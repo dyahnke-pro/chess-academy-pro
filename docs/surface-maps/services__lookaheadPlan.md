@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1659 lines · 25 exports · 14 importers · 7 tests · 0 audits**
+**1662 lines · 25 exports · 14 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -161,7 +161,7 @@
 - `src/services/lookaheadPlan.test.ts:1258`
 
 ### `positionReadLine` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9611`
+- `src/components/Coach/CoachTeachPage.tsx:9613`
 - `src/services/coachLaneWiring.test.ts:38`
 - `src/services/computedVoiceAudit.report.test.ts:225`
 - `src/services/lookaheadPlan.test.ts:541`
@@ -180,7 +180,7 @@
 - `src/services/narrationAdversarial.test.ts:67`
 
 ### `lineShapeLine` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9615`
+- `src/components/Coach/CoachTeachPage.tsx:9617`
 - `src/services/coachLaneWiring.test.ts:39`
 - `src/services/computedVoiceAudit.report.test.ts:226`
 - `src/services/lookaheadPlan.test.ts:881`
@@ -199,7 +199,7 @@
 - `src/services/lookaheadPlan.test.ts:1015`
 
 ### `terminalReadLine` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9618`
+- `src/components/Coach/CoachTeachPage.tsx:9620`
 - `src/services/coachLaneWiring.test.ts:40`
 - `src/services/computedVoiceAudit.report.test.ts:230`
 - `src/services/lookaheadPlan.test.ts:988`
@@ -213,7 +213,7 @@
 - `src/services/lookaheadPlan.test.ts:1016`
 
 ### `keySquareLine` (function) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9606`
+- `src/components/Coach/CoachTeachPage.tsx:9608`
 - `src/services/coachLaneWiring.test.ts:37`
 - `src/services/computedVoiceAudit.report.test.ts:224`
 - `src/services/forkNarration.ts:108`

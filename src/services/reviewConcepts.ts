@@ -171,7 +171,17 @@ function detectOpenLinesAtKing(ctx: ConceptCtx): ConceptBeat | null {
   //       forces lines open (the 4.d4 idea: "tearing the centre apart").
   const fromFile = mv.from[0];
   const toFile = mv.to[0];
-  const centralCapture = !!mv.captured && fromFile >= 'c' && fromFile <= 'f';
+  // The line that opens must run AT the king — within a file of it (review
+  // walk 2026-09-27: 7.c4 hitting b5 "tore the centre open" at a king on e8).
+  let kingFile = -9;
+  try {
+    const kb = new Chess(ctx.fenAfter);
+    const ks = kb.board().flat().find((c) => c && c.type === 'k' && c.color === enemy)?.square;
+    if (ks) kingFile = ks.charCodeAt(0) - 97;
+  } catch { /* no king read — nothing speaks */ }
+  const nearKing = (f: number): boolean => Math.abs(f - kingFile) <= 1;
+  const centralCapture = !!mv.captured && fromFile >= 'c' && fromFile <= 'f'
+    && (nearKing(fromFile.charCodeAt(0) - 97) || nearKing(toFile.charCodeAt(0) - 97));
   let breakPush = false;
   if (!mv.captured && toFile >= 'c' && toFile <= 'f') {
     const after = new Chess(ctx.fenBefore);       // scan the pre-move board for an enemy centre pawn the push attacks
@@ -183,7 +193,7 @@ function detectOpenLinesAtKing(ctx: ConceptCtx): ConceptBeat | null {
       if (f < 0 || f > 7 || capRank < 1 || capRank > 8) continue;
       const sq = `${String.fromCharCode(97 + f)}${capRank}` as Square;
       const p = after.get(sq);
-      if (p && p.type === 'p' && p.color === enemy) breakPush = true;
+      if (p && p.type === 'p' && p.color === enemy && (nearKing(f) || nearKing(tf))) breakPush = true;
     }
   }
   if (!centralCapture && !breakPush) return null;

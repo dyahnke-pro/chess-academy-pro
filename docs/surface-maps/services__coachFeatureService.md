@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4928 lines · 34 exports · 38 importers · 36 tests · 5 audits**
+**4938 lines · 35 exports · 39 importers · 37 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -25,6 +25,7 @@
 - `src/hooks/useReviewPlayback.ts`
 - `src/services/coachFeatureService.causalChain.test.ts`
 - `src/services/coachFeatureService.cpLossSign.test.ts`
+- `src/services/coachFeatureService.introResult.test.ts`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts`
 - `src/services/coachFeatureService.planChange.test.ts`
 - `src/services/coachFeatureService.recurrence.test.ts`
@@ -207,6 +208,12 @@
 ### `reviewOpeningRecord` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `defaultIntroText` (function) — 4 call sites
+- `src/services/coachFeatureService.introResult.test.ts:9`
+- `src/services/coachFeatureService.introResult.test.ts:14`
+- `src/services/coachFeatureService.introResult.test.ts:15`
+- `src/services/coachFeatureService.introResult.test.ts:16`
+
 ### `mapConcurrent` (function) — 4 call sites
 - `src/services/mapConcurrent.test.ts:9`
 - `src/services/mapConcurrent.test.ts:18`
@@ -326,6 +333,7 @@
 - `src/hooks/useReviewPlayback.test.ts`
 - `src/services/coachFeatureService.causalChain.test.ts`
 - `src/services/coachFeatureService.cpLossSign.test.ts`
+- `src/services/coachFeatureService.introResult.test.ts`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts`
 - `src/services/coachFeatureService.planChange.test.ts`
 - `src/services/coachFeatureService.recurrence.test.ts`

@@ -1650,7 +1650,10 @@ export function gameArcs(sans: readonly string[], studentColor: 'white' | 'black
       const side = plan ? (seat === 'student' ? plan.mine : plan.theirs) : null;
       const r = stepArc(state, side ? aimsOf(side, seat) : [], moved[i], fens[i + 1], color, seat);
       state = r.next;
-      const spoken = r.events.filter((e) => e.kind !== 'advance');
+      // A plan leaving the engine line is not something a player DID — "they
+      // have let an attack on your king go" read as nonsense four times in one
+      // review (Carlsen–Topalov walk 2026-09-27). Emerge and arrive speak.
+      const spoken = r.events.filter((e) => e.kind === 'emerge' || e.kind === 'arrive');
       if (spoken.length) out.set(i, [...(out.get(i) ?? []), ...spoken]);
     }
   }

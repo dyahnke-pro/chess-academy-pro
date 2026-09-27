@@ -317,10 +317,16 @@ describe('D-8 (WO-STANDARD-01, 2026-09-22) — the [eval] facet needs a real shi
       prevCap: { square: null, capturedValue: 0 }, allSans: ['d4', 'Kd8'], forcedRunStartPly: null, bestLineUci: [], replyBestSan: null,
     }).filter((f) => f.startsWith('[loose]'));
   it('names a piece the move LEFT undefended', () => {
-    const f = loose(A, B, 'd4', 1, 'white');
+    // The d4-pawn guards the e5-knight against the e8-rook; d5 walks away.
+    const A2 = '4r2k/8/8/4N3/3P4/8/8/4K3 w - - 0 1';
+    const c2 = new Chess(A2); c2.move('d5');
+    const f = loose(A2, c2.fen(), 'd5', 1, 'white');
     expect(f.length).toBe(1);
     expect(f[0]).toMatch(/Newly undefended/);
     expect(f[0]).toMatch(/knight on e5/);
+  });
+  it('a piece the move ATTACKS is not "newly undefended" — the attack line owns it (review walk 2026-09-27)', () => {
+    expect(loose(A, B, 'd4', 1, 'white')).toEqual([]);
   });
   it('NEGATIVE CONTROL: the same loose knight one ply later is standing state — silent', () => {
     // The old facet ("Undefended right now: …") fired here too, every ply.

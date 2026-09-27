@@ -19,7 +19,7 @@ import { computeGemCrush } from './gemCrushLines';
 import { getPunishGemById } from '../data/lessons/punishGems';
 import { Chess, type Color, type Square } from 'chess.js';
 import { plyFactsForMove } from './pvPlayback';
-import { findMinorityAttack, findColorComplexWeakness } from './positionReadingService';
+import { findMinorityAttack, findColorComplexWeakness, signedLegalSeeFor } from './positionReadingService';
 import { detectTactics } from './tacticsDetector';
 import { verifyForkOnBoard } from './tacticVerification';
 import { seatPieceReferences, detectNewThreat } from './groundedAnswer';
@@ -293,9 +293,18 @@ export function computeMoveFacets(
       const mine = NOUN[mv.piece] ?? 'piece';
       const theirs = NOUN[mv.captured ?? ''] ?? 'piece';
       const what = mine === theirs ? `a ${mine} trade` : isStudent ? `your ${mine} for their ${theirs}` : `their ${mine} for your ${theirs}`;
-      const f = isStudent
-        ? `[trade] You take on ${tradeSq}, and they can take back — ${what}.`
-        : `[trade] They take on ${tradeSq}, and you can take back — ${what}.`;
+      // "Can take back" only when taking back does not lose material (review
+      // walk 2026-09-27: 15.Nxh7 — …Rxh7 loses the rook to Qxh7).
+      const recapturer: Color = mv.color === 'w' ? 'b' : 'w';
+      const safe = signedLegalSeeFor(fenAfter, tradeSq as Square, recapturer) >= 0;
+      const lost = NOUN[mv.captured ?? ''] ?? 'piece';
+      const f = safe
+        ? isStudent
+          ? `[trade] You take on ${tradeSq}, and they can take back — ${what}.`
+          : `[trade] They take on ${tradeSq}, and you can take back — ${what}.`
+        : isStudent
+          ? `[trade] You take on ${tradeSq} — taking back would cost them more than the ${lost}.`
+          : `[trade] They take on ${tradeSq} — taking back would cost you more than the ${lost}.`;
       facets.push(f);
     } catch { /* no trade line */ }
   } else if (influence) { const f = `[${influenceShape.hitsPiece ? 'does' : 'delta'}] ${influence}`; facets.push(f); recSquares(f, influenceSquares); }
@@ -553,14 +562,17 @@ export function computeMoveFacets(
       // bishop on g4" then "Watch out — that pawn leaves your bishop on g4
       // loose", back to back). A student piece the opponent's move ATTACKS is
       // stated by the opponent read below, which names the attacker.
+      // BOTH SEATS (Carlsen–Topalov review walk 2026-09-27: "Newly undefended:
+      // their bishop on b5" on …a6, beside "your pawn on a6 now eyes their
+      // bishop on b5") — a piece the move just ATTACKED is not newly
+      // undefended; the attack line names it, with its attacker.
       let attackedByMover: (sq: string) => boolean = () => false;
-      if (!isStudent && studentColorWB) {
-        try {
-          const b = new Chess(fenAfter);
-          const to = new Chess(fenBefore).move(san).to;
-          attackedByMover = (sq) => b.get(sq as Square)?.color === studentColorWB && b.attackers(sq as Square, studentColorWB === 'w' ? 'b' : 'w').includes(to);
-        } catch { attackedByMover = () => false; }
-      }
+      try {
+        const b = new Chess(fenAfter);
+        const moved = new Chess(fenBefore).move(san);
+        const victim: 'w' | 'b' = moved.color === 'w' ? 'b' : 'w';
+        attackedByMover = (sq) => b.get(sq as Square)?.color === victim && b.attackers(sq as Square, moved.color).includes(moved.to);
+      } catch { attackedByMover = () => false; }
       const fresh = t.hangingPieces.filter((h) => !before.has(`${h.piece}${h.square}`)
         && 'nbr'.includes(h.piece.toLowerCase())
         && exchangeStakes(fenAfter, [h.square]) !== null

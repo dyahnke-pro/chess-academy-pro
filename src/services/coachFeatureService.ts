@@ -3111,7 +3111,7 @@ export function reviewOpeningRecord(params: {
   return parts.length > 0 ? parts.join(' ') : null;
 }
 
-function defaultIntroText(params: {
+export function defaultIntroText(params: {
   playerColor: 'white' | 'black';
   result: string;
   openingName: string | null;
@@ -3125,13 +3125,19 @@ function defaultIntroText(params: {
   // 'win'/'loss'/'draw'. The old ternary only checked the latter, so a raw
   // '1-0' fell through to "a draw" — the coach opened a WIN by calling it a draw
   // (David 2026-07-19). Grounded certainty: we computed the result, so state it.
-  const outcome: 'win' | 'loss' | 'draw' =
-    params.result === 'win' || params.result === 'loss' || params.result === 'draw'
-      ? params.result
-      : params.result === '1-0' || params.result === '0-1'
-        ? ((params.result === '1-0') === (params.playerColor === 'white') ? 'win' : 'loss')
-        : 'draw';
-  const resultPhrase = outcome === 'win' ? 'a win' : outcome === 'loss' ? 'a loss' : 'a draw';
+  // …and ONLY a drawn score reads as a draw (Carlsen–Topalov review walk
+  // 2026-09-27: an unfinished game, `*`, opened "it ended in a draw"). An
+  // unknown result names no result.
+  const raw = params.result.trim().toLowerCase();
+  const outcome: 'win' | 'loss' | 'draw' | null =
+    raw === 'win' || raw === 'loss' || raw === 'draw'
+      ? raw
+      : raw === '1-0' || raw === '0-1'
+        ? ((raw === '1-0') === (params.playerColor === 'white') ? 'win' : 'loss')
+        : raw === '1/2-1/2' || raw === '½-½' || raw === 'drawn'
+          ? 'draw'
+          : null;
+  const resultBit = outcome === 'win' ? ' and it ended in a win' : outcome === 'loss' ? ' and it ended in a loss' : outcome === 'draw' ? ' and it ended in a draw' : '';
   const framedIntro = params.openingName ? frameOpeningForStudent(params.openingName, params.playerColor) : null;
   const openingBit = framedIntro
     ? (framedIntro.owned ? ` in the ${framedIntro.label}` : ` against the ${framedIntro.label}`)
@@ -3140,7 +3146,7 @@ function defaultIntroText(params: {
     ? ` You had ${params.mistakeCount === 1 ? 'one moment' : `${params.mistakeCount} moments`} worth a second look — here's each one.`
     : ` Clean play throughout — here's what worked.`;
   const recordBit = params.record ? ` ${params.record}` : '';
-  return `Here's your game${openingBit} — you had ${colorWord} and it ended in ${resultPhrase}.${recordBit}${momentBit}`;
+  return `Here's your game${openingBit} — you had ${colorWord}${resultBit}.${recordBit}${momentBit}`;
 }
 
 /**
@@ -4391,6 +4397,10 @@ function toPastSentence(sentence: string): string {
   h = sub(h, /\byou're\b/gi, 'you were');
   h = sub(h, /\bthey're\b/gi, 'they were');
   h = sub(h, /\bthere's\b/gi, 'there was');
+  // "you were up a pawn and you have the bishop pair" split one clause list
+  // across two tenses (review walk 2026-09-27). Possession only — "have to"
+  // is a modal and stays.
+  h = h.replace(/\b(you|they|You|They) have (the|a|an|two|more|both)\b/g, (_m, who: string, what: string) => `${who} had ${what}`);
   h = sub(h, /\bis still\b/gi, 'was still');
   // "points a pawn storm" is a verb; "2 points of material" is a noun — only the verb.
   h = h.replace(/\bpoints a\b/gi, 'pointed a');

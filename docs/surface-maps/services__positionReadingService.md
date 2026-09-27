@@ -123,7 +123,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/latentFork.ts:149`
 - `src/services/latentFork.ts:220`
 - `src/services/moveFundamentals.ts:303`
-- `src/services/moveFundamentals.ts:1139`
+- `src/services/moveFundamentals.ts:1141`
 
 ### `legalSeeGainFor` (function) — 23 call sites
 - `src/services/bluffDetector.ts:53`
@@ -150,15 +150,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticAlertService.ts:329`
 - `src/services/tacticVerification.ts:101`
 
-### `signedLegalSeeFor` (function) — 8 call sites
+### `signedLegalSeeFor` (function) — 9 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7776`
 - `src/components/Coach/CoachTeachPage.tsx:7890`
-- `src/components/Coach/CoachTeachPage.tsx:10579`
-- `src/components/Coach/CoachTeachPage.tsx:10598`
+- `src/components/Coach/CoachTeachPage.tsx:10581`
+- `src/components/Coach/CoachTeachPage.tsx:10600`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
 - `src/services/principleAttribution.ts:257`
+- `src/services/reviewFullData.ts:299`
 
 ### `capturesWinMaterial` (function) — 6 call sites
 - `src/services/computedMaterialTruth.corpus.test.ts:136`
@@ -276,8 +277,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.ts:345`
 - `src/services/positionalTruth.corpus.test.ts:95`
 - `src/services/positionalTruth.corpus.test.ts:100`
-- `src/services/reviewFullData.ts:673`
-- `src/services/reviewFullData.ts:677`
+- `src/services/reviewFullData.ts:685`
+- `src/services/reviewFullData.ts:689`
 
 ### `MinorityAttack` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -292,8 +293,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.ts:317`
 - `src/services/positionalTruth.corpus.test.ts:108`
 - `src/services/positionalTruth.corpus.test.ts:113`
-- `src/services/reviewFullData.ts:669`
-- `src/services/reviewFullData.ts:671`
+- `src/services/reviewFullData.ts:681`
+- `src/services/reviewFullData.ts:683`
 
 ### `pieceScope` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

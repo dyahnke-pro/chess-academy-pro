@@ -847,7 +847,9 @@ function openingIdeas(
   }
 
   // DEVELOPMENT COMPLETE — the last minor off its home square.
-  if ((mv.piece === 'n' || mv.piece === 'b') && rankOf(mv.from) === homeRank && homeMinorCount(after, mover) === 0) {
+  // Only in the opening: on move 39 a bishop that wandered back to its home
+  // rank and out again "completed your development" (review walk 2026-09-27).
+  if ((mv.piece === 'n' || mv.piece === 'b') && rankOf(mv.from) === homeRank && homeMinorCount(after, mover) === 0 && after.moveNumber() <= 20) {
     out.push({
       id: 'development-complete',
       weight: 70,

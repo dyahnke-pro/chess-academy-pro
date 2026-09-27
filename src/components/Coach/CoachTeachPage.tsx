@@ -9595,8 +9595,10 @@ export function CoachTeachPage(): JSX.Element {
                             : null;
                           planArcRef.current = { theirs: theirStep.next, mine: mineStep?.next ?? planArcRef.current.mine };
                           const arcLines = [
-                            ...theirStep.events.filter((e) => e.kind !== 'advance'),
-                            ...(mineStep?.events ?? []).filter((e) => e.kind === 'arrive' || e.kind === 'drop'),
+                            // Drops stay silent — a plan leaving the engine line is
+                            // not something a player did (review walk 2026-09-27).
+                            ...theirStep.events.filter((e) => e.kind === 'emerge' || e.kind === 'arrive'),
+                            ...(mineStep?.events ?? []).filter((e) => e.kind === 'arrive'),
                           ];
                           for (const e of arcLines) {
                             const line = gradeNarrationText(e.text, probe.fen(), 'CoachTeachPage.planArc')?.trim();
