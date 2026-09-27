@@ -403,28 +403,12 @@ export default defineConfig(({ mode }) => {
             // FETCHED from `public/data/`, so neither needs a rule.
             if (id.includes('/lessons/sublineNarration')) return 'appdata-subline-narration';
             if (id.includes('model-games.json')) return 'appdata-modelgames';
-            // 2026-09-26 (app-size plan, Fix E). The curated lesson scripts
-            // (~2.2 MB, ~100 files importing only types / JSON / chess.js) and
-            // the rest of src/data's JSON (~0.5 MB) sat INSIDE the entry chunk,
-            // so every code fix re-shipped them in each OTA. Their own chunks
-            // change only when content changes. `lessons/index.ts` and
-            // `punishGems.ts` import services, so they stay with the code.
-            // Boot bytes are unchanged — these chunks are still preloaded.
-            // Guard: `appdata-no-entry-import` below fails the build if a
-            // data chunk ever imports the entry (an init-order cycle).
-            if (/\/src\/data\/lessons\//.test(id) && !/\/lessons\/(index|punishGems)\.ts$/.test(id)) {
-              return 'appdata-lessons';
-            }
-            if (id.includes('/src/data/openingWalkthroughs/')) return 'appdata-lessons';
-            if (/\/src\/data\/[^/]+\.json$/.test(id)) return 'appdata-misc';
           }
           if (id.includes('/node_modules/')) {
             if (/\/node_modules\/(react|react-dom|react-router-dom)\//.test(id)) return 'react-vendor';
             if (/\/node_modules\/(chess\.js|react-chessboard)\//.test(id)) return 'chess-vendor';
             if (/\/node_modules\/(framer-motion|recharts|lucide-react)\//.test(id)) return 'ui-vendor';
             if (/\/node_modules\/(dexie|zustand)\//.test(id)) return 'data-vendor';
-            // Stable third-party code that sat in the entry (Fix E).
-            if (/\/node_modules\/(openai|@capacitor|posthog-js)\//.test(id)) return 'app-vendor';
           }
           return undefined;
         },
