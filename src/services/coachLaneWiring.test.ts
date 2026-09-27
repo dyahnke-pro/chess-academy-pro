@@ -90,7 +90,9 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     expect(TEACH).toMatch(/const evidence = sameLoss && look\.withoutAttempt \? look\.withoutAttempt\.line : look\.line;/);
     // (2026-09-27: the line now closes with the move's concession, review
     // parity — the verdict still leads, the evidence still follows it.)
-    expect(TEACH).toMatch(/const line = `\$\{fundamental\s*\?\s*`\$\{fundamental\.verdict\}[\s\S]{0,160}?\$\{evidence\}[\s\S]{0,20}?`\s*:\s*look\.line\}\$\{concession \? ` \$\{concession\}` : ''\}`;/);
+    // (Najdorf re-walk 2026-09-27: the verdict stands down only when the grade
+    // already names the SAME lost square — `lossInGrade`.)
+    expect(TEACH).toMatch(/const line = `\$\{fundamental\s*\?\s*`\$\{lossInGrade \? '' : fundamental\.verdict\}[\s\S]{0,160}?\$\{evidence\}[\s\S]{0,20}?`\.trim\(\)\s*:\s*look\.line\}\$\{concession \? ` \$\{concession\}` : ''\}`;/);
     expect(TEACH).toMatch(/const concession = lookConcession\(fenBefore, move\.san, cpLoss\);/);
     // A fundamental with NO material drawback still speaks, on its own.
     // (Colle re-walk 2026-09-27: graded on the student-move board, `move.fen`.)

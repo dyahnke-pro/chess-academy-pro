@@ -148,6 +148,12 @@ const routes = {
     const re = q.get('grep') ? new RegExp(q.get('grep'), 'i') : null;
     return consoleLines.filter((l) => !re || re.test(l)).slice(-n);
   },
+  // Tap a visible control by its text (line pickers, fork tiles, Skip).
+  async click(q) {
+    await page.getByText(q.get('text') ?? '', { exact: false }).first().click({ force: true, timeout: 10000 });
+    await sleep(1500);
+    return state();
+  },
   async wait(q) { await sleep(Number(q.get('ms') ?? 5000)); return state(); },
   state,
   async shot(q) {
