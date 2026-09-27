@@ -154,6 +154,13 @@ const routes = {
     await sleep(1500);
     return state();
   },
+  // Take the Nth tile of the open "Which line?" picker (0 = main line).
+  async pick(q) {
+    const row = page.getByText('Which line?', { exact: false }).first().locator('xpath=..');
+    await row.locator('button').nth(Number(q.get('n') ?? 0)).click({ force: true, timeout: 10000 });
+    await sleep(1500);
+    return state();
+  },
   async wait(q) { await sleep(Number(q.get('ms') ?? 5000)); return state(); },
   state,
   async shot(q) {
