@@ -79,6 +79,11 @@ export function parseSpokenMove(utterance: string, fen: string): ParsedSpokenMov
   let candidates: Move[] = legal.filter((m) => m.to === to);
   if (fromHint) candidates = candidates.filter((m) => m.from === fromHint);
   if (pieceWord) candidates = candidates.filter((m) => m.piece === PIECE_WORDS[pieceWord]);
+  // A BARE SQUARE IS A PAWN MOVE (g9 walk 2026-09-27): "play d6+" typed while
+  // the pawn push was blocked resolved to Bxd6 — the only move landing on d6 —
+  // and the coach then played neither. In notation and in speech alike, a
+  // square with no piece named means the pawn; only "takes d6" reaches wider.
+  else if (!wantsCapture) candidates = candidates.filter((m) => m.piece === 'p');
   if (wantsCapture) {
     const capturing = candidates.filter((m) => !!m.captured);
     if (capturing.length > 0) candidates = capturing;

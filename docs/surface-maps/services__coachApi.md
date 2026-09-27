@@ -279,7 +279,7 @@
 - `src/services/coachFeatureService.ts:522`
 - `src/services/coachFeatureService.ts:4683`
 - `src/services/coachFeatureService.ts:4836`
-- `src/services/coachLaneWiring.test.ts:185`
+- `src/services/coachLaneWiring.test.ts:188`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`
 - `src/services/contentGenerationService.ts:133`

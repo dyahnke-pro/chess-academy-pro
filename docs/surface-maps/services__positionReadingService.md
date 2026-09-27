@@ -111,11 +111,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachFeatureService.ts:2428`
 - `src/services/groundedAnswer.ts:6730`
 - `src/services/opponentMovePurpose.ts:33`
-- `src/services/reviewTeachingPoints.ts:98`
-- `src/services/reviewTeachingPoints.ts:134`
-- `src/services/reviewTeachingPoints.ts:465`
-- `src/services/reviewTeachingPoints.ts:666`
-- `src/services/reviewTeachingPoints.ts:769`
+- `src/services/reviewTeachingPoints.ts:99`
+- `src/services/reviewTeachingPoints.ts:135`
+- `src/services/reviewTeachingPoints.ts:466`
+- `src/services/reviewTeachingPoints.ts:667`
+- `src/services/reviewTeachingPoints.ts:775`
 
 ### `landingIsSafe` (function) — 13 call sites
 - `src/services/computedMaterialTruth.corpus.test.ts:160`
@@ -132,14 +132,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveFundamentals.ts:309`
 - `src/services/moveFundamentals.ts:1221`
 
-### `legalSeeGainFor` (function) — 23 call sites
+### `legalSeeGainFor` (function) — 25 call sites
 - `src/services/bluffDetector.ts:53`
 - `src/services/bluffDetector.ts:63`
 - `src/services/boardState.ts:42`
 - `src/services/causalChain.ts:42`
 - `src/services/computedMaterialTruth.corpus.test.ts:120`
 - `src/services/computedMaterialTruth.corpus.test.ts:145`
-- `src/services/deliberation.ts:41`
+- `src/services/deliberation.ts:42`
+- `src/services/deliberation.ts:311`
+- `src/services/deliberation.ts:312`
 - `src/services/exchangeLedger.ts:75`
 - `src/services/groundedAnswer.ts:294`
 - `src/services/groundedAnswer.ts:499`
@@ -233,7 +235,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `bishopHemmedByOwnPawns` (function) — 3 call sites
 - `src/services/positionReadingService.test.ts:895`
 - `src/services/principleAttribution.ts:974`
-- `src/services/reviewTeachingPoints.ts:201`
+- `src/services/reviewTeachingPoints.ts:202`
 
 ### `findPieceQuality` (function) — 29 call sites
 - `src/services/concessionBeat.ts:291`

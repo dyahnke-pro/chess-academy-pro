@@ -19,6 +19,7 @@ import { findHangingPieces } from './tacticClassifier';
 import { proofAgainstMover } from './exchangeLedger';
 import { strategicWhyLed } from './moveFundamentals';
 import { legalSeeGainFor } from './positionReadingService';
+import { isPinnedPiece } from './nextPlans';
 
 const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 
@@ -279,5 +280,45 @@ export function deliberationAlternativesFacts(d: Deliberation): string {
  *  d5"). The ONE reason computer behind "The move is X" — shared so every lane
  *  that names a move gives the same reason. Null when nothing is computable. */
 export function moveWhy(fenBefore: string, san: string, mover: 'w' | 'b', opponentLastSan: string | null): string | null {
-  return materialWhy(fenBefore, san, mover, opponentLastSan) ?? strategicWhyLed(fenBefore, san, mover === 'w' ? 'white' : 'black');
+  return materialWhy(fenBefore, san, mover, opponentLastSan)
+    ?? threatAnswerWhy(fenBefore, san, mover)
+    ?? strategicWhyLed(fenBefore, san, mover === 'w' ? 'white' : 'black');
+}
+
+/**
+ * THE THREAT, AND THE MOVE THAT MEETS IT (David 2026-09-27 — the corpus names
+ * the threat and the answer together: "the threat is Qe7 hitting e4, so you
+ * double back to f3"). The coach named the threat and stopped; when the move
+ * IS the answer, its reason should say so. Two board-true shapes:
+ *  - another of the mover's pieces (a minor or more) that the opponent was
+ *    winning is safe after the move — a defender arrived or the attacker was
+ *    blocked;
+ *  - a piece pinned to the king before the move is free after it.
+ * The moved piece itself is `strategicWhyLed`'s "steps out of reach", not this.
+ */
+export function threatAnswerWhy(fenBefore: string, san: string, mover: 'w' | 'b'): string | null {
+  try {
+    const board0 = new Chess(fenBefore);
+    const after = new Chess(fenBefore);
+    const m = after.move(san);
+    if (!m) return null;
+    const opp: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
+    const mine = board0.board().flat().flatMap((c) => (c && c.color === mover && c.type !== 'k' ? [c] : []));
+    for (const c of mine) {
+      if (c.square === m.from || VAL[c.type] < 3) continue;
+      const still = after.get(c.square);
+      if (!still || still.color !== mover) continue;
+      if (legalSeeGainFor(fenBefore, c.square, opp) <= 0) continue;
+      if (legalSeeGainFor(after.fen(), c.square, opp) <= 0) return `guards the ${PNAME[c.type]} on ${c.square}, which they were about to win`;
+    }
+    for (const c of mine) {
+      if (c.square === m.from) continue;
+      if (isPinnedPiece(board0, c.square, mover) && !isPinnedPiece(after, c.square, mover) && after.get(c.square)?.color === mover) {
+        return `breaks the pin on the ${PNAME[c.type]} on ${c.square}`;
+      }
+    }
+    return null;
+  } catch {
+    return null;
+  }
 }

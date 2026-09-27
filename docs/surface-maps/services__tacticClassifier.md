@@ -33,7 +33,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `findHangingPieces` (function) — 11 call sites
 - `src/data/patternRegistry.ts:113`
 - `src/services/coachGameEngine.ts:298`
-- `src/services/deliberation.ts:117`
+- `src/services/deliberation.ts:118`
 - `src/services/liveTacticsContext.ts:378`
 - `src/services/moveReason.ts:112`
 - `src/services/playedMoveGrade.ts:90`

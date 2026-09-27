@@ -349,7 +349,7 @@
 - `src/services/whyBestMove.ts:75`
 
 ### `captureHasCounterTactic` (function) — 1 call site
-- `src/services/reviewTeachingPoints.ts:100`
+- `src/services/reviewTeachingPoints.ts:101`
 
 ### `describeMoveGeometry` (function) — 21 call sites
 - `src/components/Puzzles/PuzzleBoard.tsx:110`
@@ -1054,7 +1054,7 @@
 - `src/services/reviewNarrationFidelity.test.ts:227`
 - `src/services/reviewNarrationFidelity.test.ts:239`
 - `src/services/reviewNarrationFidelity.test.ts:253`
-- `src/services/reviewTeachingPoints.ts:347`
+- `src/services/reviewTeachingPoints.ts:348`
 
 ### `captureThreatIsAnswerable` (function) — 2 call sites
 - `src/services/captureThreatAnswerable.test.ts:12`
@@ -1067,7 +1067,7 @@
 - `src/services/reviewNarrationFidelity.test.ts:204`
 
 ### `forkAlignmentClause` (function) — 1 call site
-- `src/services/reviewTeachingPoints.ts:392`
+- `src/services/reviewTeachingPoints.ts:393`
 
 ### `describeThreatRecognition` (function) — 4 call sites
 - `src/services/learnMoveTeaching.ts:128`

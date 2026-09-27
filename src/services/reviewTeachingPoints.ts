@@ -33,6 +33,7 @@
  */
 import { Chess, type Color, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
+import { inFluxAfter } from './boardState';
 import { legalSeeGainOn, bishopHemmedByOwnPawns } from './positionReadingService';
 import { captureHasCounterTactic, detectNewThreat, forkAlignmentClause, type DetectedThreat } from './groundedAnswer';
 import { cells, PIECE_NOUN, findWorstPlacedPiece, deriveNextPlans } from './nextPlans';
@@ -685,6 +686,11 @@ export function describeTradeConsequence(
  * Returns a compact clause or null when no structural concession shows.
  */
 export function describeConcessions(fenBefore: string, san: string, moverIsStudent: boolean): string | null {
+  // NEVER MID-EXCHANGE (Learn walk g9, 2026-09-27): after …cxd5 the new pawn
+  // on d5 looked isolated — then exd5 took it and the isolani was White's. A
+  // capture they can take back leaves a structure that is still changing, so
+  // there is no lasting concession to name yet.
+  if (inFluxAfter(fenBefore, san)) return null;
   try {
     const b = new Chess(fenBefore);
     const mv = b.move(san);

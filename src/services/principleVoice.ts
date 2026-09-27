@@ -505,7 +505,7 @@ function shortVerdict(a: PrincipleAttribution): string {
     case 'premature-centre-break': return `Another early break on ${f.pawn}.`;
     case 'knight-to-the-rim': return `A knight on the rim again, on ${f.square}.`;
     case 'loose-piece': return `Loose piece again — the ${f.piece} on ${f.square} hangs.`;
-    case 'ignored-threat': return `Their threat again — the ${f.piece} on ${f.square} is still hanging.`;
+    case 'ignored-threat': return `Their threat again — the ${f.piece} on ${f.square} was still hanging.`;
     case 'passive-when-forcing-existed': return `A forcing move missed again: ${f.better}.`;
     case 'weakened-king-shield': return `The king's shelter loosened again — ${f.punish}.`;
     case 'created-pawn-weakness': return `Another weak pawn, on ${f.pawn}.`;
