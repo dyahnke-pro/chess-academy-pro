@@ -181,8 +181,8 @@
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.ts:9`
 - `src/services/danyaBehaviors.ts:440`
-- `src/services/replayFence.alekhine1500.test.ts:18`
-- `src/services/replayFence.alekhine1500.test.ts:19`
+- `src/services/replayFence.alekhine1500.test.ts:24`
+- `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.sicilianClosed1000.test.ts:21`
 
 ## Tests

@@ -52,6 +52,10 @@ export interface BackwardLook {
    *  speaks this instead, so the loss is said once and the rest — the cost,
    *  the better move — still speaks (re-walk 1380, 24.Bg5). */
   withoutAttempt?: { line: string; square: string };
+  /** The student piece the grade says was left to be taken (from
+   *  `InaccuracyCall.lostSquare`). The live fundamental verdict names the same
+   *  loss as "that left your rook on b2 hanging"; one of them speaks. */
+  lostSquare?: string;
 }
 
 /**
@@ -334,7 +338,7 @@ export function backwardLook(args: {
         replyLineUci: args.replyPvUci ?? [],
         replySan: args.replySan ?? null,
       });
-      if (call) return { line: call.said, square: call.square, kind: 'mistake' };
+      if (call) return { line: call.said, square: call.square, kind: 'mistake', ...(call.lostSquare ? { lostSquare: call.lostSquare } : {}) };
     } catch { /* fall through */ }
   }
 

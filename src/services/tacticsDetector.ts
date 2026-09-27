@@ -649,7 +649,14 @@ function findRemovableGuards(chess: Chess): TacticPattern[] {
         // a removal — a pawn guard covered by another pawn is not removable
         // by a knight. Undefended guards are removable by anything.
         const guardVal = PIECE_VALUE[chess.get(guardSq)?.type ?? 'p'];
-        const guardIsDefended = chess.attackers(guardSq, enemy).some((d) => d !== guardSq);
+        const guardDefenders = chess.attackers(guardSq, enemy).filter((d) => d !== guardSq);
+        // THE TARGET RECAPTURING IS NOT A REMOVAL (Alekhine re-walk ply 41:
+        // "the queen on a4 is the only defender of the bishop on b5 — and it
+        // can be taken" — Qxa4 Bxa4, and the bishop simply walks off b5). When
+        // the target itself guards the guard, taking the guard leaves nothing
+        // to win; an outright win of the guard is the hanging-piece lane's.
+        if (guardDefenders.length > 0 && guardDefenders.every((d) => d === targetSq)) continue;
+        const guardIsDefended = guardDefenders.length > 0;
         const cheapestTaker = Math.min(...takers.map((p) => PIECE_VALUE[p]));
         if (guardIsDefended && cheapestTaker > guardVal) continue;
         out.push({

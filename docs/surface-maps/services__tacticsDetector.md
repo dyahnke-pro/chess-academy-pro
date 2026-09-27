@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**889 lines · 2 exports · 33 importers · 16 tests · 0 audits**
+**896 lines · 2 exports · 34 importers · 16 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,6 +30,7 @@
 - `src/services/playCommentary.ts`
 - `src/services/pvPlayback.ts`
 - `src/services/relationClaimCost.report.test.ts`
+- `src/services/replayFence.alekhine1500.test.ts`
 - `src/services/reviewCorpusNote.test.ts`
 - `src/services/reviewFullData.ts`
 - `src/services/reviewMoveBriefing.ts`
@@ -52,7 +53,7 @@
 ### `TacticsDetectionResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `detectTactics` (function) — 99 call sites
+### `detectTactics` (function) — 100 call sites
 - `src/components/Board/BoardPageLayout.tsx:124`
 - `src/services/boardConcepts.ts:304`
 - `src/services/coachPrompts.ts:1097`
@@ -85,7 +86,8 @@
 - `src/services/pvPlayback.ts:324`
 - `src/services/pvPlayback.ts:344`
 - `src/services/relationClaimCost.report.test.ts:52`
-- `src/services/replayFence.alekhine1500.test.ts:30`
+- `src/services/replayFence.alekhine1500.test.ts:35`
+- `src/services/replayFence.alekhine1500.test.ts:85`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:60`
 - `src/services/reviewCorpusNote.test.ts:61`
 - `src/services/reviewFullData.ts:531`

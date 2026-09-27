@@ -1263,7 +1263,7 @@ function buildClauses(a: {
     // — that diagonal is a pin". One fact once.
     ranked.push({
       kind: 'latent-danger', rank: 80, text: latentDangerClause(latentDanger),
-      squares: [latentDanger.enemySquare, latentDanger.frontSquare, latentDanger.backSquare],
+      squares: [latentDanger.enemySquare, latentDanger.frontSquare, latentDanger.backSquare, ...(latentDanger.shieldSquare ? [latentDanger.shieldSquare] : [])],
       // A LATENT line needs their piece to arrive first.
       stakes: { points: lineTacticPoints(latentDanger.frontPiece, latentDanger.backPiece), plies: 3 },
     });

@@ -45,6 +45,10 @@ export interface InaccuracyCall {
   said: string;
   /** The square to mark: where the better move was going. '' when unknown. */
   square: string;
+  /** The student's piece the move left to be taken, when the grade names one
+   *  ("it let them take your rook on b2"). Structured so a caller that already
+   *  said that loss can tell it is the same claim without reading the prose. */
+  lostSquare?: string;
 }
 
 /** Only the three that are worth stopping for. `good` and above stay silent —
@@ -525,7 +529,7 @@ export function callInaccuracyDetailed(args: {
       // A LOST MATE is the cost when nothing was taken (Damiano walk, 32.Rxc7).
       ? `${args.playedSan} was ${grade} — it let a forced mate slip.`
       : `${args.playedSan} was ${grade}.`;
-  return { call: { quality, side: 'student', cost, said: `${head}${should}`, square: better?.square ?? '' } };
+  return { call: { quality, side: 'student', cost, said: `${head}${should}`, square: better?.square ?? '', ...(punishment?.lostSquare ? { lostSquare: punishment.lostSquare } : {}) } };
 }
 
 /** What the played move let the OTHER side do: their best line after it, read
@@ -533,7 +537,7 @@ export function callInaccuracyDetailed(args: {
  *  that line's first move as SAN so the caller can say whether it was played. */
 function punishmentOf(
   fenBefore: string, playedSan: string, replyLineUci: readonly string[], moverColor: 'white' | 'black',
-): { why: string; first: string | null } | null {
+): { why: string; first: string | null; lostSquare?: string } | null {
   if (!replyLineUci || replyLineUci.length < 4) return null;
   let fenAfter: string;
   let first: string | null = null;
@@ -553,7 +557,7 @@ function punishmentOf(
     const NAME: Record<string, string> = { q: 'queen', r: 'rook', b: 'bishop', n: 'knight' };
     const outright = m?.captured ? legalSeeGain(fenAfter, m.to) >= MATERIAL_VALUE[m.captured] : false;
     if (m?.captured && NAME[m.captured] && (MATERIAL_VALUE[m.captured] > MATERIAL_VALUE[m.piece] || outright)) {
-      return { why: `take your ${NAME[m.captured]} on ${m.to}`, first };
+      return { why: `take your ${NAME[m.captured]} on ${m.to}`, first, lostSquare: m.to };
     }
   } catch { /* fall through to the plan read */ }
   // Otherwise THEIR half of the plan, seated from the student's side so its
@@ -583,6 +587,12 @@ function punishmentOf(
   // the cost clause above exists to name, and when it can't, the grade stands
   // alone.
   if (first && !/x|[+#]$/.test(first)) return null;
+  // …and a capture is an entry only when it WINS something: "it let them in
+  // with Bxf3" (Alekhine re-walk ply 49) named a bishop trade the student
+  // recaptures as if it were the cost.
+  if (first && !/[+#]$/.test(first)) {
+    try { if (legalSeeGain(fenAfter, replyLineUci[0].slice(2, 4) as Square) <= 0) return null; } catch { return null; }
+  }
   return first ? { why: `in with ${first}`, first } : null;
 }
 

@@ -31,7 +31,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `markableSquares` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10893`
+- `src/components/Coach/CoachTeachPage.tsx:10901`
 - `src/services/voicePackage.test.ts:419`
 - `src/services/voicePackage.test.ts:428`
 - `src/services/voicePackage.test.ts:438`
@@ -48,8 +48,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:7566`
 - `src/components/Coach/CoachTeachPage.tsx:8458`
 - `src/components/Coach/CoachTeachPage.tsx:8513`
-- `src/components/Coach/CoachTeachPage.tsx:10859`
-- `src/components/Coach/CoachTeachPage.tsx:10871`
+- `src/components/Coach/CoachTeachPage.tsx:10867`
+- `src/components/Coach/CoachTeachPage.tsx:10879`
 - `src/hooks/usePhaseNarration.ts:425`
 - `src/hooks/usePhaseNarration.ts:875`
 - `src/hooks/usePositionNarration.ts:314`
@@ -60,7 +60,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/computedVoiceAudit.report.test.ts:369`
 - `src/services/computedVoiceAudit.report.test.ts:410`
 - `src/services/laneReachability.test.ts:168`
-- `src/services/replayFence.najdorf1500.test.ts:48`
+- `src/services/replayFence.najdorf1500.test.ts:50`
 - `src/services/voicePackage.test.ts:19`
 - `src/services/voicePackage.test.ts:32`
 - `src/services/voicePackage.test.ts:44`
@@ -123,7 +123,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `spokenSentenceKeys` (function) — 6 call sites
 - `src/components/Coach/CoachTeachPage.tsx:10371`
-- `src/components/Coach/CoachTeachPage.tsx:10881`
+- `src/components/Coach/CoachTeachPage.tsx:10889`
 - `src/services/voicePackage.test.ts:525`
 - `src/services/voicePackage.test.ts:534`
 - `src/services/voicePackage.test.ts:546`
@@ -131,7 +131,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `describeVoicePackage` (function) — 3 call sites
 - `src/components/Coach/CoachTeachPage.tsx:10363`
-- `src/components/Coach/CoachTeachPage.tsx:10905`
+- `src/components/Coach/CoachTeachPage.tsx:10913`
 - `src/services/voicePackage.test.ts:38`
 
 ## Tests

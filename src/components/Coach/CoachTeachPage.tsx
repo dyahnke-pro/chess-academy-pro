@@ -10622,13 +10622,21 @@ export function CoachTeachPage(): JSX.Element {
                         && (fundamental.id === 'loose-piece' || fundamental.id === 'ignored-threat')
                         && fundamental.square === look.withoutAttempt.square;
                       const evidence = sameLoss && look.withoutAttempt ? look.withoutAttempt.line : look.line;
+                      // …and the other way round: the grade already says "it let
+                      // them take your rook on b2, and they missed it", so the
+                      // fundamental's "that left your rook on b2 hanging" is the
+                      // same claim (Najdorf re-walk ply 48). The grade speaks —
+                      // it also carries the better move.
+                      const lossInGrade = !!fundamental && !sameLoss
+                        && (fundamental.id === 'loose-piece' || fundamental.id === 'ignored-threat')
+                        && !!look.lostSquare && fundamental.square === look.lostSquare;
                       // WHAT THE MOVE GAVE UP (capability parity with review,
                       // 2026-09-27): the lasting damage a flagged move left —
                       // king cover thinned, a passer granted, a new isolani.
                       // The same computer review speaks; it self-gates to null.
                       const concession = lookConcession(fenBefore, move.san, cpLoss);
                       const line = `${fundamental
-                        ? `${fundamental.verdict}${fundamental.recurrence ? ` ${fundamental.recurrence}` : ''}${evidence ? ` ${evidence}` : ''}`
+                        ? `${lossInGrade ? '' : fundamental.verdict}${fundamental.recurrence ? ` ${fundamental.recurrence}` : ''}${evidence ? ` ${evidence}` : ''}`.trim()
                         : look.line}${concession ? ` ${concession}` : ''}`;
                       queueSpokenHint(fenAfterReply, line, look.kind,
                         /^[a-h][1-8]$/.test(look.square) ? [look.square] : [], undefined, move.fen);

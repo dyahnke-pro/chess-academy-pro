@@ -83,8 +83,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.test.ts:365`
 - `src/services/positionalRead.test.ts:374`
 - `src/services/positionalRead.test.ts:379`
-- `src/services/replayFence.najdorf1500.test.ts:23`
-- `src/services/replayFence.najdorf1500.test.ts:34`
+- `src/services/replayFence.najdorf1500.test.ts:25`
+- `src/services/replayFence.najdorf1500.test.ts:36`
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
 ### `buildPositionalRead` (function) — 12 call sites

@@ -35,6 +35,9 @@ export interface LatentDanger {
   /** True when a single shield sits between the enemy and the front piece — the
    *  danger is LATENT (it opens if that shield trades/moves), not live yet. */
   latent: boolean;
+  /** The student's own piece that keeps a LATENT line shut (absent when open). */
+  shieldSquare?: string;
+  shieldPiece?: string;
 }
 
 interface Cell { sq: string; piece: string; color: 'w' | 'b'; }
@@ -122,6 +125,10 @@ export function detectLatentDanger(
         // the student opens by accident (and e4-Be2-Ke1 is every Italian).
         else if (guards(onRay[1], onRay[2]) && !(onRay[0].piece === 'p' && dc === 0)) {
           front = onRay[1]; back = onRay[2]; shields = 1;
+          // A pawn pinned in WAITING costs at most the pawn; it is not the
+          // alarm this clause is for (Alekhine re-walk ply 33: "your pawn on
+          // b4 and your queen share that diagonal").
+          if (front.piece === 'p') continue;
         } else continue;
         if (opts.latentOnly && shields === 0) continue;
         const danger: LatentDanger = {
@@ -129,6 +136,7 @@ export function detectLatentDanger(
           backSquare: back.sq, backPiece: back.piece,
           enemySquare: cell.sq, enemyPiece: cell.piece,
           line: lineKind(dr, dc), latent: shields === 1,
+          ...(shields === 1 ? { shieldSquare: onRay[0].sq, shieldPiece: onRay[0].piece } : {}),
         };
         // Rank by the piece at risk (front), then prefer a king behind.
         const score = (VAL[front.piece] ?? 0) + (back.piece === 'k' ? 0.5 : 0);
@@ -198,6 +206,12 @@ export function tradeDangerClause(d: TradeDanger): string {
 export function latentDangerClause(d: LatentDanger): string {
   const front = `${PNAME[d.frontPiece]} on ${d.frontSquare}`;
   const back = PNAME[d.backPiece];
-  const open = d.latent ? ` — mind it before you open the line` : ` — that ${d.line} is a pin`;
-  return `heads up: your ${front} and your ${back} share that ${d.line}${open}.`;
+  // WHICH line, WHOSE piece, and WHAT opens it (Alekhine re-walk ply 19: "your
+  // bishop on e2 and your queen share that diagonal — mind it" named no enemy
+  // and no move; the student cannot act on a line they cannot find).
+  if (d.latent && d.shieldSquare && d.shieldPiece) {
+    const shield = PNAME[d.shieldPiece];
+    return `heads up: their ${PNAME[d.enemyPiece]} on ${d.enemySquare} looks through your ${shield} on ${d.shieldSquare} at your ${front} and your ${back} behind it — move the ${shield} and the ${PNAME[d.frontPiece]} is pinned.`;
+  }
+  return `heads up: your ${front} and your ${back} share that ${d.line} with their ${PNAME[d.enemyPiece]} on ${d.enemySquare} — that ${d.line} is a pin.`;
 }

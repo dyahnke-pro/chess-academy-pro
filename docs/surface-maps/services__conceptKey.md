@@ -27,8 +27,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionFacts.ts:1027`
 - `src/services/positionFacts.ts:1402`
 - `src/services/positionFacts.ts:1416`
-- `src/services/replayFence.alekhine1500.test.ts:18`
-- `src/services/replayFence.alekhine1500.test.ts:19`
+- `src/services/replayFence.alekhine1500.test.ts:24`
+- `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.sicilianClosed1000.test.ts:21`
 
 ### `forkThreatKey` (function) — 4 call sites

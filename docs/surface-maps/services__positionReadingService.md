@@ -88,7 +88,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/whyItFailed.ts:146`
 - `src/services/whyItFailed.ts:239`
 
-### `legalSeeGain` (function) — 18 call sites
+### `legalSeeGain` (function) — 19 call sites
 - `src/services/computedTruth.fuzz.test.ts:91`
 - `src/services/computedVoiceGrounding.test.ts:31`
 - `src/services/computedVoiceGrounding.test.ts:74`
@@ -99,8 +99,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:2541`
 - `src/services/groundedAnswer.ts:3293`
 - `src/services/groundedAnswer.ts:6709`
-- `src/services/inaccuracyCall.ts:206`
-- `src/services/inaccuracyCall.ts:554`
+- `src/services/inaccuracyCall.ts:210`
+- `src/services/inaccuracyCall.ts:558`
+- `src/services/inaccuracyCall.ts:594`
 - `src/services/moveTiming.ts:27`
 - `src/services/pvPlayback.ts:411`
 - `src/services/pvPlayback.ts:458`
@@ -164,8 +165,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `signedLegalSeeFor` (function) — 9 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7790`
 - `src/components/Coach/CoachTeachPage.tsx:7904`
-- `src/components/Coach/CoachTeachPage.tsx:10669`
-- `src/components/Coach/CoachTeachPage.tsx:10705`
+- `src/components/Coach/CoachTeachPage.tsx:10677`
+- `src/components/Coach/CoachTeachPage.tsx:10713`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
@@ -292,7 +293,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.ts:359`
 - `src/services/positionalTruth.corpus.test.ts:97`
 - `src/services/positionalTruth.corpus.test.ts:102`
-- `src/services/replayFence.najdorf1500.test.ts:22`
+- `src/services/replayFence.najdorf1500.test.ts:24`
 - `src/services/reviewFullData.ts:723`
 - `src/services/reviewFullData.ts:727`
 
@@ -454,7 +455,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/danyaExploitability.test.ts:142`
 - `src/services/danyaExploitability.test.ts:145`
 - `src/services/groundedAnswer.ts:6395`
-- `src/services/replayFence.najdorf1500.test.ts:52`
+- `src/services/replayFence.najdorf1500.test.ts:54`
 
 ### `rookBehindPasser` (function) — 5 call sites
 - `src/services/danyaBehaviors.ts:542`
