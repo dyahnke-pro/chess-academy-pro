@@ -57,40 +57,21 @@ const redisUrl = process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_U
 const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN;
 if (!blobToken) { console.error('❌ BLOB_READ_WRITE_TOKEN not set'); process.exit(1); }
 
-// 🔒 BOTH STORES OR NEITHER. The endpoint ranks Redis and Blob by ordinal and
-// breaks a TIE in Redis's favour — and a mode flip does not change the ordinal.
-// So a Blob-only write leaves the old mode winning on every check: the tool
-// prints success, the pointer visibly changes, and NOTHING happens. That is the
-// silent-no-op-reporting-success failure mode, in the one tool whose entire job
-// is backing out an incident. Refuse rather than lie.
-if (!redisUrl || !redisToken) {
-  console.error('❌ Redis creds absent (UPSTASH_REDIS_REST_* / KV_REST_API_*).');
-  console.error('   A Blob-only write would NOT take effect: the endpoint breaks an');
-  console.error('   ordinal tie in favour of Redis, and a mode flip leaves the ordinal');
-  console.error('   unchanged — so the old mode would keep winning while this reported');
-  console.error('   success. In CI these come from `vercel pull`; locally, pull them');
-  console.error('   from the Vercel project env with VERCEL_TOKEN.');
-  process.exit(1);
-}
-
+// BLOB IS AUTHORITATIVE; REDIS IS BEST-EFFORT (corrected 2026-09-27).
+// This used to refuse to run without a Redis write, on the grounds that the
+// endpoint ranked the two stores and broke ties in Redis's favour. That stopped
+// being true on 2026-09-11: `api/ota/manifest.ts` readLatest() reads the Blob
+// pointer FIRST and consults Redis ONLY when the Blob read fails. So the Blob
+// write is the one that takes effect. The old rule was not just stale but
+// harmful: on 2026-09-27 the shared Upstash budget was at its monthly cap
+// (500,000/500,000) and the tool could not flip the switch at all.
+//
+// Redis is still updated when it can be, so the fallback copy agrees; a failed
+// Redis write is a warning. (If Blob ever becomes unreadable the endpoint falls
+// back to Redis, which may then hold the old mode — the safe direction for
+// 'off', and only a missed saving for 'on'.)
 const before = pointer.delta ?? '(unset)';
 const next = { ...pointer, delta: arg };
-
-// Redis first, Blob last — the same order publish-ota-bundle.mjs uses, and the
-// endpoint prefers whichever holds the higher ordinal, so a half-completed
-// write can never serve an older bundle.
-try {
-  const { Redis } = await import('@upstash/redis');
-  await new Redis({ url: redisUrl, token: redisToken }).set('ota:latest', next);
-  console.log('[ota] Redis pointer updated');
-} catch (err) {
-  // Same reasoning as the guard above: a Blob-only write is ineffective, so a
-  // failed Redis write must stop the run rather than half-apply the change.
-  console.error(`❌ Redis update FAILED (${err instanceof Error ? err.message : err}).`);
-  console.error('   Aborting BEFORE the Blob write: a Blob-only change would not take');
-  console.error('   effect, and leaving the two stores disagreeing is worse than no change.');
-  process.exit(1);
-}
 
 const { put } = await import('@vercel/blob');
 const written = await put('ota/latest.json', JSON.stringify(next), {
@@ -101,6 +82,19 @@ const written = await put('ota/latest.json', JSON.stringify(next), {
   allowOverwrite: true,
   cacheControlMaxAge: 60,
 });
+
+if (redisUrl && redisToken) {
+  try {
+    const { Redis } = await import('@upstash/redis');
+    await new Redis({ url: redisUrl, token: redisToken }).set('ota:latest', next);
+    console.log('[ota] Redis fallback pointer updated');
+  } catch (err) {
+    console.warn(`⚠️  Redis fallback NOT updated (${err instanceof Error ? err.message : err}).`);
+    console.warn('   The Blob pointer is what the endpoint reads; this only matters if Blob becomes unreadable.');
+  }
+} else {
+  console.warn('⚠️  Redis creds absent — fallback pointer not updated (Blob is authoritative).');
+}
 
 console.log(`✅ delta mode ${before} → ${arg} (version ${pointer.version}, ordinal ${pointer.ordinal})`);
 console.log(`   ${written.url}`);
