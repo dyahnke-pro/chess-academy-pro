@@ -3654,7 +3654,17 @@ async function augmentWithProjections(
     flaggedForPunish.forEach((s, i) => {
       const line = lines[i];
       const isStudentSlip = s.playerColor === studentColorName;
-      const proof = line && line.delivers && line.plies.length >= 2 ? render(line, isStudentSlip ? 'opponent' : 'student') : '';
+      // A line that opens by TAKING BACK on the square this move just captured
+      // on proves nothing new — "Here's how you take advantage: Qxc5 — you win
+      // a bishop" after …Bxc5 was the recapture the trade line had already
+      // named (1200 review walk 2026-09-27).
+      let opensWithRecapture = false;
+      try {
+        const played = new Chess(s.fenBefore).move(s.san);
+        const firstTo = line?.plies[0]?.san.match(/x([a-h][1-8])/)?.[1] ?? null;
+        opensWithRecapture = !!played.captured && firstTo === played.to;
+      } catch { opensWithRecapture = false; }
+      const proof = line && line.delivers && line.plies.length >= 2 && !opensWithRecapture ? render(line, isStudentSlip ? 'opponent' : 'student') : '';
       if (line && proof) {
         const frame = isStudentSlip
           ? `Here's how it gets punished from here: ${proof}.`

@@ -1007,7 +1007,7 @@
 - `src/services/engineDeltaLines.ts:54`
 - `src/services/learnMoveTeaching.ts:125`
 - `src/services/opponentMovePurpose.ts:52`
-- `src/services/reviewFullData.ts:609`
+- `src/services/reviewFullData.ts:614`
 - `src/services/reviewMoveBriefing.ts:237`
 - `src/services/reviewNarrationFidelity.test.ts:218`
 - `src/services/reviewNarrationFidelity.test.ts:227`
@@ -1065,9 +1065,9 @@
 - `src/services/coachApi.ts:2338`
 - `src/services/coachApi.ts:5697`
 
-### `seatPieceReferences` (re-export) — 24 call sites
+### `seatPieceReferences` (re-export) — 25 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7805`
-- `src/services/coachFeatureService.ts:4783`
+- `src/services/coachFeatureService.ts:4793`
 - `src/services/liveTacticsContext.ts:453`
 - `src/services/reviewBoardAwareness.test.ts:70`
 - `src/services/reviewBoardAwareness.test.ts:74`
@@ -1078,7 +1078,8 @@
 - `src/services/reviewBoardAwareness.test.ts:109`
 - `src/services/reviewFullData.ts:278`
 - `src/services/reviewFullData.ts:325`
-- `src/services/reviewFullData.ts:522`
+- `src/services/reviewFullData.ts:404`
+- `src/services/reviewFullData.ts:527`
 - `src/services/reviewNarrationFidelity.test.ts:85`
 - `src/services/reviewNarrationFidelity.test.ts:95`
 - `src/services/reviewNarrationFidelity.test.ts:101`

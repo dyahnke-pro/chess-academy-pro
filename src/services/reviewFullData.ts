@@ -394,9 +394,14 @@ export function computeMoveFacets(
       } catch { bestSan = null; }
     }
     if (bestSan && bestSan === san) bestSan = null;
-    const reason = bestSan && fellShort
+    // Seated on the board it DESCRIBES — the one before the move. The review's
+    // global seating pass reads the board after it, and after 16.Nxe4 "the
+    // knight on e4" there was White's: "Qxe4 — it would take your knight on e4"
+    // (1200 review walk 2026-09-27). A seated reference is left alone later.
+    const reason0 = bestSan && fellShort
       ? betterMoveReason(fenBefore, san, bestSan, ctx.bestLineUci, ctx.moverColor)
       : null;
+    const reason = reason0 && ctx.studentColorWB ? seatPieceReferences(reason0, fenBefore, ctx.studentColorWB) : reason0;
     const better = bestSan && fellShort ? `the stronger move was ${bestSan}${reason ? ` — ${reason}` : ''}` : '';
     const tail = [whyBad, better].filter(Boolean).join('; ');
     const betterBit = tail ? ` — ${tail}` : '';

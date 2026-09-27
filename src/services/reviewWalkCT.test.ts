@@ -62,3 +62,19 @@ describe('"you can take back" only when taking back holds (15.Nxh7)', () => {
     expect(f).toMatch(/you can take back/);
   });
 });
+
+describe('the better move\'s reason is seated on the board it describes (1200 Sicilian, 16.Nxe4)', () => {
+  const quality = (sans: string, san: string, best: string, line: string[] = []): string => {
+    const c = after(sans); const fenBefore = c.fen(); c.move(san);
+    return computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
+      fenBefore, fenAfter: c.fen(), san, ply: 31, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
+      evaluation: -150, preMoveEval: 20, classification: 'mistake', bestMoveSan: best,
+      prevCap: { square: null, capturedValue: 0 }, allSans: [], forcedRunStartPly: null, bestLineUci: line, replyBestSan: null,
+    }).filter((f) => f.startsWith('[quality]')).join(' ');
+  };
+  it('"take their knight on e4", never "your knight"', () => {
+    const q = quality('e4 c5 Nf3 d6 c3 Nc6 d4 cxd4 cxd4 Bg4 Be2 Nf6 Nc3 Bxf3 Bxf3 e6 Qa4 Qd7 Be3 Be7 O-O O-O Rad1 Qc8 Qc2 a6 e5 dxe5 Be4 Nxe4', 'Nxe4', 'Qxe4', ['c2e4', 'e5d4', 'e3d4', 'c6d4']);
+    expect(q).toMatch(/take their knight on e4/);
+    expect(q).not.toMatch(/your knight on e4/);
+  });
+});

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1129 lines · 8 exports · 8 importers · 9 tests · 0 audits**
+**1134 lines · 8 exports · 8 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -43,7 +43,7 @@
 ### `EVAL_FACET_MIN_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeMoveFacets` (function) — 25 call sites
+### `computeMoveFacets` (function) — 26 call sites
 - `src/services/boardDelta.test.ts:13`
 - `src/services/boardDelta.test.ts:66`
 - `src/services/coachFeatureService.ts:1758`
@@ -66,12 +66,13 @@
 - `src/services/reviewFullData.test.ts:349`
 - `src/services/reviewFullData.test.ts:369`
 - `src/services/reviewWalkCT.test.ts:49`
+- `src/services/reviewWalkCT.test.ts:69`
 - `src/services/unifiedBetterMoveReason.test.ts:36`
 - `src/test/teach02Wired.test.ts:26`
 - `src/test/teach02Wired.test.ts:66`
 
 ### `computeThroughLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:4860`
+- `src/services/coachFeatureService.ts:4870`
 - `src/services/reviewFullData.test.ts:204`
 - `src/services/reviewFullData.test.ts:207`
 - `src/services/reviewFullData.test.ts:215`
