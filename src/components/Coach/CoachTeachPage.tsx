@@ -8364,6 +8364,10 @@ export function CoachTeachPage(): JSX.Element {
       // full board-awareness pool — surfaces each turn instead of repeating.
       try {
         const pr = buildPositionalRead(args.fenAfterReply, args.studentColor, positionalSaidRef.current, standingRef.current.said);
+        // ONE LEDGER FOR THE PHASE TURN TOO (1200 walk 2026-09-27: "your king
+        // is still in the centre and castling is ready" at moves 6 and 8 — the
+        // phase narration reads the standing memory, not this set).
+        for (const k of positionalSaidRef.current) if (!standingRef.current.said.has(k)) standingRef.current.remember(k);
         const prSquares = (pr?.squares ?? []).filter((s) => /^[a-h][1-8]$/.test(s));
         // ONE CLAIM, ONE VOICE (hand walk 2026-09-24: "b5 is the pawn break …
         // prepare it. A pawn break is available on b5 …" on one turn). When the

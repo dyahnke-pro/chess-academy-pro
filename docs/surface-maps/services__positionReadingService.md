@@ -153,8 +153,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `signedLegalSeeFor` (function) — 9 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7776`
 - `src/components/Coach/CoachTeachPage.tsx:7890`
-- `src/components/Coach/CoachTeachPage.tsx:10591`
-- `src/components/Coach/CoachTeachPage.tsx:10610`
+- `src/components/Coach/CoachTeachPage.tsx:10595`
+- `src/components/Coach/CoachTeachPage.tsx:10614`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
@@ -339,7 +339,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:128`
 
 ### `namedPawnStructure` (function) — 15 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9011`
+- `src/components/Coach/CoachTeachPage.tsx:9015`
 - `src/services/danyaBehaviors.ts:316`
 - `src/services/danyaDeviceCoverage.test.ts:107`
 - `src/services/danyaDeviceCoverage.test.ts:108`
