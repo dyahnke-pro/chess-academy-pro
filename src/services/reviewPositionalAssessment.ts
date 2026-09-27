@@ -15,6 +15,7 @@
  * overstate the why, I don't want non-applicable reasons stated").
  */
 import { andList } from '../utils/andList';
+import { goodPieceIdeaKey } from './positionReadingService';
 import { Chess, type Color } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { MATERIAL_VALUE } from './pieceValues';
@@ -158,7 +159,7 @@ function assetsFor(
     const name = myOutpost.piece === 'n' ? 'knight' : 'bishop';
     reasons.push(own
       ? `your ${name} sits on a protected outpost on ${myOutpost.square} where no enemy pawn attacks the square`
-      : `their ${name} sits on a protected outpost on ${myOutpost.square} where no pawn of yours attacks the square`, `${holder}-good-${myOutpost.square}`);
+      : `their ${name} sits on a protected outpost on ${myOutpost.square} where no pawn of yours attacks the square`, goodPieceIdeaKey(holder, myOutpost.piece, 'outpost', myOutpost.square));
   }
 
   // 3. Control of an open file — a rook or queen on a fully open file the
@@ -170,7 +171,7 @@ function assetsFor(
     && struct.pawns.openFiles.includes(p.square[0])
     && !all.some((q) => (q.type === 'r' || q.type === 'q') && q.color === other && q.square[0] === p.square[0]));
   if (myHeavyOnOpen) {
-    reasons.push(`${you} own the open ${myHeavyOnOpen.square[0]}-file`, `${holder}-file-${myHeavyOnOpen.square[0]}`);
+    reasons.push(`${you} own the open ${myHeavyOnOpen.square[0]}-file`, `file-${myHeavyOnOpen.square[0]}`);
   }
 
   // 4. An enemy weak pawn to target. DURABILITY HONESTY (board-awareness
@@ -192,7 +193,7 @@ function assetsFor(
 
   // 5. A passed pawn of your own.
   const myPassed = struct.pawns.passedPawns[side][0];
-  if (myPassed) reasons.push(`${your} passed pawn on ${myPassed} is a long-term trump`, `${holder}-passer-${myPassed}`);
+  if (myPassed) reasons.push(`${your} passed pawn on ${myPassed} is a long-term trump`, `${holder}-passer-${myPassed[0]}`);
 
   // 6. A development lead (only meaningful in the opening/early middlegame).
   const lead = developedCount(all, side) - developedCount(all, other);

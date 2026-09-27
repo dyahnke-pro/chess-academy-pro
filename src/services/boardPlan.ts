@@ -70,7 +70,15 @@ function isCentralFile(square: string): boolean {
  * deliberately omits the square, so advancing the pawn you were told to advance
  * is not a change of plan.
  */
-export interface StructurePlanFact { text: string; id: string; }
+export interface StructurePlanFact {
+  text: string;
+  id: string;
+  /** The positional read's key for the same idea (`positionalRead` passer
+   *  key), so the two lanes that both read one passer are one claim to the
+   *  say-once memory (fresh-game walk 2026-09-27: "their passed pawn on h2"
+   *  spoken at move 18 by one, at move 21 by the other). */
+  ideaKey?: string;
+}
 
 /** The text alone — the shape four existing callers want. */
 export function structurePlan(fen: string, studentColor: Color): string | null {
@@ -121,11 +129,11 @@ export function structurePlanFact(fen: string, studentColor: Color): StructurePl
         text: `${raceText.charAt(0).toUpperCase()}${raceText.slice(1)}.`,
       };
     }
-    return { id: 'passer-mine', text: `Your passed pawn on ${mine} is the trump here — push it and make them deal with the promotion.` };
+    return { id: 'passer-mine', ideaKey: `student-passer-${mine[0]}`, text: `Your passed pawn on ${mine} is the trump here — push it and make them deal with the promotion.` };
   }
   const theirs = mostAdvanced(s.pawns.passedPawns[opp], opp);
   if (theirs) {
-    return { id: 'passer-theirs', text: `Their passed pawn on ${theirs} is the danger — get a piece in front of it and blockade before it runs.` };
+    return { id: 'passer-theirs', ideaKey: `opponent-passer-${theirs[0]}`, text: `Their passed pawn on ${theirs} is the danger — get a piece in front of it and blockade before it runs.` };
   }
 
   // Isolated queen's/king's pawn — the classic IQP plan.

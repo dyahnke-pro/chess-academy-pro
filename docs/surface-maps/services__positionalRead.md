@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**552 lines · 7 exports · 8 importers · 5 tests · 1 audits**
+**565 lines · 7 exports · 10 importers · 7 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,11 +13,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/components/Coach/CoachTeachPage.tsx`
+- `src/services/boardPlan.ideaKey.test.ts`
 - `src/services/danyaBehaviors.ts`
 - `src/services/groundedAnswer.ts`
 - `src/services/learnWalkNimzo.test.ts`
 - `src/services/narrationAdversarial.test.ts`
 - `src/services/positionReadComposer.ts`
+- `src/services/positionalRead.ideaKey.test.ts`
 - `src/services/positionalRead.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 
@@ -30,12 +32,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `rookReachesFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:578`
+- `src/services/danyaBehaviors.ts:598`
 
 ### `castleIsOneMoveAway` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:222`
+- `src/services/danyaBehaviors.ts:242`
 
-### `readPosition` (function) — 42 call sites
+### `readPosition` (function) — 43 call sites
+- `src/services/boardPlan.ideaKey.test.ts:13`
 - `src/services/groundedAnswer.ts:1370`
 - `src/services/lookaheadPlan.ts:920`
 - `src/services/lookaheadPlan.ts:1189`
@@ -79,12 +82,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.test.ts:378`
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
-### `buildPositionalRead` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8289`
+### `buildPositionalRead` (function) — 12 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8356`
 - `src/services/learnWalkBlumenfeld.test.ts:116`
 - `src/services/learnWalkNimzo.test.ts:34`
 - `src/services/narrationAdversarial.test.ts:106`
 - `src/services/narrationAdversarial.test.ts:174`
+- `src/services/positionalRead.ideaKey.test.ts:18`
+- `src/services/positionalRead.ideaKey.test.ts:30`
 - `src/services/positionalRead.test.ts:164`
 - `src/services/positionalRead.test.ts:167`
 - `src/services/positionalRead.test.ts:176`
@@ -92,13 +97,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.test.ts:192`
 
 ### `attackerCanUseFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:207`
+- `src/services/danyaBehaviors.ts:223`
 
 ## Tests
 
+- `src/services/boardPlan.ideaKey.test.ts`
 - `src/services/learnWalkBlumenfeld.test.ts`
 - `src/services/learnWalkNimzo.test.ts`
 - `src/services/narrationAdversarial.test.ts`
+- `src/services/positionalRead.ideaKey.test.ts`
 - `src/services/positionalRead.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 

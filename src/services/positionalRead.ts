@@ -39,6 +39,7 @@ import {
   findOpenFiles,
   bishopBlockingPawns,
   namedPawnStructure,
+  goodPieceIdeaKey,
 } from './positionReadingService';
 
 const NAME: Record<string, string> = {
@@ -62,8 +63,16 @@ export type ObservationKind =
   | 'minority' | 'passer' | 'complex' | 'file';
 
 export interface PositionalObservation {
-  /** Dedupe key for the caller's said-set. */
+  /** Dedupe key for the caller's said-set — keyed on the IDEA, never on a
+   *  square a piece is standing on (fresh-game walk 2026-09-27: "your rook on
+   *  g8 / g7 / g6 has the half-open g-file" four times as the rook slid down
+   *  the file, and "their passed pawn on h2 / h4 / h5 is the danger" three
+   *  times as it ran — every step was a new square, so a new key). */
   key: string;
+  /** Other claims this one also makes — a rook that owns the d-file and "the
+   *  d-file is open" are one claim. Skipped when any is said; all are
+   *  remembered when it speaks. */
+  aliases?: readonly string[];
   /** Whose feature this is. */
   side: 'student' | 'opponent';
   kind: ObservationKind;
@@ -233,7 +242,8 @@ function observationsFor(
   const outpost = quality.find((q) => q.color === color && q.quality === 'good');
   if (outpost) {
     out.push({
-      key: `${side}-good-${outpost.square}`, side, kind: 'piece', rank: rank('piece'),
+      key: goodPieceIdeaKey(side, outpost.piece, outpost.kind, outpost.square), side, kind: 'piece', rank: rank('piece'),
+      aliases: outpost.kind === 'open-file' || outpost.kind === 'semi-open-file' ? [`file-${outpost.square[0]}`] : [],
       squares: [outpost.square],
       text: own
         ? `Your ${NAME[outpost.piece] ?? 'piece'} on ${outpost.square} is your best-placed piece — ${goodPieceClause(outpost.kind, outpost.square)}.`
@@ -293,7 +303,7 @@ function observationsFor(
       key: `${side}-break-${breaks[0]}`, side, kind: 'lever', rank: rank('lever'),
       squares: [breaks[0]],
       text: own
-        ? `A pawn break is available on ${breaks[0]} — the pawn levers are where the play comes from.`
+        ? `You have a pawn break on ${breaks[0]} — the pawn levers are where the play comes from.`
         : `${you.charAt(0).toUpperCase()}${you.slice(1)} have a pawn break available on ${breaks[0]} — that is where their play comes from.`,
     });
   }
@@ -319,7 +329,7 @@ function observationsFor(
   const passers = findPassedPawns(fen, color);
   if (passers.length > 0) {
     out.push({
-      key: `${side}-passer-${passers[0]}`, side, kind: 'passer', rank: rank('passer'),
+      key: `${side}-passer-${passers[0][0]}`, side, kind: 'passer', rank: rank('passer'),
       squares: [passers[0]],
       text: own
         ? `Your passed pawn on ${passers[0]} is a long-term trump — every trade that clears its path makes it stronger.`
@@ -364,6 +374,7 @@ function observationsFor(
     if (file) {
       out.push({
         key: `${side}-file-${file}`, side, kind: 'file', rank: rank('file'),
+        aliases: [`file-${file}`],
         text: `The ${file}-file is open — that is where a rook wants to be.`,
       });
     }
@@ -522,9 +533,10 @@ export function buildPositionalRead(
   // break square is still news; the lesson around it is not.
   const leverTaught = (side: string): boolean => [...(said ?? []), ...(heard ?? [])].some((k) => k.startsWith(`${side}-break-`));
   for (const o of readPosition(fen, studentColor)) {
-    if (said?.has(o.key) || heard?.has(o.key)) continue;
+    const keys = [o.key, ...(o.aliases ?? [])];
+    if (keys.some((k) => said?.has(k) || heard?.has(k))) continue;
     const stem = o.kind === 'lever' && leverTaught(o.side) ? leverStem(o) : null;
-    said?.add(o.key);
+    for (const k of keys) said?.add(k);
     return stem ? { ...o, text: stem } : o;
   }
   return null;
@@ -549,3 +561,4 @@ export function attackerCanUseFile(fen: string, file: string, attacker: 'w' | 'b
     return true;
   } catch { return true; }
 }
+

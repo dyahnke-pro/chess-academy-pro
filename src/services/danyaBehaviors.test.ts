@@ -64,7 +64,7 @@ describe('BehaviorScheduler — fires at the corpus RATE (stride scheduling)', (
   // Two behaviors, weights 3:1 → over many always-applicable turns the spoken
   // share must converge to 3:1.
   function hit(id: string, weight: number): BehaviorHit {
-    return { id, fact: id, squares: [], weight };
+    return { id, fact: id, squares: [], keys: [], weight };
   }
 
   it('reproduces the target weight ratio when both behaviors always fire', () => {

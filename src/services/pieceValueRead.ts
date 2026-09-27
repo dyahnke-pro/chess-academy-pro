@@ -159,6 +159,11 @@ export function strongestByDelta(
 export interface PieceQualityLine {
   text: string;
   kind: 'their-best-piece' | 'your-worst-piece';
+  /** The idea this line states, in the ledger other lanes share — an unmoved
+   *  piece is the DEVELOPMENT idea, which the positional read and the
+   *  behaviour lane also state (fresh-game walk 2026-09-27: development said
+   *  three ways on one move). */
+  ideaKey?: string;
   squares: string[];
 }
 
@@ -262,6 +267,12 @@ export function pieceQualityLines(
   // already doing work this early IS the exception worth naming.
   const best = theirs.filter((v) => v.piece.toLowerCase() !== 'p')
     .filter((v) => opts?.isMiddlegame === true || !onHomeSquare(v))
+    // …and in ANY phase a piece still on its home square is doing work only as
+    // a rook or queen looking down a file free of its own pawns (fresh-game
+    // walk 2026-09-27, move 10: "their queen on d1 is the piece doing the most
+    // work" — an unmoved queen behind its own d2-pawn, crowned because it
+    // measured a shade above the other side's unmoved queen).
+    .filter((v) => !onHomeSquare(v) || ('rq'.includes(v.piece.toLowerCase()) && (!opts?.fen || rookFileFree(opts.fen, v))))
     .filter((v) => opts?.isMiddlegame === true || !'nb'.includes(v.piece.toLowerCase()))
     // …and a pre-middlegame ROOK counts as "doing work" only on a file free of
     // its own pawns. Castling is not work: on move six of a Philidor (hand walk
@@ -317,6 +328,7 @@ export function pieceQualityLines(
       out.push({
         kind: 'your-worst-piece',
         squares: [worst.v.square],
+        ideaKey: onHomeSquare(worst.v) ? 'student-development' : undefined,
         // Still on its home square it is UNDEVELOPED, not misplaced — the
         // advice is the development rule, not a reroute (hand walk
         // 2026-09-24: the c1-bishop at move nine; his line a few moves later

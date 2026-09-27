@@ -2444,3 +2444,12 @@ export function gradeReadingAnswerDeterministic(q: ReadingQuestion, userAnswer: 
   }
   return { verdict: 'partial', correctAnswer: q.answer, note: 'On the right track, but name the exact square or idea.' };
 }
+
+/** ONE KEY FOR "THIS PIECE IS WELL PLACED, AND WHY" — shared by the positional
+ *  read and the piece-activity behaviour. A file reason is keyed on the FILE
+ *  (the rook sliding g8→g6 is the same idea); an outpost or a bad piece on its
+ *  square (a different square is a different post). */
+export function goodPieceIdeaKey(side: string, piece: string, kind: string, square: string): string {
+  const where = kind === 'open-file' || kind === 'semi-open-file' ? square[0] : square;
+  return `${side}-good-${piece}-${kind}-${where}`;
+}

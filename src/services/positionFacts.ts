@@ -696,8 +696,11 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // ONE identity rule for "the same plan" — `planMemory.stepPlan`, the fold
   // review's selector already runs — so the two surfaces cannot disagree.
   const planEvent = stepPlan(lastPlan ? { plan: null, id: lastPlan.id, announcedAt: null } : EMPTY_PLAN_STATE, plyNumberForPlan(fen), planFact).event;
-  const planKey = planFact && (planEvent === 'announce' || planEvent === 'changed') ? `plan:${planFact.id}#${(lastPlan?.n ?? 0) + 1}` : null;
-  const structureText = planFact && planEvent === 'announce' ? planFact.text
+  // The same idea already spoken by the positional read speaks nowhere else.
+  const planIdeaHeard = !!planFact?.ideaKey && !!input.alreadySaid?.has(planFact.ideaKey);
+  const planKey = planFact && !planIdeaHeard && (planEvent === 'announce' || planEvent === 'changed') ? `plan:${planFact.id}#${(lastPlan?.n ?? 0) + 1}` : null;
+  const structureText = planIdeaHeard ? ''
+    : planFact && planEvent === 'announce' ? planFact.text
     : planFact && planEvent === 'changed' ? planChangedText(planFact.text)
       : '';
 
@@ -966,7 +969,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     remember: [
       ...clauses.filter((c) => SAY_ONCE_KINDS.has(c.kind)).map((c) => c.text),
       ...(methodKey && clauses.some((c) => c.kind === 'method') ? [methodKey] : []),
-      ...(planKey && clauses.some((c) => c.kind === 'structure-plan') ? [planKey] : []),
+      ...(planKey && clauses.some((c) => c.kind === 'structure-plan') ? [planKey, ...(planFact?.ideaKey ? [planFact.ideaKey] : [])] : []),
       ...convertRemember(clauses, input.fen, studentSeat),
       // The balance sheet's reasons, under the keys the positional read uses.
       ...(clauses.some((c) => c.kind === 'stock') ? stockKeys : []),

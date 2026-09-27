@@ -90,6 +90,8 @@ export interface CentralKingDanger {
   aimedFrom: Sq;
   /** The central pawn contact that, once it opens, unmasks the file. */
   tensionSquare: Sq;
+  /** How the king gets castled from here (at most one piece in the way). */
+  route: CastleRoute;
 }
 
 /** Is there a friendly pawn on files c–f in the centre that is in direct
@@ -136,6 +138,12 @@ export function detectCentralKingDanger(fen: string, studentColor: 'w' | 'b'): C
   // 27…Ba4+: the king had already walked to f8 and the coach said it anyway).
   const rights = game.getCastlingRights(studentColor);
   if (!rights.k && !rights.q) return null;
+  // The remedy has to be REACHABLE: "get castled" with the kingside right gone
+  // and the c8-bishop and d8-queen both standing in the long castle's way is
+  // advice the student cannot follow for three moves (fresh-game walk
+  // 2026-09-27, Carlsen–Topalov, twice).
+  const route = castleRoute(fen, studentColor);
+  if (!route || route.blockers.length > 1) return null;
 
   const tension = centralTensionSquare(game, studentColor);
   if (!tension) return null; // centre is locked / no contact → no imminent opening
@@ -153,11 +161,44 @@ export function detectCentralKingDanger(fen: string, studentColor: 'w' | 'b'): C
   }
   if (!aimedFrom) return null;
 
-  return { kingSquare: kingSq, aimedFrom, tensionSquare: tension };
+  return { kingSquare: kingSq, aimedFrom, tensionSquare: tension, route };
 }
 
 export function centralKingDangerClause(d: CentralKingDanger): string {
-  return `Your king is still in the centre and the position is about to crack open — they already have a piece aimed down the ${d.kingSquare[0]}-file. Get castled before the centre opens.`;
+  return `Your king is still in the centre and the position is about to crack open — they already have a piece aimed down the ${d.kingSquare[0]}-file. ${castleAdvice(d.route)}`;
+}
+
+/** "Get castled", or the one piece in the way of it. */
+export function castleAdvice(route: CastleRoute): string {
+  if (route.blockers.length === 0) return 'Get castled before the centre opens.';
+  const b = route.blockers[0];
+  return `Move your ${PIECE_WORD[b.piece] ?? 'piece'} on ${b.square}, then castle ${route.side} before the centre opens.`;
+}
+
+const PIECE_WORD: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king', p: 'pawn' };
+
+export interface CastleRoute {
+  side: 'short' | 'long';
+  /** Own pieces standing between king and rook — each is a move to spend. */
+  blockers: Array<{ square: string; piece: string }>;
+}
+
+/** The castle still on the table with the fewest pieces in its way, or null
+ *  when both rights are gone. The ONE answer to "can this king castle soon". */
+export function castleRoute(fen: string, color: 'w' | 'b'): CastleRoute | null {
+  let b: Chess;
+  try { b = new Chess(fen); } catch { return null; }
+  const rights = fen.split(' ')[2] ?? '-';
+  const r = color === 'w' ? '1' : '8';
+  const inWay = (files: readonly string[]): Array<{ square: string; piece: string }> => files
+    .map((f) => ({ square: `${f}${r}`, cell: b.get(`${f}${r}` as never) }))
+    .filter((x) => !!x.cell)
+    .map((x) => ({ square: x.square, piece: (x.cell as { type: string }).type }));
+  const routes: CastleRoute[] = [];
+  if (rights.includes(color === 'w' ? 'K' : 'k')) routes.push({ side: 'short', blockers: inWay(['f', 'g']) });
+  if (rights.includes(color === 'w' ? 'Q' : 'q')) routes.push({ side: 'long', blockers: inWay(['b', 'c', 'd']) });
+  if (routes.length === 0) return null;
+  return routes.sort((x, y) => x.blockers.length - y.blockers.length)[0];
 }
 
 /** The spoken clause for a king exposure, board-true. */

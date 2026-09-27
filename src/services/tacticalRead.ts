@@ -535,14 +535,19 @@ export function uncertaintyClause(read: TacticalRead, opts: { spoken?: boolean; 
   // The caller passes the ply; the same ply always gets the same stem
   // (resume-safe, testable — never Math.random).
   const alt = sayN(read.closeAlternative.san);
+  // EVERY STEM NAMES BOTH MOVES (fresh-game walk 2026-09-27: "nothing to lose
+  // sleep over — the king to c7 does the same job" — the same job as what? The
+  // best move was never said beside it). The register only speaks where naming
+  // the move is earned, so naming it here leaks nothing.
+  const best = sayN(read.bestMoveSan);
   const stems = [
-    `It’s genuinely close — ${alt} is about as good, so don’t agonise.`,
-    `${alt.charAt(0).toUpperCase()}${alt.slice(1)} is a fine alternative here; the two are within a whisker.`,
-    `Nothing to lose sleep over — ${alt} does the same job.`,
+    `It’s genuinely close — ${alt} is about as good as ${best}, so don’t agonise.`,
+    `${alt.charAt(0).toUpperCase()}${alt.slice(1)} is a fine alternative to ${best} here; the two are within a whisker.`,
+    `Nothing to lose sleep over — ${alt} does the same job as ${best}.`,
     // No COUNT stem ("there are two good moves here…"): the critical-moment
     // read already counts the moves that hold, and the two spoke back to back
     // as one fact said twice (hand walk 2026-09-24).
-    `${alt.charAt(0).toUpperCase()}${alt.slice(1)} works just as well here.`,
+    `${alt.charAt(0).toUpperCase()}${alt.slice(1)} works just as well as ${best} here.`,
   ];
   return stems[Math.abs(opts.rotation ?? 0) % stems.length];
 }

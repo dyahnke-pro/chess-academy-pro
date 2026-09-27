@@ -291,7 +291,7 @@ import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGroundi
 // student must not read the same board at different depths. See the constant.
 import { rankReplies, bestReplyLine } from '../../services/bestReplyRanking';
 import { tacticalReadFromLines, namedTacticClause, temptingTurnClause, uncertaintyClause, candidateCompareClause } from '../../services/tacticalRead';
-import { namedPawnStructure } from '../../services/positionReadingService';
+import { namedPawnStructure, signedLegalSeeFor } from '../../services/positionReadingService';
 import { BehaviorScheduler, detectBehaviors } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
@@ -849,6 +849,8 @@ interface TeachSubmitOpts {
   teachIntent?: boolean;
 }
 
+
+const NAME_OF_PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 
 export function CoachTeachPage(): JSX.Element {
   const navigate = useNavigate();
@@ -7717,7 +7719,12 @@ export function CoachTeachPage(): JSX.Element {
         const justCaptured = lastMoveCapturedOn(history, prize.square);
         tacticLine = justCaptured
           ? `Their ${NAME[prize.piece] ?? 'piece'} on ${prize.square} just took and nothing defends it — the material comes back.`
-          : `Their ${NAME[prize.piece] ?? 'piece'} on ${prize.square} has nothing defending it — there's something to win here.`;
+          // UNDEFENDED IS A FACT; FREE IS THE ENGINE'S VERDICT (fresh-game walk
+          // 2026-09-27, 11.Nxc4: "their knight on g5 has nothing defending it —
+          // there's something to win here", and …Rxg5 loses to d4, the c1-bishop
+          // opening onto the rook). This lane runs before the engine read, so it
+          // states the fact and the question; the engine lane names the move.
+          : `Their ${NAME[prize.piece] ?? 'piece'} on ${prize.square} has nothing defending it — before you take, check what taking it allows.`;
       } else {
         // THE STUDENT ALREADY FOUND IT (hand walks 800 + 2000): "There's a pin
         // here for you — have a look" right after they played …Bg4 themselves,
@@ -7751,6 +7758,32 @@ export function CoachTeachPage(): JSX.Element {
           if (word) tacticSquares = t.squares.filter((sq) => /^[a-h][1-8]$/.test(sq));
         }
       }
+      const kingPawnThreat = (): boolean => {
+        // A PAWN IN FRONT OF YOUR KING IS NOT "SMALL STUFF" (fresh-game walk
+        // 2026-09-27, 14.Qxh5: queen and knight both hit f7, only the king
+        // guarded it, and the coach talked about the bishop pair — …Rg7 was
+        // the only defence). The pawn exception to "pieces only": a pawn
+        // touching the king that the opponent can win outright.
+        try {
+          const b = new Chess(args.fenAfterReply);
+          const kSq = b.board().flat().find((c) => c && c.type === 'k' && c.color === studentCC)?.square;
+          if (!kSq) return false;
+          const foe: 'w' | 'b' = studentCC === 'w' ? 'b' : 'w';
+          for (const c of b.board().flat()) {
+            if (!c || c.type !== 'p' || c.color !== studentCC) continue;
+            const near = Math.abs(c.square.charCodeAt(0) - kSq.charCodeAt(0)) <= 1 && Math.abs(Number(c.square[1]) - Number(kSq[1])) <= 1;
+            if (!near) continue;
+            if (signedLegalSeeFor(args.fenAfterReply, c.square, foe) > 0) {
+              const n = b.attackers(c.square, foe).length;
+              threatKey = `kingpawn:${c.square}`;
+              threatSquares = [c.square, kSq];
+              threatLine = `Careful — your pawn on ${c.square} guards your king, and they hit it ${n === 2 ? 'twice' : n === 3 ? 'three times' : `${n} times`} — it falls unless you cover it.`;
+              return true;
+            }
+          }
+        } catch { /* a bonus lane */ }
+        return false;
+      };
       if (againstMe.length > 0) {
         const t = againstMe[0];
         // KEYED ON THE PATTERN, NOT EVERY SQUARE IN IT. A pin is the same pin
@@ -7785,7 +7818,10 @@ export function CoachTeachPage(): JSX.Element {
           tacticLine = `You've got a ${tacticWord(myTacticType) ?? 'chance'} of your own here — a different one. See it?`;
           tacticTailType = myTacticType;
         }
-      } else if (tctx.threats.length > 0) {
+      } else if (tctx.threats.some((t) => t.spoken && !(t.type === 'pin' && / pins pawn /i.test(t.description)))) {
+        // (Only a threat that can be SAID takes the turn — an unspeakable one
+        // fell through to nothing and hid the king-pawn warning below; fresh-
+        // game walk 2026-09-27, 14.Qxh5.)
         // NOT ON THE BOARD YET — AND THAT IS THE POINT. The branch above warns
         // about geometry that already exists; this one is the fork two plies
         // out, from the PV scan the cached analysis just unlocked. Warning a
@@ -7809,6 +7845,8 @@ export function CoachTeachPage(): JSX.Element {
           threatSquares = (up.description.match(/\b[a-h][1-8]\b/g) ?? []).slice(0, 4);
           threatLine = `Watch out — ${up.spoken}.`;
         }
+      } else if (!(myHanging.length > 0 && (AV[myHanging[0].piece] ?? 0) >= 3) && kingPawnThreat()) {
+        // threatLine set above
       } else if (myHanging.length > 0 && (AV[myHanging[0].piece] ?? 0) >= 3) {
         // Only a real PIECE (minor or better) earns the interrupt. A hanging pawn
         // is the small stuff Naroditsky assumes you see — flagging every one is
@@ -7843,7 +7881,13 @@ export function CoachTeachPage(): JSX.Element {
               .sort((x, y) => (x.t === 'p' ? 1 : AV[x.t] ?? 0) - (y.t === 'p' ? 1 : AV[y.t] ?? 0))[0];
             // …unless the attacker is simply free to take — then the answer
             // is to take it, not to move away.
-            const attackerFree = !!low && board.attackers(low.a, studentCC).length > 0 && board.attackers(low.a, foe).length === 0;
+            // …or can be taken back in a trade that loses nothing (fresh-game
+            // walk 2026-09-27: "their pawn on c5 hits your knight on b6; it has
+            // to move" — …dxc5 removes the attacker, and that is what was
+            // played). The student is to move here, so a legal capture exists
+            // or it doesn't; the signed SEE says whether taking costs anything.
+            const attackerFree = !!low && board.moves({ verbose: true }).some((m) => m.to === low.a && !!m.captured)
+              && signedLegalSeeFor(args.fenAfterReply, low.a, studentCC) >= 0;
             if (low && !attackerFree && (!hit || (AV[cell.type] ?? 0) > (AV[hit.piece] ?? 0))) hit = { sq: cell.square, piece: cell.type, by: low.t, bySq: low.a };
           }
           if (hit) {
@@ -7900,6 +7944,20 @@ export function CoachTeachPage(): JSX.Element {
         learnMemRef.current.spokenThreatLines.add(threatKey);
         if (mustHere) standingRef.current.remember(mustHere);
         captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: threatKey });
+      }
+      // A threat that was only a REPEAT must not hide a fresh danger to the king
+      // (fresh-game walk 2026-09-27, 14.Qxh5: the f7 pin was said last move,
+      // was dropped here as a repeat, and f7 falling went unsaid).
+      if (threatLine === null && !(myHanging.length > 0 && (AV[myHanging[0].piece] ?? 0) >= 3) && kingPawnThreat()) {
+        const fresh = threatLine as string | null;
+        if (fresh && !learnMemRef.current.spokenThreatLines.has(threatKey)) {
+          learnMemRef.current.lastThreatKey = threatKey;
+          learnMemRef.current.spokenThreatLines.add(threatKey);
+          captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: threatKey });
+        } else {
+          threatLine = null;
+          threatSquares = [];
+        }
       }
       // What the alert lane has CLAIMED this turn. The keys carry their squares
       // by construction (`vs:pin:e1c3`, `hang:nc3`), so this reads them back
@@ -8247,6 +8305,7 @@ export function CoachTeachPage(): JSX.Element {
           fen: args.fenAfterReply,
           studentColor: args.studentColor,
           studentLastTo: studentLastSan?.match(/([a-h][1-8])(?:=[NBRQ])?[+#]?$/)?.[1] ?? null,
+          opponentLastTo: args.historyAfterReply[args.historyAfterReply.length - 1]?.match(/([a-h][1-8])(?:=[NBRQ])?[+#]?$/)?.[1] ?? null,
         });
         // The move that WON the bishop pair already says so (the move point,
         // "now you have the two bishops") — the standing read stands aside
@@ -8266,12 +8325,20 @@ export function CoachTeachPage(): JSX.Element {
         // read and write `student-break-<square>`.
         const breakHeard = (x: { id: string; squares: readonly string[] }): boolean =>
           x.id === 'pawn-break' && x.squares.some((sq) => standingRef.current.said.has(`student-break-${sq}`) || positionalSaidRef.current.has(`student-break-${sq}`));
-        const hits = (pairJustWon ? allHits.filter((x) => x.id !== 'bishop-pair') : allHits).filter((x) => !breakHeard(x));
+        // ONE IDEA, ONE SAYING, ACROSS LANES (fresh-game walk 2026-09-27): the
+        // behaviour reads and writes the positional read's IDEA keys, so "your
+        // rook has the half-open g-file", "the d-file is open" and "you hold the
+        // bishop pair" are each said once whichever lane reaches them first.
+        if (pairJustWon) positionalSaidRef.current.add('student-bishop-pair');
+        const ideaHeard = (x: { keys: readonly string[] }): boolean =>
+          x.keys.some((k) => positionalSaidRef.current.has(k) || standingRef.current.said.has(k));
+        const hits = (pairJustWon ? allHits.filter((x) => x.id !== 'bishop-pair') : allHits).filter((x) => !breakHeard(x) && !ideaHeard(x));
         const eligible = quietTurn ? hits : hits.filter((h) => BEHAVIOR_ALWAYS_RIDE.has(h.id));
         const hit = behaviorSchedulerRef.current.pick(eligible);
         if (hit) {
           behaviorLine = hit.fact; behaviorSquares = hit.squares; factLines.push(`Behavior (${hit.id}): ${hit.fact}`);
           if (hit.id === 'pawn-break') for (const sq of hit.squares) standingRef.current.remember(`student-break-${sq}`);
+          for (const k of hit.keys) positionalSaidRef.current.add(k);
         }
       } catch { /* never a blocker */ }
       // THE POSITIONAL READ IS CHECKED EVERY (non-urgent) TURN (David 2026-09-13:
@@ -9031,6 +9098,10 @@ export function CoachTeachPage(): JSX.Element {
                     // piece (David 2026-08-23).
                     const isMiddlegame = Number(probe.fen().split(' ')[5] ?? '0') >= 10;
                     for (const q of pieceQualityLines(parseEvalTable(raw), playerColor, learnMemRef.current.pieceQualitySaid, { isMiddlegame, fen: probe.fen(), justMovedTo: move.to })) {
+                      // One idea, one saying: an unmoved piece is the
+                      // development idea another lane may already have said.
+                      if (q.ideaKey && (positionalSaidRef.current.has(q.ideaKey) || standingRef.current.said.has(q.ideaKey))) continue;
+                      if (q.ideaKey) positionalSaidRef.current.add(q.ideaKey);
                       queueSpokenHint(probe.fen(), q.text, 'computed', q.squares);
                       captureEvent('piece_quality_spoken', { surface: 'coach-teach', kind: q.kind });
                     }
@@ -9117,7 +9188,9 @@ export function CoachTeachPage(): JSX.Element {
                       // and owns the mover guard, so this surface decides none
                       // of it (§G4.5.15, and `surfaceContract.scan` enforces it).
                       studentNeedContext: studentNeedRef.current,
-                      alreadySaid: standingRef.current.said,
+                      // The positional read's ideas count as said too — one
+                      // passer, one claim (fresh-game walk 2026-09-27).
+                      alreadySaid: new Set([...standingRef.current.said, ...positionalSaidRef.current]),
                       // The coach's reply that produced this board — so the
                       // composer can tell a real threat from a bluff.
                       ...(m ? { opponentLastMove: { fenBefore: move.fen, san: m.san } } : {}),
@@ -10488,8 +10561,42 @@ export function CoachTeachPage(): JSX.Element {
                       // only then (hand walk 2340: dxe5 "that's a free pawn",
                       // Bxc3 "now you have the two bishops", Bd2 "you unpin
                       // yourself"). The review walk's own clauses.
-                      const point = studentMovePoint(fenBefore, move.san, move.history.length >= 2 ? move.history[move.history.length - 2] : null);
-                      if (point) {
+                      // A GAMBIT THEY ACCEPTED (fresh-game walk 2026-09-27, …g5
+                      // Nxg5: the pawn went and nothing said what it bought).
+                      // Their reply took the piece this move put down, and the
+                      // move still cost under the clean bar — so it was an
+                      // offer, and the teaching is what it opened: files your
+                      // pawns no longer stand on.
+                      const gambitLine = ((): string | null => {
+                        try {
+                          const reply = new Chess(move.fen).moves({ verbose: true })
+                            .find((r) => { const c = new Chess(move.fen); c.move(r.san); return c.fen().split(' ')[0] === fenAfterReply.split(' ')[0]; });
+                          if (!reply || reply.to !== move.to || !reply.captured) return null;
+                          // A trade is not a gambit: the move itself captured,
+                          // or the piece can be won straight back.
+                          if (move.san.includes('x')) return null;
+                          const me: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
+                          if (signedLegalSeeFor(fenAfterReply, move.to, me) > 0) return null;
+                          const pawnFiles = (fen: string): Set<string> => new Set(new Chess(fen).board().flat()
+                            .filter((c) => c && c.type === 'p' && c.color === me).map((c) => (c as { square: string }).square[0]));
+                          const before = pawnFiles(fenBefore); const after = pawnFiles(fenAfterReply);
+                          const opened = [...before].filter((f) => !after.has(f)).sort();
+                          const what = NAME_OF_PIECE[reply.captured] ?? 'pawn';
+                          return opened.length > 0
+                            ? `${move.san} was a gambit — they took the ${what}, and in return the ${opened[0]}-file is open for your rook.`
+                            : `${move.san} was a gambit — they took the ${what}, and the engine rates the trade of it for time as sound.`;
+                        } catch { return null; }
+                      })();
+                      if (gambitLine) queueSpokenHint(fenAfterReply, gambitLine, 'computed', []);
+                      const point = gambitLine ? null : studentMovePoint(fenBefore, move.san, move.history.length >= 2 ? move.history[move.history.length - 2] : null);
+                      // SPOKEN ON THE BOARD AFTER THEIR REPLY, SO TRUE THERE
+                      // (fresh-game walk 2026-09-27: "That wins the pawn on c4 —
+                      // nothing takes it back safely" heard after Na3 hit c4).
+                      // A capture whose piece their reply can now win is not a
+                      // point worth naming.
+                      const oppWB: 'w' | 'b' = playerColor === 'white' ? 'b' : 'w';
+                      const nowLoose = move.san.includes('x') && signedLegalSeeFor(fenAfterReply, move.to as Square, oppWB) > 0;
+                      if (point && !nowLoose) {
                         queueSpokenHint(fenAfterReply, point, 'computed', []);
                         captureEvent('coach_move_point_named', { surface: 'coach-teach' });
                       }

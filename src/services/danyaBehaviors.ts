@@ -22,6 +22,7 @@
  * here; the vibe concepts (initiative, counterplay, coordination, conversion,
  * flexibility) have none and are deliberately absent (empty > invented).
  */
+import { castleRoute, castleAdvice } from './kingSafety';
 import { fileList } from '../utils/andList';
 import { Chess } from 'chess.js';
 import type { Color, PieceSymbol, Square } from 'chess.js';
@@ -38,7 +39,7 @@ import {
   namedPawnStructure,
   developmentRead,
   findPieceQuality,
-  goodPieceClause,
+  goodPieceClause, goodPieceIdeaKey,
   countMaterial,
   findPassedPawns,
   findPawnBreaks,
@@ -92,6 +93,12 @@ export interface BehaviorContext {
    *  verdict names better or a deliberate offer it cannot judge (hand walk
    *  2026-09-25: …Bh3, the textbook x-ray, read as "they win your bishop"). */
   studentLastTo?: string | null;
+  /** The square the OPPONENT's last move landed on — the sibling of
+   *  `studentLastTo`. A piece they just put where it can be taken is an offer
+   *  the static count cannot judge (fresh-game walk 2026-09-27, 19.Nf6+: "You
+   *  win the knight on f6 — it can't be held" beside the engine's "…exf6
+   *  falls apart"). The engine lanes speak for it. */
+  opponentLastTo?: string | null;
 }
 
 export interface BehaviorHit {
@@ -102,13 +109,18 @@ export interface BehaviorHit {
   squares: Square[];
   /** Corpus firing weight. */
   weight: number;
+  /** The idea keys this fact states — the SAME keys the positional read
+   *  writes, so one idea is said once whichever lane reaches it first
+   *  (fresh-game walk 2026-09-27: the bishop pair, a rook on the g-file and
+   *  the d-file each said three and four times across lanes). */
+  keys: readonly string[];
 }
 
 export interface Behavior {
   id: string;
   /** Corpus note count — the target relative firing rate. */
   weight: number;
-  detect(ctx: NormalizedCtx): { fact: string; squares: Square[] } | null;
+  detect(ctx: NormalizedCtx): { fact: string; squares: Square[]; keys?: string[] } | null;
 }
 
 interface NormalizedCtx {
@@ -125,6 +137,7 @@ interface NormalizedCtx {
   phase: Phase | null;
   isEndgame: boolean;
   studentLastTo: string | null;
+  opponentLastTo: string | null;
 }
 
 function normalize(ctx: BehaviorContext): NormalizedCtx | null {
@@ -143,6 +156,7 @@ function normalize(ctx: BehaviorContext): NormalizedCtx | null {
     phase,
     isEndgame: phase === 'endgame',
     studentLastTo: ctx.studentLastTo ?? null,
+    opponentLastTo: ctx.opponentLastTo ?? null,
   };
 }
 
@@ -172,6 +186,8 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         return {
           fact: `Your ${PIECE_NAME[good.piece]} on ${good.square} ${goodPieceClause(good.kind, good.square).replace(/^it /, '')} — build your play around it.`,
           squares: [good.square],
+          keys: [goodPieceIdeaKey('student', good.piece, good.kind, good.square),
+            ...(good.kind === 'open-file' || good.kind === 'semi-open-file' ? [`file-${good.square[0]}`] : [])],
         };
       }
       // "Reroute your worst piece" is a MIDDLEGAME idea — in the opening a piece
@@ -218,9 +234,13 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // "castling is ready" then (walk 3, 2026-09-26: 6.Bc4 and 7.Bb3 heard
       // the same claim from both computers on consecutive moves). This line
       // speaks only when the king is stuck AND cannot castle next move.
+      // Castling must be REACHABLE — the advice for a king whose kingside right
+      // is gone and whose long castle is blocked twice over is not "castle"
+      // (fresh-game walk 2026-09-27).
+      const route = castleRoute(fen, student);
       if (mine && !mine.castled && mine.inCenter && moveNo >= 8 && mine.openFilesNearKing.length >= 1
-        && !castleIsOneMoveAway(fen, student)) {
-        return { fact: `Your king on ${mine.square} is still in the center with lines opening — castle before anything sharp.`, squares: [sq(mine.square)] };
+        && !castleIsOneMoveAway(fen, student) && route && route.blockers.length <= 1) {
+        return { fact: `Your king on ${mine.square} is still in the center with lines opening. ${castleAdvice(route)}`, squares: [sq(mine.square)] };
       }
       return null;
     },
@@ -336,7 +356,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // 1380 re-walk both sides had three minors out and only Black had
       // castled, and the coach told White to get the pieces out.
       if (theyLead - iLag >= 2 && !mine.castled && theirs.developedMinors > mine.developedMinors) {
-        return { fact: `You're behind in development — get the minor pieces out and castle before the position sharpens.`, squares: [] };
+        return { fact: `You're behind in development — get the minor pieces out and castle before the position sharpens.`, squares: [], keys: ['student-development'] };
       }
       return null;
     },
@@ -552,7 +572,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
     weight: 191,
     detect: ({ fen, student }) => {
       if (bishopPair(fen, student)) {
-        return { fact: `You hold the bishop pair — keep the position open so both bishops bite.`, squares: [] };
+        return { fact: `You hold the bishop pair — keep the position open so both bishops bite.`, squares: [], keys: ['student-bishop-pair'] };
       }
       return null;
     },
@@ -577,7 +597,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       for (const file of all) {
         if (!rookReachesFile(fen, student, file)) continue;
         const kind = files.open.includes(file) ? 'open' : 'half-open';
-        return { fact: `The ${file}-file is ${kind} — your rook belongs there.`, squares: [] };
+        return { fact: `The ${file}-file is ${kind} — your rook belongs there.`, squares: [], keys: [`file-${file}`] };
       }
       return null;
     },
@@ -585,13 +605,13 @@ export const DANYA_BEHAVIORS: Behavior[] = [
   {
     id: 'pressure',
     weight: 135,
-    detect: ({ fen, student }) => {
+    detect: ({ fen, student, opponentLastTo }) => {
       // A real, mounting threat — not "one bishop eyes f7" every ply. Either the
       // target is genuinely winnable (SEE) OR there is real tension with ≥2
       // attackers (the "two attackers, two defenders, one more and it falls"
       // frame Danya actually uses on a contested pawn like d4).
       const targets = pressuredTargets(fen, student);
-      const winnable = targets.find((x) => x.verdict === 'winnable' && PIECE_VALUE_TABLE[x.piece] >= 3);
+      const winnable = targets.find((x) => x.verdict === 'winnable' && PIECE_VALUE_TABLE[x.piece] >= 3 && x.square !== opponentLastTo);
       if (winnable) {
         return { fact: `You win the ${PIECE_NAME[winnable.piece]} on ${winnable.square} — it can't be held.`, squares: [winnable.square] };
       }
@@ -697,7 +717,9 @@ export const DANYA_BEHAVIORS: Behavior[] = [
     detect: ({ fen, student }) => {
       const bl = findBlockade(fen, student);
       if (bl) {
-        return { fact: `Your ${bl.blocker} piece is the perfect blockader — it sits in front of the passed pawn on ${bl.pawn} and that pawn goes nowhere.`, squares: [bl.blocker, bl.pawn] };
+        let what = 'piece';
+        try { const t = new Chess(fen).get(bl.blocker)?.type; if (t) what = ({ n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king', p: 'pawn' } as Record<string, string>)[t] ?? 'piece'; } catch { /* keep "piece" */ }
+        return { fact: `Your ${what} on ${bl.blocker} is the perfect blockader — it sits in front of the passed pawn on ${bl.pawn} and that pawn goes nowhere.`, squares: [bl.blocker, bl.pawn] };
       }
       return null;
     },
@@ -726,9 +748,9 @@ export function detectBehaviors(ctx: BehaviorContext): BehaviorHit[] {
   if (!n) return [];
   const hits: BehaviorHit[] = [];
   for (const b of DANYA_BEHAVIORS) {
-    let res: { fact: string; squares: Square[] } | null = null;
+    let res: { fact: string; squares: Square[]; keys?: string[] } | null = null;
     try { res = b.detect(n); } catch { res = null; }
-    if (res && res.fact) hits.push({ id: b.id, fact: res.fact, squares: res.squares, weight: b.weight });
+    if (res && res.fact) hits.push({ id: b.id, fact: res.fact, squares: res.squares, weight: b.weight, keys: res.keys ?? [] });
   }
   return hits;
 }

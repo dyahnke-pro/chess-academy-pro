@@ -326,7 +326,7 @@ describe('their good piece is a fact, not a second "best piece" (hand walk 2340)
   it('names why it is good without crowning it or trailing a plan sentence', () => {
     // Black rook on the open d-file.
     const obs = readPosition('3r2k1/pp3ppp/8/8/8/8/PP3PPP/4R1K1 w - - 0 25', 'white');
-    const good = obs.find((o) => o.key === 'opponent-good-d8');
+    const good = obs.find((o) => o.key.startsWith('opponent-good-') && o.key.endsWith('-d'));
     expect(good?.text).toBe('Their rook on d8 is well placed — it owns the open d-file.');
   });
 });

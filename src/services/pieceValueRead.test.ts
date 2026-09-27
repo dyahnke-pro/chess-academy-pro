@@ -383,3 +383,17 @@ describe('one idea, said once a phase — not once per square (re-walk 1380, 202
     expect(pieceQualityLines(at('e6', 'b2'), 'white', undefined, { isMiddlegame: true }).find((l) => l.kind === 'your-worst-piece')?.text).toMatch(/bishop on b2/);
   });
 });
+
+describe('an unmoved queen behind its own pawn is not doing the most work (fresh-game walk 2026-09-27)', () => {
+  it('Carlsen–Topalov move 10: the d1-queen is not crowned', async () => {
+    const { Chess } = await import('chess.js');
+    const c = new Chess();
+    for (const s of 'e4 c5 Nf3 d6 Bb5+ Nd7 O-O Nf6 Re1 a6 Bd3 b5 c4 g5 Nxg5 Ne5 Be2 bxc4 Na3'.split(' ')) c.move(s);
+    const values = [
+      { piece: 'q', color: 'w', square: 'd1', value: 1.2 },
+      { piece: 'q', color: 'b', square: 'd8', value: -0.2 },
+    ] as never;
+    const lines = pieceQualityLines(values, 'black', undefined, { isMiddlegame: true, fen: c.fen() });
+    expect(lines.some((l) => /queen on d1/.test(l.text))).toBe(false);
+  });
+});
