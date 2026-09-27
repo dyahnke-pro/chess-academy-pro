@@ -23,6 +23,10 @@ import { computePlyFacts } from './pvPlayback';
 import { describeStructure } from './boardStructure';
 import { detectTactics } from './tacticsDetector';
 import type { PvLine, PvPly, PrevCaptureContext } from './pvPlayback';
+import { aimsOf, stepArc, EMPTY_ARC, type ArcEvent, type ArcMove, type Seat } from './planArc';
+// The PLAN ACROSS MOVES (planArc) — the memory this reader never had. Exposed
+// from here so a surface composes one plan module, not two.
+export { aimsOf, stepArc, EMPTY_ARC, type ArcEvent, type ArcState, type ArcMove, type Seat, type Aim } from './planArc';
 
 type ChessCtor = InstanceType<typeof Chess>;
 
@@ -1611,4 +1615,44 @@ export function planFromUci(
     studentColor,
     said,
   );
+}
+
+/** How far ahead review reads a side's plan off the moves actually played. */
+const HINDSIGHT_PLIES = 8;
+
+/**
+ * Both sides' arcs across a finished game, keyed by the index of the move each
+ * event belongs to (0-based into `sans`). Review's read is HINDSIGHT: the plan
+ * after each move is read off the moves that were actually played next — the
+ * plan the side really carried out, not one the engine proposed.
+ *
+ * Emerge, arrive and drop speak; a step toward a plan does not — walking a
+ * whole review, "another step toward…" on every move is a chant, and the
+ * landing says what the steps were for.
+ */
+export function gameArcs(sans: readonly string[], studentColor: 'white' | 'black'): Map<number, ArcEvent[]> {
+  const out = new Map<number, ArcEvent[]>();
+  const board = new Chess();
+  const uci: string[] = []; const fens: string[] = [board.fen()];
+  const moved: ArcMove[] = [];
+  for (const san of sans) {
+    let m;
+    try { m = board.move(san); } catch { break; }
+    uci.push(m.from + m.to + (m.promotion ?? '')); fens.push(board.fen());
+    moved.push({ from: m.from, to: m.to, piece: m.piece, promotion: m.promotion });
+  }
+  const studentWB: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+  for (const color of ['w', 'b'] as const) {
+    const seat: Seat = color === studentWB ? 'student' : 'opponent';
+    let state = EMPTY_ARC;
+    for (let i = color === 'w' ? 0 : 1; i < moved.length; i += 2) {
+      const plan = planFromUci(fens[i + 1], uci.slice(i + 1, i + 1 + HINDSIGHT_PLIES), studentColor);
+      const side = plan ? (seat === 'student' ? plan.mine : plan.theirs) : null;
+      const r = stepArc(state, side ? aimsOf(side, seat) : [], moved[i], fens[i + 1], color, seat);
+      state = r.next;
+      const spoken = r.events.filter((e) => e.kind !== 'advance');
+      if (spoken.length) out.set(i, [...(out.get(i) ?? []), ...spoken]);
+    }
+  }
+  return out;
 }

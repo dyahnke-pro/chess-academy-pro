@@ -37,9 +37,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `readPosition` (function) — 42 call sites
 - `src/services/groundedAnswer.ts:1309`
-- `src/services/lookaheadPlan.ts:916`
-- `src/services/lookaheadPlan.ts:1185`
-- `src/services/lookaheadPlan.ts:1539`
+- `src/services/lookaheadPlan.ts:920`
+- `src/services/lookaheadPlan.ts:1189`
+- `src/services/lookaheadPlan.ts:1543`
 - `src/services/narrationAdversarial.test.ts:87`
 - `src/services/narrationAdversarial.test.ts:173`
 - `src/services/positionReadComposer.ts:128`
@@ -80,7 +80,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
 ### `buildPositionalRead` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8283`
+- `src/components/Coach/CoachTeachPage.tsx:8289`
 - `src/services/learnWalkBlumenfeld.test.ts:116`
 - `src/services/learnWalkNimzo.test.ts:34`
 - `src/services/narrationAdversarial.test.ts:106`
