@@ -309,7 +309,7 @@ function detectPassedPawnPush(ctx: ConceptCtx): ConceptBeat | null {
   const file = dest[0];
   const text = mine
     ? `You're pushing your passed pawn on the ${file}-file — passed pawns are made to be pushed. It ties a piece down to babysit it, and the moment it's ignored, it queens.`
-    : `Your opponent's passed pawn on the ${file}-file is rolling — it will tie your pieces down to stop it. Blockade it on a dark/light square a knight or king can hold.`;
+    : `Your opponent's passed pawn on the ${file}-file is rolling — it will tie your pieces down to stop it. Blockade it on ${file}${ctx.moverColor === 'w' ? rank + 1 : rank - 1}, the square in front of it — a knight or the king holds a blockade best.`;
   return { concept: 'passed-pawn-push', text, source: 'concept:pawn-passed' };
 }
 

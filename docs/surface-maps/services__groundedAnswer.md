@@ -296,8 +296,8 @@
 - `src/services/coachFeatureService.test.ts:66`
 - `src/services/coachFeatureService.test.ts:80`
 - `src/services/coachFeatureService.test.ts:87`
-- `src/services/coachFeatureService.ts:2279`
-- `src/services/coachFeatureService.ts:2290`
+- `src/services/coachFeatureService.ts:2282`
+- `src/services/coachFeatureService.ts:2293`
 - `src/services/coachMoveCommentary.ts:222`
 - `src/services/computerAccuracy.audit.test.ts:111`
 - `src/services/groundedAnswer.hangingBoth.test.ts:25`
@@ -1003,11 +1003,11 @@
 - `src/data/patternRegistry.ts:123`
 - `src/services/bluffDetector.ts:73`
 - `src/services/captureThreatAnswerable.test.ts:13`
-- `src/services/coachFeatureService.ts:2607`
+- `src/services/coachFeatureService.ts:2610`
 - `src/services/engineDeltaLines.ts:54`
 - `src/services/learnMoveTeaching.ts:125`
 - `src/services/opponentMovePurpose.ts:52`
-- `src/services/reviewFullData.ts:605`
+- `src/services/reviewFullData.ts:609`
 - `src/services/reviewMoveBriefing.ts:237`
 - `src/services/reviewNarrationFidelity.test.ts:218`
 - `src/services/reviewNarrationFidelity.test.ts:227`
@@ -1020,7 +1020,7 @@
 - `src/services/captureThreatAnswerable.test.ts:18`
 
 ### `describeStudentThreat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2529`
+- `src/services/coachFeatureService.ts:2532`
 - `src/services/reviewNarrationFidelity.test.ts:184`
 - `src/services/reviewNarrationFidelity.test.ts:196`
 - `src/services/reviewNarrationFidelity.test.ts:204`
@@ -1036,7 +1036,7 @@
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/coachFeatureService.ts:2627`
+- `src/services/coachFeatureService.ts:2630`
 - `src/services/reviewNarrationFidelity.test.ts:254`
 
 ### `ComparedMove` (interface) — 0 call sites
@@ -1067,7 +1067,7 @@
 
 ### `seatPieceReferences` (re-export) — 24 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7805`
-- `src/services/coachFeatureService.ts:4777`
+- `src/services/coachFeatureService.ts:4783`
 - `src/services/liveTacticsContext.ts:453`
 - `src/services/reviewBoardAwareness.test.ts:70`
 - `src/services/reviewBoardAwareness.test.ts:74`
@@ -1078,7 +1078,7 @@
 - `src/services/reviewBoardAwareness.test.ts:109`
 - `src/services/reviewFullData.ts:278`
 - `src/services/reviewFullData.ts:325`
-- `src/services/reviewFullData.ts:518`
+- `src/services/reviewFullData.ts:522`
 - `src/services/reviewNarrationFidelity.test.ts:85`
 - `src/services/reviewNarrationFidelity.test.ts:95`
 - `src/services/reviewNarrationFidelity.test.ts:101`

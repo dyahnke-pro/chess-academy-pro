@@ -364,7 +364,11 @@ export function computeMoveFacets(
     const costsPoints = ctx.classification === 'inaccuracy'
       || ctx.classification === 'mistake'
       || ctx.classification === 'blunder';
-    const swingBit = swing != null && costsPoints ? `, costing about ${(swing / 100).toFixed(1)} points` : '';
+    // The grade is in win chances; the points are centipawns. In a decided
+    // position they part ways — "an inaccuracy, costing about 9.2 points"
+    // (amateur review walk 2026-09-27). The label stands; the number goes.
+    const pointsAgree = swing != null && (ctx.classification === 'blunder' || swing < 300);
+    const swingBit = swing != null && costsPoints && pointsAgree ? `, costing about ${(swing / 100).toFixed(1)} points` : '';
     // WHY it's a mistake, when we can prove it (a premature central break). Danya
     // leads with the positional reason, THEN names the better move — so does this.
     const whyBad = (ctx.classification === 'mistake' || ctx.classification === 'blunder' || ctx.classification === 'inaccuracy')

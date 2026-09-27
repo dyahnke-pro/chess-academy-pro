@@ -59,3 +59,13 @@ export function withTransfer(text: string, phrase: string): string {
 export function recordMotif(motif: string, instance: string, moveNumber: number, ledger: MotifLedger): void {
   if (!ledger.has(motif)) ledger.set(motif, { move: moveNumber, instance });
 }
+
+/** The motif and instance a facet identity carries, or null when the identity
+ *  is not a tactic motif. Only a `motif:` identity transfers — a principle's
+ *  `rule-stem:<ply>:<id>` was once read as a motif named "stem", so every
+ *  repeated principle said "the same idea as move 3" (review walks 2026-09-27). */
+export function transferMotifOf(identity: string): { motif: string; instance: string } | null {
+  if (!identity.startsWith('motif:')) return null;
+  const [motif, instance = ''] = identity.slice('motif:'.length).split(':');
+  return motif ? { motif, instance } : null;
+}

@@ -1,0 +1,68 @@
+66 plies FAILS STANDARD wedged None
+INTRO Here's your game against the Four Knights Game: Italian Variation — you had Black. You had 14 moments worth a second look — here's each one.
+12 GOOD | Your bishop on e6 now eyes their bishop on c4, fights for d5. Be6 develops into the game, fighting for the center on d5, c4 and f5 — the same idea as move 3.
+13 GOOD | Their knight on d5 looks aggressive, hitting your knight on f6, but it wins nothing — no need to react; keep developing. Their knight on d5 now eyes your pawn on c7 and your knight on f6.
+15 GOOD | Your opponent castles kingside, king to safety and rooks connected. Note which wing — it tells you where to aim your own pawns.
+16 INACCURACY | Tempo lost — after this they get b4 for free, hitting your knight on a5, and your next move is forced to react. Here's how: Count it out loud: does this move force them to answer, or do they get a free turn? When a move gives them a tempo, look for one that develops AND asks a question. You: that was an inaccuracy, costing about 0.8 points — the stronger move was Bxd5 — it would trade off pieces.
+17 GOOD | They take on f6, and you can take back — a knight trade.
+19 GOOD | They take on e6, and you can take back — a bishop trade.
+21 GOOD | Their queen on d2 and their bishop on e3 form a battery on the diagonal, bearing down on your pawn on h6. Their queen on d2 now eyes your knight on a5. Watch out — that queen attacks your knight on a5, and nothing defends it. Here is what they are after: the bishop's walk to c3. Your opponent's plan is to push on the kingside, where they hold the majority.
+23 GOOD | Your opponent tears the centre open while your king is still in it — that's the danger of leaving the king in the middle; the open lines all point at it.
+24 GOOD | You took on d4, and they can take back — a pawn trade.
+25 INACCURACY | Your opponent: that was an inaccuracy, costing about 0.6 points — the stronger move was Nxd4 — it would win a pawn. They take on d4, and you can take back — their bishop for your pawn.
+27 GOOD | Their bishop on c3 now eyes your pawn on e5, fights for d4. There it is — their bishop on c3. That was the plan: the bishop's walk to c3.
+28 GOOD | There was a rule behind O-O-O: castle your king to safety and bring the rook toward the center. The kings are on opposite wings — this is a race, and it's won by throwing your pawns at their king on the kingside and tearing open the files around it before they do the same to you.
+29 GOOD | Their rook on d1 and their queen on d2 form a battery on the file, bearing down on your pawn on d6 — the same idea as move 11. Watch where their moves are going — an attack on your king.
+32 GOOD | Your bishop on h6 now eyes their queen on d2. Bh6 does what the opening asks — get the last minor piece out, then bring the rooks.
+35 GOOD | Their queen on a5 now eyes your pawn on a7, your pawn on c7 and your pawn on e5, fights for d5. There it is — their queen on a5. That was the plan: the queen's walk to a5.
+37 INACCURACY | Your opponent: that was an inaccuracy, costing about 1.1 points — the stronger move was Kh1 — the idea is to walk the rook round to e4, by way of e1.
+38 INACCURACY | You: that was an inaccuracy, costing about 1.1 points — the stronger move was Qg4 — it would swing pieces toward their king. Your plan is taking shape: an attack on their king.
+39 INACCURACY | Your opponent: that was an inaccuracy, costing about 1.0 points — the stronger move was Qb4.
+40 BLUNDER | Convert with patience: you were clearly winning and this hands most of it back — Qg4 was the calm move. Here's how: Winning positions are won by simplifying. Trade pieces at every chance but keep the pawn structure intact, steer for the ending where the extra material decides, and refuse every complication. You: that was a blunder, costing about 3.3 points — the stronger move was Qg4 — it would swing pieces toward their king.
+41 MISTAKE | Your opponent: that was a mistake, costing about 1.9 points — the stronger move was Bxe5.
+42 BLUNDER | You: that was a blunder, costing about 2.2 points — the stronger move was fxe4. The move you wanted was a forcing one, so start there: list the checks and the captures before anything quiet. Here's how it gets punished from here: Nxe5, Qe6 and Nf3 — they win a pawn.
+43 BLUNDER | Your opponent: that was a blunder, costing about 2.7 points — the stronger move was Bxe5.
+44 INACCURACY | A structural cost: h4 is a weak pawn now. Here's how: Look one move ahead of every pawn push: what square does this permanently stop covering, and can a piece of theirs sit there? A pawn move is the only one you cannot undo. Your pawn on h4 is overextended — nothing supports it, and it's a target the moment they look at it. The habit that fixes it: A pawn far up the board needs support before it goes. Check it is defended and that you can hold the square behind it — otherwise it becomes the targ
+45 MISTAKE | Your opponent: that was a mistake, costing about 1.6 points — the stronger move was h3.
+46 GOOD | Your rook on g8 now eyes their pawn on g2. Rhg8 takes the half-open g-file, where the rook belongs.
+47 MISTAKE | Your opponent: that was a mistake, costing about 3.6 points — the stronger move was f3. You had a minority attack on the kingside — f3 makes contact and leaves them a weak pawn on g2. Here is what they are after: a passed pawn on the g-file.
+48 BLUNDER | Checks, captured, threats — there was a forcing move here: Qxh3 wins by force, and this quiet move lets it go. Here's how: Scan forcing moves first, in order: every check, every capture, every threat. Only when none of them works do you look at quiet moves — that order is what finds shots. You: that was a blunder, costing about 4.7 points — the stronger move was Qxh3 — it would swing pieces toward their king. Here is what you are building: an attack on their king.
+49 INACCURACY | Your opponent: that was an inaccuracy, costing about 1.2 points — the stronger move was f3.
+50 MISTAKE | Rushing the win again — f3 was calmer. You: that was a mistake, costing about 2.0 points — the stronger move was f3 — it would swing pieces toward their king.
+51 BLUNDER | Your opponent: that was a blunder, costing about 3.2 points — the stronger move was Qb3 — the idea is to walk the knight round to f3, by way of d2.
+52 GOOD | That pawn push stakes out space — your pawns are cramping their pieces, leaving them less room to manoeuvre. Space is a slow, real edge: keep it and your pieces breathe while theirs stumble over each other.
+53 MISTAKE | Your opponent: that was a mistake, costing about 3.4 points — the stronger move was Bd2.
+54 GREAT | You took on g3, and they can take back — a pawn trade.
+55 GOOD | Both sides had a runner: yours on f3 was 2 pushes from queening, theirs on g3 was 5; you got there first once the queens came off — that race was the reason to trade into the endgame. The plan from here is to get your passed pawn on f3 promoting. Here's how: clear the square in front of it so nothing blocks the road, escort it with your pieces rather than pushing it alone into danger — the king joins the escort once the queens come off, and advance it one safe square at a time until they have to
+56 BLUNDER | You: that was a blunder, costing about 10.2 points — the stronger move was Nf4 — it would win a rook. Your plan is taking shape: the knight's walk to d5.
+57 BLUNDER | Your opponent: that was a blunder, costing about 4.0 points — the stronger move was Na5+ — it would swing pieces toward their king. Your light squares are weak — with no bishop of that colour, nothing covers e6, f5 and c6. Watch where their moves are going — an attack on your king. Here's how you take advantage: Nf4, g4, Nxh3, Rd2, Bf4+ and Kh1 — you win a pawn.
+58 BLUNDER | You: that was a blunder, costing about 4.7 points — the stronger move was Nf4 — it would swing pieces toward their king.
+59 INACCURACY | Your opponent: that was an inaccuracy, costing about 0.6 points — the stronger move was Rd3. Moving their rook on d5 would unveil their queen on b3 against your queen on e6.
+61 GOOD | Their rook on d5 is the only defender of their bishop on d2 — and it can be taken. Their bishop on d2 now eyes your bishop on h6.
+62 MISTAKE | You: that was a mistake, costing about 1.7 points — the stronger move was Bf4. You took on d5, and they can take back — your knight for their rook. Here's how it gets punished from here: Nc6+, Kc8, Bxh6, Qg6 and Qxf3 — they win a bishop and a pawn.
+63 GOOD | Their queen on b3 pins your knight on d5 against your queen on e6. Your queen on e6 is overloaded — it's the only defender of both your bishop on h6 and your knight on d5. Threat: Their knight on c6 forks your king on b8 and your rook on d8 — the defender can't save everything. Their knight on c6 now eyes your rook on d8, your pawn on a7 and your pawn on e5, fights for d4. The plan changes here — now it's to convert your extra material. Here's how: offer a trade of pieces at every chance but kee
+64 MISTAKE | You: that was a mistake, costing about 2.0 points — the stronger move was Kc8. Newly undefended: their bishop on d2. Here's how it gets punished from here: Nxd8+, Rxd8 and exd5 — you come out behind on material, a knight for a rook and a knight.
+65 GOOD | Your queen on e6 is the only defender of your bishop on h6 — and it can be taken. Your queen on e6 is the only defender of your knight on d5 — and it can be taken. They take on d8, and you can take back — their knight for your rook.
+66 GOOD | Here is what you are building: a passed pawn on the e-file.
+67 BLUNDER | Your opponent: that was a blunder, costing about 5.0 points — the stronger move was exd5 — it would take the knight on d5. They take on d5, and you can take back — their queen for your knight. Their plan is taking shape: a passed pawn on the g-file. Here's how you take advantage: Qxd5, exd5 and Bxd2 — you come out ahead on material, a queen and a bishop for a queen.
+68 GOOD | You're now threatening Qxd2+ — it wins their bishop on d2 and forks the king and their rook on e1. You take on d5, and they can take back — a queen trade.
+69 GOOD | exd5 has a point: it stops your Qxd2 fork. Before the endgame gets going, the balance sheet: you're clearly better — your passed pawn on e5 is a long-term trump.
+70 GOOD | Your passed pawn on e5 is the win — push it, with your king and pieces escorting it one safe square at a time.
+71 GOOD | Here is what they are after: a passed pawn on the c-file.
+72 GOOD | Your passed pawn on e4 wants to run — passed pawns are meant to be pushed. Their light squares are weak — e4 and f3 are holes their bishop can't cover; a knight belongs on one. e4 pushes your passed pawn — passed pawns must be pushed.
+73 GOOD | Your opponent's passed pawn on the g-file is rolling — it will tie your pieces down to stop it. Blockade it on a dark/light square a knight or king can hold.
+76 INACCURACY | Stopped calculating early again — Rxd5 was waiting deeper. You: that was an inaccuracy, costing about 1.3 points — the stronger move was Rf8 — the idea is to push a pawn through to a new queen on e1.
+77 GOOD | They take on c6, and you can take back — a pawn trade.
+78 GOOD | You're clearly ahead here, and when you're ahead the plan is to trade: every pair of pieces off the board strips your opponent's counterplay and carries you toward a won endgame.
+79 GOOD | Watch where their moves are going — a passed pawn on the h-file.
+80 GOOD | Your bishop on e3 now eyes their rook on f2, fights for d4. Be3 lands on the e3 outpost, a square none of their pawns can attack.
+82 GOOD | Your king on d5 now fights for d4 and e5. Your light squares are weak — with no bishop of that colour, nothing covers d5 and e6. Kd5 marches your king toward the center, where it fights in the endgame.
+84 GOOD | You're up material with the position simplified — no need to force anything. Improve your worst piece, trade when it's offered, and let the extra material decide. Winning won positions is about patience, not haste.
+86 GOOD | Your rook on h8 now eyes their pawn on h4. Rh8 takes the half-open h-file, where the rook belongs. Your moves are pointing at the rook's walk to g4.
+88 GOOD | Your plan is taking shape: the g-file.
+90 GOOD | Bf4+ lands on the f4 outpost, a square none of their pawns can attack.
+92 GOOD | Your rook on h4 now eyes their pawn on g4. The timing of Rxh4 matters — a move earlier, Kxh4 would have won your rook.
+93 BLUNDER | Your opponent: that was a blunder — the stronger move was Rf1 — it would walk the rook round to h5, by way of f1 and h1.
+94 INACCURACY | Rooks belong on the seventh — Rh2+ lands yours on h2; a passive rook just watches the ending go by. Here's how: Rooks go BEHIND passed pawns and onto the seventh. Before defending passively, look for the active square — an active rook is often worth a pawn in a rook ending. You: that was an inaccuracy — the stronger move was Rh2+ — it would swing pieces toward their king. The plan changes here — now it's to seize the open h-file. Here's how: put a rook on it right away before they contest it, dr
+95 INACCURACY | Your opponent: that was an inaccuracy, costing about 9.2 points — the stronger move was Rf1. Your opponent's plan is to push on the queenside, where they hold the majority.
+96 GOOD | Rg2 takes the open g-file, where the rook belongs. There it is — your rook on the g-file. That was the plan: the g-file.

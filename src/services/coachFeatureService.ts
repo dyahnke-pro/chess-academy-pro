@@ -22,7 +22,7 @@ import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGround
 import { getHisPlayDb } from './hisPlayLookup';
 import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
 import { refutedAlternative, candidatesForPosition, type RefutedAlternative } from './refutedAlternative';
-import { transferClause, recordMotif, withTransfer, type MotifLedger } from './motifLedger';
+import { transferClause, transferMotifOf, recordMotif, withTransfer, type MotifLedger } from './motifLedger';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectOpening } from './openingDetectionService';
 import { resolveCuratedOpeningIdeas } from './reviewOpeningTheory';
@@ -2192,9 +2192,12 @@ export function buildReviewSegments(
           if (!identity) continue;
           if (identity.startsWith('rule:')) { principlesTaught.add(identity.slice(5)); continue; }
           if (identity.startsWith('refuted:')) { refutedSaid.add(identity); continue; }
+          // ONLY a tactic motif transfers (`transferMotifOf`).
           // `motif:<type>:<squares>` — the squares make it THIS instance, so a
           // standing tactic is never "the same idea as move N" of itself.
-          const [motif, instance = ''] = identity.slice('motif:'.length).split(':');
+          const tm = transferMotifOf(identity);
+          if (!tm) continue;
+          const { motif, instance } = tm;
           uncappedParts[k] = withTransfer(uncappedParts[k], transferClause(motif, instance, fullMove, motifFirstMove));
           recordMotif(motif, instance, fullMove, motifFirstMove);
         }
@@ -4375,7 +4378,10 @@ const SERIES_VERB = new RegExp(`, ${V_ALT}\\b`, 'g');
 // one happened to sit after it: the same walk said "Watch what they're building"
 // on one ply and "Watch what they were building" on another, purely on ordering.
 // Registers don't take turns in one string, so the decision is made PER SENTENCE.
-const PRESCRIPTIVE = /(the plan (?:from here|is|changes)|so the plan is|here's (?:exactly )?how|your defense starts with|watch what they|follow it up|don't play|spend two or three tempi|that's your cue|is your cue|your whole job|wants to run)/i;
+// …and a method list or a conditional race is advice, not history (amateur
+// review walk 2026-09-27: "Checks, captured, threats"; a passer race "you got
+// there first once the queens came off" while the queens were still on).
+const PRESCRIPTIVE = /(the plan (?:from here|is|changes)|so the plan is|here's (?:exactly )?how|your defense starts with|watch what they|follow it up|don't play|spend two or three tempi|that's your cue|is your cue|your whole job|wants to run|checks, captures|pushes from queening|once the queens come off)/i;
 /** Case-preserving contraction rewrite: "You're" → "You were", never "you were"
  *  mid-narration with a lowercase head (the `/gi` replacement used to lowercase
  *  every sentence it opened). */
