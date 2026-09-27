@@ -43,10 +43,10 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `gradedLoss` (function) — 4 call sites
-- `src/services/positionFacts.moveWhy.test.ts:119`
-- `src/services/positionFacts.moveWhy.test.ts:120`
-- `src/services/positionFacts.moveWhy.test.ts:121`
-- `src/services/positionFacts.moveWhy.test.ts:122`
+- `src/services/positionFacts.moveWhy.test.ts:128`
+- `src/services/positionFacts.moveWhy.test.ts:129`
+- `src/services/positionFacts.moveWhy.test.ts:130`
+- `src/services/positionFacts.moveWhy.test.ts:131`
 
 ### `LastMoveInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -90,7 +90,7 @@
 - `src/services/whyBestMove.ts:103`
 
 ### `computePositionFacts` (function) — 78 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9187`
+- `src/components/Coach/CoachTeachPage.tsx:9191`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:630`
@@ -170,13 +170,13 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:7946`
+- `src/components/Coach/CoachTeachPage.tsx:7950`
 
 ### `convertKey` (function) — 1 call site
 - `src/services/positionFacts.convertOnce.test.ts:24`
 
 ### `conceptInstanceKey` (re-export) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7927`
+- `src/components/Coach/CoachTeachPage.tsx:7931`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.ts:9`

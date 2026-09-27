@@ -137,7 +137,7 @@ describe('F2 — a principle never restates the move it explains', () => {
     const { computeMoveFundamentals, principleOnceLine } = await import('./moveFundamentals');
     const centre = computeMoveFundamentals(fenAt(5), 'c5', 'black').find((f) => f.id === 'center');
     expect(centre?.imperative).toMatch(/challenge their pawn on d4/);
-    for (let k = 0; k < 4; k++) expect(principleOnceLine('c5', centre ?? { imperative: '' }, k)).not.toMatch(/c5.*pawn to c5/);
+    for (let k = 0; k < 4; k++) expect(principleOnceLine('c5', centre ?? { id: 'center', imperative: '' }, k)).not.toMatch(/c5.*pawn to c5/);
   });
 });
 

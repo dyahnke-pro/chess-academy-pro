@@ -41,13 +41,13 @@ describe('review — the four facts are facets, so they go through the door', ()
     expect(f.some((x) => x.startsWith('[stopped]'))).toBe(false);
   });
 
-  it('[rule] teaches the principle in full once, then a short stem about the move (re-walk 1380)', () => {
+  it('[rule] teaches the principle once WITH its reason, then stays silent (David 2026-09-27)', () => {
     const f = facetsAt(4, SCH, S, 'black', NO_TEACHING_CONTEXT);
-    expect(f.find((x) => x.startsWith('[rule]'))).toMatch(/^\[rule\] Nc6 follows a principle worth keeping: /);
+    expect(f.find((x) => x.startsWith('[rule]'))).toMatch(/^\[rule\] Nc6 follows a rule worth keeping: .*cannot join the fight/);
     const taught = facetsAt(4, SCH, S, 'black', { ...NO_TEACHING_CONTEXT, principlesTaught: new Set(['development', 'center']) });
-    // Taught already: the rule is not restated — the move gets its own stem.
-    expect(taught.some((x) => /principle worth keeping|the principle behind|rule behind|what the opening asks/i.test(x))).toBe(false);
-    expect(taught.find((x) => x.startsWith('[rule]'))).toMatch(/^\[rule\] Nc6 develops into the game/);
+    // Taught already: "Nc6 develops into the game…" names what the student
+    // can see and teaches nothing — no [rule] facet at all.
+    expect(taught.some((x) => x.startsWith('[rule]'))).toBe(false);
   });
 
   it('[refuted] speaks the engine-computed alternative on the student\'s ply', () => {

@@ -33,22 +33,31 @@ describe('the student\'s own move has a why', () => {
   it('negative control: an ungraded move that is NOT theory stays silent (no grade, no praise)', async () => {
     expect(await ruleAt(PHILIDOR, 0, new Set(), false, null)).toBeNull();
   });
-  it('a principle already taught returns as a short stem about THIS move', async () => {
-    expect(await ruleAt(PHILIDOR, 10, new Set(['development', 'center']), false, 0)).toMatch(/^Bc4 develops into the game/);
+  it('a principle already taught is not restated on a new square (David 2026-09-27: no teaching element)', async () => {
+    expect(await ruleAt(PHILIDOR, 10, new Set(['development', 'center']), false, 0)).toBeNull();
   });
   it('a pawn pushed into contact OPENS the center — true after the exchange', async () => {
-    expect(await ruleAt(PHILIDOR, 4, new Set(['center', 'development']), true, null)).toBe('d4 opens up the center.');
+    // The fundamental is computed true (below) — but once "center" is taught,
+    // restating it on the next pawn teaches nothing, so the rule lane is silent.
+    expect(await ruleAt(PHILIDOR, 4, new Set(['center', 'development']), true, null)).toBeNull();
+    expect(computeMoveFundamentals((() => { const c = new Chess(); for (const s of PHILIDOR.slice(0, 4)) c.move(s); return c.fen(); })(), 'd4', 'white')[0].led).toBe('opens up the center');
     // …and a pawn nothing attacks still stakes it out (non-vacuous).
     const start = new Chess().fen();
     expect(computeMoveFundamentals(start, 'e4', 'white')[0].led).toBe('stakes out the center and grabs space');
   });
-  it('principleLine: full the first time, a stem after', () => {
+  it('principleLine: full with its reason the first time, silent after', () => {
     const c = new Chess(); for (const s of PHILIDOR.slice(0, 10)) c.move(s);
     const first = principleLine(c.fen(), 'Bc4', 'white', new Set(), 1);
     const again = principleLine(c.fen(), 'Bc4', 'white', new Set([first?.id ?? '']), 1);
     expect(first?.first).toBe(true);
+    expect(first?.text).toMatch(/because|—/);
+    expect(again).toBeNull();
+  });
+  it('POSITIVE CONTROL: a repeat that forces an answer still speaks (3.Nc3 hits the d5 queen)', () => {
+    const c = new Chess(); for (const s of 'e4 d5 exd5 Qxd5'.split(' ')) c.move(s);
+    const again = principleLine(c.fen(), 'Nc3', 'white', new Set(['development', 'center']), 1);
     expect(again?.first).toBe(false);
-    expect(again?.text).toMatch(/^Bc4 /);
+    expect(again?.text).toMatch(/^Nc3 develops into the game with tempo, hitting the queen on d5/);
   });
 });
 

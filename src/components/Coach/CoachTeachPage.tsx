@@ -7716,11 +7716,15 @@ export function CoachTeachPage(): JSX.Element {
         tacticKey = `win:${prize.piece}${prize.square}`;
         tacticSquares = [prize.square];
         // A piece that just CAPTURED and stands undefended is a trade, not a
-        // prize: taking it back restores the material (hand walk 2026-09-24:
-        // 18…Bxf3 was announced as "there's something to win here").
+        // prize (hand walk 2026-09-24: 18…Bxf3 was announced as "there's
+        // something to win here"). And it is not a teaching point either:
+        // "the material comes back" names the obvious recapture and teaches
+        // nothing — and after a lost queen it told the student the material
+        // was coming back when a bishop was (David 2026-09-27: "There needs to
+        // be a teaching element"). Silent; the ranked package speaks instead.
         const justCaptured = lastMoveCapturedOn(history, prize.square);
         tacticLine = justCaptured
-          ? `Their ${NAME[prize.piece] ?? 'piece'} on ${prize.square} just took and nothing defends it — the material comes back.`
+          ? null
           // UNDEFENDED IS A FACT; FREE IS THE ENGINE'S VERDICT (fresh-game walk
           // 2026-09-27, 11.Nxc4: "their knight on g5 has nothing defending it —
           // there's something to win here", and …Rxg5 loses to d4, the c1-bishop

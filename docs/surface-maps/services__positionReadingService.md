@@ -127,8 +127,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:6662`
 - `src/services/latentFork.ts:149`
 - `src/services/latentFork.ts:220`
-- `src/services/moveFundamentals.ts:306`
-- `src/services/moveFundamentals.ts:1158`
+- `src/services/moveFundamentals.ts:309`
+- `src/services/moveFundamentals.ts:1221`
 
 ### `legalSeeGainFor` (function) — 23 call sites
 - `src/services/bluffDetector.ts:53`
@@ -156,10 +156,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticVerification.ts:101`
 
 ### `signedLegalSeeFor` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7778`
-- `src/components/Coach/CoachTeachPage.tsx:7892`
-- `src/components/Coach/CoachTeachPage.tsx:10630`
-- `src/components/Coach/CoachTeachPage.tsx:10649`
+- `src/components/Coach/CoachTeachPage.tsx:7782`
+- `src/components/Coach/CoachTeachPage.tsx:7896`
+- `src/components/Coach/CoachTeachPage.tsx:10634`
+- `src/components/Coach/CoachTeachPage.tsx:10653`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
@@ -346,7 +346,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:128`
 
 ### `namedPawnStructure` (function) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9044`
+- `src/components/Coach/CoachTeachPage.tsx:9048`
 - `src/services/danyaBehaviors.ts:318`
 - `src/services/danyaDeviceCoverage.test.ts:107`
 - `src/services/danyaDeviceCoverage.test.ts:108`

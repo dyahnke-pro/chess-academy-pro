@@ -110,6 +110,9 @@ export interface MoveFundamental {
   imperative: string;
   /** Board squares the clause references (arrows / highlights). */
   squares: string[];
+  /** The opponent must answer it (a developing move that hits their queen or
+   *  rook). A consequence, so it teaches even when the principle is known. */
+  forcing?: boolean;
 }
 
 /**
@@ -425,6 +428,7 @@ export function computeMoveFundamentals(
       selfContained: `develops the ${name} into the game${tempo}${centerTail}`,
       imperative: `develop into the game${tempo}${centerTail}`,
       squares: hit ? [mv.to, hit.square, ...eyes] : [mv.to, ...eyes],
+      forcing: !!hit,
     });
   }
 
@@ -1015,23 +1019,82 @@ export function strategicWhyImperative(
   return renderStrategic(fenBefore, moveSan, moverColor, 'imperative');
 }
 
+/** WHY the rule holds — one clause, said with the principle the one time it is
+ *  taught. The imperative alone ("develop into the game, fighting for the
+ *  center on d4 and e5") names what the move does and teaches nothing (David
+ *  2026-09-27: "There needs to be a teaching element"); the reason is the
+ *  lesson. Null where the imperative already carries its reason ("prepare f5 —
+ *  when the f-pawn goes forward, it will be supported"). A `Record` so a new
+ *  fundamental fails to compile until someone decides its reason. */
+const PRINCIPLE_REASON: Record<MoveFundamental['id'], string | null> = {
+  development: 'a piece left at home cannot join the fight, and whoever has more pieces out wins the fights when the center opens',
+  'open-diagonal': 'a bishop shut in behind its own pawns is a spectator',
+  center: 'pieces behind a strong center reach either wing in a move or two',
+  'king-safety': 'a king left in the middle gets caught the moment the center opens',
+  outpost: 'a piece no pawn can chase stays there for the whole game',
+  'open-file': 'a rook needs an open file to reach their camp',
+  tempo: 'every move they spend retreating is a move they do not spend developing',
+  'attack-defender': null,
+  'keep-working': null,
+  'prepare-break': null,
+  'development-complete': null,
+  'rook-behind-pawn': null,
+  'queen-off-file': null,
+  'king-activity': null,
+  promotion: null,
+  'passed-pawn': null,
+  luft: null,
+  space: null,
+  prophylaxis: null,
+};
+
 /** A principle taught once per game on a quiet student opening ply (S2): the
- *  move, and the rule it follows. The rule is the board's own imperative clause
- *  (`computeMoveFundamentals`), so nothing here is asserted without proof. */
+ *  move, the rule it follows, and WHY the rule holds. The rule is the board's
+ *  own imperative clause (`computeMoveFundamentals`), so nothing here is
+ *  asserted without proof. */
 export function principleOnceLine(
   san: string,
-  f: Pick<MoveFundamental, 'imperative'>,
+  f: Pick<MoveFundamental, 'imperative' | 'id'>,
   /** Rotation key — required, stable about the moment (`stemKeyOf` of the
    *  board the move was played from). Only the wrapper rotates. */
   stemKey: number,
 ): string {
+  const reason = PRINCIPLE_REASON[f.id];
+  if (!reason) return `${san}: ${f.imperative}.`;
   return rotateStem([
-    `${san} follows a principle worth keeping: ${f.imperative}.`,
-    `The principle behind ${san}: ${f.imperative}.`,
-    `${san} does what the opening asks — ${f.imperative}.`,
-    `There's a rule behind ${san}: ${f.imperative}.`,
+    `${san} follows a rule worth keeping: ${f.imperative} — ${reason}.`,
+    `The rule behind ${san}: ${f.imperative}, because ${reason}.`,
   ], stemKey);
 }
+
+/** Which repeats still TEACH once their principle has been taught. A stem that
+ *  only restates the rule on a new square ("Bg7 develops into the game,
+ *  fighting for the center on e5") names what the student can see and teaches
+ *  nothing (David 2026-09-27) — silent. One whose clause is a consequence the
+ *  student must weigh (a kick that gains time, the lone guard, a break
+ *  prepared, a rook behind its pawn) speaks. Development speaks on repeat only
+ *  when it is `forcing` (it hits their queen or rook). */
+const REPEAT_TEACHES: Record<MoveFundamental['id'], boolean> = {
+  development: false,
+  'open-diagonal': false,
+  center: false,
+  'king-safety': false,
+  outpost: true,
+  'open-file': true,
+  tempo: true,
+  'attack-defender': true,
+  'keep-working': true,
+  'prepare-break': true,
+  'development-complete': true,
+  'rook-behind-pawn': true,
+  'queen-off-file': true,
+  'king-activity': false,
+  promotion: false,
+  'passed-pawn': false,
+  luft: false,
+  space: false,
+  prophylaxis: false,
+};
 
 /** Which positive fundamentals are opening PRINCIPLES a beginner is taught.
  *  Space grabs with a flank pawn and prophylaxis are real fundamentals but not
@@ -1122,7 +1185,7 @@ export function principleLine(
   const lead = computeMoveFundamentals(fenBefore, san, mover)
     .filter((f) => IS_OPENING_PRINCIPLE[f.id])
     .sort((a, b) => b.weight - a.weight)[0];
-  if (!lead) return null;
+  if (!lead || !(REPEAT_TEACHES[lead.id] || lead.forcing)) return null;
   return { id: lead.id, text: `${san} ${lead.led}.`, squares: lead.squares, first: false };
 }
 
