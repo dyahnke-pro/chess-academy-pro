@@ -612,6 +612,11 @@ function findRemovableGuards(chess: Chess): TacticPattern[] {
         const defenders = chess.attackers(targetSq, enemy).filter((d) => d !== targetSq);
         if (defenders.length !== 1) continue;
         const guardSq = defenders[0];
+        // A KING cannot be removed — "your king on f8 is the only defender of
+        // your rook on g7 — and it can be taken" (Bowdler walk 2026-09-27, 35…Rg7
+        // Rh8+) read a check as a capture. A king guard is a check or a
+        // deflection question, never a removal.
+        if (chess.get(guardSq)?.type === 'k') continue;
         const takers = attackersOfSquare(chess, guardSq, color);
         if (takers.length === 0) continue;
         // Taking a DEFENDED guard with a pricier piece is a losing trade, not

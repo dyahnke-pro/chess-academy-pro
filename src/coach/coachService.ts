@@ -27,11 +27,11 @@
  * See `docs/COACH-BRAIN-00.md` for the architecture this implements.
  */
 import { Chess } from 'chess.js';
-import type { ComparedMove } from '../services/groundedAnswer';
+import { findTradeMove, type ComparedMove } from '../services/groundedAnswer';
 import { logAppAudit } from '../services/appAuditor';
 import { tacticsAreFreshFor } from '../services/tacticsContextIdentity';
 import { pureBoardAspect } from '../services/boardQuestionRouter';
-import { buildEnginePlan, buildCandidateEval, buildAlternativesContext } from '../services/enginePlanContext';
+import { buildEnginePlan, buildCandidateEval, buildAlternativesContext, buildOpponentHypotheticalEval } from '../services/enginePlanContext';
 import { scanPositionForTrap } from '../services/positionTrapScan';
 import { applyCandidateArrows, appendKeySquareHighlights } from '../services/coachAnswerGates';
 import { assembleEnvelope } from './envelope';
@@ -208,13 +208,14 @@ import {
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isErrorsBySituationQuestion, isMisconceptionsQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
-  isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion, isHintRequest, positionalTopic, isGameMistakeQuestion,
+  isWhyBestMoveQuestion, isCandidateMoveQuestion, isOpponentHypotheticalQuestion, tradeAsk, extractCandidateSan, isAlternativesQuestion, isHintRequest, positionalTopic, isGameMistakeQuestion,
   retrospectiveMoveRef, type RetrospectiveMoveRef, compareMovesAsk, captureOnAsk, pawnStrengthAsk, isMateQuestion, isMethodQuestion, stripQuestionFiller, pieceOptionsRef,
   isTeachingMethodQuestion, isSettingsQuestion, isAppHelpQuestion, isTimeTroubleQuestion, isLastGameQuestion, isLastGameMistakeQuestion, isNameOpeningQuestion, isOpponentMoveQuestion, isLastMoveQuestion, isTheoryQuestion, weaknessLifecycleKind, isWeaknessLifecycleQuestion, isWeaknessBriefingQuestion, openingExistenceQuery,
 } from './questionIntents';
 import { isAnyBoardQuestion } from './boardQuestions';
 import { computePieceOptions, pieceAbsentAnswer, resolvePieceQuestion } from '../services/pieceOptions';
 import { stockfishEngine } from '../services/stockfishEngine';
+import { searchUntilStable } from '../services/searchDepth';
 export {
   isPlanQuestion, isBestMoveQuestion, restrictedPieceInAsk, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion, isAttackAssessmentQuestion,
   isMasterPlayQuestion, isEndgameQuestion, isEndgamePlayRequest, isEndgameWeaknessQuestion, isPlayerGamesQuestion, isConceptQuestion, isFundamentalsQuestion, isFundamentalLessonQuestion, isFamousGameQuestion,
@@ -1520,6 +1521,31 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
         candidateSettled = cand.settled;
       }
     }
+    // "Should I trade queens?" — the trade move on this board and what it
+    // costs against the best move (question walk 2026-09-27).
+    let trade: import('../services/coachApi').MasterGroundingOptions['trade'];
+    const tradePiece = input.liveState.fen ? tradeAsk(askForIntents) : null;
+    if (tradePiece && input.liveState.fen) {
+      const fen = input.liveState.fen;
+      const seat: 'white' | 'black' = input.liveState.studentColor
+        ?? ((fen.split(' ')[1] ?? 'w') === 'b' ? 'black' : 'white');
+      const myTurn = (fen.split(' ')[1] === 'w') === (seat === 'white');
+      const move = myTurn ? findTradeMove(fen, tradePiece) : null;
+      const cand = move ? await buildCandidateEval(fen, move.san) : null;
+      trade = { piece: tradePiece, studentColor: seat, move, evalCp: cand?.evalCp ?? null, mateIn: cand?.mateIn ?? null, settled: cand?.settled ?? null };
+    }
+    // "What if THEY play d5?" — the opponent's named move, played where it is
+    // their turn and answered from the student's seat (question walk 2026-09-27).
+    let opponentHypothetical: import('../services/coachApi').OpponentHypotheticalGrounding | undefined;
+    if (!compareMoves && input.liveState.fen && isOpponentHypotheticalQuestion(askForIntents)) {
+      const theirSan = extractCandidateSan(askForIntents);
+      if (theirSan) {
+        const seat: 'white' | 'black' = input.liveState.studentColor
+          ?? ((input.liveState.fen.split(' ')[1] ?? 'w') === 'b' ? 'black' : 'white');
+        const r = await buildOpponentHypotheticalEval(input.liveState.fen, theirSan, seat);
+        opponentHypothetical = { theirSan, studentColor: seat, ...r };
+      }
+    }
     // STALE-PACKAGE REFUSAL (David 2026-09-19). `liveState.tactics` is a set of
     // facts ABOUT a board, and `liveState.fen` is the board this turn is about.
     // Until the package carried its own `fen` nothing could check they agree —
@@ -1564,7 +1590,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
       // coachApi. Whose-turn and colour are then answerable from `whoseTurn` /
       // `studentColor` alone; draw and mate still need the board, but they now
       // decline honestly through the computed lane instead of being improvised.
-      (input.liveState.fen || isAnyBoardQuestion(askForIntents) || isAttackAssessmentQuestion(askForIntents) || progressQuestion || trendQuestionEngage || conceptQuestionEngage || fundamentalsQuestionEngage || fundamentalLessonQuestionEngage || famousGameQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage || lastGameMistakeQuestionEngage || nameOpeningQuestionEngage || opponentMoveQuestionEngage || lastMoveQuestionEngage || theoryQuestionEngage || weaknessLifecycleKindEngage !== null || weaknessBriefingQuestionEngage || endgameWeaknessQuestionEngage || isEndgameQuestion(askForIntents) || openingExistenceName !== null || retrospectiveEngage || methodQuestionEngage
+      (input.liveState.fen || isAnyBoardQuestion(askForIntents) || isAttackAssessmentQuestion(askForIntents) || progressQuestion || trendQuestionEngage || conceptQuestionEngage || fundamentalsQuestionEngage || fundamentalLessonQuestionEngage || famousGameQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || opponentHypothetical !== undefined || trade !== undefined || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage || lastGameMistakeQuestionEngage || nameOpeningQuestionEngage || opponentMoveQuestionEngage || lastMoveQuestionEngage || theoryQuestionEngage || weaknessLifecycleKindEngage !== null || weaknessBriefingQuestionEngage || endgameWeaknessQuestionEngage || isEndgameQuestion(askForIntents) || openingExistenceName !== null || retrospectiveEngage || methodQuestionEngage
         ? {
             currentFen: input.liveState.fen,
             // The side to move, as the surface already knows it. Threaded so
@@ -1632,7 +1658,9 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // lastUserMessage() on wrapped surfaces sees the envelope.
             cleanAsk: askForIntents,
             askedPiece: restrictedPieceInAsk(askForIntents),
-            whyBestMoveQuestion: whyBestMoveEngage && !retrospectiveEngage,
+            // A resolved comparison answers "why is that better than e5?"
+            // itself — the generic why-best walk never mentions e5.
+            whyBestMoveQuestion: whyBestMoveEngage && !retrospectiveEngage && !(compareMoves && 'a' in compareMoves),
             reviewFlaggedMove: input.liveState.reviewFlaggedMove,
             // Game-scoped mistake ask + the reviewed game's computed worst
             // moment (2026-08-13 — the review ask was answered from the habit
@@ -1650,6 +1678,8 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             candidateMateIn,
             candidateLineUci,
             candidateSettled,
+            opponentHypothetical,
+            trade,
             compareMoves: compareMoves && 'a' in compareMoves ? compareMoves : undefined,
             compareOnly: compareMoves && 'only' in compareMoves ? compareMoves : undefined,
             captureOn: captureOnAsk(askForIntents) ?? undefined,
@@ -2394,17 +2424,33 @@ export { COACH_TOOLS };
  * on b5" names a move to MAKE, and a match on an earlier …b5 would answer
  * about the wrong move. Matched by coordinates at each ply, never by string.
  */
+/** Words that ask what a piece IS now, not why it was moved. */
+const QUALITY_WORD = /\b(?:weak|weakness|strong|good|bad|active|passive|safe|unsafe|well[- ]placed|badly placed|misplaced|doing|useful|useless|trapped|exposed|healthy|isolated|backward|doubled|target|defended|protected|hanging|loose)\b/i;
+
 export function tapeMoveRef(
   ask: string | undefined,
   fen: string | undefined,
   history: readonly string[],
 ): RetrospectiveMoveRef | null {
   if (!ask || history.length === 0) return null;
-  if (/\b(?:if\s+i|if\s+we|can\s+i|could\s+i|should\s+i|shall\s+i|may\s+i|what\s+happens|what\s+if|let\s+me|i\s+want\s+to|how\s+about)\b/i.test(ask)) return null;
+  if (/\b(?:if\s+i|if\s+we|can\s+i|could\s+i|should\s+i|shall\s+i|may\s+i|what\s+happens|what\s+if|let\s+me|i\s+want\s+to|how\s+about|(?:can|could|will|would|might)\s+(?:they|he|she|my\s+opponent))\b/i.test(ask)) return null;
   const san = extractCandidateSan(ask);
   if (!san) return null;
   if (fen) {
     try { if (new Chess(fen).move(san)) return null; } catch { /* not legal now — keep looking */ }
+  }
+  // A QUESTION ABOUT A PIECE THAT STILL STANDS THERE is about the piece, not
+  // the move that put it there (question walk 2026-09-27: "Is my d4 pawn
+  // weak?" was answered "your d4 on move 4 was the engine's top move"; "Is my
+  // bishop on e3 good or bad?" graded 10.Be3). The quality word says it asks
+  // about the piece NOW; the board says the piece is still on that square.
+  if (fen && QUALITY_WORD.test(ask)) {
+    const to = /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(san)?.[1];
+    const type = /^[KQRBN]/.test(san) ? san[0].toLowerCase() : 'p';
+    try {
+      const here = to ? new Chess(fen).get(to as never) as { type?: string } | undefined : undefined;
+      if (here?.type === type) return null;
+    } catch { /* unreadable board — fall through */ }
   }
   const c = new Chess();
   let hit = false;
@@ -2439,10 +2485,22 @@ export async function resolveCompareMoves(
   if (!ref) return null;
   let sans: [string, string] | null = null;
   const board = new Chess(fen);
+  const legal = (san: string): string | null => { try { return new Chess(fen).move(san)?.san ?? null; } catch { return null; } };
   if (ref.kind === 'sans') {
-    const legal = (san: string): string | null => { try { return new Chess(fen).move(san)?.san ?? null; } catch { return null; } };
     const a = legal(ref.a); const b = legal(ref.b);
     if (a && b) sans = [a, b];
+  } else if (ref.kind === 'versus-best') {
+    // "Why is that better than e5?" — "that" is the engine's move here; the
+    // same settle-search the candidate lane uses names it.
+    const b = legal(ref.b);
+    if (b) {
+      try {
+        const r = await searchUntilStable(fen, 'question', stockfishEngine);
+        const u = r.analysis.bestMove;
+        const best = u ? new Chess(fen).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] })?.san ?? null : null;
+        if (best && best !== b) sans = [best, b];
+      } catch { /* no engine — no comparison */ }
+    }
   } else {
     // "With the pawn or the queen" — the capture square is the last move's
     // landing square when it was a capture (a recapture); otherwise the piece

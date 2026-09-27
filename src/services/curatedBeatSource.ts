@@ -34,6 +34,7 @@ import type { LessonScript } from '../types';
 import { gradeNarrationText } from './coachAnswerGates';
 import { noteOpeningConflicts } from './danyaTeachingService';
 import repertoireRaw from '../data/repertoire.json';
+import proRepertoireRaw from '../data/pro-repertoires.json';
 
 /** A beat shallower than this sits on a SHARED prefix and identifies no
  *  opening, so it teaches whatever its own lesson was about — not this game.
@@ -146,8 +147,12 @@ export function beatRegister(say: string, seat: 'white' | 'black'): BeatRegister
 
 /** openingId → the opening's NAME, so the same tag-conflict guard the corpus
  *  uses can judge a beat. Ids are stable; names are what the guard compares. */
+// The pro repertoires too: their beats had NO name here, so neither guard
+// below could see which opening a pro beat belonged to (Colle walk 2026-09-27:
+// the GothamChess London beat spoke on a Colle).
 const NAME_BY_ID = new Map(
-  (repertoireRaw as Array<{ id: string; name: string }>).map((e) => [e.id, e.name]),
+  [...(repertoireRaw as Array<{ id: string; name: string }>), ...((proRepertoireRaw as { openings: Array<{ id: string; name: string }> }).openings)]
+    .map((e) => [e.id, e.name]),
 );
 const openingNameFor = (openingId: string): string | null => NAME_BY_ID.get(openingId) ?? null;
 
@@ -279,6 +284,22 @@ export function warmCuratedBeatIndexSync(): void {
  * same idea at several plies, and hearing it twice is what makes a coach sound
  * stuck.
  */
+const GENERIC_OPENING_WORDS = new Set([
+  'opening', 'system', 'game', 'defense', 'defence', 'variation', 'attack', 'gambit', 'line', 'main',
+  'pawn', 'queen', 'king', "queen's", "king's", 'queens', 'kings', 'with', 'from', 'accepted', 'declined',
+]);
+
+/** Does the beat's prose name its own opening (a distinctive word of the
+ *  lesson's opening name) while the game's detected opening does not carry it? */
+export function namesUnreachedOpening(say: string, beatOpening: string | null, gameOpening: string | null): boolean {
+  // Unknown on either side: stand down, the same rule as the seat (null = not
+  // known, never "known to differ").
+  if (!beatOpening || !gameOpening) return false;
+  const game = gameOpening.toLowerCase();
+  const words = beatOpening.toLowerCase().split(/[^a-z']+/).filter((w) => w.length >= 4 && !GENERIC_OPENING_WORDS.has(w));
+  return words.some((w) => new RegExp(`\\b${w}\\b`, 'i').test(say) && !game.includes(w));
+}
+
 export function curatedBeatAt(
   historySans: readonly string[],
   fen: string,
@@ -367,6 +388,13 @@ export function curatedBeatAt(
       // words) — only the subject sees it. See `beatSubject`.
       if (beat.subject && excludeSubjects?.has(beat.subject)) continue;
       if (noteOpeningConflicts(openingNameFor(beat.openingId), openingName)) continue;
+      // A BEAT THAT NAMES ITS OPENING SPEAKS ONLY ONCE THE GAME IS THAT OPENING
+      // (Colle walk 2026-09-27, 1.d4 d5 2.Nf3 Nf6: "The London — this
+      // repertoire's bread-and-butter…" before any Bf4). The name guard above
+      // passes it — the London is a child of the Queen's Pawn Game — and the
+      // board is shared; only the beat's own words claim an opening the game
+      // has not reached.
+      if (namesUnreachedOpening(beat.say, openingNameFor(beat.openingId), openingName)) continue;
       // A lesson written from the other side of the board addresses the
       // student as the opponent. Never speak it.
       if (studentSide && beat.seat !== studentSide) continue;

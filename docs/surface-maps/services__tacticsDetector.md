@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**858 lines · 2 exports · 33 importers · 14 tests · 0 audits**
+**863 lines · 2 exports · 33 importers · 15 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -52,24 +52,24 @@
 ### `TacticsDetectionResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `detectTactics` (function) — 95 call sites
+### `detectTactics` (function) — 96 call sites
 - `src/components/Board/BoardPageLayout.tsx:124`
 - `src/services/boardConcepts.ts:304`
 - `src/services/coachPrompts.ts:1097`
 - `src/services/coachPrompts.ts:1103`
 - `src/services/computerAccuracy.audit.test.ts:117`
-- `src/services/conceptEngine.ts:436`
-- `src/services/conceptEngine.ts:606`
-- `src/services/danyaBehaviors.ts:343`
+- `src/services/conceptEngine.ts:441`
+- `src/services/conceptEngine.ts:611`
+- `src/services/danyaBehaviors.ts:390`
 - `src/services/discussionPractice.ts:55`
 - `src/services/discussionPractice.ts:100`
 - `src/services/discussionPractice.ts:143`
 - `src/services/liveNoteTruth.test.ts:59`
-- `src/services/liveTacticsContext.ts:354`
-- `src/services/lookaheadPlan.ts:1127`
-- `src/services/lookaheadPlan.ts:1190`
+- `src/services/liveTacticsContext.ts:361`
+- `src/services/lookaheadPlan.ts:1164`
+- `src/services/lookaheadPlan.ts:1227`
 - `src/services/misconceptionClassifier.ts:113`
-- `src/services/misconceptionClassifier.ts:262`
+- `src/services/misconceptionClassifier.ts:264`
 - `src/services/mistakeNarration.ts:395`
 - `src/services/openingGenerator.ts:3545`
 - `src/services/pinGeometry.test.ts:72`
@@ -83,9 +83,10 @@
 - `src/services/pvPlayback.ts:324`
 - `src/services/pvPlayback.ts:344`
 - `src/services/relationClaimCost.report.test.ts:52`
+- `src/services/replayFence.bowdler1000.rewalk.test.ts:60`
 - `src/services/reviewCorpusNote.test.ts:61`
-- `src/services/reviewFullData.ts:488`
-- `src/services/reviewFullData.ts:547`
+- `src/services/reviewFullData.ts:518`
+- `src/services/reviewFullData.ts:577`
 - `src/services/reviewMoveBriefing.ts:64`
 - `src/services/reviewMoveBriefing.ts:65`
 - `src/services/reviewNarrationFidelity.test.ts:324`
@@ -156,6 +157,7 @@
 - `src/services/liveNoteTruth.test.ts`
 - `src/services/pinGeometry.test.ts`
 - `src/services/relationClaimCost.report.test.ts`
+- `src/services/replayFence.bowdler1000.rewalk.test.ts`
 - `src/services/reviewCorpusNote.test.ts`
 - `src/services/reviewNarrationFidelity.test.ts`
 - `src/services/reviewWalk1500.test.ts`

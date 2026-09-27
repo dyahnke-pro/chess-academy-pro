@@ -85,7 +85,7 @@ describe('whose best move it is', () => {
   it('keeps the old wording when no side was supplied', () => {
     // Chat asks ("what should I play here?") arrive on the student's own turn
     // and pass no colour; they must read exactly as before.
-    const answer = assembleMoveEvalAnswer({ fen: BLACK_TO_MOVE, bestMoveUci: 'd8b6' });
+    const answer = assembleMoveEvalAnswer({ studentColor: null, fen: BLACK_TO_MOVE, bestMoveUci: 'd8b6' });
     expect(answer?.facts).toContain('The best move is Qb6');
   });
 });

@@ -72,7 +72,7 @@ export interface GroundedAnswer {
 
 /** Convert a centipawn eval (side-to-move POV) into a grounded phrase. Never
  *  invents a number — rounds the real one. */
-function evalPhrase(evalCp: number | null | undefined, mateIn: number | null | undefined, mover: 'white' | 'black', studentColor?: 'white' | 'black' | null): string | null {
+function evalPhrase(evalCp: number | null | undefined, mateIn: number | null | undefined, mover: 'white' | 'black', studentColor: 'white' | 'black' | null): string | null {
   // ONE PERSPECTIVE: when the student's seat is known, the better side is
   // "you" or "they" — never a bare colour (Learn walk 2026-09-23: "White is
   // slightly better" to the student playing White).
@@ -1677,7 +1677,7 @@ export function assembleMoveEvalAnswer(opts: {
    *  twenty-one seconds later. Every "best move" in that report was advice for
    *  his opponent, read to him as his own. He described it as the hints being
    *  bad moves; they were good moves for the wrong player. */
-  studentColor?: 'white' | 'black' | null;
+  studentColor: 'white' | 'black' | null;
   /** THE PIECE THE STUDENT ASKED ABOUT, when they restricted the question.
    *
    *  🔒 ANSWER THE QUESTION THAT WAS ASKED (David 2026-08-11: "the coach could
@@ -1811,6 +1811,9 @@ export function assembleCandidateMoveAnswer(opts: {
    *  as a first read, never as fact — above all on a sacrifice, where the
    *  truth hides deepest. `null` = no search ran (no eval to hedge). */
   candidateSettled: boolean | null;
+  /** The student's seat — REQUIRED so the eval is said as "you"/"they", never a
+   *  colour to the player of that colour (question walk 2026-09-27). */
+  studentColor: 'white' | 'black' | null;
 }): GroundedAnswer | null {
   const { fen, candidateSan } = opts;
   const hedge = opts.candidateSettled === false
@@ -1917,7 +1920,7 @@ export function assembleCandidateMoveAnswer(opts: {
   if (sacOffer !== null) {
     const stmEval = typeof opts.candidateEvalCp === 'number' ? opts.candidateEvalCp : null;
     const give = sacOffer >= 5 ? 'the exchange or more' : sacOffer >= 3 ? 'a piece' : 'a pawn';
-    const after = evalPhrase(opts.candidateEvalCp, opts.candidateMateIn, mover);
+    const after = evalPhrase(opts.candidateEvalCp, opts.candidateMateIn, mover, opts.studentColor);
     let verdict: string | null = null;
     if (typeof opts.candidateMateIn === 'number' && opts.candidateMateIn > 0) {
       verdict = `${candNorm} is a sound sacrifice — it forces mate in ${opts.candidateMateIn}.`;
@@ -1964,7 +1967,7 @@ export function assembleCandidateMoveAnswer(opts: {
   // Name WHAT the candidate does when the geometry is concrete (not a bare
   // "attacks"), so the student hears the reason, not just the grade.
   if (geo && !geo.startsWith('attacks')) parts.push(`It ${geo}.`);
-  const evalText = evalPhrase(opts.candidateEvalCp, opts.candidateMateIn, mover);
+  const evalText = evalPhrase(opts.candidateEvalCp, opts.candidateMateIn, mover, opts.studentColor);
   if (evalText) parts.push(`After it, ${evalText}.`);
   if (lineText) parts.push(lineText);
   if (freqText) parts.push(freqText);
@@ -1976,6 +1979,163 @@ export function assembleCandidateMoveAnswer(opts: {
     bestMoveFromTo: bestFromTo,
     sources,
   };
+}
+
+/** "What if THEY play d5?" — the opponent's named move, answered from the
+ *  student's seat (question walk 2026-09-27: routed as a student candidate, the
+ *  coach graded the STUDENT playing d5). Played on `opponentMoveBoard` — the
+ *  live board, or the tempo-flipped one when it is the student's turn — and
+ *  judged by what it changes: the eval now versus the eval once they have it
+ *  in, both from the student's side. The student's best answer comes from the
+ *  engine line after it. Every fact computed (G0); the model only phrases. */
+export function assembleOpponentHypotheticalAnswer(opts: {
+  /** The board the move is played on (their turn), from `opponentMoveBoard`.
+   *  null = they cannot get a move in (the student is in check). */
+  board: string | null;
+  theirSan: string;
+  studentColor: 'white' | 'black';
+  /** Student-POV eval of the live position before their move. */
+  nowEvalCp: number | null;
+  /** Student-POV eval once their move is on the board. */
+  afterEvalCp: number | null;
+  afterMateIn: number | null;
+  /** Best play after their move — the student's answer first (UCI). */
+  lineUci: readonly string[];
+  settled: boolean | null;
+}): GroundedAnswer | null {
+  const raw = (opts.theirSan ?? '').trim();
+  if (!raw) return null;
+  const sources = ['engine:stockfish', 'board:chess.js'];
+  if (!opts.board) {
+    return { facts: "You're in check, so they don't get a free move — deal with the check first.", bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+  }
+  const them: 'white' | 'black' = opts.studentColor === 'white' ? 'black' : 'white';
+  let theirNorm: string | null = null;
+  try { theirNorm = new Chess(opts.board).move(raw)?.san ?? null; } catch { theirNorm = null; }
+  if (!theirNorm) {
+    return { facts: `${raw} isn't a move they can play here.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+  }
+  const geo = describeMoveGeometry(opts.board, theirNorm, them);
+  const after = evalPhrase(opts.afterEvalCp, opts.afterMateIn, opts.studentColor, opts.studentColor);
+  const parts: string[] = [];
+  if (geo) {
+    parts.push(`If they get ${theirNorm} in, it ${geo}.`);
+    if (after) parts.push(`After it, ${after}.`);
+  } else {
+    parts.push(after ? `If they get ${theirNorm} in, ${after}.` : `If they get ${theirNorm} in:`);
+  }
+  if (typeof opts.nowEvalCp === 'number' && typeof opts.afterEvalCp === 'number') {
+    const swing = (opts.nowEvalCp - opts.afterEvalCp) / 100;
+    if (swing >= 1) parts.push(`That would cost you about ${swing.toFixed(1)} points — it's the move to watch for.`);
+    else if (swing >= 0.3) parts.push(`It takes about ${swing.toFixed(1)} of a point off your position.`);
+    else if (swing <= -0.3) parts.push(`It would only help you — about ${(-swing).toFixed(1)} ${-swing >= 1 ? 'points' : 'of a point'} more for you than now.`);
+    else parts.push("It doesn't change much.");
+  }
+  // The student's best answer and the line it starts.
+  let bestSan: string | null = null;
+  let bestFromTo: { from: string; to: string } | null = null;
+  const lineSan: string[] = [];
+  try {
+    const c = new Chess(opts.board);
+    c.move(theirNorm);
+    for (const u of opts.lineUci.slice(0, 6)) {
+      const mv = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined });
+      if (!mv) break;
+      if (!bestSan) { bestSan = mv.san; bestFromTo = { from: mv.from, to: mv.to }; }
+      lineSan.push(mv.san);
+      if (c.isCheckmate()) break;
+    }
+  } catch { /* an unreadable line is no line */ }
+  if (bestSan) parts.push(`Your best answer is ${bestSan}${lineSan.length > 1 ? `: ${lineSan.join(' ')}` : ''}.`);
+  if (opts.settled === false) parts.push("The engine hadn't settled on this line yet — take it as a first read, not a final word.");
+  return { facts: parts.join(' '), bestMoveSan: bestSan, bestMoveFromTo: bestFromTo, sources };
+}
+
+// ── "SHOULD I TRADE QUEENS?" (question walk 2026-09-27) ──────────────────────
+//
+// The ask fell through to the best-move lane and the trade was never addressed.
+// Two computed halves: WHICH move trades (chess.js — a capture of their piece
+// by ours of the same kind, else a move that offers it on a defended square),
+// and WHAT IT COSTS against the best move (the engine, searched until it
+// settles). The material count adds the one principle that is always true:
+// trades favour the side that is ahead.
+
+export type TradePiece = 'q' | 'r' | 'b' | 'n' | 'any';
+const TRADE_WORD: Record<Exclude<TradePiece, 'any'>, [string, string]> = {
+  q: ['queen', 'queens'], r: ['rook', 'rooks'], b: ['bishop', 'bishops'], n: ['knight', 'knights'],
+};
+
+/** The move that trades `piece` now — a same-kind capture first, else a move
+ *  that offers it (lands where their same-kind piece hits it, defended). SAN,
+ *  or null when no such trade is on the board. Deterministic: first by SAN. */
+export function findTradeMove(fen: string, piece: TradePiece): { san: string; kind: 'capture' | 'offer' } | null {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return null; }
+  const me = c.turn();
+  const kinds: Array<'q' | 'r' | 'b' | 'n'> = piece === 'any' ? ['q', 'r', 'b', 'n'] : [piece];
+  const moves = c.moves({ verbose: true });
+  const same = (a: string, b: string | undefined): boolean => a === b || (piece === 'any' && (a === 'b' || a === 'n') && (b === 'b' || b === 'n'));
+  const captures = moves.filter((m) => kinds.includes(m.piece as 'q') && m.captured && same(m.piece, m.captured))
+    .map((m) => m.san).sort();
+  if (captures.length > 0) return { san: captures[0], kind: 'capture' };
+  const offers = moves.filter((m) => {
+    if (!kinds.includes(m.piece as 'q') || m.captured) return false;
+    const b = new Chess(fen);
+    const mv = b.move(m.san);
+    if (!mv || b.isCheckmate()) return false;
+    const foe = b.turn();
+    const hitBySame = b.attackers(mv.to, foe).some((sq) => same(mv.piece, b.get(sq)?.type));
+    const defended = b.attackers(mv.to, me).some((sq) => sq !== mv.to);
+    const otherAttackers = b.attackers(mv.to, foe).some((sq) => !same(mv.piece, b.get(sq)?.type));
+    return hitBySame && defended && !otherAttackers;
+  }).map((m) => m.san).sort();
+  return offers.length > 0 ? { san: offers[0], kind: 'offer' } : null;
+}
+
+export function assembleTradeAnswer(opts: {
+  fen: string;
+  piece: TradePiece;
+  studentColor: 'white' | 'black';
+  trade: { san: string; kind: 'capture' | 'offer' } | null;
+  /** Student-POV eval of the best move now, and of the position after the trade move. */
+  bestEvalCp: number | null;
+  tradeEvalCp: number | null;
+  tradeMateIn: number | null;
+  bestSan: string | null;
+  settled: boolean | null;
+}): GroundedAnswer | null {
+  let c: Chess;
+  try { c = new Chess(opts.fen); } catch { return null; }
+  const [one, many] = opts.piece === 'any' ? ['piece', 'pieces'] : TRADE_WORD[opts.piece];
+  const me = opts.studentColor === 'white' ? 'w' : 'b';
+  const pts = (col: 'w' | 'b'): number => c.board().flat().reduce((n, x) => n + (x && x.color === col ? (REVIEW_PIECE_VALUE[x.type] ?? 0) : 0), 0);
+  const edge = pts(me) - pts(me === 'w' ? 'b' : 'w');
+  const principle = edge >= 2
+    ? "You're ahead in material, so trades are on your side — every trade makes the extra material count for more."
+    : edge <= -2
+      ? "You're behind in material — trades help the side that's ahead, so keep pieces on unless the trade wins something."
+      : null;
+  const parts: string[] = [];
+  if (!opts.trade) {
+    parts.push(`There's no ${one} trade on the board this move — nothing of yours can take or offer to take their ${opts.piece === 'any' ? 'pieces' : one}.`);
+    if (principle) parts.push(principle);
+    return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+  }
+  const t = opts.trade;
+  parts.push(t.kind === 'capture' ? `${t.san} trades the ${many}.` : `${t.san} offers the ${one} trade.`);
+  if (typeof opts.bestEvalCp === 'number' && typeof opts.tradeEvalCp === 'number') {
+    const loss = Math.max(0, opts.bestEvalCp - opts.tradeEvalCp) / 100;
+    if (opts.bestSan && opts.bestSan === t.san) parts.push("It's also the engine's first choice.");
+    else if (loss <= 0.3) parts.push(`It keeps you level with the best move${opts.bestSan ? `, ${opts.bestSan}` : ''} — a fine choice.`);
+    else if (loss < 1) parts.push(`It gives up about ${loss.toFixed(1)} of a point next to ${opts.bestSan ?? 'the best move'}.`);
+    else parts.push(`It costs about ${loss.toFixed(1)} points next to ${opts.bestSan ?? 'the best move'} — not now.`);
+  }
+  const mover = c.turn() === 'w' ? 'white' : 'black';
+  const after = evalPhrase(opts.tradeEvalCp, opts.tradeMateIn, mover, opts.studentColor);
+  if (after) parts.push(`After it, ${after}.`);
+  if (principle) parts.push(principle);
+  if (opts.settled === false) parts.push("The engine hadn't settled on this line yet — take it as a first read, not a final word.");
+  return { facts: parts.join(' '), bestMoveSan: opts.bestSan, bestMoveFromTo: null, sources: ['engine:stockfish', 'board:chess.js'] };
 }
 
 /** One engine line for the alternatives comparison: the first move (SAN),
@@ -2009,6 +2169,8 @@ export interface AlternativeLineFact {
 export function assembleAlternativesAnswer(opts: {
   fen: string;
   lines: ReadonlyArray<AlternativeLineFact>;
+  /** The student's seat — REQUIRED, see `evalPhrase`. */
+  studentColor: 'white' | 'black' | null;
 }): GroundedAnswer | null {
   const { fen, lines } = opts;
   if (!lines || lines.length < 2) return null;
@@ -2121,7 +2283,7 @@ export function assembleAlternativesAnswer(opts: {
   }
 
   // 3. The verdict eval of best play.
-  const evalText = evalPhrase(bestEvalStm, bestMateStm, mover);
+  const evalText = evalPhrase(bestEvalStm, bestMateStm, mover, opts.studentColor);
   if (evalText) parts.push(`With ${bestSan}, ${evalText}.`);
 
   return {
@@ -2798,7 +2960,7 @@ export function assembleMovePurpose(opts: {
   const ss = opts.studentSide ?? opts.moverColor;
   const studentEvalCp = opts.evalCp == null ? null : (ss === 'white' ? opts.evalCp : -opts.evalCp);
   const studentMate = opts.mateIn == null ? null : (ss === 'white' ? opts.mateIn : -opts.mateIn);
-  const ev = evalPhrase(studentEvalCp, studentMate, ss);
+  const ev = evalPhrase(studentEvalCp, studentMate, ss, opts.studentSide ?? null);
   if (ev) clauses.push(`${upperFirst(ev)}.`);
 
   if (clauses.length === 0) return null;
@@ -2948,7 +3110,7 @@ export function assembleEngineReasoning(opts: {
   const ss = opts.studentSide ?? opts.moverColor;
   const studentEvalCp = opts.evalCp == null ? null : (ss === 'white' ? opts.evalCp : -opts.evalCp);
   const studentMate = opts.mateIn == null ? null : (ss === 'white' ? opts.mateIn : -opts.mateIn);
-  const ev = evalPhrase(studentEvalCp, studentMate, ss);
+  const ev = evalPhrase(studentEvalCp, studentMate, ss, opts.studentSide ?? null);
   if (ev) clauses.push(`${cap(ev)}.`);
 
   const first = plies[0];
@@ -6670,7 +6832,7 @@ const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop'
  * refutation — the reply the engine plays and what it takes — so the student
  * hears why, not only which. Both equal → said so. All computed (G0).
  */
-export function assembleCompareMovesAnswer(opts: { fen: string; a: ComparedMove; b: ComparedMove }): GroundedAnswer | null {
+export function assembleCompareMovesAnswer(opts: { fen: string; a: ComparedMove; b: ComparedMove; studentColor: 'white' | 'black' | null }): GroundedAnswer | null {
   const score = (m: ComparedMove): number | null =>
     typeof m.mateIn === 'number' ? (m.mateIn > 0 ? 100000 - m.mateIn : -100000 - m.mateIn) : m.evalCp;
   const sa = score(opts.a); const sb = score(opts.b);
@@ -6692,7 +6854,7 @@ export function assembleCompareMovesAnswer(opts: { fen: string; a: ComparedMove;
     } catch { return null; }
   };
   if (gap <= 30) {
-    const after = evalPhrase(better.evalCp, better.mateIn, mover);
+    const after = evalPhrase(better.evalCp, better.mateIn, mover, opts.studentColor);
     return {
       facts: `${opts.a.san} and ${opts.b.san} come to about the same${after ? ` — ${after} either way` : ''}.`,
       bestMoveSan: better.san, bestMoveFromTo: null, sources: ['engine:stockfish', 'board:chess.js'],

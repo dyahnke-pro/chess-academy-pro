@@ -60,7 +60,7 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
 }
 import { lookupMasterPlay } from './masterPlayLookup';
 import { isEndgameByMaterial } from './gamePhaseService';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleCompareMovesAnswer, assembleCaptureOnAnswer, assemblePawnStrengthAnswer, playedSacrificeVerdict, lastCaptureOf, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFundamentalLessonAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleLastMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer, type WeakFundamental, type PositionalTopic as PositionalTopicType } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleOpponentHypotheticalAnswer, assembleTradeAnswer, assembleCompareMovesAnswer, assembleCaptureOnAnswer, assemblePawnStrengthAnswer, playedSacrificeVerdict, lastCaptureOf, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFundamentalLessonAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleLastMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer, type WeakFundamental, type PositionalTopic as PositionalTopicType } from './groundedAnswer';
 import { getFundamentalCounts, FUNDAMENTAL_LABEL, fundamentalDevice } from './fundamentalsCatalog';
 import type { FundamentalId } from './principleAttribution';
 import { matchRouteByTopic } from './navigationRouter';
@@ -1072,6 +1072,17 @@ export async function getCoachStructuredResponse(
 /** Surfaces that want master-play grounding pass this block. The
  *  function decides INTERNALLY whether to engage (intent detector +
  *  context availability) — surfaces don't need to gate the call. */
+/** The opponent-hypothetical read, WHITE-POV evals, as `buildOpponentHypotheticalEval` returns it. */
+export interface OpponentHypotheticalGrounding {
+  theirSan: string;
+  studentColor: 'white' | 'black';
+  board: string | null;
+  evalCp: number | null;
+  mateIn: number | null;
+  lineUci: string[];
+  settled: boolean | null;
+}
+
 export interface MasterGroundingOptions {
   /** The FEN the user is currently looking at. When undefined, Layer B
    *  skips: nothing to ground against. The watcher's prefetch is also
@@ -1203,6 +1214,18 @@ export interface MasterGroundingOptions {
   candidateLineUci?: string[];
   /** Did that search settle (`searchUntilStable`)? null = no search ran. */
   candidateSettled?: boolean | null;
+  /** "What if THEY play d5?" — their named move, evals WHITE-POV (coachService). */
+  opponentHypothetical?: OpponentHypotheticalGrounding;
+  /** "Should I trade queens?" — the trade move on the board and its engine
+   *  read, WHITE-POV evals (coachService). `move` null = no trade available. */
+  trade?: {
+    piece: 'q' | 'r' | 'b' | 'n' | 'any';
+    studentColor: 'white' | 'black';
+    move: { san: string; kind: 'capture' | 'offer' } | null;
+    evalCp: number | null;
+    mateIn: number | null;
+    settled: boolean | null;
+  };
   /** "X or Y?" — both moves resolved on this board, mover POV. */
   compareMoves?: { a: import('./groundedAnswer').ComparedMove; b: import('./groundedAnswer').ComparedMove };
   /** "The pawn or the queen?" when only one of them can take there. */
@@ -2011,7 +2034,7 @@ export function isBoardQuestionTurn(
   query: string,
   g: Pick<MasterGroundingOptions,
     'currentFen' | 'cleanAsk' | 'forceEngage' | 'positionAssessmentQuestion' | 'endgameQuestion'
-    | 'bestMoveQuestion' | 'whyBestMoveQuestion' | 'planQuestion' | 'candidateMoveQuestion' | 'compareMoves' | 'compareOnly' | 'captureOn' | 'pawnStrength'
+    | 'bestMoveQuestion' | 'whyBestMoveQuestion' | 'planQuestion' | 'candidateMoveQuestion' | 'opponentHypothetical' | 'trade' | 'compareMoves' | 'compareOnly' | 'captureOn' | 'pawnStrength'
     | 'alternativesQuestion' | 'moveRatingQuestion' | 'opponentMoveQuestion'
     | 'convertingQuestion' | 'colorQuestion' | 'attackQuestion'>,
 ): boolean {
@@ -2028,6 +2051,8 @@ export function isBoardQuestionTurn(
     g.whyBestMoveQuestion === true ||
     g.planQuestion === true ||
     g.candidateMoveQuestion === true ||
+    g.opponentHypothetical !== undefined ||
+    g.trade !== undefined ||
     g.compareMoves !== undefined ||
     g.compareOnly !== undefined ||
     g.captureOn !== undefined ||
@@ -3649,6 +3674,8 @@ export async function getCoachChatResponse(
       grounding.pawnStrength !== undefined ||
       grounding.alternativesQuestion === true ||
       grounding.candidateMoveQuestion === true ||
+      grounding.opponentHypothetical !== undefined ||
+      grounding.trade !== undefined ||
       grounding.masterPlayQuestion === true ||
       grounding.planQuestion === true ||
       grounding.tacticsQuestion === true ||
@@ -5402,6 +5429,7 @@ export async function getCoachChatResponse(
           const answer = assembleAlternativesAnswer({
             fen: grounding.currentFen,
             lines: grounding.alternativesLines,
+            studentColor: grounding.studentColor ?? null,
           });
           if (answer) {
             const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'alternatives', preferRaw: true, mustPreserve: answer.bestMoveSan ? [answer.bestMoveSan] : undefined });
@@ -5554,9 +5582,33 @@ export async function getCoachChatResponse(
         // Before the single-candidate lane, which would evaluate one and drop
         // the other. The worse move is shown with its refutation.
         if (grounding.compareMoves && grounding.currentFen) {
-          const answer = assembleCompareMovesAnswer({ fen: grounding.currentFen, a: grounding.compareMoves.a, b: grounding.compareMoves.b });
+          const answer = assembleCompareMovesAnswer({ fen: grounding.currentFen, a: grounding.compareMoves.a, b: grounding.compareMoves.b, studentColor: grounding.studentColor ?? null });
           if (answer) {
             const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true });
+            if (voiced) {
+              return answer.bestMoveFromTo
+                ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
+                : voiced;
+            }
+          }
+        }
+        if (grounding.opponentHypothetical && grounding.currentFen) {
+          const oh = grounding.opponentHypothetical;
+          // Student POV: the evals are White-POV, flip for a Black student.
+          const pov = (cp: number | null | undefined): number | null =>
+            typeof cp === 'number' ? (oh.studentColor === 'black' ? -cp : cp) : null;
+          const answer = assembleOpponentHypotheticalAnswer({
+            board: oh.board,
+            theirSan: oh.theirSan,
+            studentColor: oh.studentColor,
+            nowEvalCp: pov(grounding.engineEvalCp),
+            afterEvalCp: pov(oh.evalCp),
+            afterMateIn: pov(oh.mateIn),
+            lineUci: oh.lineUci,
+            settled: oh.settled,
+          });
+          if (answer) {
+            const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'candidate-move', preferRaw: true });
             if (voiced) {
               return answer.bestMoveFromTo
                 ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
@@ -5603,6 +5655,7 @@ export async function getCoachChatResponse(
             candidateMateIn: stmCandMate,
             candidateLineUci: grounding.candidateLineUci ?? [],
             candidateSettled: grounding.candidateSettled ?? null,
+            studentColor: grounding.studentColor ?? null,
             masterFreqPct,
           });
           if (answer) {
@@ -5673,6 +5726,32 @@ export async function getCoachChatResponse(
           }
         }
 
+        if (grounding.trade && grounding.currentFen) {
+          const tr = grounding.trade;
+          const pov = (cp: number | null | undefined): number | null =>
+            typeof cp === 'number' ? (tr.studentColor === 'black' ? -cp : cp) : null;
+          let bestSan: string | null = null;
+          const bu = grounding.engineBestMoveUci ?? null;
+          if (bu && bu.length >= 4) {
+            try { bestSan = new Chess(grounding.currentFen).move({ from: bu.slice(0, 2), to: bu.slice(2, 4), promotion: bu[4] })?.san ?? null; } catch { bestSan = null; }
+          }
+          const answer = assembleTradeAnswer({
+            fen: grounding.currentFen,
+            piece: tr.piece,
+            studentColor: tr.studentColor,
+            trade: tr.move,
+            bestEvalCp: pov(grounding.engineEvalCp),
+            tradeEvalCp: pov(tr.evalCp),
+            tradeMateIn: pov(tr.mateIn),
+            bestSan,
+            settled: tr.settled,
+          });
+          if (answer) {
+            const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'candidate-move', preferRaw: true });
+            if (voiced) return voiced;
+          }
+        }
+
         if (grounding.bestMoveQuestion) {
           // Prefer Stockfish's TRUE best move (threaded from the surface engine
           // snapshot, STEP A); fall back to the top master move when the engine
@@ -5697,7 +5776,7 @@ export async function getCoachChatResponse(
               typeof grounding.engineMateIn === 'number'
                 ? (blackToMove ? -grounding.engineMateIn : grounding.engineMateIn)
                 : null;
-            const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, askedPiece: grounding.askedPiece ?? null, prevCapture: bestFen === grounding.currentFen ? lastCaptureOf(grounding.moveHistory) : null });
+            const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null, askedPiece: grounding.askedPiece ?? null, prevCapture: bestFen === grounding.currentFen ? lastCaptureOf(grounding.moveHistory) : null });
             if (answer) {
               const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true });
               if (voiced) {

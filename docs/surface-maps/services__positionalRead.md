@@ -32,10 +32,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `rookReachesFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:617`
+- `src/services/danyaBehaviors.ts:621`
 
 ### `castleIsOneMoveAway` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:242`
+- `src/services/danyaBehaviors.ts:243`
 
 ### `readPosition` (function) — 43 call sites
 - `src/services/boardPlan.ideaKey.test.ts:13`
@@ -66,20 +66,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.test.ts:256`
 - `src/services/positionalRead.test.ts:268`
 - `src/services/positionalRead.test.ts:276`
-- `src/services/positionalRead.test.ts:286`
-- `src/services/positionalRead.test.ts:291`
-- `src/services/positionalRead.test.ts:298`
-- `src/services/positionalRead.test.ts:302`
-- `src/services/positionalRead.test.ts:309`
-- `src/services/positionalRead.test.ts:313`
-- `src/services/positionalRead.test.ts:320`
-- `src/services/positionalRead.test.ts:328`
-- `src/services/positionalRead.test.ts:337`
-- `src/services/positionalRead.test.ts:341`
-- `src/services/positionalRead.test.ts:352`
-- `src/services/positionalRead.test.ts:364`
-- `src/services/positionalRead.test.ts:373`
-- `src/services/positionalRead.test.ts:378`
+- `src/services/positionalRead.test.ts:287`
+- `src/services/positionalRead.test.ts:292`
+- `src/services/positionalRead.test.ts:299`
+- `src/services/positionalRead.test.ts:303`
+- `src/services/positionalRead.test.ts:310`
+- `src/services/positionalRead.test.ts:314`
+- `src/services/positionalRead.test.ts:321`
+- `src/services/positionalRead.test.ts:329`
+- `src/services/positionalRead.test.ts:338`
+- `src/services/positionalRead.test.ts:342`
+- `src/services/positionalRead.test.ts:353`
+- `src/services/positionalRead.test.ts:365`
+- `src/services/positionalRead.test.ts:374`
+- `src/services/positionalRead.test.ts:379`
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
 ### `buildPositionalRead` (function) — 12 call sites
@@ -97,7 +97,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.test.ts:192`
 
 ### `attackerCanUseFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:223`
+- `src/services/danyaBehaviors.ts:224`
 
 ## Tests
 

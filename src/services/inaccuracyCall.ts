@@ -233,7 +233,13 @@ function whyBetter(
   // and give no reason — empty beats a reason that says nothing.
   if (lead?.drift) return null;
   if (lead?.text) {
-    const own = isCostClause(lead.text) || lead.squares.includes(firstFrom) || lead.squares.includes(firstTo);
+    // A cost is the move's own consequence ("it would win a pawn") — but a
+    // NAMED capture on another square is a different move's work: "Bxb4 was
+    // the move — it would take the bishop on d7" (Baltic walk 2026-09-27; the
+    // bishop falls to …Kxd7 later). That one is the idea, said as such.
+    const namedCapture = /\btake (?:the|their|your) \w+ on ([a-h][1-8])/.exec(lead.text);
+    const costIsOwn = isCostClause(lead.text) && (!namedCapture || namedCapture[1] === firstTo);
+    const own = costIsOwn || lead.squares.includes(firstFrom) || lead.squares.includes(firstTo);
     return { why: lead.text, square: lead.squares[0] ?? '', own };
   }
   // No clause carried a square (anything square-less that outranked the rest)
@@ -531,7 +537,14 @@ function punishmentOf(
   // was a mistake — it let them in with Kg7"). When the played move gave check,
   // their first move is the reply the check forced; naming it as what the move
   // "let them" do is a sentence about nothing.
-  if (/[+#]$/.test(playedSan) && first && !/x/.test(first)) return null;
+  // …unless the answer is itself a CHECK: then it is not what the check forced
+  // but what the check walked into (Bowdler walk 2026-09-27, 29…Rd4+ Kf5+ — the
+  // king stepped off the g-file and the rook on g1 checked behind it).
+  if (/[+#]$/.test(playedSan) && first && !/x|[+#]$/.test(first)) return null;
+  if (first && /[+#]$/.test(first)) {
+    const disc = discoveredBy(fenAfter, replyLineUci[0]);
+    if (disc) return { why: `in with ${first}, a discovered check from the ${disc}`, first };
+  }
   // Nor is a QUIET reply something the move "let them in with": "let them in
   // with Kg6" (Damiano walk), "let them in with Neg6", "…with e5" (Colle walk,
   // 2026-09-27) named a retreat and a pawn push as if they broke in. Only a
@@ -614,5 +627,21 @@ export function gambitFile(fenBefore: string, playedSan: string, moverColor: 'wh
       if (p && p.type === 'p' && p.color === me) return null;
     }
     return file;
+  } catch { return null; }
+}
+
+/** The piece that gives check when `uci` is played on `fen` — but only when it
+ *  is NOT the piece that moved (a discovered check), named "rook on g1". */
+function discoveredBy(fen: string, uci: string): string | null {
+  try {
+    const c = new Chess(fen);
+    const m = c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] });
+    if (!m || !c.inCheck()) return null;
+    const kingSq = c.board().flat().find((x) => x && x.type === 'k' && x.color === c.turn())?.square;
+    if (!kingSq) return null;
+    const checkers = c.attackers(kingSq, m.color).filter((sq) => sq !== m.to);
+    if (checkers.length === 0) return null;
+    const p = c.get(checkers[0]);
+    return p ? `${PIECE_NAME[p.type]} on ${checkers[0]}` : null;
   } catch { return null; }
 }

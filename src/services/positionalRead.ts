@@ -458,8 +458,8 @@ function joinsFor(
         rank: RANK.plan - (side === 'opponent' ? OPPONENT_PENALTY : 0),
         squares: [b.square, mv.to],
         text: side === 'student'
-          ? `Your ${NAME[b.piece] ?? 'piece'} on ${b.square} is your problem piece — ${b.reason} — and the pawn move to ${mv.to} is what fixes it — that pairing is the plan, and the pawn move is not about the pawn.`
-          : `Their ${NAME[b.piece] ?? 'piece'} on ${b.square} is their problem piece — ${b.reason} — and a pawn to ${mv.to} would fix it, so stopping that pawn is worth more than it looks.`,
+          ? `Your ${NAME[b.piece] ?? 'piece'} on ${b.square} is your problem piece — ${b.reason} — and your pawn from ${mv.from} to ${mv.to} is what frees it — that pairing is the plan, and the pawn move is not about the pawn.`
+          : `Their ${NAME[b.piece] ?? 'piece'} on ${b.square} is their problem piece — ${b.reason} — and their pawn from ${mv.from} to ${mv.to} would free it, so stopping that pawn is worth more than it looks.`,
       });
       break; // one join per bad piece; the first proved fix is enough to teach
     }

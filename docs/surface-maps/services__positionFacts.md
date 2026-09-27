@@ -90,7 +90,7 @@
 - `src/services/whyBestMove.ts:103`
 
 ### `computePositionFacts` (function) — 78 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9176`
+- `src/components/Coach/CoachTeachPage.tsx:9187`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:630`
@@ -169,16 +169,19 @@
 - `src/test/teach02Wired.test.ts:136`
 - `src/test/teach02Wired.test.ts:138`
 
-### `conceptInstanceKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7927`
-- `src/services/claimKeyParity.test.ts:27`
-- `src/services/claimKeyParity.test.ts:30`
-
 ### `mustKey` (function) — 1 call site
 - `src/components/Coach/CoachTeachPage.tsx:7946`
 
 ### `convertKey` (function) — 1 call site
 - `src/services/positionFacts.convertOnce.test.ts:24`
+
+### `conceptInstanceKey` (re-export) — 6 call sites
+- `src/components/Coach/CoachTeachPage.tsx:7927`
+- `src/services/claimKeyParity.test.ts:27`
+- `src/services/claimKeyParity.test.ts:30`
+- `src/services/conceptKey.ts:9`
+- `src/services/danyaBehaviors.ts:429`
+- `src/services/replayFence.sicilianClosed1000.test.ts:21`
 
 ## Tests
 

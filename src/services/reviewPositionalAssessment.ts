@@ -104,6 +104,31 @@ export function assessPositionalEdge(
   return { verdict, reasons: assets.map((a) => a.text), reasonKeys: assets.map((a) => a.key) };
 }
 
+const EDGE_NAME: Record<string, [string, string]> = {
+  q: ['a queen', 'queens'], r: ['a rook', 'rooks'], b: ['a bishop', 'bishops'], n: ['a knight', 'knights'], p: ['a pawn', 'pawns'],
+};
+const COUNT_WORD = ['', 'a', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
+
+/** The material edge in pieces: "a pawn", "a bishop for two pawns", "a rook
+ *  for a knight and a pawn". Pure count by type — the side's extras, then what
+ *  the other side holds in return. */
+export function materialEdgeWords(all: ReadonlyArray<{ type: string; color: Color }>, side: Color, other: Color): string {
+  const n = (c: Color, t: string): number => all.filter((p) => p.color === c && p.type === t).length;
+  const list = (from: Color, to: Color): string[] => ['q', 'r', 'b', 'n', 'p'].flatMap((t) => {
+    const d = n(from, t) - n(to, t);
+    if (d <= 0) return [];
+    const [one, many] = EDGE_NAME[t];
+    return [d === 1 ? one : `${COUNT_WORD[d] ?? d} ${many}`];
+  });
+  const join = (xs: string[]): string => (xs.length <= 1 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
+  const mine = list(side, other);
+  const theirs = list(other, side);
+  if (mine.length === 0) return 'material';
+  // A lone extra minor is "a piece" — the idiom every strong player uses.
+  if (theirs.length === 0 && (mine[0] === 'a bishop' || mine[0] === 'a knight') && mine.length === 1) return 'a piece';
+  return theirs.length === 0 ? join(mine) : `${join(mine)} for ${join(theirs)}`;
+}
+
 /**
  * The itemised, board-true asset list of `side`, phrased from the STUDENT's
  * seat: `who === 'yours'` when `side` is the student, `'theirs'` when it is the
@@ -135,7 +160,10 @@ function assetsFor(
   // side actually holds; a level count says nothing.
   const count = (c: Color): number => all.filter((p) => p.color === c).reduce((n, p) => n + (MATERIAL_VALUE[p.type] ?? 0), 0);
   const up = count(side) - count(other);
-  if (up >= 1) reasons.push(`${youre} up ${up === 1 ? 'a pawn' : up === 3 ? 'a piece' : `${up} points of material`}`);
+  // SAID AS WHAT IS ON THE BOARD, not as a point total (Bowdler walk
+  // 2026-09-27, 9.Qxe7+ Bxe7: "you're up a pawn" with a bishop against two
+  // pawns). The count decides whether there is an edge; the pieces say what it is.
+  if (up >= 1) reasons.push(`${youre} up ${materialEdgeWords(all, side, other)}`);
 
   // 0b. KING SAFETY — castled against a king still in the centre, with queens
   // on (without queens a central king is an endgame asset, not a target).

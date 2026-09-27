@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**250 lines · 5 exports · 8 importers · 6 tests · 0 audits**
+**278 lines · 6 exports · 8 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -59,6 +59,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/standingRefrains.test.ts:80`
 - `src/services/standingRefrains.test.ts:110`
 
+### `materialEdgeWords` (function) — 3 call sites
+- `src/services/replayFence.bowdler1000.rewalk.test.ts:30`
+- `src/services/replayFence.bowdler1000.rewalk.test.ts:33`
+- `src/services/replayFence.bowdler1000.rewalk.test.ts:36`
+
 ### `phaseVerdictLine` (function) — 8 call sites
 - `src/services/learnWalkNimzo.test.ts:21`
 - `src/services/learnWalkNimzo.test.ts:27`
@@ -66,13 +71,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseVerdict.test.ts:18`
 - `src/services/phaseVerdict.test.ts:23`
 - `src/services/phaseVerdict.test.ts:28`
-- `src/services/positionFacts.ts:820`
+- `src/services/positionFacts.ts:821`
 - `src/services/reviewFullData.ts:914`
 
 ### `phaseVerdictKeys` (function) — 3 call sites
 - `src/services/learnWalkNimzo.test.ts:22`
 - `src/services/learnWalkNimzo.test.ts:31`
-- `src/services/positionFacts.ts:823`
+- `src/services/positionFacts.ts:824`
 
 ## Tests
 
@@ -80,6 +85,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnWalkNimzo.test.ts`
 - `src/services/phaseVerdict.test.ts`
 - `src/services/planPrescriptions.test.ts`
+- `src/services/replayFence.bowdler1000.rewalk.test.ts`
 - `src/services/reviewPositionalAssessment.test.ts`
 - `src/services/standingRefrains.test.ts`
 

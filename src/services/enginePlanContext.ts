@@ -19,10 +19,11 @@
 import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
-import { searchUntilStable } from './searchDepth';
+import { searchUntilStable, floorFor, sharpness, SEARCH_POLICY } from './searchDepth';
 import { legalSeeGain } from './positionReadingService';
 import { getCachedStockfish } from '../hooks/stockfishFenCache';
 import type { StockfishAnalysis } from '../types';
+import { opponentMoveBoard } from './tempoFen';
 import type { LiveState } from '../coach/types';
 
 /** Search depth for the plan PV. Deep enough for a meaningful line, shallow
@@ -65,6 +66,15 @@ export async function buildEnginePlan(
   const hasLine = (a: StockfishAnalysis | undefined): boolean =>
     !!a && (!!a.topLines?.[0]?.moves?.length || !!a.bestMove);
   let analysis: StockfishAnalysis | undefined = getCachedStockfish(fen);
+  // THE CACHE ANSWERS ONLY IF IT IS DEEP ENOUGH FOR THIS POSITION (David
+  // 2026-09-27: "algo the stockfish depth"). A quiet position is settled by
+  // the question floor; a sharp one needs more before the eval bar's read can
+  // stand as the answer. Below it, search until the answer stops changing.
+  if (hasLine(analysis) && (analysis?.depth ?? 0) < floorFor(SEARCH_POLICY.question, sharpness(fen))) {
+    try {
+      analysis = (await searchUntilStable(fen, 'question', stockfishEngine)).analysis;
+    } catch { /* keep the cached read — a shallower answer beats none */ }
+  }
   if (!hasLine(analysis)) {
     try {
       // ── A BUDGET, NOT A DEADLINE SOMEONE ELSE ENFORCES ──────────────────
@@ -242,4 +252,39 @@ export async function buildCandidateEval(
     // actually asks for, and the proof a sacrifice verdict stands on.
     lineUci: analysis.topLines?.[0]?.moves?.filter((m): m is string => typeof m === 'string') ?? [],
   };
+}
+
+/** "What if THEY play d5?" — play the opponent's named move on the board where
+ *  it is their turn (`opponentMoveBoard`), then search the result until it
+ *  settles. Evals are WHITE-POV like `buildCandidateEval`. `board` null = the
+ *  student is in check and they get no free move; `evalCp` etc. then null. */
+export async function buildOpponentHypotheticalEval(
+  fen: string,
+  theirSan: string,
+  studentColor: 'white' | 'black',
+): Promise<{ board: string | null; evalCp: number | null; mateIn: number | null; lineUci: string[]; settled: boolean | null }> {
+  const board = opponentMoveBoard(fen, studentColor);
+  const empty = { board, evalCp: null, mateIn: null, lineUci: [] as string[], settled: null };
+  if (!board) return empty;
+  let afterFen: string;
+  try {
+    const c = new Chess(board);
+    if (!c.move(theirSan)) return empty;
+    afterFen = c.fen();
+  } catch {
+    return empty;
+  }
+  try {
+    const r = await searchUntilStable(afterFen, 'question', stockfishEngine);
+    const a = r.analysis;
+    return {
+      board,
+      settled: r.stable,
+      evalCp: a.isMate ? null : Math.round(a.evaluation),
+      mateIn: a.isMate ? a.mateIn : null,
+      lineUci: a.topLines?.[0]?.moves?.filter((m): m is string => typeof m === 'string') ?? [],
+    };
+  } catch {
+    return empty;
+  }
 }

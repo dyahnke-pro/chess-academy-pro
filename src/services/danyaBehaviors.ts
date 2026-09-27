@@ -29,6 +29,7 @@ import type { Color, PieceSymbol, Square } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
 import { attackerCanUseFile, castleIsOneMoveAway, rookReachesFile } from './positionalRead';
 import { seatBare } from '../utils/seatPieces';
+import { conceptInstanceKey, forkThreatKey } from './conceptKey';
 import { tacticalReadFromLines, namedTacticClause } from './tacticalRead';
 import { phaseOfFen, type Phase } from './boardConcepts';
 import { homeMinorCount } from './development';
@@ -282,6 +283,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // NAME WHAT IT FORKS — "forking on e4" named the knight's landing
       // square as if it were the target (walk 2026-09-27, Carlsen–Aronian).
       let forked: string[] = [];
+      let forkedSquares: string[] = [];
       try {
         const parts = fen.split(' ');
         parts[1] = student === 'w' ? 'b' : 'w';
@@ -291,10 +293,10 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         forked = b.board().flat()
           .filter((c): c is NonNullable<typeof c> => !!c && c.color === student && (c.type === 'k' || c.type === 'q' || c.type === 'r' || c.type === 'b' || c.type === 'n'))
           .filter((c) => b.attackers(c.square, mv.color).includes(mv.to))
-          .map((c) => `your ${PIECE_NAME[c.type]} on ${c.square}`);
-      } catch { forked = []; }
+          .map((c) => { forkedSquares.push(c.square); return `your ${PIECE_NAME[c.type]} on ${c.square}`; });
+      } catch { forked = []; forkedSquares = []; }
       if (forked.length >= 2) {
-        return { fact: `The opponent wants ${intent.san}, forking ${andList(forked)} — take the square away from them.`, squares: [intent.target] };
+        return { fact: `The opponent wants ${intent.san}, forking ${andList(forked)} — take the square away from them.`, squares: [intent.target], keys: [forkThreatKey(intent.target, forkedSquares)] };
       }
       return { fact: `The opponent wants ${intent.san} — a fork on ${intent.target}; take the square away from them.`, squares: [intent.target] };
     },
@@ -422,7 +424,9 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       });
       if (meaningful.length > 0) {
         const p = meaningful[0];
-        return { fact: seatBare(p.description, fen, student), squares: p.involvedSquares.map(sq) };
+        // Keyed as the CLAIM, so the tactic line that already said this pin
+        // silences it on the next move (Sicilian walk 2026-09-27, 21…Kxg6).
+        return { fact: seatBare(p.description, fen, student), squares: p.involvedSquares.map(sq), keys: [conceptInstanceKey(p.type, p.involvedSquares)] };
       }
       return null;
     },
@@ -632,7 +636,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       const targets = pressuredTargets(fen, student);
       const winnable = targets.find((x) => x.verdict === 'winnable' && PIECE_VALUE_TABLE[x.piece] >= 3 && x.square !== opponentLastTo);
       if (winnable) {
-        return { fact: `You win the ${PIECE_NAME[winnable.piece]} on ${winnable.square} — it can't be held.`, squares: [winnable.square] };
+        return { fact: `You can win the ${PIECE_NAME[winnable.piece]} on ${winnable.square} — it can't be held.`, squares: [winnable.square] };
       }
       const tension = targets.find((x) => x.verdict === 'balanced-tension' && x.attackers >= 2);
       if (tension) {
@@ -754,7 +758,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       if (moveNo < 6) return null;
       const keep = bestMinorToKeep(fen, student);
       if (keep?.dominant && keep.note.scope >= 6) {
-        return { fact: `Keep your ${PIECE_NAME[keep.note.piece]} on ${keep.note.square} — it outclasses their minor; don't trade it off.`, squares: [keep.note.square] };
+        return { fact: `Keep your ${PIECE_NAME[keep.note.piece]} on ${keep.note.square} — it does more than any minor piece they have; don't trade it off.`, squares: [keep.note.square] };
       }
       return null;
     },

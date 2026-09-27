@@ -100,7 +100,7 @@ describe('a verdict off an unsettled search is said as a first read', () => {
   const GREEK = 'r1bq1rk1/pppn1ppp/4p3/3pP3/1b1P4/2NB1N2/PPP2PPP/R1BQK2R w KQ - 0 7';
   it('settled=false appends the hedge; settled=true and null do not', async () => {
     const { assembleCandidateMoveAnswer } = await import('./groundedAnswer');
-    const ask = (candidateSettled: boolean | null) => assembleCandidateMoveAnswer({
+    const ask = (candidateSettled: boolean | null) => assembleCandidateMoveAnswer({ studentColor: null,
       fen: GREEK, candidateSan: 'Bxh7+', bestMoveUci: 'e1g1', bestEvalCp: 60, candidateEvalCp: 50,
       candidateLineUci: [], candidateSettled,
     })?.facts ?? '';

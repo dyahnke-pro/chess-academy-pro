@@ -13,7 +13,7 @@ const FEN = (() => {
 
 describe('two moves compared', () => {
   it('names the better one and shows the worse one refuted', () => {
-    const a = assembleCompareMovesAnswer({
+    const a = assembleCompareMovesAnswer({ studentColor: null,
       fen: FEN,
       a: { san: 'dxe5', evalCp: -50, mateIn: null, lineUci: ['b2e5'] },
       b: { san: 'Qb6', evalCp: -400, mateIn: null, lineUci: ['e5f7'] },
@@ -22,7 +22,7 @@ describe('two moves compared', () => {
     expect(a?.facts).toMatch(/Qb6\? Then Nxf7 — it takes your pawn on f7/);
   });
   it('near-equal moves are said to be equal (no invented winner)', () => {
-    const a = assembleCompareMovesAnswer({
+    const a = assembleCompareMovesAnswer({ studentColor: null,
       fen: FEN,
       a: { san: 'dxe5', evalCp: -50, mateIn: null, lineUci: [] },
       b: { san: 'Qb6', evalCp: -60, mateIn: null, lineUci: [] },
@@ -30,7 +30,7 @@ describe('two moves compared', () => {
     expect(a?.facts).toMatch(/about the same/);
   });
   it('no eval → no answer rather than a guess', () => {
-    expect(assembleCompareMovesAnswer({
+    expect(assembleCompareMovesAnswer({ studentColor: null,
       fen: FEN,
       a: { san: 'dxe5', evalCp: null, mateIn: null, lineUci: [] },
       b: { san: 'Qb6', evalCp: -60, mateIn: null, lineUci: [] },

@@ -120,3 +120,15 @@ export function opponentGapClause(
 }
 
 const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+
+/** ONE MOVE, ONE VOICE (Colle walk 2026-09-27, 26…Rxc3: "Rxc3 gives you
+ *  something: Bf6 — it lands on the f6 outpost … The move is Bf6 — it lands on
+ *  the f6 outpost"). When the weighing already concludes on the gap's move, the
+ *  gap line is its echo and stays quiet — the weighing carries more. */
+export function gapEchoedByVerdict(
+  gapSan: string | null,
+  clauses: ReadonlyArray<{ kind: string; text: string }>,
+): boolean {
+  if (!gapSan) return false;
+  return clauses.some((c) => c.kind === 'deliberation' && c.text.includes(`The move is ${gapSan} `));
+}

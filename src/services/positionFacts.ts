@@ -13,6 +13,7 @@
 //  • `computeCriticality` is the sharpness SCORE (from the same analysis);
 //    `computeImportance` is the speak/rank verdict. One analysis, both reads.
 //  • Perturbation (expensive) runs ONLY when importance says the moment matters.
+import { conceptInstanceKey, forkThreatKey } from './conceptKey';
 import { layerStandings } from './teachingLayers';
 import { seatBare } from '../utils/seatPieces';
 import { detectBluff, bluffClause, type Bluff } from './bluffDetector';
@@ -987,9 +988,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
 }
 
 /** The say-once key for one tactic INSTANCE — its type on its squares. */
-export function conceptInstanceKey(id: string, squares: readonly string[]): string {
-  return `concept:${id}:${[...squares].sort().join('')}`;
-}
+export { conceptInstanceKey };
 
 /** The say-once key for "this piece must be answered", shared by every lane
  *  that warns about a piece under fire (instant alert + composer). Keyed to
@@ -1229,7 +1228,7 @@ function buildClauses(a: {
   // material, which is plainly wrong. Foresight is valuable and it is not
   // urgent. (Whether the existing 80/82 is itself too high is a real question
   // and a separate one — not to be changed as a side effect of this build.)
-  if (latentFork) {
+  if (latentFork && !a.alreadySaid?.has(forkThreatKey(latentFork.square, latentFork.targets.map((t) => t.square)))) {
     ranked.push({
       // 🔒 THE SEAT DECIDES THE KIND. `latentForkClause` has always rendered the
       // two seats differently; the KIND did not, and three consumers read it:
@@ -1242,6 +1241,7 @@ function buildClauses(a: {
       // The destination and both targets ARE the claim — so a tactic clause
       // about the same geometry subsumes this one rather than stacking on it.
       squares: [latentFork.square, ...latentFork.targets.map((t) => t.square)],
+      claim: forkThreatKey(latentFork.square, latentFork.targets.map((t) => t.square)),
       // The fork wins the lesser target, `moves` moves away.
       stakes: { points: forkPoints(latentFork.targets.map((t) => t.piece)), plies: 2 * latentFork.moves },
     });

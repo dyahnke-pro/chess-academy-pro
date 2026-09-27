@@ -170,3 +170,23 @@ describe('the seat guard', () => {
     expect(curatedBeatAt(history, fen, undefined, null, null, 'watch')).not.toBeNull();
   });
 });
+
+describe('a beat that names its opening waits for the game to BE that opening (Colle walk 2026-09-27)', () => {
+  beforeAll(() => { warmCuratedBeatIndexSync(); }, 60_000);
+  it('1.d4 d5 2.Nf3 Nf6 in a Colle does not hear "The London —"', () => {
+    const line = ['d4', 'd5', 'Nf3', 'Nf6'];
+    const chess = new Chess();
+    for (const san of line) chess.move(san);
+    for (const name of ["Queen's Pawn Game", "Queen's Pawn Game: Symmetrical Variation"]) {
+      expect(curatedBeatAt(line, chess.fen(), undefined, name, 'white', 'live')?.text ?? '').not.toMatch(/London/);
+    }
+  });
+  it('NEGATIVE CONTROL: the same words speak once the game is the London', async () => {
+    const { namesUnreachedOpening } = await import('./curatedBeatSource');
+    const say = "The London — This repertoire's bread-and-butter with d4.";
+    expect(namesUnreachedOpening(say, 'London System', "Queen's Pawn Game: Symmetrical Variation")).toBe(true);
+    expect(namesUnreachedOpening(say, 'London System', "Queen's Pawn Game: London System")).toBe(false);
+    // A beat that does not name its opening is untouched.
+    expect(namesUnreachedOpening('Nf3 develops toward the centre.', 'London System', "Queen's Pawn Game")).toBe(false);
+  });
+});

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6690 lines · 37 exports · 50 importers · 54 tests · 19 audits**
+**6769 lines · 38 exports · 50 importers · 54 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -113,16 +113,16 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `consumeCoachLines` (function) — 4 call sites
-- `src/coach/coachService.ts:1849`
+- `src/coach/coachService.ts:1879`
 - `src/services/coachApi.pieceOptions.test.ts:42`
 - `src/services/coachApi.pieceOptions.test.ts:44`
 - `src/services/coachApi.pieceOptions.test.ts:49`
 
 ### `consumeCoachActionOffer` (function) — 1 call site
-- `src/coach/coachService.ts:1843`
+- `src/coach/coachService.ts:1873`
 
 ### `consumeCoachKeySquares` (function) — 6 call sites
-- `src/coach/coachService.ts:1854`
+- `src/coach/coachService.ts:1884`
 - `src/services/coachApi.keySquares.test.ts:10`
 - `src/services/coachApi.keySquares.test.ts:12`
 - `src/services/coachApi.keySquares.test.ts:15`
@@ -153,6 +153,9 @@
 - `src/services/openingGenerator.ts:3122`
 - `src/services/openingGenerator.ts:3260`
 - `src/services/openingGenerator.ts:3833`
+
+### `OpponentHypotheticalGrounding` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `MasterGroundingOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -226,7 +229,7 @@
 - `src/services/groundedMoveFeedback.test.ts:45`
 
 ### `translateToEnglish` (function) — 4 call sites
-- `src/coach/coachService.ts:570`
+- `src/coach/coachService.ts:571`
 - `src/components/Coach/CoachTeachPage.tsx:3333`
 - `src/services/coachSessionRouter.ts:117`
 - `src/services/coachSettingsAction.ts:242`

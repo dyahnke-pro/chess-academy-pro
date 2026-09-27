@@ -938,7 +938,10 @@ export function namedPawnStructure(
   // ISOLATED QUEEN’S PAWN — a d-pawn with no friendly c- or e-pawns.
   const holder = (white: boolean): string => ((white ? 'w' : 'b') === studentColor ? 'You hold' : 'They hold');
   for (const [set, white] of [[wp, true], [bp, false]] as const) {
-    const dRank = [...set].find((s) => s[0] === 'd');
+    // An isolani is a d4/d5 pawn — its whole plan is the d4/d5 outpost and the
+    // central files (Sicilian walk 2026-09-27: "the isolated queen's pawn … the
+    // d5/d4 outpost" about a pawn on d3 in a rook ending).
+    const dRank = [...set].find((s) => s === (white ? 'd4' : 'd5') || s === (white ? 'd5' : 'd4'));
     // A true isolani: no friendly c/e-pawn, and no enemy d-pawn on the file.
     const enemy = white ? bp : wp;
     if (dRank && fileCount(set, 'c') === 0 && fileCount(set, 'e') === 0 && fileCount(enemy, 'd') === 0) {

@@ -278,7 +278,7 @@ import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, mustKey, conceptInstanceKey } from '../../services/positionFacts';
 import { gradePlayedMove } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
-import { detectOpponentGap, opponentGapClause } from '../../services/opponentGap';
+import { detectOpponentGap, opponentGapClause, gapEchoedByVerdict } from '../../services/opponentGap';
 import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
 import { buildCausalChain, causalChainArrows, causalChainHighlights } from '../../services/causalChain';
 import { renderCausalChain } from '../../services/causalChainVoice';
@@ -1789,7 +1789,7 @@ export function CoachTeachPage(): JSX.Element {
     fen: string;
     /** `squares` rides along so the board can be drawn from what SURVIVED the
      *  package rather than re-derived from its prose — see `VoiceFact.squares`. */
-    lines: Array<{ kind: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[] }>;
+    lines: Array<{ kind: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string }>;
   } | null>(null);
   /** The coach's own last move, captured for judging. See the callout below —
    *  the inputs are gathered while the engine work runs and the verdict is
@@ -7779,7 +7779,7 @@ export function CoachTeachPage(): JSX.Element {
               const n = b.attackers(c.square, foe).length;
               threatKey = `kingpawn:${c.square}`;
               threatSquares = [c.square, kSq];
-              threatLine = `Careful — your pawn on ${c.square} guards your king, and they hit it ${n === 2 ? 'twice' : n === 3 ? 'three times' : `${n} times`} — it falls unless you cover it.`;
+              threatLine = `Careful — your pawn on ${c.square} guards your king, and they hit it ${n === 1 ? 'once' : n === 2 ? 'twice' : n === 3 ? 'three times' : `${n} times`} — it falls unless you cover it.`;
               return true;
             }
           }
@@ -8581,6 +8581,13 @@ export function CoachTeachPage(): JSX.Element {
     /** The claims this line makes (`VoiceFact.claims`) — so a claim the
      *  instant lane already spoke is dropped here at speak time. */
     claims?: readonly string[],
+    /** THE BOARD THE LINE IS ABOUT, when it is not the one the package waits
+     *  on. A backward look names the student's move — "the knight on g5 is left
+     *  hanging, and Bxg5 just takes it" — and graded against the board AFTER
+     *  Bxg5 that sentence reads false and is deleted (Colle walk 2026-09-27,
+     *  27.Ng5: the blunder was never named). `VoiceFact.fen` is the board a
+     *  fact is verified on; this hands it the right one. */
+    gradeFen?: string,
   ): void => {
     const text = line.trim();
     if (!text) return;
@@ -8612,8 +8619,8 @@ export function CoachTeachPage(): JSX.Element {
     } catch { /* unreadable FEN — the lanes' own board checks still apply */ }
     const pending = pendingVoiceRef.current?.fen === fen
       ? pendingVoiceRef.current
-      : { fen, lines: [] as Array<{ kind: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[] }> };
-    if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ kind, text, squares, claims });
+      : { fen, lines: [] as Array<{ kind: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string }> };
+    if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ kind, text, squares, claims, gradeFen });
     pendingVoiceRef.current = pending;
   }, []);
 
@@ -8956,7 +8963,7 @@ export function CoachTeachPage(): JSX.Element {
                 let moveAdviceHere: Awaited<ReturnType<typeof computePositionFacts>>['moveAdvice'] = null;
                 // The gift line NAMES the student's next move, so it waits for
                 // the one decision on where a move is named (`nextMoveAdvice`).
-                let gapPending: { text: string; square: string } | null = null;
+                let gapPending: { text: string; square: string; san: string | null } | null = null;
                 try {
                   if (studentBest?.topLines && probe.turn() === (playerColor === 'white' ? 'w' : 'b')) {
                     turnRead = tacticalReadFromLines(probe.fen(), studentBest.topLines, playerColor, { maxPlies: 6 });
@@ -9019,7 +9026,11 @@ export function CoachTeachPage(): JSX.Element {
                           const clause = opponentGapClause(gap, learnMemRef.current.lastReplyDictated !== null ? 'dictated' : 'coach-is-opponent',
                             probe.fen(), playerColor === 'white' ? 'w' : 'b', m.san);
                           const nudge = clause ? gradeNarrationText(clause, probe.fen(), 'CoachTeachPage.opponentGap')?.trim() : null;
-                          if (nudge) gapPending = { text: nudge, square: gap.toSquare };
+                          if (nudge) {
+                            let gapSan: string | null = null;
+                            try { gapSan = new Chess(probe.fen()).move({ from: gap.opportunityUci.slice(0, 2), to: gap.opportunityUci.slice(2, 4), promotion: gap.opportunityUci.slice(4, 5) || undefined })?.san ?? null; } catch { gapSan = null; }
+                            gapPending = { text: nudge, square: gap.toSquare, san: gapSan };
+                          }
                           captureEvent('opponent_gap_nudged', { surface: 'coach-teach', gain_cp: Math.round(gap.gainCp) });
                         }
                       }
@@ -9233,13 +9244,18 @@ export function CoachTeachPage(): JSX.Element {
                     const countSpoken = pf.clauses.some((c) => c.kind === 'key-moment');
                     const registerNow = countSpoken ? pendingRegisterNoHedge : pendingRegister;
                     if (registerNow && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), registerNow);
-                    if (gapPending && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), gapPending.text, 'computed', [gapPending.square]);
+                    const gapEchoed = gapEchoedByVerdict(gapPending?.san ?? null, pf.clauses);
+                    if (gapPending && moveAdviceHere?.speak && !gapEchoed) queueSpokenHint(probe.fen(), gapPending.text, 'computed', [gapPending.square]);
                     standingRef.current.rememberAll(pf.remember);
                     if (pf.principleSpoken) learnMemRef.current.principleTaught.add(pf.principleSpoken);
                     // The student is to move at `probe`; their coming move is ply history+1.
                     if (pf.clauses.some((c) => c.kind === 'key-moment')) announcedPliesRef.current.add(probe.history().length + 1);
                     for (const c of pf.clauses) {
                       if (c.kind === 'must-defend') continue;
+                      // The claim joins the standing ledger too, so a behaviour
+                      // stating the same fact later reads it as heard (Bowdler
+                      // walk 2026-09-27: the c7 fork warned at plies 18 and 24).
+                      if (c.claim) standingRef.current.remember(c.claim);
                       queueSpokenHint(probe.fen(), c.text, 'computed', undefined, c.claim ? [c.claim] : undefined);
                     }
                     if (pf.importance.speak) captureEvent('position_facts_spoken', { surface: 'coach-teach', tier: pf.importance.tier, clauses: pf.clauses.length });
@@ -10576,7 +10592,7 @@ export function CoachTeachPage(): JSX.Element {
                         ? `${fundamental.verdict}${fundamental.recurrence ? ` ${fundamental.recurrence}` : ''}${evidence ? ` ${evidence}` : ''}`
                         : look.line;
                       queueSpokenHint(fenAfterReply, line, look.kind,
-                        /^[a-h][1-8]$/.test(look.square) ? [look.square] : []);
+                        /^[a-h][1-8]$/.test(look.square) ? [look.square] : [], undefined, move.fen);
                       captureEvent('coach_backward_look', {
                         surface: 'coach-teach', kind: look.kind, cp_loss: Math.round(cpLoss),
                         fundamental: fundamental?.id ?? null,
@@ -10586,7 +10602,7 @@ export function CoachTeachPage(): JSX.Element {
                       // neglected (neglected-development, space-conceded, a passive
                       // worst piece — costs the eval never itemises). Name it on
                       // its own; the fundamental IS the teaching here.
-                      queueSpokenHint(fenAfterReply, fundamental.verdict, 'drawback', []);
+                      queueSpokenHint(fenAfterReply, fundamental.verdict, 'drawback', [], undefined, move.fen);
                       captureEvent('coach_fundamental_named', {
                         surface: 'coach-teach', fundamental: fundamental.id, cp_loss: Math.round(cpLoss),
                       });
@@ -10778,7 +10794,7 @@ export function CoachTeachPage(): JSX.Element {
                   // student heard eight seconds ago; see the parameter's note in
                   // `voicePackage`.
                   const fullPkg = buildVoicePackage(
-                    pending.lines.map(({ kind, text, squares, claims }) => ({ kind, text, squares, claims, fen: pending.fen })),
+                    pending.lines.map(({ kind, text, squares, claims, gradeFen }) => ({ kind, text, squares, claims, fen: gradeFen ?? pending.fen })),
                     instantSpokenText,
                     learnMemRef.current.spokenKeys,
                   );
@@ -10790,7 +10806,7 @@ export function CoachTeachPage(): JSX.Element {
                   const lateDna = fullPkg.kept.filter((f) => DNA_VOICE_KINDS.has(f.kind));
                   const hintPkg = (NARRATE_DNA_ONLY && lateDna.length < fullPkg.kept.length)
                     ? buildVoicePackage(
-                      lateDna.map((f) => ({ kind: f.kind, text: f.text, squares: f.squares, claims: f.claims, fen: pending.fen })),
+                      lateDna.map((f) => ({ kind: f.kind, text: f.text, squares: f.squares, claims: f.claims, fen: f.fen })),
                       instantSpokenText,
                       learnMemRef.current.spokenKeys,
                     )

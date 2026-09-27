@@ -677,10 +677,24 @@ export function isStopCommand(text: string | undefined): boolean {
  *  two PIECES named; the board resolves pieces to moves. Text only. */
 export type CompareMovesAsk =
   | { kind: 'sans'; a: string; b: string }
-  | { kind: 'pieces'; a: string; b: string };
+  | { kind: 'pieces'; a: string; b: string }
+  /** "Why is that better than e5?" — the ENGINE's move against the named one. */
+  | { kind: 'versus-best'; b: string };
 const PIECE_WORD_RE = '(pawn|knight|night|bishop|rook|queen|king)';
 export function compareMovesAsk(ask: string | undefined): CompareMovesAsk | null {
-  if (!ask || !/\bor\b/i.test(ask)) return null;
+  if (!ask) return null;
+  // "X better than Y" / "that better than Y" / "instead of Y" — a comparison
+  // with no "or" (question walk 2026-09-27: "Why is that better than e5?" went
+  // to the generic why-best lane and e5 was never mentioned).
+  const than = new RegExp(`\\b(?:better|stronger|worse|weaker)\\s+than\\s+(?:playing\\s+)?${SAN_TOKEN_RE.source.replace(/^\\b/, '')}`, 'i').exec(ask);
+  if (than) {
+    const b = normalizeSan(than[1]);
+    const lead = ask.slice(0, than.index).match(new RegExp(SAN_TOKEN_RE.source, 'gi'));
+    const a = lead ? normalizeSan(lead[lead.length - 1]) : null;
+    if (b && a && a !== b) return { kind: 'sans', a, b };
+    if (b && !a) return { kind: 'versus-best', b };
+  }
+  if (!/\bor\b/i.test(ask)) return null;
   const pieces = new RegExp(`\\bwith\\s+(?:the|my|a)?\\s*${PIECE_WORD_RE}\\s+or\\s+(?:with\\s+)?(?:the|my|a)?\\s*${PIECE_WORD_RE}\\b`, 'i').exec(ask);
   if (pieces) {
     const norm = (w: string): string => (w.toLowerCase() === 'night' ? 'knight' : w.toLowerCase());
@@ -715,14 +729,52 @@ export function pawnStrengthAsk(ask: string | undefined): { file: string } | nul
   if (!ask) return null;
   const m = /\b(?:is|how\s+(?:strong|good|dangerous|weak)\s+is)\s+my\s+(?:passed\s+)?([a-h])[\s-]?pawn\b/i.exec(ask)
     ?? /\bmy\s+(?:passed\s+)?pawn\s+on\s+the\s+([a-h])[\s-]?file\b/i.exec(ask)
-    ?? /\bmy\s+(?:passed\s+)?pawn\s+on\s+([a-h])[1-8]\b.*\b(?:strong|weak|good|dangerous|safe|passed)\b/i.exec(ask);
+    ?? /\bmy\s+(?:passed\s+)?pawn\s+on\s+([a-h])[1-8]\b.*\b(?:strong|weak|good|dangerous|safe|passed)\b/i.exec(ask)
+    // The SQUARE form (question walk 2026-09-27: "Is my d4 pawn weak?" had no
+    // lane and was graded as the move 4.d4).
+    ?? /\bmy\s+(?:passed\s+)?([a-h])[1-8][\s-]?pawn\b/i.exec(ask);
   return m ? { file: m[1].toLowerCase() } : null;
+}
+
+/** "Should I trade queens?" — the piece kind the student asks about trading
+ *  (question walk 2026-09-27: it fell through to the best move and the trade
+ *  was never addressed). `any` = "pieces". */
+export function tradeAsk(ask: string | undefined): 'q' | 'r' | 'b' | 'n' | 'any' | null {
+  if (!ask) return null;
+  const PIECE = String.raw`(queens?|rooks?|bishops?|knights?|minor\s+pieces|pieces)`;
+  const m = new RegExp(String.raw`\b(?:should|shall|can|could|do|would)\s+i\s+(?:want\s+to\s+|be\s+)?(?:trade|trading|exchange|exchanging|swap|swapping)\s+(?:off\s+)?(?:the\s+|my\s+)?${PIECE}\b`, 'i').exec(ask)
+    ?? new RegExp(String.raw`\b(?:is|would\s+be|are)\s+(?:it\s+(?:good|wise|right|smart)\s+to\s+(?:trade|exchange|swap)|trading|exchanging|swapping)\s+(?:off\s+)?(?:the\s+)?${PIECE}\s*(?:good|wise|right|a\s+good\s+idea|ok(?:ay)?|smart)?\b`, 'i').exec(ask)
+    ?? new RegExp(String.raw`^\s*(?:trade|exchange|swap)\s+(?:off\s+)?(?:the\s+)?${PIECE}\s*\?\s*$`, 'i').exec(ask);
+  if (!m) return null;
+  const w = m[1].toLowerCase();
+  if (w.startsWith('queen')) return 'q';
+  if (w.startsWith('rook')) return 'r';
+  if (w.startsWith('bishop')) return 'b';
+  if (w.startsWith('knight')) return 'n';
+  return 'any';
+}
+
+/** "What if THEY play d5?" — a move the OPPONENT might make, named ahead of
+ *  time (question walk 2026-09-27: routed as the student's candidate, the coach
+ *  graded the student playing d5). The subject is the opponent and the tense is
+ *  forward — "why did they play" is the retrospective opponent-move lane. */
+const OPPONENT_HYPOTHETICAL_RE = anyOf([
+  String.raw`\bwhat\s+(?:if|happens?\s+(?:if|when))\s+(?:they|he|she|(?:my|the)\s+opponent|the\s+(?:bot|computer|engine))\s+(?:play|plays|go|goes|push|pushes|take|takes|answer|answers|respond|responds|reply|replies|tr(?:y|ies)|get|gets|castle|castles|move|moves|put|puts)\b`,
+  String.raw`\b(?:can|could|will|would|might)\s+(?:they|he|she|(?:my|the)\s+opponent)\s+(?:play|go|push|take|get|try|answer|castle)\b`,
+  String.raw`\b(?:should|do|must)\s+i\s+(?:worry|be\s+worried|care)\s+about\s+(?:their|his|her|the)\b`,
+]);
+
+export function isOpponentHypotheticalQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  if (!extractCandidateSan(ask)) return false;
+  return OPPONENT_HYPOTHETICAL_RE.test(ask);
 }
 
 export function isCandidateMoveQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
   if (isWhyBestMoveQuestion(ask)) return false; // "why is X best" is engine-reasoning
   if (!extractCandidateSan(ask)) return false;  // must NAME a move
+  if (isOpponentHypotheticalQuestion(ask)) return false; // THEIR move, their lane
   return CANDIDATE_MOVE_RE.test(ask);
 }
 

@@ -42,9 +42,9 @@
 - `src/services/computedVoiceAudit.report.test.ts:262`
 - `src/services/dnaLineNarrator.ts:129`
 - `src/services/dnaLineNarrator.ts:218`
-- `src/services/groundedAnswer.ts:4789`
-- `src/services/groundedAnswer.ts:4801`
-- `src/services/groundedAnswer.ts:5555`
+- `src/services/groundedAnswer.ts:4951`
+- `src/services/groundedAnswer.ts:4963`
+- `src/services/groundedAnswer.ts:5717`
 - `src/services/pvPlayback.test.ts:291`
 - `src/services/pvPlayback.test.ts:292`
 - `src/services/pvPlayback.test.ts:293`
@@ -161,7 +161,7 @@
 - `src/services/lookaheadPlan.test.ts:1258`
 
 ### `positionReadLine` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9646`
+- `src/components/Coach/CoachTeachPage.tsx:9662`
 - `src/services/coachLaneWiring.test.ts:38`
 - `src/services/computedVoiceAudit.report.test.ts:225`
 - `src/services/lookaheadPlan.test.ts:541`
@@ -180,7 +180,7 @@
 - `src/services/narrationAdversarial.test.ts:67`
 
 ### `lineShapeLine` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9650`
+- `src/components/Coach/CoachTeachPage.tsx:9666`
 - `src/services/coachLaneWiring.test.ts:39`
 - `src/services/computedVoiceAudit.report.test.ts:226`
 - `src/services/lookaheadPlan.test.ts:881`
@@ -199,7 +199,7 @@
 - `src/services/lookaheadPlan.test.ts:1015`
 
 ### `terminalReadLine` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9653`
+- `src/components/Coach/CoachTeachPage.tsx:9669`
 - `src/services/coachLaneWiring.test.ts:40`
 - `src/services/computedVoiceAudit.report.test.ts:230`
 - `src/services/lookaheadPlan.test.ts:988`
@@ -213,7 +213,7 @@
 - `src/services/lookaheadPlan.test.ts:1016`
 
 ### `keySquareLine` (function) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9641`
+- `src/components/Coach/CoachTeachPage.tsx:9657`
 - `src/services/coachLaneWiring.test.ts:37`
 - `src/services/computedVoiceAudit.report.test.ts:224`
 - `src/services/forkNarration.ts:108`
@@ -235,22 +235,22 @@
 ### `isCostClause` (function) — 8 call sites
 - `src/services/concessionBeat.ts:430`
 - `src/services/inaccuracyCall.ts:228`
-- `src/services/inaccuracyCall.ts:236`
-- `src/services/inaccuracyCall.ts:529`
+- `src/services/inaccuracyCall.ts:241`
+- `src/services/inaccuracyCall.ts:535`
 - `src/services/learnWalkBlumenfeld.test.ts:174`
 - `src/services/learnWalkBlumenfeld.test.ts:175`
 - `src/services/learnWalkBlumenfeld.test.ts:176`
 - `src/services/learnWalkBlumenfeld.test.ts:177`
 
 ### `planFromUci` (function) — 31 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9609`
+- `src/components/Coach/CoachTeachPage.tsx:9625`
 - `src/services/coachLaneWiring.test.ts:36`
 - `src/services/computedVoiceAudit.report.test.ts:220`
 - `src/services/concessionBeat.ts:424`
 - `src/services/forkNarration.ts:106`
 - `src/services/inaccuracyCall.ts:186`
 - `src/services/inaccuracyCall.ts:190`
-- `src/services/inaccuracyCall.ts:527`
+- `src/services/inaccuracyCall.ts:533`
 - `src/services/lookaheadPlan.test.ts:262`
 - `src/services/lookaheadPlan.test.ts:270`
 - `src/services/lookaheadPlan.test.ts:275`
@@ -279,14 +279,14 @@
 - `src/services/coachFeatureService.ts:1319`
 
 ### `aimsOf` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9622`
-- `src/components/Coach/CoachTeachPage.tsx:9626`
+- `src/components/Coach/CoachTeachPage.tsx:9638`
+- `src/components/Coach/CoachTeachPage.tsx:9642`
 - `src/services/planArc.test.ts:28`
 - `src/services/planArc.ts:48`
 
 ### `stepArc` (re-export) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9622`
-- `src/components/Coach/CoachTeachPage.tsx:9626`
+- `src/components/Coach/CoachTeachPage.tsx:9638`
+- `src/components/Coach/CoachTeachPage.tsx:9642`
 - `src/services/planArc.test.ts:28`
 - `src/services/planArc.test.ts:93`
 - `src/services/planArc.test.ts:95`
