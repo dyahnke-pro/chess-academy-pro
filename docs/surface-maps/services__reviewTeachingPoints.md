@@ -14,7 +14,7 @@
 ## Who calls in
 
 - `src/components/Coach/CoachGameReview.tsx`
-- `src/components/Coach/CoachTeachPage.tsx`
+- `src/services/backwardLook.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/concessionInFlux.test.ts`
 - `src/services/learnMoveTeaching.ts`
@@ -139,7 +139,7 @@
 - `src/services/coachFeatureService.ts:2591`
 
 ### `describeConcessions` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10609`
+- `src/services/backwardLook.ts:387`
 - `src/services/coachFeatureService.ts:2275`
 - `src/services/coachFeatureService.ts:2341`
 - `src/services/concessionInFlux.test.ts:13`

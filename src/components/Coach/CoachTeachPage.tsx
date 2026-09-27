@@ -9,7 +9,6 @@
  * / reset_board markers parsed from its response. Same room, different
  * actions.
  */
-import { describeConcessions } from '../../services/reviewTeachingPoints';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStandingFactMemory, fullmoveOf } from '../../services/standingFactMemory';
 import { createLearnMemory, type LearnMemory } from '../../services/learnMemory';
@@ -207,7 +206,7 @@ import { aimsOf, stepArc, EMPTY_ARC, type ArcState, planFromUci, keySquareLine, 
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import type { LookaheadPlan } from '../../services/lookaheadPlan';
 import { planMarks } from '../../services/planMarks';
-import { backwardLook, lastCoachVerdictDecline } from '../../services/backwardLook';
+import { backwardLook, lastCoachVerdictDecline, lookConcession } from '../../services/backwardLook';
 import { learnFundamentalVerdict } from '../../services/learnFundamentalNarration';
 import type { FundamentalId } from '../../services/principleAttribution';
 import { FUNDAMENTAL_LABEL } from '../../services/fundamentalsCatalog';
@@ -10606,7 +10605,7 @@ export function CoachTeachPage(): JSX.Element {
                       // 2026-09-27): the lasting damage a flagged move left —
                       // king cover thinned, a passer granted, a new isolani.
                       // The same computer review speaks; it self-gates to null.
-                      const concession = cpLoss >= 50 ? describeConcessions(fenBefore, move.san, true) : null;
+                      const concession = lookConcession(fenBefore, move.san, cpLoss);
                       const line = `${fundamental
                         ? `${fundamental.verdict}${fundamental.recurrence ? ` ${fundamental.recurrence}` : ''}${evidence ? ` ${evidence}` : ''}`
                         : look.line}${concession ? ` ${concession}` : ''}`;

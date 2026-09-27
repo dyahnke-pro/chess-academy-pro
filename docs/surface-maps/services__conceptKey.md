@@ -19,7 +19,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `conceptInstanceKey` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7932`
+- `src/components/Coach/CoachTeachPage.tsx:7931`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/danyaBehaviors.ts:429`

@@ -105,7 +105,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pvPlayback.ts:458`
 - `src/services/reviewQuestionPlan.ts:67`
 - `src/services/reviewTrapQuestion.ts:113`
-- `src/services/tradeQuality.ts:143`
+- `src/services/tradeQuality.ts:144`
 
 ### `legalSeeGainOn` (function) — 8 call sites
 - `src/services/coachFeatureService.ts:2428`
@@ -160,10 +160,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticVerification.ts:101`
 
 ### `signedLegalSeeFor` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7783`
-- `src/components/Coach/CoachTeachPage.tsx:7897`
-- `src/components/Coach/CoachTeachPage.tsx:10649`
-- `src/components/Coach/CoachTeachPage.tsx:10668`
+- `src/components/Coach/CoachTeachPage.tsx:7782`
+- `src/components/Coach/CoachTeachPage.tsx:7896`
+- `src/components/Coach/CoachTeachPage.tsx:10648`
+- `src/components/Coach/CoachTeachPage.tsx:10667`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
@@ -264,8 +264,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:81`
 - `src/services/positionalTruth.corpus.test.ts:86`
 - `src/services/thinkAloud.ts:83`
-- `src/services/tradeQuality.ts:148`
-- `src/services/tradeQuality.ts:237`
+- `src/services/tradeQuality.ts:149`
+- `src/services/tradeQuality.ts:238`
 - `src/services/walk3.test.ts:12`
 
 ### `findWeakSquares` (function) — 11 call sites
@@ -352,7 +352,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:128`
 
 ### `namedPawnStructure` (function) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9049`
+- `src/components/Coach/CoachTeachPage.tsx:9048`
 - `src/services/danyaBehaviors.ts:318`
 - `src/services/danyaDeviceCoverage.test.ts:107`
 - `src/services/danyaDeviceCoverage.test.ts:108`

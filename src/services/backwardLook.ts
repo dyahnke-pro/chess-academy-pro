@@ -30,6 +30,7 @@
 import { findConcession, findStudentDrawback, whatItAllowed } from './concessionBeat';
 import { callInaccuracy, callInaccuracyDetailed, type InaccuracyDecline } from './inaccuracyCall';
 import { whyItFailed } from './whyItFailed';
+import { describeConcessions } from './reviewTeachingPoints';
 import { INACCURACY_CP, BLUNDER_CP } from './engineConstants';
 import { logAppAudit } from './appAuditor';
 
@@ -374,4 +375,14 @@ export function backwardLook(args: {
     }
     return allowed ? { ...allowed, kind: 'drawback' } : null;
   } catch { return null; }
+}
+
+/**
+ * WHAT THE STUDENT'S FLAGGED MOVE GAVE UP FOR GOOD — king cover thinned, a
+ * passer granted, a new isolani (capability parity with review, 2026-09-27).
+ * The look owns the move's cost, so its lasting damage lives here too. Null on
+ * a move that was not flagged, and never mid-exchange (`describeConcessions`).
+ */
+export function lookConcession(fenBefore: string, playedSan: string, cpLoss: number): string | null {
+  return cpLoss >= INACCURACY_CP ? describeConcessions(fenBefore, playedSan, true) : null;
 }

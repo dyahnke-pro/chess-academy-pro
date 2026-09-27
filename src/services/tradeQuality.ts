@@ -19,8 +19,9 @@
  */
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { findPieceQuality, legalSeeGain, type PieceQualityNote } from './positionReadingService';
+import { MATERIAL_VALUE } from './pieceValues';
 
-const VAL: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+const VAL: Readonly<Record<string, number>> = MATERIAL_VALUE;
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
 export type TradeCall = 'good' | 'bad' | 'ahead' | 'behind';
