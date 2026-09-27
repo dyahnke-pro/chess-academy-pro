@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6769 lines · 38 exports · 50 importers · 54 tests · 19 audits**
+**6774 lines · 38 exports · 50 importers · 54 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -337,7 +337,7 @@
 - `src/services/coachApi.currentAsk.test.ts:51`
 - `src/services/coachApi.currentAsk.test.ts:56`
 
-### `getCoachChatResponse` (function) — 23 call sites
+### `getCoachChatResponse` (function) — 24 call sites
 - `scripts/audit-coach-master-integration.mjs:327`
 - `scripts/audit-coach-master-integration.mjs:360`
 - `scripts/audit-coach-master-integration.mjs:436`
@@ -345,6 +345,7 @@
 - `src/coach/providers/deepseek.ts:74`
 - `src/services/coachAgentRunner.ts:246`
 - `src/services/coachApi.boardVerdict.integration.test.ts:69`
+- `src/services/coachApi.boardVerdict.integration.test.ts:118`
 - `src/services/coachApi.master-integration.test.ts:140`
 - `src/services/coachApi.master-integration.test.ts:161`
 - `src/services/coachApi.master-integration.test.ts:178`

@@ -1746,6 +1746,14 @@ export function assembleMoveEvalAnswer(opts: {
         : `The best move is ${bestMoveSan}.`,
   ];
   if (why) parts.push(why);
+  else {
+    // NAMED WITH ITS REASON (question walk 2026-09-27: "The best move is g3."
+    // and nothing else). What the move does on the board, else the fact that
+    // makes a quiet best move best: nothing forcing does better.
+    const geo = describeMoveGeometry(fen, bestMoveSan, mover);
+    if (geo && !geo.startsWith('attacks')) parts.push(`It ${geo}.`);
+    else if (!/[x+#]/.test(bestMoveSan)) parts.push("It's a quiet move — nothing forcing does better here, so the engine improves the position instead.");
+  }
   if (evalText) parts.push(`${evalText.charAt(0).toUpperCase()}${evalText.slice(1)}.`);
 
   const sources = ['engine:stockfish', 'board:chess.js'];
@@ -5583,7 +5591,7 @@ export function assembleRetrospectiveAnswer(r: RetrospectiveMoveLike): GroundedA
   const noRead = r.quality === null;
   const why = r.bestMoveUci ? explainBestMoveGrounded(r.fenBefore, r.playedSan, r.bestMoveUci, r.moverColor) : null;
   const better = bestSan
-    ? ` The engine preferred ${bestSan}${why ? `: ${why.replace(/[.!?]+$/, '')}` : ''}.`
+    ? ` The engine preferred ${bestSan}${why ? `: ${(/^[A-Z][a-z]+(?=[\s,])/.test(why) && !/^I\b/.test(why) ? why.charAt(0).toLowerCase() + why.slice(1) : why).replace(/[.!?]+$/, '')}` : ''}.`
     : '';
 
   if (noRead) {

@@ -71,3 +71,28 @@ describe('Q10 — "is my bishop on e3 good or bad?" answers about the bishop', (
     expect(f).toMatch(/your bishop on e3/);
   });
 });
+
+describe('Q1 — the best move is said with a reason', () => {
+  it('a quiet best move with no tactical point still says why it is best', async () => {
+    const { assembleMoveEvalAnswer } = await import('../services/groundedAnswer');
+    const f = assembleMoveEvalAnswer({ fen: 'r1q2rk1/pp2bppp/2nppn2/8/Q2PP3/2N1BB2/PP3PPP/3R1RK1 w - - 8 13', bestMoveUci: 'g2g3', evalCp: 100, mateIn: null, studentColor: 'white' })?.facts ?? '';
+    expect(f).toMatch(/^The best move is g3\. \S/);
+    expect(f).not.toMatch(/^The best move is g3\. You're/);
+  });
+});
+
+describe('Q7 — no capital after the colon', () => {
+  it('"The engine preferred d5: it opens up the center"', async () => {
+    const { assembleRetrospectiveAnswer } = await import('../services/groundedAnswer');
+    // Position before 12…Qc8 in the 1200 Sicilian; the engine preferred …d5.
+    const { Chess } = await import('chess.js');
+    const c = new Chess();
+    for (const m of 'e4 c5 Nf3 d6 c3 Nc6 d4 cxd4 cxd4 Bg4 Be2 Nf6 Nc3 Bxf3 Bxf3 e6 Qa4 Qd7 Be3 Be7 O-O O-O Rad1'.split(' ')) c.move(m);
+    const a = assembleRetrospectiveAnswer({
+      playedSan: 'Qc8', fenBefore: c.fen(), moveNumber: 12, moverColor: 'black', mover: 'coach',
+      bestMoveUci: 'd6d5', cpLoss: 60, quality: 'inaccuracy', missedMate: null, allowedMate: null,
+    });
+    expect(a.facts).toMatch(/The engine preferred d5/);
+    expect(a.facts).toMatch(/preferred d5: [a-z]/);
+  });
+});

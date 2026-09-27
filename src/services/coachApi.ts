@@ -106,7 +106,7 @@ import { getPunishGemsForOpening, isSurfaceableGem } from '../data/lessons/punis
 import { gemTrapChoices, MORE_TRAPS_CHIP } from '../data/lessons/gemTrapMenu';
 import type { CoachTask, CoachVerbosity, AiProvider, WalkableLine } from '../types';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
-import { fundamentalsTopicFromText, famousGameFromText, isEndgamePlayRequest, isMateQuestion, isWhoseTurnQuestion, isLiveColorQuestion, isDrawQuestion, type RetrospectiveMoveRef } from '../coach/questionIntents';
+import { fundamentalsTopicFromText, famousGameFromText, isEndgamePlayRequest, isMateQuestion, isWhoseTurnQuestion, isLiveColorQuestion, isDrawQuestion, compareMovesAsk, type RetrospectiveMoveRef } from '../coach/questionIntents';
 import { pureBoardAspect } from './boardQuestionRouter';
 import { resolveTaughtFundamental } from '../data/fundamentalLessons';
 import { detectBoardQuestion, isAnyBoardQuestion } from '../coach/boardQuestions';
@@ -2438,6 +2438,11 @@ async function computeLiveBoardVerdict(
   turnLanguage?: string,
 ): Promise<string | null> {
   const fen = grounding.currentFen;
+  // A COMPARISON IS NOT A VERDICT (question walk 2026-09-27: "Why is that
+  // better than e5?" was answered "you're clearly better" by this lane — the
+  // word "better" read as "who's better"). Two moves named against each other
+  // belong to the compare lane.
+  if (grounding.compareMoves || grounding.compareOnly || compareMovesAsk(question)) return null;
   // TEMP DEBUG (David 2026-09-02 board-verdict prod triage) — remove after.
   void logAppAudit({
     kind: 'board-verdict-debug',

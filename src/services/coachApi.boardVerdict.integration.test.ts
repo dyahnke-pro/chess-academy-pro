@@ -102,3 +102,27 @@ describe('board-verdict questions route to the computer on the play surface', ()
     expect(r).toMatch(/mate in \d+|win for you/);
   });
 });
+
+describe('a comparison is not a board verdict (question walk 2026-09-27)', () => {
+  const SICILIAN = 'r1q2rk1/pp2bppp/2nppn2/8/Q2PP3/2N1BB2/PP3PPP/3R1RK1 w - - 8 13';
+  const grounding = (cleanAsk: string, withCompare: boolean) => ({
+    currentFen: SICILIAN, surface: '/coach/teach', cleanAsk, studentColor: 'white' as const,
+    engineBestMoveUci: 'g2g3', engineEvalCp: 100,
+    ...(withCompare ? {
+      compareMoves: {
+        a: { san: 'g3', evalCp: 100, mateIn: null, lineUci: [] },
+        b: { san: 'e5', evalCp: 30, mateIn: null, lineUci: ['d6e5', 'd4d5'] },
+      },
+    } : {}),
+  });
+  const run = (q: string, withCompare: boolean) => getCoachChatResponse(
+    [{ role: 'user', content: `[Ask]\n${q}` }], '', undefined, 'chat_response', 1024, undefined, undefined, undefined,
+    grounding(q, withCompare),
+  );
+  it('"Why is that better than e5?" is answered by the comparison, naming e5', async () => {
+    const r = await run('Why is that better than e5?', true);
+    expect(r).not.toContain('LLM_WAS_CALLED');
+    expect(r).toMatch(/e5/);
+    expect(r).not.toMatch(/^Clearly your position/);
+  });
+});
