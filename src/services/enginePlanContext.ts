@@ -19,6 +19,8 @@
 import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
+import { searchUntilStable } from './searchDepth';
+import { legalSeeGain } from './positionReadingService';
 import { getCachedStockfish } from '../hooks/stockfishFenCache';
 import type { StockfishAnalysis } from '../types';
 import type { LiveState } from '../coach/types';
@@ -204,28 +206,36 @@ export async function buildAlternativesContext(
 export async function buildCandidateEval(
   fen: string,
   candidateSan: string,
-): Promise<{ evalCp: number | null; mateIn: number | null; lineUci: string[] } | null> {
+): Promise<{ evalCp: number | null; mateIn: number | null; lineUci: string[]; settled: boolean } | null> {
   let after: Chess;
+  let landed: Square;
   try {
     after = new Chess(fen);
     const mv = after.move(candidateSan);
     if (!mv) return null; // illegal — caller answers "not legal" from the SAN
+    landed = mv.to;
   } catch {
     return null;
   }
   const afterFen = after.fen();
-  const hasEval = (a: StockfishAnalysis | undefined): boolean =>
-    !!a && (typeof a.evaluation === 'number' || a.isMate);
-  let analysis: StockfishAnalysis | undefined = getCachedStockfish(afterFen);
-  if (!hasEval(analysis)) {
-    try {
-      analysis = await stockfishEngine.analyzePosition(afterFen, PLAN_DEPTH);
-    } catch {
-      analysis = undefined;
-    }
+  // SEARCHED UNTIL THE ANSWER SETTLES (David 2026-09-27: "algo the stockfish
+  // depth"). This was an unbounded depth-18 search per question — the shape
+  // `buildEnginePlan` was already moved off. A move that leaves material en
+  // prise is a SACRIFICE question and gets the deeper policy: the truth about
+  // a sac hides past a shallow horizon.
+  let offered = 0;
+  try { offered = legalSeeGain(afterFen, landed); } catch { offered = 0; }
+  let analysis: StockfishAnalysis;
+  let settled: boolean;
+  try {
+    const r = await searchUntilStable(afterFen, offered > 0 ? 'sacrifice' : 'question', stockfishEngine);
+    analysis = r.analysis;
+    settled = r.stable;
+  } catch {
+    return null;
   }
-  if (!analysis) return null;
   return {
+    settled,
     evalCp: analysis.isMate ? null : Math.round(analysis.evaluation),
     mateIn: analysis.isMate ? analysis.mateIn : null,
     // The best play AFTER the candidate — what "what happens if I play X"

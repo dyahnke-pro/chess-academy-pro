@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1662 lines · 25 exports · 14 importers · 7 tests · 0 audits**
+**1695 lines · 25 exports · 14 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -42,9 +42,9 @@
 - `src/services/computedVoiceAudit.report.test.ts:262`
 - `src/services/dnaLineNarrator.ts:129`
 - `src/services/dnaLineNarrator.ts:218`
-- `src/services/groundedAnswer.ts:4778`
-- `src/services/groundedAnswer.ts:4790`
-- `src/services/groundedAnswer.ts:5544`
+- `src/services/groundedAnswer.ts:4789`
+- `src/services/groundedAnswer.ts:4801`
+- `src/services/groundedAnswer.ts:5555`
 - `src/services/pvPlayback.test.ts:291`
 - `src/services/pvPlayback.test.ts:292`
 - `src/services/pvPlayback.test.ts:293`
@@ -234,22 +234,23 @@
 
 ### `isCostClause` (function) — 8 call sites
 - `src/services/concessionBeat.ts:430`
-- `src/services/inaccuracyCall.ts:214`
-- `src/services/inaccuracyCall.ts:222`
-- `src/services/inaccuracyCall.ts:508`
+- `src/services/inaccuracyCall.ts:228`
+- `src/services/inaccuracyCall.ts:236`
+- `src/services/inaccuracyCall.ts:529`
 - `src/services/learnWalkBlumenfeld.test.ts:174`
 - `src/services/learnWalkBlumenfeld.test.ts:175`
 - `src/services/learnWalkBlumenfeld.test.ts:176`
 - `src/services/learnWalkBlumenfeld.test.ts:177`
 
-### `planFromUci` (function) — 30 call sites
+### `planFromUci` (function) — 31 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9609`
 - `src/services/coachLaneWiring.test.ts:36`
 - `src/services/computedVoiceAudit.report.test.ts:220`
 - `src/services/concessionBeat.ts:424`
 - `src/services/forkNarration.ts:106`
-- `src/services/inaccuracyCall.ts:176`
-- `src/services/inaccuracyCall.ts:506`
+- `src/services/inaccuracyCall.ts:186`
+- `src/services/inaccuracyCall.ts:190`
+- `src/services/inaccuracyCall.ts:527`
 - `src/services/lookaheadPlan.test.ts:262`
 - `src/services/lookaheadPlan.test.ts:270`
 - `src/services/lookaheadPlan.test.ts:275`

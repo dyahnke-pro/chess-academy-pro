@@ -1510,12 +1510,14 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     let candidateEvalCp: number | null = null;
     let candidateMateIn: number | null = null;
     let candidateLineUci: string[] = [];
+    let candidateSettled: boolean | null = null;
     if (candidateMoveSan && input.liveState.fen) {
       const cand = await buildCandidateEval(input.liveState.fen, candidateMoveSan);
       if (cand) {
         candidateEvalCp = cand.evalCp;
         candidateMateIn = cand.mateIn;
         candidateLineUci = cand.lineUci;
+        candidateSettled = cand.settled;
       }
     }
     // STALE-PACKAGE REFUSAL (David 2026-09-19). `liveState.tactics` is a set of
@@ -1647,6 +1649,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             candidateEvalCp,
             candidateMateIn,
             candidateLineUci,
+            candidateSettled,
             compareMoves: compareMoves && 'a' in compareMoves ? compareMoves : undefined,
             compareOnly: compareMoves && 'only' in compareMoves ? compareMoves : undefined,
             captureOn: captureOnAsk(askForIntents) ?? undefined,

@@ -1201,6 +1201,8 @@ export interface MasterGroundingOptions {
   candidateMateIn?: number | null;
   /** Best play AFTER the candidate (UCI), from the same engine read. */
   candidateLineUci?: string[];
+  /** Did that search settle (`searchUntilStable`)? null = no search ran. */
+  candidateSettled?: boolean | null;
   /** "X or Y?" — both moves resolved on this board, mover POV. */
   compareMoves?: { a: import('./groundedAnswer').ComparedMove; b: import('./groundedAnswer').ComparedMove };
   /** "The pawn or the queen?" when only one of them can take there. */
@@ -5600,6 +5602,7 @@ export async function getCoachChatResponse(
             candidateEvalCp: stmCandEval,
             candidateMateIn: stmCandMate,
             candidateLineUci: grounding.candidateLineUci ?? [],
+            candidateSettled: grounding.candidateSettled ?? null,
             masterFreqPct,
           });
           if (answer) {

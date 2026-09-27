@@ -889,6 +889,11 @@ const DETECTORS: Detector[] = [
     const { last, best, mover, opp } = c;
     if (!c.endgame || best.piece !== 'k' || last.piece === 'k') return null;
     const bk = kingSquare(c.before, mover); if (!bk) return null;
+    // WALKING IN means toward the centre (Bowdler walk 2026-09-27: "yours on g8
+    // should be walking in — Kh8"). A king move to the corner is something else
+    // — a safety step — and this rule has nothing to say about it.
+    const centreDist = (sq: string): number => Math.max(Math.abs(fileIdx(sq) - 3.5), Math.abs(Number(sq[1]) - 4.5));
+    if (centreDist(best.to) >= centreDist(bk)) return null;
     const oppKingUp = legalMovesFor(c.after, opp).some((m) => m.piece === 'k' && relRank(m.to, opp) > relRank(m.from, opp));
     if (!oppKingUp) return null;
     return att('passive-king-endgame', 1, { squares: [bk, best.to], moves: [best.san], pvMoves: [] }, { king: bk, better: best.san });

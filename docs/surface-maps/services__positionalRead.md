@@ -40,9 +40,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `readPosition` (function) — 43 call sites
 - `src/services/boardPlan.ideaKey.test.ts:13`
 - `src/services/groundedAnswer.ts:1370`
-- `src/services/lookaheadPlan.ts:920`
-- `src/services/lookaheadPlan.ts:1189`
-- `src/services/lookaheadPlan.ts:1543`
+- `src/services/lookaheadPlan.ts:953`
+- `src/services/lookaheadPlan.ts:1222`
+- `src/services/lookaheadPlan.ts:1576`
 - `src/services/narrationAdversarial.test.ts:87`
 - `src/services/narrationAdversarial.test.ts:173`
 - `src/services/positionReadComposer.ts:128`

@@ -450,6 +450,19 @@ export function keySquaresOf(plies: readonly PvPly[]): KeySquare[] {
     .sort((a, b) => b.weight - a.weight || a.square.localeCompare(b.square));
 }
 
+/** Material for `color` minus the other side's, in points, off the board. */
+function sideBalance(fen: string, color: 'white' | 'black'): number {
+  const V: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+  const me = color === 'white' ? 'w' : 'b';
+  let net = 0;
+  try {
+    for (const cell of new Chess(fen).board().flat()) {
+      if (cell) net += (cell.color === me ? 1 : -1) * (V[cell.type] ?? 0);
+    }
+  } catch { return 0; }
+  return net;
+}
+
 function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
   const mine = plies.slice(0, PLAN_HORIZON).filter((p) => p.moverColor === color);
   const destinations = new Map<string, number>();
@@ -537,6 +550,26 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
       nearEnemyKing += 1;
       kingAttackSquares.push(to);
     }
+  }
+
+  // THE MATERIAL IS THE BOARD'S, AT A QUIET POINT — not a sum of per-capture
+  // exchange guesses. Each ply's gain is a static exchange that assumes a
+  // recapture; summing one side's captures double-counts the trade (McConnell
+  // walk 2026-09-27: O-O Bg4 Bg5 Qxg5 Bxf7+ Ke7 Nxg5 Bxd1 read "win a rook" —
+  // +1 for f7 and +9 for the queen, never the bishop and queen given back).
+  // The count is taken where the line is QUIET — the last ply the next move
+  // does not capture — so a horizon that ends mid-exchange claims nothing
+  // from the half it did not see.
+  {
+    const horizon = plies.slice(0, PLAN_HORIZON);
+    let quietAt = -1;
+    for (let i = 0; i < horizon.length; i++) {
+      const next = horizon[i + 1];
+      if (next ? !/x/.test(next.san) : !/x/.test(horizon[i].san)) quietAt = i;
+    }
+    materialSwing = quietAt >= 0 && horizon.length > 0
+      ? sideBalance(horizon[quietAt].fenAfter, color) - sideBalance(horizon[0].fenBefore, color)
+      : 0;
   }
 
   // WHAT NEVER MOVED. A plan is as much about what is left out as what is in

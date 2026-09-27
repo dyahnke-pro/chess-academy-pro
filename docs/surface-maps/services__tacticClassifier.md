@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**813 lines · 3 exports · 14 importers · 4 tests · 0 audits**
+**813 lines · 3 exports · 15 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,6 +20,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveReason.ts`
 - `src/services/playedMoveGrade.ts`
 - `src/services/pvPlayback.ts`
+- `src/services/searchDepth.ts`
 - `src/services/tacticClassifier.skewer.test.ts`
 - `src/services/tacticClassifier.test.ts`
 - `src/services/tacticsDetector.ts`
@@ -29,13 +30,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `findHangingPieces` (function) — 10 call sites
+### `findHangingPieces` (function) — 11 call sites
 - `src/data/patternRegistry.ts:113`
 - `src/services/coachGameEngine.ts:298`
 - `src/services/deliberation.ts:117`
 - `src/services/liveTacticsContext.ts:378`
 - `src/services/moveReason.ts:112`
 - `src/services/playedMoveGrade.ts:90`
+- `src/services/searchDepth.ts:69`
 - `src/services/tacticsDetector.ts:776`
 - `src/services/threatCheck.ts:55`
 - `src/services/threatOut.ts:78`

@@ -77,7 +77,7 @@ const FUNDAMENTAL_HOW: Record<FundamentalId, string> = {
     'Rooks go BEHIND passed pawns and onto the seventh. Before defending passively, look for the active square — an active rook is often worth a pawn in a rook ending.',
   // ── threats and tactics ──
   'loose-piece':
-    'End every move with a sweep: what of mine is undefended right now? Loose pieces are what makes their tactic work, so defend it or move it before it becomes their idea.',
+    'End every move with a sweep: what of mine is undefended right now? Loose pieces are what make their tactics work — defend a loose piece or move it before it becomes their idea.',
   'ignored-threat':
     'Their move first, always. Before you look for your own idea, answer what their last move threatens — if it threatens something, that is the move you have to meet.',
   'passive-when-forcing-existed':
@@ -522,10 +522,10 @@ function shortVerdict(a: PrincipleAttribution): string {
     case 'passive-rook-endgame': return `The rook still passive — ${f.better} takes the seventh.`;
     case 'kept-bad-bishop': return `The bad bishop on ${f.bishop} still buried — ${f.better}.`;
     case 'overvalued-attack': return `The attack overvalued again — ${f.move} doesn't hold up.`;
-    case 'poisoned-pawn': return `Another poisoned pawn — the ${f.piece} on ${f.square} is snared.`;
+    case 'poisoned-pawn': return f.fled === 0 ? `Another guarded pawn grabbed — the ${f.piece} on ${f.square} is taken.` : `Another poisoned pawn — the ${f.piece} on ${f.square} is snared.`;
     case 'capture-toward-centre': return `The recapture again — ${f.better} opens the ${f.file}-file.`;
     case 'botched-conversion': return `Rushing the win again — ${f.better} was calmer.`;
-    case 'calculation-depth': return `Stopped calculating early again — ${f.punish} was waiting deeper.`;
+    case 'calculation-depth': return `Stopped calculating early again — their ${f.punish} was waiting deeper.`;
     case 'left-book-early': return `Out of book early again — ${f.book} was the line.`;
     case 'no-plan': return `Another move without a plan — ${f.better} served the position.`;
   }

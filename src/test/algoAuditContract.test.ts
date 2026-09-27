@@ -33,7 +33,8 @@ type AlgoEmissionKind =
   | 'player-rating-estimated'
   | 'review-need-coverage'
   | 'home-opening-chosen'
-  | 'analysis-batch-ordered';
+  | 'analysis-batch-ordered'
+  | 'search-depth';
 
 interface Contract {
   /** The audit that holds the contract. */
@@ -80,6 +81,11 @@ const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
     script: 'scripts/audit-home-opening-prod.mjs',
     contractMarker: 'ANALYSIS ORDER home-games-first-past-the-cap',
     emittedBy: 'src/services/gameAnalysisService.ts (analyzeAllGames via pickAnalysisBatch)',
+  },
+  'search-depth': {
+    script: 'scripts/audit-search-depth-prod.mjs',
+    contractMarker: 'SEARCH DEPTH emitted',
+    emittedBy: 'src/services/searchDepthEvents.ts (searchDepth.searchUntilStable)',
   },
 };
 

@@ -66,7 +66,7 @@ export function readConversion(fen: string, student: 'w' | 'b'): ConversionRead 
   let text: string;
   if (homeMinorCount(c, student) >= 2 || (!castled && theirPieces >= 3)) {
     step = 'finish-development';
-    text = `You're ${edgeWords(edge)} up — before any plan, finish developing and get your king safe. Up material, the only way to lose is to get careless.`;
+    text = `You're ${edgeWords(edge, c, student)} up — before any plan, finish developing and get your king safe. Up material, the only way to lose is to get careless.`;
   } else if (theirPieces === 0 && theirPawns === 0) {
     step = 'cut-off-king';
     const heavy = (['q', 'r'] as const).find((t) => c.board().some((row) => row.some((x) => x && x.color === student && x.type === t)));
@@ -75,10 +75,10 @@ export function readConversion(fen: string, student: 'w' | 'b'): ConversionRead 
       : `Their king is alone — drive it to the edge with your king and pieces together, then mate.`;
   } else if (theirPieces >= 2) {
     step = 'trade-pieces';
-    text = `You're ${edgeWords(edge)} up — trade pieces, not pawns. Every piece that comes off makes your extra material count for more.`;
+    text = `You're ${edgeWords(edge, c, student)} up — trade pieces, not pawns. Every piece that comes off makes your extra material count for more.`;
   } else if (!passer) {
     step = 'make-passer';
-    text = `You're ${edgeWords(edge)} up with few pieces left — now make a passed pawn. The extra material wins by making a new queen, not by hunting the king.`;
+    text = `You're ${edgeWords(edge, c, student)} up with few pieces left — now make a passed pawn. The extra material wins by making a new queen, not by hunting the king.`;
   } else {
     step = 'escort-passer';
     text = `Your passed pawn on ${passer} is the win — push it, with your king and pieces escorting it one safe square at a time.`;
@@ -86,9 +86,20 @@ export function readConversion(fen: string, student: 'w' | 'b'): ConversionRead 
   return { step, edge, passer, text };
 }
 
-function edgeWords(edge: number): string {
-  if (edge >= 9) return 'a queen';
-  if (edge >= 5) return 'a rook';
+/** The edge in words — a PIECE name only when that piece is really the extra
+ *  one on the board. "You're a queen up" with no queens on it (Damiano walk
+ *  2026-09-27: rook+bishop+knight against a rook) named a piece nobody had. */
+function edgeWords(edge: number, c: Chess, student: 'w' | 'b'): string {
+  const count = (color: 'w' | 'b', t: string): number => {
+    let n = 0;
+    for (const row of c.board()) for (const x of row) if (x && x.color === color && x.type === t) n += 1;
+    return n;
+  };
+  const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
+  const extra = (t: string): boolean => count(student, t) > count(them, t);
+  if (edge >= 9 && extra('q')) return 'a queen';
+  if (edge >= 5 && edge < 9 && extra('r')) return 'a rook';
+  if (edge >= 5) return `${Math.round(edge)} points`;
   return 'a piece'; // readConversion never calls below CONVERSION_EDGE
 }
 

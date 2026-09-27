@@ -1248,37 +1248,37 @@ describe('assembleCandidateMoveAnswer — evaluate the NAMED move', () => {
   const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
   it('affirms when the named move IS the engine best move', () => {
-    const a = assembleCandidateMoveAnswer({ candidateLineUci: [], fen: START, candidateSan: 'e4', bestMoveUci: 'e2e4', bestEvalCp: 30, candidateEvalCp: 30 });
+    const a = assembleCandidateMoveAnswer({ candidateLineUci: [], candidateSettled: null, fen: START, candidateSan: 'e4', bestMoveUci: 'e2e4', bestEvalCp: 30, candidateEvalCp: 30 });
     expect(a?.facts).toMatch(/e4 is the best move/i);
   });
 
   it('answers an ILLEGAL named move honestly, never fabricating an eval', () => {
-    const a = assembleCandidateMoveAnswer({ candidateLineUci: [], fen: START, candidateSan: 'e5', bestMoveUci: 'e2e4', bestEvalCp: 30, candidateEvalCp: 0 });
+    const a = assembleCandidateMoveAnswer({ candidateLineUci: [], candidateSettled: null, fen: START, candidateSan: 'e5', bestMoveUci: 'e2e4', bestEvalCp: 30, candidateEvalCp: 0 });
     expect(a?.facts).toMatch(/isn't a legal move/i);
     expect(a?.bestMoveSan).toBeNull();
   });
 
   it('grades a slightly-worse legal move as PLAYABLE (cp-loss vs best), not "best is X"', () => {
     // best e4 (+0.3 mover POV), candidate a3 (-0.1 mover POV) → 40cp loss.
-    const a = assembleCandidateMoveAnswer({ candidateLineUci: [], fen: START, candidateSan: 'a3', bestMoveUci: 'e2e4', bestEvalCp: 30, candidateEvalCp: -10 });
+    const a = assembleCandidateMoveAnswer({ candidateLineUci: [], candidateSettled: null, fen: START, candidateSan: 'a3', bestMoveUci: 'e2e4', bestEvalCp: 30, candidateEvalCp: -10 });
     expect(a?.facts).toMatch(/a3/);
     expect(a?.facts).toMatch(/playable|fine|slightly worse/i);
     expect(a?.facts).not.toMatch(/best move is a3/i);
   });
 
   it('grades a large cp-loss as a mistake and names the better move', () => {
-    const a = assembleCandidateMoveAnswer({ candidateLineUci: [], fen: START, candidateSan: 'a3', bestMoveUci: 'e2e4', bestEvalCp: 30, candidateEvalCp: -300 });
+    const a = assembleCandidateMoveAnswer({ candidateLineUci: [], candidateSettled: null, fen: START, candidateSan: 'a3', bestMoveUci: 'e2e4', bestEvalCp: 30, candidateEvalCp: -300 });
     expect(a?.facts).toMatch(/mistake/i);
     expect(a?.facts).toMatch(/\be4\b/);
   });
 
   it('flags a candidate that walks into mate', () => {
-    const a = assembleCandidateMoveAnswer({ candidateLineUci: [], fen: START, candidateSan: 'a3', bestMoveUci: 'e2e4', candidateMateIn: -2 });
+    const a = assembleCandidateMoveAnswer({ candidateLineUci: [], candidateSettled: null, fen: START, candidateSan: 'a3', bestMoveUci: 'e2e4', candidateMateIn: -2 });
     expect(a?.facts).toMatch(/mate in 2/i);
   });
 
   it('cites master frequency when the DB covers the move (DB ground alongside engine)', () => {
-    const a = assembleCandidateMoveAnswer({ candidateLineUci: [], fen: START, candidateSan: 'a3', bestMoveUci: 'e2e4', bestEvalCp: 30, candidateEvalCp: 22, masterFreqPct: 8 });
+    const a = assembleCandidateMoveAnswer({ candidateLineUci: [], candidateSettled: null, fen: START, candidateSan: 'a3', bestMoveUci: 'e2e4', bestEvalCp: 30, candidateEvalCp: 22, masterFreqPct: 8 });
     expect(a?.facts).toMatch(/8%/);
   });
 
@@ -1287,18 +1287,18 @@ describe('assembleCandidateMoveAnswer — evaluate the NAMED move', () => {
   // verdict is sound/speculative/unsound by the engine eval of best play AFTER.
   const GREEK = 'r1bq1rk1/ppp2ppp/2n2n2/4p3/3P4/2NB1N2/PPP2PPP/R2QK2R w KQ - 0 1';
   it('calls a material-offering sac SOUND when the eval holds up', () => {
-    const a = assembleCandidateMoveAnswer({ candidateLineUci: [], fen: GREEK, candidateSan: 'Bxh7+', bestMoveUci: 'd3e2', bestEvalCp: 60, candidateEvalCp: 50 });
+    const a = assembleCandidateMoveAnswer({ candidateLineUci: [], candidateSettled: null, fen: GREEK, candidateSan: 'Bxh7+', bestMoveUci: 'd3e2', bestEvalCp: 60, candidateEvalCp: 50 });
     expect(a?.facts).toMatch(/sound/i);
     expect(a?.facts).not.toMatch(/unsound/i);
     expect(a?.facts).toMatch(/Bxh7/);
   });
   it('calls the sac UNSOUND when the attack does not cover the material', () => {
-    const a = assembleCandidateMoveAnswer({ candidateLineUci: [], fen: GREEK, candidateSan: 'Bxh7+', bestMoveUci: 'd3e2', bestEvalCp: 40, candidateEvalCp: -260 });
+    const a = assembleCandidateMoveAnswer({ candidateLineUci: [], candidateSettled: null, fen: GREEK, candidateSan: 'Bxh7+', bestMoveUci: 'd3e2', bestEvalCp: 40, candidateEvalCp: -260 });
     expect(a?.facts).toMatch(/unsound/i);
     expect(a?.facts).toMatch(/down a piece|just down/i);
   });
   it('calls the sac SPECULATIVE in the middle band', () => {
-    const a = assembleCandidateMoveAnswer({ candidateLineUci: [], fen: GREEK, candidateSan: 'Bxh7+', bestMoveUci: 'd3e2', bestEvalCp: 40, candidateEvalCp: -80 });
+    const a = assembleCandidateMoveAnswer({ candidateLineUci: [], candidateSettled: null, fen: GREEK, candidateSan: 'Bxh7+', bestMoveUci: 'd3e2', bestEvalCp: 40, candidateEvalCp: -80 });
     expect(a?.facts).toMatch(/speculative/i);
   });
 });

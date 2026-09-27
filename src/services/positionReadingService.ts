@@ -926,11 +926,14 @@ export function namedPawnStructure(
       ? { name: 'French-type pawn chain', plan: 'the break comes at the base of the chain — they hit d4 with …c5 and …f6; you defend the head on e5 and play on the kingside' }
       : { name: 'French-type pawn chain', plan: 'the break comes at the base of the chain — you hit d4 with …c5 and …f6; they defend the head on e5 and play on the kingside' };
   }
-  // KING'S-INDIAN CLOSED CENTRE — White d5+e4 vs Black d6+e5.
+  // CLOSED CENTRE — White d5+e4 vs Black d6+e5. Named by the STRUCTURE, never
+  // by an opening: the same chain arises from the Damiano, the Philidor and the
+  // Old Indian, and "King's-Indian" in a Damiano (1000 walk 2026-09-27, 4.d5)
+  // named an opening the student was not playing. The plan is the chain's own.
   if (w('d5') && w('e4') && b('d6') && b('e5')) {
     return studentColor === 'w'
-      ? { name: 'King’s-Indian closed centre', plan: 'the wings decide: they storm the kingside with …f5-f4 and a pawn avalanche; you break on the queenside with c5' }
-      : { name: 'King’s-Indian closed centre', plan: 'the wings decide: you storm the kingside with …f5-f4 and a pawn avalanche; they break on the queenside with c5' };
+      ? { name: 'Closed centre', plan: 'the wings decide: they storm the kingside with …f5-f4 and a pawn avalanche; you break on the queenside with c5' }
+      : { name: 'Closed centre', plan: 'the wings decide: you storm the kingside with …f5-f4 and a pawn avalanche; they break on the queenside with c5' };
   }
   // ISOLATED QUEEN’S PAWN — a d-pawn with no friendly c- or e-pawns.
   const holder = (white: boolean): string => ((white ? 'w' : 'b') === studentColor ? 'You hold' : 'They hold');
@@ -1261,7 +1264,10 @@ export function bestMinorToKeep(fen: string, color: Color): { note: ActivePieceN
   const theirs = minorsOf(color === 'w' ? 'b' : 'w');
   const best = ours[0];
   const enemyBest = theirs[0]?.scope ?? 0;
-  return { note: best, dominant: best.scope >= enemyBest + 3 };
+  // Dominant is a comparison WITH their minor — with none on the board there is
+  // nothing to outclass (Bowdler walk 2026-09-27, 41…Bxf2: "it outclasses their
+  // minor; don't trade it off" against a lone rook).
+  return { note: best, dominant: theirs.length > 0 && best.scope >= enemyBest + 3 };
 }
 
 /** BISHOP PAIR — does `color` hold two bishops while the opponent does not?

@@ -28,6 +28,7 @@
 import { db } from '../db/schema';
 import { mirrorAuditEvent } from './analytics';
 import { onCoachDecision, onNeedScore, type CoachDecisionRow, type NeedScoreRow } from './coachDecisionEvents';
+import { onSearchDepth } from './searchDepthEvents';
 
 const APP_AUDIT_LOG_META_KEY = 'app-audit-log.v1';
 const APP_AUDIT_LOG_MAX_ENTRIES = 300;
@@ -239,6 +240,11 @@ export type AuditKind =
   // gate closed it and how many facts survived — so the WEIGHTING can be
   // trended by an audit instead of judged by reading prose.
   | 'coach-decision'
+  // How deep Stockfish searched and whether the answer SETTLED
+  // (`searchUntilStable`, David 2026-09-27: "algo the stockfish depth"). One
+  // row per search — so an audit can hold that verdicts were voiced off
+  // settled searches and that sharp positions went deeper than quiet ones.
+  | 'search-depth'
   // The NEED score's per-term breakdown, AGGREGATED. One row per ply would
   // be hundreds of Dexie writes per review (`computeNeed` runs over every
   // move), so the subscriber buffers and emits ONE distribution per burst —
@@ -2162,4 +2168,16 @@ onCoachDecision((row) => {
     decisionFlush = setTimeout(flushCoachDecisions, 1500);
     (decisionFlush as unknown as { unref?: () => void }).unref?.();
   }
+});
+
+// One row per settled-or-not search. Searches are few (one per question, one
+// per review key moment), so each is logged as it lands.
+onSearchDepth((row) => {
+  void logAppAudit({
+    kind: 'search-depth',
+    category: 'subsystem',
+    source: 'searchDepth.searchUntilStable',
+    summary: `${row.purpose} sharp=${row.sharpness} floor=${row.minDepth} reached=${row.depthReached} ${row.stable ? 'settled' : `UNSETTLED (${row.reason})`} in ${row.elapsedMs}ms`,
+    details: JSON.stringify(row),
+  });
 });

@@ -174,7 +174,12 @@ export function buildDeliberation(input: {
     if (!san || san === bestSan || san === excludeSan) continue;
     const evalCp = moverEval(l);
     const deltaCp = Math.max(0, bestEval - evalCp);
-    const drop = dropsAfter(fenBefore, l.moves[0], moverColor);
+    // A DROP THE ENGINE DOES NOT PUNISH IS NOT A DROP (Damiano walk 2026-09-27:
+    // "Bh6 was cleaner" then "Bh6? That drops the knight on a7" — the knight is
+    // loose, but taking it walks into something worse, so the line holds). A
+    // piece left en prise only counts when the eval says it costs.
+    const loose = dropsAfter(fenBefore, l.moves[0], moverColor);
+    const drop = loose && Math.max(0, bestEval - moverEval(l)) >= CLEARLY_WORSE_CP ? loose : null;
     const shortfall: Shortfall = drop ? 'drops-material' : deltaCp >= CLEARLY_WORSE_CP ? 'clearly-worse' : 'less-precise';
     const proof = proofAgainstMover(fenBefore, l.moves, moverColor);
     alternatives.push({

@@ -428,7 +428,14 @@ export function whatItAllowed(args: {
   // drift to (Blumenfeld walk F18/F32).
   const lead = plan?.theirs.spokenClauses[0];
   if (!lead?.text || lead.drift || !isCostClause(lead.text)) return null;
-  const line = `That let them ${lead.text.trim().replace(/\.$/, '')}.`;
+  // NAMED WITH THE MOVE THAT DOES IT (McConnell walk 2026-09-27: a bare "That
+  // let them win a pawn." left the student to find which pawn and how).
+  let first: string | null = null;
+  try {
+    const u = args.opponentPv[0];
+    first = new Chess(args.fenAfter).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] })?.san ?? null;
+  } catch { first = null; }
+  const line = `That let them ${lead.text.trim().replace(/\.$/, '')}${first ? `, starting with ${first}` : ''}.`;
 
   // The square to mark: where their line actually lands first, so the eye goes
   // to the consequence rather than to the move that caused it.

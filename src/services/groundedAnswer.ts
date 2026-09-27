@@ -1806,8 +1806,16 @@ export function assembleCandidateMoveAnswer(opts: {
    *  sacrifice that mates next move (question walk 2026-09-27). Pass [] when
    *  no engine line exists. */
   candidateLineUci: readonly string[];
+  /** Did the search behind `candidateEvalCp` SETTLE (`searchUntilStable`)?
+   *  REQUIRED: a verdict off a search that was still changing its mind is said
+   *  as a first read, never as fact — above all on a sacrifice, where the
+   *  truth hides deepest. `null` = no search ran (no eval to hedge). */
+  candidateSettled: boolean | null;
 }): GroundedAnswer | null {
   const { fen, candidateSan } = opts;
+  const hedge = opts.candidateSettled === false
+    ? "The engine hadn't settled on this line yet — take it as a first read, not a final word."
+    : null;
   const raw = (candidateSan ?? '').trim();
   if (!raw) return null;
 
@@ -1889,6 +1897,7 @@ export function assembleCandidateMoveAnswer(opts: {
     if (why) parts.push(why);
     if (lineText) parts.push(lineText);
     if (freqText) parts.push(freqText);
+    if (hedge) parts.push(hedge);
     return { facts: parts.join(' '), bestMoveSan: bestSan, bestMoveFromTo: bestFromTo, sources };
   }
 
@@ -1924,6 +1933,7 @@ export function assembleCandidateMoveAnswer(opts: {
       if (geo && !geo.startsWith('attacks')) parts.push(`It ${geo}.`);
       if (lineText) parts.push(lineText);
       if (freqText) parts.push(freqText);
+      if (hedge) parts.push(hedge);
       return { facts: parts.join(' '), bestMoveSan: bestSan, bestMoveFromTo: bestFromTo, sources };
     }
   }
@@ -1958,6 +1968,7 @@ export function assembleCandidateMoveAnswer(opts: {
   if (evalText) parts.push(`After it, ${evalText}.`);
   if (lineText) parts.push(lineText);
   if (freqText) parts.push(freqText);
+  if (hedge) parts.push(hedge);
 
   return {
     facts: parts.join(' '),

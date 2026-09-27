@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**946 lines · 32 exports · 932 importers · 208 tests · 39 audits**
+**946 lines · 32 exports · 934 importers · 209 tests · 39 audits**
 
 ## Locked rules that govern this surface
 
@@ -867,6 +867,8 @@
 - `src/services/reviewGameAdapter.ts`
 - `src/services/reviewNarrationBuild.ts`
 - `src/services/reviewSampleGames.ts`
+- `src/services/searchDepth.test.ts`
+- `src/services/searchDepth.ts`
 - `src/services/section14RecordPath.test.ts`
 - `src/services/sessionGenerator.test.ts`
 - `src/services/sessionGenerator.ts`
@@ -1227,6 +1229,7 @@
 - `src/services/pvPlayback.test.ts`
 - `src/services/ratingIdempotence.test.ts`
 - `src/services/refutedAlternative.test.ts`
+- `src/services/searchDepth.test.ts`
 - `src/services/section14RecordPath.test.ts`
 - `src/services/sessionGenerator.test.ts`
 - `src/services/setupTrainerService.test.ts`

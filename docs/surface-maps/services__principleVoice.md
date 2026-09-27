@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**670 lines · 6 exports · 11 importers · 8 tests · 3 audits**
+**670 lines · 6 exports · 12 importers · 9 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,6 +21,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleAttributionEndgame.test.ts`
 - `src/services/principleAttributionEvalPv.test.ts`
 - `src/services/principleVoice.test.ts`
+- `src/services/replayFence.mcconnell1000.test.ts`
 - `src/services/replayFence.sicilian1200.test.ts`
 - `src/services/reviewFullData.ts`
 
@@ -45,7 +46,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `FundamentalVerdictOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `renderFundamentalVerdict` (function) — 22 call sites
+### `renderFundamentalVerdict` (function) — 23 call sites
 - `src/services/coachFeatureService.ts:2262`
 - `src/services/fundLeadStems.test.ts:58`
 - `src/services/fundamentalHow.test.ts:47`
@@ -65,6 +66,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleVoice.test.ts:25`
 - `src/services/principleVoice.test.ts:31`
 - `src/services/principleVoice.test.ts:32`
+- `src/services/replayFence.mcconnell1000.test.ts:21`
 - `src/services/replayFence.sicilian1200.test.ts:54`
 - `src/services/replayFence.sicilian1200.test.ts:61`
 - `src/services/reviewFullData.ts:431`
@@ -94,6 +96,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleAttributionEndgame.test.ts`
 - `src/services/principleAttributionEvalPv.test.ts`
 - `src/services/principleVoice.test.ts`
+- `src/services/replayFence.mcconnell1000.test.ts`
 - `src/services/replayFence.sicilian1200.test.ts`
 
 ## Audits that reach it

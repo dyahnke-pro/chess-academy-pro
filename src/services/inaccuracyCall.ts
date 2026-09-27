@@ -121,7 +121,13 @@ export function betterMoveFact(
   const order = checksFirst(fenBefore, playedSan, bestSan, bestLineUci);
   if (order) return { kind: 'checks-first', ...order };
   const better = whyBetter(fenBefore, bestLineUci, moverColor);
-  return better ? { kind: 'line-wins', why: better.why, own: better.own } : null;
+  if (!better) return null;
+  // A KING MOVE DOES NOT SERVE ANOTHER PIECE'S PLAN (Bowdler walk 2026-09-27:
+  // "Kf8 was the move — the idea is to park a piece on d4"). A plan clause that
+  // is not the move's own work is only honest when the move is a step in it;
+  // a king step is its own reason (the endgame king rule names it) or none.
+  if (!better.own && /^K/.test(bestSan)) return null;
+  return { kind: 'line-wins', why: better.why, own: better.own };
 }
 
 /** The fact, worded. A verdict on a move already PLAYED is retrospective on
@@ -171,6 +177,14 @@ function whyBetter(
     const winsOutright = first?.captured ? legalSeeGain(fenBefore, first.to) >= MATERIAL_VALUE[first.captured] : false;
     if (first?.captured && NAME[first.captured] && (MATERIAL_VALUE[first.captured] > MATERIAL_VALUE[first.piece] || winsOutright)) {
       return { why: `take the ${NAME[first.captured]} on ${first.to}`, square: first.to, own: true };
+    }
+    // A CAPTURE THAT "WINS A PAWN" MAY ONLY BE TAKING IT BACK (Colle walk
+    // 2026-09-27: "cxd4 was the move — it would win a pawn" one move after
+    // …cxd4). The board cannot say whether the pawn just arrived, so the
+    // reason says what is certainly true of both: it takes the pawn.
+    if (first?.captured === 'p') {
+      const plan0 = planFromUci(fenBefore, bestUci, moverColor)?.mine.text?.trim() ?? '';
+      if (/win a pawn/.test(plan0)) return { why: `take the pawn on ${first.to}`, square: first.to, own: true };
     }
   } catch { /* fall through to the plan read */ }
   const plan = planFromUci(fenBefore, bestUci, moverColor);
@@ -403,7 +417,11 @@ export function callInaccuracyDetailed(args: {
   // board — hiding it would be coyness, not teaching.
   if (args.side === 'coach') {
     const head = quality === 'blunder'
-      ? `That was a blunder from me — ${args.playedSan} gives away real material.`
+      // The cost named is the real one: a move that walks into mate gave away
+      // no material (Damiano walk 2026-09-27, 42…Kf8 in a mating net).
+      ? ((args.allowedMate ?? null) !== null
+        ? `That was a blunder from me — ${args.playedSan} walks into mate.`
+        : `That was a blunder from me — ${args.playedSan} gives away real material.`)
       : quality === 'mistake'
         ? `That was a mistake from me. ${args.playedSan} is not what the position wanted.`
         : `A touch inaccurate from me — ${args.playedSan} is not quite right.`;
@@ -466,7 +484,10 @@ export function callInaccuracyDetailed(args: {
   const grade = quality === 'blunder' ? 'a blunder' : quality === 'mistake' ? 'a mistake' : 'a little loose';
   const head = punishment
     ? `${args.playedSan} was ${grade} — it let them ${punishment.why}${punishment.first && args.replySan !== null && bare(args.replySan) !== bare(punishment.first) ? ', and they missed it' : ''}.`
-    : `${args.playedSan} was ${grade}.`;
+    : (args.missedMate ?? null) !== null
+      // A LOST MATE is the cost when nothing was taken (Damiano walk, 32.Rxc7).
+      ? `${args.playedSan} was ${grade} — it let a forced mate slip.`
+      : `${args.playedSan} was ${grade}.`;
   return { call: { quality, side: 'student', cost, said: `${head}${should}`, square: better?.square ?? '' } };
 }
 
@@ -511,6 +532,13 @@ function punishmentOf(
   // their first move is the reply the check forced; naming it as what the move
   // "let them" do is a sentence about nothing.
   if (/[+#]$/.test(playedSan) && first && !/x/.test(first)) return null;
+  // Nor is a QUIET reply something the move "let them in with": "let them in
+  // with Kg6" (Damiano walk), "let them in with Neg6", "…with e5" (Colle walk,
+  // 2026-09-27) named a retreat and a pawn push as if they broke in. Only a
+  // capture or a check is an entry the mistake opened; anything else is what
+  // the cost clause above exists to name, and when it can't, the grade stands
+  // alone.
+  if (first && !/x|[+#]$/.test(first)) return null;
   return first ? { why: `in with ${first}`, first } : null;
 }
 

@@ -158,6 +158,7 @@ const MATCHUP_PRINCIPLE: Record<MatchupClass, Register | null> = {
   'rook-endgame': { full: 'in a rook ending activity is everything: put the rook behind the passed pawn and keep the king in the fight.', short: 'Rook ending — activity first.' },
   'queen-endgame': { full: 'a queen ending turns on checks and your own king\'s safety — cover the perpetual before you push.', short: 'Queen ending — mind perpetual check.' },
   'queen-vs-rook': { full: 'queen versus rook is a win with care, but the rook fights on with a fortress and stalemate tricks.', short: 'Queen vs rook — fortress tricks.' },
+  'pieces-vs-pawns': { full: 'pieces against bare pawns — the pawns are the only counterplay, so stop the most advanced one first; then king and pieces together finish it.', short: 'Stop the pawns first.' },
   'rook-vs-minor': { full: 'a rook against a minor piece usually converts, but watch for a fortress the minor can build.', short: 'Rook vs minor — watch fortresses.' },
   'opposite-bishops': { full: 'opposite-coloured bishops are famously drawish — each bishop guards squares the other can never touch.', short: 'Opposite bishops — drawish.' },
   'same-bishops': { full: 'a same-coloured bishop ending goes to the better bishop and the more active king.', short: 'Bishop ending — the better bishop.' },

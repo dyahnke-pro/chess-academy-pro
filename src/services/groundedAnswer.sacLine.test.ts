@@ -10,7 +10,7 @@ const GAME = 'd4 Nf6 c4 e6 Nf3 c5 d5 b5 b3 Bb7 Nbd2 exd5 cxb5 d6 Bb2 Be7 e3 O-O 
 describe('a sacrifice that is the best move gets the soundness verdict and the line', () => {
   const c = new Chess(); for (const s of GAME) c.move(s);
   const fen = c.fen();
-  const base = { fen, candidateSan: 'd1=Q+', bestMoveUci: 'd2d1q', bestEvalCp: null, candidateEvalCp: null, candidateMateIn: 2 };
+  const base = { fen, candidateSan: 'd1=Q+', bestMoveUci: 'd2d1q', bestEvalCp: null, candidateEvalCp: null, candidateMateIn: 2, candidateSettled: null };
 
   it('says sound, says mate, plays the line out', () => {
     const a = assembleCandidateMoveAnswer({ ...base, candidateLineUci: ['g4d1', 'd6d1'] });

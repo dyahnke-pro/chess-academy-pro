@@ -360,7 +360,15 @@ export function computeMoveFundamentals(
   // Not on a CAPTURE: taking a piece is its own reason, and the hanging-piece
   // and tactic lanes name it (hand walk 2026-09-24: 23.Bxe6+ was "plant the
   // bishop on the e6 outpost" — it takes a knight with check).
-  if ((mv.piece === 'n' || mv.piece === 'b') && !mv.captured && relRank(mv.to, mover) >= 5 && isOutpost(after, mv.to, mover, false)) {
+  // …and not a square where the piece simply hangs: "Bh6 lands on the h6
+  // outpost" was said beside "your bishop on h6 is attacked and nothing's
+  // defending it" (Damiano walk 2026-09-27). No pawn can evict it; a rook can
+  // still take it for free.
+  const them: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
+  const hangsThere = (() => {
+    try { return after.isAttacked(mv.to as never, them) && after.attackers(mv.to as never, mover).length === 0; } catch { return false; }
+  })();
+  if ((mv.piece === 'n' || mv.piece === 'b') && !mv.captured && relRank(mv.to, mover) >= 5 && !hangsThere && isOutpost(after, mv.to, mover, false)) {
     const name = PIECE_NAME[mv.piece];
     out.push({
       id: 'outpost',
@@ -688,7 +696,11 @@ export function computeMoveFundamentals(
   // "Prepares d4" is the better statement of "supports the center, guarding
   // d4" — the same pawn, the same square — so the support clause steps aside.
   const prepared = ideas.find((f) => f.id === 'prepare-break');
-  const kept = prepared ? out.filter((f) => !(f.id === 'center' && f.led.startsWith('supports the center'))) : out;
+  // "Completes your development" already says the piece develops — one
+  // development claim per move (Bowdler walk 2026-09-27, 20…Nc6 spoke both,
+  // joined by "and").
+  const completes = ideas.some((f) => f.id === 'development-complete');
+  const kept = out.filter((f) => !(prepared && f.id === 'center' && f.led.startsWith('supports the center')) && !(completes && f.id === 'development'));
   kept.push(...ideas);
   return kept.sort((a, b) => b.weight - a.weight);
 }

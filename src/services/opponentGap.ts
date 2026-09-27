@@ -113,7 +113,10 @@ export function opponentGapClause(
   // game, 2026-09-26): after "You'd love to play Nc5 — but they answer Nxc6",
   // "That reply gives you something" read as Nxc6 when it meant their Nd4.
   const stem = seat === 'dictated' && opponentLastSan ? `${opponentLastSan} gives you something` : GAP_STEM[seat];
-  return `${cap(stem)}: ${san} — it ${why}.`;
+  // A stem that OPENS with their move keeps the move's own case: "c5" is a pawn
+  // move, "C5" is not a move at all (Bowdler walk 2026-09-27, 40…c5).
+  const led = seat === 'dictated' && opponentLastSan ? stem : cap(stem);
+  return `${led}: ${san} — it ${why}.`;
 }
 
 const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);

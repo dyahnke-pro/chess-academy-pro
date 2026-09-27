@@ -57,6 +57,7 @@ export type MatchupClass =
   | 'rook-and-minor'    // both sides rook + minor(s), no queens — technical MG→EG
   | 'major-piece'       // queens and/or rooks (+pawns), no minors — Q/Q+R endings
   | 'mating-material'   // one side lone king, other has forced-mate material
+  | 'pieces-vs-pawns'   // one side king + pawns only, the other still has pieces
   | 'complex'           // an ending with mixed heavy material (queens + rooks + minors)
   | 'non-endgame';      // too much material to be an ending — tactics path owns it
 
@@ -132,6 +133,7 @@ const LABELS: Record<MatchupClass, string> = {
   'rook-and-minor': 'rook-and-minor ending',
   'major-piece': 'major-piece ending',
   'mating-material': 'forced-mate material vs lone king',
+  'pieces-vs-pawns': 'pieces against bare pawns',
   complex: 'complex ending',
   'non-endgame': 'not an ending',
 };
@@ -181,6 +183,13 @@ function reduce(w: SideMaterial, b: SideMaterial, total: number): MatchupClass {
     // Lone king vs king + lone minor (no pawns) — a dead draw, still nameable.
     return 'minor-endgame';
   }
+
+  // PIECES AGAINST BARE PAWNS — one side has only king and pawns left. Every
+  // class below compares PIECES, so this one reached "rook vs minor" when the
+  // minor was on the same side as the rook (Damiano walk 2026-09-27: rook,
+  // bishop and knight against a king and an h-pawn).
+  const bare = (m: SideMaterial): boolean => m.Q === 0 && m.R === 0 && minors(m) === 0;
+  if (bare(w) !== bare(b)) return 'pieces-vs-pawns';
 
   // Middlegame gate: too much material on the board is a middlegame the
   // tactic/positional path owns — not a teachable ENDING type. Piece count is
