@@ -41,6 +41,8 @@ const NOT_A_CHAT_LANE = new Set<string>([
   // a PHRASING helper — one wording per good-piece reason; the fact itself is
   // `findPieceQuality`, which the chat path already reaches
   'goodPieceClause',
+  // a say-once KEY builder — names an idea for the memory, states nothing
+  'goodPieceIdeaKey',
   // low-level helpers other computers call
   'seeSequence', 'minorCanReachSquare', 'pieceScope', 'pressureCount',
   'forcingPrefix', 'findForcingCandidates',

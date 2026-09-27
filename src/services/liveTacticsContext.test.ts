@@ -415,7 +415,7 @@ describe('the opponent look-ahead is what a null analysis switches off', () => {
     // and an await here would put the alert behind the engine again.
     expect(page).toMatch(/stockfishCache\.get\(args\.fenAfterReply, COACH_TURN_DEPTH\)/);
     // And the lane must actually SPEAK an upcoming threat, not merely receive it.
-    expect(page).toMatch(/tctx\.threats\.length > 0/);
+    expect(page).toMatch(/tctx\.threats\.some\(\(t\) => t\.spoken/);
   });
 });
 
