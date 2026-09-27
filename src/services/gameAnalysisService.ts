@@ -1627,8 +1627,10 @@ export async function analyzeGameOnWorker(
     // A cached best-move search at this position is as good as running one.
     const hit = cached.get(moveIdx);
     if (hit?.bestMove && hit.depth >= BEST_MOVE_DEPTH) {
-      annotations[moveIdx].bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], hit.bestMove) ? null : hit.bestMove;
+      const hitSame = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], hit.bestMove);
+      annotations[moveIdx].bestMove = hitSame ? null : hit.bestMove;
       annotations[moveIdx].bestMoveEval = hit.evaluation;
+      if (hitSame) annotations[moveIdx].classification = 'good';
       continue;
     }
     try {
@@ -1638,9 +1640,10 @@ export async function analyzeGameOnWorker(
       // (David 2026-09-05). The refined best move is re-deepened with the game
       // when it's next opened on a fast engine, same as the eval curve.
       const result = await worker.analyzePosition(fens[moveIdx], BEST_MOVE_DEPTH, BATCH_POSITION_BUDGET_MS);
-      annotations[moveIdx].bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], result.bestMove)
-        ? null
-        : result.bestMove;
+      const same = !!result.bestMove && bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], result.bestMove);
+      annotations[moveIdx].bestMove = same ? null : result.bestMove;
+      // The deeper search played it too — not a mistake (see the review path).
+      if (same) annotations[moveIdx].classification = 'good';
       // Overwrite the shallow bestMoveEval with the deeper-depth value
       // for this position. Same engine, deeper search — keeps the swing
       // math (detectMisses / detectMissedTactics) on the most reliable
@@ -1967,14 +1970,21 @@ async function analyzeGamePositions(
               // The dive already searched this exact position deep — the move it
               // found IS the refinement. Same engine, same depth the verdict was
               // settled at; a second search here bought nothing but wall-clock.
-              bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], reused) ? null : reused;
+              const reusedSame = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], reused);
+              bestMove = reusedSame ? null : reused;
               refinedBestMoveEval = evalBefore;
+              // THE DEEP SEARCH PLAYED IT TOO — the shallow cost was noise, not
+              // a mistake (review walk 2026-09-27: three plies said "that was an
+              // inaccuracy" with no better move to name, because the deeper
+              // engine's best WAS the move played).
+              if (reusedSame) classification = 'good';
             } else try {
               const bestAnalysis = await deepSearch(fens[moveIdx], BEST_MOVE_DEPTH);
               bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], bestAnalysis.bestMove)
                 ? null
                 : bestAnalysis.bestMove;
               refinedBestMoveEval = bestAnalysis.evaluation;
+              if (!!bestAnalysis.bestMove && bestMove === null) classification = 'good';
               if (Number.isFinite(bestAnalysis.depth) && bestAnalysis.depth > 0) {
                 toStore.push({ fen: fens[moveIdx], evaluation: bestAnalysis.evaluation, depth: bestAnalysis.depth, bestMove: bestAnalysis.bestMove });
               }

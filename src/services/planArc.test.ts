@@ -133,3 +133,19 @@ describe('the arc reaches the review narration', () => {
     expect(segs.some((s) => /There it is — their knight on g3/.test(s.narration ?? ''))).toBe(true);
   }, 120000);
 });
+
+describe('an attack on the king needs queens and a middlegame (review walk 2026-09-27)', () => {
+  const aim = { id: 'king-attack', kind: 'king-attack' as const, squares: ['g7'], goal: null, phrase: 'an attack on your king' };
+  const run = (fen: string) => {
+    let st = EMPTY_ARC;
+    const out: string[] = [];
+    for (let i = 0; i < 3; i++) { const r = stepArc(st, [aim], null, fen, 'b', 'opponent'); st = r.next; out.push(...r.events.map((e) => e.kind)); }
+    return out;
+  };
+  it('a rook endgame announces no king attack', () => {
+    expect(run('6k1/5ppp/8/8/8/8/5PPP/3R2K1 b - - 0 40')).not.toContain('emerge');
+  });
+  it('NEGATIVE CONTROL: queens on, move 20 — it still emerges', () => {
+    expect(run('3q2k1/5ppp/8/8/8/8/5PPP/3Q2K1 b - - 0 20')).toContain('emerge');
+  });
+});

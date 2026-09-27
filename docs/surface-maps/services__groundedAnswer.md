@@ -1007,7 +1007,7 @@
 - `src/services/engineDeltaLines.ts:54`
 - `src/services/learnMoveTeaching.ts:125`
 - `src/services/opponentMovePurpose.ts:52`
-- `src/services/reviewFullData.ts:593`
+- `src/services/reviewFullData.ts:605`
 - `src/services/reviewMoveBriefing.ts:237`
 - `src/services/reviewNarrationFidelity.test.ts:218`
 - `src/services/reviewNarrationFidelity.test.ts:227`
@@ -1078,7 +1078,7 @@
 - `src/services/reviewBoardAwareness.test.ts:109`
 - `src/services/reviewFullData.ts:278`
 - `src/services/reviewFullData.ts:325`
-- `src/services/reviewFullData.ts:506`
+- `src/services/reviewFullData.ts:518`
 - `src/services/reviewNarrationFidelity.test.ts:85`
 - `src/services/reviewNarrationFidelity.test.ts:95`
 - `src/services/reviewNarrationFidelity.test.ts:101`

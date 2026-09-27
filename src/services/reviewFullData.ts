@@ -378,10 +378,22 @@ export function computeMoveFacets(
     const fellShort = costsPoints || ctx.classification === 'miss';
     // THE REASON, from the one computer Learn's verdict uses (checks first,
     // then what the line wins) — review used to name the move and stop.
-    const reason = ctx.bestMoveSan && fellShort
-      ? betterMoveReason(fenBefore, san, ctx.bestMoveSan, ctx.bestLineUci, ctx.moverColor)
+    // The better move comes off the engine LINE when the annotation carries no
+    // SAN (review walk 2026-09-27, Carlsen–Aronian: three plies said only
+    // "You: that was an inaccuracy, costing about 0.7 points." — a verdict
+    // with nothing to learn from it).
+    let bestSan = ctx.bestMoveSan;
+    if (!bestSan && fellShort && ctx.bestLineUci[0]) {
+      try {
+        const u = ctx.bestLineUci[0];
+        bestSan = new Chess(fenBefore).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san;
+      } catch { bestSan = null; }
+    }
+    if (bestSan && bestSan === san) bestSan = null;
+    const reason = bestSan && fellShort
+      ? betterMoveReason(fenBefore, san, bestSan, ctx.bestLineUci, ctx.moverColor)
       : null;
-    const better = ctx.bestMoveSan && fellShort ? `the stronger move was ${ctx.bestMoveSan}${reason ? ` — ${reason}` : ''}` : '';
+    const better = bestSan && fellShort ? `the stronger move was ${bestSan}${reason ? ` — ${reason}` : ''}` : '';
     const tail = [whyBad, better].filter(Boolean).join('; ');
     const betterBit = tail ? ` — ${tail}` : '';
     // CARRY THE MOVER'S SUBJECT (David 2026-07-20 opera-ply-14 bug): a quiet move

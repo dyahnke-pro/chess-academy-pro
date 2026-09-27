@@ -283,7 +283,7 @@
 - `src/services/planArc.test.ts:28`
 - `src/services/planArc.ts:48`
 
-### `stepArc` (re-export) — 15 call sites
+### `stepArc` (re-export) — 16 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9599`
 - `src/components/Coach/CoachTeachPage.tsx:9603`
 - `src/services/planArc.test.ts:28`
@@ -298,6 +298,7 @@
 - `src/services/planArc.test.ts:111`
 - `src/services/planArc.test.ts:113`
 - `src/services/planArc.test.ts:117`
+- `src/services/planArc.test.ts:142`
 - `src/services/planArc.ts:192`
 
 ### `EMPTY_ARC` (re-export) — 0 call sites

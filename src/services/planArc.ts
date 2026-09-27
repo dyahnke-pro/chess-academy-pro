@@ -191,12 +191,22 @@ function arrived(aim: Aim, fen: string, color: 'w' | 'b', promoted: string | nul
  */
 export function stepArc(
   state: ArcState,
-  aimsNow: readonly Aim[],
+  aimsIn: readonly Aim[],
   moved: ArcMove | null,
   fenAfter: string,
   color: 'w' | 'b',
   seat: Seat,
 ): { next: ArcState; events: ArcEvent[] } {
+  // AN ATTACK ON THE KING NEEDS THE QUEENS AND A MIDDLEGAME (review walk
+  // 2026-09-27, Carlsen–Aronian: "their plan: an attack on your king" at move 7
+  // and again in a rook endgame). Two pieces near a king is not a plan then.
+  let kingPlanLive = true;
+  try {
+    const b = new Chess(fenAfter);
+    const queens = b.board().flat().filter((c) => c?.type === 'q').length;
+    kingPlanLive = queens >= 2 && b.moveNumber() > 10;
+  } catch { kingPlanLive = false; }
+  const aimsNow = kingPlanLive ? aimsIn : aimsIn.filter((a) => a.kind !== 'king-attack' && a.kind !== 'shield');
   const their = seat === 'opponent';
   const events: ArcEvent[] = [];
   let emerged = state.emerged;
