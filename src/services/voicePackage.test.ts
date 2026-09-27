@@ -602,3 +602,16 @@ describe('"Remember —" is a frame too (walk 2340, move 28)', () => {
     expect(pkg.spoken.match(/unveils a second attacker/g)?.length).toBe(1);
   });
 });
+
+describe('one claim, however it is framed (1200 walk 2026-09-27)', () => {
+  it('"You have a back-rank threat: the king on g8…" then "Their king on g8…" is one claim', () => {
+    const first = 'You have a back-rank threat: the king on g8 has no escape square and the back rank can be invaded from d1.';
+    const pkg = buildVoicePackage([{ text: 'Their king on g8 has no escape square and the back rank can be invaded from d1 — a back-rank weakness leaves the king boxed in.', rank: 'computed' } as never], first);
+    expect(pkg.spoken).not.toMatch(/king on g8 has no escape/);
+  });
+  it('NEGATIVE CONTROL: a different claim about the same king still speaks', () => {
+    const first = 'You have a back-rank threat: the king on g8 has no escape square and the back rank can be invaded from d1.';
+    const pkg = buildVoicePackage([{ text: 'Their king on g8 is short of defenders on the dark squares.', rank: 'computed' } as never], first);
+    expect(pkg.spoken).toMatch(/dark squares/);
+  });
+});

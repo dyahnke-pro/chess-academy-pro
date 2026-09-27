@@ -331,7 +331,14 @@ const sayKey = (s: string): string => {
   // were spoken back to back, because the prefix twin-check never saw them
   // as one). The key drops a leading "watch out / careful / check" so one
   // claim is one key however it is introduced — never down to nothing.
-  const bare = s.replace(/^\s*(?:(?:watch out|careful|check|look out|heads up|remember|note)\s*[—–:,.!-]*\s*)+/i, '');
+  // …and a naming frame ("You have a back-rank threat:") and the owner word
+  // ("the / their / your king on g8…") are not the claim either — the 1200
+  // walk (2026-09-27) heard "You have a back-rank threat: the king on g8 has no
+  // escape square…" and then "Their king on g8 has no escape square…".
+  const bare = s
+    .replace(/^\s*(?:(?:watch out|careful|check|look out|heads up|remember|note)\s*[—–:,.!-]*\s*)+/i, '')
+    .replace(/^\s*you (?:have|'ve got|’ve got) an? [\w -]{2,30}?:\s*/i, '')
+    .replace(/^\s*(?:the|their|your|my)\s+(?=(?:king|queen|rook|bishop|knight|pawn)\b)/i, 'the ');
   const key = bare.toLowerCase().replace(/[^a-z0-9]/g, '');
   return key.length >= 12 ? key : full;
 };
