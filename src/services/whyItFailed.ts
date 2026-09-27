@@ -300,7 +300,11 @@ export function whyItFailed(args: {
   // and Nxd5 won the game).
   const realGuards = guards.filter((g) => !pinnedToMore(after, g, me));
   const pinsTarget = pinnedToMore(after, target.sq, me);
-  if (swap < 0 && swap >= -2 && realGuards.length > 0 && !pinsTarget) {
+  // A CAPTURE'S IDEA IS THE CAPTURE (1200 Sicilian walk 2026-09-27: 17.Bxd4
+  // "That eyed the pawn on g7…", 19.Nxc5 "That eyed the pawn on b7…"). What
+  // the piece happens to see from its new square is not what the student took
+  // for — the capture itself is, and the landing-square rule above answers it.
+  if (!mv.captured && swap < 0 && swap >= -2 && realGuards.length > 0 && !pinsTarget) {
     const guard = leastValuableAttackerOf(after, target.sq);
     if (guard) {
       // The COMPUTED cost of the swap-off, never "the exchange" — that term

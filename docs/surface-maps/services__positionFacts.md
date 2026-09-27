@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1463 lines · 14 exports · 17 importers · 16 tests · 3 audits**
+**1469 lines · 14 exports · 18 importers · 17 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,6 +21,7 @@
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/hooks/useLiveCoach.ts`
 - `src/hooks/usePhaseNarration.ts`
+- `src/services/claimKeyParity.test.ts`
 - `src/services/computerAccuracy.audit.test.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/loopCloses.test.ts`
@@ -75,8 +76,7 @@
 ### `planChangedText` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `clauseText` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9233`
+### `clauseText` (function) — 11 call sites
 - `src/hooks/useLiveCoach.ts:295`
 - `src/hooks/usePhaseNarration.ts:655`
 - `src/services/computerAccuracy.audit.test.ts:113`
@@ -90,7 +90,7 @@
 - `src/services/whyBestMove.ts:103`
 
 ### `computePositionFacts` (function) — 78 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9168`
+- `src/components/Coach/CoachTeachPage.tsx:9176`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:630`
@@ -169,11 +169,13 @@
 - `src/test/teach02Wired.test.ts:136`
 - `src/test/teach02Wired.test.ts:138`
 
-### `conceptInstanceKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:7924`
+### `conceptInstanceKey` (function) — 3 call sites
+- `src/components/Coach/CoachTeachPage.tsx:7927`
+- `src/services/claimKeyParity.test.ts:27`
+- `src/services/claimKeyParity.test.ts:30`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:7941`
+- `src/components/Coach/CoachTeachPage.tsx:7946`
 
 ### `convertKey` (function) — 1 call site
 - `src/services/positionFacts.convertOnce.test.ts:24`
@@ -182,6 +184,7 @@
 
 - `src/hooks/useLiveCoach.needWire.test.tsx`
 - `src/services/bluffDetector.test.ts`
+- `src/services/claimKeyParity.test.ts`
 - `src/services/computerAccuracy.audit.test.ts`
 - `src/services/forkTrick.test.ts`
 - `src/services/latentFork.test.ts`

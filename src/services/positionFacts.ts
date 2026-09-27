@@ -341,6 +341,11 @@ export interface ClauseItem {
    *  The door orders by it. Omitted where the clause carries no material
    *  (a plan, the status band, a habit): those rank below every staked fact. */
   stakes?: FactStakes;
+  /** THE CLAIM this clause makes, when it makes one another lane can make too
+   *  (a tactic concept: `conceptInstanceKey`). The voice package drops a fact
+   *  whose claim was already spoken this game — checked at SPEAK time, so a
+   *  lane that ran before the claim was recorded cannot repeat it. */
+  claim?: string;
 }
 
 /** THE STANDING KINDS — say these once per game, not once per ply.
@@ -1356,6 +1361,7 @@ function buildClauses(a: {
       squares: concept.squares,
       // What the idea wins on its own targets (agent first, then targets).
       stakes: concept.source === 'tactic' ? (exchangeStakes(a.fen, concept.squares.slice(1)) ?? undefined) : undefined,
+      claim: concept.source === 'tactic' ? conceptInstanceKey(concept.id, concept.squares) : undefined,
     });
   }
 

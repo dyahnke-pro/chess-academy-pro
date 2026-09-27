@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**746 lines · 20 exports · 21 importers · 8 tests · 29 audits**
+**746 lines · 20 exports · 22 importers · 9 tests · 29 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,7 @@
 ## Who calls in
 
 - `src/components/Coach/CoachTeachPage.tsx`
+- `src/services/claimKeyParity.test.ts`
 - `src/services/conceptCoverage.report.test.ts`
 - `src/services/conceptEngine.test.ts`
 - `src/services/conceptVocabulary.test.ts`
@@ -147,7 +148,8 @@
 ### `ConceptForBoardOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `conceptForBoard` (function) — 10 call sites
+### `conceptForBoard` (function) — 11 call sites
+- `src/services/claimKeyParity.test.ts:24`
 - `src/services/conceptEngine.test.ts:119`
 - `src/services/conceptEngine.test.ts:126`
 - `src/services/conceptEngine.test.ts:132`
@@ -157,7 +159,7 @@
 - `src/services/conceptEngine.test.ts:206`
 - `src/services/conceptEngine.test.ts:224`
 - `src/services/liveTacticsContext.ts:116`
-- `src/services/positionFacts.ts:749`
+- `src/services/positionFacts.ts:754`
 
 ### `LineInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -192,14 +194,14 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `definitionKey` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7687`
-- `src/components/Coach/CoachTeachPage.tsx:7691`
+- `src/components/Coach/CoachTeachPage.tsx:7689`
+- `src/components/Coach/CoachTeachPage.tsx:7693`
 - `src/services/learnWalkBlumenfeld.test.ts:131`
-- `src/services/positionFacts.ts:976`
-- `src/services/positionFacts.ts:1352`
+- `src/services/positionFacts.ts:981`
+- `src/services/positionFacts.ts:1357`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7688`
+- `src/components/Coach/CoachTeachPage.tsx:7690`
 - `src/services/dnaLineNarrator.ts:185`
 - `src/services/dnaLineNarrator.ts:216`
 - `src/services/dnaLineNarrator.ts:252`
@@ -210,6 +212,7 @@
 
 ## Tests
 
+- `src/services/claimKeyParity.test.ts`
 - `src/services/conceptCoverage.report.test.ts`
 - `src/services/conceptEngine.test.ts`
 - `src/services/conceptVocabulary.test.ts`

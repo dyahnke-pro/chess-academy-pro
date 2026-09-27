@@ -615,3 +615,32 @@ describe('one claim, however it is framed (1200 walk 2026-09-27)', () => {
     expect(pkg.spoken).toMatch(/dark squares/);
   });
 });
+
+describe('the claim ledger — checked at speak time (1200 walk 2026-09-27, ply 37)', () => {
+  const key = 'concept:back_rank:d1,d8,g8';
+  const instant = buildVoicePackage([
+    { kind: 'tactic', text: 'You have a back-rank threat: the king on g8 has no escape square.', claims: [key] },
+  ] as never);
+  const ledger = new Set(spokenSentenceKeys(instant));
+  const late = (claims?: string[]) => buildVoicePackage([
+    { kind: 'computed', text: 'Nxc5 was a blunder — Qxc5 was the move.' },
+    { kind: 'computed', text: 'A boxed-in monarch on the eighth rank can be mated by a rook arriving on d8.', claims },
+  ] as never, undefined, ledger);
+  it('a claim the instant lane spoke is dropped from the late package — only that clause', () => {
+    const pkg = late([key]);
+    expect(pkg.spoken).toMatch(/Qxc5 was the move/);
+    expect(pkg.spoken).not.toMatch(/boxed-in monarch/);
+  });
+  it('NEGATIVE CONTROL: the same words with no claim, or another claim, still speak', () => {
+    expect(late(undefined).spoken).toMatch(/boxed-in monarch/);
+    expect(late(['concept:pin:c6,c8,d8']).spoken).toMatch(/boxed-in monarch/);
+  });
+  it('within one package the second fact with the claim is dropped', () => {
+    const pkg = buildVoicePackage([
+      { kind: 'tactic', text: 'You have a back-rank threat on g8.', claims: [key] },
+      { kind: 'computed', text: 'A boxed-in monarch on the eighth rank.', claims: [key] },
+    ] as never);
+    expect(pkg.spoken).toMatch(/back-rank threat/);
+    expect(pkg.spoken).not.toMatch(/boxed-in/);
+  });
+});

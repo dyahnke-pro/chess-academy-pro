@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**589 lines · 7 exports · 8 importers · 5 tests · 2 audits**
+**606 lines · 7 exports · 8 importers · 5 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,7 +30,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `markableSquares` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10805`
+- `src/components/Coach/CoachTeachPage.tsx:10814`
 - `src/services/voicePackage.test.ts:419`
 - `src/services/voicePackage.test.ts:428`
 - `src/services/voicePackage.test.ts:438`
@@ -41,14 +41,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `VoicePackage` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildVoicePackage` (function) — 73 call sites
+### `buildVoicePackage` (function) — 76 call sites
 - `src/components/Coach/CoachGameReview.tsx:1983`
 - `src/components/Coach/CoachGameReview.tsx:2021`
 - `src/components/Coach/CoachTeachPage.tsx:7558`
-- `src/components/Coach/CoachTeachPage.tsx:8431`
-- `src/components/Coach/CoachTeachPage.tsx:8486`
-- `src/components/Coach/CoachTeachPage.tsx:10771`
-- `src/components/Coach/CoachTeachPage.tsx:10783`
+- `src/components/Coach/CoachTeachPage.tsx:8436`
+- `src/components/Coach/CoachTeachPage.tsx:8491`
+- `src/components/Coach/CoachTeachPage.tsx:10780`
+- `src/components/Coach/CoachTeachPage.tsx:10792`
 - `src/hooks/usePhaseNarration.ts:425`
 - `src/hooks/usePhaseNarration.ts:875`
 - `src/hooks/usePositionNarration.ts:314`
@@ -115,17 +115,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:598`
 - `src/services/voicePackage.test.ts:609`
 - `src/services/voicePackage.test.ts:614`
+- `src/services/voicePackage.test.ts:621`
+- `src/services/voicePackage.test.ts:625`
+- `src/services/voicePackage.test.ts:639`
 
-### `spokenSentenceKeys` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10321`
-- `src/components/Coach/CoachTeachPage.tsx:10793`
+### `spokenSentenceKeys` (function) — 6 call sites
+- `src/components/Coach/CoachTeachPage.tsx:10330`
+- `src/components/Coach/CoachTeachPage.tsx:10802`
 - `src/services/voicePackage.test.ts:525`
 - `src/services/voicePackage.test.ts:534`
 - `src/services/voicePackage.test.ts:546`
+- `src/services/voicePackage.test.ts:624`
 
 ### `describeVoicePackage` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10313`
-- `src/components/Coach/CoachTeachPage.tsx:10817`
+- `src/components/Coach/CoachTeachPage.tsx:10322`
+- `src/components/Coach/CoachTeachPage.tsx:10826`
 - `src/services/voicePackage.test.ts:38`
 
 ## Tests

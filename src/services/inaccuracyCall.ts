@@ -506,6 +506,11 @@ function punishmentOf(
   const plan = planFromUci(fenAfter, replyLineUci, moverColor);
   const lead = plan?.theirs.spokenClauses[0];
   if (lead?.text && !lead.drift && isCostClause(lead.text)) return { why: lead.text, first };
+  // A FORCED ANSWER IS NOT AN OPENING (1200 Sicilian walk 2026-09-27: "Nf6+
+  // was a mistake — it let them in with Kg7"). When the played move gave check,
+  // their first move is the reply the check forced; naming it as what the move
+  // "let them" do is a sentence about nothing.
+  if (/[+#]$/.test(playedSan) && first && !/x/.test(first)) return null;
   return first ? { why: `in with ${first}`, first } : null;
 }
 

@@ -151,10 +151,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticVerification.ts:101`
 
 ### `signedLegalSeeFor` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7776`
-- `src/components/Coach/CoachTeachPage.tsx:7890`
-- `src/components/Coach/CoachTeachPage.tsx:10605`
-- `src/components/Coach/CoachTeachPage.tsx:10624`
+- `src/components/Coach/CoachTeachPage.tsx:7778`
+- `src/components/Coach/CoachTeachPage.tsx:7892`
+- `src/components/Coach/CoachTeachPage.tsx:10614`
+- `src/components/Coach/CoachTeachPage.tsx:10633`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
@@ -223,7 +223,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `bishopHemmedByOwnPawns` (function) — 3 call sites
 - `src/services/positionReadingService.test.ts:895`
-- `src/services/principleAttribution.ts:964`
+- `src/services/principleAttribution.ts:969`
 - `src/services/reviewTeachingPoints.ts:201`
 
 ### `findPieceQuality` (function) — 27 call sites
@@ -339,7 +339,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:128`
 
 ### `namedPawnStructure` (function) — 15 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9025`
+- `src/components/Coach/CoachTeachPage.tsx:9033`
 - `src/services/danyaBehaviors.ts:316`
 - `src/services/danyaDeviceCoverage.test.ts:107`
 - `src/services/danyaDeviceCoverage.test.ts:108`

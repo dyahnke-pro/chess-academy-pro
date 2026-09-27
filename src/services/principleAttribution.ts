@@ -391,17 +391,22 @@ function pvWinsMaterial(chess: Chess, pv: readonly string[] | undefined, mover: 
 /** Replaying `pv` from `after` (opponent to move), does the `grabber`-owned piece
  *  that stands on `startSq` get CAPTURED by the opponent — following it as it
  *  flees? Proves a grab was poisoned: you win the pawn, lose the piece. */
-function grabberCaptured(after: Chess, startSq: Square, grabber: Color, pv: readonly string[] | undefined): boolean {
-  if (!pv || pv.length === 0) return false;
+/** How many times the grabbing piece FLED before the opponent took it, or null
+ *  when the line never takes it. 0 = taken on its landing square (the pawn was
+ *  defended); ≥1 = hunted down (trapped). The voice says which — "gets trapped"
+ *  of a bishop taken on the spot was false (1200 Sicilian walk, 17.Bxd4). */
+function grabberCaptured(after: Chess, startSq: Square, grabber: Color, pv: readonly string[] | undefined): number | null {
+  if (!pv || pv.length === 0) return null;
   const c = new Chess(after.fen());
   let sq: string = startSq;
+  let fled = 0;
   for (const raw of pv.slice(0, 6)) {
     let m: Move;
-    try { m = c.move(raw.replace(/[?!]+$/, '')); } catch { return false; }
-    if (m.color === grabber) { if (m.from === sq) sq = m.to; }   // the grabber fled
-    else if (m.to === sq) return true;                          // the opponent took it
+    try { m = c.move(raw.replace(/[?!]+$/, '')); } catch { return null; }
+    if (m.color === grabber) { if (m.from === sq) { sq = m.to; fled++; } } // the grabber fled
+    else if (m.to === sq) return fled;                                      // the opponent took it
   }
-  return false;
+  return null;
 }
 /** The file `best` (a pawn capture AWAY from the centre) opens for a `mover` rook
  *  or queen: the pawn vacates its file, that file had a mover pawn before and
@@ -1008,9 +1013,10 @@ const DETECTORS: Detector[] = [
     const { last, opp } = c;
     if (last.captured !== 'p' || last.piece === 'p' || last.piece === 'k') return null;
     if (!pvWinsMaterial(c.after, c.pvP, opp)) return null;
-    if (!grabberCaptured(c.after, last.to, last.color, c.pvP)) return null;
+    const fled = grabberCaptured(c.after, last.to, last.color, c.pvP);
+    if (fled === null) return null;
     if (c.pvB && pvWinsMaterial(c.afterBest, c.pvB, opp)) return null;
-    return att('poisoned-pawn', 4, { squares: [last.to], moves: [], pvMoves: (c.pvP ?? []).slice(0, 4) }, { piece: PNAME[last.piece], square: last.to });
+    return att('poisoned-pawn', 4, { squares: [last.to], moves: [], pvMoves: (c.pvP ?? []).slice(0, 4) }, { piece: PNAME[last.piece], square: last.to, fled });
   },
   // 32. Recaptured the wrong way (eval-gated, David 2026-09-06: "capturing with
   // the B or G pawn was best because it opens a lane for the rook"). PATTERN: a

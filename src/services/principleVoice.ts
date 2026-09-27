@@ -424,6 +424,15 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       return s[v % s.length];
     }
     case 'poisoned-pawn': {
+      // Taken on its landing square: the pawn was DEFENDED, nothing was hunted.
+      if (f.fled === 0) {
+        const d = [
+          `That pawn was defended: your ${f.piece} takes on ${f.square} and is taken on the spot — it cost you far more than a pawn.`,
+          `Count the guards before you grab: the ${f.piece} that took on ${f.square} is captured straight away, and the pawn was never worth it.`,
+          `The pawn on ${f.square} was covered — your ${f.piece} goes the moment it lands, a piece for a pawn.`,
+        ];
+        return d[v % d.length];
+      }
       const s = [
         `That pawn was poisoned: your ${f.piece} takes on ${f.square} and then gets trapped — the engine wins it straight back, and it cost you far more than a pawn.`,
         `A pawn grab with the ${f.piece} that ends badly — chased down after ${f.square}, it's snared for more than it took.`,

@@ -17,3 +17,15 @@
 
 ## Re-walk 2
 "Modern Variations" gone (the move-2 beat is now the principle behind Nf3); ply 49 reads "Qxc8 was the move… Now, you'd love to play the queen taking on c8 — but they take back and it falls apart", so the two moments are distinct. The back-rank line still repeats at ply 37. Diagnosis: the concept instance key the instant lane now writes DOES match the composer's (squares g8/d8/d1 on both), but the late composer snapshots `alreadySaid` before the instant lane records the tactic — an ordering race, not a key mismatch. OPEN: record the instant lane's claims before the late composer reads the ledger.
+
+## Re-walk 3 — the claim ledger
+**~46 of 50 distinct lines clean (92%)** (the ply-15 dictation-turn chat answer excluded, as before). Ply 37 now says the back-rank threat ONCE: every fact carries the claim it makes (`VoiceFact.claims`, `conceptInstanceKey`), and the voice package drops a fact whose claim is already in the game's spoken ledger at SPEAK time — so the lane that computed first cannot repeat a claim another lane spoke first. `claimKeyParity.test.ts` proves both lanes key the back-rank geometry identically on this position.
+
+Flagged this run, fixed after it (each fenced on the real position in `replayFence.sicilian1200.test.ts`, real Stockfish lines, every fix negative-controlled by reverting it):
+
+| ply | flag | root cause | fix |
+|---|---|---|---|
+| 33 | "your bishop takes on d4 and then gets trapped" — it was taken on the spot | poisoned-pawn never asked whether the grabber FLED | the detector counts flights; 0 = "that pawn was defended … taken on the spot" |
+| 33, 37 | "That eyed the pawn on g7/b7, but the king/queen holds it" on two captures | the geometry reader took what the piece sees from its new square as the move's idea | a capture's idea is the capture; the eyed branch is for non-captures |
+| 47 | "Nf6+ was a mistake — it let them in with Kg7" | the fallback named the first reply even when the check forced it | a forced non-capture reply to a check is not named |
+| 15 | the dictation "play e6" answered as a position read (Look ahead + Material is even) | instrument timing, intermittent | OPEN question (routing), not narration |

@@ -109,6 +109,14 @@ export type VoiceFactKind =
 
 export interface VoiceFact {
   kind: VoiceFactKind;
+  /** THE CLAIMS THIS FACT MAKES, as keys computed where the fact is computed —
+   *  a tactic is `concept:<type>:<squares>`, a positional idea is its idea key.
+   *  The sentence ledger below catches the same WORDS twice; this catches the
+   *  same FACT in different words ("You have a back-rank threat: the king on
+   *  g8…" / "Their king on g8 has no escape square…", 1200 walk 2026-09-27).
+   *  A fact whose claim is already in the game ledger is dropped; a kept fact
+   *  writes its claims there. Bookkeeping on keys, never a read of prose (G0). */
+  claims?: readonly string[];
   /** Spoken VERBATIM. If it cannot be said to a student out loud, it does not
    *  belong in a package — put it in the caller's own prompt/log instead. */
   text: string;
@@ -343,6 +351,10 @@ const sayKey = (s: string): string => {
   return key.length >= 12 ? key : full;
 };
 
+/** A claim's key in the ledger. Namespaced with a colon, which `sayKey` never
+ *  produces, so a claim can never collide with a sentence. */
+const claimKey = (c: string): string => `claim:${c}`;
+
 export function buildVoicePackage(
   facts: VoiceFact[],
   /** WHAT THIS TURN HAS ALREADY SAID OUT LOUD.
@@ -482,6 +494,7 @@ export function buildVoicePackage(
       dropped.push({ fact: f, reason: 'the look-ahead had something about THIS board' });
       continue;
     }
+    if (f.claims?.some((c) => seen.has(claimKey(c)))) { dropped.push({ fact: f, reason: 'claim already said' }); continue; }
     const result = verify(f);
     if ('reason' in result) { dropped.push({ fact: f, reason: result.reason }); continue; }
     // Same sentence from two producers is one sentence to the ear — and the two
@@ -533,6 +546,7 @@ export function buildVoicePackage(
     // names a square — so it cannot collapse two genuinely different warnings
     // that happen to open "Watch out —".
     seen.add(key);
+    for (const c of f.claims ?? []) seen.add(claimKey(c));
     kept.push({ ...f, text: fresh.join(' ') });
   }
 
@@ -575,7 +589,10 @@ export function buildVoicePackage(
  *  `buildVoicePackage`, so a key added here is a key that suppresses there. */
 export function spokenSentenceKeys(pkg: { kept: VoiceFact[] }): string[] {
   const out: string[] = [];
-  for (const f of pkg.kept) for (const s of sentencesOf(f.text)) out.push(sayKey(s));
+  for (const f of pkg.kept) {
+    for (const s of sentencesOf(f.text)) out.push(sayKey(s));
+    for (const c of f.claims ?? []) out.push(claimKey(c));
+  }
   return out;
 }
 
