@@ -28,7 +28,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `quietMovePoint` (function) — 3 call sites
-- `src/services/playCommentary.ts:961`
+- `src/services/playCommentary.ts:967`
 - `src/services/reviewMoveTeaching.unpin.test.ts:11`
 - `src/services/reviewMoveTeaching.unpin.test.ts:15`
 

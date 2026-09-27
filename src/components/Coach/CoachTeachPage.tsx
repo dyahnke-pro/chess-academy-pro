@@ -26,7 +26,7 @@ import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../typ
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { transferClause, recordMotif, withTransfer } from '../../services/motifLedger';
 import { buildVoicePackage, describeVoicePackage, markableSquares, spokenSentenceKeys, type VoicePackage, type VoiceFactKind } from '../../services/voicePackage';
-import { buildPositionalRead } from '../../services/positionalRead';
+import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { curatedBeatAt } from '../../services/curatedBeatSource';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
 import type { CommentaryKind } from '../../services/playCommentary';
@@ -8375,7 +8375,7 @@ export function CoachTeachPage(): JSX.Element {
         const eligible = quietTurn ? hits : hits.filter((h) => BEHAVIOR_ALWAYS_RIDE.has(h.id));
         const hit = behaviorSchedulerRef.current.pick(eligible);
         if (hit) {
-          behaviorLine = hit.fact; behaviorSquares = hit.squares; behaviorClaims = hit.keys.filter((k) => /^(?:file-[a-h]|(?:passer|break)-[a-h][1-8])$/.test(k)); factLines.push(`Behavior (${hit.id}): ${hit.fact}`);
+          behaviorLine = hit.fact; behaviorSquares = hit.squares; behaviorClaims = hit.keys.filter((k) => /^(?:castle-now|file-[a-h]|(?:passer|break)-[a-h][1-8])$/.test(k)); factLines.push(`Behavior (${hit.id}): ${hit.fact}`);
           if (hit.id === 'pawn-break') for (const sq of hit.squares) standingRef.current.remember(`student-break-${sq}`);
           for (const k of hit.keys) positionalSaidRef.current.add(k);
         }
@@ -10580,7 +10580,15 @@ export function CoachTeachPage(): JSX.Element {
                       replyPvUci: mid.topLines?.[0]?.moves ?? [],
                       replySan: reply ?? null,
                       cpLoss,
-                      moverEvalAfterCp: bothCp ? mid.evaluation * sign : null,
+                      // STILL WINNING READS OFF THE POSITION AFTER THE MOVE,
+                      // whatever the read BEFORE it was (hand walk 1690,
+                      // 2026-09-27: 46.Rxc5 left White +9 — the mate the engine
+                      // saw before it was the only reason `bothCp` was false —
+                      // and was graded "a blunder"). A mate FOR the mover is
+                      // winning; a mate against them is not.
+                      moverEvalAfterCp: !mid.isMate
+                        ? mid.evaluation * sign
+                        : mid.mateIn !== null && mid.mateIn * sign > 0 ? 100_000 : null,
                       studentColor: playerColor,
                       ...mateContext(preStudentRead, mid, playerColor),
                     });
@@ -10701,8 +10709,16 @@ export function CoachTeachPage(): JSX.Element {
                           const was = passed(fenBefore);
                           const fresh = [...passed(fenAfterReply)].filter((sq) => !was.has(sq) && ![...was].some((w) => w[0] === sq[0]));
                           if (fresh.length > 0) return `${move.san} was a breakthrough — they took the ${what}, and now your ${fresh[0][0]}-pawn is passed.`;
-                          const hasRook = new Chess(fenAfterReply).board().flat().some((c) => c?.type === 'r' && c.color === me);
-                          if (opened.length > 0 && hasRook) return `${move.san} was a gambit — they took the ${what}, and in return the ${opened[0]}-file is open for your rook.`;
+                          // OPEN ONLY IF IT IS OPEN, AND ONLY FOR A ROOK THAT
+                          // GETS THERE (hand walk 1690, 2026-09-27: after 24.e5
+                          // dxe5 "the e-file is open for your rook" — Black's
+                          // pawns still sat on e7 and e5).
+                          const file = opened[0];
+                          const theirPawnOnFile = file !== undefined && new Chess(fenAfterReply).board().flat()
+                            .some((c) => c?.type === 'p' && c.color !== me && c.square[0] === file);
+                          if (file !== undefined && rookReachesFile(fenAfterReply, me, file)) {
+                            return `${move.san} was a gambit — they took the ${what}, and in return the ${file}-file is ${theirPawnOnFile ? 'half-open' : 'open'} for your rook.`;
+                          }
                           if (opened.length > 0) return null;
                           return `${move.san} was a gambit — they took the ${what}, and the engine rates the trade of it for time as sound.`;
                         } catch { return null; }

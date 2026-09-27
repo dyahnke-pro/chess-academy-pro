@@ -999,6 +999,11 @@ const DETECTORS: Detector[] = [
     // and trade rules name.
     const prevMove = c.history[c.history.length - 2];
     if (last.captured && prevMove?.captured && prevMove.to === last.to) return null;
+    // AN EVEN TRADE INVESTS NOTHING (hand walk 1690, 2026-09-27: 11.Bxg7 read
+    // "the attack was overvalued: Bxg7 commits material" — bishop for bishop;
+    // the material at stake was the knight left on c3, which the loose-piece
+    // and ignored-threat rules name).
+    if (last.captured && VAL[last.captured] >= VAL[last.piece]) return null;
     const offered = hangsBy(c.after, last.to) > 0;
     if (!offered && !isForcing(last.san)) return null;       // an aggressive commitment
     // A piece that can simply be TAKEN on the square it landed on is not an

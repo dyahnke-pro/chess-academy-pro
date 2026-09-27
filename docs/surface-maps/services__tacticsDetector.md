@@ -67,8 +67,8 @@
 - `src/services/discussionPractice.ts:143`
 - `src/services/liveNoteTruth.test.ts:59`
 - `src/services/liveTacticsContext.ts:361`
-- `src/services/lookaheadPlan.ts:1167`
-- `src/services/lookaheadPlan.ts:1230`
+- `src/services/lookaheadPlan.ts:1156`
+- `src/services/lookaheadPlan.ts:1219`
 - `src/services/misconceptionClassifier.ts:113`
 - `src/services/misconceptionClassifier.ts:264`
 - `src/services/mistakeNarration.ts:395`
@@ -82,9 +82,9 @@
 - `src/services/pinGeometry.test.ts:134`
 - `src/services/pinGeometry.test.ts:141`
 - `src/services/pinGeometry.test.ts:142`
-- `src/services/playCommentary.ts:745`
-- `src/services/pvPlayback.ts:324`
-- `src/services/pvPlayback.ts:344`
+- `src/services/playCommentary.ts:751`
+- `src/services/pvPlayback.ts:319`
+- `src/services/pvPlayback.ts:339`
 - `src/services/relationClaimCost.report.test.ts:52`
 - `src/services/replayFence.alekhine1500.test.ts:35`
 - `src/services/replayFence.alekhine1500.test.ts:85`

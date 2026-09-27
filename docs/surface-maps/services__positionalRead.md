@@ -33,7 +33,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `PositionalObservation` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `rookReachesFile` (function) — 1 call site
+### `rookReachesFile` (function) — 2 call sites
+- `src/components/Coach/CoachTeachPage.tsx:10719`
 - `src/services/danyaBehaviors.ts:632`
 
 ### `castleIsOneMoveAway` (function) — 1 call site
@@ -42,9 +43,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `readPosition` (function) — 46 call sites
 - `src/services/boardPlan.ideaKey.test.ts:13`
 - `src/services/groundedAnswer.ts:1397`
-- `src/services/lookaheadPlan.ts:956`
-- `src/services/lookaheadPlan.ts:1225`
-- `src/services/lookaheadPlan.ts:1579`
+- `src/services/lookaheadPlan.ts:945`
+- `src/services/lookaheadPlan.ts:1214`
+- `src/services/lookaheadPlan.ts:1568`
 - `src/services/narrationAdversarial.test.ts:87`
 - `src/services/narrationAdversarial.test.ts:173`
 - `src/services/positionReadComposer.ts:128`

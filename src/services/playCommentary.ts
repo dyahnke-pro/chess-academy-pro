@@ -107,7 +107,7 @@ function withTurn(fen: string, color: 'w' | 'b'): string {
  *  actually be exploited"). Can a student slider of `types` reach a square from
  *  which it ATTACKS one of the aligned pieces — already, or within ~2 moves? An
  *  alignment no slider can contest is tidy geometry, not a threat. */
-function toolCanContest(fen: string, aSq: Square, bSq: Square, me: 'w' | 'b', types: PieceSymbol[]): PieceSymbol | null {
+function toolCanContest(fen: string, aSq: Square, bSq: Square, me: 'w' | 'b', types: PieceSymbol[], skipKingEnd = false): PieceSymbol | null {
   // A move that TAKES one of the aligned pair has destroyed the alignment, not
   // exploited it (hand walk 2026-09-24: Rd7 + Qd6 "line up on the d-file" was
   // "contested" by Rxd7 then Rxd6 — the rook ate the geometry it was naming).
@@ -137,7 +137,13 @@ function toolCanContest(fen: string, aSq: Square, bSq: Square, me: 'w' | 'b', ty
   const VAL = CAPTURE_VALUE;
   const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
   const contests = (c: Chess): PieceSymbol | null => {
-    for (const sq of [...c.attackers(aSq, me), ...c.attackers(bSq, me)]) {
+    // WITH A PIECE BETWEEN, HITTING THE KING IS ONLY A CHECK (hand walk 1690,
+    // 2026-09-27: queen d8 / rook f8 / king g8 "line up on the 8th rank, and
+    // you have a queen that moves along it" — the only standpoint was h8,
+    // beside the king, and the rook blocks any x-ray to the queen). The
+    // alignment is used only by hitting the OTHER end through the gap.
+    const ends = [aSq, bSq].filter((e) => !(skipKingEnd && c.get(e)?.type === 'k'));
+    for (const sq of ends.flatMap((e) => c.attackers(e, me))) {
       const p = c.get(sq);
       if (!p || !types.includes(p.type) || !onLine(sq)) continue;
       const hitters = c.attackers(sq, them);
@@ -280,7 +286,7 @@ function findAlignmentSeed(
       // EXPLOITABILITY (David 2026-08-23): the tool must be able to CONTEST the
       // line — attack an aligned piece now or within ~2 moves. "You have a rook
       // that moves along it" is a lie if no rook can ever get onto that line.
-      const contester = toolCanContest(fen, a.square as Square, b.square as Square, me, toolKinds);
+      const contester = toolCanContest(fen, a.square as Square, b.square as Square, me, toolKinds, betweenCount(a, b) === 1);
       if (!contester) continue;
       tool = NAME[contester as string] ?? tool;
       // An alignment is only worth a word if a slider can actually GET on the

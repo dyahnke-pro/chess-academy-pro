@@ -1390,6 +1390,27 @@ export function opponentIntentRead(fen: string, studentColor: Color | 'white' | 
       // "Bxf2+ that just drops the bishop" false-positive). Pin-aware so a
       // pinned student recapturer can't be counted (2026-09-13 sweep).
       if (!landingIsSafe(after.fen(), mv.to)) continue;
+      // …AND NOT BE TRADED OFF. A capture of the forker by an equal-or-cheaper
+      // piece nets the student ≥ 0 and dissolves the fork (hand walk 1690,
+      // 2026-09-27: "they want Qf4, forking your queen on h6 and your knight
+      // on e3" — Qxf4 simply trades the forking queen). SEE reads 0 for that
+      // trade, which is why the safety test above lets it through.
+      // The trade must leave nothing behind: after their cheapest recapture,
+      // the recapturing piece may not hit a piece worth more than it (the
+      // Carlsen–Aronian …Ne4+ Nxe4 dxe4 lands a pawn on the queen — a real fork).
+      const tradedOff = after.moves({ verbose: true }).some((r) => {
+        if (r.to !== mv.to || !r.captured || (PIECE_VALUE[r.piece] ?? 99) > (PIECE_VALUE[mv.piece] ?? 0)) return false;
+        let t: Chess;
+        try { t = new Chess(after.fen()); t.move(r); } catch { return false; }
+        const recaps = t.moves({ verbose: true }).filter((x) => x.to === mv.to && !!x.captured)
+          .sort((a, b) => (PIECE_VALUE[a.piece] ?? 0) - (PIECE_VALUE[b.piece] ?? 0));
+        if (recaps.length === 0) return true;
+        try { t.move(recaps[0]); } catch { return false; }
+        const hitter = PIECE_VALUE[recaps[0].piece] ?? 0;
+        return !t.board().flat().some((c) => !!c && c.color === student && c.type !== 'k'
+          && (PIECE_VALUE[c.type] ?? 0) > hitter && t.attackers(c.square, opp).includes(mv.to));
+      });
+      if (tradedOff) continue;
       const hitFen = after.fen().split(' '); hitFen[1] = opp; // keep opp as attacker to read attacks
       let probe: Chess;
       try { probe = new Chess(hitFen.join(' ')); } catch { continue; }

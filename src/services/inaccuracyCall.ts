@@ -338,8 +338,9 @@ export function callInaccuracyDetailed(args: {
    *  blunder regardless of the centipawns, and so must this. */
   missedMate?: number | null;
   allowedMate?: number | null;
-  /** The mover's eval after the move (their perspective), when a real
-   *  centipawn read — null/absent when unknown or a mate score. */
+  /** The mover's eval after the move (their perspective): a real centipawn
+   *  read, a large positive number when the mover now has a forced mate, and
+   *  null/absent when unknown or when the mate is against them. */
   moverEvalAfterCp?: number | null;
   /** Whose move it was. */
   side: 'student' | 'coach';

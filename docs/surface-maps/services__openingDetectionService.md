@@ -267,7 +267,7 @@
 - `src/services/openingFactChains.ts:141`
 - `src/services/openingGenerator.ts:3191`
 - `src/services/principleAttribution.section14.test.ts:90`
-- `src/services/principleAttribution.ts:1146`
+- `src/services/principleAttribution.ts:1151`
 
 ### `ForkBranch` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -373,8 +373,8 @@
 
 ### `studentSideForPlay` (function) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:5288`
-- `src/components/Coach/CoachTeachPage.tsx:12777`
-- `src/components/Coach/CoachTeachPage.tsx:12827`
+- `src/components/Coach/CoachTeachPage.tsx:12793`
+- `src/components/Coach/CoachTeachPage.tsx:12843`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:59`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:60`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:64`

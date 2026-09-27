@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1698 lines · 25 exports · 14 importers · 7 tests · 0 audits**
+**1687 lines · 26 exports · 14 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -36,6 +36,10 @@
 ### `waypointsOf` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `tacticAim` (function) — 2 call sites
+- `src/services/replayFence.modern1690.test.ts:77`
+- `src/services/replayFence.modern1690.test.ts:79`
+
 ### `tacticWord` (function) — 24 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7762`
 - `src/components/Coach/CoachTeachPage.tsx:7837`
@@ -53,11 +57,11 @@
 - `src/services/pvPlayback.test.ts:297`
 - `src/services/pvPlayback.test.ts:299`
 - `src/services/pvPlayback.test.ts:300`
-- `src/services/pvPlayback.ts:235`
-- `src/services/pvPlayback.ts:645`
-- `src/services/pvPlayback.ts:665`
-- `src/services/pvPlayback.ts:702`
-- `src/services/pvPlayback.ts:795`
+- `src/services/pvPlayback.ts:230`
+- `src/services/pvPlayback.ts:640`
+- `src/services/pvPlayback.ts:660`
+- `src/services/pvPlayback.ts:697`
+- `src/services/pvPlayback.ts:790`
 - `src/services/reviewMoveBriefing.ts:250`
 - `src/services/tacticVocabulary.ts:95`
 - `src/services/teachingSelector.ts:347`
@@ -233,10 +237,10 @@
 - `src/services/planMarks.test.ts:37`
 
 ### `isCostClause` (function) — 8 call sites
-- `src/services/concessionBeat.ts:430`
+- `src/services/concessionBeat.ts:446`
 - `src/services/inaccuracyCall.ts:263`
 - `src/services/inaccuracyCall.ts:276`
-- `src/services/inaccuracyCall.ts:570`
+- `src/services/inaccuracyCall.ts:571`
 - `src/services/learnWalkBlumenfeld.test.ts:174`
 - `src/services/learnWalkBlumenfeld.test.ts:175`
 - `src/services/learnWalkBlumenfeld.test.ts:176`
@@ -246,11 +250,11 @@
 - `src/components/Coach/CoachTeachPage.tsx:9652`
 - `src/services/coachLaneWiring.test.ts:36`
 - `src/services/computedVoiceAudit.report.test.ts:220`
-- `src/services/concessionBeat.ts:424`
+- `src/services/concessionBeat.ts:440`
 - `src/services/forkNarration.ts:106`
 - `src/services/inaccuracyCall.ts:219`
 - `src/services/inaccuracyCall.ts:223`
-- `src/services/inaccuracyCall.ts:568`
+- `src/services/inaccuracyCall.ts:569`
 - `src/services/lookaheadPlan.test.ts:262`
 - `src/services/lookaheadPlan.test.ts:270`
 - `src/services/lookaheadPlan.test.ts:275`
@@ -313,6 +317,7 @@
 - `src/services/narrationAdversarial.test.ts`
 - `src/services/planArc.test.ts`
 - `src/services/planMarks.test.ts`
+- `src/services/replayFence.modern1690.test.ts`
 - `src/services/reviewWalk900.test.ts`
 
 ## Audits that reach it

@@ -234,7 +234,12 @@ export function readTrade(
       squares: [mv.to], key: 'trade:ahead', moverIsStudent,
     };
   }
-  if (edge <= -2) {
+  // "KEEP PIECES ON" IS A VERDICT THE ENGINE MUST AGREE WITH (hand walk 1690,
+  // 2026-09-27: 29.Nxd7 — the engine's best move by 2.6 pawns, the first step
+  // of Nxd7 … Bxe6+ … Nxf8 — heard "trades pieces while you're behind, so keep
+  // pieces on"). The count is a rule of thumb; a trade that costs nothing is
+  // not the mistake the rule warns about.
+  if (edge <= -2 && (!you || (cpLoss !== null && cpLoss >= 30))) {
     return {
       call: 'behind',
       text: you

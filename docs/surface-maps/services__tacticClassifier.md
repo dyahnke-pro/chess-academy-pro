@@ -46,7 +46,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `classifyPosition` (function) — 30 call sites
 - `src/components/Coach/CoachGamePage.tsx:3336`
 - `src/services/missedTacticService.ts:755`
-- `src/services/pvPlayback.ts:389`
+- `src/services/pvPlayback.ts:384`
 - `src/services/tacticClassifier.test.ts:32`
 - `src/services/tacticClassifier.test.ts:40`
 - `src/services/tacticClassifier.test.ts:47`

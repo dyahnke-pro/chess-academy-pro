@@ -22,6 +22,7 @@ import { Chess, type Square } from 'chess.js';
 import { computePlyFacts } from './pvPlayback';
 import { describeStructure } from './boardStructure';
 import { detectTactics } from './tacticsDetector';
+import { PATTERN_SPEECH, patternAim } from './tacticVocabulary';
 import type { PvLine, PvPly, PrevCaptureContext } from './pvPlayback';
 import { aimsOf, stepArc, EMPTY_ARC, type ArcEvent, type ArcMove, type Seat } from './planArc';
 // The PLAN ACROSS MOVES (planArc) — the memory this reader never had. Exposed
@@ -32,25 +33,6 @@ type ChessCtor = InstanceType<typeof Chess>;
 
 const PIECE_WORD: Record<string, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen',
-};
-
-/** Tactic names in English.
- *
- *  `tacticsDetector` types are snake_case identifiers, and the first version of
- *  this spoke them raw — a 60-gem sweep produced "You want to land a
- *  mate_threat", which is the coach reading a variable name aloud. A detector
- *  enum is a program's word for a thing, never a person's. */
-const TACTIC_WORD: Record<string, string> = {
-  fork: 'fork',
-  pin: 'pin',
-  skewer: 'skewer',
-  discovery: 'discovered attack',
-  back_rank: 'back-rank threat',
-  mate_threat: 'mating threat',
-  removal_of_guard: 'removal of the defender',
-  trapped_piece: 'piece trap',
-  double_check: 'double check',
-  overload: 'overloaded defender',
 };
 
 /**
@@ -114,9 +96,16 @@ function listWithArticles(words: readonly string[]): string {
 
 /** Speakable name for a tactic, or null when it has none — an unknown tactic
  *  is dropped rather than read out as its identifier. */
+/** Tactic names and aims in English come from the ONE table,
+ *  `tacticVocabulary.PATTERN_SPEECH` — never a snake_case enum read aloud
+ *  ("You want to land a mate_threat"), never a hand-copied list. */
+export function tacticAim(kind: string | null): string | null {
+  return kind && kind !== 'battery' ? patternAim(kind) : null;
+}
+
 export function tacticWord(kind: string | null): string | null {
-  if (!kind) return null;
-  return TACTIC_WORD[kind] ?? null;
+  if (!kind || kind === 'battery' || kind === 'none') return null;
+  return (PATTERN_SPEECH as Record<string, { word: string }>)[kind]?.word ?? null;
 }
 
 /** How close a landing square has to be to a king to count as "coming at it".
@@ -752,8 +741,8 @@ export function describePlan(
   if (plan.promotes) {
     add(150, `push a pawn through to a new queen on ${plan.promotes}`, [plan.promotes]);
   }
-  const tactic = tacticWord(plan.tactic);
-  if (tactic) add(90, `land a ${tactic}`, plan.tacticSquare ? [plan.tacticSquare] : []);
+  const tactic = tacticAim(plan.tactic);
+  if (tactic) add(90, tactic, plan.tacticSquare ? [plan.tacticSquare] : []);
   // THE REROUTE — the most characteristic thing a coach says about a line, and
   // the plan had the data and no sentence for it: `headingFor` kept the
   // destinations and lost the journey, so a three-move regrouping read as two

@@ -388,7 +388,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // 1380 re-walk both sides had three minors out and only Black had
       // castled, and the coach told White to get the pieces out.
       if (theyLead - iLag >= 2 && !mine.castled && theirs.developedMinors > mine.developedMinors) {
-        return { fact: `You're behind in development — get the minor pieces out and castle before the position sharpens.`, squares: [], keys: ['student-development'] };
+        return { fact: `You're behind in development — get the minor pieces out and castle before the position sharpens.`, squares: [], keys: ['student-development', 'student-king-centre', 'castle-now'] };
       }
       return null;
     },
@@ -516,7 +516,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       };
       const live = passers.find(canAdvance);
       if (live) {
-        return { fact: `The passed pawn on ${live} is a long-term trump — support it and push.`, squares: [live], keys: [`passer-${live}`] };
+        return { fact: `The passed pawn on ${live} is a long-term trump — support it and push.`, squares: [live], keys: [`passer-${live}`, `student-passer-${live[0]}`] };
       }
       return null;
     },
@@ -681,7 +681,14 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // "IN THEIR CAMP" MEANS THEIR HALF (hand walk 2026-09-24: "c4 is a hole in
       // their camp" — Black's weak c4 sits on White's side of the board).
       const inTheirHalf = (sq: string): boolean => (opp === 'b' ? Number(sq[1]) >= 5 : Number(sq[1]) <= 4);
-      const hole = holes.find((h) => inTheirHalf(h) && minorCanReachSquare(fen, h, student));
+      // A HOLE AN ENEMY MINOR COVERS IS NOT A HOME (hand walk 1690, 2026-09-27:
+      // "h6 is a hole … can't be kicked" after 1.d4 g6 2.e4 Bg7 — the g7
+      // bishop takes anything that lands there). No pawn can kick it, but a
+      // bishop or knight can simply take it, so it is no outpost.
+      const board = new Chess(fen);
+      const coveredByMinor = (sq: string): boolean =>
+        board.attackers(sq as Square, opp).some((a) => { const t = board.get(a)?.type; return t === 'n' || t === 'b'; });
+      const hole = holes.find((h) => inTheirHalf(h) && !coveredByMinor(h) && minorCanReachSquare(fen, h, student));
       if (hole) {
         return { fact: `${hole} is a hole in their camp — a piece planted there can't be kicked.`, squares: [hole] };
       }

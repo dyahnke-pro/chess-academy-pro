@@ -26,6 +26,7 @@ import { describeStructure } from './boardStructure';
 import { legalSeeGain, legalSeeGainFor } from './positionReadingService';
 import type { StockfishAnalysis } from '../types';
 import { MATERIAL_VALUE } from './pieceValues';
+import { patternWord, patternAim } from './tacticVocabulary';
 
 /** Face values for the recapture-net calc (mirrors positionReadingService). */
 // MATERIAL semantics (k: 0 — a king is never won). One home: `pieceValues.ts`.
@@ -226,14 +227,8 @@ export interface PvEngine {
  *  that voices tacticLanded MUST route through this. A clean single-word type
  *  (fork/pin/skewer) maps to itself; an unknown type falls back to
  *  underscores-to-spaces so a NEW enum never leaks raw. */
-const TACTIC_WORD: Record<string, string> = {
-  fork: 'fork', pin: 'pin', skewer: 'skewer', discovery: 'discovered attack',
-  back_rank: 'back-rank threat', mate_threat: 'mating threat',
-  removal_of_guard: 'removal of the defender', trapped_piece: 'piece trap',
-  double_check: 'double check', overload: 'overloaded defender',
-};
 export function tacticWord(type: string): string {
-  return TACTIC_WORD[type] ?? type.replace(/_/g, ' ');
+  return patternWord(type);
 }
 
 export interface PlyFacts {
@@ -642,7 +637,7 @@ export function renderPlyFactLine(ply: PvPly): string | null {
   if (f.captured) bits.push(`takes the ${f.captured}`);
   if (f.isCheck) bits.push('with check');
   if (f.promotion) bits.push(`promoting to a ${f.promotion}`);
-  if (f.tacticLanded) bits.push(`landing a ${tacticWord(f.tacticLanded)}`);
+  if (f.tacticLanded) bits.push(patternAim(f.tacticLanded, 'ing') ?? `landing a ${tacticWord(f.tacticLanded)}`);
   if (f.outpostGained) bits.push(`planting an outpost on ${f.outpostGained}`);
   if (f.newPassedPawns.length > 0) bits.push(`creating a passed pawn on ${f.newPassedPawns[0]}`);
   if (f.passedPawnsHanded.length > 0) bits.push(`leaving the other side a passed pawn on ${f.passedPawnsHanded[0]}`);
@@ -662,7 +657,7 @@ export function plyFactsString(ply: PvPly): string | null {
   if (f.isMate) parts.push('checkmate');
   else if (f.isCheck) parts.push('check');
   if (f.promotion) parts.push(`promotes to ${f.promotion}`);
-  if (f.tacticLanded) parts.push(`lands a ${tacticWord(f.tacticLanded)}`);
+  if (f.tacticLanded) parts.push(patternAim(f.tacticLanded, 'third') ?? `lands a ${tacticWord(f.tacticLanded)}`);
   if (f.outpostGained) parts.push(`outpost established on ${f.outpostGained}`);
   if (f.newPassedPawns.length > 0) parts.push(`creates a passed pawn on ${f.newPassedPawns.join(', ')}`);
   if (f.passedPawnsHanded.length > 0) parts.push(`leaves the other side a passed pawn on ${f.passedPawnsHanded.join(', ')}`);
@@ -699,7 +694,7 @@ export function plyFactsClause(fenBefore: string, san: string, prev?: PrevCaptur
     if (f.isMate) parts.push('delivers checkmate');
     else if (f.isCheck) parts.push('gives check');
     if (f.promotion) parts.push(`promotes to a ${f.promotion}`);
-    if (f.tacticLanded) parts.push(`lands a ${tacticWord(f.tacticLanded)}`);
+    if (f.tacticLanded) parts.push(patternAim(f.tacticLanded, 'third') ?? `lands a ${tacticWord(f.tacticLanded)}`);
     if (f.outpostGained) parts.push(`plants an outpost on ${f.outpostGained}`);
     if (f.newPassedPawns.length > 0) parts.push(`creates a passed pawn on ${f.newPassedPawns.join(', ')}`);
     if (f.passedPawnsHanded.length > 0) parts.push(`leaves the other side a passed pawn on ${f.passedPawnsHanded.join(', ')}`);
@@ -792,7 +787,7 @@ export function plyFactsForMove(fenBefore: string, san: string, prev?: PrevCaptu
     if (f.isMate) parts.push(vb('deliver checkmate', 'delivers checkmate'));
     else if (f.isCheck) parts.push(vb('give check', 'gives check'));
     if (f.promotion) parts.push(vb(`promote to a ${f.promotion}`, `promotes to a ${f.promotion}`));
-    if (f.tacticLanded) parts.push(vb(`land a ${tacticWord(f.tacticLanded)}`, `lands a ${tacticWord(f.tacticLanded)}`));
+    if (f.tacticLanded) parts.push(vb(patternAim(f.tacticLanded) ?? `land a ${tacticWord(f.tacticLanded)}`, patternAim(f.tacticLanded, 'third') ?? `lands a ${tacticWord(f.tacticLanded)}`));
     if (f.outpostGained) parts.push(vb(`plant an outpost on ${f.outpostGained}`, `plants an outpost on ${f.outpostGained}`));
     if (f.newPassedPawns.length > 0) parts.push(vb(`create a passed pawn on ${f.newPassedPawns[0]}`, `creates a passed pawn on ${f.newPassedPawns[0]}`));
     if (f.passedPawnsHanded.length > 0) parts.push(vb(`hand them a passed pawn on ${f.passedPawnsHanded[0]}`, isYou || moverIsStudent === false ? `hands you a passed pawn on ${f.passedPawnsHanded[0]}` : `leaves the other side a passed pawn on ${f.passedPawnsHanded[0]}`));

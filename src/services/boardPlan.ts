@@ -97,10 +97,10 @@ export function structurePlanFact(fen: string, studentColor: Color): StructurePl
   if (mine) {
     const block = passerBlock(fen, mine, studentColor);
     if (block.kind === 'enemy') {
-      return { id: 'passer-blockaded-enemy', text: `Your passed pawn on ${mine} is a trump, but their ${PIECE_NOUN[block.piece ?? 'p']} blockades it — challenge or dislodge that blockader before it can run.` };
+      return { id: 'passer-blockaded-enemy', ideaKey: `student-passer-${mine[0]}`, text: `Your passed pawn on ${mine} is a trump, but their ${PIECE_NOUN[block.piece ?? 'p']} blockades it — challenge or dislodge that blockader before it can run.` };
     }
     if (block.kind === 'friendly') {
-      return { id: 'passer-blockaded-friendly', text: `Your passed pawn on ${mine} is a trump, but your own ${PIECE_NOUN[block.piece ?? 'p']} sits in its path — clear the way before it can advance.` };
+      return { id: 'passer-blockaded-friendly', ideaKey: `student-passer-${mine[0]}`, text: `Your passed pawn on ${mine} is a trump, but your own ${PIECE_NOUN[block.piece ?? 'p']} sits in its path — clear the way before it can advance.` };
     }
     // 🚨 THE ELSE-CHAIN DEFECT (found reading the code, 2026-09-17). Everything
     // below used to be unreachable whenever the student had a passer of their

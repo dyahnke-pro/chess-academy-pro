@@ -26,6 +26,7 @@ import { Chess, type Color, type Square } from 'chess.js';
 import { findWeakPawns, findPieceQuality } from './positionReadingService';
 import { planFromUci, isCostClause } from './lookaheadPlan';
 import { isEndgameByMaterial } from './gamePhaseService';
+import { MATERIAL_VALUE as VALUE } from './pieceValues';
 
 export type DrawbackKind =
   | 'defender-left'
@@ -271,7 +272,16 @@ export function findConcession(args: {
     const wentTo = ranksFromHome(moved.to, me);
     const altTo = alt.history({ verbose: true })[0];
     const altRank = altTo ? ranksFromHome(altTo.to, me) : wentTo;
-    if (wentTo >= 5 && wentTo > altRank + 1) {
+    // A PIECE ON A MISSION IS NOT OFFSIDE (hand walk 1690, 2026-09-27: 7.Bh6
+    // in the 150 attack read "your piece went a long way from your king" —
+    // it went there to trade off the g7 bishop). When the piece now attacks an
+    // enemy piece worth at least as much, it went to trade or to win, not astray.
+    const onMission = after.board().flat().some((c) => {
+      if (!c || c.color === me || c.type === 'k') return false;
+      if (!after.attackers(c.square, me).includes(moved.to)) return false;
+      return (VALUE[c.type] ?? 0) >= (VALUE[moved.piece] ?? 0);
+    });
+    if (wentTo >= 5 && wentTo > altRank + 1 && !onMission) {
       return {
         kind: 'piece-offside',
         square: moved.to,
@@ -292,7 +302,13 @@ export function findConcession(args: {
   const goodAlt = new Set(
     findPieceQuality(alt.fen()).filter((q) => q.color === them && isOutpost(q)).map((q) => q.square as string),
   );
-  const conceded = goodNow.find((q) => !goodAlt.has(q.square as string));
+  // …and not one they ALREADY had (hand walk 1690, 2026-09-27: 37.Ng5 "handed
+  // me g3" — the knight had stood on that outpost for six plies). A square is
+  // handed over by this move only if it was not theirs before it.
+  const goodBefore = new Set(
+    findPieceQuality(args.fen).filter((q) => q.color === them && isOutpost(q)).map((q) => q.square as string),
+  );
+  const conceded = goodNow.find((q) => !goodAlt.has(q.square as string) && !goodBefore.has(q.square as string));
   if (conceded) {
     return {
       kind: 'outpost-conceded',

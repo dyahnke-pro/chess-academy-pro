@@ -190,7 +190,7 @@ function observationsFor(
       key: `${side}-king-centre`, side, kind: 'king', rank: rank('king'),
       squares: [king.square],
       text: own
-        ? 'Your king is still in the centre and castling is ready — getting it tucked away is worth more than anything else right now.'
+        ? 'Your king is still in the centre and castling is one move away — tuck it in before the centre opens.'
         : 'Their king is still in the centre — every line that opens toward it is worth looking at.',
     });
   }

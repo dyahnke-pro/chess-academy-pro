@@ -311,7 +311,13 @@ export function threatAnswerWhy(fenBefore: string, san: string, mover: 'w' | 'b'
       const still = after.get(c.square);
       if (!still || still.color !== mover) continue;
       if (legalSeeGainFor(fenBefore, c.square, opp) <= 0) continue;
-      if (legalSeeGainFor(after.fen(), c.square, opp) <= 0) return `guards the ${PNAME[c.type]} on ${c.square}, which they were about to win`;
+      if (legalSeeGainFor(after.fen(), c.square, opp) > 0) continue;
+      // TAKING THE ATTACKER IS NOT GUARDING (hand walk 1690, 2026-09-27:
+      // 18.Nxf7 "guards the queen on h6" — it removed the knight that forked it).
+      if (m.captured && board0.attackers(c.square, opp).includes(m.to)) {
+        return `takes the ${PNAME[m.captured]} that was hitting the ${PNAME[c.type]} on ${c.square}`;
+      }
+      return `guards the ${PNAME[c.type]} on ${c.square}, which they were about to win`;
     }
     for (const c of mine) {
       if (c.square === m.from) continue;
