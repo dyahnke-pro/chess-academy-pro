@@ -10,3 +10,6 @@ Muted overhaul audit on localhost, full game (105 narrated plies). **~92 of 105 
 | 85 | Rb8+ then "seize the open a-file" | file plan read after the rook left it | OPEN |
 
 Tests: `gameAnalysisService.deepAgrees.test.ts` (with a real negative control — the first draft passed vacuously and was caught), `planArc.test.ts`.
+
+## Re-walk (same game, after the fixes)
+**~93 of 98 narrated plies clean (~95%)**, up from 88%. Every flagged ply now names its better move; no bare verdicts. King-attack plans now appear only with queens on in the middlegame, and the four that remain are true (a6/axb7 against a king on b8). Still open: the transfer phrase at ply 11 on a development sentence; the file plan at 85.
