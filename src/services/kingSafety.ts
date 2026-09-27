@@ -58,6 +58,12 @@ export function detectKingExposure(fen: string, studentColor: 'w' | 'b'): KingEx
   try { game = new Chess(fen); } catch { return null; }
   const kingSq = kingSquareOf(game, studentColor);
   if (!kingSq) return null;
+  // NO QUEEN, NO SHELTER LECTURE (hand walk 2026-09-27, a rook endgame: "your
+  // king's cover is thin — look after the king" while the king was the best
+  // piece on the board). Without their queen there is no mating force to hide
+  // from; the endgame king belongs in the fight, not behind pawns.
+  const foe: 'w' | 'b' = studentColor === 'w' ? 'b' : 'w';
+  if (!game.board().flat().some((c) => c?.type === 'q' && c.color === foe)) return null;
   const shelter = shelterSquares(kingSq, studentColor);
   if (!shelter) return null;
 

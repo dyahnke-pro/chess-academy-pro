@@ -537,3 +537,18 @@ describe("David's game reaches the middlegame", () => {
     expect(count).toBe(1);
   });
 });
+
+describe('an opening that ends in an endgame has ONE beat (hand walk 2026-09-27)', () => {
+  it('Najdorf queen trade: one beat on Kxd8 and no endgame beat two moves later', () => {
+    const moves = 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Nf3 Nc6 e5 Nxe5 Nxe5 dxe5 Qxd8+ Kxd8 Bd3 e6'.split(' ');
+    const state = createPhaseTransitionState();
+    const c = new Chess();
+    const fired: string[] = [];
+    moves.forEach((m, i) => {
+      c.move(m);
+      const ev = detectPhaseTransition({ fen: c.fen(), san: m, moveNumber: i + 1, isCoachMove: i % 2 === 0 }, state, 'black');
+      if (ev) fired.push(`${i + 1}:${ev.kind}`);
+    });
+    expect(fired).toEqual(['18:opening-to-middlegame']);
+  });
+});

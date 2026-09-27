@@ -153,6 +153,14 @@ export function isRealPin(args: {
   if (front && pinner
     && args.chess.attackers(args.attacker, front.color).includes(args.pinned)
     && CAPTURE_VALUE[front.type] <= CAPTURE_VALUE[pinner.type]) return false;
+  // A RELATIVE PIN ON A PIECE THAT SIMPLY HANGS IS A CAPTURE, NOT A PIN (hand
+  // walk 2026-09-27, Najdorf: "you've got a pin coming — …Bb7" where the
+  // bishop hit an undefended g2 with the rook on h1 behind it). The lesson is
+  // "g2 falls and the rook is hit"; naming it a pin teaches the wrong idea.
+  // An absolute pin (king behind) always stays — the piece cannot move at all.
+  const behindPiece = args.chess.get(args.behind);
+  if (front && behindPiece && behindPiece.type !== 'k'
+    && args.chess.attackers(args.pinned, front.color).length === 0) return false;
   return pinBites(args.chess, args.attacker, args.pinned, args.behind);
 }
 

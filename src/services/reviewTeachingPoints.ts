@@ -715,7 +715,10 @@ export function describeConcessions(fenBefore: string, san: string, moverIsStude
         && (Number(p.square[1]) - kr) * dir >= 1 && (Number(p.square[1]) - kr) * dir <= 2).length;
     };
     const shieldB = shield(before, mover); const shieldA = shield(after, mover);
-    if (shieldA < shieldB) out.push(`${poss} king's pawn cover thinned (${shieldB} shield pawns down to ${shieldA})`);
+    // The shield only matters while their queen can use the gap (a rook
+    // endgame king is meant to walk out — hand walk 2026-09-27).
+    const foeQueen = after.board().flat().some((p) => p?.type === 'q' && p.color === enemy);
+    if (foeQueen && shieldA < shieldB) out.push(`${poss} king's pawn cover thinned (${shieldB} shield pawns down to ${shieldA})`);
     if (sB && sA) {
       const passB = sB.pawns.passedPawns[enemy].length; const passA = sA.pawns.passedPawns[enemy].length;
       if (passA > passB) out.push(`it hands the opponent a passed pawn on ${sA.pawns.passedPawns[enemy].find((p) => !sB.pawns.passedPawns[enemy].includes(p)) ?? sA.pawns.passedPawns[enemy][0]}`);

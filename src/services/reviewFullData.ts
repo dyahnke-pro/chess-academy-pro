@@ -722,7 +722,7 @@ export function computeMoveFacets(
     if (theirMinority) { const f = `[minority] They have a minority attack on the ${theirMinority.flank} — ${theirMinority.leverSan} is the lever, leaving you a weak pawn on ${theirMinority.target} to watch.`; facets.push(f); recSquares(f, [theirMinority.target]); }
     for (const cc of findColorComplexWeakness(fenAfter)) {
       const sqs = andList([...cc.squares]);
-      if (cc.side === enemyWB2) { const f = `[complex] Their ${cc.complex} squares are weak — ${sqs} ${cc.squares.length === 1 ? 'is a hole' : 'are holes'} their bishop can't cover; a knight belongs on one.`; facets.push(f); recSquares(f, cc.squares); break; }
+      if (cc.side === enemyWB2) { const f = `[complex] Their ${cc.complex} squares are weak — ${sqs} ${cc.squares.length === 1 ? 'is a hole' : 'are holes'} no bishop of theirs covers; ${cc.by === 'knight' ? 'a knight belongs on one' : 'your bishop can work on them'}.`; facets.push(f); recSquares(f, cc.squares); break; }
     }
     for (const cc of findColorComplexWeakness(fenAfter)) {
       const sqs = andList([...cc.squares]);

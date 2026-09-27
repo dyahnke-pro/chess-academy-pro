@@ -104,8 +104,8 @@ describe('a verdict off an unsettled search is said as a first read', () => {
       fen: GREEK, candidateSan: 'Bxh7+', bestMoveUci: 'e1g1', bestEvalCp: 60, candidateEvalCp: 50,
       candidateLineUci: [], candidateSettled,
     })?.facts ?? '';
-    expect(ask(false)).toMatch(/hadn't settled/);
-    expect(ask(true)).not.toMatch(/hadn't settled/);
-    expect(ask(null)).not.toMatch(/hadn't settled/);
+    expect(ask(false)).toMatch(/first read/);
+    expect(ask(true)).not.toMatch(/first read/);
+    expect(ask(null)).not.toMatch(/first read/);
   });
 });

@@ -301,7 +301,7 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
       [{ spoken: null, type: 'skewer', description: 's', depthAhead: 3, line: ['Re1', 'Qd7', 'Rxe8'] }],
     );
     const say = speakDeepestLookahead(ctx, 'student', 'w')!;
-    expect(say).toMatch(/if you play the rook to e1, they have the queen to d7, then the rook taking on e8/);
+    expect(say).toMatch(/if you play the rook to e1, they have the queen to d7, then your rook taking on e8/);
     expect(say).not.toMatch(/lining up/i);
     expect(say.toLowerCase()).toContain('skewer in 3');
     // Coach seat: the reply is the coach's own — "I have", never "they have".

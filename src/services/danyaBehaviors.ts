@@ -278,7 +278,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         // that kept Black on top was Bxa4, which ignores it). This lane speaks
         // before the engine has read the position, so it cannot know whether
         // meeting the threat is right; the late package does, and names it.
-        return { fact: `The opponent is eyeing ${intent.san} — it would win ${what}.`, squares: [intent.target] };
+        return { fact: `They're eyeing ${intent.san} — it would win ${what}.`, squares: [intent.target] };
       }
       // NAME WHAT IT FORKS — "forking on e4" named the knight's landing
       // square as if it were the target (walk 2026-09-27, Carlsen–Aronian).
@@ -296,9 +296,9 @@ export const DANYA_BEHAVIORS: Behavior[] = [
           .map((c) => { forkedSquares.push(c.square); return `your ${PIECE_NAME[c.type]} on ${c.square}`; });
       } catch { forked = []; forkedSquares = []; }
       if (forked.length >= 2) {
-        return { fact: `The opponent wants ${intent.san}, forking ${andList(forked)} — take the square away from them.`, squares: [intent.target], keys: [forkThreatKey(intent.target, forkedSquares)] };
+        return { fact: `They want ${intent.san}, forking ${andList(forked)} — take the square away from them.`, squares: [intent.target], keys: [forkThreatKey(intent.target, forkedSquares)] };
       }
-      return { fact: `The opponent wants ${intent.san} — a fork on ${intent.target}; take the square away from them.`, squares: [intent.target] };
+      return { fact: `They want ${intent.san} — a fork on ${intent.target}; take the square away from them.`, squares: [intent.target] };
     },
   },
   {
@@ -336,8 +336,16 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         }
         return false;
       };
-      const theirsPick = [theirs.backward[0], theirs.isolated[0], theirs.doubled[0]]
-        .find((p): p is Square => !!p && pawnIsAttackable(chess, p, student)
+      // A PASSED PAWN IS A RUNNER, NOT A TARGET (hand walk 2026-09-27, pawn
+      // ending: "the isolated pawn on b6 is a weakness — pile up on it" one
+      // move before "their passed pawn on b6 is the danger — blockade it"). The
+      // passer read owns it; calling it weak contradicts the one true order.
+      // ADVANCED passers only (four squares or fewer to queen): a passer still
+      // at home that a rook already eyes is a target like any weak pawn.
+      const advanced = (sq: Square, c: Color): boolean => (c === 'w' ? 8 - Number(sq[1]) : Number(sq[1]) - 1) <= 4;
+      const theirPassers = new Set(findPassedPawns(fen, opp).filter((sq) => advanced(sq, opp)));
+      const theirsPick = [...theirs.backward, ...theirs.isolated, ...theirs.doubled]
+        .find((p): p is Square => !!p && !theirPassers.has(p) && pawnIsAttackable(chess, p, student)
           && !(theirs.doubled.includes(p) && inFlux(p)));
       if (theirsPick) {
         const kind = theirs.backward.includes(theirsPick) ? 'backward' : theirs.isolated.includes(theirsPick) ? 'isolated' : 'doubled';
@@ -346,8 +354,11 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         return { fact: `The ${kind} pawn on ${theirsPick} is a weakness — pile up on it.`, squares: [theirsPick], ...(kind === 'isolated' ? { keys: [`opponent-iso-${theirsPick[0]}`] } : {}) };
       }
       const mine = noIsolani(findWeakPawns(fen, student));
-      const minePick = [mine.backward[0], mine.isolated[0]]
-        .find((p): p is Square => !!p && pawnIsAttackable(chess, p, opp));
+      // Same rule for your own: a passer is a runner, not a target to guard
+      // (hand walk 2026-09-27: "watch your isolated pawn on a5" mid-race).
+      const myPassers = new Set(findPassedPawns(fen, student).filter((sq) => advanced(sq, student)));
+      const minePick = [...mine.backward, ...mine.isolated]
+        .find((p): p is Square => !!p && !myPassers.has(p) && pawnIsAttackable(chess, p, opp));
       if (minePick) {
         const kind = mine.backward.includes(minePick) ? 'backward' : 'isolated';
         return { fact: `Watch your ${kind} pawn on ${minePick} — don't let it become a target.`, squares: [minePick], ...(kind === 'isolated' ? { keys: [`student-iso-${minePick[0]}`] } : {}) };
@@ -505,7 +516,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       };
       const live = passers.find(canAdvance);
       if (live) {
-        return { fact: `The passed pawn on ${live} is a long-term trump — support it and push.`, squares: [live] };
+        return { fact: `The passed pawn on ${live} is a long-term trump — support it and push.`, squares: [live], keys: [`passer-${live}`] };
       }
       return null;
     },

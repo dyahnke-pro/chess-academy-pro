@@ -546,7 +546,10 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     // before the move, so it describes where the piece is heading rather than
     // where the king ended up after being chased.
     const enemyKing = kingSquare(ply.fenBefore, color === 'white' ? 'b' : 'w');
-    if (enemyKing && chebyshev(to, enemyKing) <= KING_ZONE) {
+    // PIECES only: a king walking over or a pawn run is not "swinging pieces
+    // toward their king" (hand walk 2026-09-27, a king-and-pawn ending: "h6 was
+    // the move, to swing pieces toward their king" with no pieces on the board).
+    if (enemyKing && /^[QRBN]/.test(ply.san) && chebyshev(to, enemyKing) <= KING_ZONE) {
       nearEnemyKing += 1;
       kingAttackSquares.push(to);
     }

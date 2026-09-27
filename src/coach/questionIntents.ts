@@ -1168,8 +1168,11 @@ export function isPlayerGamesQuestion(ask: string | undefined): boolean {
   // mean?" (David 2026-09-09 teach audit).
   // …but "do you have a game in this line?" is an availability ask about the
   // pro's corpus, not a question about a move the coach played, so it is exempt.
+  // THIRD-person pronouns too: "why did THEY play Ne4?" is the opponent's
+  // move on this board, never a player named "they" (question walk 2026-09-27:
+  // it answered "Carlsen has 74 reference games in the Najdorf").
   if (!GAME_AVAILABILITY_RE.test(ask)
-    && /\b(?:did|has|do|does|will|would|can)\s+(?:i|you)\b/i.test(ask)) return false;
+    && /\b(?:did|has|have|do|does|will|would|can)\s+(?:i|you|they|my\s+opponent|the\s+opponent|the\s+coach)\b/i.test(ask)) return false;
   return PLAYER_GAMES_QUESTION_RE.test(ask);
 }
 

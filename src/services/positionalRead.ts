@@ -26,6 +26,7 @@
 // a threat, a gem or a taught note — it is what plays when none of them have
 // anything, which per the measurement is about half the game.
 import { describeStructure } from './boardStructure';
+import { homeMinorCount } from './development';
 import { Chess, type Color, type Square } from 'chess.js';
 import {
   kingSafetyRead,
@@ -279,6 +280,11 @@ function observationsFor(
   // (hand walk 2340: both said it on one move).
   const isolani = /isolated queen/i.test(namedPawnStructure(fen, color)?.name ?? '');
   if (isolani) weak.isolated = weak.isolated.filter((sq) => sq[0] !== 'd');
+  // A passed pawn is a runner, not a long-term target — the passer read owns it.
+  // (An ADVANCED one — four squares or fewer to queen; a passer still at home
+  // can be a target like any isolated pawn.)
+  const toGo = (sq: Square): number => (color === 'w' ? 8 - Number(sq[1]) : Number(sq[1]) - 1);
+  weak.isolated = weak.isolated.filter((sq) => !(findPassedPawns(fen, color).includes(sq) && toGo(sq) <= 4));
   if (weak.isolated.length > 0) {
     out.push({
       key: `${side}-iso-${weak.isolated[0][0]}`, side, kind: 'structure', rank: rank('structure'),
@@ -298,7 +304,14 @@ function observationsFor(
   }
 
   const turned = withTurn(fen, color);
-  const breaks = turned ? findPawnBreaks(turned) : [];
+  // NO LEVER TALK BEFORE THE PIECES ARE OUT (hand walk 2026-09-27: "you have
+  // a pawn break on f5" after 1.e4 c5 2.Nf3 d6). With three or more of that
+  // side's minors still at home, development decides the game and the
+  // principle lane owns the teaching; a French at move 8 (…f6, …c4) keeps its
+  // levers because by then the break IS the plan.
+  let undeveloped = 0;
+  try { undeveloped = homeMinorCount(new Chess(fen), color); } catch { undeveloped = 0; }
+  const breaks = turned && undeveloped < 3 ? findPawnBreaks(turned) : [];
   if (breaks.length > 0) {
     out.push({
       key: `${side}-break-${breaks[0]}`, side, kind: 'lever', rank: rank('lever'),
@@ -350,8 +363,8 @@ function observationsFor(
       key: `${side}-complex-${cc.complex}`, side, kind: 'complex', rank: rank('complex'),
       squares: cc.squares.slice(0, 2),
       text: own
-        ? `Your ${cc.complex} squares are weak — with no bishop of that colour, nothing covers ${sqs}, so a piece has to babysit them.`
-        : `Their ${cc.complex} squares are weak — ${sqs} are holes their bishop can't cover; a knight belongs on one.`,
+        ? `Your ${cc.complex} squares are weak — with no bishop of that colour, nothing covers ${sqs}, and their ${cc.by} can settle there.`
+        : `Their ${cc.complex} squares are weak — no bishop of theirs covers ${sqs}; ${cc.by === 'knight' ? 'a knight belongs on one' : 'your bishop can work on them'}.`,
     });
     break; // one complex read is enough — the second is the same lesson
   }

@@ -20,6 +20,7 @@ import { proofAgainstMover } from './exchangeLedger';
 import { strategicWhyLed } from './moveFundamentals';
 import { legalSeeGainFor } from './positionReadingService';
 import { isPinnedPiece } from './nextPlans';
+import { andList } from '../utils/andList';
 
 const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 
@@ -282,6 +283,7 @@ export function deliberationAlternativesFacts(d: Deliberation): string {
 export function moveWhy(fenBefore: string, san: string, mover: 'w' | 'b', opponentLastSan: string | null): string | null {
   return materialWhy(fenBefore, san, mover, opponentLastSan)
     ?? threatAnswerWhy(fenBefore, san, mover)
+    ?? threatMadeWhy(fenBefore, san, mover)
     ?? strategicWhyLed(fenBefore, san, mover === 'w' ? 'white' : 'black');
 }
 
@@ -318,6 +320,30 @@ export function threatAnswerWhy(fenBefore: string, san: string, mover: 'w' | 'b'
       }
     }
     return null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * THE MOVE MAKES A THREAT (question walk 2026-09-27: "why did they play e5?"
+ * was graded and costed but never said e5 hits the knight on f6). The moved
+ * piece now attacks an enemy piece that is worth more than it, or that nothing
+ * defends — the question the opponent must answer next move.
+ */
+export function threatMadeWhy(fenBefore: string, san: string, mover: 'w' | 'b'): string | null {
+  try {
+    const after = new Chess(fenBefore);
+    const m = after.move(san);
+    if (!m || m.captured || after.inCheck()) return null;
+    const opp: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
+    const targets = after.board().flat()
+      .flatMap((c) => (c && c.color === opp && c.type !== 'k' && c.type !== 'p' ? [c] : []))
+      .filter((c) => after.attackers(c.square, mover).includes(m.to))
+      .filter((c) => VAL[c.type] > VAL[m.piece] || after.attackers(c.square, opp).length === 0)
+      .sort((a, b) => VAL[b.type] - VAL[a.type]);
+    if (targets.length === 0) return null;
+    return `attacks ${andList(targets.map((t) => `the ${PNAME[t.type]} on ${t.square}`))}`;
   } catch {
     return null;
   }

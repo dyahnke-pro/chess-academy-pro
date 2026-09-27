@@ -183,6 +183,33 @@ export function readTrade(
     bad.push({ why: `it takes off ${theirs(NAME[mv.captured])}, which was ${qualityPhrase(got)} and doing little`, key: 'bad-taken', sq: [mv.to] });
   }
 
+  // THE MATERIAL COUNT IS PART OF THE VERDICT (hand walk 2026-09-27, the
+  // Najdorf: after …Nxe5 won a pawn, "their Nxe5 is a good trade for them —
+  // taking back doubles your pawns" — while you stayed a clean pawn up and
+  // every trade brought your won ending closer). A structural gain for the
+  // side that is behind is weighed against the count, never read alone.
+  // Structure is the only thing they got (doubled / isolated / cover), and a
+  // bent pawn does not outweigh a pawn more heading into a simpler position.
+  // A trade that removes their BEST piece still stands on its own.
+  const edge0 = materialFor(board0, mover);
+  const STRUCTURAL = new Set(['doubles', 'isolates', 'cover']);
+  if (edge0 <= -1 && good.length && !bad.length && good.every((g) => STRUCTURAL.has(g.key))) {
+    // Say BOTH halves — the dent and the count — because that weighing is the
+    // lesson (Naroditsky at this exact move: "you take, inviting the trade —
+    // White can't exploit it").
+    const pawns = -edge0 === 1 ? 'a pawn' : `${-edge0} points`;
+    const dent = good[0].why.replace(/^taking back /, '');
+    return {
+      call: 'behind',
+      text: you
+        // Said while the recapture is still pending, so the count is framed as
+        // what holds ONCE it lands — never as a standing fact of this board.
+        ? `${mv.san} ${dent}, but once they take back you're still ${pawns} behind — and trades help the side with more material.`
+        : `Their ${mv.san} ${dent}, but once you take back you're still ${pawns} ahead — and every trade brings your ending closer.`,
+      squares: good[0].sq, key: 'trade:behind-structure', moverIsStudent,
+    };
+  }
+
   const subject = you ? mv.san : `Their ${mv.san}`;
   const forWhom = you ? '' : ' for them';
   const sound = cpLoss === null || cpLoss < 100;
@@ -197,7 +224,7 @@ export function readTrade(
   }
   if (good.length || bad.length) return null; // mixed — not a lesson
   // Neutral pieces: the material count decides who the trade helps.
-  const edge = materialFor(board0, mover);
+  const edge = edge0;
   if (edge >= 2) {
     return {
       call: 'ahead',

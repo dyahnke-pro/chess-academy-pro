@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**813 lines · 20 exports · 12 importers · 6 tests · 0 audits**
+**816 lines · 20 exports · 12 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -169,7 +169,7 @@
 - `src/services/reviewNarrationDefects.test.ts:50`
 
 ### `deriveNextPlans` (re-export) — 20 call sites
-- `src/services/groundedAnswer.ts:398`
+- `src/services/groundedAnswer.ts:403`
 - `src/services/learnMoveTeaching.ts:145`
 - `src/services/nextPlans.test.ts:16`
 - `src/services/nextPlans.test.ts:24`

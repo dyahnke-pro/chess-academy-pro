@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**21 lines · 2 exports · 3 importers · 2 tests · 0 audits**
+**26 lines · 2 exports · 4 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,28 +14,32 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/services/danyaBehaviors.ts`
 - `src/services/positionFacts.ts`
+- `src/services/replayFence.alekhine1500.test.ts`
 - `src/services/replayFence.sicilianClosed1000.test.ts`
 
 ## Exports and every call site
 
-### `conceptInstanceKey` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7931`
+### `conceptInstanceKey` (function) — 10 call sites
+- `src/components/Coach/CoachTeachPage.tsx:7939`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
-- `src/services/danyaBehaviors.ts:429`
-- `src/services/positionFacts.ts:1010`
-- `src/services/positionFacts.ts:1378`
-- `src/services/positionFacts.ts:1392`
+- `src/services/danyaBehaviors.ts:440`
+- `src/services/positionFacts.ts:1027`
+- `src/services/positionFacts.ts:1402`
+- `src/services/positionFacts.ts:1416`
+- `src/services/replayFence.alekhine1500.test.ts:18`
+- `src/services/replayFence.alekhine1500.test.ts:19`
 - `src/services/replayFence.sicilianClosed1000.test.ts:21`
 
 ### `forkThreatKey` (function) — 4 call sites
 - `src/services/danyaBehaviors.ts:299`
-- `src/services/positionFacts.ts:1259`
-- `src/services/positionFacts.ts:1272`
+- `src/services/positionFacts.ts:1278`
+- `src/services/positionFacts.ts:1291`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:50`
 
 ## Tests
 
+- `src/services/replayFence.alekhine1500.test.ts`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts`
 - `src/services/replayFence.sicilianClosed1000.test.ts`
 

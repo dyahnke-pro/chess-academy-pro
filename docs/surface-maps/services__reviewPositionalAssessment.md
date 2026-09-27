@@ -61,8 +61,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/standingRefrains.test.ts:110`
 
 ### `materialEdgeWords` (function) — 5 call sites
-- `src/services/groundedAnswer.ts:2178`
-- `src/services/groundedAnswer.ts:2179`
+- `src/services/groundedAnswer.ts:2197`
+- `src/services/groundedAnswer.ts:2198`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:30`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:33`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:36`
@@ -74,13 +74,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseVerdict.test.ts:18`
 - `src/services/phaseVerdict.test.ts:23`
 - `src/services/phaseVerdict.test.ts:28`
-- `src/services/positionFacts.ts:824`
+- `src/services/positionFacts.ts:841`
 - `src/services/reviewFullData.ts:927`
 
 ### `phaseVerdictKeys` (function) — 3 call sites
 - `src/services/learnWalkNimzo.test.ts:22`
 - `src/services/learnWalkNimzo.test.ts:31`
-- `src/services/positionFacts.ts:827`
+- `src/services/positionFacts.ts:844`
 
 ## Tests
 

@@ -2387,7 +2387,11 @@ async function serveGroundedPositionDefault(
     // played?" / "key squares?" / "worst move?" all fell through to here and
     // answered only "your pawn on e5 is hanging". Same fix already applied at the
     // position-assessment lane below; this completes it across the call sites.
-    fen: grounding.currentFen,
+    // NOT on a phase beat: its eval readout was stripped on purpose (David
+    // 2026-08-23), and the material count is the same readout in points —
+    // "You're up 1 point of material" right after the balance sheet said
+    // "you're up a pawn" (hand walk 2026-09-27).
+    fen: grounding.surface === 'phase-narration' ? null : grounding.currentFen,
   });
   if (assess) {
     const hl = keySquareHighlightTags(assess);

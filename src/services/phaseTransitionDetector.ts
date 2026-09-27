@@ -293,6 +293,13 @@ export function detectPhaseTransition(
 
     if (rule1 || rule2 || rule3 || rule4 || rule5 || rule6 || rule7) {
       state.openingToMiddlegameFired = true;
+      // ONE BEAT WHEN THE OPENING ENDS IN A QUEENLESS POSITION (hand walk
+      // 2026-09-27, Najdorf after the queen trade): "before the middlegame gets
+      // going, the balance sheet" and, two moves later with nothing traded,
+      // "the endgame starts here, take stock" — the same stock taken twice.
+      // The board already qualifies as an endgame here, so that beat is spent;
+      // the endgame beat is marked spent.
+      if (phase === 'endgame' || isEndgameByMaterial(lastMove.fen)) state.middlegameToEndgameFired = true;
       const triggeringRule = rule1
         ? 'development'
         : rule2

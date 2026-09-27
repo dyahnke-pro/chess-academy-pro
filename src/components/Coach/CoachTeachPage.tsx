@@ -7452,6 +7452,14 @@ export function CoachTeachPage(): JSX.Element {
     // A walkthrough owns the board and has its own narration — never talk over
     // a lesson (the same rule that used to clear the question cards).
     if (walkthrough.isActive) return;
+    // NEVER MID-SWAP (hand walk 2026-09-27, Najdorf ply 16: after Qxd8+ the
+    // "queens are off" beat read the board before the recapture — "you're down
+    // 8 points", "their queen on d8 pins your bishop"). A capture the side to
+    // move can still take back is not a new phase yet; the state is left
+    // untouched, so the transition is detected on the settled board next move.
+    // `san` here is the student's move; the board came from the coach's reply,
+    // so the flux is read off the full history (the one `inFluxAfter` rule).
+    if (pendingRecapture(gameRef.current.history)) return;
     try {
       const event = detectPhaseTransition(
         { fen, san, moveNumber: plyCount, isCoachMove: false },
@@ -8286,8 +8294,10 @@ export function CoachTeachPage(): JSX.Element {
     // the corpus. No engine lines are in hand at this synchronous site, so the
     // `calculation` behavior stands down; the other reads are engine-free.
     let behaviorLine: string | null = null;
+    let behaviorClaims: string[] = [];
     let behaviorSquares: string[] = [];
     let positionalLine: string | null = null;
+    let positionalClaims: string[] = [];
     let positionalSquares: readonly string[] = [];
     // THE CONTESTED GATE (David 2026-09-13) — the standing board read stands down
     // in a DECIDED game: a positional lesson ("your knight has an outpost") is
@@ -8360,7 +8370,7 @@ export function CoachTeachPage(): JSX.Element {
         const eligible = quietTurn ? hits : hits.filter((h) => BEHAVIOR_ALWAYS_RIDE.has(h.id));
         const hit = behaviorSchedulerRef.current.pick(eligible);
         if (hit) {
-          behaviorLine = hit.fact; behaviorSquares = hit.squares; factLines.push(`Behavior (${hit.id}): ${hit.fact}`);
+          behaviorLine = hit.fact; behaviorSquares = hit.squares; behaviorClaims = hit.keys.filter((k) => /^(?:file-[a-h]|passer-[a-h][1-8])$/.test(k)); factLines.push(`Behavior (${hit.id}): ${hit.fact}`);
           if (hit.id === 'pawn-break') for (const sq of hit.squares) standingRef.current.remember(`student-break-${sq}`);
           for (const k of hit.keys) positionalSaidRef.current.add(k);
         }
@@ -8392,6 +8402,13 @@ export function CoachTeachPage(): JSX.Element {
           standingRef.current.remember(pr.key);
           positionalLine = pr.text;
           positionalSquares = prSquares;
+          // The same claim keys the composer's clauses carry, so one idea is
+          // one saying across the two passes (hand walk 2026-09-27, Alekhine:
+          // "castling is ready" then "The plan here: castle").
+          positionalClaims = [
+            ...(pr.key === 'student-king-centre' ? ['castle-now'] : []),
+            ...(pr.aliases ?? []).filter((a) => /^file-[a-h]$/.test(a)),
+          ];
           factLines.push(`Positional read: ${pr.text}`);
         }
       } catch { /* never a blocker */ }
@@ -8449,7 +8466,7 @@ export function CoachTeachPage(): JSX.Element {
       // computer's board reads, so the two never split or duplicate (the outpost
       // both once computed is now one deduped lane). Stands down behind a note
       // and in a decided game (the contested gate).
-      ...(behaviorLine && !softStandDown && !decidedByMaterial ? [{ kind: 'observation' as const, text: behaviorLine, fen: args.fenAfterReply, squares: behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)) }] : []),
+      ...(behaviorLine && !softStandDown && !decidedByMaterial ? [{ kind: 'observation' as const, text: behaviorLine, fen: args.fenAfterReply, squares: behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)), claims: behaviorClaims.length ? behaviorClaims : undefined }] : []),
       // The hand-written masterclass beat, verified before it shipped
       // (narrationAccuracy, lessonIntegrity). No corpus note rides free play.
       ...(curatedLine ? [{ kind: 'note' as const, text: curatedLine, fen: args.fenAfterReply }] : []),
@@ -8472,7 +8489,7 @@ export function CoachTeachPage(): JSX.Element {
       // speaks in (the merge). Widened board-awareness pool (king, plan, minority,
       // outpost, passer, colour-complex, open file, lever, both sides). Stands
       // down behind a note and in a decided game (the contested gate).
-      ...(positionalLine && !softStandDown && !decidedByMaterial ? [{ kind: 'observation' as const, text: positionalLine, fen: args.fenAfterReply, squares: positionalSquares }] : []),
+      ...(positionalLine && !softStandDown && !decidedByMaterial ? [{ kind: 'observation' as const, text: positionalLine, fen: args.fenAfterReply, squares: positionalSquares, claims: positionalClaims.length ? positionalClaims : undefined }] : []),
       // priorKeys = every phrase spoken EARLIER this game, so no lane repeats a
       // phrase across turns (David 2026-09-13). Within-turn dedupe is separate
       // (the late package's `alreadySaid`); this is the cross-turn guarantee.
@@ -9248,7 +9265,7 @@ export function CoachTeachPage(): JSX.Element {
                     const countSpoken = pf.clauses.some((c) => c.kind === 'key-moment');
                     const registerNow = countSpoken ? pendingRegisterNoHedge : pendingRegister;
                     if (registerNow && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), registerNow);
-                    const gapEchoed = gapEchoedByVerdict(gapPending?.san ?? null, pf.clauses);
+                    const gapEchoed = gapEchoedByVerdict(gapPending?.san ?? null, pf.clauses, gapPending?.square ?? null);
                     if (gapPending && moveAdviceHere?.speak && !gapEchoed) queueSpokenHint(probe.fen(), gapPending.text, 'computed', [gapPending.square]);
                     standingRef.current.rememberAll(pf.remember);
                     if (pf.principleSpoken) learnMemRef.current.principleTaught.add(pf.principleSpoken);
@@ -9945,9 +9962,12 @@ export function CoachTeachPage(): JSX.Element {
                 {
                   try {
                     const chainHistory = historyAfterReply;
-                    if (chainHistory.length <= 2) {
-                      resetPerGameMemory();
-                    }
+                    // NO RESET HERE. `learnMemRef.current.observe()` detects a
+                    // new game from the board going backwards, on every ply.
+                    // This `length <= 2` reset ran AFTER the turn's facts had
+                    // written the memory, so for a White student (e4 Nf6 is
+                    // two plies) it wiped the e4 principle and d4 taught it
+                    // again in full (hand walk 2026-09-27, Alekhine).
                     // OPENING ANNOUNCEMENT — fires when detection resolves a
                     // NEW name (first recognition or a refinement). Name from
                     // the opening DB, idea from the corpus's opening-level
@@ -10651,9 +10671,26 @@ export function CoachTeachPage(): JSX.Element {
                           const before = pawnFiles(fenBefore); const after = pawnFiles(fenAfterReply);
                           const opened = [...before].filter((f) => !after.has(f)).sort();
                           const what = NAME_OF_PIECE[reply.captured] ?? 'pawn';
-                          return opened.length > 0
-                            ? `${move.san} was a gambit — they took the ${what}, and in return the ${opened[0]}-file is open for your rook.`
-                            : `${move.san} was a gambit — they took the ${what}, and the engine rates the trade of it for time as sound.`;
+                          // A BREAKTHROUGH, NOT A FILE (hand walk 2026-09-27, a
+                          // pawn ending: "b6 was a gambit … the b-file is open
+                          // for your rook" with no rook on the board). What the
+                          // sacrifice bought is whichever of these is TRUE: a
+                          // pawn of yours that is passed now, or a file a rook
+                          // of yours can use.
+                          const passed = (fen: string): Set<string> => {
+                            const cells = new Chess(fen).board().flat().filter((c) => c && c.type === 'p') as Array<{ square: string; color: 'w' | 'b' }>;
+                            const dir = me === 'w' ? 1 : -1;
+                            return new Set(cells.filter((p) => p.color === me && !cells.some((e) => e.color !== me
+                              && Math.abs(e.square.charCodeAt(0) - p.square.charCodeAt(0)) <= 1
+                              && (Number(e.square[1]) - Number(p.square[1])) * dir > 0)).map((p) => p.square));
+                          };
+                          const was = passed(fenBefore);
+                          const fresh = [...passed(fenAfterReply)].filter((sq) => !was.has(sq) && ![...was].some((w) => w[0] === sq[0]));
+                          if (fresh.length > 0) return `${move.san} was a breakthrough — they took the ${what}, and now your ${fresh[0][0]}-pawn is passed.`;
+                          const hasRook = new Chess(fenAfterReply).board().flat().some((c) => c?.type === 'r' && c.color === me);
+                          if (opened.length > 0 && hasRook) return `${move.san} was a gambit — they took the ${what}, and in return the ${opened[0]}-file is open for your rook.`;
+                          if (opened.length > 0) return null;
+                          return `${move.san} was a gambit — they took the ${what}, and the engine rates the trade of it for time as sound.`;
                         } catch { return null; }
                       })();
                       if (gambitLine) queueSpokenHint(fenAfterReply, gambitLine, 'computed', []);
@@ -10665,7 +10702,14 @@ export function CoachTeachPage(): JSX.Element {
                       // point worth naming.
                       const oppWB: 'w' | 'b' = playerColor === 'white' ? 'b' : 'w';
                       const nowLoose = move.san.includes('x') && signedLegalSeeFor(fenAfterReply, move.to as Square, oppWB) > 0;
-                      if (point && !nowLoose) {
+                      // ONE FILE, ONE SAYING (hand walk 2026-09-27, Rad8: "your
+                      // rook on d8 owns the open d-file", then "Rad8 takes the
+                      // open d-file"). A rook or queen move's point is about its
+                      // file — the same idea key the positional read writes.
+                      const fileKey = /^[RQ]/.test(move.san) && !move.san.includes('x') ? `file-${move.to[0]}` : null;
+                      const fileHeard = !!fileKey && (positionalSaidRef.current.has(fileKey) || standingRef.current.said.has(fileKey));
+                      if (point && !nowLoose && !fileHeard) {
+                        if (fileKey) positionalSaidRef.current.add(fileKey);
                         queueSpokenHint(fenAfterReply, point, 'computed', []);
                         captureEvent('coach_move_point_named', { surface: 'coach-teach' });
                       }

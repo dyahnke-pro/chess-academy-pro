@@ -48,7 +48,7 @@ describe('plies 18 and 24 — the c7 fork is one claim across two lanes', async 
     const latent = detectLatentFork(fenAt(19), 'white');
     expect(latent?.square).toBe('c7');
     const latentKey = forkThreatKey(latent!.square, latent!.targets.map((t) => t.square));
-    const hit = detectBehaviors({ fen: fenAt(25), studentColor: 'b' }).find((h) => /The opponent wants Nc7/.test(h.fact));
+    const hit = detectBehaviors({ fen: fenAt(25), studentColor: 'b' }).find((h) => /They want Nc7/.test(h.fact));
     expect(hit?.keys).toContain(latentKey);
   });
 });

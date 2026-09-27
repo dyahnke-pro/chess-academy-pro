@@ -402,8 +402,23 @@ function findBackRankWeakness(chess: Chess): TacticPattern[] {
     const enemy: Color = color === 'w' ? 'b' : 'w';
     const probe = withTurn(chess, enemy);
     if (!probe) continue;
+    // …and the check must SURVIVE: a landing square the defender simply takes
+    // on is not an invasion (hand walk 2026-09-27, Alekhine: "the back rank can
+    // be invaded from f1" with Rf8+ met by …Bxf8). The king may take only an
+    // unprotected invader.
+    const survives = (m: { from: Square; to: Square; san: string }): boolean => {
+      try {
+        const after = withTurn(chess, enemy);
+        if (!after) return false;
+        after.move(m.san);
+        const takers = after.attackers(m.to, color).filter((sq) => after.get(sq)?.type !== 'k');
+        if (takers.length > 0) return false;
+        const kingTakes = after.attackers(m.to, color).length > 0;
+        return !kingTakes || after.attackers(m.to, enemy).length > 0;
+      } catch { return false; }
+    };
     const invader = probe.moves({ verbose: true }).find((m) =>
-      (m.piece === 'r' || m.piece === 'q') && rankOfSquare(m.to) === rank && m.san.includes('+'));
+      (m.piece === 'r' || m.piece === 'q') && rankOfSquare(m.to) === rank && m.san.includes('+') && survives(m));
     if (invader) {
       out.push({
         type: 'back_rank',

@@ -62,7 +62,7 @@ describe('is my d-pawn strong', async () => {
   it('the protected passer on d3', () => {
     expect(pawnStrengthAsk('Is my d-pawn strong?')).toEqual({ file: 'd' });
     const a = assemblePawnStrengthAnswer({ fen: g.fen(), file: 'd', studentColor: 'black' });
-    expect(a?.facts).toMatch(/^Yes — your pawn on d3 is a passed pawn, 2 squares from queening, and nothing stands in front of it\. It's protected by your pawn on e4\./);
+    expect(a?.facts).toMatch(/^It's a strength — your pawn on d3 is a passed pawn, 2 squares from queening, and nothing stands in front of it\. It's protected by your pawn on e4\./);
   });
   it('no pawn on the file is said plainly (negative control)', () => {
     const a = assemblePawnStrengthAnswer({ fen: g.fen(), file: 'b', studentColor: 'black' });

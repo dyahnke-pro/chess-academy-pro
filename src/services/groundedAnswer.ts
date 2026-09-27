@@ -33,6 +33,7 @@ import { structurePlan } from './boardPlan';
 import { structureSignature } from './boardStructure';
 import { materialEdgeWords } from './reviewPositionalAssessment';
 import { strategicWhyLed, strategicWhyImperative } from './moveFundamentals';
+import { threatMadeWhy } from './deliberation';
 import { liveMethodBeatFor } from './methodBeat';
 import { detectKingExposure, kingExposureClause } from './kingSafety';
 import { extractQuestionFocus, PURE_BOARD_ASPECTS } from './boardQuestionRouter';
@@ -395,7 +396,13 @@ export function assembleBoardPlanAnswer(
   // Each plan is a sentence: `deriveNextPlans` returns clauses without their
   // full stop, and joined bare they ran on ("…pins the king back The plan from
   // here is…", question walk 2026-09-27).
-  const withMethod = deriveNextPlans(fen, myC).map((p) => cap(p)).map((p) => (/[.!?]$/.test(p.trim()) ? p.trim() : `${p.trim()}.`));
+  // Stacked plans vary the stem after the first — the same rule the review
+  // narrator follows (question walk 2026-09-27: "The plan from here is to…"
+  // three times in one answer). Every plan survives; only the opener changes.
+  const STEMS = ['Alongside that, aim to ', 'On top of that, work to ', 'And the third piece of it: '];
+  const withMethod = deriveNextPlans(fen, myC).map((p) => cap(p))
+    .map((p, i) => (i === 0 ? p : p.replace(/^The plan from here is to /, STEMS[(i - 1) % STEMS.length])))
+    .map((p) => (/[.!?]$/.test(p.trim()) ? p.trim() : `${p.trim()}.`));
   const levers: string[] = [];
 
   // A pawn break to open the position (findPawnBreaks reads the side to move).
@@ -1001,8 +1008,13 @@ export function assemblePiecePlanAnswer(
   // "plan for my bishop" is really asking about).
   const scopeCount = (sq: Square): number => squaresAttackedBy(chess, sq, me).length;
   const engineFrom = engineBestUci && engineBestUci.length >= 4 ? (engineBestUci.slice(0, 2) as Square) : null;
+  // A piece they are about to win is the one the question is really about
+  // (question walk 2026-09-27: "where should my knight go?" answered for the
+  // c6 knight while e5 was hitting the one on f6).
+  const underFire = candidates.find((c) => { try { return legalSeeGainFor(fen, c, them) > 0; } catch { return false; } }) ?? null;
   const sq = parsed.square
     ?? (engineFrom && candidates.includes(engineFrom) ? engineFrom : null)
+    ?? underFire
     ?? [...candidates].sort((a, b) => scopeCount(a) - scopeCount(b))[0];
 
   // ── THE LINES IT SITS ON, and what blocks them ────────────────────────────
@@ -1129,6 +1141,11 @@ export function assemblePieceActivityAnswer(
   officers.sort((a, b) => (a.scope - b.scope) || ((REVIEW_PIECE_VALUE[b.type] ?? 0) - (REVIEW_PIECE_VALUE[a.type] ?? 0)));
   const worst = officers[0];
   const name = REVIEW_PIECE_NAME[worst.type];
+  // ONE PIECE HAS NO "WORST" (question walk 2026-09-27, rook ending: "your
+  // least active piece is the rook on d8", then "is it good?" → "Good").
+  if (officers.length === 1 && !wantType) {
+    return { facts: `Your ${name} on ${worst.sq} is your only piece besides the king, so there's nothing to rank it against — the question is only whether it stands on its best square.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+  }
   const homeRank = me === 'w' ? '1' : '8';
   const undeveloped = worst.sq[1] === homeRank && (worst.type === 'n' || worst.type === 'b');
   const tail = worst.scope === 0
@@ -1835,7 +1852,7 @@ export function assembleCandidateMoveAnswer(opts: {
 }): GroundedAnswer | null {
   const { fen, candidateSan } = opts;
   const hedge = opts.candidateSettled === false
-    ? "The engine hadn't settled on this line yet — take it as a first read, not a final word."
+    ? "Take that line as a first read, not a final word."
     : null;
   const raw = (candidateSan ?? '').trim();
   if (!raw) return null;
@@ -1951,7 +1968,9 @@ export function assembleCandidateMoveAnswer(opts: {
     }
     if (verdict) {
       const parts = [verdict];
-      if (geo && !geo.startsWith('attacks')) parts.push(`It ${geo}.`);
+      // Named, not "It": after "Play Bd7 instead" a bare "It gives check" was
+      // heard as Bd7 giving check (question walk 2026-09-27).
+      if (geo && !geo.startsWith('attacks')) parts.push(`${candNorm} ${geo}.`);
       if (lineText) parts.push(lineText);
       if (freqText) parts.push(freqText);
       if (hedge) parts.push(hedge);
@@ -2070,7 +2089,7 @@ export function assembleOpponentHypotheticalAnswer(opts: {
   if (parts.length === 1 && !/[.!?]$/.test(parts[0])) {
     return { facts: `I don't have an engine read on ${theirNorm} for them yet — ask me again in a moment.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
   }
-  if (opts.settled === false) parts.push("The engine hadn't settled on this line yet — take it as a first read, not a final word.");
+  if (opts.settled === false) parts.push("Take that line as a first read, not a final word.");
   return { facts: parts.join(' '), bestMoveSan: bestSan, bestMoveFromTo: bestFromTo, sources };
 }
 
@@ -2157,7 +2176,7 @@ export function assembleTradeAnswer(opts: {
   const after = evalPhrase(opts.tradeEvalCp, opts.tradeMateIn, mover, opts.studentColor);
   if (after) parts.push(`After it, ${after}.`);
   if (principle) parts.push(principle);
-  if (opts.settled === false) parts.push("The engine hadn't settled on this line yet — take it as a first read, not a final word.");
+  if (opts.settled === false) parts.push("Take that line as a first read, not a final word.");
   return { facts: parts.join(' '), bestMoveSan: opts.bestSan, bestMoveFromTo: null, sources: ['engine:stockfish', 'board:chess.js'] };
 }
 
@@ -5615,13 +5634,18 @@ export function assembleRetrospectiveAnswer(r: RetrospectiveMoveLike): GroundedA
   // form is written from the mover's chair, so its possessives are re-seated
   // for a move the student did not make ("my king" for the coach's castle).
   const ledRaw = describeMoveGeometry(r.fenBefore, r.playedSan, r.moverColor)
+    ?? threatMadeWhy(r.fenBefore, r.playedSan, r.moverColor === 'white' ? 'w' : 'b')
     ?? strategicWhyLed(r.fenBefore, r.playedSan, r.moverColor);
+  // The mover's chair re-seated for a move the student did not make — applied
+  // to EVERY clause written from the mover's side ("your move let them play
+  // Nxe5" said of the coach's own e5, question walk 2026-09-27).
   const reseat: Record<string, string> = r.mover === 'coach'
-    ? { your: 'my', their: 'your', Your: 'My', Their: 'Your' }
+    ? { your: 'my', their: 'your', Your: 'My', Their: 'Your', them: 'you', they: 'you', They: 'You' }
     : r.mover === 'opponent'
-      ? { your: 'their', their: 'your', Your: 'Their', Their: 'Your' }
+      ? { your: 'their', their: 'your', Your: 'Their', Their: 'Your', them: 'you', they: 'you', They: 'You' }
       : {};
-  const did = ledRaw ? ledRaw.replace(/\b(your|their|Your|Their)\b/g, (w) => reseat[w] ?? w) : null;
+  const reseatText = (t: string): string => t.replace(/\b(your|their|Your|Their|them|they|They)\b/g, (w) => reseat[w] ?? w);
+  const did = ledRaw ? reseatText(ledRaw) : null;
   const didClause = did ? ` — it ${did.replace(/[.!?]+$/, '')}` : '';
 
   // The engine's better move, by COORDINATES — the same move renders Nxd4 or
@@ -5649,7 +5673,8 @@ export function assembleRetrospectiveAnswer(r: RetrospectiveMoveLike): GroundedA
   }
 
   const noRead = r.quality === null;
-  const why = r.bestMoveUci ? explainBestMoveGrounded(r.fenBefore, r.playedSan, r.bestMoveUci, r.moverColor) : null;
+  const whyRaw = r.bestMoveUci ? explainBestMoveGrounded(r.fenBefore, r.playedSan, r.bestMoveUci, r.moverColor) : null;
+  const why = whyRaw ? reseatText(whyRaw) : null;
   const better = bestSan
     ? ` The engine preferred ${bestSan}${why ? `: ${(/^[A-Z][a-z]+(?=[\s,])/.test(why) && !/^I\b/.test(why) ? why.charAt(0).toLowerCase() + why.slice(1) : why).replace(/[.!?]+$/, '')}` : ''}.`
     : '';
@@ -7064,7 +7089,10 @@ export function assemblePawnStrengthAnswer(opts: { fen: string; file: string; st
   const squares = `${toGo} square${toGo === 1 ? '' : 's'} from queening`;
   const strong = passed && !blockader && loseable === 0 && (protectedBy.length > 0 || toGo <= 3);
   if (passed) {
-    parts.push(`${strong ? 'Yes — ' : ''}your pawn on ${sq} is a passed pawn, ${squares}${blockader ? `, but their ${blockader} blocks it` : ', and nothing stands in front of it'}.`);
+    // One answer to "strong?" and "weak?" alike: a healthy passer is named as
+    // a strength, never a bare "Yes" that reads as agreeing it is weak
+    // (question walk 2026-09-27: "Is my e6 pawn weak?" → "Yes — … passed").
+    parts.push(`${strong ? "It's a strength — " : ''}your pawn on ${sq} is a passed pawn, ${squares}${blockader ? `, but their ${blockader} blocks it` : ', and nothing stands in front of it'}.`);
   } else {
     // "IS IT WEAK?" IS ABOUT HEALTH, NOT RUNNING (question walk 2026-09-27:
     // "Is my d4 pawn weak?" was answered "it isn't passed"). The structural

@@ -316,11 +316,17 @@ export function pieceQualityLines(
   // the same wrong-intent as the queen case). Danya reroutes minors, not rooks.
   // Also a MIDDLEGAME idea only — in the opening a minor is idle because it
   // isn't developed YET, not because it is misplaced (the caller passes phase).
-  const worst = mine.filter((v) => v.piece.toLowerCase() === 'n' || v.piece.toLowerCase() === 'b')
+  const minors = mine.filter((v) => v.piece.toLowerCase() === 'n' || v.piece.toLowerCase() === 'b')
     .filter((v) => !atWork(opts?.fen, v.square, me))
-    .filter((v) => v.square !== opts?.justMovedTo)
-    .map((v) => ({ v, d: delta(v) }))
-    .sort((a, b) => a.d - b.d)[0];
+    .filter((v) => v.square !== opts?.justMovedTo);
+  // A MINOR STILL AT HOME IS THE WORST PIECE, whatever the table says about
+  // the developed ones (hand walk 2026-09-27, Alekhine: "your knight on c3 is
+  // doing the least of anything you own" with the f1 bishop not yet moved).
+  // Development comes before rerouting.
+  const home = opts?.isMiddlegame === true ? minors.find((v) => onHomeSquare(v)) : undefined;
+  const worst = home
+    ? { v: home, d: -1 }
+    : minors.map((v) => ({ v, d: delta(v) })).sort((a, b) => a.d - b.d)[0];
   if (opts?.isMiddlegame !== false && worst && worst.d <= -0.3) {
     const key = `worst:${phase}`;
     if (!said?.has(key)) {
@@ -336,7 +342,9 @@ export function pieceQualityLines(
         // to finish").
         text: onHomeSquare(worst.v)
           ? `Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} hasn't moved yet — in general, finish your development before starting anything new.`
-          : `Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} is doing the least of anything you own — finding it a better square is worth more than a new plan.`,
+          // The metric compares a piece with the others of its KIND on this
+          // board, so that is all the sentence claims.
+          : `Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} is doing less than a ${NAME[worst.v.piece.toLowerCase()]} should here — finding it a better square is worth more than a new plan.`,
       });
     }
   }

@@ -54,6 +54,11 @@ export async function computeLeansOn(
   if (!star || star.delta < minDelta) return null;
   const starVal = baseTable.find((v) => v.square === star.square);
   if (!starVal) return null;
+  // ONLY A MINOR IS "HELD" ON ITS SQUARE (hand walk 2026-09-27, Alekhine: "your
+  // queen on d1 does its work because your bishop on e2 holds it there" — the
+  // bishop was SHIELDING the queen from the g4 bishop, not anchoring it). The
+  // leans-on lesson is the outpost knight or bishop and the pawn beneath it.
+  if (!/^[nb]$/i.test(starVal.piece)) return null;
   const before = Math.abs(ownContribution(starVal));
 
   // A piece the opponent can WIN on its square cannot be "kept in place", and a

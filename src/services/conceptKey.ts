@@ -7,6 +7,11 @@
  * 2026-09-27).
  */
 export function conceptInstanceKey(id: string, squares: readonly string[]): string {
+  // A BATTERY IS ITS TARGET (hand walk 2026-09-27, Alekhine: "your rooks on e1
+  // and e4 form a battery … bearing down on e6", then "after R1e2 … your rooks
+  // on e2 and e4 form a battery … on e6"). Which back square the stack uses is
+  // not a new idea; the pressure on e6 is the idea. Target is the last square.
+  if (/battery/i.test(id) && squares.length > 0) return `concept:battery:${squares[squares.length - 1]}`;
   return `concept:${id}:${[...squares].sort().join('')}`;
 }
 

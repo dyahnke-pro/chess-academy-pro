@@ -127,8 +127,14 @@ const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
  *  gap line is its echo and stays quiet — the weighing carries more. */
 export function gapEchoedByVerdict(
   gapSan: string | null,
-  clauses: ReadonlyArray<{ kind: string; text: string }>,
+  clauses: ReadonlyArray<{ kind: string; text: string; squares?: readonly string[] }>,
+  /** The square the gap's move lands on. A tactic concept whose agent lands
+   *  there (its first square) is the same move told better — "After Ne5, your
+   *  knight on e5 forks …" beside "g4 gives you something: Ne5 — it attacks
+   *  the rook on d7 and the rook on g6" (hand walk 2026-09-27, Alekhine). */
+  gapTo: string | null = null,
 ): boolean {
   if (!gapSan) return false;
+  if (gapTo && clauses.some((c) => c.kind === 'concept' && c.squares?.[0] === gapTo)) return true;
   return clauses.some((c) => c.kind === 'deliberation' && c.text.includes(`The move is ${gapSan} `));
 }

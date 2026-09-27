@@ -33,12 +33,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `findHangingPieces` (function) — 11 call sites
 - `src/data/patternRegistry.ts:113`
 - `src/services/coachGameEngine.ts:298`
-- `src/services/deliberation.ts:118`
+- `src/services/deliberation.ts:119`
 - `src/services/liveTacticsContext.ts:378`
 - `src/services/moveReason.ts:112`
 - `src/services/playedMoveGrade.ts:90`
 - `src/services/searchDepth.ts:69`
-- `src/services/tacticsDetector.ts:781`
+- `src/services/tacticsDetector.ts:796`
 - `src/services/threatCheck.ts:55`
 - `src/services/threatOut.ts:78`
 - `src/test/kingIsNeverHanging.test.ts:53`

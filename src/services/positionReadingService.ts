@@ -576,6 +576,8 @@ export interface ColorComplexWeakness {
   complex: 'light' | 'dark';
   /** The holes of that colour the opponent can settle on. */
   squares: Square[];
+  /** The opponent's piece that can settle there — a knight when they have one. */
+  by: 'knight' | 'bishop';
 }
 
 /**
@@ -602,10 +604,23 @@ export function findColorComplexWeakness(fen: string): ColorComplexWeakness[] {
     // about squares in your camp the opponent settles on, not the shared centre.
     const sideHoles = (side === 'w' ? holes.white : holes.black)
       .filter((sq) => (side === 'w' ? Number(sq[1]) <= 4 : Number(sq[1]) >= 5));
+    // THE WEAKNESS NEEDS SOMEONE TO USE IT (hand walk 2026-09-27, a rook
+    // endgame: "their dark squares are weak — a knight belongs on one" with no
+    // knight on the board). A hole is only a hole to a piece that can sit on it
+    // — the opponent's knight, or their bishop of that colour.
+    const enemy: Color = side === 'w' ? 'b' : 'w';
+    const exploiter: Record<'light' | 'dark', 'knight' | 'bishop' | null> = { light: null, dark: null };
+    for (const row of chess.board()) for (const cell of row) {
+      if (!cell || cell.color !== enemy) continue;
+      if (cell.type === 'n') { exploiter.light = 'knight'; exploiter.dark = 'knight'; }
+      if (cell.type === 'b') { const k = squareColor(cell.square); exploiter[k] = exploiter[k] ?? 'bishop'; }
+    }
     for (const complex of ['light', 'dark'] as const) {
       if (hasBishopOfColor[complex]) continue; // a bishop of that colour still covers it
+      const by = exploiter[complex];
+      if (!by) continue; // nothing of theirs can settle there
       const cHoles = sideHoles.filter((sq) => squareColor(sq) === complex);
-      if (cHoles.length >= 2) out.push({ side, complex, squares: cHoles });
+      if (cHoles.length >= 2) out.push({ side, complex, squares: cHoles, by });
     }
   }
   return out;
@@ -1174,12 +1189,32 @@ export function kingActivation(fen: string, color: Color): { to: Square } | null
       if (m.piece !== 'k') continue;
       const d = centreDist(m.to);
       if (d >= bestDist) continue;
+      // NEVER ONTO A SQUARE THAT BURIES ITS OWN BISHOP (hand walk 2026-09-27,
+      // Najdorf: "walk it up … starting with d7" with the c8 bishop still at
+      // home — d7 is its only way out). A home-rank bishop's first diagonal
+      // steps stay free; the king goes round (Kc7, as Naroditsky plays it).
+      if (blocksHomeBishop(c, m.to, color)) continue;
       const probe = new Chess(forceTurn(fen, color));
       probe.move({ from: m.from, to: m.to });
       if (probe.attackers(m.to, enemy).length === 0) { best = m.to; bestDist = d; }
     }
   } catch { return null; }
   return best ? { to: best } : null;
+}
+
+/** True when `to` is a first diagonal step of a `color` bishop still on its
+ *  home rank — putting the king there shuts that bishop in. */
+function blocksHomeBishop(chess: Chess, to: Square, color: Color): boolean {
+  const home = color === 'w' ? 1 : 8;
+  const step = color === 'w' ? 1 : -1;
+  if (Number(to[1]) !== home + step) return false;
+  for (const df of [-1, 1]) {
+    const f = to.charCodeAt(0) - df;
+    if (f < 97 || f > 104) continue;
+    const p = chess.get(`${String.fromCharCode(f)}${home}` as Square);
+    if (p && p.type === 'b' && p.color === color) return true;
+  }
+  return false;
 }
 
 /** ROOK BEHIND THE PASSED PAWN — the Tarrasch rule (David 2026-08-23). Fires

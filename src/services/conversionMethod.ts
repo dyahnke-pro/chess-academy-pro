@@ -81,7 +81,10 @@ export function readConversion(fen: string, student: 'w' | 'b'): ConversionRead 
     text = `You're ${edgeWords(edge, c, student)} up with few pieces left — now make a passed pawn. The extra material wins by making a new queen, not by hunting the king.`;
   } else {
     step = 'escort-passer';
-    text = `Your passed pawn on ${passer} is the win — push it, with your king and pieces escorting it one safe square at a time.`;
+    // "and pieces" only when there are pieces — a pawn ending escorts with the
+    // king alone (hand walk 2026-09-27).
+    const escorts = pieces(student) > 0 ? 'your king and pieces' : 'your king';
+    text = `Your passed pawn on ${passer} is the win — push it, with ${escorts} escorting it one safe square at a time.`;
   }
   return { step, edge, passer, text };
 }

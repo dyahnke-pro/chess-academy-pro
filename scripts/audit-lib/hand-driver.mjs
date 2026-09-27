@@ -64,6 +64,17 @@ async function state() {
     .filter((e) => e.kind === 'coach-narration-spoken')
     .map((e) => (e.narrationText ?? e.summary ?? '').trim())
     .filter((t) => t && !NOISE.test(t));
+  // A line that reached the VOICE without its own narration event (a verdict
+  // spoken straight through speakForced) shows only as a 40-char `voice=`
+  // stub. Keep it, marked "…", so a walk log never undercounts what was
+  // heard (hand walk 2026-09-27: "dxe5: nice — that was the only…" missing).
+  for (const e of fresh) {
+    const m = /voice=\S+ personality=\S+ text="(.*)"$/.exec(e.narrationText ?? e.summary ?? '');
+    if (!m) continue;
+    const stub = m[1].replace(/\s+/g, ' ').trim();
+    const norm = (t) => t.toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (stub && !spoken.some((t) => norm(t).includes(norm(stub).slice(0, 30)))) spoken.push(`${stub}… [voice]`);
+  }
   const cmd = fresh
     .filter((e) => /coachMoveCommand|walkthrough/i.test(`${e.source ?? ''}`))
     .map((e) => `${e.kind} ${e.source}: ${(e.summary ?? '').slice(0, 160)}`);

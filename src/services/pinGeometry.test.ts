@@ -83,6 +83,9 @@ describe('a pin that wins nothing is not a pin (WO-STANDARD-01 D-2, prod tape 20
     c.remove('e8');
     c.remove('d8');
     c.put({ type: 'k', color: 'b' }, 'a8');
+    // f7 keeps a defender (Nd8 guards f7, not g8): an UNDEFENDED f7 is simply
+    // a pawn Bxf7 collects — a capture, not a pin (hand walk 2026-09-27).
+    c.put({ type: 'n', color: 'b' }, 'd8');
     expect(pinBites(c, 'c4', 'f7', 'g8')).toBe(true);
     const pins = detectTactics(c.fen()).tactics.filter((t) => t.type === 'pin');
     expect(pins.some((p) => /bishop on c4 pins pawn on f7 against knight on g8/i.test(p.description))).toBe(true);
@@ -130,5 +133,12 @@ describe('a front piece that can take the pinner is not pinned (hand walk 2340, 
     for (const m of 'e4 c5 Nf3 Nc6 c3 e5 d4 cxd4 cxd4 d5 exd5 Qxd5 Nc3 Bb4 Bd2 Bxc3'.split(' ')) c.move(m);
     const pins = detectTactics(c.fen()).tactics.filter((t) => t.type === 'pin');
     expect(pins.some((p) => p.involvedSquares.includes('c3') && p.involvedSquares.includes('b2'))).toBe(false);
+  });
+
+  it('a relative pin on a piece that simply hangs is a capture, not a pin (Najdorf ply 18)', () => {
+    // …Bb7 on the long diagonal: g2 undefended, the rook on h1 behind it.
+    const fen = 'r2k1b1r/1b2pppp/p4n2/1p2p1B1/8/2NB4/PPP2PPP/R3K2R w KQ - 2 12';
+    expect(detectTactics(fen).tactics.some((t) => t.type === 'pin' && /g2/.test(t.description))).toBe(false);
+    expect(detectTactics(fen).hangingPieces.some((h) => h.square === 'g2')).toBe(true);
   });
 });

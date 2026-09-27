@@ -113,6 +113,9 @@ export interface MoveFundamental {
   /** The opponent must answer it (a developing move that hits their queen or
    *  rook). A consequence, so it teaches even when the principle is known. */
   forcing?: boolean;
+  /** The reason this SHAPE of the principle holds, when it differs from the
+   *  id's general reason (a flank pawn's is not a center pawn's). */
+  reason?: string;
 }
 
 /**
@@ -368,8 +371,15 @@ export function computeMoveFundamentals(
   // defending it" (Damiano walk 2026-09-27). No pawn can evict it; a rook can
   // still take it for free.
   const them: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
+  // …and not a square a minor of theirs takes it on right now: that is a
+  // trade offer, not an outpost (hand walk 2026-09-27, Alekhine: "Be5 lands
+  // on the e5 outpost" with …Nxe5 the next move — Naroditsky's point was that
+  // Be5 OFFERS the trade to shift their rook).
   const hangsThere = (() => {
-    try { return after.isAttacked(mv.to as never, them) && after.attackers(mv.to as never, mover).length === 0; } catch { return false; }
+    try {
+      if (after.isAttacked(mv.to as never, them) && after.attackers(mv.to as never, mover).length === 0) return true;
+      return after.attackers(mv.to as never, them).some((sq) => ['n', 'b'].includes(after.get(sq as never)?.type ?? ''));
+    } catch { return false; }
   })();
   if ((mv.piece === 'n' || mv.piece === 'b') && !mv.captured && relRank(mv.to, mover) >= 5 && !hangsThere && isOutpost(after, mv.to, mover, false)) {
     const name = PIECE_NAME[mv.piece];
@@ -467,6 +477,17 @@ export function computeMoveFundamentals(
       // twice and taught nothing (Blumenfeld walk F2).
       imperative: `open up the center — challenge their pawn on ${andList(contactBy)}`,
       squares: [mv.to],
+    } : mv.to[0] !== 'd' && mv.to[0] !== 'e' && coreHitBy(mv.to, mover).length > 0 ? {
+      // A FLANK PAWN fights for the center from the side — it does not stake
+      // it out (hand walk 2026-09-27: "stake out the center … with the pawn
+      // to c5" on 1…c5, the Sicilian's whole idea being to contest d4).
+      id: 'center',
+      weight: 66,
+      led: `fights for ${andList(coreHitBy(mv.to, mover))} from the side`,
+      selfContained: `fights for ${andList(coreHitBy(mv.to, mover))} from the side with the pawn to ${mv.to}`,
+      imperative: `fight for ${andList(coreHitBy(mv.to, mover))} from the side`,
+      reason: 'a flank pawn that trades itself for a center pawn leaves you two center pawns against their one',
+      squares: [mv.to, ...coreHitBy(mv.to, mover)],
     } : {
       id: 'center',
       weight: 66,
@@ -988,6 +1009,21 @@ function renderStrategic(
   return lead.map((f) => f[form]).join(', and ');
 }
 
+/** The CLAIM KEYS a strategic why makes — computed from the fundamentals
+ *  themselves, never read back out of the prose. The keys the positional read
+ *  writes for the same ideas, so one idea is one saying across lanes. */
+export function strategicClaims(
+  fenBefore: string,
+  moveSan: string,
+  moverColor: 'white' | 'black',
+): string[] {
+  if (isForcedReply(fenBefore, moveSan)) return [];
+  return leadingFundamentals(fenBefore, moveSan, moverColor).flatMap((f) =>
+    f.id === 'open-file' && f.squares[0] ? [`file-${f.squares[0][0]}`]
+      : f.id === 'king-safety' ? ['castle-now']
+        : []);
+}
+
 /** The LED positional clause (verb-first) — for a surface that has ALREADY named
  *  the move, e.g. the hint ("Your knight to f3 — {this}"). Null when quiet. */
 export function strategicWhyLed(
@@ -1054,12 +1090,12 @@ const PRINCIPLE_REASON: Record<MoveFundamental['id'], string | null> = {
  *  asserted without proof. */
 export function principleOnceLine(
   san: string,
-  f: Pick<MoveFundamental, 'imperative' | 'id'>,
+  f: Pick<MoveFundamental, 'imperative' | 'id'> & { reason?: string },
   /** Rotation key — required, stable about the moment (`stemKeyOf` of the
    *  board the move was played from). Only the wrapper rotates. */
   stemKey: number,
 ): string {
-  const reason = PRINCIPLE_REASON[f.id];
+  const reason = f.reason ?? PRINCIPLE_REASON[f.id];
   if (!reason) return `${san}: ${f.imperative}.`;
   return rotateStem([
     `${san} follows a rule worth keeping: ${f.imperative} — ${reason}.`,
@@ -1230,4 +1266,10 @@ function tempoTarget(
     }
   }
   return null;
+}
+
+/** The core center squares (d4 e4 d5 e5) a pawn on `sq` attacks. */
+function coreHitBy(sq: string, color: 'w' | 'b'): string[] {
+  const f = sq.charCodeAt(0); const r = Number(sq[1]) + (color === 'w' ? 1 : -1);
+  return [f - 1, f + 1].map((x) => `${String.fromCharCode(x)}${r}`).filter((t) => ['d4', 'e4', 'd5', 'e5'].includes(t));
 }
