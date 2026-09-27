@@ -16,3 +16,6 @@ Every narrated ply read against the board. **42 of 52 narrated plies clean (81%)
 Kept (checked, true): 23 "a passed pawn on the h-file" as White's aim — it arrived at 29–31. 28 buried bishop — Rg6 (best) also drops h7.
 
 Tests: `reviewWalkCT.test.ts`, `coachFeatureService.introResult.test.ts`, `reviewRegister.test.ts`, `reviewFullData.test.ts` (loose facet), each on the game's own positions with a negative control.
+
+## Re-walk (same game, after the fixes)
+**48 of 50 narrated plies clean (96%)**, up from 81%. Every fixed class gone; intro now "— you had Black." Left: 78 "Bb5 develops into the game" (the sibling development rule, same missing gate — now both rules require the piece to leave its STARTING square), 52 "your plan is taking shape: an attack on their king" (vague in a rook endgame, watch).

@@ -27,6 +27,14 @@ describe('"completes your development" is an opening fact', () => {
     const fen = '4b3/8/8/2p5/8/8/5PPP/6K1 b - - 0 39';
     expect(computeMoveFundamentals(fen, 'Bb5', 'black').some((f) => f.id === 'development-complete')).toBe(false);
   });
+  it('a bishop leaving e8 (not a starting square) does not "develop into the game"', () => {
+    const fen = '4b3/8/8/2p5/8/8/5PPP/6K1 b - - 0 39';
+    expect(computeMoveFundamentals(fen, 'Bb5', 'black').some((f) => f.id === 'development')).toBe(false);
+  });
+  it('NEGATIVE CONTROL: Bh6 from f8 on move 25 is development', () => {
+    const fen = after('e4 c5 Nf3 d6 Bb5+ Nd7 O-O Nf6 Re1 a6 Bd3 b5 c4 g5 Nxg5 Ne5 Be2 bxc4 Na3 Rg8 Nxc4 Nxc4 d4 Nb6 Bh5 Nxh5 Qxh5 Rg7 Nxh7 Qd7 dxc5 dxc5 e5 Qc6 f3 Qg6 Nf6+ Kd8 Qxg6 Rxg6 Ne4 Bb7 h4 Rc8 h5 Rg8 Bd2 Nc4 Bc3').fen();
+    expect(computeMoveFundamentals(fen, 'Bh6', 'black').some((f) => f.id === 'development' || f.id === 'development-complete')).toBe(true);
+  });
   it('NEGATIVE CONTROL: the last minor out on move 8 still reads', () => {
     const fen = '4kb2/8/8/8/8/8/8/4K3 b - - 0 8';
     expect(computeMoveFundamentals(fen, 'Be7', 'black').some((f) => f.id === 'development-complete')).toBe(true);

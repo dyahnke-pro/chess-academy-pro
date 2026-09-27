@@ -65,7 +65,7 @@
 - `src/services/reviewFullData.test.ts:314`
 - `src/services/reviewFullData.test.ts:349`
 - `src/services/reviewFullData.test.ts:369`
-- `src/services/reviewWalkCT.test.ts:41`
+- `src/services/reviewWalkCT.test.ts:49`
 - `src/services/unifiedBetterMoveReason.test.ts:36`
 - `src/test/teach02Wired.test.ts:26`
 - `src/test/teach02Wired.test.ts:66`

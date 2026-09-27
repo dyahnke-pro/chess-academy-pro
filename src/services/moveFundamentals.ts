@@ -190,6 +190,9 @@ function relRank(sq: string, color: 'w' | 'b'): number {
 
 /** No enemy pawn can ever advance to attack `sq` — the classic outpost test. */
 /** Central squares the piece on `to` now attacks (from the after-move board). */
+/** The files a minor piece starts on. */
+const ORIGINAL_FILES: Record<'n' | 'b', string> = { n: 'bg', b: 'cf' };
+
 function eyesCenter(after: Chess, to: string, mover: 'w' | 'b'): string[] {
   // Q2 — the centre AND the squares beside their king. Filtering the Q1 list
   // here is why `Bc4` could never be said to look at f7.
@@ -373,7 +376,9 @@ export function computeMoveFundamentals(
   //    scales with how much is still undeveloped: the more pieces at home, the
   //    more urgent development is.
   const homeRank = mover === 'w' ? 1 : 8;
-  if ((mv.piece === 'n' || mv.piece === 'b') && rankOf(mv.from) === homeRank && !out.some((f) => f.id === 'outpost')) {
+  // Only from the square the piece STARTED on — a bishop that wandered back to
+  // e8 and out again on move 39 "developed into the game" (review walk 2026-09-27).
+  if ((mv.piece === 'n' || mv.piece === 'b') && rankOf(mv.from) === homeRank && ORIGINAL_FILES[mv.piece].includes(mv.from[0]) && !out.some((f) => f.id === 'outpost')) {
     const name = PIECE_NAME[mv.piece];
     // NO SLICE (G4.5). This was `.filter(CORE_CENTER).slice(0, 2)` — two
     // truncations stacked: the narrow four-square centre, then a hard cap of
@@ -847,9 +852,9 @@ function openingIdeas(
   }
 
   // DEVELOPMENT COMPLETE — the last minor off its home square.
-  // Only in the opening: on move 39 a bishop that wandered back to its home
-  // rank and out again "completed your development" (review walk 2026-09-27).
-  if ((mv.piece === 'n' || mv.piece === 'b') && rankOf(mv.from) === homeRank && homeMinorCount(after, mover) === 0 && after.moveNumber() <= 20) {
+  // Only from a starting square: on move 39 a bishop that wandered back to its
+  // home rank and out again "completed your development" (review walk 2026-09-27).
+  if ((mv.piece === 'n' || mv.piece === 'b') && rankOf(mv.from) === homeRank && ORIGINAL_FILES[mv.piece].includes(mv.from[0]) && homeMinorCount(after, mover) === 0) {
     out.push({
       id: 'development-complete',
       weight: 70,

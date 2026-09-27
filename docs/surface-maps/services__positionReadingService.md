@@ -122,8 +122,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:6381`
 - `src/services/latentFork.ts:149`
 - `src/services/latentFork.ts:220`
-- `src/services/moveFundamentals.ts:303`
-- `src/services/moveFundamentals.ts:1141`
+- `src/services/moveFundamentals.ts:306`
+- `src/services/moveFundamentals.ts:1146`
 
 ### `legalSeeGainFor` (function) — 23 call sites
 - `src/services/bluffDetector.ts:53`
