@@ -365,7 +365,7 @@ describe('the [principle] facet teaches its HOW once per game (walk 5, R19)', ()
   it('a second ply carrying the same fundamental gets the short stem, not the lecture', () => {
     const fens = fensAfter(SICILIAN_IQP);
     const seen = new Set<import('./principleAttribution').FundamentalId>();
-    const fundamentals = [({ id: 'tempo-handed', facts: { target: 'rook on d5', kick: 'c4' }, evidence: { moves: ['c4'], pvMoves: [] } }) as never];
+    const fundamentals = [({ id: 'tempo-handed', facts: { target: 'rook on d5', kick: 'c4', played: 1 }, evidence: { moves: ['c4'], pvMoves: [] } }) as never];
     const at = (ply: number): string => computeMoveFacets({
       seenFundamentals: seen, fundamentals, teaching: NO_TEACHING_CONTEXT,
       fenBefore: fens[ply - 2], fenAfter: fens[ply - 1], san: SICILIAN_IQP[ply - 1], ply,

@@ -493,7 +493,12 @@ function shortVerdict(a: PrincipleAttribution): string {
   const e = a.evidence;
   switch (a.id) {
     case 'same-piece-twice': return `The same ${f.piece} again — its ${nth(Number(f.nth))} move.`;
-    case 'tempo-handed': return `Another tempo handed over: ${listMoves(e.moves)} hits your ${f.target}.`;
+    // Said as what HAPPENED only when they played the kick (g9 walk 2026-09-27:
+    // "g4 hits your knight on f5" after they had played Rc1) — the same
+    // `played` fact the full stem already reads.
+    case 'tempo-handed': return Number(f.played) === 1
+      ? `Another tempo handed over: ${listMoves(e.moves)} hits your ${f.target}.`
+      : `Another tempo on offer: ${listMoves(e.moves)} would hit your ${f.target}.`;
     case 'space-conceded': return `Space given up again — ${f.push} takes ${f.square}.`;
     case 'neglected-development': return `Development again — ${f.homeMinors} pieces still at home.`;
     case 'early-queen-sortie': return `The early queen again — ${f.kick} hits her.`;

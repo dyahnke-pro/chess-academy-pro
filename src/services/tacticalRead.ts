@@ -394,7 +394,13 @@ export function tacticalReadFromLines(
     const runner = topLines[1];
     const gap = bestStudentCp - toStudentCp(runner.evaluation, studentColor);
     const rUci = runner?.moves?.[0];
-    if (rUci && rUci.length >= 4 && rUci !== first.uci && gap >= 0 && gap <= 40) {
+    // A LOST POSITION HAS NO COIN-FLIP (g9 walk 2026-09-27: "nothing to lose
+    // sleep over — Ke7 does the same job as Kxc8", with mate in one after
+    // either). Two moves that lose equally are not a reassuring choice: the
+    // hedge speaks only in a live position. A forced mate against the student
+    // arrives here as a huge negative score, so the one bound covers it.
+    const live = bestStudentCp > -300;
+    if (live && rUci && rUci.length >= 4 && rUci !== first.uci && gap >= 0 && gap <= 40) {
       const rp = replayUci(fen, [rUci]);
       if (rp.length) closeAlternative = { san: rp[0].san, gapCp: gap };
     }

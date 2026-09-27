@@ -91,3 +91,13 @@ describe('the recap SUBJECT reads as English at every count', () => {
     }
   });
 });
+
+describe('the short tempo stem says what happened only when it happened (g9 walk 2026-09-27)', () => {
+  it('an unplayed kick is "on offer", never "handed over"', async () => {
+    const { renderFundamentalVerdict } = await import('./principleVoice');
+    const a = (played: number) => ({ id: 'tempo-handed', facts: { target: 'knight on f5', kick: 'g4', played }, evidence: { moves: ['g4'], pvMoves: [] } }) as never;
+    const seen = new Set(['tempo-handed']) as never;
+    expect(renderFundamentalVerdict([a(0)], { seen, ply: 1, replySan: 'Rc1' } as never)).toBe('Another tempo on offer: g4 would hit your knight on f5.');
+    expect(renderFundamentalVerdict([a(1)], { seen, ply: 1, replySan: 'g4' } as never)).toBe('Another tempo handed over: g4 hits your knight on f5.');
+  });
+});

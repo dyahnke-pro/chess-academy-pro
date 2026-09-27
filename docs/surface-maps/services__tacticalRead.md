@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**843 lines · 27 exports · 6 importers · 5 tests · 0 audits**
+**849 lines · 27 exports · 6 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -93,7 +93,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:123`
 - `src/services/tacticalRead.test.ts:126`
 
-### `tacticalReadFromLines` (function) — 12 call sites
+### `tacticalReadFromLines` (function) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8974`
 - `src/services/danyaBehaviors.ts:439`
 - `src/services/danyaDeviceCoverage.test.ts:73`
@@ -106,6 +106,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:403`
 - `src/services/tacticalRead.test.ts:404`
 - `src/services/tacticalRead.test.ts:410`
+- `src/services/tacticalRead.test.ts:605`
 
 ### `narrateTacticalRead` (function) — 5 call sites
 - `src/services/tacticalRead.test.ts:160`
