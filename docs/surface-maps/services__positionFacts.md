@@ -76,7 +76,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseText` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9228`
+- `src/components/Coach/CoachTeachPage.tsx:9233`
 - `src/hooks/useLiveCoach.ts:295`
 - `src/hooks/usePhaseNarration.ts:655`
 - `src/services/computerAccuracy.audit.test.ts:113`
@@ -90,7 +90,7 @@
 - `src/services/whyBestMove.ts:103`
 
 ### `computePositionFacts` (function) — 78 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9163`
+- `src/components/Coach/CoachTeachPage.tsx:9168`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:630`
@@ -169,11 +169,11 @@
 - `src/test/teach02Wired.test.ts:136`
 - `src/test/teach02Wired.test.ts:138`
 
-### `conceptInstanceKey` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `conceptInstanceKey` (function) — 1 call site
+- `src/components/Coach/CoachTeachPage.tsx:7924`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:7936`
+- `src/components/Coach/CoachTeachPage.tsx:7941`
 
 ### `convertKey` (function) — 1 call site
 - `src/services/positionFacts.convertOnce.test.ts:24`

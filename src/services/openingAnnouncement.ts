@@ -29,7 +29,10 @@ export interface DetectedName {
  * `studentColor` is REQUIRED: "you left" and "they left" are different claims.
  */
 /** Lichess filler labels that name no line a student can look up. */
-const GENERIC_TAIL = /^(?:main line|normal variation|rare (?:defen[cs]es?|variations?|lines?)|other (?:variations?|lines?))\b/i;
+// A PLURAL "… Variations" is the DB's grouping label, not a line ("Sicilian
+// Defense: Modern Variations" → "It's the Modern Variations", 1200 walk
+// 2026-09-27); a singular named variation stays.
+const GENERIC_TAIL = /^(?:main line|normal variation|rare (?:defen[cs]es?|variations?|lines?)|other (?:variations?|lines?)|\w+ variations$)/i;
 
 /** The name as it is SAID: a filler tail is dropped ("Indian Defense: Normal
  *  Variation" → "Indian Defense"), a real one kept. */

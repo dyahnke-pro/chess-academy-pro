@@ -275,7 +275,7 @@ import type { OpeningRecord, OpeningVariation } from '../../types';
 import type { LiveState, TacticsLiveContext } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight, WalkableLine } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import { computePositionFacts, clauseText, mustKey } from '../../services/positionFacts';
+import { computePositionFacts, clauseText, mustKey, conceptInstanceKey } from '../../services/positionFacts';
 import { gradePlayedMove } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause } from '../../services/opponentGap';
@@ -7917,6 +7917,11 @@ export function CoachTeachPage(): JSX.Element {
         learnMemRef.current.lastTacticKey = tacticKey;
         learnMemRef.current.spokenTacticLines.add(tacticLine);
         if (pendingMotif) recordMotif(pendingMotif.type, pendingMotif.instance, pendingMotif.moveNo, learnMemRef.current.motifFirstMove);
+        // …and the composer's concept clause reads the same instance key, so
+        // "you have a back-rank threat: the king on g8 has no escape square"
+        // is not followed by "their king on g8 has no escape square" in the
+        // late package (1200 walk 2026-09-27, ply 37).
+        if (myTacticType && tacticSquares.length > 0) standingRef.current.remember(conceptInstanceKey(myTacticType, tacticSquares));
         captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: tacticKey });
       }
       // ONE DEFINITION PER MOVE, ON THE LEAD (Blumenfeld walk, move 24: "Watch

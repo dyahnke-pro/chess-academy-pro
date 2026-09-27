@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach, vi } from 'vitest';
-import { openingAnnouncement } from './openingAnnouncement';
+import { openingAnnouncement, spokenOpeningLabel } from './openingAnnouncement';
 import { bookDeparture } from './bookDeparture';
 import { __setLocalDbForTests, lookupMasterPlay } from './masterPlayLookup';
 import { masterPlayCache, positionFen } from './masterPlayCache';
@@ -105,5 +105,14 @@ describe('bookDeparture reads the LIVE explorer answers from the cache', () => {
     await lookupMasterPlay(fens[0], { triggeredBy: 'book-departure', skipLocalDb: true });
     expect(calls.some((u) => u.includes('openings-masters-db'))).toBe(false);
     vi.restoreAllMocks();
+  });
+});
+
+describe('a plural "Variations" tail is a DB grouping, not a name (1200 walk 2026-09-27)', () => {
+  it('"Sicilian Defense: Modern Variations" is said as the family', () => {
+    expect(spokenOpeningLabel('Sicilian Defense: Modern Variations')).toBe('Sicilian Defense');
+  });
+  it('NEGATIVE CONTROL: a singular named variation stays', () => {
+    expect(spokenOpeningLabel('Sicilian Defense: Alapin Variation')).toBe('Sicilian Defense: Alapin Variation');
   });
 });
