@@ -1324,6 +1324,14 @@ export function attributePrinciples(
     }
   }
 
+  // A SILENCE ALWAYS NAMES ITSELF (review N900, ply 30): when no detector
+  // matched and none explained its refusal, `why` came back empty — so the
+  // review's "declined, and here is why" row never fired and the audit reported
+  // the diagnosis BLIND. The reason is a fact: nothing covered this slip.
+  if (pool.length === 0 && why && why.length === 0) {
+    why.push(`attribution: none of the ${DETECTORS.length} detectors matched ${last.san} (best ${best.san}) — this slip has no nameable fundamental yet`);
+  }
+
   return pool.sort((a, b) => b.weight - a.weight || FUNDAMENTAL_IDS.indexOf(a.id) - FUNDAMENTAL_IDS.indexOf(b.id)).slice(0, ATTRIBUTION_MAX);
 }
 

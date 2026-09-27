@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1343 lines · 11 exports · 37 importers · 23 tests · 1 audits**
+**1351 lines · 11 exports · 38 importers · 24 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,6 +17,7 @@
 - `src/components/Coach/GameReviewWeaknessCapture.tsx`
 - `src/data/fundamentalLessons.test.ts`
 - `src/data/fundamentalLessons.ts`
+- `src/services/attributionNeverBlind.test.ts`
 - `src/services/autoAnalyzeGame.ts`
 - `src/services/causalChain.ts`
 - `src/services/coachApi.ts`
@@ -80,7 +81,8 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:130`
 
-### `attributePrinciples` (function) — 59 call sites
+### `attributePrinciples` (function) — 60 call sites
+- `src/services/attributionNeverBlind.test.ts:13`
 - `src/services/coachFeatureService.ts:839`
 - `src/services/learnWalkBlumenfeld.test.ts:65`
 - `src/services/liveFundamental.ts:135`
@@ -158,6 +160,7 @@
 
 - `src/components/Coach/FundamentalsPage.test.tsx`
 - `src/data/fundamentalLessons.test.ts`
+- `src/services/attributionNeverBlind.test.ts`
 - `src/services/fundLeadStems.test.ts`
 - `src/services/fundamentalHow.test.ts`
 - `src/services/fundamentalReachesDecider.test.ts`
