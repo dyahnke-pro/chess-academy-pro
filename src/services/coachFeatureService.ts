@@ -1,4 +1,5 @@
 import { Chess } from 'chess.js';
+import { gameArcs, type ArcEvent } from './planArc';
 import { FUNDAMENTAL_CLAIM_FAMILY, type MoveFundamentalId } from './moveFundamentals';
 import type { Square } from 'chess.js';
 import { legalSeeGainOn } from './positionReadingService';
@@ -1310,6 +1311,13 @@ export function buildReviewSegments(
   /** The fundamental each student ply broke — attributed ONCE, consumed by the
    *  need score, the ranker and the narration. */
   const attrByPly = attributeGameFundamentals(moves, fenChain, usable, playerColor ?? null, sansForRun);
+  /** Each side's plan FOLLOWED across the game (planArc): where it took shape,
+   *  where it landed, where it was given up — read off the moves actually
+   *  played. The per-ply plan facets forget themselves every move; this is the
+   *  thread between them. */
+  const arcByIndex = playerColor === 'white' || playerColor === 'black'
+    ? gameArcs(sansForRun, playerColor)
+    : new Map<number, ArcEvent[]>();
   // THE ONE SELECTOR's student term (N2): need per student ply, computed once
   // for the game from the student's own data (cold → the rating prior). This is
   // what retires R2 ("teach every silent opening move"): a book ply speaks only
@@ -1782,6 +1790,12 @@ export function buildReviewSegments(
           seenConversionSteps.add(conv.step);
           facets.push(`[technique] ${conv.text}`);
         }
+      }
+      for (const e of arcByIndex.get(i) ?? []) {
+        const raw = `[plan-arc] ${e.text}`;
+        facets.push(raw);
+        if (e.squares.length) facetSquares.set(raw, e.squares);
+        if (e.seat === 'opponent') facetIncoming.add(raw);
       }
       // THE LOOP, OUT LOUD — ON THE PATH PROD ACTUALLY RUNS (WO-LOOP-01, run 4).
       // `isReviewUncapped()` is TRUE by default, so every shipped review beat is

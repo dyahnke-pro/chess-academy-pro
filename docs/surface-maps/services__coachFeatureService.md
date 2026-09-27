@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4914 lines · 34 exports · 38 importers · 35 tests · 5 audits**
+**4928 lines · 34 exports · 38 importers · 36 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -143,7 +143,7 @@
 - `src/services/coachFeatureService.test.ts:15`
 - `src/services/coachFeatureService.test.ts:24`
 
-### `buildReviewSegments` (function) — 58 call sites
+### `buildReviewSegments` (function) — 59 call sites
 - `src/components/Coach/CoachGameReview.tsx:1881`
 - `src/services/coachFeatureService.causalChain.test.ts:27`
 - `src/services/coachFeatureService.causalChain.test.ts:41`
@@ -189,6 +189,7 @@
 - `src/services/coachFeatureService.trade.test.ts:15`
 - `src/services/loopCloses.review.integration.test.ts:89`
 - `src/services/methodBeat.test.ts:70`
+- `src/services/planArc.test.ts:123`
 - `src/services/reviewCorpusNote.test.ts:40`
 - `src/services/reviewForesight.test.ts:52`
 - `src/services/reviewNeedGate.test.ts:30`
@@ -268,7 +269,7 @@
 - `src/services/reviewNarrationFidelity.test.ts:118`
 
 ### `pendingRecapture` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7531`
+- `src/components/Coach/CoachTeachPage.tsx:7538`
 - `src/services/coachFeatureService.test.ts:929`
 - `src/services/coachFeatureService.test.ts:930`
 - `src/utils/justCaptured.test.ts:20`
@@ -334,6 +335,7 @@
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/mapConcurrent.test.ts`
 - `src/services/methodBeat.test.ts`
+- `src/services/planArc.test.ts`
 - `src/services/recapSeat.test.ts`
 - `src/services/reviewBetterLineWhy.test.ts`
 - `src/services/reviewCorpusNote.test.ts`

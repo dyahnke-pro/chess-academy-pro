@@ -31,7 +31,7 @@ export type FacetTag =
   | 'sac' | 'sac-why' | 'forced' | 'king' | 'rook7' | 'passer'
   | 'badbishop' | 'worst' | 'minority' | 'complex' | 'structure'
   | 'verdict' | 'opening' | 'opp-dev' | 'opp-target' | 'endgame'
-  | 'plan-now' | 'plan-race' | 'plan-opening' | 'plan-middlegame' | 'plan-line' | 'consequence'
+  | 'plan-now' | 'plan-race' | 'plan-arc' | 'plan-opening' | 'plan-middlegame' | 'plan-line' | 'consequence'
   | 'note' | 'method' | 'refuted' | 'bluff' | 'technique' | 'contrast' | 'timing' | 'praise'
   | 'rule' | 'stopped' | 'stock' | 'trade';
 
@@ -117,6 +117,10 @@ export const FACET_RANK: Record<FacetTag, number> = {
   // committed to the idea by then.
   'plan-race': 21,
   'plan-now': 20,
+  // A plan FOLLOWED across moves (planArc): it landed, or it was dropped. An
+  // event on this move, so it sits with the plans — below the one being
+  // proposed now, above the line that illustrates it.
+  'plan-arc': 19,
   'plan-line': 18,
   'plan-middlegame': 16,
   'plan-opening': 14,
@@ -169,6 +173,7 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   contrast: 'teach',
   timing: 'teach',
   'plan-race': 'teach',
+  'plan-arc': 'teach',
   'plan-now': 'teach',
   'plan-opening': 'teach',
   'plan-middlegame': 'teach',
@@ -267,7 +272,7 @@ export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   does: 'principle', 'opp-dev': 'principle', fundamental: 'principle', convert: 'principle',
   status: 'principle',
   // PLAN — structure, targets, the plan and the long read.
-  'plan-now': 'plan', contrast: 'plan', timing: 'plan', 'plan-race': 'plan', 'plan-opening': 'plan', 'plan-middlegame': 'plan',
+  'plan-now': 'plan', contrast: 'plan', timing: 'plan', 'plan-race': 'plan', 'plan-arc': 'plan', 'plan-opening': 'plan', 'plan-middlegame': 'plan',
   'plan-line': 'plan', consequence: 'plan', structure: 'plan', passer: 'plan', rook7: 'plan',
   badbishop: 'plan', complex: 'plan', minority: 'plan', worst: 'plan', 'opp-target': 'plan',
   verdict: 'plan', eval: 'plan', delta: 'plan', note: 'plan', stock: 'plan',

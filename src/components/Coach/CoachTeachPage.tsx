@@ -202,6 +202,7 @@ import { parseEvalTable, pieceQualityLines, parseEvalSplit, evalSplitLine } from
 
 import { buildThinkAloud } from '../../services/thinkAloud';
 import { scaleGap, packageForRegister, readsForRegister } from '../../services/hintRegister';
+import { aimsOf, stepArc, EMPTY_ARC, type ArcState } from '../../services/planArc';
 import { planFromUci, keySquareLine, positionReadLine, lineShapeLine, terminalReadLine, tacticWord } from '../../services/lookaheadPlan';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import type { LookaheadPlan } from '../../services/lookaheadPlan';
@@ -1724,6 +1725,7 @@ export function CoachTeachPage(): JSX.Element {
     announcedTrapsRef.current.clear();
     fundamentalSeenRef.current.clear();
     planSaidRef.current.clear();
+    planArcRef.current = { theirs: EMPTY_ARC, mine: EMPTY_ARC };
     positionalSaidRef.current.clear();
     forkTalkCountRef.current = 0;
     pendingForkRef.current = null;
@@ -1800,6 +1802,11 @@ export function CoachTeachPage(): JSX.Element {
    *  same pin is still coming three moves later — so without this the coach
    *  chants. A five-ply sample from a real game repeated one line four times. */
   const planSaidRef = useRef<Set<string>>(new Set());
+  /** Each side's plan FOLLOWED across the game (`planArc`): the plan read
+   *  above forgets itself every move, so on its own the coach could say what
+   *  they want now and never "there it is — that was the plan" or "they have
+   *  given it up". Per game, reset with the other page refs. */
+  const planArcRef = useRef<{ theirs: ArcState; mine: ArcState }>({ theirs: EMPTY_ARC, mine: EMPTY_ARC });
   /** The moment Stockfish reports a forced mate FOR the student, the async engine
    *  pass flags it here (keyed by the FEN it read) so the instant package can call
    *  the mating NET at mate-in-N — not wait for the board to reach mate-in-1
@@ -9497,6 +9504,33 @@ export function CoachTeachPage(): JSX.Element {
                         ? planFromUci(probe.fen(), pv, playerColor, planSaidRef.current)
                         : null;
                       if (plan) {
+                        // THE PLAN ACROSS MOVES — one step of each side's arc
+                        // off this same read. Their half speaks what the read
+                        // alone cannot: a plan landing ("there it is") and a
+                        // plan abandoned. It stays quiet on each step toward
+                        // it — the read below names the plan every move, and a
+                        // "step toward" beside it would say it twice. Yours
+                        // speaks only its landings and its abandonments.
+                        try {
+                          const oppColor = playerColor === 'white' ? 'b' : 'w';
+                          const studColor = playerColor === 'white' ? 'w' : 'b';
+                          const theirStep = stepArc(planArcRef.current.theirs, aimsOf(plan.theirs, 'opponent'),
+                            { from: m.from, to: m.to, piece: m.piece, promotion: m.promotion }, probe.fen(), oppColor, 'opponent');
+                          const studentPiece = new Chess(move.fen).get(move.to as Square)?.type ?? null;
+                          const mineStep = studentPiece
+                            ? stepArc(planArcRef.current.mine, aimsOf(plan.mine, 'student'),
+                              { from: move.from, to: move.to, piece: studentPiece, promotion: move.promotion }, probe.fen(), studColor, 'student')
+                            : null;
+                          planArcRef.current = { theirs: theirStep.next, mine: mineStep?.next ?? planArcRef.current.mine };
+                          const arcLines = [
+                            ...theirStep.events.filter((e) => e.kind !== 'advance'),
+                            ...(mineStep?.events ?? []).filter((e) => e.kind === 'arrive' || e.kind === 'drop'),
+                          ];
+                          for (const e of arcLines) {
+                            const line = gradeNarrationText(e.text, probe.fen(), 'CoachTeachPage.planArc')?.trim();
+                            if (line) { facts.push(line); queueSpokenHint(probe.fen(), line, 'plan', e.squares); }
+                          }
+                        } catch { /* the arc is a bonus, never a blocker */ }
                         const key = keySquareLine(plan.keySquares, planSaidRef.current);
                         // What the board already IS, beside what the line does
                         // to it — a student needs the first to understand the
