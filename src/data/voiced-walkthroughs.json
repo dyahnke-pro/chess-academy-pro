@@ -306,13 +306,13 @@
          "node": {
           "san": "Nf6",
           "movedBy": "black",
-          "idea": "You have Black against a strong player — White opens the pawn to d4 and you answer the knight to f6.",
+          "idea": "White opens with the pawn to d4 and you answer with the knight to f6.",
           "children": [
            {
             "node": {
              "san": "d5",
              "movedBy": "white",
-             "idea": "White pushes the pawn to d5 — unusual, and played in bullet by some strong grandmasters. It's not terrible, but only good if White follows it up very carefully.",
+             "idea": "White pushes the pawn to d5 — unusual. It is not bad, but it only works if White follows it up carefully.",
              "children": [
               {
                "node": {
@@ -372,7 +372,7 @@
                                           "node": {
                                            "san": "Qc2",
                                            "movedBy": "white",
-                                           "idea": "You capture on d5, and White switches into bullet mode with the queen to c2.",
+                                           "idea": "After your capture on d5, White brings the queen to c2.",
                                            "children": [
                                             {
                                              "node": {
@@ -396,7 +396,7 @@
                                                       "node": {
                                                        "san": "N2b3",
                                                        "movedBy": "white",
-                                                       "idea": "The knight to d4 threatens nothing, so you develop with the pawn to d6, and White reroutes the knight to b3. Now the decisive central invasion begins — I'm focused on the centre, where White has a failing pawn structure.",
+                                                       "idea": "The knight to d4 threatened nothing, so you developed with d6, and White reroutes the knight to b3. Now aim at the centre, where White's pawn structure is failing.",
                                                        "children": [
                                                         {
                                                          "node": {
@@ -566,7 +566,7 @@
                                                          }
                                                         }
                                                        ],
-                                                       "shortIdea": "The knight to d4 threatens nothing, so you develop with the pawn to d6, and White reroutes the knight to b3."
+                                                       "shortIdea": "The knight to d4 threatened nothing, so you developed with d6, and White reroutes the knight to b3."
                                                       }
                                                      }
                                                     ]
@@ -581,7 +581,7 @@
                                              }
                                             }
                                            ],
-                                           "shortIdea": "You capture on d5, and White switches into bullet mode with the queen to c2."
+                                           "shortIdea": "After your capture on d5, White brings the queen to c2."
                                           }
                                          }
                                         ]
@@ -632,7 +632,7 @@
                }
               }
              ],
-             "shortIdea": "White pushes the pawn to d5 — unusual, and played in bullet by some strong grandmasters."
+             "shortIdea": "White pushes the pawn to d5 — unusual."
             }
            },
            {
@@ -705,7 +705,7 @@
                                              "node": {
                                               "san": "exd4",
                                               "movedBy": "black",
-                                              "idea": "I'll play an interesting line I like myself — take on d4.",
+                                              "idea": "You take on d4 — a less common, interesting line.",
                                               "children": [
                                                {
                                                 "node": {
@@ -801,7 +801,7 @@
                                                                                              "node": {
                                                                                               "san": "Qh4",
                                                                                               "movedBy": "black",
-                                                                                              "idea": "It looks like you should just grab the rook on f1 — and against another grandmaster I would. But here you're going for mate: the queen to h4.",
+                                                                                              "idea": "Grabbing the rook on f1 looks natural, and it is good — but here you can go for mate instead: the queen to h4.",
                                                                                               "children": [
                                                                                                {
                                                                                                 "node": {
@@ -879,7 +879,7 @@
                                                                                                                                     "node": {
                                                                                                                                      "san": "Kf2",
                                                                                                                                      "movedBy": "white",
-                                                                                                                                     "idea": "Against the queen to b7 I'd planned to trade queens with the queen to b6.",
+                                                                                                                                     "idea": "Against the queen to b7, the plan is to trade queens with the queen to b6.",
                                                                                                                                      "children": [
                                                                                                                                       {
                                                                                                                                        "node": {
@@ -1172,7 +1172,7 @@
                                                                                                                                        }
                                                                                                                                       }
                                                                                                                                      ],
-                                                                                                                                     "shortIdea": "Against the queen to b7 I'd planned to trade queens with the queen to b6."
+                                                                                                                                     "shortIdea": "Against the queen to b7, the plan is to trade queens with the queen to b6."
                                                                                                                                     }
                                                                                                                                    }
                                                                                                                                   ]
@@ -1221,7 +1221,7 @@
                                                                                                 }
                                                                                                }
                                                                                               ],
-                                                                                              "shortIdea": "It looks like you should just grab the rook on f1 — and against another grandmaster I would."
+                                                                                              "shortIdea": "Grabbing the rook on f1 looks natural, and it is good — but here you can go for mate instead: the queen to h4."
                                                                                              }
                                                                                             }
                                                                                            ]
@@ -1282,7 +1282,7 @@
                                                 }
                                                }
                                               ],
-                                              "shortIdea": "I'll play an interesting line I like myself — take on d4."
+                                              "shortIdea": "You take on d4 — a less common, interesting line."
                                              }
                                             }
                                            ]
@@ -2224,7 +2224,7 @@
                                                          "node": {
                                                           "san": "Bf5",
                                                           "movedBy": "black",
-                                                          "idea": "You complete development with the bishop to f5. It's not exactly what I'd play in a classical game, but it's an easy, sound setup.",
+                                                          "idea": "You complete development with the bishop to f5 — an easy, sound setup.",
                                                           "children": [
                                                            {
                                                             "node": {
@@ -2625,7 +2625,7 @@
                                                             }
                                                            }
                                                           ],
-                                                          "shortIdea": "You complete development with the bishop to f5."
+                                                          "shortIdea": "You complete development with the bishop to f5 — an easy, sound setup."
                                                          }
                                                         }
                                                        ]
@@ -2915,7 +2915,7 @@
                                        "node": {
                                         "san": "c5",
                                         "movedBy": "black",
-                                        "idea": "The problem with e5 now is that it allows a queen trade, and I want more than an endgame. So because White played the knight to c3, I like c5 a lot more — after White's standard d5, you have a tactic: a knight to e4, exposing the bishop on b2 and grabbing the bishop pair.",
+                                        "idea": "e5 now allows a queen trade, and you want more than an endgame. Because White played the knight to c3, c5 is stronger — after White's usual d5, a knight to e4 exposes their bishop on b2 and grabs the bishop pair.",
                                         "children": [
                                          {
                                           "node": {
@@ -2981,7 +2981,7 @@
                                                                         "node": {
                                                                          "san": "Ke2",
                                                                          "movedBy": "white",
-                                                                         "idea": "White bites the bullet with the king to e2, but it brings little relief. A common mistake is to win a pawn and rest on your laurels — dropping back or trading knights — but you have a better way.",
+                                                                         "idea": "White steps the king to e2, but it brings little relief. A common mistake is to win a pawn and then rest — dropping back or trading knights — but you have a better way.",
                                                                          "children": [
                                                                           {
                                                                            "node": {
@@ -3035,7 +3035,7 @@
                                                                                                    "node": {
                                                                                                     "san": "Bd7",
                                                                                                     "movedBy": "black",
-                                                                                                    "idea": "A bishop to g4 trading minor pieces is fine, but to win efficiently I want to open a rook's file. Playing a5 immediately creates a weak square on b5 for White's bishop — pedantic here, but let's start with a bishop to d7 to make the a5-a4 push smoother.",
+                                                                                                    "idea": "Trading minor pieces with the bishop to g4 is fine, but to win efficiently, open a file for a rook. Playing a5 at once hands White's bishop the b5 square, so start with the bishop to d7 to make the a5-a4 push smoother.",
                                                                                                     "children": [
                                                                                                      {
                                                                                                       "node": {
@@ -3119,7 +3119,7 @@
                                                                                                                                              "node": {
                                                                                                                                               "san": "Bxc4",
                                                                                                                                               "movedBy": "black",
-                                                                                                                                              "idea": "Just trading — I'm playing quickly here.",
+                                                                                                                                              "idea": "You simply trade.",
                                                                                                                                               "children": [
                                                                                                                                                {
                                                                                                                                                 "node": {
@@ -3369,7 +3369,7 @@
                                                                                                                                                 }
                                                                                                                                                }
                                                                                                                                               ],
-                                                                                                                                              "shortIdea": "Just trading — I'm playing quickly here."
+                                                                                                                                              "shortIdea": "You simply trade."
                                                                                                                                              }
                                                                                                                                             }
                                                                                                                                            ]
@@ -3420,15 +3420,15 @@
                                                                                                       }
                                                                                                      }
                                                                                                     ],
-                                                                                                    "shortIdea": "A bishop to g4 trading minor pieces is fine, but to win efficiently I want to open a rook's file."
+                                                                                                    "shortIdea": "Trading minor pieces with the bishop to g4 is fine, but to win efficiently, open a file for a rook."
                                                                                                    }
                                                                                                   }
                                                                                                  ],
                                                                                                  "shortIdea": "The next step is to open files for your rooks.",
                                                                                                  "asides": [
                                                                                                   {
-                                                                                                   "idea": "But the point of top-level play is to build good habits early.",
-                                                                                                   "shortIdea": "But the point of top-level play is to build good habits early.",
+                                                                                                   "idea": "Good habits are worth building early.",
+                                                                                                   "shortIdea": "Good habits are worth building early.",
                                                                                                    "arrows": [
                                                                                                     {
                                                                                                      "from": "c8",
@@ -3466,7 +3466,7 @@
                                                                            }
                                                                           }
                                                                          ],
-                                                                         "shortIdea": "White bites the bullet with the king to e2, but it brings little relief."
+                                                                         "shortIdea": "White steps the king to e2, but it brings little relief."
                                                                         }
                                                                        }
                                                                       ],
@@ -3509,7 +3509,7 @@
                                           }
                                          }
                                         ],
-                                        "shortIdea": "The problem with e5 now is that it allows a queen trade, and I want more than an endgame."
+                                        "shortIdea": "e5 now allows a queen trade, and you want more than an endgame."
                                        }
                                       }
                                      ],
@@ -4049,7 +4049,7 @@
                   "node": {
                    "san": "e3",
                    "movedBy": "white",
-                   "idea": "but I don't like playing d5 against the Stonewall. Even if you're not a King's-Indian player, I like the King's-Indian setup against it — you don't have to be a King's-Indian player; White should really meet it with c5, then c-takes and d-takes, to be able to play the King's Indian. So",
+                   "idea": "Against the Stonewall, the King's Indian setup works well — you do not need to be a King's Indian player to use it.",
                    "children": [
                     {
                      "node": {
@@ -4073,13 +4073,13 @@
                               "node": {
                                "san": "Bd3",
                                "movedBy": "white",
-                               "idea": "The bishop to d3. The funny thing is I'm going to allow White to play e4 next, which would be a Pirc up a tempo — I kind of play the Pirc anyway, so I don't mind, and someone who plays d4 and f4 won't be familiar with the Pirc's ideas for White.",
+                               "idea": "The bishop to d3. White may push e4 next and reach a Pirc structure — a setup you can handle comfortably.",
                                "children": [
                                 {
                                  "node": {
                                   "san": "O-O",
                                   "movedBy": "black",
-                                  "idea": "So you castle — I'm not afraid of e4.",
+                                  "idea": "So you castle — e4 is nothing to fear.",
                                   "children": [
                                    {
                                     "node": {
@@ -4127,9 +4127,9 @@
                                                          "node": {
                                                           "san": "Re8",
                                                           "movedBy": "black",
-                                                          "idea": "The rook to e8 is a pretty inoffensive move you can always throw in, reinforcing the threat of e4, and maybe you play e-takes-d later and open the e-file. Actually, first you should develop your bishop — I know some of you think of the bishop to g4, but then h3 chases it away; the alternate way is b6 and the bishop to b7, fianchettoing the other bishop and aiming at the e4-square. This is a pawn sacrifice — let's see if your opponent figures out how to win it. The knight to g5 is an intimidating-looking move, but is it scary? I don't see what it threatens, so you continue developing; probably the bishop to c4, but then you simply defend the pawn with the rook to e7. The knight to d5 would give up f7 potentially, so be careful — always consider what you're opening and closing when you move a knight. g4 is a mistake. Should you take the knight? Yes — you take on g5, because that exposes an attack on the other knight: after the knight takes and the queen takes g5, White has to recapture your knight with their knight, which takes the pressure off the f-pawn; and one step further, the knight takes e4 is a very natural, strong King's-Indian continuation. Am I afraid of the knight taking f7? I calculated it — if they play it, f5 chases the knight away, and then e4, or the capture on d4 pushing their pieces back. Now, your opponent is contemplating the knight takes f7 — an intermezzo that attacks the queen, and White has two attackers on your knight over on e4, so wherever your queen goes, even to h4, it appears White can capture the knight with the bishop. But I calculated — wait, maybe I miscalculated; you might have to go into an endgame I don't want. They out-calculated me. I was intending the queen to h4, and what I missed is the smothered-mate idea: after the bishop takes c4, the queen to b3 sets up an unstoppable discovered check against the king and a potential smothered mate. So the knight takes e4 was simply a mistake — I underestimated the knight to f7. So after the capture, since the bishop takes e4 is a big mistake because of the queen to b3, is there an alternative? You have to take the bishop with the queen, offering a queen trade; then they take on e5, basically everything trades, and it's essentially a dead draw — but you'll try to win that endgame. You panic and bite the bullet, because otherwise the bishop takes c4 and they find the queen to b3 and you're busted. Now I have to prove my mettle by winning an endgame nearly devoid of chances. The queen to f2, leaving your battery intact — I think this just loses. You can play e-takes-d4, but then there might be the knight to h6 with check, a nasty idea that forces a trade; then you pin the knight. You're not threatening the rook takes f7 — some of you might think you are, but then the queen takes f7 with check — what you're threatening is the bishop from b7 to d5, picking off the knight, which I don't think can be defended. I'm disappointed in my play — maybe fianchettoing the bishop was fundamentally too slow. People in the seventeen-, eighteen-hundred range make this kind of mistake often; there's a psychology name for it, like walking to the wrong floor of a building out of habit. Something even better than the bishop to d5: because after the bishop to d5, the rook to e1 gives you something to deal with — you want to attack the knight without allowing the rook to e1, so the queen to d5. That violates my rule of accomplishing tasks with the lowest-value piece, but it's an exception, because the queen is vulnerable to begin with — so you do two things at once, making the queen safer and attacking and winning the knight. This is a lesson in flexibility: players think they must keep attacking no matter what and rule out all queen trades, and they ignore what's actually going on — that I now have this battery and there's no longer any attack; that inflexibility makes you lose objectivity. Let's snag the queen and convert with discipline. What you shouldn't do is the bishop takes e5 — I don't like giving away the dark-squared bishop, because those with a keen tactical eye see that the bishop to h6 could become a problem, with White creating mate threats on f8. So two options: the rook to f8, trading one pair of rooks; and c5, undermining the knight, which is defended by the pawn — the undermining concept is so important. And after the rook to f1, ask how the position has changed and don't lose sight of the whole board: the a2-pawn is now hanging, so after the trade you can safely take on a2 and start grabbing everything on the queenside. The knight to f3 — they brought the knight back themselves, a good move. You have a fancy move available, but there are so many good moves I struggle to verbalise — g5 and then g4. The move I'd play in a classical game is c5. You might say the point was to undermine the knight, which you've done — but I want to get rid of the d-pawn so your queen gets more real estate in the centre: d-takes-c5, the queen takes e5, pinning the rook and threatening to double-capture on f3 because of the pin. That d4-pawn holds you back, so get rid of it and open files — the more files open, the easier it is to convert the extra queen. Your dark-squared bishop isn't good and won't be even after the trade, since there'll be a c3-pawn staring at it, but at least it controls the d4-square. I have a great high-level example of an international master who did exactly this against me — instructive on how chess psychology can be used against people, even to defend bad positions. The rook to e1 — time to grab; pinned. I briefly checked the rook to e8 with check, making sure there's nothing after the king to f7 — anytime you abandon the back rank, always check fast. The rook to f1 — b4 is a threat, so you kind of have to take; there's a fancy move, but let's keep it simple and take. After the rook takes f2, I really like the bishop from g7 to e5 idea. The bishop takes h2 — how did I see it? A lot of people passively notice the pin and think, can I attack the rook with the bishop to d4? No, there's a pawn on c3 — and they file it away. I don't stop there: the pin means the king is defending the rook, so it's overloaded, and going after the h2-pawn could be an overloading tactic. The queen takes f2 is also a fork, but just winning the rook is already enough — the point is that high-level players don't just see the tactical phenomenon, they understand how it can be used as a component in a combination. b4 — I saw this; you need to move the queen and defend the bishop, so the queen to e5 or d6; I like the queen to d6, because if the bishop to h6 happens, you can move your bishop back and sacrifice on f8 and keep the bishop; you can also give the queen to g3 with check and win the bishop. Actually the queen to h3 — this is just a fork.",
+                                                          "idea": "The rook to e8 backs up the push e4, and you can open the e-file later.",
                                                           "children": [],
-                                                          "shortIdea": "The rook to e8 is a pretty inoffensive move you can always throw in, reinforcing the threat of e4, and maybe you play e-takes-d later and open the…"
+                                                          "shortIdea": "The rook to e8 backs up the push e4, and you can open the e-file later."
                                                          }
                                                         }
                                                        ],
@@ -4161,7 +4161,7 @@
                                     }
                                    }
                                   ],
-                                  "shortIdea": "So you castle — I'm not afraid of e4."
+                                  "shortIdea": "So you castle — e4 is nothing to fear."
                                  }
                                 }
                                ],
@@ -4181,7 +4181,7 @@
                      }
                     }
                    ],
-                   "shortIdea": "but I don't like playing d5 against the Stonewall."
+                   "shortIdea": "Against the Stonewall, the King's Indian setup works well — you do not need to be a King's Indian player to use it."
                   }
                  }
                 ]
@@ -5200,7 +5200,7 @@
             }
            }
           ],
-          "shortIdea": "You have Black against a strong player — White opens the pawn to d4 and you answer the knight to f6."
+          "shortIdea": "White opens with the pawn to d4 and you answer with the knight to f6."
          }
         }
        ]

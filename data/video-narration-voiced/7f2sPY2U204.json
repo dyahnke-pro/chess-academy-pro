@@ -83,7 +83,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": "I'll play an interesting line I like myself — take on d4."
+   "spoken": "You take on d4 — a less common, interesting line."
   },
   {
    "ply": 15,
@@ -227,7 +227,7 @@
    "line": [
     "Qh4"
    ],
-   "spoken": "It looks like you should just grab the rook on f1 — and against another grandmaster I would. But here you're going for mate: the queen to h4."
+   "spoken": "Grabbing the rook on f1 looks natural, and it is good — but here you can go for mate instead: the queen to h4."
   },
   {
    "ply": 31,
@@ -336,7 +336,7 @@
    "line": [
     "Kf2"
    ],
-   "spoken": "Against the queen to b7 I'd planned to trade queens with the queen to b6."
+   "spoken": "Against the queen to b7, the plan is to trade queens with the queen to b6."
   },
   {
    "ply": 44,
