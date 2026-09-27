@@ -1,6 +1,17 @@
 import 'fake-indexeddb/auto';
 import '@testing-library/jest-dom';
 import { cleanup, configure } from '@testing-library/react';
+import { readFileSync as readAnnotationSync, existsSync as annotationExists } from 'node:fs';
+import { join as joinAnnotationPath } from 'node:path';
+
+// Annotations are FETCHED at runtime from /data/annotations/ (2026-09-26); in
+// node there is no server, so tests read the same files off disk. A global,
+// not an import of the annotations module, so setup never loads app modules
+// ahead of a test file's vi.mock calls.
+(globalThis as { __readAnnotationFromDisk?: (key: string) => Promise<unknown> }).__readAnnotationFromDisk = (key) => {
+  const file = joinAnnotationPath(process.cwd(), 'src/data/annotations', `${key}.json`);
+  return Promise.resolve(annotationExists(file) ? (JSON.parse(readAnnotationSync(file, 'utf8')) as unknown) : null);
+};
 
 /**
  * 🔒 `waitFor` GETS A BUDGET THAT SURVIVES A LOADED MACHINE (2026-09-21).

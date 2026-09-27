@@ -2,7 +2,7 @@
 import OpenAI from 'openai';
 import { detectLanguage } from '../utils/detectLanguage';
 import { parseJsonSalvaging, isTruncatedJson } from '../utils/salvageJson';
-import { Capacitor } from '@capacitor/core';
+import { WEB_ORIGIN, isNativeApp } from '../utils/webOrigin';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { SYSTEM_PROMPT, getVerbosityInstruction } from './coachPrompts';
@@ -315,13 +315,9 @@ const PROXY_SENTINEL_KEY = 'proxy';
  *  Same fix voiceService.detectNativeApp / lichessExplorerService got
  *  2026-06-06; coachApi was missed in that sweep (David 2026-06-13). The
  *  protocol sniff stays as a defensive fallback. */
-const VERCEL_ORIGIN = 'https://chess-academy-pro.vercel.app';
 function apiOrigin(): string {
-  if (typeof window === 'undefined') return VERCEL_ORIGIN;
-  try {
-    if (Capacitor.isNativePlatform()) return VERCEL_ORIGIN;
-  } catch { /* @capacitor/core unavailable — fall through */ }
-  if (window.location.protocol === 'capacitor:') return VERCEL_ORIGIN;
+  if (typeof window === 'undefined') return WEB_ORIGIN;
+  if (isNativeApp()) return WEB_ORIGIN;
   return window.location.origin;
 }
 const DEEPSEEK_PROXY_BASE = `${apiOrigin()}/api/llm/deepseek`;

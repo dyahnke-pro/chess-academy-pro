@@ -2,6 +2,58 @@ import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import { execSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { readdirSync, readFileSync, statSync, writeFileSync, existsSync, mkdirSync, copyFileSync } from 'node:fs';
+import { join, relative, resolve as resolvePath, sep } from 'node:path';
+
+/** Legacy auto-annotations live in src/ (tests and scripts read them there)
+ *  but are SERVED as `/data/annotations/<id>.json`, fetched per opening on
+ *  demand — no longer compiled into 1,889 JS chunks. See
+ *  src/data/annotations/index.ts. */
+const ANNOTATIONS_SRC = 'src/data/annotations';
+/** Directories whose files share ONE version entry, so the per-session
+ *  version file stays small (1,889 annotation files would otherwise add 1,889
+ *  entries). A change to any file re-versions the directory. */
+const VERSIONED_AS_DIRECTORY = ['/data/annotations/'];
+
+function copyAnnotations(root: string, outDir: string): void {
+  const from = join(root, ANNOTATIONS_SRC);
+  const to = join(outDir, 'data', 'annotations');
+  mkdirSync(to, { recursive: true });
+  for (const name of readdirSync(from)) {
+    if (name.endsWith('.json')) copyFileSync(join(from, name), join(to, name));
+  }
+}
+
+/** Content hash of every file under `<outDir>/data`, keyed by its `/data/...`
+ *  path. Written to `<outDir>/data-versions.json` so the native app can tell
+ *  whether a data file it downloaded and kept is still current
+ *  (src/services/dataFile.ts). Pure function of the file bytes — an
+ *  unchanged file keeps its hash across builds. */
+function writeDataVersions(outDir: string): void {
+  const dataDir = join(outDir, 'data');
+  if (!existsSync(dataDir)) return;
+  const versions: Record<string, string> = {};
+  const dirHashes = new Map(VERSIONED_AS_DIRECTORY.map((d) => [d, createHash('sha256')]));
+  const walk = (dir: string): void => {
+    for (const name of readdirSync(dir).sort()) {
+      const full = join(dir, name);
+      if (statSync(full).isDirectory()) { walk(full); continue; }
+      const path = '/' + relative(outDir, full).split(sep).join('/');
+      const bytes = readFileSync(full);
+      const group = VERSIONED_AS_DIRECTORY.find((d) => path.startsWith(d));
+      if (group) {
+        dirHashes.get(group)!.update(path).update(bytes);
+        continue;
+      }
+      versions[path] = createHash('sha256').update(bytes).digest('hex').slice(0, 16);
+    }
+  };
+  walk(dataDir);
+  for (const [dir, h] of dirHashes) versions[dir] = h.digest('hex').slice(0, 16);
+  const sorted = Object.fromEntries(Object.entries(versions).sort(([a], [b]) => a.localeCompare(b)));
+  writeFileSync(join(outDir, 'data-versions.json'), JSON.stringify(sorted));
+}
 
 // WO-DEEP-DIAGNOSTICS — generate a build identifier at config time so
 // every build embeds a unique stamp the audit log can attribute findings
@@ -35,7 +87,6 @@ export default defineConfig(({ mode }) => {
   return {
   envPrefix: ['VITE_'],
   define: {
-    __BUILD_ID__: JSON.stringify(buildId),
     // Baked-in audit-stream defaults. These no longer ENABLE anything —
     // streaming is opt-in and OFF by default as of 2026-09-11 (David: "i only
     // want the live audit stream to send to redis when i turn it on"). They are
@@ -56,6 +107,86 @@ export default defineConfig(({ mode }) => {
   },
   plugins: [
     react(),
+    // The build id lives in index.html, NEVER in a JS chunk (2026-09-26).
+    // It changes on every build (`Date.now()`), so while it was a `define`
+    // inlined into appAuditor's chunk it renamed that chunk and every chunk
+    // importing it by hashed name — 142 files / 8.7 MB — on a build whose
+    // code had not changed at all, and every OTA shipped them. index.html
+    // already changes on every build, so the stamp costs nothing there.
+    // Read back by `appAuditor.getBuildId()`. Gate: buildIdNotInJs.test.ts.
+    (() => {
+      // Served data files: copy the annotations in, then write the version
+      // map the native app uses to tell a kept copy went stale. ONE plugin so
+      // the order is guaranteed (Rollup runs closeBundle hooks in parallel).
+      // closeBundle, not writeBundle: `public/` must already be copied in.
+      let outDir = 'dist';
+      let root = process.cwd();
+      let isBuild = false;
+      return {
+        name: 'data-files',
+        configResolved(c: { root: string; command: string; build: { outDir: string } }) {
+          root = c.root;
+          isBuild = c.command === 'build';
+          outDir = resolvePath(c.root, c.build.outDir);
+        },
+        configureServer(server: { middlewares: { use: (fn: (req: { url?: string }, res: { setHeader: (k: string, v: string) => void; end: (b: Buffer) => void }, next: () => void) => void) => void } }) {
+          // Dev server: serve /data/annotations/<id>.json straight from src.
+          server.middlewares.use((req, res, next) => {
+            const m = /^\/data\/annotations\/([A-Za-z0-9_.-]+\.json)(?:\?.*)?$/.exec(req.url ?? '');
+            const file = m ? join(root, ANNOTATIONS_SRC, m[1]) : '';
+            if (!m || !existsSync(file)) { next(); return; }
+            res.setHeader('content-type', 'application/json');
+            res.end(readFileSync(file));
+          });
+        },
+        closeBundle() {
+          if (!isBuild) return;
+          copyAnnotations(root, outDir);
+          writeDataVersions(outDir);
+        },
+      };
+    })(),
+    {
+      // NO STATIC IMPORT CYCLE BETWEEN CHUNKS — the build FAILS on one.
+      //
+      // 2026-09-26: splitting lesson data out of the entry put a shared helper
+      // where `appdata-lessons` and `app-vendor` imported EACH OTHER. Across
+      // chunks a cycle can evaluate a module before the one it depends on, so
+      // prod threw "Cannot access 'B0' before initialization" and rendered a
+      // blank page for ~10 minutes. Every test was green: nothing checked the
+      // BUILT chunk graph. This does. Measured: the broken build had exactly 1
+      // cycle, the healthy build has 0 — so this cannot fire on a good build.
+      // (It replaces a narrower check that only looked for data→entry
+      // imports, and so passed the cycle that shipped.)
+      name: 'no-chunk-import-cycles',
+      apply: 'build',
+      generateBundle(_opts, bundle) {
+        const imports = new Map<string, string[]>();
+        for (const c of Object.values(bundle)) if (c.type === 'chunk') imports.set(c.fileName, c.imports);
+        const state = new Map<string, 1 | 2>();
+        const found: string[][] = [];
+        const visit = (n: string, stack: string[]): void => {
+          state.set(n, 1);
+          stack.push(n);
+          for (const m of imports.get(n) ?? []) {
+            if (state.get(m) === 1) found.push([...stack.slice(stack.indexOf(m)), m]);
+            else if (!state.has(m)) visit(m, stack);
+          }
+          stack.pop();
+          state.set(n, 2);
+        };
+        for (const n of imports.keys()) if (!state.has(n)) visit(n, []);
+        if (found.length > 0) {
+          this.error(`static import cycle between chunks (boots in the wrong order): ${found.map((c) => c.join(' -> ')).join(' ; ')}`);
+        }
+      },
+    },
+    {
+      name: 'build-id-meta',
+      transformIndexHtml() {
+        return [{ tag: 'meta', attrs: { name: 'app-build-id', content: buildId }, injectTo: 'head' }];
+      },
+    },
     VitePWA({
       // 🔒 'prompt', NOT 'autoUpdate' — and the name is load-bearing, not a
       // preference. vite-plugin-pwa FORCES `workbox.skipWaiting = true` and
@@ -139,6 +270,19 @@ export default defineConfig(({ mode }) => {
             handler: 'CacheFirst' as const,
             options: {
               cacheName: 'lichess-piece-cache',
+              expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 90 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            // Legacy per-opening annotations (`/data/annotations/<id>.json`,
+            // 2026-09-26). Their OWN cache, listed BEFORE the /data/ rule: up
+            // to 1,889 small files would otherwise evict the masters DB from
+            // that rule's 20-entry cache.
+            urlPattern: /\/data\/annotations\/.*\.json$/i,
+            handler: 'CacheFirst' as const,
+            options: {
+              cacheName: 'annotation-cache',
               expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 90 },
               cacheableResponse: { statuses: [0, 200] },
             },

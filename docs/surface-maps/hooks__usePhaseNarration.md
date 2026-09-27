@@ -29,7 +29,7 @@
 
 ### `usePhaseNarration` (function) — 5 call sites
 - `src/components/Coach/CoachGamePage.tsx:1849`
-- `src/components/Coach/CoachTeachPage.tsx:7423`
+- `src/components/Coach/CoachTeachPage.tsx:7429`
 - `src/hooks/usePhaseNarration.test.ts:120`
 - `src/hooks/usePhaseNarration.test.ts:339`
 - `src/hooks/usePhaseNarration.test.ts:354`

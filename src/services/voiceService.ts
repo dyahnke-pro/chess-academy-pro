@@ -2,7 +2,7 @@
 // Fallback chain: Amazon Polly → Web Speech API
 // Only this file may call TTS APIs.
 
-import { Capacitor } from '@capacitor/core';
+import { WEB_ORIGIN, isNativeApp } from '../utils/webOrigin';
 import { speechService } from './speechService';
 import { getSharedAudioContext } from './audioContextManager';
 import { stripCoachMarkup, formatForSpeech } from './sanitizeCoachText';
@@ -148,8 +148,8 @@ export function resolvePollySecondaryVoice(
   return PERSONALITY_SECONDARY_VOICE_DEFAULTS[p];
 }
 
-/** Absolute URL for Polly TTS — needed when running inside Capacitor WKWebView */
-const VERCEL_ORIGIN = 'https://chess-academy-pro.vercel.app';
+/** Absolute URL for cloud TTS — needed when running inside Capacitor WKWebView */
+const VERCEL_ORIGIN = WEB_ORIGIN;
 
 /** How long a FAILED warmup probe suppresses Polly before the next speak
  *  retries it. Short on purpose: a cold-boot network blip shouldn't cost the
@@ -170,13 +170,7 @@ const WARMUP_RETRY_MS = 20_000;
  * device while the web kept working (David 2026-06-06). The protocol sniff is
  * kept as a defensive fallback. (David's app: no narration after the rebuild.)
  */
-function detectNativeApp(): boolean {
-  try {
-    if (Capacitor.isNativePlatform()) return true;
-  } catch { /* @capacitor/core unavailable — fall through */ }
-  return typeof window !== 'undefined' && window.location.protocol === 'capacitor:';
-}
-const isCapacitor = detectNativeApp();
+const isCapacitor = isNativeApp();
 
 export function getTtsUrl(text: string, voice: string, useSsml = true, style?: string, prosody?: 'spike'): string {
   const base = isCapacitor ? VERCEL_ORIGIN : '';

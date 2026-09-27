@@ -59,7 +59,12 @@ const config: CapacitorConfig = {
       updateUrl: 'https://chess-academy-pro.vercel.app/api/ota/manifest',
       directUpdate: false,
       appReadyTimeout: 10000,
-      responseTimeout: 20,
+      // 60 s, was 20 (2026-09-26). The plugin applies it PER FILE, and on the
+      // delta path a single file that misses it fails the whole update for
+      // that version on that phone. 20 s + 5 needed ~0.8 Mbps for the ~2.5 MB
+      // compressed entry chunk — weak cellular misses that. Native setting:
+      // takes effect with the next App Store / TestFlight build.
+      responseTimeout: 60,
       autoDeleteFailed: true,
       autoDeletePrevious: true,
     },

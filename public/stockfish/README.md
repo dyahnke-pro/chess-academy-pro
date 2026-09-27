@@ -1,32 +1,16 @@
-# Stockfish WASM Files
+# Stockfish engine files
 
-Place the Stockfish WASM engine files here. These are downloaded via npm (`stockfish` package v18.0.5) and must be copied to this directory to be served as static assets.
+Copied from `node_modules` by `npm run stockfish:copy` (postinstall) and
+gitignored — do not commit them.
 
-## Required Files
+| file | build | who loads it |
+|---|---|---|
+| `stockfish-18-lite.js` + `.wasm` | Stockfish 18 lite, multi-thread WASM | desktop / Android web with crossOriginIsolated + SharedArrayBuffer |
+| `stockfish-18-lite-single.js` + `.wasm` | Stockfish 18 lite, single-thread WASM | web without SAB, and the batch-analysis pool off iOS |
+| `stockfish-asm.js` | pure asm.js, no WASM | every iOS path: iOS Safari, and the iOS app's fallback when the native engine (`native-plugins/capacitor-stockfish-native`) is unavailable, plus the iOS analysis pool |
 
-After running `npm install`, copy from `node_modules/stockfish/`:
+Routing lives in `src/services/stockfishEngine.ts` (`resolveWorkerUrl`).
 
-```
-stockfish-nnue-16-single.js
-stockfish-nnue-16-single.wasm
-stockfish-nnue-16-multi.js
-stockfish-nnue-16-multi.wasm
-```
-
-## Copy command (run from project root)
-
-```bash
-cp node_modules/stockfish/src/stockfish-nnue-16*.{js,wasm} public/stockfish/
-```
-
-## Why here?
-
-The engine runs in a Web Worker. Web Workers can only load scripts from the same origin as static files — they cannot be bundled by Vite. They must be served directly from the `/public` directory.
-
-## Platform selection
-
-`stockfishEngine.ts` automatically selects:
-- Mobile/no SharedArrayBuffer → `stockfish-nnue-16-single.js` (7MB, single-threaded)
-- Desktop with COOP/COEP headers → `stockfish-nnue-16-multi.js` (multi-threaded)
-
-COOP/COEP headers are set in `vite.config.ts` for development and must be set on your server/CDN for production.
+The iOS app and the iOS OTA bundle ship ONLY `stockfish-asm.js` — the WASM
+builds are stripped after `vite build` by `scripts/ci/strip-native-bundle.mjs`
+(iOS never loads them). The web deploy keeps every file.

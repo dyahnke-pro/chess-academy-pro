@@ -17,10 +17,12 @@
  * to find: no server log records an error, because the server believes it
  * served a page successfully.
  *
- * And every deploy creates the situation. `vite.config.ts` bakes `Date.now()`
- * into `__BUILD_ID__`, so a build with a byte-identical tree still renames
- * chunks — docs-only pushes included, which is a proof by construction rather
- * than a pattern.
+ * And every deploy that changes code creates the situation: a changed chunk
+ * gets a new hashed name and the old one stops being served. (Until
+ * 2026-09-26 `vite.config.ts` also baked `Date.now()` into a JS `define`, so
+ * even a byte-identical tree renamed chunks; the build id now lives in
+ * index.html — see buildIdNotInJs.test.ts — but any real code change still
+ * renames, so this gate matters exactly as much.)
  *
  * 🔴 THIS PARAGRAPH USED TO SAY "every build renames EVERY chunk", and that is
  * wrong by a factor of 160. Measured 2026-09-21 rather than argued: two

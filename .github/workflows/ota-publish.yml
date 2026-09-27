@@ -119,6 +119,10 @@ jobs:
             exit 1
           fi
           echo "[ota] artifact verified: RevenueCat + PostHog keys present in dist/" 
+          # The OTA bundle is the iOS app's web layer — strip it exactly like
+          # the App Store build (scripts/ci/strip-native-bundle.mjs), or every
+          # update would ship the 80 MB the app no longer carries.
+          node scripts/ci/strip-native-bundle.mjs dist
           node scripts/ci/publish-ota-bundle.mjs "$(git rev-parse --short=8 HEAD)"
 
       # Post-check, deliberately NON-FATAL: several of its assertions read the

@@ -20,6 +20,7 @@
  *    primed.
  */
 import type { ProGameReference } from '../types';
+import { loadDataJson } from './dataFile';
 
 /** Public-path of the static reference asset. Served by the same origin
  *  as the SPA (Vite copies `public/` to the build root). */
@@ -44,12 +45,9 @@ export async function loadProGameReferenceData(): Promise<ProGameReference[]> {
         cache = [];
         return cache;
       }
-      const resp = await fetch(REF_URL);
-      if (!resp.ok) {
-        cache = [];
-        return cache;
-      }
-      const raw = (await resp.json()) as unknown;
+      // Web: same-origin fetch. Native: kept copy → app bundle → web origin
+      // (downloaded once and kept, so it is no longer re-fetched every boot).
+      const raw = await loadDataJson(REF_URL);
       cache = Array.isArray(raw) ? (raw as ProGameReference[]) : [];
       return cache;
     } catch {

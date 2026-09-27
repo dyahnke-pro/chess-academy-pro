@@ -285,6 +285,59 @@ function wouldRollBack(latest: OtaLatest, deviceVersion: string): boolean {
   return deviceOrdinal >= latest.ordinal;
 }
 
+/**
+ * Record which path an update took — delta manifest or whole zip — as a
+ * PostHog event (2026-09-26). The plugin runs natively and never tells the
+ * app's JS which one it used, and its own `download_manifest_*` stats go to
+ * Capgo, not to us. The server is the one place that knows, because it
+ * decides. Without this, re-enabling delta could not be measured: PostHog's
+ * `ota_download_*` rows look identical either way.
+ *
+ * Uses the PUBLIC project key (the same `phc_` key the app bundles), fired only
+ * when an update is actually served — never on the every-launch no-op check.
+ * Bounded to 1.5 s and swallowed on any failure: telemetry never delays or
+ * breaks an update.
+ */
+async function recordServed(props: {
+  deviceId: string;
+  platform: string;
+  from: string;
+  to: string;
+  delta: boolean;
+  files: number;
+}): Promise<void> {
+  const key = process.env.POSTHOG_PROJECT_KEY || process.env.VITE_POSTHOG_KEY || '';
+  if (!key) return;
+  const host = (process.env.VITE_POSTHOG_HOST || 'https://us.i.posthog.com').replace(/\/$/, '');
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 1500);
+  try {
+    await fetch(`${host}/capture/`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      signal: ctrl.signal,
+      body: JSON.stringify({
+        api_key: key,
+        event: 'ota_manifest_served',
+        distinct_id: props.deviceId || 'ota-anonymous',
+        properties: {
+          device_id: props.deviceId,
+          platform: 'native',
+          native_platform: props.platform,
+          from_version: props.from,
+          to_version: props.to,
+          delta: props.delta,
+          manifest_files: props.files,
+        },
+      }),
+    });
+  } catch {
+    /* telemetry only */
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 /** The no-update reply. `kind: 'up_to_date'` is load-bearing — without it the
  *  plugin classifies the response "failed" and emits a phantom downloadFailed
  *  (see note 1 at the top of this file). */
@@ -308,6 +361,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     (typeof body.device_id === 'string' && body.device_id) ||
     (typeof req.query.device_id === 'string' && req.query.device_id) ||
     '';
+
+  const platform =
+    (typeof body.platform === 'string' && body.platform) ||
+    (typeof req.query.platform === 'string' && req.query.platform) ||
+    '';
+
+  // 🔒 iOS ONLY (2026-09-26). The published bundle is built for iOS: the CI
+  // strip (scripts/ci/strip-native-bundle.mjs) removes the WASM chess engines
+  // iOS never loads, and an Android app DOES load them. No Android build
+  // exists today (0 native Android devices in PostHog), so the safe answer is
+  // to serve Android nothing until an Android bundle is published separately.
+  if (platform === 'android') {
+    noUpdate(res, currentVersion, 'no android bundle published');
+    return;
+  }
 
   const latest = await readLatest();
 
@@ -345,15 +413,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   const payload: Record<string, unknown> = { version: targetVersion, url: targetUrl };
   if (latest.checksum) payload.checksum = latest.checksum;
 
+  let manifestFiles = 0;
   if (latest.manifestUrl && !pinned && deltaAllowed(deviceId, latest)) {
     const manifest = await readManifest(latest.manifestUrl);
     if (manifest) {
       payload.manifest = manifest;
+      manifestFiles = manifest.length;
       // The plugin skips whole-bundle checksum verification when a manifest is
       // present (per-file hashes cover it) — don't send a stale one.
       delete payload.checksum;
     }
   }
 
+  await recordServed({
+    deviceId,
+    platform,
+    from: currentVersion,
+    to: targetVersion,
+    delta: manifestFiles > 0,
+    files: manifestFiles,
+  });
   res.status(200).json(payload);
 }

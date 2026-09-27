@@ -35,6 +35,10 @@ rm -rf ios
 # Web bundle + native iOS project (mirrors `npm run setup:ios`).
 npm ci
 npm run build
+# Strip what the iOS app never needs inside it (the WASM engines iOS never
+# loads, and the large data files it downloads once on first use). Refuses —
+# and fails the build — if anything the app needs would go missing.
+node scripts/ci/strip-native-bundle.mjs dist
 
 # OTA (David 2026-07-03): stamp the SHIPPED bundle's version = short git SHA so
 # it matches the OTA bundle published for this same commit

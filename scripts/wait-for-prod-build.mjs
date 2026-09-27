@@ -5,11 +5,10 @@
 // auditing the old alias chases regressions that aren't shipped yet).
 //
 // How it knows which build is live: vite stamps every build with
-// `__BUILD_ID__ = "<git-short-sha>+<unix-ms>"` (see vite.config.ts).
-// That string is inlined into appAuditor's chunk, which App.tsx imports
-// statically — so it lands in the entry chunk or a modulepreloaded core
-// chunk referenced by index.html. We fetch index.html, crawl its JS
-// asset URLs, and look for the expected short SHA substring.
+// `<meta name="app-build-id" content="<git-short-sha>+<unix-ms>">` in
+// index.html (see vite.config.ts `build-id-meta`). We read that meta first.
+// Builds from before 2026-09-26 inlined the id into a JS chunk instead, so
+// the asset crawl stays as a fallback.
 //
 // Env:
 //   PROD_URL       prod origin (default https://chess-academy-pro.vercel.app)
@@ -38,6 +37,9 @@ async function fetchText(url) {
 async function servedSha() {
   const bust = `?_=${Date.now()}`;
   const html = await fetchText(`${PROD_URL}/${bust}`);
+  const shaRe = new RegExp(`${EXPECTED_SHA}[a-f0-9]*\\+`);
+  const meta = html.match(/<meta[^>]*name="app-build-id"[^>]*content="([^"]+)"/);
+  if (meta) return { found: shaRe.test(meta[1]), assetCount: 0, path: 'index.html meta' };
   // Collect every /assets/*.js referenced by the shell (entry script +
   // modulepreload chunks). dedupe.
   const assetPaths = [...new Set([...html.matchAll(/\/assets\/[A-Za-z0-9._-]+\.js/g)].map((m) => m[0]))];

@@ -37,9 +37,13 @@ describe('corpus material-direction integrity', () => {
     expect(offenders, offenders.join('\n')).toHaveLength(0);
   });
 
-  it('hp-54v carries the corrected accounting', () => {
+  // hp-54v belonged to hangingpawns, removed from the registry 2026-09-21, and
+  // its bake entry was pruned 2026-09-26 with the rest of the dead creators —
+  // so the positive "carries the corrected accounting" check has nothing left
+  // to find. The negative half is what protects students: the lie never ships.
+  it('hp-54v inverted accounting never ships', () => {
     const raw = readFileSync('public/data/corpus-spoken.json', 'utf8');
-    expect(raw).toContain('Black is down a pawn but leads in development, while White keeps the extra pawn');
+    expect(raw.length).toBeGreaterThan(1000);
     expect(raw).not.toContain("he's down a pawn but leads in development and controls the center");
   });
 });

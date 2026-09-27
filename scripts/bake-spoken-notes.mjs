@@ -51,7 +51,29 @@ const OUT = resolve(ROOT, 'public/data/corpus-spoken.json');
 // spoken. Reading the registry makes that omission impossible.
 const CORPORA = JSON.parse(
   readFileSync(resolve(process.cwd(), 'src/data/corpora.json'), 'utf8'),
-).corpora.map((c) => c.path);
+).corpora.flatMap((c) => [c.path, c.floatingPath].filter(Boolean));
+// ↑ `floatingPath` too (2026-09-26). The 2026-09-19 split moved danya's
+// un-positioned notes into `floatingPath`, and this list read only `path` —
+// so the half of the corpus the bake exists FOR (floating notes are mute
+// until baked) could never be re-baked. The existing bake predates the split.
+
+/** Every note id a registered corpus still carries. The bake keeps entries
+ *  for these ids only: on 2026-09-26 50,155 of its 61,019 entries belonged to
+ *  the seven creators removed from the registry on 2026-09-21 — 10 MB of
+ *  shipped JSON nothing could ever read. */
+export function liveNoteIds() {
+  const ids = new Set();
+  for (const rel of CORPORA) {
+    const raw = JSON.parse(readFileSync(resolve(ROOT, rel), 'utf8'));
+    for (const n of Array.isArray(raw) ? raw : raw.notes) if (n?.id) ids.add(n.id);
+  }
+  return ids;
+}
+
+/** Drop every bake entry whose note is no longer in a registered corpus. */
+export function pruneBake(bake, live = liveNoteIds()) {
+  return Object.fromEntries(Object.entries(bake).filter(([id]) => live.has(id)));
+}
 
 const API_KEY = process.env.DEEPSEEK_KEY ?? process.env.VITE_DEEPSEEK_API_KEY ?? '';
 const MODEL = 'deepseek-chat';
@@ -380,8 +402,16 @@ async function rewrite(note, feedback) {
 }
 
 async function main() {
-  if (!API_KEY) { console.error('DEEPSEEK_KEY not set'); process.exit(1); }
   const args = process.argv.slice(2);
+  // `--prune` needs no model: rewrite the committed bake to live ids only.
+  if (args.includes('--prune')) {
+    const before = JSON.parse(readFileSync(OUT, 'utf8'));
+    const after = pruneBake(before);
+    writeFileSync(OUT, JSON.stringify(after));
+    console.log(`[bake] pruned ${Object.keys(before).length - Object.keys(after).length} dead entries → ${Object.keys(after).length} kept`);
+    return;
+  }
+  if (!API_KEY) { console.error('DEEPSEEK_KEY not set'); process.exit(1); }
   const limit = Number(args[args.indexOf('--limit') + 1]) || 0;
   const kindOnly = args.includes('--kind') ? args[args.indexOf('--kind') + 1] : null;
 
@@ -454,7 +484,7 @@ async function main() {
     }
   }
   mkdirSync(dirname(outPath), { recursive: true });
-  writeFileSync(outPath, JSON.stringify(baked));
+  writeFileSync(outPath, JSON.stringify(outPath === OUT ? pruneBake(baked) : baked));
   console.log(`[bake] done — ${JSON.stringify(stats)}`);
   if (why.size > 0) {
     console.log('[bake] rejection reasons:');

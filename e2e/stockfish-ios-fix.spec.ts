@@ -21,7 +21,7 @@
  * route that requires Stockfish. Pass criteria:
  *   1. ZERO `call_indirect` console errors in 15 s
  *   2. The audit-log entry `stockfish-variant-resolved` reports
- *      `variant=lila` (not single, not multi)
+ *      `variant=asm` (not single, not multi)
  */
 import { test, expect, type Page } from '@playwright/test';
 
@@ -39,7 +39,7 @@ test.describe('Stockfish iOS preflight fix', () => {
   // crash-detection wait. Same budget as the openings.spec.ts suite.
   test.setTimeout(120_000);
 
-  test('iOS Safari routes to lila, not lite-single, even with sticky-fallback flag set', async ({
+  test('iOS Safari routes to asm, not lite-single, even with sticky-fallback flag set', async ({
     page,
   }) => {
     // Capture every runtime error so we can fail the test if the
@@ -139,12 +139,15 @@ test.describe('Stockfish iOS preflight fix', () => {
     // Use the Playwright request listener data captured above —
     // Worker source URLs fire request events but don't show up in
     // performance.getEntriesByType('resource').
-    const loadedLila = stockfishRequests.some((u) => /lila-bridge/.test(u));
+    // iOS Safari routes to the pure asm.js build (stockfishEngine.ts
+    // resolveWorkerUrl). The lila/sf16-7 bridge this spec used to expect was
+    // removed from routing 2026-06-15 and its files deleted 2026-09-26.
+    const loadedAsm = stockfishRequests.some((u) => /stockfish-asm/.test(u));
     const loadedLite = stockfishRequests.some((u) => /stockfish-18-lite/.test(u));
 
     expect(
-      loadedLila,
-      `lila-bridge was NOT loaded. Stockfish requests: ${stockfishRequests.join(', ') || '(none)'}`,
+      loadedAsm,
+      `stockfish-asm was NOT loaded. Stockfish requests: ${stockfishRequests.join(', ') || '(none)'}`,
     ).toBe(true);
     expect(
       loadedLite,

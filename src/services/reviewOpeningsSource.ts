@@ -11,6 +11,7 @@
 // Lichess masters data, never invented. Runtime stays API-free — the sidecar is
 // a bundled static asset, not a live call.
 
+import { loadDataJson } from './dataFile';
 import type { MasterPlayResult, MasterPlayMove, MasterPlayTopGame } from './masterPlayTypes';
 import { lookupMasterPlay } from './masterPlayLookup';
 import { positionFen } from './masterPlayCache';
@@ -39,9 +40,8 @@ async function loadSidecar(): Promise<Sidecar | null> {
   inflight = (async () => {
     try {
       if (typeof fetch !== 'function') { cache = null; return null; }
-      const resp = await fetch(SIDECAR_URL);
-      if (!resp.ok) { cache = null; return null; }
-      const raw = (await resp.json()) as unknown;
+      // Stays inside the app bundle on native (96 KB); dataFile reads it there.
+      const raw = await loadDataJson(SIDECAR_URL);
       if (raw && typeof raw === 'object' && !Array.isArray(raw) && Object.keys(raw).length > 0) {
         cache = raw as Sidecar;
         return cache;
