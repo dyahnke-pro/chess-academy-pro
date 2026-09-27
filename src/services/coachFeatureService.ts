@@ -1,5 +1,5 @@
 import { Chess } from 'chess.js';
-import { gameArcs, type ArcEvent } from './planArc';
+import { gameArcs, type ArcEvent } from './lookaheadPlan';
 import { FUNDAMENTAL_CLAIM_FAMILY, type MoveFundamentalId } from './moveFundamentals';
 import type { Square } from 'chess.js';
 import { legalSeeGainOn } from './positionReadingService';

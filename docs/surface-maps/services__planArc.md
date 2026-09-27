@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**323 lines · 10 exports · 3 importers · 1 tests · 1 audits**
+**296 lines · 9 exports · 2 importers · 1 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,8 +12,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
-- `src/components/Coach/CoachTeachPage.tsx`
-- `src/services/coachFeatureService.ts`
+- `src/services/lookaheadPlan.ts`
 - `src/services/planArc.test.ts`
 
 ## Exports and every call site
@@ -27,9 +26,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `Seat` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `aimsOf` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9517`
-- `src/components/Coach/CoachTeachPage.tsx:9521`
+### `aimsOf` (function) — 4 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9516`
+- `src/components/Coach/CoachTeachPage.tsx:9520`
+- `src/services/lookaheadPlan.ts:1651`
 - `src/services/planArc.test.ts:28`
 
 ### `ArcState` (interface) — 0 call sites
@@ -44,24 +44,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `ArcMove` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `stepArc` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9517`
-- `src/components/Coach/CoachTeachPage.tsx:9521`
+### `stepArc` (function) — 15 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9516`
+- `src/components/Coach/CoachTeachPage.tsx:9520`
+- `src/services/lookaheadPlan.ts:1651`
 - `src/services/planArc.test.ts:28`
-- `src/services/planArc.test.ts:86`
-- `src/services/planArc.test.ts:88`
 - `src/services/planArc.test.ts:93`
-- `src/services/planArc.test.ts:94`
 - `src/services/planArc.test.ts:95`
-- `src/services/planArc.test.ts:97`
-- `src/services/planArc.test.ts:99`
-- `src/services/planArc.test.ts:103`
+- `src/services/planArc.test.ts:100`
+- `src/services/planArc.test.ts:101`
+- `src/services/planArc.test.ts:102`
 - `src/services/planArc.test.ts:104`
 - `src/services/planArc.test.ts:106`
 - `src/services/planArc.test.ts:110`
-
-### `gameArcs` (function) — 1 call site
-- `src/services/coachFeatureService.ts:1319`
+- `src/services/planArc.test.ts:111`
+- `src/services/planArc.test.ts:113`
+- `src/services/planArc.test.ts:117`
 
 ## Tests
 

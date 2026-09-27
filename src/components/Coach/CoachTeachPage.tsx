@@ -202,8 +202,7 @@ import { parseEvalTable, pieceQualityLines, parseEvalSplit, evalSplitLine } from
 
 import { buildThinkAloud } from '../../services/thinkAloud';
 import { scaleGap, packageForRegister, readsForRegister } from '../../services/hintRegister';
-import { aimsOf, stepArc, EMPTY_ARC, type ArcState } from '../../services/planArc';
-import { planFromUci, keySquareLine, positionReadLine, lineShapeLine, terminalReadLine, tacticWord } from '../../services/lookaheadPlan';
+import { aimsOf, stepArc, EMPTY_ARC, type ArcState, planFromUci, keySquareLine, positionReadLine, lineShapeLine, terminalReadLine, tacticWord } from '../../services/lookaheadPlan';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import type { LookaheadPlan } from '../../services/lookaheadPlan';
 import { planMarks } from '../../services/planMarks';
