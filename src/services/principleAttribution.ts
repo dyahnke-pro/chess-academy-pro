@@ -982,6 +982,12 @@ const DETECTORS: Detector[] = [
     // GRAB. A piece taking a pawn that then gets trapped is a poisoned pawn (its
     // own detector), so exclude piece-takes-pawn here to keep the two distinct.
     if (last.captured === 'p' && VAL[last.piece] >= 3) return null;
+    // A RECAPTURE is not an investment — Bxc5 Nxc5 was called "that sacrifice
+    // doesn't land" (1200 Sicilian walk 2026-09-27). Taking back on the square
+    // they just captured on is an exchange; whatever it lost, the loose-piece
+    // and trade rules name.
+    const prevMove = c.history[c.history.length - 2];
+    if (last.captured && prevMove?.captured && prevMove.to === last.to) return null;
     const offered = hangsBy(c.after, last.to) > 0;
     if (!offered && !isForcing(last.san)) return null;       // an aggressive commitment
     // A piece that can simply be TAKEN on the square it landed on is not an

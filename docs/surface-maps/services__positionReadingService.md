@@ -652,7 +652,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `goodPieceIdeaKey` (function) — 3 call sites
 - `src/services/danyaBehaviors.ts:189`
 - `src/services/positionalRead.ts:245`
-- `src/services/reviewPositionalAssessment.ts:162`
+- `src/services/reviewPositionalAssessment.ts:163`
 
 ## Tests
 

@@ -151,7 +151,8 @@ function assetsFor(
   // 1. Bishop pair — two bishops vs one-or-none, on a reasonably open board.
   const myB = all.filter((p) => p.type === 'b' && p.color === side).length;
   const enemyB = all.filter((p) => p.type === 'b' && p.color === other).length;
-  if (myB >= 2 && enemyB <= 1) reasons.push(`${you} have the bishop pair`);
+  // Keyed like the move point that wins it (`student-bishop-pair`) — one claim.
+  if (myB >= 2 && enemyB <= 1) reasons.push(`${you} have the bishop pair`, `${holder}-bishop-pair`);
 
   // 2. An outpost — a knight/bishop on a square no enemy pawn can chase.
   const myOutpost = struct.outposts.find((o) => o.color === side);
