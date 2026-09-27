@@ -3671,7 +3671,10 @@ that already states it.
 
 **Sweep status:** `curatedBeatAt` (2026-09-17, `IndexedBeat.seat` from
 `lesson.orientation`), `noteAtPosition` / `teachingSourceForBoard` /
-`supportNoteForPly` / `noteCoverageForLine` (2026-09-17, `noteSeatMatches`).
+`supportNoteForPly` / `noteCoverageForLine` (2026-09-17, `noteSeatMatches`),
+`resolveVoicedWalkthrough` (2026-09-27: a REQUIRED `side`; the builder groups
+voiced trees by opening AND seat — 34 of 207 lessons had merged both seats, so
+a Black King's Indian lesson said "You claim space with c4").
 When you add a new teaching source, ask which seat it is written from before you
 ask which position it is about.
 

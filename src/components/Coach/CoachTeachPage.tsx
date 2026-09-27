@@ -5071,7 +5071,8 @@ export function CoachTeachPage(): JSX.Element {
           // Caro lesson IS the Fantasy Variation. If voiced answers the raw
           // query, serve that instead of the picker.
           const voicedForFuzzy =
-            resolveVoicedWalkthrough(fuzzy.query) ?? resolveVoicedWalkthrough(text);
+            resolveVoicedWalkthrough(fuzzy.query, sideOverride ?? inferStudentSideFromName(fuzzy.query))
+            ?? resolveVoicedWalkthrough(text, sideOverride ?? inferStudentSideFromName(text));
           if (voicedForFuzzy) {
             const vfTurnId = freshTurnId('voiced-fuzzy');
             setMessages((prev) => [...prev, {
@@ -5360,7 +5361,7 @@ export function CoachTeachPage(): JSX.Element {
         // opening, it IS the lesson (G0/G3), so it wins over the static
         // masterclass AND over LLM generation. It's already note-driven, so
         // the notes-lead branch below must never null it back to generation.
-        const voicedTree = resolveVoicedWalkthrough(requestedName);
+        const voicedTree = resolveVoicedWalkthrough(requestedName, sideOverride ?? inferStudentSideFromName(requestedName));
         const candidateStatic =
           voicedTree ??
           resolveWalkthroughTree(requestedName) ??
@@ -6527,7 +6528,7 @@ export function CoachTeachPage(): JSX.Element {
             // fallback keeps the in-place walkthrough flow on
             // /coach/teach for everything we've ever generated.
             const tree =
-              resolveVoicedWalkthrough(opening) ??
+              resolveVoicedWalkthrough(opening, inferStudentSideFromName(opening)) ??
               resolveWalkthroughTree(opening) ??
               (await getCachedOpening(opening));
             if (tree) {

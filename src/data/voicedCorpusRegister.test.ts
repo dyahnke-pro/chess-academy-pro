@@ -51,7 +51,7 @@ const ALL = new Set([
 ]);
 
 // Measured 2026-09-16 across 11,809 unique spoken strings.
-const BASELINE_FIRST_PERSON = 521;
+const BASELINE_FIRST_PERSON = 509; // 521 -> 509 (2026-09-27: seat split + XzgnlvT5-6Y rewritten)
 const BASELINE_FRAGMENT = 81;
 const BASELINE_META = 0;
 // 1145 -> 34 (2026-09-19, in two passes). `scripts/voiced-authoring/degender.mjs` rewrote the
@@ -60,7 +60,7 @@ const BASELINE_META = 0;
 // guessed: "he's pinned" is ambiguous — "he IS pinned" and "he HAS pinned" are
 // both real chess sentences and pluralise differently (they're / they've).
 // Those need a human, so they are still counted here. Lower this as they go.
-const BASELINE_MASCULINE_OPPONENT = 34;
+const BASELINE_MASCULINE_OPPONENT = 33;
 
 describe('voiced corpus register — shrink-only backlog', () => {
   it('the corpus is actually loaded (non-vacuous)', () => {

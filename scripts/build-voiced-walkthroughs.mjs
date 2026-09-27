@@ -86,15 +86,25 @@ for (const f of files) {
 
   // Depersonalize the opening NAME too — some carry a pro-specific annotation
   // ("Scandinavian Defense (750 speedrun)") that leaks into the intro/outro.
-  const key = depersonalize(j.openingName || 'Unknown') || 'Unknown';
-  if (!groups.has(key)) groups.set(key, { sideVotes: { white: 0, black: 0 }, videos: [] });
-  const g = groups.get(key);
-  // MAJORITY vote for the student's side — a single mis-tagged video must not
-  // flip the board (David 2026-08-26: "Jobava is being taught from the wrong
-  // color. Should be white." — the FIRST of 12 Jobava videos was tagged black
-  // while 11 were white, and the builder took the first).
-  g.sideVotes[j.studentSide === 'black' ? 'black' : 'white'] += 1;
-  g.videos.push({ id, spine });
+  // ONE OPENING, ONE NAME: typography split lessons in two — "King’s" vs
+  // "King's", "Defence" vs "Defense", "Game, Scotch" vs "Game: Scotch",
+  // "Dragon (Maroczy Bind)" vs "Dragon, Maroczy Bind".
+  // The display name keeps its own punctuation; only the GROUPING key folds it.
+  const key = (depersonalize(j.openingName || 'Unknown') || 'Unknown')
+    .replace(/[‘’`]/g, "'")
+    .replace(/\bDefence\b/g, 'Defense');
+  const groupKey = key.replace(/^([^:,(]+), /, '$1: ').replace(/ \(([^)]+)\)$/, ', $1').toLowerCase();
+  // ONE SEAT PER TREE (teach walk 2026-09-27). A tree used to merge every
+  // video of an opening and take the MAJORITY seat, so a Black King's Indian
+  // lesson carried White-seat narration — "You claim space with c4",
+  // "They play the main line" about the student's own …e5. 34 of 207 lessons
+  // mixed seats. The seat is part of what identifies a teaching claim, so it
+  // is part of the grouping key: each seat builds its own tree, and the
+  // resolver serves the one whose seat the student is taking.
+  const side = j.studentSide === 'black' ? 'black' : 'white';
+  const gk = `${groupKey}\u0000${side}`;
+  if (!groups.has(gk)) groups.set(gk, { openingName: key, groupKey, side, videos: [] });
+  groups.get(gk).videos.push({ id, spine });
 }
 
 /** Trie node -> WalkthroughTree node. */
@@ -182,14 +192,22 @@ function emitTree(openingName, studentSide, videos) {
 }
 
 const out = [];
-for (const [openingName, { sideVotes, videos }] of groups) {
-  const studentSide = sideVotes.black > sideVotes.white ? 'black' : 'white';
+// The seat with more videos keeps the plain id (the /voiced index links to
+// it); the other seat's tree gets an "-as-<side>" suffix.
+const videosFor = (gkey, side) => groups.get(`${gkey}\u0000${side}`)?.videos.length ?? 0;
+for (const { openingName, groupKey, side: studentSide, videos } of groups.values()) {
+  const other = studentSide === 'white' ? 'black' : 'white';
+  const mine = videosFor(groupKey, studentSide);
+  const theirs = videosFor(groupKey, other);
+  // A tie goes to the seat the name implies ("…Defense" is Black's).
+  const named = /defen[cs]e/i.test(openingName) ? 'black' : 'white';
+  const majority = mine > theirs || (mine === theirs && studentSide === named);
   const tree = emitTree(openingName, studentSide, videos);
   // count narrated nodes
   let narrated = 0, total = 0;
   (function count(n){ total++; if (n.idea) narrated++; (n.children||[]).forEach(c=>count(c.node)); })(tree.root);
   out.push({
-    id: openingName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+    id: `${openingName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}${majority ? '' : `-as-${studentSide}`}`,
     openingName,
     studentSide,
     videoIds: videos.map((v) => v.id),

@@ -10,7 +10,7 @@
 
 - **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:281) — names `curatedBeatSource`
 - **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:3672) — names `BeatRegister`, `beatRegister`, `curatedBeatAt`
-- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4244) — names `curatedBeatAt`
+- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4247) — names `curatedBeatAt`
 
 ## Who calls in
 
@@ -68,7 +68,7 @@
 - `src/services/curatedBeatSource.test.ts:190`
 
 ### `curatedBeatAt` (function) — 21 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8238`
+- `src/components/Coach/CoachTeachPage.tsx:8239`
 - `src/services/beatVsCorpus.report.test.ts:73`
 - `src/services/computedVoiceAudit.report.test.ts:319`
 - `src/services/computedVoiceAudit.report.test.ts:336`
