@@ -2025,7 +2025,7 @@ export function assembleOpponentHypotheticalAnswer(opts: {
     parts.push(`If they get ${theirNorm} in, it ${geo}.`);
     if (after) parts.push(`After it, ${after}.`);
   } else {
-    parts.push(after ? `If they get ${theirNorm} in, ${after}.` : `If they get ${theirNorm} in:`);
+    parts.push(after ? `If they get ${theirNorm} in, ${after}.` : `If they get ${theirNorm} in`);
   }
   if (typeof opts.nowEvalCp === 'number' && typeof opts.afterEvalCp === 'number') {
     const swing = (opts.nowEvalCp - opts.afterEvalCp) / 100;
@@ -2050,6 +2050,11 @@ export function assembleOpponentHypotheticalAnswer(opts: {
     }
   } catch { /* an unreadable line is no line */ }
   if (bestSan) parts.push(`Your best answer is ${bestSan}${lineSan.length > 1 ? `: ${lineSan.join(' ')}` : ''}.`);
+  // NO ENGINE READ, NO DANGLING HEAD (question walk 2026-09-27: "If they get d5
+  // in:" and nothing after it). Say what is missing instead.
+  if (parts.length === 1 && !/[.!?]$/.test(parts[0])) {
+    return { facts: `I don't have an engine read on ${theirNorm} for them yet — ask me again in a moment.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+  }
   if (opts.settled === false) parts.push("The engine hadn't settled on this line yet — take it as a first read, not a final word.");
   return { facts: parts.join(' '), bestMoveSan: bestSan, bestMoveFromTo: bestFromTo, sources };
 }

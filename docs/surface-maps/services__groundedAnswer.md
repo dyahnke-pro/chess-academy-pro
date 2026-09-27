@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7067 lines · 157 exports · 67 importers · 40 tests · 8 audits**
+**7072 lines · 157 exports · 67 importers · 40 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -282,10 +282,11 @@
 - `src/services/groundedAnswer.test.ts:1301`
 - `src/services/searchDepth.test.ts:103`
 
-### `assembleOpponentHypotheticalAnswer` (function) — 3 call sites
+### `assembleOpponentHypotheticalAnswer` (function) — 4 call sites
 - `src/services/coachApi.ts:5600`
 - `src/services/groundedAnswer.opponentHypothetical.test.ts:35`
 - `src/services/groundedAnswer.opponentHypothetical.test.ts:51`
+- `src/services/groundedAnswer.opponentHypothetical.test.ts:66`
 
 ### `TradePiece` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

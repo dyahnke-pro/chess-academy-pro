@@ -59,3 +59,12 @@ describe('what if THEY play d5 — the opponent hypothetical lane', () => {
     expect(opponentMoveBoard(theirTurn, 'white')).toBe(theirTurn);
   });
 });
+
+describe('no engine read', () => {
+  it('never leaves a dangling "If they get d5 in:" — it says the read is missing', () => {
+    const board = opponentMoveBoard(FEN, 'white');
+    const f = assembleOpponentHypotheticalAnswer({ board, theirSan: 'd5', studentColor: 'white', nowEvalCp: null, afterEvalCp: null, afterMateIn: null, lineUci: [], settled: null })?.facts ?? '';
+    expect(f).not.toMatch(/in:?$/);
+    expect(f).toMatch(/don't have an engine read on d5/);
+  });
+});

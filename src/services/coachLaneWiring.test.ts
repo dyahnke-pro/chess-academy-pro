@@ -90,7 +90,8 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     expect(TEACH).toMatch(/const evidence = sameLoss && look\.withoutAttempt \? look\.withoutAttempt\.line : look\.line;/);
     expect(TEACH).toMatch(/const line = fundamental\s*\?\s*`\$\{fundamental\.verdict\}[\s\S]{0,160}?\$\{evidence\}[\s\S]{0,20}?`\s*:\s*look\.line/);
     // A fundamental with NO material drawback still speaks, on its own.
-    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, fundamental\.verdict, 'drawback', \[\]\)/);
+    // (Colle re-walk 2026-09-27: graded on the student-move board, `move.fen`.)
+    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, fundamental\.verdict, 'drawback', \[\], undefined, move\.fen\)/);
   });
 
   it('the borrowed tier is queued WITH the plan, so the yield rule can see both', () => {
