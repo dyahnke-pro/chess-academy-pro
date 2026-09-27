@@ -631,6 +631,15 @@ export function findLongestPgnExtending(basePgn: string): string | null {
  *
  *  Returns null when no DB entry matches (the user is asking about
  *  something not in the openings DB; surface routing rejects). */
+/** The alias for a typed name, apostrophe-tolerant: the map is keyed "kings
+ *  indian", and "King's Indian" missed it and fell to a tier that picked the
+ *  King's Indian ATTACK for a student asking for the Defense (teach walk
+ *  2026-09-27). One lookup, both spellings. */
+function aliasFor(name: string): string | undefined {
+  const k = name.trim().toLowerCase();
+  return NAME_ALIASES[k] ?? NAME_ALIASES[k.replace(/[‘’'`]/g, '')];
+}
+
 export function resolveOpeningEntry(
   openingName: string,
 ): { canonicalName: string; eco: string; moves: string[] } | null {
@@ -664,7 +673,7 @@ export function resolveOpeningEntry(
 
   // Apply alias map first (KID → King's Indian Defense, najdorf →
   // Sicilian Defense: Najdorf Variation, etc.). Case-insensitive.
-  const aliased = NAME_ALIASES[trimmed.toLowerCase()] ?? trimmed;
+  const aliased = aliasFor(trimmed) ?? trimmed;
   const queryNorm = normalizeNameForMatch(aliased);
 
   // EXACT NAME MATCH against the FULL DB (not the teachable-filtered pool). A
@@ -1620,7 +1629,7 @@ export function findLinePickerOptions(
   if (!trimmed) return null;
 
   // Resolve through the alias map first so "KID" / "Caro Kann" work.
-  const aliased = NAME_ALIASES[trimmed.toLowerCase()] ?? trimmed;
+  const aliased = aliasFor(trimmed) ?? trimmed;
   const queryNorm = normalizeNameForMatch(aliased);
   // Defence/Defense-tolerant form so British spellings ("Pirc Defence")
   // resolve the bare entry the ECO DB stores as "Pirc Defense".

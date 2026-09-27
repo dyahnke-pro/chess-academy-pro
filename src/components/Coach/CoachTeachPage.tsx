@@ -4455,7 +4455,11 @@ export function CoachTeachPage(): JSX.Element {
         // the literal phrase "Walkthrough the alapin" as an opening NAME
         // (David's 2026-07-31 audit, finding 103). Same class as the
         // learn/teach synonym fix below — don't lose the ask to semantics.
-        /\b(teach(?:\s+me)?|(?:i\s+want\s+to\s+|help\s+me\s+)?learn|study|continue|walk\s*(?:me\s+)?through|show\s+me|let'?s\s+do|let'?s\s+go\s+over|let'?s\s+try|tell\s+me\s+about|review)\b\s+(?:the\s+)?(.+?)(?:\s+(?:opening|defense|defence|game|gambit|attack|variation|line|system))?[.?!]*\s*$/i;
+        /\b(teach(?:\s+me)?|(?:i\s+want\s+to\s+|help\s+me\s+)?learn|study|continue|walk\s*(?:me\s+)?through|show\s+me|let'?s\s+do|let'?s\s+go\s+over|let'?s\s+try|tell\s+me\s+about|review)\b\s+(?:the\s+)?(.+?)(?:\s+(?:opening|line))?[.?!]*\s*$/i;
+      // ONLY filler words are dropped from the name. "Defense", "Attack",
+      // "Gambit", "System" are the name: stripping them turned "King's Indian
+      // Defense" into "King's Indian", which resolved to the ATTACK (teach walk
+      // 2026-09-27).
       // "how do I play the Sicilian" — a request to LEARN a named opening, not
       // a board-plan question (David 2026-09-10: it answered with a generic
       // start-position White plan, backwards for a Black defense). Route it to

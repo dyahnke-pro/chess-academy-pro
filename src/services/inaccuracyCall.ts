@@ -587,13 +587,27 @@ function punishmentOf(
   // the cost clause above exists to name, and when it can't, the grade stands
   // alone.
   if (first && !/x|[+#]$/.test(first)) return null;
-  // …and a capture is an entry only when it WINS something: "it let them in
-  // with Bxf3" (Alekhine re-walk ply 49) named a bishop trade the student
-  // recaptures as if it were the cost.
-  if (first && !/[+#]$/.test(first)) {
-    try { if (legalSeeGain(fenAfter, replyLineUci[0].slice(2, 4) as Square) <= 0) return null; } catch { return null; }
-  }
+  // …and a capture is an entry only when THEIR LINE WINS something: "it let
+  // them in with Bxf3" (Alekhine re-walk ply 49) named a bishop trade that
+  // nets nothing over the line. Counted over the whole line, not the first
+  // capture — Bxf6 Bxf6 Nxe4 (Blumenfeld F16) opens with an even trade and
+  // still wins the pawn.
+  if (first && !/[+#]$/.test(first) && lineNetFor(fenAfter, replyLineUci) <= 0) return null;
   return first ? { why: `in with ${first}`, first } : null;
+}
+
+/** Material the side to move nets over a line (captures only, in pawns). */
+function lineNetFor(fen: string, lineUci: readonly string[]): number {
+  try {
+    const c = new Chess(fen);
+    const me = c.turn();
+    let net = 0;
+    for (const u of lineUci) {
+      const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+      if (m?.captured) net += (m.color === me ? 1 : -1) * MATERIAL_VALUE[m.captured];
+    }
+    return net;
+  } catch { return 0; }
 }
 
 /** The verdict alone — the shape every existing caller already expects.

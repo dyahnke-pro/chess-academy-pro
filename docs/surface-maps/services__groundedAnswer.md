@@ -326,7 +326,7 @@
 - `src/services/groundedAnswer.test.ts:1381`
 
 ### `explainBestMoveGrounded` (function) — 21 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8935`
+- `src/components/Coach/CoachTeachPage.tsx:8939`
 - `src/services/coachApi.ts:3385`
 - `src/services/coachApi.ts:5474`
 - `src/services/coachFeatureService.test.ts:40`
@@ -1110,7 +1110,7 @@
 - `src/services/coachApi.ts:5810`
 
 ### `seatPieceReferences` (re-export) — 25 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7819`
+- `src/components/Coach/CoachTeachPage.tsx:7823`
 - `src/services/coachFeatureService.ts:4793`
 - `src/services/liveTacticsContext.ts:453`
 - `src/services/reviewBoardAwareness.test.ts:70`
