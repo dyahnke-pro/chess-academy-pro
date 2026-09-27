@@ -156,7 +156,7 @@
 - `src/services/conceptEngine.test.ts:170`
 - `src/services/conceptEngine.test.ts:206`
 - `src/services/conceptEngine.test.ts:224`
-- `src/services/liveTacticsContext.ts:110`
+- `src/services/liveTacticsContext.ts:116`
 - `src/services/positionFacts.ts:749`
 
 ### `LineInput` (interface) — 0 call sites

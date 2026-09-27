@@ -182,7 +182,7 @@ function assetsFor(
   // structural read — skip it; and speak present tense, never "lasting".
   const enemyIso = struct.pawns.isolatedPawns[other][0];
   const enemyDoubledFile = struct.pawns.doubledFiles[other][0];
-  if (enemyIso) reasons.push(`${their} pawn on ${enemyIso} is isolated — a target ${you} can pile on`, `${loser}-iso-${enemyIso}`);
+  if (enemyIso) reasons.push(`${their} pawn on ${enemyIso} is isolated — a target ${you} can pile on`, `${loser}-iso-${enemyIso[0]}`);
   else if (enemyDoubledFile) {
     const doubledStable = !all.some((p) => p.type === 'p' && p.color === other
       && p.square[0] === enemyDoubledFile

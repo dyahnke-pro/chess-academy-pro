@@ -33,7 +33,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/data/patternRegistry.ts:113`
 - `src/services/coachGameEngine.ts:298`
 - `src/services/deliberation.ts:117`
-- `src/services/liveTacticsContext.ts:372`
+- `src/services/liveTacticsContext.ts:378`
 - `src/services/moveReason.ts:112`
 - `src/services/playedMoveGrade.ts:90`
 - `src/services/tacticsDetector.ts:776`
@@ -75,7 +75,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `scanUpcomingTactics` (function) — 5 call sites
 - `src/components/Coach/CoachGamePage.tsx:2873`
-- `src/services/liveTacticsContext.ts:86`
+- `src/services/liveTacticsContext.ts:92`
 - `src/services/tacticClassifier.skewer.test.ts:13`
 - `src/services/tacticClassifier.skewer.test.ts:15`
 - `src/services/tacticClassifier.skewer.test.ts:22`

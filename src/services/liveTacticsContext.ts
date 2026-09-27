@@ -83,9 +83,15 @@ export function buildTacticsLiveContext(
   let threats: TacticsLiveContext['threats'] = [];
   let opportunities: TacticsLiveContext['opportunities'] = [];
   if (analysis && analysis.topLines.length > 0) {
+    // Only lines worth playing: a line a pawn or more worse than the engine's
+    // best is not a plan for either side (walk 2026-09-27: "you've got a pin
+    // coming: Nxg5, hxg5, Bxg5" one sentence after "Nxg5 falls apart").
+    const bestEval = analysis.topLines[0]?.evaluation ?? null;
+    const playable = analysis.topLines.filter((l, i) => i === 0 || bestEval === null || l.mate != null
+      || Math.abs((l.evaluation ?? bestEval) - bestEval) < 100);
     const upcoming = scanUpcomingTactics(
       fen,
-      analysis.topLines,
+      playable,
       playerColor,
       lookaheadDepth,
     );

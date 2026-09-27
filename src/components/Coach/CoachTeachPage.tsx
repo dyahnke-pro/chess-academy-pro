@@ -89,7 +89,7 @@ import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
 import { findSiblingExtensionBranches, resolveOpeningEntry, isBookLine } from '../../services/openingDetectionService';
-import { openingAnnouncementForGame, warmOpeningBook } from '../../services/openingAnnouncement';
+import { openingAnnouncementForGame, spokenOpeningLabel, warmOpeningBook } from '../../services/openingAnnouncement';
 import { lastMoveCapturedOn, pendingRecapture, landingSquare } from '../../utils/justCaptured';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
@@ -7967,6 +7967,12 @@ export function CoachTeachPage(): JSX.Element {
       for (const k of [tacticLine ? tacticKey : '', threatLine ? threatKey : '']) {
         for (const sq of k.match(/[a-h][1-8]/g) ?? []) spokenSquaresThisTurn.add(sq);
       }
+      // …and every square the line NAMED — a battery's key holds only its
+      // target (`vs:battery:e3`), so "their rook on e8 and queen on e7 form a
+      // battery" was followed by "their rook on e8 and queen on e7 line up on
+      // the same e-file" (walk 2026-09-27, Carlsen–Aronian).
+      if (threatLine) for (const sq of threatSquares) spokenSquaresThisTurn.add(sq);
+      if (tacticLine) for (const sq of tacticSquares) spokenSquaresThisTurn.add(sq);
     } catch { /* the alert is a bonus — never block the teaching */ }
 
     // ── OPENING ANNOUNCEMENT ───────────────────────────────────────────────
@@ -7976,7 +7982,11 @@ export function CoachTeachPage(): JSX.Element {
       // WHEN to name it is one rule shared with the late lane below
       // (`openingAnnouncement`): first identification, then the settled
       // name once, where the game leaves book — never every refinement.
-      const announce = det && det.name !== learnMemRef.current.queuedOpeningName
+      // Compared as SPOKEN — "Indian Defense" and "Indian Defense: Normal
+      // Variation" read the same once the filler tail goes, and the student
+      // heard "This game is the Indian Defense" twice (walk 2026-09-27).
+      const queuedLabel = learnMemRef.current.queuedOpeningName ? spokenOpeningLabel(learnMemRef.current.queuedOpeningName) : null;
+      const announce = det && det.name !== learnMemRef.current.queuedOpeningName && spokenOpeningLabel(det.name) !== queuedLabel
         ? openingAnnouncementForGame(det, history, learnMemRef.current.spokenOpeningName, playerColor === 'white' ? 'w' : 'b')
         : null;
       if (det && announce) {

@@ -23,7 +23,11 @@ export function sayMoveClause(san: string): string {
   if (clean === 'O-O-O') return 'castle long';
   const m = clean.match(SAN);
   if (!m) return clean;
-  const piece = m[1] ? PIECE_THE[m[1]] : 'the pawn';
+  // A pawn CAPTURE names its file — "the f-pawn taking on g3". Two pawns can
+  // take on one square, and "you left the book with the pawn taking on g3; the
+  // usual move there was the pawn taking on g3" (fxg3 vs hxg3, walk 2026-09-27)
+  // said the same thing twice.
+  const piece = m[1] ? PIECE_THE[m[1]] : m[3] && m[2] && /^[a-h]$/.test(m[2]) ? `the ${m[2]}-pawn` : 'the pawn';
   const takes = m[3] ? ' takes ' : ' to ';
   const promo = m[6] ? `, promoting to ${PROMO[m[6]]}` : '';
   return `${piece}${takes}${m[4]}${promo}`;
@@ -37,7 +41,11 @@ export function sayMoveNoun(san: string): string {
   if (clean === 'O-O-O') return 'castling long';
   const m = clean.match(SAN);
   if (!m) return clean;
-  const piece = m[1] ? PIECE_THE[m[1]] : 'the pawn';
+  // A pawn CAPTURE names its file — "the f-pawn taking on g3". Two pawns can
+  // take on one square, and "you left the book with the pawn taking on g3; the
+  // usual move there was the pawn taking on g3" (fxg3 vs hxg3, walk 2026-09-27)
+  // said the same thing twice.
+  const piece = m[1] ? PIECE_THE[m[1]] : m[3] && m[2] && /^[a-h]$/.test(m[2]) ? `the ${m[2]}-pawn` : 'the pawn';
   const promo = m[6] ? `, promoting to ${PROMO[m[6]]}` : '';
   // "taking on d5" rather than "taking d5": the pawn/piece is taken ON a square.
   return m[3] ? `${piece} taking on ${m[4]}${promo}` : `${piece} to ${m[4]}${promo}`;

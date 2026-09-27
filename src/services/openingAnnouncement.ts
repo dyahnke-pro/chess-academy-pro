@@ -33,6 +33,9 @@ const GENERIC_TAIL = /^(?:main line|normal variation|rare (?:defen[cs]es?|variat
 
 /** The name as it is SAID: a filler tail is dropped ("Indian Defense: Normal
  *  Variation" → "Indian Defense"), a real one kept. */
+export function spokenOpeningLabel(name: string): string {
+  return spoken(name);
+}
 function spoken(name: string): string {
   const [family, ...rest] = name.split(':');
   const tail = rest.join(':').trim();

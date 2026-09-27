@@ -235,7 +235,7 @@ export function findConcession(args: {
   // that way by it (hand walk 2340, move 21: a2 had been isolated since the
   // c-pawn traded; the best move only would have MENDED it).
   const weakBefore = findWeakPawns(args.fen, me);
-  const newIsolated = weakNow.isolated.find((sq) => !weakAlt.isolated.includes(sq) && !weakBefore.isolated.includes(sq));
+  const newIsolated = weakNow.isolated.find((sq) => !weakAlt.isolated.includes(sq) && !weakBefore.isolated.some((b) => b[0] === sq[0]));
   if (newIsolated) {
     return {
       kind: 'pawn-weakened',

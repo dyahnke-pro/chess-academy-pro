@@ -23,7 +23,7 @@
  * flexibility) have none and are deliberately absent (empty > invented).
  */
 import { castleRoute, castleAdvice } from './kingSafety';
-import { fileList } from '../utils/andList';
+import { andList, fileList } from '../utils/andList';
 import { Chess } from 'chess.js';
 import type { Color, PieceSymbol, Square } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
@@ -279,7 +279,24 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         // meeting the threat is right; the late package does, and names it.
         return { fact: `The opponent is eyeing ${intent.san} — it would win ${what}.`, squares: [intent.target] };
       }
-      return { fact: `The opponent wants ${intent.san}, forking on ${intent.target} — take the square away from them.`, squares: [intent.target] };
+      // NAME WHAT IT FORKS — "forking on e4" named the knight's landing
+      // square as if it were the target (walk 2026-09-27, Carlsen–Aronian).
+      let forked: string[] = [];
+      try {
+        const parts = fen.split(' ');
+        parts[1] = student === 'w' ? 'b' : 'w';
+        parts[3] = '-';
+        const b = new Chess(parts.join(' '));
+        const mv = b.move(intent.san);
+        forked = b.board().flat()
+          .filter((c): c is NonNullable<typeof c> => !!c && c.color === student && (c.type === 'k' || c.type === 'q' || c.type === 'r' || c.type === 'b' || c.type === 'n'))
+          .filter((c) => b.attackers(c.square, mv.color).includes(mv.to))
+          .map((c) => `your ${PIECE_NAME[c.type]} on ${c.square}`);
+      } catch { forked = []; }
+      if (forked.length >= 2) {
+        return { fact: `The opponent wants ${intent.san}, forking ${andList(forked)} — take the square away from them.`, squares: [intent.target] };
+      }
+      return { fact: `The opponent wants ${intent.san} — a fork on ${intent.target}; take the square away from them.`, squares: [intent.target] };
     },
   },
   {

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**98 lines · 4 exports · 3 importers · 3 tests · 1 audits**
+**101 lines · 5 exports · 3 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,6 +20,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `DetectedName` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
+
+### `spokenOpeningLabel` (function) — 2 call sites
+- `src/components/Coach/CoachTeachPage.tsx:7988`
+- `src/components/Coach/CoachTeachPage.tsx:7989`
 
 ### `openingAnnouncement` (function) — 15 call sites
 - `src/services/computedVoiceAudit.report.test.ts:310`
@@ -39,11 +43,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingAnnouncement.test.ts:48`
 
 ### `openingAnnouncementForGame` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7885`
-- `src/components/Coach/CoachTeachPage.tsx:9744`
+- `src/components/Coach/CoachTeachPage.tsx:7990`
+- `src/components/Coach/CoachTeachPage.tsx:9918`
 
 ### `warmOpeningBook` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:978`
+- `src/components/Coach/CoachTeachPage.tsx:980`
 
 ## Tests
 

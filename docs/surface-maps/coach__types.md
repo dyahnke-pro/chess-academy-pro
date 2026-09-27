@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**946 lines · 32 exports · 931 importers · 207 tests · 39 audits**
+**946 lines · 32 exports · 932 importers · 208 tests · 39 audits**
 
 ## Locked rules that govern this surface
 
@@ -781,6 +781,7 @@
 - `src/services/lichessPuzzleService.test.ts`
 - `src/services/lichessPuzzleService.ts`
 - `src/services/lichessService.ts`
+- `src/services/liveTacticsContext.playable.test.ts`
 - `src/services/liveTacticsContext.test.ts`
 - `src/services/liveTacticsContext.ts`
 - `src/services/liveVoiceDefects.test.ts`
@@ -1192,6 +1193,7 @@
 - `src/services/kidPuzzleService.test.ts`
 - `src/services/laneReachability.test.ts`
 - `src/services/lichessPuzzleService.test.ts`
+- `src/services/liveTacticsContext.playable.test.ts`
 - `src/services/liveTacticsContext.test.ts`
 - `src/services/liveVoiceDefects.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`

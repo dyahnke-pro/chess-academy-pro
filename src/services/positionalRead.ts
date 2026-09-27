@@ -280,7 +280,7 @@ function observationsFor(
   if (isolani) weak.isolated = weak.isolated.filter((sq) => sq[0] !== 'd');
   if (weak.isolated.length > 0) {
     out.push({
-      key: `${side}-iso-${weak.isolated[0]}`, side, kind: 'structure', rank: rank('structure'),
+      key: `${side}-iso-${weak.isolated[0][0]}`, side, kind: 'structure', rank: rank('structure'),
       squares: [weak.isolated[0]],
       text: own
         ? `Your pawn on ${weak.isolated[0]} is isolated — no friendly pawn can ever defend it, so a piece has to.`
