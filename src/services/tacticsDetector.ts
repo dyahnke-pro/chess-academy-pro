@@ -1,4 +1,5 @@
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
+import { MATERIAL_VALUE } from './pieceValues';
 import type { BoardHighlight } from '../types';
 import type { TacticPattern, HangingPiece } from '../types/tacticTypes';
 import { findHangingPieces } from './tacticClassifier';
@@ -402,18 +403,25 @@ function findBackRankWeakness(chess: Chess): TacticPattern[] {
     const enemy: Color = color === 'w' ? 'b' : 'w';
     const probe = withTurn(chess, enemy);
     if (!probe) continue;
-    // …and the check must SURVIVE: a landing square the defender simply takes
-    // on is not an invasion (hand walk 2026-09-27, Alekhine: "the back rank can
-    // be invaded from f1" with Rf8+ met by …Bxf8). The king may take only an
-    // unprotected invader.
-    const survives = (m: { from: Square; to: Square; san: string }): boolean => {
+    // …and the check must not simply LOSE the invader: a landing square a
+    // cheaper piece takes on is not an invasion (hand walk 2026-09-27,
+    // Alekhine: "the back rank can be invaded from f1" with Rf8+ met by
+    // …Bxf8). An even trade still counts — the defender's rook is tied to the
+    // rank, which is the weakness. The king may take only an unprotected
+    // invader.
+    const survives = (m: { from: Square; to: Square; san: string; piece: string; captured?: string }): boolean => {
       try {
         const after = withTurn(chess, enemy);
         if (!after) return false;
         after.move(m.san);
-        const takers = after.attackers(m.to, color).filter((sq) => after.get(sq)?.type !== 'k');
-        if (takers.length > 0) return false;
-        const kingTakes = after.attackers(m.to, color).length > 0;
+        const cheaper = after.attackers(m.to, color).filter((sq) => {
+          const t = after.get(sq)?.type;
+          return t !== undefined && t !== 'k' && MATERIAL_VALUE[t] < MATERIAL_VALUE[m.piece as PieceSymbol];
+        });
+        // Rxd8+ Nxd8 is rook for rook, still an invasion; Rf8+ Bxf8 is a rook for nothing.
+        const net = (m.captured ? MATERIAL_VALUE[m.captured] : 0) - MATERIAL_VALUE[m.piece];
+        if (cheaper.length > 0 && net < 0) return false;
+        const kingTakes = after.attackers(m.to, color).some((sq) => after.get(sq)?.type === 'k');
         return !kingTakes || after.attackers(m.to, enemy).length > 0;
       } catch { return false; }
     };
@@ -599,7 +607,10 @@ function findDiscoveredAttacks(chess: Chess): TacticPattern[] {
           type: 'discovery',
           beneficiary: p.color,
           involvedSquares: [blocker.square, sq, target.square],
-          description: `Moving the ${PIECE_NAMES[blocker.type]} on ${blocker.square} would unveil the ${PIECE_NAMES[p.type]} on ${sq} against the ${PIECE_NAMES[target.type]} on ${target.square}`,
+          // THE PIECE IS THE SUBJECT (hand walk 2026-09-27, Alekhine: "After
+          // d5, moving your pawn on d5 would unveil…" named the pawn twice).
+          // Read alone or after "After d5, …", it says one thing.
+          description: `The ${PIECE_NAMES[blocker.type]} on ${blocker.square} is a discovered attack in waiting — moving it unveils the ${PIECE_NAMES[p.type]} on ${sq} against the ${PIECE_NAMES[target.type]} on ${target.square}`,
         });
       }
     }

@@ -40,3 +40,31 @@ describe('one move, one voice (Alekhine ply 79)', () => {
     expect(gapEchoedByVerdict('Ne5', [fork], 'c5')).toBe(false);
   });
 });
+
+describe('the reason must be what the played move did NOT do (Alekhine ply 37)', () => {
+  // 19.Qxa7?? took the a-pawn; "Rhc1 was the move — it would win a pawn" said
+  // right after it is no reason at all.
+  const fen = '1nkr3r/ppp1bppp/4p3/1PP1Pb2/3P4/Q3BN1P/P1q1BKP1/R6R w - - 1 19';
+  const line = ['h1c1', 'c2e4', 'a3a7', 'b8d7'];
+  it('no "win a pawn" when the played move already took a pawn', async () => {
+    const { betterMoveReason } = await import('./inaccuracyCall');
+    expect(betterMoveReason(fen, 'Qxa7', 'Rhc1', line, 'white') ?? '').not.toMatch(/win a pawn/);
+  });
+  it('NEGATIVE CONTROL: a quiet played move still hears it', async () => {
+    const { betterMoveReason } = await import('./inaccuracyCall');
+    expect(betterMoveReason(fen, 'Kg1', 'Rhc1', line, 'white')).toMatch(/win a pawn/);
+  });
+});
+
+describe('one pawn break, one saying (Alekhine ply 75)', () => {
+  // "g4 is the pawn break that cracks the position open" then, one breath
+  // later, "The plan here: grab space on the kingside with g4".
+  const fen = '3k4/1pprb3/4p1r1/2P3pp/3PR3/4N2P/P5PK/5R2 w - - 2 39';
+  it('the behaviour and the plan clause carry the same claim key', async () => {
+    const { detectBehaviors } = await import('./danyaBehaviors');
+    const { strategicClaims } = await import('./moveFundamentals');
+    const brk = detectBehaviors({ fen, studentColor: 'white' }).find((h) => h.id === 'pawn-break');
+    expect(brk?.keys).toContain('break-g4');
+    expect(strategicClaims(fen, 'g4', 'white')).toContain('break-g4');
+  });
+});

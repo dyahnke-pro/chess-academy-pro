@@ -38,7 +38,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveReason.ts:112`
 - `src/services/playedMoveGrade.ts:90`
 - `src/services/searchDepth.ts:69`
-- `src/services/tacticsDetector.ts:796`
+- `src/services/tacticsDetector.ts:807`
 - `src/services/threatCheck.ts:55`
 - `src/services/threatOut.ts:78`
 - `src/test/kingIsNeverHanging.test.ts:53`

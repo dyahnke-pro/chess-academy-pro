@@ -1021,7 +1021,10 @@ export function strategicClaims(
   return leadingFundamentals(fenBefore, moveSan, moverColor).flatMap((f) =>
     f.id === 'open-file' && f.squares[0] ? [`file-${f.squares[0][0]}`]
       : f.id === 'king-safety' ? ['castle-now']
-        : []);
+        // A pawn push the plan names is the same idea as "g4 is the pawn
+        // break" said by another lane (Alekhine re-walk ply 75).
+        : f.id === 'space' && f.squares[0] ? [`break-${f.squares[0]}`]
+          : []);
 }
 
 /** The LED positional clause (verb-first) — for a surface that has ALREADY named

@@ -99,8 +99,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:2541`
 - `src/services/groundedAnswer.ts:3293`
 - `src/services/groundedAnswer.ts:6709`
-- `src/services/inaccuracyCall.ts:177`
-- `src/services/inaccuracyCall.ts:523`
+- `src/services/inaccuracyCall.ts:206`
+- `src/services/inaccuracyCall.ts:554`
 - `src/services/moveTiming.ts:27`
 - `src/services/pvPlayback.ts:411`
 - `src/services/pvPlayback.ts:458`
@@ -131,7 +131,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/latentFork.ts:149`
 - `src/services/latentFork.ts:220`
 - `src/services/moveFundamentals.ts:312`
-- `src/services/moveFundamentals.ts:1257`
+- `src/services/moveFundamentals.ts:1260`
 
 ### `legalSeeGainFor` (function) — 26 call sites
 - `src/services/bluffDetector.ts:53`
@@ -164,8 +164,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `signedLegalSeeFor` (function) — 9 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7790`
 - `src/components/Coach/CoachTeachPage.tsx:7904`
-- `src/components/Coach/CoachTeachPage.tsx:10668`
-- `src/components/Coach/CoachTeachPage.tsx:10704`
+- `src/components/Coach/CoachTeachPage.tsx:10669`
+- `src/components/Coach/CoachTeachPage.tsx:10705`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
@@ -178,7 +178,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:2705`
 - `src/services/groundedAnswer.ts:2756`
 - `src/services/tacticVerification.ts:75`
-- `src/services/tacticsDetector.ts:161`
+- `src/services/tacticsDetector.ts:162`
 
 ### `seeSequence` (function) — 3 call sites
 - `src/services/positionReadingService.test.ts:595`
@@ -355,7 +355,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:130`
 
 ### `namedPawnStructure` (function) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9065`
+- `src/components/Coach/CoachTeachPage.tsx:9066`
 - `src/services/danyaBehaviors.ts:318`
 - `src/services/danyaDeviceCoverage.test.ts:107`
 - `src/services/danyaDeviceCoverage.test.ts:108`

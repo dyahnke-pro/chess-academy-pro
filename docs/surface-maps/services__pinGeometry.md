@@ -34,7 +34,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:2609`
 - `src/services/missedTacticService.ts:228`
 - `src/services/tacticClassifier.ts:234`
-- `src/services/tacticsDetector.ts:220`
+- `src/services/tacticsDetector.ts:221`
 
 ### `pinBites` (function) — 3 call sites
 - `src/services/pinGeometry.test.ts:89`

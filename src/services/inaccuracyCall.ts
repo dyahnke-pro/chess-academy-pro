@@ -120,7 +120,7 @@ export function betterMoveFact(
 ): BetterMoveFact | null {
   const order = checksFirst(fenBefore, playedSan, bestSan, bestLineUci);
   if (order) return { kind: 'checks-first', ...order };
-  const better = whyBetter(fenBefore, bestLineUci, moverColor);
+  const better = whyBetter(fenBefore, bestLineUci, moverColor, playedSan);
   if (!better) return null;
   // A KING MOVE DOES NOT SERVE ANOTHER PIECE'S PLAN (Bowdler walk 2026-09-27:
   // "Kf8 was the move — the idea is to park a piece on d4"). A plan clause that
@@ -154,12 +154,41 @@ export function betterMoveReason(
   return f ? phraseBetterMove(f) : null;
 }
 
+/** What a "win …" clause is worth, in pawns — null when it is not a material
+ *  win (a mate, a trap, the shelter). */
+function winClauseValue(text: string): number | null {
+  const m = /^win (?:a |an |the |two |their |your )?(pawns?|knight|bishop|rook|queen|exchange|piece)\b/.exec(text.trim());
+  if (!m) return null;
+  if (/^win two/.test(text.trim())) return 2;
+  const V: Record<string, number> = { pawn: 1, pawns: 2, knight: 3, bishop: 3, piece: 3, exchange: 2, rook: 5, queen: 9 };
+  return V[m[1]] ?? null;
+}
+
+/** Material the PLAYED move itself took, in pawns (0 when it took nothing). */
+function playedGain(fenBefore: string, playedSan: string | null): number {
+  if (!playedSan) return 0;
+  try {
+    const m = new Chess(fenBefore).move(playedSan);
+    return m?.captured ? MATERIAL_VALUE[m.captured] : 0;
+  } catch { return 0; }
+}
+
 function whyBetter(
   fenBefore: string,
   bestUci: readonly string[],
   moverColor: 'white' | 'black',
+  // The move actually played, when there is one. Required so a new caller
+  // decides it: a reason the played move ALSO delivers is not why the other
+  // move was better (Alekhine walk 2026-09-27: "Qxa7 was a blunder. Rhc1 was
+  // the move — it would win a pawn", one breath after Qxa7 took the a-pawn).
+  playedSan: string | null,
 ): { why: string; square: string; own: boolean } | null {
   if (bestUci.length < 4) return null;
+  const alreadyWon = playedGain(fenBefore, playedSan);
+  const sharedWin = (text: string): boolean => {
+    const v = winClauseValue(text);
+    return v !== null && alreadyWon > 0 && v <= alreadyWon;
+  };
   // THE CAPTURE IS THE REASON. When the better move itself takes a real piece,
   // say what it takes — the plan's material read is the NET over the line
   // ("win a rook" for Bxd8, which takes the QUEEN and gives the bishop back;
@@ -184,7 +213,7 @@ function whyBetter(
     // reason says what is certainly true of both: it takes the pawn.
     if (first?.captured === 'p') {
       const plan0 = planFromUci(fenBefore, bestUci, moverColor)?.mine.text?.trim() ?? '';
-      if (/win a pawn/.test(plan0)) return { why: `take the pawn on ${first.to}`, square: first.to, own: true };
+      if (/win a pawn/.test(plan0) && alreadyWon === 0) return { why: `take the pawn on ${first.to}`, square: first.to, own: true };
     }
   } catch { /* fall through to the plan read */ }
   const plan = planFromUci(fenBefore, bestUci, moverColor);
@@ -225,8 +254,10 @@ function whyBetter(
   // touch the move's own squares, or it describes some other piece's journey.
   const firstFrom = bestUci[0].slice(0, 2);
   const firstTo = bestUci[0].slice(2, 4);
-  const lead = plan?.mine.spokenClauses.find((c) => !c.drift && (isCostClause(c.text) || c.squares.includes(firstFrom) || c.squares.includes(firstTo)))
-    ?? plan?.mine.spokenClauses[0];
+  const clauses = plan?.mine.spokenClauses.filter((c) => !sharedWin(c.text)) ?? [];
+  if (plan && clauses.length === 0) return null;
+  const lead = clauses.find((c) => !c.drift && (isCostClause(c.text) || c.squares.includes(firstFrom) || c.squares.includes(firstTo)))
+    ?? clauses[0];
   // WHERE THE PIECES END UP IS NOT WHY THE MOVE WAS BETTER (review walks 900 +
   // 2065, 2026-09-26: "the stronger move was c6 — it would bring pieces to a5
   // and c6 over the next few moves"). With nothing but drift, name the move
@@ -412,7 +443,7 @@ export function callInaccuracyDetailed(args: {
   const better = stopsMate
     ? { why: 'stop the mate', square: '', own: true }
     : args.bestLineUci
-      ? whyBetter(args.fenBefore, args.bestLineUci, args.moverColor)
+      ? whyBetter(args.fenBefore, args.bestLineUci, args.moverColor, args.playedSan)
       : null;
   const cost = Math.round(Math.max(0, args.cpLoss));
 

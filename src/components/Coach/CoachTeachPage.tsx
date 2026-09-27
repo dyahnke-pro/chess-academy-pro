@@ -8370,7 +8370,7 @@ export function CoachTeachPage(): JSX.Element {
         const eligible = quietTurn ? hits : hits.filter((h) => BEHAVIOR_ALWAYS_RIDE.has(h.id));
         const hit = behaviorSchedulerRef.current.pick(eligible);
         if (hit) {
-          behaviorLine = hit.fact; behaviorSquares = hit.squares; behaviorClaims = hit.keys.filter((k) => /^(?:file-[a-h]|passer-[a-h][1-8])$/.test(k)); factLines.push(`Behavior (${hit.id}): ${hit.fact}`);
+          behaviorLine = hit.fact; behaviorSquares = hit.squares; behaviorClaims = hit.keys.filter((k) => /^(?:file-[a-h]|(?:passer|break)-[a-h][1-8])$/.test(k)); factLines.push(`Behavior (${hit.id}): ${hit.fact}`);
           if (hit.id === 'pawn-break') for (const sq of hit.squares) standingRef.current.remember(`student-break-${sq}`);
           for (const k of hit.keys) positionalSaidRef.current.add(k);
         }
@@ -8407,6 +8407,7 @@ export function CoachTeachPage(): JSX.Element {
           // "castling is ready" then "The plan here: castle").
           positionalClaims = [
             ...(pr.key === 'student-king-centre' ? ['castle-now'] : []),
+            ...(/^student-break-[a-h][1-8]$/.test(pr.key) ? [`break-${pr.key.slice(-2)}`] : []),
             ...(pr.aliases ?? []).filter((a) => /^file-[a-h]$/.test(a)),
           ];
           factLines.push(`Positional read: ${pr.text}`);

@@ -595,7 +595,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
           // safe where it lands — so it is READY, not something to prepare
           // (hand walk 2026-09-24: after 11.Qe1 prepared e5 the coach still
           // said "prepare it"; his line was "now you can go e5").
-          return { fact: `${dest} is the pawn break that cracks the position open — and it's ready now.`, squares: [dest] };
+          return { fact: `${dest} is the pawn break that cracks the position open — and it's ready now.`, squares: [dest], keys: [`break-${dest}`] };
         }
       }
       return null;
