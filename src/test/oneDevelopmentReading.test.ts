@@ -14,8 +14,10 @@ function walk(dir: string, out: string[] = []): string[] {
   return out;
 }
 
-// A pair of home squares written side by side is the fingerprint of a copy.
-const COPY = /'(?:b1', ?'g1|b8', ?'g8|c1', ?'f1|c8', ?'f8)'/;
+// A pair of home squares written side by side is the fingerprint of a copy —
+// and so is "a minor off its back rank", the variant two review computers kept
+// (found 2026-09-26, after this gate first shipped; it had no square literals).
+const COPY = /'(?:b1', ?'g1|b8', ?'g8|c1', ?'f1|c8', ?'f8)'|square\[1\] !== backRank/;
 // Level data for a kid mini-game places pieces on those squares on purpose.
 const ALLOWED = new Set(['src/services/development.ts', 'src/data/rowClearerLevels.ts']);
 

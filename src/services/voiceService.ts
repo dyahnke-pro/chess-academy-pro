@@ -414,7 +414,7 @@ const MOVE_NUMBER_PREFIX_RE = /\b\d{1,3}(?:\.\.\.|…|\.)(?=[NBRQKO]|[a-h][1-8x]
 /** Render a SAN disambiguation token as a leading, human-readable
  *  qualifier (returns "" for no disambiguation, else a trailing-space
  *  prefix that sits BEFORE the piece name):
- *    "b"  → "b-file "        ("Nbd2" → "b-file knight to d2")
+ *    "b"  → "b-"             ("Nbd2" → "b-knight to d2")
  *    "1"  → "first-rank "    ("R1e2" → "first-rank rook to e2")
  *    "h4" → "h4 "            (rare full-square disambig — read as-is)
  *  The single-file form is hyphenated ("b-file") deliberately so the
@@ -422,7 +422,9 @@ const MOVE_NUMBER_PREFIX_RE = /\b\d{1,3}(?:\.\.\.|…|\.)(?=[NBRQKO]|[a-h][1-8x]
  *  followed by an action word. */
 function speakDisambiguation(disambig: string): string {
   if (!disambig) return '';
-  if (/^[a-h]$/.test(disambig)) return `${disambig}-file `;
+  // "the b-knight", "the f-rook" — how a coach says it (Blumenfeld walk F12:
+  // "b-file knight to d7" / "f-file rook to d8" read like a spreadsheet).
+  if (/^[a-h]$/.test(disambig)) return `${disambig}-`;
   if (/^[1-8]$/.test(disambig)) return `${RANK_ORDINALS[Number(disambig) - 1]}-rank `;
   return `${disambig} `;
 }
@@ -474,9 +476,9 @@ export function sanitizeForTTS(text: string): string {
   out = out.replace(SAN_MOVE_RE, (san: string, piece: string, disambig: string, capture: string, dest: string) => {
     const name = PIECE_LETTER_NAMES[piece] ?? piece;
     // Disambiguation reads as a LEADING natural-language qualifier, not a
-    // dangling letter after the piece name: "Nbd2" → "b-file knight to
-    // d2" (was the robotic "knight b to d2"). Besides reading like a human
-    // coach, the leading-hyphenated form ("b-file") dodges the
+    // dangling letter after the piece name: "Nbd2" → "b-knight to d2"
+    // (was the robotic "knight b to d2"). Besides reading like a human
+    // coach, the leading-hyphenated form ("b-knight") dodges the
     // case-insensitive LEAK_DETECTOR_RE false-positive — the old trailing
     // "knight b to d2" had a lone "b to" that the leak auditor flagged as
     // un-expanded piece-letter shorthand (prod sanitizer-leak noise).
@@ -499,6 +501,9 @@ export function sanitizeForTTS(text: string): string {
   out = out.replace(SAN_SUFFIX_RE, (_m, move: string, mark: string) => (
     `${move}${mark === '#' ? ', checkmate' : ', check'}`
   ));
+  // A sentence that already SAYS it is mate does not get the word twice
+  // (Blumenfeld walk F38: "rook takes d1, checkmate is mate").
+  out = out.replace(/, checkmate (is|would be|was) (?:check)?mate\b/g, ' $1 checkmate');
   // Audit-instrumentation phase-1: log every SAN→speech expansion
   // pair so Bug F-style regressions ("Nb4" → "knight to b") surface
   // the moment they happen, not after the user reports them. Only

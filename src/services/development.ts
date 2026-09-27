@@ -71,3 +71,20 @@ export function developedMinorCount(chess: Chess, color: Color): number {
 export function totalMinorCount(chess: Chess, color: Color): number {
   return minors(chess, color).length;
 }
+
+/** Pieces "in play" for the development comparison two review computers make:
+ *  minors off their starting squares, plus one for a king that has left the
+ *  e-file (castled, or walked). Takes a plain piece list so a caller holding
+ *  one never rebuilds a board. */
+export function developmentScore(
+  pieces: ReadonlyArray<{ type: string; color: Color; square: string }>,
+  color: Color,
+): number {
+  let n = 0;
+  for (const p of pieces) {
+    if (p.color !== color) continue;
+    if (isMinor(p.type) && !isMinorAtHome(p.type, color, p.square)) n += 1;
+    if (p.type === 'k' && p.square[0] !== 'e') n += 1;
+  }
+  return n;
+}

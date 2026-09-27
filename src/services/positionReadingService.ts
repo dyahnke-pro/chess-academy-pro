@@ -22,6 +22,7 @@ import type { TacticsLiveContext } from '../coach/types';
 import type { WeaknessCategory } from '../types';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { developedMinorCount, totalMinorCount } from './development';
+import { isOutpost } from './outpost';
 
 /** Centipawn-free piece values for SEE + material reasoning (king ~ ∞). */
 const PIECE_VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
@@ -447,26 +448,7 @@ export function findPieceQuality(fen: string): PieceQualityNote[] {
           notes.push({ square, piece: 'n', color, quality: 'bad', kind: 'rim-knight', reason: 'knight on the rim' });
           continue;
         }
-        const inEnemyHalf = color === 'w' ? rank >= 4 && rank <= 6 : rank >= 3 && rank <= 5;
-        if (!inEnemyHalf) continue;
-        const pawnDefends = chess.attackers(square, color).some((s) => chess.get(s)?.type === 'p');
-        if (!pawnDefends) continue;
-        // Can an enemy pawn ever attack this square? Enemy pawns on an adjacent
-        // file, ahead of the knight (from their advance direction), could.
-        let challengeable = false;
-        for (const df of [-1, 1]) {
-          const af = file + df;
-          if (af < 0 || af > 7) continue;
-          const fileLetter = String.fromCharCode(97 + af);
-          for (let r = 1; r <= 8; r += 1) {
-            const occ = chess.get(`${fileLetter}${r}` as Square);
-            if (occ && occ.type === 'p' && occ.color !== color) {
-              // white knight challenged by a black pawn on a higher rank; black knight by a white pawn on a lower rank
-              if (color === 'w' ? r > rank : r < rank) challengeable = true;
-            }
-          }
-        }
-        if (!challengeable) notes.push({ square, piece: 'n', color, quality: 'good', kind: 'outpost', reason: 'knight outpost' });
+        if (isOutpost(chess, square, color, true)) notes.push({ square, piece: 'n', color, quality: 'good', kind: 'outpost', reason: 'knight outpost' });
       }
 
       if (type === 'b') {
@@ -668,7 +650,11 @@ export function findMinorityAttack(fen: string, color: Color): MinorityAttack | 
   for (const flank of flanks) {
     const mine = pawnsOn(color, flank.files);
     const theirs = pawnsOn(enemy, flank.files);
-    if (mine.length < 2 || theirs.length < 3 || mine.length >= theirs.length) continue; // a real minority only
+    // A MAJORITY IS COUNTED IN FILES, not pawns: doubled pawns are one file's
+    // worth of pawn (Blumenfeld walk F4: White's b3+b5 after cxb5 made "a
+    // minority attack on the queenside" out of two pawns against two files).
+    const theirFiles = new Set(theirs.map((sq) => sq[0])).size;
+    if (mine.length < 2 || theirFiles < 3 || mine.length >= theirFiles) continue; // a real minority only
     // DOUBLED PAWNS ARE NOT A MINORITY — they are a weakness (hand walk
     // 2026-09-24: White's h3+h5 after 22.gxh5 was read as "a minority attack
     // on the kingside").
@@ -1933,7 +1919,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
     out.push({
       id: 'threat', type: 'threat', bucket: 'tactics', misconceptionTag: 'missed-opponents-threat',
       prompt: "What is your opponent threatening?",
-      answer: th.description,
+      answer: th.spoken ?? `${th.description} (after ${th.line.join(' ')})`,
       acceptTokens: [th.type.replace(/_/g, ' '), ...th.type.split('_'), ...(th.line[0] ? [sq(th.line[0])] : [])],
       negative: false,
     });

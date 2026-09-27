@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1416 lines · 12 exports · 17 importers · 16 tests · 3 audits**
+**1460 lines · 14 exports · 17 importers · 16 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -76,9 +76,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseText` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9096`
+- `src/components/Coach/CoachTeachPage.tsx:9136`
 - `src/hooks/useLiveCoach.ts:295`
-- `src/hooks/usePhaseNarration.ts:647`
+- `src/hooks/usePhaseNarration.ts:655`
 - `src/services/computerAccuracy.audit.test.ts:113`
 - `src/services/positionFacts.test.ts:254`
 - `src/services/positionFacts.test.ts:255`
@@ -90,10 +90,10 @@
 - `src/services/whyBestMove.ts:103`
 
 ### `computePositionFacts` (function) — 78 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9033`
+- `src/components/Coach/CoachTeachPage.tsx:9073`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
-- `src/hooks/usePhaseNarration.ts:622`
+- `src/hooks/usePhaseNarration.ts:630`
 - `src/services/bluffDetector.test.ts:36`
 - `src/services/bluffDetector.test.ts:46`
 - `src/services/computerAccuracy.audit.test.ts:112`
@@ -168,6 +168,12 @@
 - `src/test/teach02Wired.test.ts:126`
 - `src/test/teach02Wired.test.ts:136`
 - `src/test/teach02Wired.test.ts:138`
+
+### `conceptInstanceKey` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `mustKey` (function) — 1 call site
+- `src/components/Coach/CoachTeachPage.tsx:7892`
 
 ### `convertKey` (function) — 1 call site
 - `src/services/positionFacts.convertOnce.test.ts:24`

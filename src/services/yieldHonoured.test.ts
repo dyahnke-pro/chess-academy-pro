@@ -30,7 +30,7 @@ const DEEP = { evalBefore: 30, evalAfterPlayed: -200, pvAfterPlayed: ['Rd1', 'Be
 
 function whyFor(extra: Record<string, unknown>): string {
   const why: string[] = [];
-  attributePrinciples({ ...base, ...extra } as Parameters<typeof attributePrinciples>[0], why);
+  attributePrinciples({ replySan: null, ...base, ...extra } as Parameters<typeof attributePrinciples>[0], why);
   return why.join(' | ');
 }
 
@@ -66,8 +66,8 @@ describe('a yield is checked against what actually fired', () => {
   it('NEGATIVE CONTROL — the sink is opt-in and costs nothing when nobody asks', () => {
     // No `why` array passed: the deferral ledger is never allocated and the
     // result is identical. A diagnostic that changes the answer is a bug.
-    const withSink = attributePrinciples({ ...base, ...IMMEDIATE }, []);
-    const without = attributePrinciples({ ...base, ...IMMEDIATE });
+    const withSink = attributePrinciples({ replySan: null, ...base, ...IMMEDIATE }, []);
+    const without = attributePrinciples({ replySan: null, ...base, ...IMMEDIATE });
     expect(without.map((f) => f.id)).toEqual(withSink.map((f) => f.id));
   });
 

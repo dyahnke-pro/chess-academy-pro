@@ -145,7 +145,7 @@ export function sharedFeatureLines(a: StructureSignature, b: StructureSignature)
     out.push('a protected outpost in both positions');
   }
   if (a.oppositeWings && b.oppositeWings) {
-    out.push('kings castled on opposite wings in both games');
+    out.push('kings on opposite wings in both games');
   }
   if (a.iqp && b.iqp) {
     out.push('an isolated queen’s pawn in both positions');

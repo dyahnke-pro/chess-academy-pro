@@ -13,18 +13,18 @@ describe('phaseVerdictLine', () => {
   });
 
   it('speaks the band and the reasons, never the number', () => {
-    const t = phaseVerdictLine(FEN, 'w', 300, 'middlegame')!;
+    const t = phaseVerdictLine(FEN, 'w', 300, 'middlegame', new Set())!;
     expect(t).toMatch(/middlegame.*: you're clearly better — you're up a piece/);
-    expect(phaseVerdictLine(FEN, 'w', 300, 'middlegame')).toBe(t); // same board, same words
+    expect(phaseVerdictLine(FEN, 'w', 300, 'middlegame', new Set())).toBe(t); // same board, same words
     expect(t).not.toMatch(/\d{2,}|centipawn|points? of eval/);
   });
 
   it('from the other seat the reasons are the opponent\'s assets', () => {
-    const t = phaseVerdictLine(FEN, 'b', -300, 'middlegame')!;
+    const t = phaseVerdictLine(FEN, 'b', -300, 'middlegame', new Set())!;
     expect(t).toMatch(/you're in trouble — they're up a piece/);
   });
 
   it('NEGATIVE CONTROL: a level start with nothing to name stays silent', () => {
-    expect(phaseVerdictLine('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'w', 10, 'middlegame')).toBeNull();
+    expect(phaseVerdictLine('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'w', 10, 'middlegame', new Set())).toBeNull();
   });
 });

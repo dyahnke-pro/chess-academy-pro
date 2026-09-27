@@ -61,18 +61,21 @@ describe('sanitizeForTTS', () => {
     it('"Bc4" → "bishop to c4"', () => {
       expect(sanitizeForTTS('play Bc4')).toBe('play bishop to c4');
     });
-    it('disambiguated "Rad8" → "a-file rook to d8"', () => {
-      expect(sanitizeForTTS('Rad8 centralises the rook')).toBe('a-file rook to d8 centralises the rook');
+    it('disambiguated "Rad8" → "a-rook to d8"', () => {
+      expect(sanitizeForTTS('Rad8 centralises the rook')).toBe('a-rook to d8 centralises the rook');
     });
-    it('disambiguated capture "Nbxd2" → "b-file knight takes d2"', () => {
-      expect(sanitizeForTTS('then Nbxd2')).toBe('then b-file knight takes d2');
+    it('disambiguated capture "Nbxd2" → "b-knight takes d2"', () => {
+      expect(sanitizeForTTS('then Nbxd2')).toBe('then b-knight takes d2');
+    });
+    it('a sentence that says mate does not say it twice (F38)', () => {
+      expect(sanitizeForTTS('Rxd1# is mate.')).toBe('rook takes d1 is checkmate.');
     });
     it('rank-disambiguated "R1e2" → "first-rank rook to e2"', () => {
       expect(sanitizeForTTS('R1e2 holds')).toBe('first-rank rook to e2 holds');
     });
     it('natural disambiguation does not trip the sanitizer-leak detector', () => {
       // "knight b to d2" (old form) had a lone "b to" the leak detector
-      // flagged; "b-file knight to d2" must not.
+      // flagged; "b-knight to d2" must not.
       expect(detectSanitizerLeak(sanitizeForTTS('then Nbd2'))).toBe(false);
     });
     it('pawn capture "exd5" → "e-pawn takes d5"', () => {

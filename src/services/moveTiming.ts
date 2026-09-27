@@ -40,6 +40,7 @@ export function readTiming(fenEarlier: string, fenNow: string, san: string): Mov
   let now: Chess;
   try { early = new Chess(fenEarlier); now = new Chess(fenNow); } catch { return null; }
   if (early.turn() !== now.turn()) return null;
+  const mover = now.turn();
   try { if (!early.move(san)) return null; } catch { return null; }
   try { if (!now.move(san)) return null; } catch { return null; }
   const then = bestWin(early);
@@ -50,6 +51,13 @@ export function readTiming(fenEarlier: string, fenNow: string, san: string): Mov
   if (legalSeeGainFor(fenEarlier, then.square as Square, opp) >= then.gain) return null;
   const nowWin = bestWin(now);
   if (nowWin && nowWin.gain >= then.gain) return null;
+  // THE PIECE IT SAVED MUST STILL BE THERE (review walk 2065, 2026-09-26: on
+  // Nf3, "a move earlier, Kxf7 would have won your bishop" — the bishop had
+  // left f7 the move before and was gone). The lesson is "this move is safe
+  // NOW because of what you did first"; if that piece is no longer on the
+  // square, the sentence points at nothing on the board.
+  const stands = now.get(then.square as Square);
+  if (!stands || stands.type !== then.piece || stands.color !== mover) return null;
   return { san, reply: then.san, piece: then.piece, square: then.square };
 }
 

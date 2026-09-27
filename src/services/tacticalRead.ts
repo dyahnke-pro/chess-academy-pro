@@ -277,7 +277,9 @@ export async function computeTacticalRead(
         const { score, appeal } = appealScore({ isCapture: mv.captured != null, isPromotion: mv.promotion != null, san: mv.san, piece: mv.piece, to: mv.to, from: mv.from });
         return { mv, score, appeal, uci: mv.from + mv.to + (mv.promotion ?? '') };
       })
-      .filter((c) => c.score > 0 && c.uci !== first.uci)
+      // Nobody is TEMPTED by an underpromotion (Blumenfeld walk: "You'd love to
+      // push it and queen with the pawn to d1, promoting to a bishop").
+      .filter((c) => c.score > 0 && c.uci !== first.uci && !(c.mv.promotion && c.mv.promotion !== 'q'))
       .sort((a, b) => b.score - a.score)
       .slice(0, maxProbe);
     const scored: Array<{ san: string; uci: string; appeal: string; appealScore: number; studentCp: number }> = [];
@@ -646,6 +648,7 @@ export function temptingFromAnalysis(
     // requireForcing: only a capture or a check may be flagged tempting — the
     // conservative free-play contract (matches the retired buildRejectedTempting).
     if (opts.requireForcing && !(mv.captured != null || probe.inCheck())) continue;
+    if (mv.promotion && mv.promotion !== 'q') continue; // no one is tempted by an underpromotion
     const { score, appeal } = appealScore({ isCapture: mv.captured != null, isPromotion: mv.promotion != null, san: mv.san, piece: mv.piece, to: mv.to, from: mv.from });
     if (score <= 0) continue;
     let replySan: string | null = null;

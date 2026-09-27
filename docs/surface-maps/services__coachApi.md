@@ -218,7 +218,7 @@
 - `src/hooks/useLiveCoach.test.tsx:13`
 - `src/hooks/useLiveCoach.ts:312`
 - `src/hooks/usePhaseNarration.test.ts:68`
-- `src/hooks/usePhaseNarration.ts:731`
+- `src/hooks/usePhaseNarration.ts:739`
 - `src/services/coachMoveCommentary.ts:303`
 - `src/services/groundedComputedOnly.test.ts:25`
 - `src/services/groundedMoveFeedback.test.ts:14`
@@ -227,7 +227,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:569`
-- `src/components/Coach/CoachTeachPage.tsx:3325`
+- `src/components/Coach/CoachTeachPage.tsx:3331`
 - `src/services/coachSessionRouter.ts:117`
 - `src/services/coachSettingsAction.ts:242`
 
@@ -266,16 +266,16 @@
 - `src/components/Coach/CoachGameReview.tsx:1654`
 - `src/components/Coach/CoachGameReview.tsx:1773`
 - `src/components/Coach/CoachGameReview.tsx:1961`
-- `src/hooks/usePhaseNarration.ts:718`
+- `src/hooks/usePhaseNarration.ts:726`
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:256`
 - `src/services/coachChatText.ts:221`
-- `src/services/coachFeatureService.ts:134`
-- `src/services/coachFeatureService.ts:384`
-- `src/services/coachFeatureService.ts:519`
-- `src/services/coachFeatureService.ts:520`
-- `src/services/coachFeatureService.ts:4608`
-- `src/services/coachFeatureService.ts:4761`
+- `src/services/coachFeatureService.ts:136`
+- `src/services/coachFeatureService.ts:386`
+- `src/services/coachFeatureService.ts:521`
+- `src/services/coachFeatureService.ts:522`
+- `src/services/coachFeatureService.ts:4657`
+- `src/services/coachFeatureService.ts:4810`
 - `src/services/coachLaneWiring.test.ts:184`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`

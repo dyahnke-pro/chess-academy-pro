@@ -18,11 +18,11 @@ const base = { historySans: ALAPIN, bestSan: 'e6', classification: 'mistake' as 
 describe('section 14 says which gate stopped it', () => {
   it('calculation-depth names the missing eval, then the floor, then the PV shape', () => {
     const live: string[] = [];
-    attributePrinciples({ ...base }, live);
+    attributePrinciples({ replySan: null, ...base }, live);
     expect(live.join(' | ')).toMatch(/calculation-depth: no persisted eval \(live path\)/);
 
     const cheap: string[] = [];
-    attributePrinciples({ ...base, evalBefore: 30, evalAfterPlayed: -20 }, cheap);
+    attributePrinciples({ replySan: null, ...base, evalBefore: 30, evalAfterPlayed: -20 }, cheap);
     // 🔒 THIS ASSERTION WENT RED ON `main` AND NOBODY SAW IT (fixed 2026-09-21).
     // It pinned the words "under the 150cp floor". On 2026-09-21 that raw
     // centipawn floor became an EXPECTED-POINTS band (chess.com's currency,
@@ -38,11 +38,11 @@ describe('section 14 says which gate stopped it', () => {
     expect(cheap.join(' | ')).toMatch(/calculation-depth: cost 50cp is [\d.]+ win% — under an inaccuracy/);
 
     const shallow: string[] = [];
-    attributePrinciples({ ...base, evalBefore: 30, evalAfterPlayed: -200, pvAfterPlayed: ['Nf3'] }, shallow);
+    attributePrinciples({ replySan: null, ...base, evalBefore: 30, evalAfterPlayed: -200, pvAfterPlayed: ['Nf3'] }, shallow);
     expect(shallow.join(' | ')).toMatch(/calculation-depth: punishing PV is 1 plies, needs 3/);
 
     const immediate: string[] = [];
-    attributePrinciples({ ...base, evalBefore: 30, evalAfterPlayed: -200, pvAfterPlayed: ['Bxf6', 'gxf6', 'Qh5'] }, immediate);
+    attributePrinciples({ replySan: null, ...base, evalBefore: 30, evalAfterPlayed: -200, pvAfterPlayed: ['Bxf6', 'gxf6', 'Qh5'] }, immediate);
     expect(immediate.join(' | ')).toMatch(/calculation-depth: the punishment Bxf6 is immediate \(ply 1\)/);
   });
 
@@ -50,17 +50,17 @@ describe('section 14 says which gate stopped it', () => {
     const late: string[] = [];
     // A 30-ply history is past the opening window.
     const long = [...ALAPIN, 'Nf3', 'd6', 'exd6', 'Qxd6', 'Be2', 'Bg4', 'O-O', 'e6', 'Be3', 'Be7', 'd5', 'exd5', 'Nxd5', 'Qxd5', 'Qxd5', 'Nxd5'];
-    attributePrinciples({ historySans: long, bestSan: 'O-O', classification: 'mistake' }, late);
+    attributePrinciples({ replySan: null, historySans: long, bestSan: 'O-O', classification: 'mistake' }, late);
     expect(late.join(' | ')).toMatch(/left-book-early: ply \d+ is past the 24-ply opening window/);
 
     const early: string[] = [];
-    attributePrinciples({ historySans: ['e4', 'c5', 'c3', 'a6'], bestSan: 'Nf6', classification: 'mistake' }, early);
+    attributePrinciples({ replySan: null, historySans: ['e4', 'c5', 'c3', 'a6'], bestSan: 'Nf6', classification: 'mistake' }, early);
     expect(early.join(' | ')).toMatch(/left-book-early: ply 4 is too early/);
   });
 
   it('no-plan names the opening, a planless structure, or a move that DOES serve the plan', () => {
     const opening: string[] = [];
-    attributePrinciples({ ...base }, opening);
+    attributePrinciples({ replySan: null, ...base }, opening);
     expect(opening.join(' | ')).toMatch(/no-plan: ply \d+ is still the opening/);
   });
 
@@ -99,8 +99,8 @@ describe('section 14 says which gate stopped it', () => {
 
   it('costs nothing when nobody asks — no sink, no reasons, same result', () => {
     const withSink: string[] = [];
-    const a = attributePrinciples({ ...base, evalBefore: 30, evalAfterPlayed: -200 }, withSink);
-    const b = attributePrinciples({ ...base, evalBefore: 30, evalAfterPlayed: -200 });
+    const a = attributePrinciples({ replySan: null, ...base, evalBefore: 30, evalAfterPlayed: -200 }, withSink);
+    const b = attributePrinciples({ replySan: null, ...base, evalBefore: 30, evalAfterPlayed: -200 });
     expect(a.map((x) => x.id)).toEqual(b.map((x) => x.id));
     expect(withSink.length).toBeGreaterThan(0);
   });

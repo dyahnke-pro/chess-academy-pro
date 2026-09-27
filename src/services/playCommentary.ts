@@ -955,5 +955,9 @@ export function studentMovePoint(
   // A capture's point is the capture — Raxd8 taking the queen back is not
   // "unpins your rook on e8" (hand walk 2026-09-25).
   if (mv.captured) return null;
-  return quietMovePoint(fenBefore, san);
+  // THE MOVE IS THE SUBJECT (Blumenfeld re-walk): "Unpins your pawn on d5 —
+  // and the queen eyes f2" was queued behind "what is their last move doing?"
+  // and read as its answer. A verb-first point says whose move it is.
+  const point = quietMovePoint(fenBefore, san);
+  return point ? `${san} ${point.charAt(0).toLowerCase()}${point.slice(1)}` : null;
 }

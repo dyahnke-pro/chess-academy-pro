@@ -21,6 +21,8 @@ describe('backwardLook — the line without its opening loss', () => {
     expect(look.withoutAttempt.square).toBe('g5');
     expect(look.line).toMatch(/g5/);
     expect(look.withoutAttempt.line).not.toMatch(/hanging/);
-    expect(look.withoutAttempt.line).toMatch(/Bxf5/);
+    // The better move rides along only WITH its reason — a three-ply line
+    // proves none, so it is not named bare (the Nimzo-walk rule).
+    if (/Bxf5/.test(look.withoutAttempt.line)) expect(look.withoutAttempt.line).toMatch(/Bxf5 was (the move|cleaner) — /);
   });
 });

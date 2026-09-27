@@ -19,6 +19,7 @@ import { Chess, type Color } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { MATERIAL_VALUE } from './pieceValues';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { developmentScore } from './development';
 
 export interface PositionalAssessment {
   /** Student-perspective verdict word from the eval, or null when unclear. */
@@ -26,6 +27,12 @@ export interface PositionalAssessment {
   /** Ordered, board-true asset clauses (student's perspective), most-telling
    *  first; empty when nothing concrete can be named. */
   reasons: string[];
+  /** For each reason, the say-once key Learn's positional read files the SAME
+   *  fact under (`positionalRead` keys), or null — so a balance sheet that
+   *  names "their pawn on a3 is isolated" silences the read's own copy next
+   *  move (Learn walk, fresh Nimzo game, 2026-09-26: said on three moves
+   *  running through two lanes). Same order as `reasons`. */
+  reasonKeys: Array<string | null>;
 }
 
 interface Located { type: string; color: Color; square: string; }
@@ -36,17 +43,9 @@ function pieces(chess: Chess): Located[] {
   return out;
 }
 
-/** Minor pieces developed off the back rank + a castled/walked king (board-true). */
+/** Minors off their starting squares + a castled/walked king (the one reading). */
 function developedCount(all: Located[], color: Color): number {
-  const backRank = color === 'w' ? '1' : '8';
-  let n = 0;
-  for (const p of all) {
-    if (p.color !== color) continue;
-    if ((p.type === 'n' || p.type === 'b') && p.square[1] !== backRank) n += 1;
-  }
-  const king = all.find((p) => p.type === 'k' && p.color === color);
-  if (king && king.square[0] !== 'e') n += 1;
-  return n;
+  return developmentScore(all, color);
 }
 
 /**
@@ -76,7 +75,7 @@ export function assessPositionalEdge(
   studentColorWB: Color,
   studentPovEvalCp: number | null,
 ): PositionalAssessment {
-  const empty: PositionalAssessment = { verdict: null, reasons: [] };
+  const empty: PositionalAssessment = { verdict: null, reasons: [], reasonKeys: [] };
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return empty; }
   const struct = describeStructure(fen);
@@ -97,11 +96,11 @@ export function assessPositionalEdge(
   // reasons are THEIR assets, phrased from the student's seat ("they have the
   // bishop pair"). Balanced / unknown keeps the student's own reading.
   const worse = verdict === 'a bit worse' || verdict === 'in trouble';
-  const reasons = worse
+  const assets = worse
     ? assetsFor(chess, struct, all, enemy, me, 'theirs')
     : assetsFor(chess, struct, all, me, enemy, 'yours');
 
-  return { verdict, reasons };
+  return { verdict, reasons: assets.map((a) => a.text), reasonKeys: assets.map((a) => a.key) };
 }
 
 /**
@@ -117,9 +116,14 @@ function assetsFor(
   side: Color,
   other: Color,
   who: 'yours' | 'theirs',
-): string[] {
-  const reasons: string[] = [];
+): Array<{ text: string; key: string | null }> {
+  const found: Array<{ text: string; key: string | null }> = [];
   const own = who === 'yours';
+  // The seats as Learn's positional read names them: the side holding the
+  // asset, and the side whose weakness it is.
+  const holder = own ? 'student' : 'opponent';
+  const loser = own ? 'opponent' : 'student';
+  const reasons = { push: (text: string, key: string | null = null): void => { found.push({ text, key }); } };
   const you = own ? 'you' : 'they';
   const your = own ? 'your' : 'their';
   const their = own ? 'their' : 'your';
@@ -140,7 +144,7 @@ function assetsFor(
     !!sq && sq[1] === (c === 'w' ? '1' : '8') && (sq[0] === 'g' || sq[0] === 'h' || sq[0] === 'b' || sq[0] === 'c');
   const central = (sq: string | undefined): boolean => !!sq && (sq[0] === 'd' || sq[0] === 'e');
   if (queensOn && castled(kingOf(side), side) && central(kingOf(other))) {
-    reasons.push(`${your} king is tucked away and ${own ? 'theirs' : 'yours'} is still in the centre`);
+    reasons.push(`${your} king is tucked away and ${own ? 'theirs' : 'yours'} is still in the centre`, `${loser}-king-centre`);
   }
 
   // 1. Bishop pair — two bishops vs one-or-none, on a reasonably open board.
@@ -154,7 +158,7 @@ function assetsFor(
     const name = myOutpost.piece === 'n' ? 'knight' : 'bishop';
     reasons.push(own
       ? `your ${name} sits on a protected outpost on ${myOutpost.square} where no enemy pawn attacks the square`
-      : `their ${name} sits on a protected outpost on ${myOutpost.square} where no pawn of yours attacks the square`);
+      : `their ${name} sits on a protected outpost on ${myOutpost.square} where no pawn of yours attacks the square`, `${holder}-good-${myOutpost.square}`);
   }
 
   // 3. Control of an open file — a rook or queen on a fully open file the
@@ -166,7 +170,7 @@ function assetsFor(
     && struct.pawns.openFiles.includes(p.square[0])
     && !all.some((q) => (q.type === 'r' || q.type === 'q') && q.color === other && q.square[0] === p.square[0]));
   if (myHeavyOnOpen) {
-    reasons.push(`${you} own the open ${myHeavyOnOpen.square[0]}-file`);
+    reasons.push(`${you} own the open ${myHeavyOnOpen.square[0]}-file`, `${holder}-file-${myHeavyOnOpen.square[0]}`);
   }
 
   // 4. An enemy weak pawn to target. DURABILITY HONESTY (board-awareness
@@ -177,24 +181,24 @@ function assetsFor(
   // structural read — skip it; and speak present tense, never "lasting".
   const enemyIso = struct.pawns.isolatedPawns[other][0];
   const enemyDoubledFile = struct.pawns.doubledFiles[other][0];
-  if (enemyIso) reasons.push(`${their} pawn on ${enemyIso} is isolated — a target ${you} can pile on`);
+  if (enemyIso) reasons.push(`${their} pawn on ${enemyIso} is isolated — a target ${you} can pile on`, `${loser}-iso-${enemyIso}`);
   else if (enemyDoubledFile) {
     const doubledStable = !all.some((p) => p.type === 'p' && p.color === other
       && p.square[0] === enemyDoubledFile
       && chess.attackers(p.square as Parameters<typeof chess.attackers>[0], side).length
         > chess.attackers(p.square as Parameters<typeof chess.attackers>[0], other).length);
-    if (doubledStable) reasons.push(`${their} doubled pawns on the ${enemyDoubledFile}-file are a structural weakness ${own ? 'to work against' : 'they can work against'}`);
+    if (doubledStable) reasons.push(`${their} doubled pawns on the ${enemyDoubledFile}-file are a structural weakness ${own ? 'to work against' : 'they can work against'}`, `${loser}-doubled-${enemyDoubledFile}`);
   }
 
   // 5. A passed pawn of your own.
   const myPassed = struct.pawns.passedPawns[side][0];
-  if (myPassed) reasons.push(`${your} passed pawn on ${myPassed} is a long-term trump`);
+  if (myPassed) reasons.push(`${your} passed pawn on ${myPassed} is a long-term trump`, `${holder}-passer-${myPassed}`);
 
   // 6. A development lead (only meaningful in the opening/early middlegame).
   const lead = developedCount(all, side) - developedCount(all, other);
   if (lead >= 2) reasons.push(`${youre} ${lead === 2 ? 'two pieces' : `${lead} pieces`} further developed`);
 
-  return reasons;
+  return found;
 }
 
 /**
@@ -209,8 +213,11 @@ export function phaseVerdictLine(
   studentColorWB: Color,
   studentPovEvalCp: number | null,
   phase: 'middlegame' | 'endgame',
+  /** Say-once keys already spoken this game. Required: a reason the student
+   *  already heard ("their pawn on a3 is isolated") is not repeated here. */
+  heard: ReadonlySet<string>,
 ): string | null {
-  const a = assessPositionalEdge(fen, studentColorWB, studentPovEvalCp);
+  const a = freshAssessment(fen, studentColorWB, studentPovEvalCp, heard);
   // WHO'S BETTER *AND WHY*: a verdict with no reason is a description, not a
   // lesson (a prod review said "you were a bit worse" and nothing else).
   if (!a.verdict || a.reasons.length === 0) return null;
@@ -222,4 +229,19 @@ export function phaseVerdictLine(
     `The ${phase} starts here, so take stock: ${standing}${why}.`,
     `Before the ${phase} gets going, the balance sheet: ${standing}${why}.`,
   ], stemKeyOf(fen));
+}
+
+/** The say-once keys of the reasons `phaseVerdictLine` speaks for the same
+ *  inputs — empty when it speaks nothing. One computation, two reads. */
+export function phaseVerdictKeys(fen: string, studentColorWB: Color, studentPovEvalCp: number | null, heard: ReadonlySet<string>): string[] {
+  const a = freshAssessment(fen, studentColorWB, studentPovEvalCp, heard);
+  if (!a.verdict || a.reasons.length === 0) return [];
+  return a.reasonKeys.filter((k): k is string => k !== null);
+}
+
+/** The assessment minus the reasons whose key was already heard. */
+function freshAssessment(fen: string, studentColorWB: Color, studentPovEvalCp: number | null, heard: ReadonlySet<string>): PositionalAssessment {
+  const a = assessPositionalEdge(fen, studentColorWB, studentPovEvalCp);
+  const keep = a.reasonKeys.map((k) => k === null || !heard.has(k));
+  return { verdict: a.verdict, reasons: a.reasons.filter((_, i) => keep[i]), reasonKeys: a.reasonKeys.filter((_, i) => keep[i]) };
 }

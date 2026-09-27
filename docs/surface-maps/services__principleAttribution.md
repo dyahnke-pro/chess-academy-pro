@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1318 lines · 11 exports · 37 importers · 22 tests · 1 audits**
+**1351 lines · 11 exports · 38 importers · 24 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,6 +17,7 @@
 - `src/components/Coach/GameReviewWeaknessCapture.tsx`
 - `src/data/fundamentalLessons.test.ts`
 - `src/data/fundamentalLessons.ts`
+- `src/services/attributionNeverBlind.test.ts`
 - `src/services/autoAnalyzeGame.ts`
 - `src/services/causalChain.ts`
 - `src/services/coachApi.ts`
@@ -80,10 +81,12 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:130`
 
-### `attributePrinciples` (function) — 58 call sites
-- `src/services/coachFeatureService.ts:838`
-- `src/services/liveFundamental.ts:132`
-- `src/services/misconceptionClassifier.ts:250`
+### `attributePrinciples` (function) — 60 call sites
+- `src/services/attributionNeverBlind.test.ts:13`
+- `src/services/coachFeatureService.ts:840`
+- `src/services/learnWalkBlumenfeld.test.ts:65`
+- `src/services/liveFundamental.ts:135`
+- `src/services/misconceptionClassifier.ts:244`
 - `src/services/principleAttribution.section14.test.ts:22`
 - `src/services/principleAttribution.section14.test.ts:32`
 - `src/services/principleAttribution.section14.test.ts:37`
@@ -145,18 +148,19 @@
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
 - `src/services/autoAnalyzeGame.ts:373`
 - `src/services/autoAnalyzeGame.ts:376`
-- `src/services/coachFeatureService.ts:842`
-- `src/services/coachFeatureService.ts:844`
+- `src/services/coachFeatureService.ts:845`
+- `src/services/coachFeatureService.ts:847`
 - `src/services/discussionPractice.ts:353`
 - `src/services/discussionPractice.ts:361`
-- `src/services/liveFundamental.ts:122`
-- `src/services/liveFundamental.ts:129`
+- `src/services/liveFundamental.ts:125`
+- `src/services/liveFundamental.ts:132`
 - `src/services/principleAttribution.test.ts:46`
 
 ## Tests
 
 - `src/components/Coach/FundamentalsPage.test.tsx`
 - `src/data/fundamentalLessons.test.ts`
+- `src/services/attributionNeverBlind.test.ts`
 - `src/services/fundLeadStems.test.ts`
 - `src/services/fundamentalHow.test.ts`
 - `src/services/fundamentalReachesDecider.test.ts`
@@ -165,6 +169,7 @@
 - `src/services/fundamentalsCatalog.test.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/learnFundamentalNarration.test.ts`
+- `src/services/learnWalkBlumenfeld.test.ts`
 - `src/services/principleAttribution.section14.test.ts`
 - `src/services/principleAttribution.test.ts`
 - `src/services/principleAttributionEndgame.test.ts`

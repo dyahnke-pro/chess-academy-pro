@@ -605,6 +605,13 @@ export interface TacticsLiveContext {
     description: string;
     depthAhead: number;
     line: string[];
+    /** The ONE spoken form: the moves that build it, then the geometry,
+     *  seated on the board where it happens — or null when the line is too
+     *  deep to say (Blumenfeld walk F9, 2026-09-26: a four-ply PV discovery
+     *  was spoken as "Watch out — moving from a4 to b5 reveals…" with no
+     *  piece on a4). Computed at the one build site; never re-seat the bare
+     *  `description` against the current board. */
+    spoken: string | null;
   }>;
   /** Tactics in the student's principal variation — OPPORTUNITIES
    *  the student should aim for. */
@@ -613,6 +620,13 @@ export interface TacticsLiveContext {
     description: string;
     depthAhead: number;
     line: string[];
+    /** The ONE spoken form: the moves that build it, then the geometry,
+     *  seated on the board where it happens — or null when the line is too
+     *  deep to say (Blumenfeld walk F9, 2026-09-26: a four-ply PV discovery
+     *  was spoken as "Watch out — moving from a4 to b5 reveals…" with no
+     *  piece on a4). Computed at the one build site; never re-seat the bare
+     *  `description` against the current board. */
+    spoken: string | null;
   }>;
   /** Half-move depth the PV scan covered (rating-adaptive via
    *  `getTacticLookahead`). The brain must not claim a tactic

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1090 lines · 8 exports · 6 importers · 7 tests · 0 audits**
+**1097 lines · 8 exports · 7 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,17 +16,19 @@
 - `src/services/coachFeatureService.ts`
 - `src/services/prematureBreak.test.ts`
 - `src/services/reviewFullData.test.ts`
+- `src/services/reviewWalk2065.test.ts`
 - `src/services/unifiedBetterMoveReason.test.ts`
 - `src/test/teach02Wired.test.ts`
 
 ## Exports and every call site
 
-### `prematureBreakWhy` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:999`
+### `prematureBreakWhy` (function) — 6 call sites
+- `src/services/coachFeatureService.ts:1002`
 - `src/services/prematureBreak.test.ts:15`
 - `src/services/prematureBreak.test.ts:25`
 - `src/services/prematureBreak.test.ts:30`
 - `src/services/prematureBreak.test.ts:34`
+- `src/services/reviewWalk2065.test.ts:33`
 
 ### `MoveFactContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -43,7 +45,7 @@
 ### `computeMoveFacets` (function) — 24 call sites
 - `src/services/boardDelta.test.ts:13`
 - `src/services/boardDelta.test.ts:66`
-- `src/services/coachFeatureService.ts:1748`
+- `src/services/coachFeatureService.ts:1758`
 - `src/services/forkTrick.test.ts:60`
 - `src/services/reviewFullData.test.ts:15`
 - `src/services/reviewFullData.test.ts:19`
@@ -67,7 +69,7 @@
 - `src/test/teach02Wired.test.ts:66`
 
 ### `computeThroughLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:4795`
+- `src/services/coachFeatureService.ts:4844`
 - `src/services/reviewFullData.test.ts:204`
 - `src/services/reviewFullData.test.ts:207`
 - `src/services/reviewFullData.test.ts:215`
@@ -84,6 +86,7 @@
 - `src/services/prematureBreak.test.ts`
 - `src/services/reviewFullData.test.ts`
 - `src/services/reviewNarrationFidelity.test.ts`
+- `src/services/reviewWalk2065.test.ts`
 - `src/services/unifiedBetterMoveReason.test.ts`
 - `src/test/teach02Wired.test.ts`
 

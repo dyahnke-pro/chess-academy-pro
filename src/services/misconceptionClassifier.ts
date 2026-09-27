@@ -18,6 +18,7 @@ import { attributePrinciples } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
 import { detectTactics } from './tacticsDetector';
 import { homeMinorCount } from './development';
+import { centreDistance } from '../utils/centreDistance';
 
 export interface ClassifyMisconceptionInput {
   /** Position BEFORE the played move (FEN). */
@@ -191,13 +192,6 @@ function isRimSquare(square: string): boolean {
   return file === 0 || file === 7 || rank === 1 || rank === 8;
 }
 
-/** Chebyshev distance from the four central squares — bigger is more passive. */
-function centreDistance(square: string): number {
-  const file = fileOf(square);
-  const rank = Number(square[1]) - 1;
-  return Math.max(Math.abs(file - 3.5), Math.abs(rank - 3.5));
-}
-
 function phaseLabel(phase: 'opening' | 'middlegame' | 'endgame'): string {
   if (phase === 'opening') return 'Opening slip';
   if (phase === 'endgame') return 'Endgame slip';
@@ -251,6 +245,8 @@ function classifyMisconceptionImpl(
       historySans: input.historySans,
       bestSan: input.bestSan,
       classification: 'mistake',
+      // Classified at the moment of the move — the reply is not played yet.
+      replySan: null,
       pvAfterPlayed: input.pvAfterPlayed,
       pvAfterBest: input.pvAfterBest,
       evalBefore: input.evalBefore,

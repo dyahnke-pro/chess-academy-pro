@@ -23,6 +23,10 @@ import { computePlyFacts } from './pvPlayback';
 import { describeStructure } from './boardStructure';
 import { detectTactics } from './tacticsDetector';
 import type { PvLine, PvPly, PrevCaptureContext } from './pvPlayback';
+import { aimsOf, stepArc, EMPTY_ARC, type ArcEvent, type ArcMove, type Seat } from './planArc';
+// The PLAN ACROSS MOVES (planArc) — the memory this reader never had. Exposed
+// from here so a surface composes one plan module, not two.
+export { aimsOf, stepArc, EMPTY_ARC, type ArcEvent, type ArcState, type ArcMove, type Seat, type Aim } from './planArc';
 
 type ChessCtor = InstanceType<typeof Chess>;
 
@@ -59,6 +63,32 @@ const TACTIC_WORD: Record<string, string> = {
  * the sentence: "walk the queen round to c2, by way of c2 and b3." Real
  * journey, nonsense sentence, and it happened twice in one game.
  */
+/** Could the piece on `from` step to `to` in ONE move on this board — its own
+ *  geometry, with the squares between clear? Unreadable board → false, so the
+ *  caller's reroute survives rather than being dropped on a guess. */
+export function reachesInOneMove(fen: string | undefined, from: string, to: string): boolean {
+  if (!fen) return false;
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return false; }
+  const piece = board.get(from as Square);
+  if (!piece) return false;
+  const df = to.charCodeAt(0) - from.charCodeAt(0);
+  const dr = Number(to[1]) - Number(from[1]);
+  const adf = Math.abs(df); const adr = Math.abs(dr);
+  if (piece.type === 'n') return (adf === 1 && adr === 2) || (adf === 2 && adr === 1);
+  if (piece.type === 'k') return Math.max(adf, adr) === 1;
+  const straight = df === 0 || dr === 0;
+  const diagonal = adf === adr && adf > 0;
+  const shapeOk = piece.type === 'q' ? straight || diagonal : piece.type === 'r' ? straight : piece.type === 'b' ? diagonal : false;
+  if (!shapeOk) return false;
+  const sf = Math.sign(df); const sr = Math.sign(dr);
+  for (let i = 1; i < Math.max(adf, adr); i++) {
+    const sq = `${String.fromCharCode(from.charCodeAt(0) + sf * i)}${Number(from[1]) + sr * i}`;
+    if (board.get(sq as Square)) return false;
+  }
+  return true;
+}
+
 export function waypointsOf(path: readonly string[]): string[] {
   if (path.length < 3) return [];
   const start = path[0];
@@ -221,7 +251,9 @@ export interface SidePlan {
    *  wrong. Keep new producers to the contract rather than teaching consumers to
    *  detect the violation — a validator on prose is the thing G0 says to stop
    *  writing. */
-  spokenClauses: Array<{ text: string; squares: string[] }>;
+  /** `drift` marks the fallback "bring pieces to X and Y" — where the pieces
+   *  end up, not why a move is good. A reason-seeking caller skips it. */
+  spokenClauses: Array<{ text: string; squares: string[]; drift?: true }>;
 }
 
 /** What is TRUE OF THE BOARD RIGHT NOW, as opposed to what the line does next.
@@ -552,6 +584,13 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     // engine marking time; either way it is not the regrouping this clause is
     // for.
     .filter((j) => j.path[0] !== j.path[j.path.length - 1])
+    // A ROUTE THE PIECE DID NOT NEED IS NOT A REGROUPING (review walk 900,
+    // 2026-09-26): "…Bh2+ — it would walk the bishop round to c7, by way of
+    // h2". The bishop checked, then dropped back to c7 — a square it reached
+    // from d6 in one move. A reroute is the long way to a square the short way
+    // cannot reach; when the start sees the destination on the ROOT board,
+    // the waypoints are incident (a check, a chase), not the idea.
+    .filter((j) => !reachesInOneMove(mine[0]?.fenBefore, j.path[0], j.path[j.path.length - 1]))
     .sort((a, b) => b.path.length - a.path.length)[0] ?? null;
 
   const headingFor = [...destinations.entries()]
@@ -777,7 +816,7 @@ export function describePlan(
     // on a real Two Knights blunder: "Na5 was the move — it would You're
     // bringing pieces to c6 and a5 over the next few moves.." Board-true in
     // every part, so no gate could see it; it is simply not English.
-    plan.spokenClauses = [{ text: `bring pieces to ${squares} over the next few moves`, squares: heading }];
+    plan.spokenClauses = [{ text: `bring pieces to ${squares} over the next few moves`, squares: heading, drift: true }];
     return line;
   }
 
@@ -1518,6 +1557,16 @@ function shortLineRead(
  * than guessed, so `describe` falls back to the squares the pieces are heading
  * for — less to say, and nothing invented (G0).
  */
+/** Is this plan clause a COST — something that was taken or broken, as opposed
+ *  to where pieces go? The one test both backward readers use ("that let them
+ *  …", "it let them …"): Blumenfeld walk F32 heard "That let them walk the rook
+ *  round to h5, by way of c5, pull the pawns away, win a pawn, prise open the
+ *  c-file and trade off the rook", and F18 "That gave them the run of b4 and
+ *  c3" — plans and drift said as if they were the price of the move. */
+export function isCostClause(text: string): boolean {
+  return /^(win|take|mate|checkmate|trap|pull the pawns)\b/.test(text.trim());
+}
+
 export function planFromUci(
   fen: string,
   uciMoves: readonly string[],
@@ -1566,4 +1615,44 @@ export function planFromUci(
     studentColor,
     said,
   );
+}
+
+/** How far ahead review reads a side's plan off the moves actually played. */
+const HINDSIGHT_PLIES = 8;
+
+/**
+ * Both sides' arcs across a finished game, keyed by the index of the move each
+ * event belongs to (0-based into `sans`). Review's read is HINDSIGHT: the plan
+ * after each move is read off the moves that were actually played next — the
+ * plan the side really carried out, not one the engine proposed.
+ *
+ * Emerge, arrive and drop speak; a step toward a plan does not — walking a
+ * whole review, "another step toward…" on every move is a chant, and the
+ * landing says what the steps were for.
+ */
+export function gameArcs(sans: readonly string[], studentColor: 'white' | 'black'): Map<number, ArcEvent[]> {
+  const out = new Map<number, ArcEvent[]>();
+  const board = new Chess();
+  const uci: string[] = []; const fens: string[] = [board.fen()];
+  const moved: ArcMove[] = [];
+  for (const san of sans) {
+    let m;
+    try { m = board.move(san); } catch { break; }
+    uci.push(m.from + m.to + (m.promotion ?? '')); fens.push(board.fen());
+    moved.push({ from: m.from, to: m.to, piece: m.piece, promotion: m.promotion });
+  }
+  const studentWB: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+  for (const color of ['w', 'b'] as const) {
+    const seat: Seat = color === studentWB ? 'student' : 'opponent';
+    let state = EMPTY_ARC;
+    for (let i = color === 'w' ? 0 : 1; i < moved.length; i += 2) {
+      const plan = planFromUci(fens[i + 1], uci.slice(i + 1, i + 1 + HINDSIGHT_PLIES), studentColor);
+      const side = plan ? (seat === 'student' ? plan.mine : plan.theirs) : null;
+      const r = stepArc(state, side ? aimsOf(side, seat) : [], moved[i], fens[i + 1], color, seat);
+      state = r.next;
+      const spoken = r.events.filter((e) => e.kind !== 'advance');
+      if (spoken.length) out.set(i, [...(out.get(i) ?? []), ...spoken]);
+    }
+  }
+  return out;
 }

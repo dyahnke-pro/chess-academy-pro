@@ -61,7 +61,11 @@ describe('it speaks only when a move really cost something', () => {
       studentColor: 'black',
     });
     expect(look, 'a 420-centipawn move produced no backward look at all').not.toBeNull();
-    expect(look!.line).toContain(HUNG.best);
+    // NAMED WITH ITS REASON, OR NOT NAMED (Learn walk, Nimzo, 2026-09-26): with
+    // no engine line there is no reason, so the grade stands and Nf6 is not
+    // handed over bare.
+    expect(look!.line).toMatch(/Nd4 was a blunder/);
+    if (look!.line.includes(HUNG.best)) expect(look!.line).toMatch(new RegExp(`${HUNG.best} was the move — `));
   });
 });
 

@@ -151,6 +151,12 @@ export interface AttributionInput {
   evalBefore?: number;
   /** Persisted engine eval AFTER the played move, MOVER POV in centipawns. */
   evalAfterPlayed?: number;
+  /** The opponent's ACTUAL reply to the played move (SAN), or null when it is
+   *  not known yet. REQUIRED: a verdict spoken after the reply must name the
+   *  kick they PLAYED, not a hypothetical one — Blumenfeld walk F17 heard
+   *  "after this they get g4 for free, hitting your queen" once Ng3 had
+   *  already hit it. */
+  replySan: string | null;
 }
 
 export const ATTRIBUTION_MAX = 3;
@@ -420,6 +426,8 @@ interface Ctx {
   mover: Color; opp: Color; last: Move; best: Move;
   history: Move[]; plyIndex: number; opening: boolean; endgame: boolean;
   pvP?: readonly string[]; pvB?: readonly string[];
+  /** The opponent's actual reply, parsed on `after`, or null. */
+  reply: Move | null;
   /** Persisted engine eval before/after the played move, MOVER POV (cp).
    *  Present on the review path only — eval-gated detectors stay silent live. */
   evalBefore?: number; evalAfterPlayed?: number;
@@ -542,13 +550,17 @@ const DETECTORS: Detector[] = [
     const bestKick = kickAvailable(c.afterBest, opp);
     if (kick && bestKick && bestKick.hits.length >= kick.hits.length) return null;
     if (two && twoStepKick(c.afterBest, opp, c.best.to)) return null;
-    const moves = kick ? [kick.san] : two ? [two.san, two.then] : [];
+    // THE KICK THEY PLAYED OUTRANKS THE ONE THEY COULD HAVE (F17): when the
+    // actual reply already hit a piece with tempo, that move is the evidence.
+    const played = c.reply ? tempoTargets(c.after, c.reply, opp) : [];
+    const playedSan = played.length && c.reply ? c.reply.san : null;
+    const moves = playedSan ? [playedSan] : kick ? [kick.san] : two ? [two.san, two.then] : [];
     if (moves.length === 0) return null;
-    const target: Square = kick ? kick.hits[0] : last.to;
+    const target: Square = played.length ? played[0] : kick ? kick.hits[0] : last.to;
     return att('tempo-handed', 3, {
       squares: [last.to, target], moves,
       pvMoves: pvHas(c.pvP, (s) => moves.includes(s)),
-    }, { target: `${PNAME[c.after.get(target)?.type ?? 'n']} on ${target}`, kick: moves.join(' then ') });
+    }, { target: `${PNAME[c.after.get(target)?.type ?? 'n']} on ${target}`, kick: moves.join(' then '), played: played.length ? 1 : 0 });
   },
   // 3. Space conceded — the piece left a centre-box square and the opponent can
   // now push a centre pawn onto/over it SAFELY (capturing the pawn loses
@@ -1078,6 +1090,15 @@ const DETECTORS: Detector[] = [
       return yieldTo(c, 'calculation-depth', CALC_DEPTH_CLAIMANTS,
         `the punishment ${pvP[firstForcing]} is immediate (ply ${firstForcing + 1}) — another fundamental owns it`);
     }
+    // A BLOW THAT WAS ALREADY ON IS NOT "DEEPER" (Learn walk, fresh Nimzo
+    // game, 2026-09-26: "c6 survives the first replies and breaks on dxc6" —
+    // and dxc6 was legal the very next move, and was played). The engine's line
+    // may order the blow later, but a punishment available at once is an
+    // immediate one, and another fundamental owns it.
+    if (c.after.moves().includes(pvP[firstForcing])) {
+      return yieldTo(c, 'calculation-depth', CALC_DEPTH_CLAIMANTS,
+        `the punishment ${pvP[firstForcing]} is already legal as the immediate reply — not a depth lapse`);
+    }
     // A BLOW DEEPER THAN ANY LINE THE COACH EVER SPELLS IS NOT A CALCULATION
     // LAPSE (hand walk 1380, move 10: a 1380 told the punishment "arrives on
     // their 7th move" — ply 13). Nobody is held to a line past the coach's own
@@ -1086,7 +1107,10 @@ const DETECTORS: Detector[] = [
       return no(c, 'calculation-depth', `the punishment ${pvP[firstForcing]} lands at ply ${firstForcing + 1}, past the ${MAX_PV_DEPTH_PLIES}-ply horizon`);
     }
     return att('calculation-depth', 2, { squares: [last.to], moves: [pvP[firstForcing]], pvMoves: pvP.slice(0, firstForcing + 1) },
-      { played: last.san, punish: pvP[firstForcing], depth: firstForcing + 1 });
+      // THE PATH TRAVELS WITH THE BLOW (Blumenfeld walk F21: "breaks on Nxh5"
+      // with nothing on h5 yet) — the moves that lead to it, so the student
+      // can follow the thread that was lost.
+      { played: last.san, punish: pvP[firstForcing], depth: firstForcing + 1, path: pvP.slice(0, firstForcing).join(', ') });
   },
   // 35. Left theory early (opening, DB-anchored — G3: the Lichess DB is canon).
   // PATTERN: the position BEFORE the move is in the openings DB with named
@@ -1220,6 +1244,7 @@ export function attributePrinciples(
     before, after, afterBest, mover, opp: other(mover), last, best, history,
     plyIndex: input.historySans.length, opening: input.historySans.length <= OPENING_PLIES,
     endgame: isEndgame(before), pvP: input.pvAfterPlayed, pvB: input.pvAfterBest,
+    reply: input.replySan ? tryMove(after, input.replySan) : null,
     evalBefore: input.evalBefore, evalAfterPlayed: input.evalAfterPlayed,
     ...(why ? { why, deferrals: [] } : {}),
   };
@@ -1297,6 +1322,14 @@ export function attributePrinciples(
       const covered = pool.length > 0 ? `the ply still spoke via [${pool.map((f) => f.id).join(', ')}]` : 'and NOTHING else fired — the moment is unnamed';
       why?.push(`${d.from}: YIELD UNHONOURED — stood down for [${d.to.join(', ')}], none fired; ${covered} (${d.reason})`);
     }
+  }
+
+  // A SILENCE ALWAYS NAMES ITSELF (review N900, ply 30): when no detector
+  // matched and none explained its refusal, `why` came back empty — so the
+  // review's "declined, and here is why" row never fired and the audit reported
+  // the diagnosis BLIND. The reason is a fact: nothing covered this slip.
+  if (pool.length === 0 && why && why.length === 0) {
+    why.push(`attribution: none of the ${DETECTORS.length} detectors matched ${last.san} (best ${best.san}) — this slip has no nameable fundamental yet`);
   }
 
   return pool.sort((a, b) => b.weight - a.weight || FUNDAMENTAL_IDS.indexOf(a.id) - FUNDAMENTAL_IDS.indexOf(b.id)).slice(0, ATTRIBUTION_MAX);

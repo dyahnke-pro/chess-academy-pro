@@ -28,10 +28,11 @@
 // and the reason comes from replaying the engine's own line. Nothing here asks a
 // model what it thinks.
 import { Chess, type Square } from 'chess.js';
-import { planFromUci } from './lookaheadPlan';
+import { planFromUci, isCostClause } from './lookaheadPlan';
 import { classifyMove, type MoveQuality } from './moveRating';
 import { MISTAKE_CP, BLUNDER_CP } from './engineConstants';
 import { MATERIAL_VALUE } from './pieceValues';
+import { legalSeeGain } from './positionReadingService';
 
 export interface InaccuracyCall {
   /** Straight from `moveRating.classifyMove` — never re-derived here. */
@@ -102,7 +103,9 @@ export function checksFirst(
  *  computer, never the phrasing). */
 export type BetterMoveFact =
   | { kind: 'checks-first'; best: string; reply: string | null; played: string }
-  | { kind: 'line-wins'; why: string };
+  /** `own`: the reason is the move's own work (a cost, or a clause on its
+   *  squares). Otherwise it is the plan the move serves, and says so. */
+  | { kind: 'line-wins'; why: string; own: boolean };
 
 /**
  * WHY THE BETTER MOVE IS BETTER — the one computer every coach surface reads
@@ -118,7 +121,7 @@ export function betterMoveFact(
   const order = checksFirst(fenBefore, playedSan, bestSan, bestLineUci);
   if (order) return { kind: 'checks-first', ...order };
   const better = whyBetter(fenBefore, bestLineUci, moverColor);
-  return better ? { kind: 'line-wins', why: better.why } : null;
+  return better ? { kind: 'line-wins', why: better.why, own: better.own } : null;
 }
 
 /** The fact, worded. A verdict on a move already PLAYED is retrospective on
@@ -130,7 +133,10 @@ export function phraseBetterMove(f: BetterMoveFact): string {
     case 'checks-first':
       return `checks first: ${f.best}, ${f.reply ?? 'they answer'}, and ${f.played} would still have been there — you'd have had both`;
     case 'line-wins':
-      return `it would ${f.why}`;
+      // A plan clause about another piece is the IDEA the move serves, never
+      // something the move itself does (Blumenfeld re-walk: "Rad8 was the move —
+      // it would walk the knight round to e5").
+      return f.own ? `it would ${f.why}` : `the idea is to ${f.why}`;
   }
 }
 
@@ -146,7 +152,7 @@ function whyBetter(
   fenBefore: string,
   bestUci: readonly string[],
   moverColor: 'white' | 'black',
-): { why: string; square: string } | null {
+): { why: string; square: string; own: boolean } | null {
   if (bestUci.length < 4) return null;
   // THE CAPTURE IS THE REASON. When the better move itself takes a real piece,
   // say what it takes — the plan's material read is the NET over the line
@@ -159,8 +165,12 @@ function whyBetter(
     const NAME: Record<string, string> = { q: 'queen', r: 'rook', b: 'bishop', n: 'knight' };
     // Only when it takes MORE than the capturer is worth — an even trade is not
     // the reason a move is better.
-    if (first?.captured && NAME[first.captured] && MATERIAL_VALUE[first.captured] > MATERIAL_VALUE[first.piece]) {
-      return { why: `take the ${NAME[first.captured]} on ${first.to}`, square: first.to };
+    // …or when it wins the piece OUTRIGHT: an undefended queen taken by a
+    // queen is not an even trade (review walk 2065, 2026-09-26: Qxh5 took a
+    // hanging queen and the line's net read called it "win a rook").
+    const winsOutright = first?.captured ? legalSeeGain(fenBefore, first.to) >= MATERIAL_VALUE[first.captured] : false;
+    if (first?.captured && NAME[first.captured] && (MATERIAL_VALUE[first.captured] > MATERIAL_VALUE[first.piece] || winsOutright)) {
+      return { why: `take the ${NAME[first.captured]} on ${first.to}`, square: first.to, own: true };
     }
   } catch { /* fall through to the plan read */ }
   const plan = planFromUci(fenBefore, bestUci, moverColor);
@@ -195,14 +205,29 @@ function whyBetter(
   // selection from ranked data, and it reads the STRUCTURE rather than
   // re-splitting the joined prose — which cannot be split safely anyway, since a
   // clause carries its own commas ("walk the bishop round to b3, by way of f7").
-  const lead = plan?.mine.spokenClauses[0];
-  if (lead?.text) return { why: lead.text, square: lead.squares[0] ?? '' };
-  // No clause carried a square (the drift line, and anything square-less that
-  // outranked it) — fall back to the sentence, which in that case IS one clause.
+  // THE REASON IS ABOUT THE MOVE (Blumenfeld re-walk: "Rad8 was the move — it
+  // would walk the knight round to e5", "f5 was the move — it would walk the
+  // rook round to c8"). A cost counts wherever it lands; any other clause must
+  // touch the move's own squares, or it describes some other piece's journey.
+  const firstFrom = bestUci[0].slice(0, 2);
+  const firstTo = bestUci[0].slice(2, 4);
+  const lead = plan?.mine.spokenClauses.find((c) => !c.drift && (isCostClause(c.text) || c.squares.includes(firstFrom) || c.squares.includes(firstTo)))
+    ?? plan?.mine.spokenClauses[0];
+  // WHERE THE PIECES END UP IS NOT WHY THE MOVE WAS BETTER (review walks 900 +
+  // 2065, 2026-09-26: "the stronger move was c6 — it would bring pieces to a5
+  // and c6 over the next few moves"). With nothing but drift, name the move
+  // and give no reason — empty beats a reason that says nothing.
+  if (lead?.drift) return null;
+  if (lead?.text) {
+    const own = isCostClause(lead.text) || lead.squares.includes(firstFrom) || lead.squares.includes(firstTo);
+    return { why: lead.text, square: lead.squares[0] ?? '', own };
+  }
+  // No clause carried a square (anything square-less that outranked the rest)
+  // — fall back to the sentence, which in that case IS one clause.
   const want = /^You want to ([^.]+)\./.exec(text);
   if (!want) return null;
   const square = plan?.mine.spokenClauses.flatMap((c) => c.squares)[0] ?? '';
-  return { why: want[1], square };
+  return { why: want[1], square, own: false };
 }
 
 /**
@@ -264,6 +289,14 @@ export function callInaccuracyDetailed(args: {
   /** Whose move it was. */
   side: 'student' | 'coach';
   moverColor: 'white' | 'black';
+  /** The engine's best line for the OTHER side after the played move, UCI —
+   *  the punishment, which is what a "blunder" COST. REQUIRED (`[]` when
+   *  unknown): Blumenfeld walk F16/F23/F31 heard "Qd7 was a blunder", "Bd6 was
+   *  a mistake", "d4 was a mistake" and never what any of them gave away. */
+  replyLineUci: readonly string[];
+  /** Their ACTUAL reply, SAN, or null when not played yet — so a punishment
+   *  they did not play is "and they missed it", never a loss that happened. */
+  replySan: string | null;
 }): InaccuracyVerdict {
   const bare = (s: string): string => s.replace(/[+#]$/, '');
   const wasBest = Boolean(args.bestSan) && bare(args.playedSan) === bare(args.bestSan ?? '');
@@ -357,7 +390,7 @@ export function callInaccuracyDetailed(args: {
   })();
 
   const better = stopsMate
-    ? { why: 'stop the mate', square: '' }
+    ? { why: 'stop the mate', square: '', own: true }
     : args.bestLineUci
       ? whyBetter(args.fenBefore, args.bestLineUci, args.moverColor)
       : null;
@@ -374,7 +407,9 @@ export function callInaccuracyDetailed(args: {
       : quality === 'mistake'
         ? `That was a mistake from me. ${args.playedSan} is not what the position wanted.`
         : `A touch inaccurate from me — ${args.playedSan} is not quite right.`;
-    const should = better ? ` ${args.bestSan} was the move, to ${better.why}.` : ` ${args.bestSan} was the move.`;
+    // NAMED WITH ITS REASON, OR NOT NAMED (the Learn rule, 2026-09-24): a move
+    // with no computed reason is an order, not teaching.
+    const should = better ? ` ${args.bestSan} was the move, to ${better.why}.` : '';
     // WHICH KIND OF SLIP, read off the board (walk 6, L4). The coach's move can
     // cost by GIVING something (the student now has a capture to find) or by
     // MISSING a capture of the student's piece — and then that piece is still
@@ -418,16 +453,60 @@ export function callInaccuracyDetailed(args: {
   if (typeof after === 'number' && after >= BLUNDER_CP && (args.allowedMate ?? null) === null) {
     const said = reason
       ? `${args.playedSan} still wins, but ${args.bestSan} was cleaner — ${reason}.`
-      : `${args.playedSan} still wins, but ${args.bestSan} was cleaner.`;
+      : `${args.playedSan} still wins.`;
     return { call: { quality, side: 'student', cost, said, square: better?.square ?? '' } };
   }
-  const head = quality === 'blunder'
-    ? `${args.playedSan} was a blunder.`
-    : quality === 'mistake'
-      ? `${args.playedSan} was a mistake.`
-      : `${args.playedSan} was a little loose.`;
-  const should = reason ? ` ${args.bestSan} was the move — ${reason}.` : ` ${args.bestSan} was the move.`;
+  // THE GRADE CARRIES ITS COST (Blumenfeld walk F16/F23/F31): what the move
+  // let them do, read off their own best line by the same reader that says why
+  // a better move is better — and whether they actually did it.
+  const punishment = quality === 'inaccuracy' ? null : punishmentOf(args.fenBefore, args.playedSan, args.replyLineUci, args.moverColor);
+  // NAMED WITH ITS REASON, OR NOT NAMED (Learn walk, fresh Nimzo game,
+  // 2026-09-26: "exd5 was a mistake. e5 was the move." — nothing said why).
+  const should = reason ? ` ${args.bestSan} was the move — ${reason}.` : '';
+  const grade = quality === 'blunder' ? 'a blunder' : quality === 'mistake' ? 'a mistake' : 'a little loose';
+  const head = punishment
+    ? `${args.playedSan} was ${grade} — it let them ${punishment.why}${punishment.first && args.replySan !== null && bare(args.replySan) !== bare(punishment.first) ? ', and they missed it' : ''}.`
+    : `${args.playedSan} was ${grade}.`;
   return { call: { quality, side: 'student', cost, said: `${head}${should}`, square: better?.square ?? '' } };
+}
+
+/** What the played move let the OTHER side do: their best line after it, read
+ *  by `whyBetter` (the capture it wins, else the plan's leading clause), plus
+ *  that line's first move as SAN so the caller can say whether it was played. */
+function punishmentOf(
+  fenBefore: string, playedSan: string, replyLineUci: readonly string[], moverColor: 'white' | 'black',
+): { why: string; first: string | null } | null {
+  if (!replyLineUci || replyLineUci.length < 4) return null;
+  let fenAfter: string;
+  let first: string | null = null;
+  try {
+    const c = new Chess(fenBefore);
+    c.move(playedSan);
+    fenAfter = c.fen();
+    const u = replyLineUci[0];
+    first = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] })?.san ?? null;
+  } catch { return null; }
+  // A CAPTURE THAT WINS is the cost, said as what they take — same rule as
+  // `whyBetter` (more than the capturer is worth, or outright).
+  try {
+    const b = new Chess(fenAfter);
+    const u = replyLineUci[0];
+    const m = b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+    const NAME: Record<string, string> = { q: 'queen', r: 'rook', b: 'bishop', n: 'knight' };
+    const outright = m?.captured ? legalSeeGain(fenAfter, m.to) >= MATERIAL_VALUE[m.captured] : false;
+    if (m?.captured && NAME[m.captured] && (MATERIAL_VALUE[m.captured] > MATERIAL_VALUE[m.piece] || outright)) {
+      return { why: `take your ${NAME[m.captured]} on ${m.to}`, first };
+    }
+  } catch { /* fall through to the plan read */ }
+  // Otherwise THEIR half of the plan, seated from the student's side so its
+  // pronouns point the right way ("toward your king", not "their king").
+  // Only a clause that IS a cost — material, mate, the king's shelter. "Trade
+  // off the knight" was the lead for …Qd7 (Blumenfeld walk), true and not why it
+  // cost three pawns; then the punishing move itself is the honest answer.
+  const plan = planFromUci(fenAfter, replyLineUci, moverColor);
+  const lead = plan?.theirs.spokenClauses[0];
+  if (lead?.text && !lead.drift && isCostClause(lead.text)) return { why: lead.text, first };
+  return first ? { why: `in with ${first}`, first } : null;
 }
 
 /** The verdict alone — the shape every existing caller already expects.

@@ -9,7 +9,7 @@ const SANS = (() => { const c = new Chess(); c.loadPgn(ALAPIN); return c.history
 const fenBefore = (ply: number): string => { const c = new Chess(); for (const s of SANS.slice(0, ply - 1)) c.move(s); return c.fen(); };
 
 /** Ply 12 = 6...Nb6, Black's flagged move (best 6...e6): −30 → +90 White POV. */
-const NB6: LiveFundamentalReads = {
+const NB6: LiveFundamentalReads = { replySan: null,
   fenBefore: fenBefore(12), historySans: SANS.slice(0, 12), playedSan: 'Nb6', bestSan: 'e6',
   studentColor: 'black', evalBeforeWhiteCp: -30, evalAfterWhiteCp: 90,
 };

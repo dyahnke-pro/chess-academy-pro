@@ -24,7 +24,7 @@
 // something to excuse.
 import { Chess, type Color, type Square } from 'chess.js';
 import { findWeakPawns, findPieceQuality } from './positionReadingService';
-import { planFromUci } from './lookaheadPlan';
+import { planFromUci, isCostClause } from './lookaheadPlan';
 import { isEndgameByMaterial } from './gamePhaseService';
 
 export type DrawbackKind =
@@ -423,20 +423,12 @@ export function whatItAllowed(args: {
   if (args.opponentPv.length < 4) return null;
   const plan = planFromUci(args.fenAfter, args.opponentPv, args.studentColor);
   // `theirs` is the opponent — the side to move here, whose line this is.
-  const said = plan?.theirs.text?.trim();
-  if (!said) return null;
-
-  // "They want to win a piece." → "That let them win a piece." The fact is
-  // unchanged; the tense and the frame are what make it a backward look, and
-  // both are rewritten deterministically rather than regenerated.
-  const want = /^They want to (.+?)\.?$/.exec(said);
-  const drift = /^They're bringing pieces to (.+?) over the next few moves\.?$/.exec(said);
-  const line = want
-    ? `That let them ${want[1]}.`
-    : drift
-      ? `That gave them the run of ${drift[1]}.`
-      : null;
-  if (!line) return null;
+  // ONE CLAUSE, AND ONLY A COST (`isCostClause`): the price of the move is
+  // what it lost, never the opponent's whole want-list or where their pieces
+  // drift to (Blumenfeld walk F18/F32).
+  const lead = plan?.theirs.spokenClauses[0];
+  if (!lead?.text || lead.drift || !isCostClause(lead.text)) return null;
+  const line = `That let them ${lead.text.trim().replace(/\.$/, '')}.`;
 
   // The square to mark: where their line actually lands first, so the eye goes
   // to the consequence rather than to the move that caused it.

@@ -51,6 +51,12 @@ describe('computeLeansOn — the perturbation why-probe', () => {
     expect(r!.leansOn.drop).toBeCloseTo(1.5, 2);
   });
 
+  it('a supporter the opponent can win is not one to "keep in place" (Blumenfeld F24)', async () => {
+    // Same board, plus a black pawn on c5 hitting the undefended d4 pawn.
+    const hit = '4k3/8/8/2p1N3/3P4/8/8/1N2K3 w - - 0 1';
+    expect(await computeLeansOn(hit, 'w', evalBoard)).toBeNull();
+  });
+
   it('stays silent when removing the supporter barely moves the eval', async () => {
     const flat = (fen: string): Promise<string> => Promise.resolve(fen.includes('3P4') ? base : renderTable({ e5: { piece: 'N', value: 4.3 }, b1: { piece: 'N', value: 3.0 }, e1: { piece: 'K', value: 0 }, e8: { piece: 'k', value: 0 } }));
     expect(await computeLeansOn(FEN, 'w', flat)).toBeNull(); // drop 0.2 < 0.5

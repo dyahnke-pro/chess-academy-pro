@@ -1286,7 +1286,7 @@ export function assemblePositionAssessment(opts: {
       // stale package passes this check by construction.
       const myHang = tactics.hanging.find((h) => h.color === sc && pieceIsOn(tactics.fen, h.square, h.piece, h.color));
       if (myHang) parts.push(`Your ${REVIEW_PIECE_NAME[myHang.piece] ?? myHang.piece} on ${myHang.square} is hanging.`);
-      else if (tactics.threats[0]?.description) parts.push(`Watch out — ${seatedDescription(tactics.threats[0].description, tactics.fen, sc)}.`);
+      else if (tactics.threats[0]?.spoken) parts.push(`Watch out — ${tactics.threats[0].spoken}.`);
     }
   }
 
@@ -2398,33 +2398,6 @@ export function describeMoveGeometry(
 // CENTRAL_SQUARES / keyTargetSquares / kingZoneAmong live in `keySquares.ts` —
 // TWO vocabularies for TWO questions, shared by all four sites that had the bug.
 
-/** True when NO enemy pawn can ever advance to attack `sq` — the classic
- *  outpost test. For a white piece on (file, rank) the attacking squares are
- *  (file±1, rank+1); a black pawn reaches them from any higher rank on those
- *  files. So it's an outpost iff neither adjacent file carries an enemy pawn
- *  that could still push to the attacking rank. Pure chess.js board read. */
-function isOutpostSquare(board: Chess, sq: string, moverColor: 'white' | 'black'): boolean {
-  const file = sq.charCodeAt(0); // 'a'..'h'
-  const rank = parseInt(sq[1], 10);
-  const enemy = moverColor === 'white' ? 'b' : 'w';
-  const attackRank = moverColor === 'white' ? rank + 1 : rank - 1;
-  if (attackRank < 1 || attackRank > 8) return false;
-  for (const df of [-1, 1]) {
-    const f = file + df;
-    if (f < 97 || f > 104) continue; // off-board file
-    const adjFile = String.fromCharCode(f);
-    for (let r = 1; r <= 8; r += 1) {
-      const p = board.get(`${adjFile}${r}` as Square);
-      if (!p || p.type !== 'p' || p.color !== enemy) continue;
-      // Can this enemy pawn ever reach (adjFile, attackRank)? White pawns move
-      // up (increasing rank), black down. Enemy = the side NOT moverColor.
-      const canReach = enemy === 'w' ? r <= attackRank : r >= attackRank;
-      if (canReach) return false;
-    }
-  }
-  return true;
-}
-
 /**
  * quietPurposePhrase — the POSITIONAL merit of a NON-forcing move, as a
  * sub-clause ("develops the bishop to c4, eyeing d5 and e6", "plants a knight
@@ -2469,7 +2442,7 @@ export function quietPurposePhrase(
     // and a landing defended only by a pinned piece is NOT safe.
     if (!landingIsSafe(b.fen(), mv.to)) return null;
     // Outpost — a minor piece planted where no enemy pawn can ever attack it.
-    if ((mv.piece === 'n' || mv.piece === 'b') && isOutpostSquare(b, mv.to, moverColor)) {
+    if ((mv.piece === 'n' || mv.piece === 'b') && isOutpost(b, mv.to, moverColor === 'white' ? 'w' : 'b', false)) {
       const rank = parseInt(mv.to[1], 10);
       const advanced = moverColor === 'white' ? rank >= 5 : rank <= 4;
       if (advanced) {
@@ -2694,15 +2667,18 @@ export function assembleMovePurpose(opts: {
   }
 
   // 2) OUTPOST — a minor piece planted where no pawn can chase it.
-  if ((mv.piece === 'n' || mv.piece === 'b') && isOutpostSquare(afterBoard, mv.to, opts.moverColor)) {
+  if ((mv.piece === 'n' || mv.piece === 'b') && isOutpost(afterBoard, mv.to, opts.moverColor === 'white' ? 'w' : 'b', false)) {
     const rank = parseInt(mv.to[1], 10);
     const advanced = opts.moverColor === 'white' ? rank >= 5 : rank <= 4;
     if (advanced) clauses.push(`It's an outpost on ${mv.to} — no enemy pawn covers the square, so it sits there unchallenged.`);
   }
 
   // 3) THE POINT — the threat/opportunity the move creates (computed tactics).
-  const point = opts.tactics?.opportunities?.[0] ?? opts.tactics?.immediate?.[0];
-  if (point?.description) clauses.push(`The point: ${lowerFirst(point.description)}.`);
+  // A future shot is said with the moves that build it (`spoken`); a tactic
+  // already on the board is said as it stands (F9).
+  const nextShot = opts.tactics?.opportunities?.[0];
+  const point = nextShot ? nextShot.spoken : (opts.tactics?.immediate?.[0]?.description ?? null);
+  if (point) clauses.push(`The point: ${lowerFirst(point)}.`);
 
   // 4) THE PLAN — the mover's follow-up in the engine PV (index 1; index 0 is
   //    the opponent's reply).
@@ -3228,7 +3204,7 @@ export function assembleTacticsAnswer(
     // collapsed — that is subsumption (one claim, said once), not a cap.
     const said = new Set(parts);
     const push = (d: string | undefined) => { if (!d) return; const line = `${d}.`; if (!said.has(line)) { said.add(line); parts.push(line); } };
-    for (const o of tactics.opportunities) push(o.description);
+    for (const o of tactics.opportunities) push(o.spoken ?? undefined);
     for (const im of tactics.immediate) push(im.description);
     if (parts.length > 0) {
       return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: ['engine:stockfish', 'board:chess.js'] };
@@ -3269,11 +3245,13 @@ export function assembleTacticsAnswer(
     parts.push(`Your ${REVIEW_PIECE_NAME[h.piece] ?? h.piece} on ${h.square} is hanging.`);
   }
   // Nothing concrete yet → surface the top threat, then the top opportunity.
-  if (parts.length === 0 && tactics.threats[0]?.description) {
-    parts.push(`Watch out — ${seatedDescription(tactics.threats[0].description, tactics.fen, sc)}.`);
+  // Future tactics speak their `spoken` form — the moves that build them —
+  // never the bare description re-seated on the CURRENT board (F9).
+  if (parts.length === 0 && tactics.threats[0]?.spoken) {
+    parts.push(`Watch out — ${tactics.threats[0].spoken}.`);
   }
-  if (parts.length === 0 && tactics.opportunities[0]?.description) {
-    parts.push(`You have a shot: ${seatedDescription(tactics.opportunities[0].description, tactics.fen, sc)}.`);
+  if (parts.length === 0 && tactics.opportunities[0]?.spoken) {
+    parts.push(`You have a shot: ${tactics.opportunities[0].spoken}.`);
   }
 
   if (parts.length === 0) return null;
@@ -5741,6 +5719,7 @@ export function assembleLastGameAnswer(g: LastGameLike | null): GroundedAnswer |
 // ─────────────────────────────────────────────────────────────────────────────
 import { findPieceQuality, findWeakPawns, findWeakSquares, developmentRead, kingSafetyRead, countMaterial, centralPieceCount, findColorComplexWeakness, findMinorityAttack } from './positionReadingService';
 import { rotateStem } from '../utils/rotateStem';
+import { isOutpost } from './outpost';
 
 export type PositionalTopic =
   | 'material' | 'center' | 'development' | 'structure' | 'king' | 'piece'

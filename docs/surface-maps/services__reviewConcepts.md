@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**514 lines · 3 exports · 2 importers · 1 tests · 0 audits**
+**486 lines · 3 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/services/coachFeatureService.ts`
 - `src/services/reviewConcepts.test.ts`
+- `src/services/reviewWalk900.test.ts`
 
 ## Exports and every call site
 
@@ -23,8 +24,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `ConceptBeat` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `detectConcept` (function) — 26 call sites
-- `src/services/coachFeatureService.ts:4238`
+### `detectConcept` (function) — 27 call sites
+- `src/services/coachFeatureService.ts:4286`
 - `src/services/reviewConcepts.test.ts:23`
 - `src/services/reviewConcepts.test.ts:26`
 - `src/services/reviewConcepts.test.ts:34`
@@ -35,25 +36,27 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewConcepts.test.ts:67`
 - `src/services/reviewConcepts.test.ts:75`
 - `src/services/reviewConcepts.test.ts:83`
-- `src/services/reviewConcepts.test.ts:94`
-- `src/services/reviewConcepts.test.ts:101`
-- `src/services/reviewConcepts.test.ts:110`
-- `src/services/reviewConcepts.test.ts:119`
-- `src/services/reviewConcepts.test.ts:126`
-- `src/services/reviewConcepts.test.ts:133`
-- `src/services/reviewConcepts.test.ts:140`
-- `src/services/reviewConcepts.test.ts:148`
-- `src/services/reviewConcepts.test.ts:155`
-- `src/services/reviewConcepts.test.ts:161`
-- `src/services/reviewConcepts.test.ts:168`
-- `src/services/reviewConcepts.test.ts:179`
-- `src/services/reviewConcepts.test.ts:188`
-- `src/services/reviewConcepts.test.ts:197`
-- `src/services/reviewConcepts.test.ts:203`
+- `src/services/reviewConcepts.test.ts:95`
+- `src/services/reviewConcepts.test.ts:102`
+- `src/services/reviewConcepts.test.ts:111`
+- `src/services/reviewConcepts.test.ts:120`
+- `src/services/reviewConcepts.test.ts:127`
+- `src/services/reviewConcepts.test.ts:134`
+- `src/services/reviewConcepts.test.ts:141`
+- `src/services/reviewConcepts.test.ts:149`
+- `src/services/reviewConcepts.test.ts:156`
+- `src/services/reviewConcepts.test.ts:162`
+- `src/services/reviewConcepts.test.ts:169`
+- `src/services/reviewConcepts.test.ts:180`
+- `src/services/reviewConcepts.test.ts:189`
+- `src/services/reviewConcepts.test.ts:198`
+- `src/services/reviewConcepts.test.ts:204`
+- `src/services/reviewWalk900.test.ts:25`
 
 ## Tests
 
 - `src/services/reviewConcepts.test.ts`
+- `src/services/reviewWalk900.test.ts`
 
 ## Audits that reach it
 
