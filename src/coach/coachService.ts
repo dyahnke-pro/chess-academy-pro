@@ -27,6 +27,7 @@
  * See `docs/COACH-BRAIN-00.md` for the architecture this implements.
  */
 import { Chess } from 'chess.js';
+import type { ComparedMove } from '../services/groundedAnswer';
 import { logAppAudit } from '../services/appAuditor';
 import { tacticsAreFreshFor } from '../services/tacticsContextIdentity';
 import { pureBoardAspect } from '../services/boardQuestionRouter';
@@ -208,7 +209,7 @@ import {
   isAccuracyQuestion, isConsistencyQuestion, isErrorsBySituationQuestion, isMisconceptionsQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
   isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion, isHintRequest, positionalTopic, isGameMistakeQuestion,
-  retrospectiveMoveRef, isMethodQuestion, stripQuestionFiller, pieceOptionsRef,
+  retrospectiveMoveRef, type RetrospectiveMoveRef, compareMovesAsk, captureOnAsk, pawnStrengthAsk, isMateQuestion, isMethodQuestion, stripQuestionFiller, pieceOptionsRef,
   isTeachingMethodQuestion, isSettingsQuestion, isAppHelpQuestion, isTimeTroubleQuestion, isLastGameQuestion, isLastGameMistakeQuestion, isNameOpeningQuestion, isOpponentMoveQuestion, isLastMoveQuestion, isTheoryQuestion, weaknessLifecycleKind, isWeaknessLifecycleQuestion, isWeaknessBriefingQuestion, openingExistenceQuery,
 } from './questionIntents';
 import { isAnyBoardQuestion } from './boardQuestions';
@@ -1369,7 +1370,8 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // THE TWO LANES THAT FELL INTO BEST-MOVE-NOW (PLAN §E1, 2026-09-22): a
     // question about a move ON THE TAPE, and a question about HOW TO THINK.
     // Both are computed first and suppress the present-tense move lanes below.
-    const retrospectiveRefEngage = retrospectiveMoveRef(askForIntents);
+    const retrospectiveRefEngage = retrospectiveMoveRef(askForIntents)
+      ?? tapeMoveRef(askForIntents, input.liveState.fen, input.liveState.moveHistory ?? []);
     const retrospectiveEngage = retrospectiveRefEngage !== null;
     const methodQuestionEngage = isMethodQuestion(askForIntents);
     const bestMoveQuestionEngage = isBestMoveQuestion(askForIntents) && !methodQuestionEngage && !retrospectiveEngage;
@@ -1412,7 +1414,9 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
       && (whyBestMoveEngage || planQuestionEngage
         // Only when the surface didn't already hand one over — the two that do
         // must not pay for a second search.
-        || ((bestMoveQuestionEngage || hintRequestEngage) && !input.liveState.engineBestMoveUci))
+        || ((bestMoveQuestionEngage || hintRequestEngage) && !input.liveState.engineBestMoveUci)
+        // "Can I checkmate them?" is answered with the mating line itself.
+        || isMateQuestion(askForIntents))
       && input.liveState.fen && !input.liveState.reviewFlaggedMove) {
       const sideToMove: 'white' | 'black' = (input.liveState.fen.split(' ')[1] ?? 'w') === 'b' ? 'black' : 'white';
       // THE BUDGET IS INSIDE THE SEARCH NOW, and the race is only the backstop
@@ -1496,15 +1500,22 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
         fen: input.liveState.fen,
       });
     }
-    const candidateMoveEngage = isCandidateMoveQuestion(askForIntents);
+    // "dxe5 or Qxe5?" / "the pawn or the queen?" — both moves resolved on THIS
+    // board and scored by the engine, mover POV (question walk 2026-09-27).
+    const compareMoves = input.liveState.fen
+      ? await resolveCompareMoves(askForIntents, input.liveState.fen, input.liveState.moveHistory ?? [])
+      : null;
+    const candidateMoveEngage = isCandidateMoveQuestion(askForIntents) && !compareMoves;
     const candidateMoveSan = candidateMoveEngage ? (extractCandidateSan(askForIntents) ?? undefined) : undefined;
     let candidateEvalCp: number | null = null;
     let candidateMateIn: number | null = null;
+    let candidateLineUci: string[] = [];
     if (candidateMoveSan && input.liveState.fen) {
       const cand = await buildCandidateEval(input.liveState.fen, candidateMoveSan);
       if (cand) {
         candidateEvalCp = cand.evalCp;
         candidateMateIn = cand.mateIn;
+        candidateLineUci = cand.lineUci;
       }
     }
     // STALE-PACKAGE REFUSAL (David 2026-09-19). `liveState.tactics` is a set of
@@ -1635,6 +1646,11 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             candidateMoveSan,
             candidateEvalCp,
             candidateMateIn,
+            candidateLineUci,
+            compareMoves: compareMoves && 'a' in compareMoves ? compareMoves : undefined,
+            compareOnly: compareMoves && 'only' in compareMoves ? compareMoves : undefined,
+            captureOn: captureOnAsk(askForIntents) ?? undefined,
+            pawnStrength: pawnStrengthAsk(askForIntents) ?? undefined,
             // GROUNDING INVERSION (STEP A) — thread the live engine snapshot +
             // tactics so the chat layer can COMPUTE a best-move / eval / tactics
             // answer and voice it through `voiceFacts`, instead of handing the
@@ -1722,7 +1738,11 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // "was that a good move?" — board-dependent; rides the fen gate.
             // A "why is that the BEST move" ask wants the reasoning walk, not a
             // played-move grade — the why-form wins (live audit 2026-07-10).
-            moveRatingQuestion: isMoveRatingQuestion(askForIntents) && !isWhyBestMoveQuestion(askForIntents) && !retrospectiveEngage,
+            // A move named that is LEGAL NOW is a move to make, not the one just
+            // made: "is it a sound sacrifice to promote on d1?" graded the d2
+            // push before it (question walk 2026-09-27). The candidate lane owns it.
+            moveRatingQuestion: isMoveRatingQuestion(askForIntents) && !isWhyBestMoveQuestion(askForIntents) && !retrospectiveEngage
+              && !namedMoveLegalNow(askForIntents, input.liveState.fen),
             // RETROSPECTIVE + METHOD (PLAN §E1): the move ON THE TAPE the student
             // named, and the routine for THIS board. Dispatched ahead of the
             // last-move rating / why-best / plan lanes they used to fall into.
@@ -2358,3 +2378,108 @@ export const coachService = { ask };
 
 /** Re-export the toolbelt for tests / debugging. */
 export { COACH_TOOLS };
+
+/**
+ * A NAMED MOVE THAT IS ON THE TAPE AND NOT ON THE BOARD is a question about the
+ * move that was played (question walk, 2026-09-27). "Why Nf1?", "Is b5 a sound
+ * sacrifice?", "Why did they play Be2?" — each named a move already made, and
+ * each was answered as a hypothetical: "Nf1 isn't a legal move in this
+ * position", or the pro-games ask-back. The text alone cannot tell; the BOARD
+ * can — the move is illegal now and was played earlier, so it is the played one.
+ *
+ * Only when the question is not itself hypothetical: "what happens if I take
+ * on b5" names a move to MAKE, and a match on an earlier …b5 would answer
+ * about the wrong move. Matched by coordinates at each ply, never by string.
+ */
+export function tapeMoveRef(
+  ask: string | undefined,
+  fen: string | undefined,
+  history: readonly string[],
+): RetrospectiveMoveRef | null {
+  if (!ask || history.length === 0) return null;
+  if (/\b(?:if\s+i|if\s+we|can\s+i|could\s+i|should\s+i|shall\s+i|may\s+i|what\s+happens|what\s+if|let\s+me|i\s+want\s+to|how\s+about)\b/i.test(ask)) return null;
+  const san = extractCandidateSan(ask);
+  if (!san) return null;
+  if (fen) {
+    try { if (new Chess(fen).move(san)) return null; } catch { /* not legal now — keep looking */ }
+  }
+  const c = new Chess();
+  let hit = false;
+  for (const played of history) {
+    const before = c.fen();
+    let mv;
+    try { mv = c.move(played); } catch { break; }
+    try {
+      const named = new Chess(before).move(san);
+      if (named && named.from === mv.from && named.to === mv.to) hit = true;
+    } catch { /* the named move was not legal at this ply */ }
+  }
+  return hit ? { kind: 'san', san } : null;
+}
+
+/** Does the ask name a move that can be played on this board right now? */
+function namedMoveLegalNow(ask: string | undefined, fen: string | undefined): boolean {
+  const san = extractCandidateSan(ask);
+  if (!san || !fen) return false;
+  try { return !!new Chess(fen).move(san); } catch { return false; }
+}
+
+const WORD_TO_TYPE: Record<string, string> = { pawn: 'p', knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k' };
+
+/** Resolve a two-move choice to legal SANs on this board and score both. */
+export async function resolveCompareMoves(
+  ask: string | undefined,
+  fen: string,
+  history: readonly string[],
+): Promise<{ a: ComparedMove; b: ComparedMove } | { only: string; cannot: string; square: string } | null> {
+  const ref = compareMovesAsk(ask);
+  if (!ref) return null;
+  let sans: [string, string] | null = null;
+  const board = new Chess(fen);
+  if (ref.kind === 'sans') {
+    const legal = (san: string): string | null => { try { return new Chess(fen).move(san)?.san ?? null; } catch { return null; } };
+    const a = legal(ref.a); const b = legal(ref.b);
+    if (a && b) sans = [a, b];
+  } else {
+    // "With the pawn or the queen" — the capture square is the last move's
+    // landing square when it was a capture (a recapture); otherwise the piece
+    // must have exactly one legal move for the choice to mean anything.
+    let lastTo: string | null = null;
+    try { const c = new Chess(); for (const h of history) { const mv = c.move(h); lastTo = mv.captured ? mv.to : null; } } catch { lastTo = null; }
+    const pick = (word: string): string | null => {
+      const type = WORD_TO_TYPE[word];
+      const moves = board.moves({ verbose: true }).filter((m) => m.piece === type);
+      const onSquare = lastTo ? moves.filter((m) => m.to === lastTo) : [];
+      const pool = onSquare.length > 0 ? onSquare : moves;
+      return pool.length === 1 ? pool[0].san : null;
+    };
+    const a = pick(ref.a); const b = pick(ref.b);
+    if (a && b && a !== b) sans = [a, b];
+    // ONE OF THE TWO CANNOT TAKE AT ALL — "the pawn or the queen" when the
+    // queen has no way onto e5. Saying which one can is the answer; scoring a
+    // move that does not exist is not.
+    else if (lastTo && (a || b) && !(a && b)) {
+      const can = a ?? b;
+      const cannotWord = a ? ref.b : ref.a;
+      const cannotType = WORD_TO_TYPE[cannotWord];
+      if (can && !board.moves({ verbose: true }).some((m) => m.piece === cannotType && m.to === lastTo)) {
+        return { only: can, cannot: cannotWord, square: lastTo };
+      }
+    }
+  }
+  if (!sans) return null;
+  const blackToMove = fen.split(' ')[1] === 'b';
+  const score = async (san: string): Promise<ComparedMove | null> => {
+    const e = await buildCandidateEval(fen, san);
+    if (!e) return null;
+    return {
+      san,
+      evalCp: typeof e.evalCp === 'number' ? (blackToMove ? -e.evalCp : e.evalCp) : null,
+      mateIn: typeof e.mateIn === 'number' ? (blackToMove ? -e.mateIn : e.mateIn) : null,
+      lineUci: e.lineUci,
+    };
+  };
+  const a = await score(sans[0]);
+  const b = await score(sans[1]);
+  return a && b ? { a, b } : null;
+}

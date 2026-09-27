@@ -36,7 +36,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/danyaBehaviors.ts:222`
 
 ### `readPosition` (function) — 42 call sites
-- `src/services/groundedAnswer.ts:1309`
+- `src/services/groundedAnswer.ts:1370`
 - `src/services/lookaheadPlan.ts:920`
 - `src/services/lookaheadPlan.ts:1189`
 - `src/services/lookaheadPlan.ts:1543`

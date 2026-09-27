@@ -204,7 +204,7 @@ export async function buildAlternativesContext(
 export async function buildCandidateEval(
   fen: string,
   candidateSan: string,
-): Promise<{ evalCp: number | null; mateIn: number | null } | null> {
+): Promise<{ evalCp: number | null; mateIn: number | null; lineUci: string[] } | null> {
   let after: Chess;
   try {
     after = new Chess(fen);
@@ -228,5 +228,8 @@ export async function buildCandidateEval(
   return {
     evalCp: analysis.isMate ? null : Math.round(analysis.evaluation),
     mateIn: analysis.isMate ? analysis.mateIn : null,
+    // The best play AFTER the candidate — what "what happens if I play X"
+    // actually asks for, and the proof a sacrifice verdict stands on.
+    lineUci: analysis.topLines?.[0]?.moves?.filter((m): m is string => typeof m === 'string') ?? [],
   };
 }

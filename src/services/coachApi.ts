@@ -60,7 +60,7 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
 }
 import { lookupMasterPlay } from './masterPlayLookup';
 import { isEndgameByMaterial } from './gamePhaseService';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFundamentalLessonAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleLastMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer, type WeakFundamental, type PositionalTopic as PositionalTopicType } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleCompareMovesAnswer, assembleCaptureOnAnswer, assemblePawnStrengthAnswer, playedSacrificeVerdict, lastCaptureOf, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFundamentalLessonAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleLastMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer, type WeakFundamental, type PositionalTopic as PositionalTopicType } from './groundedAnswer';
 import { getFundamentalCounts, FUNDAMENTAL_LABEL, fundamentalDevice } from './fundamentalsCatalog';
 import type { FundamentalId } from './principleAttribution';
 import { matchRouteByTopic } from './navigationRouter';
@@ -1199,6 +1199,16 @@ export interface MasterGroundingOptions {
   candidateMoveSan?: string;
   candidateEvalCp?: number | null;
   candidateMateIn?: number | null;
+  /** Best play AFTER the candidate (UCI), from the same engine read. */
+  candidateLineUci?: string[];
+  /** "X or Y?" — both moves resolved on this board, mover POV. */
+  compareMoves?: { a: import('./groundedAnswer').ComparedMove; b: import('./groundedAnswer').ComparedMove };
+  /** "The pawn or the queen?" when only one of them can take there. */
+  compareOnly?: { only: string; cannot: string; square: string };
+  /** "Can they take on c5?" — who captures on a square. */
+  captureOn?: { capturer: 'student' | 'opponent'; square: string };
+  /** "Is my d-pawn strong?" — one pawn, read off the board. */
+  pawnStrength?: { file: string };
   masterFreqPct?: number | null;
   /** GROUNDING INVERSION (STEP A) — the live engine snapshot, threaded from
    *  the surface (`CoachTeachPage`/play) so the chat layer can ground a
@@ -1999,7 +2009,7 @@ export function isBoardQuestionTurn(
   query: string,
   g: Pick<MasterGroundingOptions,
     'currentFen' | 'cleanAsk' | 'forceEngage' | 'positionAssessmentQuestion' | 'endgameQuestion'
-    | 'bestMoveQuestion' | 'whyBestMoveQuestion' | 'planQuestion' | 'candidateMoveQuestion'
+    | 'bestMoveQuestion' | 'whyBestMoveQuestion' | 'planQuestion' | 'candidateMoveQuestion' | 'compareMoves' | 'compareOnly' | 'captureOn' | 'pawnStrength'
     | 'alternativesQuestion' | 'moveRatingQuestion' | 'opponentMoveQuestion'
     | 'convertingQuestion' | 'colorQuestion' | 'attackQuestion'>,
 ): boolean {
@@ -2016,6 +2026,10 @@ export function isBoardQuestionTurn(
     g.whyBestMoveQuestion === true ||
     g.planQuestion === true ||
     g.candidateMoveQuestion === true ||
+    g.compareMoves !== undefined ||
+    g.compareOnly !== undefined ||
+    g.captureOn !== undefined ||
+    g.pawnStrength !== undefined ||
     g.alternativesQuestion === true ||
     g.moveRatingQuestion === true ||
     g.opponentMoveQuestion === true ||
@@ -2321,7 +2335,7 @@ async function serveGroundedPositionDefault(
       typeof grounding.engineMateIn === 'number'
         ? (blackToMove ? -grounding.engineMateIn : grounding.engineMateIn)
         : null;
-    const answer = assembleMoveEvalAnswer({ fen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null });
+    const answer = assembleMoveEvalAnswer({ fen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null, prevCapture: lastCaptureOf(grounding.moveHistory) });
     if (computedOnly && answer?.facts?.trim()) return `${prefix}${answer.facts}`.trim();
     if (answer) {
       // DETERMINISTIC → COMPUTER, never the LLM (David 2026-09-02, chokepoint
@@ -2528,7 +2542,15 @@ async function computeLiveBoardVerdict(
   const pawns = scEvalCp === null ? '' : (Math.abs(scEvalCp) / 100).toFixed(1);
 
   if (mateQ) {
-    if (scMateIn !== null && scMateIn > 0) return voice(`Yes — there's a forced mate in ${scMateIn}.`, 'mate');
+    if (scMateIn !== null && scMateIn > 0) {
+      // The student ASKED — say the mate, not just that one exists (question
+      // walk 2026-09-27: "Yes — there's a forced mate in 2." and nothing else).
+      // The line is the engine's own PV, cut where it mates.
+      const pv = grounding.enginePlan?.pvSan ?? [];
+      const mateAt = pv.findIndex((m) => m.includes('#'));
+      const line = mateAt >= 0 && mateAt < scMateIn * 2 ? pv.slice(0, mateAt + 1).join(' ') : null;
+      return voice(line ? `Yes — there's a forced mate in ${scMateIn}: ${line}.` : `Yes — there's a forced mate in ${scMateIn}.`, 'mate');
+    }
     if (scMateIn !== null && scMateIn < 0) return voice(`No — you're the one facing mate (in ${Math.abs(scMateIn)}); focus on defending.`, 'mate');
     if (scEvalCp !== null && scEvalCp >= 300) return voice(`No forced mate yet, but you're clearly winning (about ${pawns} points) — convert the material first and the mate will come.`, 'mate');
     if (scEvalCp !== null && scEvalCp <= -300) return voice(`No — you're not mating anyone here; you're worse (about ${pawns} points down).`, 'mate');
@@ -3619,6 +3641,10 @@ export async function getCoachChatResponse(
       // falls through to the legacy path, so this can only ADD grounding.
       grounding.bestMoveQuestion === true ||
       grounding.whyBestMoveQuestion === true ||
+      grounding.compareMoves !== undefined ||
+      grounding.compareOnly !== undefined ||
+      grounding.captureOn !== undefined ||
+      grounding.pawnStrength !== undefined ||
       grounding.alternativesQuestion === true ||
       grounding.candidateMoveQuestion === true ||
       grounding.masterPlayQuestion === true ||
@@ -3905,6 +3931,7 @@ export async function getCoachChatResponse(
             let quality: 'best' | 'excellent' | 'good' | 'inaccuracy' | 'mistake' | 'blunder' | null = null;
             let missedMate: number | null = null;
             let allowedMate: number | null = null;
+            let evalAfterMoverCp: number | null = null;
             if (stored && stored.classification) {
               // The stored read carries the CLASS, not the centipawns — the
               // verdict speaks the class and no figure (G0: never a number
@@ -3921,8 +3948,12 @@ export async function getCoachChatResponse(
                 quality = rating.quality;
                 missedMate = rating.missedMate;
                 allowedMate = rating.allowedMate;
+                evalAfterMoverCp = rating.evalAfterMoverCp;
               }
             }
+            // "Was it a SOUND SACRIFICE?" gets the soundness verdict first.
+            const asksSound = /\b(?:sound|unsound|sac(?:rifice)?s?|gambit|worth\s+it)\b/i.test(lastUserMessage() ?? grounding.cleanAsk ?? '');
+            const sacVerdict = asksSound ? playedSacrificeVerdict(ply.fenBefore, ply.san, evalAfterMoverCp, cpLoss) : null;
             const answer = assembleRetrospectiveAnswer({
               playedSan: ply.san,
               fenBefore: ply.fenBefore,
@@ -3935,6 +3966,7 @@ export async function getCoachChatResponse(
               missedMate,
               allowedMate,
             });
+            if (sacVerdict) answer.facts = `${sacVerdict} ${answer.facts}`;
             const mustPreserve = [ply.san, answer.bestMoveSan].filter((s): s is string => !!s);
             const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'move-rating', preferRaw: true, mustPreserve });
             if (voiced) return voiced;
@@ -5490,6 +5522,46 @@ export async function getCoachChatResponse(
         // stockfish"). EVALUATE the named move (cp-loss vs best + DB frequency)
         // rather than reciting the best move. Dispatched BEFORE bestMove so a
         // named-move ask never deflects. All computed → voiceFacts (G0).
+        if (grounding.pawnStrength && grounding.currentFen) {
+          const sc: 'white' | 'black' = grounding.studentColor ?? (grounding.currentFen.split(' ')[1] === 'b' ? 'black' : 'white');
+          const answer = assemblePawnStrengthAnswer({ fen: grounding.currentFen, file: grounding.pawnStrength.file, studentColor: sc });
+          if (answer) {
+            const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'positional', preferRaw: true });
+            if (voiced) return voiced;
+          }
+        }
+        if (grounding.captureOn && grounding.currentFen) {
+          const sc: 'white' | 'black' = grounding.studentColor ?? (grounding.currentFen.split(' ')[1] === 'b' ? 'black' : 'white');
+          const answer = assembleCaptureOnAnswer({ fen: grounding.currentFen, square: grounding.captureOn.square, capturer: grounding.captureOn.capturer, studentColor: sc });
+          if (answer) {
+            const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics', preferRaw: true });
+            if (voiced) {
+              return answer.bestMoveFromTo
+                ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:red]`
+                : voiced;
+            }
+          }
+        }
+        if (grounding.compareOnly) {
+          const { only, cannot, square } = grounding.compareOnly;
+          const msg = `Only one of those can take on ${square}: ${only}. Your ${cannot} can't get to ${square}.`;
+          const voicedOnly = await voice(msg, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true });
+          if (voicedOnly) return voicedOnly;
+        }
+        // TWO MOVES AS A CHOICE — "dxe5 or Qxe5?" (question walk 2026-09-27).
+        // Before the single-candidate lane, which would evaluate one and drop
+        // the other. The worse move is shown with its refutation.
+        if (grounding.compareMoves && grounding.currentFen) {
+          const answer = assembleCompareMovesAnswer({ fen: grounding.currentFen, a: grounding.compareMoves.a, b: grounding.compareMoves.b });
+          if (answer) {
+            const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true });
+            if (voiced) {
+              return answer.bestMoveFromTo
+                ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
+                : voiced;
+            }
+          }
+        }
         if (grounding.candidateMoveQuestion && grounding.candidateMoveSan && grounding.currentFen) {
           const candFen = grounding.currentFen;
           const blackToMove = candFen.split(' ')[1] === 'b';
@@ -5527,6 +5599,7 @@ export async function getCoachChatResponse(
             bestEvalCp: stmBestEval,
             candidateEvalCp: stmCandEval,
             candidateMateIn: stmCandMate,
+            candidateLineUci: grounding.candidateLineUci ?? [],
             masterFreqPct,
           });
           if (answer) {
@@ -5621,7 +5694,7 @@ export async function getCoachChatResponse(
               typeof grounding.engineMateIn === 'number'
                 ? (blackToMove ? -grounding.engineMateIn : grounding.engineMateIn)
                 : null;
-            const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, askedPiece: grounding.askedPiece ?? null });
+            const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, askedPiece: grounding.askedPiece ?? null, prevCapture: bestFen === grounding.currentFen ? lastCaptureOf(grounding.moveHistory) : null });
             if (answer) {
               const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true });
               if (voiced) {
@@ -5946,6 +6019,25 @@ export async function getCoachChatResponse(
               }
             }
           } catch { /* tablebase unreachable — fall through to engine eval */ }
+          // TOO MANY MEN FOR THE TABLEBASE — the engine's verdict is the answer
+          // (question walk 2026-09-27: "Can I win even though I'm down a
+          // piece?" in a rook ending got only "You're down 4 points of
+          // material" — a count, no verdict). Same assessor as "who's better".
+          {
+            const sc: 'white' | 'black' =
+              grounding.studentColor ?? (grounding.currentFen.split(' ')[1] === 'b' ? 'black' : 'white');
+            const assess = assemblePositionAssessment({
+              evalCp: grounding.engineEvalCp,
+              mateIn: grounding.engineMateIn,
+              tactics: grounding.tactics,
+              studentColor: sc,
+              fen: grounding.currentFen,
+            });
+            if (assess && (typeof grounding.engineEvalCp === 'number' || typeof grounding.engineMateIn === 'number')) {
+              const voiced = await voice(assess.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
+              if (voiced) return voiced;
+            }
+          }
         }
 
         // ── ENDGAME TECHNIQUE (P-V.1) — a GENERAL "how do I win/hold X" ask with

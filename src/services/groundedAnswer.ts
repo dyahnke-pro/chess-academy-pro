@@ -273,34 +273,52 @@ export function assembleHangingAnswer(fen: string, ask: string | null | undefine
   const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
   const t = (ask ?? '').toLowerCase();
   const scanTheirs = /\b(their|his|her|opponent|black'?s|white'?s|win\s+material|can\s+i\s+(?:win|take|grab)|free\s+material)\b/.test(t);
-  const victimColor = scanTheirs ? them : me;
-  const loose: Array<{ sq: Square; type: PieceSymbol; g: number }> = [];
-  for (const row of chess.board()) {
-    for (const cell of row) {
-      if (!cell || cell.color !== victimColor || cell.type === 'k') continue;
-      // Pin-aware (2026-09-12): a pinned attacker can't legally take, so it must
-      // not read as "hanging"; a pinned defender can't recapture, so a real hang
-      // isn't masked. `seeGain` (geometric) got both wrong.
-      const capturer: 'w' | 'b' = victimColor === 'w' ? 'b' : 'w';
-      let g = 0;
-      try { g = legalSeeGainFor(fen, cell.square, capturer); } catch { g = 0; }
-      if (g > 0) loose.push({ sq: cell.square, type: cell.type, g });
+  // "What's hanging?" with no owner asks about the WHOLE board (question walk
+  // 2026-09-27: after 13.Nxe5 it answered "Nothing of yours is hanging" while
+  // their knight stood on e5 waiting to be taken back). Only an ask that names
+  // an owner is scoped to one side.
+  const scanMine = !scanTheirs;
+  const scanBoth = !scanTheirs && !/\b(my|mine|i|me)\b/.test(t);
+  const looseOf = (victimColor: 'w' | 'b'): Array<{ sq: Square; type: PieceSymbol; g: number }> => {
+    const out: Array<{ sq: Square; type: PieceSymbol; g: number }> = [];
+    for (const row of chess.board()) {
+      for (const cell of row) {
+        if (!cell || cell.color !== victimColor || cell.type === 'k') continue;
+        // Pin-aware (2026-09-12): a pinned attacker can't legally take, so it must
+        // not read as "hanging"; a pinned defender can't recapture, so a real hang
+        // isn't masked. `seeGain` (geometric) got both wrong.
+        const capturer: 'w' | 'b' = victimColor === 'w' ? 'b' : 'w';
+        let g = 0;
+        try { g = legalSeeGainFor(fen, cell.square, capturer); } catch { g = 0; }
+        if (g > 0) out.push({ sq: cell.square, type: cell.type, g });
+      }
     }
-  }
-  loose.sort((a, b) => b.g - a.g);
-  if (loose.length === 0) {
+    return out.sort((a, b) => b.g - a.g);
+  };
+  const say = (list: Array<{ sq: Square; type: PieceSymbol; g: number }>, mine: boolean): string => {
+    const named = andList(list.map((l) => `the ${REVIEW_PIECE_NAME[l.type]} on ${l.sq}`));
+    const pts = `${list[0].g} point${list[0].g === 1 ? '' : 's'}`;
+    return mine
+      ? `Careful — ${named} ${list.length > 1 ? 'are' : 'is'} hanging; they can win about ${pts}.`
+      : `${cap(named.replace(/^the /, 'their '))} ${list.length > 1 ? 'are' : 'is'} loose — you can win about ${pts}.`;
+  };
+  const mineLoose = scanMine ? looseOf(me) : [];
+  const theirLoose = scanTheirs || scanBoth ? looseOf(them) : [];
+  if (mineLoose.length === 0 && theirLoose.length === 0) {
     return {
-      facts: scanTheirs
-        ? `Nothing of theirs is hanging — there's no free material to grab right now.`
-        : `Nothing of yours is hanging — your pieces are all defended.`,
+      facts: scanBoth
+        ? `Nothing is hanging on either side right now.`
+        : scanTheirs
+          ? `Nothing of theirs is hanging — there's no free material to grab right now.`
+          : `Nothing of yours is hanging — your pieces are all defended.`,
       bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
     };
   }
-  const named = andList(loose.map((l) => `the ${REVIEW_PIECE_NAME[l.type]} on ${l.sq}`));
-  const pts = `${loose[0].g} point${loose[0].g === 1 ? '' : 's'}`;
-  const facts = scanTheirs
-    ? `Yes — ${named} ${loose.length > 1 ? 'are' : 'is'} loose; you can win about ${pts}.`
-    : `Careful — ${named} ${loose.length > 1 ? 'are' : 'is'} hanging; they can win about ${pts}.`;
+  const parts: string[] = [];
+  if (mineLoose.length > 0) parts.push(say(mineLoose, true));
+  else if (scanBoth) parts.push('Nothing of yours is hanging.');
+  if (theirLoose.length > 0) parts.push(scanTheirs && !scanBoth ? `Yes — ${say(theirLoose, false).charAt(0).toLowerCase()}${say(theirLoose, false).slice(1)}` : say(theirLoose, false));
+  const facts = parts.join(' ');
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
 }
 
@@ -1144,7 +1162,9 @@ export function assemblePieceActivityAnswer(
 const BALANCED = [
   'The position is roughly balanced.',
   'Materially and positionally, this is level.',
-  'Neither side has anything concrete here yet.',
+  // Was "Neither side has anything concrete here yet." — asked "who stands
+  // better?", that read as a dodge (question walk 2026-09-27). It says level.
+  "It's level — neither side is better yet.",
   'Dead level — this one gets decided by ideas, not by the count.',
 ];
 const SLIGHT_EDGE = [
@@ -1218,6 +1238,22 @@ export function assemblePositionAssessment(opts: {
   const sc: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
   const parts: string[] = [];
 
+  // A FINISHED GAME HAS A RESULT, NOT AN ASSESSMENT (question walk 2026-09-27:
+  // after …Rxd1# the coach said "The position is roughly balanced. Their king on
+  // g1 has no escape square…"). A mated board still has pieces on it, so every
+  // reader below finds something to say; the result is the only true sentence.
+  if (opts.fen) {
+    try {
+      const over = new Chess(opts.fen);
+      if (over.isGameOver()) {
+        const facts = over.isCheckmate()
+          ? (over.turn() === sc ? 'Checkmate — you lost this one.' : 'Checkmate — you won.')
+          : 'The game is over — it ends in a draw.';
+        return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+      }
+    } catch { /* unreadable FEN — read what we can below */ }
+  }
+
   // WHITE-perspective eval → student POV (flip sign for Black).
   const studentEvalCp = typeof opts.evalCp === 'number' ? (studentColor === 'white' ? opts.evalCp : -opts.evalCp) : null;
   const studentMateIn = typeof opts.mateIn === 'number' ? (studentColor === 'white' ? opts.mateIn : -opts.mateIn) : null;
@@ -1239,6 +1275,31 @@ export function assemblePositionAssessment(opts: {
     else if (mag < 1.0) parts.push(pick(ahead ? SLIGHT_EDGE : SLIGHT_DEFICIT, seed).replace('{m}', mag.toFixed(1)));
     else if (mag < 2.5) parts.push(pick(ahead ? CLEAR_EDGE : CLEAR_DEFICIT, seed).replace('{m}', mag.toFixed(1)));
     else parts.push(pick(ahead ? WINNING : LOSING, seed).replace('{m}', mag.toFixed(1)));
+    // THE MATERIAL BESIDE THE EVAL (question walk 2026-09-27: "Did I get enough
+    // for the pawn?" got "+0.3" and two weaknesses, never the pawn). When the
+    // count and the eval point different ways, the gap between them IS the
+    // answer — compensation, or material that isn't worth what it counts.
+    if (opts.fen) {
+      try {
+        const c = new Chess(opts.fen);
+        let w = 0, b = 0;
+        for (const row of c.board()) for (const cell of row) {
+          if (!cell || cell.type === 'k') continue;
+          const v = REVIEW_PIECE_VALUE[cell.type] ?? 0;
+          if (cell.color === 'w') w += v; else b += v;
+        }
+        const mine = sc === 'w' ? w : b; const theirs = sc === 'w' ? b : w;
+        const diff = mine - theirs;
+        const pts = (n: number): string => `${n} point${n === 1 ? '' : 's'}`;
+        if (diff < 0 && studentEvalCp >= -30) {
+          parts.push(`You're ${pts(-diff)} down in material (${mine} to ${theirs}) and still holding your own — the compensation is real.`);
+        } else if (diff > 0 && studentEvalCp <= 30) {
+          parts.push(`You're ${pts(diff)} up in material (${mine} to ${theirs}), but the position gives it back — the extra material isn't the whole story.`);
+        } else if (diff !== 0) {
+          parts.push(`Material: you're ${diff > 0 ? 'up' : 'down'} ${pts(Math.abs(diff))} (${mine} to ${theirs}).`);
+        }
+      } catch { /* bad fen — the eval stands alone */ }
+    }
   } else if (opts.fen) {
     // No engine eval available (e.g. inside a walkthrough with no warm analysis)
     // — give a board-true material read so "is this winning for me?" gets a real
@@ -1604,6 +1665,8 @@ export function assembleMoveEvalAnswer(opts: {
   fen: string;
   /** Engine best move in UCI (e.g. `g1f3`) — from Stockfish PV[0]. */
   bestMoveUci: string | null;
+  /** The previous move's capture, when the caller has the game. */
+  prevCapture?: { square: string; capturedValue: number } | null;
   evalCp?: number | null;
   mateIn?: number | null;
   /** Whose game this is. When the position is NOT the student's to move, the
@@ -1663,7 +1726,7 @@ export function assembleMoveEvalAnswer(opts: {
 
   // The GROUNDED reason it's strong — no LLM. (playedSan null: we're not
   // contrasting a played move here, just stating what the best move achieves.)
-  const why = explainBestMoveGrounded(fen, null, bestMoveUci, mover);
+  const why = explainBestMoveGrounded(fen, null, bestMoveUci, mover, opts.prevCapture ?? null);
   const evalText = evalPhrase(opts.evalCp, opts.mateIn, mover, opts.studentColor ?? null);
 
   const theirMove = Boolean(opts.studentColor) && opts.studentColor !== mover;
@@ -1696,13 +1759,13 @@ export function assembleMoveEvalAnswer(opts: {
  *  the moved piece there for ≥2 points, i.e. it's a sacrifice. Returns the point
  *  value offered, or null when the move loses nothing (not a sac). Pure chess.js
  *  + SEE (`seeGain` > 0 = the enemy wins material by capturing on that square). */
-function sacrificeOffer(fen: string, candSan: string): number | null {
+function sacrificeOffer(fen: string, candSan: string, minGain = 2): number | null {
   try {
     const c = new Chess(fen);
     const mv = c.move(candSan);
     if (!mv) return null;
     const gain = legalSeeGain(c.fen(), mv.to); // opponent to move — their legal winning capture
-    return gain >= 2 ? gain : null;
+    return gain >= minGain ? gain : null;
   } catch {
     return null;
   }
@@ -1737,6 +1800,12 @@ export function assembleCandidateMoveAnswer(opts: {
   candidateMateIn?: number | null;
   /** % of master games that play the candidate here, when the explorer has it. */
   masterFreqPct?: number | null;
+  /** Best play AFTER the candidate (UCI, from the position after it). REQUIRED:
+   *  "what happens if I play X" is a question about the line, and an answer
+   *  without it said "d1=Q+ is the best move. It gives check." about a queen
+   *  sacrifice that mates next move (question walk 2026-09-27). Pass [] when
+   *  no engine line exists. */
+  candidateLineUci: readonly string[];
 }): GroundedAnswer | null {
   const { fen, candidateSan } = opts;
   const raw = (candidateSan ?? '').trim();
@@ -1795,11 +1864,30 @@ export function assembleCandidateMoveAnswer(opts: {
       ? `Masters play it about ${Math.round(opts.masterFreqPct)}% of the time here.`
       : null;
 
-  // Candidate IS the engine's best move → affirm it (with the grounded why).
-  if (bestSan && candNorm === bestSan) {
+  // THE LINE the candidate leads to — engine best play after it, in SAN, to
+  // mate or six plies (a projected line's length, not a cap on facts).
+  const lineSan: string[] = [];
+  try {
+    const c = new Chess(fen);
+    c.move(candNorm);
+    for (const u of opts.candidateLineUci.slice(0, 6)) {
+      const mv = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined });
+      if (!mv) break;
+      lineSan.push(mv.san);
+      if (c.isCheckmate()) break;
+    }
+  } catch { /* an unreadable line is no line */ }
+  const lineText = lineSan.length > 0 ? `The line: ${[candNorm, ...lineSan].join(' ')}.` : null;
+  const sacOfferEarly = sacrificeOffer(fen, candNorm);
+
+  // Candidate IS the engine's best move → affirm it (with the grounded why) —
+  // unless it GIVES material: then "is it sound" is the question, and the
+  // sacrifice verdict below answers it.
+  if (bestSan && candNorm === bestSan && sacOfferEarly === null) {
     const why = explainBestMoveGrounded(fen, null, opts.bestMoveUci, mover);
     const parts = [`Yes — ${candNorm} is the best move here.`];
     if (why) parts.push(why);
+    if (lineText) parts.push(lineText);
     if (freqText) parts.push(freqText);
     return { facts: parts.join(' '), bestMoveSan: bestSan, bestMoveFromTo: bestFromTo, sources };
   }
@@ -1816,7 +1904,7 @@ export function assembleCandidateMoveAnswer(opts: {
   // moved piece can be won on its landing square (SEE) — the honest answer is
   // sound / speculative / unsound, judged by the engine eval of best play AFTER
   // the sac (mover POV), not a bare cp-loss grade. All computed (G0).
-  const sacOffer = sacrificeOffer(fen, candNorm);
+  const sacOffer = sacOfferEarly;
   if (sacOffer !== null) {
     const stmEval = typeof opts.candidateEvalCp === 'number' ? opts.candidateEvalCp : null;
     const give = sacOffer >= 5 ? 'the exchange or more' : sacOffer >= 3 ? 'a piece' : 'a pawn';
@@ -1834,6 +1922,7 @@ export function assembleCandidateMoveAnswer(opts: {
     if (verdict) {
       const parts = [verdict];
       if (geo && !geo.startsWith('attacks')) parts.push(`It ${geo}.`);
+      if (lineText) parts.push(lineText);
       if (freqText) parts.push(freqText);
       return { facts: parts.join(' '), bestMoveSan: bestSan, bestMoveFromTo: bestFromTo, sources };
     }
@@ -1867,6 +1956,7 @@ export function assembleCandidateMoveAnswer(opts: {
   if (geo && !geo.startsWith('attacks')) parts.push(`It ${geo}.`);
   const evalText = evalPhrase(opts.candidateEvalCp, opts.candidateMateIn, mover);
   if (evalText) parts.push(`After it, ${evalText}.`);
+  if (lineText) parts.push(lineText);
   if (freqText) parts.push(freqText);
 
   return {
@@ -2044,6 +2134,10 @@ export function explainBestMoveGrounded(
   playedSan: string | null,
   bestMoveUci: string | null,
   moverColor: 'white' | 'black',
+  /** The capture the previous move made, when the caller has the history —
+   *  so taking back is said as taking back, not as winning (question walk
+   *  2026-09-27: "dxe5 … wins the knight on e5" after Nxe5). */
+  prevCapture: { square: string; capturedValue: number } | null = null,
 ): string | null {
   if (!bestMoveUci || bestMoveUci.length < 4) return null;
   const mc: 'w' | 'b' = moverColor === 'white' ? 'w' : 'b';
@@ -2064,7 +2158,11 @@ export function explainBestMoveGrounded(
       // are all forcing or material-safe. Falls back to the narrow capture/check
       // read when no strong geometry is computable.
       const geo = describeMoveGeometry(fenBefore, mv.san, moverColor);
-      if (geo && !geo.startsWith('attacks')) {
+      const takesBack = captured && prevCapture && prevCapture.square === to
+        && (REVIEW_PIECE_VALUE[captured.type] ?? 0) <= prevCapture.capturedValue;
+      if (takesBack && captured) {
+        bestClause = `it takes back the ${REVIEW_PIECE_NAME[captured.type]} on ${to}`;
+      } else if (geo && !geo.startsWith('attacks')) {
         bestClause = `it ${geo}`;
       } else if (captured && captured.color !== mc) {
         const recapturable = c.attackers(to as never, captured.color).length > 0;
@@ -6542,4 +6640,188 @@ export function describeThreatPrevention(
   } catch {
     return null;
   }
+}
+
+/** One side of a two-move comparison, mover POV (positive = good for the side
+ *  choosing). `lineUci` is best play AFTER the move. */
+export interface ComparedMove {
+  san: string;
+  evalCp: number | null;
+  mateIn: number | null;
+  lineUci: readonly string[];
+}
+
+const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/**
+ * assembleCompareMovesAnswer — "dxe5 or Qxe5?" (question walk 2026-09-27). The
+ * engine scores both; the better one is named; the worse one is shown WITH its
+ * refutation — the reply the engine plays and what it takes — so the student
+ * hears why, not only which. Both equal → said so. All computed (G0).
+ */
+export function assembleCompareMovesAnswer(opts: { fen: string; a: ComparedMove; b: ComparedMove }): GroundedAnswer | null {
+  const score = (m: ComparedMove): number | null =>
+    typeof m.mateIn === 'number' ? (m.mateIn > 0 ? 100000 - m.mateIn : -100000 - m.mateIn) : m.evalCp;
+  const sa = score(opts.a); const sb = score(opts.b);
+  if (sa === null || sb === null) return null;
+  const [better, worse] = sa >= sb ? [opts.a, opts.b] : [opts.b, opts.a];
+  const gap = Math.abs(sa - sb);
+  const mover: 'white' | 'black' = opts.fen.split(' ')[1] === 'b' ? 'black' : 'white';
+  const refutation = (m: ComparedMove): string | null => {
+    try {
+      const c = new Chess(opts.fen);
+      c.move(m.san);
+      const u = m.lineUci[0];
+      if (!u) return null;
+      const reply = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined });
+      if (!reply) return null;
+      if (c.isCheckmate()) return `${reply.san} is mate`;
+      if (reply.captured) return `${reply.san} — it takes your ${PIECE_NAME[reply.captured] ?? 'piece'} on ${reply.to}`;
+      return reply.san;
+    } catch { return null; }
+  };
+  if (gap <= 30) {
+    const after = evalPhrase(better.evalCp, better.mateIn, mover);
+    return {
+      facts: `${opts.a.san} and ${opts.b.san} come to about the same${after ? ` — ${after} either way` : ''}.`,
+      bestMoveSan: better.san, bestMoveFromTo: null, sources: ['engine:stockfish', 'board:chess.js'],
+    };
+  }
+  const why = refutation(worse);
+  const pawns = gap >= 10000 ? null : (gap / 100).toFixed(1);
+  const parts = [`${better.san} is better.`];
+  parts.push(why
+    ? `${worse.san}? Then ${why}${pawns ? ` — about ${pawns} points worse` : ''}.`
+    : `${worse.san} is about ${pawns ?? 'a lot'} points worse.`);
+  let fromTo: { from: string; to: string } | null = null;
+  try { const mv = new Chess(opts.fen).move(better.san); fromTo = { from: mv.from, to: mv.to }; } catch { /* keep null */ }
+  return { facts: parts.join(' '), bestMoveSan: better.san, bestMoveFromTo: fromTo, sources: ['engine:stockfish', 'board:chess.js'] };
+}
+
+/**
+ * assembleCaptureOnAnswer — "can they take on c5?" / "can I take on e5?"
+ * (question walk 2026-09-27: the flat refusal "I can't verify that" while the
+ * app computes exactly this for every hanging-piece read). Lists the side's
+ * legal captures on the square — asked hypothetically, so the turn is flipped
+ * when it is not theirs — and says whether the exchange wins material, from the
+ * same pin-aware SEE as the hanging read. All computed (G0).
+ */
+export function assembleCaptureOnAnswer(opts: { fen: string; square: string; capturer: 'student' | 'opponent'; studentColor: 'white' | 'black' }): GroundedAnswer | null {
+  const me: 'w' | 'b' = opts.studentColor === 'white' ? 'w' : 'b';
+  const side: 'w' | 'b' = opts.capturer === 'student' ? me : (me === 'w' ? 'b' : 'w');
+  const sq = opts.square as Square;
+  let board: Chess;
+  try {
+    const parts = opts.fen.split(' ');
+    parts[1] = side; parts[3] = '-';
+    board = new Chess(parts.join(' '));
+  } catch { return null; }
+  const target = board.get(sq);
+  const who = opts.capturer === 'student' ? 'you' : 'they';
+  const Who = cap(who);
+  if (!target || target.color === side) {
+    return { facts: `There's nothing of ${opts.capturer === 'student' ? 'theirs' : 'yours'} on ${sq} to take.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+  }
+  const captures = board.moves({ verbose: true }).filter((m) => m.to === sq && m.captured);
+  if (captures.length === 0) {
+    return { facts: `No — nothing of ${opts.capturer === 'student' ? 'yours' : 'theirs'} can take on ${sq} right now.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+  }
+  let gain = 0;
+  try { gain = legalSeeGainFor(opts.fen, sq, side); } catch { gain = 0; }
+  const sans = orList(captures.map((m) => m.san));
+  const victim = `${opts.capturer === 'student' ? 'their' : 'your'} ${REVIEW_PIECE_NAME[target.type] ?? 'piece'} on ${sq}`;
+  const notTheirTurn = new Chess(opts.fen).turn() !== side;
+  const facts = gain > 0
+    ? `Yes — ${sans} wins ${victim}, about ${gain} point${gain === 1 ? '' : 's'}${notTheirTurn && opts.capturer === 'opponent' ? ' if you leave it' : ''}.`
+    : `${Who} can take with ${sans}, but it doesn't win anything — ${victim} is defended well enough.`;
+  const first = captures[0];
+  return { facts, bestMoveSan: null, bestMoveFromTo: gain > 0 ? { from: first.from, to: first.to } : null, sources: ['board:chess.js'] };
+}
+
+/**
+ * assemblePawnStrengthAnswer — "is my d-pawn strong?" (question walk
+ * 2026-09-27: answered with the best move). Reads the pawn itself off the
+ * board: passed or not, protected by a pawn, blockaded, squares to queening,
+ * and whether it can be won right now. Every clause is a chess.js fact (G0).
+ */
+export function assemblePawnStrengthAnswer(opts: { fen: string; file: string; studentColor: 'white' | 'black' }): GroundedAnswer | null {
+  let board: Chess;
+  try { board = new Chess(opts.fen); } catch { return null; }
+  const me: 'w' | 'b' = opts.studentColor === 'white' ? 'w' : 'b';
+  const dir = me === 'w' ? 1 : -1;
+  const f = opts.file.toLowerCase();
+  const fileIdx = f.charCodeAt(0) - 97;
+  if (fileIdx < 0 || fileIdx > 7) return null;
+  const mine: Square[] = [];
+  for (let r = 1; r <= 8; r += 1) {
+    const sq = `${f}${r}` as Square;
+    const p = board.get(sq);
+    if (p && p.type === 'p' && p.color === me) mine.push(sq);
+  }
+  if (mine.length === 0) {
+    return { facts: `You don't have a pawn on the ${f}-file.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+  }
+  // The most advanced one is the one people ask about.
+  const sq = mine.sort((a, b) => (Number(b[1]) - Number(a[1])) * dir)[0];
+  const rank = Number(sq[1]);
+  const toGo = me === 'w' ? 8 - rank : rank - 1;
+  const passed = findPassedPawns(opts.fen, me).includes(sq);
+  const protectedBy: string[] = [];
+  for (const df of [-1, 1]) {
+    const pf = fileIdx + df; const pr = rank - dir;
+    if (pf < 0 || pf > 7 || pr < 1 || pr > 8) continue;
+    const s = `${String.fromCharCode(97 + pf)}${pr}` as Square;
+    const p = board.get(s);
+    if (p && p.type === 'p' && p.color === me) protectedBy.push(s);
+  }
+  const frontRank = rank + dir;
+  const front = frontRank >= 1 && frontRank <= 8 ? board.get(`${f}${frontRank}` as Square) : undefined;
+  const blockader = front && front.color !== me ? `${REVIEW_PIECE_NAME[front.type] ?? 'piece'} on ${f}${frontRank}` : null;
+  let loseable = 0;
+  try { loseable = legalSeeGainFor(opts.fen, sq, me === 'w' ? 'b' : 'w'); } catch { loseable = 0; }
+  const parts: string[] = [];
+  const squares = `${toGo} square${toGo === 1 ? '' : 's'} from queening`;
+  const strong = passed && !blockader && loseable === 0 && (protectedBy.length > 0 || toGo <= 3);
+  if (passed) {
+    parts.push(`${strong ? 'Yes — ' : ''}your pawn on ${sq} is a passed pawn, ${squares}${blockader ? `, but their ${blockader} blocks it` : ', and nothing stands in front of it'}.`);
+  } else {
+    parts.push(`Your pawn on ${sq} isn't passed — an enemy pawn can still stop it on its way.`);
+  }
+  if (protectedBy.length > 0) parts.push(`It's protected by your pawn on ${andList(protectedBy)}.`);
+  else if (passed) parts.push(`No pawn protects it, so it needs a piece behind it.`);
+  if (loseable > 0) parts.push(`Careful — right now it can be won.`);
+  return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+}
+
+/**
+ * The soundness verdict on a sacrifice ALREADY PLAYED — "was b5 a sound
+ * sacrifice?" (question walk 2026-09-27: the played-move lane graded it as a
+ * move choice and never answered "sound?"). The same bands as the candidate
+ * lane, judged by the eval after it, mover POV. Null when the move gave nothing.
+ */
+export function playedSacrificeVerdict(fenBefore: string, san: string, evalAfterMoverCp: number | null, cpLoss: number | null): string | null {
+  // A GAMBIT PAWN counts here: the student called it a sacrifice, and the
+  // board confirms the pawn is on offer. (The candidate lane keeps 2 so an
+  // ordinary pawn push is never announced as a sacrifice unprompted.)
+  const offer = sacrificeOffer(fenBefore, san, 1);
+  if (offer === null || evalAfterMoverCp === null) return null;
+  const give = offer >= 5 ? 'the exchange or more' : offer >= 3 ? 'a piece' : 'a pawn';
+  // Judged by what the sacrifice COST against best play, not by the eval
+  // alone: an opening that is already a touch worse for you does not make the
+  // engine's own top move "speculative" (it said both, in one answer).
+  const cost = cpLoss ?? Math.max(0, -evalAfterMoverCp);
+  if (cost <= 30 || evalAfterMoverCp >= -30) return `${san} was a sound sacrifice — you gave ${give} and the position held up.`;
+  if (cost <= 150) return `${san} was speculative — you gave ${give}, and the compensation doesn't quite cover it.`;
+  return `${san} was unsound — you gave ${give} for too little.`;
+}
+
+/** The capture the last move of a game made (square + points), or null. */
+export function lastCaptureOf(history: readonly string[] | undefined): { square: string; capturedValue: number } | null {
+  if (!history || history.length === 0) return null;
+  try {
+    const c = new Chess();
+    let last: Move | null = null;
+    for (const san of history) last = c.move(san);
+    return last?.captured ? { square: last.to, capturedValue: REVIEW_PIECE_VALUE[last.captured] ?? 0 } : null;
+  } catch { return null; }
 }

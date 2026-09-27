@@ -199,6 +199,19 @@ export function appealScore(mv: {
   return { score, appeal };
 }
 
+/** How eye-catching the engine's BEST move is. A tempting move has to pull the
+ *  eye AWAY from it, so it must out-appeal it: with a free recapture on the
+ *  board the natural move IS the recapture, and "you'd love to play the knight
+ *  to e4" beside it (question walk 2026-09-27, 13.Nxe5 and 27.Rxc5) described
+ *  a temptation no student feels. */
+export function bestMoveAppeal(fen: string, bestUci: string | undefined): number {
+  if (!bestUci || bestUci.length < 4) return 0;
+  try {
+    const mv = new Chess(fen).move({ from: bestUci.slice(0, 2), to: bestUci.slice(2, 4), promotion: bestUci.length > 4 ? bestUci.slice(4) : undefined });
+    return appealScore({ isCapture: mv.captured != null, isPromotion: mv.promotion != null, san: mv.san, piece: mv.piece, to: mv.to, from: mv.from }).score;
+  } catch { return 0; }
+}
+
 /** From scored candidates, the seductive-but-wrong one: the highest-appeal move
  *  that is clearly inferior to best (≥ `dropThresholdCp` worse, student POV). */
 /** A tempting move that still leaves the student this far ahead has not
@@ -279,7 +292,7 @@ export async function computeTacticalRead(
       })
       // Nobody is TEMPTED by an underpromotion (Blumenfeld walk: "You'd love to
       // push it and queen with the pawn to d1, promoting to a bishop").
-      .filter((c) => c.score > 0 && c.uci !== first.uci && !(c.mv.promotion && c.mv.promotion !== 'q'))
+      .filter((c) => c.score > bestMoveAppeal(fen, first.uci) && c.uci !== first.uci && !(c.mv.promotion && c.mv.promotion !== 'q'))
       .sort((a, b) => b.score - a.score)
       .slice(0, maxProbe);
     const scored: Array<{ san: string; uci: string; appeal: string; appealScore: number; studentCp: number }> = [];
@@ -634,6 +647,7 @@ export function temptingFromAnalysis(
   if (!best || best.moves.length === 0) return null;
   const bestUci = best.moves.at(0);
   const bestStudentCp = toStudentCp(best.evaluation, studentColor);
+  const bestAppeal = bestMoveAppeal(fen, bestUci);
   const scored: Array<{ san: string; uci: string; appeal: string; appealScore: number; studentCp: number; replySan: string | null }> = [];
   for (let i = 1; i < topLines.length; i += 1) {
     const line = topLines.at(i);
@@ -650,7 +664,7 @@ export function temptingFromAnalysis(
     if (opts.requireForcing && !(mv.captured != null || probe.inCheck())) continue;
     if (mv.promotion && mv.promotion !== 'q') continue; // no one is tempted by an underpromotion
     const { score, appeal } = appealScore({ isCapture: mv.captured != null, isPromotion: mv.promotion != null, san: mv.san, piece: mv.piece, to: mv.to, from: mv.from });
-    if (score <= 0) continue;
+    if (score <= 0 || score <= bestAppeal) continue;
     let replySan: string | null = null;
     const replyUci = line.moves.at(1);
     if (replyUci && replyUci.length >= 4) {

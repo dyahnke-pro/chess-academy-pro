@@ -542,6 +542,16 @@ function normalizeSan(tok: string): string {
   const up = tok.toUpperCase();
   if (up === '0-0-0' || up === 'O-O-O') return 'O-O-O';
   if (up === '0-0' || up === 'O-O') return 'O-O';
+  // A lower-case "b" straight onto a rank is the b-PAWN, not a bishop: "Is b5 a
+  // sound sacrifice?" read as "B5" and was answered "B5 isn't a legal move"
+  // (question walk 2026-09-27). "b" is the one piece letter that is also a file,
+  // so only a square after it ("bc4", "bxc6") can make it a bishop.
+  // A pawn onto the last rank with no piece named IS a promotion — "promote on
+  // d1" read as the move "d1", which chess.js calls illegal, and the question
+  // fell to grading the move before it. The queen is what people mean.
+  const promo = /^([a-h](?:x[a-h])?[18])([+#]?)$/i.exec(tok);
+  if (promo) return `${promo[1].toLowerCase()}=Q${promo[2]}`;
+  if (/^b[1-8]/.test(tok)) return tok.toLowerCase();
   if (/^[kqrbn]/i.test(tok)) return tok[0].toUpperCase() + tok.slice(1).toLowerCase();
   return tok.toLowerCase().replace(/=([qrbn])/i, (_m, p: string) => `=${p.toUpperCase()}`);
 }
@@ -658,6 +668,55 @@ export function pieceOptionsRef(ask: string | undefined): import('../services/pi
 export function isStopCommand(text: string | undefined): boolean {
   if (!text) return false;
   return /^\s*(?:(?:ok(?:ay)?|coach|please)[,\s]+)?(?:stop(?:\s+(?:talking|it|please))?|wait(?:\s+a\s+(?:sec(?:ond)?|minute|moment))?|hold\s+on|hang\s+on|pause|shh+|quiet|be\s+quiet|silence|enough|one\s+sec(?:ond)?)(?:[,\s]+please)?\s*[.!]*\s*$/i.test(text);
+}
+
+/** TWO MOVES NAMED AS A CHOICE — "dxe5 or Qxe5?", "should I recapture with the
+ *  pawn or the queen?" (question walk 2026-09-27: both fell to the best-move
+ *  answer, which never said why the other one is worse — here, …Qxe5 drops the
+ *  queen to the bishop on b2). Returns the two moves as SAN tokens, or as the
+ *  two PIECES named; the board resolves pieces to moves. Text only. */
+export type CompareMovesAsk =
+  | { kind: 'sans'; a: string; b: string }
+  | { kind: 'pieces'; a: string; b: string };
+const PIECE_WORD_RE = '(pawn|knight|night|bishop|rook|queen|king)';
+export function compareMovesAsk(ask: string | undefined): CompareMovesAsk | null {
+  if (!ask || !/\bor\b/i.test(ask)) return null;
+  const pieces = new RegExp(`\\bwith\\s+(?:the|my|a)?\\s*${PIECE_WORD_RE}\\s+or\\s+(?:with\\s+)?(?:the|my|a)?\\s*${PIECE_WORD_RE}\\b`, 'i').exec(ask);
+  if (pieces) {
+    const norm = (w: string): string => (w.toLowerCase() === 'night' ? 'knight' : w.toLowerCase());
+    return { kind: 'pieces', a: norm(pieces[1]), b: norm(pieces[2]) };
+  }
+  const [left, ...rest] = ask.split(/\bor\b/i);
+  const right = rest.join(' or ');
+  const tokA = left.match(new RegExp(SAN_TOKEN_RE.source, 'gi'));
+  const tokB = right.match(new RegExp(SAN_TOKEN_RE.source, 'i'));
+  if (!tokA || !tokB) return null;
+  const a = normalizeSan(tokA[tokA.length - 1]);
+  const b = normalizeSan(tokB[1] ?? tokB[0]);
+  return a && b && a !== b ? { kind: 'sans', a, b } : null;
+}
+
+/** "Can they take on c5?" / "can I capture on e5?" / "can he win the pawn on
+ *  d4?" — who can capture on a SQUARE (question walk 2026-09-27: no lane, and
+ *  the chat refused). Text only; the board answers it. */
+export function captureOnAsk(ask: string | undefined): { capturer: 'student' | 'opponent'; square: string } | null {
+  if (!ask) return null;
+  const m = /\bcan\s+(i|we|they|he|she|my\s+opponent|the\s+opponent|white|black)\s+(?:just\s+)?(?:take|capture|win|grab)\s+(?:on\s+|the\s+(?:pawn|knight|bishop|rook|queen|piece)\s+on\s+|at\s+)?([a-h][1-8])\b/i.exec(ask);
+  if (!m) return null;
+  const who = m[1].toLowerCase();
+  const capturer: 'student' | 'opponent' = who === 'i' || who === 'we' ? 'student' : 'opponent';
+  return { capturer, square: m[2].toLowerCase() };
+}
+
+/** "Is my d-pawn strong?" / "how good is my passed pawn on the c-file?" —
+ *  a question about ONE pawn (question walk 2026-09-27: answered with the best
+ *  move). Returns the file; the board reads the pawn. */
+export function pawnStrengthAsk(ask: string | undefined): { file: string } | null {
+  if (!ask) return null;
+  const m = /\b(?:is|how\s+(?:strong|good|dangerous|weak)\s+is)\s+my\s+(?:passed\s+)?([a-h])[\s-]?pawn\b/i.exec(ask)
+    ?? /\bmy\s+(?:passed\s+)?pawn\s+on\s+the\s+([a-h])[\s-]?file\b/i.exec(ask)
+    ?? /\bmy\s+(?:passed\s+)?pawn\s+on\s+([a-h])[1-8]\b.*\b(?:strong|weak|good|dangerous|safe|passed)\b/i.exec(ask);
+  return m ? { file: m[1].toLowerCase() } : null;
 }
 
 export function isCandidateMoveQuestion(ask: string | undefined): boolean {

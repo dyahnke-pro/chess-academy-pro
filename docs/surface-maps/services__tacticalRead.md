@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**824 lines · 26 exports · 5 importers · 4 tests · 0 audits**
+**838 lines · 27 exports · 6 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,6 +16,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/danyaBehaviors.ts`
 - `src/services/danyaDeviceCoverage.test.ts`
 - `src/services/liveVoiceDefects.test.ts`
+- `src/services/tacticalRead.recaptureTempting.test.ts`
 - `src/services/tacticalRead.test.ts`
 
 ## Exports and every call site
@@ -68,6 +69,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:61`
 - `src/services/tacticalRead.test.ts:62`
 - `src/services/tacticalRead.test.ts:63`
+
+### `bestMoveAppeal` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `STILL_WINNING_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -144,8 +148,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:594`
 - `src/services/tacticalRead.test.ts:597`
 
-### `temptingFromAnalysis` (function) — 4 call sites
+### `temptingFromAnalysis` (function) — 6 call sites
 - `src/services/learnWalkBlumenfeld.test.ts:196`
+- `src/services/tacticalRead.recaptureTempting.test.ts:15`
+- `src/services/tacticalRead.recaptureTempting.test.ts:22`
 - `src/services/tacticalRead.test.ts:207`
 - `src/services/tacticalRead.test.ts:212`
 - `src/services/tacticalRead.test.ts:222`
@@ -194,6 +200,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/danyaDeviceCoverage.test.ts`
 - `src/services/learnWalkBlumenfeld.test.ts`
 - `src/services/liveVoiceDefects.test.ts`
+- `src/services/tacticalRead.recaptureTempting.test.ts`
 - `src/services/tacticalRead.test.ts`
 
 ## Audits that reach it

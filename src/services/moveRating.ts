@@ -41,6 +41,10 @@ export interface MoveRating {
   /** Pre-rendered grounded "why it's brilliant" line, or null. Rendered here so
    *  the answer assembler needs no runtime import of the detector. */
   brilliancyWhy: string | null;
+  /** The mover's eval AFTER the move (centipawns, mover POV) — what a
+   *  sacrifice verdict stands on ("is b5 a sound sacrifice?"). Null when the
+   *  engine read carried no number. */
+  evalAfterMoverCp: number | null;
 }
 
 /** Shallow-ish depth: on-demand, two positions compared, must feel responsive. */
@@ -327,6 +331,7 @@ export async function computeMoveRatingAt(moveHistory: readonly string[], plyInd
     allowedMate,
     brilliancy: brilliancy.brilliant ? brilliancy : null,
     brilliancyWhy: describeBrilliancy(brilliancy, playedSan),
+    evalAfterMoverCp: typeof postStudent === 'number' ? postStudent : null,
   };
 }
 
