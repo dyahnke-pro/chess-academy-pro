@@ -147,22 +147,37 @@ export default defineConfig(({ mode }) => {
       };
     })(),
     {
-      // A data chunk must never import the entry chunk: the entry imports the
-      // data chunks statically, so that would be an import cycle, and a cycle
-      // across chunks can evaluate a module before its dependency is ready
-      // (a TDZ crash at boot). Rollup places a shared helper wherever it
-      // likes, so this is checked on the output, and it FAILS the build.
-      name: 'appdata-no-entry-import',
+      // NO STATIC IMPORT CYCLE BETWEEN CHUNKS — the build FAILS on one.
+      //
+      // 2026-09-26: splitting lesson data out of the entry put a shared helper
+      // where `appdata-lessons` and `app-vendor` imported EACH OTHER. Across
+      // chunks a cycle can evaluate a module before the one it depends on, so
+      // prod threw "Cannot access 'B0' before initialization" and rendered a
+      // blank page for ~10 minutes. Every test was green: nothing checked the
+      // BUILT chunk graph. This does. Measured: the broken build had exactly 1
+      // cycle, the healthy build has 0 — so this cannot fire on a good build.
+      // (It replaces a narrower check that only looked for data→entry
+      // imports, and so passed the cycle that shipped.)
+      name: 'no-chunk-import-cycles',
       apply: 'build',
       generateBundle(_opts, bundle) {
-        const entry = Object.values(bundle).find((c) => c.type === 'chunk' && c.isEntry);
-        if (!entry || entry.type !== 'chunk') return;
-        const offenders = Object.values(bundle)
-          .filter((c) => c.type === 'chunk' && c.name.startsWith('appdata-'))
-          .filter((c) => c.type === 'chunk' && c.imports.includes(entry.fileName))
-          .map((c) => c.fileName);
-        if (offenders.length > 0) {
-          this.error(`data chunk(s) import the entry chunk (init-order cycle): ${offenders.join(', ')}`);
+        const imports = new Map<string, string[]>();
+        for (const c of Object.values(bundle)) if (c.type === 'chunk') imports.set(c.fileName, c.imports);
+        const state = new Map<string, 1 | 2>();
+        const found: string[][] = [];
+        const visit = (n: string, stack: string[]): void => {
+          state.set(n, 1);
+          stack.push(n);
+          for (const m of imports.get(n) ?? []) {
+            if (state.get(m) === 1) found.push([...stack.slice(stack.indexOf(m)), m]);
+            else if (!state.has(m)) visit(m, stack);
+          }
+          stack.pop();
+          state.set(n, 2);
+        };
+        for (const n of imports.keys()) if (!state.has(n)) visit(n, []);
+        if (found.length > 0) {
+          this.error(`static import cycle between chunks (boots in the wrong order): ${found.map((c) => c.join(' -> ')).join(' ; ')}`);
         }
       },
     },
