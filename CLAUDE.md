@@ -2936,6 +2936,20 @@ streams ending on a review event → **no real user has ever hit it**, so it is
 an instrument bug, not a user bug, and the hunt stopped. Ask PostHog "does
 this reach users, and how often" BEFORE spending hours reproducing anything.
 
+**🔒🔒 ERROR REPORTS START AT THE BASELINE: `2026-09-27T03:18:55Z` (David
+2026-09-27: "I want to start fresh next time I ask about errors in the app").**
+When David asks about errors, crashes or failures in the app, count ONLY
+events with `timestamp >= '2026-09-27 03:18:55'` (on top of the native-user
+recipe above). Nothing was deleted — PostHog cannot cleanly delete events and
+a delete is irreversible — so older errors are still in the store: never report
+them, and never widen the window unless he asks for history. "Errors" means
+`$exception` plus the app's own failure events (`event LIKE '%error%' OR '%fail%'
+OR '%crash%'` — e.g. `tts_failure`, `mic_start_failed`, `ota_download_failed`).
+PostHog's Error Tracking UI still shows 240 issues opened before the baseline.
+The session's key is read-only (`error_tracking:write` missing), so they could
+not be marked resolved; ignore that UI's backlog, or resolve them there by hand.
+When David asks for a new fresh start, move this timestamp; don't add a second one.
+
 **Secrets — durable storage (stop re-pasting keys).** This container
 is ephemeral and re-cloned every web session, and `.env*` / `.claude/`
 are gitignored — so NOTHING on disk survives. The only durable secret
