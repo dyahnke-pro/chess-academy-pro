@@ -14,3 +14,6 @@
 
 ## Re-walk (same game)
 **~37 of 40 distinct narration lines correct (93%)**, up from 90%. No "failed sacrifice" on the recapture; no stray chat answer this run (so that one is intermittent — instrument timing); the bishop pair said once. Fixed after this run: the tempting read now opens "Now, you'd love to play…", so it cannot read as contradicting the verdict on the move just played; the timing clause names the piece that answers ("their queen would have taken on a8 and won your queen"). Still open: the back-rank sentence twice in one utterance (ply 37), "It's the Modern Variations".
+
+## Re-walk 2
+"Modern Variations" gone (the move-2 beat is now the principle behind Nf3); ply 49 reads "Qxc8 was the move… Now, you'd love to play the queen taking on c8 — but they take back and it falls apart", so the two moments are distinct. The back-rank line still repeats at ply 37. Diagnosis: the concept instance key the instant lane now writes DOES match the composer's (squares g8/d8/d1 on both), but the late composer snapshots `alreadySaid` before the instant lane records the tactic — an ordering race, not a key mismatch. OPEN: record the instant lane's claims before the late composer reads the ledger.
