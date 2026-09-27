@@ -1221,6 +1221,10 @@ export function isConceptQuestion(ask: string | undefined): boolean {
   // student asking about the app was taught what a fork is (2026-08-13
   // all-questions audit, run allq-msrzt11w).
   if (/\b(?:tab|page|screen|section|button|menu|the\s+app)\b/i.test(ask)) return false;
+  // A PIECE ON A SQUARE is this board, never a glossary entry (question run
+  // 2026-09-27: "What does their bishop on c8 do?" was answered with a book
+  // passage on doubled pawns).
+  if (/\b(?:knight|night|bishop|rook|queen|king|pawn)\s+on\s+[a-h][1-8]\b/i.test(ask)) return false;
   // NOTE: the broad "what's <word>" / "how does the" shapes below DO also match
   // some self-knowledge / app-method / why-best-move asks. That over-match is
   // handled at DISPATCH now (coach audit 2026-09-11): the concept lane answers

@@ -60,7 +60,7 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
 }
 import { lookupMasterPlay } from './masterPlayLookup';
 import { isEndgameByMaterial } from './gamePhaseService';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleOpponentHypotheticalAnswer, assembleTradeAnswer, assembleCompareMovesAnswer, assembleCaptureOnAnswer, assemblePawnStrengthAnswer, playedSacrificeVerdict, lastCaptureOf, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFundamentalLessonAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleLastMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer, type WeakFundamental, type PositionalTopic as PositionalTopicType } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleOpponentHypotheticalAnswer, assembleTradeAnswer, assembleEndgameOutlookAnswer, boardWeaknessNow, assembleCompareMovesAnswer, assembleCaptureOnAnswer, assemblePawnStrengthAnswer, playedSacrificeVerdict, lastCaptureOf, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFundamentalLessonAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleLastMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer, type WeakFundamental, type PositionalTopic as PositionalTopicType } from './groundedAnswer';
 import { getFundamentalCounts, FUNDAMENTAL_LABEL, fundamentalDevice } from './fundamentalsCatalog';
 import type { FundamentalId } from './principleAttribution';
 import { matchRouteByTopic } from './navigationRouter';
@@ -3797,7 +3797,13 @@ export async function getCoachChatResponse(
                   : grounding.lastGameQuestion ? 'how your last game went'
                   : 'the mistakes you make';
                 lastCoachActionOffer = [IMPORT_ANALYZE_OFFER];
-                const msg = uploadGamesReminder(topic, overview);
+                // A LIVE BOARD STILL HAS A WEAKNESS (question run 2026-09-27):
+                // read it first, then say what the games would add.
+                const onBoard = topic === 'the mistakes you make' && grounding.currentFen
+                  ? boardWeaknessNow(grounding.currentFen, grounding.studentColor ?? ((grounding.currentFen.split(' ')[1] ?? 'w') === 'b' ? 'black' : 'white'))
+                  : null;
+                const reminder = uploadGamesReminder(topic, overview);
+                const msg = onBoard ? `${onBoard} ${reminder}` : reminder;
                 const voiced = await voice(msg, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
                 return voiced ?? msg;
               }
@@ -4383,7 +4389,13 @@ export async function getCoachChatResponse(
                   : grounding.mistakesQuestion ? 'the mistakes you make'
                   : 'your weaknesses';
                 lastCoachActionOffer = [IMPORT_ANALYZE_OFFER];
-                const msg = uploadGamesReminder(topic, overview);
+                // A LIVE BOARD STILL HAS A WEAKNESS (question run 2026-09-27):
+                // read it first, then say what the games would add.
+                const onBoard = topic === 'the mistakes you make' && grounding.currentFen
+                  ? boardWeaknessNow(grounding.currentFen, grounding.studentColor ?? ((grounding.currentFen.split(' ')[1] ?? 'w') === 'b' ? 'black' : 'white'))
+                  : null;
+                const reminder = uploadGamesReminder(topic, overview);
+                const msg = onBoard ? `${onBoard} ${reminder}` : reminder;
                 const voiced = await voice(msg, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
                 return voiced ?? msg;
               }
@@ -5704,6 +5716,20 @@ export async function getCoachChatResponse(
         // / threats / king-safety / material / move-purpose), NOT a best move
         // about a different piece (David 2026-08-28). Runs before bestMoveQuestion
         // so the board question wins.
+        // "What should I aim for in the endgame?" before there is one: what the
+        // structure will be worth once the pieces come off, not the middlegame
+        // plan (question run 2026-09-27).
+        if (grounding.endgameQuestion === true && !isEndgameByMaterial(grounding.currentFen ?? '') && grounding.currentFen
+          && /\b(?:aim|aiming|plan|goal|steer|head(?:ing)?|want|go\s+for|looking\s+for)\b/i.test(grounding.cleanAsk ?? lastUserMessage() ?? '')) {
+          const sc: 'white' | 'black' = grounding.studentColor
+            ?? ((grounding.currentFen.split(' ')[1] ?? 'w') === 'b' ? 'black' : 'white');
+          const outlook = assembleEndgameOutlookAnswer(grounding.currentFen, sc);
+          if (outlook) {
+            const voiced = await voice(outlook.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
+            if (voiced) return voiced;
+          }
+        }
+
         if (grounding.groundedBoardQuestion && grounding.currentFen) {
           const sc: 'white' | 'black' =
             grounding.studentColor ??

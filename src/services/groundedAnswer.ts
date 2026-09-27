@@ -30,6 +30,8 @@ import {
 import type { PressureCount } from './positionReadingService';
 import { readPosition } from './positionalRead';
 import { structurePlan } from './boardPlan';
+import { structureSignature } from './boardStructure';
+import { materialEdgeWords } from './reviewPositionalAssessment';
 import { strategicWhyLed, strategicWhyImperative } from './moveFundamentals';
 import { liveMethodBeatFor } from './methodBeat';
 import { detectKingExposure, kingExposureClause } from './kingSafety';
@@ -441,12 +443,17 @@ export function assembleBoardPlanAnswer(
   // most→least decisive, so a long list reads as a ranked plan, not a dump.
   const top = levers;
   const head = [trump, ...withMethod].filter((x): x is string => !!x).join(' ');
+  // THE THREAT COMES BEFORE THE PLAN (question run 2026-09-27: "the plan is to
+  // break with a4…" with the student's queen hanging on g4). A piece of yours
+  // that can be taken right now is the first move of any plan.
+  const loose = findHangingBySee(fen).filter((h) => h.color === myC).sort((a, b) => b.gain - a.gain)[0];
+  const urgent = loose ? `First, your ${REVIEW_PIECE_NAME[loose.piece]} on ${loose.square} can be taken — that comes before any plan. ` : '';
   if (head && top.length) {
-    return { facts: `${head} Beyond that: ${top.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    return { facts: `${urgent}${head} Beyond that: ${top.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
-  if (head) return { facts: head, bestMoveSan: null, bestMoveFromTo: null, sources: src };
-  if (top.length) return { facts: `No single trump yet — the plan is to ${top.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
-  return null;
+  if (head) return { facts: `${urgent}${head}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  if (top.length) return { facts: `${urgent}${urgent ? 'Then' : 'No single trump yet —'} the plan is to ${top.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  return urgent ? { facts: urgent.trim(), bestMoveSan: null, bestMoveFromTo: null, sources: src } : null;
 }
 
 // ── PIECE SAFETY — "is my knight on d5 safe?" ────────────────────────────────
@@ -2152,6 +2159,59 @@ export function assembleTradeAnswer(opts: {
   if (principle) parts.push(principle);
   if (opts.settled === false) parts.push("The engine hadn't settled on this line yet — take it as a first read, not a final word.");
   return { facts: parts.join(' '), bestMoveSan: opts.bestSan, bestMoveFromTo: null, sources: ['engine:stockfish', 'board:chess.js'] };
+}
+
+/** "WHAT SHOULD I AIM FOR IN THE ENDGAME?" asked before there is one (question
+ *  run 2026-09-27: answered with the middlegame plan, twice in one run). What
+ *  the structure will be worth once the pieces come off: the material edge, the
+ *  passed pawns, a queenside majority, the bishop pair — each computed, and the
+ *  honest "nothing decides it yet" when none of them is there. */
+export function assembleEndgameOutlookAnswer(fen: string, studentColor: 'white' | 'black'): GroundedAnswer | null {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return null; }
+  const me: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+  const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
+  const all = c.board().flat().filter((x): x is NonNullable<typeof x> => !!x);
+  const pts = (col: 'w' | 'b'): number => all.reduce((n, x) => n + (x.color === col && x.type !== 'k' ? (REVIEW_PIECE_VALUE[x.type] ?? 0) : 0), 0);
+  const edge = pts(me) - pts(them);
+  const parts: string[] = [];
+  if (edge >= 1) parts.push(`You're up ${materialEdgeWords(all, me, them)} — an endgame is where that counts, so every trade brings it closer.`);
+  else if (edge <= -1) parts.push(`You're down ${materialEdgeWords(all, them, me)} — an endgame is where that tells, so keep the pieces on for now.`);
+  const myP = findPassedPawns(fen, me);
+  const theirP = findPassedPawns(fen, them);
+  if (myP.length > 0) parts.push(`Your passed pawn${myP.length > 1 ? 's' : ''} on ${andList(myP)} ${myP.length > 1 ? 'are' : 'is'} the endgame's trump — ${myP.length > 1 ? 'they run' : 'it runs'} once the pieces come off.`);
+  if (theirP.length > 0) parts.push(`Their passed pawn${theirP.length > 1 ? 's' : ''} on ${andList(theirP)} ${theirP.length > 1 ? 'are' : 'is'} the one to stop before it gets going.`);
+  const sig = structureSignature(fen);
+  if (sig?.queensideMajority === me) parts.push('You hold the queenside pawn majority — in an endgame it makes a passed pawn far from both kings.');
+  else if (sig?.queensideMajority === them) parts.push('They hold the queenside pawn majority — in an endgame it makes a passed pawn far from both kings, so keep it in check.');
+  if (bishopPair(fen, me)) parts.push('Your bishop pair grows stronger as pawns come off.');
+  else if (bishopPair(fen, them)) parts.push('Their bishop pair grows stronger as pawns come off.');
+  const men = all.length;
+  const head = `You're not in an endgame yet — ${men} pieces are still on the board.`;
+  if (parts.length === 0) {
+    return { facts: `${head} Nothing in the structure decides an endgame yet — material and pawns are balanced, so the middlegame will decide what the ending looks like.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+  }
+  return { facts: `${head} If it comes to one: ${parts[0].charAt(0).toLowerCase()}${parts[0].slice(1)}${parts.length > 1 ? ` ${parts.slice(1).join(' ')}` : ''}`, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+}
+
+/** THE WEAKNESS ON THIS BOARD, for "what's my biggest weakness?" asked over a
+ *  live game with no imported games to read (question run 2026-09-27: the
+ *  answer was only "import your games" while the student's queen hung on g4).
+ *  A loose piece first — the one that costs most — then a structural pawn
+ *  weakness. Null when the board shows neither. */
+export function boardWeaknessNow(fen: string, studentColor: 'white' | 'black'): string | null {
+  const me: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+  const loose = findHangingBySee(fen).filter((h) => h.color === me).sort((a, b) => b.gain - a.gain)[0];
+  if (loose) return `On this board, your biggest weakness is your ${REVIEW_PIECE_NAME[loose.piece]} on ${loose.square} — it can be taken right now.`;
+  const w = findWeakPawns(fen, me);
+  const WHY: Record<string, string> = {
+    isolated: 'no pawn can ever defend it, so it is the target',
+    backward: 'it cannot be supported by a pawn, and the square in front of it is theirs',
+    doubled: 'two pawns on one file cover less than two side by side',
+  };
+  const kind = w.isolated.length ? ['isolated', w.isolated[0]] : w.backward.length ? ['backward', w.backward[0]] : w.doubled.length ? ['doubled', w.doubled[0]] : null;
+  if (kind) return `On this board, your biggest weakness is your ${kind[0]} pawn on ${kind[1]} — ${WHY[kind[0]]}.`;
+  return null;
 }
 
 /** One engine line for the alternatives comparison: the first move (SAN),

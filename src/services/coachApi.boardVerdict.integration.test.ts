@@ -126,3 +126,17 @@ describe('a comparison is not a board verdict (question walk 2026-09-27)', () =>
     expect(r).not.toMatch(/^Clearly your position/);
   });
 });
+
+describe('question run 2026-09-27 (Colle, White, move 15)', () => {
+  const COLLE = 'r1bqrnk1/5ppp/p3p3/1p1pn1bN/3p2Q1/2PB4/PP3PPP/R1B1R1K1 w - - 0 16';
+  const run = (q: string) => getCoachChatResponse(
+    [{ role: 'user', content: `[Ask]\n${q}` }], '', undefined, 'chat_response', 1024, undefined, undefined, undefined,
+    { currentFen: COLLE, surface: '/coach/teach', cleanAsk: q, studentColor: 'white' as const, engineBestMoveUci: 'e1e5', engineEvalCp: 50, groundedBoardQuestion: true, conceptQuestion: false },
+  );
+  it('"What does their bishop on c8 do?" reads that bishop, never a book passage', async () => {
+    const r = await run('What does their bishop on c8 do?');
+    expect(r).not.toContain('LLM_WAS_CALLED');
+    expect(r).not.toMatch(/doubled pawns/i);
+    expect(r).toMatch(/bishop on c8/);
+  });
+});

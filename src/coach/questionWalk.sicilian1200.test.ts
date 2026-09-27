@@ -96,3 +96,17 @@ describe('Q7 — no capital after the colon', () => {
     expect(a.facts).toMatch(/preferred d5: [a-z]/);
   });
 });
+
+describe('Colle run — the plan puts the hanging queen first', () => {
+  const COLLE = 'r1bqrnk1/5ppp/p3p3/1p1pn1bN/3p2Q1/2PB4/PP3PPP/R1B1R1K1 w - - 0 16';
+  it('a loose queen leads the plan answer', async () => {
+    const { assembleBoardPlanAnswer } = await import('../services/groundedAnswer');
+    const f = assembleBoardPlanAnswer(COLLE, 'white', 'me')?.facts ?? '';
+    expect(f).toMatch(/^First, your queen on g4 can be taken — that comes before any plan\./);
+  });
+  it('NEGATIVE CONTROL: with nothing loose, no "First," line', async () => {
+    const { assembleBoardPlanAnswer } = await import('../services/groundedAnswer');
+    const f = assembleBoardPlanAnswer('r1q2rk1/pp2bppp/2nppn2/8/Q2PP3/2N1BB2/PP3PPP/3R1RK1 w - - 8 13', 'white', 'me')?.facts ?? '';
+    expect(f).not.toMatch(/^First,/);
+  });
+});

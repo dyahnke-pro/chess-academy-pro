@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3230 lines · 98 exports · 40 importers · 34 tests · 4 audits**
+**3234 lines · 98 exports · 40 importers · 34 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -287,7 +287,7 @@
 - `src/coach/batteryRouting.test.ts:109`
 - `src/coach/coachService.ts:1420`
 - `src/services/coachApi.ts:2451`
-- `src/services/coachApi.ts:5995`
+- `src/services/coachApi.ts:6021`
 
 ### `isWhoseTurnQuestion` (function) — 4 call sites
 - `src/coach/batteryRouting.test.ts:120`
@@ -337,7 +337,7 @@
 - `src/coach/questionIntents.test.ts:571`
 - `src/coach/questionIntents.test.ts:579`
 - `src/coach/questionIntents.test.ts:585`
-- `src/services/coachApi.ts:6183`
+- `src/services/coachApi.ts:6209`
 
 ### `isEndgameWeaknessQuestion` (function) — 4 call sites
 - `src/coach/coachService.ts:1288`
@@ -398,7 +398,7 @@
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:94`
 
 ### `fundamentalsTopicFromText` (function) — 6 call sites
-- `src/services/coachApi.ts:5204`
+- `src/services/coachApi.ts:5216`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:47`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:48`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:49`
@@ -442,7 +442,7 @@
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:143`
 
 ### `famousGameFromText` (function) — 2 call sites
-- `src/services/coachApi.ts:5159`
+- `src/services/coachApi.ts:5171`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:135`
 
 ### `isProgressQuestion` (function) — 27 call sites

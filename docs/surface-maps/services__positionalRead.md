@@ -39,7 +39,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `readPosition` (function) — 43 call sites
 - `src/services/boardPlan.ideaKey.test.ts:13`
-- `src/services/groundedAnswer.ts:1373`
+- `src/services/groundedAnswer.ts:1380`
 - `src/services/lookaheadPlan.ts:953`
 - `src/services/lookaheadPlan.ts:1222`
 - `src/services/lookaheadPlan.ts:1576`

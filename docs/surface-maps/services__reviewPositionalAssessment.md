@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**278 lines · 6 exports · 8 importers · 7 tests · 0 audits**
+**278 lines · 6 exports · 9 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/coachFeatureService.ts`
+- `src/services/groundedAnswer.ts`
 - `src/services/learnWalkNimzo.test.ts`
 - `src/services/phaseVerdict.test.ts`
 - `src/services/planPrescriptions.test.ts`
@@ -59,7 +60,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/standingRefrains.test.ts:80`
 - `src/services/standingRefrains.test.ts:110`
 
-### `materialEdgeWords` (function) — 3 call sites
+### `materialEdgeWords` (function) — 5 call sites
+- `src/services/groundedAnswer.ts:2178`
+- `src/services/groundedAnswer.ts:2179`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:30`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:33`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:36`
