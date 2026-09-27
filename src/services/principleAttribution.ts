@@ -25,6 +25,7 @@
  * principleVoice.ts; persisted PVs (annotation.pv) come from the review's
  * deep dive.
  */
+import { lineWithReasons } from './lineReasons';
 import { Chess, type Color, type Square, type Move, type PieceSymbol } from 'chess.js';
 import { signedLegalSeeFor, bishopHemmedByOwnPawns } from './positionReadingService';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
@@ -1127,7 +1128,7 @@ const DETECTORS: Detector[] = [
       // THE PATH TRAVELS WITH THE BLOW (Blumenfeld walk F21: "breaks on Nxh5"
       // with nothing on h5 yet) — the moves that lead to it, so the student
       // can follow the thread that was lost.
-      { played: last.san, punish: pvP[firstForcing], depth: firstForcing + 1, path: pvP.slice(0, firstForcing).join(', ') });
+      { played: last.san, punish: pvP[firstForcing], depth: firstForcing + 1, path: lineWithReasons(c.after.fen(), pvP.slice(0, firstForcing), last.color) });
   },
   // 35. Left theory early (opening, DB-anchored — G3: the Lichess DB is canon).
   // PATTERN: the position BEFORE the move is in the openings DB with named

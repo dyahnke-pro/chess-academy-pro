@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**565 lines · 7 exports · 10 importers · 7 tests · 1 audits**
+**586 lines · 8 exports · 11 importers · 8 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,6 +20,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/narrationAdversarial.test.ts`
 - `src/services/positionReadComposer.ts`
 - `src/services/positionalRead.ideaKey.test.ts`
+- `src/services/positionalRead.race.test.ts`
 - `src/services/positionalRead.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 
@@ -37,7 +38,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `castleIsOneMoveAway` (function) — 1 call site
 - `src/services/danyaBehaviors.ts:243`
 
-### `readPosition` (function) — 43 call sites
+### `readPosition` (function) — 44 call sites
 - `src/services/boardPlan.ideaKey.test.ts:13`
 - `src/services/groundedAnswer.ts:1380`
 - `src/services/lookaheadPlan.ts:953`
@@ -46,6 +47,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/narrationAdversarial.test.ts:87`
 - `src/services/narrationAdversarial.test.ts:173`
 - `src/services/positionReadComposer.ts:128`
+- `src/services/positionalRead.race.test.ts:10`
 - `src/services/positionalRead.test.ts:28`
 - `src/services/positionalRead.test.ts:43`
 - `src/services/positionalRead.test.ts:46`
@@ -99,6 +101,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `attackerCanUseFile` (function) — 1 call site
 - `src/services/danyaBehaviors.ts:224`
 
+### `racingPasser` (function) — 2 call sites
+- `src/services/positionalRead.race.test.ts:9`
+- `src/services/positionalRead.race.test.ts:15`
+
 ## Tests
 
 - `src/services/boardPlan.ideaKey.test.ts`
@@ -106,6 +112,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnWalkNimzo.test.ts`
 - `src/services/narrationAdversarial.test.ts`
 - `src/services/positionalRead.ideaKey.test.ts`
+- `src/services/positionalRead.race.test.ts`
 - `src/services/positionalRead.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 

@@ -25,6 +25,7 @@
 // It is the LOWEST-priority lane by design. It should never displace a tactic,
 // a threat, a gem or a taught note — it is what plays when none of them have
 // anything, which per the measurement is about half the game.
+import { describeStructure } from './boardStructure';
 import { Chess, type Color, type Square } from 'chess.js';
 import {
   kingSafetyRead,
@@ -493,7 +494,14 @@ export function readPosition(
     all.filter((o) => o.kind === 'plan').map((o) => o.key.split('-')[2]),
   );
   const deduped = all.filter((o) => !(o.kind === 'piece' && joinedSquares.has(o.key.split('-').pop() ?? '')));
-  return deduped.sort((a, b) => b.rank - a.rank);
+  // A PAWN RACE IS THE WHOLE POSITION (g9 walk 2026-09-27: "their pawn on b4
+  // is isolated", "their b-pawns are doubled", "a5 is a pawn break for you" —
+  // while their d-pawn stood two squares from queening). With a passed pawn
+  // that close, the slow structural reads are scenery: only the passer itself
+  // and danger to a king still speak.
+  const racing = racingPasser(fen);
+  const kept = racing ? deduped.filter((o) => o.kind === 'passer' || o.kind === 'king') : deduped;
+  return kept.sort((a, b) => b.rank - a.rank);
 }
 
 /**
@@ -562,3 +570,16 @@ export function attackerCanUseFile(fen: string, file: string, attacker: 'w' | 'b
   } catch { return true; }
 }
 
+
+/** A passed pawn, either side, two squares or fewer from promoting. */
+export function racingPasser(fen: string): string | null {
+  const st = describeStructure(fen);
+  if (!st) return null;
+  for (const color of ['w', 'b'] as const) {
+    for (const sq of st.pawns.passedPawns[color]) {
+      const rank = Number(sq[1]);
+      if ((color === 'w' && rank >= 6) || (color === 'b' && rank <= 3)) return sq;
+    }
+  }
+  return null;
+}

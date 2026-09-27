@@ -167,7 +167,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
-- `src/services/principleAttribution.ts:257`
+- `src/services/principleAttribution.ts:258`
 - `src/services/reviewFullData.ts:300`
 
 ### `capturesWinMaterial` (function) — 6 call sites
@@ -217,7 +217,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:100`
 - `src/services/positionReadingService.test.ts:909`
 - `src/services/positionReadingService.test.ts:911`
-- `src/services/positionalRead.ts:300`
+- `src/services/positionalRead.ts:301`
 - `src/services/thinkAloud.ts:89`
 
 ### `PieceQualityNote` (interface) — 0 call sites
@@ -230,11 +230,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:889`
 - `src/services/positionReadingService.test.ts:894`
 - `src/services/positionReadingService.test.ts:900`
-- `src/services/positionalRead.ts:428`
+- `src/services/positionalRead.ts:429`
 
 ### `bishopHemmedByOwnPawns` (function) — 3 call sites
 - `src/services/positionReadingService.test.ts:895`
-- `src/services/principleAttribution.ts:974`
+- `src/services/principleAttribution.ts:975`
 - `src/services/reviewTeachingPoints.ts:202`
 
 ### `findPieceQuality` (function) — 29 call sites
@@ -253,9 +253,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:147`
 - `src/services/positionReadingService.test.ts:888`
 - `src/services/positionReadingService.test.ts:901`
-- `src/services/positionalRead.ts:241`
-- `src/services/positionalRead.ts:405`
-- `src/services/positionalRead.ts:439`
+- `src/services/positionalRead.ts:242`
+- `src/services/positionalRead.ts:406`
+- `src/services/positionalRead.ts:440`
 - `src/services/positionalTruth.corpus.test.ts:30`
 - `src/services/positionalTruth.corpus.test.ts:36`
 - `src/services/positionalTruth.corpus.test.ts:42`
@@ -287,7 +287,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `findColorComplexWeakness` (function) — 7 call sites
 - `src/services/computedTruth.fuzz.test.ts:154`
 - `src/services/groundedAnswer.ts:6218`
-- `src/services/positionalRead.ts:345`
+- `src/services/positionalRead.ts:346`
 - `src/services/positionalTruth.corpus.test.ts:95`
 - `src/services/positionalTruth.corpus.test.ts:100`
 - `src/services/reviewFullData.ts:723`
@@ -303,7 +303,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnWalkBlumenfeld.test.ts:109`
 - `src/services/minorityLeverCheck.test.ts:9`
 - `src/services/positionReadingService.test.ts:931`
-- `src/services/positionalRead.ts:317`
+- `src/services/positionalRead.ts:318`
 - `src/services/positionalTruth.corpus.test.ts:108`
 - `src/services/positionalTruth.corpus.test.ts:113`
 - `src/services/reviewFullData.ts:719`
@@ -366,7 +366,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:874`
 - `src/services/positionReadingService.test.ts:875`
 - `src/services/positionReadingService.test.ts:878`
-- `src/services/positionalRead.ts:279`
+- `src/services/positionalRead.ts:280`
 - `src/services/replayFence.damiano1000.test.ts:20`
 - `src/services/replayFence.sicilianClosed1000.test.ts:27`
 - `src/services/replayFence.sicilianClosed1000.test.ts:30`
@@ -385,8 +385,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `goodPieceClause` (function) — 3 call sites
 - `src/services/danyaBehaviors.ts:188`
-- `src/services/positionalRead.ts:249`
-- `src/services/positionalRead.ts:255`
+- `src/services/positionalRead.ts:250`
+- `src/services/positionalRead.ts:256`
 
 ### `findWeakPawns` (function) — 18 call sites
 - `src/services/concessionBeat.ts:232`
@@ -405,7 +405,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:409`
 - `src/services/positionReadingService.test.ts:918`
 - `src/services/positionReadingService.test.ts:925`
-- `src/services/positionalRead.ts:275`
+- `src/services/positionalRead.ts:276`
 - `src/services/thinkAloud.ts:87`
 
 ### `PressureVerdict` (type) — 0 call sites
@@ -438,7 +438,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:7049`
 - `src/services/positionReadingService.test.ts:769`
 - `src/services/positionReadingService.test.ts:775`
-- `src/services/positionalRead.ts:329`
+- `src/services/positionalRead.ts:330`
 - `src/services/positionalTruth.corpus.test.ts:119`
 - `src/services/positionalTruth.corpus.test.ts:125`
 
@@ -500,7 +500,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:6300`
 - `src/services/positionReadingService.test.ts:175`
 - `src/services/positionReadingService.test.ts:185`
-- `src/services/positionalRead.ts:364`
+- `src/services/positionalRead.ts:365`
 
 ### `SpaceInfo` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -534,7 +534,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:508`
 - `src/services/positionReadingService.test.ts:515`
 - `src/services/positionReadingService.test.ts:521`
-- `src/services/positionalRead.ts:173`
+- `src/services/positionalRead.ts:174`
 - `src/services/thinkAloud.ts:77`
 
 ### `MaterialCount` (interface) — 0 call sites
@@ -562,8 +562,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:6153`
 - `src/services/positionReadingService.test.ts:526`
 - `src/services/positionReadingService.test.ts:533`
-- `src/services/positionalRead.ts:220`
 - `src/services/positionalRead.ts:221`
+- `src/services/positionalRead.ts:222`
 - `src/services/thinkAloud.ts:76`
 
 ### `formatReadingFacts` (function) — 7 call sites
@@ -674,7 +674,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `goodPieceIdeaKey` (function) — 3 call sites
 - `src/services/danyaBehaviors.ts:190`
-- `src/services/positionalRead.ts:245`
+- `src/services/positionalRead.ts:246`
 - `src/services/reviewPositionalAssessment.ts:191`
 
 ## Tests
