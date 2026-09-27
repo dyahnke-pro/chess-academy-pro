@@ -339,14 +339,16 @@ export const DANYA_BEHAVIORS: Behavior[] = [
           && !(theirs.doubled.includes(p) && inFlux(p)));
       if (theirsPick) {
         const kind = theirs.backward.includes(theirsPick) ? 'backward' : theirs.isolated.includes(theirsPick) ? 'isolated' : 'doubled';
-        return { fact: `The ${kind} pawn on ${theirsPick} is a weakness — pile up on it.`, squares: [theirsPick] };
+        // Isolated pawns share the positional read's file key — one idea, one
+        // claim (walk 2026-09-27: "isolated h6" twice in two moves).
+        return { fact: `The ${kind} pawn on ${theirsPick} is a weakness — pile up on it.`, squares: [theirsPick], ...(kind === 'isolated' ? { keys: [`opponent-iso-${theirsPick[0]}`] } : {}) };
       }
       const mine = noIsolani(findWeakPawns(fen, student));
       const minePick = [mine.backward[0], mine.isolated[0]]
         .find((p): p is Square => !!p && pawnIsAttackable(chess, p, opp));
       if (minePick) {
         const kind = mine.backward.includes(minePick) ? 'backward' : 'isolated';
-        return { fact: `Watch your ${kind} pawn on ${minePick} — don't let it become a target.`, squares: [minePick] };
+        return { fact: `Watch your ${kind} pawn on ${minePick} — don't let it become a target.`, squares: [minePick], ...(kind === 'isolated' ? { keys: [`student-iso-${minePick[0]}`] } : {}) };
       }
       return null;
     },

@@ -1,0 +1,86 @@
+=== ply 2 e5 -> Nf3 | ok
+  > This game is the King's Knight Opening.
+=== ply 4 Nc6 -> Bc4 | ok
+  > They have a pawn break available on d4 — that is where their play comes from.
+=== ply 6 Nf6 -> Nc3 | ok
+  > The knight taking on e4 before the bishop to e7: the forcing move first, while it still works. Nf6 unpins your pawn on f7 — and the knight eyes the pawn on e4.
+  > The knight taking on e4 before the bishop to e7: the forcing move first, while it still works. knight to f6 unpins your pawn on f7 — and the knight eyes the pawn on e4.
+=== ply 8 h6 -> d3 | ok
+  > You left the book with the pawn to h6; the usual move there was the knight taking on e4. The line was the Four Knights Game: Italian Variation.
+  > Shallow read: h6 survives the first replies — after d4, exd4, Nxd4 breaks it. The thread was lost deeper in the line. Here's how: Calculate to a QUIET position, not to a good feeling. Follow every forcing reply — check, capture, threat — until nothing forces, then judge. If the line ends while they still have a capture, you have not finished. d3 also defuses your fork trick — Nxe4, Nxe4, d5 would have forked their bishop and knight.
+=== ply 10 d6 -> Be3 | ok
+  > You're behind in development — get the minor pieces out and castle before the position sharpens.
+=== ply 12 Be6 -> Nd5 | ok
+  > 2 attackers on d5 against 2 defenders — pile on one more and it falls.
+  > Their knight on d5 looks aggressive, hitting your knight on f6, but it wins nothing — no need to react; keep developing.
+=== ply 14 Qd7 -> O-O | ok
+  > Your king is still in the centre and castling is ready — getting it tucked away is worth more than anything else right now.
+  > The knight to e7 can wait — the bishop taking on d5 forces matters now.
+=== ply 16 Na5 -> Nxf6+ | ok
+  > Their knight on f6 just took and nothing defends it — the material comes back.
+  > Tempo lost — after this they get b4 for free, hitting your knight on a5, and your next move is forced to react. Here's how: Count it out loud: does this move force them to answer, or do they get a free turn? When a move gives them a tempo, look for one that develops AND asks a question.
+=== ply 18 gxf6 -> Bxe6 | ok
+  > Their bishop on e6 just took and nothing defends it — the material comes back.
+  > Their rook on f1 is the piece doing the most work for them — trading it off takes the sting out of the position. As for your next move: nothing to lose sleep over — the queen taking on e6 does the same job as the f-pawn taking on e6.
+=== ply 20 fxe6 -> Qd2 | ok
+  > Watch out — their queen on d2 and their bishop on e3 form a battery on the diagonal, bearing down on your pawn on h6. Remember — a battery stacks two pieces on the same line, multiplying their pressure down it.
+  > Narrow here — two moves keep you level, and nothing else does. The habit here is order of operations: their threat first, your idea second. Never the other way round.
+=== ply 22 Nc6 -> d4 | ok
+  > Watch your isolated pawn on h6 — don't let it become a target. Your light squares are weak — with no bishop of that colour, nothing covers g6 and h5, so a piece has to babysit them.
+=== ply 24 exd4 -> Bxd4 | ok
+  > Watch out — their bishop on d4 pins your pawn on f6 against your rook on h8. Remember — a pin freezes the piece in front: it can't move without exposing the more valuable piece behind it, so it can be piled on.
+=== ply 26 e5 -> Bc3 | ok
+  > The g-file is half-open — your rook belongs there. Your pawn on h6 is isolated — no friendly pawn can ever defend it, so a piece has to.
+=== ply 28 O-O-O -> Rfd1 | ok
+  > Watch out — their rook on d1 and their queen on d2 form a battery on the file, bearing down on your pawn on d6.
+=== ply 30 h5 -> Rf1 | ok
+  > You own more space — keep them cramped, don't rush, improve every piece first. You have a pawn break on d5 — the pawn levers are where the play comes from.
+=== ply 32 Bh6 -> Qd5 | ok
+  > f5 is a pawn break for you now.
+=== ply 34 Ne7 -> Qa5 | ok
+  > The opponent is eyeing Qxa7 — it would win your pawn on a7.
+  > The opponent is eyeing queen takes a7 — it would win your pawn on a7.
+=== ply 36 Kb8 -> Rad1 | ok
+  > Their rook on d1 is well placed — it has the half-open d-file.
+=== ply 38 b6 -> Qa3 | ok
+  > b6 was a mistake — it let them in with Qb4, and they missed it. Qg4 was the move — it would swing pieces toward their king. After Qg4, Kh1, Rhg8, your rook on g8 and your queen on g4 form a battery on the file, bearing down on their pawn on g2 — a battery stacks two pieces on the same line, multiplying their pressure down it.
+  > b6 was a mistake — it let them in with queen to b4, and they missed it. queen to g4 was the move — it would swing pieces toward their king. After queen to g4, king to h1, h-rook to g8, your rook on g8 and your queen on g4 form a battery on the file, bearing down on their pawn on g2 — a battery stacks two pieces on the same line, multiplying their pressure down it.
+=== ply 40 f5 -> Rfe1 | ok
+  > Convert with patience: you were clearly winning and this hands most of it back — Qg4 was the calm move. Here's how: Winning positions are won by simplifying. Trade pieces at every chance but keep the pawn structure intact, steer for the ending where the extra material decides, and refuse every complication. f5 was a blunder — it let them in with Nxe5, and they missed it. Qg4 was the move — it would walk the queen round to e4, by way of g4.
+  > Convert with patience: you were clearly winning and this hands most of it back — queen to g4 was the calm move. Here's how: Winning positions are won by simplifying. Trade pieces at every chance but keep the pawn structure intact, steer for the ending where the extra material decides, and refuse every complication. f5 was a blunder — it let them in with knight takes e5, and they missed it. queen to g4 was the move — it would walk the queen round to e4, by way of g4.
+=== ply 42 f4 -> Nd2 | ok
+  > You have a minority attack on the kingside — f3 makes contact and leaves them a weak pawn on g2.
+  > f4 was a mistake — it let them in with Nxe5, and they missed it. fxe4 was the move — it would swing pieces toward their king.
+  > f4 was a mistake — it let them in with knight takes e5, and they missed it. f-pawn takes e4 was the move — it would swing pieces toward their king.
+=== ply 44 h4 -> Nc4 | ok
+  > They can break with g3 now.
+  > A structural cost: h4 is a weak pawn now. Here's how: Look one move ahead of every pawn push: what square does this permanently stop covering, and can a piece of theirs sit there? A pawn move is the only one you cannot undo.
+=== ply 46 Rhg8 -> h3 | ok
+  > Lift the rook to g6 and swing it along the third rank into the attack.
+  > Rhg8 unpins your pawn on e5 — and the rook eyes the pawn on g2.
+  > h-rook to g8 unpins your pawn on e5 — and the rook eyes the pawn on g2.
+=== ply 48 Ng6 -> Kh2 | ok
+  > Stopped calculating early again — Bxh6 was waiting deeper. Ng6 was a blunder — it let them in with Bd2, and they missed it. f3 was the move — it would swing pieces toward their king. Slow down — exactly one move keeps the win from this position.
+  > Stopped calculating early again — bishop takes h6 was waiting deeper. knight to g6 was a blunder — it let them in with bishop to d2, and they missed it. f3 was the move — it would swing pieces toward their king. Slow down — exactly one move keeps the win from this position.
+=== ply 50 Qe6 -> Rd5 | ok
+  > Qe6 was a mistake — it let them in with Qb3, and they missed it. Critical moment — two moves keep the win; everything else concedes.
+  > queen to e6 was a mistake — it let them in with queen to b3, and they missed it. Critical moment — two moves keep the win; everything else concedes.
+=== ply 52 f3 -> g4 | ok
+  > f4 is a hole in their camp — a piece planted there can't be kicked. Their passed pawn on g4 is the danger — get a piece in front of it and blockade before it runs.
+=== ply 54 hxg3+ -> fxg3 | ok
+  > There's a forced mate here — mate in 12, starting with Nf4.
+  > Critical moment — only one move keeps the forced mate. Slow down here.
+  > There's a forced mate here — mate in 12, starting with knight to f4.
+=== ply 56 Kb7 -> Qb3 | ok
+  > The passed pawn on f3 is a long-term trump — support it and push.
+  > Kb7 was a blunder — it let them in with Na5+, and they missed it. Nf4 was the move — it would win a rook.
+  > king to b7 was a blunder — it let them in with knight to a5, check, and they missed it. knight to f4 was the move — it would win a rook.
+=== ply 58 Ne7 -> Na5+ | ok
+  > Watch out — moving their rook on d5 would unveil their queen on b3 against your queen on e6. Remember — a discovered attack unveils a second attacker by moving the piece in front, so two threats land at once.
+  > Ne7 was a blunder — it let them in with Rd3, and they missed it.
+  > Check. Watch out — moving their rook on d5 would unveil their queen on b3 against your queen on e6. Remember — a discovered attack unveils a second attacker by moving the piece in front, so two threats land at once.
+=== ply 60 Kb8 ->  | ok
+  > Careful — your queen on e6 is attacked and nothing's defending it.
+  > You’d love to play the queen taking on b3 — but they take back and it falls apart. Qg6? Then Rxf3 — they win a pawn. Narrow here — two moves keep the win, and nothing else does. Both sides have a runner: yours on f3 is 2 pushes from queening, theirs on g3 is 5; you get there first once the queens come off — that race is your reason to trade into the endgame, not to go pushing into the middlegame.
+  > You’d love to play the queen taking on b3 — but they take back and it falls apart. queen to g6? Then rook takes f3 — they win a pawn. Narrow here — two moves keep the win, and nothing else does. Both sides have a runner: yours on f3 is 2 pushes from queening, theirs on g3 is 5; you get there first once the queens come off — that race is your reason to trade into the endgame, not to go pushing into the middlegame.
+DONE

@@ -181,7 +181,12 @@ function pinnedSquares(fen: string, color: 'w' | 'b'): Set<string> {
               if (pc.color === color && pc.type !== 'k') a = { sq: s, val: val(pc.type) };
               else break; // enemy piece, or our king as the first piece → no pin starts here
             } else {
-              if (pc.color === color && val(pc.type) > a.val) out.add(a.sq); // A pinned to a costlier friend (incl. king)
+              // A pinned to a costlier friend (incl. king) — and the pin must
+              // COST something: the rear piece is the king, worth more than the
+              // pinner, or undefended. "Nf6 unpins your pawn on f7" was a pawn
+              // in front of a defended knight on g8 (walk 2026-09-27).
+              const rearCosts = pc.type === 'k' || val(pc.type) > val(cell.type) || chess.attackers(s as Sq, color).length === 0;
+              if (pc.color === color && val(pc.type) > a.val && rearCosts) out.add(a.sq);
               break; // the second piece resolves the line
             }
           }
