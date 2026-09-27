@@ -13,6 +13,7 @@
 //  • `computeCriticality` is the sharpness SCORE (from the same analysis);
 //    `computeImportance` is the speak/rank verdict. One analysis, both reads.
 //  • Perturbation (expensive) runs ONLY when importance says the moment matters.
+import { readTrade, findTradeTarget } from './tradeQuality';
 import { conceptInstanceKey, forkThreatKey } from './conceptKey';
 import { layerStandings } from './teachingLayers';
 import { seatBare } from '../utils/seatPieces';
@@ -282,7 +283,9 @@ export interface PositionFactsResult {
 export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'latent-chance' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'fundamental' | 'structure-plan' | 'convert' | 'concept' | 'method' | 'bluff'
   // WO-TEACH-02: the same four teaching kinds review carries as facets — one
   // name on both sides, so FACT_ROLE / FACT_LAYER / TIE_ORDER answer once.
-  | 'refuted' | 'rule' | 'stopped' | 'stock';
+  | 'refuted' | 'rule' | 'stopped' | 'stock'
+  // How good a trade is (`tradeQuality`) — the same name review's facet uses.
+  | 'trade';
 
 /** STATUS bands from the student's POV (cp). The general's opening read. */
 type StatusBand = 'lost' | 'worse' | 'level' | 'better' | 'winning';
@@ -824,8 +827,32 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     ? phaseVerdictKeys(fen, studentColor, evalCpWhitePov * sSign, input.alreadySaid ?? new Set())
     : [];
 
+  // TRADES, JUDGED (David 2026-09-27: "how well the trade benefits the
+  // user"). The move just played on either side, and — with the student to
+  // move — their worst piece against the opponent's best when one can reach
+  // the other. The verdict never contradicts the engine: the student's own
+  // move carries its graded cost; the opponent's is judged on the board alone.
+  const tradeClauses: ClauseItem[] = [];
+  let tradeTargetKey: string | null = null;
+  try {
+    if (lm) {
+      const t = readTrade(lm.fenBefore, lm.san, studentColor, gradedLoss(lm, studentColor));
+      if (t) tradeClauses.push({ kind: 'trade', rank: 36, text: t.text, squares: t.squares });
+    }
+    if (input.opponentLastMove) {
+      const t = readTrade(input.opponentLastMove.fenBefore, input.opponentLastMove.san, studentColor, null);
+      if (t) tradeClauses.push({ kind: 'trade', rank: 36, text: t.text, squares: t.squares });
+    }
+    if (studentToMove) {
+      const tt = findTradeTarget(fen, studentColor);
+      if (tt && !(input.alreadySaid?.has(tt.key))) {
+        tradeTargetKey = tt.key;
+        tradeClauses.push({ kind: 'trade', rank: 34, text: tt.text, squares: tt.squares });
+      }
+    }
+  } catch { /* the trade read is a bonus, never a blocker */ }
   const composedAll = applyWeaknessBoost(
-    buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt) } : null, rule: ruleHere && lm ? { text: ruleHere.text, squares: ruleHere.squares } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: input.alreadySaid }),
+    [...buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt) } : null, rule: ruleHere && lm ? { text: ruleHere.text, squares: ruleHere.squares } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: input.alreadySaid }), ...tradeClauses],
     input.studentWeaknesses ?? [],
   );
 
@@ -975,6 +1002,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     remember: [
       ...clauses.filter((c) => SAY_ONCE_KINDS.has(c.kind)).map((c) => c.text),
       ...(methodKey && clauses.some((c) => c.kind === 'method') ? [methodKey] : []),
+      ...(tradeTargetKey && clauses.some((c) => c.kind === 'trade' && c.rank === 34) ? [tradeTargetKey] : []),
       ...(planKey && clauses.some((c) => c.kind === 'structure-plan') ? [planKey, ...(planFact?.ideaKey ? [planFact.ideaKey] : [])] : []),
       ...convertRemember(clauses, input.fen, studentSeat),
       // The balance sheet's reasons, under the keys the positional read uses.

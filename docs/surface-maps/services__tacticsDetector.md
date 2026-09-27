@@ -85,8 +85,8 @@
 - `src/services/relationClaimCost.report.test.ts:52`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:60`
 - `src/services/reviewCorpusNote.test.ts:61`
-- `src/services/reviewFullData.ts:518`
-- `src/services/reviewFullData.ts:577`
+- `src/services/reviewFullData.ts:531`
+- `src/services/reviewFullData.ts:590`
 - `src/services/reviewMoveBriefing.ts:64`
 - `src/services/reviewMoveBriefing.ts:65`
 - `src/services/reviewNarrationFidelity.test.ts:324`

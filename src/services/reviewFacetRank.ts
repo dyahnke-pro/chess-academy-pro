@@ -235,6 +235,7 @@ export const CLAUSE_ROLE: Record<ClauseKind, FacetRole> = {
   rule: 'teach',
   stopped: 'teach',
   stock: 'teach',
+  trade: 'teach',
   'student-leans': 'describe',
   'opponent-leans': 'describe',
 };
@@ -307,6 +308,7 @@ const CLAUSE_TIE: Record<ClauseKind, number> = {
   rule: FACET_RANK.rule,
   stopped: FACET_RANK.stopped,
   stock: FACET_RANK.stock,
+  trade: FACET_RANK.trade,
 };
 export const TIE_ORDER: Record<FactKind, number> = { ...FACET_RANK, ...CLAUSE_TIE };
 

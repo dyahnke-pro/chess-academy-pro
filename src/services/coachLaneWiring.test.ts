@@ -88,7 +88,10 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     // WITHOUT its opening loss when the verdict already named that loss — one
     // fact once. The verdict still leads.)
     expect(TEACH).toMatch(/const evidence = sameLoss && look\.withoutAttempt \? look\.withoutAttempt\.line : look\.line;/);
-    expect(TEACH).toMatch(/const line = fundamental\s*\?\s*`\$\{fundamental\.verdict\}[\s\S]{0,160}?\$\{evidence\}[\s\S]{0,20}?`\s*:\s*look\.line/);
+    // (2026-09-27: the line now closes with the move's concession, review
+    // parity — the verdict still leads, the evidence still follows it.)
+    expect(TEACH).toMatch(/const line = `\$\{fundamental\s*\?\s*`\$\{fundamental\.verdict\}[\s\S]{0,160}?\$\{evidence\}[\s\S]{0,20}?`\s*:\s*look\.line\}\$\{concession \? ` \$\{concession\}` : ''\}`;/);
+    expect(TEACH).toMatch(/const concession = cpLoss >= 50 \? describeConcessions\(fenBefore, move\.san, true\) : null;/);
     // A fundamental with NO material drawback still speaks, on its own.
     // (Colle re-walk 2026-09-27: graded on the student-move board, `move.fen`.)
     expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, fundamental\.verdict, 'drawback', \[\], undefined, move\.fen\)/);
@@ -593,7 +596,10 @@ describe('the couplings that make the wiring safe', () => {
     // `opening-to-middlegame` at ply 15, his move 8 — and a prod probe caught
     // it being called with correct arguments. The report was built and thrown
     // away, which is the hardest kind of dead lane to see: everything works.
-    expect(TEACH).toMatch(/runPhaseTransition\(liveFenRef\.current, move\.san/);
+    // Captured from the live board up front; the call itself now waits for the
+    // move verdict (see the ply-28 block below) but still reads that board.
+    expect(TEACH_CODE).toMatch(/const phaseFen = liveFenRef\.current;/);
+    expect(TEACH_CODE).toMatch(/runPhaseTransition\(phaseFen, phaseSan/);
     expect(TEACH_CODE, 'the transition is judged against a board that has already moved on')
       .not.toMatch(/runPhaseTransition\(move\.fen/);
   });
@@ -658,5 +664,17 @@ describe('the couplings that make the wiring safe', () => {
     expect(TEACH).toMatch(/const rating = studentPlayingRating\(activeProfile\)/);
     expect(TEACH_CODE, 'the game record rebuilt the rating resolution inline')
       .not.toMatch(/const rating = activeProfile\?\.currentRating \?\? activeProfile\?\.puzzleRating/);
+  });
+});
+
+describe('the move verdict goes before the phase beat (Sicilian Closed ply 28, 2026-09-27)', () => {
+  it('the phase transition waits for the verdict pass and stands down on a mistake', () => {
+    // e6 lost the queen; in the same breath the phase beat took stock ("You're
+    // down 2 points of material here", "Their rook on f3 is well placed").
+    expect(TEACH_CODE).toMatch(/const verdictPass = factsReady\.then\(/);
+    expect(TEACH_CODE).toMatch(/if \(look \|\| fundamental\) mistakeCalledThisTurn = true;/);
+    expect(TEACH_CODE).toMatch(/verdictPass\.then\([\s\S]{0,200}if \(mistakeCalledThisTurn \|\| liveFenRef\.current !== phaseFen\) return;\s*runPhaseTransition\(phaseFen/);
+    // NEGATIVE: no call fires the transition straight from the move handler.
+    expect(TEACH_CODE).not.toMatch(/runPhaseTransition\(liveFenRef\.current/);
   });
 });

@@ -12,6 +12,7 @@
  * and the gaps are visible. Each facet is a labeled prose clause.
  */
 import { inFluxAfter } from './boardState';
+import { readTrade } from './tradeQuality';
 import { readTiming, timingClause } from './moveTiming';
 import { contrastMoves, contrastClause } from './moveContrast';
 import { detectBluff, bluffClause } from './bluffDetector';
@@ -305,7 +306,19 @@ export function computeMoveFacets(
         : isStudent
           ? `[trade] You take on ${tradeSq} — taking back would cost them more than the ${lost}.`
           : `[trade] They take on ${tradeSq} — taking back would cost you more than the ${lost}.`;
-      facets.push(f);
+      // HOW GOOD THE TRADE IS (David 2026-09-27: "how well the trade benefits
+      // the user"). The same computer Learn speaks from; the engine has the
+      // last word through the mover's own cost on this ply.
+      const moverSign = ctx.moverColor === 'white' ? 1 : -1;
+      const cost = ctx.preMoveEval != null && ctx.evaluation != null
+        ? (ctx.preMoveEval - ctx.evaluation) * moverSign
+        : null;
+      const judged = ctx.studentColorWB ? readTrade(fenBefore, san, ctx.studentColorWB, cost) : null;
+      if (judged) {
+        const jf = `[trade] ${judged.text}`;
+        facets.push(jf);
+        recSquares(jf, judged.squares);
+      } else facets.push(f);
     } catch { /* no trade line */ }
   } else if (influence) { const f = `[${influenceShape.hitsPiece ? 'does' : 'delta'}] ${influence}`; facets.push(f); recSquares(f, influenceSquares); }
 

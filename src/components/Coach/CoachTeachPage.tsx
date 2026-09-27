@@ -9,6 +9,7 @@
  * / reset_board markers parsed from its response. Same room, different
  * actions.
  */
+import { describeConcessions } from '../../services/reviewTeachingPoints';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStandingFactMemory, fullmoveOf } from '../../services/standingFactMemory';
 import { createLearnMemory, type LearnMemory } from '../../services/learnMemory';
@@ -10440,7 +10441,15 @@ export function CoachTeachPage(): JSX.Element {
             // Registered BEFORE the `await factsReady` below, so this
             // callback runs first when the facts settle — handleSubmit
             // always sees the complete instantSpokenText.
-            void factsReady.then(async () => {
+            //
+            // THE VERDICT GOES FIRST (David 2026-09-27, ply 28 of the Sicilian
+            // Closed walk: e6 lost the queen, and in the same breath the phase
+            // beat took stock — "Heads up: your pawn on f7…", "You're down 2
+            // points of material here", "Their rook on f3 is well placed").
+            // A move called a mistake IS the lesson of that turn; the phase
+            // beat waits for this pass and stands down when it called one.
+            let mistakeCalledThisTurn = false;
+            const verdictPass = factsReady.then(async () => {
               try {
                 if (liveFenRef.current !== fenAfterReply) return;
                 // The alert and the taught note already spoke WITH the move
@@ -10575,6 +10584,7 @@ export function CoachTeachPage(): JSX.Element {
                       playedPvUci: mid.topLines?.[0]?.moves ?? [],
                       ...mateContext(preStudentRead, mid, playerColor),
                     }, fundamentalSeenRef.current, weaknessSignalsRef.current, standingRef.current.said);
+                    if (look || fundamental) mistakeCalledThisTurn = true;
                     if (look) {
                       // THE SQUARE TRAVELS WITH THE SENTENCE, and is drawn below
                       // only if the package KEPT it. Not `look.line.includes(sq)`
@@ -10592,9 +10602,14 @@ export function CoachTeachPage(): JSX.Element {
                         && (fundamental.id === 'loose-piece' || fundamental.id === 'ignored-threat')
                         && fundamental.square === look.withoutAttempt.square;
                       const evidence = sameLoss && look.withoutAttempt ? look.withoutAttempt.line : look.line;
-                      const line = fundamental
+                      // WHAT THE MOVE GAVE UP (capability parity with review,
+                      // 2026-09-27): the lasting damage a flagged move left —
+                      // king cover thinned, a passer granted, a new isolani.
+                      // The same computer review speaks; it self-gates to null.
+                      const concession = cpLoss >= 50 ? describeConcessions(fenBefore, move.san, true) : null;
+                      const line = `${fundamental
                         ? `${fundamental.verdict}${fundamental.recurrence ? ` ${fundamental.recurrence}` : ''}${evidence ? ` ${evidence}` : ''}`
-                        : look.line;
+                        : look.line}${concession ? ` ${concession}` : ''}`;
                       queueSpokenHint(fenAfterReply, line, look.kind,
                         /^[a-h][1-8]$/.test(look.square) ? [look.square] : [], undefined, move.fen);
                       captureEvent('coach_backward_look', {
@@ -10890,7 +10905,18 @@ export function CoachTeachPage(): JSX.Element {
             // about, so that is the one it is computed from. The stale guard
             // keeps its real job — the student moving again while the report is
             // being phrased — instead of firing on the coach's own reply.
-            runPhaseTransition(liveFenRef.current, move.san, (move.moveNumber ?? 1) * 2);
+            {
+              const phaseFen = liveFenRef.current;
+              const phaseSan = move.san;
+              const phasePly = (move.moveNumber ?? 1) * 2;
+              void Promise.race([
+                verdictPass.then(() => undefined, () => undefined),
+                new Promise<void>((r) => setTimeout(r, 12_000)),
+              ]).then(() => {
+                if (mistakeCalledThisTurn || liveFenRef.current !== phaseFen) return;
+                runPhaseTransition(phaseFen, phaseSan, phasePly);
+              });
+            }
             // The beat needs the full fact bundle — normally already done.
             await factsReady;
             setOpponentThinking(false);
