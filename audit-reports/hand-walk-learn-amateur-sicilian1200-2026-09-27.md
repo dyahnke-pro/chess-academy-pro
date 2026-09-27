@@ -11,3 +11,6 @@
 | 11/15 | "castling is ready" at moves 6 and 8 | the second was the chat answer; the positional read's keys are now also written to the standing memory the phase lane reads |
 | 3 | "It's the Modern Variations." — a generic DB label | OPEN |
 | 15 | stray "Material is even" + the cluster above | instrument: the dictation turn produced a position-assessment chat reply. OPEN QUESTION: why "play X" routed as a question on that turn — worth checking it is not a real routing bug |
+
+## Re-walk (same game)
+**~37 of 40 distinct narration lines correct (93%)**, up from 90%. No "failed sacrifice" on the recapture; no stray chat answer this run (so that one is intermittent — instrument timing); the bishop pair said once. Fixed after this run: the tempting read now opens "Now, you'd love to play…", so it cannot read as contradicting the verdict on the move just played; the timing clause names the piece that answers ("their queen would have taken on a8 and won your queen"). Still open: the back-rank sentence twice in one utterance (ply 37), "It's the Modern Variations".

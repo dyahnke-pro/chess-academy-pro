@@ -44,7 +44,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `openingAnnouncementForGame` (function) — 2 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7990`
-- `src/components/Coach/CoachTeachPage.tsx:9922`
+- `src/components/Coach/CoachTeachPage.tsx:9927`
 
 ### `warmOpeningBook` (function) — 1 call site
 - `src/components/Coach/CoachTeachPage.tsx:980`

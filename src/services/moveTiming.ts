@@ -68,5 +68,10 @@ export function timingClause(t: MoveTiming): string {
   // is the facet's highlight instead.
   // Led by a word, never the SAN: spoken, the SAN expands to lowercase words
   // ("bishop to a5 now…") and the sentence opens uncapitalised.
-  return `The timing of ${t.san} matters — a move earlier, ${t.reply} would have won your ${NAME[t.piece] ?? 'piece'}`;
+  // The reply is named by its PIECE, not its SAN — "a move earlier, Qxa8 would
+  // have won your queen" after Qxa8 read as the same move twice (1200 review
+  // walk 2026-09-27). The square it lands on is the hypothetical's, not a
+  // claim about a piece standing there now.
+  const by = /^[NBRQK]/.test(t.reply) ? NAME[t.reply[0].toLowerCase()] ?? 'piece' : 'pawn';
+  return `The timing of ${t.san} matters — a move earlier, their ${by} would have taken on ${t.square} and won your ${NAME[t.piece] ?? 'piece'}`;
 }

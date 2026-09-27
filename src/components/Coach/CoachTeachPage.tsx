@@ -8957,7 +8957,12 @@ export function CoachTeachPage(): JSX.Element {
                     // the MultiPV already computed; fires only on a real seductive-
                     // inferior move / a genuine close call (G0).
                     if (turnRead) {
-                      const butTurn = temptingTurnClause(turnRead, { spoken: true });
+                      // Framed as the NEXT decision too — "Qxc8 was the move… You'd
+                      // love to play the queen taking on c8 — but it falls apart"
+                      // read as a contradiction (1200 walk 2026-09-27): the verdict
+                      // was about the move just played, this is about the board now.
+                      const rawButTurn = temptingTurnClause(turnRead, { spoken: true });
+                      const butTurn = rawButTurn ? `Now, ${rawButTurn.charAt(0).toLowerCase()}${rawButTurn.slice(1)}` : null;
                       // Framed as the NEXT decision: queued, it is heard after the
                       // verdict on the move just played, and unframed the two
                       // read as one contradiction ("that let them win a rook… it's
