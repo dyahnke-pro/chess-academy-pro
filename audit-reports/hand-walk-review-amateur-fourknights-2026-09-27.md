@@ -10,3 +10,6 @@
 | 73 | "Blockade it on a dark/light square" | template placeholder | names the square in front of the pawn |
 | 95 | "an inaccuracy, costing about 9.2 points" | grade is win chances, number is centipawns; they part in a decided position | the number is dropped when they disagree |
 | 72 | "passed pawns must be pushed" said by two lanes | — | OPEN |
+
+## Re-walk (same game, after the fixes)
+**~64 of 66 narrated plies clean (97%)**, up from 89%. No principle carries a transfer phrase; "Checks, captures, threats" reads right; the blockade names g5; no contradictory point cost. Two left, both fixed after this run: the passer race's past form still asserted "you got there first" (the text was planRace's own review register, not the rewrite — now "you would get there first"), and "passed pawns must be pushed" twice on the push itself (the standing note skips the move that pushes it).

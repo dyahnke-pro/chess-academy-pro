@@ -1889,7 +1889,7 @@ export function buildReviewSegments(
         }
         // The RACE — once, then only when the verdict FLIPS (see lastRaceVerdict).
         if (/^\[plan-race\]/.test(f)) {
-          const verdict = /they get there first|they got there first/i.test(f) ? 'them' : 'you';
+          const verdict = /they get there first|they got there first|they would get there first/i.test(f) ? 'them' : 'you';
           if (lastRaceVerdict === verdict || !claim(`race:${verdict}`)) continue;
           keep(f, () => { lastRaceVerdict = verdict; });
           continue;

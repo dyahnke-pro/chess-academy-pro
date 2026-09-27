@@ -685,7 +685,11 @@ export function computeMoveFacets(
     const worst = worstPlacedFriendlyPiece(fenAfter, studentColorWB);
     if (worst) facets.push(`[worst] ${cap(worst)}.`);
     const passer = struct?.pawns.passedPawns[studentColorWB][0] ?? null; // reuse §5's struct
-    const passNote = passedPawnPush(fenAfter, studentColorWB, passer);
+    // Not on the move that PUSHES it — the move's own point says "pushes your
+    // passed pawn" (amateur review walk 2026-09-27: both, one ply).
+    let pushedThisPasser = false;
+    try { const pm = new Chess(fenBefore).move(san); pushedThisPasser = pm.piece === 'p' && pm.to === passer; } catch { pushedThisPasser = false; }
+    const passNote = pushedThisPasser ? null : passedPawnPush(fenAfter, studentColorWB, passer);
     if (passNote) { const f = `[passer] ${cap(passNote)}.`; facets.push(f); recSquares(f, [passer]); }
 
     // ── 6c. WIDENED BOARD AWARENESS ON REVIEW (David 2026-09-13: "I also want

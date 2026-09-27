@@ -225,15 +225,15 @@ export function planRaceClause(
     const lesson = race.youQueenFirst
       ? (past
         ? (race.queensOn
-          ? 'you got there first once the queens came off — that race was the reason to trade into the endgame'
-          : 'you got there first if nobody interfered, so the race was yours to take — pushing beat stopping to defend')
+          ? 'you would get there first once the queens came off — that race was the reason to trade into the endgame'
+          : 'you would get there first if nobody interfered, so the race was yours to take — pushing beat stopping to defend')
         : (race.queensOn
           ? 'you get there first once the queens come off — that race is your reason to trade into the endgame, not to go pushing into the middlegame'
           : "you get there first if nobody interferes, so the race is yours — push, and make them be the one who stops to defend"))
       : (past
         ? (race.queensOn
-          ? 'they got there first, so the endgame was theirs — that race was the reason to keep the queens on and play for something else'
-          : 'they got there first, so racing lost it — theirs had to be stopped before yours could decide anything')
+          ? 'they would get there first, so the endgame was theirs — that race was the reason to keep the queens on and play for something else'
+          : 'they would get there first, so racing lost it — theirs had to be stopped before yours could decide anything')
         : (race.queensOn
           ? 'they get there first, so the endgame favours them — keep the queens on and play for something else, or stop theirs before you trade'
           : "they get there first, so you can't just race — stop theirs before yours can decide anything"));
