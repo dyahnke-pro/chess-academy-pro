@@ -60,8 +60,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/standingRefrains.test.ts:110`
 
 ### `phaseVerdictLine` (function) — 8 call sites
-- `src/services/learnWalkNimzo.test.ts:20`
-- `src/services/learnWalkNimzo.test.ts:26`
+- `src/services/learnWalkNimzo.test.ts:21`
+- `src/services/learnWalkNimzo.test.ts:27`
 - `src/services/phaseVerdict.test.ts:16`
 - `src/services/phaseVerdict.test.ts:18`
 - `src/services/phaseVerdict.test.ts:23`
@@ -70,8 +70,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewFullData.ts:889`
 
 ### `phaseVerdictKeys` (function) — 3 call sites
-- `src/services/learnWalkNimzo.test.ts:21`
-- `src/services/learnWalkNimzo.test.ts:30`
+- `src/services/learnWalkNimzo.test.ts:22`
+- `src/services/learnWalkNimzo.test.ts:31`
 - `src/services/positionFacts.ts:818`
 
 ## Tests

@@ -85,7 +85,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `buildPositionalRead` (function) — 12 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8366`
 - `src/services/learnWalkBlumenfeld.test.ts:116`
-- `src/services/learnWalkNimzo.test.ts:34`
+- `src/services/learnWalkNimzo.test.ts:35`
 - `src/services/narrationAdversarial.test.ts:106`
 - `src/services/narrationAdversarial.test.ts:174`
 - `src/services/positionalRead.ideaKey.test.ts:18`
