@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7001 lines · 157 exports · 67 importers · 39 tests · 8 audits**
+**7067 lines · 157 exports · 67 importers · 40 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -126,7 +126,8 @@
 - `src/services/groundedAnswer.hangingBoth.test.ts:13`
 - `src/services/groundedAnswer.hangingBoth.test.ts:17`
 
-### `assembleBoardPlanAnswer` (function) — 3 call sites
+### `assembleBoardPlanAnswer` (function) — 4 call sites
+- `src/coach/questionWalk.sicilian1200.test.ts:39`
 - `src/services/groundedAnswer.test.ts:1595`
 - `src/services/groundedAnswer.test.ts:1606`
 - `src/services/groundedAnswer.test.ts:1613`
@@ -980,7 +981,8 @@
 ### `PositionalTopic` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `assemblePositionalAnswer` (function) — 18 call sites
+### `assemblePositionalAnswer` (function) — 19 call sites
+- `src/coach/questionWalk.sicilian1200.test.ts:69`
 - `src/services/coachApi.ts:6211`
 - `src/services/groundedAnswer.positional.test.ts:6`
 - `src/services/groundedAnswer.positional.test.ts:12`
@@ -1080,7 +1082,10 @@
 - `src/services/groundedAnswer.compare.test.ts:48`
 - `src/services/groundedAnswer.compare.test.ts:52`
 
-### `assemblePawnStrengthAnswer` (function) — 3 call sites
+### `assemblePawnStrengthAnswer` (function) — 6 call sites
+- `src/coach/questionWalk.sicilian1200.test.ts:49`
+- `src/coach/questionWalk.sicilian1200.test.ts:56`
+- `src/coach/questionWalk.sicilian1200.test.ts:61`
 - `src/services/coachApi.ts:5557`
 - `src/services/groundedAnswer.compare.test.ts:64`
 - `src/services/groundedAnswer.compare.test.ts:68`
@@ -1122,6 +1127,7 @@
 ## Tests
 
 - `src/coach/questionIntents.counterRepertoire.test.ts`
+- `src/coach/questionWalk.sicilian1200.test.ts`
 - `src/services/answerBoardQuestion.test.ts`
 - `src/services/attackAssessment.test.ts`
 - `src/services/captureThreatAnswerable.test.ts`

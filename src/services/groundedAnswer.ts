@@ -14,7 +14,7 @@
  */
 import { isSacrifice } from './factStakes';
 import { seatPieceReferences } from '../utils/seatPieces';
-import { deriveNextPlans } from './nextPlans';
+import { deriveNextPlans, mobilityMap } from './nextPlans';
 import { Chess } from 'chess.js';
 import { isRealPin } from './pinGeometry';
 import { tacticWord } from './tacticVocabulary';
@@ -390,7 +390,10 @@ export function assembleBoardPlanAnswer(
   // that earns no structural plan.
   // The levers below still speak AFTER the plans: a lever is a computed fact
   // the ranker never dropped (G4.5), and the worst-piece bar is its own lesson.
-  const withMethod = deriveNextPlans(fen, myC).map((p) => cap(p));
+  // Each plan is a sentence: `deriveNextPlans` returns clauses without their
+  // full stop, and joined bare they ran on ("…pins the king back The plan from
+  // here is…", question walk 2026-09-27).
+  const withMethod = deriveNextPlans(fen, myC).map((p) => cap(p)).map((p) => (/[.!?]$/.test(p.trim()) ? p.trim() : `${p.trim()}.`));
   const levers: string[] = [];
 
   // A pawn break to open the position (findPawnBreaks reads the side to move).
@@ -6306,6 +6309,38 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
 
   // piece quality
   const quality = findPieceQuality(fen).filter((q) => q.color === myC);
+  // "IS MY BISHOP ON E3 GOOD OR BAD?" ASKS ABOUT ONE PIECE (question walk
+  // 2026-09-27: answered "none of your pieces stand out" — a survey, not the
+  // piece). The quality read when it has one, else the board facts that make
+  // the verdict: its squares, what it hits, and for a bishop its pawns' colour.
+  const named = ask ? /\b(knight|night|bishop|rook|queen)\s+on\s+([a-h][1-8])\b|\bmy\s+([a-h][1-8])[\s-]?(knight|night|bishop|rook|queen)\b/i.exec(ask) : null;
+  if (named) {
+    const sq = (named[2] ?? named[3]).toLowerCase() as Square;
+    const w0 = (named[1] ?? named[4]).toLowerCase(); const word = w0 === 'night' ? 'knight' : w0;
+    const board = new Chess(fen);
+    const here = board.get(sq);
+    const type = ({ knight: 'n', bishop: 'b', rook: 'r', queen: 'q' } as Record<string, string>)[word];
+    if (here && here.color === myC && here.type === type) {
+      const q = quality.find((x) => x.square === sq);
+      if (q) {
+        return { facts: `${q.quality === 'good' ? 'Good' : 'Bad'} — your ${word} on ${sq}: ${q.reason}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+      }
+      const moves = mobilityMap(board, myC).get(sq) ?? 0;
+      const enemy: 'w' | 'b' = myC === 'w' ? 'b' : 'w';
+      const hits = board.board().flat()
+        .filter((x): x is NonNullable<typeof x> => !!x && x.color === enemy && x.type !== 'k' && board.attackers(x.square, myC).includes(sq))
+        .map((x) => `${REVIEW_PIECE_NAME[x.type]} on ${x.square}`);
+      const bits = [`Neither — your ${word} on ${sq} is doing an ordinary job: it has ${moves} square${moves === 1 ? '' : 's'} to go to`];
+      if (type === 'b') {
+        const parity = (s2: string): number => (s2.charCodeAt(0) - 97 + Number(s2[1])) % 2;
+        const mine = board.board().flat().filter((x) => x && x.color === myC && x.type === 'p');
+        const same = mine.filter((x) => x && parity(x.square) === parity(sq)).length;
+        bits.push(`${same} of your ${mine.length} pawns stand on its colour`);
+      }
+      if (hits.length > 0) bits.push(`it hits their ${andList(hits)}`);
+      return { facts: `${andList(bits)}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    }
+  }
   if (quality.length === 0) return { facts: `None of your pieces stand out as especially good or bad right now.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   const good = quality.filter((q) => q.quality === 'good').map((q) => `${PIECE_WORD[q.piece] ?? q.piece} on ${q.square} (${q.reason})`);
   const bad = quality.filter((q) => q.quality === 'bad').map((q) => `${PIECE_WORD[q.piece] ?? q.piece} on ${q.square} (${q.reason})`);
@@ -6958,7 +6993,38 @@ export function assemblePawnStrengthAnswer(opts: { fen: string; file: string; st
   if (passed) {
     parts.push(`${strong ? 'Yes — ' : ''}your pawn on ${sq} is a passed pawn, ${squares}${blockader ? `, but their ${blockader} blocks it` : ', and nothing stands in front of it'}.`);
   } else {
-    parts.push(`Your pawn on ${sq} isn't passed — an enemy pawn can still stop it on its way.`);
+    // "IS IT WEAK?" IS ABOUT HEALTH, NOT RUNNING (question walk 2026-09-27:
+    // "Is my d4 pawn weak?" was answered "it isn't passed"). The structural
+    // reads — isolated, doubled, backward — then the live count of who hits it.
+    const enemy: 'w' | 'b' = me === 'w' ? 'b' : 'w';
+    const adj = [fileIdx - 1, fileIdx + 1].filter((i) => i >= 0 && i <= 7).map((i) => String.fromCharCode(97 + i));
+    const ownOn = (file: string): number[] => {
+      const out: number[] = [];
+      for (let r = 1; r <= 8; r += 1) { const p = board.get(`${file}${r}` as Square); if (p && p.type === 'p' && p.color === me) out.push(r); }
+      return out;
+    };
+    const isolated = adj.every((a) => ownOn(a).length === 0);
+    const doubled = mine.length > 1;
+    const stop = frontRank >= 1 && frontRank <= 8 ? (`${f}${frontRank}` as Square) : null;
+    const stopHitByPawn = !!stop && board.attackers(stop, enemy).some((x) => board.get(x)?.type === 'p');
+    // Backward = every neighbour pawn is already PAST it, so none can come up
+    // beside it; a neighbour level with it (d4 next to e4) is not that.
+    const neighbourRanks = adj.flatMap((a) => ownOn(a));
+    const allAhead = neighbourRanks.length > 0 && neighbourRanks.every((r) => (r - rank) * dir > 0);
+    const backward = !isolated && protectedBy.length === 0 && allAhead && stopHitByPawn;
+    const faults: string[] = [];
+    if (isolated) faults.push(`isolated — no pawn on the ${adj.map((a) => `${a}-file`).join(' or ')} can ever defend it`);
+    if (backward) faults.push(`backward — no pawn can come up to support it, and their pawn controls ${stop}`);
+    if (doubled) faults.push(`doubled with your other ${f}-pawn`);
+    parts.push(faults.length > 0
+      ? `Yes — your pawn on ${sq} is ${andList(faults)}.`
+      : `Not structurally — your pawn on ${sq} isn't isolated, doubled or backward.`);
+    const name = (x: Square): string => `${REVIEW_PIECE_NAME[board.get(x)?.type ?? 'p'] ?? 'piece'} on ${x}`;
+    const hitters = board.attackers(sq, enemy);
+    const guards = board.attackers(sq, me);
+    if (hitters.length > 0) {
+      parts.push(`Right now it's attacked ${hitters.length === 1 ? 'once' : `${hitters.length} times`} (${andList(hitters.map(name))}) and defended ${guards.length === 0 ? 'by nothing' : guards.length === 1 ? 'once' : `${guards.length} times`}${guards.length > 0 ? ` (${andList(guards.map(name))})` : ''}.`);
+    }
   }
   if (protectedBy.length > 0) parts.push(`It's protected by your pawn on ${andList(protectedBy)}.`);
   else if (passed) parts.push(`No pawn protects it, so it needs a piece behind it.`);

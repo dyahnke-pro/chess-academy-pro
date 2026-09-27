@@ -31,3 +31,43 @@ describe('the square form reaches the pawn lane', () => {
     expect(pawnStrengthAsk('should I play d4?')).toBeNull();
   });
 });
+
+
+describe('Q6 — every plan is its own sentence', () => {
+  it('two plans never run together without a full stop', async () => {
+    const { assembleBoardPlanAnswer } = await import('../services/groundedAnswer');
+    const f = assembleBoardPlanAnswer('r1q2rk1/pp2bppp/2nppn2/8/Q2PP3/2N1BB2/PP3PPP/3R1RK1 w - - 8 13', 'white', 'me')?.facts ?? '';
+    expect(f).toMatch(/The plan from here/);
+    // A lower-case word followed by a capitalised "The plan" = a missing stop.
+    expect(f).not.toMatch(/[a-z] The plan from here/);
+  });
+});
+
+describe('Q5 — "is my d4 pawn weak?" reads its health, not whether it runs', () => {
+  it('names the structure and the live count of attackers and defenders', async () => {
+    const { assemblePawnStrengthAnswer } = await import('../services/groundedAnswer');
+    const f = assemblePawnStrengthAnswer({ fen: 'r1q2rk1/pp2bppp/2nppn2/8/Q2PP3/2N1BB2/PP3PPP/3R1RK1 w - - 8 13', file: 'd', studentColor: 'white' })?.facts ?? '';
+    expect(f).not.toMatch(/isn't passed/);
+    expect(f).toMatch(/Not structurally — your pawn on d4 isn't isolated, doubled or backward/);
+    expect(f).toMatch(/attacked once \(knight on c6\) and defended 3 times/);
+  });
+  it('NEGATIVE CONTROL: a real isolani is called isolated', async () => {
+    const { assemblePawnStrengthAnswer } = await import('../services/groundedAnswer');
+    const f = assemblePawnStrengthAnswer({ fen: 'r1bq1rk1/pp2bppp/2n1pn2/8/3P4/2NB1N2/PP3PPP/R1BQ1RK1 w - - 0 10', file: 'd', studentColor: 'white' })?.facts ?? '';
+    expect(f).toMatch(/Yes — your pawn on d4 is isolated — no pawn on the c-file or e-file can ever defend it/);
+  });
+  it('a Sicilian d6 behind e5 with d5 covered is backward', async () => {
+    const { assemblePawnStrengthAnswer } = await import('../services/groundedAnswer');
+    const f = assemblePawnStrengthAnswer({ fen: '4k3/8/3p4/4p3/2P1P3/8/8/4K3 b - - 0 1', file: 'd', studentColor: 'black' })?.facts ?? '';
+    expect(f).toMatch(/your pawn on d6 is backward — no pawn can come up to support it, and their pawn controls d5/);
+  });
+});
+
+describe('Q10 — "is my bishop on e3 good or bad?" answers about the bishop', () => {
+  it('reads that bishop, never a survey of every piece', async () => {
+    const { assemblePositionalAnswer } = await import('../services/groundedAnswer');
+    const f = assemblePositionalAnswer('r1q2rk1/pp2bppp/2nppn2/8/Q2PP3/2N1BB2/PP3PPP/3R1RK1 w - - 8 13', 'white', 'piece-quality' as never, 'Is my bishop on e3 good or bad?')?.facts ?? '';
+    expect(f).not.toMatch(/None of your pieces stand out/);
+    expect(f).toMatch(/your bishop on e3/);
+  });
+});

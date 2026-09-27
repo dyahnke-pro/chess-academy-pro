@@ -61,3 +61,12 @@ describe('ply 70 — a king is never a removable guard', async () => {
     expect(r).not.toMatch(/king on f8 is the only defender/);
   });
 });
+
+describe('the piece-worded edge is still one standing refrain', async () => {
+  const { STANDING_REFRAINS } = await import('./standingRefrains');
+  it('"you\'re up a bishop for two pawns" is covered and keyed on the whole edge', () => {
+    const r = STANDING_REFRAINS.find((x) => x.id === 'my-material')!;
+    const m = new RegExp(r.re.source).exec("you're up a bishop for two pawns");
+    expect(m?.[1]).toBe('a bishop for two pawns');
+  });
+});
