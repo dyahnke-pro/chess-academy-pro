@@ -787,6 +787,11 @@ export const DANYA_BEHAVIORS: Behavior[] = [
 export function detectBehaviors(ctx: BehaviorContext): BehaviorHit[] {
   const n = normalize(ctx);
   if (!n) return [];
+  // IN CHECK, THE CHECK IS THE ONLY QUESTION (claim check 2026-09-27: "Lift the
+  // rook to f6 and swing it into the attack" twice with the student in check —
+  // no rook could move at all). Plans wait until the king is safe; the alert
+  // lane names the check.
+  if (n.chess && n.chess.turn() === n.student && n.chess.inCheck()) return [];
   const hits: BehaviorHit[] = [];
   for (const b of DANYA_BEHAVIORS) {
     let res: { fact: string; squares: Square[]; keys?: string[] } | null = null;

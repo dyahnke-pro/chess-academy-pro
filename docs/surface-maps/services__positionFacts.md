@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1525 lines · 14 exports · 18 importers · 17 tests · 3 audits**
+**1525 lines · 14 exports · 19 importers · 18 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,6 +21,7 @@
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/hooks/useLiveCoach.ts`
 - `src/hooks/usePhaseNarration.ts`
+- `src/services/claimChecker.measure.test.ts`
 - `src/services/claimKeyParity.test.ts`
 - `src/services/computerAccuracy.audit.test.ts`
 - `src/services/liveNeedGate.test.ts`
@@ -89,13 +90,14 @@
 - `src/services/positionReadComposer.ts:116`
 - `src/services/whyBestMove.ts:103`
 
-### `computePositionFacts` (function) — 78 call sites
+### `computePositionFacts` (function) — 79 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9214`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:630`
 - `src/services/bluffDetector.test.ts:36`
 - `src/services/bluffDetector.test.ts:46`
+- `src/services/claimChecker.measure.test.ts:104`
 - `src/services/computerAccuracy.audit.test.ts:112`
 - `src/services/forkTrick.test.ts:48`
 - `src/services/latentFork.test.ts:151`
@@ -189,6 +191,7 @@
 
 - `src/hooks/useLiveCoach.needWire.test.tsx`
 - `src/services/bluffDetector.test.ts`
+- `src/services/claimChecker.measure.test.ts`
 - `src/services/claimKeyParity.test.ts`
 - `src/services/computerAccuracy.audit.test.ts`
 - `src/services/forkTrick.test.ts`

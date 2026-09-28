@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**599 lines · 8 exports · 12 importers · 9 tests · 1 audits**
+**612 lines · 8 exports · 13 importers · 11 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/boardPlan.ideaKey.test.ts`
+- `src/services/claimChecker.measure.test.ts`
 - `src/services/danyaBehaviors.ts`
 - `src/services/groundedAnswer.ts`
 - `src/services/learnWalkNimzo.test.ts`
@@ -37,8 +38,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:10719`
 - `src/services/danyaBehaviors.ts:632`
 
-### `castleIsOneMoveAway` (function) — 1 call site
+### `castleIsOneMoveAway` (function) — 4 call sites
 - `src/services/danyaBehaviors.ts:243`
+- `src/services/replayFence.modern1690.test.ts:132`
+- `src/services/replayFence.modern1690.test.ts:133`
+- `src/services/replayFence.modern1690.test.ts:134`
 
 ### `readPosition` (function) — 46 call sites
 - `src/services/boardPlan.ideaKey.test.ts:13`
@@ -88,8 +92,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.najdorf1500.test.ts:36`
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
-### `buildPositionalRead` (function) — 12 call sites
+### `buildPositionalRead` (function) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8395`
+- `src/services/claimChecker.measure.test.ts:130`
 - `src/services/learnWalkBlumenfeld.test.ts:116`
 - `src/services/learnWalkNimzo.test.ts:35`
 - `src/services/narrationAdversarial.test.ts:106`
@@ -112,12 +117,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Tests
 
 - `src/services/boardPlan.ideaKey.test.ts`
+- `src/services/claimChecker.measure.test.ts`
 - `src/services/learnWalkBlumenfeld.test.ts`
 - `src/services/learnWalkNimzo.test.ts`
 - `src/services/narrationAdversarial.test.ts`
 - `src/services/positionalRead.ideaKey.test.ts`
 - `src/services/positionalRead.race.test.ts`
 - `src/services/positionalRead.test.ts`
+- `src/services/replayFence.modern1690.test.ts`
 - `src/services/replayFence.najdorf1500.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 

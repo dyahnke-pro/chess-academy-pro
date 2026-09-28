@@ -152,7 +152,20 @@ export function castleIsOneMoveAway(fen: string, color: Color): boolean {
   const clear = (files: readonly string[]): boolean => files.every((f) => !b.get(`${f}${r}` as Square));
   const kingSide = rights.includes(color === 'w' ? 'K' : 'k') && clear(['f', 'g']);
   const queenSide = rights.includes(color === 'w' ? 'Q' : 'q') && clear(['b', 'c', 'd']);
-  return kingSide || queenSide;
+  if (!kingSide && !queenSide) return false;
+  // …AND LEGAL: not in check, not through or onto an attacked square (claim
+  // check 2026-09-27: "castling is one move away" twice where the king could
+  // not castle — the squares were empty but attacked). Read with the colour
+  // to move, so the answer is about THEIR next move whoever is on move now.
+  try {
+    const parts = fen.split(' ');
+    parts[1] = color;
+    parts[3] = '-';
+    const probe = new Chess(parts.join(' '));
+    return probe.moves({ verbose: true }).some((m) => m.isKingsideCastle() || m.isQueensideCastle());
+  } catch {
+    return false;
+  }
 }
 
 /** Every observation for one side. */

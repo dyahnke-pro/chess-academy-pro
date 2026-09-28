@@ -21,6 +21,13 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ---
 
+## 00. WO-ACC-01 — measured accuracy to 97% before new computers (David 2026-09-27)
+- ✅ Claim checker built: 100 real games (50 Naroditsky, 50 amateur), engine-annotated; harvest + independent board/engine verify (PLAN §WO-ACC-01).
+- ✅ 5 computer bugs fixed from the first run (future-board technique, illegal castling, plans in check, "a rook up", pawn-chaseable outpost).
+- 🔴 Full 100-game number, then fix error classes by frequency until ≥97%.
+- 🟠 ACC-1: extract Learn's narration builder from the page so the checker runs what is spoken.
+- 🟠 Naroditsky census (430 games) done — build order for new computers AFTER 97% (docs/plans/2026-09-27-naroditsky-teaching-census.md).
+
 ## 000. WO-DANYA-01 — Learn free play taught like his speedruns (David 2026-09-24)
 
 - ✅ Hand-walk 1 (his Scandinavian, vc-1zfJ7ABoh8k): ~25 board-false/misframed lines fixed at the computer (PLAN §WO-DANYA-01 "Hand-walk 1").

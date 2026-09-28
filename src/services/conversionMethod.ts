@@ -100,8 +100,10 @@ function edgeWords(edge: number, c: Chess, student: 'w' | 'b'): string {
   };
   const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
   const extra = (t: string): boolean => count(student, t) > count(them, t);
-  if (edge >= 9 && extra('q')) return 'a queen';
-  if (edge >= 5 && edge < 9 && extra('r')) return 'a rook';
+  // NAME A PIECE ONLY WHEN THE LEAD IS WORTH ABOUT THAT PIECE (claim check
+  // 2026-09-27: "you're a rook up" at +8 and +9 — a rook and a minor more).
+  if (edge >= 8 && edge <= 10 && extra('q')) return 'a queen';
+  if (edge >= 4 && edge <= 6 && extra('r')) return 'a rook';
   if (edge >= 5) return `${Math.round(edge)} points`;
   return 'a piece'; // readConversion never calls below CONVERSION_EDGE
 }

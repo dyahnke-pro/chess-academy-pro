@@ -1406,7 +1406,7 @@ function buildClauses(a: {
       // 2026-09-24: "Bishop on h5 pins knight on e2 against queen on d1").
       // The definition is taught once a game (`definitionKey`); after that the
       // board fact speaks alone.
-      kind: 'concept', rank, text: concept.source === 'tactic' ? afterLine(concept.line, concept.boardFen, a.fen, seatBare(concept.instance && a.alreadySaid?.has(definitionKey(concept.id)) ? `${concept.instance}.` : concept.full, concept.boardFen ?? a.fen, studentSeat === 'white' ? 'w' : 'b')) : concept.full,
+      kind: 'concept', rank, text: concept.source === 'tactic' ? afterLine(concept.line, concept.boardFen, a.fen, seatBare(concept.instance && a.alreadySaid?.has(definitionKey(concept.id)) ? `${concept.instance}.` : concept.full, concept.boardFen ?? a.fen, studentSeat === 'white' ? 'w' : 'b')) : afterLine(concept.line, concept.boardFen, a.fen, concept.full),
       conceptId: concept.source === 'tactic' ? concept.id : undefined,
       // `ComputedConcept.squares` is the engine's own lead-the-eye set (agent
       // first, then targets) — exactly the geometry the sentence names.

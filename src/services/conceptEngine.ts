@@ -573,7 +573,11 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
       }
       if (!techConcept && wants('technique')) {
         const tech = endgameConceptFor(fenAfter);
-        if (tech && tech.source === 'technique') techConcept = tech;
+        // A technique found further down the line is about THAT board, so it
+        // carries the line that reaches it — the same "After …" the tactic
+        // concept rides (claim check 2026-09-27: "the rook on e6 stands behind
+        // its own e2 pawn" with the rook still on e8; e6 was three plies away).
+        if (tech && tech.source === 'technique') techConcept = { ...tech, line: [...path], boardFen: fenAfter };
       }
     }
 

@@ -461,6 +461,40 @@ every WO-TEACH-02 line against it:
 **Order:** S0 → S1 → S8 → S2 → S3 → S4 → S5 → S7 → S6. Verify: the meter,
 ship-check, both prod audits muted, narrations read and quoted here.
 
+## 🎯 WO-ACC-01 — measure the coach's accuracy, then raise it to 97% before adding computers (David 2026-09-27: "We don't even have the accuracy with the current build" · "I like the plan")
+
+**Why.** The 1690 hand walk measured ~78% of spoken lines true (13 of ~60 false, all
+fixed). Hand walks find ~1 new error class per game, one game an hour — too slow to
+reach 97%, and no way to know when we got there. New computers wait until the base
+is measured at 97%.
+
+**The instrument (built 2026-09-27).**
+- Corpus: 50 Naroditsky games rebuilt from the voiced notes (`data/sources/acc-naro/`,
+  25 White / 25 Black, ≥40 plies) + 50 chess.com amateur games 800–1800
+  (`data/sources/acc-corpus/`, via `build-wo4-corpus.mjs --fetch`). Engine: the app's
+  own Stockfish 18, top-3 lines at depth 14 for every position
+  (`scripts/acc-annotate.mjs`). All gitignored research data; reproducible.
+- Pass 1 HARVEST — `src/services/claimChecker.measure.test.ts`: every student move,
+  the same computers Learn calls after the reply with the same inputs
+  (`computePositionFacts`, `detectBehaviors`, `buildPositionalRead`, `backwardLook`).
+- Pass 2 VERIFY — `scripts/claim-verify.mjs`: every claim checked by board (chess.js)
+  and engine, INDEPENDENT of app code (a verifier calling the helper it checks agrees
+  by construction). TRUE / FALSE with reason / UNVERIFIED (judgment — counted and
+  sampled, never passed). Reports spoken lanes (facts + backward look) apart from
+  candidate lanes (behaviour + positional).
+- Limit, stated: it checks the computers, not the page's selection/ordering glue —
+  that stays with the hand walks and, after ACC-1, the extracted Learn service.
+
+**Fixed from the first 12-game run** (each with a test on the real position):
+future-board endgame technique spoken as current (`conceptEngine` now carries the
+line — "After Rce6, …"); "castling is one move away" when castling was illegal
+(`castleIsOneMoveAway` asks chess.js); plans offered while the student was in check
+(`detectBehaviors` stands down); "a rook up" at +8/+9 (`conversionMethod`); "no pawn
+can ever chase it" when …b6 could (`findKnightReroute`).
+
+**Next:** full 100-game number → fix error classes by frequency → ACC-1 extract Learn's
+builder so the checker can run what is actually spoken.
+
 ## 🎙️ WO-DANYA-01 — Learn free play taught like the video (David 2026-09-24: "I want to be taught like the video I sent you! That's the only reason I'm making this app.")
 
 ### Hand-walk 1 — Naroditsky's Scandinavian (vc-1zfJ7ABoh8k), 2026-09-24

@@ -826,6 +826,17 @@ export function findKnightReroute(fen: string, color: Color): { from: Square; to
     if (chess.get(s)) return false;
     if (!enemyHalf(Number(s[1]))) return false;
     if (chess.attackers(s, enemy).some((a) => chess.get(a)?.type === 'p')) return false;
+    // "A SQUARE NO PAWN CAN EVER CHASE IT FROM" — ever, not just now (claim
+    // check 2026-09-27: a4→c5 with …b6 one push away). Any enemy pawn on an
+    // adjacent file that can still advance to attack it disqualifies it.
+    const sf = s.charCodeAt(0) - 97; const sr = Number(s[1]);
+    for (const df of [-1, 1]) {
+      const ff = sf + df; if (ff < 0 || ff > 7) continue;
+      for (let rr = 1; rr <= 8; rr += 1) {
+        const p = chess.get(`${String.fromCharCode(97 + ff)}${rr}` as Square);
+        if (p && p.type === 'p' && p.color === enemy && (enemy === 'b' ? rr > sr : rr < sr)) return false;
+      }
+    }
     return chess.attackers(s, color).some((a) => chess.get(a)?.type === 'p');
   };
   // STRICT to keep intent: only a knight genuinely STUCK ON THE RIM (a- or

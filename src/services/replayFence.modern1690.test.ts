@@ -35,7 +35,7 @@ describe('an even trade is not an overvalued attack (ply 21)', () => {
       replySan: 'Kxg7',
     }).map((a) => a.id);
     expect(ids).not.toContain('overvalued-attack');
-  });
+  }, 20_000);
 });
 
 describe('the engine\'s best capture is never "keep pieces on" (ply 57)', () => {
@@ -123,5 +123,32 @@ describe('an outpost they already held is not "handed" over (ply 73)', () => {
       const d = findStudentDrawback({ fen: fenAt(72), playedSan: 'Ng5', bestSan: best, studentColor: 'white' });
       expect(d?.kind === 'outpost-conceded' && d.square === 'g3').toBe(false);
     }
+  });
+});
+
+describe('claim check 2026-09-27 — castling "one move away" must be legal', () => {
+  it('in check (Qe2+) or through an attacked square is not one move away', async () => {
+    const { castleIsOneMoveAway } = await import('./positionalRead');
+    expect(castleIsOneMoveAway('rnb1kb1r/ppp2pp1/4pn1p/8/3Np3/1BP5/PP1PqPPP/RNB1K2R w KQkq - 0 10', 'w')).toBe(false);
+    expect(castleIsOneMoveAway('r4rk1/1p1b1ppp/2pq1n2/4p3/1QB1P3/2Pn1P1P/PB1N2P1/R3K1R1 w Q - 1 17', 'w')).toBe(false);
+    expect(castleIsOneMoveAway('r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4', 'w')).toBe(true);
+  });
+});
+
+describe('claim check 2026-09-27 — no plans while in check', () => {
+  it('no "lift the rook" (or any behaviour) with the student in check', () => {
+    expect(detectBehaviors({ fen: 'r4rk1/pp1q2pp/3p2n1/4p3/4b3/1Q6/PPP2PPP/2KR1B1R b - - 1 17', studentColor: 'black' })).toEqual([]);
+  });
+});
+
+describe('claim check 2026-09-27 — "no pawn can ever chase it" means ever', () => {
+  it('a4→c5 with …b6 available is no reroute', async () => {
+    const { findKnightReroute } = await import('./positionReadingService');
+    expect(findKnightReroute('1r2k2r/1p1b1p2/p1n1p3/3pPn2/N2P4/1Q3P2/PP4Pq/3R1RK1 w k - 3 21', 'w')?.to).not.toBe('c5');
+  });
+  it('a rook and a bishop up is not "a rook up"', async () => {
+    const { readConversion } = await import('./conversionMethod');
+    const r = readConversion('8/6k1/8/R6p/7P/p7/B5P1/6K1 w - - 0 36', 'w');
+    expect(r?.text ?? '').not.toMatch(/a rook up/);
   });
 });

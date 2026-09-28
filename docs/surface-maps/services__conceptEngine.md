@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**747 lines · 20 exports · 22 importers · 9 tests · 29 audits**
+**751 lines · 20 exports · 23 importers · 10 tests · 29 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,6 +16,7 @@
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/claimKeyParity.test.ts`
 - `src/services/conceptCoverage.report.test.ts`
+- `src/services/conceptEngine.futureTechnique.test.ts`
 - `src/services/conceptEngine.test.ts`
 - `src/services/conceptVocabulary.test.ts`
 - `src/services/dnaLineNarrator.ts`
@@ -164,7 +165,8 @@
 ### `LineInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `conceptForLine` (function) — 10 call sites
+### `conceptForLine` (function) — 11 call sites
+- `src/services/conceptEngine.futureTechnique.test.ts:12`
 - `src/services/conceptEngine.test.ts:231`
 - `src/services/conceptEngine.test.ts:235`
 - `src/services/conceptEngine.test.ts:244`
@@ -214,6 +216,7 @@
 
 - `src/services/claimKeyParity.test.ts`
 - `src/services/conceptCoverage.report.test.ts`
+- `src/services/conceptEngine.futureTechnique.test.ts`
 - `src/services/conceptEngine.test.ts`
 - `src/services/conceptVocabulary.test.ts`
 - `src/services/endgameDrillService.test.ts`
