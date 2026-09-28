@@ -23,16 +23,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:7944`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
-- `src/services/danyaBehaviors.ts:440`
+- `src/services/danyaBehaviors.ts:443`
 - `src/services/positionFacts.ts:1027`
 - `src/services/positionFacts.ts:1402`
 - `src/services/positionFacts.ts:1416`
 - `src/services/replayFence.alekhine1500.test.ts:24`
 - `src/services/replayFence.alekhine1500.test.ts:25`
-- `src/services/replayFence.sicilianClosed1000.test.ts:21`
+- `src/services/replayFence.sicilianClosed1000.test.ts:26`
 
 ### `forkThreatKey` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:299`
+- `src/services/danyaBehaviors.ts:302`
 - `src/services/positionFacts.ts:1278`
 - `src/services/positionFacts.ts:1291`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:50`

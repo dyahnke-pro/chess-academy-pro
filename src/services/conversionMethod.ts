@@ -17,10 +17,11 @@
 // This returns the ONE step the board is on, board-true (chess.js +
 // `describeStructure`), or null when the mover is not clearly ahead. No
 // engine; the eval gate belongs to the caller that already holds one.
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
-import { findHangingBySee } from './positionReadingService';
+import { findHangingBySee, legalSeeGainFor } from './positionReadingService';
 import { homeMinorCount } from './development';
+import { MATERIAL_VALUE } from './pieceValues';
 
 export type ConversionStep = 'finish-development' | 'trade-pieces' | 'make-passer' | 'escort-passer' | 'cut-off-king';
 
@@ -48,7 +49,42 @@ export function readConversion(fen: string, student: 'w' | 'b'): ConversionRead 
   // rook up" with the rook on d8 about to be taken back). Take off the most
   // the opponent wins by capturing a student piece now — the undercount is
   // deliberate: a smaller edge costs a sentence, a bigger one is a false claim.
-  const owed = Math.max(0, ...findHangingBySee(fen).filter((h) => h.color === student).map((h) => h.gain));
+  // …BUT ONLY WHAT CANNOT BE SAVED (claim check 2026-09-27: "you're a piece
+  // up" a queen up, because the rook on e4 was attacked — on the student's own
+  // move, where it simply steps away). On their move the biggest hang is owed;
+  // on the student's move only the SECOND biggest, since one piece can be saved.
+  // A hanging piece counts as SAVED when, on the student's move, it has a move
+  // that does not lose material: to a safe square, or a trade that takes back
+  // at least what it gives (the 1380 rook on d8 trades itself with Rxf8+). A
+  // saving move WITH CHECK buys a second save, since the opponent must answer
+  // the check first (claim check: Rxe1+ then the queen steps away — "a piece
+  // up" said a queen up, engine +7).
+  const hangs = findHangingBySee(fen).filter((h) => h.color === student).sort((x, y) => y.gain - x.gain);
+  const rescue = (sq: string): { ok: boolean; check: boolean } => {
+    let ok = false; let check = false;
+    for (const m of c.moves({ square: sq as Square, verbose: true })) {
+      try {
+        c.move(m);
+        const net = (m.captured ? MATERIAL_VALUE[m.captured] ?? 0 : 0) - legalSeeGainFor(c.fen(), m.to, c.turn());
+        const gives = c.inCheck();
+        c.undo();
+        if (net >= 0) { ok = true; if (gives) check = true; }
+      } catch { /* illegal on this board */ }
+    }
+    return { ok, check };
+  };
+  const studentToMove = c.turn() === student;
+  let lost = hangs;
+  if (studentToMove && hangs.length) {
+    const reads = hangs.map((h) => ({ h, ...rescue(h.square) }));
+    const tempo = reads.find((r) => r.ok && r.check);
+    const rest = reads.filter((r) => r !== tempo);
+    const saved = new Set<typeof hangs[number]>();
+    if (tempo) saved.add(tempo.h);
+    if (rest[0]?.ok) saved.add(rest[0].h);
+    lost = hangs.filter((h) => !saved.has(h));
+  }
+  const owed = Math.max(0, lost[0]?.gain ?? 0);
   const edge = raw - owed;
   if (edge < CONVERSION_EDGE) return null;
   const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';

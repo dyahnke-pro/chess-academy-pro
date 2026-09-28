@@ -13,8 +13,13 @@ const GAME = 'e4 c5 Nc3 d6 Bc4 Nf6 f4 Nc6 Nf3 g6 e5 dxe5 fxe5 Ng4 O-O Bg7 d3 O-O
 const fenAt = (n: number): string => { const c = new Chess(); for (const m of GAME.slice(0, n)) c.move(m); return c.fen(); };
 
 describe('ply 42 — the b7-bishop pin is one claim across the tactic line and the behaviour', () => {
+  it('in check (43.Bf5+) the behaviours stay quiet — the check comes first', () => {
+    expect(detectBehaviors({ fen: fenAt(43), studentColor: 'b' })).toEqual([]);
+  });
   it('both lanes key the pin identically', () => {
-    const fen = fenAt(43);
+    // The same Bb7–Rf3–Kh1 pin on the board BEFORE the check (claim check
+    // 2026-09-27 silenced behaviours while in check), Black to move.
+    const fen = fenAt(42).replace(' w ', ' b ');
     const pin = buildTacticsLiveContext(fen, null, 'b', 1000).immediate.find((t) => t.side === 'student' && t.type === 'pin');
     const hit = detectBehaviors({ fen, studentColor: 'b' }).find((h) => h.id === 'tactics');
     expect(pin).toBeDefined();

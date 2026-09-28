@@ -152,3 +152,33 @@ describe('claim check 2026-09-27 — "no pawn can ever chase it" means ever', ()
     expect(r?.text ?? '').not.toMatch(/a rook up/);
   });
 });
+
+describe('claim check 2026-09-27 — a threatened piece is one the exchange loses', () => {
+  it('…Qxa8 is met by Rxa8 from behind: the a8 rook is not "threatened"', async () => {
+    const { computeMustDefend } = await import('./threatOut');
+    const m = computeMustDefend('r2Qr1k1/pp1n3p/2p1b1p1/4p3/2P1Pp2/2N2P2/PPN3PP/R4BK1 b - - 0 21', 'b');
+    expect(m.pieces.some((p) => p.square === 'a8')).toBe(false);
+  });
+  it('a genuinely loose piece still is', async () => {
+    const { computeMustDefend } = await import('./threatOut');
+    expect(computeMustDefend('4k3/8/8/3n4/8/8/8/3RK3 b - - 0 1', 'b').net).toBe(3);
+  });
+});
+
+describe('claim check 2026-09-27 — a mating capture is named as mate', () => {
+  it('Nxg3# is "threatening mate", never "would win your bishop"', () => {
+    const facts = detectBehaviors({ fen: 'r4rk1/pp3ppp/6n1/2bN3q/2B1P1b1/3P2B1/PPPQn1PP/R4R1K w - - 13 18', studentColor: 'white' }).map((h) => h.fact).join(' ');
+    expect(facts).not.toMatch(/Nxg3# — it would win/);
+  });
+});
+
+describe('claim check 2026-09-27 — material and the king walk', () => {
+  it('a queen up with a rook attacked on your own move is not "a piece up"', async () => {
+    const { readConversion } = await import('./conversionMethod');
+    expect(readConversion('r5k1/p1p2p2/2pq3p/2b5/4r3/6B1/PPP2P1P/R3R1K1 b - - 1 19', 'b')?.text ?? '').not.toMatch(/a piece up/);
+  });
+  it('no "walk your king to the centre" with queens on', () => {
+    const facts = detectBehaviors({ fen: '8/5pk1/6p1/8/3Q4/6P1/5PK1/3q4 w - - 0 40', studentColor: 'white' }).map((h) => h.id);
+    expect(facts).not.toContain('king-activity');
+  });
+});

@@ -40,7 +40,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/searchDepth.ts:69`
 - `src/services/tacticsDetector.ts:814`
 - `src/services/threatCheck.ts:55`
-- `src/services/threatOut.ts:78`
+- `src/services/threatOut.ts:79`
 - `src/test/kingIsNeverHanging.test.ts:53`
 
 ### `classifyPosition` (function) — 30 call sites

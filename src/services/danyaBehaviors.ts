@@ -278,6 +278,9 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         // that kept Black on top was Bxa4, which ignores it). This lane speaks
         // before the engine has read the position, so it cannot know whether
         // meeting the threat is right; the late package does, and names it.
+        // A CAPTURE THAT MATES IS A MATE THREAT (claim check 2026-09-27:
+        // "They're eyeing Nxg3# — it would win your bishop on g3").
+        if (/#$/.test(intent.san)) return { fact: `They're threatening mate with ${intent.san.replace(/#$/, '')} — that comes first.`, squares: [intent.target] };
         return { fact: `They're eyeing ${intent.san} — it would win ${what}.`, squares: [intent.target] };
       }
       // NAME WHAT IT FORKS — "forking on e4" named the knight's landing
@@ -529,6 +532,10 @@ export const DANYA_BEHAVIORS: Behavior[] = [
     weight: 260,
     detect: ({ fen, student, isEndgame }) => {
       if (!isEndgame) return null;
+      // NOT WITH QUEENS ON (claim check 2026-09-27: "walk it up toward the
+      // centre" ten times in a queen ending) — a queen checks a walking king
+      // from anywhere; the king is a fighting piece once the queens are off.
+      if (/[qQ]/.test(fen.split(' ')[0] ?? '')) return null;
       const ka = kingActivation(fen, student);
       if (!ka) return null;
       return { fact: `Your king is a fighting piece now — walk it up toward the centre, starting with ${ka.to}; an active king often decides the endgame.`, squares: [ka.to] };

@@ -13,8 +13,9 @@
 // played-out / latent extension (search the flipped position for the opponent's
 // best line) is deliberately NOT here: it costs a search and is gated behind
 // criticality at the call site per the cost architecture.
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 import { findHangingPieces } from './tacticClassifier';
+import { legalSeeGain } from './positionReadingService';
 import type { HangingPiece } from '../types/tacticTypes';
 
 const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
@@ -79,9 +80,16 @@ export function computeMustDefend(fen: string, subjectColor: 'w' | 'b'): MustDef
   } catch {
     return { net: 0, pieces: [] };
   }
+  // CONFIRMED BY THE EXCHANGE, NOT JUST "NO DEFENDER RIGHT NOW" (claim check
+  // 2026-09-27: "they're threatening the rook on a8" — Qxa8 is met by …Rxa8
+  // from behind the square the queen just left; "win the knight on e4" and
+  // "the rook on d6" were the same). The legal SEE plays the real captures, so
+  // a defender standing behind the attacker counts, and the net is what the
+  // opponent actually wins, not the piece's full value.
   const mine = hanging
     .filter((h) => h.color === subjectColor && h.piece.toLowerCase() !== 'k')
-    .map((h) => ({ square: h.square, piece: h.piece, value: VALUE[h.piece.toLowerCase()] ?? 0 }))
+    .map((h) => ({ square: h.square, piece: h.piece, value: Math.min(VALUE[h.piece.toLowerCase()] ?? 0, legalSeeGain(probeFen, h.square as Square)) }))
+    .filter((h) => h.value > 0)
     .sort((a, b) => b.value - a.value);
   return { net: mine[0]?.value ?? 0, pieces: mine };
 }

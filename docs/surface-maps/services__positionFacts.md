@@ -97,7 +97,7 @@
 - `src/hooks/usePhaseNarration.ts:630`
 - `src/services/bluffDetector.test.ts:36`
 - `src/services/bluffDetector.test.ts:46`
-- `src/services/claimChecker.measure.test.ts:104`
+- `src/services/claimChecker.measure.test.ts:106`
 - `src/services/computerAccuracy.audit.test.ts:112`
 - `src/services/forkTrick.test.ts:48`
 - `src/services/latentFork.test.ts:151`
@@ -182,10 +182,10 @@
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.ts:9`
-- `src/services/danyaBehaviors.ts:440`
+- `src/services/danyaBehaviors.ts:443`
 - `src/services/replayFence.alekhine1500.test.ts:24`
 - `src/services/replayFence.alekhine1500.test.ts:25`
-- `src/services/replayFence.sicilianClosed1000.test.ts:21`
+- `src/services/replayFence.sicilianClosed1000.test.ts:26`
 
 ## Tests
 
