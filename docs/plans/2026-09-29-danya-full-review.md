@@ -55,7 +55,7 @@ Density is the lesson: silence on routine plies, monologue where it turns. Our L
 - **`danya-review-openings.json` is misnamed** — it is Lichess masters data. Rename.
 - **Voiced corpus**: only 945/7,477 have `teaches`, zero concepts — can't feed concept weights.
 
-## 🎯 SCOPE (David 2026-09-29): "I am interested in his in-game analysis. I want his narrations to match ours when free play in learn with coach."
+## 🎯 SCOPE (David 2026-09-29): "I am interested in his in-game analysis. I want his narrations to match ours when free play in learn with coach." → corrected same day: "Our narrations to match his." His line is the answer key.
 
 So: LEARN FREE PLAY ONLY, his IN-GAME beats only. Out of scope: the post-game rewind/branch drill (P5 below), review, the authored layer (history, psychology, repertoire advice). The phases below are re-ordered for that scope in "Learn free-play plan".
 
@@ -71,6 +71,40 @@ So: LEARN FREE PLAY ONLY, his IN-GAME beats only. Out of scope: the post-game re
 - **L8 Opponent's best / intent as a two-step plan** (#12), structure transfer on the opening name (#11).
 - **L9 His data on the live board**: `danya-play-db` "his move here", trap candidates as gems.
 - Each phase: re-run L0, report the row it moved, hand-walk one of his games per the walk-then-fix standard.
+
+
+## 🔗 MERGED COMPUTER LIST — every computer ever suggested for his in-game voice (2026-09-29)
+
+Merges: 08-23 coverage matrix (#), 09-17 22 structures, 09-24 speedrun target (L/H), WO-DANYA-01 open items, and this review (R#). Status from a grep of `src/services`, not memory. Readers' raw reports: `docs/plans/danya-review-2026-09-29/`.
+
+**BUILT** — pressureCount (#5/L2), findPassedPawns (#20/#33), conversionMethod (L10), planRace, planArc (plan arc), forkTrick, refutedAlternative (TEMPT/L7), methodBeat (4 habits), thinkAloud, standingRefrains, deliberation + nextMoveAdvice (ALOUD, move named where earned), pieceOptions ("couldn't X just move"), bluff, gems, opponentIntent, latentDanger (H3).
+
+**PARTIAL — extend, don't rebuild**
+| computer | sources | what's missing |
+|---|---|---|
+| conversion CHOICE | L8, R4 | picks a method but never says why this one; no stalemate watch / diminishing returns |
+| moveTiming | H13, R13 | "switch to attack once pieces are in" |
+| structure naming / transfer | #1, H1, R11 | "reversed Dragon, a tempo up" — colour-flip DB lookup |
+| phaseVerdictLine | H8 | picks THE one reason, not a list |
+| lookaheadPlan / route | #11, H11, R14 | destination first, then path |
+| opponent intent as 2-step plan | L1, H14, R12 | "he wants X, then Y" |
+| board delta | #28 L11 H12 R2 | squares only as prose; structural cost of THEIR move |
+| methodBeat habits | L3, R8 | trigger→scan, autopilot guard, safety precheck |
+
+**MISSING — new computers, ranked for Learn free play**
+1. **Rule→exception** (#19, L4, COND, R1) — principle fires, engine disagrees, say why here.
+2. **What changed / drawback read** (L11, H12, R2) — both seats, after every pawn move or trade.
+3. **Multi-job** (#23, L6, R3) — count the move's jobs.
+4. **Stakes / equal choice** (R5) — MultiPV gap small → "any of these, taste".
+5. **Practical vs objective** (PRACT) — how many moves hold vs lose.
+6. **Method beats** (H5 split the position, H6 three ways to meet check, H7 question the knee-jerk, FEAR).
+7. **Wishlist + least-valuable piece** (H9, H10).
+8. **Target switch / re-eval** (#24, R1) — rejected move now right.
+9. **Tension / wasted move / punish the slow move** (#15, #16, #21, R13).
+10. **Test / contrast** (R10) — best-case test, one-change comparison.
+11. **King-hunt method** (R15).
+
+**THE ONE THAT GATES THEM ALL:** L0 match instrument + L1 one idea per beat (B). Without L0 none of these can say it moved us closer to him.
 
 ## Phased plan (full, all surfaces — superseded for now by the scope above)
 - **P0 Measure.** Parity instrument: the 22 detectors + the new ones above, run over coach output at the voiced corpus's exact positions, plus a density metric (ideas per beat, share of silent routine plies). Exclude the ~25 bare/defective videos. Every later phase must move its row.
