@@ -303,7 +303,7 @@ import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
 import { actionForCommand, actuate } from '../../services/coachActuator';
 import { readSpokenSquares } from '../../services/spokenSquares';
-import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, isPlayerGamesQuestion, isPositionAssessmentQuestion, positionalTopic, looksLikeQuestionNotAnOpeningName, looksLikeConversationalReply, isStopCommand } from '../../coach/questionIntents';
+import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, isPlayerGamesQuestion, isPositionAssessmentQuestion, positionalTopic, looksLikeQuestionNotAnOpeningName, looksLikeConversationalReply, isStopCommand, LETS_PLAY_RE } from '../../coach/questionIntents';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -4496,7 +4496,10 @@ export function CoachTeachPage(): JSX.Element {
         { regex: /\bplay\s+me\s+(?:the\s+)?/i, stage: 'play-real' },
         // "let's play the Caro" / "can we play the London". NOT "play through
         // the Vienna" — that is a watch ask and keeps its walkthrough.
-        { regex: /\b(?:let'?s|can\s+we|could\s+we|wanna|i\s+want\s+to)\s+play\s+(?!through\b)(?:the\s+)?/i, stage: 'play-real' },
+        // The one shared pattern (questionIntents.LETS_PLAY_RE): punctuation
+        // after "play" and a curly apostrophe both count (prod tape 2026-09-29:
+        // "let's play, I'll be white" missed on the comma and went to the model).
+        { regex: LETS_PLAY_RE, stage: 'play-real' },
       ];
       // Translated once at the top of this turn — see the note there.
       const trimmed = englishText;
@@ -4647,9 +4650,9 @@ export function CoachTeachPage(): JSX.Element {
         // (hand walk 2026-09-25: it opened the picker at "Did you mean Italian
         // Game?"). The seat phrase and the bare "a game" are stripped before
         // asking whether anything names an opening.
-        const seatAsked = /\b(?:i'?ll\s+(?:be|play|take)|i'?m|i\s+am|as)\s+(white|black)\b/i.exec(stageStrippedInput)?.[1]?.toLowerCase() as 'white' | 'black' | undefined;
+        const seatAsked = /\b(?:i[’']?ll\s+(?:be|play|take)|i[’']?m|i\s+am|as)\s+(white|black)\b/i.exec(stageStrippedInput)?.[1]?.toLowerCase() as 'white' | 'black' | undefined;
         const withoutSeat = stageStrippedInput
-          .replace(/[,;]?\s*\b(?:i'?ll\s+(?:be|play|take)|i'?m|i\s+am|as)\s+(?:white|black)\b/gi, '')
+          .replace(/[,;]?\s*\b(?:i[’']?ll\s+(?:be|play|take)|i[’']?m|i\s+am|as)\s+(?:white|black)\b/gi, '')
           .replace(/^(?:a\s+|another\s+|some\s+)?(?:new\s+)?(?:game|match)\b[\s,.]*/i, '')
           .trim();
         if (stageHint === 'play-real' && seatAsked && withoutSeat === '' && !walkthrough.isActive && gameRef.current.history.length === 0) {

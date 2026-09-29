@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech, stripScaffolding } from './sanitizeCoachText';
+import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech, stripScaffolding, stripCoachMarkup } from './sanitizeCoachText';
 
 describe('sanitizeCoachText', () => {
   describe('passthrough', () => {
@@ -405,5 +405,16 @@ describe('sanitizeCoachText — prose "Board arrows:" leak (David 2026-06-16)', 
   it('leaves ordinary prose containing the word "arrows" alone', () => {
     const text = 'The arrows on the board point at the weak squares.';
     expect(sanitizeCoachText(text)).toBe(text);
+  });
+});
+
+describe('an unclosed [VOICE: opener (prod tape 2026-09-29, a typo question)', () => {
+  it('drops the opener and keeps the words — chat and voice', () => {
+    const raw = "[VOICE: You've got a clear edge, about a pawn and a half.";
+    expect(stripCoachMarkup(raw)).toBe("You've got a clear edge, about a pawn and a half.");
+    expect(sanitizeCoachText(raw)).not.toContain('[VOICE');
+  });
+  it('a CLOSED marker is still removed whole (negative control on the new rule)', () => {
+    expect(stripCoachMarkup('[VOICE: short] The full text.').trim()).toBe('The full text.');
   });
 });
