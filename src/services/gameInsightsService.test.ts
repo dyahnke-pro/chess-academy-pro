@@ -98,6 +98,7 @@ describe('gameInsightsService', () => {
   beforeAll(async () => { await import('./gameInsightsService'); }, 60000);
 
   beforeEach(async () => {
+    (await import('./gameInsightsService')).clearInsightStatsSession();
     await db.delete();
     await db.open();
     resetFactoryCounter();
