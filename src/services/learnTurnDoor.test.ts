@@ -67,7 +67,7 @@ describe('G8.5 — no lane without a live producer, no producer without a lane',
   it('every lane in the table is fed by live code in CoachTeachPage', () => {
     for (const lane of Object.keys(LEARN_LANES) as LearnLane[]) {
       if (VIA_BACKWARD_LOOK.has(lane)) continue;
-      const fed = new RegExp(`queueSpokenHint\\([^;]*'${lane}'|lane: '${lane}'|'${lane}' as const`).test(TEACH_CODE);
+      const fed = new RegExp(`queueSpokenHint\\([^;]*'${lane}'|deferIf\\([^;]*'${lane}'|lane: '${lane}'|'${lane}' as const`).test(TEACH_CODE);
       expect(fed, `lane '${lane}' is in the table and nothing feeds it`).toBe(true);
     }
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(cm\.fenAfter, look\.line, look\.kind\)/);
@@ -139,5 +139,20 @@ describe('WO-1b — one lead per turn', () => {
     // Purpose outranks description — the scoreboard's finding, pinned.
     expect(LEARN_LANES.movePoint.lead).toBeGreaterThan(LEARN_LANES.pieceQuality.lead);
     expect(LEARN_LANES.planArc.lead).toBeGreaterThan(LEARN_LANES.behavior.lead);
+  });
+});
+
+describe('WO-1b — board descriptions wait for the turn\'s one decision', () => {
+  it('the instant wave carries only urgent lanes; descriptions are deferred to the late wave', () => {
+    const start = TEACH_CODE.indexOf('const instantDecision = decideTurn([');
+    const end = TEACH_CODE.indexOf('learnMemRef.current.spokenKeys);', start);
+    const instantCall = TEACH_CODE.slice(start, end);
+    for (const lane of ['commentary', 'behavior', 'positional', 'kingSafety']) {
+      expect(instantCall, `${lane} speaks instantly again — it will lead the turn by arriving first`).not.toContain(`'${lane}'`);
+    }
+    // Positive control: the urgent lanes are still there.
+    for (const lane of ['gem', 'tactic', 'threat']) expect(instantCall).toContain(`'${lane}'`);
+    // …and the deferred ones reach the late wave.
+    expect(TEACH_CODE).toMatch(/for \(const d of instant\.deferred\) queueSpokenHint\(/);
   });
 });

@@ -215,6 +215,21 @@ import { warmAmateurPlay, getCachedAmateurPlay } from '../../services/amateurPla
 // by the student's hint register (David 2026-08-09: "Stronger player more
 // subtle and less often hints. Weaker player much more obvious").
 const REJECTED_TEMPTING_MAX_PER_GAME = 2;
+/** Lead-the-eye colour per spoken fact kind — ONE table for both waves. */
+const COLOR_FOR: Partial<Record<VoiceFactKind, string>> = {
+  threat: '#ef4444',   // coming AT the student
+  tactic: '#22c55e',   // theirs to find
+  gem: '#22c55e',
+  // A cost already paid, not a threat arriving.
+  drawback: '#f59e0b',
+  mistake: '#f59e0b',
+  // KEY SQUARES the computed board-read named — the lead-the-eye yellow
+  // (David 2026-09-13: "add highlights to all spoken key squares"). Covers
+  // the positional read + the Danya behaviours (both speak as `observation`
+  // now) — every square handed over on the fact gets marked.
+  observation: '#eab308',
+};
+
 const PRIORITY_FIRST_MIN_PLY_GAP = 10;
 import { captureEvent } from '../../services/analytics';
 
@@ -7476,6 +7491,8 @@ export function CoachTeachPage(): JSX.Element {
     /** The lane that led this wave (WO-1b) — the late wave may only lead
      *  over it by outranking it. */
     lead: TurnDecision['lead'];
+    /** Board descriptions for the late wave's one decision. */
+    deferred: Array<{ lane: LearnLane; text: string; squares?: readonly string[] }>;
     alertArrow: BoardArrow | null;
     leadEyeArrows: BoardArrow[];
     /** Lead-the-eye for the lanes that SPOKE — each kept fact's squares.
@@ -7502,7 +7519,7 @@ export function CoachTeachPage(): JSX.Element {
       const over = new Chess(args.fenAfterReply);
       if (over.isGameOver()) {
         return {
-          pkg: buildVoicePackage([]), lanes: '', lead: null, alertArrow: null, leadEyeArrows: [],
+          pkg: buildVoicePackage([]), lanes: '', lead: null, deferred: [], alertArrow: null, leadEyeArrows: [],
           keptHighlights: [],
         };
       }
@@ -8271,19 +8288,30 @@ export function CoachTeachPage(): JSX.Element {
     // doctrine keeps alongside the note, not the wordy lanes he flagged.
     const noteHere = !!curatedLine;
     const softStandDown = noteHere;
+    // DESCRIPTIONS WAIT FOR THE TURN'S ONE DECISION (WO-1b). The board reads
+    // (commentary, behaviour, positional, king safety) used to speak in this
+    // instant wave simply because they are cheap — and whatever speaks first
+    // leads. Now they ride the late wave, decided together with the engine
+    // lanes, so a board description can no longer take the turn from what a
+    // move is FOR. Only the urgent lanes speak instantly.
+    const deferred: Array<{ lane: LearnLane; text: string; squares?: readonly string[] }> = [];
+    const deferIf = (on: unknown, lane: LearnLane, text: string | null, squares?: readonly string[]): void => {
+      if (on && text) deferred.push({ lane, text, squares });
+    };
+    deferIf(computedLine && !softStandDown, 'commentary', computedLine);
+    deferIf(behaviorLine && !softStandDown && !decidedByMaterial, 'behavior', behaviorLine, behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)));
+    deferIf(positionalLine && !softStandDown && !decidedByMaterial, positionalIsOwnKing ? 'kingSafety' : 'positional', positionalLine, positionalSquares);
     const instantDecision = decideTurn([
       ...(gemLine ? [{ lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply }] : []),
       ...(tacticLine ? [{ lane: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares }] : []),
       ...(threatLine ? [{ lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares }] : []),
       ...(announceLine ? [{ lane: 'opening' as const, text: announceLine, fen: args.fenAfterReply }] : []),
-      ...(computedLine && !softStandDown ? [{ lane: 'commentary' as const, text: computedLine, fen: args.fenAfterReply }] : []),
       // Rate-matched Danya behavior — board-truth. MERGED with the positional
       // read into ONE board-read lane (David 2026-09-13: "computer and observation
       // can be merged"): it now speaks as `observation`, the single home for the
       // computer's board reads, so the two never split or duplicate (the outpost
       // both once computed is now one deduped lane). Stands down behind a note
       // and in a decided game (the contested gate).
-      ...(behaviorLine && !softStandDown && !decidedByMaterial ? [{ lane: 'behavior' as const, text: behaviorLine, fen: args.fenAfterReply, squares: behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)) }] : []),
       // The hand-written masterclass beat, verified before it shipped
       // (narrationAccuracy, lessonIntegrity). No corpus note rides free play.
       ...(curatedLine ? [{ lane: 'curated' as const, text: curatedLine, fen: args.fenAfterReply }] : []),
@@ -8306,7 +8334,6 @@ export function CoachTeachPage(): JSX.Element {
       // speaks in (the merge). Widened board-awareness pool (king, plan, minority,
       // outpost, passer, colour-complex, open file, lever, both sides). Stands
       // down behind a note and in a decided game (the contested gate).
-      ...(positionalLine && !softStandDown && !decidedByMaterial ? [{ lane: positionalIsOwnKing ? 'kingSafety' as const : 'positional' as const, text: positionalLine, fen: args.fenAfterReply, squares: positionalSquares }] : []),
       // priorKeys = every phrase spoken EARLIER this game, so no lane repeats a
       // phrase across turns (David 2026-09-13). Within-turn dedupe is separate
       // (the late package's `alreadySaid`); this is the cross-turn guarantee.
@@ -8349,19 +8376,6 @@ export function CoachTeachPage(): JSX.Element {
       // `said.includes(square)`, which is a validator on prose: it passes on an
       // accidental substring and fails on a square the sentence names in words.
       // Both were re-deriving downstream what the producer already knew.
-      const COLOR_FOR: Partial<Record<VoiceFactKind, string>> = {
-        threat: '#ef4444',   // coming AT the student
-        tactic: '#22c55e',   // theirs to find
-        gem: '#22c55e',
-        // A cost already paid, not a threat arriving.
-        drawback: '#f59e0b',
-        mistake: '#f59e0b',
-        // KEY SQUARES the computed board-read named — the lead-the-eye yellow
-        // (David 2026-09-13: "add highlights to all spoken key squares"). Covers
-        // the positional read + the Danya behaviours (both speak as `observation`
-        // now) — every square handed over on the fact gets marked.
-        observation: '#eab308',
-      };
       for (const f of pkg.kept) {
         const color = COLOR_FOR[f.kind];
         if (!color) continue;
@@ -8382,6 +8396,7 @@ export function CoachTeachPage(): JSX.Element {
       pkg,
       lanes: describeTurnDecision(instantDecision),
       lead: instantDecision.lead,
+      deferred,
       alertArrow,
       leadEyeArrows,
       keptHighlights,
@@ -9331,6 +9346,7 @@ export function CoachTeachPage(): JSX.Element {
                   studentColor: playerColor,
                 });
                 instantLead = instant.lead;
+                for (const d of instant.deferred) queueSpokenHint(ip.fen(), d.text, d.lane, d.squares);
                 turnLeadRef.current = instant.lead ? { fen: ip.fen(), lead: instant.lead } : null;
                 // THE PACKAGE IS THE UTTERANCE. This used to log `factLines`
                 // while speaking a separately-assembled `alertLine`/`teachLine`
@@ -9773,12 +9789,20 @@ export function CoachTeachPage(): JSX.Element {
                     // is the whole coupling and needs no check of its own.
                     // Amber throughout: everything queued here is retrospective
                     // (a cost already paid), never a threat arriving.
-                    const owed = markableSquares(hintPkg);
+                    // Coloured by the kind that spoke — the same table the
+                    // instant wave uses, now that board reads ride this wave
+                    // too. A kind with no colour of its own is retrospective
+                    // (a cost already paid): amber.
+                    const owed: BoardHighlight[] = [];
+                    for (const f of hintPkg.kept) {
+                      for (const sq of markableSquares({ kept: [f] })) {
+                        if (!owed.some((h) => h.square === sq)) owed.push({ square: sq, color: COLOR_FOR[f.kind] ?? '#f59e0b' });
+                      }
+                    }
                     if (owed.length > 0 && liveFenRef.current === fenAfterReply) {
                       setHighlights((prev) => {
                         const have = new Set(prev.map((h) => h.square));
-                        return [...prev, ...owed.filter((sq) => !have.has(sq))
-                          .map((square) => ({ square, color: '#f59e0b' }))];
+                        return [...prev, ...owed.filter((h) => !have.has(h.square))];
                       });
                     }
                     void logAppAudit({
