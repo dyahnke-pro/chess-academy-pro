@@ -2,6 +2,7 @@ import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { detectTacticType } from './missedTacticService';
 import { useAppStore } from '../stores/appStore';
+import { TACTIC_TYPE_REV } from './tacticTypeBackfill';
 import { PRODUCTION_BACKFILL_SCHEDULE, sleep, type BackfillSchedule } from './backfillSchedule';
 import type { ClassifiedTactic, TacticType, TacticMotifStats, GameRecord } from '../types';
 
@@ -146,15 +147,18 @@ export function getPrimaryThemeLabel(themes: string[]): string | null {
 // ─── Classify & Persist ─────────────────────────────────────────────────────
 
 /**
- * Classify a game's missed tactics and persist them, then mark the game
- * classified (`tacticsClassified`) so a game with ZERO missed tactics is not
- * re-derived on every read — that re-derivation, over every analysed game on
- * every open of /weaknesses, is what froze the app (2026-09-29).
+ * Classify a game's tactics — the ones the student MISSED (persisted as
+ * `classifiedTactics` rows) and the ones they FOUND (brilliant/great moves,
+ * stored on the game as `foundTacticTypes`) — then stamp the game with the
+ * classifier revision (`tacticsClassifiedRev`). Readers take both from here and
+ * never re-derive, because re-deriving over every analysed game on every open
+ * of /weaknesses is what froze the app (2026-09-29): the Tactics tab ran the
+ * classifier over every miss, the Patterns tab over every find, three times.
  *
- * Without `force`, a game already classified (marker set, or rows present from
- * before the marker existed) is only marked. After a fresh analysis the caller
- * passes `force` so the tactics are re-derived from the NEW annotations; the
- * drill counters on rows that survive are carried over.
+ * Without `force`, a game already stamped at the current revision is skipped.
+ * After a fresh analysis the caller passes `force` so both sides are re-derived
+ * from the NEW annotations; drill counters on surviving rows are carried over.
+ * A classifier change bumps `TACTIC_TYPE_REV`, which un-stamps every game.
  */
 export async function classifyTacticsFromGame(
   gameId: string,
@@ -162,16 +166,13 @@ export async function classifyTacticsFromGame(
 ): Promise<number> {
   const game = await db.games.get(gameId);
   if (!game || !game.annotations || game.annotations.length === 0) return 0;
+  if (!opts.force && game.tacticsClassifiedRev === TACTIC_TYPE_REV) return 0;
 
   const existing = await db.classifiedTactics.where('sourceGameId').equals(gameId).toArray();
-  if (!opts.force && (game.tacticsClassified || existing.length > 0)) {
-    if (!game.tacticsClassified) await db.games.update(gameId, { tacticsClassified: true });
-    return 0;
-  }
-
   const tactics = opts.yieldBetween
     ? await deriveMissedTacticsForGameYielding(game, opts.yieldBetween)
     : deriveMissedTacticsForGame(game);
+  const found = await deriveFoundTacticTypes(game, opts.yieldBetween);
   const prior = new Map(existing.map((t) => [t.id, t]));
   for (const t of tactics) {
     const was = prior.get(t.id);
@@ -185,9 +186,44 @@ export async function classifyTacticsFromGame(
   await db.transaction('rw', db.classifiedTactics, db.games, async () => {
     if (stale.length > 0) await db.classifiedTactics.bulkDelete(stale);
     if (tactics.length > 0) await db.classifiedTactics.bulkPut(tactics);
-    await db.games.update(gameId, { tacticsClassified: true });
+    await db.games.update(gameId, { tacticsClassifiedRev: TACTIC_TYPE_REV, foundTacticTypes: found });
   });
   return tactics.length;
+}
+
+/**
+ * The tactic types the student FOUND in a game: each of their brilliant/great
+ * moves, classified by the move they PLAYED (on such a move `bestMove` is null —
+ * the played move already is the best one). `tactical_sequence` is the
+ * catch-all bucket and is dropped. Yields between classifier calls when asked.
+ */
+export async function deriveFoundTacticTypes(
+  game: GameRecord,
+  yieldBetween?: () => Promise<void>,
+): Promise<TacticType[]> {
+  if (!game.annotations || game.annotations.length === 0) return [];
+  const playerColor = resolvePlayerColor(game);
+  if (!playerColor) return [];
+  const fens = replayPgnToFens(game.pgn);
+  const types: TacticType[] = [];
+  for (let i = 0; i < game.annotations.length; i++) {
+    const ann = game.annotations[i];
+    if (ann.color !== playerColor) continue;
+    if (ann.classification !== 'brilliant' && ann.classification !== 'great') continue;
+    const preFen = fens[i];
+    if (!preFen || !ann.san) continue;
+    let uci: string;
+    try {
+      const mv = new Chess(preFen).move(ann.san);
+      uci = `${mv.from}${mv.to}${mv.promotion ?? ''}`;
+    } catch {
+      continue; // illegal/unparseable SAN against the reconstructed FEN
+    }
+    if (yieldBetween) await yieldBetween();
+    const type = detectTacticType(preFen, uci);
+    if (type !== 'tactical_sequence') types.push(type);
+  }
+  return types;
 }
 
 /**
@@ -352,7 +388,7 @@ export function backfillClassifiedTactics(opts: {
   fillInFlight = (async () => {
     if (schedule.startDelayMs > 0) await sleep(schedule.startDelayMs);
     const pending = await db.games
-      .filter((g) => !g.tacticsClassified && !!g.annotations && g.annotations.length > 0)
+      .filter((g) => g.tacticsClassifiedRev !== TACTIC_TYPE_REV && !!g.annotations && g.annotations.length > 0)
       .primaryKeys();
     let total = 0;
     let done = 0;

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**309 lines · 9 exports · 2 importers · 1 tests · 1 audits**
+**418 lines · 10 exports · 2 importers · 1 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,7 +30,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:9480`
 - `src/components/Coach/CoachTeachPage.tsx:9484`
 - `src/services/lookaheadPlan.ts:1651`
-- `src/services/planArc.test.ts:28`
+- `src/services/planArc.test.ts:29`
 
 ### `ArcState` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -48,22 +48,35 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:9480`
 - `src/components/Coach/CoachTeachPage.tsx:9484`
 - `src/services/lookaheadPlan.ts:1651`
-- `src/services/planArc.test.ts:28`
-- `src/services/planArc.test.ts:93`
-- `src/services/planArc.test.ts:95`
-- `src/services/planArc.test.ts:100`
+- `src/services/planArc.test.ts:29`
+- `src/services/planArc.test.ts:94`
+- `src/services/planArc.test.ts:96`
 - `src/services/planArc.test.ts:101`
 - `src/services/planArc.test.ts:102`
-- `src/services/planArc.test.ts:104`
-- `src/services/planArc.test.ts:106`
-- `src/services/planArc.test.ts:110`
+- `src/services/planArc.test.ts:103`
+- `src/services/planArc.test.ts:105`
+- `src/services/planArc.test.ts:107`
 - `src/services/planArc.test.ts:111`
-- `src/services/planArc.test.ts:113`
-- `src/services/planArc.test.ts:117`
-- `src/services/planArc.test.ts:147`
+- `src/services/planArc.test.ts:112`
+- `src/services/planArc.test.ts:114`
+- `src/services/planArc.test.ts:118`
 - `src/services/planArc.test.ts:148`
-- `src/services/planArc.test.ts:153`
+- `src/services/planArc.test.ts:149`
 - `src/services/planArc.test.ts:154`
+- `src/services/planArc.test.ts:155`
+
+### `aimWalkableNow` (function) — 11 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9480`
+- `src/components/Coach/CoachTeachPage.tsx:9484`
+- `src/services/planArc.test.ts:182`
+- `src/services/planArc.test.ts:192`
+- `src/services/planArc.test.ts:198`
+- `src/services/planArc.test.ts:203`
+- `src/services/planArc.test.ts:210`
+- `src/services/planArc.test.ts:215`
+- `src/services/planArc.test.ts:224`
+- `src/services/planArc.test.ts:229`
+- `src/services/planArc.test.ts:233`
 
 ## Tests
 

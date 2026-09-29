@@ -202,7 +202,7 @@ import { parseEvalTable, pieceQualityLines, parseEvalSplit, evalSplitLine } from
 
 import { buildThinkAloud } from '../../services/thinkAloud';
 import { scaleGap, packageForRegister, readsForRegister } from '../../services/hintRegister';
-import { aimsOf, stepArc, EMPTY_ARC, type ArcState, planFromUci, keySquareLine, positionReadLine, lineShapeLine, terminalReadLine, tacticWord } from '../../services/lookaheadPlan';
+import { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcState, planFromUci, keySquareLine, positionReadLine, lineShapeLine, terminalReadLine, tacticWord } from '../../services/lookaheadPlan';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import type { LookaheadPlan } from '../../services/lookaheadPlan';
 import { planMarks } from '../../services/planMarks';
@@ -9480,17 +9480,21 @@ export function CoachTeachPage(): JSX.Element {
                         try {
                           const oppColor = playerColor === 'white' ? 'b' : 'w';
                           const studColor = playerColor === 'white' ? 'w' : 'b';
-                          const theirStep = stepArc(planArcRef.current.theirs, aimsOf(plan.theirs, 'opponent'),
+                          const theirStep = stepArc(planArcRef.current.theirs, aimsOf(plan.theirs, 'opponent').filter((a) => aimWalkableNow(a, probe.fen(), oppColor)),
                             { from: m.from, to: m.to, piece: m.piece, promotion: m.promotion }, probe.fen(), oppColor, 'opponent');
                           const studentPiece = new Chess(move.fen).get(move.to as Square)?.type ?? null;
                           const mineStep = studentPiece
-                            ? stepArc(planArcRef.current.mine, aimsOf(plan.mine, 'student'),
+                            ? stepArc(planArcRef.current.mine, aimsOf(plan.mine, 'student').filter((a) => aimWalkableNow(a, probe.fen(), studColor)),
                               { from: move.from, to: move.to, piece: studentPiece, promotion: move.promotion }, probe.fen(), studColor, 'student')
                             : null;
                           planArcRef.current = { theirs: theirStep.next, mine: mineStep?.next ?? planArcRef.current.mine };
                           const arcLines = [
                             ...theirStep.events.filter((e) => e.kind !== 'advance'),
-                            ...(mineStep?.events ?? []).filter((e) => e.kind === 'arrive' || e.kind === 'drop'),
+                            // The student's own plans are never ANNOUNCED on Learn (their emerge
+                            // is filtered), so their DROP is never said either: "You have let
+                            // an attack on their king go" for a plan the student never heard
+                            // (walk 2026-09-29). An arrival still speaks — it names the move.
+                            ...(mineStep?.events ?? []).filter((e) => e.kind === 'arrive'),
                           ];
                           for (const e of arcLines) {
                             const line = gradeNarrationText(e.text, probe.fen(), 'CoachTeachPage.planArc')?.trim();

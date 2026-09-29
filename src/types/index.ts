@@ -727,10 +727,14 @@ export interface GameRecord {
    *  annotation density (the old `annotations.length >= moves/2`
    *  heuristic). */
   fullyAnalyzed?: boolean;
-  /** Missed tactics for this game are in `classifiedTactics` (possibly zero).
-   *  Lets the Tactics tab read the cache instead of re-deriving every game on
-   *  every open. Cleared by nothing: a fresh analysis re-classifies with force. */
-  tacticsClassified?: boolean;
+  /** The classifier revision (`TACTIC_TYPE_REV`) this game's tactics were
+   *  classified at: missed ones are in `classifiedTactics` (possibly zero),
+   *  found ones in `foundTacticTypes`. Readers take them from there instead of
+   *  re-deriving the whole library on every open (2026-09-29 freeze). A fresh
+   *  analysis re-classifies with force; a classifier change un-stamps all. */
+  tacticsClassifiedRev?: string;
+  /** Tactic types of the student's brilliant/great moves in this game. */
+  foundTacticTypes?: TacticType[];
   /** Stockfish search depth the per-move eval curve was produced at
    *  (gameAnalysisService `ANALYSIS_DEPTH`). Drives accuracy: a shallow
    *  search misses the punishment of dubious moves and reads accuracy
