@@ -25,7 +25,7 @@ import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { transferClause, recordMotif, withTransfer } from '../../services/motifLedger';
-import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePackage, markableSquares, spokenSentenceKeys, type LearnLane, type VoicePackage, type VoiceFactKind } from '../../services/learnTurnDoor';
+import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePackage, markableSquares, spokenSentenceKeys, type LearnLane, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/learnTurnDoor';
 import { buildPositionalRead } from '../../services/positionalRead';
 import { curatedBeatAt } from '../../services/curatedBeatSource';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
@@ -7440,6 +7440,9 @@ export function CoachTeachPage(): JSX.Element {
     pkg: VoicePackage;
     /** Which lanes offered and which spoke — the door's record. */
     lanes: string;
+    /** The lane that led this wave (WO-1b) — the late wave may only lead
+     *  over it by outranking it. */
+    lead: TurnDecision['lead'];
     alertArrow: BoardArrow | null;
     leadEyeArrows: BoardArrow[];
     /** Lead-the-eye for the lanes that SPOKE — each kept fact's squares.
@@ -7466,7 +7469,7 @@ export function CoachTeachPage(): JSX.Element {
       const over = new Chess(args.fenAfterReply);
       if (over.isGameOver()) {
         return {
-          pkg: buildVoicePackage([]), lanes: '', alertArrow: null, leadEyeArrows: [],
+          pkg: buildVoicePackage([]), lanes: '', lead: null, alertArrow: null, leadEyeArrows: [],
           keptHighlights: [],
         };
       }
@@ -8096,6 +8099,7 @@ export function CoachTeachPage(): JSX.Element {
     let behaviorSquares: string[] = [];
     let positionalLine: string | null = null;
     let positionalSquares: readonly string[] = [];
+    let positionalIsOwnKing = false;
     // THE CONTESTED GATE (David 2026-09-13) — the standing board read stands down
     // in a DECIDED game: a positional lesson ("your knight has an outpost") is
     // noise when someone is up a queen. This is the non-count importance filter
@@ -8186,6 +8190,10 @@ export function CoachTeachPage(): JSX.Element {
           standingRef.current.remember(pr.key);
           positionalLine = pr.text;
           positionalSquares = prSquares;
+          // YOUR king in the centre with castling ready is a safety call, not
+          // a description — it outranks the board reads (hand walk 2026-09-29,
+          // ply 9: held behind "keep your knight on c3").
+          positionalIsOwnKing = pr.kind === 'king' && pr.side === 'student';
         }
       } catch { /* never a blocker */ }
     }
@@ -8265,7 +8273,7 @@ export function CoachTeachPage(): JSX.Element {
       // speaks in (the merge). Widened board-awareness pool (king, plan, minority,
       // outpost, passer, colour-complex, open file, lever, both sides). Stands
       // down behind a note and in a decided game (the contested gate).
-      ...(positionalLine && !softStandDown && !decidedByMaterial ? [{ lane: 'positional' as const, text: positionalLine, fen: args.fenAfterReply, squares: positionalSquares }] : []),
+      ...(positionalLine && !softStandDown && !decidedByMaterial ? [{ lane: positionalIsOwnKing ? 'kingSafety' as const : 'positional' as const, text: positionalLine, fen: args.fenAfterReply, squares: positionalSquares }] : []),
       // priorKeys = every phrase spoken EARLIER this game, so no lane repeats a
       // phrase across turns (David 2026-09-13). Within-turn dedupe is separate
       // (the late package's `alreadySaid`); this is the cross-turn guarantee.
@@ -8340,6 +8348,7 @@ export function CoachTeachPage(): JSX.Element {
     return {
       pkg,
       lanes: describeTurnDecision(instantDecision),
+      lead: instantDecision.lead,
       alertArrow,
       leadEyeArrows,
       keptHighlights,
@@ -9211,6 +9220,7 @@ export function CoachTeachPage(): JSX.Element {
             // student is never left in silence.
             const fenAfterReply = liveFenRef.current;
             let instantSpokenText = '';
+            let instantLead: TurnDecision['lead'] = null;
             let trackAStarted = false;
             // GENERATION TOKEN — the fix for the lost-line collision (David
             // 2026-08-07 log, findings 92-95): resetting `speechChainRef`
@@ -9287,6 +9297,7 @@ export function CoachTeachPage(): JSX.Element {
                   moveTo: im.to,
                   studentColor: playerColor,
                 });
+                instantLead = instant.lead;
                 // THE PACKAGE IS THE UTTERANCE. This used to log `factLines`
                 // while speaking a separately-assembled `alertLine`/`teachLine`
                 // pair — two truths for one turn, so the audit could report
@@ -9706,6 +9717,9 @@ export function CoachTeachPage(): JSX.Element {
                     pending.lines.map(({ lane, text, squares }) => ({ lane, text, squares, fen: pending.fen })),
                     instantSpokenText,
                     learnMemRef.current.spokenKeys,
+                    // ONE THOUGHT PER TURN (WO-1b): the late wave leads only
+                    // if it outranks what the instant wave led with.
+                    instantLead,
                   );
                   const hintPkg = lateDecision.pkg;
                   if (hintPkg.spoken) {

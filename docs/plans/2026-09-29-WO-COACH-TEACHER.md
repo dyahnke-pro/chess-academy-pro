@@ -151,7 +151,7 @@ Today (engineer map, `brainstorm-r1/engineer.md`): ~15 lanes. One (`computePosit
 | WO | status | owner |
 |---|---|---|
 | WO-0 bugs | ✅ 3/4 on main (PR #979); takeback stall open | this session |
-| WO-1 door | 🔵 1a ✅ on main (PR #976); 1a'' ✅ `facts[]` cut + causal chain spoken (PR #981); 1a' ✅ orphan cleanup (G8.5): 5 closed lanes + their producers deleted, the silent fork/think-aloud/improving/best-reply chain that out-ranked priority-first removed, the unspoken look-ahead paragraph (and its arrows, and its hold on the behaviour filler) removed, 6 dead modules deleted, gate in `learnTurnDoor.test.ts`. **On main + live (PR #980, verified in the deployed chunk).** 1b next | this session |
+| WO-1 door | 🔵 1a ✅ on main (PR #976); 1a'' ✅ `facts[]` cut + causal chain spoken (PR #981); 1a' ✅ orphan cleanup (G8.5): 5 closed lanes + their producers deleted, the silent fork/think-aloud/improving/best-reply chain that out-ranked priority-first removed, the unspoken look-ahead paragraph (and its arrows, and its hold on the behaviour filler) removed, 6 dead modules deleted, gate in `learnTurnDoor.test.ts`. **On main + live (PR #980, verified in the deployed chunk).** 1b ✅ one lead per turn (lead rank in `LEARN_LANES`, safety always rides, support shares squares, late wave leads only by outranking; hand walk 3UqPa5eV2e0 904→650 words, 51→40 sentences). OPEN: the phase-transition read speaks outside the door (3 lines at ply 11); 1c next | this session |
 | WO-2 plan thread | 🔵 step 1 ✅ on main (PR #977, #978: route identity + board check; lane open) | this session |
 | WO-3 BoardQuery chat | ⚪ | — |
 | WO-4 shrinking repeats | ⚪ | — |

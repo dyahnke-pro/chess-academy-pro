@@ -453,18 +453,7 @@ export function buildVoicePackage(
   // pawn can challenge." leading a whole turn. The position of a sentence has
   // no bearing on whether it starts with a capital; only whether it opens with
   // a move name does.
-  const sentence = (t: string): string => {
-    // Every line ENDS as a sentence before the join — the 2026-09-24 Learn tape
-    // ran "…against king on e1 Your king is still in the centre" together.
-    const bare = t.trim();
-    const trimmed = bare && !/[.!?…]["'’”)\]]*$/.test(bare) ? `${bare}.` : bare;
-    if (!trimmed) return trimmed;
-    // Leave an intentional lowercase opener alone when it is a SAN token
-    // ("dxe5 wins a pawn") — capitalising a move name would be wrong.
-    if (/^[a-h][1-8x]/.test(trimmed) || /^[KQRBN]x?[a-h][1-8]/.test(trimmed)) return trimmed;
-    return trimmed[0].toUpperCase() + trimmed.slice(1);
-  };
-  const spoken = kept.map((f) => sentence(f.text)).join(' ');
+  const spoken = joinSpoken(kept);
   return { spoken, kept, dropped };
 }
 
@@ -484,4 +473,22 @@ export function describeVoicePackage(pkg: VoicePackage): string {
   const kinds = pkg.kept.map((f) => f.kind).join('+') || 'silent';
   const why = pkg.dropped.map((d) => `${d.fact.kind}:${d.reason}`).join(', ');
   return why ? `${kinds} (dropped ${why})` : kinds;
+}
+
+/** The utterance for a list of kept facts: each a full sentence, capitalised
+ *  unless it opens with a move name. Exported so a caller that SELECTS from
+ *  `kept` (the Learn door's lead pick) renders exactly as the package does. */
+export function joinSpoken(kept: readonly VoiceFact[]): string {
+  const sentence = (t: string): string => {
+    // Every line ENDS as a sentence before the join — the 2026-09-24 Learn tape
+    // ran "…against king on e1 Your king is still in the centre" together.
+    const bare = t.trim();
+    const trimmed = bare && !/[.!?…]["'’”)\]]*$/.test(bare) ? `${bare}.` : bare;
+    if (!trimmed) return trimmed;
+    // Leave an intentional lowercase opener alone when it is a SAN token
+    // ("dxe5 wins a pawn") — capitalising a move name would be wrong.
+    if (/^[a-h][1-8x]/.test(trimmed) || /^[KQRBN]x?[a-h][1-8]/.test(trimmed)) return trimmed;
+    return trimmed[0].toUpperCase() + trimmed.slice(1);
+  };
+  return kept.map((f) => sentence(f.text)).join(' ');
 }

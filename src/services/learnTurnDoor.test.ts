@@ -67,7 +67,7 @@ describe('G8.5 — no lane without a live producer, no producer without a lane',
   it('every lane in the table is fed by live code in CoachTeachPage', () => {
     for (const lane of Object.keys(LEARN_LANES) as LearnLane[]) {
       if (VIA_BACKWARD_LOOK.has(lane)) continue;
-      const fed = new RegExp(`queueSpokenHint\\([^;]*'${lane}'|lane: '${lane}'`).test(TEACH_CODE);
+      const fed = new RegExp(`queueSpokenHint\\([^;]*'${lane}'|lane: '${lane}'|'${lane}' as const`).test(TEACH_CODE);
       expect(fed, `lane '${lane}' is in the table and nothing feeds it`).toBe(true);
     }
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(cm\.fenAfter, look\.line, look\.kind\)/);
@@ -79,5 +79,65 @@ describe('G8.5 — no lane without a live producer, no producer without a lane',
       'lookaheadPlanRef', 'planSaidRef', 'planMarks(', 'trackABestReply', 'factLines', 'borrowedLine']) {
       expect(TEACH_CODE.includes(gone), `${gone} is back in CoachTeachPage`).toBe(false);
     }
+  });
+});
+
+describe('WO-1b — one lead per turn', () => {
+  const F3 = 'Your knight on f3 attacks the pawn on e5.';
+  const C6 = 'Their knight on c6 defends the pawn on e5.';
+  const F1 = 'Your bishop on f1 can come out to c4.';
+
+  it('the highest-ranked survivor leads and OPENS the utterance', () => {
+    const d = decideTurn([
+      { lane: 'pieceQuality', text: F3, fen: FEN, squares: ['f3', 'e5'] },
+      { lane: 'register', text: C6, fen: FEN, squares: ['c6', 'e5'] },
+    ]);
+    expect(d.lead?.lane).toBe('register');
+    expect(d.pkg.spoken.startsWith('Their knight on c6')).toBe(true);
+  });
+
+  it('a fact that shares a square with the lead supports it; one that shares nothing is held', () => {
+    const d = decideTurn([
+      { lane: 'register', text: C6, fen: FEN, squares: ['c6', 'e5'] },
+      { lane: 'pieceQuality', text: F3, fen: FEN, squares: ['f3', 'e5'] },
+      { lane: 'behavior', text: F1, fen: FEN, squares: ['f1', 'c4'] },
+    ]);
+    expect(d.spoke).toEqual(expect.arrayContaining(['register', 'pieceQuality']));
+    // Negative control: the unrelated description is held, not spoken.
+    expect(d.held).toContain('behavior');
+    expect(d.pkg.spoken).not.toContain('f1');
+  });
+
+  it('SAFETY FLOOR — a threat speaks even when something else leads', () => {
+    const d = decideTurn([
+      { lane: 'gem', text: C6, fen: FEN, squares: ['c6'] },
+      { lane: 'threat', text: F1, fen: FEN, squares: ['f1', 'c4'] },
+    ]);
+    expect(d.lead?.lane).toBe('gem');
+    expect(d.spoke).toContain('threat');
+  });
+
+  it('the late wave leads only by outranking the instant lead; safety still rides', () => {
+    const prior = { lane: 'gem' as const, squares: ['a1'] };
+    const d = decideTurn([
+      { lane: 'pieceQuality', text: F3, fen: FEN, squares: ['f3', 'e5'] },
+      { lane: 'threat', text: F1, fen: FEN, squares: ['f1', 'c4'] },
+    ], undefined, undefined, prior);
+    expect(d.lead).toBeNull();
+    expect(d.held).toEqual(['pieceQuality']);
+    expect(d.spoke).toEqual(['threat']);
+    // …and a higher-ranked late fact does lead.
+    const lower = { lane: 'pieceQuality' as const, squares: ['a1'] };
+    const d2 = decideTurn([{ lane: 'register', text: C6, fen: FEN, squares: ['c6'] }], undefined, undefined, lower);
+    expect(d2.lead?.lane).toBe('register');
+  });
+
+  it('every lane declares a lead rank; the safety lanes are always-on', () => {
+    for (const [lane, rule] of Object.entries(LEARN_LANES)) expect(typeof rule.lead, lane).toBe('number');
+    expect(LEARN_LANES.threat.always).toBe(true);
+    expect(LEARN_LANES.gem.always).toBe(true);
+    // Purpose outranks description — the scoreboard's finding, pinned.
+    expect(LEARN_LANES.movePoint.lead).toBeGreaterThan(LEARN_LANES.pieceQuality.lead);
+    expect(LEARN_LANES.planArc.lead).toBeGreaterThan(LEARN_LANES.behavior.lead);
   });
 });
