@@ -9,6 +9,7 @@
  * / reset_board markers parsed from its response. Same room, different
  * actions.
  */
+import { characterOf, stepCharacter, EMPTY_CHARACTER, type CharacterState } from '../../services/positionCharacter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStandingFactMemory, fullmoveOf } from '../../services/standingFactMemory';
 import { createLearnMemory, type LearnMemory } from '../../services/learnMemory';
@@ -1684,6 +1685,7 @@ export function CoachTeachPage(): JSX.Element {
     liveGradesRef.current.clear();
     fundamentalSeenRef.current.clear();
     planArcRef.current = { theirs: EMPTY_ARC, mine: EMPTY_ARC };
+    characterRef.current = EMPTY_CHARACTER;
     positionalSaidRef.current.clear();
     rejectedTemptingCountRef.current = 0;
     priorityFirstLastPlyRef.current = -999;
@@ -1744,6 +1746,8 @@ export function CoachTeachPage(): JSX.Element {
    *  they want now and never "there it is — that was the plan" or "they have
    *  given it up". Per game, reset with the other page refs. */
   const planArcRef = useRef<{ theirs: ArcState; mine: ArcState }>({ theirs: EMPTY_ARC, mine: EMPTY_ARC });
+  /** What the position is about, followed across the game (WO-2). */
+  const characterRef = useRef<CharacterState>(EMPTY_CHARACTER);
   /** The moment Stockfish reports a forced mate FOR the student, the async engine
    *  pass flags it here (keyed by the FEN it read) so the instant package can call
    *  the mating NET at mate-in-N — not wait for the board to reach mate-in-1
@@ -9087,6 +9091,30 @@ export function CoachTeachPage(): JSX.Element {
                         queueSpokenHint(probe.fen(), packageForRegister(rt.hint, discussion.hintDial.register), 'rejectedTempting');
                       }
                     }
+
+                    // WHAT THE POSITION IS ABOUT, AND WHEN THAT CHANGES (WO-2,
+                    // David 2026-09-29: "Tactical to positional back to
+                    // tactics"). Computed off this same read: a tactic live on
+                    // the board, the gap between the engine's two best moves,
+                    // and the material. Spoken only when a new character holds
+                    // for two reads.
+                    try {
+                      const cc: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
+                      const tctxNow = buildTacticsLiveContext(probe.fen(), studentBest, cc, rating);
+                      const tl = studentBest?.topLines ?? [];
+                      const gap = tl.length >= 2 && typeof tl[0].evaluation === 'number' && typeof tl[1].evaluation === 'number'
+                        ? Math.abs(tl[0].evaluation - tl[1].evaluation)
+                        : null;
+                      const now = characterOf({
+                        fen: probe.fen(),
+                        studentColor: playerColor,
+                        tacticLive: tctxNow.immediate.length > 0 || tctxNow.hanging.length > 0,
+                        bestGapCp: gap,
+                      });
+                      const step = stepCharacter(characterRef.current, now);
+                      characterRef.current = step.next;
+                      if (step.switched) queueSpokenHint(probe.fen(), step.switched.text, 'character');
+                    } catch { /* the character read is a bonus, never a blocker */ }
 
                     // BOTH SIDES' PLANS, off the SAME engine read (David
                     // 2026-08-09: "We will need to know the plans for both

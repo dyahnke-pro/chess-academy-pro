@@ -12,20 +12,9 @@
  * and the result.
  */
 
-const PIECE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 
 /** Material balance from a FEN — positive = White ahead, in points. */
-export function materialBalance(fen: string): number {
-  const board = fen.split(' ')[0];
-  let bal = 0;
-  for (const ch of board) {
-    const lower = ch.toLowerCase();
-    const v = PIECE_VALUE[lower];
-    if (v === undefined) continue;
-    bal += ch === lower ? -v : v; // lowercase = Black, uppercase = White
-  }
-  return bal;
-}
+export { materialBalance };
 
 /** Total non-pawn, non-king material on the board (both sides), in points. */
 export function nonPawnMaterial(fen: string): number {
@@ -33,11 +22,12 @@ export function nonPawnMaterial(fen: string): number {
   let total = 0;
   for (const ch of board) {
     const l = ch.toLowerCase();
-    if (l === 'n' || l === 'b' || l === 'r' || l === 'q') total += PIECE_VALUE[l];
+    if (l === 'n' || l === 'b' || l === 'r' || l === 'q') total += MATERIAL_VALUE[l];
   }
   return total;
 }
 
+import { materialBalance, MATERIAL_VALUE } from './pieceValues';
 import type { GamePhase } from '../types';
 export type { GamePhase };
 

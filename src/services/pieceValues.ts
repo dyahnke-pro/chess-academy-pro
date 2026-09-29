@@ -45,3 +45,16 @@ export const CAPTURE_VALUE: Readonly<Record<string, number>> = Object.freeze({
 export const MATERIAL_VALUE_BY_NAME: Readonly<Record<string, number>> = Object.freeze({
   pawn: 1, knight: 3, bishop: 3, rook: 5, queen: 9, king: 0,
 });
+
+/** Non-king material balance, WHITE minus BLACK, in pawns (MATERIAL semantics,
+ *  king 0). The one reader of the question — three private copies of it, each
+ *  with its own value table, were folded here 2026-09-29. */
+export function materialBalance(fen: string): number {
+  let bal = 0;
+  for (const ch of fen.split(' ')[0] ?? '') {
+    const v = MATERIAL_VALUE[ch.toLowerCase()];
+    if (!v) continue;
+    bal += ch === ch.toUpperCase() ? v : -v;
+  }
+  return bal;
+}
