@@ -22,7 +22,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `planMarks` (function) — 25 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9855`
+- `src/components/Coach/CoachTeachPage.tsx:9841`
 - `src/services/coachLaneWiring.test.ts:41`
 - `src/services/planMarks.safeNow.test.ts:21`
 - `src/services/planMarks.test.ts:51`

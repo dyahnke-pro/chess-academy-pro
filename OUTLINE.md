@@ -22,10 +22,10 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 ---
 
 ## 000. WO-ARROW-01 — one arrow door
-- ✅ door + tests · 🔴 Learn (13 producers) · 🔴 walkthrough · 🔴 Review · 🔴 Play/Openings/chat · 🔴 gate
+- ✅ door + tests · ✅ Learn · ✅ walkthrough · ✅ Review · ✅ Play/Openings/chat/trainers · ✅ gate (ceiling empty — no file outside the door builds an arrow)
 
 ## 00a. Naroditsky re-evaluation (2026-09-29)
-- 🔴 scoreboard vs his 430 games · 🔴 intent ledger · 🔴 one thread per move · 🔴 gaps by scoreboard
+- 🟠 scoreboard v1: 20.7% reach on 50 games (PLAN §SCOREBOARD) — widen harvest to all lanes + opponent plies · 🔴 intent ledger · 🔴 one thread per move · 🔴 gaps by scoreboard
 
 ## 00. WO-ACC-01 — measured accuracy to 97% before new computers (David 2026-09-27)
 - ✅ Claim checker built: 100 real games (50 Naroditsky, 50 amateur), engine-annotated; harvest + independent board/engine verify (PLAN §WO-ACC-01).

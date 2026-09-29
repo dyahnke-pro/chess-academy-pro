@@ -24,6 +24,7 @@ import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { logAppAudit } from '../../services/appAuditor';
 import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation, AnalysisLine, LichessCloudEval } from '../../types';
 import { ArrowLeft, Play, Pause, Info } from 'lucide-react';
+import { narrationArrowsThroughDoor } from '../../services/arrowDoor';
 
 export interface WalkthroughModeProps {
   opening: OpeningRecord;
@@ -702,12 +703,8 @@ export function WalkthroughMode({
   // board (react-chessboard treats missing prop as uncontrolled).
   const boardArrows = useMemo(() => {
     if (!currentAnnotation?.arrows || visibleArrowCount === 0) return [];
-    return currentAnnotation.arrows.slice(0, visibleArrowCount).map((a) => ({
-      startSquare: a.from,
-      endSquare: a.to,
-      color: a.color ?? 'rgba(0, 180, 80, 0.8)',
-    }));
-  }, [currentAnnotation, visibleArrowCount]);
+    return narrationArrowsThroughDoor(currentAnnotation.arrows.slice(0, visibleArrowCount), { fen: currentFen, studentColor: opening.color }, 'book', 'walkthroughMode');
+  }, [currentAnnotation, visibleArrowCount, currentFen, opening.color]);
 
   const boardHighlights = useMemo(() => {
     if (!currentAnnotation?.highlights || visibleHighlightCount === 0) return undefined;

@@ -20,6 +20,8 @@ import {
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { LessonScaffold } from './LessonScaffold';
 import type { ModelGame, ModelGameCriticalMoment, AnnotationArrow } from '../../types';
+import { narrationArrowsThroughDoor } from '../../services/arrowDoor';
+import type { BoardArrow } from '../../types';
 
 interface ModelGameViewerProps {
   game: ModelGame;
@@ -76,9 +78,11 @@ export function getCriticalMomentForMove(
   );
 }
 
-function annotationArrowsToBoard(arrows: AnnotationArrow[] | undefined): Array<{ startSquare: string; endSquare: string; color: string }> {
+/** A critical moment's authored arrows, through the arrow door's lesson
+ *  mapping on the board shown (a real game: vouched by the book). */
+function annotationArrowsToBoard(arrows: AnnotationArrow[] | undefined, fen: string, studentColor: 'white' | 'black'): BoardArrow[] {
   if (!arrows) return [];
-  return arrows.map((a) => ({ startSquare: a.from, endSquare: a.to, color: a.color ?? 'rgba(0, 128, 0, 0.8)' }));
+  return narrationArrowsThroughDoor(arrows, { fen, studentColor }, 'book', 'modelGame');
 }
 
 export function ModelGameViewer({
@@ -142,7 +146,7 @@ export function ModelGameViewer({
   }, [criticalMoment]);
 
   const customArrows = criticalMoment
-    ? annotationArrowsToBoard(criticalMoment.arrows)
+    ? annotationArrowsToBoard(criticalMoment.arrows, currentFen, boardOrientation)
     : [];
 
   const goFirst = useCallback((): void => {

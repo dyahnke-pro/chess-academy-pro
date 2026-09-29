@@ -16,6 +16,7 @@ import { usePieceSound } from '../../hooks/usePieceSound';
 import { getRepertoireOpenings, recordDrillAttempt } from '../../services/openingService';
 import type { OpeningRecord, HintLevel, BoardArrow } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
+import { admitArrow } from '../../services/arrowDoor';
 
 export interface BlindfolTrainerProps {
   onExit: () => void;
@@ -210,12 +211,13 @@ export function BlindfolTrainer({ onExit }: BlindfolTrainerProps): JSX.Element {
     setHintsUsed((prev) => prev + 1);
 
     const expected = expectedMoves[currentMoveIndex];
-    setHintArrows([{
-      startSquare: expected.from,
-      endSquare: expected.to,
-      color: 'rgba(245, 158, 11, 0.7)',
-    }]);
-  }, [currentMoveIndex, expectedMoves, hintLevel]);
+    // The line's own next move (book), through the arrow door.
+    const hint = admitArrow(
+      { from: expected.from, to: expected.to, role: 'play', vouchedBy: 'book', source: 'blindfold.hint' },
+      { fen: currentFen, studentColor: currentOpening?.color ?? 'white' },
+    );
+    setHintArrows(hint ? [hint] : []);
+  }, [currentMoveIndex, expectedMoves, hintLevel, currentFen, currentOpening?.color]);
 
   // Start a new opening
   const startOpening = useCallback((opening: OpeningRecord): void => {

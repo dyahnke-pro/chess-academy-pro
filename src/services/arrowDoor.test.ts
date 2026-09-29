@@ -120,3 +120,36 @@ describe('arrowDoor — missed (better move shown on the board after)', () => {
     expect(refusalFor({ from: 'c6', to: 'b4', role: 'missed', fen: before, source: 't' }, { fen: after, studentColor: 'black' })).toBe('moved-away');
   });
 });
+
+describe('narrationArrowsThroughDoor — authored routes', () => {
+  it('a knight route Nb1–d2–f1–g3 keeps every hop; a red "don\'t" arrow is dropped', async () => {
+    const { narrationArrowsThroughDoor } = await import('./arrowDoor');
+    const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+    const out = narrationArrowsThroughDoor([
+      { from: 'g1', to: 'e2', color: 'green' },
+      { from: 'e2', to: 'g3', color: 'green' },
+      { from: 'g3', to: 'f5', color: 'green' },
+      { from: 'd2', to: 'd4', color: 'red' },
+    ], { fen: '4k3/8/8/8/8/8/8/6NK w - - 0 1', studentColor: 'white' }, 'book', 't');
+    expect(out.map((a) => `${a.startSquare}${a.endSquare}`)).toEqual(['g1e2', 'e2g3', 'g3f5']);
+    void fen;
+  });
+});
+
+// Ported from the deleted `groundArrows` tests — the same geometry, now the
+// door's sight-line check.
+describe('arrowDoor — vision geometry (ported from arrowGrounding)', () => {
+  const start = { fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', studentColor: 'white' as const };
+  it('a knight sees on its L, not in a straight line', () => {
+    expect(refusalFor({ from: 'g1', to: 'f3', role: 'vision', source: 't' }, start)).toBeNull();
+    expect(refusalFor({ from: 'g1', to: 'g3', role: 'vision', source: 't' }, start)).toBe('no-sight');
+  });
+  it('an empty start square is refused', () => {
+    expect(refusalFor({ from: 'e4', to: 'e5', role: 'vision', source: 't' }, start)).toBe('no-piece');
+  });
+  it('a slider blocked by its own pawn does not see past it; a clear path does', () => {
+    expect(refusalFor({ from: 'f1', to: 'c4', role: 'vision', source: 't' }, start)).toBe('no-sight');
+    const open = { fen: 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2', studentColor: 'white' as const };
+    expect(refusalFor({ from: 'f1', to: 'c4', role: 'vision', source: 't' }, open)).toBeNull();
+  });
+});

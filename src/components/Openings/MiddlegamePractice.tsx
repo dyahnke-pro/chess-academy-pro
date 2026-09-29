@@ -24,6 +24,7 @@ import type {
 import type { MoveResult } from '../../hooks/useChessGame';
 import { GameChatPanel } from '../Coach/GameChatPanel';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
+import { admitArrows, type ArrowClaim } from '../../services/arrowDoor';
 
 interface MiddlegamePracticeProps {
   plan: MiddlegamePlan;
@@ -36,9 +37,6 @@ interface CoachMessage {
   content: string;
 }
 
-const BEST_MOVE_COLOR = 'rgba(255, 215, 0, 0.85)';
-const ALT_MOVE_COLOR_2 = 'rgba(148, 163, 184, 0.5)';
-const ALT_MOVE_COLOR_3 = 'rgba(148, 163, 184, 0.35)';
 
 function uciToSquares(uci: string): { from: string; to: string } {
   return { from: uci.slice(0, 2), to: uci.slice(2, 4) };
@@ -82,24 +80,24 @@ function stripLeadingMoveCitation(text: string): string {
   return text.replace(LEADING_CITATION_RE, '');
 }
 
-function buildEngineArrows(analysis: StockfishAnalysis): BoardArrow[] {
-  const arrows: BoardArrow[] = [];
-  const colors = [BEST_MOVE_COLOR, ALT_MOVE_COLOR_2, ALT_MOVE_COLOR_3];
+/** The engine's top moves, ranked, through the arrow door on `fen`. */
+function buildEngineArrows(analysis: StockfishAnalysis, fen: string, studentColor: 'white' | 'black'): BoardArrow[] {
+  const claims: ArrowClaim[] = [];
 
   for (let i = 0; i < analysis.topLines.length && i < 3; i++) {
     const line = analysis.topLines[i];
     const move = line.moves[0];
     if (!move) continue;
     const { from, to } = uciToSquares(move);
-    arrows.push({ startSquare: from, endSquare: to, color: colors[i] });
+    claims.push({ from, to, role: 'play', rank: i + 1, vouchedBy: 'engine', source: 'middlegamePractice' });
   }
 
-  if (arrows.length === 0 && analysis.bestMove) {
+  if (claims.length === 0 && analysis.bestMove) {
     const { from, to } = uciToSquares(analysis.bestMove);
-    arrows.push({ startSquare: from, endSquare: to, color: BEST_MOVE_COLOR });
+    claims.push({ from, to, role: 'play', rank: 1, vouchedBy: 'engine', source: 'middlegamePractice' });
   }
 
-  return arrows;
+  return admitArrows(claims, { fen, studentColor }).arrows;
 }
 
 export function MiddlegamePractice({
@@ -127,7 +125,7 @@ export function MiddlegamePractice({
   // Mounts the SAME `GameChatPanel` /coach/play uses → routes through
   // coachService.ask, so this surface inherits the full grounded stack by
   // reuse (live tactics + the centralized trap scan + master-play + book/plan
-  // grounding + groundArrows + the panel's audit instrumentation). Q&A +
+  // grounding + the arrow door + the panel's audit instrumentation). Q&A +
   // arrows only — no move-mutation handlers, so the practice loop is untouched.
   const [chatOpen, setChatOpen] = useState(false);
   const [chatArrows, setChatArrows] = useState<BoardArrow[]>([]);
@@ -181,7 +179,7 @@ export function MiddlegamePractice({
       setEngineAnalysis(analysis);
       setTopLines(analysis.topLines);
       if (showEngineLines) {
-        setEngineArrows(buildEngineArrows(analysis));
+        setEngineArrows(buildEngineArrows(analysis, fen, playerColor));
       } else {
         setEngineArrows([]);
       }
@@ -392,7 +390,7 @@ export function MiddlegamePractice({
     try {
       const analysis = engineAnalysis ?? await stockfishEngine.queueAnalysis(game.fen, 16);
       if (!isMountedRef.current) return;
-      setEngineArrows(buildEngineArrows(analysis));
+      setEngineArrows(buildEngineArrows(analysis, game.fen, playerColor));
     } catch {
       // Engine unavailable — hint silently fails
     }

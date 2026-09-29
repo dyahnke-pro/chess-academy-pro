@@ -27,6 +27,8 @@ import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { BOARD_DEMO_ANIMATION_MS } from '../../hooks/useBoardTheme';
 import type { PlayableMiddlegameLine, AnnotationArrow, AnnotationHighlight } from '../../types';
 import type { PieceDropHandlerArgs, SquareHandlerArgs } from 'react-chessboard';
+import { admitArrow, narrationArrowsThroughDoor } from '../../services/arrowDoor';
+import type { BoardArrow } from '../../types';
 
 interface PlayableLinePlayerProps {
   line: PlayableMiddlegameLine;
@@ -59,15 +61,15 @@ export type PlayMode = 'watch' | 'learn' | 'practice';
 
 type Phase = 'demo' | 'memory';
 
+/** A line's authored arrows through the arrow door's lesson mapping, checked
+ *  on the board they were authored for (routes hop by hop). */
 function arrowsToBoard(
   arrows: AnnotationArrow[] | undefined,
-): Array<{ startSquare: string; endSquare: string; color: string }> {
+  fen: string,
+  studentColor: 'white' | 'black',
+): BoardArrow[] {
   if (!arrows || arrows.length === 0) return [];
-  return arrows.map((a) => ({
-    startSquare: a.from,
-    endSquare: a.to,
-    color: a.color ?? 'rgba(0, 128, 0, 0.8)',
-  }));
+  return narrationArrowsThroughDoor(arrows, { fen, studentColor }, 'book', 'playableLine');
 }
 
 // How long the "Line Mastered!" celebration lingers before it auto-advances
@@ -230,10 +232,10 @@ export function PlayableLinePlayer({
     return demoFenAtIndex(demoMoveIndex);
   }, [demoMoveIndex, demoFenAtIndex, line.fen]);
 
-  const currentDemoArrows = useMemo((): Array<{ startSquare: string; endSquare: string; color: string }> => {
+  const currentDemoArrows = useMemo((): BoardArrow[] => {
     // Intro beat: the plan's idea arrows (breaks + future-open lines) on the
     // static critical position, before any move.
-    if (demoMoveIndex < 0) return arrowsToBoard(line.intro?.arrows);
+    if (demoMoveIndex < 0) return arrowsToBoard(line.intro?.arrows, line.fen, boardOrientation);
     const authored = demoMoveIndex < (line.arrows ?? []).length ? (line.arrows?.[demoMoveIndex] ?? []) : [];
     // LEAD THE EYE on every move the annotation MENTIONS but doesn't play
     // out (David 2026-07-30) — future plans, opponent replies, named
@@ -243,8 +245,8 @@ export function PlayableLinePlayer({
     const mentioned = say
       ? mentionedMoveArrows(say, demoFenAtIndex(demoMoveIndex), authored.map((a) => ({ from: a.from, to: a.to })))
       : [];
-    return arrowsToBoard([...authored, ...mentioned]);
-  }, [demoMoveIndex, line.arrows, line.intro, line.annotations, demoFenAtIndex]);
+    return arrowsToBoard([...authored, ...mentioned], demoFenAtIndex(demoMoveIndex), boardOrientation);
+  }, [demoMoveIndex, line.arrows, line.intro, line.annotations, line.fen, demoFenAtIndex, boardOrientation]);
 
   // Lead-the-eye highlights — light up exactly the squares the current
   // annotation names so the student looks where the words point instead
@@ -671,17 +673,21 @@ export function PlayableLinePlayer({
 
   // Learn mode shows the move's arrows live (voice-guided). Practice shows
   // nothing until the student taps Hint, which reveals just the move arrow.
-  const memoryHintArrows = useMemo((): Array<{ startSquare: string; endSquare: string; color: string }> => {
+  const memoryHintArrows = useMemo((): BoardArrow[] => {
     if (phase !== 'memory' || memoryComplete) return [];
     if (guided && memoryMoveIndex < (line.arrows ?? []).length) {
-      return arrowsToBoard(line.arrows[memoryMoveIndex]);
+      // The same per-move arrows the demo shows, checked on the board they
+      // were authored for.
+      return arrowsToBoard(line.arrows[memoryMoveIndex], demoFenAtIndex(memoryMoveIndex), boardOrientation);
     }
     if (showHint && memoryMoveIndex < expectedMoves.length) {
+      // The line's own next move (book), on the board the student faces.
       const mv = expectedMoves[memoryMoveIndex];
-      return [{ startSquare: mv.from, endSquare: mv.to, color: 'rgba(255, 165, 0, 0.85)' }];
+      const hint = admitArrow({ from: mv.from, to: mv.to, role: 'play', vouchedBy: 'book', source: 'playableLine.hint' }, { fen: memoryFen, studentColor: boardOrientation });
+      return hint ? [hint] : [];
     }
     return [];
-  }, [guided, phase, memoryComplete, memoryMoveIndex, line.arrows, showHint, expectedMoves]);
+  }, [guided, phase, memoryComplete, memoryMoveIndex, line.arrows, showHint, expectedMoves, demoFenAtIndex, boardOrientation, memoryFen]);
 
   const handleRetryMemory = useCallback((): void => {
     chessRef.current = new Chess(line.fen);

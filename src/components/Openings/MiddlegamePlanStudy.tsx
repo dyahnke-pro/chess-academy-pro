@@ -5,6 +5,8 @@ import { MiddlegamePractice } from './MiddlegamePractice';
 import { voiceService } from '../../services/voiceService';
 import { captureEvent } from '../../services/analytics';
 import { motion, AnimatePresence } from 'framer-motion';
+import { narrationArrowsThroughDoor } from '../../services/arrowDoor';
+import type { BoardArrow } from '../../types';
 import {
   ArrowLeft,
   ChevronLeft,
@@ -41,15 +43,15 @@ const SECTIONS: { key: PlanSection; label: string; icon: typeof Compass }[] = [
   { key: 'endgames', label: 'Endgames', icon: Flag },
 ];
 
+/** Authored plan arrows through the arrow door's lesson mapping, on the board
+ *  they are shown on (routes checked hop by hop). */
 function arrowsToBoard(
   arrows: AnnotationArrow[] | undefined,
-): Array<{ startSquare: string; endSquare: string; color: string }> {
+  fen: string,
+  studentColor: 'white' | 'black',
+): BoardArrow[] {
   if (!arrows) return [];
-  return arrows.map((a) => ({
-    startSquare: a.from,
-    endSquare: a.to,
-    color: a.color ?? 'rgba(0, 128, 0, 0.8)',
-  }));
+  return narrationArrowsThroughDoor(arrows, { fen, studentColor }, 'book', 'middlegamePlanStudy');
 }
 
 function highlightsToBoard(
@@ -116,7 +118,7 @@ export function MiddlegamePlanStudy({
       const pb = plan.pawnBreaks[pawnBreakIndex];
       return {
         displayFen: pb.fen || plan.criticalPositionFen,
-        displayArrows: arrowsToBoard(pb.arrows),
+        displayArrows: arrowsToBoard(pb.arrows, pb.fen || plan.criticalPositionFen, boardOrientation),
         displayHighlights: [] as Array<{ square: string; color: string }>,
       };
     }
@@ -124,16 +126,16 @@ export function MiddlegamePlanStudy({
       const m = plan.pieceManeuvers[maneuverIndex];
       return {
         displayFen: plan.criticalPositionFen,
-        displayArrows: arrowsToBoard(m.arrows),
+        displayArrows: arrowsToBoard(m.arrows, plan.criticalPositionFen, boardOrientation),
         displayHighlights: [] as Array<{ square: string; color: string }>,
       };
     }
     return {
       displayFen: plan.criticalPositionFen,
-      displayArrows: arrowsToBoard(plan.arrows),
+      displayArrows: arrowsToBoard(plan.arrows, plan.criticalPositionFen, boardOrientation),
       displayHighlights: highlightsToBoard(plan.highlights),
     };
-  }, [activeSection, pawnBreakIndex, maneuverIndex, plan]);
+  }, [activeSection, pawnBreakIndex, maneuverIndex, plan, boardOrientation]);
 
   // Chess game for the board — parent owns the game object
   const game = useChessGame(displayFen, boardOrientation);

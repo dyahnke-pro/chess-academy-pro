@@ -38,28 +38,14 @@ import { buildNarrationSegments } from '../../services/narrationSegments';
 /** A causal-chain arrow is a SIGHT LINE (the piece that attacks the loose
  *  target), not a move — the door checks it as vision. */
 const causalClaim = (a: { from: string; to: string }): ArrowClaim => ({ from: a.from, to: a.to, role: 'vision', source: 'teach.causalChain' });
-/** A walkthrough / play-out narration's arrows, through the arrow door. Each
- *  NarrationArrow declares its meaning by colour (see its type): orange is the
- *  move just played, red is "don't play this" (a bad move — never arrowed),
- *  yellow is attention (a sight line), green/blue are moves the narration
- *  names. `vouchedBy`: the walkthrough stands on the book, the play-out on the
- *  engine's line. */
+/** A walkthrough / play-out narration's arrows — the door's one lesson mapping. */
 function walkthroughBoardArrows(
   arrows: NarrationArrow[],
   fen: string,
   studentColor: 'white' | 'black',
   vouchedBy: 'engine' | 'book',
 ): BoardArrow[] {
-  const ctx = { fen, studentColor };
-  const claims: ArrowClaim[] = [];
-  for (const a of arrows) {
-    const c = a.color ?? 'green';
-    if (c === 'red') continue;
-    if (c === 'orange') claims.push({ from: a.from, to: a.to, role: 'played', source: 'teach.walkthrough' });
-    else if (c === 'yellow') claims.push({ from: a.from, to: a.to, role: 'vision', source: 'teach.walkthrough' });
-    else claims.push(namedMoveClaim(a.from, a.to, ctx, vouchedBy, 'teach.walkthrough'));
-  }
-  return admitArrows(claims, ctx).arrows;
+  return narrationArrowsThroughDoor(arrows, { fen, studentColor }, vouchedBy, 'teach.walkthrough');
 }
 // LessonPlayer highlight default (yellow key square).
 const WALKTHROUGH_HIGHLIGHT_PALETTE: Record<string, string> = {
@@ -293,7 +279,7 @@ import { rankByPopularity, popularityLabel, type RankedLineOption } from '../../
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { applyCandidateArrows, candidateHighlightMarkers, gradeNarrationText } from '../../services/coachAnswerGates';
 import { dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
-import { admitArrow, admitArrows, lineClaims, namedMoveClaim, withAdmitted, type ArrowClaim } from '../../services/arrowDoor';
+import { admitArrow, admitArrows, lineClaims, narrationArrowsThroughDoor, withAdmitted, type ArrowClaim } from '../../services/arrowDoor';
 // ONE depth for the whole turn — the hint lane and the lane that grades the
 // student must not read the same board at different depths. See the constant.
 import { rankReplies, bestReplyLine } from '../../services/bestReplyRanking';

@@ -178,7 +178,6 @@ vi.mock('../../services/accuracyService', () => ({
 vi.mock('../../services/boardUtils', () => ({
   getCapturedPieces: vi.fn().mockReturnValue({ white: [], black: [] }),
   getMaterialAdvantage: vi.fn().mockReturnValue(0),
-  uciToArrow: vi.fn().mockReturnValue(null),
 }));
 
 vi.mock('../Board/ChessBoard', () => ({

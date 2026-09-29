@@ -216,7 +216,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `groundedMoveFeedback` (function) — 11 call sites
-- `src/components/Openings/MiddlegamePractice.tsx:269`
+- `src/components/Openings/MiddlegamePractice.tsx:267`
 - `src/hooks/useLiveCoach.needWire.test.tsx:15`
 - `src/hooks/useLiveCoach.test.tsx:13`
 - `src/hooks/useLiveCoach.ts:312`
@@ -230,7 +230,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:571`
-- `src/components/Coach/CoachTeachPage.tsx:3345`
+- `src/components/Coach/CoachTeachPage.tsx:3331`
 - `src/services/coachSessionRouter.ts:117`
 - `src/services/coachSettingsAction.ts:242`
 

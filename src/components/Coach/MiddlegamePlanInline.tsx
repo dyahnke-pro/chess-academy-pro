@@ -21,6 +21,7 @@ import { ArrowLeft, Play, Pause, ChevronLeft, ChevronRight, RotateCcw } from 'lu
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { useWalkthroughRunner } from '../../hooks/useWalkthroughRunner';
 import type { WalkthroughSession } from '../../types/walkthrough';
+import { narrationArrowsThroughDoor } from '../../services/arrowDoor';
 
 interface MiddlegamePlanInlineProps {
   session: WalkthroughSession;
@@ -42,12 +43,9 @@ export function MiddlegamePlanInline({
 
   const stepArrows = useMemo(
     () =>
-      step?.arrows?.map((a) => ({
-        startSquare: a.from,
-        endSquare: a.to,
-        color: a.color ?? 'rgba(34, 211, 238, 0.9)',
-      })),
-    [step],
+      // Through the arrow door, on the board the step shows (after its move).
+      step?.arrows ? narrationArrowsThroughDoor(step.arrows, { fen: step.fenAfter, studentColor: session.orientation }, 'book', 'middlegamePlanInline') : undefined,
+    [step, session.orientation],
   );
 
   const stepHighlights: Record<string, CSSProperties> | undefined = useMemo(

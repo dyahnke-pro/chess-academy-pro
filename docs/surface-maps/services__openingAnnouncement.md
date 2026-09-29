@@ -22,8 +22,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `spokenOpeningLabel` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8031`
-- `src/components/Coach/CoachTeachPage.tsx:8032`
+- `src/components/Coach/CoachTeachPage.tsx:8017`
+- `src/components/Coach/CoachTeachPage.tsx:8018`
 - `src/services/openingAnnouncement.test.ts:113`
 - `src/services/openingAnnouncement.test.ts:116`
 
@@ -45,11 +45,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingAnnouncement.test.ts:48`
 
 ### `openingAnnouncementForGame` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8033`
-- `src/components/Coach/CoachTeachPage.tsx:10005`
+- `src/components/Coach/CoachTeachPage.tsx:8019`
+- `src/components/Coach/CoachTeachPage.tsx:9991`
 
 ### `warmOpeningBook` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:987`
+- `src/components/Coach/CoachTeachPage.tsx:973`
 
 ## Tests
 

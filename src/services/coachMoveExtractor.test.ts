@@ -8,8 +8,8 @@ const START_FEN =
 const AFTER_E4_FEN =
   'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1';
 
-const GREEN = 'rgba(34, 197, 94, 0.85)';
-const RED = 'rgba(239, 68, 68, 0.85)';
+// Arrow-door colour for the student's own move (2026-09-29).
+const GREEN = '#22c55e';
 
 describe('extractMoveArrows', () => {
   it('draws an arrow for a single legal move mentioned in prose', () => {
@@ -56,24 +56,27 @@ describe('extractMoveArrows', () => {
     expect(arrows[0].endSquare).toBe('e4');
   });
 
-  it('uses the red color when the move is explicitly negated', () => {
+  it('never arrows a move the text rules out (a bad move is never arrowed — 2026-09-29)', () => {
     const arrows = extractMoveArrows(
       "Don't play Nf3 here — it blocks the f-pawn.",
       { fen: START_FEN },
     );
-    expect(arrows).toHaveLength(1);
-    expect(arrows[0].color).toBe(RED);
+    expect(arrows).toEqual([]);
   });
 
-  it('uses green for non-negated moves and red for negated ones in the same reply', () => {
+  it('arrows the recommended move and drops the ruled-out one in the same reply', () => {
     const arrows = extractMoveArrows(
       'Play Nf3 to develop. Avoid Nc3 in this line — it blocks c2.',
       { fen: START_FEN },
     );
-    const nf3 = arrows.find((a) => a.startSquare === 'g1');
-    const nc3 = arrows.find((a) => a.startSquare === 'b1');
-    expect(nf3?.color).toBe(GREEN);
-    expect(nc3?.color).toBe(RED);
+    expect(arrows.find((a) => a.startSquare === 'g1')?.color).toBe(GREEN);
+    expect(arrows.find((a) => a.startSquare === 'b1')).toBeUndefined();
+  });
+
+  it('refuses a named move that hangs the piece (the prose chose it, not the engine)', () => {
+    // After 1.e4 d5, "Qg4" puts the queen where the bishop on c8 takes it.
+    const fen = 'rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 2';
+    expect(extractMoveArrows('Try Qg4 here.', { fen })).toEqual([]);
   });
 
   it('returns empty array when no SAN moves appear', () => {

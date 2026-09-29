@@ -26,30 +26,18 @@ const EXEMPT = new Set([
   'src/components/Board/ControlledChessBoard.tsx',
   'src/components/Chessboard/ConsistentChessboard.tsx',
   'src/components/Kid/GuidedGamePage.tsx',
+  // A DECODER, not a producer: turns `[BOARD: arrow:…]` text back into objects.
+  // Every marker it reads is door output (chat candidates) or is sent through
+  // the door straight after parsing (in-game chat).
+  'src/services/boardAnnotationService.ts',
+  // Kid mode only (Kid/MiniGamePage) — not a coach surface.
+  'src/services/miniGameEngine.ts',
 ]);
 
 /** Unmigrated files → how many constructors they may still hold. SHRINK ONLY. */
 const CEILING: Record<string, number> = {
-  'src/components/Openings/PlayableLinePlayer.tsx': 5,
-  'src/services/miniGameEngine.ts': 4,
-  'src/services/tacticVisuals.ts': 2,
-  'src/services/boardUtils.ts': 2,
-  'src/components/Openings/OpeningPlayMode.tsx': 2,
-  'src/components/Openings/ModelGameViewer.tsx': 2,
-  'src/components/Openings/MiddlegamePractice.tsx': 2,
-  'src/components/Openings/MiddlegamePlanStudy.tsx': 2,
-  'src/components/Openings/LessonPlayer.tsx': 2,
-  'src/components/Openings/CommonMistakesSection.tsx': 2,
-  'src/components/Coach/EndgameTablebaseTrainer.tsx': 2,
-  'src/services/coachMoveExtractor.ts': 1,
-  'src/services/boardAnnotationService.ts': 1,
-  'src/hooks/useHintSystem.ts': 1,
-  'src/components/Play/BlindfolTrainer.tsx': 1,
-  'src/components/Openings/WalkthroughMode.tsx': 1,
-  'src/components/Coach/MiddlegamePlanInline.tsx': 1,
-  'src/components/Coach/CoachesLibraryPage.tsx': 1,
-  'src/components/Coach/CoachSessionPage.tsx': 1,
-  'src/components/Board/VoiceChatMic.tsx': 1,
+  // EMPTY (2026-09-29): every coach surface draws through the door. A new
+  // producer must hand claims to `admitArrows`; this list is not a way around it.
 };
 
 function walk(dir: string, out: string[]): string[] {

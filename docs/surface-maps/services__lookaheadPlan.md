@@ -42,8 +42,8 @@
 - `src/services/replayFence.modern1690.test.ts:80`
 
 ### `tacticWord` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7778`
-- `src/components/Coach/CoachTeachPage.tsx:7853`
+- `src/components/Coach/CoachTeachPage.tsx:7764`
+- `src/components/Coach/CoachTeachPage.tsx:7839`
 - `src/services/computedVoiceAudit.report.test.ts:262`
 - `src/services/dnaLineNarrator.ts:129`
 - `src/services/dnaLineNarrator.ts:218`
@@ -166,7 +166,7 @@
 - `src/services/lookaheadPlan.test.ts:1258`
 
 ### `positionReadLine` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9707`
+- `src/components/Coach/CoachTeachPage.tsx:9693`
 - `src/services/coachLaneWiring.test.ts:38`
 - `src/services/computedVoiceAudit.report.test.ts:225`
 - `src/services/lookaheadPlan.test.ts:541`
@@ -185,7 +185,7 @@
 - `src/services/narrationAdversarial.test.ts:67`
 
 ### `lineShapeLine` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9711`
+- `src/components/Coach/CoachTeachPage.tsx:9697`
 - `src/services/coachLaneWiring.test.ts:39`
 - `src/services/computedVoiceAudit.report.test.ts:226`
 - `src/services/lookaheadPlan.test.ts:881`
@@ -204,7 +204,7 @@
 - `src/services/lookaheadPlan.test.ts:1015`
 
 ### `terminalReadLine` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9714`
+- `src/components/Coach/CoachTeachPage.tsx:9700`
 - `src/services/coachLaneWiring.test.ts:40`
 - `src/services/computedVoiceAudit.report.test.ts:230`
 - `src/services/lookaheadPlan.test.ts:988`
@@ -218,7 +218,7 @@
 - `src/services/lookaheadPlan.test.ts:1016`
 
 ### `keySquareLine` (function) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9702`
+- `src/components/Coach/CoachTeachPage.tsx:9688`
 - `src/services/coachLaneWiring.test.ts:37`
 - `src/services/computedVoiceAudit.report.test.ts:224`
 - `src/services/forkNarration.ts:108`
@@ -248,7 +248,7 @@
 - `src/services/learnWalkBlumenfeld.test.ts:177`
 
 ### `planFromUci` (function) — 32 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9670`
+- `src/components/Coach/CoachTeachPage.tsx:9656`
 - `src/services/coachLaneWiring.test.ts:36`
 - `src/services/computedVoiceAudit.report.test.ts:220`
 - `src/services/concessionBeat.ts:440`
@@ -285,14 +285,14 @@
 - `src/services/coachFeatureService.ts:1321`
 
 ### `aimsOf` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9683`
-- `src/components/Coach/CoachTeachPage.tsx:9687`
+- `src/components/Coach/CoachTeachPage.tsx:9669`
+- `src/components/Coach/CoachTeachPage.tsx:9673`
 - `src/services/planArc.test.ts:28`
 - `src/services/planArc.ts:48`
 
 ### `stepArc` (re-export) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9683`
-- `src/components/Coach/CoachTeachPage.tsx:9687`
+- `src/components/Coach/CoachTeachPage.tsx:9669`
+- `src/components/Coach/CoachTeachPage.tsx:9673`
 - `src/services/planArc.test.ts:28`
 - `src/services/planArc.test.ts:93`
 - `src/services/planArc.test.ts:95`

@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { ConsistentChessboard, type BoardArrow } from '../Chessboard/ConsistentChessboard';
 import { useProseReader, type ProseUnit } from '../../hooks/useProseReader';
+import { admitArrow } from '../../services/arrowDoor';
 import {
   COACHES_LIBRARY, getLibraryBook, searchLibrary,
   type LibraryBook, type LibraryPage, type LivingBoard,
@@ -153,7 +154,7 @@ function LivingBoardView({ board }: { board: LivingBoard }): JSX.Element {
     for (let i = 0; i < index; i++) {
       const applied = game.move(board.moves[i]);
       if (!applied) break;
-      lastArrow = { startSquare: applied.from, endSquare: applied.to, color: 'rgba(34,197,94,0.8)' };
+      lastArrow = admitArrow({ from: applied.from, to: applied.to, role: 'played', source: 'library.lastMove' }, { fen: game.fen(), studentColor: 'white' });
     }
     return { fen: game.fen(), arrows: lastArrow ? [lastArrow] : [] };
   }, [board, index]);

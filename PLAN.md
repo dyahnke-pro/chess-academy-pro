@@ -41,6 +41,36 @@ arrow is a bad move → dropped) · 3 useTeachWalkthrough · 4 Review · 5 Play,
 Openings, chat, the rest · 6 gate `arrowDoor.gate.test.ts`: no `set*Arrows(`
 outside the door's output, allowlist of unmigrated files shrinks only.
 
+**DONE 2026-09-29.** All six steps landed. The gate's ceiling is EMPTY; only the
+board renderers, the `[BOARD:]` decoder and kid mode are exempt. Dead producers
+deleted (`uciToArrow`, `groundArrows`). Hints draw for the side to move (a hint
+is always for the player on move). Pitfalls name the wrong move in text, never
+as an arrow.
+
+## 📊 SCOREBOARD v1 — reach vs Naroditsky, 50 voiced games (2026-09-29)
+
+`scripts/scoreboard/` — his per-ply lines tagged with the census taxonomy
+(`his-tags.json`, 1,394 lines, one offline DeepSeek pass, temperature 0), our
+harvested claims (`claimChecker.measure.test.ts`) mapped kind→code in
+`score.py`. Match = same game, same ply, same code.
+
+**20.7%** (268 / 1,294 code-moments at student-move plies). What it measures is
+REACH — a computer HAS the point at that moment — not what the decider speaks;
+the harvest covers four lanes (facts, behaviors, backward look, positional read)
+and not the opening idea, refuted alternative, opponent purpose or plan arc, so
+those rows read low until the harvest widens. 1,115 more of his code-moments
+sit on the OPPONENT's plies, which the harvest never runs.
+
+Worst rows (his count, ours): quiet-move purpose 92/0 · plan 88/26 · verdict on
+a GOOD move 75/7 · the move prevents something 71/0 · king attack 46/5 ·
+recapture choice 42/0 · threat 46/8. Best: passers 80%, piece quality 52%,
+structure 52%, principles 51%, breaks 50%.
+
+**Read.** The top gaps are what the student's OWN move is for (prepares /
+prevents / two jobs) — the intent ledger — and grading good moves (we grade
+only mistakes). Next: widen the harvest to every lane + opponent plies so the
+number is honest, then build the ledger and watch these rows move.
+
 ## 🧭 2026-09-29 — RE-EVALUATION: how the coach gets to Naroditsky (after WO-ACC-01 measured 99.6%)
 
 Measured: 14,317 claims / 100 games · spoken 99.6% of checked (was 97.9) ·

@@ -21,21 +21,18 @@
  */
 import { Chess } from 'chess.js';
 import type { BoardArrow } from '../types';
+import { admitArrows, namedMoveClaim, type ArrowClaim } from './arrowDoor';
 
 export interface ExtractMoveArrowsOptions {
   /** FEN of the position currently on the board. Required. */
   fen: string;
   /** Cap on arrows returned. Defaults to 3. */
   maxArrows?: number;
-  /** Arrow color for recommended moves. Defaults to green. */
-  goodColor?: string;
-  /** Arrow color for explicitly negated moves ("don't play X"). */
-  badColor?: string;
+  /** The student's side. Defaults to the side to move in `fen`. */
+  studentColor?: 'white' | 'black';
 }
 
 const DEFAULT_MAX = 3;
-const DEFAULT_GOOD = 'rgba(34, 197, 94, 0.85)'; // green-500
-const DEFAULT_BAD = 'rgba(239, 68, 68, 0.85)'; // red-500
 
 /**
  * Broad SAN-like matcher. Captures:
@@ -60,19 +57,18 @@ export function extractMoveArrows(
   options: ExtractMoveArrowsOptions,
 ): BoardArrow[] {
   const max = options.maxArrows ?? DEFAULT_MAX;
-  const good = options.goodColor ?? DEFAULT_GOOD;
-  const bad = options.badColor ?? DEFAULT_BAD;
+  const ctx = { fen: options.fen, studentColor: options.studentColor ?? (options.fen.split(' ')[1] === 'b' ? 'black' as const : 'white' as const) };
 
   if (!text.trim()) return [];
 
-  const out: BoardArrow[] = [];
+  const claims: ArrowClaim[] = [];
   const seen = new Set<string>();
 
   // Regex state is preserved across exec — reset for a fresh run.
   SAN_RE.lastIndex = 0;
   let match: RegExpExecArray | null;
   while ((match = SAN_RE.exec(text)) !== null) {
-    if (out.length >= max) break;
+    if (claims.length >= max) break;
     const san = match[0];
     // Fresh Chess instance per candidate so we don't mutate state
     // across attempts (chess.js move() advances turn — we'd otherwise
@@ -93,11 +89,12 @@ export function extractMoveArrows(
     const pre = text.slice(windowStart, match.index);
     const isNegated = NEGATION_RE.test(pre);
 
-    out.push({
-      startSquare: moved.from,
-      endSquare: moved.to,
-      color: isNegated ? bad : good,
-    });
+    // A NEGATED move ("don't play Qd3") is a bad move — it is never arrowed
+    // (David 2026-09-29); the text says it. Every other named move goes
+    // through the arrow door unvouched: the prose, not the engine, chose it,
+    // so the door checks it is legal and safe on this board.
+    if (isNegated) continue;
+    claims.push(namedMoveClaim(moved.from, moved.to, ctx, undefined, 'coachMoveExtractor'));
   }
-  return out;
+  return admitArrows(claims, ctx).arrows;
 }

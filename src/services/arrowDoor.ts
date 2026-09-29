@@ -237,7 +237,8 @@ export function namedMoveClaim(
   from: string,
   to: string,
   ctx: ArrowDoorContext,
-  vouchedBy: 'engine' | 'book',
+  /** undefined = nobody vouches (e.g. a move a model named): full safety check. */
+  vouchedBy: 'engine' | 'book' | undefined,
   source: string,
 ): ArrowClaim {
   try {
@@ -246,8 +247,62 @@ export function namedMoveClaim(
     const legal = !!b && b.moves({ square: from as Square, verbose: true }).some((m) => m.to === to);
     if (piece && legal) {
       const mine = piece.color === (ctx.studentColor === 'white' ? 'w' : 'b');
-      return { from, to, role: mine ? 'play' : 'theirs', vouchedBy, source };
+      return vouchedBy
+        ? { from, to, role: mine ? 'play' : 'theirs', vouchedBy, source }
+        : { from, to, role: mine ? 'play' : 'theirs', source };
     }
   } catch { /* fall through to a sight line */ }
   return { from, to, role: 'vision', source };
+}
+
+/** A lesson / walkthrough / plan narration's arrows (`NarrationArrow`-shaped:
+ *  from, to, a colour that DECLARES its meaning — see that type) through the
+ *  door. One mapping for every lesson surface:
+ *    orange → the move just played (`played`)
+ *    red    → "don't play this" — a bad move, never arrowed
+ *    yellow → attention (a sight line)
+ *    other  → a move the narration names: that side's move, or a sight line
+ *  `vouchedBy`: the source the lesson stands on (book, or the engine's line). */
+export function narrationArrowsThroughDoor(
+  arrows: ReadonlyArray<{ from: string; to: string; color?: string }>,
+  ctx: ArrowDoorContext,
+  vouchedBy: 'engine' | 'book',
+  source: string,
+): BoardArrow[] {
+  const claims: ArrowClaim[] = [];
+  // A ROUTE (Nd2–f1–g3) is authored as consecutive hops on one static board.
+  // A hop that starts where an earlier hop landed is checked on the board
+  // AFTER that hop (the same piece moved on, its side still to play) — not on
+  // the static board, where its start square is empty.
+  const hopBoard = new Map<string, string>();
+  for (const a of arrows) {
+    const c = (a.color ?? 'green').toLowerCase();
+    if (c === 'red' || c.startsWith('rgba(239') || c === '#ef4444') continue;
+    if (c === 'orange' || c.startsWith('rgba(255,170') || c.startsWith('rgba(255, 170')) { claims.push({ from: a.from, to: a.to, role: 'played', source }); continue; }
+    if (c === 'yellow') { claims.push({ from: a.from, to: a.to, role: 'vision', source }); continue; }
+    const onRoute = hopBoard.get(a.from);
+    if (onRoute) {
+      claims.push({ from: a.from, to: a.to, role: 'line', fen: onRoute, source });
+      const next = afterHop(onRoute, a.from, a.to);
+      if (next) hopBoard.set(a.to, next);
+      continue;
+    }
+    claims.push(namedMoveClaim(a.from, a.to, ctx, vouchedBy, source));
+    const next = afterHop(ctx.fen, a.from, a.to);
+    if (next) hopBoard.set(a.to, next);
+  }
+  return admitArrows(claims, ctx).arrows;
+}
+
+/** The board after one hop of a route, with the same side to move again. */
+function afterHop(fen: string, from: string, to: string): string | null {
+  try {
+    const piece = new Chess(fen).get(from as Square);
+    if (!piece) return null;
+    const b = boardAs(fen, piece.color);
+    if (!b || !b.move({ from, to, promotion: 'q' })) return null;
+    return boardAs(b.fen(), piece.color)?.fen() ?? null;
+  } catch {
+    return null;
+  }
 }

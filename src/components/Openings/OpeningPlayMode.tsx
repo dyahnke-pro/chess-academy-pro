@@ -40,6 +40,7 @@ import type { MoveResult } from '../../hooks/useChessGame';
 import type { MoveQuality } from '../Board/ChessBoard';
 import { GameChatPanel } from '../Coach/GameChatPanel';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
+import { admitArrow, admitArrows, namedMoveClaim, type ArrowClaim } from '../../services/arrowDoor';
 
 interface OpeningPlayModeProps {
   opening: OpeningRecord;
@@ -109,7 +110,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   // Mounts the SAME `GameChatPanel` /coach/play uses — so the opening-play
   // surface inherits the entire grounded stack by reuse: getCoachChatResponse
   // → coachService.ask (live tactics + the centralized trap scan + master-play
-  // + book/plan grounding), groundArrows, and the panel's logAppAudit
+  // + book/plan grounding), the arrow door, and the panel's logAppAudit
   // instrumentation. Q&A + arrows only here — the coach never mutates the play
   // board (no play_move/takeback handlers), so the WLPP Play LOCK is untouched.
   const [chatOpen, setChatOpen] = useState(false);
@@ -138,7 +139,8 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
       // Lead the eye to the move we NAME but don't play out (G6).
       const uci = analysis.bestMove;
       if (why && uci && uci.length >= 4) {
-        setChatArrows([{ startSquare: uci.slice(0, 2), endSquare: uci.slice(2, 4), color: 'cyan' }]);
+        const best = admitArrow({ from: uci.slice(0, 2), to: uci.slice(2, 4), role: 'play', vouchedBy: 'engine', source: 'openingPlay.why' }, { fen, studentColor: playerColor });
+        setChatArrows(best ? [best] : []);
       }
       const answer = why || 'No single best move stands out here — the position is roughly balanced.';
       setWhyCard(answer);
@@ -395,14 +397,18 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   // the Show-the-line button reveals it (arrow + spoken line). When there's no
   // punish, fall back to the opponent's THREAT arrow (ambient awareness). The
   // board NEVER moves — arrows show the line.
-  const colorHex = useCallback(
-    (c?: string): string => (c === 'red' ? '#ef4444' : c === 'blue' ? '#3b82f6' : '#22c55e'),
-    [],
-  );
+  // Through the arrow door on the live board. Here RED means the opponent's
+  // threat, so it is claimed as one (their piece, wins something) — a red
+  // "tempting mistake" fails that test and is not drawn; every other arrow is a
+  // move of the engine's line.
   const toBoardArrows = useCallback(
-    (arr: NarrationArrow[]): BoardArrow[] =>
-      arr.map((a) => ({ startSquare: a.from, endSquare: a.to, color: colorHex(a.color) })),
-    [colorHex],
+    (arr: NarrationArrow[]): BoardArrow[] => {
+      const ctx = { fen: game.fen, studentColor: playerColor };
+      return admitArrows(arr.map((a): ArrowClaim => (a.color === 'red'
+        ? { from: a.from, to: a.to, role: 'threat', source: 'openingPlay.threat' }
+        : namedMoveClaim(a.from, a.to, ctx, 'engine', 'openingPlay.line'))), ctx).arrows;
+    },
+    [game.fen, playerColor],
   );
   useEffect(() => {
     if (game.isGameOver || playPhase === 'pregame' || playPhase === 'postgame') {

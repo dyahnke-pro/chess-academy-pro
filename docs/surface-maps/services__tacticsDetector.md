@@ -101,8 +101,8 @@
 - `src/services/tacticClaimValidator.test.ts:200`
 - `src/services/tacticClaimValidator.ts:151`
 - `src/services/tacticLaneVocabulary.test.ts:69`
-- `src/services/tacticVisuals.ts:44`
-- `src/services/tacticVisuals.ts:58`
+- `src/services/tacticVisuals.ts:43`
+- `src/services/tacticVisuals.ts:60`
 - `src/services/tacticalRead.ts:157`
 - `src/services/tacticsDetector.expansion.test.ts:10`
 - `src/services/tacticsDetector.expansion.test.ts:73`

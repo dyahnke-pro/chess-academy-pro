@@ -35,6 +35,7 @@ import {
 } from './stockfishFenCache';
 import { useCoachMemoryStore } from '../stores/coachMemoryStore';
 import { logAppAudit } from '../services/appAuditor';
+import { admitArrow } from '../services/arrowDoor';
 import type {
   HintLevel,
   BoardArrow,
@@ -94,7 +95,6 @@ export interface UseHintSystemReturn {
   resetHints: () => void;
 }
 
-const TIER3_ARROW_COLOR = 'rgba(34, 197, 94, 0.85)'; // green-500 @ 85%
 const HINT_API_TIMEOUT_MS = 30_000;
 const HINT_STOCKFISH_DEPTH = 10;
 
@@ -386,7 +386,8 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
           const arrows: BoardArrow[] = [];
           const { from, to } = uciToSquares(best.bestMoveUci);
           if (isLegalMove(fen, from, to)) {
-            arrows.push({ startSquare: from, endSquare: to, color: TIER3_ARROW_COLOR });
+            const best = admitArrow({ from, to, role: 'play', vouchedBy: 'engine', source: 'hintSystem' }, { fen, studentColor: fen.split(' ')[1] === 'b' ? 'black' : 'white' });
+            if (best) arrows.push(best);
           }
 
           if (fenRef.current !== fen) { setHintState((s) => ({ ...s, isAnalyzing: false })); return; }

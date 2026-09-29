@@ -113,9 +113,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `tryRouteIntent` (function) — 44 call sites
-- `src/components/Board/VoiceChatMic.tsx:238`
+- `src/components/Board/VoiceChatMic.tsx:237`
 - `src/components/Coach/CoachGameReview.tsx:3140`
-- `src/components/Coach/CoachTeachPage.tsx:3117`
+- `src/components/Coach/CoachTeachPage.tsx:3103`
 - `src/components/Coach/GameChatPanel.tsx:516`
 - `src/services/coachHands.test.ts:35`
 - `src/services/coachHands.test.ts:141`

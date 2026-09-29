@@ -18,10 +18,9 @@
 import { Chess } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
 import type { BoardArrow, BoardHighlight } from '../types';
+import { admitArrows, type ArrowClaim } from './arrowDoor';
 
-const KEY_MOVE_COLOR = 'rgba(34, 197, 94, 0.90)';   // green — the move to play
 const KEY_MOVE_SQUARE = 'rgba(34, 197, 94, 0.35)';  // green tint on its landing square
-const TACTIC_LINE_COLOR = 'rgba(249, 115, 22, 0.85)'; // orange — the tactic's lines
 
 export interface TacticVisuals {
   arrows: BoardArrow[];
@@ -46,7 +45,10 @@ export function buildTacticVisuals(fen: string | undefined, uciMoves: string[] |
 
   const from = first.slice(0, 2);
   const to = first.slice(2, 4);
-  arrows.push({ startSquare: from, endSquare: to, color: KEY_MOVE_COLOR });
+  // The puzzle's key move (its own solution — vouched) and, below, the lines
+  // of the tactic it creates, all through the arrow door.
+  const studentColor: 'white' | 'black' = fen.split(' ')[1] === 'b' ? 'black' : 'white';
+  const claims: ArrowClaim[] = [{ from, to, role: 'play', vouchedBy: 'book', source: 'tacticVisuals.key' }];
   highlights.push({ square: to, color: KEY_MOVE_SQUARE });
 
   // Play the key move and read the tactic it creates — the forked pieces are
@@ -60,8 +62,9 @@ export function buildTacticVisuals(fen: string | undefined, uciMoves: string[] |
     for (const t of det.tactics) {
       const [attacker, ...targets] = t.involvedSquares;
       if (!attacker) continue;
+      // Sight lines of the tactic, on the board AFTER the key move lands.
       for (const target of targets) {
-        arrows.push({ startSquare: attacker, endSquare: target, color: TACTIC_LINE_COLOR });
+        claims.push({ from: attacker, to: target, role: 'vision', fen: chess.fen(), source: 'tacticVisuals.line' });
       }
     }
   } catch {
@@ -72,5 +75,6 @@ export function buildTacticVisuals(fen: string | undefined, uciMoves: string[] |
   // the move and the tactic doesn't render twice.
   const bySquare = new Map<string, BoardHighlight>();
   for (const h of highlights) bySquare.set(h.square, h);
+  arrows.push(...admitArrows(claims, { fen, studentColor }).arrows);
   return { arrows, highlights: Array.from(bySquare.values()) };
 }

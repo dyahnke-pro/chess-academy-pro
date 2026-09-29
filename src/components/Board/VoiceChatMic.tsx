@@ -24,18 +24,17 @@ import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
 const VOICE_ONBOARDING_META_KEY = 'voice-onboarding-shown';
 import { uciMoveToSan, uciLinesToSan } from '../../utils/uciToSan';
 import type { ChatMessage, BoardArrow } from '../../types';
+import { admitArrows, namedMoveClaim } from '../../services/arrowDoor';
 
-/** Parse [ARROW:from:to] tags from LLM response. Returns arrows and cleaned text. */
-function extractArrows(text: string): { arrows: BoardArrow[]; cleanText: string } {
+/** Parse [ARROW:from:to] tags from the response. Returns the tagged squares
+ *  and cleaned text. The squares are CLAIMS — the model chose them, so the
+ *  caller hands them to the arrow door unvouched (legal and safe, or nothing). */
+function extractArrows(text: string): { arrows: Array<{ from: string; to: string }>; cleanText: string } {
   const ARROW_RE = /\[ARROW:([a-h][1-8]):([a-h][1-8])\]/gi;
-  const arrows: BoardArrow[] = [];
+  const arrows: Array<{ from: string; to: string }> = [];
   let match: RegExpExecArray | null;
   while ((match = ARROW_RE.exec(text)) !== null) {
-    arrows.push({
-      startSquare: match[1],
-      endSquare: match[2],
-      color: 'rgba(255, 170, 0, 0.85)',
-    });
+    arrows.push({ from: match[1], to: match[2] });
   }
   const cleanText = text.replace(ARROW_RE, '').replace(/\s{2,}/g, ' ').trim();
   return { arrows, cleanText };
@@ -526,8 +525,12 @@ export function VoiceChatMic({ fen, turn, playerColor = 'white', onOpeningReques
     flushSentence(cleanBuffer);
 
     // Send arrows to the board if the LLM included any
-    if (responseArrows.length > 0 && onArrows) {
-      onArrows(responseArrows);
+    const boardFen = getCurrentFen?.() ?? fen;
+    const doorArrows: BoardArrow[] = responseArrows.length > 0
+      ? admitArrows(responseArrows.map((a) => namedMoveClaim(a.from, a.to, { fen: boardFen, studentColor: playerColor }, undefined, 'voiceChat.tag')), { fen: boardFen, studentColor: playerColor }).arrows
+      : [];
+    if (doorArrows.length > 0 && onArrows) {
+      onArrows(doorArrows);
     }
 
     const assistantMsg: ChatMessage = {

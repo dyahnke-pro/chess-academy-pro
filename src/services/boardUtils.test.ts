@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getCapturedPieces, getMaterialAdvantage, uciToArrow, pieceToUnicode } from './boardUtils';
+import { getCapturedPieces, getMaterialAdvantage, pieceToUnicode } from './boardUtils';
 
 describe('boardUtils', () => {
   describe('getCapturedPieces', () => {
@@ -57,33 +57,6 @@ describe('boardUtils', () => {
     });
   });
 
-  describe('uciToArrow', () => {
-    it('converts valid UCI string to arrow object', () => {
-      const result = uciToArrow('e2e4', 'green');
-      expect(result).toEqual({
-        startSquare: 'e2',
-        endSquare: 'e4',
-        color: 'green',
-      });
-    });
-
-    it('handles promotion moves', () => {
-      const result = uciToArrow('e7e8q', 'green');
-      expect(result).toEqual({
-        startSquare: 'e7',
-        endSquare: 'e8',
-        color: 'green',
-      });
-    });
-
-    it('returns null for empty string', () => {
-      expect(uciToArrow('', 'green')).toBeNull();
-    });
-
-    it('returns null for too-short string', () => {
-      expect(uciToArrow('e2', 'green')).toBeNull();
-    });
-  });
 
   describe('pieceToUnicode', () => {
     it('converts lowercase pieces to black Unicode symbols', () => {
