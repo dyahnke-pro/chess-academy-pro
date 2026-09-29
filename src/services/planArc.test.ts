@@ -3,8 +3,9 @@
 // a real wrong read on this game before the fix.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
+import { readFileSync } from 'node:fs';
 import { planFromUci } from './lookaheadPlan';
-import { aimsOf, stepArc, EMPTY_ARC, type ArcEvent, type Aim } from './planArc';
+import { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcEvent, type Aim } from './planArc';
 
 const GAME = 'd4 Nf6 c4 e6 Nf3 c5 d5 b5 b3 Bb7 Nbd2 exd5 cxb5 d6 Bb2 Be7 e3 O-O Bd3 Nbd7 O-O Qc7 Re1 Ne5 Nxe5 dxe5 Rc1 e4 Be2 Qd7 Nf1 Rac8 a4 Qf5 Ng3 Qg6 Be5 Rfd8 a5 Bd6 Bxd6 Rxd6 a6 Ba8 Nh5 Nxh5 Bxh5 Qg5 Qg4 Qxg4 Bxg4 Rc7 Rc2 d4 Rec1 d3 Rxc5 Rxc5 Rxc5 g6 Rc8+ Kg7 Rxa8 d2 Rc8 d1=Q+ Bxd1 Rxd1#'.split(' ');
 
@@ -155,5 +156,50 @@ describe('a route only takes shape toward ONE goal', () => {
     expect(b.events.filter((e) => e.kind === 'emerge').map((e) => e.text)).toEqual([
       "Their plan is taking shape: the knight's walk to e5.",
     ]);
+  });
+});
+
+describe('aimWalkableNow — a live guess is said only if it can be walked from THIS board', () => {
+  // The positions of the 2026-09-29 Learn walk, taken from the games themselves.
+  const fenAfter = (id: string, plies: number): string => {
+    const v = JSON.parse(readFileSync(`data/video-narration-voiced/${id}.json`, 'utf8')) as { moves: Array<{ ply: number; line: string[] }> };
+    const g = new Chess(); let last = 0; let n = 0;
+    for (const m of v.moves) {
+      if (m.ply < last) break; last = m.ply;
+      for (const s of m.line) { if (n >= plies) return g.fen(); g.move(s); n += 1; }
+    }
+    return g.fen();
+  };
+  const route = (piece: string, path: string[]): Aim => ({
+    id: `route:${piece}`, kind: 'route', squares: path.slice(1), goal: path[path.length - 1], phrase: 'x', from: path[0],
+  });
+
+  it('a bishop route through a diagonal the queen blocks is refused (FqVMAv3wKes ply 36)', () => {
+    const fen = fenAfter('FqVMAv3wKes', 36);
+    const b = new Chess(fen);
+    expect(b.get('e7')?.type).toBe('b');
+    expect(b.get('d4')?.type).toBe('q');
+    expect(aimWalkableNow(route('b', ['e7', 'f6', 'c3']), fen, 'b')).toBe(false);
+  });
+
+  it('a knight route onto a square it would simply lose is refused (3UqPa5eV2e0 ply 38)', () => {
+    const fen = fenAfter('3UqPa5eV2e0', 38);
+    const b = new Chess(fen);
+    const knight = ['d7', 'd5', 'f6', 'e5'].find((sq) => b.get(sq as never)?.type === 'n' && b.get(sq as never)?.color === 'b');
+    expect(knight).toBeTruthy();
+    // g4 is covered twice by White, once by Black.
+    expect(b.attackers('g4', 'w').length).toBeGreaterThan(b.attackers('g4', 'b').length);
+    expect(aimWalkableNow(route('n', ['d7', 'f6', 'g4']), fen, 'b')).toBe(false);
+  });
+
+  it('a real reroute that later landed passes (Blumenfeld Nd2-f1-g3, positive control)', () => {
+    const c = new Chess();
+    for (const s of GAME.slice(0, 27)) c.move(s);
+    expect(aimWalkableNow(route('n', ['d2', 'f1', 'g3']), c.fen(), 'w')).toBe(true);
+  });
+
+  it('a route naming a piece that is not there is refused', () => {
+    const c = new Chess();
+    expect(aimWalkableNow(route('n', ['e4', 'f6', 'g4']), c.fen(), 'w')).toBe(false);
   });
 });

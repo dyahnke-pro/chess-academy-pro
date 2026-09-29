@@ -37,6 +37,8 @@ export interface Aim {
   goal: string | null;
   /** A noun phrase in the seat's voice: "the outpost on d5", "an attack on your king". */
   phrase: string;
+  /** Route only: the square the piece starts from. */
+  from?: string;
 }
 
 export type Seat = 'student' | 'opponent';
@@ -78,7 +80,7 @@ export function aimsOf(side: SidePlan, seat: Seat): Aim[] {
     const name = PIECE[piece] ?? word;
     // Keyed by the PIECE: a knight heading for g3 that then heads on to h5 is
     // one journey, not a dropped plan and a new one (first real game read).
-    out.push({ id: `route:${piece}`, kind: 'route', squares: side.maneuver.path.slice(1), goal: dest, phrase: `the ${name}'s walk to ${dest}` });
+    out.push({ id: `route:${piece}`, kind: 'route', squares: side.maneuver.path.slice(1), goal: dest, phrase: `the ${name}'s walk to ${dest}`, from: side.maneuver.path[0] });
   }
   return out;
 }
@@ -306,3 +308,63 @@ export function stepArc(
   return { next: { entries: live, done: [...done], emerged }, events: said };
 }
 
+const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+
+/**
+ * Is this aim a plan the side can walk FROM THE BOARD AS IT IS — not only
+ * inside the one engine line it was read from?
+ *
+ * Learn reads a side's plan off ONE engine line (a guess), and that line is
+ * free to trade pieces off, open diagonals and change who controls a square
+ * before the route makes sense. Said as "their plan" NOW, that was false three
+ * times in four on the 2026-09-29 walk: a bishop's "walk to c3" through a
+ * diagonal the queen blocks, a knight's "walk to g4" onto a square covered
+ * twice. Review reads the moves actually PLAYED, so its routes are real by
+ * construction and does not call this.
+ *
+ * A route passes when every hop is a legal move for that piece on the current
+ * board, and the goal is not simply lost to it there (a cheaper attacker, or
+ * more attackers than defenders). An outpost passes when the goal is not lost
+ * to the side's own minor pieces there. Other aims pass: they are regions or
+ * files, not a piece's journey.
+ */
+export function aimWalkableNow(aim: Aim, fen: string, color: 'w' | 'b'): boolean {
+  if (aim.kind !== 'route' && aim.kind !== 'outpost') return true;
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return false; }
+  const foe: 'w' | 'b' = color === 'w' ? 'b' : 'w';
+  const goal = aim.goal as Square | null;
+  if (!goal) return false;
+  const lostThere = (pieceType: string): boolean => {
+    const attackers = board.attackers(goal, foe);
+    if (attackers.length === 0) return false;
+    const cheapest = Math.min(...attackers.map((sq) => VALUE[board.get(sq)?.type ?? 'k'] ?? 100));
+    if (cheapest < (VALUE[pieceType] ?? 0)) return true;
+    return attackers.length > board.attackers(goal, color).length;
+  };
+  if (aim.kind === 'outpost') return !lostThere('n');
+  const piece = aim.id.split(':')[1];
+  const start = aim.from as Square | undefined;
+  if (!start || !piece) return false;
+  const at = board.get(start);
+  if (!at || at.color !== color || at.type !== piece) return false;
+  // Walk the hops on the CURRENT board: the piece alone moves, everything
+  // else stays where it stands now.
+  let here: Square = start;
+  for (const next of aim.squares as Square[]) {
+    const probe = new Chess(fen);
+    probe.remove(start);
+    if (here !== start) probe.remove(here);
+    probe.put({ type: piece as 'n' | 'b' | 'r' | 'q' | 'k', color }, here);
+    const parts = probe.fen().split(' ');
+    parts[1] = color; parts[3] = '-';
+    let legal = false;
+    try {
+      const turn = new Chess(parts.join(' '), { skipValidation: true });
+      legal = turn.moves({ square: here, verbose: true }).some((m) => m.to === next);
+    } catch { legal = false; }
+    if (!legal) return false;
+    here = next;
+  }
+  return !lostThere(piece);
+}
