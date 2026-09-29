@@ -26,7 +26,7 @@ Instrument: `scripts/scoreboard/` — his per-ply lines tagged with the census t
 
 **The read.** We are a board DESCRIBER; he is a THINKER. We report what is true on the board every move; he mostly says what a move is FOR, what it STOPS, where the plan goes. Picking one lead per move (WO-1b) cuts the noise but cannot raise the number by itself — the missing points need a computer that does not exist yet.
 
-Caveat: he narrates selectively, so a true fact he skipped counts as off-target; the "match" column is the fair one.
+He explains every move — his own words: he tries to "explain the heck out of every move" (David 2026-09-29). A ply with no line from him is a gap in OUR transcribed corpus, never his silence; those plies are unscored, not counted as "he said nothing". The target is a teaching line on every move.
 
 ## 2. The plan — one computer: `moveIntent`
 
