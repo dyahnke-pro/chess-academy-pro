@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { isWhyBestMoveQuestion, isBestMoveQuestion, buildQuestionGrounding } from './questionIntents';
+import { isWhyBestMoveQuestion, isBestMoveQuestion, isCandidateMoveQuestion, buildQuestionGrounding } from './questionIntents';
 
 /**
  * isWhyBestMoveQuestion — "why does the engine like this move / walk me through
@@ -62,5 +62,20 @@ describe('isWhyBestMoveQuestion — decipher the engine', () => {
     const r = buildQuestionGrounding('was that a good move?', { fen: FEN, moveHistory: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5'] });
     expect(r.whyBestMoveQuestion).toBeFalsy();
     expect(r.moveRatingQuestion).toBe(true);
+  });
+});
+
+describe('"why not <move>?" is about THAT move (prod tape 2026-09-29)', () => {
+  // The tape asked "why not e5?" and "why not Bxd7?" and both times heard the
+  // engine's best move with the named move never mentioned.
+  for (const q of ['why not e5?', 'why not Bxd7', 'Why not just play Nf5?', 'why not castle?']) {
+    it(`"${q}" goes to the candidate lane, not the best-move walk`, () => {
+      expect(isWhyBestMoveQuestion(q)).toBe(false);
+      expect(isCandidateMoveQuestion(q)).toBe(true);
+    });
+  }
+  it('a bare "why not?" with no move stays an engine-reasoning follow-up', () => {
+    expect(isWhyBestMoveQuestion('why not?')).toBe(true);
+    expect(isCandidateMoveQuestion('why not?')).toBe(false);
   });
 });

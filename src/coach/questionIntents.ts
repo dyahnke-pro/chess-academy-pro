@@ -477,6 +477,12 @@ export function isWhyBestMoveQuestion(ask: string | undefined): boolean {
   // "why did I lose / blunder / play badly" is a self-review ask, not engine
   // reasoning about a best move — keep it out.
   if (/\bwhy\s+(?:did|do|am|are|is)\s+(?:i|my|we)\b[\s\S]{0,20}\b(?:los(?:e|ing|t)|blunder|bad|worse|struggl|drop)/i.test(ask)) return false;
+  // "WHY NOT e5?" NAMES A MOVE — it asks why THAT move fails, so it is the
+  // candidate lane's (evaluate e5 against best), never "why is the best move
+  // best". The prod tape of 2026-09-29 asked "why not e5?" and "why not Bxd7?"
+  // and both times heard the engine's best move with e5 / Bxd7 never mentioned.
+  // A bare "why not?" (no move) is still an engine-reasoning follow-up.
+  if (/\bwhy\s+not\b/i.test(ask) && extractCandidateSan(ask)) return false;
   if (WHY_BEST_MOVE_RE.test(ask)) return true;
   // A "why <verb> <move>" with no move named is an engine-reasoning ask; with
   // one, it belongs to the candidate lane (see WHY_THIS_MOVE_RE).
@@ -619,6 +625,9 @@ const CANDIDATE_MOVE_RE = anyOf([
   // Nc3 ok": the answer must be about Nc3. See WHY_THIS_MOVE_RE.
   String.raw`\bwhy\s+(?:play|playing|go|going|move|moving|put|putting|develop|developing|take|taking|castle|castling|push|pushing|trade|trading)\b`,
   String.raw`^\s*why\s+(?:the\s+)?(?:[NBRQK]?[a-h][1-8]|[NBRQK]?x?[a-h][1-8](?:=[NBRQ])?[+#]?|O-O(?:-O)?|(?:knight|bishop|rook|queen|king|pawn|night)\s*(?:to\s*)?[a-h]\s*[1-8])\s*\??\s*$`,
+  // "why not e5?" / "why not just take on d5?" — the move is named, so it is
+  // evaluated (see isWhyBestMoveQuestion, which now yields it).
+  String.raw`\bwhy\s+not\b`,
 ]);
 /** "Couldn't he just move the queen?" / "why didn't I move my knight?" /
  *  "what if the rook ran?" — a question about a PIECE'S options, not a named
