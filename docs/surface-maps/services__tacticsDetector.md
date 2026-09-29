@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:24) — names `detectTactics`
-- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:4979) — names `detectTactics`
+- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5010) — names `detectTactics`
 
 ## Who calls in
 
@@ -67,8 +67,8 @@
 - `src/services/discussionPractice.ts:143`
 - `src/services/liveNoteTruth.test.ts:59`
 - `src/services/liveTacticsContext.ts:361`
-- `src/services/lookaheadPlan.ts:1156`
-- `src/services/lookaheadPlan.ts:1219`
+- `src/services/lookaheadPlan.ts:1147`
+- `src/services/lookaheadPlan.ts:1210`
 - `src/services/misconceptionClassifier.ts:113`
 - `src/services/misconceptionClassifier.ts:264`
 - `src/services/mistakeNarration.ts:395`

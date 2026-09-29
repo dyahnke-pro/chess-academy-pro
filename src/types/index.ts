@@ -727,6 +727,19 @@ export interface GameRecord {
    *  annotation density (the old `annotations.length >= moves/2`
    *  heuristic). */
   fullyAnalyzed?: boolean;
+  /** The classifier revision (`TACTIC_TYPE_REV`) this game's tactics were
+   *  classified at: missed ones are in `classifiedTactics` (possibly zero),
+   *  found ones in `foundTacticTypes`. Readers take them from there instead of
+   *  re-deriving the whole library on every open (2026-09-29 freeze). A fresh
+   *  analysis re-classifies with force; a classifier change un-stamps all. */
+  tacticsClassifiedRev?: string;
+  /** Tactic types of the student's brilliant/great moves in this game. */
+  foundTacticTypes?: TacticType[];
+  /** This game's contribution to the Weaknesses insights, computed once from a
+   *  replay and read back on every later open (2026-09-29: recomputing all of
+   *  them replayed the whole library on every app launch). `sig` fingerprints
+   *  what they depend on, so a re-analysis recomputes them. */
+  insightStats?: GameInsightStats;
   /** Stockfish search depth the per-move eval curve was produced at
    *  (gameAnalysisService `ANALYSIS_DEPTH`). Drives accuracy: a shallow
    *  search misses the punishment of dubious moves and reads accuracy
@@ -1837,6 +1850,9 @@ export interface TacticInsights {
   awarenessRate: number;
   missedByPhase: { phase: GamePhase; count: number }[];
   totalGames: number;
+  /** Analysed games whose missed tactics are not yet in the cache — the
+   *  background fill is still running, so the missed counts are partial. */
+  gamesPendingClassification?: number;
   strengths: string[];
 }
 
@@ -2072,6 +2088,18 @@ export interface GameAccuracy {
   white: number;
   black: number;
   moveCount: number;
+}
+
+export interface GameInsightStats {
+  sig: string;
+  /** Plies the replay produced; 0 = the PGN would not replay (nothing to count). */
+  plies: number;
+  counts: MoveClassificationCounts;
+  accuracy: { white: number; black: number };
+  phases: PhaseAccuracy[];
+  agreement: { matches: number; total: number };
+  /** The student's brilliant/great moves — the Tactics tab's best moments. */
+  finds: { moveNumber: number; san: string; fen: string; evalSwing: number; classification: 'brilliant' | 'great' }[];
 }
 
 export interface MoveClassificationCounts {

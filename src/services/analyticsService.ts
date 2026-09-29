@@ -24,13 +24,12 @@
  * Companion docs: ANALYTICS_AUDIT.md. The build plan there maps
  * each query function to the emit sites that feed it.
  */
-import { Chess } from 'chess.js';
 import { getAppAuditLog, type AuditEntry, type AuditKind } from './appAuditor';
 import { db } from '../db/schema';
 import { resolvePlayerColor, isEngineName } from './playerIdentity';
-import { getOverviewInsights, getOpeningInsights } from './gameInsightsService';
+import { getOpeningInsights } from './gameInsightsService';
 import { getOpeningNameByEco, openingFamilyMoves } from './openingDetectionService';
-import { detectTacticType } from './missedTacticService';
+import { TACTIC_TYPE_REV } from './tacticTypeBackfill';
 import type {
   GamePhase,
   TacticType,
@@ -542,7 +541,20 @@ function isWin(g: GameRecord, c: 'white' | 'black'): boolean {
   return (c === 'white' && g.result === '1-0') || (c === 'black' && g.result === '0-1');
 }
 
-async function loadPlayerGames(): Promise<{ game: GameRecord; color: 'white' | 'black' }[]> {
+// One games-table read shared by every analytic asked for at the same moment:
+// the Patterns tab asks for ~15 at once, and each deserialised the whole table
+// on the main thread. Only an IN-FLIGHT read is shared, so a write is never
+// hidden behind a settled snapshot.
+let playerGamesInFlight: Promise<{ game: GameRecord; color: 'white' | 'black' }[]> | null = null;
+
+function loadPlayerGames(): Promise<{ game: GameRecord; color: 'white' | 'black' }[]> {
+  if (!playerGamesInFlight) {
+    playerGamesInFlight = readPlayerGames().finally(() => { playerGamesInFlight = null; });
+  }
+  return playerGamesInFlight;
+}
+
+async function readPlayerGames(): Promise<{ game: GameRecord; color: 'white' | 'black' }[]> {
   const profile = await db.profiles.toCollection().first();
   const username = profile?.preferences.chessComUsername ?? profile?.preferences.lichessUsername ?? profile?.name ?? null;
   const all = await db.games.filter((g) => !g.isMasterGame && g.result !== '*').toArray();
@@ -581,12 +593,8 @@ export interface ColorMismatch {
 const MIN_GAMES_PER_COLOR = 5;
 
 export async function colorProficiencyMismatch(): Promise<ColorMismatch | null> {
-  const overview = await getOverviewInsights();
-  if (overview.totalGames === 0) return null;
-
-  // overview.winRateWhite/Black are already 0-100 rounded but overview
-  // doesn't carry per-color game counts, so we re-derive cheaply from
-  // db.games (single Dexie scan).
+  // Counted straight off the games table. This used to run the whole Overview
+  // computation (every game replayed) just to learn whether any games exist.
   const playerGames = await loadPlayerGames();
   let w = 0, b = 0, wWins = 0, bWins = 0;
   for (const { game, color } of playerGames) {
@@ -716,57 +724,43 @@ export interface TacticBreadth {
 }
 
 export async function tacticTypeBreadth(): Promise<TacticBreadth> {
-  // Pre-fix this read `db.classifiedTactics` thinking those were
-  // tactics the player FOUND. But `tacticClassifierService` only
-  // writes that table for mistakes/blunders — they're MISSED
-  // tactics, not finds. So this card was inverted: showing
-  // breadth-of-misses while labeled as breadth-of-finds.
-  //
-  // Now scan annotations directly for brilliant/great moves and
-  // classify each via `detectTacticType(preFen, bestMove)`. Real
-  // strength signal.
-  const found = await scanFoundTacticsByType();
-  return { distinctTypes: found.size, types: Array.from(found.keys()).sort() };
+  // Finds, not misses: `classifiedTactics` holds MISSED tactics only, so
+  // breadth reads the per-game FOUND types (brilliant/great moves).
+  const { counts } = await scanFoundTacticsByType();
+  return { distinctTypes: counts.size, types: Array.from(counts.keys()).sort() };
 }
 
-/** Scan every fully-analyzed player game for moves classified as
- *  brilliant or great, group them by detected tactic type. Returns
- *  a Map<TacticType, count>. Used by `tacticTypeBreadth` and
- *  `tacticTransferGap` as the canonical "tactics the player found"
- *  source — the alternative (db.classifiedTactics) is actually
- *  misses-only and was being misread as finds. */
-async function scanFoundTacticsByType(): Promise<Map<TacticType, number>> {
+/** Tally the tactic types the student FOUND (brilliant/great moves) across
+ *  every fully-analysed game. Reads each game's stored `foundTacticTypes` —
+ *  written once by the background fill in `tacticClassifierService` — and
+ *  never classifies inline: running the classifier over every find, on every
+ *  open, three times over (breadth, transfer gap, recognition matrix) held the
+ *  Patterns tab for 206 s on a 900-game library (2026-09-29). Games not yet
+ *  classified are COUNTED as pending, never guessed. */
+function scanFoundTacticsByType(): Promise<FoundTacticScan> {
+  if (!foundScanInFlight) {
+    foundScanInFlight = readFoundTactics().finally(() => { foundScanInFlight = null; });
+  }
+  return foundScanInFlight;
+}
+
+interface FoundTacticScan {
+  counts: Map<TacticType, number>;
+  pendingGames: number;
+}
+
+let foundScanInFlight: Promise<FoundTacticScan> | null = null;
+
+async function readFoundTactics(): Promise<FoundTacticScan> {
   const playerGames = await loadPlayerGames();
   const counts = new Map<TacticType, number>();
-  for (const { game, color } of playerGames) {
+  let pendingGames = 0;
+  for (const { game } of playerGames) {
     if (!game.fullyAnalyzed || !game.annotations || game.annotations.length === 0) continue;
-    const preMoveFens = buildPreMoveFens(game.pgn, game.annotations.length);
-    for (let i = 0; i < game.annotations.length; i++) {
-      const ann = game.annotations[i];
-      if (ann.color !== color) continue;
-      if (ann.classification !== 'brilliant' && ann.classification !== 'great') continue;
-      const preFen = preMoveFens[i];
-      if (!preFen || !ann.san) continue;
-      // The player FOUND the tactic — classify the move they PLAYED (`ann.san`),
-      // NOT `ann.bestMove`. On a brilliant/great move bestMove is null (the
-      // played move already IS the best), so the old `if (!ann.bestMove) continue`
-      // skipped every find → 0 tactic types / 0% in-game recognition despite
-      // hundreds of brilliants (David 2026-06-19). detectTacticType wants UCI, so
-      // resolve the played SAN to from-to via chess.js.
-      let uci: string;
-      try {
-        const probe = new Chess(preFen);
-        const mv = probe.move(ann.san);
-        uci = `${mv.from}${mv.to}${mv.promotion ?? ''}`;
-      } catch {
-        continue; // illegal/unparseable SAN against the reconstructed FEN
-      }
-      const type = detectTacticType(preFen, uci);
-      if (type === 'tactical_sequence') continue; // catch-all bucket — skip
-      counts.set(type, (counts.get(type) ?? 0) + 1);
-    }
+    if (game.tacticsClassifiedRev !== TACTIC_TYPE_REV) { pendingGames++; continue; }
+    for (const type of game.foundTacticTypes ?? []) counts.set(type, (counts.get(type) ?? 0) + 1);
   }
-  return counts;
+  return { counts, pendingGames };
 }
 
 // ─── Brilliant-move concentration ──────────────────────────────────────
@@ -905,7 +899,7 @@ export async function tacticTransferGap(): Promise<TacticTransferRow[]> {
   // matrix was comparing "missed-via-A" to "missed-via-B" with a
   // confusing "found-vs-missed" label. Fixed by scanning annotations
   // for brilliant/great moves and detecting their tactic type.
-  const foundByType = await scanFoundTacticsByType();
+  const { counts: foundByType } = await scanFoundTacticsByType();
 
   const types = new Set<TacticType>([
     ...puzzleByType.keys(),
@@ -1417,28 +1411,6 @@ function phaseForMoveNumber(moveNumber: number): GamePhase {
   return 'middlegame';
 }
 
-/** Replay a game's PGN and return the FEN BEFORE each move was
- *  played. Used to convert annotation `bestMove` (UCI) to the SAN
- *  format that matches `ann.san`. Returns at most `annotationCount`
- *  entries — the FEN before the i-th move is at index `i`. Returns
- *  empty array when the PGN can't be parsed; callers fall back to
- *  the raw UCI string in that case (still wrong but no worse than
- *  pre-fix). */
-function buildPreMoveFens(pgn: string, annotationCount: number): string[] {
-  const chess = new Chess();
-  try { chess.loadPgn(pgn); } catch { return []; }
-  const moves = chess.history();
-  if (moves.length === 0) return [];
-  const fens: string[] = [];
-  const replay = new Chess();
-  fens.push(replay.fen());
-  for (let i = 0; i < moves.length && fens.length <= annotationCount; i++) {
-    try { replay.move(moves[i]); } catch { break; }
-    fens.push(replay.fen());
-  }
-  return fens;
-}
-
 export async function criticalMomentsAccuracy(): Promise<CriticalMomentsStats> {
   const playerGames = await loadPlayerGames();
   let total = 0, found = 0;
@@ -1681,11 +1653,15 @@ export interface EngagementSummary {
   tacticRecognition: TacticRecognitionRow[];
   /** Total game sample size — gates "not enough data" empty states. */
   totalGames: number;
+  /** Analysed games whose found tactics are still being classified in the
+   *  background — the tactic breadth / recognition numbers are partial. */
+  gamesPendingClassification: number;
 }
 
 export async function engagementSummary(): Promise<EngagementSummary> {
   const [
-    overview,
+    playerGames,
+    foundScan,
     colorMismatch,
     comeback,
     winShape,
@@ -1703,7 +1679,8 @@ export async function engagementSummary(): Promise<EngagementSummary> {
     phaseStrength,
     tacticRecognition,
   ] = await Promise.all([
-    getOverviewInsights(),
+    loadPlayerGames(),
+    scanFoundTacticsByType(),
     colorProficiencyMismatch(),
     comebackWins(),
     winShapeStats(),
@@ -1741,7 +1718,8 @@ export async function engagementSummary(): Promise<EngagementSummary> {
     openingMatrix,
     phaseStrength,
     tacticRecognition,
-    totalGames: overview.totalGames,
+    totalGames: playerGames.length,
+    gamesPendingClassification: foundScan.pendingGames,
   };
 }
 

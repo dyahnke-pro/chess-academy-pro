@@ -81,6 +81,11 @@ export function PatternsTab({ data: provided }: PatternsTabProps = {}): JSX.Elem
       <PersonalRecordsCard records={data.records} onDrillRecord={goToDrilldown} />
       <StreaksRow streak={data.streak} />
       <PhaseStrengthHeatmap matrix={data.phaseStrength} onDrillCell={goToDrilldown} />
+      {data.gamesPendingClassification > 0 && (
+        <p data-testid="patterns-classifying" className="text-xs text-theme-text-muted">
+          Still scanning {data.gamesPendingClassification} games for the tactics you found — these counts will grow.
+        </p>
+      )}
       <TacticRecognitionHeatmap rows={data.tacticRecognition} onDrillRow={goToDrilldown} />
       <FirstTryCard firstTry={data.firstTry} />
       <ColorMismatchCard mismatch={data.colorMismatch} />

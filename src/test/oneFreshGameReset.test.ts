@@ -24,10 +24,16 @@ describe('CoachTeachPage — one fresh-game reset', () => {
     expect(at - fnStart).toBeLessThan(1500);
   });
 
-  it('both fresh-game doors call it, and nothing else clears a per-game ref on its own', () => {
+  // TWO DOORS, ONE CALL (hand walk 2026-09-27, Alekhine). The ASK door calls
+  // the reset. The BOARD door used to call it too, on `history.length <= 2` —
+  // after the turn's facts had written the memory, so a White student's e4
+  // principle was wiped at e4 Nf6 and taught again at d4. The board door is now
+  // `learnMemory.observe()` (the board going backwards), which reaches the page
+  // refs through the memory's own signal — asserted in the next test.
+  it('the ask door calls it, and the board door is observe(), never a ply count', () => {
     const calls = SRC.match(/resetPerGameMemory\(\)/g) ?? [];
-    // one declaration + two call sites
-    expect(calls.length).toBeGreaterThanOrEqual(2);
+    expect(calls.length).toBeGreaterThanOrEqual(1);
+    expect(SRC, 'no ply-count reset after the turn has written the memory').not.toMatch(/length <= 2\)\s*\{\s*resetPerGameMemory\(\)/);
   });
 
   // THE THIRD DOOR (2026-09-20). `learnMemory.observe()` resets ITSELF when the
@@ -55,7 +61,7 @@ describe('CoachTeachPage — one fresh-game reset', () => {
     const body = SRC.slice(start, SRC.indexOf('}, []);', start));
     for (const ref of [
       'announcedPliesRef', 'announcedTrapsRef', 'fundamentalSeenRef',
-      'planSaidRef', 'positionalSaidRef', 'forkTalkCountRef', 'pendingForkRef',
+      'positionalSaidRef',
       'rejectedTemptingCountRef', 'priorityFirstLastPlyRef',
     ]) {
       expect(body, `${ref} is not forgotten on a fresh game`).toContain(ref);

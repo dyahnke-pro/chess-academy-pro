@@ -375,6 +375,29 @@ export async function loadProRepertoireData(): Promise<void> {
  * out on already-seeded devices, not just players who still carry
  * some JSON content (G8, David 2026-05-28).
  */
+/**
+ * Replay every entry's PGN to its position, handing the thread back every
+ * ~10 ms. The loop this replaces ran all of them in one synchronous pass —
+ * ~0.8 s of chess.js at phone speed on the launch after each content revision
+ * (2026-09-29). Callers run it OUTSIDE their IndexedDB transaction, so a yield
+ * here can never let WebKit auto-commit one mid-flight.
+ */
+async function precomputePositions(
+  entries: ReadonlyArray<{ id: string; pgn: string }>,
+): Promise<Map<string, ReturnType<typeof computePosition>>> {
+  const now = (): number => (typeof performance !== 'undefined' ? performance.now() : Date.now());
+  const out = new Map<string, ReturnType<typeof computePosition>>();
+  let sliceStart = now();
+  for (const entry of entries) {
+    out.set(entry.id, computePosition(entry.pgn));
+    if (now() - sliceStart > 10) {
+      await new Promise<void>((resolve) => { setTimeout(resolve, 0); });
+      sliceStart = now();
+    }
+  }
+  return out;
+}
+
 export async function reconcileProRepertoires(): Promise<void> {
   const entries = (proRepertoireData as { openings: ProRepertoireEntry[] }).openings;
 
@@ -391,8 +414,7 @@ export async function reconcileProRepertoires(): Promise<void> {
   // "Attempt to delete range from database without an in-progress transaction"
   // (PostHog, iOS capacitor:// boot, 2026-07-21). Precomputing keeps the
   // transaction body pure fast IDB ops, so it never idles mid-flight.
-  const posById = new Map<string, ReturnType<typeof computePosition>>();
-  for (const entry of entries) posById.set(entry.id, computePosition(entry.pgn));
+  const posById = await precomputePositions(entries);
 
   // Wrap the entire reconcile in a single read-write transaction so all
   // reads (get, toArray) and writes (bulkPut, bulkDelete, meta.put) share
@@ -531,8 +553,7 @@ export async function reconcileBaseRepertoire(): Promise<void> {
   // heavy synchronous computePosition inside the rw transaction lets WebKit/iOS
   // auto-commit the IndexedDB transaction mid-flight, breaking the later
   // bulkDelete orphan sweep ("delete range without an in-progress transaction").
-  const posById = new Map<string, ReturnType<typeof computePosition>>();
-  for (const entry of entries) posById.set(entry.id, computePosition(entry.pgn));
+  const posById = await precomputePositions(entries);
 
   // Single rw transaction so the for-of get() loop, bulkPut, orphan sweep,
   // and revision bump share one scope (David 2026-06-30, prod catch).

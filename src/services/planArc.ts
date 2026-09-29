@@ -24,6 +24,7 @@ import { Chess, type Square } from 'chess.js';
 // plan reader's memory, and the Learn surface reaches it through the reader it
 // already composes), so a runtime import back would be a cycle.
 import type { SidePlan } from './lookaheadPlan';
+import { CAPTURE_VALUE } from './pieceValues';
 
 export type AimKind = 'king-attack' | 'outpost' | 'file' | 'passer' | 'route' | 'shield';
 
@@ -37,6 +38,8 @@ export interface Aim {
   goal: string | null;
   /** A noun phrase in the seat's voice: "the outpost on d5", "an attack on your king". */
   phrase: string;
+  /** Route only: the square the piece starts from. */
+  from?: string;
 }
 
 export type Seat = 'student' | 'opponent';
@@ -78,7 +81,7 @@ export function aimsOf(side: SidePlan, seat: Seat): Aim[] {
     const name = PIECE[piece] ?? word;
     // Keyed by the PIECE: a knight heading for g3 that then heads on to h5 is
     // one journey, not a dropped plan and a new one (first real game read).
-    out.push({ id: `route:${piece}`, kind: 'route', squares: side.maneuver.path.slice(1), goal: dest, phrase: `the ${name}'s walk to ${dest}` });
+    out.push({ id: `route:${piece}`, kind: 'route', squares: side.maneuver.path.slice(1), goal: dest, phrase: `the ${name}'s walk from ${side.maneuver.path[0]} to ${dest}`, from: side.maneuver.path[0] });
   }
   return out;
 }
@@ -282,7 +285,20 @@ export function stepArc(
     // changes its name every move is not one plan (it said "walk to a8" then
     // "walk to c8" on consecutive moves).
     const aim = prev?.announced && prev.aim.kind === 'route' && prev.aim.goal !== read.goal ? prev.aim : read;
-    const streak = (prev?.streak ?? 0) + 1;
+    // A ROUTE IS ONLY "THE SAME PLAN" IF IT GOES TO THE SAME PLACE (found
+    // 2026-09-29, the first live walk with the lane open). The id is
+    // `route:<piece>` so an ANNOUNCED route keeps its name while the piece
+    // walks it — but before it is announced, that same id let two unrelated
+    // knight routes on consecutive reads (one engine line wanting e5, the next
+    // h2) count as one plan read twice, and "Their plan is taking shape: the
+    // knight's walk to h2" was said off a single read. Until announced, a
+    // route's streak continues only if the two routes SHARE a square on the way
+    // (a rook's e1-c1-c5 growing into e1-c1-c5-c8 is one plan read twice;
+    // f6-d7-e5 then f6-g4-h2 is two). Goal equality alone was too strict — the
+    // engine's horizon moves the end square as the walk lengthens.
+    const sameRoute = !(prev && !prev.announced && prev.aim.kind === 'route'
+      && !prev.aim.squares.some((sq) => read.squares.includes(sq)));
+    const streak = (sameRoute ? (prev?.streak ?? 0) : 0) + 1;
     const entry: ArcEntry = { aim, streak, missing: 0, announced: prev?.announced ?? false, steps: prev?.steps ?? 0 };
     if (!entry.announced && streak >= 2) {
       entry.announced = true;
@@ -303,3 +319,109 @@ export function stepArc(
   return { next: { entries: live, done: [...done], emerged }, events: said };
 }
 
+
+/**
+ * Is this aim a plan the side can walk FROM THE BOARD AS IT IS — not only
+ * inside the one engine line it was read from?
+ *
+ * Learn reads a side's plan off ONE engine line (a guess), and that line is
+ * free to trade pieces off, open diagonals and change who controls a square
+ * before the route makes sense. Said as "their plan" NOW, that was false three
+ * times in four on the 2026-09-29 walk: a bishop's "walk to c3" through a
+ * diagonal the queen blocks, a knight's "walk to g4" onto a square covered
+ * twice. Review reads the moves actually PLAYED, so its routes are real by
+ * construction and does not call this.
+ *
+ * A route passes when every hop is a legal move for that piece on the current
+ * board, and the goal is not simply lost to it there (a cheaper attacker, or
+ * more attackers than defenders). An outpost passes when the goal is not lost
+ * to the side's own minor pieces there. Other aims pass: they are regions or
+ * files, not a piece's journey.
+ */
+export function aimWalkableNow(aim: Aim, fen: string, color: 'w' | 'b'): boolean {
+  if (aim.kind !== 'route' && aim.kind !== 'outpost' && aim.kind !== 'king-attack' && aim.kind !== 'shield') return true;
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return false; }
+  const foe: 'w' | 'b' = color === 'w' ? 'b' : 'w';
+  if (aim.kind === 'king-attack' || aim.kind === 'shield') {
+    // "An attack on your king" is a claim about the board NOW (walk 3,
+    // 2026-09-29: said with no black piece bearing on g1 while the real threat
+    // was …dxe3). It passes only if at least two of the side's pieces (not
+    // pawns, not the king) already hit the enemy king's square or a square
+    // next to it.
+    const kingSq = board.board().flat().find((c) => c && c.type === 'k' && c.color === foe)?.square;
+    if (!kingSq) return false;
+    const f = kingSq.charCodeAt(0); const r = Number(kingSq[1]);
+    const zone: Square[] = [];
+    for (let df = -1; df <= 1; df += 1) for (let dr = -1; dr <= 1; dr += 1) {
+      const nf = f + df; const nr = r + dr;
+      if (nf >= 97 && nf <= 104 && nr >= 1 && nr <= 8) zone.push(`${String.fromCharCode(nf)}${nr}` as Square);
+    }
+    const hitters = new Set<string>();
+    for (const sq of zone) for (const a of board.attackers(sq, color)) {
+      const t = board.get(a)?.type;
+      if (t && t !== 'p' && t !== 'k') hitters.add(a);
+    }
+    return hitters.size >= 2;
+  }
+  const goal = aim.goal as Square | null;
+  if (!goal) return false;
+  const lostThere = (pieceType: string): boolean => {
+    const attackers = board.attackers(goal, foe);
+    if (attackers.length === 0) return false;
+    const cheapest = Math.min(...attackers.map((sq) => CAPTURE_VALUE[board.get(sq)?.type ?? 'k'] ?? 100));
+    if (cheapest < (CAPTURE_VALUE[pieceType] ?? 0)) return true;
+    return attackers.length > board.attackers(goal, color).length;
+  };
+  if (aim.kind === 'outpost') {
+    // An outpost is a square ONE OF THE SIDE'S PAWNS protects and NO enemy pawn
+    // can ever attack (walk 4, 2026-09-29: "the outpost on d5" said with no
+    // black pawn touching d5). Both, on the board as it is.
+    const f = goal.charCodeAt(0); const r = Number(goal[1]);
+    const up = color === 'w' ? 1 : -1;
+    const ownPawnGuards = [f - 1, f + 1].some((pf) => {
+      if (pf < 97 || pf > 104) return false;
+      const p = board.get(`${String.fromCharCode(pf)}${r - up}` as Square);
+      return !!p && p.type === 'p' && p.color === color;
+    });
+    if (!ownPawnGuards) return false;
+    // An enemy pawn on a neighbouring file that can still advance to hit the
+    // square: it sits on the far side of the goal (from the enemy's view).
+    const enemyCanHit = [f - 1, f + 1].some((pf) => {
+      if (pf < 97 || pf > 104) return false;
+      for (let rr = 1; rr <= 8; rr += 1) {
+        const p = board.get(`${String.fromCharCode(pf)}${rr}` as Square);
+        if (!p || p.type !== 'p' || p.color !== foe) continue;
+        // White pawns attack upward, black downward; the pawn must be able to
+        // reach the rank that attacks the goal (goal rank - 1 for white foe).
+        if (foe === 'w' ? rr <= r - 1 : rr >= r + 1) return true;
+      }
+      return false;
+    });
+    return !enemyCanHit && !lostThere('n');
+  }
+  const piece = aim.id.split(':')[1];
+  const start = aim.from as Square | undefined;
+  if (!start || !piece) return false;
+  const at = board.get(start);
+  if (!at || at.color !== color || at.type !== piece) return false;
+  // Walk the hops on the CURRENT board: the piece alone moves, everything
+  // else stays where it stands now.
+  let here: Square = start;
+  for (const next of aim.squares as Square[]) {
+    const probe = new Chess(fen);
+    probe.remove(start);
+    if (here !== start) probe.remove(here);
+    probe.put({ type: piece as 'n' | 'b' | 'r' | 'q' | 'k', color }, here);
+    const parts = probe.fen().split(' ');
+    parts[1] = color; parts[3] = '-';
+    let legal = false;
+    try {
+      const turn = new Chess(parts.join(' '), { skipValidation: true });
+      legal = turn.moves({ square: here, verbose: true }).some((m) => m.to === next);
+    } catch { legal = false; }
+    if (!legal) return false;
+    here = next;
+  }
+  return !lostThere(piece);
+}

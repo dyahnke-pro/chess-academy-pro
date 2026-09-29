@@ -17,7 +17,7 @@
 // lists — none of which may throw.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { planFromUci, keySquareLine, positionReadLine, describePlan } from './lookaheadPlan';
+import { planFromUci, describePlan } from './lookaheadPlan';
 import { findConcession, findStudentDrawback } from './concessionBeat';
 import { readPosition, buildPositionalRead } from './positionalRead';
 import { buildSidePlan } from '../test/factories';
@@ -63,8 +63,6 @@ describe('ADVERSARIAL: 60 machine-played games through every computed lane', () 
         if (plan) {
           plansBuilt += 1;
           const parts = [
-            keySquareLine(plan.keySquares, said),
-            positionReadLine(plan.read, studentColor, said, fen),
             plan.theirs.text,
             plan.mine.text,
           ].filter(Boolean);
@@ -147,7 +145,12 @@ describe('ADVERSARIAL: 60 machine-played games through every computed lane', () 
     // games, which is where most of the 6k went. Lowering a volume floor to
     // absorb a real cut is honest; lowering it to absorb a regression is not, so
     // the margin below the measured 83,981 is deliberately narrow.
-    expect(chars, 'the narration got thinner, not just fewer-sentenced').toBeGreaterThan(75_000);
+    // 75,000 → 50,000 (2026-09-29): the key-square line and the standing
+    // board read were DELETED from the look-ahead module (their Learn lane was
+    // built but never spoken), so the sweep no longer drives them. Re-measured
+    // without them: 56,514. Same rule as above — a real cut, not a regression,
+    // and the margin stays narrow.
+    expect(chars, 'the narration got thinner, not just fewer-sentenced').toBeGreaterThan(50_000);
     expect(concessions, 'the concession beat never fired across 400 games').toBeGreaterThan(0);
   // 🔒 THE DEADLINE MUST NOT BE THE THING THAT FAILS. Measured solo on a quiet
   // machine this test takes ~193s — against a 240s cap, a 1.24x margin. Any

@@ -30,7 +30,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildOpeningChainFacts` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10053`
+- `src/components/Coach/CoachTeachPage.tsx:9429`
 - `src/services/openingFactChains.test.ts:11`
 - `src/services/openingFactChains.test.ts:19`
 - `src/services/openingFactChains.test.ts:27`

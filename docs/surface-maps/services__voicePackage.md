@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**606 lines · 7 exports · 9 importers · 6 tests · 2 audits**
+**512 lines · 7 exports · 9 importers · 6 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,12 +13,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/components/Coach/CoachGameReview.tsx`
-- `src/components/Coach/CoachTeachPage.tsx`
 - `src/hooks/usePhaseNarration.ts`
 - `src/hooks/usePositionNarration.ts`
 - `src/services/coachSurfaceScorecard.report.test.ts`
 - `src/services/computedVoiceAudit.report.test.ts`
 - `src/services/laneReachability.test.ts`
+- `src/services/learnTurnDoor.ts`
 - `src/services/replayFence.najdorf1500.test.ts`
 - `src/services/voicePackage.test.ts`
 
@@ -31,25 +31,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `markableSquares` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10926`
-- `src/services/voicePackage.test.ts:419`
-- `src/services/voicePackage.test.ts:428`
-- `src/services/voicePackage.test.ts:438`
-- `src/services/voicePackage.test.ts:445`
-- `src/services/voicePackage.test.ts:452`
-- `src/services/voicePackage.test.ts:511`
+- `src/components/Coach/CoachTeachPage.tsx:10270`
+- `src/services/voicePackage.test.ts:309`
+- `src/services/voicePackage.test.ts:318`
+- `src/services/voicePackage.test.ts:328`
+- `src/services/voicePackage.test.ts:335`
+- `src/services/voicePackage.test.ts:342`
+- `src/services/voicePackage.test.ts:401`
 
 ### `VoicePackage` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildVoicePackage` (function) — 77 call sites
+### `buildVoicePackage` (function) — 64 call sites
 - `src/components/Coach/CoachGameReview.tsx:2005`
 - `src/components/Coach/CoachGameReview.tsx:2043`
-- `src/components/Coach/CoachTeachPage.tsx:7573`
-- `src/components/Coach/CoachTeachPage.tsx:8462`
-- `src/components/Coach/CoachTeachPage.tsx:8517`
-- `src/components/Coach/CoachTeachPage.tsx:10892`
-- `src/components/Coach/CoachTeachPage.tsx:10904`
+- `src/components/Coach/CoachTeachPage.tsx:7499`
 - `src/hooks/usePhaseNarration.ts:425`
 - `src/hooks/usePhaseNarration.ts:875`
 - `src/hooks/usePositionNarration.ts:314`
@@ -57,9 +53,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachSurfaceScorecard.report.test.ts:138`
 - `src/services/coachSurfaceScorecard.report.test.ts:149`
 - `src/services/coachSurfaceScorecard.report.test.ts:170`
-- `src/services/computedVoiceAudit.report.test.ts:369`
-- `src/services/computedVoiceAudit.report.test.ts:410`
-- `src/services/laneReachability.test.ts:168`
+- `src/services/computedVoiceAudit.report.test.ts:363`
+- `src/services/computedVoiceAudit.report.test.ts:395`
+- `src/services/laneReachability.test.ts:136`
+- `src/services/learnTurnDoor.ts:127`
 - `src/services/replayFence.najdorf1500.test.ts:50`
 - `src/services/voicePackage.test.ts:19`
 - `src/services/voicePackage.test.ts:32`
@@ -76,62 +73,52 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:157`
 - `src/services/voicePackage.test.ts:176`
 - `src/services/voicePackage.test.ts:182`
-- `src/services/voicePackage.test.ts:214`
-- `src/services/voicePackage.test.ts:231`
-- `src/services/voicePackage.test.ts:240`
-- `src/services/voicePackage.test.ts:251`
-- `src/services/voicePackage.test.ts:259`
-- `src/services/voicePackage.test.ts:288`
-- `src/services/voicePackage.test.ts:297`
-- `src/services/voicePackage.test.ts:306`
+- `src/services/voicePackage.test.ts:208`
+- `src/services/voicePackage.test.ts:217`
+- `src/services/voicePackage.test.ts:228`
+- `src/services/voicePackage.test.ts:236`
+- `src/services/voicePackage.test.ts:250`
+- `src/services/voicePackage.test.ts:266`
+- `src/services/voicePackage.test.ts:276`
+- `src/services/voicePackage.test.ts:285`
+- `src/services/voicePackage.test.ts:305`
 - `src/services/voicePackage.test.ts:315`
-- `src/services/voicePackage.test.ts:326`
-- `src/services/voicePackage.test.ts:328`
-- `src/services/voicePackage.test.ts:336`
-- `src/services/voicePackage.test.ts:343`
-- `src/services/voicePackage.test.ts:353`
+- `src/services/voicePackage.test.ts:324`
+- `src/services/voicePackage.test.ts:332`
+- `src/services/voicePackage.test.ts:339`
+- `src/services/voicePackage.test.ts:359`
 - `src/services/voicePackage.test.ts:369`
-- `src/services/voicePackage.test.ts:379`
-- `src/services/voicePackage.test.ts:388`
-- `src/services/voicePackage.test.ts:396`
-- `src/services/voicePackage.test.ts:415`
-- `src/services/voicePackage.test.ts:425`
-- `src/services/voicePackage.test.ts:434`
-- `src/services/voicePackage.test.ts:442`
-- `src/services/voicePackage.test.ts:449`
-- `src/services/voicePackage.test.ts:469`
-- `src/services/voicePackage.test.ts:479`
-- `src/services/voicePackage.test.ts:485`
-- `src/services/voicePackage.test.ts:493`
-- `src/services/voicePackage.test.ts:501`
-- `src/services/voicePackage.test.ts:507`
-- `src/services/voicePackage.test.ts:526`
-- `src/services/voicePackage.test.ts:537`
-- `src/services/voicePackage.test.ts:545`
-- `src/services/voicePackage.test.ts:549`
-- `src/services/voicePackage.test.ts:554`
-- `src/services/voicePackage.test.ts:561`
-- `src/services/voicePackage.test.ts:572`
-- `src/services/voicePackage.test.ts:583`
-- `src/services/voicePackage.test.ts:590`
-- `src/services/voicePackage.test.ts:598`
-- `src/services/voicePackage.test.ts:609`
-- `src/services/voicePackage.test.ts:614`
-- `src/services/voicePackage.test.ts:621`
-- `src/services/voicePackage.test.ts:625`
-- `src/services/voicePackage.test.ts:639`
+- `src/services/voicePackage.test.ts:375`
+- `src/services/voicePackage.test.ts:383`
+- `src/services/voicePackage.test.ts:391`
+- `src/services/voicePackage.test.ts:397`
+- `src/services/voicePackage.test.ts:416`
+- `src/services/voicePackage.test.ts:427`
+- `src/services/voicePackage.test.ts:435`
+- `src/services/voicePackage.test.ts:439`
+- `src/services/voicePackage.test.ts:444`
+- `src/services/voicePackage.test.ts:451`
+- `src/services/voicePackage.test.ts:462`
+- `src/services/voicePackage.test.ts:473`
+- `src/services/voicePackage.test.ts:480`
+- `src/services/voicePackage.test.ts:488`
+- `src/services/voicePackage.test.ts:499`
+- `src/services/voicePackage.test.ts:504`
+- `src/services/voicePackage.test.ts:511`
+- `src/services/voicePackage.test.ts:515`
+- `src/services/voicePackage.test.ts:529`
 
 ### `spokenSentenceKeys` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10380`
-- `src/components/Coach/CoachTeachPage.tsx:10914`
-- `src/services/voicePackage.test.ts:525`
-- `src/services/voicePackage.test.ts:534`
-- `src/services/voicePackage.test.ts:546`
-- `src/services/voicePackage.test.ts:624`
+- `src/components/Coach/CoachTeachPage.tsx:9756`
+- `src/components/Coach/CoachTeachPage.tsx:10258`
+- `src/services/voicePackage.test.ts:415`
+- `src/services/voicePackage.test.ts:424`
+- `src/services/voicePackage.test.ts:436`
+- `src/services/voicePackage.test.ts:514`
 
 ### `describeVoicePackage` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10372`
-- `src/components/Coach/CoachTeachPage.tsx:10938`
+- `src/components/Coach/CoachTeachPage.tsx:9748`
+- `src/components/Coach/CoachTeachPage.tsx:10282`
 - `src/services/voicePackage.test.ts:38`
 
 ## Tests

@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **Routing** (CLAUDE.md:5280) — names `CoachSessionPage`
+- **Routing** (CLAUDE.md:5311) — names `CoachSessionPage`
 
 ## Who calls in
 

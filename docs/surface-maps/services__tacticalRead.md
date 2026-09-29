@@ -82,8 +82,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:81`
 - `src/services/tacticalRead.test.ts:84`
 
-### `namedTacticClause` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9583`
+### `namedTacticClause` (function) — 4 call sites
 - `src/services/danyaBehaviors.ts:460`
 - `src/services/danyaDeviceCoverage.test.ts:102`
 - `src/services/tacticalRead.test.ts:144`
@@ -94,7 +93,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:126`
 
 ### `tacticalReadFromLines` (function) — 13 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9000`
+- `src/components/Coach/CoachTeachPage.tsx:8880`
 - `src/services/danyaBehaviors.ts:458`
 - `src/services/danyaDeviceCoverage.test.ts:73`
 - `src/services/liveVoiceDefects.test.ts:46`
@@ -115,18 +114,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:201`
 - `src/services/tacticalRead.test.ts:546`
 
-### `temptingTurnClause` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9015`
-- `src/components/Coach/CoachTeachPage.tsx:9602`
+### `temptingTurnClause` (function) — 4 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8895`
 - `src/services/danyaDeviceCoverage.test.ts:79`
 - `src/services/tacticalRead.test.ts:437`
 - `src/services/tacticalRead.test.ts:450`
 
-### `uncertaintyClause` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9021`
-- `src/components/Coach/CoachTeachPage.tsx:9605`
+### `uncertaintyClause` (function) — 13 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8901`
 - `src/services/danyaDeviceCoverage.test.ts:84`
-- `src/services/liveVoiceDefects.test.ts:281`
+- `src/services/liveVoiceDefects.test.ts:279`
 - `src/services/tacticalRead.test.ts:422`
 - `src/services/tacticalRead.test.ts:443`
 - `src/services/tacticalRead.test.ts:451`
@@ -139,7 +136,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:582`
 
 ### `candidateCompareClause` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9027`
+- `src/components/Coach/CoachTeachPage.tsx:8907`
 - `src/services/danyaDeviceCoverage.test.ts:89`
 - `src/services/tacticalRead.test.ts:455`
 - `src/services/tacticalRead.test.ts:463`

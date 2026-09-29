@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**813 lines · 3 exports · 15 importers · 4 tests · 0 audits**
+**813 lines · 3 exports · 15 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **The standard post-deploy ritual** (CLAUDE.md:6072) — names `tacticClassifier`
 
 ## Who calls in
 
@@ -86,6 +86,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/services/tacticClassifier.skewer.test.ts`
 - `src/services/tacticClassifier.test.ts`
+- `src/services/tacticClassifierService.fill.test.ts`
 - `src/services/tacticClassifierService.test.ts`
 - `src/test/kingIsNeverHanging.test.ts`
 

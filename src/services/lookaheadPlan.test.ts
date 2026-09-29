@@ -13,9 +13,9 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import {
-  buildLookaheadPlan, keySquaresOf, keySquareLine, describePlan, planFromUci,
-  positionReadLine, lineShapeLine, terminalReadLine, PLAN_HORIZON, mergeTwinDriftForTest } from './lookaheadPlan';
-import type { SidePlan, LookaheadPlan, LineShape, TerminalRead, PositionRead } from './lookaheadPlan';
+  buildLookaheadPlan, keySquaresOf, describePlan, planFromUci,
+  PLAN_HORIZON, mergeTwinDriftForTest } from './lookaheadPlan';
+import type { SidePlan, LookaheadPlan } from './lookaheadPlan';
 
 /** Every field `SidePlan` grew AFTER these fixtures were written (attack /
  *  material / trade squares, the idle list, maneuver, checks, promotion, the
@@ -23,27 +23,6 @@ import type { SidePlan, LookaheadPlan, LineShape, TerminalRead, PositionRead } f
  *  only what it is about. Spread FIRST so a fixture's own field wins. */
 import type { PvLine, PvPly, PlyFacts } from './pvPlayback';
 import { buildSidePlan } from '../test/factories';
-
-/**
- * A `LineShape` with the fields this test does not care about filled in
- * HONESTLY — null rather than 0, because "no capture happened" and "the first
- * capture was at ply 0" are different facts and a 0 would make every shape
- * look like it had measured something it never looked at.
- */
-function lineShape(over: Partial<LineShape>): LineShape {
-  return {
-    forcedPlies: 0,
-    traded: 0,
-    endsInEndgame: false,
-    repeats: false,
-    pliesToFirstCapture: null,
-    quietMoveIndex: null,
-    evalSwingCp: null,
-    castlingLost: null,
-    ...over,
-  };
-}
-
 
 const EMPTY: PlyFacts = {
   captured: null, isCheck: false, isMate: false, promotion: null,
@@ -207,19 +186,6 @@ describe('key squares are counted, not felt', () => {
     expect(keys.some((k) => k.square === 'h6')).toBe(false);
   });
 
-  it('earns the strong claim only when the counts support it', () => {
-    // "The square this position turns on" is a different claim from "a square
-    // worth watching", and which one is spoken is decided by arithmetic.
-    const hot = keySquaresOf(plies(START, ['e4', 'd5', 'exd5', 'Qxd5', 'Nc3', 'Qd8']));
-    expect(keySquareLine(hot)).toContain("Everything's running through");
-
-    const quiet = keySquaresOf(plies(START, ['Nf3', 'Nf6', 'Ng1', 'Ng8']));
-    expect(keySquareLine(quiet)).not.toContain("Everything's running through");
-  });
-
-  it('says nothing when the line touches nothing twice', () => {
-    expect(keySquareLine(keySquaresOf(plies(START, ['e4', 'c5'])))).toBe('');
-  });
 });
 
 describe('every claim traces to a move the engine actually played', () => {
@@ -532,96 +498,6 @@ describe('the read sees the board as it stands, not only what the line changes',
     expect(planFromUci(START, ['e2e4', 'c7c5', 'g1f3', 'd7d6'], 'white')?.read.evalSwingCp).toBeNull();
   });
 
-  it('leads with opposite-wing kings, because it reframes everything else', () => {
-    const read = {
-      tacticsNow: ['fork'], oppositeWings: true,
-      islands: { white: 3, black: 1 }, halfOpen: { white: ['c'], black: [] },
-      endgameType: null, materialBalance: 0, evalSwingCp: null,
-    };
-    expect(positionReadLine(read, 'white')).toContain('opposite wings');
-  });
-
-  it('names a tactic already on the board, in English', () => {
-    const read = {
-      tacticsNow: ['mate_threat'], oppositeWings: false,
-      islands: { white: 2, black: 2 }, halfOpen: { white: [], black: [] },
-      endgameType: null, materialBalance: 0, evalSwingCp: null,
-    };
-    const said = positionReadLine(read, 'white');
-    expect(said).toContain('mating threat');
-    expect(said, 'a raw identifier reached the voice').not.toMatch(/_/);
-  });
-
-  it('says nothing when the board has nothing worth saying', () => {
-    expect(positionReadLine({
-      tacticsNow: [], oppositeWings: false,
-      islands: { white: 1, black: 1 }, halfOpen: { white: [], black: [] },
-      endgameType: null, materialBalance: 0, evalSwingCp: null,
-    }, 'white')).toBe('');
-  });
-
-  it('reads islands from the STUDENT\'s side of the board', () => {
-    const read = {
-      tacticsNow: [], oppositeWings: false,
-      islands: { white: 1, black: 3 }, halfOpen: { white: [], black: [] },
-      endgameType: null, materialBalance: 0, evalSwingCp: null,
-    };
-    // For White the opponent has more islands; flipping the student must flip
-    // whose weakness it is, not lose it.
-    expect(positionReadLine(read, 'white')).toContain("They've got 3");
-    expect(positionReadLine(read, 'black')).not.toContain("They've got 3");
-  });
-
-  it('never tells a rookless side where a rook belongs', () => {
-    // A half-open file is a PAWN fact, so it outlives the rooks — and the line
-    // then advises a student to post a piece they no longer own. It showed up
-    // as a `voicePackage.plan` grading drop in David's live log (2026-08-10);
-    // per G0 the fix is that the claim is never computed, not that a gate
-    // catches it.
-    const read: PositionRead = {
-      tacticsNow: [], oppositeWings: false, islands: { white: 2, black: 2 },
-      halfOpen: { white: ['e'], black: [] }, endgameType: null,
-      materialBalance: 0, evalSwingCp: null,
-    };
-    const ROOKLESS = '4k3/5ppp/8/8/8/8/PPP2PPP/4K3 w - - 0 1';
-    const WITH_ROOK = '4k3/5ppp/8/8/8/8/PPP2PPP/R3K3 w - - 0 1';
-    expect(positionReadLine(read, 'white', undefined, ROOKLESS)).not.toContain('rook');
-    expect(positionReadLine(read, 'white', undefined, WITH_ROOK)).toContain('rook');
-    // No board handed in → say nothing rather than guess.
-    expect(positionReadLine(read, 'white')).not.toContain('rook');
-  });
-});
-
-describe('"the square this position turns on" is said once', () => {
-  // From the prod audit transcript, 2026-08-10, five seconds apart:
-  //   "d5 is the square this position turns on — both sides keep coming back."
-  //   "d3 is the square this position turns on — both sides keep coming back."
-  // Each was true of its own line. Together they cancel: a coach that names
-  // THE decisive square every move has named nothing.
-  const hot = () => keySquaresOf(plies(START, ['e4', 'd5', 'exd5', 'Qxd5', 'Nc3', 'Qd8']));
-
-  it('spends the superlative once, then speaks honestly', () => {
-    const said = new Set<string>();
-    expect(keySquareLine(hot(), said)).toContain("Everything's running through");
-    // A different square, same game — it may still be worth naming, but not as
-    // the one the position turns on.
-    const other = keySquaresOf(plies(START, ['d4', 'e5', 'dxe5', 'Nc6', 'Nf3', 'Nxe5']));
-    const second = keySquareLine(other, said);
-    expect(second, `said the superlative twice: ${second}`).not.toContain("Everything's running through");
-  });
-
-  it('still names the second square rather than going silent', () => {
-    const said = new Set<string>();
-    keySquareLine(hot(), said);
-    const other = keySquaresOf(plies(START, ['d4', 'e5', 'dxe5', 'Nc6', 'Nf3', 'Nxe5']));
-    const second = keySquareLine(other, said);
-    expect(second, 'the weaker form should still speak').not.toBe('');
-  });
-
-  it('without a said-set every caller still gets the strong form', () => {
-    // The set is the caller's memory of ONE game; a fresh game starts fresh.
-    expect(keySquareLine(hot())).toContain("Everything's running through");
-  });
 });
 
 describe('the two sides never say the same sentence twice', () => {
@@ -723,22 +599,6 @@ describe('the plan does not repeat itself', () => {
     expect(describePlan(P, 'mine', said)).toBe('');
   });
 
-  it('the board read stops repeating too', () => {
-    const read = {
-      tacticsNow: ['pin'], oppositeWings: false,
-      islands: { white: 1, black: 3 }, halfOpen: { white: ['c'], black: [] },
-      endgameType: null, materialBalance: 0, evalSwingCp: null,
-    };
-    const said = new Set<string>();
-    const a = positionReadLine(read, 'white', said);
-    const b = positionReadLine(read, 'white', said);
-    // Uncapped, the first call says every fresh rung — the pin, the islands and
-    // the half-open file — so the second correctly has nothing left.
-    expect(a).toContain('pin');
-    expect(a, 'the read spoke one rung and discarded the rest').toContain('islands');
-    expect(b, 'the same board fact was spoken twice running').not.toBe(a);
-    expect(b, 'nothing was left, so silence is right').toBe('');
-  });
 });
 
 describe('a passed pawn belongs to the side that has it', () => {
@@ -777,30 +637,6 @@ describe('a passed pawn belongs to the side that has it', () => {
         }
       }
     }
-  });
-});
-
-describe('an uncontested square has to earn the sentence', () => {
-  // Also found on PROD: "a7 is worth watching; the play keeps running through
-  // it" — in a quiet Italian, about a rim square nothing was fighting over. It
-  // reached the top slot on two touches and no contest. Contest is the whole
-  // signal; without it the traffic has to be heavy enough to mean something.
-  const key = (over: Partial<{ square: string; whiteTouches: number; blackTouches: number; contested: boolean }>) => ([{
-    square: 'a7', whiteTouches: 2, blackTouches: 0, materialOnSquare: 0,
-    weight: 3, contested: false, ...over,
-  }]);
-
-  it('says nothing about a square one side merely passed through', () => {
-    expect(keySquareLine(key({}))).toBe('');
-  });
-
-  it('still speaks when one side keeps returning to it', () => {
-    expect(keySquareLine(key({ whiteTouches: 5 }))).toContain('Keep half an eye on');
-  });
-
-  it('always speaks for a contested square, however light the traffic', () => {
-    // Contest is the signal that does not need volume behind it.
-    expect(keySquareLine(key({ whiteTouches: 1, blackTouches: 1, contested: true }))).not.toBe('');
   });
 });
 
@@ -876,29 +712,6 @@ describe('the rest of what the line has to say', () => {
     expect(p?.shape.traded).toBeGreaterThan(0);
   });
 
-  it('says a forced run out loud, and stays quiet when there are choices', () => {
-    const said = new Set<string>();
-    expect(lineShapeLine(lineShape({ forcedPlies: 3, traded: 0, endsInEndgame: false  }), said))
-      .toContain('forced');
-    // `pliesToFirstCapture: 1` isolates the FORCING claim. Left null, the shape
-    // means 'nothing is ever captured', which legitimately earns its own
-    // manoeuvring-line sentence — a different fact from 'there were choices'.
-    expect(lineShapeLine(lineShape({ forcedPlies: 0, traded: 0, endsInEndgame: false, pliesToFirstCapture: 1 })))
-      .not.toContain('forced');
-  });
-
-  it('says the line trades down into an ending', () => {
-    expect(lineShapeLine(lineShape({ forcedPlies: 0, traded: 12, endsInEndgame: true  })))
-      .toMatch(/comes off.*endgame|endgame/s);
-  });
-
-  it('says each shape fact once a game, not once a ply', () => {
-    const said = new Set<string>();
-    const shape = lineShape({ forcedPlies: 3, traded: 12, endsInEndgame: true  });
-    expect(lineShapeLine(shape, said)).not.toBe('');
-    expect(lineShapeLine(shape, said), 'the shape read chanted').toBe('');
-  });
-
   it('never hands over a move in any of it', () => {
     for (const sans of [
       ['Nf3', 'e5', 'Nd4', 'd5', 'Nb5', 'a6'],
@@ -906,7 +719,7 @@ describe('the rest of what the line has to say', () => {
       ['e4', 'd5', 'exd5', 'Qxd5', 'Nc3', 'Qxg2'],
     ]) {
       const p = plan(sans);
-      for (const t of [p?.white.text, p?.black.text, lineShapeLine(p?.shape ?? lineShape({ forcedPlies: 0, traded: 0, endsInEndgame: false  }))]) {
+      for (const t of [p?.white.text, p?.black.text]) {
         expect(t ?? '', `a move leaked: ${t}`).not.toMatch(/\b[NBRQK][a-h]?[1-8]?x?[a-h][1-8]\b/);
       }
     }
@@ -940,83 +753,6 @@ describe('the reroute clause survived its own prod run', () => {
 describe('the rest of the inventory — everything the line leaves behind', () => {
   // David 2026-08-10, given the list of what the PV could still yield: "I want
   // them all. Spoken when they apply." These are the remainder.
-  const shape = (over: Partial<LineShape> = {}): LineShape => ({
-    forcedPlies: 0, traded: 0, endsInEndgame: false, repeats: false,
-    pliesToFirstCapture: 0, quietMoveIndex: null, evalSwingCp: null,
-    castlingLost: null, ...over,
-  });
-  const terminal = (over: Partial<TerminalRead> = {}): TerminalRead => ({
-    loose: [], mobilityShift: { mine: 0, theirs: 0 }, kingOnOpenFile: null,
-    betterPawns: null, breaks: [], ...over,
-  });
-
-  it('calls a repetition what it is', () => {
-    expect(lineShapeLine(shape({ repeats: true }))).toContain('repeats the position');
-  });
-
-  it('says a quiet move is buried in there WITHOUT naming its square', () => {
-    // Finding the in-between move is the exercise; saying it exists is the hint.
-    const said = lineShapeLine(shape({ quietMoveIndex: 3 }));
-    expect(said).toContain('quiet move');
-    expect(said).not.toMatch(/\b[a-h][1-8]\b/);
-  });
-
-  it('names a manoeuvring line by how long nothing is taken', () => {
-    expect(lineShapeLine(shape({ pliesToFirstCapture: 7 }))).toContain('manoeuvring');
-    expect(lineShapeLine(shape({ pliesToFirstCapture: 1 }))).not.toContain('manoeuvring');
-  });
-
-  it('tells the student whose castling rights went', () => {
-    expect(lineShapeLine(shape({ castlingLost: 'mine' }))).toContain('Your king loses');
-    expect(lineShapeLine(shape({ castlingLost: 'theirs' }))).toContain('They lose');
-  });
-
-  it('says NOTHING about the eval swing — it would be meaningless', () => {
-    // A first draft spoke "playing this through is worth about a pawn to you"
-    // from the root→terminal swing. On this path the line IS the engine's
-    // principal variation, and a PV's terminal eval equals its root eval by
-    // definition — that is what makes it principal. The swing is structurally
-    // zero, so the sentence could only ever say nothing or say something false.
-    // Found by auditing whether each new lane could actually fire, not by a
-    // test failing.
-    for (const cp of [20, 150, -400, 900]) {
-      expect(lineShapeLine(shape({ evalSwingCp: cp })), `spoke a PV swing at ${cp}`).toBe('');
-    }
-  });
-
-  it('reads the king on an open file at the END of the line', () => {
-    expect(terminalReadLine(terminal({ kingOnOpenFile: 'mine' }))).toContain('Your king ends up');
-    expect(terminalReadLine(terminal({ kingOnOpenFile: 'theirs' }))).toContain('Their king ends up');
-  });
-
-  it('reports a real squeeze, not engine noise', () => {
-    expect(terminalReadLine(terminal({ mobilityShift: { mine: 0, theirs: -12 } })))
-      .toContain('fewer squares');
-    expect(terminalReadLine(terminal({ mobilityShift: { mine: 0, theirs: -3 } }))).toBe('');
-  });
-
-  it('says who comes out with the tidier pawns', () => {
-    expect(terminalReadLine(terminal({ betterPawns: 'mine' }))).toContain('tidier pawns');
-  });
-
-  it('names the break that is ready once the line finishes', () => {
-    expect(terminalReadLine(terminal({ breaks: ['c5'] }))).toContain('pawn break on c5');
-  });
-
-  it('says each of these once a game, not once a ply', () => {
-    const said = new Set<string>();
-    const t = terminal({ kingOnOpenFile: 'mine', betterPawns: 'mine', breaks: ['c5'] });
-    expect(terminalReadLine(t, said)).not.toBe('');
-    expect(terminalReadLine(t, said), 'the terminal read chanted').toBe('');
-  });
-
-  it('never hands over a move in any of it', () => {
-    const all = [
-      lineShapeLine(shape({ repeats: true, quietMoveIndex: 2, castlingLost: 'both', evalSwingCp: 400 })),
-      terminalReadLine(terminal({ kingOnOpenFile: 'theirs', loose: ['e5'], breaks: ['c5'], betterPawns: 'mine' })),
-    ];
-    for (const t of all) expect(t, `a move leaked: ${t}`).not.toMatch(/\b[NBRQK][a-h]?[1-8]?x?[a-h][1-8]\b/);
-  });
 
   it('a PAWN is never described as being rerouted', () => {
     // A live probe produced "they want to walk the pawn round to a5, by way of
@@ -1184,33 +920,6 @@ describe('sentences that were true and still wrong', () => {
     expect(said.match(/new queen on a8/g) ?? []).toHaveLength(1);
   });
 
-  it('names every standing tactic in ONE frame, not one frame each', () => {
-    // Verbatim from the transcript: "There's already a fork sitting on the
-    // board, whether or not anyone plays into it. There's already a removal of
-    // the defender sitting on the board, whether or not anyone plays into it."
-    const read = {
-      tacticsNow: ['fork', 'removal_of_guard'], oppositeWings: false,
-      islands: { white: 1, black: 1 }, halfOpen: { white: [], black: [] },
-      endgameType: null, materialBalance: 0, evalSwingCp: null,
-    };
-    const line = positionReadLine(read, 'white', new Set());
-    expect(line.match(/sitting on the board/g) ?? []).toHaveLength(1);
-    expect(line).toMatch(/a fork and a removal of the defender/);
-  });
-
-  it('still refuses to re-announce a tactic named on an earlier ply', () => {
-    const said = new Set<string>();
-    const read = (tactics: string[]) => ({
-      tacticsNow: tactics, oppositeWings: false,
-      islands: { white: 1, black: 1 }, halfOpen: { white: [], black: [] },
-      endgameType: null, materialBalance: 0, evalSwingCp: null,
-    });
-    const first = positionReadLine(read(['fork']), 'white', said);
-    const second = positionReadLine(read(['fork', 'pin']), 'white', said);
-    expect(first).toMatch(/a fork sitting/);
-    expect(second).toMatch(/a pin sitting/);
-    expect(second, 'the fork was already said').not.toMatch(/fork/);
-  });
 });
 
 describe('mergeTwinDrift — the double-sentence fix must actually RUN', () => {

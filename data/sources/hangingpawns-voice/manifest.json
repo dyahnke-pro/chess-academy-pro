@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-21T15:38:37.180Z",
+  "updatedAt": "2026-09-28T17:21:53.981Z",
   "videos": [
     {
       "id": "UQlQjco7Mc8",
@@ -2734,6 +2734,16 @@
     {
       "id": "1fT9aSl1cGE",
       "title": "Sicilian McDonnell Attack (2.f4)",
+      "playlist": "complete-chess-openings"
+    },
+    {
+      "id": "y_nTGCFsrUc",
+      "title": "The Grand Prix Attack against the Sicilian",
+      "playlist": "complete-chess-openings"
+    },
+    {
+      "id": "jKYqqsmO-7U",
+      "title": "The Chekover Sicilian (Qxd4)",
       "playlist": "complete-chess-openings"
     }
   ]

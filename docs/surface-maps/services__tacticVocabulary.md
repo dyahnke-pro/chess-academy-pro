@@ -31,15 +31,15 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `tacticWord` (function) — 24 call sites
+- `src/components/Coach/CoachTeachPage.tsx:7689`
 - `src/components/Coach/CoachTeachPage.tsx:7764`
-- `src/components/Coach/CoachTeachPage.tsx:7839`
-- `src/services/computedVoiceAudit.report.test.ts:262`
+- `src/services/computedVoiceAudit.report.test.ts:256`
 - `src/services/dnaLineNarrator.ts:129`
 - `src/services/dnaLineNarrator.ts:218`
 - `src/services/groundedAnswer.ts:5046`
 - `src/services/groundedAnswer.ts:5058`
 - `src/services/groundedAnswer.ts:5818`
-- `src/services/lookaheadPlan.ts:106`
+- `src/services/lookaheadPlan.ts:97`
 - `src/services/pvPlayback.test.ts:291`
 - `src/services/pvPlayback.test.ts:292`
 - `src/services/pvPlayback.test.ts:293`
@@ -63,7 +63,7 @@
 - `src/services/pvPlayback.ts:231`
 
 ### `patternAim` (function) — 5 call sites
-- `src/services/lookaheadPlan.ts:103`
+- `src/services/lookaheadPlan.ts:94`
 - `src/services/pvPlayback.ts:640`
 - `src/services/pvPlayback.ts:660`
 - `src/services/pvPlayback.ts:697`

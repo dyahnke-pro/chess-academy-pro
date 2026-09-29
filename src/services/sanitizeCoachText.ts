@@ -62,6 +62,9 @@ const JSON_MARKUP_RE = /\\?\[\[?[A-Z][A-Z0-9_]*:[^[\]{]*\{[\s\S]*?\}\s*\]\]?/g;
  *
  *  Bracketed ALL-CAPS-then-colon is a directive by construction; ordinary
  *  prose does not shout inside square brackets. */
+/** A `[VOICE:` opener with no `]` anywhere after it. */
+const UNCLOSED_VOICE_RE = /\\?\[VOICE:\s*(?![^\]]*\])/g;
+
 const SINGLE_MARKUP_RE = /\\?\[[A-Z][A-Z0-9_]*(?: [A-Z][A-Z0-9_]*)*:[^\]]*\]/g;
 
 /** Board markup the LLM sometimes emits as PROSE despite the "code draws
@@ -149,6 +152,11 @@ function stripMarkup(text: string): string {
     // the generic single-bracket match early and leak the tail.
     .replace(JSON_MARKUP_RE, '')
     .replace(SINGLE_MARKUP_RE, '')
+    // AN UNCLOSED `[VOICE:` OPENER (prod tape 2026-09-29): a reply began
+    // "[VOICE: You've got a clear edge…" with no closing `]`, so neither the
+    // marker extractor nor the stripper above matched and the raw tag reached
+    // the chat bubble AND the voice. The opener goes; the words stay.
+    .replace(UNCLOSED_VOICE_RE, '')
     // Prose "Board arrows:/highlights:" lists the LLM emits despite the
     // code-draws-the-board rule — strip before whitespace-collapse.
     .replace(BOARD_PROSE_RE, '')

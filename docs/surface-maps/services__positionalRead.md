@@ -36,7 +36,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `rookReachesFile` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10723`
+- `src/components/Coach/CoachTeachPage.tsx:10075`
 - `src/services/danyaBehaviors.ts:644`
 
 ### `castleIsOneMoveAway` (function) — 4 call sites
@@ -48,11 +48,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `readPosition` (function) — 46 call sites
 - `src/services/boardPlan.ideaKey.test.ts:13`
 - `src/services/groundedAnswer.ts:1397`
-- `src/services/lookaheadPlan.ts:945`
-- `src/services/lookaheadPlan.ts:1214`
-- `src/services/lookaheadPlan.ts:1568`
-- `src/services/narrationAdversarial.test.ts:87`
-- `src/services/narrationAdversarial.test.ts:173`
+- `src/services/lookaheadPlan.ts:936`
+- `src/services/lookaheadPlan.ts:1205`
+- `src/services/lookaheadPlan.ts:1282`
+- `src/services/narrationAdversarial.test.ts:85`
+- `src/services/narrationAdversarial.test.ts:176`
 - `src/services/positionReadComposer.ts:128`
 - `src/services/positionalRead.race.test.ts:10`
 - `src/services/positionalRead.test.ts:28`
@@ -94,12 +94,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
 ### `buildPositionalRead` (function) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8397`
+- `src/components/Coach/CoachTeachPage.tsx:8299`
 - `src/services/claimChecker.measure.test.ts:132`
 - `src/services/learnWalkBlumenfeld.test.ts:116`
 - `src/services/learnWalkNimzo.test.ts:35`
-- `src/services/narrationAdversarial.test.ts:106`
-- `src/services/narrationAdversarial.test.ts:174`
+- `src/services/narrationAdversarial.test.ts:104`
+- `src/services/narrationAdversarial.test.ts:177`
 - `src/services/positionalRead.ideaKey.test.ts:18`
 - `src/services/positionalRead.ideaKey.test.ts:30`
 - `src/services/positionalRead.test.ts:164`

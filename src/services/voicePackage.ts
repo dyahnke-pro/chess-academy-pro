@@ -77,28 +77,12 @@ export type VoiceFactKind =
   /** BOTH SIDES' PLANS, read off the engine's own line (`lookaheadPlan`).
    *
    *  David 2026-08-09: this "replaces the corpus notes as primary first heard by
-   *  user when corpus runs out" — so it sits ABOVE the borrowed tiers and below
+   *  user when corpus runs out" — so it sits below
    *  a note authored at this exact board. A computed plan about THIS position
    *  outranks a real note about a DIFFERENT one, which is the reordering he
    *  asked for and is plainly right given that 44.6% of the notes selection
    *  reaches name an opening that never gets to the board they were filed at. */
   | 'plan'
-  /** Corpus teaching borrowed from a DIFFERENT board — structure transfer, the
-   *  concept tier, an opening-family note. Honest teaching, framed as such
-   *  ("The same idea shows up in positions like this"), but it is not about
-   *  these squares and now ranks below the plan that is. */
-  | 'borrowed'
-  /** THE FORK IN THE ROAD, while still in book (`forkNarration.forkOfferAt`).
-   *
-   *  David 2026-08-10: "Have the coach narrate with the forward PV the two
-   *  different paths and have the coach ask which path they want to walk down.
-   *  This happens only when still in book/theory."
-   *
-   *  Distinct from `forkTalk`, which fires on near-EQUAL ENGINE options anywhere
-   *  in the game. This one fires where the THEORY splits, which the engine's
-   *  top-three need not agree with. Answered by PLAYING one of the roads — it
-   *  never blocks the board. */
-  | 'fork'
   /** A newly resolved opening name. */
   | 'opening'
   /** The computed read — true of this position by construction. */
@@ -224,14 +208,6 @@ const RANK: Record<VoiceFactKind, number> = {
   // package, where the note was speaking first.)
   threat: 8,
   tactic: 7,
-  // A CHOICE OF ROADS, offered while the game is still in theory. Below the
-  // urgent lanes on purpose — a hanging piece is happening now, a fork in the
-  // road is a question — and above the borrowed corpus, because a question
-  // about THIS position beats a rule from another one.
-  fork: 6,
-  // Corpus teaching BORROWED from a different board still sits below the
-  // computed plan: a plan about THIS position beats a real note about another.
-  borrowed: 3,
   opening: 2,
   computed: 1,
   observation: 0,
@@ -420,80 +396,10 @@ export function buildVoicePackage(
     .map((f, i) => ({ f, i }))
     .sort((a, b) => RANK[b.f.kind] - RANK[a.f.kind] || a.i - b.i);
 
-  // THE GENERAL RULE YIELDS TO THE PARTICULAR BOARD (David 2026-08-10: "I want
-  // more out of the PV and less from general rules. They do not match the board
-  // well enough." Then, asked whether they should yield entirely: "Do it.").
-  //
-  // `borrowed` is corpus teaching reached by structure or concept transfer —
-  // honest, framed as such ("As a rule in these positions…"), and about a
-  // DIFFERENT board. It dominated his transcript: five of twelve utterances in
-  // one game led with it, including "with three extra pawns, trading pieces is
-  // the fastest road to promotion" in a level middlegame and "the pawn
-  // advantage makes development the priority" with no pawn advantage. Each is
-  // true somewhere; none was true there.
-  //
-  // So when the look-ahead has produced something about THIS position, the
-  // borrowed tier stands down. It still carries whole turns the PV cannot
-  // reach, which is most of its value and all of its reason to exist.
-  //
-  // A note authored AT this exact board is a different kind and is untouched:
-  // the corpus note is always first (the 90/10 rule), and this is about the
-  // tier that borrows, not the tier that belongs.
-  //
-  // ── 🔒 BUT `plan` IS NOT AN EVENT, AND IT WAS SILENCING THE CORPUS ───────
-  //
-  // David 2026-08-15, shown the measurement: "I don't want the corpus narrowed
-  // that much. I need to hear the teachings from the corpus!!"
-  //
-  // The rule above was written for a look-ahead that spoke OCCASIONALLY, and
-  // `plan` does not: `computedVoiceAudit` over 40 student turns of four real
-  // games has it firing on 90% of them — it needs only a 4-ply PV, which always
-  // exists, so it is present on essentially every turn by construction rather
-  // than because the turn had something to report. Measured through this very
-  // function, the corpus was offered on 33 turns and refused on 31 of them —
-  // 93.9% — for this reason alone.
-  //
-  // That inverts the locked ratio (CLAUDE.md: "90% of what needs to be said to
-  // user lives within these notes"): the notes were reaching ~10% and the
-  // routine forward read was taking the rest. A scope guard that fires nine
-  // times in ten is not a scope guard, it is a silencer.
-  //
-  // So the stand-down is now keyed to the EVENT lanes — the backward-looking
-  // ones that fire because something actually happened on this board: a mistake,
-  // the coach's own, a concession. Those genuinely are "something about THIS
-  // position" and genuinely should outrank a rule borrowed from another one.
-  // The routine plan no longer counts, so a turn can carry both the plan and the
-  // corpus teaching — which is longer, and is the point (David, same message:
-  // "The longer narrations are good. Do not cap them.").
-  //
-  // Read off `kept`, never off the facts supplied: a fact that was COMPUTED but
-  // then refused by board-grading has said nothing, and letting it silence the
-  // corpus as well would turn one dropped sentence into a silent turn. Rank
-  // makes this safe — every lane below outranks `borrowed`, so by the time a
-  // borrowed fact is considered, their verdict is already in.
-  //
-  // ── A DETECTED TACTIC/THREAT ALSO OUTRANKS A BORROWED RULE (David 2026-08-23,
-  //    the device-log fix: "Most computed teaching are irrelevant or wrong to
-  //    the current position") ──────────────────────────────────────────────
-  // The borrowed tier speaks corpus notes transferred from a DIFFERENT board.
-  // When THIS board has a real board-computed tactic or threat — the concrete
-  // thing happening right now — a general rule borrowed from elsewhere is at
-  // best redundant and at worst the wrong-position teaching he heard. `tactic`
-  // and `threat` are EVENT-like (they fire only when the detector actually
-  // finds one, not on every turn the way `plan` does), so keying the stand-down
-  // to them fixes the wrong-note complaint WITHOUT re-triggering the 08-15
-  // over-silencing: a quiet position with no detected tactic still hears the
-  // corpus. `plan` stays excluded (it fires ~every turn — see the note above).
-  const pvSpoke = (): boolean => kept.some(
-    (f) => f.kind === 'drawback' || f.kind === 'mistake' || f.kind === 'coachMistake'
-      || f.kind === 'tactic' || f.kind === 'threat',
-  );
-
+  // (The `borrowed` corpus tier and the book `fork` offer, and the rule that
+  // made borrowed teaching yield to an event on THIS board, went 2026-09-29:
+  // no surface produced either kind any more — G8.5.)
   for (const { f } of ordered) {
-    if (f.kind === 'borrowed' && pvSpoke()) {
-      dropped.push({ fact: f, reason: 'the look-ahead had something about THIS board' });
-      continue;
-    }
     if (f.claims?.some((c) => seen.has(claimKey(c)))) { dropped.push({ fact: f, reason: 'claim already said' }); continue; }
     const result = verify(f);
     if ('reason' in result) { dropped.push({ fact: f, reason: result.reason }); continue; }

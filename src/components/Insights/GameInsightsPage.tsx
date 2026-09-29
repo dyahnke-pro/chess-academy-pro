@@ -10,6 +10,7 @@ import {
   getTacticInsights,
 } from '../../services/gameInsightsService';
 import { runBackgroundAnalysis } from '../../services/gameAnalysisService';
+import { backfillClassifiedTactics } from '../../services/tacticClassifierService';
 import { ImportGamesButton } from '../Games/ImportGamesButton';
 import { AnalyzeGamesButton } from '../Games/AnalyzeGamesButton';
 import { useAppStore } from '../../stores/appStore';
@@ -68,7 +69,6 @@ export function GameInsightsPage(): JSX.Element {
     return 'overview' as InsightsTab;
   })();
   const [tab, setTab] = useState<InsightsTab>(initialTabFromState);
-  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -90,21 +90,34 @@ export function GameInsightsPage(): JSX.Element {
   const bgAnalysisProgress = useAppStore((s) => s.backgroundAnalysisProgress);
   const prevBgRunning = useRef(false);
 
+  // Each tab renders as soon as ITS data lands. Waiting on all four held every
+  // tab behind the slowest (Overview replays the whole library) — on a large
+  // library that was a minute of spinner on a phone (2026-09-29).
   async function loadAll(): Promise<void> {
-    const [ov, op, mi, ta] = await Promise.all([
-      getOverviewInsights(),
-      getOpeningInsights(),
-      getMistakeInsights(),
-      getTacticInsights(),
+    await Promise.all([
+      getOverviewInsights().then(setOverview),
+      getOpeningInsights().then(setOpenings),
+      getMistakeInsights().then(setMistakes),
+      getTacticInsights().then(setTactics),
     ]);
-    setOverview(ov);
-    setOpenings(op);
-    setMistakes(mi);
-    setTactics(ta);
   }
 
   useEffect(() => {
-    void loadAll().finally(() => setLoading(false));
+    let cancelled = false;
+    void loadAll()
+      .then(() => {
+        // Missed tactics are read from a cache; fill whatever it lacks in the
+        // background (yielding, per game) and refresh the tab as games land.
+        // Never inline — deriving the whole library on open froze the app.
+        const refresh = (): void => {
+          if (!cancelled) void getTacticInsights().then((t) => { if (!cancelled) setTactics(t); });
+        };
+        return backfillClassifiedTactics({
+          onGame: (done, total) => { if (done % 25 === 0 && done < total) refresh(); },
+        }).then(refresh);
+      })
+      .catch(() => { /* best-effort: the tab still renders from the cache */ });
+    return () => { cancelled = true; };
   }, []);
 
   // When the global background analysis finishes, reload insights so the
@@ -185,10 +198,11 @@ export function GameInsightsPage(): JSX.Element {
   // The game-insights tabs (overview/openings/mistakes/tactics) need analysis
   // to finish. The "Thinking Errors" (misconceptions) + "Patterns" tabs load
   // their OWN data and must NOT be blocked by game analysis — so we render the
-  // tab bar always and only gate the game-data tab BODIES on `loading`
+  // tab bar always and only gate the game-data tab BODIES on that tab's own data
   // (David 2026-05-21: the weakness mirror must be reachable independent of
   // "Analysing your games…").
   const gameDataTab = tab === 'overview' || tab === 'openings' || tab === 'mistakes' || tab === 'tactics';
+  const currentTabData = tab === 'overview' ? overview : tab === 'openings' ? openings : tab === 'mistakes' ? mistakes : tab === 'tactics' ? tactics : null;
   const totalGames = overview?.totalGames ?? 0;
   // ONE count (A2): the header and the Overview's "not analysed" card read the
   // same `analyzedGameCount` / `gamesNeedingAnalysis` pair, so they can never
@@ -375,7 +389,7 @@ export function GameInsightsPage(): JSX.Element {
 
       {/* Content — in the page's single scroll flow (no nested scroller). */}
       <div className="px-5 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6">
-        {loading && gameDataTab && (
+        {gameDataTab && !currentTabData && (
           <div className="flex items-center justify-center p-12" data-testid="insights-loading">
             <span className="text-sm" style={{ color: 'var(--color-text-muted)' }}>Analysing your games...</span>
           </div>
