@@ -39,6 +39,24 @@ This is not a new track. It is the next step of four that already exist:
 
 **So the honest order is:** WO-1 (= Phase 4 slice 2 + DANYA B) → WO-2 (planArc + switch + grading, stitching TEACH-02's facts) → WO-3 (extends the pieceOptions pattern to every question) → WO-4 → WO-5 measures all of it.
 
+
+## 1.6 WHAT THE CODE ACTUALLY DOES — read end to end 2026-09-29 (`CoachTeachPage.tsx` 7514–10760)
+
+**A Learn turn speaks in up to FOUR separate voices, not two:**
+1. the grade of the student's move, spoken at once (`gradePlayedMove`, ~8669), plus a gem resolution if one was pending (~8561);
+2. the INSTANT package with the coach's reply (`computeInstantTeaching` ~7514): event line + gem · tactic · threat · computed commentary (`buildPlayCommentary`) · curated beat · danyaBehaviors (quiet turns) · positional read → `buildVoicePackage` (~8345);
+3. the LATE package when the engine settles (~10638): register (but-turn / hedge / compare), opponent gap, named structure, piece quality, **position facts through `decide()` (the ONLY lane that does)**, priority-first, rejected-tempting, plan-arc events, backward look / fundamental / move point, the coach's own verdict;
+4. the phase transition (`runPhaseTransition`, ~10720).
+
+**🔴 Teaching that is COMPUTED and NEVER SPOKEN** — found reading, verify with a test before relying on it:
+- The `facts[]` array (~8780–10000) is a leftover of the per-move model call that was removed ("NO MODEL CALL ON A MOVE", ~10735). It is only LOGGED (`turnFacts`). Everything that only lands there is silent: **the causal chain** ("SAY THIS FIRST"), **think-aloud**, **fork talk** (engine forks), the **improving move**, the **best-reply line with its played-out proof**, the **look-ahead plan text**, the opening chain + trap names, the rating-reality split.
+- The DNA whitelist (`DNA_VOICE_KINDS`, ~371) has no `'plan'` and no `'fork'`. The late package drops every non-whitelisted fact, so **the plan-arc events built 2026-09-27 ("There it is — … That was the plan") and the book fork are filtered out**. The prod tape (42 plies) has zero plan-arc lines.
+- `trackABestReply` is muted by `NARRATE_DNA_ONLY`.
+
+So the lanes most like his thinking-out-loud — plan, causal chain, think-aloud, candidate lines — exist and are the ones silenced. **WO-1 therefore starts by routing these INTO the door** (as facts with kind, squares, stakes) rather than building new computers; the door, not a whitelist, decides what speaks. The whitelist was the 2026-08-23 answer to "the non-DNA lanes are noise"; the door replaces it.
+
+**The two-wave timing (open question for WO-1c):** the instant package must stay instant (the reply lands, the voice starts in ~1s); the lead fact usually needs the engine read (late). Proposed: the instant wave carries only urgent facts (a threat, a tactic, the event); the one connected thought is the late wave. To measure on the tape before building.
+
 ## 2. Work orders
 
 Dependency graph: `WO-0` and `WO-5` any time · `WO-1` first on the Learn side · `WO-2`, `WO-4` build pure now, wire after `WO-1` · `WO-3` + `WO-6` in parallel with everything.
