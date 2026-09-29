@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1687 lines · 26 exports · 14 importers · 8 tests · 0 audits**
+**1687 lines · 26 exports · 15 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,6 +22,7 @@
 - `src/services/narrationAdversarial.test.ts`
 - `src/services/planArc.test.ts`
 - `src/services/planArc.ts`
+- `src/services/planMarks.safeNow.test.ts`
 - `src/services/planMarks.test.ts`
 - `src/services/planMarks.ts`
 - `src/services/reviewWalk900.test.ts`
@@ -246,7 +247,7 @@
 - `src/services/learnWalkBlumenfeld.test.ts:176`
 - `src/services/learnWalkBlumenfeld.test.ts:177`
 
-### `planFromUci` (function) — 31 call sites
+### `planFromUci` (function) — 32 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9652`
 - `src/services/coachLaneWiring.test.ts:36`
 - `src/services/computedVoiceAudit.report.test.ts:220`
@@ -272,6 +273,7 @@
 - `src/services/narrationAdversarial.test.ts:175`
 - `src/services/narrationAdversarial.test.ts:185`
 - `src/services/planArc.test.ts:26`
+- `src/services/planMarks.safeNow.test.ts:14`
 - `src/services/planMarks.test.ts:25`
 - `src/services/planMarks.test.ts:228`
 - `src/services/planMarks.test.ts:287`
@@ -316,6 +318,7 @@
 - `src/services/lookaheadPlan.test.ts`
 - `src/services/narrationAdversarial.test.ts`
 - `src/services/planArc.test.ts`
+- `src/services/planMarks.safeNow.test.ts`
 - `src/services/planMarks.test.ts`
 - `src/services/replayFence.modern1690.test.ts`
 - `src/services/reviewWalk900.test.ts`

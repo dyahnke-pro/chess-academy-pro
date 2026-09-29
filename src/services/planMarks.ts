@@ -24,7 +24,9 @@
 // construction; it names DESTINATIONS ("plant a piece on d5"), never moves. An
 // arrow to a destination the coach has already said out loud adds no
 // information — it only saves the student the hunt, which is its entire job.
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
+import { MATERIAL_VALUE } from './pieceValues';
+import { legalSeeGainFor } from './positionReadingService';
 import type { BoardArrow, BoardHighlight } from '../types';
 import type { LookaheadPlan, PlanStep } from './lookaheadPlan';
 
@@ -133,6 +135,32 @@ function isLegalNow(board: Chess, from: string, to: string): boolean {
 }
 
 /**
+ * SAFE ON THIS BOARD — an arrow is read as "play this", so a move drawn from the
+ * board in front of the student must not simply lose the piece that makes it
+ * (David's Learn game, 2026-09-27: f3→d3 with their queen on c4 — the engine
+ * line played Qd3 LATER, after the queen had left, and the arrow only checked
+ * that the move was legal now). Safe = what it takes is worth at least what the
+ * exchange on the landing square costs it. The square keeps its highlight.
+ */
+function isSafeNow(board: Chess, from: string, to: string): boolean {
+  try {
+    const piece = board.get(from as never) as { color?: 'w' | 'b' } | undefined;
+    if (!piece?.color) return false;
+    const parts = board.fen().split(' ');
+    parts[1] = piece.color;
+    parts[3] = '-';
+    const c = new Chess(parts.join(' '));
+    const m = c.move({ from, to, promotion: 'q' });
+    if (!m) return false;
+    const gained = m.captured ? MATERIAL_VALUE[m.captured] ?? 0 : 0;
+    const lost = legalSeeGainFor(c.fen(), to as Square, piece.color === 'w' ? 'b' : 'w');
+    return gained - lost >= 0;
+  } catch {
+    return false;
+  }
+}
+
+/**
  * The marks for one spoken utterance.
  *
  * `spoken` is the text the student HEARD — post-verification, post-grading. Pass
@@ -224,7 +252,7 @@ export function planMarks(args: {
     // was computed for a board that has since moved on.
     if (!board.get(path[0] as never)) continue;
     for (let i = 0; i + 1 < path.length; i += 1) {
-      if (i === 0 && !isLegalNow(board, path[0], path[1])) break;
+      if (i === 0 && (!isLegalNow(board, path[0], path[1]) || !isSafeNow(board, path[0], path[1]))) break;
       addArrow(path[i], path[i + 1], walk.color);
       // Every square the walk passes through is a square the coach just named.
       push(path[i + 1], walk.color === MINE ? 'mine' : 'theirs');
@@ -259,6 +287,7 @@ export function planMarks(args: {
     if (arrows.some((a) => a.endSquare === square)) continue;
     // Legal, from THIS board, in ONE move — or no arrow at all. See `isLegalNow`.
     if (!isLegalNow(board, origin, square)) continue;
+    if (!isSafeNow(board, origin, square)) continue;
     // ONE ARROW PER PIECE, outside a walk. The same knight heading for two
     // squares at two different moments drew two lines out of one square — even
     // when both were legal, that reads as the piece going to both places at

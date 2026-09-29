@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2532 lines · 77 exports · 58 importers · 18 tests · 2 audits**
+**2532 lines · 77 exports · 59 importers · 18 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -45,6 +45,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/opponentMovePurpose.ts`
 - `src/services/perturbation.ts`
 - `src/services/pieceValueRead.ts`
+- `src/services/planMarks.ts`
 - `src/services/playCommentary.ts`
 - `src/services/positionReadingGrader.test.ts`
 - `src/services/positionReadingGrader.ts`
@@ -135,7 +136,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveFundamentals.ts:312`
 - `src/services/moveFundamentals.ts:1260`
 
-### `legalSeeGainFor` (function) — 27 call sites
+### `legalSeeGainFor` (function) — 28 call sites
 - `src/services/bluffDetector.ts:53`
 - `src/services/bluffDetector.ts:63`
 - `src/services/boardState.ts:42`
@@ -158,6 +159,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveTiming.ts:51`
 - `src/services/nextPlans.ts:46`
 - `src/services/perturbation.ts:69`
+- `src/services/planMarks.ts:156`
 - `src/services/playCommentary.ts:946`
 - `src/services/pvPlayback.ts:203`
 - `src/services/pvPlayback.ts:207`
