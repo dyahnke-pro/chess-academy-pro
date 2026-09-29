@@ -13,6 +13,57 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🏹 WO-ARROW-01 — ONE DOOR FOR EVERY BOARD ARROW (David 2026-09-29: "Can we reduce to one source for arrows?")
+
+**Why.** His Learn game (2026-09-27, 21:41, PostHog device `da84d189`): a green
+f3→d3 with the black queen on c4 — Qd3 hangs the queen. Source:
+`planMarks` drew a move from DEEPER in the engine line on the current board,
+checking only legality. Learn alone had 13 arrow producers each calling
+`setArrows` with its own checks (legal / piece-there / sight / none); ~120
+setter sites app-wide (Learn 30 + walkthrough 23, Review 27, Play 8, Openings 21).
+Colours were chaos: red, #ef4444, green, #22c55e, rgba-green, yellow, blue,
+orange, cyan. `groundArrows` banned red (2026-07-06) while threats drew red around it.
+
+**Decisions (David 2026-09-29).** Every coach surface. A ruled-out move is NEVER
+arrowed (said + highlighted only). Threats ARE drawn, red, always from THEIR
+piece, and only when they win something — this replaces the 2026-07-06 red ban.
+
+**The door** — `src/services/arrowDoor.ts` `admitArrows(claims, {fen, studentColor})`.
+Producers decide WHAT; the door decides WHETHER and the COLOUR. Roles:
+`play` (student's, green / rank shades, legal + safe by exchange unless
+`engineBacked`), `threat` (theirs, red, must win material or check),
+`line` (one ply on its OWN board, coloured by mover), `vision` (sight line).
+A producer DECLARES its role — the door never infers a role from a colour.
+
+**Order.** 1 ✅ door + 13 tests (David's Qd3 refused, engine sac admitted) ·
+2 Learn: CoachTeachPage's 13 producers (the fact-chain's red "lurking slip"
+arrow is a bad move → dropped) · 3 useTeachWalkthrough · 4 Review · 5 Play,
+Openings, chat, the rest · 6 gate `arrowDoor.gate.test.ts`: no `set*Arrows(`
+outside the door's output, allowlist of unmigrated files shrinks only.
+
+## 🧭 2026-09-29 — RE-EVALUATION: how the coach gets to Naroditsky (after WO-ACC-01 measured 99.6%)
+
+Measured: 14,317 claims / 100 games · spoken 99.6% of checked (was 97.9) ·
+10 FALSE left · but only 62% of spoken lines are checkable — the unchecked 38%
+is plans / why / method, i.e. the Naroditsky layer.
+
+**The correction.** The census ranked him by CATEGORY and implied one computer
+per category. Read end to end, his games show the gap is the THREAD: intent
+announced ("sacrifice — but not yet"), prepared ("you want f4, so Kh1 first"),
+executed ("the first progress"), then paid off or failed ("my trick half-worked").
+Six of the top ten missing items exist only BETWEEN moves.
+
+**Order (David may reorder):** 1 arrow door → 2 SCOREBOARD vs his 430 games
+(run our coach on his positions; per-moment match by taxonomy code, never word
+count; every new computer must raise it with accuracy ≥97%, silent first) →
+3 INTENT LEDGER (each side's plan from the engine line, remembered across plies;
+every move read as prepares / executes / stops theirs / abandons — engine-grounded,
+so plan lines become checkable) → 4 one thread per move (routine = a few words,
+decision moments = two candidates weighed) → 5 remaining gaps by scoreboard
+deficit (king attack, practical play, recapture, when-ahead).
+Not copied: self-critique, repertoire advice, humour, first person; opening
+lectures belong to the parked "teach me X".
+
 ## 🏁 WO-STANDARD-01 — THE FULL BOARD: everything the 2026-09-22 evaluation found, in build order (David: "get my app up to standard" · "i want a full plan listed first, not just one section" · "i will not always be here — work independently")
 
 **How this was found.** One session, 2026-09-22: four levels of context, three

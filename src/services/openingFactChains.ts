@@ -15,6 +15,8 @@
 // the LLM phrases them; it decides nothing (G0).
 
 import { Chess } from 'chess.js';
+import type { BoardArrow } from '../types';
+import { admitArrows, type ArrowClaim } from './arrowDoor';
 import { detectOpening, findContinuationsAtPly } from './openingDetectionService';
 import { getAllVerifiedLines } from './verifiedLineLibrary';
 import { isWeaponGem, type PunishGem } from '../data/lessons/punishGems';
@@ -33,11 +35,7 @@ function gemStudentColor(gem: PunishGem): 'white' | 'black' {
   return spineLen % 2 === 0 ? 'black' : 'white'; // even → White slips next → student is Black
 }
 
-export interface ChainArrow {
-  startSquare: string;
-  endSquare: string;
-  color: string;
-}
+export type ChainArrow = BoardArrow;
 export interface ChainHighlight {
   square: string;
   color: string;
@@ -59,9 +57,9 @@ export interface OpeningChainFacts {
 }
 
 /** Lead-the-eye colours (masterclass colour language). */
-const CONTINUATION_ARROW = '#22c55e'; // green — where the named lines lead
-const TRAP_ARROW = '#f59e0b';         // amber — a lurking line's next move
-const SLIP_ARROW = '#ef4444';         // red — the opponent slip to watch for
+const CONTINUATION_ARROW = 'continuation'; // where the named lines lead
+const TRAP_ARROW = 'trap';                 // a lurking line's next move
+const SLIP_ARROW = 'slip';                 // the opponent slip to watch for — never arrowed
 const KEY_SQUARE = '#eab308';         // yellow — the square the narration names
 
 /** From→to of `san` if it is legal on `fen`, else null (never guess). */
@@ -118,20 +116,20 @@ export function buildOpeningChainFacts(opts: {
     currentFen = walk.fen();
   } catch { /* unreplayable history — facts still work, arrows stay off */ }
 
-  // Urgency wins on a shared square-pair: a move that is BOTH a named
-  // continuation AND a lurking slip must read as the slip — red > amber >
-  // green (the danger is the teaching point).
-  const ARROW_PRIORITY: Record<string, number> = { [SLIP_ARROW]: 3, [TRAP_ARROW]: 2, [CONTINUATION_ARROW]: 1 };
+  // CLAIMS, NOT ARROWS: the door decides whether a move may be drawn and in
+  // what colour. A named continuation or a trap line's next move is a BOOK
+  // move — vouched for, drawn for whichever side plays it. The opponent SLIP a
+  // gem waits for is a bad move, and a bad move is never arrowed (David
+  // 2026-09-29): its square is still highlighted, so the eye still lands there.
+  const claims: ArrowClaim[] = [];
   const paintMove = (san: string, color: string): void => {
     if (!currentFen) return;
     const ft = legalFromTo(currentFen, san);
     if (!ft) return;
-    const existing = arrows.find((a) => a.startSquare === ft.from && a.endSquare === ft.to);
-    if (existing) {
-      if ((ARROW_PRIORITY[color] ?? 0) > (ARROW_PRIORITY[existing.color] ?? 0)) existing.color = color;
-      return;
+    if (color !== SLIP_ARROW && !claims.some((c) => c.from === ft.from && c.to === ft.to)) {
+      const moverIsStudent = (currentFen.split(' ')[1] === 'w') === (studentColor === 'white');
+      claims.push({ from: ft.from, to: ft.to, role: moverIsStudent ? 'play' : 'theirs', vouchedBy: 'book', source: 'openingFactChains' });
     }
-    arrows.push({ startSquare: ft.from, endSquare: ft.to, color });
     highlights.push({ square: ft.to, color: KEY_SQUARE });
   };
 
@@ -212,5 +210,6 @@ export function buildOpeningChainFacts(opts: {
     }
   } catch { /* gem data unavailable — skip */ }
 
+  if (currentFen) arrows.push(...admitArrows(claims, { fen: currentFen, studentColor }).arrows);
   return { facts, trapNames, arrows, highlights };
 }

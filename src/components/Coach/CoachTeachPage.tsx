@@ -32,28 +32,34 @@ import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildIn
 import type { CommentaryKind } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
-// Walkthrough arrows/highlights render through the SAME react-chessboard
-// pipeline the opening tab's LessonPlayer uses — identical palette, identical
-// tapered arrows (David 2026-07-31, third request: "the arrows on the coach
-// tab need to MATCH the opening tab"). The old NarrationArrowOverlay drew its
-// own chunky SVG lines and never looked like the opening tab.
-const WALKTHROUGH_ARROW_PALETTE: Record<string, string> = {
-  // LessonPlayer TRAIL — the played move.
-  orange: 'rgba(255,170,60,0.6)',
-  // LessonPlayer vision default — moves the narration names.
-  green: 'rgba(40,185,95,0.92)',
-  red: 'rgba(239,68,68,0.85)',
-  blue: 'rgba(59,130,246,0.85)',
-  yellow: 'rgba(234,179,8,0.85)',
-};
+// EVERY ARROW ON THIS PAGE COMES OUT OF THE ARROW DOOR (`arrowDoor`, David
+// 2026-09-29: "one source for arrows"). Producers hand it claims; it alone
+// decides whether a move may be drawn and in what colour.
+/** A causal-chain arrow is a SIGHT LINE (the piece that attacks the loose
+ *  target), not a move — the door checks it as vision. */
+const causalClaim = (a: { from: string; to: string }): ArrowClaim => ({ from: a.from, to: a.to, role: 'vision', source: 'teach.causalChain' });
+/** A walkthrough / play-out narration's arrows, through the arrow door. Each
+ *  NarrationArrow declares its meaning by colour (see its type): orange is the
+ *  move just played, red is "don't play this" (a bad move — never arrowed),
+ *  yellow is attention (a sight line), green/blue are moves the narration
+ *  names. `vouchedBy`: the walkthrough stands on the book, the play-out on the
+ *  engine's line. */
 function walkthroughBoardArrows(
   arrows: NarrationArrow[],
-): Array<{ startSquare: string; endSquare: string; color: string }> {
-  return arrows.map((a) => ({
-    startSquare: a.from,
-    endSquare: a.to,
-    color: WALKTHROUGH_ARROW_PALETTE[a.color ?? 'green'] ?? WALKTHROUGH_ARROW_PALETTE.green,
-  }));
+  fen: string,
+  studentColor: 'white' | 'black',
+  vouchedBy: 'engine' | 'book',
+): BoardArrow[] {
+  const ctx = { fen, studentColor };
+  const claims: ArrowClaim[] = [];
+  for (const a of arrows) {
+    const c = a.color ?? 'green';
+    if (c === 'red') continue;
+    if (c === 'orange') claims.push({ from: a.from, to: a.to, role: 'played', source: 'teach.walkthrough' });
+    else if (c === 'yellow') claims.push({ from: a.from, to: a.to, role: 'vision', source: 'teach.walkthrough' });
+    else claims.push(namedMoveClaim(a.from, a.to, ctx, vouchedBy, 'teach.walkthrough'));
+  }
+  return admitArrows(claims, ctx).arrows;
 }
 // LessonPlayer highlight default (yellow key square).
 const WALKTHROUGH_HIGHLIGHT_PALETTE: Record<string, string> = {
@@ -286,7 +292,8 @@ import { explainBestMoveGrounded, seatPieceReferences } from '../../services/gro
 import { rankByPopularity, popularityLabel, type RankedLineOption } from '../../services/linePickerPopularity';
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { applyCandidateArrows, candidateHighlightMarkers, gradeNarrationText } from '../../services/coachAnswerGates';
-import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
+import { dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
+import { admitArrow, admitArrows, lineClaims, namedMoveClaim, withAdmitted, type ArrowClaim } from '../../services/arrowDoor';
 // ONE depth for the whole turn — the hint lane and the lane that grades the
 // student must not read the same board at different depths. See the constant.
 import { rankReplies, bestReplyLine } from '../../services/bestReplyRanking';
@@ -1653,12 +1660,14 @@ export function CoachTeachPage(): JSX.Element {
   const [lineWalkFen, setLineWalkFen] = useState<string | null>(null);
   const [lineWalkArrows, setLineWalkArrows] = useState<BoardArrow[]>([]);
   const lineWalkTokenRef = useRef(0);
-  const lineArrowsOf = useCallback((line: WalkableLine): BoardArrow[] => line.plies.map((p, i) => ({
-    startSquare: p.uci.slice(0, 2),
-    endSquare: p.uci.slice(2, 4),
-    // The option in green, the reply that answers it in red, and so on.
-    color: i % 2 === 0 ? 'green' : 'red',
-  })), []);
+  // Each ply through the door on the board BEFORE it; the door colours by
+  // whose move it is (yours green, theirs red).
+  const lineArrowsOf = useCallback((line: WalkableLine): BoardArrow[] => {
+    return admitArrows(
+      lineClaims(line.startFen, line.plies, 'teach.lineWalk'),
+      { fen: line.startFen, studentColor: playerColor },
+    ).arrows;
+  }, [playerColor]);
   const clearLineWalk = useCallback((): void => {
     lineWalkTokenRef.current += 1;
     setLineWalkFen(null);
@@ -1670,16 +1679,19 @@ export function CoachTeachPage(): JSX.Element {
       setLineWalkFen(line.startFen);
       setLineWalkArrows([]);
       await new Promise((r) => window.setTimeout(r, 600));
-      for (const ply of line.plies) {
+      const plyArrows = lineArrowsOf(line);
+      for (let i = 0; i < line.plies.length; i += 1) {
+        const ply = line.plies[i];
         if (lineWalkTokenRef.current !== token) return;
         setLineWalkFen(ply.fenAfter);
-        setLineWalkArrows([{ startSquare: ply.uci.slice(0, 2), endSquare: ply.uci.slice(2, 4), color: 'green' }]);
+        const hop = plyArrows.find((a) => a.startSquare === ply.uci.slice(0, 2) && a.endSquare === ply.uci.slice(2, 4));
+        setLineWalkArrows(hop ? [hop] : []);
         await new Promise((r) => window.setTimeout(r, 1000));
       }
       await new Promise((r) => window.setTimeout(r, 900));
       if (lineWalkTokenRef.current === token) { setLineWalkFen(null); setLineWalkArrows([]); }
     })();
-  }, []);
+  }, [lineArrowsOf]);
   /** Any new move ends a line on the board — the game is the ground truth. */
   useEffect(() => { clearLineWalk(); }, [game.history.length, clearLineWalk]);
 
@@ -7034,12 +7046,15 @@ export function CoachTeachPage(): JSX.Element {
         const codeArrows: BoardArrow[] = [];
         const codeHighlights: BoardHighlight[] = [];
         for (const cmd of annoBoard.commands) {
-          if (cmd.type === 'arrow' && cmd.arrows) codeArrows.push(...cmd.arrows);
+          // Candidate markers are DOOR output (`injectCandidateArrows` admits
+          // each one). An answer that calculated lines skips that pass, so any
+          // marker in its text came from nowhere — its lines draw themselves.
+          if (cmd.type === 'arrow' && cmd.arrows && !(result.lines && result.lines.length > 0)) codeArrows.push(...cmd.arrows);
           if (cmd.type === 'highlight' && cmd.highlights) codeHighlights.push(...cmd.highlights);
         }
         // Merge the opening-chain's lead-the-eye arrows so the narration's
         // own arrow pass doesn't wipe them — both describe THIS reply.
-        // groundArrows re-validates everything against the live fen.
+        // Every arrow here already passed the arrow door (`arrowDoor`).
         //
         // STALE-TURN GUARD (David 2026-08-06: "arrows still showed bad moves…
         // they adjust if left alone"): this pass runs seconds after the turn
@@ -7093,7 +7108,8 @@ export function CoachTeachPage(): JSX.Element {
           // a move or square they need to be arrowed or highlighted." Volume is
           // controlled by only ever marking what a surviving claim entitles —
           // upstream, where it can be judged — not by truncating here.
-          const mergedArrows = uniqueArrows(groundArrows([...codeArrows, ...chainArrowsRef.current], fen));
+          // Both sides are already door output — merged, never re-judged here.
+          const mergedArrows = withAdmitted(codeArrows, chainArrowsRef.current);
           const mergedHighlights = [...codeHighlights, ...chainHighlightsRef.current];
           // LEAD-THE-EYE SYNC (David 2026-08-07: "make sure they fire on
           // every mentioned move, AS it's being mentioned — mirror how we
@@ -7882,7 +7898,7 @@ export function CoachTeachPage(): JSX.Element {
         const cap = fp.moves({ verbose: true })
           .filter((cm) => cm.to === worst.square && cm.isCapture())
           .sort((a, b) => (AV[a.piece] ?? 1) - (AV[b.piece] ?? 1))[0];
-        if (cap) alertArrow = { startSquare: cap.from, endSquare: cap.to, color: 'red' };
+        if (cap) alertArrow = admitArrow({ from: cap.from, to: cap.to, role: 'threat', source: 'teach.hangAlert' }, { fen: args.fenAfterReply, studentColor: studentCC === 'w' ? 'white' : 'black' });
       } else {
         // ATTACKED BY A SMALLER PIECE — defended or not, it has to move (hand
         // walk 1200, French Advance: …c4 hit the d3-bishop and the coach said
@@ -7913,7 +7929,7 @@ export function CoachTeachPage(): JSX.Element {
             threatKey = `hit:${hit.piece}${hit.sq}:${hit.bySq}`;
             threatSquares = [hit.sq, hit.bySq];
             threatLine = `Careful — their ${NAME[hit.by] ?? 'piece'} on ${hit.bySq} hits your ${NAME[hit.piece] ?? 'piece'} on ${hit.sq}; it has to move.`;
-            alertArrow = { startSquare: hit.bySq, endSquare: hit.sq, color: 'red' };
+            alertArrow = admitArrow({ from: hit.bySq, to: hit.sq, role: 'threat', source: 'teach.hitAlert' }, { fen: args.fenAfterReply, studentColor: studentCC === 'w' ? 'white' : 'black' });
           }
         } catch { /* the warning is a bonus */ }
       }
@@ -8436,13 +8452,10 @@ export function CoachTeachPage(): JSX.Element {
     try {
       const recited = curatedLine;
       if (recited) {
-        for (const a of moveOrderArrows(recited, args.fenAfterReply)) {
-          leadEyeArrows.push({
-            startSquare: a.from,
-            endSquare: a.to,
-            color: a.color === studentCC ? 'green' : 'blue',
-          });
-        }
+        leadEyeArrows.push(...admitArrows(
+          moveOrderArrows(recited, args.fenAfterReply).map((a): ArrowClaim => ({ from: a.from, to: a.to, role: 'line', fen: a.fenBefore, source: 'teach.moveOrder' })),
+          { fen: args.fenAfterReply, studentColor: studentCC === 'w' ? 'white' : 'black' },
+        ).arrows);
       }
     } catch { /* the walk is a bonus, never a blocker */ }
 
@@ -8691,7 +8704,12 @@ export function CoachTeachPage(): JSX.Element {
             const a = pendingGem.revealArrows[0];
             try {
               const board = new Chess(move.fen);
-              if (a && board.get(a.from as Square)) setArrows([{ startSquare: a.from, endSquare: a.to, color: 'rgba(34,197,94,0.85)' }]);
+              // The gem's move, on the board where the student missed it — the
+              // engine found it there, so it is vouched for.
+              const shown = a && board.get(a.from as Square)
+                ? admitArrow({ from: a.from, to: a.to, role: 'play', vouchedBy: 'engine', source: 'teach.gemReveal' }, { fen: fenBefore, studentColor: playerColor })
+                : null;
+              if (shown) setArrows([shown]);
             } catch { /* the arrow is a bonus */ }
           }
           captureEvent('gem_resolved', { surface: 'coach-teach', found: res.found, plies: res.line.plies.length });
@@ -9607,7 +9625,7 @@ export function CoachTeachPage(): JSX.Element {
                             // fork / think-aloud / priority beat withheld the
                             // move (speaking it then would leak the answer).
                             trackABestReply = recLine;
-                            trackABestReplyArrow = { startSquare: recMove.from, endSquare: recMove.to, color: 'green' };
+                            trackABestReplyArrow = admitArrow({ from: recMove.from, to: recMove.to, role: 'play', vouchedBy: 'engine', source: 'teach.bestReply' }, { fen: probe.fen(), studentColor: playerColor });
                             }
                           }
                         }
@@ -10116,7 +10134,7 @@ export function CoachTeachPage(): JSX.Element {
                       });
                       if (chainLines.length) {
                         facts.unshift(`Cross-move causal chain — SAY THIS FIRST, present-tense, in this order: ${chainLines.join(' ')}`);
-                        const chainAr: BoardArrow[] = causalChainArrows(chain).map((a) => ({ startSquare: a.from, endSquare: a.to, color: a.color }));
+                        const chainAr: BoardArrow[] = admitArrows(causalChainArrows(chain).map(causalClaim), { fen: probe.fen(), studentColor: playerColor }).arrows;
                         if (chainAr.length) {
                           chainArrowsRef.current = [...chainArrowsRef.current, ...chainAr];
                           void padDone.then(() => setArrows((prev) => uniqueArrows([...prev, ...chainAr])));
@@ -11588,7 +11606,8 @@ export function CoachTeachPage(): JSX.Element {
       if (uci.length >= 4) {
         const from = uci.slice(0, 2);
         const to = uci.slice(2, 4);
-        setArrows([{ startSquare: from, endSquare: to, color: '#eab308' }]);
+        const hint = admitArrow({ from, to, role: 'play', vouchedBy: 'engine', source: 'teach.hint' }, { fen, studentColor: playerColor });
+        setArrows(hint ? [hint] : []);
         setHighlights([{ square: from, color: '#eab308' }]);
       }
     } catch {
@@ -11596,7 +11615,7 @@ export function CoachTeachPage(): JSX.Element {
     } finally {
       setHintBusy(false);
     }
-  }, [hintBusy, coachDrillSay]);
+  }, [hintBusy, coachDrillSay, playerColor]);
 
   // NARRATED CONTINUATION (David 2026-07-18): after a lesson, the coach can
   // play out both sides with Stockfish from where the opening ended and
@@ -12150,7 +12169,7 @@ export function CoachTeachPage(): JSX.Element {
                         // the played move's squares (ConsistentChessboard's
                         // last-move style) — measured, not assumed.
                         showLastMoveHighlight
-                        arrows={walkthroughBoardArrows(walkthrough.narrationArrows)}
+                        arrows={walkthroughBoardArrows(walkthrough.narrationArrows, fenToShow, playerColor, 'book')}
                         annotationHighlights={walkthroughBoardHighlights(walkthrough.narrationHighlights)}
                         onMove={
                           isFindMoveQuiz
@@ -12212,7 +12231,7 @@ export function CoachTeachPage(): JSX.Element {
                     !coachTipsOn
                       ? undefined
                       : continuationArrows.length > 0
-                        ? walkthroughBoardArrows(continuationArrows)
+                        ? walkthroughBoardArrows(continuationArrows, game.fen, playerColor, 'engine')
                         : (arrows.length > 0 ? arrows : undefined)
                   }
                   annotationHighlights={coachTipsOn && highlights.length > 0 ? highlights : undefined}

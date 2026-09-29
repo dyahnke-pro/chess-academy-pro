@@ -28,6 +28,7 @@
  * file has no hard dep on the engine singleton and stays unit-testable.
  */
 import { Chess, type Move, type Square } from 'chess.js';
+import { admitArrow, arrowColorName } from './arrowDoor';
 
 export type FromTo = { from: string; to: string };
 export type ArrowColor = 'green' | 'blue' | 'yellow' | 'red';
@@ -327,13 +328,25 @@ export async function injectCandidateArrows(
 
   // Suggestions first (they're the point), then spoken threats fill the rest.
   const finalArrows = [
-    ...capped.map((r) => ({ san: r.san, from: r.from, to: r.to, color: r.color })),
-    ...threats,
+    ...capped.map((r) => ({ san: r.san, from: r.from, to: r.to, color: r.color, rank: r.rank })),
+    ...threats.map((t) => ({ ...t, rank: null as number | null })),
   ].slice(0, MAX_CANDIDATE_ARROWS);
+  // THROUGH THE DOOR (`arrowDoor`): a suggestion is the engine's own ranked move
+  // for the side to move; a threat must be THEIRS, legal now and winning
+  // something now (the chat once drew "Qxd3" red — the punishment of a move the
+  // student had not played). The marker carries the door's colour.
+  const studentColor: 'white' | 'black' = fen.split(' ')[1] === 'b' ? 'black' : 'white';
   const markers: string[] = [];
   const injected: { san: string; color: ArrowColor }[] = [];
-  for (const { san, from, to, color } of finalArrows) {
-    markers.push(`[BOARD: arrow:${from}-${to}:${color}]`);
+  for (const { san, from, to, color, rank } of finalArrows) {
+    const admitted = admitArrow(
+      color === 'red'
+        ? { from, to, role: 'threat', source: 'arrowEngine.threat' }
+        : { from, to, role: 'play', rank, vouchedBy: 'engine', source: 'arrowEngine.candidate' },
+      { fen, studentColor },
+    );
+    if (!admitted) continue;
+    markers.push(`[BOARD: arrow:${from}-${to}:${arrowColorName(admitted.color)}]`);
     injected.push({ san, color });
   }
   if (markers.length === 0) return { text: base, injected: [] };

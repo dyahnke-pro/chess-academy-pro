@@ -12,6 +12,8 @@
 // named DB continuations. The narration deliberates; it never picks.
 
 import { Chess } from 'chess.js';
+import type { BoardArrow } from '../types';
+import { admitArrows } from './arrowDoor';
 import { describeMoveGeometry } from './groundedAnswer';
 import { detectOpening, findContinuationsAtPly } from './openingDetectionService';
 
@@ -39,14 +41,15 @@ export interface ForkTalk {
   /** The computed facts block for the narration (live register deliberation). */
   facts: string;
   /** One arrow per road (green first road, blue second). */
-  arrows: Array<{ startSquare: string; endSquare: string; color: string }>;
+  arrows: BoardArrow[];
   /** Road-affirm clauses, keyed by SAN — spoken AFTER the student picks. */
   affirmBySan: Record<string, string>;
 }
 
 /** Max mover-POV gap between roads for a genuine fork. */
 export const FORK_MAX_GAP_CP = 40;
-const ROAD_COLORS = ['#22c55e', '#3b82f6'];
+/** The roads are the side to move's options — that side is the student. */
+const moverColorOf = (fen: string): 'white' | 'black' => (fen.split(' ')[1] === 'b' ? 'black' : 'white');
 
 function probe(fen: string, uci: string): { san: string; from: string; to: string; isCapture: boolean; isCheck: boolean; piece: string; fenAfter: string } | null {
   if (!uci || uci.length < 4) return null;
@@ -131,7 +134,12 @@ export function buildForkTalk(opts: {
   return {
     options: built,
     facts,
-    arrows: built.map((o, i) => ({ startSquare: o.from, endSquare: o.to, color: ROAD_COLORS[i] ?? ROAD_COLORS[0] })),
+    // The roads are the engine's candidates for the student here — ranked, so
+    // the door shades them (first green, second blue).
+    arrows: admitArrows(
+      built.map((o, i) => ({ from: o.from, to: o.to, role: 'play' as const, rank: i + 1, vouchedBy: 'engine' as const, source: 'forkTalk' })),
+      { fen, studentColor: moverColorOf(fen) },
+    ).arrows,
     affirmBySan: Object.fromEntries(built.map((o) => [o.san, affirm(o)])),
   };
 }

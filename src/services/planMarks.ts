@@ -24,9 +24,8 @@
 // construction; it names DESTINATIONS ("plant a piece on d5"), never moves. An
 // arrow to a destination the coach has already said out loud adds no
 // information — it only saves the student the hunt, which is its entire job.
-import { Chess, type Square } from 'chess.js';
-import { MATERIAL_VALUE } from './pieceValues';
-import { legalSeeGainFor } from './positionReadingService';
+import { Chess } from 'chess.js';
+import { admitArrows, type ArrowClaim } from './arrowDoor';
 import type { BoardArrow, BoardHighlight } from '../types';
 import type { LookaheadPlan, PlanStep } from './lookaheadPlan';
 
@@ -86,79 +85,6 @@ function originOf(path: readonly PlanStep[], index: number, board: Chess): strin
   return piece.color === (color === 'white' ? 'w' : 'b') ? from : null;
 }
 
-/**
- * IS THIS ARROW A MOVE SOMEBODY COULD ACTUALLY PLAY, RIGHT NOW?
- *
- * David 2026-08-10, from a live screenshot: "bad arrows, not deterministically
- * made." The board showed `f6-b6` and `f6-c4` — a knight on f6 reaching neither
- * square in one move, drawn as two straight lines out of the same piece.
- *
- * The cause was this file's own cleverness. `originOf` walks the chain back so a
- * knight going f3→d4→b5 is drawn from where the student can SEE it, which reads
- * well in prose and draws a line through squares the piece never travels. Three
- * moves compressed into one arrow is indistinguishable from a hallucination, and
- * the student is right not to trust it.
- *
- * So the arrow now has to survive chess.js: legal, from this position, this
- * move. Journeys keep their destination HIGHLIGHT — the eye is still led, and
- * nothing on the board claims a move that isn't there.
- */
-function isLegalNow(board: Chess, from: string, to: string): boolean {
-  try {
-    const piece = board.get(from as never) as { color?: 'w' | 'b' } | undefined;
-    if (!piece?.color) return false;
-    // FROM THE MOVER'S SIDE OF THE BOARD, NOT WHOEVER HAPPENS TO BE ON MOVE.
-    //
-    // This asked `board.moves()`, which only ever returns moves for the side to
-    // move — so every arrow about the OPPONENT's plan was impossible by
-    // construction. David's game log, 2026-08-11: "They want to walk the bishop
-    // round to b2, by way of f6" with ZERO arrows, four times in one game, and
-    // the same silence on his own plans whenever it was the opponent's turn. He
-    // read it as the feature not working, and he was right — it could not.
-    //
-    // A plan is about what happens NEXT, so the question is whether the piece
-    // could make that move when it is its turn. A null move answers it: same
-    // position, other side to play. `narrationArrows` has flipped turn for this
-    // exact reason since it was written; the marks never learned to.
-    if (piece.color === board.turn()) {
-      return board.moves({ verbose: true }).some((m) => m.from === from && m.to === to);
-    }
-    const parts = board.fen().split(' ');
-    if (parts.length < 4) return false;
-    parts[1] = piece.color;
-    parts[3] = '-'; // an en-passant square belongs to the side that just moved
-    return new Chess(parts.join(' ')).moves({ verbose: true })
-      .some((m) => m.from === from && m.to === to);
-  } catch {
-    return false;
-  }
-}
-
-/**
- * SAFE ON THIS BOARD — an arrow is read as "play this", so a move drawn from the
- * board in front of the student must not simply lose the piece that makes it
- * (David's Learn game, 2026-09-27: f3→d3 with their queen on c4 — the engine
- * line played Qd3 LATER, after the queen had left, and the arrow only checked
- * that the move was legal now). Safe = what it takes is worth at least what the
- * exchange on the landing square costs it. The square keeps its highlight.
- */
-function isSafeNow(board: Chess, from: string, to: string): boolean {
-  try {
-    const piece = board.get(from as never) as { color?: 'w' | 'b' } | undefined;
-    if (!piece?.color) return false;
-    const parts = board.fen().split(' ');
-    parts[1] = piece.color;
-    parts[3] = '-';
-    const c = new Chess(parts.join(' '));
-    const m = c.move({ from, to, promotion: 'q' });
-    if (!m) return false;
-    const gained = m.captured ? MATERIAL_VALUE[m.captured] ?? 0 : 0;
-    const lost = legalSeeGainFor(c.fen(), to as Square, piece.color === 'w' ? 'b' : 'w');
-    return gained - lost >= 0;
-  } catch {
-    return false;
-  }
-}
 
 /**
  * The marks for one spoken utterance.
@@ -202,12 +128,22 @@ export function planMarks(args: {
   for (const part of saidParts) for (const sq of part.squares) push(sq, part.side);
 
   const myColor = studentColor === 'white' ? 'white' : 'black';
-  const arrows: BoardArrow[] = [];
+  // CLAIMS, NOT ARROWS: this lane decides what is worth pointing at; the door
+  // (`arrowDoor`) alone decides whether it may be drawn, and in what colour.
+  const claims: ArrowClaim[] = [];
   const highlights: BoardHighlight[] = [];
-  const addArrow = (startSquare: string, endSquare: string, color: string): void => {
-    if (startSquare === endSquare) return;
-    if (arrows.some((a) => a.startSquare === startSquare && a.endSquare === endSquare)) return;
-    arrows.push({ startSquare, endSquare, color });
+  const claimed = (from: string, to: string): boolean => claims.some((c) => c.from === from && c.to === to);
+  // The board BEFORE a given ply of the line — a walk's later hops start on
+  // squares the piece has not reached yet, so each hop is checked on its own.
+  const boardBefore = (from: string, to: string): string | null => {
+    try {
+      const c = new Chess(fen);
+      for (const step of plan.path) {
+        if (step.from === from && step.to === to) return c.fen();
+        c.move({ from: step.from, to: step.to, promotion: 'q' });
+      }
+    } catch { /* the line no longer replays from this board */ }
+    return null;
   };
 
   // ── THE PIECE WALKS, DRAWN HOP BY HOP ────────────────────────────────────
@@ -252,8 +188,21 @@ export function planMarks(args: {
     // was computed for a board that has since moved on.
     if (!board.get(path[0] as never)) continue;
     for (let i = 0; i + 1 < path.length; i += 1) {
-      if (i === 0 && (!isLegalNow(board, path[0], path[1]) || !isSafeNow(board, path[0], path[1]))) break;
-      addArrow(path[i], path[i + 1], walk.color);
+      // Each hop is one ply of the engine's line, checked on the board BEFORE
+      // that ply; the door refuses a hop it cannot replay.
+      // The FIRST hop is drawn from the piece where it stands now, so it is
+      // read as a move for now and checked like one (legal and safe HERE).
+      // Later hops start on squares the piece has not reached yet: each is one
+      // ply of the engine's line, checked on the board BEFORE that ply.
+      const mine = walk.color === MINE;
+      const hopFen = i === 0 ? fen : boardBefore(path[i], path[i + 1]);
+      if (!hopFen) break;
+      const claim: ArrowClaim = i === 0
+        ? { from: path[0], to: path[1], role: mine ? 'play' : 'theirs', source: 'planMarks.walk' }
+        : { from: path[i], to: path[i + 1], role: 'line', fen: hopFen, source: 'planMarks.walk' };
+      const { refused } = admitArrows([claim], { fen, studentColor });
+      if (refused.length > 0) break;
+      if (!claimed(path[i], path[i + 1])) claims.push(claim);
       // Every square the walk passes through is a square the coach just named.
       push(path[i + 1], walk.color === MINE ? 'mine' : 'theirs');
     }
@@ -284,24 +233,24 @@ export function planMarks(args: {
     const origin = originOf(plan.path, index, board);
     if (!origin || origin === square) continue;
     // Already drawn as part of a walk — the chain owns that piece's route.
-    if (arrows.some((a) => a.endSquare === square)) continue;
-    // Legal, from THIS board, in ONE move — or no arrow at all. See `isLegalNow`.
-    if (!isLegalNow(board, origin, square)) continue;
-    if (!isSafeNow(board, origin, square)) continue;
+    if (claims.some((a) => a.to === square)) continue;
     // ONE ARROW PER PIECE, outside a walk. The same knight heading for two
     // squares at two different moments drew two lines out of one square — even
     // when both were legal, that reads as the piece going to both places at
     // once. A walk is the honest way to say that, and it is drawn above.
-    if (arrows.some((a) => a.startSquare === origin)) continue;
-    addArrow(
-      origin,
-      square,
-      // The arrow's colour follows whose MOVE it is, not whose square it is: a
-      // piece of theirs arriving on a contested square is still a thing coming
-      // at the student, and drawing that in "key square yellow" reads neutral.
-      plan.path[index].color === myColor ? MINE : THEIRS,
-    );
+    if (claims.some((a) => a.from === origin)) continue;
+    // A LATER move of the line drawn from THIS board. It is not the engine's
+    // move here, so the door checks it the way the student will read it: legal
+    // now and safe now (David's game: f3→d3 into the queen on c4). Theirs is
+    // drawn only when it wins something — red means "coming at you".
+    claims.push({
+      from: origin,
+      to: square,
+      role: plan.path[index].color === myColor ? 'play' : 'theirs',
+      source: 'planMarks.future',
+    });
   }
 
+  const { arrows } = admitArrows(claims, { fen, studentColor });
   return { arrows, highlights };
 }

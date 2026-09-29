@@ -146,7 +146,7 @@ describe('injectCandidateArrows', () => {
     );
     expect(text).not.toContain('g1-f3'); // the already-played move — no arrow
     expect(injected.some((i) => i.san === 'Nf3')).toBe(false);
-    expect(text).toContain('[BOARD: arrow:b1-c3:yellow]'); // the other move still arrowed
+    expect(text).toContain('[BOARD: arrow:b1-c3:blue]'); // the other move still arrowed — a runner-up is blue (arrow door, 2026-09-29)
     expect(injected.some((i) => i.san === 'Nc3')).toBe(true);
   });
 
