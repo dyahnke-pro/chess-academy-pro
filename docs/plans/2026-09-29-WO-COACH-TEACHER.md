@@ -151,7 +151,7 @@ Today (engineer map, `brainstorm-r1/engineer.md`): ~15 lanes. One (`computePosit
 | WO | status | owner |
 |---|---|---|
 | WO-0 bugs | ✅ 3/4 on main (PR #979); takeback stall open | this session |
-| WO-1 door | 🔵 1a ✅ on main (PR #976); 1a' ✅ orphan cleanup (G8.5): 5 closed lanes + their producers deleted, the silent fork/think-aloud/improving/best-reply chain that out-ranked priority-first removed, the unspoken look-ahead paragraph (and its arrows, and its hold on the behaviour filler) removed, 6 dead modules deleted, gate in `learnTurnDoor.test.ts`. **On main + live (PR #980, verified in the deployed chunk).** OPEN: `facts[]` audit-only list; 1b | this session |
+| WO-1 door | 🔵 1a ✅ on main (PR #976); 1a'' ✅ `facts[]` cut + causal chain spoken (PR #981); 1a' ✅ orphan cleanup (G8.5): 5 closed lanes + their producers deleted, the silent fork/think-aloud/improving/best-reply chain that out-ranked priority-first removed, the unspoken look-ahead paragraph (and its arrows, and its hold on the behaviour filler) removed, 6 dead modules deleted, gate in `learnTurnDoor.test.ts`. **On main + live (PR #980, verified in the deployed chunk).** 1b next | this session |
 | WO-2 plan thread | 🔵 step 1 ✅ on main (PR #977, #978: route identity + board check; lane open) | this session |
 | WO-3 BoardQuery chat | ⚪ | — |
 | WO-4 shrinking repeats | ⚪ | — |
@@ -159,6 +159,8 @@ Today (engineer map, `brainstorm-r1/engineer.md`): ~15 lanes. One (`computePosit
 | WO-6 scratch board | ⚪ | — |
 
 ## 5. THE PLAN FROM HERE (2026-09-29, after the orphan cleanup + the review)
+
+**WORDS BEFORE SILENCE (David 2026-09-29: "Let's get the words down before we focus on silence").** Scoreboard (34 of his 50 games, 906 beats): we land a point on 38% of his teaching beats, 17% point-for-point. The gap is WHAT WE SAY — he explains what a move is FOR (plans 115 → 12%, quiet-move purpose 89 → 7%, prevents 73 → 7%, routes 61 → 10%, king attack 52 → 10%, their move's purpose 51 → 4%, recapture choice 47 → 6%); we describe the board. So: `moveIntent` (review session, engine-proven prevents/prepares, one lane) → 1b leads with purpose → WO-2. The decoder's SILENCE half waits until the words land.
 
 In order. Each step ends on main with a localhost hand-walk; a full prod audit only when David asks.
 
