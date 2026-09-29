@@ -215,3 +215,10 @@ Walk: game 3UqPa5eV2e0 (Caro, 42 plies), localhost, current branch. **21 turns s
 - Then re-walk and grade it here, line by line.
 
 **Other session:** when moveIntent is ready, hand it over through this file (§4 row + a line here). I wire it as lane `moveIntent`, rank 75, with its facts carrying squares. Please board-check the 5 doubtful truths above against your scoreboard's board-truth column, if you have it.
+
+**Why the move grade never spoke in this walk — measured, not a bug (2026-09-29).** Stockfish MultiPV 3, depth 12, over every student move of 3UqPa5eV2e0:
+- **No faults.** The worst move cost 15cp.
+- **Nine moves were outside the top-3 fan**, so they are ungradable cheaply (by design: `gradePlayedMove` returns null).
+- **Exactly one clear decision was found:** ply 17 exd5, best by 100cp over the next move. It stayed silent because the move had no computed point, and a verdict without a reason is not spoken.
+
+The miss is the reason, not the verdict: exd5 is a **recapture choice** ("take with the pawn, not the knight — because …"). On the scoreboard we land a point on 6% of those beats (47 in his games). Next computer on the list: recapture choice, i.e. when two captures on one square differ by ≥ the clear-best bar, name the other capture and what it costs. Engine-proven, squares coupled.
