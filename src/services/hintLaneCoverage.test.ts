@@ -86,8 +86,8 @@ describe('the gem Learn speaks never names its answer', () => {
       const live = findLivePunishment(null, [...g.lineMoves.split(/\s+/).filter(Boolean), g.inaccuracy]);
       if (!live) continue;
       checked += 1;
-      expect(live.callout, `${g.id} names its punish`).not.toContain(live.punish.replace(/[+#]$/, ''));
-      expect(live.callout, `${g.id} names a square`).not.toMatch(/\b[a-h][1-8]\b/);
+      expect(live.callout, `${g.lineMoves} ${g.inaccuracy} names its punish`).not.toContain(live.punish.replace(/[+#]$/, ''));
+      expect(live.callout, `${g.lineMoves} ${g.inaccuracy} names a square`).not.toMatch(/\b[a-h][1-8]\b/);
     }
     expect(checked, 'no real gem produced a live callout — this test checked nothing').toBeGreaterThan(5);
   });
