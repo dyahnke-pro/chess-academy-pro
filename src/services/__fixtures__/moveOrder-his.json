@@ -1,0 +1,94 @@
+[
+{
+"game": "OkjaIVnXg9o",
+"ply": 5,
+"fenBefore": "rnbqkb1r/ppp1pppp/3p1n2/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+"x": "Nc3",
+"y": "Nf3",
+"xLine": {
+"cp": 60,
+"pv": []
+},
+"yFirst": {
+"cp": -81,
+"pv": [
+"f6e4",
+"f1d3",
+"e4f6",
+"e1g1",
+"g7g6",
+"f1e1"
+]
+},
+"his": null
+},
+{
+"game": "1rcEbI44WqE",
+"ply": 13,
+"fenBefore": "r1bqkb1r/ppp1pppp/1nn5/4P3/2PP4/8/PP4PP/RNBQKBNR w KQkq - 1 7",
+"x": "Be3",
+"y": "Nc3",
+"xLine": {
+"cp": 63,
+"pv": []
+},
+"yFirst": {
+"cp": -194,
+"pv": [
+"d8d4",
+"d1d4",
+"c6d4",
+"c3b5",
+"d4b5",
+"c4b5"
+]
+},
+"his": "Rather than c5, which would gift the d5 outpost, you defend the centre with the bishop to e3."
+},
+{
+"game": "cdEASsRLWcg",
+"ply": 14,
+"fenBefore": "rnbq1rk1/pp2ppbp/3p1np1/2p1P1B1/2PP1P2/2N5/PP4PP/R2QKBNR b KQ - 0 7",
+"x": "cxd4",
+"y": "Nc6",
+"xLine": {
+"cp": -265,
+"pv": []
+},
+"yFirst": {
+"cp": 138,
+"pv": [
+"e5f6",
+"e7f6",
+"g5h4",
+"f8e8",
+"e1f2",
+"c5d4"
+]
+},
+"his": "The key move order \u2014 you take on d4 first."
+},
+{
+"game": "jwFOi039eeg",
+"ply": 13,
+"fenBefore": "r1bqkb1r/ppp1pppp/1nn5/4P3/2PP4/8/PP4PP/RNBQKBNR w KQkq - 1 7",
+"x": "Be3",
+"y": "Nc3",
+"xLine": {
+"cp": 89,
+"pv": []
+},
+"yFirst": {
+"cp": -172,
+"pv": [
+"d8d4",
+"d1d4",
+"c6d4",
+"c3b5",
+"d4b5",
+"c4b5"
+]
+},
+"his": "You develop the bishop to e3."
+}
+]

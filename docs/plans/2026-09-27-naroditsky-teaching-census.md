@@ -5,6 +5,12 @@
 sum past 100%. Status: C computed today · P partial · M missing. Counts are model
 classification — treat ±15% per row; the RANK is the signal.
 
+## BUILD STATUS (2026-09-29, branch `claude/chess-app-review-perf-du6haq`, merged at the end)
+He explains EVERY move — no computer below may go quiet because a move is in book or routine.
+- ✅ **#4 prevents · #6 two jobs · P "a quiet move's purpose"** → `moveIntent` (engine-proven, both seats; Learn lane `moveIntent`, rank 75). Walked on his game 1PI3xfMiUE4: "Kh1 prepares f4, to hit the pawn on e5", "O-O — so …Qxf2# isn't possible any more".
+- 🔵 **#1 move order** → building (`moveOrder`: "X first — Y right now runs into R", proven by playing the follow-up first).
+- ⏭ next, in rank order: #5 what THEIR move cost them · #2 king attack · #8 recapture choice · #10 rule→exception · #7 don't panic.
+
 ## Missing (M) — ranked by how often he teaches it
 | rank | what | lines | share |
 |---|---|---|---|

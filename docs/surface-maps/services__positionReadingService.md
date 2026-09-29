@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2532 lines · 77 exports · 59 importers · 18 tests · 2 audits**
+**2532 lines · 77 exports · 60 importers · 18 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -42,6 +42,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/minorityLeverCheck.test.ts`
 - `src/services/moveFundamentals.ts`
 - `src/services/moveIntent.ts`
+- `src/services/moveOrder.ts`
 - `src/services/moveTiming.ts`
 - `src/services/nextPlans.ts`
 - `src/services/opponentMovePurpose.ts`
@@ -138,7 +139,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveFundamentals.ts:312`
 - `src/services/moveFundamentals.ts:1260`
 
-### `legalSeeGainFor` (function) — 28 call sites
+### `legalSeeGainFor` (function) — 29 call sites
 - `src/services/arrowDoor.ts:161`
 - `src/services/bluffDetector.ts:53`
 - `src/services/bluffDetector.ts:63`
@@ -159,6 +160,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:1076`
 - `src/services/groundedAnswer.ts:7036`
 - `src/services/groundedAnswer.ts:7087`
+- `src/services/moveOrder.ts:112`
 - `src/services/moveTiming.ts:51`
 - `src/services/nextPlans.ts:46`
 - `src/services/perturbation.ts:69`
