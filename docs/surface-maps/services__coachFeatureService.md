@@ -146,14 +146,14 @@
 
 ### `buildReviewSegments` (function) — 59 call sites
 - `src/components/Coach/CoachGameReview.tsx:1903`
-- `src/services/coachFeatureService.causalChain.test.ts:27`
-- `src/services/coachFeatureService.causalChain.test.ts:41`
-- `src/services/coachFeatureService.causalChain.test.ts:47`
-- `src/services/coachFeatureService.causalChain.test.ts:55`
-- `src/services/coachFeatureService.causalChain.test.ts:69`
-- `src/services/coachFeatureService.causalChain.test.ts:78`
-- `src/services/coachFeatureService.causalChain.test.ts:93`
-- `src/services/coachFeatureService.causalChain.test.ts:97`
+- `src/services/coachFeatureService.causalChain.test.ts:30`
+- `src/services/coachFeatureService.causalChain.test.ts:44`
+- `src/services/coachFeatureService.causalChain.test.ts:50`
+- `src/services/coachFeatureService.causalChain.test.ts:58`
+- `src/services/coachFeatureService.causalChain.test.ts:72`
+- `src/services/coachFeatureService.causalChain.test.ts:81`
+- `src/services/coachFeatureService.causalChain.test.ts:96`
+- `src/services/coachFeatureService.causalChain.test.ts:100`
 - `src/services/coachFeatureService.cpLossSign.test.ts:40`
 - `src/services/coachFeatureService.cpLossSign.test.ts:47`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:37`
