@@ -1855,6 +1855,8 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     corpusNotes: true,
     // Play keeps the hook's own ledger (it volunteers nothing, 2026-09-23).
     getStanding: null,
+    // Play has no turn door; the hook speaks its own package.
+    speakSentence: null,
     // Persist the phase-transition report in the chat messages under the board
     // (David 2026-07-01) instead of the transient narration banner that pops
     // up then disappears. Voice still plays live via the hook.

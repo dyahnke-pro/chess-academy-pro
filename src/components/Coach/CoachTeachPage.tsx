@@ -9,6 +9,7 @@
  * / reset_board markers parsed from its response. Same room, different
  * actions.
  */
+import { characterOf, stepCharacter, EMPTY_CHARACTER, type CharacterState } from '../../services/positionCharacter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStandingFactMemory, fullmoveOf } from '../../services/standingFactMemory';
 import { createLearnMemory, type LearnMemory } from '../../services/learnMemory';
@@ -25,7 +26,7 @@ import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { transferClause, recordMotif, withTransfer } from '../../services/motifLedger';
-import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePackage, markableSquares, spokenSentenceKeys, type LearnLane, type VoicePackage, type VoiceFactKind } from '../../services/learnTurnDoor';
+import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePackage, markableSquares, spokenSentenceKeys, type LearnLane, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/learnTurnDoor';
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { curatedBeatAt } from '../../services/curatedBeatSource';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
@@ -204,6 +205,21 @@ import { warmAmateurPlay, getCachedAmateurPlay } from '../../services/amateurPla
 // by the student's hint register (David 2026-08-09: "Stronger player more
 // subtle and less often hints. Weaker player much more obvious").
 const REJECTED_TEMPTING_MAX_PER_GAME = 2;
+/** Lead-the-eye colour per spoken fact kind — ONE table for both waves. */
+const COLOR_FOR: Partial<Record<VoiceFactKind, string>> = {
+  threat: '#ef4444',   // coming AT the student
+  tactic: '#22c55e',   // theirs to find
+  gem: '#22c55e',
+  // A cost already paid, not a threat arriving.
+  drawback: '#f59e0b',
+  mistake: '#f59e0b',
+  // KEY SQUARES the computed board-read named — the lead-the-eye yellow
+  // (David 2026-09-13: "add highlights to all spoken key squares"). Covers
+  // the positional read + the Danya behaviours (both speak as `observation`
+  // now) — every square handed over on the fact gets marked.
+  observation: '#eab308',
+};
+
 const PRIORITY_FIRST_MIN_PLY_GAP = 10;
 import { captureEvent } from '../../services/analytics';
 
@@ -1666,6 +1682,7 @@ export function CoachTeachPage(): JSX.Element {
     liveGradesRef.current.clear();
     fundamentalSeenRef.current.clear();
     planArcRef.current = { theirs: EMPTY_ARC, mine: EMPTY_ARC };
+    characterRef.current = EMPTY_CHARACTER;
     positionalSaidRef.current.clear();
     rejectedTemptingCountRef.current = 0;
     priorityFirstLastPlyRef.current = -999;
@@ -1726,6 +1743,8 @@ export function CoachTeachPage(): JSX.Element {
    *  they want now and never "there it is — that was the plan" or "they have
    *  given it up". Per game, reset with the other page refs. */
   const planArcRef = useRef<{ theirs: ArcState; mine: ArcState }>({ theirs: EMPTY_ARC, mine: EMPTY_ARC });
+  /** What the position is about, followed across the game (WO-2). */
+  const characterRef = useRef<CharacterState>(EMPTY_CHARACTER);
   /** The moment Stockfish reports a forced mate FOR the student, the async engine
    *  pass flags it here (keyed by the FEN it read) so the instant package can call
    *  the mating NET at mate-in-N — not wait for the board to reach mate-in-1
@@ -3141,7 +3160,13 @@ export function CoachTeachPage(): JSX.Element {
       // the dictation branch below could arm it).
       const studentsTurnNow = gameRef.current.turn === playerColor?.[0];
       const dictation = routed?.kind === 'play_move' && studentsTurnNow;
-      if (routed && !dictation) {
+      // A CORRECTION IS NOT A BARE TAKEBACK HERE EITHER (WO-0, the takeback
+      // stall). "take that back and play c6" routes as `take_back_move`; the
+      // arm above already steps aside for it, but this door did not — it undid
+      // the move, saw `ok`, and returned in silence, so the student's move
+      // came off, nothing went on, and the coach never spoke again. The
+      // correction branch below undoes AND plays; let it.
+      if (routed && !dictation && !correctionNamesAMove) {
         const action = actionForCommand(routed, {
           fen: liveFenRef.current,
           // THE TEACHABLE MOVE, FROM THE ENGINE. Gated on the cached analysis
@@ -7348,6 +7373,9 @@ export function CoachTeachPage(): JSX.Element {
   // the coach marks the moment the opening ends and says what the position is
   // now about. Report lands in the chat, same as Play.
   const phaseStateRef = useRef<PhaseTransitionState>(createPhaseTransitionState());
+  /** The lead this turn's voice has spoken so far, and the board it spoke on —
+   *  the phase wave competes with it (one thought per turn, WO-1b). */
+  const turnLeadRef = useRef<{ fen: string; lead: NonNullable<TurnDecision['lead']> } | null>(null);
   const phaseNarration = usePhaseNarration({
     getPgn: () => game.history.join(' '),
     playerColor,
@@ -7360,6 +7388,36 @@ export function CoachTeachPage(): JSX.Element {
     // ONE say-once ledger for the game: the phase turn's balance sheet and the
     // positional read below share it.
     getStanding: () => standingRef.current,
+    // THROUGH THE DOOR (WO-1b). A phase transition is one more wave of the
+    // turn: its sentences compete with the lead the turn already spoke, so
+    // "the middlegame starts here" takes the turn only if it outranks it,
+    // and a report of five stacked lines speaks as one thought.
+    speakSentence: async (text, fen) => {
+      const prior = turnLeadRef.current && samePosition(turnLeadRef.current.fen, liveFenRef.current ?? fen)
+        ? turnLeadRef.current.lead
+        : null;
+      const d = decideTurn([{ lane: 'phase', text, fen }], undefined, learnMemRef.current.spokenKeys, prior);
+      // A held sentence was not spoken, so it must not ride the narration
+      // kind every listener reads as speech.
+      void logAppAudit(d.pkg.spoken ? {
+        kind: 'coach-narration-spoken',
+        category: 'narration',
+        source: 'CoachTeachPage.phase',
+        summary: `${describeTurnDecision(d)} — ${d.pkg.spoken.slice(0, 200)}`,
+        narrationText: d.pkg.spoken,
+        fen,
+      } : {
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'CoachTeachPage.phase.held',
+        summary: describeTurnDecision(d),
+        fen,
+      });
+      if (!d.pkg.spoken) return;
+      if (d.lead) turnLeadRef.current = { fen: liveFenRef.current ?? fen, lead: d.lead };
+      for (const k of spokenSentenceKeys(d.pkg)) learnMemRef.current.spokenKeys.add(k);
+      await voiceService.speakPackage(d.pkg);
+    },
     onReport: (text) => setMessages((prev) => [...prev, {
       id: uid('phase'), role: 'assistant', content: text, timestamp: Date.now(),
     }]),
@@ -7454,6 +7512,11 @@ export function CoachTeachPage(): JSX.Element {
     pkg: VoicePackage;
     /** Which lanes offered and which spoke — the door's record. */
     lanes: string;
+    /** The lane that led this wave (WO-1b) — the late wave may only lead
+     *  over it by outranking it. */
+    lead: TurnDecision['lead'];
+    /** Board descriptions for the late wave's one decision. */
+    deferred: Array<{ lane: LearnLane; text: string; squares?: readonly string[]; claims?: string[] }>;
     alertArrow: BoardArrow | null;
     leadEyeArrows: BoardArrow[];
     /** Lead-the-eye for the lanes that SPOKE — each kept fact's squares.
@@ -7480,7 +7543,7 @@ export function CoachTeachPage(): JSX.Element {
       const over = new Chess(args.fenAfterReply);
       if (over.isGameOver()) {
         return {
-          pkg: buildVoicePackage([]), lanes: '', alertArrow: null, leadEyeArrows: [],
+          pkg: buildVoicePackage([]), lanes: '', lead: null, deferred: [], alertArrow: null, leadEyeArrows: [],
           keptHighlights: [],
         };
       }
@@ -8192,6 +8255,7 @@ export function CoachTeachPage(): JSX.Element {
     let positionalLine: string | null = null;
     let positionalClaims: string[] = [];
     let positionalSquares: readonly string[] = [];
+    let positionalIsOwnKing = false;
     // THE CONTESTED GATE (David 2026-09-13) — the standing board read stands down
     // in a DECIDED game: a positional lesson ("your knight has an outpost") is
     // noise when someone is up a queen. This is the non-count importance filter
@@ -8303,6 +8367,10 @@ export function CoachTeachPage(): JSX.Element {
             ...(/^student-break-[a-h][1-8]$/.test(pr.key) ? [`break-${pr.key.slice(-2)}`] : []),
             ...(pr.aliases ?? []).filter((a) => /^file-[a-h]$/.test(a)),
           ];
+          // YOUR king in the centre with castling ready is a safety call, not
+          // a description — it outranks the board reads (hand walk 2026-09-29,
+          // ply 9: held behind "keep your knight on c3").
+          positionalIsOwnKing = pr.kind === 'king' && pr.side === 'student';
         }
       } catch { /* never a blocker */ }
     }
@@ -8344,19 +8412,30 @@ export function CoachTeachPage(): JSX.Element {
     // doctrine keeps alongside the note, not the wordy lanes he flagged.
     const noteHere = !!curatedLine;
     const softStandDown = noteHere;
+    // DESCRIPTIONS WAIT FOR THE TURN'S ONE DECISION (WO-1b). The board reads
+    // (commentary, behaviour, positional, king safety) used to speak in this
+    // instant wave simply because they are cheap — and whatever speaks first
+    // leads. Now they ride the late wave, decided together with the engine
+    // lanes, so a board description can no longer take the turn from what a
+    // move is FOR. Only the urgent lanes speak instantly.
+    const deferred: Array<{ lane: LearnLane; text: string; squares?: readonly string[]; claims?: string[] }> = [];
+    const deferIf = (on: unknown, lane: LearnLane, text: string | null, squares?: readonly string[], claims?: string[]): void => {
+      if (on && text) deferred.push({ lane, text, squares, claims: claims?.length ? claims : undefined });
+    };
+    deferIf(computedLine && !softStandDown, 'commentary', computedLine);
+    deferIf(behaviorLine && !softStandDown && !decidedByMaterial, 'behavior', behaviorLine, behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)), behaviorClaims);
+    deferIf(positionalLine && !softStandDown && !decidedByMaterial, positionalIsOwnKing ? 'kingSafety' : 'positional', positionalLine, positionalSquares, positionalClaims);
     const instantDecision = decideTurn([
       ...(gemLine ? [{ lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply }] : []),
       ...(tacticLine ? [{ lane: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, claims: tacticClaim ? [tacticClaim] : undefined }] : []),
       ...(threatLine ? [{ lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares }] : []),
       ...(announceLine ? [{ lane: 'opening' as const, text: announceLine, fen: args.fenAfterReply }] : []),
-      ...(computedLine && !softStandDown ? [{ lane: 'commentary' as const, text: computedLine, fen: args.fenAfterReply }] : []),
       // Rate-matched Danya behavior — board-truth. MERGED with the positional
       // read into ONE board-read lane (David 2026-09-13: "computer and observation
       // can be merged"): it now speaks as `observation`, the single home for the
       // computer's board reads, so the two never split or duplicate (the outpost
       // both once computed is now one deduped lane). Stands down behind a note
       // and in a decided game (the contested gate).
-      ...(behaviorLine && !softStandDown && !decidedByMaterial ? [{ lane: 'behavior' as const, text: behaviorLine, fen: args.fenAfterReply, squares: behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)), claims: behaviorClaims.length ? behaviorClaims : undefined }] : []),
       // The hand-written masterclass beat, verified before it shipped
       // (narrationAccuracy, lessonIntegrity). No corpus note rides free play.
       ...(curatedLine ? [{ lane: 'curated' as const, text: curatedLine, fen: args.fenAfterReply }] : []),
@@ -8379,7 +8458,6 @@ export function CoachTeachPage(): JSX.Element {
       // speaks in (the merge). Widened board-awareness pool (king, plan, minority,
       // outpost, passer, colour-complex, open file, lever, both sides). Stands
       // down behind a note and in a decided game (the contested gate).
-      ...(positionalLine && !softStandDown && !decidedByMaterial ? [{ lane: 'positional' as const, text: positionalLine, fen: args.fenAfterReply, squares: positionalSquares, claims: positionalClaims.length ? positionalClaims : undefined }] : []),
       // priorKeys = every phrase spoken EARLIER this game, so no lane repeats a
       // phrase across turns (David 2026-09-13). Within-turn dedupe is separate
       // (the late package's `alreadySaid`); this is the cross-turn guarantee.
@@ -8422,19 +8500,6 @@ export function CoachTeachPage(): JSX.Element {
       // `said.includes(square)`, which is a validator on prose: it passes on an
       // accidental substring and fails on a square the sentence names in words.
       // Both were re-deriving downstream what the producer already knew.
-      const COLOR_FOR: Partial<Record<VoiceFactKind, string>> = {
-        threat: '#ef4444',   // coming AT the student
-        tactic: '#22c55e',   // theirs to find
-        gem: '#22c55e',
-        // A cost already paid, not a threat arriving.
-        drawback: '#f59e0b',
-        mistake: '#f59e0b',
-        // KEY SQUARES the computed board-read named — the lead-the-eye yellow
-        // (David 2026-09-13: "add highlights to all spoken key squares"). Covers
-        // the positional read + the Danya behaviours (both speak as `observation`
-        // now) — every square handed over on the fact gets marked.
-        observation: '#eab308',
-      };
       for (const f of pkg.kept) {
         const color = COLOR_FOR[f.kind];
         if (!color) continue;
@@ -8454,6 +8519,8 @@ export function CoachTeachPage(): JSX.Element {
     return {
       pkg,
       lanes: describeTurnDecision(instantDecision),
+      lead: instantDecision.lead,
+      deferred,
       alertArrow,
       leadEyeArrows,
       keptHighlights,
@@ -9181,6 +9248,30 @@ export function CoachTeachPage(): JSX.Element {
                       }
                     }
 
+                    // WHAT THE POSITION IS ABOUT, AND WHEN THAT CHANGES (WO-2,
+                    // David 2026-09-29: "Tactical to positional back to
+                    // tactics"). Computed off this same read: a tactic live on
+                    // the board, the gap between the engine's two best moves,
+                    // and the material. Spoken only when a new character holds
+                    // for two reads.
+                    try {
+                      const cc: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
+                      const tctxNow = buildTacticsLiveContext(probe.fen(), studentBest, cc, rating);
+                      const tl = studentBest?.topLines ?? [];
+                      const gap = tl.length >= 2 && typeof tl[0].evaluation === 'number' && typeof tl[1].evaluation === 'number'
+                        ? Math.abs(tl[0].evaluation - tl[1].evaluation)
+                        : null;
+                      const now = characterOf({
+                        fen: probe.fen(),
+                        studentColor: playerColor,
+                        tacticLive: tctxNow.immediate.length > 0 || tctxNow.hanging.length > 0,
+                        bestGapCp: gap,
+                      });
+                      const step = stepCharacter(characterRef.current, now);
+                      characterRef.current = step.next;
+                      if (step.switched) queueSpokenHint(probe.fen(), step.switched.text, 'character');
+                    } catch { /* the character read is a bonus, never a blocker */ }
+
                     // BOTH SIDES' PLANS, off the SAME engine read (David
                     // 2026-08-09: "We will need to know the plans for both
                     // sides. That is the most important part of teaching
@@ -9360,6 +9451,7 @@ export function CoachTeachPage(): JSX.Element {
             // student is never left in silence.
             const fenAfterReply = liveFenRef.current;
             let instantSpokenText = '';
+            let instantLead: TurnDecision['lead'] = null;
             let trackAStarted = false;
             // GENERATION TOKEN — the fix for the lost-line collision (David
             // 2026-08-07 log, findings 92-95): resetting `speechChainRef`
@@ -9436,6 +9528,9 @@ export function CoachTeachPage(): JSX.Element {
                   moveTo: im.to,
                   studentColor: playerColor,
                 });
+                instantLead = instant.lead;
+                for (const d of instant.deferred) queueSpokenHint(ip.fen(), d.text, d.lane, d.squares, d.claims);
+                turnLeadRef.current = instant.lead ? { fen: ip.fen(), lead: instant.lead } : null;
                 // THE PACKAGE IS THE UTTERANCE. This used to log `factLines`
                 // while speaking a separately-assembled `alertLine`/`teachLine`
                 // pair — two truths for one turn, so the audit could report
@@ -9951,8 +10046,24 @@ export function CoachTeachPage(): JSX.Element {
                     pending.lines.map(({ lane, kind, text, squares, claims, gradeFen }) => ({ lane, kind, text, squares, claims, fen: gradeFen ?? pending.fen })),
                     instantSpokenText,
                     learnMemRef.current.spokenKeys,
+                    // ONE THOUGHT PER TURN (WO-1b): the late wave leads only
+                    // if it outranks what the instant wave led with.
+                    instantLead,
                   );
                   const hintPkg = lateDecision.pkg;
+                  if (lateDecision.lead) turnLeadRef.current = { fen: pending.fen, lead: lateDecision.lead };
+                  // A wave that held everything said nothing — but what it held
+                  // must still be visible, or a lane that loses every turn looks
+                  // exactly like a lane that never fires.
+                  if (!hintPkg.spoken && lateDecision.held.length > 0) {
+                    void logAppAudit({
+                      kind: 'coach-surface-migrated',
+                      category: 'subsystem',
+                      source: 'CoachTeachPage.hintRegister.held',
+                      summary: describeTurnDecision(lateDecision),
+                      fen: pending.fen,
+                    });
+                  }
                   if (hintPkg.spoken) {
                     speakTrackA(hintPkg.spoken);
                     // Record the late package's phrases too — the per-game set is
@@ -9969,12 +10080,20 @@ export function CoachTeachPage(): JSX.Element {
                     // is the whole coupling and needs no check of its own.
                     // Amber throughout: everything queued here is retrospective
                     // (a cost already paid), never a threat arriving.
-                    const owed = markableSquares(hintPkg);
+                    // Coloured by the kind that spoke — the same table the
+                    // instant wave uses, now that board reads ride this wave
+                    // too. A kind with no colour of its own is retrospective
+                    // (a cost already paid): amber.
+                    const owed: BoardHighlight[] = [];
+                    for (const f of hintPkg.kept) {
+                      for (const sq of markableSquares({ kept: [f] })) {
+                        if (!owed.some((h) => h.square === sq)) owed.push({ square: sq, color: COLOR_FOR[f.kind] ?? '#f59e0b' });
+                      }
+                    }
                     if (owed.length > 0 && liveFenRef.current === fenAfterReply) {
                       setHighlights((prev) => {
                         const have = new Set(prev.map((h) => h.square));
-                        return [...prev, ...owed.filter((sq) => !have.has(sq))
-                          .map((square) => ({ square, color: '#f59e0b' }))];
+                        return [...prev, ...owed.filter((h) => !have.has(h.square))];
                       });
                     }
                     void logAppAudit({

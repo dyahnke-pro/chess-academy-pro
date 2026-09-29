@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**512 lines · 7 exports · 9 importers · 6 tests · 2 audits**
+**519 lines · 8 exports · 9 importers · 6 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -31,7 +31,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `markableSquares` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9972`
+- `src/components/Coach/CoachTeachPage.tsx:10089`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
@@ -45,9 +45,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `buildVoicePackage` (function) — 64 call sites
 - `src/components/Coach/CoachGameReview.tsx:2005`
 - `src/components/Coach/CoachGameReview.tsx:2043`
-- `src/components/Coach/CoachTeachPage.tsx:7483`
-- `src/hooks/usePhaseNarration.ts:425`
-- `src/hooks/usePhaseNarration.ts:875`
+- `src/components/Coach/CoachTeachPage.tsx:7546`
+- `src/hooks/usePhaseNarration.ts:430`
+- `src/hooks/usePhaseNarration.ts:880`
 - `src/hooks/usePositionNarration.ts:314`
 - `src/services/coachSurfaceScorecard.report.test.ts:116`
 - `src/services/coachSurfaceScorecard.report.test.ts:138`
@@ -56,7 +56,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/computedVoiceAudit.report.test.ts:363`
 - `src/services/computedVoiceAudit.report.test.ts:395`
 - `src/services/laneReachability.test.ts:136`
-- `src/services/learnTurnDoor.ts:129`
+- `src/services/learnTurnDoor.ts:158`
 - `src/services/replayFence.najdorf1500.test.ts:50`
 - `src/services/voicePackage.test.ts:19`
 - `src/services/voicePackage.test.ts:32`
@@ -108,18 +108,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:515`
 - `src/services/voicePackage.test.ts:529`
 
-### `spokenSentenceKeys` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9458`
-- `src/components/Coach/CoachTeachPage.tsx:9960`
+### `spokenSentenceKeys` (function) — 7 call sites
+- `src/components/Coach/CoachTeachPage.tsx:7418`
+- `src/components/Coach/CoachTeachPage.tsx:9553`
+- `src/components/Coach/CoachTeachPage.tsx:10071`
 - `src/services/voicePackage.test.ts:415`
 - `src/services/voicePackage.test.ts:424`
 - `src/services/voicePackage.test.ts:436`
 - `src/services/voicePackage.test.ts:514`
 
 ### `describeVoicePackage` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9450`
-- `src/components/Coach/CoachTeachPage.tsx:9984`
+- `src/components/Coach/CoachTeachPage.tsx:9545`
+- `src/components/Coach/CoachTeachPage.tsx:10103`
 - `src/services/voicePackage.test.ts:38`
+
+### `joinSpoken` (function) — 1 call site
+- `src/services/learnTurnDoor.ts:186`
 
 ## Tests
 

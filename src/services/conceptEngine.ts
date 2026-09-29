@@ -10,6 +10,7 @@
  * pure so every surface can call it synchronously.
  */
 
+import { materialBalance, MATERIAL_VALUE } from './pieceValues';
 import type { TacticPattern, TacticPatternType } from '../types/tacticTypes';
 import { type PositionalConceptId, asPositionalConcept } from './conceptVocabulary';
 import type { MatchupClass, MatchupResult } from './endgameMatchup';
@@ -73,18 +74,9 @@ export interface ComputedConcept {
   line?: string[];
 }
 
-const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
 
-/** Non-king material balance, white minus black, in pawns. */
-export function materialBalance(fen: string): number {
-  let bal = 0;
-  for (const ch of fen.split(' ')[0]) {
-    const v = VAL[ch.toLowerCase()];
-    if (!v) continue;
-    bal += ch === ch.toUpperCase() ? v : -v;
-  }
-  return bal;
-}
+/** Non-king material balance, white minus black, in pawns — the shared reader. */
+export { materialBalance };
 
 /**
  * The stronger side by raw material, or 'balanced' within ~1 pawn. Used to frame
@@ -562,7 +554,7 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
       path.push(mv.san);
       const fenAfter = c.fen();
       const facts = computePlyFacts(fenBefore, fenAfter, { captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion }, prev);
-      prev = mv.captured ? { square: mv.to, capturedValue: VAL[mv.captured] ?? 0 } : { square: null, capturedValue: 0 };
+      prev = mv.captured ? { square: mv.to, capturedValue: MATERIAL_VALUE[mv.captured] ?? 0 } : { square: null, capturedValue: 0 };
       if (mv.color !== studentColor) continue;
       // Key-move score: mate » real landed tactic (weighted by what it nets) »
       // material. Every term is board-true from computePlyFacts.

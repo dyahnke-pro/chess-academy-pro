@@ -23,29 +23,23 @@
  *     one is a lesser sin than an inverted direction, and magnitude claims
  *     about compensation/structure get fuzzy fast.
  */
+import { materialBalance as sharedMaterialBalance } from './pieceValues';
 import { Chess } from 'chess.js';
 import { claimSentences } from '../utils/claimSentences';
 
-const PIECE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 
 /** Mirrors boardClaimValidator's future/hypothetical exemption. */
 const FUTURE_MARKER_RE = /\b(after|if|once|then|would|will|could|should|when|next|prepares?|preparing|plan(?:s|ning)?|threatens?|going to|about to)\b/i;
 
-/** White-minus-black material balance in pawns, from the FEN placement. */
+/** White-minus-black material balance in pawns, or null for an unreadable
+ *  FEN (the validator must not grade against a board it cannot read). */
 export function materialBalance(fen: string): number | null {
   try {
-    const board = new Chess(fen).board();
-    let bal = 0;
-    for (const row of board) {
-      for (const cell of row) {
-        if (!cell) continue;
-        bal += (cell.color === 'w' ? 1 : -1) * (PIECE_VALUE[cell.type] ?? 0);
-      }
-    }
-    return bal;
+    new Chess(fen);
   } catch {
     return null;
   }
+  return sharedMaterialBalance(fen);
 }
 
 
