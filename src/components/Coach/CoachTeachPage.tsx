@@ -29,7 +29,7 @@ import { transferClause, recordMotif, withTransfer } from '../../services/motifL
 import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePackage, markableSquares, spokenSentenceKeys, type LearnLane, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/learnTurnDoor';
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { curatedBeatAt } from '../../services/curatedBeatSource';
-import { moveIntent, nullMoveFen } from '../../services/moveIntent';
+import { DEFAULT_INTENT, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -9903,10 +9903,11 @@ export function CoachTeachPage(): JSX.Element {
                       // by the engine (a search where this side passes instead),
                       // replayed against their ACTUAL reply so it is still true on
                       // the board the student hears it on. The door ranks it.
-                      // Not in book (move one "stops …d5 and prepares Be2" is noise
-                      // — walk 2026-09-29), and not on a capture or check: the
-                      // point of a capture is the capture.
-                      if (!gambitLine && !studentMoveInBook && !/[x+#]/.test(move.san) && !mid.isMate && !preStudentRead.isMate) {
+                      // Every move, book included — he explains every move (David
+                      // 2026-09-29). In book the computer keeps only a real stopped
+                      // threat or a prepared move with its reason. Not on a capture
+                      // or check: the point of a capture is the capture.
+                      if (!gambitLine && !/[x+#]/.test(move.san) && !mid.isMate && !preStudentRead.isMate) {
                         const passFen = nullMoveFen(fenBefore);
                         const passRead = passFen
                           ? await stockfishEngine.analyzeWithBudget(passFen, COACH_TURN_DEPTH, 900).catch(() => null)
@@ -9924,7 +9925,7 @@ export function CoachTeachPage(): JSX.Element {
                           passBefore: passRead.topLines,
                           passAfter: [],
                           reply: replyUci,
-                        }, 'student') : null;
+                        }, 'student', { ...DEFAULT_INTENT, book: studentMoveInBook }) : null;
                         if (intent) {
                           queueSpokenHint(fenAfterReply, intent.text, 'moveIntent', intent.squares, [
                             ...(intent.prevents ? [`stops:${intent.prevents.uci}`] : []),

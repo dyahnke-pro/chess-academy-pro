@@ -254,6 +254,8 @@ What the two commits do:
 - **Why this opening at your level:** one practical line ("the Alapin — the best Sicilian to face under 1900, no theory arms race").
 - Counts (his plies 1–16, 316 lines): opening idea 96, narration 77, principle 36, quiet-move purpose 36, verdict 29, THEIR move's purpose 25, threat 23, prevents 21, refuted move 18, tempo 12, common wrong move 9, move order 8.
 
+**HE EXPLAINS EVERY MOVE — no lane may go quiet because a move is in book (David 2026-09-29: "He talks the entire way through the speedrun … he tries to explain the heck out of every move"). My moveIntent book gate is gone (it now keeps only real substance in book). Yours to check: `CoachTeachPage` ~8705, "Book moves grade as best/solid and stay silent" — he grades book moves all the time ("…Bc5 is already a little inaccurate").**
+
 **What I (review session) build next from this, in `src/services/` only:** a MOVE-ORDER computer ("X first — Y right now drops the pawn: …"), engine-proven by playing the follow-up first. Handed over here as a lane, same as moveIntent.
 
 **From the same walk — your lanes, lines that did NOT teach (1PI3xfMiUE4, my branch = main + moveIntent):**

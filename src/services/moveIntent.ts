@@ -45,6 +45,9 @@ export interface IntentOptions {
   /** 'any' — every strong reply after a pass; 'concrete' — only a reply that
    *  mates, gives check, or wins material by exchange. */
   prevent: 'any' | 'concrete' | 'deny' | 'any+deny';
+  /** The move is still in opening book: speak only a real stopped threat or a
+   *  prepared move with its reason (never silence for being in book). */
+  book?: boolean;
 }
 export const DEFAULT_INTENT: IntentOptions = { prepare: 'unlock', prevent: 'any+deny' };
 
@@ -245,6 +248,16 @@ export function moveIntent(
       const own = [m.to, castledRookSquare(m)].filter(Boolean);
       if (own.includes(prepares.uci.slice(0, 2))) prepares = null;
     } catch { /* keep */ }
+  }
+  // IN BOOK THE SAME TEACHING, HELD TO ITS SUBSTANCE (David 2026-09-29: "He
+  // is not quiet during book moves"). He speaks every move of the opening,
+  // so book is never a reason for silence — but "e4 stops …d5 and prepares
+  // Be2" teaches nothing. In book a stopped move must be a real threat (a
+  // check, a capture, mate — "Nf3 stops …Qh4+") and a prepared move must come
+  // with what it does.
+  if (opts.book) {
+    if (prevents && !/[x+#]/.test(prevents.san)) prevents = null;
+    if (prepares && !whatItDoes(fenAfter, prepares.uci, mover)) prepares = null;
   }
   if (!prevents && !prepares) return null;
   const squares = [...new Set([

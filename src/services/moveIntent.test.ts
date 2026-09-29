@@ -3,7 +3,7 @@
 // point he gives. Engine reads are stored with the positions (depth 14,
 // multi-PV), so the test needs no engine.
 import { describe, it, expect } from 'vitest';
-import { moveIntent, whatItDoes } from './moveIntent';
+import { DEFAULT_INTENT, moveIntent, whatItDoes } from './moveIntent';
 import type { AnalysisLine } from '../types';
 import fixture from './__fixtures__/moveIntent-1PI3xfMiUE4.json';
 
@@ -85,5 +85,15 @@ describe('moveIntent — never a plan the move itself just placed', () => {
     }, 'student');
     expect(out?.prepares?.uci.slice(0, 2)).not.toBe('f1');
     expect(out?.text).not.toMatch(/Re1/);
+  });
+});
+
+describe('moveIntent in book — never silent for being in book, held to substance', () => {
+  it('drops a quiet "stops" in book, keeps a stopped threat', () => {
+    const m = moments['13'];
+    const r = { before: lines(m.before), after: lines(m.after), passBefore: lines(m.passBefore), passAfter: lines(m.passAfter) };
+    const inBook = moveIntent(m.fenBefore, m.san, r, 'student', { ...DEFAULT_INTENT, book: true });
+    // …Qxf2# is a real threat: it survives the book gate.
+    expect(inBook?.prevents?.san).toMatch(/Qxf2/);
   });
 });
