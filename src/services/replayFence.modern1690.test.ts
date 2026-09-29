@@ -4,6 +4,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { detectBehaviors } from './danyaBehaviors';
+import { buildPositionalRead } from './positionalRead';
 
 const GAME = 'd4 g6 e4 Bg7 Nc3 d6 Be3 Nf6 f3 O-O Qd2 Nbd7 Bh6 c5 d5 a6 h4 b5 h5 b4 Bxg7 Kxg7 hxg6 fxg6 Qh6+ Kg8 Nd1 Rf7 Ne3 Rg7 Nh3 Qf8 Ng5 Ne5 O-O-O Nf7 Nxf7 Qxf7 Bc4 Nh5 Rh4 Qf6 Rdh1 Bd7 f4 Rf8 e5 dxe5 d6+ e6 Ng4 Qxf4+ Qxf4 exf4 Ne5 Ng3 Nxd7 Nxh1 Bxe6+ Kh8 Nxf8 Ng3 d7 Rxd7 Bxd7 Kg7 Nxh7 g5 Nxg5 Kg6 Nh3 Kg7 Ng5 Kg6 Nh3 Kg7 Nxf4 Kf6 Kd2 Ke5 Rg4 Ne4+ Ke3 Nd6 Nd3+ Kd5 Rg5+ Nf5+ Rxf5+ Kd6 Rxc5 Kxd7 Nxb4'.split(' ');
 const fenAt = (n: number): string => { const c = new Chess(); for (const s of GAME.slice(0, n)) c.move(s); return c.fen(); };
@@ -180,5 +181,24 @@ describe('claim check 2026-09-27 — material and the king walk', () => {
   it('no "walk your king to the centre" with queens on', () => {
     const facts = detectBehaviors({ fen: '8/5pk1/6p1/8/3Q4/6P1/5PK1/3q4 w - - 0 40', studentColor: 'white' }).map((h) => h.id);
     expect(facts).not.toContain('king-activity');
+  });
+});
+
+describe('claim check 2026-09-28 — development is the work LEFT, not the pieces out', () => {
+  it('a side that lost a minor is not "ahead in development" with 2 at home each (naro-Dj_hLEdDpAg ply 10)', () => {
+    const r = buildPositionalRead('r3kbnr/ppq1pppp/2B5/2ppP3/6b1/2P2N2/PP1P1PPP/RNBQK2R b KQkq - 0 6', 'black', new Set(), new Set());
+    expect(r?.text ?? '').not.toMatch(/ahead in development/);
+  });
+  it('3 at home each is not "behind" (amateur 173835080400 ply 9)', () => {
+    const r = buildPositionalRead('r1bqkbnr/pppp2pp/8/4n3/3Pp3/2P5/PP3PPP/RNBQKB1R w KQkq - 0 6', 'white', new Set(), new Set());
+    expect(r?.text ?? '').not.toMatch(/ahead in development/);
+  });
+  it('the behaviour agrees (amateur 184173326512 ply 25)', () => {
+    const hits = detectBehaviors({ fen: 'r1b2rk1/1p3ppp/2pq1n2/p1n1p3/1PB1P3/Q1P2P1P/P2N2P1/R1B1K1bR w KQ - 0 14', studentColor: 'white' });
+    expect(hits.map((h) => h.id)).not.toContain('development');
+  });
+  it('NEGATIVE CONTROL: a real lag still speaks — three at home against one', () => {
+    const r = buildPositionalRead('rnbqkb1r/pppp1ppp/5n2/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 5 6', 'black', new Set(), new Set());
+    expect(r?.text ?? '').toMatch(/3 minor pieces at home and they are ahead in development/);
   });
 });

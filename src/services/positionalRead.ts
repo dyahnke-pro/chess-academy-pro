@@ -241,7 +241,10 @@ function observationsFor(
     // One tempo is not a lead in the first moves — White moves first, and
     // "they are ahead in development" after 1.e4 c6 2.Nf3 d5 3.e5 is a nag
     // about one knight (hand walk 1600). Two pieces, or one past move five.
-    const lead = other.developedMinors - mine.developedMinors;
+    // Measured as pieces still AT HOME, the work left — not pieces out, which
+    // read a side that had lost a minor as "behind" with 2 at home each
+    // (claim check 2026-09-28).
+    const lead = asleep - (other.totalMinors - other.developedMinors);
     const moveNo = Number(fen.split(' ')[5] ?? '1') || 1;
     if (asleep >= 2 && (lead >= 2 || (lead >= 1 && moveNo >= 6))) {
       out.push({

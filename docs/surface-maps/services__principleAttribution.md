@@ -129,7 +129,7 @@
 - `src/services/principleAttributionEvalPv.test.ts:94`
 - `src/services/principleVoice.test.ts:9`
 - `src/services/replayFence.bowdler1000.test.ts:37`
-- `src/services/replayFence.modern1690.test.ts:31`
+- `src/services/replayFence.modern1690.test.ts:32`
 - `src/services/replayFence.sicilian1200.test.ts:29`
 - `src/services/replayFence.sicilian1200.test.ts:48`
 - `src/services/section14Coverage.measure.test.ts:77`

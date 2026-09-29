@@ -198,14 +198,18 @@ export function readTrade(
     // lesson (Naroditsky at this exact move: "you take, inviting the trade —
     // White can't exploit it").
     const pawns = -edge0 === 1 ? 'a pawn' : `${-edge0} points`;
-    const dent = good[0].why.replace(/^taking back /, '');
+    // The dent KEEPS its "taking back": it is about the pawn that will stand
+    // on the square after the recapture. Stripped, "Their Nxe3 leaves your
+    // pawn on e3 isolated" was said with their knight on e3 (claim check
+    // 2026-09-28).
+    const dent = good[0].why;
     return {
       call: 'behind',
       text: you
         // Said while the recapture is still pending, so the count is framed as
         // what holds ONCE it lands — never as a standing fact of this board.
-        ? `${mv.san} ${dent}, but once they take back you're still ${pawns} behind — and trades help the side with more material.`
-        : `Their ${mv.san} ${dent}, but once you take back you're still ${pawns} ahead — and every trade brings your ending closer.`,
+        ? `After ${mv.san}, ${dent}, but you're still ${pawns} behind — and trades help the side with more material.`
+        : `After their ${mv.san}, ${dent}, but you're still ${pawns} ahead — and every trade brings your ending closer.`,
       squares: good[0].sq, key: 'trade:behind-structure', moverIsStudent,
     };
   }

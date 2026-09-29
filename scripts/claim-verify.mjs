@@ -65,9 +65,14 @@ function see(fen, sq, by) {
   const target = at(b, sq); if (!target || target.color === by) return 0;
   const gains = []; let side = by; let onSq = target.type;
   const removed = new Set();
-  const liveAtt = (col) => attackers(b, sq, col).filter((s) => !removed.has(s)).sort((x, y) => VAL[at(b, x).type] - VAL[at(b, y).type]);
+  // The king captures LAST, and only onto a square the other side no longer
+  // covers (it had k=0 and sorted first, so every exchange with a king in it
+  // was misread — claim check 2026-09-28).
+  const ORDER = (t) => (t === 'k' ? 1000 : VAL[t]);
+  const liveAtt = (col) => attackers(b, sq, col).filter((s) => !removed.has(s)).sort((x, y) => ORDER(at(b, x).type) - ORDER(at(b, y).type));
   for (let depth = 0; depth < 32; depth += 1) {
     const a = liveAtt(side)[0]; if (!a) break;
+    if (at(b, a).type === 'k' && liveAtt(other(side)).length > 0) break;
     gains.push(VAL[onSq] === 0 && onSq === 'k' ? 100 : VAL[onSq]);
     onSq = at(b, a).type; removed.add(a);
     b.remove(a); // x-rays behind it now count
@@ -278,8 +283,16 @@ function verify(x) {
         const lines = LINES.get(fkey(before.fen())); const pv = lines?.[0]?.pv ?? [];
         const c = board(before.fen()); const m0 = material(c.fen(), them) - material(c.fen(), me);
         if (lines?.[0]?.mate !== null && lines?.[0]?.mate !== undefined) return U('the engine line is a mate — material does not settle it');
-        for (const u of pv.slice(0, 6)) { try { c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { break; } }
-        const gain = (material(c.fen(), them) - material(c.fen(), me)) - m0;
+        // SETTLED gain over the WHOLE line: read only after the student has
+        // answered each of their moves (so a capture that gets taken back does
+        // not count), and keep the most they hold at any such point. A six-ply
+        // window cut Rf2 …Qxd5 Qxd5 Nxd5 in half and called a lost rook "-4".
+        let gain = -Infinity;
+        for (const u of pv.slice(0, 12)) {
+          let mv; try { mv = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { break; }
+          if (mv.color === me) gain = Math.max(gain, (material(c.fen(), them) - material(c.fen(), me)) - m0);
+        }
+        if (gain === -Infinity) gain = (material(c.fen(), them) - material(c.fen(), me)) - m0;
         // "win" is a net gain; "take" is a capture that happens in the line.
         const isTake = /let them take/.test(t);
         if (isTake) {

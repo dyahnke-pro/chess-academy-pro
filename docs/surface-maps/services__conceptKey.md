@@ -23,7 +23,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:7944`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
-- `src/services/danyaBehaviors.ts:443`
+- `src/services/danyaBehaviors.ts:448`
 - `src/services/positionFacts.ts:1027`
 - `src/services/positionFacts.ts:1402`
 - `src/services/positionFacts.ts:1416`

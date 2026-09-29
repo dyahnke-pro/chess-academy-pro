@@ -17,12 +17,12 @@ describe('readTrade — a trade judged by the pieces, not the points', () => {
   it('doubled pawns are not "a good trade" for the side that is behind — both halves are said', () => {
     const r = readTrade('rn2k1nr/pp1b1ppp/1b1p1q2/1N2p3/4P3/3PBN2/PPP2PPP/R2QK2R w KQkq - 3 9', 'Bxb6', 'b');
     expect(r?.call).toBe('behind');
-    expect(r?.text).toBe('Their Bxb6 doubles your pawns, but once you take back you\'re still 2 points ahead — and every trade brings your ending closer.');
+    expect(r?.text).toBe('After their Bxb6, taking back doubles your pawns, but you\'re still 2 points ahead — and every trade brings your ending closer.');
   });
   it('NEGATIVE: the Najdorf — Nxe5 after …Nxe5 won a pawn is not "good for them" — you stay a pawn up (hand walk 2026-09-27)', () => {
     // 1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 a6 6.Nf3 Nc6 7.e5 Nxe5
     const fen = 'r1bqkb1r/1p2pppp/p2p1n2/4n3/8/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 8';
-    expect(readTrade(fen, 'Nxe5', 'b')?.text).toBe('Their Nxe5 doubles your pawns, but once you take back you\'re still a pawn ahead — and every trade brings your ending closer.');
+    expect(readTrade(fen, 'Nxe5', 'b')?.text).toBe('After their Nxe5, taking back doubles your pawns, but you\'re still a pawn ahead — and every trade brings your ending closer.');
   });
   it('good: taking back leaves an isolated pawn (queenless — not "king cover")', () => {
     const r = readTrade('r5k1/pR6/5p1p/2p1bn1r/2P4B/3P2P1/PP3PK1/5R2 b - - 0 25', 'Nxh4+', 'b');

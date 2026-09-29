@@ -384,13 +384,18 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       if (!mine || !theirs) return null;
       // Only fire when you are genuinely BEHIND the opponent — not just
       // "uncastled", which was true for both sides every opening ply.
-      const iLag = mine.developedMinors + (mine.castled ? 2 : 0);
-      const theyLead = theirs.developedMinors + (theirs.castled ? 2 : 0);
+      // WORK LEFT, not pieces out (claim check 2026-09-28): a side that has
+      // lost a minor has fewer to develop, and counting pieces OUT called it
+      // "behind" with the same number at home on both sides.
+      const myHome = mine.totalMinors - mine.developedMinors;
+      const theirHome = theirs.totalMinors - theirs.developedMinors;
+      const iLag = -myHome + (mine.castled ? 2 : 0);
+      const theyLead = -theirHome + (theirs.castled ? 2 : 0);
       // AND fewer minors out than them. Castling counts toward the lead, but a
       // castling gap alone is not "behind in development": at 7.Bb3 in the
       // 1380 re-walk both sides had three minors out and only Black had
       // castled, and the coach told White to get the pieces out.
-      if (theyLead - iLag >= 2 && !mine.castled && theirs.developedMinors > mine.developedMinors) {
+      if (theyLead - iLag >= 2 && !mine.castled && myHome > theirHome) {
         return { fact: `You're behind in development — get the minor pieces out and castle before the position sharpens.`, squares: [], keys: ['student-development', 'student-king-centre', 'castle-now'] };
       }
       return null;

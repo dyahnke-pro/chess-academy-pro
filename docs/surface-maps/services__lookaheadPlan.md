@@ -37,8 +37,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `tacticAim` (function) — 2 call sites
-- `src/services/replayFence.modern1690.test.ts:77`
-- `src/services/replayFence.modern1690.test.ts:79`
+- `src/services/replayFence.modern1690.test.ts:78`
+- `src/services/replayFence.modern1690.test.ts:80`
 
 ### `tacticWord` (function) — 24 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7762`
