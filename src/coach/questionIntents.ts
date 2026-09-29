@@ -664,6 +664,13 @@ export function pieceOptionsRef(ask: string | undefined): import('../services/pi
 /** "stop" / "wait" / "hold on" / "shh" — the student telling the coach to be
  *  quiet (David 2026-09-24: "User is in control"). The WHOLE message must be
  *  the command, so "stop — why is Nf3 bad?" is still a question. */
+/** "Let's play …" — a request to start a real game on Learn. Punctuation may
+ *  follow "play" ("let's play, I'll be white") and the apostrophe may be the
+ *  curly one phone keyboards type ("let’s play"). The prod tape of 2026-09-29
+ *  typed the comma form and it missed this pattern, fell through to the model,
+ *  and the model announced a Caro-Kann the code never set up. */
+export const LETS_PLAY_RE = /\b(?:let[’']?s|can\s+we|could\s+we|wanna|i\s+want\s+to)\s+play\b(?!\s+through\b)[\s,.!]*(?:the\s+)?/i;
+
 export function isStopCommand(text: string | undefined): boolean {
   if (!text) return false;
   return /^\s*(?:(?:ok(?:ay)?|coach|please)[,\s]+)?(?:stop(?:\s+(?:talking|it|please))?|wait(?:\s+a\s+(?:sec(?:ond)?|minute|moment))?|hold\s+on|hang\s+on|pause|shh+|quiet|be\s+quiet|silence|enough|one\s+sec(?:ond)?)(?:[,\s]+please)?\s*[.!]*\s*$/i.test(text);
