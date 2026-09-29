@@ -57,6 +57,8 @@ export type LearnLane =
   | 'theirMoveCost'
   | 'recapture'
   | 'kingAttack'
+  | 'ruleException'
+  | 'falseAlarm'
   | 'causalChain'
   | 'kingSafety'
   | 'phase'
@@ -117,6 +119,13 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // Bringing pieces to their king (census #2): a shelter pawn taken, a
   // defender removed, a piece brought over or heading there next.
   kingAttack: { kind: 'computed', why: 'how the student’s move adds to the attack on their king', lead: 76 },
+  // A rule broken for a reason (census #10): the same piece twice, a pawn in
+  // front of your own king, the queen out early — the engine agrees, and the
+  // board says why here.
+  // Don't panic (census #7): their threat was real, the engine's move ignored
+  // it, and the student played that move — "you didn't have to react".
+  falseAlarm: { kind: 'computed', why: 'a threat the student rightly ignored, and what answers it', lead: 72 },
+  ruleException: { kind: 'computed', why: 'a beginner’s rule the move breaks, and why it is right here', lead: 73 },
   recapture: { kind: 'computed', why: 'which piece takes back and why — compared with the other recapture', lead: 66 },
   theirMoveCost: { kind: 'computed', why: 'what the opponent’s move cost them that the student can use', lead: 74 },
   moveOrder: { kind: 'computed', why: 'why the move had to come first — the follow-up played first loses material', lead: 77 },

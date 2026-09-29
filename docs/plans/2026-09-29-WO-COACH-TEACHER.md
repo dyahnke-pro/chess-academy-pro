@@ -274,3 +274,7 @@ What the two commits do:
 | `recapture` | 66 | backward look, on a recapture | `recapture-<sq>` |
 
 Events: `coach_move_order_named` {cost_cp}, `coach_king_attack_named` {kind}, `coach_move_intent_named` {prevents, prepares}. If your decoder (WO-5) picks WHAT KIND to say per move, these are five of the kinds; their `lead` is only a tie-break.
+
+**Two more lanes (review session, same branch):** `ruleException` (lead 73, cpLoss ≤ 20, claim `rule-<rule>-<sq>`) and `falseAlarm` (lead 72, the student played the engine's best move and it ignored their threat, claim `false-alarm-<landing>`). Events `coach_rule_exception_named` {rule}, `coach_false_alarm_named` {kind}.
+
+**One conflict that is yours to settle:** your instant hit-alert says "Careful — their X hits your Y; it has to move" before any engine read exists. `falseAlarm` is the proof that sometimes it did NOT have to move (…Bxf2+ was on, Qxd5 came first). If the alert fired on that ply the student hears both. Options: (a) soften the instant wording to "it's attacked" with no instruction, or (b) hold the alert until `latestEvalRef` has the read and drop it when `falseAlarm(beforeTheirs, fen, topLines[0])` is non-null. (b) is the one that makes the contradiction impossible.

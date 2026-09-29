@@ -31,8 +31,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `tacticWord` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7741`
-- `src/components/Coach/CoachTeachPage.tsx:7816`
+- `src/components/Coach/CoachTeachPage.tsx:7743`
+- `src/components/Coach/CoachTeachPage.tsx:7818`
 - `src/services/computedVoiceAudit.report.test.ts:256`
 - `src/services/dnaLineNarrator.ts:129`
 - `src/services/dnaLineNarrator.ts:218`

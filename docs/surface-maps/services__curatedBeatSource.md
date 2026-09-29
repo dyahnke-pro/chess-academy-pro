@@ -69,7 +69,7 @@
 - `src/services/curatedBeatSource.test.ts:190`
 
 ### `curatedBeatAt` (function) — 21 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8215`
+- `src/components/Coach/CoachTeachPage.tsx:8217`
 - `src/services/beatVsCorpus.report.test.ts:73`
 - `src/services/computedVoiceAudit.report.test.ts:313`
 - `src/services/computedVoiceAudit.report.test.ts:330`

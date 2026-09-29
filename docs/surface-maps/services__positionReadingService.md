@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2532 lines · 77 exports · 60 importers · 18 tests · 2 audits**
+**2532 lines · 77 exports · 62 importers · 18 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -35,6 +35,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/enginePlanContext.ts`
 - `src/services/exchangeLedger.ts`
 - `src/services/factStakes.ts`
+- `src/services/falseAlarm.ts`
 - `src/services/forkTrick.ts`
 - `src/services/groundedAnswer.ts`
 - `src/services/inaccuracyCall.ts`
@@ -65,6 +66,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewQuestionPlan.ts`
 - `src/services/reviewTeachingPoints.ts`
 - `src/services/reviewTrapQuestion.ts`
+- `src/services/ruleException.ts`
 - `src/services/tacticAlertService.ts`
 - `src/services/tacticVerification.ts`
 - `src/services/tacticsDetector.ts`
@@ -139,7 +141,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveFundamentals.ts:312`
 - `src/services/moveFundamentals.ts:1260`
 
-### `legalSeeGainFor` (function) — 29 call sites
+### `legalSeeGainFor` (function) — 31 call sites
 - `src/services/arrowDoor.ts:161`
 - `src/services/bluffDetector.ts:53`
 - `src/services/bluffDetector.ts:63`
@@ -152,6 +154,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/deliberation.ts:313`
 - `src/services/deliberation.ts:314`
 - `src/services/exchangeLedger.ts:75`
+- `src/services/falseAlarm.ts:62`
 - `src/services/groundedAnswer.ts:295`
 - `src/services/groundedAnswer.ts:506`
 - `src/services/groundedAnswer.ts:530`
@@ -167,14 +170,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/playCommentary.ts:946`
 - `src/services/pvPlayback.ts:203`
 - `src/services/pvPlayback.ts:207`
+- `src/services/ruleException.ts:53`
 - `src/services/tacticAlertService.ts:329`
 - `src/services/tacticVerification.ts:101`
 
 ### `signedLegalSeeFor` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7774`
-- `src/components/Coach/CoachTeachPage.tsx:7888`
-- `src/components/Coach/CoachTeachPage.tsx:9874`
-- `src/components/Coach/CoachTeachPage.tsx:9918`
+- `src/components/Coach/CoachTeachPage.tsx:7776`
+- `src/components/Coach/CoachTeachPage.tsx:7890`
+- `src/components/Coach/CoachTeachPage.tsx:9904`
+- `src/components/Coach/CoachTeachPage.tsx:9948`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
@@ -364,7 +368,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:130`
 
 ### `namedPawnStructure` (function) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8988`
+- `src/components/Coach/CoachTeachPage.tsx:8990`
 - `src/services/danyaBehaviors.ts:321`
 - `src/services/danyaDeviceCoverage.test.ts:107`
 - `src/services/danyaDeviceCoverage.test.ts:108`

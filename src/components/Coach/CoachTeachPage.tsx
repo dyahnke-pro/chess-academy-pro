@@ -34,6 +34,8 @@ import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { theirMoveCost } from '../../services/theirMoveCost';
 import { recaptureChoice } from '../../services/recaptureChoice';
 import { kingAttack } from '../../services/kingAttack';
+import { ruleException } from '../../services/ruleException';
+import { falseAlarm } from '../../services/falseAlarm';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -9754,6 +9756,34 @@ export function CoachTeachPage(): JSX.Element {
                         ]);
                         captureEvent('coach_king_attack_named', { surface: 'coach-teach', kind: ka.kind });
                       }
+                    }
+                    // A RULE AND ITS EXCEPTION (census #10) — only on a move the
+                    // engine agrees with, so the exception is proven, not excused.
+                    if (bothCp && cpLoss <= 20) {
+                      const rx = ruleException(fenBefore, move.san, move.history.slice(0, -1));
+                      if (rx) {
+                        queueSpokenHint(fenAfterReply, rx.text, 'ruleException', rx.squares, [`rule-${rx.rule}-${move.to}`]);
+                        captureEvent('coach_rule_exception_named', { surface: 'coach-teach', rule: rx.rule });
+                      }
+                    }
+                    // DON'T PANIC (census #7): their last move made a real threat, the
+                    // engine's move ignored it, and the student played exactly
+                    // that move. The board before their move is replayed from the
+                    // game and must lead to this board, or nothing is said.
+                    if (bothCp && cpLoss <= 20 && studentBestSan === move.san && move.history.length >= 2) {
+                      try {
+                        const g = new Chess();
+                        for (const s of move.history.slice(0, -2)) g.move(s);
+                        const beforeTheirs = g.fen();
+                        g.move(move.history[move.history.length - 2]);
+                        if (g.fen().split(' ')[0] === fenBefore.split(' ')[0]) {
+                          const fa = falseAlarm(beforeTheirs, fenBefore, preStudentRead.topLines?.[0], reply ?? null);
+                          if (fa) {
+                            queueSpokenHint(fenAfterReply, fa.text, 'falseAlarm', fa.squares, [`false-alarm-${fa.threat.landing}`]);
+                            captureEvent('coach_false_alarm_named', { surface: 'coach-teach', kind: fa.threat.kind });
+                          }
+                        }
+                      } catch { /* a bonus, never a blocker */ }
                     }
                     const look = backwardLook({
                       fenBefore,
