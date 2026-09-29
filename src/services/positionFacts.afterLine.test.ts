@@ -10,7 +10,10 @@ const TEXT = 'Your queen on d2 and your bishop on e3 form a battery.';
 
 describe('afterLine — a future board is said as the moves that reach it', () => {
   it("one move of the student's own is their option, not a past event", () => {
-    expect(afterLine(['Qd2'], FUTURE, NOW, 'w', TEXT)).toBe('Play Qd2 and your queen on d2 and your bishop on e3 form a battery.');
+    expect(afterLine(['Qd2'], FUTURE, NOW, 'w', TEXT)).toBe('If you play Qd2, your queen on d2 and your bishop on e3 form a battery.');
+  });
+  it('reads for a sentence that opens on a verb (the discovery shape)', () => {
+    expect(afterLine(['Nd4'], FUTURE, NOW, 'w', 'Moving the knight on e5 would unveil an attack.')).toBe('If you play Nd4, moving the knight on e5 would unveil an attack.');
   });
   it('a longer line keeps "After …"', () => {
     expect(afterLine(['Qd2', 'Nf6'], FUTURE, NOW, 'w', TEXT)).toMatch(/^After Qd2, Nf6, your queen/);

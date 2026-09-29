@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1471 lines · 15 exports · 18 importers · 17 tests · 3 audits**
+**1474 lines · 15 exports · 18 importers · 17 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -178,11 +178,12 @@
 ### `convertKey` (function) — 1 call site
 - `src/services/positionFacts.convertOnce.test.ts:24`
 
-### `afterLine` (function) — 4 call sites
+### `afterLine` (function) — 5 call sites
 - `src/services/positionFacts.afterLine.test.ts:13`
 - `src/services/positionFacts.afterLine.test.ts:16`
 - `src/services/positionFacts.afterLine.test.ts:19`
 - `src/services/positionFacts.afterLine.test.ts:22`
+- `src/services/positionFacts.afterLine.test.ts:25`
 
 ## Tests
 

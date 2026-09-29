@@ -342,7 +342,7 @@ export interface ClauseItem {
    *  (a plan, the status band, a habit): those rank below every staked fact. */
   stakes?: FactStakes;
   /** The moves the clause SAYS, SAN from the clause's board — a concept on a
-   *  future board is said with the line that reaches it ("Play Qd2 and…",
+   *  future board is said with the line that reaches it ("If you play Qd2, …",
    *  "After Qd2, Nf6, …"), and the board draws that line (`VoiceFact.line`). */
   line?: readonly string[];
 }
@@ -1455,13 +1455,16 @@ function buildClauses(a: {
 /** A concept that lives on a FUTURE board is said with the moves that reach
  *  it — "After cxb3+, moving your pawn on b3…" — never as a fact about the
  *  board on screen (walk 900, 27…Ba4+). When the line is ONE move of the
- *  student's own, it is their option, not something that happened: "Play Qd2
- *  and your queen on d2…" (walk 3UqPa5eV2e0 ply 33 read "After Qd2, your
+ *  student's own, it is their option, not something that happened: "If you
+ *  play Qd2, your queen on d2…" (walk 3UqPa5eV2e0 ply 33 read "After Qd2, your
  *  queen on d2…" as if Qd2 had been played — it had not). */
 export function afterLine(line: readonly string[] | undefined, boardFen: string | undefined, fenNow: string, student: 'w' | 'b', text: string): string {
   if (!line || line.length === 0 || !boardFen || samePlacementFen(boardFen, fenNow)) return text;
   const rest = `${text.charAt(0).toLowerCase()}${text.slice(1)}`;
-  if (line.length === 1 && fenNow.split(' ')[1] === student) return `Play ${line[0]} and ${rest}`;
+  // "If you play X, …" — the same comma-and-whole-sentence shape as "After …",
+  // so it reads for every detector sentence ("If you play Nd4, moving the
+  // knight on e5 would unveil…"); "Play X and moving…" did not.
+  if (line.length === 1 && fenNow.split(' ')[1] === student) return `If you play ${line[0]}, ${rest}`;
   return `After ${line.join(', ')}, ${rest}`;
 }
 
