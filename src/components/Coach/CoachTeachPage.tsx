@@ -29,6 +29,7 @@ import { transferClause, recordMotif, withTransfer } from '../../services/motifL
 import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePackage, markableSquares, spokenSentenceKeys, type LearnLane, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/learnTurnDoor';
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { curatedBeatAt } from '../../services/curatedBeatSource';
+import { moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -9895,6 +9896,47 @@ export function CoachTeachPage(): JSX.Element {
                         if (fileKey) positionalSaidRef.current.add(fileKey);
                         queueSpokenHint(fenAfterReply, point, 'movePoint', []);
                         captureEvent('coach_move_point_named', { surface: 'coach-teach' });
+                      }
+                      // WHAT THE MOVE IS FOR (David 2026-09-29: "the coach describes the
+                      // board; he explains why a move is played"). The reply this
+                      // move took away, or the move it made possible — both proven
+                      // by the engine (a search where this side passes instead),
+                      // replayed against their ACTUAL reply so it is still true on
+                      // the board the student hears it on. The door ranks it.
+                      // Not in book (move one "stops …d5 and prepares Be2" is noise
+                      // — walk 2026-09-29), and not on a capture or check: the
+                      // point of a capture is the capture.
+                      if (!gambitLine && !studentMoveInBook && !/[x+#]/.test(move.san) && !mid.isMate && !preStudentRead.isMate) {
+                        const passFen = nullMoveFen(fenBefore);
+                        const passRead = passFen
+                          ? await stockfishEngine.analyzeWithBudget(passFen, COACH_TURN_DEPTH, 900).catch(() => null)
+                          : null;
+                        const replyUci = (() => {
+                          try {
+                            const r = new Chess(move.fen).moves({ verbose: true })
+                              .find((m) => { const c = new Chess(move.fen); c.move(m.san); return c.fen().split(' ')[0] === fenAfterReply.split(' ')[0]; });
+                            return r ? `${r.from}${r.to}${r.promotion ?? ''}` : undefined;
+                          } catch { return undefined; }
+                        })();
+                        const intent = passRead?.topLines?.length ? moveIntent(fenBefore, move.san, {
+                          before: preStudentRead.topLines ?? [],
+                          after: mid.topLines ?? [],
+                          passBefore: passRead.topLines,
+                          passAfter: [],
+                          reply: replyUci,
+                        }, 'student') : null;
+                        if (intent) {
+                          queueSpokenHint(fenAfterReply, intent.text, 'moveIntent', intent.squares, [
+                            ...(intent.prevents ? [`stops:${intent.prevents.uci}`] : []),
+                            ...(intent.prepares ? [`prepares:${intent.prepares.uci}`] : []),
+                            // "Bc4 clears the way to castle" and "castling is one
+                            // move away" are one idea (walk 2026-09-29).
+                            ...(intent.prepares?.san.startsWith('O-O') ? ['castle-now'] : []),
+                          ]);
+                          captureEvent('coach_move_intent_named', {
+                            surface: 'coach-teach', prevents: !!intent.prevents, prepares: !!intent.prepares,
+                          });
+                        }
                       }
                     }
                   }

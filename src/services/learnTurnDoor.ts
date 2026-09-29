@@ -52,6 +52,7 @@ export type LearnLane =
   | 'coachMistake'
   | 'fundamental'
   | 'movePoint'
+  | 'moveIntent'
   | 'causalChain'
   | 'kingSafety'
   | 'phase'
@@ -99,6 +100,10 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   coachMistake: { kind: 'coachMistake', why: 'the coach owning its own inaccuracy', lead: 84 },
   fundamental: { kind: 'drawback', why: 'the fundamental the move broke', lead: 82 },
   movePoint: { kind: 'computed', why: 'the point of the student’s clean move', lead: 62 },
+  // What a quiet move is FOR — the reply it took away or the move it made
+  // possible, both engine-proven (moveIntent). His most frequent point on a
+  // clean move, and the one a board description never says.
+  moveIntent: { kind: 'computed', why: 'what the student’s move prevents or prepares, engine-proven', lead: 75 },
   // ALWAYS rides: a switch is said once, the move it happens — held behind a
   // threat it is lost for good (Fried Liver walk 2026-09-29: the turn to sharp
   // came WITH the threat, lost the lead to it, and was never heard).

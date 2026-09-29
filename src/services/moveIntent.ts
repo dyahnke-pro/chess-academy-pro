@@ -242,7 +242,7 @@ export function moveIntent(
     ...(prevents ? [prevents.uci.slice(0, 2), prevents.uci.slice(2, 4)] : []),
     ...(prepares ? [prepares.uci.slice(0, 2), prepares.uci.slice(2, 4)] : []),
   ])];
-  return { prevents, prepares, text: phrase(playedSan, prevents, prepares, seat, mover, fenAfter), squares, about: seat };
+  return { prevents, prepares, text: phrase(playedSan, prevents, prepares, seat, mover, fenAfter, prepares ? whatItDoes(fenAfter, prepares.uci, mover) : null), squares, about: seat };
 }
 
 /** A threat worth naming as "stopped": it mates, checks, or wins material by
@@ -262,6 +262,9 @@ function phrase(
   seat: 'student' | 'opponent',
   mover: 'w' | 'b',
   fenAfter: string,
+  /** What the prepared move does once played — "hit the pawn on e5", "take
+   *  the open e-file", "castle" — so the line teaches the WHY, not a bare move. */
+  does: PreparedPoint | null,
 ): string {
   const dot = (s: string, side: 'w' | 'b'): string => (side === 'b' ? `…${s}` : s);
   const opp: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
@@ -270,15 +273,63 @@ function phrase(
   if (seat === 'student') {
     const stop = prevents ? dot(prevents.san, opp) : '';
     const prep = prepares ? dot(prepares.san, mover) : '';
-    if (prevents && prepares) return `${played} does two jobs: it stops ${stop}, and it prepares ${prep}.`;
+    if (prevents && prepares) return `${played} does two jobs: it stops ${stop}, and it prepares ${prep}${does ? `, to ${does.verb}` : ''}.`;
     if (prevents) return rotateStem([`${played} — so ${stop} isn't possible any more.`, `The point of ${played}: it takes ${stop} away.`], key);
+    if (does?.castle) return rotateStem([`${played} clears the way to castle.`, `${played} first, so you can castle next.`], key);
+    if (does) return rotateStem([`${played} first, so that ${prep} can ${does.verb}.`, `${played} prepares ${prep}, to ${does.verb}.`], key);
     return rotateStem([`${played} prepares ${prep}.`, `${played} first, so that ${prep} comes next.`], key);
   }
   const stop = prevents ? `your ${dot(prevents.san, opp)}` : '';
   const prep = prepares ? dot(prepares.san, mover) : '';
-  if (prevents && prepares) return `Their ${played} does two jobs: it stops ${stop}, and it prepares ${prep}.`;
+  if (prevents && prepares) return `Their ${played} does two jobs: it stops ${stop}, and it prepares ${prep}${does ? `, to ${does.verb}` : ''}.`;
   if (prevents) return rotateStem([`Their ${played} stops ${stop}.`, `The point of their ${played}: it takes ${stop} away.`], key);
+  if (does?.castle) return rotateStem([`Their ${played} clears the way to castle.`, `They play ${played} first, so they can castle next.`], key);
+  if (does) return rotateStem([`Their ${played} prepares ${prep}, to ${does.verb}.`, `They play ${played} first, so that ${prep} can ${does.verb}.`], key);
   return rotateStem([`Their ${played} prepares ${prep}.`, `They play ${played} first, so that ${prep} comes next.`], key);
+}
+
+const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+const PIECE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+
+export interface PreparedPoint { verb: string; castle: boolean }
+
+/** What the prepared move DOES once played, read off the board where the mover
+ *  moves again (the opponent passes): castle; hit an enemy piece or pawn the
+ *  moved piece did not hit before (the most valuable one); or put a rook or
+ *  queen on a file with no pawn of its own side. Null when none is true — the
+ *  line then names the move alone rather than inventing a reason. */
+export function whatItDoes(fenAfter: string, prepUci: string, mover: 'w' | 'b'): PreparedPoint | null {
+  const again = nullMoveFen(fenAfter);
+  if (!again) return null;
+  let board: Chess; let m;
+  try { board = new Chess(again); m = board.move({ from: prepUci.slice(0, 2), to: prepUci.slice(2, 4), promotion: prepUci.slice(4, 5) || undefined }); } catch { return null; }
+  if (!m) return null;
+  if (m.isKingsideCastle() || m.isQueensideCastle()) return { verb: 'castle', castle: true };
+  const opp: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
+  const hits = (b: Chess, from: string): string[] => {
+    try {
+      const probe = new Chess(nullMoveFen(b.fen()) ?? b.fen());
+      if (probe.turn() !== mover) return [];
+      return probe.moves({ square: from as never, verbose: true }).filter((x) => x.captured).map((x) => x.to);
+    } catch { return []; }
+  };
+  const before = new Set(hits(new Chess(again), m.from));
+  const now = hits(board, m.to).filter((sq) => !before.has(sq));
+  const targets: Array<{ sq: string; type: string }> = [];
+  for (const sq of now) {
+    const p = board.get(sq as never);
+    if (p && p.color === opp && p.type !== 'k') targets.push({ sq, type: p.type });
+  }
+  targets.sort((a, b) => PIECE_VALUE[b.type] - PIECE_VALUE[a.type]);
+  if (targets.length) return { verb: `hit the ${PIECE_NAME[targets[0].type]} on ${targets[0].sq}`, castle: false };
+  if (m.piece === 'r' || m.piece === 'q') {
+    const file = m.to[0];
+    const cells = board.board().flat().filter((c) => c && c.type === 'p' && c.square[0] === file) as Array<{ color: 'w' | 'b' }>;
+    if (!cells.some((c) => c.color === mover) && m.from[0] !== file) {
+      return { verb: `take the ${cells.length ? 'half-open' : 'open'} ${file}-file`, castle: false };
+    }
+  }
+  return null;
 }
 
 /** SQUARE DENIAL: of the moves they would play after a pass, the first whose
