@@ -136,6 +136,8 @@ describe('WO-1b — one lead per turn', () => {
     for (const [lane, rule] of Object.entries(LEARN_LANES)) expect(typeof rule.lead, lane).toBe('number');
     expect(LEARN_LANES.threat.always).toBe(true);
     expect(LEARN_LANES.gem.always).toBe(true);
+    // A character switch is said the move it happens or never — it rides.
+    expect(LEARN_LANES.character.always).toBe(true);
     // Purpose outranks description — the scoreboard's finding, pinned.
     expect(LEARN_LANES.movePoint.lead).toBeGreaterThan(LEARN_LANES.pieceQuality.lead);
     expect(LEARN_LANES.planArc.lead).toBeGreaterThan(LEARN_LANES.behavior.lead);

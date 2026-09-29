@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**746 lines · 20 exports · 21 importers · 8 tests · 29 audits**
+**738 lines · 20 exports · 21 importers · 8 tests · 28 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:24) — names `conceptEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:6027) — names `conceptEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:6058) — names `conceptEngine`
 
 ## Who calls in
 
@@ -60,60 +60,6 @@
 
 ### `ComputedConcept` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
-
-### `materialBalance` (function) — 52 call sites
-- `scripts/pro-repertoire/mine-alapin-traps.mjs:41`
-- `scripts/pro-repertoire/mine-alapin-traps.mjs:90`
-- `scripts/pro-repertoire/mine-alapin-traps.mjs:94`
-- `scripts/pro-repertoire/mine-alapin-traps.mjs:103`
-- `scripts/pro-repertoire/mine-alekhine-traps.mjs:41`
-- `scripts/pro-repertoire/mine-alekhine-traps.mjs:88`
-- `scripts/pro-repertoire/mine-alekhine-traps.mjs:93`
-- `scripts/pro-repertoire/mine-alekhine-traps.mjs:99`
-- `scripts/pro-repertoire/mine-caro-traps.mjs:41`
-- `scripts/pro-repertoire/mine-caro-traps.mjs:88`
-- `scripts/pro-repertoire/mine-caro-traps.mjs:93`
-- `scripts/pro-repertoire/mine-caro-traps.mjs:99`
-- `scripts/pro-repertoire/mine-fantasy-traps.mjs:41`
-- `scripts/pro-repertoire/mine-fantasy-traps.mjs:90`
-- `scripts/pro-repertoire/mine-fantasy-traps.mjs:94`
-- `scripts/pro-repertoire/mine-fantasy-traps.mjs:103`
-- `scripts/pro-repertoire/mine-jobava-traps.mjs:41`
-- `scripts/pro-repertoire/mine-jobava-traps.mjs:90`
-- `scripts/pro-repertoire/mine-jobava-traps.mjs:94`
-- `scripts/pro-repertoire/mine-jobava-traps.mjs:103`
-- `scripts/pro-repertoire/mine-kia-traps.mjs:41`
-- `scripts/pro-repertoire/mine-kia-traps.mjs:90`
-- `scripts/pro-repertoire/mine-kia-traps.mjs:94`
-- `scripts/pro-repertoire/mine-kia-traps.mjs:103`
-- `scripts/pro-repertoire/mine-kid-traps.mjs:41`
-- `scripts/pro-repertoire/mine-kid-traps.mjs:88`
-- `scripts/pro-repertoire/mine-kid-traps.mjs:93`
-- `scripts/pro-repertoire/mine-kid-traps.mjs:99`
-- `scripts/pro-repertoire/mine-najdorf-traps.mjs:41`
-- `scripts/pro-repertoire/mine-najdorf-traps.mjs:88`
-- `scripts/pro-repertoire/mine-najdorf-traps.mjs:93`
-- `scripts/pro-repertoire/mine-najdorf-traps.mjs:99`
-- `scripts/pro-repertoire/mine-rossolimo-traps.mjs:41`
-- `scripts/pro-repertoire/mine-rossolimo-traps.mjs:90`
-- `scripts/pro-repertoire/mine-rossolimo-traps.mjs:94`
-- `scripts/pro-repertoire/mine-rossolimo-traps.mjs:103`
-- `scripts/pro-repertoire/mine-ruy-traps.mjs:41`
-- `scripts/pro-repertoire/mine-ruy-traps.mjs:90`
-- `scripts/pro-repertoire/mine-ruy-traps.mjs:94`
-- `scripts/pro-repertoire/mine-ruy-traps.mjs:103`
-- `src/services/conceptEngine.test.ts:24`
-- `src/services/conceptEngine.test.ts:26`
-- `src/services/conceptEngine.test.ts:28`
-- `src/services/materialClaimValidator.test.ts:24`
-- `src/services/materialClaimValidator.test.ts:25`
-- `src/services/materialClaimValidator.ts:35`
-- `src/services/materialClaimValidator.ts:80`
-- `src/services/narratedContinuation.test.ts:15`
-- `src/services/narratedContinuation.test.ts:17`
-- `src/services/narratedContinuation.test.ts:19`
-- `src/services/narratedContinuation.ts:18`
-- `src/services/narratedContinuation.ts:95`
 
 ### `strongerSide` (function) — 3 call sites
 - `src/services/conceptEngine.test.ts:32`
@@ -192,14 +138,14 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `definitionKey` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7685`
-- `src/components/Coach/CoachTeachPage.tsx:7689`
+- `src/components/Coach/CoachTeachPage.tsx:7660`
+- `src/components/Coach/CoachTeachPage.tsx:7664`
 - `src/services/learnWalkBlumenfeld.test.ts:131`
 - `src/services/positionFacts.ts:973`
 - `src/services/positionFacts.ts:1349`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7686`
+- `src/components/Coach/CoachTeachPage.tsx:7661`
 - `src/services/dnaLineNarrator.ts:185`
 - `src/services/dnaLineNarrator.ts:216`
 - `src/services/dnaLineNarrator.ts:252`
@@ -207,6 +153,62 @@
 - `src/services/tacticAlertService.ts:141`
 - `src/services/tacticTypeUnification.test.ts:199`
 - `src/test/auditConceptGameplayCues.test.ts:24`
+
+### `materialBalance` (re-export) — 54 call sites
+- `scripts/pro-repertoire/mine-alapin-traps.mjs:41`
+- `scripts/pro-repertoire/mine-alapin-traps.mjs:90`
+- `scripts/pro-repertoire/mine-alapin-traps.mjs:94`
+- `scripts/pro-repertoire/mine-alapin-traps.mjs:103`
+- `scripts/pro-repertoire/mine-alekhine-traps.mjs:41`
+- `scripts/pro-repertoire/mine-alekhine-traps.mjs:88`
+- `scripts/pro-repertoire/mine-alekhine-traps.mjs:93`
+- `scripts/pro-repertoire/mine-alekhine-traps.mjs:99`
+- `scripts/pro-repertoire/mine-caro-traps.mjs:41`
+- `scripts/pro-repertoire/mine-caro-traps.mjs:88`
+- `scripts/pro-repertoire/mine-caro-traps.mjs:93`
+- `scripts/pro-repertoire/mine-caro-traps.mjs:99`
+- `scripts/pro-repertoire/mine-fantasy-traps.mjs:41`
+- `scripts/pro-repertoire/mine-fantasy-traps.mjs:90`
+- `scripts/pro-repertoire/mine-fantasy-traps.mjs:94`
+- `scripts/pro-repertoire/mine-fantasy-traps.mjs:103`
+- `scripts/pro-repertoire/mine-jobava-traps.mjs:41`
+- `scripts/pro-repertoire/mine-jobava-traps.mjs:90`
+- `scripts/pro-repertoire/mine-jobava-traps.mjs:94`
+- `scripts/pro-repertoire/mine-jobava-traps.mjs:103`
+- `scripts/pro-repertoire/mine-kia-traps.mjs:41`
+- `scripts/pro-repertoire/mine-kia-traps.mjs:90`
+- `scripts/pro-repertoire/mine-kia-traps.mjs:94`
+- `scripts/pro-repertoire/mine-kia-traps.mjs:103`
+- `scripts/pro-repertoire/mine-kid-traps.mjs:41`
+- `scripts/pro-repertoire/mine-kid-traps.mjs:88`
+- `scripts/pro-repertoire/mine-kid-traps.mjs:93`
+- `scripts/pro-repertoire/mine-kid-traps.mjs:99`
+- `scripts/pro-repertoire/mine-najdorf-traps.mjs:41`
+- `scripts/pro-repertoire/mine-najdorf-traps.mjs:88`
+- `scripts/pro-repertoire/mine-najdorf-traps.mjs:93`
+- `scripts/pro-repertoire/mine-najdorf-traps.mjs:99`
+- `scripts/pro-repertoire/mine-rossolimo-traps.mjs:41`
+- `scripts/pro-repertoire/mine-rossolimo-traps.mjs:90`
+- `scripts/pro-repertoire/mine-rossolimo-traps.mjs:94`
+- `scripts/pro-repertoire/mine-rossolimo-traps.mjs:103`
+- `scripts/pro-repertoire/mine-ruy-traps.mjs:41`
+- `scripts/pro-repertoire/mine-ruy-traps.mjs:90`
+- `scripts/pro-repertoire/mine-ruy-traps.mjs:94`
+- `scripts/pro-repertoire/mine-ruy-traps.mjs:103`
+- `src/services/conceptEngine.test.ts:24`
+- `src/services/conceptEngine.test.ts:26`
+- `src/services/conceptEngine.test.ts:28`
+- `src/services/materialClaimValidator.test.ts:24`
+- `src/services/materialClaimValidator.test.ts:25`
+- `src/services/materialClaimValidator.ts:36`
+- `src/services/materialClaimValidator.ts:74`
+- `src/services/narratedContinuation.test.ts:15`
+- `src/services/narratedContinuation.test.ts:17`
+- `src/services/narratedContinuation.test.ts:19`
+- `src/services/narratedContinuation.ts:85`
+- `src/services/pieceValues.ts:52`
+- `src/services/positionCharacter.ts:39`
+- `src/test/onePieceValueTable.test.ts:46`
 
 ## Tests
 
@@ -241,7 +243,6 @@ appear here — check the post-deploy matrix in CLAUDE.md for those._
 - `scripts/audit-lib/source-real-game.mjs`
 - `scripts/audit-lichess-lines.mjs`
 - `scripts/audit-llm-claims.mjs`
-- `scripts/audit-lookahead-plan-prod.mjs`
 - `scripts/audit-loop-closes-prod.mjs`
 - `scripts/audit-loop-green-prod.mjs`
 - `scripts/audit-model-games-cluster.mjs`

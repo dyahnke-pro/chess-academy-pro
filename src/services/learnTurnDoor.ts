@@ -99,7 +99,10 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   coachMistake: { kind: 'coachMistake', why: 'the coach owning its own inaccuracy', lead: 84 },
   fundamental: { kind: 'drawback', why: 'the fundamental the move broke', lead: 82 },
   movePoint: { kind: 'computed', why: 'the point of the student’s clean move', lead: 62 },
-  character: { kind: 'computed', why: 'what the position is about just changed — tactical, positional, converting or holding', lead: 73 },
+  // ALWAYS rides: a switch is said once, the move it happens — held behind a
+  // threat it is lost for good (Fried Liver walk 2026-09-29: the turn to sharp
+  // came WITH the threat, lost the lead to it, and was never heard).
+  character: { kind: 'computed', why: 'what the position is about just changed — tactical, positional, converting or holding', lead: 73, always: true },
   phase: { kind: 'computed', why: 'the game has changed phase — take stock of what the position is about now', lead: 72 },
   kingSafety: { kind: 'observation', why: 'your own king is still in the centre and castling is ready', lead: 55 },
   causalChain: { kind: 'tactic', why: 'a cross-move cause proven on the board — the earlier move that left the piece loose', lead: 80 },

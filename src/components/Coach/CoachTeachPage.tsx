@@ -9807,6 +9807,18 @@ export function CoachTeachPage(): JSX.Element {
                   );
                   const hintPkg = lateDecision.pkg;
                   if (lateDecision.lead) turnLeadRef.current = { fen: pending.fen, lead: lateDecision.lead };
+                  // A wave that held everything said nothing — but what it held
+                  // must still be visible, or a lane that loses every turn looks
+                  // exactly like a lane that never fires.
+                  if (!hintPkg.spoken && lateDecision.held.length > 0) {
+                    void logAppAudit({
+                      kind: 'coach-surface-migrated',
+                      category: 'subsystem',
+                      source: 'CoachTeachPage.hintRegister.held',
+                      summary: describeTurnDecision(lateDecision),
+                      fen: pending.fen,
+                    });
+                  }
                   if (hintPkg.spoken) {
                     speakTrackA(hintPkg.spoken);
                     // Record the late package's phrases too — the per-game set is
