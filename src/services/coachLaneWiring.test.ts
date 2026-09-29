@@ -61,8 +61,18 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
   // The distinction that cost the hint register a whole session: `facts` feeds
   // the prompt, and the prompt only runs when the student types. A lane that
   // pushes there and nowhere else is silent during ordinary play.
-  it('the plan is queued for speech at the PLAN rank', () => {
-    expect(TEACH).toMatch(/queueSpokenHint\(planFen, graded, 'plan'\)/);
+  it('the look-ahead plan is queued on its OWN lane, so the door decides it', () => {
+    // WO-COACH-TEACHER WO-1 (2026-09-29): the lane table in learnTurnDoor, not a
+    // kind whitelist, decides whether it speaks. It is gated off today
+    // (LEARN_LANES.lookaheadPlan.speaks = false, with its reason); the plan arc
+    // speaks the plan instead.
+    expect(TEACH).toMatch(/queueSpokenHint\(planFen, graded, 'lookaheadPlan'\)/);
+  });
+
+  it('the plan arc is queued on its lane and the door lets it speak', () => {
+    // It carried kind 'plan', which the old DNA kind whitelist never listed, so
+    // from 2026-09-27 to 2026-09-29 it was computed every turn and never heard.
+    expect(TEACH).toMatch(/queueSpokenHint\(probe\.fen\(\), line, 'planArc', e\.squares\)/);
   });
 
   it('the coach callout is queued at the rank the model gives it', () => {
@@ -90,7 +100,7 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     expect(TEACH).toMatch(/const evidence = sameLoss && look\.withoutAttempt \? look\.withoutAttempt\.line : look\.line;/);
     expect(TEACH).toMatch(/const line = fundamental\s*\?\s*`\$\{fundamental\.verdict\}[\s\S]{0,160}?\$\{evidence\}[\s\S]{0,20}?`\s*:\s*look\.line/);
     // A fundamental with NO material drawback still speaks, on its own.
-    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, fundamental\.verdict, 'drawback', \[\]\)/);
+    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, fundamental\.verdict, 'fundamental', \[\]\)/);
   });
 
   it('the borrowed tier is queued WITH the plan, so the yield rule can see both', () => {
@@ -138,8 +148,8 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     // seventeen seconds of it) finished.
     expect(TEACH_CODE, 'the instant package carries the plan again')
       .not.toMatch(/kind: 'plan' as const, text: planLine/);
-    expect(TEACH, 'the plan lost its one route to the voice')
-      .toMatch(/queueSpokenHint\(planFen, graded, 'plan'\)/);
+    expect(TEACH, 'the plan lost its one route to the door')
+      .toMatch(/queueSpokenHint\(planFen, graded, 'lookaheadPlan'\)/);
     // And only one producer draws its marks, for the same reason.
     expect((TEACH_CODE.match(/planMarks\(\{/g) ?? []).length,
       'two producers are painting the plan').toBe(1);
