@@ -115,7 +115,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `legalSeeGainOn` (function) — 10 call sites
 - `src/services/coachFeatureService.ts:2431`
 - `src/services/groundedAnswer.ts:6755`
-- `src/services/moveIntent.ts:278`
+- `src/services/moveIntent.ts:279`
 - `src/services/moveIntent.ts:402`
 - `src/services/opponentMovePurpose.ts:33`
 - `src/services/reviewTeachingPoints.ts:99`
@@ -160,7 +160,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:1076`
 - `src/services/groundedAnswer.ts:7036`
 - `src/services/groundedAnswer.ts:7087`
-- `src/services/moveOrder.ts:112`
+- `src/services/moveOrder.ts:113`
 - `src/services/moveTiming.ts:51`
 - `src/services/nextPlans.ts:46`
 - `src/services/perturbation.ts:69`

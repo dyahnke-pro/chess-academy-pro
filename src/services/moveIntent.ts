@@ -17,6 +17,7 @@ import { Chess } from 'chess.js';
 import type { AnalysisLine } from '../types';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { legalSeeGainOn } from './positionReadingService';
+import { MATERIAL_VALUE } from './pieceValues';
 
 export interface IntentReads {
   /** Mover to move at the board BEFORE the move (the ordinary read). */
@@ -312,7 +313,6 @@ function phrase(
 }
 
 const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
-const PIECE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 
 export interface PreparedPoint { verb: string; castle: boolean }
 
@@ -343,7 +343,7 @@ export function whatItDoes(fenAfter: string, prepUci: string, mover: 'w' | 'b'):
     const p = board.get(sq as never);
     if (p && p.color === opp && p.type !== 'k') targets.push({ sq, type: p.type });
   }
-  targets.sort((a, b) => PIECE_VALUE[b.type] - PIECE_VALUE[a.type]);
+  targets.sort((a, b) => (MATERIAL_VALUE[b.type] ?? 0) - (MATERIAL_VALUE[a.type] ?? 0));
   if (targets.length) return { verb: `hit the ${PIECE_NAME[targets[0].type]} on ${targets[0].sq}`, castle: false };
   if (m.piece === 'r' || m.piece === 'q') {
     const file = m.to[0];

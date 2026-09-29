@@ -22,6 +22,7 @@
 import { Chess } from 'chess.js';
 import type { AnalysisLine } from '../types';
 import { legalSeeGainFor } from './positionReadingService';
+import { MATERIAL_VALUE } from './pieceValues';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
 /** Y-first must cost at least this much, in centipawns, against X. */
@@ -111,7 +112,7 @@ export function moveOrder(
     const before = new Chess(yFen);
     const net = legalSeeGainFor(before.fen(), r.to, opp);
     const piece = NAME[r.captured] ?? 'piece';
-    if (net >= ({ p: 1, n: 3, b: 3, r: 5, q: 9 } as Record<string, number>)[r.captured]) cost = `and the ${piece} on ${r.to} simply drops`;
+    if (net >= (MATERIAL_VALUE[r.captured] ?? 0)) cost = `and the ${piece} on ${r.to} simply drops`;
     else if (net > 0) cost = `and it costs you material on ${r.to}`;
   }
   if (!cost) return null;
