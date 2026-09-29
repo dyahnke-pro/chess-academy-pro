@@ -64,7 +64,7 @@ Dependency graph: `WO-0` and `WO-5` any time · `WO-1` first on the Learn side �
 ---
 
 ### WO-0 — Tape bugs (hours)
-**Status:** ⚪ open
+**Status:** 🔵 this session — 3 of 4 fixed on branch `wo0-chat-bugs` (why-not → candidate lane; unclosed `[VOICE:` stripped; "let's play, I'll be white" — the play pattern missed the comma and the phone apostrophe ’, so it fell to the model which invented a Caro-Kann). Open: the takeback stall (needs a localhost repro).
 **Files:** `src/services/questionIntents.ts`, `src/services/coachApi.ts` (only the lines named), the markup stripper wherever `[VOICE:` leaks.
 - `[VOICE:` markup leaked into chat AND voice on a typo'd question (tape Q8).
 - `\bwhy\s+not\b` sits in the best-move-reason list (`questionIntents.ts:~437`), so "why not e5?" answers with the best move. Route to a why-not lane (a stub that WO-3 fills; until then: evaluate X, say its cost vs best).
@@ -101,7 +101,7 @@ Today (engineer map, `brainstorm-r1/engineer.md`): ~15 lanes. One (`computePosit
 ---
 
 ### WO-3 — A coach you can talk to (BoardQuery chat)
-**Status:** ⚪ open
+**Status:** ⚪ open — SUPERSEDED by `docs/plans/2026-09-29-ONE-CHAT.md` §FINAL (one contract for all nine chat entries, the action half, shadow-first rollout)
 **Files:** NEW `src/services/boardQuery.ts` (schema + resolver), NEW `src/services/boardQueryAnswer.ts`, the fall-through in `coachApi.ts` (`~6335-6389`, `~6484-6500`, stock line `~1772`), `questionIntents.ts` only to hand off.
 - **Schema (closed):** `kind`: why | why-not | what-if | is-good | plan | meaning | eval | meta. `subject`: a SAN (chess.js-validated from the right side), `last-move` by seat ("that" = the last ply, resolved in CODE by coordinates), a piece on a square, the position, a plan by seat, a concept id. `seat`: me | them.
 - **Parser:** the 55 regex lanes stay as the fast path; anything they miss goes to the model, which may ONLY fill the schema. Validation by chess.js; unresolvable → a clarifying question with the candidate moves as choices ("the queen move or the pawn take?"). The stock "can't verify" line is deleted.
@@ -147,9 +147,9 @@ Today (engineer map, `brainstorm-r1/engineer.md`): ~15 lanes. One (`computePosit
 ## 4. Status board (update in the same commit as the work)
 | WO | status | owner |
 |---|---|---|
-| WO-0 bugs | ⚪ | — |
+| WO-0 bugs | ✅ 3/4 on main (PR #979); takeback stall open | this session |
 | WO-1 door | 🔵 1a ✅ on main (PR #976, live in CoachTeachPage chunk); 1b next | this session |
-| WO-2 plan thread | ⚪ | — |
+| WO-2 plan thread | 🔵 step 1 ✅ on main (PR #977, #978: route identity + board check; lane open) | this session |
 | WO-3 BoardQuery chat | ⚪ | — |
 | WO-4 shrinking repeats | ⚪ | — |
 | WO-5 measuring stick | ⚪ | — |

@@ -202,7 +202,7 @@ import { parseEvalTable, pieceQualityLines, parseEvalSplit, evalSplitLine } from
 
 import { buildThinkAloud } from '../../services/thinkAloud';
 import { scaleGap, packageForRegister, readsForRegister } from '../../services/hintRegister';
-import { aimsOf, stepArc, EMPTY_ARC, type ArcState, planFromUci, keySquareLine, positionReadLine, lineShapeLine, terminalReadLine, tacticWord } from '../../services/lookaheadPlan';
+import { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcState, planFromUci, keySquareLine, positionReadLine, lineShapeLine, terminalReadLine, tacticWord } from '../../services/lookaheadPlan';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import type { LookaheadPlan } from '../../services/lookaheadPlan';
 import { planMarks } from '../../services/planMarks';
@@ -303,7 +303,7 @@ import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
 import { actionForCommand, actuate } from '../../services/coachActuator';
 import { readSpokenSquares } from '../../services/spokenSquares';
-import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, isPlayerGamesQuestion, isPositionAssessmentQuestion, positionalTopic, looksLikeQuestionNotAnOpeningName, looksLikeConversationalReply, isStopCommand } from '../../coach/questionIntents';
+import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, isPlayerGamesQuestion, isPositionAssessmentQuestion, positionalTopic, looksLikeQuestionNotAnOpeningName, looksLikeConversationalReply, isStopCommand, LETS_PLAY_RE } from '../../coach/questionIntents';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -4496,7 +4496,10 @@ export function CoachTeachPage(): JSX.Element {
         { regex: /\bplay\s+me\s+(?:the\s+)?/i, stage: 'play-real' },
         // "let's play the Caro" / "can we play the London". NOT "play through
         // the Vienna" — that is a watch ask and keeps its walkthrough.
-        { regex: /\b(?:let'?s|can\s+we|could\s+we|wanna|i\s+want\s+to)\s+play\s+(?!through\b)(?:the\s+)?/i, stage: 'play-real' },
+        // The one shared pattern (questionIntents.LETS_PLAY_RE): punctuation
+        // after "play" and a curly apostrophe both count (prod tape 2026-09-29:
+        // "let's play, I'll be white" missed on the comma and went to the model).
+        { regex: LETS_PLAY_RE, stage: 'play-real' },
       ];
       // Translated once at the top of this turn — see the note there.
       const trimmed = englishText;
@@ -4647,9 +4650,9 @@ export function CoachTeachPage(): JSX.Element {
         // (hand walk 2026-09-25: it opened the picker at "Did you mean Italian
         // Game?"). The seat phrase and the bare "a game" are stripped before
         // asking whether anything names an opening.
-        const seatAsked = /\b(?:i'?ll\s+(?:be|play|take)|i'?m|i\s+am|as)\s+(white|black)\b/i.exec(stageStrippedInput)?.[1]?.toLowerCase() as 'white' | 'black' | undefined;
+        const seatAsked = /\b(?:i[’']?ll\s+(?:be|play|take)|i[’']?m|i\s+am|as)\s+(white|black)\b/i.exec(stageStrippedInput)?.[1]?.toLowerCase() as 'white' | 'black' | undefined;
         const withoutSeat = stageStrippedInput
-          .replace(/[,;]?\s*\b(?:i'?ll\s+(?:be|play|take)|i'?m|i\s+am|as)\s+(?:white|black)\b/gi, '')
+          .replace(/[,;]?\s*\b(?:i[’']?ll\s+(?:be|play|take)|i[’']?m|i\s+am|as)\s+(?:white|black)\b/gi, '')
           .replace(/^(?:a\s+|another\s+|some\s+)?(?:new\s+)?(?:game|match)\b[\s,.]*/i, '')
           .trim();
         if (stageHint === 'play-real' && seatAsked && withoutSeat === '' && !walkthrough.isActive && gameRef.current.history.length === 0) {
@@ -9477,17 +9480,21 @@ export function CoachTeachPage(): JSX.Element {
                         try {
                           const oppColor = playerColor === 'white' ? 'b' : 'w';
                           const studColor = playerColor === 'white' ? 'w' : 'b';
-                          const theirStep = stepArc(planArcRef.current.theirs, aimsOf(plan.theirs, 'opponent'),
+                          const theirStep = stepArc(planArcRef.current.theirs, aimsOf(plan.theirs, 'opponent').filter((a) => aimWalkableNow(a, probe.fen(), oppColor)),
                             { from: m.from, to: m.to, piece: m.piece, promotion: m.promotion }, probe.fen(), oppColor, 'opponent');
                           const studentPiece = new Chess(move.fen).get(move.to as Square)?.type ?? null;
                           const mineStep = studentPiece
-                            ? stepArc(planArcRef.current.mine, aimsOf(plan.mine, 'student'),
+                            ? stepArc(planArcRef.current.mine, aimsOf(plan.mine, 'student').filter((a) => aimWalkableNow(a, probe.fen(), studColor)),
                               { from: move.from, to: move.to, piece: studentPiece, promotion: move.promotion }, probe.fen(), studColor, 'student')
                             : null;
                           planArcRef.current = { theirs: theirStep.next, mine: mineStep?.next ?? planArcRef.current.mine };
                           const arcLines = [
                             ...theirStep.events.filter((e) => e.kind !== 'advance'),
-                            ...(mineStep?.events ?? []).filter((e) => e.kind === 'arrive' || e.kind === 'drop'),
+                            // The student's own plans are never ANNOUNCED on Learn (their emerge
+                            // is filtered), so their DROP is never said either: "You have let
+                            // an attack on their king go" for a plan the student never heard
+                            // (walk 2026-09-29). An arrival still speaks — it names the move.
+                            ...(mineStep?.events ?? []).filter((e) => e.kind === 'arrive'),
                           ];
                           for (const e of arcLines) {
                             const line = gradeNarrationText(e.text, probe.fen(), 'CoachTeachPage.planArc')?.trim();

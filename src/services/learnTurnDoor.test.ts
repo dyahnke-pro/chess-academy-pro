@@ -23,12 +23,14 @@ describe('learnTurnDoor — the lane table decides, not a kind whitelist', () =>
     expect(d.spoke).toEqual(['pieceQuality']);
   });
 
-  it('the plan arc stays closed until WO-2 validates its aims', () => {
-    // Two live walks, 2026-09-29: 3 of 4 lines false. Re-opening it is a
-    // deliberate edit to LEARN_LANES with a walk behind it.
-    const d = decideTurn([{ lane: 'planArc', text: "Their plan is taking shape: the bishop's walk to c3.", fen: FEN }]);
-    expect(d.pkg.spoken).toBe('');
-    expect(d.closed).toEqual(['planArc']);
+  it('the plan arc speaks (behind the walkability check)', () => {
+    const d = decideTurn([{ lane: 'planArc', text: "Their plan is taking shape: the knight's walk to e5.", fen: FEN, squares: ['e5'] }]);
+    expect(d.spoke).toEqual(['planArc']);
+  });
+
+  it('Learn filters every aim through aimWalkableNow before the arc sees it', () => {
+    expect(TEACH_CODE).toMatch(/aimsOf\(plan\.theirs, 'opponent'\)\.filter\(\(a\) => aimWalkableNow\(/);
+    expect(TEACH_CODE).toMatch(/aimsOf\(plan\.mine, 'student'\)\.filter\(\(a\) => aimWalkableNow\(/);
   });
 
   it('a closed lane is refused BEFORE the package and recorded as closed', () => {
