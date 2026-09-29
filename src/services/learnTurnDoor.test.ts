@@ -163,5 +163,10 @@ describe('WO-2 — a verdict on a good move carries its reason', () => {
   it('clear-best speaks only with the move\'s computed point', () => {
     expect(TEACH_CODE).toMatch(/grade\.reason !== 'clear-best' \|\| !!goodPoint/);
     expect(TEACH_CODE).toMatch(/studentMovePoint\(fenBefore, move\.san/);
+    // The bishop pair is said once a game, by whichever owner says it first.
+    expect(TEACH_CODE).toMatch(/pairHeard \? allHits\.filter\(\(x\) => x\.id !== 'bishop-pair'\)/);
+    expect(TEACH_CODE).toMatch(/hit\.id === 'bishop-pair'\) standingRef\.current\.remember\('bishop-pair'\)/);
+    // A board move counts as starting, so the welcome greeting never lands mid-game.
+    expect(TEACH_CODE).toMatch(/handleStudentMove = useCallback\(\(move: MoveResult\): void => \{[\s\S]{0,600}userInteractedRef\.current = true/);
   });
 });
