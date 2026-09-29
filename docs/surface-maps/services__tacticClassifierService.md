@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**494 lines · 13 exports · 5 importers · 3 tests · 0 audits**
+**586 lines · 14 exports · 6 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,9 +12,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/components/Insights/GameInsightsPage.tsx`
 - `src/components/Puzzles/PuzzleBoard.tsx`
 - `src/services/gameAnalysisService.ts`
-- `src/services/gameInsightsService.ts`
+- `src/services/tacticClassifierService.fill.test.ts`
 - `src/services/tacticClassifierService.test.ts`
 - `src/services/tacticalProfileService.ts`
 
@@ -35,16 +36,26 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `getPrimaryThemeLabel` (function) — 1 call site
 - `src/components/Puzzles/PuzzleBoard.tsx:136`
 
-### `classifyTacticsFromGame` (function) — 1 call site
+### `classifyTacticsFromGame` (function) — 5 call sites
 - `src/services/gameAnalysisService.ts:2081`
+- `src/services/tacticClassifierService.fill.test.ts:60`
+- `src/services/tacticClassifierService.fill.test.ts:64`
+- `src/services/tacticClassifierService.fill.test.ts:65`
+- `src/services/tacticClassifierService.fill.test.ts:72`
 
-### `deriveMissedTacticsForGame` (function) — 3 call sites
-- `src/services/gameInsightsService.ts:782`
+### `deriveMissedTacticsForGame` (function) — 2 call sites
 - `src/services/tacticClassifierService.test.ts:37`
 - `src/services/tacticClassifierService.test.ts:45`
 
-### `backfillClassifiedTactics` (function) — 0 call sites
+### `deriveMissedTacticsForGameYielding` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
+
+### `backfillClassifiedTactics` (function) — 5 call sites
+- `src/components/Insights/GameInsightsPage.tsx:118`
+- `src/services/tacticClassifierService.fill.test.ts:37`
+- `src/services/tacticClassifierService.fill.test.ts:46`
+- `src/services/tacticClassifierService.fill.test.ts:52`
+- `src/services/tacticClassifierService.fill.test.ts:53`
 
 ### `getTacticMotifStats` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -64,7 +75,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Tests
 
 - `src/components/Puzzles/PuzzleBoard.test.tsx`
-- `src/services/gameInsightsService.tacticsMissed.test.ts`
+- `src/services/tacticClassifierService.fill.test.ts`
 - `src/services/tacticClassifierService.test.ts`
 
 ## Audits that reach it
