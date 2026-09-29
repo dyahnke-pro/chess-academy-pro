@@ -151,8 +151,8 @@ Today (engineer map, `brainstorm-r1/engineer.md`): ~15 lanes. One (`computePosit
 | WO | status | owner |
 |---|---|---|
 | WO-0 bugs | ✅ 4/4 — takeback stall fixed (the generic command door undid the move and returned before the correction branch; walked: …e5 taken back, …c6 played, coach answered) | this session |
-| WO-1 door | 🔵 1a ✅ on main (PR #976); 1a'' ✅ `facts[]` cut + causal chain spoken (PR #981); 1a' ✅ orphan cleanup (G8.5): 5 closed lanes + their producers deleted, the silent fork/think-aloud/improving/best-reply chain that out-ranked priority-first removed, the unspoken look-ahead paragraph (and its arrows, and its hold on the behaviour filler) removed, 6 dead modules deleted, gate in `learnTurnDoor.test.ts`. **On main + live (PR #980, verified in the deployed chunk).** 1b ✅ one lead per turn (lead rank in `LEARN_LANES`, safety always rides, support shares squares, late wave leads only by outranking; hand walk 3UqPa5eV2e0 904→650 words, 51→40 sentences). phase read now a door lane (`phase`, rank 72; ply 11 five lines → three, phase itself one sentence). descriptions deferred to the late wave (one decision per turn): walk 904 → 650 → 472 words, 51 → 40 → 29 sentences — one thought per turn except the phase turn (two). OPEN: opening plies now lead with the move's principle and hold the break/hole reads — the scoreboard said we over-say principles, so the WO-5 rescore decides that rank; then 1c | this session |
-| WO-2 plan thread | 🔵 step 1 ✅ (PR #977, #978: route identity + board check); step 2 ✅ `positionCharacter` — tactical / positional / conversion / defence, a switch spoken once it holds two reads, `character` lane (73, always rides). Walked: silent through the positional Caro-Kann; fires at the Fried Liver's …d5 with the threat. NEXT: good-move verdicts, engine-proven "deliberate" | this session |
+| WO-1 door | 🔵 1a ✅ on main (PR #976); 1a'' ✅ `facts[]` cut + causal chain spoken (PR #981); 1a' ✅ orphan cleanup (G8.5): 5 closed lanes + their producers deleted, the silent fork/think-aloud/improving/best-reply chain that out-ranked priority-first removed, the unspoken look-ahead paragraph (and its arrows, and its hold on the behaviour filler) removed, 6 dead modules deleted, gate in `learnTurnDoor.test.ts`. **On main + live (PR #980, verified in the deployed chunk).** 1b ✅ one lead per turn (lead rank in `LEARN_LANES`, safety always rides, support shares squares, late wave leads only by outranking; phase read now a door lane (`phase`, rank 72; ply 11 five lines → three, phase itself one sentence). descriptions deferred to the late wave (one decision per turn). OPEN: opening plies now lead with the move's principle and hold the break/hole reads — the scoreboard said we over-say principles, so the WO-5 rescore decides that rank; then 1c | this session |
+| WO-2 plan thread | 🔵 step 1 ✅ (PR #977, #978: route identity + board check); step 2 ✅ `positionCharacter` — tactical / positional / conversion / defence, a switch spoken once it holds two reads, `character` lane (73, always rides). Walked: silent through the positional Caro-Kann; fires at the Fried Liver's …d5 with the threat. step 3 🔵 good-move verdicts on branch `wo2-good-move`: `clear-best` reason (best by ≥80cp), spoken ONLY joined to the move's computed point ("the strongest move here: it unpins your pawn on d5"), never bare praise. NOT yet seen in a walk — the grade line has not fired in any walk since the cleanup; cause unknown. NEXT: engine-proven "deliberate" | this session |
 | WO-3 BoardQuery chat | ⚪ | — |
 | WO-4 shrinking repeats | ⚪ | — |
 | WO-5 measuring stick | 🟠 50-game scoreboard baseline | Chess app review session |
@@ -180,3 +180,38 @@ In order. Each step ends on main with a localhost hand-walk; a full prod audit o
 
 **Coordination:** CoachTeachPage's turn path is this session's (the review session dropped ACC-1). Anyone else touching CoachTeachPage merges main first.
 
+
+## 6. DID IT TEACH? — the Learn session's read of its own walk (2026-09-29)
+
+**The bar is QUALITY, not word count (David 2026-09-29: "I don't care about word count! I CARE ABOUT THE QUALITY OF THE WORDS!! DID THEY TEACH???").** Word/sentence counts are deleted from the status board. Every walk from now on is graded line by line: did it teach, and was it true?
+
+Walk: game 3UqPa5eV2e0 (Caro, 42 plies), localhost, current branch. **21 turns spoke. About 5 taught. The rest are generic, wrong, or robotic.**
+
+**Taught (keep this shape):**
+- ply 15 — "You'd love to play the knight to d4 — but they answer the pawn takes e4 and it falls apart." A real weighing: it rules out the natural move.
+- ply 19 — "Nd2 unpins your pawn on d5." Says what the move is FOR.
+- ply 25 — "Bf5 lands on the f5 outpost, a square none of their pawns can attack."
+- ply 27 — "Re1 takes the half-open e-file."
+- ply 11 middlegame stock-take (king safety + development lead). This one teaches.
+
+**Did NOT teach — the defect list, worst first:**
+1. **Opening plies 1–13 are one template six times.** The pattern is "There's a rule behind X / X follows a principle worth keeping: …", and e4 and d4 get the same sentence. It describes a principle, never the move's job in THIS position. This is the scoreboard's "we over-say principles".
+2. **Nothing about THEIR plan.** …e5, …g5, …Rg8 are a kingside pawn storm with the king still on e8. The coach never names it. This is the scoreboard's "their move's purpose 4%".
+3. **ply 29 is a lecture in the wrong register:** "Shallow read: a5 survives the first replies … The thread was lost deeper in the line. Here's how: Calculate to a QUIET position…" It is jargon plus a paragraph of method. It should be one line on what a5 walked into.
+4. **ply 33 narrates a move not played:** "After Qd2, your queen … form a battery". The student played Ra4. A hypothetical is voiced as if it were the position.
+5. **Doubtful truths, to be board-checked before anyone builds on them:**
+   - ply 17: "their knight on g8 is the piece doing the most work". It is undeveloped.
+   - ply 39: a back-rank threat "invaded from c4".
+   - ply 23: "2 attackers on b6 against 2 defenders". The line doesn't say whose pieces.
+6. **Repeats:** "bishop pair" at 37 and again at 41. And ply 35 "The move is Nxd5" appears twice, but that is likely the instrument (SAN log + spoken log). Check that before fixing.
+7. **ply 1 speaks the interface:** "Name any opening and I'll walk you through it" breaks Voice Rule 2.
+
+**What this means for the plan:** defects 1 and 2 are exactly the moveIntent gap (purpose of OUR quiet moves, purpose of THEIR moves). So moveIntent (rank 75, from the other session) is the next thing that changes quality. The Learn session fixes 3, 4, 6 and 7 itself; they are this session's lanes.
+
+**This session, now:**
+- `wo2-good-move` is on the branch. It carries the good-move verdict with the reason, plus the gate fix.
+- Next: find out why the move grade never fires in a walk.
+- Then fix defects 3/4/6/7, each with a test on the exact walk position.
+- Then re-walk and grade it here, line by line.
+
+**Other session:** when moveIntent is ready, hand it over through this file (§4 row + a line here). I wire it as lane `moveIntent`, rank 75, with its facts carrying squares. Please board-check the 5 doubtful truths above against your scoreboard's board-truth column, if you have it.
