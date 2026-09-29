@@ -37,6 +37,7 @@
 //   4. What is spoken and what is logged are the same object. A package that
 //      reports something other than what the student heard is worse than no
 //      log at all.
+import { Chess } from 'chess.js';
 import { gradeNarrationText } from './coachAnswerGates';
 import { falseConfigurationClaim } from './configurationClaims';
 import { claimSentences } from '../utils/claimSentences';
@@ -119,6 +120,14 @@ export interface VoiceFact {
    *  its squares with it, so a refused claim can never be drawn — which is the
    *  whole coupling, in one line, for every lane at once. */
   squares?: readonly string[];
+  /** THE MOVES THIS FACT SAYS, IN ORDER — SAN, played from `fen`. The board's
+   *  half of a spoken LINE, coupled the same way `squares` is: the producer
+   *  that computed "you'd love Nd4, but they answer dxe4" hands the two moves
+   *  over with the sentence, and the board draws them only if the fact
+   *  SURVIVED (David 2026-09-29: "Make sure arrows populate when talking about
+   *  multiple move lines. I have never seen any!"). Never scraped back out of
+   *  the prose — a bare "f5" in "the f5 outpost" is not a move. */
+  line?: readonly string[];
 }
 
 /** Every square the package is allowed to draw — the squares of the facts that
@@ -432,7 +441,9 @@ export function buildVoicePackage(
     // names a square — so it cannot collapse two genuinely different warnings
     // that happen to open "Watch out —".
     seen.add(key);
-    kept.push({ ...f, text: fresh.join(' ') });
+    // A line rides only when EVERY sentence survived: a trimmed fact may have
+    // lost the very sentence that named the moves.
+    kept.push({ ...f, text: fresh.join(' '), line: why.size === 0 ? f.line : undefined });
   }
 
   // SENTENCE CASE AT THE JOIN. David's 2026-08-08 run: "That takes your pawn.
@@ -491,4 +502,32 @@ export function joinSpoken(kept: readonly VoiceFact[]): string {
     return trimmed[0].toUpperCase() + trimmed.slice(1);
   };
   return kept.map((f) => sentence(f.text)).join(' ');
+}
+
+/** A spoken line's arrow — one per move, in the order said. */
+export interface LineArrow {
+  from: string;
+  to: string;
+  /** Whose move it is: the student's own, or the opponent's answer. */
+  side: 'student' | 'opponent';
+  san: string;
+}
+
+/** The arrows for every LINE the package kept, replayed by chess.js from the
+ *  board each fact was computed on. The first move that does not play ends that
+ *  line — half a line is drawn rather than a spliced one. */
+export function keptLineArrows(pkg: { kept: readonly VoiceFact[] }, student: 'w' | 'b'): LineArrow[] {
+  const out: LineArrow[] = [];
+  for (const f of pkg.kept) {
+    if (!f.line || f.line.length === 0) continue;
+    let board: Chess;
+    try { board = new Chess(f.fen); } catch { continue; }
+    for (const san of f.line) {
+      let mv;
+      try { mv = board.move(san); } catch { mv = null; }
+      if (!mv) break;
+      out.push({ from: mv.from, to: mv.to, side: mv.color === student ? 'student' : 'opponent', san: mv.san });
+    }
+  }
+  return out;
 }

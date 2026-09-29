@@ -25,7 +25,7 @@
  */
 import { buildVoicePackage, joinSpoken, type VoiceFact, type VoiceFactKind, type VoicePackage } from './voicePackage';
 
-export { buildVoicePackage, describeVoicePackage, markableSquares, spokenSentenceKeys } from './voicePackage';
+export { buildVoicePackage, describeVoicePackage, keptLineArrows, markableSquares, spokenSentenceKeys } from './voicePackage';
 export type { VoicePackage, VoiceFactKind } from './voicePackage';
 
 export type LearnLane =
@@ -113,6 +113,8 @@ export interface LaneFact {
   text: string;
   fen: string;
   squares?: readonly string[];
+  /** The moves the sentence says, SAN from `fen` — see `VoiceFact.line`. */
+  line?: readonly string[];
   /** Only for lanes whose producer decides the kind itself (the backward look
    *  returns drawback | mistake | coachMistake). */
   kind?: VoiceFactKind;
@@ -150,9 +152,9 @@ export function decideTurn(
   for (const f of facts) {
     if (!f.text.trim()) continue;
     offered.push(f.lane);
-    open.push({ lane: f.lane, kind: f.kind ?? LEARN_LANES[f.lane].kind, text: f.text, fen: f.fen, squares: f.squares });
+    open.push({ lane: f.lane, kind: f.kind ?? LEARN_LANES[f.lane].kind, text: f.text, fen: f.fen, squares: f.squares, line: f.line });
   }
-  const verified = buildVoicePackage(open.map(({ kind, text, fen, squares }) => ({ kind, text, fen, squares })), alreadySaid, priorKeys);
+  const verified = buildVoicePackage(open.map(({ kind, text, fen, squares, line }) => ({ kind, text, fen, squares, line })), alreadySaid, priorKeys);
   // Which lane each surviving fact came from (the package may trim the text).
   const laneOf = (k: VoiceFact): LearnLane | undefined =>
     open.find((o) => o.text === k.text || (k.text.length > 0 && o.text.includes(k.text)))?.lane;

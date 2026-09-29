@@ -341,6 +341,10 @@ export interface ClauseItem {
    *  The door orders by it. Omitted where the clause carries no material
    *  (a plan, the status band, a habit): those rank below every staked fact. */
   stakes?: FactStakes;
+  /** The moves the clause SAYS, SAN from the clause's board — a concept on a
+   *  future board is said with the line that reaches it ("Play Qd2 and…",
+   *  "After Qd2, Nf6, …"), and the board draws that line (`VoiceFact.line`). */
+  line?: readonly string[];
 }
 
 /** THE STANDING KINDS — say these once per game, not once per ply.
@@ -1353,6 +1357,8 @@ function buildClauses(a: {
       squares: concept.squares,
       // What the idea wins on its own targets (agent first, then targets).
       stakes: concept.source === 'tactic' ? (exchangeStakes(a.fen, concept.squares.slice(1)) ?? undefined) : undefined,
+      // The line `afterLine` names is the one drawn — only when it named one.
+      line: concept.source === 'tactic' && concept.line && concept.line.length > 0 && concept.boardFen && !samePlacementFen(concept.boardFen, a.fen) ? concept.line : undefined,
     });
   }
 

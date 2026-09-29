@@ -170,3 +170,29 @@ describe('WO-2 — a verdict on a good move carries its reason', () => {
     expect(TEACH_CODE).toMatch(/handleStudentMove = useCallback\(\(move: MoveResult\): void => \{[\s\S]{0,600}userInteractedRef\.current = true/);
   });
 });
+
+describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen any!")', () => {
+  it('the kept fact carries its line through the door, and the arrows replay it', async () => {
+    const { keptLineArrows } = await import('./learnTurnDoor');
+    const text = "You'd love to grab the pawn with Nxe5 — but they answer Nxe5 and the knight is gone.";
+    const d = decideTurn([{ lane: 'register', text, fen: FEN, line: ['Nxe5', 'Nxe5'] }]);
+    expect(d.spoke).toEqual(['register']);
+    const arrows = keptLineArrows(d.pkg, 'w');
+    expect(arrows.map((a) => `${a.from}${a.to}:${a.side}`)).toEqual(['f3e5:student', 'c6e5:opponent']);
+  });
+  it('an illegal move ends the line — never a spliced one', async () => {
+    const { keptLineArrows } = await import('./learnTurnDoor');
+    const arrows = keptLineArrows({ kept: [{ kind: 'computed', text: 'x', fen: FEN, line: ['Nxe5', 'Qh5', 'Nxe5'] }] }, 'w');
+    expect(arrows).toHaveLength(1);
+  });
+  it('a fact that lost a sentence to the novelty set loses its line with it', () => {
+    const text = "You'd love to grab the pawn with Nxe5 — but they answer Nxe5 and the knight is gone. Your knight on f3 attacks the pawn on e5.";
+    const d = decideTurn([{ lane: 'register', text, fen: FEN, line: ['Nxe5', 'Nxe5'] }], 'Your knight on f3 attacks the pawn on e5.');
+    expect(d.pkg.kept[0]?.line).toBeUndefined();
+  });
+  it('Learn queues the but-turn and the concept line, and draws what the late wave kept', () => {
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), registerNow, 'register', undefined, pendingRegisterLine\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, 'positionFacts', undefined, c\.line\)/);
+    expect(TEACH_CODE).toMatch(/keptLineArrows\(hintPkg,/);
+  });
+});
