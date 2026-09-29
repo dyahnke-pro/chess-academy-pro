@@ -83,13 +83,16 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   fork: { kind: 'fork', speaks: false, why: 'book fork-in-the-road is not his DNA (2026-08-23); gated off at the call site' },
   priorityFirst: { kind: 'computed', speaks: true, why: 'the priority before the move' },
   rejectedTempting: { kind: 'computed', speaks: true, why: 'the tempting move and its refutation' },
-  // CLOSED, with a measured reason (2026-09-29). Built 2026-09-27 to speak, it
-  // was silenced by accident by the old kind whitelist. Opened here, its first
-  // live line was board-FALSE: 3UqPa5eV2e0 ply 37, "Their plan is taking shape:
-  // the knight's walk to h2" with the knight going f6→d5, away from h2, and h2
-  // covered by the king. Fixed and re-opened in WO-2 (the plan thread), never
-  // spoken before it is true.
-  planArc: { kind: 'plan', speaks: false, why: 'board-false on its first live walk (3UqPa5eV2e0 ply 37) — re-opened by WO-2 once the aim reading is proven' },
+  // CLOSED, measured twice (2026-09-29). Walk 1: "the knight's walk to h2"
+  // (fixed: two unrelated routes counted as one — planArc route identity).
+  // Walk 2, after that fix, two games, 82 plies: 4 lines, 3 false — "the
+  // bishop's walk to c3" for a light-squared bishop and a blocked diagonal,
+  // "the knight's walk to g4" onto a square White covers twice, and "You have
+  // let an attack on their king go" for a plan the student never heard, on a
+  // forced recapture, one move before the student's own mate threat. The aims
+  // come from ONE engine line's `maneuver` and are never checked for
+  // reachability, safety or which piece. WO-2 builds that check first.
+  planArc: { kind: 'plan', speaks: false, why: 'aims read off one engine line, unchecked for reachability/safety — 3 of 4 live lines false (2026-09-29 walk 2); WO-2 validates first' },
   lookaheadPlan: { kind: 'plan', speaks: false, why: 'the whole look-ahead paragraph; the plan arc speaks the plan instead (WO-2 folds it into the one thought)' },
   borrowed: { kind: 'borrowed', speaks: false, why: 'corpus teaching borrowed from another board — no corpus notes in Learn free play (2026-09-23)' },
   drawback: { kind: 'drawback', speaks: true, why: 'what the student’s own move handed over' },

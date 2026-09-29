@@ -23,10 +23,10 @@ describe('learnTurnDoor — the lane table decides, not a kind whitelist', () =>
     expect(d.spoke).toEqual(['pieceQuality']);
   });
 
-  it('the plan arc stays closed until WO-2 proves it true on the board', () => {
-    // Its first live line was board-false (3UqPa5eV2e0 ply 37). Re-opening it
-    // is a deliberate edit to LEARN_LANES, with a walk behind it.
-    const d = decideTurn([{ lane: 'planArc', text: 'Their plan is taking shape: the knight walk to h2.', fen: FEN }]);
+  it('the plan arc stays closed until WO-2 validates its aims', () => {
+    // Two live walks, 2026-09-29: 3 of 4 lines false. Re-opening it is a
+    // deliberate edit to LEARN_LANES with a walk behind it.
+    const d = decideTurn([{ lane: 'planArc', text: "Their plan is taking shape: the bishop's walk to c3.", fen: FEN }]);
     expect(d.pkg.spoken).toBe('');
     expect(d.closed).toEqual(['planArc']);
   });

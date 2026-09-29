@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**296 lines · 9 exports · 2 importers · 1 tests · 1 audits**
+**309 lines · 9 exports · 2 importers · 1 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,8 +27,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `aimsOf` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9516`
-- `src/components/Coach/CoachTeachPage.tsx:9520`
+- `src/components/Coach/CoachTeachPage.tsx:9480`
+- `src/components/Coach/CoachTeachPage.tsx:9484`
 - `src/services/lookaheadPlan.ts:1651`
 - `src/services/planArc.test.ts:28`
 
@@ -44,9 +44,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `ArcMove` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `stepArc` (function) — 15 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9516`
-- `src/components/Coach/CoachTeachPage.tsx:9520`
+### `stepArc` (function) — 19 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9480`
+- `src/components/Coach/CoachTeachPage.tsx:9484`
 - `src/services/lookaheadPlan.ts:1651`
 - `src/services/planArc.test.ts:28`
 - `src/services/planArc.test.ts:93`
@@ -60,6 +60,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planArc.test.ts:111`
 - `src/services/planArc.test.ts:113`
 - `src/services/planArc.test.ts:117`
+- `src/services/planArc.test.ts:147`
+- `src/services/planArc.test.ts:148`
+- `src/services/planArc.test.ts:153`
+- `src/services/planArc.test.ts:154`
 
 ## Tests
 

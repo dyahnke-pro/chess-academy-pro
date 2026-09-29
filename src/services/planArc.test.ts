@@ -133,3 +133,27 @@ describe('the arc reaches the review narration', () => {
     expect(segs.some((s) => /There it is — their knight on g3/.test(s.narration ?? ''))).toBe(true);
   }, 120000);
 });
+
+describe('a route only takes shape toward ONE goal', () => {
+  // The first live walk with the lane open (3UqPa5eV2e0, 2026-09-29) said
+  // "Their plan is taking shape: the knight's walk to h2" — two DIFFERENT knight
+  // routes on consecutive engine reads counted as one plan read twice.
+  const FEN = 'r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4';
+  const route = (goal: string, path: string[]): Aim => ({
+    id: 'route:n', kind: 'route', squares: path.slice(1), goal, phrase: `the knight's walk to ${goal}`,
+  });
+
+  it('two different destinations on consecutive reads never emerge', () => {
+    const a = stepArc(EMPTY_ARC, [route('e5', ['f6', 'd7', 'e5'])], null, FEN, 'b', 'opponent');
+    const b = stepArc(a.next, [route('h2', ['f6', 'g4', 'h2'])], null, FEN, 'b', 'opponent');
+    expect(b.events.filter((e) => e.kind === 'emerge')).toEqual([]);
+  });
+
+  it('the same destination read twice still emerges (positive control)', () => {
+    const a = stepArc(EMPTY_ARC, [route('e5', ['f6', 'd7', 'e5'])], null, FEN, 'b', 'opponent');
+    const b = stepArc(a.next, [route('e5', ['f6', 'd7', 'e5'])], null, FEN, 'b', 'opponent');
+    expect(b.events.filter((e) => e.kind === 'emerge').map((e) => e.text)).toEqual([
+      "Their plan is taking shape: the knight's walk to e5.",
+    ]);
+  });
+});
