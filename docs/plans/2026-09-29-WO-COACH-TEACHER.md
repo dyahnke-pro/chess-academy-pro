@@ -22,6 +22,23 @@ Today Learn free play speaks ~1.3 disconnected labels per move ("A pawn break is
 6. **Audits**: hand-walk one of his games after each merged WO (CLAUDE.md "WALK IT, FLAG EVERYTHING, THEN FIX"), muted.
 7. **Don't touch `src/components/Weaknesses/**` or the weaknesses services** — another session is fixing a freeze there.
 
+
+## 1.5 HOW THIS FITS WHAT IS ALREADY BUILT (context pass 2026-09-29 — read before any WO)
+
+This is not a new track. It is the next step of four that already exist:
+
+| existing work | what it already did | what this plan adds on top |
+|---|---|---|
+| **computer-unification Phase 4** (`2026-09-17-computer-unification.md` §2.6, §6) | slice 1 DONE: 15 say-once refs → `learnMemory.ts` (orphan ceiling now 1). Phase 4 target named: `buildLearnFacts(ctx) → VoiceFact[]`, a LIFT of `computeInstantTeaching` (~`CoachTeachPage.tsx:7514`) | **WO-1 IS slice 2 of Phase 4.** Not a new "door" — lift the lanes into `buildLearnFacts`, then pick a lead. Also covers `handleStudentMove`'s late lanes (the ~19 `queueSpokenHint` sites) which §6 did not list. |
+| **WO-DANYA-01** (PLAN.md §464, OUTLINE §000) | 8 hand-walks + fixes; A, A2, C, C2 done; plan arc; fork trick; quiet-move purpose (partial) | **WO-1b IS open item B** ("subsumption, not a cap") — now by relevance to the plan, not only same-claim. Leftovers (rook template, "either works", duplicate break lanes, transposition name) stay in WO-DANYA-01. |
+| **WO-TEACH-02** (PLAN.md §284) | S1–S7 built as live clauses THROUGH `decide()`: refuted alternative, principle-once, stopped threat, `positionVerdict`/stock, candidates + proof lines, transfer ledger, forcing scan. `opponentMovePurpose` (S3). Teach meter on `coach-decision`. | Those facts are the INGREDIENTS WO-2 chains together. The teach meter becomes one column of WO-5. |
+| **WO-LAYERS-01** (PLAN.md §558) | layer standings in the door (red raised, grey bottom-up, green quiet as `proven`), `proofCut`, bluff, conversion step, `moveTiming`, `liveStrength` | WO-4's shrinking repeats extend the same standings ACROSS games; WO-2's lead rule must respect layers (grey = safety before plan). |
+| **planArc** (`planArc.ts`, behind `lookaheadPlan`) | each side's plan followed: takes shape / lands / given up | **WO-2 extends planArc** (no new `planThread.ts`): add the character switch (tactical ↔ positional) and plan-aware grading. |
+| **pieceOptions + WalkableLine + Walk button** (WO-DANYA-01 C, `ChatMessage.tsx:~290`) | "couldn't X just move?" answers in chat with engine lines per option, drawn on a board, Walk button steps and returns | **WO-3's why-not/what-if REUSE this shape** (engine read → proof-cut line → WalkableLine). **WO-6 mostly exists** — shrinks to: auto-play the walk in Learn instead of a button, if needed. |
+| **`danyaBehaviors` scheduler** | 25 computed behaviours fired at his corpus rate | Stays; once WO-1 lands it is one more lane INTO the lead decision rather than a separate voice. |
+
+**So the honest order is:** WO-1 (= Phase 4 slice 2 + DANYA B) → WO-2 (planArc + switch + grading, stitching TEACH-02's facts) → WO-3 (extends the pieceOptions pattern to every question) → WO-4 → WO-5 measures all of it.
+
 ## 2. Work orders
 
 Dependency graph: `WO-0` and `WO-5` any time · `WO-1` first on the Learn side · `WO-2`, `WO-4` build pure now, wire after `WO-1` · `WO-3` + `WO-6` in parallel with everything.
@@ -54,8 +71,8 @@ Today (engineer map, `brainstorm-r1/engineer.md`): ~15 lanes. One (`computePosit
 
 ### WO-2 — The plan thread (switches with the board)
 **Status:** ⚪ open — build the pure computer now, wire after WO-1
-**Files:** NEW `src/services/planThread.ts` (+ test). Reads `planArc.ts`, `positionFacts.ts`, `boardPlan.ts`; does NOT edit them.
-- `readPlanThread(prev, board, facts) → { plan, character: 'tactical'|'positional'|'conversion'|'defence', switched, why }`. Board picks the plan (their concession, the structure, `planArc`'s dominant aim). Character flips on: a tactic appears/vanishes, material changes, structure changes, a plan lands or dies.
+**Files:** `src/services/planArc.ts` (extend — NOT a new planThread.ts), its test, `positionFacts.ts` only for the grading hook.
+- extend planArc: `stepArc(...)` also returns → { plan, character: 'tactical'|'positional'|'conversion'|'defence', switched, why }`. Board picks the plan (their concession, the structure, `planArc`'s dominant aim). Character flips on: a tactic appears/vanishes, material changes, structure changes, a plan lands or dies.
 - A switch is a fact: "The position has changed — now it's about the king." A plan landing: "There it is — that's what the knight tour was for."
 - **Plan-aware grading:** a move serving the current plan whose compensation holds a few plies deep is "deliberate", never "a mistake" (tape plies 29, 41 — the outpost move called a mistake).
 - **"First X, so that Y":** when the plan move fails now, name the obstacle (own piece in the way, a kick with tempo, a piece left hanging) and the quiet move that removes it.
@@ -94,7 +111,7 @@ Today (engineer map, `brainstorm-r1/engineer.md`): ~15 lanes. One (`computePosit
 ---
 
 ### WO-6 — The scratch board
-**Status:** ⚪ open
+**Status:** ⚪ open — MOSTLY EXISTS (WalkableLine + Walk button from WO-DANYA-01 C); only build what WO-3 finds missing
 **Files:** NEW `src/components/Coach/ScratchLinePlayer.tsx` (+ test), its mount point in `CoachTeachPage.tsx` coordinated with WO-1's owner.
 - Plays a line on the Learn board (arrows per move, voice per move), then snaps back to the game position. Board input disabled while it runs; any tap cancels and snaps back. Uses `ConsistentChessboard`.
 - Used by WO-3 (why-not / what-if) and later by WO-2 ("first X so that Y").
