@@ -30,12 +30,8 @@ const EXEMPT = new Set([
 
 /** Unmigrated files → how many constructors they may still hold. SHRINK ONLY. */
 const CEILING: Record<string, number> = {
-  'src/components/Coach/CoachGameReview.tsx': 10,
-  'src/services/coachFeatureService.ts': 7,
-  'src/services/reviewStrategicOrientation.ts': 5,
   'src/components/Openings/PlayableLinePlayer.tsx': 5,
   'src/services/miniGameEngine.ts': 4,
-  'src/services/reviewOpponentCommentary.ts': 3,
   'src/services/tacticVisuals.ts': 2,
   'src/services/boardUtils.ts': 2,
   'src/components/Openings/OpeningPlayMode.tsx': 2,
@@ -44,7 +40,6 @@ const CEILING: Record<string, number> = {
   'src/components/Openings/MiddlegamePlanStudy.tsx': 2,
   'src/components/Openings/LessonPlayer.tsx': 2,
   'src/components/Openings/CommonMistakesSection.tsx': 2,
-  'src/components/Coach/ReviewCitationPreviews.tsx': 2,
   'src/components/Coach/EndgameTablebaseTrainer.tsx': 2,
   'src/services/coachMoveExtractor.ts': 1,
   'src/services/boardAnnotationService.ts': 1,
@@ -69,7 +64,8 @@ function walk(dir: string, out: string[]): string[] {
 /** Constructors, with comments stripped so prose about arrows never counts. */
 function constructors(src: string): number {
   const code = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
-  return (code.match(/\bstartSquare\s*:/g) ?? []).length;
+  // `startSquare:` and the shorthand `{ startSquare, … }` both build one.
+  return (code.match(/\bstartSquare\s*:|\{\s*startSquare\s*[,}]/g) ?? []).length;
 }
 
 describe('only the arrow door builds an arrow', () => {
@@ -92,6 +88,7 @@ describe('only the arrow door builds an arrow', () => {
 
   it('NEGATIVE CONTROL: the scanner sees a constructor', () => {
     expect(constructors("const a = { startSquare: 'e2', endSquare: 'e4', color: 'x' };")).toBe(1);
+    expect(constructors('return [{ startSquare, endSquare, color }];')).toBe(1);
     expect(constructors('// { startSquare: 1 }\n/* startSquare: */')).toBe(0);
   });
 });

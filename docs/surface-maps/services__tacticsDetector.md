@@ -95,7 +95,7 @@
 - `src/services/reviewMoveBriefing.ts:64`
 - `src/services/reviewMoveBriefing.ts:65`
 - `src/services/reviewNarrationFidelity.test.ts:324`
-- `src/services/reviewOpponentCommentary.ts:67`
+- `src/services/reviewOpponentCommentary.ts:73`
 - `src/services/reviewWalk1500.test.ts:23`
 - `src/services/reviewWalk900.test.ts:20`
 - `src/services/tacticClaimValidator.test.ts:200`

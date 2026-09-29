@@ -60,6 +60,13 @@ const INFRA = new Set([
   // through `voiceFacts` to `voiceService` and computes nothing. Same class as
   // `voiceService` and `coachApi`, both already here. It did NOT move a ceiling.
   'speakComputed',
+  // `arrowDoor` is the ARROW DOOR (2026-09-29, David: "one source for
+  // arrows"): every board arrow passes through it, and it answers only
+  // "may this be drawn, and in what colour" — no chess or teaching fact is
+  // computed there. Same class as `speakComputed` (the voice door) and
+  // `coachAnswerGates`, both already here. The import is the shared door
+  // replacing 13 private arrow paths, the opposite of divergence.
+  'arrowDoor',
   // `weaknessModelEvents` is ONE leaf signal — "the student model just
   // changed" — with a listener set and nothing else: it imports NOTHING and
   // computes no chess or teaching fact, the same class as `standingFactMemory`

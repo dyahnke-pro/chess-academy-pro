@@ -112,7 +112,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tradeQuality.ts:144`
 
 ### `legalSeeGainOn` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:2428`
+- `src/services/coachFeatureService.ts:2431`
 - `src/services/groundedAnswer.ts:6755`
 - `src/services/opponentMovePurpose.ts:33`
 - `src/services/reviewTeachingPoints.ts:99`
@@ -137,7 +137,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveFundamentals.ts:1260`
 
 ### `legalSeeGainFor` (function) — 28 call sites
-- `src/services/arrowDoor.ts:151`
+- `src/services/arrowDoor.ts:161`
 - `src/services/bluffDetector.ts:53`
 - `src/services/bluffDetector.ts:63`
 - `src/services/boardState.ts:42`

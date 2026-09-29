@@ -22,7 +22,10 @@ function buildMoves(): ReviewMoveInput[] {
   return out;
 }
 
-describe('buildReviewSegments — causal chain is wired into the review walk', () => {
+// buildReviewSegments runs the whole review pipeline per case (4s alone on the
+// heaviest); under the pre-commit hook's parallel load it crossed the 5s
+// default. The work is real, so the limit matches it.
+describe('buildReviewSegments — causal chain is wired into the review walk', { timeout: 30_000 }, () => {
   it('the Nxe4 segment LEADS with the cross-move causal chain (beginner rating)', () => {
     const segs = buildReviewSegments(buildMoves(), 'black', null, false, 900);
     const nxe4 = segs.find((s) => s.san === 'Nxe4');
@@ -58,7 +61,7 @@ describe('buildReviewSegments — causal chain is wired into the review walk', (
   });
 });
 
-describe('buildReviewSegments — BOTH WAYS wired into the walk', () => {
+describe('buildReviewSegments — BOTH WAYS wired into the walk', { timeout: 30_000 }, () => {
   function mk(sans: string[]): ReviewMoveInput[] {
     const c = new Chess(); const out: ReviewMoveInput[] = [];
     sans.forEach((san, i) => { c.move(san); out.push({ ply: i + 1, san, isCoachMove: false, classification: null, evaluation: null, preMoveEval: null, bestMove: null, fenAfter: c.fen() }); });

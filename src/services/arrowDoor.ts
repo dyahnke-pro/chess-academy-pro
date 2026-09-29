@@ -27,6 +27,10 @@
 //             start square that sees the end square along a clear path.
 //   played  — the trail of the move just made (orange): the start square is
 //             now empty and the moved piece stands on the end square.
+//   missed  — the better move from the board BEFORE the student's move (`fen`),
+//             shown on the board after it (the door's board): legal on its own
+//             board, and the same piece still stands on its start square on the
+//             board shown — or the arrow would start from an empty square.
 //
 // A move the coach rules out ("Qd3? drops the queen") has NO role — it is said
 // and highlighted, never arrowed (David 2026-09-29: "Never"). An arrow always
@@ -36,7 +40,7 @@ import type { BoardArrow } from '../types';
 import { MATERIAL_VALUE } from './pieceValues';
 import { legalSeeGainFor } from './positionReadingService';
 
-export type ArrowRole = 'play' | 'theirs' | 'threat' | 'line' | 'vision' | 'played';
+export type ArrowRole = 'play' | 'theirs' | 'threat' | 'line' | 'vision' | 'played' | 'missed';
 
 export interface ArrowClaim {
   from: string;
@@ -62,7 +66,7 @@ export interface ArrowDoorContext {
   studentColor: 'white' | 'black';
 }
 
-export type ArrowRefusal = 'not-played' | 'bad-square' | 'no-piece' | 'wrong-side' | 'illegal' | 'unsafe' | 'wins-nothing' | 'no-sight' | 'duplicate' | 'bad-fen';
+export type ArrowRefusal = 'moved-away' | 'not-played' | 'bad-square' | 'no-piece' | 'wrong-side' | 'illegal' | 'unsafe' | 'wins-nothing' | 'no-sight' | 'duplicate' | 'bad-fen';
 
 export interface ArrowDoorResult {
   arrows: BoardArrow[];
@@ -146,6 +150,12 @@ export function refusalFor(claim: ArrowClaim, ctx: ArrowDoorContext): ArrowRefus
   try { moved = b.move({ from, to, promotion: 'q' }); } catch { return 'illegal'; }
   if (!moved) return 'illegal';
   if (role === 'line') return null;
+  if (role === 'missed') {
+    let shown: Chess;
+    try { shown = new Chess(ctx.fen); } catch { return 'bad-fen'; }
+    const now = shown.get(from as Square);
+    return now && now.type === piece.type && now.color === piece.color ? null : 'moved-away';
+  }
 
   const gained = moved.captured ? MATERIAL_VALUE[moved.captured] ?? 0 : 0;
   const lost = legalSeeGainFor(b.fen(), to as Square, piece.color === 'w' ? 'b' : 'w');
@@ -160,10 +170,10 @@ export function refusalFor(claim: ArrowClaim, ctx: ArrowDoorContext): ArrowRefus
 
 function colourFor(claim: ArrowClaim, ctx: ArrowDoorContext): string {
   if (claim.role === 'threat' || claim.role === 'theirs') return ARROW_COLOR.theirs;
-  if (claim.role === 'vision') return ARROW_COLOR.vision;
   if (claim.role === 'played') return ARROW_COLOR.played;
+  if (claim.role === 'missed') return ARROW_COLOR.mine;
   if (claim.role === 'play') return (claim.rank && RANK_SHADE[claim.rank]) || ARROW_COLOR.mine;
-  // line: by whose move it is on its own board.
+  // line and vision: by whose piece it is — theirs reads "coming at you".
   try {
     const piece = new Chess(claim.fen ?? ctx.fen).get(claim.from as Square);
     const student = ctx.studentColor === 'white' ? 'w' : 'b';

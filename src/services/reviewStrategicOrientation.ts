@@ -31,6 +31,8 @@ import { phaseOfFen } from './boardConcepts';
 import { hisGroundedPlanSync, lookupHisPlaySync, HIS_PLAN_MIN_GAMES } from './hisPlayLookup';
 import { mastersMovesSync, type LocalDbMove } from './masterPlayLookup';
 import { isMinorAtHome } from './development';
+import type { BoardArrow } from '../types';
+import { admitArrows, type ArrowClaim } from './arrowDoor';
 
 /**
  * GROUNDED per-move opening detail (David 2026-07-24: "we already attached his
@@ -79,14 +81,11 @@ export function buildOpeningMoveDetail(fenBefore: string, san: string, moverIsSt
   return null;
 }
 
-/** A plan-idea arrow. Colours: PLAN_BLUE for the student's plan, PLAN_AMBER for
- *  the opponent's — distinct from the green best-move arrow so the two never
- *  read as the same thing. */
-export interface PlanArrow {
-  startSquare: string;
-  endSquare: string;
-  color: string;
-}
+/** A plan-idea arrow — ARROW DOOR output (`arrowDoor`, 2026-09-29): the
+ *  student's plan move is theirs to play (green, checked legal and safe), the
+ *  opponent's reads red (coming at you), a bishop's diagonal is a sight line.
+ *  The blue/amber plan palette this replaced was a third colour language. */
+export type PlanArrow = BoardArrow;
 
 /**
  * WHAT A PLAN BEAT IS, and why it gained an id and squares (2026-09-17, the
@@ -138,8 +137,20 @@ export function squaresOfArrows(arrows: readonly PlanArrow[]): string[] {
   return [...out];
 }
 
-const PLAN_BLUE = '#3b82f6'; // the student's plan
-const PLAN_AMBER = '#f59e0b'; // the opponent's plan
+/** A plan move (or sight line) before the door judges it. `mine` = the
+ *  student's side; `fen` set = one ply of a line, checked on its own board. */
+interface PlanPair { from: string; to: string; mine: boolean; sight?: boolean; fen?: string }
+const PLAN_MINE = true;
+const PLAN_THEIRS = false;
+
+function planDoor(fen: string, studentColorWB: 'w' | 'b', pairs: readonly PlanPair[]): PlanArrow[] {
+  const claims: ArrowClaim[] = pairs.map((p) => (
+    p.fen ? { from: p.from, to: p.to, role: 'line', fen: p.fen, source: 'reviewPlan.line' }
+      : p.sight ? { from: p.from, to: p.to, role: 'vision', source: 'reviewPlan.sight' }
+        : { from: p.from, to: p.to, role: p.mine ? 'play' : 'theirs', source: 'reviewPlan.move' }
+  ));
+  return admitArrows(claims, { fen, studentColor: studentColorWB === 'w' ? 'white' : 'black' }).arrows;
+}
 
 type Wing = 'queenside' | 'kingside';
 const QUEENSIDE_FILES = new Set(['a', 'b', 'c']);
@@ -257,15 +268,15 @@ function devJobs(dev: SideDev): string | null {
   return jobs.length > 0 ? jobs.join(', ') : null;
 }
 
-function devArrows(dev: SideDev, arrowColor: string): PlanArrow[] {
-  const arrows: PlanArrow[] = [];
+function devArrows(dev: SideDev, mine: boolean): PlanPair[] {
+  const arrows: PlanPair[] = [];
   for (const kn of dev.undevelopedKnights.slice(0, 2)) {
     const to = KNIGHT_HOME_TO_NATURAL[kn];
-    if (to) arrows.push({ startSquare: kn, endSquare: to, color: arrowColor });
+    if (to) arrows.push({ from: kn, to, mine });
   }
   if (dev.fianchettoSquare) {
     const to = fianchettoDiagonalTarget(dev.fianchettoSquare);
-    if (to) arrows.push({ startSquare: dev.fianchettoSquare, endSquare: to, color: arrowColor });
+    if (to) arrows.push({ from: dev.fianchettoSquare, to, mine, sight: true });
   }
   return arrows;
 }
@@ -293,10 +304,10 @@ export function buildOpeningDevelopmentPlan(
   const castlingField = fen.split(' ')[2] ?? '-';
   const mine = assessDevelopment(all, studentColorWB, castlingField);
   const theirs = assessDevelopment(all, enemyWB, castlingField);
-  const arrows = [
-    ...devArrows(mine, PLAN_BLUE),
-    ...devArrows(theirs, PLAN_AMBER),
-  ];
+  const arrows = planDoor(fen, studentColorWB, [
+    ...devArrows(mine, PLAN_MINE),
+    ...devArrows(theirs, PLAN_THEIRS),
+  ]);
   const openingLabel = opts?.openingName ?? null;
   const seed = opts?.seed ?? 0;
 
@@ -369,7 +380,7 @@ const applyMoveFen = (f: string, san: string): string | null => {
 };
 
 /** Render a plan beat from a side's move itinerary: depersonalized prose
- *  (chronological order, central break flagged) + PLAN_BLUE lead-the-eye arrows
+ *  (chronological order, central break flagged) + lead-the-eye arrows (arrow door)
  *  on each of that side's moves. Shared by the his-games + masters beats. */
 function renderPlanBeat(
   id: PlanBeatId,
@@ -389,17 +400,20 @@ function renderPlanBeat(
   const breakNote = brk ? `, with the ${fmt(brk)} break the key lever` : '';
   const namePart = openingName ? `In the ${openingName}, ` : '';
   const text = `${namePart}${who}'s ${planWord} is ${planStr}${breakNote}. It's ${conf}.`;
-  const arrows: PlanArrow[] = [];
+  const pairs: PlanPair[] = [];
   let cur = fen;
   let curSide: 'w' | 'b' = side;
   for (const san of line) {
     let mv: { from: string; to: string } | null = null;
+    const before = cur;
     try { const c = new Chess(cur); const r = c.move(san); mv = r; cur = c.fen(); } catch { break; }
-    if (curSide === side && mv && arrows.length < 4) {
-      arrows.push({ startSquare: mv.from, endSquare: mv.to, color: PLAN_BLUE });
+    if (curSide === side && mv && pairs.length < 4) {
+      pairs.push({ from: mv.from, to: mv.to, mine: true, fen: before });
     }
     curSide = curSide === 'w' ? 'b' : 'w';
   }
+  // The plan's owner is the one being taught here, so its moves read as "yours".
+  const arrows = planDoor(fen, side, pairs);
   return { id, text, arrows, squares: squaresOfArrows(arrows) };
 }
 
@@ -503,16 +517,16 @@ function majorityWing(counts: Record<'w' | 'b', WingCounts>, side: 'w' | 'b'): W
 
 /** Arrows showing a side advancing its pawns on a wing (each pawn → one square
  *  forward). Caps at 3 so the board doesn't get busy. */
-function majorityArrows(all: Located[], side: 'w' | 'b', wing: Wing, arrowColor: string): PlanArrow[] {
+function majorityArrows(all: Located[], side: 'w' | 'b', wing: Wing, mine: boolean): PlanPair[] {
   const files = wing === 'queenside' ? QUEENSIDE_FILES : KINGSIDE_FILES;
   const dir = side === 'w' ? 1 : -1;
-  const arrows: PlanArrow[] = [];
+  const arrows: PlanPair[] = [];
   for (const p of all) {
     if (p.type !== 'p' || p.color !== side || !files.has(fileOf(p.square))) continue;
     const r = rankOf(p.square);
     const nr = r + dir;
     if (nr < 1 || nr > 8) continue;
-    arrows.push({ startSquare: p.square, endSquare: `${fileOf(p.square)}${nr}`, color: arrowColor });
+    arrows.push({ from: p.square, to: `${fileOf(p.square)}${nr}`, mine });
     if (arrows.length >= 3) break;
   }
   return arrows;
@@ -520,8 +534,8 @@ function majorityArrows(all: Located[], side: 'w' | 'b', wing: Wing, arrowColor:
 
 /** Arrows for a pawn-storm toward the enemy king (opposite-side castling): the
  *  attacker's wing pawns point one square forward toward the enemy king's wing. */
-function stormArrows(all: Located[], attacker: 'w' | 'b', enemyKingWing: Wing, arrowColor: string): PlanArrow[] {
-  return majorityArrows(all, attacker, enemyKingWing, arrowColor);
+function stormArrows(all: Located[], attacker: 'w' | 'b', enemyKingWing: Wing, mine: boolean): PlanPair[] {
+  return majorityArrows(all, attacker, enemyKingWing, mine);
 }
 
 /**
@@ -566,7 +580,7 @@ export function buildMiddlegameOrientation(
   const enemyWing = majorityWing(counts, enemyWB);
 
   const parts: string[] = [];
-  const arrows: PlanArrow[] = [];
+  const pairs: PlanPair[] = [];
 
   // A PAWN RACE NEEDS PAWNS TO RACE WITH, AND A MIDDLEGAME TO RACE IN (review
   // walk 900, 2026-09-26: "The kings castled on opposite wings — this is a
@@ -595,22 +609,23 @@ export function buildMiddlegameOrientation(
       raceLine += ` — and note this pawn push goes the wrong way, opening lines in front of your OWN king instead of theirs`;
     }
     parts.push(raceLine);
-    arrows.push(...stormArrows(all, studentColorWB, enemyKingWing, PLAN_BLUE));
-    arrows.push(...stormArrows(all, enemyWB, myKingWing, PLAN_AMBER));
+    pairs.push(...stormArrows(all, studentColorWB, enemyKingWing, PLAN_MINE));
+    pairs.push(...stormArrows(all, enemyWB, myKingWing, PLAN_THEIRS));
   }
 
   if (studentWing && seat !== 'opponent') {
     parts.push(`your plan is to advance your ${studentWing} pawn majority and make it count`);
-    if (!oppositeCastling) arrows.push(...majorityArrows(all, studentColorWB, studentWing, PLAN_BLUE));
+    if (!oppositeCastling) pairs.push(...majorityArrows(all, studentColorWB, studentWing, PLAN_MINE));
   }
   if (enemyWing && seat !== 'student') {
     parts.push(`your opponent's plan is to push on the ${enemyWing}, where they hold the majority`);
-    if (!oppositeCastling) arrows.push(...majorityArrows(all, enemyWB, enemyWing, PLAN_AMBER));
+    if (!oppositeCastling) pairs.push(...majorityArrows(all, enemyWB, enemyWing, PLAN_THEIRS));
   }
 
   if (parts.length === 0) return null;
   const first = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
   const rest = parts.slice(1);
   const text = rest.length ? `${first}; ${rest.join('; ')}.` : `${first}.`;
+  const arrows = planDoor(fen, studentColorWB, pairs);
   return { id: 'middlegame-orientation', text, arrows, squares: squaresOfArrows(arrows) };
 }

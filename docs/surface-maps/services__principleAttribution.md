@@ -85,7 +85,7 @@
 
 ### `attributePrinciples` (function) — 64 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
-- `src/services/coachFeatureService.ts:840`
+- `src/services/coachFeatureService.ts:842`
 - `src/services/learnWalkBlumenfeld.test.ts:65`
 - `src/services/liveFundamental.ts:135`
 - `src/services/misconceptionClassifier.ts:244`
@@ -154,8 +154,8 @@
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
 - `src/services/autoAnalyzeGame.ts:373`
 - `src/services/autoAnalyzeGame.ts:376`
-- `src/services/coachFeatureService.ts:845`
 - `src/services/coachFeatureService.ts:847`
+- `src/services/coachFeatureService.ts:849`
 - `src/services/discussionPractice.ts:353`
 - `src/services/discussionPractice.ts:361`
 - `src/services/liveFundamental.ts:125`

@@ -38,7 +38,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `habitIsOwed` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:2326`
+- `src/services/coachFeatureService.ts:2329`
 - `src/services/positionFacts.ts:872`
 
 ### `methodBeatFor` (function) — 43 call sites

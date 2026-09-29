@@ -97,3 +97,26 @@ describe('arrowDoor — played trail and named moves', () => {
     expect(namedMoveClaim('f1', 'f3', ctx, 'engine', 't').role).toBe('vision');
   });
 });
+
+describe('arrowDoor — a sight line takes its owner\'s colour', () => {
+  it('their queen eyeing your pawn is red; your bishop eyeing theirs is green', () => {
+    const r = admitArrows([
+      { from: 'c4', to: 'e4', role: 'vision', source: 't' },
+      { from: 'g5', to: 'd8', role: 'vision', source: 't' },
+    ], ctxW);
+    expect(r.arrows.map((a) => a.color)).toEqual([ARROW_COLOR.theirs, ARROW_COLOR.mine]);
+  });
+});
+
+describe('arrowDoor — missed (better move shown on the board after)', () => {
+  // 1.e4 e5 2.Nf3 Nc6 3.Bc4 — student (Black) played 3…Nd4?; better was 3…Nf6.
+  const before = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3';
+  const after = 'r1bqkbnr/pppp1ppp/8/4p3/2BnP3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4';
+  it('a better move whose piece is still there is drawn', () => {
+    expect(refusalFor({ from: 'g8', to: 'f6', role: 'missed', fen: before, source: 't' }, { fen: after, studentColor: 'black' })).toBeNull();
+  });
+  it('a better move by the piece that just moved away is not drawn', () => {
+    // …Nb4 (c6-knight) was the "better" move, but the c6-knight is on d4 now.
+    expect(refusalFor({ from: 'c6', to: 'b4', role: 'missed', fen: before, source: 't' }, { fen: after, studentColor: 'black' })).toBe('moved-away');
+  });
+});

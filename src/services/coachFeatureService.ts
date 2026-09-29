@@ -64,7 +64,8 @@ import { matchFundamental, matchTag, type WeaknessSignal } from './weaknessSigna
 import { loadWeaknessSignals } from './weaknessSignalLoader';
 import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap, isMethodSentence } from './principleVoice';
 import { resolveCoachNarration } from '../utils/coachNarration';
-import type { BadHabit, CoachContext, UserProfile, CoachNarration, OpeningKey } from '../types';
+import type { BadHabit, CoachContext, UserProfile, CoachNarration, OpeningKey, BoardArrow } from '../types';
+import { admitArrow, admitArrows, type ArrowClaim } from './arrowDoor';
 import { departureRecordSentence, openingRecordClause } from './openingRecordBeat';
 import { ecoOfKey, openingEntryForKey, openingFamily, openingKeyFromSans } from './openingKey';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
@@ -588,7 +589,8 @@ export interface ReviewMoveSegment {
    *  beat (opening-development / middlegame orientation). The board stays put —
    *  these arrows SHOW the plan instead of moving pieces (David 2026-07-19).
    *  Undefined on ordinary moves. */
-  planArrows?: Array<{ startSquare: string; endSquare: string; color: string }>;
+  /** Arrow-door output only (`arrowDoor`). */
+  planArrows?: BoardArrow[];
   /** The projected line this segment's narration MENTIONS in prose — the delta
    *  ("the line runs h3, then d5, then e5…"), the opponent-punishment line
    *  ("here's how you take advantage: Ne5, then bxc5…"), or the deep-threat line
@@ -1734,9 +1736,10 @@ export function buildReviewSegments(
             }
           }
           if (chain.stance === 'played' || chain.stance === 'allowed') {
-            const CHAIN_ARROW_HEX: Record<string, string> = { green: '#22c55e', yellow: '#eab308', red: '#ef4444', blue: '#3b82f6' };
+            // Sight lines (the piece that attacks the loose target) through the
+            // arrow door, on the board after the move — each takes its owner's colour.
             const arr = causalChainArrows(chain);
-            if (arr.length) causalArrows = arr.map((a) => ({ startSquare: a.from, endSquare: a.to, color: CHAIN_ARROW_HEX[a.color] ?? '#22c55e' }));
+            if (arr.length) causalArrows = admitArrows(arr.map((a): ArrowClaim => ({ from: a.from, to: a.to, role: 'vision', source: 'review.causalChain' })), { fen: fenPair.fenAfter, studentColor: playerColor ?? moverColor }).arrows;
           }
         }
       } catch { causalLead = null; }
@@ -2546,7 +2549,8 @@ export function buildReviewSegments(
           // Draw the student's threatened move (green — your attack).
           try {
             const tc = new Chess(nullFen).move(threatSan.replace(/[.,]$/, ''));
-            if (tc) threatArrows = [{ startSquare: tc.from, endSquare: tc.to, color: '#22c55e' }];
+            const yours = tc ? admitArrow({ from: tc.from, to: tc.to, role: 'play', fen: nullFen, source: 'review.yourThreat' }, { fen: fenPair.fenAfter, studentColor: playerColor }) : null;
+            if (yours) threatArrows = [yours];
           } catch { /* arrow is a bonus — never block the narration */ }
         }
       }
@@ -2634,10 +2638,16 @@ export function buildReviewSegments(
         narrationSource = narrationSource ?? 'per-move';
         // Draw the danger (red): the threatened move from → landing, plus a ray
         // to each fork victim so the eye lands on what's under attack.
-        threatArrows = [
-          { startSquare: oppThreat.from, endSquare: oppThreat.landing, color: '#ef4444' },
-          ...oppThreat.targetSquares.map((sq) => ({ startSquare: oppThreat.landing, endSquare: sq, color: '#f97316' })),
-        ];
+        // Their move is a plan of theirs (a fork lands quietly, so it is not a
+        // capture that wins now); the rays to what it hits are sight lines on
+        // the board AFTER it lands — the piece is not on the landing square yet.
+        const threatCtx = { fen: fenPair.fenAfter, studentColor: playerColor };
+        let landedFen: string | null = null;
+        try { const lc = new Chess(fenPair.fenAfter); if (lc.move({ from: oppThreat.from, to: oppThreat.landing, promotion: 'q' })) landedFen = lc.fen(); } catch { landedFen = null; }
+        threatArrows = admitArrows([
+          { from: oppThreat.from, to: oppThreat.landing, role: 'theirs', vouchedBy: 'engine', source: 'review.oppThreat' },
+          ...(landedFen ? oppThreat.targetSquares.map((sq): ArrowClaim => ({ from: oppThreat.landing, to: sq, role: 'vision', fen: landedFen, source: 'review.oppThreat.ray' })) : []),
+        ], threatCtx).arrows;
       }
       // GEM CRUSH IN REVIEW (David: "add the gem calculator into review… showing
       // crush lines during review!!!"). If the path BEFORE this move is exactly a
@@ -2658,11 +2668,12 @@ export function buildReviewSegments(
           });
           narration = narration ? `${narration} ${gemSay}` : gemSay;
           narrationSource = narrationSource ?? 'per-move';
-          const gemArrows = gemCrush.arrows.map((a) => ({
-            startSquare: a.from,
-            endSquare: a.to,
-            color: a.color === 'green' ? '#22c55e' : a.color === 'red' ? '#ef4444' : '#3b82f6',
-          }));
+          // The crush is the engine's own reply; the red "tempting mistake"
+          // arrow is a bad move and is never drawn.
+          const gemArrows = admitArrows(
+            gemCrush.arrows.filter((a) => a.color !== 'red').map((a): ArrowClaim => ({ from: a.from, to: a.to, role: 'play', vouchedBy: 'engine', source: 'review.gemCrush' })),
+            { fen: fenPair.fenAfter, studentColor: playerColor },
+          ).arrows;
           threatArrows = [...(threatArrows ?? []), ...gemArrows];
         }
       }
@@ -4043,11 +4054,10 @@ async function groundOpeningPlanInBook(segments: ReviewMoveSegment[]): Promise<v
   // Blue = the student's pieces, amber = the opponent's (devArrows' scheme).
   const studentIsWhite = seg.playerColor === 'white';
   const sideOf = (home: string): 'student' | 'opponent' => ((home[1] === '1') === studentIsWhite ? 'student' : 'opponent');
-  seg.planArrows = [...targets.entries()].map(([from, t]) => ({
-    startSquare: from,
-    endSquare: t.to,
-    color: sideOf(from) === 'student' ? '#3b82f6' : '#f59e0b',
-  }));
+  seg.planArrows = admitArrows(
+    [...targets.entries()].map(([from, t]): ArrowClaim => ({ from, to: t.to, role: sideOf(from) === 'student' ? 'play' : 'theirs', source: 'review.devTargets' })),
+    { fen: seg.fenAfter, studentColor: seg.playerColor },
+  ).arrows;
   // SPEAK the scheme SEAT-AWARE — "your f1-bishop to d3", "expect their knight
   // to head for e7" — never a sideless mix of both armies in one clause.
   const mineT = [...targets.entries()].filter(([f]) => sideOf(f) === 'student');

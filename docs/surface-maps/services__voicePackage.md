@@ -43,8 +43,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildVoicePackage` (function) — 77 call sites
-- `src/components/Coach/CoachGameReview.tsx:1983`
-- `src/components/Coach/CoachGameReview.tsx:2021`
+- `src/components/Coach/CoachGameReview.tsx:2005`
+- `src/components/Coach/CoachGameReview.tsx:2043`
 - `src/components/Coach/CoachTeachPage.tsx:7587`
 - `src/components/Coach/CoachTeachPage.tsx:8476`
 - `src/components/Coach/CoachTeachPage.tsx:8531`

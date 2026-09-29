@@ -10,7 +10,7 @@ function beforeLast(sans: string[]): { fen: string; san: string } {
 }
 
 describe('buildOpponentMoveTeaching (read the opponent — targets in your position)', () => {
-  it('flags a student piece left LOOSE by the opponent move, with an amber arrow', () => {
+  it('flags a student piece left LOOSE by the opponent move, with a red threat arrow (arrow door: red = coming at you)', () => {
     // Student = White. Black plays a move whose piece attacks an undefended White piece.
     // Setup: White bishop on c4 undefended; Black plays ...b5 hitting it? No — build a
     // clean loose-piece case: White knight on e5 undefended, Black plays ...d6 attacking it.
@@ -22,7 +22,7 @@ describe('buildOpponentMoveTeaching (read the opponent — targets in your posit
     expect(beat!.text).toMatch(/loose|watch out/i);
     expect(beat!.text).toMatch(/e5/);
     expect(beat!.arrows[0]?.endSquare).toBe('e5');
-    expect(beat!.arrows[0]?.color).toBe('#f59e0b');
+    expect(beat!.arrows[0]?.color).toBe('#ef4444');
   });
 
   it('names a weak student pawn the opponent trains on', () => {

@@ -266,19 +266,19 @@
 - `src/services/coachApi.speakableFacts.test.ts:53`
 
 ### `voiceFacts` (function) — 35 call sites
-- `src/components/Coach/CoachGameReview.tsx:1654`
-- `src/components/Coach/CoachGameReview.tsx:1773`
-- `src/components/Coach/CoachGameReview.tsx:1961`
+- `src/components/Coach/CoachGameReview.tsx:1676`
+- `src/components/Coach/CoachGameReview.tsx:1795`
+- `src/components/Coach/CoachGameReview.tsx:1983`
 - `src/hooks/usePhaseNarration.ts:726`
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:256`
 - `src/services/coachChatText.ts:221`
-- `src/services/coachFeatureService.ts:136`
-- `src/services/coachFeatureService.ts:386`
-- `src/services/coachFeatureService.ts:521`
+- `src/services/coachFeatureService.ts:137`
+- `src/services/coachFeatureService.ts:387`
 - `src/services/coachFeatureService.ts:522`
-- `src/services/coachFeatureService.ts:4683`
-- `src/services/coachFeatureService.ts:4836`
+- `src/services/coachFeatureService.ts:523`
+- `src/services/coachFeatureService.ts:4693`
+- `src/services/coachFeatureService.ts:4846`
 - `src/services/coachLaneWiring.test.ts:190`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`

@@ -282,7 +282,7 @@
 - `src/services/planMarks.test.ts:399`
 
 ### `gameArcs` (function) — 1 call site
-- `src/services/coachFeatureService.ts:1319`
+- `src/services/coachFeatureService.ts:1321`
 
 ### `aimsOf` (re-export) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9683`

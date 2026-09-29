@@ -91,6 +91,8 @@ import { db } from '../../db/schema';
 import { getOrBuildReviewNarration, isReviewUncapped, reviewMoveInputsFrom } from '../../services/reviewNarrationBuild';
 import { CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
+import { admitArrow } from '../../services/arrowDoor';
+import type { BoardArrow } from '../../types';
 import { registerCoachHands, actionForCommand, actuate } from '../../services/coachActuator';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
 import type { CoachGameMove, KeyMoment, ReviewState, GameAccuracy, MoveClassificationCounts, PhaseAccuracy, MissedTactic, ChatMessage as ChatMessageType, MoveClassification, StockfishAnalysis } from '../../types';
@@ -202,6 +204,26 @@ const REVIEW_LOCKED: Record<'play' | 'takeBack' | 'setPosition' | 'reset', strin
   setPosition: 'set_board_position is locked on the review surface — the timeline is the source of truth.',
   reset: 'reset_board is locked on the review surface — the student can use the Jump-to-Start nav button to rewind.',
 };
+
+/** One ply of a line walked on the review board, through the arrow door —
+ *  checked on the board BEFORE it, coloured by whose move it is. */
+function lineArrow(fenBefore: string, uci: string, studentColor: 'white' | 'black'): BoardArrow[] | null {
+  const a = admitArrow({ from: uci.slice(0, 2), to: uci.slice(2, 4), role: 'line', fen: fenBefore, source: 'review.line' }, { fen: fenBefore, studentColor });
+  return a ? [a] : null;
+}
+
+/** The board a line's FIRST ply was played on: whichever candidate the move is
+ *  legal on. */
+function firstPlyBoard(uci: string, candidates: ReadonlyArray<string | undefined>): string | null {
+  for (const fen of candidates) {
+    if (!fen) continue;
+    try {
+      const c = new Chess(fen);
+      if (c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] ?? 'q' })) return fen;
+    } catch { /* not this board */ }
+  }
+  return null;
+}
 
 export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const {
@@ -377,7 +399,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // the stronger line "has no arrows"). Each played ply of the shown line paints
   // a green arrow on the move it's narrating, so the eye lands where the voice is.
   const [walkExplorationArrows, setWalkExplorationArrows] =
-    useState<Array<{ startSquare: string; endSquare: string; color: string }> | null>(null);
+    useState<BoardArrow[] | null>(null);
   const walkExplorationPlyRef = useRef<number | null>(null);
   // Spoken-line playout (the delta arrows) — token supersedes an in-flight
   // playout the instant the walk advances or a card opens; the set stops a
@@ -1780,7 +1802,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       const ply = line.plies[i];
       setWalkExplorationFen(ply.fenAfter);
       setWalkExplorationSan(ply.san);
-      setWalkExplorationArrows([{ startSquare: ply.uci.slice(0, 2), endSquare: ply.uci.slice(2, 4), color: '#22c55e' }]);
+      setWalkExplorationArrows(lineArrow(ply.fenBefore, ply.uci, playerColor));
       playMoveSound(ply.san);
       const spoken = warmed.get(i) ?? (rawWhys[i].fact.length > 0 ? rawWhys[i].fact : null);
       if (betterLineTokenRef.current !== token || !walkMountedRef.current) { onDone(); return; }
@@ -1904,7 +1926,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       const replyFen = probe.fen();
       setWalkExplorationFen(replyFen);
       setWalkExplorationSan(reply.san);
-      setWalkExplorationArrows([{ startSquare: reply.from, endSquare: reply.to, color: '#ef4444' }]);
+      setWalkExplorationArrows(lineArrow(args.fenAfter, `${reply.from}${reply.to}`, playerColor));
       walkExploreSansRef.current = [...walkExploreSansRef.current, reply.san];
       playMoveSound(reply.san);
       // Narrate their move the way the walk narrates an opponent move (a
@@ -1967,7 +1989,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       const b = beats[i];
       setWalkExplorationFen(b.fenBefore);
       if (b.showUci) {
-        setWalkExplorationArrows([{ startSquare: b.showUci.slice(0, 2), endSquare: b.showUci.slice(2, 4), color: '#3b82f6' }]);
+        setWalkExplorationArrows(lineArrow(b.fenBefore, b.showUci, playerColor));
       } else {
         setWalkExplorationArrows(null);
       }
@@ -2008,7 +2030,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           try {
             const cc = new Chess(prevFen);
             const m = cc.move(step.san);
-            if (m) setWalkExplorationArrows([{ startSquare: m.from, endSquare: m.to, color: '#3b82f6' }]);
+            if (m) setWalkExplorationArrows(lineArrow(prevFen, `${m.from}${m.to}`, playerColor));
           } catch { /* arrow is a bonus */ }
           setWalkExplorationFen(step.fenAfter);
           playMoveSound(step.san);
@@ -2093,11 +2115,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       for (let i = 0; i < sans.length; i++) {
         if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) return;
         let mv: ReturnType<Chess['move']> | null = null;
+        const beforeMv = c.fen();
         try { mv = c.move(sans[i]); } catch { break; }
         if (!mv) break;
         setWalkExplorationFen(c.fen());
         setWalkExplorationSan(mv.san);
-        setWalkExplorationArrows([{ startSquare: mv.from, endSquare: mv.to, color: '#f59e0b' }]);
+        setWalkExplorationArrows(lineArrow(beforeMv, `${mv.from}${mv.to}`, playerColor));
         playMoveSound(mv.san);
         const moveNo = Math.ceil((i + 1) / 2);
         const moverName = mv.color === 'w' ? 'white' : 'black';
@@ -2159,7 +2182,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         try {
           const cc = new Chess(prevFen);
           const m = cc.move(step.san);
-          if (m) setWalkExplorationArrows([{ startSquare: m.from, endSquare: m.to, color: '#3b82f6' }]);
+          if (m) setWalkExplorationArrows(lineArrow(prevFen, `${m.from}${m.to}`, playerColor));
         } catch { /* arrow is a bonus */ }
         setWalkExplorationFen(step.fenAfter);
         setWalkExplorationSan(step.san);
@@ -2528,7 +2551,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       } catch { san = null; }
       setWalkExplorationFen(a.fenAfter);
       setWalkExplorationSan(san);
-      setWalkExplorationArrows([{ startSquare: from, endSquare: to, color: '#22c55e' }]);
+      setWalkExplorationArrows(lineArrow(a.fenBefore, `${from}${to}`, playerColor));
       if (san) { try { playMoveSound(san); } catch { /* sound optional */ } }
       await new Promise((r) => setTimeout(r, 1050));
     }
@@ -2755,14 +2778,19 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // an in-flight reveal. Each timer instead self-guards on the token (bumped on
     // ply change), mount, and the anchor ply — so a ply change no-ops the stale
     // ones and the arrows finish painting even after the statement ends.
-    const painted: Array<{ startSquare: string; endSquare: string; color: string }> = [];
+    const painted: BoardArrow[] = [];
     arrows.forEach((a, i) => {
       if (!a.uci || a.uci.length < 4) return;
       setTimeout(() => {
         if (autoLineArrowTokenRef.current !== token
           || !walkMountedRef.current
           || walkPlyRef.current !== anchor) return;
-        painted.push({ startSquare: a.uci.slice(0, 2), endSquare: a.uci.slice(2, 4), color: '#22c55e' });
+        // Each ply of the spoken line on the board BEFORE it: the previous
+        // ply's frame, or — for the first — whichever of this ply's two boards
+        // the move is legal on.
+        const before = i > 0 ? arrows[i - 1].fenAfter : firstPlyBoard(a.uci, [seg?.fenAfter, seg?.fenBefore]);
+        const drawn = before ? lineArrow(before, a.uci, playerColor) : null;
+        if (drawn) painted.push(...drawn);
         setWalkExplorationArrows([...painted]);
       }, Math.round(step * (i + 1)));
     });
@@ -3708,9 +3736,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         if (!seg || !hasArrow) return undefined;
         const uci = seg.bestMoveUci;
         if (!uci) return undefined;
-        const startSquare = uci.slice(0, 2);
-        const endSquare = uci.slice(2, 4);
-        return [{ startSquare, endSquare, color: '#22c55e' }];
+        // The better move lives on the board BEFORE the student's move, and
+        // the walk shows the board AFTER it — the door checks both.
+        const missed = admitArrow(
+          { from: uci.slice(0, 2), to: uci.slice(2, 4), role: 'missed', fen: seg.fenBefore, source: 'review.betterMove' },
+          { fen: displayFen, studentColor: playerColor },
+        );
+        return missed ? [missed] : undefined;
       })();
       // Walk-mode board is interactive only when a green arrow is on
       // screen — the student can grab the suggested piece and play it
