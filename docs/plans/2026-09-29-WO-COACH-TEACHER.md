@@ -64,7 +64,7 @@ Dependency graph: `WO-0` and `WO-5` any time · `WO-1` first on the Learn side �
 ---
 
 ### WO-0 — Tape bugs (hours)
-**Status:** ⚪ open
+**Status:** 🔵 this session — 3 of 4 fixed on branch `wo0-chat-bugs` (why-not → candidate lane; unclosed `[VOICE:` stripped; "let's play, I'll be white" — the play pattern missed the comma and the phone apostrophe ’, so it fell to the model which invented a Caro-Kann). Open: the takeback stall (needs a localhost repro).
 **Files:** `src/services/questionIntents.ts`, `src/services/coachApi.ts` (only the lines named), the markup stripper wherever `[VOICE:` leaks.
 - `[VOICE:` markup leaked into chat AND voice on a typo'd question (tape Q8).
 - `\bwhy\s+not\b` sits in the best-move-reason list (`questionIntents.ts:~437`), so "why not e5?" answers with the best move. Route to a why-not lane (a stub that WO-3 fills; until then: evaluate X, say its cost vs best).
