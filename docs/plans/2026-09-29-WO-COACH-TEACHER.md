@@ -148,7 +148,7 @@ Today (engineer map, `brainstorm-r1/engineer.md`): ~15 lanes. One (`computePosit
 | WO | status | owner |
 |---|---|---|
 | WO-0 bugs | ⚪ | — |
-| WO-1 door | 🔵 | this session |
+| WO-1 door | 🔵 1a ✅ on main (PR #976, live in CoachTeachPage chunk); 1b next | this session |
 | WO-2 plan thread | ⚪ | — |
 | WO-3 BoardQuery chat | ⚪ | — |
 | WO-4 shrinking repeats | ⚪ | — |
