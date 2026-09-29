@@ -29,7 +29,6 @@ import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePacka
 import { buildPositionalRead } from '../../services/positionalRead';
 import { curatedBeatAt } from '../../services/curatedBeatSource';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
-import type { CommentaryKind } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
 // Walkthrough arrows/highlights render through the SAME react-chessboard
@@ -179,7 +178,6 @@ import type { WalkthroughSession } from '../../types/walkthrough';
 import { classifyPhase } from '../../services/gamePhaseService';
 import { narrateContinuationMove } from '../../services/continuationMoveNarration';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
-import { buildOpeningChainFacts } from '../../services/openingFactChains';
 import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
 import { sanToSpeech } from '../../utils/sanToSpeech';
 import { noteCoverageForLine } from '../../services/danyaTeachingService';
@@ -208,8 +206,7 @@ import {
   noteFamilyFork, markWalked, unwalked, nextForkToOffer, progressAt,
   type ForkLog, type Fork,
 } from '../../services/branchExplorer';
-import { warmAmateurPlay, buildRatingRealityFact, getCachedAmateurPlay } from '../../services/amateurPlayCache';
-import { masterPlayCache } from '../../services/masterPlayCache';
+import { warmAmateurPlay, getCachedAmateurPlay } from '../../services/amateurPlayCache';
 
 // The speedrun's two remaining beats (2026-08-06): a refuted tempting move is
 // worth at most a couple of warnings a game; priority-first framing needs
@@ -219,9 +216,6 @@ import { masterPlayCache } from '../../services/masterPlayCache';
 // subtle and less often hints. Weaker player much more obvious").
 const REJECTED_TEMPTING_MAX_PER_GAME = 2;
 const PRIORITY_FIRST_MIN_PLY_GAP = 10;
-/** Beat kinds Learn cannot use — its tactics lane already speaks them. Hoisted
- *  so the set is not rebuilt on every turn. */
-const SKIP_TACTIC_BEATS: ReadonlySet<CommentaryKind> = new Set(['tactic']);
 import { captureEvent } from '../../services/analytics';
 
 import { getNeonColor, scaledShadow } from '../../utils/neonColors';
@@ -264,9 +258,9 @@ import { gradePlayedMove } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause } from '../../services/opponentGap';
 import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
-import { buildCausalChain, causalChainArrows, causalChainHighlights } from '../../services/causalChain';
+import { buildCausalChain, causalChainHighlights } from '../../services/causalChain';
 import { renderCausalChain } from '../../services/causalChainVoice';
-import { explainBestMoveGrounded, seatPieceReferences } from '../../services/groundedAnswer';
+import { seatPieceReferences } from '../../services/groundedAnswer';
 import { rankByPopularity, popularityLabel, type RankedLineOption } from '../../services/linePickerPopularity';
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { applyCandidateArrows, candidateHighlightMarkers, gradeNarrationText } from '../../services/coachAnswerGates';
@@ -1636,9 +1630,6 @@ export function CoachTeachPage(): JSX.Element {
   /** Any new move ends a line on the board — the game is the ground truth. */
   useEffect(() => { clearLineWalk(); }, [game.history.length, clearLineWalk]);
 
-  /** Traps/gems already announced this game (openingFactChains dedup) — the
-   *  same lurking line isn't re-announced on every ply it stays live. */
-  const announcedTrapsRef = useRef(new Set<string>());
   /** OPENING ANNOUNCEMENT dedup (David 2026-08-06: "I should hear some
    *  important phrases about the Vienna as soon as the coach realizes I'm
    *  playing it"). The last opening name the coach announced aloud this
@@ -1676,7 +1667,6 @@ export function CoachTeachPage(): JSX.Element {
   const forgetPageRefs = useCallback((): void => {
     announcedPliesRef.current.clear();
     liveGradesRef.current.clear();
-    announcedTrapsRef.current.clear();
     fundamentalSeenRef.current.clear();
     planArcRef.current = { theirs: EMPTY_ARC, mine: EMPTY_ARC };
     positionalSaidRef.current.clear();
@@ -1833,7 +1823,6 @@ export function CoachTeachPage(): JSX.Element {
    *  narration's own arrow pass so the later setArrows doesn't wipe them.
    *  Cleared on the student's next move with the rest of the board art. */
   const chainArrowsRef = useRef<BoardArrow[]>([]);
-  const chainHighlightsRef = useRef<BoardHighlight[]>([]);
 
 
   // A live session must survive a deploy: hold the service-worker HANDOVER
@@ -2064,7 +2053,6 @@ export function CoachTeachPage(): JSX.Element {
     setArrows([]);
     setHighlights([]);
     chainArrowsRef.current = [];
-    chainHighlightsRef.current = [];
     useCoachMemoryStore.getState().setIntendedOpening({
       name: openingName,
       color: studentSide,
@@ -7016,7 +7004,7 @@ export function CoachTeachPage(): JSX.Element {
           // controlled by only ever marking what a surviving claim entitles —
           // upstream, where it can be judged — not by truncating here.
           const mergedArrows = uniqueArrows(groundArrows([...codeArrows, ...chainArrowsRef.current], fen));
-          const mergedHighlights = [...codeHighlights, ...chainHighlightsRef.current];
+          const mergedHighlights = codeHighlights;
           // LEAD-THE-EYE SYNC (David 2026-08-07: "make sure they fire on
           // every mentioned move, AS it's being mentioned — mirror how we
           // do that for other coach tabs"). This mirrors LessonPlayer's
@@ -7034,11 +7022,10 @@ export function CoachTeachPage(): JSX.Element {
             setHighlights(mergedHighlights);
           } else {
             const chainKeys = new Set(chainArrowsRef.current.map((a) => `${a.startSquare}-${a.endSquare}`));
-            const chainHl = new Set(chainHighlightsRef.current.map((h) => h.square));
             const revealed = new Set<string>();
             const paintRevealed = (): void => {
               setArrows(mergedArrows.filter((a) => chainKeys.has(`${a.startSquare}-${a.endSquare}`) || revealed.has(a.endSquare)));
-              setHighlights(mergedHighlights.filter((h) => chainHl.has(h.square) || revealed.has(h.square)));
+              setHighlights(mergedHighlights.filter((h) => revealed.has(h.square)));
             };
             paintRevealed();
             const markerSquares = Array.from(new Set([
@@ -8493,7 +8480,6 @@ export function CoachTeachPage(): JSX.Element {
     setArrows([]);
     setHighlights([]);
     chainArrowsRef.current = [];
-    chainHighlightsRef.current = [];
     // Silent faucet: a genuine eval-worsening slip during guided play feeds
     // the bucket so it resurfaces as a drill. No panel/voice — the brain is
     // already narrating this move. DEFERRED a few seconds (2026-08-06,
@@ -8673,33 +8659,11 @@ export function CoachTeachPage(): JSX.Element {
               const probe = new Chess(move.fen);
               const m = probe.move(reply);
               if (m) {
-                const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
-                const mover = NAME[m.piece] ?? 'piece';
-                const facts: string[] = [];
-                // 1. What it did — the victim is gone from the after-FEN, so this
-                //    is the ONLY source of the captured piece.
-                // Speakable at the SOURCE: "c6->a5" was read aloud verbatim on
-                // any containment fallback (David's 2026-08-06 session).
-                facts.push(m.captured
-                  ? `CAPTURED the ${NAME[m.captured] ?? 'piece'} on ${m.to} (${mover} from ${m.from}).`
-                  : `quiet ${mover} move from ${m.from} to ${m.to}, no capture.`);
-                // 2. Check / mate / stalemate — straight from chess.js.
-                if (probe.isCheckmate()) facts.push('This is CHECKMATE — the game is over.');
-                else if (probe.isCheck()) facts.push('It gives CHECK.');
-                else if (probe.isStalemate()) facts.push('This is STALEMATE — a draw.');
-                // 3. Why it's strong — material/check judgment (no-LLM grounded "why").
-                const coachColor: 'white' | 'black' = playerColor === 'white' ? 'black' : 'white';
-                const why = explainBestMoveGrounded(move.fen, null, `${m.from}${m.to}${m.promotion ?? ''}`, coachColor);
-                // Trim a trailing period before adding ours — "eyeing f5.."
-                // split the downstream sentence streamer mid-parenthesis and
-                // Ruth spoke a bare "3 points)." fragment (2026-08-06).
-                if (why) facts.push(`Why it's strong: ${why.replace(/\.+$/, '')}.`);
                 // 4. REAL tactics + loose pieces in the resulting position (student
                 //    to move) — the true fork/pin/threat, so the coach narrates the
                 //    ACTUAL tactic instead of inventing one (the validators were
                 //    stripping invented "fork/discovery" all session).
                 const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
-                const studentCC: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
                 // THE WATCHER FEEDS THE PROMPT (David 2026-08-07: "WIRE THAT
                 // SHIT IN!!"). The engine read runs FIRST — pre-warmed during
                 // the coach's think-time pad, so this await is normally a
@@ -8981,28 +8945,6 @@ export function CoachTeachPage(): JSX.Element {
                   }
                 } catch { /* the position-facts lane is a bonus, never a blocker */ }
 
-                const tctx = buildTacticsLiveContext(probe.fen(), studentBest, studentCC, rating);
-                // Tactics facts are held back until the question decision
-                // below — when a guided-find or threat-check question arms,
-                // narrating the live tactics would hand over the very answer
-                // the question withholds (honesty contract rule 1).
-                const tacticsFacts: string[] = [];
-                // SAY WHOSE TACTIC IT IS. The list was side-blind, so the
-                // model could read the OPPONENT'S fork as the student's
-                // chance — on David's 2026-08-07 game a probe found every
-                // position reporting Black's geometry with nothing marking
-                // it. Same for hanging pieces: "yours" vs "theirs" is the
-                // difference between a warning and an opportunity.
-                if (tctx.immediate.length > 0) {
-                  tacticsFacts.push(`Real tactics on the board now: ${tctx.immediate
-                    .map((t) => `${t.description} (${t.side === 'student' ? "the STUDENT's tactic" : t.side === 'opponent' ? "the OPPONENT's tactic — a danger to the student" : 'side unknown'})`)
-                    .join('; ')}.`);
-                }
-                if (tctx.hanging.length > 0) {
-                  tacticsFacts.push(`Undefended/attacked: ${tctx.hanging
-                    .map((h) => `${h.color === studentCC ? "the student's" : "the opponent's"} ${NAME[h.piece] ?? h.piece} on ${h.square}`)
-                    .join(', ')}.`);
-                }
                 // THE TACTICS ALERT — spoken, deterministic, board-true by
                 // construction (every claim reads straight off the current
                 // FEN; the PV-conditional threats stay prompt-only because
@@ -9062,7 +9004,6 @@ export function CoachTeachPage(): JSX.Element {
                       if (pf) {
                         priorityFirstLastPlyRef.current = plyNow;
                         captureEvent('priority_first_offered', { surface: 'coach-teach', target: pf.targetSquare });
-                        facts.push(packageForRegister(pf.hint, discussion.hintDial.register));
                         queueSpokenHint(probe.fen(), packageForRegister(pf.hint, discussion.hintDial.register), 'priorityFirst');
                       }
                     }
@@ -9086,7 +9027,6 @@ export function CoachTeachPage(): JSX.Element {
                       if (rt) {
                         rejectedTemptingCountRef.current += 1;
                         captureEvent('rejected_tempting_offered', { surface: 'coach-teach', tempting: rt.temptingSan, refutation: rt.refutationSan });
-                        facts.push(packageForRegister(rt.hint, discussion.hintDial.register));
                         queueSpokenHint(probe.fen(), packageForRegister(rt.hint, discussion.hintDial.register), 'rejectedTempting');
                       }
                     }
@@ -9133,7 +9073,7 @@ export function CoachTeachPage(): JSX.Element {
                           ];
                           for (const e of arcLines) {
                             const line = gradeNarrationText(e.text, probe.fen(), 'CoachTeachPage.planArc')?.trim();
-                            if (line) { facts.push(line); queueSpokenHint(probe.fen(), line, 'planArc', e.squares); }
+                            if (line) queueSpokenHint(probe.fen(), line, 'planArc', e.squares);
                           }
                         } catch { /* the arc is a bonus, never a blocker */ }
                         // The look-ahead PARAGRAPH (key square, board read, line
@@ -9147,166 +9087,12 @@ export function CoachTeachPage(): JSX.Element {
                     } catch { /* the plan is a bonus, never a blocker */ }
                   }
                 } catch { /* engine down → no move named; the prompt keeps the prompt-for-next-move general */ }
-                // Tactics facts reach the narration ONLY when no question is
-                // open — otherwise they leak the answer.
-                facts.push(...tacticsFacts);
-                // TRADE OFF THEIR BEST PIECE — the Naroditsky speedrun's middle
-                // beat (B7r1bgPEyIQ ~18-23min; David: "trading off opponents
-                // best piece"). The tactic and improving-move beats already
-                // live above (tacticsFacts / think-aloud / the engine rec);
-                // this is the one the chain had no slot for. buildPlayCommentary
-                // is deliberately narrow — an unchallengeable outpost knight or
-                // an open-file rook, and only when the trade is available on
-                // THIS move — so most turns it stays silent (G0: the read is
-                // computed; the model only phrases it).
-                try {
-                  // ASK FOR WHAT WE CAN USE. 'tactic' beats are dropped here —
-                  // tacticsFacts above already speaks the side-attributed
-                  // library, and one position must never be narrated twice —
-                  // but this used to build the beat and THEN discard it. The
-                  // builder is a single-return ladder, so a discarded tactic
-                  // ended the turn's commentary before the trade beat was ever
-                  // evaluated: a whole 24-ply game (2026-08-09) produced a
-                  // tactic on six middlegame plies and reached
-                  // `trade-the-best-piece` on none of them. Naming the skip up
-                  // front lets the ladder fall through to a beat that has no
-                  // other voice.
-                  const beat = buildPlayCommentary({
-                    fen: probe.fen(),
-                    studentColor: playerColor,
-                    skipKinds: SKIP_TACTIC_BEATS,
-                  });
-                  if (beat && beat.kind === 'seeding-observation') {
-                    facts.push(...beat.facts);
-                    // The prompt-only half of the same lane. `spoke:false` is
-                    // honest here by construction — these reach the model's
-                    // fact list, never the voice — and keeping them in the same
-                    // event means one query answers "did this beat happen" for
-                    // both routes instead of two half-answers.
-                    captureEvent('coach_beat_offered', { surface: 'coach-teach', kind: beat.kind, spoke: false });
-                  }
-                } catch { /* commentary is a bonus, never a blocker */ }
-                // OPENING FACT-CHAIN (David 2026-07-11: "the purpose of each
-                // move and what traps might form") — during the opening, hand
-                // the narration where the moves LEAD (named DB continuations)
-                // + any engine-verified trap/gem forming on this exact path.
-                // Suppressed while a question is open (nothing extra leaks),
-                // and each lurking line is announced once per game.
-                {
-                  try {
-                    const chainHistory = historyAfterReply;
-                    if (chainHistory.length <= 2) {
-                      resetPerGameMemory();
-                    }
-                    // OPENING ANNOUNCEMENT — fires when detection resolves a
-                    // NEW name (first recognition or a refinement). Name from
-                    // the opening DB, idea from the corpus's opening-level
-                    // notes, the model only phrases (G0). David heard the
-                    // detection resolve "Vienna Gambit, Paulsen Attack" turn
-                    // by turn in his 2026-08-06 log with zero narration about
-                    // it — the name was context, never an event.
-                    try {
-                      const det = detectOpening(chainHistory);
-                      if (det && det.name) learnMemRef.current.detectedOpeningName = det.name;
-                      const announce = openingAnnouncementForGame(det, chainHistory, learnMemRef.current.spokenOpeningName, playerColor === 'white' ? 'w' : 'b');
-                      if (det && announce) {
-                        const firstResolve = learnMemRef.current.spokenOpeningName === null;
-                        // NOT marked spoken here either. This site pushes into
-                        // `facts`, which is the MODEL's grounding list — the name
-                        // reaches the student only if the model chooses to use it,
-                        // and "the model buried the name" is the original 2026-08-07
-                        // complaint this whole lane exists to answer. A hope is not
-                        // a delivery. The voice packages spend the flag; this site
-                        // only supplies the grounding, so an unspoken name is
-                        // re-offered next turn instead of being marked done.
-                        // Idea source spans ALL the speaking-note corpora
-                        // (David 2026-08-07: "make sure all the notes get
-                        // wired in"): primary first (house voice), then the
-                        // farmed corpora via the support tier. Opening-level
-                        // register by design — this is teaching about the
-                        // OPENING, not a claim about the board.
-                        // Same placeholder guard as the instant lane above —
-                        // both sites build this sentence, so a fix applied to
-                        // one of them is a fix the student still hears the bug
-                        // from on the other.
-                        // Same piece-truth filter as the instant lane above —
-                        // both sites build this sentence, so both owe it.
-                        // 🔒 No floating opening-level "key idea" on teach
-                        // (David 2026-08-26): reached by opening NAME, not by
-                        // the board — floating. Opening still named; idea dropped.
-                        // SPEAKABLE — on a gate fallback this string IS the
-                        // voice (David heard the old "mention the new name in
-                        // passing" instruction read aloud, 2026-08-07). The
-                        // say-the-name-naturally instruction travels in the
-                        // step directive, never here.
-                        const announceLine = announce;
-                        facts.push(announceLine);
-                        // Track A speaks this the moment the move lands —
-                        // David's 2026-08-07 game had three announcements
-                        // injected and ZERO voiced (they rode beats that
-                        // arrived late and died stale, or the model buried
-                        // the name). Anything he must hear AT a moment is
-                        // spoken by code AT that moment.
-                        // NOT spoken from here any more — the announcement
-                        // is voiced by the instant pass, seconds earlier.
-                        // In practice this block no longer runs at all: that
-                        // pass already set `learnMem.spokenOpeningName`, so the
-                        // name-changed test above is false. It stays as the
-                        // fallback path for any turn the instant pass could
-                        // not run.
-                        captureEvent('opening_announced', {
-                          surface: 'coach-teach',
-                          name: det.name,
-                          first: firstResolve,
-                          has_idea: false,
-                        });
-                        void logAppAudit({
-                          kind: 'coach-narration-spoken',
-                          category: 'narration',
-                          source: 'CoachTeachPage.openingAnnouncement',
-                          summary: `opening ${firstResolve ? 'identified' : 'refined'}: ${det.name}`,
-                          fen: probe.fen(),
-                        });
-                      }
-                    } catch { /* announcement is a bonus, never a blocker */ }
-                    if (classifyPhase(probe.fen(), chainHistory.length) === 'opening') {
-                      const chain = buildOpeningChainFacts({
-                        historySans: chainHistory,
-                        studentColor: playerColor,
-                        announcedTraps: announcedTrapsRef.current,
-                      });
-                      for (const n of chain.trapNames) announcedTrapsRef.current.add(n);
-                      // Rating-banded reality (#23) — CACHE-ONLY reads: when
-                      // both the amateur band and the masters data are warm
-                      // for THIS position, the split becomes a fact ("at your
-                      // level X is most common; masters prefer Y"). Cold
-                      // caches → no fact (empty > generic).
-                      try {
-                        const masters = masterPlayCache.get(probe.fen());
-                        const mTop = masters && masters.totalGames > 0 ? masters.moves[0] : null;
-                        const banded = buildRatingRealityFact(probe.fen(), mTop && masters ? {
-                          san: mTop.san,
-                          pct: Math.round((mTop.games / masters.totalGames) * 100),
-                          totalGames: masters.totalGames,
-                        } : null);
-                        if (banded) facts.push(banded);
-                      } catch { /* the split is a bonus */ }
-                      facts.push(...chain.facts);
-                      // Lead the eye NOW — the arrows land with the words
-                      // (green = named continuation, amber/red = lurking
-                      // slip; yellow key squares). All chess.js-derived from
-                      // moves legal on this exact board.
-                      if (chain.arrows.length > 0) {
-                        chainArrowsRef.current = chain.arrows;
-                        chainHighlightsRef.current = chain.highlights;
-                        void padDone.then(() => {
-                          setArrows((prev) => uniqueArrows([...prev, ...chain.arrows]));
-                          setHighlights((prev) => [...prev, ...chain.highlights]);
-                        });
-                      }
-                    }
-                  } catch { /* the chain is a bonus, never a blocker */ }
-                }
+                // A fresh game from the board's side: the second ply resets the
+                // per-game memory. (The opening fact-chain, the rating-band split
+                // and a fallback opening announcement lived here; they fed a list
+                // nobody heard — or the instant pass already said them — and the
+                // chain drew arrows for unspoken words. Removed 2026-09-29, G8.5.)
+                if (historyAfterReply.length <= 2) resetPerGameMemory();
                 // TEACHING NOTE (David 2026-07-12: "what he teaches in every
                 // position… his explanation… and the future plans"). Curated
                 // corpus, code-selected; suppressed while a question is open
@@ -9339,14 +9125,11 @@ export function CoachTeachPage(): JSX.Element {
                         rating: chainRating,
                       });
                       if (chainLines.length) {
-                        facts.unshift(`Cross-move causal chain — SAY THIS FIRST, present-tense, in this order: ${chainLines.join(' ')}`);
-                        const chainAr: BoardArrow[] = causalChainArrows(chain).map((a) => ({ startSquare: a.from, endSquare: a.to, color: a.color }));
-                        if (chainAr.length) {
-                          chainArrowsRef.current = [...chainArrowsRef.current, ...chainAr];
-                          void padDone.then(() => setArrows((prev) => uniqueArrows([...prev, ...chainAr])));
-                        }
-                        const chainHi: BoardHighlight[] = causalChainHighlights(chain).map((h) => ({ square: h.square, color: h.color }));
-                        if (chainHi.length) void padDone.then(() => setHighlights((prev) => [...prev, ...chainHi.filter((h) => !prev.some((p) => p.square === h.square))]));
+                        // SPOKEN through the door (2026-09-29). It used to go into
+                        // a facts list nobody heard while its arrows still
+                        // painted — marks without words (G8.5). The package now
+                        // marks the squares only if the words survive.
+                        queueSpokenHint(probe.fen(), chainLines.join(' '), 'causalChain', causalChainHighlights(chain).map((h) => h.square));
                         void logAppAudit({
                           kind: 'coach-narration-spoken',
                           category: 'narration',
@@ -9360,97 +9143,21 @@ export function CoachTeachPage(): JSX.Element {
                   // No corpus note on a free-play reply (2026-09-23) — the
                   // facts above are computed on THIS board; notes belong to the
                   // "teach me X" lesson. Gate: corpusScope.test.ts.
-                  // GEM DETECTION on Learn (David 2026-07-30: "This is for the
-                  // learn with coach tab!!"). If the coach's reply just walked
-                  // into a known engine-verified gem inaccuracy, the coach
-                  // flags the moment — but WITHHOLDS the punishing move (the
-                  // guided-find rule: name the opportunity, never the square).
-                  try {
-                    const gem = findLivePunishment(null, historyAfterReply);
-                    if (gem) {
-                      // ARM A REAL CHALLENGE BEHIND THE QUESTION (David
-                      // 2026-08-01: "Pressing the hint button will then show
-                      // the answer to the gem question asked by coach right?").
-                      // It did not. The gem pushed a question into the prose
-                      // but armed nothing, so Hint had no answer to reveal and
-                      // a correct board move was never judged correct — the
-                      // coach asked and then could not respond to the answer.
-                      //
-                      // The gem's punish is a BETTER answer source than the
-                      // engine recommendation guided-find normally uses: it is
-                      // curated, tiered, and already played out. So the gem
-                      // supplies the move and the existing guided-find
-                      // machinery supplies the question, the hint ladder, and
-                      // the judging — no new UI, and Hint reveals the real
-                      // punish.
-                      // The gem is now CALLED OUT IN THE COMMENTARY, not armed
-                      // as a card (2026-08-05). It used to borrow the
-                      // guided-find machinery for its question/hint/judging;
-                      // with the cards gone the callout stands on its own —
-                      // which is what a coach does anyway: point out that
-                      // something is there, and let the student look.
-                      // Still withholds the move and the square.
-                      // A HINT — the loudest one the coach has, and until now
-                      // the only one that spoke at one volume for every
-                      // student. Tiered like the others: a strong player gets
-                      // the callout and goes hunting; one who has been missing
-                      // things is told it came from the last move and that it
-                      // is worth material. The square is withheld at EVERY
-                      // register — plainer is a shorter walk, never the answer.
-                      facts.push(packageForRegister({
-                        anchor: `GEM ALERT (known verified inaccuracy by the coach's last move): ${gem.callout}`,
-                        detail: 'Invite the student to FIND the punishing move.',
-                        stakes: 'Tell them it came from the move just played and that there is real material in it.',
-                        withhold: 'Do NOT name or hint the move or its square.',
-                      }, discussion.hintDial.register));
-                      void logAppAudit({
-                        kind: 'coach-narration-spoken',
-                        category: 'narration',
-                        source: 'CoachTeachPage.gemDetection',
-                        summary: `gem alert on Learn @[${historyAfterReply.join(' ')}]: ${gem.callout.slice(0, 80)}`,
-                        fen: probe.fen(),
-                      });
-                    }
-                  } catch { /* gems are a bonus, never a blocker */ }
+                  // (A second gem alert lived here, pushed into the unheard facts
+                  // list; the instant pass already speaks the gem. Removed
+                  // 2026-09-29, G8.5.)
                 }
-                // FACTS ONLY — the directive that used to lead this string
-                // ("GROUNDED FACTS (voice ONLY these — never invent a capture,
-                // check, tactic, or threat not listed here):") is model INPUT,
-                // and every net in `voiceFacts` falls back to speaking the
-                // facts verbatim. So the moment containment tripped, the
-                // student heard the prompt read aloud — prod, David 2026-08-02,
-                // five times in one game. Directives travel in `directives`,
-                // which is excluded from every fallback path; facts are things
-                // about the board that may be spoken.
-                // The bundle is no longer handed to a model on a move — it is
-                // kept as the audit record of what the turn COMPUTED, which is
-                // what makes a spoken line traceable back to its facts.
+                // WHICH TIER TAUGHT THIS PLY. What the turn SPOKE is on the
+                // door's own rows (`describeTurnDecision` on the instant and
+                // late packages); this row keeps only the teaching tier. The
+                // `beats` list it used to carry counted computation nobody heard
+                // (G8.5, 2026-09-29).
                 void logAppAudit({
                   kind: 'coach-narration-spoken',
                   category: 'subsystem',
                   source: 'CoachTeachPage.turnFacts',
-                  // WHICH beats fired, not just how many facts. A count cannot
-                  // answer "does the trade-off-their-best-piece beat work in a
-                  // real middlegame" — the question this lane exists for — so
-                  // an audit had no way to prove any of it beyond reading the
-                  // model's paraphrase and guessing. Each computed fact opens
-                  // with its own uppercase tag (THEIR BEST PIECE, IMPROVING
-                  // MOVE, ALIGNMENT, FORK…); listing the tags is the cheapest
-                  // honest signal and leaks nothing the summary didn't.
-                  summary: `computed ${facts.length} fact(s) for the turn`,
-                  details: JSON.stringify({
-                    beats: facts
-                      .map((f) => /^([A-Z][A-Z ]{2,}):/.exec(f)?.[1] ?? null)
-                      .filter((t): t is string => t !== null),
-                    // WHICH TIER TAUGHT THIS PLY. Three rounds of hand-grepping
-                    // went into answering "are the corpus notes firing", and the
-                    // answer was always in the app — it just never said it out
-                    // loud. `position` means a note authored AT this board;
-                    // `structure`/`concept` mean one borrowed by idea; `baked`
-                    // is the reviewed opening prose. Without this an audit can
-                    // only read the model's phrasing and guess.
-                    teaching: teachingTierRef.current,
-                  }),
+                  summary: `teaching tier: ${teachingTierRef.current ?? 'none'}`,
+                  details: JSON.stringify({ teaching: teachingTierRef.current }),
                   fen: probe.fen(),
                 });
               }

@@ -6,19 +6,13 @@
 //
 // The previous Learn audit drove the board from a list of preferred moves and
 // stopped at ply 8 — still in the opening — so it could not have answered this
-// even in principle. The beats in question only fire in a real middlegame:
-//   • IMPROVING MOVE      — nothing forcing, so name the piece with a better
-//                           square (and withhold the square).
-//   • THEIR BEST PIECE    — their strongest piece can be traded off right now.
-//   • ALIGNMENT           — the seeding observation that precedes a tactic.
-// This plays a whole game with a real (small) player and reports which beats
-// actually fired, per phase.
+// even in principle. This plays a whole game with a real (small) player and
+// reports which LANES actually spoke, per phase.
 //
-// PROVEN, NOT INFERRED. Every computed fact opens with its own uppercase tag,
-// and `CoachTeachPage.turnFacts` now lists those tags in its audit details, so
-// the beats are read from the app's own events rather than guessed at from the
-// model's paraphrase. Reading the prose would only prove the model said
-// something adjacent.
+// PROVEN, NOT INFERRED. The Learn door (`learnTurnDoor.decideTurn`) records
+// `spoke=[…]` on every package row, so the lanes are read from the app's own
+// events rather than guessed at from the prose. (Until 2026-09-29 this read
+// `turnFacts` beat tags — computation, most of which was never spoken.)
 //
 // MUTED (`muteTtsForAudit`) — same narration events, same full text, zero TTS
 // spend. Instruments per §G1: Playwright drives, the prod audit-stream is
@@ -250,7 +244,7 @@ async function main() {
   const page = await ctx.newPage();
   const pageErrors = [];
   const spoken = [];
-  const beats = [];        // { beat, fen } from the app's own turnFacts details
+  const beats = [];        // { beat: lane, fen } — lanes the door actually SPOKE
   const committedReplies = []; // { san, fen } — the coach's own account of each reply
   const bakedPlies = [];   // which plies of the named opening the bake taught
   const rawPayloads = [];
@@ -265,10 +259,12 @@ async function main() {
       rawPayloads.push(body);
       for (const e of (body.events ?? body.entries ?? [body])) {
         const kind = String(e.kind ?? '');
-        if (e.source === 'CoachTeachPage.turnFacts' && e.details) {
-          try {
-            for (const b of (JSON.parse(e.details).beats ?? [])) beats.push({ beat: b, fen: e.fen });
-          } catch { /* details not ours */ }
+        // WHAT THE TURN SPOKE, by lane — read off the door's own record
+        // (`spoke=[…]` on the instant and late package rows). The old source,
+        // `turnFacts.beats`, counted computation nobody heard (G8.5, 2026-09-29).
+        if (String(e.source ?? '').startsWith('CoachTeachPage') && typeof e.summary === 'string') {
+          const m = /spoke=\[([^\]]*)\]/.exec(e.summary);
+          if (m && m[1]) for (const b of m[1].split(',').filter(Boolean)) beats.push({ beat: b, fen: e.fen });
         }
         // The bake announces WHICH ply of the opening it taught, so "the whole
         // opening got taught" is read off the app's own event instead of being
@@ -635,35 +631,16 @@ async function main() {
   console.log(`plies played        ${ply} (${report.result})`);
   console.log(`phases reached      ${phases.join(', ') || 'none'}`);
   console.log(`lines spoken        ${totalSpoken}   silent plies: ${silentPlies}`);
-  console.log('beats fired:');
+  console.log('lanes spoken:');
   for (const [b, n] of Object.entries(histogram).sort((a, b2) => b2[1] - a[1])) console.log(`   ${String(n).padStart(3)}  ${b}`);
-  // The two David named.
-  //
-  // 🔒 A CHECK THAT CANNOT OBSERVE SOMETHING MUST NOT REPORT IT AS FAILED.
-  // This printed a flat ❌ for both across three runs, and I was one step from
-  // filing "the improving-move beat is dead". It is not: PostHog has
-  // `improving_move_offered` firing 57 times in 14 days, most recently the
-  // night before. The beat is built at a DEDICATED call site — the only one
-  // handed the `bestUci`/`bestMoveWhy` the branch requires — which reports via
-  // `captureEvent`, not through the `turnFacts` details blob this histogram is
-  // built from. The beat was fine; the instrument was pointed at the wrong
-  // place, and it was shouting.
-  //
-  // THEIR BEST PIECE is genuinely rare by construction rather than unobserved:
-  // it needs an enemy knight on a real, pawn-unchallengeable outpost that is
-  // ALSO capturable this move. A short driven game may honestly never contain
-  // one, so a zero here is not evidence of a defect either.
-  //
-  // So: report what this instrument saw, and name the one that can answer.
-  // IMPROVING MOVE was removed 2026-09-29 (G8.5): it filled the facts list and
-  // was never spoken once the move-prompt went.
-  for (const want of ['THEIR BEST PIECE']) {
+  // The two David named: "trade their best piece" / "improve your worst"
+  // both speak on the `pieceQuality` lane. Rare by construction (an enemy
+  // piece worth trading AND tradeable this move), so a zero is reported, not
+  // failed.
+  for (const want of ['pieceQuality']) {
     const n = histogram[want] ?? 0;
-    console.log(`${n ? '✅' : '⏳'} ${want}: ${n}${n ? '' : ' — not seen in THIS run; this histogram cannot see the dedicated call site'}`);
+    console.log(`${n ? '✅' : '⏳'} ${want}: ${n}${n ? '' : ' — not seen in THIS run'}`);
   }
-  console.log(`   beats are owned by PostHog, not by this stream:`);
-  console.log(`   SELECT event, kind, count() FROM events WHERE event IN ('coach_beat_offered')`);
-  console.log(`   AND properties.audit_run_id='${RUN_ID}' GROUP BY event, kind`);
   if (FOLLOW) {
     console.log(`opening line        ${report.spineReached}/${FOLLOW.spine.length} plies of ${FOLLOW.name} played`);
     // Two plies happen per turn and the coach says one thing per turn, so a

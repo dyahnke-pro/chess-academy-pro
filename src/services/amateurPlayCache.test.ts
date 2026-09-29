@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
   ratingBandFor,
   getCachedAmateurPlay,
-  buildRatingRealityFact,
   __clearAmateurPlayCache,
   __seedAmateurPlayCache,
 } from './amateurPlayCache';
@@ -38,39 +37,4 @@ describe('cache-only reads', () => {
     expect(getCachedAmateurPlay(FEN)).toBeNull();
   });
 
-  it('buildRatingRealityFact needs BOTH sides warm and ≥50 games each', () => {
-    expect(buildRatingRealityFact(FEN, { san: 'e4', pct: 45, totalGames: 1000 })).toBeNull();
-    __seedAmateurPlayCache(FEN, {
-      band: '1400,1600', bandLabel: 'around 1400–1600', totalGames: 30,
-      moves: [{ san: 'e4', games: 15, pct: 50 }],
-    });
-    expect(buildRatingRealityFact(FEN, { san: 'e4', pct: 45, totalGames: 1000 })).toBeNull(); // amateur < 50g
-    __clearAmateurPlayCache();
-    __seedAmateurPlayCache(FEN, {
-      band: '1400,1600', bandLabel: 'around 1400–1600', totalGames: 800,
-      moves: [{ san: 'd4', games: 400, pct: 50 }],
-    });
-    expect(buildRatingRealityFact(FEN, { san: 'e4', pct: 45, totalGames: 40 })).toBeNull(); // masters < 50g
-  });
-
-  it('composes the split when amateurs and masters disagree', () => {
-    __seedAmateurPlayCache(FEN, {
-      band: '1400,1600', bandLabel: 'around 1400–1600', totalGames: 800,
-      moves: [{ san: 'd4', games: 400, pct: 50 }],
-    });
-    const fact = buildRatingRealityFact(FEN, { san: 'e4', pct: 45, totalGames: 1000 });
-    expect(fact).toContain('d4');
-    expect(fact).toContain('e4');
-    expect(fact).toContain('masters prefer');
-    expect(fact).toContain('around 1400–1600');
-  });
-
-  it('composes the agreement fact when both pick the same move', () => {
-    __seedAmateurPlayCache(FEN, {
-      band: '1400,1600', bandLabel: 'around 1400–1600', totalGames: 800,
-      moves: [{ san: 'e4', games: 400, pct: 50 }],
-    });
-    const fact = buildRatingRealityFact(FEN, { san: 'e4', pct: 45, totalGames: 1000 });
-    expect(fact).toContain('agree');
-  });
 });

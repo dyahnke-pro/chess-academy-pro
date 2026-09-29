@@ -30,11 +30,6 @@ const HINT_LANES: Array<{ name: string; near: string; proof: RegExp }> = [
     near: 'rejected_tempting_offered',
     proof: /packageForRegister\(rt\.hint, discussion\.hintDial\.register\)/,
   },
-  {
-    name: 'gem alert',
-    near: 'GEM ALERT',
-    proof: /packageForRegister\(\{[\s\S]*?GEM ALERT[\s\S]*?\}, discussion\.hintDial\.register\)/,
-  },
 ];
 
 describe('every hint lane rides the register', () => {
@@ -76,18 +71,24 @@ describe('every hint lane rides the register', () => {
   });
 });
 
-describe('a hint never becomes an answer, however plain it gets', () => {
-  const src = readFileSync(SOURCE, 'utf8');
+// (The tiered GEM ALERT package lived in the late read's facts list, which no
+// voice ever read; it was removed 2026-09-29 under G8.5. The gem Learn SPEAKS is
+// the instant pass's `gem.callout` — authored narration that names the chance
+// and withholds the move — see `punishGems.test.ts`.)
 
-  it('the gem withholds its square at every register', () => {
-    // The gem alert is the loudest pointer the coach has. Plainer means a
-    // shorter walk to the answer, never the answer — so the withhold sits
-    // OUTSIDE the tiers, which `packageForRegister` appends unconditionally.
-    // Anchored on the anchor line rather than the first mention of "GEM ALERT"
-    // in the file — the phrase appears in commentary above the code too.
-    const at = src.indexOf('anchor: `GEM ALERT');
-    expect(at, 'the gem alert no longer ships as a tiered package').toBeGreaterThan(-1);
-    expect(src.slice(at, at + 900))
-      .toMatch(/withhold: 'Do NOT name or hint the move or its square\.'/);
+describe('the gem Learn speaks never names its answer', () => {
+  it('every live callout on a real surfaceable gem withholds the move and every square', async () => {
+    const { getAllPunishGems, isSurfaceableGem } = await import('../data/lessons/punishGems');
+    const { findLivePunishment } = await import('./gemCrushLines');
+    const gems = getAllPunishGems().filter(isSurfaceableGem).slice(0, 40);
+    let checked = 0;
+    for (const g of gems) {
+      const live = findLivePunishment(null, [...g.lineMoves.split(/\s+/).filter(Boolean), g.inaccuracy]);
+      if (!live) continue;
+      checked += 1;
+      expect(live.callout, `${g.id} names its punish`).not.toContain(live.punish.replace(/[+#]$/, ''));
+      expect(live.callout, `${g.id} names a square`).not.toMatch(/\b[a-h][1-8]\b/);
+    }
+    expect(checked, 'no real gem produced a live callout — this test checked nothing').toBeGreaterThan(5);
   });
 });

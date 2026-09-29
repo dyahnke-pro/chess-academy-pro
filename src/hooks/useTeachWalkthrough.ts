@@ -900,7 +900,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   // been told about, unchanged, is not news; CLAUDE.md's narration rules make
   // silence the right answer ("silence is acceptable", "don't restate the
   // board"). The moment the threat CHANGES the sentence changes with it and
-  // speaks again. Same shape as `planSaidRef` / `announcedTrapsRef` on the
+  // speaks again. Same say-once shape as the per-game sets on the
   // sibling play surface.
   const deltaSaidRef = useRef<{ tree: WalkthroughTree | null; said: Set<string> }>({
     tree: null,

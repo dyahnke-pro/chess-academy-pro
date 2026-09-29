@@ -51,7 +51,8 @@ export type LearnLane =
   | 'mistake'
   | 'coachMistake'
   | 'fundamental'
-  | 'movePoint';
+  | 'movePoint'
+  | 'causalChain';
 
 export interface LaneRule {
   /** The kind the package ranks it as. */
@@ -86,6 +87,7 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   coachMistake: { kind: 'coachMistake', why: 'the coach owning its own inaccuracy' },
   fundamental: { kind: 'drawback', why: 'the fundamental the move broke' },
   movePoint: { kind: 'computed', why: 'the point of the student’s clean move' },
+  causalChain: { kind: 'tactic', why: 'a cross-move cause proven on the board — the earlier move that left the piece loose' },
 };
 
 export interface LaneFact {
