@@ -65,6 +65,11 @@ export interface UsePhaseNarrationArgs {
    *  centre" and "a3 is isolated" said on three moves through two lanes that
    *  each kept their own memory). */
   getStanding: (() => StandingFactMemory) | null;
+  /** How a sentence that passed this hook's board gate reaches the voice.
+   *  REQUIRED, so a surface decides: Learn routes each one through its turn
+   *  door (one thought per turn, WO-1b); a surface without a door passes null
+   *  and the hook speaks the sentence as its own package. */
+  speakSentence: ((text: string, fen: string) => Promise<void>) | null;
 }
 
 export interface UsePhaseNarrationResult {
@@ -415,15 +420,15 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         // zero. `event.fen` is the position the line was computed from, which
         // is the board it must be judged against.
         speechChain = speechChain
-          .then(() => voiceService.speakPackage(
-            // The SAME board the sentence was judged against — handing the
-            // package a different fen than the gate used is how a line passes
-            // one check and fails the other.
-            // The SAME board the gate used, which is the board the sentence
-            // was computed from. Handing the package a different fen than the
-            // gate is how a line passes one check and fails the other.
-            buildVoicePackage([{ kind: 'computed', text: trimmed, fen: event.fen }]),
-          ))
+          .then(() => {
+            // The surface's door, when it has one (Learn); otherwise its own
+            // package. Either way the SAME board the gate used — the board the
+            // sentence was computed from.
+            const via = argsRef.current.speakSentence;
+            return via
+              ? via(trimmed, event.fen)
+              : voiceService.speakPackage(buildVoicePackage([{ kind: 'computed', text: trimmed, fen: event.fen }]));
+          })
           .catch(() => undefined);
       };
       // The splitter lives in `sentenceSplit` — extracted because the regex it

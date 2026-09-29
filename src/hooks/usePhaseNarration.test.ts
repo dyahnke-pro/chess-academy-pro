@@ -124,6 +124,7 @@ const setup = (getLiveFen?: () => string, corpusNotes = true) => renderHook(() =
   getLiveFen,
   corpusNotes,
   getStanding: null,
+  speakSentence: null,
 }));
 
 beforeEach(() => {
@@ -343,6 +344,7 @@ describe('THE ONE SELECTOR at a phase transition (unified-coach N1)', () => {
       getLiveFen: () => FEN,
       corpusNotes: true,
       getStanding: null,
+      speakSentence: null,
     }));
     act(() => { void result.current.narrate({ ...EVENT, playerColor: 'black' }, 'full'); });
     await new Promise((r) => setTimeout(r, 300));
@@ -358,6 +360,7 @@ describe('THE ONE SELECTOR at a phase transition (unified-coach N1)', () => {
       getLiveFen: () => FEN,
       corpusNotes: true,
       getStanding: null,
+      speakSentence: null,
     }));
     act(() => { void result.current.narrate(EVENT, 'full'); });
     await new Promise((r) => setTimeout(r, 300));

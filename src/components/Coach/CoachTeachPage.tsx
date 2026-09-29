@@ -7342,6 +7342,9 @@ export function CoachTeachPage(): JSX.Element {
   // the coach marks the moment the opening ends and says what the position is
   // now about. Report lands in the chat, same as Play.
   const phaseStateRef = useRef<PhaseTransitionState>(createPhaseTransitionState());
+  /** The lead this turn's voice has spoken so far, and the board it spoke on —
+   *  the phase wave competes with it (one thought per turn, WO-1b). */
+  const turnLeadRef = useRef<{ fen: string; lead: NonNullable<TurnDecision['lead']> } | null>(null);
   const phaseNarration = usePhaseNarration({
     getPgn: () => game.history.join(' '),
     playerColor,
@@ -7354,6 +7357,36 @@ export function CoachTeachPage(): JSX.Element {
     // ONE say-once ledger for the game: the phase turn's balance sheet and the
     // positional read below share it.
     getStanding: () => standingRef.current,
+    // THROUGH THE DOOR (WO-1b). A phase transition is one more wave of the
+    // turn: its sentences compete with the lead the turn already spoke, so
+    // "the middlegame starts here" takes the turn only if it outranks it,
+    // and a report of five stacked lines speaks as one thought.
+    speakSentence: async (text, fen) => {
+      const prior = turnLeadRef.current && samePosition(turnLeadRef.current.fen, liveFenRef.current ?? fen)
+        ? turnLeadRef.current.lead
+        : null;
+      const d = decideTurn([{ lane: 'phase', text, fen }], undefined, learnMemRef.current.spokenKeys, prior);
+      // A held sentence was not spoken, so it must not ride the narration
+      // kind every listener reads as speech.
+      void logAppAudit(d.pkg.spoken ? {
+        kind: 'coach-narration-spoken',
+        category: 'narration',
+        source: 'CoachTeachPage.phase',
+        summary: `${describeTurnDecision(d)} — ${d.pkg.spoken.slice(0, 200)}`,
+        narrationText: d.pkg.spoken,
+        fen,
+      } : {
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'CoachTeachPage.phase.held',
+        summary: describeTurnDecision(d),
+        fen,
+      });
+      if (!d.pkg.spoken) return;
+      if (d.lead) turnLeadRef.current = { fen: liveFenRef.current ?? fen, lead: d.lead };
+      for (const k of spokenSentenceKeys(d.pkg)) learnMemRef.current.spokenKeys.add(k);
+      await voiceService.speakPackage(d.pkg);
+    },
     onReport: (text) => setMessages((prev) => [...prev, {
       id: uid('phase'), role: 'assistant', content: text, timestamp: Date.now(),
     }]),
@@ -9298,6 +9331,7 @@ export function CoachTeachPage(): JSX.Element {
                   studentColor: playerColor,
                 });
                 instantLead = instant.lead;
+                turnLeadRef.current = instant.lead ? { fen: ip.fen(), lead: instant.lead } : null;
                 // THE PACKAGE IS THE UTTERANCE. This used to log `factLines`
                 // while speaking a separately-assembled `alertLine`/`teachLine`
                 // pair — two truths for one turn, so the audit could report
@@ -9722,6 +9756,7 @@ export function CoachTeachPage(): JSX.Element {
                     instantLead,
                   );
                   const hintPkg = lateDecision.pkg;
+                  if (lateDecision.lead) turnLeadRef.current = { fen: pending.fen, lead: lateDecision.lead };
                   if (hintPkg.spoken) {
                     speakTrackA(hintPkg.spoken);
                     // Record the late package's phrases too — the per-game set is
