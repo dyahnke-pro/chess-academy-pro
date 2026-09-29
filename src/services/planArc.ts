@@ -363,7 +363,33 @@ export function aimWalkableNow(aim: Aim, fen: string, color: 'w' | 'b'): boolean
     if (cheapest < (VALUE[pieceType] ?? 0)) return true;
     return attackers.length > board.attackers(goal, color).length;
   };
-  if (aim.kind === 'outpost') return !lostThere('n');
+  if (aim.kind === 'outpost') {
+    // An outpost is a square ONE OF THE SIDE'S PAWNS protects and NO enemy pawn
+    // can ever attack (walk 4, 2026-09-29: "the outpost on d5" said with no
+    // black pawn touching d5). Both, on the board as it is.
+    const f = goal.charCodeAt(0); const r = Number(goal[1]);
+    const up = color === 'w' ? 1 : -1;
+    const ownPawnGuards = [f - 1, f + 1].some((pf) => {
+      if (pf < 97 || pf > 104) return false;
+      const p = board.get(`${String.fromCharCode(pf)}${r - up}` as Square);
+      return !!p && p.type === 'p' && p.color === color;
+    });
+    if (!ownPawnGuards) return false;
+    // An enemy pawn on a neighbouring file that can still advance to hit the
+    // square: it sits on the far side of the goal (from the enemy's view).
+    const enemyCanHit = [f - 1, f + 1].some((pf) => {
+      if (pf < 97 || pf > 104) return false;
+      for (let rr = 1; rr <= 8; rr += 1) {
+        const p = board.get(`${String.fromCharCode(pf)}${rr}` as Square);
+        if (!p || p.type !== 'p' || p.color !== foe) continue;
+        // White pawns attack upward, black downward; the pawn must be able to
+        // reach the rank that attacks the goal (goal rank - 1 for white foe).
+        if (foe === 'w' ? rr <= r - 1 : rr >= r + 1) return true;
+      }
+      return false;
+    });
+    return !enemyCanHit && !lostThere('n');
+  }
   const piece = aim.id.split(':')[1];
   const start = aim.from as Square | undefined;
   if (!start || !piece) return false;

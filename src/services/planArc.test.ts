@@ -215,3 +215,22 @@ describe('aimWalkableNow — "an attack on your king" needs pieces on the king N
     expect(aimWalkableNow(kingAim, fen, 'b')).toBe(true);
   });
 });
+
+describe('aimWalkableNow — an outpost is pawn-guarded and pawn-proof', () => {
+  const outpost = (sq: string): Aim => ({ id: `outpost:${sq}`, kind: 'outpost', squares: [sq], goal: sq, phrase: `the outpost on ${sq}` });
+  it('refused when no own pawn guards it (walk 4)', () => {
+    // After 1.e4 e5 2.Nf3 Nc6: d4 for White is guarded by no white pawn on c3/e3.
+    const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
+    expect(aimWalkableNow(outpost('d5'), fen, 'w')).toBe(false);
+  });
+  it('refused when an enemy pawn can still come to hit it', () => {
+    // White pawn e4 guards d5, but black c-pawn on c7 can come to c6.
+    const fen = 'rnbqkbnr/ppp2ppp/3p4/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3';
+    expect(aimWalkableNow(outpost('d5'), fen, 'w')).toBe(false);
+  });
+  it('passes a true outpost (positive control): e4 guards d5, no black c/e pawn can reach it', () => {
+    const fen = '4k3/8/3p4/4p3/4P3/8/8/4K3 w - - 0 1';
+    expect(aimWalkableNow(outpost('d5'), fen, 'w')).toBe(true);
+  });
+});
+
