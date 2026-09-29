@@ -6035,6 +6035,7 @@ After every `git push origin main`:
    | `/coach/analyse` / `/train` | `scripts/audit-untouched-surfaces.mjs` |
    | `/tactics/*` | `scripts/audit-tactics.mjs` |
    | `/weaknesses` (or its tab/row → review flow) | `scripts/audit-weaknesses.mjs` |
+   | anything `/weaknesses` computes on open (`gameInsightsService`, `tacticClassifierService`, the Insights tabs) | `scripts/audit-weaknesses-freeze-prod.mjs` — seeds ~900 analysed games, throttles the CPU ×4, and measures the longest frame gap on load and on tab taps (negative-controlled). The 2026-09-29 freeze only exists at library scale; a cold device can never show it |
    | `/openings/*` | `scripts/audit-openings-ui.mjs` (coordinate — often 🚧 in flight) |
    | `/openings/:id` Understand-zone book readers (From-the-Books / Overview / Key Ideas / Classic Wisdom read-aloud) | `scripts/audit-book-reader-prod.mjs` (3-instrument: Playwright + prod audit-stream + narration listener; asserts read-aloud routes through `speakReadAloud`/bypassVerbosity, full passage, no briefCap clip) |
    | `/openings/:id` trap + warning tiles | `scripts/audit-opening-trap-tiles.mjs` |

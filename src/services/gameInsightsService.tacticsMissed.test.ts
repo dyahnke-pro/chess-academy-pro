@@ -52,4 +52,15 @@ describe('getTacticInsights reads the cache and never classifies inline', () => 
     expect(insights.worstMisses[0].san).toBe('Ke2');
     expect(insights.gamesPendingClassification).toBe(1); // g2 is not in the cache yet — said, not hidden
   });
+
+  it('shares ONE games-table read across insights asked for at the same moment', { timeout: 20000 }, async () => {
+    const { getOverviewInsights, getTacticInsights, getOpeningInsights, getMistakeInsights } = await import('./gameInsightsService');
+    const spy = vi.spyOn(db.games, 'filter');
+    await Promise.all([getOverviewInsights(), getTacticInsights(), getOpeningInsights(), getMistakeInsights()]);
+    expect(spy).toHaveBeenCalledTimes(1);
+    // A later ask reads fresh — nothing is served from a settled snapshot.
+    await getTacticInsights();
+    expect(spy).toHaveBeenCalledTimes(2);
+    spy.mockRestore();
+  });
 });

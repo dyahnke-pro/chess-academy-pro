@@ -158,7 +158,21 @@ export function openingChoosingColor(name: string | null): 'white' | 'black' | n
   return null;
 }
 
-async function getPlayerGames(): Promise<AnnotatedGame[]> {
+// One read of the games table shared by every insight asked for at the same
+// moment. /weaknesses asks for four at once, and each deserialised the whole
+// table on the main thread (~1 s per read on a phone with ~900 games). Only an
+// IN-FLIGHT read is shared — a call after it settles reads fresh, so a write is
+// never hidden behind a stale snapshot.
+let playerGamesInFlight: Promise<AnnotatedGame[]> | null = null;
+
+function getPlayerGames(): Promise<AnnotatedGame[]> {
+  if (!playerGamesInFlight) {
+    playerGamesInFlight = readPlayerGames().finally(() => { playerGamesInFlight = null; });
+  }
+  return playerGamesInFlight;
+}
+
+async function readPlayerGames(): Promise<AnnotatedGame[]> {
   const allGames = await db.games
     .filter((g) => !g.isMasterGame && g.result !== '*')
     .toArray();

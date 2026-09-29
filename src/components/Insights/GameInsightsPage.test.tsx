@@ -140,6 +140,18 @@ describe('GameInsightsPage', () => {
     expect(screen.getByTestId('insights-loading')).toBeInTheDocument();
   });
 
+  it('renders a tab as soon as its own data lands, without waiting on the slowest (2026-09-29)', async () => {
+    // Overview replays the whole library and can take a minute on a phone; the
+    // Tactics tab must not sit behind it.
+    mockGetOverviewInsights.mockReturnValue(new Promise(() => {}));
+    render(<GameInsightsPage />);
+    fireEvent.click(screen.getByTestId('tab-tactics'));
+    await waitFor(() => { expect(screen.getByTestId('tactics-tab')).toBeInTheDocument(); });
+    expect(screen.queryByTestId('insights-loading')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('tab-overview'));
+    expect(screen.getByTestId('insights-loading')).toBeInTheDocument();
+  });
+
   it('renders main page after data loads', async () => {
     render(<GameInsightsPage />);
 
