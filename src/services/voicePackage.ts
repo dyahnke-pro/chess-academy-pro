@@ -120,14 +120,23 @@ export interface VoiceFact {
    *  its squares with it, so a refused claim can never be drawn — which is the
    *  whole coupling, in one line, for every lane at once. */
   squares?: readonly string[];
-  /** THE MOVES THIS FACT SAYS, IN ORDER — SAN, played from `fen`. The board's
-   *  half of a spoken LINE, coupled the same way `squares` is: the producer
-   *  that computed "you'd love Nd4, but they answer dxe4" hands the two moves
-   *  over with the sentence, and the board draws them only if the fact
-   *  SURVIVED (David 2026-09-29: "Make sure arrows populate when talking about
-   *  multiple move lines. I have never seen any!"). Never scraped back out of
-   *  the prose — a bare "f5" in "the f5 outpost" is not a move. */
-  line?: readonly string[];
+  /** THE LINES THIS FACT SAYS — each the SAN moves it names, in order, played
+   *  from the board that line starts on. The board's half of a spoken line,
+   *  coupled the same way `squares` is: the producer that computed "you'd love
+   *  Nd4, but they answer dxe4" hands the moves over with the sentence, and the
+   *  board draws them only if the fact SURVIVED (David 2026-09-29: "Make sure
+   *  arrows populate when talking about multiple move lines. I have never seen
+   *  any!" → "I'm sure you're missing deeper lines being narrated"). A line
+   *  starts on its OWN board: "a5 holds … after b5, Nb6, Nxb6 breaks it"
+   *  starts after the student's a5, not on the board on screen. Never scraped
+   *  back out of the prose — a bare "f5" in "the f5 outpost" is not a move. */
+  lines?: readonly SpokenLine[];
+}
+
+/** One spoken line: the moves it names, from the board it starts on. */
+export interface SpokenLine {
+  fen: string;
+  sans: readonly string[];
 }
 
 /** Every square the package is allowed to draw — the squares of the facts that
@@ -443,7 +452,7 @@ export function buildVoicePackage(
     seen.add(key);
     // A line rides only when EVERY sentence survived: a trimmed fact may have
     // lost the very sentence that named the moves.
-    kept.push({ ...f, text: fresh.join(' '), line: why.size === 0 ? f.line : undefined });
+    kept.push({ ...f, text: fresh.join(' '), lines: why.size === 0 ? f.lines : undefined });
   }
 
   // SENTENCE CASE AT THE JOIN. David's 2026-08-08 run: "That takes your pawn.
@@ -513,20 +522,29 @@ export interface LineArrow {
   san: string;
 }
 
-/** The arrows for every LINE the package kept, replayed by chess.js from the
- *  board each fact was computed on. The first move that does not play ends that
- *  line — half a line is drawn rather than a spliced one. */
-export function keptLineArrows(pkg: { kept: readonly VoiceFact[] }, student: 'w' | 'b'): LineArrow[] {
-  const out: LineArrow[] = [];
+/** A kept line, replayed: the board it starts on and one arrow per move. */
+export interface DrawnLine {
+  fen: string;
+  arrows: LineArrow[];
+}
+
+/** Every LINE the package kept, replayed by chess.js from the board it starts
+ *  on. The first move that does not play ends that line — half a line is drawn
+ *  rather than a spliced one; a line with no legal first move is dropped. */
+export function keptLines(pkg: { kept: readonly VoiceFact[] }, student: 'w' | 'b'): DrawnLine[] {
+  const out: DrawnLine[] = [];
   for (const f of pkg.kept) {
-    if (!f.line || f.line.length === 0) continue;
-    let board: Chess;
-    try { board = new Chess(f.fen); } catch { continue; }
-    for (const san of f.line) {
-      let mv;
-      try { mv = board.move(san); } catch { mv = null; }
-      if (!mv) break;
-      out.push({ from: mv.from, to: mv.to, side: mv.color === student ? 'student' : 'opponent', san: mv.san });
+    for (const line of f.lines ?? []) {
+      let board: Chess;
+      try { board = new Chess(line.fen); } catch { continue; }
+      const arrows: LineArrow[] = [];
+      for (const san of line.sans) {
+        let mv;
+        try { mv = board.move(san); } catch { mv = null; }
+        if (!mv) break;
+        arrows.push({ from: mv.from, to: mv.to, side: mv.color === student ? 'student' : 'opponent', san: mv.san });
+      }
+      if (arrows.length > 0) out.push({ fen: line.fen, arrows });
     }
   }
   return out;

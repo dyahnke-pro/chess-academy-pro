@@ -171,28 +171,39 @@ describe('WO-2 — a verdict on a good move carries its reason', () => {
   });
 });
 
-describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen any!")', () => {
-  it('the kept fact carries its line through the door, and the arrows replay it', async () => {
-    const { keptLineArrows } = await import('./learnTurnDoor');
+describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen any!" → "deeper lines")', () => {
+  it('the kept fact carries its line through the door, and it replays into arrows', async () => {
+    const { keptLines } = await import('./learnTurnDoor');
     const text = "You'd love to grab the pawn with Nxe5 — but they answer Nxe5 and the knight is gone.";
-    const d = decideTurn([{ lane: 'register', text, fen: FEN, line: ['Nxe5', 'Nxe5'] }]);
+    const d = decideTurn([{ lane: 'register', text, fen: FEN, lines: [{ fen: FEN, sans: ['Nxe5', 'Nxe5'] }] }]);
     expect(d.spoke).toEqual(['register']);
-    const arrows = keptLineArrows(d.pkg, 'w');
-    expect(arrows.map((a) => `${a.from}${a.to}:${a.side}`)).toEqual(['f3e5:student', 'c6e5:opponent']);
+    const drawn = keptLines(d.pkg, 'w');
+    expect(drawn[0].arrows.map((a) => `${a.from}${a.to}:${a.side}`)).toEqual(['f3e5:student', 'c6e5:opponent']);
+  });
+  it('a line starts on its OWN board — a deeper line from an earlier position replays there', async () => {
+    const { keptLines } = await import('./learnTurnDoor');
+    const earlier = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+    const drawn = keptLines({ kept: [{ kind: 'computed', text: 'x', fen: FEN, lines: [{ fen: earlier, sans: ['Nf3', 'Nc6', 'Bb5'] }] }] }, 'w');
+    expect(drawn[0].fen).toBe(earlier);
+    expect(drawn[0].arrows.map((a) => a.san)).toEqual(['Nf3', 'Nc6', 'Bb5']);
   });
   it('an illegal move ends the line — never a spliced one', async () => {
-    const { keptLineArrows } = await import('./learnTurnDoor');
-    const arrows = keptLineArrows({ kept: [{ kind: 'computed', text: 'x', fen: FEN, line: ['Nxe5', 'Qh5', 'Nxe5'] }] }, 'w');
-    expect(arrows).toHaveLength(1);
+    const { keptLines } = await import('./learnTurnDoor');
+    const drawn = keptLines({ kept: [{ kind: 'computed', text: 'x', fen: FEN, lines: [{ fen: FEN, sans: ['Nxe5', 'Qh5', 'Nxe5'] }] }] }, 'w');
+    expect(drawn[0].arrows).toHaveLength(1);
   });
-  it('a fact that lost a sentence to the novelty set loses its line with it', () => {
+  it('a fact that lost a sentence to the novelty set loses its lines with it', () => {
     const text = "You'd love to grab the pawn with Nxe5 — but they answer Nxe5 and the knight is gone. Your knight on f3 attacks the pawn on e5.";
-    const d = decideTurn([{ lane: 'register', text, fen: FEN, line: ['Nxe5', 'Nxe5'] }], 'Your knight on f3 attacks the pawn on e5.');
-    expect(d.pkg.kept[0]?.line).toBeUndefined();
+    const d = decideTurn([{ lane: 'register', text, fen: FEN, lines: [{ fen: FEN, sans: ['Nxe5', 'Nxe5'] }] }], 'Your knight on f3 attacks the pawn on e5.');
+    expect(d.pkg.kept[0]?.lines).toBeUndefined();
   });
-  it('Learn queues the but-turn and the concept line, and draws what the late wave kept', () => {
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), registerNow, 'register', undefined, pendingRegisterLine\)/);
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, 'positionFacts', undefined, c\.line\)/);
-    expect(TEACH_CODE).toMatch(/keptLineArrows\(hintPkg,/);
+  it('Learn hands every line-speaking producer\'s lines to the queue, and draws on-screen and earlier boards apart', () => {
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), registerNow, 'register', undefined, pendingRegisterLines\)/);
+    expect(TEACH_CODE).toMatch(/pendingRegisterLines = \[\{ fen: probe\.fen\(\), sans: \[compareRead\.bestSan\] \}/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, 'positionFacts', undefined, c\.lines\)/);
+    expect(TEACH_CODE).toMatch(/fundamental\?\.lines\)/);
+    expect(TEACH_CODE).toMatch(/'fundamental', \[\], fundamental\.lines\)/);
+    expect(TEACH_CODE).toMatch(/keptLines\(hintPkg,/);
+    expect(TEACH_CODE).toMatch(/setLineWalkFen\(showFen\)/);
   });
 });

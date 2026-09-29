@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**824 lines · 26 exports · 5 importers · 4 tests · 0 audits**
+**836 lines · 27 exports · 5 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -78,8 +78,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:81`
 - `src/services/tacticalRead.test.ts:84`
 
-### `namedTacticClause` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9430`
+### `namedTacticClause` (function) — 4 call sites
 - `src/services/danyaBehaviors.ts:398`
 - `src/services/danyaDeviceCoverage.test.ts:102`
 - `src/services/tacticalRead.test.ts:144`
@@ -90,7 +89,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:126`
 
 ### `tacticalReadFromLines` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8868`
+- `src/components/Coach/CoachTeachPage.tsx:8807`
 - `src/services/danyaBehaviors.ts:396`
 - `src/services/danyaDeviceCoverage.test.ts:73`
 - `src/services/liveVoiceDefects.test.ts:46`
@@ -110,18 +109,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:201`
 - `src/services/tacticalRead.test.ts:546`
 
-### `temptingTurnClause` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8879`
-- `src/components/Coach/CoachTeachPage.tsx:9449`
+### `temptingTurnClause` (function) — 4 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8818`
 - `src/services/danyaDeviceCoverage.test.ts:79`
 - `src/services/tacticalRead.test.ts:437`
 - `src/services/tacticalRead.test.ts:450`
 
-### `uncertaintyClause` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8884`
-- `src/components/Coach/CoachTeachPage.tsx:9452`
+### `uncertaintyClause` (function) — 13 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8829`
 - `src/services/danyaDeviceCoverage.test.ts:84`
-- `src/services/liveVoiceDefects.test.ts:281`
+- `src/services/liveVoiceDefects.test.ts:279`
 - `src/services/tacticalRead.test.ts:422`
 - `src/services/tacticalRead.test.ts:443`
 - `src/services/tacticalRead.test.ts:451`
@@ -133,8 +130,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:581`
 - `src/services/tacticalRead.test.ts:582`
 
-### `candidateCompareClause` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8890`
+### `candidateCompareClause` (function) — 8 call sites
 - `src/services/danyaDeviceCoverage.test.ts:89`
 - `src/services/tacticalRead.test.ts:455`
 - `src/services/tacticalRead.test.ts:463`
@@ -143,6 +139,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:489`
 - `src/services/tacticalRead.test.ts:594`
 - `src/services/tacticalRead.test.ts:597`
+
+### `candidateCompareRead` (function) — 1 call site
+- `src/components/Coach/CoachTeachPage.tsx:8835`
 
 ### `temptingFromAnalysis` (function) — 4 call sites
 - `src/services/learnWalkBlumenfeld.test.ts:196`

@@ -341,10 +341,11 @@ export interface ClauseItem {
    *  The door orders by it. Omitted where the clause carries no material
    *  (a plan, the status band, a habit): those rank below every staked fact. */
   stakes?: FactStakes;
-  /** The moves the clause SAYS, SAN from the clause's board — a concept on a
-   *  future board is said with the line that reaches it ("If you play Qd2, …",
-   *  "After Qd2, Nf6, …"), and the board draws that line (`VoiceFact.line`). */
-  line?: readonly string[];
+  /** The lines the clause SAYS, each from the board it starts on — a concept
+   *  on a future board is said with the line that reaches it ("If you play
+   *  Qd2, …", "After Qd2, Nf6, …"); "g6 has a point: it stops the mate with
+   *  Qxh7" names their reply and the threat it stopped (`VoiceFact.lines`). */
+  lines?: ReadonlyArray<{ fen: string; sans: readonly string[] }>;
 }
 
 /** THE STANDING KINDS — say these once per game, not once per ply.
@@ -801,8 +802,18 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // The fork trick, both seats (re-walk 1380: 7.Bb3 sidestepping …Nxe4 Nxe4
   // d5 said nothing): the student's own move took theirs off the board, or
   // their reply took the student's.
-  const stoppedHere: Array<{ text: string; squares: readonly string[] }> = [];
-  if (stoppedReply) stoppedHere.push({ text: stoppedReply.text, squares: [stoppedReply.threat.from, stoppedReply.threat.landing] });
+  const stoppedHere: Array<{ text: string; squares: readonly string[]; lines?: ReadonlyArray<{ fen: string; sans: readonly string[] }> }> = [];
+  if (stoppedReply && input.opponentLastMove) {
+    // Both moves the sentence names, on the board BEFORE their reply: the
+    // reply itself, and the student's threat it stopped (played as if it were
+    // the student's turn — the threat is what their move had set up).
+    const before = input.opponentLastMove.fenBefore;
+    stoppedHere.push({
+      text: stoppedReply.text,
+      squares: [stoppedReply.threat.from, stoppedReply.threat.landing],
+      lines: [{ fen: before, sans: [stoppedReply.reply] }, { fen: sideToMoveFlipped(before), sans: [stoppedReply.threat.san] }],
+    });
+  }
   if (studentToMove && lm) {
     const own = trickSidestepped(lm.fenBefore, lm.san, studentColor, 'their');
     if (own) stoppedHere.push(own);
@@ -1139,7 +1150,7 @@ function buildClauses(a: {
    *  (the student's pre-move board — coupled there, never from prose). */
   refuted: { fact: RefutedAlternative; squares: readonly string[] } | null;
   rule: { text: string; squares: readonly string[] } | null;
-  stopped: ReadonlyArray<{ text: string; squares: readonly string[] }>;
+  stopped: ReadonlyArray<{ text: string; squares: readonly string[]; lines?: ReadonlyArray<{ fen: string; sans: readonly string[] }> }>;
   stock: string | null;
   leansOn: LeansOn | null;
   opponentLeansOn: LeansOn | null;
@@ -1301,7 +1312,7 @@ function buildClauses(a: {
     ranked.push({ kind: 'refuted', rank: 82, text: a.refuted.fact.text, stakes: costStakes(a.refuted.fact.costCp) ?? undefined, squares: [...a.refuted.squares] });
   }
   if (a.rule) ranked.push({ kind: 'rule', rank: 29, text: a.rule.text, squares: [...a.rule.squares] });
-  for (const st of a.stopped) ranked.push({ kind: 'stopped', rank: 27, text: st.text, squares: [...st.squares] });
+  for (const st of a.stopped) ranked.push({ kind: 'stopped', rank: 27, text: st.text, squares: [...st.squares], lines: st.lines });
   if (a.stock) ranked.push({ kind: 'stock', rank: 35, text: a.stock });
   // §9 delayed-castling — speaks IN the opening too (the "castle now" moment),
   // ranked just under a live hanging threat. Its gate (central king + tension +
@@ -1358,7 +1369,7 @@ function buildClauses(a: {
       // What the idea wins on its own targets (agent first, then targets).
       stakes: concept.source === 'tactic' ? (exchangeStakes(a.fen, concept.squares.slice(1)) ?? undefined) : undefined,
       // The line `afterLine` names is the one drawn — only when it named one.
-      line: concept.source === 'tactic' && concept.line && concept.line.length > 0 && concept.boardFen && !samePlacementFen(concept.boardFen, a.fen) ? concept.line : undefined,
+      lines: concept.source === 'tactic' && concept.line && concept.line.length > 0 && concept.boardFen && !samePlacementFen(concept.boardFen, a.fen) ? [{ fen: a.fen, sans: concept.line }] : undefined,
     });
   }
 
@@ -1466,6 +1477,17 @@ export function afterLine(line: readonly string[] | undefined, boardFen: string 
   // knight on e5 would unveil…"); "Play X and moving…" did not.
   if (line.length === 1 && fenNow.split(' ')[1] === student) return `If you play ${line[0]}, ${rest}`;
   return `After ${line.join(', ')}, ${rest}`;
+}
+
+/** The same board with the other side to move (en passant cleared) — the
+ *  position a THREAT is played on: what the mover had set up, as if it were
+ *  their turn again. */
+function sideToMoveFlipped(fen: string): string {
+  const p = fen.split(' ');
+  if (p.length < 4) return fen;
+  p[1] = p[1] === 'w' ? 'b' : 'w';
+  p[3] = '-';
+  return p.join(' ');
 }
 
 function samePlacementFen(a: string, b: string): boolean {

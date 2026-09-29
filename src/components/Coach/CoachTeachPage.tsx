@@ -26,7 +26,7 @@ import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { transferClause, recordMotif, withTransfer } from '../../services/motifLedger';
-import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePackage, keptLineArrows, markableSquares, spokenSentenceKeys, type LearnLane, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/learnTurnDoor';
+import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/learnTurnDoor';
 import { buildPositionalRead } from '../../services/positionalRead';
 import { curatedBeatAt } from '../../services/curatedBeatSource';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
@@ -283,7 +283,7 @@ import { applyCandidateArrows, candidateHighlightMarkers, gradeNarrationText } f
 import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
 // ONE depth for the whole turn — the hint lane and the lane that grades the
 // student must not read the same board at different depths. See the constant.
-import { tacticalReadFromLines, temptingTurnClause, uncertaintyClause, candidateCompareClause } from '../../services/tacticalRead';
+import { tacticalReadFromLines, temptingTurnClause, uncertaintyClause, candidateCompareRead } from '../../services/tacticalRead';
 import { namedPawnStructure } from '../../services/positionReadingService';
 import { BehaviorScheduler, detectBehaviors } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
@@ -1728,7 +1728,7 @@ export function CoachTeachPage(): JSX.Element {
     fen: string;
     /** `squares` rides along so the board can be drawn from what SURVIVED the
      *  package rather than re-derived from its prose — see `VoiceFact.squares`. */
-    lines: Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; line?: readonly string[] }>;
+    lines: Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; lines?: readonly SpokenLine[] }>;
   } | null>(null);
   /** The coach's own last move, captured for judging. See the callout below —
    *  the inputs are gathered while the engine work runs and the verdict is
@@ -8435,9 +8435,9 @@ export function CoachTeachPage(): JSX.Element {
      *  drawn because the fact survived, never because the prose contained
      *  something square-shaped. */
     squares?: readonly string[],
-    /** The moves the line SAYS, SAN from `fen` — drawn as arrows only if the
-     *  fact survives the door (see `VoiceFact.line`). */
-    moves?: readonly string[],
+    /** The lines the sentence SAYS, each from the board it starts on — drawn
+     *  only if the fact survives the door (see `VoiceFact.lines`). */
+    lines?: readonly SpokenLine[],
   ): void => {
     const text = line.trim();
     if (!text) return;
@@ -8467,8 +8467,8 @@ export function CoachTeachPage(): JSX.Element {
     } catch { /* unreadable FEN — the lanes' own board checks still apply */ }
     const pending = pendingVoiceRef.current?.fen === fen
       ? pendingVoiceRef.current
-      : { fen, lines: [] as Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; line?: readonly string[] }> };
-    if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ lane, text, squares, line: moves });
+      : { fen, lines: [] as Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; lines?: readonly SpokenLine[] }> };
+    if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ lane, text, squares, lines });
     pendingVoiceRef.current = pending;
   }, []);
 
@@ -8797,7 +8797,7 @@ export function CoachTeachPage(): JSX.Element {
                 let pendingRegisterNoHedge: string | null = null;
                 /** The but-turn's two moves (the tempting one and the answer
                  *  that refutes it) — drawn as arrows if the register speaks. */
-                let pendingRegisterLine: string[] | undefined;
+                let pendingRegisterLines: SpokenLine[] | undefined;
                 let moveAdviceHere: Awaited<ReturnType<typeof computePositionFacts>>['moveAdvice'] = null;
                 // The gift line NAMES the student's next move, so it waits for
                 // the one decision on where a move is named (`nextMoveAdvice`).
@@ -8820,7 +8820,7 @@ export function CoachTeachPage(): JSX.Element {
                         // The same reply the clause names (`temptingTurnClause`).
                         const ref = turnRead.tempting.refutation;
                         const reply = ref.length > 1 ? ref[1] : (ref.length > 0 ? ref[0] : undefined);
-                        pendingRegisterLine = reply ? [turnRead.tempting.san, reply.san] : [turnRead.tempting.san];
+                        pendingRegisterLines = [{ fen: probe.fen(), sans: reply ? [turnRead.tempting.san, reply.san] : [turnRead.tempting.san] }];
                       }
                       // Framed as the NEXT decision: queued, it is heard after the
                       // verdict on the move just played, and unframed the two
@@ -8831,9 +8831,12 @@ export function CoachTeachPage(): JSX.Element {
                       // His "X, not Y, because…" — only when there is NO but-turn
                       // (a seductive blunder outranks a fine-margin preference) and
                       // NO hedge (a genuine coin-flip is the hedge, not a compare).
-                      const compare = (!butTurn && !hedge)
-                        ? candidateCompareClause(probe.fen(), studentBest.topLines, playerColor, { spoken: true, recaptureOn: m.captured ? m.to : null })
+                      const compareRead = (!butTurn && !hedge)
+                        ? candidateCompareRead(probe.fen(), studentBest.topLines, playerColor, { spoken: true, recaptureOn: m.captured ? m.to : null })
                         : null;
+                      const compare = compareRead?.text ?? null;
+                      // Both moves the compare names, from this board.
+                      if (compareRead) pendingRegisterLines = [{ fen: probe.fen(), sans: [compareRead.bestSan] }, { fen: probe.fen(), sans: [compareRead.altSan] }];
                       const reg = [butTurn, hedge, compare].filter(Boolean).join(' ');
                       const gradedReg = reg ? gradeNarrationText(reg, probe.fen(), 'CoachTeachPage.register')?.trim() : '';
                       pendingRegister = gradedReg || null;
@@ -9033,7 +9036,7 @@ export function CoachTeachPage(): JSX.Element {
                     moveAdviceHere = pf.moveAdvice;
                     const countSpoken = pf.clauses.some((c) => c.kind === 'key-moment');
                     const registerNow = countSpoken ? pendingRegisterNoHedge : pendingRegister;
-                    if (registerNow && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), registerNow, 'register', undefined, pendingRegisterLine);
+                    if (registerNow && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), registerNow, 'register', undefined, pendingRegisterLines);
                     if (gapPending && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), gapPending.text, 'gap', [gapPending.square]);
                     standingRef.current.rememberAll(pf.remember);
                     if (pf.principleSpoken) learnMemRef.current.principleTaught.add(pf.principleSpoken);
@@ -9041,7 +9044,7 @@ export function CoachTeachPage(): JSX.Element {
                     if (pf.clauses.some((c) => c.kind === 'key-moment')) announcedPliesRef.current.add(probe.history().length + 1);
                     for (const c of pf.clauses) {
                       if (c.kind === 'must-defend' || !c.text) continue;
-                      queueSpokenHint(probe.fen(), c.text, 'positionFacts', undefined, c.line);
+                      queueSpokenHint(probe.fen(), c.text, 'positionFacts', undefined, c.lines);
                     }
                     if (pf.importance.speak) captureEvent('position_facts_spoken', { surface: 'coach-teach', tier: pf.importance.tier, clauses: pf.clauses.length });
                   }
@@ -9661,7 +9664,9 @@ export function CoachTeachPage(): JSX.Element {
                         ? `${fundamental.verdict}${fundamental.recurrence ? ` ${fundamental.recurrence}` : ''}${evidence ? ` ${evidence}` : ''}`
                         : look.line;
                       queueSpokenHint(fenAfterReply, line, look.kind,
-                        /^[a-h][1-8]$/.test(look.square) ? [look.square] : []);
+                        /^[a-h][1-8]$/.test(look.square) ? [look.square] : [],
+                        // The fundamental's own lines lead this sentence.
+                        fundamental?.lines);
                       captureEvent('coach_backward_look', {
                         surface: 'coach-teach', kind: look.kind, cp_loss: Math.round(cpLoss),
                         fundamental: fundamental?.id ?? null,
@@ -9671,7 +9676,7 @@ export function CoachTeachPage(): JSX.Element {
                       // neglected (neglected-development, space-conceded, a passive
                       // worst piece — costs the eval never itemises). Name it on
                       // its own; the fundamental IS the teaching here.
-                      queueSpokenHint(fenAfterReply, fundamental.verdict, 'fundamental', []);
+                      queueSpokenHint(fenAfterReply, fundamental.verdict, 'fundamental', [], fundamental.lines);
                       captureEvent('coach_fundamental_named', {
                         surface: 'coach-teach', fundamental: fundamental.id, cp_loss: Math.round(cpLoss),
                       });
@@ -9833,7 +9838,7 @@ export function CoachTeachPage(): JSX.Element {
                   // (David 2026-09-13) — repetition is caught by the twin gate and
                   // the per-game novelty set, not by a number.
                   const lateDecision = decideTurn(
-                    pending.lines.map(({ lane, text, squares, line }) => ({ lane, text, squares, line, fen: pending.fen })),
+                    pending.lines.map(({ lane, text, squares, lines }) => ({ lane, text, squares, lines, fen: pending.fen })),
                     instantSpokenText,
                     learnMemRef.current.spokenKeys,
                     // ONE THOUGHT PER TURN (WO-1b): the late wave leads only
@@ -9891,10 +9896,33 @@ export function CoachTeachPage(): JSX.Element {
                     // Every move a kept fact named, replayed from its own board:
                     // yours green, their answer red — the same colours the
                     // line-walk board uses.
-                    const lineMarks = keptLineArrows(hintPkg, playerColor === 'white' ? 'w' : 'b');
-                    if (lineMarks.length > 0 && liveFenRef.current === fenAfterReply) {
-                      const drawn: BoardArrow[] = lineMarks.map((a) => ({ startSquare: a.from, endSquare: a.to, color: a.side === 'student' ? 'green' : 'red' }));
+                    // A line on the board on screen draws there; a line that
+                    // starts on an EARLIER board ("a5 holds … after b5, Nb6,
+                    // Nxb6 breaks it") shows that board while it is spoken,
+                    // then the game comes back — the same static line-walk
+                    // board a chat answer uses, never played into the game.
+                    const drawnLines = keptLines(hintPkg, playerColor === 'white' ? 'w' : 'b');
+                    const toBoard = (a: { from: string; to: string; side: 'student' | 'opponent' }): BoardArrow =>
+                      ({ startSquare: a.from, endSquare: a.to, color: a.side === 'student' ? 'green' : 'red' });
+                    // By PLACEMENT: a threat is drawn on its board with the
+                    // other side to move, and it is still the same picture.
+                    const samePlacement = (x: string, y: string): boolean => x.split(' ')[0] === y.split(' ')[0];
+                    const onScreen = drawnLines.filter((l) => samePlacement(l.fen, fenAfterReply));
+                    const earlier = drawnLines.filter((l) => !samePlacement(l.fen, fenAfterReply));
+                    if (onScreen.length > 0 && liveFenRef.current === fenAfterReply) {
+                      const drawn = onScreen.flatMap((l) => l.arrows.map(toBoard));
                       setArrows((prev) => uniqueArrows([...prev, ...drawn]));
+                    }
+                    if (earlier.length > 0 && liveFenRef.current === fenAfterReply) {
+                      const showFen = earlier[0].fen;
+                      const drawn = uniqueArrows(earlier.filter((l) => samePlacement(l.fen, showFen)).flatMap((l) => l.arrows.map(toBoard)));
+                      const token = ++lineWalkTokenRef.current;
+                      setLineWalkFen(showFen);
+                      setLineWalkArrows(drawn);
+                      const holdMs = Math.max(hintPkg.spoken.length * 55, 2500) + 1500;
+                      window.setTimeout(() => {
+                        if (lineWalkTokenRef.current === token) { setLineWalkFen(null); setLineWalkArrows([]); }
+                      }, holdMs);
                     }
                     void logAppAudit({
                       kind: 'coach-narration-spoken',

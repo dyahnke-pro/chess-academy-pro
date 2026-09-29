@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**534 lines · 10 exports · 8 importers · 5 tests · 2 audits**
+**552 lines · 12 exports · 8 importers · 5 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -29,8 +29,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `VoiceFact` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `SpokenLine` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `markableSquares` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9879`
+- `src/components/Coach/CoachTeachPage.tsx:9884`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
@@ -55,7 +58,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/computedVoiceAudit.report.test.ts:363`
 - `src/services/computedVoiceAudit.report.test.ts:395`
 - `src/services/laneReachability.test.ts:136`
-- `src/services/learnTurnDoor.ts:157`
+- `src/services/learnTurnDoor.ts:158`
 - `src/services/voicePackage.test.ts:19`
 - `src/services/voicePackage.test.ts:32`
 - `src/services/voicePackage.test.ts:44`
@@ -104,27 +107,31 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `spokenSentenceKeys` (function) — 7 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7412`
 - `src/components/Coach/CoachTeachPage.tsx:8632`
-- `src/components/Coach/CoachTeachPage.tsx:9439`
-- `src/components/Coach/CoachTeachPage.tsx:9861`
+- `src/components/Coach/CoachTeachPage.tsx:9442`
+- `src/components/Coach/CoachTeachPage.tsx:9866`
 - `src/services/voicePackage.test.ts:415`
 - `src/services/voicePackage.test.ts:424`
 - `src/services/voicePackage.test.ts:436`
 
 ### `describeVoicePackage` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9431`
-- `src/components/Coach/CoachTeachPage.tsx:9903`
+- `src/components/Coach/CoachTeachPage.tsx:9434`
+- `src/components/Coach/CoachTeachPage.tsx:9931`
 - `src/services/voicePackage.test.ts:38`
 
 ### `joinSpoken` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:185`
+- `src/services/learnTurnDoor.ts:186`
 
 ### `LineArrow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `keptLineArrows` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9894`
+### `DrawnLine` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `keptLines` (function) — 4 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9904`
 - `src/services/learnTurnDoor.test.ts:180`
-- `src/services/learnTurnDoor.test.ts:185`
+- `src/services/learnTurnDoor.test.ts:186`
+- `src/services/learnTurnDoor.test.ts:192`
 
 ## Tests
 
