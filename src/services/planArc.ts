@@ -272,7 +272,20 @@ export function stepArc(
     // changes its name every move is not one plan (it said "walk to a8" then
     // "walk to c8" on consecutive moves).
     const aim = prev?.announced && prev.aim.kind === 'route' && prev.aim.goal !== read.goal ? prev.aim : read;
-    const streak = (prev?.streak ?? 0) + 1;
+    // A ROUTE IS ONLY "THE SAME PLAN" IF IT GOES TO THE SAME PLACE (found
+    // 2026-09-29, the first live walk with the lane open). The id is
+    // `route:<piece>` so an ANNOUNCED route keeps its name while the piece
+    // walks it — but before it is announced, that same id let two unrelated
+    // knight routes on consecutive reads (one engine line wanting e5, the next
+    // h2) count as one plan read twice, and "Their plan is taking shape: the
+    // knight's walk to h2" was said off a single read. Until announced, a
+    // route's streak continues only if the two routes SHARE a square on the way
+    // (a rook's e1-c1-c5 growing into e1-c1-c5-c8 is one plan read twice;
+    // f6-d7-e5 then f6-g4-h2 is two). Goal equality alone was too strict — the
+    // engine's horizon moves the end square as the walk lengthens.
+    const sameRoute = !(prev && !prev.announced && prev.aim.kind === 'route'
+      && !prev.aim.squares.some((sq) => read.squares.includes(sq)));
+    const streak = (sameRoute ? (prev?.streak ?? 0) : 0) + 1;
     const entry: ArcEntry = { aim, streak, missing: 0, announced: prev?.announced ?? false, steps: prev?.steps ?? 0 };
     if (!entry.announced && streak >= 2) {
       entry.announced = true;

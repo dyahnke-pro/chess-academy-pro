@@ -23,12 +23,9 @@ describe('learnTurnDoor — the lane table decides, not a kind whitelist', () =>
     expect(d.spoke).toEqual(['pieceQuality']);
   });
 
-  it('the plan arc stays closed until WO-2 proves it true on the board', () => {
-    // Its first live line was board-false (3UqPa5eV2e0 ply 37). Re-opening it
-    // is a deliberate edit to LEARN_LANES, with a walk behind it.
-    const d = decideTurn([{ lane: 'planArc', text: 'Their plan is taking shape: the knight walk to h2.', fen: FEN }]);
-    expect(d.pkg.spoken).toBe('');
-    expect(d.closed).toEqual(['planArc']);
+  it('the plan arc speaks (re-opened after the route-identity fix)', () => {
+    const d = decideTurn([{ lane: 'planArc', text: "Their plan is taking shape: the knight's walk to e5.", fen: FEN, squares: ['e5'] }]);
+    expect(d.spoke).toEqual(['planArc']);
   });
 
   it('a closed lane is refused BEFORE the package and recorded as closed', () => {
