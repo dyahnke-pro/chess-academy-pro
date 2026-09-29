@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { db } from '../db/schema';
 import { buildUserProfile, buildGameRecord } from '../test/factories';
+import { TACTIC_TYPE_REV } from './tacticTypeBackfill';
 
 // 🔒 THE WEAKNESSES FREEZE (2026-09-29). getTacticInsights ran the tactic
 // classifier over every mistake of every analysed game, synchronously, on every
@@ -31,7 +32,7 @@ describe('getTacticInsights reads the cache and never classifies inline', () => 
 
   it('reports cached missed tactics and counts unclassified games as pending', { timeout: 20000 }, async () => {
     await db.games.bulkPut([
-      buildGameRecord({ id: 'g1', white: 'hero', black: 'foe', result: '1-0', pgn: '1. e4 e5 1-0', annotations: ANN, tacticsClassified: true }),
+      buildGameRecord({ id: 'g1', white: 'hero', black: 'foe', result: '1-0', pgn: '1. e4 e5 1-0', annotations: ANN, tacticsClassifiedRev: TACTIC_TYPE_REV }),
       buildGameRecord({ id: 'g2', white: 'hero', black: 'foe', result: '1-0', pgn: '1. e4 e5 1-0', annotations: ANN }),
     ]);
     await db.classifiedTactics.put({

@@ -8,6 +8,7 @@ import { uciMoveToSan } from '../utils/uciToSan';
 import { countFullMovesInPgn } from '../utils/pgnMoveCount';
 import { getMistakePuzzleStats } from './mistakePuzzleService';
 import { gameNeedsAnalysis } from './gameAnalysisService';
+import { TACTIC_TYPE_REV } from './tacticTypeBackfill';
 import { getOpeningNameByEco } from './openingDetectionService';
 import type {
   CoachGameMove,
@@ -878,7 +879,7 @@ export async function getTacticInsights(): Promise<TacticInsights> {
   const classified = (await db.classifiedTactics.toArray())
     .filter((t) => playerGameIds.has(t.sourceGameId));
   const gamesPendingClassification = playerGames.filter(({ game }) =>
-    !game.tacticsClassified && !!game.annotations && game.annotations.length > 0,
+    game.tacticsClassifiedRev !== TACTIC_TYPE_REV && !!game.annotations && game.annotations.length > 0,
   ).length;
   totalMissed = classified.length;
   for (const m of classified) {

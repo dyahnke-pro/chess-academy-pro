@@ -195,14 +195,22 @@ async function main() {
   row('page loads without a freeze', loadGap < FREEZE_MS, `longest block ${loadGap} ms, loaded in ${loadMs} ms (cpu ×${THROTTLE})`);
 
   // Tap the tabs while the background fill runs — each tap must land promptly.
-  for (const label of ['Tactics', 'Mistakes', 'Openings', 'Overview', 'Tactics']) {
+  // Every tab, Patterns and Thinking Errors included: Patterns ran the tactic
+  // classifier over every find three times (206 s / 900 games) and an earlier
+  // version of this probe never tapped it, so it could not see that freeze.
+  for (const id of ['tactics', 'mistakes', 'openings', 'patterns', 'misconceptions', 'overview', 'tactics']) {
     await resetGap();
     const t = Date.now();
-    await page.locator(`[data-testid="tab-${label.toLowerCase()}"]`).click({ timeout: 10000, noWaitAfter: true });
+    await page.locator(`[data-testid="tab-${id}"]`).click({ timeout: 10000, noWaitAfter: true });
     const tapMs = Date.now() - t;
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(id === 'patterns' ? 8000 : 1500);
     const gap = await readGap();
-    row(`tap "${label}" during background fill`, gap < FREEZE_MS && tapMs < 5000, `tap ${tapMs} ms, longest block ${gap} ms`);
+    row(`tap "${id}" during background fill`, gap < FREEZE_MS && tapMs < 5000, `tap ${tapMs} ms, longest block ${gap} ms`);
+    if (id === 'patterns') {
+      const shown = await page.locator('[data-testid="patterns-tab"]').isVisible().catch(() => false);
+      const note = await page.locator('[data-testid="patterns-classifying"]').textContent().catch(() => null);
+      row('Patterns tab renders and says finds are still being scanned', shown && !!note, note ?? (shown ? 'rendered, no pending note' : 'not rendered'));
+    }
   }
   if (PROFILE && process.env.AUDIT_PROFILE_PHASE === 'taps') await dumpProfile();
   const pending = await page.locator('[data-testid="tactics-classifying"]').textContent().catch(() => null);

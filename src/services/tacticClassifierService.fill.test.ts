@@ -3,6 +3,7 @@ import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { backfillClassifiedTactics, classifyTacticsFromGame } from './tacticClassifierService';
 import { IMMEDIATE_BACKFILL_SCHEDULE } from './backfillSchedule';
+import { TACTIC_TYPE_REV } from './tacticTypeBackfill';
 import { buildGameRecord } from '../test/factories';
 import type { MoveAnnotation } from '../types';
 
@@ -37,9 +38,9 @@ describe('backfillClassifiedTactics', () => {
     const found = await backfillClassifiedTactics({ schedule: IMMEDIATE_BACKFILL_SCHEDULE, onGame: (d) => seen.push(d) });
     expect(found).toBe(1);
     expect(seen).toEqual([1, 2]);                                   // unanalysed game skipped
-    expect((await db.games.get('miss'))?.tacticsClassified).toBe(true);
-    expect((await db.games.get('clean'))?.tacticsClassified).toBe(true); // zero tactics, still marked
-    expect((await db.games.get('raw'))?.tacticsClassified).toBeUndefined();
+    expect((await db.games.get('miss'))?.tacticsClassifiedRev).toBe(TACTIC_TYPE_REV);
+    expect((await db.games.get('clean'))?.tacticsClassifiedRev).toBe(TACTIC_TYPE_REV); // zero tactics, still stamped
+    expect((await db.games.get('raw'))?.tacticsClassifiedRev).toBeUndefined();
     expect(await db.classifiedTactics.count()).toBe(1);
 
     const again: number[] = [];
@@ -71,5 +72,31 @@ describe('backfillClassifiedTactics', () => {
     await db.games.update('miss', { annotations: annotations(false) });
     await classifyTacticsFromGame('miss', { force: true });
     expect(await db.classifiedTactics.count()).toBe(0);
+  });
+
+  it('stores the FOUND tactic types too, classified by the move the student played', async () => {
+    // 1.e4 e5 2.Qh5 Nc6 3.Bc4 Nf6?? 4.Qxf7# — the mate is marked brilliant.
+    const c = new Chess();
+    const sans = ['e4', 'e5', 'Qh5', 'Nc6', 'Bc4', 'Nf6', 'Qxf7#'];
+    const anns: MoveAnnotation[] = sans.map((san, i) => {
+      c.move(san);
+      return {
+        moveNumber: Math.floor(i / 2) + 1, color: i % 2 === 0 ? 'white' : 'black', san,
+        evaluation: 20, bestMove: null, bestMoveEval: null,
+        classification: i === 6 ? 'brilliant' : 'good', comment: null,
+      };
+    });
+    await db.games.put(buildGameRecord({ id: 'find', pgn: '1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7# 1-0', studentSide: 'white', annotations: anns }));
+    await classifyTacticsFromGame('find');
+    const g = await db.games.get('find');
+    expect(g?.foundTacticTypes).toEqual(['checkmate']);
+  });
+
+  it('a classifier revision the game was not stamped at re-classifies it', async () => {
+    await db.games.put(buildGameRecord({ id: 'old', pgn: PGN, studentSide: 'white', annotations: annotations(true), tacticsClassifiedRev: 'an-older-classifier' }));
+    const seen: number[] = [];
+    await backfillClassifiedTactics({ schedule: IMMEDIATE_BACKFILL_SCHEDULE, onGame: (d) => seen.push(d) });
+    expect(seen).toEqual([1]);
+    expect((await db.games.get('old'))?.tacticsClassifiedRev).toBe(TACTIC_TYPE_REV);
   });
 });
