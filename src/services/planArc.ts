@@ -24,6 +24,7 @@ import { Chess, type Square } from 'chess.js';
 // plan reader's memory, and the Learn surface reaches it through the reader it
 // already composes), so a runtime import back would be a cycle.
 import type { SidePlan } from './lookaheadPlan';
+import { CAPTURE_VALUE } from './pieceValues';
 
 export type AimKind = 'king-attack' | 'outpost' | 'file' | 'passer' | 'route' | 'shield';
 
@@ -308,7 +309,6 @@ export function stepArc(
   return { next: { entries: live, done: [...done], emerged }, events: said };
 }
 
-const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 
 /**
  * Is this aim a plan the side can walk FROM THE BOARD AS IT IS — not only
@@ -359,8 +359,8 @@ export function aimWalkableNow(aim: Aim, fen: string, color: 'w' | 'b'): boolean
   const lostThere = (pieceType: string): boolean => {
     const attackers = board.attackers(goal, foe);
     if (attackers.length === 0) return false;
-    const cheapest = Math.min(...attackers.map((sq) => VALUE[board.get(sq)?.type ?? 'k'] ?? 100));
-    if (cheapest < (VALUE[pieceType] ?? 0)) return true;
+    const cheapest = Math.min(...attackers.map((sq) => CAPTURE_VALUE[board.get(sq)?.type ?? 'k'] ?? 100));
+    if (cheapest < (CAPTURE_VALUE[pieceType] ?? 0)) return true;
     return attackers.length > board.attackers(goal, color).length;
   };
   if (aim.kind === 'outpost') {
