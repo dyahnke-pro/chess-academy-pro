@@ -23,6 +23,8 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ## 000. WO-DANYA-01 — Learn free play taught like his speedruns (David 2026-09-24)
 
+- 🟠 **FINAL PLAN 2026-09-29 (brainstorm, APPROVED by David — parser + scratch board yes)**: 0 tape bugs → 1 `composeLearnTurn` one door → 2 a plan that SWITCHES with the board (tactical ↔ positional) + one continuous thought + plan-aware grading → 3 BoardQuery chat that plays the line out → 4 shrinking repeats. L2–L9 computers parked. `docs/plans/2026-09-29-danya-full-review.md` §FINAL PLAN.
+
 - ✅ Hand-walk 1 (his Scandinavian, vc-1zfJ7ABoh8k): ~25 board-false/misframed lines fixed at the computer (PLAN §WO-DANYA-01 "Hand-walk 1").
 - ✅ Hand-walk audit locked as the standard (CLAUDE.md "WALK IT, FLAG EVERYTHING, THEN FIX").
 - ✅ Gem tests: SEE 2x faster, convert-once, budgets.
