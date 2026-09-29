@@ -138,11 +138,19 @@ async function main() {
 
   const PROFILE = process.env.AUDIT_PROFILE === '1';
   if (PROFILE && process.env.AUDIT_PROFILE_PHASE !== 'taps') { await cdp.send('Profiler.enable'); await cdp.send('Profiler.setSamplingInterval', { interval: 200 }); await cdp.send('Profiler.start'); }
+  // Boot first, the way a user arrives: the app opens on the home screen and
+  // they TAP Weaknesses. A full reload onto /weaknesses would charge boot work
+  // (the lesson index, the one-time backfills) to this page.
+  await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+  await resetGap();
+  await page.waitForTimeout(Number(process.env.AUDIT_BOOT_SETTLE_MS ?? 45000));
+  const bootGap = await readGap();
+  console.log(`  · boot (informational, not this page): longest block ${bootGap} ms`);
   await resetGap();
   const t0 = Date.now();
-  await page.goto(`${BASE_URL}/weaknesses`, { waitUntil: 'domcontentloaded' });
-  await resetGap(); // the navigation itself tears down the frame loop's page
-  await page.locator('button', { hasText: 'Tactics' }).first().waitFor({ timeout: 120000 });
+  await page.locator('a[href="/weaknesses"]:visible').first().click({ timeout: 30000, noWaitAfter: true });
+  await page.waitForURL(/\/weaknesses/, { timeout: 60000 });
+  await page.locator('[data-testid="tab-tactics"]').waitFor({ timeout: 120000 });
   // Wait for the data to land (the Overview spinner clears).
   // The page shows "Analysing your games..." until every insight has loaded.
   const loaded = await page.waitForFunction(
@@ -190,7 +198,7 @@ async function main() {
   for (const label of ['Tactics', 'Mistakes', 'Openings', 'Overview', 'Tactics']) {
     await resetGap();
     const t = Date.now();
-    await page.locator('button', { hasText: label }).first().click({ timeout: 10000, noWaitAfter: true });
+    await page.locator(`[data-testid="tab-${label.toLowerCase()}"]`).click({ timeout: 10000, noWaitAfter: true });
     const tapMs = Date.now() - t;
     await page.waitForTimeout(1500);
     const gap = await readGap();
