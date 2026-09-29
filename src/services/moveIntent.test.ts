@@ -76,3 +76,14 @@ describe('whatItDoes — the reason the prepared move is played', () => {
     expect(whatItDoes('4k3/8/8/8/8/8/8/4K3 b - - 0 1', 'e1e2', 'w')).toBeNull();
   });
 });
+
+describe('moveIntent — never a plan the move itself just placed', () => {
+  it('castling does not "prepare" the castled rook moving again', () => {
+    const m = moments['13'];
+    const out = moveIntent(m.fenBefore, m.san, {
+      before: lines(m.before), after: lines(m.after), passBefore: lines(m.passBefore), passAfter: lines(m.passAfter),
+    }, 'student');
+    expect(out?.prepares?.uci.slice(0, 2)).not.toBe('f1');
+    expect(out?.text).not.toMatch(/Re1/);
+  });
+});

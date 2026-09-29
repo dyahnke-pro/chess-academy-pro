@@ -9932,6 +9932,9 @@ export function CoachTeachPage(): JSX.Element {
                             // "Bc4 clears the way to castle" and "castling is one
                             // move away" are one idea (walk 2026-09-29).
                             ...(intent.prepares?.san.startsWith('O-O') ? ['castle-now'] : []),
+                            // "prepares f4" and "you have a pawn break on f4" are one
+                            // idea — the positional read's break key.
+                            ...(intent.prepares && /^[a-h][1-8]$/.test(intent.prepares.san) ? [`break-${intent.prepares.san}`] : []),
                           ]);
                           captureEvent('coach_move_intent_named', {
                             surface: 'coach-teach', prevents: !!intent.prevents, prepares: !!intent.prepares,

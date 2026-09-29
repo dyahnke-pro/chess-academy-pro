@@ -236,6 +236,16 @@ export function moveIntent(
     }
   }
 
+  // A follow-up by the piece this move just put down is not a plan the move
+  // prepared — castling "prepares Re1" is the castled rook moving again
+  // (walk 2026-09-29).
+  if (prepares) {
+    try {
+      const m = new Chess(fenBefore).move(playedSan);
+      const own = [m.to, castledRookSquare(m)].filter(Boolean);
+      if (own.includes(prepares.uci.slice(0, 2))) prepares = null;
+    } catch { /* keep */ }
+  }
   if (!prevents && !prepares) return null;
   const squares = [...new Set([
     playedUci.slice(2, 4),
@@ -387,14 +397,24 @@ function safeLanding(fen: string, m: { from: string; to: string; promotion?: str
  * counting only; no engine. "e6 opens d6 for the bishop", "Qd2 makes Bh6 safe",
  * "h3 makes g4 safe". The moved piece's own continuations are not unlocks.
  */
+/** Where the rook lands when `m` castles, else null. */
+function castledRookSquare(m: { color: 'w' | 'b'; isKingsideCastle: () => boolean; isQueensideCastle: () => boolean }): string | null {
+  const rank = m.color === 'w' ? '1' : '8';
+  if (m.isKingsideCastle()) return `f${rank}`;
+  if (m.isQueensideCastle()) return `d${rank}`;
+  return null;
+}
+
 export function unlockedMoves(fenBefore: string, playedSan: string): IntentMove[] {
   let fenAfter: string;
   let movedTo: string;
+  let castledRook: string | null = null;
   try {
     const c = new Chess(fenBefore);
     const m = c.move(playedSan);
     if (!m) return [];
     movedTo = m.to;
+    castledRook = castledRookSquare(m);
     fenAfter = c.fen();
   } catch { return []; }
   const again = nullMoveFen(fenAfter);
@@ -407,7 +427,7 @@ export function unlockedMoves(fenBefore: string, playedSan: string): IntentMove[
   let now: ReturnType<Chess['moves']>;
   try { now = new Chess(again).moves({ verbose: true }); } catch { return []; }
   for (const u of now as Array<{ from: string; to: string; promotion?: string; san: string; captured?: string }>) {
-    if (u.from === movedTo || u.captured || /[+#]/.test(u.san)) continue;
+    if (u.from === movedTo || u.from === castledRook || u.captured || /[+#]/.test(u.san)) continue;
     const key = `${u.from}${u.to}${u.promotion ?? ''}`;
     if (!safeLanding(again, u)) continue;
     const b = before.get(key);
