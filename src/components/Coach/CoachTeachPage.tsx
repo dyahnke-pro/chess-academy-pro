@@ -3144,7 +3144,13 @@ export function CoachTeachPage(): JSX.Element {
       // the dictation branch below could arm it).
       const studentsTurnNow = gameRef.current.turn === playerColor?.[0];
       const dictation = routed?.kind === 'play_move' && studentsTurnNow;
-      if (routed && !dictation) {
+      // A CORRECTION IS NOT A BARE TAKEBACK HERE EITHER (WO-0, the takeback
+      // stall). "take that back and play c6" routes as `take_back_move`; the
+      // arm above already steps aside for it, but this door did not — it undid
+      // the move, saw `ok`, and returned in silence, so the student's move
+      // came off, nothing went on, and the coach never spoke again. The
+      // correction branch below undoes AND plays; let it.
+      if (routed && !dictation && !correctionNamesAMove) {
         const action = actionForCommand(routed, {
           fen: liveFenRef.current,
           // THE TEACHABLE MOVE, FROM THE ENGINE. Gated on the cached analysis
