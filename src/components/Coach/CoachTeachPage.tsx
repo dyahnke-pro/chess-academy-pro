@@ -9153,7 +9153,9 @@ export function CoachTeachPage(): JSX.Element {
                 // `beats` list it used to carry counted computation nobody heard
                 // (G8.5, 2026-09-29).
                 void logAppAudit({
-                  kind: 'coach-narration-spoken',
+                  // Not narration — nothing here is spoken, so it must not ride
+                  // the narration kind that every listener reads as speech.
+                  kind: 'coach-opening-teaching-active',
                   category: 'subsystem',
                   source: 'CoachTeachPage.turnFacts',
                   summary: `teaching tier: ${teachingTierRef.current ?? 'none'}`,
