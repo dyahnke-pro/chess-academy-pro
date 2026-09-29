@@ -16,6 +16,7 @@
 import { Chess } from 'chess.js';
 import type { AnalysisLine } from '../types';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { legalSeeGainOn } from './positionReadingService';
 
 export interface IntentReads {
   /** Mover to move at the board BEFORE the move (the ordinary read). */
@@ -31,6 +32,18 @@ export interface IntentReads {
 }
 
 export interface IntentMove { uci: string; san: string }
+
+/** How each half reads the engine. Chosen by measurement against his games
+ *  (`moveIntent.measure.test.ts`), not by taste. */
+export interface IntentOptions {
+  /** 'pass' — the best move after a free extra move; 'line' — the next move
+   *  this side plays in the engine's own main line after the move. */
+  prepare: 'pass' | 'line';
+  /** 'any' — every strong reply after a pass; 'concrete' — only a reply that
+   *  mates, gives check, or wins material by exchange. */
+  prevent: 'any' | 'concrete';
+}
+export const DEFAULT_INTENT: IntentOptions = { prepare: 'line', prevent: 'concrete' };
 
 export interface MoveIntent {
   /** The reply this move took away from the opponent. */
@@ -100,6 +113,7 @@ export function moveIntent(
   reads: IntentReads,
   /** Whose move this is, for the wording: the student's, or their opponent's. */
   seat: 'student' | 'opponent',
+  opts: IntentOptions = DEFAULT_INTENT,
 ): MoveIntent | null {
   let fenAfter: string;
   let playedUci: string;
@@ -137,6 +151,7 @@ export function moveIntent(
       // Moving the attacked piece away is a rescue, not a purpose worth naming.
       const rescue = threat.slice(2, 4) === playedUci.slice(0, 2);
       if (!threatSan || rescue || threat === playedUci) continue;
+      if (opts.prevent === 'concrete' && !concreteThreat(passFen, threat, threatSan, line)) continue;
       const stillLegal = sanOf(fenAfter, threat) !== null;
       const threatNow = valueOfMove(reads.after, threat, opp);
       const gone = !stillLegal
@@ -149,24 +164,56 @@ export function moveIntent(
 
   // ── PREPARES ────────────────────────────────────────────────────────────
   let prepares: MoveIntent['prepares'] = null;
-  const againFen = nullMoveFen(fenAfter);
-  const follow = firstMove(reads.passAfter[0]);
-  if (againFen && follow && reads.passAfter[0] && follow !== playedUci) {
-    const followSan = sanOf(againFen, follow);
-    // A capture or a check after a PASS is an artifact of the pass — the
-    // opponent never got to answer. A plan move is quiet.
-    const forcing = !!followSan && /[x+#]/.test(followSan);
-    const nowValue = valueFor(reads.passAfter[0], mover);
-    const legalBefore = sanOf(fenBefore, follow) !== null;
-    const beforeValue = valueOfMove(reads.before, follow, mover);
-    // Illegal before → the move made it possible. Listed before → the gain is
-    // exact. Legal but unlisted → unknown, and unknown is never claimed.
-    const gainCp = !legalBefore ? PREPARE_CP : beforeValue !== null ? nowValue - beforeValue : null;
-    if (followSan && !forcing && gainCp !== null && gainCp >= PREPARE_CP) prepares = { uci: follow, san: followSan, gainCp };
+  if (opts.prepare === 'line') {
+    // The engine's main line after the move, walked for THIS side's moves (the
+    // 2nd, 4th, 6th ply). The first one that was not available before — illegal
+    // then, or clearly worse then — is what this move is heading for. "Kh1, …,
+    // then f4": the plan move is rarely the very next one.
+    const line = reads.after[0]?.moves ?? [];
+    const bestBefore = valueFor(reads.before[0], mover);
+    try {
+      const c = new Chess(fenAfter);
+      for (let i = 0; i < Math.min(line.length, 6); i += 1) {
+        const u = line[i];
+        const mv = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.slice(4, 5) || undefined });
+        if (!mv) break;
+        if (i % 2 === 0) continue; // their move
+        if (mv.captured || /[+#]/.test(mv.san)) continue; // forcing is not a plan
+        if (u === playedUci) continue;
+        const legalBefore = sanOf(fenBefore, u) !== null;
+        const beforeValue = valueOfMove(reads.before, u, mover);
+        const gainCp = !legalBefore ? PREPARE_CP : beforeValue !== null ? bestBefore - beforeValue : null;
+        if (gainCp !== null && gainCp >= PREPARE_CP) { prepares = { uci: u, san: mv.san, gainCp }; break; }
+      }
+    } catch { /* an unreadable line prepares nothing */ }
+  } else {
+    const againFen = nullMoveFen(fenAfter);
+    const follow = firstMove(reads.passAfter[0]);
+    if (againFen && follow && reads.passAfter[0] && follow !== playedUci) {
+      const followSan = sanOf(againFen, follow);
+      // A capture or a check after a PASS is an artifact of the pass — the
+      // opponent never got to answer. A plan move is quiet.
+      const forcing = !!followSan && /[x+#]/.test(followSan);
+      const nowValue = valueFor(reads.passAfter[0], mover);
+      const legalBefore = sanOf(fenBefore, follow) !== null;
+      const beforeValue = valueOfMove(reads.before, follow, mover);
+      const gainCp = !legalBefore ? PREPARE_CP : beforeValue !== null ? nowValue - beforeValue : null;
+      if (followSan && !forcing && gainCp !== null && gainCp >= PREPARE_CP) prepares = { uci: follow, san: followSan, gainCp };
+    }
   }
 
   if (!prevents && !prepares) return null;
   return { prevents, prepares, text: phrase(playedSan, prevents, prepares, seat, mover, fenAfter) };
+}
+
+/** A threat worth naming as "stopped": it mates, checks, or wins material by
+ *  exchange on the square it lands on. A quiet reply the engine merely likes
+ *  is not a threat a student can see. */
+function concreteThreat(passFen: string, uci: string, san: string, line: AnalysisLine): boolean {
+  if (line.mate !== null && line.mate !== undefined) return true;
+  if (/[+#]/.test(san)) return true;
+  if (!san.includes('x')) return false;
+  try { return legalSeeGainOn(new Chess(passFen), uci.slice(2, 4) as Parameters<typeof legalSeeGainOn>[1]) >= 1; } catch { return false; }
 }
 
 function phrase(

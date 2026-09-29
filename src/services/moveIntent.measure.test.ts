@@ -8,8 +8,8 @@
 //
 // Not a gate. Skips unless the reads exist and MOVE_INTENT=1.
 import { describe, it, expect } from 'vitest';
-import { existsSync, readFileSync } from 'node:fs';
-import { moveIntent, type IntentReads } from './moveIntent';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { moveIntent, type IntentReads, type IntentOptions, type MoveIntent } from './moveIntent';
 import type { AnalysisLine } from '../types';
 
 interface Raw { cp: number | null; mate: number | null; pv: string[] }
@@ -25,27 +25,34 @@ const HAVE = existsSync(SRC) && process.env.MOVE_INTENT === '1';
 const lines = (r: Raw[]): AnalysisLine[] => r.map((l, i) => ({ rank: i + 1, evaluation: l.cp ?? 0, moves: l.pv, mate: l.mate }));
 
 describe.skipIf(!HAVE)('moveIntent on his moments', () => {
-  it('fires on his purpose moments far more than on the control', () => {
+  it('names what HE names, per variant', () => {
     const ms = JSON.parse(readFileSync(SRC, 'utf8')) as Moment[];
-    const res = ms.map((m) => {
-      const reads: IntentReads = { before: lines(m.before), after: lines(m.after), passBefore: lines(m.passBefore), passAfter: lines(m.passAfter) };
-      return { m, out: moveIntent(m.fenBefore, m.san, reads, 'student') };
-    });
-    const t = res.filter((r) => r.m.target); const c = res.filter((r) => !r.m.target);
-    const rate = (xs: typeof res): number => xs.filter((r) => r.out).length / Math.max(1, xs.length);
-    const prevOn = (xs: typeof res, code: string): string => {
-      const ys = xs.filter((r) => r.m.codes.includes(code));
-      return `${ys.filter((r) => r.out?.prevents).length}/${ys.length} prevents, ${ys.filter((r) => r.out?.prepares).length}/${ys.length} prepares`;
-    };
-    console.log(`[intent] target ${t.length}: fires ${(100 * rate(t)).toFixed(0)}% · control ${c.length}: fires ${(100 * rate(c)).toFixed(0)}%`);
-    console.log(`[intent] his PREVENT moments: ${prevOn(t, 'M-PURPOSE-PREVENT')}`);
-    console.log(`[intent] his QUIET-PURPOSE moments: ${prevOn(t, 'M-PURPOSE-QUIET')}`);
-    for (const r of res.filter((x) => x.m.target).slice(0, 60)) {
-      console.log(`\n${r.m.game}:${r.m.ply} ${r.m.san}\n  HIM: ${r.m.his}\n  US:  ${r.out?.text ?? '—'}`);
+    const readsOf = (m: Moment): IntentReads => ({ before: lines(m.before), after: lines(m.after), passBefore: lines(m.passBefore), passAfter: lines(m.passAfter) });
+    // "Names what he names": a square or move we name appears in his line.
+    const squaresOf = (o: MoveIntent): string[] => [o.prevents?.uci.slice(2, 4), o.prepares?.uci.slice(2, 4)].filter((x): x is string => !!x);
+    const agrees = (o: MoveIntent, his: string): boolean => squaresOf(o).some((sq) => his.includes(sq))
+      || [o.prevents?.san, o.prepares?.san].some((sn) => !!sn && his.includes(sn.replace(/[+#x]/g, '').slice(-3)));
+    const VARIANTS: IntentOptions[] = [
+      { prepare: 'pass', prevent: 'any' }, { prepare: 'pass', prevent: 'concrete' },
+      { prepare: 'line', prevent: 'any' }, { prepare: 'line', prevent: 'concrete' },
+    ];
+    const dump: Record<string, Record<string, { text: string | null; agrees: boolean }>> = {};
+    for (const v of VARIANTS) {
+      const res = ms.map((m) => ({ m, out: moveIntent(m.fenBefore, m.san, readsOf(m), 'student', v) }));
+      const vk = `${v.prepare}/${v.prevent}`;
+      for (const r of res) {
+        const key = `${r.m.game}:${r.m.ply}`;
+        (dump[key] ??= {})[vk] = { text: r.out?.text ?? null, agrees: !!r.out && agrees(r.out, r.m.his ?? '') };
+      }
+      const t = res.filter((r) => r.m.target && r.out); const tAll = res.filter((r) => r.m.target);
+      const c = res.filter((r) => !r.m.target);
+      const ag = t.filter((r) => agrees(r.out as MoveIntent, r.m.his ?? '')).length;
+      console.log(`[intent] ${v.prepare}/${v.prevent}: fires on his ${t.length}/${tAll.length}, agrees ${ag} (${Math.round(100 * ag / Math.max(1, t.length))}% of fires) · control fires ${c.filter((r) => r.out).length}/${c.length}`);
+      if (v.prepare === 'line' && v.prevent === 'concrete') {
+        for (const r of t.slice(0, 40)) console.log(`${agrees(r.out as MoveIntent, r.m.his ?? '') ? '✓' : '✗'} ${r.m.game}:${r.m.ply} ${r.m.san} | ${r.out?.text} || ${(r.m.his ?? '').slice(0, 120)}`);
+      }
     }
-    for (const r of res.filter((x) => !x.m.target && x.out).slice(0, 25)) {
-      console.log(`\n[control] ${r.m.game}:${r.m.ply} ${r.m.san}\n  HIM: ${r.m.his ?? '(silent)'}\n  US:  ${r.out?.text}`);
-    }
-    expect(res.length).toBeGreaterThan(20);
+    if (process.env.MOVE_INTENT_DUMP) writeFileSync(process.env.MOVE_INTENT_DUMP, JSON.stringify(dump));
+    expect(ms.length).toBeGreaterThan(20);
   }, 120_000);
 });
