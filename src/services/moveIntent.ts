@@ -117,24 +117,28 @@ export function moveIntent(
   if (!reads.before.length || !reads.after.length) return null;
 
   // ── PREVENTS ────────────────────────────────────────────────────────────
+  // Every reply the opponent would have after a pass is a candidate — his
+  // "prevents" is often their second idea, not their first. The strongest
+  // real threat the move took away is the one named.
   let prevents: MoveIntent['prevents'] = null;
   const passFen = nullMoveFen(fenBefore);
-  const threat = firstMove(reads.passBefore[0]);
-  if (passFen && threat && reads.passBefore[0]) {
-    // What passing would cost the mover: their best reply after a pass, against
-    // the mover's own best move now (both from the opponent's side).
-    const ifPass = valueFor(reads.passBefore[0], opp);
+  if (passFen && reads.before[0]) {
     const ifBest = -valueFor(reads.before[0], mover);
-    const threatCp = ifPass - ifBest;
-    const threatSan = sanOf(passFen, threat);
-    // The move that simply moves the attacked piece away is a rescue, not a
-    // purpose worth naming — other lanes already say the piece was hit.
-    const rescue = threat.slice(2, 4) === playedUci.slice(0, 2);
-    if (threatSan && threatCp >= THREAT_CP && !rescue && threat !== playedUci) {
+    const theirBestNow = reads.after[0] ? valueFor(reads.after[0], opp) : null;
+    const worstListed = reads.after.length ? Math.min(...reads.after.map((l) => valueFor(l, opp))) : null;
+    for (const line of reads.passBefore) {
+      const threat = firstMove(line);
+      if (!threat) continue;
+      // What passing would cost the mover: this reply after a pass, against
+      // the mover's own best move now (both from the opponent's side).
+      const threatCp = valueFor(line, opp) - ifBest;
+      if (threatCp < THREAT_CP || (prevents && prevents.threatCp >= threatCp)) continue;
+      const threatSan = sanOf(passFen, threat);
+      // Moving the attacked piece away is a rescue, not a purpose worth naming.
+      const rescue = threat.slice(2, 4) === playedUci.slice(0, 2);
+      if (!threatSan || rescue || threat === playedUci) continue;
       const stillLegal = sanOf(fenAfter, threat) !== null;
-      const theirBestNow = reads.after[0] ? valueFor(reads.after[0], opp) : null;
       const threatNow = valueOfMove(reads.after, threat, opp);
-      const worstListed = reads.after.length ? Math.min(...reads.after.map((l) => valueFor(l, opp))) : null;
       const gone = !stillLegal
         || (theirBestNow !== null && threatNow !== null && threatNow <= theirBestNow - GONE_CP)
         // Not even among their listed moves: worse than the worst of them.
@@ -149,20 +153,16 @@ export function moveIntent(
   const follow = firstMove(reads.passAfter[0]);
   if (againFen && follow && reads.passAfter[0] && follow !== playedUci) {
     const followSan = sanOf(againFen, follow);
+    // A capture or a check after a PASS is an artifact of the pass — the
+    // opponent never got to answer. A plan move is quiet.
+    const forcing = !!followSan && /[x+#]/.test(followSan);
     const nowValue = valueFor(reads.passAfter[0], mover);
     const legalBefore = sanOf(fenBefore, follow) !== null;
     const beforeValue = valueOfMove(reads.before, follow, mover);
-    const worstBefore = Math.min(...reads.before.map((l) => valueFor(l, mover)));
     // Illegal before → the move made it possible. Listed before → the gain is
-    // exact. Legal but unlisted → it scored worse than every listed move, so the
-    // worst listed value is an upper bound on what it was worth then.
-    const gainCp = !legalBefore ? PREPARE_CP
-      : beforeValue !== null ? nowValue - beforeValue
-        : nowValue - worstBefore;
-    // Recapturing the piece that just moved, or taking something the move
-    // itself put en prise, is not a plan.
-    const trivial = follow.slice(2, 4) === playedUci.slice(2, 4);
-    if (followSan && gainCp >= PREPARE_CP && !trivial) prepares = { uci: follow, san: followSan, gainCp };
+    // exact. Legal but unlisted → unknown, and unknown is never claimed.
+    const gainCp = !legalBefore ? PREPARE_CP : beforeValue !== null ? nowValue - beforeValue : null;
+    if (followSan && !forcing && gainCp !== null && gainCp >= PREPARE_CP) prepares = { uci: follow, san: followSan, gainCp };
   }
 
   if (!prevents && !prepares) return null;

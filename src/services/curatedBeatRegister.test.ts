@@ -9,7 +9,9 @@ import { Chess } from 'chess.js';
 import { beatRegister, curatedBeatAt, curatedBeatStats, warmCuratedBeatIndexSync } from './curatedBeatSource';
 import { getAllLessonScripts } from '../data/lessons/index';
 
-beforeAll(() => { warmCuratedBeatIndexSync(); });
+// Indexing every curated beat is real work (~3,700 beats, synchronous): seconds
+// on a quiet machine, over the 10s default under a loaded ship-check.
+beforeAll(() => { warmCuratedBeatIndexSync(); }, 60_000);
 
 describe('beatRegister — the classification', () => {
   it('refuses the student\'s own side named as an actor', () => {
