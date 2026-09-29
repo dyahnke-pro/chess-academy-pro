@@ -28,12 +28,12 @@ describe('moveOrder — his "this first, because…"', () => {
     expect(out).not.toBeNull();
     expect(out?.text).toMatch(/cxd4/);
     expect(out?.text).toMatch(/Nc6/);
-    expect(out?.text).toMatch(/drops|costs you material/);
+    expect(out?.text).toMatch(/dropped|cost material/);
   });
 
   it('Be3 first — Nc3 right now drops the d4-pawn', () => {
     const out = run(at('1rcEbI44WqE', 13));
-    expect(out?.text).toMatch(/^(Be3 first — Nc3 right now runs into …Qxd4|The order matters: Be3 before Nc3)/);
+    expect(out?.text).toMatch(/^(Be3 first — Nc3 straight away would have run into …Qxd4|The order matters: Be3 before Nc3)/);
     expect(out?.squares).toContain('d4');
   });
 

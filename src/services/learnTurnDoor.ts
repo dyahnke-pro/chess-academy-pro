@@ -53,6 +53,8 @@ export type LearnLane =
   | 'fundamental'
   | 'movePoint'
   | 'moveIntent'
+  | 'moveOrder'
+  | 'theirMoveCost'
   | 'causalChain'
   | 'kingSafety'
   | 'phase'
@@ -104,6 +106,12 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // possible, both engine-proven (moveIntent). His most frequent point on a
   // clean move, and the one a board description never says.
   moveIntent: { kind: 'computed', why: 'what the student’s move prevents or prepares, engine-proven', lead: 75 },
+  // "X first — Y straight away would have run into R" (census #1, his most
+  // frequent missing point). Engine-proven by playing the follow-up first.
+  // What THEIR move cost them (census #5): a hole your knight can use, their
+  // own bishop shut in, castling given up, lasting structural damage.
+  theirMoveCost: { kind: 'computed', why: 'what the opponent’s move cost them that the student can use', lead: 74 },
+  moveOrder: { kind: 'computed', why: 'why the move had to come first — the follow-up played first loses material', lead: 77 },
   // ALWAYS rides: a switch is said once, the move it happens — held behind a
   // threat it is lost for good (Fried Liver walk 2026-09-29: the turn to sharp
   // came WITH the threat, lost the lead to it, and was never heard).

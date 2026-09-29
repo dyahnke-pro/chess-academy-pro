@@ -107,13 +107,13 @@ export function moveOrder(
 
   // What R wins, counted by exchange on its square (their gain, in pawns).
   let cost: string | null = null;
-  if (mates) cost = "and it's mate";
+  if (mates) cost = 'and it would have been mate';
   else if (r.captured) {
     const before = new Chess(yFen);
     const net = legalSeeGainFor(before.fen(), r.to, opp);
     const piece = NAME[r.captured] ?? 'piece';
-    if (net >= (MATERIAL_VALUE[r.captured] ?? 0)) cost = `and the ${piece} on ${r.to} simply drops`;
-    else if (net > 0) cost = `and it costs you material on ${r.to}`;
+    if (net >= (MATERIAL_VALUE[r.captured] ?? 0)) cost = `and the ${piece} on ${r.to} would simply have dropped`;
+    else if (net > 0) cost = `and it would have cost material on ${r.to}`;
   }
   if (!cost) return null;
 
@@ -122,12 +122,12 @@ export function moveOrder(
   const key = stemKeyOf(fenBefore);
   const text = seat === 'student'
     ? rotateStem([
-      `${X} first — ${Y} right now runs into ${R}, ${cost}.`,
-      `The order matters: ${X} before ${Y}. Play ${Y} straight away and ${R} comes, ${cost}.`,
+      `${X} first — ${Y} straight away would have run into ${R}, ${cost}.`,
+      `The order matters: ${X} before ${Y}. ${Y} at once would have met ${R}, ${cost}.`,
     ], key)
     : rotateStem([
-      `Their ${X} comes first for a reason — ${Y} right now would run into your ${R}.`,
-      `They get the order right: ${X} before ${Y}, because ${Y} at once walks into your ${R}.`,
+      `Their ${X} comes first for a reason — ${Y} straight away would have run into your ${R}.`,
+      `They get the order right: ${X} before ${Y}, because ${Y} at once would have walked into your ${R}.`,
     ], key);
   return {
     text,

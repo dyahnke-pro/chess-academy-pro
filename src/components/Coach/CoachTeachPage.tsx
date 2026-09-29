@@ -30,6 +30,8 @@ import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePacka
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { curatedBeatAt } from '../../services/curatedBeatSource';
 import { DEFAULT_INTENT, moveIntent, nullMoveFen } from '../../services/moveIntent';
+import { followUpOf, moveOrder } from '../../services/moveOrder';
+import { theirMoveCost } from '../../services/theirMoveCost';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -9897,6 +9899,25 @@ export function CoachTeachPage(): JSX.Element {
                         queueSpokenHint(fenAfterReply, point, 'movePoint', []);
                         captureEvent('coach_move_point_named', { surface: 'coach-teach' });
                       }
+                      // WHY THIS MOVE HAD TO COME FIRST (census #1: "the key move
+                      // order — you take on d4 first"). Play the student's next move
+                      // in the engine's line FIRST and read what they answer; spoken
+                      // only when that answer wins material or mates.
+                      if (!gambitLine && !mid.isMate && !preStudentRead.isMate) {
+                        const yUci = followUpOf(mid.topLines ?? []);
+                        const xLine = mid.topLines?.[0];
+                        const yFen = (() => {
+                          if (!yUci) return null;
+                          try { const c = new Chess(fenBefore); return c.move({ from: yUci.slice(0, 2), to: yUci.slice(2, 4), promotion: yUci.slice(4, 5) || undefined }) ? c.fen() : null; } catch { return null; }
+                        })();
+                        const yRead = yFen ? await stockfishEngine.analyzeWithBudget(yFen, COACH_TURN_DEPTH, 900).catch(() => null) : null;
+                        const order = yUci && xLine && yRead?.topLines?.[0]
+                          ? moveOrder(fenBefore, move.san, yUci, xLine, yRead.topLines[0], 'student')
+                          : null;
+                        if (order) {
+                          queueSpokenHint(fenAfterReply, order.text, 'moveOrder', order.squares, [`order:${order.followUp.uci}`, `stops:${order.answer.uci}`]);
+                          captureEvent('coach_move_order_named', { surface: 'coach-teach', cost_cp: Math.round(order.costCp) });
+                        }
                       // WHAT THE MOVE IS FOR (David 2026-09-29: "the coach describes the
                       // board; he explains why a move is played"). The reply this
                       // move took away, or the move it made possible — both proven
@@ -9942,9 +9963,29 @@ export function CoachTeachPage(): JSX.Element {
                           });
                         }
                       }
+                      }
                     }
                   }
                 } catch { /* the backward look is a bonus, never a blocker */ }
+
+                // ── WHAT THEIR MOVE COST THEM (census #5) ──────────────────
+                // "…e6 opens a square your knight jumps into", "the passive
+                // …d6 blocks in the bishop". Their reply is read off the board,
+                // so a dictated move is taught the same as one the coach chose.
+                try {
+                  const replySan = (() => {
+                    try {
+                      const c0 = new Chess(move.fen);
+                      return c0.moves({ verbose: true })
+                        .find((m) => { const c = new Chess(move.fen); c.move(m.san); return c.fen().split(' ')[0] === fenAfterReply.split(' ')[0]; })?.san ?? null;
+                    } catch { return null; }
+                  })();
+                  const cost = replySan ? theirMoveCost(move.fen, replySan, playerColor === 'white' ? 'w' : 'b') : null;
+                  if (cost) {
+                    queueSpokenHint(fenAfterReply, cost.text, 'theirMoveCost', cost.squares, [`cost-${cost.kind}-${cost.squares[0]}`]);
+                    captureEvent('coach_their_move_cost_named', { surface: 'coach-teach', kind: cost.kind });
+                  }
+                } catch { /* a bonus, never a blocker */ }
 
                 // ── THE COACH'S OWN MOVE ───────────────────────────────────
                 try {

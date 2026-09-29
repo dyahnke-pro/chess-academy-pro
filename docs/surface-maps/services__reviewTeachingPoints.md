@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**816 lines · 20 exports · 12 importers · 6 tests · 0 audits**
+**816 lines · 20 exports · 13 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -25,6 +25,7 @@
 - `src/services/reviewNarrationFidelity.test.ts`
 - `src/services/reviewOpeningTheory.ts`
 - `src/services/reviewTeachingPoints.test.ts`
+- `src/services/theirMoveCost.ts`
 
 ## Exports and every call site
 
@@ -138,7 +139,7 @@
 ### `describeTradeConsequence` (function) — 1 call site
 - `src/services/coachFeatureService.ts:2595`
 
-### `describeConcessions` (function) — 8 call sites
+### `describeConcessions` (function) — 9 call sites
 - `src/services/backwardLook.ts:391`
 - `src/services/coachFeatureService.ts:2278`
 - `src/services/coachFeatureService.ts:2344`
@@ -147,6 +148,7 @@
 - `src/services/reviewTeachingPoints.test.ts:211`
 - `src/services/reviewTeachingPoints.test.ts:218`
 - `src/services/reviewTeachingPoints.test.ts:227`
+- `src/services/theirMoveCost.ts:135`
 
 ### `findTrappedPiece` (function) — 9 call sites
 - `src/services/coachFeatureService.ts:2917`
