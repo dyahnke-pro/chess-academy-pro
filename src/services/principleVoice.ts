@@ -119,7 +119,7 @@ const FUNDAMENTAL_HOW: Record<FundamentalId, string> = {
     'Winning positions are won by simplifying. Trade pieces at every chance but keep the pawn structure intact, steer for the ending where the extra material decides, and refuse every complication.',
   // ── section 14: the reasoning errors ──
   'calculation-depth':
-    'Calculate to a QUIET position, not to a good feeling. Follow every forcing reply — check, capture, threat — until nothing forces, then judge. If the line ends while they still have a capture, you have not finished.',
+    'Follow every check, capture and threat until nothing is forcing, then judge the position. If they still have a capture at the end of your line, you have not finished.',
   'left-book-early':
     'Before you leave theory, ask what the new move gains that the book move does not. If you cannot say it out loud, prefer the book move — it is there because thousands of games found it works.',
   'no-plan':
@@ -454,7 +454,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       const s = [
         `The move looks fine for two moves — then, after ${f.path}, ${f.punish} lands. The line had to be followed ${f.depth} plies deep, and the calculation stopped early.`,
         `Nothing hangs right away, which is the trap: after ${f.path}, ${f.punish} arrives on their ${nth(Math.ceil(Number(f.depth) / 2))} move.`,
-        `Shallow read: ${f.played} survives the first replies — after ${f.path}, ${f.punish} breaks it. The thread was lost deeper in the line.`,
+        `${f.played} holds against the first replies, but after ${f.path}, ${f.punish} breaks it — the line had to be followed to the end.`,
       ];
       return s[v % s.length];
     }

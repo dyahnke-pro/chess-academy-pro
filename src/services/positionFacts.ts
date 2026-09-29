@@ -1346,7 +1346,7 @@ function buildClauses(a: {
       // 2026-09-24: "Bishop on h5 pins knight on e2 against queen on d1").
       // The definition is taught once a game (`definitionKey`); after that the
       // board fact speaks alone.
-      kind: 'concept', rank, text: concept.source === 'tactic' ? afterLine(concept.line, concept.boardFen, a.fen, seatBare(concept.instance && a.alreadySaid?.has(definitionKey(concept.id)) ? `${concept.instance}.` : concept.full, concept.boardFen ?? a.fen, studentSeat === 'white' ? 'w' : 'b')) : concept.full,
+      kind: 'concept', rank, text: concept.source === 'tactic' ? afterLine(concept.line, concept.boardFen, a.fen, studentSeat === 'white' ? 'w' : 'b', seatBare(concept.instance && a.alreadySaid?.has(definitionKey(concept.id)) ? `${concept.instance}.` : concept.full, concept.boardFen ?? a.fen, studentSeat === 'white' ? 'w' : 'b')) : concept.full,
       conceptId: concept.source === 'tactic' ? concept.id : undefined,
       // `ComputedConcept.squares` is the engine's own lead-the-eye set (agent
       // first, then targets) — exactly the geometry the sentence names.
@@ -1448,10 +1448,15 @@ function buildClauses(a: {
 
 /** A concept that lives on a FUTURE board is said with the moves that reach
  *  it — "After cxb3+, moving your pawn on b3…" — never as a fact about the
- *  board on screen (walk 900, 27…Ba4+). */
-function afterLine(line: readonly string[] | undefined, boardFen: string | undefined, fenNow: string, text: string): string {
+ *  board on screen (walk 900, 27…Ba4+). When the line is ONE move of the
+ *  student's own, it is their option, not something that happened: "Play Qd2
+ *  and your queen on d2…" (walk 3UqPa5eV2e0 ply 33 read "After Qd2, your
+ *  queen on d2…" as if Qd2 had been played — it had not). */
+export function afterLine(line: readonly string[] | undefined, boardFen: string | undefined, fenNow: string, student: 'w' | 'b', text: string): string {
   if (!line || line.length === 0 || !boardFen || samePlacementFen(boardFen, fenNow)) return text;
-  return `After ${line.join(', ')}, ${text.charAt(0).toLowerCase()}${text.slice(1)}`;
+  const rest = `${text.charAt(0).toLowerCase()}${text.slice(1)}`;
+  if (line.length === 1 && fenNow.split(' ')[1] === student) return `Play ${line[0]} and ${rest}`;
+  return `After ${line.join(', ')}, ${rest}`;
 }
 
 function samePlacementFen(a: string, b: string): boolean {

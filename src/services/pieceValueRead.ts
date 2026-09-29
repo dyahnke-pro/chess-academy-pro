@@ -262,6 +262,11 @@ export function pieceQualityLines(
   // already doing work this early IS the exception worth naming.
   const best = theirs.filter((v) => v.piece.toLowerCase() !== 'p')
     .filter((v) => opts?.isMiddlegame === true || !onHomeSquare(v))
+    // …and a MINOR still on its home square is never their best piece, in any
+    // phase — it is undeveloped (walk 3UqPa5eV2e0, 18…e5: "their knight on g8
+    // is the piece doing the most work for them"). The middlegame lifts the
+    // home-square guard for rooks and the queen, which can work from home.
+    .filter((v) => !('nb'.includes(v.piece.toLowerCase()) && onHomeSquare(v)))
     .filter((v) => opts?.isMiddlegame === true || !'nb'.includes(v.piece.toLowerCase()))
     // …and a pre-middlegame ROOK counts as "doing work" only on a file free of
     // its own pawns. Castling is not work: on move six of a Philidor (hand walk

@@ -4,17 +4,17 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1460 lines · 14 exports · 17 importers · 16 tests · 3 audits**
+**1465 lines · 15 exports · 18 importers · 17 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:24) — names `positionFacts`
 - **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:287) — names `positionFacts`
 - **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:907) — names `positionFacts`
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3833) — names `ClauseKind`, `positionFacts`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3985) — names `positionFacts`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5920) — names `positionFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:6027) — names `positionFacts`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3864) — names `ClauseKind`, `positionFacts`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4016) — names `positionFacts`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5951) — names `positionFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:6058) — names `positionFacts`
 
 ## Who calls in
 
@@ -24,6 +24,7 @@
 - `src/services/computerAccuracy.audit.test.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/loopCloses.test.ts`
+- `src/services/positionFacts.afterLine.test.ts`
 - `src/services/positionFacts.convertOnce.test.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/positionFacts.moveWhy.test.ts`
@@ -76,9 +77,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseText` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9136`
+- `src/components/Coach/CoachTeachPage.tsx:9030`
 - `src/hooks/useLiveCoach.ts:295`
-- `src/hooks/usePhaseNarration.ts:655`
+- `src/hooks/usePhaseNarration.ts:660`
 - `src/services/computerAccuracy.audit.test.ts:113`
 - `src/services/positionFacts.test.ts:254`
 - `src/services/positionFacts.test.ts:255`
@@ -90,10 +91,10 @@
 - `src/services/whyBestMove.ts:103`
 
 ### `computePositionFacts` (function) — 78 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9073`
+- `src/components/Coach/CoachTeachPage.tsx:8967`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
-- `src/hooks/usePhaseNarration.ts:630`
+- `src/hooks/usePhaseNarration.ts:635`
 - `src/services/bluffDetector.test.ts:36`
 - `src/services/bluffDetector.test.ts:46`
 - `src/services/computerAccuracy.audit.test.ts:112`
@@ -173,10 +174,16 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:7892`
+- `src/components/Coach/CoachTeachPage.tsx:7867`
 
 ### `convertKey` (function) — 1 call site
 - `src/services/positionFacts.convertOnce.test.ts:24`
+
+### `afterLine` (function) — 4 call sites
+- `src/services/positionFacts.afterLine.test.ts:13`
+- `src/services/positionFacts.afterLine.test.ts:16`
+- `src/services/positionFacts.afterLine.test.ts:19`
+- `src/services/positionFacts.afterLine.test.ts:22`
 
 ## Tests
 
@@ -187,6 +194,7 @@
 - `src/services/latentFork.test.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/loopCloses.test.ts`
+- `src/services/positionFacts.afterLine.test.ts`
 - `src/services/positionFacts.convertOnce.test.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/positionFacts.moveWhy.test.ts`

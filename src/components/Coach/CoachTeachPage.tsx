@@ -8219,12 +8219,18 @@ export function CoachTeachPage(): JSX.Element {
         // read and write `student-break-<square>`.
         const breakHeard = (x: { id: string; squares: readonly string[] }): boolean =>
           x.id === 'pawn-break' && x.squares.some((sq) => standingRef.current.said.has(`student-break-${sq}`) || positionalSaidRef.current.has(`student-break-${sq}`));
-        const hits = (pairJustWon ? allHits.filter((x) => x.id !== 'bishop-pair') : allHits).filter((x) => !breakHeard(x));
+        // …and once announced, the pair is not news again this game (walk
+        // 3UqPa5eV2e0: "Now you have the two bishops" at ply 37, then "You hold
+        // the bishop pair" at ply 41). One key, both owners.
+        if (pairJustWon) standingRef.current.remember('bishop-pair');
+        const pairHeard = standingRef.current.said.has('bishop-pair');
+        const hits = (pairHeard ? allHits.filter((x) => x.id !== 'bishop-pair') : allHits).filter((x) => !breakHeard(x));
         const eligible = quietTurn ? hits : hits.filter((h) => BEHAVIOR_ALWAYS_RIDE.has(h.id));
         const hit = behaviorSchedulerRef.current.pick(eligible);
         if (hit) {
           behaviorLine = hit.fact; behaviorSquares = hit.squares;
           if (hit.id === 'pawn-break') for (const sq of hit.squares) standingRef.current.remember(`student-break-${sq}`);
+          if (hit.id === 'bishop-pair') standingRef.current.remember('bishop-pair');
         }
       } catch { /* never a blocker */ }
       // THE POSITIONAL READ IS CHECKED EVERY (non-urgent) TURN (David 2026-09-13:
@@ -8467,6 +8473,10 @@ export function CoachTeachPage(): JSX.Element {
     // A board move DISMISSES the "Read this position" banner (clears its
     // text) — same as Play. The student answered the position by playing.
     positionNarration.cancel();
+    // A board move is the student starting, same as typing: the welcome
+    // greeting and its chips must not land on a game already under way (the
+    // 2026-09-29 walk heard "Name any opening…" right after 1.e4).
+    userInteractedRef.current = true;
     // In-place drill: when a drill is running the board move is a SOLVE
     // attempt, validated against the puzzle's solution (code, not the
     // LLM). Consumes the move and skips the normal opening-reply flow.
