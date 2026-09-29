@@ -158,3 +158,10 @@ describe('WO-1b — board descriptions wait for the turn\'s one decision', () =>
     expect(TEACH_CODE).toMatch(/for \(const d of instant\.deferred\) queueSpokenHint\(/);
   });
 });
+
+describe('WO-2 — a verdict on a good move carries its reason', () => {
+  it('clear-best speaks only with the move\'s computed point', () => {
+    expect(TEACH_CODE).toMatch(/grade\.reason !== 'clear-best' \|\| !!goodPoint/);
+    expect(TEACH_CODE).toMatch(/studentMovePoint\(fenBefore, move\.san/);
+  });
+});

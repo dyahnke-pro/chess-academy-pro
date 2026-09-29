@@ -34,6 +34,13 @@ describe('classifyMoveReason — faithful to the validated offline classifier', 
   it('the best move standing far ahead → only-move', () => {
     expect(classifyMoveReason({ ...base, label: 'best', isBest: true, gap12: 200 })).toBe('only-move');
   });
+  it('the best move by a clear margin → clear-best; a calm best stays plain best', () => {
+    expect(classifyMoveReason({ ...base, label: 'best', isBest: true, gap12: 100 })).toBe('clear-best');
+    // Negative control: several moves about as good is not a decision found.
+    expect(classifyMoveReason({ ...base, label: 'best', isBest: true, gap12: 30 })).toBe('best');
+    // A best move that meets a threat still says so.
+    expect(classifyMoveReason({ ...base, label: 'best', isBest: true, gap12: 100, threatNetBefore: 3 })).toBe('defends-threat');
+  });
   it('a good capture winning material → wins-material', () => {
     expect(classifyMoveReason({ ...base, label: 'good', capture: true, seeNow: 3 })).toBe('wins-material');
   });
@@ -55,6 +62,7 @@ describe('the post-move-grade helpers', () => {
     expect(gradeWorthSpeaking('hung-piece')).toBe(true);
     expect(gradeWorthSpeaking('only-move')).toBe(true);
     expect(gradeWorthSpeaking('wins-material')).toBe(true);
+    expect(gradeWorthSpeaking('clear-best')).toBe(true);
   });
   it('names the pattern (not the SAN) and the hung piece when known', () => {
     expect(moveReasonClause('walked-into-tactic', { named: 'a knight fork' })).toMatch(/walked into a knight fork/);

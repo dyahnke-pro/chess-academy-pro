@@ -30,11 +30,13 @@ export type MoveReason =
   | 'hung-piece' | 'ignored-threat' | 'walked-into-tactic' | 'missed-forcing-win' | 'lost-the-thread'
   | 'imprecise-defence' | 'second-best'
   // merits
-  | 'only-move' | 'defends-threat' | 'wins-material' | 'best' | 'solid';
+  | 'only-move' | 'clear-best' | 'defends-threat' | 'wins-material' | 'best' | 'solid';
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const MATE_CP = 100000;
+/** Best move by at least this much over the second best is a real decision. */
+export const CLEAR_BEST_GAP_CP = 80;
 
 export interface MoveReasonInputs {
   label: MoveLabel;
@@ -78,6 +80,10 @@ export function classifyMoveReason(i: MoveReasonInputs): MoveReason {
   if (i.isBest && i.gap12 >= 150) return 'only-move';
   if (i.threatNetBefore >= 3) return 'defends-threat';
   if (i.capture && i.seeNow >= 2) return 'wins-material';
+  // A REAL DECISION, FOUND (WO-2 good-move verdicts, 2026-09-29): the best move
+  // by a clear margin over the next, short of the only-move bar. A plain `best`
+  // in a calm spot — where several moves are about as good — stays silent.
+  if (i.isBest && i.gap12 >= CLEAR_BEST_GAP_CP) return 'clear-best';
   if (i.isBest) return 'best';
   return 'solid';
 }
@@ -139,6 +145,9 @@ export function moveReasonClause(r: MoveReason, ctx?: { named?: string; hung?: {
     case 'imprecise-defence': return `it holds, but not the cleanest way.`;
     case 'second-best': return `playable — not quite the most precise.`;
     case 'only-move': return `nice — that was the only move that holds.`;
+    // Said ONLY with the move's computed point after it — a verdict with no
+    // reason is bare praise (Narration Voice Rule 5). The caller enforces it.
+    case 'clear-best': return `the strongest move here.`;
     case 'defends-threat': return `good — that meets the threat cleanly.`;
     case 'wins-material': return `that wins material.`;
     case 'best': return `clean — the strongest move.`;

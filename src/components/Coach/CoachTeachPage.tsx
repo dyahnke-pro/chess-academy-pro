@@ -8601,10 +8601,22 @@ export function CoachTeachPage(): JSX.Element {
             pv: { afterPlayed: [], afterBest },
           });
         }
-        if (grade?.worthSpeaking && grade.clause) {
+        // A GOOD MOVE IS GRADED WITH ITS REASON (WO-2, 2026-09-29): his
+        // verdicts on good moves always say why. The move's computed point
+        // (material won, the bishop pair, an unpin, luft) rides after the
+        // verdict — and a `clear-best` with no point stays silent, because a
+        // verdict with no reason is bare praise (Narration Voice Rule 5).
+        const goodPoint = grade && (grade.reason === 'clear-best' || grade.reason === 'only-move')
+          ? studentMovePoint(fenBefore, move.san, move.history.length >= 2 ? move.history[move.history.length - 2] : null)
+          : null;
+        const speakGrade = !!grade?.worthSpeaking && !!grade.clause && (grade.reason !== 'clear-best' || !!goodPoint);
+        if (grade && speakGrade) {
           // The clause is a verdict ("good — that meets the threat cleanly.");
           // heard on its own it names no move. Lead with the move it grades.
-          const gradeLine = `${move.san}: ${grade.clause}`;
+          const gradeLine = goodPoint ? `${move.san}: ${grade.clause} ${goodPoint}` : `${move.san}: ${grade.clause}`;
+          // Recorded as said, so the late wave's move-point lane does not
+          // repeat the reason a second later.
+          for (const k of spokenSentenceKeys({ kept: [{ kind: 'computed', text: gradeLine, fen: move.fen }] })) learnMemRef.current.spokenKeys.add(k);
           setMessages((prev) => [...prev, { id: `grade-${Date.now()}`, role: 'assistant', content: gradeLine, timestamp: Date.now() }]);
           void speakComputed(gradeLine, { forced: false, intent: 'learn' });
           captureEvent('post_move_grade_spoken', { surface: 'coach-teach', reason: grade.reason, cp_loss: Math.round(grade.cpLossCp), fault: grade.fault });
