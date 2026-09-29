@@ -83,11 +83,16 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   fork: { kind: 'fork', speaks: false, why: 'book fork-in-the-road is not his DNA (2026-08-23); gated off at the call site' },
   priorityFirst: { kind: 'computed', speaks: true, why: 'the priority before the move' },
   rejectedTempting: { kind: 'computed', speaks: true, why: 'the tempting move and its refutation' },
-  // RE-OPENED 2026-09-29 after the fix it was waiting on: its first live line
-  // ("the knight's walk to h2") came from two DIFFERENT knight routes counted
-  // as one plan read twice (`route:n` identity). A route's streak now needs the
-  // two reads to share a square on the way (planArc.stepArc).
-  planArc: { kind: 'plan', speaks: true, why: 'the plan taking shape / landing / given up — read twice before it is said' },
+  // CLOSED, measured twice (2026-09-29). Walk 1: "the knight's walk to h2"
+  // (fixed: two unrelated routes counted as one — planArc route identity).
+  // Walk 2, after that fix, two games, 82 plies: 4 lines, 3 false — "the
+  // bishop's walk to c3" for a light-squared bishop and a blocked diagonal,
+  // "the knight's walk to g4" onto a square White covers twice, and "You have
+  // let an attack on their king go" for a plan the student never heard, on a
+  // forced recapture, one move before the student's own mate threat. The aims
+  // come from ONE engine line's `maneuver` and are never checked for
+  // reachability, safety or which piece. WO-2 builds that check first.
+  planArc: { kind: 'plan', speaks: false, why: 'aims read off one engine line, unchecked for reachability/safety — 3 of 4 live lines false (2026-09-29 walk 2); WO-2 validates first' },
   lookaheadPlan: { kind: 'plan', speaks: false, why: 'the whole look-ahead paragraph; the plan arc speaks the plan instead (WO-2 folds it into the one thought)' },
   borrowed: { kind: 'borrowed', speaks: false, why: 'corpus teaching borrowed from another board — no corpus notes in Learn free play (2026-09-23)' },
   drawback: { kind: 'drawback', speaks: true, why: 'what the student’s own move handed over' },
