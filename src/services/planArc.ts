@@ -80,7 +80,7 @@ export function aimsOf(side: SidePlan, seat: Seat): Aim[] {
     const name = PIECE[piece] ?? word;
     // Keyed by the PIECE: a knight heading for g3 that then heads on to h5 is
     // one journey, not a dropped plan and a new one (first real game read).
-    out.push({ id: `route:${piece}`, kind: 'route', squares: side.maneuver.path.slice(1), goal: dest, phrase: `the ${name}'s walk to ${dest}`, from: side.maneuver.path[0] });
+    out.push({ id: `route:${piece}`, kind: 'route', squares: side.maneuver.path.slice(1), goal: dest, phrase: `the ${name}'s walk from ${side.maneuver.path[0]} to ${dest}`, from: side.maneuver.path[0] });
   }
   return out;
 }
@@ -329,10 +329,31 @@ const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
  * files, not a piece's journey.
  */
 export function aimWalkableNow(aim: Aim, fen: string, color: 'w' | 'b'): boolean {
-  if (aim.kind !== 'route' && aim.kind !== 'outpost') return true;
+  if (aim.kind !== 'route' && aim.kind !== 'outpost' && aim.kind !== 'king-attack' && aim.kind !== 'shield') return true;
   let board: Chess;
   try { board = new Chess(fen); } catch { return false; }
   const foe: 'w' | 'b' = color === 'w' ? 'b' : 'w';
+  if (aim.kind === 'king-attack' || aim.kind === 'shield') {
+    // "An attack on your king" is a claim about the board NOW (walk 3,
+    // 2026-09-29: said with no black piece bearing on g1 while the real threat
+    // was …dxe3). It passes only if at least two of the side's pieces (not
+    // pawns, not the king) already hit the enemy king's square or a square
+    // next to it.
+    const kingSq = board.board().flat().find((c) => c && c.type === 'k' && c.color === foe)?.square;
+    if (!kingSq) return false;
+    const f = kingSq.charCodeAt(0); const r = Number(kingSq[1]);
+    const zone: Square[] = [];
+    for (let df = -1; df <= 1; df += 1) for (let dr = -1; dr <= 1; dr += 1) {
+      const nf = f + df; const nr = r + dr;
+      if (nf >= 97 && nf <= 104 && nr >= 1 && nr <= 8) zone.push(`${String.fromCharCode(nf)}${nr}` as Square);
+    }
+    const hitters = new Set<string>();
+    for (const sq of zone) for (const a of board.attackers(sq, color)) {
+      const t = board.get(a)?.type;
+      if (t && t !== 'p' && t !== 'k') hitters.add(a);
+    }
+    return hitters.size >= 2;
+  }
   const goal = aim.goal as Square | null;
   if (!goal) return false;
   const lostThere = (pieceType: string): boolean => {

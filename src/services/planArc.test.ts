@@ -65,7 +65,7 @@ describe('planArc on a real game', () => {
   it('an announced route keeps its name until it lands', () => {
     const rookWalk = white.filter((e) => e.id === 'route:r').map((e) => e.text);
     expect(rookWalk.length).toBeGreaterThan(2);
-    expect(rookWalk.every((t) => /walk to c8/.test(t))).toBe(true);
+    expect(rookWalk.every((t) => /walk from \w\d to c8/.test(t))).toBe(true);
   });
 
   it('pawn pushes step toward the passer, and promotion is its arrival', () => {
@@ -201,5 +201,17 @@ describe('aimWalkableNow — a live guess is said only if it can be walked from 
   it('a route naming a piece that is not there is refused', () => {
     const c = new Chess();
     expect(aimWalkableNow(route('n', ['e4', 'f6', 'g4']), c.fen(), 'w')).toBe(false);
+  });
+});
+
+describe('aimWalkableNow — "an attack on your king" needs pieces on the king NOW', () => {
+  const kingAim: Aim = { id: 'king-attack', kind: 'king-attack', squares: [], goal: null, phrase: 'an attack on your king' };
+  it('refused when no piece of theirs bears on the king (walk 3, FqVMAv3wKes ply 27)', () => {
+    expect(aimWalkableNow(kingAim, new Chess().fen(), 'b')).toBe(false);
+  });
+  it('passes with two pieces on the king zone (positive control)', () => {
+    // Black queen h4 and bishop c5 both bear on f2, next to the white king.
+    const fen = 'rnb1k1nr/pppp1ppp/8/2b1p3/4P2q/5N2/PPPP1PPP/RNBQKB1R w KQkq - 4 4';
+    expect(aimWalkableNow(kingAim, fen, 'b')).toBe(true);
   });
 });
