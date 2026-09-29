@@ -33,8 +33,6 @@ describe('corpus notes stay where David put them', () => {
   it.each([
     ['review', 'src/services/coachFeatureService.ts'],
     ['Learn free play', 'src/components/Coach/CoachTeachPage.tsx'],
-    ['fork talk (Learn only)', 'src/services/forkTalk.ts'],
-    ['think-aloud (Learn only)', 'src/services/thinkAloud.ts'],
   ])('%s fetches no corpus note', (_surface, file) => {
     const hit = RETRIEVAL.exec(code(file));
     expect(hit?.[0] ?? null, `${file} calls ${hit?.[0]} — corpus notes are off here (2026-09-23)`).toBeNull();

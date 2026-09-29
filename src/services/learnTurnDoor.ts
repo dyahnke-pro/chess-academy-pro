@@ -11,10 +11,14 @@
  * 42-ply prod game it said nothing at all.
  *
  * So the unit of decision is the LANE, not the kind. Every lane that can speak
- * in Learn is declared here with the kind it speaks as and whether it speaks,
- * in a `Record` over the union — a new lane fails to compile until someone
- * answers for it. Nothing is silenced by accident any more: a lane that stays
- * quiet says so in this table, with the reason.
+ * in Learn is declared here with the kind it speaks as, in a `Record` over the
+ * union — a new lane fails to compile until someone answers for it.
+ *
+ * THERE ARE NO CLOSED LANES (G8.5, 2026-09-29). Five used to sit here marked
+ * silent — the engine read, the eval split, the book fork, borrowed teaching,
+ * the look-ahead paragraph — while their producers kept computing text nobody
+ * heard. Closing a lane means deleting its producer and its row; a lane in
+ * this table has a live producer (`learnTurnDoor.test.ts` holds both halves).
  *
  * Slice 1 (this file): route + record, behaviour-preserving. Ordering and dedupe are still
  * `buildVoicePackage`'s. Picking ONE lead per turn is the next slice.
@@ -36,18 +40,13 @@ export type LearnLane =
   // ── the late wave, spoken when the engine read settles ──
   | 'opening'
   | 'structure'
-  | 'engineRead'
   | 'pieceQuality'
-  | 'evalSplit'
   | 'register'
   | 'gap'
   | 'positionFacts'
-  | 'fork'
   | 'priorityFirst'
   | 'rejectedTempting'
   | 'planArc'
-  | 'lookaheadPlan'
-  | 'borrowed'
   | 'drawback'
   | 'mistake'
   | 'coachMistake'
@@ -57,45 +56,36 @@ export type LearnLane =
 export interface LaneRule {
   /** The kind the package ranks it as. */
   kind: VoiceFactKind;
-  /** Whether this lane may reach the voice at all. */
-  speaks: boolean;
-  /** Why, in one line — required when `speaks` is false, so a silent lane is
-   *  a stated decision and never an omission. */
+  /** What the lane teaches, in one line. */
   why: string;
 }
 
 export const LEARN_LANES: Record<LearnLane, LaneRule> = {
-  gem: { kind: 'gem', speaks: true, why: 'a verified punish the coach just handed over' },
-  tactic: { kind: 'tactic', speaks: true, why: 'a tactic the detectors proved for the student' },
-  threat: { kind: 'threat', speaks: true, why: 'danger to the student on this board' },
-  commentary: { kind: 'computed', speaks: true, why: 'the computed board read (playCommentary)' },
-  behavior: { kind: 'observation', speaks: true, why: 'a Danya behaviour, rate-matched to his corpus' },
-  curated: { kind: 'note', speaks: true, why: 'a masterclass beat authored for this position' },
-  positional: { kind: 'observation', speaks: true, why: 'the positional read' },
-  opening: { kind: 'opening', speaks: true, why: 'the opening named once, when it settles' },
-  structure: { kind: 'computed', speaks: true, why: 'the named pawn structure and its plan' },
-  engineRead: { kind: 'computed', speaks: false, why: 'engine eval narration is not his DNA (2026-08-23); the producer is also gated off at the call site' },
-  pieceQuality: { kind: 'computed', speaks: true, why: 'their best piece / your worst piece' },
-  evalSplit: { kind: 'computed', speaks: false, why: 'eval-term split is not his DNA (2026-08-23); gated off at the call site' },
-  register: { kind: 'computed', speaks: true, why: 'but-turn / hedge / candidate compare, where the move is earned' },
-  gap: { kind: 'computed', speaks: true, why: 'what the opponent’s move left undone' },
-  positionFacts: { kind: 'computed', speaks: true, why: 'position facts, already through coachDecider' },
-  fork: { kind: 'fork', speaks: false, why: 'book fork-in-the-road is not his DNA (2026-08-23); gated off at the call site' },
-  priorityFirst: { kind: 'computed', speaks: true, why: 'the priority before the move' },
-  rejectedTempting: { kind: 'computed', speaks: true, why: 'the tempting move and its refutation' },
-  // RE-OPENED behind the walkability check (2026-09-29). Walk 2 heard 3 false
-  // lines in 4 — routes read off one engine line that the CURRENT board cannot
-  // walk (a queen-blocked diagonal, a square simply lost). Learn now filters
-  // aims through planArc.aimWalkableNow, and a student plan the student never
-  // heard is never "let go". Re-closed if the next walk finds a false line.
-  planArc: { kind: 'plan', speaks: true, why: 'the plan taking shape / landing / given up — read twice, walkable from this board' },
-  lookaheadPlan: { kind: 'plan', speaks: false, why: 'the whole look-ahead paragraph; the plan arc speaks the plan instead (WO-2 folds it into the one thought)' },
-  borrowed: { kind: 'borrowed', speaks: false, why: 'corpus teaching borrowed from another board — no corpus notes in Learn free play (2026-09-23)' },
-  drawback: { kind: 'drawback', speaks: true, why: 'what the student’s own move handed over' },
-  mistake: { kind: 'mistake', speaks: true, why: 'the mistake call-out' },
-  coachMistake: { kind: 'coachMistake', speaks: true, why: 'the coach owning its own inaccuracy' },
-  fundamental: { kind: 'drawback', speaks: true, why: 'the fundamental the move broke' },
-  movePoint: { kind: 'computed', speaks: true, why: 'the point of the student’s clean move' },
+  gem: { kind: 'gem', why: 'a verified punish the coach just handed over' },
+  tactic: { kind: 'tactic', why: 'a tactic the detectors proved for the student' },
+  threat: { kind: 'threat', why: 'danger to the student on this board' },
+  commentary: { kind: 'computed', why: 'the computed board read (playCommentary)' },
+  behavior: { kind: 'observation', why: 'a Danya behaviour, rate-matched to his corpus' },
+  curated: { kind: 'note', why: 'a masterclass beat authored for this position' },
+  positional: { kind: 'observation', why: 'the positional read' },
+  opening: { kind: 'opening', why: 'the opening named once, when it settles' },
+  structure: { kind: 'computed', why: 'the named pawn structure and its plan' },
+  pieceQuality: { kind: 'computed', why: 'their best piece / your worst piece' },
+  register: { kind: 'computed', why: 'but-turn / hedge / candidate compare, where the move is earned' },
+  gap: { kind: 'computed', why: 'what the opponent’s move left undone' },
+  positionFacts: { kind: 'computed', why: 'position facts, already through coachDecider' },
+  priorityFirst: { kind: 'computed', why: 'the priority before the move' },
+  rejectedTempting: { kind: 'computed', why: 'the tempting move and its refutation' },
+  // Behind the walkability check (2026-09-29): walk 2 heard 3 false lines in 4
+  // — routes read off one engine line the CURRENT board cannot walk. Learn
+  // filters aims through planArc.aimWalkableNow, and a student plan the
+  // student never heard is never "let go".
+  planArc: { kind: 'plan', why: 'the plan taking shape / landing / given up — read twice, walkable from this board' },
+  drawback: { kind: 'drawback', why: 'what the student’s own move handed over' },
+  mistake: { kind: 'mistake', why: 'the mistake call-out' },
+  coachMistake: { kind: 'coachMistake', why: 'the coach owning its own inaccuracy' },
+  fundamental: { kind: 'drawback', why: 'the fundamental the move broke' },
+  movePoint: { kind: 'computed', why: 'the point of the student’s clean move' },
 };
 
 export interface LaneFact {
@@ -114,8 +104,6 @@ export interface TurnDecision {
   offered: LearnLane[];
   /** Lanes whose fact reached the voice. */
   spoke: LearnLane[];
-  /** Lanes refused by the lane table, before the package saw them. */
-  closed: LearnLane[];
 }
 
 /** The door. Every Learn free-play utterance is assembled here. */
@@ -127,14 +115,11 @@ export function decideTurn(
   priorKeys?: ReadonlySet<string>,
 ): TurnDecision {
   const offered: LearnLane[] = [];
-  const closed: LearnLane[] = [];
   const open: Array<VoiceFact & { lane: LearnLane }> = [];
   for (const f of facts) {
     if (!f.text.trim()) continue;
     offered.push(f.lane);
-    const rule = LEARN_LANES[f.lane];
-    if (!rule.speaks) { closed.push(f.lane); continue; }
-    open.push({ lane: f.lane, kind: f.kind ?? rule.kind, text: f.text, fen: f.fen, squares: f.squares });
+    open.push({ lane: f.lane, kind: f.kind ?? LEARN_LANES[f.lane].kind, text: f.text, fen: f.fen, squares: f.squares });
   }
   const pkg = buildVoicePackage(open.map(({ kind, text, fen, squares }) => ({ kind, text, fen, squares })), alreadySaid, priorKeys);
   const spoke: LearnLane[] = [];
@@ -142,10 +127,10 @@ export function decideTurn(
     const hit = open.find((o) => o.text === k.text || k.text.length > 0 && o.text.includes(k.text));
     if (hit && !spoke.includes(hit.lane)) spoke.push(hit.lane);
   }
-  return { pkg, offered, spoke, closed };
+  return { pkg, offered, spoke };
 }
 
-/** One line for the audit log: which lanes were offered, spoke, or were closed. */
+/** One line for the audit log: which lanes were offered and which spoke. */
 export function describeTurnDecision(d: TurnDecision): string {
-  return `lanes offered=[${d.offered.join(',')}] spoke=[${d.spoke.join(',')}] closed=[${d.closed.join(',')}]`;
+  return `lanes offered=[${d.offered.join(',')}] spoke=[${d.spoke.join(',')}]`;
 }

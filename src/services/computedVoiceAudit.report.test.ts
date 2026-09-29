@@ -20,7 +20,7 @@ import { writeFileSync, mkdirSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { loadFullCorpus } from '../test/loadFullCorpus';
 import { backwardLook } from './backwardLook';
-import { planFromUci, keySquareLine, positionReadLine, lineShapeLine, terminalReadLine } from './lookaheadPlan';
+import { planFromUci } from './lookaheadPlan';
 import { buildTacticsLiveContext } from './liveTacticsContext';
 import { buildPlayCommentary } from './playCommentary';
 import { findLivePunishment } from './gemCrushLines';
@@ -221,13 +221,9 @@ describe('computed voice audit', () => {
         let planLine: string | null = null;
         if (plan) {
           const parts = [
-            keySquareLine(plan.keySquares, planSaid),
-            positionReadLine(plan.read, game.student, planSaid, fenAfterReply),
-            lineShapeLine(plan.shape, planSaid),
             plan.theirs.text,
             plan.mine.text,
             plan.mine.aside,
-            terminalReadLine(plan.terminal, planSaid),
           ].filter(Boolean)
             .map((t) => gradeNarrationText(t, fenAfterReply, 'audit.plan')?.trim() ?? '')
             .filter(Boolean);

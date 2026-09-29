@@ -31,36 +31,9 @@ const HINT_LANES: Array<{ name: string; near: string; proof: RegExp }> = [
     proof: /packageForRegister\(rt\.hint, discussion\.hintDial\.register\)/,
   },
   {
-    name: 'think-aloud',
-    near: 'think_aloud_offered',
-    proof: /maxReads: readsForRegister\(discussion\.hintDial\.register\)/,
-  },
-  {
-    name: 'improving-move',
-    near: 'improving_move_offered',
-    proof: /improve\.facts\.slice\(0, readsForRegister\(discussion\.hintDial\.register\)\)/,
-  },
-  {
     name: 'gem alert',
     near: 'GEM ALERT',
     proof: /packageForRegister\(\{[\s\S]*?GEM ALERT[\s\S]*?\}, discussion\.hintDial\.register\)/,
-  },
-  {
-    // DELIBERATE EXEMPTION, and the gate has to say so out loud rather than
-    // keep failing. The look-ahead plan used to be truncated to 3 parts on
-    // 'obvious' and 2 elsewhere; that was removed on purpose — the key square,
-    // the board read and both plans are computed from one PV line and are all
-    // board-true, so the register was throwing away half of what the position
-    // says. The register governs how much help a HINT gives, not how much of
-    // the position is described.
-    //
-    // What must still hold: the parts are graded INDIVIDUALLY (so the spoken
-    // text and the board marks cannot disagree), and the register is still
-    // reported, so the choice stays visible in the stream. Left red on `main`
-    // since that change because this file was not in ship-check; it is now.
-    name: 'look-ahead plan',
-    near: 'lookahead_plan_offered',
-    proof: /register: discussion\.hintDial\.register,/,
   },
 ];
 
@@ -78,10 +51,8 @@ describe('every hint lane rides the register', () => {
   }
 
   it('the frequency dial reaches the beats that carry cooldowns', () => {
-    // The other half of David's rule: "less often" for a strong player. Both
-    // hand-tuned gaps are scaled, so the RATIO between the beats survives and
-    // only the cadence breathes.
-    expect(src).toMatch(/scaleGap\(THINK_ALOUD_MIN_PLY_GAP, discussion\.hintDial\.register\)/);
+    // The other half of David's rule: "less often" for a strong player. The
+    // hand-tuned gap is scaled, so only the cadence breathes.
     expect(src).toMatch(/scaleGap\(PRIORITY_FIRST_MIN_PLY_GAP, discussion\.hintDial\.register\)/);
   });
 

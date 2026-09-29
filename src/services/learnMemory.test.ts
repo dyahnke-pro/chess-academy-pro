@@ -178,13 +178,6 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
     ).toBe(true);
   });
 
-  it('a think-aloud ply reset reads as "never fired", not as a future ply', () => {
-    const mem = createLearnMemory();
-    mem.thinkAloudLastPly = 40; // a long game 1
-    mem.newGame();
-    // Game 2, ply 3, with any sane gap: must be allowed to fire.
-    expect(3 - mem.thinkAloudLastPly).toBeGreaterThan(20);
-  });
 
   // 🔄 REWRITTEN 2026-09-20, and the old assertion is DELETED rather than
   // annotated. It read "newGame() is called at EVERY fresh-game site
@@ -220,6 +213,6 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
     const src = readFileSync(PAGE, 'utf8');
     const declared = [...src.matchAll(/const (\w+Ref) = useRef/g)].map((m) => m[1]);
     expect(declared.length).toBeGreaterThan(30);
-    expect(declared).toContain('planSaidRef');
+    expect(declared).toContain('positionalSaidRef');
   });
 });

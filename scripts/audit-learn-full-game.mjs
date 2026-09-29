@@ -655,12 +655,14 @@ async function main() {
   // one, so a zero here is not evidence of a defect either.
   //
   // So: report what this instrument saw, and name the one that can answer.
-  for (const want of ['IMPROVING MOVE', 'THEIR BEST PIECE']) {
+  // IMPROVING MOVE was removed 2026-09-29 (G8.5): it filled the facts list and
+  // was never spoken once the move-prompt went.
+  for (const want of ['THEIR BEST PIECE']) {
     const n = histogram[want] ?? 0;
     console.log(`${n ? '✅' : '⏳'} ${want}: ${n}${n ? '' : ' — not seen in THIS run; this histogram cannot see the dedicated call site'}`);
   }
   console.log(`   beats are owned by PostHog, not by this stream:`);
-  console.log(`   SELECT event, kind, count() FROM events WHERE event IN ('coach_beat_offered','improving_move_offered')`);
+  console.log(`   SELECT event, kind, count() FROM events WHERE event IN ('coach_beat_offered')`);
   console.log(`   AND properties.audit_run_id='${RUN_ID}' GROUP BY event, kind`);
   if (FOLLOW) {
     console.log(`opening line        ${report.spineReached}/${FOLLOW.spine.length} plies of ${FOLLOW.name} played`);

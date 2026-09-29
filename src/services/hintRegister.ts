@@ -191,17 +191,3 @@ export function scaleGap(baseGap: number, register: HintRegister): number {
   }
 }
 
-/**
- * How many computed reads a think-aloud deliberation may weigh.
- *
- * The same principle as `packageForRegister`, applied to a beat whose content
- * is already a LIST of facts: subtlety is how many you hand over. One read is
- * a nudge; four walks the student most of the way there.
- */
-export function readsForRegister(register: HintRegister): number {
-  switch (register) {
-    case 'obvious': return 4;
-    case 'moderate': return 2;
-    case 'subtle': return 1;
-  }
-}
