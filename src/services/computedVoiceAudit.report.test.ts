@@ -24,7 +24,7 @@ import { planFromUci } from './lookaheadPlan';
 import { buildTacticsLiveContext } from './liveTacticsContext';
 import { buildPlayCommentary } from './playCommentary';
 import { findLivePunishment } from './gemCrushLines';
-import { teachingSourceForBoard, spokenBeatText, generalizedTeaching } from './danyaTeachingService';
+import { teachingSourceForBoard, spokenBeatText } from './danyaTeachingService';
 import { curatedBeatAt } from './curatedBeatSource';
 import { detectOpening } from './openingDetectionService';
 import { noteStaysInScope } from './noteAnchorIntegrity';
@@ -130,8 +130,6 @@ describe('computed voice audit', () => {
     const perGame: Array<Record<string, unknown>> = [];
     let studentPlies = 0;
     let turnsWithAnyVoice = 0;
-    let corpusOffered = 0;
-    let corpusSuppressedByPv = 0;
     const tierAvailable: Record<string, number> = {};
     const tierNeverAsked: Record<string, number> = {};
     const utterances: Array<{ game: string; ply: number; text: string; move: string; tier: string | null; lanes: string[] }> = [];
@@ -369,13 +367,9 @@ describe('computed voice audit', () => {
           ...(coachLook ? [{ kind: coachLook.kind, text: coachLook.line, fen: fenAfterReply }] : []),
           ...(planLine ? [{ kind: 'plan' as const, text: planLine, fen: fenAfterReply }] : []),
         ];
-        // ── WHAT THE CORPUS WOULD HAVE SAID, AND WHETHER IT GOT TO ─────────
-        // `pvSpoke()` stands the borrowed tier down whenever the look-ahead
-        // kept anything. That rule was written for an occasional plan. Measure
-        // what it actually costs: offer a real borrowed note on every turn and
-        // count how often the package refuses it for that reason alone.
-        let borrowedOffered = 0;
-        let borrowedSuppressed = 0;
+        // ── WHAT THE CORPUS WOULD HAVE SAID ────────────────────────────────
+        // Only a note authored AT this board is spoken; the borrowed tier (a
+        // note from a different board) was removed from the package.
         {
           try {
             // The surface's own predicate: a tier keeps looking rather than
@@ -390,35 +384,24 @@ describe('computed voice audit', () => {
             if (src && noteText.trim()) {
               corpusSeen.add(src.note.id);
               // 'position' is a note authored AT this board — the `note` rank.
-              // Everything else is teaching BORROWED from a different one.
               if (src.origin === 'position') {
                 noteTier = 'corpus-position';
                 lateFacts.push({ kind: 'note', text: noteText, fen: fenAfterReply });
-              } else {
-                borrowedOffered = 1;
-                noteTier = `borrowed:${src.origin}`;
-                lateFacts.push({ kind: 'borrowed', text: generalizedTeaching(src.origin, noteText), fen: fenAfterReply });
               }
             }
           } catch { /* bonus */ }
         }
 
         const late = buildVoicePackage(lateFacts, instant.spoken);
-        if (borrowedOffered) {
-          const d = late.dropped.find((x) => x.fact.kind === 'borrowed');
-          if (d?.reason === 'the look-ahead had something about THIS board') borrowedSuppressed = 1;
-        }
         // NOW noteTier is final — the corpus block above sets it. Comparing
         // before that point is what made the first version of this metric
         // report 106 of 106 tiers silent while 88 of them had plainly spoken.
         for (const tier of Object.keys(avail)) {
           const picked = tier === 'corpus'
-            ? (noteTier.startsWith('corpus') || noteTier.startsWith('borrowed'))
+            ? noteTier.startsWith('corpus')
             : noteTier.startsWith(tier);
           if (!picked) tierNeverAsked[tier] = (tierNeverAsked[tier] ?? 0) + 1;
         }
-        corpusOffered += borrowedOffered;
-        corpusSuppressedByPv += borrowedSuppressed;
 
         for (const pkg of [instant, late]) {
           for (const f of pkg.kept) hits.push({ game: game.name, ply: history.length, kind: f.kind, text: f.text, spoken: true });
@@ -439,7 +422,7 @@ describe('computed voice audit', () => {
     }
 
     // ── SCORE ────────────────────────────────────────────────────────────
-    const KINDS: VoiceFactKind[] = ['gem', 'note', 'mistake', 'coachMistake', 'drawback', 'plan', 'borrowed', 'threat', 'tactic', 'fork', 'opening', 'computed', 'observation'];
+    const KINDS: VoiceFactKind[] = ['gem', 'note', 'mistake', 'coachMistake', 'drawback', 'plan', 'threat', 'tactic', 'opening', 'computed', 'observation'];
     const lanes = KINDS.map((k) => {
       const mine = hits.filter((h) => h.kind === k);
       const spoke = mine.filter((h) => h.spoken);
@@ -462,7 +445,6 @@ describe('computed voice audit', () => {
       turnsWithAnyVoice,
       silentTurnRate: Number((1 - turnsWithAnyVoice / studentPlies).toFixed(3)),
       tiers: { available: tierAvailable, hadSomethingButNeverSpoke: tierNeverAsked },
-      corpus: { offered: corpusOffered, suppressedByLookahead: corpusSuppressedByPv, suppressionRate: corpusOffered ? Number((corpusSuppressedByPv / corpusOffered).toFixed(3)) : 0 },
       lanes,
       perGame,
       utterances,

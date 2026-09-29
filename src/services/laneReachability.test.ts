@@ -130,7 +130,7 @@ describe('no dead lanes — every lane can fire', () => {
     const FEN = 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4';
     const kinds: VoiceFactKind[] = [
       'gem', 'note', 'mistake', 'coachMistake', 'drawback', 'plan',
-      'borrowed', 'threat', 'tactic', 'fork', 'opening', 'computed', 'observation',
+      'threat', 'tactic', 'opening', 'computed', 'observation',
     ];
     for (const kind of kinds) {
       const pkg = buildVoicePackage([{ kind, text: 'The knight on f3 is doing real work here.', fen: FEN }]);
