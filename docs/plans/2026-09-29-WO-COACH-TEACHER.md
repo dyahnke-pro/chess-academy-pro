@@ -225,7 +225,7 @@ The miss is the reason, not the verdict: exd5 is a **recapture choice** ("take w
 
 **Fixed from the defect list (branch `wo2-grade-fires`, each with a test on the walk position):**
 - #7 **greeting mid-game.** A board move now counts as the student starting, so "Name any opening…" can't land after 1.e4.
-- #4 **the unplayed move.** A one-move engine line of the student's own now reads as their option: "Play Qd2 and your queen on d2 and your bishop on e3 form a battery…". Longer lines keep "After …".
+- #4 **the unplayed move.** A one-move engine line of the student's own now reads as their option: "If you play Qd2, your queen on d2 and your bishop on e3 form a battery…" (first shipped as "Play Qd2 and …", corrected on the triple-check: that broke on detector sentences opening with a verb). Longer lines keep "After …".
 - #3 **the lecture.** "Shallow read … The thread was lost deeper in the line" became "a5 holds against the first replies, but after b5, Nb6, Nxb6 breaks it — the line had to be followed to the end." The calculation habit dropped the shouting: "Follow every check, capture and threat until nothing is forcing, then judge the position." The review audit's regex follows.
 - #6 **bishop pair twice.** It is now said once a game, whichever owner says it first (key `bishop-pair` in the standing memory).
 - #5a **Ng8 "their best piece".** An undeveloped minor on its home square is never "their best piece" in any phase. Negative-controlled.
