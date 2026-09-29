@@ -25,7 +25,7 @@ import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { transferClause, recordMotif, withTransfer } from '../../services/motifLedger';
-import { buildVoicePackage, describeVoicePackage, markableSquares, spokenSentenceKeys, type VoicePackage, type VoiceFactKind } from '../../services/voicePackage';
+import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePackage, markableSquares, spokenSentenceKeys, type LearnLane, type VoicePackage, type VoiceFactKind } from '../../services/learnTurnDoor';
 import { buildPositionalRead } from '../../services/positionalRead';
 import { curatedBeatAt } from '../../services/curatedBeatSource';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
@@ -338,40 +338,11 @@ const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 const NARRATE_DNA_ONLY = true;
 
 /** THE DNA WHITELIST (David 2026-08-23: "the only computed voice I should hear
- *  is the DNA computations. If it doesn't fit within the DNA structure it does
- *  not get spoken"). A WHITELIST, not a blacklist: default-silent, and only a
- *  kind that IS part of the Danya DNA structure may be spoken. Any lane not
- *  listed here is dropped from the spoken package no matter what produced it, so
- *  a future non-DNA lane is silent by construction instead of leaking until
- *  someone hand-silences it.
- *
- *  IN — the DNA structure:
- *   • note        — the farmed corpus, his voice (the 90%)
- *   • gem/threat/tactic — threat + gem + tactic detection (the 10%)
- *   • opening     — naming the opening (R1 of the arc)
- *   • computed    — the register (but-turn/hedge/compare), the Danya behaviours,
- *                   the named structure, piece-quality. (The non-DNA `computed`
- *                   lanes — engine reads, eval-split, plan prose, best-move — are
- *                   already silenced at their source, so what reaches here as
- *                   `computed` is DNA.)
- *   • drawback/mistake/coachMistake — the backward look: what the last move gave
- *                   up, the mistake call-out, the coach's own-blunder admission.
- *                   DNA per David's 2026-08-10 ordering ("backwards first…").
- *
- *  IN as of 2026-09-13 — `observation` (the positional read: king in the centre,
- *  a bad piece + the break that frees it, an outpost, a lever, both sides'
- *  plans). David saw its output and reversed the 2026-08-23 exclusion: "That is
- *  a beautiful teaching tool!! … loud and proud on learn … checking every turn
- *  for new and different teaching phrases." It stays rank-0 in `voicePackage`,
- *  so it never displaces a note or a detector and only fills the DNA breath when
- *  a turn had room; it still yields behind a corpus note (`softStandDown`).
- *
- *  OUT — silent: `plan` and `borrowed` (already silenced at source; here for
- *  defence in depth). */
-const DNA_VOICE_KINDS: ReadonlySet<VoiceFactKind> = new Set<VoiceFactKind>([
-  'note', 'gem', 'threat', 'tactic', 'opening', 'computed',
-  'drawback', 'mistake', 'coachMistake', 'observation',
-]);
+ *  is the DNA computations") now lives in `learnTurnDoor.LEARN_LANES`, per LANE
+ *  rather than per kind. The kind set that stood here could not tell two lanes
+ *  of one kind apart and silently dropped the plan arc (kind `plan`), which was
+ *  built to speak. Every lane's speak/silent answer, with its reason, is in
+ *  that table (WO-COACH-TEACHER WO-1, 2026-09-29). */
 
 /** Cheap gate: does the request look like a "X vs Y" matchup? Only then do
  *  we run the (fuzzy-per-side) matchup resolver. */
@@ -1787,7 +1758,7 @@ export function CoachTeachPage(): JSX.Element {
     fen: string;
     /** `squares` rides along so the board can be drawn from what SURVIVED the
      *  package rather than re-derived from its prose — see `VoiceFact.squares`. */
-    lines: Array<{ kind: VoiceFactKind; text: string; squares?: readonly string[] }>;
+    lines: Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[] }>;
   } | null>(null);
   /** The coach's own last move, captured for judging. See the callout below —
    *  the inputs are gathered while the engine work runs and the verdict is
@@ -7522,6 +7493,8 @@ export function CoachTeachPage(): JSX.Element {
      *  `pkg.spoken` and log `pkg.kept` — never a separately-assembled string,
      *  which is how the log and the voice drifted apart. */
     pkg: VoicePackage;
+    /** Which lanes offered, spoke and were closed — the door's record. */
+    lanes: string;
     alertArrow: BoardArrow | null;
     leadEyeArrows: BoardArrow[];
     /** Lead-the-eye for the COMPUTED lanes — the plan's future moves and key
@@ -7553,7 +7526,7 @@ export function CoachTeachPage(): JSX.Element {
       const over = new Chess(args.fenAfterReply);
       if (over.isGameOver()) {
         return {
-          pkg: buildVoicePackage([]), alertArrow: null, leadEyeArrows: [],
+          pkg: buildVoicePackage([]), lanes: '', alertArrow: null, leadEyeArrows: [],
           planArrows: [], planHighlights: [], borrowedLine: null, factLines: [],
         };
       }
@@ -8342,22 +8315,22 @@ export function CoachTeachPage(): JSX.Element {
     // doctrine keeps alongside the note, not the wordy lanes he flagged.
     const noteHere = !!curatedLine;
     const softStandDown = NARRATE_DNA_ONLY && noteHere;
-    const instantFull = buildVoicePackage([
-      ...(gemLine ? [{ kind: 'gem' as const, text: gemLine, fen: args.fenAfterReply }] : []),
-      ...(tacticLine ? [{ kind: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares }] : []),
-      ...(threatLine ? [{ kind: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares }] : []),
-      ...(announceLine ? [{ kind: 'opening' as const, text: announceLine, fen: args.fenAfterReply }] : []),
-      ...(computedLine && !softStandDown ? [{ kind: 'computed' as const, text: computedLine, fen: args.fenAfterReply }] : []),
+    const instantDecision = decideTurn([
+      ...(gemLine ? [{ lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply }] : []),
+      ...(tacticLine ? [{ lane: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares }] : []),
+      ...(threatLine ? [{ lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares }] : []),
+      ...(announceLine ? [{ lane: 'opening' as const, text: announceLine, fen: args.fenAfterReply }] : []),
+      ...(computedLine && !softStandDown ? [{ lane: 'commentary' as const, text: computedLine, fen: args.fenAfterReply }] : []),
       // Rate-matched Danya behavior — board-truth. MERGED with the positional
       // read into ONE board-read lane (David 2026-09-13: "computer and observation
       // can be merged"): it now speaks as `observation`, the single home for the
       // computer's board reads, so the two never split or duplicate (the outpost
       // both once computed is now one deduped lane). Stands down behind a note
       // and in a decided game (the contested gate).
-      ...(behaviorLine && !softStandDown && !decidedByMaterial ? [{ kind: 'observation' as const, text: behaviorLine, fen: args.fenAfterReply, squares: behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)) }] : []),
+      ...(behaviorLine && !softStandDown && !decidedByMaterial ? [{ lane: 'behavior' as const, text: behaviorLine, fen: args.fenAfterReply, squares: behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)) }] : []),
       // The hand-written masterclass beat, verified before it shipped
       // (narrationAccuracy, lessonIntegrity). No corpus note rides free play.
-      ...(curatedLine ? [{ kind: 'note' as const, text: curatedLine, fen: args.fenAfterReply }] : []),
+      ...(curatedLine ? [{ lane: 'curated' as const, text: curatedLine, fen: args.fenAfterReply }] : []),
       // Corpus teaching reached by structure/concept transfer — BORROWED, and
       // now ranked as such. It used to ship at the same `note` rank as the
       // exact-position tier on the grounds that both are the corpus speaking.
@@ -8377,28 +8350,16 @@ export function CoachTeachPage(): JSX.Element {
       // speaks in (the merge). Widened board-awareness pool (king, plan, minority,
       // outpost, passer, colour-complex, open file, lever, both sides). Stands
       // down behind a note and in a decided game (the contested gate).
-      ...(positionalLine && !softStandDown && !decidedByMaterial ? [{ kind: 'observation' as const, text: positionalLine, fen: args.fenAfterReply, squares: positionalSquares }] : []),
+      ...(positionalLine && !softStandDown && !decidedByMaterial ? [{ lane: 'positional' as const, text: positionalLine, fen: args.fenAfterReply, squares: positionalSquares }] : []),
       // priorKeys = every phrase spoken EARLIER this game, so no lane repeats a
       // phrase across turns (David 2026-09-13). Within-turn dedupe is separate
       // (the late package's `alreadySaid`); this is the cross-turn guarantee.
     ], undefined, learnMemRef.current.spokenKeys);
-    // DNA WHITELIST, NO COUNT CAP — INSTANT package. Drop any non-DNA kind, then
-    // speak EVERY DNA fact that survived, rank-sorted (gem/note/mistake lead).
-    //
-    // 🔒 NO HARD CAP (David 2026-09-13, emphatic: "I want all important computed
-    // narration facts to fire, anything deemed important enough to tell the user
-    // should not be hard capped"). This REVERSES the 2026-08-23 three-reason
-    // breath. The wall that cap was fighting was REPETITION, not count — a lane
-    // saying the same thing another already said. That is now handled properly:
-    // the double-phrase gate drops in-turn twins, and the per-game novelty set
-    // (`learnMem.spokenKeys`) drops anything said on an earlier turn. What is left is
-    // every DISTINCT important fact, most-important first — which is exactly what
-    // a briefing should be, and what "no budget on the coach narrations" always
-    // meant.
-    const instantDna = instantFull.kept.filter((f) => DNA_VOICE_KINDS.has(f.kind));
-    const pkg = (NARRATE_DNA_ONLY && instantDna.length < instantFull.kept.length)
-      ? buildVoicePackage(instantDna.map((f) => ({ kind: f.kind, text: f.text, squares: f.squares, fen: args.fenAfterReply })), undefined, learnMemRef.current.spokenKeys)
-      : instantFull;
+    // Every lane's speak/silent answer is the door's lane table now
+    // (`learnTurnDoor.LEARN_LANES`), not a kind whitelist applied after the
+    // fact. NO COUNT CAP (David 2026-09-13) still holds — repetition is caught
+    // by the in-turn twin gate and the per-game novelty set.
+    const pkg = instantDecision.pkg;
 
     // ── LEAD THE EYE ON THE COMPUTED LANES ─────────────────────────────────
     // David 2026-08-10, after a live run in which the coach named d6, b5, c6
@@ -8464,6 +8425,7 @@ export function CoachTeachPage(): JSX.Element {
 
     return {
       pkg,
+      lanes: describeTurnDecision(instantDecision),
       alertArrow,
       leadEyeArrows,
       planArrows,
@@ -8482,7 +8444,9 @@ export function CoachTeachPage(): JSX.Element {
   const queueSpokenHint = useCallback((
     fen: string,
     line: string,
-    kind: VoiceFactKind = 'computed',
+    /** The lane this line comes from — REQUIRED, so the door's lane table
+     *  (`learnTurnDoor.LEARN_LANES`) decides whether it speaks, not a default. */
+    lane: LearnLane,
     /** The squares this line is about. Handed in with the text so a mark is
      *  drawn because the fact survived, never because the prose contained
      *  something square-shaped. */
@@ -8518,8 +8482,8 @@ export function CoachTeachPage(): JSX.Element {
     } catch { /* unreadable FEN — the lanes' own board checks still apply */ }
     const pending = pendingVoiceRef.current?.fen === fen
       ? pendingVoiceRef.current
-      : { fen, lines: [] as Array<{ kind: VoiceFactKind; text: string; squares?: readonly string[] }> };
-    if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ kind, text, squares });
+      : { fen, lines: [] as Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[] }> };
+    if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ lane, text, squares });
     pendingVoiceRef.current = pending;
   }, []);
 
@@ -8935,7 +8899,7 @@ export function CoachTeachPage(): JSX.Element {
                       if (struct && !learnMemRef.current.structureSaid.has(struct.name)) {
                         learnMemRef.current.structureSaid.add(struct.name);
                         const line = gradeNarrationText(`${struct.name} — ${struct.plan}.`, probe.fen(), 'CoachTeachPage.structure')?.trim();
-                        if (line) queueSpokenHint(probe.fen(), line);
+                        if (line) queueSpokenHint(probe.fen(), line, 'structure');
                       }
                     } catch { /* the structure note is a bonus, never a blocker */ }
                   }
@@ -9004,7 +8968,7 @@ export function CoachTeachPage(): JSX.Element {
                   // wordy lanes, not his DNA.
                   if (!NARRATE_DNA_ONLY && studentBest) {
                     for (const r of engineReadLines(studentBest, playerColor, learnMemRef.current.engineReadSaid)) {
-                      queueSpokenHint(probe.fen(), r.text, 'computed');
+                      queueSpokenHint(probe.fen(), r.text, 'engineRead');
                       captureEvent('engine_read_spoken', { surface: 'coach-teach', kind: r.kind });
                     }
                   }
@@ -9031,7 +8995,7 @@ export function CoachTeachPage(): JSX.Element {
                     // piece (David 2026-08-23).
                     const isMiddlegame = Number(probe.fen().split(' ')[5] ?? '0') >= 10;
                     for (const q of pieceQualityLines(parseEvalTable(raw), playerColor, learnMemRef.current.pieceQualitySaid, { isMiddlegame, fen: probe.fen(), justMovedTo: move.to })) {
-                      queueSpokenHint(probe.fen(), q.text, 'computed', q.squares);
+                      queueSpokenHint(probe.fen(), q.text, 'pieceQuality', q.squares);
                       captureEvent('piece_quality_spoken', { surface: 'coach-teach', kind: q.kind });
                     }
                     // WHERE THE EDGE COMES FROM — material or position. The two
@@ -9044,7 +9008,7 @@ export function CoachTeachPage(): JSX.Element {
                     const split = NARRATE_DNA_ONLY ? null : parseEvalSplit(raw);
                     const splitLine = split ? evalSplitLine(split, playerColor, learnMemRef.current.pieceQualitySaid) : null;
                     if (splitLine) {
-                      queueSpokenHint(probe.fen(), splitLine, 'computed');
+                      queueSpokenHint(probe.fen(), splitLine, 'evalSplit');
                       captureEvent('eval_split_spoken', { surface: 'coach-teach' });
                     }
                   }
@@ -9127,14 +9091,14 @@ export function CoachTeachPage(): JSX.Element {
                     moveAdviceHere = pf.moveAdvice;
                     const countSpoken = pf.clauses.some((c) => c.kind === 'key-moment');
                     const registerNow = countSpoken ? pendingRegisterNoHedge : pendingRegister;
-                    if (registerNow && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), registerNow);
-                    if (gapPending && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), gapPending.text, 'computed', [gapPending.square]);
+                    if (registerNow && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), registerNow, 'register');
+                    if (gapPending && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), gapPending.text, 'gap', [gapPending.square]);
                     standingRef.current.rememberAll(pf.remember);
                     if (pf.principleSpoken) learnMemRef.current.principleTaught.add(pf.principleSpoken);
                     // The student is to move at `probe`; their coming move is ply history+1.
                     if (pf.clauses.some((c) => c.kind === 'key-moment')) announcedPliesRef.current.add(probe.history().length + 1);
                     for (const c of clauseText(pf.clauses, ['must-defend'])) {
-                      queueSpokenHint(probe.fen(), c, 'computed');
+                      queueSpokenHint(probe.fen(), c, 'positionFacts');
                     }
                     if (pf.importance.speak) captureEvent('position_facts_spoken', { surface: 'coach-teach', tier: pf.importance.tier, clauses: pf.clauses.length });
                   }
@@ -9338,7 +9302,7 @@ export function CoachTeachPage(): JSX.Element {
                           priorityFirstLastPlyRef.current = plyNow;
                           captureEvent('priority_first_offered', { surface: 'coach-teach', target: pf.targetSquare });
                           facts.push(packageForRegister(pf.hint, discussion.hintDial.register));
-                          queueSpokenHint(probe.fen(), packageForRegister(pf.hint, discussion.hintDial.register));
+                          queueSpokenHint(probe.fen(), packageForRegister(pf.hint, discussion.hintDial.register), 'priorityFirst');
                         } else {
                           const recProbe = new Chess(probe.fen());
                           const recMove = recProbe.move({ from: recUci.slice(0, 2), to: recUci.slice(2, 4), promotion: recUci.slice(4, 5) || undefined });
@@ -9485,7 +9449,7 @@ export function CoachTeachPage(): JSX.Element {
                         rejectedTemptingCountRef.current += 1;
                         captureEvent('rejected_tempting_offered', { surface: 'coach-teach', tempting: rt.temptingSan, refutation: rt.refutationSan });
                         facts.push(packageForRegister(rt.hint, discussion.hintDial.register));
-                        queueSpokenHint(probe.fen(), packageForRegister(rt.hint, discussion.hintDial.register));
+                        queueSpokenHint(probe.fen(), packageForRegister(rt.hint, discussion.hintDial.register), 'rejectedTempting');
                       }
                     }
 
@@ -9527,7 +9491,7 @@ export function CoachTeachPage(): JSX.Element {
                           ];
                           for (const e of arcLines) {
                             const line = gradeNarrationText(e.text, probe.fen(), 'CoachTeachPage.planArc')?.trim();
-                            if (line) { facts.push(line); queueSpokenHint(probe.fen(), line, 'plan', e.squares); }
+                            if (line) { facts.push(line); queueSpokenHint(probe.fen(), line, 'planArc', e.squares); }
                           }
                         } catch { /* the arc is a bonus, never a blocker */ }
                         const key = keySquareLine(plan.keySquares, planSaidRef.current);
@@ -9644,7 +9608,7 @@ export function CoachTeachPage(): JSX.Element {
                             // ahead plan prose ("they're bringing pieces to d5 and
                             // e6 …") is the wordiest of the pre-existing lanes, not
                             // his DNA. The plan's ARROWS still paint below.
-                            if (graded && !NARRATE_DNA_ONLY) queueSpokenHint(planFen, graded, 'plan');
+                            if (graded && !NARRATE_DNA_ONLY) queueSpokenHint(planFen, graded, 'lookaheadPlan');
                             // 🔒 THE SAME COMPARISON THE SPEECH USES. This was
                             // `liveFenRef.current === planFen` — whole-FEN
                             // equality — while the line immediately above
@@ -10211,7 +10175,7 @@ export function CoachTeachPage(): JSX.Element {
                   kind: 'coach-narration-spoken',
                   category: 'subsystem',
                   source: 'CoachTeachPage.voicePackage',
-                  summary: `${describeVoicePackage(instant.pkg)} — ${instant.pkg.spoken.slice(0, 240)}`,
+                  summary: `${describeVoicePackage(instant.pkg)} · ${instant.lanes} — ${instant.pkg.spoken.slice(0, 240)}`,
                   narrationText: instant.pkg.spoken,
                   fen: ip.fen(),
                 });
@@ -10478,7 +10442,7 @@ export function CoachTeachPage(): JSX.Element {
                       // neglected (neglected-development, space-conceded, a passive
                       // worst piece — costs the eval never itemises). Name it on
                       // its own; the fundamental IS the teaching here.
-                      queueSpokenHint(fenAfterReply, fundamental.verdict, 'drawback', []);
+                      queueSpokenHint(fenAfterReply, fundamental.verdict, 'fundamental', []);
                       captureEvent('coach_fundamental_named', {
                         surface: 'coach-teach', fundamental: fundamental.id, cp_loss: Math.round(cpLoss),
                       });
@@ -10490,7 +10454,7 @@ export function CoachTeachPage(): JSX.Element {
                       // yourself"). The review walk's own clauses.
                       const point = studentMovePoint(fenBefore, move.san, move.history.length >= 2 ? move.history[move.history.length - 2] : null);
                       if (point) {
-                        queueSpokenHint(fenAfterReply, point, 'computed', []);
+                        queueSpokenHint(fenAfterReply, point, 'movePoint', []);
                         captureEvent('coach_move_point_named', { surface: 'coach-teach' });
                       }
                     }
@@ -10635,24 +10599,16 @@ export function CoachTeachPage(): JSX.Element {
                   // over is what stops the late package repeating a sentence the
                   // student heard eight seconds ago; see the parameter's note in
                   // `voicePackage`.
-                  const fullPkg = buildVoicePackage(
-                    pending.lines.map(({ kind, text, squares }) => ({ kind, text, squares, fen: pending.fen })),
+                  // THE DOOR (WO-COACH-TEACHER WO-1). The lane table decides
+                  // what may speak; the package orders and dedupes. NO COUNT CAP
+                  // (David 2026-09-13) — repetition is caught by the twin gate and
+                  // the per-game novelty set, not by a number.
+                  const lateDecision = decideTurn(
+                    pending.lines.map(({ lane, text, squares }) => ({ lane, text, squares, fen: pending.fen })),
                     instantSpokenText,
                     learnMemRef.current.spokenKeys,
                   );
-                  // DNA WHITELIST, NO COUNT CAP (David 2026-09-13: "anything
-                  // deemed important enough to tell the user should not be hard
-                  // capped"). Drop non-DNA kinds; speak every DNA fact that
-                  // survived. The grab-bag "wall" was repetition, now caught by the
-                  // double-phrase gate + the per-game novelty set — not by a count.
-                  const lateDna = fullPkg.kept.filter((f) => DNA_VOICE_KINDS.has(f.kind));
-                  const hintPkg = (NARRATE_DNA_ONLY && lateDna.length < fullPkg.kept.length)
-                    ? buildVoicePackage(
-                      lateDna.map((f) => ({ kind: f.kind, text: f.text, squares: f.squares, fen: pending.fen })),
-                      instantSpokenText,
-                      learnMemRef.current.spokenKeys,
-                    )
-                    : fullPkg;
+                  const hintPkg = lateDecision.pkg;
                   if (hintPkg.spoken) {
                     speakTrackA(hintPkg.spoken);
                     // Record the late package's phrases too — the per-game set is
@@ -10681,7 +10637,7 @@ export function CoachTeachPage(): JSX.Element {
                       kind: 'coach-narration-spoken',
                       category: 'narration',
                       source: 'CoachTeachPage.hintRegister',
-                      summary: `${describeVoicePackage(hintPkg)} — ${hintPkg.spoken.slice(0, 200)}`,
+                      summary: `${describeVoicePackage(hintPkg)} · ${describeTurnDecision(lateDecision)} — ${hintPkg.spoken.slice(0, 200)}`,
                       narrationText: hintPkg.spoken,
                       fen: pending.fen,
                     });
