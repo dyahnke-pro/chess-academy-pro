@@ -55,7 +55,7 @@
 ### `warmCuratedBeatIndex` (function) — 3 call sites
 - `src/services/curatedBeatSource.test.ts:133`
 - `src/services/curatedBeatSource.warmSlice.test.ts:19`
-- `src/services/dataLoader.ts:1032`
+- `src/services/dataLoader.ts:1042`
 
 ### `warmCuratedBeatIndexSync` (function) — 4 call sites
 - `src/services/beatVsCorpus.report.test.ts:34`
@@ -69,7 +69,7 @@
 - `src/services/curatedBeatSource.test.ts:190`
 
 ### `curatedBeatAt` (function) — 21 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8163`
+- `src/components/Coach/CoachTeachPage.tsx:8147`
 - `src/services/beatVsCorpus.report.test.ts:73`
 - `src/services/computedVoiceAudit.report.test.ts:313`
 - `src/services/computedVoiceAudit.report.test.ts:330`

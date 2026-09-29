@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**105 lines · 8 exports · 5 importers · 2 tests · 0 audits**
+**89 lines · 7 exports · 6 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4025) — names `amateurPlayCache`, `ratingBandFor`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4059) — names `amateurPlayCache`, `ratingBandFor`
 
 ## Who calls in
 
@@ -17,6 +17,7 @@
 - `src/services/coachApi.ts`
 - `src/services/masterPlayWatcher.ts`
 - `src/services/ratingBands.test.ts`
+- `src/services/refutedAlternative.ts`
 
 ## Exports and every call site
 
@@ -24,11 +25,11 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `ratingBandFor` (const) — 12 call sites
+- `src/services/amateurPlayCache.test.ts:22`
 - `src/services/amateurPlayCache.test.ts:23`
 - `src/services/amateurPlayCache.test.ts:24`
-- `src/services/amateurPlayCache.test.ts:25`
-- `src/services/amateurPlayCache.test.ts:29`
-- `src/services/amateurPlayCache.test.ts:32`
+- `src/services/amateurPlayCache.test.ts:28`
+- `src/services/amateurPlayCache.test.ts:31`
 - `src/services/theoryDeparture.test.ts:128`
 - `src/services/theoryDeparture.test.ts:129`
 - `src/services/theoryDeparture.test.ts:130`
@@ -37,31 +38,23 @@
 - `src/services/theoryDeparture.ts:62`
 - `src/services/theoryDeparture.ts:114`
 
-### `getCachedAmateurPlay` (function) — 2 call sites
-- `src/services/amateurPlayCache.test.ts:38`
-- `src/services/coachApi.ts:1710`
+### `getCachedAmateurPlay` (function) — 4 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9060`
+- `src/services/amateurPlayCache.test.ts:37`
+- `src/services/coachApi.ts:1753`
+- `src/services/refutedAlternative.ts:141`
 
 ### `warmAmateurPlay` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8796`
+- `src/components/Coach/CoachTeachPage.tsx:9119`
 - `src/services/masterPlayWatcher.ts:169`
 
-### `buildRatingRealityFact` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9492`
-- `src/services/amateurPlayCache.test.ts:42`
-- `src/services/amateurPlayCache.test.ts:47`
-- `src/services/amateurPlayCache.test.ts:53`
-- `src/services/amateurPlayCache.test.ts:61`
-- `src/services/amateurPlayCache.test.ts:73`
+### `__clearAmateurPlayCache` (function) — 3 call sites
+- `src/services/amateurPlayCache.test.ts:18`
+- `src/services/refutedAlternative.test.ts:130`
+- `src/services/refutedAlternative.test.ts:137`
 
-### `__clearAmateurPlayCache` (function) — 2 call sites
-- `src/services/amateurPlayCache.test.ts:19`
-- `src/services/amateurPlayCache.test.ts:48`
-
-### `__seedAmateurPlayCache` (function) — 4 call sites
-- `src/services/amateurPlayCache.test.ts:43`
-- `src/services/amateurPlayCache.test.ts:49`
-- `src/services/amateurPlayCache.test.ts:57`
-- `src/services/amateurPlayCache.test.ts:69`
+### `__seedAmateurPlayCache` (function) — 1 call site
+- `src/services/refutedAlternative.test.ts:132`
 
 ### `emitAmateurWarmAudit` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -70,6 +63,7 @@
 
 - `src/services/amateurPlayCache.test.ts`
 - `src/services/ratingBands.test.ts`
+- `src/services/refutedAlternative.test.ts`
 
 ## Audits that reach it
 

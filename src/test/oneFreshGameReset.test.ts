@@ -33,7 +33,7 @@ describe('CoachTeachPage — one fresh-game reset', () => {
   it('the ask door calls it, and the board door is observe(), never a ply count', () => {
     const calls = SRC.match(/resetPerGameMemory\(\)/g) ?? [];
     expect(calls.length).toBeGreaterThanOrEqual(1);
-    expect(SRC, 'no ply-count reset after the turn has written the memory').not.toMatch(/length <= 2\)\s*\{\s*resetPerGameMemory\(\)/);
+    expect(SRC, 'no ply-count reset after the turn has written the memory').not.toMatch(/length <= 2\)\s*\{?\s*resetPerGameMemory\(\)/);
   });
 
   // THE THIRD DOOR (2026-09-20). `learnMemory.observe()` resets ITSELF when the
@@ -60,7 +60,7 @@ describe('CoachTeachPage — one fresh-game reset', () => {
     const start = SRC.indexOf('const forgetPageRefs = useCallback');
     const body = SRC.slice(start, SRC.indexOf('}, []);', start));
     for (const ref of [
-      'announcedPliesRef', 'announcedTrapsRef', 'fundamentalSeenRef',
+      'announcedPliesRef', 'fundamentalSeenRef',
       'positionalSaidRef',
       'rejectedTemptingCountRef', 'priorityFirstLastPlyRef',
     ]) {

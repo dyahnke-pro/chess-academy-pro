@@ -68,22 +68,6 @@ export async function warmAmateurPlay(fen: string, rating: number, surface: stri
   }
 }
 
-/** Compose the rating-reality fact for narration — CACHE-ONLY. Returns null
- *  unless both sides are statistically real (≥50 games each). */
-export function buildRatingRealityFact(
-  fen: string,
-  masters: { san: string; pct: number; totalGames: number } | null,
-): string | null {
-  const amateur = getCachedAmateurPlay(fen);
-  if (!amateur || amateur.totalGames < 50 || amateur.moves.length === 0) return null;
-  if (!masters || masters.totalGames < 50) return null;
-  const top = amateur.moves[0];
-  if (top.san === masters.san) {
-    return `At the student's level (${amateur.bandLabel}), ${top.san} is also the most common move here (${top.pct}% of ${amateur.totalGames} games) — amateurs and masters agree in this position.`;
-  }
-  return `At the student's level (${amateur.bandLabel}), ${top.san} is the most common move here (${top.pct}% of ${amateur.totalGames} games) — but masters prefer ${masters.san} (${masters.pct}%). Name the split naturally when it teaches.`;
-}
-
 /** Test-only. */
 export function __clearAmateurPlayCache(): void {
   entries.clear();

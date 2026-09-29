@@ -230,7 +230,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:571`
-- `src/components/Coach/CoachTeachPage.tsx:3257`
+- `src/components/Coach/CoachTeachPage.tsx:3242`
 - `src/services/coachSessionRouter.ts:117`
 - `src/services/coachSettingsAction.ts:242`
 

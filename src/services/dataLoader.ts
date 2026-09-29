@@ -156,10 +156,20 @@ async function buildAndBulkPutChunked<S, R>(
   batchSize = 200,
 ): Promise<R[]> {
   const built: R[] = [];
+  // Yield on TIME inside a batch too: 200 `computePosition` builds in one go
+  // was a 422 ms long task at phone speed on first install (2026-09-29).
+  const now = (): number => (typeof performance !== 'undefined' ? performance.now() : Date.now());
+  let sliceStart = now();
   for (let i = 0; i < source.length; i += batchSize) {
     const end = Math.min(i + batchSize, source.length);
     const batch: R[] = [];
-    for (let j = i; j < end; j++) batch.push(build(source[j]));
+    for (let j = i; j < end; j++) {
+      batch.push(build(source[j]));
+      if (now() - sliceStart > 10) {
+        await yieldToEventLoop();
+        sliceStart = now();
+      }
+    }
     await table.bulkPut(batch);
     built.push(...batch);
     if (end < source.length) await yieldToEventLoop();
@@ -391,7 +401,7 @@ async function precomputePositions(
   for (const entry of entries) {
     out.set(entry.id, computePosition(entry.pgn));
     if (now() - sliceStart > 10) {
-      await new Promise<void>((resolve) => { setTimeout(resolve, 0); });
+      await yieldToEventLoop();
       sliceStart = now();
     }
   }
