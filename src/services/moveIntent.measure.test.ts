@@ -9,7 +9,7 @@
 // Not a gate. Skips unless the reads exist and MOVE_INTENT=1.
 import { describe, it, expect } from 'vitest';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { moveIntent, type IntentReads, type IntentOptions, type MoveIntent } from './moveIntent';
+import { moveIntent, unlockedMoves, type IntentReads, type IntentOptions, type MoveIntent } from './moveIntent';
 import type { AnalysisLine } from '../types';
 
 interface Raw { cp: number | null; mate: number | null; pv: string[] }
@@ -35,6 +35,8 @@ describe.skipIf(!HAVE)('moveIntent on his moments', () => {
     const VARIANTS: IntentOptions[] = [
       { prepare: 'pass', prevent: 'any' }, { prepare: 'pass', prevent: 'concrete' },
       { prepare: 'line', prevent: 'any' }, { prepare: 'line', prevent: 'concrete' },
+      { prepare: 'unlock', prevent: 'any' }, { prepare: 'unlock', prevent: 'concrete' },
+      { prepare: 'unlock', prevent: 'deny' }, { prepare: 'unlock', prevent: 'any+deny' },
     ];
     const dump: Record<string, Record<string, { text: string | null; agrees: boolean }>> = {};
     for (const v of VARIANTS) {
@@ -52,6 +54,17 @@ describe.skipIf(!HAVE)('moveIntent on his moments', () => {
         for (const r of t.slice(0, 40)) console.log(`${agrees(r.out as MoveIntent, r.m.his ?? '') ? '✓' : '✗'} ${r.m.game}:${r.m.ply} ${r.m.san} | ${r.out?.text} || ${(r.m.his ?? '').slice(0, 120)}`);
       }
     }
+    // UNLOCK recall: is the move he names among the moves this one unlocked?
+    const unlockRows = ms.filter((m) => m.target).map((m) => {
+      const un = unlockedMoves(m.fenBefore, m.san);
+      const his = m.his ?? '';
+      const hit = un.find((u) => his.includes(u.uci.slice(2, 4)));
+      return { key: `${m.game}:${m.ply}`, n: un.length, hit: hit?.san ?? null };
+    });
+    const withHit = unlockRows.filter((r) => r.hit).length;
+    const sizes = unlockRows.map((r) => r.n).sort((a, b) => a - b);
+    console.log(`[intent] unlock: his square among the unlocked moves on ${withHit}/${unlockRows.length} of his purpose moments; unlocked-set size median ${sizes[Math.floor(sizes.length / 2)]}, p90 ${sizes[Math.floor(sizes.length * 0.9)]}`);
+    if (process.env.MOVE_INTENT_UNLOCK) writeFileSync(process.env.MOVE_INTENT_UNLOCK, JSON.stringify(unlockRows));
     if (process.env.MOVE_INTENT_DUMP) writeFileSync(process.env.MOVE_INTENT_DUMP, JSON.stringify(dump));
     expect(ms.length).toBeGreaterThan(20);
   }, 120_000);

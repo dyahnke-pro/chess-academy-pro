@@ -38,12 +38,12 @@ export interface IntentMove { uci: string; san: string }
 export interface IntentOptions {
   /** 'pass' — the best move after a free extra move; 'line' — the next move
    *  this side plays in the engine's own main line after the move. */
-  prepare: 'pass' | 'line';
+  prepare: 'pass' | 'line' | 'unlock';
   /** 'any' — every strong reply after a pass; 'concrete' — only a reply that
    *  mates, gives check, or wins material by exchange. */
-  prevent: 'any' | 'concrete';
+  prevent: 'any' | 'concrete' | 'deny' | 'any+deny';
 }
-export const DEFAULT_INTENT: IntentOptions = { prepare: 'line', prevent: 'concrete' };
+export const DEFAULT_INTENT: IntentOptions = { prepare: 'unlock', prevent: 'any+deny' };
 
 export interface MoveIntent {
   /** The reply this move took away from the opponent. */
@@ -136,7 +136,9 @@ export function moveIntent(
   // real threat the move took away is the one named.
   let prevents: MoveIntent['prevents'] = null;
   const passFen = nullMoveFen(fenBefore);
-  if (passFen && reads.before[0]) {
+  if (passFen && opts.prevent === 'deny') {
+    prevents = denied(fenBefore, fenAfter, passFen, playedUci, mover, reads);
+  } else if (passFen && reads.before[0]) {
     const ifBest = -valueFor(reads.before[0], mover);
     const theirBestNow = reads.after[0] ? valueFor(reads.after[0], opp) : null;
     const worstListed = reads.after.length ? Math.min(...reads.after.map((l) => valueFor(l, opp))) : null;
@@ -157,14 +159,27 @@ export function moveIntent(
       const gone = !stillLegal
         || (theirBestNow !== null && threatNow !== null && threatNow <= theirBestNow - GONE_CP)
         // Not even among their listed moves: worse than the worst of them.
-        || (threatNow === null && theirBestNow !== null && worstListed !== null && worstListed <= theirBestNow - GONE_CP);
+        || (threatNow === null && theirBestNow !== null && worstListed !== null && worstListed <= theirBestNow - GONE_CP)
+        // Their best reply to a pass, worth a real threat, and now not even in
+        // their top lines: it no longer works.
+        || (threatNow === null && line === reads.passBefore[0]);
       if (gone) prevents = { uci: threat, san: threatSan, threatCp };
     }
+    if (!prevents && opts.prevent === 'any+deny') prevents = denied(fenBefore, fenAfter, passFen, playedUci, mover, reads);
   }
 
   // ── PREPARES ────────────────────────────────────────────────────────────
   let prepares: MoveIntent['prepares'] = null;
-  if (opts.prepare === 'line') {
+  if (opts.prepare === 'unlock') {
+    // What the move UNLOCKS (board + exchange counting), and of those, the one
+    // the engine actually plays for this side in its lines; a lone unlock is
+    // named as it stands; several with none in the lines stay unnamed.
+    const unlocked = unlockedMoves(fenBefore, playedSan);
+    const engineSaw = new Set<string>();
+    for (const l of [...reads.after, ...reads.passAfter]) (l.moves ?? []).forEach((u) => engineSaw.add(u));
+    const pick = unlocked.find((u) => engineSaw.has(u.uci)) ?? (unlocked.length === 1 ? unlocked[0] : undefined);
+    if (pick) prepares = { uci: pick.uci, san: pick.san, gainCp: PREPARE_CP };
+  } else if (opts.prepare === 'line') {
     // The engine's main line after the move, walked for THIS side's moves (the
     // 2nd, 4th, 6th ply). The first one that was not available before — illegal
     // then, or clearly worse then — is what this move is heading for. "Kh1, …,
@@ -240,4 +255,68 @@ function phrase(
   if (prevents && prepares) return `Their ${played} does two jobs: it stops ${stop}, and it prepares ${prep}.`;
   if (prevents) return rotateStem([`Their ${played} stops ${stop}.`, `The point of their ${played}: it takes ${stop} away.`], key);
   return rotateStem([`Their ${played} prepares ${prep}.`, `They play ${played} first, so that ${prep} comes next.`], key);
+}
+
+/** SQUARE DENIAL: of the moves they would play after a pass, the first whose
+ *  landing square this move now covers and did not before — "Bf5 stops the
+ *  knight landing on e4", "f3 takes g4 away", "d6 shuts the door on e5". */
+function denied(
+  fenBefore: string, fenAfter: string, passFen: string, playedUci: string, mover: 'w' | 'b', reads: IntentReads,
+): MoveIntent['prevents'] {
+  const covered = (fen: string, sq: string): boolean => { try { return new Chess(fen).isAttacked(sq as never, mover); } catch { return false; } };
+  for (const line of reads.passBefore) {
+    const t = firstMove(line);
+    if (!t || t === playedUci) continue;
+    const to = t.slice(2, 4);
+    const tSan = sanOf(passFen, t);
+    if (!tSan || tSan.includes('x')) continue; // a capture is not a square they wanted
+    if (!covered(fenBefore, to) && covered(fenAfter, to)) return { uci: t, san: tSan, threatCp: 0 };
+  }
+  return null;
+}
+
+/** Moving `m` from `fen` lands safely: the opponent wins nothing by taking. */
+function safeLanding(fen: string, m: { from: string; to: string; promotion?: string }): boolean {
+  try {
+    const c = new Chess(fen);
+    const mv = c.move({ from: m.from, to: m.to, promotion: m.promotion });
+    if (!mv) return false;
+    return legalSeeGainOn(c, mv.to) <= 0;
+  } catch { return false; }
+}
+
+/**
+ * What a move UNLOCKS: this side's quiet moves that were illegal before the
+ * move, or legal but losing material, and are legal and safe after it — with
+ * this side to move again (a pass by the opponent). Board geometry and exchange
+ * counting only; no engine. "e6 opens d6 for the bishop", "Qd2 makes Bh6 safe",
+ * "h3 makes g4 safe". The moved piece's own continuations are not unlocks.
+ */
+export function unlockedMoves(fenBefore: string, playedSan: string): IntentMove[] {
+  let fenAfter: string;
+  let movedTo: string;
+  try {
+    const c = new Chess(fenBefore);
+    const m = c.move(playedSan);
+    if (!m) return [];
+    movedTo = m.to;
+    fenAfter = c.fen();
+  } catch { return []; }
+  const again = nullMoveFen(fenAfter);
+  if (!again) return [];
+  const before = new Map<string, { from: string; to: string; promotion?: string }>();
+  try {
+    for (const b of new Chess(fenBefore).moves({ verbose: true })) before.set(`${b.from}${b.to}${b.promotion ?? ''}`, b);
+  } catch { return []; }
+  const out: IntentMove[] = [];
+  let now: ReturnType<Chess['moves']>;
+  try { now = new Chess(again).moves({ verbose: true }); } catch { return []; }
+  for (const u of now as Array<{ from: string; to: string; promotion?: string; san: string; captured?: string }>) {
+    if (u.from === movedTo || u.captured || /[+#]/.test(u.san)) continue;
+    const key = `${u.from}${u.to}${u.promotion ?? ''}`;
+    if (!safeLanding(again, u)) continue;
+    const b = before.get(key);
+    if (!b || !safeLanding(fenBefore, b)) out.push({ uci: key, san: u.san });
+  }
+  return out;
 }
