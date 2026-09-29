@@ -45,6 +45,11 @@ export function TacticsTab({ data }: TacticsTabProps): JSX.Element {
     <div data-testid="tactics-tab">
       {/* Tactics Found */}
       <Section title="Tactics Found vs Missed">
+        {(data.gamesPendingClassification ?? 0) > 0 && (
+          <p data-testid="tactics-classifying" className="text-xs pt-2" style={{ color: 'var(--color-text-muted)' }}>
+            Still scanning {data.gamesPendingClassification} games for missed tactics — counts will grow.
+          </p>
+        )}
         <div className="flex items-center gap-5 py-3.5">
           <InsightsDonutChart data={foundDonut} centerValue={`${data.awarenessRate}%`} centerLabel="Found" />
           <div className="flex flex-col gap-1.5 flex-1">

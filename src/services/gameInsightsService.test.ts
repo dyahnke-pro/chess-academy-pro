@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeAll, beforeEach, vi } from 'vitest';
 import { db } from '../db/schema';
 import {
   buildGameRecord,
@@ -93,6 +93,10 @@ function setupAnnotatedMocks(): void {
 // ─── Tests ───────────────────────────────────────────────────────────────────
 
 describe('gameInsightsService', () => {
+  // The module graph takes ~9s to load cold; pay it once here instead of inside
+  // the first test's timeout, which it raced when files ran in parallel.
+  beforeAll(async () => { await import('./gameInsightsService'); }, 60000);
+
   beforeEach(async () => {
     await db.delete();
     await db.open();
@@ -490,12 +494,10 @@ describe('gameInsightsService', () => {
       expect(result.tacticsFound.great).toBe(3);
     });
 
-    it('does NOT count missed tactics from the classifiedTactics store — only live-derived (David 2026-09-09)', async () => {
-      // Root-cause contract flip: missed tactics are derived LIVE from each
-      // game's annotations, NOT read from the classifiedTactics cache (which is
-      // only written at analyze-time and never backfilled — the false-100% bug).
-      // Seeding ONLY the store, with a game whose annotations carry no missed
-      // tactic, must yield 0 missed — proving the tab no longer depends on it.
+    it('reads missed tactics from the classifiedTactics cache and flags unclassified games (2026-09-29 freeze)', async () => {
+      // Deriving missed tactics live over the whole library froze the app on
+      // open; the tab now reads the cache (filled in the background) and counts
+      // games not yet in it, so a partial count is never mistaken for a clean one.
       await db.profiles.add(buildUserProfile({ id: 'p1', name: 'TestUser' }));
       await db.games.add(
         buildGameRecord({
@@ -520,10 +522,9 @@ describe('gameInsightsService', () => {
       const { getTacticInsights } = await import('./gameInsightsService');
       const result = await getTacticInsights();
 
-      // The stale store row is ignored; the game's annotations hold no missed tactic.
-      expect(result.foundVsMissed.missed).toBe(0);
-      expect(result.worstMisses.length).toBe(0);
-      expect(result.missedByType.length).toBe(0);
+      expect(result.foundVsMissed.missed).toBe(1);
+      expect(result.missedByType[0]?.type).toBe('fork');
+      expect(result.gamesPendingClassification).toBe(1); // g1 carries no tacticsClassified marker yet
     });
 
     it('returns empty state when no games exist', async () => {

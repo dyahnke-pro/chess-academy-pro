@@ -2,6 +2,7 @@ import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { detectTacticType } from './missedTacticService';
 import { useAppStore } from '../stores/appStore';
+import { PRODUCTION_BACKFILL_SCHEDULE, sleep, type BackfillSchedule } from './backfillSchedule';
 import type { ClassifiedTactic, TacticType, TacticMotifStats, GameRecord } from '../types';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
@@ -145,64 +146,124 @@ export function getPrimaryThemeLabel(themes: string[]): string | null {
 // ─── Classify & Persist ─────────────────────────────────────────────────────
 
 /**
- * Classify all missed tactics from a single analyzed game and persist them.
- * Called after game analysis is complete (annotations available).
+ * Classify a game's missed tactics and persist them, then mark the game
+ * classified (`tacticsClassified`) so a game with ZERO missed tactics is not
+ * re-derived on every read — that re-derivation, over every analysed game on
+ * every open of /weaknesses, is what froze the app (2026-09-29).
+ *
+ * Without `force`, a game already classified (marker set, or rows present from
+ * before the marker existed) is only marked. After a fresh analysis the caller
+ * passes `force` so the tactics are re-derived from the NEW annotations; the
+ * drill counters on rows that survive are carried over.
  */
-export async function classifyTacticsFromGame(gameId: string): Promise<number> {
+export async function classifyTacticsFromGame(
+  gameId: string,
+  opts: { force?: boolean; yieldBetween?: () => Promise<void> } = {},
+): Promise<number> {
   const game = await db.games.get(gameId);
   if (!game || !game.annotations || game.annotations.length === 0) return 0;
 
-  // Check if we already classified this game
-  const existing = await db.classifiedTactics.where('sourceGameId').equals(gameId).count();
-  if (existing > 0) return 0;
-
-  const tactics = deriveMissedTacticsForGame(game);
-  if (tactics.length > 0) {
-    await db.classifiedTactics.bulkPut(tactics);
+  const existing = await db.classifiedTactics.where('sourceGameId').equals(gameId).toArray();
+  if (!opts.force && (game.tacticsClassified || existing.length > 0)) {
+    if (!game.tacticsClassified) await db.games.update(gameId, { tacticsClassified: true });
+    return 0;
   }
+
+  const tactics = opts.yieldBetween
+    ? await deriveMissedTacticsForGameYielding(game, opts.yieldBetween)
+    : deriveMissedTacticsForGame(game);
+  const prior = new Map(existing.map((t) => [t.id, t]));
+  for (const t of tactics) {
+    const was = prior.get(t.id);
+    if (was) {
+      t.puzzleAttempts = was.puzzleAttempts;
+      t.puzzleSuccesses = was.puzzleSuccesses;
+      t.createdAt = was.createdAt;
+    }
+  }
+  const stale = existing.filter((t) => !tactics.some((n) => n.id === t.id)).map((t) => t.id);
+  await db.transaction('rw', db.classifiedTactics, db.games, async () => {
+    if (stale.length > 0) await db.classifiedTactics.bulkDelete(stale);
+    if (tactics.length > 0) await db.classifiedTactics.bulkPut(tactics);
+    await db.games.update(gameId, { tacticsClassified: true });
+  });
   return tactics.length;
 }
 
 /**
  * PURE derivation of a game's missed tactics from its annotations — no DB read
- * or write. This is the same logic classifyTacticsFromGame persists, split out
- * so read-only surfaces (the /weaknesses Tactics tab) can compute missed tactics
- * LIVE from the always-present annotations, instead of depending on the
- * classifiedTactics cache being populated.
+ * or write. The logic classifyTacticsFromGame persists.
  *
- * 🔒 WHY (David 2026-09-09, live report "still seeing 100% tactical awareness"):
- * classifiedTactics is only written at analyze-time and `backfillClassifiedTactics`
- * is never called, so every game analyzed before the classifier was wired stays
- * unclassified forever → the tab read 0 missed → a false 100%. The FOUND side
- * (brilliant/great) is derived live from annotations every load and was correct;
- * deriving MISSED live from the same annotations makes the tab self-consistent
- * regardless of the cache. Games are still classified into the store at
- * analyze-time (cheap incremental) — this just stops the tab depending on it.
+ * 🔒 NEVER call this over the whole library on a read path (2026-09-29). The
+ * /weaknesses Tactics tab once did, to dodge an unfilled cache (David
+ * 2026-09-09, "still seeing 100% tactical awareness"): ~930 games × every
+ * mistake × a classifier costing tens of ms on a phone, synchronous on the
+ * main thread, on every open — the page froze the app. The tab now reads the
+ * cache and `backfillClassifiedTactics` fills it in the background.
  */
 export function deriveMissedTacticsForGame(
   game: GameRecord,
   playerColorOverride?: 'white' | 'black',
 ): ClassifiedTactic[] {
-  if (!game.annotations || game.annotations.length === 0) return [];
-  const playerColor = playerColorOverride ?? resolvePlayerColor(game);
-  if (!playerColor) return [];
+  const plan = planDerivation(game, playerColorOverride);
+  if (!plan) return [];
+  const tactics: ClassifiedTactic[] = [];
+  for (const i of plan.candidates) {
+    const t = classifyCandidate(plan, i);
+    if (t) tactics.push(t);
+  }
+  return tactics;
+}
 
-  const context = resolveGameContext(game, playerColor);
+/** Same derivation, but hands the thread back between every classifier call
+ *  (each is tens of ms on a phone) — for the background fill. */
+export async function deriveMissedTacticsForGameYielding(
+  game: GameRecord,
+  yieldBetween: () => Promise<void>,
+): Promise<ClassifiedTactic[]> {
+  const plan = planDerivation(game);
+  if (!plan) return [];
+  const tactics: ClassifiedTactic[] = [];
+  for (const i of plan.candidates) {
+    await yieldBetween();
+    const t = classifyCandidate(plan, i);
+    if (t) tactics.push(t);
+  }
+  return tactics;
+}
+
+interface DerivationPlan {
+  game: GameRecord;
+  playerColor: 'white' | 'black';
+  context: ReturnType<typeof resolveGameContext>;
+  fens: string[];
+  /** Annotation indices worth classifying: the player's mistakes/blunders with a
+   *  known best move and a real eval swing. Cheap to compute — the expensive
+   *  step is `detectTacticType`, run once per candidate. */
+  candidates: number[];
+  cpLoss: Map<number, number>;
+}
+
+function planDerivation(
+  game: GameRecord,
+  playerColorOverride?: 'white' | 'black',
+): DerivationPlan | null {
+  if (!game.annotations || game.annotations.length === 0) return null;
+  const playerColor = playerColorOverride ?? resolvePlayerColor(game);
+  if (!playerColor) return null;
 
   // Replay PGN to get FENs for each position
   const fens = replayPgnToFens(game.pgn);
-  if (fens.length < 2) return [];
+  if (fens.length < 2) return null;
 
   const annotations = game.annotations;
-  const gameId = game.id;
-  const tactics: ClassifiedTactic[] = [];
-
+  const candidates: number[] = [];
+  const cpLossAt = new Map<number, number>();
   for (let i = 0; i < annotations.length; i++) {
     const ann = annotations[i];
 
     // Only player's mistakes/blunders with a known best move
     if (ann.color !== playerColor) continue;
-
     const cls = ann.classification;
     if (cls !== 'mistake' && cls !== 'blunder') continue;
     if (!ann.bestMove) continue;
@@ -218,7 +279,6 @@ export function deriveMissedTacticsForGame(
     const evalAfter = ann.evaluation;
     const prevAnn = i > 0 ? annotations[i - 1] : null;
     const evalBefore = prevAnn?.evaluation ?? null;
-
     let cpLoss = 0;
     if (evalBefore !== null && evalAfter !== null) {
       cpLoss = Math.abs(
@@ -226,61 +286,93 @@ export function deriveMissedTacticsForGame(
       );
     }
     if (cpLoss < MIN_CP_LOSS) continue;
-
     // FEN before this move was played
-    const fenBefore = fens[i] ?? null;
-    if (!fenBefore) continue;
-
-    const tacticType = detectTacticType(fenBefore, ann.bestMove);
-    if (tacticType === 'tactical_sequence') continue; // Skip unclassifiable
-
-    const bestMoveSan = uciToSan(fenBefore, ann.bestMove);
-
-    tactics.push({
-      id: `ct-${gameId}-${i}`,
-      sourceGameId: gameId,
-      moveIndex: i,
-      fen: fenBefore,
-      bestMoveUci: ann.bestMove,
-      bestMoveSan: bestMoveSan ?? ann.bestMove,
-      playerMoveUci: '', // Not critical for display
-      playerMoveSan: ann.san,
-      playerColor,
-      tacticType,
-      evalSwing: cpLoss,
-      explanation: generateExplanation(tacticType, bestMoveSan ?? ann.bestMove, cpLoss),
-      opponentName: context.opponentName,
-      gameDate: context.gameDate,
-      openingName: context.openingName,
-      puzzleAttempts: 0,
-      puzzleSuccesses: 0,
-      createdAt: new Date().toISOString(),
-    });
+    if (!fens[i]) continue;
+    candidates.push(i);
+    cpLossAt.set(i, cpLoss);
   }
-
-  return tactics;
+  return {
+    game,
+    playerColor,
+    context: resolveGameContext(game, playerColor),
+    fens,
+    candidates,
+    cpLoss: cpLossAt,
+  };
 }
+
+function classifyCandidate(plan: DerivationPlan, i: number): ClassifiedTactic | null {
+  const ann = plan.game.annotations?.[i];
+  const fenBefore = plan.fens[i];
+  if (!ann || !ann.bestMove || !fenBefore) return null;
+  const cpLoss = plan.cpLoss.get(i) ?? 0;
+
+  const tacticType = detectTacticType(fenBefore, ann.bestMove);
+  if (tacticType === 'tactical_sequence') return null; // Skip unclassifiable
+
+  const bestMoveSan = uciToSan(fenBefore, ann.bestMove);
+  return {
+    id: `ct-${plan.game.id}-${i}`,
+    sourceGameId: plan.game.id,
+    moveIndex: i,
+    fen: fenBefore,
+    bestMoveUci: ann.bestMove,
+    bestMoveSan: bestMoveSan ?? ann.bestMove,
+    playerMoveUci: '', // Not critical for display
+    playerMoveSan: ann.san,
+    playerColor: plan.playerColor,
+    tacticType,
+    evalSwing: cpLoss,
+    explanation: generateExplanation(tacticType, bestMoveSan ?? ann.bestMove, cpLoss),
+    opponentName: plan.context.opponentName,
+    gameDate: plan.context.gameDate,
+    openingName: plan.context.openingName,
+    puzzleAttempts: 0,
+    puzzleSuccesses: 0,
+    createdAt: new Date().toISOString(),
+  };
+}
+
+let fillInFlight: Promise<number> | null = null;
 
 /**
- * Backfill: classify tactics from all previously analyzed games that haven't been classified yet.
- * Returns the total number of new tactics found.
+ * Fill the classifiedTactics cache for every analysed game not yet classified,
+ * scheduled per `backfillSchedule` rules: yield between classifier calls,
+ * persist per game (a killed app keeps its progress), never on the boot path.
+ * Single-flight — a second caller joins the running fill instead of starting a
+ * parallel one. `onGame` fires after each game lands so a surface can refresh.
+ * Returns the number of new tactics found.
  */
-export async function backfillClassifiedTactics(): Promise<number> {
-  const allGames = await db.games.toArray();
-  let total = 0;
-
-  for (const game of allGames) {
-    if (!game.annotations || game.annotations.length === 0) continue;
-    try {
-      const count = await classifyTacticsFromGame(game.id);
-      total += count;
-    } catch {
-      // Continue with remaining games
+export function backfillClassifiedTactics(opts: {
+  schedule?: BackfillSchedule;
+  onGame?: (done: number, total: number) => void;
+} = {}): Promise<number> {
+  if (fillInFlight) return fillInFlight;
+  const schedule = opts.schedule ?? PAGE_BACKFILL_SCHEDULE;
+  fillInFlight = (async () => {
+    if (schedule.startDelayMs > 0) await sleep(schedule.startDelayMs);
+    const pending = await db.games
+      .filter((g) => !g.tacticsClassified && !!g.annotations && g.annotations.length > 0)
+      .primaryKeys();
+    let total = 0;
+    let done = 0;
+    for (const id of pending) {
+      try {
+        total += await classifyTacticsFromGame(id, { yieldBetween: schedule.yieldBetweenRows });
+      } catch {
+        // Continue with remaining games
+      }
+      done++;
+      opts.onGame?.(done, pending.length);
+      await schedule.yieldBetweenRows();
     }
-  }
-
-  return total;
+    return total;
+  })().finally(() => { fillInFlight = null; });
+  return fillInFlight;
 }
+
+/** A page-triggered fill: the page has already painted, so no boot delay. */
+const PAGE_BACKFILL_SCHEDULE: BackfillSchedule = { ...PRODUCTION_BACKFILL_SCHEDULE, startDelayMs: 0 };
 
 // ─── Stats & Queries ────────────────────────────────────────────────────────
 

@@ -10,6 +10,7 @@ import {
   getTacticInsights,
 } from '../../services/gameInsightsService';
 import { runBackgroundAnalysis } from '../../services/gameAnalysisService';
+import { backfillClassifiedTactics } from '../../services/tacticClassifierService';
 import { ImportGamesButton } from '../Games/ImportGamesButton';
 import { AnalyzeGamesButton } from '../Games/AnalyzeGamesButton';
 import { useAppStore } from '../../stores/appStore';
@@ -104,7 +105,22 @@ export function GameInsightsPage(): JSX.Element {
   }
 
   useEffect(() => {
-    void loadAll().finally(() => setLoading(false));
+    let cancelled = false;
+    void loadAll()
+      .finally(() => setLoading(false))
+      .then(() => {
+        // Missed tactics are read from a cache; fill whatever it lacks in the
+        // background (yielding, per game) and refresh the tab as games land.
+        // Never inline — deriving the whole library on open froze the app.
+        const refresh = (): void => {
+          if (!cancelled) void getTacticInsights().then((t) => { if (!cancelled) setTactics(t); });
+        };
+        return backfillClassifiedTactics({
+          onGame: (done, total) => { if (done % 25 === 0 && done < total) refresh(); },
+        }).then(refresh);
+      })
+      .catch(() => { /* best-effort: the tab still renders from the cache */ });
+    return () => { cancelled = true; };
   }, []);
 
   // When the global background analysis finishes, reload insights so the

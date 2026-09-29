@@ -2078,7 +2078,7 @@ export async function generateInsightsForGame(
   // freshly analyzed library never filled the tab). Deterministic + free now.
   let misconceptionsLogged = 0;
   try { misconceptionsLogged = (await autoAnalyzeGameMisconceptions(gameId, username)).logged; } catch { /* continue */ }
-  try { await classifyTacticsFromGame(gameId); } catch { /* continue */ }
+  try { await classifyTacticsFromGame(gameId, { force: true }); } catch { /* continue */ }
   if (opts.habits !== false && profile && annotations.length > 0) {
     try { await detectBadHabitsFromGame(annotations, profile); } catch { /* continue */ }
   }

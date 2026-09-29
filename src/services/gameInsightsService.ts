@@ -9,8 +9,8 @@ import { countFullMovesInPgn } from '../utils/pgnMoveCount';
 import { getMistakePuzzleStats } from './mistakePuzzleService';
 import { gameNeedsAnalysis } from './gameAnalysisService';
 import { getOpeningNameByEco } from './openingDetectionService';
-import { deriveMissedTacticsForGame } from './tacticClassifierService';
 import type {
+  CoachGameMove,
   GameRecord,
   MoveClassificationCounts,
   PhaseAccuracy,
@@ -174,6 +174,58 @@ async function getPlayerGames(): Promise<AnnotatedGame[]> {
   return result;
 }
 
+// ─── Main-thread budget ───────────────────────────────────────────────────────
+//
+// 🔒 THE WEAKNESSES FREEZE (2026-09-29). Every insight here walks the WHOLE
+// library, and a chess.js replay costs ~8 ms per game (the best-move SAN
+// conversion another ~6 ms) on a desktop — several times that on a phone. On a
+// ~930-game library that was 20+ s of unbroken main-thread work on every open
+// of /weaknesses, and the app froze. Two rules, both here:
+//   1. REPLAY ONCE. `movesFor` memoises a game's reconstruction (and its
+//      best-move agreement) keyed on what the result depends on, so Overview,
+//      its strengths pass and Tactics share one replay, and a reopen reuses it.
+//   2. HAND THE THREAD BACK. `sliceYield` in every per-game loop yields once
+//      ~12 ms of work has accumulated, so taps and paints run in between.
+
+interface ReplayMemo {
+  sig: string;
+  moves: CoachGameMove[];
+  agreement?: { matches: number; total: number };
+}
+const replayMemo = new Map<string, ReplayMemo>();
+
+function replaySignature(game: GameRecord, playerColor: 'white' | 'black'): string {
+  const anns = game.annotations ?? [];
+  let evalSum = 0;
+  let classes = '';
+  for (const a of anns) {
+    evalSum += a.evaluation ?? 0;
+    classes += a.classification.charAt(0);
+  }
+  return `${playerColor}|${game.pgn}|${game.white}|${game.black}|${anns.length}|${evalSum}|${classes}|${game.analysisDepth ?? ''}`;
+}
+
+function replayEntry(game: GameRecord, playerColor: 'white' | 'black'): ReplayMemo {
+  const sig = replaySignature(game, playerColor);
+  const hit = replayMemo.get(game.id);
+  if (hit && hit.sig === sig) return hit;
+  const entry: ReplayMemo = { sig, moves: reconstructMovesFromGame(game, playerColor) };
+  replayMemo.set(game.id, entry);
+  return entry;
+}
+
+function movesFor(game: GameRecord, playerColor: 'white' | 'black'): CoachGameMove[] {
+  return replayEntry(game, playerColor).moves;
+}
+
+let sliceStart = 0;
+async function sliceYield(): Promise<void> {
+  const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
+  if (now - sliceStart < 12) return;
+  await new Promise<void>((resolve) => { setTimeout(resolve, 0); });
+  sliceStart = typeof performance !== 'undefined' ? performance.now() : Date.now();
+}
+
 // ─── Overview ─────────────────────────────────────────────────────────────────
 
 export async function getOverviewInsights(): Promise<OverviewInsights> {
@@ -263,7 +315,9 @@ export async function getOverviewInsights(): Promise<OverviewInsights> {
     // otherwise zero out every average (and produce a misleading "zero
     // blunders" strength) because most moves have no classification.
     if (!gameNeedsAnalysis(game, { depthUpgrade: false })) {
-      const moves = reconstructMovesFromGame(game, playerColor);
+      await sliceYield();
+      const memo = replayEntry(game, playerColor);
+      const moves = memo.moves;
       if (moves.length === 0) continue;
 
       // Classification counts
@@ -293,30 +347,36 @@ export async function getOverviewInsights(): Promise<OverviewInsights> {
       // current move's pre-fen, or the start position when i === 0).
       // Pre-fix this compared SAN directly to UCI (e.g. "Nf3" vs
       // "g1f3") and `bestMoveMatches` was 0 for every game.
-      const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-      for (let mi = 0; mi < moves.length; mi++) {
-        const move = moves[mi];
-        if (move.isCoachMove) continue;
-        const isMoveWhite = move.moveNumber % 2 === 1;
-        if ((playerColor === 'white' && !isMoveWhite) || (playerColor === 'black' && isMoveWhite)) continue;
-        // Book moves are theory, not a choice against the engine.
-        if (move.classification === 'book') continue;
-        if (move.bestMove && move.san) {
-          bestMoveTotal++;
-          const preFen = mi > 0 ? moves[mi - 1].fen : STARTING_FEN;
-          const bestSan = uciMoveToSan(move.bestMove, preFen);
-          if (move.san === bestSan) bestMoveMatches++;
-        } else if (move.evaluation !== null && move.bestMoveEval !== null) {
-          // 🔴 THE ANALYSER STORES `bestMove` ONLY ON A MOVE THAT DIFFERED
-          // (walk 5, S1c). It nulls it when the student played the engine's
-          // move, so the branch above only ever saw mismatches and the stat
-          // read 0% on every account. The eval pair is on every move: the
-          // played move AGREES when it reaches the best move's eval.
-          bestMoveTotal++;
-          const loss = isMoveWhite ? move.bestMoveEval - move.evaluation : move.evaluation - move.bestMoveEval;
-          if (loss <= BEST_MOVE_AGREEMENT_CP) bestMoveMatches++;
+      if (!memo.agreement) {
+        let agreeMatches = 0, agreeTotal = 0;
+        const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+        for (let mi = 0; mi < moves.length; mi++) {
+          const move = moves[mi];
+          if (move.isCoachMove) continue;
+          const isMoveWhite = move.moveNumber % 2 === 1;
+          if ((playerColor === 'white' && !isMoveWhite) || (playerColor === 'black' && isMoveWhite)) continue;
+          // Book moves are theory, not a choice against the engine.
+          if (move.classification === 'book') continue;
+          if (move.bestMove && move.san) {
+            agreeTotal++;
+            const preFen = mi > 0 ? moves[mi - 1].fen : STARTING_FEN;
+            const bestSan = uciMoveToSan(move.bestMove, preFen);
+            if (move.san === bestSan) agreeMatches++;
+          } else if (move.evaluation !== null && move.bestMoveEval !== null) {
+            // 🔴 THE ANALYSER STORES `bestMove` ONLY ON A MOVE THAT DIFFERED
+            // (walk 5, S1c). It nulls it when the student played the engine's
+            // move, so the branch above only ever saw mismatches and the stat
+            // read 0% on every account. The eval pair is on every move: the
+            // played move AGREES when it reaches the best move's eval.
+            agreeTotal++;
+            const loss = isMoveWhite ? move.bestMoveEval - move.evaluation : move.evaluation - move.bestMoveEval;
+            if (loss <= BEST_MOVE_AGREEMENT_CP) agreeMatches++;
+          }
         }
+        memo.agreement = { matches: agreeMatches, total: agreeTotal };
       }
+      bestMoveMatches += memo.agreement.matches;
+      bestMoveTotal += memo.agreement.total;
     }
   }
 
@@ -375,7 +435,7 @@ export async function getOverviewInsights(): Promise<OverviewInsights> {
       continue;
     }
     analyzedGameCount++;
-    const moves = reconstructMovesFromGame(game, playerColor);
+    const moves = movesFor(game, playerColor);
     if (moves.length === 0) continue;
     const counts = getClassificationCounts(moves, playerColor);
     if (counts.blunder === 0) zeroBlunderGames++;
@@ -752,7 +812,8 @@ export async function getTacticInsights(): Promise<TacticInsights> {
   for (const { game, playerColor } of playerGames) {
     if (!game.annotations || game.annotations.length === 0) continue;
 
-    const moves = reconstructMovesFromGame(game, playerColor);
+    await sliceYield();
+    const moves = movesFor(game, playerColor);
     if (moves.length === 0) continue;
 
     const counts = getClassificationCounts(moves, playerColor);
@@ -791,20 +852,20 @@ export async function getTacticInsights(): Promise<TacticInsights> {
     // classifiedTactics read after this loop (David 2026-09-08 fix).
   }
 
-  // 🔒 MISSED TACTICS ARE DERIVED LIVE FROM ANNOTATIONS (David 2026-09-09: the
-  // tab STILL showed "100% tactical awareness / 0 missed" on a device with 933
-  // analyzed games). The 2026-09-08 fix switched this to read the
-  // `classifiedTactics` CACHE — but that store is only written at analyze-time
-  // and `backfillClassifiedTactics` is never called, so every game analyzed
-  // before the classifier was wired stays unclassified forever → 0 missed. The
-  // FOUND side (brilliant/great) is derived live from these same annotations and
-  // was correct, so derive MISSED live too via the shared pure helper. Uses the
-  // loop's already-resolved `playerColor` so it can't disagree with the found
-  // side. (Analyze-time still fills the cache; the tab just no longer depends
-  // on it being populated.)
-  const classified = playerGames.flatMap(({ game, playerColor }) =>
-    deriveMissedTacticsForGame(game, playerColor),
-  );
+  // 🔒 MISSED TACTICS COME FROM THE classifiedTactics CACHE (2026-09-29). They
+  // were derived live here from every game's annotations (David 2026-09-09: the
+  // cache was never filled for older games → a false "100% awareness"), which
+  // ran the tactic classifier over the whole library, synchronously, on every
+  // open — thousands of calls, and the app froze on a phone. The cache is now
+  // filled by `backfillClassifiedTactics` (yielding, per game, single-flight),
+  // which the page starts; games not yet classified are COUNTED so the tab can
+  // say the numbers are still filling instead of reading as a clean record.
+  const playerGameIds = new Set(playerGames.map(({ game }) => game.id));
+  const classified = (await db.classifiedTactics.toArray())
+    .filter((t) => playerGameIds.has(t.sourceGameId));
+  const gamesPendingClassification = playerGames.filter(({ game }) =>
+    !game.tacticsClassified && !!game.annotations && game.annotations.length > 0,
+  ).length;
   totalMissed = classified.length;
   for (const m of classified) {
     const existing = missedByType.get(m.tacticType);
@@ -886,6 +947,7 @@ export async function getTacticInsights(): Promise<TacticInsights> {
     awarenessRate,
     missedByPhase: missedByPhaseArr,
     totalGames,
+    gamesPendingClassification,
     strengths,
   };
 }

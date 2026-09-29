@@ -727,6 +727,10 @@ export interface GameRecord {
    *  annotation density (the old `annotations.length >= moves/2`
    *  heuristic). */
   fullyAnalyzed?: boolean;
+  /** Missed tactics for this game are in `classifiedTactics` (possibly zero).
+   *  Lets the Tactics tab read the cache instead of re-deriving every game on
+   *  every open. Cleared by nothing: a fresh analysis re-classifies with force. */
+  tacticsClassified?: boolean;
   /** Stockfish search depth the per-move eval curve was produced at
    *  (gameAnalysisService `ANALYSIS_DEPTH`). Drives accuracy: a shallow
    *  search misses the punishment of dubious moves and reads accuracy
@@ -1837,6 +1841,9 @@ export interface TacticInsights {
   awarenessRate: number;
   missedByPhase: { phase: GamePhase; count: number }[];
   totalGames: number;
+  /** Analysed games whose missed tactics are not yet in the cache — the
+   *  background fill is still running, so the missed counts are partial. */
+  gamesPendingClassification?: number;
   strengths: string[];
 }
 
