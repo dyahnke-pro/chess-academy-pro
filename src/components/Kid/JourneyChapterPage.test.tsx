@@ -326,7 +326,7 @@ describe('JourneyChapterPage', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
-    });
+    }, { timeout: 10_000 }); // the puzzle set loads async; a loaded run takes seconds
   });
 
   it('puzzle phase shows puzzle counter', async () => {
@@ -346,7 +346,7 @@ describe('JourneyChapterPage', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
-    });
+    }, { timeout: 10_000 }); // the puzzle set loads async; a loaded run takes seconds
 
     expect(screen.getByText('Puzzle 1 of 1')).toBeInTheDocument();
   });
@@ -404,7 +404,7 @@ describe('JourneyChapterPage', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
-    });
+    }, { timeout: 10_000 }); // the puzzle set loads async; a loaded run takes seconds
 
     // Click the mock move button which sends 'e4' (the correct solution)
     fireEvent.click(screen.getByTestId('mock-move-btn'));

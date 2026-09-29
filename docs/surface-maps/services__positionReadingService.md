@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2532 lines · 77 exports · 58 importers · 18 tests · 2 audits**
+**2532 lines · 77 exports · 59 importers · 18 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -41,6 +41,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/latentFork.ts`
 - `src/services/minorityLeverCheck.test.ts`
 - `src/services/moveFundamentals.ts`
+- `src/services/moveIntent.ts`
 - `src/services/moveTiming.ts`
 - `src/services/nextPlans.ts`
 - `src/services/opponentMovePurpose.ts`
@@ -110,9 +111,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/threatOut.ts:91`
 - `src/services/tradeQuality.ts:144`
 
-### `legalSeeGainOn` (function) — 8 call sites
+### `legalSeeGainOn` (function) — 10 call sites
 - `src/services/coachFeatureService.ts:2431`
 - `src/services/groundedAnswer.ts:6755`
+- `src/services/moveIntent.ts:255`
+- `src/services/moveIntent.ts:328`
 - `src/services/opponentMovePurpose.ts:33`
 - `src/services/reviewTeachingPoints.ts:99`
 - `src/services/reviewTeachingPoints.ts:135`

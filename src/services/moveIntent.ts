@@ -29,6 +29,9 @@ export interface IntentReads {
   /** Mover to move again at the board after the move — a null move for the
    *  opponent. `nullMoveFen(fenAfter)`. */
   passAfter: readonly AnalysisLine[];
+  /** Their actual reply to the move, when the surface knows it (Learn does:
+   *  the coach's own move). Defaults to the first move of `after[0]`. */
+  reply?: string;
 }
 
 export interface IntentMove { uci: string; san: string }
@@ -51,6 +54,12 @@ export interface MoveIntent {
   /** The follow-up this move made possible or clearly better. */
   prepares: (IntentMove & { gainCp: number }) | null;
   text: string;
+  /** Every square the text is about — the move's own landing square, and the
+   *  from/to of the move it stops or prepares. Always non-empty, so the fact
+   *  can SUPPORT a lead that shares a square (the Learn door, WO-1b). */
+  squares: string[];
+  /** Whose move this is about. */
+  about: 'student' | 'opponent';
 }
 
 /** A real threat costs the side that passes at least this much. */
@@ -174,10 +183,20 @@ export function moveIntent(
     // What the move UNLOCKS (board + exchange counting), and of those, the one
     // the engine actually plays for this side in its lines; a lone unlock is
     // named as it stands; several with none in the lines stay unnamed.
+    // THE REPLAY GUARD (WO-COACH-TEACHER review 2026-09-29): the move must be
+    // the CAUSE. Replay their reply without the move (this side passes) — the
+    // follow-up must fail there, and must work after the move and the reply.
+    const reply = reads.reply ?? reads.after[0]?.moves?.[0];
     const unlocked = unlockedMoves(fenBefore, playedSan);
     const engineSaw = new Set<string>();
     for (const l of [...reads.after, ...reads.passAfter]) (l.moves ?? []).forEach((u) => engineSaw.add(u));
-    const pick = unlocked.find((u) => engineSaw.has(u.uci)) ?? (unlocked.length === 1 ? unlocked[0] : undefined);
+    // Two kinds of evidence. The engine playing it in its lines is one (it sees
+    // the pins and lines exchange counting cannot — Kh1 then f4). Without that,
+    // a lone unlock must pass the replay guard AND not merely step into the
+    // square the moved piece left (Kh1 → Rg1 is not a plan).
+    const vacated = playedUci.slice(0, 2);
+    const pick = unlocked.find((u) => engineSaw.has(u.uci))
+      ?? (unlocked.length === 1 && unlocked[0].uci.slice(2, 4) !== vacated && causedBy(fenBefore, fenAfter, reply, unlocked[0]) ? unlocked[0] : undefined);
     if (pick) prepares = { uci: pick.uci, san: pick.san, gainCp: PREPARE_CP };
   } else if (opts.prepare === 'line') {
     // The engine's main line after the move, walked for THIS side's moves (the
@@ -218,7 +237,12 @@ export function moveIntent(
   }
 
   if (!prevents && !prepares) return null;
-  return { prevents, prepares, text: phrase(playedSan, prevents, prepares, seat, mover, fenAfter) };
+  const squares = [...new Set([
+    playedUci.slice(2, 4),
+    ...(prevents ? [prevents.uci.slice(0, 2), prevents.uci.slice(2, 4)] : []),
+    ...(prepares ? [prepares.uci.slice(0, 2), prepares.uci.slice(2, 4)] : []),
+  ])];
+  return { prevents, prepares, text: phrase(playedSan, prevents, prepares, seat, mover, fenAfter), squares, about: seat };
 }
 
 /** A threat worth naming as "stopped": it mates, checks, or wins material by
@@ -273,6 +297,26 @@ function denied(
     if (!covered(fenBefore, to) && covered(fenAfter, to)) return { uci: t, san: tSan, threatCp: 0 };
   }
   return null;
+}
+
+/** The replay guard: `u` works after the move and their reply, and fails when
+ *  the same reply is played without the move (this side passes instead). A
+ *  reply that is illegal without the move falls back to the board before it. */
+function causedBy(fenBefore: string, fenAfter: string, reply: string | undefined, u: IntentMove): boolean {
+  const toMove = (uci: string): { from: string; to: string; promotion?: string } => ({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.slice(4, 5) || undefined });
+  const afterReply = (fen: string | null): string | null => {
+    if (!fen || !reply) return null;
+    try { const c = new Chess(fen); return c.move(toMove(reply)) ? c.fen() : null; } catch { return null; }
+  };
+  const real = afterReply(fenAfter);
+  // With no reply to replay (game over, unreadable), the unlock test stands.
+  if (!real) return true;
+  const works = (fen: string): boolean => {
+    try { return !!new Chess(fen).moves({ verbose: true }).find((m) => `${m.from}${m.to}${m.promotion ?? ''}` === u.uci) && safeLanding(fen, toMove(u.uci)); } catch { return false; }
+  };
+  if (!works(real)) return false;
+  const without = afterReply(nullMoveFen(fenBefore));
+  return without ? !works(without) : true;
 }
 
 /** Moving `m` from `fen` lands safely: the opponent wins nothing by taking. */

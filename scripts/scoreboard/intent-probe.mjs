@@ -8,8 +8,10 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 
 const DEPTH = 14;
-const games = JSON.parse(readFileSync('data/sources/acc-naro/multipv-d14.json', 'utf8'));
-const his = JSON.parse(readFileSync('scripts/scoreboard/his-tags.json', 'utf8'));
+const GAMES = process.env.PROBE_GAMES ?? 'data/sources/acc-naro/multipv-d14.json';
+const OUTP = process.env.PROBE_OUT ?? 'data/sources/acc-naro/intent-reads.json';
+const games = JSON.parse(readFileSync(GAMES, 'utf8'));
+const his = JSON.parse(readFileSync(process.env.PROBE_TAGS ?? 'scripts/scoreboard/his-tags.json', 'utf8'));
 const WANT = new Set(['M-PURPOSE-QUIET', 'M-PURPOSE-PREVENT', 'M-TWO-JOBS']);
 
 function engine() {
@@ -64,5 +66,5 @@ await Promise.all(Array.from({ length: JOBS }, async () => {
   }
   e.kill();
 }));
-writeFileSync('data/sources/acc-naro/intent-reads.json', JSON.stringify(moments));
-console.log('wrote data/sources/acc-naro/intent-reads.json');
+writeFileSync(OUTP, JSON.stringify(moments));
+console.log(`wrote ${OUTP}`);

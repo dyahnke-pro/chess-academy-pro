@@ -38,15 +38,15 @@
 - `src/services/liveVoiceDefects.test.ts:222`
 
 ### `beatRegister` (function) — 10 call sites
-- `src/services/curatedBeatRegister.test.ts:17`
-- `src/services/curatedBeatRegister.test.ts:21`
-- `src/services/curatedBeatRegister.test.ts:25`
-- `src/services/curatedBeatRegister.test.ts:32`
-- `src/services/curatedBeatRegister.test.ts:37`
+- `src/services/curatedBeatRegister.test.ts:19`
+- `src/services/curatedBeatRegister.test.ts:23`
+- `src/services/curatedBeatRegister.test.ts:27`
+- `src/services/curatedBeatRegister.test.ts:34`
 - `src/services/curatedBeatRegister.test.ts:39`
-- `src/services/curatedBeatRegister.test.ts:46`
-- `src/services/curatedBeatRegister.test.ts:66`
-- `src/services/curatedBeatRegister.test.ts:107`
+- `src/services/curatedBeatRegister.test.ts:41`
+- `src/services/curatedBeatRegister.test.ts:48`
+- `src/services/curatedBeatRegister.test.ts:68`
+- `src/services/curatedBeatRegister.test.ts:109`
 - `src/services/voicedCorpusRegister.measure.test.ts:58`
 
 ### `CuratedBeat` (interface) — 0 call sites
@@ -59,7 +59,7 @@
 
 ### `warmCuratedBeatIndexSync` (function) — 4 call sites
 - `src/services/beatVsCorpus.report.test.ts:34`
-- `src/services/curatedBeatRegister.test.ts:12`
+- `src/services/curatedBeatRegister.test.ts:14`
 - `src/services/curatedBeatSource.test.ts:21`
 - `src/services/curatedBeatSource.test.ts:175`
 
@@ -73,10 +73,10 @@
 - `src/services/beatVsCorpus.report.test.ts:73`
 - `src/services/computedVoiceAudit.report.test.ts:313`
 - `src/services/computedVoiceAudit.report.test.ts:330`
-- `src/services/curatedBeatRegister.test.ts:61`
-- `src/services/curatedBeatRegister.test.ts:62`
-- `src/services/curatedBeatRegister.test.ts:82`
-- `src/services/curatedBeatRegister.test.ts:83`
+- `src/services/curatedBeatRegister.test.ts:63`
+- `src/services/curatedBeatRegister.test.ts:64`
+- `src/services/curatedBeatRegister.test.ts:84`
+- `src/services/curatedBeatRegister.test.ts:85`
 - `src/services/curatedBeatSource.test.ts:29`
 - `src/services/curatedBeatSource.test.ts:38`
 - `src/services/curatedBeatSource.test.ts:52`
@@ -93,7 +93,7 @@
 
 ### `curatedBeatStats` (function) — 6 call sites
 - `src/services/beatVsCorpus.report.test.ts:35`
-- `src/services/curatedBeatRegister.test.ts:93`
+- `src/services/curatedBeatRegister.test.ts:95`
 - `src/services/curatedBeatSource.test.ts:119`
 - `src/services/curatedBeatSource.test.ts:131`
 - `src/services/curatedBeatSource.test.ts:134`

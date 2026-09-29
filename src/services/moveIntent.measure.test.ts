@@ -19,14 +19,15 @@ interface Moment {
   his: string | null; codes: string[]; target: boolean;
 }
 
-const SRC = 'data/sources/acc-naro/intent-reads.json';
-const HAVE = existsSync(SRC) && process.env.MOVE_INTENT === '1';
+// One or more probe outputs, comma-separated (MOVE_INTENT_SRC); default the first set.
+const SRCS = (process.env.MOVE_INTENT_SRC ?? 'data/sources/acc-naro/intent-reads.json').split(',').filter((p) => existsSync(p));
+const HAVE = SRCS.length > 0 && process.env.MOVE_INTENT === '1';
 
 const lines = (r: Raw[]): AnalysisLine[] => r.map((l, i) => ({ rank: i + 1, evaluation: l.cp ?? 0, moves: l.pv, mate: l.mate }));
 
 describe.skipIf(!HAVE)('moveIntent on his moments', () => {
   it('names what HE names, per variant', () => {
-    const ms = JSON.parse(readFileSync(SRC, 'utf8')) as Moment[];
+    const ms = SRCS.flatMap((p) => JSON.parse(readFileSync(p, 'utf8')) as Moment[]);
     const readsOf = (m: Moment): IntentReads => ({ before: lines(m.before), after: lines(m.after), passBefore: lines(m.passBefore), passAfter: lines(m.passAfter) });
     // "Names what he names": a square or move we name appears in his line.
     const squaresOf = (o: MoveIntent): string[] => [o.prevents?.uci.slice(2, 4), o.prepares?.uci.slice(2, 4)].filter((x): x is string => !!x);
