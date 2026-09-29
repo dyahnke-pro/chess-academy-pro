@@ -16,7 +16,7 @@
  * answers for it. Nothing is silenced by accident any more: a lane that stays
  * quiet says so in this table, with the reason.
  *
- * Slice 1 (this file): route + record. Ordering and dedupe are still
+ * Slice 1 (this file): route + record, behaviour-preserving. Ordering and dedupe are still
  * `buildVoicePackage`'s. Picking ONE lead per turn is the next slice.
  */
 import { buildVoicePackage, type VoiceFact, type VoiceFactKind, type VoicePackage } from './voicePackage';
@@ -83,7 +83,13 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   fork: { kind: 'fork', speaks: false, why: 'book fork-in-the-road is not his DNA (2026-08-23); gated off at the call site' },
   priorityFirst: { kind: 'computed', speaks: true, why: 'the priority before the move' },
   rejectedTempting: { kind: 'computed', speaks: true, why: 'the tempting move and its refutation' },
-  planArc: { kind: 'plan', speaks: true, why: 'the plan taking shape / landing / given up — built 2026-09-27 to speak, silenced by the kind whitelist until this door' },
+  // CLOSED, with a measured reason (2026-09-29). Built 2026-09-27 to speak, it
+  // was silenced by accident by the old kind whitelist. Opened here, its first
+  // live line was board-FALSE: 3UqPa5eV2e0 ply 37, "Their plan is taking shape:
+  // the knight's walk to h2" with the knight going f6→d5, away from h2, and h2
+  // covered by the king. Fixed and re-opened in WO-2 (the plan thread), never
+  // spoken before it is true.
+  planArc: { kind: 'plan', speaks: false, why: 'board-false on its first live walk (3UqPa5eV2e0 ply 37) — re-opened by WO-2 once the aim reading is proven' },
   lookaheadPlan: { kind: 'plan', speaks: false, why: 'the whole look-ahead paragraph; the plan arc speaks the plan instead (WO-2 folds it into the one thought)' },
   borrowed: { kind: 'borrowed', speaks: false, why: 'corpus teaching borrowed from another board — no corpus notes in Learn free play (2026-09-23)' },
   drawback: { kind: 'drawback', speaks: true, why: 'what the student’s own move handed over' },

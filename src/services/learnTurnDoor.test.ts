@@ -14,12 +14,21 @@ describe('learnTurnDoor — the lane table decides, not a kind whitelist', () =>
     }
   });
 
-  it('the plan arc speaks — the lane the kind whitelist silenced', () => {
-    const text = 'There it is — their knight on g3. That was the plan.';
-    const d = decideTurn([{ lane: 'planArc', text, fen: FEN, squares: ['g3'] }]);
-    expect(d.pkg.spoken).toContain('That was the plan');
-    expect(d.spoke).toEqual(['planArc']);
-    expect(d.closed).toEqual([]);
+  it('an OPEN lane speaks (positive control)', () => {
+    // True on FEN (the board grader refuses a false claim — a knight "on c3"
+    // there is refused, which is the package doing its job).
+    const text = 'Your knight on f3 attacks the pawn on e5.';
+    const d = decideTurn([{ lane: 'pieceQuality', text, fen: FEN, squares: ['f3', 'e5'] }]);
+    expect(d.pkg.spoken.length).toBeGreaterThan(0);
+    expect(d.spoke).toEqual(['pieceQuality']);
+  });
+
+  it('the plan arc stays closed until WO-2 proves it true on the board', () => {
+    // Its first live line was board-false (3UqPa5eV2e0 ply 37). Re-opening it
+    // is a deliberate edit to LEARN_LANES, with a walk behind it.
+    const d = decideTurn([{ lane: 'planArc', text: 'Their plan is taking shape: the knight walk to h2.', fen: FEN }]);
+    expect(d.pkg.spoken).toBe('');
+    expect(d.closed).toEqual(['planArc']);
   });
 
   it('a closed lane is refused BEFORE the package and recorded as closed', () => {
@@ -32,10 +41,11 @@ describe('learnTurnDoor — the lane table decides, not a kind whitelist', () =>
   });
 
   it('two lanes of ONE kind are told apart (a kind whitelist cannot)', () => {
-    // lookaheadPlan and planArc are both kind 'plan'; only one is open.
-    expect(LEARN_LANES.planArc.kind).toBe(LEARN_LANES.lookaheadPlan.kind);
-    expect(LEARN_LANES.planArc.speaks).toBe(true);
-    expect(LEARN_LANES.lookaheadPlan.speaks).toBe(false);
+    // pieceQuality and engineRead are both kind 'computed'; only one is open.
+    expect(LEARN_LANES.pieceQuality.kind).toBe(LEARN_LANES.register.kind);
+    expect(LEARN_LANES.pieceQuality.speaks).toBe(true);
+    expect(LEARN_LANES.engineRead.kind).toBe(LEARN_LANES.pieceQuality.kind);
+    expect(LEARN_LANES.engineRead.speaks).toBe(false);
   });
 
   it('a producer-decided kind rides through (the backward look)', () => {

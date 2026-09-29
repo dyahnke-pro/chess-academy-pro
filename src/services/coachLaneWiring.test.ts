@@ -69,7 +69,7 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     expect(TEACH).toMatch(/queueSpokenHint\(planFen, graded, 'lookaheadPlan'\)/);
   });
 
-  it('the plan arc is queued on its lane and the door lets it speak', () => {
+  it('the plan arc is queued on its own lane (closed until WO-2 proves it true)', () => {
     // It carried kind 'plan', which the old DNA kind whitelist never listed, so
     // from 2026-09-27 to 2026-09-29 it was computed every turn and never heard.
     expect(TEACH).toMatch(/queueSpokenHint\(probe\.fen\(\), line, 'planArc', e\.squares\)/);
