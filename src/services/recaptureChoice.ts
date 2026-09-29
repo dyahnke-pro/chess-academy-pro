@@ -36,14 +36,14 @@ function isolated(c: Chess, file: string, color: 'w' | 'b'): boolean {
   return pawnsOnFile(c, file, color) > 0 && adj.every((a) => pawnsOnFile(c, a, color) === 0);
 }
 /** Can the opponent hit the square with a pawn or minor next move, safely? */
-function hitWithTempo(c: Chess, sq: string, them: 'w' | 'b'): string | null {
+function hitWithTempo(c: Chess, sq: string, them: 'w' | 'b', skip: string | null): string | null {
   const probe = new Chess(c.fen());
   if (probe.turn() !== them) return null;
   for (const m of probe.moves({ verbose: true })) {
     if (m.piece !== 'p' && m.piece !== 'n' && m.piece !== 'b') continue;
-    if (m.captured) continue;
+    if (m.captured || m.san === skip) continue;
     probe.move(m);
-    const hits = probe.moves({ verbose: true }).length >= 0 && probe.attackers(sq as Square, them).includes(m.to);
+    const hits = probe.attackers(sq as Square, them).includes(m.to);
     // safe: the moved piece is not simply taken for free
     const safe = !probe.attackers(m.to, them === 'w' ? 'b' : 'w').length || m.piece === 'p';
     probe.undo();
@@ -52,7 +52,7 @@ function hitWithTempo(c: Chess, sq: string, them: 'w' | 'b'): string | null {
   return null;
 }
 
-export function readRecapture(fenBefore: string, m: Move, me: 'w' | 'b'): RecaptureFacts {
+export function readRecapture(fenBefore: string, m: Move, me: 'w' | 'b', theirReply: string | null = null): RecaptureFacts {
   const plus: string[] = []; const minus: string[] = [];
   const after = new Chess(fenBefore); after.move(m.san);
   const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
@@ -71,7 +71,10 @@ export function readRecapture(fenBefore: string, m: Move, me: 'w' | 'b'): Recapt
   } else {
     if (/^[de][45]$/.test(m.to) && m.piece === 'n') plus.push(`the knight lands in the centre on ${m.to}`);
     if (m.piece === 'q') {
-      const hit = hitWithTempo(after, m.to, them);
+      // Not the move they actually played: it hit whatever took back (the
+      // IMBSR0A9nJs walk: "Qxd4 would be hit by …c5" said after …c5 had just
+      // hit the knight on d4 — true of both recaptures, so no reason at all).
+      const hit = hitWithTempo(after, m.to, them, theirReply);
       if (hit) minus.push(`would put the queen on ${m.to}, where ${them === 'b' ? '…' : ''}${hit} hits it`);
     }
     const rights = (fenBefore.split(' ')[2] ?? '-');
@@ -87,16 +90,23 @@ export function readRecapture(fenBefore: string, m: Move, me: 'w' | 'b'): Recapt
  * among the recaptures, passed ONLY when the played one costs >= 50cp against
  * it (a near-tie is taste, not a lesson); then the line teaches that one.
  */
-export function recaptureChoice(fenBefore: string, playedSan: string, bestSan: string | null): string | null {
+export function recaptureChoice(
+  fenBefore: string,
+  playedSan: string,
+  bestSan: string | null,
+  /** Their actual answer to the recapture, SAN without dots, when known. */
+  theirReply: string | null = null,
+): string | null {
   let played: Move; const b = new Chess(fenBefore);
   try { played = b.move(playedSan); } catch { return null; }
   if (!played?.captured || played.promotion) return null;
   const me = played.color;
   const options = new Chess(fenBefore).moves({ verbose: true }).filter((x) => x.to === played.to && x.captured && !x.promotion && x.san !== played.san);
   if (!options.length) return null;
-  const mine = readRecapture(fenBefore, played, me);
+  const reply = theirReply ? theirReply.replace(/^…/, '') : null;
+  const mine = readRecapture(fenBefore, played, me, reply);
   const pick = options.find((o) => o.san === bestSan) ?? options[0];
-  const other = readRecapture(fenBefore, pick, me);
+  const other = readRecapture(fenBefore, pick, me, reply);
   const dot = me === 'b' ? '…' : '';
   const P = `${dot}${mine.san}`; const O = `${dot}${other.san}`;
   const what = (x: Move): string => (x.piece === 'p' ? `the ${x.from[0]}-pawn` : `the ${PIECE[x.piece]}`);

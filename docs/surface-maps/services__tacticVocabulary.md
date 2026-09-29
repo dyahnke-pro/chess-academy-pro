@@ -31,14 +31,14 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `tacticWord` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7740`
-- `src/components/Coach/CoachTeachPage.tsx:7815`
+- `src/components/Coach/CoachTeachPage.tsx:7741`
+- `src/components/Coach/CoachTeachPage.tsx:7816`
 - `src/services/computedVoiceAudit.report.test.ts:256`
 - `src/services/dnaLineNarrator.ts:129`
 - `src/services/dnaLineNarrator.ts:218`
-- `src/services/groundedAnswer.ts:5046`
-- `src/services/groundedAnswer.ts:5058`
-- `src/services/groundedAnswer.ts:5818`
+- `src/services/groundedAnswer.ts:4970`
+- `src/services/groundedAnswer.ts:4982`
+- `src/services/groundedAnswer.ts:5742`
 - `src/services/lookaheadPlan.ts:97`
 - `src/services/pvPlayback.test.ts:291`
 - `src/services/pvPlayback.test.ts:292`

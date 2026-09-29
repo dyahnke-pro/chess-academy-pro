@@ -56,6 +56,7 @@ export type LearnLane =
   | 'moveOrder'
   | 'theirMoveCost'
   | 'recapture'
+  | 'kingAttack'
   | 'causalChain'
   | 'kingSafety'
   | 'phase'
@@ -113,6 +114,9 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // own bishop shut in, castling given up, lasting structural damage.
   // Which piece takes back, and why (census #8): the file it opens, the
   // doubled pawn it avoids, the queen that would be hit with tempo.
+  // Bringing pieces to their king (census #2): a shelter pawn taken, a
+  // defender removed, a piece brought over or heading there next.
+  kingAttack: { kind: 'computed', why: 'how the student’s move adds to the attack on their king', lead: 76 },
   recapture: { kind: 'computed', why: 'which piece takes back and why — compared with the other recapture', lead: 66 },
   theirMoveCost: { kind: 'computed', why: 'what the opponent’s move cost them that the student can use', lead: 74 },
   moveOrder: { kind: 'computed', why: 'why the move had to come first — the follow-up played first loses material', lead: 77 },

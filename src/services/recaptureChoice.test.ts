@@ -18,6 +18,13 @@ describe('recaptureChoice — which piece takes back, and why', () => {
     expect(out).toMatch(/Qxd4 would put the queen on d4, where …c5 hits it/);
   });
 
+  it('drops the tempo argument when their actual reply is that very move', () => {
+    // They answered Nxd4 with …c5, which hits the knight too — so "a queen on
+    // d4 would be hit by …c5" is no difference between the two recaptures.
+    const p = at('IMBSR0A9nJs:11');
+    expect(recaptureChoice(p.fen, p.san, null, 'c5') ?? '').not.toMatch(/c5 hits it/);
+  });
+
   it('queen, not the pawn: "keeping the structure intact"', () => {
     const p = at('Dj_hLEdDpAg:12');
     expect(recaptureChoice(p.fen, p.san, null)).toMatch(/…Qxc6, not …bxc6, which would double your pawns on the c-file/);

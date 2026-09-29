@@ -262,3 +262,15 @@ What the two commits do:
 - ply 29: the "Shallow read … Here's how: Calculate to a QUIET position … You've walked into this before … Your piece went a long way from your king, to c7" block — your §6 defect 3, still there, now with two more sentences stacked on it.
 - ply 33: "Tempo lost … Here's how: Count it out loud … Nd5 was a mistake … h3 was the move … There it is — your knight on d5. That was the plan: the outpost on d5. Your knight on d5 is your best-placed piece" — five lanes in one breath; "mistake" and "that was the plan" about the same knight contradict.
 - ply 23: "You own more space — keep them cramped, don't rush, improve every piece first." — generic; Qd2 was his "prepares Rae1".
+
+**NEW LANES ON MY BRANCH (review session, `claude/chess-app-review-perf-du6haq`) — all computed, all in `LEARN_LANES`, all claim-keyed so they never repeat each other:**
+
+| lane | lead | producer in `CoachTeachPage` | claims |
+|---|---|---|---|
+| `moveOrder` | 77 | cpLoss < 50, before moveIntent | `order:<Y uci>`, `stops:<R uci>` |
+| `kingAttack` | 76 | backward look, cpLoss < 100 | `king-attack-<kind>`, `prepares:<next uci>` |
+| `moveIntent` | 75 | cpLoss < 50 | `stops:`, `prepares:`, `castle-now`, `break-<sq>` |
+| `theirMoveCost` | 74 | before the coach's own move | `cost-<kind>-<sq>` |
+| `recapture` | 66 | backward look, on a recapture | `recapture-<sq>` |
+
+Events: `coach_move_order_named` {cost_cp}, `coach_king_attack_named` {kind}, `coach_move_intent_named` {prevents, prepares}. If your decoder (WO-5) picks WHAT KIND to say per move, these are five of the kinds; their `lead` is only a tie-break.

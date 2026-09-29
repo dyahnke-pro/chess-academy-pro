@@ -33,6 +33,7 @@ import { DEFAULT_INTENT, moveIntent, nullMoveFen } from '../../services/moveInte
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { theirMoveCost } from '../../services/theirMoveCost';
 import { recaptureChoice } from '../../services/recaptureChoice';
+import { kingAttack } from '../../services/kingAttack';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -9736,10 +9737,24 @@ export function CoachTeachPage(): JSX.Element {
                       const tookOn = theirLast ? /x([a-h][1-8])/.exec(theirLast)?.[1] ?? null : null;
                       if (tookOn && move.to === tookOn && move.san.includes('x')) {
                         const bestRe = studentBestSan && new RegExp(`x${tookOn}`).test(studentBestSan) && cpLoss >= 50 ? studentBestSan : null;
-                        const rc = recaptureChoice(fenBefore, move.san, bestRe);
+                        const rc = recaptureChoice(fenBefore, move.san, bestRe, reply ?? null);
                         if (rc) queueSpokenHint(fenAfterReply, rc, 'recapture', [move.to], [`recapture-${move.to}`]);
                       }
                     } catch { /* a bonus, never a blocker */ }
+                    // BRINGING PIECES TO THEIR KING (census #2). Board-only; not on
+                    // a move that cost a pawn — that move's lesson is the cost.
+                    if (cpLoss < 100) {
+                      const ka = kingAttack(fenBefore, move.san);
+                      if (ka) {
+                        queueSpokenHint(fenAfterReply, ka.text, 'kingAttack', ka.squares, [
+                          `king-attack-${ka.kind}`,
+                          // "Qe1 heads for their king — Qg3 next" and "Qe1 prepares
+                          // Qg3" are one idea.
+                          ...(ka.next ? [`prepares:${ka.next.uci}`] : []),
+                        ]);
+                        captureEvent('coach_king_attack_named', { surface: 'coach-teach', kind: ka.kind });
+                      }
+                    }
                     const look = backwardLook({
                       fenBefore,
                       fenAfter: move.fen,
