@@ -8,7 +8,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   openingRegister, startDial, recordAttempt, hintPlyGap, hintIsDue, scaleGap,
-  packageForRegister, readsForRegister, WINDOW,
+  packageForRegister, WINDOW,
 } from './hintRegister';
 
 const FOUND = 0;     // cpLoss 0 — the engine's own move
@@ -197,11 +197,6 @@ describe('subtlety is WHICH FACTS are handed over, not how they are worded', () 
     expect(packageForRegister({ anchor: 'A.' }, 'obvious')).toBe('A.');
   });
 
-  it('weighs fewer reads when the deliberation should be subtle', () => {
-    expect(readsForRegister('subtle')).toBeLessThan(readsForRegister('moderate'));
-    expect(readsForRegister('moderate')).toBeLessThan(readsForRegister('obvious'));
-    expect(readsForRegister('subtle')).toBeGreaterThanOrEqual(1);
-  });
 });
 
 describe('ADAPTIVE end to end: the package follows the student, not the profile', () => {

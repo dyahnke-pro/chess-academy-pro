@@ -88,15 +88,8 @@ export interface LearnMemory {
   lastThreatKey: string;
   readonly spokenTacticLines: Set<string>;
   readonly spokenThreatLines: Set<string>;
-  /** Engine readings (WDL, sharpness) already spoken this game. */
-  readonly engineReadSaid: Set<string>;
   /** Pieces already called out this game by `pieceQualityLines`. */
   readonly pieceQualitySaid: Set<string>;
-  /** Ply a think-aloud last fired. A PLY NUMBER, so it must reset with the
-   *  board: carried across games it reads as a FUTURE ply, and
-   *  `plyNow - last >= gap` then fails for as many plies as the last game was
-   *  long — muting the lane precisely at the start of the new game. */
-  thinkAloudLastPly: number;
   /** EVERY phrase the coach has spoken this game, across every lane and both
    *  packages of every turn — the CROSS-turn, cross-lane repeat guard.
    *
@@ -212,7 +205,6 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
   const curatedBeatSubjects = new Set<string>();
   const saidExplainers = new Set<string>();
   const structureSaid = new Set<string>();
-  const engineReadSaid = new Set<string>();
   const pieceQualitySaid = new Set<string>();
   const spokenKeys = new Set<string>();
   const conceptTaught = new Set<string>();
@@ -227,7 +219,6 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
     curatedBeatSubjects,
     saidExplainers,
     structureSaid,
-    engineReadSaid,
     pieceQualitySaid,
     spokenKeys,
     conceptTaught,
@@ -242,7 +233,6 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
     gemPending: null,
     lastReplyDictated: null,
     lastComputed: '',
-    thinkAloudLastPly: NEVER_FIRED,
     spokenOpeningName: null,
     detectedOpeningName: null,
     queuedOpeningName: null,
@@ -257,7 +247,6 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
       curatedBeatSubjects.clear();
       saidExplainers.clear();
       structureSaid.clear();
-      engineReadSaid.clear();
       pieceQualitySaid.clear();
       spokenKeys.clear();
       conceptTaught.clear();
@@ -272,7 +261,6 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
       mem.gemPending = null;
       mem.lastReplyDictated = null;
       mem.lastComputed = '';
-      mem.thinkAloudLastPly = NEVER_FIRED;
       mem.spokenOpeningName = null;
       mem.detectedOpeningName = null;
       mem.queuedOpeningName = null;

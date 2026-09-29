@@ -21,8 +21,7 @@
 // Engine-free and fast, so it can sit in ship-check: every input below is a
 // fixture or a chess.js computation, never a search.
 import { describe, it, expect } from 'vitest';
-import { engineReadLines } from './engineReadNarration';
-import { parseEvalTable, pieceQualityLines, parseEvalSplit, evalSplitLine } from './pieceValueRead';
+import { parseEvalTable, pieceQualityLines } from './pieceValueRead';
 import { buildPlayCommentary } from './playCommentary';
 import { buildTacticsLiveContext } from './liveTacticsContext';
 import { backwardLook } from './backwardLook';
@@ -30,7 +29,6 @@ import { callInaccuracy } from './inaccuracyCall';
 import { findLivePunishment } from './gemCrushLines';
 import { getAllPunishGems, isSurfaceableGem } from '../data/lessons/punishGems';
 import { buildVoicePackage, type VoiceFactKind } from './voicePackage';
-import type { StockfishAnalysis } from '../types';
 import { Chess } from 'chess.js';
 
 const EVAL_FIXTURE = `
@@ -68,28 +66,7 @@ const EVAL_FIXTURE = `
 Final evaluation       -0.15 (white side)
 `;
 
-const analysis = (o: Partial<StockfishAnalysis> = {}): StockfishAnalysis => ({
-  bestMove: 'e2e4', evaluation: 0, isMate: false, mateIn: null, depth: 14,
-  topLines: [{ rank: 1, evaluation: 0, moves: ['e2e4'], mate: null, wdl: null, seldepth: 20, bound: null }],
-  nodesPerSecond: 0, wdl: null, seldepth: 20, nodes: 1, timeMs: 1, hashfull: 1, ...o,
-});
-
 describe('no dead lanes — every lane can fire', () => {
-  it('engine WDL read', () => {
-    const out = engineReadLines(analysis({ wdl: { win: 750, draw: 150, loss: 100 } }), 'white');
-    expect(out.length, 'WDL lane produced nothing on a 75% win read').toBeGreaterThan(0);
-  });
-
-  it('engine sharpness read', () => {
-    const out = engineReadLines(analysis({
-      topLines: [
-        { rank: 1, evaluation: 300, moves: ['e2e4'], mate: null, wdl: null, seldepth: 20, bound: null },
-        { rank: 2, evaluation: 20, moves: ['d2d4'], mate: null, wdl: null, seldepth: 20, bound: null },
-      ],
-    }), 'white');
-    expect(out.some((l) => l.kind === 'sharpness'), 'sharpness lane silent on a 280cp gap').toBe(true);
-  });
-
   it('piece quality — their best / your worst', () => {
     // The b1 knight in EVAL_FIXTURE reads +2.20 (well under its ~3.4 kind) so a
     // passive MINOR carries this lane. It used to lean on an under-valued ROOK,
@@ -97,15 +74,6 @@ describe('no dead lanes — every lane can fire', () => {
     // Danya reroutes minors, not rooks), so the fixture must present a minor.
     const out = pieceQualityLines(parseEvalTable(EVAL_FIXTURE), 'white');
     expect(out.length, 'piece-quality lane produced nothing on a real eval table').toBeGreaterThan(0);
-  });
-
-  it('🔒 material/positional split — the lane that nearly shipped dead', () => {
-    // Its first threshold required one term near zero. NNUE never puts one
-    // there, so on a position a ROOK up it said nothing. This is the assertion
-    // that would have caught it before it reached David.
-    const split = parseEvalSplit(EVAL_FIXTURE);
-    expect(split, 'the marked NNUE bucket did not parse').not.toBeNull();
-    expect(evalSplitLine(split!, 'black', new Set()), 'split lane silent while a rook up').not.toBeNull();
   });
 
   it('play commentary', () => {
@@ -162,7 +130,7 @@ describe('no dead lanes — every lane can fire', () => {
     const FEN = 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4';
     const kinds: VoiceFactKind[] = [
       'gem', 'note', 'mistake', 'coachMistake', 'drawback', 'plan',
-      'borrowed', 'threat', 'tactic', 'fork', 'opening', 'computed', 'observation',
+      'threat', 'tactic', 'opening', 'computed', 'observation',
     ];
     for (const kind of kinds) {
       const pkg = buildVoicePackage([{ kind, text: 'The knight on f3 is doing real work here.', fen: FEN }]);

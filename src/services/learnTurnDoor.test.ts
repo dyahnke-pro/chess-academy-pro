@@ -8,13 +8,13 @@ const TEACH = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
 const TEACH_CODE = TEACH.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
 
 describe('learnTurnDoor — the lane table decides, not a kind whitelist', () => {
-  it('every silent lane says why', () => {
+  it('every lane says what it teaches', () => {
     for (const [lane, rule] of Object.entries(LEARN_LANES)) {
       expect(rule.why.length, `${lane} has no stated reason`).toBeGreaterThan(10);
     }
   });
 
-  it('an OPEN lane speaks (positive control)', () => {
+  it('a lane speaks (positive control)', () => {
     // True on FEN (the board grader refuses a false claim — a knight "on c3"
     // there is refused, which is the package doing its job).
     const text = 'Your knight on f3 attacks the pawn on e5.';
@@ -33,23 +33,6 @@ describe('learnTurnDoor — the lane table decides, not a kind whitelist', () =>
     expect(TEACH_CODE).toMatch(/aimsOf\(plan\.mine, 'student'\)\.filter\(\(a\) => aimWalkableNow\(/);
   });
 
-  it('a closed lane is refused BEFORE the package and recorded as closed', () => {
-    // Negative control: the same sentence on a closed lane never speaks.
-    const text = 'Your pieces are well coordinated and the position is balanced.';
-    const d = decideTurn([{ lane: 'borrowed', text, fen: FEN }]);
-    expect(d.pkg.spoken).toBe('');
-    expect(d.offered).toEqual(['borrowed']);
-    expect(d.closed).toEqual(['borrowed']);
-  });
-
-  it('two lanes of ONE kind are told apart (a kind whitelist cannot)', () => {
-    // pieceQuality and engineRead are both kind 'computed'; only one is open.
-    expect(LEARN_LANES.pieceQuality.kind).toBe(LEARN_LANES.register.kind);
-    expect(LEARN_LANES.pieceQuality.speaks).toBe(true);
-    expect(LEARN_LANES.engineRead.kind).toBe(LEARN_LANES.pieceQuality.kind);
-    expect(LEARN_LANES.engineRead.speaks).toBe(false);
-  });
-
   it('a producer-decided kind rides through (the backward look)', () => {
     const d = decideTurn([{ lane: 'coachMistake', text: 'I slipped there — that knight move left f7 loose.', fen: FEN }]);
     expect(d.pkg.kept[0]?.kind).toBe('coachMistake');
@@ -64,8 +47,9 @@ describe('the gate — Learn assembles its voice ONLY through the door', () => {
     expect(TEACH_CODE).toMatch(/buildVoicePackage\(\[\]\)/);
   });
 
-  it('the kind whitelist is gone', () => {
+  it('the kind whitelist and the always-on DNA switch are gone', () => {
     expect(TEACH_CODE).not.toMatch(/DNA_VOICE_KINDS/);
+    expect(TEACH_CODE).not.toMatch(/NARRATE_DNA_ONLY/);
   });
 
   it('every queued line names a real lane', () => {
@@ -73,5 +57,27 @@ describe('the gate — Learn assembles its voice ONLY through the door', () => {
     const calls = [...TEACH_CODE.matchAll(/queueSpokenHint\([^;]*?,\s*'([a-zA-Z]+)'/g)].map((m) => m[1]);
     expect(calls.length).toBeGreaterThan(10);
     for (const lane of calls) expect(lanes.has(lane as LearnLane), `unknown lane '${lane}'`).toBe(true);
+  });
+});
+
+describe('G8.5 — no lane without a live producer, no producer without a lane', () => {
+  // The backward look queues under its own verdict kind, one producer for three lanes.
+  const VIA_BACKWARD_LOOK = new Set<LearnLane>(['drawback', 'mistake', 'coachMistake']);
+
+  it('every lane in the table is fed by live code in CoachTeachPage', () => {
+    for (const lane of Object.keys(LEARN_LANES) as LearnLane[]) {
+      if (VIA_BACKWARD_LOOK.has(lane)) continue;
+      const fed = new RegExp(`queueSpokenHint\\([^;]*'${lane}'|lane: '${lane}'`).test(TEACH_CODE);
+      expect(fed, `lane '${lane}' is in the table and nothing feeds it`).toBe(true);
+    }
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(cm\.fenAfter, look\.line, look\.kind\)/);
+  });
+
+  it('the producers deleted with their lanes stay deleted', () => {
+    // Each of these computed text for a lane that never spoke (2026-09-29).
+    for (const gone of ['engineReadLines', 'parseEvalSplit', 'forkOfferAt', 'buildForkTalk', 'buildThinkAloud',
+      'lookaheadPlanRef', 'planSaidRef', 'planMarks(', 'trackABestReply', 'factLines', 'borrowedLine']) {
+      expect(TEACH_CODE.includes(gone), `${gone} is back in CoachTeachPage`).toBe(false);
+    }
   });
 });

@@ -19,7 +19,6 @@ const read = (p: string): string => readFileSync(p, 'utf8');
 const TEACH = read('src/components/Coach/CoachTeachPage.tsx');
 const HOOK = read('src/hooks/useDiscussionPractice.ts');
 const BACKWARD = read('src/services/backwardLook.ts');
-const FORK = read('src/services/forkNarration.ts');
 const PHASE = read('src/hooks/usePhaseNarration.ts');
 /** Comments stripped. A rule about what the code must NOT DO has to read the
  *  code — the note explaining WHY a call was removed contains the very string
@@ -34,11 +33,6 @@ const HOOK_CODE = code(HOOK);
 describe('every producer we added has a live consumer', () => {
   const wired: Array<[string, string, string]> = [
     ['the look-ahead plan', TEACH, 'planFromUci('],
-    ['the key-square line', TEACH, 'keySquareLine('],
-    ['the board read', TEACH, 'positionReadLine('],
-    ['the line-shape read', TEACH, 'lineShapeLine('],
-    ['the terminal read', TEACH, 'terminalReadLine('],
-    ['the board marks', TEACH, 'planMarks('],
     ['the coach-side callout', BACKWARD, "side: 'coach'"],
     ['the coach-side concession', BACKWARD, 'findConcession('],
     // The three student-side lanes moved into `backwardLook`, which BOTH the
@@ -61,13 +55,6 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
   // The distinction that cost the hint register a whole session: `facts` feeds
   // the prompt, and the prompt only runs when the student types. A lane that
   // pushes there and nowhere else is silent during ordinary play.
-  it('the look-ahead plan is queued on its OWN lane, so the door decides it', () => {
-    // WO-COACH-TEACHER WO-1 (2026-09-29): the lane table in learnTurnDoor, not a
-    // kind whitelist, decides whether it speaks. It is gated off today
-    // (LEARN_LANES.lookaheadPlan.speaks = false, with its reason); the plan arc
-    // speaks the plan instead.
-    expect(TEACH).toMatch(/queueSpokenHint\(planFen, graded, 'lookaheadPlan'\)/);
-  });
 
   it('the plan arc is queued on its own lane (closed until WO-2 proves it true)', () => {
     // It carried kind 'plan', which the old DNA kind whitelist never listed, so
@@ -103,56 +90,12 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, fundamental\.verdict, 'fundamental', \[\]\)/);
   });
 
-  it('the borrowed tier is queued WITH the plan, so the yield rule can see both', () => {
-    expect(TEACH).toMatch(/queueSpokenHint\(.*?borrowedLine, 'borrowed'\)/);
-    expect(TEACH, 'the borrowed line is still packaged early, where no plan exists yet')
-      .not.toMatch(/kind: 'borrowed' as const, text: teachingLine/);
-  });
-
   it('the hint register speaks rather than only prompting', () => {
     const hintPushes = TEACH.match(/facts\.push\(packageForRegister\(/g)?.length ?? 0;
     // NB: not `[^)]*` — the call is `queueSpokenHint(probe.fen(), …)` and the
     // fen() closes a paren, so an exclusion class stops before the payload.
     const hintSpeaks = TEACH.match(/queueSpokenHint\(.*?packageForRegister\(/g)?.length ?? 0;
     expect(hintSpeaks, 'hints go to the prompt but never to the voice').toBeGreaterThanOrEqual(hintPushes - 1);
-  });
-
-  it('the in-book fork is offered, and shares the fork budget', () => {
-    // Two fork beats, one question at a time: the BOOK fork (theory splits)
-    // goes first and the ENGINE fork (near-equal options) stands down behind
-    // it, both counting against the same per-game budget.
-    expect(TEACH).toMatch(/forkOfferAt\(historyAfterReply/);
-    expect(TEACH).toMatch(/queueSpokenHint\(probe\.fen\(\), bookFork\.said, 'fork'\)/);
-    expect(TEACH, 'the engine fork can still fire on top of the book fork')
-      .toMatch(/const fork = !bookFork &&/);
-  });
-
-  it("what the plan leaves out reaches the voice, and only the FULL narration", () => {
-    // Its own field, not a tail on `text`: a probe caught all three fork roads
-    // ending "Worth noticing: your pieces on a1, c1 and d1 sit this one out
-    // entirely" — identical tails on options that exist to be told apart.
-    // It is a part of the graded utterance now, carrying no squares of its own —
-    // it is a noticing about what the plan LEAVES OUT, so there is nothing on
-    // the board for it to point at.
-    expect(TEACH, 'the aside is computed and never spoken')
-      .toMatch(/\{ text: plan\.mine\.aside, squares: \[\], side: null \}/);
-    expect(FORK, 'the compact road preview picked the aside back up')
-      .not.toContain('.aside');
-  });
-
-  it('the plan rides ONE package — never both', () => {
-    // David's game log, 2026-08-11: "Lots of double narrations." When the engine
-    // read resolved before the synchronous instant pass, `lookaheadPlanRef`
-    // matched, the plan went into the instant package AND was queued into the
-    // late one, and both spoke — the second clip starting as the first (about
-    // seventeen seconds of it) finished.
-    expect(TEACH_CODE, 'the instant package carries the plan again')
-      .not.toMatch(/kind: 'plan' as const, text: planLine/);
-    expect(TEACH, 'the plan lost its one route to the door')
-      .toMatch(/queueSpokenHint\(planFen, graded, 'lookaheadPlan'\)/);
-    // And only one producer draws its marks, for the same reason.
-    expect((TEACH_CODE.match(/planMarks\(\{/g) ?? []).length,
-      'two producers are painting the plan').toBe(1);
   });
 
   it('the line picker is ranked by real games, and never blocks its own render', () => {
@@ -442,37 +385,16 @@ describe('the couplings that make the wiring safe', () => {
       .not.toMatch(/findLivePunishment/);
   });
 
-  it('the plan\'s marks use the SAME guard as the plan\'s speech', () => {
-    // 🔒 THE MISSING-ARROWS BUG, MEASURED. David's game 2026-08-11: 18 plans
-    // offered, 12 mark events. The speech was queued through a POSITION
-    // comparison and passed; the marks were gated on whole-FEN `===` and
-    // failed. So the coach said "you want to walk the knight round to b3, by
-    // way of d2" and the board stayed empty — a third of the time.
-    //
-    // Two guards on one utterance must not disagree about what "still here"
-    // means, and a halfmove clock ticking is not the board moving.
-    // (The guard has since grown a second, equally position-based arm — the
-    // reply still being in flight — which has its own case below. What this
-    // one holds is that BOTH arms compare positions rather than whole FENs.)
-    expect(TEACH).toMatch(/samePosition\(liveFenRef\.current, planFen\)/);
-    expect(TEACH_CODE, 'the marks are back on whole-FEN equality')
-      .not.toMatch(/liveFenRef\.current === planFen/);
+  it('the position comparison has ONE owner', () => {
+    // Born of the missing-arrows bug (David's game 2026-08-11): two guards on
+    // one utterance disagreed about what "still here" means because one used a
+    // position comparison and the other whole-FEN `===`, and a halfmove clock
+    // ticking is not the board moving.
     // ONE OWNER. The comparison was rebuilt from scratch in nine places and the
     // marks path used none of them; that is how the two halves drifted apart.
     expect(TEACH).toMatch(/import \{ samePosition \} from '\.\.\/\.\.\/utils\/samePosition'/);
     expect(TEACH_CODE, 'a local copy of the comparison has grown back')
       .not.toMatch(/const samePosition = \(a: string, b: string\)/);
-  });
-
-  it('the marks are computed from what SURVIVED grading', () => {
-    // Graded PART BY PART, so what survived is known rather than recovered from
-    // the joined blob afterwards — and the marks are handed the survivors, not
-    // the prose. `spoken: graded` was the old shape and it meant planMarks had
-    // to parse squares back out of a sentence.
-    expect(TEACH).toMatch(/gradeNarrationText\(p\.text, planFen/);
-    expect(TEACH).toMatch(/saidParts: survived/);
-    expect(TEACH_CODE, 'the marks are reading the prose again')
-      .not.toMatch(/spoken: graded/);
   });
 
   it('the best-move ask reads the plan the coach just BUILT for it', () => {
@@ -503,29 +425,6 @@ describe('the couplings that make the wiring safe', () => {
     // computed from the engine's line at this position; it wins.
     const SERVICE = code(read('src/coach/coachService.ts'));
     expect(SERVICE).toMatch(/conceptQuestion: conceptQuestionEngage && !planQuestionEngage/);
-  });
-
-  it('the plan\'s marks survive the reply still being in flight', () => {
-    // 🔒 THE GUARD REFUSED THE VERY TURN IT WAS WRITTEN FOR. `planFen` is the
-    // position AFTER the coach's reply — what the plan is about, and what the
-    // student is about to see. `liveFenRef` is board state and does not carry
-    // the reply until React renders it, so at the moment the marks run it still
-    // holds `move.fen`. Demanding equality therefore failed on an ordinary turn.
-    //
-    // Measured on prod: 6 plans offered on one real game, 1 annotation, and the
-    // diagnostic named both blanks with the live position exactly one ply
-    // BEHIND the plan. Painting is allowed at the plan's position or the one
-    // immediately before it; a student who has genuinely moved on still gets
-    // nothing.
-    expect(TEACH).toMatch(/samePosition\(liveFenRef\.current, planFen\)\s*\|\|\s*samePosition\(liveFenRef\.current, move\.fen\)/);
-    expect(TEACH).toMatch(/if \(graded && boardIsHereOrArriving\)/);
-  });
-
-  it('a blank board says WHICH way it went blank', () => {
-    // A lane that can only be observed when it fires cannot be debugged when it
-    // doesn't — the same lesson as the coach verdict. Both silent branches emit.
-    expect(TEACH).toMatch(/CoachTeachPage\.planMarks\.boardMovedOn/);
-    expect(TEACH).toMatch(/CoachTeachPage\.planMarks\.drewNothing/);
   });
 
   it('a finished game keeps its board and OFFERS the review', () => {

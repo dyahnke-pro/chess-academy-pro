@@ -83,6 +83,8 @@ Today (engineer map, `brainstorm-r1/engineer.md`): ~15 lanes. One (`computePosit
 - ✅ **1a DONE 2026-09-29 (branch `wo1-learn-door`, `learnTurnDoor.ts`)** — lane table `LEARN_LANES` replaces the kind whitelist; both waves through `decideTurn`; lanes logged on the voicePackage/hintRegister audit rows; gate `learnTurnDoor.test.ts`. Behaviour-preserving. The plan arc was opened, walked (localhost, 3UqPa5eV2e0, 38 plies) and CLOSED again: its first and only live line was board-false — ply 37 "Their plan is taking shape: the knight's walk to h2" as the knight went f6→d5, h2 covered by the king. So its silence was hiding a wrong computer, not just a wiring slip. Its lane stays closed with that reason until WO-2 proves the aim reading. **Found:** the silenced `facts[]` producers (think-aloud, fork talk, improving move) emit PROMPT blocks for a model ("THINK ALOUD … weave these reads"), in third person ("the student's king") and built on the retired withhold-the-move contract — they cannot be un-silenced as-is; their raw reads are WO-2's ingredients, re-rendered in code. The causal chain (`renderCausalChain`, register 'learn') IS already speakable → next lane to open.
 - **1a (original spec) — route + record, no audible change.** Every lane carries a `lane` id. Both package passes go through `learnTurnDoor.decideTurn()`, which today returns exactly what `buildVoicePackage` returned, and emits ONE `learn-turn-decision` row per turn: lanes offered, lanes kept, facts per turn, sentences per turn, lead lane. Gate: a test that fails if any call site speaks Learn per-turn narration without the door.
 - **1b — the door picks a LEAD.** `decideTurn` returns `{ lead, support[], held[] }`. Lead rule (until WO-2 lands): a deciding moment → biggest stakes; otherwise the fact that answers "what's the plan / what do they want". Support must share squares or plan with the lead; the rest are `held` — available behind a "why?" / chat, not spoken. This is subsumption by relevance, not a cap.
+- **1b SAFETY FLOOR (review 2026-09-29):** a threat or a hanging piece is NEVER `held` — safety facts always lead or support.
+- **1b will not close the biggest gaps alone** (scoreboard, 2 games): it fixes over-talking (we speak on 46 of 49 beats; piece quality 12× to his 1, principles 11 to 3). The biggest MISSES — plans (16/1), move purpose (13/3), king attack (10/2), verdicts on good moves (10/1) — need new computing: WO-2.
 - **1c — one sentence chain.** The lead + support render as one connected utterance (connectives: "so", "which is why", "but first") instead of stacked sentences.
 **Done:** `learn-turn-decision` rows on a hand-walk of his game `3UqPa5eV2e0` show one lead per turn; tape ply 11 (four labels) comes out as one thought; ship-check green; hand-walk flags written.
 
@@ -93,7 +95,8 @@ Today (engineer map, `brainstorm-r1/engineer.md`): ~15 lanes. One (`computePosit
 **Files:** `src/services/planArc.ts` (extend — NOT a new planThread.ts), its test, `positionFacts.ts` only for the grading hook.
 - extend planArc: `stepArc(...)` also returns → { plan, character: 'tactical'|'positional'|'conversion'|'defence', switched, why }`. Board picks the plan (their concession, the structure, `planArc`'s dominant aim). Character flips on: a tactic appears/vanishes, material changes, structure changes, a plan lands or dies.
 - A switch is a fact: "The position has changed — now it's about the king." A plan landing: "There it is — that's what the knight tour was for."
-- **Plan-aware grading:** a move serving the current plan whose compensation holds a few plies deep is "deliberate", never "a mistake" (tape plies 29, 41 — the outpost move called a mistake).
+- **Plan-aware grading — ENGINE-PROVEN, never plan-proven (review 2026-09-29):** a move is "deliberate" only when the ENGINE eval holds N plies deep; serving the plan computer's aim is never enough (that computer was 3/4 false on walk 2 and would excuse real mistakes). Such a move is "deliberate", never "a mistake" (tape plies 29, 41 — the outpost move called a mistake).
+- **Grading GOOD moves (owner: WO-2, review 2026-09-29):** his biggest single miss after plans — a verdict on a good move (10 of his, 1 of ours). Name what the move did right, from the same computed read.
 - **"First X, so that Y":** when the plan move fails now, name the obstacle (own piece in the way, a kick with tempo, a piece left hanging) and the quiet move that removes it.
 **FIRST (partly done 2026-09-29):** route identity fixed (two unrelated routes no longer count as one plan read twice). Walk 2 after that fix (3UqPa5eV2e0 + FqVMAv3wKes, 82 plies): 4 plan-arc lines, 3 false — a light-squared bishop's "walk to c3" through a blocked diagonal, a knight's walk to a square covered twice, and a student 'drop' for a plan the student never heard (the student's emerge is filtered in Learn, so its drop must be too). ROOT: aims come from ONE engine line's `maneuver` (`lookaheadPlan`) and are never validated. WO-2 step 1 = a validator: the named piece (by square) can reach the goal, the goal is safe for it (SEE), and the path isn't blocked; only validated aims enter the arc. Same computer feeds review's `[plan-arc]` — check review for the same false lines. Then: fix `planArc`'s aim reading — the "knight's walk to h2" line (3UqPa5eV2e0 ply 37) is false; a test on that exact position must fail before the fix. Only then re-open `LEARN_LANES.planArc`.
 **Done:** unit tests on tape `3UqPa5eV2e0` positions (plan = open the centre → switch at d5 → Nd2-c4 reroute → outpost c6 = landed); wired into WO-1's lead rule.
@@ -121,8 +124,8 @@ Today (engineer map, `brainstorm-r1/engineer.md`): ~15 lanes. One (`computePosit
 ---
 
 ### WO-5 — The measuring stick
-**Status:** ⚪ open
-**Files:** NEW `data/danya-labels/*.json`, NEW `scripts/audit-danya-match.mjs`. No app code.
+**Status:** 🟠 OWNED by the "Chess app review" session — its scoreboard (branch `claude/chess-app-review-perf-du6haq`, `scripts/scoreboard/`) IS this instrument, bigger: his 1,394 lines tagged + Learn's spoken output taped across 50 of his games, one classifier (2-game read: 15.2%). The 50-game run is the WO-5 baseline, committed before WO-1b merges. The hand labels below become the TAGGER'S accuracy check, not a second instrument. **Every scoreboard row also carries a BOARD-TRUTH column** — topic match without truth is sounding like him while being wrong. Re-tape on current main (plan arc re-opened behind walkability; PR #980 un-shadowed priority-first + the behaviours) before reading the gaps.
+**Files:** NEW `data/danya-labels/*.json` (tagger check). No app code.
 - Hand-label ~200 in-game plies from ~20 of his games (spread across ratings), by IDEA kind (plan / their plan / tactic / structure / prerequisite / switch / verdict), never by words. Skip the ~25 bare/defective distilled videos (reader reports list them).
 - Score our `learn-turn-decision` lead against the label. Report per idea kind + a chat score from WO-3's question set.
 - Do NOT score word overlap. Do NOT target his distilled 0.6 sentences/ply.
@@ -148,9 +151,29 @@ Today (engineer map, `brainstorm-r1/engineer.md`): ~15 lanes. One (`computePosit
 | WO | status | owner |
 |---|---|---|
 | WO-0 bugs | ✅ 3/4 on main (PR #979); takeback stall open | this session |
-| WO-1 door | 🔵 1a ✅ on main (PR #976, live in CoachTeachPage chunk); 1b next | this session |
+| WO-1 door | 🔵 1a ✅ on main (PR #976); 1a' ✅ orphan cleanup (G8.5): 5 closed lanes + their producers deleted, the silent fork/think-aloud/improving/best-reply chain that out-ranked priority-first removed, the unspoken look-ahead paragraph (and its arrows, and its hold on the behaviour filler) removed, 6 dead modules deleted, gate in `learnTurnDoor.test.ts`. **On main + live (PR #980, verified in the deployed chunk).** OPEN: `facts[]` audit-only list; 1b | this session |
 | WO-2 plan thread | 🔵 step 1 ✅ on main (PR #977, #978: route identity + board check; lane open) | this session |
 | WO-3 BoardQuery chat | ⚪ | — |
 | WO-4 shrinking repeats | ⚪ | — |
-| WO-5 measuring stick | ⚪ | — |
+| WO-5 measuring stick | 🟠 50-game scoreboard baseline | Chess app review session |
 | WO-6 scratch board | ⚪ | — |
+
+## 5. THE PLAN FROM HERE (2026-09-29, after the orphan cleanup + the review)
+
+In order. Each step ends on main with a localhost hand-walk; a full prod audit only when David asks.
+
+1. **WO-1 · cut `facts[]`** (this session, next). Everything left in the late read's `facts[]` either reaches a lane or is deleted (G8.5). The `turnFacts` audit row gets rebuilt from what the door actually spoke, so `audit-learn-full-game`'s beat histogram counts speech, not computation.
+2. **WO-0 · takeback stall.** "Take that back and play c6" → the coach never replies. Repro on localhost, failing test first, fix through `actionForCommand`.
+3. **WO-5 · baseline** (Chess app review session). The 50-game scoreboard, re-taped on current main, with a board-truth column. Committed BEFORE 1b merges.
+4. **WO-1b · one lead per turn.** `decideTurn → { lead, support[], held[] }`. Lead = biggest stakes on a deciding moment, else the plan fact. Support shares squares or plan with the lead. SAFETY FLOOR: a threat or hanging piece is never held. Measured against the WO-5 baseline: over-talking falls (46 of 49 beats; piece quality 12× his 1) without losing a safety fact.
+5. **WO-1c · one connected thought.** Lead + support render with connectives, not stacked sentences.
+6. **WO-2 · the plan thread** — the biggest misses (plans 16/1, move purpose 13/3, king attack 10/2, good-move verdicts 10/1):
+   - character + switches (tactical ↔ positional) as facts;
+   - grading good moves (new — owner WO-2);
+   - "deliberate, not a mistake" ONLY when the engine eval holds N plies — never on the plan computer's word;
+   - "first X, so that Y".
+7. **ONE-CHAT** (replaces WO-3), per `2026-09-29-ONE-CHAT.md` §FINAL: ChatTurn schema + ledger → offline parser eval gated on the 86 real + held-out phrasings (the 554 reported separately) → shadow mode → switch. Start-game always confirmed + echoed; `walkLine` only through the arrow door.
+8. **WO-4 · shrinking repeats**, then **WO-6 · scratch board**.
+
+**Coordination:** CoachTeachPage's turn path is this session's (the review session dropped ACC-1). Anyone else touching CoachTeachPage merges main first.
+

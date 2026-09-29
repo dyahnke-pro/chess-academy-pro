@@ -48,12 +48,10 @@ describe('L1 — nothing advises a finished game', () => {
   });
 
   it('the lanes that DID speak carry no FEN, so only the queue can hold the guard', async () => {
-    // engineReadLines / pieceQualityLines take an analysis and an eval table —
-    // no position — so a mated board is invisible to them. If either ever grows
-    // a `fen` parameter this test should be revisited, not deleted.
-    const engineRead = await import('./engineReadNarration');
+    // pieceQualityLines takes an eval table — no position — so a mated board
+    // is invisible to it. If it ever grows a `fen` parameter this test should
+    // be revisited, not deleted.
     const pieceValue = await import('./pieceValueRead');
-    expect(engineRead.engineReadLines).toHaveLength(3); // (analysis, studentColor, said)
     expect(pieceValue.pieceQualityLines).toHaveLength(4); // (values, studentColor, said, opts)
   });
 });

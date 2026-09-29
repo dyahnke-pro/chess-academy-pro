@@ -1377,6 +1377,37 @@ before assuming a routing bug.
 This is the directive verbatim (2026-05-28):
 *"Lock that in to the rules."*
 
+### G8.5 NOTHING BUILT-BUT-UNWIRED, NO ORPHANS LEFT BEHIND (David 2026-09-29, LOCKED: "You need to FULLY understand ALL code related to your builds. No more leaving things built but not wired, or changes made but leaving orphan components." → "Yes. Lock that in").
+
+The sibling of G8 (orphans in DATA) for CODE. Found reading `CoachTeachPage`
+after the Learn door landed: five producers still computing text for lanes the
+door closes (engine read, eval split, book fork, borrowed teaching, the
+look-ahead paragraph), a `facts[]` array only ever logged, a `factLines`
+return nobody reads, and plan arrows drawn for a paragraph that is never
+spoken. Every one was green in every test. Built, not wired.
+
+**Every build ends with a WIRING CHECK, before push:**
+1. **Every new piece has a live caller.** Grep the export; a function, lane,
+   field or component with zero production call sites is not shipped, it is
+   parked. Wire it or delete it.
+2. **Nothing computed and dropped.** If code computes a fact, it either
+   reaches the student (voice, text, board) or a named consumer (the record,
+   an audit contract). A value computed only to be logged or discarded is a
+   defect.
+3. **No marks without words.** An arrow or highlight is drawn only for a line
+   that is actually spoken or shown.
+4. **When you close a path, delete what fed it.** Closing a lane means
+   removing its producer too — keeping any LIVE side effect it carried
+   (say-once refs, counters) — never leaving it running behind a switch.
+5. **Map before you touch (§ THE FOUR LEVELS).** `surface-map.mjs --changed`
+   plus reading every call site end to end. A change you cannot trace to its
+   consumers is not understood yet.
+
+Gate: a closed lane in `LEARN_LANES` may have no producer in
+`CoachTeachPage` (`learnTurnDoor.test.ts`). Extend the same shape to every
+new door: the table that says "silent" must be the only place silence is
+decided.
+
 ### G9. Pro-repertoire builds MUST look and feel like masterclass builds — only the spine source differs (David 2026-05-28, locked).
 
 David's directive verbatim: *"I want everything to look and feel like
