@@ -208,8 +208,9 @@ const push = (map: Map<string, IndexedBeat[]>, key: string, entry: IndexedBeat):
   else map.set(key, [entry]);
 };
 
-/** Index up to `limit` more beats. Returns false when there is nothing left. */
-function indexSome(limit: number): boolean {
+/** Index up to `limit` more beats, stopping early once `deadline` (a
+ *  `performance.now()` value) passes. Returns false when there is nothing left. */
+function indexSome(limit: number, deadline = Number.POSITIVE_INFINITY): boolean {
   pending ??= getAllLessonScripts();
   let done = 0;
   while (lessonCursor < pending.length) {
@@ -246,13 +247,16 @@ function indexSome(limit: number): boolean {
           push(byPrefix, beat.moves.join(' '), entry);
         }
       }
-      if (done >= limit) return true;
+      if (done >= limit || (done % 8 === 0 && now() >= deadline)) return true;
     }
     lessonCursor += 1;
     beatCursor = 0;
   }
   return false;
 }
+
+const WARM_SLICE_MS = 10;
+const now = (): number => (typeof performance !== 'undefined' ? performance.now() : Date.now());
 
 const isBuilt = (): boolean => pending !== null && lessonCursor >= pending.length;
 
@@ -261,7 +265,10 @@ const isBuilt = (): boolean => pending !== null && lessonCursor >= pending.lengt
  * boot prewarm. Idempotent, and safe to race with a lookup.
  */
 export async function warmCuratedBeatIndex(): Promise<void> {
-  while (indexSome(200)) {
+  // A TIME budget per chunk, not a beat count: 200 beats was ~265 ms on a
+  // desktop and over a second at phone speed — a boot-time block every launch
+  // (2026-09-29). ~10 ms keeps each chunk under a frame on any device.
+  while (indexSome(Number.MAX_SAFE_INTEGER, now() + WARM_SLICE_MS)) {
     await new Promise((r) => { setTimeout(r, 0); });
   }
 }

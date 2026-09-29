@@ -4,24 +4,24 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**397 lines · 8 exports · 9 importers · 6 tests · 0 audits**
+**404 lines · 8 exports · 8 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
 - **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:281) — names `curatedBeatSource`
-- **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:3515) — names `BeatRegister`, `beatRegister`, `curatedBeatAt`
+- **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:3672) — names `BeatRegister`, `beatRegister`, `curatedBeatAt`
+- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4244) — names `curatedBeatAt`
 
 ## Who calls in
 
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/beatVsCorpus.report.test.ts`
-- `src/services/coachFeatureService.ts`
 - `src/services/computedVoiceAudit.report.test.ts`
 - `src/services/curatedBeatRegister.test.ts`
 - `src/services/curatedBeatSource.test.ts`
 - `src/services/dataLoader.ts`
 - `src/services/liveVoiceDefects.test.ts`
-- `src/services/reviewCorpusReach.test.ts`
+- `src/services/voicedCorpusRegister.measure.test.ts`
 
 ## Exports and every call site
 
@@ -37,8 +37,7 @@
 - `src/services/liveVoiceDefects.test.ts:223`
 - `src/services/liveVoiceDefects.test.ts:224`
 
-### `beatRegister` (function) — 12 call sites
-- `src/services/coachFeatureService.ts:1580`
+### `beatRegister` (function) — 10 call sites
 - `src/services/curatedBeatRegister.test.ts:17`
 - `src/services/curatedBeatRegister.test.ts:21`
 - `src/services/curatedBeatRegister.test.ts:25`
@@ -48,15 +47,15 @@
 - `src/services/curatedBeatRegister.test.ts:46`
 - `src/services/curatedBeatRegister.test.ts:66`
 - `src/services/curatedBeatRegister.test.ts:107`
-- `src/services/reviewCorpusReach.test.ts:54`
-- `src/services/reviewCorpusReach.test.ts:67`
+- `src/services/voicedCorpusRegister.measure.test.ts:58`
 
 ### `CuratedBeat` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `warmCuratedBeatIndex` (function) — 2 call sites
+### `warmCuratedBeatIndex` (function) — 3 call sites
 - `src/services/curatedBeatSource.test.ts:133`
-- `src/services/dataLoader.ts:1007`
+- `src/services/curatedBeatSource.warmSlice.test.ts:19`
+- `src/services/dataLoader.ts:1011`
 
 ### `warmCuratedBeatIndexSync` (function) — 3 call sites
 - `src/services/beatVsCorpus.report.test.ts:34`
@@ -64,7 +63,7 @@
 - `src/services/curatedBeatSource.test.ts:21`
 
 ### `curatedBeatAt` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7615`
+- `src/components/Coach/CoachTeachPage.tsx:8117`
 - `src/services/beatVsCorpus.report.test.ts:73`
 - `src/services/computedVoiceAudit.report.test.ts:319`
 - `src/services/computedVoiceAudit.report.test.ts:336`
@@ -85,12 +84,13 @@
 - `src/services/curatedBeatSource.test.ts:164`
 - `src/services/curatedBeatSource.test.ts:170`
 
-### `curatedBeatStats` (function) — 5 call sites
+### `curatedBeatStats` (function) — 6 call sites
 - `src/services/beatVsCorpus.report.test.ts:35`
 - `src/services/curatedBeatRegister.test.ts:93`
 - `src/services/curatedBeatSource.test.ts:119`
 - `src/services/curatedBeatSource.test.ts:131`
 - `src/services/curatedBeatSource.test.ts:134`
+- `src/services/curatedBeatSource.warmSlice.test.ts:22`
 
 ## Tests
 
@@ -98,9 +98,14 @@
 - `src/services/computedVoiceAudit.report.test.ts`
 - `src/services/curatedBeatRegister.test.ts`
 - `src/services/curatedBeatSource.test.ts`
+- `src/services/curatedBeatSource.warmSlice.test.ts`
 - `src/services/liveVoiceDefects.test.ts`
-- `src/services/reviewCorpusReach.test.ts`
+- `src/services/voicedCorpusRegister.measure.test.ts`
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._
