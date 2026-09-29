@@ -151,9 +151,29 @@ Today (engineer map, `brainstorm-r1/engineer.md`): ~15 lanes. One (`computePosit
 | WO | status | owner |
 |---|---|---|
 | WO-0 bugs | ✅ 3/4 on main (PR #979); takeback stall open | this session |
-| WO-1 door | 🔵 1a ✅ on main (PR #976); 1a' ✅ orphan cleanup (G8.5): 5 closed lanes + their producers deleted, the silent fork/think-aloud/improving/best-reply chain that out-ranked priority-first removed, the unspoken look-ahead paragraph (and its arrows, and its hold on the behaviour filler) removed, 6 dead modules deleted, gate in `learnTurnDoor.test.ts`. OPEN: `facts[]` in the late read is still mostly an audit-only list — next. 1b next | this session |
+| WO-1 door | 🔵 1a ✅ on main (PR #976); 1a' ✅ orphan cleanup (G8.5): 5 closed lanes + their producers deleted, the silent fork/think-aloud/improving/best-reply chain that out-ranked priority-first removed, the unspoken look-ahead paragraph (and its arrows, and its hold on the behaviour filler) removed, 6 dead modules deleted, gate in `learnTurnDoor.test.ts`. **On main + live (PR #980, verified in the deployed chunk).** OPEN: `facts[]` audit-only list; 1b | this session |
 | WO-2 plan thread | 🔵 step 1 ✅ on main (PR #977, #978: route identity + board check; lane open) | this session |
 | WO-3 BoardQuery chat | ⚪ | — |
 | WO-4 shrinking repeats | ⚪ | — |
 | WO-5 measuring stick | 🟠 50-game scoreboard baseline | Chess app review session |
 | WO-6 scratch board | ⚪ | — |
+
+## 5. THE PLAN FROM HERE (2026-09-29, after the orphan cleanup + the review)
+
+In order. Each step ends on main with a localhost hand-walk; a full prod audit only when David asks.
+
+1. **WO-1 · cut `facts[]`** (this session, next). Everything left in the late read's `facts[]` either reaches a lane or is deleted (G8.5). The `turnFacts` audit row gets rebuilt from what the door actually spoke, so `audit-learn-full-game`'s beat histogram counts speech, not computation.
+2. **WO-0 · takeback stall.** "Take that back and play c6" → the coach never replies. Repro on localhost, failing test first, fix through `actionForCommand`.
+3. **WO-5 · baseline** (Chess app review session). The 50-game scoreboard, re-taped on current main, with a board-truth column. Committed BEFORE 1b merges.
+4. **WO-1b · one lead per turn.** `decideTurn → { lead, support[], held[] }`. Lead = biggest stakes on a deciding moment, else the plan fact. Support shares squares or plan with the lead. SAFETY FLOOR: a threat or hanging piece is never held. Measured against the WO-5 baseline: over-talking falls (46 of 49 beats; piece quality 12× his 1) without losing a safety fact.
+5. **WO-1c · one connected thought.** Lead + support render with connectives, not stacked sentences.
+6. **WO-2 · the plan thread** — the biggest misses (plans 16/1, move purpose 13/3, king attack 10/2, good-move verdicts 10/1):
+   - character + switches (tactical ↔ positional) as facts;
+   - grading good moves (new — owner WO-2);
+   - "deliberate, not a mistake" ONLY when the engine eval holds N plies — never on the plan computer's word;
+   - "first X, so that Y".
+7. **ONE-CHAT** (replaces WO-3), per `2026-09-29-ONE-CHAT.md` §FINAL: ChatTurn schema + ledger → offline parser eval gated on the 86 real + held-out phrasings (the 554 reported separately) → shadow mode → switch. Start-game always confirmed + echoed; `walkLine` only through the arrow door.
+8. **WO-4 · shrinking repeats**, then **WO-6 · scratch board**.
+
+**Coordination:** CoachTeachPage's turn path is this session's (the review session dropped ACC-1). Anyone else touching CoachTeachPage merges main first.
+
