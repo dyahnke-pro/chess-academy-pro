@@ -55,6 +55,7 @@ export type LearnLane =
   | 'moveIntent'
   | 'moveOrder'
   | 'theirMoveCost'
+  | 'recapture'
   | 'causalChain'
   | 'kingSafety'
   | 'phase'
@@ -110,6 +111,9 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // frequent missing point). Engine-proven by playing the follow-up first.
   // What THEIR move cost them (census #5): a hole your knight can use, their
   // own bishop shut in, castling given up, lasting structural damage.
+  // Which piece takes back, and why (census #8): the file it opens, the
+  // doubled pawn it avoids, the queen that would be hit with tempo.
+  recapture: { kind: 'computed', why: 'which piece takes back and why — compared with the other recapture', lead: 66 },
   theirMoveCost: { kind: 'computed', why: 'what the opponent’s move cost them that the student can use', lead: 74 },
   moveOrder: { kind: 'computed', why: 'why the move had to come first — the follow-up played first loses material', lead: 77 },
   // ALWAYS rides: a switch is said once, the move it happens — held behind a

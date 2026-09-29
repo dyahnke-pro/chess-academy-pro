@@ -32,6 +32,7 @@ import { curatedBeatAt } from '../../services/curatedBeatSource';
 import { DEFAULT_INTENT, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { theirMoveCost } from '../../services/theirMoveCost';
+import { recaptureChoice } from '../../services/recaptureChoice';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -9727,6 +9728,18 @@ export function CoachTeachPage(): JSX.Element {
                       ? (preStudentRead.evaluation * sign) - (mid.evaluation * sign)
                       : 0;
                     const studentBestSan = uciSanAt(fenBefore, preStudentRead.bestMove);
+                    // WHICH PIECE TAKES BACK, AND WHY (census #8). Every recapture
+                    // with a second option — the better one named only when the
+                    // played one cost >= 50cp against it (a near-tie is taste).
+                    try {
+                      const theirLast = move.history.length >= 2 ? move.history[move.history.length - 2] : null;
+                      const tookOn = theirLast ? /x([a-h][1-8])/.exec(theirLast)?.[1] ?? null : null;
+                      if (tookOn && move.to === tookOn && move.san.includes('x')) {
+                        const bestRe = studentBestSan && new RegExp(`x${tookOn}`).test(studentBestSan) && cpLoss >= 50 ? studentBestSan : null;
+                        const rc = recaptureChoice(fenBefore, move.san, bestRe);
+                        if (rc) queueSpokenHint(fenAfterReply, rc, 'recapture', [move.to], [`recapture-${move.to}`]);
+                      }
+                    } catch { /* a bonus, never a blocker */ }
                     const look = backwardLook({
                       fenBefore,
                       fenAfter: move.fen,
