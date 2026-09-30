@@ -238,3 +238,19 @@ describe('a capture is not "planting on an outpost" (hand walk 2026-09-24)', () 
     expect(computeMoveFundamentals('3q1rk1/pp4pp/2p1n3/4Pp1P/1b6/1BN1BR1P/PPP5/4Q1K1 w - - 0 23', 'Bxe6+', 'white').some((f) => f.id === 'outpost')).toBe(false);
   });
 });
+
+describe('development is a piece leaving its OWN starting square (hand walk 2026-09-30, Closed Ruy)', () => {
+  const RUY = 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O d3 Bg4 Nbd2 Na5 Bc2 c5 Nf1 Nc6'.split(' ');
+  it('Nf1–e3 on move 13 is not development', async () => {
+    const { Chess } = await import('chess.js');
+    const { computeMoveFundamentals } = await import('./moveFundamentals');
+    const c = new Chess(); for (const m of RUY) c.move(m);
+    expect(computeMoveFundamentals(c.fen(), 'Ne3', 'white').some((f) => f.id === 'development')).toBe(false);
+  });
+  it('Nb1–c3 still is (positive control)', async () => {
+    const { Chess } = await import('chess.js');
+    const { computeMoveFundamentals } = await import('./moveFundamentals');
+    const c = new Chess(); c.move('e4'); c.move('e5');
+    expect(computeMoveFundamentals(c.fen(), 'Nc3', 'white').some((f) => f.id === 'development')).toBe(true);
+  });
+});

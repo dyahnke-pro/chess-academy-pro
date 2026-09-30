@@ -577,6 +577,17 @@ export function candidateCompareClause(
   studentColor: 'white' | 'black',
   opts: { spoken?: boolean; recaptureOn?: string | null } = {},
 ): string | null {
+  return candidateCompareRead(fen, topLines, studentColor, opts)?.text ?? null;
+}
+
+/** The compare clause WITH the two moves it names, so the board can draw them
+ *  (`VoiceFact.lines`) — the preferred move and the one it is preferred to. */
+export function candidateCompareRead(
+  fen: string,
+  topLines: ReadonlyArray<{ moves: string[]; evaluation: number }>,
+  studentColor: 'white' | 'black',
+  opts: { spoken?: boolean; recaptureOn?: string | null } = {},
+): { text: string; bestSan: string; altSan: string } | null {
   if (topLines.length < 2) return null;
   // Comparison clauses put BOTH moves in noun slots ("X over Y", "X reads
   // better than Y"), so there is no clause slot in this function at all.
@@ -607,7 +618,7 @@ export function candidateCompareClause(
       const atkBest = board.attackers(bestMv.to, enemy).length;
       const atkAlt = board.attackers(altMv.to, enemy).length;
       if (atkAlt > atkBest) {
-        return `Prefer ${sayN(bestMv.san)} to ${sayN(altMv.san)} — the square is safer, less exposed to attack.`;
+        return { text: `Prefer ${sayN(bestMv.san)} to ${sayN(altMv.san)} — the square is safer, less exposed to attack.`, bestSan: bestMv.san, altSan: altMv.san };
       }
       // No grounded reason for the square → say nothing (Learn walk 2026-09-23:
       // "keeps more of the edge" fired on three consecutive plies as filler).
@@ -623,11 +634,12 @@ export function candidateCompareClause(
       // moves running). Stable per ply, so resume-safe — never Math.random.
       const b = sayN(bestMv.san);
       const q = sayN(altMv.san);
-      return rotateStem([
+      const text = rotateStem([
         `Prefer ${b} to ${q} — it forces the issue while the edge is there.`,
         `${b} before ${q}: the forcing move first, while it still works.`,
         `${q} can wait — ${b} forces matters now.`,
       ], Number(fen.split(' ')[5] ?? '0') || 0);
+      return { text, bestSan: bestMv.san, altSan: altMv.san };
     }
     // Case 3 — two different plans and no board-read reason: SILENT. "It keeps
     // more of the edge" is the eval bar read aloud, not a reason (G0, the

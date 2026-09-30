@@ -81,7 +81,7 @@
 - `src/components/Coach/CoachGamePage.tsx:1801`
 - `src/components/Coach/CoachGamePage.tsx:3312`
 - `src/components/Coach/CoachGamePage.tsx:3400`
-- `src/components/Coach/CoachTeachPage.tsx:8020`
+- `src/components/Coach/CoachTeachPage.tsx:8018`
 - `src/hooks/usePhaseNarration.ts:461`
 - `src/services/coachFeatureService.ts:2391`
 - `src/services/coachFeatureService.ts:2812`
@@ -200,7 +200,7 @@
 - `src/services/openingSublines.ts:100`
 
 ### `isBookLine` (function) — 13 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8754`
+- `src/components/Coach/CoachTeachPage.tsx:8764`
 - `src/services/bookDeparture.ts:66`
 - `src/services/gameAnalysisService.ts:1289`
 - `src/services/gameAnalysisService.ts:1554`
@@ -212,7 +212,7 @@
 - `src/services/isBookLine.test.ts:18`
 - `src/services/isBookLine.test.ts:25`
 - `src/services/mistakePuzzleService.ts:493`
-- `src/services/positionFacts.ts:819`
+- `src/services/positionFacts.ts:824`
 
 ### `getOpeningMoves` (function) — 28 call sites
 - `src/coach/tools/cerebellum/localOpeningBook.ts:84`
@@ -366,8 +366,8 @@
 
 ### `studentSideForPlay` (function) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:5249`
-- `src/components/Coach/CoachTeachPage.tsx:12218`
-- `src/components/Coach/CoachTeachPage.tsx:12268`
+- `src/components/Coach/CoachTeachPage.tsx:12300`
+- `src/components/Coach/CoachTeachPage.tsx:12350`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:59`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:60`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:64`

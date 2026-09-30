@@ -30,11 +30,13 @@ export type MoveReason =
   | 'hung-piece' | 'ignored-threat' | 'walked-into-tactic' | 'missed-forcing-win' | 'lost-the-thread'
   | 'imprecise-defence' | 'second-best'
   // merits
-  | 'only-move' | 'defends-threat' | 'wins-material' | 'best' | 'solid';
+  | 'only-move' | 'clear-best' | 'defends-threat' | 'wins-material' | 'best' | 'solid';
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const MATE_CP = 100000;
+/** Best move by at least this much over the second best is a real decision. */
+export const CLEAR_BEST_GAP_CP = 80;
 
 export interface MoveReasonInputs {
   label: MoveLabel;
@@ -78,6 +80,10 @@ export function classifyMoveReason(i: MoveReasonInputs): MoveReason {
   if (i.isBest && i.gap12 >= 150) return 'only-move';
   if (i.threatNetBefore >= 3) return 'defends-threat';
   if (i.capture && i.seeNow >= 2) return 'wins-material';
+  // A REAL DECISION, FOUND (WO-2 good-move verdicts, 2026-09-29): the best move
+  // by a clear margin over the next, short of the only-move bar. A plain `best`
+  // in a calm spot — where several moves are about as good — stays silent.
+  if (i.isBest && i.gap12 >= CLEAR_BEST_GAP_CP) return 'clear-best';
   if (i.isBest) return 'best';
   return 'solid';
 }
@@ -111,8 +117,12 @@ export function gradeWorthSpeaking(r: MoveReason): boolean {
   // on three recaptures. The teaching lanes now say WHY a good move is good
   // (what it stops or prepares, move order, the attack), so a bare merit adds
   // nothing but a label. Silence here is computed, not a cap.
+  // The two merits that name a real DECISION (only-move, clear-best) may speak —
+  // and only joined to the move's computed point; the caller enforces that
+  // (WO-2 #986). Every other merit is a bare label.
   return r === 'mate' || r === 'hung-piece' || r === 'ignored-threat'
-    || r === 'walked-into-tactic' || r === 'missed-forcing-win';
+    || r === 'walked-into-tactic' || r === 'missed-forcing-win'
+    || r === 'only-move' || r === 'clear-best';
 }
 
 /** Compute the SEE net of material the MOVER left hanging after their move — the
@@ -140,6 +150,8 @@ export function moveReasonClause(r: MoveReason, ctx?: { named?: string; hung?: {
   // the same verdict the review gives for the same move (one coach).
   if (r === 'lost-the-thread' && ctx?.fundamental) return ctx.fundamental;
   const hung = ctx?.hung ? `${PNAME[ctx.hung.piece.toLowerCase()] ?? 'piece'} on ${ctx.hung.square}` : 'piece';
+  // NO PRAISE WORDS (Narration Voice Rule 5; hand walk 2026-09-30 heard "nice —"
+  // twice on routine recaptures). The verdict states what the move did.
   switch (r) {
     case 'mate': return `there's a forced mate on the board.`;
     case 'hung-piece': return `careful — that hung the ${hung}.`;
@@ -149,10 +161,13 @@ export function moveReasonClause(r: MoveReason, ctx?: { named?: string; hung?: {
     case 'lost-the-thread': return `no tactic — but the plan drifted there.`;
     case 'imprecise-defence': return `it holds, but not the cleanest way.`;
     case 'second-best': return `playable — not quite the most precise.`;
-    case 'only-move': return `nice — that was the only move that holds.`;
-    case 'defends-threat': return `good — that meets the threat cleanly.`;
+    case 'only-move': return `the only move that holds here.`;
+    // Said ONLY with the move's computed point after it — a verdict with no
+    // reason is bare praise (Narration Voice Rule 5). The caller enforces it.
+    case 'clear-best': return `the strongest move here.`;
+    case 'defends-threat': return `that meets the threat.`;
     case 'wins-material': return `that wins material.`;
-    case 'best': return `clean — the strongest move.`;
+    case 'best': return `the strongest move.`;
     case 'solid': return `solid, nothing lost.`;
   }
 }

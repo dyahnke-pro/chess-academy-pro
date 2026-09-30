@@ -298,6 +298,7 @@ function classifyReason({ label, isBest, cpLoss, gap12, threatNetBefore, hangAft
   if (isBest && gap12 >= 150) return 'only-move';
   if (threatNetBefore >= 3) return 'defends-threat';
   if (capture && seeNow >= 2) return 'wins-material';
+  if (isBest && gap12 >= 80) return 'clear-best';            // a real decision, found (mirrors moveReason CLEAR_BEST_GAP_CP)
   if (isBest) return 'best';
   return 'solid';
 }

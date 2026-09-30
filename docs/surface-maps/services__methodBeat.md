@@ -39,7 +39,7 @@
 
 ### `habitIsOwed` (function) — 2 call sites
 - `src/services/coachFeatureService.ts:2329`
-- `src/services/positionFacts.ts:872`
+- `src/services/positionFacts.ts:887`
 
 ### `methodBeatFor` (function) — 43 call sites
 - `src/services/coachDecider.ts:393`
@@ -96,7 +96,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `liveHabitKey` (function) — 3 call sites
-- `src/services/learnFundamentalNarration.ts:106`
+- `src/services/learnFundamentalNarration.ts:113`
 - `src/services/methodBeat.live.test.ts:112`
 - `src/services/methodBeat.live.test.ts:119`
 
@@ -105,7 +105,7 @@
 - `src/services/methodBeat.live.test.ts:115`
 - `src/services/methodBeat.live.test.ts:118`
 - `src/services/methodBeat.test.ts:97`
-- `src/services/positionFacts.ts:790`
+- `src/services/positionFacts.ts:795`
 
 ### `liveMethodBeatFor` (function) — 22 call sites
 - `src/services/groundedAnswer.ts:3404`

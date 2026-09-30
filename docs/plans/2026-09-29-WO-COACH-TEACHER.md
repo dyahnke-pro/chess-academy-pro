@@ -294,3 +294,67 @@ Events: `coach_move_order_named` {cost_cp}, `coach_king_attack_named` {kind}, `c
 - `claimSentences`: a short question (≤ 40 chars) glues to the sentence after it, so the dedupe can no longer drop "What do you do about it?" and leave a bare answer.
 - **Yours, from the same walk:** `positionCharacter`'s switch lines ("The position has turned sharp — now it is about calculation", "The tactics have settled — it is back to improving pieces") say no WHY. Name what made it sharp (the live tactic, or "one move is far better than the rest") or stay quiet.
 - **Accuracy instrument:** `scripts/scoreboard/tape-verify.mjs <tape> sr-all80.json` checks every spoken sentence of a Learn walk against chess.js and the stored MultiPV reads (independent of app code). Baseline on the 2026-09-30 walk: 89.1% accuracy, 47% of sentences checkable; the five falses were the stopped-move wording above.
+
+**Why the move grade never spoke in this walk — measured, not a bug (2026-09-29).** Stockfish MultiPV 3, depth 12, over every student move of 3UqPa5eV2e0:
+- **No faults.** The worst move cost 15cp.
+- **Nine moves were outside the top-3 fan**, so they are ungradable cheaply (by design: `gradePlayedMove` returns null).
+- **Exactly one clear decision was found:** ply 17 exd5, best by 100cp over the next move. It stayed silent because the move had no computed point, and a verdict without a reason is not spoken.
+
+The miss is the reason, not the verdict: exd5 is a **recapture choice** ("take with the pawn, not the knight — because …"). On the scoreboard we land a point on 6% of those beats (47 in his games). Next computer on the list: recapture choice, i.e. when two captures on one square differ by ≥ the clear-best bar, name the other capture and what it costs. Engine-proven, squares coupled.
+
+**Fixed from the defect list (branch `wo2-grade-fires`, each with a test on the walk position):**
+- #7 **greeting mid-game.** A board move now counts as the student starting, so "Name any opening…" can't land after 1.e4.
+- #4 **the unplayed move.** A one-move engine line of the student's own now reads as their option: "If you play Qd2, your queen on d2 and your bishop on e3 form a battery…" (first shipped as "Play Qd2 and …", corrected on the triple-check: that broke on detector sentences opening with a verb). Longer lines keep "After …".
+- #3 **the lecture.** "Shallow read … The thread was lost deeper in the line" became "a5 holds against the first replies, but after b5, Nb6, Nxb6 breaks it — the line had to be followed to the end." The calculation habit dropped the shouting: "Follow every check, capture and threat until nothing is forcing, then judge the position." The review audit's regex follows.
+- #6 **bishop pair twice.** It is now said once a game, whichever owner says it first (key `bishop-pair` in the standing memory).
+- #5a **Ng8 "their best piece".** An undeveloped minor on its home square is never "their best piece" in any phase. Negative-controlled.
+
+**Still open (mine):** #5b the back-rank line at ply 39 and #5c "2 attackers on b6" (unclear whose). Both still need checking against the board.
+**Still open (theirs):** #1 and #2 are moveIntent.
+
+**Arrows for spoken lines (David 2026-09-29: "I have never seen any!" → "I'm sure you're missing deeper lines").**
+- `VoiceFact.lines`: each line the sentence names, with the board it STARTS on. It is coupled at emission, like `squares`, and never scraped from prose.
+- Lines on the board on screen draw there. Lines from an earlier board show that board (the line-walk board chat uses) while spoken, then the game returns.
+- Census of 34 multi-move lines across the walks. Wired:
+  - the but-turn;
+  - the compare ("X can wait — Y forces matters now");
+  - concept lines ("If you play Qd2, …" / "After Rxe4+, Be2, Qe7, …");
+  - "X has a point: it stops your Y" (their reply plus the stopped threat);
+  - the forcing win that was on the board;
+  - the calculation-depth path ("after b5, Nb6, Nxb6").
+- Already had arrows before: curated beats.
+- Shipped: PR #988 (live board). Branch `wo1-deep-lines` (earlier boards) is pending its live screenshot.
+- Walk note: the calc-depth line did not fire on the re-walk. The engine judged a5 differently; which lines speak varies run to run.
+
+**Triple-check finds (fixed):**
+- "Play Qd2 and …" broke on verb-first detector sentences. Now "If you play Qd2, …" (PR #989).
+- The Ng8 fix moved "the piece doing the most work" to their Rh8 behind its own h6 pawn. A rook now needs a free file in every phase (branch `wo1-deep-lines`).
+
+**Hand walk 2, Closed Ruy (2026-09-30).** Seven flags, all fixed on branch `wo1-deep-lines`, each with a test on the walk position:
+1. **Their move's purpose was held behind a description.** "g6 has a point: it stops the mate with Qxh7" lost to "Qd3 takes aim at the center" on offer order within `positionFacts`. It now rides its own lane, `theirPurpose` (rank 74, above every description).
+2. **"Their pawn on d4 hits your knight; it has to move", when cxd4 takes back.** The warning now stands down whenever taking the attacker loses nothing (SEE ≥ 0), not only when the attacker is free.
+3. **Routine recaptures graded aloud with praise** ("c-pawn takes d4: nice — the only move that holds", twice). A recapture is no longer graded aloud unless it is a fault, and no merit clause opens on a praise word.
+4. **One piece twice** (the pin on g4, then "their bishop on g4 is their best piece"). A description whose squares all sit inside the lead's is a restatement and is held; support must add a square.
+5. **An IQP called on doubled d-pawns (d6 + d4).** It now needs exactly one central d-pawn.
+6. **The character read flipped three times in a quiet game.** A piece that can simply step away (a bishop hit by a pawn) no longer makes the position "sharp"; only detected tactics or a big engine gap do.
+7. **"Ne3 develops into the game" at move 13.** Development now means leaving the piece's own starting square, not merely rank 1.
+
+### 6.x Hand walk 3 (Ruy re-walk, 2026-09-30) — flags and decisions
+
+- **Character flip on a standing pin — FIXED (pending push).** `…Bg4` pinning
+  Nf3 to d1 read "turned sharp" (move 19) and flipped back at move 27. The
+  detector reports a pin's geometry with no verdict (`wins` is set for forks
+  only), so the pin counted as a live tactic. Now only a pattern a verifier
+  PROVED wins something (`wins: live | threat`) counts (`provenTacticLive`). A
+  pin that really costs material still reads sharp through the engine's
+  best-move gap. Test on the real position + a verified-fork control:
+  `positionCharacter.pin.test.ts`.
+- **🟠 DECISION FOR DAVID — curated beats name the OPPONENT by colour.**
+  `beatRegister` refuses the student's own colour but passes "Black's
+  e5-pawn" / "Black develops" to a White student, which breaks the locked
+  one-perspective rule (opponent = they/their). Census: **1,199 of 1,444
+  live-safe beats** do it (939 as a subject, 260 possessive-only). Silencing
+  them cuts live curated teaching by 83%, and a regex rewrite is banned
+  (verb agreement: "Black has" → "they have"). The real fix is the owed
+  offline live-register bake (BACKLOG §4.6). Left as is until David picks:
+  bake (recommended) or silence.

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**118 lines · 10 exports · 2 importers · 1 tests · 0 audits**
+**127 lines · 11 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/components/Coach/CoachTeachPage.tsx`
+- `src/services/positionCharacter.pin.test.ts`
 - `src/services/positionCharacter.test.ts`
 
 ## Exports and every call site
@@ -29,8 +30,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `SHARP_GAP_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `provenTacticLive` (function) — 5 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9379`
+- `src/components/Coach/CoachTeachPage.tsx:9384`
+- `src/services/positionCharacter.pin.test.ts:17`
+- `src/services/positionCharacter.pin.test.ts:23`
+- `src/services/positionCharacter.pin.test.ts:27`
+
 ### `characterOf` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9331`
+- `src/components/Coach/CoachTeachPage.tsx:9371`
 - `src/services/positionCharacter.test.ts:10`
 - `src/services/positionCharacter.test.ts:14`
 - `src/services/positionCharacter.test.ts:15`
@@ -51,7 +59,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `stepCharacter` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9338`
+- `src/components/Coach/CoachTeachPage.tsx:9385`
 - `src/services/positionCharacter.test.ts:31`
 - `src/services/positionCharacter.test.ts:56`
 - `src/services/positionCharacter.test.ts:68`
@@ -60,6 +68,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
+- `src/services/positionCharacter.pin.test.ts`
 - `src/services/positionCharacter.test.ts`
 
 ## Audits that reach it

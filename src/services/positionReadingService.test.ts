@@ -864,6 +864,13 @@ describe('namedPawnStructure (his "catalogue the structures", 2026-08-23)', () =
     const s = namedPawnStructure('r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 1', 'w');
     expect(s?.name).toMatch(/French/);
   });
+  it('does not call doubled d-pawns an isolani (hand walk 2026-09-30, Ruy 15…exd4: d6 + d4)', () => {
+    const fen = 'r2q1rk1/4bppp/p1npbn2/1p6/3pP3/4NN2/PPB2PPP/R1BQR1K1 w - - 0 16';
+    expect(namedPawnStructure(fen, 'w')?.name ?? '').not.toMatch(/isolated queen/i);
+  });
+  it('does not call a lone d6 pawn an isolani — the plan is about d4/d5', () => {
+    expect(namedPawnStructure('4k3/pp3ppp/3p4/8/8/8/PP3PPP/4K3 w - - 0 1', 'w')?.name ?? '').not.toMatch(/isolated queen/i);
+  });
   it('names an isolated queen pawn', () => {
     // White d4 with no c/e pawns; Black has no d-pawn.
     const s = namedPawnStructure('4k3/pp3ppp/8/8/3P4/8/PP3PPP/4K3 w - - 0 1', 'w');

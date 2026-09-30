@@ -106,7 +106,7 @@
 - `src/services/conceptEngine.test.ts:206`
 - `src/services/conceptEngine.test.ts:224`
 - `src/services/liveTacticsContext.ts:116`
-- `src/services/positionFacts.ts:764`
+- `src/services/positionFacts.ts:769`
 
 ### `LineInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -145,9 +145,9 @@
 - `src/components/Coach/CoachTeachPage.tsx:7703`
 - `src/components/Coach/CoachTeachPage.tsx:7707`
 - `src/services/learnWalkBlumenfeld.test.ts:133`
-- `src/services/positionFacts.ts:1027`
-- `src/services/positionFacts.ts:1030`
-- `src/services/positionFacts.ts:1412`
+- `src/services/positionFacts.ts:1042`
+- `src/services/positionFacts.ts:1045`
+- `src/services/positionFacts.ts:1427`
 
 ### `tacticInvariant` (function) — 8 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7704`
@@ -212,7 +212,7 @@
 - `src/services/narratedContinuation.test.ts:19`
 - `src/services/narratedContinuation.ts:85`
 - `src/services/pieceValues.ts:52`
-- `src/services/positionCharacter.ts:39`
+- `src/services/positionCharacter.ts:48`
 - `src/test/onePieceValueTable.test.ts:46`
 
 ## Tests

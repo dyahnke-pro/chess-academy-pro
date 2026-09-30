@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**849 lines · 27 exports · 6 importers · 5 tests · 0 audits**
+**861 lines · 28 exports · 6 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -93,7 +93,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:126`
 
 ### `tacticalReadFromLines` (function) — 13 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8971`
+- `src/components/Coach/CoachTeachPage.tsx:9003`
 - `src/services/danyaBehaviors.ts:509`
 - `src/services/danyaDeviceCoverage.test.ts:73`
 - `src/services/liveVoiceDefects.test.ts:46`
@@ -115,13 +115,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:546`
 
 ### `temptingTurnClause` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8986`
+- `src/components/Coach/CoachTeachPage.tsx:9018`
 - `src/services/danyaDeviceCoverage.test.ts:79`
 - `src/services/tacticalRead.test.ts:437`
 - `src/services/tacticalRead.test.ts:450`
 
 ### `uncertaintyClause` (function) — 13 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8992`
+- `src/components/Coach/CoachTeachPage.tsx:9030`
 - `src/services/danyaDeviceCoverage.test.ts:84`
 - `src/services/liveVoiceDefects.test.ts:279`
 - `src/services/tacticalRead.test.ts:422`
@@ -135,8 +135,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:581`
 - `src/services/tacticalRead.test.ts:582`
 
-### `candidateCompareClause` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8998`
+### `candidateCompareClause` (function) — 8 call sites
 - `src/services/danyaDeviceCoverage.test.ts:89`
 - `src/services/tacticalRead.test.ts:455`
 - `src/services/tacticalRead.test.ts:463`
@@ -145,6 +144,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:489`
 - `src/services/tacticalRead.test.ts:594`
 - `src/services/tacticalRead.test.ts:597`
+
+### `candidateCompareRead` (function) — 1 call site
+- `src/components/Coach/CoachTeachPage.tsx:9036`
 
 ### `temptingFromAnalysis` (function) — 6 call sites
 - `src/services/learnWalkBlumenfeld.test.ts:198`

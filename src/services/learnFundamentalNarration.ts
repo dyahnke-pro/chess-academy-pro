@@ -16,6 +16,7 @@
 // sentence names can never disagree. This module owns only the VOICE: the
 // rendered verdict and the recurrence clause.
 
+import { Chess } from 'chess.js';
 import { type FundamentalId } from './principleAttribution';
 import { attributeLiveFundamental, LEARN_FUNDAMENTAL_CP_FLOOR, type LiveFundamentalReads } from './liveFundamental';
 import { renderFundamentalVerdict, isMethodSentence } from './principleVoice';
@@ -67,6 +68,12 @@ export interface LearnFundamental {
    *  walk 2026-09-30 heard "You left the book with Bc5…" then "That leaves the
    *  book — … Bc5 steps out of every known line"). Empty when there is no HOW. */
   howOnly: string;
+  /** The lines the verdict SAYS, each from the board it starts on
+   *  (`VoiceFact.lines`): the move a "forcing win was on the board" names, from
+   *  the board before the student's move; the path to the blow a
+   *  calculation-depth verdict walks ("after b5, Nb6, Nxb6 breaks it"), from
+   *  the board after it — spoken only by the full verdict, so drawn only then. */
+  lines: Array<{ fen: string; sans: readonly string[] }>;
 }
 
 /**
@@ -122,5 +129,33 @@ export function learnFundamentalVerdict(
     : null;
   const sq = attrs[0].facts.square;
   const howOnly = verdict.split(/(?<=[.!?])\s+/).filter(isMethodSentence).join(' ');
-  return { id: attrs[0].id, tag: attrs[0].tag, verdict, recurrence, square: typeof sq === 'string' ? sq : null, howOnly };
+  const a0 = attrs[0];
+  const lines = fundamentalLines(a0, input.fenBefore, input.playedSan, firstThisGame);
+  return { id: a0.id, tag: a0.tag, verdict, recurrence, square: typeof sq === 'string' ? sq : null, lines, howOnly };
+}
+
+/** The lines a fundamental's verdict names, each from the board it starts on.
+ *  Only the two verdicts that name moves carry any; `full` is false for a
+ *  repeat within the game, whose short stem no longer walks the path. */
+export function fundamentalLines(
+  a: { id: FundamentalId; facts: Record<string, string | number>; evidence: { pvMoves?: readonly string[] } },
+  fenBefore: string,
+  playedSan: string,
+  full: boolean,
+): Array<{ fen: string; sans: readonly string[] }> {
+  if (a.id === 'passive-when-forcing-existed' && typeof a.facts.better === 'string') {
+    return [{ fen: fenBefore, sans: [a.facts.better] }];
+  }
+  if (a.id === 'calculation-depth' && full && (a.evidence.pvMoves ?? []).length > 0) {
+    const after = fenAfterSan(fenBefore, playedSan);
+    return after ? [{ fen: after, sans: a.evidence.pvMoves ?? [] }] : [];
+  }
+  return [];
+}
+
+function fenAfterSan(fen: string, san: string): string | null {
+  try {
+    const c = new Chess(fen);
+    return c.move(san) ? c.fen() : null;
+  } catch { return null; }
 }

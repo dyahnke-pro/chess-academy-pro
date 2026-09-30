@@ -34,6 +34,13 @@ describe('classifyMoveReason — faithful to the validated offline classifier', 
   it('the best move standing far ahead → only-move', () => {
     expect(classifyMoveReason({ ...base, label: 'best', isBest: true, gap12: 200 })).toBe('only-move');
   });
+  it('the best move by a clear margin → clear-best; a calm best stays plain best', () => {
+    expect(classifyMoveReason({ ...base, label: 'best', isBest: true, gap12: 100 })).toBe('clear-best');
+    // Negative control: several moves about as good is not a decision found.
+    expect(classifyMoveReason({ ...base, label: 'best', isBest: true, gap12: 30 })).toBe('best');
+    // A best move that meets a threat still says so.
+    expect(classifyMoveReason({ ...base, label: 'best', isBest: true, gap12: 100, threatNetBefore: 3 })).toBe('defends-threat');
+  });
   it('a good capture winning material → wins-material', () => {
     expect(classifyMoveReason({ ...base, label: 'good', capture: true, seeNow: 3 })).toBe('wins-material');
   });
@@ -53,8 +60,10 @@ describe('the post-move-grade helpers', () => {
     expect(gradeWorthSpeaking('solid')).toBe(false);
     expect(gradeWorthSpeaking('best')).toBe(false);
     expect(gradeWorthSpeaking('hung-piece')).toBe(true);
-    // Bare merits and soft faults name no cause — silent (walk 2026-09-30).
-    expect(gradeWorthSpeaking('only-move')).toBe(false);
+    // Bare merits and soft faults name no cause — silent (walk 2026-09-30);
+    // only-move and clear-best speak, joined to their point by the caller.
+    expect(gradeWorthSpeaking('only-move')).toBe(true);
+    expect(gradeWorthSpeaking('clear-best')).toBe(true);
     expect(gradeWorthSpeaking('wins-material')).toBe(false);
     expect(gradeWorthSpeaking('defends-threat')).toBe(false);
     expect(gradeWorthSpeaking('second-best')).toBe(false);
@@ -85,5 +94,14 @@ describe('moveReasonClause — a positional slip speaks its attributed fundament
     expect(moveReasonClause('lost-the-thread')).toMatch(/plan drifted/);
     // A tactical reason keeps its own clause — the fundamental only fills the positional gap.
     expect(moveReasonClause('hung-piece', { fundamental: verdict })).toMatch(/hung/);
+  });
+});
+
+describe('no praise words in a verdict (Narration Voice Rule 5, hand walk 2026-09-30)', () => {
+  it('no merit clause opens on nice / good / clean / great', async () => {
+    const { moveReasonClause } = await import('./moveReason');
+    for (const r of ['only-move', 'defends-threat', 'best', 'clear-best', 'wins-material'] as const) {
+      expect(moveReasonClause(r)).not.toMatch(/^(nice|good|clean|great|excellent)\b/i);
+    }
   });
 });

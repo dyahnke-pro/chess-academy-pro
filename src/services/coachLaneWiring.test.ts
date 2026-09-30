@@ -93,7 +93,7 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     expect(TEACH).toMatch(/const concession = lookConcession\(fenBefore, move\.san, cpLoss\);/);
     // A fundamental with NO material drawback still speaks, on its own.
     // (Colle re-walk 2026-09-27: graded on the student-move board, `move.fen`.)
-    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, bookSaidAlone \? fundamental\.howOnly : fundamental\.verdict, 'fundamental', \[\], undefined, move\.fen\)/);
+    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, bookSaidAlone \? fundamental\.howOnly : fundamental\.verdict, 'fundamental', \[\], undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines\)/);
   });
 
   it('the hint register speaks rather than only prompting', () => {

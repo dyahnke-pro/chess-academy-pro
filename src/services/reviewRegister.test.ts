@@ -77,9 +77,9 @@ describe('pastTenseReviewNarration — retrospective, but never over a plan', ()
 
 describe('the past-tense pass leaves instructions alone and keeps one tense (walk 5, R17/R18)', () => {
   it('every sentence of a HOW stays an instruction — never "check, captured, threat"', () => {
-    const out = past("The move looks fine for two moves — then fxe6 lands. Here's how: Calculate to a QUIET position, not to a good feeling. Follow every forcing reply — check, capture, threat — until nothing forces, then judge.");
-    expect(out).toMatch(/check, capture, threat/);
-    expect(out).not.toMatch(/captured, threat/);
+    const out = past("The move looks fine for two moves — then fxe6 lands. Here's how: Follow every check, capture and threat until nothing is forcing, then judge the position. If they still have a capture at the end of your line, you have not finished.");
+    expect(out).toMatch(/check, capture and threat/);
+    expect(out).not.toMatch(/captured and threat/);
   });
   it('the rotated HOW stems are instructions too', () => {
     expect(past('The habit that fixes it: take the free piece first.')).toMatch(/take the free piece/);

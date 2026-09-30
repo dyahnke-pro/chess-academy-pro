@@ -714,7 +714,11 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       }
       const tension = targets.find((x) => x.verdict === 'balanced-tension' && x.attackers >= 2);
       if (tension) {
-        return { fact: `${tension.attackers} attackers on ${tension.square} against ${tension.defenders} defenders — pile on one more and it falls.`, squares: [tension.square] };
+        // SEATED AND SPELLED (walk 3UqPa5eV2e0 ply 23: "2 attackers on b6
+        // against 2 defenders" — whose attackers, on whose piece?). The
+        // target is theirs; the attackers are the student's.
+        const times = (n: number): string => (n === 1 ? 'once' : n === 2 ? 'twice' : `${['three', 'four', 'five', 'six'][n - 3] ?? n} times`);
+        return { fact: `Their ${PIECE_NAME[tension.piece]} on ${tension.square} is attacked ${times(tension.attackers)} and defended ${times(tension.defenders)} — add one more attacker and it falls.`, squares: [tension.square] };
       }
       return null;
     },

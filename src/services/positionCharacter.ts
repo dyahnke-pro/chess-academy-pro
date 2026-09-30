@@ -35,6 +35,15 @@ export const DECISIVE_MATERIAL = 3;
 /** A best-move gap this wide means there is one right move to find. */
 export const SHARP_GAP_CP = 150;
 
+/** A tactic counts as LIVE only when a verifier PROVED it wins something.
+ *  The detector reports a pin's geometry with no verdict, and a standing pin
+ *  (…Bg4 on Nf3/d1) is not the position turning sharp — hand walk 2026-09-30
+ *  heard it flip the read twice in a quiet Closed Ruy. A pin that really costs
+ *  material still reads sharp through the engine's best-move gap. */
+export function provenTacticLive(immediate: ReadonlyArray<{ wins?: 'live' | 'threat' | 'none' }>): boolean {
+  return immediate.some((t) => t.wins === 'live' || t.wins === 'threat');
+}
+
 export function characterOf(i: CharacterInputs): Character {
   const bal = materialBalance(i.fen) * (i.studentColor === 'white' ? 1 : -1);
   // A live tactic outranks the material count: being up a rook with your
