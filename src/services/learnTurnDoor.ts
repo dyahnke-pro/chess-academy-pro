@@ -141,7 +141,9 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // What the opening IS (the identity computer): what it provokes, the
   // structure its master main line reaches, a lasting gambit, sharpness, OTB
   // master games. Said once per game, right after the name.
-  openingIdentity: { kind: 'computed', why: 'what the named opening provokes, aims for and costs — computed from the master database', lead: 44 },
+  // Rides with the name (walk 2026-09-30, game 1: held all game because it
+  // shares no square with the move being discussed).
+  openingIdentity: { kind: 'computed', why: 'what the named opening provokes, aims for and costs — computed from the master database', lead: 44, always: true },
   // Practical lore: the student's natural move here is a known, engine-verified
   // trap (a curated gem). Said BEFORE the move; names the move to be careful
   // with, never the refutation.

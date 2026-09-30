@@ -128,3 +128,15 @@ describe('a hit is a threat or it is not a reason (run D walk 2026-09-30, 1.c4)'
     expect(whatItDoes('rn1qkbnr/pppppppp/8/8/2P5/8/PP1PPPPP/RNBQKBNR b KQkq - 0 1', 'd1b3', 'w')?.verb).toBe('hit the pawn on b7');
   });
 });
+
+describe('moveIntent — a move that hits something is about the hit', () => {
+  it('…g4 attacking the bishop on f3 never "prepares …h5" (walk 2026-09-30)', () => {
+    const fen = 'r1bqr1k1/p1p2p2/2pp1n1p/2b3p1/4P3/2N2BB1/PPP2PPP/R2Q1RK1 b - - 1 12';
+    const L = (pv: string[], cp: number): AnalysisLine => ({ rank: 1, evaluation: cp, moves: pv, mate: null });
+    const out = moveIntent(fen, 'g4', {
+      before: [L(['h6h5'], 0)], after: [L(['f3e2', 'h6h5'], -30)],
+      passBefore: [L(['g5g4'], -30)], passAfter: [L(['h6h5', 'a2a3'], -300)],
+    }, 'student', { ...DEFAULT_INTENT, prepare: 'pass' });
+    expect(out?.prepares ?? null).toBeNull();
+  });
+});

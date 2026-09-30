@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:24) — names `conceptEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:6061) — names `conceptEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:6089) — names `conceptEngine`
 
 ## Who calls in
 
@@ -142,15 +142,15 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `definitionKey` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7726`
-- `src/components/Coach/CoachTeachPage.tsx:7730`
+- `src/components/Coach/CoachTeachPage.tsx:7729`
+- `src/components/Coach/CoachTeachPage.tsx:7733`
 - `src/services/learnWalkBlumenfeld.test.ts:133`
 - `src/services/positionFacts.ts:1044`
 - `src/services/positionFacts.ts:1047`
 - `src/services/positionFacts.ts:1429`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7727`
+- `src/components/Coach/CoachTeachPage.tsx:7730`
 - `src/services/dnaLineNarrator.ts:185`
 - `src/services/dnaLineNarrator.ts:216`
 - `src/services/dnaLineNarrator.ts:252`
@@ -212,7 +212,7 @@
 - `src/services/narratedContinuation.test.ts:19`
 - `src/services/narratedContinuation.ts:85`
 - `src/services/pieceValues.ts:52`
-- `src/services/positionCharacter.ts:48`
+- `src/services/positionCharacter.ts:60`
 - `src/test/onePieceValueTable.test.ts:46`
 
 ## Tests

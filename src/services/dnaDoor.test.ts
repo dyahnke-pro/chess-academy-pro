@@ -31,3 +31,21 @@ describe('the DNA outline at the door', () => {
     expect(s.indexOf('short of a defender')).toBeLessThan(s.indexOf('Their knight on c6'));
   });
 });
+
+describe('a definition never stands alone', () => {
+  it('drops "Remember — …" when the fact it explains was already said', () => {
+    const pin = 'Your rook on e2 pins their bishop on e6 against their king on e8.';
+    const board = '4k3/8/4b3/8/8/8/4R3/4K3 w - - 0 1';
+    const pkg = buildVoicePackage([
+      { kind: 'computed', text: `${pin} Remember — a pin freezes the piece in front: it can't move without exposing the more valuable piece behind it.`, fen: board },
+    ], pin);
+    expect(pkg.spoken).toBe('');
+  });
+  it('keeps it when the fact is new', () => {
+    const board = '4k3/8/4b3/8/8/8/4R3/4K3 w - - 0 1';
+    const pkg = buildVoicePackage([
+      { kind: 'computed', text: 'Your rook on e2 pins their bishop on e6 against their king on e8. Remember — a pin freezes the piece in front.', fen: board },
+    ]);
+    expect(pkg.spoken).toMatch(/Remember — a pin freezes/);
+  });
+});

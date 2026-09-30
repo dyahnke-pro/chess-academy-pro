@@ -298,3 +298,11 @@ describe('the review actually carries the reason', () => {
     expect(cited[0].whyItFailedSquares).toEqual([]);
   });
 });
+
+describe('abandoned defender — only when leaving caused it', () => {
+  it('a queen a bishop already attacked is not "left unguarded" by the bishop that moved (walk 2026-09-30)', () => {
+    const fen = '8/p1p2pk1/2pq3p/2b5/8/6B1/PPP2P1P/4K3 b - - 0 23';
+    const out = whyItFailed({ fenBefore: fen, playedSan: 'Bd4', studentColor: 'black' });
+    expect(out?.line ?? '').not.toMatch(/only thing guarding/);
+  });
+});

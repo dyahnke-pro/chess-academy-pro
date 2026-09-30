@@ -1,7 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { planChoice } from './planChooser';
 
-const FEN = 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4';
+// Same board, dated move 12 — a plan choice is taught once the opening is played.
+const FEN = 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 12';
+const EARLY = FEN.replace(/ 12$/, ' 4');
 const A = ['d2d3', 'f8c5', 'c2c3', 'd7d6', 'b1d2', 'a7a6', 'd2f1', 'e8g8', 'f1g3'];
 const B = ['b1c3', 'f8c5', 'd2d3', 'd7d6', 'c1g5', 'h7h6', 'g5h4', 'g7g5', 'h4g3'];
 
@@ -16,6 +18,8 @@ describe('the plan chooser (census #52)', () => {
   });
   it('silent in the grey zone, on a mate, or with one line (negative controls)', () => {
     expect(planChoice(FEN, [{ moves: A, evaluation: 80 }, { moves: B, evaluation: 20 }], 'white')).toBeNull();
+    // Too early in the game: silent (walk 2026-09-30, game 2).
+    expect(planChoice(EARLY, [{ moves: A, evaluation: 30 }, { moves: B, evaluation: 20 }], 'white')).toBeNull();
     expect(planChoice(FEN, [{ moves: A, evaluation: 0, mate: 3 }, { moves: B, evaluation: 20 }], 'white')).toBeNull();
     expect(planChoice(FEN, [{ moves: A, evaluation: 30 }], 'white')).toBeNull();
   });

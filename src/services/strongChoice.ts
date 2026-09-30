@@ -21,8 +21,14 @@ export function strongChoice(fenBefore: string, playedSan: string): { text: stri
   const same = bare(best.san) === bare(playedSan);
   const score = Math.round(((best.w + best.d / 2) / Math.max(1, best.games)) * 100);
   const stat = `played in ${best.games} of ${entry.total} games from this position, scoring ${score}%`;
+  // The student's own move, when strong players play it too, is said FIRST —
+  // "the choice is Bb5" after a sound Nc3 read as a correction (walk
+  // 2026-09-30, game 2).
+  const mine = entry.moves.find((m) => bare(m.san) === bare(playedSan));
   const text = same
     ? `That is a strong player's choice here — ${stat}.`
-    : `A strong player's choice here is ${best.san} — ${stat}.`;
+    : mine && mine.games >= Math.max(HIS_PLAN_MIN_GAMES, best.games * 0.1)
+      ? `${playedSan} is a strong player's move here too — played in ${mine.games} of ${entry.total} games; the most common is ${best.san}, ${stat}.`
+      : `A strong player's choice here is ${best.san} — ${stat}.`;
   return { text, san: best.san, same };
 }

@@ -97,6 +97,17 @@ function routePhrase(name: string, path: readonly string[]): string {
   return `getting the ${name} to ${dest}${tail}`;
 }
 
+/** A route aim, re-phrased from where the piece stands NOW: the squares
+ *  already reached drop out of "by way of" (walk 2026-09-30, game 1: "getting
+ *  the rook to e2, by way of e1" with the rook already on e1). */
+export function phraseFrom(aim: Aim, at: string): string {
+  if (aim.kind !== 'route') return aim.phrase;
+  const i = aim.squares.indexOf(at);
+  const name = /^getting the (.+?) to /.exec(aim.phrase)?.[1];
+  if (i < 0 || !name) return aim.phrase;
+  return routePhrase(name, [at, ...aim.squares.slice(i + 1)]);
+}
+
 interface ArcEntry {
   aim: Aim;
   /** Reads in a row this aim has been present. */
@@ -284,8 +295,8 @@ export function stepArc(
         // WHY THEY PLAYED IT, question first (David 2026-09-30): the move
         // they actually made, read as a step of the plan announced earlier.
         text: their
-          ? `What is their ${PIECE[moved.piece] ?? 'piece'} on ${moved.to} doing? ${THINK_MARK} It's ${entry.steps === 1 ? 'a step' : 'another step'} toward ${e.aim.phrase}.`
-          : `Your ${PIECE[moved.piece] ?? 'piece'} to ${moved.to} is ${entry.steps === 1 ? 'a step' : 'another step'} toward ${e.aim.phrase}.`,
+          ? `What is their ${PIECE[moved.piece] ?? 'piece'} on ${moved.to} doing? ${THINK_MARK} It's ${entry.steps === 1 ? 'a step' : 'another step'} toward ${phraseFrom(e.aim, moved.to)}.`
+          : `Your ${PIECE[moved.piece] ?? 'piece'} to ${moved.to} is ${entry.steps === 1 ? 'a step' : 'another step'} toward ${phraseFrom(e.aim, moved.to)}.`,
       });
     }
     // Present now — or just advanced by the move (a step toward an aim is not
@@ -384,10 +395,27 @@ export function aimWalkableNow(aim: Aim, fen: string, color: 'w' | 'b', history?
   // came from d7 to c2). Reject it when one of the side's last two moves took
   // that piece from the goal to the route's start.
   if (aim.kind === 'route' && aim.goal && aim.from && history && justLeft(history, color, aim.goal, aim.from)) return false;
-  if (aim.kind !== 'route' && aim.kind !== 'outpost' && aim.kind !== 'king-attack' && aim.kind !== 'shield') return true;
+  if (aim.kind !== 'route' && aim.kind !== 'outpost' && aim.kind !== 'king-attack' && aim.kind !== 'shield' && aim.kind !== 'passer') return true;
   let board: Chess;
   try { board = new Chess(fen); } catch { return false; }
   const foe: 'w' | 'b' = color === 'w' ? 'b' : 'w';
+  if (aim.kind === 'passer') {
+    // A PASSED PAWN IS ON THE BOARD, not at the end of an engine line (walk
+    // 2026-09-30: "a passed pawn on the g-file" with no g-pawn — only …fxg2,
+    // beside the king that just takes it, would make one).
+    const file = aim.squares[0]?.[0];
+    if (!file) return false;
+    const cells = board.board().flat().filter((c): c is NonNullable<typeof c> => c !== null);
+    const pawns = cells.filter((c) => c.type === 'p' && c.color === color && c.square[0] === file);
+    if (!pawns.length) return false;
+    const fi = file.charCodeAt(0);
+    return pawns.some((p) => {
+      const r = Number(p.square[1]);
+      return !cells.some((c) => c.type === 'p' && c.color === foe
+        && Math.abs(c.square.charCodeAt(0) - fi) <= 1
+        && (color === 'w' ? Number(c.square[1]) > r : Number(c.square[1]) < r));
+    });
+  }
   if (aim.kind === 'king-attack' || aim.kind === 'shield') {
     // "An attack on your king" is a claim about the board NOW (walk 3,
     // 2026-09-29: said with no black piece bearing on g1 while the real threat

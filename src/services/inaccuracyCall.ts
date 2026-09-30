@@ -535,7 +535,7 @@ export function callInaccuracyDetailed(args: {
       // NEVER A BARE GRADE (run B walk 2026-09-30: "Nf5 was a mistake." and
       // nothing else). With no punishment and no better-move reason, the one
       // computed fact left is what it cost.
-      : `${args.playedSan} was ${grade}${should ? '' : ` — it gave away about ${(cost / 100).toFixed(1)} points`}.`;
+      : `${args.playedSan} was ${grade}${should ? '' : ` — it gave away ${costWords(cost)}`}.`;
   return { call: { quality, side: 'student', cost, said: `${head}${should}`, square: better?.square ?? '', ...(punishment?.lostSquare ? { lostSquare: punishment.lostSquare } : {}), ...(should ? { namesBetter: args.bestSan } : {}) } };
 }
 
@@ -600,7 +600,43 @@ function punishmentOf(
   // capture — Bxf6 Bxf6 Nxe4 (Blumenfeld F16) opens with an even trade and
   // still wins the pawn.
   if (first && !/[+#]$/.test(first) && lineNetFor(fenAfter, replyLineUci) <= 0) return null;
+  // …and only an entry THE MOVE OPENED (walk 2026-09-30: "Raf8 let them in with
+  // Nxb6" — Nxb6 was there before Raf8; the cost was missing …Nd4). The same
+  // line on the board before the move, them to play, winning as much, is not
+  // what it let in.
+  if (first && wonBefore(fenBefore, replyLineUci) >= lineNetFor(fenAfter, replyLineUci)) return null;
   return first ? { why: `in with ${first}`, first } : null;
+}
+
+/** What the same line nets for them on the board BEFORE the student's move
+ *  (them to move). -Infinity when the line cannot be played there — then the
+ *  move is what made it possible. */
+function wonBefore(fenBefore: string, lineUci: readonly string[]): number {
+  try {
+    const parts = fenBefore.split(' ');
+    parts[1] = parts[1] === 'w' ? 'b' : 'w'; parts[3] = '-';
+    const c = new Chess(parts.join(' '));
+    const me = c.turn();
+    let net = 0;
+    for (const u of lineUci) {
+      const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+      if (!m) return -Infinity;
+      if (m.captured) net += (m.color === me ? 1 : -1) * MATERIAL_VALUE[m.captured];
+    }
+    return net;
+  } catch { return -Infinity; }
+}
+
+/** A cost in words coarse enough to survive the engine's depth (walk
+ *  2026-09-30: "about 1.4 points" where a deeper read said 1.8). */
+export function costWords(cp: number): string {
+  const p = cp / 100;
+  if (p < 0.75) return 'about half a pawn';
+  if (p < 1) return 'most of a pawn';
+  if (p < 2) return 'more than a pawn';
+  if (p < 3) return 'about two pawns';
+  if (p < 5) return 'about a piece';
+  return 'more than a piece';
 }
 
 /** Material the side to move nets over a line (captures only, in pawns). */

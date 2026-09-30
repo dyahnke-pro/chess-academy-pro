@@ -45,3 +45,12 @@ describe('recaptureChoice — which piece takes back, and why', () => {
     expect(recaptureChoice('rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2', 'Qxd5', null)).toBeNull();
   });
 });
+
+describe('recaptureChoice — only a difference is spoken', () => {
+  it('two pawn recaptures that both double the c-pawns never blame just one', () => {
+    // White pawns b2 c2 d2; Black's knight has taken on c3.
+    const fen = '4k3/8/8/8/8/2n5/1PPP4/4K3 w - - 0 1';
+    const line = recaptureChoice(fen, 'dxc3', null);
+    expect(line ?? '').not.toMatch(/double/);
+  });
+});

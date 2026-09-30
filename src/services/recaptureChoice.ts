@@ -114,9 +114,13 @@ export function recaptureChoice(
   const options = new Chess(fenBefore).moves({ verbose: true }).filter((x) => x.to === played.to && x.captured && !x.promotion && x.san !== played.san);
   if (!options.length) return null;
   const reply = theirReply ? theirReply.replace(/^…/, '') : null;
-  const mine = readRecapture(fenBefore, played, me, reply);
+  const mineAll = readRecapture(fenBefore, played, me, reply);
   const pick = options.find((o) => o.san === bestSan) ?? options[0];
-  const other = readRecapture(fenBefore, pick, me, reply);
+  const otherAll = readRecapture(fenBefore, pick, me, reply);
+  // ONLY A DIFFERENCE IS SPOKEN (walk 2026-09-30: "bxc3 would double your
+  // pawns" said for dxc3's sake, when dxc3 doubles them too).
+  const mine = { ...mineAll, plus: mineAll.plus.filter((x) => !otherAll.plus.includes(x)), minus: mineAll.minus.filter((x) => !otherAll.minus.includes(x)) };
+  const other = { ...otherAll, plus: otherAll.plus.filter((x) => !mineAll.plus.includes(x)), minus: otherAll.minus.filter((x) => !mineAll.minus.includes(x)) };
   const dot = me === 'b' ? '…' : '';
   const P = `${dot}${mine.san}`; const O = `${dot}${other.san}`;
   const what = (x: Move): string => (x.piece === 'p' ? `the ${x.from[0]}-pawn` : `the ${PIECE[x.piece]}`);

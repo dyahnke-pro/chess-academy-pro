@@ -6,11 +6,18 @@
 import { planFromUci } from './lookaheadPlan';
 import { aimsOf } from './planArc';
 
+/** The first full move a plan choice may be taught on. */
+export const PLAN_CHOICE_FROM_MOVE = 10;
+
 export interface PlanChoiceLine { moves: readonly string[]; evaluation: number; mate?: number | null }
 
 /** `lines` = the student's MultiPV at `fen` (student to move), best first,
  *  `evaluation` in White-POV centipawns. */
 export function planChoice(fen: string, lines: readonly PlanChoiceLine[], studentColor: 'white' | 'black'): { text: string; key: string } | null {
+  // A plan is chosen once the opening is played: at move 2 "two plans hold —
+  // an attack on their king, or the bishop to a4" is noise (walk 2026-09-30,
+  // game 2). Move 10 is where the pieces are out.
+  if (Number(fen.split(' ')[5] ?? '1') < PLAN_CHOICE_FROM_MOVE) return null;
   const [l0, l1] = lines;
   if (!l0 || !l1 || l0.mate != null || l1.mate != null) return null;
   const p0 = planFromUci(fen, l0.moves, studentColor);

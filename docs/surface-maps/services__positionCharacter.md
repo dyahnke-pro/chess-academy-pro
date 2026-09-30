@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**127 lines · 11 exports · 3 importers · 2 tests · 0 audits**
+**139 lines · 13 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,15 +30,26 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `SHARP_GAP_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `DECIDED_CP` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `sharpGap` (function) — 6 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9403`
+- `src/services/positionCharacter.test.ts:77`
+- `src/services/positionCharacter.test.ts:78`
+- `src/services/positionCharacter.test.ts:79`
+- `src/services/positionCharacter.test.ts:80`
+- `src/services/positionCharacter.test.ts:81`
+
 ### `provenTacticLive` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9408`
-- `src/components/Coach/CoachTeachPage.tsx:9413`
+- `src/components/Coach/CoachTeachPage.tsx:9412`
+- `src/components/Coach/CoachTeachPage.tsx:9417`
 - `src/services/positionCharacter.pin.test.ts:17`
 - `src/services/positionCharacter.pin.test.ts:23`
 - `src/services/positionCharacter.pin.test.ts:27`
 
 ### `characterOf` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9400`
+- `src/components/Coach/CoachTeachPage.tsx:9404`
 - `src/services/positionCharacter.test.ts:10`
 - `src/services/positionCharacter.test.ts:14`
 - `src/services/positionCharacter.test.ts:15`
@@ -59,7 +70,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `stepCharacter` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9414`
+- `src/components/Coach/CoachTeachPage.tsx:9418`
 - `src/services/positionCharacter.test.ts:31`
 - `src/services/positionCharacter.test.ts:56`
 - `src/services/positionCharacter.test.ts:68`

@@ -88,7 +88,7 @@ export function mastersPlanRead(fen: string, movesAt: MovesAt): MastersPlanRead 
   const pieces: Record<'w' | 'b', Map<string, { weight: number; piece: string; from: string; to: string; san: string }>> = { w: new Map(), b: new Map() };
   const castles: Record<'w' | 'b', Record<'short' | 'long', number>> = { w: { short: 0, long: 0 }, b: { short: 0, long: 0 } };
   const seen = new Set<string>();
-  const walk = (at: string, weight: number, depth: number, found: Set<string>, lastCaptureOn: string | null): void => {
+  const walk = (at: string, weight: number, depth: number, found: Set<string>, lastCaptureOn: string | null, lastTo: string | null): void => {
     if (depth >= DEPTH) return;
     const moves = movesAt(at);
     const total = moves?.reduce((n, m) => n + m.games, 0) ?? 0;
@@ -112,7 +112,11 @@ export function mastersPlanRead(fen: string, movesAt: MovesAt): MastersPlanRead 
       // A capture on the next two plies is the move in hand, not a plan
       // ("their break is exd5 (98%)" the move after …d5).
       const immediate = !!m.captured && depth < 2;
-      if (!recapture && !immediate && isBreak(new Chess(at), m)) {
+      // Taking the pawn that just ARRIVED is the answer to the other side's
+      // break, not a break of its own (walk 2026-09-30: "your break is …d5,
+      // and theirs is exd5" — exd5 only exists after …d5).
+      const answersBreak = !!m.captured && m.to === lastTo;
+      if (!recapture && !immediate && !answersBreak && isBreak(new Chess(at), m)) {
         // Counted once per path: the same break reached again down a line is
         // the same plan, not a second vote.
         const id = `${m.color}:${m.from}${m.to}`;
@@ -138,10 +142,10 @@ export function mastersPlanRead(fen: string, movesAt: MovesAt): MastersPlanRead 
         pieces[m.color].set(pid, cur);
         next = new Set(next); next.add(id);
       }
-      walk(c.fen(), w, depth + 1, next, m.captured ? m.to : null);
+      walk(c.fen(), w, depth + 1, next, m.captured ? m.to : null, m.to);
     }
   };
-  walk(fen, 1, 0, new Set(), null);
+  walk(fen, 1, 0, new Set(), null, null);
   const top = (side: 'w' | 'b'): PlanBreak | null => {
     const best = [...tally[side].values()].sort((a, b) => b.weight - a.weight)[0];
     if (!best || best.weight < MIN_BREAK_SHARE) return null;

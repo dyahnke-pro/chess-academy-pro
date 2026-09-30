@@ -9,7 +9,7 @@
  * / reset_board markers parsed from its response. Same room, different
  * actions.
  */
-import { characterOf, provenTacticLive, stepCharacter, EMPTY_CHARACTER, SHARP_GAP_CP, type CharacterState } from '../../services/positionCharacter';
+import { characterOf, provenTacticLive, sharpGap, stepCharacter, EMPTY_CHARACTER, SHARP_GAP_CP, type CharacterState } from '../../services/positionCharacter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStandingFactMemory, fullmoveOf } from '../../services/standingFactMemory';
 import { createLearnMemory, type LearnMemory } from '../../services/learnMemory';
@@ -30,7 +30,7 @@ import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePacka
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { announcesTheMove, checkMethodTeaching, countMethodTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, openingBreakFor, openingIdentityTeaching, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
+import { announcesTheMove, checkMethodTeaching, countMethodTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -1518,6 +1518,9 @@ export function CoachTeachPage(): JSX.Element {
   // moves; eval-bar / engine-lines toggles drive the board overlays.
   const { settings, updateSetting } = useSettings();
   const [playerColor, setPlayerColor] = useState<'white' | 'black'>('white');
+  // Read by the stable queue callback (named-move arrows need the seat).
+  const playerColorRef = useRef(playerColor);
+  playerColorRef.current = playerColor;
   /**
    * 🔴 FLIPPING THE BOARD IS A VIEW, NOT A SIDE SWAP (fixed 2026-09-21, same
    * defect as CoachGamePage's). The `setOrientation` hand used to call
@@ -8651,7 +8654,12 @@ export function CoachTeachPage(): JSX.Element {
     const pending = pendingVoiceRef.current?.fen === fen
       ? pendingVoiceRef.current
       : { fen, lines: [] as Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[] }> };
-    if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ lane, text, squares, claims, gradeFen, arrows, lines });
+    // EVERY MOVE A LINE NAMES GETS ITS ARROW (G6) — the lane's own arrows
+    // when it computed them, else each move the sentence names.
+    const drawn = arrows && arrows.length > 0
+      ? arrows
+      : namedMoveArrows(text, gradeFen ?? fen, playerColorRef.current === 'white' ? 'w' : 'b');
+    if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ lane, text, squares, claims, gradeFen, arrows: drawn, lines });
     pendingVoiceRef.current = pending;
   }, []);
 
@@ -8697,16 +8705,14 @@ export function CoachTeachPage(): JSX.Element {
           }]);
           void speakComputed(res.say, { forced: false, intent: 'learn' }).catch(() => undefined);
           if (!res.found) {
-            const a = pendingGem.revealArrows[0];
+            // THE WHOLE PUNISHMENT, NOT ITS FIRST MOVE (David 2026-09-30: "It's
+            // typically more than one move … it should arrow the entire
+            // sequence"). Every ply of the gem's line, each on the board it is
+            // played from — the same plies the Walk button plays.
             try {
-              const board = new Chess(move.fen);
-              // The gem's move, on the board where the student missed it — the
-              // engine found it there, so it is vouched for.
-              const shown = a && board.get(a.from as Square)
-                ? admitArrow({ from: a.from, to: a.to, role: 'play', vouchedBy: 'engine', source: 'teach.gemReveal' }, { fen: fenBefore, studentColor: playerColor })
-                : null;
-              if (shown) setArrows([shown]);
-            } catch { /* the arrow is a bonus */ }
+              const shown = admitArrows(lineClaims(fenBefore, res.line.plies, 'teach.gemReveal'), { fen: fenBefore, studentColor: playerColor }).arrows;
+              if (shown.length > 0) setArrows(shown);
+            } catch { /* the arrows are a bonus */ }
           }
           captureEvent('gem_resolved', { surface: 'coach-teach', found: res.found, plies: res.line.plies.length });
         }
@@ -8987,7 +8993,7 @@ export function CoachTeachPage(): JSX.Element {
                     if (cm.event) captureEvent(cm.event.name, cm.event.props);
                   }
                   // A KNOWN TRAP AHEAD (practical lore) — the same moment.
-                  const trap = trapAheadTeaching(probe.fen());
+                  const trap = trapAheadTeaching(probe.fen(), playerColor === 'white' ? 'w' : 'b');
                   if (trap) {
                     queueSpokenHint(probe.fen(), trap.text, trap.lane, trap.squares, trap.claims);
                     if (trap.event) captureEvent(trap.event.name, trap.event.props);
@@ -9394,9 +9400,7 @@ export function CoachTeachPage(): JSX.Element {
                       const cc: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
                       const tctxNow = buildTacticsLiveContext(probe.fen(), studentBest, cc, rating);
                       const tl = studentBest?.topLines ?? [];
-                      const gap = tl.length >= 2 && typeof tl[0].evaluation === 'number' && typeof tl[1].evaluation === 'number'
-                        ? Math.abs(tl[0].evaluation - tl[1].evaluation)
-                        : null;
+                      const gap = tl.length >= 2 ? sharpGap(tl[0].evaluation, tl[1].evaluation) : null;
                       const now = characterOf({
                         fen: probe.fen(),
                         studentColor: playerColor,

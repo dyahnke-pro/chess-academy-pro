@@ -79,7 +79,7 @@ describe('it names the better move AND what it was for', () => {
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', cpLoss: 150,
       side: 'student', moverColor: 'white',
     });
-    expect(call?.said).toMatch(/^a3 was a mistake — it gave away about 1\.5 points\.$/);
+    expect(call?.said).toMatch(/^a3 was a mistake — it gave away more than a pawn\.$/);
   });
 });
 
@@ -352,5 +352,16 @@ describe('still winning after the move is said first', () => {
   });
   it('unknown eval keeps the grade', () => {
     expect(callInaccuracy({ replyLineUci: [], replySan: null, ...base })?.said).toMatch(/was a (mistake|blunder)/);
+  });
+});
+
+describe('let them in — only an entry the move opened', () => {
+  it('Raf8 does not "let them in with Nxb6" when Nxb6 was already there (walk 2026-09-30)', () => {
+    const call = callInaccuracy({
+      fenBefore: 'r6k/ppp3pp/1bnp4/3Npr1n/2B5/3PBq1P/PPPQ1PRK/6R1 b - - 1 17', playedSan: 'Raf8', bestSan: 'Nd4',
+      cpLoss: 180, side: 'student', moverColor: 'black',
+      replyLineUci: ['d5b6', 'a7b6', 'c4e6', 'c6e7', 'd3d4', 'e5d4'], replySan: 'Nxb6',
+    });
+    expect(call?.said ?? '').not.toMatch(/let them in with Nxb6/);
   });
 });

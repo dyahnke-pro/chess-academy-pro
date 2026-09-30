@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7106 lines · 159 exports · 66 importers · 40 tests · 8 audits**
+**7127 lines · 159 exports · 67 importers · 41 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,7 +13,7 @@
 - **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:885) — names `groundedAnswer`
 - **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:3694) — names `describeThreatRecognition`
 - **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3785) — names `explainBestMoveGrounded`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5954) — names `describeThreatRecognition`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5982) — names `describeThreatRecognition`
 
 ## Who calls in
 
@@ -68,6 +68,7 @@
 - `src/services/guidedFindTheMove.ts`
 - `src/services/keySquares.test.ts`
 - `src/services/kidGameCoach.ts`
+- `src/services/kingSafetyAnswer.test.ts`
 - `src/services/learnMoveTeaching.ts`
 - `src/services/liveVoiceDefects.test.ts`
 - `src/services/mistakeNarration.ts`
@@ -139,8 +140,9 @@
 ### `assembleThreatAnswer` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `assembleKingSafetyAnswer` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `assembleKingSafetyAnswer` (function) — 2 call sites
+- `src/services/kingSafetyAnswer.test.ts:6`
+- `src/services/kingSafetyAnswer.test.ts:11`
 
 ### `assembleMovePurposeAnswer` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -1108,7 +1110,7 @@
 - `src/services/coachApi.ts:5839`
 
 ### `seatPieceReferences` (re-export) — 26 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7848`
+- `src/components/Coach/CoachTeachPage.tsx:7851`
 - `src/services/coachFeatureService.ts:4837`
 - `src/services/liveTacticsContext.ts:453`
 - `src/services/lookaheadPlan.ts:116`
@@ -1168,6 +1170,7 @@
 - `src/services/groundedAnswer.test.ts`
 - `src/services/groundedAnswer.trade.test.ts`
 - `src/services/keySquares.test.ts`
+- `src/services/kingSafetyAnswer.test.ts`
 - `src/services/liveVoiceDefects.test.ts`
 - `src/services/pieceActivity.test.ts`
 - `src/services/piecePurpose.test.ts`

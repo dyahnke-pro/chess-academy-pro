@@ -35,6 +35,18 @@ export const DECISIVE_MATERIAL = 3;
 /** A best-move gap this wide means there is one right move to find. */
 export const SHARP_GAP_CP = 150;
 
+/** Evaluation, in centipawns, past which a game is decided either way. */
+export const DECIDED_CP = 300;
+
+/** The best-move gap that makes a position SHARP — none when the second-best
+ *  move still wins (or still loses) as clearly as the best. +9 against +6.5 is
+ *  a wide gap and no question at all (walk 2026-09-30, game 2 ply 57). */
+export function sharpGap(bestCp: number | null | undefined, secondCp: number | null | undefined): number | null {
+  if (typeof bestCp !== 'number' || typeof secondCp !== 'number') return null;
+  const sameSideDecided = (bestCp >= DECIDED_CP && secondCp >= DECIDED_CP) || (bestCp <= -DECIDED_CP && secondCp <= -DECIDED_CP);
+  return sameSideDecided ? 0 : Math.abs(bestCp - secondCp);
+}
+
 /** A tactic counts as LIVE only when a verifier PROVED it wins something.
  *  The detector reports a pin's geometry with no verdict, and a standing pin
  *  (…Bg4 on Nf3/d1) is not the position turning sharp — hand walk 2026-09-30

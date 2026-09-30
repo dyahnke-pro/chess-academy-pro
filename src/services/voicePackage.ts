@@ -257,6 +257,9 @@ export interface VoicePackage {
  *  package passed all 61 of them through to be spoken. That is precisely the
  *  failure `voiceFacts` documents from a prod run: the coach reading its own
  *  directive out loud. A law with no check is a comment. */
+/** Sentences that explain the one before them and cannot open an utterance. */
+const DEPENDENT = /^(?:Remember —|Here's how:|The habit that fixes it:|Next time:)/;
+
 const NOT_SPEAKABLE: Array<{ re: RegExp; why: string }> = [
   { re: /\n/, why: 'multi-line block, not an utterance' },
   { re: /\[(?:BOARD|VOICE|EVAL|FACT)S?\b/i, why: 'control tag' },
@@ -455,8 +458,15 @@ export function buildVoicePackage(
     // seeded above rather than starting empty.
     const fresh: string[] = [];
     const why = new Set<string>();
+    // A sentence that EXPLAINS the one before it ("Remember — a pin freezes…",
+    // "Here's how: …") never stands alone: when its fact sentence was dropped
+    // as a repeat, it goes too (walk 2026-09-30, game 2: the pin definition
+    // spoken a move after the pin, on its own).
+    let prevKept = false;
     for (const s of sentencesOf(result.text)) {
       const k = sayKey(s);
+      if (DEPENDENT.test(s) && !prevKept) { why.add('duplicate'); continue; }
+      prevKept = false;
       if (seen.has(k)) { why.add(saidEarlier.has(k) ? 'already said this turn' : 'duplicate'); continue; }
       const near = [...seen].find((prior) => {
         const n = sharedPrefix(prior, k);
@@ -468,6 +478,7 @@ export function buildVoicePackage(
       }
       seen.add(k);
       fresh.push(s);
+      prevKept = true;
     }
     if (fresh.length === 0) {
       // Whole-fact refusals report the STRONGEST cause, so a fact that lost one

@@ -279,6 +279,19 @@ export function moveIntent(
   // "d4 prepares Bd2."). A prepared pawn move is a break or a plan ("c3
   // prepares d4") and stands on its own; a quiet piece move needs its point.
   if (prepares && !/^[a-h]/.test(prepares.san) && !prepares.san.startsWith('O-O') && !whatItDoes(fenAfter, prepares.uci, mover)) prepares = null;
+  // A MOVE THAT HITS SOMETHING IS ABOUT THE HIT (walk 2026-09-30: "…g4 first,
+  // so that …h5 comes next" — …g4 attacked the bishop on f3, and after e5 the
+  // recapture was forced). When the moved piece now wins material by force if
+  // left alone, "prepares" is not its point; the threat lanes own it.
+  if (prepares) {
+    const again = nullMoveFen(fenAfter);
+    try {
+      const to = playedUci.slice(2, 4);
+      const hits = again ? new Chess(again).moves({ verbose: true })
+        .some((m) => m.from === to && m.captured && legalSeeGainOn(new Chess(again), m.to) >= 1) : false;
+      if (hits) prepares = null;
+    } catch { /* keep */ }
+  }
   if (!prevents && !prepares) return null;
   const squares = [...new Set([
     playedUci.slice(2, 4),

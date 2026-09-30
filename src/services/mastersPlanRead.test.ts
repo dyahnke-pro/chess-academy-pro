@@ -25,6 +25,17 @@ describe('mastersPlanRead — the break master games go for', () => {
     expect(mastersPlanLine(r, 'w')?.text).toBe('The plan in this structure: their break is …c5 (90%).');
   });
 
+  it('taking the pawn that just arrived answers their break — it is not a break (walk 2026-09-30)', () => {
+    const at = tree({
+      'e4 e5 Nf3 Nc6 Nc3 Nf6': [['d3', 1000]],
+      'e4 e5 Nf3 Nc6 Nc3 Nf6 d3': [['d5', 1000]],
+      'e4 e5 Nf3 Nc6 Nc3 Nf6 d3 d5': [['exd5', 1000]],
+    });
+    const r = mastersPlanRead(fenOf('e4 e5 Nf3 Nc6 Nc3 Nf6'), at);
+    expect(r?.black?.san).toBe('d5');
+    expect(r?.white ?? null).toBeNull();
+  });
+
   it('a recapture is not a break, and a capture in hand is not a plan', () => {
     const at = tree({
       'd4 d5 c4 e6': [['Nc3', 1000]],

@@ -48,3 +48,10 @@ describe('kingAttack — bringing pieces to the king', () => {
     expect(kingAttack('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'e4')).toBeNull();
   });
 });
+
+describe('removes-defender — only a piece standing by the king', () => {
+  it('taking back a rook three squares from the king is a recapture, not an attack (walk 2026-09-30)', () => {
+    const out = kingAttack('4r3/p1p2pk1/2pq3p/2b5/4R3/6B1/PPP2P1P/R4K2 b - - 0 21', 'Rxe4');
+    expect(out?.kind).not.toBe('removes-defender');
+  });
+});

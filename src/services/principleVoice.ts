@@ -104,8 +104,10 @@ const FUNDAMENTAL_HOW: Record<FundamentalId, string> = {
   // ── trades ──
   'traded-active-for-passive':
     'Before a trade, compare the two pieces honestly: which one is doing more work right now? Trade your worst piece for their best, never the other way round.',
+  // Fits BOTH directions of this fundamental (walk 2026-09-30, game 1: "Rxe1+
+  // was the trade to make" followed by a how-to about bad trades).
   'wrong-trade-for-material':
-    'Material is not the only ledger. Ask what the position looks like after the trade — a piece count that improves while your structure or king safety gets worse is a bad deal.',
+    'Count the material before every exchange. Ahead, look for the move that takes pieces off; behind, the move that keeps them on.',
   // ── endgame ──
   'passive-king-endgame':
     'When the queens come off, the king becomes a fighting piece — march it toward the centre. In endgames the side whose king arrives first usually wins.',

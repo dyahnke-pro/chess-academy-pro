@@ -20,8 +20,8 @@
 - **🔒🔒 A NOTE IS SELECTED BY POSITION, NEVER BY NAME — and every number below was re-measured 2026-08-04 (David, emphatic: *"All narrations need to be deterministically found and handed to llm in the package. There is no room for false narrations on this app! Ever!!"* and *"The problem is NOT the gate… Gates are back ups that should never fire. Fix the package or how the position is chosen."*).** (CLAUDE.md:4154) — names `openingGenerator`
 - **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4274) — names `openingGenerator`
 - **🔒 WHICH NOTES THE KEPT SURFACES MAY SPEAK — split by anchoring (David 2026-08-26).** (CLAUDE.md:4357) — names `noteArrowSourceAt`, `openingGenerator`
-- **🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!").** (CLAUDE.md:5677) — names `generateOpening`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5966) — names `openingGenerator`
+- **🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!").** (CLAUDE.md:5705) — names `generateOpening`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5994) — names `openingGenerator`
 
 ## Who calls in
 
@@ -71,8 +71,8 @@
 - `src/services/sharedOpeningCache.ts:175`
 
 ### `getCachedOpening` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:5599`
-- `src/components/Coach/CoachTeachPage.tsx:6515`
+- `src/components/Coach/CoachTeachPage.tsx:5602`
+- `src/components/Coach/CoachTeachPage.tsx:6518`
 - `src/hooks/useTeachWalkthrough.ts:2252`
 - `src/services/lessonCacheKey.test.ts:59`
 - `src/services/lessonCacheKey.test.ts:66`
@@ -81,13 +81,13 @@
 - `src/services/openingGenerator.test.ts:980`
 
 ### `cacheOpening` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:4969`
-- `src/components/Coach/CoachTeachPage.tsx:5488`
-- `src/components/Coach/CoachTeachPage.tsx:5714`
-- `src/components/Coach/CoachTeachPage.tsx:5753`
-- `src/components/Coach/CoachTeachPage.tsx:5827`
-- `src/components/Coach/CoachTeachPage.tsx:6584`
-- `src/components/Coach/CoachTeachPage.tsx:10825`
+- `src/components/Coach/CoachTeachPage.tsx:4972`
+- `src/components/Coach/CoachTeachPage.tsx:5491`
+- `src/components/Coach/CoachTeachPage.tsx:5717`
+- `src/components/Coach/CoachTeachPage.tsx:5756`
+- `src/components/Coach/CoachTeachPage.tsx:5830`
+- `src/components/Coach/CoachTeachPage.tsx:6587`
+- `src/components/Coach/CoachTeachPage.tsx:10829`
 - `src/services/lessonCacheKey.test.ts:58`
 - `src/services/lessonCacheKey.test.ts:63`
 - `src/services/lessonCacheKey.test.ts:72`
@@ -238,11 +238,11 @@
 ### `generateOpening` (function) — 10 call sites
 - `scripts/audit-coach-teach-gaps.mjs:384`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:57`
-- `src/components/Coach/CoachTeachPage.tsx:4963`
-- `src/components/Coach/CoachTeachPage.tsx:5708`
-- `src/components/Coach/CoachTeachPage.tsx:5821`
-- `src/components/Coach/CoachTeachPage.tsx:6579`
-- `src/components/Coach/CoachTeachPage.tsx:10819`
+- `src/components/Coach/CoachTeachPage.tsx:4966`
+- `src/components/Coach/CoachTeachPage.tsx:5711`
+- `src/components/Coach/CoachTeachPage.tsx:5824`
+- `src/components/Coach/CoachTeachPage.tsx:6582`
+- `src/components/Coach/CoachTeachPage.tsx:10823`
 - `src/services/openingGenerator.computedBeats.test.ts:59`
 - `src/services/openingGenerator.test.ts:933`
 - `src/services/openingGenerator.test.ts:936`
@@ -275,11 +275,11 @@
 - `src/services/stageEntryValidity.test.ts:87`
 
 ### `generateMissingStagesInBackground` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:5507`
-- `src/components/Coach/CoachTeachPage.tsx:5653`
-- `src/components/Coach/CoachTeachPage.tsx:5780`
-- `src/components/Coach/CoachTeachPage.tsx:5863`
-- `src/components/Coach/CoachTeachPage.tsx:6602`
+- `src/components/Coach/CoachTeachPage.tsx:5510`
+- `src/components/Coach/CoachTeachPage.tsx:5656`
+- `src/components/Coach/CoachTeachPage.tsx:5783`
+- `src/components/Coach/CoachTeachPage.tsx:5866`
+- `src/components/Coach/CoachTeachPage.tsx:6605`
 
 ## Tests
 

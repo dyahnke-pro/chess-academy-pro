@@ -44,6 +44,7 @@ import { splitPosition } from './splitPosition';
 import { planChoice, type PlanChoiceLine } from './planChooser';
 import { openingIdentityLine, warmOpeningIdentity } from './openingIdentity';
 import { trapAheadAt } from './gemCrushLines';
+import { extractMentionedSans } from './arrowEngine';
 
 export interface TeachingHint {
   lane: LearnLane;
@@ -344,20 +345,84 @@ export function countMethodTeaching(fen: string, student: 'w' | 'b'): TeachingHi
   };
 }
 
+/** EVERY MOVE A LINE NAMES GETS ITS ARROW (G6; the walk 2026-09-30 drew
+ *  arrows on 7 of 64 plies — "Their Bg3 prepares h4", "Rxe1+ was the trade"
+ *  and "Kd8 refutes it" all spoke with none). The fallback for a line that
+ *  carries no arrows of its own: each SAN it names, resolved on its board
+ *  (or the other side to move), the student's in `play`, theirs in `theirs`. */
+export function namedMoveArrows(text: string, fen: string, student: 'w' | 'b'): ArrowClaim[] {
+  const out: ArrowClaim[] = [];
+  const seen = new Set<string>();
+  for (const san of extractMentionedSans(text)) {
+    for (const f of [fen, flipTurn(fen)]) {
+      try {
+        const c = new Chess(f);
+        const mv = c.move(san);
+        if (!mv) continue;
+        const k = `${mv.from}${mv.to}`;
+        if (!seen.has(k)) {
+          seen.add(k);
+          out.push({ from: mv.from, to: mv.to, role: mv.color === student ? 'play' : 'theirs', fen: f, source: 'learn.namedMove' });
+        }
+        break;
+      } catch { /* not legal on this side — try the other */ }
+    }
+  }
+  return out;
+}
+function flipTurn(fen: string): string {
+  const p = fen.split(' ');
+  if (p.length < 2) return fen;
+  p[1] = p[1] === 'w' ? 'b' : 'w';
+  p[3] = '-';
+  return p.join(' ');
+}
+
 /** A KNOWN TRAP AHEAD (practical lore): the student's natural-looking move
  *  here is a curated, engine-verified trap that club players fall into. Names
  *  the move to be careful with and the share that plays it; never the
  *  refutation, and never the student's best move. */
-export function trapAheadTeaching(fen: string): TeachingHint | null {
+export function trapAheadTeaching(fen: string, student: 'w' | 'b'): TeachingHint | null {
+  // THE STUDENT'S move only (walk 2026-09-30, game 1: it warned about White's
+  // Nxd4 to a Black student, on the coach's own think board).
+  if (fen.split(' ')[1] !== student) return null;
   const t = trapAheadAt(fen);
   if (!t) return null;
   const to = t.san.replace(/[+#]/g, '').slice(-2);
+  // THE ARROWS SHOW THE TRAP (David 2026-09-30: "arrows showing the move and
+  // the punishment lines"): the natural move in red, then their punishing
+  // reply — the reason it is a trap, on the board.
+  const arrows: ArrowClaim[] = [];
+  // NAME THE CAPTURE BY BOTH PIECES (walk 2026-09-30: "the knight taking on d4"
+  // right after THEIR knight took on d4 read as their move). A trade says so.
+  let moveNoun = sayMoveNoun(t.san);
+  try {
+    const c = new Chess(fen);
+    const slip = c.move(t.san);
+    if (slip?.captured) {
+      const P: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+      moveNoun = slip.captured === slip.piece
+        ? `trading ${P[slip.piece]}s on ${slip.to}`
+        : `your ${P[slip.piece]} taking their ${P[slip.captured]} on ${slip.to}`;
+    }
+    if (slip) {
+      arrows.push({ from: slip.from, to: slip.to, role: 'missed', fen, source: 'learn.trapAhead' });
+      // …then the WHOLE punishing line, every ply on the board it is played
+      // from — never just its first move.
+      for (const san of t.punish) {
+        const before = c.fen();
+        const pu = c.move(san);
+        if (!pu) break;
+        arrows.push({ from: pu.from, to: pu.to, role: 'line', fen: before, source: 'learn.trapAhead' });
+      }
+    }
+  } catch { /* no arrows — the line still speaks */ }
   return {
     lane: 'trapAhead',
-    text: `Careful here: ${sayMoveNoun(t.san)} looks natural, and ${t.freqPct}% of club players play it — but it walks into a known trap.`,
+    text: `Careful here: ${moveNoun} looks natural, and ${t.freqPct}% of club players play it — but it walks into a known trap.`,
     squares: /^[a-h][1-8]$/.test(to) ? [to] : [], claims: [t.key],
     event: { name: 'coach_trap_ahead', props: { surface: 'coach-teach', freq: t.freqPct } },
-    arrows: [],
+    arrows,
   };
 }
 

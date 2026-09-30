@@ -560,7 +560,28 @@ export function assembleKingSafetyAnswer(fen: string, studentColor: 'white' | 'b
   const whose = side === 'opponent' ? 'their' : 'your';
   const exposure = detectKingExposure(fen, target);
   if (!exposure) {
-    return { facts: `${whose === 'your' ? 'Your' : 'Their'} king looks safe — no open lines or attackers on it right now.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+    // Say only what was checked (walk 2026-09-30, game 1: "no open lines" with
+    // the g-file in front of the king wide open). Name any file beside the king
+    // with none of its own pawns on it.
+    let openFiles: string[] = [];
+    try {
+      const c = new Chess(fen);
+      const k = c.board().flat().find((x) => x && x.type === 'k' && x.color === target);
+      if (k) {
+        const f = k.square.charCodeAt(0);
+        for (const df of [-1, 0, 1]) {
+          const file = String.fromCharCode(f + df);
+          if (file < 'a' || file > 'h') continue;
+          const hasPawn = c.board().flat().some((x) => x && x.type === 'p' && x.color === target && x.square[0] === file);
+          if (!hasPawn) openFiles.push(`${file}-file`);
+        }
+      }
+    } catch { openFiles = []; }
+    const Whose = whose === 'your' ? 'Your' : 'Their';
+    const facts = openFiles.length
+      ? `${Whose} king is not under attack right now, and most of its cover is in place — but the ${andList(openFiles)} beside it ${openFiles.length === 1 ? 'is' : 'are'} open, so watch for a rook or queen landing there.`
+      : `${Whose} king looks safe — its pawn cover is in place and nothing is attacking it right now.`;
+    return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
   }
   const clause = kingExposureClause(exposure);
   const lead = whose === 'your' ? 'Your king' : 'Their king';

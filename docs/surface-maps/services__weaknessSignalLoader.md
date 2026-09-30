@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6094) — names `weaknessSignalLoader`
+- **The standard post-deploy ritual** (CLAUDE.md:6122) — names `weaknessSignalLoader`
 
 ## Who calls in
 

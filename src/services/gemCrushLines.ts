@@ -27,6 +27,7 @@
  */
 import type { WalkableLine, WalkPly } from '../types';
 import { computeExchangeLedger } from './exchangeLedger';
+import { sayMoveNoun } from './spokenMove';
 import { Chess } from 'chess.js';
 import {
   getPunishGemsForOpening,
@@ -570,7 +571,7 @@ export type GemMoveSignal = 'walked-into' | 'punished' | 'missed-punish';
  *  verified (weapon tiers only), with the club share that plays it. The punish
  *  is withheld — the lesson is "this natural move is a known trap", not the
  *  refutation. Null until the chunked index has warmed, or when no gem is here. */
-export function trapAheadAt(fen: string): { san: string; freqPct: number; key: string } | null {
+export function trapAheadAt(fen: string): { san: string; freqPct: number; key: string; punish: string[] } | null {
   if (!gemsByPosition || !gemsAfterSlip) { warmGemIndexes(); return null; }
   let board: Chess;
   try { board = new Chess(fen); } catch { return null; }
@@ -578,7 +579,7 @@ export function trapAheadAt(fen: string): { san: string; freqPct: number; key: s
   const best = (gemsByPosition.get(positionKey(fen)) ?? [])
     .filter((g) => (g.tier === 'confirmed' || g.tier === 'positional') && legal.has(g.inaccuracy))
     .sort((a, b) => b.freqPct - a.freqPct)[0];
-  return best ? { san: best.inaccuracy, freqPct: Math.round(best.freqPct), key: `trap-ahead:${best.openingId}:${best.inaccuracy}` } : null;
+  return best ? { san: best.inaccuracy, freqPct: Math.round(best.freqPct), key: `trap-ahead:${best.openingId}:${best.inaccuracy}`, punish: best.punishSeq?.length ? best.punishSeq : [best.punish] } : null;
 }
 
 /** WHAT A MOVE SAID ABOUT THE PLAYER, IN GEM TERMS — the strongest early
@@ -794,7 +795,14 @@ export function findLivePunishment(
   const { payoff } = computePayoff(curFen, gem.punish, continuation, punisher, gem.tier);
   const us = cap(sideWord(punisher));
   // Rotate the callout deterministically by gem so it varies without randomness.
-  const callout = CALLOUTS[gem.inaccuracy.length % CALLOUTS.length];
+  // THE TWO SIDES OF ONE TRAP (David 2026-09-30: "One teaches how to take
+  // advantage of a mistake, the other prevents a mistake from happening").
+  // Their side names the trap and its club share, then asks for the punish
+  // (withheld); the student's side is `trapAheadAt` — the warning before the
+  // same kind of slip.
+  const share = Math.round(gem.freqPct);
+  const lore = share >= 1 ? `That's a known trap — ${share}% of club players play ${sayMoveNoun(gem.inaccuracy)} here. ` : '';
+  const callout = `${lore}${CALLOUTS[gem.inaccuracy.length % CALLOUTS.length]}`;
 
   // SHOW THE LINE LANDING, not just its first move (David 2026-08-01: "make
   // sure the gem lines are not sparse and play out fully"). The gem carries a

@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6092) — names `coachSessionRouter`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6106) — names `coachSessionRouter`
+- **The standard post-deploy ritual** (CLAUDE.md:6120) — names `coachSessionRouter`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6134) — names `coachSessionRouter`
 
 ## Who calls in
 
@@ -115,7 +115,7 @@
 ### `tryRouteIntent` (function) — 44 call sites
 - `src/components/Board/VoiceChatMic.tsx:237`
 - `src/components/Coach/CoachGameReview.tsx:3140`
-- `src/components/Coach/CoachTeachPage.tsx:3078`
+- `src/components/Coach/CoachTeachPage.tsx:3081`
 - `src/components/Coach/GameChatPanel.tsx:516`
 - `src/services/coachHands.test.ts:35`
 - `src/services/coachHands.test.ts:141`
