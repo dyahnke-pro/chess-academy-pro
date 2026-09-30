@@ -10424,20 +10424,33 @@ export function CoachTeachPage(): JSX.Element {
                     // then the game comes back — the same static line-walk
                     // board a chat answer uses, never played into the game.
                     const drawnLines = keptLines(hintPkg, playerColor === 'white' ? 'w' : 'b');
-                    const toBoard = (a: { from: string; to: string; side: 'student' | 'opponent' }): BoardArrow =>
-                      ({ startSquare: a.from, endSquare: a.to, color: a.side === 'student' ? 'green' : 'red' });
+                    // THROUGH THE ARROW DOOR, like every coach arrow: a line's ply is
+                    // a `line` claim on the board before it, coloured by whose piece
+                    // moves (yours green, theirs red).
+                    const throughDoor = (l: { fen: string; arrows: readonly { from: string; to: string }[] }): BoardArrow[] => {
+                      const claims: ArrowClaim[] = [];
+                      try {
+                        const c = new Chess(l.fen);
+                        for (const a of l.arrows) {
+                          const before = c.fen();
+                          claims.push({ from: a.from, to: a.to, role: 'line', fen: before, source: 'teach.keptLines' });
+                          c.move({ from: a.from, to: a.to, promotion: 'q' });
+                        }
+                      } catch { /* the plies replayed so far still draw */ }
+                      return admitArrows(claims, { fen: l.fen, studentColor: playerColor }).arrows;
+                    };
                     // By PLACEMENT: a threat is drawn on its board with the
                     // other side to move, and it is still the same picture.
                     const samePlacement = (x: string, y: string): boolean => x.split(' ')[0] === y.split(' ')[0];
                     const onScreen = drawnLines.filter((l) => samePlacement(l.fen, fenAfterReply));
                     const earlier = drawnLines.filter((l) => !samePlacement(l.fen, fenAfterReply));
                     if (onScreen.length > 0 && liveFenRef.current === fenAfterReply) {
-                      const drawn = onScreen.flatMap((l) => l.arrows.map(toBoard));
+                      const drawn = onScreen.flatMap(throughDoor);
                       setArrows((prev) => uniqueArrows([...prev, ...drawn]));
                     }
                     if (earlier.length > 0 && liveFenRef.current === fenAfterReply) {
                       const showFen = earlier[0].fen;
-                      const drawn = uniqueArrows(earlier.filter((l) => samePlacement(l.fen, showFen)).flatMap((l) => l.arrows.map(toBoard)));
+                      const drawn = uniqueArrows(earlier.filter((l) => samePlacement(l.fen, showFen)).flatMap(throughDoor));
                       const token = ++lineWalkTokenRef.current;
                       setLineWalkFen(showFen);
                       setLineWalkArrows(drawn);

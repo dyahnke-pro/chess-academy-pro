@@ -123,7 +123,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `describeVoicePackage` (function) — 3 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9685`
-- `src/components/Coach/CoachTeachPage.tsx:10453`
+- `src/components/Coach/CoachTeachPage.tsx:10466`
 - `src/services/voicePackage.test.ts:38`
 
 ### `joinSpoken` (function) — 1 call site
