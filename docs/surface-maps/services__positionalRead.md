@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**673 lines · 10 exports · 16 importers · 12 tests · 1 audits**
+**679 lines · 10 exports · 17 importers · 13 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,6 +22,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadComposer.ts`
 - `src/services/positionalRead.fileStep.test.ts`
 - `src/services/positionalRead.ideaKey.test.ts`
+- `src/services/positionalRead.justMoved.test.ts`
 - `src/services/positionalRead.race.test.ts`
 - `src/services/positionalRead.test.ts`
 - `src/services/recaptureChoice.ts`
@@ -38,7 +39,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `rookReachesFile` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10001`
+- `src/components/Coach/CoachTeachPage.tsx:10005`
 - `src/services/danyaBehaviors.ts:695`
 - `src/services/recaptureChoice.ts:62`
 
@@ -96,8 +97,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.najdorf1500.test.ts:36`
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
-### `buildPositionalRead` (function) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8386`
+### `buildPositionalRead` (function) — 17 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8389`
 - `src/services/claimChecker.measure.test.ts:132`
 - `src/services/learnWalkBlumenfeld.test.ts:118`
 - `src/services/learnWalkNimzo.test.ts:35`
@@ -105,6 +106,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/narrationAdversarial.test.ts:177`
 - `src/services/positionalRead.ideaKey.test.ts:18`
 - `src/services/positionalRead.ideaKey.test.ts:30`
+- `src/services/positionalRead.justMoved.test.ts:10`
 - `src/services/positionalRead.test.ts:164`
 - `src/services/positionalRead.test.ts:167`
 - `src/services/positionalRead.test.ts:176`
@@ -140,6 +142,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/narrationAdversarial.test.ts`
 - `src/services/positionalRead.fileStep.test.ts`
 - `src/services/positionalRead.ideaKey.test.ts`
+- `src/services/positionalRead.justMoved.test.ts`
 - `src/services/positionalRead.race.test.ts`
 - `src/services/positionalRead.test.ts`
 - `src/services/replayFence.modern1690.test.ts`

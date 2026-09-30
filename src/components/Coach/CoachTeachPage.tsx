@@ -7835,7 +7835,10 @@ export function CoachTeachPage(): JSX.Element {
         if (myTacticType && myTacticType === t.type) {
           // The concept has just been taught on the threat line above, so this
           // one refers back to it rather than repeating the lesson.
-          tacticLine = `You've got a ${tacticWord(myTacticType) ?? 'chance'} of your own here — a different one. See it?`;
+          // NAMED, not withheld (run E walk 2026-09-30: "…a different one. See
+          // it?" and nothing after). Learn names the move; the seated line
+          // already says which, and "different" keeps it apart from theirs.
+          tacticLine = tacticLine ? tacticLine.replace(/^You have a /, 'You have a different ') : null;
           tacticTailType = myTacticType;
         }
       } else if (tctx.threats.some((t) => t.spoken && !(t.type === 'pin' && / pins pawn /i.test(t.description)))) {
@@ -8383,7 +8386,8 @@ export function CoachTeachPage(): JSX.Element {
       // has already offered, so a fresh, different observation — drawn from the
       // full board-awareness pool — surfaces each turn instead of repeating.
       try {
-        const pr = buildPositionalRead(args.fenAfterReply, args.studentColor, positionalSaidRef.current, standingRef.current.said);
+        const pr = buildPositionalRead(args.fenAfterReply, args.studentColor, positionalSaidRef.current, standingRef.current.said,
+          (args.historyAfterReply.length >= 2 ? args.historyAfterReply[args.historyAfterReply.length - 2] : null)?.match(/([a-h][1-8])(?:=[NBRQ])?[+#]?$/)?.[1] ?? null);
         // ONE LEDGER FOR THE PHASE TURN TOO (1200 walk 2026-09-27: "your king
         // is still in the centre and castling is ready" at moves 6 and 8 — the
         // phase narration reads the standing memory, not this set).
@@ -10274,6 +10278,11 @@ export function CoachTeachPage(): JSX.Element {
                       // the same fact, and it landed between the question and
                       // its answer (run D walk 2026-09-30).
                       .filter((l) => !(l.lane === 'character' && /tactic/.test(l.text) && /(?:^|\. )(?:Watch out|Careful) —/.test(instantSpokenText)))
+                      // "What is their bishop on c3 doing? It's another step toward
+                      // the c-file" — right after "your rook on a1 is attacked",
+                      // when what it is doing is attacking the rook (run E walk).
+                      // A live threat is the answer; the slow plan waits.
+                      .filter((l) => !(l.lane === 'planArc' && /^What is their /.test(l.text) && /(?:^|\. )(?:Watch out|Careful) —/.test(instantSpokenText)))
                       .map(({ lane, kind, text, squares, claims, gradeFen }) => ({ lane, kind, text, squares, claims, fen: gradeFen ?? pending.fen })),
                     instantSpokenText,
                     learnMemRef.current.spokenKeys,

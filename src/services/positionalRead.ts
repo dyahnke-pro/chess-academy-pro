@@ -579,6 +579,11 @@ export function buildPositionalRead(
   /** Keys another lane already spoke this game (the phase turn's balance
    *  sheet names the same facts under the same keys). Read, never written. */
   heard?: ReadonlySet<string>,
+  /** The square the student's piece JUST landed on. That move's own purpose is
+   *  what speaks this turn; calling the same piece "your problem piece" beside
+   *  it is two coaches (run E walk 2026-09-30: "Nxh3, not gxh3 …" then "Your
+   *  knight on h3 is your problem piece"). Skipped, not said — it can come back. */
+  justMoved?: string | null,
 ): PositionalObservation | null {
   // Returns the whole observation (not just its text) so the caller can mark the
   // squares it named (David 2026-09-13: "add highlights to all spoken key
@@ -591,6 +596,7 @@ export function buildPositionalRead(
   for (const o of readPosition(fen, studentColor)) {
     const keys = [o.key, ...(o.aliases ?? [])];
     if (keys.some((k) => said?.has(k) || heard?.has(k))) continue;
+    if (justMoved && o.kind === 'piece' && o.side === 'student' && (o.squares ?? []).includes(justMoved)) continue;
     const stem = o.kind === 'lever' && leverTaught(o.side) ? leverStem(o) : null;
     for (const k of keys) said?.add(k);
     return stem ? { ...o, text: stem } : o;
