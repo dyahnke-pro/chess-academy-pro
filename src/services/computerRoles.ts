@@ -83,6 +83,8 @@ export const COMPUTER_ROLES: Record<LearnLane, ComputerRole> = {
   causalChain: { computer: 'causalChain', tag: 'hung-material', held: { state: 'na', why: 'explains a slip across moves' }, broken: SLIP, askable: { state: 'wired', via: 'isMoveRatingQuestion' } },
   openingIdea: { computer: 'mastersPlanRead', tag: null, held: DESC('the masters plan'), broken: DESC('the masters plan'), askable: { state: 'wired', via: 'isPlanQuestion' } },
   planArc: { computer: 'planArc', tag: 'no-plan', held: { state: 'na', why: 'a plan only arrives after the coach announced it — always prompted' }, broken: { state: 'na', why: 'a dropped plan the student was never told is not a miss' }, askable: { state: 'wired', via: 'isPlanQuestion' } },
+  trapAhead: { computer: 'gemCrushLines.trapAheadAt', tag: null, held: PRE, broken: PRE, askable: { state: 'wired', via: 'isOpeningTrapsQuestion' } },
+  openingIdentity: { computer: 'openingIdentity', tag: null, held: DESC('what the opening is'), broken: DESC('what the opening is'), askable: { state: 'wired', via: 'openingIdentityQuery' } },
   opening: { computer: 'openingDetectionService', tag: null, held: DESC('the opening name'), broken: DESC('the opening name'), askable: { state: 'wired', via: 'isNameOpeningQuestion' } },
   structure: { computer: 'namedPawnStructure', tag: null, held: DESC('the pawn structure'), broken: DESC('the pawn structure'), askable: { state: 'wired', via: 'isPlanQuestion' } },
   pieceQuality: { computer: 'pieceValueRead', tag: 'misplaced-piece', held: DESC('best/worst piece'), broken: DESC('best/worst piece'), askable: { state: 'wired', via: 'isPositionAssessmentQuestion' } },

@@ -109,6 +109,9 @@ export interface LearnMemory {
    *  spoke "This game is now the Caro-Kann Defense." on two consecutive plies
    *  (Learn walk 2026-09-23). One queue per name per game. */
   queuedOpeningName: string | null;
+  /** The opening-identity paragraph queued this game (its claim key) — what
+   *  the opening provokes/aims for is said ONCE per game, after the name. */
+  identityQueued: string | null;
   /**
    * The opening name the student has actually HEARD. Per game: a second game of
    * the same line must be named again, because the student is being told what
@@ -230,6 +233,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
     spokenOpeningName: null,
     detectedOpeningName: null,
     queuedOpeningName: null,
+    identityQueued: null,
     observe(plies: number): boolean {
       const forgot = plies < lastPlies;
       if (forgot) mem.newGame();
@@ -257,6 +261,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
       mem.spokenOpeningName = null;
       mem.detectedOpeningName = null;
       mem.queuedOpeningName = null;
+      mem.identityQueued = null;
       lastPlies = 0;
       // A NEW GAME IS A NEW ID. Re-minting here (rather than at a call site)
       // is what makes it impossible to record game 2's slips against game 1.

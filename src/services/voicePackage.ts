@@ -268,11 +268,28 @@ const NOT_SPEAKABLE: Array<{ re: RegExp; why: string }> = [
   { re: /\bNEVER (?:say|invent|repeat)\b/i, why: 'instruction to a model' },
 ];
 
+/** THE DNA VOICE RULES (docs/DNA-outline.md), held at the one door every
+ *  spoken fact passes (Learn and Review). The computers are written to them;
+ *  this is the backstop, and a fact it refuses is a template to fix.
+ *  • no praise or acknowledgement — the position is the acknowledgement;
+ *  • no interface talk — the voice knows the position, not the buttons. */
+const DNA_REFUSE: Array<{ re: RegExp; why: string }> = [
+  // Sentence-OPENING praise only: "the only good move here" is teaching.
+  { re: /(?:^|[.!?]\s+)(?:great|nice|good|excellent|brilliant|well)\s+(?:move|job|find|done|play|shot)\b|\bwell done\b|\bgood job\b|(?:^|[.!?]\s+)(?:excellent|correct|great|nice|perfect)[!.]/i, why: 'dna: praise' },
+  { re: /\b(?:tap|click|press)\s+(?:the|a|on)\b|\b(?:button|menu)\b/i, why: 'dna: interface talk' },
+];
+/** DNA rule 7 — no move-number prefixes ("12.Nf3" is read "twelve"). A
+ *  rephrase, never a drop: the move stays, the number goes. */
+export function stripMoveNumbers(text: string): string {
+  return text.replace(/(?<![\w.])\d{1,3}\s?(?:\.\.\.|…|\.)\s?(?=(?:[NBRQK][a-h1-8x]|O-O|[a-h][1-8x]))/g, (m) => (/(?:\.\.\.|…)/.test(m) ? '…' : ''));
+}
+
 function verify(fact: VoiceFact): { text: string } | { reason: string } {
-  const raw = fact.text.trim();
+  const raw = stripMoveNumbers(fact.text.trim());
   if (!raw) return { reason: 'empty' };
 
   for (const s of NOT_SPEAKABLE) if (s.re.test(raw)) return { reason: s.why };
+  for (const s of DNA_REFUSE) if (s.re.test(raw)) return { reason: s.why };
 
   // Square-anchored claims: "the knight on f6" when f6 is empty.
   let graded = gradeNarrationText(raw, fact.fen, `voicePackage.${fact.kind}`)?.trim();

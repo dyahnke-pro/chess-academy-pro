@@ -42,6 +42,8 @@ import type { TacticType } from '../types';
 import { countMethod } from './countMethod';
 import { splitPosition } from './splitPosition';
 import { planChoice, type PlanChoiceLine } from './planChooser';
+import { openingIdentityLine, warmOpeningIdentity } from './openingIdentity';
+import { trapAheadAt } from './gemCrushLines';
 
 export interface TeachingHint {
   lane: LearnLane;
@@ -342,6 +344,23 @@ export function countMethodTeaching(fen: string, student: 'w' | 'b'): TeachingHi
   };
 }
 
+/** A KNOWN TRAP AHEAD (practical lore): the student's natural-looking move
+ *  here is a curated, engine-verified trap that club players fall into. Names
+ *  the move to be careful with and the share that plays it; never the
+ *  refutation, and never the student's best move. */
+export function trapAheadTeaching(fen: string): TeachingHint | null {
+  const t = trapAheadAt(fen);
+  if (!t) return null;
+  const to = t.san.replace(/[+#]/g, '').slice(-2);
+  return {
+    lane: 'trapAhead',
+    text: `Careful here: ${sayMoveNoun(t.san)} looks natural, and ${t.freqPct}% of club players play it — but it walks into a known trap.`,
+    squares: /^[a-h][1-8]$/.test(to) ? [to] : [], claims: [t.key],
+    event: { name: 'coach_trap_ahead', props: { surface: 'coach-teach', freq: t.freqPct } },
+    arrows: [],
+  };
+}
+
 /** A held row for a lane the page composes itself (moveOrder, moveIntent, a
  *  plan arriving) — the same writer, the same honesty about `prompted`. */
 export function recordHeld(tag: MisconceptionTagId, posedImportance: number, ctx: { fen: string; playedSan: string; prompted: boolean; gameId: string | null }): void {
@@ -390,6 +409,21 @@ export function openingPlanTeaching(fen: string, student: 'w' | 'b'): TeachingHi
     lane: 'openingIdea', text: plan.text, squares: plan.squares, claims: plan.squares.map((q) => `break-${q}`),
     event: { name: 'coach_opening_plan_named', props: { surface: 'coach-teach' } },
     arrows: plan.arrows.map((a) => ({ from: a.from, to: a.to, role: 'play', fen, source: 'learn.openingPlan' })),
+  };
+}
+
+/** WHAT THE OPENING IS (the identity computer), from the student's seat —
+ *  said once per game, right after the opening is named. Null until the
+ *  identity file has loaded (it warms here), for a waypoint name, or when the
+ *  master data gives this opening no signature. */
+export function openingIdentityTeaching(name: string, student: 'w' | 'b'): TeachingHint | null {
+  warmOpeningIdentity();
+  const line = openingIdentityLine(name, student, 'seat');
+  if (!line) return null;
+  return {
+    lane: 'openingIdentity', text: line.text, squares: line.squares, claims: [line.key],
+    event: { name: 'coach_opening_identity', props: { surface: 'coach-teach' } },
+    arrows: [],
   };
 }
 

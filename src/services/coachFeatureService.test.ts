@@ -377,7 +377,7 @@ describe('coachFeatureService', () => {
       expect(text).not.toMatch(/\b(we|our|us)\b/i);
       // 4. Nothing attaches to the opponent's or to book moves.
       expect(segments.filter((x) => x.fundamentals?.length).map((x) => x.ply)).toEqual([12]);
-    });
+    }, 30_000); // real review build (~1.6 s alone); slower under the commit hook's load
 
     it('fundamentals are spoken RAW — identical text on two builds of the same inputs', () => {
       const sans = ['e4', 'c5', 'c3', 'Nf6', 'e5', 'Nd5', 'd4', 'cxd4', 'cxd4', 'Nc6', 'Nc3', 'Nb6'];

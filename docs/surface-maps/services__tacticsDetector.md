@@ -72,7 +72,7 @@
 - `src/services/misconceptionClassifier.ts:113`
 - `src/services/misconceptionClassifier.ts:264`
 - `src/services/mistakeNarration.ts:395`
-- `src/services/openingGenerator.ts:3545`
+- `src/services/openingGenerator.ts:3552`
 - `src/services/pinGeometry.test.ts:72`
 - `src/services/pinGeometry.test.ts:74`
 - `src/services/pinGeometry.test.ts:90`

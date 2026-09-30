@@ -67,7 +67,8 @@ describe('buildNarrationSession', () => {
     expect(session.steps[0].narration).toBe('Classical center grab.');
     // Falls back to the classification template when no comment.
     // 'best' was never a MoveClassification — the line it keyed was unreachable.
-    expect(session.steps[1].narration).toMatch(/brilliant/i);
+    // DNA: no praise — the template says what the move was.
+    expect(session.steps[1].narration).toBe('The best move in a sharp position.');
   });
 
   it('falls back to empty narration for unannotated moves', () => {

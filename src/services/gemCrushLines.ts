@@ -565,6 +565,22 @@ export function warmGemIndexes(): void {
 }
 export type GemMoveSignal = 'walked-into' | 'punished' | 'missed-punish';
 
+/** A KNOWN TRAP ONE MOVE AHEAD — for the side to move (the student, on Learn):
+ *  a curated gem whose slip is THEIR natural move from this exact board, engine-
+ *  verified (weapon tiers only), with the club share that plays it. The punish
+ *  is withheld — the lesson is "this natural move is a known trap", not the
+ *  refutation. Null until the chunked index has warmed, or when no gem is here. */
+export function trapAheadAt(fen: string): { san: string; freqPct: number; key: string } | null {
+  if (!gemsByPosition || !gemsAfterSlip) { warmGemIndexes(); return null; }
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return null; }
+  const legal = new Set(board.moves());
+  const best = (gemsByPosition.get(positionKey(fen)) ?? [])
+    .filter((g) => (g.tier === 'confirmed' || g.tier === 'positional') && legal.has(g.inaccuracy))
+    .sort((a, b) => b.freqPct - a.freqPct)[0];
+  return best ? { san: best.inaccuracy, freqPct: Math.round(best.freqPct), key: `trap-ahead:${best.openingId}:${best.inaccuracy}` } : null;
+}
+
 /** WHAT A MOVE SAID ABOUT THE PLAYER, IN GEM TERMS — the strongest early
  *  strength signal (CLAUDE.md: "a gem blunder … a mistake with a known
  *  population attached"). Gems are mined at amateur rating bands, so:

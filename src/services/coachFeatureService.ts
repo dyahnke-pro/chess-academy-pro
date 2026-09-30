@@ -1062,7 +1062,7 @@ function buildDeterministicNarration(params: {
       if (playedMerit) return `And there it is — it ${playedMerit}.`;
       const stems = [
         'And there it is — that was the move.',
-        'Brilliant find. This was the game.',
+        'That was the move — the game turned on it.',
         'There it is. The position asked for exactly this.',
       ];
       return stems[variant];

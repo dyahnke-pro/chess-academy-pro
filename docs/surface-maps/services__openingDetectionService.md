@@ -83,7 +83,7 @@
 - `src/components/Coach/CoachGamePage.tsx:3312`
 - `src/components/Coach/CoachGamePage.tsx:3400`
 - `src/components/Coach/CoachTeachPage.tsx:8041`
-- `src/components/Coach/CoachTeachPage.tsx:9100`
+- `src/components/Coach/CoachTeachPage.tsx:9117`
 - `src/hooks/usePhaseNarration.ts:461`
 - `src/services/coachFeatureService.ts:2416`
 - `src/services/coachFeatureService.ts:2837`
@@ -105,8 +105,8 @@
 - `src/services/reviewFullData.ts:1143`
 
 ### `detectOpeningTranspositional` (function) — 5 call sites
-- `src/services/coachApi.ts:5391`
-- `src/services/coachApi.ts:6258`
+- `src/services/coachApi.ts:5395`
+- `src/services/coachApi.ts:6300`
 - `src/services/reviewGameAdapter.ts:170`
 - `src/services/reviewOpeningTheory.ts:270`
 - `src/services/reviewOpeningTheory.ts:271`
@@ -124,9 +124,9 @@
 - `src/services/openingDetectionService.test.ts:593`
 - `src/services/openingDetectionService.test.ts:607`
 - `src/services/openingDetectionService.test.ts:637`
-- `src/services/openingGenerator.ts:2717`
-- `src/services/openingGenerator.ts:3081`
-- `src/services/openingGenerator.ts:3171`
+- `src/services/openingGenerator.ts:2724`
+- `src/services/openingGenerator.ts:3088`
+- `src/services/openingGenerator.ts:3178`
 
 ### `findLongestPgnExtending` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -165,18 +165,18 @@
 - `src/services/openingFuzzyMatcher.ts:354`
 - `src/services/openingFuzzyMatcher.ts:355`
 - `src/services/openingFuzzyMatcher.ts:375`
-- `src/services/openingGenerator.ts:118`
-- `src/services/openingGenerator.ts:286`
-- `src/services/openingGenerator.ts:1787`
-- `src/services/openingGenerator.ts:2522`
-- `src/services/openingGenerator.ts:2714`
-- `src/services/openingGenerator.ts:2851`
-- `src/services/openingGenerator.ts:2863`
-- `src/services/openingGenerator.ts:2886`
-- `src/services/openingGenerator.ts:3079`
-- `src/services/openingGenerator.ts:3169`
-- `src/services/openingGenerator.ts:3704`
-- `src/services/openingGenerator.ts:4143`
+- `src/services/openingGenerator.ts:119`
+- `src/services/openingGenerator.ts:287`
+- `src/services/openingGenerator.ts:1788`
+- `src/services/openingGenerator.ts:2529`
+- `src/services/openingGenerator.ts:2721`
+- `src/services/openingGenerator.ts:2858`
+- `src/services/openingGenerator.ts:2870`
+- `src/services/openingGenerator.ts:2893`
+- `src/services/openingGenerator.ts:3086`
+- `src/services/openingGenerator.ts:3176`
+- `src/services/openingGenerator.ts:3711`
+- `src/services/openingGenerator.ts:4150`
 - `src/services/openingMatchup.ts:100`
 - `src/services/openingNameClaimValidator.ts:99`
 - `src/services/openingNameResolution.test.ts:37`
@@ -205,7 +205,7 @@
 - `src/services/openingSublines.ts:100`
 
 ### `isBookLine` (function) — 13 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8756`
+- `src/components/Coach/CoachTeachPage.tsx:8767`
 - `src/services/bookDeparture.ts:66`
 - `src/services/gameAnalysisService.ts:1289`
 - `src/services/gameAnalysisService.ts:1554`
@@ -263,7 +263,7 @@
 - `src/services/openingDetectionService.test.ts:348`
 - `src/services/openingDetectionService.test.ts:357`
 - `src/services/openingDetectionService.test.ts:371`
-- `src/services/openingGenerator.ts:3191`
+- `src/services/openingGenerator.ts:3198`
 - `src/services/principleAttribution.section14.test.ts:90`
 - `src/services/principleAttribution.ts:1181`
 
@@ -275,8 +275,8 @@
 - `src/services/openingDetectionService.test.ts:595`
 - `src/services/openingDetectionService.test.ts:609`
 - `src/services/openingDetectionService.test.ts:639`
-- `src/services/openingGenerator.ts:2719`
-- `src/services/openingGenerator.ts:3083`
+- `src/services/openingGenerator.ts:2726`
+- `src/services/openingGenerator.ts:3090`
 - `src/services/openingSublines.ts:104`
 
 ### `resolveTeachSpine` (function) — 5 call sites
@@ -284,7 +284,7 @@
 - `src/services/openingDetectionService.teachSpine.test.ts:53`
 - `src/services/openingDetectionService.teachSpine.test.ts:60`
 - `src/services/openingDetectionService.teachSpine.test.ts:70`
-- `src/services/openingGenerator.ts:1803`
+- `src/services/openingGenerator.ts:1804`
 
 ### `findRelatedDbEntries` (function) — 7 call sites
 - `src/services/openingDbGrounding.ts:210`
@@ -293,7 +293,7 @@
 - `src/services/openingDetectionService.test.ts:232`
 - `src/services/openingDetectionService.test.ts:237`
 - `src/services/openingDetectionService.test.ts:242`
-- `src/services/openingGenerator.ts:145`
+- `src/services/openingGenerator.ts:146`
 
 ### `LinePickerOption` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -306,8 +306,8 @@
 - `src/services/openingDetectionService.test.ts:571`
 - `src/services/openingDetectionService.test.ts:572`
 - `src/services/openingDetectionService.test.ts:582`
-- `src/services/openingGenerator.ts:1787`
-- `src/services/openingGenerator.ts:2522`
+- `src/services/openingGenerator.ts:1788`
+- `src/services/openingGenerator.ts:2529`
 
 ### `classifyVariationStyle` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -361,18 +361,18 @@
 - `src/components/Coach/CoachTeachPage.tsx:6513`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:91`
 - `src/data/voicedWalkthroughs.test.ts:6`
-- `src/services/openingGenerator.ts:1905`
-- `src/services/openingGenerator.ts:2537`
-- `src/services/openingGenerator.ts:3088`
-- `src/services/openingGenerator.ts:3175`
-- `src/services/openingGenerator.ts:3744`
+- `src/services/openingGenerator.ts:1906`
+- `src/services/openingGenerator.ts:2544`
+- `src/services/openingGenerator.ts:3095`
+- `src/services/openingGenerator.ts:3182`
+- `src/services/openingGenerator.ts:3751`
 - `src/services/punishStageSeat.test.ts:35`
 - `src/services/punishStageSeat.test.ts:87`
 
 ### `studentSideForPlay` (function) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:5270`
-- `src/components/Coach/CoachTeachPage.tsx:12468`
-- `src/components/Coach/CoachTeachPage.tsx:12518`
+- `src/components/Coach/CoachTeachPage.tsx:12485`
+- `src/components/Coach/CoachTeachPage.tsx:12535`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:59`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:60`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:64`

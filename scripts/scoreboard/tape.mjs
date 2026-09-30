@@ -3,6 +3,13 @@
 //   node scripts/audit-lib/hand-driver.mjs &   (against a dev server)
 //   node scripts/scoreboard/tape.mjs <games.json> <out.json> [elo]
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+// QUESTIONS PER GAME (David 2026-09-30: "asking questions on the board to see
+// how they hold up… maybe 3-5 per game"). Asked at evenly spread student-to-move
+// points, one question KIND per point, rotating, from the board-adapted set in
+// QGEN (qgen.cjs — every SAN and square in a question is legal on this board).
+const ASK = Number(process.env.QUESTIONS ?? 0);
+const QGEN = process.env.QGEN ?? new URL('./qgen.cjs', import.meta.url).pathname;
 const [src, OUT, ELO = '1500'] = process.argv.slice(2);
 const H = `http://localhost:${process.env.HAND_PORT ?? 7777}`;
 const games = JSON.parse(readFileSync(src, 'utf8'));
@@ -32,7 +39,35 @@ for (const g of games) {
     if (count(st) < 1) { rec.error = 'coach never played the first move'; tape[id] = rec; writeFileSync(OUT, JSON.stringify(tape)); continue; }
   }
   const limit = Math.min(sans.length, 80);
+  const askAt = new Set(ASK > 0 ? Array.from({ length: ASK }, (_, k) => {
+    let p = Math.round(((k + 1) * limit) / (ASK + 1));
+    if ((p % 2 === 0) !== (seat === 'white')) p += 1; // student to move
+    return p;
+  }) : []);
+  let asked = 0;
   while (i < limit) {
+    if (askAt.has(i)) {
+      try {
+        const mf = `/tmp/claude-0/q-moves-${id}.txt`;
+        writeFileSync(mf, sans.join(' '));
+        const qs = execFileSync(process.execPath, [QGEN, mf, String(i), seat === 'white' ? 'w' : 'b', String(asked)], { encoding: 'utf8' })
+          .split('\n').filter(Boolean).map((l) => l.split('|').slice(1).join('|'))
+          .filter((x) => !/^Why is that\b/.test(x)); // needs the previous answer as context
+        const q = qs[(asked * 5 + id.length) % qs.length];
+        const before = (await call('state')).lastChat ?? '';
+        await call('type', q);
+        let a = before; let busy = true; let voice = [];
+        for (let t = 0; t < 60; t++) {
+          await sleep(1000);
+          const s2 = await call('state');
+          voice.push(...(s2.spoken ?? []));
+          a = s2.lastChat ?? ''; busy = s2.inputBusy;
+          if (!busy && a !== before) break;
+        }
+        (rec.questions ??= []).push({ ply: i, moves: sans.slice(0, i).join(' '), q, a: a === before ? '(no answer)' : a, voice: [...new Set(voice)] });
+      } catch (e) { (rec.questions ??= []).push({ ply: i, q: '(generator failed)', a: String(e).slice(0, 200) }); }
+      asked += 1;
+    }
     if (i + 1 < limit) await call('type', `play ${sans[i + 1]}`);
     st = await call(`move?san=${encodeURIComponent(sans[i])}`);
     if (st.error) { rec.error = `ply ${i + 1}: ${st.error}`; break; }

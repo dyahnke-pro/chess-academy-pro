@@ -116,10 +116,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/endgameService.ts:259`
 - `src/services/mistakeNarration.ts:117`
 - `src/services/mistakeNarration.ts:591`
-- `src/services/openingGenerator.ts:3459`
-- `src/services/openingGenerator.ts:3658`
-- `src/services/openingGenerator.ts:3662`
-- `src/services/openingGenerator.ts:3667`
+- `src/services/openingGenerator.ts:3466`
+- `src/services/openingGenerator.ts:3665`
+- `src/services/openingGenerator.ts:3669`
+- `src/services/openingGenerator.ts:3674`
 - `src/services/opponentIntent.ts:39`
 - `src/services/opponentIntent.ts:70`
 - `src/services/opponentIntent.ts:77`

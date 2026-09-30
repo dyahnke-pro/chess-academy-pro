@@ -39,6 +39,8 @@ export type LearnLane =
   | 'commentary'
   | 'behavior'
   | 'openingIdea'
+  | 'openingIdentity'
+  | 'trapAhead'
   | 'positional'
   // ── the late wave, spoken when the engine read settles ──
   | 'opening'
@@ -105,6 +107,28 @@ export interface LaneRule {
   always?: true;
 }
 
+/** A lane's place in the DNA beat. */
+export type DnaBeat = 'name' | 'affirm' | 'but' | 'refute' | 'their' | 'point' | 'verdict' | 'now';
+const BEAT_ORDER: Record<DnaBeat, number> = { name: 0, affirm: 1, but: 2, refute: 3, their: 4, point: 5, verdict: 6, now: 7 };
+
+/** Every lane answers where it sits in the DNA beat — a new lane fails to
+ *  compile until it does. */
+export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
+  opening: 'name', openingIdentity: 'name',
+  foundMove: 'affirm', movePoint: 'affirm', moveIntent: 'affirm', recapture: 'affirm', kingAttack: 'affirm',
+  ruleException: 'affirm', fileRace: 'affirm', trade: 'affirm', timing: 'affirm', strongChoice: 'affirm',
+  falseAlarm: 'affirm', tempo: 'affirm', pushOrHold: 'affirm',
+  mistake: 'but', drawback: 'but', fundamental: 'but', register: 'but', rejectedTempting: 'but', kneeJerk: 'but',
+  moveOrder: 'refute', causalChain: 'refute',
+  theirPurpose: 'their', theirIntent: 'their', theirMoveCost: 'their', coachMistake: 'their', gap: 'their',
+  tactic: 'point', planArc: 'point', openingIdea: 'point', structure: 'point', pieceQuality: 'point',
+  positionFacts: 'point', commentary: 'point', positional: 'point', kingSafety: 'point', splitPosition: 'point',
+  behavior: 'point',
+  phase: 'verdict', character: 'verdict',
+  threat: 'now', threatAnswer: 'now', gem: 'now', trapAhead: 'now', priorityFirst: 'now', countMethod: 'now',
+  checkMethod: 'now', stalemate: 'now', blunderCheck: 'now', autopilot: 'now',
+};
+
 export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   gem: { kind: 'gem', why: 'a verified punish the coach just handed over', lead: 100, always: true },
   tactic: { kind: 'tactic', why: 'a tactic the detectors proved for the student', lead: 90, always: true },
@@ -114,6 +138,14 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // The opening's plan counted off master games (P2 #0): the break each side
   // actually goes for, with its share. Computed, never authored.
   openingIdea: { kind: 'computed', why: 'the pawn break master games from here go for, with its share', lead: 61 },
+  // What the opening IS (the identity computer): what it provokes, the
+  // structure its master main line reaches, a lasting gambit, sharpness, OTB
+  // master games. Said once per game, right after the name.
+  openingIdentity: { kind: 'computed', why: 'what the named opening provokes, aims for and costs — computed from the master database', lead: 44 },
+  // Practical lore: the student's natural move here is a known, engine-verified
+  // trap (a curated gem). Said BEFORE the move; names the move to be careful
+  // with, never the refutation.
+  trapAhead: { kind: 'computed', why: 'a natural-looking move here is a known trap club players fall into', lead: 73 },
   positional: { kind: 'observation', why: 'the positional read', lead: 25 },
   opening: { kind: 'opening', why: 'the opening named once, when it settles', lead: 45, always: true },
   structure: { kind: 'computed', why: 'the named pawn structure and its plan', lead: 40 },
@@ -311,8 +343,23 @@ export function decideTurn(
       if (!spoke.includes(x.lane)) spoke.push(x.lane);
     } else if (!held.includes(x.lane)) held.push(x.lane);
   }
-  // The lead OPENS the thought; the rest follow in the package's own order.
-  if (ownLead) keep.sort((a, b) => (a === ownLead.fact ? -1 : b === ownLead.fact ? 1 : 0));
+  // THE DNA SHAPE (docs/DNA-outline.md: affirm → but → refute → the point →
+  // verdict), read for a live turn: the opening's name first, then the
+  // student's move (what it does, then its cost, then the line that proves
+  // it), their reply, the idea on the board, and what matters BEFORE the next
+  // move last. The lead still decides WHAT speaks; the beat decides the order,
+  // and the lead opens its own beat.
+  const beatOf = (f: VoiceFact): number => {
+    const lane = survivors.find((x) => x.fact === f)?.lane;
+    return lane ? BEAT_ORDER[DNA_BEAT[lane]] : BEAT_ORDER.point;
+  };
+  const rank = (f: VoiceFact): number => {
+    const lane = survivors.find((x) => x.fact === f)?.lane;
+    return lane ? LEARN_LANES[lane].lead : 0;
+  };
+  keep.sort((a, b) => beatOf(a) - beatOf(b)
+    || (ownLead && a === ownLead.fact ? -1 : ownLead && b === ownLead.fact ? 1 : 0)
+    || rank(b) - rank(a));
   const pkg: VoicePackage = {
     spoken: joinSpoken(keep),
     kept: keep,

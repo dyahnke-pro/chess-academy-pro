@@ -30,7 +30,7 @@ import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePacka
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { announcesTheMove, checkMethodTeaching, countMethodTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, openingBreakFor, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
+import { announcesTheMove, checkMethodTeaching, countMethodTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, openingBreakFor, openingIdentityTeaching, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -8104,6 +8104,17 @@ export function CoachTeachPage(): JSX.Element {
           fen: args.fenAfterReply,
         });
       }
+      // WHAT THE OPENING IS — once per game, after the name has been queued
+      // (the identity file loads lazily; until it has, this retries next turn).
+      const idName = learnMemRef.current.queuedOpeningName;
+      if (idName && learnMemRef.current.identityQueued === null) {
+        const idHint = openingIdentityTeaching(idName, playerColor === 'white' ? 'w' : 'b');
+        if (idHint) {
+          queueSpokenHint(args.fenAfterReply, idHint.text, idHint.lane, idHint.squares, idHint.claims);
+          learnMemRef.current.identityQueued = idHint.claims[0] ?? idName;
+          if (idHint.event) captureEvent(idHint.event.name, idHint.event.props);
+        }
+      }
     } catch { /* announcement is a bonus, never a blocker */ }
 
     // ── THE GEM — a verified punishable slip by the coach ──────────────────
@@ -8974,6 +8985,12 @@ export function CoachTeachPage(): JSX.Element {
                   if (cm) {
                     queueSpokenHint(probe.fen(), cm.text, cm.lane, cm.squares, cm.claims);
                     if (cm.event) captureEvent(cm.event.name, cm.event.props);
+                  }
+                  // A KNOWN TRAP AHEAD (practical lore) — the same moment.
+                  const trap = trapAheadTeaching(probe.fen());
+                  if (trap) {
+                    queueSpokenHint(probe.fen(), trap.text, trap.lane, trap.squares, trap.claims);
+                    if (trap.event) captureEvent(trap.event.name, trap.event.props);
                   }
                   // COUNT BEFORE YOU TAKE (P3 how-to-calculate) — the same moment.
                   const cnt = countMethodTeaching(probe.fen(), playerColor === 'white' ? 'w' : 'b');

@@ -1291,6 +1291,9 @@ export interface MasterGroundingOptions {
   /** "is there an opening called X?" — the candidate NAME, answered by a
    *  deterministic lookup against the canonical openings DB. */
   openingExistenceName?: string;
+  /** "what is the Alekhine about / is the Marshall sharp" — the candidate
+   *  opening NAME, answered by the opening-identity computer after a DB hit. */
+  openingIdentityName?: string;
   reviewWorstMoment?: { moveNumber: number; san: string; classification: string; bestMoveSan: string | null };
   /** STEP B — true when this turn is a STUDENT-PROGRESS question ("am I
    *  improving?", "what should I work on?"). The answer is the student's OWN
@@ -3688,6 +3691,7 @@ export async function getCoachChatResponse(
       grounding.hintQuestion === true ||
       grounding.gameMistakeQuestion === true ||
       typeof grounding.openingExistenceName === 'string' ||
+      typeof grounding.openingIdentityName === 'string' ||
       grounding.progressQuestion === true ||
       grounding.trendQuestion === true ||
       grounding.openingProfileQuestion === true ||
@@ -5392,8 +5396,19 @@ export async function getCoachChatResponse(
             const answer = detected
               ? assembleOpeningNameAnswer({ name: detected.name, eco: detected.eco, plies: detected.plyCount })
               : null;
+            let identity = '';
+            if (detected && answer) {
+              // …and what that opening IS (the identity computer), from the
+              // student's seat when a game is on the board.
+              const { loadOpeningIdentity, openingIdentityLine } = await import('./openingIdentity');
+              await loadOpeningIdentity();
+              const onBoard = (grounding.moveHistory?.length ?? 0) > 0 && grounding.studentColor;
+              const line = openingIdentityLine(detected.name, grounding.studentColor === 'black' ? 'b' : 'w', onBoard ? 'seat' : 'demo');
+              if (line) identity = ` ${line.text}`;
+            }
             const facts = answer?.facts
-              ?? "I can't name the opening yet — play a few more moves and I'll tell you exactly which line you're in.";
+              ? `${answer.facts}${identity}`
+              : "I can't name the opening yet — play a few more moves and I'll tell you exactly which line you're in.";
             const voiced = await voice(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'name-opening', preferRaw: true });
             if (voiced) return voiced;
           } catch { /* fall through */ }
@@ -5889,6 +5904,33 @@ export async function getCoachChatResponse(
         // entry named-openings DB. Deterministic lookup: exact-ish hit →
         // confirm + offer to teach; miss → honest no + the closest REAL
         // names. The DB is the fact; nothing is invented (G3).
+        // OPENING IDENTITY — "what is the Alekhine about?", "is the Marshall
+        // sharp?". The name must be a real DB opening (G3); the answer is the
+        // identity computer's facts (what it provokes, the structure its main
+        // master line reaches, a lasting gambit, sharpness, OTB master games),
+        // rendered in code. Falls through on a miss — never a recalled answer.
+        if (typeof grounding.openingIdentityName === 'string' && grounding.openingIdentityName.length > 0) {
+          try {
+            const { searchOpenings } = await import('./openingService');
+            const { loadOpeningIdentity, openingIdentityLine } = await import('./openingIdentity');
+            const q = grounding.openingIdentityName;
+            const norm = (x: string): string => x.toLowerCase().replace(/[^a-z0-9]/g, '');
+            const matches = await searchOpenings(q).catch(() => []);
+            const hit = matches.find((m) => norm(m.name).includes(norm(q)) || norm(q).includes(norm(m.name)));
+            if (hit) {
+              await loadOpeningIdentity();
+              const seat = grounding.studentColor === 'black' ? 'b' : 'w';
+              const line = openingIdentityLine(hit.name, seat, 'demo');
+              const facts = line
+                ? `The ${hit.name}: ${line.text}`
+                : `The ${hit.name} is in my database, but its master games don't give me a clear signature to describe — no lasting pawn sacrifice, no locked structure, nothing it reliably provokes. Say "teach me the ${hit.name}" and I'll walk the line with you.`;
+              const voiced = await voice(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-identity', preferRaw: true });
+              if (voiced) return voiced;
+              return facts;
+            }
+          } catch { /* fall through */ }
+        }
+
         if (typeof grounding.openingExistenceName === 'string' && grounding.openingExistenceName.length > 0) {
           try {
             const { searchOpenings } = await import('./openingService');

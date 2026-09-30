@@ -210,7 +210,7 @@ import {
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
   isWhyBestMoveQuestion, isCandidateMoveQuestion, isOpponentHypotheticalQuestion, tradeAsk, extractCandidateSan, isAlternativesQuestion, isHintRequest, positionalTopic, isGameMistakeQuestion,
   retrospectiveMoveRef, type RetrospectiveMoveRef, compareMovesAsk, captureOnAsk, pawnStrengthAsk, isMateQuestion, isMethodQuestion, stripQuestionFiller, pieceOptionsRef,
-  isTeachingMethodQuestion, isSettingsQuestion, isAppHelpQuestion, isTimeTroubleQuestion, isLastGameQuestion, isLastGameMistakeQuestion, isNameOpeningQuestion, isOpponentMoveQuestion, isLastMoveQuestion, isTheoryQuestion, weaknessLifecycleKind, isWeaknessLifecycleQuestion, isWeaknessBriefingQuestion, openingExistenceQuery,
+  isTeachingMethodQuestion, isSettingsQuestion, isAppHelpQuestion, isTimeTroubleQuestion, isLastGameQuestion, isLastGameMistakeQuestion, isNameOpeningQuestion, isOpponentMoveQuestion, isLastMoveQuestion, isTheoryQuestion, weaknessLifecycleKind, isWeaknessLifecycleQuestion, isWeaknessBriefingQuestion, openingExistenceQuery, openingIdentityQuery,
 } from './questionIntents';
 import { isAnyBoardQuestion } from './boardQuestions';
 import { computePieceOptions, pieceAbsentAnswer, resolvePieceQuestion } from '../services/pieceOptions';
@@ -1310,6 +1310,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // The five lanes the 2026-08-13 all-questions audit found unreachable —
     // none needs a board, so they must also ENGAGE grounding without a FEN.
     const openingExistenceName = openingExistenceQuery(askForIntents);
+    const openingIdentityName = openingIdentityQuery(askForIntents);
     const teachingMethodQuestionEngage = isTeachingMethodQuestion(askForIntents);
     const settingsQuestionEngage = isSettingsQuestion(askForIntents);
     const appHelpQuestionEngage = isAppHelpQuestion(askForIntents);
@@ -1590,7 +1591,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
       // coachApi. Whose-turn and colour are then answerable from `whoseTurn` /
       // `studentColor` alone; draw and mate still need the board, but they now
       // decline honestly through the computed lane instead of being improvised.
-      (input.liveState.fen || isAnyBoardQuestion(askForIntents) || isAttackAssessmentQuestion(askForIntents) || progressQuestion || trendQuestionEngage || conceptQuestionEngage || fundamentalsQuestionEngage || fundamentalLessonQuestionEngage || famousGameQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || opponentHypothetical !== undefined || trade !== undefined || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage || lastGameMistakeQuestionEngage || nameOpeningQuestionEngage || opponentMoveQuestionEngage || lastMoveQuestionEngage || theoryQuestionEngage || weaknessLifecycleKindEngage !== null || weaknessBriefingQuestionEngage || endgameWeaknessQuestionEngage || isEndgameQuestion(askForIntents) || openingExistenceName !== null || retrospectiveEngage || methodQuestionEngage
+      (input.liveState.fen || isAnyBoardQuestion(askForIntents) || isAttackAssessmentQuestion(askForIntents) || progressQuestion || trendQuestionEngage || conceptQuestionEngage || fundamentalsQuestionEngage || fundamentalLessonQuestionEngage || famousGameQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || opponentHypothetical !== undefined || trade !== undefined || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage || lastGameMistakeQuestionEngage || nameOpeningQuestionEngage || opponentMoveQuestionEngage || lastMoveQuestionEngage || theoryQuestionEngage || weaknessLifecycleKindEngage !== null || weaknessBriefingQuestionEngage || endgameWeaknessQuestionEngage || isEndgameQuestion(askForIntents) || openingExistenceName !== null || openingIdentityName !== null || retrospectiveEngage || methodQuestionEngage
         ? {
             currentFen: input.liveState.fen,
             // The side to move, as the surface already knows it. Threaded so
@@ -1831,6 +1832,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // too fast?" the stock line, "did I win my last game?" silence.
             // The same lane-reaches-nobody class as the plan/best-move fixes.
             openingExistenceName: openingExistenceName ?? undefined,
+            openingIdentityName: openingIdentityName ?? undefined,
             teachingMethodQuestion: teachingMethodQuestionEngage && !methodQuestionEngage,
             settingsQuestion: settingsQuestionEngage,
             appHelpQuestion: appHelpQuestionEngage,

@@ -282,3 +282,32 @@ Two honest options: (a) the builder skips first-person notes (compliant now,
 ~9% of voiced coverage lost in the "teach me X opening" walkthrough — the only
 surface that speaks them), or (b) an authoring pass rewrites them. Held to the
 shrink-only ceiling in `voicedDepersonalized.test` until David chooses.
+
+### Opening identity, traps ahead, and the DNA at the door (2026-09-30, David: "Can we add these computers?" / "This is the DNA outline all narrations NEED to pass through")
+- ✅ **Opening identity** (`openingIdentity.ts`, data built offline by
+  `scripts/build-opening-identity.mjs` → `public/data/opening-identity.json`,
+  1,577 openings). Facts only, rendered in code: what the defining move
+  provokes (a centre pawn thrown at a piece — the Alekhine's e5 — vs a flank
+  pawn putting the question, vs a pawn offered or a trade the masters take
+  back), the structure the master main line reaches (a real chain, not an
+  e4/e5 standoff), a gambit only when the imbalance LASTS six plies of main
+  line (stated with its length), sharp/quiet from forcing rate + theory depth,
+  and over-the-board master games from `model-games.json` (David: "we have a
+  database the coach can look up"). Said once per game after the name on
+  Learn (lane `openingIdentity`), in the teach-me-X intro (gen rev bumped), and
+  in chat ("what opening is this" + "what is the Alekhine about / is the
+  Marshall sharp"). Waypoint names ("King's Pawn Game") say nothing.
+- ✅ **Trap ahead** (`gemCrushLines.trapAheadAt`, lane `trapAhead`): the
+  student's natural move here is a curated, engine-verified trap — named with
+  its club share, BEFORE the move, never the refutation. The weapon direction
+  (their slip) stays with the coach's deliberate teachable slip, which a
+  warning would spoil.
+- ✅ **DNA at the door.** Voice rules held at `buildVoicePackage` (Learn AND
+  Review): move-number prefixes rephrased away, sentence-opening praise and
+  interface talk refused (fixed at the source first: review's "Brilliant find",
+  the legacy "Great move." / "A solid move."). Beat order on the Learn door
+  (`DNA_BEAT`, exhaustive): name → the move (affirm → but → refute) → their
+  reply → the point → verdict → what matters now. Review's order stays the
+  stakes order it already computes (open: whether review should take the beat
+  order too).
+- Perspective: DNA's White/Black voice stays for Watch; Learn is you/your.

@@ -1345,6 +1345,8 @@ export function isTheoryQuestion(ask: string | undefined): boolean {
   if (/\bhow\s+(?:do|can)\s+i\s+(?:improve|get\s+better|rank\s+up|climb|gain\s+rating)\b/i.test(ask)) return false;
   // A NAMED opening → opening profile ("how do I play the Sicilian").
   if (openingExistenceQuery(ask)) return false;
+  // "what is the Alekhine about" is the identity lane, not generic theory.
+  if (openingIdentityQuery(ask)) return false;
   return THEORY_QUESTION_RE.test(ask);
 }
 
@@ -2196,6 +2198,26 @@ export function openingExistenceQuery(ask: string | undefined): string | null {
     ?? /\bis\s+(?:the\s+)?(.{2,60}?)\s+(?:an?\s+)?opening\s+(?:that\s+exists|in\s+(?:the|your)\s+(?:database|book))[?!.\s]*$/i.exec(ask);
   const name = m?.[1]?.trim() ?? null;
   return name && name.length >= 2 ? name : null;
+}
+
+/** "what is the Alekhine about?" / "what's the idea behind the Marshall?" / "is
+ *  the Najdorf sharp?" / "why do people play the London?" — the candidate NAME,
+ *  answered from the opening-identity computer (provokes / aims / gambit /
+ *  sharpness / famous games), after a DB lookup confirms it is an opening. */
+export function openingIdentityQuery(ask: string | undefined): string | null {
+  if (!ask) return null;
+  const m =
+    /\bwhat(?:'s|\s+is)\s+(?:the\s+)?(.{2,60}?)\s+(?:all\s+)?about[?!.\s]*$/i.exec(ask)
+    ?? /\b(?:idea|point|purpose|concept|plan)s?\s+(?:behind|of)\s+(?:the\s+)?(.{2,60}?)[?!.\s]*$/i.exec(ask)
+    ?? /\bis\s+(?:the\s+)?(.{2,60}?)\s+(?:a\s+)?(?:sharp|solid|aggressive|quiet|theoretical|theory[- ]heavy|gambit)\b(?:\s+opening)?[?!.\s]*$/i.exec(ask)
+    ?? /\bwhy\s+(?:do|would|does)\s+(?:people|players|anyone|someone|masters|you)\s+play\s+(?:the\s+)?(.{2,60}?)[?!.\s]*$/i.exec(ask)
+    ?? /\btell\s+me\s+about\s+(?:the\s+)?(.{2,60}?)[?!.\s]*$/i.exec(ask);
+  const name = m?.[1]?.trim() ?? null;
+  if (!name || name.length < 3) return null;
+  // Deictic or board words are not an opening name — those are board asks.
+  if (/^(?:this|that|it|here|the\s+position|position|move|game|my\s+game|this\s+(?:position|move|game|opening|line))$/i.test(name)) return null;
+  if (/\b(?:move|position|piece|knight|bishop|rook|queen|king|pawn|square)\b/i.test(name) && !/\b(?:gambit|defen[cs]e|opening|attack|variation|game|system)\b/i.test(name)) return null;
+  return name;
 }
 
 export function isCounterRepertoireQuestion(ask: string | undefined): boolean {
@@ -3159,6 +3181,7 @@ export function buildQuestionGrounding(
     lastGameQuestion: isLastGameQuestion(a),
     lastGameMistakeQuestion: isLastGameMistakeQuestion(a),
     nameOpeningQuestion: isNameOpeningQuestion(a),
+    openingIdentityName: openingIdentityQuery(a) ?? undefined,
     // "what piece just moved and where is it?" — the neutral, factual last-move
     // read (either side). Disjoint from opponentMove/rating (those carry "why").
     lastMoveQuestion: isLastMoveQuestion(a),
