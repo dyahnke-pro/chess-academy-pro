@@ -299,14 +299,51 @@ function checkSentence(s, ctx) {
       res.push([ok, `line ${sans.join(' ')} is illegal`]);
     }
   }
-  if (!res.length) return { v: 'U' };
+  if (!future) {
+    const pawnsOf = (b, c) => b.board().flat().filter((x) => x && x.type === 'p' && x.color === c).map((x) => x.square);
+    // "The isolated pawn on d5" — no pawn of its side on a neighbouring file.
+    for (const m of s.matchAll(/isolated (?:queen[’']s )?pawn on ([a-h][1-8])/gi)) {
+      const ok = boards.some((b) => { const p = b.get(m[1]); if (!p || p.type !== 'p') return false; const f = FILES.indexOf(m[1][0]); return !pawnsOf(b, p.color).some((q) => Math.abs(FILES.indexOf(q[0]) - f) === 1); });
+      res.push([ok, `${m[1]} is not an isolated pawn`]);
+    }
+    // "The backward pawn on e6" — no neighbouring pawn of its side level with it or behind it.
+    for (const m of s.matchAll(/backward pawn on ([a-h][1-8])/gi)) {
+      const ok = boards.some((b) => { const p = b.get(m[1]); if (!p || p.type !== 'p') return false; const f = FILES.indexOf(m[1][0]); const r = Number(m[1][1]); const dir = p.color === 'w' ? 1 : -1; return !pawnsOf(b, p.color).some((q) => Math.abs(FILES.indexOf(q[0]) - f) === 1 && (Number(q[1]) - r) * dir <= 0); });
+      res.push([ok, `${m[1]} is not a backward pawn`]);
+    }
+    // "Now you have the two bishops"
+    if (/you have the two bishops/i.test(s)) {
+      const count = (b, c) => b.board().flat().filter((x) => x && x.type === 'b' && x.color === c).length;
+      res.push([boards.some((b) => count(b, me) === 2 && count(b, them) < 2), 'the student does not have the bishop pair']);
+    }
+    // "d5 is the pawn break … ready now" / "You have a pawn break on d5"
+    for (const m of s.matchAll(/([a-h][1-8]) is the pawn break|pawn break on ([a-h][1-8])/gi)) {
+      const sq = m[1] ?? m[2];
+      const theirs = /^They /.test(s);
+      const side = theirs ? them : me;
+      const ok = [ctx.fenAfter, ctx.fenMid].some((fen) => { const b = board(withTurn(fen, side)); return !!b && b.moves({ verbose: true }).some((x) => x.piece === 'p' && x.to === sq); });
+      res.push([ok, `no pawn move to ${sq}`]);
+    }
+    // "there is a tactic on the board" / "a tactic is live" — some capture wins by exchange.
+    const wins = (fen, by) => { const b = board(fen); if (!b) return false; return b.board().flat().some((x) => x && x.color !== by && x.type !== 'k' && see(fen, x.square, by) > 0); };
+    if (/tactic on the board|a tactic is live/i.test(s)) {
+      // The app's own read also counts detected forks/pins, which a capture scan
+      // cannot see — so a miss here stays UNCHECKED, never false.
+      if ([ctx.fenAfter, ctx.fenMid].some((fen) => wins(fen, me) || wins(fen, them))) res.push([true, '']);
+    }
+  }
+  if (!res.length) {
+    // A method, a definition, a question: advice, not a claim about this board.
+    if (/\?$|^(Remember —|Here's how|The habit that fixes it|Next time|Follow every forcing|If the line ends|Only when none|Calculate to|Scan forcing|Count it|Look one move ahead|Check\.$|The thread was lost|Before you leave theory|If you cannot say)/.test(s.trim())) return { v: 'N' };
+    return { v: 'U' };
+  }
   const bad = res.find((r) => !r[0]);
   return bad ? { v: 'F', why: bad[1] } : { v: 'T' };
 }
 
 // ── run ────────────────────────────────────────────────────────────────────
 const spokenForm = /(knight|bishop|rook|queen|king) (to|takes) [a-h]|[a-h]-pawn takes|\bcastles\b/i;
-let T = 0; let F = 0; let U = 0; const falses = []; const unchecked = [];
+let T = 0; let F = 0; let U = 0; let N = 0; const falses = []; const unchecked = [];
 for (const [id, rec] of Object.entries(tape)) {
   const g = games.get(id); if (!g) continue;
   const me = rec.seat === 'white' ? 'w' : 'b'; const them = other(me);
@@ -325,12 +362,12 @@ for (const [id, rec] of Object.entries(tape)) {
       for (const s of line.split(/(?<=[.!])\s+(?=[A-Z…"])/)) {
         const k = s.toLowerCase().replace(/[^a-z0-9]/g, ''); if (!k || seen.has(k)) continue; seen.add(k);
         const r = checkSentence(s, ctx);
-        if (r.v === 'T') T++; else if (r.v === 'F') { F++; falses.push({ id, ply: plyS, s, why: r.why }); } else { U++; unchecked.push(s.slice(0, 140)); }
+        if (r.v === 'T') T++; else if (r.v === 'F') { F++; falses.push({ id, ply: plyS, s, why: r.why }); } else if (r.v === 'N') N++; else { U++; unchecked.push(s.slice(0, 140)); }
       }
     }
   }
 }
 const n = T + F + U;
-console.log(`sentences ${n}; checked ${T + F} (${(100 * (T + F) / Math.max(1, n)).toFixed(0)}% coverage); TRUE ${T} FALSE ${F}; ACCURACY ${(100 * T / Math.max(1, T + F)).toFixed(1)}%`);
+console.log(`sentences ${n + N} (${N} advice, no board claim); claims ${n}; checked ${T + F} (${(100 * (T + F) / Math.max(1, n)).toFixed(0)}% coverage); TRUE ${T} FALSE ${F}; ACCURACY ${(100 * T / Math.max(1, T + F)).toFixed(1)}%`);
 if (process.env.SHOW_U) for (const u of unchecked) console.log(`? ${u}`);
 for (const f of falses.slice(0, SHOW)) console.log(`✗ ${f.id}:${f.ply} [${f.why}] ${f.s.slice(0, 160)}`);

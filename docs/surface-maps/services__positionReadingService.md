@@ -120,7 +120,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachFeatureService.ts:2431`
 - `src/services/groundedAnswer.ts:6685`
 - `src/services/moveIntent.ts:288`
-- `src/services/moveIntent.ts:454`
+- `src/services/moveIntent.ts:461`
 - `src/services/opponentMovePurpose.ts:33`
 - `src/services/reviewTeachingPoints.ts:99`
 - `src/services/reviewTeachingPoints.ts:135`
@@ -182,8 +182,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:827`
 - `src/components/Coach/CoachTeachPage.tsx:7796`
 - `src/components/Coach/CoachTeachPage.tsx:7914`
-- `src/components/Coach/CoachTeachPage.tsx:9963`
-- `src/components/Coach/CoachTeachPage.tsx:10007`
+- `src/components/Coach/CoachTeachPage.tsx:9972`
+- `src/components/Coach/CoachTeachPage.tsx:10016`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`

@@ -81,7 +81,7 @@ import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
 import { findSiblingExtensionBranches, resolveOpeningEntry, isBookLine } from '../../services/openingDetectionService';
-import { openingAnnouncementForGame, spokenOpeningLabel, warmOpeningBook } from '../../services/openingAnnouncement';
+import { openingAnnouncementForGame, spokenOpeningLabel, studentJustLeftBook, warmOpeningBook } from '../../services/openingAnnouncement';
 import { lastMoveCapturedOn, pendingRecapture, landingSquare } from '../../utils/justCaptured';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
@@ -9337,7 +9337,10 @@ export function CoachTeachPage(): JSX.Element {
                       // "it has turned sharp" beside it is the same fact twice
                       // (run C walk 2026-09-30, the mate-in-4 ply).
                       const mateOnBoard = typeof tl[0]?.mate === 'number' && tl[0].mate > 0;
-                      if (step.switched && !mateOnBoard) queueSpokenHint(probe.fen(), step.switched.text, 'character');
+                      // …and "it is a quiet game now" on the move that just gave
+                      // check is the opposite of the truth (run D walk, f6+).
+                      const quietOnCheck = step.switched?.to === 'positional' && /[+#]$/.test(move.san);
+                      if (step.switched && !mateOnBoard && !quietOnCheck) queueSpokenHint(probe.fen(), step.switched.text, 'character');
                     } catch { /* the character read is a bonus, never a blocker */ }
 
                     // BOTH SIDES' PLANS, off the SAME engine read (David
@@ -9916,8 +9919,12 @@ export function CoachTeachPage(): JSX.Element {
                       // king cover thinned, a passer granted, a new isolani.
                       // The same computer review speaks; it self-gates to null.
                       const concession = lookConcession(fenBefore, move.san, cpLoss);
+                      // The opening lane already announced this departure and the
+                      // usual move; the fundamental keeps only its HOW.
+                      const bookSaid = fundamental?.id === 'left-book-early'
+                        && studentJustLeftBook(move.history, playerColor === 'white' ? 'w' : 'b');
                       const line = `${fundamental
-                        ? `${lossInGrade ? '' : fundamental.verdict}${fundamental.recurrence ? ` ${fundamental.recurrence}` : ''}${evidence ? ` ${evidence}` : ''}`.trim()
+                        ? `${lossInGrade ? '' : bookSaid ? fundamental.howOnly : fundamental.verdict}${fundamental.recurrence ? ` ${fundamental.recurrence}` : ''}${evidence ? ` ${evidence}` : ''}`.trim()
                         : look.line}${concession ? ` ${concession}` : ''}`;
                       // "That let them win the pawn on d4" and "they're eyeing
                       // Nxd4 — it would win your pawn on d4" are one claim (run
@@ -9935,7 +9942,9 @@ export function CoachTeachPage(): JSX.Element {
                       // neglected (neglected-development, space-conceded, a passive
                       // worst piece — costs the eval never itemises). Name it on
                       // its own; the fundamental IS the teaching here.
-                      queueSpokenHint(fenAfterReply, fundamental.verdict, 'fundamental', [], undefined, move.fen);
+                      const bookSaidAlone = fundamental.id === 'left-book-early'
+                        && studentJustLeftBook(move.history, playerColor === 'white' ? 'w' : 'b');
+                      queueSpokenHint(fenAfterReply, bookSaidAlone ? fundamental.howOnly : fundamental.verdict, 'fundamental', [], undefined, move.fen);
                       captureEvent('coach_fundamental_named', {
                         surface: 'coach-teach', fundamental: fundamental.id, cp_loss: Math.round(cpLoss),
                       });
@@ -10259,7 +10268,13 @@ export function CoachTeachPage(): JSX.Element {
                   // (David 2026-09-13) — repetition is caught by the twin gate and
                   // the per-game novelty set, not by a number.
                   const lateDecision = decideTurn(
-                    pending.lines.map(({ lane, kind, text, squares, claims, gradeFen }) => ({ lane, kind, text, squares, claims, fen: gradeFen ?? pending.fen })),
+                    pending.lines
+                      // A threat alert already said a tactic is on the board;
+                      // "it has turned sharp — there is a tactic" beside it is
+                      // the same fact, and it landed between the question and
+                      // its answer (run D walk 2026-09-30).
+                      .filter((l) => !(l.lane === 'character' && /tactic/.test(l.text) && /(?:^|\. )(?:Watch out|Careful) —/.test(instantSpokenText)))
+                      .map(({ lane, kind, text, squares, claims, gradeFen }) => ({ lane, kind, text, squares, claims, fen: gradeFen ?? pending.fen })),
                     instantSpokenText,
                     learnMemRef.current.spokenKeys,
                     // ONE THOUGHT PER TURN (WO-1b): the late wave leads only

@@ -89,11 +89,11 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     // parity — the verdict still leads, the evidence still follows it.)
     // (Najdorf re-walk 2026-09-27: the verdict stands down only when the grade
     // already names the SAME lost square — `lossInGrade`.)
-    expect(TEACH).toMatch(/const line = `\$\{fundamental\s*\?\s*`\$\{lossInGrade \? '' : fundamental\.verdict\}[\s\S]{0,160}?\$\{evidence\}[\s\S]{0,20}?`\.trim\(\)\s*:\s*look\.line\}\$\{concession \? ` \$\{concession\}` : ''\}`;/);
+    expect(TEACH).toMatch(/const line = `\$\{fundamental\s*\?\s*`\$\{lossInGrade \? '' : bookSaid \? fundamental\.howOnly : fundamental\.verdict\}[\s\S]{0,160}?\$\{evidence\}[\s\S]{0,20}?`\.trim\(\)\s*:\s*look\.line\}\$\{concession \? ` \$\{concession\}` : ''\}`;/);
     expect(TEACH).toMatch(/const concession = lookConcession\(fenBefore, move\.san, cpLoss\);/);
     // A fundamental with NO material drawback still speaks, on its own.
     // (Colle re-walk 2026-09-27: graded on the student-move board, `move.fen`.)
-    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, fundamental\.verdict, 'fundamental', \[\], undefined, move\.fen\)/);
+    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, bookSaidAlone \? fundamental\.howOnly : fundamental\.verdict, 'fundamental', \[\], undefined, move\.fen\)/);
   });
 
   it('the hint register speaks rather than only prompting', () => {

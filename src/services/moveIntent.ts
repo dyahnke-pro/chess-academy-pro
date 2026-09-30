@@ -393,7 +393,14 @@ export function whatItDoes(fenAfter: string, prepUci: string, mover: 'w' | 'b'):
   const targets: Array<{ sq: string; type: string }> = [];
   for (const sq of now) {
     const p = board.get(sq as never);
-    if (p && p.color === opp && p.type !== 'k') targets.push({ sq, type: p.type });
+    // A HIT IS A THREAT, or it is not a reason. "c4 first, so that Qb3 can hit
+    // their pawn on b7" (run D walk 2026-09-30) named a pawn the c8-bishop
+    // guards — true geometry, no purpose. Only a target that is loose, or worth
+    // more than the piece hitting it, counts — or a pawn lever.
+    if (!p || p.color !== opp || p.type === 'k') continue;
+    const guarded = board.isAttacked(sq as never, opp);
+    // A pawn hitting a pawn is a lever — that IS a purpose ("f4 hits e5").
+    if (m.piece === 'p' || !guarded || (MATERIAL_VALUE[p.type] ?? 0) > (MATERIAL_VALUE[m.piece] ?? 0)) targets.push({ sq, type: p.type });
   }
   targets.sort((a, b) => (MATERIAL_VALUE[b.type] ?? 0) - (MATERIAL_VALUE[a.type] ?? 0));
   if (targets.length) return { verb: `hit the ${PIECE_NAME[targets[0].type]} on ${targets[0].sq}`, castle: false };

@@ -29,7 +29,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `isMethodSentence` (function) — 2 call sites
 - `src/services/coachFeatureService.ts:4418`
-- `src/services/learnFundamentalNarration.ts:105`
+- `src/services/learnFundamentalNarration.ts:110`
 
 ### `fundamentalHow` (function) — 10 call sites
 - `src/services/fundamentalHow.test.ts:25`
@@ -53,7 +53,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/fundamentalHow.test.ts:49`
 - `src/services/fundamentalHow.test.ts:55`
 - `src/services/fundamentalHow.test.ts:81`
-- `src/services/learnFundamentalNarration.ts:95`
+- `src/services/learnFundamentalNarration.ts:100`
 - `src/services/learnWalkBlumenfeld.test.ts:75`
 - `src/services/misconceptionClassifier.ts:259`
 - `src/services/principleAttribution.section14.test.ts:179`

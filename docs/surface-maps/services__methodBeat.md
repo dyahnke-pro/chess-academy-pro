@@ -96,7 +96,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `liveHabitKey` (function) — 3 call sites
-- `src/services/learnFundamentalNarration.ts:101`
+- `src/services/learnFundamentalNarration.ts:106`
 - `src/services/methodBeat.live.test.ts:112`
 - `src/services/methodBeat.live.test.ts:119`
 

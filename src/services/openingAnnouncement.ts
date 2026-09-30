@@ -106,3 +106,10 @@ export function openingAnnouncementForGame(
 export function warmOpeningBook(fen: string, surface: string): void {
   warmBookPosition(fen, surface);
 }
+
+/** Did THIS student move leave the book? The opening lane announces such a
+ *  departure; a lane that would say it again reads this instead of the book. */
+export function studentJustLeftBook(history: readonly string[], studentColor: 'w' | 'b'): boolean {
+  const dep = bookDeparture(history);
+  return !!dep && dep.mover === studentColor && history.length - dep.ply <= 1;
+}

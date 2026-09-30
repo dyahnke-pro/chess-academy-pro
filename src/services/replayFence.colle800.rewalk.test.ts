@@ -21,7 +21,9 @@ describe('the keep-your-minor line names what it outclasses', () => {
       expect(t).not.toMatch(/outclasses their minor;/);
       expect(t).toMatch(/does more than any minor piece they have/);
     }
-  });
+    // Eleven full behaviour reads: 3.5s alone, over 5s under the pre-commit
+    // load — a budget, not a race.
+  }, 20000);
 });
 
 describe('ply 52 — the gap line and the weighing name Bf6 once', () => {
@@ -50,7 +52,7 @@ describe('ply 27 — Ng5 hangs the knight, and the coach says so', () => {
     const { readFileSync } = await import('node:fs');
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     expect(src).toMatch(/queueSpokenHint\(fenAfterReply, line, look\.kind,\s*\/\^\[a-h\]\[1-8\]\$\/\.test\(look\.square\) \? \[look\.square\] : \[\], winClaim, move\.fen\)/);
-    expect(src).toMatch(/queueSpokenHint\(fenAfterReply, fundamental\.verdict, 'fundamental', \[\], undefined, move\.fen\)/);
+    expect(src).toMatch(/queueSpokenHint\(fenAfterReply, bookSaidAlone \? fundamental\.howOnly : fundamental\.verdict, 'fundamental', \[\], undefined, move\.fen\)/);
     expect(src).toMatch(/fen: gradeFen \?\? pending\.fen/);
   });
 });

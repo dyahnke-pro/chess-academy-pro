@@ -118,3 +118,13 @@ describe('stopReason — the stopped move, counted (census #12)', () => {
     expect(stopReason('r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 5 4', 'c5f2', 'w')).toBeNull();
   });
 });
+
+describe('a hit is a threat or it is not a reason (run D walk 2026-09-30, 1.c4)', () => {
+  it('Qb3 against a guarded b7 is no purpose for c4', async () => {
+    const { whatItDoes } = await import('./moveIntent');
+    // after 1.c4: Qb3 would hit b7, which the c8-bishop guards
+    expect(whatItDoes('rnbqkbnr/pppppppp/8/8/2P5/8/PP1PPPPP/RNBQKBNR b KQkq - 0 1', 'd1b3', 'w')).toBeNull();
+    // …and with the bishop gone, b7 is loose and the hit is a reason
+    expect(whatItDoes('rn1qkbnr/pppppppp/8/8/2P5/8/PP1PPPPP/RNBQKBNR b KQkq - 0 1', 'd1b3', 'w')?.verb).toBe('hit the pawn on b7');
+  });
+});

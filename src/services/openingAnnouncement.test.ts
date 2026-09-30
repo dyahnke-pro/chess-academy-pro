@@ -132,3 +132,19 @@ describe('a departure is news only when it just happened (run C walk 2026-09-30)
     vi.doUnmock('./bookDeparture');
   });
 });
+
+describe('studentJustLeftBook (run D walk 2026-09-30: the departure said twice)', () => {
+  it('true only on the student move that left book', async () => {
+    vi.resetModules();
+    vi.doMock('./bookDeparture', async (orig) => ({
+      ...(await orig<typeof import('./bookDeparture')>()),
+      bookDeparture: () => ({ ply: 6, san: 'Bc5', mover: 'b', mainSan: 'Nc6' }),
+    }));
+    const { studentJustLeftBook } = await import('./openingAnnouncement');
+    const h = ['e4', 'e5', 'Nf3', 'Nf6', 'Nc3', 'Bc5'];
+    expect(studentJustLeftBook(h, 'b')).toBe(true);
+    expect(studentJustLeftBook(h, 'w')).toBe(false);
+    expect(studentJustLeftBook([...h, 'Nxe5', 'O-O'], 'b')).toBe(false);
+    vi.doUnmock('./bookDeparture');
+  });
+});

@@ -62,6 +62,11 @@ export interface LearnFundamental {
    *  same fact (re-walk 1380, 24.Bg5: "the bishop on g5 hangs" and "that left
    *  your bishop on g5 hanging" in one breath). */
   square: string | null;
+  /** The HOW sentences alone — for a turn where another lane already said the
+   *  diagnosis (the book departure is announced by the opening lane; run D
+   *  walk 2026-09-30 heard "You left the book with Bc5…" then "That leaves the
+   *  book — … Bc5 steps out of every known line"). Empty when there is no HOW. */
+  howOnly: string;
 }
 
 /**
@@ -116,5 +121,6 @@ export function learnFundamentalVerdict(
     })
     : null;
   const sq = attrs[0].facts.square;
-  return { id: attrs[0].id, tag: attrs[0].tag, verdict, recurrence, square: typeof sq === 'string' ? sq : null };
+  const howOnly = verdict.split(/(?<=[.!?])\s+/).filter(isMethodSentence).join(' ');
+  return { id: attrs[0].id, tag: attrs[0].tag, verdict, recurrence, square: typeof sq === 'string' ? sq : null, howOnly };
 }
