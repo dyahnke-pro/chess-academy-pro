@@ -162,9 +162,10 @@ question the knee-jerk, trigger→scan, autopilot guard, safety precheck.
   **three ways to meet check** (`checkMethod`, lane `checkMethod`, once per game,
   names the kinds never the move); **question the knee-jerk** (`kneeJerk`, lane
   `kneeJerk`, once per game).
-- STILL OPEN: split the position, trigger→scan, autopilot guard, safety
-  precheck — each needs a board signal that proves the habit mattered; not
-  built until one is found (empty > generic).
+- ✅ ALL FOUR BUILT (see the census at the end): split the position
+  (`splitPosition`, reads `boardStructure.kings` — one definition of "opposite
+  wings"), trigger→scan (`looseTrigger`), autopilot guard + safety precheck
+  (`safetyHabits`).
 
 ---
 
@@ -183,7 +184,7 @@ question the knee-jerk, trigger→scan, autopilot guard, safety precheck.
     answered without the king, tempo (their half — nothing of the student's to
     record).
 - **Strength from move one** — ✅ ALREADY WIRED on Play: `liveStrength` reads the same posed/answered measurement as `capabilityEvidence` and sets the Stockfish opponent every move (`CoachGamePage` → `discussion.liveRating`). The line above saying "not wired" was stale. Gem hit / book departure as extra inputs: open.
-- **Fade:** ✅ BUILT 2026-09-30 — the Learn door (`fadeWhenGreen`) speaks only the first sentence of a lane whose skill the student has PROVEN (`loadProvenTags` → `capabilityProven`); grey/red keep the full teaching; only lanes whose held half is wired can fade. Recorded on the `learn-turn-decision` row as `faded`; audit contract LD3 (a fresh device fades nothing).
+- **Fade:** two phrasings per fact kind by heat-map state (#27) — partly live: a GREEN layer goes quiet in the door (`GREEN_QUIET_BELOW`); a verdict only fires on a slip, which breaks the streak, so a second phrasing tier buys little. Not built.
 - **Concept-level spaced retrieval** and **transfer** ("you met this two games ago").
 
 ---
@@ -239,7 +240,7 @@ before the one door and the one thread lands as one more disconnected label
 
 David: "Make sure all other computers carry the same dual role … Can we add a teaching function to ALL current computers? … add the proper audit tools for when we go live … Play still needs access to these computers to answer questions on demand." Decisions: scope = all live-coach computers; no-student-skill → N/A with a reason; Play = every question that makes sense; merge after the audits are built and green.
 
-- ✅ **`computerRoles.ts`** — `Record<LearnLane, {computer, tag, held, broken, askable}>`, each half `wired` (code path named and checked to exist) / `owed` (shrink-only, now 1: falseAlarm on Play needs an engine line at question time) / `na` with its reason. A new lane fails to compile until it answers. Gate `computerRoles.test.ts`.
+- ✅ **`computerRoles.ts`** — `Record<LearnLane, {computer, tag, held, broken, askable}>`, each half `wired` (code path named and checked to exist) / `owed` (shrink-only, now 0) / `na` with its reason. A new lane fails to compile until it answers. Gate `computerRoles.test.ts`.
 - ✅ **HONESTY BUG FOUND AND FIXED**: `evaluatePlayerMove` recorded every clean Learn move as UNPROMPTED held evidence, though Learn now announces critical moments before the move. `prompted` is a REQUIRED arg at all five capture sites (Learn: announced ply; WLPP practice: hint shown; middlegame practice: hint used; opening play: hint level; review card: false).
 - ✅ Held rows now wired for: found move, good trade, well-timed quiet move, right recapture, threat rightly ignored, move order, move intent. Said-before-the-move lanes (gem, tactic, threat, its answer, stalemate, check method) are N/A: a find after them is prompted.
 - ✅ **Trade by piece quality** — `tradeJudgement` reads the engine's per-piece table (fetched only on a completed trade): their busiest piece off = good trade; your best for their idlest = a bad deal. `weakestByDelta` is the twin of `strongestByDelta`.
@@ -259,30 +260,25 @@ gate's measurement), not on this one.
 
 ### TRIAGE vs CODE (2026-09-30, every open row of Phases 1/3/4/5, file:line checked)
 BUILT: 1.2 Learn door · one move two jobs · latentDanger · concession (#46).
-PARTIAL: ~~1.2 Review speaks outside the door~~ ✅ (every uncapped review ply passes `buildVoicePackage`: board grade on the board before OR after the move, the not-speakable screen, a per-game sentence ledger; audit row `review-voice-package`, contract "REVIEW DOOR package ran"; Play stays silent by David's call) · ~~1.3 ~10 lanes carry no claim key~~ ✅ (opening name, gap, plan arc, causal chain, backward look ×2, gambit, move point — each keyed on its fact, event-like facts per ply) · 1.4 (structure yes; NO word budget — and a budget would be a G4.5 cap, so the structure IS the answer) · ~~trigger→scan (forcing-scan only)~~ ✅ (`looseTrigger` + habit `loose-trigger`: a loose enemy piece the quiet best move hits, named as the trigger — never the move — at a deciding moment, once) · ~~how-to-calculate (drill only)~~ ✅ counting live (`countMethod`, lane `countMethod`: attackers vs defenders on a real exchange square, said only when the count and the legal SEE agree) · ~~overall verdict (a list, not one comparison)~~ ✅ (`phaseVerdictLine` weighs the other side: "…; what they have in return: X, and it keeps it close / isn't enough"; level → "the two hold each other") · ~~piece maneuvers (path-first wording)~~ ✅ (planArc: "getting the knight to e5, by way of d2 and f3") · ~~their next move~~ ✅ (Learn's `theirIntent` lane says what their quiet move prepares — that IS their next move) · ~~planRace (file-collision review-only)~~ ✅ (`fileClaimed`, lane `fileRace`: said AFTER the student's rook takes the contested file — never "claim it now", which would name the next move unearned; held evidence `passive-rook`) · ~~callbacks to the thesis~~ ✅ folded into the move→plan link · ~~trap candidates (LLM context, not a gem)~~ ✅ covered: punish-gems ARE the trap candidates (popular amateur moves the engine refutes), mined offline and fired live as gems; a runtime rescan would cost an engine call per candidate to duplicate them · ~~structure transfer~~ ✅ (`structureTransfer`: a French chain / closed centre / IQP reached from another opening adds "it is the structure the X is built on, so its plans carry over") · ~~heat-map (stalemate avoided, check answered)~~ ✅ stalemate avoided is a `capabilitiesPosed` question (held/broken on every recording surface); check answered = N/A (no student-model tag names it; a costly answer is already attributed) · ~~transfer (slips only)~~ ✅ positive transfer (`drilledTransferLine`: the engine move landing a motif the student SOLVED from their own mistakes — "that is the fork you drilled from your game against X — this time you found it") · ~~liveStrength (no gem/book inputs)~~ ✅ gem input (`gemMoveSignal`: walked into / punished / missed, indexes warmed in chunks off the move path); book departure = N/A for STRENGTH (a knowledge signal, already fed to the weakness model) · #37/#41 walks unrecorded · ~~move→plan link (student advance filtered)~~ ✅ (the student's FIRST step toward their announced plan speaks once; a move after the plan was told is prompted for `no-plan`) · ~~branching narrator (no caller)~~ ⛔ DELETED (G8.5): `opponentIntentFacts`' branched "you'll want Y ready; if instead Z, then W" form was contracted to demo surfaces only and none ever called it; every live surface is the student's own game (guide-don't-tell) · ~~break preparation (narrow)~~ ✅ covered by `moveOrder` (engine-proven "X first — Y now drops a pawn") + `timing` · ~~opening summary~~ ✅ (`openingSummaryLine`: the first move out of the opening says whether the master-game break came, is still there to play, or the position moved past it).
-MISSING: ~~split the position~~ ✅ (`splitPosition`, lane `splitPosition`: opposite-side castling with queens on — two races, a tempo over a pawn) · ~~autopilot guard~~ ✅ · ~~safety precheck (blunder check)~~ ✅ · ~~his data on the live board~~ ✅ (`strongChoice`, depersonalized) · ~~concept-level SRS~~ ✅ (`conceptSchedule`: a missed card brings its concept's other open cards due today; phase-only buckets never pull) · ~~fade~~ ✅ · ~~plan chooser~~ ✅ (`planChooser`: the two best engine lines carry different plans — "two plans hold here" or "the stronger is X; Y falls N pawns short") · ~~transposition reader~~ ✅ (`openingPositions`: every DB opening keyed by its board, built offline to `public/data/opening-positions.json`; a board the move order never named is announced "by a different move order, the game has transposed into …") · #56 re-anchor 163 beats · walks #40, #32.
+PARTIAL: 1.2 Play/Review speak outside the door · 1.3 ~10 lanes carry no claim key · 1.4 (structure yes; NO word budget — and a budget would be a G4.5 cap, so the structure IS the answer) · trigger→scan (forcing-scan only) · how-to-calculate (drill only) · overall verdict (a list, not one comparison) · piece maneuvers (path-first wording) · their next move (Play only) · planRace (file-collision review-only) · callbacks to the thesis (review/lesson only) · trap candidates (LLM context, not a gem) · structure transfer · heat-map (stalemate avoided, check answered) · transfer (slips only) · liveStrength (no gem/book inputs) · #37/#41 walks unrecorded · move→plan link (student advance filtered) · branching narrator (no caller) · break preparation (narrow) · opening summary.
+MISSING: split the position · autopilot guard · safety precheck (blunder check) · his data on the live board · concept-level SRS · fade · plan chooser · transposition reader · ~~#56 re-anchor 163 beats~~ ⛔ NOT REPRODUCIBLE (see "#56 re-measured" below) · walks #40, #32.
 
 **David's calls on the design rows (2026-09-30):** concept-level SRS → FOLD INTO MISTAKE DRILLS (cards carry the concept tag; SRS schedules by concept too; no new screen or store) · his data on the live board → SAY IT DEPERSONALIZED ("a strong player's choice here is X", never a name) · fade → SHORT PHRASING WHEN GREEN · one door → REVIEW YES, PLAY NO (Play stays silent; its answers already use the shared computers).
 
-### Honesty fix (2026-09-30, found while wiring the stalemate row)
-A warning spoken BEFORE the student moves (threat, tactic, gem, stalemate, how
-to meet check) never marked that move as prompted — only the critical-moment
-announcement did. A warned-then-answered move could therefore file as unaided
-proof. Now the Learn door's spoken lanes are checked against
-`SAID_BEFORE_MOVE` (derived from the role table) and the board they spoke on
-is marked; the move made from it joins `announcedPliesRef`, so every evidence
-row it writes is prompted.
+### #56 re-measured (2026-09-30)
+No script, test or report ever produced the "163". A board-proof detector over
+all 430 voiced source files (11,919 main-line rows with speech): 80 sentences
+are false on their own row's board (0.7%) — almost all hypotheticals ("such a
+knight would…", "if Black takes…") that the walkthrough's board grading drops
+at speak time. Of those, 24 are true one ply earlier — and every one of them
+narrates the move being played ("you take the free pawn on h2" on …Qxh2),
+which is correct, not late. No note was re-anchored: nothing measured wrong.
 
-### Review through the one door — measured (2026-09-30)
-Scratch run: 4 real model games, node Stockfish depth 9, the production
-(uncapped) builder. 301 review sentences, 0 false on the boards around the
-move. The door dropped 24 of 280 parts (8.6%): the plan-race sentence repeated
-on 7 straight plies, restated standing tactics, repeated trade/target lines —
-real repetition — plus FOUR false refusals it exposed, all fixed at the root:
-- `voicePackage` refused "Do not move the pawns in front of your own king…" as
-  an "instruction to a model" (case-insensitive DO NOT) — now shouted only.
-- `configurationClaims` refused a GOAL ("build toward a passed pawn", "their
-  plan is taking shape: a passed pawn") and a PRINCIPLE ("a rook needs an open
-  file") as false board claims. Learn's plan line runs the same checker, so a
-  passer plan could never be spoken on Learn either. A structure named after an
-  aspiration word in its own sentence is no longer a claim about the board.
+### First-person voiced notes — DAVID'S CALL (2026-09-30)
+2,214 first-person uses across ~700 notes (`I like…`, `I don't think…`, `I
+played the queen…` — the video's own game). Not mechanical: "I played" is a
+narration of a real game, "I think" is a hedge, "I recommend" is an opinion.
+Two honest options: (a) the builder skips first-person notes (compliant now,
+~9% of voiced coverage lost in the "teach me X opening" walkthrough — the only
+surface that speaks them), or (b) an authoring pass rewrites them. Held to the
+shrink-only ceiling in `voicedDepersonalized.test` until David chooses.
