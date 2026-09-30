@@ -983,7 +983,16 @@ export function namedPawnStructure(
     // A true isolani: no friendly c/e-pawn, and no enemy d-pawn on the file.
     const enemy = white ? bp : wp;
     if (dRank && fileCount(set, 'c') === 0 && fileCount(set, 'e') === 0 && fileCount(enemy, 'd') === 0) {
-      return { name: `${holder(white)} the isolated queen’s pawn`, plan: 'the isolani gives active pieces and the d5/d4 outpost now, but becomes a target in the endgame — the owner attacks, the blockader trades down' };
+      // SEATED, AND WHAT TO DO (walk 2026-09-30: "the owner attacks, the
+      // blockader trades down" never said which one the student is).
+      const front = `${dRank[0]}${Number(dRank[1]) + (white ? 1 : -1)}`;
+      const mine = (white ? 'w' : 'b') === studentColor;
+      return {
+        name: `${holder(white)} the isolated queen’s pawn`,
+        plan: mine
+          ? `play actively while pieces are on — the isolani gives you open files and the outposts beside it, but every trade makes it weaker, so avoid simplifying`
+          : `blockade it on ${front}, ideally with a knight, and trade pieces — every trade makes the pawn weaker, and in the endgame it becomes a target`,
+      };
     }
   }
   // HANGING PAWNS — c- and d-pawns abreast on the 4th/5th with no b/e neighbours.

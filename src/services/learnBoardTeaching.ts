@@ -18,6 +18,7 @@ import { ruleException } from './ruleException';
 import { falseAlarm } from './falseAlarm';
 import { theirMoveCost } from './theirMoveCost';
 import { pushOrHold } from './pushOrHold';
+import { threatAnswer, type ThreatAnswer } from './threatAnswer';
 
 export interface TeachingHint {
   lane: LearnLane;
@@ -173,4 +174,22 @@ export function theirMoveTeaching(fenBefore: string, san: string, student: 'w' |
     event: { name: 'coach_their_move_cost_named', props: { surface: 'coach-teach', kind: cost.kind } },
     arrows,
   };
+}
+
+/** The answer to a threat the coach just named ("Watch out — their bishop pins
+ *  your knight …"): question first, then what the engine's move does about it
+ *  (census T4). Appended to the threat line itself, never a lane of its own —
+ *  a threat and its answer are one claim. */
+export function threatAnswerTeaching(i: {
+  fen: string;
+  squares: readonly string[];
+  shape: 'line' | 'hit';
+  bestUci: string | null;
+  /** White-POV engine eval at `fen`, or null. */
+  whiteCp: number | null;
+  student: 'w' | 'b';
+  ply: number;
+}): ThreatAnswer | null {
+  const studentCp = i.whiteCp === null ? null : i.student === 'w' ? i.whiteCp : -i.whiteCp;
+  return threatAnswer({ fen: i.fen, squares: i.squares, bestUci: i.bestUci, studentCp, student: i.student, ply: i.ply, shape: i.shape });
 }

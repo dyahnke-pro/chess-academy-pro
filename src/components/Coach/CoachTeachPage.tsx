@@ -9,7 +9,7 @@
  * / reset_board markers parsed from its response. Same room, different
  * actions.
  */
-import { characterOf, stepCharacter, EMPTY_CHARACTER, type CharacterState } from '../../services/positionCharacter';
+import { characterOf, stepCharacter, EMPTY_CHARACTER, SHARP_GAP_CP, type CharacterState } from '../../services/positionCharacter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStandingFactMemory, fullmoveOf } from '../../services/standingFactMemory';
 import { createLearnMemory, type LearnMemory } from '../../services/learnMemory';
@@ -31,7 +31,7 @@ import { buildPositionalRead, rookReachesFile } from '../../services/positionalR
 import { curatedBeatAt } from '../../services/curatedBeatSource';
 import { DEFAULT_INTENT, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { studentMoveTeaching, theirMoveTeaching } from '../../services/learnBoardTeaching';
+import { studentMoveTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -188,7 +188,7 @@ import { findAndBakeGems } from '../../services/gemFinder';
 import { moveOrderArrows } from '../../services/moveOrderArrows';
 import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead';
 
-import { scaleGap, packageForRegister } from '../../services/hintRegister';
+import { scaleGap } from '../../services/hintRegister';
 import { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcState, planFromUci, tacticWord } from '../../services/lookaheadPlan';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import { backwardLook, lastCoachVerdictDecline, lookConcession } from '../../services/backwardLook';
@@ -285,6 +285,7 @@ import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingRating } from '../../services/coachGameEngine';
 import { samePosition } from '../../utils/samePosition';
+import { splitThink, stripThink, THINK_MARK, THINK_PAUSE_MS } from '../../utils/thinkPause';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
 import { actionForCommand, actuate } from '../../services/coachActuator';
@@ -1770,6 +1771,12 @@ export function CoachTeachPage(): JSX.Element {
    *  the mating NET at mate-in-N — not wait for the board to reach mate-in-1
    *  (David 2026-08-23). Cleared when there is no student mate. */
   const pendingEngineMateRef = useRef<{ fen: string; movesToMate: number; firstUci: string | null } | null>(null);
+  // The engine's read of the board after the coach's reply — the answer to a
+  // threat the instant wave named waits on it (threatAnswer).
+  const studentBestReadRef = useRef<{ fen: string; bestUci: string | null; whiteCp: number | null } | null>(null);
+  // How many threat answers have been said — rotates the question stem by
+  // occurrence, so consecutive answers never open with the same words.
+  const threatAnswerCountRef = useRef(0);
   /** Positional observations already spoken this game — see `buildPositionalRead`.
    *  Without it an uncastled king repeats the same sentence every ply until it
    *  castles, and the boundary repeat-guard turns each of those back into the
@@ -7536,8 +7543,10 @@ export function CoachTeachPage(): JSX.Element {
      *  over it by outranking it. */
     lead: TurnDecision['lead'];
     /** Board descriptions for the late wave's one decision. */
-    deferred: Array<{ lane: LearnLane; text: string; squares?: readonly string[]; claims?: string[] }>;
+    deferred: Array<{ lane: LearnLane; text: string; squares?: readonly string[]; claims?: string[]; arrows?: ArrowClaim[] }>;
     alertArrow: BoardArrow | null;
+    /** The threat that SPOKE this wave, for its answer in the late wave. */
+    threatAsked: { squares: string[]; shape: 'line' | 'hit' } | null;
     leadEyeArrows: BoardArrow[];
     /** Lead-the-eye for the lanes that SPOKE — each kept fact's squares.
      *  Computed from what survived into `pkg.spoken`, so a mark can never
@@ -7563,7 +7572,7 @@ export function CoachTeachPage(): JSX.Element {
       const over = new Chess(args.fenAfterReply);
       if (over.isGameOver()) {
         return {
-          pkg: buildVoicePackage([]), lanes: '', lead: null, deferred: [], alertArrow: null, leadEyeArrows: [],
+          pkg: buildVoicePackage([]), lanes: '', lead: null, deferred: [], alertArrow: null, threatAsked: null, leadEyeArrows: [],
           keptHighlights: [],
         };
       }
@@ -7593,6 +7602,7 @@ export function CoachTeachPage(): JSX.Element {
      *  when no threat on the same move already carries one (one lecture per move). */
     let tacticTailType: string | null = null;
     let threatLine: string | null = null;
+    let threatShape: 'line' | 'hit' = 'line';
     /** A mate was named by the alert lane this turn — the composer below must
      *  not announce it a second time in other words. */
     let mateNamedThisTurn = false;
@@ -7910,7 +7920,11 @@ export function CoachTeachPage(): JSX.Element {
           if (hit) {
             threatKey = `hit:${hit.piece}${hit.sq}:${hit.bySq}`;
             threatSquares = [hit.sq, hit.bySq];
-            threatLine = `Careful — their ${NAME[hit.by] ?? 'piece'} on ${hit.bySq} hits your ${NAME[hit.piece] ?? 'piece'} on ${hit.sq}; it has to move.`;
+            // No instruction here: this is said before the engine has read the
+            // board, and "it has to move" was contradicted by the answer that
+            // follows ("It can wait — Bh2+ comes first", walk 2026-09-30). The
+            // threat answer says what to do, from the engine.
+            threatLine = `Careful — their ${NAME[hit.by] ?? 'piece'} on ${hit.bySq} hits your ${NAME[hit.piece] ?? 'piece'} on ${hit.sq}.`;
             alertArrow = admitArrow({ from: hit.bySq, to: hit.sq, role: 'threat', source: 'teach.hitAlert' }, { fen: args.fenAfterReply, studentColor: studentCC === 'w' ? 'white' : 'black' });
           }
         } catch { /* the warning is a bonus */ }
@@ -7997,6 +8011,7 @@ export function CoachTeachPage(): JSX.Element {
       // battery" was followed by "their rook on e8 and queen on e7 line up on
       // the same e-file" (walk 2026-09-27, Carlsen–Aronian).
       if (threatLine) for (const sq of threatSquares) spokenSquaresThisTurn.add(sq);
+      threatShape = /^(?:hang|hit|kingpawn):|:fork:/.test(threatKey) ? 'hit' : 'line';
       if (tacticLine) for (const sq of tacticSquares) spokenSquaresThisTurn.add(sq);
     } catch { /* the alert is a bonus — never block the teaching */ }
 
@@ -8275,6 +8290,7 @@ export function CoachTeachPage(): JSX.Element {
     // `calculation` behavior stands down; the other reads are engine-free.
     let behaviorLine: string | null = null;
     let behaviorClaims: string[] = [];
+    let behaviorArrows: ArrowClaim[] = [];
     let behaviorSquares: string[] = [];
     let positionalLine: string | null = null;
     let positionalClaims: string[] = [];
@@ -8351,6 +8367,7 @@ export function CoachTeachPage(): JSX.Element {
         const eligible = quietTurn ? hits : hits.filter((h) => BEHAVIOR_ALWAYS_RIDE.has(h.id));
         const hit = behaviorSchedulerRef.current.pick(eligible);
         if (hit) {
+          behaviorArrows = hit.arrows ?? [];
           behaviorLine = hit.fact; behaviorSquares = hit.squares; behaviorClaims = hit.keys.filter((k) => /^(?:castle-now|file-[a-h]|(?:passer|break)-[a-h][1-8])$/.test(k));
           if (hit.id === 'pawn-break') for (const sq of hit.squares) standingRef.current.remember(`student-break-${sq}`);
           for (const k of hit.keys) positionalSaidRef.current.add(k);
@@ -8442,12 +8459,22 @@ export function CoachTeachPage(): JSX.Element {
     // leads. Now they ride the late wave, decided together with the engine
     // lanes, so a board description can no longer take the turn from what a
     // move is FOR. Only the urgent lanes speak instantly.
-    const deferred: Array<{ lane: LearnLane; text: string; squares?: readonly string[]; claims?: string[] }> = [];
-    const deferIf = (on: unknown, lane: LearnLane, text: string | null, squares?: readonly string[], claims?: string[]): void => {
-      if (on && text) deferred.push({ lane, text, squares, claims: claims?.length ? claims : undefined });
+    const deferred: Array<{ lane: LearnLane; text: string; squares?: readonly string[]; claims?: string[]; arrows?: ArrowClaim[] }> = [];
+    const deferIf = (on: unknown, lane: LearnLane, text: string | null, squares?: readonly string[], claims?: string[], arrows?: ArrowClaim[]): void => {
+      if (on && text) deferred.push({ lane, text, squares, claims: claims?.length ? claims : undefined, arrows: arrows?.length ? arrows : undefined });
     };
-    deferIf(computedLine && !softStandDown, 'commentary', computedLine);
-    deferIf(behaviorLine && !softStandDown && !decidedByMaterial, 'behavior', behaviorLine, behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)), behaviorClaims);
+    // A recited line in the computed beat ("After Rxb2+, Bxb2, Rb8, your rook
+    // pins…") is walked as arrows, the same as a curated note's (walk
+    // 2026-09-30: the line was spoken with nothing on the board).
+    const computedLineArrows: ArrowClaim[] = (() => {
+      try {
+        return computedLine
+          ? moveOrderArrows(computedLine, args.fenAfterReply).map((a): ArrowClaim => ({ from: a.from, to: a.to, role: 'line', fen: a.fenBefore, source: 'teach.computedLine' }))
+          : [];
+      } catch { return []; }
+    })();
+    deferIf(computedLine && !softStandDown, 'commentary', computedLine, undefined, undefined, computedLineArrows);
+    deferIf(behaviorLine && !softStandDown && !decidedByMaterial, 'behavior', behaviorLine, behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)), behaviorClaims, behaviorArrows);
     deferIf(positionalLine && !softStandDown && !decidedByMaterial, positionalIsOwnKing ? 'kingSafety' : 'positional', positionalLine, positionalSquares, positionalClaims);
     const instantDecision = decideTurn([
       ...(gemLine ? [{ lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply }] : []),
@@ -8546,6 +8573,9 @@ export function CoachTeachPage(): JSX.Element {
       lead: instantDecision.lead,
       deferred,
       alertArrow,
+      threatAsked: threatLine
+        ? { squares: [...threatSquares], shape: threatShape }
+        : null,
       leadEyeArrows,
       keptHighlights,
     };
@@ -8909,6 +8939,9 @@ export function CoachTeachPage(): JSX.Element {
                   studentBest = await stockfishEngine.analyzeWithBudget(probe.fen(), COACH_TURN_DEPTH, 1200);
                 } catch { /* engine down → thin (chess.js-only) context below */ }
                 finally { try { stockfishEngine.setMultiPv(3); } catch { /* ignore */ } }
+                studentBestReadRef.current = studentBest
+                  ? { fen: probe.fen(), bestUci: studentBest.bestMove || null, whiteCp: studentBest.isMate ? null : studentBest.evaluation }
+                  : null;
                 // ONE tactical read per turn — the seductive-but-wrong move (the
                 // BUT-TURN, Naroditsky's #1 device) and the honest hedge (a close
                 // second-best), read straight off the MultiPV the turn ALREADY
@@ -9086,7 +9119,7 @@ export function CoachTeachPage(): JSX.Element {
                       // development idea another lane may already have said.
                       if (q.ideaKey && (positionalSaidRef.current.has(q.ideaKey) || standingRef.current.said.has(q.ideaKey))) continue;
                       if (q.ideaKey) positionalSaidRef.current.add(q.ideaKey);
-                      queueSpokenHint(probe.fen(), q.text, 'pieceQuality', q.squares);
+                      queueSpokenHint(probe.fen(), q.text, 'pieceQuality', q.squares, undefined, undefined, q.arrows);
                       captureEvent('piece_quality_spoken', { surface: 'coach-teach', kind: q.kind });
                     }
                   }
@@ -9184,7 +9217,11 @@ export function CoachTeachPage(): JSX.Element {
                       // stating the same fact later reads it as heard (Bowdler
                       // walk 2026-09-27: the c7 fork warned at plies 18 and 24).
                       if (c.claim) standingRef.current.remember(c.claim);
-                      queueSpokenHint(probe.fen(), c.text, 'positionFacts', undefined, c.claim ? [c.claim] : undefined);
+                      // A recited line ("After Re1+, Be7, Qe2, your queen pins…")
+                      // is walked as arrows (walk 2026-09-30).
+                      let pfArrows: ArrowClaim[] = [];
+                      try { pfArrows = moveOrderArrows(c.text, probe.fen()).map((a): ArrowClaim => ({ from: a.from, to: a.to, role: 'line', fen: a.fenBefore, source: 'teach.positionFacts' })); } catch { pfArrows = []; }
+                      queueSpokenHint(probe.fen(), c.text, 'positionFacts', undefined, c.claim ? [c.claim] : undefined, undefined, pfArrows);
                     }
                     if (pf.importance.speak) captureEvent('position_facts_spoken', { surface: 'coach-teach', tier: pf.importance.tier, clauses: pf.clauses.length });
                   }
@@ -9249,7 +9286,7 @@ export function CoachTeachPage(): JSX.Element {
                       if (pf) {
                         priorityFirstLastPlyRef.current = plyNow;
                         captureEvent('priority_first_offered', { surface: 'coach-teach', target: pf.targetSquare });
-                        queueSpokenHint(probe.fen(), packageForRegister(pf.hint, discussion.hintDial.register), 'priorityFirst');
+                        queueSpokenHint(probe.fen(), pf.spoken, 'priorityFirst', [pf.targetSquare], undefined, undefined, [{ from: pf.arrow.from, to: pf.arrow.to, role: 'play', vouchedBy: 'engine', source: 'learn.priorityFirst' }]);
                       }
                     }
                     // THE REJECTED TEMPTING MOVE (the speedrun's warning
@@ -9267,12 +9304,12 @@ export function CoachTeachPage(): JSX.Element {
                           evalCp: playerColor === 'white' ? l.evaluation : -l.evaluation,
                         }));
                       const rt = rtLines.length >= 2
-                        ? buildRejectedTempting({ fen: probe.fen(), studentColor: playerColor, lines: rtLines })
+                        ? buildRejectedTempting({ fen: probe.fen(), studentColor: playerColor, lines: rtLines, baitSquare: m.to })
                         : null;
                       if (rt) {
                         rejectedTemptingCountRef.current += 1;
                         captureEvent('rejected_tempting_offered', { surface: 'coach-teach', tempting: rt.temptingSan, refutation: rt.refutationSan });
-                        queueSpokenHint(probe.fen(), packageForRegister(rt.hint, discussion.hintDial.register), 'rejectedTempting');
+                        queueSpokenHint(probe.fen(), rt.spoken, 'rejectedTempting', undefined, undefined, undefined, [{ from: rt.refutation.from, to: rt.refutation.to, role: 'line', fen: rt.refutation.fenBefore, source: 'learn.rejectedTempting' }]);
                       }
                     }
 
@@ -9295,7 +9332,8 @@ export function CoachTeachPage(): JSX.Element {
                         tacticLive: tctxNow.immediate.length > 0 || tctxNow.hanging.length > 0,
                         bestGapCp: gap,
                       });
-                      const step = stepCharacter(characterRef.current, now);
+                      const tacticLiveNow = tctxNow.immediate.length > 0 || tctxNow.hanging.length > 0;
+                      const step = stepCharacter(characterRef.current, now, tacticLiveNow ? 'tactic' : gap !== null && gap >= SHARP_GAP_CP ? 'gap' : undefined);
                       characterRef.current = step.next;
                       if (step.switched) queueSpokenHint(probe.fen(), step.switched.text, 'character');
                     } catch { /* the character read is a bonus, never a blocker */ }
@@ -9333,7 +9371,9 @@ export function CoachTeachPage(): JSX.Element {
                             : null;
                           planArcRef.current = { theirs: theirStep.next, mine: mineStep?.next ?? planArcRef.current.mine };
                           const arcLines = [
-                            ...theirStep.events.filter((e) => e.kind !== 'advance'),
+                            // Their ADVANCE speaks now: it is the why of the move they just
+                            // made, question first (2026-09-30).
+                            ...theirStep.events,
                             // The student's own plans are never ANNOUNCED on Learn (their emerge
                             // is filtered), so their DROP is never said either: "You have let
                             // an attack on their king go" for a plan the student never heard
@@ -9493,7 +9533,9 @@ export function CoachTeachPage(): JSX.Element {
             // newest line always wins (the same newest-move-wins doctrine
             // the parked-submit refire follows).
             const myTrackAGen = ++trackAGenRef.current;
-            const speakTrackA = (line: string): void => {
+            // `onAnswer` runs when a THINK_MARK line reaches its answer — after
+            // the question and the pause — so the answer's marks appear with it.
+            const speakTrackA = (line: string, onAnswer?: () => void): void => {
               if (trackAGenRef.current !== myTrackAGen) return;
               if (!trackAStarted) {
                 trackAStarted = true;
@@ -9513,15 +9555,25 @@ export function CoachTeachPage(): JSX.Element {
                   // code; they reach the voice THROUGH `voiceFacts`, in the raw
                   // register (the computed text is spoken as-is, no model call,
                   // no latency) — the same seam review speaks through.
-                  return speakComputed(line, { forced: true, intent: 'learn-live' });
+                  // THE THINK PAUSE (David 2026-09-30): a question, time to
+                  // think, then the answer shown and explained.
+                  const qa = splitThink(line);
+                  if (!qa) return speakComputed(line, { forced: true, intent: 'learn-live' });
+                  return speakComputed(qa[0], { forced: true, intent: 'learn-live' })
+                    .then(() => new Promise<void>((res) => { setTimeout(res, THINK_PAUSE_MS); }))
+                    .then(() => {
+                      if (trackAGenRef.current !== myTrackAGen) return undefined;
+                      onAnswer?.();
+                      return speakComputed(qa[1], { forced: true, intent: 'learn-live' });
+                    });
                 })
                 .catch(() => undefined);
-              instantSpokenText = instantSpokenText ? `${instantSpokenText} ${line}` : line;
+              instantSpokenText = instantSpokenText ? `${instantSpokenText} ${stripThink(line)}` : stripThink(line);
               void logAppAudit({
                 kind: 'coach-narration-spoken',
                 category: 'narration',
                 source: 'CoachTeachPage.trackA',
-                summary: `track A spoke: "${line.slice(0, 80)}"`,
+                summary: `track A spoke: "${stripThink(line).slice(0, 80)}"`,
                 fen: liveFenRef.current,
               });
             };
@@ -9557,7 +9609,7 @@ export function CoachTeachPage(): JSX.Element {
                   studentColor: playerColor,
                 });
                 instantLead = instant.lead;
-                for (const d of instant.deferred) queueSpokenHint(ip.fen(), d.text, d.lane, d.squares, d.claims);
+                for (const d of instant.deferred) queueSpokenHint(ip.fen(), d.text, d.lane, d.squares, d.claims, undefined, d.arrows);
                 turnLeadRef.current = instant.lead ? { fen: ip.fen(), lead: instant.lead } : null;
                 // THE PACKAGE IS THE UTTERANCE. This used to log `factLines`
                 // while speaking a separately-assembled `alertLine`/`teachLine`
@@ -9594,6 +9646,28 @@ export function CoachTeachPage(): JSX.Element {
                   if (instant.alertArrow && instant.pkg.kept.some((f) => f.kind === 'threat')) {
                     const arrow = instant.alertArrow;
                     void padDone.then(() => setArrows((prev) => uniqueArrows([...prev, arrow])));
+                  }
+                  // THE THREAT'S ANSWER (census T4, David 2026-09-30: "describing
+                  // the board is what we do not want"). The warning speaks now;
+                  // what to do about it needs the engine's read of this board, so
+                  // it rides the late wave — question first, then the answer.
+                  const asked = instant.pkg.kept.some((f) => f.kind === 'threat') ? instant.threatAsked : null;
+                  if (asked) {
+                    const fenNow = ip.fen();
+                    void factsReady.then(() => {
+                      const read = studentBestReadRef.current;
+                      if (!read || !samePosition(read.fen, fenNow)) return;
+                      const ans = threatAnswerTeaching({
+                        fen: fenNow, squares: asked.squares, shape: asked.shape,
+                        bestUci: read.bestUci, whiteCp: read.whiteCp,
+                        student: playerColor === 'white' ? 'w' : 'b', ply: threatAnswerCountRef.current,
+                      });
+                      if (ans) {
+                        threatAnswerCountRef.current += 1;
+                        queueSpokenHint(fenNow, ans.text, 'threatAnswer', asked.squares, [`threat-answer:${ans.arrow.from}${ans.arrow.to}`], undefined, [ans.arrow]);
+                        captureEvent('threat_answer_queued', { surface: 'coach-teach', kind: ans.kind });
+                      }
+                    });
                   }
                   // "We said something beyond a bare callout." The two callout
                   // kinds were one `alert` before the split, so both are named.
@@ -9953,7 +10027,13 @@ export function CoachTeachPage(): JSX.Element {
                         if (order) {
                           // The follow-up that works NOW, as the move to play.
                           queueSpokenHint(fenAfterReply, order.text, 'moveOrder', order.squares, [`order:${order.followUp.uci}`, `stops:${order.answer.uci}`], undefined,
-                            [{ from: order.followUp.uci.slice(0, 2), to: order.followUp.uci.slice(2, 4), role: 'play', source: 'learn.moveOrder' }]);
+                            [
+                              { from: order.followUp.uci.slice(0, 2), to: order.followUp.uci.slice(2, 4), role: 'play', source: 'learn.moveOrder' },
+                              // …and the answer it would have run into, walked on
+                              // the board where the follow-up came first (walk
+                              // 2026-09-30: "…Rxe3+" was spoken with no arrow).
+                              ...(yFen ? [{ from: order.answer.uci.slice(0, 2), to: order.answer.uci.slice(2, 4), role: 'line' as const, fen: yFen, source: 'learn.moveOrder' }] : []),
+                            ]);
                           captureEvent('coach_move_order_named', { surface: 'coach-teach', cost_cp: Math.round(order.costCp) });
                         }
                       // WHAT THE MOVE IS FOR (David 2026-09-29: "the coach describes the
@@ -10194,7 +10274,9 @@ export function CoachTeachPage(): JSX.Element {
                     });
                   }
                   if (hintPkg.spoken) {
-                    speakTrackA(hintPkg.spoken);
+                    // Arrows for an answered question wait for the answer.
+                    const reveal: { answer?: () => void } = {};
+                    speakTrackA(hintPkg.spoken, () => reveal.answer?.());
                     // Record the late package's phrases too — the per-game set is
                     // what keeps the NEXT turn from repeating any of them.
                     for (const k of spokenSentenceKeys(hintPkg)) learnMemRef.current.spokenKeys.add(k);
@@ -10230,11 +10312,19 @@ export function CoachTeachPage(): JSX.Element {
                     // kept fact finds its queued line by its first claim; the
                     // arrows go through the one door, on the live board.
                     const owedArrows: ArrowClaim[] = [];
+                    const answerArrows: ArrowClaim[] = [];
                     for (const f of hintPkg.kept) {
                       const key = f.claims?.[0];
-                      const src = key ? pending.lines.find((l) => l.claims?.[0] === key) : pending.lines.find((l) => l.text === f.text);
-                      if (src?.arrows?.length) owedArrows.push(...src.arrows);
+                      // Without a claim, by text — and a kept line may be its queued line with
+                      // a sentence the ledger had already heard taken out.
+                      const src = key ? pending.lines.find((l) => l.claims?.[0] === key) : pending.lines.find((l) => l.text === f.text || l.text.includes(f.text));
+                      if (src?.arrows?.length) (f.text.includes(THINK_MARK) ? answerArrows : owedArrows).push(...src.arrows);
                     }
+                    reveal.answer = () => {
+                      if (answerArrows.length === 0 || liveFenRef.current !== fenAfterReply) return;
+                      const drawn = admitArrows(answerArrows, { fen: fenAfterReply, studentColor: playerColor }).arrows;
+                      if (drawn.length > 0) setArrows((prev) => uniqueArrows([...prev, ...drawn]));
+                    };
                     if (owedArrows.length > 0 && liveFenRef.current === fenAfterReply) {
                       const drawn = admitArrows(owedArrows, { fen: fenAfterReply, studentColor: playerColor }).arrows;
                       if (drawn.length > 0) setArrows((prev) => uniqueArrows([...prev, ...drawn]));
@@ -10243,8 +10333,8 @@ export function CoachTeachPage(): JSX.Element {
                       kind: 'coach-narration-spoken',
                       category: 'narration',
                       source: 'CoachTeachPage.hintRegister',
-                      summary: `${describeVoicePackage(hintPkg)} · ${describeTurnDecision(lateDecision)} — ${hintPkg.spoken.slice(0, 200)}`,
-                      narrationText: hintPkg.spoken,
+                      summary: `${describeVoicePackage(hintPkg)} · ${describeTurnDecision(lateDecision)} — ${stripThink(hintPkg.spoken).slice(0, 200)}`,
+                      narrationText: stripThink(hintPkg.spoken),
                       fen: pending.fen,
                     });
                   }

@@ -15,7 +15,7 @@ const run = (key: string, reply: string | null = null) => {
 describe('falseAlarm — the threat you can ignore', () => {
   it('…Bxf2+ is coming, but Qxd5 first: "you move the king to f1"', () => {
     const out = run('uJro3yCDEgk:25');
-    expect(out?.text).toMatch(/^Their move threatens …Bxf2\+ .* but you don't have to react: Qxd5 comes first, and if they go ahead with …Bxf2\+, Kf1 answers it\.$/);
+    expect(out?.text).toMatch(/^Their move threatens …Bxf2\+ — .*\. Do you have to react\? No — Qxd5 comes first, and if they go ahead with …Bxf2\+, Kf1 answers it\.$/);
   });
 
   it('once they HAVE played it, no "if" — just the answer', () => {

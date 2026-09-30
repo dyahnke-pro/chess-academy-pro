@@ -27,6 +27,9 @@ import { Chess, type Square } from 'chess.js';
 import { CAPTURE_VALUE } from './pieceValues';
 import { findPieceQuality } from './positionReadingService';
 import { isOnHomeSquare } from './development';
+import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
+import { THINK_MARK } from '../utils/thinkPause';
+import type { ArrowClaim } from './arrowDoor';
 
 export interface PieceValue {
   square: string;
@@ -165,6 +168,8 @@ export interface PieceQualityLine {
    *  three ways on one move). */
   ideaKey?: string;
   squares: string[];
+  /** The answer's move, drawn when the answer is spoken. */
+  arrows?: ArrowClaim[];
 }
 
 /**
@@ -299,10 +304,15 @@ export function pieceQualityLines(
     const key = `best:${phase}`;
     if (!said?.has(key)) {
       said?.add(key);
+      // QUESTION FIRST, THEN THE ANSWER (David 2026-09-30): he asks which
+      // piece is doing the work, lets you look, then names it — and the move
+      // that challenges it, when there is one.
+      const ch = challengeMove(opts?.fen, best.v.square, me);
       out.push({
         kind: 'their-best-piece',
-        squares: [best.v.square],
-        text: `Their ${NAME[best.v.piece.toLowerCase()]} on ${best.v.square} is the piece doing the most work for them — trading it off takes the sting out of the position.`,
+        squares: [best.v.square, ...(ch ? [ch.to] : [])],
+        text: `Which of their pieces is doing the most work? ${THINK_MARK} The ${NAME[best.v.piece.toLowerCase()]} on ${best.v.square}${ch ? ` — ${ch.san} challenges it` : ''}, and trading it off takes the sting out of the position.`,
+        arrows: ch ? [{ from: ch.from, to: ch.to, role: 'play', source: 'pieceQuality.challenge' }] : undefined,
       });
     }
   }
@@ -344,12 +354,53 @@ export function pieceQualityLines(
           ? `Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} hasn't moved yet — in general, finish your development before starting anything new.`
           // The metric compares a piece with the others of its KIND on this
           // board, so that is all the sentence claims.
-          : `Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} is doing less than a ${NAME[worst.v.piece.toLowerCase()]} should here — finding it a better square is worth more than a new plan.`,
+          : betterSquare(opts?.fen, worst.v.square)
+            ? `Which of your pieces is doing the least? ${THINK_MARK} Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} — ${betterSquare(opts?.fen, worst.v.square)?.text}`
+            : `Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} is doing less than a ${NAME[worst.v.piece.toLowerCase()]} should here — finding it a better square is worth more than a new plan.`,
+        arrows: onHomeSquare(worst.v) ? undefined : betterSquare(opts?.fen, worst.v.square)?.arrows,
       });
     }
   }
 
   return out;
+}
+
+/** A move that CHALLENGES their best piece: a piece of the student's, of
+ *  equal or lower value, lands on a safe square attacking it. Null if none. */
+function challengeMove(fen: string | undefined, square: string, me: 'w' | 'b'): { san: string; from: string; to: string } | null {
+  if (!fen) return null;
+  try {
+    const parts = fen.split(' '); parts[1] = me; parts[3] = '-';
+    const b = new Chess(parts.join(' '));
+    if (b.inCheck()) return null;
+    const target = b.get(square as Square);
+    if (!target) return null;
+    const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
+    for (const m of b.moves({ verbose: true })) {
+      if (m.captured || m.piece === 'k' || m.piece === 'p') continue;
+      if ((CAPTURE_VALUE[m.piece] ?? 0) > (CAPTURE_VALUE[target.type] ?? 0)) continue;
+      const after = new Chess(b.fen());
+      after.move(m.san);
+      if (!after.attackers(square as Square, me).includes(m.to)) continue;
+      if (after.attackers(m.to, them).length > after.attackers(m.to, me).length) continue;
+      return { san: m.san, from: m.from, to: m.to };
+    }
+  } catch { /* none */ }
+  return null;
+}
+
+/** Where the student's worst minor wants to go, and how — from the route
+ *  computers. Null when neither finds a better square. */
+function betterSquare(fen: string | undefined, square: string): { text: string; arrows: ArrowClaim[] } | null {
+  if (!fen) return null;
+  const knight = computePieceRoute(fen, square as Square);
+  const route = knight ? { target: knight.target, route: knight.route } : computeSliderRoute(fen, square as Square);
+  if (!route || route.route.length === 0) return null;
+  const via = route.route.slice(0, -1);
+  return {
+    text: `it wants ${route.target}${via.length ? `, via ${via.join(' and ')}` : ''}.`,
+    arrows: [{ from: square, to: route.route[0], role: 'play', source: 'pieceQuality.route' }],
+  };
 }
 
 /** Squares as chess.js types them, for the callers that mark the board. */

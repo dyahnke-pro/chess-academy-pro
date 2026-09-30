@@ -80,7 +80,9 @@ export function falseAlarm(
   }
   return {
     threat,
-    text: `Their move threatens ${theirs} — it ${threat.detail} — but you don't have to react: ${dot(me)}${mine.san} comes first${tail}.`,
+    // QUESTION FIRST, ANSWER SECOND (David 2026-09-30): the question the
+    // student should ask on every threat, then the board's answer.
+    text: `Their move threatens ${theirs} — it ${threat.detail}. Do you have to react? No — ${dot(me)}${mine.san} comes first${tail}.`,
     squares: [...new Set([mine.from, mine.to, threat.from, threat.landing])],
   };
 }

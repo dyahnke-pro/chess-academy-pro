@@ -275,3 +275,11 @@ describe('the piece that just arrived is not a static "they win it" (hand walk 2
     expect(hits.some((h) => /eyeing gxh3/.test(h.fact))).toBe(false);
   });
 });
+
+describe('the move they are eyeing is drawn (walk 2026-09-30: arrows illustrate what is spoken)', () => {
+  it('"They\'re eyeing dxc6" carries a threat arrow d5-c6', () => {
+    const hits = detectBehaviors({ fen: 'r3k3/5pp1/p1b1p3/2pP4/2B5/7r/PP2KP1q/R1BQ1R2 b q - 4 23', studentColor: 'black' });
+    const eyed = hits.find((h) => /eyeing dxc6/.test(h.fact));
+    expect(eyed?.arrows).toEqual([{ from: 'd5', to: 'c6', role: 'threat', source: 'behavior.eyeing' }]);
+  });
+});

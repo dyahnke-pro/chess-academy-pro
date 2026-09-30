@@ -59,6 +59,7 @@ export type LearnLane =
   | 'kingAttack'
   | 'ruleException'
   | 'falseAlarm'
+  | 'threatAnswer'
   | 'pushOrHold'
   | 'causalChain'
   | 'kingSafety'
@@ -101,7 +102,10 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // — routes read off one engine line the CURRENT board cannot walk. Learn
   // filters aims through planArc.aimWalkableNow, and a student plan the
   // student never heard is never "let go".
-  planArc: { kind: 'plan', why: 'the plan taking shape / landing / given up — read twice, walkable from this board', lead: 70 },
+  // Always rides (2026-09-30): it spoke 0 times in 252 walked plies, held
+  // behind every stronger lead, though the computer fired 41 times offline on
+  // 20 of his games. Their plan advancing IS the why of their move.
+  planArc: { kind: 'plan', why: 'the plan taking shape / advancing / landing / given up — read twice, walkable from this board', lead: 70, always: true },
   drawback: { kind: 'drawback', why: 'what the student’s own move handed over', lead: 83 },
   mistake: { kind: 'mistake', why: 'the mistake call-out', lead: 85 },
   coachMistake: { kind: 'coachMistake', why: 'the coach owning its own inaccuracy', lead: 84 },
@@ -128,6 +132,10 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // Push for a win or hold (census #14): what a pawn up or down is worth in
   // THIS ending, while the engine keeps it better-not-won / worse-not-lost.
   pushOrHold: { kind: 'computed', why: 'whether the ending is worth pressing or holding, by its type', lead: 60 },
+  // The answer to the threat the instant wave just named (census T4): question
+  // first, then what the engine's move does about it. Always rides — a threat
+  // said without its answer is the describing he never does.
+  threatAnswer: { kind: 'computed', why: 'what to do about the threat just named — take, step out, kick, block, guard, or it can wait', lead: 81, always: true },
   falseAlarm: { kind: 'computed', why: 'a threat the student rightly ignored, and what answers it', lead: 72 },
   ruleException: { kind: 'computed', why: 'a beginner’s rule the move breaks, and why it is right here', lead: 73 },
   recapture: { kind: 'computed', why: 'which piece takes back and why — compared with the other recapture', lead: 66 },

@@ -25,10 +25,11 @@
 import { castleRoute, castleAdvice } from './kingSafety';
 import { andList, fileList } from '../utils/andList';
 import { Chess } from 'chess.js';
+import type { ArrowClaim } from './arrowDoor';
 import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
 import type { Color, PieceSymbol, Square } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
-import { attackerCanUseFile, castleIsOneMoveAway, rookReachesFile } from './positionalRead';
+import { attackerCanUseFile, castleIsOneMoveAway, heavyPieceToFile, rookReachesFile } from './positionalRead';
 import { seatBare } from '../utils/seatPieces';
 import { conceptInstanceKey, forkThreatKey } from './conceptKey';
 import { tacticalReadFromLines, namedTacticClause } from './tacticalRead';
@@ -126,13 +127,27 @@ export interface BehaviorHit {
    *  (fresh-game walk 2026-09-27: the bishop pair, a rook on the g-file and
    *  the d-file each said three and four times across lanes). */
   keys: readonly string[];
+  /** Moves the fact names, as arrow claims for the arrow door. */
+  arrows?: ArrowClaim[];
+}
+
+/** The opponent's move `san` on `fen` (student to move) as a threat arrow —
+ *  resolved on the board with their turn set, never read out of prose. */
+function theirMoveArrow(fen: string, san: string, student: Color): ArrowClaim[] {
+  try {
+    const parts = fen.split(' ');
+    parts[1] = student === 'w' ? 'b' : 'w';
+    parts[3] = '-';
+    const m = new Chess(parts.join(' ')).move(san);
+    return m ? [{ from: m.from, to: m.to, role: 'threat', source: 'behavior.eyeing' }] : [];
+  } catch { return []; }
 }
 
 export interface Behavior {
   id: string;
   /** Corpus note count — the target relative firing rate. */
   weight: number;
-  detect(ctx: NormalizedCtx): { fact: string; squares: Square[]; keys?: string[] } | null;
+  detect(ctx: NormalizedCtx): { fact: string; squares: Square[]; keys?: string[]; arrows?: ArrowClaim[] } | null;
 }
 
 interface NormalizedCtx {
@@ -247,7 +262,15 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         // "the b- and c-files are", never "the b, c-file is" (walk 900, 33…Qxf2
         // — the voice read it as "the bishop, c-file").
         const lines = `${fileList(roads)} ${roads.length === 1 ? 'is' : 'are'}`;
-        return { fact: `The enemy king on ${theirs.square} is exposed — ${lines} open toward it. Play for the attack.`, squares: [sq(theirs.square)] };
+        // The first step of the attack, not the word "attack" alone (walk
+        // 2026-09-30: "Play for the attack." with nothing to play).
+        const onto = heavyPieceToFile(fen, student, roads[0]);
+        const step = onto ? ` Play for the attack — ${onto.san} puts your ${onto.piece} on the ${roads[0]}-file.` : ' Play for the attack.';
+        return {
+          fact: `The enemy king on ${theirs.square} is exposed — ${lines} open toward it.${step}`,
+          squares: [sq(theirs.square)],
+          arrows: onto ? [{ from: onto.from, to: onto.to, role: 'play', source: 'behavior.kingOpen' }] : [],
+        };
       }
       // Your own king stuck in the center is only a real problem once pieces are
       // out and the center can open — not on move 3 with everything at home.
@@ -301,8 +324,11 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         // meeting the threat is right; the late package does, and names it.
         // A CAPTURE THAT MATES IS A MATE THREAT (claim check 2026-09-27:
         // "They're eyeing Nxg3# — it would win your bishop on g3").
-        if (/#$/.test(intent.san)) return { fact: `They're threatening mate with ${intent.san.replace(/#$/, '')} — that comes first.`, squares: [intent.target] };
-        return { fact: `They're eyeing ${intent.san} — it would win ${what}.`, squares: [intent.target] };
+        // The move they are eyeing, drawn where it is named (David 2026-09-30:
+        // "make sure arrows are firing to illustrate the ideas being spoken").
+        const eyed = theirMoveArrow(fen, intent.san, student);
+        if (/#$/.test(intent.san)) return { fact: `They're threatening mate with ${intent.san.replace(/#$/, '')} — that comes first.`, squares: [intent.target], arrows: eyed };
+        return { fact: `They're eyeing ${intent.san} — it would win ${what}.`, squares: [intent.target], arrows: eyed };
       }
       // NAME WHAT IT FORKS — "forking on e4" named the knight's landing
       // square as if it were the target (walk 2026-09-27, Carlsen–Aronian).
@@ -834,9 +860,9 @@ export function detectBehaviors(ctx: BehaviorContext): BehaviorHit[] {
   if (n.chess && n.chess.turn() === n.student && n.chess.inCheck()) return [];
   const hits: BehaviorHit[] = [];
   for (const b of DANYA_BEHAVIORS) {
-    let res: { fact: string; squares: Square[]; keys?: string[] } | null = null;
+    let res: { fact: string; squares: Square[]; keys?: string[]; arrows?: ArrowClaim[] } | null = null;
     try { res = b.detect(n); } catch { res = null; }
-    if (res && res.fact) hits.push({ id: b.id, fact: res.fact, squares: res.squares, weight: b.weight, keys: res.keys ?? [] });
+    if (res && res.fact) hits.push({ id: b.id, fact: res.fact, squares: res.squares, weight: b.weight, keys: res.keys ?? [], arrows: res.arrows ?? [] });
   }
   return hits;
 }

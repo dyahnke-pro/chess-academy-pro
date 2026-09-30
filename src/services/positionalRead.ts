@@ -224,11 +224,24 @@ function observationsFor(
   if (king?.exposed && roads.length > 0 && heavyAttackers > 0) {
     const files = roads.slice(0, 2).join(' and ');
     const plural = roads.length > 1 ? 's are' : ' is';
+    // AND WHAT TO DO ABOUT IT — never the road alone (David 2026-09-30:
+    // "describing the board is what we do not want"). Your king: step it off
+    // the road, or put your own rook on it. Their king: put yours on it.
+    const road = roads[0];
+    const castle = own ? castleOffFile(fen, color) : null;
+    const onto = heavyPieceToFile(fen, own ? color : foeColor, road);
+    const todo = castle
+      ? ` Castle and the king steps off it.`
+      : onto
+        ? own
+          ? ` Contest it — ${onto.san} puts your ${onto.piece} on the ${road}-file first.`
+          : ` Take it — ${onto.san} puts your ${onto.piece} on the ${road}-file.`
+        : '';
     out.push({
       key: `${side}-king-open-file`, side, kind: 'king', rank: rank('king'),
       text: own
-        ? `The ${files} file${plural} open toward your king — that is the road an attack would come down.`
-        : `The ${files} file${plural} open toward their king — that is the road an attack would come down.`,
+        ? `The ${files} file${plural} open toward your king — that is the road an attack would come down.${todo}`
+        : `The ${files} file${plural} open toward their king — that is the road an attack would come down.${todo}`,
     });
   }
 
@@ -597,6 +610,45 @@ export function attackerCanUseFile(fen: string, file: string, attacker: 'w' | 'b
     }
     return true;
   } catch { return true; }
+}
+
+/** THE FIRST STEP ONTO A FILE (walk 2026-09-30: "the e-file is open toward
+ *  their king" said nothing about what to do with it). A rook — or, with no
+ *  rook able to, the queen — of `color` that lands on `file` in one move on a
+ *  square nothing of theirs attacks. Rook first: the rook is the piece a file
+ *  is for. Null when no such move exists, and then nothing is suggested. */
+export function heavyPieceToFile(fen: string, color: Color, file: string): { san: string; from: string; to: string; piece: 'rook' | 'queen' } | null {
+  try {
+    const parts = fen.split(' ');
+    parts[1] = color;
+    parts[3] = '-';
+    const b = new Chess(parts.join(' '));
+    if (b.inCheck()) return null;
+    const foe: Color = color === 'w' ? 'b' : 'w';
+    for (const type of ['r', 'q'] as const) {
+      if (b.board().flat().some((c) => c && c.color === color && c.type === type && c.square[0] === file)) return null;
+      for (const m of b.moves({ verbose: true })) {
+        if (m.piece !== type || m.to[0] !== file || m.from[0] === file || m.captured) continue;
+        const after = new Chess(b.fen());
+        after.move(m.san);
+        if (after.attackers(m.to, foe).length > 0) continue;
+        return { san: m.san, from: m.from, to: m.to, piece: type === 'r' ? 'rook' : 'queen' };
+      }
+    }
+  } catch { /* no suggestion */ }
+  return null;
+}
+
+/** Castling that takes `color`'s king off the board's open files, when legal. */
+export function castleOffFile(fen: string, color: Color): string | null {
+  try {
+    const parts = fen.split(' ');
+    parts[1] = color;
+    parts[3] = '-';
+    const b = new Chess(parts.join(' '));
+    const m = b.moves().find((x) => x === 'O-O' || x === 'O-O+') ?? b.moves().find((x) => x.startsWith('O-O-O'));
+    return m ?? null;
+  } catch { return null; }
 }
 
 

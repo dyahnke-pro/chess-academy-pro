@@ -61,3 +61,12 @@ describe('stepCharacter — a switch is spoken only once it holds', () => {
     expect(said[0]).not.toBe(said[2]); // two tactical switches, two different stems
   });
 });
+
+describe('the switch says WHY it turned sharp (walk 2026-09-30)', () => {
+  it('names a live tactic, or the one move that works', () => {
+    const settled = { ...EMPTY_CHARACTER, current: 'positional' as const };
+    const hold = stepCharacter(settled, 'tactical', 'tactic').next;
+    expect(stepCharacter(hold, 'tactical', 'tactic').switched?.text).toMatch(/there is a tactic on the board/);
+    expect(stepCharacter(stepCharacter(settled, 'tactical', 'gap').next, 'tactical', 'gap').switched?.text).toMatch(/one move here is far better than the rest/);
+  });
+});

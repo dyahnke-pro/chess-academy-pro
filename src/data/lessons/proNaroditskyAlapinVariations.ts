@@ -147,7 +147,7 @@ const E6_FRENCH: LessonScript = {
       id: 'e6-open',
       moves: 'e4 c5 c3 e6',
       highlights: [{ square: 'e6', color: KEY }, { square: 'd5', color: SOFT }],
-      say: "…e6 — Black plays a French-style setup, preparing …d5 to challenge the centre next move. The trade you're getting here is exactly what the Alapin promises: Black voluntarily walks into French-Advance territory, and you trade Sicilian theory you don't want for French theory you know cold. Logical piece development, central control, practical positions — the consensus description of the Alapin lands beat for beat in this line.",
+      say: "…e6 — Black plays a French-style setup, preparing …d5 to challenge the centre next move. The trade you're getting here is exactly what the Alapin promises: Black voluntarily walks into French-Advance territory, and you trade Sicilian theory you don't want for French theory you know cold.",
       sayShort: '…e6 — French setup invited.',
     }),
     b({

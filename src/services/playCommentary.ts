@@ -13,6 +13,7 @@
 // them. That is the locked voice law ("speak when it instructs") and the
 // narration rules' "silence is acceptable" — a coach who comments on every
 // recapture teaches nothing and gets tuned out.
+import { THINK_MARK } from '../utils/thinkPause';
 import { Chess } from 'chess.js';
 import type { Square, PieceSymbol } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
@@ -519,7 +520,10 @@ export function buildRejectedTempting(args: {
   /** Engine multipv lines, best first: first move + its reply (UCI), eval
    *  from the STUDENT's perspective in centipawns. */
   lines: Array<{ uci: string; replyUci?: string | null; evalCp: number }>;
-}): { facts: string; hint: HintPackage; temptingSan: string; refutationSan: string } | null {
+  /** Where the opponent's last move landed. A tempting capture ON it is
+   *  their BAIT (census #48: "f4 invites exf4, then Bxf4+"). */
+  baitSquare?: string | null;
+}): { facts: string; hint: HintPackage; temptingSan: string; refutationSan: string; bait: boolean; spoken: string; refutation: { from: string; to: string; fenBefore: string } } | null {
   if (args.lines.length < 2) return null;
   const me: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
   let base: Chess;
@@ -539,6 +543,7 @@ export function buildRejectedTempting(args: {
       // Tempting = it LOOKS like it wins something or forces something.
       const looksGood = tempting.captured !== undefined || probe.isCheck();
       if (!looksGood) continue;
+      const fenBeforeRefutation = probe.fen();
       const refutation = probe.move({ from: line.replyUci.slice(0, 2) as Square, to: line.replyUci.slice(2, 4) as Square, promotion: (line.replyUci[4] as 'q' | undefined) ?? undefined });
       if (!refutation) continue;
       const dropPawns = ((bestEval - line.evalCp) / 100).toFixed(1);
@@ -549,8 +554,13 @@ export function buildRejectedTempting(args: {
       // (hintRegister.packageForRegister). The anchor carries both moves
       // because the tempting move alone, without its refutation, would read as
       // a recommendation — every tier has to stand on its own.
+      // THEIR BAIT, question first (David 2026-09-30): the piece their last
+      // move put en prise, taken, runs into the refutation.
+      const bait = !!args.baitSquare && tempting.captured !== undefined && tempting.to === args.baitSquare;
       const hint: HintPackage = {
-        anchor: `TEMPTING BUT REFUTED: ${tempting.san} looks natural — ${why} — but the reply ${refutation.san} refutes it.`,
+        anchor: bait
+          ? `Can you take the ${NAME[tempting.captured ?? 'p'] ?? 'piece'} on ${tempting.to}? ${THINK_MARK} No — it's bait: ${tempting.san} runs into ${refutation.san}.`
+          : `TEMPTING BUT REFUTED: ${tempting.san} looks natural — ${why} — but the reply ${refutation.san} refutes it.`,
         detail: `That line leaves the student about ${dropPawns} points worse than the best plan.`,
         stakes: 'Teach the habit from this: calculate the opponent\'s most forcing reply BEFORE trusting a tempting move.',
         withhold: `Name ${tempting.san} and ${refutation.san} exactly as given. Do NOT name or hint at the best move.`,
@@ -558,6 +568,12 @@ export function buildRejectedTempting(args: {
       return {
         temptingSan: tempting.san,
         refutationSan: refutation.san,
+        bait,
+        // What the student hears (never the prompt package above).
+        spoken: bait
+          ? `Can you take the ${NAME[tempting.captured ?? 'p'] ?? 'piece'} on ${tempting.to}? ${THINK_MARK} No — it's bait: ${tempting.san} runs into ${refutation.san}.`
+          : `Why not ${tempting.san}? ${THINK_MARK} ${why.charAt(0).toUpperCase()}${why.slice(1)}, but ${refutation.san} refutes it.`,
+        refutation: { from: refutation.from, to: refutation.to, fenBefore: fenBeforeRefutation },
         hint,
         facts: packageForRegister(hint, 'moderate'),
       };
@@ -578,7 +594,7 @@ export function buildPriorityFirst(args: {
   studentColor: 'white' | 'black';
   /** Engine best move for the student, UCI. */
   bestUci: string;
-}): { facts: string; hint: HintPackage; targetSquare: string } | null {
+}): { facts: string; hint: HintPackage; targetSquare: string; spoken: string; arrow: { from: string; to: string } } | null {
   const me: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
   const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
   let chess: Chess;
@@ -626,6 +642,12 @@ export function buildPriorityFirst(args: {
       targetSquare: target.square,
       hint,
       facts: packageForRegister(hint, 'moderate'),
+      // WHAT THE STUDENT HEARS — question first, then the priority and the
+      // move that serves it, with its reason (Learn names the move with its
+      // reason, 2026-09-24). The package above is prompt material and must
+      // never reach the voice raw (2026-09-30).
+      spoken: `What's the priority here? ${THINK_MARK} Their pawn on ${target.square} — it's ${flaw}, so aim at it: ${moved.san} does.`,
+      arrow: { from: moved.from, to: moved.to },
     };
   } catch {
     return null;

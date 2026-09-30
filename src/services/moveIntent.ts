@@ -306,8 +306,10 @@ function phrase(
     const stop = prevents ? dot(prevents.san, opp) : '';
     const prep = prepares ? dot(prepares.san, mover) : '';
     if (prevents && prepares) return `${played} does two jobs: it stops ${stop}, and it prepares ${prep}${does ? `, to ${does.verb}` : ''}.`;
-    if (prevents && why) return `${played} — so ${stop} isn't possible any more: ${why}.`;
-    if (prevents) return rotateStem([`${played} — so ${stop} isn't possible any more.`, `The point of ${played}: it takes ${stop} away.`], key);
+    // "doesn't work", never "isn't possible" — the stopped move is still
+    // LEGAL, it just loses (walk 2026-09-30: said five times in one game).
+    if (prevents && why) return `${played} — now ${stop} doesn't work: ${why}.`;
+    if (prevents) return rotateStem([`${played} — now ${stop} doesn't work.`, `The point of ${played}: it takes ${stop} away.`], key);
     if (does?.castle) return rotateStem([`${played} clears the way to castle.`, `${played} first, so you can castle next.`], key);
     if (does) return rotateStem([`${played} first, so that ${prep} can ${does.verb}.`, `${played} prepares ${prep}, to ${does.verb}.`], key);
     return rotateStem([`${played} prepares ${prep}.`, `${played} first, so that ${prep} comes next.`], key);

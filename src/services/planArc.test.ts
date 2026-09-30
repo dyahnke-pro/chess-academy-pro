@@ -97,13 +97,16 @@ describe('stepArc rules', () => {
     expect(b.events.map((e) => e.kind)).toEqual(['emerge']);
   });
 
-  it('drops only after two reads missing, and never says it twice', () => {
+  it('a plan never pursued leaves silently — no "they have let it go" (2026-09-30)', () => {
+    // Measured on 20 of his games: 18 of 23 announced opponent plans were
+    // "let go" within two moves with no move made toward them — the engine's
+    // line changing, not the opponent changing their mind.
     let st = stepArc(EMPTY_ARC, [outpost], null, EMPTY_BOARD, 'w', 'opponent').next;
     st = stepArc(st, [outpost], null, EMPTY_BOARD, 'w', 'opponent').next;
     const miss1 = stepArc(st, [], null, EMPTY_BOARD, 'w', 'opponent');
     expect(miss1.events).toEqual([]);
     const miss2 = stepArc(miss1.next, [], null, EMPTY_BOARD, 'w', 'opponent');
-    expect(miss2.events.map((e) => e.kind)).toEqual(['drop']);
+    expect(miss2.events).toEqual([]);
     expect(stepArc(miss2.next, [], null, EMPTY_BOARD, 'w', 'opponent').events).toEqual([]);
   });
 

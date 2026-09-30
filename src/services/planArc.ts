@@ -19,6 +19,7 @@
 // Pure and deterministic (G0): the identity of an aim is WHAT IT IS AIMED AT
 // (`outpost:d5`, `file:c`, `route:n:e5`), never its wording, so a pushed pawn
 // or a knight one hop closer is the same plan, not a new one.
+import { THINK_MARK } from '../utils/thinkPause';
 import { Chess, type Square } from 'chess.js';
 // TYPE-ONLY on purpose: `lookaheadPlan` re-exports this module (the arc is the
 // plan reader's memory, and the Learn surface reaches it through the reader it
@@ -160,7 +161,6 @@ function stepsToward(aim: Aim, moved: ArcMove): boolean {
   return true;
 }
 
-const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 
 /** Is the aim done on this board? */
 function arrived(aim: Aim, fen: string, color: 'w' | 'b', promoted: string | null = null): { done: boolean; what: string } {
@@ -248,8 +248,10 @@ export function stepArc(
       }
       events.push({
         id, kind: 'advance', seat, squares: [moved.to],
+        // WHY THEY PLAYED IT, question first (David 2026-09-30): the move
+        // they actually made, read as a step of the plan announced earlier.
         text: their
-          ? `${cap(PIECE[moved.piece] ?? 'piece')} to ${moved.to} is ${entry.steps === 1 ? 'a step' : 'another step'} toward ${e.aim.phrase}.`
+          ? `What is their ${PIECE[moved.piece] ?? 'piece'} on ${moved.to} doing? ${THINK_MARK} It's ${entry.steps === 1 ? 'a step' : 'another step'} toward ${e.aim.phrase}.`
           : `Your ${PIECE[moved.piece] ?? 'piece'} to ${moved.to} is ${entry.steps === 1 ? 'a step' : 'another step'} toward ${e.aim.phrase}.`,
       });
     }
@@ -260,6 +262,11 @@ export function stepArc(
       continue;
     }
     const missing = entry.missing + 1;
+    // A plan is "let go" only if it was PURSUED — at least one move made
+    // toward it. An announced aim the engine's next reads simply stopped
+    // showing was never the student's news (measured 2026-09-30: 18 of 23
+    // announced opponent plans were "let go" within two moves, none walked).
+    if (entry.announced && missing >= 2 && entry.steps === 0) continue;
     if (entry.announced && missing >= 2) {
       events.push({
         id, kind: 'drop', seat, squares: [],
