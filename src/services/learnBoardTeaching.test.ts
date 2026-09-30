@@ -1,7 +1,7 @@
 // The composer really carries each lane through (G8.5: a wire that does not
 // fire is not a wire). Positions are the computers' own fixtures from his games.
 import { describe, it, expect } from 'vitest';
-import { studentMoveTeaching, theirMoveTeaching } from './learnBoardTeaching';
+import { dangerAnswerLines, studentMoveAnswerLines, studentMoveTeaching, theirMoveAnswerLines, theirMoveTeaching } from './learnBoardTeaching';
 import { admitArrows } from './arrowDoor';
 import { Chess } from 'chess.js';
 import ruleFx from './__fixtures__/ruleException-his.json';
@@ -71,5 +71,23 @@ describe('learnBoardTeaching — every lane reaches the door', () => {
     // Their turn is irrelevant to a plan arrow: the door sets the piece's side to move.
     const drawn = admitArrows(h.arrows, { fen: live.fen(), studentColor: live.turn() === 'w' ? 'black' : 'white' }).arrows;
     expect(drawn.map((a) => `${a.startSquare}${a.endSquare}`)).toEqual(['e1g3']);
+  });
+});
+
+describe('Play asks the same computers (David 2026-09-30)', () => {
+  it('"was that a good move?" carries the timing read of the student\'s move', () => {
+    const h = ['e4', 'e6', 'Nc3', 'a6', 'Nf3', 'e5', 'Nd5'];
+    expect(studentMoveAnswerLines(h, 6, 0, 'Nd5').join(' ')).toMatch(/The timing of Nd5 matters/);
+  });
+  it('"what did their move do?" carries the tempo count', () => {
+    const h = 'e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bd2 Qb6'.split(' ');
+    expect(theirMoveAnswerLines(h, 11, 'w').join(' ')).toMatch(/That's their queen's third move already/);
+  });
+  it('"how am I doing?" carries the stalemate warning', () => {
+    expect(dangerAnswerLines('7k/8/5K2/8/8/8/8/6Q1 w - - 0 1', 'w', null).join(' ')).toMatch(/stalemate/);
+  });
+  it('answers write no evidence — text only', () => {
+    const out = studentMoveAnswerLines(['e4', 'e6', 'Nc3', 'a6', 'Nf3', 'e5', 'Nd5'], 6, 0, 'Nd5');
+    expect(out.every((t) => typeof t === 'string')).toBe(true);
   });
 });

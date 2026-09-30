@@ -159,6 +159,24 @@ export function strongestByDelta(
   return { square: best.v.square, piece: best.v.piece, contribution: +Math.abs(own(best.v)).toFixed(2), delta: +best.d.toFixed(2) };
 }
 
+/** The colour's UNDERPERFORMING piece — lowest contribution vs its own kind.
+ *  The twin of `strongestByDelta`, on the same scale-free delta, so "best" and
+ *  "worst" can never disagree. Excludes king + pawns. */
+export function weakestByDelta(
+  values: readonly PieceValue[],
+  color: 'w' | 'b',
+): { square: string; piece: string; contribution: number; delta: number } | null {
+  if (values.length === 0) return null;
+  const own = (v: PieceValue): number => (v.color === 'w' ? v.value : -v.value);
+  const mean = meanByType(values);
+  const cand = values.filter((v) => v.color === color && !'kp'.includes(v.piece.toLowerCase()));
+  if (cand.length === 0) return null;
+  const worst = cand
+    .map((v) => ({ v, d: Math.abs(own(v)) - (mean.get(v.piece.toLowerCase()) ?? Math.abs(own(v))) }))
+    .sort((a, b) => a.d - b.d)[0];
+  return { square: worst.v.square, piece: worst.v.piece, contribution: +Math.abs(own(worst.v)).toFixed(2), delta: +worst.d.toFixed(2) };
+}
+
 export interface PieceQualityLine {
   text: string;
   kind: 'their-best-piece' | 'your-worst-piece';

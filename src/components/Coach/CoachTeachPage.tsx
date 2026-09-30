@@ -30,7 +30,7 @@ import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePacka
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { checkMethodTeaching, foundMoveTeaching, openingPlanTeaching, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
+import { checkMethodTeaching, foundMoveTeaching, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -8799,6 +8799,9 @@ export function CoachTeachPage(): JSX.Element {
         inBook: studentMoveInBook,
         bookMoveSan: studentMoveInBook ? move.san : undefined,
         learned: !!openingName,
+        // Told before moving? The critical-moment announcement is keyed on
+        // the ply of the student's move.
+        prompted: announcedPliesRef.current.has(move.history.length),
         gamePhase: classifyPhase(move.fen, (capturedMoveNumber ?? 1) * 2),
         moveNumber: capturedMoveNumber,
         openingName,
@@ -9865,10 +9868,18 @@ export function CoachTeachPage(): JSX.Element {
                     // THE BOARD-LEVEL TEACHING of the student's move — recapture
                     // choice, king attack, rule→exception, don't panic — composed
                     // once in `learnBoardTeaching`; the door ranks them.
+                    // The engine's piece table at the board BEFORE the move — only
+                    // when the move completed a trade (their reply took back on the
+                    // same square), for the good-piece / bad-piece read.
+                    const tradeTo = /x([a-h][1-8])/.exec(move.san)?.[1];
+                    const tradeTable = tradeTo && reply && reply.replace(/^…/, '').includes(`x${tradeTo}`)
+                      ? await stockfishEngine.evalBoard(fenBefore).then((raw) => (raw ? parseEvalTable(raw) : undefined)).catch(() => undefined)
+                      : undefined;
                     for (const h of studentMoveTeaching({
                       fenBefore, san: move.san, history: move.history, cpLoss, bothCp,
                       bestSan: studentBestSan, bestLine: preStudentRead.topLines?.[0], reply: reply ?? null,
                       cpAfter: bothCp ? mid.evaluation * sign : null,
+                      evalBefore: tradeTable,
                     })) {
                       queueSpokenHint(fenAfterReply, h.text, h.lane, h.squares, h.claims, undefined, h.arrows);
                       if (h.event) captureEvent(h.event.name, h.event.props);
@@ -10095,6 +10106,8 @@ export function CoachTeachPage(): JSX.Element {
                           : null;
                         if (order) {
                           // The follow-up that works NOW, as the move to play.
+                          // DUAL-USE (P4): the right order played is calculation answered.
+                          recordHeld('calculation-depth', 80, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
                           queueSpokenHint(fenAfterReply, order.text, 'moveOrder', order.squares, [`order:${order.followUp.uci}`, `stops:${order.answer.uci}`], undefined,
                             [
                               { from: order.followUp.uci.slice(0, 2), to: order.followUp.uci.slice(2, 4), role: 'play', source: 'learn.moveOrder' },
@@ -10135,6 +10148,9 @@ export function CoachTeachPage(): JSX.Element {
                           reply: replyUci,
                         }, 'student', { ...DEFAULT_INTENT, book: studentMoveInBook }) : null;
                         if (intent) {
+                          // DUAL-USE (P4): an engine-proven purpose (prevents / prepares)
+                          // is the no-plan question answered.
+                          recordHeld('no-plan', 60, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
                           queueSpokenHint(fenAfterReply, intent.text, 'moveIntent', intent.squares, [
                             ...(intent.prevents ? [`stops:${intent.prevents.uci}`] : []),
                             ...(intent.prepares ? [`prepares:${intent.prepares.uci}`] : []),

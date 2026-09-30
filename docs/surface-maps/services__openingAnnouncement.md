@@ -53,8 +53,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:955`
 
 ### `studentJustLeftBook` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9959`
-- `src/components/Coach/CoachTeachPage.tsx:9986`
+- `src/components/Coach/CoachTeachPage.tsx:9970`
+- `src/components/Coach/CoachTeachPage.tsx:9997`
 - `src/services/openingAnnouncement.test.ts:136`
 - `src/services/openingAnnouncement.test.ts:145`
 - `src/services/openingAnnouncement.test.ts:146`

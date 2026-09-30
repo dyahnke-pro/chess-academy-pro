@@ -183,8 +183,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `signedLegalSeeFor` (function) — 9 call sites
 - `src/components/Coach/CoachTeachPage.tsx:826`
 - `src/components/Coach/CoachTeachPage.tsx:7795`
-- `src/components/Coach/CoachTeachPage.tsx:10012`
-- `src/components/Coach/CoachTeachPage.tsx:10069`
+- `src/components/Coach/CoachTeachPage.tsx:10023`
+- `src/components/Coach/CoachTeachPage.tsx:10080`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
@@ -270,7 +270,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/danyaBehaviors.ts:206`
 - `src/services/danyaBehaviors.ts:522`
 - `src/services/groundedAnswer.ts:6339`
-- `src/services/pieceValueRead.ts:488`
+- `src/services/pieceValueRead.ts:506`
 - `src/services/positionReadingService.test.ts:106`
 - `src/services/positionReadingService.test.ts:114`
 - `src/services/positionReadingService.test.ts:121`
@@ -380,7 +380,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:130`
 
 ### `namedPawnStructure` (function) — 22 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9056`
+- `src/components/Coach/CoachTeachPage.tsx:9059`
 - `src/services/claimTruth.manual.test.ts:64`
 - `src/services/claimTruth.manual.test.ts:66`
 - `src/services/danyaBehaviors.ts:372`

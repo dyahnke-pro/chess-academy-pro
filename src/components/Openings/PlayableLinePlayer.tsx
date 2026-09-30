@@ -531,6 +531,8 @@ export function PlayableLinePlayer({
               playerColor: sideToMove === 'w' ? 'white' : 'black',
               inBook: false,
               learned: true,
+              // Told? Only if the student asked for the hint on this move.
+              prompted: showHint,
               gamePhase: classifyPhase(temp.fen(), chessRef.current.history().length + 1),
               openingName: line.title,
               // Attribute the fundamental so a live slip feeds the

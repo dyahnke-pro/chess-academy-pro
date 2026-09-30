@@ -27,7 +27,7 @@
  */
 import { db } from '../db/schema';
 import { mirrorAuditEvent } from './analytics';
-import { onCoachDecision, onNeedScore, type CoachDecisionRow, type NeedScoreRow } from './coachDecisionEvents';
+import { onCoachDecision, onLearnTurn, onNeedScore, type CoachDecisionRow, type LearnTurnRow, type NeedScoreRow } from './coachDecisionEvents';
 import { onSearchDepth } from './searchDepthEvents';
 
 const APP_AUDIT_LOG_META_KEY = 'app-audit-log.v1';
@@ -240,6 +240,11 @@ export type AuditKind =
   // gate closed it and how many facts survived — so the WEIGHTING can be
   // trended by an audit instead of judged by reading prose.
   | 'coach-decision'
+  // One entry per burst of Learn door decisions (learnTurnDoor.decideTurn) —
+  // offered / spoke / lead / held lanes, aggregated like coach-decision.
+  | 'learn-turn-decision'
+  // One held row written by a Learn teaching lane (capabilityEvidence.recordLaneEvidence).
+  | 'lane-evidence'
   // How deep Stockfish searched and whether the answer SETTLED
   // (`searchUntilStable`, David 2026-09-27: "algo the stockfish depth"). One
   // row per search — so an audit can hold that verdicts were voiced off
@@ -2177,6 +2182,32 @@ onCoachDecision((row) => {
   if (!decisionFlush) {
     decisionFlush = setTimeout(flushCoachDecisions, 1500);
     (decisionFlush as unknown as { unref?: () => void }).unref?.();
+  }
+});
+
+// THE LEARN DOOR, aggregated the same way (a per-turn entry is the same
+// high-frequency shape that once cost the narration its sidecar events).
+let learnTurnBuffer: LearnTurnRow[] = [];
+let learnTurnFlush: ReturnType<typeof setTimeout> | null = null;
+function flushLearnTurns(): void {
+  learnTurnFlush = null;
+  const rows = learnTurnBuffer;
+  learnTurnBuffer = [];
+  if (rows.length === 0) return;
+  void logAppAudit({
+    kind: 'learn-turn-decision',
+    category: 'subsystem',
+    source: 'learnTurnDoor.decideTurn',
+    summary: `${rows.length} turn(s) — ${rows.filter((r) => r.spoke.length > 0).length} spoke, ${rows.filter((r) => r.held.length > 0).length} held something`,
+    details: JSON.stringify({ rows }),
+  });
+}
+onLearnTurn((row) => {
+  learnTurnBuffer.push(row);
+  if (learnTurnBuffer.length >= 200) { if (learnTurnFlush) clearTimeout(learnTurnFlush); flushLearnTurns(); return; }
+  if (!learnTurnFlush) {
+    learnTurnFlush = setTimeout(flushLearnTurns, 1500);
+    (learnTurnFlush as unknown as { unref?: () => void }).unref?.();
   }
 });
 

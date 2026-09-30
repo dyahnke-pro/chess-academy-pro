@@ -27,6 +27,7 @@ import { tempoCount } from './tempoCount';
 import { readTiming, timingClause } from './moveTiming';
 import { checkMethod } from './checkMethod';
 import { tradeJudgement } from './tradeJudgement';
+import type { PieceValue } from './pieceValueRead';
 import { kneeJerk } from './kneeJerk';
 import { stalemateWatch } from './stalemateWatch';
 import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from './criticalMoment';
@@ -75,6 +76,10 @@ export interface StudentMoveInput {
   bestLine: AnalysisLine | undefined;
   /** Their answer to the student's move, SAN, when already on the board. */
   reply: string | null;
+  /** The engine's per-piece table (`evalBoard`) at `fenBefore` — fetched by the
+   *  page only when the move completed a trade, for the good-piece /
+   *  bad-piece read. Absent → the trade is judged without it. */
+  evalBefore?: readonly PieceValue[];
   /** The engine's eval AFTER the student's move, centipawns, student POV; null
    *  when either read is a mate. */
   cpAfter: number | null;
@@ -95,7 +100,9 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
     if (tookOn && to === tookOn && i.san.includes('x')) {
       const bestRe = i.bestSan && new RegExp(`x${tookOn}`).test(i.bestSan) && i.cpLoss >= 50 ? i.bestSan : null;
       const rc = recaptureChoice(i.fenBefore, i.san, bestRe, i.reply);
-      if (rc) out.push({ lane: 'recapture', text: rc, squares: [to], claims: [`recapture-${to}`], event: null, arrows: [] });
+      // The right recapture chosen (no better one named) answers the
+      // capture-toward-centre question — held (P4 dual-use).
+      if (rc) out.push({ lane: 'recapture', text: rc, squares: [to], claims: [`recapture-${to}`], event: null, arrows: [], ...(bestRe ? {} : { evidence: { tag: 'capture-toward-centre' as const, posedImportance: 60 } }) });
     }
   } catch { /* a bonus, never a blocker */ }
 
@@ -109,16 +116,19 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   // WAS THE TRADE A GOOD DEAL (P3, T3 #45) — a like-for-like trade the reply
   // completed, judged by the first reason the board supports.
   try {
-    const tj = tradeJudgement(i.fenBefore, i.san, i.reply, new Chess(i.fenBefore).turn(), i.cpLoss);
+    const tj = tradeJudgement(i.fenBefore, i.san, i.reply, new Chess(i.fenBefore).turn(), i.cpLoss, i.evalBefore);
     if (tj) out.push({ lane: 'trade', text: tj.text, squares: tj.squares, claims: [`trade-${tj.reason}`], event: { name: 'coach_trade_judged', props: { surface: 'coach-teach', reason: tj.reason } }, arrows: [],
       // A good trade the student chose is the 'bad-trade' question answered well.
-      ...(tj.reason !== 'behind' ? { evidence: { tag: 'bad-trade' as const, posedImportance: 60 } } : {}) });
+      ...(tj.reason !== 'behind' && tj.reason !== 'gave-best' ? { evidence: { tag: 'bad-trade' as const, posedImportance: 60 } } : {}) });
   } catch { /* a bonus, never a blocker */ }
 
   // THE TIMING (capability parity with review, WO-TEACH-GAPS P3): "b4 is
   // finally right — a move earlier their queen would have taken on b3". Only on
   // a sound move; the board a move earlier is replayed from the game itself.
-  if (i.cpLoss < 50 && i.history.length >= 3) {
+  // QUIET MOVES ONLY (run J, 2026-09-30: "The timing of Ncxd4 matters" on a
+  // recapture, "The timing of Qh2+" on a check). The lesson is a quiet move
+  // played at the right moment; a capture or a check is its own reason.
+  if (i.cpLoss < 50 && i.history.length >= 3 && !/[x+#]/.test(i.san)) {
     try {
       const early = new Chess();
       for (const san of i.history.slice(0, -3)) early.move(san);
@@ -181,6 +191,9 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
             lane: 'falseAlarm', text: fa.text, squares: fa.squares, claims: [`false-alarm-${fa.threat.landing}`],
             event: { name: 'coach_false_alarm_named', props: { surface: 'coach-teach', kind: fa.threat.kind } },
             arrows: played ? [] : [{ from: fa.threat.from, to: fa.threat.landing, role: 'threat', source: 'learn.falseAlarm' }],
+            // A threat rightly ignored (the engine's move, and not worse) is the
+            // opponent-threat question answered — held (P4 dual-use).
+            evidence: { tag: 'missed-opponents-threat', posedImportance: 70 },
           });
         }
       }
@@ -257,6 +270,12 @@ export function checkMethodTeaching(fen: string, student: 'w' | 'b', bestUci: st
   };
 }
 
+/** A held row for a lane the page composes itself (moveOrder, moveIntent, a
+ *  plan arriving) — the same writer, the same honesty about `prompted`. */
+export function recordHeld(tag: MisconceptionTagId, posedImportance: number, ctx: { fen: string; playedSan: string; prompted: boolean; gameId: string | null }): void {
+  recordTeachingEvidence({ lane: 'movePoint', text: '', squares: [], claims: [], event: null, arrows: [], evidence: { tag, posedImportance } }, ctx);
+}
+
 /** Write the line's evidence row, if it carries one (P4 dual-use). The ONE
  *  impure export here: the page hands every queued hint through it so a lane
  *  that teaches also records. `prompted` = the student was told the moment
@@ -311,4 +330,50 @@ export function foundMoveTeaching(fenBefore: string, san: string, preLines: read
   // A real decision moment (only one or two moves held) answered is calculation
   // proven — importance 90, above the green bar, because the board posed it.
   return { lane: 'foundMove', text, squares: [to], claims: [`found-${san}`], event: { name: 'coach_found_move_named', props: { surface: 'coach-teach' } }, arrows: [], evidence: { tag: 'calculation-depth', posedImportance: 90 } };
+}
+
+// ── PLAY ASKS THE SAME COMPUTERS (David 2026-09-30: "Play still needs access to
+// these computers to answer questions on demand"). One composer for Learn's
+// narration and Play's answers, so a question gets the same fact the lesson
+// would have said. TEXT ONLY: answering a question never writes evidence — the
+// move was already recorded when it was played.
+
+function replayTo(history: readonly string[], ply: number): string | null {
+  try { const c = new Chess(); for (const san of history.slice(0, ply)) c.move(san); return c.fen(); } catch { return null; }
+}
+
+/** "Was that a good move?" — every board-level teaching line for the student's
+ *  move at `ply` (0-based index into `history`). */
+export function studentMoveAnswerLines(history: readonly string[], ply: number, cpLoss: number, bestSan: string | null): string[] {
+  const fenBefore = replayTo(history, ply);
+  if (!fenBefore || ply < 0 || ply >= history.length) return [];
+  const hints = studentMoveTeaching({
+    fenBefore, san: history[ply], history: history.slice(0, ply + 1), cpLoss, bothCp: true,
+    bestSan, bestLine: undefined, reply: history[ply + 1] ?? null, cpAfter: null,
+  });
+  return hints.map((h) => h.text);
+}
+
+/** "What did their move do?" — what it cost them, and the tempo count. `ply`
+ *  is the index of THEIR move. */
+export function theirMoveAnswerLines(history: readonly string[], ply: number, student: 'w' | 'b'): string[] {
+  const fenBefore = replayTo(history, ply);
+  if (!fenBefore || ply < 0 || ply >= history.length) return [];
+  const out: string[] = [];
+  const cost = theirMoveTeaching(fenBefore, history[ply], student);
+  if (cost) out.push(cost.text);
+  const tempo = tempoTeaching(history.slice(0, ply + 1), student);
+  if (tempo) out.push(tempo.text);
+  return out;
+}
+
+/** "How am I doing / what should I watch?" — the warnings the board earns now:
+ *  a move that would stalemate them, and the three ways to meet a check. */
+export function dangerAnswerLines(fen: string, student: 'w' | 'b', bestUci: string | null): string[] {
+  const out: string[] = [];
+  const st = stalemateTeaching(fen, student);
+  if (st) out.push(st.text);
+  const cm = checkMethodTeaching(fen, student, bestUci);
+  if (cm) out.push(cm.text);
+  return out;
 }

@@ -235,7 +235,7 @@
 
 ### `compareMovesAsk` (function) — 2 call sites
 - `src/coach/coachService.ts:2484`
-- `src/services/coachApi.ts:2445`
+- `src/services/coachApi.ts:2446`
 
 ### `captureOnAsk` (function) — 2 call sites
 - `src/coach/coachService.ts:1685`
@@ -293,25 +293,25 @@
 - `src/coach/batteryRouting.test.ts:106`
 - `src/coach/batteryRouting.test.ts:109`
 - `src/coach/coachService.ts:1420`
-- `src/services/coachApi.ts:2451`
-- `src/services/coachApi.ts:6021`
+- `src/services/coachApi.ts:2452`
+- `src/services/coachApi.ts:6032`
 
 ### `isWhoseTurnQuestion` (function) — 4 call sites
 - `src/coach/batteryRouting.test.ts:120`
 - `src/coach/batteryRouting.test.ts:123`
-- `src/services/coachApi.ts:2451`
-- `src/services/coachApi.ts:2473`
+- `src/services/coachApi.ts:2452`
+- `src/services/coachApi.ts:2474`
 
 ### `isLiveColorQuestion` (function) — 4 call sites
 - `src/coach/batteryRouting.test.ts:128`
 - `src/coach/batteryRouting.test.ts:132`
-- `src/services/coachApi.ts:2451`
-- `src/services/coachApi.ts:2477`
+- `src/services/coachApi.ts:2452`
+- `src/services/coachApi.ts:2478`
 
 ### `isDrawQuestion` (function) — 3 call sites
 - `src/coach/batteryRouting.test.ts:137`
 - `src/coach/batteryRouting.test.ts:140`
-- `src/services/coachApi.ts:2451`
+- `src/services/coachApi.ts:2452`
 
 ### `isPositionAssessmentQuestion` (function) — 6 call sites
 - `src/coach/coachService.ts:1826`
@@ -344,7 +344,7 @@
 - `src/coach/questionIntents.test.ts:571`
 - `src/coach/questionIntents.test.ts:579`
 - `src/coach/questionIntents.test.ts:585`
-- `src/services/coachApi.ts:6209`
+- `src/services/coachApi.ts:6220`
 
 ### `isEndgameWeaknessQuestion` (function) — 4 call sites
 - `src/coach/coachService.ts:1288`
@@ -406,7 +406,7 @@
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:94`
 
 ### `fundamentalsTopicFromText` (function) — 6 call sites
-- `src/services/coachApi.ts:5216`
+- `src/services/coachApi.ts:5223`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:47`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:48`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:49`
@@ -450,7 +450,7 @@
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:143`
 
 ### `famousGameFromText` (function) — 2 call sites
-- `src/services/coachApi.ts:5171`
+- `src/services/coachApi.ts:5178`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:135`
 
 ### `isProgressQuestion` (function) — 27 call sites

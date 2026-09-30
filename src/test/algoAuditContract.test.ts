@@ -34,7 +34,9 @@ type AlgoEmissionKind =
   | 'review-need-coverage'
   | 'home-opening-chosen'
   | 'analysis-batch-ordered'
-  | 'search-depth';
+  | 'search-depth'
+  | 'learn-turn-decision'
+  | 'lane-evidence';
 
 interface Contract {
   /** The audit that holds the contract. */
@@ -47,6 +49,16 @@ interface Contract {
 }
 
 const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
+  'learn-turn-decision': {
+    script: 'scripts/audit-concept-gameplay-prod.mjs',
+    contractMarker: 'the LEARN door EMITTED',
+    emittedBy: 'src/services/learnTurnDoor.ts (decideTurn), aggregated by appAuditor',
+  },
+  'lane-evidence': {
+    script: 'scripts/audit-concept-gameplay-prod.mjs',
+    contractMarker: 'LANE EVIDENCE rows are held-only',
+    emittedBy: 'src/services/capabilityEvidence.ts (recordLaneEvidence)',
+  },
   'coach-decision': {
     script: 'scripts/audit-concept-gameplay-prod.mjs',
     contractMarker: 'the deciding door EMITTED',

@@ -205,6 +205,31 @@ const samePlacement = (a, b) => {
 // -> `appAuditor`). `details` is the row verbatim; a malformed one is DROPPED
 // rather than defaulted, so a parse bug reads as "fewer rows" and never as a
 // clean distribution the audit invented.
+/** Rows of the LEARN door (`learn-turn-decision`, aggregated bursts). */
+function learnTurnRows(listener) {
+  const rows = [];
+  for (const e of listener.getCapturedEvents()) {
+    if (e.kind !== 'learn-turn-decision') continue;
+    try {
+      const p = JSON.parse(e.details ?? '');
+      for (const row of Array.isArray(p?.rows) ? p.rows : []) {
+        if (row && Array.isArray(row.offered) && Array.isArray(row.spoke)) rows.push(row);
+      }
+    } catch { /* unreadable is not a row */ }
+  }
+  return rows;
+}
+
+/** Held rows written by Learn teaching lanes (`lane-evidence`). */
+function laneEvidenceRows(listener) {
+  const rows = [];
+  for (const e of listener.getCapturedEvents()) {
+    if (e.kind !== 'lane-evidence') continue;
+    try { rows.push(JSON.parse(e.details ?? '')); } catch { /* skip */ }
+  }
+  return rows;
+}
+
 function decisionRows(listener) {
   const rows = [];
   for (const e of listener.getCapturedEvents()) {
@@ -483,6 +508,24 @@ async function main() {
     // other half, or the emission is decoration. These rows are the WEIGHTING
     // itself — one per call of the one deciding door — so they are asserted as
     // DISTRIBUTIONS, never as prose.
+    // THE LEARN DOOR (2026-09-30): every turn decision emits which lanes were
+    // offered, which spoke and which led. Asserted as structure, never prose.
+    const turns = learnTurnRows(listener);
+    record('LD1. the LEARN door EMITTED its turn decisions', turns.length > 0, `${turns.length} learn-turn rows`);
+    if (turns.length > 0) {
+      const bad = turns.filter((t) => t.spoke.some((l) => !t.offered.includes(l)) || (t.lead !== null && !t.spoke.includes(t.lead)));
+      record('LD2. every spoken lane was offered, and the lead spoke', bad.length === 0, `${bad.length} malformed of ${turns.length}`);
+      const laneCount = {};
+      for (const t of turns) for (const l of t.spoke) laneCount[l] = (laneCount[l] ?? 0) + 1;
+      console.log('  [learn door] spoke by lane:', JSON.stringify(laneCount));
+    }
+    // LANE EVIDENCE (P4 dual-use): a lane that teaches also records. Held
+    // only (a miss is recorded by the slip capture), and `prompted` is always
+    // answered — a row without it would count as unaided by default.
+    const evidence = laneEvidenceRows(listener);
+    const dishonest = evidence.filter((r) => r.outcome !== 'held' || typeof r.prompted !== 'boolean' || !Array.isArray(r.tags) || r.tags.length !== 1);
+    record('LE1. LANE EVIDENCE rows are held-only and answer prompted', dishonest.length === 0, `${evidence.length} rows (${evidence.filter((r) => r.prompted).length} prompted), ${dishonest.length} malformed`);
+
     const decisions = decisionRows(listener);
     record(
       'G1. the deciding door EMITTED (a wire that does not fire is not a wire)',

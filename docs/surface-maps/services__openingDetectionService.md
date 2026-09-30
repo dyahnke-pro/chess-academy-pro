@@ -101,7 +101,7 @@
 - `src/services/reviewFullData.ts:1143`
 
 ### `detectOpeningTranspositional` (function) — 4 call sites
-- `src/services/coachApi.ts:5384`
+- `src/services/coachApi.ts:5391`
 - `src/services/reviewGameAdapter.ts:170`
 - `src/services/reviewOpeningTheory.ts:270`
 - `src/services/reviewOpeningTheory.ts:271`
@@ -366,8 +366,8 @@
 
 ### `studentSideForPlay` (function) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:5248`
-- `src/components/Coach/CoachTeachPage.tsx:12348`
-- `src/components/Coach/CoachTeachPage.tsx:12398`
+- `src/components/Coach/CoachTeachPage.tsx:12364`
+- `src/components/Coach/CoachTeachPage.tsx:12414`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:59`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:60`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:64`

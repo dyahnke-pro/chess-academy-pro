@@ -759,6 +759,8 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
     const fenBefore = game.fen;
     moveCountRef.current += 1;
     setComputerLastMove(null);
+    // Read BEFORE the reset: a hint on this move makes it prompted evidence.
+    const hintedThisMove = hintState.level > 0;
     resetHints();
     setViewedMoveIndex(null);
 
@@ -778,6 +780,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
       inBook: inOpeningPhase,
       bookMoveSan,
       learned: opening.isRepertoire,
+      prompted: hintedThisMove,
       gamePhase: playPhase === 'opening' ? 'opening' : 'middlegame',
       moveNumber: Math.ceil((currentMoveIdx + 1) / 2),
       openingId: opening.id,

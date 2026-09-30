@@ -1,4 +1,5 @@
 // All LLM API calls must go through this file only — per CLAUDE.md
+import { dangerAnswerLines, studentMoveAnswerLines, theirMoveAnswerLines } from './learnBoardTeaching';
 import OpenAI from 'openai';
 import { detectLanguage } from '../utils/detectLanguage';
 import { parseJsonSalvaging, isTruncatedJson } from '../utils/salvageJson';
@@ -85,7 +86,7 @@ import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningI
 import { matchOpponentOpening } from './counterRepertoireService';
 import { getMisconceptionProfile } from './misconceptionService';
 import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleLastGameMistakeAnswer, assembleRecentGamesMistakeAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleTrendAnswer, assembleTimeTroubleAnswer, assembleLastGameAnswer, assembleRetrospectiveAnswer, assembleMethodAnswer, assembleHintAnswer, hintUnavailableReason, assemblePiecePlanAnswer } from './groundedAnswer';
-import { computeLastMoveRating, computeMoveRatingAt } from './moveRating';
+import { computeLastMoveRating, computeMoveRatingAt, lastPlyOf } from './moveRating';
 import { homeOpeningRow, rankOpeningsByVolume } from './openingVolumeFloor';
 import { getHomeOpenings } from './homeOpeningService';
 import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled } from './srsOpeningService';
@@ -4050,7 +4051,13 @@ export async function getCoachChatResponse(
           try {
             const rating = await computeLastMoveRating(grounding.moveHistory, grounding.studentColor ?? null);
             if (rating) {
-              const answer = assembleMoveRatingAnswer(rating);
+              const rated = assembleMoveRatingAnswer(rating);
+              // THE SAME COMPUTERS LEARN SPEAKS (David 2026-09-30): the trade,
+              // the timing, the recapture, the reflex recapture, the king attack
+              // — every board-level read of THIS move, appended to the grade.
+              const ply = lastPlyOf(grounding.moveHistory, grounding.studentColor ?? null);
+              const extra = ply === null ? [] : studentMoveAnswerLines(grounding.moveHistory, ply, rating.cpLoss, rating.wasBest ? rating.playedSan : rating.betterSan);
+              const answer = rated && extra.length > 0 ? { ...rated, facts: `${rated.facts} ${extra.join(' ')}` } : rated;
               if (answer) {
                 // The played move + the engine's better move are the chess
                 // content the answer hinges on — require them verbatim so a
@@ -5537,11 +5544,15 @@ export async function getCoachChatResponse(
           const sc: 'white' | 'black' =
             grounding.studentColor ??
             ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
-          const answer = assembleOpponentMoveAnswer({
+          const base = assembleOpponentMoveAnswer({
             fen: grounding.currentFen,
             moveHistory: [...grounding.moveHistory],
             studentColor: sc,
           });
+          // What their move COST them and the tempo count — the Learn computers.
+          const theirPly = lastPlyOf(grounding.moveHistory, sc === 'white' ? 'black' : 'white');
+          const theirExtra = theirPly === null ? [] : theirMoveAnswerLines(grounding.moveHistory, theirPly, sc === 'white' ? 'w' : 'b');
+          const answer = base && theirExtra.length > 0 ? { ...base, facts: `${base.facts} ${theirExtra.join(' ')}` } : base;
           if (answer) {
             const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opponent-move', preferRaw: true });
             if (voiced) return voiced;
@@ -6254,13 +6265,17 @@ export async function getCoachChatResponse(
           const sc: 'white' | 'black' =
             grounding.studentColor ??
             ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
-          const answer = assemblePositionAssessment({
+          const assessed = assemblePositionAssessment({
             evalCp: grounding.engineEvalCp,
             mateIn: grounding.engineMateIn,
             tactics: grounding.tactics,
             studentColor: sc,
             fen: grounding.currentFen,
           });
+          // The warnings the board earns now: a stalemating move while winning,
+          // the three ways to meet a check.
+          const danger = grounding.currentFen ? dangerAnswerLines(grounding.currentFen, sc === 'white' ? 'w' : 'b', grounding.engineBestMoveUci ?? null) : [];
+          const answer = assessed && danger.length > 0 ? { ...assessed, facts: `${assessed.facts} ${danger.join(' ')}` } : assessed;
           if (answer) {
             const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'position-assessment', preferRaw: true });
             if (voiced) return `${voiced}${keySquareHighlightTags(answer)}`;

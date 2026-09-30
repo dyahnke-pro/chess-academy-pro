@@ -392,7 +392,7 @@ export async function recordLaneEvidence(args: {
       ...(args.sourceGameId ? { sourceGameId: args.sourceGameId } : {}),
     });
     void logAppAudit({
-      kind: 'coach-surface-migrated',
+      kind: 'lane-evidence',
       category: 'subsystem',
       source: 'capabilityEvidence.recordLaneEvidence',
       summary: `${args.outcome} [${args.tag}] from ${args.origin}${args.prompted ? ' (prompted)' : ''}`,

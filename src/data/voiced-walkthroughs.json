@@ -71519,7 +71519,7 @@
                   "node": {
                    "san": "Nxe5",
                    "movedBy": "white",
-                   "idea": "The knight takes e5 — let's see if these guys know the refutation.",
+                   "idea": "The knight takes e5 — do they know the refutation?",
                    "children": [
                     {
                      "node": {
@@ -71976,7 +71976,7 @@
                      }
                     }
                    ],
-                   "shortIdea": "The knight takes e5 — let's see if these guys know the refutation."
+                   "shortIdea": "The knight takes e5 — do they know the refutation?"
                   }
                  }
                 ],
@@ -72137,7 +72137,7 @@
                                                       "node": {
                                                        "san": "Qd2",
                                                        "movedBy": "white",
-                                                       "idea": "One comment: White isn't castled yet — you need to be prepared for castling in either direction. Many good approaches: the queen to e8, aiming for g6 if they castle short; or more ambitiously a6 to prepare a pawn storm if they castle queenside; and if they castle kingside, a6 is still a helpful move.",
+                                                       "idea": "White isn't castled yet — you need to be prepared for castling in either direction. Many good approaches: the queen to e8, aiming for g6 if they castle short; or more ambitiously a6 to prepare a pawn storm if they castle queenside; and if they castle kingside, a6 is still a helpful move.",
                                                        "children": [
                                                         {
                                                          "node": {
@@ -72429,7 +72429,7 @@
                                                          }
                                                         }
                                                        ],
-                                                       "shortIdea": "One comment: White isn't castled yet — you need to be prepared for castling in either direction."
+                                                       "shortIdea": "White isn't castled yet — you need to be prepared for castling in either direction."
                                                       }
                                                      }
                                                     ],
@@ -88702,7 +88702,7 @@
          "node": {
           "san": "e5",
           "movedBy": "black",
-          "idea": "Six thousand viewers — let's go. e4, e5.",
+          "idea": "e4, e5.",
           "children": [
            {
             "node": {
@@ -89171,7 +89171,7 @@
             }
            }
           ],
-          "shortIdea": "Six thousand viewers — let's go."
+          "shortIdea": "e4, e5."
          }
         }
        ]

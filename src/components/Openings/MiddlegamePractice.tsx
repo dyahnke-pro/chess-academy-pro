@@ -313,6 +313,10 @@ export function MiddlegamePractice({
     }
   }, [moveCount, isNarrating]);
 
+  /** A hint was shown on the move being played — the capture records it as
+   *  prompted, not unaided evidence. Cleared once the move is recorded. */
+  const hintUsedRef = useRef(false);
+
   // Handle player move
   const handleMove = useCallback((moveResult: MoveResult) => {
     setMoveCount((prev) => prev + 1);
@@ -327,6 +331,7 @@ export function MiddlegamePractice({
       playerColor,
       inBook: false,
       learned: true,
+      prompted: hintUsedRef.current,
       gamePhase: 'middlegame',
       moveNumber: moveCount + 1,
       openingId: plan.openingId,
@@ -336,6 +341,7 @@ export function MiddlegamePractice({
       // scorecard + drill queue, not just the coarse tag (David 2026-09-07).
       historySans: moveResult.history,
     });
+    hintUsedRef.current = false;
     void getCoachFeedback(moveResult.san, moveResult.fen);
   }, [getCoachFeedback, discussion, playerColor, moveCount, plan.openingId, plan.title]);
 
@@ -387,6 +393,7 @@ export function MiddlegamePractice({
   const handleGetHint = useCallback(async () => {
     if (isCoachThinking || isEngineMoving || isHintActive) return;
     setIsHintActive(true);
+    hintUsedRef.current = true;
     try {
       const analysis = engineAnalysis ?? await stockfishEngine.queueAnalysis(game.fen, 16);
       if (!isMountedRef.current) return;

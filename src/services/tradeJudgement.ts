@@ -19,8 +19,9 @@
 import { Chess } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { MATERIAL_VALUE } from './pieceValues';
+import { strongestByDelta, weakestByDelta, type PieceValue } from './pieceValueRead';
 
-export type TradeReason = 'ahead' | 'behind' | 'bad-bishop' | 'attacker-gone';
+export type TradeReason = 'their-best' | 'gave-best' | 'ahead' | 'behind' | 'bad-bishop' | 'attacker-gone';
 
 export interface TradeJudgement {
   reason: TradeReason;
@@ -33,7 +34,9 @@ const isLight = (sq: string): boolean => (sq.charCodeAt(0) - 97 + Number(sq[1]))
 const dist = (a: string, b: string): number =>
   Math.max(Math.abs(a.charCodeAt(0) - b.charCodeAt(0)), Math.abs(Number(a[1]) - Number(b[1])));
 
-export function tradeJudgement(fenBefore: string, san: string, reply: string | null, student: 'w' | 'b', cpLoss: number): TradeJudgement | null {
+/** `values` = the engine's per-piece table (`evalBoard`) for `fenBefore`, when
+ *  the caller has it — the good-piece / bad-piece read (David 2026-09-30). */
+export function tradeJudgement(fenBefore: string, san: string, reply: string | null, student: 'w' | 'b', cpLoss: number, values?: readonly PieceValue[]): TradeJudgement | null {
   if (!reply) return null;
   let c: Chess;
   try { c = new Chess(fenBefore); } catch { return null; }
@@ -48,6 +51,23 @@ export function tradeJudgement(fenBefore: string, san: string, reply: string | n
   const edge = student === 'w' ? s.material.balance : -s.material.balance;
   const gave = NAME[mine.piece] ?? 'piece';
   const got = NAME[mine.captured] ?? 'piece';
+  // GOOD PIECE, BAD PIECE — read off the engine's table of THIS board, on the
+  // same scale-free delta the "trade off their best piece" line uses. Needs
+  // pieces of the traded kind on both sides to compare, so both reads must
+  // name the traded squares exactly.
+  if (values && values.length > 0) {
+    const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
+    const theirBest = strongestByDelta(values, them);
+    const myWorst = weakestByDelta(values, student);
+    const myBest = strongestByDelta(values, student);
+    const theirWorst = weakestByDelta(values, them);
+    if (theirBest?.square === mine.to && theirBest.delta > 0) {
+      return { reason: 'their-best', squares: [mine.to], text: `A good trade — their ${got} on ${mine.to} was the piece doing the most work for them${myWorst?.square === mine.from ? `, and it cost you your least useful piece` : ''}.` };
+    }
+    if (myBest?.square === mine.from && myBest.delta > 0 && theirWorst?.square === mine.to) {
+      return { reason: 'gave-best', squares: [mine.from, mine.to], text: `That trade gave up your best piece, the ${gave} on ${mine.from}, for their least useful one — keep the pieces that are working and trade the ones that are not.` };
+    }
+  }
   if (edge >= 2) {
     return { reason: 'ahead', squares: [mine.to], text: `A ${gave} for a ${got} — and trading is exactly right when you are ahead: every piece off the board makes your extra material count for more.` };
   }

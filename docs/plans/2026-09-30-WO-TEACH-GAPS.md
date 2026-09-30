@@ -77,7 +77,7 @@ Loop until **≥97% of ALL checkable claims**, not just the auto-checked ones.
 | # | build | why now |
 |---|---|---|
 | ~~1.1~~ | ~~ACC-1: extract Learn's narration builder~~ — **DROPPED 2026-09-30** | the move handler is ~3,000 lines of a 14,450-line page; the tape harness already records exactly what the real page speaks, so the extraction buys no measurement and carries large regression risk |
-| 1.2 | **T1: every speaking lane through `coachDecider`** (one door) | lanes still bypass the ranker; a new lane would add another bypass |
+| 🟠 1.2 | **T1: every speaking lane through `coachDecider`** (one door) — ASSESSED 2026-09-30: Learn already has ONE door for its lanes (`learnTurnDoor.decideTurn`, every lane through `buildVoicePackage`; `positionFacts` enters it already decided by `coachDecider`). Merging the two deciders is a rewrite of the same scale as the dropped 1.1; debt, not a blind refactor | lanes still bypass the ranker; a new lane would add another bypass |
 | 🟡 1.3 | **Shared claim keys across lanes** (#49) — in progress: `convert-method` joins the botched-conversion verdict and the "up material now" switch; `namesBetter` lets a verdict drop a better move the grade already names | the same fact from 3 lanes on one ply ("open file" ×3) |
 | 🟡 1.4 | **One thread per move** (#23): lead + one support, ~30 words — MEASURED on run I (121 spoken plies, deduped): median 1 line / 22 words, mean 1.5 lines / 28 words; only 5 plies > 60 words, and those are repeated-claim stacks (fixed via 1.3), not missing structure | what Danya does; we still stack 3–5 lines |
 | ✅ 1.5 | **`facts[]` audit-only list** — already gone (nothing pushes to it; the OUTLINE line was stale) | — |
@@ -169,9 +169,8 @@ question the knee-jerk, trigger→scan, autopilot guard, safety precheck.
     unprompted finds → GREEN; prompted never). Open: stalemate avoided, check
     answered without the king, tempo (their half — nothing of the student's to
     record).
-- **Strength from move one** (gem hit → book departure → cpLoss at decision
-  moments) — one detector, two consumers; not wired to the opponent's strength yet.
-- **Fade:** two phrasings per fact kind by heat-map state (#27).
+- **Strength from move one** — ✅ ALREADY WIRED on Play: `liveStrength` reads the same posed/answered measurement as `capabilityEvidence` and sets the Stockfish opponent every move (`CoachGamePage` → `discussion.liveRating`). The line above saying "not wired" was stale. Gem hit / book departure as extra inputs: open.
+- **Fade:** two phrasings per fact kind by heat-map state (#27) — partly live: a GREEN layer goes quiet in the door (`GREEN_QUIET_BELOW`); a verdict only fires on a slip, which breaks the streak, so a second phrasing tier buys little. Not built.
 - **Concept-level spaced retrieval** and **transfer** ("you met this two games ago").
 
 ---
@@ -183,7 +182,7 @@ question the knee-jerk, trigger→scan, autopilot guard, safety precheck.
   answering questions walk + fix (#41).
 - T4: concession, move→plan link, branching line narrator (#46).
 - Plans: break preparation, plan chooser, transposition reader, opening summary (#52).
-- Voiced corpus: strip video residue + first person (#55); re-anchor 163
+- Voiced corpus: strip video residue + first person (#55) — 🟡 residue ✅ (5 notes fixed at the source, banned by `voicedDepersonalized.test`); first person MEASURED at 700 of 7,477 notes, held to a shrink-only ceiling — each needs an authoring decision (flip to "you" or drop), not a blind rewrite; re-anchor 163
   one-ply-late opponent beats (#56).
 - **NO HAND-WRITTEN NOTES ON THE LIVE COACH (David 2026-09-30: "I do not want
   to rely on the hand written notes. I want to accomplish the ideas via
@@ -220,3 +219,17 @@ gate: every new lane is one more thing that can say something false, and the
 measured rate is 85%, not 97%. Phase 1 before Phase 2 because a lane added
 before the one door and the one thread lands as one more disconnected label
 (the full review's finding, all five readers agreed).
+
+---
+
+## PHASE 6 — every computer dual-use, Play asks them, audits for live (David 2026-09-30)
+
+David: "Make sure all other computers carry the same dual role … Can we add a teaching function to ALL current computers? … add the proper audit tools for when we go live … Play still needs access to these computers to answer questions on demand." Decisions: scope = all live-coach computers; no-student-skill → N/A with a reason; Play = every question that makes sense; merge after the audits are built and green.
+
+- ✅ **`computerRoles.ts`** — `Record<LearnLane, {computer, tag, held, broken, askable}>`, each half `wired` (code path named and checked to exist) / `owed` (shrink-only, now 1: falseAlarm on Play needs an engine line at question time) / `na` with its reason. A new lane fails to compile until it answers. Gate `computerRoles.test.ts`.
+- ✅ **HONESTY BUG FOUND AND FIXED**: `evaluatePlayerMove` recorded every clean Learn move as UNPROMPTED held evidence, though Learn now announces critical moments before the move. `prompted` is a REQUIRED arg at all five capture sites (Learn: announced ply; WLPP practice: hint shown; middlegame practice: hint used; opening play: hint level; review card: false).
+- ✅ Held rows now wired for: found move, good trade, well-timed quiet move, right recapture, threat rightly ignored, move order, move intent. Said-before-the-move lanes (gem, tactic, threat, its answer, stalemate, check method) are N/A: a find after them is prompted.
+- ✅ **Trade by piece quality** — `tradeJudgement` reads the engine's per-piece table (fetched only on a completed trade): their busiest piece off = good trade; your best for their idlest = a bad deal. `weakestByDelta` is the twin of `strongestByDelta`.
+- ✅ **Play Q&A** — `studentMoveAnswerLines` / `theirMoveAnswerLines` / `dangerAnswerLines` (text only — answers never write evidence) appended to the move-rating, opponent-move and assessment answers in `coachApi`.
+- ✅ **Audit tools** — the Learn door emits `learn-turn-decision` (aggregated like `coach-decision`); `recordLaneEvidence` logs `lane-evidence`. Contracts in `audit-concept-gameplay-prod.mjs`: LD1 emitted, LD2 spoken ⊆ offered and lead spoke, LE1 held-only + prompted answered. Declared in `algoAuditContract.test.ts`.
+- ✅ Run J (re-walk of run I, new build): candidates, tempo count, trade-when-ahead, found-move, plan-as-plan all fire. Fixed from it: timing on captures/checks (quiet moves only), "their piece" for the king.

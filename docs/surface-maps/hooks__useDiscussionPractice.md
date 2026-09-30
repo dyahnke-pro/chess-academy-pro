@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**868 lines · 10 exports · 9 importers · 4 tests · 0 audits**
+**871 lines · 10 exports · 9 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6058) — names `useDiscussionPractice`
+- **The standard post-deploy ritual** (CLAUDE.md:6093) — names `useDiscussionPractice`
 
 ## Who calls in
 
@@ -51,35 +51,36 @@
 ### `UseDiscussionPracticeOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `useDiscussionPractice` (function) — 28 call sites
+### `useDiscussionPractice` (function) — 29 call sites
 - `src/components/Coach/CoachGamePage.tsx:587`
-- `src/components/Coach/CoachGameReview.tsx:901`
-- `src/components/Coach/CoachTeachPage.tsx:1578`
-- `src/components/Openings/MiddlegamePractice.tsx:162`
-- `src/components/Openings/OpeningPlayMode.tsx:274`
-- `src/components/Openings/PlayableLinePlayer.tsx:205`
-- `src/hooks/hintDialTally.test.ts:66`
-- `src/hooks/hintDialTally.test.ts:92`
-- `src/hooks/hintDialTally.test.ts:111`
-- `src/hooks/hintDialTally.test.ts:122`
-- `src/hooks/learnSilentCapture.test.ts:80`
-- `src/hooks/learnSilentCapture.test.ts:115`
-- `src/hooks/learnSilentCapture.test.ts:197`
-- `src/hooks/learnSilentCapture.test.ts:214`
-- `src/hooks/learnSilentCapture.test.ts:228`
+- `src/components/Coach/CoachGameReview.tsx:923`
+- `src/components/Coach/CoachTeachPage.tsx:1555`
+- `src/components/Openings/MiddlegamePractice.tsx:160`
+- `src/components/Openings/OpeningPlayMode.tsx:276`
+- `src/components/Openings/PlayableLinePlayer.tsx:207`
+- `src/hooks/hintDialTally.test.ts:67`
+- `src/hooks/hintDialTally.test.ts:93`
+- `src/hooks/hintDialTally.test.ts:112`
+- `src/hooks/hintDialTally.test.ts:123`
+- `src/hooks/learnSilentCapture.test.ts:81`
+- `src/hooks/learnSilentCapture.test.ts:116`
+- `src/hooks/learnSilentCapture.test.ts:198`
+- `src/hooks/learnSilentCapture.test.ts:215`
+- `src/hooks/learnSilentCapture.test.ts:229`
 - `src/hooks/useDiscussionPractice.test.ts:70`
-- `src/hooks/useDiscussionPractice.test.ts:88`
-- `src/hooks/useDiscussionPractice.test.ts:124`
-- `src/hooks/useDiscussionPractice.test.ts:146`
-- `src/hooks/useDiscussionPractice.test.ts:161`
-- `src/hooks/useDiscussionPractice.test.ts:179`
-- `src/hooks/useDiscussionPractice.test.ts:200`
-- `src/hooks/useDiscussionPractice.test.ts:212`
-- `src/hooks/useDiscussionPractice.test.ts:234`
-- `src/hooks/useDiscussionPractice.test.ts:252`
-- `src/hooks/useDiscussionPractice.test.ts:279`
-- `src/hooks/useDiscussionPractice.test.ts:294`
-- `src/hooks/useDiscussionPractice.test.ts:309`
+- `src/hooks/useDiscussionPractice.test.ts:89`
+- `src/hooks/useDiscussionPractice.test.ts:126`
+- `src/hooks/useDiscussionPractice.test.ts:149`
+- `src/hooks/useDiscussionPractice.test.ts:165`
+- `src/hooks/useDiscussionPractice.test.ts:184`
+- `src/hooks/useDiscussionPractice.test.ts:205`
+- `src/hooks/useDiscussionPractice.test.ts:218`
+- `src/hooks/useDiscussionPractice.test.ts:241`
+- `src/hooks/useDiscussionPractice.test.ts:260`
+- `src/hooks/useDiscussionPractice.test.ts:274`
+- `src/hooks/useDiscussionPractice.test.ts:302`
+- `src/hooks/useDiscussionPractice.test.ts:317`
+- `src/hooks/useDiscussionPractice.test.ts:332`
 
 ## Tests
 

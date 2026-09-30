@@ -99,6 +99,11 @@ export interface EvaluatePlayerMoveArgs {
    *  MiddlegamePractice) has no game, and `origin: 'drill'` is the right answer
    *  there — never a fabricated game id. */
   sourceGameId?: string;
+  /** WAS THE STUDENT TOLD before they moved? REQUIRED (the capability record's
+   *  own rule): Learn announces critical moments ("only one move holds") BEFORE
+   *  the move, so a find right after one is not unaided evidence. Surfaces that
+   *  say nothing before the move pass `false`. */
+  prompted: boolean;
   /** Every SAN up to AND INCLUDING the played move. When present, a captured
    *  slip is attributed to the specific FUNDAMENTAL it neglected (David
    *  2026-09-07: one coach, one memory) — so a live Learn/Play slip lands in the
@@ -482,17 +487,12 @@ export function useDiscussionPractice(
         moverColor: args.playerColor,
         cpLoss,
         origin: opts.capabilityOrigin,
-        // UNPROMPTED, and provably so at THIS point in the turn: every reveal
-        // this hook delivers (`buildGroundedReveal`, `buildSlipReveal`, the
-        // teach card) fires AFTER the move is on the board, so nothing has
-        // told the student anything about the position they just answered.
-        //
-        // 🚨 THIS BECOMES DYNAMIC the moment the coach speaks BEFORE the move —
-        // the critical-moment announcement in PLAN.md ("only one move keeps you
-        // level") is exactly that, and a find after it must record
-        // `prompted: true` or the coach's own teaching inflates the model it
-        // uses to decide whether to teach.
-        prompted: false,
+        // DYNAMIC, from the surface (2026-09-30): this hook's own reveals fire
+        // AFTER the move, but Learn announces critical moments BEFORE it ("only
+        // one move holds"), and a find after that is prompted — recorded as
+        // unaided it inflated the model the coach uses to decide whether to
+        // teach. The surface knows what it said; it answers.
+        prompted: args.prompted,
         sourceGameId: args.sourceGameId,
       });
 
@@ -770,6 +770,9 @@ export function useDiscussionPractice(
         playerColor: moverChar === 'w' ? 'white' : 'black', inBook: false,
         learned: args.shouldCount, gamePhase: args.gamePhase, moveNumber: args.moveNumber,
         openingId: args.openingId, openingName: args.openingName, studentRating: args.studentRating,
+        // The review asks about a move already played in a real game, where
+        // nothing was said before it: unprompted.
+        prompted: false,
       },
       bestSan: args.bestSan, cpLoss: args.cpLoss, kind: 'slip',
       shouldCount: args.shouldCount, reveal, moverChar, options,

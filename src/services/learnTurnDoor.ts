@@ -23,6 +23,7 @@
  * Slice 1 (this file): route + record, behaviour-preserving. Ordering and dedupe are still
  * `buildVoicePackage`'s. Picking ONE lead per turn is the next slice.
  */
+import { emitLearnTurn } from './coachDecisionEvents';
 import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type VoiceFactKind, type VoicePackage } from './voicePackage';
 
 export { buildVoicePackage, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys } from './voicePackage';
@@ -281,6 +282,9 @@ export function decideTurn(
     ],
   };
   const lead = ownLead ? { lane: ownLead.lane, squares: ownLead.fact.squares ?? [] } : null;
+  // EMIT every decision (the algo-audit rule): a door whose decisions cannot be
+  // inspected can only be judged by reading the tape.
+  if (offered.length > 0) emitLearnTurn({ offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held] });
   return { pkg, offered, spoke, lead, held };
 }
 

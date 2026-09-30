@@ -155,3 +155,27 @@ export function resetCoachDecisionListeners(): void {
   listeners.clear();
   needListeners.clear();
 }
+
+/** One decision of the LEARN door (`learnTurnDoor.decideTurn`) — which lanes
+ *  were offered, which spoke, which led, which the one-thought rule held
+ *  (2026-09-30: every deciding computer emits; the Learn door was the one that
+ *  only logged when it held everything). Lane names only, never prose. */
+export interface LearnTurnRow {
+  offered: string[];
+  spoke: string[];
+  lead: string | null;
+  held: string[];
+}
+
+const learnTurnListeners = new Set<(row: LearnTurnRow) => void>();
+
+export function onLearnTurn(cb: (row: LearnTurnRow) => void): () => void {
+  learnTurnListeners.add(cb);
+  return () => { learnTurnListeners.delete(cb); };
+}
+
+export function emitLearnTurn(row: LearnTurnRow): void {
+  for (const cb of learnTurnListeners) {
+    try { cb(row); } catch { /* telemetry never breaks the coach */ }
+  }
+}
