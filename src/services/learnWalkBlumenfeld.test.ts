@@ -182,7 +182,7 @@ describe('F18 / F32 — the price of a move is one cost, never a want-list', () 
     const { whatItAllowed } = await import('./concessionBeat');
     const said = whatItAllowed({
       fenAfter: fenAt(56), opponentPv: ['c2c5', 'c7c5', 'c1c5', 'd6d8', 'c5c8', 'd8c8'],
-      studentColor: 'black', cpLoss: 250,
+      studentColor: 'black', cpLoss: 250, playedSan: 'd3',
     });
     if (said) {
       expect(said.line).toMatch(/^That let them (win|take|mate|checkmate|trap|pull the pawns)/);

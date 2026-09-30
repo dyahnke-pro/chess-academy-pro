@@ -163,7 +163,7 @@
 - `src/services/lookaheadPlan.test.ts:967`
 
 ### `isCostClause` (function) — 8 call sites
-- `src/services/concessionBeat.ts:446`
+- `src/services/concessionBeat.ts:455`
 - `src/services/inaccuracyCall.ts:263`
 - `src/services/inaccuracyCall.ts:276`
 - `src/services/inaccuracyCall.ts:574`
@@ -177,7 +177,7 @@
 - `src/services/claimTruth.manual.test.ts:119`
 - `src/services/coachLaneWiring.test.ts:35`
 - `src/services/computedVoiceAudit.report.test.ts:216`
-- `src/services/concessionBeat.ts:440`
+- `src/services/concessionBeat.ts:449`
 - `src/services/inaccuracyCall.ts:219`
 - `src/services/inaccuracyCall.ts:223`
 - `src/services/inaccuracyCall.ts:572`

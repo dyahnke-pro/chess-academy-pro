@@ -382,7 +382,15 @@ function checkSentence(s, ctx) {
     const pawnsOf = (b, c) => b.board().flat().filter((x) => x && x.type === 'p' && x.color === c).map((x) => x.square);
     // "The isolated pawn on d5" — no pawn of its side on a neighbouring file.
     for (const m of s.matchAll(/isolated (?:queen[’']s )?pawn on ([a-h][1-8])/gi)) {
-      const ok = boards.some((b) => { const p = b.get(m[1]); if (!p || p.type !== 'p') return false; const f = FILES.indexOf(m[1][0]); return !pawnsOf(b, p.color).some((q) => Math.abs(FILES.indexOf(q[0]) - f) === 1); });
+      // "X, which would leave an isolated pawn on f3" is about the board AFTER
+      // X — play it first (run I, 1rcE ply 55: gxf3 would, and it does).
+      const hypo = /(\S+), which would leave an isolated/.exec(s);
+      const iso = (b) => { const p = b.get(m[1]); if (!p || p.type !== 'p') return false; const f = FILES.indexOf(m[1][0]); return !pawnsOf(b, p.color).some((q) => Math.abs(FILES.indexOf(q[0]) - f) === 1); };
+      let ok;
+      if (hypo) {
+        const san = stripSan(hypo[1]);
+        ok = [ctx.fenAfter, ctx.fenMid, ctx.fenBefore].some((fen) => [me, them].some((t) => { const c = board(withTurn(fen, t)); if (!c) return false; try { c.move(san); } catch { return false; } return iso(c); }));
+      } else ok = boards.some(iso);
       res.push([ok, `${m[1]} is not an isolated pawn`]);
     }
     // "The backward pawn on e6" — no neighbouring pawn of its side level with it or behind it.

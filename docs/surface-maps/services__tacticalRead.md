@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**861 lines · 28 exports · 6 importers · 5 tests · 0 audits**
+**871 lines · 28 exports · 6 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -92,8 +92,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:123`
 - `src/services/tacticalRead.test.ts:126`
 
-### `tacticalReadFromLines` (function) — 13 call sites
+### `tacticalReadFromLines` (function) — 14 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8968`
+- `src/services/claimTruth.manual.test.ts:163`
 - `src/services/danyaBehaviors.ts:509`
 - `src/services/danyaDeviceCoverage.test.ts:73`
 - `src/services/liveVoiceDefects.test.ts:45`
@@ -120,8 +121,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:437`
 - `src/services/tacticalRead.test.ts:450`
 
-### `uncertaintyClause` (function) — 13 call sites
+### `uncertaintyClause` (function) — 14 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8995`
+- `src/services/claimTruth.manual.test.ts:165`
 - `src/services/danyaDeviceCoverage.test.ts:84`
 - `src/services/liveVoiceDefects.test.ts:257`
 - `src/services/tacticalRead.test.ts:422`
@@ -197,6 +199,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
+- `src/services/claimTruth.manual.test.ts`
 - `src/services/danyaDeviceCoverage.test.ts`
 - `src/services/learnWalkBlumenfeld.test.ts`
 - `src/services/liveVoiceDefects.test.ts`

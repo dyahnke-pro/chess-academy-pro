@@ -434,9 +434,18 @@ export function whatItAllowed(args: {
    *  describes a normal reply rather than a consequence, and saying "that let
    *  them…" about ordinary play teaches the student to distrust the coach. */
   cpLoss: number;
+  /** The student's move that led to `fenAfter`, SAN. REQUIRED: a capture of
+   *  theirs that is simply taken back is a trade, and "that let them win a
+   *  pawn, starting with Bxc4" after …bxc4 is false (run I, manual check). */
+  playedSan: string | null;
 }): { line: string; square: string } | null {
   if (args.cpLoss < 60) return null;
   if (args.opponentPv.length < 4) return null;
+  // Their first move takes back on the square the student just captured on:
+  // the material the plan counts from here is the student's own capture being
+  // returned, not a win.
+  const studentTo = /x([a-h][1-8])/.exec(args.playedSan ?? '')?.[1] ?? null;
+  const recaptures = !!studentTo && args.opponentPv[0]?.slice(2, 4) === studentTo;
   const plan = planFromUci(args.fenAfter, args.opponentPv, args.studentColor);
   // `theirs` is the opponent — the side to move here, whose line this is.
   // ONE CLAUSE, AND ONLY A COST (`isCostClause`): the price of the move is
@@ -444,6 +453,7 @@ export function whatItAllowed(args: {
   // drift to (Blumenfeld walk F18/F32).
   const lead = plan?.theirs.spokenClauses[0];
   if (!lead?.text || lead.drift || !isCostClause(lead.text)) return null;
+  if (recaptures && /^win\b/.test(lead.text.trim())) return null;
   // NAMED WITH THE MOVE THAT DOES IT (McConnell walk 2026-09-27: a bare "That
   // let them win a pawn." left the student to find which pawn and how).
   let first: string | null = null;

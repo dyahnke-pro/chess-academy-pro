@@ -54,7 +54,17 @@ Status: 37 of 40 fixed, each with a fail-on-old test (`claimTruth.manual.test.ts
 - Game-history claims ("the third game now") are unverifiable from a board:
   have the lane emit its count source so the checker can grade it.
 
-### 0.3 Re-measure
+### 0.3 Re-measure — ✅ MET on run I (2026-09-30)
+Run I: 6 fresh games walked on the fixed code (314c1cc21). Checker: 76 of 76
+checked claims TRUE (coverage 46%). Manual pass on the 89 it could not grade
+(3 agents): 68 TRUE, 3 FALSE, 9 advice, 9 unverifiable. **Combined: 144 TRUE /
+3 FALSE = 98.0% of all checkable claims.** Two of the three fixed with
+fail-on-old tests (a recapture called "win a pawn"; a pawn recapture called
+"the same job" as a piece recapture). 🟠 Open: a plan route read backwards
+("the queen's walk from c2 to d7" just after it came from d7) — needs the game
+history at the route check; logged, not yet fixed.
+
+### 0.3 (original text)
 New games from the unused pool (QJ3YfBMrVls, 5MAKlJpkpsg, kYbh2NTFsS8,
 s3ea8V8twrY, FPI9J8_LmJQ, 33EpuPv4ULw, zprg2WbmgzQ, l65FZlRkWcM, tWGrKGoNNEA,
 wn7jKtpg2dg, …): walk → tape → checker → manual pass on the unchecked half.

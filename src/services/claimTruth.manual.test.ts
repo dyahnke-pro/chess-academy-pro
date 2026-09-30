@@ -141,3 +141,27 @@ describe('the verdict on a found move (P2 #2)', () => {
     expect(criticalMomentFound(read, 'Qe2')).toBeNull();
   });
 });
+
+describe('run I manual check: a recapture is not a win, a pawn recapture is not a coin-flip', () => {
+  it('"That let them win a pawn, starting with Bxc4" is not said after the student\'s own …bxc4', async () => {
+    const { whatItAllowed } = await import('./concessionBeat');
+    const args = {
+      fenAfter: 'r2qk2r/5pp1/p1bbpn2/2p4p/2pP4/1B6/PPN2PPP/R1BQ1RK1 w kq - 0 14',
+      opponentPv: ['b3c4', 'f6g4', 'h2h3', 'd6h2', 'g1h1', 'h2c7'],
+      studentColor: 'black' as const, cpLoss: 120,
+    };
+    expect(whatItAllowed({ ...args, playedSan: 'bxc4' })?.line ?? '').not.toMatch(/win a pawn/);
+  });
+  it('Nxf3 vs gxf3 is never "does the same job"', async () => {
+    const { tacticalReadFromLines, uncertaintyClause } = await import('./tacticalRead');
+    const fen = '1nkr1r2/1pp1b1pp/4p3/2P1N3/3P4/4BbKP/P5P1/1R2R3 w - - 0 28';
+    const lines = [
+      { rank: 1, evaluation: -19, moves: ['e5f3', 'b8c6', 'e3f2', 'f8e8', 'g3h2', 'e7f6'], mate: null },
+      { rank: 2, evaluation: -40, moves: ['g2f3', 'e7f6', 'e3f2', 'd8d5', 'e5g4', 'f6d4'], mate: null },
+      { rank: 3, evaluation: -481, moves: ['b1b3', 'f3d5', 'b3a3', 'e7f6', 'a3a8', 'f6e5'], mate: null },
+    ];
+    const read = tacticalReadFromLines(fen, lines as never, 'white');
+    expect(read?.closeAlternative ?? null).toBeNull();
+    for (let r = 0; r < 4; r++) expect(read ? uncertaintyClause(read, { rotation: r }) : null).toBeNull();
+  });
+});

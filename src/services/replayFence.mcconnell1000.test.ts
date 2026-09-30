@@ -29,7 +29,7 @@ describe('ply 39 — "That let them win a pawn" names the move that does it', ()
     const r = whatItAllowed({
       fenAfter: '2kn2nr/p4p2/b2pq1p1/1p2p2p/PPP1P2P/3P2N1/5PP1/R2QK2R b KQ - 0 20',
       opponentPv: ['b5c4', 'b4b5', 'a6b7', 'e1g1', 'g8f6', 'a4a5', 'e6d7', 'd1b1'],
-      studentColor: 'white', cpLoss: 68,
+      studentColor: 'white', cpLoss: 68, playedSan: 'a4',
     });
     expect(r?.line).toMatch(/^That let them win a pawn, starting with bxc4\.$/);
   });

@@ -360,6 +360,7 @@ export function backwardLook(args: {
       opponentPv: args.replyPvUci ?? [],
       studentColor: args.studentColor,
       cpLoss: args.cpLoss,
+      playedSan: args.playedSan,
     });
     // 🚨 LOG THE INPUTS, NOT JUST THE SENTENCE (David's prod game, 2026-08-16).
     //

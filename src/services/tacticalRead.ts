@@ -400,7 +400,17 @@ export function tacticalReadFromLines(
     // hedge speaks only in a live position. A forced mate against the student
     // arrives here as a huge negative score, so the one bound covers it.
     const live = bestStudentCp > -300;
-    if (live && rUci && rUci.length >= 4 && rUci !== first.uci && gap >= 0 && gap <= 40) {
+    // TWO RECAPTURES ON ONE SQUARE ARE NOT A COIN-FLIP when one is a pawn:
+    // they leave different structures (run I, manual check: "gxf3 does the
+    // same job as Nxf3" — 70cp apart at depth). The recapture lane owns that.
+    const sameSquareDifferentKind = ((): boolean => {
+      try {
+        const a = new Chess(fen).move({ from: first.uci.slice(0, 2), to: first.uci.slice(2, 4), promotion: first.uci[4] });
+        const b = rUci ? new Chess(fen).move({ from: rUci.slice(0, 2), to: rUci.slice(2, 4), promotion: rUci[4] }) : null;
+        return !!a && !!b && a.to === b.to && !!a.captured && !!b.captured && (a.piece === 'p') !== (b.piece === 'p');
+      } catch { return false; }
+    })();
+    if (live && rUci && rUci.length >= 4 && rUci !== first.uci && gap >= 0 && gap <= 40 && !sameSquareDifferentKind) {
       const rp = replayUci(fen, [rUci]);
       if (rp.length) closeAlternative = { san: rp[0].san, gapCp: gap };
     }
