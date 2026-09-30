@@ -1512,6 +1512,24 @@ export async function gradeMistakePuzzle(
   await db.meta.delete('tactical_profile');
 }
 
+// ─── Drilled motifs (positive transfer) ─────────────────────────────────────
+
+/** The tactic motifs the student has SOLVED from their own mistakes, each with
+ *  the opponent of the game it came from (most recent first) — so a live find
+ *  of the same motif can be tied back to the drill ("the fork you drilled from
+ *  your game against X"). Read once per game; a failed read is empty. */
+export async function loadDrilledMotifs(): Promise<Map<TacticType, { opponentName: string | null }>> {
+  const out = new Map<TacticType, { opponentName: string | null }>();
+  try {
+    const rows = await db.mistakePuzzles.toArray();
+    rows
+      .filter((r) => r.tacticType && r.tacticType !== 'tactical_sequence' && r.successes > 0)
+      .sort((a, b) => (b.srsLastReview ?? '').localeCompare(a.srsLastReview ?? ''))
+      .forEach((r) => { if (r.tacticType && !out.has(r.tacticType)) out.set(r.tacticType, { opponentName: r.opponentName }); });
+  } catch { /* no store — nothing drilled */ }
+  return out;
+}
+
 // ─── Delete ─────────────────────────────────────────────────────────────────
 
 export async function deleteMistakePuzzle(id: string): Promise<void> {

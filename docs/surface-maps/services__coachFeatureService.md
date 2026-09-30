@@ -276,8 +276,8 @@
 - `src/services/reviewNarrationFidelity.test.ts:118`
 
 ### `pendingRecapture` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7481`
-- `src/components/Coach/CoachTeachPage.tsx:7570`
+- `src/components/Coach/CoachTeachPage.tsx:7487`
+- `src/components/Coach/CoachTeachPage.tsx:7576`
 - `src/services/coachFeatureService.test.ts:929`
 - `src/services/coachFeatureService.test.ts:930`
 - `src/utils/justCaptured.test.ts:20`

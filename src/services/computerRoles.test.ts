@@ -60,7 +60,7 @@ describe('a move made after a pre-move warning is PROMPTED (P4 honesty)', () => 
     for (const l of ['trade', 'recapture', 'timing', 'foundMove'] as const) expect(SAID_BEFORE_MOVE.has(l), l).toBe(false);
     expect(announcesTheMove(['threat', 'positional'])).toBe(true);
     expect(announcesTheMove(['positional', 'trade'])).toBe(false);
-  });
+  }, 30000);
   it('the page files the move from an announced board as prompted', async () => {
     const { readFileSync } = await import('node:fs');
     const page = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');

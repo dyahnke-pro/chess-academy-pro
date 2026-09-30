@@ -259,6 +259,9 @@ export interface LiveMethodSignals {
    *  habit, it is nagging. The choice is worth teaching where the choice
    *  actually decides something. */
   tier?: ImportanceTier;
+  /** TRIGGER → SCAN: a loose enemy piece the engine's quiet best move hits
+   *  (`looseTrigger`) — "their bishop on b5". The trigger, never the move. */
+  looseTarget?: string | null;
 }
 
 /**
@@ -271,7 +274,7 @@ export interface LiveMethodSignals {
 /** The three live habits. Each is taught ONCE per game: the 2026-09-24 hand
  *  walk heard "their threat first, your idea second" three times in six moves —
  *  the stems rotate, so a text dedupe never matched. Keyed on the HABIT. */
-export type LiveHabit = 'opponent-threat' | 'forcing-scan' | 'candidates';
+export type LiveHabit = 'opponent-threat' | 'forcing-scan' | 'loose-trigger' | 'candidates';
 export interface LiveMethodBeat { text: string; key: string }
 /** The say-once key a caller carries forward in its `alreadySaid` set. */
 export function liveHabitKey(habit: LiveHabit): string { return `method:${habit}`; }
@@ -312,6 +315,18 @@ export function liveMethodBeat(s: LiveMethodSignals, plyForVariety = 0, said?: R
       'Start with the forcing moves here — every check, every capture, before you look at anything quiet.',
       'List the checks and the captures first. Something in this position is forcing, and quiet moves can wait.',
       'Scan forcing first: checks, then captures, then the quiet moves — that order is what finds a shot when there is one.',
+    ], plyForVariety);
+  }
+
+  // 2b — TRIGGER → SCAN. The move that is there is quiet, but it hits a piece of
+  // theirs with no defender: the loose piece is the trigger that should start
+  // the search. Same deciding-moment gate as the forcing scan.
+  if (s.looseTarget && isDecidingMoment(s.tier) && owed('loose-trigger')) {
+    const t = s.looseTarget;
+    return beat('loose-trigger', [
+      `Spot the trigger first: ${t} has no defender. A loose piece is where tactics start — look for a move that hits it.`,
+      `The trigger here is ${t} — nothing defends it. Loose pieces drop off; scan for a move that attacks it.`,
+      `Before anything else, notice ${t}: undefended. That is the trigger — now find the move that goes after it.`,
     ], plyForVariety);
   }
 

@@ -45,3 +45,18 @@ describe('gradeMistakePuzzle wires the concept pull', () => {
     expect((await db.mistakePuzzles.get('o'))?.srsDueDate).toBe(future);
   });
 });
+
+describe('loadDrilledMotifs — the motifs solved from the student\'s own mistakes', () => {
+  beforeEach(async () => { await db.mistakePuzzles.clear(); });
+  it('only solved cards count, most recent opponent kept', async () => {
+    const { loadDrilledMotifs } = await import('./mistakePuzzleService');
+    await db.mistakePuzzles.bulkPut([
+      card('a', { tacticType: 'fork', successes: 1, opponentName: 'Old', srsLastReview: '2026-01-01' }),
+      card('b', { tacticType: 'fork', successes: 2, opponentName: 'New', srsLastReview: '2026-09-01' }),
+      card('c', { tacticType: 'pin', successes: 0, opponentName: 'Never' }),
+    ]);
+    const m = await loadDrilledMotifs();
+    expect(m.get('fork')?.opponentName).toBe('New');
+    expect(m.has('pin')).toBe(false);
+  });
+});

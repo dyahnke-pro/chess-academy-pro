@@ -106,7 +106,7 @@
 - `src/services/conceptEngine.test.ts:206`
 - `src/services/conceptEngine.test.ts:224`
 - `src/services/liveTacticsContext.ts:116`
-- `src/services/positionFacts.ts:769`
+- `src/services/positionFacts.ts:770`
 
 ### `LineInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -142,15 +142,15 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `definitionKey` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7720`
-- `src/components/Coach/CoachTeachPage.tsx:7724`
+- `src/components/Coach/CoachTeachPage.tsx:7726`
+- `src/components/Coach/CoachTeachPage.tsx:7730`
 - `src/services/learnWalkBlumenfeld.test.ts:133`
-- `src/services/positionFacts.ts:1042`
-- `src/services/positionFacts.ts:1045`
-- `src/services/positionFacts.ts:1427`
+- `src/services/positionFacts.ts:1044`
+- `src/services/positionFacts.ts:1047`
+- `src/services/positionFacts.ts:1429`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7721`
+- `src/components/Coach/CoachTeachPage.tsx:7727`
 - `src/services/dnaLineNarrator.ts:185`
 - `src/services/dnaLineNarrator.ts:216`
 - `src/services/dnaLineNarrator.ts:252`

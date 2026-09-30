@@ -59,14 +59,14 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
   it('the plan arc is queued on its own lane (closed until WO-2 proves it true)', () => {
     // It carried kind 'plan', which the old DNA kind whitelist never listed, so
     // from 2026-09-27 to 2026-09-29 it was computed every turn and never heard.
-    expect(TEACH).toMatch(/queueSpokenHint\(probe\.fen\(\), line, 'planArc', e\.squares\)/);
+    expect(TEACH).toMatch(/queueSpokenHint\(probe\.fen\(\), line, 'planArc', e\.squares[,)]/);
   });
 
   it('the coach callout is queued at the rank the model gives it', () => {
     // Not a literal 'coachMistake' any more: the coach half runs through
     // `backwardLook`, which returns the lane along with the line, so the rank
     // is decided in ONE place for both sides instead of at each call site.
-    expect(TEACH).toMatch(/queueSpokenHint\(cm\.fenAfter, look\.line, look\.kind\)/);
+    expect(TEACH).toMatch(/queueSpokenHint\(cm\.fenAfter, look\.line, look\.kind[,)]/);
     expect(BACKWARD, "the coach's lane is not the one David ranked second")
       .toMatch(/kind: 'coachMistake'/);
   });

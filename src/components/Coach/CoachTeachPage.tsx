@@ -30,7 +30,7 @@ import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePacka
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { announcesTheMove, checkMethodTeaching, foundMoveTeaching, openingBreakFor, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
+import { announcesTheMove, checkMethodTeaching, countMethodTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, openingBreakFor, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -150,7 +150,7 @@ import {
   drillContinueBeat, drillHintBeat, drillSolvedBeat, drillWrongMoveBeat } from '../../services/coachDrillService';
 import { seedMasterPuzzles } from '../../services/puzzleService';
 import { explainDrillConcept } from '../../services/puzzleConceptExplanation';
-import { gradeMistakePuzzle } from '../../services/mistakePuzzleService';
+import { gradeMistakePuzzle, loadDrilledMotifs } from '../../services/mistakePuzzleService';
 import { reportCoachReask, isMoveReport } from '../../services/coachNonAnswer';
 import { tryCaptureOpeningIntent, tryCaptureForgetIntent } from '../../services/openingIntentCapture';
 import { findPlansForOpening, sessionFromPlan } from '../../services/middlegamePlanner';
@@ -1702,6 +1702,7 @@ export function CoachTeachPage(): JSX.Element {
     announcedBoardsRef.current.clear();
     planToldBoardsRef.current.clear();
     openingBreakRef.current = null;
+    drilledSaidRef.current.clear();
     liveGradesRef.current.clear();
     fundamentalSeenRef.current.clear();
     planArcRef.current = { theirs: EMPTY_ARC, mine: EMPTY_ARC };
@@ -1735,6 +1736,11 @@ export function CoachTeachPage(): JSX.Element {
    *  ply it was named at — the opening summary reads it when the middlegame
    *  begins (census #52). `said` keeps it once per game. */
   const openingBreakRef = useRef<{ san: string; square: string; atPly: number; said: boolean } | null>(null);
+  /** Motifs the student has solved from their own mistakes (positive transfer),
+   *  and the ones already tied back this game. */
+  const drilledMotifsRef = useRef<Awaited<ReturnType<typeof loadDrilledMotifs>>>(new Map());
+  const drilledSaidRef = useRef(new Set<string>());
+  useEffect(() => { void loadDrilledMotifs().then((m) => { drilledMotifsRef.current = m; }); }, []);
   // THE LIVE PER-MOVE EVALUATIONS (C7, 2026-09-22). Every student ply is
   // graded off the paid-for pre-move read (`gradePlayedMove`, below) and the
   // saved record used to carry `annotations: null` regardless. Keyed by ply so
@@ -8085,7 +8091,7 @@ export function CoachTeachPage(): JSX.Element {
         // Scandinavian that was never named). Queue it through the same reliable
         // late-package path as the plan/structure/register so a busy turn can't
         // swallow it.
-        queueSpokenHint(args.fenAfterReply, announceLine, 'opening');
+        queueSpokenHint(args.fenAfterReply, announceLine, 'opening', undefined, [`opening-name:${det.name}`]);
         learnMemRef.current.queuedOpeningName = det.name;
         captureEvent('opening_announced', {
           surface: 'coach-teach', name: det.name, first: firstResolve, has_idea: false,
@@ -8969,6 +8975,12 @@ export function CoachTeachPage(): JSX.Element {
                     queueSpokenHint(probe.fen(), cm.text, cm.lane, cm.squares, cm.claims);
                     if (cm.event) captureEvent(cm.event.name, cm.event.props);
                   }
+                  // COUNT BEFORE YOU TAKE (P3 how-to-calculate) — the same moment.
+                  const cnt = countMethodTeaching(probe.fen(), playerColor === 'white' ? 'w' : 'b');
+                  if (cnt) {
+                    queueSpokenHint(probe.fen(), cnt.text, cnt.lane, cnt.squares, cnt.claims);
+                    if (cnt.event) captureEvent(cnt.event.name, cnt.event.props);
+                  }
                 } catch { /* a bonus, never a blocker */ }
                 // ONE tactical read per turn — the seductive-but-wrong move (the
                 // BUT-TURN, Naroditsky's #1 device) and the honest hedge (a close
@@ -9249,7 +9261,7 @@ export function CoachTeachPage(): JSX.Element {
                     const registerNow = countSpoken ? pendingRegisterNoHedge : pendingRegister;
                     if (registerNow && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), registerNow, 'register', undefined, undefined, undefined, undefined, pendingRegisterLines);
                     const gapEchoed = gapEchoedByVerdict(gapPending?.san ?? null, pf.clauses, gapPending?.square ?? null);
-                    if (gapPending && moveAdviceHere?.speak && !gapEchoed) queueSpokenHint(probe.fen(), gapPending.text, 'gap', [gapPending.square]);
+                    if (gapPending && moveAdviceHere?.speak && !gapEchoed) queueSpokenHint(probe.fen(), gapPending.text, 'gap', [gapPending.square], [`gap:${gapPending.square}:${probe.history().length}`]);
                     standingRef.current.rememberAll(pf.remember);
                     if (pf.principleSpoken) learnMemRef.current.principleTaught.add(pf.principleSpoken);
                     // The student is to move at `probe`; their coming move is ply history+1.
@@ -9417,6 +9429,18 @@ export function CoachTeachPage(): JSX.Element {
                     // colour is free. The opponent's half is the part a student
                     // cannot get anywhere else: a strong player tells you what
                     // they are trying to do to you, in time to meet it.
+                    // THE PLAN CHOOSER (census #52): once a game, when the two best
+                    // lines carry different plans, the choice itself is taught.
+                    try {
+                      const tl2 = studentBest?.topLines ?? [];
+                      const pcHint = tl2.length >= 2
+                        ? planChoiceTeaching(probe.fen(), tl2.map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate })), playerColor)
+                        : null;
+                      if (pcHint) {
+                        queueSpokenHint(probe.fen(), pcHint.text, pcHint.lane, pcHint.squares, pcHint.claims);
+                        if (pcHint.event) captureEvent(pcHint.event.name, pcHint.event.props);
+                      }
+                    } catch { /* the chooser is a bonus, never a blocker */ }
                     try {
                       const pv = studentBest?.topLines?.[0]?.moves;
                       const plan = Array.isArray(pv)
@@ -9459,7 +9483,7 @@ export function CoachTeachPage(): JSX.Element {
                           for (const e of arcLines) {
                             const line = gradeNarrationText(e.text, probe.fen(), 'CoachTeachPage.planArc')?.trim();
                             if (!line) continue;
-                            queueSpokenHint(probe.fen(), line, 'planArc', e.squares);
+                            queueSpokenHint(probe.fen(), line, 'planArc', e.squares, [`plan:${e.seat}:${e.id}:${e.kind}${e.kind === 'advance' ? `:${e.step ?? 0}` : ''}`]);
                             if (e.seat === 'student' && e.kind === 'emerge') planToldBoardsRef.current.add(probe.fen().split(' ').slice(0, 2).join(' '));
                           }
                         } catch { /* the arc is a bonus, never a blocker */ }
@@ -9515,7 +9539,7 @@ export function CoachTeachPage(): JSX.Element {
                         // a facts list nobody heard while its arrows still
                         // painted — marks without words (G8.5). The package now
                         // marks the squares only if the words survive.
-                        queueSpokenHint(probe.fen(), chainLines.join(' '), 'causalChain', causalChainHighlights(chain).map((h) => h.square));
+                        queueSpokenHint(probe.fen(), chainLines.join(' '), 'causalChain', causalChainHighlights(chain).map((h) => h.square), [`causal:${causalChainHighlights(chain).map((h) => h.square).join(',')}`]);
                         // A DIAGNOSTIC, NOT A SPOKEN LINE: the line is queued, and
                         // the package decides whether it is heard. Filed as
                         // "spoken", this summary landed in the run G tape as
@@ -9933,6 +9957,17 @@ export function CoachTeachPage(): JSX.Element {
                       // DUAL-USE (P4): the lane that teaches it also records it.
                       recordTeachingEvidence(h, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
                     }
+                    // POSITIVE TRANSFER: the engine's move, landing a tactic the
+                    // student drilled from their own mistakes — said once a motif.
+                    try {
+                      const playedUci = `${move.from}${move.to}${move.promotion ?? ''}`;
+                      const tr = drilledTransferLine(fenBefore, playedUci, preStudentRead.bestMove || null, drilledMotifsRef.current);
+                      if (tr && !drilledSaidRef.current.has(tr.motif)) {
+                        drilledSaidRef.current.add(tr.motif);
+                        queueSpokenHint(fenAfterReply, tr.text, 'foundMove', [move.to], [`drilled-transfer:${tr.motif}`]);
+                        captureEvent('coach_drilled_transfer', { surface: 'coach-teach', motif: tr.motif });
+                      }
+                    } catch { /* the transfer is a bonus, never a blocker */ }
                     // THE OPENING SUMMARY (census #52): the first move out of the
                     // opening says whether the break it is played for came.
                     try {
@@ -10037,7 +10072,7 @@ export function CoachTeachPage(): JSX.Element {
                       // character switch "you are up material now — the job changes to
                       // trading down" is the same claim (run I, 4GIsh ply 32).
                       const winClaim = !fundamental && /^That let them win /.test(look.line) && /^[a-h][1-8]$/.test(look.square)
-                        ? [`win-${look.square}`] : fundamental?.id === 'botched-conversion' ? ['convert-method'] : undefined;
+                        ? [`win-${look.square}`] : fundamental?.id === 'botched-conversion' ? ['convert-method'] : [`look:${look.kind}:${move.history.length}`];
                       queueSpokenHint(fenAfterReply, line, look.kind,
                         /^[a-h][1-8]$/.test(look.square) ? [look.square] : [], winClaim, move.fen, undefined,
                         // The fundamental's own lines lead this sentence.
@@ -10127,7 +10162,7 @@ export function CoachTeachPage(): JSX.Element {
                           recordTeachingEvidence(found, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
                         }
                       } catch { /* the verdict is a bonus, never a blocker */ }
-                      if (gambitLine) queueSpokenHint(fenAfterReply, gambitLine, 'movePoint', []);
+                      if (gambitLine) queueSpokenHint(fenAfterReply, gambitLine, 'movePoint', [], [`gambit:${move.to}`]);
                       const point = gambitLine ? null : studentMovePoint(fenBefore, move.san, move.history.length >= 2 ? move.history[move.history.length - 2] : null);
                       // SPOKEN ON THE BOARD AFTER THEIR REPLY, SO TRUE THERE
                       // (fresh-game walk 2026-09-27: "That wins the pawn on c4 —
@@ -10145,7 +10180,7 @@ export function CoachTeachPage(): JSX.Element {
                       if (point && !nowLoose && !fileHeard) {
                         if (fileKey) positionalSaidRef.current.add(fileKey);
                         // A capture's point and the trade verdict are one claim about one square.
-                        queueSpokenHint(fenAfterReply, point, 'movePoint', [], move.san.includes('x') ? [`capture:${move.to}:${move.history.length}`] : undefined);
+                        queueSpokenHint(fenAfterReply, point, 'movePoint', [], move.san.includes('x') ? [`capture:${move.to}:${move.history.length}`] : [`point:${move.history.length}`]);
                         captureEvent('coach_move_point_named', { surface: 'coach-teach' });
                       }
                       // WHY THIS MOVE HAD TO COME FIRST (census #1: "the key move
@@ -10255,6 +10290,11 @@ export function CoachTeachPage(): JSX.Element {
                   if (tempo) {
                     queueSpokenHint(fenAfterReply, tempo.text, tempo.lane, tempo.squares, tempo.claims);
                     if (tempo.event) captureEvent(tempo.event.name, tempo.event.props);
+                  }
+                  const split = splitPositionTeaching(fenAfterReply, playerColor === 'white' ? 'w' : 'b');
+                  if (split) {
+                    queueSpokenHint(fenAfterReply, split.text, split.lane, split.squares, split.claims);
+                    if (split.event) captureEvent(split.event.name, split.event.props);
                   }
                   const stale = stalemateTeaching(fenAfterReply, playerColor === 'white' ? 'w' : 'b');
                   if (stale) {
@@ -10375,7 +10415,7 @@ export function CoachTeachPage(): JSX.Element {
                     const gemCalledIt = learnMemRef.current.gemFen !== null
                       && samePosition(learnMemRef.current.gemFen, cm.fenAfter);
                     if (look && !gemCalledIt) {
-                      queueSpokenHint(cm.fenAfter, look.line, look.kind);
+                      queueSpokenHint(cm.fenAfter, look.line, look.kind, undefined, [`look:${look.kind}:coach:${cm.fenAfter.split(' ').slice(0, 2).join(' ')}`]);
                       captureEvent('coach_inaccuracy_called', {
                         surface: 'coach-teach', kind: look.kind, cost: Math.round(cpLoss),
                       });

@@ -114,6 +114,7 @@ import { readCriticalMoment, criticalMomentStatement, type CriticalMomentRead } 
 import { costStakes, exchangeStakes, forkPoints, lineTacticPoints, type FactStakes } from './factStakes';
 import { nextMoveAdvice, type MoveAdviceVerdict } from './nextMoveAdvice';
 import { classifyPhase } from './gamePhaseService';
+import { looseTrigger } from './looseTrigger';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -802,6 +803,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       isStudentMove: studentToMove,
       realChoice: !!deliberation?.isRealChoice,
       tier: importance.tier,
+      looseTarget: studentToMove ? looseTrigger(fen, bestSanHere) : null,
     }, halfmove, input.alreadySaid);
     methodBeat = mb?.text ?? null;
     methodKey = mb?.key ?? null;

@@ -101,3 +101,16 @@ describe('the opening summary (census #52)', () => {
     expect(openingSummaryLine(brk, ['Nf3'], '4k3/8/8/8/8/8/8/4K3 w - - 0 1')).toMatch(/moved past it/);
   });
 });
+
+describe('positive transfer — a drilled motif found at the board', () => {
+  const FEN = 'r3k3/8/8/1N6/8/8/8/4K3 w - - 0 1';
+  it('ties the find back to the drill, only for the engine move and a drilled motif', async () => {
+    const { drilledTransferLine } = await import('./learnBoardTeaching');
+    const drilled = new Map([['fork' as const, { opponentName: 'Rossi' }]]);
+    const t = drilledTransferLine(FEN, 'b5c7', 'b5c7', drilled);
+    expect(t?.motif).toBe('fork');
+    expect(t?.text).toBe('That is the fork you drilled from your game against Rossi — this time you found it at the board.');
+    expect(drilledTransferLine(FEN, 'b5c7', 'e1d2', drilled)).toBeNull();       // not the engine's move
+    expect(drilledTransferLine(FEN, 'b5c7', 'b5c7', new Map())).toBeNull();     // nothing drilled
+  });
+});

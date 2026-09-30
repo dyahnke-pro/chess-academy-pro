@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1570 lines · 26 exports · 29 importers · 17 tests · 4 audits**
+**1588 lines · 27 exports · 29 importers · 17 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -95,8 +95,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:7353`
 - `src/components/Coach/CoachTeachPage.tsx:7359`
+- `src/components/Coach/CoachTeachPage.tsx:7365`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
@@ -240,7 +240,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `gradeMistakePuzzle` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2387`
+- `src/components/Coach/CoachTeachPage.tsx:2393`
 - `src/components/Puzzles/MyMistakesPage.tsx:227`
 - `src/components/Puzzles/WeaknessThemesPage.tsx:116`
 - `src/components/Tactics/TacticCreatePage.tsx:219`
@@ -250,6 +250,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakePuzzleService.test.ts:516`
 - `src/services/mistakePuzzleService.test.ts:537`
 - `src/services/mistakePuzzleService.test.ts:545`
+
+### `loadDrilledMotifs` (function) — 2 call sites
+- `src/components/Coach/CoachTeachPage.tsx:1743`
+- `src/services/conceptSchedule.test.ts:58`
 
 ### `deleteMistakePuzzle` (function) — 2 call sites
 - `src/components/Puzzles/MyMistakesPage.tsx:220`

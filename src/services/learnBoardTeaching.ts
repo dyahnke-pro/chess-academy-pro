@@ -36,6 +36,12 @@ import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from '.
 import { SAID_BEFORE_MOVE } from './computerRoles';
 import { fileClaimed } from './planRace';
 import { sayMoveNoun } from './spokenMove';
+import { detectTacticType } from './missedTacticService';
+import { tacticTypeLabel } from './tacticAlertService';
+import type { TacticType } from '../types';
+import { countMethod } from './countMethod';
+import { splitPosition } from './splitPosition';
+import { planChoice, type PlanChoiceLine } from './planChooser';
 
 export interface TeachingHint {
   lane: LearnLane;
@@ -302,6 +308,40 @@ export function checkMethodTeaching(fen: string, student: 'w' | 'b', bestUci: st
   };
 }
 
+/** The plan chooser (census #52): the engine's two best lines carry
+ *  different plans for the student — level, or one clearly stronger. */
+export function planChoiceTeaching(fen: string, lines: readonly PlanChoiceLine[], studentColor: 'white' | 'black'): TeachingHint | null {
+  const pc = planChoice(fen, lines, studentColor);
+  if (!pc) return null;
+  return {
+    lane: 'planArc', text: pc.text, squares: [], claims: ['plan-choice', pc.key],
+    event: { name: 'coach_plan_choice_named', props: { surface: 'coach-teach' } },
+    arrows: [],
+  };
+}
+
+/** Split the position (P3): opposite-side castling with queens on. */
+export function splitPositionTeaching(fen: string, student: 'w' | 'b'): TeachingHint | null {
+  const sp = splitPosition(fen, student);
+  if (!sp) return null;
+  return {
+    lane: 'splitPosition', text: sp.text, squares: sp.squares, claims: ['split-position'],
+    event: { name: 'coach_split_position_taught', props: { surface: 'coach-teach' } },
+    arrows: [],
+  };
+}
+
+/** Count before you take (P3): an exchange square the count decides. */
+export function countMethodTeaching(fen: string, student: 'w' | 'b'): TeachingHint | null {
+  const m = countMethod(fen, student);
+  if (!m) return null;
+  return {
+    lane: 'countMethod', text: m.text, squares: [m.square], claims: ['count-method'],
+    event: { name: 'coach_count_method_taught', props: { surface: 'coach-teach' } },
+    arrows: [],
+  };
+}
+
 /** A held row for a lane the page composes itself (moveOrder, moveIntent, a
  *  plan arriving) — the same writer, the same honesty about `prompted`. */
 export function recordHeld(tag: MisconceptionTagId, posedImportance: number, ctx: { fen: string; playedSan: string; prompted: boolean; gameId: string | null }): void {
@@ -380,6 +420,25 @@ export function openingSummaryLine(brk: { san: string; square: string }, student
     : `The opening is over without its break, ${say} — the position has moved past it, so the plan now comes from the middlegame.`;
 }
 
+/** POSITIVE TRANSFER (census: "transfer — slips only"): the student played the
+ *  engine's move and it lands a tactic whose motif they have DRILLED from their
+ *  own mistakes. The loop closing in the green direction, said once per motif. */
+export function drilledTransferLine(
+  fenBefore: string,
+  playedUci: string,
+  bestUci: string | null,
+  drilled: ReadonlyMap<TacticType, { opponentName: string | null }>,
+): { text: string; motif: TacticType } | null {
+  if (!bestUci || bestUci.slice(0, 4) !== playedUci.slice(0, 4) || drilled.size === 0) return null;
+  let motif: TacticType;
+  try { motif = detectTacticType(fenBefore, playedUci); } catch { return null; }
+  const d = drilled.get(motif);
+  if (!d || motif === 'tactical_sequence') return null;
+  const name = tacticTypeLabel(motif);
+  const from = d.opponentName ? ` from your game against ${d.opponentName}` : ' from your own games';
+  return { motif, text: `That is the ${name} you drilled${from} — this time you found it at the board.` };
+}
+
 /** THE VERDICT ON A FOUND MOVE (P2 #2): at a real decision moment on the board
  *  before the move, the student played one of the only moves that held. */
 export function foundMoveTeaching(fenBefore: string, san: string, preLines: readonly CriticalFanLine[] | undefined, student: 'w' | 'b', to: string): TeachingHint | null {
@@ -441,6 +500,10 @@ export function dangerAnswerLines(fen: string, student: 'w' | 'b', bestUci: stri
   if (st) out.push(st.text);
   const cm = checkMethodTeaching(fen, student, bestUci);
   if (cm) out.push(cm.text);
+  const cnt = countMethodTeaching(fen, student);
+  if (cnt) out.push(cnt.text);
+  const sp = splitPositionTeaching(fen, student);
+  if (sp) out.push(sp.text);
   return out;
 }
 

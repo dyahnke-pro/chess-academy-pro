@@ -66,6 +66,8 @@ export const COMPUTER_ROLES: Record<LearnLane, ComputerRole> = {
   ruleException: { computer: 'ruleException', tag: null, held: { state: 'na', why: 'a rule broken correctly is not a skill with its own tag' }, broken: { state: 'na', why: 'speaks only when the exception is right' }, askable: { state: 'wired', via: 'isMoveRatingQuestion' } },
   movePoint: { computer: 'studentMovePoint', tag: null, held: { state: 'wired', via: 'recordMoveEvidence (capabilitiesPosed)' }, broken: { state: 'na', why: 'speaks on a clean move only' }, askable: { state: 'wired', via: 'isMoveRatingQuestion' } },
   stalemate: { computer: 'stalemateWatch', tag: 'botched-conversion', held: { state: 'wired', via: 'capabilitiesPosed' }, broken: SLIP, askable: { state: 'wired', via: 'dangerAnswerLines' } },
+  splitPosition: { computer: 'splitPosition', tag: null, held: DESC('opposite-side castling'), broken: DESC('opposite-side castling'), askable: { state: 'wired', via: 'dangerAnswerLines' } },
+  countMethod: { computer: 'countMethod', tag: 'calculation-depth', held: PRE, broken: SLIP, askable: { state: 'wired', via: 'dangerAnswerLines' } },
   checkMethod: { computer: 'checkMethod', tag: null, held: PRE, broken: PRE, askable: { state: 'wired', via: 'dangerAnswerLines' } },
   priorityFirst: { computer: 'priorityFirst', tag: null, held: PRE, broken: PRE, askable: { state: 'wired', via: 'isBestMoveQuestion' } },
   rejectedTempting: { computer: 'playCommentary.buildRejectedTempting', tag: null, held: PRE, broken: PRE, askable: { state: 'wired', via: 'isCandidateMoveQuestion' } },

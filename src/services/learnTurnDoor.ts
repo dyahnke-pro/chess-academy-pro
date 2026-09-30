@@ -74,6 +74,8 @@ export type LearnLane =
   | 'tempo'
   | 'fileRace'
   | 'stalemate'
+  | 'countMethod'
+  | 'splitPosition'
   | 'timing'
   | 'checkMethod'
   | 'trade'
@@ -197,6 +199,10 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // THE TIMING (P3, parity with review): the move is right NOW because of what came first.
   timing: { kind: 'computed', why: 'why this move works now and did not a move earlier', lead: 69 },
   // STALEMATE WATCH (P2 #9): the one move that throws away a won game.
+  // Count before you take (P3 how-to-calculate): a real exchange square, the count said.
+  // Split the position (P3 method beat): opposite-side castling, two races.
+  splitPosition: { kind: 'computed', why: 'the kings are on opposite wings — the board is two races', lead: 66 },
+  countMethod: { kind: 'computed', why: 'an exchange is on — count attackers against defenders before you take', lead: 77 },
   stalemate: { kind: 'computed', why: 'you are winning and one of your moves would stalemate them', lead: 81 },
   phase: { kind: 'computed', why: 'the game has changed phase — take stock of what the position is about now', lead: 72 },
   kingSafety: { kind: 'observation', why: 'your own king is still in the centre and castling is ready', lead: 55 },

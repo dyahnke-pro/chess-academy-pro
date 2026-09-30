@@ -76,7 +76,7 @@ describe('G8.5 — no lane without a live producer, no producer without a lane',
         || (pageCallsBoard && new RegExp(`lane: '${lane}'`).test(BOARD_CODE));
       expect(fed, `lane '${lane}' is in the table and nothing feeds it`).toBe(true);
     }
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(cm\.fenAfter, look\.line, look\.kind\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(cm\.fenAfter, look\.line, look\.kind[,)]/);
   });
 
   it('the producers deleted with their lanes stay deleted', () => {

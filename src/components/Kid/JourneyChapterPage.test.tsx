@@ -35,6 +35,7 @@ vi.mock('../../services/coachApi', async (importOriginal) => {
 import { useAppStore } from '../../stores/appStore';
 import { buildUserProfile } from '../../test/factories';
 
+
 // ─── Mocks ──────────────────────────────────────────────────────────────────
 
 const { testChapter } = vi.hoisted(() => {
@@ -209,7 +210,9 @@ const defaultProgress = {
 
 // ─── Tests ──────────────────────────────────────────────────────────────────
 
-describe('JourneyChapterPage', () => {
+// The puzzle set and hint flow load async; ship-check runs this file beside
+// the whole suite, where one test took 5.4s against the 5s default.
+describe('JourneyChapterPage', { timeout: 40_000 }, () => {
   beforeEach(async () => {
     vi.clearAllMocks();
     useAppStore.getState().reset();
@@ -326,7 +329,7 @@ describe('JourneyChapterPage', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
-    }, { timeout: 10_000 }); // the puzzle set loads async; a loaded run takes seconds
+    }, { timeout: 30_000 }); // the puzzle set loads async; under ship-check's parallel load it took >10s
   });
 
   it('puzzle phase shows puzzle counter', async () => {
@@ -346,7 +349,7 @@ describe('JourneyChapterPage', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
-    }, { timeout: 10_000 }); // the puzzle set loads async; a loaded run takes seconds
+    }, { timeout: 30_000 }); // the puzzle set loads async; under ship-check's parallel load it took >10s
 
     expect(screen.getByText('Puzzle 1 of 1')).toBeInTheDocument();
   });
@@ -404,7 +407,7 @@ describe('JourneyChapterPage', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
-    }, { timeout: 10_000 }); // the puzzle set loads async; a loaded run takes seconds
+    }, { timeout: 30_000 }); // the puzzle set loads async; under ship-check's parallel load it took >10s
 
     // Click the mock move button which sends 'e4' (the correct solution)
     fireEvent.click(screen.getByTestId('mock-move-btn'));
