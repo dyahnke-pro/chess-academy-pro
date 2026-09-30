@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**100 lines · 9 exports · 2 importers · 1 tests · 0 audits**
+**118 lines · 10 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,7 +30,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `characterOf` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9264`
+- `src/components/Coach/CoachTeachPage.tsx:9329`
 - `src/services/positionCharacter.test.ts:10`
 - `src/services/positionCharacter.test.ts:14`
 - `src/services/positionCharacter.test.ts:15`
@@ -47,10 +47,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `CharacterStep` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `stepCharacter` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9270`
+### `SharpReason` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `stepCharacter` (function) — 6 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9336`
 - `src/services/positionCharacter.test.ts:31`
 - `src/services/positionCharacter.test.ts:56`
+- `src/services/positionCharacter.test.ts:68`
+- `src/services/positionCharacter.test.ts:69`
+- `src/services/positionCharacter.test.ts:70`
 
 ## Tests
 

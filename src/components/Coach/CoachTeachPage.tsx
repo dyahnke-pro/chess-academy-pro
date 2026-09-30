@@ -188,7 +188,7 @@ import { findAndBakeGems } from '../../services/gemFinder';
 import { moveOrderArrows } from '../../services/moveOrderArrows';
 import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead';
 
-import { scaleGap } from '../../services/hintRegister';
+import { scaleGap, packageForRegister } from '../../services/hintRegister';
 import { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcState, planFromUci, tacticWord } from '../../services/lookaheadPlan';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import { backwardLook, lastCoachVerdictDecline, lookConcession } from '../../services/backwardLook';
@@ -9286,7 +9286,7 @@ export function CoachTeachPage(): JSX.Element {
                       if (pf) {
                         priorityFirstLastPlyRef.current = plyNow;
                         captureEvent('priority_first_offered', { surface: 'coach-teach', target: pf.targetSquare });
-                        queueSpokenHint(probe.fen(), pf.spoken, 'priorityFirst', [pf.targetSquare], undefined, undefined, [{ from: pf.arrow.from, to: pf.arrow.to, role: 'play', vouchedBy: 'engine', source: 'learn.priorityFirst' }]);
+                        queueSpokenHint(probe.fen(), packageForRegister(pf.hint, discussion.hintDial.register), 'priorityFirst', [pf.targetSquare], undefined, undefined, [{ from: pf.arrow.from, to: pf.arrow.to, role: 'play', vouchedBy: 'engine', source: 'learn.priorityFirst' }]);
                       }
                     }
                     // THE REJECTED TEMPTING MOVE (the speedrun's warning
@@ -9309,7 +9309,7 @@ export function CoachTeachPage(): JSX.Element {
                       if (rt) {
                         rejectedTemptingCountRef.current += 1;
                         captureEvent('rejected_tempting_offered', { surface: 'coach-teach', tempting: rt.temptingSan, refutation: rt.refutationSan });
-                        queueSpokenHint(probe.fen(), rt.spoken, 'rejectedTempting', undefined, undefined, undefined, [{ from: rt.refutation.from, to: rt.refutation.to, role: 'line', fen: rt.refutation.fenBefore, source: 'learn.rejectedTempting' }]);
+                        queueSpokenHint(probe.fen(), packageForRegister(rt.hint, discussion.hintDial.register), 'rejectedTempting', undefined, undefined, undefined, [{ from: rt.refutation.from, to: rt.refutation.to, role: 'line', fen: rt.refutation.fenBefore, source: 'learn.rejectedTempting' }]);
                       }
                     }
 

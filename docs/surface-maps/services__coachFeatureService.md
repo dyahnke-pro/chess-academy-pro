@@ -190,7 +190,7 @@
 - `src/services/coachFeatureService.trade.test.ts:15`
 - `src/services/loopCloses.review.integration.test.ts:89`
 - `src/services/methodBeat.test.ts:70`
-- `src/services/planArc.test.ts:131`
+- `src/services/planArc.test.ts:134`
 - `src/services/reviewCorpusNote.test.ts:40`
 - `src/services/reviewForesight.test.ts:52`
 - `src/services/reviewNeedGate.test.ts:30`
@@ -276,8 +276,8 @@
 - `src/services/reviewNarrationFidelity.test.ts:118`
 
 ### `pendingRecapture` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7460`
-- `src/components/Coach/CoachTeachPage.tsx:7547`
+- `src/components/Coach/CoachTeachPage.tsx:7467`
+- `src/components/Coach/CoachTeachPage.tsx:7556`
 - `src/services/coachFeatureService.test.ts:929`
 - `src/services/coachFeatureService.test.ts:930`
 - `src/utils/justCaptured.test.ts:20`

@@ -1,6 +1,7 @@
 // The running commentary must be RIGHT about whose piece it names and silent on
 // an unremarkable position — a coach who comments on every recapture teaches
 // nothing (the locked voice law: speak when it instructs).
+import { packageForRegister } from './hintRegister';
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence, studentMovePoint } from './playCommentary';
@@ -144,7 +145,10 @@ describe('buildPriorityFirst', () => {
     expect(pf2?.targetSquare).toBe('d5');
     expect(pf2?.facts).toContain('d5');
     expect(pf2?.facts).toContain('isolated');
-    expect(pf2?.facts).not.toContain('Nc3');
+    // The register decides: subtle keeps the move back, moderate names it
+    // with its reason (Learn names the move, 2026-09-24).
+    expect(packageForRegister(pf2!.hint, 'subtle')).not.toContain('Nc3');
+    expect(packageForRegister(pf2!.hint, 'moderate')).toContain('Nc3');
   });
 
   it('a healthy pawn target means no priority beat', () => {

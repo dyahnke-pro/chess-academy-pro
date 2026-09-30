@@ -557,22 +557,21 @@ export function buildRejectedTempting(args: {
       // THEIR BAIT, question first (David 2026-09-30): the piece their last
       // move put en prise, taken, runs into the refutation.
       const bait = !!args.baitSquare && tempting.captured !== undefined && tempting.to === args.baitSquare;
+      // THE SPOKEN PACKAGE — question first, the answer, then what the
+      // register adds (2026-09-30: the old package carried prompt text —
+      // "Name X exactly as given. Do NOT…" — and Learn speaks it raw).
       const hint: HintPackage = {
         anchor: bait
           ? `Can you take the ${NAME[tempting.captured ?? 'p'] ?? 'piece'} on ${tempting.to}? ${THINK_MARK} No — it's bait: ${tempting.san} runs into ${refutation.san}.`
-          : `TEMPTING BUT REFUTED: ${tempting.san} looks natural — ${why} — but the reply ${refutation.san} refutes it.`,
-        detail: `That line leaves the student about ${dropPawns} points worse than the best plan.`,
-        stakes: 'Teach the habit from this: calculate the opponent\'s most forcing reply BEFORE trusting a tempting move.',
-        withhold: `Name ${tempting.san} and ${refutation.san} exactly as given. Do NOT name or hint at the best move.`,
+          : `Why not ${tempting.san}? ${THINK_MARK} ${why.charAt(0).toUpperCase()}${why.slice(1)}, but ${refutation.san} refutes it.`,
+        detail: `That line leaves you about ${dropPawns} points worse.`,
+        stakes: 'Before trusting a tempting move, calculate their most forcing reply.',
       };
       return {
         temptingSan: tempting.san,
         refutationSan: refutation.san,
         bait,
-        // What the student hears (never the prompt package above).
-        spoken: bait
-          ? `Can you take the ${NAME[tempting.captured ?? 'p'] ?? 'piece'} on ${tempting.to}? ${THINK_MARK} No — it's bait: ${tempting.san} runs into ${refutation.san}.`
-          : `Why not ${tempting.san}? ${THINK_MARK} ${why.charAt(0).toUpperCase()}${why.slice(1)}, but ${refutation.san} refutes it.`,
+        spoken: hint.anchor,
         refutation: { from: refutation.from, to: refutation.to, fenBefore: fenBeforeRefutation },
         hint,
         facts: packageForRegister(hint, 'moderate'),
@@ -632,11 +631,12 @@ export function buildPriorityFirst(args: {
     // The detail tier deliberately does NOT name the attacking piece: naming
     // it is naming the move on most boards, and the withhold below would then
     // be contradicting the package it ships with.
+    // THE SPOKEN PACKAGE — the register decides how much is handed over:
+    // the priority always, the move from moderate up, the habit at obvious.
     const hint: HintPackage = {
-      anchor: `PRIORITY FIRST: the opponent's pawn on ${target.square} is ${flaw}, and the strongest plan ATTACKS it.`,
-      detail: `Frame the thought the way strong players do — "our priority is the ${target.square} pawn" — and let them find the move that fits the priority.`,
-      stakes: `A pawn like that cannot run and cannot be defended by a pawn, so every piece aimed at ${target.square} keeps working for free.`,
-      withhold: 'Do NOT name the move or the piece that attacks it.',
+      anchor: `What's the priority here? ${THINK_MARK} Their pawn on ${target.square} — it's ${flaw}.`,
+      detail: `Aim at it: ${moved.san} does.`,
+      stakes: `A pawn like that cannot be defended by a pawn, so every piece aimed at ${target.square} keeps working for free.`,
     };
     return {
       targetSquare: target.square,
@@ -646,7 +646,7 @@ export function buildPriorityFirst(args: {
       // move that serves it, with its reason (Learn names the move with its
       // reason, 2026-09-24). The package above is prompt material and must
       // never reach the voice raw (2026-09-30).
-      spoken: `What's the priority here? ${THINK_MARK} Their pawn on ${target.square} — it's ${flaw}, so aim at it: ${moved.san} does.`,
+      spoken: packageForRegister(hint, 'moderate'),
       arrow: { from: moved.from, to: moved.to },
     };
   } catch {

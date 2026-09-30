@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**615 lines · 8 exports · 15 importers · 11 tests · 1 audits**
+**670 lines · 10 exports · 16 importers · 12 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,6 +20,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnWalkNimzo.test.ts`
 - `src/services/narrationAdversarial.test.ts`
 - `src/services/positionReadComposer.ts`
+- `src/services/positionalRead.fileStep.test.ts`
 - `src/services/positionalRead.ideaKey.test.ts`
 - `src/services/positionalRead.race.test.ts`
 - `src/services/positionalRead.test.ts`
@@ -37,12 +38,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `rookReachesFile` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9911`
-- `src/services/danyaBehaviors.ts:665`
+- `src/components/Coach/CoachTeachPage.tsx:9985`
+- `src/services/danyaBehaviors.ts:691`
 - `src/services/recaptureChoice.ts:62`
 
 ### `castleIsOneMoveAway` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:264`
+- `src/services/danyaBehaviors.ts:287`
 - `src/services/replayFence.modern1690.test.ts:133`
 - `src/services/replayFence.modern1690.test.ts:134`
 - `src/services/replayFence.modern1690.test.ts:135`
@@ -96,7 +97,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
 ### `buildPositionalRead` (function) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8371`
+- `src/components/Coach/CoachTeachPage.tsx:8388`
 - `src/services/claimChecker.measure.test.ts:132`
 - `src/services/learnWalkBlumenfeld.test.ts:116`
 - `src/services/learnWalkNimzo.test.ts:35`
@@ -114,7 +115,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.modern1690.test.ts:201`
 
 ### `attackerCanUseFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:245`
+- `src/services/danyaBehaviors.ts:260`
+
+### `heavyPieceToFile` (function) — 4 call sites
+- `src/services/danyaBehaviors.ts:267`
+- `src/services/positionalRead.fileStep.test.ts:10`
+- `src/services/positionalRead.fileStep.test.ts:16`
+- `src/services/positionalRead.fileStep.test.ts:20`
+
+### `castleOffFile` (function) — 2 call sites
+- `src/services/positionalRead.fileStep.test.ts:26`
+- `src/services/positionalRead.fileStep.test.ts:29`
 
 ### `racingPasser` (function) — 2 call sites
 - `src/services/positionalRead.race.test.ts:9`
@@ -127,6 +138,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnWalkBlumenfeld.test.ts`
 - `src/services/learnWalkNimzo.test.ts`
 - `src/services/narrationAdversarial.test.ts`
+- `src/services/positionalRead.fileStep.test.ts`
 - `src/services/positionalRead.ideaKey.test.ts`
 - `src/services/positionalRead.race.test.ts`
 - `src/services/positionalRead.test.ts`

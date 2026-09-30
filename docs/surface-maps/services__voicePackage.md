@@ -31,7 +31,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `markableSquares` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10218`
+- `src/components/Coach/CoachTeachPage.tsx:10300`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
@@ -45,7 +45,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `buildVoicePackage` (function) — 64 call sites
 - `src/components/Coach/CoachGameReview.tsx:2005`
 - `src/components/Coach/CoachGameReview.tsx:2043`
-- `src/components/Coach/CoachTeachPage.tsx:7566`
+- `src/components/Coach/CoachTeachPage.tsx:7575`
 - `src/hooks/usePhaseNarration.ts:430`
 - `src/hooks/usePhaseNarration.ts:880`
 - `src/hooks/usePositionNarration.ts:314`
@@ -56,7 +56,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/computedVoiceAudit.report.test.ts:363`
 - `src/services/computedVoiceAudit.report.test.ts:395`
 - `src/services/laneReachability.test.ts:136`
-- `src/services/learnTurnDoor.ts:192`
+- `src/services/learnTurnDoor.ts:200`
 - `src/services/replayFence.najdorf1500.test.ts:50`
 - `src/services/voicePackage.test.ts:19`
 - `src/services/voicePackage.test.ts:32`
@@ -109,21 +109,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:529`
 
 ### `spokenSentenceKeys` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7438`
-- `src/components/Coach/CoachTeachPage.tsx:9581`
-- `src/components/Coach/CoachTeachPage.tsx:10200`
+- `src/components/Coach/CoachTeachPage.tsx:7445`
+- `src/components/Coach/CoachTeachPage.tsx:9633`
+- `src/components/Coach/CoachTeachPage.tsx:10282`
 - `src/services/voicePackage.test.ts:415`
 - `src/services/voicePackage.test.ts:424`
 - `src/services/voicePackage.test.ts:436`
 - `src/services/voicePackage.test.ts:514`
 
 ### `describeVoicePackage` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9573`
-- `src/components/Coach/CoachTeachPage.tsx:10246`
+- `src/components/Coach/CoachTeachPage.tsx:9625`
+- `src/components/Coach/CoachTeachPage.tsx:10336`
 - `src/services/voicePackage.test.ts:38`
 
 ### `joinSpoken` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:220`
+- `src/services/learnTurnDoor.ts:228`
 
 ## Tests
 

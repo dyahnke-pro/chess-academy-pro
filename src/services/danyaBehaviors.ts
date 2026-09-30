@@ -265,11 +265,11 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         // The first step of the attack, not the word "attack" alone (walk
         // 2026-09-30: "Play for the attack." with nothing to play).
         const onto = heavyPieceToFile(fen, student, roads[0]);
-        const step = onto ? ` Play for the attack — ${onto.san} puts your ${onto.piece} on the ${roads[0]}-file.` : ' Play for the attack.';
+        // The idea, not the move (the move is the student's to find).
+        const step = onto ? ` Play for the attack — get your ${onto.piece} onto the ${roads[0]}-file.` : ' Play for the attack.';
         return {
           fact: `The enemy king on ${theirs.square} is exposed — ${lines} open toward it.${step}`,
           squares: [sq(theirs.square)],
-          arrows: onto ? [{ from: onto.from, to: onto.to, role: 'play', source: 'behavior.kingOpen' }] : [],
         };
       }
       // Your own king stuck in the center is only a real problem once pieces are

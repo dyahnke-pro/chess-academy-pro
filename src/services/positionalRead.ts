@@ -233,9 +233,12 @@ function observationsFor(
     const todo = castle
       ? ` Castle and the king steps off it.`
       : onto
+        // The IDEA, never the move: a board read speaks every ply, and naming
+        // the move there hands it over (narrationAdversarial). The move is the
+        // student's to find.
         ? own
-          ? ` Contest it — ${onto.san} puts your ${onto.piece} on the ${road}-file first.`
-          : ` Take it — ${onto.san} puts your ${onto.piece} on the ${road}-file.`
+          ? ` Contest it — get your ${onto.piece} onto the ${road}-file first.`
+          : ` Take it — get your ${onto.piece} onto the ${road}-file.`
         : '';
     out.push({
       key: `${side}-king-open-file`, side, kind: 'king', rank: rank('king'),

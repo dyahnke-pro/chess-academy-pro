@@ -61,7 +61,7 @@
 - `src/services/computerAccuracy.audit.test.ts:117`
 - `src/services/conceptEngine.ts:433`
 - `src/services/conceptEngine.ts:607`
-- `src/services/danyaBehaviors.ts:430`
+- `src/services/danyaBehaviors.ts:456`
 - `src/services/discussionPractice.ts:55`
 - `src/services/discussionPractice.ts:100`
 - `src/services/discussionPractice.ts:143`
@@ -82,7 +82,7 @@
 - `src/services/pinGeometry.test.ts:134`
 - `src/services/pinGeometry.test.ts:141`
 - `src/services/pinGeometry.test.ts:142`
-- `src/services/playCommentary.ts:751`
+- `src/services/playCommentary.ts:773`
 - `src/services/pvPlayback.ts:319`
 - `src/services/pvPlayback.ts:339`
 - `src/services/relationClaimCost.report.test.ts:52`

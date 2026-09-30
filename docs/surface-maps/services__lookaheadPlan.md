@@ -38,8 +38,8 @@
 - `src/services/replayFence.modern1690.test.ts:80`
 
 ### `tacticWord` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7756`
-- `src/components/Coach/CoachTeachPage.tsx:7831`
+- `src/components/Coach/CoachTeachPage.tsx:7766`
+- `src/components/Coach/CoachTeachPage.tsx:7841`
 - `src/services/computedVoiceAudit.report.test.ts:256`
 - `src/services/dnaLineNarrator.ts:129`
 - `src/services/dnaLineNarrator.ts:218`
@@ -166,7 +166,7 @@
 - `src/services/learnWalkBlumenfeld.test.ts:177`
 
 ### `planFromUci` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9314`
+- `src/components/Coach/CoachTeachPage.tsx:9352`
 - `src/services/coachLaneWiring.test.ts:35`
 - `src/services/computedVoiceAudit.report.test.ts:218`
 - `src/services/concessionBeat.ts:440`
@@ -195,45 +195,45 @@
 - `src/services/coachFeatureService.ts:1321`
 
 ### `aimsOf` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9327`
-- `src/components/Coach/CoachTeachPage.tsx:9331`
+- `src/components/Coach/CoachTeachPage.tsx:9365`
+- `src/components/Coach/CoachTeachPage.tsx:9369`
 - `src/services/planArc.test.ts:29`
-- `src/services/planArc.ts:51`
+- `src/services/planArc.ts:52`
 
 ### `aimWalkableNow` (re-export) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9327`
-- `src/components/Coach/CoachTeachPage.tsx:9331`
-- `src/services/planArc.test.ts:198`
-- `src/services/planArc.test.ts:208`
-- `src/services/planArc.test.ts:214`
-- `src/services/planArc.test.ts:219`
-- `src/services/planArc.test.ts:226`
-- `src/services/planArc.test.ts:231`
-- `src/services/planArc.test.ts:240`
-- `src/services/planArc.test.ts:245`
-- `src/services/planArc.test.ts:249`
-- `src/services/planArc.ts:341`
+- `src/components/Coach/CoachTeachPage.tsx:9365`
+- `src/components/Coach/CoachTeachPage.tsx:9369`
+- `src/services/planArc.test.ts:201`
+- `src/services/planArc.test.ts:211`
+- `src/services/planArc.test.ts:217`
+- `src/services/planArc.test.ts:222`
+- `src/services/planArc.test.ts:229`
+- `src/services/planArc.test.ts:234`
+- `src/services/planArc.test.ts:243`
+- `src/services/planArc.test.ts:248`
+- `src/services/planArc.test.ts:252`
+- `src/services/planArc.ts:348`
 
 ### `stepArc` (re-export) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9327`
-- `src/components/Coach/CoachTeachPage.tsx:9331`
+- `src/components/Coach/CoachTeachPage.tsx:9365`
+- `src/components/Coach/CoachTeachPage.tsx:9369`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.test.ts:94`
 - `src/services/planArc.test.ts:96`
-- `src/services/planArc.test.ts:101`
-- `src/services/planArc.test.ts:102`
-- `src/services/planArc.test.ts:103`
+- `src/services/planArc.test.ts:104`
 - `src/services/planArc.test.ts:105`
-- `src/services/planArc.test.ts:107`
-- `src/services/planArc.test.ts:111`
-- `src/services/planArc.test.ts:112`
+- `src/services/planArc.test.ts:106`
+- `src/services/planArc.test.ts:108`
+- `src/services/planArc.test.ts:110`
 - `src/services/planArc.test.ts:114`
-- `src/services/planArc.test.ts:118`
-- `src/services/planArc.test.ts:143`
-- `src/services/planArc.test.ts:164`
-- `src/services/planArc.test.ts:165`
-- `src/services/planArc.test.ts:170`
-- `src/services/planArc.test.ts:171`
+- `src/services/planArc.test.ts:115`
+- `src/services/planArc.test.ts:117`
+- `src/services/planArc.test.ts:121`
+- `src/services/planArc.test.ts:146`
+- `src/services/planArc.test.ts:167`
+- `src/services/planArc.test.ts:168`
+- `src/services/planArc.test.ts:173`
+- `src/services/planArc.test.ts:174`
 - `src/services/planArc.ts:195`
 
 ### `EMPTY_ARC` (re-export) — 0 call sites
