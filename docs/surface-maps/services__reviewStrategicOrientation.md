@@ -24,7 +24,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `buildOpeningMoveDetail` (function) — 1 call site
-- `src/services/coachFeatureService.ts:2917`
+- `src/services/coachFeatureService.ts:2961`
 
 ### `PlanArrow` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -41,7 +41,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planBeatShape.test.ts:78`
 
 ### `buildOpeningDevelopmentPlan` (function) — 12 call sites
-- `src/services/coachFeatureService.ts:2751`
+- `src/services/coachFeatureService.ts:2795`
 - `src/services/planPrescriptions.test.ts:53`
 - `src/services/planPrescriptions.test.ts:61`
 - `src/services/planPrescriptions.test.ts:74`
@@ -55,19 +55,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewStrategicOrientation.test.ts:110`
 
 ### `buildHisGroundedPlanBeat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2749`
+- `src/services/coachFeatureService.ts:2793`
 - `src/services/groundedPlanBeat.test.ts:21`
 - `src/services/groundedPlanBeat.test.ts:31`
 - `src/services/groundedPlanBeat.test.ts:55`
 
 ### `buildMastersGroundedPlanBeat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2750`
+- `src/services/coachFeatureService.ts:2794`
 - `src/services/groundedPlanBeat.test.ts:41`
 - `src/services/groundedPlanBeat.test.ts:49`
 - `src/services/groundedPlanBeat.test.ts:56`
 
 ### `buildMiddlegameOrientation` (function) — 15 call sites
-- `src/services/coachFeatureService.ts:2772`
+- `src/services/coachFeatureService.ts:2816`
 - `src/services/reviewFullData.ts:946`
 - `src/services/reviewStrategicOrientation.test.ts:4`
 - `src/services/reviewStrategicOrientation.test.ts:8`

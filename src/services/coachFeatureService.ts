@@ -42,7 +42,7 @@ import { recurrenceFor, recurrenceLine } from './misconceptionCallbacks';
 import { fundamentalRecurrenceLine } from './fundamentalRecurrence';
 import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
-import type { FactStakes } from './factStakes';
+import { MATE_POINTS, type FactStakes } from './factStakes';
 import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead, buildMissedShotSignal } from './reviewTeachingPoints';
 import { computeGemCrush, buildReviewGemSay } from './gemCrushLines';
 import { buildOpeningMoveDetail } from './reviewStrategicOrientation';
@@ -66,6 +66,8 @@ import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap, is
 import { resolveCoachNarration } from '../utils/coachNarration';
 import type { BadHabit, CoachContext, UserProfile, CoachNarration, OpeningKey, BoardArrow } from '../types';
 import { admitArrow, admitArrows, type ArrowClaim } from './arrowDoor';
+import { lineWins, lineArrows, mateLine } from './lineCalc';
+import { theirOpeningVerdict } from './openingAnnouncement';
 import { departureRecordSentence, openingRecordClause } from './openingRecordBeat';
 import { ecoOfKey, openingEntryForKey, openingFamily, openingKeyFromSans } from './openingKey';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
@@ -1801,6 +1803,48 @@ export function buildReviewSegments(
           seenConversionSteps.add(conv.step);
           facets.push(`[technique] ${conv.text}`);
         }
+      }
+      // THE LINE BEHIND A WINNING MOVE — parity with Learn (David 2026-09-30:
+      // "teach more line calculations"; one coach everywhere). The student
+      // played the engine's move and its line wins material: said to the last
+      // capture, drawn ply by ply.
+      if (moverColor === playerColor && studentColorWB) {
+        try {
+          const played = new Chess(fenPair.fenBefore).move(m.san);
+          const playedUci = played ? `${played.from}${played.to}${played.promotion ?? ''}` : null;
+          const line = m.bestMove && playedUci === m.bestMove ? [m.bestMove, ...(m.pv?.afterBest ?? [])]
+            : playedUci && m.pv?.afterPlayed?.length && (m.classification === 'great' || m.classification === 'brilliant' || m.classification === 'good') ? [playedUci, ...m.pv.afterPlayed]
+              : null;
+          // A line that MATES is said as the mate (and the quiet move that
+          // started it) — a material count would undersell it.
+          const ml = line ? mateLine(fenPair.fenBefore, line, studentColorWB, m.san) : null;
+          if (ml) {
+            const raw = `[tactic] ${ml.text}`;
+            facets.push(raw);
+            facetStakes.set(raw, { points: MATE_POINTS, plies: 0 });
+            if (ml.taken.length) facetSquares.set(raw, ml.taken);
+            if (!causalArrows || causalArrows.length === 0) {
+              causalArrows = admitArrows(lineArrows(fenPair.fenBefore, line ?? [], 'review.mateLine'), { fen: fenPair.fenBefore, studentColor: playerColor ?? moverColor }).arrows;
+            }
+          }
+          const won = !ml && line ? lineWins(fenPair.fenBefore, line, studentColorWB, m.san) : null;
+          if (won) {
+            const raw = `[tactic] That wins ${won.what}: ${won.sans.join(' ')}.`;
+            facets.push(raw);
+            facetStakes.set(raw, { points: won.net, plies: 0 });
+            if (!causalArrows || causalArrows.length === 0) {
+              causalArrows = admitArrows(lineArrows(fenPair.fenBefore, line ?? [], 'review.winningLine'), { fen: fenPair.fenBefore, studentColor: playerColor ?? moverColor }).arrows;
+            }
+          }
+        } catch { /* a bonus, never a blocker */ }
+      }
+      // A VERDICT ON THEIR OPENING CHOICE — parity with Learn: their move that
+      // left the masters' book, judged by the engine's cost of it.
+      if (moverColor !== playerColor && studentColorWB && typeof m.preMoveEval === 'number' && typeof m.evaluation === 'number') {
+        const sign = moverColor === 'white' ? 1 : -1;
+        const oppLoss = (m.preMoveEval - m.evaluation) * sign;
+        const verdict = theirOpeningVerdict(moves.slice(0, i + 1).map((x) => x.san), studentColorWB, oppLoss, false);
+        if (verdict) facets.push(`[opening] ${verdict}`);
       }
       for (const e of arcByIndex.get(i) ?? []) {
         const raw = `[plan-arc] ${e.text}`;

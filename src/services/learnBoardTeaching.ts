@@ -9,7 +9,7 @@
 //
 // Pure: the engine reads are handed in by the page.
 import { Chess } from 'chess.js';
-import { lineWins, lineArrows } from './lineCalc';
+import { lineWins, lineArrows, mateLine, type MateLine } from './lineCalc';
 /** A line as board arrows, ply by ply (one door for the page). */
 export { lineArrows as lineArrowClaims };
 import type { MisconceptionTagId } from '../data/misconceptionTags';
@@ -32,7 +32,7 @@ import { checkMethod } from './checkMethod';
 import { tradeJudgement } from './tradeJudgement';
 import type { PieceValue } from './pieceValueRead';
 import { kneeJerk } from './kneeJerk';
-import { autopilotGuard, blunderCheck } from './safetyHabits';
+import { autopilotGuard, blunderCheck, keepPressing } from './safetyHabits';
 import { strongChoice, warmStrongChoice } from './strongChoice';
 import { stalemateWatch } from './stalemateWatch';
 import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from './criticalMoment';
@@ -138,7 +138,9 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
     const me = i.fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
     const bare = (x: string): string => x.replace(/[+#]$/, '');
     if (i.bestSan && bare(i.bestSan) === bare(i.san) && i.bestLine?.moves?.length) {
-      const w = winningLine(i.fenBefore, i.san, i.bestLine.moves, me);
+      const ml = mateLine(i.fenBefore, i.bestLine.moves, me, i.san);
+      const w = ml ? null : winningLine(i.fenBefore, i.san, i.bestLine.moves, me);
+      if (ml) out.push({ lane: 'movePoint', text: ml.text, squares: [to, ...ml.taken], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_mate_line', props: { surface: 'coach-teach', quiet: ml.quiet } }, arrows: mateArrows(ml, me) });
       if (w) out.push({ lane: 'movePoint', text: `That wins ${w.what}: ${w.sans.join(' ')}.`, squares: [to], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_winning_line', props: { surface: 'coach-teach' } }, arrows: w.arrows });
     }
   } catch { /* a bonus, never a blocker */ }
@@ -172,6 +174,8 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
     if (bc) out.push({ lane: 'blunderCheck', text: bc, squares: [], claims: ['method:blunder-check'], event: { name: 'coach_blunder_check_taught', props: { surface: 'coach-teach' } }, arrows: [] });
     const ap = autopilotGuard(i.san, i.cpLoss, i.popularTopSan ?? null);
     if (ap) out.push({ lane: 'autopilot', text: ap, squares: [to], claims: ['method:autopilot'], event: { name: 'coach_autopilot_taught', props: { surface: 'coach-teach' } }, arrows: [] });
+    const kp = keepPressing(i.fenBefore, i.san, i.bestSan, i.cpLoss, i.cpAfter);
+    if (kp) out.push({ lane: 'keepPressing', text: kp, squares: [], claims: ['method:keep-pressing'], event: { name: 'coach_keep_pressing_taught', props: { surface: 'coach-teach' } }, arrows: [] });
   }
 
   // WAS THE TRADE A GOOD DEAL (P3, T3 #45) — a like-for-like trade the reply
@@ -580,12 +584,18 @@ export function foundMoveTeaching(fenBefore: string, san: string, preLines: read
   // move that kept you on top" — he says why: it wins a pawn, because …Bxc3+
   // follows WITH CHECK). When the found move is the engine's and its own line
   // wins material, the line is said to where the material lands, and drawn.
-  const won = winningLine(fenBefore, san, preLines[0]?.moves ?? [], student);
-  const text = won ? `${found} It wins ${won.what}: ${won.sans.join(' ')}.` : found;
-  const arrows: ArrowClaim[] = won ? won.arrows : [];
+  const ml = mateLine(fenBefore, preLines[0]?.moves ?? [], student, san);
+  const won = ml ? null : winningLine(fenBefore, san, preLines[0]?.moves ?? [], student);
+  const text = ml ? `${found} ${ml.text}` : won ? `${found} It wins ${won.what}: ${won.sans.join(' ')}.` : found;
+  const arrows: ArrowClaim[] = ml ? mateArrows(ml, student) : won ? won.arrows : [];
   // A real decision moment (only one or two moves held) answered is calculation
   // proven — importance 90, above the green bar, because the board posed it.
-  return { lane: 'foundMove', text, squares: [to], claims: [`found-${san}`, ...(won ? [`wins-line:${fenBefore.split(' ').slice(0, 2).join(' ')}`] : [])], event: { name: 'coach_found_move_named', props: { surface: 'coach-teach' } }, arrows, evidence: { tag: 'calculation-depth', posedImportance: 90 } };
+  return { lane: 'foundMove', text, squares: [to], claims: [`found-${san}`, ...(won || ml ? [`wins-line:${fenBefore.split(' ').slice(0, 2).join(' ')}`] : [])], event: { name: 'coach_found_move_named', props: { surface: 'coach-teach' } }, arrows, evidence: { tag: 'calculation-depth', posedImportance: 90 } };
+}
+
+/** A mate line as board arrows, ply by ply, seated. */
+function mateArrows(ml: MateLine, student: 'w' | 'b'): ArrowClaim[] {
+  return ml.plies.map((p) => ({ from: p.from, to: p.to, role: p.color === student ? 'play' : 'theirs', fen: p.fen, source: 'learn.foundMove.mate' }));
 }
 
 /** The engine line starting with the played move, when the student ends it up

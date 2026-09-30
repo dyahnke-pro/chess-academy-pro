@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**165 lines · 10 exports · 4 importers · 4 tests · 1 audits**
+**165 lines · 10 exports · 5 importers · 4 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/components/Coach/CoachTeachPage.tsx`
+- `src/services/coachFeatureService.ts`
 - `src/services/computedVoiceAudit.report.test.ts`
 - `src/services/openingAnnouncement.test.ts`
 - `src/services/openingPositions.test.ts`
@@ -72,8 +73,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `SIDELINE_DUBIOUS_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `theirOpeningVerdict` (function) — 6 call sites
+### `theirOpeningVerdict` (function) — 7 call sites
 - `src/components/Coach/CoachTeachPage.tsx:10418`
+- `src/services/coachFeatureService.ts:1846`
 - `src/services/openingAnnouncement.test.ts:168`
 - `src/services/openingAnnouncement.test.ts:169`
 - `src/services/openingAnnouncement.test.ts:173`

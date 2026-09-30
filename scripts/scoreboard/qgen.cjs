@@ -62,4 +62,46 @@ const pool = [
   ['C', sac && `Is ${sac.san} sound?`], ['C', 'Do I have a strong attack?'], ['C', 'Should I push for a win or hold?'],
 ].filter(([, q]) => q);
 for (let k = 0; k < 9; k += 1) { const [l, q] = pool[(run * 9 + k) % pool.length]; add(`NEW-${l}`, q); }
-console.log([...new Set(out)].join('\n'));
+// HARD set (David 2026-09-30: "Ask deeper questions" → "Push the questions
+// HARD!!!"): calculation, candidates, both sides' plans, sacrifices — the
+// questions a strong coach has to answer with a LINE, not a label. With
+// HARD=1 only these are asked.
+if (process.env.HARD === '1') {
+  const hard = [];
+  const h = (q) => { if (q && !/undefined|null/.test(q)) hard.push(`HARD|${q}`); };
+  h('Walk me through the best line here — what happens after it, move by move?');
+  h(alt2 && `What happens after ${alt2}? Show me the line.`);
+  h(alt1 && `Why not ${alt1}? What goes wrong — give me the line.`);
+  h(capture && `If I play ${capture.san}, what do they answer and who comes out ahead?`);
+  h('What are my three best candidate moves, and how do they compare?');
+  h('What is their best plan here, and how do I stop it?');
+  h('Is there a tactic for either side? Show me the line.');
+  h('What is the most forcing move here, and does it work?');
+  h(oppMove && `If they play ${oppMove}, what is my best reply and why?`);
+  h(theirPiece && `Count it out: can I win the ${NAME[theirPiece.type]} on ${theirPiece.square}?`);
+  h('Which pawn break should I aim for, and when is the right moment?');
+  h(sac && `Is ${sac.san} sound? Calculate it for me.`);
+  h('What are the weaknesses in their position, and how do I attack them?');
+  h('If I do nothing, what do they do to me?');
+  h('What would a grandmaster play here, and why?');
+  // ALL IN ONE ASK (David 2026-09-30: "Ask all in one block at least once. Can
+  // coach answer all three in one ask?"): the first question of every game is
+  // three questions in one message.
+  if (run === 0) {
+    console.log(`HARD3|${[
+      'What should I play here',
+      'what is their best plan',
+      'and is there a tactic for either side? Show me the lines.',
+    ].join(', ')}`);
+  } else {
+    // EACH GAME GETS DIFFERENT QUESTIONS (David 2026-09-30): the walk picks by
+    // index, and the index repeats game to game — so the list is rotated by a
+    // fingerprint of THIS game's moves.
+    const list = [...new Set(hard)];
+    let fp = 0; for (const ch of moves.join(' ')) fp = (fp * 31 + ch.charCodeAt(0)) >>> 0;
+    const k = list.length ? fp % list.length : 0;
+    console.log([...list.slice(k), ...list.slice(0, k)].join('\n'));
+  }
+} else {
+  console.log([...new Set(out)].join('\n'));
+}

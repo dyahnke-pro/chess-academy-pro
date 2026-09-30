@@ -34,7 +34,7 @@ import { MISTAKE_CP, BLUNDER_CP, costWords } from './engineConstants';
 export { costWords };
 import { MATERIAL_VALUE } from './pieceValues';
 import { legalSeeGain } from './positionReadingService';
-import { lineWins } from './lineCalc';
+import { lineWins, mateLine } from './lineCalc';
 
 export interface InaccuracyCall {
   /** Straight from `moveRating.classifyMove` — never re-derived here. */
@@ -591,7 +591,15 @@ export function callInaccuracyDetailed(args: {
       }
     } catch { /* no line — the grade stands */ }
   }
-  return { call: { quality, side: 'student', cost, said: `${head}${lineTail}${should}`, square: better?.square ?? '', ...(punishment?.lostSquare ? { lostSquare: punishment.lostSquare } : {}), ...(should ? { namesBetter: args.bestSan } : {}), ...(line ? { line } : {}) } };
+  // THE MATE THAT SLIPPED, PLAYED OUT — and the quiet move it started with
+  // (Danya: "no check yet — take the escape square first"). Replaces the bare
+  // better-move reason: the line IS the reason.
+  let mateSaid = '';
+  if ((args.missedMate ?? null) !== null && !punishment && args.bestLineUci?.length) {
+    const ml = mateLine(args.fenBefore, args.bestLineUci, args.moverColor === 'white' ? 'w' : 'b', args.bestSan);
+    if (ml) { mateSaid = ` ${ml.text}`; line ??= { fen: args.fenBefore, uci: args.bestLineUci.slice(0, ml.plies.length) }; }
+  }
+  return { call: { quality, side: 'student', cost, said: `${head}${lineTail}${mateSaid || should}`, square: better?.square ?? '', ...(punishment?.lostSquare ? { lostSquare: punishment.lostSquare } : {}), ...(should || mateSaid ? { namesBetter: args.bestSan } : {}), ...(line ? { line } : {}) } };
 }
 
 /** What the played move let the OTHER side do: their best line after it, read

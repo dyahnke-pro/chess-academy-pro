@@ -84,6 +84,7 @@ export type LearnLane =
   | 'kneeJerk'
   | 'blunderCheck'
   | 'autopilot'
+  | 'keepPressing'
   | 'strongChoice';
 
 /** Lanes at or below this lead DESCRIBE the board (commentary, behaviour,
@@ -126,7 +127,7 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   behavior: 'point',
   phase: 'verdict', character: 'verdict',
   threat: 'now', threatAnswer: 'now', gem: 'now', trapAhead: 'now', priorityFirst: 'now', countMethod: 'now',
-  checkMethod: 'now', stalemate: 'now', blunderCheck: 'now', autopilot: 'now',
+  checkMethod: 'now', stalemate: 'now', blunderCheck: 'now', autopilot: 'now', keepPressing: 'now',
 };
 
 export const LEARN_LANES: Record<LearnLane, LaneRule> = {
@@ -224,6 +225,7 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // THE SAFETY HABITS (P3 method beats): close the beat after the grade.
   blunderCheck: { kind: 'computed', why: 'the move left a piece they simply took — the habit that catches it', lead: 61 },
   autopilot: { kind: 'computed', why: 'the popular move here cost — the moment to stop and check', lead: 59 },
+  keepPressing: { kind: 'computed', why: 'winning, and a slow move gave them time — keep forcing', lead: 58 },
   // QUESTION THE KNEE-JERK (P3 method beat): closes the beat after the grade.
   kneeJerk: { kind: 'computed', why: 'the reflex recapture cost — ask what comes first', lead: 60 },
   // WAS THE TRADE A GOOD DEAL (P3, T3 #45).

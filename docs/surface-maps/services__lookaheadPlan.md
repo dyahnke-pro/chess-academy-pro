@@ -167,7 +167,7 @@
 - `src/services/concessionBeat.ts:455`
 - `src/services/inaccuracyCall.ts:271`
 - `src/services/inaccuracyCall.ts:284`
-- `src/services/inaccuracyCall.ts:632`
+- `src/services/inaccuracyCall.ts:640`
 - `src/services/learnWalkBlumenfeld.test.ts:176`
 - `src/services/learnWalkBlumenfeld.test.ts:177`
 - `src/services/learnWalkBlumenfeld.test.ts:178`
@@ -181,7 +181,7 @@
 - `src/services/concessionBeat.ts:449`
 - `src/services/inaccuracyCall.ts:227`
 - `src/services/inaccuracyCall.ts:231`
-- `src/services/inaccuracyCall.ts:630`
+- `src/services/inaccuracyCall.ts:638`
 - `src/services/lookaheadPlan.test.ts:228`
 - `src/services/lookaheadPlan.test.ts:236`
 - `src/services/lookaheadPlan.test.ts:241`
@@ -203,7 +203,7 @@
 - `src/services/planChooser.ts:36`
 
 ### `gameArcs` (function) — 1 call site
-- `src/services/coachFeatureService.ts:1322`
+- `src/services/coachFeatureService.ts:1324`
 
 ### `aimsOf` (re-export) — 8 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9498`

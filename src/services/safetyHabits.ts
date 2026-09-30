@@ -45,3 +45,17 @@ export function autopilotGuard(san: string, cpLoss: number, popularTopSan: strin
   if (bare(san) !== bare(popularTopSan)) return null;
   return 'That is the move most players make here — and it costs. When a move feels automatic, that is exactly the moment to check it.';
 }
+
+/** When they are collapsing, a slow move gives them the one thing they need —
+ *  time. Earned when the student is still winning after the move (>= 300cp),
+ *  the engine's move was a check or a capture, and the played move was neither
+ *  and cost >= 100cp. Teaches the habit only; the grade names the better move. */
+export const KEEP_PRESSING_WIN_CP = 300;
+export function keepPressing(fenBefore: string, san: string, bestSan: string | null, cpLoss: number, cpAfter: number | null): string | null {
+  if (!bestSan || cpAfter === null || cpAfter < KEEP_PRESSING_WIN_CP || cpLoss < AUTOPILOT_CP) return null;
+  const forcing = (x: string): boolean => /x|[+#]$/.test(x);
+  const bare = (s: string): string => s.replace(/[+#!?]+$/, '');
+  if (bare(san) === bare(bestSan) || forcing(san) || !forcing(bestSan)) return null;
+  try { new Chess(fenBefore).move(san); } catch { return null; }
+  return 'When they are on the ropes, keep asking questions — a check or a capture first, so they never get a free move to untangle.';
+}

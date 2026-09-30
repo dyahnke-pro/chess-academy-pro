@@ -61,3 +61,79 @@ export function lineArrows(fen: string, lineUci: readonly string[], source: stri
   }
   return out;
 }
+
+export interface MateLine {
+  sans: string[];
+  plies: LinePly[];
+  /** The first move gives no check and takes nothing. */
+  quiet: boolean;
+  /** Squares next to their king the quiet first move takes away. */
+  taken: string[];
+  text: string;
+}
+
+const FILES = 'abcdefgh';
+function kingSquare(c: Chess, color: 'w' | 'b'): string | null {
+  for (const row of c.board()) for (const p of row) if (p && p.type === 'k' && p.color === color) return p.square;
+  return null;
+}
+function around(sq: string): string[] {
+  const f = FILES.indexOf(sq[0]); const r = Number(sq[1]);
+  const out: string[] = [];
+  for (let df = -1; df <= 1; df += 1) for (let dr = -1; dr <= 1; dr += 1) {
+    if ((df || dr) && f + df >= 0 && f + df < 8 && r + dr >= 1 && r + dr <= 8) out.push(`${FILES[f + df]}${r + dr}`);
+  }
+  return out;
+}
+
+/**
+ * THE MATE, PLAYED OUT — and the QUIET MOVE BEFORE IT (Danya: "no check yet —
+ * take the escape square first"). `lineUci` from `fen` must end in `side`
+ * mating on the board; the line is cut at the mate. When the first move gives
+ * no check and captures nothing, `taken` names the squares beside their king it
+ * covers that were free before. Null when the line does not mate.
+ */
+export function mateLine(fen: string, lineUci: readonly string[], side: 'w' | 'b', firstSan?: string): MateLine | null {
+  if (!lineUci.length) return null;
+  const bare = (s: string): string => s.replace(/[+#]$/, '');
+  const c = new Chess(fen);
+  const plies: LinePly[] = [];
+  let mated = false; let first: { check: boolean; capture: boolean } | null = null;
+  let taken: string[] = [];
+  try {
+    for (let i = 0; i < lineUci.length && !mated; i += 1) {
+      const u = lineUci[i];
+      const before = c.fen();
+      const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+      if (!m) return null;
+      if (i === 0) {
+        if (m.color !== side) return null;
+        if (firstSan && bare(m.san) !== bare(firstSan)) return null;
+        first = { check: c.inCheck(), capture: !!m.captured };
+        if (!first.check && !first.capture) {
+          const them = side === 'w' ? 'b' : 'w';
+          const k = kingSquare(c, them);
+          const was = new Chess(before);
+          taken = k ? around(k).filter((s) => {
+            const occ = c.get(s as Parameters<Chess['get']>[0]);
+            if (occ && occ.color === them) return false;
+            return c.isAttacked(s as Parameters<Chess['isAttacked']>[0], side) && !was.isAttacked(s as Parameters<Chess['isAttacked']>[0], side);
+          }) : [];
+        }
+      }
+      plies.push({ from: m.from, to: m.to, color: m.color, fen: before, san: m.san });
+      if (c.isCheckmate()) { if (m.color !== side) return null; mated = true; }
+    }
+  } catch { return null; }
+  if (!mated || !first || plies.length < 3) return null;
+  const sans = plies.map((p) => `${p.color === 'b' ? '…' : ''}${p.san}`);
+  const quiet = !first.check && !first.capture;
+  const mateSan = sans[sans.length - 1].replace(/[+#]$/, '');
+  const list = (xs: string[]): string => xs.length <= 1 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`;
+  const text = quiet && taken.length
+    ? `No check yet — the quiet ${sans[0]} comes first: it takes ${list(taken)} from their king, and ${mateSan} is mate. ${sans.join(' ')}.`
+    : quiet
+      ? `No check yet — the quiet ${sans[0]} comes first, and ${mateSan} is mate. ${sans.join(' ')}.`
+      : `It is a forced mate: ${sans.join(' ')}.`;
+  return { sans, plies, quiet, taken, text };
+}

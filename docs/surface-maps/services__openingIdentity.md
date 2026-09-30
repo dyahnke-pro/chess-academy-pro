@@ -27,7 +27,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingGenerator.ts:2483`
 
 ### `warmOpeningIdentity` (function) — 1 call site
-- `src/services/learnBoardTeaching.ts:517`
+- `src/services/learnBoardTeaching.ts:521`
 
 ### `setOpeningIdentity` (function) — 1 call site
 - `src/services/openingIdentity.test.ts:9`
@@ -41,7 +41,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `openingIdentityLine` (function) — 11 call sites
 - `src/services/coachApi.ts:5406`
 - `src/services/coachApi.ts:5923`
-- `src/services/learnBoardTeaching.ts:518`
+- `src/services/learnBoardTeaching.ts:522`
 - `src/services/openingGenerator.ts:2484`
 - `src/services/openingIdentity.test.ts:18`
 - `src/services/openingIdentity.test.ts:20`

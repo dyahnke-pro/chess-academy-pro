@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4998 lines · 35 exports · 39 importers · 37 tests · 5 audits**
+**5042 lines · 35 exports · 40 importers · 38 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,6 +26,7 @@
 - `src/services/coachFeatureService.causalChain.test.ts`
 - `src/services/coachFeatureService.cpLossSign.test.ts`
 - `src/services/coachFeatureService.introResult.test.ts`
+- `src/services/coachFeatureService.learnParity.test.ts`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts`
 - `src/services/coachFeatureService.planChange.test.ts`
 - `src/services/coachFeatureService.recurrence.test.ts`
@@ -144,7 +145,7 @@
 - `src/services/coachFeatureService.test.ts:15`
 - `src/services/coachFeatureService.test.ts:24`
 
-### `buildReviewSegments` (function) — 59 call sites
+### `buildReviewSegments` (function) — 62 call sites
 - `src/components/Coach/CoachGameReview.tsx:1903`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -156,6 +157,9 @@
 - `src/services/coachFeatureService.causalChain.test.ts:100`
 - `src/services/coachFeatureService.cpLossSign.test.ts:40`
 - `src/services/coachFeatureService.cpLossSign.test.ts:47`
+- `src/services/coachFeatureService.learnParity.test.ts:46`
+- `src/services/coachFeatureService.learnParity.test.ts:52`
+- `src/services/coachFeatureService.learnParity.test.ts:71`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:37`
 - `src/services/coachFeatureService.planChange.test.ts:14`
 - `src/services/coachFeatureService.recurrence.test.ts:37`
@@ -335,6 +339,7 @@
 - `src/services/coachFeatureService.causalChain.test.ts`
 - `src/services/coachFeatureService.cpLossSign.test.ts`
 - `src/services/coachFeatureService.introResult.test.ts`
+- `src/services/coachFeatureService.learnParity.test.ts`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts`
 - `src/services/coachFeatureService.planChange.test.ts`
 - `src/services/coachFeatureService.recurrence.test.ts`

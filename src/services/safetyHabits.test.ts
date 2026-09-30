@@ -28,3 +28,18 @@ describe('autopilot guard (P3 method beat)', () => {
     expect(autopilotGuard('Bc4', 200, null)).toBeNull();
   });
 });
+
+describe('keepPressing — winning, and a slow move gave them time', () => {
+  const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+  it('speaks when the forcing best move was passed over while still winning', async () => {
+    const { keepPressing } = await import('./safetyHabits');
+    expect(keepPressing(fen, 'a3', 'Nxe5', 150, 400)).toMatch(/keep asking questions/);
+  });
+  it('silent when not winning, when the played move forces, or when the best was quiet', async () => {
+    const { keepPressing } = await import('./safetyHabits');
+    expect(keepPressing(fen, 'a3', 'Nxe5', 150, 200)).toBeNull();
+    expect(keepPressing(fen, 'a3', 'Nf3', 150, 400)).toBeNull();
+    expect(keepPressing(fen, 'a3', 'Nxe5', 60, 400)).toBeNull();
+    expect(keepPressing(fen, 'a3', null, 150, 400)).toBeNull();
+  });
+});

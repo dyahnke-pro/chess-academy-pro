@@ -67,7 +67,7 @@
 - `src/services/reviewFullData.ts:745`
 
 ### `fileClaimed` (function) — 4 call sites
-- `src/services/learnBoardTeaching.ts:165`
+- `src/services/learnBoardTeaching.ts:167`
 - `src/services/planRace.test.ts:140`
 - `src/services/planRace.test.ts:147`
 - `src/services/planRace.test.ts:148`

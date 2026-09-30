@@ -85,8 +85,8 @@
 - `src/components/Coach/CoachTeachPage.tsx:8047`
 - `src/components/Coach/CoachTeachPage.tsx:9140`
 - `src/hooks/usePhaseNarration.ts:461`
-- `src/services/coachFeatureService.ts:2416`
-- `src/services/coachFeatureService.ts:2837`
+- `src/services/coachFeatureService.ts:2460`
+- `src/services/coachFeatureService.ts:2881`
 - `src/services/computedVoiceAudit.report.test.ts:300`
 - `src/services/oneOpeningKey.test.ts:43`
 - `src/services/openingDetectionService.test.ts:12`
