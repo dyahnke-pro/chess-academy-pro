@@ -22,21 +22,21 @@ before any new computer in Phase 3.
 
 ## PHASE 0 — Finish the truth pass (blocks everything)
 
-Status: batch 1 committed (≈29 of 40); 95 + 195 fixed with fail-on-old tests (`claimTruth.manual.test.ts`).
+Status: 37 of 40 fixed, each with a fail-on-old test (`claimTruth.manual.test.ts`, `moveIntent.takesAway`, `planArc.truth`). 🟠 97 / 281 / 203 do not reproduce on the stored engine lines (the live walk used a different PV); the plan reader's material wording now names the real deal ("a piece for a pawn", like-for-like cancels) and threats count as forcing — re-verify all three in 0.3.
 
 ### 0.1 The 11 remaining false one-offs (manual check 2026-09-30)
 | item | line spoken | what is wrong | fix at |
 |---|---|---|---|
-| 65 | "The tactics have settled — ask which piece is doing the least" | …Bb4 pin was the top move on the board | `positionCharacter` / quiet-switch: never "settled" while `detectTactics(immediate)` has a live tactic for either side |
-| 84 | "Qxd4 would put the queen on d4, where …e5 hits it" | Nc6 simply takes it: Qxd4?? Nxd4 | recapture-choice reason: check the square is SAFE before naming a later hit; say "loses the queen to Nxd4" |
+| ✅ 65 | "The tactics have settled — ask which piece is doing the least" | …Bb4 pin was the top move on the board | `positionCharacter` / quiet-switch: never "settled" while `detectTactics(immediate)` has a live tactic for either side |
+| ✅ 84 | "Qxd4 would put the queen on d4, where …e5 hits it" | Nc6 simply takes it: Qxd4?? Nxd4 | recapture-choice reason: check the square is SAFE before naming a later hit; say "loses the queen to Nxd4" |
 | ✅ 95 | "Your king's cover is thin — 2 of the pawns in front of it are gone" | only the h-pawn is gone; g6 + Bg7 still shield | king-shield count: a pawn advanced one square still shields; count only missing/over-advanced |
-| 97 | "Bxc6 was the move — the idea is to set up a pin" | no pin arises in the line | best-move "idea" label must come from `detectTactics` on the PV, not the move's class |
-| 189 | "their gxf5 was waiting deeper" | the refutation was g4 hitting the queen | refutation name = the PV move that actually wins material, not the first capture in the line |
-| 190 | "Bc2 let them win a pawn" | g4 won a BISHOP | material read from the PV's net count, not a default "pawn" |
+| 🟠 97 | "Bxc6 was the move — the idea is to set up a pin" | no pin arises in the line | best-move "idea" label must come from `detectTactics` on the PV, not the move's class |
+| ✅ 189 | "their gxf5 was waiting deeper" | the refutation was g4 hitting the queen | refutation name = the PV move that actually wins material, not the first capture in the line |
+| ✅ 190 | "Bc2 let them win a pawn" | g4 won a BISHOP | material read from the PV's net count, not a default "pawn" |
 | ✅ 195 | "The bishop on e6 — trade it off" | no bishop on e6 | `pieceQualityLines` reads a stale eval table; key the table to the FEN and drop squares that are empty on this board |
-| 203 | "The point of …d5: it takes h4 away" | d5 has nothing to do with h4 | covered by the new `denied()` rule? — verify on the position; if not, require the denied square be ATTACKED by the moved piece |
-| 281 | "Qe2 was the move — it would win a pawn" | pressure only; no pawn falls | "wins a pawn" only when the PV end shows +1 pawn net |
-| 294 | "c5 is a weak pawn now" | d6 defends it | weak-pawn read: isolated / backward only (no friendly pawn can ever defend it) |
+| 🟠 203 | "The point of …d5: it takes h4 away" | d5 has nothing to do with h4 | covered by the new `denied()` rule? — verify on the position; if not, require the denied square be ATTACKED by the moved piece |
+| 🟠 281 | "Qe2 was the move — it would win a pawn" | pressure only; no pawn falls | "wins a pawn" only when the PV end shows +1 pawn net |
+| ✅ 294 | "c5 is a weak pawn now" | d6 defends it | weak-pawn read: isolated / backward only (no friendly pawn can ever defend it) |
 | 28 | "leaves you about 1.8 points worse" | stored lines ~1.3 | wording fixed ("against the best move"); verify the number is best − line on the SAME board |
 
 ### 0.2 Checker gaps (so the next 100 games are measured, not hand-checked)

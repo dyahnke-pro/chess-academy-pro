@@ -19,6 +19,7 @@ export interface RecaptureFacts {
 }
 
 const CENTRE_DIST = (file: string): number => Math.abs(file.charCodeAt(0) - 100.5); // d/e = 0.5
+const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
 function pawnsOnFile(c: Chess, file: string, color: 'w' | 'b'): number {
@@ -70,7 +71,16 @@ export function readRecapture(fenBefore: string, m: Move, me: 'w' | 'b', theirRe
     if (reachGain >= 2) plus.push('it frees your bishop');
   } else {
     if (/^[de][45]$/.test(m.to) && m.piece === 'n') plus.push(`the knight lands in the centre on ${m.to}`);
-    if (m.piece === 'q') {
+    // A RECAPTURE THAT JUST LOSES THE PIECE says so first (manual claim check
+    // 2026-09-30, item 84: "Qxd4 would put the queen on d4, where …e5 hits
+    // it" — Nc6 simply takes it). Taken by something cheaper, or taken with
+    // nothing to take back, is the whole reason.
+    const takers = after.moves({ verbose: true }).filter((x) => x.to === m.to && x.captured);
+    const cheapest = takers.sort((a, b) => (VALUE[a.piece] ?? 99) - (VALUE[b.piece] ?? 99))[0];
+    const guarded = after.attackers(m.to, me).length > 0;
+    if (cheapest && ((VALUE[cheapest.piece] ?? 99) < (VALUE[m.piece] ?? 0) || !guarded)) {
+      minus.push(`would just lose the ${PIECE[m.piece]} to ${cheapest.san}`);
+    } else if (m.piece === 'q') {
       // Not the move they actually played: it hit whatever took back (the
       // IMBSR0A9nJs walk: "Qxd4 would be hit by …c5" said after …c5 had just
       // hit the knight on d4 — true of both recaptures, so no reason at all).

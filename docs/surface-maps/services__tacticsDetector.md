@@ -67,8 +67,8 @@
 - `src/services/discussionPractice.ts:143`
 - `src/services/liveNoteTruth.test.ts:59`
 - `src/services/liveTacticsContext.ts:361`
-- `src/services/lookaheadPlan.ts:1166`
-- `src/services/lookaheadPlan.ts:1229`
+- `src/services/lookaheadPlan.ts:1177`
+- `src/services/lookaheadPlan.ts:1240`
 - `src/services/misconceptionClassifier.ts:113`
 - `src/services/misconceptionClassifier.ts:264`
 - `src/services/mistakeNarration.ts:395`

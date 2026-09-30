@@ -810,9 +810,14 @@ const DETECTORS: Detector[] = [
   // 17. Created pawn weakness — the move leaves a new isolated/doubled pawn the
   // opponent can attack; the best move does not.
   (c) => {
-    const { mover, opp } = c;
+    const { mover, opp, last } = c;
     const weakBefore = new Set([...isolatedPawns(c.before, mover), ...doubledPawns(c.before, mover)]);
-    const weakAfter = [...isolatedPawns(c.after, mover), ...doubledPawns(c.after, mover)].filter((s) => !weakBefore.has(s));
+    // A pawn capture that is simply taken back does not leave doubled pawns
+    // (manual claim check 2026-09-30, item 294: …bxc3 "doubled" c5 and c3 for
+    // one ply, then bxc3 — and "c5 is a weak pawn now" with d6 beside it).
+    const recapturable = last.piece === 'p' && !!last.captured && c.after.attackers(last.to, opp).length > 0;
+    const doubledAfter = doubledPawns(c.after, mover).filter((s) => !(recapturable && s[0] === last.to[0]));
+    const weakAfter = [...isolatedPawns(c.after, mover), ...doubledAfter].filter((s) => !weakBefore.has(s));
     if (weakAfter.length === 0) return null;
     const weakBest = new Set([...isolatedPawns(c.afterBest, mover), ...doubledPawns(c.afterBest, mover)]);
     const newOnlyHere = weakAfter.filter((s) => !weakBest.has(s));
@@ -1112,7 +1117,27 @@ const DETECTORS: Detector[] = [
     // line — pvP opens on the opponent's reply, so their moves are the even
     // plies (walk 700, 16…a6: "Qxb6 was waiting deeper" beside "Qb6 was the
     // move" — the capture was a queen trade inside the student's own line).
-    const firstForcing = pvP.findIndex((san, i) => i % 2 === 0 && isForcing(san));
+    // A THREAT is forcing too (manual claim check 2026-09-30, item 189: after
+    // …Bc2 the blow was g4 hitting the queen, and "their gxf5 was waiting
+    // deeper" named a capture three plies later). A move that attacks the
+    // queen, or a piece worth more than the mover, or an undefended piece, is
+    // as forcing as a check.
+    const threatens = (i: number): boolean => {
+      try {
+        const b = new Chess(c.after.fen());
+        for (let k = 0; k < i; k += 1) b.move(pvP[k]);
+        const m = b.move(pvP[i]);
+        if (!m) return false;
+        const victim = m.color === 'w' ? 'b' : 'w';
+        const probe = new Chess(b.fen().replace(/ [wb] /, ` ${m.color} `).replace(/ [a-h][36] /, ' - '));
+        return probe.moves({ square: m.to, verbose: true }).some((x) => {
+          if (!x.captured) return false;
+          const guarded = b.attackers(x.to, victim).length > 0;
+          return x.captured === 'q' || VAL[x.captured] > VAL[m.piece] || !guarded;
+        });
+      } catch { return false; }
+    };
+    const firstForcing = pvP.findIndex((san, i) => i % 2 === 0 && (isForcing(san) || threatens(i)));
     if (firstForcing < 0) return no(c, 'calculation-depth', `no forcing move anywhere in the PV (${pvP.slice(0, 4).join(' ')})`);
     if (firstForcing < 2) {
       return yieldTo(c, 'calculation-depth', CALC_DEPTH_CLAIMANTS,

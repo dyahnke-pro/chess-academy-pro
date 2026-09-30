@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1420 lines · 24 exports · 12 importers · 8 tests · 0 audits**
+**1466 lines · 24 exports · 12 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -172,8 +172,9 @@
 - `src/services/learnWalkBlumenfeld.test.ts:178`
 - `src/services/learnWalkBlumenfeld.test.ts:179`
 
-### `planFromUci` (function) — 24 call sites
+### `planFromUci` (function) — 25 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9414`
+- `src/services/claimTruth.manual.test.ts:119`
 - `src/services/coachLaneWiring.test.ts:35`
 - `src/services/computedVoiceAudit.report.test.ts:218`
 - `src/services/concessionBeat.ts:440`
@@ -253,6 +254,7 @@
 
 ## Tests
 
+- `src/services/claimTruth.manual.test.ts`
 - `src/services/computedVoiceAudit.report.test.ts`
 - `src/services/learnWalkBlumenfeld.test.ts`
 - `src/services/lookaheadPlan.test.ts`

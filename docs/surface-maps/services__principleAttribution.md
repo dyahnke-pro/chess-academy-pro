@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1379 lines · 11 exports · 41 importers · 28 tests · 1 audits**
+**1404 lines · 11 exports · 41 importers · 28 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -84,10 +84,12 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:130`
 
-### `attributePrinciples` (function) — 66 call sites
+### `attributePrinciples` (function) — 68 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
 - `src/services/claimTruth.manual.test.ts:10`
 - `src/services/claimTruth.manual.test.ts:12`
+- `src/services/claimTruth.manual.test.ts:106`
+- `src/services/claimTruth.manual.test.ts:114`
 - `src/services/coachFeatureService.ts:842`
 - `src/services/learnWalkBlumenfeld.test.ts:65`
 - `src/services/liveFundamental.ts:135`

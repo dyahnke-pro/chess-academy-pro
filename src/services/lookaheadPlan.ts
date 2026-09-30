@@ -163,6 +163,10 @@ export interface SidePlan {
   outposts: string[];
   /** Net material this side wins across the horizon, in points. */
   materialSwing: number;
+  /** WHAT was won and what was given for it, counted off the board at the
+   *  same quiet point as `materialSwing` — so a bishop taken for a pawn is said
+   *  as that, never rounded to "a pawn" (manual claim check 2026-09-30, 190). */
+  materialDeal?: { took: string; gave: string | null };
   /** Passed pawns this side creates. */
   passedPawns: string[];
   /** Enemy king-shield pawns this side strips away. */
@@ -470,6 +474,7 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
   const outposts: string[] = [];
   const passedPawns: string[] = [];
   let materialSwing = 0;
+  let materialDeal: { took: string; gave: string | null } | undefined;
   let shieldStripped = 0;
   let tactic: string | null = null;
   let tacticSquare: string | null = null;
@@ -572,6 +577,9 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     materialSwing = quietAt >= 0 && horizon.length > 0
       ? sideBalance(horizon[quietAt].fenAfter, color) - sideBalance(horizon[0].fenBefore, color)
       : 0;
+    if (quietAt >= 0 && horizon.length > 0 && materialSwing >= 1) {
+      materialDeal = dealOf(horizon[0].fenBefore, horizon[quietAt].fenAfter, color);
+    }
   }
 
   // WHAT NEVER MOVED. A plan is as much about what is left out as what is in
@@ -639,6 +647,7 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     trading,
     outposts,
     materialSwing,
+    ...(materialDeal ? { materialDeal } : {}),
     passedPawns,
     shieldStripped,
     tactic,
@@ -797,7 +806,9 @@ export function describePlan(
   // Material, by what it actually is. A rook is not a pawn and the ranking
   // should not pretend otherwise.
   if (plan.materialSwing >= 1) {
-    const what = plan.materialSwing >= 5 ? 'a rook' : plan.materialSwing >= 3 ? 'a piece' : 'a pawn';
+    const what = plan.materialDeal
+      ? `${plan.materialDeal.took}${plan.materialDeal.gave ? ` for ${plan.materialDeal.gave}` : ''}`
+      : plan.materialSwing >= 5 ? 'a rook' : plan.materialSwing >= 3 ? 'a piece' : 'a pawn';
     add(35 + plan.materialSwing * 10, `win ${what}`, plan.materialSquares);
   }
   // A passed pawn matters more the closer it is to promoting — the one fact
@@ -1302,6 +1313,51 @@ function shortLineRead(
   };
 }
 
+/** Is this plan clause a COST — something that was taken or broken, as opposed
+ *  to where pieces go? The one test both backward readers use ("that let them
+ *  …", "it let them …"): Blumenfeld walk F32 heard "That let them walk the rook
+ *  round to h5, by way of c5, pull the pawns away, win a pawn, prise open the
+ *  c-file and trade off the rook", and F18 "That gave them the run of b4 and
+ *  c3" — plans and drift said as if they were the price of the move. */
+export function isCostClause(text: string): boolean {
+  return /^(win|take|mate|checkmate|trap|pull the pawns)\b/.test(text.trim());
+}
+
+/** Pieces of each kind a side lost between two boards (minors counted as one kind). */
+function lostCounts(before: string, after: string, side: 'w' | 'b'): Record<string, number> {
+  const count = (fen: string): Record<string, number> => {
+    const out: Record<string, number> = { q: 0, r: 0, m: 0, p: 0 };
+    for (const c of new Chess(fen).board().flat()) {
+      if (!c || c.color !== side || c.type === 'k') continue;
+      out[c.type === 'n' || c.type === 'b' ? 'm' : c.type] += 1;
+    }
+    return out;
+  };
+  const a = count(before); const b = count(after);
+  return { q: Math.max(0, a.q - b.q), r: Math.max(0, a.r - b.r), m: Math.max(0, a.m - b.m), p: Math.max(0, a.p - b.p) };
+}
+const DEAL_ONE: Record<string, string> = { p: 'a pawn', m: 'a piece', r: 'a rook', q: 'the queen' };
+const DEAL_MANY: Record<string, string> = { p: 'pawns', m: 'pieces', r: 'rooks', q: 'queens' };
+const COUNT_WORD = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
+function dealWords(n: Record<string, number>): string | null {
+  const words = (['q', 'r', 'm', 'p'] as const).filter((t) => n[t] > 0)
+    .map((t) => (n[t] === 1 ? DEAL_ONE[t] : `${COUNT_WORD[n[t]] ?? n[t]} ${DEAL_MANY[t]}`));
+  return words.length ? words.join(' and ') : null;
+}
+/** What `color` took and gave between two boards — "a piece for a pawn".
+ *  Like-for-like cancels: a bishop and two pawns for a bishop is two pawns. */
+function dealOf(before: string, after: string, color: 'white' | 'black'): { took: string; gave: string | null } | undefined {
+  try {
+    const me: 'w' | 'b' = color === 'white' ? 'w' : 'b';
+    const took = lostCounts(before, after, me === 'w' ? 'b' : 'w');
+    const gave = lostCounts(before, after, me);
+    for (const t of ['q', 'r', 'm', 'p']) { const k = Math.min(took[t], gave[t]); took[t] -= k; gave[t] -= k; }
+    const t = dealWords(took);
+    if (!t) return undefined;
+    return { took: t, gave: dealWords(gave) };
+  } catch { return undefined; }
+}
+
 /**
  * The plan from a raw engine PV, with no second search and no engine handle.
  *
@@ -1315,16 +1371,6 @@ function shortLineRead(
  * than guessed, so `describe` falls back to the squares the pieces are heading
  * for — less to say, and nothing invented (G0).
  */
-/** Is this plan clause a COST — something that was taken or broken, as opposed
- *  to where pieces go? The one test both backward readers use ("that let them
- *  …", "it let them …"): Blumenfeld walk F32 heard "That let them walk the rook
- *  round to h5, by way of c5, pull the pawns away, win a pawn, prise open the
- *  c-file and trade off the rook", and F18 "That gave them the run of b4 and
- *  c3" — plans and drift said as if they were the price of the move. */
-export function isCostClause(text: string): boolean {
-  return /^(win|take|mate|checkmate|trap|pull the pawns)\b/.test(text.trim());
-}
-
 export function planFromUci(
   fen: string,
   uciMoves: readonly string[],
