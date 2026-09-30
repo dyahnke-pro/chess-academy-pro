@@ -6253,7 +6253,9 @@ export async function getCoachChatResponse(
           const sc: 'white' | 'black' =
             grounding.studentColor ??
             ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
-          const answer = assemblePositionalAnswer(grounding.currentFen, sc, grounding.positionalTopic, grounding.cleanAsk ?? lastUserMessage());
+          const histSans = (grounding.moveHistory ?? []).map((m) => m.replace(/^\d+\.+/, '').trim()).filter(Boolean);
+          const answer = assemblePositionalAnswer(grounding.currentFen, sc, grounding.positionalTopic, grounding.cleanAsk ?? lastUserMessage(),
+            histSans.length > 0 ? detectOpeningTranspositional(histSans)?.name ?? null : null);
           if (answer) {
             const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'positional-feature', preferRaw: true });
             if (voiced) return voiced;

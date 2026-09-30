@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7098 lines · 159 exports · 66 importers · 40 tests · 8 audits**
+**7106 lines · 159 exports · 66 importers · 40 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -190,7 +190,7 @@
 - `src/services/coachApi.ts:2380`
 - `src/services/coachApi.ts:2551`
 - `src/services/coachApi.ts:6156`
-- `src/services/coachApi.ts:6271`
+- `src/services/coachApi.ts:6273`
 - `src/services/groundedAnswer.sacLine.test.ts:33`
 - `src/services/groundedAnswer.sacLine.test.ts:38`
 - `src/services/groundedAnswer.seatedTactic.test.ts:14`
@@ -579,8 +579,8 @@
 - `src/services/coachApi.currentAsk.test.ts:51`
 - `src/services/coachApi.currentAsk.test.ts:56`
 - `src/services/coachApi.ts:3626`
-- `src/services/coachApi.ts:6577`
-- `src/services/coachApi.ts:6675`
+- `src/services/coachApi.ts:6579`
+- `src/services/coachApi.ts:6677`
 - `src/services/groundedAnswer.test.ts:1476`
 - `src/services/groundedAnswer.test.ts:1477`
 - `src/services/groundedAnswer.test.ts:1478`
@@ -604,8 +604,8 @@
 
 ### `explainSanNotation` (function) — 9 call sites
 - `src/services/coachApi.ts:3628`
-- `src/services/coachApi.ts:6579`
-- `src/services/coachApi.ts:6677`
+- `src/services/coachApi.ts:6581`
+- `src/services/coachApi.ts:6679`
 - `src/services/groundedAnswer.test.ts:1518`
 - `src/services/groundedAnswer.test.ts:1522`
 - `src/services/groundedAnswer.test.ts:1523`
@@ -991,7 +991,7 @@
 
 ### `assemblePositionalAnswer` (function) — 19 call sites
 - `src/coach/questionWalk.sicilian1200.test.ts:69`
-- `src/services/coachApi.ts:6256`
+- `src/services/coachApi.ts:6257`
 - `src/services/groundedAnswer.positional.test.ts:6`
 - `src/services/groundedAnswer.positional.test.ts:12`
 - `src/services/groundedAnswer.positional.test.ts:16`

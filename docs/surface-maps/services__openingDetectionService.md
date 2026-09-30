@@ -104,8 +104,9 @@
 - `src/services/reviewFullData.ts:967`
 - `src/services/reviewFullData.ts:1143`
 
-### `detectOpeningTranspositional` (function) — 4 call sites
+### `detectOpeningTranspositional` (function) — 5 call sites
 - `src/services/coachApi.ts:5391`
+- `src/services/coachApi.ts:6258`
 - `src/services/reviewGameAdapter.ts:170`
 - `src/services/reviewOpeningTheory.ts:270`
 - `src/services/reviewOpeningTheory.ts:271`

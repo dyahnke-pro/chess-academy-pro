@@ -23,7 +23,7 @@ import type { Square, PieceSymbol, Move } from 'chess.js';
 import {
   legalSeeGain, legalSeeGainOn, landingIsSafe, capturesWinMaterial, legalSeeGainFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
   strongestWeakestPiece, pressuredTargets, findAttackTargets, findPawnGrabs,
-  namedPawnStructure, findXrays, findKnightReroute, findRookLift, findFianchetto,
+  namedPawnStructure, structureTransfer, findXrays, findKnightReroute, findRookLift, findFianchetto,
   findBlockade, kingActivation, oppositionRead, rookBehindPasser, bestMinorToKeep,
   bishopPair, computeSpace, findPassedPawns, findForcingCandidates, findHangingBySee, minorRouteToSquare,
 } from './positionReadingService';
@@ -6025,7 +6025,12 @@ export type PositionalTopic =
 
 const PIECE_WORD: Record<string, string> = { p: 'pawns', n: 'knights', b: 'bishops', r: 'rooks', q: 'queen', k: 'king' };
 
-export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'black', topic: PositionalTopic, ask?: string): GroundedAnswer | null {
+export function assemblePositionalAnswer(
+  fen: string, studentColor: 'white' | 'black', topic: PositionalTopic, ask?: string,
+  /** The game's opening, when the caller knows it — the structure answer names
+   *  the opening a structure is at home in when the game came from another. */
+  openingName?: string | null,
+): GroundedAnswer | null {
   // Board-validity guard (2026-09-09): every branch reads the FEN through
   // chess.js, so an unparseable FEN can only produce garbage — degrade to a
   // null (honest decline) rather than a bogus read. Must NOT rely on
@@ -6270,7 +6275,10 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
 
   if (topic === 'structure-name') {
     const s = namedPawnStructure(fen, myC);
-    if (s) return { facts: `This is ${s.name}. ${s.plan}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    if (s) {
+      const transfer = structureTransfer(s.name, openingName);
+      return { facts: `This is ${s.name}. ${s.plan}${transfer ? ` ${transfer}` : ''}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    }
     // Not a textbook-named structure — still describe it board-truthfully from
     // the pawn faults on each side rather than declining.
     const mineWp = findWeakPawns(fen, myC);
