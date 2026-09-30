@@ -70,7 +70,7 @@ describe('L1 — the guard sits at the one queue every late lane funnels through
     const src = fs.readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     const start = src.indexOf('const queueSpokenHint = useCallback(');
     expect(start, 'queueSpokenHint moved or was renamed').toBeGreaterThan(-1);
-    const body = src.slice(start, start + 3000);
+    const body = src.slice(start, start + 5000);
     expect(body).toMatch(/new Chess\(fen\)\.isGameOver\(\)/);
     // It must guard the QUEUED position, not some other board in scope.
     expect(body).not.toMatch(/liveFenRef\.current\)\.isGameOver/);
