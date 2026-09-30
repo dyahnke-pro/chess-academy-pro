@@ -37,12 +37,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `rookReachesFile` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9885`
-- `src/services/danyaBehaviors.ts:644`
+- `src/components/Coach/CoachTeachPage.tsx:9886`
+- `src/services/danyaBehaviors.ts:664`
 - `src/services/recaptureChoice.ts:62`
 
 ### `castleIsOneMoveAway` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:243`
+- `src/services/danyaBehaviors.ts:263`
 - `src/services/replayFence.modern1690.test.ts:133`
 - `src/services/replayFence.modern1690.test.ts:134`
 - `src/services/replayFence.modern1690.test.ts:135`
@@ -114,7 +114,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.modern1690.test.ts:201`
 
 ### `attackerCanUseFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:224`
+- `src/services/danyaBehaviors.ts:244`
 
 ### `racingPasser` (function) — 2 call sites
 - `src/services/positionalRead.race.test.ts:9`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**197 lines · 10 exports · 5 importers · 2 tests · 0 audits**
+**227 lines · 11 exports · 5 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,6 +26,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `RefutedAlternative` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `droppedJob` (function) — 3 call sites
+- `src/services/refutedAlternative.ts:127`
+- `src/services/refutedAlternativeCore.test.ts:45`
+- `src/services/refutedAlternativeCore.test.ts:51`
+
 ### `MIN_ALTERNATIVE_SHARE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
@@ -37,7 +42,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/refutedAlternative.test.ts:142`
 - `src/services/refutedAlternative.ts:85`
 
-### `renderRefutedAlternative` (function) — 7 call sites
+### `renderRefutedAlternative` (function) — 8 call sites
 - `src/services/refutedAlternative.test.ts:118`
 - `src/services/refutedAlternative.test.ts:123`
 - `src/services/refutedAlternative.test.ts:135`
@@ -45,6 +50,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/refutedAlternative.test.ts:150`
 - `src/services/refutedAlternative.test.ts:151`
 - `src/services/refutedAlternative.ts:128`
+- `src/services/refutedAlternativeCore.test.ts:56`
 
 ### `candidatesFromMasters` (function) — 6 call sites
 - `src/services/refutedAlternative.test.ts:39`
@@ -55,7 +61,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/refutedAlternative.ts:143`
 
 ### `candidatesFromAmateur` (function) — 2 call sites
-- `src/services/positionFacts.ts:741`
+- `src/services/positionFacts.ts:810`
 - `src/services/refutedAlternative.ts:142`
 
 ### `FanLine` (interface) — 0 call sites
@@ -66,7 +72,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/refutedAlternativeCore.test.ts:34`
 
 ### `refutedFromFan` (function) — 2 call sites
-- `src/services/positionFacts.ts:741`
+- `src/services/positionFacts.ts:810`
 - `src/services/refutedAlternativeCore.test.ts:14`
 
 ## Tests

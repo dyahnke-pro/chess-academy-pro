@@ -16,7 +16,7 @@
 import { Chess } from 'chess.js';
 import type { AnalysisLine } from '../types';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
-import { legalSeeGainOn } from './positionReadingService';
+import { legalSeeGainFor, legalSeeGainOn } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
 
 export interface IntentReads {
@@ -266,7 +266,8 @@ export function moveIntent(
     ...(prevents ? [prevents.uci.slice(0, 2), prevents.uci.slice(2, 4)] : []),
     ...(prepares ? [prepares.uci.slice(0, 2), prepares.uci.slice(2, 4)] : []),
   ])];
-  return { prevents, prepares, text: phrase(playedSan, prevents, prepares, seat, mover, fenAfter, prepares ? whatItDoes(fenAfter, prepares.uci, mover) : null), squares, about: seat };
+  const why = prevents ? stopReason(fenAfter, prevents.uci, mover) : null;
+  return { prevents, prepares, text: phrase(playedSan, prevents, prepares, seat, mover, fenAfter, prepares ? whatItDoes(fenAfter, prepares.uci, mover) : null, why), squares, about: seat };
 }
 
 /** A threat worth naming as "stopped": it mates, checks, or wins material by
@@ -289,6 +290,9 @@ function phrase(
   /** What the prepared move does once played — "hit the pawn on e5", "take
    *  the open e-file", "castle" — so the line teaches the WHY, not a bare move. */
   does: PreparedPoint | null,
+  /** WHY the stopped move no longer works, counted — "you cover d5 three
+   *  times to their two" (census #12, his "count it"). */
+  why: string | null = null,
 ): string {
   const dot = (s: string, side: 'w' | 'b'): string => (side === 'b' ? `…${s}` : s);
   const opp: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
@@ -298,6 +302,7 @@ function phrase(
     const stop = prevents ? dot(prevents.san, opp) : '';
     const prep = prepares ? dot(prepares.san, mover) : '';
     if (prevents && prepares) return `${played} does two jobs: it stops ${stop}, and it prepares ${prep}${does ? `, to ${does.verb}` : ''}.`;
+    if (prevents && why) return `${played} — so ${stop} isn't possible any more: ${why}.`;
     if (prevents) return rotateStem([`${played} — so ${stop} isn't possible any more.`, `The point of ${played}: it takes ${stop} away.`], key);
     if (does?.castle) return rotateStem([`${played} clears the way to castle.`, `${played} first, so you can castle next.`], key);
     if (does) return rotateStem([`${played} first, so that ${prep} can ${does.verb}.`, `${played} prepares ${prep}, to ${does.verb}.`], key);
@@ -313,6 +318,40 @@ function phrase(
 }
 
 const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+const TIMES = ['', 'once', 'twice', 'three times', 'four times', 'five times'];
+const COUNT = ['none', 'one', 'two', 'three', 'four', 'five'];
+
+/**
+ * Why the move the student took away no longer works, COUNTED on the board
+ * (census #12 — "you still don't allow d5: three defenders on that square to
+ * only two attackers"). The stopped move is played on the board after the
+ * student's move: when what lands there is simply lost by exchange count, say
+ * so — a pawn break by the count of who covers the square, a piece by "it would
+ * just be taken". Null when the stopped move is a capture or check (the engine
+ * reason is not a count) or when the count does not explain it.
+ */
+export function stopReason(fenAfter: string, stoppedUci: string, mover: 'w' | 'b'): string | null {
+  const opp: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
+  let c: Chess;
+  let m;
+  try {
+    c = new Chess(fenAfter);
+    if (c.turn() !== opp) return null;
+    m = c.move({ from: stoppedUci.slice(0, 2), to: stoppedUci.slice(2, 4), promotion: stoppedUci.slice(4, 5) || undefined });
+  } catch { return null; }
+  if (!m || m.captured || c.inCheck()) return null;
+  if (legalSeeGainFor(c.fen(), m.to, mover) <= 0) return null;
+  const mine = c.attackers(m.to, mover).length;
+  const theirs = c.attackers(m.to, opp).length;
+  if (m.piece === 'p') {
+    if (mine > theirs && theirs > 0 && mine <= 5) {
+      return `you cover ${m.to} ${TIMES[mine]} to their ${COUNT[theirs]}`;
+    }
+    return `the pawn would just be lost on ${m.to}`;
+  }
+  return `the ${PIECE_NAME[m.piece]} would just be taken on ${m.to}`;
+}
 
 export interface PreparedPoint { verb: string; castle: boolean }
 

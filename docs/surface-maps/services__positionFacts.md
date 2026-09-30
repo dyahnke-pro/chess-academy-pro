@@ -182,7 +182,7 @@
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.ts:9`
-- `src/services/danyaBehaviors.ts:448`
+- `src/services/danyaBehaviors.ts:468`
 - `src/services/replayFence.alekhine1500.test.ts:24`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.sicilianClosed1000.test.ts:26`

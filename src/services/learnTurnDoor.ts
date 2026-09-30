@@ -59,6 +59,7 @@ export type LearnLane =
   | 'kingAttack'
   | 'ruleException'
   | 'falseAlarm'
+  | 'pushOrHold'
   | 'causalChain'
   | 'kingSafety'
   | 'phase'
@@ -124,6 +125,9 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // board says why here.
   // Don't panic (census #7): their threat was real, the engine's move ignored
   // it, and the student played that move — "you didn't have to react".
+  // Push for a win or hold (census #14): what a pawn up or down is worth in
+  // THIS ending, while the engine keeps it better-not-won / worse-not-lost.
+  pushOrHold: { kind: 'computed', why: 'whether the ending is worth pressing or holding, by its type', lead: 60 },
   falseAlarm: { kind: 'computed', why: 'a threat the student rightly ignored, and what answers it', lead: 72 },
   ruleException: { kind: 'computed', why: 'a beginner’s rule the move breaks, and why it is right here', lead: 73 },
   recapture: { kind: 'computed', why: 'which piece takes back and why — compared with the other recapture', lead: 66 },

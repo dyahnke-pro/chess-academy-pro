@@ -83,7 +83,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:84`
 
 ### `namedTacticClause` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:460`
+- `src/services/danyaBehaviors.ts:480`
 - `src/services/danyaDeviceCoverage.test.ts:102`
 - `src/services/tacticalRead.test.ts:144`
 - `src/services/tacticalRead.test.ts:153`
@@ -94,7 +94,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `tacticalReadFromLines` (function) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8911`
-- `src/services/danyaBehaviors.ts:458`
+- `src/services/danyaBehaviors.ts:478`
 - `src/services/danyaDeviceCoverage.test.ts:73`
 - `src/services/liveVoiceDefects.test.ts:46`
 - `src/services/tacticalRead.test.ts:349`

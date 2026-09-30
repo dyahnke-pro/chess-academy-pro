@@ -16,6 +16,7 @@ import { kingAttack } from './kingAttack';
 import { ruleException } from './ruleException';
 import { falseAlarm } from './falseAlarm';
 import { theirMoveCost } from './theirMoveCost';
+import { pushOrHold } from './pushOrHold';
 
 export interface TeachingHint {
   lane: LearnLane;
@@ -42,6 +43,9 @@ export interface StudentMoveInput {
   bestLine: AnalysisLine | undefined;
   /** Their answer to the student's move, SAN, when already on the board. */
   reply: string | null;
+  /** The engine's eval AFTER the student's move, centipawns, student POV; null
+   *  when either read is a mate. */
+  cpAfter: number | null;
 }
 
 /** Everything the student's move teaches on the board, in no particular order —
@@ -106,6 +110,21 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
             event: { name: 'coach_false_alarm_named', props: { surface: 'coach-teach', kind: fa.threat.kind } },
           });
         }
+      }
+    } catch { /* a bonus, never a blocker */ }
+  }
+  // PUSH OR HOLD — what a pawn up or down is worth in THIS ending, only while
+  // the engine keeps it in the band where the choice matters.
+  if (i.cpAfter !== null) {
+    try {
+      const after = new Chess(i.fenBefore);
+      const mv = after.move(i.san);
+      const ph = pushOrHold(after.fen(), mv.color, i.cpAfter);
+      if (ph) {
+        out.push({
+          lane: 'pushOrHold', text: ph.text, squares: [], claims: [`ending-${ph.cls}-${ph.side}`],
+          event: { name: 'coach_push_or_hold_named', props: { surface: 'coach-teach', cls: ph.cls, side: ph.side } },
+        });
       }
     } catch { /* a bonus, never a blocker */ }
   }

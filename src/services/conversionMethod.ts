@@ -22,8 +22,9 @@ import { describeStructure } from './boardStructure';
 import { findHangingBySee, legalSeeGainFor } from './positionReadingService';
 import { homeMinorCount } from './development';
 import { MATERIAL_VALUE } from './pieceValues';
+import { countKingAttack } from './kingSafety';
 
-export type ConversionStep = 'finish-development' | 'trade-pieces' | 'make-passer' | 'escort-passer' | 'cut-off-king';
+export type ConversionStep = 'finish-development' | 'attack-king' | 'trade-pieces' | 'make-passer' | 'escort-passer' | 'cut-off-king';
 
 export interface ConversionRead {
   step: ConversionStep;
@@ -109,6 +110,12 @@ export function readConversion(fen: string, student: 'w' | 'b'): ConversionRead 
     text = heavy
       ? `Their king is alone — cut it off: put your ${heavy === 'q' ? 'queen' : 'rook'} on a file or rank it can't cross, then drive it to the edge and mate.`
       : `Their king is alone — drive it to the edge with your king and pieces together, then mate.`;
+  } else if (kingOpen(c, student)) {
+    // THE CHOICE (census #9 — "when ahead: trade, attack or convert"). Ahead AND
+    // their king is short of defenders: trading would let it off the hook.
+    const k = countKingAttack(c, student);
+    step = 'attack-king';
+    text = `You're ${edgeWords(edge, c, student)} up and their king is short of defenders — ${k?.attackers.size ?? 0} of your pieces on it against ${k?.defenders.size ?? 0}. Don't cash in with trades yet: the attack is the fastest win.`;
   } else if (theirPieces >= 2) {
     step = 'trade-pieces';
     text = `You're ${edgeWords(edge, c, student)} up — trade pieces, not pawns. Every piece that comes off makes your extra material count for more.`;
@@ -123,6 +130,15 @@ export function readConversion(fen: string, student: 'w' | 'b'): ConversionRead 
     text = `Your passed pawn on ${passer} is the win — push it, with ${escorts} escorting it one safe square at a time.`;
   }
   return { step, edge, passer, text };
+}
+
+/** Their king is the target: your queen is on, at least three of your pieces
+ *  bear on it and they outnumber its defenders. */
+function kingOpen(c: Chess, student: 'w' | 'b'): boolean {
+  const hasQueen = c.board().some((row) => row.some((x) => x?.type === 'q' && x.color === student));
+  if (!hasQueen) return false;
+  const k = countKingAttack(c, student);
+  return !!k && k.attackers.size >= 3 && k.attackers.size > k.defenders.size;
 }
 
 /** The edge in words — a PIECE name only when that piece is really the extra

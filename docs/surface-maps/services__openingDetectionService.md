@@ -366,8 +366,8 @@
 
 ### `studentSideForPlay` (function) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:5228`
-- `src/components/Coach/CoachTeachPage.tsx:12047`
-- `src/components/Coach/CoachTeachPage.tsx:12097`
+- `src/components/Coach/CoachTeachPage.tsx:12048`
+- `src/components/Coach/CoachTeachPage.tsx:12098`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:59`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:60`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:64`

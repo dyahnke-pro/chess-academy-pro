@@ -97,3 +97,24 @@ describe('moveIntent in book — never silent for being in book, held to substan
     expect(inBook?.prevents?.san).toMatch(/Qxf2/);
   });
 });
+
+describe('stopReason — the stopped move, counted (census #12)', () => {
+  it('a pawn break covered more times than it is supported: "you cover d5 three times to their one"', async () => {
+    const { stopReason } = await import('./moveIntent');
+    // 1PI3xfMiUE4 after Bc4: …d5 would land on a square White hits three times.
+    expect(stopReason('r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 5 4', 'd7d5', 'w'))
+      .toBe('you cover d5 three times to their one');
+  });
+
+  it('level counts, still lost by exchange: "the pawn would just be lost"', async () => {
+    const { stopReason } = await import('./moveIntent');
+    // QOb_ElHrC14 after Nxe2: "you still don't allow d5".
+    expect(stopReason('r2q1rk1/pp2bppp/2np1n2/2p5/4P3/6PP/PPP1NPB1/R1BQ1RK1 b - - 0 11', 'd6d5', 'w'))
+      .toBe('the pawn would just be lost on d5');
+  });
+
+  it('says nothing for a stopped capture — the reason is not a count', async () => {
+    const { stopReason } = await import('./moveIntent');
+    expect(stopReason('r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 5 4', 'c5f2', 'w')).toBeNull();
+  });
+});

@@ -6,7 +6,7 @@ import ruleFx from './__fixtures__/ruleException-his.json';
 import kingFx from './__fixtures__/kingAttack-his.json';
 import falseFx from './__fixtures__/falseAlarm-his.json';
 
-const base = { cpLoss: 0, bothCp: true, bestSan: null, bestLine: undefined, reply: null };
+const base = { cpLoss: 0, bothCp: true, bestSan: null, bestLine: undefined, reply: null, cpAfter: null };
 
 describe('learnBoardTeaching — every lane reaches the door', () => {
   it('rule→exception comes out with its claim and event', () => {
@@ -34,6 +34,12 @@ describe('learnBoardTeaching — every lane reaches the door', () => {
       bestLine: { rank: 1, evaluation: p.best.cp, moves: p.best.pv, mate: null },
     });
     expect(out.some((h) => h.lane === 'falseAlarm')).toBe(false);
+  });
+
+  it('push or hold reaches the door in a close ending', () => {
+    // Rook ending, White a pawn up, the student plays a quiet king move.
+    const out = studentMoveTeaching({ ...base, fenBefore: 'r5k1/5ppp/8/8/8/8/4PPPP/R5K1 w - - 0 1', san: 'Kf1', history: ['Kf1'], cpAfter: 90 });
+    expect(out.find((h) => h.lane === 'pushOrHold')?.claims).toEqual(['ending-rook-endgame-up']);
   });
 
   it('their move cost reaches the door', () => {

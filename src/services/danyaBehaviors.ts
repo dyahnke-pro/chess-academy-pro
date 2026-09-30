@@ -25,6 +25,7 @@
 import { castleRoute, castleAdvice } from './kingSafety';
 import { andList, fileList } from '../utils/andList';
 import { Chess } from 'chess.js';
+import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
 import type { Color, PieceSymbol, Square } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
 import { attackerCanUseFile, castleIsOneMoveAway, rookReachesFile } from './positionalRead';
@@ -62,6 +63,15 @@ import {
   rookBehindPasser,
   oppositionRead,
 } from './positionReadingService';
+
+/** Where a passive piece wants to go and how (census #15): a knight's outpost
+ *  route, or a bishop's long diagonal / a rook's pawnless file, at most one
+ *  stop on the way. */
+function wishRoute(fen: string, sq: string): { target: Square; via: Square | null; why: string } | null {
+  const r = computePieceRoute(fen, sq as Square) ?? computeSliderRoute(fen, sq as Square);
+  if (!r || r.route.length > 2) return null;
+  return { target: r.target, via: r.route.length === 2 ? r.route[0] : null, why: r.why };
+}
 
 const PIECE_NAME: Record<PieceSymbol, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
@@ -197,11 +207,21 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       if (!isMiddlegame) return null;
       const bad = notes.find((n) => n.quality === 'bad');
       if (bad) {
+        // THE WISHLIST (census #15): name WHERE it wants to be and the path,
+        // or say nothing about rerouting — "a better square" teaches nothing.
+        const route = wishRoute(fen, bad.square);
+        if (route) {
+          return { fact: `Your ${PIECE_NAME[bad.piece]} on ${bad.square} is a ${bad.reason} — it wants ${route.target}${route.via ? `, via ${route.via}` : ''}: ${route.why}.`, squares: [bad.square, ...(route.via ? [route.via] : []), route.target] };
+        }
         return { fact: `Your ${PIECE_NAME[bad.piece]} on ${bad.square} is a ${bad.reason} — reroute it to a better square.`, squares: [bad.square] };
       }
       // Fallback: a genuinely passive MINOR (never the queen/king/rook).
       const { weakest } = strongestWeakestPiece(fen, student);
       if (weakest && (weakest.piece === 'n' || weakest.piece === 'b') && weakest.scope <= 1) {
+        const route = wishRoute(fen, weakest.square);
+        if (route) {
+          return { fact: `Your ${PIECE_NAME[weakest.piece]} on ${weakest.square} is doing nothing — it wants ${route.target}${route.via ? `, via ${route.via}` : ''}: ${route.why}.`, squares: [weakest.square, ...(route.via ? [route.via] : []), route.target] };
+        }
         return { fact: `Your ${PIECE_NAME[weakest.piece]} on ${weakest.square} is doing nothing — find it a better square.`, squares: [weakest.square] };
       }
       return null;

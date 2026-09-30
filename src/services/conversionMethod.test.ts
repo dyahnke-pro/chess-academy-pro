@@ -52,3 +52,13 @@ describe('readConversion', () => {
   });
 
 });
+
+describe('the choice when ahead — attack, not trade, when their king is open (census #9)', () => {
+  it('a piece up with three attackers on a bare king: attack', async () => {
+    const { readConversion } = await import('./conversionMethod');
+    // White: queen h5, rook f1 on the open f-file, bishop c4 — all bearing on g8/f7; a knight up.
+    const r = readConversion('r5k1/pp4pp/8/7Q/2B5/8/PPP3PP/5RK1 w - - 0 1', 'w');
+    expect(r?.step).toBe('attack-king');
+    expect(r?.text).toMatch(/Don't cash in with trades yet/);
+  });
+});

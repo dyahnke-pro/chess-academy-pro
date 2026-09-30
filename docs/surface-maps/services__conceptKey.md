@@ -23,7 +23,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:7921`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
-- `src/services/danyaBehaviors.ts:448`
+- `src/services/danyaBehaviors.ts:468`
 - `src/services/positionFacts.ts:1027`
 - `src/services/positionFacts.ts:1402`
 - `src/services/positionFacts.ts:1416`
@@ -32,7 +32,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.sicilianClosed1000.test.ts:26`
 
 ### `forkThreatKey` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:302`
+- `src/services/danyaBehaviors.ts:322`
 - `src/services/positionFacts.ts:1278`
 - `src/services/positionFacts.ts:1291`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:50`
