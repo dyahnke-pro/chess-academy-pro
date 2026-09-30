@@ -754,6 +754,17 @@ Gates: `appAuditor.auditGate.test.ts`, `api/audit-stream.refuse.test.ts`. The
 listener sidecar is unaffected — it is loopback, and it never touched Redis.
 When Upstash reads `500000/500000` again, audits are no longer a suspect.
 
+🔴 **CORRECTED 2026-09-30 — the gates above covered only `/api/audit-stream`, and
+audits kept filling Redis through the OTHER doors.** Measured 13:49–16:49 UTC:
+28,665 `/api/messages`, 14,737 `/api/referrals`, 6,446 LLM-proxy calls from ~14.5k
+headless page boots (bell LRANGEs + a fresh referral code per device + a
+spend-guard INCR per coach call) ≈150k commands in one afternoon, while the
+stream itself saw 13. Now ONE check, `api/_lib/auditTraffic.isAuditTraffic`, runs
+at EVERY Redis door (messages, referrals, audit-stream, usageGuard → in-memory
+rate limit), and the client skips the bell + referral fetch on marked pages. Gate:
+`api/auditTraffic.gate.test.ts` fails any new Redis-backed route that does not
+call it (cron-only routes are named with a reason).
+
 Gate: `appAuditor.test.ts` → "audit-stream is opt-in (2026-09-11)". It is
 deliberately non-vacuous — `vitest.config.ts` defines a NON-EMPTY baked secret,
 because with an empty one there is nothing for a regression to fall back to and a

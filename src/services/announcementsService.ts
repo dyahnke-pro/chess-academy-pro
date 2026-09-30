@@ -1,5 +1,6 @@
 import { db } from '../db/schema';
 import { getDeviceId } from './deviceIdentity';
+import { isAuditMarkedPage } from './appAuditor';
 
 /** A message from the developer to users, shown behind the home-screen bell. */
 export interface Announcement {
@@ -118,6 +119,9 @@ export function mergeBroadcasts(pinned: Announcement[], dynamic: Announcement[])
  *  Redis state. */
 export async function fetchInbox(): Promise<{ broadcasts: Announcement[]; thread: ThreadMessage[] }> {
   const pinned = await fetchAnnouncements();
+  // An audit page never reaches the Redis-backed bell (the server refuses it
+  // too — api/_lib/auditTraffic.ts); the pinned welcome set is origin-served.
+  if (isAuditMarkedPage()) return { broadcasts: pinned, thread: [] };
   try {
     const device = await getDeviceId();
     const res = await fetch(`${MESSAGES_API}?device=${encodeURIComponent(device)}&cb=${Date.now()}`, { cache: 'no-store' });

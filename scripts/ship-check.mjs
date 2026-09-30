@@ -311,6 +311,8 @@ const GATE_TESTS = [
   'api/audit-stream.refuse.test.ts',
   'api/audit-stream.batch.test.ts',
   'api/store-degraded.test.ts',
+  // 🔒 AUDIT TRAFFIC NEVER TOUCHES REDIS (2026-09-30) — every Redis door checks it.
+  'api/auditTraffic.gate.test.ts',
   'src/hooks/learnSilentCapture.test.ts',
   'src/services/oneStudentRating.test.ts',
   'src/data/proGameReferences.test.ts',

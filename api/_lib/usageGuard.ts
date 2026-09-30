@@ -1,3 +1,5 @@
+import { isAuditTraffic } from './auditTraffic.js';
+
 /**
  * Edge-safe usage guard shared by /api/llm-proxy and /api/tts.
  *
@@ -37,6 +39,7 @@ export type GuardKind = 'llm' | 'tts';
 // guard reading them at module scope did not). Read them per request instead.
 
 interface KvCreds { url: string; token: string; }
+
 function kvCreds(): KvCreds {
   return {
     url: (process.env.KV_REST_API_URL || '').replace(/\/+$/, ''),
@@ -160,6 +163,9 @@ export async function checkUsageGuard(kind: GuardKind, req: Request): Promise<Gu
   if (!creds.url || !creds.token) return { allowed: true }; // not provisioned → no-op
 
   const ip = clientIp(req);
+  // Audit traffic keeps its rate limit but never spends Upstash commands on it
+  // (see auditTraffic.ts) — the in-memory window bounds it just the same.
+  if (isAuditTraffic(req.headers)) return localBackstop(kind, ip);
   const lim = limitFor(kind);
   const rlKey = `rl:${kind}:${ip}:${Math.floor(Date.now() / 1000 / lim.windowSec)}`;
 

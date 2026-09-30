@@ -13,6 +13,7 @@
  * bookkeeping, the LLM decides nothing.
  */
 import { getDeviceId } from './deviceIdentity';
+import { isAuditMarkedPage } from './appAuditor';
 import { syncOpeningCredits } from './freeTierService';
 import { captureEvent } from './analytics';
 import { db } from './../db/schema';
@@ -40,6 +41,9 @@ export interface ReferralStatus {
 /** Fetch this device's referral status AND mirror credits into the ledger.
  *  Never throws — returns null when the API is unreachable/unconfigured. */
 export async function getStatus(): Promise<ReferralStatus | null> {
+  // An audit page's fresh device would mint a referral code in Redis on every
+  // boot; it never asks (the server refuses it too — api/_lib/auditTraffic.ts).
+  if (isAuditMarkedPage()) return null;
   try {
     const device = await getDeviceId();
     const res = await fetch(`${API}?device=${encodeURIComponent(device)}&cb=${Date.now()}`, { cache: 'no-store' });

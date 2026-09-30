@@ -18,6 +18,7 @@
  * in-memory per-instance fallback for local dev. No per-event object storage.
  */
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { isAuditTraffic } from './_lib/auditTraffic.js';
 
 const CODE_KEY = (code: string): string => `ref:code:${code}`;
 const BYDEVICE_KEY = (device: string): string => `ref:bydevice:${device}`;
@@ -122,9 +123,20 @@ async function readInt(store: Store, key: string): Promise<number> {
 export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'content-type');
+  res.setHeader('Access-Control-Allow-Headers', 'content-type, x-audit-marked');
   res.setHeader('Access-Control-Max-Age', '86400');
   if (req.method === 'OPTIONS') { res.status(204).end(); return; }
+
+  // 🔒 Audit traffic never touches Redis (auditTraffic.ts). A fresh audit
+  // device would otherwise mint a referral code (~6 commands) on every boot.
+  // `code: null` is the client's "no referral state" — it shows nothing.
+  if (isAuditTraffic(req.headers)) {
+    res.setHeader('x-store', 'refused-audit');
+    res.status(200).json(req.method === 'GET'
+      ? { code: null, credits: 0, recruits: 0, claimed: null, refused: 'audit' }
+      : { ok: false, reason: 'audit', refused: 'audit' });
+    return;
+  }
 
   const store = await getStore();
 
