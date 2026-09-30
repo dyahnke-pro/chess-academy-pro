@@ -9,7 +9,7 @@
  * / reset_board markers parsed from its response. Same room, different
  * actions.
  */
-import { characterOf, stepCharacter, EMPTY_CHARACTER, type CharacterState } from '../../services/positionCharacter';
+import { characterOf, provenTacticLive, stepCharacter, EMPTY_CHARACTER, type CharacterState } from '../../services/positionCharacter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStandingFactMemory, fullmoveOf } from '../../services/standingFactMemory';
 import { createLearnMemory, type LearnMemory } from '../../services/learnMemory';
@@ -9169,8 +9169,9 @@ export function CoachTeachPage(): JSX.Element {
                         // A detected tactic, not a HANGING piece: a bishop hit by
                         // a pawn simply steps away (hand walk 2026-09-30, Closed
                         // Ruy: 3…a6 read as "turned sharp", then three flips in
-                        // 20 plies of a quiet game).
-                        tacticLive: tctxNow.immediate.length > 0,
+                        // 20 plies of a quiet game). And a PROVEN one: a standing pin carries no
+                        // verdict and must not flip the read (walk 3, …Bg4).
+                        tacticLive: provenTacticLive(tctxNow.immediate),
                         bestGapCp: gap,
                       });
                       const step = stepCharacter(characterRef.current, now);

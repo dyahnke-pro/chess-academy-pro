@@ -255,7 +255,7 @@ describe('a description restating the lead\'s piece is held (hand walk 2026-09-3
 
 describe('the character read counts tactics, not a piece that can step away (hand walk 2026-09-30)', () => {
   it('a hanging piece alone does not make the position sharp', () => {
-    expect(TEACH_CODE).toMatch(/tacticLive: tctxNow\.immediate\.length > 0,/);
+    expect(TEACH_CODE).toMatch(/tacticLive: provenTacticLive\(tctxNow\.immediate\),/);
     expect(TEACH_CODE).not.toMatch(/tacticLive: tctxNow\.immediate\.length > 0 \|\| tctxNow\.hanging/);
   });
 });
