@@ -259,3 +259,23 @@ The miss is the reason, not the verdict: exd5 is a **recapture choice** ("take w
 5. **An IQP called on doubled d-pawns (d6 + d4).** It now needs exactly one central d-pawn.
 6. **The character read flipped three times in a quiet game.** A piece that can simply step away (a bishop hit by a pawn) no longer makes the position "sharp"; only detected tactics or a big engine gap do.
 7. **"Ne3 develops into the game" at move 13.** Development now means leaving the piece's own starting square, not merely rank 1.
+
+### 6.x Hand walk 3 (Ruy re-walk, 2026-09-30) — flags and decisions
+
+- **Character flip on a standing pin — FIXED (pending push).** `…Bg4` pinning
+  Nf3 to d1 read "turned sharp" (move 19) and flipped back at move 27. The
+  detector reports a pin's geometry with no verdict (`wins` is set for forks
+  only), so the pin counted as a live tactic. Now only a pattern a verifier
+  PROVED wins something (`wins: live | threat`) counts (`provenTacticLive`). A
+  pin that really costs material still reads sharp through the engine's
+  best-move gap. Test on the real position + a verified-fork control:
+  `positionCharacter.pin.test.ts`.
+- **🟠 DECISION FOR DAVID — curated beats name the OPPONENT by colour.**
+  `beatRegister` refuses the student's own colour but passes "Black's
+  e5-pawn" / "Black develops" to a White student, which breaks the locked
+  one-perspective rule (opponent = they/their). Census: **1,199 of 1,444
+  live-safe beats** do it (939 as a subject, 260 possessive-only). Silencing
+  them cuts live curated teaching by 83%, and a regex rewrite is banned
+  (verb agreement: "Black has" → "they have"). The real fix is the owed
+  offline live-register bake (BACKLOG §4.6). Left as is until David picks:
+  bake (recommended) or silence.
