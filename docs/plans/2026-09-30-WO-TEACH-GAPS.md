@@ -136,12 +136,39 @@ the live board (`danya-play-db` "his move here", trap candidates as gems).
 **Method beats still missing:** split the position, three ways to meet check,
 question the knee-jerk, trigger→scan, autopilot guard, safety precheck.
 
+**STATUS 2026-09-30 (census re-checked against the code, not the list):**
+- ALREADY BUILT, list was stale: rule→exception (`ruleException`), what their
+  move cost (`theirMoveCost`), push or hold (`pushOrHold`), endgame technique
+  (`endgameTechnique`: opposition, key squares, rule of the square, rook-pawn
+  corner, Lucena, Philidor, cut-off, rook behind the passer), the wishlist
+  method (`moveIntent.prepares`), the alternative that fails a job
+  (`refutedAlternative`), candidates (P2 #4), tempo (P2 #7).
+- ✅ NEW: **timing** on Learn (`moveTiming` was review-only — parity), lane
+  `timing`; **trade judgement** (`tradeJudgement`, lane `trade`: ahead / behind
+  and it cost / bad bishop from fixed centre pawns / attacker by the king gone);
+  **three ways to meet check** (`checkMethod`, lane `checkMethod`, once per game,
+  names the kinds never the move); **question the knee-jerk** (`kneeJerk`, lane
+  `kneeJerk`, once per game).
+- STILL OPEN: split the position, trigger→scan, autopilot guard, safety
+  precheck — each needs a board signal that proves the habit mattered; not
+  built until one is found (empty > generic).
+
 ---
 
 ## PHASE 4 — The loop (the app's definition), still owed
 
 - **Heat map GREEN** is built for tactics; extend `capabilityEvidence` so every
   Phase-2 computer records "posed and answered" as well as "missed".
+  - 🟡 STARTED 2026-09-30: a Learn lane can couple `evidence` (tag + posed
+    importance) at emission; `recordTeachingEvidence` → `recordLaneEvidence`
+    writes one HELD row (origin `learn`, `prompted` honest — a found move after
+    the critical moment was announced counts as neither). Wired: found move →
+    `calculation-depth` (90), a good trade → `bad-trade` (60), a well-timed pawn
+    move → `mistimed-pawn-break` (70). Only HELD: the miss is already recorded
+    by the live slip capture. Gate: `capabilityEvidence.lane.test.ts` (two
+    unprompted finds → GREEN; prompted never). Open: stalemate avoided, check
+    answered without the king, tempo (their half — nothing of the student's to
+    record).
 - **Strength from move one** (gem hit → book departure → cpLoss at decision
   moments) — one detector, two consumers; not wired to the opponent's strength yet.
 - **Fade:** two phrasings per fact kind by heat-map state (#27).

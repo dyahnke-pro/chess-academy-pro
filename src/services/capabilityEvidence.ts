@@ -369,6 +369,43 @@ export async function recordCapabilityEvidence(args: {
 }
 
 /**
+ * ONE held/broken row from a Learn teaching lane (WO-TEACH-GAPS P4: every
+ * computer is dual-use — the lane that TEACHES a found move also RECORDS that
+ * the student found it). The lane computed both halves already: the board posed
+ * the question (it would not speak otherwise) and the student's move answered
+ * it. Writers pass `prompted` honestly; a prompted row counts as neither.
+ */
+export async function recordLaneEvidence(args: {
+  tag: MisconceptionTagId;
+  outcome: CapabilityOutcome;
+  fen: string;
+  playedSan: string;
+  posedImportance: number;
+  origin: CapabilityEvidenceRecord['origin'];
+  prompted: boolean;
+  sourceGameId?: string;
+}): Promise<boolean> {
+  try {
+    await db.capabilityEvidence.add({
+      id: newId(), tag: args.tag, outcome: args.outcome, fen: args.fen, playedSan: args.playedSan,
+      posedImportance: args.posedImportance, recordedAt: Date.now(), origin: args.origin, prompted: args.prompted,
+      ...(args.sourceGameId ? { sourceGameId: args.sourceGameId } : {}),
+    });
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'capabilityEvidence.recordLaneEvidence',
+      summary: `${args.outcome} [${args.tag}] from ${args.origin}${args.prompted ? ' (prompted)' : ''}`,
+      details: JSON.stringify({ origin: args.origin, outcome: args.outcome, tags: [args.tag], prompted: args.prompted }),
+      fen: args.fen,
+    });
+    return true;
+  } catch {
+    return false;   // never break the caller's turn over telemetry
+  }
+}
+
+/**
  * The capability profile. ABSENT means UNKNOWN — the caller must not read a
  * missing tag as either mastery or a hole (absent ≠ silent).
  */

@@ -20,6 +20,18 @@ describe('learnBoardTeaching — every lane reaches the door', () => {
     expect(rx?.event?.name).toBe('coach_rule_exception_named');
   });
 
+  it('the timing of a sound move comes out, and not on a costly one (P3 parity)', () => {
+    const pre = ['e4', 'e6', 'Nc3', 'a6', 'Nf3', 'e5'];
+    const c = new Chess();
+    for (const m of pre) c.move(m);
+    const out = studentMoveTeaching({ ...base, fenBefore: c.fen(), san: 'Nd5', history: [...pre, 'Nd5'] });
+    const t = out.find((h) => h.lane === 'timing');
+    expect(t?.text).toBe('The timing of Nd5 matters — a move earlier, their pawn would have taken on d5 and won your knight.');
+    expect(t?.claims).toEqual(['timing:Nd5']);
+    const bad = studentMoveTeaching({ ...base, cpLoss: 80, fenBefore: c.fen(), san: 'Nd5', history: [...pre, 'Nd5'] });
+    expect(bad.some((h) => h.lane === 'timing')).toBe(false);
+  });
+
   it('king attack comes out, not on a move that cost a pawn', () => {
     const p = (kingFx as { key: string; fen: string; san: string }[]).find((x) => x.key === 'xoS71OW-Re0:21')!;
     const good = studentMoveTeaching({ ...base, fenBefore: p.fen, san: p.san, history: [p.san] });

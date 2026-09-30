@@ -70,7 +70,11 @@ export type LearnLane =
   | 'theirPurpose'
   | 'theirIntent'
   | 'tempo'
-  | 'stalemate';
+  | 'stalemate'
+  | 'timing'
+  | 'checkMethod'
+  | 'trade'
+  | 'kneeJerk';
 
 /** Lanes at or below this lead DESCRIBE the board (commentary, behaviour,
  *  the positional read, structure, piece quality) — the tier the scoreboard
@@ -171,6 +175,14 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   theirIntent: { kind: 'computed', why: "what the opponent's quiet move prepares — engine-proven from their seat", lead: 73 },
   // TEMPO, COUNTED (P2 #7): their piece's third move while the student develops.
   tempo: { kind: 'computed', why: 'their piece keeps moving in the opening while you develop — free moves, counted', lead: 70 },
+  // QUESTION THE KNEE-JERK (P3 method beat): closes the beat after the grade.
+  kneeJerk: { kind: 'computed', why: 'the reflex recapture cost — ask what comes first', lead: 60 },
+  // WAS THE TRADE A GOOD DEAL (P3, T3 #45).
+  trade: { kind: 'computed', why: 'the trade you just made — good or bad deal, and why', lead: 68 },
+  // THREE WAYS TO MEET CHECK (P3 method beat): once per game, before the student moves.
+  checkMethod: { kind: 'computed', why: 'you are in check and the king move is not the best answer — list all three', lead: 78 },
+  // THE TIMING (P3, parity with review): the move is right NOW because of what came first.
+  timing: { kind: 'computed', why: 'why this move works now and did not a move earlier', lead: 69 },
   // STALEMATE WATCH (P2 #9): the one move that throws away a won game.
   stalemate: { kind: 'computed', why: 'you are winning and one of your moves would stalemate them', lead: 81 },
   phase: { kind: 'computed', why: 'the game has changed phase — take stock of what the position is about now', lead: 72 },

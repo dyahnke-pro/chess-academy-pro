@@ -9,6 +9,8 @@
 //
 // Pure: the engine reads are handed in by the page.
 import { Chess } from 'chess.js';
+import type { MisconceptionTagId } from '../data/misconceptionTags';
+import { recordLaneEvidence } from './capabilityEvidence';
 import type { AnalysisLine } from '../types';
 import type { LearnLane } from './learnTurnDoor';
 import type { ArrowClaim } from './arrowDoor';
@@ -22,6 +24,10 @@ import { threatAnswer, type ThreatAnswer } from './threatAnswer';
 import { mastersPlanLine, mastersPlanRead } from './mastersPlanRead';
 import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
 import { tempoCount } from './tempoCount';
+import { readTiming, timingClause } from './moveTiming';
+import { checkMethod } from './checkMethod';
+import { tradeJudgement } from './tradeJudgement';
+import { kneeJerk } from './kneeJerk';
 import { stalemateWatch } from './stalemateWatch';
 import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from './criticalMoment';
 
@@ -37,6 +43,10 @@ export interface TeachingHint {
    *  are validated by the arrow door on the live board and drawn only when the
    *  line survives the turn. */
   arrows: ArrowClaim[];
+  /** DUAL-USE (P4): what this line proves the student CAN do, coupled at
+   *  emission. Only HELD rows — a miss is already recorded by the live slip
+   *  capture, so a broken row here would count it twice. */
+  evidence?: { tag: MisconceptionTagId; posedImportance: number };
 }
 
 /** The board after the student's move and their reply, or null. */
@@ -88,6 +98,36 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
       if (rc) out.push({ lane: 'recapture', text: rc, squares: [to], claims: [`recapture-${to}`], event: null, arrows: [] });
     }
   } catch { /* a bonus, never a blocker */ }
+
+  // QUESTION THE KNEE-JERK (P3 method beat): the reflex recapture that cost.
+  {
+    const theirLast = i.history.length >= 2 ? i.history[i.history.length - 2] : null;
+    const kj = kneeJerk(theirLast, i.san, i.bestSan, i.cpLoss);
+    if (kj) out.push({ lane: 'kneeJerk', text: kj, squares: [to], claims: ['method:knee-jerk'], event: { name: 'coach_knee_jerk_taught', props: { surface: 'coach-teach' } }, arrows: [] });
+  }
+
+  // WAS THE TRADE A GOOD DEAL (P3, T3 #45) — a like-for-like trade the reply
+  // completed, judged by the first reason the board supports.
+  try {
+    const tj = tradeJudgement(i.fenBefore, i.san, i.reply, new Chess(i.fenBefore).turn(), i.cpLoss);
+    if (tj) out.push({ lane: 'trade', text: tj.text, squares: tj.squares, claims: [`trade-${tj.reason}`], event: { name: 'coach_trade_judged', props: { surface: 'coach-teach', reason: tj.reason } }, arrows: [],
+      // A good trade the student chose is the 'bad-trade' question answered well.
+      ...(tj.reason !== 'behind' ? { evidence: { tag: 'bad-trade' as const, posedImportance: 60 } } : {}) });
+  } catch { /* a bonus, never a blocker */ }
+
+  // THE TIMING (capability parity with review, WO-TEACH-GAPS P3): "b4 is
+  // finally right — a move earlier their queen would have taken on b3". Only on
+  // a sound move; the board a move earlier is replayed from the game itself.
+  if (i.cpLoss < 50 && i.history.length >= 3) {
+    try {
+      const early = new Chess();
+      for (const san of i.history.slice(0, -3)) early.move(san);
+      const t = readTiming(early.fen(), i.fenBefore, i.san);
+      if (t) out.push({ lane: 'timing', text: `${timingClause(t)}.`, squares: [to, t.square], claims: [`timing:${i.san}`], event: { name: 'coach_move_timing_named', props: { surface: 'coach-teach' } }, arrows: [],
+        // A pawn push played at the right moment answers the mistimed-break question.
+        ...(/^[a-h]/.test(i.san) ? { evidence: { tag: 'mistimed-pawn-break' as const, posedImportance: 70 } } : {}) });
+    } catch { /* a bonus, never a blocker */ }
+  }
 
   // BRINGING PIECES TO THEIR KING — not on a move that cost a pawn; that
   // move's lesson is the cost.
@@ -205,6 +245,31 @@ export function stalemateTeaching(fen: string, student: 'w' | 'b'): TeachingHint
   };
 }
 
+/** Three ways to meet check (P3 method beat): the student is in check and the
+ *  best answer is not the king move. Names the kinds, never the move. */
+export function checkMethodTeaching(fen: string, student: 'w' | 'b', bestUci: string | null): TeachingHint | null {
+  const m = checkMethod(fen, student, bestUci);
+  if (!m) return null;
+  return {
+    lane: 'checkMethod', text: m.text, squares: m.squares, claims: ['check-method'],
+    event: { name: 'coach_check_method_taught', props: { surface: 'coach-teach', kinds: m.kinds.join(',') } },
+    arrows: [],
+  };
+}
+
+/** Write the line's evidence row, if it carries one (P4 dual-use). The ONE
+ *  impure export here: the page hands every queued hint through it so a lane
+ *  that teaches also records. `prompted` = the student was told the moment
+ *  before they moved (the critical-moment announcement). */
+export function recordTeachingEvidence(h: TeachingHint, ctx: { fen: string; playedSan: string; prompted: boolean; gameId: string | null }): void {
+  if (!h.evidence) return;
+  void recordLaneEvidence({
+    tag: h.evidence.tag, outcome: 'held', fen: ctx.fen, playedSan: ctx.playedSan,
+    posedImportance: h.evidence.posedImportance, origin: 'learn', prompted: ctx.prompted,
+    ...(ctx.gameId ? { sourceGameId: ctx.gameId } : {}),
+  });
+}
+
 /** The answer to a threat the coach just named ("Watch out — their bishop pins
  *  your knight …"): question first, then what the engine's move does about it
  *  (census T4). Appended to the threat line itself, never a lane of its own —
@@ -243,5 +308,7 @@ export function foundMoveTeaching(fenBefore: string, san: string, preLines: read
   if (!preLines || preLines.length < 2) return null;
   const text = criticalMomentFound(readCriticalMoment({ topLines: preLines, moverColor: student, fen: fenBefore }), san);
   if (!text) return null;
-  return { lane: 'foundMove', text, squares: [to], claims: [`found-${san}`], event: { name: 'coach_found_move_named', props: { surface: 'coach-teach' } }, arrows: [] };
+  // A real decision moment (only one or two moves held) answered is calculation
+  // proven — importance 90, above the green bar, because the board posed it.
+  return { lane: 'foundMove', text, squares: [to], claims: [`found-${san}`], event: { name: 'coach_found_move_named', props: { surface: 'coach-teach' } }, arrows: [], evidence: { tag: 'calculation-depth', posedImportance: 90 } };
 }

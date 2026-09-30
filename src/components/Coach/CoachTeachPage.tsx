@@ -30,7 +30,7 @@ import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePacka
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { foundMoveTeaching, openingPlanTeaching, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
+import { checkMethodTeaching, foundMoveTeaching, openingPlanTeaching, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -8934,6 +8934,14 @@ export function CoachTeachPage(): JSX.Element {
                 studentBestReadRef.current = studentBest
                   ? { fen: probe.fen(), bestUci: studentBest.bestMove || null, whiteCp: studentBest.isMate ? null : studentBest.evaluation }
                   : null;
+                // THREE WAYS TO MEET CHECK (WO-TEACH-GAPS P3) — before the student moves.
+                try {
+                  const cm = checkMethodTeaching(probe.fen(), playerColor === 'white' ? 'w' : 'b', studentBest?.bestMove || null);
+                  if (cm) {
+                    queueSpokenHint(probe.fen(), cm.text, cm.lane, cm.squares, cm.claims);
+                    if (cm.event) captureEvent(cm.event.name, cm.event.props);
+                  }
+                } catch { /* a bonus, never a blocker */ }
                 // ONE tactical read per turn — the seductive-but-wrong move (the
                 // BUT-TURN, Naroditsky's #1 device) and the honest hedge (a close
                 // second-best), read straight off the MultiPV the turn ALREADY
@@ -9864,6 +9872,8 @@ export function CoachTeachPage(): JSX.Element {
                     })) {
                       queueSpokenHint(fenAfterReply, h.text, h.lane, h.squares, h.claims, undefined, h.arrows);
                       if (h.event) captureEvent(h.event.name, h.event.props);
+                      // DUAL-USE (P4): the lane that teaches it also records it.
+                      recordTeachingEvidence(h, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
                     }
                     const look = backwardLook({
                       fenBefore,
@@ -10041,7 +10051,12 @@ export function CoachTeachPage(): JSX.Element {
                       // the others failed. The fact is the verdict; no praise word.
                       try {
                         const found = foundMoveTeaching(fenBefore, move.san, preStudentRead?.topLines, playerColor === 'white' ? 'w' : 'b', move.to);
-                        if (found) queueSpokenHint(fenAfterReply, found.text, found.lane, found.squares, found.claims, fenBefore);
+                        if (found) {
+                          queueSpokenHint(fenAfterReply, found.text, found.lane, found.squares, found.claims, fenBefore);
+                          // DUAL-USE (P4): a found only-move is calculation proven — unless
+                          // the coach had just announced the critical moment (prompted).
+                          recordTeachingEvidence(found, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
+                        }
                       } catch { /* the verdict is a bonus, never a blocker */ }
                       if (gambitLine) queueSpokenHint(fenAfterReply, gambitLine, 'movePoint', []);
                       const point = gambitLine ? null : studentMovePoint(fenBefore, move.san, move.history.length >= 2 ? move.history[move.history.length - 2] : null);
