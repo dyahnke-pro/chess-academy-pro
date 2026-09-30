@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**432 lines · 9 exports · 8 importers · 7 tests · 0 audits**
+**441 lines · 9 exports · 8 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -37,7 +37,7 @@
 - `src/services/liveVoiceDefects.test.ts:221`
 - `src/services/liveVoiceDefects.test.ts:222`
 
-### `beatRegister` (function) — 10 call sites
+### `beatRegister` (function) — 13 call sites
 - `src/services/curatedBeatRegister.test.ts:19`
 - `src/services/curatedBeatRegister.test.ts:23`
 - `src/services/curatedBeatRegister.test.ts:27`
@@ -47,6 +47,9 @@
 - `src/services/curatedBeatRegister.test.ts:48`
 - `src/services/curatedBeatRegister.test.ts:68`
 - `src/services/curatedBeatRegister.test.ts:109`
+- `src/services/curatedBeatRegister.test.ts:122`
+- `src/services/curatedBeatRegister.test.ts:123`
+- `src/services/curatedBeatRegister.test.ts:124`
 - `src/services/voicedCorpusRegister.measure.test.ts:58`
 
 ### `CuratedBeat` (interface) — 0 call sites

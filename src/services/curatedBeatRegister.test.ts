@@ -116,3 +116,11 @@ describe('the census, so the owed bake has a number', () => {
     console.log(`[curated-beat register] ${safe}/${deep} live-safe (${(safe / deep * 100).toFixed(1)}%) — ${deep - safe} owed a live rendering`);
   });
 });
+
+describe('a move-list recap and a corpus score are Watch-only (run F walk 2026-09-30)', () => {
+  it('both stay off the live board', () => {
+    expect(beatRegister('d4 / …cxd4 / cxd4 / …d5 / exd5 / …Qxd5 — the same simplification by another order.', 'white')).toBe('spectator');
+    expect(beatRegister('The queen looks active. Black scored only 33.7% against them in this line.', 'white')).toBe('spectator');
+    expect(beatRegister('The knight heads for d5, where no pawn can chase it.', 'white')).toBe('live-safe');
+  });
+});

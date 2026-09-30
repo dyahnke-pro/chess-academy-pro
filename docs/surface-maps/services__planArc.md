@@ -29,7 +29,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `aimsOf` (function) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9374`
 - `src/components/Coach/CoachTeachPage.tsx:9378`
-- `src/services/lookaheadPlan.ts:1411`
+- `src/services/lookaheadPlan.ts:1409`
 - `src/services/planArc.test.ts:29`
 
 ### `ArcState` (interface) — 0 call sites
@@ -47,7 +47,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `stepArc` (function) — 20 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9374`
 - `src/components/Coach/CoachTeachPage.tsx:9378`
-- `src/services/lookaheadPlan.ts:1411`
+- `src/services/lookaheadPlan.ts:1409`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.test.ts:94`
 - `src/services/planArc.test.ts:96`

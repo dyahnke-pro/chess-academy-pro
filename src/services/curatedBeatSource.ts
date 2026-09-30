@@ -132,8 +132,17 @@ export function beatSubject(say: string, moves: readonly string[]): string | nul
   return moves.some((mv) => bare(mv) === lead) ? lead : null;
 }
 
+// A MOVE-LIST RECAP ("d4 / …cxd4 / cxd4 / …d5") replays moves already on the
+// board — Watch shows it move by move; on a live board it restates what the
+// student just played and is read aloud as "slash" (run F walk 2026-09-30).
+const MOVE_LIST = /(?:^|\s)…?(?:O-O(?:-O)?|[NBRQK]?[a-h]?[1-8]?x?[a-h][1-8])[+#]? \/ …?(?:O-O(?:-O)?|[NBRQK]?[a-h]?[1-8]?x?[a-h][1-8])/;
+// A SCORE FROM THE DATABASE ("Black scored only 33.7% against them") cites the
+// lesson's game corpus — Watch's spine, not a fact about this board.
+const CORPUS_SCORE = /\bscor(?:ed|es|ing)\b[^.]*\d+(?:\.\d+)?%/i;
+
 export function beatRegister(say: string, seat: 'white' | 'black'): BeatRegister {
   if (THEATRE.test(say)) return 'spectator';
+  if (MOVE_LIST.test(say) || CORPUS_SCORE.test(say)) return 'spectator';
   // The student's OWN side named as an actor. The beat's seat IS the student's
   // seat by the time it is a candidate (the seat guard below), so this is the
   // student being talked ABOUT rather than TO.

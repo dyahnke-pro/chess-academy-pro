@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1422 lines · 24 exports · 12 importers · 8 tests · 0 audits**
+**1420 lines · 24 exports · 12 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -63,11 +63,12 @@
 - `src/services/tacticVocabulary.ts:95`
 - `src/services/teachingSelector.ts:347`
 
-### `seatedTacticLine` (function) — 4 call sites
+### `seatedTacticLine` (function) — 5 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7774`
-- `src/services/seatedTacticLine.test.ts:7`
-- `src/services/seatedTacticLine.test.ts:11`
-- `src/services/seatedTacticLine.test.ts:15`
+- `src/services/seatedTacticLine.test.ts:8`
+- `src/services/seatedTacticLine.test.ts:13`
+- `src/services/seatedTacticLine.test.ts:19`
+- `src/services/seatedTacticLine.test.ts:23`
 
 ### `PLAN_HORIZON` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

@@ -81,7 +81,7 @@ function checkSentence(s, ctx) {
   const who = (w) => (/^(your|you)$/i.test(w) ? me : /^(their|they|my)$/i.test(w) ? them : null);
   // A sentence about a FUTURE board ("After X, Y, …", "if …", "would") is about
   // a line, not this position: only its moves' legality is checked.
-  const future = /^(After |If |Then |Once )/.test(s) || /was waiting deeper|deeper in the line/.test(s);
+  const future = /^(After |If |Then |Once )/.test(s) || /was waiting deeper|deeper in the line|\bonce you\b/.test(s);
 
   if (!future) {
     for (const m of s.matchAll(/\b(your|their)\s+(pawn|knight|bishop|rook|queen|king)\s+on\s+([a-h][1-8])/gi)) {

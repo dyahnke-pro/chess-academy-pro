@@ -1107,10 +1107,11 @@
 - `src/services/coachApi.ts:2361`
 - `src/services/coachApi.ts:5810`
 
-### `seatPieceReferences` (re-export) — 25 call sites
+### `seatPieceReferences` (re-export) — 26 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7825`
 - `src/services/coachFeatureService.ts:4803`
 - `src/services/liveTacticsContext.ts:453`
+- `src/services/lookaheadPlan.ts:116`
 - `src/services/reviewBoardAwareness.test.ts:70`
 - `src/services/reviewBoardAwareness.test.ts:74`
 - `src/services/reviewBoardAwareness.test.ts:78`

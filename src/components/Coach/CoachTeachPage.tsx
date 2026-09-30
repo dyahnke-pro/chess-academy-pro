@@ -7771,7 +7771,7 @@ export function CoachTeachPage(): JSX.Element {
           tacticLine = word
             // NAMED from the detector's own description (Learn names the
             // move; "have a look" withheld it — walk 1500, 21.Rab1/38.Ne3).
-            ? withTransfer(t.description ? seatedTacticLine(word, t.description) : `You have a ${word}: on ${t.squares.join(', ')}.`, transferClause(t.type, instance, moveNo, learnMemRef.current.motifFirstMove))
+            ? withTransfer(t.description ? seatedTacticLine(word, t.description, args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b') : `You have a ${word}: on ${t.squares.join(', ')}.`, transferClause(t.type, instance, moveNo, learnMemRef.current.motifFirstMove))
             : null;
           if (word) { pendingMotif = { type: t.type, instance, moveNo }; tacticTailType = t.type; }
           myTacticType = word ? t.type : null;
