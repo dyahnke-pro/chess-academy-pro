@@ -67,8 +67,12 @@ function engineAt(g, fen) {
   const c = board(fen);
   return p.lines.map((l) => {
     let san = null; try { san = c ? new Chess(fen).move({ from: l.pv[0].slice(0, 2), to: l.pv[0].slice(2, 4), promotion: l.pv[0][4] }).san : null; } catch { /* */ }
-    return { san, cp: l.mate !== null && l.mate !== undefined ? (l.mate > 0 ? 10000 - l.mate : -10000 - l.mate) : l.cp };
-  });
+    const white = l.mate !== null && l.mate !== undefined ? (l.mate > 0 ? 10000 - l.mate : -10000 - l.mate) : l.cp;
+    // STORED SCORES ARE WHITE'S POINT OF VIEW (verified 2026-09-30 by six
+    // independent readers). Before this conversion, every engine claim on a
+    // Black-to-move board passed: best − hit went negative, always ≤ 60.
+    return { san, cp: fen.split(' ')[1] === 'b' ? -white : white };
+  }).sort((a, b) => b.cp - a.cp);
 }
 const stripSan = (s) => s.replace(/^…|^\.\.\./, '').replace(/[+#!?]+$/, '');
 
@@ -220,6 +224,81 @@ function checkSentence(s, ctx) {
     if (/\bCastle and the king steps off it/.test(s)) {
       const b = board(withTurn(ctx.fenAfter, me));
       res.push([!!b && b.moves().some((x) => x.startsWith('O-O')), 'castling not legal']);
+    }
+  }
+
+  // ── 2026-09-30 manual-check classes (WO-TEACH-GAPS P0.2) ──
+  if (!future) {
+    const ownPawnOnFile = (b, col, f) => { for (let r = 1; r <= 8; r++) { const p = b.get(`${f}${r}`); if (p?.type === 'p' && p.color === col) return true; } return false; };
+    // "Their plan is taking shape: the c-file" — the side's own pawn is off it.
+    for (const m of s.matchAll(/(Their|Your) plan is taking shape: the ([a-h])-file|(?:what they are after|Here is what they are after): the ([a-h])-file/g)) {
+      const col = m[1] ? who(m[1]) : them; const f = m[2] ?? m[3];
+      res.push([boards.some((b) => !ownPawnOnFile(b, col, f)), `${m[1] ?? 'their'} own pawn stands on the ${f}-file`]);
+    }
+    // "It's a step toward the c-file" — the moved piece is a rook or queen.
+    for (const m of s.matchAll(/(?:a step|another step) toward the ([a-h])-file/g)) {
+      const mv = ctx.g.plies[ctx.i]?.san ?? '';
+      const theirMv = ctx.g.plies[ctx.i + 1]?.san ?? '';
+      res.push([/^[RQ]/.test(stripSan(mv)) || /^[RQ]/.test(stripSan(theirMv)), `the move toward the ${m[1]}-file was not a rook or queen`]);
+    }
+    // "The point of X: it takes Y away" / "X — now Y doesn't work" / "X stops Y":
+    // Y must be illegal, or lose material, or rank well below their best.
+    for (const m of s.matchAll(/(?:it takes (…?[NBRQK]?[a-h]?x?[a-h][1-8]\S*) away|stops (?:your )?(…?[NBRQK]?[a-h]?x?[a-h][1-8]\S*))/g)) {
+      const san = stripSan(m[1] ?? m[2]);
+      const fen = /^Their /.test(s) ? ctx.fenAfter : ctx.fenMid;
+      const side = /^Their /.test(s) ? me : them;
+      const b = board(withTurn(fen, side)); if (!b) continue;
+      let mv = null; try { mv = b.move(san); } catch { mv = null; }
+      if (!mv) { res.push([true, '']); continue; }
+      const loses = see(b.fen(), mv.to, side === 'w' ? 'b' : 'w') > (mv.captured ? VAL[mv.captured] : 0);
+      const lines = engineAt(ctx.g, withTurn(fen, side)) ?? engineAt(ctx.g, fen);
+      const hit = lines?.find((l) => l.san && stripSan(l.san) === san);
+      const fine = !loses && hit && lines && lines[0].cp - hit.cp < 60;
+      res.push([!fine, `${san} is still fine after it (legal, safe${hit ? `, ${lines[0].cp - hit.cp}cp off best` : ''})`]);
+    }
+    // "Can you take the X on sq? No — it's bait: A runs into B" — the best move
+    // does not itself capture on sq.
+    for (const m of s.matchAll(/Can you take the \w+ on ([a-h][1-8])\? .*?No — it's bait/g)) {
+      const lines = engineAt(ctx.g, ctx.fenAfter);
+      if (!lines?.[0]?.san) continue;
+      const best = board(ctx.fenAfter)?.moves({ verbose: true }).find((x) => x.san === lines[0].san);
+      res.push([!(best && best.to === m[1] && best.captured), `the best move ${lines[0].san} takes on ${m[1]} itself`]);
+    }
+    // "The bishop on f6 hangs after this" — net of what the move captured.
+    for (const m of s.matchAll(/The (\w+) on ([a-h][1-8]) hangs after this/g)) {
+      const mv = board(ctx.fenBefore)?.moves({ verbose: true }).find((x) => x.san === stripSan(ctx.g.plies[ctx.i]?.san ?? ''));
+      const took = mv?.captured && mv.to === m[2] ? VAL[mv.captured] : 0;
+      res.push([see(ctx.fenMid, m[2], them) - took >= 2, `${m[2]} was a trade, not a hanging piece`]);
+    }
+    // "N challenges it" — the challenger is not taken by a cheaper piece.
+    for (const m of s.matchAll(/— (…?[NBRQ][a-h]?[1-8]?[a-h][1-8]) challenges it/g)) {
+      const c = board(withTurn(ctx.fenAfter, me)); let ok = false;
+      try { const mv = c.move(stripSan(m[1])); const cheap = attackers(c, mv.to, them).map((sq) => VAL[c.get(sq).type]); ok = !cheap.some((v) => v < VAL[mv.piece]); } catch { ok = false; }
+      res.push([ok, `${m[1]} is simply taken by a cheaper piece`]);
+    }
+    // "Your king's cover is thin — N of the pawns in front of it are gone"
+    for (const m of s.matchAll(/king's cover is thin — (\d|all three) of the pawns/g)) {
+      const want = m[1] === 'all three' ? 3 : Number(m[1]);
+      const b = boards[0]; const k = b.board().flat().find((x) => x && x.type === 'k' && x.color === me);
+      if (!k) continue;
+      const f = FILES.indexOf(k.square[0]); const shelterRank = me === 'w' ? 2 : 7; const step = me === 'w' ? 1 : -1;
+      let gone = 0;
+      for (const df of [-1, 0, 1]) { const nf = f + df; if (nf < 0 || nf > 7) continue; const a = `${FILES[nf]}${shelterRank}`; const z = `${FILES[nf]}${shelterRank + step}`; const own = (sq) => { const p = b.get(sq); return p?.type === 'p' && p.color === me; }; if (!own(a) && !own(z)) gone++; }
+      res.push([gone === want, `${gone} shield pawns gone, not ${want}`]);
+    }
+    // "c5 is a weak pawn now" — isolated or backward on the board after the reply.
+    for (const m of s.matchAll(/([a-h][1-8]) is a weak pawn now|no pawn beside ([a-h][1-8]) can defend it|the pawn on ([a-h][1-8]) is now a weakness/g)) {
+      const sq = m[1] ?? m[2] ?? m[3]; const b = board(ctx.fenAfter); const p = b?.get(sq);
+      if (!p || p.type !== 'p') { res.push([false, `no pawn on ${sq}`]); continue; }
+      const f = FILES.indexOf(sq[0]); const neighbours = b.board().flat().filter((x) => x && x.type === 'p' && x.color === p.color && Math.abs(FILES.indexOf(x.square[0]) - f) === 1);
+      const dir = p.color === 'w' ? 1 : -1;
+      const backward = !neighbours.some((q) => (Number(sq[1]) - Number(q.square[1])) * dir >= 0);
+      res.push([neighbours.length === 0 || backward, `${sq} has a pawn beside or behind it`]);
+    }
+    // "the tactics have settled" / "it is a quiet game now" — no capture wins by exchange.
+    if (/tactics have settled|quiet game now/.test(s)) {
+      const wins2 = (fen, by) => { const b = board(fen); return !!b && b.board().flat().some((x) => x && x.color !== by && x.type !== 'k' && see(fen, x.square, by) > 0); };
+      res.push([![ctx.fenAfter].some((fen) => wins2(fen, me) || wins2(fen, them)), 'material is still loose on the board']);
     }
   }
 

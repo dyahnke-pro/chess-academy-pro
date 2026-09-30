@@ -7,6 +7,7 @@
 // Pure: for the student's recapture on square S, every legal recapture on S is
 // read for the same board facts, and the played one is compared with the
 // strongest alternative. Only a DIFFERENCE between the two is spoken.
+import { CAPTURE_VALUE } from './pieceValues';
 import { Chess, type Move, type Square } from 'chess.js';
 import { rookReachesFile } from './positionalRead';
 
@@ -19,7 +20,6 @@ export interface RecaptureFacts {
 }
 
 const CENTRE_DIST = (file: string): number => Math.abs(file.charCodeAt(0) - 100.5); // d/e = 0.5
-const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
 function pawnsOnFile(c: Chess, file: string, color: 'w' | 'b'): number {
@@ -76,9 +76,9 @@ export function readRecapture(fenBefore: string, m: Move, me: 'w' | 'b', theirRe
     // it" — Nc6 simply takes it). Taken by something cheaper, or taken with
     // nothing to take back, is the whole reason.
     const takers = after.moves({ verbose: true }).filter((x) => x.to === m.to && x.captured);
-    const cheapest = takers.sort((a, b) => (VALUE[a.piece] ?? 99) - (VALUE[b.piece] ?? 99))[0];
+    const cheapest = takers.sort((a, b) => (CAPTURE_VALUE[a.piece] ?? 99) - (CAPTURE_VALUE[b.piece] ?? 99))[0];
     const guarded = after.attackers(m.to, me).length > 0;
-    if (cheapest && ((VALUE[cheapest.piece] ?? 99) < (VALUE[m.piece] ?? 0) || !guarded)) {
+    if (cheapest && ((CAPTURE_VALUE[cheapest.piece] ?? 99) < (CAPTURE_VALUE[m.piece] ?? 0) || !guarded)) {
       minus.push(`would just lose the ${PIECE[m.piece]} to ${cheapest.san}`);
     } else if (m.piece === 'q') {
       // Not the move they actually played: it hit whatever took back (the
