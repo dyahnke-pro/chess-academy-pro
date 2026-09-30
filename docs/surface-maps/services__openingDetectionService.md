@@ -108,8 +108,8 @@
 - `src/services/coachApi.ts:5395`
 - `src/services/coachApi.ts:6300`
 - `src/services/reviewGameAdapter.ts:170`
-- `src/services/reviewOpeningTheory.ts:270`
-- `src/services/reviewOpeningTheory.ts:271`
+- `src/services/reviewOpeningTheory.ts:308`
+- `src/services/reviewOpeningTheory.ts:309`
 
 ### `isStillInOpening` (function) — 3 call sites
 - `src/services/openingDetectionService.test.ts:71`

@@ -56,6 +56,9 @@ import { selectTeachingForSegments, renderThesis } from '../../services/teaching
 import { registerFor } from '../../coach/surfaceContract';
 import { buildOpeningTheoryLecture, buildTheoryLectureBeats, resolveOpeningIdeas, enrichLectureWithEngine, type TheoryLectureBeat, type ExploreLine } from '../../services/reviewOpeningTheory';
 import { reviewTheoryLookup } from '../../services/reviewOpeningsSource';
+import { warmGemIndexes } from '../../services/gemCrushLines';
+import { sanToSpeech } from '../../utils/sanToSpeech';
+import { warmOpeningIdentity } from '../../services/openingIdentity';
 import { captureEvent } from '../../services/analytics';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import {
@@ -2039,16 +2042,21 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           if (stepWhy) {
             setTheoryCaption(`${step.san} — ${stepWhy}`);
             const stepStart = performance.now();
-            // The why for THIS step, judged on the board the step produced.
-            try { await voiceService.speakPackage(buildVoicePackage([{ kind: 'computed', text: stepWhy, fen: step.fenAfter }])); } catch { /* voice off */ }
+            // THE MOVE IS SAID, then its why (Danya walks theory out loud:
+            // "bishop b5, a6, bishop a4…"), judged on the board it produced.
+            try { await voiceService.speakPackage(buildVoicePackage([{ kind: 'computed', text: `${sanToSpeech(step.san)}. ${stepWhy}`, fen: step.fenAfter }])); } catch { /* voice off */ }
             await waitIdle();
             const stepElapsed = performance.now() - stepStart;
             const stepDwell = Math.min(4000, 1000 + stepWhy.length * 22);
             if (stepElapsed < stepDwell) await new Promise((r) => setTimeout(r, stepDwell - stepElapsed));
           } else {
-            // A quiet step with no computed point still needs absorb time.
+            // A quiet step with no computed point: the move is still said.
             setTheoryCaption(step.san);
-            await new Promise((r) => setTimeout(r, 1400));
+            const stepStart = performance.now();
+            try { await voiceService.speakPackage(buildVoicePackage([{ kind: 'computed', text: `${sanToSpeech(step.san)}.`, fen: step.fenAfter }])); } catch { /* voice off */ }
+            await waitIdle();
+            const left = 1400 - (performance.now() - stepStart);
+            if (left > 0) await new Promise((r) => setTimeout(r, left));
           }
         }
         await new Promise((r) => setTimeout(r, 400));
@@ -2882,7 +2890,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const sans = moves.map((m) => m.san);
     let cancelled = false;
     const t = window.setTimeout(() => {
-      void buildOpeningTheoryLecture(reviewFens, sans, openingName ?? 'this opening', { lookup: reviewTheoryLookup })
+      warmGemIndexes();
+      warmOpeningIdentity();
+      // The review's own engine read of each game ply, so the lecture can judge
+      // the departure (its cost, the line that punishes it) without a new search.
+      const gameReads = moves.map((m, idx) => {
+        if (typeof m.preMoveEval !== 'number' || typeof m.evaluation !== 'number') return null;
+        const moverWhite = reviewFens[idx]?.split(' ')[1] !== 'b';
+        return { cpLoss: Math.max(0, (m.preMoveEval - m.evaluation) * (moverWhite ? 1 : -1)), replyLineUci: m.pv?.afterPlayed ?? [] };
+      });
+      void buildOpeningTheoryLecture(reviewFens, sans, openingName ?? 'this opening', { lookup: reviewTheoryLookup, gameReads })
         .then((lec) => {
           if (cancelled || !lec) return;
           // Phase 1: show the DB-built lecture immediately (button appears fast).

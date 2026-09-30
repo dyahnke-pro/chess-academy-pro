@@ -150,7 +150,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
 - `src/components/Coach/CoachGamePage.tsx:2100`
-- `src/components/Coach/CoachGameReview.tsx:366`
+- `src/components/Coach/CoachGameReview.tsx:369`
 - `src/services/gameAnalysisService.ts:2086`
 - `src/services/mistakePuzzleService.test.ts:109`
 - `src/services/mistakePuzzleService.test.ts:163`

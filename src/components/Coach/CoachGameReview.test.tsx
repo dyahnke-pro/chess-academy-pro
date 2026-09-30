@@ -360,11 +360,14 @@ let CoachGameReviewComponent: typeof import('./CoachGameReview').CoachGameReview
 // ─── Tests ──────────────────────────────────────────────────────────────────
 
 describe('CoachGameReview', () => {
+  // The first call cold-imports the whole review component (its service graph
+  // is large); on a loaded machine that alone passes 10s. The hook only
+  // imports — a generous ceiling here hides nothing the tests assert.
   beforeEach(async () => {
     vi.clearAllMocks();
     const mod = await import('./CoachGameReview');
     CoachGameReviewComponent = mod.CoachGameReview;
-  });
+  }, 60_000);
 
   it('renders empty state when no moves', () => {
     renderReview({ moves: [] });

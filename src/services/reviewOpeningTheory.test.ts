@@ -324,3 +324,48 @@ describe('tabiya walk — sidelines get NARRATED dives + computed pros/cons (Dav
     expect(sideBeat!.fact).toMatch(/walk down/i);
   });
 });
+
+describe('the departure judged — cost and the punishing line (Danya reviews, 2026-09-30)', () => {
+  const { fens, sans } = chain(['e4', 'e5', 'Nf3', 'f6']);
+  const lookup = async (fen: string): Promise<MasterPlayResult> => {
+    if (fen.startsWith('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')) return res(fen, [mv('e4', 600), mv('d4', 400)]);
+    if (fen.startsWith('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b')) return res(fen, [mv('e5', 500), mv('c5', 500)]);
+    if (fen.startsWith('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w')) return res(fen, [mv('Nf3', 700), mv('Nc3', 200)]);
+    if (fen.startsWith('rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b')) return res(fen, [mv('Nc6', 700), mv('d6', 200)]);
+    return res(fen, []);
+  };
+  const departure = async (read: { cpLoss: number; replyLineUci: string[] }): Promise<string> => {
+    const lec = await buildOpeningTheoryLecture(fens, sans, 'Damiano Defense', { lookup, gameReads: [null, null, null, read] });
+    return buildTheoryLectureBeats(lec!, [], 'white').find((b) => b.kind === 'departure')?.fact ?? '';
+  };
+  it('a departure that drops material plays the refutation to its last capture', async () => {
+    const f = await departure({ cpLoss: 120, replyLineUci: ['f3e5', 'f6e5', 'd1h5', 'g7g6', 'h5e5', 'd8e7', 'e5h8'] });
+    expect(f).toMatch(/The engine punishes f6: Nxe5 …fxe5 Qh5\+ …g6 Qxe5\+ …Qe7 Qxh8 — you come out [^.]+ up\./);
+  });
+  it('a costly departure without a forced win says what it costs', async () => {
+    expect(await departure({ cpLoss: 45, replyLineUci: [] })).toContain('By the engine\'s count f6 costs about half a pawn.');
+  });
+  it('a cheap departure is called playable', async () => {
+    expect(await departure({ cpLoss: 10, replyLineUci: [] })).toContain('f6 is perfectly playable — the engine barely minds');
+  });
+});
+
+describe('a known trap on the walked line is named with its punishment', () => {
+  it('Caro-Kann: after …dxe4 the natural f3 is the trap', async () => {
+    const { warmGemIndexes, trapAheadAt } = await import('./gemCrushLines');
+    const line = ['e4', 'c6', 'd4', 'd5', 'Nc3', 'dxe4', 'Nxe4'];
+    const { fens, sans } = chain(line);
+    warmGemIndexes();
+    for (let i = 0; i < 200 && !trapAheadAt(fens[6]); i++) await new Promise((r) => setTimeout(r, 25));
+    const lookup = async (fen: string): Promise<MasterPlayResult> => {
+      const i = fens.indexOf(fen);
+      if (i < 0 || i >= line.length) return res(fen, []);
+      return res(fen, [mv(line[i], 550), mv(i === 6 ? 'f3' : 'a3', 450)]);
+    };
+    const lec = await buildOpeningTheoryLecture(fens, sans, 'no-name', { lookup });
+    const beats = buildTheoryLectureBeats(lec!, [], 'white');
+    const hit = beats.find((b) => /A trap to know here/.test(b.fact));
+    expect(hit?.fact).toMatch(/A trap to know here: the natural f3, which \d+% of club players choose, (loses|runs into)/);
+    expect(beats.filter((b) => /A trap to know here/.test(b.fact))).toHaveLength(1);
+  });
+});
