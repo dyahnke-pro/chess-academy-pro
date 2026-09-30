@@ -242,8 +242,21 @@ export function pieceQualityLines(
   },
 ): PieceQualityLine[] {
   const out: PieceQualityLine[] = [];
-  if (values.length === 0) return out;
   const me: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+  // THE TABLE MUST DESCRIBE THIS BOARD (manual claim check 2026-09-30, item
+  // 195: "the bishop on e6" with e6 empty). The engine's `eval` answer is
+  // async and can belong to an earlier position; an entry whose square does
+  // not hold that piece now is dropped, never spoken.
+  if (opts?.fen) {
+    try {
+      const board = new Chess(opts.fen);
+      values = values.filter((v) => {
+        const cell = board.get(v.square as Square);
+        return !!cell && cell.color === v.color && cell.type === v.piece.toLowerCase();
+      });
+    } catch { /* unreadable board: keep the table as read */ }
+  }
+  if (values.length === 0) return out;
 
   // Contribution is printed white-positive; each side's own good is the
   // magnitude in their direction.
@@ -385,6 +398,10 @@ function challengeMove(fen: string | undefined, square: string, me: 'w' | 'b'): 
       after.move(m.san);
       if (!after.attackers(square as Square, me).includes(m.to)) continue;
       if (after.attackers(m.to, them).length > after.attackers(m.to, me).length) continue;
+      // A challenger a cheaper piece simply takes is not a challenge (manual
+      // claim check 2026-09-30, item 136: "Nd5 challenges it" — …exd5).
+      const cheapest = Math.min(...after.attackers(m.to, them).map((sq) => CAPTURE_VALUE[after.get(sq)?.type ?? 'k'] ?? 99));
+      if (cheapest < (CAPTURE_VALUE[m.piece] ?? 0)) continue;
       return { san: m.san, from: m.from, to: m.to };
     }
   } catch { /* none */ }

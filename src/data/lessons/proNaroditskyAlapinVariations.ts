@@ -62,7 +62,7 @@ const D5_OPEN: LessonScript = {
       moves: 'e4 c5 c3 d5 exd5 Qxd5',
       arrows: [{ from: 'e4', to: 'd5', color: ATK }],
       highlights: [{ square: 'd5', color: KEY }],
-      say: "exd5 Qxd5 — forced sequence. The queen on d5 looks active but it's exposed to a tempo-gaining Nc3 once you develop. Black scored only 33.7% AGAINST them in this line — the queen-out simplification doesn't equalise as cleanly as it looks.",
+      say: "exd5 Qxd5 — the main recapture. The queen on d5 looks active, but out this early it becomes a target your developing moves can hit with tempo. Black scored only 33.7% AGAINST them in this line — the queen-out simplification doesn't equalise as cleanly as it looks.",
       sayShort: 'exd5 — queen comes to d5, exposed.',
     }),
     b({

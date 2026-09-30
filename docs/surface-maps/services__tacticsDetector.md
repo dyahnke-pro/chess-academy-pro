@@ -82,7 +82,7 @@
 - `src/services/pinGeometry.test.ts:134`
 - `src/services/pinGeometry.test.ts:141`
 - `src/services/pinGeometry.test.ts:142`
-- `src/services/playCommentary.ts:773`
+- `src/services/playCommentary.ts:781`
 - `src/services/pvPlayback.ts:319`
 - `src/services/pvPlayback.ts:339`
 - `src/services/relationClaimCost.report.test.ts:52`

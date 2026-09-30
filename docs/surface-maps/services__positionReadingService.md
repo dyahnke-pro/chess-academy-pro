@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2565 lines · 78 exports · 64 importers · 19 tests · 2 audits**
+**2569 lines · 78 exports · 64 importers · 20 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -119,8 +119,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `legalSeeGainOn` (function) — 10 call sites
 - `src/services/coachFeatureService.ts:2431`
 - `src/services/groundedAnswer.ts:6685`
-- `src/services/moveIntent.ts:292`
-- `src/services/moveIntent.ts:465`
+- `src/services/moveIntent.ts:299`
+- `src/services/moveIntent.ts:481`
 - `src/services/opponentMovePurpose.ts:33`
 - `src/services/reviewTeachingPoints.ts:99`
 - `src/services/reviewTeachingPoints.ts:135`
@@ -141,7 +141,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/latentFork.ts:149`
 - `src/services/latentFork.ts:220`
 - `src/services/moveFundamentals.ts:312`
-- `src/services/moveFundamentals.ts:1261`
+- `src/services/moveFundamentals.ts:1263`
 
 ### `legalSeeGainFor` (function) — 35 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7915`
@@ -167,12 +167,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:6966`
 - `src/services/groundedAnswer.ts:7017`
 - `src/services/learnTurnDoor.test.ts:238`
-- `src/services/moveIntent.ts:361`
+- `src/services/moveIntent.ts:368`
 - `src/services/moveOrder.ts:113`
 - `src/services/moveTiming.ts:51`
 - `src/services/nextPlans.ts:46`
 - `src/services/perturbation.ts:69`
-- `src/services/playCommentary.ts:970`
+- `src/services/playCommentary.ts:978`
 - `src/services/pvPlayback.ts:203`
 - `src/services/pvPlayback.ts:207`
 - `src/services/ruleException.ts:53`
@@ -183,8 +183,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `signedLegalSeeFor` (function) — 9 call sites
 - `src/components/Coach/CoachTeachPage.tsx:827`
 - `src/components/Coach/CoachTeachPage.tsx:7796`
-- `src/components/Coach/CoachTeachPage.tsx:10029`
-- `src/components/Coach/CoachTeachPage.tsx:10073`
+- `src/components/Coach/CoachTeachPage.tsx:10035`
+- `src/components/Coach/CoachTeachPage.tsx:10079`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
@@ -260,7 +260,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `bishopHemmedByOwnPawns` (function) — 3 call sites
 - `src/services/positionReadingService.test.ts:902`
-- `src/services/principleAttribution.ts:975`
+- `src/services/principleAttribution.ts:980`
 - `src/services/reviewTeachingPoints.ts:202`
 
 ### `findPieceQuality` (function) — 29 call sites
@@ -270,7 +270,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/danyaBehaviors.ts:206`
 - `src/services/danyaBehaviors.ts:522`
 - `src/services/groundedAnswer.ts:6339`
-- `src/services/pieceValueRead.ts:471`
+- `src/services/pieceValueRead.ts:488`
 - `src/services/positionReadingService.test.ts:106`
 - `src/services/positionReadingService.test.ts:114`
 - `src/services/positionReadingService.test.ts:121`
@@ -379,8 +379,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:128`
 - `src/services/positionalTruth.corpus.test.ts:130`
 
-### `namedPawnStructure` (function) — 20 call sites
+### `namedPawnStructure` (function) — 22 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9087`
+- `src/services/claimTruth.manual.test.ts:64`
+- `src/services/claimTruth.manual.test.ts:66`
 - `src/services/danyaBehaviors.ts:372`
 - `src/services/danyaDeviceCoverage.test.ts:107`
 - `src/services/danyaDeviceCoverage.test.ts:108`
@@ -711,6 +713,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
+- `src/services/claimTruth.manual.test.ts`
 - `src/services/coachSurfaceScorecard.report.test.ts`
 - `src/services/computedMaterialTruth.corpus.test.ts`
 - `src/services/computedTruth.fuzz.test.ts`

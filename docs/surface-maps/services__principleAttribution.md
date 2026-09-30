@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1374 lines · 11 exports · 40 importers · 27 tests · 1 audits**
+**1379 lines · 11 exports · 41 importers · 28 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,6 +20,7 @@
 - `src/services/attributionNeverBlind.test.ts`
 - `src/services/autoAnalyzeGame.ts`
 - `src/services/causalChain.ts`
+- `src/services/claimTruth.manual.test.ts`
 - `src/services/coachApi.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/discussionPractice.ts`
@@ -83,8 +84,10 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:130`
 
-### `attributePrinciples` (function) — 64 call sites
+### `attributePrinciples` (function) — 66 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
+- `src/services/claimTruth.manual.test.ts:10`
+- `src/services/claimTruth.manual.test.ts:12`
 - `src/services/coachFeatureService.ts:842`
 - `src/services/learnWalkBlumenfeld.test.ts:65`
 - `src/services/liveFundamental.ts:135`
@@ -167,6 +170,7 @@
 - `src/components/Coach/FundamentalsPage.test.tsx`
 - `src/data/fundamentalLessons.test.ts`
 - `src/services/attributionNeverBlind.test.ts`
+- `src/services/claimTruth.manual.test.ts`
 - `src/services/fundLeadStems.test.ts`
 - `src/services/fundamentalHow.test.ts`
 - `src/services/fundamentalReachesDecider.test.ts`

@@ -68,9 +68,17 @@ export function detectKingExposure(fen: string, studentColor: 'w' | 'b'): KingEx
   if (!shelter) return null;
 
   let missing = 0;
+  // A pawn one step forward (g6 for a king on g8) still shields — "two of the
+  // pawns in front of it are gone" with g6 + Bg7 in place was false (manual
+  // claim check 2026-09-30, item 95).
+  const step = studentColor === 'w' ? 1 : -1;
+  const own = (sq: string): boolean => {
+    const p = game.get(sq as Parameters<Chess['get']>[0]);
+    return !!p && p.type === 'p' && p.color === studentColor;
+  };
   for (const s of shelter) {
-    const p = game.get(s as Parameters<Chess['get']>[0]);
-    if (!(p && p.type === 'p' && p.color === studentColor)) missing += 1;
+    const ahead = `${s[0]}${Number(s[1]) + step}`;
+    if (!own(s) && !own(ahead)) missing += 1;
   }
   if (missing < 2) return null; // shelter still largely intact — no alarm
 

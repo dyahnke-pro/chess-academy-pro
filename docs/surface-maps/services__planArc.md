@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**435 lines · 10 exports · 2 importers · 1 tests · 1 audits**
+**453 lines · 10 exports · 3 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/services/lookaheadPlan.ts`
 - `src/services/planArc.test.ts`
+- `src/services/planArc.truth.test.ts`
 
 ## Exports and every call site
 
@@ -27,8 +28,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `aimsOf` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9421`
-- `src/components/Coach/CoachTeachPage.tsx:9425`
+- `src/components/Coach/CoachTeachPage.tsx:9427`
+- `src/components/Coach/CoachTeachPage.tsx:9431`
 - `src/services/lookaheadPlan.ts:1409`
 - `src/services/planArc.test.ts:29`
 
@@ -44,9 +45,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `ArcMove` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `stepArc` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9421`
-- `src/components/Coach/CoachTeachPage.tsx:9425`
+### `stepArc` (function) — 25 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9427`
+- `src/components/Coach/CoachTeachPage.tsx:9431`
 - `src/services/lookaheadPlan.ts:1409`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.test.ts:94`
@@ -65,10 +66,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planArc.test.ts:168`
 - `src/services/planArc.test.ts:173`
 - `src/services/planArc.test.ts:174`
+- `src/services/planArc.truth.test.ts:12`
+- `src/services/planArc.truth.test.ts:15`
+- `src/services/planArc.truth.test.ts:22`
+- `src/services/planArc.truth.test.ts:31`
+- `src/services/planArc.truth.test.ts:36`
 
 ### `aimWalkableNow` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9421`
-- `src/components/Coach/CoachTeachPage.tsx:9425`
+- `src/components/Coach/CoachTeachPage.tsx:9427`
+- `src/components/Coach/CoachTeachPage.tsx:9431`
 - `src/services/planArc.test.ts:201`
 - `src/services/planArc.test.ts:211`
 - `src/services/planArc.test.ts:217`
@@ -82,6 +88,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Tests
 
 - `src/services/planArc.test.ts`
+- `src/services/planArc.truth.test.ts`
 
 ## Audits that reach it
 

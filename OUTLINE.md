@@ -34,6 +34,7 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - 🟠 ACC-1: extract Learn's narration builder from the page so the checker runs what is spoken.
 - 🟠 Naroditsky census (430 games) done — build order for new computers AFTER 97% (docs/plans/2026-09-27-naroditsky-teaching-census.md).
 - 🟠 Census computers BUILT on branch `claude/chess-app-review-perf-du6haq` (2026-09-30): threat→answer, question→THINK PAUSE→answer, plan thread (their move's why), bait/tempting/priority spoken forms, arrows for spoken ideas. Next: walk NEW games, `scripts/scoreboard/tape-verify.mjs`, fix to ≥97% (baseline 89.1% / 47% checkable), then main.
+- 🟠 **WO-TEACH-GAPS (2026-09-30)** — the full missing-build plan: `docs/plans/2026-09-30-WO-TEACH-GAPS.md`. Manual check of 324 unchecked claims: 40 false of 271 (85%); ~29 fixed on branch with fail-on-old tests; 11 one-offs + checker gaps are Phase 0. Danya moment coverage 14% — Phase 2 ranks the gaps (plan 0/37, good-move verdict 1/38, line out loud 0/20, candidates 0/19).
 
 ## 000. WO-DANYA-01 — Learn free play taught like his speedruns (David 2026-09-24)
 

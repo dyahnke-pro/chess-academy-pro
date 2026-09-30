@@ -559,7 +559,9 @@ export function computeMoveFundamentals(
 
   // ── OPEN FILE — a rook (or queen) onto an open / half-open file: the file
   //    where a rook belongs.
-  if (mv.piece === 'r' || mv.piece === 'q') {
+  // A rook already on the file does not "take" it by sliding along it (manual
+  // claim check 2026-09-30, item 11: Rd8-d7 "takes the half-open d-file").
+  if ((mv.piece === 'r' || mv.piece === 'q') && fileOf(mv.from) !== fileOf(mv.to)) {
     const openness = fileOpenness(after, fileOf(mv.to), mover);
     if (openness) {
       const name = PIECE_NAME[mv.piece];

@@ -152,7 +152,15 @@ function stepsToward(aim: Aim, moved: ArcMove): boolean {
   if (!aim.squares.includes(moved.to)) return false;
   // A route is ONE piece's journey: a bishop landing on d6 is not the rook's
   // walk to d6 (first real game read).
-  if (aim.kind === 'route') return moved.piece === aim.id.split(':')[1];
+  // And it is the SAME piece: it moved off the route's start or a square on
+  // it. A knight arriving from b1 is not "the knight's walk from f3" (manual
+  // claim check 2026-09-30, items 162 and 236).
+  if (aim.kind === 'route') {
+    return moved.piece === aim.id.split(':')[1] && (moved.from === aim.from || aim.squares.includes(moved.from));
+  }
+  // A file is taken by its heavy pieces: a knight capture that happens to land
+  // on c3 is not "a step toward the c-file" (items 171, 172).
+  if (aim.kind === 'file') return moved.piece === 'r' || moved.piece === 'q';
   // A passer is pushed by its own pawn.
   if (aim.kind === 'passer') return moved.piece === 'p';
   // "An attack on your king" is brought by PIECES; pawns storming the king are
@@ -209,7 +217,17 @@ export function stepArc(
     const queens = b.board().flat().filter((c) => c?.type === 'q').length;
     kingPlanLive = queens >= 2 && b.moveNumber() > 10;
   } catch { kingPlanLive = false; }
-  const aimsNow = kingPlanLive ? aimsIn : aimsIn.filter((a) => a.kind !== 'king-attack' && a.kind !== 'shield');
+  const liveAims = kingPlanLive ? aimsIn : aimsIn.filter((a) => a.kind !== 'king-attack' && a.kind !== 'shield');
+  // A FILE IS A SIDE'S PLAN ONLY IF ITS OWN PAWN IS OFF IT (manual claim check
+  // 2026-09-30: "their plan is taking shape: the c-file" with White's own pawn
+  // on c2 — a file half-open for the OTHER side, or closed).
+  let ownPawnFiles = new Set<string>();
+  try {
+    ownPawnFiles = new Set(new Chess(fenAfter).board().flat()
+      .filter((c): c is NonNullable<typeof c> => !!c && c.type === 'p' && c.color === color)
+      .map((c) => c.square[0]));
+  } catch { /* unreadable board: keep the aims as read */ }
+  const aimsNow = liveAims.filter((a) => a.kind !== 'file' || !ownPawnFiles.has(a.id.split(':')[1]));
   const their = seat === 'opponent';
   const events: ArcEvent[] = [];
   let emerged = state.emerged;

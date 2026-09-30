@@ -176,7 +176,14 @@ export function moveIntent(
         // Their best reply to a pass, worth a real threat, and now not even in
         // their top lines: it no longer works.
         || (threatNow === null && line === reads.passBefore[0]);
-      if (gone) prevents = { uci: threat, san: threatSan, threatCp };
+      // "Takes it away" must be TRUE on the board (manual claim check
+      // 2026-09-30: "Re1 takes …Re8 away" when Rxe8+ Kxe8 is an even trade;
+      // "Bg5 takes …Ne7 away" when …Ne7 was their best move). A move still
+      // legal, still safe to land, and not measured worse by the engine is
+      // not gone — absence from the top lines alone proves nothing.
+      const stillFine = stillLegal && safeLanding(fenAfter, uciToMove(threat))
+        && (threatNow === null || theirBestNow === null || threatNow > theirBestNow - GONE_CP);
+      if (gone && !stillFine) prevents = { uci: threat, san: threatSan, threatCp };
     }
     if (!prevents && opts.prevent === 'any+deny') prevents = denied(fenBefore, fenAfter, passFen, playedUci, mover, reads);
   }
@@ -431,10 +438,19 @@ function denied(
     const to = t.slice(2, 4);
     const tSan = sanOf(passFen, t);
     if (!tSan || tSan.includes('x')) continue; // a capture is not a square they wanted
-    if (!covered(fenBefore, to) && covered(fenAfter, to)) return { uci: t, san: tSan, threatCp: 0 };
+    if (covered(fenBefore, to) || !covered(fenAfter, to)) continue;
+    // Covering the square is not denying it: the landing must now lose
+    // material, and the engine must not still rate it near their best.
+    if (safeLanding(fenAfter, uciToMove(t))) continue;
+    const theirBestNow = reads.after[0] ? valueFor(reads.after[0], mover === 'w' ? 'b' : 'w') : null;
+    const tNow = valueOfMove(reads.after, t, mover === 'w' ? 'b' : 'w');
+    if (tNow !== null && theirBestNow !== null && tNow > theirBestNow - GONE_CP) continue;
+    return { uci: t, san: tSan, threatCp: 0 };
   }
   return null;
 }
+
+const uciToMove = (uci: string): { from: string; to: string; promotion?: string } => ({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.slice(4, 5) || undefined });
 
 /** The replay guard: `u` works after the move and their reply, and fails when
  *  the same reply is played without the move (this side passes instead). A

@@ -543,6 +543,14 @@ export function buildRejectedTempting(args: {
       // Tempting = it LOOKS like it wins something or forces something.
       const looksGood = tempting.captured !== undefined || probe.isCheck();
       if (!looksGood) continue;
+      // Not bait, not refuted (manual claim check 2026-09-30, items 37, 144):
+      // "Can you take the rook on d7? No — it's bait" when Rxd7 was the BEST
+      // move, and "Bxg5 runs into h6" when Qxg5 won the pawn and Bxg5 still
+      // came out clearly ahead. The best move taking on the same square means
+      // the capture is right, just with another piece; a line that still
+      // leaves the student two pawns up is not refuted.
+      if (tempting.captured !== undefined && args.lines[0].uci.slice(2, 4) === tempting.to) continue;
+      if (line.evalCp >= 200) continue;
       const fenBeforeRefutation = probe.fen();
       const refutation = probe.move({ from: line.replyUci.slice(0, 2) as Square, to: line.replyUci.slice(2, 4) as Square, promotion: (line.replyUci[4] as 'q' | undefined) ?? undefined });
       if (!refutation) continue;
@@ -564,7 +572,7 @@ export function buildRejectedTempting(args: {
         anchor: bait
           ? `Can you take the ${NAME[tempting.captured ?? 'p'] ?? 'piece'} on ${tempting.to}? ${THINK_MARK} No — it's bait: ${tempting.san} runs into ${refutation.san}.`
           : `Why not ${tempting.san}? ${THINK_MARK} ${why.charAt(0).toUpperCase()}${why.slice(1)}, but ${refutation.san} refutes it.`,
-        detail: `That line leaves you about ${dropPawns} points worse.`,
+        detail: `That line gives up about ${dropPawns} points against the best move.`,
         stakes: 'Before trusting a tempting move, calculate their most forcing reply.',
       };
       return {

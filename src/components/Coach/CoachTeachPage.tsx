@@ -9391,7 +9391,13 @@ export function CoachTeachPage(): JSX.Element {
                       // …and "it is a quiet game now" on the move that just gave
                       // check is the opposite of the truth (run D walk, f6+).
                       const quietOnCheck = step.switched?.to === 'positional' && /[+#]$/.test(move.san);
-                      if (step.switched && !mateOnBoard && !quietOnCheck) queueSpokenHint(probe.fen(), step.switched.text, 'character');
+                      // …and "the tactics have settled" while ANY tactic is on
+                      // the board, or one move stands far above the rest, is
+                      // false (manual claim check 2026-09-30, item 65: …Bb4
+                      // pinning Nc3 was the top line).
+                      const quietButConcrete = step.switched?.to === 'positional'
+                        && ((tctxNow.immediate?.length ?? 0) > 0 || (gap !== null && gap >= SHARP_GAP_CP));
+                      if (step.switched && !mateOnBoard && !quietOnCheck && !quietButConcrete) queueSpokenHint(probe.fen(), step.switched.text, 'character');
                     } catch { /* the character read is a bonus, never a blocker */ }
 
                     // BOTH SIDES' PLANS, off the SAME engine read (David

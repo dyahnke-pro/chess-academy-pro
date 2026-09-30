@@ -326,7 +326,7 @@ const SAEMISCH: LessonScript = {
     b({
       id: 'sae-open', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3',
       highlights: [{ square: 'f3', color: KEY }, { square: 'g4', color: SOFT }, { square: 'h5', color: SOFT }],
-      say: "f3 — the Sämisch Variation. White denies …Ng4 AND …Nh5 (the f3-pawn covers BOTH squares) AND prepares Be3 + Qd2 + O-O-O for a kingside pawn storm against your king. You can't fight on the kingside here, so the entire game shifts to the queenside.",
+      say: "f3 — the Sämisch Variation. White denies …Ng4 (the f3-pawn covers g4 and e4) AND prepares Be3 + Qd2 + O-O-O for a kingside pawn storm against your king. You can't fight on the kingside here, so the entire game shifts to the queenside.",
       sayShort: 'f3 — Sämisch attack setup.',
     }),
     b({

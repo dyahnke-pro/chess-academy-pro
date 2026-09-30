@@ -977,9 +977,13 @@ export function namedPawnStructure(
   // Old Indian, and "King's-Indian" in a Damiano (1000 walk 2026-09-27, 4.d5)
   // named an opening the student was not playing. The plan is the chain's own.
   if (w('d5') && w('e4') && b('d6') && b('e5')) {
+    // The queenside break is c5 only while c5 is free: with Black's own pawn
+    // already on c5 (the Benoni/Czech chain) White breaks with b4 (manual claim
+    // check 2026-09-30, item 160: "you break on the queenside with c5" there).
+    const qBreak = b('c5') ? 'b4' : 'c5';
     return studentColor === 'w'
-      ? { name: 'Closed centre', plan: 'the wings decide: they storm the kingside with …f5-f4 and a pawn avalanche; you break on the queenside with c5' }
-      : { name: 'Closed centre', plan: 'the wings decide: you storm the kingside with …f5-f4 and a pawn avalanche; they break on the queenside with c5' };
+      ? { name: 'Closed centre', plan: `the wings decide: they storm the kingside with …f5-f4 and a pawn avalanche; you break on the queenside with ${qBreak}` }
+      : { name: 'Closed centre', plan: `the wings decide: you storm the kingside with …f5-f4 and a pawn avalanche; they break on the queenside with ${qBreak}` };
   }
   // ISOLATED QUEEN’S PAWN — a d-pawn with no friendly c- or e-pawns.
   const holder = (white: boolean): string => ((white ? 'w' : 'b') === studentColor ? 'You hold' : 'They hold');

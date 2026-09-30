@@ -173,7 +173,7 @@
 - `src/services/learnWalkBlumenfeld.test.ts:179`
 
 ### `planFromUci` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9408`
+- `src/components/Coach/CoachTeachPage.tsx:9414`
 - `src/services/coachLaneWiring.test.ts:35`
 - `src/services/computedVoiceAudit.report.test.ts:218`
 - `src/services/concessionBeat.ts:440`
@@ -202,14 +202,14 @@
 - `src/services/coachFeatureService.ts:1321`
 
 ### `aimsOf` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9421`
-- `src/components/Coach/CoachTeachPage.tsx:9425`
+- `src/components/Coach/CoachTeachPage.tsx:9427`
+- `src/components/Coach/CoachTeachPage.tsx:9431`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.ts:52`
 
 ### `aimWalkableNow` (re-export) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9421`
-- `src/components/Coach/CoachTeachPage.tsx:9425`
+- `src/components/Coach/CoachTeachPage.tsx:9427`
+- `src/components/Coach/CoachTeachPage.tsx:9431`
 - `src/services/planArc.test.ts:201`
 - `src/services/planArc.test.ts:211`
 - `src/services/planArc.test.ts:217`
@@ -219,11 +219,11 @@
 - `src/services/planArc.test.ts:243`
 - `src/services/planArc.test.ts:248`
 - `src/services/planArc.test.ts:252`
-- `src/services/planArc.ts:348`
+- `src/services/planArc.ts:366`
 
-### `stepArc` (re-export) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9421`
-- `src/components/Coach/CoachTeachPage.tsx:9425`
+### `stepArc` (re-export) — 25 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9427`
+- `src/components/Coach/CoachTeachPage.tsx:9431`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.test.ts:94`
 - `src/services/planArc.test.ts:96`
@@ -241,7 +241,12 @@
 - `src/services/planArc.test.ts:168`
 - `src/services/planArc.test.ts:173`
 - `src/services/planArc.test.ts:174`
-- `src/services/planArc.ts:195`
+- `src/services/planArc.truth.test.ts:12`
+- `src/services/planArc.truth.test.ts:15`
+- `src/services/planArc.truth.test.ts:22`
+- `src/services/planArc.truth.test.ts:31`
+- `src/services/planArc.truth.test.ts:36`
+- `src/services/planArc.ts:203`
 
 ### `EMPTY_ARC` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

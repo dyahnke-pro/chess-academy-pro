@@ -743,8 +743,13 @@ const DETECTORS: Detector[] = [
   // 13. Loose piece — after the move a piece (≥3pts, non-king) can be taken for
   // material RIGHT NOW; after the best move nothing of the kind hangs.
   (c) => {
-    const { mover } = c;
-    const hangingAfter = pieces(c.after, mover).filter((p) => p.type !== 'k' && VAL[p.type] >= 3 && hangsBy(c.after, p.square) >= 2)
+    const { mover, last } = c;
+    // A capture that is recaptured is a TRADE, not a loose piece (manual claim
+    // check 2026-09-30, items 133-135: Bxf6 …Qxf6 was spoken as "the bishop
+    // on f6 hangs", "loose piece, the third game now" and "let them win a
+    // piece"). The piece that just captured is netted against what it took.
+    const net = (sq: Square): number => hangsBy(c.after, sq) - (sq === last.to && last.captured ? VAL[last.captured] ?? 0 : 0);
+    const hangingAfter = pieces(c.after, mover).filter((p) => p.type !== 'k' && VAL[p.type] >= 3 && net(p.square) >= 2)
       .sort((a, b) => VAL[b.type] - VAL[a.type]);
     if (hangingAfter.length === 0) return null;
     const hangingBest = pieces(c.afterBest, mover).filter((p) => p.type !== 'k' && VAL[p.type] >= 3 && hangsBy(c.afterBest, p.square) >= 2);
