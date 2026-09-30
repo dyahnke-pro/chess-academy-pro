@@ -182,7 +182,8 @@ import { noteCoverageForLine } from '../../services/danyaTeachingService';
  *  single opening-level note that happened to match early. Below the floor the
  *  instant, verified masterclass is still the better lesson, so it keeps it. */
 const NOTE_PRIMARY_MIN_PLIES = 3;
-import { findLivePunishment, bakeGemsIntoTree, gemResolution } from '../../services/gemCrushLines';
+import { findLivePunishment, bakeGemsIntoTree, gemResolution, trapAheadAt } from '../../services/gemCrushLines';
+import { noteTrapMeeting, trapSpeaks, type TrapState } from '../../services/trapLearning';
 import { findAndBakeGems } from '../../services/gemFinder';
 import { moveOrderArrows } from '../../services/moveOrderArrows';
 import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead';
@@ -1844,6 +1845,9 @@ export function CoachTeachPage(): JSX.Element {
   // THE MEMORY OWNS THE SIGNAL (2026-09-20). Every reset — a caller's, or the
   // one `observe()` performs when the board goes backwards — forgets this
   // page's hand refs too. Before this, `observe()` was a silent third door.
+  /** The known trap on the board the student is about to move from — warned
+   *  or held back as a test — so their move can be recorded as its answer. */
+  const trapPendingRef = useRef<{ fen: string; slip: string; warned: boolean; confirmed: boolean; state: TrapState } | null>(null);
   const learnMemRef = useRef<LearnMemory>(createLearnMemory(() => { forgetPageRefsRef.current(); }));
   
   // The threat / tactic say-once memory (last key + every spoken line) lives in
@@ -8688,6 +8692,16 @@ export function CoachTeachPage(): JSX.Element {
     // needs the position the student moved FROM.
     const fenBefore = liveFenRef.current;
     if (fenBefore && announcedBoardsRef.current.has(fenBefore.split(' ').slice(0, 2).join(' '))) announcedPliesRef.current.add(move.history.length);
+    // A KNOWN TRAP, ANSWERED (David 2026-09-30): whether it was warned or held
+    // back as a test, the move is the student's answer — recorded either way.
+    try {
+      const tp = trapPendingRef.current;
+      if (tp && fenBefore && samePosition(tp.fen, fenBefore)) {
+        trapPendingRef.current = null;
+        const outcome = noteTrapMeeting({ fen: tp.fen, playedSan: move.san, slipSan: tp.slip, warned: tp.warned, confirmed: tp.confirmed, gameId: learnMemRef.current.gameId });
+        captureEvent('coach_trap_answered', { surface: 'coach-teach', outcome, warned: tp.warned, state: tp.state });
+      }
+    } catch { /* a record, never a blocker */ }
     // THE GEM, RESOLVED (David 2026-09-24: "After you've played it (or missed
     // it): then the full narration, arrows, and Walk button"). The callout only
     // said there was something to find; now the student has answered, so the
@@ -8993,10 +9007,18 @@ export function CoachTeachPage(): JSX.Element {
                     if (cm.event) captureEvent(cm.event.name, cm.event.props);
                   }
                   // A KNOWN TRAP AHEAD (practical lore) — the same moment.
+                  // WARN, OR TEST (David 2026-09-30): grey and red always warn;
+                  // once heeded in enough games the coach stays silent once, and
+                  // an unaided avoid turns the trap green.
                   const trap = trapAheadTeaching(probe.fen(), playerColor === 'white' ? 'w' : 'b');
-                  if (trap) {
-                    queueSpokenHint(probe.fen(), trap.text, trap.lane, trap.squares, trap.claims);
-                    if (trap.event) captureEvent(trap.event.name, trap.event.props);
+                  const trapAt = trap ? trapAheadAt(probe.fen()) : null;
+                  if (trap && trapAt) {
+                    const parts = probe.fen().split(' ');
+                    const ply = (Number(parts[5]) - 1) * 2 + (parts[1] === 'b' ? 1 : 0) + 1;
+                    const d = trapSpeaks(probe.fen(), ply);
+                    trapPendingRef.current = { fen: probe.fen(), slip: trapAt.san, warned: d.speak, confirmed: trapAt.confirmed, state: d.state };
+                    if (d.speak) queueSpokenHint(probe.fen(), trap.text, trap.lane, trap.squares, trap.claims, undefined, trap.arrows);
+                    if (trap.event) captureEvent(trap.event.name, { ...trap.event.props, state: d.state, spoken: d.speak });
                   }
                   // COUNT BEFORE YOU TAKE (P3 how-to-calculate) — the same moment.
                   const cnt = countMethodTeaching(probe.fen(), playerColor === 'white' ? 'w' : 'b');

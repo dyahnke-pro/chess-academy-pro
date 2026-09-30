@@ -570,7 +570,7 @@ export type GemMoveSignal = 'walked-into' | 'punished' | 'missed-punish';
  *  verified (weapon tiers only), with the club share that plays it. The punish
  *  is withheld — the lesson is "this natural move is a known trap", not the
  *  refutation. Null until the chunked index has warmed, or when no gem is here. */
-export function trapAheadAt(fen: string): { san: string; freqPct: number; key: string; punish: string[] } | null {
+export function trapAheadAt(fen: string): { san: string; freqPct: number; key: string; punish: string[]; confirmed: boolean } | null {
   if (!gemsByPosition || !gemsAfterSlip) { warmGemIndexes(); return null; }
   let board: Chess;
   try { board = new Chess(fen); } catch { return null; }
@@ -578,7 +578,7 @@ export function trapAheadAt(fen: string): { san: string; freqPct: number; key: s
   const best = (gemsByPosition.get(positionKey(fen)) ?? [])
     .filter((g) => (g.tier === 'confirmed' || g.tier === 'positional') && legal.has(g.inaccuracy))
     .sort((a, b) => b.freqPct - a.freqPct)[0];
-  return best ? { san: best.inaccuracy, freqPct: Math.round(best.freqPct), key: `trap-ahead:${best.openingId}:${best.inaccuracy}`, punish: best.punishSeq?.length ? best.punishSeq : [best.punish] } : null;
+  return best ? { san: best.inaccuracy, freqPct: Math.round(best.freqPct), key: `trap-ahead:${best.openingId}:${best.inaccuracy}`, punish: best.punishSeq?.length ? best.punishSeq : [best.punish], confirmed: best.tier === 'confirmed' } : null;
 }
 
 /** WHAT A MOVE SAID ABOUT THE PLAYER, IN GEM TERMS — the strongest early
