@@ -30,7 +30,7 @@ import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePacka
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { checkMethodTeaching, foundMoveTeaching, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
+import { announcesTheMove, checkMethodTeaching, foundMoveTeaching, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -1699,6 +1699,7 @@ export function CoachTeachPage(): JSX.Element {
   const forgetPageRefsRef = useRef<() => void>(() => undefined);
   const forgetPageRefs = useCallback((): void => {
     announcedPliesRef.current.clear();
+    announcedBoardsRef.current.clear();
     liveGradesRef.current.clear();
     fundamentalSeenRef.current.clear();
     planArcRef.current = { theirs: EMPTY_ARC, mine: EMPTY_ARC };
@@ -1719,6 +1720,11 @@ export function CoachTeachPage(): JSX.Element {
    *  Saved on the game record so the post-game sweep files a find there as
    *  PROMPTED (grey), never as unaided evidence. Reset per game. */
   const announcedPliesRef = useRef(new Set<number>());
+  /** Boards (placement + side) where a lane spoke BEFORE the student moved — a
+   *  threat, tactic, gem, stalemate or check warning. The move made from one is
+   *  filed into `announcedPliesRef`, so every evidence row it writes is
+   *  PROMPTED (P4 honesty: being told is not proving). */
+  const announcedBoardsRef = useRef(new Set<string>());
   // THE LIVE PER-MOVE EVALUATIONS (C7, 2026-09-22). Every student ply is
   // graded off the paid-for pre-move read (`gradePlayedMove`, below) and the
   // saved record used to carry `annotations: null` regardless. Keyed by ply so
@@ -8486,6 +8492,7 @@ export function CoachTeachPage(): JSX.Element {
     // fact. NO COUNT CAP (David 2026-09-13) still holds — repetition is caught
     // by the in-turn twin gate and the per-game novelty set.
     const pkg = instantDecision.pkg;
+    if (announcesTheMove(instantDecision.spoke)) announcedBoardsRef.current.add(args.fenAfterReply.split(' ').slice(0, 2).join(' '));
 
     // ── LEAD THE EYE ON THE COMPUTED LANES ─────────────────────────────────
     // David 2026-08-10, after a live run in which the coach named d6, b5, c6
@@ -8640,6 +8647,7 @@ export function CoachTeachPage(): JSX.Element {
     // Pre-move FEN (before we overwrite liveFenRef below) — the slip faucet
     // needs the position the student moved FROM.
     const fenBefore = liveFenRef.current;
+    if (fenBefore && announcedBoardsRef.current.has(fenBefore.split(' ').slice(0, 2).join(' '))) announcedPliesRef.current.add(move.history.length);
     // THE GEM, RESOLVED (David 2026-09-24: "After you've played it (or missed
     // it): then the full narration, arrows, and Walk button"). The callout only
     // said there was something to find; now the student has answered, so the
@@ -10412,6 +10420,7 @@ export function CoachTeachPage(): JSX.Element {
                     provenTagsRef.current,
                   );
                   const hintPkg = lateDecision.pkg;
+                  if (announcesTheMove(lateDecision.spoke)) announcedBoardsRef.current.add(pending.fen.split(' ').slice(0, 2).join(' '));
                   if (lateDecision.lead) turnLeadRef.current = { fen: pending.fen, lead: lateDecision.lead };
                   // A wave that held everything said nothing — but what it held
                   // must still be visible, or a lane that loses every turn looks

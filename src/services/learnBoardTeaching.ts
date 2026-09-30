@@ -33,6 +33,7 @@ import { autopilotGuard, blunderCheck } from './safetyHabits';
 import { strongChoice, warmStrongChoice } from './strongChoice';
 import { stalemateWatch } from './stalemateWatch';
 import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from './criticalMoment';
+import { SAID_BEFORE_MOVE } from './computerRoles';
 
 export interface TeachingHint {
   lane: LearnLane;
@@ -404,4 +405,11 @@ export function dangerAnswerLines(fen: string, student: 'w' | 'b', bestUci: stri
   const cm = checkMethodTeaching(fen, student, bestUci);
   if (cm) out.push(cm.text);
   return out;
+}
+
+/** True when a turn spoke a lane that warns BEFORE the student moves (a threat,
+ *  a tactic, a gem, a stalemate, how to meet check). The page marks that board
+ *  so the student's next move from it is filed as PROMPTED — told, not proven. */
+export function announcesTheMove(spoke: readonly LearnLane[]): boolean {
+  return spoke.some((l) => SAID_BEFORE_MOVE.has(l));
 }

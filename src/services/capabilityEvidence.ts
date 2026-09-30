@@ -44,6 +44,7 @@ import { db } from '../db/schema';
 import { MISTAKE_CP } from './engineConstants';
 import { logAppAudit } from './appAuditor';
 import { leadingFundamentals, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
+import { stalemateWatch } from './stalemateWatch';
 import { isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
 
 /** How live the fundamental had to be on THIS board before answering it counts
@@ -299,8 +300,19 @@ export function capabilitiesPosed(
     seen.add(tag);
     out.push({ tag, posedImportance: f.weight });
   }
+  // A WON GAME WITH A STALEMATE ON THE BOARD (P3 heat map): the board asked
+  // "which of your moves throws the win away?". A stalemating move costs the
+  // whole game, so `movePlayedCleanly` sorts held from broken on its own.
+  if (!seen.has('botched-conversion')) {
+    try {
+      if (stalemateWatch(fenBefore, moverColor === 'white' ? 'w' : 'b')) out.push({ tag: 'botched-conversion', posedImportance: STALEMATE_POSED });
+    } catch { /* an unreadable board posed nothing */ }
+  }
   return out;
 }
+
+/** A win on the line is a question worth the green bar. */
+const STALEMATE_POSED = 90;
 
 /**
  * Record what a move demonstrated — OR FAILED TO. Fire-and-forget; never throws

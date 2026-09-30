@@ -16,3 +16,18 @@ describe('stalemateWatch (P2 #9)', () => {
     expect(stalemateWatch('4k3/8/8/8/8/8/8/Q3K3 w - - 0 1', 'w')).toBeNull();
   });
 });
+
+describe('stalemate avoided is a heat-map question (capabilitiesPosed)', () => {
+  const FEN = '7k/8/5K2/8/8/8/8/6Q1 w - - 0 1';
+  it('the board POSED it; a clean move holds, the stalemate breaks', async () => {
+    const { capabilitiesPosed, capabilitiesShown } = await import('./capabilityEvidence');
+    expect(capabilitiesPosed(FEN, 'Qg7#', 'white').map((c) => c.tag)).toContain('botched-conversion');
+    expect(capabilitiesShown(FEN, 'Qg7#', 'white', 0).map((c) => c.tag)).toContain('botched-conversion');
+    // Qg6 stalemates: the win is gone, so nothing is shown.
+    expect(capabilitiesShown(FEN, 'Qg6', 'white', 900)).toEqual([]);
+  });
+  it('a board with no stalemate posed no such question (negative control)', async () => {
+    const { capabilitiesPosed } = await import('./capabilityEvidence');
+    expect(capabilitiesPosed('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'e4', 'white').map((c) => c.tag)).not.toContain('botched-conversion');
+  });
+});

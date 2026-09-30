@@ -1,6 +1,7 @@
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { emitWeaknessModelChanged } from './weaknessModelEvents';
+import { conceptSiblingsToPull, mistakeConcept } from './conceptSchedule';
 import { createDefaultSrsFields, calculateNextInterval } from './srsEngine';
 import { stockfishEngine } from './stockfishEngine';
 import { generateMistakeNarration } from './mistakeNarration';
@@ -1486,6 +1487,26 @@ export async function gradeMistakePuzzle(
   }
 
   await db.mistakePuzzles.update(id, updates);
+
+  // THE CONCEPT SCHEDULE: a miss fails the IDEA, so its other open cards come
+  // due today and the queue retests the concept on fresh boards.
+  if (!correct) {
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      const pull = conceptSiblingsToPull(puzzle, await db.mistakePuzzles.toArray(), today);
+      for (const sid of pull) await db.mistakePuzzles.update(sid, { srsDueDate: today });
+      if (pull.length > 0) {
+        const { logAppAudit } = await import('./appAuditor');
+        void logAppAudit({
+          kind: 'concept-srs-pulled',
+          category: 'subsystem',
+          source: 'mistakePuzzleService.gradeMistakePuzzle',
+          summary: `${mistakeConcept(puzzle)} missed — ${pull.length} card(s) of the same idea due today`,
+          details: JSON.stringify({ concept: mistakeConcept(puzzle), pulled: pull.length }),
+        });
+      }
+    } catch { /* the card's own grade already landed */ }
+  }
 
   // Invalidate the tactical profile cache so it recomputes with fresh data
   await db.meta.delete('tactical_profile');

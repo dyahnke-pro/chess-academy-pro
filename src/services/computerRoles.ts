@@ -65,7 +65,7 @@ export const COMPUTER_ROLES: Record<LearnLane, ComputerRole> = {
   kingAttack: { computer: 'kingAttack', tag: null, held: { state: 'na', why: 'describes what a sound move adds; no failure tag it answers' }, broken: { state: 'na', why: 'silent on a costly move' }, askable: { state: 'wired', via: 'isAttackAssessmentQuestion' } },
   ruleException: { computer: 'ruleException', tag: null, held: { state: 'na', why: 'a rule broken correctly is not a skill with its own tag' }, broken: { state: 'na', why: 'speaks only when the exception is right' }, askable: { state: 'wired', via: 'isMoveRatingQuestion' } },
   movePoint: { computer: 'studentMovePoint', tag: null, held: { state: 'wired', via: 'recordMoveEvidence (capabilitiesPosed)' }, broken: { state: 'na', why: 'speaks on a clean move only' }, askable: { state: 'wired', via: 'isMoveRatingQuestion' } },
-  stalemate: { computer: 'stalemateWatch', tag: 'botched-conversion', held: PRE, broken: SLIP, askable: { state: 'wired', via: 'dangerAnswerLines' } },
+  stalemate: { computer: 'stalemateWatch', tag: 'botched-conversion', held: { state: 'wired', via: 'capabilitiesPosed' }, broken: SLIP, askable: { state: 'wired', via: 'dangerAnswerLines' } },
   checkMethod: { computer: 'checkMethod', tag: null, held: PRE, broken: PRE, askable: { state: 'wired', via: 'dangerAnswerLines' } },
   priorityFirst: { computer: 'priorityFirst', tag: null, held: PRE, broken: PRE, askable: { state: 'wired', via: 'isBestMoveQuestion' } },
   rejectedTempting: { computer: 'playCommentary.buildRejectedTempting', tag: null, held: PRE, broken: PRE, askable: { state: 'wired', via: 'isCandidateMoveQuestion' } },
@@ -100,3 +100,13 @@ export function owedRoles(): string[] {
   }
   return out;
 }
+
+/** Lanes spoken BEFORE the student moves (their held half is `PRE`): a move
+ *  made after one of them spoke is PROMPTED, never unaided evidence. */
+export const SAID_BEFORE_MOVE: ReadonlySet<LearnLane> = new Set([
+  ...(Object.keys(COMPUTER_ROLES) as LearnLane[]).filter((l) => COMPUTER_ROLES[l].held === PRE),
+  // Warned before the move, and its held half is still recorded — by the
+  // board's own question (`capabilitiesPosed`), where an unwarned surface
+  // (Play is silent) makes the find unaided.
+  'stalemate',
+]);
