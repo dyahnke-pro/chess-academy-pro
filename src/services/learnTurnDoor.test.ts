@@ -153,7 +153,7 @@ describe('WO-1b — one lead per turn', () => {
 describe('WO-1b — board descriptions wait for the turn\'s one decision', () => {
   it('the instant wave carries only urgent lanes; descriptions are deferred to the late wave', () => {
     const start = TEACH_CODE.indexOf('const instantDecision = decideTurn([');
-    const end = TEACH_CODE.indexOf('learnMemRef.current.spokenKeys);', start);
+    const end = TEACH_CODE.indexOf('learnMemRef.current.spokenKeys, null, provenTagsRef.current);', start);
     const instantCall = TEACH_CODE.slice(start, end);
     for (const lane of ['commentary', 'behavior', 'positional', 'kingSafety']) {
       expect(instantCall, `${lane} speaks instantly again — it will lead the turn by arriving first`).not.toContain(`'${lane}'`);
@@ -272,5 +272,30 @@ describe('"the tactics have settled" is never said with material loose (run J, U
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     expect(src).toMatch(/legalSeeGainFor\(probe\.fen\(\), c\.square,[^)]*\) > 0/);
     expect(src).toMatch(/\|\| looseNow\)/);
+  });
+});
+
+describe('the fade — short phrasing when the skill is green (David 2026-09-30)', () => {
+  const TWO = 'That trade gives up your better minor piece. Keep the bishop that has open diagonals and trade the one blocked by its own pawns.';
+  it('a lane on a PROVEN tag speaks only its first sentence', async () => {
+    const { fadeWhenGreen } = await import('./learnTurnDoor');
+    expect(fadeWhenGreen('trade', TWO, new Set(['bad-trade']))).toBe('That trade gives up your better minor piece.');
+  });
+  it('grey or red keeps the full teaching (negative controls)', async () => {
+    const { fadeWhenGreen } = await import('./learnTurnDoor');
+    expect(fadeWhenGreen('trade', TWO, new Set())).toBe(TWO);
+    expect(fadeWhenGreen('trade', TWO, null)).toBe(TWO);
+    expect(fadeWhenGreen('trade', TWO, new Set(['hung-material']))).toBe(TWO);
+  });
+  it('a lane whose held half is not wired never fades — the app cannot see it green', async () => {
+    const { fadeWhenGreen } = await import('./learnTurnDoor');
+    // blunderCheck is tagged hung-material but only speaks on a slip.
+    expect(fadeWhenGreen('blunderCheck', TWO, new Set(['hung-material']))).toBe(TWO);
+  });
+  it('the door records the fade on its row', () => {
+    const d = decideTurn([{ lane: 'trade', text: TWO, fen: FEN }], undefined, undefined, null, new Set(['bad-trade']));
+    expect(d.faded).toEqual(['trade']);
+    const cold = decideTurn([{ lane: 'trade', text: TWO, fen: FEN }], undefined, undefined, null, null);
+    expect(cold.faded).toEqual([]);
   });
 });

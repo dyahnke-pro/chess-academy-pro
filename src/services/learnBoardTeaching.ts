@@ -30,6 +30,7 @@ import { tradeJudgement } from './tradeJudgement';
 import type { PieceValue } from './pieceValueRead';
 import { kneeJerk } from './kneeJerk';
 import { autopilotGuard, blunderCheck } from './safetyHabits';
+import { strongChoice, warmStrongChoice } from './strongChoice';
 import { stalemateWatch } from './stalemateWatch';
 import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from './criticalMoment';
 
@@ -115,6 +116,14 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
     const theirLast = i.history.length >= 2 ? i.history[i.history.length - 2] : null;
     const kj = kneeJerk(theirLast, i.san, i.bestSan, i.cpLoss);
     if (kj) out.push({ lane: 'kneeJerk', text: kj, squares: [to], claims: ['method:knee-jerk'], event: { name: 'coach_knee_jerk_taught', props: { surface: 'coach-teach' } }, arrows: [] });
+  }
+
+  // A STRONG PLAYER'S CHOICE HERE — from the games DB, depersonalized, said
+  // after the move (P3 "his data on the live board").
+  warmStrongChoice();
+  {
+    const sc = strongChoice(i.fenBefore, i.san);
+    if (sc) out.push({ lane: 'strongChoice', text: sc.text, squares: [], claims: [`strong-choice:${i.history.length}`], event: { name: 'coach_strong_choice_named', props: { surface: 'coach-teach', same: sc.same } }, arrows: [] });
   }
 
   // THE SAFETY HABITS (P3 method beats) — earned only by what the board did.

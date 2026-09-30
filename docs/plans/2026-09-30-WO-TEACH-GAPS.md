@@ -183,7 +183,7 @@ question the knee-jerk, trigger→scan, autopilot guard, safety precheck.
     answered without the king, tempo (their half — nothing of the student's to
     record).
 - **Strength from move one** — ✅ ALREADY WIRED on Play: `liveStrength` reads the same posed/answered measurement as `capabilityEvidence` and sets the Stockfish opponent every move (`CoachGamePage` → `discussion.liveRating`). The line above saying "not wired" was stale. Gem hit / book departure as extra inputs: open.
-- **Fade:** two phrasings per fact kind by heat-map state (#27) — partly live: a GREEN layer goes quiet in the door (`GREEN_QUIET_BELOW`); a verdict only fires on a slip, which breaks the streak, so a second phrasing tier buys little. Not built.
+- **Fade:** ✅ BUILT 2026-09-30 — the Learn door (`fadeWhenGreen`) speaks only the first sentence of a lane whose skill the student has PROVEN (`loadProvenTags` → `capabilityProven`); grey/red keep the full teaching; only lanes whose held half is wired can fade. Recorded on the `learn-turn-decision` row as `faded`; audit contract LD3 (a fresh device fades nothing).
 - **Concept-level spaced retrieval** and **transfer** ("you met this two games ago").
 
 ---
@@ -260,6 +260,6 @@ gate's measurement), not on this one.
 ### TRIAGE vs CODE (2026-09-30, every open row of Phases 1/3/4/5, file:line checked)
 BUILT: 1.2 Learn door · one move two jobs · latentDanger · concession (#46).
 PARTIAL: 1.2 Play/Review speak outside the door · 1.3 ~10 lanes carry no claim key · 1.4 (structure yes; NO word budget — and a budget would be a G4.5 cap, so the structure IS the answer) · trigger→scan (forcing-scan only) · how-to-calculate (drill only) · overall verdict (a list, not one comparison) · piece maneuvers (path-first wording) · their next move (Play only) · planRace (file-collision review-only) · callbacks to the thesis (review/lesson only) · trap candidates (LLM context, not a gem) · structure transfer · heat-map (stalemate avoided, check answered) · transfer (slips only) · liveStrength (no gem/book inputs) · #37/#41 walks unrecorded · move→plan link (student advance filtered) · branching narrator (no caller) · break preparation (narrow) · opening summary.
-MISSING: split the position · autopilot guard · safety precheck (blunder check) · his data on the live board · concept-level SRS · fade · plan chooser · transposition reader · #56 re-anchor 163 beats · walks #40, #32.
+MISSING: split the position · ~~autopilot guard~~ ✅ · ~~safety precheck (blunder check)~~ ✅ · ~~his data on the live board~~ ✅ (`strongChoice`, depersonalized) · concept-level SRS · ~~fade~~ ✅ · plan chooser · transposition reader · #56 re-anchor 163 beats · walks #40, #32.
 
 **David's calls on the design rows (2026-09-30):** concept-level SRS → FOLD INTO MISTAKE DRILLS (cards carry the concept tag; SRS schedules by concept too; no new screen or store) · his data on the live board → SAY IT DEPERSONALIZED ("a strong player's choice here is X", never a name) · fade → SHORT PHRASING WHEN GREEN · one door → REVIEW YES, PLAY NO (Play stays silent; its answers already use the shared computers).

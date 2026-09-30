@@ -15,6 +15,7 @@
 // A LEAF: chess.js + the SEE helper.
 import { Chess } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
+import { MATERIAL_VALUE } from './pieceValues';
 
 export const BLUNDER_CHECK_CP = 150;
 export const AUTOPILOT_CP = 100;
@@ -32,8 +33,7 @@ export function blunderCheck(fenBefore: string, san: string, reply: string | nul
   if (!r.captured || r.captured === 'k') return null;
   // Taking back on the square the student just captured on, for no more than
   // they took, is a TRADE (the Ruy exchange: Bxc6 dxc6), not a blunder.
-  const V: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
-  if (mine.captured && r.to === mine.to && (V[r.captured] ?? 0) <= (V[mine.captured] ?? 0)) return null;
+  if (mine.captured && r.to === mine.to && (MATERIAL_VALUE[r.captured] ?? 0) <= (MATERIAL_VALUE[mine.captured] ?? 0)) return null;
   // The piece was winnable right after the student's move — not a trade.
   if (legalSeeGainFor(afterMove, r.to, r.color) <= 0) return null;
   return `Blunder check before you let go of a piece: what can they take now? Here the answer was your ${NAME[r.captured] ?? 'piece'} on ${r.to}.`;

@@ -515,6 +515,11 @@ async function main() {
     if (turns.length > 0) {
       const bad = turns.filter((t) => t.spoke.some((l) => !t.offered.includes(l)) || (t.lead !== null && !t.spoke.includes(t.lead)));
       record('LD2. every spoken lane was offered, and the lead spoke', bad.length === 0, `${bad.length} malformed of ${turns.length}`);
+      // THE FADE (short phrasing when green): the audit device starts with no
+      // evidence, so nothing is green and NOTHING may fade — grey means teach.
+      // A fade here is the heat map reading green off an empty record.
+      const fadedRows = turns.filter((t) => !Array.isArray(t.faded) || t.faded.length > 0 || t.faded.some((l) => !t.offered.includes(l)));
+      record('LD3. nothing FADED on a fresh device (grey teaches in full)', fadedRows.length === 0, `${fadedRows.length} of ${turns.length} rows faded or lack the field`);
       const laneCount = {};
       for (const t of turns) for (const l of t.spoke) laneCount[l] = (laneCount[l] ?? 0) + 1;
       console.log('  [learn door] spoke by lane:', JSON.stringify(laneCount));

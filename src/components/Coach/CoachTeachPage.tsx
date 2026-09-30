@@ -67,7 +67,7 @@ import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { usePhaseNarration } from '../../hooks/usePhaseNarration';
 import { useStudentNeed } from '../../hooks/useStudentNeed';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
-import { useWeaknessSignals } from '../../hooks/useWeaknessSignals';
+import { useProvenTags, useWeaknessSignals } from '../../hooks/useWeaknessSignals';
 import {
   createPhaseTransitionState,
   detectPhaseTransition,
@@ -7355,6 +7355,8 @@ export function CoachTeachPage(): JSX.Element {
   // THE STUDENT MODEL (Phase 1) — re-ranks the coach-reply teaching briefing
   // toward the holes this student keeps falling in. Ref-held; read at speak-time.
   const weaknessSignalsRef = useWeaknessSignals();
+  // Proven skills — the Learn door fades their lanes to the short phrasing.
+  const provenTagsRef = useProvenTags();
   // …AND THE OTHER HALF OF IT (N2). Weaknesses say which holes they keep falling
   // in and RAISE what leads; need says whether this student needs teaching HERE
   // AT ALL — book departures in this opening, weakness match for what the ply
@@ -7419,7 +7421,7 @@ export function CoachTeachPage(): JSX.Element {
       const prior = turnLeadRef.current && samePosition(turnLeadRef.current.fen, liveFenRef.current ?? fen)
         ? turnLeadRef.current.lead
         : null;
-      const d = decideTurn([{ lane: 'phase', text, fen }], undefined, learnMemRef.current.spokenKeys, prior);
+      const d = decideTurn([{ lane: 'phase', text, fen }], undefined, learnMemRef.current.spokenKeys, prior, provenTagsRef.current);
       // A held sentence was not spoken, so it must not ride the narration
       // kind every listener reads as speech.
       void logAppAudit(d.pkg.spoken ? {
@@ -8478,7 +8480,7 @@ export function CoachTeachPage(): JSX.Element {
       // priorKeys = every phrase spoken EARLIER this game, so no lane repeats a
       // phrase across turns (David 2026-09-13). Within-turn dedupe is separate
       // (the late package's `alreadySaid`); this is the cross-turn guarantee.
-    ], undefined, learnMemRef.current.spokenKeys);
+    ], undefined, learnMemRef.current.spokenKeys, null, provenTagsRef.current);
     // Every lane's speak/silent answer is the door's lane table now
     // (`learnTurnDoor.LEARN_LANES`), not a kind whitelist applied after the
     // fact. NO COUNT CAP (David 2026-09-13) still holds — repetition is caught
@@ -10407,6 +10409,7 @@ export function CoachTeachPage(): JSX.Element {
                     // ONE THOUGHT PER TURN (WO-1b): the late wave leads only
                     // if it outranks what the instant wave led with.
                     instantLead,
+                    provenTagsRef.current,
                   );
                   const hintPkg = lateDecision.pkg;
                   if (lateDecision.lead) turnLeadRef.current = { fen: pending.fen, lead: lateDecision.lead };

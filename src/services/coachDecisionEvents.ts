@@ -165,6 +165,8 @@ export interface LearnTurnRow {
   spoke: string[];
   lead: string | null;
   held: string[];
+  /** Lanes that spoke short because the skill is proven (the fade). */
+  faded: string[];
 }
 
 const learnTurnListeners = new Set<(row: LearnTurnRow) => void>();

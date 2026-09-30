@@ -24,6 +24,7 @@
  * `buildVoicePackage`'s. Picking ONE lead per turn is the next slice.
  */
 import { emitLearnTurn } from './coachDecisionEvents';
+import { COMPUTER_ROLES } from './computerRoles';
 import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type VoiceFactKind, type VoicePackage } from './voicePackage';
 
 export { buildVoicePackage, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys } from './voicePackage';
@@ -77,7 +78,8 @@ export type LearnLane =
   | 'trade'
   | 'kneeJerk'
   | 'blunderCheck'
-  | 'autopilot';
+  | 'autopilot'
+  | 'strongChoice';
 
 /** Lanes at or below this lead DESCRIBE the board (commentary, behaviour,
  *  the positional read, structure, piece quality) — the tier the scoreboard
@@ -178,6 +180,8 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   theirIntent: { kind: 'computed', why: "what the opponent's quiet move prepares — engine-proven from their seat", lead: 73 },
   // TEMPO, COUNTED (P2 #7): their piece's third move while the student develops.
   tempo: { kind: 'computed', why: 'their piece keeps moving in the opening while you develop — free moves, counted', lead: 70 },
+  // A STRONG PLAYER'S CHOICE (P3, depersonalized): what a strong player plays here.
+  strongChoice: { kind: 'computed', why: 'what a strong player chooses in this exact position, from real games', lead: 57 },
   // THE SAFETY HABITS (P3 method beats): close the beat after the grade.
   blunderCheck: { kind: 'computed', why: 'the move left a piece they simply took — the habit that catches it', lead: 61 },
   autopilot: { kind: 'computed', why: 'the popular move here cost — the moment to stop and check', lead: 59 },
@@ -224,6 +228,22 @@ export interface TurnDecision {
    *  thought per turn is the rule. Recorded so the audit can see what the
    *  ranking cost. */
   held: LearnLane[];
+  /** Lanes that spoke their SHORT phrasing because the student's own record
+   *  proves the skill (David 2026-09-30: "Short phrasing when green"). */
+  faded: LearnLane[];
+}
+
+/** THE FADE. A lane that teaches a skill the student has PROVEN (green on the
+ *  heat map — `capabilityProven`) says only its first sentence: the point, not
+ *  the lesson again. Not a cap (G4.5): the student's own record decides, and
+ *  grey or red keeps the full teaching. Only lanes whose HELD half is wired
+ *  fade — a skill the app cannot see the student answer can never be green. */
+export function fadeWhenGreen(lane: LearnLane, text: string, green: ReadonlySet<string> | null): string {
+  if (!green || green.size === 0) return text;
+  const role = COMPUTER_ROLES[lane];
+  if (!role || !role.tag || role.held.state !== 'wired' || !green.has(role.tag)) return text;
+  const first = text.split(/(?<=[.!?])\s+(?=[A-Z"“])/)[0];
+  return first && first.length < text.length ? first : text;
 }
 
 /** The door. Every Learn free-play utterance is assembled here. */
@@ -237,13 +257,19 @@ export function decideTurn(
    *  only lead if it outranks it; otherwise it speaks support and safety only,
    *  so a turn stays one thought across its two waves. */
   priorLead?: { lane: LearnLane; squares: readonly string[] } | null,
+  /** The tags the student's record has PROVEN (`loadProvenTags`) — lanes on
+   *  them fade to their short phrasing. Null when the record is not loaded. */
+  green?: ReadonlySet<string> | null,
 ): TurnDecision {
   const offered: LearnLane[] = [];
+  const faded: LearnLane[] = [];
   const open: Array<VoiceFact & { lane: LearnLane }> = [];
   for (const f of facts) {
     if (!f.text.trim()) continue;
     offered.push(f.lane);
-    open.push({ lane: f.lane, kind: f.kind ?? LEARN_LANES[f.lane].kind, text: f.text, fen: f.fen, squares: f.squares, claims: f.claims, lines: f.lines });
+    const text = fadeWhenGreen(f.lane, f.text, green ?? null);
+    if (text !== f.text && !faded.includes(f.lane)) faded.push(f.lane);
+    open.push({ lane: f.lane, kind: f.kind ?? LEARN_LANES[f.lane].kind, text, fen: f.fen, squares: f.squares, claims: f.claims, lines: f.lines });
   }
   const verified = buildVoicePackage(open.map(({ kind, text, fen, squares, claims, lines }) => ({ kind, text, fen, squares, claims, lines })), alreadySaid, priorKeys);
   // Which lane each surviving fact came from (the package may trim the text).
@@ -289,8 +315,8 @@ export function decideTurn(
   const lead = ownLead ? { lane: ownLead.lane, squares: ownLead.fact.squares ?? [] } : null;
   // EMIT every decision (the algo-audit rule): a door whose decisions cannot be
   // inspected can only be judged by reading the tape.
-  if (offered.length > 0) emitLearnTurn({ offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held] });
-  return { pkg, offered, spoke, lead, held };
+  if (offered.length > 0) emitLearnTurn({ offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded] });
+  return { pkg, offered, spoke, lead, held, faded };
 }
 
 /** One line for the audit log: which lanes were offered and which spoke. */
