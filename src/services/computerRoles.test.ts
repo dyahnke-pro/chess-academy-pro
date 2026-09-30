@@ -7,7 +7,7 @@ import { COMPUTER_ROLES, owedRoles } from './computerRoles';
 import { LEARN_LANES } from './learnTurnDoor';
 
 /** Shrink-only. Lower it when an owed half is wired; never raise it. */
-const OWED_CEILING = 1;
+const OWED_CEILING = 0;
 
 function allSource(dir: string, out: string[] = []): string[] {
   for (const f of readdirSync(dir)) {

@@ -294,7 +294,7 @@
 - `src/coach/batteryRouting.test.ts:109`
 - `src/coach/coachService.ts:1420`
 - `src/services/coachApi.ts:2452`
-- `src/services/coachApi.ts:6032`
+- `src/services/coachApi.ts:6035`
 
 ### `isWhoseTurnQuestion` (function) — 4 call sites
 - `src/coach/batteryRouting.test.ts:120`
@@ -344,7 +344,7 @@
 - `src/coach/questionIntents.test.ts:571`
 - `src/coach/questionIntents.test.ts:579`
 - `src/coach/questionIntents.test.ts:585`
-- `src/services/coachApi.ts:6220`
+- `src/services/coachApi.ts:6223`
 
 ### `isEndgameWeaknessQuestion` (function) — 4 call sites
 - `src/coach/coachService.ts:1288`

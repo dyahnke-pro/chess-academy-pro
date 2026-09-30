@@ -18,6 +18,19 @@ Order rule (unchanged from the full review): **truth before coverage.** A new
 lane that speaks a false line costs more than a silent move. Phase 0 and 1 land
 before any new computer in Phase 3.
 
+
+---
+
+## 🔒 RELEASE GATE (David 2026-09-30: "We go live once the entire system is built and verified to 97% accuracy. All phases 1-6 done, then merge")
+
+Nothing merges to `main` until BOTH hold:
+1. **Phases 1–6 are all done** — every row ✅, or ⛔ with David's explicit say.
+2. **The whole system verifies at ≥ 97%** of all checkable claims on a fresh walk
+   (walk → tape → `tape-verify.mjs` → manual pass on the unchecked half), plus the
+   Learn and Review prod-shaped audits green, including LD1/LD2/LE1.
+
+Then merge, then the post-deploy audit on prod.
+
 ---
 
 ## PHASE 0 — Finish the truth pass (blocks everything)

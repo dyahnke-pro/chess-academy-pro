@@ -5551,7 +5551,10 @@ export async function getCoachChatResponse(
           });
           // What their move COST them and the tempo count — the Learn computers.
           const theirPly = lastPlyOf(grounding.moveHistory, sc === 'white' ? 'black' : 'white');
-          const theirExtra = theirPly === null ? [] : theirMoveAnswerLines(grounding.moveHistory, theirPly, sc === 'white' ? 'w' : 'b');
+          const bestHere = grounding.engineBestMoveUci && typeof grounding.engineEvalCp === 'number'
+            ? { rank: 1, evaluation: grounding.engineEvalCp, moves: [grounding.engineBestMoveUci], mate: null }
+            : undefined;
+          const theirExtra = theirPly === null ? [] : theirMoveAnswerLines(grounding.moveHistory, theirPly, sc === 'white' ? 'w' : 'b', bestHere);
           const answer = base && theirExtra.length > 0 ? { ...base, facts: `${base.facts} ${theirExtra.join(' ')}` } : base;
           if (answer) {
             const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opponent-move', preferRaw: true });

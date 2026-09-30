@@ -48,7 +48,7 @@ export const COMPUTER_ROLES: Record<LearnLane, ComputerRole> = {
   tactic: { computer: 'tacticsDetector', tag: 'missed-tactic', held: PRE, broken: SLIP, askable: { state: 'wired', via: 'isTacticsQuestion' } },
   threat: { computer: 'groundedAnswer.detectNewThreat', tag: 'missed-opponents-threat', held: PRE, broken: SLIP, askable: { state: 'wired', via: 'isOpponentMoveQuestion' } },
   threatAnswer: { computer: 'threatAnswer', tag: 'missed-opponents-threat', held: PRE, broken: SLIP, askable: { state: 'wired', via: 'isOpponentMoveQuestion' } },
-  falseAlarm: { computer: 'falseAlarm', tag: 'missed-opponents-threat', held: { state: 'wired', via: 'recordTeachingEvidence' }, broken: SLIP, askable: { state: 'owed', what: 'a "do I have to deal with that?" question' } },
+  falseAlarm: { computer: 'falseAlarm', tag: 'missed-opponents-threat', held: { state: 'wired', via: 'recordTeachingEvidence' }, broken: SLIP, askable: { state: 'wired', via: 'theirMoveAnswerLines' } },
   mistake: { computer: 'backwardLook / inaccuracyCall', tag: null, held: { state: 'na', why: 'only speaks on a slip' }, broken: SLIP, askable: { state: 'wired', via: 'isMoveRatingQuestion' } },
   fundamental: { computer: 'learnFundamentalNarration', tag: null, held: { state: 'wired', via: 'recordMoveEvidence (capabilitiesPosed)' }, broken: SLIP, askable: { state: 'wired', via: 'isFundamentalsQuestion' } },
   drawback: { computer: 'backwardLook.lookConcession', tag: null, held: { state: 'na', why: 'only speaks on a cost' }, broken: SLIP, askable: { state: 'wired', via: 'isMoveRatingQuestion' } },

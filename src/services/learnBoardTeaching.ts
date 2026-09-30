@@ -354,12 +354,19 @@ export function studentMoveAnswerLines(history: readonly string[], ply: number, 
   return hints.map((h) => h.text);
 }
 
-/** "What did their move do?" — what it cost them, and the tempo count. `ply`
- *  is the index of THEIR move. */
-export function theirMoveAnswerLines(history: readonly string[], ply: number, student: 'w' | 'b'): string[] {
+/** "What did their move do? Do I have to deal with it?" — what it cost them,
+ *  the tempo count, and — when their move is the last on the board and the
+ *  engine's best line at the current position is known — whether its threat can
+ *  wait (`falseAlarm`). `ply` is the index of THEIR move. */
+export function theirMoveAnswerLines(history: readonly string[], ply: number, student: 'w' | 'b', best?: AnalysisLine): string[] {
   const fenBefore = replayTo(history, ply);
   if (!fenBefore || ply < 0 || ply >= history.length) return [];
   const out: string[] = [];
+  if (best && ply === history.length - 1) {
+    const after = replayTo(history, ply + 1);
+    const fa = after ? falseAlarm(fenBefore, after, best, null) : null;
+    if (fa) out.push(fa.text);
+  }
   const cost = theirMoveTeaching(fenBefore, history[ply], student);
   if (cost) out.push(cost.text);
   const tempo = tempoTeaching(history.slice(0, ply + 1), student);
