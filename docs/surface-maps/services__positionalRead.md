@@ -38,12 +38,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `rookReachesFile` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9982`
-- `src/services/danyaBehaviors.ts:691`
+- `src/components/Coach/CoachTeachPage.tsx:9992`
+- `src/services/danyaBehaviors.ts:695`
 - `src/services/recaptureChoice.ts:62`
 
 ### `castleIsOneMoveAway` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:287`
+- `src/services/danyaBehaviors.ts:291`
 - `src/services/replayFence.modern1690.test.ts:133`
 - `src/services/replayFence.modern1690.test.ts:134`
 - `src/services/replayFence.modern1690.test.ts:135`
@@ -51,9 +51,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `readPosition` (function) — 46 call sites
 - `src/services/boardPlan.ideaKey.test.ts:13`
 - `src/services/groundedAnswer.ts:1397`
-- `src/services/lookaheadPlan.ts:936`
-- `src/services/lookaheadPlan.ts:1205`
-- `src/services/lookaheadPlan.ts:1282`
+- `src/services/lookaheadPlan.ts:957`
+- `src/services/lookaheadPlan.ts:1226`
+- `src/services/lookaheadPlan.ts:1303`
 - `src/services/narrationAdversarial.test.ts:85`
 - `src/services/narrationAdversarial.test.ts:176`
 - `src/services/positionReadComposer.ts:128`
@@ -97,7 +97,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
 ### `buildPositionalRead` (function) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8385`
+- `src/components/Coach/CoachTeachPage.tsx:8386`
 - `src/services/claimChecker.measure.test.ts:132`
 - `src/services/learnWalkBlumenfeld.test.ts:118`
 - `src/services/learnWalkNimzo.test.ts:35`
@@ -115,10 +115,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.modern1690.test.ts:201`
 
 ### `attackerCanUseFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:260`
+- `src/services/danyaBehaviors.ts:264`
 
 ### `heavyPieceToFile` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:267`
+- `src/services/danyaBehaviors.ts:271`
 - `src/services/positionalRead.fileStep.test.ts:10`
 - `src/services/positionalRead.fileStep.test.ts:16`
 - `src/services/positionalRead.fileStep.test.ts:20`

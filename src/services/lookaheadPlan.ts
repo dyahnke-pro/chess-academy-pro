@@ -99,6 +99,27 @@ export function tacticWord(kind: string | null): string | null {
   return (PATTERN_SPEECH as Record<string, { word: string }>)[kind]?.word ?? null;
 }
 
+/**
+ * THE STUDENT'S OWN TACTIC, SEATED (run C walk 2026-09-30: "You have a pin:
+ * bishop on h3 pins rook on g2 against king on f1" — nobody's pieces; and "You
+ * have a discovered attack: the knight on f3 is a discovered attack in
+ * waiting", the name said twice). The detector describes a tactic the student
+ * HOLDS, so its first piece is theirs to play and everything it hits is the
+ * opponent's — except the piece a discovery unveils, which is also the
+ * student's. When the description already names the motif, it IS the sentence.
+ */
+export function seatedTacticLine(word: string, description: string | null | undefined): string {
+  if (!description) return `You have a ${word}.`;
+  const PIECE = '(pawn|knight|bishop|rook|queen|king)';
+  let d = description.trim().replace(/[.!]$/, '');
+  d = d.charAt(0).toLowerCase() + d.slice(1);
+  d = d.replace(new RegExp(`^(?:the )?${PIECE} on`), 'your $1 on');
+  d = d.replace(new RegExp(`unveils (?:the )?${PIECE} on`, 'g'), 'unveils your $1 on');
+  d = d.replace(new RegExp(`(^|[^\\w])(?:the )?(?<!your |their )${PIECE} on ([a-h][1-8])`, 'g'), (_m: string, pre: string, piece: string, sq: string) => `${pre}their ${piece} on ${sq}`);
+  const body = d.charAt(0).toUpperCase() + d.slice(1);
+  return new RegExp(`\\b${word}\\b`).test(d) ? `${body}.` : `You have a ${word}: ${d}.`;
+}
+
 /** How close a landing square has to be to a king to count as "coming at it".
  *
  *  Three, not two. Two is the ring of squares touching the king, which almost

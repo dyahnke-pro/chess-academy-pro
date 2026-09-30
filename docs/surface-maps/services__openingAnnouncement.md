@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**104 lines · 5 exports · 3 importers · 3 tests · 1 audits**
+**109 lines · 5 exports · 3 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -44,8 +44,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingAnnouncement.test.ts:47`
 - `src/services/openingAnnouncement.test.ts:48`
 
-### `openingAnnouncementForGame` (function) — 1 call site
+### `openingAnnouncementForGame` (function) — 3 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8027`
+- `src/services/openingAnnouncement.test.ts:130`
+- `src/services/openingAnnouncement.test.ts:131`
 
 ### `warmOpeningBook` (function) — 1 call site
 - `src/components/Coach/CoachTeachPage.tsx:956`

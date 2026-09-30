@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1401 lines · 23 exports · 11 importers · 7 tests · 0 audits**
+**1422 lines · 24 exports · 12 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,6 +22,7 @@
 - `src/services/planArc.test.ts`
 - `src/services/planArc.ts`
 - `src/services/reviewWalk900.test.ts`
+- `src/services/seatedTacticLine.test.ts`
 - `src/test/factories.ts`
 
 ## Exports and every call site
@@ -62,6 +63,12 @@
 - `src/services/reviewMoveBriefing.ts:250`
 - `src/services/tacticVocabulary.ts:95`
 - `src/services/teachingSelector.ts:347`
+
+### `seatedTacticLine` (function) — 4 call sites
+- `src/components/Coach/CoachTeachPage.tsx:7774`
+- `src/services/seatedTacticLine.test.ts:7`
+- `src/services/seatedTacticLine.test.ts:11`
+- `src/services/seatedTacticLine.test.ts:15`
 
 ### `PLAN_HORIZON` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -166,7 +173,7 @@
 - `src/services/learnWalkBlumenfeld.test.ts:179`
 
 ### `planFromUci` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9349`
+- `src/components/Coach/CoachTeachPage.tsx:9354`
 - `src/services/coachLaneWiring.test.ts:35`
 - `src/services/computedVoiceAudit.report.test.ts:218`
 - `src/services/concessionBeat.ts:440`
@@ -195,14 +202,14 @@
 - `src/services/coachFeatureService.ts:1321`
 
 ### `aimsOf` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9362`
-- `src/components/Coach/CoachTeachPage.tsx:9366`
+- `src/components/Coach/CoachTeachPage.tsx:9367`
+- `src/components/Coach/CoachTeachPage.tsx:9371`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.ts:52`
 
 ### `aimWalkableNow` (re-export) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9362`
-- `src/components/Coach/CoachTeachPage.tsx:9366`
+- `src/components/Coach/CoachTeachPage.tsx:9367`
+- `src/components/Coach/CoachTeachPage.tsx:9371`
 - `src/services/planArc.test.ts:201`
 - `src/services/planArc.test.ts:211`
 - `src/services/planArc.test.ts:217`
@@ -215,8 +222,8 @@
 - `src/services/planArc.ts:348`
 
 ### `stepArc` (re-export) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9362`
-- `src/components/Coach/CoachTeachPage.tsx:9366`
+- `src/components/Coach/CoachTeachPage.tsx:9367`
+- `src/components/Coach/CoachTeachPage.tsx:9371`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.test.ts:94`
 - `src/services/planArc.test.ts:96`
@@ -248,6 +255,7 @@
 - `src/services/planArc.test.ts`
 - `src/services/replayFence.modern1690.test.ts`
 - `src/services/reviewWalk900.test.ts`
+- `src/services/seatedTacticLine.test.ts`
 
 ## Audits that reach it
 

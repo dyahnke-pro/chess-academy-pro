@@ -274,6 +274,13 @@ function checkSentence(s, ctx) {
     sans.forEach((x) => lineSans.add(x));
     res.push([walkLine(sans), `line ${sans.join(' ')} is illegal`]);
   }
+  // "Why not X? It grabs …, but Y refutes it." — Y answers X, so walk them together.
+  const whyNot = /Why not (…?\S+?)\?[^.]*?, but (…?\S+?) refutes it/.exec(s);
+  if (whyNot) {
+    const sans = [whyNot[1], whyNot[2]].map((x) => stripSan(x.trim()));
+    sans.forEach((x) => lineSans.add(x));
+    res.push([walkLine(sans), `line ${sans.join(' ')} is illegal`]);
+  }
   // LEGALITY: a named student/opponent move must be legal on a board it can be about.
   if (!future) {
     for (const m of s.matchAll(/(?<![\w-])(…)?([NBRQK][a-h]?[1-8]?x?[a-h][1-8]|[a-h]x[a-h][1-8])[+#]?(?![\w-])/g)) {

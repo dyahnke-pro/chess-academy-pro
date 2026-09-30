@@ -197,7 +197,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
   {
     id: 'piece-activity',
     weight: 1039,
-    detect: ({ fen, student }) => {
+    detect: ({ fen, student, studentLastTo }) => {
       // Danya's real "piece activity" read is a CONCRETE placement — a knight
       // on an outpost, a rook on the open file, a bad bishop to improve — NOT
       // "your queen is your most active piece" (the queen always has the widest
@@ -221,7 +221,10 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // is passive because it isn't developed yet (David 2026-08-23).
       const isMiddlegame = Number(fen.split(' ')[5] ?? '0') >= 10;
       if (!isMiddlegame) return null;
-      const bad = notes.find((n) => n.quality === 'bad');
+      // Never the piece the student JUST put there: the move's own purpose is
+      // speaking, and "reroute it" beside "Na4 does two jobs" is two coaches
+      // (run C walk 2026-09-30).
+      const bad = notes.find((n) => n.quality === 'bad' && n.square !== studentLastTo);
       if (bad) {
         // THE WISHLIST (census #15): name WHERE it wants to be and the path,
         // or say nothing about rerouting — "a better square" teaches nothing.
@@ -229,7 +232,8 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         if (route) {
           return { fact: `Your ${PIECE_NAME[bad.piece]} on ${bad.square} is a ${bad.reason} — it wants ${route.target}${route.via ? `, via ${route.via}` : ''}: ${route.why}.`, squares: [bad.square, ...(route.via ? [route.via] : []), route.target] };
         }
-        return { fact: `Your ${PIECE_NAME[bad.piece]} on ${bad.square} is a ${bad.reason} — reroute it to a better square.`, squares: [bad.square] };
+        // No route, no line: "a better square" teaches nothing (census #15).
+        return null;
       }
       // Fallback: a genuinely passive MINOR (never the queen/king/rook).
       const { weakest } = strongestWeakestPiece(fen, student);
@@ -328,7 +332,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         // "make sure arrows are firing to illustrate the ideas being spoken").
         const eyed = theirMoveArrow(fen, intent.san, student);
         if (/#$/.test(intent.san)) return { fact: `They're threatening mate with ${intent.san.replace(/#$/, '')} — that comes first.`, squares: [intent.target], arrows: eyed };
-        return { fact: `They're eyeing ${intent.san} — it would win ${what}.`, squares: [intent.target], arrows: eyed };
+        return { fact: `They're eyeing ${intent.san} — it would win ${what}.`, squares: [intent.target], keys: [`win-${intent.target}`], arrows: eyed };
       }
       // NAME WHAT IT FORKS — "forking on e4" named the knight's landing
       // square as if it were the target (walk 2026-09-27, Carlsen–Aronian).

@@ -116,3 +116,19 @@ describe('a plural "Variations" tail is a DB grouping, not a name (1200 walk 202
     expect(spokenOpeningLabel('Sicilian Defense: Alapin Variation')).toBe('Sicilian Defense: Alapin Variation');
   });
 });
+
+describe('a departure is news only when it just happened (run C walk 2026-09-30)', () => {
+  it('a departure forty moves old says nothing; one just played is announced', async () => {
+    vi.resetModules();
+    vi.doMock('./bookDeparture', async (orig) => ({
+      ...(await orig<typeof import('./bookDeparture')>()),
+      bookDeparture: () => ({ ply: 6, san: 'h5', mover: 'b', mainSan: null }),
+    }));
+    const { openingAnnouncementForGame } = await import('./openingAnnouncement');
+    const det = { name: 'Indian Defense: Knights Variation, East Indian' } as never;
+    const long = Array.from({ length: 40 }, () => 'x');
+    expect(openingAnnouncementForGame(det, long, 'Indian Defense: Knights Variation', 'b')).toBeNull();
+    expect(openingAnnouncementForGame(det, long.slice(0, 6), 'Indian Defense: Knights Variation', 'b')).toMatch(/^You left the book with/);
+    vi.doUnmock('./bookDeparture');
+  });
+});

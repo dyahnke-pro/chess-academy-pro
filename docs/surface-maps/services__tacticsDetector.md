@@ -61,14 +61,14 @@
 - `src/services/computerAccuracy.audit.test.ts:117`
 - `src/services/conceptEngine.ts:433`
 - `src/services/conceptEngine.ts:607`
-- `src/services/danyaBehaviors.ts:456`
+- `src/services/danyaBehaviors.ts:460`
 - `src/services/discussionPractice.ts:55`
 - `src/services/discussionPractice.ts:100`
 - `src/services/discussionPractice.ts:143`
 - `src/services/liveNoteTruth.test.ts:59`
 - `src/services/liveTacticsContext.ts:361`
-- `src/services/lookaheadPlan.ts:1147`
-- `src/services/lookaheadPlan.ts:1210`
+- `src/services/lookaheadPlan.ts:1168`
+- `src/services/lookaheadPlan.ts:1231`
 - `src/services/misconceptionClassifier.ts:113`
 - `src/services/misconceptionClassifier.ts:264`
 - `src/services/mistakeNarration.ts:395`

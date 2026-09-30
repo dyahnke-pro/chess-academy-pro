@@ -189,7 +189,7 @@ import { moveOrderArrows } from '../../services/moveOrderArrows';
 import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead';
 
 import { scaleGap, packageForRegister } from '../../services/hintRegister';
-import { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcState, planFromUci, tacticWord } from '../../services/lookaheadPlan';
+import { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcState, planFromUci, tacticWord, seatedTacticLine } from '../../services/lookaheadPlan';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import { backwardLook, lastCoachVerdictDecline, lookConcession } from '../../services/backwardLook';
 import { learnFundamentalVerdict } from '../../services/learnFundamentalNarration';
@@ -7771,7 +7771,7 @@ export function CoachTeachPage(): JSX.Element {
           tacticLine = word
             // NAMED from the detector's own description (Learn names the
             // move; "have a look" withheld it — walk 1500, 21.Rab1/38.Ne3).
-            ? withTransfer(`You have a ${word}: ${t.description ? t.description.charAt(0).toLowerCase() + t.description.slice(1).replace(/[.!]$/, '') : `on ${t.squares.join(', ')}`}.`, transferClause(t.type, instance, moveNo, learnMemRef.current.motifFirstMove))
+            ? withTransfer(t.description ? seatedTacticLine(word, t.description) : `You have a ${word}: on ${t.squares.join(', ')}.`, transferClause(t.type, instance, moveNo, learnMemRef.current.motifFirstMove))
             : null;
           if (word) { pendingMotif = { type: t.type, instance, moveNo }; tacticTailType = t.type; }
           myTacticType = word ? t.type : null;
@@ -8365,9 +8365,10 @@ export function CoachTeachPage(): JSX.Element {
         const hit = behaviorSchedulerRef.current.pick(eligible);
         if (hit) {
           behaviorArrows = hit.arrows ?? [];
-          behaviorLine = hit.fact; behaviorSquares = hit.squares; behaviorClaims = hit.keys.filter((k) => /^(?:castle-now|file-[a-h]|(?:passer|break)-[a-h][1-8])$/.test(k));
+          behaviorLine = hit.fact; behaviorSquares = hit.squares; behaviorClaims = hit.keys.filter((k) => /^(?:castle-now|file-[a-h]|(?:passer|break|win)-[a-h][1-8])$/.test(k));
           if (hit.id === 'pawn-break') for (const sq of hit.squares) standingRef.current.remember(`student-break-${sq}`);
-          for (const k of hit.keys) positionalSaidRef.current.add(k);
+          // A threat is a claim about THIS turn, not an idea said once a game.
+          for (const k of hit.keys) if (!k.startsWith('win-')) positionalSaidRef.current.add(k);
         }
       } catch { /* never a blocker */ }
       // THE POSITIONAL READ IS CHECKED EVERY (non-urgent) TURN (David 2026-09-13:
@@ -9332,7 +9333,11 @@ export function CoachTeachPage(): JSX.Element {
                       const tacticLiveNow = tctxNow.immediate.length > 0 || tctxNow.hanging.length > 0;
                       const step = stepCharacter(characterRef.current, now, tacticLiveNow ? 'tactic' : gap !== null && gap >= SHARP_GAP_CP ? 'gap' : undefined);
                       characterRef.current = step.next;
-                      if (step.switched) queueSpokenHint(probe.fen(), step.switched.text, 'character');
+                      // A forced mate already says what the position is about;
+                      // "it has turned sharp" beside it is the same fact twice
+                      // (run C walk 2026-09-30, the mate-in-4 ply).
+                      const mateOnBoard = typeof tl[0]?.mate === 'number' && tl[0].mate > 0;
+                      if (step.switched && !mateOnBoard) queueSpokenHint(probe.fen(), step.switched.text, 'character');
                     } catch { /* the character read is a bonus, never a blocker */ }
 
                     // BOTH SIDES' PLANS, off the SAME engine read (David
@@ -9914,8 +9919,13 @@ export function CoachTeachPage(): JSX.Element {
                       const line = `${fundamental
                         ? `${lossInGrade ? '' : fundamental.verdict}${fundamental.recurrence ? ` ${fundamental.recurrence}` : ''}${evidence ? ` ${evidence}` : ''}`.trim()
                         : look.line}${concession ? ` ${concession}` : ''}`;
+                      // "That let them win the pawn on d4" and "they're eyeing
+                      // Nxd4 — it would win your pawn on d4" are one claim (run
+                      // C walk 2026-09-30); the shared key lets the package keep one.
+                      const winClaim = !fundamental && /^That let them win /.test(look.line) && /^[a-h][1-8]$/.test(look.square)
+                        ? [`win-${look.square}`] : undefined;
                       queueSpokenHint(fenAfterReply, line, look.kind,
-                        /^[a-h][1-8]$/.test(look.square) ? [look.square] : [], undefined, move.fen);
+                        /^[a-h][1-8]$/.test(look.square) ? [look.square] : [], winClaim, move.fen);
                       captureEvent('coach_backward_look', {
                         surface: 'coach-teach', kind: look.kind, cp_loss: Math.round(cpLoss),
                         fundamental: fundamental?.id ?? null,

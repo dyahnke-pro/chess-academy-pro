@@ -93,7 +93,12 @@ export function openingAnnouncementForGame(
   spokenName: string | null,
   studentColor: 'w' | 'b',
 ): string | null {
-  return openingAnnouncement(det, bookDeparture(history), spokenName, studentColor);
+  const dep = bookDeparture(history);
+  // A DEPARTURE IS NEWS ONLY WHEN IT JUST HAPPENED. Found late — a name the
+  // detector sharpened forty moves in — it announced "You left the book with
+  // the pawn to h5" at move 39 (run C walk 2026-09-30). Stale: say nothing.
+  if (spokenName !== null && dep && history.length - dep.ply > 1) return null;
+  return openingAnnouncement(det, dep, spokenName, studentColor);
 }
 
 /** Warm the book read for the position now on the board — the surface calls
