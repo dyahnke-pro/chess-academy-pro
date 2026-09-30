@@ -326,7 +326,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/computedTruth.fuzz.test.ts:174`
 - `src/services/groundedAnswer.ts:6185`
 - `src/services/groundedAnswer.ts:6187`
-- `src/services/learnWalkBlumenfeld.test.ts:109`
+- `src/services/learnWalkBlumenfeld.test.ts:111`
 - `src/services/minorityLeverCheck.test.ts:9`
 - `src/services/positionReadingService.test.ts:931`
 - `src/services/positionalRead.ts:366`

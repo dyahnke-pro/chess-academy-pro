@@ -160,10 +160,10 @@
 - `src/services/inaccuracyCall.ts:263`
 - `src/services/inaccuracyCall.ts:276`
 - `src/services/inaccuracyCall.ts:574`
-- `src/services/learnWalkBlumenfeld.test.ts:174`
-- `src/services/learnWalkBlumenfeld.test.ts:175`
 - `src/services/learnWalkBlumenfeld.test.ts:176`
 - `src/services/learnWalkBlumenfeld.test.ts:177`
+- `src/services/learnWalkBlumenfeld.test.ts:178`
+- `src/services/learnWalkBlumenfeld.test.ts:179`
 
 ### `planFromUci` (function) — 24 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9349`
