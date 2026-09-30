@@ -21,6 +21,7 @@ import { pushOrHold } from './pushOrHold';
 import { threatAnswer, type ThreatAnswer } from './threatAnswer';
 import { mastersPlanLine, mastersPlanRead } from './mastersPlanRead';
 import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
+import { tempoCount } from './tempoCount';
 import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from './criticalMoment';
 
 export interface TeachingHint {
@@ -176,6 +177,18 @@ export function theirMoveTeaching(fenBefore: string, san: string, student: 'w' |
     lane: 'theirMoveCost', text: cost.text, squares: cost.squares, claims: [`cost-${cost.kind}-${cost.squares[0]}`],
     event: { name: 'coach_their_move_cost_named', props: { surface: 'coach-teach', kind: cost.kind } },
     arrows,
+  };
+}
+
+/** Tempo, counted (P2 #7): their reply is a piece's third move in the opening
+ *  while the student has more pieces out. `history` ends with THEIR reply. */
+export function tempoTeaching(history: readonly string[], student: 'w' | 'b'): TeachingHint | null {
+  const t = tempoCount(history, student);
+  if (!t) return null;
+  return {
+    lane: 'tempo', text: t.text, squares: t.squares, claims: [`tempo-count:${t.pieceId}`],
+    event: { name: 'coach_tempo_counted', props: { surface: 'coach-teach', moves: t.moves } },
+    arrows: [],
   };
 }
 

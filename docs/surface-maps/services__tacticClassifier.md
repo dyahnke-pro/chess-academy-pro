@@ -33,7 +33,7 @@
 ### `findHangingPieces` (function) — 11 call sites
 - `src/data/patternRegistry.ts:113`
 - `src/services/coachGameEngine.ts:298`
-- `src/services/deliberation.ts:119`
+- `src/services/deliberation.ts:122`
 - `src/services/liveTacticsContext.ts:378`
 - `src/services/moveReason.ts:133`
 - `src/services/playedMoveGrade.ts:90`

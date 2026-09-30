@@ -154,8 +154,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/computedMaterialTruth.corpus.test.ts:145`
 - `src/services/conversionMethod.ts:69`
 - `src/services/deliberation.ts:43`
-- `src/services/deliberation.ts:313`
-- `src/services/deliberation.ts:314`
+- `src/services/deliberation.ts:328`
+- `src/services/deliberation.ts:329`
 - `src/services/exchangeLedger.ts:75`
 - `src/services/falseAlarm.ts:62`
 - `src/services/groundedAnswer.ts:295`

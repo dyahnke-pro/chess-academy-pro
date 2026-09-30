@@ -30,7 +30,7 @@ import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePacka
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { foundMoveTeaching, openingPlanTeaching, studentMoveTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
+import { foundMoveTeaching, openingPlanTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -10154,6 +10154,11 @@ export function CoachTeachPage(): JSX.Element {
                   if (cost) {
                     queueSpokenHint(fenAfterReply, cost.text, cost.lane, cost.squares, cost.claims, undefined, cost.arrows);
                     if (cost.event) captureEvent(cost.event.name, cost.event.props);
+                  }
+                  const tempo = replySan ? tempoTeaching([...move.history, replySan], playerColor === 'white' ? 'w' : 'b') : null;
+                  if (tempo) {
+                    queueSpokenHint(fenAfterReply, tempo.text, tempo.lane, tempo.squares, tempo.claims);
+                    if (tempo.event) captureEvent(tempo.event.name, tempo.event.props);
                   }
                 } catch { /* a bonus, never a blocker */ }
 

@@ -16,11 +16,11 @@
 import { Chess } from 'chess.js';
 import type { StockfishAnalysis } from '../types';
 import { findHangingPieces } from './tacticClassifier';
-import { proofAgainstMover } from './exchangeLedger';
+import { proofAgainstMover, proofForMover } from './exchangeLedger';
 import { strategicWhyLed } from './moveFundamentals';
 import { legalSeeGainFor } from './positionReadingService';
 import { isPinnedPiece } from './nextPlans';
-import { andList } from '../utils/andList';
+import { andList, orList } from '../utils/andList';
 
 const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 
@@ -90,6 +90,9 @@ export interface Deliberation {
   /** Why the best move is best, from the board (`strategicWhyLed`). Null when
    *  the board gives no reason — then the verdict is not spoken. */
   bestWhy: string | null;
+  /** The best move's own line, played out, when it proves a win of material
+   *  or mate within the horizon — the "if X, then Y" half of the verdict. */
+  bestLine?: string | null;
 }
 
 function uciToSan(fen: string, uci: string): string | null {
@@ -192,7 +195,11 @@ export function buildDeliberation(input: {
   }
 
   const bestWhy = moveWhy(fenBefore, bestSan, moverColor, input.opponentLastSan);
-  return { best, alternatives, isRealChoice: alternatives.length > 0, bestWhy };
+  // Played out only when it takes more than the move itself to see (3+ plies):
+  // a one-move win is already the reason.
+  const played = proofForMover(fenBefore, bestLine.moves, moverColor);
+  const bestLineText = played && played.plies >= 3 ? played.text : null;
+  return { best, alternatives, isRealChoice: alternatives.length > 0, bestWhy, bestLine: bestLineText };
 }
 
 
@@ -244,8 +251,16 @@ export function deliberationFacts(d: Deliberation): string {
   // THE VERDICT CARRIES ITS REASON, or it is not said (David 2026-09-24:
   // "The move is Rxf3" alone is an order, not teaching). The weighing still
   // stands on its own — ruling the bad moves out IS the thinking out loud.
-  const verdict = d.bestWhy ? ` The move is ${d.best.san} — it ${d.bestWhy}.` : '';
-  return `${reasoned.map(shortfallText).join(' ')}${verdict}`;
+  const line = d.bestLine ? ` ${d.bestLine[0].toUpperCase()}${d.bestLine.slice(1)}.` : '';
+  const verdict = d.bestWhy ? ` The move is ${d.best.san} — it ${d.bestWhy}.${line}` : '';
+  // WEIGH THE CANDIDATES BEFORE NAMING ONE (plan P2 #4): name the moves on the
+  // table first, then rule the bad ones out, then conclude. Said only when a
+  // conclusion follows — naming candidates and never choosing is not thinking
+  // out loud. Alphabetical, so the order never telegraphs the answer.
+  const opener = verdict
+    ? `Candidates: ${orList([...new Set([...reasoned.map((a) => a.san), d.best.san])].sort())}. `
+    : '';
+  return `${opener}${reasoned.map(shortfallText).join(' ')}${verdict}`;
 }
 
 /** The alternatives that are a real fork in the road — they drop material or

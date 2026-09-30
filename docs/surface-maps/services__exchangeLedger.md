@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**220 lines · 9 exports · 9 importers · 3 tests · 0 audits**
+**239 lines · 10 exports · 9 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -55,25 +55,30 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `proofCut` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3317`
+- `src/services/coachFeatureService.ts:3381`
 - `src/services/lineProof.test.ts:13`
 - `src/services/lineProof.test.ts:24`
 - `src/services/lineProof.test.ts:32`
 - `src/services/lineProof.test.ts:37`
 - `src/services/pieceOptions.ts:110`
-- `src/services/refutedAlternativeCore.ts:145`
+- `src/services/refutedAlternativeCore.ts:175`
 
 ### `describeProofResult` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3304`
+- `src/services/coachFeatureService.ts:3368`
 - `src/services/lineProof.test.ts:27`
 - `src/services/pieceOptions.ts:118`
-- `src/services/refutedAlternativeCore.ts:153`
+- `src/services/refutedAlternativeCore.ts:183`
 
 ### `proofAgainstMover` (function) — 4 call sites
-- `src/services/criticalMoment.ts:200`
-- `src/services/deliberation.ts:179`
+- `src/services/criticalMoment.ts:230`
+- `src/services/deliberation.ts:189`
 - `src/services/exchangeLedger.horizon.test.ts:16`
 - `src/services/exchangeLedger.horizon.test.ts:21`
+
+### `proofForMover` (function) — 3 call sites
+- `src/services/deliberation.ts:200`
+- `src/services/exchangeLedger.horizon.test.ts:31`
+- `src/services/exchangeLedger.horizon.test.ts:38`
 
 ## Tests
 
