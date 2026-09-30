@@ -343,7 +343,7 @@ function checkSentence(s, ctx) {
 
 // ── run ────────────────────────────────────────────────────────────────────
 const spokenForm = /(knight|bishop|rook|queen|king) (to|takes) [a-h]|[a-h]-pawn takes|\bcastles\b/i;
-let T = 0; let F = 0; let U = 0; let N = 0; const falses = []; const unchecked = [];
+let T = 0; let F = 0; let U = 0; let N = 0; const falses = []; const unchecked = []; const dumpU = [];
 for (const [id, rec] of Object.entries(tape)) {
   const g = games.get(id); if (!g) continue;
   const me = rec.seat === 'white' ? 'w' : 'b'; const them = other(me);
@@ -362,7 +362,7 @@ for (const [id, rec] of Object.entries(tape)) {
       for (const s of line.split(/(?<=[.!])\s+(?=[A-Z…"])/)) {
         const k = s.toLowerCase().replace(/[^a-z0-9]/g, ''); if (!k || seen.has(k)) continue; seen.add(k);
         const r = checkSentence(s, ctx);
-        if (r.v === 'T') T++; else if (r.v === 'F') { F++; falses.push({ id, ply: plyS, s, why: r.why }); } else if (r.v === 'N') N++; else { U++; unchecked.push(s.slice(0, 140)); }
+        if (r.v === 'T') T++; else if (r.v === 'F') { F++; falses.push({ id, ply: plyS, s, why: r.why }); } else if (r.v === 'N') N++; else { U++; unchecked.push(s.slice(0, 140)); dumpU.push({ id, ply: plyS, seat: rec.seat, s, fenBefore, fenMid, fenAfter, lines: [g.plies[i]?.lines, g.plies[i + 1]?.lines, g.plies[i + 2]?.lines].map((ls) => (ls ?? []).slice(0, 3).map((l) => ({ cp: l.cp, mate: l.mate, pv: (l.pv ?? []).slice(0, 6) }))) }); }
       }
     }
   }
@@ -371,3 +371,4 @@ const n = T + F + U;
 console.log(`sentences ${n + N} (${N} advice, no board claim); claims ${n}; checked ${T + F} (${(100 * (T + F) / Math.max(1, n)).toFixed(0)}% coverage); TRUE ${T} FALSE ${F}; ACCURACY ${(100 * T / Math.max(1, T + F)).toFixed(1)}%`);
 if (process.env.SHOW_U) for (const u of unchecked) console.log(`? ${u}`);
 for (const f of falses.slice(0, SHOW)) console.log(`✗ ${f.id}:${f.ply} [${f.why}] ${f.s.slice(0, 160)}`);
+if (process.env.DUMP_U) (await import('node:fs')).writeFileSync(process.env.DUMP_U, JSON.stringify(dumpU, null, 1));
