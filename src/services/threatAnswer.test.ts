@@ -74,7 +74,7 @@ describe('threatAnswer', () => {
     const fen = '1r5r/1b1Rb3/p3k1p1/1p2p2p/4P2P/2B2P2/PPP1B1P1/1K5R w - - 1 27';
     const a = run(fen, ['d7', 'e6'], 'd7e7', 400, 'hit');
     expect(a?.kind).toBe('with-gain');
-    expect(a?.text).toContain('Move it with gain — Rxe7+ takes the bishop with check.');
+    expect(a?.text).toContain('Move it with gain — take their bishop with check: Rxe7+.');
   });
 
   it('refuses a board where the student is not to move', () => {

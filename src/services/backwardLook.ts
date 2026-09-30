@@ -288,6 +288,7 @@ export function backwardLook(args: {
       // order moves. It is strictly more teaching in the same slot, which is the
       // right direction ("The longer narrations are good. Do not cap them.").
       let instead: string | null = null;
+      let insteadLost: string | undefined;
       if (args.bestSan) {
         try {
           const call = callInaccuracy({
@@ -305,6 +306,7 @@ export function backwardLook(args: {
             replySan: args.replySan ?? null,
           });
           instead = call?.said ?? null;
+          insteadLost = call?.lostSquare;
         } catch { /* the alternative is a bonus; the read still stands */ }
       }
       const line = [attempt, cost ? `${cost.said} ${cost.opening}` : '', instead ?? '']
@@ -315,6 +317,11 @@ export function backwardLook(args: {
       return {
         line, square: attemptSquare || cost?.square || '', kind: 'drawback',
         ...(attempt && attemptSquare ? { withoutAttempt: { line: rest, square: attemptSquare } } : {}),
+        // The grade's lost square rides here too, so the fundamental that names
+        // the same hung piece stays quiet (run B walk 2026-09-30, Ng3: "that
+        // left your knight on g3 hanging…" then "it let them take your knight
+        // on g3" in one breath).
+        ...(insteadLost ? { lostSquare: insteadLost } : {}),
       };
     }
   }

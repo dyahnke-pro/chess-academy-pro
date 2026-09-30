@@ -73,6 +73,14 @@ describe('it names the better move AND what it was for', () => {
     expect(call?.said).toMatch(/^a3 was/);
     expect(call?.said).not.toContain('Bg5');
   });
+
+  it('never a bare grade — with no reason and no punishment it says what the move cost (run B walk, Nf5)', () => {
+    const call = callInaccuracy({ replyLineUci: [], replySan: null,
+      fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', cpLoss: 150,
+      side: 'student', moverColor: 'white',
+    });
+    expect(call?.said).toMatch(/^a3 was a mistake — it gave away about 1\.5 points\.$/);
+  });
 });
 
 describe('the coach owns its own mistakes', () => {

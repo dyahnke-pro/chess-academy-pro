@@ -267,7 +267,10 @@ function observationsFor(
         key: `${side}-development`, side, kind: 'development', rank: rank('development'),
         text: own
           ? `You still have ${asleep} minor pieces at home and they are ahead in development — the next move probably belongs to a piece, not a pawn.`
-          : `They still have ${asleep} minor pieces at home — a lead in development is only worth something while it lasts.`,
+          // SEATED AND WHAT TO DO (walk 2026-09-30: "a lead in development is
+          // only worth something while it lasts" never said whose lead, or how
+          // to use it). The lead is the student's; its use is opening the game.
+          : `You're ahead in development — they still have ${asleep} minor pieces at home, so open the position before they catch up.`,
       });
     }
   }

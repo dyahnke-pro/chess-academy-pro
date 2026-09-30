@@ -306,6 +306,9 @@ function phrase(
   const opp: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
   const played = dot(san, mover);
   const key = stemKeyOf(fenAfter);
+  // WHOSE piece it hits, said from the student's seat (run B walk 2026-09-30:
+  // "…Rad8 prepares …Qd2, to hit the queen on c1" — theirs, unsaid).
+  if (does && /^hit the /.test(does.verb)) does = { ...does, verb: does.verb.replace(/^hit the /, seat === 'student' ? 'hit their ' : 'hit your ') };
   if (seat === 'student') {
     const stop = prevents ? dot(prevents.san, opp) : '';
     const prep = prepares ? dot(prepares.san, mover) : '';

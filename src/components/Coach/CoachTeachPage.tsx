@@ -9903,7 +9903,7 @@ export function CoachTeachPage(): JSX.Element {
                       // fundamental's "that left your rook on b2 hanging" is the
                       // same claim (Najdorf re-walk ply 48). The grade speaks —
                       // it also carries the better move.
-                      const lossInGrade = !!fundamental && !sameLoss
+                      const lossInGrade = !!fundamental
                         && (fundamental.id === 'loose-piece' || fundamental.id === 'ignored-threat')
                         && !!look.lostSquare && fundamental.square === look.lostSquare;
                       // WHAT THE MOVE GAVE UP (capability parity with review,

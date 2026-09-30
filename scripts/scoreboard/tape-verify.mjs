@@ -81,7 +81,7 @@ function checkSentence(s, ctx) {
   const who = (w) => (/^(your|you)$/i.test(w) ? me : /^(their|they|my)$/i.test(w) ? them : null);
   // A sentence about a FUTURE board ("After X, Y, …", "if …", "would") is about
   // a line, not this position: only its moves' legality is checked.
-  const future = /^(After |If |Then |Once )/.test(s);
+  const future = /^(After |If |Then |Once )/.test(s) || /was waiting deeper|deeper in the line/.test(s);
 
   if (!future) {
     for (const m of s.matchAll(/\b(your|their)\s+(pawn|knight|bishop|rook|queen|king)\s+on\s+([a-h][1-8])/gi)) {
@@ -129,7 +129,7 @@ function checkSentence(s, ctx) {
       res.push([ok, `after ${san} the piece on ${sq} is not lost`]);
     }
     // "…e6 prepares …Bd6, to hit the pawn on h2"
-    for (const m of s.matchAll(/prepares? (…?[NBRQK]?[a-h]?x?[a-h][1-8]),? to hit the (\w+) on ([a-h][1-8])/g)) {
+    for (const m of s.matchAll(/prepares? (…?[NBRQK]?[a-h]?x?[a-h][1-8]),? to hit (?:the|their|your) (\w+) on ([a-h][1-8])/g)) {
       const san = stripSan(m[1]); const sq = m[3];
       const ok = [ctx.fenAfter, ctx.fenMid].some((fen) => { const b = board(withTurn(fen, me)); if (!b) return false; let mv; try { mv = b.move(san); } catch { return false; } const t = b.get(sq); return !!t && t.color === them && attackers(b, sq, me).includes(mv.to); });
       res.push([ok, `${san} does not hit ${sq}`]);
@@ -166,6 +166,56 @@ function checkSentence(s, ctx) {
       try { const before = attackers(c, sq, me).length; c.move(san); const p = c.get(sq); ok = !!p && p.color === me && attackers(c, sq, me).length > before; } catch { ok = false; }
       res.push([ok, `${san} does not add a defender to ${sq}`]);
     }
+    // "Their pawns on the d-file are doubled"
+    for (const m of s.matchAll(/(Their|Your) pawns on the ([a-h])-file are doubled/g)) {
+      const col = who(m[1]); const b = boards[0]; let n = 0; for (let r = 1; r <= 8; r++) { const p = b.get(`${m[2]}${r}`); if (p?.type === 'p' && p.color === col) n++; }
+      res.push([n >= 2, `${m[2]}-file has ${n} such pawns`]);
+    }
+    // "They still have 3 minor pieces at home"
+    for (const m of s.matchAll(/(They|You) still have (\d+) minor pieces? at home/g)) {
+      const col = who(m[1]); const home = col === 'w' ? ['b1', 'g1', 'c1', 'f1'] : ['b8', 'g8', 'c8', 'f8'];
+      const n = home.filter((sq) => boards.some((b) => { const p = b.get(sq); return p && p.color === col && (p.type === 'n' || p.type === 'b'); })).length;
+      res.push([n === Number(m[2]), `${n} minors at home, not ${m[2]}`]);
+    }
+    // "…d6 shuts in their own bishop on c5 — the pawn now sits on its colour"
+    for (const m of s.matchAll(/(\S+) shuts in (?:their|your) own bishop on ([a-h][1-8])/g)) {
+      const pawnSq = stripSan(m[1]).match(/[a-h][1-8]/)?.[0]; const bSq = m[2];
+      const colour = (sq) => (FILES.indexOf(sq[0]) + Number(sq[1])) % 2;
+      res.push([!!pawnSq && colour(pawnSq) === colour(bSq), `pawn on ${pawnSq} is not on the bishop's colour`]);
+    }
+    // "back-rank threat: the king on g1 has no escape square"
+    for (const m of s.matchAll(/the king on ([a-h][1-8]) has no escape square/g)) {
+      const b = boards[0]; const k = b.get(m[1]);
+      let ok = !!k && k.type === 'k';
+      if (ok) { const c = board(withTurn(ctx.fenAfter, k.color)); ok = !c.moves({ square: m[1], verbose: true }).some((mv) => mv.to[1] !== m[1][1]); }
+      res.push([ok, `king on ${m[1]} has an escape off the rank`]);
+    }
+    // "Bg7 first, so you can castle next"
+    for (const m of s.matchAll(/(…?\S+) first, so you can castle next/g)) {
+      const c = board(withTurn(ctx.fenMid, me));
+      res.push([!!c && c.moves().some((x) => x.startsWith('O-O')), 'castling not legal after it']);
+    }
+    // "…Bc6 moves the same piece twice … but here it hits the pawn on g2"
+    for (const m of s.matchAll(/(\S+) moves the same piece twice[^.]*hits the (\w+) on ([a-h][1-8])/g)) {
+      const to = stripSan(m[1]).match(/[a-h][1-8]$/)?.[0]; const b = board(ctx.fenMid);
+      res.push([!!to && !!b && attackers(b, m[3], me).includes(to), `${to} does not hit ${m[3]}`]);
+    }
+    // "Nxf2 was the move — it would take the pawn on f2"
+    for (const m of s.matchAll(/(\S+) was the move — it would take the (\w+) on ([a-h][1-8])/g)) {
+      const c = board(ctx.fenBefore); let ok = false; try { const mv = c.move(stripSan(m[1])); ok = mv.to === m[3] && !!mv.captured; } catch { ok = false; }
+      res.push([ok, `${m[1]} does not take on ${m[3]}`]);
+    }
+    // "You have a pawn break on c3" / "They have a pawn break available on c5"
+    for (const m of s.matchAll(/(You|They) have a pawn break (?:available )?on ([a-h][1-8])/g)) {
+      const col = who(m[1]); const c = board(withTurn(ctx.fenAfter, col));
+      res.push([!!c && c.moves({ verbose: true }).some((mv) => mv.piece === 'p' && mv.to === m[2]), `no ${m[1]} pawn can reach ${m[2]}`]);
+    }
+    // "You're 5 points up"
+    for (const m of s.matchAll(/You're (\d+) points? (up|down)/g)) {
+      const b = boards[0]; let d = 0; for (const row of b.board()) for (const p of row) if (p && p.type !== 'k') d += (p.color === me ? 1 : -1) * VAL[p.type];
+      const want = Number(m[1]) * (m[2] === 'up' ? 1 : -1);
+      res.push([Math.abs(d - want) <= 1, `material is ${d}, not ${want}`]);
+    }
     // "Castle and the king steps off it" → castling legal
     if (/\bCastle and the king steps off it/.test(s)) {
       const b = board(withTurn(ctx.fenAfter, me));
@@ -175,9 +225,9 @@ function checkSentence(s, ctx) {
 
   // ENGINE: "X comes first", "The move is X", "X was cleaner", "It can wait — X",
   // "Take it — X", "Step out of it — X", "Ask the question — X", "Guard it — X", "Block it — X", "Move it — X"
-  const engineClaim = /(?:It can wait|Take it|Step out of it|Ask the question|Guard it|Block it|Move it|No) — (…?\S+?)(?=[ ,.])|The move is (…?\S+?)(?=[ ,.])|(…?\S+) comes first|(…?\S+) was cleaner|but (…?\S+) was the move/g;
+  const engineClaim = /(?:It can wait|Take it|Step out of it|Ask the question|Guard it|Block it|Move it|No) — (…?\S+?)(?=[ ,.])|The move is (…?\S+?)(?=[ ,.])|(…?\S+) comes first|(…?\S+) was cleaner|but (…?\S+) was the move|Move it with gain — [^:.]*: (…?\S+?)(?=\.)/g;
   for (const m of s.matchAll(engineClaim)) {
-    const san = stripSan(m[1] ?? m[2] ?? m[3] ?? m[4] ?? m[5]);
+    const san = stripSan(m[1] ?? m[2] ?? m[3] ?? m[4] ?? m[5] ?? m[6]);
     if (!/^([NBRQK][a-h]?[1-8]?x?[a-h][1-8]|[a-h](x[a-h])?[1-8](=[NBRQ])?|O-O(-O)?)$/.test(san)) continue;
     const retro = /was cleaner|was the move|The move is/.test(m[0]) && !/comes first/.test(m[0]);
     // A retrospective claim is about the board BEFORE the student's move; a
@@ -249,7 +299,7 @@ function checkSentence(s, ctx) {
 
 // ── run ────────────────────────────────────────────────────────────────────
 const spokenForm = /(knight|bishop|rook|queen|king) (to|takes) [a-h]|[a-h]-pawn takes|\bcastles\b/i;
-let T = 0; let F = 0; let U = 0; const falses = [];
+let T = 0; let F = 0; let U = 0; const falses = []; const unchecked = [];
 for (const [id, rec] of Object.entries(tape)) {
   const g = games.get(id); if (!g) continue;
   const me = rec.seat === 'white' ? 'w' : 'b'; const them = other(me);
@@ -268,11 +318,12 @@ for (const [id, rec] of Object.entries(tape)) {
       for (const s of line.split(/(?<=[.!])\s+(?=[A-Z…"])/)) {
         const k = s.toLowerCase().replace(/[^a-z0-9]/g, ''); if (!k || seen.has(k)) continue; seen.add(k);
         const r = checkSentence(s, ctx);
-        if (r.v === 'T') T++; else if (r.v === 'F') { F++; falses.push({ id, ply: plyS, s, why: r.why }); } else U++;
+        if (r.v === 'T') T++; else if (r.v === 'F') { F++; falses.push({ id, ply: plyS, s, why: r.why }); } else { U++; unchecked.push(s.slice(0, 140)); }
       }
     }
   }
 }
 const n = T + F + U;
 console.log(`sentences ${n}; checked ${T + F} (${(100 * (T + F) / Math.max(1, n)).toFixed(0)}% coverage); TRUE ${T} FALSE ${F}; ACCURACY ${(100 * T / Math.max(1, T + F)).toFixed(1)}%`);
+if (process.env.SHOW_U) for (const u of unchecked) console.log(`? ${u}`);
 for (const f of falses.slice(0, SHOW)) console.log(`✗ ${f.id}:${f.ply} [${f.why}] ${f.s.slice(0, 160)}`);

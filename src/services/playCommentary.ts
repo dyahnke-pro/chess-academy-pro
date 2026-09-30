@@ -859,7 +859,9 @@ export function buildPlayCommentary(args: {
     const seedBeat: PlayCommentary = {
       kind: 'seeding-observation',
       key: `seed:${seed.what}:${seed.line}`,
-      spoken: `Their ${seed.what} line up on the same ${seed.line}, and you have a ${seed.tool} that moves along it.${once('worth-noticing', ' Worth noticing.')}`,
+      // WHY it matters, not "worth noticing" (walk 2026-09-30): two pieces on
+      // one line are where a pin or a skewer comes from.
+      spoken: `Their ${seed.what} line up on the same ${seed.line}, and you have a ${seed.tool} that moves along it${once('alignment-why', ' — two pieces on one line is where a pin or a skewer comes from, so keep an eye on it')}.`,
       facts: [
         `ALIGNMENT: the opponent's ${seed.what} line up on the same ${seed.line}. The student owns a ${seed.tool} that moves along that geometry. Point out the alignment as something worth noticing — nothing more. Do NOT suggest a move.`,
       ],

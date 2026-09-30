@@ -108,8 +108,10 @@ export function threatAnswer(input: {
     // the rook itself leaving with check).
     kind = 'with-gain';
     answer = m.captured
-      ? `Move it with gain — ${m.san} takes the ${NAME[m.captured]}${new Chess(after).inCheck() ? ' with check' : ''}.`
-      : `Move it with gain — ${m.san} comes with check.`;
+      // The action first, the move last — "Bxf3 takes the knight" is spoken
+      // "bishop takes f3 takes the knight" (run B walk 2026-09-30).
+      ? `Move it with gain — take their ${NAME[m.captured]}${new Chess(after).inCheck() ? ' with check' : ''}: ${m.san}.`
+      : `Move it with gain — give check: ${m.san}.`;
   } else if (victims.includes(m.from) && safeThere) {
     kind = 'step-out';
     answer = input.shape === 'hit'

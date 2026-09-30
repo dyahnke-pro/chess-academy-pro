@@ -529,7 +529,10 @@ export function callInaccuracyDetailed(args: {
     : (args.missedMate ?? null) !== null
       // A LOST MATE is the cost when nothing was taken (Damiano walk, 32.Rxc7).
       ? `${args.playedSan} was ${grade} — it let a forced mate slip.`
-      : `${args.playedSan} was ${grade}.`;
+      // NEVER A BARE GRADE (run B walk 2026-09-30: "Nf5 was a mistake." and
+      // nothing else). With no punishment and no better-move reason, the one
+      // computed fact left is what it cost.
+      : `${args.playedSan} was ${grade}${should ? '' : ` — it gave away about ${(cost / 100).toFixed(1)} points`}.`;
   return { call: { quality, side: 'student', cost, said: `${head}${should}`, square: better?.square ?? '', ...(punishment?.lostSquare ? { lostSquare: punishment.lostSquare } : {}) } };
 }
 

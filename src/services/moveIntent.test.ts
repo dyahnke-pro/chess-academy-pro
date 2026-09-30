@@ -63,7 +63,7 @@ describe('whatItDoes — the reason the prepared move is played', () => {
     const out = moveIntent(m.fenBefore, m.san, {
       before: lines(m.before), after: lines(m.after), passBefore: lines(m.passBefore), passAfter: lines(m.passAfter),
     }, 'student');
-    expect(out?.text).toMatch(/f4 can hit the pawn on e5|prepares f4, to hit the pawn on e5/);
+    expect(out?.text).toMatch(/f4 can hit their pawn on e5|prepares f4, to hit their pawn on e5/);
   });
 
   it('a move that clears the back rank reads as castling', () => {
