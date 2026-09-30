@@ -7,8 +7,8 @@
 // recaptures hand back). A LEAF: chess.js only.
 import { Chess } from 'chess.js';
 import type { ArrowClaim } from './arrowDoor';
+import { MATERIAL_VALUE } from './pieceValues';
 
-const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
 const WORDS: Record<number, string> = { 1: 'a pawn', 2: 'two pawns', 3: 'a piece', 4: 'a piece and a pawn', 5: 'the exchange', 6: 'a rook and a pawn', 9: 'the queen' };
 
 export interface LinePly { from: string; to: string; color: 'w' | 'b'; fen: string; san: string }
@@ -32,7 +32,7 @@ export function lineWins(fen: string, lineUci: readonly string[], side: 'w' | 'b
       const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
       if (!m) break;
       if (i === 0 && firstSan && bare(m.san) !== bare(firstSan)) return null;
-      if (m.captured) { net += (m.color === side ? 1 : -1) * (VALUE[m.captured] ?? 0); lastCap = i; }
+      if (m.captured) { net += (m.color === side ? 1 : -1) * (MATERIAL_VALUE[m.captured] ?? 0); lastCap = i; }
       plies.push({ from: m.from, to: m.to, color: m.color, fen: before, san: m.san });
     }
   } catch { return null; }
