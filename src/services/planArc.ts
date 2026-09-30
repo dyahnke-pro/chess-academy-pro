@@ -70,7 +70,10 @@ export function aimsOf(side: SidePlan, seat: Seat): Aim[] {
     // stood on when the plan was read (a first read counted d4 toward the king
     // attack because the passer's squares held only d5).
     const onFile = ['1', '2', '3', '4', '5', '6', '7', '8'].map((r) => `${sq[0]}${r}`);
-    out.push({ id: `passer:${sq[0]}`, kind: 'passer', squares: onFile, goal: null, phrase: `a passed pawn on the ${sq[0]}-file` });
+    // The aim only stands once the passer is on the board (`aimWalkableNow`), so
+    // it is PUSHED, never built: "a step toward a passed pawn" on a pawn that
+    // was already passed (pass-2 walk 2026-09-30, three times in one ending).
+    out.push({ id: `passer:${sq[0]}`, kind: 'passer', squares: onFile, goal: null, phrase: `pushing ${seat === 'opponent' ? 'their' : 'the'} passed pawn on the ${sq[0]}-file` });
   }
   if (side.maneuver && side.maneuver.path.length >= 2) {
     const dest = side.maneuver.path[side.maneuver.path.length - 1];
@@ -171,6 +174,13 @@ export interface ArcMove {
   piece: string;
   /** The piece a pawn became, when the move promoted. */
   promotion?: string;
+}
+
+/** A passed pawn's push, counted: "Your passed pawn is on a3 — two squares from queening." */
+function passerStep(to: string, color: 'w' | 'b', their: boolean): string {
+  const togo = color === 'w' ? 8 - Number(to[1]) : Number(to[1]) - 1;
+  const left = togo === 1 ? 'one square' : `${['no', 'one', 'two', 'three', 'four', 'five', 'six'][togo] ?? togo} squares`;
+  return `${their ? 'Their' : 'Your'} passed pawn is on ${to} now — ${left} from queening.`;
 }
 
 /** Can THIS move be a step toward the aim — not only land on its squares? */
@@ -294,7 +304,10 @@ export function stepArc(
         id, kind: 'advance', seat, squares: [moved.to], step: entry.steps,
         // WHY THEY PLAYED IT, question first (David 2026-09-30): the move
         // they actually made, read as a step of the plan announced earlier.
-        text: their
+        // A passer's step is counted in squares to go, not "toward" itself.
+        text: e.aim.kind === 'passer'
+          ? passerStep(moved.to, color, their)
+          : their
           ? `What is their ${PIECE[moved.piece] ?? 'piece'} on ${moved.to} doing? ${THINK_MARK} It's ${entry.steps === 1 ? 'a step' : 'another step'} toward ${phraseFrom(e.aim, moved.to)}.`
           : `Your ${PIECE[moved.piece] ?? 'piece'} to ${moved.to} is ${entry.steps === 1 ? 'a step' : 'another step'} toward ${phraseFrom(e.aim, moved.to)}.`,
       });

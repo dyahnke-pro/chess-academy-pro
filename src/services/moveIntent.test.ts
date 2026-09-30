@@ -140,3 +140,15 @@ describe('moveIntent — a move that hits something is about the hit', () => {
     expect(out?.prepares ?? null).toBeNull();
   });
 });
+
+describe('moveIntent — a piece saved is not a plan', () => {
+  it('Ba2, stepping away from the rook on b4, never "prepares Rb1" (pass-2 walk 2026-09-30)', () => {
+    const fen = 'r5k1/4pp1p/3p2p1/2pP4/1rB5/p3PK2/5PPP/R7 w - - 2 26';
+    const L = (pv: string[], cp: number): AnalysisLine => ({ rank: 1, evaluation: cp, moves: pv, mate: null });
+    const out = moveIntent(fen, 'Ba2', {
+      before: [L(['a1b1'], -900)], after: [L(['c5c4', 'a1b1'], -599)],
+      passBefore: [L(['b4c4'], -900)], passAfter: [L(['a1b1', 'a8b8'], -400)],
+    }, 'opponent', { ...DEFAULT_INTENT, prepare: 'pass' });
+    expect(out?.prepares ?? null).toBeNull();
+  });
+});

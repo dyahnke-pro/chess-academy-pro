@@ -513,6 +513,17 @@ export function callInaccuracyDetailed(args: {
     ? 'it would stop the mate'
     : args.bestLineUci ? betterMoveReason(args.fenBefore, args.playedSan, args.bestSan, args.bestLineUci, args.moverColor) : null;
   const after = args.moverEvalAfterCp;
+  // …and CLEARLY BETTER is not a mistake either (pass-2 walk 2026-09-30: his
+  // Bxc5 went +3.1 → +1.9 and was graded "a mistake" where he said "knocking
+  // on the door of victory"). Still clearly on top: the teaching is the cleaner
+  // way. "Wins" only where the eval says so.
+  if (typeof after === 'number' && after >= STILL_BETTER_CP && quality !== 'blunder' && (args.allowedMate ?? null) === null) {
+    const stands = after >= BLUNDER_CP ? 'still wins' : 'keeps you clearly on top';
+    const said = reason
+      ? `${args.playedSan} ${stands}, but ${args.bestSan} was cleaner — ${reason}.`
+      : `${args.playedSan} ${stands}.`;
+    return { call: { quality, side: 'student', cost, said, square: better?.square ?? '', ...(reason ? { namesBetter: args.bestSan } : {}) } };
+  }
   if (typeof after === 'number' && after >= BLUNDER_CP && (args.allowedMate ?? null) === null) {
     const said = reason
       ? `${args.playedSan} still wins, but ${args.bestSan} was cleaner — ${reason}.`
@@ -626,6 +637,10 @@ function wonBefore(fenBefore: string, lineUci: readonly string[]): number {
     return net;
   } catch { return -Infinity; }
 }
+
+/** Clearly better after the move (+1.5): a drop that leaves you here is a
+ *  cleaner way missed, not a mistake. */
+export const STILL_BETTER_CP = 150;
 
 /** A cost in words coarse enough to survive the engine's depth (walk
  *  2026-09-30: "about 1.4 points" where a deeper read said 1.8). */

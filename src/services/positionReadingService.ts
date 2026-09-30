@@ -1310,7 +1310,15 @@ export function rookBehindPasser(fen: string, color: Color): { rook: Square; paw
     } catch { return null; }
     return null;
   };
+  // A pawn that cannot step forward is not shoved by a rook behind it (pass-2
+  // walk 2026-09-30: "put your rook behind the passed pawn on a2" with their
+  // rook sitting on a1, the queening square).
+  const blocked = (pawn: Square, pawnIsWhite: boolean): boolean => {
+    const ahead = `${pawn[0]}${Number(pawn[1]) + (pawnIsWhite ? 1 : -1)}` as Square;
+    return !!chess.get(ahead);
+  };
   for (const p of findPassedPawns(fen, color)) {
+    if (blocked(p, color === 'w')) continue;
     const rk = reach(p, color === 'w');
     if (rk) return { rook: rk, pawn: p, own: true };
   }

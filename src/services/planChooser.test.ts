@@ -24,3 +24,14 @@ describe('the plan chooser (census #52)', () => {
     expect(planChoice(FEN, [{ moves: A, evaluation: 30 }], 'white')).toBeNull();
   });
 });
+
+describe('planChoice — never mid-combination', () => {
+  it('when the best line opens with a capture, it is calculation, not a plan (pass-2 walk 2026-09-30)', () => {
+    const fen = 'r1b2rk1/pp2ppbp/2np1np1/q1pP4/2P5/1PNBPN2/PB3PPP/R2QK2R b KQ - 0 10';
+    const out = planChoice(fen, [
+      { moves: ['f6d5', 'c4d5', 'g7c3', 'b2c3'], evaluation: -270 },
+      { moves: ['c6b4', 'e1g1', 'b4d3', 'd1d3'], evaluation: 0 },
+    ], 'black');
+    expect(out).toBeNull();
+  });
+});

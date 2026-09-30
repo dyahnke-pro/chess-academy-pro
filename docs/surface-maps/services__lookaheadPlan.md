@@ -167,7 +167,7 @@
 - `src/services/concessionBeat.ts:455`
 - `src/services/inaccuracyCall.ts:266`
 - `src/services/inaccuracyCall.ts:279`
-- `src/services/inaccuracyCall.ts:577`
+- `src/services/inaccuracyCall.ts:588`
 - `src/services/learnWalkBlumenfeld.test.ts:176`
 - `src/services/learnWalkBlumenfeld.test.ts:177`
 - `src/services/learnWalkBlumenfeld.test.ts:178`
@@ -181,7 +181,7 @@
 - `src/services/concessionBeat.ts:449`
 - `src/services/inaccuracyCall.ts:222`
 - `src/services/inaccuracyCall.ts:226`
-- `src/services/inaccuracyCall.ts:575`
+- `src/services/inaccuracyCall.ts:586`
 - `src/services/lookaheadPlan.test.ts:228`
 - `src/services/lookaheadPlan.test.ts:236`
 - `src/services/lookaheadPlan.test.ts:241`
@@ -199,19 +199,21 @@
 - `src/services/narrationAdversarial.test.ts:178`
 - `src/services/narrationAdversarial.test.ts:188`
 - `src/services/planArc.test.ts:27`
-- `src/services/planChooser.ts:23`
-- `src/services/planChooser.ts:24`
+- `src/services/planChooser.ts:35`
+- `src/services/planChooser.ts:36`
 
 ### `gameArcs` (function) — 1 call site
 - `src/services/coachFeatureService.ts:1322`
 
-### `aimsOf` (re-export) — 6 call sites
+### `aimsOf` (re-export) — 8 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9498`
 - `src/components/Coach/CoachTeachPage.tsx:9502`
+- `src/services/planArc.phraseFrom.test.ts:30`
+- `src/services/planArc.phraseFrom.test.ts:31`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.ts:52`
-- `src/services/planChooser.ts:26`
-- `src/services/planChooser.ts:27`
+- `src/services/planChooser.ts:38`
+- `src/services/planChooser.ts:39`
 
 ### `aimWalkableNow` (re-export) — 16 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9498`
@@ -229,13 +231,13 @@
 - `src/services/planArc.test.ts:253`
 - `src/services/planArc.test.ts:258`
 - `src/services/planArc.test.ts:262`
-- `src/services/planArc.ts:392`
+- `src/services/planArc.ts:405`
 
 ### `joinEmerges` (re-export) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9514`
 - `src/services/planArc.test.ts:269`
 - `src/services/planArc.test.ts:276`
-- `src/services/planArc.ts:515`
+- `src/services/planArc.ts:528`
 
 ### `stepArc` (re-export) — 25 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9498`
@@ -262,7 +264,7 @@
 - `src/services/planArc.truth.test.ts:22`
 - `src/services/planArc.truth.test.ts:31`
 - `src/services/planArc.truth.test.ts:36`
-- `src/services/planArc.ts:229`
+- `src/services/planArc.ts:239`
 
 ### `EMPTY_ARC` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

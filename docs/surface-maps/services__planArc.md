@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**530 lines · 12 exports · 5 importers · 3 tests · 1 audits**
+**543 lines · 12 exports · 5 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -29,13 +29,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `Seat` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `aimsOf` (function) — 6 call sites
+### `aimsOf` (function) — 8 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9498`
 - `src/components/Coach/CoachTeachPage.tsx:9502`
 - `src/services/lookaheadPlan.ts:1455`
+- `src/services/planArc.phraseFrom.test.ts:30`
+- `src/services/planArc.phraseFrom.test.ts:31`
 - `src/services/planArc.test.ts:29`
-- `src/services/planChooser.ts:26`
-- `src/services/planChooser.ts:27`
+- `src/services/planChooser.ts:38`
+- `src/services/planChooser.ts:39`
 
 ### `phraseFrom` (function) — 2 call sites
 - `src/services/planArc.phraseFrom.test.ts:7`

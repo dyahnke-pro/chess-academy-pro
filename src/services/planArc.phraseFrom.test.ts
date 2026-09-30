@@ -22,3 +22,12 @@ describe('aimWalkableNow — a passer must be on the board', () => {
     expect(aimWalkableNow(a, '4k3/8/8/8/8/8/P7/4K3 w - - 0 1', 'w')).toBe(true);
   });
 });
+
+describe('a passer is pushed, never built (pass-2 walk 2026-09-30)', () => {
+  it('the aim says "pushing the passed pawn", not "a passed pawn"', async () => {
+    const { aimsOf } = await import('./planArc');
+    const side = { nearEnemyKing: 0, kingAttackSquares: [], shieldStripped: 0, outposts: [], opening: [], passedPawns: ['c5'], maneuver: null } as unknown as Parameters<typeof aimsOf>[0];
+    expect(aimsOf(side, 'student')[0].phrase).toBe('pushing the passed pawn on the c-file');
+    expect(aimsOf(side, 'opponent')[0].phrase).toBe('pushing their passed pawn on the c-file');
+  });
+});

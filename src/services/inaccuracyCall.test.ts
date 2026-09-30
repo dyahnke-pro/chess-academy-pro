@@ -365,3 +365,14 @@ describe('let them in — only an entry the move opened', () => {
     expect(call?.said ?? '').not.toMatch(/let them in with Nxb6/);
   });
 });
+
+describe('clearly better after the move is a cleaner way, not a mistake', () => {
+  it('Bxc5 +3.1 → +1.9 keeps you clearly on top (pass-2 walk 2026-09-30)', () => {
+    const call = callInaccuracy({
+      fenBefore: '5rk1/1qpn1pbp/prN3p1/2pP4/2P5/Q3B2P/P4PP1/3RR1K1 w - - 0 24', playedSan: 'Bxc5', bestSan: 'Bf4',
+      cpLoss: 115, moverEvalAfterCp: 194, side: 'student', moverColor: 'white', replyLineUci: [], replySan: null,
+    });
+    expect(call?.said ?? '').not.toMatch(/mistake/);
+    expect(call?.said ?? '').toMatch(/^Bxc5 keeps you clearly on top/);
+  });
+});

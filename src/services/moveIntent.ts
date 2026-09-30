@@ -292,6 +292,17 @@ export function moveIntent(
       if (hits) prepares = null;
     } catch { /* keep */ }
   }
+  // …and A PIECE SAVED IS NOT A PLAN (pass-2 walk 2026-09-30: "They play Ba2
+  // first, so that Rb1 can take the open b-file" — the bishop on c4 was
+  // attacked by the rook and simply stepped away). When the moved piece stood
+  // en prise before the move, saving it is the move's point.
+  if (prepares) {
+    try {
+      const parts = fenBefore.split(' ');
+      parts[1] = parts[1] === 'w' ? 'b' : 'w'; parts[3] = '-';
+      if (legalSeeGainOn(new Chess(parts.join(' ')), playedUci.slice(0, 2) as Parameters<typeof legalSeeGainOn>[1]) >= 1) prepares = null;
+    } catch { /* keep */ }
+  }
   if (!prevents && !prepares) return null;
   const squares = [...new Set([
     playedUci.slice(2, 4),

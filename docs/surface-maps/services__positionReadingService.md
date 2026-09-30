@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2585 lines · 79 exports · 66 importers · 20 tests · 2 audits**
+**2593 lines · 79 exports · 66 importers · 20 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -110,7 +110,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:3238`
 - `src/services/groundedAnswer.ts:6668`
 - `src/services/inaccuracyCall.ts:213`
-- `src/services/inaccuracyCall.ts:565`
+- `src/services/inaccuracyCall.ts:576`
 - `src/services/moveTiming.ts:27`
 - `src/services/pvPlayback.ts:406`
 - `src/services/pvPlayback.ts:453`
@@ -119,12 +119,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/threatOut.ts:91`
 - `src/services/tradeQuality.ts:144`
 
-### `legalSeeGainOn` (function) — 11 call sites
+### `legalSeeGainOn` (function) — 12 call sites
 - `src/services/coachFeatureService.ts:2456`
 - `src/services/groundedAnswer.ts:6714`
 - `src/services/moveIntent.ts:291`
-- `src/services/moveIntent.ts:312`
-- `src/services/moveIntent.ts:494`
+- `src/services/moveIntent.ts:303`
+- `src/services/moveIntent.ts:323`
+- `src/services/moveIntent.ts:505`
 - `src/services/opponentMovePurpose.ts:33`
 - `src/services/reviewTeachingPoints.ts:99`
 - `src/services/reviewTeachingPoints.ts:135`
@@ -172,7 +173,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:6995`
 - `src/services/groundedAnswer.ts:7046`
 - `src/services/learnTurnDoor.test.ts:238`
-- `src/services/moveIntent.ts:381`
+- `src/services/moveIntent.ts:392`
 - `src/services/moveOrder.ts:113`
 - `src/services/moveTiming.ts:51`
 - `src/services/nextPlans.ts:46`
@@ -500,11 +501,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:6354`
 - `src/services/replayFence.najdorf1500.test.ts:54`
 
-### `rookBehindPasser` (function) — 5 call sites
+### `rookBehindPasser` (function) — 6 call sites
 - `src/services/danyaBehaviors.ts:605`
 - `src/services/danyaExploitability.test.ts:151`
 - `src/services/danyaExploitability.test.ts:155`
 - `src/services/danyaExploitability.test.ts:158`
+- `src/services/danyaExploitability.test.ts:181`
 - `src/services/groundedAnswer.ts:6356`
 
 ### `oppositionRead` (function) — 6 call sites
