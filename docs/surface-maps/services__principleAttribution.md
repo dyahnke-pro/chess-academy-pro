@@ -84,7 +84,7 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:130`
 
-### `attributePrinciples` (function) — 68 call sites
+### `attributePrinciples` (function) — 69 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
 - `src/services/claimTruth.manual.test.ts:10`
 - `src/services/claimTruth.manual.test.ts:12`
@@ -131,7 +131,8 @@
 - `src/services/principleAttributionEndgame.test.ts:57`
 - `src/services/principleAttributionEvalPv.test.ts:62`
 - `src/services/principleAttributionEvalPv.test.ts:76`
-- `src/services/principleAttributionEvalPv.test.ts:94`
+- `src/services/principleAttributionEvalPv.test.ts:86`
+- `src/services/principleAttributionEvalPv.test.ts:103`
 - `src/services/principleVoice.test.ts:9`
 - `src/services/replayFence.bowdler1000.test.ts:37`
 - `src/services/replayFence.modern1690.test.ts:32`

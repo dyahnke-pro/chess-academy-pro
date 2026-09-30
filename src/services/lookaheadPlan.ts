@@ -28,7 +28,7 @@ import type { PvLine, PvPly, PrevCaptureContext } from './pvPlayback';
 import { aimsOf, stepArc, EMPTY_ARC, type ArcEvent, type ArcMove, type Seat } from './planArc';
 // The PLAN ACROSS MOVES (planArc) — the memory this reader never had. Exposed
 // from here so a surface composes one plan module, not two.
-export { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcEvent, type ArcState, type ArcMove, type Seat, type Aim } from './planArc';
+export { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcEvent, type ArcState, type ArcMove, type Seat, type Aim } from './planArc';
 
 type ChessCtor = InstanceType<typeof Chess>;
 

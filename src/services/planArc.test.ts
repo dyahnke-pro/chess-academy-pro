@@ -5,7 +5,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { readFileSync } from 'node:fs';
 import { planFromUci } from './lookaheadPlan';
-import { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcEvent, type Aim } from './planArc';
+import { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcEvent, type Aim } from './planArc';
 
 const GAME = 'd4 Nf6 c4 e6 Nf3 c5 d5 b5 b3 Bb7 Nbd2 exd5 cxb5 d6 Bb2 Be7 e3 O-O Bd3 Nbd7 O-O Qc7 Re1 Ne5 Nxe5 dxe5 Rc1 e4 Be2 Qd7 Nf1 Rac8 a4 Qf5 Ng3 Qg6 Be5 Rfd8 a5 Bd6 Bxd6 Rxd6 a6 Ba8 Nh5 Nxh5 Bxh5 Qg5 Qg4 Qxg4 Bxg4 Rc7 Rc2 d4 Rec1 d3 Rxc5 Rxc5 Rxc5 g6 Rc8+ Kg7 Rxa8 d2 Rc8 d1=Q+ Bxd1 Rxd1#'.split(' ');
 
@@ -193,6 +193,16 @@ describe('aimWalkableNow — a live guess is said only if it can be walked from 
     id: `route:${piece}`, kind: 'route', squares: path.slice(1), goal: path[path.length - 1], phrase: 'x', from: path[0],
   });
 
+  it('a route back to where the piece just came from is not a plan (manual check 2026-09-30)', () => {
+    const h = 'e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 O-O O-O Qe2 d6 Qd1 a6'.split(' ');
+    const c = new Chess();
+    for (const san of h) c.move(san);
+    // White's queen just went e2 → d1: "the queen's walk from d1 to e2" is a retreat, not a plan.
+    expect(aimWalkableNow(route('q', ['d1', 'e2']), c.fen(), 'w', h)).toBe(false);
+    // Without history the guard cannot apply (and the route is otherwise legal).
+    expect(aimWalkableNow(route('q', ['d1', 'e2']), c.fen(), 'w')).toBe(true);
+  });
+
   it('a bishop route through a diagonal the queen blocks is refused (FqVMAv3wKes ply 36)', () => {
     const fen = fenAfter('FqVMAv3wKes', 36);
     const b = new Chess(fen);
@@ -253,3 +263,16 @@ describe('aimWalkableNow — an outpost is pawn-guarded and pawn-proof', () => {
   });
 });
 
+describe('joinEmerges — the plan said as a plan (P2 #1)', () => {
+  it('two aims on one move become one "X, then Y" line', () => {
+    const ev = (text: string, sq: string): ArcEvent => ({ id: text, kind: 'emerge', seat: 'student', text, squares: [sq] });
+    const out = joinEmerges([ev('The plan for you here: the knight\'s walk from f3 to d4.', 'd4'), ev('Your plan from here: the c-file.', 'c1')]);
+    expect(out).toHaveLength(1);
+    expect(out[0].text).toBe("The plan for you here: the knight's walk from f3 to d4, then the c-file.");
+    expect(out[0].squares).toEqual(['d4', 'c1']);
+  });
+  it('one aim passes through unchanged', () => {
+    const e: ArcEvent = { id: 'a', kind: 'emerge', seat: 'student', text: 'The plan for you here: x.', squares: [] };
+    expect(joinEmerges([e])).toEqual([e]);
+  });
+});

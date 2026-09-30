@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1466 lines · 24 exports · 12 importers · 9 tests · 0 audits**
+**1466 lines · 25 exports · 12 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -164,9 +164,9 @@
 
 ### `isCostClause` (function) — 8 call sites
 - `src/services/concessionBeat.ts:455`
-- `src/services/inaccuracyCall.ts:263`
-- `src/services/inaccuracyCall.ts:276`
-- `src/services/inaccuracyCall.ts:574`
+- `src/services/inaccuracyCall.ts:266`
+- `src/services/inaccuracyCall.ts:279`
+- `src/services/inaccuracyCall.ts:577`
 - `src/services/learnWalkBlumenfeld.test.ts:176`
 - `src/services/learnWalkBlumenfeld.test.ts:177`
 - `src/services/learnWalkBlumenfeld.test.ts:178`
@@ -178,9 +178,9 @@
 - `src/services/coachLaneWiring.test.ts:35`
 - `src/services/computedVoiceAudit.report.test.ts:216`
 - `src/services/concessionBeat.ts:449`
-- `src/services/inaccuracyCall.ts:219`
-- `src/services/inaccuracyCall.ts:223`
-- `src/services/inaccuracyCall.ts:572`
+- `src/services/inaccuracyCall.ts:222`
+- `src/services/inaccuracyCall.ts:226`
+- `src/services/inaccuracyCall.ts:575`
 - `src/services/lookaheadPlan.test.ts:228`
 - `src/services/lookaheadPlan.test.ts:236`
 - `src/services/lookaheadPlan.test.ts:241`
@@ -208,19 +208,27 @@
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.ts:52`
 
-### `aimWalkableNow` (re-export) — 12 call sites
+### `aimWalkableNow` (re-export) — 14 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9388`
 - `src/components/Coach/CoachTeachPage.tsx:9392`
 - `src/services/planArc.test.ts:201`
+- `src/services/planArc.test.ts:203`
 - `src/services/planArc.test.ts:211`
-- `src/services/planArc.test.ts:217`
-- `src/services/planArc.test.ts:222`
-- `src/services/planArc.test.ts:229`
-- `src/services/planArc.test.ts:234`
-- `src/services/planArc.test.ts:243`
-- `src/services/planArc.test.ts:248`
-- `src/services/planArc.test.ts:252`
-- `src/services/planArc.ts:366`
+- `src/services/planArc.test.ts:221`
+- `src/services/planArc.test.ts:227`
+- `src/services/planArc.test.ts:232`
+- `src/services/planArc.test.ts:239`
+- `src/services/planArc.test.ts:244`
+- `src/services/planArc.test.ts:253`
+- `src/services/planArc.test.ts:258`
+- `src/services/planArc.test.ts:262`
+- `src/services/planArc.ts:369`
+
+### `joinEmerges` (re-export) — 4 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9404`
+- `src/services/planArc.test.ts:269`
+- `src/services/planArc.test.ts:276`
+- `src/services/planArc.ts:475`
 
 ### `stepArc` (re-export) — 25 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9388`
@@ -247,7 +255,7 @@
 - `src/services/planArc.truth.test.ts:22`
 - `src/services/planArc.truth.test.ts:31`
 - `src/services/planArc.truth.test.ts:36`
-- `src/services/planArc.ts:203`
+- `src/services/planArc.ts:206`
 
 ### `EMPTY_ARC` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

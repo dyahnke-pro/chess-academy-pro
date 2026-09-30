@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**453 lines · 10 exports · 3 importers · 2 tests · 1 audits**
+**490 lines · 11 exports · 3 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -72,18 +72,25 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planArc.truth.test.ts:31`
 - `src/services/planArc.truth.test.ts:36`
 
-### `aimWalkableNow` (function) — 11 call sites
+### `aimWalkableNow` (function) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9388`
 - `src/components/Coach/CoachTeachPage.tsx:9392`
 - `src/services/planArc.test.ts:201`
+- `src/services/planArc.test.ts:203`
 - `src/services/planArc.test.ts:211`
-- `src/services/planArc.test.ts:217`
-- `src/services/planArc.test.ts:222`
-- `src/services/planArc.test.ts:229`
-- `src/services/planArc.test.ts:234`
-- `src/services/planArc.test.ts:243`
-- `src/services/planArc.test.ts:248`
-- `src/services/planArc.test.ts:252`
+- `src/services/planArc.test.ts:221`
+- `src/services/planArc.test.ts:227`
+- `src/services/planArc.test.ts:232`
+- `src/services/planArc.test.ts:239`
+- `src/services/planArc.test.ts:244`
+- `src/services/planArc.test.ts:253`
+- `src/services/planArc.test.ts:258`
+- `src/services/planArc.test.ts:262`
+
+### `joinEmerges` (function) — 3 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9404`
+- `src/services/planArc.test.ts:269`
+- `src/services/planArc.test.ts:276`
 
 ## Tests
 

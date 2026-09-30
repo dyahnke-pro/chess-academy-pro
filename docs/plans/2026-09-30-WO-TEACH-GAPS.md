@@ -78,8 +78,8 @@ Loop until **≥97% of ALL checkable claims**, not just the auto-checked ones.
 |---|---|---|
 | ~~1.1~~ | ~~ACC-1: extract Learn's narration builder~~ — **DROPPED 2026-09-30** | the move handler is ~3,000 lines of a 14,450-line page; the tape harness already records exactly what the real page speaks, so the extraction buys no measurement and carries large regression risk |
 | 1.2 | **T1: every speaking lane through `coachDecider`** (one door) | lanes still bypass the ranker; a new lane would add another bypass |
-| 1.3 | **Shared claim keys across lanes** (#49) | the same fact from 3 lanes on one ply ("open file" ×3) |
-| 1.4 | **One thread per move** (#23): lead + one support, ~30 words | what Danya does; we still stack 3–5 lines |
+| 🟡 1.3 | **Shared claim keys across lanes** (#49) — in progress: `convert-method` joins the botched-conversion verdict and the "up material now" switch; `namesBetter` lets a verdict drop a better move the grade already names | the same fact from 3 lanes on one ply ("open file" ×3) |
+| 🟡 1.4 | **One thread per move** (#23): lead + one support, ~30 words — MEASURED on run I (121 spoken plies, deduped): median 1 line / 22 words, mean 1.5 lines / 28 words; only 5 plies > 60 words, and those are repeated-claim stacks (fixed via 1.3), not missing structure | what Danya does; we still stack 3–5 lines |
 | ✅ 1.5 | **`facts[]` audit-only list** — already gone (nothing pushes to it; the OUTLINE line was stale) | — |
 | 1.6 | **Board tag on every emission** (feeds 0.2) | truth checking needs it |
 
@@ -94,7 +94,7 @@ into the heat map) or it is not done.
 | rank | gap | his moments / ours | computer (exists?) | what to build |
 |---|---|---|---|---|
 | ✅ 0 | **The opening's key idea, computed** (replaces hand-written beats) | 15% of all he says (census) | NEW `mastersPlanRead` | Walks the masters DB (his-games DB as fallback) weighted by games; names the pawn break each side goes for with its share, recaptures and captures-in-hand excluded, ≥40% floor. Lane `openingIdea`, say-once per game. Measured on 33 walked games: fires in 7, every line a real plan. The hand-written feed (`curatedBeatAt`, 33 beats in 18 games, visibly poor: "sourced from the Gordima-distilled…") is REMOVED from Learn with its orphaned module, boot warm and tests (G8.5). What it covered is now said by computed lanes: opening name, `moveIntent`, `namedPawnStructure`, `mastersPlanRead`. |
-| 1 | **The plan, said as a plan** | 37 / 0 | `planArc`, `deriveNextPlans`, `planRace` exist | speak the plan at phase changes and after the opening leaves book: "the plan here is X, then Y"; carry it across moves (one thread) |
+| ✅ 1 | **The plan, said as a plan** — the student's plan is now ANNOUNCED on Learn, prescriptively ("The plan for you here: X, then Y." — two aims on one move joined by `joinEmerges`); it used to be filtered, and its old wording claimed the student was already pursuing it. Also fixed: a route back to where the piece just came from is not a plan (`aimWalkableNow` history guard) | 37 / 0 | `planArc`, `deriveNextPlans`, `planRace` exist | speak the plan at phase changes and after the opening leaves book: "the plan here is X, then Y"; carry it across moves (one thread) |
 | ✅ 2 | **Verdict on GOOD moves** — `criticalMomentFound`, lane `foundMove`: at a real decision moment the student played one of the only moves that held; said with why each alternative failed, no praise word | 38 / 1 | `moveReason`, `nextMoveAdvice` | a good student move earns one line naming WHY it is good when it was a decision moment (importance tier ≥ critical) — silence after a good move teaches nothing |
 | ✅ 3 | **Playing a line out loud** — `exchangeLedger.proofForMover`: when the move is named with its reason, the engine's forcing winning line (≤7 plies, ends in mate or net material) is said after it | 20 / 0 | `computePvLine`, `dnaLineNarrator` | "if X, then Y, then Z" — 2–4 plies from the PV at decision moments, with the arrows drawn (arrow door) |
 | ✅ 4 | **Weighing candidates** — `deliberationFacts` opens with "Candidates: A, B or C." (alphabetical, never telegraphs) before ruling out, only when a verdict follows | 19 / 0 | `deliberation` | "I'm looking at A or B —" before naming; rule one out with its refutation |
@@ -102,12 +102,12 @@ into the heat map) or it is not done.
 | ✅ 6 | **Composure / don't panic** — ALREADY BUILT as `falseAlarm` (census #7) + the gambit line; not duplicated. Firing rate to measure in the re-walk | 14 / 0 | none | when the student is worse but the engine says it holds: "looks scary, but …" with the one move that holds |
 | ✅ 7 | **Tempo** — "with tempo" existed (`moveFundamentals`); the COUNT is new: `tempoCount`, lane `tempo` — their piece's third move in the opening while you have more minors out | 12 / 0 | none as a lane | a move that develops WITH a threat, or a piece forced to move twice: count it |
 | 🟠 8 | **The common wrong move** — ALREADY BUILT (S2 refuted alternative reads amateur play at the student's band, warmed each turn). 0 in the walks is a HARNESS artifact: the localhost vite server has no `/api/lichess-explorer`, so the cache is always cold there. Measure on prod | 10 / 0 | explorer data exists | the move most players at the student's band play here, and why it fails (the refuted-alternative lane on the explorer's top move) |
-| 9 | **Converting when ahead** | 18 / 0 | `conversionMethod` | name the choice (trade / attack / push) and WHY this one; stalemate + diminishing-returns watch |
-| 10 | **Recapture choice** | 8 / 0 | built (#50) but rarely fires | measure why it does not fire on these 8 |
-| 11 | **Practical play** | 9 / 0 | criticalMoment counts | "only one move holds, the rest lose" as a practical warning; human-vs-engine framing |
-| 12 | **Space / prophylaxis** | 13 / 0 | positionalRead, moveIntent.prevents | prophylaxis now truth-gated — let it speak on quiet positions |
-| 13 | **Piece quality / structure** | ~10% | `pieceValueRead`, `namedPawnStructure` | fix the stale-table bug (195) first, then speak structure CHANGES, not states |
-| 14 | **King attack** | 2 / 22 | king-attack aim | open lines, storms, sacs at the king — the census #2 missing item |
+| ✅ 9 | **Converting when ahead** — the method step was already live (`readConversion` in `positionFacts`); the missing half is new: `stalemateWatch`, lane `stalemate` — ahead by a piece and a move of yours stalemates them: every such move named | 18 / 0 | `conversionMethod` | name the choice (trade / attack / push) and WHY this one; stalemate + diminishing-returns watch |
+| 🟠 10 | **Recapture choice** — built; measure its rate in the re-walk (fires only on a real two-way recapture) | 8 / 0 | built (#50) but rarely fires | measure why it does not fire on these 8 |
+| ✅ 11 | **Practical play** — ALREADY BUILT: `criticalMomentStatement` ("only one move holds — slow down") on Learn, plus `foundMove` after it | 9 / 0 | criticalMoment counts | "only one move holds, the rest lose" as a practical warning; human-vs-engine framing |
+| 🟠 12 | **Space / prophylaxis** — `moveIntent.prevents` truth-gated (P0) and now also read from their seat (`theirIntent`); measure in the re-walk | 13 / 0 | positionalRead, moveIntent.prevents | prophylaxis now truth-gated — let it speak on quiet positions |
+| ✅ 13 | **Piece quality / structure** — stale-table bug fixed (195); a structure is named once, the move it crystallises (`namedPawnStructure`, say-once) | ~10% | `pieceValueRead`, `namedPawnStructure` | fix the stale-table bug (195) first, then speak structure CHANGES, not states |
+| ✅ 14 | **King attack** — we OVER-say it (his 2, ours 22); nothing to build | 2 / 22 | king-attack aim | open lines, storms, sacs at the king — the census #2 missing item |
 
 ---
 

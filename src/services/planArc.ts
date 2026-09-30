@@ -116,10 +116,13 @@ const EMERGE: Record<Seat, ReadonlyArray<(p: string) => string>> = {
     (p) => `Here is what they are after: ${p}.`,
     (p) => `Watch where their moves are going — ${p}.`,
   ],
+  // PRESCRIPTIVE, not descriptive (WO-TEACH-GAPS P2 #1): the read is the
+  // engine's plan FOR the student, which they may not be following yet — "your
+  // plan is taking shape" claimed they were. He says "the plan here is …".
   student: [
-    (p) => `Your plan is taking shape: ${p}.`,
-    (p) => `Here is what you are building: ${p}.`,
-    (p) => `Your moves are pointing at ${p}.`,
+    (p) => `The plan for you here: ${p}.`,
+    (p) => `Here is what to build toward: ${p}.`,
+    (p) => `Your plan from here: ${p}.`,
   ],
 };
 
@@ -363,7 +366,12 @@ export function stepArc(
  * to the side's own minor pieces there. Other aims pass: they are regions or
  * files, not a piece's journey.
  */
-export function aimWalkableNow(aim: Aim, fen: string, color: 'w' | 'b'): boolean {
+export function aimWalkableNow(aim: Aim, fen: string, color: 'w' | 'b', history?: readonly string[]): boolean {
+  // A ROUTE BACK TO WHERE THE PIECE JUST WAS is not a plan (manual check
+  // 2026-09-30: "the queen's walk from c2 to d7" said the move after the queen
+  // came from d7 to c2). Reject it when one of the side's last two moves took
+  // that piece from the goal to the route's start.
+  if (aim.kind === 'route' && aim.goal && aim.from && history && justLeft(history, color, aim.goal, aim.from)) return false;
   if (aim.kind !== 'route' && aim.kind !== 'outpost' && aim.kind !== 'king-attack' && aim.kind !== 'shield') return true;
   let board: Chess;
   try { board = new Chess(fen); } catch { return false; }
@@ -449,4 +457,33 @@ export function aimWalkableNow(aim: Aim, fen: string, color: 'w' | 'b'): boolean
     here = next;
   }
   return !lostThere(piece);
+}
+
+/** True when one of `color`'s last two moves in `history` went `from` → `to`. */
+function justLeft(history: readonly string[], color: 'w' | 'b', from: string, to: string): boolean {
+  const c = new Chess();
+  const moves: { color: string; from: string; to: string }[] = [];
+  for (const san of history) {
+    try { const m = c.move(san); moves.push({ color: m.color, from: m.from, to: m.to }); } catch { return false; }
+  }
+  return moves.filter((m) => m.color === color).slice(-2).some((m) => m.from === from && m.to === to);
+}
+
+/** Two or more of the student's plans read on one move are ONE line, "X, then
+ *  Y" (P2 #1) — never two announcements back to back. The first emerge keeps
+ *  its stem; the rest join as its next steps. */
+export function joinEmerges(events: readonly ArcEvent[]): ArcEvent[] {
+  if (events.length < 2) return [...events];
+  const phrase = (e: ArcEvent): string => {
+    const i = e.text.indexOf(': ');
+    return (i >= 0 ? e.text.slice(i + 2) : e.text).replace(/\.$/, '');
+  };
+  const head = events[0];
+  const stem = head.text.slice(0, head.text.indexOf(': ') + 2);
+  const rest = events.slice(1).map(phrase);
+  return [{
+    ...head,
+    text: `${stem}${phrase(head)}, then ${rest.join(', then ')}.`,
+    squares: [...new Set(events.flatMap((e) => e.squares))],
+  }];
 }

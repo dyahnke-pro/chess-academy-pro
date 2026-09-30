@@ -453,9 +453,11 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       // (thrown mate / a rout) names no exact figure — "a winning position".
       const lost = Number(f.drop) >= 6 ? 'a winning position' : `about ${f.drop} point${Number(f.drop) === 1 ? '' : 's'} of your edge`;
       const s = [
-        `You had it won and rushed — this move throws away ${lost}; ${f.better} keeps it simple and holds the advantage.`,
-        `Convert with patience: you were clearly winning and this hands most of it back — ${f.better} was the calm move.`,
-        `A won position needs care, not haste — this gives up ${lost}; ${f.better} stays on track.`,
+        // An empty `better` means the line beside this verdict already names
+        // the move (Learn's grade: "h5 was the move — …") — one fact once.
+        `You had it won and rushed — this move throws away ${lost}${f.better ? `; ${f.better} keeps it simple and holds the advantage` : ''}.`,
+        `Convert with patience: you were clearly winning and this hands most of it back${f.better ? ` — ${f.better} was the calm move` : ''}.`,
+        `A won position needs care, not haste — this gives up ${lost}${f.better ? `; ${f.better} stays on track` : ''}.`,
       ];
       return s[v % s.length];
     }

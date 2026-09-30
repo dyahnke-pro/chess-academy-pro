@@ -49,6 +49,9 @@ export interface InaccuracyCall {
    *  ("it let them take your rook on b2"). Structured so a caller that already
    *  said that loss can tell it is the same claim without reading the prose. */
   lostSquare?: string;
+  /** The better move this line NAMES ("Nf3 was the move — …"), when it names
+   *  one — so a verdict beside it can leave the move out (one fact once). */
+  namesBetter?: string;
 }
 
 /** Only the three that are worth stopping for. `good` and above stay silent —
@@ -498,7 +501,7 @@ export function callInaccuracyDetailed(args: {
   const gambit = quality === 'blunder' ? null : gambitFile(args.fenBefore, args.playedSan, args.moverColor);
   if (gambit) {
     const said = `${args.playedSan} offers a pawn — if they take, the ${gambit}-file opens toward their king. The engine prefers ${args.bestSan}${better ? `, to ${better.why}` : ''}, so it is a practical try, not a free one.`;
-    return { call: { quality, side: 'student', cost, said, square: better?.square ?? '' } };
+    return { call: { quality, side: 'student', cost, said, square: better?.square ?? '', namesBetter: args.bestSan } };
   }
   // STILL WINNING IS SAID FIRST (hand walk 1380, move 22: "gxh5 was a
   // mistake" — it won two pieces and left White +4). When the mover is still
@@ -514,7 +517,7 @@ export function callInaccuracyDetailed(args: {
     const said = reason
       ? `${args.playedSan} still wins, but ${args.bestSan} was cleaner — ${reason}.`
       : `${args.playedSan} still wins.`;
-    return { call: { quality, side: 'student', cost, said, square: better?.square ?? '' } };
+    return { call: { quality, side: 'student', cost, said, square: better?.square ?? '', ...(reason ? { namesBetter: args.bestSan } : {}) } };
   }
   // THE GRADE CARRIES ITS COST (Blumenfeld walk F16/F23/F31): what the move
   // let them do, read off their own best line by the same reader that says why
@@ -533,7 +536,7 @@ export function callInaccuracyDetailed(args: {
       // nothing else). With no punishment and no better-move reason, the one
       // computed fact left is what it cost.
       : `${args.playedSan} was ${grade}${should ? '' : ` — it gave away about ${(cost / 100).toFixed(1)} points`}.`;
-  return { call: { quality, side: 'student', cost, said: `${head}${should}`, square: better?.square ?? '', ...(punishment?.lostSquare ? { lostSquare: punishment.lostSquare } : {}) } };
+  return { call: { quality, side: 'student', cost, said: `${head}${should}`, square: better?.square ?? '', ...(punishment?.lostSquare ? { lostSquare: punishment.lostSquare } : {}), ...(should ? { namesBetter: args.bestSan } : {}) } };
 }
 
 /** What the played move let the OTHER side do: their best line after it, read

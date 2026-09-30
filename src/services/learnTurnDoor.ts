@@ -69,7 +69,8 @@ export type LearnLane =
   | 'character'
   | 'theirPurpose'
   | 'theirIntent'
-  | 'tempo';
+  | 'tempo'
+  | 'stalemate';
 
 /** Lanes at or below this lead DESCRIBE the board (commentary, behaviour,
  *  the positional read, structure, piece quality) — the tier the scoreboard
@@ -170,6 +171,8 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   theirIntent: { kind: 'computed', why: "what the opponent's quiet move prepares — engine-proven from their seat", lead: 73 },
   // TEMPO, COUNTED (P2 #7): their piece's third move while the student develops.
   tempo: { kind: 'computed', why: 'their piece keeps moving in the opening while you develop — free moves, counted', lead: 70 },
+  // STALEMATE WATCH (P2 #9): the one move that throws away a won game.
+  stalemate: { kind: 'computed', why: 'you are winning and one of your moves would stalemate them', lead: 81 },
   phase: { kind: 'computed', why: 'the game has changed phase — take stock of what the position is about now', lead: 72 },
   kingSafety: { kind: 'observation', why: 'your own king is still in the centre and castling is ready', lead: 55 },
   causalChain: { kind: 'tactic', why: 'a cross-move cause proven on the board — the earlier move that left the piece loose', lead: 80 },

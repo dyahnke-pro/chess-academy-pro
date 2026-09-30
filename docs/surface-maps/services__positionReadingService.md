@@ -106,8 +106,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:2465`
 - `src/services/groundedAnswer.ts:3217`
 - `src/services/groundedAnswer.ts:6639`
-- `src/services/inaccuracyCall.ts:210`
-- `src/services/inaccuracyCall.ts:562`
+- `src/services/inaccuracyCall.ts:213`
+- `src/services/inaccuracyCall.ts:565`
 - `src/services/moveTiming.ts:27`
 - `src/services/pvPlayback.ts:406`
 - `src/services/pvPlayback.ts:453`
@@ -183,8 +183,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `signedLegalSeeFor` (function) — 9 call sites
 - `src/components/Coach/CoachTeachPage.tsx:826`
 - `src/components/Coach/CoachTeachPage.tsx:7795`
-- `src/components/Coach/CoachTeachPage.tsx:9996`
-- `src/components/Coach/CoachTeachPage.tsx:10048`
+- `src/components/Coach/CoachTeachPage.tsx:10002`
+- `src/components/Coach/CoachTeachPage.tsx:10054`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`

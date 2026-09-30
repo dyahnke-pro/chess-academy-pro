@@ -22,6 +22,7 @@ import { threatAnswer, type ThreatAnswer } from './threatAnswer';
 import { mastersPlanLine, mastersPlanRead } from './mastersPlanRead';
 import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
 import { tempoCount } from './tempoCount';
+import { stalemateWatch } from './stalemateWatch';
 import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from './criticalMoment';
 
 export interface TeachingHint {
@@ -188,6 +189,18 @@ export function tempoTeaching(history: readonly string[], student: 'w' | 'b'): T
   return {
     lane: 'tempo', text: t.text, squares: t.squares, claims: [`tempo-count:${t.pieceId}`],
     event: { name: 'coach_tempo_counted', props: { surface: 'coach-teach', moves: t.moves } },
+    arrows: [],
+  };
+}
+
+/** Stalemate watch (P2 #9): student to move at `fen`, winning, and one of
+ *  their moves stalemates the opponent. */
+export function stalemateTeaching(fen: string, student: 'w' | 'b'): TeachingHint | null {
+  const w = stalemateWatch(fen, student);
+  if (!w) return null;
+  return {
+    lane: 'stalemate', text: w.text, squares: w.squares, claims: [`stalemate-watch:${fen.split(' ')[0]}`],
+    event: { name: 'coach_stalemate_warned', props: { surface: 'coach-teach', moves: w.moves.length } },
     arrows: [],
   };
 }

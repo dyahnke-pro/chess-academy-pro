@@ -82,6 +82,15 @@ describe('eval/PV fundamentals — Wave 3 detectors fire on real legal games', (
     expect(text).toMatch(/winning position/i);
   });
 
+  it('botched-conversion with the better move named ELSEWHERE leaves it out (run I, 4GIsh ply 32)', () => {
+    const a = attributePrinciples(BOTCHED).find((x) => x.id === 'botched-conversion')!;
+    for (let ply = 0; ply < 3; ply++) {
+      const text = renderFundamentalVerdict([{ ...a, facts: { ...a.facts, better: '' } }], { replySan: null, ply, seen: new Set() });
+      expect(text).not.toMatch(/Re8/);
+      expect(text).not.toMatch(/;\s*(stays|keeps)|—\s+was the calm|\s{2}/);
+    }
+  });
+
   it('the eval/PV-GATED detectors stay SILENT without the persisted eval/PV', () => {
     // Same positions, but no eval and no PV → the eval/PV-gated detectors must not
     // fire (the live-path contract). capture-toward-centre is EXCLUDED — it is

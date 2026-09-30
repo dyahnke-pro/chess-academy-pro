@@ -56,6 +56,8 @@ export interface BackwardLook {
    *  `InaccuracyCall.lostSquare`). The live fundamental verdict names the same
    *  loss as "that left your rook on b2 hanging"; one of them speaks. */
   lostSquare?: string;
+  /** The better move the line names (`InaccuracyCall.namesBetter`). */
+  namesBetter?: string;
 }
 
 /**
@@ -289,6 +291,7 @@ export function backwardLook(args: {
       // right direction ("The longer narrations are good. Do not cap them.").
       let instead: string | null = null;
       let insteadLost: string | undefined;
+      let insteadBetter: string | undefined;
       if (args.bestSan) {
         try {
           const call = callInaccuracy({
@@ -307,6 +310,7 @@ export function backwardLook(args: {
           });
           instead = call?.said ?? null;
           insteadLost = call?.lostSquare;
+          insteadBetter = call?.namesBetter;
         } catch { /* the alternative is a bonus; the read still stands */ }
       }
       const line = [attempt, cost ? `${cost.said} ${cost.opening}` : '', instead ?? '']
@@ -322,6 +326,7 @@ export function backwardLook(args: {
         // left your knight on g3 hanging…" then "it let them take your knight
         // on g3" in one breath).
         ...(insteadLost ? { lostSquare: insteadLost } : {}),
+        ...(insteadBetter ? { namesBetter: insteadBetter } : {}),
       };
     }
   }
@@ -345,7 +350,7 @@ export function backwardLook(args: {
         replyLineUci: args.replyPvUci ?? [],
         replySan: args.replySan ?? null,
       });
-      if (call) return { line: call.said, square: call.square, kind: 'mistake', ...(call.lostSquare ? { lostSquare: call.lostSquare } : {}) };
+      if (call) return { line: call.said, square: call.square, kind: 'mistake', ...(call.lostSquare ? { lostSquare: call.lostSquare } : {}), ...(call.namesBetter ? { namesBetter: call.namesBetter } : {}) };
     } catch { /* fall through */ }
   }
 

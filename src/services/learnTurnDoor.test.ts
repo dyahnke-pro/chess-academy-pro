@@ -210,7 +210,7 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
     expect(TEACH_CODE).toMatch(/pendingRegisterLines = \[\{ fen: probe\.fen\(\), sans: \[compareRead\.bestSan\] \}/);
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, undefined, c\.claim \? \[c\.claim\] : undefined, undefined, undefined, c\.lines\)/);
     expect(TEACH_CODE).toMatch(/fundamental\?\.lines\)/);
-    expect(TEACH_CODE).toMatch(/'fundamental', \[\], undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines\)/);
+    expect(TEACH_CODE).toMatch(/'fundamental', \[\], [^,]*\? \['convert-method'\] : undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines\)/);
     expect(TEACH_CODE).toMatch(/keptLines\(hintPkg,/);
     // Their move's purpose leads over a board description (hand walk 2026-09-30, …g6).
     expect(TEACH_CODE).toMatch(/c\.kind === 'stopped' \? 'theirPurpose' as const/);

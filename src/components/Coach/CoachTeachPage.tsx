@@ -30,7 +30,7 @@ import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePacka
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { foundMoveTeaching, openingPlanTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
+import { foundMoveTeaching, openingPlanTeaching, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -188,7 +188,7 @@ import { moveOrderArrows } from '../../services/moveOrderArrows';
 import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead';
 
 import { scaleGap, packageForRegister } from '../../services/hintRegister';
-import { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcState, planFromUci, tacticWord, seatedTacticLine } from '../../services/lookaheadPlan';
+import { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcState, planFromUci, tacticWord, seatedTacticLine } from '../../services/lookaheadPlan';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import { backwardLook, lastCoachVerdictDecline, lookConcession } from '../../services/backwardLook';
 import { learnFundamentalVerdict } from '../../services/learnFundamentalNarration';
@@ -9358,7 +9358,7 @@ export function CoachTeachPage(): JSX.Element {
                       // pinning Nc3 was the top line).
                       const quietButConcrete = step.switched?.to === 'positional'
                         && ((tctxNow.immediate?.length ?? 0) > 0 || (gap !== null && gap >= SHARP_GAP_CP));
-                      if (step.switched && !mateOnBoard && !quietOnCheck && !quietButConcrete) queueSpokenHint(probe.fen(), step.switched.text, 'character');
+                      if (step.switched && !mateOnBoard && !quietOnCheck && !quietButConcrete) queueSpokenHint(probe.fen(), step.switched.text, 'character', undefined, step.switched.to === 'conversion' ? ['convert-method'] : undefined);
                     } catch { /* the character read is a bonus, never a blocker */ }
 
                     // BOTH SIDES' PLANS, off the SAME engine read (David
@@ -9385,11 +9385,11 @@ export function CoachTeachPage(): JSX.Element {
                         try {
                           const oppColor = playerColor === 'white' ? 'b' : 'w';
                           const studColor = playerColor === 'white' ? 'w' : 'b';
-                          const theirStep = stepArc(planArcRef.current.theirs, aimsOf(plan.theirs, 'opponent').filter((a) => aimWalkableNow(a, probe.fen(), oppColor)),
+                          const theirStep = stepArc(planArcRef.current.theirs, aimsOf(plan.theirs, 'opponent').filter((a) => aimWalkableNow(a, probe.fen(), oppColor, [...move.history, m.san])),
                             { from: m.from, to: m.to, piece: m.piece, promotion: m.promotion }, probe.fen(), oppColor, 'opponent');
                           const studentPiece = new Chess(move.fen).get(move.to as Square)?.type ?? null;
                           const mineStep = studentPiece
-                            ? stepArc(planArcRef.current.mine, aimsOf(plan.mine, 'student').filter((a) => aimWalkableNow(a, probe.fen(), studColor)),
+                            ? stepArc(planArcRef.current.mine, aimsOf(plan.mine, 'student').filter((a) => aimWalkableNow(a, probe.fen(), studColor, [...move.history, m.san])),
                               { from: move.from, to: move.to, piece: studentPiece, promotion: move.promotion }, probe.fen(), studColor, 'student')
                             : null;
                           planArcRef.current = { theirs: theirStep.next, mine: mineStep?.next ?? planArcRef.current.mine };
@@ -9397,10 +9397,11 @@ export function CoachTeachPage(): JSX.Element {
                             // Their ADVANCE speaks now: it is the why of the move they just
                             // made, question first (2026-09-30).
                             ...theirStep.events,
-                            // The student's own plans are never ANNOUNCED on Learn (their emerge
-                            // is filtered), so their DROP is never said either: "You have let
-                            // an attack on their king go" for a plan the student never heard
-                            // (walk 2026-09-29). An arrival still speaks — it names the move.
+                            // The student's plan is ANNOUNCED now, prescriptively (P2 #1: "the
+                            // plan here is X, then Y" — his 37 moments, ours 0): two aims read
+                            // on one move are one line. Their DROP stays unsaid — a plan the
+                            // coach suggested and the student chose not to follow is not news.
+                            ...joinEmerges((mineStep?.events ?? []).filter((e) => e.kind === 'emerge')),
                             ...(mineStep?.events ?? []).filter((e) => e.kind === 'arrive'),
                           ];
                           for (const e of arcLines) {
@@ -9899,6 +9900,7 @@ export function CoachTeachPage(): JSX.Element {
                       // THIS game's id, so its own live-captured rows are never
                       // counted as a prior game (C4) — the spine reloads mid-game.
                       currentGameId: learnMemRef.current.gameId,
+                      betterNamed: look?.namesBetter ?? null,
                       replySan: reply ?? null,
                       historySans: move.history,
                       playedSan: move.san,
@@ -9951,8 +9953,12 @@ export function CoachTeachPage(): JSX.Element {
                       // "That let them win the pawn on d4" and "they're eyeing
                       // Nxd4 — it would win your pawn on d4" are one claim (run
                       // C walk 2026-09-30); the shared key lets the package keep one.
+                      // A botched conversion's verdict carries the conversion method
+                      // ("Here's how: winning positions are won by simplifying…"); the
+                      // character switch "you are up material now — the job changes to
+                      // trading down" is the same claim (run I, 4GIsh ply 32).
                       const winClaim = !fundamental && /^That let them win /.test(look.line) && /^[a-h][1-8]$/.test(look.square)
-                        ? [`win-${look.square}`] : undefined;
+                        ? [`win-${look.square}`] : fundamental?.id === 'botched-conversion' ? ['convert-method'] : undefined;
                       queueSpokenHint(fenAfterReply, line, look.kind,
                         /^[a-h][1-8]$/.test(look.square) ? [look.square] : [], winClaim, move.fen, undefined,
                         // The fundamental's own lines lead this sentence.
@@ -9968,7 +9974,7 @@ export function CoachTeachPage(): JSX.Element {
                       // its own; the fundamental IS the teaching here.
                       const bookSaidAlone = fundamental.id === 'left-book-early'
                         && studentJustLeftBook(move.history, playerColor === 'white' ? 'w' : 'b');
-                      queueSpokenHint(fenAfterReply, bookSaidAlone ? fundamental.howOnly : fundamental.verdict, 'fundamental', [], undefined, move.fen, undefined, bookSaidAlone ? undefined : fundamental.lines);
+                      queueSpokenHint(fenAfterReply, bookSaidAlone ? fundamental.howOnly : fundamental.verdict, 'fundamental', [], fundamental.id === 'botched-conversion' ? ['convert-method'] : undefined, move.fen, undefined, bookSaidAlone ? undefined : fundamental.lines);
                       captureEvent('coach_fundamental_named', {
                         surface: 'coach-teach', fundamental: fundamental.id, cp_loss: Math.round(cpLoss),
                       });
@@ -10159,6 +10165,11 @@ export function CoachTeachPage(): JSX.Element {
                   if (tempo) {
                     queueSpokenHint(fenAfterReply, tempo.text, tempo.lane, tempo.squares, tempo.claims);
                     if (tempo.event) captureEvent(tempo.event.name, tempo.event.props);
+                  }
+                  const stale = stalemateTeaching(fenAfterReply, playerColor === 'white' ? 'w' : 'b');
+                  if (stale) {
+                    queueSpokenHint(fenAfterReply, stale.text, stale.lane, stale.squares, stale.claims);
+                    if (stale.event) captureEvent(stale.event.name, stale.event.props);
                   }
                 } catch { /* a bonus, never a blocker */ }
 

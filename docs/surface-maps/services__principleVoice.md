@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**675 lines · 6 exports · 12 importers · 9 tests · 3 audits**
+**677 lines · 6 exports · 12 importers · 9 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -29,7 +29,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `isMethodSentence` (function) — 2 call sites
 - `src/services/coachFeatureService.ts:4418`
-- `src/services/learnFundamentalNarration.ts:117`
+- `src/services/learnFundamentalNarration.ts:125`
 
 ### `fundamentalHow` (function) — 10 call sites
 - `src/services/fundamentalHow.test.ts:25`
@@ -46,14 +46,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `FundamentalVerdictOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `renderFundamentalVerdict` (function) — 25 call sites
+### `renderFundamentalVerdict` (function) — 26 call sites
 - `src/services/coachFeatureService.ts:2265`
 - `src/services/fundLeadStems.test.ts:58`
 - `src/services/fundamentalHow.test.ts:47`
 - `src/services/fundamentalHow.test.ts:49`
 - `src/services/fundamentalHow.test.ts:55`
 - `src/services/fundamentalHow.test.ts:81`
-- `src/services/learnFundamentalNarration.ts:107`
+- `src/services/learnFundamentalNarration.ts:115`
 - `src/services/learnWalkBlumenfeld.test.ts:75`
 - `src/services/misconceptionClassifier.ts:259`
 - `src/services/principleAttribution.section14.test.ts:179`
@@ -61,6 +61,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleAttributionEndgame.test.ts:49`
 - `src/services/principleAttributionEvalPv.test.ts:66`
 - `src/services/principleAttributionEvalPv.test.ts:79`
+- `src/services/principleAttributionEvalPv.test.ts:88`
 - `src/services/principleVoice.test.ts:13`
 - `src/services/principleVoice.test.ts:24`
 - `src/services/principleVoice.test.ts:25`

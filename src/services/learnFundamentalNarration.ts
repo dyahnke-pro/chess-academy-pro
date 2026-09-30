@@ -39,6 +39,10 @@ export interface LearnFundamentalInput extends LiveFundamentalReads {
    * self-count.
    */
   currentGameId: string | null;
+  /** The better move another line on this turn already NAMES (the grade's
+   *  "h5 was the move — …", `BackwardLook.namesBetter`). A verdict that would
+   *  name the same move leaves it out — one fact once (run I, 4GIsh ply 32). */
+  betterNamed?: string | null;
   // `replySan` is inherited from `LiveFundamentalReads` — ONE field for both
   // readers: the attributor names the kick they PLAYED (F17), and this verdict
   // says "they missed it" of a loose piece they did not take (re-walk 1380,
@@ -97,8 +101,12 @@ export function learnFundamentalVerdict(
    *  threatens…"). */
   said?: Set<string>,
 ): LearnFundamental | null {
-  const attrs = attributeLiveFundamental(input);
-  if (attrs.length === 0) return null;
+  const raw = attributeLiveFundamental(input);
+  if (raw.length === 0) return null;
+  const bare = (s: unknown): string => (typeof s === 'string' ? s : '').replace(/[+#]+$/, '');
+  const attrs = raw[0].id === 'botched-conversion' && input.betterNamed && bare(raw[0].facts.better) === bare(input.betterNamed)
+    ? [{ ...raw[0], facts: { ...raw[0].facts, better: '' } }, ...raw.slice(1)]
+    : raw;
 
   // First appearance THIS game → the recurrence clause may follow the full
   // verdict; a repeat within the game already got its short stem and says
