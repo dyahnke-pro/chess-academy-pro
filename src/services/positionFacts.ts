@@ -1487,7 +1487,7 @@ function buildClauses(a: {
     // fall back to the generic sharpness line when there's no concrete move.
     if (opponentIntent) {
       ranked.push({
-        kind: 'opponent-intent', rank: 55, text: opponentIntentFacts(opponentIntent, { revealReply: false }),
+        kind: 'opponent-intent', rank: 55, text: opponentIntentFacts(opponentIntent),
         // The idea the sentence actually names is plan[0] — couple ITS squares,
         // not every plan's, or the set stops describing the claim.
         squares: opponentIntent.plans[0]?.squares,

@@ -86,21 +86,16 @@ export function buildOpponentIntent(input: {
 }
 
 /**
- * The intent as board-true facts. `revealReply` decides disclosure:
- *  - false (the student's OWN game — guide-don't-tell): name the opponent's idea,
- *    withhold the student's reply so they find it.
- *  - true (a teaching context — Watch/demo): play it out, branched.
- * '' when there's nothing to say.
+ * The intent as a board-true fact: the opponent's strongest idea, with the
+ * student's reply WITHHELD so they find it (guide-don't-tell — every live
+ * surface is the student's own game). '' when there's nothing to say.
+ *
+ * The branched "you'll want Y ready; if instead Z, then W" form was deleted
+ * 2026-09-30 (G8.5): its contract limited it to demo surfaces, and no demo
+ * surface ever called it.
  */
-export function opponentIntentFacts(oi: OpponentIntent, opts: { revealReply: boolean }): string {
+export function opponentIntentFacts(oi: OpponentIntent): string {
   const p0 = oi.plans[0];
   if (!p0) return '';
-  if (opts.revealReply && p0.studentReply) {
-    let s = `the opponent's strongest here is ${p0.opponentMove} — you'll want ${p0.studentReply} ready.`;
-    const p1 = oi.plans[1];
-    if (p1?.studentReply) s += ` if instead ${p1.opponentMove}, then ${p1.studentReply}.`;
-    return s;
-  }
-  // Guide-don't-tell: the opponent's idea only.
   return `keep an eye on the opponent's ${p0.opponentMove} — that's their strongest try here.`;
 }

@@ -20,16 +20,9 @@ describe('buildOpponentIntent — the branched plan, straight from the PVs', () 
     expect(oi.plans[1]).toMatchObject({ opponentMove: 'Nf6', studentReply: 'O-O' });
   });
 
-  it('teaching disclosure plays the branch out (revealReply)', () => {
-    const oi = buildOpponentIntent({ analysis, fen: FEN })!;
-    const facts = opponentIntentFacts(oi, { revealReply: true });
-    expect(facts).toMatch(/strongest here is a6 — you'll want Ba4 ready/);
-    expect(facts).toMatch(/if instead Nf6, then O-O/);
-  });
-
   it('own-game disclosure names the opponent idea but withholds your reply (guide-don\'t-tell)', () => {
     const oi = buildOpponentIntent({ analysis, fen: FEN })!;
-    const facts = opponentIntentFacts(oi, { revealReply: false });
+    const facts = opponentIntentFacts(oi);
     expect(facts).toMatch(/keep an eye on the opponent's a6/);
     expect(facts).not.toMatch(/Ba4/); // reply withheld
   });
@@ -46,7 +39,6 @@ describe('buildOpponentIntent — the branched plan, straight from the PVs', () 
   it('handles a one-ply line (no reply available)', () => {
     const oi = buildOpponentIntent({ analysis: { topLines: [line(1, 20, ['a7a6'])] }, fen: FEN })!;
     expect(oi.plans[0]).toMatchObject({ opponentMove: 'a6', studentReply: null });
-    // revealReply falls back to the guide form when there's no reply to reveal.
-    expect(opponentIntentFacts(oi, { revealReply: true })).toMatch(/keep an eye on the opponent's a6/);
+    expect(opponentIntentFacts(oi)).toMatch(/keep an eye on the opponent's a6/);
   });
 });
