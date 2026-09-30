@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**116 lines · 6 exports · 3 importers · 3 tests · 1 audits**
+**136 lines · 7 exports · 4 importers · 4 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,6 +15,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/computedVoiceAudit.report.test.ts`
 - `src/services/openingAnnouncement.test.ts`
+- `src/services/openingPositions.test.ts`
 
 ## Exports and every call site
 
@@ -22,12 +23,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `spokenOpeningLabel` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8038`
-- `src/components/Coach/CoachTeachPage.tsx:8039`
+- `src/components/Coach/CoachTeachPage.tsx:8046`
+- `src/components/Coach/CoachTeachPage.tsx:8047`
 - `src/services/openingAnnouncement.test.ts:113`
 - `src/services/openingAnnouncement.test.ts:116`
 
-### `openingAnnouncement` (function) — 15 call sites
+### `openingAnnouncement` (function) — 16 call sites
 - `src/services/computedVoiceAudit.report.test.ts:302`
 - `src/services/openingAnnouncement.test.ts:15`
 - `src/services/openingAnnouncement.test.ts:18`
@@ -43,9 +44,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingAnnouncement.test.ts:43`
 - `src/services/openingAnnouncement.test.ts:47`
 - `src/services/openingAnnouncement.test.ts:48`
+- `src/services/openingPositions.test.ts:32`
 
 ### `openingAnnouncementForGame` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8040`
+- `src/components/Coach/CoachTeachPage.tsx:8048`
 - `src/services/openingAnnouncement.test.ts:130`
 - `src/services/openingAnnouncement.test.ts:131`
 
@@ -53,18 +55,23 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:955`
 
 ### `studentJustLeftBook` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10004`
-- `src/components/Coach/CoachTeachPage.tsx:10031`
+- `src/components/Coach/CoachTeachPage.tsx:10028`
+- `src/components/Coach/CoachTeachPage.tsx:10055`
 - `src/services/openingAnnouncement.test.ts:136`
 - `src/services/openingAnnouncement.test.ts:145`
 - `src/services/openingAnnouncement.test.ts:146`
 - `src/services/openingAnnouncement.test.ts:147`
+
+### `openingNameForBoard` (function) — 2 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8038`
+- `src/services/openingPositions.test.ts:30`
 
 ## Tests
 
 - `src/services/computedVoiceAudit.report.test.ts`
 - `src/services/openingAnnouncement.test.ts`
 - `src/services/openingAnnouncementIdea.test.ts`
+- `src/services/openingPositions.test.ts`
 
 ## Audits that reach it
 

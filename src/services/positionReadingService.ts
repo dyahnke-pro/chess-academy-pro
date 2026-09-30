@@ -943,6 +943,22 @@ export function findBlockade(fen: string, color: Color): { blocker: Square; pawn
   return null;
 }
 
+/** STRUCTURE TRANSFER (census: "structure transfer on the opening name"): the
+ *  opening a named structure is at home in. When the game reached it from a
+ *  DIFFERENT opening, the plans of the home opening carry over — the idea that
+ *  lets a student reuse what they know. Only structures with one clear home. */
+const STRUCTURE_HOME: ReadonlyArray<{ match: RegExp; home: string; family: RegExp }> = [
+  { match: /^French-type pawn chain$/, home: 'French Defense', family: /French/i },
+  { match: /^Closed centre$/, home: "King's Indian", family: /King['’]s Indian/i },
+  { match: /isolated queen['’]s pawn/i, home: 'Tarrasch Defense', family: /Tarrasch|Panov/i },
+];
+export function structureTransfer(structureName: string, openingName: string | null | undefined): string | null {
+  if (!openingName) return null;
+  const h = STRUCTURE_HOME.find((x) => x.match.test(structureName));
+  if (!h || h.family.test(openingName)) return null;
+  return `It is the structure the ${h.home} is built on, so its plans carry over here.`;
+}
+
 /** A NAMED PAWN STRUCTURE + its standing plan — Naroditsky's closing lesson
  *  ("catalogue the typical structures from your openings and their plans"). This
  *  is the deterministic proxy for his "we've move-ordered into a French" teaching:

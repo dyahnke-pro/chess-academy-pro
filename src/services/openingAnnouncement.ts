@@ -14,6 +14,8 @@
 
 import { bookDeparture, warmBookPosition, type BookDeparture } from './bookDeparture';
 import { sayMoveNoun } from './spokenMove';
+import { transposedOpening } from './openingPositions';
+import type { DetectedOpening } from '../types';
 
 export interface DetectedName {
   name: string;
@@ -52,6 +54,9 @@ export function openingAnnouncement(
   departure: BookDeparture | null,
   spokenName: string | null,
   studentColor: 'w' | 'b',
+  /** The name was read off the POSITION after a different move order
+   *  (`transposedOpening`) — a family change is then news, said as one. */
+  transposed = false,
 ): string | null {
   if (!det || !det.name || det.name === spokenName) return null;
   if (spokenName === null) return `This game is the ${spoken(det.name)}.`;
@@ -67,6 +72,7 @@ export function openingAnnouncement(
     const spokenFamily = spokenName.split(':')[0].trim();
     const newFamily = det.name.split(':')[0].trim();
     if (!det.name.startsWith(spokenName)) {
+      if (transposed && newFamily !== spokenFamily) return `By a different move order, the game has transposed into the ${spoken(det.name)}.`;
       if (newFamily === spokenFamily || !newFamily.includes(spokenFamily)) return null;
       return `It's the ${newFamily}.`;
     }
@@ -92,13 +98,14 @@ export function openingAnnouncementForGame(
   history: readonly string[],
   spokenName: string | null,
   studentColor: 'w' | 'b',
+  transposed = false,
 ): string | null {
   const dep = bookDeparture(history);
   // A DEPARTURE IS NEWS ONLY WHEN IT JUST HAPPENED. Found late — a name the
   // detector sharpened forty moves in — it announced "You left the book with
   // the pawn to h5" at move 39 (run C walk 2026-09-30). Stale: say nothing.
   if (spokenName !== null && dep && history.length - dep.ply > 1) return null;
-  return openingAnnouncement(det, dep, spokenName, studentColor);
+  return openingAnnouncement(det, dep, spokenName, studentColor, transposed);
 }
 
 /** Warm the book read for the position now on the board — the surface calls
@@ -112,4 +119,17 @@ export function warmOpeningBook(fen: string, surface: string): void {
 export function studentJustLeftBook(history: readonly string[], studentColor: 'w' | 'b'): boolean {
   const dep = bookDeparture(history);
   return !!dep && dep.mover === studentColor && history.length - dep.ply <= 1;
+}
+
+/** The name to announce for this board: the move-order match, or — when the
+ *  board is a named DB position the move order never reached — that position's
+ *  name, flagged as a transposition (`openingPositions`). */
+export function openingNameForBoard(
+  byOrder: DetectedOpening | null,
+  fen: string,
+  historyLength: number,
+): { det: DetectedName | null; transposed: boolean } {
+  const t = transposedOpening(fen, historyLength, byOrder);
+  if (t) return { det: { name: t }, transposed: true };
+  return { det: byOrder, transposed: false };
 }

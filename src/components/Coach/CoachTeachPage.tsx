@@ -30,7 +30,7 @@ import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePacka
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { announcesTheMove, checkMethodTeaching, foundMoveTeaching, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
+import { announcesTheMove, checkMethodTeaching, foundMoveTeaching, openingBreakFor, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -80,7 +80,7 @@ import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
 import { findSiblingExtensionBranches, resolveOpeningEntry, isBookLine } from '../../services/openingDetectionService';
-import { openingAnnouncementForGame, spokenOpeningLabel, studentJustLeftBook, warmOpeningBook } from '../../services/openingAnnouncement';
+import { openingAnnouncementForGame, openingNameForBoard, spokenOpeningLabel, studentJustLeftBook, warmOpeningBook } from '../../services/openingAnnouncement';
 import { lastMoveCapturedOn, pendingRecapture, landingSquare } from '../../utils/justCaptured';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
@@ -276,7 +276,7 @@ import { admitArrow, admitArrows, lineClaims, narrationArrowsThroughDoor, withAd
 // ONE depth for the whole turn — the hint lane and the lane that grades the
 // student must not read the same board at different depths. See the constant.
 import { tacticalReadFromLines, temptingTurnClause, uncertaintyClause, candidateCompareRead } from '../../services/tacticalRead';
-import { legalSeeGainFor, namedPawnStructure, signedLegalSeeFor } from '../../services/positionReadingService';
+import { legalSeeGainFor, namedPawnStructure, structureTransfer, signedLegalSeeFor } from '../../services/positionReadingService';
 import { BehaviorScheduler, detectBehaviors } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
@@ -1701,6 +1701,7 @@ export function CoachTeachPage(): JSX.Element {
     announcedPliesRef.current.clear();
     announcedBoardsRef.current.clear();
     planToldBoardsRef.current.clear();
+    openingBreakRef.current = null;
     liveGradesRef.current.clear();
     fundamentalSeenRef.current.clear();
     planArcRef.current = { theirs: EMPTY_ARC, mine: EMPTY_ARC };
@@ -1730,6 +1731,10 @@ export function CoachTeachPage(): JSX.Element {
    *  prescriptive emerge). A move from one that serves the plan is PROMPTED for
    *  the plan skill (`no-plan`) only — the plan was said; the tactics were not. */
   const planToldBoardsRef = useRef(new Set<string>());
+  /** The student's master-game break named with the opening's plan, and the
+   *  ply it was named at — the opening summary reads it when the middlegame
+   *  begins (census #52). `said` keeps it once per game. */
+  const openingBreakRef = useRef<{ san: string; square: string; atPly: number; said: boolean } | null>(null);
   // THE LIVE PER-MOVE EVALUATIONS (C7, 2026-09-22). Every student ply is
   // graded off the paid-for pre-move read (`gradePlayedMove`, below) and the
   // saved record used to carry `annotations: null` regardless. Keyed by ply so
@@ -8027,7 +8032,10 @@ export function CoachTeachPage(): JSX.Element {
 
     // ── OPENING ANNOUNCEMENT ───────────────────────────────────────────────
     try {
-      const det = detectOpening(history);
+      const byOrder = detectOpening(history);
+      // THE TRANSPOSITION READER: the board may be a named opening the move
+      // order never reached — name the position, and say it transposed.
+      const { det, transposed } = openingNameForBoard(byOrder, args.fenAfterReply, history.length);
       if (det && det.name) learnMemRef.current.detectedOpeningName = det.name;
       // WHEN to name it is one rule shared with the late lane below
       // (`openingAnnouncement`): first identification, then the settled
@@ -8037,7 +8045,7 @@ export function CoachTeachPage(): JSX.Element {
       // heard "This game is the Indian Defense" twice (walk 2026-09-27).
       const queuedLabel = learnMemRef.current.queuedOpeningName ? spokenOpeningLabel(learnMemRef.current.queuedOpeningName) : null;
       const announce = det && det.name !== learnMemRef.current.queuedOpeningName && spokenOpeningLabel(det.name) !== queuedLabel
-        ? openingAnnouncementForGame(det, history, learnMemRef.current.spokenOpeningName, playerColor === 'white' ? 'w' : 'b')
+        ? openingAnnouncementForGame(det, history, learnMemRef.current.spokenOpeningName, playerColor === 'white' ? 'w' : 'b', transposed)
         : null;
       if (det && announce) {
         const firstResolve = learnMemRef.current.spokenOpeningName === null;
@@ -8255,6 +8263,8 @@ export function CoachTeachPage(): JSX.Element {
         if (plan) {
           learnMemRef.current.structureSaid.add('masters-plan');
           openingIdeaLine = { text: plan.text, squares: plan.squares };
+          const brk = openingBreakFor(args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b');
+          if (brk) openingBreakRef.current = { ...brk, atPly: history.length, said: false };
           if (plan.event) captureEvent(plan.event.name, plan.event.props);
         }
       }
@@ -9074,7 +9084,10 @@ export function CoachTeachPage(): JSX.Element {
                       const struct = namedPawnStructure(probe.fen(), playerColor === 'white' ? 'w' : 'b');
                       if (struct && !learnMemRef.current.structureSaid.has(struct.name)) {
                         learnMemRef.current.structureSaid.add(struct.name);
-                        const line = gradeNarrationText(`${struct.name} — ${struct.plan}.`, probe.fen(), 'CoachTeachPage.structure')?.trim();
+                        let openingNow: string | null = null;
+                        try { openingNow = detectOpening([...move.history, m.san])?.name ?? null; } catch { openingNow = null; }
+                        const transfer = structureTransfer(struct.name, openingNow);
+                        const line = gradeNarrationText(`${struct.name} — ${struct.plan}.${transfer ? ` ${transfer}` : ''}`, probe.fen(), 'CoachTeachPage.structure')?.trim();
                         if (line) queueSpokenHint(probe.fen(), line, 'structure', undefined, [`structure:${struct.name}`]);
                       }
                     } catch { /* the structure note is a bonus, never a blocker */ }
@@ -9920,6 +9933,17 @@ export function CoachTeachPage(): JSX.Element {
                       // DUAL-USE (P4): the lane that teaches it also records it.
                       recordTeachingEvidence(h, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
                     }
+                    // THE OPENING SUMMARY (census #52): the first move out of the
+                    // opening says whether the break it is played for came.
+                    try {
+                      const brk = openingBreakRef.current;
+                      if (brk && !brk.said && classifyPhase(move.fen, move.history.length) !== 'opening') {
+                        brk.said = true;
+                        const mine = move.history.filter((_, i) => i >= brk.atPly && (i % 2 === 0) === (playerColor === 'white'));
+                        const line = openingSummaryLine(brk, mine, fenAfterReply);
+                        if (line) queueSpokenHint(fenAfterReply, line, 'openingIdea', [brk.square], [`opening-summary:${brk.san}`]);
+                      }
+                    } catch { /* the summary is a bonus, never a blocker */ }
                     const look = backwardLook({
                       fenBefore,
                       fenAfter: move.fen,

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2569 lines · 78 exports · 65 importers · 20 tests · 2 audits**
+**2585 lines · 79 exports · 65 importers · 20 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -145,8 +145,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveFundamentals.ts:1263`
 
 ### `legalSeeGainFor` (function) — 37 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7927`
-- `src/components/Coach/CoachTeachPage.tsx:9391`
+- `src/components/Coach/CoachTeachPage.tsx:7932`
+- `src/components/Coach/CoachTeachPage.tsx:9404`
 - `src/services/arrowDoor.ts:161`
 - `src/services/bluffDetector.ts:53`
 - `src/services/bluffDetector.ts:63`
@@ -185,9 +185,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `signedLegalSeeFor` (function) — 9 call sites
 - `src/components/Coach/CoachTeachPage.tsx:826`
-- `src/components/Coach/CoachTeachPage.tsx:7808`
-- `src/components/Coach/CoachTeachPage.tsx:10057`
-- `src/components/Coach/CoachTeachPage.tsx:10114`
+- `src/components/Coach/CoachTeachPage.tsx:7813`
+- `src/components/Coach/CoachTeachPage.tsx:10081`
+- `src/components/Coach/CoachTeachPage.tsx:10138`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
@@ -382,8 +382,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:128`
 - `src/services/positionalTruth.corpus.test.ts:130`
 
+### `structureTransfer` (function) — 6 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9089`
+- `src/services/positionReadingService.test.ts:954`
+- `src/services/positionReadingService.test.ts:955`
+- `src/services/positionReadingService.test.ts:956`
+- `src/services/positionReadingService.test.ts:957`
+- `src/services/positionReadingService.test.ts:958`
+
 ### `namedPawnStructure` (function) — 22 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9074`
+- `src/components/Coach/CoachTeachPage.tsx:9084`
 - `src/services/claimTruth.manual.test.ts:64`
 - `src/services/claimTruth.manual.test.ts:66`
 - `src/services/danyaBehaviors.ts:372`
@@ -712,7 +720,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `goodPieceIdeaKey` (function) — 3 call sites
 - `src/services/danyaBehaviors.ts:216`
 - `src/services/positionalRead.ts:282`
-- `src/services/reviewPositionalAssessment.ts:191`
+- `src/services/reviewPositionalAssessment.ts:202`
 
 ## Tests
 

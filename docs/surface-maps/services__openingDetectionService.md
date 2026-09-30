@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1961 lines · 26 exports · 51 importers · 24 tests · 2 audits**
+**1961 lines · 26 exports · 52 importers · 25 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -54,6 +54,7 @@
 - `src/services/openingMatchup.ts`
 - `src/services/openingNameClaimValidator.ts`
 - `src/services/openingNameResolution.test.ts`
+- `src/services/openingPositions.test.ts`
 - `src/services/openingSublines.ts`
 - `src/services/positionFacts.ts`
 - `src/services/principleAttribution.section14.test.ts`
@@ -72,7 +73,7 @@
 ### `isTeachable` (function) — 1 call site
 - `src/services/masterclassRedirect.ts:132`
 
-### `detectOpening` (function) — 26 call sites
+### `detectOpening` (function) — 29 call sites
 - `src/coach/coachService.ts:903`
 - `src/coach/sources/annotationContext.ts:79`
 - `src/coach/sources/middlegamePlan.ts:51`
@@ -81,7 +82,8 @@
 - `src/components/Coach/CoachGamePage.tsx:1801`
 - `src/components/Coach/CoachGamePage.tsx:3312`
 - `src/components/Coach/CoachGamePage.tsx:3400`
-- `src/components/Coach/CoachTeachPage.tsx:8030`
+- `src/components/Coach/CoachTeachPage.tsx:8035`
+- `src/components/Coach/CoachTeachPage.tsx:9088`
 - `src/hooks/usePhaseNarration.ts:461`
 - `src/services/coachFeatureService.ts:2416`
 - `src/services/coachFeatureService.ts:2837`
@@ -97,6 +99,8 @@
 - `src/services/openingDetectionService.test.ts:61`
 - `src/services/openingKey.test.ts:26`
 - `src/services/openingKey.ts:39`
+- `src/services/openingPositions.test.ts:27`
+- `src/services/openingPositions.test.ts:37`
 - `src/services/reviewFullData.ts:967`
 - `src/services/reviewFullData.ts:1143`
 
@@ -128,8 +132,8 @@
 
 ### `resolveOpeningEntry` (function) — 58 call sites
 - `src/components/Coach/CoachGamePage.tsx:1097`
-- `src/components/Coach/CoachTeachPage.tsx:4718`
-- `src/components/Coach/CoachTeachPage.tsx:5387`
+- `src/components/Coach/CoachTeachPage.tsx:4723`
+- `src/components/Coach/CoachTeachPage.tsx:5392`
 - `src/data/voicedWalkthroughs.test.ts:100`
 - `src/data/voicedWalkthroughs.ts:160`
 - `src/services/openingDbGrounding.ts:231`
@@ -200,7 +204,7 @@
 - `src/services/openingSublines.ts:100`
 
 ### `isBookLine` (function) — 13 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8740`
+- `src/components/Coach/CoachTeachPage.tsx:8750`
 - `src/services/bookDeparture.ts:66`
 - `src/services/gameAnalysisService.ts:1289`
 - `src/services/gameAnalysisService.ts:1554`
@@ -225,8 +229,8 @@
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:74`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:37`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:43`
-- `src/components/Coach/CoachTeachPage.tsx:5662`
-- `src/components/Coach/CoachTeachPage.tsx:7302`
+- `src/components/Coach/CoachTeachPage.tsx:5667`
+- `src/components/Coach/CoachTeachPage.tsx:7307`
 - `src/services/coachLaneWiring.test.ts:348`
 - `src/services/inGameChatIntent.ts:163`
 - `src/services/inGameChatIntent.ts:174`
@@ -294,8 +298,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolveCuratedVariation` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:5021`
-- `src/components/Coach/CoachTeachPage.tsx:5670`
+- `src/components/Coach/CoachTeachPage.tsx:5026`
+- `src/components/Coach/CoachTeachPage.tsx:5675`
 - `src/services/openingDetectionService.test.ts:561`
 - `src/services/openingDetectionService.test.ts:567`
 - `src/services/openingDetectionService.test.ts:571`
@@ -310,8 +314,8 @@
 ### `findLinePickerOptions` (function) — 18 call sites
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:115`
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:129`
-- `src/components/Coach/CoachTeachPage.tsx:5282`
-- `src/components/Coach/CoachTeachPage.tsx:5534`
+- `src/components/Coach/CoachTeachPage.tsx:5287`
+- `src/components/Coach/CoachTeachPage.tsx:5539`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:30`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:43`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:47`
@@ -345,15 +349,15 @@
 
 ### `inferStudentSideFromName` (function) — 19 call sites
 - `src/components/Coach/CoachTeachPage.tsx:1012`
-- `src/components/Coach/CoachTeachPage.tsx:2135`
-- `src/components/Coach/CoachTeachPage.tsx:5045`
-- `src/components/Coach/CoachTeachPage.tsx:5046`
-- `src/components/Coach/CoachTeachPage.tsx:5260`
-- `src/components/Coach/CoachTeachPage.tsx:5335`
-- `src/components/Coach/CoachTeachPage.tsx:5342`
-- `src/components/Coach/CoachTeachPage.tsx:5354`
-- `src/components/Coach/CoachTeachPage.tsx:5390`
-- `src/components/Coach/CoachTeachPage.tsx:6502`
+- `src/components/Coach/CoachTeachPage.tsx:2140`
+- `src/components/Coach/CoachTeachPage.tsx:5050`
+- `src/components/Coach/CoachTeachPage.tsx:5051`
+- `src/components/Coach/CoachTeachPage.tsx:5265`
+- `src/components/Coach/CoachTeachPage.tsx:5340`
+- `src/components/Coach/CoachTeachPage.tsx:5347`
+- `src/components/Coach/CoachTeachPage.tsx:5359`
+- `src/components/Coach/CoachTeachPage.tsx:5395`
+- `src/components/Coach/CoachTeachPage.tsx:6507`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:91`
 - `src/data/voicedWalkthroughs.test.ts:6`
 - `src/services/openingGenerator.ts:1905`
@@ -365,9 +369,9 @@
 - `src/services/punishStageSeat.test.ts:87`
 
 ### `studentSideForPlay` (function) — 13 call sites
-- `src/components/Coach/CoachTeachPage.tsx:5259`
-- `src/components/Coach/CoachTeachPage.tsx:12404`
-- `src/components/Coach/CoachTeachPage.tsx:12454`
+- `src/components/Coach/CoachTeachPage.tsx:5264`
+- `src/components/Coach/CoachTeachPage.tsx:12428`
+- `src/components/Coach/CoachTeachPage.tsx:12478`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:59`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:60`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:64`
@@ -402,6 +406,7 @@
 - `src/services/openingIntentCapture.requestedOpening.test.ts`
 - `src/services/openingKey.test.ts`
 - `src/services/openingNameResolution.test.ts`
+- `src/services/openingPositions.test.ts`
 - `src/services/principleAttribution.section14.test.ts`
 - `src/services/punishStageSeat.test.ts`
 - `src/services/teachKidRouting.test.ts`

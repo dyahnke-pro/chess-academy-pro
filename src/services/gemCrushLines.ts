@@ -531,6 +531,60 @@ export function buildGemDetour(
   };
 }
 
+let gemsAfterSlip: Map<string, PunishGem[]> | null = null;
+let warming = false;
+/** Build both gem indexes a few gems at a time, yielding between chunks, so no
+ *  single task holds the main thread (the backfill schedule's shape). */
+export function warmGemIndexes(): void {
+  if (warming || (gemsByPosition && gemsAfterSlip)) return;
+  warming = true;
+  const gems = getAllPunishGems().filter(isSurfaceableGem);
+  const byPos = new Map<string, PunishGem[]>();
+  const after = new Map<string, PunishGem[]>();
+  let i = 0;
+  const step = (): void => {
+    const end = Math.min(gems.length, i + 8);
+    for (; i < end; i += 1) {
+      const gem = gems[i];
+      const chess = new Chess();
+      try {
+        for (const san of gem.lineMoves.split(/\s+/).filter(Boolean)) chess.move(san);
+        const k1 = positionKey(chess.fen());
+        byPos.set(k1, [...(byPos.get(k1) ?? []), gem]);
+        chess.move(gem.inaccuracy);
+        const k2 = positionKey(chess.fen());
+        after.set(k2, [...(after.get(k2) ?? []), gem]);
+      } catch { /* an unreplayable gem indexes nowhere */ }
+    }
+    if (i < gems.length) { setTimeout(step, 0); return; }
+    if (!gemsByPosition) gemsByPosition = byPos;
+    gemsAfterSlip = after;
+    warming = false;
+  };
+  setTimeout(step, 0);
+}
+export type GemMoveSignal = 'walked-into' | 'punished' | 'missed-punish';
+
+/** WHAT A MOVE SAID ABOUT THE PLAYER, IN GEM TERMS — the strongest early
+ *  strength signal (CLAUDE.md: "a gem blunder … a mistake with a known
+ *  population attached"). Gems are mined at amateur rating bands, so:
+ *   • playing a gem's inaccuracy = walking into a known trap;
+ *   • facing one and playing its punish = finding the refutation;
+ *   • facing one and playing anything else = missing it.
+ *  Null when the board holds no gem either way. */
+export function gemMoveSignal(fenBefore: string, san: string): GemMoveSignal | null {
+  // NEVER BUILD ON THE MOVE PATH: both indexes replay ~400 gem lines (1.2 s on
+  // a desktop, several on a phone). Until the chunked warm-up has finished the
+  // answer is "no signal", which only means this move nudges nothing.
+  if (!gemsByPosition || !gemsAfterSlip) { warmGemIndexes(); return null; }
+  const bare = (x: string): string => x.replace(/[+#!?]+$/, '');
+  const key = positionKey(fenBefore);
+  for (const g of gemsByPosition.get(key) ?? []) if (bare(g.inaccuracy) === bare(san)) return 'walked-into';
+  const faced = gemsAfterSlip.get(key) ?? [];
+  if (faced.length === 0) return null;
+  return faced.some((g) => bare(g.punishSeq[0] ?? g.punish) === bare(san)) ? 'punished' : 'missed-punish';
+}
+
 /**
  * Every surfaceable gem whose spine reaches the position `pathSans` stands in,
  * built into baked detours. When `studentSide` is given, each gem is classified:

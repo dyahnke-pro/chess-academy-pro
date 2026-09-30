@@ -82,9 +82,19 @@ export function aimsOf(side: SidePlan, seat: Seat): Aim[] {
     const name = PIECE[piece] ?? word;
     // Keyed by the PIECE: a knight heading for g3 that then heads on to h5 is
     // one journey, not a dropped plan and a new one (first real game read).
-    out.push({ id: `route:${piece}`, kind: 'route', squares: side.maneuver.path.slice(1), goal: dest, phrase: `the ${name}'s walk from ${side.maneuver.path[0]} to ${dest}`, from: side.maneuver.path[0] });
+    out.push({ id: `route:${piece}`, kind: 'route', squares: side.maneuver.path.slice(1), goal: dest, phrase: routePhrase(name, side.maneuver.path), from: side.maneuver.path[0] });
   }
   return out;
+}
+
+/** DESTINATION FIRST, then the path (census: piece maneuvers — his "the knight
+ *  wants e5, by way of d2 and f3"): where it is going is the idea; the squares
+ *  on the way are the how. */
+function routePhrase(name: string, path: readonly string[]): string {
+  const dest = path[path.length - 1];
+  const via = path.slice(1, -1);
+  const tail = via.length === 0 ? '' : via.length === 1 ? `, by way of ${via[0]}` : `, by way of ${via.slice(0, -1).join(', ')} and ${via[via.length - 1]}`;
+  return `getting the ${name} to ${dest}${tail}`;
 }
 
 interface ArcEntry {
@@ -293,7 +303,7 @@ export function stepArc(
     if (entry.announced && missing >= 2) {
       events.push({
         id, kind: 'drop', seat, squares: [],
-        text: their ? `They have let ${e.aim.phrase} go.` : `You have let ${e.aim.phrase} go.`,
+        text: their ? `They have given up on ${e.aim.phrase}.` : `You have given up on ${e.aim.phrase}.`,
       });
       continue;
     }

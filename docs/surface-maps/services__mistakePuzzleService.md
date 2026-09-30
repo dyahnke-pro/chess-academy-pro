@@ -95,14 +95,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:7348`
-- `src/components/Coach/CoachTeachPage.tsx:7354`
+- `src/components/Coach/CoachTeachPage.tsx:7353`
+- `src/components/Coach/CoachTeachPage.tsx:7359`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
 - `src/hooks/useAcceptableMoves.ts:88`
-- `src/hooks/useDiscussionPractice.ts:271`
-- `src/hooks/useDiscussionPractice.ts:397`
+- `src/hooks/useDiscussionPractice.ts:272`
+- `src/hooks/useDiscussionPractice.ts:398`
 - `src/services/autoAnalyzeGame.ts:315`
 - `src/services/computerAccuracy.audit.test.ts:107`
 - `src/services/deliberation.ts:98`
@@ -240,7 +240,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `gradeMistakePuzzle` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2382`
+- `src/components/Coach/CoachTeachPage.tsx:2387`
 - `src/components/Puzzles/MyMistakesPage.tsx:227`
 - `src/components/Puzzles/WeaknessThemesPage.tsx:116`
 - `src/components/Tactics/TacticCreatePage.tsx:219`

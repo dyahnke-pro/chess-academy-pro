@@ -35,6 +35,7 @@ import { stalemateWatch } from './stalemateWatch';
 import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from './criticalMoment';
 import { SAID_BEFORE_MOVE } from './computerRoles';
 import { fileClaimed } from './planRace';
+import { sayMoveNoun } from './spokenMove';
 
 export interface TeachingHint {
   lane: LearnLane;
@@ -350,6 +351,33 @@ export function openingPlanTeaching(fen: string, student: 'w' | 'b'): TeachingHi
     event: { name: 'coach_opening_plan_named', props: { surface: 'coach-teach' } },
     arrows: plan.arrows.map((a) => ({ from: a.from, to: a.to, role: 'play', fen, source: 'learn.openingPlan' })),
   };
+}
+
+/** The student's own master-game break at `fen` (the one `openingPlanTeaching`
+ *  names), for the opening summary later. */
+export function openingBreakFor(fen: string, student: 'w' | 'b'): { san: string; square: string } | null {
+  const read = mastersPlanRead(fen, mastersMovesSync);
+  const mine = read ? (student === 'w' ? read.white : read.black) : null;
+  return mine ? { san: mine.san, square: mine.square } : null;
+}
+
+/** THE OPENING SUMMARY (census #52): the opening is over — did the student get
+ *  the break the opening is played for? Read against the board, never assumed:
+ *  played it; still there to play (legal now); or the position moved past it. */
+export function openingSummaryLine(brk: { san: string; square: string }, studentSans: readonly string[], fenNow: string): string | null {
+  const bare = (x: string): string => x.replace(/[+#!?]+$/, '');
+  const say = sayMoveNoun(brk.san);
+  if (studentSans.some((s) => bare(s) === bare(brk.san))) {
+    return `The opening is over, and you got its break in — ${say}, the move this opening is played for.`;
+  }
+  let legalNow = false;
+  try {
+    const c = new Chess(fenNow);
+    legalNow = c.moves().some((m) => bare(m) === bare(brk.san));
+  } catch { legalNow = false; }
+  return legalNow
+    ? `The opening is over and its break, ${say}, has not come yet — it is still there to play when it is prepared.`
+    : `The opening is over without its break, ${say} — the position has moved past it, so the plan now comes from the middlegame.`;
 }
 
 /** THE VERDICT ON A FOUND MOVE (P2 #2): at a real decision moment on the board

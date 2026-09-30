@@ -39,6 +39,7 @@ import { getMisconceptionTag } from '../data/misconceptionTags';
 import { principleFor } from '../data/principles';
 import type { MisconceptionSource } from '../types';
 import { COACH_TURN_DEPTH } from '../services/engineConstants';
+import { gemMoveSignal, warmGemIndexes, type GemMoveSignal } from '../services/gemCrushLines';
 
 /** Sentinel the panel's Hint button submits — the hook treats it as an honest
  *  "I couldn't say" (reveal the answer, log the gap), never a typed reason. */
@@ -825,7 +826,12 @@ export function useDiscussionPractice(
   // `evaluatePlayerMove`, so a surface that opts out of recording stays inert.
   const liveRef = useRef<{ gameId: string; s: LiveStrength } | null>(null);
   const liveFor = useCallback((gameId: string, seed: number): { gameId: string; s: LiveStrength } => {
-    if (!liveRef.current || liveRef.current.gameId !== gameId) liveRef.current = { gameId, s: startLiveStrength(seed) };
+    if (!liveRef.current || liveRef.current.gameId !== gameId) {
+      liveRef.current = { gameId, s: startLiveStrength(seed) };
+      // Gem hits feed the strength; build their index now, in chunks, so it is
+      // warm well before the first gem position of the game.
+      warmGemIndexes();
+    }
     return liveRef.current;
   }, []);
   const liveRating = useCallback((gameId: string, seed: number): number => liveFor(gameId, seed).s.rating, [liveFor]);
@@ -833,7 +839,9 @@ export function useDiscussionPractice(
   const recordGradedMove = useCallback((args: GradedMoveArgs): void => {
     // The opponent's strength moves on every graded move, recorded or not.
     const live = liveFor(args.sourceGameId, args.seedRating);
-    live.s = updateLiveStrength(live.s, { fenBefore: args.fenBefore, san: args.playedSan, moverColor: args.moverColor, cpLoss: args.cpLoss });
+    let gem: GemMoveSignal | null = null;
+    try { gem = gemMoveSignal(args.fenBefore, args.playedSan); } catch { gem = null; }
+    live.s = updateLiveStrength(live.s, { fenBefore: args.fenBefore, san: args.playedSan, moverColor: args.moverColor, cpLoss: args.cpLoss, gem });
     if (!recording) return;
     if (args.cpLoss === null) return;   // unknown is not clean
     void recordMoveEvidence({

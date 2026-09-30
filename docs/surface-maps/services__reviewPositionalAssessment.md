@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**278 lines · 6 exports · 9 importers · 7 tests · 0 audits**
+**304 lines · 6 exports · 9 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -67,7 +67,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:33`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:36`
 
-### `phaseVerdictLine` (function) — 8 call sites
+### `phaseVerdictLine` (function) — 10 call sites
 - `src/services/learnWalkNimzo.test.ts:21`
 - `src/services/learnWalkNimzo.test.ts:27`
 - `src/services/phaseVerdict.test.ts:16`
@@ -76,6 +76,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseVerdict.test.ts:28`
 - `src/services/positionFacts.ts:856`
 - `src/services/reviewFullData.ts:927`
+- `src/services/reviewPositionalAssessment.test.ts:87`
+- `src/services/reviewPositionalAssessment.test.ts:92`
 
 ### `phaseVerdictKeys` (function) — 3 call sites
 - `src/services/learnWalkNimzo.test.ts:22`

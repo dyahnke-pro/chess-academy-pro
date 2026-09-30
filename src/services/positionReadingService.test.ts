@@ -947,3 +947,14 @@ describe('minorRouteToSquare never routes through a capture or a losing stop (wa
     expect(r?.via).not.toBe('b5');
   });
 });
+
+describe('structureTransfer — a known structure reached from another opening', () => {
+  it('names the home opening only when the game came from elsewhere', async () => {
+    const { structureTransfer } = await import('./positionReadingService');
+    expect(structureTransfer('French-type pawn chain', 'Caro-Kann Defense: Advance Variation')).toMatch(/French Defense is built on/);
+    expect(structureTransfer('French-type pawn chain', 'French Defense: Advance Variation')).toBeNull();
+    expect(structureTransfer('You hold the isolated queen’s pawn', 'Sicilian Defense: Alapin Variation')).toMatch(/Tarrasch Defense/);
+    expect(structureTransfer('You have the hanging pawns', 'Queen\'s Gambit Declined')).toBeNull();
+    expect(structureTransfer('Closed centre', null)).toBeNull();
+  });
+});

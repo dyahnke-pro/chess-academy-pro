@@ -34,6 +34,11 @@ export interface PositionalAssessment {
    *  move (Learn walk, fresh Nimzo game, 2026-09-26: said on three moves
    *  running through two lanes). Same order as `reasons`. */
   reasonKeys: Array<string | null>;
+  /** THE OTHER SIDE OF THE SCALE (overall verdict as ONE comparison, census
+   *  P3): the assets of the side the verdict does NOT favour, phrased from the
+   *  student's seat, with their say-once keys. Absent on older callers. */
+  counter?: string[];
+  counterKeys?: Array<string | null>;
 }
 
 interface Located { type: string; color: Color; square: string; }
@@ -100,8 +105,14 @@ export function assessPositionalEdge(
   const assets = worse
     ? assetsFor(chess, struct, all, enemy, me, 'theirs')
     : assetsFor(chess, struct, all, me, enemy, 'yours');
+  const counter = worse
+    ? assetsFor(chess, struct, all, me, enemy, 'yours')
+    : assetsFor(chess, struct, all, enemy, me, 'theirs');
 
-  return { verdict, reasons: assets.map((a) => a.text), reasonKeys: assets.map((a) => a.key) };
+  return {
+    verdict, reasons: assets.map((a) => a.text), reasonKeys: assets.map((a) => a.key),
+    counter: counter.map((a) => a.text), counterKeys: counter.map((a) => a.key),
+  };
 }
 
 const EDGE_NAME: Record<string, [string, string]> = {
@@ -253,11 +264,22 @@ export function phaseVerdictLine(
   if (!a.verdict || a.reasons.length === 0) return null;
   const standing = a.verdict === 'balanced' ? "it's level" : `you're ${a.verdict}`;
   const why = a.reasons.length === 0 ? '' : ` — ${andList(a.reasons)}`;
+  // ONE COMPARISON, not a list: the other side of the scale, and what it
+  // weighs. Level → the two sides' trumps hold each other; a bit → theirs keeps
+  // it close; clearly / in trouble → it is not enough.
+  const counter = a.counter ?? [];
+  const inReturn = (() => {
+    if (counter.length === 0) return '';
+    const worse = a.verdict === 'a bit worse' || a.verdict === 'in trouble';
+    if (a.verdict === 'balanced') return `; on the other side, ${andList(counter)} — and the two hold each other`;
+    const weight = a.verdict === 'clearly better' || a.verdict === 'in trouble' ? "and it isn't enough" : 'and it keeps it close';
+    return `; what ${worse ? 'you have' : 'they have'} in return: ${andList(counter)}, ${weight}`;
+  })();
   // Rotated on the board — the verdict and its reasons never vary.
   return rotateStem([
-    `Taking stock as the ${phase} begins: ${standing}${why}.`,
-    `The ${phase} starts here, so take stock: ${standing}${why}.`,
-    `Before the ${phase} gets going, the balance sheet: ${standing}${why}.`,
+    `Taking stock as the ${phase} begins: ${standing}${why}${inReturn}.`,
+    `The ${phase} starts here, so take stock: ${standing}${why}${inReturn}.`,
+    `Before the ${phase} gets going, the balance sheet: ${standing}${why}${inReturn}.`,
   ], stemKeyOf(fen));
 }
 
@@ -266,12 +288,16 @@ export function phaseVerdictLine(
 export function phaseVerdictKeys(fen: string, studentColorWB: Color, studentPovEvalCp: number | null, heard: ReadonlySet<string>): string[] {
   const a = freshAssessment(fen, studentColorWB, studentPovEvalCp, heard);
   if (!a.verdict || a.reasons.length === 0) return [];
-  return a.reasonKeys.filter((k): k is string => k !== null);
+  return [...a.reasonKeys, ...(a.counterKeys ?? [])].filter((k): k is string => k !== null);
 }
 
 /** The assessment minus the reasons whose key was already heard. */
 function freshAssessment(fen: string, studentColorWB: Color, studentPovEvalCp: number | null, heard: ReadonlySet<string>): PositionalAssessment {
   const a = assessPositionalEdge(fen, studentColorWB, studentPovEvalCp);
   const keep = a.reasonKeys.map((k) => k === null || !heard.has(k));
-  return { verdict: a.verdict, reasons: a.reasons.filter((_, i) => keep[i]), reasonKeys: a.reasonKeys.filter((_, i) => keep[i]) };
+  const keepC = (a.counterKeys ?? []).map((k) => k === null || !heard.has(k));
+  return {
+    verdict: a.verdict, reasons: a.reasons.filter((_, i) => keep[i]), reasonKeys: a.reasonKeys.filter((_, i) => keep[i]),
+    counter: (a.counter ?? []).filter((_, i) => keepC[i]), counterKeys: (a.counterKeys ?? []).filter((_, i) => keepC[i]),
+  };
 }
