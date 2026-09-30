@@ -38,8 +38,8 @@
 - `src/services/replayFence.modern1690.test.ts:80`
 
 ### `tacticWord` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7766`
-- `src/components/Coach/CoachTeachPage.tsx:7841`
+- `src/components/Coach/CoachTeachPage.tsx:7763`
+- `src/components/Coach/CoachTeachPage.tsx:7838`
 - `src/services/computedVoiceAudit.report.test.ts:256`
 - `src/services/dnaLineNarrator.ts:129`
 - `src/services/dnaLineNarrator.ts:218`
@@ -166,7 +166,7 @@
 - `src/services/learnWalkBlumenfeld.test.ts:177`
 
 ### `planFromUci` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9352`
+- `src/components/Coach/CoachTeachPage.tsx:9349`
 - `src/services/coachLaneWiring.test.ts:35`
 - `src/services/computedVoiceAudit.report.test.ts:218`
 - `src/services/concessionBeat.ts:440`
@@ -195,14 +195,14 @@
 - `src/services/coachFeatureService.ts:1321`
 
 ### `aimsOf` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9365`
-- `src/components/Coach/CoachTeachPage.tsx:9369`
+- `src/components/Coach/CoachTeachPage.tsx:9362`
+- `src/components/Coach/CoachTeachPage.tsx:9366`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.ts:52`
 
 ### `aimWalkableNow` (re-export) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9365`
-- `src/components/Coach/CoachTeachPage.tsx:9369`
+- `src/components/Coach/CoachTeachPage.tsx:9362`
+- `src/components/Coach/CoachTeachPage.tsx:9366`
 - `src/services/planArc.test.ts:201`
 - `src/services/planArc.test.ts:211`
 - `src/services/planArc.test.ts:217`
@@ -215,8 +215,8 @@
 - `src/services/planArc.ts:348`
 
 ### `stepArc` (re-export) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9365`
-- `src/components/Coach/CoachTeachPage.tsx:9369`
+- `src/components/Coach/CoachTeachPage.tsx:9362`
+- `src/components/Coach/CoachTeachPage.tsx:9366`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.test.ts:94`
 - `src/services/planArc.test.ts:96`

@@ -137,16 +137,20 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
   });
 
   it('the queued package is actually spoken', () => {
-    expect(TEACH).toMatch(/speakTrackA\(hintPkg\.spoken\)/);
+    expect(TEACH).toMatch(/speakTrackA\(hintPkg\.spoken[,)]/);
   });
 
   it('every Track A line reaches the voice THROUGH voiceFacts (G0 — handed to the model seam)', () => {
     // David 2026-09-24: "everything built needs to be deterministic, worded by
     // the DNA, and handed to LLM". Track A used to call speakForced(line)
     // directly, so Learn's computed lines never met the one chokepoint.
-    const body = TEACH.slice(TEACH.indexOf('const speakTrackA = (line: string)'), TEACH.indexOf('instantSpokenText = instantSpokenText'));
+    const body = TEACH.slice(TEACH.indexOf('const speakTrackA = (line: string'), TEACH.indexOf('instantSpokenText = instantSpokenText'));
     expect(body.length).toBeGreaterThan(0);
     expect(body).toMatch(/speakComputed\(line, \{ forced: true, intent: 'learn-live' \}\)/);
+    // …and a question-then-answer line (the think pause) speaks BOTH halves
+    // through the same seam.
+    expect(body).toMatch(/speakComputed\(qa\[0\], \{ forced: true, intent: 'learn-live' \}\)/);
+    expect(body).toMatch(/speakComputed\(qa\[1\], \{ forced: true, intent: 'learn-live' \}\)/);
     expect(body).not.toMatch(/voiceService\.speak/);
   });
 });

@@ -9657,10 +9657,10 @@ export function CoachTeachPage(): JSX.Element {
                       const ans = threatAnswerTeaching({
                         fen: fenNow, squares: asked.squares, shape: asked.shape,
                         bestUci: read.bestUci, whiteCp: read.whiteCp,
-                        student: playerColor === 'white' ? 'w' : 'b', ply: learnMemRef.current.threatAnswers.size,
+                        student: playerColor === 'white' ? 'w' : 'b', ply: learnMemRef.current.questionsAnswered.size,
                       });
                       if (ans) {
-                        learnMemRef.current.threatAnswers.add(`${fenNow}|${ans.san}`);
+                        learnMemRef.current.questionsAnswered.add(`${fenNow}|${ans.san}`);
                         queueSpokenHint(fenNow, ans.text, 'threatAnswer', asked.squares, [`threat-answer:${ans.arrow.from}${ans.arrow.to}`], undefined, [ans.arrow]);
                         captureEvent('threat_answer_queued', { surface: 'coach-teach', kind: ans.kind });
                       }
