@@ -251,3 +251,28 @@ export function planRaceClause(
       ? `you both wanted the open ${race.file}-file, but only their rook could take it — it was theirs first`
       : `you both want the open ${race.file}-file, but only their rook can take it right now — contest it or they own it`);
 }
+
+/**
+ * THE FILE, TAKEN — the live half of the file collision, said AFTER the move
+ * (never "claim it now", which would name the student's next move unearned).
+ * Both sides wanted the same open file and the student's rook got there. Null
+ * unless the move itself is the rook landing on the contested file.
+ */
+export function fileClaimed(fenBefore: string, san: string): { file: string; contested: boolean; text: string } | null {
+  let chess: Chess;
+  try { chess = new Chess(fenBefore); } catch { return null; }
+  const mover = chess.turn();
+  const race = detectPlanRace(fenBefore, mover);
+  if (!race || race.kind !== 'file-collision' || !race.yoursNow) return null;
+  let mv;
+  try { mv = chess.move(san); } catch { return null; }
+  if (mv.piece !== 'r' || mv.to[0] !== race.file) return null;
+  const file = race.file;
+  return {
+    file,
+    contested: race.theirsNow,
+    text: race.theirsNow
+      ? `You took the open ${file}-file first — their rook could have reached it too, so now they have to contest it.`
+      : `You took the open ${file}-file before either of their rooks could reach it.`,
+  };
+}

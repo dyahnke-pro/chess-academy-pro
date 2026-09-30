@@ -76,6 +76,7 @@ export const COMPUTER_ROLES: Record<LearnLane, ComputerRole> = {
   theirMoveCost: { computer: 'theirMoveCost', tag: null, held: OPP('what it cost them'), broken: OPP('what it cost them'), askable: { state: 'wired', via: 'isOpponentMoveQuestion' } },
   theirPurpose: { computer: 'theirPurpose', tag: null, held: OPP('what it stopped'), broken: OPP('what it stopped'), askable: { state: 'wired', via: 'isOpponentMoveQuestion' } },
   theirIntent: { computer: 'moveIntent (their seat)', tag: null, held: OPP('what it prepares'), broken: OPP('what it prepares'), askable: { state: 'wired', via: 'isOpponentMoveQuestion' } },
+  fileRace: { computer: 'planRace.fileClaimed', tag: 'passive-rook', held: { state: 'wired', via: 'recordTeachingEvidence' }, broken: SLIP, askable: { state: 'wired', via: 'studentMoveAnswerLines' } },
   tempo: { computer: 'tempoCount', tag: null, held: OPP('their wasted moves'), broken: OPP('their wasted moves'), askable: { state: 'wired', via: 'isOpponentMoveQuestion' } },
   causalChain: { computer: 'causalChain', tag: 'hung-material', held: { state: 'na', why: 'explains a slip across moves' }, broken: SLIP, askable: { state: 'wired', via: 'isMoveRatingQuestion' } },
   openingIdea: { computer: 'mastersPlanRead', tag: null, held: DESC('the masters plan'), broken: DESC('the masters plan'), askable: { state: 'wired', via: 'isPlanQuestion' } },

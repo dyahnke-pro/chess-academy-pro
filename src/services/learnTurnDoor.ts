@@ -72,6 +72,7 @@ export type LearnLane =
   | 'theirPurpose'
   | 'theirIntent'
   | 'tempo'
+  | 'fileRace'
   | 'stalemate'
   | 'timing'
   | 'checkMethod'
@@ -179,6 +180,8 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // What their QUIET move prepares (P2 #5), engine-proven from their seat.
   theirIntent: { kind: 'computed', why: "what the opponent's quiet move prepares — engine-proven from their seat", lead: 73 },
   // TEMPO, COUNTED (P2 #7): their piece's third move while the student develops.
+  // The contested open file, taken by the student's rook (planRace, live).
+  fileRace: { kind: 'computed', why: 'you both wanted the open file and your rook took it first', lead: 64 },
   tempo: { kind: 'computed', why: 'their piece keeps moving in the opening while you develop — free moves, counted', lead: 70 },
   // A STRONG PLAYER'S CHOICE (P3, depersonalized): what a strong player plays here.
   strongChoice: { kind: 'computed', why: 'what a strong player chooses in this exact position, from real games', lead: 57 },

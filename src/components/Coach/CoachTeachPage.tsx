@@ -1700,6 +1700,7 @@ export function CoachTeachPage(): JSX.Element {
   const forgetPageRefs = useCallback((): void => {
     announcedPliesRef.current.clear();
     announcedBoardsRef.current.clear();
+    planToldBoardsRef.current.clear();
     liveGradesRef.current.clear();
     fundamentalSeenRef.current.clear();
     planArcRef.current = { theirs: EMPTY_ARC, mine: EMPTY_ARC };
@@ -1725,6 +1726,10 @@ export function CoachTeachPage(): JSX.Element {
    *  filed into `announcedPliesRef`, so every evidence row it writes is
    *  PROMPTED (P4 honesty: being told is not proving). */
   const announcedBoardsRef = useRef(new Set<string>());
+  /** Boards on which the student's OWN plan was told to them (planArc's
+   *  prescriptive emerge). A move from one that serves the plan is PROMPTED for
+   *  the plan skill (`no-plan`) only — the plan was said; the tactics were not. */
+  const planToldBoardsRef = useRef(new Set<string>());
   // THE LIVE PER-MOVE EVALUATIONS (C7, 2026-09-22). Every student ply is
   // graded off the paid-for pre-move read (`gradePlayedMove`, below) and the
   // saved record used to carry `annotations: null` regardless. Keyed by ply so
@@ -9432,11 +9437,17 @@ export function CoachTeachPage(): JSX.Element {
                             // on one move are one line. Their DROP stays unsaid — a plan the
                             // coach suggested and the student chose not to follow is not news.
                             ...joinEmerges((mineStep?.events ?? []).filter((e) => e.kind === 'emerge')),
-                            ...(mineStep?.events ?? []).filter((e) => e.kind === 'arrive'),
+                            // THE MOVE → PLAN LINK (P3): the student's FIRST step toward the
+                            // plan announced for them is said once ("your knight to f3 is a
+                            // step toward …") — the callback that ties the move to the plan.
+                            // Later steps stay quiet; the landing says the rest.
+                            ...(mineStep?.events ?? []).filter((e) => e.kind === 'arrive' || (e.kind === 'advance' && e.step === 1)),
                           ];
                           for (const e of arcLines) {
                             const line = gradeNarrationText(e.text, probe.fen(), 'CoachTeachPage.planArc')?.trim();
-                            if (line) queueSpokenHint(probe.fen(), line, 'planArc', e.squares);
+                            if (!line) continue;
+                            queueSpokenHint(probe.fen(), line, 'planArc', e.squares);
+                            if (e.seat === 'student' && e.kind === 'emerge') planToldBoardsRef.current.add(probe.fen().split(' ').slice(0, 2).join(' '));
                           }
                         } catch { /* the arc is a bonus, never a blocker */ }
                         // The look-ahead PARAGRAPH (key square, board read, line
@@ -10174,7 +10185,7 @@ export function CoachTeachPage(): JSX.Element {
                         if (intent) {
                           // DUAL-USE (P4): an engine-proven purpose (prevents / prepares)
                           // is the no-plan question answered.
-                          recordHeld('no-plan', 60, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
+                          recordHeld('no-plan', 60, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length) || planToldBoardsRef.current.has(fenBefore.split(' ').slice(0, 2).join(' ')), gameId: learnMemRef.current.gameId });
                           queueSpokenHint(fenAfterReply, intent.text, 'moveIntent', intent.squares, [
                             ...(intent.prevents ? [`stops:${intent.prevents.uci}`] : []),
                             ...(intent.prepares ? [`prepares:${intent.prepares.uci}`] : []),

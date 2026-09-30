@@ -1071,6 +1071,21 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // ply whose computed need cleared the bar was narrated; no quiet per-move beat
   // fired where need said silent. A fresh prod profile is COLD, so the rating
   // prior owes the opening — the July silence cannot hide behind "need said no".
+  // THE ONE DOOR, REVIEW SIDE (2026-09-30): every uncapped ply's lines passed
+  // the package Learn speaks through. The row says how many parts went in and
+  // what the door dropped, by reason. A door that dropped nothing on a real
+  // game is fine; one that dropped a large share is eating teaching.
+  {
+    const ev = listener.getCapturedEvents().filter((e) => e.kind === 'review-voice-package').pop();
+    let t = null;
+    try { t = ev ? JSON.parse(ev.details ?? '{}') : null; } catch { t = null; }
+    if (!t) {
+      await add('REVIEW DOOR package ran', false, 'no review-voice-package row — the review did not pass the door');
+    } else {
+      const share = t.parts ? t.dropped / t.parts : 0;
+      await add('REVIEW DOOR package ran', t.plies > 0 && t.parts > 0 && share <= 0.3, `${t.plies} plies, ${t.parts} parts, ${t.dropped} dropped (${Math.round(share * 100)}%) — ${JSON.stringify(t.reasons)}`);
+    }
+  }
   {
     const ev = listener.getCapturedEvents().filter((e) => e.kind === 'review-need-coverage').pop();
     let cov = null;

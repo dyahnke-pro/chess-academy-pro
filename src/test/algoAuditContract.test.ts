@@ -36,7 +36,8 @@ type AlgoEmissionKind =
   | 'analysis-batch-ordered'
   | 'search-depth'
   | 'learn-turn-decision'
-  | 'lane-evidence';
+  | 'lane-evidence'
+  | 'review-voice-package';
 
 interface Contract {
   /** The audit that holds the contract. */
@@ -58,6 +59,11 @@ const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
     script: 'scripts/audit-concept-gameplay-prod.mjs',
     contractMarker: 'LANE EVIDENCE rows are held-only',
     emittedBy: 'src/services/capabilityEvidence.ts (recordLaneEvidence)',
+  },
+  'review-voice-package': {
+    script: 'scripts/audit-review-overhaul-prod.mjs',
+    contractMarker: 'REVIEW DOOR package ran',
+    emittedBy: 'src/services/coachFeatureService.ts (buildReviewSegments → buildVoicePackage)',
   },
   'coach-decision': {
     script: 'scripts/audit-concept-gameplay-prod.mjs',

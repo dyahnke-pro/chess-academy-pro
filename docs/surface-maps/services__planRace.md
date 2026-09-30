@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**254 lines · 8 exports · 3 importers · 1 tests · 0 audits**
+**279 lines · 9 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,7 @@
 ## Who calls in
 
 - `src/services/boardPlan.ts`
+- `src/services/learnBoardTeaching.ts`
 - `src/services/planRace.test.ts`
 - `src/services/reviewFullData.ts`
 
@@ -64,6 +65,12 @@
 - `src/services/planRace.test.ts:109`
 - `src/services/planRace.test.ts:115`
 - `src/services/reviewFullData.ts:745`
+
+### `fileClaimed` (function) — 4 call sites
+- `src/services/learnBoardTeaching.ts:135`
+- `src/services/planRace.test.ts:140`
+- `src/services/planRace.test.ts:147`
+- `src/services/planRace.test.ts:148`
 
 ## Tests
 

@@ -34,6 +34,7 @@ import { strongChoice, warmStrongChoice } from './strongChoice';
 import { stalemateWatch } from './stalemateWatch';
 import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from './criticalMoment';
 import { SAID_BEFORE_MOVE } from './computerRoles';
+import { fileClaimed } from './planRace';
 
 export interface TeachingHint {
   lane: LearnLane;
@@ -125,6 +126,14 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   {
     const sc = strongChoice(i.fenBefore, i.san);
     if (sc) out.push({ lane: 'strongChoice', text: sc.text, squares: [], claims: [`strong-choice:${i.history.length}`], event: { name: 'coach_strong_choice_named', props: { surface: 'coach-teach', same: sc.same } }, arrows: [] });
+  }
+
+  // THE OPEN FILE, TAKEN (planRace file collision, live — P3): both sides
+  // wanted it and the student's rook got there on a clean move. Said after the
+  // move, and it records: the board asked who takes the file.
+  if (i.cpLoss < 50) {
+    const fc = fileClaimed(i.fenBefore, i.san);
+    if (fc) out.push({ lane: 'fileRace', text: fc.text, squares: [to], claims: [`file-race:${fc.file}`], event: { name: 'coach_file_claimed', props: { surface: 'coach-teach', contested: fc.contested } }, arrows: [], evidence: { tag: 'passive-rook', posedImportance: 60 } });
   }
 
   // THE SAFETY HABITS (P3 method beats) — earned only by what the board did.

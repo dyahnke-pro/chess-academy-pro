@@ -71,6 +71,7 @@ import { ecoOfKey, openingEntryForKey, openingFamily, openingKeyFromSans } from 
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { describeEvalCp, isMateEval } from './engineConstants';
 import { isMinorAtHome } from './development';
+import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
 
@@ -1380,6 +1381,13 @@ export function buildReviewSegments(
   const motifFirstMove: MotifLedger = new Map();
   /** S2: opening principles SPOKEN this game — committed after the door. */
   const principlesTaught = new Set<string>();
+  // THE ONE DOOR, REVIEW SIDE (David 2026-09-30: "Review yes, Play no"). Every
+  // uncapped ply's lines pass the same package Learn speaks through — board
+  // grading (true on the board before OR after the move), the not-speakable
+  // screen, and the per-game sentence + claim ledger — so a line said at move
+  // 9 is not said again at move 22. Counted for the audit row below.
+  const reviewSpokenKeys = new Set<string>();
+  const reviewPkgTally = { plies: 0, parts: 0, dropped: 0, reasons: {} as Record<string, number>, drops: [] as Array<{ ply: number; reason: string; text: string }> };
   /** S4: the first ply of each phase the game reaches after the opening. */
   const phaseTurnAt = new Map<number, 'middlegame' | 'endgame'>();
   {
@@ -2205,6 +2213,23 @@ export function buildReviewSegments(
           recordMotif(motif, instance, fullMove, motifFirstMove);
         }
       }
+      const doorNarration = (() => {
+        if (uncappedParts.length === 0) return null;
+        const pkg = buildVoicePackage(
+          uncappedParts.map((text) => ({ kind: 'computed' as const, text, fen: fenPair.fenAfter, altFen: fenPair.fenBefore })),
+          undefined,
+          reviewSpokenKeys,
+        );
+        for (const k of spokenSentenceKeys(pkg)) reviewSpokenKeys.add(k);
+        reviewPkgTally.plies += 1;
+        reviewPkgTally.parts += uncappedParts.length;
+        for (const d of pkg.dropped) {
+          reviewPkgTally.dropped += 1;
+          reviewPkgTally.reasons[d.reason] = (reviewPkgTally.reasons[d.reason] ?? 0) + 1;
+          reviewPkgTally.drops.push({ ply: m.ply, reason: d.reason, text: d.fact.text.slice(0, 200) });
+        }
+        return pkg.spoken || null;
+      })();
       segments.push({
         ply: m.ply,
         moveNumber: fullMove,
@@ -2217,9 +2242,9 @@ export function buildReviewSegments(
         evalAfter: m.evaluation,
         bestMoveSan,
         bestMoveUci: m.bestMove,
-        narration: uncappedParts.length ? uncappedParts.join(' ') : null,
-        narrationSource: uncappedParts.length ? 'per-move' : null,
-        ...(uncappedParts.length ? { teaches: decision.teaches } : {}),
+        narration: doorNarration,
+        narrationSource: doorNarration ? 'per-move' : null,
+        ...(doorNarration ? { teaches: decision.teaches } : {}),
         ...(needHere ? { need: needHere } : {}),
         ...(causalArrows && causalArrows.length ? { planArrows: causalArrows } : {}),
         ...(fundamentals.length ? { fundamentals } : {}),
@@ -3096,6 +3121,15 @@ export function buildReviewSegments(
     } catch {
       prevCap = { square: null, capturedValue: 0 };
     }
+  }
+  if (reviewPkgTally.plies > 0) {
+    void logAppAudit({
+      kind: 'review-voice-package',
+      category: 'subsystem',
+      source: 'coachFeatureService.buildReviewSegments',
+      summary: `${reviewPkgTally.plies} plies, ${reviewPkgTally.parts} parts, ${reviewPkgTally.dropped} dropped at the door`,
+      details: JSON.stringify(reviewPkgTally),
+    });
   }
   return segments;
 }

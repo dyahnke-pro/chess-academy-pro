@@ -230,7 +230,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:571`
-- `src/components/Coach/CoachTeachPage.tsx:3296`
+- `src/components/Coach/CoachTeachPage.tsx:3301`
 - `src/services/coachSessionRouter.ts:117`
 - `src/services/coachSettingsAction.ts:242`
 
@@ -273,12 +273,12 @@
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:256`
 - `src/services/coachChatText.ts:221`
-- `src/services/coachFeatureService.ts:137`
-- `src/services/coachFeatureService.ts:387`
-- `src/services/coachFeatureService.ts:522`
+- `src/services/coachFeatureService.ts:138`
+- `src/services/coachFeatureService.ts:388`
 - `src/services/coachFeatureService.ts:523`
-- `src/services/coachFeatureService.ts:4693`
-- `src/services/coachFeatureService.ts:4846`
+- `src/services/coachFeatureService.ts:524`
+- `src/services/coachFeatureService.ts:4727`
+- `src/services/coachFeatureService.ts:4880`
 - `src/services/coachLaneWiring.test.ts:143`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`

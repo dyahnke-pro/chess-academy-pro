@@ -110,6 +110,10 @@ export interface VoiceFact {
    *  those differ during an animation, and judging a fact by the wrong board is
    *  the bug this whole file exists to prevent. */
   fen: string;
+  /** A second board the claim may be about — review speaks about the move, so
+   *  a sentence may describe the board BEFORE it ("the knight on f3 was the
+   *  defender"). A sentence survives if it is true on either. */
+  altFen?: string;
   /** THE SQUARES THIS FACT IS ABOUT — the board's half of the package.
    *
    *  David 2026-08-10: "It needs to be deterministic, handed in the package."
@@ -257,7 +261,11 @@ const NOT_SPEAKABLE: Array<{ re: RegExp; why: string }> = [
   { re: /\n/, why: 'multi-line block, not an utterance' },
   { re: /\[(?:BOARD|VOICE|EVAL|FACT)S?\b/i, why: 'control tag' },
   { re: /\b[A-Z][A-Z0-9]{2,}(?:\s+[A-Z][A-Z0-9]{2,})+/, why: 'shouted header (prompt scaffolding)' },
-  { re: /\b(?:REQUIRED|GROUND TRUTH|DO NOT|NEVER (?:say|invent|repeat)|you MUST)\b/i, why: 'instruction to a model' },
+  // SHOUTED only: prompt scaffolding is capitalised. Case-insensitive, it
+  // refused real teaching — "Do not move the pawns in front of your own king"
+  // is a fundamental's how-to (review measurement 2026-09-30).
+  { re: /\b(?:REQUIRED|GROUND TRUTH|DO NOT|you MUST)\b/, why: 'instruction to a model' },
+  { re: /\bNEVER (?:say|invent|repeat)\b/i, why: 'instruction to a model' },
 ];
 
 function verify(fact: VoiceFact): { text: string } | { reason: string } {
@@ -267,14 +275,18 @@ function verify(fact: VoiceFact): { text: string } | { reason: string } {
   for (const s of NOT_SPEAKABLE) if (s.re.test(raw)) return { reason: s.why };
 
   // Square-anchored claims: "the knight on f6" when f6 is empty.
-  const graded = gradeNarrationText(raw, fact.fen, `voicePackage.${fact.kind}`)?.trim();
+  let graded = gradeNarrationText(raw, fact.fen, `voicePackage.${fact.kind}`)?.trim();
+  if (fact.altFen && (graded ?? '') !== raw) {
+    const alt = gradeNarrationText(raw, fact.altFen, `voicePackage.${fact.kind}`)?.trim();
+    if ((alt ?? '').length > (graded ?? '').length) graded = alt;
+  }
   if (!graded) return { reason: 'no sentence survived board grading' };
 
   // Structural claims naming NO square, which the grader above cannot settle:
   // "doubled rooks on the open file" with every rook at home. A note reached by
   // pattern is exactly the kind that asserts a configuration it cannot see.
   const bad = falseConfigurationClaim(graded, fact.fen);
-  if (bad) return { reason: `board lacks ${bad}` };
+  if (bad && !(fact.altFen && !falseConfigurationClaim(graded, fact.altFen))) return { reason: `board lacks ${bad}` };
 
   return { text: graded };
 }

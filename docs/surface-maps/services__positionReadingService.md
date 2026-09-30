@@ -118,7 +118,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tradeQuality.ts:144`
 
 ### `legalSeeGainOn` (function) — 10 call sites
-- `src/services/coachFeatureService.ts:2431`
+- `src/services/coachFeatureService.ts:2456`
 - `src/services/groundedAnswer.ts:6685`
 - `src/services/moveIntent.ts:299`
 - `src/services/moveIntent.ts:481`
@@ -145,8 +145,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveFundamentals.ts:1263`
 
 ### `legalSeeGainFor` (function) — 37 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7922`
-- `src/components/Coach/CoachTeachPage.tsx:9386`
+- `src/components/Coach/CoachTeachPage.tsx:7927`
+- `src/components/Coach/CoachTeachPage.tsx:9391`
 - `src/services/arrowDoor.ts:161`
 - `src/services/bluffDetector.ts:53`
 - `src/services/bluffDetector.ts:63`
@@ -185,9 +185,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `signedLegalSeeFor` (function) — 9 call sites
 - `src/components/Coach/CoachTeachPage.tsx:826`
-- `src/components/Coach/CoachTeachPage.tsx:7803`
-- `src/components/Coach/CoachTeachPage.tsx:10046`
-- `src/components/Coach/CoachTeachPage.tsx:10103`
+- `src/components/Coach/CoachTeachPage.tsx:7808`
+- `src/components/Coach/CoachTeachPage.tsx:10057`
+- `src/components/Coach/CoachTeachPage.tsx:10114`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
@@ -383,7 +383,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:130`
 
 ### `namedPawnStructure` (function) — 22 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9069`
+- `src/components/Coach/CoachTeachPage.tsx:9074`
 - `src/services/claimTruth.manual.test.ts:64`
 - `src/services/claimTruth.manual.test.ts:66`
 - `src/services/danyaBehaviors.ts:372`

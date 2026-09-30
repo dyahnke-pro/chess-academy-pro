@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4964 lines · 35 exports · 39 importers · 37 tests · 5 audits**
+**4998 lines · 35 exports · 39 importers · 37 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -276,8 +276,8 @@
 - `src/services/reviewNarrationFidelity.test.ts:118`
 
 ### `pendingRecapture` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7471`
-- `src/components/Coach/CoachTeachPage.tsx:7560`
+- `src/components/Coach/CoachTeachPage.tsx:7476`
+- `src/components/Coach/CoachTeachPage.tsx:7565`
 - `src/services/coachFeatureService.test.ts:929`
 - `src/services/coachFeatureService.test.ts:930`
 - `src/utils/justCaptured.test.ts:20`

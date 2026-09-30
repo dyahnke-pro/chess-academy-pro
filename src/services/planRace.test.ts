@@ -132,3 +132,19 @@ describe('planRace — the race, not just the plans', () => {
     expect(s.endsWith('.')).toBe(true);
   });
 });
+
+describe('fileClaimed — the contested open file, taken (live, after the move)', () => {
+  const FEN = 'r5k1/5ppp/8/8/8/8/5PPP/R5K1 w - - 0 1';
+  it('the rook landing on the contested file is named', async () => {
+    const { fileClaimed } = await import('./planRace');
+    const f = fileClaimed(FEN, 'Rb1');
+    expect(f?.file).toBe('b');
+    expect(f?.contested).toBe(true);
+    expect(f?.text).toMatch(/open b-file first/);
+  });
+  it('silent for any other move (negative control)', async () => {
+    const { fileClaimed } = await import('./planRace');
+    expect(fileClaimed(FEN, 'Kf1')).toBeNull();
+    expect(fileClaimed(FEN, 'h3')).toBeNull();
+  });
+});

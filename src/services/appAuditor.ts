@@ -246,6 +246,7 @@ export type AuditKind =
   // One held row written by a Learn teaching lane (capabilityEvidence.recordLaneEvidence).
   | 'lane-evidence'
   | 'concept-srs-pulled'
+  | 'review-voice-package'
   // How deep Stockfish searched and whether the answer SETTLED
   // (`searchUntilStable`, David 2026-09-27: "algo the stockfish depth"). One
   // row per search — so an audit can hold that verdicts were voiced off

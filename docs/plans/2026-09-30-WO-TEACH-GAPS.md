@@ -259,7 +259,7 @@ gate's measurement), not on this one.
 
 ### TRIAGE vs CODE (2026-09-30, every open row of Phases 1/3/4/5, file:line checked)
 BUILT: 1.2 Learn door · one move two jobs · latentDanger · concession (#46).
-PARTIAL: 1.2 Play/Review speak outside the door · 1.3 ~10 lanes carry no claim key · 1.4 (structure yes; NO word budget — and a budget would be a G4.5 cap, so the structure IS the answer) · trigger→scan (forcing-scan only) · how-to-calculate (drill only) · overall verdict (a list, not one comparison) · piece maneuvers (path-first wording) · their next move (Play only) · planRace (file-collision review-only) · callbacks to the thesis (review/lesson only) · trap candidates (LLM context, not a gem) · structure transfer · ~~heat-map (stalemate avoided, check answered)~~ ✅ stalemate avoided is a `capabilitiesPosed` question (held/broken on every recording surface); check answered = N/A (no student-model tag names it; a costly answer is already attributed) · transfer (slips only) · liveStrength (no gem/book inputs) · #37/#41 walks unrecorded · move→plan link (student advance filtered) · branching narrator (no caller) · break preparation (narrow) · opening summary.
+PARTIAL: ~~1.2 Review speaks outside the door~~ ✅ (every uncapped review ply passes `buildVoicePackage`: board grade on the board before OR after the move, the not-speakable screen, a per-game sentence ledger; audit row `review-voice-package`, contract "REVIEW DOOR package ran"; Play stays silent by David's call) · 1.3 ~10 lanes carry no claim key · 1.4 (structure yes; NO word budget — and a budget would be a G4.5 cap, so the structure IS the answer) · trigger→scan (forcing-scan only) · how-to-calculate (drill only) · overall verdict (a list, not one comparison) · piece maneuvers (path-first wording) · ~~their next move~~ ✅ (Learn's `theirIntent` lane says what their quiet move prepares — that IS their next move) · ~~planRace (file-collision review-only)~~ ✅ (`fileClaimed`, lane `fileRace`: said AFTER the student's rook takes the contested file — never "claim it now", which would name the next move unearned; held evidence `passive-rook`) · ~~callbacks to the thesis~~ ✅ folded into the move→plan link · trap candidates (LLM context, not a gem) · structure transfer · ~~heat-map (stalemate avoided, check answered)~~ ✅ stalemate avoided is a `capabilitiesPosed` question (held/broken on every recording surface); check answered = N/A (no student-model tag names it; a costly answer is already attributed) · transfer (slips only) · liveStrength (no gem/book inputs) · #37/#41 walks unrecorded · ~~move→plan link (student advance filtered)~~ ✅ (the student's FIRST step toward their announced plan speaks once; a move after the plan was told is prompted for `no-plan`) · branching narrator (no caller) · break preparation (narrow) · opening summary.
 MISSING: split the position · ~~autopilot guard~~ ✅ · ~~safety precheck (blunder check)~~ ✅ · ~~his data on the live board~~ ✅ (`strongChoice`, depersonalized) · ~~concept-level SRS~~ ✅ (`conceptSchedule`: a missed card brings its concept's other open cards due today; phase-only buckets never pull) · ~~fade~~ ✅ · plan chooser · transposition reader · #56 re-anchor 163 beats · walks #40, #32.
 
 **David's calls on the design rows (2026-09-30):** concept-level SRS → FOLD INTO MISTAKE DRILLS (cards carry the concept tag; SRS schedules by concept too; no new screen or store) · his data on the live board → SAY IT DEPERSONALIZED ("a strong player's choice here is X", never a name) · fade → SHORT PHRASING WHEN GREEN · one door → REVIEW YES, PLAY NO (Play stays silent; its answers already use the shared computers).
@@ -272,3 +272,17 @@ proof. Now the Learn door's spoken lanes are checked against
 `SAID_BEFORE_MOVE` (derived from the role table) and the board they spoke on
 is marked; the move made from it joins `announcedPliesRef`, so every evidence
 row it writes is prompted.
+
+### Review through the one door — measured (2026-09-30)
+Scratch run: 4 real model games, node Stockfish depth 9, the production
+(uncapped) builder. 301 review sentences, 0 false on the boards around the
+move. The door dropped 24 of 280 parts (8.6%): the plan-race sentence repeated
+on 7 straight plies, restated standing tactics, repeated trade/target lines —
+real repetition — plus FOUR false refusals it exposed, all fixed at the root:
+- `voicePackage` refused "Do not move the pawns in front of your own king…" as
+  an "instruction to a model" (case-insensitive DO NOT) — now shouted only.
+- `configurationClaims` refused a GOAL ("build toward a passed pawn", "their
+  plan is taking shape: a passed pawn") and a PRINCIPLE ("a rook needs an open
+  file") as false board claims. Learn's plan line runs the same checker, so a
+  passer plan could never be spoken on Learn either. A structure named after an
+  aspiration word in its own sentence is no longer a claim about the board.

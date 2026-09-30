@@ -534,3 +534,19 @@ describe('the claim ledger — checked at speak time (1200 walk 2026-09-27, ply 
     expect(pkg.spoken).not.toMatch(/boxed-in/);
   });
 });
+
+describe('review door fixes (2026-09-30)', () => {
+  const FEN0 = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+  it('"Do not move the pawns…" is teaching, not a model instruction; shouted scaffolding still is', async () => {
+    const { buildVoicePackage } = await import('./voicePackage');
+    expect(buildVoicePackage([{ kind: 'computed', text: 'Do not move the pawns in front of your own king without a concrete reason.', fen: FEN0 }]).spoken).toMatch(/^Do not move/);
+    expect(buildVoicePackage([{ kind: 'computed', text: 'DO NOT invent squares.', fen: FEN0 }]).spoken).toBe('');
+  });
+  it('a sentence true on the board BEFORE the move survives when altFen names it', async () => {
+    const { buildVoicePackage } = await import('./voicePackage');
+    const after = 'rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq - 1 1';
+    const text = 'Your knight on g1 was still at home.';
+    expect(buildVoicePackage([{ kind: 'computed', text, fen: after }]).spoken).toBe('');
+    expect(buildVoicePackage([{ kind: 'computed', text, fen: after, altFen: FEN0 }]).spoken).toBe(text);
+  });
+});

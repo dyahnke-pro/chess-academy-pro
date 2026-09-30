@@ -138,6 +138,8 @@ export interface ArcEvent {
   seat: Seat;
   text: string;
   squares: string[];
+  /** For an `advance`: which step toward the aim this move is (1 = the first). */
+  step?: number;
 }
 
 /** The side's move this read follows, or null on the first read. */
@@ -268,7 +270,7 @@ export function stepArc(
         continue; // done — the aim leaves the arc for the rest of the game
       }
       events.push({
-        id, kind: 'advance', seat, squares: [moved.to],
+        id, kind: 'advance', seat, squares: [moved.to], step: entry.steps,
         // WHY THEY PLAYED IT, question first (David 2026-09-30): the move
         // they actually made, read as a step of the plan announced earlier.
         text: their
