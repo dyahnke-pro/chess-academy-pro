@@ -11,6 +11,7 @@
 import { Chess } from 'chess.js';
 import type { AnalysisLine } from '../types';
 import type { LearnLane } from './learnTurnDoor';
+import type { ArrowClaim } from './arrowDoor';
 import { recaptureChoice } from './recaptureChoice';
 import { kingAttack } from './kingAttack';
 import { ruleException } from './ruleException';
@@ -25,6 +26,21 @@ export interface TeachingHint {
   claims: string[];
   /** The analytics event this line fires when queued. */
   event: { name: string; props: Record<string, string | number | boolean> } | null;
+  /** The arrows that illustrate THIS line, computed with it (David 2026-09-30:
+   *  "make sure arrows are firing to illustrate the ideas being spoken"). They
+   *  are validated by the arrow door on the live board and drawn only when the
+   *  line survives the turn. */
+  arrows: ArrowClaim[];
+}
+
+/** The board after the student's move and their reply, or null. */
+function boardAfter(fenBefore: string, san: string, reply: string | null): Chess | null {
+  try {
+    const c = new Chess(fenBefore);
+    c.move(san);
+    if (reply) c.move(reply.replace(/^…/, ''));
+    return c;
+  } catch { return null; }
 }
 
 export interface StudentMoveInput {
@@ -63,7 +79,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
     if (tookOn && to === tookOn && i.san.includes('x')) {
       const bestRe = i.bestSan && new RegExp(`x${tookOn}`).test(i.bestSan) && i.cpLoss >= 50 ? i.bestSan : null;
       const rc = recaptureChoice(i.fenBefore, i.san, bestRe, i.reply);
-      if (rc) out.push({ lane: 'recapture', text: rc, squares: [to], claims: [`recapture-${to}`], event: null });
+      if (rc) out.push({ lane: 'recapture', text: rc, squares: [to], claims: [`recapture-${to}`], event: null, arrows: [] });
     }
   } catch { /* a bonus, never a blocker */ }
 
@@ -77,6 +93,8 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
         // "Qe1 heads for their king — Qg3 next" and "Qe1 prepares Qg3" are one idea.
         claims: [`king-attack-${ka.kind}`, ...(ka.next ? [`prepares:${ka.next.uci}`] : [])],
         event: { name: 'coach_king_attack_named', props: { surface: 'coach-teach', kind: ka.kind } },
+        // "…heads for their king — Qg3 next": the next hop, as the move to play.
+        arrows: ka.next ? [{ from: ka.next.uci.slice(0, 2), to: ka.next.uci.slice(2, 4), role: 'play', source: 'learn.kingAttack' }] : [],
       });
     }
   }
@@ -86,9 +104,15 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   if (i.bothCp && i.cpLoss <= 20) {
     const rx = ruleException(i.fenBefore, i.san, i.history.slice(0, -1));
     if (rx) {
+      // "…here it hits the pawn on g2": the sight line — only while the target
+      // is still standing there after their reply.
+      const hitSq = rx.squares[1];
+      const live = boardAfter(i.fenBefore, i.san, i.reply);
+      const stillThere = !!hitSq && !!live?.get(hitSq as never);
       out.push({
         lane: 'ruleException', text: rx.text, squares: rx.squares, claims: [`rule-${rx.rule}-${to}`],
         event: { name: 'coach_rule_exception_named', props: { surface: 'coach-teach', rule: rx.rule } },
+        arrows: stillThere ? [{ from: to, to: hitSq, role: 'vision', source: 'learn.ruleException' }] : [],
       });
     }
   }
@@ -105,9 +129,12 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
       if (g.fen().split(' ')[0] === i.fenBefore.split(' ')[0]) {
         const fa = falseAlarm(beforeTheirs, i.fenBefore, i.bestLine, i.reply);
         if (fa) {
+          // Their threat, red — only while it is still coming (not once played).
+          const played = i.reply && i.reply.replace(/^…/, '') === fa.threat.san;
           out.push({
             lane: 'falseAlarm', text: fa.text, squares: fa.squares, claims: [`false-alarm-${fa.threat.landing}`],
             event: { name: 'coach_false_alarm_named', props: { surface: 'coach-teach', kind: fa.threat.kind } },
+            arrows: played ? [] : [{ from: fa.threat.from, to: fa.threat.landing, role: 'threat', source: 'learn.falseAlarm' }],
           });
         }
       }
@@ -124,6 +151,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
         out.push({
           lane: 'pushOrHold', text: ph.text, squares: [], claims: [`ending-${ph.cls}-${ph.side}`],
           event: { name: 'coach_push_or_hold_named', props: { surface: 'coach-teach', cls: ph.cls, side: ph.side } },
+          arrows: [],
         });
       }
     } catch { /* a bonus, never a blocker */ }
@@ -136,8 +164,13 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
 export function theirMoveTeaching(fenBefore: string, san: string, student: 'w' | 'b'): TeachingHint | null {
   const cost = theirMoveCost(fenBefore, san, student);
   if (!cost) return null;
+  // A hole your knight can use: its first hop, as the move to play.
+  const arrows: ArrowClaim[] = cost.kind === 'hole' && cost.squares.length >= 2
+    ? [{ from: cost.squares[1], to: cost.squares[2] ?? cost.squares[0], role: 'play', source: 'learn.theirMoveCost' }]
+    : [];
   return {
     lane: 'theirMoveCost', text: cost.text, squares: cost.squares, claims: [`cost-${cost.kind}-${cost.squares[0]}`],
     event: { name: 'coach_their_move_cost_named', props: { surface: 'coach-teach', kind: cost.kind } },
+    arrows,
   };
 }

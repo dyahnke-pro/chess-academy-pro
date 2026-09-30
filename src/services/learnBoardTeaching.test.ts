@@ -2,6 +2,8 @@
 // fire is not a wire). Positions are the computers' own fixtures from his games.
 import { describe, it, expect } from 'vitest';
 import { studentMoveTeaching, theirMoveTeaching } from './learnBoardTeaching';
+import { admitArrows } from './arrowDoor';
+import { Chess } from 'chess.js';
 import ruleFx from './__fixtures__/ruleException-his.json';
 import kingFx from './__fixtures__/kingAttack-his.json';
 import falseFx from './__fixtures__/falseAlarm-his.json';
@@ -47,5 +49,15 @@ describe('learnBoardTeaching — every lane reaches the door', () => {
     const t = theirMoveTeaching('rnbqkb1r/pppp1ppp/5n2/4p3/4PP2/2N5/PPPP2PP/R1BQKBNR b KQkq - 0 3', 'd6', 'w');
     expect(t?.lane).toBe('theirMoveCost');
     expect(t?.event?.name).toBe('coach_their_move_cost_named');
+  });
+
+  it('a spoken idea carries its arrow, and the arrow door admits it (David 2026-09-30)', () => {
+    const p = (kingFx as { key: string; fen: string; san: string }[]).find((x) => x.key === 'xoS71OW-Re0:21')!;
+    const [h] = studentMoveTeaching({ ...base, fenBefore: p.fen, san: p.san, history: [p.san] }).filter((x) => x.lane === 'kingAttack');
+    expect(h.arrows).toEqual([expect.objectContaining({ from: 'e1', to: 'g3', role: 'play' })]);
+    const live = new Chess(p.fen); live.move(p.san);
+    // Their turn is irrelevant to a plan arrow: the door sets the piece's side to move.
+    const drawn = admitArrows(h.arrows, { fen: live.fen(), studentColor: live.turn() === 'w' ? 'black' : 'white' }).arrows;
+    expect(drawn.map((a) => `${a.startSquare}${a.endSquare}`)).toEqual(['e1g3']);
   });
 });

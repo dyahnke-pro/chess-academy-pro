@@ -260,6 +260,10 @@ export function moveIntent(
     if (prevents && !/[x+#]/.test(prevents.san)) prevents = null;
     if (prepares && !whatItDoes(fenAfter, prepares.uci, mover)) prepares = null;
   }
+  // A PREPARED PIECE MOVE WITH NO REASON TEACHES NOTHING (walk 2026-09-30:
+  // "d4 prepares Bd2."). A prepared pawn move is a break or a plan ("c3
+  // prepares d4") and stands on its own; a quiet piece move needs its point.
+  if (prepares && !/^[a-h]/.test(prepares.san) && !prepares.san.startsWith('O-O') && !whatItDoes(fenAfter, prepares.uci, mover)) prepares = null;
   if (!prevents && !prepares) return null;
   const squares = [...new Set([
     playedUci.slice(2, 4),

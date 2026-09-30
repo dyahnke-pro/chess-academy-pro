@@ -69,10 +69,14 @@ export function threatStoppedBy(
       : `your ${san}, which was winning material`;
   // Rotated on the board the student's threat stood on — only the wrapper
   // varies; which threat, and that it stopped, never do.
+  // THEIR move, said as theirs (walk 2026-09-30: "The point of Kxg1: it stops
+  // the mate" — no seat, no dots, and it read as the student's move).
+  let theirs = replySan;
+  try { if (new Chess(studentFenAfter).turn() === 'b' && !theirs.startsWith('…')) theirs = `…${theirs}`; } catch { /* keep bare */ }
   const text = rotateStem([
-    `${replySan} has a point: it stops ${what}.`,
-    `${replySan} isn't idle — it stops ${what}.`,
-    `The point of ${replySan}: it stops ${what}.`,
+    `Their ${theirs} has a point: it stops ${what}.`,
+    `Their ${theirs} isn't idle — it stops ${what}.`,
+    `The point of their ${theirs}: it stops ${what}.`,
   ], stemKeyOf(studentFenAfter));
   return { threat, reply: replySan, text };
 }

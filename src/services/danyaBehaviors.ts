@@ -54,6 +54,7 @@ import {
   opponentIntentRead,
   findXrays,
   findKnightReroute,
+  minorRouteToSquare,
   findFianchetto,
   findRookLift,
   findBlockade,
@@ -721,8 +722,15 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       const coveredByMinor = (sq: string): boolean =>
         board.attackers(sq as Square, opp).some((a) => { const t = board.get(a)?.type; return t === 'n' || t === 'b'; });
       const hole = holes.find((h) => inTheirHalf(h) && !coveredByMinor(h) && minorCanReachSquare(fen, h, student));
-      if (hole) {
-        return { fact: `${hole} is a hole in their camp — a piece planted there can't be kicked.`, squares: [hole] };
+      // SAY WHO GETS THERE, AND HOW (walk 2026-09-30: "d6 is a hole in their
+      // camp — a piece planted there can't be kicked" described a square and
+      // taught nothing to do with it). The route is the one the reach check
+      // proved; no route, no line.
+      const route = hole ? minorRouteToSquare(fen, hole, student) : null;
+      if (hole && route) {
+        const who = `your ${PIECE_NAME[route.piece]} on ${route.from}`;
+        const how = route.via ? `${who} gets there via ${route.via}` : `${who} can go straight there`;
+        return { fact: `${hole} is a hole in their camp: ${how}, and no pawn can ever kick it out.`, squares: [route.from, ...(route.via ? [route.via] : []), hole] };
       }
       return null;
     },

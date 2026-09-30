@@ -810,6 +810,23 @@ interface TeachSubmitOpts {
 
 const NAME_OF_PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 
+/** A piece "hanging" to an attacker the student can take back at no cost is a
+ *  trade on offer, not a warning (walk 2026-09-30). Board-only. */
+function tradeOnOffer(fen: string, square: string, student: 'w' | 'b'): boolean {
+  try {
+    const flip = fen.split(' ');
+    flip[1] = student === 'w' ? 'b' : 'w';
+    flip[3] = '-';
+    const attackers = new Chess(flip.join(' ')).moves({ verbose: true })
+      .filter((m) => m.to === square && m.isCapture()).map((m) => m.from);
+    if (attackers.length === 0) return false;
+    const board = new Chess(fen);
+    if (board.turn() !== student) return false;
+    return attackers.every((a) => board.moves({ verbose: true }).some((m) => m.to === a && m.isCapture())
+      && signedLegalSeeFor(fen, a, student) >= 0);
+  } catch { return false; }
+}
+
 export function CoachTeachPage(): JSX.Element {
   const navigate = useNavigate();
   // Quick Tour mode: ?mode=tour in the URL flips lessons into a
@@ -1728,7 +1745,7 @@ export function CoachTeachPage(): JSX.Element {
     fen: string;
     /** `squares` rides along so the board can be drawn from what SURVIVED the
      *  package rather than re-derived from its prose — see `VoiceFact.squares`. */
-    lines: Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string }>;
+    lines: Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[] }>;
   } | null>(null);
   /** The coach's own last move, captured for judging. See the callout below —
    *  the inputs are gathered while the engine work runs and the verdict is
@@ -7843,11 +7860,15 @@ export function CoachTeachPage(): JSX.Element {
         }
       } else if (!(myHanging.length > 0 && (AV[myHanging[0].piece] ?? 0) >= 3) && kingPawnThreat()) {
         // threatLine set above
-      } else if (myHanging.length > 0 && (AV[myHanging[0].piece] ?? 0) >= 3) {
+      } else if (myHanging.length > 0 && (AV[myHanging[0].piece] ?? 0) >= 3 && !tradeOnOffer(args.fenAfterReply, myHanging[0].square, studentCC)) {
         // Only a real PIECE (minor or better) earns the interrupt. A hanging pawn
         // is the small stuff Naroditsky assumes you see — flagging every one is
         // the over-alerting that reads as nagging (David 2026-08-23). The locked
         // "I want tactics alerts" contract is about pieces, not pawns.
+        // …and not when the student simply takes the attacker back at no cost
+        // (walk 2026-09-30: after Bb5+ Bd7 and Qxe4+ the coach said "your
+        // bishop on b5 is attacked and nothing's defending it" — a trade on
+        // offer, not a hanging piece). Same rule as the hit alert below.
         const worst = myHanging[0];
         threatKey = `hang:${worst.piece}${worst.square}`;
         threatSquares = [worst.square];
@@ -8556,6 +8577,10 @@ export function CoachTeachPage(): JSX.Element {
      *  27.Ng5: the blunder was never named). `VoiceFact.fen` is the board a
      *  fact is verified on; this hands it the right one. */
     gradeFen?: string,
+    /** The arrows that illustrate THIS line, computed with it. Drawn through
+     *  the arrow door only when the line survives the turn — a refused line
+     *  takes its arrows with it, exactly like its highlights. */
+    arrows?: readonly ArrowClaim[],
   ): void => {
     const text = line.trim();
     if (!text) return;
@@ -8585,8 +8610,8 @@ export function CoachTeachPage(): JSX.Element {
     } catch { /* unreadable FEN — the lanes' own board checks still apply */ }
     const pending = pendingVoiceRef.current?.fen === fen
       ? pendingVoiceRef.current
-      : { fen, lines: [] as Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string }> };
-    if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ lane, text, squares, claims, gradeFen });
+      : { fen, lines: [] as Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[] }> };
+    if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ lane, text, squares, claims, gradeFen, arrows });
     pendingVoiceRef.current = pending;
   }, []);
 
@@ -9735,7 +9760,7 @@ export function CoachTeachPage(): JSX.Element {
                       bestSan: studentBestSan, bestLine: preStudentRead.topLines?.[0], reply: reply ?? null,
                       cpAfter: bothCp ? mid.evaluation * sign : null,
                     })) {
-                      queueSpokenHint(fenAfterReply, h.text, h.lane, h.squares, h.claims);
+                      queueSpokenHint(fenAfterReply, h.text, h.lane, h.squares, h.claims, undefined, h.arrows);
                       if (h.event) captureEvent(h.event.name, h.event.props);
                     }
                     const look = backwardLook({
@@ -9926,7 +9951,9 @@ export function CoachTeachPage(): JSX.Element {
                           ? moveOrder(fenBefore, move.san, yUci, xLine, yRead.topLines[0], 'student')
                           : null;
                         if (order) {
-                          queueSpokenHint(fenAfterReply, order.text, 'moveOrder', order.squares, [`order:${order.followUp.uci}`, `stops:${order.answer.uci}`]);
+                          // The follow-up that works NOW, as the move to play.
+                          queueSpokenHint(fenAfterReply, order.text, 'moveOrder', order.squares, [`order:${order.followUp.uci}`, `stops:${order.answer.uci}`], undefined,
+                            [{ from: order.followUp.uci.slice(0, 2), to: order.followUp.uci.slice(2, 4), role: 'play', source: 'learn.moveOrder' }]);
                           captureEvent('coach_move_order_named', { surface: 'coach-teach', cost_cp: Math.round(order.costCp) });
                         }
                       // WHAT THE MOVE IS FOR (David 2026-09-29: "the coach describes the
@@ -9968,7 +9995,11 @@ export function CoachTeachPage(): JSX.Element {
                             // "prepares f4" and "you have a pawn break on f4" are one
                             // idea — the positional read's break key.
                             ...(intent.prepares && /^[a-h][1-8]$/.test(intent.prepares.san) ? [`break-${intent.prepares.san}`] : []),
-                          ]);
+                          ], undefined,
+                          // The prepared move, as the move to play next.
+                          intent.prepares && !intent.prepares.san.startsWith('O-O')
+                            ? [{ from: intent.prepares.uci.slice(0, 2), to: intent.prepares.uci.slice(2, 4), role: 'play', source: 'learn.moveIntent' }]
+                            : []);
                           captureEvent('coach_move_intent_named', {
                             surface: 'coach-teach', prevents: !!intent.prevents, prepares: !!intent.prepares,
                           });
@@ -9993,7 +10024,7 @@ export function CoachTeachPage(): JSX.Element {
                   })();
                   const cost = replySan ? theirMoveTeaching(move.fen, replySan, playerColor === 'white' ? 'w' : 'b') : null;
                   if (cost) {
-                    queueSpokenHint(fenAfterReply, cost.text, cost.lane, cost.squares, cost.claims);
+                    queueSpokenHint(fenAfterReply, cost.text, cost.lane, cost.squares, cost.claims, undefined, cost.arrows);
                     if (cost.event) captureEvent(cost.event.name, cost.event.props);
                   }
                 } catch { /* a bonus, never a blocker */ }
@@ -10193,6 +10224,20 @@ export function CoachTeachPage(): JSX.Element {
                         const have = new Set(prev.map((h) => h.square));
                         return [...prev, ...owed.filter((h) => !have.has(h.square))];
                       });
+                    }
+                    // …AND DRAW ITS ARROWS (David 2026-09-30: "make sure arrows are
+                    // firing to illustrate the ideas that are being spoken"). A
+                    // kept fact finds its queued line by its first claim; the
+                    // arrows go through the one door, on the live board.
+                    const owedArrows: ArrowClaim[] = [];
+                    for (const f of hintPkg.kept) {
+                      const key = f.claims?.[0];
+                      const src = key ? pending.lines.find((l) => l.claims?.[0] === key) : pending.lines.find((l) => l.text === f.text);
+                      if (src?.arrows?.length) owedArrows.push(...src.arrows);
+                    }
+                    if (owedArrows.length > 0 && liveFenRef.current === fenAfterReply) {
+                      const drawn = admitArrows(owedArrows, { fen: fenAfterReply, studentColor: playerColor }).arrows;
+                      if (drawn.length > 0) setArrows((prev) => uniqueArrows([...prev, ...drawn]));
                     }
                     void logAppAudit({
                       kind: 'coach-narration-spoken',

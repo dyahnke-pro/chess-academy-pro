@@ -80,7 +80,35 @@ async function state() {
     .map((e) => `${e.kind} ${e.source}: ${(e.summary ?? '').slice(0, 160)}`);
   const chat = (await page.locator('[data-testid="chat-message-assistant"]').first().innerText().catch(() => '')).replace(/\s+/g, ' ');
   const busy = await page.locator('[data-testid="chat-text-input"]').isDisabled().catch(() => null);
-  return { moves: chess.history().join(' '), turn: chess.turn(), lastChat: chat.slice(0, 400), spoken, cmd, inputBusy: busy, errors: errors.splice(0) };
+  // THE ARROWS ON THE BOARD RIGHT NOW (David 2026-09-30: "make sure arrows
+  // are firing to illustrate the ideas that are being spoken"). react-chessboard
+  // draws each arrow as an SVG path in a 2048-wide viewBox; the first point is
+  // just off the start square's centre and the last just short of the target's,
+  // so rounding each to the nearest square centre recovers from→to. The board
+  // orientation comes from the a-file label position.
+  const arrows = await page.evaluate(() => {
+    const svgs = [...document.querySelectorAll('svg[viewBox^="0 0 2048"]')];
+    const out = [];
+    const flipped = !!document.querySelector('[data-testid="board-orientation-black"]')
+      || (() => { const sq = document.querySelector('[data-square="a1"]'); const sq8 = document.querySelector('[data-square="a8"]'); return !!(sq && sq8 && sq.getBoundingClientRect().top < sq8.getBoundingClientRect().top); })();
+    const toSq = (x, y) => {
+      let c = Math.min(7, Math.max(0, Math.floor(x / 256)));
+      let r = Math.min(7, Math.max(0, Math.floor(y / 256)));
+      if (flipped) { c = 7 - c; r = 7 - r; }
+      return `${'abcdefgh'[c]}${8 - r}`;
+    };
+    for (const svg of svgs) {
+      for (const p of svg.querySelectorAll('path')) {
+        if (p.closest('defs,marker')) continue;
+        const nums = (p.getAttribute('d') ?? '').match(/-?\d+(?:\.\d+)?/g)?.map(Number) ?? [];
+        if (nums.length < 4) continue;
+        const color = p.getAttribute('stroke') ?? '';
+        out.push(`${toSq(nums[0], nums[1])}-${toSq(nums[nums.length - 2], nums[nums.length - 1])}${color ? `:${color}` : ''}`);
+      }
+    }
+    return out;
+  }).catch(() => []);
+  return { moves: chess.history().join(' '), turn: chess.turn(), lastChat: chat.slice(0, 400), spoken, arrows, cmd, inputBusy: busy, errors: errors.splice(0) };
 }
 
 const routes = {

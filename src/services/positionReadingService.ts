@@ -239,9 +239,18 @@ function forceTurn(fen: string, color: Color): string {
  *  there in a move or two — otherwise "plant a knight there" is geometry with no
  *  knight.) Turn-independent, so it answers the PLAN, not just "this ply". */
 export function minorCanReachSquare(fen: string, target: Square, color: Color, maxMoves = 2): boolean {
+  return minorRouteToSquare(fen, target, color, maxMoves) !== null;
+}
+
+/** The same search, returning the ROUTE it found — the minor, where it stands,
+ *  and the stop on the way (null for a one-move reach) — so "your knight on f3
+ *  gets there via e5" is the very route the reach check proved. */
+export function minorRouteToSquare(
+  fen: string, target: Square, color: Color, maxMoves = 2,
+): { piece: 'n' | 'b'; from: Square; via: Square | null } | null {
   let chess: Chess;
-  try { chess = new Chess(fen); } catch { return false; }
-  if (chess.get(target)) return false; // occupied — not an empty hole to plant on
+  try { chess = new Chess(fen); } catch { return null; }
+  if (chess.get(target)) return null; // occupied — not an empty hole to plant on
   const isMinorMove = (m: { piece: PieceSymbol }): boolean => m.piece === 'n' || m.piece === 'b';
   // reach-1: a minor of `color` can move straight onto the hole.
   const gen = (f: string): { from: Square; to: Square; piece: PieceSymbol }[] => {
@@ -249,16 +258,19 @@ export function minorCanReachSquare(fen: string, target: Square, color: Color, m
   };
   const start = forceTurn(fen, color);
   const moves1 = gen(start);
-  if (moves1.some((m) => m.to === target)) return true;
-  if (maxMoves < 2) return false;
+  const direct = moves1.find((m) => m.to === target);
+  if (direct) return { piece: direct.piece as 'n' | 'b', from: direct.from, via: null };
+  if (maxMoves < 2) return null;
   // reach-2: a minor hops to an intermediate square, then onto the hole. Cap the
   // fan-out so a pathological position can't run away.
   for (const m of moves1.slice(0, 24)) {
     let mid: Chess;
     try { mid = new Chess(start); mid.move({ from: m.from, to: m.to }); } catch { continue; }
-    if (gen(forceTurn(mid.fen(), color)).some((m2) => m2.to === target)) return true;
+    if (gen(forceTurn(mid.fen(), color)).some((m2) => m2.from === m.to && m2.to === target)) {
+      return { piece: m.piece as 'n' | 'b', from: m.from, via: m.to };
+    }
   }
-  return false;
+  return null;
 }
 
 export interface HangingPiece {

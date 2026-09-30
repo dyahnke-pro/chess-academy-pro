@@ -115,7 +115,10 @@ export function theirMoveCost(fenBefore: string, san: string, studentColor: 'w' 
   }
 
   // 3. Castling given up by a king move that is not castling.
-  if (mv.piece === 'k' && !mv.isKingsideCastle() && !mv.isQueensideCastle()) {
+  // Castling only matters with queens on — in an ending the king walks out on
+  // purpose (walk 2026-09-30: "…Kxe7 gives up castling" with queens traded).
+  const queensOn = after.board().flat().some((x) => x?.type === 'q');
+  if (queensOn && mv.piece === 'k' && !mv.isKingsideCastle() && !mv.isQueensideCastle()) {
     const had = (fenBefore.split(' ')[2] ?? '-').split('').some((c) => (them === 'w' ? /[KQ]/ : /[kq]/).test(c));
     if (had) {
       return {
@@ -132,8 +135,12 @@ export function theirMoveCost(fenBefore: string, san: string, studentColor: 'w' 
   // pawn cover thinned" was the first defect this computer produced).
   const king = after.board().flat().find((c) => c && c.type === 'k' && c.color === them) as { square: string } | undefined;
   const wingKing = !!king && /^[abcgh]/.test(king.square);
+  // King cover is the king-attack lane's claim, said on the move that breaks
+  // it and with its count — never here as "(3 shield pawns down to 2)" (walk
+  // 2026-09-30: both lanes said it on one ply, this one in raw form).
+  void wingKing;
   let concession = describeConcessions(fenBefore, san, false);
-  if (concession && !wingKing) {
+  if (concession) {
     const rest = concession.replace(/^The lasting concession: /, '').replace(/\.$/, '').split('; ').filter((c) => !/pawn cover thinned/.test(c));
     concession = rest.length ? `The lasting concession: ${rest.join('; ')}.` : null;
   }

@@ -148,7 +148,7 @@
 - `src/services/reviewTeachingPoints.test.ts:211`
 - `src/services/reviewTeachingPoints.test.ts:218`
 - `src/services/reviewTeachingPoints.test.ts:227`
-- `src/services/theirMoveCost.ts:135`
+- `src/services/theirMoveCost.ts:142`
 
 ### `findTrappedPiece` (function) — 9 call sites
 - `src/services/coachFeatureService.ts:2917`

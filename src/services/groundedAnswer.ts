@@ -25,7 +25,7 @@ import {
   strongestWeakestPiece, pressuredTargets, findAttackTargets, findPawnGrabs,
   namedPawnStructure, findXrays, findKnightReroute, findRookLift, findFianchetto,
   findBlockade, kingActivation, oppositionRead, rookBehindPasser, bestMinorToKeep,
-  bishopPair, computeSpace, findPassedPawns, findForcingCandidates, findHangingBySee,
+  bishopPair, computeSpace, findPassedPawns, findForcingCandidates, findHangingBySee, minorRouteToSquare,
 } from './positionReadingService';
 import type { PressureCount } from './positionReadingService';
 import { readPosition } from './positionalRead';
@@ -6139,8 +6139,14 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
     const myHoles = me === 'white' ? holes.white : holes.black;
     const oppHoles = me === 'white' ? holes.black : holes.white;
     if (myHoles.length === 0 && oppHoles.length === 0) return { facts: `No weak squares for either side yet — every pawn is still covered. A pawn break is how you create one.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    // …and WHO gets there, how (the same route Learn names — one computer,
+    // chat and Learn say it the same way, walk 2026-09-30).
+    const route = oppHoles.map((h) => ({ h, r: minorRouteToSquare(fen, h, me === 'white' ? 'w' : 'b') })).find((x) => x.r);
+    const getThere = route?.r
+      ? ` Your ${REVIEW_PIECE_NAME[route.r.piece]} on ${route.r.from} gets to ${route.h}${route.r.via ? ` via ${route.r.via}` : ' in one move'}.`
+      : '';
     const targets = oppHoles.length
-      ? `${opp === 'white' ? 'White' : 'Black'} can't cover ${oppHoles.join(', ')} — those are your outpost targets, especially for a knight.`
+      ? `${opp === 'white' ? 'White' : 'Black'} can't cover ${oppHoles.join(', ')} — those are your outpost targets, especially for a knight.${getThere}`
       : '';
     const own = myHoles.length
       ? `Watch your own weak squares on ${myHoles.join(', ')} — no pawn of yours can guard ${myHoles.length === 1 ? 'it' : 'them'}.`
