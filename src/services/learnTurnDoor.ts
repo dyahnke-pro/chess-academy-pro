@@ -56,7 +56,13 @@ export type LearnLane =
   | 'causalChain'
   | 'kingSafety'
   | 'phase'
-  | 'character';
+  | 'character'
+  | 'theirPurpose';
+
+/** Lanes at or below this lead DESCRIBE the board (commentary, behaviour,
+ *  the positional read, structure, piece quality) — the tier the scoreboard
+ *  found we over-say. */
+export const DESCRIPTION_LEAD = 40;
 
 export interface LaneRule {
   /** The kind the package ranks it as. */
@@ -104,6 +110,12 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // threat it is lost for good (Fried Liver walk 2026-09-29: the turn to sharp
   // came WITH the threat, lost the lead to it, and was never heard).
   character: { kind: 'computed', why: 'what the position is about just changed — tactical, positional, converting or holding', lead: 73, always: true },
+  // THEIR MOVE'S PURPOSE (hand walk 2026-09-30, Ruy …g6: "g6 has a point: it
+  // stops the mate with Qxh7" was HELD behind "Qd3 takes aim at the center" —
+  // both rode `positionFacts` and offer order picked). The scoreboard's
+  // "their move's purpose" is one of his biggest teaching kinds (4% landed);
+  // it is what just happened, so it outranks every description.
+  theirPurpose: { kind: 'computed', why: "what the opponent's move was FOR — the threat of yours it stopped", lead: 74 },
   phase: { kind: 'computed', why: 'the game has changed phase — take stock of what the position is about now', lead: 72 },
   kingSafety: { kind: 'observation', why: 'your own king is still in the centre and castling is ready', lead: 55 },
   causalChain: { kind: 'tactic', why: 'a cross-move cause proven on the board — the earlier move that left the piece loose', lead: 80 },
@@ -174,7 +186,13 @@ export function decideTurn(
   const spoke: LearnLane[] = [];
   const held: LearnLane[] = [];
   for (const x of survivors) {
-    const speak = x === ownLead || LEARN_LANES[x.lane].always === true || shares(x.fact.squares);
+    // A DESCRIPTION whose squares all sit inside the lead's says nothing the
+    // lead did not: it names the same piece again (hand walk 2026-09-30, Ruy
+    // 9…Bg4: the pin warning, then "their bishop on g4 is the piece doing the
+    // most work"). Support must ADD a square, or come from a lane that teaches.
+    const restates = LEARN_LANES[x.lane].lead <= DESCRIPTION_LEAD
+      && (x.fact.squares ?? []).length > 0 && (x.fact.squares ?? []).every((q) => anchor.includes(q));
+    const speak = x === ownLead || LEARN_LANES[x.lane].always === true || (shares(x.fact.squares) && !restates);
     if (speak) {
       keep.push(x.fact);
       if (!spoke.includes(x.lane)) spoke.push(x.lane);

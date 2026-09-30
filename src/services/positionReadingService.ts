@@ -938,7 +938,11 @@ export function namedPawnStructure(
     const dRank = [...set].find((s) => s[0] === 'd');
     // A true isolani: no friendly c/e-pawn, and no enemy d-pawn on the file.
     const enemy = white ? bp : wp;
-    if (dRank && fileCount(set, 'c') === 0 && fileCount(set, 'e') === 0 && fileCount(enemy, 'd') === 0) {
+    // …and exactly ONE d-pawn, standing in the centre (4th or 5th rank): doubled
+    // d-pawns on d6 and d4 are not the isolani this plan describes (hand walk
+    // 2026-09-30, Ruy 15…exd4), and a pawn still on d6 is not its outpost story.
+    const oneCentral = fileCount(set, 'd') === 1 && !!dRank && (dRank[1] === '4' || dRank[1] === '5');
+    if (dRank && oneCentral && fileCount(set, 'c') === 0 && fileCount(set, 'e') === 0 && fileCount(enemy, 'd') === 0) {
       return { name: `${holder(white)} the isolated queen’s pawn`, plan: 'the isolani gives active pieces and the d5/d4 outpost now, but becomes a target in the endgame — the owner attacks, the blockader trades down' };
     }
   }

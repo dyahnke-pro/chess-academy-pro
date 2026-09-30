@@ -163,6 +163,8 @@ describe('WO-2 — a verdict on a good move carries its reason', () => {
   it('clear-best speaks only with the move\'s computed point', () => {
     expect(TEACH_CODE).toMatch(/grade\.reason !== 'clear-best' \|\| !!goodPoint/);
     expect(TEACH_CODE).toMatch(/studentMovePoint\(fenBefore, move\.san/);
+    // A recapture is never graded aloud unless it is a fault (hand walk 2026-09-30).
+    expect(TEACH_CODE).toMatch(/&& !\(isRecapture && !grade\.fault\)/);
     // The bishop pair is said once a game, by whichever owner says it first.
     expect(TEACH_CODE).toMatch(/pairHeard \? allHits\.filter\(\(x\) => x\.id !== 'bishop-pair'\)/);
     expect(TEACH_CODE).toMatch(/hit\.id === 'bishop-pair'\) standingRef\.current\.remember\('bishop-pair'\)/);
@@ -200,10 +202,60 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
   it('Learn hands every line-speaking producer\'s lines to the queue, and draws on-screen and earlier boards apart', () => {
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), registerNow, 'register', undefined, pendingRegisterLines\)/);
     expect(TEACH_CODE).toMatch(/pendingRegisterLines = \[\{ fen: probe\.fen\(\), sans: \[compareRead\.bestSan\] \}/);
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, 'positionFacts', undefined, c\.lines\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, undefined, c\.lines\)/);
     expect(TEACH_CODE).toMatch(/fundamental\?\.lines\)/);
     expect(TEACH_CODE).toMatch(/'fundamental', \[\], fundamental\.lines\)/);
     expect(TEACH_CODE).toMatch(/keptLines\(hintPkg,/);
+    // Their move's purpose leads over a board description (hand walk 2026-09-30, …g6).
+    expect(TEACH_CODE).toMatch(/c\.kind === 'stopped' \? 'theirPurpose' as const/);
     expect(TEACH_CODE).toMatch(/setLineWalkFen\(showFen\)/);
+  });
+});
+
+describe("their move's purpose leads over a description (hand walk 2026-09-30)", () => {
+  it('"g6 has a point" speaks; "Qd3 takes aim" is held', () => {
+    // The Ruy position after 20.Qd3 g6, student White to move.
+    const fen = 'r2q1rk1/5p1p/p2p1bp1/1p1P4/8/3Q4/PPB2PPP/R1B1R1K1 w - - 0 21';
+    const d = decideTurn([
+      { lane: 'positionFacts', text: 'Your queen on d3 takes aim at the center, hitting d4 and e4.', fen, squares: ['d3', 'd4', 'e4'] },
+      { lane: 'theirPurpose', text: 'g6 has a point: it stops the mate with Qxh7.', fen, squares: ['h7'] },
+    ]);
+    expect(d.lead?.lane).toBe('theirPurpose');
+    expect(d.spoke).toEqual(['theirPurpose']);
+  });
+});
+
+describe('a smaller attacker you can take back is not "it has to move" (hand walk 2026-09-30, Ruy 14.d4 cxd4)', () => {
+  it('cxd4 answers the pawn on d4 without losing material', async () => {
+    const { legalSeeGainFor } = await import('./positionReadingService');
+    const fen = 'r2q1rk1/4bppp/p1npbn2/1p2p3/3pP3/2P1NN2/PPB2PPP/R1BQR1K1 w - - 0 15';
+    expect(legalSeeGainFor(fen, 'd4', 'w')).toBeGreaterThanOrEqual(0);
+    expect(TEACH_CODE).toMatch(/legalSeeGainFor\(args\.fenAfterReply, low\.a, studentCC\) >= 0/);
+  });
+});
+
+describe('a description restating the lead\'s piece is held (hand walk 2026-09-30, Ruy 9…Bg4)', () => {
+  const RUY = 'r2qk2r/2p1bppp/p1np1n2/1p2p3/4P1b1/1BPP1N2/PP3PPP/RNBQR1K1 w kq - 1 9';
+  it('the pin speaks; "their bishop on g4 is their best piece" is held', () => {
+    const d = decideTurn([
+      { lane: 'threat', text: 'Watch out — their bishop on g4 pins your knight on f3 against your queen on d1.', fen: RUY, squares: ['g4', 'f3', 'd1'] },
+      { lane: 'pieceQuality', text: 'Their bishop on g4 is the piece doing the most work for them — trading it off takes the sting out of the position.', fen: RUY, squares: ['g4'] },
+    ]);
+    expect(d.spoke).toEqual(['threat']);
+    expect(d.held).toEqual(['pieceQuality']);
+  });
+  it('a description that ADDS a square still rides as support', () => {
+    const d = decideTurn([
+      { lane: 'threat', text: 'Watch out — their bishop on g4 pins your knight on f3 against your queen on d1.', fen: RUY, squares: ['g4', 'f3', 'd1'] },
+      { lane: 'positional', text: 'Your bishop on b3 bears down on f7, with your knight on f3 ready to join it.', fen: RUY, squares: ['f3', 'b3', 'f7'] },
+    ]);
+    expect(d.spoke).toContain('positional');
+  });
+});
+
+describe('the character read counts tactics, not a piece that can step away (hand walk 2026-09-30)', () => {
+  it('a hanging piece alone does not make the position sharp', () => {
+    expect(TEACH_CODE).toMatch(/tacticLive: tctxNow\.immediate\.length > 0,/);
+    expect(TEACH_CODE).not.toMatch(/tacticLive: tctxNow\.immediate\.length > 0 \|\| tctxNow\.hanging/);
   });
 });

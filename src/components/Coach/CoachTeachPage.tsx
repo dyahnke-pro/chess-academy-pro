@@ -284,7 +284,7 @@ import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGroundi
 // ONE depth for the whole turn — the hint lane and the lane that grades the
 // student must not read the same board at different depths. See the constant.
 import { tacticalReadFromLines, temptingTurnClause, uncertaintyClause, candidateCompareRead } from '../../services/tacticalRead';
-import { namedPawnStructure } from '../../services/positionReadingService';
+import { legalSeeGainFor, namedPawnStructure } from '../../services/positionReadingService';
 import { BehaviorScheduler, detectBehaviors } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
@@ -7816,10 +7816,14 @@ export function CoachTeachPage(): JSX.Element {
               .map((a) => ({ a, t: board.get(a)?.type ?? 'k' }))
               .filter((x) => x.t !== 'k' && (x.t === 'p' ? 1 : (AV[x.t] ?? 0)) < (AV[cell.type] ?? 0))
               .sort((x, y) => (x.t === 'p' ? 1 : AV[x.t] ?? 0) - (y.t === 'p' ? 1 : AV[y.t] ?? 0))[0];
-            // …unless the attacker is simply free to take — then the answer
-            // is to take it, not to move away.
-            const attackerFree = !!low && board.attackers(low.a, studentCC).length > 0 && board.attackers(low.a, foe).length === 0;
-            if (low && !attackerFree && (!hit || (AV[cell.type] ?? 0) > (AV[hit.piece] ?? 0))) hit = { sq: cell.square, piece: cell.type, by: low.t, bySq: low.a };
+            // …unless taking the attacker loses nothing — then the answer is
+            // to take it, not to move away. Not only when it is FREE: a
+            // defended pawn traded pawn-for-pawn answers the attack just the
+            // same (hand walk 2026-09-30, Ruy 14.d4 cxd4: "it has to move"
+            // when cxd4 simply takes back).
+            const answeredByCapture = !!low && board.attackers(low.a, studentCC).length > 0
+              && legalSeeGainFor(args.fenAfterReply, low.a, studentCC) >= 0;
+            if (low && !answeredByCapture && (!hit || (AV[cell.type] ?? 0) > (AV[hit.piece] ?? 0))) hit = { sq: cell.square, piece: cell.type, by: low.t, bySq: low.a };
           }
           if (hit) {
             threatKey = `hit:${hit.piece}${hit.sq}:${hit.bySq}`;
@@ -8622,9 +8626,16 @@ export function CoachTeachPage(): JSX.Element {
         const goodPoint = grade && (grade.reason === 'clear-best' || grade.reason === 'only-move')
           ? studentMovePoint(fenBefore, move.san, move.history.length >= 2 ? move.history[move.history.length - 2] : null)
           : null;
-        const speakGrade = !!grade?.worthSpeaking && !!grade.clause && (grade.reason !== 'clear-best' || !!goodPoint);
+        // A RECAPTURE IS NOT A FIND (hand walk 2026-09-30, Ruy: "c-pawn takes d4:
+        // nice — that was the only move that holds", then the same for Qxd4 —
+        // taking back what they just took is routine). Recorded, never graded
+        // aloud unless it is a fault.
+        const prevSan = move.history.length >= 2 ? move.history[move.history.length - 2] : null;
+        const isRecapture = !!prevSan && new RegExp(`x${move.to}(?![1-8])`).test(prevSan) && move.san.includes('x');
+        const speakGrade = !!grade?.worthSpeaking && !!grade.clause && (grade.reason !== 'clear-best' || !!goodPoint)
+          && !(isRecapture && !grade.fault);
         if (grade && speakGrade) {
-          // The clause is a verdict ("good — that meets the threat cleanly.");
+          // The clause is a verdict ("that meets the threat.");
           // heard on its own it names no move. Lead with the move it grades.
           const gradeLine = goodPoint ? `${move.san}: ${grade.clause} ${goodPoint}` : `${move.san}: ${grade.clause}`;
           // Recorded as said, so the late wave's move-point lane does not
@@ -9044,7 +9055,10 @@ export function CoachTeachPage(): JSX.Element {
                     if (pf.clauses.some((c) => c.kind === 'key-moment')) announcedPliesRef.current.add(probe.history().length + 1);
                     for (const c of pf.clauses) {
                       if (c.kind === 'must-defend' || !c.text) continue;
-                      queueSpokenHint(probe.fen(), c.text, 'positionFacts', undefined, c.lines);
+                      // Their move's purpose rides its own lane, above the
+                      // board descriptions it used to lose to on offer order.
+                      const lane = c.kind === 'stopped' ? 'theirPurpose' as const : 'positionFacts' as const;
+                      queueSpokenHint(probe.fen(), c.text, lane, undefined, c.lines);
                     }
                     if (pf.importance.speak) captureEvent('position_facts_spoken', { surface: 'coach-teach', tier: pf.importance.tier, clauses: pf.clauses.length });
                   }
@@ -9152,7 +9166,11 @@ export function CoachTeachPage(): JSX.Element {
                       const now = characterOf({
                         fen: probe.fen(),
                         studentColor: playerColor,
-                        tacticLive: tctxNow.immediate.length > 0 || tctxNow.hanging.length > 0,
+                        // A detected tactic, not a HANGING piece: a bishop hit by
+                        // a pawn simply steps away (hand walk 2026-09-30, Closed
+                        // Ruy: 3…a6 read as "turned sharp", then three flips in
+                        // 20 plies of a quiet game).
+                        tacticLive: tctxNow.immediate.length > 0,
                         bestGapCp: gap,
                       });
                       const step = stepCharacter(characterRef.current, now);

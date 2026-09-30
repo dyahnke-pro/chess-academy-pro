@@ -250,3 +250,12 @@ The miss is the reason, not the verdict: exd5 is a **recapture choice** ("take w
 **Triple-check finds (fixed):**
 - "Play Qd2 and …" broke on verb-first detector sentences. Now "If you play Qd2, …" (PR #989).
 - The Ng8 fix moved "the piece doing the most work" to their Rh8 behind its own h6 pawn. A rook now needs a free file in every phase (branch `wo1-deep-lines`).
+
+**Hand walk 2, Closed Ruy (2026-09-30).** Seven flags, all fixed on branch `wo1-deep-lines`, each with a test on the walk position:
+1. **Their move's purpose was held behind a description.** "g6 has a point: it stops the mate with Qxh7" lost to "Qd3 takes aim at the center" on offer order within `positionFacts`. It now rides its own lane, `theirPurpose` (rank 74, above every description).
+2. **"Their pawn on d4 hits your knight; it has to move", when cxd4 takes back.** The warning now stands down whenever taking the attacker loses nothing (SEE ≥ 0), not only when the attacker is free.
+3. **Routine recaptures graded aloud with praise** ("c-pawn takes d4: nice — the only move that holds", twice). A recapture is no longer graded aloud unless it is a fault, and no merit clause opens on a praise word.
+4. **One piece twice** (the pin on g4, then "their bishop on g4 is their best piece"). A description whose squares all sit inside the lead's is a restatement and is held; support must add a square.
+5. **An IQP called on doubled d-pawns (d6 + d4).** It now needs exactly one central d-pawn.
+6. **The character read flipped three times in a quiet game.** A piece that can simply step away (a bishop hit by a pawn) no longer makes the position "sharp"; only detected tactics or a big engine gap do.
+7. **"Ne3 develops into the game" at move 13.** Development now means leaving the piece's own starting square, not merely rank 1.
