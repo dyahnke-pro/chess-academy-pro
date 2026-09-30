@@ -144,6 +144,19 @@ describe('the engine\'s per-piece table', () => {
     const lines = pieceQualityLines(values, 'white', undefined, { isMiddlegame: true, fen: c.fen() });
     expect(lines.some((l) => /knight on g8/.test(l.text))).toBe(false);
   });
+  it('never crowns a rook behind its own pawn their best piece in the middlegame (same walk: Rh8 behind h6)', () => {
+    const c = new Chess();
+    for (const m of 'e4 c6 d4 d6 Nc3 e6 Nf3 a6 Bd3 h6 O-O b6 Be3 Bb7 d5 cxd5 exd5 e5'.split(' ')) c.move(m);
+    const values = [
+      { square: 'h8', piece: 'r', color: 'b' as const, value: -7 },
+      { square: 'a8', piece: 'r', color: 'b' as const, value: -3 },
+      { square: 'a1', piece: 'R', color: 'w' as const, value: 3 },
+    ];
+    const lines = pieceQualityLines(values, 'white', undefined, { isMiddlegame: true, fen: c.fen() });
+    expect(lines.some((l) => /rook on h8/.test(l.text))).toBe(false);
+    // NEGATIVE CONTROL: without the board, the table alone still names it.
+    expect(pieceQualityLines(values, 'white', undefined, { isMiddlegame: true }).some((l) => /rook on h8/.test(l.text))).toBe(true);
+  });
 
   const BAD_MINOR = [
     { square: 'c1', piece: 'B', color: 'w' as const, value: 2 },   // idle bishop → worst

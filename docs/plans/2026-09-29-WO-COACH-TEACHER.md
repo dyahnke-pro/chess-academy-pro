@@ -232,3 +232,50 @@ The miss is the reason, not the verdict: exd5 is a **recapture choice** ("take w
 
 **Still open (mine):** #5b the back-rank line at ply 39 and #5c "2 attackers on b6" (unclear whose). Both still need checking against the board.
 **Still open (theirs):** #1 and #2 are moveIntent.
+
+**Arrows for spoken lines (David 2026-09-29: "I have never seen any!" → "I'm sure you're missing deeper lines").**
+- `VoiceFact.lines`: each line the sentence names, with the board it STARTS on. It is coupled at emission, like `squares`, and never scraped from prose.
+- Lines on the board on screen draw there. Lines from an earlier board show that board (the line-walk board chat uses) while spoken, then the game returns.
+- Census of 34 multi-move lines across the walks. Wired:
+  - the but-turn;
+  - the compare ("X can wait — Y forces matters now");
+  - concept lines ("If you play Qd2, …" / "After Rxe4+, Be2, Qe7, …");
+  - "X has a point: it stops your Y" (their reply plus the stopped threat);
+  - the forcing win that was on the board;
+  - the calculation-depth path ("after b5, Nb6, Nxb6").
+- Already had arrows before: curated beats.
+- Shipped: PR #988 (live board). Branch `wo1-deep-lines` (earlier boards) is pending its live screenshot.
+- Walk note: the calc-depth line did not fire on the re-walk. The engine judged a5 differently; which lines speak varies run to run.
+
+**Triple-check finds (fixed):**
+- "Play Qd2 and …" broke on verb-first detector sentences. Now "If you play Qd2, …" (PR #989).
+- The Ng8 fix moved "the piece doing the most work" to their Rh8 behind its own h6 pawn. A rook now needs a free file in every phase (branch `wo1-deep-lines`).
+
+**Hand walk 2, Closed Ruy (2026-09-30).** Seven flags, all fixed on branch `wo1-deep-lines`, each with a test on the walk position:
+1. **Their move's purpose was held behind a description.** "g6 has a point: it stops the mate with Qxh7" lost to "Qd3 takes aim at the center" on offer order within `positionFacts`. It now rides its own lane, `theirPurpose` (rank 74, above every description).
+2. **"Their pawn on d4 hits your knight; it has to move", when cxd4 takes back.** The warning now stands down whenever taking the attacker loses nothing (SEE ≥ 0), not only when the attacker is free.
+3. **Routine recaptures graded aloud with praise** ("c-pawn takes d4: nice — the only move that holds", twice). A recapture is no longer graded aloud unless it is a fault, and no merit clause opens on a praise word.
+4. **One piece twice** (the pin on g4, then "their bishop on g4 is their best piece"). A description whose squares all sit inside the lead's is a restatement and is held; support must add a square.
+5. **An IQP called on doubled d-pawns (d6 + d4).** It now needs exactly one central d-pawn.
+6. **The character read flipped three times in a quiet game.** A piece that can simply step away (a bishop hit by a pawn) no longer makes the position "sharp"; only detected tactics or a big engine gap do.
+7. **"Ne3 develops into the game" at move 13.** Development now means leaving the piece's own starting square, not merely rank 1.
+
+### 6.x Hand walk 3 (Ruy re-walk, 2026-09-30) — flags and decisions
+
+- **Character flip on a standing pin — FIXED (pending push).** `…Bg4` pinning
+  Nf3 to d1 read "turned sharp" (move 19) and flipped back at move 27. The
+  detector reports a pin's geometry with no verdict (`wins` is set for forks
+  only), so the pin counted as a live tactic. Now only a pattern a verifier
+  PROVED wins something (`wins: live | threat`) counts (`provenTacticLive`). A
+  pin that really costs material still reads sharp through the engine's
+  best-move gap. Test on the real position + a verified-fork control:
+  `positionCharacter.pin.test.ts`.
+- **🟠 DECISION FOR DAVID — curated beats name the OPPONENT by colour.**
+  `beatRegister` refuses the student's own colour but passes "Black's
+  e5-pawn" / "Black develops" to a White student, which breaks the locked
+  one-perspective rule (opponent = they/their). Census: **1,199 of 1,444
+  live-safe beats** do it (939 as a subject, 260 possessive-only). Silencing
+  them cuts live curated teaching by 83%, and a regex rewrite is banned
+  (verb agreement: "Black has" → "they have"). The real fix is the owed
+  offline live-register bake (BACKLOG §4.6). Left as is until David picks:
+  bake (recommended) or silence.

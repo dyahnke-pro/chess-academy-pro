@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**100 lines · 9 exports · 2 importers · 1 tests · 0 audits**
+**109 lines · 10 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/components/Coach/CoachTeachPage.tsx`
+- `src/services/positionCharacter.pin.test.ts`
 - `src/services/positionCharacter.test.ts`
 
 ## Exports and every call site
@@ -29,8 +30,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `SHARP_GAP_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `provenTacticLive` (function) — 4 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9174`
+- `src/services/positionCharacter.pin.test.ts:17`
+- `src/services/positionCharacter.pin.test.ts:23`
+- `src/services/positionCharacter.pin.test.ts:27`
+
 ### `characterOf` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9114`
+- `src/components/Coach/CoachTeachPage.tsx:9166`
 - `src/services/positionCharacter.test.ts:10`
 - `src/services/positionCharacter.test.ts:14`
 - `src/services/positionCharacter.test.ts:15`
@@ -48,12 +55,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `stepCharacter` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9120`
+- `src/components/Coach/CoachTeachPage.tsx:9177`
 - `src/services/positionCharacter.test.ts:31`
 - `src/services/positionCharacter.test.ts:56`
 
 ## Tests
 
+- `src/services/positionCharacter.pin.test.ts`
 - `src/services/positionCharacter.test.ts`
 
 ## Audits that reach it

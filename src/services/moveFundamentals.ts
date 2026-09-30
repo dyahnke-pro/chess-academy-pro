@@ -24,7 +24,7 @@ import type { Square } from 'chess.js';
 import { landingIsSafe } from './positionReadingService';
 import { classifyPhase, isEndgameByMaterial } from './gamePhaseService';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
-import { homeMinorCount, homeSquaresOf } from './development';
+import { homeMinorCount, homeSquaresOf, isOnHomeSquare } from './development';
 import { centreDistance } from '../utils/centreDistance';
 import { isOutpost } from './outpost';
 import { MATERIAL_VALUE } from './pieceValues';
@@ -373,7 +373,10 @@ export function computeMoveFundamentals(
   //    scales with how much is still undeveloped: the more pieces at home, the
   //    more urgent development is.
   const homeRank = mover === 'w' ? 1 : 8;
-  if ((mv.piece === 'n' || mv.piece === 'b') && rankOf(mv.from) === homeRank && !out.some((f) => f.id === 'outpost')) {
+  // From its OWN starting square, not merely the home rank: Nf1–e3 on move 13
+  // is a knight's third move (b1–d2–f1–e3), a re-route, not development (hand
+  // walk 2026-09-30, Closed Ruy: "Ne3 develops into the game").
+  if ((mv.piece === 'n' || mv.piece === 'b') && rankOf(mv.from) === homeRank && isOnHomeSquare(mv.piece, mover, mv.from) && !out.some((f) => f.id === 'outpost')) {
     const name = PIECE_NAME[mv.piece];
     // NO SLICE (G4.5). This was `.filter(CORE_CENTER).slice(0, 2)` — two
     // truncations stacked: the narrow four-square centre, then a hard cap of

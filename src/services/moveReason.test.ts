@@ -90,3 +90,12 @@ describe('moveReasonClause — a positional slip speaks its attributed fundament
     expect(moveReasonClause('hung-piece', { fundamental: verdict })).toMatch(/hung/);
   });
 });
+
+describe('no praise words in a verdict (Narration Voice Rule 5, hand walk 2026-09-30)', () => {
+  it('no merit clause opens on nice / good / clean / great', async () => {
+    const { moveReasonClause } = await import('./moveReason');
+    for (const r of ['only-move', 'defends-threat', 'best', 'clear-best', 'wins-material'] as const) {
+      expect(moveReasonClause(r)).not.toMatch(/^(nice|good|clean|great|excellent)\b/i);
+    }
+  });
+});

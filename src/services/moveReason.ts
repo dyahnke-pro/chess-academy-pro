@@ -135,6 +135,8 @@ export function moveReasonClause(r: MoveReason, ctx?: { named?: string; hung?: {
   // the same verdict the review gives for the same move (one coach).
   if (r === 'lost-the-thread' && ctx?.fundamental) return ctx.fundamental;
   const hung = ctx?.hung ? `${PNAME[ctx.hung.piece.toLowerCase()] ?? 'piece'} on ${ctx.hung.square}` : 'piece';
+  // NO PRAISE WORDS (Narration Voice Rule 5; hand walk 2026-09-30 heard "nice —"
+  // twice on routine recaptures). The verdict states what the move did.
   switch (r) {
     case 'mate': return `there's a forced mate on the board.`;
     case 'hung-piece': return `careful — that hung the ${hung}.`;
@@ -144,13 +146,13 @@ export function moveReasonClause(r: MoveReason, ctx?: { named?: string; hung?: {
     case 'lost-the-thread': return `no tactic — but the plan drifted there.`;
     case 'imprecise-defence': return `it holds, but not the cleanest way.`;
     case 'second-best': return `playable — not quite the most precise.`;
-    case 'only-move': return `nice — that was the only move that holds.`;
+    case 'only-move': return `the only move that holds here.`;
     // Said ONLY with the move's computed point after it — a verdict with no
     // reason is bare praise (Narration Voice Rule 5). The caller enforces it.
     case 'clear-best': return `the strongest move here.`;
-    case 'defends-threat': return `good — that meets the threat cleanly.`;
+    case 'defends-threat': return `that meets the threat.`;
     case 'wins-material': return `that wins material.`;
-    case 'best': return `clean — the strongest move.`;
+    case 'best': return `the strongest move.`;
     case 'solid': return `solid, nothing lost.`;
   }
 }

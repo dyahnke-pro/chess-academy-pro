@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { learnFundamentalVerdict, LEARN_FUNDAMENTAL_CP_FLOOR, type LearnFundamentalInput } from './learnFundamentalNarration';
+import { learnFundamentalVerdict, fundamentalLines, LEARN_FUNDAMENTAL_CP_FLOOR, type LearnFundamentalInput } from './learnFundamentalNarration';
 import type { FundamentalId } from './principleAttribution';
 
 // Build #3 (David 2026-09-07: "Learn it needs to be added into the narration").
@@ -154,5 +154,30 @@ describe('a hung piece they did not take is a miss, not free material (re-walk 1
     const out = learnFundamentalVerdict({ ...BC4, replySan: 'dxc4' }, new Set());
     expect(out).not.toBeNull();
     expect(out?.verdict ?? '').not.toMatch(/missed/);
+  });
+});
+
+describe('fundamentalLines — the moves a verdict names travel with it (deeper lines)', () => {
+  it('calculation-depth: the path to the blow, from the board AFTER the student move', () => {
+    const lines = fundamentalLines(
+      // The game's own continuation, 7.Nf3 d6 8.exd6 Qxd6 — legal from the board.
+      { id: 'calculation-depth', facts: { path: 'Nf3, d6, exd6', punish: 'Qxd6' }, evidence: { pvMoves: ['Nf3', 'd6', 'exd6', 'Qxd6'] } },
+      fenBefore(12), 'Nb6', true,
+    );
+    const after = new Chess(fenBefore(12)); after.move('Nb6');
+    expect(lines).toEqual([{ fen: after.fen(), sans: ['Nf3', 'd6', 'exd6', 'Qxd6'] }]);
+    // …and the whole path actually plays from that board.
+    const c = new Chess(lines[0].fen);
+    for (const s of lines[0].sans) expect(c.move(s)).toBeTruthy();
+  });
+  it('the short repeat stem names only the blow — no path is drawn for it', () => {
+    expect(fundamentalLines({ id: 'calculation-depth', facts: {}, evidence: { pvMoves: ['Nf3'] } }, fenBefore(12), 'Nb6', false)).toEqual([]);
+  });
+  it('a forcing win that was on the board: that move, from the board BEFORE the student move', () => {
+    expect(fundamentalLines({ id: 'passive-when-forcing-existed', facts: { better: 'e6' }, evidence: {} }, fenBefore(12), 'Nb6', true))
+      .toEqual([{ fen: fenBefore(12), sans: ['e6'] }]);
+  });
+  it('a verdict that names no move carries no line', () => {
+    expect(fundamentalLines({ id: 'same-piece-twice', facts: {}, evidence: {} }, fenBefore(12), 'Nb6', true)).toEqual([]);
   });
 });

@@ -273,6 +273,10 @@ export function pieceQualityLines(
     // 2026-09-24) the rook that had just castled to f8, behind its own f7-pawn,
     // was crowned "the piece doing the most work for them".
     .filter((v) => opts?.isMiddlegame === true || v.piece.toLowerCase() !== 'r' || rookFileFree(opts?.fen, v))
+    // …and in the middlegame too, when the board is in hand: a rook behind its
+    // own pawn is not their best piece (walk 3UqPa5eV2e0, 18…e5 after the Ng8
+    // fix: "their rook on h8 is the piece doing the most work" — h6 in front).
+    .filter((v) => opts?.isMiddlegame !== true || !opts?.fen || v.piece.toLowerCase() !== 'r' || rookFileFree(opts.fen, v))
     // …and a piece the student can simply TAKE is not one to "trade off"
     // (hand walk 2000: Rxd8 just took, nothing defended it, and the coach said
     // "their rook on d8 is the piece doing the most work — trade it off").
