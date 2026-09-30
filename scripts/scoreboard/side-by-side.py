@@ -10,6 +10,17 @@ for f in glob.glob(os.environ.get('CENSUS_DIR','/tmp/claude-0/g430')+'/*.txt'):
   for l in open(f).read().split('\n')[1:]:
     m=re.match(r'^ply (\d+) \[[^\]]*\] (.+)$',l)
     if m: his.setdefault(vid,{})[int(m[1])]=m[2]
+# LINE CALLS (David 2026-09-30: "teach more line calculations — make sure we
+# can match that"): a sentence that names 3+ moves plays a line out loud.
+# Moves count in notation (Nxd5, …Bxc3+) or in words ("the bishop to c3").
+MOVE=re.compile(r"(?:\b[KQRBN]x?[a-h][1-8]|\b[a-h]x[a-h][1-8]|\bO-O(?:-O)?|\b(?:king|queen|rook|bishop|knight|pawn)s?\s+(?:to|takes|captures on|on)\s+[a-h][1-8]|\b(?:takes|captures) on [a-h][1-8]|\b[a-h][1-8]\b)", re.I)
+def line_calls(texts):
+  n=0
+  for t in texts:
+    for sent in re.split(r'(?<=[.!?])\s+', t):
+      if len(MOVE.findall(sent))>=3: n+=1
+  return n
+totals={'him':0,'us':0}
 out=[]
 for gid,r in tape.items():
   vid=gid.replace('naro-',''); g=games.get(gid) or games.get('naro-'+vid,{}); plies=g.get('plies',[])
@@ -19,7 +30,9 @@ for gid,r in tape.items():
     h=[his.get(vid,{}).get(q) for q in (p,p+1)]; h=[x for x in h if x]
     ours=r['plies'][str(p)]
     if not h and not ours: continue
+    totals['him']+=line_calls(h); totals['us']+=line_calls(ours[:1] if ours else [])
     out.append(f'**ply {p}** `{san}`\n- HIM: {" / ".join(h) or "—"}\n- US: {" / ".join(ours) or "(silent)"}\n')
   for q in r.get('questions',[]):
     out.append(f'**Q at ply {q["ply"]}:** {q["q"]}\n- A: {q["a"]}\n')
-open(sys.argv[3],'w').write('\n'.join(out)); print('wrote',sys.argv[3])
+out.insert(0, f"LINE CALLS (sentences naming 3+ moves): him {totals['him']} · us {totals['us']}\n")
+open(sys.argv[3],'w').write('\n'.join(out)); print('wrote',sys.argv[3]); print(out[0].strip())

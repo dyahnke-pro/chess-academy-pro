@@ -34,6 +34,7 @@ import { MISTAKE_CP, BLUNDER_CP, costWords } from './engineConstants';
 export { costWords };
 import { MATERIAL_VALUE } from './pieceValues';
 import { legalSeeGain } from './positionReadingService';
+import { lineWins } from './lineCalc';
 
 export interface InaccuracyCall {
   /** Straight from `moveRating.classifyMove` — never re-derived here. */
@@ -53,6 +54,9 @@ export interface InaccuracyCall {
   /** The better move this line NAMES ("Nf3 was the move — …"), when it names
    *  one — so a verdict beside it can leave the move out (one fact once). */
   namesBetter?: string;
+  /** The punishing line this call SPEAKS, played from `fen` — so the board
+   *  draws exactly the moves the words name, ply by ply. */
+  line?: { fen: string; uci: string[] };
 }
 
 /** Only the three that are worth stopping for. `good` and above stay silent —
@@ -348,6 +352,9 @@ export function callInaccuracyDetailed(args: {
   moverEvalAfterCp?: number | null;
   /** Whose move it was. */
   side: 'student' | 'coach';
+  /** A coach-side move the STUDENT dictated: said of them, not owned by the
+   *  coach ("Their Bb5 is a mistake", never "a mistake from me"). */
+  dictated?: boolean;
   moverColor: 'white' | 'black';
   /** The engine's best line for the OTHER side after the played move, UCI —
    *  the punishment, which is what a "blunder" COST. REQUIRED (`[]` when
@@ -461,6 +468,26 @@ export function callInaccuracyDetailed(args: {
   // contract being bent: that contract withholds the STUDENT's move so they
   // have something to find. A move the coach has already played is on the
   // board — hiding it would be coyness, not teaching.
+  // A DICTATED MOVE IS THEIRS, NOT THE COACH'S (David 2026-09-30: "Speak
+  // dictated moves"): the student told the coach to play it, so the coach
+  // cannot own it in the first person — it is said of THEM.
+  if (args.side === 'coach' && args.dictated) {
+    const head = quality === 'blunder'
+      ? ((args.allowedMate ?? null) !== null
+        ? `Their ${args.playedSan} is a blunder — it walks into mate.`
+        : `Their ${args.playedSan} is a blunder — it gives away real material.`)
+      : quality === 'mistake'
+        ? `Their ${args.playedSan} is a mistake — not what the position wanted.`
+        : `Their ${args.playedSan} is a touch inaccurate.`;
+    const should = better ? ` ${args.bestSan} was their move, to ${better.why}.` : '';
+    const stillHanging = missedCaptureStillOn(args.fenBefore, args.playedSan, args.bestSan);
+    const punish = quality === 'inaccuracy'
+      ? ''
+      : stillHanging
+        ? ` Your ${stillHanging.piece} on ${stillHanging.square} is still hanging, though — see to it.`
+        : ' There is something here for you now — go and take it.';
+    return { call: { quality, side: 'coach', cost, said: `${head}${should}${punish}`, square: better?.square ?? '' } };
+  }
   if (args.side === 'coach') {
     const head = quality === 'blunder'
       // The cost named is the real one: a move that walks into mate gave away
@@ -548,7 +575,23 @@ export function callInaccuracyDetailed(args: {
       // nothing else). With no punishment and no better-move reason, the one
       // computed fact left is what it cost.
       : `${args.playedSan} was ${grade}${should ? '' : ` — it gave away ${costWords(cost)}`}.`;
-  return { call: { quality, side: 'student', cost, said: `${head}${should}`, square: better?.square ?? '', ...(punishment?.lostSquare ? { lostSquare: punishment.lostSquare } : {}), ...(should ? { namesBetter: args.bestSan } : {}) } };
+  // THE PUNISHING LINE, PLAYED OUT (David 2026-09-30: "teach more line
+  // calculations"): to where their material lands, with what it wins.
+  let lineTail = '';
+  let line: InaccuracyCall['line'];
+  if (punishment && args.replyLineUci.length >= 2) {
+    try {
+      const b = new Chess(args.fenBefore);
+      b.move(args.playedSan);
+      const opp = args.moverColor === 'white' ? 'b' : 'w';
+      const w = lineWins(b.fen(), args.replyLineUci, opp);
+      if (w) {
+        lineTail = ` The line: ${w.sans.join(' ')} — they come out ${w.what} up.`;
+        line = { fen: b.fen(), uci: args.replyLineUci.slice(0, w.plies.length) };
+      }
+    } catch { /* no line — the grade stands */ }
+  }
+  return { call: { quality, side: 'student', cost, said: `${head}${lineTail}${should}`, square: better?.square ?? '', ...(punishment?.lostSquare ? { lostSquare: punishment.lostSquare } : {}), ...(should ? { namesBetter: args.bestSan } : {}), ...(line ? { line } : {}) } };
 }
 
 /** What the played move let the OTHER side do: their best line after it, read

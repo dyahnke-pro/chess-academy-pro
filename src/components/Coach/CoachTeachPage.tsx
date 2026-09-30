@@ -30,7 +30,7 @@ import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePacka
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { announcesTheMove, trapAnswered, checkMethodTeaching, countMethodTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
+import { announcesTheMove, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -10112,7 +10112,9 @@ export function CoachTeachPage(): JSX.Element {
                       const winClaim = !fundamental && /^That let them win /.test(look.line) && /^[a-h][1-8]$/.test(look.square)
                         ? [`win-${look.square}`] : fundamental?.id === 'botched-conversion' ? ['convert-method'] : [`look:${look.kind}:${move.history.length}`];
                       queueSpokenHint(fenAfterReply, line, look.kind,
-                        /^[a-h][1-8]$/.test(look.square) ? [look.square] : [], winClaim, move.fen, undefined,
+                        /^[a-h][1-8]$/.test(look.square) ? [look.square] : [], winClaim, move.fen,
+                        // The punishing line the words play out, drawn ply by ply.
+                        !fundamental && look.punishLine ? lineArrowClaims(look.punishLine.fen, look.punishLine.uci, 'teach.punishLine') : undefined,
                         // The fundamental's own lines lead this sentence.
                         fundamental?.lines);
                       captureEvent('coach_backward_look', {
@@ -10387,7 +10389,6 @@ export function CoachTeachPage(): JSX.Element {
                   // any early exit and logged with the numbers behind it, so one
                   // real game says which of the two it is.
                   const declineReason = !cm ? 'no coach move captured (engine read failed)'
-                    : learnMemRef.current.lastReplyDictated !== null ? 'the student dictated this move'
                     : !mid ? 'no analysis of the pre-reply board'
                       : !samePosition(cm.fenAfter, fenAfterReply) ? 'board moved on before the verdict'
                         : null;
@@ -10450,6 +10451,8 @@ export function CoachTeachPage(): JSX.Element {
                       studentColor: coachColor,
                       ...mateContext(mid, { isMate: cm.afterIsMate, mateIn: cm.afterMateIn }, coachColor),
                       side: 'coach',
+                      // Dictated moves are spoken too (David 2026-09-30), of THEM.
+                      dictated: learnMemRef.current.lastReplyDictated !== null,
                     });
                     // ── THE CURATED CALLOUT ALREADY SAID THIS, BETTER ──────
                     //

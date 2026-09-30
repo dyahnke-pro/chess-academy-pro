@@ -9,6 +9,9 @@
 //
 // Pure: the engine reads are handed in by the page.
 import { Chess } from 'chess.js';
+import { lineWins, lineArrows } from './lineCalc';
+/** A line as board arrows, ply by ply (one door for the page). */
+export { lineArrows as lineArrowClaims };
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { recordLaneEvidence } from './capabilityEvidence';
 import type { AnalysisLine } from '../types';
@@ -124,6 +127,19 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
       // The right recapture chosen (no better one named) answers the
       // capture-toward-centre question — held (P4 dual-use).
       if (rc) out.push({ lane: 'recapture', text: rc, squares: [to], claims: [`recapture-${to}`], event: null, arrows: [], ...(bestRe ? {} : { evidence: { tag: 'capture-toward-centre' as const, posedImportance: 60 } }) });
+    }
+  } catch { /* a bonus, never a blocker */ }
+
+  // THE LINE BEHIND A WINNING MOVE (David 2026-09-30: "teach more line
+  // calculations"): the student played the engine's move and its line wins
+  // material — say it to where it lands, and draw it. One claim with the
+  // found-move line, so a critical moment says it once.
+  try {
+    const me = i.fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
+    const bare = (x: string): string => x.replace(/[+#]$/, '');
+    if (i.bestSan && bare(i.bestSan) === bare(i.san) && i.bestLine?.moves?.length) {
+      const w = winningLine(i.fenBefore, i.san, i.bestLine.moves, me);
+      if (w) out.push({ lane: 'movePoint', text: `That wins ${w.what}: ${w.sans.join(' ')}.`, squares: [to], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_winning_line', props: { surface: 'coach-teach' } }, arrows: w.arrows });
     }
   } catch { /* a bonus, never a blocker */ }
 
@@ -569,36 +585,15 @@ export function foundMoveTeaching(fenBefore: string, san: string, preLines: read
   const arrows: ArrowClaim[] = won ? won.arrows : [];
   // A real decision moment (only one or two moves held) answered is calculation
   // proven — importance 90, above the green bar, because the board posed it.
-  return { lane: 'foundMove', text, squares: [to], claims: [`found-${san}`], event: { name: 'coach_found_move_named', props: { surface: 'coach-teach' } }, arrows, evidence: { tag: 'calculation-depth', posedImportance: 90 } };
+  return { lane: 'foundMove', text, squares: [to], claims: [`found-${san}`, ...(won ? [`wins-line:${fenBefore.split(' ').slice(0, 2).join(' ')}`] : [])], event: { name: 'coach_found_move_named', props: { surface: 'coach-teach' } }, arrows, evidence: { tag: 'calculation-depth', posedImportance: 90 } };
 }
 
-const LINE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
-const WON_WORDS: Record<number, string> = { 1: 'a pawn', 2: 'two pawns', 3: 'a piece', 4: 'a piece and a pawn', 5: 'the exchange', 6: 'a rook and a pawn' };
-
 /** The engine line starting with the played move, when the student ends it up
- *  material — said to the last capture, where the exchanges are over. */
+ *  material — said to the last capture, drawn ply by ply (`lineCalc`). */
 export function winningLine(fen: string, san: string, lineUci: readonly string[], student: 'w' | 'b'): { what: string; sans: string[]; arrows: ArrowClaim[] } | null {
-  if (!lineUci.length) return null;
-  const c = new Chess(fen);
-  const sans: string[] = []; const arrows: ArrowClaim[] = [];
-  let net = 0; let lastCap = -1;
-  try {
-    for (let i = 0; i < lineUci.length; i += 1) {
-      const u = lineUci[i];
-      const before = c.fen();
-      const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
-      if (!m) break;
-      if (i === 0 && m.san.replace(/[+#]$/, '') !== san.replace(/[+#]$/, '')) return null;
-      if (m.captured) net += (m.color === student ? 1 : -1) * (LINE_VALUE[m.captured] ?? 0);
-      sans.push(`${m.color === 'b' ? '…' : ''}${m.san}`);
-      arrows.push({ from: m.from, to: m.to, role: m.color === student ? 'play' : 'theirs', fen: before, source: 'learn.foundMove.line' });
-      if (m.captured) lastCap = i;
-    }
-  } catch { return null; }
-  // Said to the LAST capture: the exchange is over there and what is left is
-  // what was won — never a peak the recaptures hand back.
-  if (net < 1 || lastCap < 1) return null;
-  return { what: WON_WORDS[net] ?? `${net} points of material`, sans: sans.slice(0, lastCap + 1), arrows: arrows.slice(0, lastCap + 1) };
+  const w = lineWins(fen, lineUci, student, san);
+  if (!w) return null;
+  return { what: w.what, sans: w.sans, arrows: w.plies.map((p) => ({ from: p.from, to: p.to, role: p.color === student ? 'play' : 'theirs', fen: p.fen, source: 'learn.foundMove.line' })) };
 }
 
 // ── PLAY ASKS THE SAME COMPUTERS (David 2026-09-30: "Play still needs access to

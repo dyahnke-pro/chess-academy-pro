@@ -52,6 +52,8 @@ export interface BackwardLook {
    *  speaks this instead, so the loss is said once and the rest — the cost,
    *  the better move — still speaks (re-walk 1380, 24.Bg5). */
   withoutAttempt?: { line: string; square: string };
+  /** The punishing line the words play out, from `fen` (`InaccuracyCall.line`). */
+  punishLine?: { fen: string; uci: string[] };
   /** The student piece the grade says was left to be taken (from
    *  `InaccuracyCall.lostSquare`). The live fundamental verdict names the same
    *  loss as "that left your rook on b2 hanging"; one of them speaks. */
@@ -127,6 +129,9 @@ export function backwardLook(args: {
    *  implementations of one question is how "inaccuracy" comes to mean one
    *  thing on one surface and something else on another. */
   side?: 'student' | 'coach';
+  /** The coach played it because the student dictated it: said of THEM
+   *  (the concession lane speaks in the first person, so it stands down). */
+  dictated?: boolean;
 }): BackwardLook | null {
   const side = args.side ?? 'student';
   const mover = args.studentColor;
@@ -153,7 +158,7 @@ export function backwardLook(args: {
   // `callInaccuracy` already hands that over without naming the punishment.
   if (side === 'coach') {
     lastCoachDecline = 'no-concession-and-no-call';
-    if (args.bestSan && !gained) {
+    if (args.bestSan && !gained && !args.dictated) {
       try {
         const c = findConcession({
           fen: args.fenBefore,
@@ -174,6 +179,7 @@ export function backwardLook(args: {
         missedMate: args.missedMate ?? null,
         allowedMate: args.allowedMate ?? null,
         side: 'coach',
+        ...(args.dictated ? { dictated: true } : {}),
         moverColor: mover,
         replyLineUci: args.replyPvUci ?? [],
         replySan: args.replySan ?? null,
@@ -350,7 +356,7 @@ export function backwardLook(args: {
         replyLineUci: args.replyPvUci ?? [],
         replySan: args.replySan ?? null,
       });
-      if (call) return { line: call.said, square: call.square, kind: 'mistake', ...(call.lostSquare ? { lostSquare: call.lostSquare } : {}), ...(call.namesBetter ? { namesBetter: call.namesBetter } : {}) };
+      if (call) return { line: call.said, square: call.square, kind: 'mistake', ...(call.lostSquare ? { lostSquare: call.lostSquare } : {}), ...(call.namesBetter ? { namesBetter: call.namesBetter } : {}), ...(call.line ? { punishLine: call.line } : {}) };
     } catch { /* fall through */ }
   }
 

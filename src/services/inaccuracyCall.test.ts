@@ -376,3 +376,16 @@ describe('clearly better after the move is a cleaner way, not a mistake', () => 
     expect(call?.said ?? '').toMatch(/^Bxc5 keeps you clearly on top/);
   });
 });
+
+describe('a dictated move is said of them, never owned by the coach (David 2026-09-30)', () => {
+  it('their Bb5 dropping e4 is "their mistake", not "from me"', () => {
+    // Accelerated Dragon: 1.e4 c5 2.Nf3 Nc6 3.d4 cxd4 4.Nxd4 g6 5.Be3 Bg7 6.c3 Nf6 — White to move; Bb5 drops e4.
+    const fen = 'r1bqk2r/pp1pppbp/2n2np1/8/3NP3/2P1B3/PP3PPP/RN1QKB1R w KQkq - 1 7';
+    const call = callInaccuracy({
+      fenBefore: fen, playedSan: 'Bb5', bestSan: 'Nd2', cpLoss: 160,
+      side: 'coach', dictated: true, moverColor: 'white', replyLineUci: [], replySan: null,
+    });
+    expect(call?.said ?? '').toMatch(/^Their Bb5 is a mistake/);
+    expect(call?.said ?? '').not.toMatch(/from me|\bmy\b|\bI\b/);
+  });
+});
