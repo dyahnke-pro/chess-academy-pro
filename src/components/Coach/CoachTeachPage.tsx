@@ -26,9 +26,11 @@ import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { transferClause, recordMotif, withTransfer } from '../../services/motifLedger';
+import { mastersPlanLine, mastersPlanRead } from '../../services/mastersPlanRead';
+import { criticalMomentFound, readCriticalMoment } from '../../services/criticalMoment';
+import { ensureMastersDbLoaded, mastersMovesSync } from '../../services/masterPlayLookup';
 import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/learnTurnDoor';
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
-import { curatedBeatAt } from '../../services/curatedBeatSource';
 import { DEFAULT_INTENT, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { studentMoveTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
@@ -8226,32 +8228,28 @@ export function CoachTeachPage(): JSX.Element {
     // package exists ("Order is a declared rank, not the accident of a `??`
     // chain"). Computing a fact and letting the package decide is the contract;
     // deciding here by not computing it is the same `??` chain wearing an `if`.
-    // ── THE CURATED BEAT — the masterclass speaking on this exact position ──
-    // 1,659 hand-authored beats across 361 lessons, and the live game could not
-    // see one of them (David 2026-08-08: "Don't we have coverage on the copycat
-    // lines? … Don't we pull narrations from there if corpus is empty?"). We
-    // did not. Walking the Copycat, the coach was silent on the very ply where
-    // `viennaVariations` teaches "White shatters the symmetry with Qg4!".
-    //
-    // Ranked ABOVE the corpus deliberately: a beat is verified BEFORE it ships
-    // (narrationAccuracy, lessonIntegrity, wlppNarration, lessonSources), which
-    // is the standard a farmed note only reaches once baked.
-    let curatedLine: string | null = null;
+    // The hand-written masterclass beat no longer speaks on a live board
+    // (David 2026-09-30: "I do not want to rely on the hand written notes. I
+    // want to accomplish the ideas via computer."). The opening's plan comes
+    // from `mastersPlanRead` below; what a move is for, from `moveIntent`.
+
+    // ── THE OPENING'S PLAN, COMPUTED FROM MASTER GAMES (WO-TEACH-GAPS P2 #0,
+    // David 2026-09-30: "accomplish the ideas via computer") ──
+    // Once per game: the pawn break each side's master games actually go for
+    // from this board, with its share. Counted off the masters database — no
+    // hand-written note decides it.
+    let openingIdeaLine: { text: string; squares: string[] } | null = null;
     try {
-      // The hand-written masterclass beat. Free play carries no corpus notes
-      // (2026-09-23), so this is the only authored teaching on a live Learn ply.
-      // The seat comes from ARGS, never `playerColor`: this callback's deps are
-      // the ratings only, so the state it closed over is the first render's
-      // 'white' — a Black student heard the White lesson ("Black snatches your
-      // e-pawn") on prod, 2026-09-24, with the seat guard below working as built.
-      const beat = curatedBeatAt(history, args.fenAfterReply, learnMemRef.current.curatedBeatSeen, learnMemRef.current.detectedOpeningName, args.studentColor, 'live', learnMemRef.current.curatedBeatSubjects);
-      if (beat) {
-        learnMemRef.current.curatedBeatSeen.add(beat.id);
-        if (beat.subject) learnMemRef.current.curatedBeatSubjects.add(beat.subject);
-        curatedLine = beat.text;
-        teachingTierRef.current = 'curated';
+      void ensureMastersDbLoaded();
+      if (!learnMemRef.current.structureSaid.has('masters-plan') && history.length >= 6) {
+        const seat: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
+        const plan = mastersPlanLine(mastersPlanRead(args.fenAfterReply, mastersMovesSync), seat);
+        if (plan) {
+          learnMemRef.current.structureSaid.add('masters-plan');
+          openingIdeaLine = { text: plan.text, squares: plan.squares };
+        }
       }
-    } catch { /* curated teaching is a bonus, never a blocker */ }
+    } catch { /* the masters plan is a bonus, never a blocker */ }
 
 
     // The POSITIONAL READ stays a true last resort — king safety, development,
@@ -8323,7 +8321,7 @@ export function CoachTeachPage(): JSX.Element {
     // fired (which is most plies). The SOFT positional reads still only fill a
     // genuinely quiet turn, so a plan + a soft observation never double up.
     const BEHAVIOR_ALWAYS_RIDE = new Set(['prophylaxis', 'pressure', 'x-ray', 'passed-pawn', 'knight-maneuver', 'weak-square', 'outpost']);
-    const quietTurn = !computedLine && !curatedLine;
+    const quietTurn = !computedLine;
     // STANDING READS WAIT OUT AN EXCHANGE (hand walk 2340): mid-exchange the
     // board is about to change, so "doubled", "no bishop of that colour", "weak
     // back rank" describe a position that will not exist next move.
@@ -8382,9 +8380,8 @@ export function CoachTeachPage(): JSX.Element {
       // teaching phrases"). No longer gated behind `quietTurn` — it is offered on
       // every turn that isn't already an urgent tactical moment, and the machinery
       // downstream decides whether it is HEARD: it is rank-0, so a note/behaviour
-      // leads; the per-game novelty set drops it if it repeats a phrase;
-      // `softStandDown` yields it entirely behind a corpus note (his "no aside
-      // behind a note"), and the contested gate silences it in a decided game.
+      // leads; the per-game novelty set drops it if it repeats a phrase, and
+      // the contested gate silences it in a decided game.
       // `buildPositionalRead` descends its (now widened) ranked list past what it
       // has already offered, so a fresh, different observation — drawn from the
       // full board-awareness pool — surfaces each turn instead of repeating.
@@ -8421,43 +8418,11 @@ export function CoachTeachPage(): JSX.Element {
       } catch { /* never a blocker */ }
     }
 
-    // ── THE BOARD WALKS ANY LINE THE TEACHING RECITES ─────────────────────
-    //
-    // David 2026-08-15: "arrows are needed to illustrate the move order so
-    // beginners and intermediates do not get lost in the wording."
-    //
-    // The bake no longer refuses a note for reciting a sequence, so a note may
-    // now say "after d4 e5 dxe5 Nc6 Nf3…" — four plies a student would otherwise
-    // hold in their head from audio alone. Replayed from the board the note is
-    // anchored at, they become arrows to watch instead.
-    //
-    // Applied to whichever teaching lane actually produced a line: the deficit
-    // belongs to the PROSE, not to the tier it came from. Student moves green,
-    // the opponent's blue, so whose move is whose needs no narration.
-    try {
-      const recited = curatedLine;
-      if (recited) {
-        leadEyeArrows.push(...admitArrows(
-          moveOrderArrows(recited, args.fenAfterReply).map((a): ArrowClaim => ({ from: a.from, to: a.to, role: 'line', fen: a.fenBefore, source: 'teach.moveOrder' })),
-          { fen: args.fenAfterReply, studentColor: studentCC === 'w' ? 'white' : 'black' },
-        ).arrows);
-      }
-    } catch { /* the walk is a bonus, never a blocker */ }
-
     // THE PACKAGE. Priority is a declared rank in `voicePackage`, not a `??`
     // chain here, and every entry is verified against the board it was computed
     // from before it may be spoken. What comes back is one object that is both
     // the utterance and the log — the divergence between those two is what let
     // three foreign notes reach David as "the pin on the board".
-    // NOTE-PRIMARY (David 2026-08-23: "if I'm hearing a note I shouldn't be
-    // hearing the computed narrations"). When a farmed corpus note teaches this
-    // ply — his DNA voice — the SOFT computed teaching stands down inside the
-    // instant package too: the generic computed observation, the rate-matched
-    // behaviour and the positional filler. The URGENT interrupts (gem / tactic /
-    // threat) and the opening naming still ride — those are the ~10% the corpus
-    // doctrine keeps alongside the note, not the wordy lanes he flagged.
-    const noteHere = !!curatedLine;
-    const softStandDown = noteHere;
     // DESCRIPTIONS WAIT FOR THE TURN'S ONE DECISION (WO-1b). The board reads
     // (commentary, behaviour, positional, king safety) used to speak in this
     // instant wave simply because they are cheap — and whatever speaks first
@@ -8478,9 +8443,9 @@ export function CoachTeachPage(): JSX.Element {
           : [];
       } catch { return []; }
     })();
-    deferIf(computedLine && !softStandDown, 'commentary', computedLine, undefined, undefined, computedLineArrows);
-    deferIf(behaviorLine && !softStandDown && !decidedByMaterial, 'behavior', behaviorLine, behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)), behaviorClaims, behaviorArrows);
-    deferIf(positionalLine && !softStandDown && !decidedByMaterial, positionalIsOwnKing ? 'kingSafety' : 'positional', positionalLine, positionalSquares, positionalClaims);
+    deferIf(computedLine, 'commentary', computedLine, undefined, undefined, computedLineArrows);
+    deferIf(behaviorLine && !decidedByMaterial, 'behavior', behaviorLine, behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)), behaviorClaims, behaviorArrows);
+    deferIf(positionalLine && !decidedByMaterial, positionalIsOwnKing ? 'kingSafety' : 'positional', positionalLine, positionalSquares, positionalClaims);
     const instantDecision = decideTurn([
       ...(gemLine ? [{ lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply }] : []),
       ...(tacticLine ? [{ lane: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, claims: tacticClaim ? [tacticClaim] : undefined }] : []),
@@ -8494,7 +8459,7 @@ export function CoachTeachPage(): JSX.Element {
       // and in a decided game (the contested gate).
       // The hand-written masterclass beat, verified before it shipped
       // (narrationAccuracy, lessonIntegrity). No corpus note rides free play.
-      ...(curatedLine ? [{ lane: 'curated' as const, text: curatedLine, fen: args.fenAfterReply }] : []),
+      ...(openingIdeaLine ? [{ lane: 'openingIdea' as const, text: openingIdeaLine.text, fen: args.fenAfterReply, squares: openingIdeaLine.squares }] : []),
       // Corpus teaching reached by structure/concept transfer — BORROWED, and
       // now ranked as such. It used to ship at the same `note` rank as the
       // exact-position tier on the grounds that both are the corpus speaking.
@@ -10068,6 +10033,18 @@ export function CoachTeachPage(): JSX.Element {
                           return `${move.san} was a gambit — they took the ${what}, and the engine rates the trade of it for time as sound.`;
                         } catch { return null; }
                       })();
+                      // THE VERDICT ON A FOUND MOVE (WO-TEACH-GAPS P2 #2): at a real
+                      // decision moment on the board BEFORE the move, the student
+                      // played one of the only moves that held — say so, with why
+                      // the others failed. The fact is the verdict; no praise word.
+                      try {
+                        const pre = preStudentRead?.topLines;
+                        if (pre && pre.length >= 2) {
+                          const read = readCriticalMoment({ topLines: pre, moverColor: playerColor === 'white' ? 'w' : 'b', fen: fenBefore });
+                          const found = criticalMomentFound(read, move.san);
+                          if (found) queueSpokenHint(fenAfterReply, found, 'foundMove', [move.to], undefined, fenBefore);
+                        }
+                      } catch { /* the verdict is a bonus, never a blocker */ }
                       if (gambitLine) queueSpokenHint(fenAfterReply, gambitLine, 'movePoint', []);
                       const point = gambitLine ? null : studentMovePoint(fenBefore, move.san, move.history.length >= 2 ? move.history[move.history.length - 2] : null);
                       // SPOKEN ON THE BOARD AFTER THEIR REPLY, SO TRUE THERE

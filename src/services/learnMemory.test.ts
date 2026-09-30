@@ -102,14 +102,14 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
     const mem = createLearnMemory();
     mem.spokenOpeningName = 'Scandinavian Defense: Lasker Variation';
     mem.detectedOpeningName = 'Scandinavian Defense: Lasker Variation';
-    mem.curatedBeatSeen.add('beat-1');
+    mem.structureSaid.add('masters-plan');
     expect(mem.observe(14), 'a game in progress must not forget').toBe(false);
     expect(mem.observe(16)).toBe(false);
     // A NEW game: the board is back near the start.
     expect(mem.observe(1), 'fewer plies than before = a new or rewound game').toBe(true);
     expect(mem.spokenOpeningName).toBeNull();
     expect(mem.detectedOpeningName).toBeNull();
-    expect(mem.curatedBeatSeen.size).toBe(0);
+    expect(mem.structureSaid.size).toBe(0);
   });
 
   // ── R1 OF THE ARC: QUEUEING IS NOT SAYING (2026-09-18) ──────────────────

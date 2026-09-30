@@ -348,3 +348,19 @@ export function criticalMomentHeld(read: CriticalMomentRead | null, playedSan: s
   if (!criticalMomentSpeaks(read) || !playedSan) return false;
   return read.holdingSans.includes(playedSan);
 }
+
+/**
+ * THE VERDICT ON A FOUND MOVE (WO-TEACH-GAPS P2 #2 — his most frequent verdict
+ * is on a GOOD move, and after one we said nothing). Live register: the
+ * student just played one of the moves that held at a real decision moment.
+ * No praise word — the fact is the verdict: how few moves held, that this was
+ * one, and why the tempting others failed (each proved by its own line).
+ */
+export function criticalMomentFound(read: CriticalMomentRead | null, playedSan: string | null): string | null {
+  if (!criticalMomentHeld(read, playedSan) || !read) return null;
+  const stake = stakeText(read.stake as StakeId, { plural: false, past: true });
+  const fails = (read.discardedProofs ?? []).map((d) => ` ${d.san} didn't work: ${d.text}.`).join('');
+  return read.count === 1
+    ? `${playedSan} was the only move that ${stake} here.${fails}`
+    : `${playedSan} was one of just two moves that ${stake} here.${fails}`;
+}

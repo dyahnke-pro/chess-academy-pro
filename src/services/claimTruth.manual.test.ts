@@ -120,3 +120,24 @@ describe('Bc2 in ktoa6lk6qNk: the blow is g4 and it wins a piece (items 189, 190
     expect(p?.theirs?.text).toMatch(/win a piece for a pawn/);
   });
 });
+
+describe('the verdict on a found move (P2 #2)', () => {
+  it('names the move as the only one that held, with no praise word', async () => {
+    const { readCriticalMoment, criticalMomentFound } = await import('./criticalMoment');
+    // White to move; Qxf7 mates-in-spirit (+900), everything else is level.
+    const fen = 'r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 4 4';
+    const read = readCriticalMoment({
+      topLines: [
+        { rank: 1, evaluation: 900, moves: ['h5f7'] },
+        { rank: 2, evaluation: 10, moves: ['h5e2'] },
+        { rank: 3, evaluation: 0, moves: ['h5f3'] },
+      ],
+      moverColor: 'w', fen,
+    });
+    const line = criticalMomentFound(read, 'Qxf7#');
+    expect(line).toMatch(/^Qxf7# was the only move that kept the win here\./);
+    expect(line ?? '').not.toMatch(/great|nice|excellent|well done|correct/i);
+    // Not found → nothing.
+    expect(criticalMomentFound(read, 'Qe2')).toBeNull();
+  });
+});

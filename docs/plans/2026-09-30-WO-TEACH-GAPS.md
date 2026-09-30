@@ -66,11 +66,11 @@ Loop until **≥97% of ALL checkable claims**, not just the auto-checked ones.
 
 | # | build | why now |
 |---|---|---|
-| 1.1 | **ACC-1: extract Learn's narration builder from `CoachTeachPage`** into a service | the checker must run exactly what is spoken; today the page (9k lines) is the only place it exists |
+| ~~1.1~~ | ~~ACC-1: extract Learn's narration builder~~ — **DROPPED 2026-09-30** | the move handler is ~3,000 lines of a 14,450-line page; the tape harness already records exactly what the real page speaks, so the extraction buys no measurement and carries large regression risk |
 | 1.2 | **T1: every speaking lane through `coachDecider`** (one door) | lanes still bypass the ranker; a new lane would add another bypass |
 | 1.3 | **Shared claim keys across lanes** (#49) | the same fact from 3 lanes on one ply ("open file" ×3) |
 | 1.4 | **One thread per move** (#23): lead + one support, ~30 words | what Danya does; we still stack 3–5 lines |
-| 1.5 | **`facts[]` audit-only list** — cut (G8.5) | computed and dropped |
+| ✅ 1.5 | **`facts[]` audit-only list** — already gone (nothing pushes to it; the OUTLINE line was stale) | — |
 | 1.6 | **Board tag on every emission** (feeds 0.2) | truth checking needs it |
 
 ---
@@ -83,7 +83,7 @@ into the heat map) or it is not done.
 
 | rank | gap | his moments / ours | computer (exists?) | what to build |
 |---|---|---|---|---|
-| 0 | **The opening's key idea, computed** (replaces hand-written beats) | 15% of all he says (census) | `namedPawnStructure`, `openingIdeasNarrator`, explorer, `deriveNextPlans` | structure → plan → break, from the board + DB; the book move's purpose via `moveIntent`; runs before the curated feed is cut |
+| ✅ 0 | **The opening's key idea, computed** (replaces hand-written beats) | 15% of all he says (census) | NEW `mastersPlanRead` | Walks the masters DB (his-games DB as fallback) weighted by games; names the pawn break each side goes for with its share, recaptures and captures-in-hand excluded, ≥40% floor. Lane `openingIdea`, say-once per game. Measured on 33 walked games: fires in 7, every line a real plan. The hand-written feed (`curatedBeatAt`, 33 beats in 18 games, visibly poor: "sourced from the Gordima-distilled…") is REMOVED from Learn with its orphaned module, boot warm and tests (G8.5). What it covered is now said by computed lanes: opening name, `moveIntent`, `namedPawnStructure`, `mastersPlanRead`. |
 | 1 | **The plan, said as a plan** | 37 / 0 | `planArc`, `deriveNextPlans`, `planRace` exist | speak the plan at phase changes and after the opening leaves book: "the plan here is X, then Y"; carry it across moves (one thread) |
 | 2 | **Verdict on GOOD moves** | 38 / 1 | `moveReason`, `nextMoveAdvice` | a good student move earns one line naming WHY it is good when it was a decision moment (importance tier ≥ critical) — silence after a good move teaches nothing |
 | 3 | **Playing a line out loud** | 20 / 0 | `computePvLine`, `dnaLineNarrator` | "if X, then Y, then Z" — 2–4 plies from the PV at decision moments, with the arrows drawn (arrow door) |

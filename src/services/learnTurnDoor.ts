@@ -36,7 +36,7 @@ export type LearnLane =
   | 'threat'
   | 'commentary'
   | 'behavior'
-  | 'curated'
+  | 'openingIdea'
   | 'positional'
   // ── the late wave, spoken when the engine read settles ──
   | 'opening'
@@ -53,6 +53,7 @@ export type LearnLane =
   | 'coachMistake'
   | 'fundamental'
   | 'movePoint'
+  | 'foundMove'
   | 'moveIntent'
   | 'moveOrder'
   | 'theirMoveCost'
@@ -95,7 +96,9 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   threat: { kind: 'threat', why: 'danger to the student on this board', lead: 95, always: true },
   commentary: { kind: 'computed', why: 'the computed board read (playCommentary)', lead: 30 },
   behavior: { kind: 'observation', why: 'a Danya behaviour, rate-matched to his corpus', lead: 25 },
-  curated: { kind: 'note', why: 'a masterclass beat authored for this position', lead: 58 },
+  // The opening's plan counted off master games (P2 #0): the break each side
+  // actually goes for, with its share. Computed, never authored.
+  openingIdea: { kind: 'computed', why: 'the pawn break master games from here go for, with its share', lead: 61 },
   positional: { kind: 'observation', why: 'the positional read', lead: 25 },
   opening: { kind: 'opening', why: 'the opening named once, when it settles', lead: 45, always: true },
   structure: { kind: 'computed', why: 'the named pawn structure and its plan', lead: 40 },
@@ -118,6 +121,9 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   coachMistake: { kind: 'coachMistake', why: 'the coach owning its own inaccuracy', lead: 84 },
   fundamental: { kind: 'drawback', why: 'the fundamental the move broke', lead: 82 },
   movePoint: { kind: 'computed', why: 'the point of the student’s clean move', lead: 62 },
+  // The verdict on a GOOD move at a decision moment (P2 #2): the student found
+  // one of the only moves that held, and why the others failed.
+  foundMove: { kind: 'computed', why: 'the student found one of the only moves that held — and why the rest failed', lead: 79 },
   // What a quiet move is FOR — the reply it took away or the move it made
   // possible, both engine-proven (moveIntent). His most frequent point on a
   // clean move, and the one a board description never says.

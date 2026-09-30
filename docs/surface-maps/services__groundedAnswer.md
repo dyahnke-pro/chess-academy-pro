@@ -205,8 +205,8 @@
 - `src/services/groundedAnswer.test.ts:1003`
 - `src/services/groundedAnswer.test.ts:1018`
 - `src/services/groundedAnswer.test.ts:1032`
-- `src/services/liveVoiceDefects.test.ts:101`
-- `src/services/liveVoiceDefects.test.ts:142`
+- `src/services/liveVoiceDefects.test.ts:100`
+- `src/services/liveVoiceDefects.test.ts:141`
 - `src/services/tacticsContextIdentity.test.ts:106`
 - `src/test/everySurfaceSpeaks.test.ts:127`
 
@@ -473,8 +473,8 @@
 - `src/services/groundedAnswer.test.ts:106`
 - `src/services/groundedAnswer.test.ts:113`
 - `src/services/groundedAnswer.test.ts:1581`
-- `src/services/liveVoiceDefects.test.ts:113`
-- `src/services/liveVoiceDefects.test.ts:121`
+- `src/services/liveVoiceDefects.test.ts:112`
+- `src/services/liveVoiceDefects.test.ts:120`
 - `src/services/tacticsContextIdentity.test.ts:71`
 - `src/services/tacticsContextIdentity.test.ts:103`
 - `src/services/tacticsContextIdentity.test.ts:105`
@@ -1108,7 +1108,7 @@
 - `src/services/coachApi.ts:5810`
 
 ### `seatPieceReferences` (re-export) — 26 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7825`
+- `src/components/Coach/CoachTeachPage.tsx:7827`
 - `src/services/coachFeatureService.ts:4803`
 - `src/services/liveTacticsContext.ts:453`
 - `src/services/lookaheadPlan.ts:116`

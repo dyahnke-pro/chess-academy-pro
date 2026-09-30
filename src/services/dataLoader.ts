@@ -9,7 +9,6 @@ import gambitData from '../data/gambits.json';
 import antiOpeningsData from '../data/anti-openings.json';
 import modelGamesData from '../data/model-games.json';
 import { loadProGameReferenceData } from './proGameReferenceData';
-import { warmCuratedBeatIndex } from './curatedBeatSource';
 import middlegamePlansData from '../data/middlegame-plans.json';
 // Separate-lane gambit-tab plans (David 2026-05-27): own file so the masterclass
 // lane never touches them; merged into the shared plan store here at load time,
@@ -1033,18 +1032,6 @@ export function seedDatabase(): Promise<void> {
   // the coach now pays nothing, and the transposition index warms per-corpus as
   // each one lands (the `onFarmedCorpusLoaded` listener in secondaryCorpora).
   //
-  // The curated masterclass beat index replays the PRIMARY, bundled corpus — no
-  // fetch, pure CPU — so it stays warmed, but on IDLE rather than on the boot
-  // critical path. A lesson that beats it self-heals (the index is read-only and
-  // finishes on lookup). Guarded for non-browser (test/SSR) envs.
-  {
-    const warmBeats = (): void => {
-      void warmCuratedBeatIndex().catch(() => { /* curated teaching is a bonus, never a blocker */ });
-    };
-    const ric = (globalThis as { requestIdleCallback?: (cb: () => void) => void }).requestIdleCallback;
-    if (typeof ric === 'function') ric(warmBeats);
-    else if (typeof setTimeout === 'function') setTimeout(warmBeats, 2000);
-  }
   // Reuse the in-flight promise so concurrent callers share one run.
   // Resolves after the CRITICAL seed (repertoire) — the heavy ECO/pro/
   // gambit/model-game backfill continues detached. Callers that need

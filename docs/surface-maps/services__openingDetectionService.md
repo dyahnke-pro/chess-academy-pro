@@ -81,11 +81,11 @@
 - `src/components/Coach/CoachGamePage.tsx:1801`
 - `src/components/Coach/CoachGamePage.tsx:3312`
 - `src/components/Coach/CoachGamePage.tsx:3400`
-- `src/components/Coach/CoachTeachPage.tsx:8018`
+- `src/components/Coach/CoachTeachPage.tsx:8020`
 - `src/hooks/usePhaseNarration.ts:461`
 - `src/services/coachFeatureService.ts:2391`
 - `src/services/coachFeatureService.ts:2812`
-- `src/services/computedVoiceAudit.report.test.ts:302`
+- `src/services/computedVoiceAudit.report.test.ts:300`
 - `src/services/oneOpeningKey.test.ts:43`
 - `src/services/openingDetectionService.test.ts:12`
 - `src/services/openingDetectionService.test.ts:16`
@@ -128,8 +128,8 @@
 
 ### `resolveOpeningEntry` (function) — 58 call sites
 - `src/components/Coach/CoachGamePage.tsx:1097`
-- `src/components/Coach/CoachTeachPage.tsx:4708`
-- `src/components/Coach/CoachTeachPage.tsx:5377`
+- `src/components/Coach/CoachTeachPage.tsx:4710`
+- `src/components/Coach/CoachTeachPage.tsx:5379`
 - `src/data/voicedWalkthroughs.test.ts:100`
 - `src/data/voicedWalkthroughs.ts:160`
 - `src/services/openingDbGrounding.ts:231`
@@ -194,13 +194,13 @@
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:71`
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:113`
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:127`
-- `src/components/Coach/CoachTeachPage.tsx:699`
-- `src/components/Coach/CoachTeachPage.tsx:704`
+- `src/components/Coach/CoachTeachPage.tsx:701`
+- `src/components/Coach/CoachTeachPage.tsx:706`
 - `src/services/openingDbGrounding.ts:222`
 - `src/services/openingSublines.ts:100`
 
 ### `isBookLine` (function) — 13 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8764`
+- `src/components/Coach/CoachTeachPage.tsx:8729`
 - `src/services/bookDeparture.ts:66`
 - `src/services/gameAnalysisService.ts:1289`
 - `src/services/gameAnalysisService.ts:1554`
@@ -225,8 +225,8 @@
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:74`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:37`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:43`
-- `src/components/Coach/CoachTeachPage.tsx:5652`
-- `src/components/Coach/CoachTeachPage.tsx:7292`
+- `src/components/Coach/CoachTeachPage.tsx:5654`
+- `src/components/Coach/CoachTeachPage.tsx:7294`
 - `src/services/coachLaneWiring.test.ts:348`
 - `src/services/inGameChatIntent.ts:163`
 - `src/services/inGameChatIntent.ts:174`
@@ -266,7 +266,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `findSiblingExtensionBranches` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:641`
+- `src/components/Coach/CoachTeachPage.tsx:643`
 - `src/services/openingDetectionService.test.ts:595`
 - `src/services/openingDetectionService.test.ts:609`
 - `src/services/openingDetectionService.test.ts:639`
@@ -294,8 +294,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolveCuratedVariation` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:5011`
-- `src/components/Coach/CoachTeachPage.tsx:5660`
+- `src/components/Coach/CoachTeachPage.tsx:5013`
+- `src/components/Coach/CoachTeachPage.tsx:5662`
 - `src/services/openingDetectionService.test.ts:561`
 - `src/services/openingDetectionService.test.ts:567`
 - `src/services/openingDetectionService.test.ts:571`
@@ -310,8 +310,8 @@
 ### `findLinePickerOptions` (function) — 18 call sites
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:115`
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:129`
-- `src/components/Coach/CoachTeachPage.tsx:5272`
-- `src/components/Coach/CoachTeachPage.tsx:5524`
+- `src/components/Coach/CoachTeachPage.tsx:5274`
+- `src/components/Coach/CoachTeachPage.tsx:5526`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:30`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:43`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:47`
@@ -344,16 +344,16 @@
 - `src/services/openingDetectionService.test.ts:7`
 
 ### `inferStudentSideFromName` (function) — 19 call sites
-- `src/components/Coach/CoachTeachPage.tsx:1013`
-- `src/components/Coach/CoachTeachPage.tsx:2125`
-- `src/components/Coach/CoachTeachPage.tsx:5035`
-- `src/components/Coach/CoachTeachPage.tsx:5036`
-- `src/components/Coach/CoachTeachPage.tsx:5250`
-- `src/components/Coach/CoachTeachPage.tsx:5325`
-- `src/components/Coach/CoachTeachPage.tsx:5332`
-- `src/components/Coach/CoachTeachPage.tsx:5344`
-- `src/components/Coach/CoachTeachPage.tsx:5380`
-- `src/components/Coach/CoachTeachPage.tsx:6492`
+- `src/components/Coach/CoachTeachPage.tsx:1015`
+- `src/components/Coach/CoachTeachPage.tsx:2127`
+- `src/components/Coach/CoachTeachPage.tsx:5037`
+- `src/components/Coach/CoachTeachPage.tsx:5038`
+- `src/components/Coach/CoachTeachPage.tsx:5252`
+- `src/components/Coach/CoachTeachPage.tsx:5327`
+- `src/components/Coach/CoachTeachPage.tsx:5334`
+- `src/components/Coach/CoachTeachPage.tsx:5346`
+- `src/components/Coach/CoachTeachPage.tsx:5382`
+- `src/components/Coach/CoachTeachPage.tsx:6494`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:91`
 - `src/data/voicedWalkthroughs.test.ts:6`
 - `src/services/openingGenerator.ts:1905`
@@ -365,9 +365,9 @@
 - `src/services/punishStageSeat.test.ts:87`
 
 ### `studentSideForPlay` (function) — 13 call sites
-- `src/components/Coach/CoachTeachPage.tsx:5249`
-- `src/components/Coach/CoachTeachPage.tsx:12319`
-- `src/components/Coach/CoachTeachPage.tsx:12369`
+- `src/components/Coach/CoachTeachPage.tsx:5251`
+- `src/components/Coach/CoachTeachPage.tsx:12296`
+- `src/components/Coach/CoachTeachPage.tsx:12346`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:59`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:60`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:64`
