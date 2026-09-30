@@ -31,11 +31,7 @@ import { buildPositionalRead, rookReachesFile } from '../../services/positionalR
 import { curatedBeatAt } from '../../services/curatedBeatSource';
 import { DEFAULT_INTENT, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { theirMoveCost } from '../../services/theirMoveCost';
-import { recaptureChoice } from '../../services/recaptureChoice';
-import { kingAttack } from '../../services/kingAttack';
-import { ruleException } from '../../services/ruleException';
-import { falseAlarm } from '../../services/falseAlarm';
+import { studentMoveTeaching, theirMoveTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -9731,59 +9727,15 @@ export function CoachTeachPage(): JSX.Element {
                       ? (preStudentRead.evaluation * sign) - (mid.evaluation * sign)
                       : 0;
                     const studentBestSan = uciSanAt(fenBefore, preStudentRead.bestMove);
-                    // WHICH PIECE TAKES BACK, AND WHY (census #8). Every recapture
-                    // with a second option — the better one named only when the
-                    // played one cost >= 50cp against it (a near-tie is taste).
-                    try {
-                      const theirLast = move.history.length >= 2 ? move.history[move.history.length - 2] : null;
-                      const tookOn = theirLast ? /x([a-h][1-8])/.exec(theirLast)?.[1] ?? null : null;
-                      if (tookOn && move.to === tookOn && move.san.includes('x')) {
-                        const bestRe = studentBestSan && new RegExp(`x${tookOn}`).test(studentBestSan) && cpLoss >= 50 ? studentBestSan : null;
-                        const rc = recaptureChoice(fenBefore, move.san, bestRe, reply ?? null);
-                        if (rc) queueSpokenHint(fenAfterReply, rc, 'recapture', [move.to], [`recapture-${move.to}`]);
-                      }
-                    } catch { /* a bonus, never a blocker */ }
-                    // BRINGING PIECES TO THEIR KING (census #2). Board-only; not on
-                    // a move that cost a pawn — that move's lesson is the cost.
-                    if (cpLoss < 100) {
-                      const ka = kingAttack(fenBefore, move.san);
-                      if (ka) {
-                        queueSpokenHint(fenAfterReply, ka.text, 'kingAttack', ka.squares, [
-                          `king-attack-${ka.kind}`,
-                          // "Qe1 heads for their king — Qg3 next" and "Qe1 prepares
-                          // Qg3" are one idea.
-                          ...(ka.next ? [`prepares:${ka.next.uci}`] : []),
-                        ]);
-                        captureEvent('coach_king_attack_named', { surface: 'coach-teach', kind: ka.kind });
-                      }
-                    }
-                    // A RULE AND ITS EXCEPTION (census #10) — only on a move the
-                    // engine agrees with, so the exception is proven, not excused.
-                    if (bothCp && cpLoss <= 20) {
-                      const rx = ruleException(fenBefore, move.san, move.history.slice(0, -1));
-                      if (rx) {
-                        queueSpokenHint(fenAfterReply, rx.text, 'ruleException', rx.squares, [`rule-${rx.rule}-${move.to}`]);
-                        captureEvent('coach_rule_exception_named', { surface: 'coach-teach', rule: rx.rule });
-                      }
-                    }
-                    // DON'T PANIC (census #7): their last move made a real threat, the
-                    // engine's move ignored it, and the student played exactly
-                    // that move. The board before their move is replayed from the
-                    // game and must lead to this board, or nothing is said.
-                    if (bothCp && cpLoss <= 20 && studentBestSan === move.san && move.history.length >= 2) {
-                      try {
-                        const g = new Chess();
-                        for (const s of move.history.slice(0, -2)) g.move(s);
-                        const beforeTheirs = g.fen();
-                        g.move(move.history[move.history.length - 2]);
-                        if (g.fen().split(' ')[0] === fenBefore.split(' ')[0]) {
-                          const fa = falseAlarm(beforeTheirs, fenBefore, preStudentRead.topLines?.[0], reply ?? null);
-                          if (fa) {
-                            queueSpokenHint(fenAfterReply, fa.text, 'falseAlarm', fa.squares, [`false-alarm-${fa.threat.landing}`]);
-                            captureEvent('coach_false_alarm_named', { surface: 'coach-teach', kind: fa.threat.kind });
-                          }
-                        }
-                      } catch { /* a bonus, never a blocker */ }
+                    // THE BOARD-LEVEL TEACHING of the student's move — recapture
+                    // choice, king attack, rule→exception, don't panic — composed
+                    // once in `learnBoardTeaching`; the door ranks them.
+                    for (const h of studentMoveTeaching({
+                      fenBefore, san: move.san, history: move.history, cpLoss, bothCp,
+                      bestSan: studentBestSan, bestLine: preStudentRead.topLines?.[0], reply: reply ?? null,
+                    })) {
+                      queueSpokenHint(fenAfterReply, h.text, h.lane, h.squares, h.claims);
+                      if (h.event) captureEvent(h.event.name, h.event.props);
                     }
                     const look = backwardLook({
                       fenBefore,
@@ -10038,10 +9990,10 @@ export function CoachTeachPage(): JSX.Element {
                         .find((m) => { const c = new Chess(move.fen); c.move(m.san); return c.fen().split(' ')[0] === fenAfterReply.split(' ')[0]; })?.san ?? null;
                     } catch { return null; }
                   })();
-                  const cost = replySan ? theirMoveCost(move.fen, replySan, playerColor === 'white' ? 'w' : 'b') : null;
+                  const cost = replySan ? theirMoveTeaching(move.fen, replySan, playerColor === 'white' ? 'w' : 'b') : null;
                   if (cost) {
-                    queueSpokenHint(fenAfterReply, cost.text, 'theirMoveCost', cost.squares, [`cost-${cost.kind}-${cost.squares[0]}`]);
-                    captureEvent('coach_their_move_cost_named', { surface: 'coach-teach', kind: cost.kind });
+                    queueSpokenHint(fenAfterReply, cost.text, cost.lane, cost.squares, cost.claims);
+                    if (cost.event) captureEvent(cost.event.name, cost.event.props);
                   }
                 } catch { /* a bonus, never a blocker */ }
 

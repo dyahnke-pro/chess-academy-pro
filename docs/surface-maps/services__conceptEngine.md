@@ -142,14 +142,14 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `definitionKey` (function) — 5 call sites
+- `src/components/Coach/CoachTeachPage.tsx:7679`
 - `src/components/Coach/CoachTeachPage.tsx:7683`
-- `src/components/Coach/CoachTeachPage.tsx:7687`
 - `src/services/learnWalkBlumenfeld.test.ts:131`
 - `src/services/positionFacts.ts:1027`
 - `src/services/positionFacts.ts:1409`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7684`
+- `src/components/Coach/CoachTeachPage.tsx:7680`
 - `src/services/dnaLineNarrator.ts:185`
 - `src/services/dnaLineNarrator.ts:216`
 - `src/services/dnaLineNarrator.ts:252`

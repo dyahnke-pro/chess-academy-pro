@@ -64,10 +64,16 @@ describe('G8.5 — no lane without a live producer, no producer without a lane',
   // The backward look queues under its own verdict kind, one producer for three lanes.
   const VIA_BACKWARD_LOOK = new Set<LearnLane>(['drawback', 'mistake', 'coachMistake']);
 
+  // The board-level teaching lanes are produced in ONE composer the page calls
+  // (surfaceComposition gate); a lane there counts only while the page calls it.
+  const BOARD_CODE = readFileSync('src/services/learnBoardTeaching.ts', 'utf8');
+  const pageCallsBoard = /studentMoveTeaching\(|theirMoveTeaching\(/.test(TEACH_CODE);
+
   it('every lane in the table is fed by live code in CoachTeachPage', () => {
     for (const lane of Object.keys(LEARN_LANES) as LearnLane[]) {
       if (VIA_BACKWARD_LOOK.has(lane)) continue;
-      const fed = new RegExp(`queueSpokenHint\\([^;]*'${lane}'|deferIf\\([^;]*'${lane}'|lane: '${lane}'|'${lane}' as const`).test(TEACH_CODE);
+      const fed = new RegExp(`queueSpokenHint\\([^;]*'${lane}'|deferIf\\([^;]*'${lane}'|lane: '${lane}'|'${lane}' as const`).test(TEACH_CODE)
+        || (pageCallsBoard && new RegExp(`lane: '${lane}'`).test(BOARD_CODE));
       expect(fed, `lane '${lane}' is in the table and nothing feeds it`).toBe(true);
     }
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(cm\.fenAfter, look\.line, look\.kind\)/);
