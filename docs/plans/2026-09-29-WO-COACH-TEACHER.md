@@ -232,3 +232,21 @@ The miss is the reason, not the verdict: exd5 is a **recapture choice** ("take w
 
 **Still open (mine):** #5b the back-rank line at ply 39 and #5c "2 attackers on b6" (unclear whose). Both still need checking against the board.
 **Still open (theirs):** #1 and #2 are moveIntent.
+
+**Arrows for spoken lines (David 2026-09-29: "I have never seen any!" → "I'm sure you're missing deeper lines").**
+- `VoiceFact.lines`: each line the sentence names, with the board it STARTS on. It is coupled at emission, like `squares`, and never scraped from prose.
+- Lines on the board on screen draw there. Lines from an earlier board show that board (the line-walk board chat uses) while spoken, then the game returns.
+- Census of 34 multi-move lines across the walks. Wired:
+  - the but-turn;
+  - the compare ("X can wait — Y forces matters now");
+  - concept lines ("If you play Qd2, …" / "After Rxe4+, Be2, Qe7, …");
+  - "X has a point: it stops your Y" (their reply plus the stopped threat);
+  - the forcing win that was on the board;
+  - the calculation-depth path ("after b5, Nb6, Nxb6").
+- Already had arrows before: curated beats.
+- Shipped: PR #988 (live board). Branch `wo1-deep-lines` (earlier boards) is pending its live screenshot.
+- Walk note: the calc-depth line did not fire on the re-walk. The engine judged a5 differently; which lines speak varies run to run.
+
+**Triple-check finds (fixed):**
+- "Play Qd2 and …" broke on verb-first detector sentences. Now "If you play Qd2, …" (PR #989).
+- The Ng8 fix moved "the piece doing the most work" to their Rh8 behind its own h6 pawn. A rook now needs a free file in every phase (branch `wo1-deep-lines`).
