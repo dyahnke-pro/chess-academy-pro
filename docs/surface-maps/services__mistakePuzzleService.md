@@ -95,8 +95,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:7366`
-- `src/components/Coach/CoachTeachPage.tsx:7372`
+- `src/components/Coach/CoachTeachPage.tsx:7365`
+- `src/components/Coach/CoachTeachPage.tsx:7371`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
@@ -240,7 +240,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `gradeMistakePuzzle` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2400`
+- `src/components/Coach/CoachTeachPage.tsx:2399`
 - `src/components/Puzzles/MyMistakesPage.tsx:227`
 - `src/components/Puzzles/WeaknessThemesPage.tsx:116`
 - `src/components/Tactics/TacticCreatePage.tsx:219`
@@ -252,7 +252,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakePuzzleService.test.ts:545`
 
 ### `loadDrilledMotifs` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:1747`
+- `src/components/Coach/CoachTeachPage.tsx:1746`
 - `src/services/conceptSchedule.test.ts:58`
 
 ### `deleteMistakePuzzle` (function) — 2 call sites

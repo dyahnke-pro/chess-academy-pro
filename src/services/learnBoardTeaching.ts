@@ -44,6 +44,7 @@ import { splitPosition } from './splitPosition';
 import { planChoice, type PlanChoiceLine } from './planChooser';
 import { openingIdentityLine, warmOpeningIdentity } from './openingIdentity';
 import { trapAheadAt } from './gemCrushLines';
+import { noteTrapMeeting, trapSpeaks, type TrapState } from './trapLearning';
 import { extractMentionedSans } from './arrowEngine';
 
 export interface TeachingHint {
@@ -58,6 +59,9 @@ export interface TeachingHint {
    *  are validated by the arrow door on the live board and drawn only when the
    *  line survives the turn. */
   arrows: ArrowClaim[];
+  /** A known trap on this board (trapAhead only): the slip, and whether the
+   *  coach speaks this time or holds back as a test (`trapLearning`). */
+  trap?: { slip: string; confirmed: boolean; state: TrapState; speak: boolean };
   /** DUAL-USE (P4): what this line proves the student CAN do, coupled at
    *  emission. Only HELD rows — a miss is already recorded by the live slip
    *  capture, so a broken row here would count it twice. */
@@ -389,6 +393,11 @@ export function trapAheadTeaching(fen: string, student: 'w' | 'b'): TeachingHint
   const t = trapAheadAt(fen);
   if (!t) return null;
   const to = t.san.replace(/[+#]/g, '').slice(-2);
+  // WARN, OR TEST (David 2026-09-30): grey and red always warn; once heeded
+  // in enough games the coach holds back once, and an unaided avoid is green.
+  const parts = fen.split(' ');
+  const ply = (Number(parts[5] ?? 1) - 1) * 2 + (parts[1] === 'b' ? 1 : 0) + 1;
+  const learnt = trapSpeaks(fen, ply);
   // THE ARROWS SHOW THE TRAP (David 2026-09-30: "arrows showing the move and
   // the punishment lines"): the natural move in red, then their punishing
   // reply — the reason it is a trap, on the board.
@@ -421,9 +430,16 @@ export function trapAheadTeaching(fen: string, student: 'w' | 'b'): TeachingHint
     lane: 'trapAhead',
     text: `Careful here: ${moveNoun} looks natural, and ${t.freqPct}% of club players play it — but it walks into a known trap.`,
     squares: /^[a-h][1-8]$/.test(to) ? [to] : [], claims: [t.key],
-    event: { name: 'coach_trap_ahead', props: { surface: 'coach-teach', freq: t.freqPct } },
+    event: { name: 'coach_trap_ahead', props: { surface: 'coach-teach', freq: t.freqPct, state: learnt.state, spoken: learnt.speak } },
     arrows,
+    trap: { slip: t.san, confirmed: t.confirmed, state: learnt.state, speak: learnt.speak },
   };
+}
+
+/** The student's move on a trap board — warned or held back as a test — is
+ *  the trap's answer, recorded either way (`trapLearning`). */
+export function trapAnswered(args: { fen: string; playedSan: string; slipSan: string; warned: boolean; confirmed: boolean; gameId: string | null }): 'held' | 'broken' {
+  return noteTrapMeeting(args);
 }
 
 /** A held row for a lane the page composes itself (moveOrder, moveIntent, a

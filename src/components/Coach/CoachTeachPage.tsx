@@ -30,7 +30,7 @@ import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePacka
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { announcesTheMove, checkMethodTeaching, countMethodTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
+import { announcesTheMove, trapAnswered, checkMethodTeaching, countMethodTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -182,8 +182,7 @@ import { noteCoverageForLine } from '../../services/danyaTeachingService';
  *  single opening-level note that happened to match early. Below the floor the
  *  instant, verified masterclass is still the better lesson, so it keeps it. */
 const NOTE_PRIMARY_MIN_PLIES = 3;
-import { findLivePunishment, bakeGemsIntoTree, gemResolution, trapAheadAt } from '../../services/gemCrushLines';
-import { noteTrapMeeting, trapSpeaks, type TrapState } from '../../services/trapLearning';
+import { findLivePunishment, bakeGemsIntoTree, gemResolution } from '../../services/gemCrushLines';
 import { findAndBakeGems } from '../../services/gemFinder';
 import { moveOrderArrows } from '../../services/moveOrderArrows';
 import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead';
@@ -1847,7 +1846,7 @@ export function CoachTeachPage(): JSX.Element {
   // page's hand refs too. Before this, `observe()` was a silent third door.
   /** The known trap on the board the student is about to move from — warned
    *  or held back as a test — so their move can be recorded as its answer. */
-  const trapPendingRef = useRef<{ fen: string; slip: string; warned: boolean; confirmed: boolean; state: TrapState } | null>(null);
+  const trapPendingRef = useRef<{ fen: string; slip: string; warned: boolean; confirmed: boolean; state: string } | null>(null);
   const learnMemRef = useRef<LearnMemory>(createLearnMemory(() => { forgetPageRefsRef.current(); }));
   
   // The threat / tactic say-once memory (last key + every spoken line) lives in
@@ -8698,7 +8697,7 @@ export function CoachTeachPage(): JSX.Element {
       const tp = trapPendingRef.current;
       if (tp && fenBefore && samePosition(tp.fen, fenBefore)) {
         trapPendingRef.current = null;
-        const outcome = noteTrapMeeting({ fen: tp.fen, playedSan: move.san, slipSan: tp.slip, warned: tp.warned, confirmed: tp.confirmed, gameId: learnMemRef.current.gameId });
+        const outcome = trapAnswered({ fen: tp.fen, playedSan: move.san, slipSan: tp.slip, warned: tp.warned, confirmed: tp.confirmed, gameId: learnMemRef.current.gameId });
         captureEvent('coach_trap_answered', { surface: 'coach-teach', outcome, warned: tp.warned, state: tp.state });
       }
     } catch { /* a record, never a blocker */ }
@@ -9011,14 +9010,10 @@ export function CoachTeachPage(): JSX.Element {
                   // once heeded in enough games the coach stays silent once, and
                   // an unaided avoid turns the trap green.
                   const trap = trapAheadTeaching(probe.fen(), playerColor === 'white' ? 'w' : 'b');
-                  const trapAt = trap ? trapAheadAt(probe.fen()) : null;
-                  if (trap && trapAt) {
-                    const parts = probe.fen().split(' ');
-                    const ply = (Number(parts[5]) - 1) * 2 + (parts[1] === 'b' ? 1 : 0) + 1;
-                    const d = trapSpeaks(probe.fen(), ply);
-                    trapPendingRef.current = { fen: probe.fen(), slip: trapAt.san, warned: d.speak, confirmed: trapAt.confirmed, state: d.state };
-                    if (d.speak) queueSpokenHint(probe.fen(), trap.text, trap.lane, trap.squares, trap.claims, undefined, trap.arrows);
-                    if (trap.event) captureEvent(trap.event.name, { ...trap.event.props, state: d.state, spoken: d.speak });
+                  if (trap?.trap) {
+                    trapPendingRef.current = { fen: probe.fen(), slip: trap.trap.slip, warned: trap.trap.speak, confirmed: trap.trap.confirmed, state: trap.trap.state };
+                    if (trap.trap.speak) queueSpokenHint(probe.fen(), trap.text, trap.lane, trap.squares, trap.claims, undefined, trap.arrows);
+                    if (trap.event) captureEvent(trap.event.name, trap.event.props);
                   }
                   // COUNT BEFORE YOU TAKE (P3 how-to-calculate) — the same moment.
                   const cnt = countMethodTeaching(probe.fen(), playerColor === 'white' ? 'w' : 'b');
