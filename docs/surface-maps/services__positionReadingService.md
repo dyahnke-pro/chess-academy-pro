@@ -182,8 +182,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:827`
 - `src/components/Coach/CoachTeachPage.tsx:7796`
 - `src/components/Coach/CoachTeachPage.tsx:7917`
-- `src/components/Coach/CoachTeachPage.tsx:9976`
-- `src/components/Coach/CoachTeachPage.tsx:10020`
+- `src/components/Coach/CoachTeachPage.tsx:9980`
+- `src/components/Coach/CoachTeachPage.tsx:10024`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`

@@ -52,6 +52,13 @@ for (const g of games) {
       if (count(st) >= want && quiet >= 5) break;
     }
     if (count(st) < want) { rec.error = `ply ${i + 2}: coach did not play ${sans[i + 1]} (board ${st.moves})`; rec.plies[i + 1] = [...new Set(spoken)]; break; }
+    // THE BOARD MUST BE THE GAME. When the coach plays its own reply instead of
+    // the dictated one, every later line is about a board the checker does not
+    // have — scored against the recorded game it reads false (run G walk,
+    // U8zArIhxato ply 17), and the walk later stalls clicking a move that is no
+    // longer legal. Stop at the first divergence; the lines from it are dropped.
+    const expect = sans.slice(0, want).join(' ');
+    if ((st.moves ?? '') !== expect) { rec.error = `ply ${i + 2}: board diverged from the game (board ${st.moves} / game ${expect})`; break; }
     rec.plies[i + 1] = [...new Set(spoken)]; // 1-based ply of the student's move; the beat covers it and the reply
     (rec.arrows ??= {})[i + 1] = [...arrows];
     i += 2;

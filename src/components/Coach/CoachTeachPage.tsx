@@ -9447,9 +9447,13 @@ export function CoachTeachPage(): JSX.Element {
                         // painted — marks without words (G8.5). The package now
                         // marks the squares only if the words survive.
                         queueSpokenHint(probe.fen(), chainLines.join(' '), 'causalChain', causalChainHighlights(chain).map((h) => h.square));
+                        // A DIAGNOSTIC, NOT A SPOKEN LINE: the line is queued, and
+                        // the package decides whether it is heard. Filed as
+                        // "spoken", this summary landed in the run G tape as
+                        // something the coach said (2026-09-30).
                         void logAppAudit({
-                          kind: 'coach-narration-spoken',
-                          category: 'narration',
+                          kind: 'coach-surface-migrated',
+                          category: 'subsystem',
                           source: 'CoachTeachPage.causalChain',
                           summary: `causal chain @[${historyAfterReply.join(' ')}]: ${chainLines.join(' ').slice(0, 90)}`,
                           fen: probe.fen(),
