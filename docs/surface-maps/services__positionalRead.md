@@ -39,7 +39,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `rookReachesFile` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10052`
+- `src/components/Coach/CoachTeachPage.tsx:10065`
 - `src/services/danyaBehaviors.ts:695`
 - `src/services/recaptureChoice.ts:63`
 

@@ -77,7 +77,7 @@ function engineAt(g, fen) {
 const stripSan = (s) => s.replace(/^…|^\.\.\./, '').replace(/[+#!?]+$/, '');
 
 // ── sentence verifiers ─────────────────────────────────────────────────────
-// ctx: { g, me, them, fenBefore, fenMid (after student), fenAfter (after reply) }
+// ctx: { g, me, them, fenBefore, fenMid (after student), fenAfter (after reply), taggedFen (the board the page graded the fact on, when the tape has it — plan 1.6) }
 function checkSentence(s, ctx) {
   const res = []; // [ok, why]
   const { me, them } = ctx;
@@ -126,6 +126,24 @@ function checkSentence(s, ctx) {
       const legal = [ctx.fenAfter, ctx.fenMid].some((fen) => { const b = board(withTurn(fen, them)); try { b.move(san); return true; } catch { return false; } });
       res.push([!legal, `${san} is still legal — it loses, it is not impossible`]);
     }
+    // "exd5 didn't work: exd5, Bxd5 and hxg2 — you come out behind on material,
+    // two pawns for a bishop" / "— they win a bishop" (the found-move verdict,
+    // P2 #2). The line is the ALTERNATIVE, played from the board BEFORE the
+    // student's move — replay it there, check every move is legal and the
+    // claimed result (the mover ends behind on material).
+    for (const m of s.matchAll(/(…?\S+) didn't work: ([^—]+?) — (you come out behind on material|they win (?:a|an|the|two) \w+)/g)) {
+      const b = board(ctx.fenBefore); if (!b) continue;
+      const mover = b.turn(); const V = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+      const mat = (c, col) => c.board().flat().filter((q) => q && q.color === col).reduce((t, q) => t + V[q.type], 0);
+      const start = mat(b, mover) - mat(b, other(mover));
+      let legal = true;
+      for (const tok of m[2].split(/,\s*|\s+and\s+/).map((t) => stripSan(t.trim())).filter(Boolean)) {
+        try { b.move(tok); } catch { legal = false; break; }
+      }
+      if (!legal) { res.push([false, `the line after ${m[1]} is not legal from the board before the move`]); continue; }
+      const end = mat(b, mover) - mat(b, other(mover));
+      res.push([end < start, `after ${m[1]}'s line the mover is not behind on material`]);
+    }
     // "…X doesn't work: the knight would just be taken on c5" / "…lost on f4"
     for (const m of s.matchAll(/(…?[NBRQK]?[a-h]?x?[a-h][1-8]) (?:doesn't work|isn't possible any more): the (\w+) would just be (?:taken|lost) on ([a-h][1-8])/g)) {
       const san = stripSan(m[1]); const sq = m[3];
@@ -135,7 +153,11 @@ function checkSentence(s, ctx) {
     // "…e6 prepares …Bd6, to hit the pawn on h2"
     for (const m of s.matchAll(/prepares? (…?[NBRQK]?[a-h]?x?[a-h][1-8]),? to hit (?:the|their|your) (\w+) on ([a-h][1-8])/g)) {
       const san = stripSan(m[1]); const sq = m[3];
-      const ok = [ctx.fenAfter, ctx.fenMid].some((fen) => { const b = board(withTurn(fen, me)); if (!b) return false; let mv; try { mv = b.move(san); } catch { return false; } const t = b.get(sq); return !!t && t.color === them && attackers(b, sq, me).includes(mv.to); });
+      // WHOSE plan: "Their …Nd5 prepares …f6" is the OPPONENT's move (run J —
+      // the verifier played every such move for the student, and three true
+      // lines read false).
+      const mover = /^Their /.test(s) ? them : me; const target = mover === me ? them : me;
+      const ok = [ctx.fenAfter, ctx.fenMid].some((fen) => { const b = board(withTurn(fen, mover)); if (!b) return false; let mv; try { mv = b.move(san); } catch { return false; } const t = b.get(sq); return !!t && t.color === target && attackers(b, sq, mover).includes(mv.to); });
       res.push([ok, `${san} does not hit ${sq}`]);
     }
     // "Their knight on e4 has nothing defending it"
@@ -362,6 +384,9 @@ function checkSentence(s, ctx) {
   }
   // LEGALITY: a named student/opponent move must be legal on a board it can be about.
   if (!future) {
+    // Moves inside a found-move line ("X didn't work: X, Y and Z — …") were
+    // replayed from the board before the move by their own verifier.
+    for (const m of s.matchAll(/didn't work: ([^—]+?) —/g)) for (const t of m[1].split(/,\s*|\s+and\s+/)) lineSans.add(stripSan(t.trim()));
     for (const m of s.matchAll(/(?<![\w-])(…)?([NBRQK][a-h]?[1-8]?x?[a-h][1-8]|[a-h]x[a-h][1-8])[+#]?(?![\w-])/g)) {
       const san = m[2];
       if (hypo && (stripSan(hypo[1]) === san || stripSan(hypo[2]) === san)) continue;
@@ -448,8 +473,13 @@ for (const [id, rec] of Object.entries(tape)) {
       if (spokenForm.test(line)) continue; // the voice's spelled-out copy of a SAN line
       for (const s of line.split(/(?<=[.!])\s+(?=[A-Z…"])/)) {
         const k = s.toLowerCase().replace(/[^a-z0-9]/g, ''); if (!k || seen.has(k)) continue; seen.add(k);
-        const r = checkSentence(s, ctx);
-        if (r.v === 'T') T++; else if (r.v === 'F') { F++; falses.push({ id, ply: plyS, s, why: r.why }); } else if (r.v === 'N') N++; else { U++; unchecked.push(s.slice(0, 140)); dumpU.push({ id, ply: plyS, seat: rec.seat, s, fenBefore, fenMid, fenAfter, lines: [g.plies[i]?.lines, g.plies[i + 1]?.lines, g.plies[i + 2]?.lines].map((ls) => (ls ?? []).slice(0, 3).map((l) => ({ cp: l.cp, mate: l.mate, pv: (l.pv ?? []).slice(0, 6) }))) }); }
+        // BOARD TAG (plan 1.6): the board the page graded this fact on, when
+        // the tape recorded it — shown with every FALSE and in the dump, so a
+        // manual pass reads that board instead of guessing among three.
+        const probe = k.slice(0, 40);
+        const taggedFen = (rec.boards?.[plyS] ?? []).find((b) => b.text.toLowerCase().replace(/[^a-z0-9]/g, '').includes(probe))?.fen ?? null;
+        const r = checkSentence(s, { ...ctx, taggedFen });
+        if (r.v === 'T') T++; else if (r.v === 'F') { F++; falses.push({ id, ply: plyS, s, why: r.why, taggedFen }); } else if (r.v === 'N') N++; else { U++; unchecked.push(s.slice(0, 140)); dumpU.push({ id, ply: plyS, seat: rec.seat, s, fenBefore, fenMid, fenAfter, taggedFen, lines: [g.plies[i]?.lines, g.plies[i + 1]?.lines, g.plies[i + 2]?.lines].map((ls) => (ls ?? []).slice(0, 3).map((l) => ({ cp: l.cp, mate: l.mate, pv: (l.pv ?? []).slice(0, 6) }))) }); }
       }
     }
   }
@@ -457,5 +487,5 @@ for (const [id, rec] of Object.entries(tape)) {
 const n = T + F + U;
 console.log(`sentences ${n + N} (${N} advice, no board claim); claims ${n}; checked ${T + F} (${(100 * (T + F) / Math.max(1, n)).toFixed(0)}% coverage); TRUE ${T} FALSE ${F}; ACCURACY ${(100 * T / Math.max(1, T + F)).toFixed(1)}%`);
 if (process.env.SHOW_U) for (const u of unchecked) console.log(`? ${u}`);
-for (const f of falses.slice(0, SHOW)) console.log(`✗ ${f.id}:${f.ply} [${f.why}] ${f.s.slice(0, 160)}`);
+for (const f of falses.slice(0, SHOW)) console.log(`✗ ${f.id}:${f.ply} [${f.why}] ${f.s.slice(0, 160)}${f.taggedFen ? `\n    graded on: ${f.taggedFen}` : ''}`);
 if (process.env.DUMP_U) (await import('node:fs')).writeFileSync(process.env.DUMP_U, JSON.stringify(dumpU, null, 1));

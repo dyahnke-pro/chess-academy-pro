@@ -265,3 +265,12 @@ describe('the character read counts tactics, not a piece that can step away (han
     expect(TEACH_CODE).not.toMatch(/tacticLive: tctxNow\.immediate\.length > 0 \|\| tctxNow\.hanging/);
   });
 });
+
+describe('"the tactics have settled" is never said with material loose (run J, UVJ ply 50)', () => {
+  it('the positional switch is held while either side can win a piece by exchange', async () => {
+    const { readFileSync } = await import('node:fs');
+    const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
+    expect(src).toMatch(/legalSeeGainFor\(probe\.fen\(\), c\.square,[^)]*\) > 0/);
+    expect(src).toMatch(/\|\| looseNow\)/);
+  });
+});

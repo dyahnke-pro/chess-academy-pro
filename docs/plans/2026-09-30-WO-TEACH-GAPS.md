@@ -94,7 +94,7 @@ Loop until **≥97% of ALL checkable claims**, not just the auto-checked ones.
 | 🟡 1.3 | **Shared claim keys across lanes** (#49) — in progress: `convert-method` joins the botched-conversion verdict and the "up material now" switch; `namesBetter` lets a verdict drop a better move the grade already names | the same fact from 3 lanes on one ply ("open file" ×3) |
 | 🟡 1.4 | **One thread per move** (#23): lead + one support, ~30 words — MEASURED on run I (121 spoken plies, deduped): median 1 line / 22 words, mean 1.5 lines / 28 words; only 5 plies > 60 words, and those are repeated-claim stacks (fixed via 1.3), not missing structure | what Danya does; we still stack 3–5 lines |
 | ✅ 1.5 | **`facts[]` audit-only list** — already gone (nothing pushes to it; the OUTLINE line was stale) | — |
-| 1.6 | **Board tag on every emission** (feeds 0.2) | truth checking needs it |
+| ✅ 1.6 | **Board tag on every emission** — each spoken fact's board rides its `coach-narration-spoken` event (`details.facts[{text,fen}]`); the hand driver collects it, the tape stores it per ply (`rec.boards`), the checker prints it with every FALSE and in the manual-pass dump | truth checking needs it |
 
 ---
 
@@ -246,3 +246,20 @@ David: "Make sure all other computers carry the same dual role … Can we add a 
 - ✅ **Play Q&A** — `studentMoveAnswerLines` / `theirMoveAnswerLines` / `dangerAnswerLines` (text only — answers never write evidence) appended to the move-rating, opponent-move and assessment answers in `coachApi`.
 - ✅ **Audit tools** — the Learn door emits `learn-turn-decision` (aggregated like `coach-decision`); `recordLaneEvidence` logs `lane-evidence`. Contracts in `audit-concept-gameplay-prod.mjs`: LD1 emitted, LD2 spoken ⊆ offered and lead spoke, LE1 held-only + prompted answered. Declared in `algoAuditContract.test.ts`.
 - ✅ Run J (re-walk of run I, new build): candidates, tempo count, trade-when-ahead, found-move, plan-as-plan all fire. Fixed from it: timing on captures/checks (quiet moves only), "their piece" for the king.
+
+### Run J — re-walk on the Phase 2-6 build (2026-09-30)
+6 games (run I's), 114 spoken plies. Checker, after fixing two checker bugs
+(opponent-intent moves were played for the student; found-move lines were not
+replayed from the board before the move — a new verifier now does): **79 of 80
+checked claims TRUE (98.8%), coverage 48%.** The one FALSE was real — "the
+tactics have settled" with material loose — fixed at the source (the switch is
+held while either side can win a piece by exchange; pinned by a test). The
+manual pass on the unchecked half is owed on the FINAL build (the release
+gate's measurement), not on this one.
+
+### TRIAGE vs CODE (2026-09-30, every open row of Phases 1/3/4/5, file:line checked)
+BUILT: 1.2 Learn door · one move two jobs · latentDanger · concession (#46).
+PARTIAL: 1.2 Play/Review speak outside the door · 1.3 ~10 lanes carry no claim key · 1.4 (structure yes; NO word budget — and a budget would be a G4.5 cap, so the structure IS the answer) · trigger→scan (forcing-scan only) · how-to-calculate (drill only) · overall verdict (a list, not one comparison) · piece maneuvers (path-first wording) · their next move (Play only) · planRace (file-collision review-only) · callbacks to the thesis (review/lesson only) · trap candidates (LLM context, not a gem) · structure transfer · heat-map (stalemate avoided, check answered) · transfer (slips only) · liveStrength (no gem/book inputs) · #37/#41 walks unrecorded · move→plan link (student advance filtered) · branching narrator (no caller) · break preparation (narrow) · opening summary.
+MISSING: split the position · autopilot guard · safety precheck (blunder check) · his data on the live board · concept-level SRS · fade · plan chooser · transposition reader · #56 re-anchor 163 beats · walks #40, #32.
+
+**David's calls on the design rows (2026-09-30):** concept-level SRS → FOLD INTO MISTAKE DRILLS (cards carry the concept tag; SRS schedules by concept too; no new screen or store) · his data on the live board → SAY IT DEPERSONALIZED ("a strong player's choice here is X", never a name) · fade → SHORT PHRASING WHEN GREEN · one door → REVIEW YES, PLAY NO (Play stays silent; its answers already use the shared computers).

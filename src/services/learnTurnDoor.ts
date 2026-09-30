@@ -75,7 +75,9 @@ export type LearnLane =
   | 'timing'
   | 'checkMethod'
   | 'trade'
-  | 'kneeJerk';
+  | 'kneeJerk'
+  | 'blunderCheck'
+  | 'autopilot';
 
 /** Lanes at or below this lead DESCRIBE the board (commentary, behaviour,
  *  the positional read, structure, piece quality) — the tier the scoreboard
@@ -176,6 +178,9 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   theirIntent: { kind: 'computed', why: "what the opponent's quiet move prepares — engine-proven from their seat", lead: 73 },
   // TEMPO, COUNTED (P2 #7): their piece's third move while the student develops.
   tempo: { kind: 'computed', why: 'their piece keeps moving in the opening while you develop — free moves, counted', lead: 70 },
+  // THE SAFETY HABITS (P3 method beats): close the beat after the grade.
+  blunderCheck: { kind: 'computed', why: 'the move left a piece they simply took — the habit that catches it', lead: 61 },
+  autopilot: { kind: 'computed', why: 'the popular move here cost — the moment to stop and check', lead: 59 },
   // QUESTION THE KNEE-JERK (P3 method beat): closes the beat after the grade.
   kneeJerk: { kind: 'computed', why: 'the reflex recapture cost — ask what comes first', lead: 60 },
   // WAS THE TRADE A GOOD DEAL (P3, T3 #45).

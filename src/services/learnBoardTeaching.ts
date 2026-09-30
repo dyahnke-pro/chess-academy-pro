@@ -29,6 +29,7 @@ import { checkMethod } from './checkMethod';
 import { tradeJudgement } from './tradeJudgement';
 import type { PieceValue } from './pieceValueRead';
 import { kneeJerk } from './kneeJerk';
+import { autopilotGuard, blunderCheck } from './safetyHabits';
 import { stalemateWatch } from './stalemateWatch';
 import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from './criticalMoment';
 
@@ -80,6 +81,9 @@ export interface StudentMoveInput {
    *  page only when the move completed a trade, for the good-piece /
    *  bad-piece read. Absent → the trade is judged without it. */
   evalBefore?: readonly PieceValue[];
+  /** The move most players at the student's level play at `fenBefore` (the
+   *  amateur cache's top move), for the autopilot guard. Absent → silent. */
+  popularTopSan?: string | null;
   /** The engine's eval AFTER the student's move, centipawns, student POV; null
    *  when either read is a mate. */
   cpAfter: number | null;
@@ -113,11 +117,19 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
     if (kj) out.push({ lane: 'kneeJerk', text: kj, squares: [to], claims: ['method:knee-jerk'], event: { name: 'coach_knee_jerk_taught', props: { surface: 'coach-teach' } }, arrows: [] });
   }
 
+  // THE SAFETY HABITS (P3 method beats) — earned only by what the board did.
+  {
+    const bc = blunderCheck(i.fenBefore, i.san, i.reply, i.cpLoss);
+    if (bc) out.push({ lane: 'blunderCheck', text: bc, squares: [], claims: ['method:blunder-check'], event: { name: 'coach_blunder_check_taught', props: { surface: 'coach-teach' } }, arrows: [] });
+    const ap = autopilotGuard(i.san, i.cpLoss, i.popularTopSan ?? null);
+    if (ap) out.push({ lane: 'autopilot', text: ap, squares: [to], claims: ['method:autopilot'], event: { name: 'coach_autopilot_taught', props: { surface: 'coach-teach' } }, arrows: [] });
+  }
+
   // WAS THE TRADE A GOOD DEAL (P3, T3 #45) — a like-for-like trade the reply
   // completed, judged by the first reason the board supports.
   try {
     const tj = tradeJudgement(i.fenBefore, i.san, i.reply, new Chess(i.fenBefore).turn(), i.cpLoss, i.evalBefore);
-    if (tj) out.push({ lane: 'trade', text: tj.text, squares: tj.squares, claims: [`trade-${tj.reason}`], event: { name: 'coach_trade_judged', props: { surface: 'coach-teach', reason: tj.reason } }, arrows: [],
+    if (tj) out.push({ lane: 'trade', text: tj.text, squares: tj.squares, claims: [`trade-${tj.reason}`, `capture:${to}:${i.history.length}`, ...(tj.reason === 'their-best' ? [`piece-quality:${to}`] : [])], event: { name: 'coach_trade_judged', props: { surface: 'coach-teach', reason: tj.reason } }, arrows: [],
       // A good trade the student chose is the 'bad-trade' question answered well.
       ...(tj.reason !== 'behind' && tj.reason !== 'gave-best' ? { evidence: { tag: 'bad-trade' as const, posedImportance: 60 } } : {}) });
   } catch { /* a bonus, never a blocker */ }

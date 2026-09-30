@@ -37,6 +37,8 @@ for (const g of games) {
     st = await call(`move?san=${encodeURIComponent(sans[i])}`);
     if (st.error) { rec.error = `ply ${i + 1}: ${st.error}`; break; }
     const spoken = [...(st.spoken ?? [])];
+    // Board tags (plan 1.6): the board each spoken fact was graded on.
+    const tagged = [...(st.boards ?? [])];
     // Every arrow seen on the board while this beat plays (David 2026-09-30:
     // arrows must illustrate what is spoken).
     const arrows = new Set(st.arrows ?? []);
@@ -47,6 +49,7 @@ for (const g of games) {
       st = await call('state');
       const fresh = st.spoken ?? [];
       spoken.push(...fresh);
+      tagged.push(...(st.boards ?? []));
       for (const a of st.arrows ?? []) arrows.add(a);
       quiet = fresh.length ? 0 : quiet + 1;
       if (count(st) >= want && quiet >= 5) break;
@@ -62,6 +65,7 @@ for (const g of games) {
     // length is compared.
     if ((st.moves ?? '').split(' ').slice(0, want).join(' ') !== expect) { rec.error = `ply ${i + 2}: board diverged from the game (board ${st.moves} / game ${expect})`; break; }
     rec.plies[i + 1] = [...new Set(spoken)]; // 1-based ply of the student's move; the beat covers it and the reply
+    if (tagged.length) (rec.boards ??= {})[i + 1] = tagged;
     (rec.arrows ??= {})[i + 1] = [...arrows];
     i += 2;
   }

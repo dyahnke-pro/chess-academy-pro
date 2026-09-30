@@ -75,6 +75,12 @@ async function state() {
     const norm = (t) => t.toLowerCase().replace(/[^a-z0-9]/g, '');
     if (stub && !spoken.some((t) => norm(t).includes(norm(stub).slice(0, 30)))) spoken.push(`${stub}… [voice]`);
   }
+  // BOARD TAGS (plan 1.6): each spoken fact with the board it was graded on.
+  const boards = [];
+  for (const e of fresh) {
+    if (e.kind !== 'coach-narration-spoken' || !e.details) continue;
+    try { for (const f of JSON.parse(e.details).facts ?? []) if (f?.text && f?.fen) boards.push({ text: f.text, fen: f.fen }); } catch { /* not a tagged event */ }
+  }
   const cmd = fresh
     .filter((e) => /coachMoveCommand|walkthrough/i.test(`${e.source ?? ''}`))
     .map((e) => `${e.kind} ${e.source}: ${(e.summary ?? '').slice(0, 160)}`);
@@ -108,7 +114,7 @@ async function state() {
     }
     return out;
   }).catch(() => []);
-  return { moves: chess.history().join(' '), turn: chess.turn(), lastChat: chat.slice(0, 400), spoken, arrows, cmd, inputBusy: busy, errors: errors.splice(0) };
+  return { moves: chess.history().join(' '), turn: chess.turn(), lastChat: chat.slice(0, 400), spoken, boards, arrows, cmd, inputBusy: busy, errors: errors.splice(0) };
 }
 
 const routes = {

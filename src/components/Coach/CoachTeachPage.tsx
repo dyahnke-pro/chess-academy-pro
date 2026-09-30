@@ -9060,7 +9060,7 @@ export function CoachTeachPage(): JSX.Element {
                       if (struct && !learnMemRef.current.structureSaid.has(struct.name)) {
                         learnMemRef.current.structureSaid.add(struct.name);
                         const line = gradeNarrationText(`${struct.name} — ${struct.plan}.`, probe.fen(), 'CoachTeachPage.structure')?.trim();
-                        if (line) queueSpokenHint(probe.fen(), line, 'structure');
+                        if (line) queueSpokenHint(probe.fen(), line, 'structure', undefined, [`structure:${struct.name}`]);
                       }
                     } catch { /* the structure note is a bonus, never a blocker */ }
                   }
@@ -9134,7 +9134,7 @@ export function CoachTeachPage(): JSX.Element {
                       // development idea another lane may already have said.
                       if (q.ideaKey && (positionalSaidRef.current.has(q.ideaKey) || standingRef.current.said.has(q.ideaKey))) continue;
                       if (q.ideaKey) positionalSaidRef.current.add(q.ideaKey);
-                      queueSpokenHint(probe.fen(), q.text, 'pieceQuality', q.squares, undefined, undefined, q.arrows);
+                      queueSpokenHint(probe.fen(), q.text, 'pieceQuality', q.squares, q.squares[0] ? [`piece-quality:${q.squares[0]}`] : undefined, undefined, q.arrows);
                       captureEvent('piece_quality_spoken', { surface: 'coach-teach', kind: q.kind });
                     }
                   }
@@ -9367,8 +9367,17 @@ export function CoachTeachPage(): JSX.Element {
                       // the board, or one move stands far above the rest, is
                       // false (manual claim check 2026-09-30, item 65: …Bb4
                       // pinning Nc3 was the top line).
+                      // …or any piece either side can win by exchange right now (run J,
+                      // UVJ ply 50: "the tactics have settled" with material loose).
+                      const looseNow = ((): boolean => {
+                        try {
+                          const b = new Chess(probe.fen());
+                          return b.board().flat().some((c) => !!c && c.type !== 'k'
+                            && legalSeeGainFor(probe.fen(), c.square, c.color === 'w' ? 'b' : 'w') > 0);
+                        } catch { return false; }
+                      })();
                       const quietButConcrete = step.switched?.to === 'positional'
-                        && ((tctxNow.immediate?.length ?? 0) > 0 || (gap !== null && gap >= SHARP_GAP_CP));
+                        && ((tctxNow.immediate?.length ?? 0) > 0 || (gap !== null && gap >= SHARP_GAP_CP) || looseNow);
                       if (step.switched && !mateOnBoard && !quietOnCheck && !quietButConcrete) queueSpokenHint(probe.fen(), step.switched.text, 'character', undefined, step.switched.to === 'conversion' ? ['convert-method'] : undefined);
                     } catch { /* the character read is a bonus, never a blocker */ }
 
@@ -9664,6 +9673,9 @@ export function CoachTeachPage(): JSX.Element {
                   summary: `${describeVoicePackage(instant.pkg)} · ${instant.lanes} — ${instant.pkg.spoken.slice(0, 240)}`,
                   narrationText: instant.pkg.spoken,
                   fen: ip.fen(),
+                  // BOARD TAG per fact (plan 1.6): the checker reads the board a
+                  // claim was graded on instead of guessing among three.
+                  details: JSON.stringify({ facts: instant.pkg.kept.map((f) => ({ text: f.text, fen: f.fen })) }),
                 });
                 if (instant.pkg.spoken) {
                   lines.push(instant.pkg.spoken);
@@ -9880,6 +9892,7 @@ export function CoachTeachPage(): JSX.Element {
                       bestSan: studentBestSan, bestLine: preStudentRead.topLines?.[0], reply: reply ?? null,
                       cpAfter: bothCp ? mid.evaluation * sign : null,
                       evalBefore: tradeTable,
+                      popularTopSan: getCachedAmateurPlay(fenBefore)?.moves[0]?.san ?? null,
                     })) {
                       queueSpokenHint(fenAfterReply, h.text, h.lane, h.squares, h.claims, undefined, h.arrows);
                       if (h.event) captureEvent(h.event.name, h.event.props);
@@ -10086,7 +10099,8 @@ export function CoachTeachPage(): JSX.Element {
                       const fileHeard = !!fileKey && (positionalSaidRef.current.has(fileKey) || standingRef.current.said.has(fileKey));
                       if (point && !nowLoose && !fileHeard) {
                         if (fileKey) positionalSaidRef.current.add(fileKey);
-                        queueSpokenHint(fenAfterReply, point, 'movePoint', []);
+                        // A capture's point and the trade verdict are one claim about one square.
+                        queueSpokenHint(fenAfterReply, point, 'movePoint', [], move.san.includes('x') ? [`capture:${move.to}:${move.history.length}`] : undefined);
                         captureEvent('coach_move_point_named', { surface: 'coach-teach' });
                       }
                       // WHY THIS MOVE HAD TO COME FIRST (census #1: "the key move
@@ -10517,6 +10531,9 @@ export function CoachTeachPage(): JSX.Element {
                       summary: `${describeVoicePackage(hintPkg)} · ${describeTurnDecision(lateDecision)} — ${stripThink(hintPkg.spoken).slice(0, 200)}`,
                       narrationText: stripThink(hintPkg.spoken),
                       fen: pending.fen,
+                      // BOARD TAG per fact (plan 1.6): a late fact may be graded on
+                      // the board BEFORE the move (`gradeFen`), not the turn's.
+                      details: JSON.stringify({ facts: hintPkg.kept.map((f) => ({ text: stripThink(f.text), fen: f.fen })) }),
                     });
                   }
                 }

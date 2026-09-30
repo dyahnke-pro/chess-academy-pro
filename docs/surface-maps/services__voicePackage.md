@@ -34,7 +34,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `markableSquares` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10435`
+- `src/components/Coach/CoachTeachPage.tsx:10449`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
@@ -59,7 +59,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/computedVoiceAudit.report.test.ts:352`
 - `src/services/computedVoiceAudit.report.test.ts:384`
 - `src/services/laneReachability.test.ts:136`
-- `src/services/learnTurnDoor.ts:243`
+- `src/services/learnTurnDoor.ts:248`
 - `src/services/replayFence.najdorf1500.test.ts:50`
 - `src/services/voicePackage.test.ts:19`
 - `src/services/voicePackage.test.ts:32`
@@ -114,20 +114,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `spokenSentenceKeys` (function) — 8 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7441`
 - `src/components/Coach/CoachTeachPage.tsx:8786`
-- `src/components/Coach/CoachTeachPage.tsx:9672`
-- `src/components/Coach/CoachTeachPage.tsx:10417`
+- `src/components/Coach/CoachTeachPage.tsx:9684`
+- `src/components/Coach/CoachTeachPage.tsx:10431`
 - `src/services/voicePackage.test.ts:415`
 - `src/services/voicePackage.test.ts:424`
 - `src/services/voicePackage.test.ts:436`
 - `src/services/voicePackage.test.ts:514`
 
 ### `describeVoicePackage` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9664`
-- `src/components/Coach/CoachTeachPage.tsx:10517`
+- `src/components/Coach/CoachTeachPage.tsx:9673`
+- `src/components/Coach/CoachTeachPage.tsx:10531`
 - `src/services/voicePackage.test.ts:38`
 
 ### `joinSpoken` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:277`
+- `src/services/learnTurnDoor.ts:282`
 
 ### `LineArrow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -136,7 +136,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `keptLines` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10477`
+- `src/components/Coach/CoachTeachPage.tsx:10491`
 - `src/services/learnTurnDoor.test.ts:188`
 - `src/services/learnTurnDoor.test.ts:194`
 - `src/services/learnTurnDoor.test.ts:200`

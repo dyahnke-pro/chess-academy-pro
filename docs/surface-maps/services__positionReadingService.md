@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2569 lines · 78 exports · 64 importers · 20 tests · 2 audits**
+**2569 lines · 78 exports · 65 importers · 20 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -67,6 +67,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewTeachingPoints.ts`
 - `src/services/reviewTrapQuestion.ts`
 - `src/services/ruleException.ts`
+- `src/services/safetyHabits.ts`
 - `src/services/tacticAlertService.ts`
 - `src/services/tacticVerification.ts`
 - `src/services/tacticsDetector.ts`
@@ -143,8 +144,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveFundamentals.ts:312`
 - `src/services/moveFundamentals.ts:1263`
 
-### `legalSeeGainFor` (function) — 35 call sites
+### `legalSeeGainFor` (function) — 37 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7914`
+- `src/components/Coach/CoachTeachPage.tsx:9376`
 - `src/services/arrowDoor.ts:161`
 - `src/services/bluffDetector.ts:53`
 - `src/services/bluffDetector.ts:63`
@@ -176,6 +178,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pvPlayback.ts:203`
 - `src/services/pvPlayback.ts:207`
 - `src/services/ruleException.ts:53`
+- `src/services/safetyHabits.ts:38`
 - `src/services/tacticAlertService.ts:329`
 - `src/services/tacticVerification.ts:101`
 - `src/services/threatAnswer.ts:98`
@@ -183,8 +186,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `signedLegalSeeFor` (function) — 9 call sites
 - `src/components/Coach/CoachTeachPage.tsx:826`
 - `src/components/Coach/CoachTeachPage.tsx:7795`
-- `src/components/Coach/CoachTeachPage.tsx:10023`
-- `src/components/Coach/CoachTeachPage.tsx:10080`
+- `src/components/Coach/CoachTeachPage.tsx:10036`
+- `src/components/Coach/CoachTeachPage.tsx:10093`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
