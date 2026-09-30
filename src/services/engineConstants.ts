@@ -159,3 +159,15 @@ export const ENGINE_ELO_MAX = 3190;
 export function limitStrengthElo(targetElo: number): number {
   return Math.max(ENGINE_ELO_MIN, Math.min(ENGINE_ELO_MAX, Math.round(targetElo)));
 }
+
+/** A cost in words coarse enough to survive the engine's depth (walk
+ *  2026-09-30: "about 1.4 points" where a deeper read said 1.8). */
+export function costWords(cp: number): string {
+  const p = cp / 100;
+  if (p < 0.75) return 'about half a pawn';
+  if (p < 1) return 'most of a pawn';
+  if (p < 2) return 'more than a pawn';
+  if (p < 3) return 'about two pawns';
+  if (p < 5) return 'about a piece';
+  return 'more than a piece';
+}

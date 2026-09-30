@@ -30,7 +30,8 @@
 import { Chess, type Square } from 'chess.js';
 import { planFromUci, isCostClause } from './lookaheadPlan';
 import { classifyMove, type MoveQuality } from './moveRating';
-import { MISTAKE_CP, BLUNDER_CP } from './engineConstants';
+import { MISTAKE_CP, BLUNDER_CP, costWords } from './engineConstants';
+export { costWords };
 import { MATERIAL_VALUE } from './pieceValues';
 import { legalSeeGain } from './positionReadingService';
 
@@ -642,17 +643,6 @@ function wonBefore(fenBefore: string, lineUci: readonly string[]): number {
  *  cleaner way missed, not a mistake. */
 export const STILL_BETTER_CP = 150;
 
-/** A cost in words coarse enough to survive the engine's depth (walk
- *  2026-09-30: "about 1.4 points" where a deeper read said 1.8). */
-export function costWords(cp: number): string {
-  const p = cp / 100;
-  if (p < 0.75) return 'about half a pawn';
-  if (p < 1) return 'most of a pawn';
-  if (p < 2) return 'more than a pawn';
-  if (p < 3) return 'about two pawns';
-  if (p < 5) return 'about a piece';
-  return 'more than a piece';
-}
 
 /** Material the side to move nets over a line (captures only, in pawns). */
 function lineNetFor(fen: string, lineUci: readonly string[]): number {

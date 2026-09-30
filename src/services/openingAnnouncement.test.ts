@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach, vi } from 'vitest';
-import { openingAnnouncement, spokenOpeningLabel } from './openingAnnouncement';
+import { openingAnnouncement, spokenOpeningLabel, theirOpeningVerdict } from './openingAnnouncement';
 import { bookDeparture } from './bookDeparture';
 import { __setLocalDbForTests, lookupMasterPlay } from './masterPlayLookup';
 import { masterPlayCache, positionFen } from './masterPlayCache';
@@ -146,5 +146,32 @@ describe('studentJustLeftBook (run D walk 2026-09-30: the departure said twice)'
     expect(studentJustLeftBook(h, 'w')).toBe(false);
     expect(studentJustLeftBook([...h, 'Nxe5', 'O-O'], 'b')).toBe(false);
     vi.doUnmock('./bookDeparture');
+  });
+});
+
+describe('theirOpeningVerdict — a verdict on their opening choice (pass-2 walk 2026-09-30)', () => {
+  afterEach(() => __setLocalDbForTests(null));
+  // 1.e4 c5 2.Nf3 Nc6 3.d4 cxd4 4.Nxd4 g6 5.Be3 Bg7 6.c3 — masters play Nc3.
+  const history = ['e4', 'c5', 'Nf3', 'Nc6', 'd4', 'cxd4', 'Nxd4', 'g6', 'Be3', 'Bg7', 'c3'];
+  const seed = (): void => {
+    masterPlayCache.clear();
+    const positions: Record<string, Array<{ san: string; games: number }>> = {};
+    const b = new Chess();
+    history.forEach((san, i) => {
+      positions[b.fen().split(' ').slice(0, 4).join(' ')] = i === 10 ? [{ san: 'Nc3', games: 900 }, { san: 'c4', games: 200 }] : [{ san, games: 500 }];
+      b.move(san);
+    });
+    __setLocalDbForTests({ positions } as unknown as Parameters<typeof __setLocalDbForTests>[0]);
+  };
+  it('a costly departure is judged, with the usual move named', () => {
+    seed();
+    expect(theirOpeningVerdict(history, 'b', 45, false)).toBe('It is a weaker choice than the knight to c3 — it costs them about half a pawn.');
+    expect(theirOpeningVerdict(history, 'b', 120, false)).toMatch(/^That is a dubious choice — the knight to c3 is the move here/);
+  });
+  it('a fair sideline, the student\'s own move, or a real coach slip says nothing', () => {
+    seed();
+    expect(theirOpeningVerdict(history, 'b', 10, false)).toBeNull();
+    expect(theirOpeningVerdict(history, 'w', 45, false)).toBeNull();
+    expect(theirOpeningVerdict(history, 'b', 150, true)).toBeNull();
   });
 });

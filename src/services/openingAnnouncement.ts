@@ -14,6 +14,7 @@
 
 import { bookDeparture, warmBookPosition, type BookDeparture } from './bookDeparture';
 import { sayMoveNoun } from './spokenMove';
+import { costWords, MISTAKE_CP } from './engineConstants';
 import { transposedOpening } from './openingPositions';
 import type { DetectedOpening } from '../types';
 
@@ -132,4 +133,32 @@ export function openingNameForBoard(
   const t = transposedOpening(fen, historyLength, byOrder);
   if (t) return { det: { name: t }, transposed: true };
   return { det: byOrder, transposed: false };
+}
+
+/** Below this an opponent's sideline is fair — the announcement already named
+ *  the usual move, and a verdict would be noise. */
+export const SIDELINE_FAIR_CP = 30;
+/** From here their sideline is dubious, said as such. */
+export const SIDELINE_DUBIOUS_CP = 80;
+
+/**
+ * A VERDICT ON THEIR OPENING CHOICE (pass-2 walk 2026-09-30, his most frequent
+ * missing idea: "…Bg4 is dubious", "c3 is already a mediocre move"). Only on
+ * the move that just left the masters' book, only the opponent's, and only
+ * with the engine's cost of it — the book says what is usual, the engine says
+ * whether leaving it costs anything. A fair sideline says nothing.
+ */
+export function theirOpeningVerdict(
+  history: readonly string[], studentColor: 'w' | 'b', cpLoss: number,
+  /** The coach chose this move itself — a real slip (>= the mistake floor) is
+   *  then the coach-verdict lane's, not this one's. */
+  coachChose: boolean,
+): string | null {
+  if (coachChose && cpLoss >= MISTAKE_CP) return null;
+  const dep = bookDeparture(history);
+  if (!dep || dep.ply !== history.length || dep.mover === studentColor || !dep.mainSan) return null;
+  if (cpLoss < SIDELINE_FAIR_CP) return null;
+  const main = sayMoveNoun(dep.mainSan);
+  if (cpLoss >= SIDELINE_DUBIOUS_CP) return `That is a dubious choice — ${main} is the move here, and this one costs them ${costWords(cpLoss)}.`;
+  return `It is a weaker choice than ${main} — it costs them ${costWords(cpLoss)}.`;
 }

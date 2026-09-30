@@ -558,11 +558,47 @@ export function drilledTransferLine(
  *  before the move, the student played one of the only moves that held. */
 export function foundMoveTeaching(fenBefore: string, san: string, preLines: readonly CriticalFanLine[] | undefined, student: 'w' | 'b', to: string): TeachingHint | null {
   if (!preLines || preLines.length < 2) return null;
-  const text = criticalMomentFound(readCriticalMoment({ topLines: preLines, moverColor: student, fen: fenBefore }), san);
-  if (!text) return null;
+  const found = criticalMomentFound(readCriticalMoment({ topLines: preLines, moverColor: student, fen: fenBefore }), san);
+  if (!found) return null;
+  // THE LINE THAT MAKES IT WORK (pass-2 walk 2026-09-30: "Nxd5 was the only
+  // move that kept you on top" — he says why: it wins a pawn, because …Bxc3+
+  // follows WITH CHECK). When the found move is the engine's and its own line
+  // wins material, the line is said to where the material lands, and drawn.
+  const won = winningLine(fenBefore, san, preLines[0]?.moves ?? [], student);
+  const text = won ? `${found} It wins ${won.what}: ${won.sans.join(' ')}.` : found;
+  const arrows: ArrowClaim[] = won ? won.arrows : [];
   // A real decision moment (only one or two moves held) answered is calculation
   // proven — importance 90, above the green bar, because the board posed it.
-  return { lane: 'foundMove', text, squares: [to], claims: [`found-${san}`], event: { name: 'coach_found_move_named', props: { surface: 'coach-teach' } }, arrows: [], evidence: { tag: 'calculation-depth', posedImportance: 90 } };
+  return { lane: 'foundMove', text, squares: [to], claims: [`found-${san}`], event: { name: 'coach_found_move_named', props: { surface: 'coach-teach' } }, arrows, evidence: { tag: 'calculation-depth', posedImportance: 90 } };
+}
+
+const LINE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
+const WON_WORDS: Record<number, string> = { 1: 'a pawn', 2: 'two pawns', 3: 'a piece', 4: 'a piece and a pawn', 5: 'the exchange', 6: 'a rook and a pawn' };
+
+/** The engine line starting with the played move, when the student ends it up
+ *  material — said to the last capture, where the exchanges are over. */
+export function winningLine(fen: string, san: string, lineUci: readonly string[], student: 'w' | 'b'): { what: string; sans: string[]; arrows: ArrowClaim[] } | null {
+  if (!lineUci.length) return null;
+  const c = new Chess(fen);
+  const sans: string[] = []; const arrows: ArrowClaim[] = [];
+  let net = 0; let lastCap = -1;
+  try {
+    for (let i = 0; i < lineUci.length; i += 1) {
+      const u = lineUci[i];
+      const before = c.fen();
+      const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+      if (!m) break;
+      if (i === 0 && m.san.replace(/[+#]$/, '') !== san.replace(/[+#]$/, '')) return null;
+      if (m.captured) net += (m.color === student ? 1 : -1) * (LINE_VALUE[m.captured] ?? 0);
+      sans.push(`${m.color === 'b' ? '…' : ''}${m.san}`);
+      arrows.push({ from: m.from, to: m.to, role: m.color === student ? 'play' : 'theirs', fen: before, source: 'learn.foundMove.line' });
+      if (m.captured) lastCap = i;
+    }
+  } catch { return null; }
+  // Said to the LAST capture: the exchange is over there and what is left is
+  // what was won — never a peak the recaptures hand back.
+  if (net < 1 || lastCap < 1) return null;
+  return { what: WON_WORDS[net] ?? `${net} points of material`, sans: sans.slice(0, lastCap + 1), arrows: arrows.slice(0, lastCap + 1) };
 }
 
 // ── PLAY ASKS THE SAME COMPUTERS (David 2026-09-30: "Play still needs access to

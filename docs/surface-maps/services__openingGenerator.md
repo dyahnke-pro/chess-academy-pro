@@ -87,7 +87,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:5759`
 - `src/components/Coach/CoachTeachPage.tsx:5833`
 - `src/components/Coach/CoachTeachPage.tsx:6590`
-- `src/components/Coach/CoachTeachPage.tsx:10846`
+- `src/components/Coach/CoachTeachPage.tsx:10862`
 - `src/services/lessonCacheKey.test.ts:58`
 - `src/services/lessonCacheKey.test.ts:63`
 - `src/services/lessonCacheKey.test.ts:72`
@@ -242,7 +242,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:5714`
 - `src/components/Coach/CoachTeachPage.tsx:5827`
 - `src/components/Coach/CoachTeachPage.tsx:6585`
-- `src/components/Coach/CoachTeachPage.tsx:10840`
+- `src/components/Coach/CoachTeachPage.tsx:10856`
 - `src/services/openingGenerator.computedBeats.test.ts:59`
 - `src/services/openingGenerator.test.ts:933`
 - `src/services/openingGenerator.test.ts:936`

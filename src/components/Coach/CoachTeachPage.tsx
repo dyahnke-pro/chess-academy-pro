@@ -80,7 +80,7 @@ import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
 import { findSiblingExtensionBranches, resolveOpeningEntry, isBookLine } from '../../services/openingDetectionService';
-import { openingAnnouncementForGame, openingNameForBoard, spokenOpeningLabel, studentJustLeftBook, warmOpeningBook } from '../../services/openingAnnouncement';
+import { openingAnnouncementForGame, theirOpeningVerdict, openingNameForBoard, spokenOpeningLabel, studentJustLeftBook, warmOpeningBook } from '../../services/openingAnnouncement';
 import { lastMoveCapturedOn, pendingRecapture, landingSquare } from '../../utils/justCaptured';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
@@ -10405,6 +10405,22 @@ export function CoachTeachPage(): JSX.Element {
                   // THE DECLINE DECIDES. This re-tested its own conditions and
                   // ignored the reason above, so a DICTATED move still got "I've
                   // taken a defender off b7…" in the coach's first person.
+                  // A VERDICT ON THEIR OPENING CHOICE — dictated or not, the
+                  // opponent's move that just left the masters' book, judged by
+                  // the engine's cost of it. Only below the mistake floor when
+                  // the coach chose it (a real slip is the verdict lane's).
+                  try {
+                    if (cm && mid && samePosition(cm.fenAfter, fenAfterReply) && !mid.isMate && !cm.afterIsMate) {
+                      const oppSign = playerColor === 'white' ? -1 : 1;
+                      const oppLoss = (mid.evaluation * oppSign) - (cm.evalAfterWhiteCp * oppSign);
+                      const dictated = learnMemRef.current.lastReplyDictated !== null;
+                      const verdict = theirOpeningVerdict([...move.history, cm.playedSan], playerColor === 'white' ? 'w' : 'b', oppLoss, !dictated);
+                      if (verdict) {
+                        queueSpokenHint(fenAfterReply, verdict, 'theirMoveCost', undefined, [`their-opening-verdict:${move.history.length + 1}`]);
+                        captureEvent('coach_their_opening_verdict', { surface: 'coach-teach', cost: Math.round(oppLoss) });
+                      }
+                    }
+                  } catch { /* a bonus, never a blocker */ }
                   if (!declineReason && cm && mid && samePosition(cm.fenAfter, fenAfterReply)) {
                     coachMoveRef.current = null;
                     const coachColor = playerColor === 'white' ? 'black' : 'white';
