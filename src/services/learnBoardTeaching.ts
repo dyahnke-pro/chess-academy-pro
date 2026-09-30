@@ -19,6 +19,9 @@ import { falseAlarm } from './falseAlarm';
 import { theirMoveCost } from './theirMoveCost';
 import { pushOrHold } from './pushOrHold';
 import { threatAnswer, type ThreatAnswer } from './threatAnswer';
+import { mastersPlanLine, mastersPlanRead } from './mastersPlanRead';
+import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
+import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from './criticalMoment';
 
 export interface TeachingHint {
   lane: LearnLane;
@@ -192,4 +195,27 @@ export function threatAnswerTeaching(i: {
 }): ThreatAnswer | null {
   const studentCp = i.whiteCp === null ? null : i.student === 'w' ? i.whiteCp : -i.whiteCp;
   return threatAnswer({ fen: i.fen, squares: i.squares, bestUci: i.bestUci, studentCp, student: i.student, ply: i.ply, shape: i.shape });
+}
+
+/** THE OPENING'S PLAN, COMPUTED FROM MASTER GAMES (WO-TEACH-GAPS P2 #0): the
+ *  pawn break each side's master games go for from this board, with its share.
+ *  Warms the masters file on first call; silent until it has loaded. */
+export function openingPlanTeaching(fen: string, student: 'w' | 'b'): TeachingHint | null {
+  void ensureMastersDbLoaded();
+  const plan = mastersPlanLine(mastersPlanRead(fen, mastersMovesSync), student);
+  if (!plan) return null;
+  return {
+    lane: 'openingIdea', text: plan.text, squares: plan.squares, claims: plan.squares.map((q) => `break-${q}`),
+    event: { name: 'coach_opening_plan_named', props: { surface: 'coach-teach' } },
+    arrows: plan.arrows.map((a) => ({ from: a.from, to: a.to, role: 'play', fen, source: 'learn.openingPlan' })),
+  };
+}
+
+/** THE VERDICT ON A FOUND MOVE (P2 #2): at a real decision moment on the board
+ *  before the move, the student played one of the only moves that held. */
+export function foundMoveTeaching(fenBefore: string, san: string, preLines: readonly CriticalFanLine[] | undefined, student: 'w' | 'b', to: string): TeachingHint | null {
+  if (!preLines || preLines.length < 2) return null;
+  const text = criticalMomentFound(readCriticalMoment({ topLines: preLines, moverColor: student, fen: fenBefore }), san);
+  if (!text) return null;
+  return { lane: 'foundMove', text, squares: [to], claims: [`found-${san}`], event: { name: 'coach_found_move_named', props: { surface: 'coach-teach' } }, arrows: [] };
 }

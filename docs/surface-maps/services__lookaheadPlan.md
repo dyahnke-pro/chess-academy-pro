@@ -39,7 +39,7 @@
 - `src/services/replayFence.modern1690.test.ts:80`
 
 ### `tacticWord` (function) — 23 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7765`
+- `src/components/Coach/CoachTeachPage.tsx:7762`
 - `src/services/computedVoiceAudit.report.test.ts:254`
 - `src/services/dnaLineNarrator.ts:129`
 - `src/services/dnaLineNarrator.ts:218`
@@ -64,7 +64,7 @@
 - `src/services/teachingSelector.ts:347`
 
 ### `seatedTacticLine` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7776`
+- `src/components/Coach/CoachTeachPage.tsx:7773`
 - `src/services/seatedTacticLine.test.ts:8`
 - `src/services/seatedTacticLine.test.ts:13`
 - `src/services/seatedTacticLine.test.ts:19`
@@ -173,7 +173,7 @@
 - `src/services/learnWalkBlumenfeld.test.ts:179`
 
 ### `planFromUci` (function) — 25 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9379`
+- `src/components/Coach/CoachTeachPage.tsx:9375`
 - `src/services/claimTruth.manual.test.ts:119`
 - `src/services/coachLaneWiring.test.ts:35`
 - `src/services/computedVoiceAudit.report.test.ts:216`
@@ -203,14 +203,14 @@
 - `src/services/coachFeatureService.ts:1321`
 
 ### `aimsOf` (re-export) — 4 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9388`
 - `src/components/Coach/CoachTeachPage.tsx:9392`
-- `src/components/Coach/CoachTeachPage.tsx:9396`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.ts:52`
 
 ### `aimWalkableNow` (re-export) — 12 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9388`
 - `src/components/Coach/CoachTeachPage.tsx:9392`
-- `src/components/Coach/CoachTeachPage.tsx:9396`
 - `src/services/planArc.test.ts:201`
 - `src/services/planArc.test.ts:211`
 - `src/services/planArc.test.ts:217`
@@ -223,8 +223,8 @@
 - `src/services/planArc.ts:366`
 
 ### `stepArc` (re-export) — 25 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9388`
 - `src/components/Coach/CoachTeachPage.tsx:9392`
-- `src/components/Coach/CoachTeachPage.tsx:9396`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.test.ts:94`
 - `src/services/planArc.test.ts:96`

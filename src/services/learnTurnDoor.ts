@@ -67,7 +67,8 @@ export type LearnLane =
   | 'kingSafety'
   | 'phase'
   | 'character'
-  | 'theirPurpose';
+  | 'theirPurpose'
+  | 'theirIntent';
 
 /** Lanes at or below this lead DESCRIBE the board (commentary, behaviour,
  *  the positional read, structure, piece quality) — the tier the scoreboard
@@ -164,6 +165,8 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // "their move's purpose" is one of his biggest teaching kinds (4% landed);
   // it is what just happened, so it outranks every description.
   theirPurpose: { kind: 'computed', why: "what the opponent's move was FOR — the threat of yours it stopped", lead: 74 },
+  // What their QUIET move prepares (P2 #5), engine-proven from their seat.
+  theirIntent: { kind: 'computed', why: "what the opponent's quiet move prepares — engine-proven from their seat", lead: 73 },
   phase: { kind: 'computed', why: 'the game has changed phase — take stock of what the position is about now', lead: 72 },
   kingSafety: { kind: 'observation', why: 'your own king is still in the centre and castling is ready', lead: 55 },
   causalChain: { kind: 'tactic', why: 'a cross-move cause proven on the board — the earlier move that left the piece loose', lead: 80 },

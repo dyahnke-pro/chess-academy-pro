@@ -26,14 +26,11 @@ import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { transferClause, recordMotif, withTransfer } from '../../services/motifLedger';
-import { mastersPlanLine, mastersPlanRead } from '../../services/mastersPlanRead';
-import { criticalMomentFound, readCriticalMoment } from '../../services/criticalMoment';
-import { ensureMastersDbLoaded, mastersMovesSync } from '../../services/masterPlayLookup';
 import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/learnTurnDoor';
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { studentMoveTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
+import { foundMoveTeaching, openingPlanTeaching, studentMoveTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -8240,13 +8237,12 @@ export function CoachTeachPage(): JSX.Element {
     // hand-written note decides it.
     let openingIdeaLine: { text: string; squares: string[] } | null = null;
     try {
-      void ensureMastersDbLoaded();
       if (!learnMemRef.current.structureSaid.has('masters-plan') && history.length >= 6) {
-        const seat: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
-        const plan = mastersPlanLine(mastersPlanRead(args.fenAfterReply, mastersMovesSync), seat);
+        const plan = openingPlanTeaching(args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b');
         if (plan) {
           learnMemRef.current.structureSaid.add('masters-plan');
           openingIdeaLine = { text: plan.text, squares: plan.squares };
+          if (plan.event) captureEvent(plan.event.name, plan.event.props);
         }
       }
     } catch { /* the masters plan is a bonus, never a blocker */ }
@@ -10038,12 +10034,8 @@ export function CoachTeachPage(): JSX.Element {
                       // played one of the only moves that held — say so, with why
                       // the others failed. The fact is the verdict; no praise word.
                       try {
-                        const pre = preStudentRead?.topLines;
-                        if (pre && pre.length >= 2) {
-                          const read = readCriticalMoment({ topLines: pre, moverColor: playerColor === 'white' ? 'w' : 'b', fen: fenBefore });
-                          const found = criticalMomentFound(read, move.san);
-                          if (found) queueSpokenHint(fenAfterReply, found, 'foundMove', [move.to], undefined, fenBefore);
-                        }
+                        const found = foundMoveTeaching(fenBefore, move.san, preStudentRead?.topLines, playerColor === 'white' ? 'w' : 'b', move.to);
+                        if (found) queueSpokenHint(fenAfterReply, found.text, found.lane, found.squares, found.claims, fenBefore);
                       } catch { /* the verdict is a bonus, never a blocker */ }
                       if (gambitLine) queueSpokenHint(fenAfterReply, gambitLine, 'movePoint', []);
                       const point = gambitLine ? null : studentMovePoint(fenBefore, move.san, move.history.length >= 2 ? move.history[move.history.length - 2] : null);
@@ -10162,6 +10154,35 @@ export function CoachTeachPage(): JSX.Element {
                   if (cost) {
                     queueSpokenHint(fenAfterReply, cost.text, cost.lane, cost.squares, cost.claims, undefined, cost.arrows);
                     if (cost.event) captureEvent(cost.event.name, cost.event.props);
+                  }
+                } catch { /* a bonus, never a blocker */ }
+
+                // ── WHAT THEIR QUIET MOVE PREPARES (WO-TEACH-GAPS P2 #5) ────
+                // His "what does their move want?" on a quiet move — the same
+                // engine-proven computer the student's moves get, from their
+                // seat. Only what it PREPARES: "it stopped your threat" is the
+                // theirPurpose lane's already. Not on a capture or check.
+                try {
+                  const theirSan = (() => {
+                    try {
+                      return new Chess(move.fen).moves({ verbose: true })
+                        .find((m) => { const c = new Chess(move.fen); c.move(m.san); return c.fen().split(' ')[0] === fenAfterReply.split(' ')[0]; })?.san ?? null;
+                    } catch { return null; }
+                  })();
+                  if (theirSan && !/[x+#]/.test(theirSan) && mid?.topLines?.length && !mid.isMate) {
+                    const passTheirs = nullMoveFen(move.fen);
+                    const passRead = passTheirs ? await stockfishEngine.analyzeWithBudget(passTheirs, COACH_TURN_DEPTH, 900).catch(() => null) : null;
+                    const afterRead = await stockfishEngine.analyzeWithBudget(fenAfterReply, COACH_TURN_DEPTH, 900).catch(() => null);
+                    const theirIntent = passRead?.topLines?.length && afterRead?.topLines?.length
+                      ? moveIntent(move.fen, theirSan, { before: mid.topLines, after: afterRead.topLines, passBefore: passRead.topLines, passAfter: [] }, 'opponent', DEFAULT_INTENT)
+                      : null;
+                    if (theirIntent?.prepares) {
+                      queueSpokenHint(fenAfterReply, theirIntent.text, 'theirIntent', theirIntent.squares, [
+                        `their-prepares:${theirIntent.prepares.uci}`,
+                        ...(theirIntent.prevents ? [`stops:${theirIntent.prevents.uci}`] : []),
+                      ], move.fen);
+                      captureEvent('coach_their_intent_named', { surface: 'coach-teach', prevents: !!theirIntent.prevents });
+                    }
                   }
                 } catch { /* a bonus, never a blocker */ }
 
