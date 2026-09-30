@@ -27,7 +27,6 @@
  */
 import type { WalkableLine, WalkPly } from '../types';
 import { computeExchangeLedger } from './exchangeLedger';
-import { sayMoveNoun } from './spokenMove';
 import { Chess } from 'chess.js';
 import {
   getPunishGemsForOpening,
@@ -801,7 +800,9 @@ export function findLivePunishment(
   // (withheld); the student's side is `trapAheadAt` — the warning before the
   // same kind of slip.
   const share = Math.round(gem.freqPct);
-  const lore = share >= 1 ? `That's a known trap — ${share}% of club players play ${sayMoveNoun(gem.inaccuracy)} here. ` : '';
+  // "This move", never its square: the punish usually lands on it (…f3 exf3),
+  // and a square named here is the answer given away.
+  const lore = share >= 1 ? `That's a known trap — ${share}% of club players play this move here. ` : '';
   const callout = `${lore}${CALLOUTS[gem.inaccuracy.length % CALLOUTS.length]}`;
 
   // SHOW THE LINE LANDING, not just its first move (David 2026-08-01: "make
