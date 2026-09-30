@@ -17,6 +17,8 @@ const NOT_PER_GAME: Record<string, string> = {
   // Scoped to the trap MENU by opening, not to a game: forgetting it would
   // re-offer a trap the coach just taught (the file's own comment says so).
   taughtGemIdsRef: 'trap-menu scope, keyed by opening — not per game',
+  // One engine read of ONE board, matched by FEN before use — per turn.
+  studentBestReadRef: 'per-turn engine read, keyed by its FEN — not per game',
 };
 
 function censusOrphans(): string[] {

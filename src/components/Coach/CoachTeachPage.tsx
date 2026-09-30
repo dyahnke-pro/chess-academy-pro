@@ -1774,9 +1774,6 @@ export function CoachTeachPage(): JSX.Element {
   // The engine's read of the board after the coach's reply — the answer to a
   // threat the instant wave named waits on it (threatAnswer).
   const studentBestReadRef = useRef<{ fen: string; bestUci: string | null; whiteCp: number | null } | null>(null);
-  // How many threat answers have been said — rotates the question stem by
-  // occurrence, so consecutive answers never open with the same words.
-  const threatAnswerCountRef = useRef(0);
   /** Positional observations already spoken this game — see `buildPositionalRead`.
    *  Without it an uncastled king repeats the same sentence every ply until it
    *  castles, and the boundary repeat-guard turns each of those back into the
@@ -9660,10 +9657,10 @@ export function CoachTeachPage(): JSX.Element {
                       const ans = threatAnswerTeaching({
                         fen: fenNow, squares: asked.squares, shape: asked.shape,
                         bestUci: read.bestUci, whiteCp: read.whiteCp,
-                        student: playerColor === 'white' ? 'w' : 'b', ply: threatAnswerCountRef.current,
+                        student: playerColor === 'white' ? 'w' : 'b', ply: learnMemRef.current.threatAnswers.size,
                       });
                       if (ans) {
-                        threatAnswerCountRef.current += 1;
+                        learnMemRef.current.threatAnswers.add(`${fenNow}|${ans.san}`);
                         queueSpokenHint(fenNow, ans.text, 'threatAnswer', asked.squares, [`threat-answer:${ans.arrow.from}${ans.arrow.to}`], undefined, [ans.arrow]);
                         captureEvent('threat_answer_queued', { surface: 'coach-teach', kind: ans.kind });
                       }

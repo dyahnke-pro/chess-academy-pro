@@ -88,6 +88,9 @@ export interface LearnMemory {
   lastThreatKey: string;
   readonly spokenTacticLines: Set<string>;
   readonly spokenThreatLines: Set<string>;
+  /** Threat answers said this game — rotates their question stem by
+   *  occurrence, so consecutive answers never open with the same words. */
+  readonly threatAnswers: Set<string>;
   /** Pieces already called out this game by `pieceQualityLines`. */
   readonly pieceQualitySaid: Set<string>;
   /** EVERY phrase the coach has spoken this game, across every lane and both
@@ -212,6 +215,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
   const motifFirstMove = new Map<string, { move: number; instance: string }>();
   const spokenTacticLines = new Set<string>();
   const spokenThreatLines = new Set<string>();
+  const threatAnswers = new Set<string>();
   let lastPlies = 0;
   const mem: LearnMemory = {
     gameId: mintGameId(),
@@ -226,6 +230,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
     motifFirstMove,
     lastTacticKey: '',
     lastThreatKey: '',
+    threatAnswers,
     spokenTacticLines,
     spokenThreatLines,
     gemSeen: null,
@@ -256,6 +261,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
       spokenThreatLines.clear();
       mem.lastTacticKey = '';
       mem.lastThreatKey = '';
+      threatAnswers.clear();
       mem.gemSeen = null;
       mem.gemFen = null;
       mem.gemPending = null;
