@@ -129,7 +129,11 @@ export function threatAnswer(input: {
   } else {
     const guarded = victims.includes(m.from) ? undefined : victims.find((v) => c.get(v)?.type !== 'k'
       && new Chess(after).attackers(v, student).length > new Chess(fen).attackers(v, student).length);
-    if (guarded) {
+    // A CHECK OR A CAPTURE ELSEWHERE comes first — that is the answer, not the
+    // defender it happens to leave behind (merged walk 2026-09-30: "Guard it —
+    // after Nxf3+ your bishop on c5 defends it").
+    const forcing = !!m.captured || new Chess(after).inCheck();
+    if (guarded && !forcing) {
       kind = 'guard';
       // NAME THE DEFENDER (walk 2026-09-30: "Nb2 adds a defender to your pawn
       // on a3" — the knight left, and the rook on a8 behind it did the work).

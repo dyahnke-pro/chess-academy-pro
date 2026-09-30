@@ -184,6 +184,10 @@ export function moveIntent(
   // …e6 doesn't work", and …e6 was their very next move). On the board the
   // student hears it on, the line contradicts what just happened.
   if (prevents && reads.reply && reads.reply.slice(0, 4) === prevents.uci.slice(0, 4)) prevents = null;
+  // A move onto the square the student just took is not "stopped", it is
+  // blocked by the piece standing there (merged walk 2026-09-30: "…c4 — now
+  // c4 doesn't work"). Nothing to teach.
+  if (prevents && prevents.uci.slice(2, 4) === playedUci.slice(2, 4)) prevents = null;
 
   // ── PREPARES ────────────────────────────────────────────────────────────
   let prepares: MoveIntent['prepares'] = null;

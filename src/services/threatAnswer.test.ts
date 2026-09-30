@@ -80,4 +80,10 @@ describe('threatAnswer', () => {
   it('refuses a board where the student is not to move', () => {
     expect(threatAnswer({ fen: 'r3rk2/pp1n1ppp/8/8/8/2P1BN2/PP4PP/RN2K3 b - - 3 19', squares: ['e8', 'e3', 'e1'], bestUci: 'f8g8', studentCp: 0, student: 'w', ply: 0, shape: 'line' })).toBeNull();
   });
+
+  it('a check elsewhere is not "guard it", even when it leaves a defender (merged walk, x-TMzSM51Cw ply 28)', () => {
+    // Knight on e3 hit; Nxf3+ from d4 checks, and only then does the c5-bishop cover e3.
+    const a = run('r2q1rk1/ppp2ppp/1b6/3p4/3n4/4nP1P/PPPQ2P1/2R1K2R b K - 0 16', ['e3'], 'd4f3', 150, 'hit');
+    expect(a?.kind === 'guard').toBe(false);
+  });
 });

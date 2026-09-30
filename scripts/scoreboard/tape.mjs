@@ -58,7 +58,9 @@ for (const g of games) {
     // U8zArIhxato ply 17), and the walk later stalls clicking a move that is no
     // longer legal. Stop at the first divergence; the lines from it are dropped.
     const expect = sans.slice(0, want).join(' ');
-    if ((st.moves ?? '') !== expect) { rec.error = `ply ${i + 2}: board diverged from the game (board ${st.moves} / game ${expect})`; break; }
+    // The coach plays on once the recorded game ends — only the game's own
+    // length is compared.
+    if ((st.moves ?? '').split(' ').slice(0, want).join(' ') !== expect) { rec.error = `ply ${i + 2}: board diverged from the game (board ${st.moves} / game ${expect})`; break; }
     rec.plies[i + 1] = [...new Set(spoken)]; // 1-based ply of the student's move; the beat covers it and the reply
     (rec.arrows ??= {})[i + 1] = [...arrows];
     i += 2;
