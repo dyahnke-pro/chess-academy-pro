@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2553 lines · 78 exports · 63 importers · 18 tests · 2 audits**
+**2561 lines · 78 exports · 64 importers · 18 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -70,6 +70,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticAlertService.ts`
 - `src/services/tacticVerification.ts`
 - `src/services/tacticsDetector.ts`
+- `src/services/theirMoveCost.ts`
 - `src/services/threatAnswer.ts`
 - `src/services/threatOut.ts`
 - `src/services/tradeQuality.ts`
@@ -118,8 +119,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `legalSeeGainOn` (function) — 10 call sites
 - `src/services/coachFeatureService.ts:2431`
 - `src/services/groundedAnswer.ts:6685`
-- `src/services/moveIntent.ts:284`
-- `src/services/moveIntent.ts:447`
+- `src/services/moveIntent.ts:288`
+- `src/services/moveIntent.ts:451`
 - `src/services/opponentMovePurpose.ts:33`
 - `src/services/reviewTeachingPoints.ts:99`
 - `src/services/reviewTeachingPoints.ts:135`
@@ -164,7 +165,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:1076`
 - `src/services/groundedAnswer.ts:6966`
 - `src/services/groundedAnswer.ts:7017`
-- `src/services/moveIntent.ts:350`
+- `src/services/moveIntent.ts:354`
 - `src/services/moveOrder.ts:113`
 - `src/services/moveTiming.ts:51`
 - `src/services/nextPlans.ts:46`
@@ -207,9 +208,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/danyaExploitability.test.ts:51`
 - `src/services/danyaExploitability.test.ts:55`
 
-### `minorRouteToSquare` (function) — 2 call sites
+### `minorRouteToSquare` (function) — 4 call sites
 - `src/services/danyaBehaviors.ts:755`
 - `src/services/groundedAnswer.ts:6144`
+- `src/services/positionReadingService.test.ts:939`
+- `src/services/theirMoveCost.ts:35`
 
 ### `HangingPiece` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -266,7 +269,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/danyaBehaviors.ts:206`
 - `src/services/danyaBehaviors.ts:518`
 - `src/services/groundedAnswer.ts:6339`
-- `src/services/pieceValueRead.ts:469`
+- `src/services/pieceValueRead.ts:471`
 - `src/services/positionReadingService.test.ts:106`
 - `src/services/positionReadingService.test.ts:114`
 - `src/services/positionReadingService.test.ts:121`

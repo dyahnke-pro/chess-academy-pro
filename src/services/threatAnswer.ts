@@ -18,7 +18,7 @@ import type { ArrowClaim } from './arrowDoor';
 import { legalSeeGainFor } from './positionReadingService';
 import { THINK_MARK } from '../utils/thinkPause';
 
-export type ThreatAnswerKind = 'take' | 'step-out' | 'kick' | 'block' | 'guard' | 'wait';
+export type ThreatAnswerKind = 'take' | 'step-out' | 'with-gain' | 'kick' | 'block' | 'guard' | 'wait';
 
 export interface ThreatAnswer {
   kind: ThreatAnswerKind;
@@ -102,6 +102,14 @@ export function threatAnswer(input: {
   if (m.captured && attackers.includes(m.to)) {
     kind = 'take';
     answer = `Take it — ${m.san} removes the ${piece(m.to)} doing it.`;
+  } else if (victims.includes(m.from) && (m.captured || new Chess(after).inCheck())) {
+    // THE ATTACKED PIECE LEAVES WITH GAIN — a capture or a check (walk
+    // 2026-09-30: "Guard it — Rxe7+ adds a defender to your rook on d7" was
+    // the rook itself leaving with check).
+    kind = 'with-gain';
+    answer = m.captured
+      ? `Move it with gain — ${m.san} takes the ${NAME[m.captured]}${new Chess(after).inCheck() ? ' with check' : ''}.`
+      : `Move it with gain — ${m.san} comes with check.`;
   } else if (victims.includes(m.from) && safeThere) {
     kind = 'step-out';
     answer = input.shape === 'hit'
@@ -113,15 +121,21 @@ export function threatAnswer(input: {
     const hit = attackers.find((a) => new Chess(after).attackers(a, student).includes(m.to)) as Square;
     kind = 'kick';
     answer = `Ask the question — ${m.san} hits the ${piece(hit)} at once.`;
-  } else if (input.shape === 'line' && attackers.some((a) => victims.some((v) => between(a, v).includes(m.to))) && safeThere) {
+  } else if (!victims.includes(m.from) && input.shape === 'line' && attackers.some((a) => victims.some((v) => between(a, v).includes(m.to))) && safeThere) {
     kind = 'block';
     answer = `Block it — ${m.san} steps in between.`;
   } else {
-    const guarded = victims.find((v) => c.get(v)?.type !== 'k'
+    const guarded = victims.includes(m.from) ? undefined : victims.find((v) => c.get(v)?.type !== 'k'
       && new Chess(after).attackers(v, student).length > new Chess(fen).attackers(v, student).length);
     if (guarded) {
       kind = 'guard';
-      answer = `Guard it — ${m.san} adds a defender to your ${piece(guarded)} on ${guarded}.`;
+      // NAME THE DEFENDER (walk 2026-09-30: "Nb2 adds a defender to your pawn
+      // on a3" — the knight left, and the rook on a8 behind it did the work).
+      const newDef = new Chess(after).attackers(guarded, student)
+        .find((sq) => !new Chess(fen).attackers(guarded, student).includes(sq));
+      answer = newDef && newDef !== m.to
+        ? `Guard it — after ${m.san} your ${piece(newDef, after)} on ${newDef} defends it.`
+        : `Guard it — ${m.san} adds a defender to your ${piece(guarded)} on ${guarded}.`;
     } else if (studentCp !== null && studentCp >= THREAT_WAIT_FLOOR_CP && !new Chess(fen).inCheck()) {
       kind = 'wait';
       answer = `It can wait — ${m.san} comes first.`;

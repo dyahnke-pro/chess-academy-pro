@@ -759,7 +759,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // `fundamental`, it IS the teaching idea). Positional leads are excluded here:
   // `fundamental` / `structure-plan` already carry them — no walk-over. Never
   // fails the briefing.
-  let concept: { id: string; source: string; full: string; instance?: string; squares: readonly string[]; boardFen?: string; line?: string[] } | null = null;
+  let concept: { id: string; source: string; full: string; short?: string; instance?: string; squares: readonly string[]; boardFen?: string; line?: string[] } | null = null;
   try {
     const lead = conceptForBoard(fen, { analysis, studentSide: studentColor === 'w' ? 'white' : 'black', rating, max: 1 })[0];
     // The board the concept is ABOUT travels with it — a concept found on the
@@ -774,7 +774,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     // move and may still speak.
     const fluxBy = studentToMove ? input.opponentLastMove : input.lastMove;
     const inFlux = !!fluxBy && !!inFluxAfter(fluxBy.fenBefore, fluxBy.san);
-    if (lead && lead.source !== 'positional' && !lead.bare && !(inFlux && lead.source !== 'tactic')) concept = { id: lead.id, source: lead.source, full: lead.full, squares: lead.squares, boardFen: lead.boardFen, line: lead.line };
+    if (lead && lead.source !== 'positional' && !lead.bare && !(inFlux && lead.source !== 'tactic')) concept = { id: lead.id, source: lead.source, full: lead.full, short: lead.short, squares: lead.squares, boardFen: lead.boardFen, line: lead.line };
   } catch { concept = null; }
 
   // THE METHOD BEAT — the same computer the review path uses, in its live
@@ -1025,6 +1025,9 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       // The balance sheet's reasons, under the keys the positional read uses.
       ...(clauses.some((c) => c.kind === 'stock') ? stockKeys : []),
       ...(concept?.source === 'tactic' && clauses.some((c) => c.kind === 'concept') ? [definitionKey(concept.id), conceptInstanceKey(concept.id, concept.squares)] : []),
+      // A technique's definition is said once a game too (walk 2026-09-30: the
+      // opposition defined on two consecutive moves).
+      ...(concept?.source === 'technique' && clauses.some((c) => c.kind === 'concept') ? [definitionKey(concept.id)] : []),
     ],
     // Only a principle the door actually SPOKE is committed as taught.
     principleSpoken: ruleHere && clauses.some((c) => c.kind === 'rule') ? ruleHere.id : null,
@@ -1214,7 +1217,7 @@ function buildClauses(a: {
   /** The lead COMPUTED CONCEPT of the position (conceptEngine, from the same
    *  analysis) — the teachable idea, joined to the briefing as a ranked fact.
    *  Null when nothing teachable / positional-only (no walk-over). */
-  concept: { id: string; source: string; full: string; instance?: string; squares: readonly string[]; boardFen?: string; line?: string[] } | null;
+  concept: { id: string; source: string; full: string; short?: string; instance?: string; squares: readonly string[]; boardFen?: string; line?: string[] } | null;
   /** The habit to run in this position, present tense. Null when none earned. */
   methodBeat: string | null;
 }): ClauseItem[] {
@@ -1406,7 +1409,7 @@ function buildClauses(a: {
       // 2026-09-24: "Bishop on h5 pins knight on e2 against queen on d1").
       // The definition is taught once a game (`definitionKey`); after that the
       // board fact speaks alone.
-      kind: 'concept', rank, text: concept.source === 'tactic' ? afterLine(concept.line, concept.boardFen, a.fen, seatBare(concept.instance && a.alreadySaid?.has(definitionKey(concept.id)) ? `${concept.instance}.` : concept.full, concept.boardFen ?? a.fen, studentSeat === 'white' ? 'w' : 'b')) : afterLine(concept.line, concept.boardFen, a.fen, concept.full),
+      kind: 'concept', rank, text: concept.source === 'tactic' ? afterLine(concept.line, concept.boardFen, a.fen, seatBare(concept.instance && a.alreadySaid?.has(definitionKey(concept.id)) ? `${concept.instance}.` : concept.full, concept.boardFen ?? a.fen, studentSeat === 'white' ? 'w' : 'b')) : afterLine(concept.line, concept.boardFen, a.fen, concept.source === 'technique' && a.alreadySaid?.has(definitionKey(concept.id)) && concept.short ? concept.short : concept.full),
       conceptId: concept.source === 'tactic' ? concept.id : undefined,
       // `ComputedConcept.squares` is the engine's own lead-the-eye set (agent
       // first, then targets) — exactly the geometry the sentence names.

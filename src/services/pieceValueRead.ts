@@ -283,7 +283,9 @@ export function pieceQualityLines(
     // its own pawns. Castling is not work: on move six of a Philidor (hand walk
     // 2026-09-24) the rook that had just castled to f8, behind its own f7-pawn,
     // was crowned "the piece doing the most work for them".
-    .filter((v) => opts?.isMiddlegame === true || v.piece.toLowerCase() !== 'r' || rookFileFree(opts?.fen, v))
+    // …in EVERY phase (walk 2026-09-30, move 10: "the rook on b1 is doing the
+    // most work" standing behind its own b-pawn).
+    .filter((v) => v.piece.toLowerCase() !== 'r' || (opts?.fen ? rookFileFree(opts.fen, v) : opts?.isMiddlegame === true))
     // …and a piece the student can simply TAKE is not one to "trade off"
     // (hand walk 2000: Rxd8 just took, nothing defended it, and the coach said
     // "their rook on d8 is the piece doing the most work — trade it off").

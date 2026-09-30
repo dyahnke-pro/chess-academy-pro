@@ -180,6 +180,10 @@ export function moveIntent(
     }
     if (!prevents && opts.prevent === 'any+deny') prevents = denied(fenBefore, fenAfter, passFen, playedUci, mover, reads);
   }
+  // A MOVE THEY THEN PLAYED WAS NOT "STOPPED" (walk 2026-09-30: "Ng5 — now
+  // …e6 doesn't work", and …e6 was their very next move). On the board the
+  // student hears it on, the line contradicts what just happened.
+  if (prevents && reads.reply && reads.reply.slice(0, 4) === prevents.uci.slice(0, 4)) prevents = null;
 
   // ── PREPARES ────────────────────────────────────────────────────────────
   let prepares: MoveIntent['prepares'] = null;

@@ -141,12 +141,13 @@
 - `src/services/conceptEngine.test.ts:197`
 - `src/services/conceptVocabulary.test.ts:63`
 
-### `definitionKey` (function) — 5 call sites
+### `definitionKey` (function) — 6 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7703`
 - `src/components/Coach/CoachTeachPage.tsx:7707`
 - `src/services/learnWalkBlumenfeld.test.ts:131`
 - `src/services/positionFacts.ts:1027`
-- `src/services/positionFacts.ts:1409`
+- `src/services/positionFacts.ts:1030`
+- `src/services/positionFacts.ts:1412`
 
 ### `tacticInvariant` (function) — 8 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7704`

@@ -14,6 +14,7 @@
 // Returns null when the move cost nothing a student can see.
 import { Chess, type Square } from 'chess.js';
 import { isOutpost } from './outpost';
+import { minorRouteToSquare } from './positionReadingService';
 import { describeConcessions } from './reviewTeachingPoints';
 
 export interface TheirMoveCost {
@@ -22,23 +23,17 @@ export interface TheirMoveCost {
   kind: 'hole' | 'bishop-shut' | 'castling' | 'structure';
 }
 
-const KNIGHT_JUMPS: ReadonlyArray<readonly [number, number]> = [[1, 2], [2, 1], [-1, 2], [-2, 1], [1, -2], [2, -1], [-1, -2], [-2, -1]];
-const jumps = (sq: string): string[] => {
-  const f = sq.charCodeAt(0) - 97; const r = Number(sq[1]) - 1;
-  return KNIGHT_JUMPS.map(([df, dr]) => [f + df, r + dr])
-    .filter(([a, b]) => a >= 0 && a < 8 && b >= 0 && b < 8)
-    .map(([a, b]) => `${String.fromCharCode(97 + a)}${b + 1}`);
-};
 
 /** A student knight that reaches `target` in one or two jumps, landing on
  *  squares not held by its own pieces. Returns the knight's square and, for a
  *  two-jump route, the square in between. */
+// ONE ROUTE FINDER (walk 2026-09-30): this file kept its own knight BFS, which
+// walked through enemy pawns and onto squares a pawn takes ("via c4" with their
+// pawn on c4, "via h4" with …g5 hitting it) — the same bug the shared finder
+// had, fixed there and not here. Now it asks the shared one.
 function knightRoute(board: Chess, target: string, color: 'w' | 'b'): { from: string; via: string | null } | null {
-  const own = (sq: string): boolean => { const p = board.get(sq as Square); return !!p && p.color === color; };
-  const knights = board.board().flat().filter((c) => c && c.type === 'n' && c.color === color).map((c) => (c as { square: string }).square);
-  for (const n of knights) if (jumps(n).includes(target)) return { from: n, via: null };
-  for (const n of knights) for (const mid of jumps(n)) if (!own(mid) && jumps(mid).includes(target)) return { from: n, via: mid };
-  return null;
+  const r = minorRouteToSquare(board.fen(), target as Square, color, 2, 'n');
+  return r ? { from: r.from, via: r.via } : null;
 }
 
 function bishopMobility(board: Chess, sq: string): number {

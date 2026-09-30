@@ -146,6 +146,26 @@ function checkSentence(s, ctx) {
       const b = board(ctx.fenMid); const p = b?.get(sq);
       res.push([!!p && p.color === me && see(ctx.fenMid, sq, them) <= 0, `${sq} can be taken back`]);
     }
+    // "your bishop on f1 gets there via b5" — the stop is empty and not lost
+    for (const m of s.matchAll(/your (\w+) on ([a-h][1-8]) (?:gets|can get) there via ([a-h][1-8])/g)) {
+      const b = board(ctx.fenAfter); const via = m[3];
+      const empty = !!b && !b.get(via);
+      let safe = false;
+      if (empty) { const c = board(withTurn(ctx.fenAfter, me)); try { c.move({ from: m[2], to: via }); safe = see(c.fen(), via, them) <= 0; } catch { safe = false; } }
+      res.push([empty && safe, `route stop ${via} is ${empty ? 'lost to a capture' : 'occupied'}`]);
+    }
+    // "now …e6 doesn't work" — false when …e6 was their actual reply
+    for (const m of s.matchAll(/now (…?[NBRQK]?[a-h]?x?[a-h][1-8])\S* doesn't work/g)) {
+      const san = stripSan(m[1]); const reply = ctx.g.plies[ctx.i + 1]?.san;
+      res.push([!reply || stripSan(reply) !== san, `they played ${san} anyway`]);
+    }
+    // "Guard it — X adds a defender to your Y on sq"
+    for (const m of s.matchAll(/Guard it — (\S+) adds a defender to your (\w+) on ([a-h][1-8])/g)) {
+      const san = stripSan(m[1]); const sq = m[3];
+      const c = board(withTurn(ctx.fenAfter, me)); let ok = false;
+      try { const before = attackers(c, sq, me).length; c.move(san); const p = c.get(sq); ok = !!p && p.color === me && attackers(c, sq, me).length > before; } catch { ok = false; }
+      res.push([ok, `${san} does not add a defender to ${sq}`]);
+    }
     // "Castle and the king steps off it" → castling legal
     if (/\bCastle and the king steps off it/.test(s)) {
       const b = board(withTurn(ctx.fenAfter, me));
@@ -188,11 +208,28 @@ function checkSentence(s, ctx) {
     let ok = false; try { c.move(a1); c.move(a2); ok = true; } catch { ok = false; }
     res.push([ok, `${a1} then ${a2} is illegal from the board before the move`]);
   }
+  // Hypothetical lines, walked as sequences from a board they can start on:
+  // "Rxc7+? Then Kxc7 and fxe4 — …" and "after c5, c3, their dxc3 arrives".
+  const walkLine = (sans) => [ctx.fenAfter, ctx.fenMid, ctx.fenBefore].some((fen) => { const c = board(fen); if (!c) return false; try { for (const x of sans) c.move(x); return true; } catch { return false; } });
+  const lineSans = new Set();
+  const qThen = /(…?\S+?)\? Then ([^—.]+?)(?: —|\.)/.exec(s);
+  if (qThen) {
+    const sans = [qThen[1], ...qThen[2].split(/,\s*|\s+and\s+/)].map((x) => stripSan(x.trim())).filter((x) => /^([NBRQK]|[a-h]|O-O)/.test(x));
+    sans.forEach((x) => lineSans.add(x));
+    res.push([walkLine(sans), `line ${sans.join(' ')} is illegal`]);
+  }
+  const afterLine = /after ([^.]*?), (?:their )?(…?[NBRQKa-h]\S*) (?:arrives|lands|breaks)/.exec(s);
+  if (afterLine) {
+    const sans = [...afterLine[1].replace(/ hitting [^,]*/g, '').split(/,\s*/), afterLine[2]].map((x) => stripSan(x.trim())).filter((x) => /^([NBRQK]|[a-h]|O-O)/.test(x));
+    sans.forEach((x) => lineSans.add(x));
+    res.push([walkLine(sans), `line ${sans.join(' ')} is illegal`]);
+  }
   // LEGALITY: a named student/opponent move must be legal on a board it can be about.
   if (!future) {
     for (const m of s.matchAll(/(?<![\w-])(…)?([NBRQK][a-h]?[1-8]?x?[a-h][1-8]|[a-h]x[a-h][1-8])[+#]?(?![\w-])/g)) {
       const san = m[2];
       if (hypo && (stripSan(hypo[1]) === san || stripSan(hypo[2]) === san)) continue;
+      if (lineSans.has(san)) continue;
       const ok = [ctx.fenBefore, ctx.fenMid, ctx.fenAfter].some((fen) => [me, them].some((t) => { const b = board(withTurn(fen, t)); if (!b) return false; try { b.move(san); return true; } catch { return false; } }));
       if (!ok) res.push([false, `${san} is not a legal move on these boards`]);
     }
@@ -221,7 +258,10 @@ for (const [id, rec] of Object.entries(tape)) {
     const fenBefore = g.plies[i]?.fen; const fenMid = g.plies[i + 1]?.fen;
     const fenAfter = g.plies[i + 2]?.fen ?? (() => { const c = board(fenMid); try { c.move(g.plies[i + 1].san); return c.fen(); } catch { return fenMid; } })();
     if (!fenBefore || !fenMid) continue;
-    const ctx = { g, me, them, fenBefore, fenMid, fenAfter };
+    // The last ply's reply is the COACH's own move, not in the recorded game —
+    // the board the student heard is unknown here, so nothing is judged.
+    if (!g.plies[i + 1]?.san || !g.plies[i + 2]) continue;
+    const ctx = { g, i, me, them, fenBefore, fenMid, fenAfter };
     const seen = new Set();
     for (const line of lines) {
       if (spokenForm.test(line)) continue; // the voice's spelled-out copy of a SAN line

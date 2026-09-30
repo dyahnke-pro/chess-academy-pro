@@ -70,6 +70,13 @@ describe('threatAnswer', () => {
     expect(a?.kind).toBe('step-out');
   });
 
+  it('the attacked piece leaving with a capture is never "guard it" (walk 2026-09-30, Rd7 hit; Rxe7+)', () => {
+    const fen = '1r5r/1b1Rb3/p3k1p1/1p2p2p/4P2P/2B2P2/PPP1B1P1/1K5R w - - 1 27';
+    const a = run(fen, ['d7', 'e6'], 'd7e7', 400, 'hit');
+    expect(a?.kind).toBe('with-gain');
+    expect(a?.text).toContain('Move it with gain — Rxe7+ takes the bishop with check.');
+  });
+
   it('refuses a board where the student is not to move', () => {
     expect(threatAnswer({ fen: 'r3rk2/pp1n1ppp/8/8/8/2P1BN2/PP4PP/RN2K3 b - - 3 19', squares: ['e8', 'e3', 'e1'], bestUci: 'f8g8', studentCp: 0, student: 'w', ply: 0, shape: 'line' })).toBeNull();
   });

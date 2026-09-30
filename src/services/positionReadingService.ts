@@ -247,13 +247,15 @@ export function minorCanReachSquare(fen: string, target: Square, color: Color, m
  *  gets there via e5" is the very route the reach check proved. */
 export function minorRouteToSquare(
   fen: string, target: Square, color: Color, maxMoves = 2,
+  /** Only this minor (a knight outpost wants a knight). */
+  only?: 'n' | 'b',
 ): { piece: 'n' | 'b'; from: Square; via: Square | null } | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
   if (chess.get(target)) return null; // occupied — not an empty hole to plant on
-  const isMinorMove = (m: { piece: PieceSymbol }): boolean => m.piece === 'n' || m.piece === 'b';
+  const isMinorMove = (m: { piece: PieceSymbol }): boolean => (only ? m.piece === only : m.piece === 'n' || m.piece === 'b');
   // reach-1: a minor of `color` can move straight onto the hole.
-  const gen = (f: string): { from: Square; to: Square; piece: PieceSymbol }[] => {
+  const gen = (f: string): { from: Square; to: Square; piece: PieceSymbol; captured?: PieceSymbol }[] => {
     try { return new Chess(f).moves({ verbose: true }).filter(isMinorMove); } catch { return []; }
   };
   const start = forceTurn(fen, color);
@@ -264,8 +266,14 @@ export function minorRouteToSquare(
   // reach-2: a minor hops to an intermediate square, then onto the hole. Cap the
   // fan-out so a pathological position can't run away.
   for (const m of moves1.slice(0, 24)) {
+    // THE STOP MUST BE A SQUARE THE PIECE CAN STAND ON (walk 2026-09-30:
+    // "your bishop on f1 gets there via b5" — b5 held their pawn, defended
+    // by a6; the "route" lost the bishop). No capture on the way, and no
+    // stop they can simply win.
+    if (m.captured) continue;
     let mid: Chess;
     try { mid = new Chess(start); mid.move({ from: m.from, to: m.to }); } catch { continue; }
+    if (legalSeeGainFor(mid.fen(), m.to, color === 'w' ? 'b' : 'w') > 0) continue;
     if (gen(forceTurn(mid.fen(), color)).some((m2) => m2.from === m.to && m2.to === target)) {
       return { piece: m.piece as 'n' | 'b', from: m.from, via: m.to };
     }
