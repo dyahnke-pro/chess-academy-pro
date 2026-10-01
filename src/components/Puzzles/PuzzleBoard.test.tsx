@@ -171,7 +171,7 @@ describe('PuzzleBoard', () => {
   it('shows puzzle rating badge', () => {
     const puzzle = makePuzzle({ rating: 1500, themes: ['pin', 'middlegame'] });
     render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
-    expect(screen.getByTestId('puzzle-rating-badge')).toHaveTextContent('Puzzle Rating: 1500');
+    expect(screen.getByTestId('puzzle-rating-badge')).toHaveTextContent('Difficulty: 1500');
   });
 
   it('orients board for user (black to move in FEN → user plays white)', () => {

@@ -47,6 +47,18 @@ const RATING_DELTA_CLEAN = 20;
 const RATING_DELTA_ASSISTED = 5;
 const RATING_DELTA_FAILED = -20;
 
+/** "+12" / "-8" / "0". */
+function signed(n: number): string {
+  return n > 0 ? `+${n}` : `${n}`;
+}
+
+/** The summary measures the ONE puzzle rating (the reach ladder), not the
+ *  session's internal selection rating. */
+function withReach(summary: SummaryData, history: readonly number[]): SummaryData {
+  if (history.length === 0) return summary;
+  return { ...summary, startRating: history[0], endRating: history[history.length - 1], ratingHistory: [...history] };
+}
+
 export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
@@ -114,12 +126,19 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
       ?? (activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING) + (master ? 0 : 200),
   );
   const [reachDelta, setReachDelta] = useState<number | null>(null);
+  /** The ONE puzzle rating (the reach ladder) across this session — the panel,
+   *  the checkpoint and the summary all measure it, so the tab shows one number
+   *  that moves, not a second "session rating" scored from the difficulty's
+   *  fixed start (hand walk 2026-10-01, RT1: five ratings on one tab). */
+  const [reachHistory, setReachHistory] = useState<number[]>([]);
   const [cue, setCue] = useState<ReachCue | null>(null);
   const [masterReady, setMasterReady] = useState<boolean>(!master);
   // Master concept-review pause: hold on the solved board until the student taps
   // Continue, so the concept lesson lands (the classroom teaching beat).
   const [awaitingConcept, setAwaitingConcept] = useState(false);
   const pendingSessionRef = useRef<AdaptiveSessionState | null>(null);
+  const reachHistoryRef = useRef<number[]>([]);
+  reachHistoryRef.current = reachHistory;
 
   // Keep playerRating synced with profile
   useEffect(() => {
@@ -132,6 +151,7 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
   const persistReach = useCallback((next: ReachState): void => {
     reachRef.current = next;
     setReachRating(next.rating);
+    setReachHistory((h) => [...h, next.rating]);
     if (activeProfile) {
       const preferences = {
         ...activeProfile.preferences,
@@ -189,7 +209,7 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
     if (!puzzle) {
       // No more puzzles available — end session
       voiceService.stop();
-      setSummary(getAdaptiveSessionSummary(sess));
+      setSummary(withReach(getAdaptiveSessionSummary(sess), reachHistoryRef.current));
       setPhase('summary');
       return;
     }
@@ -216,6 +236,7 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
     );
     reachRef.current = reach;
     setReachRating(reach.rating);
+    setReachHistory([reach.rating]);
     setReachDelta(null);
     setPhase('loading');
     await fetchNextPuzzle(newSession);
@@ -387,7 +408,7 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
 
   const handleEndSession = useCallback((): void => {
     if (!session) return;
-    setSummary(getAdaptiveSessionSummary(session));
+    setSummary(withReach(getAdaptiveSessionSummary(session), reachHistoryRef.current));
     setPhase('summary');
     void getPuzzleStats().then(setStats);
   }, [session]);
@@ -530,7 +551,7 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
             />
           </div>
           <div className="space-y-4">
-            <AdaptiveSessionPanel session={session} />
+            <AdaptiveSessionPanel session={session} ratingHistory={reachHistory} />
             {awaitingConcept ? (
               <button
                 onClick={() => void handleContinueAfterConcept()}
@@ -563,8 +584,11 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
               {session.puzzlesSolved} solved, {session.puzzlesFailed} missed
             </p>
             <p className="text-sm mt-2">
-              Session Rating:{' '}
-              <span className="font-bold text-theme-text">{session.sessionRating}</span>
+              Puzzle rating:{' '}
+              <span className="font-bold text-theme-text">{reachRating}</span>
+              {reachHistory.length > 1 && (
+                <span className="text-theme-text-muted">{' '}({signed(reachRating - reachHistory[0])} this session)</span>
+              )}
             </p>
           </div>
           <div className="flex gap-3">

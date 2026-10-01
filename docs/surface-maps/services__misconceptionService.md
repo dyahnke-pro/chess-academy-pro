@@ -143,8 +143,8 @@
 - `src/services/weaknessSpine.ts:869`
 
 ### `recordTagDrillResult` (function) — 8 call sites
-- `src/components/Puzzles/AdaptivePuzzlePage.tsx:247`
-- `src/components/Puzzles/AdaptivePuzzlePage.tsx:334`
+- `src/components/Puzzles/AdaptivePuzzlePage.tsx:268`
+- `src/components/Puzzles/AdaptivePuzzlePage.tsx:355`
 - `src/components/Puzzles/WeaknessTagDrillPage.tsx:64`
 - `src/services/misconceptionService.test.ts:107`
 - `src/services/misconceptionService.test.ts:124`

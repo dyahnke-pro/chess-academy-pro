@@ -116,4 +116,4 @@ Calculation 3, Drill 1. Daily / Setup / Profile: 0.
 | Hint 2 without Hint 1 | fixed — every revealed hint stays, in order |
 | H1 26 hub tiles | fixed — grouped bars with a sentence each |
 | Unified algo | done — method beat via `decide()` with the whole record; theme targets from the whole record (`puzzle-themes-targeted`, audited) |
-| RT1 five ratings on one tab | OPEN — needs David's call on which ratings show |
+| RT1 five ratings on one tab | fixed — one puzzle rating; the session panel, checkpoint and summary measure it; the per-puzzle number reads "Difficulty" |

@@ -660,7 +660,7 @@ export function PuzzleBoard({
           className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-theme-surface font-semibold text-theme-text ${flashClass.includes('success') || state === 'correct' ? 'rating-bump' : ''}`}
           data-testid="puzzle-rating-badge"
         >
-          Puzzle Rating: {puzzle.rating}
+          Difficulty: {puzzle.rating}
         </span>
       </div>
     </div>
