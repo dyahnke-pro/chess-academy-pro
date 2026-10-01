@@ -65,7 +65,10 @@ export function aimsOf(side: SidePlan, seat: Seat): Aim[] {
     const onFile = ['1', '2', '3', '4', '5', '6', '7', '8'].map((r) => `${f}${r}`);
     out.push({ id: `file:${f}`, kind: 'file', squares: onFile, goal: null, phrase: `the ${f}-file` });
   }
-  for (const sq of side.passedPawns) {
+  const passerFiles = new Set<string>();
+  for (const sq of [...side.passedPawns, ...(side.pushedPassers ?? [])]) {
+    if (passerFiles.has(sq[0])) continue;
+    passerFiles.add(sq[0]);
     // Every square of the file: each push is a step, not only the square it
     // stood on when the plan was read (a first read counted d4 toward the king
     // attack because the passer's squares held only d5).

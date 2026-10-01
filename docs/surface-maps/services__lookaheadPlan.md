@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1466 lines · 25 exports · 13 importers · 9 tests · 0 audits**
+**1483 lines · 25 exports · 13 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -231,13 +231,13 @@
 - `src/services/planArc.test.ts:253`
 - `src/services/planArc.test.ts:258`
 - `src/services/planArc.test.ts:262`
-- `src/services/planArc.ts:405`
+- `src/services/planArc.ts:408`
 
 ### `joinEmerges` (re-export) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9552`
 - `src/services/planArc.test.ts:269`
 - `src/services/planArc.test.ts:276`
-- `src/services/planArc.ts:528`
+- `src/services/planArc.ts:531`
 
 ### `stepArc` (re-export) — 25 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9536`
@@ -264,7 +264,7 @@
 - `src/services/planArc.truth.test.ts:22`
 - `src/services/planArc.truth.test.ts:31`
 - `src/services/planArc.truth.test.ts:36`
-- `src/services/planArc.ts:239`
+- `src/services/planArc.ts:242`
 
 ### `EMPTY_ARC` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

@@ -169,6 +169,10 @@ export interface SidePlan {
   materialDeal?: { took: string; gave: string | null };
   /** Passed pawns this side creates. */
   passedPawns: string[];
+  /** Passed pawns this side PUSHES — a passer that already stood and steps on.
+   *  Kept apart from `passedPawns` so it is never voiced as "create" (calc hand
+   *  walk 2026-10-01: an advancing passer read as a new one on every push). */
+  pushedPassers?: string[];
   /** Enemy king-shield pawns this side strips away. */
   shieldStripped: number;
   /** A tactic that LANDS inside the line ('fork' | 'pin' | 'skewer' | …). */
@@ -473,6 +477,7 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
   const trading: string[] = [];
   const outposts: string[] = [];
   const passedPawns: string[] = [];
+  const pushedPassers: string[] = [];
   let materialSwing = 0;
   let materialDeal: { took: string; gave: string | null } | undefined;
   let shieldStripped = 0;
@@ -536,6 +541,11 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
         const piece = new Chess(ply.fenAfter).get(sq as never) as { type?: string; color?: string } | undefined;
         if (piece?.type === 'p' && piece.color === owner) passedPawns.push(sq);
       } catch { /* unreadable board — claim nothing */ }
+    }
+    // A pawn move that lands as a passer it already was: pushing the passer.
+    if (!/^[KQRBNO]/.test(ply.san) && !ply.facts.newPassedPawns.includes(to)) {
+      const passed = describeStructure(ply.fenAfter)?.pawns.passedPawns[owner] ?? [];
+      if (passed.includes(to)) pushedPassers.push(to);
     }
     materialSwing += ply.facts.materialGained;
     if (ply.facts.materialGained > 0) materialSquares.push(to);
@@ -649,6 +659,7 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     materialSwing,
     ...(materialDeal ? { materialDeal } : {}),
     passedPawns,
+    ...(pushedPassers.length ? { pushedPassers } : {}),
     shieldStripped,
     tactic,
     tacticSquare,
@@ -821,6 +832,12 @@ export function describePlan(
     // the third is a long-term asset that should not outrank a knight sitting
     // on an outpost right now.
     add(10 + advanced * 8, `create a passed pawn on ${sq}`, [sq]);
+  }
+  if (plan.passedPawns.length === 0 && plan.pushedPassers?.length) {
+    const sq = plan.pushedPassers[plan.pushedPassers.length - 1];
+    const rank = Number(sq[1]);
+    const advanced = plan.color === 'white' ? rank : 9 - rank;
+    add(10 + advanced * 8, `push the passed pawn on to ${sq}`, [sq]);
   }
   if (plan.outposts.length > 0) {
     add(35, `park a piece on ${plan.outposts[0]}, where none of their pawns can attack it`, [plan.outposts[0]]);
