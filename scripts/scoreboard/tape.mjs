@@ -41,6 +41,8 @@ for (const g of games) {
   const seat = g.white === g.us ? 'white' : 'black';
   const rec = { seat, plies: {}, done: false };
   await call('open'); await call(`rating?elo=${ELO}`); await call('setline?moves=');
+  // The engine lines each spoken mistake line was read from, this game only.
+  const srcStart = Array.isArray(await call('sources')) ? (await call('sources')).length : 0;
   let st = await call('state');
   let i = seat === 'white' ? 0 : 1;
   if (seat === 'black') {
@@ -118,6 +120,8 @@ for (const g of games) {
     (rec.arrows ??= {})[i + 1] = [...arrows];
     i += 2;
   }
+  const srcAll = await call('sources');
+  if (Array.isArray(srcAll)) rec.sources = srcAll.slice(srcStart);
   rec.done = !rec.error;
   tape[id] = rec;
   writeFileSync(OUT, JSON.stringify(tape));

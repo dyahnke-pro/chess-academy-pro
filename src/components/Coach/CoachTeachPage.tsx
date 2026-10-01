@@ -827,6 +827,20 @@ function tradeOnOffer(fen: string, square: string, student: 'w' | 'b'): boolean 
   } catch { return false; }
 }
 
+/** The engine lines a spoken mistake line was read from — so a walk can check
+ *  each reason against its own source, not a deeper line it never saw
+ *  (`learn-reason-source`, 2026-10-01). */
+function logReasonSource(fenBefore: string, playedSan: string, said: string, bestPvUci: readonly string[], replyPvUci: readonly string[]): void {
+  void logAppAudit({
+    kind: 'learn-reason-source',
+    category: 'subsystem',
+    source: 'CoachTeachPage.reasonSource',
+    summary: `${playedSan}: ${said.slice(0, 80)}`,
+    fen: fenBefore,
+    details: JSON.stringify({ playedSan, said, bestPv: bestPvUci.slice(0, 12), replyPv: replyPvUci.slice(0, 12) }),
+  });
+}
+
 export function CoachTeachPage(): JSX.Element {
   const navigate = useNavigate();
   // Quick Tour mode: ?mode=tour in the URL flips lessons into a
@@ -10175,6 +10189,7 @@ export function CoachTeachPage(): JSX.Element {
                         surface: 'coach-teach', kind: look.kind, cp_loss: Math.round(cpLoss),
                         fundamental: fundamental?.id ?? null,
                       });
+                      logReasonSource(fenBefore, move.san, line, preStudentRead.topLines?.[0]?.moves ?? [], mid.topLines?.[0]?.moves ?? []);
                     } else if (fundamental) {
                       // No nameable material drawback, but a fundamental WAS
                       // neglected (neglected-development, space-conceded, a passive
@@ -10543,6 +10558,7 @@ export function CoachTeachPage(): JSX.Element {
                       && samePosition(learnMemRef.current.gemFen, cm.fenAfter);
                     if (look && !gemCalledIt) {
                       queueSpokenHint(cm.fenAfter, look.line, look.kind, undefined, [`look:${look.kind}:coach:${cm.fenAfter.split(' ').slice(0, 2).join(' ')}`]);
+                      logReasonSource(cm.fenBefore, cm.playedSan, look.line, mid.topLines?.[0]?.moves ?? [], []);
                       captureEvent('coach_inaccuracy_called', {
                         surface: 'coach-teach', kind: look.kind, cost: Math.round(cpLoss),
                       });

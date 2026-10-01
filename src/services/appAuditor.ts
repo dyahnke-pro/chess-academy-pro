@@ -243,6 +243,12 @@ export type AuditKind =
   // One entry per burst of Learn door decisions (learnTurnDoor.decideTurn) —
   // offered / spoke / lead / held lanes, aggregated like coach-decision.
   | 'learn-turn-decision'
+  // THE ENGINE LINES A LEARN MISTAKE LINE WAS READ FROM (2026-10-01). A
+  // reason like "d5 was their move, to win a piece" comes off the live,
+  // time-boxed PV; a deeper read may refute it, and without the source line a
+  // walk cannot tell a wrong reader from a shallow line. One row per spoken
+  // mistake line: the board, the move, the best line and the reply line.
+  | 'learn-reason-source'
   // One held row written by a Learn teaching lane (capabilityEvidence.recordLaneEvidence).
   | 'lane-evidence'
   | 'concept-srs-pulled'

@@ -176,6 +176,14 @@ const routes = {
       .map((e) => `${e.kind} | ${e.source ?? ''} | ${(e.summary ?? '').slice(0, 300)}`)
       .filter((l) => !re || re.test(l)).slice(-n);
   },
+  /** Every `learn-reason-source` row this session: the board, the move, the
+   *  spoken mistake line and the engine lines it was read from — so a walk can
+   *  check a reason against its own source (2026-10-01). `/sources` */
+  async sources() {
+    return listener.getCapturedEvents()
+      .filter((e) => e.kind === 'learn-reason-source')
+      .map((e) => { let d = {}; try { d = JSON.parse(String(e.details ?? '{}')); } catch { d = {}; } return { fen: e.fen ?? null, ...d }; });
+  },
   /** The page's console lines — `/console?n=40&grep=pf-debug`. */
   async console(q) {
     const n = Number(q.get('n') ?? 40);
