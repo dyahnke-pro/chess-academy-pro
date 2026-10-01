@@ -6076,6 +6076,7 @@ After every `git push origin main`:
    | `/coach/plan` (Training Plan) | `scripts/audit-coach-plan.mjs` |
    | `/coach/analyse` / `/train` | `scripts/audit-untouched-surfaces.mjs` |
    | `/tactics/*` | `scripts/audit-tactics.mjs` |
+   | Tactics reading the WHOLE record (`rankThemeTargets`, `getWeakestThemes`, `puzzleMethodLine`, `useStudentRecord`, the adaptive first-puzzle boost) | `scripts/audit-tactics-record-prod.mjs` (muted, 3-instrument: fresh device = every theme target grey; seeded game holes = the `puzzle-themes-targeted` row leads with red and the first puzzle trains it) + `npx vitest run src/services/puzzleThemeTargets.test.ts src/services/puzzleMethod.test.ts` |
    | `/weaknesses` (or its tab/row → review flow) | `scripts/audit-weaknesses.mjs` |
    | anything `/weaknesses` computes on open (`gameInsightsService`, `tacticClassifierService`, the Insights tabs) | `scripts/audit-weaknesses-freeze-prod.mjs` — seeds ~900 analysed games, throttles the CPU ×4, and measures the longest frame gap on load and on tab taps (negative-controlled). The 2026-09-29 freeze only exists at library scale; a cold device can never show it |
    | `/openings/*` | `scripts/audit-openings-ui.mjs` (coordinate — often 🚧 in flight) |
