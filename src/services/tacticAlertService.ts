@@ -231,6 +231,11 @@ export function getCoachingMessage(
   playerRating: number,
 ): string | null {
   if (tier === 'none') return null;
+  // "Tactical sequence" names no pattern, so everything it could say is
+  // generic ("look for checks, captures, and threats") — and wrong when the
+  // answer is quiet. Callers speak the EARNED method beat instead
+  // (`puzzleMethodLine`), or nothing (hand walk 2026-10-01).
+  if (tacticType === 'tactical_sequence') return null;
 
   const teaching = TACTIC_TEACHING[tacticType];
   const isBeginner = playerRating < 1200;

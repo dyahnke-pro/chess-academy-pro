@@ -101,6 +101,9 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
     active: boardState === 'thinking' && isPlayerTurn,
     wrongAttempts: wrongAttemptCount,
     onCoach: handleStruggleCoach,
+    // A setup puzzle always names its tactic, so the pattern's own coaching
+    // speaks; there is no unnamed case to fill.
+    earnedMethod: () => null,
   });
 
   // Derive the expected move for the hint system (always the student's next move).

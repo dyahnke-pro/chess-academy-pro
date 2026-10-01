@@ -13,6 +13,9 @@ import type { MoveResult } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { voiceService } from '../../services/voiceService';
 import { getWrongMoveHint } from '../../utils/puzzleHints';
+import { readWrongTry } from '../../services/wrongTryRefutation';
+import { puzzleMethodLine, cpFromThemes } from '../../services/puzzleMethod';
+import type { MethodHabit } from '../../services/methodBeat';
 import { recordTacticOutcome } from '../../services/tacticAlertService';
 import { usePuzzleMeter } from '../../hooks/usePuzzleMeter';
 import { getTacticTypeFromThemes, getPrimaryThemeLabel } from '../../services/tacticClassifierService';
@@ -90,6 +93,21 @@ export function PuzzleBoard({
   const [terminalId, setTerminalId] = useState<string | null>(null);
   const terminal = terminalId === puzzle.id;
   const conceptSpokenRef = useRef<string | null>(null);
+  const tryTokenRef = useRef(0);
+  // Habits taught this session — the method beat says each one once.
+  const saidHabitsRef = useRef(new Set<MethodHabit>());
+  // The solver's first move (a Lichess line opens with the opponent's move).
+  const solverFirstSan = useMemo((): string | null => {
+    try {
+      const c = new Chess(puzzle.fen);
+      const [opp, mine] = parseUciMoves(puzzle.moves);
+      if (!opp || !mine) return null;
+      c.move({ from: opp.from, to: opp.to, promotion: opp.promotion });
+      return c.move({ from: mine.from, to: mine.to, promotion: mine.promotion }).san;
+    } catch {
+      return null;
+    }
+  }, [puzzle.fen, puzzle.moves]);
 
   // Determine which color the user plays (opposite of who moves first in the FEN)
   const fenTurn = puzzle.fen.split(' ')[1];
@@ -154,6 +172,7 @@ export function PuzzleBoard({
     active: state === 'playing',
     wrongAttempts: wrongAttemptCount,
     onCoach: handleStruggleCoach,
+    earnedMethod: () => puzzleMethodLine(solverFirstSan, cpFromThemes(puzzle.themes), saidHabitsRef.current),
   });
 
   // Derive the expected move for the hint system
@@ -211,6 +230,7 @@ export function PuzzleBoard({
     hintUsedRef.current = false;
     showedSolutionRef.current = false;
     setTerminalId(null);
+    tryTokenRef.current += 1;
     setState('loading');
     resetHints();
     setSubtitle('');
@@ -300,14 +320,20 @@ export function PuzzleBoard({
     // post-attempt state). Pairs with `hint-revealed` via FEN equality
     // in analyticsService.recentHintActivity for hint effectiveness.
     // Drives analyticsService.moveAttemptsPerPuzzle aggregation.
+    // The board BEFORE this attempt, rebuilt from the puzzle line: the
+    // solution moves already played from `puzzle.fen`. The old version undid
+    // on a fresh Chess with no history (a no-op), so this always held the
+    // board AFTER the attempt — wrong for the analytics join, and wrong for
+    // reading what the try runs into.
     let fenBeforeAttempt = game.fen;
     try {
-      const replay = new Chess(game.fen);
-      replay.undo();
+      const replay = new Chess(puzzle.fen);
+      for (const m of movesRef.current.slice(0, moveIndex)) {
+        replay.move({ from: m.from, to: m.to, promotion: m.promotion });
+      }
       fenBeforeAttempt = replay.fen();
     } catch {
-      // Fall back to post-attempt fen — still a useful key for the
-      // join logic, just slightly less precise.
+      // Keep the post-attempt fen — still a usable key for the join.
     }
     const timeFromStart = Date.now() - solveStartRef.current;
     void logAppAudit({
@@ -380,17 +406,25 @@ export function PuzzleBoard({
       setState('incorrect');
       voiceService.stop();
 
-      // Progressive voice hint based on attempt count and puzzle themes
-      if (settings.voiceEnabled) {
-        const hint = getWrongMoveHint(
-          wrongAttemptsRef.current,
-          puzzle.themes,
-          expected.from,
-          expected.to,
-          new Chess(game.fen),
-        );
-        void voiceService.speak(hint);
-      }
+      // WHY THE TRY FAILS first (Learn's weighing, brought to puzzles — hand
+      // walk 2026-10-01): "Qe3? Then Bxg5, winning your pawn on g5." The
+      // template hint toward the answer stays as the fallback when the
+      // refutation is quiet. A token drops a late engine read once a newer
+      // try or a new puzzle has arrived.
+      const tryToken = ++tryTokenRef.current;
+      const hint = getWrongMoveHint(
+        wrongAttemptsRef.current,
+        puzzle.themes,
+        expected.from,
+        expected.to,
+        new Chess(fenBeforeAttempt),
+      );
+      void readWrongTry(fenBeforeAttempt, move.san).then((read) => {
+        if (tryToken !== tryTokenRef.current) return;
+        const line = read?.text ?? hint;
+        setSubtitle(line);
+        if (settings.voiceEnabled) void voiceService.speak(line);
+      });
 
       // Brief feedback then back to playing — user can keep trying
       setTimeout(() => {

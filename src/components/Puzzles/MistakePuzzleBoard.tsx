@@ -4,6 +4,9 @@ import { ChessBoard } from '../Board/ChessBoard';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useSettings } from '../../hooks/useSettings';
+import { readWrongTry } from '../../services/wrongTryRefutation';
+import { puzzleMethodLine } from '../../services/puzzleMethod';
+import type { MethodHabit } from '../../services/methodBeat';
 import { voiceService } from '../../services/voiceService';
 import { explainPuzzleMoveGrounded } from '../../services/coachApi';
 import { coachService } from '../../coach/coachService';
@@ -144,6 +147,8 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   const consumedIdRef = useRef<string | null>(null);
   const [state, setState] = useState<PuzzleState>('loading');
   const resolvedForRef = useRef<string | null>(null);
+  const tryTokenRef = useRef(0);
+  const saidHabitsRef = useRef(new Set<MethodHabit>());
   const resolve = useCallback((correct: boolean, solveTimeMs: number): void => {
     if (resolvedForRef.current === puzzle.id) return;
     resolvedForRef.current = puzzle.id;
@@ -248,6 +253,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     active: state === 'playing',
     wrongAttempts: wrongAttemptCount,
     onCoach: handleStruggleCoach,
+    earnedMethod: () => puzzleMethodLine(puzzle.bestMoveSan, puzzle.cpLoss, saidHabitsRef.current),
   });
 
   // Replay state
@@ -287,6 +293,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
 
   // Reset when puzzle changes — fetch source game and start replay
   useEffect(() => {
+    tryTokenRef.current += 1;
     const chess = new Chess(puzzle.fen);
     chessRef.current = chess;
     movesRef.current = parseUciMoves(puzzle.moves);
@@ -544,9 +551,8 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       setWhyLoading(false);
       // Fallback to tactic-specific coaching
       const coaching = getCoachingMessage(tacticType, 'guide', rating);
-      const fallback = coaching ?? 'The best move exploits a tactical pattern in this position.';
-      setSubtitle(fallback);
-      void voiceService.speak(fallback);
+      setSubtitle(coaching ?? '');
+      if (coaching) void voiceService.speak(coaching);
     }
   }, [puzzle, activeProfile?.currentRating, tacticType]);
 
@@ -563,10 +569,12 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
         void voiceService.speak(hint);
       } else {
         const rating = activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
-        const coaching = getCoachingMessage(tacticType, 'teach', rating);
-        const message = coaching ?? 'Take your time. Look for checks, captures, and threats.';
-        setSubtitle(message);
-        void voiceService.speak(message);
+        const coaching = getCoachingMessage(tacticType, 'teach', rating)
+          ?? puzzleMethodLine(puzzle.bestMoveSan, puzzle.cpLoss, saidHabitsRef.current);
+        if (coaching) {
+          setSubtitle(coaching);
+          void voiceService.speak(coaching);
+        }
       }
       return;
     }
@@ -782,8 +790,17 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
         hint = `The key square is ${expectedMove.to}. What can reach it?`;
       }
 
-      setSubtitle(hint);
-      void voiceService.speak(hint);
+      // Why the try fails before the next hint (Learn's weighing, hand walk
+      // 2026-10-01): "a6? Then Qxd6, winning your pawn on d6." The escalating
+      // hint is the fallback when the refutation is quiet; the token drops a
+      // late engine read once a newer try or a new puzzle has arrived.
+      const tryToken = ++tryTokenRef.current;
+      void readWrongTry(prevFen, move.san).then((read) => {
+        if (tryToken !== tryTokenRef.current) return;
+        const line = read ? `${read.text} ${hint}` : hint;
+        setSubtitle(line);
+        void voiceService.speak(line);
+      });
 
       setFen(prevFen);
       setBoardKey((k) => k + 1);
