@@ -29,7 +29,7 @@ function run(start: ReachState, pattern: boolean[]) {
   for (const correct of pattern) {
     // Consume the pending spike the same way the surface does.
     const { isSpike } = nextTarget(state);
-    const r = recordReachResult(state, correct, { wasSpike: isSpike });
+    const r = recordReachResult(state, correct ? 'clean' : 'missed', { wasSpike: isSpike });
     state = r.state;
     events.push(...r.events);
   }
@@ -77,9 +77,9 @@ describe('equilibrium (~80% success, down ≈ 4× up)', () => {
     // invariant: a single correct then a single wrong from a cold streak =
     // +BASE_UP − BASE_DOWN (net negative, pulling an over-seeded rating down).
     const s0 = initReachState(1200); // 1400
-    const afterWin = recordReachResult(s0, true);
+    const afterWin = recordReachResult(s0, 'clean');
     expect(afterWin.delta).toBe(BASE_UP);
-    const afterLoss = recordReachResult(afterWin.state, false);
+    const afterLoss = recordReachResult(afterWin.state, 'missed');
     expect(afterLoss.delta).toBe(-BASE_DOWN);
   });
 });
@@ -89,7 +89,7 @@ describe('streak ramp (the FELT climb)', () => {
     let s = initReachState(1200);
     const deltas: number[] = [];
     for (let i = 0; i < 6; i++) {
-      const r = recordReachResult(s, true);
+      const r = recordReachResult(s, 'clean');
       deltas.push(r.delta);
       s = r.state;
     }
@@ -104,7 +104,7 @@ describe('streak ramp (the FELT climb)', () => {
   it('a miss resets the streak and the ramp', () => {
     const { state } = run(initReachState(1200), [true, true, true, false]);
     expect(state.streak).toBe(0);
-    const back = recordReachResult(state, true);
+    const back = recordReachResult(state, 'clean');
     expect(back.delta).toBe(BASE_UP); // ramp gone, back to base
   });
 });
@@ -117,7 +117,7 @@ describe('boss spikes', () => {
   it('serves a spike after SPIKE_CADENCE solves (streak past the hot trigger)', () => {
     // streak 6 (not === HOT_STREAK_SPIKE) isolates the cadence path.
     const s: ReachState = { ...base, streak: 6, sinceSpike: SPIKE_CADENCE - 1 };
-    const r = recordReachResult(s, true);
+    const r = recordReachResult(s, 'clean');
     expect(r.state.spikePending).toBe(true);
     const { target, isSpike } = nextTarget(r.state);
     expect(isSpike).toBe(true);
@@ -126,21 +126,21 @@ describe('boss spikes', () => {
 
   it('serves a spike on a hot streak (HOT_STREAK_SPIKE), before cadence', () => {
     const s: ReachState = { ...base, streak: HOT_STREAK_SPIKE - 1, sinceSpike: 0 };
-    const r = recordReachResult(s, true);
+    const r = recordReachResult(s, 'clean');
     expect(r.state.streak).toBe(HOT_STREAK_SPIKE);
     expect(r.state.spikePending).toBe(true);
   });
 
   it('a MISSED spike carries a reduced penalty and never stacks another spike', () => {
     const s: ReachState = { ...base, spikePending: true };
-    const missed = recordReachResult(s, false, { wasSpike: true });
+    const missed = recordReachResult(s, 'missed', { wasSpike: true });
     expect(missed.delta).toBe(-BASE_DOWN * SPIKE_MISS_MULT);
     expect(missed.state.spikePending).toBe(false); // consumed, not re-armed
   });
 
   it('a CLEARED spike emits spike-cleared and resets the cadence', () => {
     const s: ReachState = { ...base, sinceSpike: 5, spikePending: true };
-    const cleared = recordReachResult(s, true, { wasSpike: true });
+    const cleared = recordReachResult(s, 'clean', { wasSpike: true });
     expect(cleared.events.some((e) => e.kind === 'spike-cleared')).toBe(true);
     expect(cleared.state.sinceSpike).toBe(0);
     expect(cleared.state.spikePending).toBe(false); // consumed, no immediate re-arm
@@ -171,7 +171,7 @@ describe('milestone cues (computed; coach only voices them)', () => {
       rating: TIER_BAND * 10 - 2, streak: 0, solved: 0, sinceSpike: 0,
       peakTier: 9, spikePending: false,
     };
-    const up1 = recordReachResult(s, true); // crosses into tier 10
+    const up1 = recordReachResult(s, 'clean'); // crosses into tier 10
     expect(up1.events.some((e) => e.kind === 'tier-up')).toBe(true);
     s = up1.state;
     expect(s.peakTier).toBe(10);
@@ -187,7 +187,7 @@ describe('milestone cues (computed; coach only voices them)', () => {
       rating: TIER_BAND * 10 + 2, streak: 3, solved: 20, sinceSpike: 1,
       peakTier: 10, spikePending: false,
     };
-    const r = recordReachResult(s, false); // BASE_DOWN drop crosses down a band
+    const r = recordReachResult(s, 'missed'); // BASE_DOWN drop crosses down a band
     expect(r.events.some((e) => e.kind === 'settle')).toBe(true);
   });
 
@@ -223,7 +223,7 @@ function run2(start: ReachState, pattern: boolean[], opts: { master?: boolean })
   let state = start;
   for (const correct of pattern) {
     const { isSpike } = nextTarget(state, opts);
-    state = recordReachResult(state, correct, { wasSpike: isSpike, ...opts }).state;
+    state = recordReachResult(state, correct ? 'clean' : 'missed', { wasSpike: isSpike, ...opts }).state;
   }
   return { state };
 }
@@ -253,5 +253,19 @@ describe('reachAskDepth (review sequence, +1 stretch)', () => {
       expect(d).toBeGreaterThanOrEqual(prev);
       prev = d;
     }
+  });
+});
+
+// Hand walk 2026-10-01: a wrong move, a hint, then the solve climbed like a
+// clean solve. Assisted holds.
+describe('an assisted solve holds the ladder', () => {
+  it('no climb, no streak, no cue', () => {
+    const s0 = initReachState(1500);
+    const r = recordReachResult({ ...s0, streak: 3 }, 'assisted');
+    expect(r.delta).toBe(0);
+    expect(r.state.rating).toBe(s0.rating);
+    expect(r.state.streak).toBe(3);
+    expect(r.events).toEqual([]);
+    expect(recordReachResult(s0, 'clean').delta).toBeGreaterThan(0);
   });
 });

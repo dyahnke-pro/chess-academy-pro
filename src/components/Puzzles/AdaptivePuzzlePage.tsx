@@ -23,6 +23,7 @@ import {
   nextTarget,
   reachTier,
   type ReachState,
+  type ReachOutcome,
 } from '../../services/reachRating';
 import { reachCueFor, spikeIncomingCue, type ReachCue } from '../../services/reachCue';
 import type { PuzzleRecord } from '../../types';
@@ -277,7 +278,10 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
     // ── The reach ladder: float to ~80% success, fire the felt cues ──
     const reach = reachRef.current;
     if (reach) {
-      const r = recordReachResult(reach, outcome.correct, {
+      const reachOutcome: ReachOutcome = !outcome.correct
+        ? 'missed'
+        : outcome.usedHint || outcome.hadRetry || outcome.showedSolution ? 'assisted' : 'clean';
+      const r = recordReachResult(reach, reachOutcome, {
         wasSpike: spikeServedRef.current,
         master,
       });
