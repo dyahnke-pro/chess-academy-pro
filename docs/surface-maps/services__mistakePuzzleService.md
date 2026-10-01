@@ -95,8 +95,8 @@
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:7330`
-- `src/components/Coach/CoachTeachPage.tsx:7336`
+- `src/components/Coach/CoachTeachPage.tsx:7329`
+- `src/components/Coach/CoachTeachPage.tsx:7335`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
@@ -242,7 +242,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `gradeMistakePuzzle` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2373`
+- `src/components/Coach/CoachTeachPage.tsx:2372`
 - `src/components/Puzzles/MyMistakesPage.tsx:243`
 - `src/components/Puzzles/WeaknessThemesPage.tsx:116`
 - `src/components/Tactics/TacticCreatePage.tsx:194`

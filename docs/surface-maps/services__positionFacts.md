@@ -90,7 +90,7 @@
 - `src/services/whyBestMove.ts:103`
 
 ### `computePositionFacts` (function) — 78 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9050`
+- `src/components/Coach/CoachTeachPage.tsx:9049`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:635`
@@ -173,7 +173,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:7894`
+- `src/components/Coach/CoachTeachPage.tsx:7893`
 
 ### `convertKey` (function) — 1 call site
 - `src/services/positionFacts.convertOnce.test.ts:24`

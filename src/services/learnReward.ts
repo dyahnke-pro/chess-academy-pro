@@ -13,7 +13,14 @@
  * (Narration Voice Rule 5) — this is the machine celebrating, not the coach.
  */
 import type { MoveReason } from './moveReason';
-import type { RewardKind } from './rewardEvents';
+import type { RewardKind, RewardEvent } from './rewardEvents';
+import { reward } from './rewardService';
+
+/** Learn's ONE door to the reward layer — the surface never calls the
+ *  reward service directly, so what Learn may celebrate is decided here. */
+export function fireLearnReward(e: RewardEvent): void {
+  reward(e);
+}
 
 export const LEARN_REWARD: Record<MoveReason, RewardKind | null> = {
   mate: 'gem',

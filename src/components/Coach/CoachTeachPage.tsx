@@ -22,8 +22,7 @@ import { registerCoachHands } from '../../services/coachActuator';
 import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, ChevronLeft, ChevronsLeft, ChevronsRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2, Swords } from 'lucide-react';
 import { TeachGameOverCard, type TeachGameResult } from './TeachGameOverCard';
 import { LearnRewardBar } from './LearnRewardBar';
-import { reward } from '../../services/rewardService';
-import { learnRewardFor, tallyMove, EMPTY_TALLY, type LearnTally } from '../../services/learnReward';
+import { learnRewardFor, tallyMove, fireLearnReward, EMPTY_TALLY, type LearnTally } from '../../services/learnReward';
 import { useProvenWatcher } from '../../hooks/useProvenWatcher';
 import { getMisconceptionTag } from '../../data/misconceptionTags';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
@@ -1714,7 +1713,7 @@ export function CoachTeachPage(): JSX.Element {
     const next = { ...learnTallyRef.current, proven: learnTallyRef.current.proven + 1 };
     learnTallyRef.current = next;
     setLearnTally(next);
-    reward({ kind: 'proven', label: `Fixed: ${getMisconceptionTag(tag)?.label ?? tag}` });
+    fireLearnReward({ kind: 'proven', label: `Fixed: ${getMisconceptionTag(tag)?.label ?? tag}` });
   });
   const resetPerGameMemory = useCallback((): void => {
     learnMemRef.current.newGame();
@@ -8552,7 +8551,7 @@ export function CoachTeachPage(): JSX.Element {
           captureEvent('gem_resolved', { surface: 'coach-teach', found: res.found, plies: res.line.plies.length });
           if (res.found) {
             gemRewarded = true;
-            reward({ kind: 'gem', square: move.to, label: 'Gem found', seed: move.history.length });
+            fireLearnReward({ kind: 'gem', square: move.to, label: 'Gem found', seed: move.history.length });
             const next = tallyMove(learnTallyRef.current, 'gem', false);
             learnTallyRef.current = next;
             setLearnTally(next);
@@ -8671,7 +8670,7 @@ export function CoachTeachPage(): JSX.Element {
         // the chime never lands on top of the voice.
         if (grade) {
           const earned = gemRewarded ? null : learnRewardFor({ reason: grade.reason, fault: grade.fault, isRecapture });
-          if (earned) reward({ kind: earned, square: move.to, seed: move.history.length });
+          if (earned) fireLearnReward({ kind: earned, square: move.to, seed: move.history.length });
           const next = tallyMove(learnTallyRef.current, earned, grade.fault);
           if (next !== learnTallyRef.current) {
             learnTallyRef.current = next;
