@@ -390,3 +390,104 @@ export function detectRookBehindPasser(fen: string): RookBehindPasserResult | nu
   }
   return null;
 }
+
+// ─── MATING A BARE KING (the basic checkmates) ──────────────────────────────
+
+export interface BareKingMateResult {
+  /** The side with the material. */
+  side: Side;
+  kind: 'queen' | 'rook' | 'two-bishops' | 'bishop-knight' | 'two-knights' | 'same-colour-bishops' | 'lone-minor';
+  /** Mate can be FORCED from any position (with correct play). */
+  forced: boolean;
+  /** The most moves the forced mate needs from the worst start (the published
+   *  figures: queen 10, rook 16, two bishops 19, bishop and knight 33). */
+  maxMoves: number | null;
+  /** Bishop and knight: the two corners of the bishop's colour, the only
+   *  corners the mate can be forced in. */
+  corners: Square[];
+}
+
+const MATE_MOVES: Partial<Record<BareKingMateResult['kind'], number>> = { queen: 10, rook: 16, 'two-bishops': 19, 'bishop-knight': 33 };
+
+/**
+ * What a king plus pieces (no pawns) can do against a bare king. Queen, rook,
+ * two bishops on opposite colours, and bishop + knight FORCE mate; two knights
+ * can mate only if the defender blunders; a lone minor or two same-coloured
+ * bishops cannot mate at all. A theorem about material, nothing about this
+ * position's move order — the bigger materials (queen + rook, …) are left out
+ * because nothing about them needs teaching.
+ */
+export function detectBareKingMate(fen: string): BareKingMateResult | null {
+  const board = scan(fen);
+  if (!board) return null;
+  for (const c of ['w', 'b'] as const) {
+    if (material(board, other(c)) !== '') continue;
+    const mine = material(board, c);
+    const sideName = sideOf(c);
+    const dark = (s: Sq): boolean => (s.f + s.r) % 2 === 1;
+    let kind: BareKingMateResult['kind'] | null = null;
+    let corners: Square[] = [];
+    if (mine === 'q') kind = 'queen';
+    else if (mine === 'r') kind = 'rook';
+    else if (mine === 'nn') kind = 'two-knights';
+    else if (mine === 'b' || mine === 'n') kind = 'lone-minor';
+    else if (mine === 'bb') {
+      const [a, b] = only(board, c, 'b');
+      kind = dark(a.sq) === dark(b.sq) ? 'same-colour-bishops' : 'two-bishops';
+    } else if (mine === 'bn') {
+      kind = 'bishop-knight';
+      const bishopDark = dark(only(board, c, 'b')[0].sq);
+      // a1 and h8 are dark; h1 and a8 are light.
+      corners = bishopDark ? ['a1', 'h8'] : ['h1', 'a8'];
+    }
+    if (!kind) return null;
+    const forced = MATE_MOVES[kind] !== undefined;
+    return { side: sideName, kind, forced, maxMoves: MATE_MOVES[kind] ?? null, corners };
+  }
+  return null;
+}
+
+// ─── TWO PAWNS AGAINST A BARE KING ──────────────────────────────────────────
+
+export interface TwoPawnsResult {
+  side: Side;
+  pawns: [Square, Square];
+  /** Adjacent files, one file between them, or further apart. */
+  kind: 'connected' | 'one-file-gap' | 'apart';
+  /** Computed: the defending king cannot take EITHER pawn without the other
+   *  one running out of its reach (rule of the square from the capture
+   *  square, the pawns' side to move after the capture). A pawn the other one
+   *  protects cannot be taken at all. */
+  selfDefending: boolean;
+}
+
+/**
+ * K + two pawns vs K — "the pawns defend each other": the king can never take
+ * one, because the moment it does, it stands outside the square of the other.
+ * Computed per position, never assumed: low on the board the king can take a
+ * pawn and still catch the other, and then the rule does not hold.
+ */
+export function detectTwoPawnsVsKing(fen: string): TwoPawnsResult | null {
+  const board = scan(fen);
+  if (!board) return null;
+  for (const c of ['w', 'b'] as const) {
+    if (material(board, c) !== 'pp' || material(board, other(c)) !== '') continue;
+    const [p1, p2] = only(board, c, 'p');
+    const gap = Math.abs(p1.sq.f - p2.sq.f);
+    const kind: TwoPawnsResult['kind'] = gap === 1 ? 'connected' : gap === 2 ? 'one-file-gap' : 'apart';
+    const d = dir(c);
+    const protects = (a: Piece, b: Piece): boolean => Math.abs(a.sq.f - b.sq.f) === 1 && b.sq.r === a.sq.r + d;
+    const runsAfterCapture = (taken: Piece, runner: Piece): boolean => {
+      if (protects(runner, taken)) return true; // cannot be taken at all
+      const ownKing = board.kings[c];
+      if (cheb(ownKing, taken.sq) <= 1) return true; // its own king guards it
+      let rank = runner.sq.r;
+      rank += isStartRank(c, rank) ? 2 * d : d; // the pawns move right after the capture
+      const promo: Sq = { f: runner.sq.f, r: promoRank(c) };
+      return cheb(taken.sq, promo) > ranksToGo(c, rank) + 1;
+    };
+    const selfDefending = runsAfterCapture(p1, p2) && runsAfterCapture(p2, p1);
+    return { side: sideOf(c), pawns: [p1.square, p2.square], kind, selfDefending };
+  }
+  return null;
+}

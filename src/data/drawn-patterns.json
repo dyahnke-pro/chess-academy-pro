@@ -262,10 +262,10 @@
     "category": "drawn-pattern",
     "order": 8,
     "narration": {
-      "intro": "Some material configurations cannot deliver checkmate at all, no matter how the pieces are arranged. King vs king. King and bishop vs king. King and knight vs king. Two knights vs lone king (without pawns). These positions are automatic draws by FIDE rule — the game ends without play.",
-      "rule": "If neither side has enough material to force mate, the game is drawn immediately.",
-      "why": "Mate requires a piece configuration that can attack and trap the enemy king. A lone bishop or knight cannot — the opponent's king can always escape to a square the piece doesn't cover. Two knights uniquely cannot force mate (the lone king can always reach a square a knight can't cover) although mate IS possible with cooperation; FIDE rules class this as 'insufficient' regardless. Knowing the list saves you from playing on in lost-on-material positions that are actually drawn — and from blundering INTO insufficient material (capturing your own way to a draw).",
-      "history": "FIDE Laws of Chess Article 5.2.b. The list has been formalized since the 19th century.",
+      "intro": "Some material can never deliver checkmate, however the pieces are arranged: king against king, king and bishop against king, king and knight against king. The game is drawn on the spot — no move order can ever produce a mate. Two knights are different: they cannot FORCE mate, but a mate position exists, so the game goes on.",
+      "rule": "If neither side can checkmate by any series of legal moves, the game is drawn immediately. If mate is merely impossible to force (two knights), the game continues — it ends in a draw by the fifty-move rule or repetition.",
+      "why": "Mate needs every square around the king covered. A lone bishop or knight never covers enough of them, so no position with that material is mate. Two knights can cover the squares, which is why they can mate a king that walks into it — but the defending king can always step aside, so with correct defence it is a draw. Knowing the list stops you playing on for a win that cannot come, and stops you trading your own way into it.",
+      "history": "FIDE Laws of Chess, Article 5.2.2: the game is drawn when neither player can checkmate by any series of legal moves. King and two knights is not covered by it.",
       "tip": "Up an exchange with bishops of the same color and no pawns? Make sure you don't accidentally trade pieces into K+B vs K. That's a draw."
     },
     "positions": [
@@ -315,10 +315,10 @@
       },
       {
         "fen": "k7/8/8/8/8/8/8/3NKN2 w - - 0 1",
-        "title": "K + 2 knights vs K — drawn by FIDE rule",
-        "explanation": "Two knights vs lone king CAN deliver checkmate in some positions — but cannot FORCE it. The lone king can always reach a square none of the two knights can simultaneously attack. FIDE classifies this as insufficient material because no FORCED mate exists, even though mate IS possible. Don't try to win this; you'll only embarrass yourself with a 50-move-rule draw.",
+        "title": "K + 2 knights vs K — no forced mate",
+        "explanation": "Two knights against a bare king cannot force mate. A mate position does exist, so the game is not over by rule — but the defending king always has a square to step to, and with correct defence this ends as a draw by the fifty-move rule. Play on only if the defender might walk into the corner.",
         "result": "draw",
-        "source": "Two-knight checkmate impossibility — FIDE Laws",
+        "source": "FIDE Laws Article 5.2.2 (mate possible, so not a dead position); en.wikipedia.org/wiki/Two_knights_endgame",
         "solution": [
           "Nfe3",
           "Kb7",

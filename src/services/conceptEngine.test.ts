@@ -266,3 +266,22 @@ describe('conceptEngine — a delivered mate is NAMED by its pattern (P2b)', () 
     expect(cs.some((c) => c.id === 'smothered-mate' && c.source === 'mate')).toBe(true);
   });
 });
+
+describe('endgame rules from the material', () => {
+  it('names the basic mate and its method', async () => {
+    const { endgameConceptFor } = await import('./conceptEngine');
+    const q = endgameConceptFor('8/8/8/4k3/8/8/8/3QK3 w - - 0 1');
+    expect(q?.id).toBe('basic-mate');
+    expect(q?.full).toMatch(/at most 10 moves/);
+    const bn = endgameConceptFor('8/8/8/4k3/8/8/8/1N2KB2 w - - 0 1');
+    expect(bn?.id).toBe('bishop-knight-mate');
+    expect(bn?.full).toMatch(/h1 or a8/);
+    expect(endgameConceptFor('8/8/8/4k3/8/8/8/1N2K1N1 w - - 0 1')?.id).toBe('two-knights-no-mate');
+    expect(endgameConceptFor('8/8/8/4k3/8/8/8/4K1N1 w - - 0 1')?.id).toBe('insufficient-material');
+  });
+  it('says the pawns defend each other only when the board proves it', async () => {
+    const { endgameConceptFor } = await import('./conceptEngine');
+    expect(endgameConceptFor('8/8/4Pk2/5P2/8/8/8/K7 b - - 0 1')?.id).toBe('pawns-defend-each-other');
+    expect(endgameConceptFor('8/8/5k2/4PP2/8/8/8/K7 b - - 0 1')?.id).not.toBe('pawns-defend-each-other');
+  });
+});

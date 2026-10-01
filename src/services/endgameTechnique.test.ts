@@ -165,3 +165,46 @@ describe('detectors — geometry, both colours', () => {
     expect(detectRookBehindPasser('8/p5k1/8/8/P7/8/R7/K7 w - - 0 1')).toBeNull();
   });
 });
+
+import { detectBareKingMate, detectTwoPawnsVsKing } from './endgameTechnique';
+
+describe('basic checkmates against a bare king', () => {
+  it('queen, rook, two bishops and bishop+knight force mate; the rest cannot', () => {
+    expect(detectBareKingMate('8/8/8/4k3/8/8/8/3QK3 w - - 0 1')).toMatchObject({ kind: 'queen', forced: true, maxMoves: 10 });
+    expect(detectBareKingMate('8/8/8/4k3/8/8/8/R3K3 w - - 0 1')).toMatchObject({ kind: 'rook', forced: true, maxMoves: 16 });
+    expect(detectBareKingMate('8/8/8/4k3/8/8/8/2B1KB2 w - - 0 1')).toMatchObject({ kind: 'two-bishops', forced: true, maxMoves: 19 });
+    // c1 and e1 are both dark — same colour, no mate at all.
+    expect(detectBareKingMate('8/8/8/4k3/8/8/8/2B1B1K1 w - - 0 1')).toMatchObject({ kind: 'same-colour-bishops', forced: false });
+    expect(detectBareKingMate('8/8/8/4k3/8/8/8/1N2K1N1 w - - 0 1')).toMatchObject({ kind: 'two-knights', forced: false });
+    expect(detectBareKingMate('8/8/8/4k3/8/8/8/4K1N1 w - - 0 1')).toMatchObject({ kind: 'lone-minor', forced: false });
+  });
+  it('bishop + knight: mate only in the corners of the bishop\'s colour', () => {
+    // f1 is a light square → h1 / a8.
+    expect(detectBareKingMate('8/8/8/4k3/8/8/8/1N2KB2 w - - 0 1')?.corners).toEqual(['h1', 'a8']);
+    // c1 is dark → a1 / h8.
+    expect(detectBareKingMate('8/8/8/4k3/8/8/8/2B1K1N1 w - - 0 1')?.corners).toEqual(['a1', 'h8']);
+  });
+  it('the side with the material can be Black, and pawns take it out of the rule', () => {
+    expect(detectBareKingMate('3qk3/8/8/8/8/8/8/4K3 w - - 0 1')).toMatchObject({ side: 'black', kind: 'queen' });
+    expect(detectBareKingMate('8/8/8/4k3/8/8/4P3/3QK3 w - - 0 1')).toBeNull();
+  });
+});
+
+describe('two pawns against a bare king', () => {
+  it('a protected chain: the front pawn is guarded, and taking the back one lets the front one queen', () => {
+    // e6 guarded by f5; Kxf5 and e7-e8 is out of reach.
+    expect(detectTwoPawnsVsKing('8/8/4Pk2/5P2/8/8/8/K7 b - - 0 1')).toMatchObject({ kind: 'connected', selfDefending: true });
+  });
+  it('pawns side by side with the king to move can lose one: Kxe5, f6, Kxf6', () => {
+    expect(detectTwoPawnsVsKing('8/8/5k2/4PP2/8/8/8/K7 b - - 0 1')).toMatchObject({ kind: 'connected', selfDefending: false });
+  });
+  it('a king behind its target never catches the other pawn (Kxd2, e4 runs)', () => {
+    expect(detectTwoPawnsVsKing('8/8/8/8/8/4k3/3PP3/7K b - - 0 1')).toMatchObject({ kind: 'connected', selfDefending: true });
+  });
+  it('one file apart is reported as such and computed, not assumed', () => {
+    expect(detectTwoPawnsVsKing('8/8/5k2/4P1P1/8/8/8/K7 b - - 0 1')).toMatchObject({ kind: 'one-file-gap', selfDefending: false });
+  });
+  it('a lone pawn is not this rule', () => {
+    expect(detectTwoPawnsVsKing('8/8/5k2/4P3/8/8/8/K7 b - - 0 1')).toBeNull();
+  });
+});

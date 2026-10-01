@@ -232,7 +232,51 @@ import { classifyMatchup } from './endgameMatchup';
 import {
   detectOpposition, detectKeySquares, detectRuleOfSquare, detectRookPawnCorner,
   detectLucena, detectPhilidor, detectCutOff, detectRookBehindPasser,
+  detectBareKingMate, detectTwoPawnsVsKing,
 } from './endgameTechnique';
+
+const KIND_WORDS: Record<string, string> = {
+  queen: 'a queen', rook: 'a rook', 'two-bishops': 'two bishops', 'bishop-knight': 'a bishop and a knight',
+};
+
+/** The basic checkmates and what cannot mate — the material rule, one sentence. */
+function bareKingConcept(fen: string): ComputedConcept | null {
+  const m = detectBareKingMate(fen);
+  if (!m) return null;
+  if (m.kind === 'queen' || m.kind === 'rook' || m.kind === 'two-bishops') {
+    const how = m.kind === 'queen'
+      ? 'box the king in with the queen a knight\'s move away, shrink the box until it is on the edge, then bring your own king up — and watch for stalemate when the box gets small'
+      : m.kind === 'rook'
+        ? 'use the rook to cut the king off along a rank or file, bring your own king up to face it, and push it back one line at a time until it is on the edge'
+        : 'keep the bishops side by side on neighbouring diagonals as a wall, drive the king to the edge and then into a corner, with your own king helping';
+    return technique(
+      'basic-mate', 'The basic checkmate',
+      `King and ${KIND_WORDS[m.kind]} against a bare king is a forced mate — at most ${m.maxMoves} moves from any start. The method: ${how}.`,
+      'Forced mate — drive it to the edge.', [], 0.7,
+    );
+  }
+  if (m.kind === 'bishop-knight') {
+    return technique(
+      'bishop-knight-mate', 'Bishop and knight mate',
+      `King, bishop and knight against a bare king is a forced mate, but the hardest of the basic ones — up to ${m.maxMoves} moves — and it only works in a corner the bishop controls: ${m.corners.join(' or ')}. Drive the king to the edge first, then walk it along the edge into one of those corners.`,
+      `Mate only in the bishop's corner.`, m.corners, 0.75,
+    );
+  }
+  if (m.kind === 'two-knights') {
+    return technique(
+      'two-knights-no-mate', 'Two knights cannot force mate',
+      'Two knights and a king cannot force mate against a bare king: a mate position exists, but the defending king always has a way to step out of it unless it walks in by mistake. This is a draw.',
+      'Two knights — no forced mate.', [], 0.6,
+    );
+  }
+  return technique(
+    'insufficient-material', 'Not enough to mate',
+    m.kind === 'same-colour-bishops'
+      ? 'Two bishops on the SAME colour cannot mate at all — they can never cover the squares of the other colour around the king. This is a draw.'
+      : 'A single bishop or knight cannot mate a bare king, however it is placed. This is a draw.',
+    'Not enough to mate — a draw.', [], 0.55,
+  );
+}
 
 /**
  * The NAMED endgame technique a position teaches, when one of the deterministic
@@ -242,7 +286,22 @@ import {
  * general rule; none claims a game result (the other king may still decide it).
  */
 function namedTechniqueFor(fen: string, cls: MatchupClass): ComputedConcept | null {
+  if (cls === 'mating-material' || cls === 'minor-endgame') {
+    const mate = bareKingConcept(fen);
+    if (mate) return mate;
+  }
   if (cls === 'kp-vs-k') {
+    const two = detectTwoPawnsVsKing(fen);
+    if (two) {
+      const what = two.kind === 'connected' ? 'Connected pawns' : two.kind === 'one-file-gap' ? 'Two pawns with one file between them' : 'Two pawns far apart';
+      return two.selfDefending
+        ? technique(
+          'pawns-defend-each-other', 'The pawns defend each other',
+          `${what} on ${two.pawns.join(' and ')} look after themselves: if the king takes either one, it lands outside the square of the other, and that pawn runs to queen. So the king can only stand in front of them and wait while your own king walks up.`,
+          'Neither pawn can be taken.', [...two.pawns], 0.65,
+        )
+        : null;
+    }
     const ks = detectKeySquares(fen);
     if (ks?.kingOnKeySquare) {
       return technique(
