@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**633 lines · 20 exports · 15 importers · 8 tests · 0 audits**
+**640 lines · 20 exports · 15 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -48,8 +48,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticAlertService.test.ts:101`
 
 ### `getCoachingMessage` (function) — 12 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:537`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:557`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:546`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:566`
 - `src/hooks/useStruggleDetection.ts:78`
 - `src/services/tacticAlertService.test.ts:114`
 - `src/services/tacticAlertService.test.ts:118`
@@ -67,7 +67,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `getTacticLookahead` (function) — 15 call sites
 - `src/hooks/useCoachTips.ts:318`
 - `src/hooks/useCoachTips.ts:349`
-- `src/services/liveTacticsContext.ts:74`
+- `src/services/liveTacticsContext.ts:76`
 - `src/services/ratingBands.test.ts:83`
 - `src/services/tacticAlertService.test.ts:168`
 - `src/services/tacticAlertService.test.ts:172`
@@ -88,7 +88,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isCriticalThreat` (function) — 21 call sites
-- `src/components/Coach/CoachGamePage.tsx:2867`
+- `src/components/Coach/CoachGamePage.tsx:2896`
 - `src/services/computedMaterialTruth.corpus.test.ts:248`
 - `src/services/computedMaterialTruth.corpus.test.ts:257`
 - `src/services/tacticAlertService.criticalThreat.test.ts:26`
@@ -122,16 +122,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/hooks/useCoachTips.ts:349`
 
 ### `tacticTypeLabel` (function) — 20 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:905`
-- `src/components/Puzzles/MyMistakesPage.tsx:196`
-- `src/components/Tactics/TacticCreatePage.tsx:298`
-- `src/components/Tactics/TacticCreatePage.tsx:571`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:916`
+- `src/components/Puzzles/MyMistakesPage.tsx:210`
+- `src/components/Tactics/TacticCreatePage.tsx:305`
+- `src/components/Tactics/TacticCreatePage.tsx:579`
 - `src/components/Tactics/TacticSetupBoard.tsx:243`
 - `src/components/Tactics/TacticSetupPage.tsx:203`
 - `src/hooks/useCoachTips.ts:327`
-- `src/services/mistakePuzzleService.ts:676`
-- `src/services/mistakePuzzleService.ts:973`
-- `src/services/mistakePuzzleService.ts:1330`
+- `src/services/mistakePuzzleService.ts:677`
+- `src/services/mistakePuzzleService.ts:974`
+- `src/services/mistakePuzzleService.ts:1230`
 - `src/services/tacticNarrationService.ts:82`
 - `src/services/tacticNarrationService.ts:133`
 - `src/services/tacticNarrationService.ts:153`
@@ -162,8 +162,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `recordTacticOutcome` (function) — 8 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:660`
-- `src/components/Puzzles/PuzzleBoard.tsx:261`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:670`
+- `src/components/Puzzles/PuzzleBoard.tsx:266`
 - `src/components/Tactics/TacticSetupBoard.tsx:174`
 - `src/hooks/useCoachTips.ts:230`
 - `src/services/tacticAlertService.test.ts:301`

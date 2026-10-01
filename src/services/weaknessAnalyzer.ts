@@ -1282,7 +1282,7 @@ export function detectWeaknessThemes(mistakes: MistakePuzzle[]): WeaknessTheme[]
  * the position finds what is merely present, in the other tactic vocabulary
  * ("battery"), and is never used here.
  */
-export function themeKeysFor(mp: MistakePuzzle): ThemeKey[] {
+function themeKeysFor(mp: MistakePuzzle): ThemeKey[] {
   const keys: ThemeKey[] = [];
   if (mp.tacticType) keys.push(`tactic:${mp.tacticType}`);
   if (mp.gamePhase === 'opening') keys.push('phase:opening');

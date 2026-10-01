@@ -52,9 +52,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakeNarration.test.ts:286`
 - `src/services/mistakeNarration.test.ts:300`
 - `src/services/mistakeNarration.test.ts:301`
-- `src/services/mistakePuzzleService.ts:642`
-- `src/services/mistakePuzzleService.ts:955`
-- `src/services/mistakePuzzleService.ts:1303`
+- `src/services/mistakePuzzleService.ts:641`
+- `src/services/mistakePuzzleService.ts:954`
+- `src/services/mistakePuzzleService.ts:1201`
 
 ## Tests
 

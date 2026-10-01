@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1534 lines · 7 exports · 11 importers · 7 tests · 0 audits**
+**1461 lines · 8 exports · 11 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,15 +27,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `computeWeaknessProfile` (function) — 6 call sites
-- `src/components/Coach/CoachGamePage.tsx:2071`
+- `src/components/Coach/CoachGamePage.tsx:2104`
 - `src/components/Stats/StatsPage.tsx:50`
-- `src/services/analyticsService.ts:463`
-- `src/services/gameAnalysisService.ts:2581`
+- `src/services/analyticsService.ts:462`
+- `src/services/gameAnalysisService.ts:2599`
 - `src/services/weaknessAnalyzer.test.ts:528`
 - `src/services/weaknessAnalyzer.test.ts:544`
 
 ### `getStoredWeaknessProfile` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10731`
+- `src/components/Coach/CoachTeachPage.tsx:10244`
 - `src/components/Stats/StatsPage.tsx:68`
 - `src/services/coachChatService.ts:188`
 - `src/services/coachContextSnapshot.ts:85`
@@ -56,7 +56,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/weaknessAnalyzer.test.ts:791`
 - `src/services/weaknessAnalyzer.test.ts:807`
 
-### `detectWeaknessThemes` (function) — 8 call sites
+### `detectWeaknessThemes` (function) — 10 call sites
 - `src/components/Puzzles/WeaknessThemesPage.tsx:68`
 - `src/services/weaknessAnalyzer.test.ts:818`
 - `src/services/weaknessAnalyzer.test.ts:828`
@@ -65,15 +65,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/weaknessAnalyzer.test.ts:866`
 - `src/services/weaknessAnalyzer.test.ts:880`
 - `src/services/weaknessAnalyzer.test.ts:897`
+- `src/services/weaknessAnalyzer.test.ts:928`
+- `src/services/weaknessAnalyzer.test.ts:937`
 
-### `generatePersonalizedDrill` (function) — 7 call sites
+### `themeKeysFor` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `generatePersonalizedDrill` (function) — 8 call sites
 - `src/components/Puzzles/WeaknessThemesPage.tsx:79`
-- `src/services/weaknessAnalyzer.test.ts:913`
-- `src/services/weaknessAnalyzer.test.ts:926`
-- `src/services/weaknessAnalyzer.test.ts:939`
+- `src/services/weaknessAnalyzer.test.ts:929`
 - `src/services/weaknessAnalyzer.test.ts:953`
-- `src/services/weaknessAnalyzer.test.ts:967`
+- `src/services/weaknessAnalyzer.test.ts:966`
 - `src/services/weaknessAnalyzer.test.ts:979`
+- `src/services/weaknessAnalyzer.test.ts:993`
+- `src/services/weaknessAnalyzer.test.ts:1007`
+- `src/services/weaknessAnalyzer.test.ts:1019`
 
 ### `_testing` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
