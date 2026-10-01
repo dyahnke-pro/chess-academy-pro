@@ -17,6 +17,7 @@ import { isAuditMarkedPage } from './appAuditor';
 import { syncOpeningCredits } from './freeTierService';
 import { captureEvent } from './analytics';
 import { db } from './../db/schema';
+import { withWebOrigin } from '../utils/webOrigin';
 
 const API = '/api/referrals';
 const QUALIFY_REPORTED_KEY = 'referral.qualifyReported';
@@ -46,7 +47,7 @@ export async function getStatus(): Promise<ReferralStatus | null> {
   if (isAuditMarkedPage()) return null;
   try {
     const device = await getDeviceId();
-    const res = await fetch(`${API}?device=${encodeURIComponent(device)}&cb=${Date.now()}`, { cache: 'no-store' });
+    const res = await fetch(withWebOrigin(`${API}?device=${encodeURIComponent(device)}&cb=${Date.now()}`), { cache: 'no-store' });
     if (!res.ok) return null;
     const data = (await res.json()) as {
       code?: unknown; credits?: unknown; recruits?: unknown;
@@ -81,7 +82,7 @@ export async function claimCode(code: string): Promise<ClaimOutcome> {
   if (!c) return 'error';
   try {
     const device = await getDeviceId();
-    const res = await fetch(API, {
+    const res = await fetch(withWebOrigin(API), {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ action: 'claim', device, code: c }),
@@ -112,7 +113,7 @@ export async function reportQualifyingUse(): Promise<void> {
   } catch { /* fall through — the server is idempotent anyway */ }
   try {
     const device = await getDeviceId();
-    const res = await fetch(API, {
+    const res = await fetch(withWebOrigin(API), {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ action: 'qualify', device }),
@@ -134,7 +135,7 @@ export async function reportQualifyingUse(): Promise<void> {
 export async function grantReviewReward(): Promise<void> {
   try {
     const device = await getDeviceId();
-    const res = await fetch(API, {
+    const res = await fetch(withWebOrigin(API), {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ action: 'reviewReward', device }),

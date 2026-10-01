@@ -14,6 +14,7 @@
  * The caller is responsible for falling back to the curator's
  * authored `result` field when the lookup returns null.
  */
+import { withWebOrigin } from '../utils/webOrigin';
 
 const TABLEBASE_PROXY_PATH = '/api/lichess-tablebase';
 const FETCH_TIMEOUT_MS = 8_000;
@@ -95,7 +96,7 @@ function whiteRelative(
  *  fails. */
 export async function lookupTablebase(fen: string): Promise<TablebaseLookupResult | null> {
   if (countPieces(fen) > 7) return null;
-  const url = new URL(TABLEBASE_PROXY_PATH, window.location.origin);
+  const url = new URL(withWebOrigin(TABLEBASE_PROXY_PATH), window.location.origin);
   url.searchParams.set('fen', fen);
   try {
     const controller = new AbortController();

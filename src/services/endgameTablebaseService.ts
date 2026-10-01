@@ -18,6 +18,7 @@
  */
 import { Chess } from 'chess.js';
 import type { TablebaseCategory } from './lichessTablebaseService';
+import { WEB_ORIGIN, withWebOrigin } from '../utils/webOrigin';
 
 const TABLEBASE_PROXY_PATH = '/api/lichess-tablebase';
 const FETCH_TIMEOUT_MS = 8_000;
@@ -72,7 +73,7 @@ export async function tablebaseMoves(fen: string): Promise<TablebaseMovesResult 
   if (countPieces(fen) > 7) return null;
   let origin = '';
   try { origin = window.location.origin; } catch { origin = ''; }
-  const url = new URL(TABLEBASE_PROXY_PATH, origin || 'https://chess-academy-pro.vercel.app');
+  const url = new URL(withWebOrigin(TABLEBASE_PROXY_PATH), origin || WEB_ORIGIN);
   url.searchParams.set('fen', fen);
   try {
     const controller = new AbortController();

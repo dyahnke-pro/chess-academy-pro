@@ -1,6 +1,7 @@
 import { db } from '../db/schema';
 import { getDeviceId } from './deviceIdentity';
 import { isAuditMarkedPage } from './appAuditor';
+import { withWebOrigin } from '../utils/webOrigin';
 
 /** A message from the developer to users, shown behind the home-screen bell. */
 export interface Announcement {
@@ -21,7 +22,7 @@ const ANNOUNCEMENTS_URL = '/announcements.json';
  *  failure yields an empty list (the bell simply shows no dot). */
 export async function fetchAnnouncements(): Promise<Announcement[]> {
   try {
-    const res = await fetch(`${ANNOUNCEMENTS_URL}?cb=${Date.now()}`, { cache: 'no-store' });
+    const res = await fetch(withWebOrigin(`${ANNOUNCEMENTS_URL}?cb=${Date.now()}`), { cache: 'no-store' });
     if (!res.ok) return [];
     const data = (await res.json()) as { messages?: Announcement[] };
     const list = Array.isArray(data.messages) ? data.messages : [];
@@ -124,7 +125,7 @@ export async function fetchInbox(): Promise<{ broadcasts: Announcement[]; thread
   if (isAuditMarkedPage()) return { broadcasts: pinned, thread: [] };
   try {
     const device = await getDeviceId();
-    const res = await fetch(`${MESSAGES_API}?device=${encodeURIComponent(device)}&cb=${Date.now()}`, { cache: 'no-store' });
+    const res = await fetch(withWebOrigin(`${MESSAGES_API}?device=${encodeURIComponent(device)}&cb=${Date.now()}`), { cache: 'no-store' });
     if (res.ok) {
       const data = (await res.json()) as { broadcasts?: { id: string; title: string; body: string; ts: number }[]; thread?: ThreadMessage[] };
       const dynamic = (Array.isArray(data.broadcasts) ? data.broadcasts : [])
@@ -143,7 +144,7 @@ export async function sendReply(body: string): Promise<boolean> {
   if (!text) return false;
   try {
     const device = await getDeviceId();
-    const res = await fetch(MESSAGES_API, {
+    const res = await fetch(withWebOrigin(MESSAGES_API), {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ action: 'reply', device, body: text }),
@@ -234,7 +235,7 @@ export async function sendBroadcast(title: string, body: string): Promise<boolea
   const text = body.trim();
   if (!secret || !text) return false;
   try {
-    const res = await fetch(MESSAGES_API, {
+    const res = await fetch(withWebOrigin(MESSAGES_API), {
       method: 'POST',
       headers: { 'content-type': 'application/json', 'x-admin-secret': secret },
       body: JSON.stringify({ action: 'broadcast', title: title.trim() || 'Message', body: text }),
@@ -247,7 +248,7 @@ export async function fetchAllThreads(): Promise<{ device: string; messages: Thr
   const secret = await getAdminSecret();
   if (!secret) return [];
   try {
-    const res = await fetch(`${MESSAGES_API}?threads=1&cb=${Date.now()}`, { cache: 'no-store', headers: { 'x-admin-secret': secret } });
+    const res = await fetch(withWebOrigin(`${MESSAGES_API}?threads=1&cb=${Date.now()}`), { cache: 'no-store', headers: { 'x-admin-secret': secret } });
     if (!res.ok) return [];
     const data = (await res.json()) as { threads?: { device: string; messages: ThreadMessage[] }[] };
     return Array.isArray(data.threads) ? data.threads : [];
@@ -259,7 +260,7 @@ export async function sendDevReply(device: string, body: string): Promise<boolea
   const text = body.trim();
   if (!secret || !text) return false;
   try {
-    const res = await fetch(MESSAGES_API, {
+    const res = await fetch(withWebOrigin(MESSAGES_API), {
       method: 'POST',
       headers: { 'content-type': 'application/json', 'x-admin-secret': secret },
       body: JSON.stringify({ action: 'devReply', device, body: text }),
@@ -288,7 +289,7 @@ export async function postFeedbackToInbox(input: {
   if (!text) return false;
   try {
     const device = await getDeviceId();
-    const res = await fetch(MESSAGES_API, {
+    const res = await fetch(withWebOrigin(MESSAGES_API), {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
@@ -311,7 +312,7 @@ export async function fetchFeedback(): Promise<FeedbackItem[]> {
   const secret = await getAdminSecret();
   if (!secret) return [];
   try {
-    const res = await fetch(`${MESSAGES_API}?feedback=1&cb=${Date.now()}`, { cache: 'no-store', headers: { 'x-admin-secret': secret } });
+    const res = await fetch(withWebOrigin(`${MESSAGES_API}?feedback=1&cb=${Date.now()}`), { cache: 'no-store', headers: { 'x-admin-secret': secret } });
     if (!res.ok) return [];
     const data = (await res.json()) as { feedback?: FeedbackItem[] };
     return Array.isArray(data.feedback) ? data.feedback : [];
@@ -338,7 +339,7 @@ export async function verifyAdminSecret(secret: string): Promise<boolean> {
   const s = secret.trim();
   if (!s) return false;
   try {
-    const res = await fetch(`${MESSAGES_API}?threads=1&cb=${Date.now()}`, { cache: 'no-store', headers: { 'x-admin-secret': s } });
+    const res = await fetch(withWebOrigin(`${MESSAGES_API}?threads=1&cb=${Date.now()}`), { cache: 'no-store', headers: { 'x-admin-secret': s } });
     return res.ok;
   } catch { return false; }
 }
