@@ -147,7 +147,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/latentFork.ts:149`
 - `src/services/latentFork.ts:220`
 - `src/services/moveFundamentals.ts:312`
-- `src/services/moveFundamentals.ts:1348`
+- `src/services/moveFundamentals.ts:1347`
 
 ### `legalSeeGainFor` (function) — 39 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7970`
