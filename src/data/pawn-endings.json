@@ -111,18 +111,18 @@
       },
       {
         "fen": "4k3/8/4P3/3K4/8/8/8/8 w - - 0 1",
-        "title": "Pawn ahead of king — must regroup",
-        "explanation": "The pawn raced ahead of its king. White must NOT push 1.e7? Kxe7 (defender's king reaches the queening square first). The right plan: 1.Kd6 first, securing the key square, then push the pawn with full king escort. This is the practical lesson — pushing the pawn before establishing the king on a key square loses the win.",
-        "result": "white-wins",
+        "result": "draw",
         "bestMove": "Kd6",
-        "source": "Teaching position — key square comes first",
+        "title": "Pawn ahead of its king — too late, it's a draw",
+        "explanation": "The pawn ran ahead of its king, and the black king already stands in front of it. Now even the best try only draws: 1.Kd6 Kd8 2.e7+ Ke8 3.Ke6 and Black has no move — stalemate. The lesson is the order: bring the king up to a key square first, and only then push the pawn.",
         "solution": [
-          "Ke5",
-          "Ke7",
-          "Kd5",
+          "Kd6",
+          "Kd8",
+          "e7+",
           "Ke8",
-          "Ke5"
-        ]
+          "Ke6"
+        ],
+        "source": "Tablebase-verified (Lichess Syzygy) — every move in the line keeps the result"
       },
       {
         "fen": "k7/8/K7/P7/8/8/8/8 b - - 0 1",
@@ -203,26 +203,21 @@
         ]
       },
       {
-        "fen": "8/8/8/8/8/4k3/P7/2K5 w - - 0 1",
-        "title": "First-move bonus — the pawn pushes two",
-        "explanation": "Pawn on a2 with the option to push two squares on its first move. After 1.a4! the pawn skips a3 entirely; the new square is a4-a8-d8-d4. Black's king on e3 is outside it. Without the two-square first move (i.e., if you mistakenly play 1.a3), Black catches with 1...Kd3 2.a4 Kc4 3.a5 Kb5 — drawn. Always remember: pawn's first move is a tempo gift; use it when racing.",
+        "fen": "8/8/8/8/8/6k1/P7/2K5 w - - 0 1",
         "result": "white-wins",
         "bestMove": "a4",
-        "source": "Two-square first-move bonus in the rule of the square",
+        "title": "First-move bonus — the pawn pushes two",
+        "explanation": "From a2 the pawn may jump two squares. After 1.a4! its square runs a4 to e8, and the black king on g3 is outside it — the pawn walks in. 1.a3? would only draw: the square from a3 reaches f8, and the king steps inside it with ...Kf4.",
         "solution": [
-          "Kb2",
-          "Kd4",
-          "Kb3",
-          "Kc5",
-          "Kc3",
-          "Kb5",
-          "Kd4",
-          "Kb4",
-          "Kd5",
-          "Kb5",
-          "Kd6",
-          "Kb6"
-        ]
+          "a4",
+          "Kf2",
+          "a5",
+          "Ke1",
+          "a6",
+          "Ke2",
+          "a7"
+        ],
+        "source": "Tablebase-verified (Lichess Syzygy) — every move in the line keeps the result"
       }
     ],
     "practiceThemes": [
@@ -306,23 +301,17 @@
     },
     "positions": [
       {
-        "fen": "3k4/8/8/3KP3/8/8/8/8 w - - 1 2",
-        "title": "Outflank to the left",
-        "explanation": "White king on d5 with the e5 pawn, Black king has just yielded with 1...Kd8. The pawn can't push safely yet (Black would chase). White's plan: outflank. 2.Kc6! shoulders Black's king aside and takes a key square on the c-file. After 2...Kc8 3.Kd6 the white king is now ahead of the pawn AND Black has lost the opposition again — the pawn marches home. Outflanking turns a stalled opposition into a winning structure.",
+        "fen": "8/8/4k3/8/4K3/8/4P3/8 w - - 0 1",
         "result": "white-wins",
-        "bestMove": "Kc6",
-        "source": "Teaching position — outflanking from a stalled opposition",
+        "bestMove": "Kd4",
+        "title": "Outflank — step aside, then use the spare pawn move",
+        "explanation": "The kings face each other and it is White to move, so White does not have the opposition. Don't push yet: step aside with 1.Kd4!, threatening to walk round on the d-file. When Black follows with ...Kd6, the pawn's spare move 2.e3 hands Black the move — now Black must give way.",
         "solution": [
-          "Kc6",
-          "Kc8",
+          "Kd4",
           "Kd6",
-          "Kd8",
-          "e6",
-          "Ke8",
-          "e7",
-          "Kf7",
-          "e8=Q+"
-        ]
+          "e3"
+        ],
+        "source": "Tablebase-verified (Lichess Syzygy) — every move in the line keeps the result"
       }
     ],
     "practiceThemes": [

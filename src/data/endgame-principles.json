@@ -270,15 +270,23 @@
     },
     "positions": [
       {
-        "fen": "4k3/p7/4P3/4K3/8/8/8/8 w - - 0 1",
-        "title": "Pieces gone, the extra pawn decides",
-        "explanation": "From a position with one pawn advantage and minor pieces, trading down to this K+P endgame ends the game. The white king is on a key square (e5), the pawn is escorted, Black has no counterplay. The original eval (+1 pawn with pieces on) becomes a clean win once pieces are off. This is what 'trade pieces when ahead' looks like at the end of the rainbow.",
+        "fen": "8/p3k3/8/3KP3/8/8/P7/8 w - - 0 1",
         "result": "white-wins",
-        "source": "Teaching position — simplification's payoff",
+        "bestMove": "a4",
+        "title": "Pieces gone, the extra pawn decides",
+        "explanation": "With the pieces traded, White's extra pawn decides it. The a-pawn runs; Black's king must stay by the e-pawn, so White's king is free to walk over and win a7: 1.a4 Kd7 2.a5 Ke7 3.Kc6 Ke6 4.Kb7 and the a7 pawn falls. Careful: 1.e6? throws the win away — the pawn needs its king, not a solo run.",
         "solution": [
-          "Kf6"
+          "a4",
+          "Kd7",
+          "a5",
+          "Ke7",
+          "Kc6",
+          "Ke6",
+          "Kb7",
+          "Kd5",
+          "Kxa7"
         ],
-        "bestMove": "Kf6"
+        "source": "Tablebase-verified (Lichess Syzygy) — every move in the line keeps the result"
       }
     ],
     "practiceThemes": [

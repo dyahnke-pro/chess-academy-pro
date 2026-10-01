@@ -171,7 +171,7 @@
 - `src/services/reviewNarrationDefects.test.ts:50`
 
 ### `deriveNextPlans` (re-export) — 20 call sites
-- `src/services/groundedAnswer.ts:405`
+- `src/services/groundedAnswer.ts:406`
 - `src/services/learnMoveTeaching.ts:145`
 - `src/services/nextPlans.test.ts:16`
 - `src/services/nextPlans.test.ts:24`

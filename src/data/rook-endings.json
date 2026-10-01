@@ -122,26 +122,19 @@
     },
     "positions": [
       {
-        "fen": "8/6k1/P4r2/8/8/8/R7/K7 w - - 0 1",
-        "title": "Vancura defense — black rook on f6, side checks forever",
-        "explanation": "White Ka1, Pa6, Ra2. Black Kg7, Rf6. White's pawn is supported by the white rook; white wants to advance the king to escort the pawn to a8. But the black rook on f6 attacks a6 (the pawn). White's king tries 1.Kb1 — Rf1+ 2.Ka2 Rf2+ 3.Kb3 Rf3+ 4.Kc4 Rf4+ — perpetual side checks. White can never escape and escort the pawn simultaneously. Drawn. Black's king on g7 stays safe; black's rook does all the work.",
+        "fen": "R7/6k1/P4r2/8/8/8/8/K7 b - - 0 1",
         "result": "draw",
-        "source": "Vancura 1924 — canonical R+RP vs R drawing technique",
+        "bestMove": "Rb6",
+        "title": "Vančura defence — attack the pawn from the side",
+        "explanation": "White's rook is stuck in front of the a-pawn on a8. Keep your rook on the 6th rank, attacking the pawn from the side, and keep the king on g7, which covers h7 and h8 so the white rook can never step out with check. When the pawn advances to a7, get the rook behind it on the a-file with check.",
         "solution": [
+          "Rb6",
           "a7",
-          "Rf1+",
-          "Kb2",
-          "Rf2+",
-          "Kb3",
-          "Rf3+",
-          "Kc4",
-          "Rf4+",
-          "Kd5",
-          "Rf5+",
-          "Ke6",
-          "Rf6+"
+          "Ra6+",
+          "Kb1",
+          "Ra3"
         ],
-        "bestMove": "a7"
+        "source": "Tablebase-verified (Lichess Syzygy) — every move in the line keeps the result"
       }
     ],
     "practiceThemes": [

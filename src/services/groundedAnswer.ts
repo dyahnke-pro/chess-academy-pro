@@ -50,6 +50,7 @@ import { isUndevelopedInOpening } from '../utils/undeveloped';
 import { pieceIsOn } from './tacticsContextIdentity';
 import { clearsVolumeFloor } from './openingVolumeFloor';
 import { endgameConceptFor } from './conceptEngine';
+import { detectTwoPawnsVsKing } from './endgameTechnique';
 import type { EndgameRuleMaterial } from '../coach/questionIntents';
 
 // Pure board-fact constants — universal chess values, leaf-local so this module
@@ -3767,14 +3768,60 @@ const RULE_POSITION: Record<Exclude<EndgameRuleMaterial, 'two-pawns'>, string> =
  */
 export function assembleEndgameRuleAnswer(material: EndgameRuleMaterial): GroundedAnswer | null {
   if (material === 'two-pawns') {
-    return {
-      facts: 'It depends on where they stand. The king can take one pawn only if, from the square where it captures, it is still inside the square of the other pawn — otherwise that pawn runs through and queens. And a pawn the other one protects cannot be taken at all.',
-      bestMoveSan: null, bestMoveFromTo: null, sources: ['endgame:two-pawns-vs-king'],
-    };
+    const facts = twoPawnsPlacementRule();
+    return facts ? { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['endgame:two-pawns-vs-king'] } : null;
   }
   const concept = endgameConceptFor(RULE_POSITION[material]);
   if (!concept) return null;
   return { facts: concept.full, bestMoveSan: null, bestMoveFromTo: null, sources: [`concept:${concept.id}`] };
+}
+
+/** Two pawns against a lone king: WHERE the pawns must stand (David
+ *  2026-10-01: "say it depends on pawn placement and then describe what that
+ *  means — where the pawn needs to be"). Each placement is said only when
+ *  `detectTwoPawnsVsKing` agrees on that exact board, so the examples cannot
+ *  drift from the computer that judges live positions. */
+function twoPawnsPlacementRule(): string | null {
+  const board = (a: string, b: string): string => {
+    const g: string[][] = Array.from({ length: 8 }, () => Array<string>(8).fill(''));
+    const put = (sq: string, p: string): void => { g[8 - Number(sq[1])][sq.charCodeAt(0) - 97] = p; };
+    put(a, 'P'); put(b, 'P'); put('h1', 'K'); put('a8', 'k');
+    const rows = g.map((r) => { let out = ''; let e = 0; for (const x of r) { if (!x) e += 1; else { if (e) out += String(e); e = 0; out += x; } } if (e) out += String(e); return out; });
+    return `${rows.join('/')} b - - 0 1`;
+  };
+  const holds = (a: string, b: string): boolean | null => {
+    const r = detectTwoPawnsVsKing(board(a, b));
+    return r ? r.selfDefending : null;
+  };
+  const parts: string[] = ['It depends on where the pawns stand.'];
+  if (holds('d4', 'e5') && holds('d5', 'e6')) {
+    parts.push('If one pawn protects the other — like d4 and e5 — the king cannot take the front one, and if it takes the back one, the front pawn runs out of its reach and queens.');
+  }
+  if (holds('b5', 'f5') && holds('b6', 'f6')) {
+    parts.push('If they are far apart on the same rank — like b5 and f5 — the king can take one, but from that square it is outside the square of the other, which runs through.');
+  }
+  if (holds('d5', 'e5') === false) {
+    parts.push('Side by side on the same rank — like d5 and e5 — neither protects the other, so the king can attack them; there your own king has to come and guard them.');
+  }
+  parts.push('The test every time: from the square where the king captures, is it still inside the square of the other pawn?');
+  return parts.length > 2 ? parts.join(' ') : null;
+}
+
+/** A board the coach sets up to DEMONSTRATE the rule (David 2026-10-01: "set
+ *  up the board a couple moves out and show how to do it") — the trainer plays
+ *  it out from the tablebase, then the student tries. Only for material that
+ *  WINS (a draw has nothing to show how to do); each was checked against the
+ *  tablebase: queen mate in 15, rook 23, two bishops 29, bishop + knight 57,
+ *  the protected pawn pair 33. */
+const RULE_DEMO: Partial<Record<EndgameRuleMaterial, string>> = {
+  queen: '4k3/8/8/8/8/8/8/3QK3 w - - 0 1',
+  rook: '4k3/8/8/8/8/8/8/R3K3 w - - 0 1',
+  'two-bishops': '4k3/8/8/8/8/8/8/2B1KB2 w - - 0 1',
+  'bishop-knight': '4k3/8/8/8/8/8/8/2B1K1N1 w - - 0 1',
+  'two-pawns': '8/8/2k5/4P3/3P4/8/8/7K w - - 0 1',
+};
+export function endgameRuleDemoFen(material: EndgameRuleMaterial): string | null {
+  return RULE_DEMO[material] ?? null;
 }
 
 export function assembleEndgameTechniqueAnswer(opts: {

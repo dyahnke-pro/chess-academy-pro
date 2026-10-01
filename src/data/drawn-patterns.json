@@ -250,18 +250,21 @@
     },
     "positions": [
       {
-        "fen": "5rk1/6pp/8/8/8/8/4q3/3K4 b - - 0 1",
-        "title": "Black checks forever — the queen alone holds the draw",
-        "explanation": "White is up a rook. But Black's queen on e2 can perpetually check: 1...Qe1+ 2.Kc2 Qe2+ 3.Kc1 Qe1+ — three repetitions, drawn. White's king has no shelter from queen checks; the queen never lets up. A losing position turned into a half point.",
+        "fen": "6k1/RR6/8/8/8/4q3/6P1/7K b - - 0 1",
         "result": "draw",
+        "bestMove": "Qe1+",
+        "title": "Checks only — the queen holds the draw",
+        "explanation": "White has two rooks and a pawn against your queen, and the rooks on the 7th threaten your king. Any quiet move loses — only checks hold. 1...Qe1+ 2.Kh2 Qh4+ 3.Kg1 Qe1+ and the white king can never get out of the checks; when the same position comes up three times, it is a draw.",
         "solution": [
           "Qe1+",
-          "Kc2",
-          "Qe2+",
-          "Kc1",
-          "Qe1+"
+          "Kh2",
+          "Qh4+",
+          "Kg1",
+          "Qe1+",
+          "Kh2",
+          "Qh4+"
         ],
-        "source": "Perpetual check pattern — common in queen endings"
+        "source": "Tablebase-verified (Lichess Syzygy) — every move in the line keeps the result"
       }
     ],
     "practiceThemes": [

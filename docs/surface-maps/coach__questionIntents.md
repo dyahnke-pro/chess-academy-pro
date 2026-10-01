@@ -305,9 +305,9 @@
 - `src/coach/batteryRouting.test.ts:109`
 - `src/coach/coachService.ts:1421`
 - `src/services/coachApi.ts:2455`
-- `src/services/coachApi.ts:6092`
-- `src/services/endgameRuleAnswer.test.ts:78`
-- `src/services/endgameRuleAnswer.test.ts:79`
+- `src/services/coachApi.ts:6099`
+- `src/services/endgameRuleAnswer.test.ts:87`
+- `src/services/endgameRuleAnswer.test.ts:88`
 
 ### `isWhoseTurnQuestion` (function) — 4 call sites
 - `src/coach/batteryRouting.test.ts:120`
@@ -365,7 +365,7 @@
 - `src/coach/questionIntents.test.ts:571`
 - `src/coach/questionIntents.test.ts:579`
 - `src/coach/questionIntents.test.ts:585`
-- `src/services/coachApi.ts:6280`
+- `src/services/coachApi.ts:6287`
 
 ### `isEndgameWeaknessQuestion` (function) — 4 call sites
 - `src/coach/coachService.ts:1288`
@@ -428,7 +428,7 @@
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:94`
 
 ### `fundamentalsTopicFromText` (function) — 6 call sites
-- `src/services/coachApi.ts:5242`
+- `src/services/coachApi.ts:5249`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:47`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:48`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:49`
@@ -473,7 +473,7 @@
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:143`
 
 ### `famousGameFromText` (function) — 2 call sites
-- `src/services/coachApi.ts:5197`
+- `src/services/coachApi.ts:5204`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:135`
 
 ### `isProgressQuestion` (function) — 27 call sites

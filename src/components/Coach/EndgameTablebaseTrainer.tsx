@@ -90,8 +90,10 @@ export function EndgameTablebaseTrainer({ fen, studentColor, title, intro, onExi
       // One ply of the tablebase's perfect line, on the board before it.
       const ply = admitArrow({ from, to, role: 'line', fen: step.fenBefore, source: 'tablebase.watch' }, { fen: step.fenBefore, studentColor });
       setArrows(ply ? [ply] : []);
-      say(`${sideWord(step.mover, studentColor)} ${step.note}.`);
-      await wait(1700);
+      // Advance when the line has been SAID (the voice promise), never on a
+      // timer that cuts a longer teaching sentence off mid-word.
+      const line = step.teaching ? `${sideWord(step.mover, studentColor)} ${step.note}. ${step.teaching}` : `${sideWord(step.mover, studentColor)} ${step.note}.`;
+      await Promise.all([voiceService.speakForced(line).catch(() => {}), wait(900)]);
       try { board.move({ from, to, promotion: step.uci.length > 4 ? step.uci[4] : undefined }); } catch { break; }
       setBoardFen(board.fen());
       setBoardKey((k) => k + 1);

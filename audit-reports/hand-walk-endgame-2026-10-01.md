@@ -29,3 +29,25 @@ fixes after. David: "We need a good sweep of that page … It's pretty jacked up
 
 Verified true on the walk: key-square keystone (Kd6 / Kf6 / e5 all win, tablebase);
 wrong tries refuted on curated mates ("Qh6? Then …gxh6 — they come out the queen up").
+
+## Tablebase sweep of every lesson keystone (≤7 pieces) — after the walk
+
+`scripts/endgame-drills/verify-lesson-keystones.mjs`: the claimed result at the
+start, and every move of the line keeps it. 9 lessons taught a result the
+tablebase contradicts; 8 rebuilt on tablebase-verified lines:
+
+| Lesson | Was | Now |
+|---|---|---|
+| Philidor (Rook tab) | "draw" — the rook stood en prise, Rxe3 wins | Rb6 e6 Rb1 Kd6 Rd1+ Ke5 Re1+, student defends |
+| Philidor (Drawn tab) | student played the attacker | same verified line |
+| Q vs R fortress | a plain Q vs R win | rook g6 / pawn f7 / king g7, a real fortress |
+| Key squares #2 | "1.Kd6 first wins" — a draw | the honest lesson: too late, stalemate |
+| Rule of the square #3 | "a4 wins" — a draw | king on g3: a4 wins, a3 draws |
+| Outflanking | "Kc6" — throws the win away | Kd4! Kd6 e3 |
+| Vančura | lost even with Black to move (rook behind the pawn) | white rook in front, Black holds |
+| Trade when ahead | a draw | a pawn up, the king collects a7; e6? draws |
+| Perpetual check | illegal position, "up a rook" with no rook | two rooks + pawn vs queen, only checks hold |
+| Triangulation | still a draw — **OPEN**, needs a true mutual-zugzwang position | — |
+
+Not tablebase-checkable (>7 pieces, engine-only): breakthrough, OCB, activate the
+king, attack weak pawns, two weaknesses (E10), don't rush.

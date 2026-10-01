@@ -196,7 +196,7 @@
 - `src/coach/questionIntents.ts:1144`
 - `src/coach/questionIntents.ts:1156`
 - `src/coach/questionIntents.ts:3252`
-- `src/services/coachApi.ts:6280`
+- `src/services/coachApi.ts:6287`
 
 ### `isEndgameWeaknessQuestion` (re-export) — 6 call sites
 - `src/coach/questionIntents.test.ts:591`

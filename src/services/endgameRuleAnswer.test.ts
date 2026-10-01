@@ -52,10 +52,19 @@ describe('assembleEndgameRuleAnswer — the computer answers, not a recall', () 
   it('a lone minor cannot mate', () => {
     expect(assembleEndgameRuleAnswer('bishop')?.facts).toMatch(/cannot mate a bare king/);
   });
-  it('two pawns: the rule, never a blanket yes', () => {
+  it('two pawns: it depends, and it says WHERE the pawns must stand', () => {
     const f = assembleEndgameRuleAnswer('two-pawns')?.facts ?? '';
-    expect(f).toMatch(/^It depends/);
+    expect(f).toMatch(/^It depends on where the pawns stand/);
+    expect(f).toContain('like d4 and e5');
+    expect(f).toContain('like b5 and f5');
+    expect(f).toContain('like d5 and e5');
     expect(f).toContain('inside the square of the other pawn');
+  });
+  it('winning material comes with a board to demonstrate on; a draw does not', async () => {
+    const { endgameRuleDemoFen } = await import('./groundedAnswer');
+    expect(endgameRuleDemoFen('rook')).toBe('4k3/8/8/8/8/8/8/R3K3 w - - 0 1');
+    expect(endgameRuleDemoFen('two-pawns')).toBe('8/8/2k5/4P3/3P4/8/8/7K w - - 0 1');
+    expect(endgameRuleDemoFen('two-knights')).toBeNull();
   });
 });
 

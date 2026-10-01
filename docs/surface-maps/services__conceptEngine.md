@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**843 lines · 20 exports · 25 importers · 10 tests · 28 audits**
+**843 lines · 20 exports · 26 importers · 10 tests · 28 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,6 +22,7 @@
 - `src/services/dnaLineNarrator.ts`
 - `src/services/endgameDrillService.test.ts`
 - `src/services/endgameService.ts`
+- `src/services/endgameTablebaseService.ts`
 - `src/services/endgameTechnique.test.ts`
 - `src/services/groundedAnswer.ts`
 - `src/services/groundedMoveWhy.ts`
@@ -90,7 +91,7 @@
 - `src/services/conceptEngine.test.ts:82`
 - `src/services/conceptEngine.test.ts:107`
 
-### `endgameConceptFor` (function) — 12 call sites
+### `endgameConceptFor` (function) — 13 call sites
 - `src/services/conceptEngine.test.ts:273`
 - `src/services/conceptEngine.test.ts:276`
 - `src/services/conceptEngine.test.ts:279`
@@ -98,11 +99,12 @@
 - `src/services/conceptEngine.test.ts:284`
 - `src/services/conceptEngine.test.ts:285`
 - `src/services/endgameService.ts:90`
+- `src/services/endgameTablebaseService.ts:274`
 - `src/services/endgameTechnique.test.ts:63`
 - `src/services/endgameTechnique.test.ts:76`
 - `src/services/endgameTechnique.test.ts:226`
-- `src/services/groundedAnswer.ts:3775`
-- `src/services/groundedAnswer.ts:6409`
+- `src/services/groundedAnswer.ts:3774`
+- `src/services/groundedAnswer.ts:6456`
 
 ### `ConceptForBoardOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

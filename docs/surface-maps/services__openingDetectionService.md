@@ -105,8 +105,8 @@
 - `src/services/reviewFullData.ts:1143`
 
 ### `detectOpeningTranspositional` (function) — 5 call sites
-- `src/services/coachApi.ts:5410`
-- `src/services/coachApi.ts:6315`
+- `src/services/coachApi.ts:5417`
+- `src/services/coachApi.ts:6322`
 - `src/services/reviewGameAdapter.ts:170`
 - `src/services/reviewOpeningTheory.ts:315`
 - `src/services/reviewOpeningTheory.ts:316`
