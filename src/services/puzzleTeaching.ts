@@ -21,7 +21,9 @@
 import { Chess } from 'chess.js';
 import { lineWins, mateLine, lineArrows } from './lineCalc';
 import { whyItFailed } from './whyItFailed';
-import type { ArrowClaim } from './arrowDoor';
+import { admitArrows, type ArrowClaim } from './arrowDoor';
+import { explainDrillConcept, type PuzzleConceptExplanation } from './puzzleConceptExplanation';
+import type { BoardArrow } from '../types';
 
 /** The best line from a position, in UCI, side to move first. */
 export type PuzzleLineAnalyser = (fen: string) => Promise<readonly string[] | null>;
@@ -94,4 +96,18 @@ export async function refuteWrongTry(args: {
     return { kind: 'geometry', text: `${san}? ${geo.line}`, fenAfter, uci: [], arrows: [] };
   }
   return null;
+}
+
+/** The refutation's arrows, admitted through the arrow door on the board after
+ *  the wrong move (each line ply carries its own board). */
+export function refutationArrows(r: WrongTryRefutation): BoardArrow[] {
+  const solver = r.fenAfter.split(' ')[1] === 'w' ? 'black' : 'white';
+  return admitArrows(r.arrows, { fen: r.fenAfter, studentColor: solver }).arrows;
+}
+
+/** The concept behind a SOLVED student-to-move drill (Calculation, Opening
+ *  Traps) — the same computed explanation the puzzle board gives. Here so a
+ *  surface reaches it through the puzzle-teaching door, not a third import. */
+export function solvedDrillConcept(setupFen: string, solutionSan: readonly string[], themes: string[] = []): PuzzleConceptExplanation | null {
+  return explainDrillConcept({ setupFen, solutionSan: [...solutionSan], themes });
 }

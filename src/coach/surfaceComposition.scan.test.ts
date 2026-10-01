@@ -51,6 +51,12 @@ const INFRA = new Set([
   // NOT move any ceiling, and adding a real computer here to duck one is the
   // same cheat as raising one.
   'spokenLanguage',
+  // Board THEMING and BILLING (2026-10-01): `boardColorService` and
+  // `pieceSetService` pick colours and a piece set; `courseEntitlement` checks
+  // a purchase. None of them reasons about a position — they were counted only
+  // because they live in services/. Reclassified together with a ceiling CUT
+  // (251 → 249), so the measurement got truer and the ceiling still shrank.
+  'boardColorService', 'pieceSetService', 'courseEntitlement',
   // `coachChatText` is the transcript's translation DOOR — the text-side twin
   // of `voiceService`'s chokepoint. It computes no chess or teaching fact; it
   // decides which language a fixed app string is shown in. Same class as
@@ -229,7 +235,7 @@ const SURFACES = [
 
 // ── SHRINK-ONLY CEILINGS, measured 2026-09-17. Lower them when you route a
 //    call through the composer. NEVER raise one.
-const TOTAL_CEILING = 251;
+const TOTAL_CEILING = 249;
 const PER_FILE_CEILING: Record<string, number> = {
   'components/Coach/CoachTeachPage.tsx': 59,
   'components/Coach/CoachGamePage.tsx': 33,

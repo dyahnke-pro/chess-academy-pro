@@ -49,7 +49,9 @@ import { voiceService } from '../../services/voiceService';
 import { useAppStore } from '../../stores/appStore';
 import { WrongTryNote } from '../Puzzles/WrongTryNote';
 import { hintSquareStyles } from '../../utils/hintSquareStyles';
-import { explainDrillConcept } from '../../services/puzzleConceptExplanation';
+import { useSolvedDrillConcept } from '../../hooks/useWrongTryRefutation';
+
+const EMPTY_LINE: readonly string[] = [];
 
 interface CalculationTabProps {
   onExit: () => void;
@@ -321,10 +323,7 @@ function AdaptivePuzzleRunner({
   // SOLVED → TEACH THE CONCEPT (tactics map 2026-10-01: Calculation ended on
   // "Solved — played to the win." and nothing else). The same computed
   // explanation the puzzle board gives, for a student-to-move drill.
-  const solvedConcept = useMemo(
-    () => (playout.isComplete ? explainDrillConcept({ setupFen: drill.fen, solutionSan: drill.solution ?? [] }) : null),
-    [playout.isComplete, drill.fen, drill.solution],
-  );
+  const solvedConcept = useSolvedDrillConcept(playout.isComplete, drill.fen, drill.solution ?? EMPTY_LINE);
 
   const [recorded, setRecorded] = useState(false);
 
@@ -426,7 +425,7 @@ function AdaptivePuzzleRunner({
         </p>
         {solvedConcept && (
           <p className="text-[12px] text-theme-text leading-relaxed" data-testid="calc-solved-concept">
-            {solvedConcept.spoken}
+            {solvedConcept}
           </p>
         )}
         {!playout.isComplete && playout.wrongAttempts > 0 && drill.conceptHint && (

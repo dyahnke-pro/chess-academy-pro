@@ -13,10 +13,9 @@
  * capped: a slow engine must never freeze the puzzle. No
  * answer in time → null, and the board keeps its own nudge.
  */
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { stockfishEngine } from '../services/stockfishEngine';
-import { refuteWrongTry, type WrongTryRefutation, type PuzzleLineAnalyser } from '../services/puzzleTeaching';
-import { admitArrows } from '../services/arrowDoor';
+import { refuteWrongTry, refutationArrows, solvedDrillConcept, type WrongTryRefutation, type PuzzleLineAnalyser } from '../services/puzzleTeaching';
 import type { BoardArrow } from '../types';
 
 const REFUTE_DEPTH = 12;
@@ -48,9 +47,8 @@ export function useWrongTryRefutation(analyse: PuzzleLineAnalyser = engineLineAn
     const r = await refuteWrongTry({ fenBefore, wrongSan, analyse });
     if (mine !== token.current) return null; // superseded by a newer try or a clear
     if (!r) { setText(null); setArrows([]); return null; }
-    const solver = fenBefore.split(' ')[1] === 'b' ? 'black' : 'white';
     setText(r.text);
-    setArrows(admitArrows(r.arrows, { fen: r.fenAfter, studentColor: solver }).arrows);
+    setArrows(refutationArrows(r));
     return r;
   }, [analyse]);
 
@@ -58,4 +56,12 @@ export function useWrongTryRefutation(analyse: PuzzleLineAnalyser = engineLineAn
   const clear = useCallback(() => { token.current += 1; setText(null); setArrows([]); }, []);
 
   return { text, arrows, refute, clearArrows, clear };
+}
+
+/** The concept behind a solved student-to-move drill, through the same door. */
+export function useSolvedDrillConcept(solved: boolean, setupFen: string, solutionSan: readonly string[], themes?: string[]): string | null {
+  return useMemo(
+    () => (solved ? solvedDrillConcept(setupFen, solutionSan, themes)?.spoken ?? null : null),
+    [solved, setupFen, solutionSan, themes],
+  );
 }

@@ -38,7 +38,7 @@ import {
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 import { WrongTryNote } from '../Puzzles/WrongTryNote';
 import { hintSquareStyles } from '../../utils/hintSquareStyles';
-import { explainDrillConcept } from '../../services/puzzleConceptExplanation';
+import { useSolvedDrillConcept } from '../../hooks/useWrongTryRefutation';
 import { db } from '../../db/schema';
 
 /** Difficulty band around the user's puzzle rating. Puzzles inside this
@@ -811,10 +811,7 @@ function PuzzleView({ puzzle, onExit, onResult, onNext }: PuzzleViewProps): JSX.
   // Solved → the concept behind the punishing line (it ended on "that's the
   // punishing line" and nothing else) — the same computed explanation the
   // puzzle board gives, for a student-to-move line.
-  const solvedConcept = useMemo(
-    () => explainDrillConcept({ setupFen: startFen, solutionSan, themes: puzzle.themes }),
-    [startFen, solutionSan, puzzle.themes],
-  );
+  const solvedConcept = useSolvedDrillConcept(true, startFen, solutionSan, puzzle.themes);
 
   // 'puzzle' = curated solution mode (default).
   // 'playing-out' = free-play vs Stockfish from the end of the
@@ -1014,7 +1011,7 @@ function PuzzleView({ puzzle, onExit, onResult, onNext }: PuzzleViewProps): JSX.
         )}
         {playout.isComplete && mode === 'puzzle' && solvedConcept && (
           <p className="text-xs text-theme-text leading-relaxed" data-testid="traps-solved-concept">
-            {solvedConcept.spoken}
+            {solvedConcept}
           </p>
         )}
         {playout.isComplete && mode === 'playing-out' && (
