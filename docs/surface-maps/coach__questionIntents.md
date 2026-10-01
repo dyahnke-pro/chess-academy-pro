@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3337 lines · 103 exports · 42 importers · 36 tests · 4 audits**
+**3374 lines · 105 exports · 44 importers · 37 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -47,11 +47,13 @@
 - `src/services/attackAssessment.test.ts`
 - `src/services/coachApi.ts`
 - `src/services/endgameLaneOwnership.test.ts`
+- `src/services/endgameRuleAnswer.test.ts`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts`
 - `src/services/groundedAnswer.opponentHypothetical.test.ts`
 - `src/services/groundedAnswer.routerE.test.ts`
 - `src/services/groundedAnswer.settings.test.ts`
 - `src/services/groundedAnswer.trade.test.ts`
+- `src/services/groundedAnswer.ts`
 - `src/services/kidGameCoach.ts`
 - `src/services/pieceOptions.test.ts`
 - `src/services/trainingAidRouter.ts`
@@ -297,13 +299,15 @@
 - `src/coach/tacticsProgressQuestion.test.ts:37`
 - `src/components/Coach/CoachTeachPage.tsx:4826`
 
-### `isMateQuestion` (function) — 6 call sites
+### `isMateQuestion` (function) — 8 call sites
 - `src/coach/batteryRouting.test.ts:102`
 - `src/coach/batteryRouting.test.ts:106`
 - `src/coach/batteryRouting.test.ts:109`
 - `src/coach/coachService.ts:1421`
 - `src/services/coachApi.ts:2455`
-- `src/services/coachApi.ts:6077`
+- `src/services/coachApi.ts:6092`
+- `src/services/endgameRuleAnswer.test.ts:78`
+- `src/services/endgameRuleAnswer.test.ts:79`
 
 ### `isWhoseTurnQuestion` (function) — 4 call sites
 - `src/coach/batteryRouting.test.ts:120`
@@ -337,7 +341,14 @@
 - `src/coach/tacticsProgressQuestion.test.ts:87`
 - `src/coach/tacticsProgressQuestion.test.ts:100`
 
-### `isEndgameQuestion` (function) — 9 call sites
+### `EndgameRuleMaterial` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `endgameRuleMaterial` (function) — 2 call sites
+- `src/services/coachApi.ts:3760`
+- `src/services/endgameRuleAnswer.test.ts:30`
+
+### `isEndgameQuestion` (function) — 10 call sites
 - `src/coach/coachService.ts:1594`
 - `src/coach/coachService.ts:1823`
 - `src/coach/questionIntents.test.ts:587`
@@ -347,13 +358,14 @@
 - `src/components/Coach/CoachTeachPage.tsx:4835`
 - `src/services/endgameLaneOwnership.test.ts:23`
 - `src/services/endgameLaneOwnership.test.ts:32`
+- `src/services/endgameRuleAnswer.test.ts:33`
 
 ### `isEndgamePlayRequest` (function) — 5 call sites
 - `src/coach/coachService.ts:1288`
 - `src/coach/questionIntents.test.ts:571`
 - `src/coach/questionIntents.test.ts:579`
 - `src/coach/questionIntents.test.ts:585`
-- `src/services/coachApi.ts:6265`
+- `src/services/coachApi.ts:6280`
 
 ### `isEndgameWeaknessQuestion` (function) — 4 call sites
 - `src/coach/coachService.ts:1288`
@@ -416,7 +428,7 @@
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:94`
 
 ### `fundamentalsTopicFromText` (function) — 6 call sites
-- `src/services/coachApi.ts:5227`
+- `src/services/coachApi.ts:5242`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:47`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:48`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:49`
@@ -461,7 +473,7 @@
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:143`
 
 ### `famousGameFromText` (function) — 2 call sites
-- `src/services/coachApi.ts:5182`
+- `src/services/coachApi.ts:5197`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:135`
 
 ### `isProgressQuestion` (function) — 27 call sites
@@ -930,6 +942,7 @@
 - `src/data/coachGreetings.test.ts`
 - `src/services/attackAssessment.test.ts`
 - `src/services/endgameLaneOwnership.test.ts`
+- `src/services/endgameRuleAnswer.test.ts`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts`
 - `src/services/groundedAnswer.compare.test.ts`
 - `src/services/groundedAnswer.opponentHypothetical.test.ts`

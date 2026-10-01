@@ -112,7 +112,7 @@
 - `src/services/positionFacts.ts:796`
 
 ### `liveMethodBeatFor` (function) — 22 call sites
-- `src/services/groundedAnswer.ts:3425`
+- `src/services/groundedAnswer.ts:3427`
 - `src/services/methodBeat.live.test.ts:15`
 - `src/services/methodBeat.live.test.ts:19`
 - `src/services/methodBeat.live.test.ts:20`

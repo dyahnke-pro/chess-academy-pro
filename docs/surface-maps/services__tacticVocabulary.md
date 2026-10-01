@@ -35,9 +35,9 @@
 - `src/services/computedVoiceAudit.report.test.ts:254`
 - `src/services/dnaLineNarrator.ts:129`
 - `src/services/dnaLineNarrator.ts:218`
-- `src/services/groundedAnswer.ts:4996`
-- `src/services/groundedAnswer.ts:5008`
-- `src/services/groundedAnswer.ts:5768`
+- `src/services/groundedAnswer.ts:5030`
+- `src/services/groundedAnswer.ts:5042`
+- `src/services/groundedAnswer.ts:5802`
 - `src/services/lookaheadPlan.ts:98`
 - `src/services/pvPlayback.test.ts:291`
 - `src/services/pvPlayback.test.ts:292`

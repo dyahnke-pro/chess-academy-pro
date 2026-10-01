@@ -161,8 +161,8 @@
 - `src/components/Tactics/TacticalProfilePage.tsx:69`
 - `src/services/bucketPipelineAudit.ts:156`
 - `src/services/coachApi.ts:2160`
-- `src/services/coachApi.ts:4449`
-- `src/services/coachApi.ts:5018`
+- `src/services/coachApi.ts:4464`
+- `src/services/coachApi.ts:5033`
 - `src/services/coachCurriculumService.ts:124`
 - `src/services/coachCurriculumService.ts:137`
 - `src/services/coachThread.ts:49`

@@ -49,6 +49,8 @@ import { andList, orList, fileList } from '../utils/andList';
 import { isUndevelopedInOpening } from '../utils/undeveloped';
 import { pieceIsOn } from './tacticsContextIdentity';
 import { clearsVolumeFloor } from './openingVolumeFloor';
+import { endgameConceptFor } from './conceptEngine';
+import type { EndgameRuleMaterial } from '../coach/questionIntents';
 
 // Pure board-fact constants — universal chess values, leaf-local so this module
 // imports nothing that could loop back. coachFeatureService imports these FROM
@@ -3743,6 +3745,38 @@ export function assembleEndgameAnswer(opts: {
 // tablebase verdict (a LIVE ≤7-piece board): this answers a general "how do I
 // win/hold X" with no board, or where the tablebase missed. The canonical FEN is
 // carried through so a later step can walk the line (P-V.2).
+/** The position each rule question is answered on: that material against a
+ *  bare king. The answer is whatever `endgameConceptFor` says about it — the
+ *  same sentence a live board with that material speaks, never a second copy. */
+const RULE_POSITION: Record<Exclude<EndgameRuleMaterial, 'two-pawns'>, string> = {
+  queen: '4k3/8/8/8/8/8/8/3QK3 w - - 0 1',
+  rook: '4k3/8/8/8/8/8/8/R3K3 w - - 0 1',
+  'two-bishops': '4k3/8/8/8/8/8/8/2B1KB2 w - - 0 1',
+  'bishop-knight': '4k3/8/8/8/8/8/8/2B1K1N1 w - - 0 1',
+  'two-knights': '4k3/8/8/8/8/8/8/1N2K1N1 w - - 0 1',
+  bishop: '4k3/8/8/8/8/8/8/2B1K3 w - - 0 1',
+  knight: '4k3/8/8/8/8/8/8/1N2K3 w - - 0 1',
+};
+
+/**
+ * A board-free ENDGAME RULE ("can two knights checkmate?", "can a king stop two
+ * pawns?") — computed, never recalled (G0). Mating material is answered on that
+ * material against a bare king; two pawns get the rule `detectTwoPawnsVsKing`
+ * computes, because whether the king can take one depends on where they stand
+ * (d5 and e5 with the king on d7 fall; other set-ups do not).
+ */
+export function assembleEndgameRuleAnswer(material: EndgameRuleMaterial): GroundedAnswer | null {
+  if (material === 'two-pawns') {
+    return {
+      facts: 'It depends on where they stand. The king can take one pawn only if, from the square where it captures, it is still inside the square of the other pawn — otherwise that pawn runs through and queens. And a pawn the other one protects cannot be taken at all.',
+      bestMoveSan: null, bestMoveFromTo: null, sources: ['endgame:two-pawns-vs-king'],
+    };
+  }
+  const concept = endgameConceptFor(RULE_POSITION[material]);
+  if (!concept) return null;
+  return { facts: concept.full, bestMoveSan: null, bestMoveFromTo: null, sources: [`concept:${concept.id}`] };
+}
+
 export function assembleEndgameTechniqueAnswer(opts: {
   name: string;
   rule: string;
@@ -6365,8 +6399,19 @@ export function assemblePositionalAnswer(
     if (op) bits.push(op.holds ? 'you hold the opposition' : 'fight for the opposition');
     if (rb) bits.push(`get your rook behind the passer on ${rb.pawn}`);
     if (bm) bits.push(`keep your ${REVIEW_PIECE_NAME[bm.note.piece]} on ${bm.note.square}${bm.dominant ? ' — it dominates' : ''}`);
-    if (bits.length === 0) return null;
-    return { facts: `Endgame technique: ${bits.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    // THE ENDING'S OWN RULE LEADS (2026-10-01): the one endgame computer that
+    // speaks over the live board — a named technique (Lucena, Philidor, the
+    // basic mates, two pawns that defend each other) — so the chat answer and
+    // the board say the same thing. A bare matchup principle stays out: it is
+    // generic beside the concrete steps below.
+    let rule: string | null = null;
+    try {
+      const c = endgameConceptFor(fen);
+      if (c && c.source === 'technique') rule = c.full;
+    } catch { rule = null; }
+    if (!rule && bits.length === 0) return null;
+    const steps = bits.length ? `Endgame technique: ${bits.join('; ')}.` : '';
+    return { facts: [rule, steps].filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
   // piece quality

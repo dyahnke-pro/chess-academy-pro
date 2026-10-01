@@ -258,7 +258,7 @@ function bareKingConcept(fen: string): ComputedConcept | null {
   if (m.kind === 'bishop-knight') {
     return technique(
       'bishop-knight-mate', 'Bishop and knight mate',
-      `King, bishop and knight against a bare king is a forced mate, but the hardest of the basic ones — up to ${m.maxMoves} moves — and it only works in a corner the bishop controls: ${m.corners.join(' or ')}. Drive the king to the edge first, then walk it along the edge into one of those corners.`,
+      `King, bishop and knight against a bare king is a forced mate, but the hardest of the basic ones — up to ${m.maxMoves} moves — and it only works in a corner of the bishop's colour: ${m.corners[0] === 'a1' ? 'a1 or h8 with a dark-squared bishop, h1 or a8 with a light-squared one' : 'h1 or a8 with a light-squared bishop, a1 or h8 with a dark-squared one'}. Drive the king to the edge first, then walk it along the edge into one of those corners.`,
       `Mate only in the bishop's corner.`, m.corners, 0.75,
     );
   }

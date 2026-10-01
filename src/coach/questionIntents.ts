@@ -896,6 +896,10 @@ export function isTacticsQuestion(ask: string | undefined): boolean {
  *  to the tactic scan, so a middlegame mate-combination ask is unaffected. */
 export function isMateQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
+  // A mate question that NAMES ITS MATERIAL ("how many moves to mate with
+  // bishop and knight") asks a rule, not about this board — localhost chat walk
+  // 2026-10-01 answered it "No forced mate here".
+  if (endgameRuleMaterial(ask) !== null) return false;
   return /\b(?:force\s+(?:a\s+)?(?:mate|checkmate)|forced\s+(?:mate|checkmate|win\s+by\s+mate)|mate\s+in\s+(?:how\s+many|\d)|how\s+(?:many\s+moves?|long)\s+(?:to|until|before)\s+(?:i\s+)?(?:force\s+)?(?:mate|checkmate)|moves?\s+to\s+(?:force\s+)?(?:mate|checkmate)|can\s+i\s+(?:force\s+)?(?:deliver\s+)?(?:mate|checkmate)|is\s+there\s+(?:a\s+)?(?:forced\s+)?(?:mate|checkmate)|mate\s+the\s+(?:lone\s+)?king|(?:fastest|quickest)\s+(?:way\s+to\s+)?(?:mate|checkmate|win)|how\s+(?:fast|quickly|soon)\s+can\s+i\s+(?:mate|win))\b/i.test(ask);
 }
 
@@ -1098,13 +1102,46 @@ const ENDGAME_QUESTION_RE = anyOf([
   String.raw`\b(?:what(?:'?s| is)?\s+the\s+)?(?:winning\s+)?technique\s+to\s+(?:convert|win|hold|draw|promote)\b`,
   String.raw`\bhow\s+do\s+i\s+(?:not\s+lose|avoid\s+losing)\s+(?:this|the)\s+(?:ending|endgame)\b`,
 ]);
+/** The material a board-free ENDGAME RULE question names ("can two knights
+ *  checkmate?", "can a king stop two pawns?", "is king and bishop vs king a
+ *  draw?"). The answer is computed by building that material and asking the
+ *  same detectors the board speaks through (`assembleEndgameRuleAnswer`), so a
+ *  rule said in chat and a rule said over a live board are one sentence. Null
+ *  for a question about THIS position (the board lanes answer those) and for
+ *  material the detectors have no rule for (queen vs rook, …). */
+export type EndgameRuleMaterial =
+  | 'queen' | 'rook' | 'two-bishops' | 'bishop-knight' | 'two-knights' | 'bishop' | 'knight' | 'two-pawns';
+export function endgameRuleMaterial(ask: string | undefined): EndgameRuleMaterial | null {
+  if (!ask) return null;
+  const a = ask.toLowerCase();
+  if (/\b(?:here|this\s+position|this\s+game|this\s+ending|this\s+endgame|on\s+the\s+board|right\s+now)\b/.test(a)) return null;
+  if (/\b(?:defen[cs]e|gambit|opening|variation)\b/.test(a)) return null;
+  const pieces = new Set<string>();
+  for (const p of ['queen', 'rook', 'bishop', 'knight', 'pawn']) if (new RegExp(`\\b${p}s?\\b`).test(a)) pieces.add(p);
+  if (pieces.size === 1 && pieces.has('pawn')) {
+    if (/\b(?:two|2)\s+(?:connected\s+)?pawns\b/.test(a) && /\bking\b/.test(a) && /\b(?:stop|catch|win|take|hold|beat|against|vs\.?|versus)\b/.test(a)) return 'two-pawns';
+    return null;
+  }
+  // A mating-material question: a mate / draw word and the lone king implied.
+  if (!/\b(?:check)?mate\b|\bmating\b|\bforce\b|\benough\b|\binsufficient\b|\bdraw\b|\bwin\b/.test(a)) return null;
+  if (pieces.size === 2 && pieces.has('bishop') && pieces.has('knight')) return 'bishop-knight';
+  if (pieces.size !== 1) return null;
+  if (/\b(?:two|2)\s+bishops\b|\bbishop\s+pair\b|\bpair\s+of\s+bishops\b/.test(a)) return 'two-bishops';
+  if (/\b(?:two|2)\s+knights\b/.test(a)) return 'two-knights';
+  if (pieces.has('queen')) return 'queen';
+  if (pieces.has('rook')) return 'rook';
+  if (pieces.has('bishop')) return 'bishop';
+  if (pieces.has('knight')) return 'knight';
+  return null;
+}
+
 export function isEndgameQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
   // "I always/keep LOSE the endgame" is a phase-WEAKNESS statement about the
   // student over time, NOT "is THIS endgame winning" — the bare "endgame" token
   // would misroute it to the live tablebase (matrix pass 11, 2026-07-10).
   if (/\bi\s+(?:always|keep|usually|constantly|often|tend\s+to)\s+(?:los|blunder|struggl|mess|screw)/i.test(ask)) return false;
-  return ENDGAME_QUESTION_RE.test(ask) || isEndgamePlayRequest(ask);
+  return ENDGAME_QUESTION_RE.test(ask) || isEndgamePlayRequest(ask) || endgameRuleMaterial(ask) !== null;
 }
 
 /** "Play / practise / train / let me try the <ending> with me" — the INTERACTIVE

@@ -89,6 +89,15 @@ http.createServer(async (req, res) => {
       const out = await page.evaluate(`(async () => { ${u.searchParams.get('code') ?? ''} })()`).catch((e) => `ERR ${String(e)}`);
       return json(res, { out });
     }
+    if (u.pathname === '/type') {
+      // Real key events — a React textarea ignores fill() and keeps Send disabled.
+      const box = page.locator(u.searchParams.get('sel') ?? 'textarea').first();
+      await box.click({ timeout: 6000, force: true });
+      await box.pressSequentially(u.searchParams.get('text') ?? '', { delay: 15 });
+      await page.keyboard.press('Enter');
+      await sleep(Number(u.searchParams.get('wait') ?? 6000));
+      return json(res, await state());
+    }
     if (u.pathname === '/wait') { await sleep(Number(u.searchParams.get('ms') ?? 2000)); return json(res, await state()); }
     if (u.pathname === '/state') return json(res, await state());
     if (u.pathname === '/shot') { const p = `${SHOTS}/${u.searchParams.get('name') ?? Date.now()}.png`; await page.screenshot({ path: p, fullPage: true }); return json(res, { path: p }); }
