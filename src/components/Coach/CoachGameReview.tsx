@@ -983,6 +983,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // is now simply said, so the game's one-line story is not lost with the card.
   const [turningSummary, setTurningSummary] = useState<string | null>(null);
   const turningAskedRef = useRef(false);
+  /** Bumped when the game changes. The stated line is computed async and must
+   *  survive the walk stepping PAST the last ply to the closing (that happens
+   *  within a second), so it is cancelled by a new game, never by a ply. */
+  const turningTokenRef = useRef(0);
 
   // §4 TRAP — "this piece looks free — take it or leave it?" Fires only when the
   // student's flagged move GRABBED poisoned material (the question plan tags the
@@ -1022,6 +1026,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     rewindOfferedPliesRef.current = new Set();
     setTurningSummary(null);
     turningAskedRef.current = false;
+    turningTokenRef.current += 1;
     setTrapQ(null);
     setTrapReveal(null);
   }, [props.gameId]);
@@ -1469,9 +1474,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const reprise = themeSpokenRef.current && themeRef.current
       ? ` It fits the thread of the game — ${themeRef.current.reprise}.`
       : '';
-    let cancelled = false;
+    const token = turningTokenRef.current;
     const speak = (hinge: string): void => {
-      if (cancelled) return;
+      if (token !== turningTokenRef.current) return;
       const text = `${thesis || q.reveal}${hinge ? ` ${hinge}` : ''}${reprise}`;
       setTurningSummary(text);
       captureEvent('review_turning_point_stated', { answer_ply: q.answer.ply, hinged: !!hinge });
@@ -1479,7 +1484,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     };
     // "What it hinged on", in the retrospective register — computed before the
     // line is said, bounded so a slow engine never holds the summary back.
-    if (!q.answer.fenBefore) { speak(''); return () => { cancelled = true; }; }
+    if (!q.answer.fenBefore) { speak(''); return; }
     let done = false;
     const timer = window.setTimeout(() => { if (!done) { done = true; speak(''); } }, 4000);
     void computeTurningPointHinge({
@@ -1488,7 +1493,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       evalBoard: (f) => stockfishEngine.evalBoard(f),
     }).then((h) => { if (!done) { done = true; window.clearTimeout(timer); speak(h); } })
       .catch(() => { if (!done) { done = true; window.clearTimeout(timer); speak(''); } });
-    return () => { cancelled = true; window.clearTimeout(timer); };
   }, [walkPlayback.currentPly, walkNarration, moves.length]);
 
   /** They committed an answer at the critical moment. Grade it against the

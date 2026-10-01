@@ -1091,6 +1091,13 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   if (flaggedLeads.size === 0) {
     await add('SHOW better-move-narrated-then-paused', true,
       `n/a — no flagged student ply in this game, so no Show-me is owed (probe ply ${FUND_PLY} graded good)`);
+  } else if (dbFlagged.n === 0 && !showBtn) {
+    // ASK THE ENGINE, NEVER THE WALK (same rule as RECAP). The walk ran on the
+    // quick pass; the deep dive can clear a ply it flagged (game 1, 2026-10-01:
+    // ply 95 queened where a rook mated — quick pass said inaccuracy, the deep
+    // record says nothing). No flag in the record = no Show-me, correctly.
+    await add('SHOW better-move-narrated-then-paused', true,
+      `n/a — the walk flagged ply ${showPly} on the quick pass but the ENGINE RECORD now flags 0 student plies, so no Show-me is owed`);
   } else {
     await add('SHOW better-move-narrated-then-paused', showBtn && showLines >= 2 && showPaused === 'paused', showBtn ? `ply ${showPly}: ${showLines} lines spoken; state after=${showPaused}` : `no Show-me button on FLAGGED ply ${showPly}${showWhy}`);
   }
