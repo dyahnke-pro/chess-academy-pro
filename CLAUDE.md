@@ -5641,6 +5641,22 @@ Save the flag list to `audit-reports/hand-walk-<topic>-<date>.md`. Before
 blaming the coach for a "repeat", check the instrument: the page logs each line
 once in SAN and the voice logs it once spoken — two events, one utterance.
 
+### 🔒🔒 THE ACCURACY BAR IS 100% — every board claim true, no stopping short (David 2026-10-01: "We go until 100% accuracy. No reason to stop short. Set the new bar in memory")
+
+🔴 **This REPLACES the old "≥97% of all claims" bar, which is DELETED rather than
+annotated (the Lake Butler rule).** A walk is not done at 97%: every false claim
+found is a defect to fix at its computer, with a test that fails on the old code,
+and the walk repeats until a fresh-game walk of Learn AND Review comes back with
+zero false claims over EVERY sentence with a board claim (machine-checked plus
+hand-checked — see rule 1 below). Report it as "X of all Y claims", and treat any
+X < Y as open work, never as "meets standard".
+
+Two honest exceptions, both named in the report, never silently counted true:
+- a CHECKER misread (the line is legal on its own board, the count matches) is
+  not a false claim — say which and why;
+- a claim the walk CANNOT decide (an engine read deeper than the stored lines) is
+  listed as undecided and settled by a deeper engine read, not by assumption.
+
 ### 🔒🔒 THE DETAILS A WALK MUST CATCH (David 2026-09-30: "These are the details you need to be catching. Lock in!!")
 
 Every one of these was missed by a green walk until David asked. Check each, on

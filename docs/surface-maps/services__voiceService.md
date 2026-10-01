@@ -17,7 +17,7 @@
 - **🧒 Kids section — non-negotiables** (CLAUDE.md:3357) — names `voiceService`
 - **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3666) — names `voiceService`
 - **Shared types / services** (CLAUDE.md:5296) — names `voiceService`
-- **The standard post-deploy ritual** (CLAUDE.md:6104) — names `voiceService`
+- **The standard post-deploy ritual** (CLAUDE.md:6120) — names `voiceService`
 
 ## Who calls in
 

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**337 lines · 9 exports · 7 importers · 2 tests · 0 audits**
+**341 lines · 9 exports · 7 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -42,7 +42,7 @@
 - `src/services/planRace.test.ts:62`
 - `src/services/planRace.test.ts:64`
 
-### `detectPlanRace` (function) — 17 call sites
+### `detectPlanRace` (function) — 18 call sites
 - `scripts/endgame-drills/generate.ts:311`
 - `src/data/endgameConceptDrills.test.ts:32`
 - `src/data/endgameConceptDrills.test.ts:56`
@@ -60,6 +60,7 @@
 - `src/services/planRace.test.ts:161`
 - `src/services/planRace.test.ts:165`
 - `src/services/planRace.test.ts:173`
+- `src/services/planRace.test.ts:181`
 
 ### `planRaceClause` (function) — 16 call sites
 - `src/services/boardPlan.ts:125`

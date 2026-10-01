@@ -115,8 +115,11 @@ export interface MoveFundamental {
    *  rook). A consequence, so it teaches even when the principle is known. */
   forcing?: boolean;
   /** The reason this SHAPE of the principle holds, when it differs from the
-   *  id's general reason (a flank pawn's is not a center pawn's). */
-  reason?: string;
+   *  id's general reason (a flank pawn's is not a center pawn's). `null` = this
+   *  shape has NO reason of its own and the id's must not ride with it either
+   *  (a knight that only EYES an outpost is not standing on one). Set where the
+   *  fact is made, never read back off the prose. */
+  reason?: string | null;
 }
 
 /**
@@ -422,6 +425,8 @@ export function computeMoveFundamentals(
         id: 'outpost',
         weight: 70,
         led: `eyes ${sqs}, ${what}`,
+        // "Stays there for the whole game" is about a piece ON the hole.
+        reason: null,
         selfContained: `heads for ${sqs}, ${what}`,
         imperative: `aim the knight at ${sqs}, ${one ? 'a hole' : 'holes'} no pawn of theirs can ever cover`,
         squares: [mv.to, ...targets],
@@ -1162,6 +1167,13 @@ const PRINCIPLE_REASON: Record<MoveFundamental['id'], string | null> = {
   prophylaxis: 'stop what they want before you chase what you want: a square their piece never reaches is a plan it never starts',
 };
 
+/** THE ONE PLACE a fundamental's reason is resolved: its own shape's reason,
+ *  `null` when the shape carries none, else the id's general reason. Every
+ *  caller reads it here, so the opening and middlegame paths cannot disagree. */
+function reasonFor(f: Pick<MoveFundamental, 'id' | 'reason'>): string | null {
+  return f.reason !== undefined ? f.reason : PRINCIPLE_REASON[f.id];
+}
+
 /** Whether a rule's reason is written from the MOVER's seat ("their camp",
  *  "every move they spend retreating"). Said of the opponent's move, such a
  *  reason points at the wrong side ("Their O-O prepares d5 … every move THEY
@@ -1195,11 +1207,7 @@ const REASON_NAMES_SIDES: Record<MoveFundamental['id'], boolean> = {
  *  home it is false ("h3 kicks their bishop … a move they do not spend
  *  developing" on move 15 with every black minor out) — the move still says
  *  what it does, without the reason. */
-function reasonHolds(f: Pick<MoveFundamental, 'id' | 'led'>, fenBefore: string, mover: 'white' | 'black'): boolean {
-  // The outpost reason is about a piece STANDING on the hole ("stays there for
-  // the whole game"); a knight that only EYES one is not there yet (Learn walk
-  // 2026-10-01: "Nh6+ eyes g4 … a piece no pawn can chase stays there").
-  if (f.id === 'outpost') return f.led.startsWith('lands');
+function reasonHolds(f: Pick<MoveFundamental, 'id'>, fenBefore: string, mover: 'white' | 'black'): boolean {
   if (f.id !== 'tempo') return true;
   try {
     return homeMinorCount(new Chess(fenBefore), mover === 'white' ? 'b' : 'w') > 0;
@@ -1212,12 +1220,12 @@ function reasonHolds(f: Pick<MoveFundamental, 'id' | 'led'>, fenBefore: string, 
  *  asserted without proof. */
 export function principleOnceLine(
   san: string,
-  f: Pick<MoveFundamental, 'imperative' | 'id'> & { reason?: string },
+  f: Pick<MoveFundamental, 'imperative' | 'id'> & Pick<MoveFundamental, 'reason'>,
   /** Rotation key — required, stable about the moment (`stemKeyOf` of the
    *  board the move was played from). Only the wrapper rotates. */
   stemKey: number,
 ): string {
-  const reason = f.reason ?? PRINCIPLE_REASON[f.id];
+  const reason = reasonFor(f);
   if (!reason) return `${san}: ${f.imperative}.`;
   return rotateStem([
     `${san} follows a rule worth keeping: ${f.imperative} — ${reason}.`,
@@ -1346,7 +1354,7 @@ export function principleLine(
     // why outposts matter. The id carries both keys ('|'), so the fact and
     // its rule are each said once.
     const ruleKey = `mg-rule:${lead.id}`;
-    const reason = PRINCIPLE_REASON[lead.id];
+    const reason = reasonFor(lead);
     if (reason && !taught.has(ruleKey) && reasonHolds(lead, fenBefore, mover)) {
       return { id: `${middlegameKey(lead)}|${ruleKey}`, text: `${san} ${lead.led} — ${reason}.`, squares: lead.squares, first: true };
     }
@@ -1452,8 +1460,8 @@ export function ruleForPurpose(
     new Chess(fen).move(preparedSan);
   } catch { return null; }
   const lead = computeMoveFundamentals(fen, preparedSan, mover)
-    .filter((f) => PRINCIPLE_REASON[f.id] && !taught.has(f.id) && !taught.has(`mg-rule:${f.id}`) && reasonHolds(f, fen, mover) && (speaker === 'student' || !REASON_NAMES_SIDES[f.id]))
+    .filter((f) => reasonFor(f) && !taught.has(f.id) && !taught.has(`mg-rule:${f.id}`) && reasonHolds(f, fen, mover) && (speaker === 'student' || !REASON_NAMES_SIDES[f.id]))
     .sort((a, b) => b.weight - a.weight)[0];
   if (!lead) return null;
-  return { text: PRINCIPLE_REASON[lead.id] as string, keys: [lead.id, `mg-rule:${lead.id}`] };
+  return { text: reasonFor(lead) as string, keys: [lead.id, `mg-rule:${lead.id}`] };
 }

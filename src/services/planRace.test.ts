@@ -174,3 +174,10 @@ describe('the first queen covers by its own line, not by a king beside the squar
     expect(r && r.kind === 'passer-race' ? r.firstQueenCovers : 'x').toBe(false);
   });
 });
+
+describe('a side in check makes no file race (review walk 2026-10-01, game 2 ply 67)', () => {
+  it('after Rb7+ the black rook on d8 is not "unable" to reach the e-file', () => {
+    // White just played Rb7+; Black's rook on d8 could take e8 any other move.
+    expect(detectPlanRace('3r4/1R3k1p/p1rP2p1/2P2p2/N7/1P5P/P5P1/6K1 b - - 2 34', 'b')?.kind).not.toBe('file-collision');
+  });
+});

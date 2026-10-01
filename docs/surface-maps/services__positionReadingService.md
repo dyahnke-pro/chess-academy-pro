@@ -146,8 +146,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:6743`
 - `src/services/latentFork.ts:149`
 - `src/services/latentFork.ts:220`
-- `src/services/moveFundamentals.ts:313`
-- `src/services/moveFundamentals.ts:1407`
+- `src/services/moveFundamentals.ts:316`
+- `src/services/moveFundamentals.ts:1415`
 
 ### `legalSeeGainFor` (function) — 39 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7974`
@@ -174,8 +174,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:7111`
 - `src/services/groundedAnswer.ts:7162`
 - `src/services/learnTurnDoor.test.ts:238`
-- `src/services/moveFundamentals.ts:871`
-- `src/services/moveFundamentals.ts:872`
+- `src/services/moveFundamentals.ts:876`
+- `src/services/moveFundamentals.ts:877`
 - `src/services/moveIntent.ts:404`
 - `src/services/moveOrder.ts:113`
 - `src/services/moveTiming.ts:51`

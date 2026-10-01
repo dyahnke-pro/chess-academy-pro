@@ -218,7 +218,11 @@ export function detectPlanRace(fen: string, studentColor: Color): PlanRace | nul
   }
   const myHeavy = heavyFiles[studentColor];
   const theirHeavy = heavyFiles[opp];
-  if (rookCount[studentColor] > 0 && rookCount[opp] > 0) {
+  // A side in CHECK has only its check answers to choose from, so "only their
+  // rook could take it" is the check talking, not the file (review walk
+  // 2026-10-01, game 2 ply 67: after Rb7+ the black rook on d8 could not go to
+  // e8 only because the king had to move).
+  if (rookCount[studentColor] > 0 && rookCount[opp] > 0 && !chess.inCheck()) {
     for (const file of s.pawns.openFiles) {
       if (myHeavy.has(file) || theirHeavy.has(file)) continue;
       return {

@@ -17,9 +17,9 @@
 - **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:3797) — names `coachApi`, `voiceFacts`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4106) — names `voiceFacts`
 - **Do NOT** (CLAUDE.md:5256) — names `coachApi`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5982) — names `voiceFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:6118) — names `coachApi`, `voiceFacts`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6133) — names `coachApi`, `translateToEnglish`, `voiceFacts`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5998) — names `voiceFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:6134) — names `coachApi`, `voiceFacts`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6149) — names `coachApi`, `translateToEnglish`, `voiceFacts`
 
 ## Who calls in
 

@@ -11,7 +11,7 @@
 - **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1237) — names `CoachTeachPage`
 - **G8.5 NOTHING BUILT-BUT-UNWIRED, NO ORPHANS LEFT BEHIND (David 2026-09-29, LOCKED: "You need to FULLY understand ALL code related to your builds. No more leaving things built but not wired, or changes made but leaving orphan components." → "Yes. Lock that in").** (CLAUDE.md:1382) — names `CoachTeachPage`
 - **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3090) — names `CoachTeachPage`
-- **The standard post-deploy ritual** (CLAUDE.md:6074) — names `CoachTeachPage`
+- **The standard post-deploy ritual** (CLAUDE.md:6090) — names `CoachTeachPage`
 
 ## Who calls in
 

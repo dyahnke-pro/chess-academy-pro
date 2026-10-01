@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:24) — names `conceptEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:6089) — names `conceptEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:6105) — names `conceptEngine`
 
 ## Who calls in
 

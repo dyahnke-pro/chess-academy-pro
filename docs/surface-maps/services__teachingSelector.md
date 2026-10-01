@@ -10,7 +10,7 @@
 
 - **STEP 11 — Add model games (multi-game per variation)** (CLAUDE.md:2034) — names `Moment`
 - **⏰ Standing notes** (CLAUDE.md:2565) — names `Thesis`
-- **The standard post-deploy ritual** (CLAUDE.md:6078) — names `Moment`
+- **The standard post-deploy ritual** (CLAUDE.md:6094) — names `Moment`
 
 ## Who calls in
 
