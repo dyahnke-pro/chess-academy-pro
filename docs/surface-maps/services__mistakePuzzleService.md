@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1485 lines · 26 exports · 29 importers · 16 tests · 4 audits**
+**1525 lines · 27 exports · 29 importers · 16 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **The standard post-deploy ritual** (CLAUDE.md:6082) — names `gradeMistakePuzzle`
 
 ## Who calls in
 
@@ -95,8 +95,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:7308`
-- `src/components/Coach/CoachTeachPage.tsx:7314`
+- `src/components/Coach/CoachTeachPage.tsx:7330`
+- `src/components/Coach/CoachTeachPage.tsx:7336`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
@@ -175,7 +175,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `getMistakePuzzlesDue` (function) — 3 call sites
 - `src/services/mistakePuzzleService.test.ts:445`
 - `src/services/mistakePuzzleService.test.ts:458`
-- `src/services/puzzleService.ts:539`
+- `src/services/puzzleService.ts:558`
 
 ### `getMistakePuzzlesByGame` (function) — 1 call site
 - `src/services/mistakePuzzleService.test.ts:471`
@@ -187,7 +187,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `rerenderMistakeNarration` (function) — 1 call site
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:362`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:370`
 
 ### `lineToUci` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -242,14 +242,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `gradeMistakePuzzle` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2351`
-- `src/components/Puzzles/MyMistakesPage.tsx:241`
+- `src/components/Coach/CoachTeachPage.tsx:2373`
+- `src/components/Puzzles/MyMistakesPage.tsx:243`
 - `src/components/Puzzles/WeaknessThemesPage.tsx:116`
 - `src/components/Tactics/TacticCreatePage.tsx:194`
 - `src/services/mistakePuzzleService.test.ts:495`
 - `src/services/mistakePuzzleService.test.ts:516`
 - `src/services/mistakePuzzleService.test.ts:537`
 - `src/services/mistakePuzzleService.test.ts:545`
+
+### `growMistakePuzzle` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `deleteMistakePuzzle` (function) — 2 call sites
 - `src/components/Puzzles/MyMistakesPage.tsx:234`

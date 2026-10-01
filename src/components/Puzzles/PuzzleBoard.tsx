@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo, type ReactNode } from 'react';
 import { captureEvent } from '../../services/analytics';
 import { Chess } from 'chess.js';
 import { ControlledChessBoard } from '../Board/ControlledChessBoard';
@@ -30,6 +30,10 @@ import { logAppAudit } from '../../services/appAuditor';
 import type { CoachingTier } from '../../services/tacticAlertService';
 import type { PuzzleRecord } from '../../types';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
+import { solverMoves } from '../../services/puzzleDepth';
+import { reward } from '../../services/rewardService';
+import { rewardSeed } from '../../services/rewardEvents';
+import { PuzzleHeader } from './PuzzleHeader';
 
 type PuzzleState = 'loading' | 'playing' | 'correct' | 'incorrect';
 
@@ -51,6 +55,11 @@ interface PuzzleBoardProps {
   disabled?: boolean;
   /** Maximum wrong attempts before auto-failing the puzzle (default: 2). */
   maxWrongAttempts?: number;
+  /** Puzzles solved in a row, shown in the header; omit on surfaces with no
+   *  session. */
+  streak?: number;
+  /** A surface's own score row (deep-run) above the pips. */
+  headerExtra?: ReactNode;
 }
 
 function parseUciMoves(uci: string): { from: string; to: string; promotion?: string }[] {
@@ -66,7 +75,14 @@ export function PuzzleBoard({
   onComplete,
   disabled = false,
   maxWrongAttempts = 2,
+  streak,
+  headerExtra,
 }: PuzzleBoardProps): JSX.Element {
+  // The line's depth, counted (never a theme tag), and how far the student is.
+  const totalMoves = useMemo(() => Math.max(1, solverMoves(puzzle)), [puzzle]);
+  const [pipsDone, setPipsDone] = useState(0);
+  const [missedPip, setMissedPip] = useState(false);
+  const seed = useMemo(() => rewardSeed(puzzle.id), [puzzle.id]);
   const meter = usePuzzleMeter();
   const consumedIdRef = useRef<string | null>(null);
   const [state, setState] = useState<PuzzleState>('loading');
@@ -80,7 +96,7 @@ export function PuzzleBoard({
   const completionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const solveStartRef = useRef<number>(Date.now());
   const movesRef = useRef(parseUciMoves(puzzle.moves));
-  const { playMoveSound, playErrorPing, playSuccessChime } = usePieceSound();
+  const { playMoveSound } = usePieceSound();
   const { settings } = useSettings();
   const activeProfile = useAppStore((s) => s.activeProfile);
   const [subtitle, setSubtitle] = useState<string>('');
@@ -265,6 +281,8 @@ export function PuzzleBoard({
     game.setOrientation(userColor);
     movesRef.current = parseUciMoves(puzzle.moves);
     setMoveIndex(0);
+    setPipsDone(0);
+    setMissedPip(false);
     setLastMoveHighlight(null);
     setFlashClass('');
     hasMadeMistakeRef.current = false;
@@ -414,6 +432,9 @@ export function PuzzleBoard({
       resetHints();
       setLastMoveHighlight({ from: move.from, to: move.to });
       const nextIndex = moveIndex + 1;
+      const step = pipsDone;
+      setPipsDone(step + 1);
+      setMissedPip(false);
 
       // Check if puzzle is fully solved
       if (nextIndex >= movesRef.current.length) {
@@ -424,12 +445,14 @@ export function PuzzleBoard({
         });
         setState('correct');
         triggerFlash('board-flash-success');
-        playSuccessChime();
+        reward({ kind: 'solved', square: move.to, step, seed });
         completionTimerRef.current = setTimeout(() => {
           completePuzzle(true);
         }, 2500);
         return;
       }
+
+      reward({ kind: 'pip', square: move.to, step, seed: seed + step });
 
       // Auto-play opponent's response
       if (nextIndex < allMoves.length) {
@@ -450,7 +473,8 @@ export function PuzzleBoard({
       setWrongAttemptCount((c) => c + 1);
       game.undoMove();
       triggerFlash('board-flash-error');
-      playErrorPing();
+      setMissedPip(true);
+      reward({ kind: 'miss' });
 
       // Record the failure at max wrong attempts, but don't lock the board
       if (wrongAttemptsRef.current === maxWrongAttempts) {
@@ -493,7 +517,7 @@ export function PuzzleBoard({
         setState('playing');
       }, 1000);
     }
-  }, [state, disabled, moveIndex, completePuzzle, playMoveSound, playErrorPing, playSuccessChime, resetHints, triggerFlash, maxWrongAttempts, settings.voiceEnabled, puzzle.themes, puzzle.id, tacticType, game]);
+  }, [state, disabled, moveIndex, pipsDone, seed, completePuzzle, playMoveSound, resetHints, triggerFlash, maxWrongAttempts, settings.voiceEnabled, puzzle.themes, puzzle.id, tacticType, game]);
 
   // With ControlledChessBoard, the move is already applied to the game object
   const handleChessBoardMove = handleMove;
@@ -541,6 +565,9 @@ export function PuzzleBoard({
 
   return (
     <div className="space-y-3" data-testid="puzzle-board">
+      <PuzzleHeader total={totalMoves} done={pipsDone} difficulty={puzzle.rating} streak={streak} missed={missedPip}>
+        {headerExtra}
+      </PuzzleHeader>
       {/* Puzzle theme label — big neon text above the board */}
       {themeLabel && (
         <h2
@@ -654,15 +681,6 @@ export function PuzzleBoard({
         </div>
       )}
 
-      {/* Puzzle info with rating badge + tactic type */}
-      <div className="flex items-center gap-3 text-xs text-theme-text-muted flex-wrap">
-        <span
-          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-theme-surface font-semibold text-theme-text ${flashClass.includes('success') || state === 'correct' ? 'rating-bump' : ''}`}
-          data-testid="puzzle-rating-badge"
-        >
-          Difficulty: {puzzle.rating}
-        </span>
-      </div>
     </div>
   );
 }

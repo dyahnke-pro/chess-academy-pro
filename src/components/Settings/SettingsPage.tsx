@@ -279,6 +279,7 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
   const [pieceSet, setPieceSet] = useState(prefs.pieceSet);
 
   const [soundEnabled, setSoundEnabled] = useState(prefs.soundEnabled);
+  const [hapticsEnabled, setHapticsEnabled] = useState(prefs.hapticsEnabled ?? true);
 
   const [showEvalBar, setShowEvalBar] = useState(prefs.showEvalBar);
   const [showEngineLines, setShowEngineLines] = useState(prefs.showEngineLines);
@@ -339,6 +340,7 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
         boardColor,
         pieceSet,
         soundEnabled,
+        hapticsEnabled,
         showEvalBar,
         showEngineLines,
         moveQualityFlash,
@@ -359,7 +361,7 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     highlightLastMove, showLegalMoves, showCoordinates, pieceAnimationSpeed,
-    boardOrientation, boardColor, pieceSet, soundEnabled, showEvalBar,
+    boardOrientation, boardColor, pieceSet, soundEnabled, hapticsEnabled, showEvalBar,
     showEngineLines, moveQualityFlash, showHints, voiceEnabled, moveMethod,
     moveConfirmation, autoPromoteQueen, masterAllOff,
   ]);
@@ -499,6 +501,13 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
         checked={soundEnabled}
         onChange={setSoundEnabled}
         testId="sound-toggle"
+      />
+      <ToggleRow
+        label="Vibration"
+        tooltip="Vibrate the phone when you find the right move"
+        checked={hapticsEnabled}
+        onChange={setHapticsEnabled}
+        testId="haptics-toggle"
       />
 
       {/* Engine */}

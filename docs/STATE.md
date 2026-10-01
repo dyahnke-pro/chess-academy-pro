@@ -11,8 +11,8 @@
 ## SENSE — does the loop record what happens to the student?
 
 - **21** modules record a MISS.
-- **9** record a HOLD (`capabilityEvidence`).
-- **4** read the capability profile back.
+- **10** record a HOLD (`capabilityEvidence`).
+- **5** read the capability profile back.
 
 Green has a reader — the heat map can lower as well as raise.
 
@@ -45,7 +45,7 @@ fact-computer count (which excludes infrastructure) lives in
 `surfaceComposition.scan.test.ts`, and duplicating its INFRA list here would be
 exactly the drifting-constant the rot rule bans.
 
-- **CoachTeachPage.tsx**: 98
+- **CoachTeachPage.tsx**: 100
 - **CoachGamePage.tsx**: 46
 - **CoachGameReview.tsx**: 43
 

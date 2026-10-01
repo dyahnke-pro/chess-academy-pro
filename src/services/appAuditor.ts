@@ -259,6 +259,13 @@ export type AuditKind =
   // record chose each (red = an open hole from games/drills/puzzles, weak =
   // a puzzle theme missed over a real sample, grey = never tried, rotated).
   | 'puzzle-themes-targeted'
+  /** Deep Run asked for a depth + rating and the selector served one (or hit
+   *  the pool's cap, so the rating climbs instead). David 2026-10-01. */
+  | 'deep-run-step'
+  /** A Learn move graded at play time and whether it earned a reward (only
+   *  finds do: clear-best, only-move, a parried threat, a punish, a gem).
+   *  David 2026-10-01. */
+  | 'learn-reward'
   // Which games a batch analysis run picked and in what order (A2): the
   // home openings' games first, then newest — so an audit can prove the
   // priority instead of reading a progress label.

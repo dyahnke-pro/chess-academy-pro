@@ -236,8 +236,10 @@ export function MyMistakesPage(): JSX.Element {
     void loadData();
   }, [activePuzzle, loadData]);
 
+  const [streak, setStreak] = useState(0);
   const handlePuzzleResolved = useCallback((correct: boolean, solveTimeMs: number): void => {
     if (!activePuzzle) return;
+    setStreak((n) => (correct ? n + 1 : 0));
     void gradeMistakePuzzle(activePuzzle.id, correct ? 'good' : 'again', correct, solveTimeMs);
   }, [activePuzzle]);
 
@@ -275,6 +277,7 @@ export function MyMistakesPage(): JSX.Element {
           puzzle={activePuzzle}
           onResolved={handlePuzzleResolved}
           onComplete={handlePuzzleComplete}
+          streak={streak}
         />
       </div>
     );

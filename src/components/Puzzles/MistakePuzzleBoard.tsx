@@ -29,6 +29,10 @@ import type { CoachingTier } from '../../services/tacticAlertService';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MistakePuzzle, MistakeClassification } from '../../types';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
+import { pliesFor, solveLengthOf } from '../../services/mistakeLineGrowth';
+import { reward } from '../../services/rewardService';
+import { rewardSeed } from '../../services/rewardEvents';
+import { PuzzleHeader } from './PuzzleHeader';
 
 type PuzzleState = 'loading' | 'replay' | 'playing' | 'correct' | 'incorrect' | 'freeplay';
 
@@ -108,6 +112,8 @@ interface MistakePuzzleBoardProps {
   onComplete: () => void;
   /** Skip the internal game replay — use when the caller already showed context */
   skipReplayContext?: boolean;
+  /** Puzzles solved in a row on the host surface, shown in the header. */
+  streak?: number;
 }
 
 const CLASSIFICATION_BADGE: Record<MistakeClassification, { label: string; symbol: string; color: string }> = {
@@ -145,7 +151,7 @@ function parseUciMoves(uci: string): { from: string; to: string; promotion?: str
   }));
 }
 
-export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayContext = false }: MistakePuzzleBoardProps): JSX.Element {
+export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayContext = false, streak }: MistakePuzzleBoardProps): JSX.Element {
   const meter = usePuzzleMeter();
   const consumedIdRef = useRef<string | null>(null);
   const [state, setState] = useState<PuzzleState>('loading');
@@ -193,9 +199,11 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       meter.consume();
     }
   }, [state, puzzle.id, meter]);
-  const movesRef = useRef(parseUciMoves(puzzle.moves));
+  // Only as many moves as the puzzle asks for TODAY — it grows by one per
+  // clean solve (mistakeLineGrowth).
+  const movesRef = useRef(parseUciMoves(pliesFor(puzzle.moves.trim().split(/\s+/).filter(Boolean), solveLengthOf(puzzle)).join(' ')));
   const playerMoveCountRef = useRef(0);
-  const { playMoveSound, playCelebration, playEncouragement } = usePieceSound();
+  const { playMoveSound } = usePieceSound();
   const { settings } = useSettings();
   const activeProfile = useAppStore((s) => s.activeProfile);
   const puzzleShowTacticName = useAppStore((s) => s.puzzleShowTacticName);
@@ -309,7 +317,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     narrationRef.current = puzzle.narration;
     const chess = new Chess(puzzle.fen);
     chessRef.current = chess;
-    movesRef.current = parseUciMoves(puzzle.moves);
+    movesRef.current = parseUciMoves(pliesFor(puzzle.moves.trim().split(/\s+/).filter(Boolean), solveLengthOf(puzzle)).join(' '));
     if (movesRef.current.length === 0) {
       // No moves in puzzle — skip it. No elapsed value to report since
       // the student never had a chance to play.
@@ -680,12 +688,15 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       }
 
       const nextIndex = moveIndex + 1;
+      if (nextIndex < allMoves.length) {
+        reward({ kind: 'pip', square: move.to, step: currentPlayerMove, seed: rewardSeed(puzzle.id) + currentPlayerMove });
+      }
 
       // Check if puzzle is fully solved
       if (nextIndex >= allMoves.length) {
         setState('correct');
         resolve(!hasMadeMistakeRef.current, Math.round(elapsedMs));
-        playCelebration();
+        reward({ kind: 'solved', square: move.to, step: currentPlayerMove, seed: rewardSeed(puzzle.id) });
         // Record outcome for cross-session coaching
         recordTacticOutcome({
           tacticType,
@@ -777,7 +788,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       const prevFen = chessRef.current.fen();
       setState('incorrect');
       voiceService.stop();
-      playEncouragement();
+      reward({ kind: 'miss' });
 
       // Progressive verbal hints based on consecutive wrong attempts
       const attempts = wrongAttemptsRef.current;
@@ -829,7 +840,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       }, 1500);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- tracked for dedicated audit; intentional dep list.
-  }, [state, moveIndex, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints, puzzle.narration, tacticType, skipReplayContext, speakBestMoveWhy]);
+  }, [state, moveIndex, onComplete, playMoveSound, resetHints, puzzle.narration, tacticType, skipReplayContext, speakBestMoveWhy]);
 
   // ── KEEP PLAYING (R4, David 2026-09-01) — after the puzzle is solved, let the
   // student play the position out; the computer answers each move. Reuses the
@@ -1006,6 +1017,15 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
         </div>
       )}
 
+      {state !== 'replay' && (
+        <PuzzleHeader
+          total={Math.ceil(totalMoves / 2)}
+          done={state === 'correct' ? Math.ceil(totalMoves / 2) : moveCount}
+          streak={streak}
+          missed={state === 'incorrect'}
+        />
+      )}
+
       {/* Show the wrong move before asking for the correct one */}
       {state !== 'replay' && (
         <div className="text-sm text-theme-text-secondary space-y-1" data-testid="prompt-text">
@@ -1094,19 +1114,6 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
               {hintState.nudgeText}
             </p>
           )}
-        </div>
-      )}
-
-      {/* Progress indicator for multi-move */}
-      {isMultiMove && state === 'playing' && moveCount > 0 && (
-        <div className="flex items-center gap-2 text-xs text-theme-text-muted" data-testid="move-progress">
-          <div className="flex-1 h-1.5 rounded-full bg-theme-border overflow-hidden">
-            <div
-              className="h-full rounded-full bg-theme-accent transition-all"
-              style={{ width: `${(moveCount / Math.ceil(totalMoves / 2)) * 100}%` }}
-            />
-          </div>
-          <span>{moveCount}/{Math.ceil(totalMoves / 2)}</span>
         </div>
       )}
 

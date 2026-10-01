@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, AlertTriangle, Shuffle, Trophy, Wrench, Crosshair, MapPin, Lightbulb, Calculator, Swords, Crown, ChevronRight } from 'lucide-react';
+import { Eye, AlertTriangle, Shuffle, Trophy, Wrench, Crosshair, MapPin, Lightbulb, Calculator, Swords, Crown, ChevronRight, Route, Flame } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PageHelp } from '../Layout/PageHelp';
@@ -77,8 +77,10 @@ const HUB_GROUPS: HubGroup[] = [
   {
     title: 'Train',
     rows: [
+      { key: 'deep-run', label: 'Deep Run', description: 'Each puzzle one move longer. How many moves deep can you go?', icon: Flame, route: '/tactics/deep-run', color: 'text-fuchsia-400', bgColor: 'bg-fuchsia-500/10', rgb: '232, 121, 249' },
       { key: 'daily', label: 'Daily Training', description: 'A mixed set at your level; missed puzzles come back on a schedule.', icon: Trophy, route: '/tactics/classic', color: 'text-violet-400', bgColor: 'bg-violet-500/10', rgb: '139, 92, 246' },
       { key: 'random-mix', label: 'Random Mix', description: 'Forks, pins, skewers, discoveries and more, shuffled.', icon: Shuffle, route: '/tactics/drill', color: 'text-emerald-400', bgColor: 'bg-emerald-500/10', rgb: '52, 211, 153', state: { filterThemes: ['fork', 'pin', 'skewer', 'discoveredAttack', 'backRankMate', 'sacrifice', 'deflection'], filterLabel: 'Random Mix' } },
+      { key: 'long', label: 'Long Puzzles', description: 'Three, four, five moves deep — calculate the whole line.', icon: Route, route: '/tactics/long', color: 'text-cyan-400', bgColor: 'bg-cyan-500/10', rgb: '34, 211, 238' },
       { key: 'master-level', label: 'Master Level', description: 'Puzzles from the elite 2400+ pool.', icon: Crown, route: '/tactics/master', color: 'text-yellow-400', bgColor: 'bg-yellow-500/10', rgb: '250, 204, 21' },
       { key: 'setup', label: 'Setup Trainer', description: 'Find the quiet move that sets the tactic up.', icon: Wrench, route: '/tactics/setup', color: 'text-teal-400', bgColor: 'bg-teal-500/10', rgb: '45, 212, 191' },
     ],

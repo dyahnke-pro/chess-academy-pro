@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2904 lines · 16 exports · 102 importers · 83 tests · 23 audits**
+**2904 lines · 16 exports · 103 importers · 83 tests · 23 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,7 +17,7 @@
 - **🧒 Kids section — non-negotiables** (CLAUDE.md:3368) — names `voiceService`
 - **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3677) — names `voiceService`
 - **Shared types / services** (CLAUDE.md:5304) — names `voiceService`
-- **The standard post-deploy ritual** (CLAUDE.md:6085) — names `voiceService`
+- **The standard post-deploy ritual** (CLAUDE.md:6088) — names `voiceService`
 
 ## Who calls in
 
@@ -86,6 +86,7 @@
 - `src/components/Openings/WalkthroughIntegration.test.tsx`
 - `src/components/Openings/WalkthroughMode.tsx`
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx`
+- `src/components/Puzzles/DeepRunPage.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx`
 - `src/components/Puzzles/PuzzleBoard.tsx`
 - `src/components/Puzzles/PuzzleTrainerPage.tsx`

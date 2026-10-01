@@ -153,36 +153,44 @@ export async function seedPuzzles(): Promise<void> {
 // ─── Master Level pool (lazy — David 2026-09-14) ────────────────────────────
 
 const MASTER_SEED_KEY = 'master_puzzles_seeded_v1';
+const LONG_SEED_KEY = 'long_puzzles_seeded_v1';
 
-/** Whether the Master Level elite pool has been fetched into Dexie. */
-export async function isMasterPoolSeeded(): Promise<boolean> {
-  const record = await db.meta.get(MASTER_SEED_KEY);
+/** A lazily-fetched CC0 pool: where it lives and how its rows are tagged. */
+interface LazyPool { key: string; url: string; source: 'master' | 'long' }
+const MASTER_POOL: LazyPool = { key: MASTER_SEED_KEY, url: '/data/master-puzzles.json', source: 'master' };
+const LONG_POOL: LazyPool = { key: LONG_SEED_KEY, url: '/data/long-puzzles.json', source: 'long' };
+
+async function isPoolSeeded(pool: LazyPool): Promise<boolean> {
+  const record = await db.meta.get(pool.key);
   return record?.value === 'true';
 }
 
+/** Whether the Master Level elite pool has been fetched into Dexie. */
+export async function isMasterPoolSeeded(): Promise<boolean> {
+  return isPoolSeeded(MASTER_POOL);
+}
+
 /**
- * Lazily fetch the elite (2400+) CC0 Master Level pool from
- * `public/data/master-puzzles.json` (NOT bundled — keeps the JS bundle lean)
- * and seed it into the shared `puzzles` store tagged `source: 'master'`. Called
- * only when the Master Level section is opened, so a user who never touches it
- * never pays the ~1MB fetch. Idempotent + StrictMode-safe like seedPuzzles.
- * Returns the number of master puzzles available after seeding.
+ * Fetch a lazy pool (NOT bundled — keeps the JS bundle lean) into the shared
+ * `puzzles` store, tagged with its `source`. Called only when the surface that
+ * needs it opens, so a user who never touches it never pays the fetch.
+ * Idempotent + StrictMode-safe like seedPuzzles. Returns the pool's size.
  */
-export async function seedMasterPuzzles(): Promise<number> {
-  if (!(await isMasterPoolSeeded())) {
+async function seedLazyPool(pool: LazyPool): Promise<number> {
+  if (!(await isPoolSeeded(pool))) {
     // Web: same-origin fetch. Native: app bundle → web origin (the pool is
     // kept in the `puzzles` store below, so dataFile need not keep it too).
-    const loaded = await loadDataJson('/data/master-puzzles.json', { persist: false });
+    const loaded = await loadDataJson(pool.url, { persist: false });
     const raw: RawPuzzle[] = Array.isArray(loaded) ? (loaded as RawPuzzle[]) : [];
     // An unreachable pool must NOT mark the pool seeded — that used to leave
     // Master Level permanently empty after one offline open.
     if (raw.length === 0) {
-      console.warn('[puzzleService] master pool unavailable — will retry next open');
-      return db.puzzles.filter((p) => p.source === 'master').count();
+      console.warn(`[puzzleService] ${pool.source} pool unavailable — will retry next open`);
+      return db.puzzles.filter((p) => p.source === pool.source).count();
     }
 
     await db.transaction('rw', db.puzzles, db.meta, async () => {
-      if (await isMasterPoolSeeded()) return;
+      if (await isPoolSeeded(pool)) return;
       const defaults = createDefaultSrsFields();
       const today = new Date().toISOString().split('T')[0];
       const existingIds = new Set(await db.puzzles.toCollection().primaryKeys());
@@ -198,7 +206,7 @@ export async function seedMasterPuzzles(): Promise<number> {
           popularity: p.popularity,
           nbPlays: p.nbPlays,
           movingPiece: p.movingPiece,
-          source: 'master' as const,
+          source: pool.source,
           srsInterval: defaults.interval,
           srsEaseFactor: defaults.easeFactor,
           srsRepetitions: defaults.repetitions,
@@ -209,10 +217,21 @@ export async function seedMasterPuzzles(): Promise<number> {
           successes: 0,
         }));
       if (records.length > 0) await db.puzzles.bulkAdd(records);
-      await db.meta.put({ key: MASTER_SEED_KEY, value: 'true' });
+      await db.meta.put({ key: pool.key, value: 'true' });
     });
   }
-  return db.puzzles.filter((p) => p.source === 'master').count();
+  return db.puzzles.filter((p) => p.source === pool.source).count();
+}
+
+/** The elite (2400+) Master Level pool (David 2026-09-14). */
+export async function seedMasterPuzzles(): Promise<number> {
+  return seedLazyPool(MASTER_POOL);
+}
+
+/** The long-calculation pool — 3+ solver moves across every rating band, for
+ *  the Long tab and deep-run (David 2026-10-01). */
+export async function seedLongPuzzles(): Promise<number> {
+  return seedLazyPool(LONG_POOL);
 }
 
 // ─── Adaptive Difficulty ────────────────────────────────────────────────────

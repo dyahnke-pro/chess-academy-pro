@@ -41,9 +41,9 @@
 
 ### `usePositionNarration` (function) — 16 call sites
 - `src/components/Coach/CoachGamePage.tsx:1806`
-- `src/components/Coach/CoachTeachPage.tsx:7353`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:577`
-- `src/components/Puzzles/PuzzleBoard.tsx:192`
+- `src/components/Coach/CoachTeachPage.tsx:7375`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:585`
+- `src/components/Puzzles/PuzzleBoard.tsx:208`
 - `src/hooks/usePositionNarration.degrade.test.ts:85`
 - `src/hooks/usePositionNarration.test.ts:126`
 - `src/hooks/usePositionNarration.test.ts:133`

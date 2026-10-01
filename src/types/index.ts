@@ -29,8 +29,10 @@ export interface PuzzleRecord {
    *  between rating 100 (kid floor) and 400 (Lichess floor).
    *  'master' = the elite (2400+) CC0 pool lazy-fetched from
    *  `public/data/master-puzzles.json` for the Master Level ladder
-   *  (see reachRating.ts + the 2026-09-14 reach-ladder plan). */
-  source?: 'lichess' | 'training' | 'master';
+   *  (see reachRating.ts + the 2026-09-14 reach-ladder plan). 'long' = the
+   *  CC0 long-calculation pool (3+ solver moves, every rating band) lazy-
+   *  fetched from `public/data/long-puzzles.json` for the Long tab + deep-run. */
+  source?: 'lichess' | 'training' | 'master' | 'long';
   // SRS fields
   srsInterval: number;
   srsEaseFactor: number;
@@ -119,6 +121,13 @@ export interface MistakePuzzle {
   /** Rolling history of solve times in ms (most-recent first, capped
    *  at the last 10 attempts to keep the record small). */
   solveTimes?: number[];
+  /** Solver moves this puzzle asks for today — it GROWS by one per clean
+   *  solve while the line stays forced and drops by one on a miss
+   *  (mistakeLineGrowth, David 2026-10-01). Absent = 1. Additive, unindexed. */
+  solveLength?: number;
+  /** The line stopped being forced at this length; growth is not re-scanned
+   *  until a miss brings the length back under it. */
+  growthCappedAt?: number;
 }
 
 // ─── Find-the-Square (board-vision drill) ──────────────────────────────────
@@ -839,6 +848,9 @@ export interface UserPreferences {
   showEvalBar: boolean;
   showEngineLines: boolean;
   soundEnabled: boolean;
+  /** Phone vibration on rewards (a correct puzzle move, a decision found).
+   *  Absent = on. David 2026-10-01: "a small vibration in the phone too". */
+  hapticsEnabled?: boolean;
   voiceEnabled: boolean;
   /** Coach-specific voice narration toggle, persisted separately
    *  from `voiceEnabled` so the user can silence the coach without

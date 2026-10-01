@@ -4,6 +4,8 @@ import { db } from '../db/schema';
 import { emitWeaknessModelChanged } from './weaknessModelEvents';
 import { createDefaultSrsFields, calculateNextInterval } from './srsEngine';
 import { stockfishEngine } from './stockfishEngine';
+import { growOneMove, shrinkOnMiss, solveLengthOf } from './mistakeLineGrowth';
+import type { EvaluateMulti } from './criticalityScan';
 import { gameReplyAfter } from './moveAllowed';
 import { generateMistakeNarration } from './mistakeNarration';
 import { voiceMistakeNarration } from './mistakeNarrationVoice';
@@ -1396,6 +1398,8 @@ export async function gradeMistakePuzzle(
   // until the puzzle is solved correctly so a fast wrong attempt
   // doesn't poison the "best" metric.
   const updates: Partial<MistakePuzzle> = {
+    // A miss drops a grown line back one move (never below one).
+    ...(!correct && solveLengthOf(puzzle) > 1 ? { solveLength: shrinkOnMiss(puzzle.solveLength) } : {}),
     srsInterval: srs.interval,
     srsEaseFactor: srs.easeFactor,
     srsRepetitions: srs.repetitions,
@@ -1419,12 +1423,48 @@ export async function gradeMistakePuzzle(
   }
 
   await db.mistakePuzzles.update(id, updates);
+  if (correct) void growMistakePuzzle(id);
 
   // Invalidate the tactical profile cache so it recomputes with fresh data
   await db.meta.delete('tactical_profile');
   // A drilled mistake changes the spine (status, lifecycle) — the coach must
   // hear it on the next read, not after the 5-minute cache ages out.
   emitWeaknessModelChanged();
+}
+
+// ─── Growth (David 2026-10-01: "puzzles from my mistakes that grow") ────────
+
+/** The engine as the criticality scan asks for it: MultiPV candidates,
+ *  white-POV centipawns (mates already folded in by the engine). */
+const engineMulti: EvaluateMulti = async (fen, multiPV) => {
+  const a = await stockfishEngine.analyzePosition(fen, 16, { MultiPV: multiPV });
+  return a.topLines
+    .filter((l) => l.moves.length > 0)
+    .map((l) => ({ uci: l.moves[0], cp: l.evaluation }));
+};
+
+/**
+ * After a CLEAN solve, try to grow the puzzle by one move. Runs in the
+ * background (the engine is slow; nothing waits on it) and writes only when
+ * the line is still forced. Called from the one grading door, so every
+ * surface that drills a mistake grows it the same way.
+ */
+export async function growMistakePuzzle(id: string, evaluate: EvaluateMulti = engineMulti): Promise<void> {
+  const puzzle = await db.mistakePuzzles.get(id);
+  if (!puzzle) return;
+  const L = solveLengthOf(puzzle);
+  if (puzzle.growthCappedAt !== undefined && puzzle.growthCappedAt <= L) return;
+  const moves = puzzle.moves.trim().split(/\s+/).filter(Boolean);
+  try {
+    const g = await growOneMove(puzzle.fen, moves, L, evaluate);
+    if (g.cappedAt !== null) {
+      await db.mistakePuzzles.update(id, { growthCappedAt: g.cappedAt });
+      return;
+    }
+    await db.mistakePuzzles.update(id, { moves: g.moves.join(' '), solveLength: g.solveLength });
+  } catch {
+    // Engine unavailable — the puzzle simply does not grow this time.
+  }
 }
 
 // ─── Delete ─────────────────────────────────────────────────────────────────

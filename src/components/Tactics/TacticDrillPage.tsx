@@ -75,6 +75,7 @@ export function TacticDrillPage(): JSX.Element {
   const [puzzleHistory, setPuzzleHistory] = useState<PuzzleRecord[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [solved, setSolved] = useState(0);
+  const [streak, setStreak] = useState(0);
   const [failed, setFailed] = useState(0);
   // Seed from the shared reach ladder (docs/plans/2026-09-14-adaptive-reach-
   // ladder.md P5) so a higher-rated player never gets easy drills here either —
@@ -147,6 +148,7 @@ export function TacticDrillPage(): JSX.Element {
     completedRef.current = new Set();
     resultsRef.current = [];
     setSolved(0);
+    setStreak(0);
     setFailed(0);
     setRatingDelta(null);
     void logAppAudit({
@@ -216,8 +218,10 @@ export function TacticDrillPage(): JSX.Element {
         ratingBump = ASSISTED_SOLVE_BONUS;
       }
       setSolved((s) => s + 1);
+      setStreak((n) => n + 1);
     } else {
       ratingBump = FAIL_PENALTY;
+      setStreak(0);
       setFailed((f) => f + 1);
     }
 
@@ -404,6 +408,7 @@ export function TacticDrillPage(): JSX.Element {
             key={currentPuzzle.id}
             puzzle={currentPuzzle}
             onComplete={handlePuzzleComplete}
+            streak={streak}
           />
 
           {/* Navigation arrows */}

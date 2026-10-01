@@ -244,6 +244,7 @@ export function PuzzleTrainerPage(): JSX.Element {
               puzzle={currentPuzzle}
               onComplete={handlePuzzleComplete}
               disabled={phase === 'grading'}
+              streak={session.streak}
             />
 
             {/* SRS Grade buttons */}

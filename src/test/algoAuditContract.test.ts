@@ -34,7 +34,9 @@ type AlgoEmissionKind =
   | 'review-need-coverage'
   | 'home-opening-chosen'
   | 'analysis-batch-ordered'
-  | 'puzzle-themes-targeted';
+  | 'puzzle-themes-targeted'
+  | 'deep-run-step'
+  | 'learn-reward';
 
 interface Contract {
   /** The audit that holds the contract. */
@@ -86,6 +88,16 @@ const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
     script: 'scripts/audit-tactics-record-prod.mjs',
     contractMarker: 'TACTICS RECORD red-leads',
     emittedBy: 'src/services/puzzleService.ts (getWeakestThemes via rankThemeTargets)',
+  },
+  'deep-run-step': {
+    script: 'scripts/audit-reward-layer-prod.mjs',
+    contractMarker: 'DEEP RUN depth climbs',
+    emittedBy: 'src/components/Puzzles/DeepRunPage.tsx (fetchFor, from the pure deepRun computer)',
+  },
+  'learn-reward': {
+    script: 'scripts/audit-concept-gameplay-prod.mjs',
+    contractMarker: 'LEARN REWARD only skill earns a chime',
+    emittedBy: 'src/components/Coach/CoachTeachPage.tsx (handleStudentMove via learnRewardFor)',
   },
 };
 

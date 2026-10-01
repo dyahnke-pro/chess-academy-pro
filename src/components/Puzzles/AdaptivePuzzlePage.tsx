@@ -2,7 +2,8 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Brain, BookOpen, AlertTriangle, Crown } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
-import { seedPuzzles, seedMasterPuzzles, recordAttempt, getPuzzleStats } from '../../services/puzzleService';
+import { seedPuzzles, seedMasterPuzzles, seedLongPuzzles, recordAttempt, getPuzzleStats } from '../../services/puzzleService';
+import { LENGTH_RANGE, type PuzzleLength } from '../../services/puzzleDepth';
 import type { PuzzleStats } from '../../services/puzzleService';
 import { recordTagDrillResult } from '../../services/misconceptionService';
 import { markRepCompletedToday } from '../../services/repCompletion';
@@ -59,7 +60,12 @@ function withReach(summary: SummaryData, history: readonly number[]): SummaryDat
   return { ...summary, startRating: history[0], endRating: history[history.length - 1], ratingHistory: [...history] };
 }
 
-export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}): JSX.Element {
+export function AdaptivePuzzlePage({ master = false, length }: { master?: boolean; length?: PuzzleLength } = {}): JSX.Element {
+  // A POOLED page (Master Level, the Long tab) skips the difficulty select,
+  // lazily fetches its own CC0 pool and auto-starts.
+  const pooled = master || length !== undefined;
+  const [lengthMode, setLengthMode] = useState<PuzzleLength | undefined>(length);
+  const lengthModeRef = useRef<PuzzleLength | undefined>(length);
   const activeProfile = useAppStore((s) => s.activeProfile);
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
   const location = useLocation();
@@ -132,7 +138,7 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
    *  fixed start (hand walk 2026-10-01, RT1: five ratings on one tab). */
   const [reachHistory, setReachHistory] = useState<number[]>([]);
   const [cue, setCue] = useState<ReachCue | null>(null);
-  const [masterReady, setMasterReady] = useState<boolean>(!master);
+  const [masterReady, setMasterReady] = useState<boolean>(!pooled);
   // Master concept-review pause: hold on the solved board until the student taps
   // Continue, so the concept lesson lands (the classroom teaching beat).
   const [awaitingConcept, setAwaitingConcept] = useState(false);
@@ -184,13 +190,13 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
   // Master Level: lazily fetch the elite (2400+) CC0 pool the first time this
   // section is opened, then flag it ready so the auto-start below can fire.
   useEffect(() => {
-    if (!master) return;
-    void seedMasterPuzzles()
+    if (!pooled) return;
+    void (master ? seedMasterPuzzles() : seedLongPuzzles())
       .catch((err: unknown) => {
-        console.warn('[AdaptivePuzzlePage] master pool seeding failed:', err);
+        console.warn('[AdaptivePuzzlePage] puzzle pool seeding failed:', err);
       })
       .finally(() => setMasterReady(true));
-  }, [master]);
+  }, [master, pooled]);
 
   const fetchNextPuzzle = useCallback(async (sess: AdaptiveSessionState): Promise<void> => {
     // The reach controller decides the target difficulty + whether this is a
@@ -205,6 +211,7 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
     const puzzle = await getNextAdaptivePuzzle(sess, seenIdsRef.current, {
       targetOverride: target,
       preferMultiMove: true,
+      depth: lengthModeRef.current ? LENGTH_RANGE[lengthModeRef.current] : undefined,
     });
     if (!puzzle) {
       // No more puzzles available — end session
@@ -253,11 +260,11 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
   // Master Level auto-starts (no difficulty select) once the elite pool is
   // ready — the master reach ladder seeds/floors it in the 2400+ band.
   useEffect(() => {
-    if (master && masterReady && !autoStartedRef.current) {
+    if (pooled && masterReady && !autoStartedRef.current) {
       autoStartedRef.current = true;
       void handleSelectDifficulty('hard');
     }
-  }, [master, masterReady, handleSelectDifficulty]);
+  }, [pooled, masterReady, handleSelectDifficulty]);
 
   // On session end, space out the misconception tag that sent us here:
   // a solid session (≥60% accuracy) advances its SRS interval so it
@@ -437,16 +444,16 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
         <button
-          onClick={master || phase === 'select' ? () => navigate('/tactics') : handleBackToSelect}
+          onClick={pooled || phase === 'select' ? () => navigate('/tactics') : handleBackToSelect}
           className="p-2 rounded-lg hover:bg-theme-surface transition-colors"
-          aria-label={master || phase === 'select' ? 'Back to Tactics' : 'Back to difficulty select'}
+          aria-label={pooled || phase === 'select' ? 'Back to Tactics' : 'Back to difficulty select'}
           data-testid="back-button"
         >
           <ArrowLeft size={18} className="text-theme-text" />
         </button>
         <div className="flex items-center gap-2">
           <Brain size={24} className="text-theme-accent" />
-          <h1 className="text-xl font-bold text-theme-text">{master ? 'Master Level' : 'Puzzles'}</h1>
+          <h1 className="text-xl font-bold text-theme-text">{master ? 'Master Level' : length ? 'Long Puzzles' : 'Puzzles'}</h1>
         </div>
         <div className="flex-1" />
         {/* Reach-ladder badge: Level + reach rating with animated delta */}
@@ -482,6 +489,36 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
         </div>
       )}
 
+      {/* Long tab: the two lengths, switchable mid-session (the next puzzle
+          takes the new length; the one on the board stays). */}
+      {length && (
+        <div className="mb-3 flex justify-center gap-2" role="radiogroup" aria-label="Puzzle length" data-testid="length-toggle">
+          {(['long', 'veryLong'] as const).map((m) => (
+            <button
+              key={m}
+              role="radio"
+              aria-checked={lengthMode === m}
+              onClick={() => { lengthModeRef.current = m; setLengthMode(m); }}
+              className={`rounded-full border-2 px-4 py-1.5 text-sm font-bold transition-colors ${
+                lengthMode === m
+                  ? 'border-cyan-300 bg-cyan-400/15 text-cyan-200 shadow-[0_0_14px_rgba(0,229,255,0.5)]'
+                  : 'border-theme-border text-theme-text-muted hover:text-theme-text'
+              }`}
+              data-testid={`length-${m}`}
+            >
+              {m === 'long' ? 'Long · 3–4 moves' : 'Very Long · 5+ moves'}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Long tab warm-up: fetching the long pool + auto-starting. */}
+      {length && phase === 'select' && (
+        <div className="flex flex-col items-center justify-center flex-1 gap-3" data-testid="long-loading">
+          <p className="text-theme-text">Loading long puzzles…</p>
+        </div>
+      )}
+
       {/* Master Level warm-up: fetching the elite pool + auto-starting. */}
       {master && phase === 'select' && (
         <div className="flex flex-col items-center justify-center flex-1 gap-3" data-testid="master-loading">
@@ -491,7 +528,7 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
       )}
 
       {/* Difficulty Select (normal tactics only) */}
-      {!master && phase === 'select' && (
+      {!pooled && phase === 'select' && (
         <div className="space-y-6">
           {stats && (
             <div className="flex flex-wrap gap-4 text-sm text-theme-text-muted">
@@ -548,6 +585,7 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
               puzzle={currentPuzzle}
               onComplete={(outcome) => void handlePuzzleComplete(outcome)}
               disabled={awaitingConcept}
+              streak={session.streak}
             />
           </div>
           <div className="space-y-4">
@@ -647,7 +685,7 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
       {phase === 'summary' && summary && (
         <AdaptiveSessionSummary
           summary={summary}
-          onBackToSelect={master ? () => navigate('/tactics') : handleBackToSelect}
+          onBackToSelect={pooled ? () => navigate('/tactics') : handleBackToSelect}
           onPlayAgain={() => void handlePlayAgain()}
         />
       )}

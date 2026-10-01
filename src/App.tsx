@@ -55,7 +55,8 @@ const OpeningExplorerPage = lazyPage('OpeningExplorerPage', () => import('./comp
 const OpeningDetailPage = lazyPage('OpeningDetailPage', () => import('./components/Openings/OpeningDetailPage').then((m) => m.OpeningDetailPage));
 const SrsTrainerPage = lazyPage('SrsTrainerPage', () => import('./components/Openings/SrsTrainerPage').then((m) => m.SrsTrainerPage));
 const PuzzleTrainerPage = lazyPage('PuzzleTrainerPage', () => import('./components/Puzzles/PuzzleTrainerPage').then((m) => m.PuzzleTrainerPage));
-const AdaptivePuzzlePage = lazyPage<{ master?: boolean }>('AdaptivePuzzlePage', () => import('./components/Puzzles/AdaptivePuzzlePage').then((m) => m.AdaptivePuzzlePage));
+const DeepRunPage = lazyPage('DeepRunPage', () => import('./components/Puzzles/DeepRunPage').then((m) => m.DeepRunPage));
+const AdaptivePuzzlePage = lazyPage<{ master?: boolean; length?: 'long' | 'veryLong' }>('AdaptivePuzzlePage', () => import('./components/Puzzles/AdaptivePuzzlePage').then((m) => m.AdaptivePuzzlePage));
 const MyMistakesPage = lazyPage('MyMistakesPage', () => import('./components/Puzzles/MyMistakesPage').then((m) => m.MyMistakesPage));
 const LichessDashboardPage = lazyPage('LichessDashboardPage', () => import('./components/Puzzles/LichessDashboardPage').then((m) => m.LichessDashboardPage));
 const WeaknessTagDrillPage = lazyPage('WeaknessTagDrillPage', () => import('./components/Puzzles/WeaknessTagDrillPage').then((m) => m.WeaknessTagDrillPage));
@@ -619,6 +620,8 @@ export function App(): JSX.Element {
           <Route path="/tactics/calculation" element={<ErrorBoundary><CalculationDrillPage /></ErrorBoundary>} />
           <Route path="/tactics/adaptive" element={<ErrorBoundary><AdaptivePuzzlePage /></ErrorBoundary>} />
           <Route path="/tactics/master" element={<ErrorBoundary><AdaptivePuzzlePage master /></ErrorBoundary>} />
+          <Route path="/tactics/long" element={<ErrorBoundary><AdaptivePuzzlePage length="long" /></ErrorBoundary>} />
+          <Route path="/tactics/deep-run" element={<ErrorBoundary><DeepRunPage /></ErrorBoundary>} />
           <Route path="/tactics/classic" element={<ErrorBoundary><PuzzleTrainerPage /></ErrorBoundary>} />
           <Route path="/tactics/weakness-drill" element={<ErrorBoundary><WeaknessTagDrillPage /></ErrorBoundary>} />
           <Route path="/tactics/weakness-themes" element={<ErrorBoundary><WeaknessThemesPage /></ErrorBoundary>} />
