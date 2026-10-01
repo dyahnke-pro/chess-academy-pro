@@ -8,6 +8,9 @@ import type { PuzzleRecord } from '../../types';
 // evidence, origin 'puzzle' (generic position — can support, never prove alone).
 
 let latestOnMove: ((m: { from: string; to: string; san: string }) => void) | null = null;
+vi.mock('../../hooks/usePositionNarration', () => ({
+  usePositionNarration: () => ({ narrate: vi.fn().mockResolvedValue(undefined), cancel: vi.fn(), isNarrating: false, currentText: '', error: null }),
+}));
 vi.mock('../Board/ControlledChessBoard', () => ({
   ControlledChessBoard: (props: { onMove?: (m: { from: string; to: string; san: string }) => void }) => {
     latestOnMove = props.onMove ?? null;

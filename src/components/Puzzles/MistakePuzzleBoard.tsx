@@ -5,6 +5,7 @@ import { usePieceSound } from '../../hooks/usePieceSound';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useSettings } from '../../hooks/useSettings';
 import { readWrongTry } from '../../services/wrongTryRefutation';
+import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { rerenderMistakeNarration } from '../../services/mistakePuzzleService';
 import { puzzleMethodLine } from '../../services/puzzleMethod';
 import type { MethodHabit } from '../../services/methodBeat';
@@ -229,7 +230,6 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     // every tick.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
-  const [whyLoading, setWhyLoading] = useState(false);
   const [wrongAttemptCount, setWrongAttemptCount] = useState(0);
   // Coach chat — visible after the puzzle is solved (state === 'correct').
   // Lets the student ask follow-up questions about the position without
@@ -325,7 +325,6 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     setMoveCount(0);
     setLastMoveHighlight(null);
     setSubtitle('');
-    setWhyLoading(false);
     hasMadeMistakeRef.current = false;
     wrongAttemptsRef.current = 0;
     showMeUsedRef.current = false;
@@ -552,7 +551,6 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   // still honors the SILENT gate. Shared by the auto-fire on solve and the
   // manual "Why?" button so both speak the same explanation.
   const speakBestMoveWhy = useCallback(async (): Promise<void> => {
-    setWhyLoading(true);
     setSubtitle('Analyzing why this was the best move...');
     const rating = activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
     try {
@@ -565,13 +563,11 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
         // engine-reasoning walk, not just the single move (David 2026-07-10).
         pvUci: puzzle.moves ? puzzle.moves.split(/\s+/).filter(Boolean) : undefined,
       });
-      setWhyLoading(false);
       // The student played this move — it is theirs, not "the engine's".
       const response = engineFramed.replace(/^The engine plays (\S+) — it /, '$1 — it ').replace(/^The engine plays (\S+)\./, '$1.');
       setSubtitle(response);
       await voiceService.speakGrounded(response, puzzle.fen, { bypassBriefCap: true });
     } catch {
-      setWhyLoading(false);
       // Fallback to tactic-specific coaching
       const coaching = getCoachingMessage(tacticType, 'guide', rating);
       setSubtitle(coaching ?? '');
@@ -579,32 +575,31 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     }
   }, [puzzle, activeProfile?.currentRating, tacticType]);
 
-  // "Why?" button — explain the concept without revealing the move
-  const handleWhy = useCallback(() => {
-    if (state !== 'playing' && state !== 'correct') return;
+  // "TEACH ME THIS POSITION" (David 2026-10-01: "on demand teaching without
+  // forcing it on the user"). The ONE read every surface shares — Learn's and
+  // Play's "Read this position" — fed by the student's WHOLE record (spine,
+  // needs, proven capabilities) through the one deciding door. Before the
+  // answer it teaches the position and withholds the move; after it, the full
+  // read, including why the alternatives fall short.
+  const teach = usePositionNarration({
+    fen: puzzle.fen,
+    pgn: '',
+    moveNumber: puzzle.moveNumber,
+    playerColor: puzzle.playerColor,
+    openingName: puzzle.openingName,
+    corpusNotes: true, // the tactics drill is a kept corpus surface
+    withhold: state === 'correct' ? null : puzzle.bestMoveSan,
+  });
+  const handleTeach = useCallback(() => {
+    // Taught before answering → the answer is `prompted` (neither proven nor
+    // failed): the student was helped, and the record says so.
+    if (!answeredRef.current) toldBeforeAnswerRef.current = true;
     voiceService.stop();
-
-    if (state === 'playing') {
-      // Spoiler-free hint during play — tactic-specific teaching, not generic position description
-      const hint = narrationRef.current.conceptHint;
-      if (hint) {
-        setSubtitle(hint);
-        void voiceService.speak(hint);
-      } else {
-        const rating = activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
-        const coaching = getCoachingMessage(tacticType, 'teach', rating)
-          ?? puzzleMethodLine(puzzle.bestMoveSan, puzzle.cpLoss, saidHabitsRef.current);
-        if (coaching) {
-          setSubtitle(coaching);
-          void voiceService.speak(coaching);
-        }
-      }
-      return;
-    }
-
-    // state === 'correct' — the grounded why.
-    void speakBestMoveWhy();
-  }, [state, puzzle, activeProfile?.currentRating, tacticType, speakBestMoveWhy]);
+    void teach.narrate();
+  }, [teach]);
+  useEffect(() => {
+    if (teach.currentText) setSubtitle(teach.currentText);
+  }, [teach.currentText]);
 
   // Ask Coach — chat handler for the post-solve chat bar. Sends the
   // student's question + position context to the LLM, displays the
@@ -1063,17 +1058,17 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
         </div>
       )}
 
-      {/* Why button — explains the concept behind the best move */}
+      {/* Teach me this position — on demand, never forced */}
       {(state === 'playing' || state === 'correct') && (
         <div className="flex justify-end">
           <button
-            onClick={handleWhy}
-            disabled={whyLoading}
+            onClick={handleTeach}
+            disabled={teach.isNarrating}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-accent text-sm transition-colors border border-theme-border disabled:opacity-50 disabled:cursor-wait"
-            data-testid="why-button"
+            data-testid="teach-position-button"
           >
             <HelpCircle size={14} />
-            <span>{whyLoading ? 'Thinking...' : state === 'correct' ? 'Explain why' : 'Why?'}</span>
+            <span>{teach.isNarrating ? 'Reading the position…' : 'Teach me this position'}</span>
           </button>
         </div>
       )}

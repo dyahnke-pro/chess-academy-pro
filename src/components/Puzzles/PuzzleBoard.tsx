@@ -8,6 +8,7 @@ import { useSettings } from '../../hooks/useSettings';
 import { useChessGame } from '../../hooks/useChessGame';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useStruggleDetection } from '../../hooks/useStruggleDetection';
+import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { Eye } from 'lucide-react';
 import type { MoveResult } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
@@ -100,6 +101,17 @@ export function PuzzleBoard({
   const answeredRef = useRef(false);
   // Habits taught this session — the method beat says each one once.
   const saidHabitsRef = useRef(new Set<MethodHabit>());
+  // The board the solver faces: a Lichess line opens with the opponent's move.
+  const solverFen = useMemo((): string => {
+    try {
+      const c = new Chess(puzzle.fen);
+      const [opp] = parseUciMoves(puzzle.moves);
+      if (opp) c.move({ from: opp.from, to: opp.to, promotion: opp.promotion });
+      return c.fen();
+    } catch {
+      return puzzle.fen;
+    }
+  }, [puzzle.fen, puzzle.moves]);
   // The solver's first move (a Lichess line opens with the opponent's move).
   const solverFirstSan = useMemo((): string | null => {
     try {
@@ -169,6 +181,28 @@ export function PuzzleBoard({
     setSubtitle(message);
     void voiceService.speak(message);
   }, []);
+
+  // "TEACH ME THIS POSITION" — the one read every surface shares, fed by the
+  // student's whole record through the one deciding door. Before the answer it
+  // teaches the position and withholds the move; once resolved, the full read.
+  const teach = usePositionNarration({
+    fen: solverFen,
+    pgn: '',
+    moveNumber: Number(solverFen.split(' ')[5] ?? 1),
+    playerColor: userColor,
+    openingName: null,
+    corpusNotes: true, // the tactics drill is a kept corpus surface
+    withhold: terminal ? null : solverFirstSan,
+  });
+  const handleTeach = useCallback((): void => {
+    // Taught before answering → the answer is recorded as prompted.
+    if (!answeredRef.current) hintUsedRef.current = true;
+    voiceService.stop();
+    void teach.narrate();
+  }, [teach]);
+  useEffect(() => {
+    if (teach.currentText) setSubtitle(teach.currentText);
+  }, [teach.currentText]);
 
   const { reset: resetStruggle } = useStruggleDetection({
     tacticType,
@@ -533,6 +567,20 @@ export function PuzzleBoard({
         </p>
       )}
 
+      {/* After it resolves, the full read stays one tap away */}
+      {terminal && (
+        <div className="flex justify-end">
+          <button
+            onClick={handleTeach}
+            disabled={teach.isNarrating}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-theme-text-muted hover:text-theme-text rounded-lg border border-theme-border hover:bg-theme-surface transition-colors disabled:opacity-50"
+            data-testid="teach-position-button"
+          >
+            {teach.isNarrating ? 'Reading the position…' : 'Teach me this position'}
+          </button>
+        </div>
+      )}
+
       {/* Hint + Show Solution controls */}
       {state === 'playing' && (
         <div className="flex items-center gap-3" data-testid="puzzle-controls">
@@ -550,6 +598,14 @@ export function PuzzleBoard({
               )}
             </div>
           )}
+          <button
+            onClick={handleTeach}
+            disabled={teach.isNarrating}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-theme-text-muted hover:text-theme-text rounded-lg border border-theme-border hover:bg-theme-surface transition-colors disabled:opacity-50"
+            data-testid="teach-position-button"
+          >
+            {teach.isNarrating ? 'Reading the position…' : 'Teach me this position'}
+          </button>
           <button
             onClick={handleShowSolution}
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-theme-text-muted hover:text-theme-text rounded-lg border border-theme-border hover:bg-theme-surface transition-colors"

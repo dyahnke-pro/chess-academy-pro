@@ -5,6 +5,9 @@ import type { PuzzleRecord } from '../../types';
 
 // ─── Mocks ───────────────────────────────────────────────────────────────────
 
+vi.mock('../../hooks/usePositionNarration', () => ({
+  usePositionNarration: () => ({ narrate: vi.fn().mockResolvedValue(undefined), cancel: vi.fn(), isNarrating: false, currentText: '', error: null }),
+}));
 vi.mock('../Board/ChessBoard', () => ({
   ChessBoard: ({ initialFen, orientation, interactive }: {
     initialFen?: string;

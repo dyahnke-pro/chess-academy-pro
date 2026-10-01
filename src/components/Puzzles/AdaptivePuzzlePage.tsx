@@ -342,7 +342,11 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
     // "classroom" teaching beat (David 2026-09-14). Keeps PuzzleBoard mounted;
     // Continue runs the normal checkpoint-or-fetch below. Other surfaces keep
     // their existing cadence (the voice still carries the concept there).
-    if (master) {
+    // …and EVERY surface holds after a MISS (2026-10-01): the result is
+    // already recorded above, only the advance waits. Jumping straight on made
+    // "Teach me this position" unreachable on exactly the puzzles where it
+    // teaches most. A clean solve keeps the fast cadence.
+    if (master || !outcome.correct) {
       pendingSessionRef.current = updatedSession;
       setAwaitingConcept(true);
       return;

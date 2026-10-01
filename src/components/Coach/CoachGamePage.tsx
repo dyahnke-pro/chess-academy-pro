@@ -1811,6 +1811,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     openingName: detectedOpening?.name ?? null,
     // Play is out of scope for the 2026-09-23 corpus removal — unchanged.
     corpusNotes: true,
+    withhold: null, // a live game: nothing to withhold
     // The read now STREAMS into the chat below the board (see the effect below),
     // so no separate final-report inject — that would duplicate the streamed
     // bubble. David 2026-07-10: "no more special place for them."

@@ -151,7 +151,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/seatResolversReadDeclaredSeat.test.ts:15`
 
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
-- `src/components/Coach/CoachGamePage.tsx:2100`
+- `src/components/Coach/CoachGamePage.tsx:2101`
 - `src/components/Coach/CoachGameReview.tsx:344`
 - `src/services/gameAnalysisService.ts:2076`
 - `src/services/mistakePuzzleService.test.ts:109`
@@ -187,7 +187,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `rerenderMistakeNarration` (function) — 1 call site
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:359`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:358`
 
 ### `lineToUci` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

@@ -130,7 +130,7 @@ const routes = {
     const n = Number(q.get('n') ?? 40);
     const re = q.get('grep') ? new RegExp(q.get('grep'), 'i') : null;
     return listener.getCapturedEvents().slice(-400)
-      .map((e) => `${e.kind} | ${e.source ?? ''} | ${(e.summary ?? '').slice(0, 300)}`)
+      .map((e) => `${e.kind} | ${e.source ?? ''} | ${(e.narrationText ?? e.summary ?? '').slice(0, 1200)}`)
       .filter((l) => !re || re.test(l)).slice(-n);
   },
   /** The page's console lines — `/console?n=40&grep=pf-debug`. */

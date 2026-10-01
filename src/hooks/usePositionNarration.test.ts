@@ -103,6 +103,7 @@ function defaultArgs(): Parameters<typeof usePositionNarration>[0] {
     playerColor: 'white',
     openingName: null,
     corpusNotes: true,
+    withhold: null,
   };
 }
 
@@ -146,7 +147,10 @@ describe('usePositionNarration', () => {
     expect(call.opts.perspective).toEqual({ mode: 'student', studentSide: 'white' });
     expect(call.facts).not.toMatch(/\bI('m|'ve| have| am)\b|\bmy\b/);
     expect(call.opts.intent).toBe('position-read');
-    expect(call.opts.warm).toBe(true);
+    // COMPUTED PROSE SPEAKS (2026-10-01): the warm pass invented a conclusion
+    // on a mate-in-two, and `warm` overrides `preferRaw`, so it is off.
+    expect(call.opts.warm).toBeUndefined();
+    expect(call.opts.preferRaw).toBe(true);
     expect(result.current.isNarrating).toBe(true);
   });
 
