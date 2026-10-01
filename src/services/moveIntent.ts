@@ -13,6 +13,7 @@
 //
 // Pure: the four engine reads are handed in (see `IntentReads`). No engine call
 // here, no model — the caller owns the search budget.
+import { ruleForPurpose } from './moveFundamentals';
 import { Chess, type Square } from 'chess.js';
 import type { AnalysisLine } from '../types';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -562,3 +563,19 @@ export function unlockedMoves(fenBefore: string, playedSan: string): IntentMove[
   }
   return out;
 }
+
+/** THE RULE BEHIND WHAT A MOVE PREPARES, said once a game (unify-the-coach B1):
+ *  the purpose and its "why" are one statement, so they live together here.
+ *  The mover is read off the intent's own seat; a seat-relative reason is never
+ *  said of the opponent's move (`ruleForPurpose`). */
+export function intentRule(
+  intent: MoveIntent,
+  fenWherePlayed: string,
+  studentColor: 'white' | 'black',
+  taught: ReadonlySet<string>,
+): { text: string; keys: string[] } | null {
+  if (!intent.prepares) return null;
+  const mover = intent.about === 'student' ? studentColor : studentColor === 'white' ? 'black' : 'white';
+  return ruleForPurpose(fenWherePlayed, intent.prepares.san, mover, taught, intent.about);
+}
+

@@ -28,8 +28,7 @@ import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { transferClause, recordMotif, withTransfer } from '../../services/motifLedger';
 import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/learnTurnDoor';
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
-import { DEFAULT_INTENT, moveIntent, nullMoveFen } from '../../services/moveIntent';
-import { ruleForPurpose } from '../../services/moveFundamentals';
+import { DEFAULT_INTENT, intentRule, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { announcesTheMove, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
@@ -10342,7 +10341,7 @@ export function CoachTeachPage(): JSX.Element {
                           recordHeld('no-plan', 60, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length) || planToldBoardsRef.current.has(fenBefore.split(' ').slice(0, 2).join(' ')), gameId: learnMemRef.current.gameId });
                           // B1: the rule behind what the move prepares, once a game
                           // (the same ledger the principle lines use).
-                          const prepRule = intent.prepares ? ruleForPurpose(fenAfterReply, intent.prepares.san, playerColor, learnMemRef.current.principleTaught, 'student') : null;
+                          const prepRule = intentRule(intent, fenAfterReply, playerColor, learnMemRef.current.principleTaught);
                           if (prepRule) for (const k of prepRule.keys) learnMemRef.current.principleTaught.add(k);
                           const intentText = prepRule ? `${intent.text.replace(/\.$/, '')} — ${prepRule.text}.` : intent.text;
                           queueSpokenHint(fenAfterReply, intentText, 'moveIntent', intent.squares, [
@@ -10423,7 +10422,7 @@ export function CoachTeachPage(): JSX.Element {
                       ? moveIntent(move.fen, theirSan, { before: mid.topLines, after: afterRead.topLines, passBefore: passRead.topLines, passAfter: [] }, 'opponent', DEFAULT_INTENT)
                       : null;
                     if (theirIntent?.prepares) {
-                      const theirRule = ruleForPurpose(fenAfterReply, theirIntent.prepares.san, playerColor === 'white' ? 'black' : 'white', learnMemRef.current.principleTaught, 'opponent');
+                      const theirRule = intentRule(theirIntent, fenAfterReply, playerColor, learnMemRef.current.principleTaught);
                       if (theirRule) for (const k of theirRule.keys) learnMemRef.current.principleTaught.add(k);
                       const theirText = theirRule ? `${theirIntent.text.replace(/\.$/, '')} — ${theirRule.text}.` : theirIntent.text;
                       queueSpokenHint(fenAfterReply, theirText, 'theirIntent', theirIntent.squares, [
