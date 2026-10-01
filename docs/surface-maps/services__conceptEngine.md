@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**843 lines · 20 exports · 26 importers · 10 tests · 28 audits**
+**843 lines · 20 exports · 27 importers · 10 tests · 28 audits**
 
 ## Locked rules that govern this surface
 
@@ -36,6 +36,7 @@
 - `src/services/puzzleGenerator.ts`
 - `src/services/refutedAlternative.ts`
 - `src/services/refutedAlternativeCore.ts`
+- `src/services/reviewFullData.ts`
 - `src/services/tacticAlertService.ts`
 - `src/services/tacticTypeUnification.test.ts`
 - `src/test/auditConceptGameplayCues.test.ts`
@@ -157,20 +158,23 @@
 - `src/services/conceptEngine.test.ts:197`
 - `src/services/conceptVocabulary.test.ts:63`
 
-### `definitionKey` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7753`
-- `src/components/Coach/CoachTeachPage.tsx:7757`
+### `definitionKey` (function) — 8 call sites
+- `src/components/Coach/CoachTeachPage.tsx:7437`
+- `src/components/Coach/CoachTeachPage.tsx:7441`
 - `src/services/learnWalkBlumenfeld.test.ts:133`
 - `src/services/positionFacts.ts:1044`
 - `src/services/positionFacts.ts:1047`
 - `src/services/positionFacts.ts:1432`
+- `src/services/reviewFullData.ts:451`
+- `src/services/reviewFullData.ts:454`
 
-### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7754`
+### `tacticInvariant` (function) — 9 call sites
+- `src/components/Coach/CoachTeachPage.tsx:7438`
 - `src/services/dnaLineNarrator.ts:185`
 - `src/services/dnaLineNarrator.ts:216`
 - `src/services/dnaLineNarrator.ts:252`
 - `src/services/puzzleConceptExplanation.ts:100`
+- `src/services/reviewFullData.ts:450`
 - `src/services/tacticAlertService.ts:141`
 - `src/services/tacticTypeUnification.test.ts:199`
 - `src/test/auditConceptGameplayCues.test.ts:24`

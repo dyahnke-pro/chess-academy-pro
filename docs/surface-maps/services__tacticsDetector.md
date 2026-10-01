@@ -90,8 +90,8 @@
 - `src/services/replayFence.alekhine1500.test.ts:85`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:60`
 - `src/services/reviewCorpusNote.test.ts:61`
-- `src/services/reviewFullData.ts:536`
-- `src/services/reviewFullData.ts:595`
+- `src/services/reviewFullData.ts:552`
+- `src/services/reviewFullData.ts:611`
 - `src/services/reviewMoveBriefing.ts:64`
 - `src/services/reviewMoveBriefing.ts:65`
 - `src/services/reviewNarrationFidelity.test.ts:324`
@@ -153,7 +153,7 @@
 - `src/services/weaknessAnalyzer.ts:1283`
 - `src/services/weaknessAnalyzer.ts:1444`
 - `src/services/weaknessAnalyzer.ts:1450`
-- `src/test/narrationScanner.ts:125`
+- `src/test/narrationScanner.ts:128`
 
 ## Tests
 

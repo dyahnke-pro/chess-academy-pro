@@ -75,6 +75,8 @@ import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { describeEvalCp, isMateEval } from './engineConstants';
 import { isMinorAtHome } from './development';
 import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
+import { studentMoveTeaching } from './learnBoardTeaching';
+import type { FacetTag } from './reviewFacetRank';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
 
@@ -83,6 +85,35 @@ import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
 // without the coachApi↔coachFeatureService import cycle (WO stumbling-block #1).
 // Re-exported here so existing consumers (StatsPage, CoachGamePage,
 // gameAnalysisService) keep importing it from this module unchanged.
+
+/** The lanes `studentMoveTeaching` emits — the Learn student-move computer. */
+type StudentMoveLane = 'recapture' | 'movePoint' | 'kneeJerk' | 'strongChoice' | 'fileRace' | 'blunderCheck'
+  | 'autopilot' | 'pawnEnding' | 'keepPressing' | 'trade' | 'timing' | 'kingAttack' | 'ruleException'
+  | 'falseAlarm' | 'pushOrHold';
+
+/** Which review facet each Learn student-move lane speaks as (unify-the-coach
+ *  A2). Exhaustive, so a new lane fails to compile until someone decides. NULL
+ *  = review already has its own producer for that fact (the winning line, the
+ *  pawn-ending reads, the trade read, the timing facet, the plan race, the
+ *  opening facets) — merging those is its own step, never a second voice. */
+const REVIEW_TAG_FOR_LANE: Record<StudentMoveLane, FacetTag | null> = {
+  recapture: 'rule',
+  kneeJerk: 'rule',
+  blunderCheck: 'rule',
+  autopilot: 'rule',
+  keepPressing: 'rule',
+  ruleException: 'rule',
+  falseAlarm: 'rule',
+  kingAttack: 'rule',
+  pushOrHold: 'rule',
+  movePoint: null,
+  pawnEnding: null,
+  trade: null,
+  timing: null,
+  fileRace: null,
+  strongChoice: null,
+};
+
 export { detectBadHabits };
 
 export async function updateBadHabits(profile: UserProfile): Promise<BadHabit[]> {
@@ -1489,6 +1520,8 @@ export function buildReviewSegments(
   const conversionFacets = new Set<string>();
   /** Refuted alternatives already SPOKEN this game, by the move refuted. */
   const refutedSaid = new Set<string>();
+  // Learn-computer hints already spoken this game (A2), by claim identity.
+  const hintsSaid = new Set<string>();
   // The RACE verdict last spoken. Keyed on WHO ARRIVES FIRST, not on the counts:
   // the counts change on every push, so keying on them would re-announce the race
   // each ply. A flip — you were winning the race and now you are not — IS the
@@ -1847,6 +1880,37 @@ export function buildReviewSegments(
           facetSquares.set(raw, decoy.squares);
         }
       }
+      // THE LEARN COMPUTERS, CALLED — not copied (unify-the-coach A2, David
+      // 2026-10-01: "one coach, every surface"). The student-move computer Learn
+      // speaks from runs here on the same move; `REVIEW_TAG_FOR_LANE` routes each
+      // lane to a review facet, and a lane review already has its own producer
+      // for maps to null so nothing is said twice. Each hint is said once a
+      // game, keyed on its own claims (committed only when it spoke).
+      if (moverColor === playerColor && studentColorWB && typeof m.preMoveEval === 'number' && typeof m.evaluation === 'number') {
+        const sign = moverColor === 'white' ? 1 : -1;
+        const bothCp = Math.abs(m.preMoveEval) < 5000 && Math.abs(m.evaluation) < 5000;
+        const hints = studentMoveTeaching({
+          fenBefore: fenPair.fenBefore,
+          san: m.san,
+          history: sansForRun.slice(0, m.ply),
+          cpLoss: Math.max(0, (m.preMoveEval - m.evaluation) * sign),
+          bothCp,
+          bestSan: bestMoveSan,
+          bestLine: m.bestMove ? { rank: 1, evaluation: m.preMoveEval, moves: [m.bestMove, ...(m.pv?.afterBest ?? [])], mate: null } : undefined,
+          reply: sansForRun[m.ply] ?? null,
+          cpAfter: bothCp ? m.evaluation * sign : null,
+        });
+        for (const h of hints) {
+          const tag = (REVIEW_TAG_FOR_LANE as Partial<Record<string, FacetTag | null>>)[h.lane] ?? null;
+          if (!tag) continue;
+          const id = `hint:${h.claims.join('|') || h.lane}`;
+          if (hintsSaid.has(id)) continue;
+          const raw = `[${tag}] ${h.text}`;
+          facets.push(raw);
+          facetIdentity.set(raw, id);
+          if (h.squares.length) facetSquares.set(raw, h.squares);
+        }
+      }
       // THE LINE BEHIND A WINNING MOVE — parity with Learn (David 2026-09-30:
       // "teach more line calculations"; one coach everywhere). The student
       // played the engine's move and its line wins material: said to the last
@@ -1948,6 +2012,7 @@ export function buildReviewSegments(
       for (const f of facets) {
         // A refuted alternative is said once per game (identity `refuted:<move>`).
         { const id = facetIdentity.get(f); if (id?.startsWith('refuted:') && (refutedSaid.has(id) || !claim(id))) continue; }
+        { const id = facetIdentity.get(f); if (id?.startsWith('hint:') && (hintsSaid.has(id) || !claim(id))) continue; }
         // Positional VERDICT — atom-diffed. Speak the verdict WORD when it
         // changes, and only the REASONS not yet stated, so a growing edge adds
         // the new asset instead of re-reciting the pile every ply.
@@ -2314,6 +2379,7 @@ export function buildReviewSegments(
           if (!identity) continue;
           if (identity.startsWith('rule:')) { principlesTaught.add(identity.slice(5)); if (!principleTaughtAt.has(identity.slice(5))) principleTaughtAt.set(identity.slice(5), m.ply); continue; }
           if (identity.startsWith('refuted:')) { refutedSaid.add(identity); continue; }
+          if (identity.startsWith('hint:')) { hintsSaid.add(identity); continue; }
           // ONLY a tactic motif transfers (`transferMotifOf`).
           // `motif:<type>:<squares>` — the squares make it THIS instance, so a
           // standing tactic is never "the same idea as move N" of itself.

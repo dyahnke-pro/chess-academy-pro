@@ -21,7 +21,7 @@ import { tacticWord } from './tacticVocabulary';
 import { CENTRAL_SQUARES, keyTargetSquares, kingZoneAmong, kingZoneClause, POSITIONAL_TARGETS } from './keySquares';
 import type { Square, PieceSymbol, Move } from 'chess.js';
 import {
-  legalSeeGain, legalSeeGainOn, landingIsSafe, capturesWinMaterial, legalSeeGainFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
+  legalSeeGain, legalSeeGainOn, landingIsSafe, capturesWinMaterial, legalSeeGainFor, signedLegalSeeFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
   strongestWeakestPiece, pressuredTargets, findAttackTargets, findPawnGrabs,
   namedPawnStructure, structureTransfer, findXrays, findKnightReroute, findRookLift, findFianchetto,
   findBlockade, kingActivation, oppositionRead, rookBehindPasser, bestMinorToKeep,
@@ -6782,6 +6782,25 @@ export function detectNewThreat(
     // computed stakes it LED the ply at nine points, though the queen just
     // moved). It stands only if EVERY reply still leaves a winning capture.
     if (threat.kind === 'capture' && captureThreatIsAnswerable(fenAfter, moverWB)) return null;
+    // A THREAT FROM THE MIDDLE OF A TRADE IS NO THREAT (review walk 2026-10-01,
+    // ply 45: 23.Qxc7 took the queen and was told "you're now threatening
+    // Qxd8+ — it wins their rook on d8 and forks…" while …Rxc7 takes the queen
+    // straight back). The agent just captured something worth at least itself
+    // and they recapture it without losing material: the trade completes and
+    // the threat never exists. A piece that took LESS than itself (Nxe5 taking
+    // a pawn) still threatens — a swap is one answer, not the end of it.
+    const enemyWB: 'w' | 'b' = moverWB === 'w' ? 'b' : 'w';
+    let tookValue = 0;
+    try {
+      const was = new Chess(fenBefore).get(threat.from as Square);
+      if (was && was.color === enemyWB) tookValue = PIECE_VALUE_LOCAL[was.type] ?? 0;
+    } catch { tookValue = 0; }
+    const agent = after.get(threat.from as Square);
+    const midTrade = !!agent && tookValue > 0 && tookValue >= (PIECE_VALUE_LOCAL[agent.type] ?? 99)
+      && after.turn() === enemyWB
+      && after.moves({ verbose: true }).some((m) => m.to === threat.from && !!m.captured)
+      && signedLegalSeeFor(fenAfter, threat.from as Square, enemyWB) >= 0;
+    if (midTrade) return null;
     // NEW threats only — a threat that already existed before the move was
     // not created by it, and re-narrating a standing threat every ply is
     // noise (the repetition class).

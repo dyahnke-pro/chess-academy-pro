@@ -19,7 +19,8 @@ import { detectBluff, bluffClause } from './bluffDetector';
 import { computeGemCrush } from './gemCrushLines';
 import { getPunishGemById } from '../data/lessons/punishGems';
 import { Chess, type Color, type Square } from 'chess.js';
-import { plyFactsForMove } from './pvPlayback';
+import { landedTacticFor, plyFactsForMove } from './pvPlayback';
+import { definitionKey, tacticInvariant } from './conceptEngine';
 import { findMinorityAttack, findColorComplexWeakness, signedLegalSeeFor } from './positionReadingService';
 import { detectTactics } from './tacticsDetector';
 import { verifyForkOnBoard } from './tacticVerification';
@@ -441,6 +442,21 @@ export function computeMoveFacets(
     }
     // The cost the move already paid — only on a class that cost something.
     if (costsPoints) recStakes(qf, costStakes(swing));
+    // THE PATTERN MISSED, AND ITS RULE (unify-the-coach B3, parity with Learn's
+    // grade): when the stronger move would have landed a tactic, its definition
+    // is taught the first time the game meets it — the same say-once ledger as
+    // the principles (`rule:` identity, committed only if it spoke).
+    const missed = isStudent && bestSan && fellShort ? landedTacticFor(fenBefore, bestSan) : null;
+    const inv = missed ? tacticInvariant(missed) : null;
+    if (missed && inv && !ctx.teaching.principlesTaught.has(definitionKey(missed))) {
+      const rf = `[rule] Remember — ${inv.full}`;
+      facets.push(rf);
+      outIdentity?.set(rf, `rule:${definitionKey(missed)}`);
+      try {
+        const bm = new Chess(fenBefore).move(bestSan ?? '');
+        if (bm) recSquares(rf, [bm.from, bm.to]);
+      } catch { /* no squares → it supports nothing and stays quiet */ }
+    }
   }
   // ── 2a. THE FUNDAMENTAL NEGLECTED (David 2026-09-05) — the attributed rule
   // the flagged move crossed, proven on the board; stated as its own facet so

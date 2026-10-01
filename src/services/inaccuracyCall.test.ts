@@ -404,3 +404,42 @@ describe('a take-back is the other half of a trade (Learn walk 2026-10-01, game 
     expect(call!.said).not.toMatch(/take your rook/);
   });
 });
+
+// unify-the-coach A1 (2026-10-01): Learn graded on centipawns and review in
+// expected points, so 300cp given back at +12 was "a blunder" in Learn and not
+// even flagged in review. Learn holds the mover's eval after the move, so the
+// grade now uses the review's bands whenever that eval is a real read.
+describe('one grade on every surface (A1)', () => {
+  const base = { replyLineUci: [] as string[], replySan: null, fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE, side: 'student' as const, moverColor: 'white' as const };
+  it('a 300cp give-back in a won game is not called a blunder', () => {
+    const call = callInaccuracy({ ...base, cpLoss: 300, moverEvalAfterCp: 900 });
+    const review = classifyMove({ wasBest: false, cpLoss: 300, missedMate: null, allowedMate: null, evalBefore: 1200, evalAfter: 900, isWhiteMove: true });
+    expect(review).not.toBe('blunder');
+    expect(call?.said ?? '').not.toMatch(/blunder/);
+  });
+  it('the same 300cp in a level game is still a blunder', () => {
+    const call = callInaccuracy({ ...base, cpLoss: 300, moverEvalAfterCp: -300 });
+    expect(call?.said ?? '').toMatch(/blunder/);
+  });
+});
+
+// unify-the-coach B3 — the grade carries the pattern the better move would
+// have landed, structured, so Learn teaches its rule once a game from its one
+// definition ledger. (The walk's "f6 was the move — it would win a piece" is
+// NOT a fork: f6 hits the g5 bishop while d5 already hits the e4 knight — two
+// pawns — and the detector rightly stays quiet; pinned below.)
+describe('the grade carries the missed pattern (B3)', () => {
+  it('a missed knight fork is carried as pattern "fork"', () => {
+    const fen = 'r3k2r/ppp2ppp/8/3N4/8/8/PPP2PPP/R3K2R w KQkq - 0 1';
+    const call = callInaccuracy({ replyLineUci: [], replySan: null, fenBefore: fen, playedSan: 'a3', bestSan: 'Nxc7+',
+      bestLineUci: ['d5c7', 'e8d7', 'c7a8', 'h8a8', 'a1d1', 'd7e7'], cpLoss: 400, moverEvalAfterCp: 0, side: 'student', moverColor: 'white' });
+    expect(call?.pattern).toBe('fork');
+  });
+  it('two pawns attacking two pieces carries no pattern (walk 2026-10-01, 5…f6)', () => {
+    const fen = 'r1bqkbnr/ppp2ppp/2n5/3p2B1/3PN3/5N2/PPP1PPPP/R2QKB1R b KQkq - 1 5';
+    const call = callInaccuracy({ replyLineUci: [], replySan: null, fenBefore: fen, playedSan: 'Be7', bestSan: 'f6',
+      bestLineUci: ['f7f6', 'e4f6', 'g8f6', 'e2e3', 'f8e7', 'c2c3', 'e8g8', 'f1d3'], cpLoss: 300, moverEvalAfterCp: -60, side: 'student', moverColor: 'black' });
+    expect(call?.said).toMatch(/win a piece/);
+    expect(call?.pattern).toBeUndefined();
+  });
+});

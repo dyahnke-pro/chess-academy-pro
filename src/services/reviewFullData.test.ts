@@ -380,3 +380,28 @@ describe('the [principle] facet teaches its HOW once per game (walk 5, R19)', ()
     expect(again).not.toMatch(/Here's how:/);
   });
 });
+
+// unify-the-coach B3 (parity with Learn's grade): a missed fork teaches the
+// fork's rule once a game — the same say-once ledger as the principles.
+describe('the missed pattern teaches its rule once (B3)', () => {
+  const FEN = 'r3k2r/ppp2ppp/8/3N4/8/8/PPP2PPP/R3K2R w KQkq - 0 1';
+  const run = (taught: ReadonlySet<string>): { facets: string[]; ids: Map<string, string> } => {
+    const c = new Chess(FEN); c.move('a3');
+    const ids = new Map<string, string>();
+    const facets = computeMoveFacets({ seenFundamentals: new Set(), teaching: { ...NO_TEACHING_CONTEXT, principlesTaught: taught },
+      fenBefore: FEN, fenAfter: c.fen(), san: 'a3', ply: 1, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
+      evaluation: 0, preMoveEval: 400, classification: 'blunder', bestMoveSan: 'Nxc7+',
+      prevCap: { square: null, capturedValue: 0 }, allSans: ['a3'], forcedRunStartPly: null,
+      bestLineUci: ['d5c7', 'e8d7', 'c7a8', 'h8a8'], replyBestSan: null }, undefined, undefined, undefined, ids);
+    return { facets, ids };
+  };
+  it('names the fork\'s rule with a say-once identity', () => {
+    const { facets, ids } = run(new Set());
+    const rule = facets.find((f) => /^\[rule\] Remember — a fork/.test(f));
+    expect(rule).toBeTruthy();
+    expect(ids.get(rule ?? '')).toBe('rule:def:fork');
+  });
+  it('stays quiet once the fork has been taught this game', () => {
+    expect(run(new Set(['def:fork'])).facets.some((f) => /Remember — a fork/.test(f))).toBe(false);
+  });
+});

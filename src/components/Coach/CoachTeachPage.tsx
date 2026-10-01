@@ -7430,6 +7430,17 @@ export function CoachTeachPage(): JSX.Element {
   // `standingFactMemory` — this file and usePhaseNarration each carried their
   // own copy of it under different ref names.
   const standingRef = useRef(createStandingFactMemory());
+  /** A tactic's definition, the FIRST time the game meets it — one ledger for
+   *  every lane that teaches a pattern (the instant alert, the composer's
+   *  concept clause, and the grade's missed pattern, B3). */
+  const takeDefinition = (type: string | null | undefined): string => {
+    if (!type || learnMemRef.current.conceptTaught.has(type) || standingRef.current.said.has(definitionKey(type))) return '';
+    const inv = tacticInvariant(type);
+    if (!inv) return '';
+    learnMemRef.current.conceptTaught.add(type);
+    standingRef.current.remember(definitionKey(type));
+    return ` Remember — ${inv.full}`;
+  };
   const positionNarration = usePositionNarration({
     fen: game.fen,
     pgn: game.history.join(' '),
@@ -7749,14 +7760,7 @@ export function CoachTeachPage(): JSX.Element {
       // ONE DEFINITION LEDGER (F30): the composer's concept clause writes the
       // same `definitionKey` to the standing memory, so a definition either lane
       // already taught is not taught again here.
-      const conceptTail = (type: string | null | undefined): string => {
-        if (!type || learnMemRef.current.conceptTaught.has(type) || standingRef.current.said.has(definitionKey(type))) return '';
-        const inv = tacticInvariant(type);
-        if (!inv) return '';
-        learnMemRef.current.conceptTaught.add(type);
-        standingRef.current.remember(definitionKey(type));
-        return ` Remember — ${inv.full}`;
-      };
+      const conceptTail = takeDefinition;
       const engineMateN = pendingEngineMateRef.current
         && samePosition(pendingEngineMateRef.current.fen, args.fenAfterReply)
         ? pendingEngineMateRef.current.movesToMate
@@ -10151,7 +10155,7 @@ export function CoachTeachPage(): JSX.Element {
                         && studentJustLeftBook(move.history, playerColor === 'white' ? 'w' : 'b');
                       const line = `${fundamental
                         ? `${lossInGrade ? '' : bookSaid ? fundamental.howOnly : fundamental.verdict}${fundamental.recurrence ? ` ${fundamental.recurrence}` : ''}${evidence ? ` ${evidence}` : ''}`.trim()
-                        : look.line}${concession ? ` ${concession}` : ''}`;
+                        : `${look.line}${takeDefinition(look.pattern)}`}${concession ? ` ${concession}` : ''}`;
                       // "That let them win the pawn on d4" and "they're eyeing
                       // Nxd4 — it would win your pawn on d4" are one claim (run
                       // C walk 2026-09-30); the shared key lets the package keep one.

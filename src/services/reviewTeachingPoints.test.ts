@@ -295,13 +295,15 @@ describe('buildReviewDeepestLookahead (review-register deep look-ahead)', () => 
   });
 
   it('names the shot retrospectively when the best move sets up a royal fork', () => {
-    // Black king e8 + queen a8, white knight c3. Nd5 sets up Nc7+ forking king + queen.
+    // Black king e8 + queen a8, white knight c3. Nb5 sets up Nc7+ forking king
+    // + queen. (Was Nd5 — which the a8 queen simply takes; a threat from a piece
+    // they can capture is no threat, 2026-10-01.)
     const fen = 'q3k3/8/8/8/8/2N5/8/4K3 w - - 0 1';
-    const say = buildReviewDeepestLookahead(fen, 'c3d5', 'w', null);
+    const say = buildReviewDeepestLookahead(fen, 'c3b5', 'w', null);
     expect(say).toBeTruthy();
     expect(say!.toLowerCase()).toContain('shot');
     expect(say!.toLowerCase()).toMatch(/fork/);
-    expect(say).toContain('Nd5'); // names the move that was the shot
+    expect(say).toContain('Nb5'); // names the move that was the shot
   });
 
   it('stays silent on a plain winning capture (owned by the better-move teaching)', () => {

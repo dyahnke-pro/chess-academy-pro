@@ -35,6 +35,7 @@ export { costWords };
 import { MATERIAL_VALUE } from './pieceValues';
 import { legalSeeGain } from './positionReadingService';
 import { lineWins, mateLine } from './lineCalc';
+import { landedTacticFor } from './pvPlayback';
 
 export interface InaccuracyCall {
   /** Straight from `moveRating.classifyMove` — never re-derived here. */
@@ -57,6 +58,10 @@ export interface InaccuracyCall {
   /** The punishing line this call SPEAKS, played from `fen` — so the board
    *  draws exactly the moves the words name, ply by ply. */
   line?: { fen: string; uci: string[] };
+  /** The tactic the better move LANDS (`landedTacticFor`), when the call names
+   *  that move — the pattern the student missed, so a caller can teach its
+   *  rule once (unify-the-coach B3). Structured, never read off the prose. */
+  pattern?: string;
 }
 
 /** Only the three that are worth stopping for. `good` and above stay silent —
@@ -367,11 +372,26 @@ export function callInaccuracyDetailed(args: {
 }): InaccuracyVerdict {
   const bare = (s: string): string => s.replace(/[+#]$/, '');
   const wasBest = Boolean(args.bestSan) && bare(args.playedSan) === bare(args.bestSan ?? '');
+  // ONE GRADE ON EVERY SURFACE (unify-the-coach A1, 2026-10-01). The review
+  // grades in expected points; this call used to have only the centipawns, so
+  // the same move read "a mistake" in Learn and "an inaccuracy" in review
+  // whenever the game was already lopsided. The mover's eval after the move
+  // plus what it cost IS the eval before it, so the evals are in hand — hand
+  // them over and `classifyMove` uses the review's bands. A mate score is not a
+  // centipawn read; that case keeps the centipawn ladder.
+  const moverAfter = args.moverEvalAfterCp;
+  const evals = typeof moverAfter === 'number' && Math.abs(moverAfter) < 10_000
+    ? (() => {
+      const sign = args.moverColor === 'white' ? 1 : -1;
+      return { evalBefore: (moverAfter + args.cpLoss) * sign, evalAfter: moverAfter * sign, isWhiteMove: args.moverColor === 'white' };
+    })()
+    : {};
   const quality = classifyMove({
     wasBest,
     cpLoss: Math.max(0, args.cpLoss),
     missedMate: args.missedMate ?? null,
     allowedMate: args.allowedMate ?? null,
+    ...evals,
   });
   if (!WORTH_SAYING.has(quality)) return { call: null, declined: 'quality-not-worth-saying' };
   // THE BANDS ARE STOCKFISH'S; THE FLOOR IS PEDAGOGY, AND THEY ARE NOT THE SAME
@@ -601,7 +621,8 @@ export function callInaccuracyDetailed(args: {
     const ml = mateLine(args.fenBefore, args.bestLineUci, args.moverColor === 'white' ? 'w' : 'b', args.bestSan);
     if (ml) { mateSaid = ` ${ml.text}`; line ??= { fen: args.fenBefore, uci: args.bestLineUci.slice(0, ml.plies.length) }; }
   }
-  return { call: { quality, side: 'student', cost, said: `${head}${lineTail}${mateSaid || should}`, square: better?.square ?? '', ...(punishment?.lostSquare ? { lostSquare: punishment.lostSquare } : {}), ...(should || mateSaid ? { namesBetter: args.bestSan } : {}), ...(line ? { line } : {}) } };
+  const pattern = should && !mateSaid ? landedTacticFor(args.fenBefore, args.bestSan) : null;
+  return { call: { quality, side: 'student', cost, said: `${head}${lineTail}${mateSaid || should}`, square: better?.square ?? '', ...(punishment?.lostSquare ? { lostSquare: punishment.lostSquare } : {}), ...(should || mateSaid ? { namesBetter: args.bestSan } : {}), ...(line ? { line } : {}), ...(pattern ? { pattern } : {}) } };
 }
 
 /** What the played move let the OTHER side do: their best line after it, read

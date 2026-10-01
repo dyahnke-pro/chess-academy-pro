@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5127 lines · 35 exports · 40 importers · 38 tests · 5 audits**
+**5193 lines · 35 exports · 41 importers · 39 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,6 +26,7 @@
 - `src/services/coachFeatureService.causalChain.test.ts`
 - `src/services/coachFeatureService.cpLossSign.test.ts`
 - `src/services/coachFeatureService.introResult.test.ts`
+- `src/services/coachFeatureService.learnLanes.test.ts`
 - `src/services/coachFeatureService.learnParity.test.ts`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts`
 - `src/services/coachFeatureService.planChange.test.ts`
@@ -145,7 +146,7 @@
 - `src/services/coachFeatureService.test.ts:15`
 - `src/services/coachFeatureService.test.ts:24`
 
-### `buildReviewSegments` (function) — 62 call sites
+### `buildReviewSegments` (function) — 63 call sites
 - `src/components/Coach/CoachGameReview.tsx:1859`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -157,6 +158,7 @@
 - `src/services/coachFeatureService.causalChain.test.ts:100`
 - `src/services/coachFeatureService.cpLossSign.test.ts:40`
 - `src/services/coachFeatureService.cpLossSign.test.ts:47`
+- `src/services/coachFeatureService.learnLanes.test.ts:25`
 - `src/services/coachFeatureService.learnParity.test.ts:46`
 - `src/services/coachFeatureService.learnParity.test.ts:52`
 - `src/services/coachFeatureService.learnParity.test.ts:71`
@@ -280,8 +282,8 @@
 - `src/services/reviewNarrationFidelity.test.ts:118`
 
 ### `pendingRecapture` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7514`
-- `src/components/Coach/CoachTeachPage.tsx:7603`
+- `src/components/Coach/CoachTeachPage.tsx:7525`
+- `src/components/Coach/CoachTeachPage.tsx:7614`
 - `src/services/coachFeatureService.test.ts:929`
 - `src/services/coachFeatureService.test.ts:930`
 - `src/utils/justCaptured.test.ts:20`
@@ -339,6 +341,7 @@
 - `src/services/coachFeatureService.causalChain.test.ts`
 - `src/services/coachFeatureService.cpLossSign.test.ts`
 - `src/services/coachFeatureService.introResult.test.ts`
+- `src/services/coachFeatureService.learnLanes.test.ts`
 - `src/services/coachFeatureService.learnParity.test.ts`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts`
 - `src/services/coachFeatureService.planChange.test.ts`

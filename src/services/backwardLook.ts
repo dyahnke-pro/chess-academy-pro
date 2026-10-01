@@ -46,6 +46,9 @@ export interface BackwardLook {
    *  One lane for the coach because it is one voice — owning a blunder and
    *  owning a positional concession are the same act at different scales. */
   kind: 'mistake' | 'drawback' | 'coachMistake';
+  /** The tactic the better move would have landed (B3) — the caller teaches
+   *  its rule once a game, from its own definition ledger. */
+  pattern?: string;
   /** The line WITHOUT its opening "that left your X on Y hanging" sentence,
    *  and the square that sentence is about — set only when the line has one.
    *  A caller that already named that loss (the live fundamental verdict)
@@ -356,7 +359,7 @@ export function backwardLook(args: {
         replyLineUci: args.replyPvUci ?? [],
         replySan: args.replySan ?? null,
       });
-      if (call) return { line: call.said, square: call.square, kind: 'mistake', ...(call.lostSquare ? { lostSquare: call.lostSquare } : {}), ...(call.namesBetter ? { namesBetter: call.namesBetter } : {}), ...(call.line ? { punishLine: call.line } : {}) };
+      if (call) return { line: call.said, square: call.square, kind: 'mistake', ...(call.pattern ? { pattern: call.pattern } : {}), ...(call.lostSquare ? { lostSquare: call.lostSquare } : {}), ...(call.namesBetter ? { namesBetter: call.namesBetter } : {}), ...(call.line ? { punishLine: call.line } : {}) };
     } catch { /* fall through */ }
   }
 
