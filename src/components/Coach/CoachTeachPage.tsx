@@ -29,6 +29,7 @@ import { transferClause, recordMotif, withTransfer } from '../../services/motifL
 import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/learnTurnDoor';
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, moveIntent, nullMoveFen } from '../../services/moveIntent';
+import { ruleForPurpose } from '../../services/moveFundamentals';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { announcesTheMove, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
@@ -9357,7 +9358,7 @@ export function CoachTeachPage(): JSX.Element {
                     const gapEchoed = gapEchoedByVerdict(gapPending?.san ?? null, pf.clauses, gapPending?.square ?? null);
                     if (gapPending && moveAdviceHere?.speak && !gapEchoed) queueSpokenHint(probe.fen(), gapPending.text, 'gap', [gapPending.square], [`gap:${gapPending.square}:${probe.history().length}`]);
                     standingRef.current.rememberAll(pf.remember);
-                    if (pf.principleSpoken) learnMemRef.current.principleTaught.add(pf.principleSpoken);
+                    if (pf.principleSpoken) for (const k of pf.principleSpoken.split('|')) learnMemRef.current.principleTaught.add(k);
                     // The student is to move at `probe`; their coming move is ply history+1.
                     if (pf.clauses.some((c) => c.kind === 'key-moment')) announcedPliesRef.current.add(probe.history().length + 1);
                     for (const c of pf.clauses) {
@@ -10339,7 +10340,12 @@ export function CoachTeachPage(): JSX.Element {
                           // DUAL-USE (P4): an engine-proven purpose (prevents / prepares)
                           // is the no-plan question answered.
                           recordHeld('no-plan', 60, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length) || planToldBoardsRef.current.has(fenBefore.split(' ').slice(0, 2).join(' ')), gameId: learnMemRef.current.gameId });
-                          queueSpokenHint(fenAfterReply, intent.text, 'moveIntent', intent.squares, [
+                          // B1: the rule behind what the move prepares, once a game
+                          // (the same ledger the principle lines use).
+                          const prepRule = intent.prepares ? ruleForPurpose(fenAfterReply, intent.prepares.san, playerColor, learnMemRef.current.principleTaught) : null;
+                          if (prepRule) for (const k of prepRule.keys) learnMemRef.current.principleTaught.add(k);
+                          const intentText = prepRule ? `${intent.text.replace(/\.$/, '')} — ${prepRule.text}.` : intent.text;
+                          queueSpokenHint(fenAfterReply, intentText, 'moveIntent', intent.squares, [
                             ...(intent.prevents ? [`stops:${intent.prevents.uci}`] : []),
                             ...(intent.prepares ? [`prepares:${intent.prepares.uci}`] : []),
                             // "Bc4 clears the way to castle" and "castling is one
@@ -10417,7 +10423,10 @@ export function CoachTeachPage(): JSX.Element {
                       ? moveIntent(move.fen, theirSan, { before: mid.topLines, after: afterRead.topLines, passBefore: passRead.topLines, passAfter: [] }, 'opponent', DEFAULT_INTENT)
                       : null;
                     if (theirIntent?.prepares) {
-                      queueSpokenHint(fenAfterReply, theirIntent.text, 'theirIntent', theirIntent.squares, [
+                      const theirRule = ruleForPurpose(fenAfterReply, theirIntent.prepares.san, playerColor === 'white' ? 'black' : 'white', learnMemRef.current.principleTaught);
+                      if (theirRule) for (const k of theirRule.keys) learnMemRef.current.principleTaught.add(k);
+                      const theirText = theirRule ? `${theirIntent.text.replace(/\.$/, '')} — ${theirRule.text}.` : theirIntent.text;
+                      queueSpokenHint(fenAfterReply, theirText, 'theirIntent', theirIntent.squares, [
                         `their-prepares:${theirIntent.prepares.uci}`,
                         ...(theirIntent.prevents ? [`stops:${theirIntent.prevents.uci}`] : []),
                       ], move.fen);

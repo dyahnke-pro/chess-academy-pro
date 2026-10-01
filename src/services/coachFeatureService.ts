@@ -2377,7 +2377,7 @@ export function buildReviewSegments(
           const raw = keptRaw[kept.indexOf(uncappedParts[k])] ?? uncappedParts[k];
           const identity = facetIdentity.get(raw);
           if (!identity) continue;
-          if (identity.startsWith('rule:')) { principlesTaught.add(identity.slice(5)); if (!principleTaughtAt.has(identity.slice(5))) principleTaughtAt.set(identity.slice(5), m.ply); continue; }
+          if (identity.startsWith('rule:')) { for (const k of identity.slice(5).split('|')) { principlesTaught.add(k); if (!principleTaughtAt.has(k)) principleTaughtAt.set(k, m.ply); } continue; }
           if (identity.startsWith('refuted:')) { refutedSaid.add(identity); continue; }
           if (identity.startsWith('hint:')) { hintsSaid.add(identity); continue; }
           // ONLY a tactic motif transfers (`transferMotifOf`).

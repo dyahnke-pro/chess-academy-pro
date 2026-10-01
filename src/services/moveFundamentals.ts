@@ -1264,8 +1264,11 @@ function middlegameKey(f: MoveFundamental): string {
  * One helper for every surface (Learn's composer and review's [rule] facet).
  */
 export function principleLine(
-  fenBefore: string, san: string, mover: 'white' | 'black', taught: ReadonlySet<string>, stemKey: number,
+  fenBefore: string, san: string, mover: 'white' | 'black', taughtIds: ReadonlySet<string>, stemKey: number,
 ): { id: string; text: string; squares: string[]; first: boolean } | null {
+  // A line that carries two claims ("mg:…|mg-rule:…") is committed as one id by
+  // some callers and split by others — read it the same either way.
+  const taught: ReadonlySet<string> = new Set([...taughtIds].flatMap((k) => k.split('|')));
   // PAST THE OPENING a clean move still has a why — its lead fundamental as a
   // stem, every time (Rd1 "takes the open d-file", g4 "kicks their knight off
   // h5"). Before this, the rule lane closed with the opening and every quiet
@@ -1290,7 +1293,18 @@ export function principleLine(
       .filter((f) => !(endgame && (f.id === 'center' || f.id === 'space')))
       .sort((a, b) => b.weight - a.weight)
       .find((f) => !taught.has(middlegameKey(f)));
-    return lead ? { id: middlegameKey(lead), text: `${san} ${lead.led}.`, squares: lead.squares, first: true } : null;
+    if (!lead) return null;
+    // THE RULE RIDES WITH THE PURPOSE, once a game (unify-the-coach B1, David
+    // 2026-10-01: "Rules to follow, golden nuggets"). "Ne3 lands on the e3
+    // outpost" described the move; the first outpost of the game also says
+    // why outposts matter. The id carries both keys ('|'), so the fact and
+    // its rule are each said once.
+    const ruleKey = `mg-rule:${lead.id}`;
+    const reason = PRINCIPLE_REASON[lead.id];
+    if (reason && !taught.has(ruleKey)) {
+      return { id: `${middlegameKey(lead)}|${ruleKey}`, text: `${san} ${lead.led} — ${reason}.`, squares: lead.squares, first: true };
+    }
+    return { id: middlegameKey(lead), text: `${san} ${lead.led}.`, squares: lead.squares, first: true };
   }
   const fresh = principleToTeach(fenBefore, san, mover, taught);
   if (fresh) return { id: fresh.id, text: principleOnceLine(san, fresh, stemKey), squares: fresh.squares, first: true };
@@ -1362,4 +1376,36 @@ function tempoTarget(
 function coreHitBy(sq: string, color: 'w' | 'b'): string[] {
   const f = sq.charCodeAt(0); const r = Number(sq[1]) + (color === 'w' ? 1 : -1);
   return [f - 1, f + 1].map((x) => `${String.fromCharCode(x)}${r}`).filter((t) => ['d4', 'e4', 'd5', 'e5'].includes(t));
+}
+
+/**
+ * THE RULE BEHIND A PREPARED MOVE (unify-the-coach B1, 2026-10-01). A purpose
+ * line ("Bc4 clears the way to castle", "…Nbd7 prepares …Rad8") described the
+ * plan and never said why it is worth having. The prepared move's own lead
+ * fundamental, read on the board where it would be played, carries the reason
+ * from the one table (`PRINCIPLE_REASON`) — once a game, on the same ledger the
+ * principle lines use (`keys` holds both the opening id and the middlegame rule
+ * key, so neither surface re-teaches it). Null when the move follows no rule
+ * with a reason, or the rule was already taught.
+ */
+export function ruleForPurpose(
+  fenWherePlayed: string,
+  preparedSan: string,
+  mover: 'white' | 'black',
+  taught: ReadonlySet<string>,
+): { text: string; keys: string[] } | null {
+  let fen = fenWherePlayed;
+  try {
+    // The prepared move is the MOVER's next one; read it with the mover to play.
+    const parts = fen.split(' ');
+    parts[1] = mover === 'white' ? 'w' : 'b';
+    parts[3] = '-';
+    fen = parts.join(' ');
+    new Chess(fen).move(preparedSan);
+  } catch { return null; }
+  const lead = computeMoveFundamentals(fen, preparedSan, mover)
+    .filter((f) => PRINCIPLE_REASON[f.id] && !taught.has(f.id) && !taught.has(`mg-rule:${f.id}`))
+    .sort((a, b) => b.weight - a.weight)[0];
+  if (!lead) return null;
+  return { text: PRINCIPLE_REASON[lead.id] as string, keys: [lead.id, `mg-rule:${lead.id}`] };
 }

@@ -254,3 +254,45 @@ describe('development is a piece leaving its OWN starting square (hand walk 2026
     expect(computeMoveFundamentals(c.fen(), 'Nc3', 'white').some((f) => f.id === 'development')).toBe(true);
   });
 });
+
+// unify-the-coach B1 (2026-10-01): past the opening the stem described the move
+// ("Ne3 lands on the e3 outpost") and never said why. The first time a
+// fundamental speaks in a game, its rule rides with it; after that, the stem.
+describe('the rule rides with the middlegame purpose, once (B1)', () => {
+  const fen = '1r3r1k/pp1R2pp/8/4p3/2B3P1/1P6/1P4nP/1K5R b - - 3 25';
+  it('the first outpost says why outposts matter', async () => {
+    const { principleLine } = await import('./moveFundamentals');
+    const r = principleLine(fen, 'Ne3', 'black', new Set(), 0);
+    expect(r?.text).toMatch(/e3 outpost.* — a piece no pawn can chase stays there/);
+    expect(r?.id.split('|')).toContain('mg-rule:outpost');
+  });
+  it('once the rule is taught, only the stem speaks', async () => {
+    const { principleLine } = await import('./moveFundamentals');
+    const r = principleLine(fen, 'Ne3', 'black', new Set(['mg-rule:outpost']), 0);
+    expect(r?.text).not.toMatch(/no pawn can chase/);
+  });
+});
+
+// unify-the-coach B1 step 2: "Bc4 clears the way to castle" described the plan.
+// The rule behind the prepared move rides with it, once a game, on the same
+// ledger the principle lines use.
+describe('the rule behind a prepared move (B1)', () => {
+  // 1.e4 e5 2.Nf3 Nc6 3.Bc4 Nf6 — White to move; O-O is what Bc4 prepared.
+  const fen = 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4';
+  it('castling carries the king-safety rule', async () => {
+    const { ruleForPurpose } = await import('./moveFundamentals');
+    const r = ruleForPurpose(fen, 'O-O', 'white', new Set());
+    expect(r?.text).toMatch(/king left in the middle/);
+    expect(r?.keys).toContain('king-safety');
+  });
+  it('a rule already taught is not said again', async () => {
+    const { ruleForPurpose } = await import('./moveFundamentals');
+    expect(ruleForPurpose(fen, 'O-O', 'white', new Set(['king-safety']))).toBeNull();
+  });
+  it('reads the prepared move with the mover to play (their plan, our turn)', async () => {
+    const { ruleForPurpose } = await import('./moveFundamentals');
+    // Same board with BLACK to move: White's O-O is still read as White's.
+    const black = fen.replace(' w ', ' b ');
+    expect(ruleForPurpose(black, 'O-O', 'white', new Set())?.keys).toContain('king-safety');
+  });
+});
