@@ -201,7 +201,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/countMethod.ts:30`
 - `src/services/groundedAnswer.ts:6802`
 - `src/services/principleAttribution.ts:258`
-- `src/services/reviewFullData.ts:301`
+- `src/services/reviewFullData.ts:310`
 
 ### `capturesWinMaterial` (function) — 6 call sites
 - `src/services/computedMaterialTruth.corpus.test.ts:136`
@@ -329,8 +329,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:97`
 - `src/services/positionalTruth.corpus.test.ts:102`
 - `src/services/replayFence.najdorf1500.test.ts:24`
-- `src/services/reviewFullData.ts:744`
-- `src/services/reviewFullData.ts:748`
+- `src/services/reviewFullData.ts:753`
+- `src/services/reviewFullData.ts:757`
 
 ### `MinorityAttack` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -345,8 +345,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.ts:366`
 - `src/services/positionalTruth.corpus.test.ts:110`
 - `src/services/positionalTruth.corpus.test.ts:115`
-- `src/services/reviewFullData.ts:740`
-- `src/services/reviewFullData.ts:742`
+- `src/services/reviewFullData.ts:749`
+- `src/services/reviewFullData.ts:751`
 
 ### `pieceScope` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

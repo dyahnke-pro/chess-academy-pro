@@ -33,7 +33,7 @@ import { MIN_ALTERNATIVE_SHARE } from './refutedAlternativeCore';
 import { principleLine } from './moveFundamentals';
 import { threatStoppedBy } from './opponentMovePurpose';
 import { trickSidestepped } from './forkTrick';
-import { isMateEval } from './engineConstants';
+import { isMateEval, MISTAKE_CP } from './engineConstants';
 import { computeBoardDelta } from './boardDelta';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
 import { explainMatingSacMechanism } from './reviewForcedSequence';
@@ -298,7 +298,16 @@ export function computeMoveFacets(
       // "Can take back" only when taking back does not lose material (review
       // walk 2026-09-27: 15.Nxh7 — …Rxh7 loses the rook to Qxh7).
       const recapturer: Color = mv.color === 'w' ? 'b' : 'w';
-      const safe = signedLegalSeeFor(fenAfter, tradeSq as Square, recapturer) >= 0;
+      // …and the static count yields to the engine (review walk 2026-10-01,
+      // ply 63: 32.Nxe5 "taking back would cost them more than the pawn" — the
+      // count says Rxe5 dxe5 drops the exchange, but dxe5 opens the d-file and
+      // …Rxd1+ wins it back; the engine graded Nxe5 a blunder). A capture that
+      // cost its mover a mistake's worth is never "safe from recapture".
+      const moverCost = ctx.preMoveEval != null && ctx.evaluation != null && !isMateEval(ctx.preMoveEval) && !isMateEval(ctx.evaluation)
+        ? (ctx.preMoveEval - ctx.evaluation) * (ctx.moverColor === 'white' ? 1 : -1)
+        : null;
+      const engineSaysCostly = moverCost !== null && moverCost >= MISTAKE_CP;
+      const safe = engineSaysCostly || signedLegalSeeFor(fenAfter, tradeSq as Square, recapturer) >= 0;
       const lost = NOUN[mv.captured ?? ''] ?? 'piece';
       const f = safe
         ? isStudent

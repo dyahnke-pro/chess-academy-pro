@@ -165,8 +165,8 @@
 - `src/services/positionFacts.ts:1044`
 - `src/services/positionFacts.ts:1047`
 - `src/services/positionFacts.ts:1432`
-- `src/services/reviewFullData.ts:451`
-- `src/services/reviewFullData.ts:454`
+- `src/services/reviewFullData.ts:460`
+- `src/services/reviewFullData.ts:463`
 
 ### `tacticInvariant` (function) — 9 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7438`
@@ -174,7 +174,7 @@
 - `src/services/dnaLineNarrator.ts:216`
 - `src/services/dnaLineNarrator.ts:252`
 - `src/services/puzzleConceptExplanation.ts:100`
-- `src/services/reviewFullData.ts:450`
+- `src/services/reviewFullData.ts:459`
 - `src/services/tacticAlertService.ts:141`
 - `src/services/tacticTypeUnification.test.ts:199`
 - `src/test/auditConceptGameplayCues.test.ts:24`

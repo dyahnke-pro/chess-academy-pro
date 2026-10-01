@@ -1073,7 +1073,7 @@
 - `src/services/falseAlarm.ts:60`
 - `src/services/learnMoveTeaching.ts:125`
 - `src/services/opponentMovePurpose.ts:52`
-- `src/services/reviewFullData.ts:648`
+- `src/services/reviewFullData.ts:657`
 - `src/services/reviewMoveBriefing.ts:237`
 - `src/services/reviewNarrationFidelity.test.ts:218`
 - `src/services/reviewNarrationFidelity.test.ts:227`
@@ -1147,9 +1147,9 @@
 - `src/services/reviewBoardAwareness.test.ts:108`
 - `src/services/reviewBoardAwareness.test.ts:109`
 - `src/services/reviewFullData.ts:280`
-- `src/services/reviewFullData.ts:339`
-- `src/services/reviewFullData.ts:423`
-- `src/services/reviewFullData.ts:561`
+- `src/services/reviewFullData.ts:348`
+- `src/services/reviewFullData.ts:432`
+- `src/services/reviewFullData.ts:570`
 - `src/services/reviewNarrationFidelity.test.ts:85`
 - `src/services/reviewNarrationFidelity.test.ts:95`
 - `src/services/reviewNarrationFidelity.test.ts:101`

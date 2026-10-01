@@ -421,3 +421,22 @@ describe('no sacrifice rationale on a move graded a blunder', () => {
     expect(facets.filter((f) => f.startsWith('[sac-why]'))).toEqual([]);
   });
 });
+
+// Review walk 2026-10-01 (game 173903420240, ply 63): 32.Nxe5 was told "taking
+// back would cost them more than the pawn" — the count says Rxe5 dxe5 drops the
+// exchange, but dxe5 opens the d-file and …Rxd1+ wins it back. The engine
+// graded Nxe5 a blunder; the trade read yields to it.
+describe('the recapture read yields to the engine', () => {
+  it('32.Nxe5 (a blunder) is "they can take back", not "taking back costs them more"', () => {
+    const fenBefore = '6k1/3r1pp1/p1N2n1p/1p1rp3/3P4/P4R1P/1P3PP1/3R2K1 w - - 0 32';
+    const c = new Chess(fenBefore); c.move('Nxe5');
+    const facets = computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
+      fenBefore, fenAfter: c.fen(), san: 'Nxe5', ply: 63, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
+      evaluation: -300, preMoveEval: 40, classification: 'blunder', bestMoveSan: 'Kf1',
+      prevCap: { square: null, capturedValue: 0 }, allSans: ['Nxe5'], forcedRunStartPly: null,
+      bestLineUci: [], replyBestSan: 'Rxe5' });
+    const trade = facets.filter((f) => f.startsWith('[trade]')).join(' ');
+    expect(trade).not.toMatch(/taking back would cost them more/);
+    expect(trade).toMatch(/they can take back/);
+  });
+});

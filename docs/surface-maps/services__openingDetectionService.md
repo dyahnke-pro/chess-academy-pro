@@ -101,8 +101,8 @@
 - `src/services/openingKey.ts:39`
 - `src/services/openingPositions.test.ts:27`
 - `src/services/openingPositions.test.ts:37`
-- `src/services/reviewFullData.ts:993`
-- `src/services/reviewFullData.ts:1169`
+- `src/services/reviewFullData.ts:1002`
+- `src/services/reviewFullData.ts:1178`
 
 ### `detectOpeningTranspositional` (function) — 5 call sites
 - `src/services/coachApi.ts:5435`
