@@ -82,8 +82,8 @@
 - `src/components/Coach/CoachGamePage.tsx:1801`
 - `src/components/Coach/CoachGamePage.tsx:3312`
 - `src/components/Coach/CoachGamePage.tsx:3400`
-- `src/components/Coach/CoachTeachPage.tsx:8068`
-- `src/components/Coach/CoachTeachPage.tsx:9185`
+- `src/components/Coach/CoachTeachPage.tsx:8073`
+- `src/components/Coach/CoachTeachPage.tsx:9190`
 - `src/hooks/usePhaseNarration.ts:461`
 - `src/services/coachFeatureService.ts:2484`
 - `src/services/coachFeatureService.ts:2905`
@@ -205,7 +205,7 @@
 - `src/services/openingSublines.ts:100`
 
 ### `isBookLine` (function) — 13 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8807`
+- `src/components/Coach/CoachTeachPage.tsx:8812`
 - `src/services/bookDeparture.ts:66`
 - `src/services/gameAnalysisService.ts:1289`
 - `src/services/gameAnalysisService.ts:1554`
@@ -371,8 +371,8 @@
 
 ### `studentSideForPlay` (function) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:5287`
-- `src/components/Coach/CoachTeachPage.tsx:12578`
-- `src/components/Coach/CoachTeachPage.tsx:12628`
+- `src/components/Coach/CoachTeachPage.tsx:12583`
+- `src/components/Coach/CoachTeachPage.tsx:12633`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:59`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:60`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:64`

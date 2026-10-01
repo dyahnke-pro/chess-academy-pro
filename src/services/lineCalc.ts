@@ -31,6 +31,7 @@ export function lineWins(fen: string, lineUci: readonly string[], side: 'w' | 'b
   // noise, and he walks three to six plies). A line whose first settled count
   // is level or behind says nothing.
   let net = 0; let settle = -1; let lastCap = -1;
+  const took: string[] = []; const gave: string[] = [];
   try {
     for (let i = 0; i < lineUci.length; i += 1) {
       const u = lineUci[i];
@@ -39,7 +40,7 @@ export function lineWins(fen: string, lineUci: readonly string[], side: 'w' | 'b
       if (!m) break;
       if (i === 0 && firstSan && bare(m.san) !== bare(firstSan)) return null;
       plies.push({ from: m.from, to: m.to, color: m.color, fen: before, san: m.san });
-      if (m.captured) { net += (m.color === side ? 1 : -1) * (MATERIAL_VALUE[m.captured] ?? 0); lastCap = i; }
+      if (m.captured) { net += (m.color === side ? 1 : -1) * (MATERIAL_VALUE[m.captured] ?? 0); lastCap = i; (m.color === side ? took : gave).push(m.captured); }
       // A SETTLE: something was taken, nobody is in check (a check forces the
       // reply), and the next move takes nothing back.
       const next = lineUci[i + 1];
@@ -60,7 +61,7 @@ export function lineWins(fen: string, lineUci: readonly string[], side: 'w' | 'b
   const shown = plies.slice(0, settle + 1);
   return {
     net,
-    what: WORDS[net] ?? `${net} points of material`,
+    what: materialWords(took, gave, net),
     sans: shown.map((p) => `${p.color === 'b' ? '…' : ''}${p.san}`),
     plies: shown,
   };
@@ -156,4 +157,24 @@ export function mateLine(fen: string, lineUci: readonly string[], side: 'w' | 'b
       ? `No check yet — the quiet ${sans[0]} comes first, and ${mateSan} is mate. ${sans.join(' ')}.`
       : `It is a forced mate: ${sans.join(' ')}.`;
   return { sans, plies, quiet, taken, text };
+}
+
+const ONE: Record<string, string> = { p: 'a pawn', n: 'a knight', b: 'a bishop', r: 'a rook', q: 'the queen' };
+const MANY: Record<string, string> = { p: 'pawns', n: 'knights', b: 'bishops', r: 'rooks', q: 'queens' };
+const NUM = ['', 'one', 'two', 'three', 'four', 'five'];
+/** What the line actually changes hands, by piece — "two pawns" was said of a
+ *  knight won for a pawn and of the exchange (Learn walk 2026-10-01). Pieces
+ *  traded like for like cancel; what is left is said as it is. */
+function materialWords(took: readonly string[], gave: readonly string[], net: number): string {
+  const g = [...took]; const l = [...gave];
+  for (let i = g.length - 1; i >= 0; i -= 1) { const j = l.indexOf(g[i]); if (j >= 0) { g.splice(i, 1); l.splice(j, 1); } }
+  const say = (xs: readonly string[]): string => {
+    const order = ['q', 'r', 'b', 'n', 'p'];
+    const parts = order.filter((t) => xs.includes(t)).map((t) => { const k = xs.filter((x) => x === t).length; return k === 1 ? ONE[t] : `${NUM[k] ?? k} ${MANY[t]}`; });
+    return parts.length <= 1 ? parts.join('') : `${parts.slice(0, -1).join(', ')} and ${parts[parts.length - 1]}`;
+  };
+  if (g.length === 0) return WORDS[net] ?? `${net} points of material`;
+  if (l.length === 0) return say(g);
+  if (g.length === 1 && g[0] === 'r' && l.length === 1 && (l[0] === 'n' || l[0] === 'b')) return 'the exchange';
+  return `${say(g)} for ${say(l)}`;
 }

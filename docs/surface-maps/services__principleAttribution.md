@@ -152,7 +152,7 @@
 - `src/services/sweepCarriesPv.test.ts:129`
 - `src/services/sweepCarriesPv.test.ts:143`
 - `src/services/sweepPassesEngineLines.test.ts:91`
-- `src/services/walkOct1Learn.test.ts:76`
+- `src/services/walkOct1Learn.test.ts:77`
 - `src/services/yieldHonoured.test.ts:33`
 - `src/services/yieldHonoured.test.ts:69`
 - `src/services/yieldHonoured.test.ts:70`

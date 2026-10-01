@@ -162,6 +162,14 @@ export function extractMentionedSans(text: string): string[] {
     const before = cleaned.slice(Math.max(0, match.index - 16), match.index);
     const precedingWord = before.trim().split(/\s+/).pop()?.toLowerCase() ?? '';
     if (NON_MOVE_PHRASE_PRECEDERS.has(precedingWord)) continue;
+    // A square in a LIST of squares ("hitting d4 and e5", "d4, e5") is a
+    // square too (Learn walk 2026-10-01: an e7→e5 arrow off "and e5").
+    if (/^[a-h][1-8]$/.test(san)) {
+      const words = cleaned.slice(Math.max(0, match.index - 24), match.index).trim().split(/\s+/);
+      const w1 = (words[words.length - 1] ?? '').toLowerCase();
+      const w2 = words[words.length - 2] ?? '';
+      if (/^[a-h][1-8],$/.test(w1) || ((w1 === 'and' || w1 === 'or') && /^[a-h][1-8],?$/.test(w2))) continue;
+    }
     out.push(san);
   }
   return out;

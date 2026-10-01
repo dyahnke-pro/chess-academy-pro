@@ -47,3 +47,18 @@ the fix lives in the stashed file) + `openingAnnouncement.test.ts` departure cas
 Found by the related-test sweep while fixing: the endgame fixture table still
 listed the pre-rebuild lesson boards (updated), and "queen versus rook" fired
 on queen against TWO rooks (the perpetual lesson) — now one rook only.
+
+## Re-walk (same 3 games, after the fixes)
+
+Checker: 125 / 126 checked claims TRUE; the one it marks false (Kf1 "takes the
+king off the line") is within 0.1 of the best at depth 18 — its stored lines
+are only the top three. All 16 flags above gone from the tape. New, fixed:
+
+| # | flag | fix |
+|---|---|---|
+| R-1 | "e5 was their move, to swing pieces toward their king" (mover's voice) | coach/opponent verdicts flip to the student's seat |
+| R-2 | "getting the rook to d1, by way of d5" — a retreat | no heavy-piece route back to its own first rank |
+| R-3 | "hitting d4 and e5" drew e7→e5 | squares in a list are squares |
+| R-4 | "mate in 18" where the shortest was 5 | the count only up to five |
+| R-5 | "wins two pawns" for a knight won for a pawn / the exchange | said by the pieces that change hands |
+| R-6 | conversion said twice (62/64) — the claim fix missed the conversion lane | the conversion fact carries its step's claim |

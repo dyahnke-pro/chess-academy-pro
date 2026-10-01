@@ -685,6 +685,10 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     // 2026-10-01: "getting the rook to c3, by way of c1" with White's knight
     // on c3 — the line only works once that knight has gone).
     .filter((j) => !rootFen || routeDestination(rootFen, j.path[j.path.length - 1], color).kind !== 'own')
+    // …nor a heavy piece walking back to its own first rank (Learn walk
+    // 2026-10-01: "getting the rook to d1, by way of d5" — a retreat, not a
+    // plan). A minor's Nd2–f1 regroup is the classic reroute and stays.
+    .filter((j) => !((j.piece === 'rook' || j.piece === 'queen') && j.path[j.path.length - 1][1] === (color === 'white' ? '1' : '8')))
     .sort((a, b) => b.path.length - a.path.length)[0] ?? null;
   // …and onto a square THEIR piece holds, the route ends in a capture, so it
   // is said as one ("getting the knight to a7" was taking the a7 pawn).

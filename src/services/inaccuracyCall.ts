@@ -479,7 +479,9 @@ export function callInaccuracyDetailed(args: {
       : quality === 'mistake'
         ? `Their ${args.playedSan} is a mistake — not what the position wanted.`
         : `Their ${args.playedSan} is a touch inaccurate.`;
-    const should = better ? ` ${args.bestSan} was their move, to ${better.why}.` : '';
+    // The plan reason is read in the MOVER's voice ("their king" = the
+    // student's); said to the student it is "your king" (walk 2026-10-01).
+    const should = better ? ` ${args.bestSan} was their move, to ${toStudentSeat(better.why)}.` : '';
     const stillHanging = missedCaptureStillOn(args.fenBefore, args.playedSan, args.bestSan);
     const punish = quality === 'inaccuracy'
       ? ''
@@ -500,7 +502,7 @@ export function callInaccuracyDetailed(args: {
         : `A touch inaccurate from me — ${args.playedSan} is not quite right.`;
     // NAMED WITH ITS REASON, OR NOT NAMED (the Learn rule, 2026-09-24): a move
     // with no computed reason is an order, not teaching.
-    const should = better ? ` ${args.bestSan} was the move, to ${better.why}.` : '';
+    const should = better ? ` ${args.bestSan} was the move, to ${toStudentSeat(better.why)}.` : '';
     // WHICH KIND OF SLIP, read off the board (walk 6, L4). The coach's move can
     // cost by GIVING something (the student now has a capture to find) or by
     // MISSING a capture of the student's piece — and then that piece is still
@@ -798,4 +800,9 @@ function discoveredBy(fen: string, uci: string): string | null {
     const p = c.get(checkers[0]);
     return p ? `${PIECE_NAME[p.type]} on ${checkers[0]}` : null;
   } catch { return null; }
+}
+
+/** A clause read in the OPPONENT's voice, said to the student. */
+function toStudentSeat(clause: string): string {
+  return clause.replace(/\btheir king\b/g, 'your king').replace(/\btheir pawns\b/g, 'your pawns');
 }

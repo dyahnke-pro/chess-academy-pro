@@ -20,13 +20,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `conceptInstanceKey` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8004`
+- `src/components/Coach/CoachTeachPage.tsx:8009`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/danyaBehaviors.ts:499`
 - `src/services/positionFacts.ts:1044`
-- `src/services/positionFacts.ts:1422`
-- `src/services/positionFacts.ts:1436`
+- `src/services/positionFacts.ts:1425`
+- `src/services/positionFacts.ts:1439`
 - `src/services/replayFence.alekhine1500.test.ts:24`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.sicilianClosed1000.test.ts:26`

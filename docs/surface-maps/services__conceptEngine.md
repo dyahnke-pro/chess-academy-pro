@@ -163,7 +163,7 @@
 - `src/services/learnWalkBlumenfeld.test.ts:133`
 - `src/services/positionFacts.ts:1044`
 - `src/services/positionFacts.ts:1047`
-- `src/services/positionFacts.ts:1429`
+- `src/services/positionFacts.ts:1432`
 
 ### `tacticInvariant` (function) — 8 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7754`

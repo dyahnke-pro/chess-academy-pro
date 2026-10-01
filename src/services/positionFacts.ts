@@ -1399,7 +1399,10 @@ function buildClauses(a: {
   if (conversion && a.alreadySaid?.has(convertKey(conversion.step))) { /* heard this step already */ }
   // The escort step speaks about ONE passer — the claim the behaviour lane's
   // "long-term trump" writes too, so the pawn is praised once a turn.
-  else if (conversion) ranked.push({ kind: 'convert', rank: 36, text: conversion.text, claim: conversion.step === 'escort-passer' && conversion.passer ? `passer-${conversion.passer}` : undefined });
+  // The step's own key is the claim (walk 2026-10-01: "a piece up — trade
+  // pieces" and, two plies on, the character switch "up material — trade
+  // down" — one idea, and the switch could not see it had been said).
+  else if (conversion) ranked.push({ kind: 'convert', rank: 36, text: conversion.text, claim: conversion.step === 'escort-passer' && conversion.passer ? `passer-${conversion.passer}` : convertKey(conversion.step) });
   else if (importance.tier === 'convert') ranked.push({ kind: 'convert', rank: 20, text: `This is technique now — convert it cleanly, no heroics.` });
   if (openingPhase) return ranked;
 

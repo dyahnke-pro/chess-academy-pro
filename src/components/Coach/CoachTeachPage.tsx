@@ -7774,7 +7774,12 @@ export function CoachTeachPage(): JSX.Element {
         const firstSan = engineFirst ?? tctx.boardFacts?.mateInOne ?? null;
         tacticLine = forcedMateN === 1
           ? (firstSan ? `${firstSan} is mate.` : "There's a mate in one here.")
-          : (firstSan ? `There's a forced mate here — mate in ${forcedMateN}, starting with ${firstSan}.` : `There's a forced mate here — mate in ${forcedMateN}.`);
+          // THE COUNT ONLY WHEN IT IS SHORT (Learn walk 2026-10-01: "mate in
+          // 18" where the shortest was 5 — a live read at low depth finds a
+          // mate, not the fastest one). Past five the number is not proven.
+          : forcedMateN > 5
+            ? (firstSan ? `There's a forced mate here, starting with ${firstSan}.` : `There's a forced mate here.`)
+            : (firstSan ? `There's a forced mate here — mate in ${forcedMateN}, starting with ${firstSan}.` : `There's a forced mate here — mate in ${forcedMateN}.`);
       } else if (theirHanging.length > 0) {
         const prize = theirHanging[0];
         tacticKey = `win:${prize.piece}${prize.square}`;
