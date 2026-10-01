@@ -353,7 +353,7 @@
 - `src/services/reviewTeachingPoints.ts:101`
 
 ### `describeMoveGeometry` (function) — 19 call sites
-- `src/components/Puzzles/PuzzleBoard.tsx:110`
+- `src/components/Puzzles/PuzzleBoard.tsx:120`
 - `src/components/Tactics/TacticSetupBoard.tsx:82`
 - `src/hooks/useHintSystem.ts:356`
 - `src/services/computedVoiceGrounding.test.ts:53`

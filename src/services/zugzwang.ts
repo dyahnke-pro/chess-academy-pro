@@ -61,3 +61,33 @@ export function zugzwangSentence(z: ZugzwangRead, studentToMove: boolean): strin
   }
   return `You put them in zugzwang: on their move it ${WORD[z.onMove + 1]} for them; if they could pass, they would ${z.ifPassed === 1 ? 'win' : 'hold'}. Every move they make now gives ground.`;
 }
+
+/**
+ * TRIANGULATION — losing a tempo on purpose (n3F 15-19, Fxj 50-61; the
+ * platform's Triangulation lesson). Read off a best line (SAN, from `fen`):
+ * the side to move walks its king and, an odd number of plies later, the SAME
+ * placement of every piece stands on the board with the OTHER side to move —
+ * a tempo handed over. Only king moves on both sides in between, so the line
+ * is the manoeuvre and nothing else. Null when the line shows no such loop.
+ */
+export function findTriangulation(fen: string, line: readonly string[]): { plies: number; squares: string[] } | null {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return null; }
+  const start = fen.split(' ')[0];
+  const side = c.turn();
+  const route: string[] = [];
+  for (let i = 0; i < line.length && i < 11; i += 1) {
+    let m;
+    try { m = c.move(line[i]); } catch { return null; }
+    if (m.piece !== 'k') return null;
+    if (m.color === side) route.push(m.to);
+    const n = i + 1;
+    if (n % 2 === 1 && n >= 5 && c.fen().split(' ')[0] === start && c.turn() !== side) return { plies: n, squares: route };
+  }
+  return null;
+}
+
+/** The sentence, in demo voice (White/Black). */
+export function triangulationSentence(side: string, other: string, t: { squares: string[] }): string {
+  return `${side} to move — and ${side} would rather it were ${other}'s move. So ${side}'s king walks a triangle (${t.squares.join(', ')}) and comes back: the same position, but now ${other} has to move. That is triangulation — losing a tempo on purpose.`;
+}

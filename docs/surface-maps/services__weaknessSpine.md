@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**961 lines · 21 exports · 30 importers · 15 tests · 2 audits**
+**1013 lines · 23 exports · 32 importers · 16 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
 - **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:236) — names `WeaknessProvenance`
-- **The standard post-deploy ritual** (CLAUDE.md:5984) — names `weaknessSpine`
+- **The standard post-deploy ritual** (CLAUDE.md:6122) — names `weaknessSpine`
 
 ## Who calls in
 
@@ -24,6 +24,7 @@
 - `src/services/coachCurriculumService.ts`
 - `src/services/coachDrillService.ts`
 - `src/services/coachThread.ts`
+- `src/services/conceptSchedule.ts`
 - `src/services/customLessonPlan.test.ts`
 - `src/services/customLessonPlan.ts`
 - `src/services/drillVocabulary.test.ts`
@@ -35,6 +36,7 @@
 - `src/services/homeOpeningPlan.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/mistakePuzzleService.ts`
+- `src/services/puzzleMissService.test.ts`
 - `src/services/tacticTypeBackfill.test.ts`
 - `src/services/weaknessLifecycle.ts`
 - `src/services/weaknessProvenance.test.ts`
@@ -56,7 +58,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `playedAtMs` (function) — 4 call sites
-- `src/services/mistakePuzzleService.ts:211`
+- `src/services/mistakePuzzleService.ts:212`
 - `src/services/weaknessProvenance.test.ts:108`
 - `src/services/weaknessProvenance.test.ts:109`
 - `src/services/weaknessProvenance.test.ts:110`
@@ -73,8 +75,9 @@
 ### `latestDrillMs` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `bucketForMistake` (function) — 7 call sites
+### `bucketForMistake` (function) — 8 call sites
 - `src/services/coachDrillService.ts:350`
+- `src/services/conceptSchedule.ts:18`
 - `src/services/tacticTypeBackfill.test.ts:94`
 - `src/services/tacticTypeBackfill.test.ts:115`
 - `src/services/weaknessLifecycle.ts:108`
@@ -83,7 +86,7 @@
 - `src/services/weaknessSpine.test.ts:369`
 
 ### `themesForTactic` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2628`
+- `src/components/Coach/CoachTeachPage.tsx:2677`
 - `src/services/coachDrillService.ts:562`
 - `src/services/drillVocabulary.test.ts:43`
 - `src/services/drillVocabulary.test.ts:53`
@@ -117,6 +120,13 @@
 - `src/services/weaknessSpine.test.ts:217`
 - `src/services/weaknessSpine.test.ts:219`
 
+### `PUZZLE_MISS_OPEN_MS` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `aggregatePuzzleMisses` (function) — 2 call sites
+- `src/services/puzzleMissService.test.ts:19`
+- `src/services/puzzleMissService.test.ts:29`
+
 ### `aggregateConversionFailures` (function) — 6 call sites
 - `src/services/weaknessProvenance.test.ts:49`
 - `src/services/weaknessSpine.test.ts:230`
@@ -143,16 +153,16 @@
 - `src/services/weaknessSpine.test.ts:259`
 - `src/services/weaknessSpine.test.ts:272`
 
-### `getUnifiedWeaknessProfile` (function) — 36 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2552`
-- `src/components/Coach/CoachTeachPage.tsx:10705`
+### `getUnifiedWeaknessProfile` (function) — 37 call sites
+- `src/components/Coach/CoachTeachPage.tsx:2601`
+- `src/components/Coach/CoachTeachPage.tsx:10995`
 - `src/components/Coach/TrainingPlanRolodexPage.tsx:71`
 - `src/components/Dashboard/DashboardPage.tsx:133`
 - `src/components/Tactics/TacticalProfilePage.tsx:69`
 - `src/services/bucketPipelineAudit.ts:156`
-- `src/services/coachApi.ts:2107`
-- `src/services/coachApi.ts:4330`
-- `src/services/coachApi.ts:4899`
+- `src/services/coachApi.ts:2160`
+- `src/services/coachApi.ts:4449`
+- `src/services/coachApi.ts:5018`
 - `src/services/coachCurriculumService.ts:124`
 - `src/services/coachCurriculumService.ts:137`
 - `src/services/coachThread.ts:49`
@@ -163,8 +173,9 @@
 - `src/services/fundamentalReachesDecider.test.ts:123`
 - `src/services/fundamentalsPipeline.realGame.test.ts:342`
 - `src/services/fundamentalsRecordLoop.integration.test.ts:92`
-- `src/services/homeOpeningPlan.ts:177`
+- `src/services/homeOpeningPlan.ts:180`
 - `src/services/loopCloses.review.integration.test.ts:74`
+- `src/services/puzzleMissService.test.ts:40`
 - `src/services/weaknessSignalLoader.ts:58`
 - `src/services/weaknessSpine.fundamentals.test.ts:48`
 - `src/services/weaknessSpine.fundamentals.test.ts:62`
@@ -193,6 +204,7 @@
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
 - `src/services/homeOpeningPlan.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`
+- `src/services/puzzleMissService.test.ts`
 - `src/services/tacticTypeBackfill.test.ts`
 - `src/services/weaknessProvenance.test.ts`
 - `src/services/weaknessSignal.test.ts`

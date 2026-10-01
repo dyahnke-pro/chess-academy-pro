@@ -5,7 +5,10 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import drills from './endgame-concept-drills.json';
-import { outsidePasserDecoy, kingCourse } from '../services/endgamePawnReads';
+import { outsidePasserDecoy, kingCourse, findBreakthrough } from '../services/endgamePawnReads';
+import { findTriangulation } from '../services/zugzwang';
+import { queenVsSeventh } from '../services/queenVsPawn';
+import { getEndgameLessonById } from '../services/endgameLessonsService';
 import { detectPlanRace } from '../services/planRace';
 import { conceptDrillsFor } from '../services/endgameDrillService';
 
@@ -29,6 +32,14 @@ describe('computed endgame concept drills', () => {
         const r = detectPlanRace(d.fen, stm);
         expect(r && r.kind === 'passer-race' && r.firstQueenCovers, d.id).toBe(true);
       }
+      if (d.concept === 'triangle') expect(findTriangulation(d.fen, d.solution), d.id).not.toBeNull();
+      if (d.concept === 'breakthrough') expect(findBreakthrough(d.fen, d.solution), d.id).not.toBeNull();
+      if (d.concept === 'q7') {
+        const q = queenVsSeventh(d.fen);
+        expect(q, d.id).not.toBeNull();
+        // The drill's stored result agrees with the file rule it teaches.
+        expect(q?.expect === 'draw' ? /draw/i.test(d.result) : !/draw/i.test(d.result), d.id).toBe(true);
+      }
     }
   });
   it('the first move of the solution IS the idea (passer runs, king heads for the target, runner pushes)', () => {
@@ -50,6 +61,7 @@ describe('computed endgame concept drills', () => {
   it('every drill reaches a lesson, and speaks in our words', () => {
     for (const d of all) {
       expect(d.lessonIds.some((id) => conceptDrillsFor(id).some((p) => p.fen === d.fen)), d.id).toBe(true);
+      for (const id of d.lessonIds) expect(getEndgameLessonById(id), `${d.id} → ${id}`).not.toBeNull();
       expect(d.explanation, d.id).not.toMatch(/Naroditsky|Danya|video/i);
     }
   });

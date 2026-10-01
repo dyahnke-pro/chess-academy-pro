@@ -333,28 +333,18 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
       return;
     }
 
-    // Master Level: pause on the solved board so the CONCEPT lesson (rendered +
-    // spoken in PuzzleBoard) is actually read/heard before advancing — the
-    // "classroom" teaching beat (David 2026-09-14). Keeps PuzzleBoard mounted;
-    // Continue runs the normal checkpoint-or-fetch below. Other surfaces keep
-    // their existing cadence (the voice still carries the concept there).
-    if (master) {
-      pendingSessionRef.current = updatedSession;
-      setAwaitingConcept(true);
-      return;
-    }
+    // Pause on the finished board so the CONCEPT lesson (rendered + spoken in
+    // PuzzleBoard) is actually read/heard before advancing — the "classroom"
+    // teaching beat (David 2026-09-14). Master-only until 2026-10-01: on the
+    // adaptive surface the next puzzle's `voiceService.stop()` cut the lesson
+    // mid-sentence, and a FAILED puzzle was replaced before its solution was
+    // ever shown. Keeps PuzzleBoard mounted; Continue runs the normal
+    // checkpoint-or-fetch below.
+    pendingSessionRef.current = updatedSession;
+    setAwaitingConcept(true);
+  }, [session, currentPuzzle, playerRating, userRating, activeProfile, setActiveProfile, repKey, repCap, misconceptionTag]);
 
-    // Check if checkpoint
-    if (updatedSession.totalPuzzles > 0 && updatedSession.totalPuzzles % CHECKPOINT_INTERVAL === 0) {
-      setPhase('checkpoint');
-      return;
-    }
-
-    // Fetch next puzzle
-    await fetchNextPuzzle(updatedSession);
-  }, [session, currentPuzzle, playerRating, userRating, activeProfile, setActiveProfile, fetchNextPuzzle, repKey, repCap, misconceptionTag, master]);
-
-  /** Master concept-review Continue → run the deferred checkpoint-or-fetch. */
+  /** Concept-review Continue → run the deferred checkpoint-or-fetch. */
   const handleContinueAfterConcept = useCallback(async (): Promise<void> => {
     const updatedSession = pendingSessionRef.current;
     pendingSessionRef.current = null;
@@ -519,6 +509,7 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
               puzzle={currentPuzzle}
               onComplete={(outcome) => void handlePuzzleComplete(outcome)}
               disabled={awaitingConcept}
+              surface={master ? 'master' : 'adaptive'}
             />
           </div>
           <div className="space-y-4">

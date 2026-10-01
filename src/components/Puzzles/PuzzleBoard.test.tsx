@@ -155,19 +155,19 @@ describe('PuzzleBoard', () => {
 
   it('renders the board', () => {
     const puzzle = makePuzzle();
-    render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} surface="classic" />);
     expect(screen.getByTestId('puzzle-board')).toBeInTheDocument();
   });
 
   it('shows loading state initially', () => {
     const puzzle = makePuzzle();
-    render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} surface="classic" />);
     expect(screen.getByTestId('puzzle-loading')).toBeInTheDocument();
   });
 
   it('shows puzzle rating badge', () => {
     const puzzle = makePuzzle({ rating: 1500, themes: ['pin', 'middlegame'] });
-    render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} surface="classic" />);
     expect(screen.getByTestId('puzzle-rating-badge')).toHaveTextContent('Puzzle Rating: 1500');
   });
 
@@ -175,13 +175,13 @@ describe('PuzzleBoard', () => {
     const puzzle = makePuzzle({
       fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1',
     });
-    render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} surface="classic" />);
     expect(screen.getByTestId('chess-board')).toHaveAttribute('data-orientation', 'white');
   });
 
   it('transitions from loading to playing after auto-play delay', async () => {
     const puzzle = makePuzzle();
-    render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} surface="classic" />);
 
     expect(screen.getByTestId('puzzle-loading')).toBeInTheDocument();
 
@@ -194,14 +194,14 @@ describe('PuzzleBoard', () => {
   it('renders board as non-interactive when disabled', () => {
     const puzzle = makePuzzle();
     const onComplete = vi.fn();
-    render(<PuzzleBoard puzzle={puzzle} onComplete={onComplete} disabled />);
+    render(<PuzzleBoard puzzle={puzzle} onComplete={onComplete} surface="classic" disabled />);
     expect(screen.getByTestId('puzzle-board')).toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
   });
 
   it('shows show-solution button when playing', async () => {
     const puzzle = makePuzzle();
-    render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} surface="classic" />);
 
     await waitFor(
       () => expect(screen.getByTestId('show-solution-button')).toBeInTheDocument(),
@@ -211,13 +211,13 @@ describe('PuzzleBoard', () => {
 
   it('renders board wrapper with flash class container', () => {
     const puzzle = makePuzzle();
-    render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} surface="classic" />);
     expect(screen.getByTestId('board-wrapper')).toBeInTheDocument();
   });
 
   it('shows puzzle controls area when playing', async () => {
     const puzzle = makePuzzle();
-    render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} surface="classic" />);
 
     await waitFor(
       () => expect(screen.getByTestId('puzzle-controls')).toBeInTheDocument(),

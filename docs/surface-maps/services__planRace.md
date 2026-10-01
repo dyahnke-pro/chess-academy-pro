@@ -42,9 +42,9 @@
 - `src/services/planRace.test.ts:64`
 
 ### `detectPlanRace` (function) — 16 call sites
-- `scripts/endgame-drills/generate.ts:179`
-- `src/data/endgameConceptDrills.test.ts:29`
-- `src/data/endgameConceptDrills.test.ts:45`
+- `scripts/endgame-drills/generate.ts:311`
+- `src/data/endgameConceptDrills.test.ts:32`
+- `src/data/endgameConceptDrills.test.ts:56`
 - `src/services/boardPlan.ts:124`
 - `src/services/planRace.test.ts:22`
 - `src/services/planRace.test.ts:27`

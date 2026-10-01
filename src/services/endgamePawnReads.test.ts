@@ -79,3 +79,14 @@ describe('kingCourse', async () => {
     expect(kingCourse('6k1/5p1p/p5p1/1K6/8/8/5PPP/8 w - - 0 1', 'w')).toBeNull();
   });
 });
+
+describe('findBreakthrough', async () => {
+  const { findBreakthrough } = await import('./endgamePawnReads');
+  it('the classic three-against-three: b6! and a pawn runs through', () => {
+    const fen = '6k1/ppp5/8/PPP5/8/8/8/6K1 w - - 0 1';
+    expect(findBreakthrough(fen, ['b6', 'cxb6', 'a6', 'bxa6', 'c6', 'Kf7', 'c7', 'Ke7', 'c8=Q'])).toEqual({ sac: 'b6', queens: 'c8' });
+  });
+  it('a quiet first move is not a breakthrough', () => {
+    expect(findBreakthrough('6k1/ppp5/8/PPP5/8/8/8/6K1 w - - 0 1', ['Kf2', 'Kf7'])).toBeNull();
+  });
+});

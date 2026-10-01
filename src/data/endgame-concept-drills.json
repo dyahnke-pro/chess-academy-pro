@@ -586,5 +586,341 @@
     ],
     "source": "computed: race count + tablebase win",
     "conceptHint": "Count the pushes — and where the new queen stands."
+  },
+  {
+    "id": "ecd-q7-0",
+    "concept": "q7",
+    "lessonIds": [
+      "rule-of-the-square",
+      "push-passed-pawns"
+    ],
+    "fen": "8/6PK/8/8/5q2/8/8/3k4 b - - 0 1",
+    "title": "Queen against a pawn on the seventh — the win",
+    "explanation": "Black to move. A queen against a knight pawn on the seventh wins: check, then pin or block, force the king in front of its own pawn, and every tempo that buys brings the queen's king one step closer. Black wins.",
+    "result": "black-wins",
+    "bestMove": "Qf5+",
+    "solution": [
+      "Qf5+",
+      "Kh8",
+      "Qh3+",
+      "Kg8",
+      "Kd2",
+      "Kf7",
+      "Qf5+",
+      "Ke7",
+      "Qg6",
+      "Kf8"
+    ],
+    "source": "computed: file rule + tablebase agrees",
+    "conceptHint": "Check, pin, and bring the king."
+  },
+  {
+    "id": "ecd-q7-1",
+    "concept": "q7",
+    "lessonIds": [
+      "rule-of-the-square",
+      "push-passed-pawns"
+    ],
+    "fen": "8/8/8/8/1K6/3k4/1Q2p3/8 w - - 0 1",
+    "title": "Queen against a pawn on the seventh — the win",
+    "explanation": "White to move. A queen against a centre pawn on the seventh wins: check, then pin or block, force the king in front of its own pawn, and every tempo that buys brings the queen's king one step closer. White wins.",
+    "result": "white-wins",
+    "bestMove": "Qc1",
+    "solution": [
+      "Qc1",
+      "Ke4",
+      "Qd2",
+      "Kf3",
+      "Kc4",
+      "Kf2",
+      "Kd3",
+      "Kf3",
+      "Qxe2+",
+      "Kf4"
+    ],
+    "source": "computed: file rule + tablebase agrees",
+    "conceptHint": "Check, pin, and bring the king."
+  },
+  {
+    "id": "ecd-q7-2",
+    "concept": "q7",
+    "lessonIds": [
+      "rule-of-the-square",
+      "push-passed-pawns"
+    ],
+    "fen": "8/4PK2/8/8/8/8/8/2q4k b - - 0 1",
+    "title": "Queen against a pawn on the seventh — the win",
+    "explanation": "Black to move. A queen against a centre pawn on the seventh wins: check, then pin or block, force the king in front of its own pawn, and every tempo that buys brings the queen's king one step closer. Black wins.",
+    "result": "black-wins",
+    "bestMove": "Qf1+",
+    "solution": [
+      "Qf1+",
+      "Ke6",
+      "Qh3+",
+      "Kf7",
+      "Qf5+",
+      "Kg7",
+      "Qe6",
+      "Kf8",
+      "Qf6+",
+      "Ke8"
+    ],
+    "source": "computed: file rule + tablebase agrees",
+    "conceptHint": "Check, pin, and bring the king."
+  },
+  {
+    "id": "ecd-q7-3",
+    "concept": "q7",
+    "lessonIds": [
+      "rule-of-the-square",
+      "push-passed-pawns"
+    ],
+    "fen": "8/6PK/8/8/8/kq6/8/8 b - - 0 1",
+    "title": "Queen against a pawn on the seventh — the win",
+    "explanation": "Black to move. A queen against a knight pawn on the seventh wins: check, then pin or block, force the king in front of its own pawn, and every tempo that buys brings the queen's king one step closer. Black wins.",
+    "result": "black-wins",
+    "bestMove": "Qf7",
+    "solution": [
+      "Qf7",
+      "Kh8",
+      "Qh5+",
+      "Kg8",
+      "Kb4",
+      "Kf8",
+      "Qf5+",
+      "Ke7",
+      "Qg6",
+      "Kf8"
+    ],
+    "source": "computed: file rule + tablebase agrees",
+    "conceptHint": "Check, pin, and bring the king."
+  },
+  {
+    "id": "ecd-q7-4",
+    "concept": "q7",
+    "lessonIds": [
+      "rule-of-the-square",
+      "push-passed-pawns"
+    ],
+    "fen": "8/1P6/2K5/7q/8/6k1/8/8 b - - 0 1",
+    "title": "Queen against a pawn on the seventh — the win",
+    "explanation": "Black to move. A queen against a knight pawn on the seventh wins: check, then pin or block, force the king in front of its own pawn, and every tempo that buys brings the queen's king one step closer. Black wins.",
+    "result": "black-wins",
+    "bestMove": "Qe5",
+    "solution": [
+      "Qe5",
+      "Kb6",
+      "Qb8",
+      "Ka6",
+      "Kf3",
+      "Kb6",
+      "Ke4",
+      "Kc6",
+      "Kd4",
+      "Kd7"
+    ],
+    "source": "computed: file rule + tablebase agrees",
+    "conceptHint": "Check, pin, and bring the king."
+  },
+  {
+    "id": "ecd-q7-5",
+    "concept": "q7",
+    "lessonIds": [
+      "rule-of-the-square",
+      "push-passed-pawns"
+    ],
+    "fen": "8/8/8/5K2/2Q5/8/3p4/4k3 w - - 0 1",
+    "title": "Queen against a pawn on the seventh — the win",
+    "explanation": "White to move. A queen against a centre pawn on the seventh wins: check, then pin or block, force the king in front of its own pawn, and every tempo that buys brings the queen's king one step closer. White wins.",
+    "result": "white-wins",
+    "bestMove": "Qe4+",
+    "solution": [
+      "Qe4+",
+      "Kf1",
+      "Qd3+",
+      "Ke1",
+      "Qe3+",
+      "Kd1",
+      "Ke4",
+      "Kc2",
+      "Qd3+",
+      "Kc1"
+    ],
+    "source": "computed: file rule + tablebase agrees",
+    "conceptHint": "Check, pin, and bring the king."
+  },
+  {
+    "id": "ecd-bt-0",
+    "concept": "breakthrough",
+    "lessonIds": [
+      "breakthrough",
+      "push-passed-pawns"
+    ],
+    "fen": "8/8/8/3pp3/8/3PP2K/8/1k6 b - - 0 1",
+    "title": "The breakthrough",
+    "explanation": "Black to move and win. d4 gives a pawn away to open a lane: whichever pawn takes it, another of Black's pawns runs through and queens on d1 before White's king can catch it.",
+    "result": "black-wins",
+    "bestMove": "d4",
+    "solution": [
+      "d4",
+      "Kg2",
+      "e4",
+      "dxe4",
+      "d3",
+      "Kf3",
+      "d2",
+      "Kf4",
+      "d1=Q",
+      "Kf5",
+      "Qf3+",
+      "Ke5"
+    ],
+    "source": "computed: pawn sacrifice then promotion, tablebase line",
+    "conceptHint": "Sacrifice a pawn to open a lane."
+  },
+  {
+    "id": "ecd-bt-1",
+    "concept": "breakthrough",
+    "lessonIds": [
+      "breakthrough",
+      "push-passed-pawns"
+    ],
+    "fen": "8/8/8/3pp3/8/3PP3/K7/7k b - - 0 1",
+    "title": "The breakthrough",
+    "explanation": "Black to move and win. e4 gives a pawn away to open a lane: whichever pawn takes it, another of Black's pawns runs through and queens on e1 before White's king can catch it.",
+    "result": "black-wins",
+    "bestMove": "e4",
+    "solution": [
+      "e4",
+      "Kb2",
+      "d4",
+      "exd4",
+      "e3",
+      "Kc3",
+      "Kg1",
+      "Kb4",
+      "e2",
+      "Kc5",
+      "e1=Q",
+      "d5"
+    ],
+    "source": "computed: pawn sacrifice then promotion, tablebase line",
+    "conceptHint": "Sacrifice a pawn to open a lane."
+  },
+  {
+    "id": "ecd-bt-2",
+    "concept": "breakthrough",
+    "lessonIds": [
+      "breakthrough",
+      "push-passed-pawns"
+    ],
+    "fen": "8/8/8/3pp3/8/3PP2K/1k6/8 b - - 0 1",
+    "title": "The breakthrough",
+    "explanation": "Black to move and win. d4 gives a pawn away to open a lane: whichever pawn takes it, another of Black's pawns runs through and queens on d1 before White's king can catch it.",
+    "result": "black-wins",
+    "bestMove": "d4",
+    "solution": [
+      "d4",
+      "Kg2",
+      "e4",
+      "dxe4",
+      "d3",
+      "Kf3",
+      "d2",
+      "Kf4",
+      "d1=Q",
+      "Kf5",
+      "Qf3+",
+      "Ke5"
+    ],
+    "source": "computed: pawn sacrifice then promotion, tablebase line",
+    "conceptHint": "Sacrifice a pawn to open a lane."
+  },
+  {
+    "id": "ecd-bt-3",
+    "concept": "breakthrough",
+    "lessonIds": [
+      "breakthrough",
+      "push-passed-pawns"
+    ],
+    "fen": "8/8/K7/8/2pp4/k7/2PP4/8 b - - 0 1",
+    "title": "The breakthrough",
+    "explanation": "Black to move and win. c3 gives a pawn away to open a lane: whichever pawn takes it, another of Black's pawns runs through and queens on c1 before White's king can catch it.",
+    "result": "black-wins",
+    "bestMove": "c3",
+    "solution": [
+      "c3",
+      "d3",
+      "Kb2",
+      "Kb5",
+      "Kxc2",
+      "Kc4",
+      "Kd2",
+      "Kxd4",
+      "c2",
+      "Ke4",
+      "c1=Q",
+      "d4"
+    ],
+    "source": "computed: pawn sacrifice then promotion, tablebase line",
+    "conceptHint": "Sacrifice a pawn to open a lane."
+  },
+  {
+    "id": "ecd-bt-4",
+    "concept": "breakthrough",
+    "lessonIds": [
+      "breakthrough",
+      "push-passed-pawns"
+    ],
+    "fen": "8/1K1pp3/8/1k1PP3/8/8/8/8 w - - 0 1",
+    "title": "The breakthrough",
+    "explanation": "White to move and win. d6 gives a pawn away to open a lane: whichever pawn takes it, another of White's pawns runs through and queens on d8 before Black's king can catch it.",
+    "result": "white-wins",
+    "bestMove": "d6",
+    "solution": [
+      "d6",
+      "e6",
+      "Kc7",
+      "Kc4",
+      "Kxd7",
+      "Kd5",
+      "Ke7",
+      "Kxe5",
+      "d7",
+      "Kf5",
+      "d8=Q",
+      "e5"
+    ],
+    "source": "computed: pawn sacrifice then promotion, tablebase line",
+    "conceptHint": "Sacrifice a pawn to open a lane."
+  },
+  {
+    "id": "ecd-bt-5",
+    "concept": "breakthrough",
+    "lessonIds": [
+      "breakthrough",
+      "push-passed-pawns"
+    ],
+    "fen": "8/8/8/K7/2pp4/8/2PP4/k7 b - - 0 1",
+    "title": "The breakthrough",
+    "explanation": "Black to move and win. c3 gives a pawn away to open a lane: whichever pawn takes it, another of Black's pawns runs through and queens on c1 before White's king can catch it.",
+    "result": "black-wins",
+    "bestMove": "c3",
+    "solution": [
+      "c3",
+      "d3",
+      "Kb1",
+      "Kb4",
+      "Kxc2",
+      "Kc4",
+      "Kd2",
+      "Kxd4",
+      "c2",
+      "Ke4",
+      "c1=Q",
+      "d4"
+    ],
+    "source": "computed: pawn sacrifice then promotion, tablebase line",
+    "conceptHint": "Sacrifice a pawn to open a lane."
   }
 ]

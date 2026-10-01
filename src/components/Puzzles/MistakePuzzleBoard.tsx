@@ -3,6 +3,8 @@ import { Chess } from 'chess.js';
 import { ChessBoard } from '../Board/ChessBoard';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useHintSystem } from '../../hooks/useHintSystem';
+import { useWrongTryRefutation, engineLineAnalyser } from '../../hooks/useWrongTryRefutation';
+import { refuteWrongTry } from '../../services/puzzleTeaching';
 import { useSettings } from '../../hooks/useSettings';
 import { voiceService } from '../../services/voiceService';
 import { explainPuzzleMoveGrounded } from '../../services/coachApi';
@@ -141,6 +143,21 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
   const meter = usePuzzleMeter();
   const consumedIdRef = useRef<string | null>(null);
   const [state, setState] = useState<PuzzleState>('loading');
+  const wrongTry = useWrongTryRefutation();
+  const { refute: refuteTry, clear: clearWrongTry, clearArrows: clearWrongArrows } = wrongTry;
+  const puzzleIdRef = useRef(puzzle.id);
+  puzzleIdRef.current = puzzle.id;
+  // WHY THE GAME MOVE FAILED — "You played X — a blunder" used to stop there.
+  // Once the student has found the better move, the same refutation computer
+  // reads THEIR game move as a wrong try: their reply, played out.
+  const [gameMoveWhy, setGameMoveWhy] = useState<string | null>(null);
+  useEffect(() => {
+    if (state !== 'correct') return;
+    const id = puzzle.id;
+    void refuteWrongTry({ fenBefore: puzzle.fen, wrongSan: puzzle.playerMoveSan, analyse: engineLineAnalyser })
+      .then((r) => { if (puzzleIdRef.current === id) setGameMoveWhy(r?.text ?? null); });
+  }, [state, puzzle.id, puzzle.fen, puzzle.playerMoveSan]);
+  useEffect(() => { setGameMoveWhy(null); }, [puzzle.id]);
   const [moveIndex, setMoveIndex] = useState(0);
   const [fen, setFen] = useState(puzzle.fen);
   const [moveCount, setMoveCount] = useState(0);
@@ -303,6 +320,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     setWhyLoading(false);
     hasMadeMistakeRef.current = false;
     wrongAttemptsRef.current = 0;
+    clearWrongTry();
     showMeUsedRef.current = false;
     setWrongAttemptCount(0);
     setReplayIndex(-1);
@@ -626,6 +644,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing') return;
+    clearWrongTry();
 
     const allMoves = movesRef.current;
     if (moveIndex >= allMoves.length) return;
@@ -741,6 +760,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       setState('incorrect');
       voiceService.stop();
       playEncouragement();
+      const puzzleAtTry = puzzle.id;
 
       // Progressive verbal hints based on consecutive wrong attempts
       const attempts = wrongAttemptsRef.current;
@@ -771,16 +791,30 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
         hint = `The key square is ${expectedMove.to}. What can reach it?`;
       }
 
-      setSubtitle(hint);
-      void voiceService.speak(hint);
-
-      setFen(prevFen);
-      setBoardKey((k) => k + 1);
-
-      // Brief feedback then back to playing
-      setTimeout(() => {
+      // REFUTE IT, KEEP THE ANSWER (David 2026-10-01): the wrong move stays
+      // on the board while their reply line is drawn and said; the canned
+      // nudge above is the fallback when nothing is computed.
+      void (async () => {
+        const r = await refuteTry(prevFen, move.san);
+        if (puzzleIdRef.current !== puzzleAtTry) return;
+        if (r) {
+          setSubtitle(r.text);
+          const shownAt = Date.now();
+          await voiceService.speak(r.text).catch(() => undefined);
+          const left = Math.max(0, 1800 + r.text.length * 35 - (Date.now() - shownAt));
+          await new Promise((res) => setTimeout(res, left));
+          if (puzzleIdRef.current !== puzzleAtTry) return;
+        } else {
+          setSubtitle(hint);
+          void voiceService.speak(hint);
+          await new Promise((res) => setTimeout(res, 1500));
+          if (puzzleIdRef.current !== puzzleAtTry) return;
+        }
+        setFen(prevFen);
+        setBoardKey((k) => k + 1);
+        clearWrongArrows();
         setState('playing');
-      }, 1500);
+      })();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- tracked for dedicated audit; intentional dep list.
   }, [state, moveIndex, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints, puzzle.narration, tacticType, skipReplayContext, speakBestMoveWhy]);
@@ -987,7 +1021,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
           showResetButton={false}
           onMove={handleChessBoardMove}
           highlightSquares={lastMoveHighlight}
-          arrows={hintState.arrows.length > 0 ? hintState.arrows : undefined}
+          arrows={wrongTry.arrows.length > 0 ? wrongTry.arrows : hintState.arrows.length > 0 ? hintState.arrows : undefined}
           ghostMove={hintState.ghostMove}
         />
       </div>
@@ -1072,6 +1106,11 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
               Correct!{isMultiMove ? ` You found all ${Math.ceil(totalMoves / 2)} moves.` : ` The best move was ${puzzle.bestMoveSan}.`}
             </span>
           </div>
+          {gameMoveWhy && (
+            <p className="text-xs text-theme-text-muted" data-testid="game-move-why">
+              In the game: {gameMoveWhy}
+            </p>
+          )}
 
           {/* Keep playing (R4) — play the solved position out; the computer
               answers each move. Reuses the coach play loop. */}

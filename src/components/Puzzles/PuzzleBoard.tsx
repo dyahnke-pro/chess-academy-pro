@@ -7,6 +7,7 @@ import { usePieceSound } from '../../hooks/usePieceSound';
 import { useSettings } from '../../hooks/useSettings';
 import { useChessGame } from '../../hooks/useChessGame';
 import { useHintSystem } from '../../hooks/useHintSystem';
+import { useWrongTryRefutation } from '../../hooks/useWrongTryRefutation';
 import { useStruggleDetection } from '../../hooks/useStruggleDetection';
 import { Eye } from 'lucide-react';
 import type { MoveResult } from '../../hooks/useChessGame';
@@ -14,6 +15,7 @@ import { useBoardContext } from '../../hooks/useBoardContext';
 import { voiceService } from '../../services/voiceService';
 import { getWrongMoveHint } from '../../utils/puzzleHints';
 import { recordTacticOutcome } from '../../services/tacticAlertService';
+import { recordPuzzleMiss, type PuzzleMissRecord } from '../../services/puzzleMissService';
 import { usePuzzleMeter } from '../../hooks/usePuzzleMeter';
 import { getTacticTypeFromThemes, getPrimaryThemeLabel } from '../../services/tacticClassifierService';
 import { describeMoveGeometry } from '../../services/groundedAnswer';
@@ -44,6 +46,9 @@ interface PuzzleBoardProps {
   disabled?: boolean;
   /** Maximum wrong attempts before auto-failing the puzzle (default: 2). */
   maxWrongAttempts?: number;
+  /** Which Tactics surface hosts the board — a missed puzzle is recorded
+   *  under it (`recordPuzzleMiss`). REQUIRED so a new host has to answer. */
+  surface: PuzzleMissRecord['surface'];
 }
 
 function parseUciMoves(uci: string): { from: string; to: string; promotion?: string }[] {
@@ -59,6 +64,7 @@ export function PuzzleBoard({
   onComplete,
   disabled = false,
   maxWrongAttempts = 2,
+  surface,
 }: PuzzleBoardProps): JSX.Element {
   const meter = usePuzzleMeter();
   const consumedIdRef = useRef<string | null>(null);
@@ -84,6 +90,10 @@ export function PuzzleBoard({
   // solution"). Distinct from the transient 'incorrect' of a single wrong try.
   const [terminal, setTerminal] = useState(false);
   const conceptSpokenRef = useRef(false);
+  const wrongTry = useWrongTryRefutation();
+  const { refute: refuteTry, clear: clearWrongTry, clearArrows: clearWrongArrows } = wrongTry;
+  const puzzleIdRef = useRef(puzzle.id);
+  puzzleIdRef.current = puzzle.id;
 
   // Determine which color the user plays (opposite of who moves first in the FEN)
   const fenTurn = puzzle.fen.split(' ')[1];
@@ -201,6 +211,7 @@ export function PuzzleBoard({
     setLastMoveHighlight(null);
     setFlashClass('');
     hasMadeMistakeRef.current = false;
+    clearWrongTry();
     wrongAttemptsRef.current = 0;
     hintUsedRef.current = false;
     showedSolutionRef.current = false;
@@ -238,7 +249,7 @@ export function PuzzleBoard({
       voiceService.stop();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [puzzle, playMoveSound, resetHints, resetStruggle]);
+  }, [puzzle, playMoveSound, resetHints, resetStruggle, clearWrongTry]);
 
   // TEACH THE CONCEPT when the puzzle resolves (solved or shown) — the computed
   // explanation of WHY the solution works, not just the grounded geometry of
@@ -270,6 +281,18 @@ export function PuzzleBoard({
     if (consumedIdRef.current !== puzzle.id) {
       consumedIdRef.current = puzzle.id;
       meter.consume();
+      // DUAL-USE (David 2026-10-01): a puzzle that ends unsolved is a miss of
+      // its motif — recorded once, as weaker evidence than a game miss.
+      if (!correct) {
+        let solveFen = puzzle.fen;
+        try {
+          const c = new Chess(puzzle.fen);
+          const first = movesRef.current[0];
+          if (first) c.move({ from: first.from, to: first.to, promotion: first.promotion });
+          solveFen = c.fen();
+        } catch { /* the setup FEN is the honest fallback */ }
+        void recordPuzzleMiss({ puzzleId: puzzle.id, themes: puzzle.themes, fen: solveFen, rating: puzzle.rating, surface });
+      }
     }
     onComplete({
       correct,
@@ -278,10 +301,11 @@ export function PuzzleBoard({
       showedSolution: showedSolutionRef.current,
       solveTimeMs: Date.now() - solveStartRef.current,
     });
-  }, [onComplete, tacticType, subtitle, puzzle.id, meter]);
+  }, [onComplete, tacticType, subtitle, puzzle.id, puzzle.fen, puzzle.themes, puzzle.rating, surface, meter]);
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing' || disabled) return;
+    clearWrongTry();
 
     const allMoves = movesRef.current;
     if (moveIndex >= allMoves.length) return;
@@ -359,11 +383,12 @@ export function PuzzleBoard({
         }, 400);
       }
     } else {
-      // Wrong move — undo, flash red, play error sound
+      // Wrong move — flash red, play error sound, and REFUTE it (David
+      // 2026-10-01: "Refute it, keep the answer"): the wrong move stays on the
+      // board while their reply line is drawn and said, then it is taken back.
       hasMadeMistakeRef.current = true;
       wrongAttemptsRef.current += 1;
       setWrongAttemptCount((c) => c + 1);
-      game.undoMove();
       triggerFlash('board-flash-error');
       playErrorPing();
 
@@ -374,25 +399,31 @@ export function PuzzleBoard({
 
       setState('incorrect');
       voiceService.stop();
-
-      // Progressive voice hint based on attempt count and puzzle themes
-      if (settings.voiceEnabled) {
-        const hint = getWrongMoveHint(
-          wrongAttemptsRef.current,
-          puzzle.themes,
-          expected.from,
-          expected.to,
-          new Chess(game.fen),
-        );
-        void voiceService.speak(hint);
-      }
-
-      // Brief feedback then back to playing — user can keep trying
-      setTimeout(() => {
+      const attempt = wrongAttemptsRef.current;
+      const puzzleAtTry = puzzle.id;
+      void (async () => {
+        const r = await refuteTry(fenBeforeAttempt, move.san);
+        if (puzzleIdRef.current !== puzzleAtTry) return;
+        const shownAt = Date.now();
+        if (r) {
+          if (settings.voiceEnabled) await voiceService.speak(r.text).catch(() => undefined);
+          // Long enough to read when the voice is off or quick.
+          const left = Math.max(0, 1800 + r.text.length * 35 - (Date.now() - shownAt));
+          await new Promise((res) => setTimeout(res, left));
+        } else if (settings.voiceEnabled) {
+          // Nothing computed: the progressive nudge, as before.
+          game.undoMove();
+          void voiceService.speak(getWrongMoveHint(attempt, puzzle.themes, expected.from, expected.to, new Chess(game.fen)));
+          setTimeout(() => setState('playing'), 1000);
+          return;
+        }
+        if (puzzleIdRef.current !== puzzleAtTry) return;
+        game.undoMove();
+        clearWrongArrows();
         setState('playing');
-      }, 1000);
+      })();
     }
-  }, [state, disabled, moveIndex, completePuzzle, playMoveSound, playErrorPing, playSuccessChime, resetHints, triggerFlash, maxWrongAttempts, settings.voiceEnabled, puzzle.themes, puzzle.id, tacticType, game]);
+  }, [state, disabled, moveIndex, completePuzzle, playMoveSound, playErrorPing, playSuccessChime, resetHints, triggerFlash, maxWrongAttempts, settings.voiceEnabled, puzzle.themes, puzzle.id, tacticType, game, refuteTry, clearWrongTry, clearWrongArrows]);
 
   // With ControlledChessBoard, the move is already applied to the game object
   const handleChessBoardMove = handleMove;
@@ -458,10 +489,18 @@ export function PuzzleBoard({
           showResetButton={false}
           onMove={handleChessBoardMove}
           highlightSquares={lastMoveHighlight}
-          arrows={hintState.arrows.length > 0 ? hintState.arrows : undefined}
+          arrows={wrongTry.arrows.length > 0 ? wrongTry.arrows : hintState.arrows.length > 0 ? hintState.arrows : undefined}
           ghostMove={hintState.ghostMove}
         />
       </div>
+
+      {/* The wrong try, refuted — on screen as well as spoken, so a student
+          with voice off sees why the move fails. */}
+      {wrongTry.text && (
+        <p className="text-sm text-red-400 px-1" data-testid="wrong-try-refutation">
+          {wrongTry.text}
+        </p>
+      )}
 
       {/* Coaching subtitle from struggle detection */}
       {subtitle && state === 'playing' && (

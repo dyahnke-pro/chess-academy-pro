@@ -8,6 +8,7 @@ import {
   calculateRatingDelta,
   applyTimeBonus,
   THEME_MAP,
+  recordAttempt,
 } from '../../services/puzzleService';
 import { getPuzzleIdsByOpening } from '../../services/puzzlesByOpening';
 import { resolveReachState } from '../../services/reachRating';
@@ -238,6 +239,10 @@ export function TacticDrillPage(): JSX.Element {
       void db.profiles.update(activeProfile.id, { puzzleRating: newPuzzleRating });
     }
 
+    // Saved like every other puzzle surface, so My Profile's theme skills see
+    // themed and Random Mix drills too (they never did — only the rating moved).
+    void recordAttempt(puzzle.id, outcome.correct, activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING, outcome.correct ? 'good' : 'again').catch(() => null);
+
     resultsRef.current.push({
       puzzleRating: puzzle.rating,
       correct: outcome.correct,
@@ -261,9 +266,10 @@ export function TacticDrillPage(): JSX.Element {
     try {
       // POSITION first — exact and rare. A puzzle that happens to sit on a
       // taught line gets the note written about that very board.
-      // The solver is the side to move on the drill's board — that is whose
-      // seat a second-person note has to be written from.
-      const source = teachingSourceForBoard([], puzzle.fen, openingFilter, puzzle.fen.split(' ')[1] === 'b' ? 'black' : 'white');
+      // The solver is NOT the side to move in a Lichess puzzle FEN: that side
+      // plays the setup move first (PuzzleBoard flips it the same way). A
+      // second-person note has to be written from the SOLVER's seat.
+      const source = teachingSourceForBoard([], puzzle.fen, openingFilter, puzzle.fen.split(' ')[1] === 'w' ? 'black' : 'white');
       const exact = source ? spokenBeatText(source.note).trim() : '';
       let note = source && exact ? generalizedTeaching(source.origin, exact) : '';
 
@@ -400,6 +406,7 @@ export function TacticDrillPage(): JSX.Element {
             key={currentPuzzle.id}
             puzzle={currentPuzzle}
             onComplete={handlePuzzleComplete}
+            surface="drill"
           />
 
           {/* Navigation arrows */}

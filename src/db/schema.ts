@@ -27,6 +27,7 @@ import type {
 import type { WalkthroughTree } from '../types/walkthroughTree';
 import type { MasterPlayResult } from '../services/masterPlayTypes';
 import type { CapabilityEvidenceRecord } from '../services/capabilityEvidence';
+import type { PuzzleMissRecord } from '../services/puzzleMissService';
 import type { DataFileRecord } from '../services/dataFile';
 
 /** A cached LLM-generated opening walkthrough tree. Once an opening
@@ -201,6 +202,7 @@ class ChessAcademyDB extends Dexie {
   positionEvals!: EntityTable<PositionEvalRecord, 'fen'>;
   capabilityEvidence!: EntityTable<CapabilityEvidenceRecord, 'id'>;
   dataFiles!: EntityTable<DataFileRecord, 'path'>;
+  puzzleMisses!: EntityTable<PuzzleMissRecord, 'id'>;
 
   constructor() {
     super('ChessAcademyDB');
@@ -964,6 +966,14 @@ class ChessAcademyDB extends Dexie {
     // `services/dataFile.ts` downloads a file once and keeps it here. Additive
     // store keyed by the `/data/...` path, no migration.
     this.version(37).stores({ dataFiles: 'path' });
+
+    // v38 — Lichess puzzle MISSES reach the student model (David 2026-10-01:
+    // "Wire all of the computers in to tactics" → misses count "as weaker
+    // evidence"). One small row per puzzle that ends unsolved; the weakness
+    // spine reads it instead of scanning the ~15k-row puzzles table. Additive
+    // store, no migration — existing installs start with no rows, which is
+    // the truth (nothing recorded them before).
+    this.version(38).stores({ puzzleMisses: 'id, tacticType, recordedAt, puzzleId' });
   }
 }
 

@@ -178,3 +178,28 @@ export function kingCourse(fen: string, color: C): { target: string; text: strin
   if (dist(target) <= 1) return null;
   return { target, text: `Chart a course: your king's job is the pawn on ${target} — no pawn of theirs can ever defend it. In a pawn ending the king heads for the weak pawn, not the centre.` };
 }
+
+/**
+ * THE BREAKTHROUGH (iyl, his whole breakthroughs video; the platform's
+ * Breakthrough lesson). Read off a best line (SAN, from `fen`): the side to
+ * move's first move is a PAWN SACRIFICE — a pawn to a square an enemy pawn
+ * attacks — and one of that side's pawns promotes within the next ten plies.
+ * Kings and pawns only. Null when the line is not that.
+ */
+export function findBreakthrough(fen: string, line: readonly string[]): { sac: string; queens: string } | null {
+  const b = read(fen);
+  if (!b || b.pieces.w + b.pieces.b !== 0) return null;
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return null; }
+  const side = c.turn();
+  let first;
+  try { first = c.move(line[0]); } catch { return null; }
+  if (first.piece !== 'p') return null;
+  if (!c.moves({ verbose: true }).some((m) => m.piece === 'p' && m.to === first.to && !!m.captured)) return null;
+  for (let i = 1; i < line.length && i < 12; i += 1) {
+    let m;
+    try { m = c.move(line[i]); } catch { return null; }
+    if (m.color === side && m.promotion) return { sac: first.san, queens: m.to };
+  }
+  return null;
+}

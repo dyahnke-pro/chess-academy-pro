@@ -42,7 +42,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/threatOut.test.ts:31`
 - `src/services/threatOut.test.ts:37`
 - `src/services/threatOut.test.ts:45`
-- `src/services/weaknessSpine.ts:218`
+- `src/services/weaknessSpine.ts:219`
 
 ## Tests
 

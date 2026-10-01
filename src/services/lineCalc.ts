@@ -19,7 +19,7 @@ export interface LineWin { net: number; what: string; sans: string[]; plies: Lin
  * is given the line must start with it. Null unless `side` ends the line up at
  * least a pawn, with at least two plies to show.
  */
-export function lineWins(fen: string, lineUci: readonly string[], side: 'w' | 'b', firstSan?: string): LineWin | null {
+export function lineWins(fen: string, lineUci: readonly string[], side: 'w' | 'b', firstSan?: string, opts: { minPlies?: number } = {}): LineWin | null {
   if (!lineUci.length) return null;
   const bare = (s: string): string => s.replace(/[+#]$/, '');
   const c = new Chess(fen);
@@ -54,7 +54,9 @@ export function lineWins(fen: string, lineUci: readonly string[], side: 'w' | 'b
       if (!nextChecks) return null;
     }
   } catch { return null; }
-  if (settle < 1) return null;
+  // Two plies by default (a line to SHOW); a refutation may settle on the
+  // very first capture (`minPlies: 1` — puzzleTeaching: "Kd1? Rxa1+").
+  if (settle < (opts.minPlies ?? 2) - 1) return null;
   const shown = plies.slice(0, settle + 1);
   return {
     net,
@@ -111,7 +113,7 @@ function around(sq: string): string[] {
  * no check and captures nothing, `taken` names the squares beside their king it
  * covers that were free before. Null when the line does not mate.
  */
-export function mateLine(fen: string, lineUci: readonly string[], side: 'w' | 'b', firstSan?: string): MateLine | null {
+export function mateLine(fen: string, lineUci: readonly string[], side: 'w' | 'b', firstSan?: string, opts: { minPlies?: number } = {}): MateLine | null {
   if (!lineUci.length) return null;
   const bare = (s: string): string => s.replace(/[+#]$/, '');
   const c = new Chess(fen);
@@ -143,7 +145,7 @@ export function mateLine(fen: string, lineUci: readonly string[], side: 'w' | 'b
       if (c.isCheckmate()) { if (m.color !== side) return null; mated = true; }
     }
   } catch { return null; }
-  if (!mated || !first || plies.length < 3) return null;
+  if (!mated || !first || plies.length < (opts.minPlies ?? 3)) return null;
   const sans = plies.map((p) => `${p.color === 'b' ? '…' : ''}${p.san}`);
   const quiet = !first.check && !first.capture;
   const mateSan = sans[sans.length - 1].replace(/[+#]$/, '');
