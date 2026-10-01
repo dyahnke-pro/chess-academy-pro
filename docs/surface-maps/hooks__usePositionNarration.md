@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**368 lines · 5 exports · 6 importers · 5 tests · 1 audits**
+**368 lines · 5 exports · 6 importers · 6 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -42,8 +42,8 @@
 ### `usePositionNarration` (function) — 16 call sites
 - `src/components/Coach/CoachGamePage.tsx:1806`
 - `src/components/Coach/CoachTeachPage.tsx:7375`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:585`
-- `src/components/Puzzles/PuzzleBoard.tsx:208`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:615`
+- `src/components/Puzzles/PuzzleBoard.tsx:215`
 - `src/hooks/usePositionNarration.degrade.test.ts:85`
 - `src/hooks/usePositionNarration.test.ts:126`
 - `src/hooks/usePositionNarration.test.ts:133`
@@ -60,6 +60,7 @@
 ## Tests
 
 - `src/components/Puzzles/PuzzleBoard.evidence.test.tsx`
+- `src/components/Puzzles/PuzzleBoard.reveal.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.test.tsx`
 - `src/hooks/usePositionNarration.corpus.test.ts`
 - `src/hooks/usePositionNarration.degrade.test.ts`

@@ -20,7 +20,7 @@
 
 ### `solveLengthOf` (function) — 5 call sites
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:204`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:320`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:350`
 - `src/services/mistakeLineGrowth.test.ts:15`
 - `src/services/mistakePuzzleService.ts:1402`
 - `src/services/mistakePuzzleService.ts:1455`
@@ -30,7 +30,7 @@
 
 ### `pliesFor` (function) — 5 call sites
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:204`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:320`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:350`
 - `src/services/mistakeLineGrowth.test.ts:17`
 - `src/services/mistakeLineGrowth.test.ts:18`
 - `src/services/mistakeLineGrowth.test.ts:19`

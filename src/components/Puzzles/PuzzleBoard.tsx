@@ -60,6 +60,12 @@ interface PuzzleBoardProps {
   streak?: number;
   /** A surface's own score row (deep-run) above the pips. */
   headerExtra?: ReactNode;
+  /** When the last allowed try is wrong, PLAY THE SOLUTION OUT on the board
+   *  (after the refutation is read) instead of leaving the student staring at
+   *  a dead board — a miss still teaches the line (David 2026-10-01: "make
+   *  sure we are not slacking on the teaching aspect"). Deep Run, where one
+   *  miss ends the run. */
+  revealOnFail?: boolean;
 }
 
 function parseUciMoves(uci: string): { from: string; to: string; promotion?: string }[] {
@@ -77,6 +83,7 @@ export function PuzzleBoard({
   maxWrongAttempts = 2,
   streak,
   headerExtra,
+  revealOnFail = false,
 }: PuzzleBoardProps): JSX.Element {
   // The line's depth, counted (never a theme tag), and how far the student is.
   const totalMoves = useMemo(() => Math.max(1, solverMoves(puzzle)), [puzzle]);
@@ -477,8 +484,27 @@ export function PuzzleBoard({
       reward({ kind: 'miss' });
 
       // Record the failure at max wrong attempts, but don't lock the board
+      const revealing = revealOnFail && wrongAttemptsRef.current === maxWrongAttempts;
       if (wrongAttemptsRef.current === maxWrongAttempts) {
         completePuzzle(false);
+        if (revealing) {
+          // Teach the line: after the wrong try is undone and its refutation
+          // read, play every remaining solution move on the board.
+          const remaining = movesRef.current.slice(moveIndex);
+          setTimeout(() => {
+            setState('loading');
+            remaining.forEach((m, i) => {
+              setTimeout(() => {
+                const r = game.makeMove(m.from, m.to, m.promotion);
+                if (r) {
+                  playMoveSound(r.san);
+                  setLastMoveHighlight({ from: m.from, to: m.to });
+                }
+                if (i === remaining.length - 1) setState('incorrect');
+              }, 900 * (i + 1));
+            });
+          }, 2600);
+        }
       }
 
       setState('incorrect');
@@ -512,12 +538,15 @@ export function PuzzleBoard({
         if (settings.voiceEnabled) void voiceService.speak(line);
       });
 
-      // Brief feedback then back to playing — user can keep trying
-      setTimeout(() => {
-        setState('playing');
-      }, 1000);
+      // Brief feedback then back to playing — user can keep trying (unless the
+      // solution is about to be played out for them).
+      if (!revealing) {
+        setTimeout(() => {
+          setState('playing');
+        }, 1000);
+      }
     }
-  }, [state, disabled, moveIndex, pipsDone, seed, completePuzzle, playMoveSound, resetHints, triggerFlash, maxWrongAttempts, settings.voiceEnabled, puzzle.themes, puzzle.id, tacticType, game]);
+  }, [state, disabled, moveIndex, pipsDone, seed, revealOnFail, completePuzzle, playMoveSound, resetHints, triggerFlash, maxWrongAttempts, settings.voiceEnabled, puzzle.themes, puzzle.id, tacticType, game]);
 
   // With ControlledChessBoard, the move is already applied to the game object
   const handleChessBoardMove = handleMove;

@@ -283,6 +283,36 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   const outroTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const completionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // THE CONTINUATION IS STILL TAUGHT (David 2026-10-01: "make sure we are
+  // not slacking on the teaching aspect"). A growing puzzle asks for only
+  // `solveLength` moves today, but the engine line runs on — so after the
+  // solve the board plays the rest out: you see how it continues before the
+  // puzzle grows to ask you for it.
+  const [continuing, setContinuing] = useState(false);
+  const continuedForRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (state !== 'correct' || continuedForRef.current === puzzle.id) return;
+    continuedForRef.current = puzzle.id;
+    const full = parseUciMoves(puzzle.moves);
+    const rest = full.slice(movesRef.current.length);
+    if (rest.length === 0) return;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    timers.push(setTimeout(() => setContinuing(true), 1200));
+    rest.forEach((m, i) => {
+      timers.push(setTimeout(() => {
+        try {
+          const r = chessRef.current.move({ from: m.from, to: m.to, promotion: m.promotion });
+          playMoveSound(r.san);
+          setLastMoveHighlight({ from: m.from, to: m.to });
+          setFen(chessRef.current.fen());
+          setBoardKey((k) => k + 1);
+        } catch { /* a stale line — stop where it stops */ }
+      }, 1200 + 1000 * (i + 1)));
+    });
+    return () => { for (const t of timers) clearTimeout(t); };
+  }, [state, puzzle.id, puzzle.moves, playMoveSound]);
+  useEffect(() => { setContinuing(false); }, [puzzle.id]);
+
   const badge = CLASSIFICATION_BADGE[puzzle.classification];
   const totalMoves = movesRef.current.length;
   const isMultiMove = totalMoves > 1;
@@ -1126,6 +1156,11 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
               Correct!{isMultiMove ? ` You found all ${Math.ceil(totalMoves / 2)} moves.` : ` The best move was ${puzzle.bestMoveSan}.`}
             </span>
           </div>
+          {continuing && (
+            <p className="text-xs text-cyan-300" data-testid="mistake-continuation">
+              Here&apos;s how the line continues — next time you&apos;ll be asked to find more of it.
+            </p>
+          )}
 
           {/* Keep playing (R4) — play the solved position out; the computer
               answers each move. Reuses the coach play loop. */}

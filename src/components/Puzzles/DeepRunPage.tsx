@@ -217,6 +217,7 @@ export function DeepRunPage(): JSX.Element {
               puzzle={puzzle}
               onComplete={handleComplete}
               maxWrongAttempts={1}
+              revealOnFail
               disabled={phase !== 'running'}
               streak={run.solved}
               headerExtra={scoreRow}

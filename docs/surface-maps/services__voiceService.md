@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2904 lines · 16 exports · 103 importers · 83 tests · 23 audits**
+**2904 lines · 16 exports · 103 importers · 84 tests · 23 audits**
 
 ## Locked rules that govern this surface
 
@@ -320,6 +320,7 @@
 - `src/components/Puzzles/MistakePuzzleBoard.capabilityRow.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.evidence.test.tsx`
+- `src/components/Puzzles/PuzzleBoard.reveal.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.test.tsx`
 - `src/components/Tactics/TacticSetupBoard.test.tsx`
 - `src/hooks/hintDialTally.test.ts`
