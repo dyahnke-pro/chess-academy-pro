@@ -71,7 +71,7 @@ describe('MistakePuzzleBoard writes capability evidence at the solve', () => {
 
   it('HELD — a clean first-try solve records cpLoss 0, unprompted, origin drill', async () => {
     const puzzle = buildMistakePuzzle();
-    render(<MistakePuzzleBoard puzzle={puzzle} onComplete={vi.fn()} skipReplayContext />);
+    render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} skipReplayContext />);
     await screen.findByTestId('mock-board');
     expect(latestOnMove).not.toBeNull();
 
@@ -89,9 +89,32 @@ describe('MistakePuzzleBoard writes capability evidence at the solve', () => {
     }));
   });
 
+  // Hand walk 2026-10-01: the result rode the "Next puzzle" tap, so solving
+  // and backing out recorded nothing. It must land at the solve, no tap.
+  it('the solve itself records — onResolved fires without Next, once', async () => {
+    const onResolved = vi.fn();
+    const onComplete = vi.fn();
+    render(<MistakePuzzleBoard puzzle={buildMistakePuzzle()} onResolved={onResolved} onComplete={onComplete} skipReplayContext />);
+    await screen.findByTestId('mock-board');
+    await solveCleanly();
+    expect(onResolved).toHaveBeenCalledTimes(1);
+    expect(onResolved).toHaveBeenCalledWith(true, expect.any(Number));
+    expect(onComplete).not.toHaveBeenCalled();
+  });
+
+  it('a wrong first try resolves as a miss', async () => {
+    const onResolved = vi.fn();
+    render(<MistakePuzzleBoard puzzle={buildMistakePuzzle({ cpLoss: 150 })} onResolved={onResolved} onComplete={vi.fn()} skipReplayContext />);
+    await screen.findByTestId('mock-board');
+    await act(async () => { latestOnMove!(mv('a2', 'a3', 'a3')); });
+    await act(async () => { await sleep(1700); });
+    await solveCleanly();
+    expect(onResolved).toHaveBeenCalledWith(false, expect.any(Number));
+  });
+
   it('BROKEN — a wrong first answer records the measured cost of the slip, still unprompted', async () => {
     const puzzle = buildMistakePuzzle({ cpLoss: 150 });
-    render(<MistakePuzzleBoard puzzle={puzzle} onComplete={vi.fn()} skipReplayContext />);
+    render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} skipReplayContext />);
     await screen.findByTestId('mock-board');
 
     await act(async () => { latestOnMove!(mv('a2', 'a3', 'a3')); });   // wrong
@@ -108,7 +131,7 @@ describe('MistakePuzzleBoard writes capability evidence at the solve', () => {
 
   it('PROMPTED — [show me] before solving marks the record prompted (grey, not green)', async () => {
     const puzzle = buildMistakePuzzle();
-    render(<MistakePuzzleBoard puzzle={puzzle} onComplete={vi.fn()} skipReplayContext />);
+    render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} skipReplayContext />);
     await screen.findByTestId('mock-board');
 
     const hintArea = await screen.findByTestId('puzzle-hint-area');
@@ -126,7 +149,7 @@ describe('MistakePuzzleBoard writes capability evidence at the solve', () => {
 
   it('a data-corrupt puzzle (no moves) records NOTHING — the student never answered', async () => {
     const puzzle = buildMistakePuzzle({ moves: '' });
-    render(<MistakePuzzleBoard puzzle={puzzle} onComplete={vi.fn()} skipReplayContext />);
+    render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} skipReplayContext />);
     await act(async () => { await sleep(50); });
     expect(recordCapabilityEvidence).not.toHaveBeenCalled();
   });

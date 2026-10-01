@@ -59,7 +59,7 @@ describe('a solved drill lands a HELD row in the capability store', () => {
       cpLoss: 120,
       narration: { intro: '', moveNarrations: [], outro: '', conceptHint: '' },
     });
-    render(<MistakePuzzleBoard puzzle={puzzle} onComplete={vi.fn()} skipReplayContext />);
+    render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} skipReplayContext />);
     await screen.findByTestId('mock-board');
 
     await act(async () => {

@@ -11,7 +11,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Brain, Trophy } from 'lucide-react';
 import { MistakePuzzleBoard } from './MistakePuzzleBoard';
-import { getMisconceptionDrillPuzzles, ensureSequenceSolution } from '../../services/mistakePuzzleService';
+import { getMisconceptionDrillPuzzles, ensureSequenceSolution, gradeMistakePuzzle } from '../../services/mistakePuzzleService';
 import { recordTagDrillResult } from '../../services/misconceptionService';
 import { logAppAudit } from '../../services/appAuditor';
 import type { MistakePuzzle } from '../../types';
@@ -66,7 +66,20 @@ export function WeaknessTagDrillPage(): JSX.Element {
     setPhase('summary');
   }, [tag]);
 
-  const handleComplete = useCallback((wasCorrect: boolean): void => {
+  // Record the moment the puzzle resolves. This drill never graded at all —
+  // its results only bumped a session counter, so a weakness drilled here never
+  // reached SRS or the spine (hand walk 2026-10-01).
+  const resolvedRef = useRef<{ correct: boolean } | null>(null);
+  const handleResolved = useCallback((wasCorrect: boolean, solveTimeMs: number): void => {
+    const p = puzzles.at(index);
+    if (!p) return;
+    resolvedRef.current = { correct: wasCorrect };
+    void gradeMistakePuzzle(p.id, wasCorrect ? 'good' : 'again', wasCorrect, solveTimeMs);
+  }, [puzzles, index]);
+
+  const handleComplete = useCallback((): void => {
+    const wasCorrect = resolvedRef.current?.correct ?? false;
+    resolvedRef.current = null;
     const nextCorrect = correct + (wasCorrect ? 1 : 0);
     setCorrect(nextCorrect);
     if (index + 1 >= puzzles.length) {
@@ -191,7 +204,8 @@ export function WeaknessTagDrillPage(): JSX.Element {
         <MistakePuzzleBoard
           key={puzzle.id}
           puzzle={puzzle}
-          onComplete={(wasCorrect) => handleComplete(wasCorrect)}
+          onResolved={handleResolved}
+          onComplete={handleComplete}
         />
       )}
     </div>

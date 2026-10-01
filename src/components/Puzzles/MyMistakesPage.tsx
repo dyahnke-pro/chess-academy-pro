@@ -222,13 +222,15 @@ export function MyMistakesPage(): JSX.Element {
     void loadData();
   }, [activePuzzle, loadData]);
 
-  const handlePuzzleComplete = useCallback((correct: boolean, solveTimeMs?: number): void => {
+  const handlePuzzleResolved = useCallback((correct: boolean, solveTimeMs: number): void => {
     if (!activePuzzle) return;
-    void gradeMistakePuzzle(activePuzzle.id, correct ? 'good' : 'again', correct, solveTimeMs).then(() => {
-      setActivePuzzle(null);
-      void loadData();
-    });
-  }, [activePuzzle, loadData]);
+    void gradeMistakePuzzle(activePuzzle.id, correct ? 'good' : 'again', correct, solveTimeMs);
+  }, [activePuzzle]);
+
+  const handlePuzzleComplete = useCallback((): void => {
+    setActivePuzzle(null);
+    void loadData();
+  }, [loadData]);
 
   const handleReanalyze = useCallback(async () => {
     setAnalyzing(true);
@@ -281,6 +283,7 @@ export function MyMistakesPage(): JSX.Element {
         </button>
         <MistakePuzzleBoard
           puzzle={activePuzzle}
+          onResolved={handlePuzzleResolved}
           onComplete={handlePuzzleComplete}
         />
       </div>

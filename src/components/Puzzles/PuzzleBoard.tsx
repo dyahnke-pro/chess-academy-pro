@@ -82,8 +82,14 @@ export function PuzzleBoard({
   // TEACH the concept behind the solution (David 2026-09-14: "not just a hint
   // with an arrow, but an explanation of the concepts to understand the
   // solution"). Distinct from the transient 'incorrect' of a single wrong try.
-  const [terminal, setTerminal] = useState(false);
-  const conceptSpokenRef = useRef(false);
+  // Resolution belongs to ONE puzzle: the id that was resolved, never a bare
+  // boolean. A boolean outlived the puzzle by a render on every swap, so the
+  // concept effect saw "resolved, not yet spoken" against the NEXT puzzle and
+  // read its whole solution aloud before the student moved (hand walk
+  // 2026-10-01). Keyed by id, a stale resolution cannot match a new puzzle.
+  const [terminalId, setTerminalId] = useState<string | null>(null);
+  const terminal = terminalId === puzzle.id;
+  const conceptSpokenRef = useRef<string | null>(null);
 
   // Determine which color the user plays (opposite of who moves first in the FEN)
   const fenTurn = puzzle.fen.split(' ')[1];
@@ -204,8 +210,7 @@ export function PuzzleBoard({
     wrongAttemptsRef.current = 0;
     hintUsedRef.current = false;
     showedSolutionRef.current = false;
-    setTerminal(false);
-    conceptSpokenRef.current = false;
+    setTerminalId(null);
     setState('loading');
     resetHints();
     setSubtitle('');
@@ -247,16 +252,16 @@ export function PuzzleBoard({
   // computable, and to silence when neither is (voice rule #5, no filler).
   // Verbosity-gated via voiceService.speak (speakInternal honours the setting).
   useEffect(() => {
-    if (!settings.voiceEnabled || !terminal || conceptSpokenRef.current) return;
-    conceptSpokenRef.current = true;
+    if (!settings.voiceEnabled || !terminal || conceptSpokenRef.current === puzzle.id) return;
+    conceptSpokenRef.current = puzzle.id;
     const line = conceptExplanation?.spoken
       ?? (state === 'correct' && solveGeometry ? `That ${solveGeometry}.` : null);
     if (line) void voiceService.speak(line);
-  }, [terminal, state, settings.voiceEnabled, solveGeometry, conceptExplanation]);
+  }, [terminal, puzzle.id, state, settings.voiceEnabled, solveGeometry, conceptExplanation]);
 
   // Complete the puzzle with outcome metadata
   const completePuzzle = useCallback((correct: boolean): void => {
-    setTerminal(true); // resolved — teach the concept (render + speak below)
+    setTerminalId(puzzle.id); // resolved — teach the concept (render + speak below)
     if (tacticType && tacticType !== 'tactical_sequence') {
       recordTacticOutcome({
         tacticType,

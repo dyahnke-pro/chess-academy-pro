@@ -183,9 +183,26 @@ export function TacticCreatePage(): JSX.Element {
     setPhase('solving');
   }, []);
 
-  const handleComplete = useCallback(async (correct: boolean, solveTimeMs?: number): Promise<void> => {
+  // Record at resolution (grade + rating); the rest of the flow (feedback,
+  // narration, advance) runs on Next. A solve the student walked away from
+  // used to record nothing (hand walk 2026-10-01).
+  const resolvedRef = useRef<boolean | null>(null);
+  const handleResolved = useCallback(async (correct: boolean, solveTimeMs: number): Promise<void> => {
     const item = queue.at(currentIndex);
     if (!item) return;
+    resolvedRef.current = correct;
+    await gradeMistakePuzzle(item.originalMistake.id, correct ? 'good' : 'again', correct, solveTimeMs);
+    if (activeProfile) {
+      const newRating = updatePuzzleRating(activeProfile.puzzleRating, item.puzzle.rating, correct);
+      setActiveProfile({ ...activeProfile, puzzleRating: newRating });
+    }
+  }, [queue, currentIndex, activeProfile, setActiveProfile]);
+
+  const handleComplete = useCallback(async (): Promise<void> => {
+    const item = queue.at(currentIndex);
+    if (!item) return;
+    const correct = resolvedRef.current ?? false;
+    resolvedRef.current = null;
 
     const newStreak = correct ? consecutiveSolves + 1 : 0;
     setConsecutiveSolves(newStreak);
@@ -214,16 +231,6 @@ export function TacticCreatePage(): JSX.Element {
       void voiceService.speak(msg);
     }
 
-    // Grade the puzzle
-    const grade = correct ? 'good' : 'again';
-    await gradeMistakePuzzle(item.originalMistake.id, grade, correct, solveTimeMs);
-
-    // Update puzzle rating
-    if (activeProfile) {
-      const newRating = updatePuzzleRating(activeProfile.puzzleRating, item.puzzle.rating, correct);
-      setActiveProfile({ ...activeProfile, puzzleRating: newRating });
-    }
-
     // Show feedback briefly, then advance
     setPhase('feedback');
     setTimeout(() => {
@@ -235,7 +242,7 @@ export function TacticCreatePage(): JSX.Element {
         prepareReplay(queue[nextIndex]);
       }
     }, 2500);
-  }, [queue, currentIndex, consecutiveSolves, activeProfile, setActiveProfile]);
+  }, [queue, currentIndex, consecutiveSolves]);
 
   const handlePrev = useCallback((): void => {
     if (currentIndex <= 0) return;
@@ -514,7 +521,8 @@ export function TacticCreatePage(): JSX.Element {
             {/* Board */}
             <MistakePuzzleBoard
               puzzle={currentItem.originalMistake}
-              onComplete={(correct, solveTimeMs) => void handleComplete(correct, solveTimeMs)}
+              onResolved={(correct, solveTimeMs) => void handleResolved(correct, solveTimeMs)}
+              onComplete={() => void handleComplete()}
             />
 
             {/* Navigation buttons */}

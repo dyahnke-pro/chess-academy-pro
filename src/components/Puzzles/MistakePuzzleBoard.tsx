@@ -91,13 +91,15 @@ function extractReplayMoves(pgn: string, _mistakeFen: string, playerColor: 'whit
 
 interface MistakePuzzleBoardProps {
   puzzle: MistakePuzzle;
-  /** Called when the student finishes the puzzle (either correct
-   *  or after revealing). solveTimeMs is the elapsed playing time
-   *  in ms — hosts pipe it to gradeMistakePuzzle for /weaknesses
-   *  aggregation. Optional so legacy callers that don't care still
-   *  work; the board always tracks it regardless of the visible-
-   *  clock toggle (per David's 2026-05-19 background-mode design). */
-  onComplete: (correct: boolean, solveTimeMs?: number) => void;
+  /** Fires ONCE per puzzle the moment it resolves — solved, or failed on bad
+   *  data — so the host can record it. REQUIRED: the result used to ride the
+   *  "Next puzzle" tap, so a student who solved and backed out recorded
+   *  nothing, and one host (the tag drill) never recorded at all (hand walk
+   *  2026-10-01). `correct` is false when any wrong move came first.
+   *  solveTimeMs is the elapsed playing time. */
+  onResolved: (correct: boolean, solveTimeMs: number) => void;
+  /** The student is done with this puzzle — advance. Records nothing. */
+  onComplete: () => void;
   /** Skip the internal game replay — use when the caller already showed context */
   skipReplayContext?: boolean;
 }
@@ -137,10 +139,16 @@ function parseUciMoves(uci: string): { from: string; to: string; promotion?: str
   }));
 }
 
-export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = false }: MistakePuzzleBoardProps): JSX.Element {
+export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayContext = false }: MistakePuzzleBoardProps): JSX.Element {
   const meter = usePuzzleMeter();
   const consumedIdRef = useRef<string | null>(null);
   const [state, setState] = useState<PuzzleState>('loading');
+  const resolvedForRef = useRef<string | null>(null);
+  const resolve = useCallback((correct: boolean, solveTimeMs: number): void => {
+    if (resolvedForRef.current === puzzle.id) return;
+    resolvedForRef.current = puzzle.id;
+    onResolved(correct, solveTimeMs);
+  }, [puzzle.id, onResolved]);
   const [moveIndex, setMoveIndex] = useState(0);
   const [fen, setFen] = useState(puzzle.fen);
   const [moveCount, setMoveCount] = useState(0);
@@ -285,7 +293,8 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     if (movesRef.current.length === 0) {
       // No moves in puzzle — skip it. No elapsed value to report since
       // the student never had a chance to play.
-      onComplete(false, 0);
+      // No moves → the student never answered; record nothing, just move on.
+      onComplete();
       return;
     }
 
@@ -655,6 +664,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       // Check if puzzle is fully solved
       if (nextIndex >= allMoves.length) {
         setState('correct');
+        resolve(!hasMadeMistakeRef.current, Math.round(elapsedMs));
         playCelebration();
         // Record outcome for cross-session coaching
         recordTacticOutcome({
@@ -724,8 +734,9 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
             // Invalid opponent move — puzzle data is corrupted, fail gracefully
             setState('incorrect');
             const elapsedAtFail = Math.round(elapsedMs);
+            resolve(false, elapsedAtFail);
             completionTimerRef.current = setTimeout(() => {
-              onComplete(false, elapsedAtFail);
+              onComplete();
             }, 1200);
             return;
           }
@@ -1138,7 +1149,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
               outro narration. */}
           <button
             type="button"
-            onClick={() => onComplete(!hasMadeMistakeRef.current, Math.round(elapsedMs))}
+            onClick={() => onComplete()}
             className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-theme-accent text-white font-semibold hover:opacity-90 transition-opacity"
             data-testid="puzzle-next-btn"
           >

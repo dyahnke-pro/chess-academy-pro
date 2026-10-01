@@ -100,7 +100,7 @@ export function WeaknessThemesPage(): JSX.Element {
     }
   }, [currentIndex, drillItems.length]);
 
-  const handleComplete = useCallback(async (correct: boolean, solveTimeMs?: number): Promise<void> => {
+  const handleResolved = useCallback(async (correct: boolean, solveTimeMs: number): Promise<void> => {
     const item = drillItems.at(currentIndex);
     if (!item) return;
     if (!completedSet.has(currentIndex)) {
@@ -115,12 +115,7 @@ export function WeaknessThemesPage(): JSX.Element {
       const grade = correct ? 'good' : 'again';
       await gradeMistakePuzzle(item.mistakePuzzle.id, grade, correct, solveTimeMs);
     }
-
-    // The board's own "Next puzzle" CTA (shown after a solve) routes here.
-    // Grade once, then advance so the drill actually moves on — otherwise the
-    // student is stranded on the solved board with no visible way forward.
-    goNext();
-  }, [drillItems, currentIndex, completedSet, goNext]);
+  }, [drillItems, currentIndex, completedSet]);
 
   const currentItem = drillItems.at(currentIndex);
   const total = solved + failed;
@@ -376,7 +371,8 @@ export function WeaknessThemesPage(): JSX.Element {
             <MistakePuzzleBoard
               key={currentItem.mistakePuzzle.id}
               puzzle={currentItem.mistakePuzzle}
-              onComplete={(correct, solveTimeMs) => void handleComplete(correct, solveTimeMs)}
+              onResolved={(correct, solveTimeMs) => void handleResolved(correct, solveTimeMs)}
+              onComplete={goNext}
             />
           )}
 

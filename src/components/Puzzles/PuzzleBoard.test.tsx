@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '../../test/utils';
+import { render, screen, waitFor, act } from '../../test/utils';
 import { PuzzleBoard } from './PuzzleBoard';
 import type { PuzzleRecord } from '../../types';
 
@@ -223,5 +223,39 @@ describe('PuzzleBoard', () => {
       () => expect(screen.getByTestId('puzzle-controls')).toBeInTheDocument(),
       { timeout: 2000 },
     );
+  });
+});
+
+// Hand walk 2026-10-01: after a solve, swapping in the next puzzle spoke the
+// NEW puzzle's whole solution ("rook to g1 … queen takes g1 …") before the
+// student moved. Two real Lichess puzzles from that walk.
+describe('PuzzleBoard — resolution belongs to one puzzle', () => {
+  const solved = makePuzzle({
+    id: '0Flch',
+    fen: 'rn1qkb1r/pp2ppp1/3p1n1p/2pP4/4N3/2P5/PP2QPPP/RNB1K2R b KQkq - 1 9',
+    moves: 'b8d7 e4d6',
+    themes: ['mate', 'mateIn1', 'pin', 'smotheredMate'],
+  });
+  const next = makePuzzle({
+    id: '0BoaI',
+    fen: '5rk1/2p3rp/3p4/2pPpb2/2P1Np2/P4P2/4KQPq/RR6 b - - 1 28',
+    moves: 'g7g2 b1g1 h2g1 a1g1 g2g1 f2g1',
+    themes: ['advantage', 'long', 'middlegame', 'pin'],
+  });
+
+  it('never speaks the next puzzle while the student has not resolved it', async () => {
+    const { voiceService } = await import('../../services/voiceService');
+    const speak = vi.mocked(voiceService.speak);
+    const { rerender } = render(<PuzzleBoard puzzle={solved} onComplete={vi.fn()} />);
+    const show = await screen.findByTestId('show-solution-button', {}, { timeout: 2000 });
+    act(() => { show.click(); });
+    // Negative control: the resolved puzzle DOES teach, so the voice is live.
+    await waitFor(() => expect(speak.mock.calls.length).toBeGreaterThan(0), { timeout: 4000 });
+    const before = speak.mock.calls.length;
+
+    rerender(<PuzzleBoard puzzle={next} onComplete={vi.fn()} />);
+    await new Promise((r) => setTimeout(r, 1200));
+    const spokenAfter = speak.mock.calls.slice(before).map((c) => c[0]);
+    expect(spokenAfter.filter((t) => /g1/i.test(t))).toEqual([]);
   });
 });

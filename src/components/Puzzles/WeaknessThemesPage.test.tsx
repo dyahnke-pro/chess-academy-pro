@@ -27,10 +27,10 @@ vi.mock('../../services/weaknessAnalyzer', () => ({
 }));
 
 vi.mock('./MistakePuzzleBoard', () => ({
-  MistakePuzzleBoard: ({ onComplete }: { onComplete: (correct: boolean) => void }) => (
+  MistakePuzzleBoard: ({ onResolved, onComplete }: { onResolved: (correct: boolean, ms: number) => void; onComplete: () => void }) => (
     <div data-testid="mistake-board">
-      <button data-testid="solve-correct" onClick={() => onComplete(true)}>Solve</button>
-      <button data-testid="solve-wrong" onClick={() => onComplete(false)}>Fail</button>
+      <button data-testid="solve-correct" onClick={() => { onResolved(true, 0); onComplete(); }}>Solve</button>
+      <button data-testid="solve-wrong" onClick={() => { onResolved(false, 0); onComplete(); }}>Fail</button>
     </div>
   ),
 }));
@@ -226,7 +226,7 @@ describe('WeaknessThemesPage', () => {
 
     await user.click(screen.getByTestId('solve-correct'));
 
-    expect(mockGradeMistakePuzzle).toHaveBeenCalledWith('mp1', 'good', true, undefined);
+    expect(mockGradeMistakePuzzle).toHaveBeenCalledWith('mp1', 'good', true, 0);
   });
 
   it('shows summary with no drills when session is empty', async () => {
