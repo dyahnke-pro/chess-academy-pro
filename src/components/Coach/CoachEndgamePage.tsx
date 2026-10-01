@@ -38,6 +38,7 @@ import {
   getPatternById,
   getPracticePuzzleCount,
   buildMatingPatternLesson,
+  patternRule,
   type EndgameTier,
 } from '../../services/endgameService';
 import {
@@ -1054,12 +1055,13 @@ function CuratedMatingLessonView({
   // `speak()` to the hook's internal `speakForced` semantics so
   // pattern narration matches EndgameLessonTab's keystone narration
   // (both are opt-in lesson content, pref gate should not mute).
+  const rule = useMemo(() => patternRule(pattern), [pattern]);
   const matingNarrationText = useMemo<string>(
     () =>
-      [`${pattern.name}.`, pattern.narration.intro, pattern.narration.recognition]
+      [`${pattern.name}.`, pattern.narration.intro, rule, pattern.narration.recognition]
         .filter(Boolean)
         .join(' '),
-    [pattern.name, pattern.narration.intro, pattern.narration.recognition],
+    [pattern, rule],
   );
   useNarration({ text: matingNarrationText });
   const wrongFlashStyles = useMemo<Record<string, React.CSSProperties>>(() => {
@@ -1191,6 +1193,11 @@ function CuratedMatingLessonView({
                 ? 'Stockfish defends. Any legal move is fine — find mate.'
                 : `Drag a piece — ${playout.curatedStudentMoves - playout.studentMovesPlayed} move${playout.curatedStudentMoves - playout.studentMovesPlayed === 1 ? '' : 's'} to mate.`}
             </div>
+            {rule && (
+              <div className="mt-1.5 text-[11px] text-theme-text leading-snug" data-testid="mating-rule">
+                {rule}
+              </div>
+            )}
           </div>
         </div>
         {playout.wrongAttempts > 0 && (

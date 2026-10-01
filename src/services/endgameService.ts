@@ -24,6 +24,7 @@
 import { Chess } from 'chess.js';
 import matingPatternsData from '../data/mating-patterns.json';
 import puzzlesData from '../data/puzzles.json';
+import { endgameConceptFor } from './conceptEngine';
 import type {
   MatingPattern,
   MatingLessonPosition,
@@ -77,6 +78,19 @@ export function getPatternById(id: string): MatingPattern | null {
 /** The recognition position is the first lessonPosition with
  *  movesToMate === 1 — the "what does the finished pattern look like"
  *  diagnostic shown briefly while the intro narration plays. */
+/** The computed RULE a piece-mate pattern teaches, from its own lesson board
+ *  (`endgameConceptFor` — the same computer Learn and Play read): the forced
+ *  mate with its move ceiling and method, the bishop's corners for B+N, or why
+ *  the material cannot mate. Null for any other pattern. */
+const MATE_RULE_IDS = new Set(['basic-mate', 'bishop-knight-mate', 'two-knights-no-mate', 'insufficient-material']);
+export function patternRule(pattern: MatingPattern): string | null {
+  if (pattern.category !== 'piece-mate') return null;
+  const fen = pattern.lessonPositions[0]?.fen;
+  if (!fen) return null;
+  const c = endgameConceptFor(fen);
+  return c && MATE_RULE_IDS.has(c.id) ? c.full : null;
+}
+
 export function getRecognitionPosition(
   pattern: MatingPattern,
 ): MatingLessonPosition | null {
@@ -434,6 +448,7 @@ export function buildMatingPatternLesson(
   // Intro: combine the hand-crafted prose into one read-aloud script.
   const introParts = [
     pattern.narration.intro,
+    patternRule(pattern),
     pattern.narration.recognition,
     pattern.narration.history,
     pattern.narration.tip,

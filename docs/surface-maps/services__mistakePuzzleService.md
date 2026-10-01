@@ -111,9 +111,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/endgameDrillService.ts:103`
 - `src/services/endgameDrillService.ts:139`
 - `src/services/endgameDrillService.ts:144`
-- `src/services/endgameService.ts:197`
-- `src/services/endgameService.ts:252`
-- `src/services/endgameService.ts:259`
+- `src/services/endgameService.ts:211`
+- `src/services/endgameService.ts:266`
+- `src/services/endgameService.ts:273`
 - `src/services/mistakeNarration.ts:117`
 - `src/services/mistakeNarration.ts:591`
 - `src/services/openingGenerator.ts:3466`

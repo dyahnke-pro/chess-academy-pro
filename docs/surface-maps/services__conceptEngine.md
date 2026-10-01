@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**802 lines · 20 exports · 23 importers · 10 tests · 28 audits**
+**802 lines · 20 exports · 24 importers · 10 tests · 28 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,6 +21,7 @@
 - `src/services/conceptVocabulary.test.ts`
 - `src/services/dnaLineNarrator.ts`
 - `src/services/endgameDrillService.test.ts`
+- `src/services/endgameService.ts`
 - `src/services/endgameTechnique.test.ts`
 - `src/services/groundedMoveWhy.ts`
 - `src/services/liveTacticsContext.ts`
@@ -88,13 +89,14 @@
 - `src/services/conceptEngine.test.ts:82`
 - `src/services/conceptEngine.test.ts:107`
 
-### `endgameConceptFor` (function) — 8 call sites
+### `endgameConceptFor` (function) — 9 call sites
 - `src/services/conceptEngine.test.ts:273`
 - `src/services/conceptEngine.test.ts:276`
 - `src/services/conceptEngine.test.ts:279`
 - `src/services/conceptEngine.test.ts:280`
 - `src/services/conceptEngine.test.ts:284`
 - `src/services/conceptEngine.test.ts:285`
+- `src/services/endgameService.ts:90`
 - `src/services/endgameTechnique.test.ts:63`
 - `src/services/endgameTechnique.test.ts:76`
 
