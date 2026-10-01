@@ -35,6 +35,20 @@ Instrument fixes: ACC reads past tense on the board before the move; the
 board-truth scanner skips conditionals ("would put"); FUND_RE knows the
 defended-pawn stems; THESIS waits for the spoken line.
 
+## Game 2 re-walk (on `8fc3f5a92`, machine quiet) — MEETS STANDARD, 0 reds
+
+49 claims, every one checked: **48 true (98.0%)**. tape-verify read 0/22 — it
+used the wrong boards for this game; all 22 are true on the real board (e-file
+rook, d3 diagonals, Ng5's targets, the e-file and d-file batteries, Qe5's lines,
+the Ne7+ fork, and the three null-move lines: mate, "a knight for two knights",
+"a knight for a queen").
+
+| # | ply | said | truth | fix |
+|---|---|---|---|---|
+| R9 | 63 | 32.Nxe5 "taking back would cost them more than the pawn" | the count says so, but dxe5 opens the d-file and …Rxd1+ wins it back — the engine graded Nxe5 a blunder | the recapture read yields to the engine (`fe4002325`) |
+
+**All three games: 268 / 274 claims true (97.8%).**
+
 ## Teaching that now reaches Review (new this build)
 - B3: "the stronger move was Bg4 — it would set up a pin. Remember — a pin freezes the piece in front…"
 - A2: "…fxe5, taking back with the f-pawn: it half-opens the f-file for your rook."
