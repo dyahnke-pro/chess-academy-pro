@@ -421,8 +421,8 @@
       }
     ],
     "narration": {
-      "intro": "Damiano's mate is one of the oldest in the books, dating to Pedro Damiano's 1512 chess treatise. A pawn or bishop pins the king to a square, and the queen swings in for the killing blow.",
-      "recognition": "When you can sacrifice on the h-file to open lines, then bring the queen to h8 with check, you may be looking at Damiano's mate.",
+      "intro": "Damiano's mate is one of the oldest in the books, dating to Pedro Damiano's 1512 chess treatise. A pawn or bishop covers the king's escape squares and protects the queen, and the queen lands right beside the king for the killing blow.",
+      "recognition": "When a pawn on the sixth rank guards the square beside the king and a sacrifice can open the h-file, the queen lands on that guarded square with mate — that is Damiano's mate.",
       "history": "Damiano was a Portuguese pharmacist who wrote one of the first printed chess books. Five hundred years later, his pattern still wins games."
     }
   },

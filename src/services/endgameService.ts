@@ -495,6 +495,16 @@ export function buildMatingPatternLesson(
  *  UI to show "X positions, increasing difficulty". Cheap — runs
  *  once at module load. */
 let _puzzleCountCache: Map<string, number> | null = null;
+/** Whether the pattern opens into something the student PLAYS — a piece mate
+ *  (free play against the engine) or a curated position with its line. The
+ *  card label reads this, not the puzzle count: a pattern with no practice
+ *  puzzles was labelled "Recognition only" while its lesson played (endgame
+ *  hand walk 2026-10-01). */
+export function hasPlayableLesson(pattern: MatingPattern): boolean {
+  if (pattern.category === 'piece-mate' && pattern.lessonPositions[0]) return true;
+  return pattern.lessonPositions.some((lp) => (lp.solution?.length ?? 0) > 0);
+}
+
 export function getPracticePuzzleCount(pattern: MatingPattern): number {
   if (!_puzzleCountCache) {
     _puzzleCountCache = new Map();
@@ -508,3 +518,7 @@ export function getPracticePuzzleCount(pattern: MatingPattern): number {
   }
   return _puzzleCountCache.get(pattern.id) ?? 0;
 }
+
+/** Why a mated board is mate — the mate computer, exposed through the endgame
+ *  door so surfaces read it here rather than importing the computer. */
+export { explainMate } from './matePatterns';

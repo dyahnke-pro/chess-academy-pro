@@ -16,6 +16,7 @@
  */
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
 import matingPatternsData from '../data/mating-patterns.json';
+import { andList } from '../utils/andList';
 import type { MatingPattern } from '../types/matingPattern';
 
 export interface MatePatternResult {
@@ -365,3 +366,52 @@ export function classifyMatePattern(fenAfterMate: string): MatePatternResult | n
 
 /** Test-only: the rule order (so the known-answer harness can name misses). */
 export const _mateRuleIds = RULES.map(([id]) => id);
+
+const PIECE_WORD: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/**
+ * WHY THIS IS MATE, read off the mated board (endgame hand walk 2026-10-01: a
+ * solved mate said only "Line completed" — nothing about why the king had no
+ * way out). Names the checking piece, what protects it when it stands next to
+ * the king, which flight squares the king's own pieces block and which the
+ * attacker covers. Null unless the position is checkmate.
+ */
+export function explainMate(fen: string): string | null {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return null; }
+  if (!c.isCheckmate()) return null;
+  const mated: Color = c.turn();
+  const attacker: Color = mated === 'w' ? 'b' : 'w';
+  const kingSq = c.board().flat().find((x) => x && x.type === 'k' && x.color === mated)?.square;
+  if (!kingSq) return null;
+  const checkers = c.attackers(kingSq, attacker);
+  if (checkers.length === 0) return null;
+  const checkSq = checkers[0];
+  const checker = c.get(checkSq);
+  if (!checker) return null;
+  const parts: string[] = [`the ${PIECE_WORD[checker.type]} on ${checkSq} checks the king on ${kingSq}`];
+  const adjacent = Math.max(Math.abs(checkSq.charCodeAt(0) - kingSq.charCodeAt(0)), Math.abs(Number(checkSq[1]) - Number(kingSq[1]))) === 1;
+  if (adjacent) {
+    const guards = c.attackers(checkSq, attacker).filter((s) => s !== checkSq);
+    const g = guards[0] ? c.get(guards[0]) : undefined;
+    if (g && guards[0]) parts.push(`it is protected by the ${PIECE_WORD[g.type]} on ${guards[0]}, so the king cannot take it`);
+  }
+  const blocked: string[] = [];
+  const covered: string[] = [];
+  const f0 = kingSq.charCodeAt(0); const r0 = Number(kingSq[1]);
+  for (let df = -1; df <= 1; df += 1) {
+    for (let dr = -1; dr <= 1; dr += 1) {
+      if (!df && !dr) continue;
+      const f = f0 + df; const r = r0 + dr;
+      if (f < 97 || f > 104 || r < 1 || r > 8) continue;
+      const sq = `${String.fromCharCode(f)}${r}` as Square;
+      const occ = c.get(sq);
+      if (occ && occ.color === mated) blocked.push(sq);
+      else if (sq !== checkSq) covered.push(sq);
+    }
+  }
+  if (blocked.length) parts.push(`its own ${blocked.length === 1 ? 'piece blocks' : 'pieces block'} ${andList(blocked)}`);
+  if (covered.length) parts.push(`${andList(covered)} ${covered.length === 1 ? 'is' : 'are'} covered`);
+  const text = parts.join('; ');
+  return `Mate: ${text}.`;
+}

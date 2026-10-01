@@ -154,7 +154,7 @@
       {
         "fen": "8/4k1p1/p3p2p/1p2P3/1P6/P5P1/4K2P/8 w - - 0 1",
         "title": "Two weaknesses — queenside AND a kingside lever",
-        "explanation": "Black has the weak a6 pawn (target #1, queenside). White's plan: bring the king to attack a6, then create a second front by playing g4-g5 to fix Black's kingside pawns. Once both sides have weaknesses, the black king can't defend both — it commits to one and White wins the other.",
+        "explanation": "Black has the weak a6 pawn (target #1, queenside). White's plan: bring the king to attack a6, then create a second front by playing g4-g5 to fix Black's kingside pawns. Once Black has a weakness on each flank, the black king can't defend both — it commits to one and White wins the other.",
         "result": "white-wins",
         "bestMove": "Kd3",
         "source": "Teaching position — Capablanca's two-weakness principle",

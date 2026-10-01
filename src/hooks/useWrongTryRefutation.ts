@@ -49,7 +49,11 @@ export function useWrongTryRefutation(analyse: PuzzleLineAnalyser = engineLineAn
   // it never cancels anything.
   useEffect(() => {
     if (analyse !== engineLineAnalyser) return;
-    void stockfishEngine.queueAnalysis('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1).catch(() => null);
+    // A warm-up may never break the board it serves: deferred, so a missing or
+    // throwing engine (a test mock without queueAnalysis) lands in the catch.
+    void Promise.resolve()
+      .then(() => stockfishEngine.queueAnalysis('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1))
+      .catch(() => null);
   }, [analyse]);
 
   const refute = useCallback(async (fenBefore: string, wrongSan: string): Promise<WrongTryRefutation | null> => {
