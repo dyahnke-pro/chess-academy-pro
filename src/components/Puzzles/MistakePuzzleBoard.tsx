@@ -8,6 +8,7 @@ import { readWrongTry } from '../../services/wrongTryRefutation';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { rerenderMistakeNarration } from '../../services/mistakePuzzleService';
 import { puzzleMethodLine } from '../../services/puzzleMethod';
+import { useStudentRecord } from '../../hooks/useStudentRecord';
 import type { MethodHabit } from '../../services/methodBeat';
 import { voiceService } from '../../services/voiceService';
 import { explainPuzzleMoveGrounded } from '../../services/coachApi';
@@ -152,6 +153,9 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   const tryTokenRef = useRef(0);
   const narrationRef = useRef(puzzle.narration);
   const saidHabitsRef = useRef(new Set<MethodHabit>());
+  // The student's WHOLE record (holes + proven), so the method beat is decided
+  // from their games and drills together, not from the puzzles alone.
+  const recordRef = useStudentRecord();
   const resolve = useCallback((correct: boolean, solveTimeMs: number): void => {
     if (resolvedForRef.current === puzzle.id) return;
     resolvedForRef.current = puzzle.id;
@@ -261,7 +265,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     active: state === 'playing',
     wrongAttempts: wrongAttemptCount,
     onCoach: handleStruggleCoach,
-    earnedMethod: () => puzzleMethodLine(puzzle.bestMoveSan, puzzle.cpLoss, saidHabitsRef.current),
+    earnedMethod: () => puzzleMethodLine(puzzle.bestMoveSan, puzzle.cpLoss, saidHabitsRef.current, recordRef.current),
   });
 
   // Replay state

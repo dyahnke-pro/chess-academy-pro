@@ -16,6 +16,7 @@ import { voiceService } from '../../services/voiceService';
 import { getWrongMoveHint } from '../../utils/puzzleHints';
 import { readWrongTry } from '../../services/wrongTryRefutation';
 import { puzzleMethodLine, cpFromThemes } from '../../services/puzzleMethod';
+import { useStudentRecord } from '../../hooks/useStudentRecord';
 import { recordCapabilityEvidence } from '../../services/capabilityEvidence';
 import { MISTAKE_CP } from '../../services/engineConstants';
 import type { MethodHabit } from '../../services/methodBeat';
@@ -101,6 +102,9 @@ export function PuzzleBoard({
   const answeredRef = useRef(false);
   // Habits taught this session — the method beat says each one once.
   const saidHabitsRef = useRef(new Set<MethodHabit>());
+  // The student's WHOLE record (holes + proven), so the method beat is decided
+  // from their games and drills together, not from the puzzles alone.
+  const recordRef = useStudentRecord();
   // The board the solver faces: a Lichess line opens with the opponent's move.
   const solverFen = useMemo((): string => {
     try {
@@ -210,7 +214,7 @@ export function PuzzleBoard({
     active: state === 'playing',
     wrongAttempts: wrongAttemptCount,
     onCoach: handleStruggleCoach,
-    earnedMethod: () => puzzleMethodLine(solverFirstSan, cpFromThemes(puzzle.themes), saidHabitsRef.current),
+    earnedMethod: () => puzzleMethodLine(solverFirstSan, cpFromThemes(puzzle.themes), saidHabitsRef.current, recordRef.current),
   });
 
   // Derive the expected move for the hint system

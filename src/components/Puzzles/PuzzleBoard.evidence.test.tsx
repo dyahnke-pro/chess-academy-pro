@@ -44,6 +44,7 @@ vi.mock('../../services/tacticClassifierService', () => ({
   getTacticTypeFromThemes: vi.fn().mockReturnValue(null), getPrimaryThemeLabel: vi.fn().mockReturnValue(null),
 }));
 vi.mock('../../stores/appStore', () => ({ useAppStore: () => null }));
+vi.mock('../../hooks/useStudentRecord', () => ({ useStudentRecord: () => ({ current: { weaknesses: [], capabilities: null } }) }));
 vi.mock('../../services/capabilityEvidence', () => ({ recordCapabilityEvidence: vi.fn().mockResolvedValue(1) }));
 const readWrongTry = vi.fn();
 vi.mock('../../services/wrongTryRefutation', () => ({ readWrongTry: (...a: unknown[]) => readWrongTry(...a) }));

@@ -19,6 +19,7 @@ import { buildMistakePuzzle, resetFactoryCounter } from '../../test/factories';
 import type { MoveResult } from '../../hooks/useChessGame';
 
 const recordCapabilityEvidence = vi.fn().mockResolvedValue(1);
+vi.mock('../../hooks/useStudentRecord', () => ({ useStudentRecord: () => ({ current: { weaknesses: [], capabilities: null } }) }));
 vi.mock('../../services/capabilityEvidence', () => ({
   recordCapabilityEvidence: (...a: unknown[]) => recordCapabilityEvidence(...a),
 }));
