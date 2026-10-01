@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1461 lines · 8 exports · 11 importers · 7 tests · 0 audits**
+**1461 lines · 7 exports · 11 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -67,9 +67,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/weaknessAnalyzer.test.ts:897`
 - `src/services/weaknessAnalyzer.test.ts:928`
 - `src/services/weaknessAnalyzer.test.ts:937`
-
-### `themeKeysFor` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `generatePersonalizedDrill` (function) — 8 call sites
 - `src/components/Puzzles/WeaknessThemesPage.tsx:79`
