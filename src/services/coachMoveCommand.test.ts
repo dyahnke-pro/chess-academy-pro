@@ -170,3 +170,16 @@ describe('a bare square is a pawn move (g9 walk, 2026-09-27)', () => {
     expect(cmd?.playableNow).toBe(false);
   });
 });
+
+describe('a bare square is the pawn push, never a capture (pass-3 walk 2026-10-01)', () => {
+  it('"play b5" with our knight on b5 does not arm axb5', async () => {
+    const { Chess } = await import('chess.js');
+    const c = new Chess();
+    for (const m of 'e4 e5 Nc3 Nc6 Nf3 Nf6 d4 exd4 Nd5 Be7 Bd3 d6 h3 Be6 Nxe7 Qxe7 O-O O-O Bg5 h6 Bh4 Ne5 Nxd4 Ng6 Bg3 c5 Nb5 Rad8 Re1 a6'.split(' ')) c.move(m);
+    // White to move, knight on b5, b-pawn blocked: "b5" must not become axb5.
+    const cmd = parseCoachMoveCommand('play b5', c.fen(), 'black');
+    expect(cmd?.san).not.toBe('axb5');
+    c.move('Nc3');
+    expect(parseCoachMoveCommand('play b5', c.fen(), 'black')?.san).toBe('b5');
+  });
+});

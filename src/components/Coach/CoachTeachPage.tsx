@@ -1877,6 +1877,9 @@ export function CoachTeachPage(): JSX.Element {
   // coach's next reply is exactly the dictated move (validated legal at
   // consume time; silently dropped with an audit if the position moved on).
   const pendingCoachMoveRef = useRef<string | null>(null);
+  /** The words the dictated reply came from — re-read on the live board when
+   *  the stored move has gone illegal (pass-3 walk 2026-10-01). */
+  const pendingCoachPhraseRef = useRef<string | null>(null);
   const rejectedTemptingCountRef = useRef(0);
   const priorityFirstLastPlyRef = useRef(-999);
   // SESSION BOOKENDS (David 2026-07-11): running tallies for the closing
@@ -3791,6 +3794,7 @@ export function CoachTeachPage(): JSX.Element {
           // (c) The student's turn mid-game (or a coach-side move parsed on
           // the flipped board) — arm it as the coach's next reply.
           pendingCoachMoveRef.current = cmd.san;
+          pendingCoachPhraseRef.current = trimmedText;
           captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'armed-pending', san: cmd.san });
           appendTurn(`Got it — after your move, I'll play ${sanToSpeech(cmd.san)} if it's still legal.`);
           return;
@@ -7286,6 +7290,16 @@ export function CoachTeachPage(): JSX.Element {
           return m.san;
         }
       } catch { /* fall through */ }
+      // The stored move went illegal: read the student's own words again on
+      // the board as it stands now — "play b5" means b5 if b5 is there.
+      const phrase = pendingCoachPhraseRef.current;
+      pendingCoachPhraseRef.current = null;
+      const reread = phrase ? parseCoachMoveCommand(phrase, fen, playerColor === 'white' ? 'black' : 'white') : null;
+      if (reread?.playableNow) {
+        learnMemRef.current.lastReplyDictated = reread.san;
+        captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'pending-reread', san: reread.san });
+        return reread.san;
+      }
       captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'pending-illegal', san: dictated });
       void logAppAudit({
         kind: 'coach-surface-migrated',

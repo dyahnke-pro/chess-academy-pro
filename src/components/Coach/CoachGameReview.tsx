@@ -54,11 +54,9 @@ import { computeTurningPointHinge } from '../../services/reviewHinge';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 import { selectTeachingForSegments, renderThesis } from '../../services/teachingSelector';
 import { registerFor } from '../../coach/surfaceContract';
-import { buildOpeningTheoryLecture, buildTheoryLectureBeats, resolveOpeningIdeas, enrichLectureWithEngine, type TheoryLectureBeat, type ExploreLine } from '../../services/reviewOpeningTheory';
+import { buildOpeningTheoryLecture, buildTheoryLectureBeats, resolveOpeningIdeas, enrichLectureWithEngine, warmLectureSources, type TheoryLectureBeat, type ExploreLine } from '../../services/reviewOpeningTheory';
 import { reviewTheoryLookup } from '../../services/reviewOpeningsSource';
-import { warmGemIndexes } from '../../services/gemCrushLines';
 import { sanToSpeech } from '../../utils/sanToSpeech';
-import { warmOpeningIdentity } from '../../services/openingIdentity';
 import { captureEvent } from '../../services/analytics';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import {
@@ -2890,8 +2888,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const sans = moves.map((m) => m.san);
     let cancelled = false;
     const t = window.setTimeout(() => {
-      warmGemIndexes();
-      warmOpeningIdentity();
+      warmLectureSources();
       // The review's own engine read of each game ply, so the lecture can judge
       // the departure (its cost, the line that punishes it) without a new search.
       const gameReads = moves.map((m, idx) => {

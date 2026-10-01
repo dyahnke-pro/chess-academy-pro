@@ -375,6 +375,29 @@ function checkSentence(s, ctx) {
     sans.forEach((x) => lineSans.add(x));
     res.push([walkLine(sans), `line ${sans.join(' ')} is illegal`]);
   }
+  // PLAYED-OUT LINES (lineCalc, 2026-09-30): "That wins a pawn: Nxd5 cxd5 …",
+  // "The line: … — they come out X up.", "The engine punishes f6: …",
+  // "It is a forced mate: …". Walked IN ORDER from a board the line can start
+  // on; a "wins N" claim is checked against the material the walk actually
+  // changes hands, and a mate line must end in checkmate.
+  const WORTH = { p: 1, n: 3, b: 3, r: 5, q: 9 };
+  const AMOUNT = { 'a pawn': 1, 'two pawns': 2, 'a piece': 3, 'a piece and a pawn': 4, 'the exchange': 2, 'a rook and a pawn': 6, 'the queen': 9 };
+  for (const m of s.matchAll(/(?:(?:That|It) wins ([^:]+)|The line|The engine punishes \S+|It is a forced mate|is mate\.)[:]?\s((?:…?(?:[NBRQK]?[a-h]?[1-8]?x?[a-h][1-8](?:=[NBRQ])?|O-O(?:-O)?)[+#]?\s?)+)/g)) {
+    const sans = m[2].trim().split(/\s+/).map((x) => stripSan(x));
+    if (sans.length < 2) continue;
+    sans.forEach((x) => lineSans.add(x));
+    let walked = null;
+    for (const fen of [ctx.fenBefore, ctx.fenMid, ctx.fenAfter]) {
+      const c = board(fen); if (!c) continue;
+      const mover = c.turn();
+      try { let net = 0; for (const x of sans) { const mv = c.move(x); if (mv.captured) net += (mv.color === mover ? 1 : -1) * WORTH[mv.captured]; } walked = { net, mate: c.isCheckmate() }; break; } catch { /* next board */ }
+    }
+    if (!walked) { res.push([false, `line ${sans.join(' ')} is illegal`]); continue; }
+    if (/forced mate|is mate/.test(m[0]) || /#$/.test(m[2].trim())) { res.push([walked.mate, `line ${sans.join(' ')} does not end in mate`]); continue; }
+    const claim = m[1] ? AMOUNT[m[1].trim()] ?? Number((/^(\d+) points/.exec(m[1].trim()) ?? [])[1]) : null;
+    if (claim) res.push([Math.abs(walked.net) === claim, `line nets ${walked.net}, said ${m[1].trim()}`]);
+    else res.push([true, 'line legal']);
+  }
   // "Why not X? It grabs …, but Y refutes it." — Y answers X, so walk them together.
   const whyNot = /Why not (…?\S+?)\?[^.]*?, but (…?\S+?) refutes it/.exec(s);
   if (whyNot) {

@@ -83,7 +83,11 @@ export function parseSpokenMove(utterance: string, fen: string): ParsedSpokenMov
   // the pawn push was blocked resolved to Bxd6 — the only move landing on d6 —
   // and the coach then played neither. In notation and in speech alike, a
   // square with no piece named means the pawn; only "takes d6" reaches wider.
-  else if (!wantsCapture) candidates = candidates.filter((m) => m.piece === 'p');
+  // …and a PUSH, not a capture: "b5" in notation is the push, "axb5" is the
+  // capture (pass-3 walk 2026-10-01: "play b5" typed while a knight stood on
+  // b5 resolved to axb5, was armed, went illegal a move later and was dropped —
+  // the coach played its own move). A capture needs its word or its "x".
+  else if (!wantsCapture) candidates = candidates.filter((m) => m.piece === 'p' && !m.captured);
   if (wantsCapture) {
     const capturing = candidates.filter((m) => !!m.captured);
     if (capturing.length > 0) candidates = capturing;

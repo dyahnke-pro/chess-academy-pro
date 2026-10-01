@@ -109,9 +109,9 @@
 - `src/services/reviewTeachingPoints.test.ts:389`
 
 ### `explainTemptingCapture` (function) — 10 call sites
-- `src/components/Coach/CoachGameReview.tsx:1757`
-- `src/services/reviewOpeningTheory.ts:368`
-- `src/services/reviewOpeningTheory.ts:404`
+- `src/components/Coach/CoachGameReview.tsx:1755`
+- `src/services/reviewOpeningTheory.ts:375`
+- `src/services/reviewOpeningTheory.ts:411`
 - `src/services/reviewTeachingPoints.test.ts:127`
 - `src/services/reviewTeachingPoints.test.ts:138`
 - `src/services/reviewTeachingPoints.test.ts:155`

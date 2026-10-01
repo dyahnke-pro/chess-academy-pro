@@ -230,7 +230,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:571`
-- `src/components/Coach/CoachTeachPage.tsx:3318`
+- `src/components/Coach/CoachTeachPage.tsx:3321`
 - `src/services/coachSessionRouter.ts:117`
 - `src/services/coachSettingsAction.ts:242`
 
@@ -266,9 +266,9 @@
 - `src/services/coachApi.speakableFacts.test.ts:53`
 
 ### `voiceFacts` (function) — 35 call sites
-- `src/components/Coach/CoachGameReview.tsx:1679`
-- `src/components/Coach/CoachGameReview.tsx:1798`
-- `src/components/Coach/CoachGameReview.tsx:1986`
+- `src/components/Coach/CoachGameReview.tsx:1677`
+- `src/components/Coach/CoachGameReview.tsx:1796`
+- `src/components/Coach/CoachGameReview.tsx:1984`
 - `src/hooks/usePhaseNarration.ts:731`
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:256`

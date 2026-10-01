@@ -9,7 +9,7 @@ import { Chess } from 'chess.js';
 import type { ArrowClaim } from './arrowDoor';
 import { MATERIAL_VALUE } from './pieceValues';
 
-const WORDS: Record<number, string> = { 1: 'a pawn', 2: 'two pawns', 3: 'a piece', 4: 'a piece and a pawn', 5: 'the exchange', 6: 'a rook and a pawn', 9: 'the queen' };
+const WORDS: Record<number, string> = { 1: 'a pawn', 2: 'two pawns', 3: 'a piece', 4: 'a piece and a pawn', 5: 'a rook', 6: 'a rook and a pawn', 9: 'the queen' };
 
 export interface LinePly { from: string; to: string; color: 'w' | 'b'; fen: string; san: string }
 export interface LineWin { net: number; what: string; sans: string[]; plies: LinePly[] }
@@ -24,7 +24,13 @@ export function lineWins(fen: string, lineUci: readonly string[], side: 'w' | 'b
   const bare = (s: string): string => s.replace(/[+#]$/, '');
   const c = new Chess(fen);
   const plies: LinePly[] = [];
-  let net = 0; let lastCap = -1;
+  // THE GAIN SETTLES at the first finished exchange that leaves `side` up:
+  // after a capture, when the next move takes nothing back (pass-3 walk
+  // 2026-10-01: "the last capture" of a 20-ply engine line read out as
+  // "…e6 dxe6+ …fxe6 b4 …Ke7 Nb3 … dxe4 fxe4" — material that deep in a PV is
+  // noise, and he walks three to six plies). A line whose first settled count
+  // is level or behind says nothing.
+  let net = 0; let settle = -1; let lastCap = -1;
   try {
     for (let i = 0; i < lineUci.length; i += 1) {
       const u = lineUci[i];
@@ -32,12 +38,24 @@ export function lineWins(fen: string, lineUci: readonly string[], side: 'w' | 'b
       const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
       if (!m) break;
       if (i === 0 && firstSan && bare(m.san) !== bare(firstSan)) return null;
-      if (m.captured) { net += (m.color === side ? 1 : -1) * (MATERIAL_VALUE[m.captured] ?? 0); lastCap = i; }
       plies.push({ from: m.from, to: m.to, color: m.color, fen: before, san: m.san });
+      if (m.captured) { net += (m.color === side ? 1 : -1) * (MATERIAL_VALUE[m.captured] ?? 0); lastCap = i; }
+      // A SETTLE: something was taken, nobody is in check (a check forces the
+      // reply), and the next move takes nothing back.
+      const next = lineUci[i + 1];
+      const nextTakes = next ? !!c.get(next.slice(2, 4) as Parameters<Chess['get']>[0]) : false;
+      if (lastCap < 0 || nextTakes || c.inCheck()) continue;
+      if (net >= 1) { settle = lastCap; break; }
+      // Behind or level once the exchange is over: only a CHECK carries the
+      // line on (a sacrifice cashed by force, the Damiano's Qh5+); a quiet
+      // move here means the line proves nothing.
+      let nextChecks = false;
+      if (next) { try { const t = new Chess(c.fen()); t.move({ from: next.slice(0, 2), to: next.slice(2, 4), promotion: next[4] }); nextChecks = t.inCheck(); } catch { /* none */ } }
+      if (!nextChecks) return null;
     }
   } catch { return null; }
-  if (net < 1 || lastCap < 1) return null;
-  const shown = plies.slice(0, lastCap + 1);
+  if (settle < 1) return null;
+  const shown = plies.slice(0, settle + 1);
   return {
     net,
     what: WORDS[net] ?? `${net} points of material`,

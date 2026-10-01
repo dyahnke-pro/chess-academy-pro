@@ -40,7 +40,7 @@
 - `src/services/replayFence.modern1690.test.ts:80`
 
 ### `tacticWord` (function) — 23 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7792`
+- `src/components/Coach/CoachTeachPage.tsx:7806`
 - `src/services/computedVoiceAudit.report.test.ts:254`
 - `src/services/dnaLineNarrator.ts:129`
 - `src/services/dnaLineNarrator.ts:218`
@@ -65,7 +65,7 @@
 - `src/services/teachingSelector.ts:347`
 
 ### `seatedTacticLine` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7803`
+- `src/components/Coach/CoachTeachPage.tsx:7817`
 - `src/services/seatedTacticLine.test.ts:8`
 - `src/services/seatedTacticLine.test.ts:13`
 - `src/services/seatedTacticLine.test.ts:19`
@@ -174,7 +174,7 @@
 - `src/services/learnWalkBlumenfeld.test.ts:179`
 
 ### `planFromUci` (function) — 27 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9485`
+- `src/components/Coach/CoachTeachPage.tsx:9499`
 - `src/services/claimTruth.manual.test.ts:119`
 - `src/services/coachLaneWiring.test.ts:35`
 - `src/services/computedVoiceAudit.report.test.ts:216`
@@ -206,8 +206,8 @@
 - `src/services/coachFeatureService.ts:1324`
 
 ### `aimsOf` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9498`
-- `src/components/Coach/CoachTeachPage.tsx:9502`
+- `src/components/Coach/CoachTeachPage.tsx:9512`
+- `src/components/Coach/CoachTeachPage.tsx:9516`
 - `src/services/planArc.phraseFrom.test.ts:30`
 - `src/services/planArc.phraseFrom.test.ts:31`
 - `src/services/planArc.test.ts:29`
@@ -216,8 +216,8 @@
 - `src/services/planChooser.ts:39`
 
 ### `aimWalkableNow` (re-export) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9498`
-- `src/components/Coach/CoachTeachPage.tsx:9502`
+- `src/components/Coach/CoachTeachPage.tsx:9512`
+- `src/components/Coach/CoachTeachPage.tsx:9516`
 - `src/services/planArc.phraseFrom.test.ts:19`
 - `src/services/planArc.phraseFrom.test.ts:22`
 - `src/services/planArc.test.ts:201`
@@ -234,14 +234,14 @@
 - `src/services/planArc.ts:405`
 
 ### `joinEmerges` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9514`
+- `src/components/Coach/CoachTeachPage.tsx:9528`
 - `src/services/planArc.test.ts:269`
 - `src/services/planArc.test.ts:276`
 - `src/services/planArc.ts:528`
 
 ### `stepArc` (re-export) — 25 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9498`
-- `src/components/Coach/CoachTeachPage.tsx:9502`
+- `src/components/Coach/CoachTeachPage.tsx:9512`
+- `src/components/Coach/CoachTeachPage.tsx:9516`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.test.ts:94`
 - `src/services/planArc.test.ts:96`

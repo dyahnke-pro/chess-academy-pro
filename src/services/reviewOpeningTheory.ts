@@ -19,8 +19,8 @@ import { walkBookLine } from './theoryDeparture';
 import { detectOpeningTranspositional } from './openingDetectionService';
 import { lineWins } from './lineCalc';
 import { costWords } from './engineConstants';
-import { trapAheadAt } from './gemCrushLines';
-import { openingIdentityLine } from './openingIdentity';
+import { trapAheadAt, warmGemIndexes } from './gemCrushLines';
+import { openingIdentityLine, warmOpeningIdentity } from './openingIdentity';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
 import { identifyingTokens } from './danyaTeachingService';
 import { explainTemptingCapture } from './reviewTeachingPoints';
@@ -239,6 +239,13 @@ function scoreClause(
   const vsEven = rp >= 54 ? 'a healthy plus' : rp >= 48 ? 'right around even' : 'a shade below even';
   const benefit = studentColor && moverColor !== studentColor && rp <= 47 ? ' — comfortable for you' : '';
   return `, and ${side} scores ${rp}% here, ${vsEven}${benefit}`;
+}
+
+/** Warm what the lecture's beats read synchronously (the gem index for the
+ *  trap on the line, the opening identity for the intro). Call before building. */
+export function warmLectureSources(): void {
+  warmGemIndexes();
+  warmOpeningIdentity();
 }
 
 /** The review's engine read of the game's move, as lecture facts: its cost,

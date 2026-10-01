@@ -149,8 +149,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveFundamentals.ts:1263`
 
 ### `legalSeeGainFor` (function) — 37 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7944`
-- `src/components/Coach/CoachTeachPage.tsx:9454`
+- `src/components/Coach/CoachTeachPage.tsx:7958`
+- `src/components/Coach/CoachTeachPage.tsx:9468`
 - `src/services/arrowDoor.ts:161`
 - `src/services/bluffDetector.ts:53`
 - `src/services/bluffDetector.ts:63`
@@ -189,9 +189,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `signedLegalSeeFor` (function) — 10 call sites
 - `src/components/Coach/CoachTeachPage.tsx:826`
-- `src/components/Coach/CoachTeachPage.tsx:7825`
-- `src/components/Coach/CoachTeachPage.tsx:10156`
-- `src/components/Coach/CoachTeachPage.tsx:10213`
+- `src/components/Coach/CoachTeachPage.tsx:7839`
+- `src/components/Coach/CoachTeachPage.tsx:10170`
+- `src/components/Coach/CoachTeachPage.tsx:10227`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
@@ -388,7 +388,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:130`
 
 ### `structureTransfer` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9141`
+- `src/components/Coach/CoachTeachPage.tsx:9155`
 - `src/services/groundedAnswer.ts:6300`
 - `src/services/positionReadingService.test.ts:954`
 - `src/services/positionReadingService.test.ts:955`
@@ -397,7 +397,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:958`
 
 ### `namedPawnStructure` (function) — 22 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9136`
+- `src/components/Coach/CoachTeachPage.tsx:9150`
 - `src/services/claimTruth.manual.test.ts:64`
 - `src/services/claimTruth.manual.test.ts:66`
 - `src/services/danyaBehaviors.ts:372`
