@@ -289,7 +289,7 @@ import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
 import { actionForCommand, actuate } from '../../services/coachActuator';
 import { readSpokenSquares } from '../../services/spokenSquares';
-import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, isPlayerGamesQuestion, isPositionAssessmentQuestion, positionalTopic, looksLikeQuestionNotAnOpeningName, looksLikeConversationalReply, isStopCommand, LETS_PLAY_RE } from '../../coach/questionIntents';
+import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isWhyBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, isPlayerGamesQuestion, isPositionAssessmentQuestion, positionalTopic, looksLikeQuestionNotAnOpeningName, looksLikeConversationalReply, isStopCommand, LETS_PLAY_RE } from '../../coach/questionIntents';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -4444,7 +4444,11 @@ export function CoachTeachPage(): JSX.Element {
         // the literal phrase "Walkthrough the alapin" as an opening NAME
         // (David's 2026-07-31 audit, finding 103). Same class as the
         // learn/teach synonym fix below — don't lose the ask to semantics.
-        /\b(teach(?:\s+me)?|(?:i\s+want\s+to\s+|help\s+me\s+)?learn|study|continue|walk\s*(?:me\s+)?through|show\s+me|let'?s\s+do|let'?s\s+go\s+over|let'?s\s+try|tell\s+me\s+about|review)\b\s+(?:the\s+)?(.+?)(?:\s+(?:opening|line))?[.?!]*\s*$/i;
+        // ANCHORED TO THE START of the ask (pass-3 walk 2026-10-01: "What should
+        // I play here, what is their best plan, and is there a tactic? Show me
+        // the lines." matched its trailing "Show me" and asked for an opening
+        // named "lines"). Only polite lead-ins may come before the verb.
+        /^\s*(?:(?:ok(?:ay)?|so|now|please|hey|hi|hello|alright|right|coach|yes|great|cool|thanks)[,!.\s]+)*(?:(?:can|could|will|would)\s+(?:you|we)\s+)?(?:(?:i'?d\s+(?:like|love)|i\s+(?:want|need|would\s+like)|i\s+wanna|let\s+me|i'?m\s+(?:trying|going|here))\s+(?:you\s+)?(?:to\s+)?)?(?:please\s+)?(teach(?:\s+me)?|(?:i\s+want\s+to\s+|help\s+me\s+)?learn|study|continue|walk\s*(?:me\s+)?through|show\s+me|let'?s\s+do|let'?s\s+go\s+over|let'?s\s+try|tell\s+me\s+about|review)\b\s+(?:the\s+)?(.+?)(?:\s+(?:opening|line))?[.?!]*\s*$/i;
       // ONLY filler words are dropped from the name. "Defense", "Attack",
       // "Gambit", "System" are the name: stripping them turned "King's Indian
       // Defense" into "King's Indian", which resolved to the ATTACK (teach walk
@@ -4820,6 +4824,9 @@ export function CoachTeachPage(): JSX.Element {
         isMistakesQuestion(requestedName) ||
         isBestMoveQuestion(requestedName) ||
         isTacticsQuestion(requestedName) ||
+        // "walk me through the best line here" names a LINE on this board,
+        // not an opening (pass-3 walk 2026-10-01).
+        isWhyBestMoveQuestion(workingInput) ||
         // New grounded lanes (2026-09-01) — every coach surface answers these,
         // so a Teach ask must reach the spine, not the opening-teach hijack.
         isOpponentMoveQuestion(requestedName) ||

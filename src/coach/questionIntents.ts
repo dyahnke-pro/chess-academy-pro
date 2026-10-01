@@ -393,6 +393,10 @@ const ALTERNATIVES_QUESTION_RE = anyOf([
   String.raw`\bwhat\s+else\s+(?:could|can|should|would|might)\s+i\s+(?:play|do|try|consider)\b`,
   // "what are my (other) options/choices/alternatives/candidate moves"
   String.raw`\bwhat\s+(?:are|about)\s+(?:my|the)\s+(?:other\s+)?(?:options?|choices?|alternatives?|candidate\s+moves?)\b`,
+  // "my three best candidate moves", "the top 3 moves", "best few moves", "how
+  // do they compare" (pass-3 walk 2026-10-01: answered with ONE move).
+  String.raw`\b(?:two|three|four|five|2|3|4|5|few|top|best)\s+(?:best\s+|top\s+|candidate\s+|good\s+)*(?:moves|candidates|options|choices)\b`,
+  String.raw`\bhow\s+do\s+(?:they|those|these|the\s+(?:moves|candidates|options))\s+compare\b`,
   // "compare it/that/the best move to/with/against the alternatives/other moves"
   String.raw`\bcompare\b[\s\S]{0,30}\b(?:alternatives?|other\s+moves?|options?|candidates?)\b`,
   // "(are there) any other (good) moves (here / that work)"
@@ -444,7 +448,13 @@ const WHY_BEST_MOVE_RE = anyOf([
   String.raw`\bhow\s+does\s+(?:the\s+)?(?:engine|computer|stockfish)\s+(?:see|read|evaluate|view)\b`,
   String.raw`\bwhat\s+does\s+(?:the\s+)?(?:engine|computer|stockfish)\s+see\b`,
   // "walk/talk me through the (best) line / the engine line / the reasoning"
-  String.raw`\b(?:walk|talk|take)\s+me\s+through\s+(?:the\s+)?(?:engine(?:'?s)?\s+)?(?:line|reasoning|thinking|idea|plan|move)\b`,
+  String.raw`\b(?:walk|talk|take)\s+me\s+through\s+(?:the\s+)?(?:(?:best|main|top|engine(?:'?s)?)\s+)?(?:line|reasoning|thinking|idea|plan|move)\b`,
+  // "show me the line / the best line", "what's the best line here", "move by
+  // move" (pass-3 walk 2026-10-01: "the BEST line" broke every pattern above,
+  // and the ask fell to a one-move answer).
+  String.raw`\b(?:show|give|tell)\s+me\s+(?:the\s+)?(?:best|main|engine(?:'?s)?|critical)\s+line\b`,
+  String.raw`\bwhat(?:'?s| is)\s+the\s+(?:best|main|engine(?:'?s)?|critical)\s+line\b`,
+  String.raw`\bmove\s+by\s+move\b`,
   // bare "why is it best / why though" right after a best-move answer.
   String.raw`\bwhy\s+(?:is\s+it|though|that|is\s+that)\b`,
 ]);
@@ -620,6 +630,8 @@ const CANDIDATE_MOVE_RE = anyOf([
   // one form the list somehow never carried (caught 2026-08-06 while
   // re-verifying the inversion inventory).
   String.raw`\bwhat\s+(?:if|happens?\s+(?:if|when|after))\b`,
+  // the bare conditional — "if I play Nxe5, what do they answer?" (pass-3 walk).
+  String.raw`\b(?:if|suppose|say)\s+i\s+(?:play|go|take|push|move|castle|try)\b`,
   String.raw`\bis\s+it\s+(?:ok(?:ay)?|fine|safe|good|playable|alright)\s+to\s+(?:play|castle)\b`,
   String.raw`\bwould\s+[A-Za-z0-9+#=-]{2,6}\s+(?:be\s+)?(?:ok(?:ay)?|fine|work|playable|good|sound|safe)\b`,
   String.raw`\bdoes\s+[A-Za-z0-9+#=-]{2,6}\s+(?:work|hold|lose|win|blunder)\b`,
@@ -775,7 +787,7 @@ export function tradeAsk(ask: string | undefined): 'q' | 'r' | 'b' | 'n' | 'any'
  *  graded the student playing d5). The subject is the opponent and the tense is
  *  forward — "why did they play" is the retrospective opponent-move lane. */
 const OPPONENT_HYPOTHETICAL_RE = anyOf([
-  String.raw`\bwhat\s+(?:if|happens?\s+(?:if|when))\s+(?:they|he|she|(?:my|the)\s+opponent|the\s+(?:bot|computer|engine))\s+(?:play|plays|go|goes|push|pushes|take|takes|answer|answers|respond|responds|reply|replies|tr(?:y|ies)|get|gets|castle|castles|move|moves|put|puts)\b`,
+  String.raw`\b(?:what\s+(?:if|happens?\s+(?:if|when))|if|when|suppose|say)\s+(?:they|he|she|(?:my|the)\s+opponent|the\s+(?:bot|computer|engine))\s+(?:play|plays|go|goes|push|pushes|take|takes|answer|answers|respond|responds|reply|replies|tr(?:y|ies)|get|gets|castle|castles|move|moves|put|puts)\b`,
   String.raw`\b(?:can|could|will|would|might)\s+(?:they|he|she|(?:my|the)\s+opponent)\s+(?:play|go|push|take|get|try|answer|castle)\b`,
   String.raw`\b(?:should|do|must)\s+i\s+(?:worry|be\s+worried|care)\s+about\s+(?:their|his|her|the)\b`,
 ]);
@@ -801,6 +813,10 @@ export function isCandidateMoveQuestion(ask: string | undefined): boolean {
  *  inversion (Phase 2) routes it through `assembleTacticsAnswer` → voiceFacts
  *  and the LLM voices the engine's facts, deciding nothing. */
 const TACTICS_QUESTION_RE = anyOf([
+  // "the most forcing move here" / "any forcing moves" — the checks, captures
+  // and threats on THIS board (pass-3 walk 2026-10-01).
+  String.raw`\b(?:most\s+)?forcing\s+(?:move|moves|line|continuation)s?\b`,
+  String.raw`\b(?:is\s+there|any)\s+(?:a\s+)?tactic`,
   String.raw`\bhang(?:ing|s)?\b`,
   String.raw`\ben\s*prise\b`,
   String.raw`\bloose\s+piece`,
@@ -1293,6 +1309,10 @@ export function isFundamentalLessonQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
   // App-surface asks ("what does the fundamentals TAB do") are app-help.
   if (/\b(?:tab|page|screen|section|button|menu|the\s+app)\b/i.test(ask)) return false;
+  // A question about THIS board is not a lesson request — "what is the most
+  // forcing move HERE, and does it work?" got the forcing-moves lecture
+  // (pass-3 walk 2026-10-01). Same board-cue veto the concept lane uses.
+  if (CONCEPT_POSITIONAL_CUE_RE.test(ask) || /\b(?:does\s+it\s+work|is\s+there\s+(?:a|any))\b/i.test(ask)) return false;
   return FUND_LESSON_FRAME.test(ask) && resolveTaughtFundamental(ask) !== null;
 }
 
@@ -3272,4 +3292,45 @@ export function looksLikeConversationalReply(input: string | undefined): boolean
   const t = input.trim().replace(/[.!,\s]+$/, '');
   if (!t) return false;
   return CONFIRMATION_RE.test(t) || NEGATION_RE.test(t);
+}
+
+/** ONE QUESTION, SEVERAL ASKS (pass-3 walk 2026-10-01: "What should I play
+ *  here, what is their best plan, and is there a tactic for either side? Show
+ *  me the lines." — one lane answered one part, or none). Splits a message
+ *  into its asks when two or more of them claim DIFFERENT board lanes, so each
+ *  is answered by its own computer, in the order asked. "Show me the lines"
+ *  folds into the best-move part as the line walk. Null when it is one ask. */
+export type MultiAskKey = 'best' | 'line' | 'their-plan' | 'my-plan' | 'tactic' | 'eval' | 'break' | 'candidates';
+export function multiAskKey(part: string): MultiAskKey | null {
+  const t = part.toLowerCase();
+  if (/\b(?:their|the\s+opponent'?s|his|her)\s+(?:best\s+)?plan\b|\bwhat\s+(?:are|is)\s+(?:they|he|she)\s+(?:up\s+to|planning|going\s+for)\b/.test(t)) return 'their-plan';
+  if (isAlternativesQuestion(part)) return 'candidates';
+  if (isWhyBestMoveQuestion(part) || /\bshow\s+me\s+(?:the\s+)?lines?\b/.test(t)) return 'line';
+  if (isTacticsQuestion(part)) return 'tactic';
+  if (/\b(?:pawn\s+)?breaks?\b/.test(t)) return 'break';
+  if (/\b(?:who'?s|who\s+is)\s+(?:better|winning)\b|\bhow\s+do\s+i\s+stand\b|\bam\s+i\s+(?:better|winning|worse)\b/.test(t)) return 'eval';
+  if (/\b(?:my|our)\s+plan\b|\bwhat(?:'?s| is)\s+the\s+plan\b/.test(t)) return 'my-plan';
+  if (isBestMoveQuestion(part) || /\bwhat\s+should\s+i\s+(?:play|do)\b/.test(t)) return 'best';
+  return null;
+}
+export function splitMultiAsk(ask: string | undefined): string[] | null {
+  // A typed question carries a question mark; composed scaffolds do not.
+  if (!ask || ask.length > 400 || /\[/.test(ask) || !ask.includes('?')) return null;
+  const parts = ask
+    .split(/\?|;|,\s*(?:and\s+)?(?=(?:what|is|are|how|which|who|show|where|why|do|does|can|should|any)\b)|\s+and\s+(?=(?:what|is|are|how|which|who|show|where|why|do|does|can|should|any)\b)|\.\s+(?=[A-Z])/i)
+    .map((p) => p.trim().replace(/^(?:and|also|then)\s+/i, ''))
+    .filter((p) => p.length >= 4);
+  if (parts.length < 2) return null;
+  const keyed: Array<{ key: MultiAskKey; text: string }> = [];
+  for (const p of parts) {
+    const key = multiAskKey(p);
+    if (!key || keyed.some((k) => k.key === key)) continue;
+    keyed.push({ key, text: /[?.!]$/.test(p) ? p : `${p}?` });
+  }
+  // "Show me the lines" beside "what should I play" is ONE ask: the best move,
+  // walked as its line.
+  const best = keyed.findIndex((k) => k.key === 'best');
+  const line = keyed.findIndex((k) => k.key === 'line');
+  if (best >= 0 && line >= 0) { keyed[best] = { key: 'line', text: 'Walk me through the best line here?' }; keyed.splice(line, 1); }
+  return keyed.length >= 2 ? keyed.map((k) => k.text) : null;
 }

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7127 lines · 159 exports · 67 importers · 41 tests · 8 audits**
+**7132 lines · 159 exports · 68 importers · 42 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,6 +18,7 @@
 ## Who calls in
 
 - `src/coach/coachService.ts`
+- `src/coach/pass3Questions.test.ts`
 - `src/coach/questionIntents.counterRepertoire.test.ts`
 - `src/components/Coach/CoachGamePage.tsx`
 - `src/components/Coach/CoachTeachPage.tsx`
@@ -576,7 +577,10 @@
 - `src/services/groundedAnswer.test.ts:789`
 - `src/services/groundedAnswer.test.ts:790`
 
-### `notationQuestionSan` (function) — 26 call sites
+### `notationQuestionSan` (function) — 29 call sites
+- `src/coach/pass3Questions.test.ts:20`
+- `src/coach/pass3Questions.test.ts:26`
+- `src/coach/pass3Questions.test.ts:43`
 - `src/services/coachApi.currentAsk.test.ts:49`
 - `src/services/coachApi.currentAsk.test.ts:51`
 - `src/services/coachApi.currentAsk.test.ts:56`
@@ -1110,7 +1114,7 @@
 - `src/services/coachApi.ts:5839`
 
 ### `seatPieceReferences` (re-export) — 26 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7868`
+- `src/components/Coach/CoachTeachPage.tsx:7875`
 - `src/services/coachFeatureService.ts:4881`
 - `src/services/liveTacticsContext.ts:453`
 - `src/services/lookaheadPlan.ts:116`
@@ -1139,6 +1143,7 @@
 
 ## Tests
 
+- `src/coach/pass3Questions.test.ts`
 - `src/coach/questionIntents.counterRepertoire.test.ts`
 - `src/coach/questionWalk.sicilian1200.test.ts`
 - `src/services/answerBoardQuestion.test.ts`

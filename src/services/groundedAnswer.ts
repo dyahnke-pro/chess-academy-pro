@@ -4066,6 +4066,11 @@ export function notationQuestionSan(text: string | null | undefined): string | n
   // to d4" (broken-map #1). A genuine notation query ("what is Bxe7", "what does
   // e4 mean") never has one of these words immediately before the token.
   if (/\b(?:with|against|versus|vs\.?|v\.?|playing|facing|in)\s+(?:the\s+)?$/i.test(before)) return null;
+  // A MOVE IN A CONDITIONAL is a board question, not a notation one — "if they
+  // play Re3, what is my best reply" was answered "'Re3' is chess notation"
+  // (pass-3 walk 2026-10-01). The verb before the token decides it.
+  if (/\b(?:play|plays|played|playing|go|goes|take|takes|push|pushes|answer|answers|reply|replies|move|moves|try|tries)\s+$/i.test(before)) return null;
+  if (/\b(?:best\s+(?:reply|response|answer|move)|who\s+(?:comes\s+out|is)\s+(?:ahead|better))\b/i.test(text)) return null;
   return normalizeBeginnerSan(m[0]);
 }
 

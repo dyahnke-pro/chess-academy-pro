@@ -196,7 +196,7 @@ function pickProvider(_name: ProviderName): Provider {
 // now live in the pure leaf ./questionIntents (so light surfaces can import
 // buildQuestionGrounding without the heavy spine). Imported for internal use
 // here and re-exported for back-compat with existing callers.
-import {
+import { splitMultiAsk,
   coachSurfaceToRoute,
   INTERNAL_ASK_SURFACES, askSourceFor,
   isPlanQuestion, isBestMoveQuestion, restrictedPieceInAsk, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion, isAttackAssessmentQuestion,
@@ -2382,6 +2382,27 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   let answer: CoachAnswer | undefined;
   let failure: unknown;
   try {
+    // SEVERAL ASKS IN ONE MESSAGE → each to its own lane, answered in order
+    // (pass-3 walk 2026-10-01). Same options per part; tool calls, offers and
+    // walkable lines are merged so the surface draws every line it heard.
+    // Only what a PERSON typed: composed internal prompts (hints, narration
+    // scaffolds) are never split.
+    const parts = INTERNAL_ASK_SURFACES.has(input.liveState.surface) ? null : splitMultiAsk(input.ask);
+    if (parts) {
+      const answers: CoachAnswer[] = [];
+      for (const part of parts) answers.push(await askImpl({ ...input, ask: part }, options));
+      const lines = answers.flatMap((a) => a.lines ?? []);
+      const offers = answers.flatMap((a) => a.actionOffer ?? []);
+      answer = {
+        ...answers[answers.length - 1],
+        text: answers.map((a) => a.text.trim()).filter(Boolean).join('\n\n'),
+        toolCallIds: answers.flatMap((a) => a.toolCallIds),
+        dispatchedToolNames: answers.flatMap((a) => a.dispatchedToolNames),
+        ...(lines.length ? { lines } : {}),
+        ...(offers.length ? { actionOffer: offers } : {}),
+      };
+      return answer;
+    }
     answer = await askImpl(input, options);
     return answer;
   } catch (e) {

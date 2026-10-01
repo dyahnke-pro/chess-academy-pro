@@ -280,8 +280,8 @@
 - `src/services/reviewNarrationFidelity.test.ts:118`
 
 ### `pendingRecapture` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7507`
-- `src/components/Coach/CoachTeachPage.tsx:7596`
+- `src/components/Coach/CoachTeachPage.tsx:7514`
+- `src/components/Coach/CoachTeachPage.tsx:7603`
 - `src/services/coachFeatureService.test.ts:929`
 - `src/services/coachFeatureService.test.ts:930`
 - `src/utils/justCaptured.test.ts:20`
