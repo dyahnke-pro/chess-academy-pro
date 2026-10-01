@@ -18,7 +18,6 @@ import { isFixtureGame } from './fixtureGames';
 import { playedAtMs, type WeaknessProvenance } from './weaknessSpine';
 import { capEval } from './accuracyService';
 import { verifySacrificeDeep, SAC_VERIFY_DEPTH } from './brilliancy';
-import { useAppStore } from '../stores/appStore';
 import { MISTAKE_CP, BLUNDER_CP, isMateEval } from './engineConstants';
 import { winPctLost, bandForWinPctLost } from './accuracyService';
 import type {
@@ -1021,107 +1020,6 @@ export async function generateMistakePuzzlesForBatch(
   return total;
 }
 
-// ─── Re-analysis ─────────────────────────────────────────────────────────────
-
-export interface ReanalysisProgress {
-  current: number;
-  total: number;
-  puzzlesFound: number;
-  /** Human-readable reason the analysis couldn't run or produced no
-   *  puzzles — surfaced so the UI can tell the user exactly what to
-   *  fix (e.g. "set your chess.com username in Settings"). */
-  warning?: string;
-}
-
-/**
- * Re-analyze all imported games that haven't produced mistake puzzles.
- * Clears cached meta keys and existing puzzles, then re-runs Stockfish analysis.
- * Reports progress via callback so the UI can show a progress indicator.
- */
-export async function reanalyzeImportedGames(
-  onProgress?: (progress: ReanalysisProgress) => void,
-): Promise<number> {
-  // Find all imported games (chesscom + lichess)
-  const allGames = await db.games
-    .filter((g) => g.source === 'chesscom' || g.source === 'lichess')
-    .toArray();
-
-  if (allGames.length === 0) return 0;
-
-  // Clear all existing mistake puzzles from imported games
-  const importedPuzzles = await db.mistakePuzzles
-    .filter((p) => p.sourceMode === 'chesscom' || p.sourceMode === 'lichess')
-    .toArray();
-  if (importedPuzzles.length > 0) {
-    await db.mistakePuzzles.bulkDelete(importedPuzzles.map((p) => p.id));
-  }
-
-  // Clear cached meta keys so games get re-processed
-  const metaKeys = allGames.map((g) => `mistakes_generated_${g.id}`);
-  await db.meta.bulkDelete(metaKeys);
-
-  // Also clear annotations on games that had none originally (so Stockfish re-analyzes)
-  for (const game of allGames) {
-    if (game.annotations && game.annotations.length > 0) {
-      // Check if these annotations came from our Stockfish analysis (no eval comments in PGN)
-      // by seeing if annotations only cover mistakes (not full game annotations)
-      const hasFullAnnotations = game.annotations.length > 5;
-      if (!hasFullAnnotations) {
-        await db.games.update(game.id, { annotations: null });
-      }
-    }
-  }
-
-  // Pull the student's real usernames from their profile. Previously
-  // we assumed the first game's white player was the user — that
-  // silently dropped every game where they played black, and worse, if
-  // their first import was a game where THEY played black, the
-  // assumed "username" was actually the opponent and ZERO puzzles
-  // generated for the whole batch. Read the saved usernames instead.
-  const profile = useAppStore.getState().activeProfile;
-  const chessComUsername = profile?.preferences.chessComUsername;
-  const lichessUsername = profile?.preferences.lichessUsername;
-
-  // Warn early if the user has imported games but never told us which
-  // side they played. The old silent-zero-puzzles behavior looked like
-  // a broken feature.
-  const hasChesscomGames = allGames.some((g) => g.source === 'chesscom');
-  const hasLichessGames = allGames.some((g) => g.source === 'lichess');
-  const missing: string[] = [];
-  if (hasChesscomGames && !chessComUsername) missing.push('chess.com');
-  if (hasLichessGames && !lichessUsername) missing.push('lichess');
-  if (missing.length > 0) {
-    onProgress?.({
-      current: 0,
-      total: allGames.length,
-      puzzlesFound: 0,
-      warning: `Set your ${missing.join(' and ')} username in Settings → Games so we know which side you played.`,
-    });
-    return 0;
-  }
-
-  // Re-run analysis on all games
-  let totalPuzzles = 0;
-  for (let i = 0; i < allGames.length; i++) {
-    onProgress?.({ current: i + 1, total: allGames.length, puzzlesFound: totalPuzzles });
-
-    // Re-fetch game since we may have cleared annotations
-    const freshGame = await db.games.get(allGames[i].id);
-    if (!freshGame) continue;
-
-    const username = freshGame.source === 'chesscom'
-      ? chessComUsername
-      : freshGame.source === 'lichess'
-        ? lichessUsername
-        : undefined;
-
-    const count = await generateMistakePuzzlesFromGame(freshGame.id, username);
-    totalPuzzles += count;
-  }
-
-  onProgress?.({ current: allGames.length, total: allGames.length, puzzlesFound: totalPuzzles });
-  return totalPuzzles;
-}
 
 // ─── Queries ────────────────────────────────────────────────────────────────
 

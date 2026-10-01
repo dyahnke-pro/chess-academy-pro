@@ -26,7 +26,6 @@ vi.mock('../../services/mistakePuzzleService', () => ({
   getMistakePuzzleStats: vi.fn(() => Promise.resolve(mockStats)),
   gradeMistakePuzzle: vi.fn(() => Promise.resolve()),
   deleteMistakePuzzle: vi.fn(() => Promise.resolve()),
-  reanalyzeImportedGames: vi.fn(() => Promise.resolve(0)),
 }));
 
 const mockNavigate = vi.fn();

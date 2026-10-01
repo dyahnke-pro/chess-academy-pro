@@ -6,15 +6,17 @@ import {
   getMistakePuzzleStats,
   gradeMistakePuzzle,
   deleteMistakePuzzle,
-  reanalyzeImportedGames,
   type MistakePuzzleStats,
-  type ReanalysisProgress,
 } from '../../services/mistakePuzzleService';
-import { ArrowLeft, Trash2, AlertTriangle, Trophy, CheckCircle, CircleDot, RefreshCw, BookOpen, Swords, Crown, Search, X, Film } from 'lucide-react';
+import { ArrowLeft, Trash2, AlertTriangle, Trophy, CheckCircle, CircleDot, BookOpen, Swords, Crown, Search, X, Film } from 'lucide-react';
 import { logAppAudit } from '../../services/appAuditor';
 import { getHomeGameIds } from '../../services/homeOpeningService';
 import { tacticTypeLabel } from '../../services/tacticAlertService';
 import { PageHelp } from '../Layout/PageHelp';
+import { AnalyzeGamesButton } from '../Games/AnalyzeGamesButton';
+import { gameNeedsAnalysis } from '../../services/gameAnalysisService';
+import { useAppStore } from '../../stores/appStore';
+import { db } from '../../db/schema';
 import { summarizeWeaknesses, mistakeWeaknessKey } from '../../services/coachDrillService';
 import type { MistakePuzzle, MistakeClassification, MistakePuzzleSourceMode, MistakePuzzleStatus, MistakeGamePhase } from '../../types';
 
@@ -115,8 +117,6 @@ export function MyMistakesPage(): JSX.Element {
   // shows exactly the puzzles it counted (David 2026-09-07).
   const [weaknessKeyFilter, setWeaknessKeyFilter] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [analyzing, setAnalyzing] = useState(false);
-  const [analysisProgress, setAnalysisProgress] = useState<ReanalysisProgress | null>(null);
 
   // Mount audit — adds observability so the audit-stream can see
   // when the user opens the mistakes browser. Was zero-coverage
@@ -133,6 +133,20 @@ export function MyMistakesPage(): JSX.Element {
       }),
     });
   }, []);  // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Imported games the pipeline has not analysed yet. An empty list after an
+  // import is not "no mistakes" — it is "not analysed", and the page has to
+  // say so and start the analysis (hand walk 2026-10-01: 3,388 imported games
+  // and the page still said "Import Games").
+  const bgRunning = useAppStore((s) => s.backgroundAnalysisRunning);
+  const [waitingGames, setWaitingGames] = useState(0);
+  useEffect(() => {
+    let cancelled = false;
+    void db.games.toArray()
+      .then((gs) => { if (!cancelled) setWaitingGames(gs.filter((g) => !g.isMasterGame && gameNeedsAnalysis(g)).length); })
+      .catch(() => { if (!cancelled) setWaitingGames(0); });
+    return () => { cancelled = true; };
+  }, [bgRunning]);
 
   // The student's home-opening games (A5): their slips lead the list.
   const [homeGameIds, setHomeGameIds] = useState<ReadonlySet<string>>(() => new Set());
@@ -232,30 +246,6 @@ export function MyMistakesPage(): JSX.Element {
     void loadData();
   }, [loadData]);
 
-  const handleReanalyze = useCallback(async () => {
-    setAnalyzing(true);
-    setAnalysisProgress(null);
-    const lastProgressRef: { current: ReanalysisProgress | null } = { current: null };
-    try {
-      await reanalyzeImportedGames((progress) => {
-        lastProgressRef.current = progress;
-        setAnalysisProgress(progress);
-      });
-      await loadData();
-    } finally {
-      setAnalyzing(false);
-      // Preserve a terminal warning (e.g. "set your chess.com
-      // username...") so the user can read it after the progress
-      // bar disappears. Clear everything else.
-      const final = lastProgressRef.current;
-      if (final && final.warning) {
-        setAnalysisProgress(final);
-      } else {
-        setAnalysisProgress(null);
-      }
-    }
-  }, [loadData]);
-
   const getPhaseCount = (phase: MistakeGamePhase | 'all'): number => {
     if (!stats) return 0;
     if (phase === 'all') return stats.total;
@@ -302,15 +292,11 @@ export function MyMistakesPage(): JSX.Element {
           <ArrowLeft size={18} className="text-theme-text" />
         </button>
         <h1 className="text-xl font-bold text-theme-text flex-1">My Mistakes</h1>
-        <button
-          onClick={() => void handleReanalyze()}
-          disabled={analyzing}
-          className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded bg-theme-accent/10 text-theme-accent hover:bg-theme-accent/20 disabled:opacity-50 transition-colors"
-          data-testid="reanalyze-button"
-        >
-          <RefreshCw size={14} className={analyzing ? 'animate-spin' : ''} />
-          {analyzing ? 'Analyzing...' : 'Re-analyze Games'}
-        </button>
+        {/* The ONE analysis pipeline (home openings first, capped package).
+            "Re-analyze Games" was a second pipeline that deleted every
+            puzzle and its progress before re-running all games serially —
+            removed (hand walk 2026-10-01). Hidden when nothing waits. */}
+        <AnalyzeGamesButton variant="compact" source="MyMistakesPage" />
         <PageHelp
           helpId="tactics-mistakes"
           title="How My Mistakes works"
@@ -347,34 +333,6 @@ export function MyMistakesPage(): JSX.Element {
               </button>
             ))}
           </div>
-        </div>
-      )}
-
-      {/* Analysis progress */}
-      {analyzing && analysisProgress && (
-        <div className="p-3 rounded-lg bg-theme-surface border border-theme-border mb-4" data-testid="analysis-progress">
-          <div className="flex justify-between text-xs text-theme-text-muted mb-1.5">
-            <span>Analyzing game {analysisProgress.current} of {analysisProgress.total}</span>
-            <span>{analysisProgress.puzzlesFound} mistakes found</span>
-          </div>
-          <div className="h-1.5 rounded-full bg-theme-border overflow-hidden">
-            <div
-              className="h-full rounded-full bg-theme-accent transition-all duration-300"
-              style={{ width: `${(analysisProgress.current / Math.max(analysisProgress.total, 1)) * 100}%` }}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Username-missing warning — surfaces the specific reason the
-          analysis couldn't produce puzzles rather than silently ending
-          with zero results. */}
-      {analysisProgress?.warning && (
-        <div
-          className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/40 text-amber-400 text-xs mb-4"
-          data-testid="analysis-warning"
-        >
-          {analysisProgress.warning}
         </div>
       )}
 
@@ -547,15 +505,26 @@ export function MyMistakesPage(): JSX.Element {
         <div className="text-center py-12 text-theme-text-muted flex flex-col items-center gap-4" data-testid="empty-state">
           <AlertTriangle size={48} className="mx-auto opacity-30" />
           <p className="text-lg font-medium">No mistakes yet</p>
-          <p className="text-sm">
-            Import games to review your in-game mistakes and generate practice puzzles.
-          </p>
-          <button
-            onClick={() => void navigate('/games/import')}
-            className="px-5 py-2.5 rounded-xl font-semibold text-sm bg-red-500 text-white hover:opacity-90 transition-opacity"
-          >
-            Import Games
-          </button>
+          {waitingGames > 0 ? (
+            <>
+              <p className="text-sm" data-testid="games-waiting">
+                {waitingGames} imported {waitingGames === 1 ? 'game is' : 'games are'} waiting to be analysed. Each mistake you made becomes a puzzle here.
+              </p>
+              <AnalyzeGamesButton variant="primary" source="MyMistakesPage.empty" />
+            </>
+          ) : (
+            <>
+              <p className="text-sm">
+                Import games to review your in-game mistakes and generate practice puzzles.
+              </p>
+              <button
+                onClick={() => void navigate('/games/import')}
+                className="px-5 py-2.5 rounded-xl font-semibold text-sm bg-red-500 text-white hover:opacity-90 transition-opacity"
+              >
+                Import Games
+              </button>
+            </>
+          )}
         </div>
       )}
 
