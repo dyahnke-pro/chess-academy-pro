@@ -1,4 +1,5 @@
 import { loadDataJson } from './dataFile';
+import { rankThemeTargets } from './puzzleThemeTargets';
 import { db } from '../db/schema';
 import { safeRatingKey } from '../utils/ratingKey';
 import { calculateNextInterval, createDefaultSrsFields } from './srsEngine';
@@ -281,16 +282,18 @@ export async function getThemeSkills(): Promise<ThemeSkill[]> {
 }
 
 /**
- * Returns the themes where the user has the lowest accuracy.
+ * The themes the next puzzles should train — ranked from the student's WHOLE
+ * record (`rankThemeTargets`): open holes from games, drills and puzzles
+ * first, then weak puzzle themes, then untried themes in rotation.
  */
 export async function getWeakestThemes(limit: number = 3): Promise<string[]> {
   const skills = await getThemeSkills();
-  // Themes never attempted are considered weakest
-  const attempted = new Set(skills.map((s) => s.theme));
-  const unattempted = TACTICAL_THEMES.filter((t) => !attempted.has(t));
-
-  const weakest = [...unattempted, ...skills.map((s) => s.theme)];
-  return weakest.slice(0, limit);
+  // Imported lazily: the weakness spine reads puzzle data through this module.
+  const signals = await import('./weaknessSignalLoader')
+    .then((m) => m.loadWeaknessSignals())
+    .catch(() => []);
+  const rotation = skills.reduce((n, s) => n + s.attempts, 0);
+  return rankThemeTargets(signals, skills, TACTICAL_THEMES, rotation, limit);
 }
 
 // ─── Queries ────────────────────────────────────────────────────────────────
