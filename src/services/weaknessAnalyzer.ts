@@ -8,6 +8,7 @@ import { getMisconceptionProfile, type MisconceptionAggregate } from './misconce
 import { isFixtureDerived, isFixtureGame } from './fixtureGames';
 import type { MisconceptionBucket } from '../data/misconceptionTags';
 import type {
+  TacticType,
   WeaknessProfile,
   WeaknessItem,
   WeaknessCategory,
@@ -1239,80 +1240,24 @@ function buildFenFromAnnotationIndex(game: GameRecord, index: number): string | 
 export function detectWeaknessThemes(mistakes: MistakePuzzle[]): WeaknessTheme[] {
   if (mistakes.length === 0) return [];
 
-  const themeMap = new Map<string, {
-    pattern: string;
-    fens: string[];
-    cpLosses: number[];
-  }>();
-
-  function addToTheme(key: string, pattern: string, fen: string, cpLoss: number): void {
-    const existing = themeMap.get(key);
-    if (existing) {
-      if (existing.fens.length < 5) existing.fens.push(fen);
-      existing.cpLosses.push(cpLoss);
-    } else {
-      themeMap.set(key, { pattern, fens: [fen], cpLosses: [cpLoss] });
-    }
-  }
-
-  // detectTactics is a full per-position board scan (Chess construction +
-  // fork/pin/skewer/mate finders). Running it synchronously for EVERY mistake
-  // froze the tab hard enough to trip Chrome's "Page Unresponsive" on a large
-  // mistake set (David 2026-08-27). Two guards keep the loop bounded:
-  //   • a mistake that already carries a `tacticType` was classified at capture
-  //     — its motif is known, so the redundant FEN re-scan is skipped entirely;
-  //   • unclassified mistakes get the scan, but only up to a hard cap (the
-  //     theme distribution is well-sampled long before then). Beyond the cap we
-  //     rank on the classified motifs alone.
-  const MAX_FEN_SCANS = 250;
-  let fenScans = 0;
-
+  const themeMap = new Map<ThemeKey, { fens: string[]; cpLosses: number[] }>();
   for (const mp of mistakes) {
-    // 1. Classify by tactic type if available
-    if (mp.tacticType) {
-      const label = TACTIC_THEME_LABELS[mp.tacticType] ?? mp.tacticType;
-      addToTheme(
-        `tactic:${mp.tacticType}`,
-        `Missed ${label.toLowerCase()} patterns`,
-        mp.fen,
-        mp.cpLoss,
-      );
-    } else if (fenScans < MAX_FEN_SCANS) {
-      // 2. Unclassified only — detect tactics from the FEN (bounded, cached).
-      fenScans += 1;
-      const detected = detectTactics(mp.fen);
-      for (const tactic of detected.tactics) {
-        const tacticKey = `tactic:${tactic.type}`;
-        if (!themeMap.has(tacticKey)) {
-          const label = TACTIC_THEME_LABELS[tactic.type] ?? tactic.type;
-          addToTheme(tacticKey, `Missed ${label.toLowerCase()} patterns`, mp.fen, mp.cpLoss);
-        }
+    for (const key of themeKeysFor(mp)) {
+      const existing = themeMap.get(key);
+      if (existing) {
+        if (existing.fens.length < 5) existing.fens.push(mp.fen);
+        existing.cpLosses.push(mp.cpLoss);
+      } else {
+        themeMap.set(key, { fens: [mp.fen], cpLosses: [mp.cpLoss] });
       }
-      if (detected.hangingPieces.length > 0) {
-        addToTheme('hanging_pieces', 'Left pieces undefended', mp.fen, mp.cpLoss);
-      }
-    }
-
-    // 3. Classify by game phase
-    if (mp.gamePhase === 'opening') {
-      addToTheme('phase:opening', 'Errors in the opening phase', mp.fen, mp.cpLoss);
-    } else if (mp.gamePhase === 'endgame') {
-      addToTheme('phase:endgame', 'Errors in endgame positions', mp.fen, mp.cpLoss);
-    }
-
-    // 4. Classify by severity
-    if (mp.classification === 'blunder') {
-      addToTheme('severity:blunder', 'Severe miscalculations (300+ cp)', mp.fen, mp.cpLoss);
     }
   }
 
-  // Convert to WeaknessTheme array sorted by frequency
   const themes: WeaknessTheme[] = [];
   for (const [key, data] of themeMap) {
-    const themeName = THEME_DISPLAY_NAMES[key] ?? key.replace(/^(tactic|phase|severity):/, '');
     themes.push({
-      theme: themeName,
-      specificPattern: data.pattern,
+      theme: THEME_INFO[key].name,
+      specificPattern: THEME_INFO[key].pattern,
       frequency: data.cpLosses.length,
       sampleFens: data.fens,
       avgCentipawnLoss: Math.round(
@@ -1325,46 +1270,63 @@ export function detectWeaknessThemes(mistakes: MistakePuzzle[]): WeaknessTheme[]
   return themes;
 }
 
-const TACTIC_THEME_LABELS: Record<string, string> = {
-  fork: 'Fork',
-  pin: 'Pin',
-  skewer: 'Skewer',
-  discovered_attack: 'Discovered Attack',
-  back_rank: 'Back Rank',
-  hanging_piece: 'Hanging Piece',
-  promotion: 'Promotion',
+/**
+ * The ONE membership rule for weakness themes — the card's count and the
+ * drill's puzzles both read it, so a "Pins" card can never open a drill of
+ * something else (hand walk 2026-10-01: the card counted tags, the drill
+ * admitted any position merely CONTAINING a pin, so "Pins ×5" opened 20
+ * puzzles starting on a discovered attack).
+ *
+ * Membership is the stored `tacticType` — the unified classifier's verdict on
+ * what was MISSED (backfilled on boot by `tacticTypeBackfill`). A board scan of
+ * the position finds what is merely present, in the other tactic vocabulary
+ * ("battery"), and is never used here.
+ */
+export function themeKeysFor(mp: MistakePuzzle): ThemeKey[] {
+  const keys: ThemeKey[] = [];
+  if (mp.tacticType) keys.push(`tactic:${mp.tacticType}`);
+  if (mp.gamePhase === 'opening') keys.push('phase:opening');
+  else if (mp.gamePhase === 'endgame') keys.push('phase:endgame');
+  if (mp.classification === 'blunder') keys.push('severity:blunder');
+  return keys;
+}
+
+type ThemeKey = `tactic:${TacticType}` | 'phase:opening' | 'phase:endgame' | 'severity:blunder';
+
+/** Name per tactic, EXHAUSTIVE: a new TacticType fails to compile until it is
+ *  named. The open `Record<string,string>` + `?? key` this replaces printed raw
+ *  ids ("removing_the_guard", "checkmate") on the Weaknesses page. */
+const TACTIC_THEME_NAMES: Record<TacticType, string> = {
+  fork: 'Forks',
+  pin: 'Pins',
+  skewer: 'Skewers',
+  discovered_attack: 'Discovered Attacks',
+  back_rank: 'Back Rank Threats',
+  hanging_piece: 'Hanging Pieces',
+  promotion: 'Promotion Tactics',
   deflection: 'Deflection',
-  overloaded_piece: 'Overloaded Piece',
-  trapped_piece: 'Trapped Piece',
-  clearance: 'Clearance',
+  overloaded_piece: 'Overloaded Pieces',
+  trapped_piece: 'Trapped Pieces',
+  clearance: 'Clearance Sacrifices',
   interference: 'Interference',
   zwischenzug: 'Zwischenzug',
-  x_ray: 'X-Ray',
+  x_ray: 'X-Ray Attacks',
   double_check: 'Double Check',
-  tactical_sequence: 'Tactical Sequence',
+  removing_the_guard: 'Removing the Guard',
+  checkmate: 'Missed Checkmates',
+  tactical_sequence: 'Tactical Sequences',
 };
 
-const THEME_DISPLAY_NAMES: Record<string, string> = {
-  'tactic:fork': 'Forks',
-  'tactic:pin': 'Pins',
-  'tactic:skewer': 'Skewers',
-  'tactic:discovered_attack': 'Discovered Attacks',
-  'tactic:back_rank': 'Back Rank Threats',
-  'tactic:hanging_piece': 'Hanging Pieces',
-  'tactic:promotion': 'Promotion Tactics',
-  'tactic:deflection': 'Deflection',
-  'tactic:overloaded_piece': 'Overloaded Pieces',
-  'tactic:trapped_piece': 'Trapped Pieces',
-  'tactic:clearance': 'Clearance Sacrifices',
-  'tactic:interference': 'Interference',
-  'tactic:zwischenzug': 'Zwischenzug',
-  'tactic:x_ray': 'X-Ray Attacks',
-  'tactic:double_check': 'Double Check',
-  'tactic:tactical_sequence': 'Tactical Sequences',
-  'hanging_pieces': 'Hanging Pieces',
-  'phase:opening': 'Opening Blunders',
-  'phase:endgame': 'Endgame Errors',
-  'severity:blunder': 'Severe Blunders',
+const THEME_INFO: Record<ThemeKey, { name: string; pattern: string }> = {
+  ...(Object.fromEntries(
+    (Object.entries(TACTIC_THEME_NAMES) as [TacticType, string][]).map(([t, name]) => [
+      `tactic:${t}`,
+      { name, pattern: name.startsWith('Missed ') ? name : `Missed ${name.toLowerCase()}` },
+    ]),
+  ) as Record<`tactic:${TacticType}`, { name: string; pattern: string }>),
+  'phase:opening': { name: 'Opening Blunders', pattern: 'Errors in the opening phase' },
+  'phase:endgame': { name: 'Endgame Errors', pattern: 'Errors in endgame positions' },
+  'severity:blunder': { name: 'Severe Blunders', pattern: 'Severe miscalculations (300+ cp)' },
 };
 
 // ─── Weakness-to-Drill: generatePersonalizedDrill ──────────────────────────
@@ -1430,42 +1392,9 @@ export async function generatePersonalizedDrill(
 }
 
 function filterMistakesByTheme(mistakes: MistakePuzzle[], theme: string): MistakePuzzle[] {
-  // Reverse-lookup: find which internal key maps to the display name
-  const internalKey = Object.entries(THEME_DISPLAY_NAMES).find(
-    ([, name]) => name === theme,
-  )?.[0];
-
-  return mistakes.filter((mp) => {
-    // Check tactic type match
-    if (internalKey?.startsWith('tactic:')) {
-      const tacticType = internalKey.replace('tactic:', '');
-      if (mp.tacticType === tacticType) return true;
-      // Also check via detector
-      const detected = detectTactics(mp.fen);
-      if (detected.tactics.some((t) => t.type === tacticType)) return true;
-    }
-
-    // Check hanging pieces
-    if (internalKey === 'hanging_pieces' || theme === 'Hanging Pieces') {
-      const detected = detectTactics(mp.fen);
-      if (detected.hangingPieces.length > 0) return true;
-    }
-
-    // Check phase-based themes
-    if (internalKey === 'phase:opening' || theme === 'Opening Blunders') {
-      return mp.gamePhase === 'opening';
-    }
-    if (internalKey === 'phase:endgame' || theme === 'Endgame Errors') {
-      return mp.gamePhase === 'endgame';
-    }
-
-    // Check severity
-    if (internalKey === 'severity:blunder' || theme === 'Severe Blunders') {
-      return mp.classification === 'blunder';
-    }
-
-    return false;
-  });
+  const key = (Object.keys(THEME_INFO) as ThemeKey[]).find((k) => THEME_INFO[k].name === theme);
+  if (!key) return [];
+  return mistakes.filter((mp) => themeKeysFor(mp).includes(key));
 }
 
 function buildMixedQueue(
@@ -1505,9 +1434,7 @@ function buildMixedQueue(
 }
 
 function resolveThemeKey(mp: MistakePuzzle): string {
-  if (mp.tacticType) {
-    return THEME_DISPLAY_NAMES[`tactic:${mp.tacticType}`] ?? mp.tacticType;
-  }
+  if (mp.tacticType) return TACTIC_THEME_NAMES[mp.tacticType];
   if (mp.gamePhase === 'opening') return 'Opening Blunders';
   if (mp.gamePhase === 'endgame') return 'Endgame Errors';
   if (mp.classification === 'blunder') return 'Severe Blunders';

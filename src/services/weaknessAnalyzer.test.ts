@@ -903,6 +903,46 @@ describe('weaknessAnalyzer', () => {
 
   // ─── generatePersonalizedDrill ────────────────────────────────────────────
 
+  // Hand walk 2026-10-01 (erik, chess.com): "Pins ×5" opened a 20-puzzle drill
+  // that began on a DISCOVERED ATTACK. The drill admitted any position that
+  // merely contained a pin; the card counted tags. One membership now.
+  describe('one theme membership — card and drill agree', () => {
+    beforeEach(async () => {
+      await db.delete();
+      await db.open();
+    });
+
+    // A real puzzle from the walk: tagged discovered_attack, and a pin IS on
+    // the board (queen on c4, pawn e4, knight g4) — the old drill took it.
+    const discoveredWithPinOnBoard = (id: string) => buildMistakePuzzle({
+      id, status: 'unsolved', tacticType: 'discovered_attack', cpLoss: 1046, classification: 'blunder',
+      gamePhase: 'middlegame',
+      fen: 'r4b1r/p1k1qBpp/1Bp5/4p3/2Q1p1n1/1P6/1PP2PPP/R2R2K1 b - - 0 19',
+    });
+
+    it('a Pins drill holds exactly the puzzles the Pins card counts', async () => {
+      const pins = [1, 2, 3, 4, 5].map((i) => buildMistakePuzzle({ id: `pin${i}`, status: 'unsolved', tacticType: 'pin', cpLoss: 300 }));
+      const others = Array.from({ length: 20 }, (_, i) => discoveredWithPinOnBoard(`da${i}`));
+      await db.mistakePuzzles.bulkAdd([...pins, ...others]);
+
+      const card = detectWeaknessThemes([...pins, ...others]).find((t) => t.theme === 'Pins');
+      const session = await generatePersonalizedDrill('Pins', 20);
+      expect(card?.frequency).toBe(5);
+      expect(session.drillItems).toHaveLength(5);
+      expect(session.drillItems.every((d) => d.mistakePuzzle.tacticType === 'pin')).toBe(true);
+    });
+
+    it('never shows a raw tactic id, and never one theme twice', () => {
+      const types = ['removing_the_guard', 'checkmate', 'hanging_piece', 'double_check', 'fork'] as const;
+      const themes = detectWeaknessThemes(types.map((t, i) => buildMistakePuzzle({ id: `t${i}`, tacticType: t })));
+      const names = themes.map((t) => t.theme);
+      expect(names).toEqual(expect.arrayContaining(['Removing the Guard', 'Missed Checkmates', 'Hanging Pieces', 'Double Check']));
+      expect(names.filter((n) => /_/.test(n) || n === n.toLowerCase())).toEqual([]);
+      expect(new Set(names).size).toBe(names.length);
+      expect(themes.map((t) => t.specificPattern).filter((p) => /missed missed/i.test(p))).toEqual([]);
+    });
+  });
+
   describe('generatePersonalizedDrill', () => {
     beforeEach(async () => {
       await db.delete();

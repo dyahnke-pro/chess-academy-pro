@@ -524,25 +524,32 @@ export function scanUpcomingTactic(
 /** Friendly label for a TacticType — used in coach messages so the
  *  popup says "fork building" instead of generic "tactic building". */
 export function tacticTypeLabel(t: TacticType): string {
-  switch (t) {
-    case 'fork': return 'fork';
-    case 'pin': return 'pin';
-    case 'skewer': return 'skewer';
-    case 'discovered_attack': return 'discovered attack';
-    case 'back_rank': return 'back-rank tactic';
-    case 'hanging_piece': return 'capture on a hanging piece';
-    case 'promotion': return 'promotion';
-    case 'deflection': return 'deflection';
-    case 'overloaded_piece': return 'overload';
-    case 'trapped_piece': return 'trapped-piece motif';
-    case 'clearance': return 'clearance sacrifice';
-    case 'interference': return 'interference';
-    case 'zwischenzug': return 'zwischenzug';
-    case 'x_ray': return 'x-ray';
-    case 'checkmate': return 'checkmate';
-    default: return 'tactic';
-  }
+  return TACTIC_TYPE_LABEL[t];
 }
+
+/** Exhaustive: the switch this replaces fell through to "tactic" for
+ *  removing_the_guard and double_check, so the coach said "a tactic" where it
+ *  had computed which one (hand walk 2026-10-01). */
+const TACTIC_TYPE_LABEL: Record<TacticType, string> = {
+  fork: 'fork',
+  pin: 'pin',
+  skewer: 'skewer',
+  discovered_attack: 'discovered attack',
+  back_rank: 'back-rank tactic',
+  hanging_piece: 'capture on a hanging piece',
+  promotion: 'promotion',
+  deflection: 'deflection',
+  overloaded_piece: 'overload',
+  trapped_piece: 'trapped-piece motif',
+  clearance: 'clearance sacrifice',
+  interference: 'interference',
+  zwischenzug: 'zwischenzug',
+  x_ray: 'x-ray',
+  double_check: 'double check',
+  removing_the_guard: 'removal of the guard',
+  checkmate: 'checkmate',
+  tactical_sequence: 'tactic',
+};
 
 /**
  * Build the coach message when a tactic is available or was just missed.
