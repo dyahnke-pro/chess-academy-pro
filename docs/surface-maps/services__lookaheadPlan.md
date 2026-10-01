@@ -56,10 +56,10 @@
 - `src/services/pvPlayback.test.ts:299`
 - `src/services/pvPlayback.test.ts:300`
 - `src/services/pvPlayback.ts:230`
-- `src/services/pvPlayback.ts:640`
-- `src/services/pvPlayback.ts:660`
-- `src/services/pvPlayback.ts:697`
-- `src/services/pvPlayback.ts:790`
+- `src/services/pvPlayback.ts:648`
+- `src/services/pvPlayback.ts:668`
+- `src/services/pvPlayback.ts:705`
+- `src/services/pvPlayback.ts:798`
 - `src/services/reviewMoveBriefing.ts:250`
 - `src/services/tacticVocabulary.ts:95`
 - `src/services/teachingSelector.ts:347`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**802 lines · 20 exports · 24 importers · 10 tests · 28 audits**
+**835 lines · 20 exports · 24 importers · 10 tests · 28 audits**
 
 ## Locked rules that govern this surface
 
@@ -119,11 +119,13 @@
 ### `LineInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `conceptForLine` (function) — 11 call sites
+### `conceptForLine` (function) — 13 call sites
 - `src/services/conceptEngine.futureTechnique.test.ts:12`
 - `src/services/conceptEngine.test.ts:231`
 - `src/services/conceptEngine.test.ts:235`
 - `src/services/conceptEngine.test.ts:244`
+- `src/services/conceptEngine.test.ts:296`
+- `src/services/conceptEngine.test.ts:303`
 - `src/services/endgameDrillService.test.ts:163`
 - `src/services/missedTacticService.ts:787`
 - `src/services/puzzleConceptExplanation.ts:111`

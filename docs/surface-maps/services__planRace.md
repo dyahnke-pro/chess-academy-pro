@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**337 lines · 9 exports · 6 importers · 2 tests · 0 audits**
+**337 lines · 9 exports · 7 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,6 +16,7 @@
 - `scripts/endgame-drills/generate.ts`
 - `src/data/endgameConceptDrills.test.ts`
 - `src/services/boardPlan.ts`
+- `src/services/conceptEngine.ts`
 - `src/services/learnBoardTeaching.ts`
 - `src/services/planRace.test.ts`
 - `src/services/reviewFullData.ts`
@@ -41,11 +42,12 @@
 - `src/services/planRace.test.ts:62`
 - `src/services/planRace.test.ts:64`
 
-### `detectPlanRace` (function) — 16 call sites
+### `detectPlanRace` (function) — 17 call sites
 - `scripts/endgame-drills/generate.ts:311`
 - `src/data/endgameConceptDrills.test.ts:32`
 - `src/data/endgameConceptDrills.test.ts:56`
 - `src/services/boardPlan.ts:124`
+- `src/services/conceptEngine.ts:598`
 - `src/services/planRace.test.ts:22`
 - `src/services/planRace.test.ts:27`
 - `src/services/planRace.test.ts:34`
@@ -59,8 +61,9 @@
 - `src/services/planRace.test.ts:165`
 - `src/services/planRace.test.ts:173`
 
-### `planRaceClause` (function) — 15 call sites
+### `planRaceClause` (function) — 16 call sites
 - `src/services/boardPlan.ts:125`
+- `src/services/conceptEngine.ts:600`
 - `src/services/planRace.test.ts:23`
 - `src/services/planRace.test.ts:38`
 - `src/services/planRace.test.ts:39`

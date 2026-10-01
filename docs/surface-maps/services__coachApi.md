@@ -328,8 +328,8 @@
 - `src/services/voiceFactsFidelity.test.ts:65`
 
 ### `explainPuzzleMoveGrounded` (function) — 2 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:540`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:627`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:541`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:628`
 
 ### `currentAskFromContent` (function) — 4 call sites
 - `src/services/coachApi.currentAsk.test.ts:31`

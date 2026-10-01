@@ -48,10 +48,10 @@
 - `src/services/pvPlayback.test.ts:299`
 - `src/services/pvPlayback.test.ts:300`
 - `src/services/pvPlayback.ts:230`
-- `src/services/pvPlayback.ts:640`
-- `src/services/pvPlayback.ts:660`
-- `src/services/pvPlayback.ts:697`
-- `src/services/pvPlayback.ts:790`
+- `src/services/pvPlayback.ts:648`
+- `src/services/pvPlayback.ts:668`
+- `src/services/pvPlayback.ts:705`
+- `src/services/pvPlayback.ts:798`
 - `src/services/reviewMoveBriefing.ts:250`
 - `src/services/teachingSelector.ts:347`
 
@@ -63,10 +63,10 @@
 
 ### `patternAim` (function) — 5 call sites
 - `src/services/lookaheadPlan.ts:95`
-- `src/services/pvPlayback.ts:640`
-- `src/services/pvPlayback.ts:660`
-- `src/services/pvPlayback.ts:697`
-- `src/services/pvPlayback.ts:790`
+- `src/services/pvPlayback.ts:648`
+- `src/services/pvPlayback.ts:668`
+- `src/services/pvPlayback.ts:705`
+- `src/services/pvPlayback.ts:798`
 
 ### `TACTIC_TO_PATTERN` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
