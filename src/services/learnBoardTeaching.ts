@@ -50,7 +50,7 @@ import { planChoice, type PlanChoiceLine } from './planChooser';
 import { openingIdentityLine, warmOpeningIdentity } from './openingIdentity';
 import { trapAheadAt } from './gemCrushLines';
 import { noteTrapMeeting, trapSpeaks, type TrapState } from './trapLearning';
-import { extractMentionedSans } from './arrowEngine';
+import { ruledOutSans, extractMentionedSans } from './arrowEngine';
 
 export interface TeachingHint {
   lane: LearnLane;
@@ -410,37 +410,6 @@ export function namedMoveArrows(text: string, fen: string, student: 'w' | 'b'): 
         break;
       } catch { /* not legal on this side — try the other */ }
     }
-  }
-  return out;
-}
-/** SANs the text rules out: the one a move STOPS / prevents / takes away, a
- *  "Why not X?", and an "X didn't work" / "X doesn't work". */
-export function ruledOutSans(text: string): Set<string> {
-  const out = new Set<string>();
-  const SAN = String.raw`(?:O-O(?:-O)?|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?)[+#]?`;
-  const before = new RegExp(String.raw`\b(?:stops|stop|prevents|prevent|takes away|rules out|why not)\s+(?:your\s+|their\s+|my\s+)?…?(${SAN})`, 'gi');
-  const after = new RegExp(String.raw`…?(${SAN})\s+(?:didn't|doesn't|does not|did not|no longer)\s+work`, 'g');
-  for (const re of [before, after]) {
-    let m: RegExpExecArray | null;
-    while ((m = re.exec(text)) !== null) out.add(m[1]);
-  }
-  // …and the WHOLE refuted line after it: "h4 didn't work: h4, hxg5 and hxg5 —
-  // you come out behind" (Learn walk 2026-10-01, game 2 ply 39: Nc5 was drawn
-  // green and …Nf4 red out of a line the sentence says fails).
-  // "Rc8? Then Bc2, c5, dxc5 … — you come out behind" (walk oct1b, game 3
-  // ply 30): the questioned candidate and its refutation are a failing line too.
-  const asked = new RegExp(String.raw`(${SAN})\?\s+Then\s+([^—.]*)`, 'g');
-  let q: RegExpExecArray | null;
-  const tok0 = new RegExp(SAN, 'g');
-  while ((q = asked.exec(text)) !== null) {
-    out.add(q[1]);
-    for (const t of q[2].match(tok0) ?? []) out.add(t);
-  }
-  const line = /(?:didn't|doesn't|does not|did not|no longer)\s+work:\s*([^—.]*)/g;
-  let l: RegExpExecArray | null;
-  const tok = new RegExp(SAN, 'g');
-  while ((l = line.exec(text)) !== null) {
-    for (const t of l[1].match(tok) ?? []) out.add(t);
   }
   return out;
 }

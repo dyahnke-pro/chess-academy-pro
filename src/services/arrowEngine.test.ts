@@ -3,6 +3,7 @@ import { Chess } from 'chess.js';
 import {
   computeLeadEyeArrows,
   extractMentionedSans,
+  extractArrowableSans,
   resolveSanToArrow,
   colorForRank,
   injectCandidateArrows,
@@ -82,6 +83,16 @@ describe('a square as the subject of a sentence (Learn walk 2026-10-01, game 2 p
   });
   it('a real pawn move at sentence start still counts', () => {
     expect(extractMentionedSans('c5 hits the centre at once.')).toEqual(['c5']);
+  });
+});
+
+describe('one refuted-line rule for every surface (2026-10-01)', () => {
+  it('a chat answer never arrows the candidate it refutes, nor its refutation', () => {
+    const text = 'Candidates: Nf5 or Rc8. Rc8? Then Bc2, c5, dxc5, Qxd1 and Bxd1 — you come out behind. The move is Nf5.';
+    expect([...new Set(extractArrowableSans(text))]).toEqual(['Nf5']);
+  });
+  it('a line that "didn\'t work" keeps none of its moves', () => {
+    expect(extractArrowableSans('Nf3 held. h4 didn\'t work: h4, hxg5 and hxg5 — you lose a piece.')).toEqual(['Nf3']);
   });
 });
 

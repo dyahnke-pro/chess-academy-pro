@@ -179,6 +179,47 @@ export function extractMentionedSans(text: string): string[] {
   return out;
 }
 
+/** SANs the text rules out: the one a move STOPS / prevents / takes away, a
+ *  "Why not X?", and an "X didn't work" / "X doesn't work". */
+export function ruledOutSans(text: string): Set<string> {
+  const out = new Set<string>();
+  const SAN = String.raw`(?:O-O(?:-O)?|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?)[+#]?`;
+  const before = new RegExp(String.raw`\b(?:stops|stop|prevents|prevent|takes away|rules out|why not)\s+(?:your\s+|their\s+|my\s+)?…?(${SAN})`, 'gi');
+  const after = new RegExp(String.raw`…?(${SAN})\s+(?:didn't|doesn't|does not|did not|no longer)\s+work`, 'g');
+  for (const re of [before, after]) {
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(text)) !== null) out.add(m[1]);
+  }
+  // …and the WHOLE refuted line after it: "h4 didn't work: h4, hxg5 and hxg5 —
+  // you come out behind" (Learn walk 2026-10-01, game 2 ply 39: Nc5 was drawn
+  // green and …Nf4 red out of a line the sentence says fails).
+  // "Rc8? Then Bc2, c5, dxc5 … — you come out behind" (walk oct1b, game 3
+  // ply 30): the questioned candidate and its refutation are a failing line too.
+  const asked = new RegExp(String.raw`(${SAN})\?\s+Then\s+([^—.]*)`, 'g');
+  let q: RegExpExecArray | null;
+  const tok0 = new RegExp(SAN, 'g');
+  while ((q = asked.exec(text)) !== null) {
+    out.add(q[1]);
+    for (const t of q[2].match(tok0) ?? []) out.add(t);
+  }
+  const line = /(?:didn't|doesn't|does not|did not|no longer)\s+work:\s*([^—.]*)/g;
+  let l: RegExpExecArray | null;
+  const tok = new RegExp(SAN, 'g');
+  while ((l = line.exec(text)) !== null) {
+    for (const t of l[1].match(tok) ?? []) out.add(t);
+  }
+  return out;
+}
+/** The SANs a line may ARROW: every mentioned move except the ones it rules
+ *  out (a move it stops, a "Why not X?", a line that "didn't work", an
+ *  "X? Then …" refutation). One rule for every surface — Learn, chat, the
+ *  live coach, Middlegame Practice (Learn walk 2026-10-01: the rule lived in
+ *  Learn only, so chat still arrowed a refuted candidate). */
+export function extractArrowableSans(text: string): string[] {
+  const out = ruledOutSans(text);
+  return extractMentionedSans(text).filter((s) => !out.has(s));
+}
+
 /** Resolve a SAN to its from→to squares, trying the running position,
  *  then the original FEN, then turn-flipped variants (the coach often
  *  cites hypothetical / opponent / branch moves that aren't legal for
@@ -266,7 +307,7 @@ export async function injectCandidateArrows(
   // preserve newlines — only collapse the double-spaces a stripped
   // inline marker leaves behind.
   const base = stripBoardMarkers(text).replace(/ {2,}/g, ' ').trim();
-  const sans = Array.from(new Set(extractMentionedSans(text)));
+  const sans = Array.from(new Set(extractArrowableSans(text)));
   if (sans.length === 0) return { text: base, injected: [] };
 
   // The just-played move is ALREADY on the board — don't arrow it (David
