@@ -345,7 +345,7 @@
 - `src/services/groundedAnswer.test.ts:1045`
 - `src/services/groundedAnswer.test.ts:1054`
 - `src/services/learnMoveTeaching.ts:43`
-- `src/services/mistakeNarration.ts:617`
+- `src/services/mistakeNarration.ts:621`
 - `src/services/reviewNarrationFidelity.test.ts:167`
 - `src/services/reviewNarrationFidelity.test.ts:173`
 - `src/services/whyBestMove.ts:75`

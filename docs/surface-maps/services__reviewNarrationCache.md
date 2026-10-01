@@ -12,7 +12,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
-- `src/components/Coach/CoachGameReview.tsx`
+- `src/services/reviewNarrationBuild.ts`
 - `src/services/reviewNarrationCache.test.ts`
 
 ## Exports and every call site
@@ -27,7 +27,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `reviewNarrationCacheKey` (function) — 10 call sites
-- `src/components/Coach/CoachGameReview.tsx:610`
+- `src/services/reviewNarrationBuild.ts:74`
 - `src/services/reviewNarrationCache.test.ts:21`
 - `src/services/reviewNarrationCache.test.ts:28`
 - `src/services/reviewNarrationCache.test.ts:30`
@@ -39,14 +39,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewNarrationCache.test.ts:43`
 
 ### `getCachedReviewNarration` (function) — 5 call sites
-- `src/components/Coach/CoachGameReview.tsx:618`
+- `src/services/reviewNarrationBuild.ts:80`
 - `src/services/reviewNarrationCache.test.ts:22`
 - `src/services/reviewNarrationCache.test.ts:24`
 - `src/services/reviewNarrationCache.test.ts:45`
 - `src/services/reviewNarrationCache.test.ts:49`
 
 ### `storeReviewNarration` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:643`
+- `src/services/reviewNarrationBuild.ts:94`
 - `src/services/reviewNarrationCache.test.ts:23`
 - `src/services/reviewNarrationCache.test.ts:50`
 

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**672 lines · 3 exports · 4 importers · 3 tests · 0 audits**
+**676 lines · 3 exports · 6 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,10 +12,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/components/Puzzles/MistakePuzzleBoard.tsx`
 - `src/services/mistakeNarration.boardTruth.test.ts`
 - `src/services/mistakeNarration.test.ts`
 - `src/services/mistakeNarrationVoice.ts`
 - `src/services/mistakePuzzleService.ts`
+- `src/services/reviewWalkOct1.test.ts`
 
 ## Exports and every call site
 
@@ -25,7 +27,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `describePositionIdea` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `generateMistakeNarration` (function) — 29 call sites
+### `generateMistakeNarration` (function) — 31 call sites
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:154`
 - `src/services/mistakeNarration.boardTruth.test.ts:26`
 - `src/services/mistakeNarration.test.ts:27`
 - `src/services/mistakeNarration.test.ts:37`
@@ -52,15 +55,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakeNarration.test.ts:286`
 - `src/services/mistakeNarration.test.ts:300`
 - `src/services/mistakeNarration.test.ts:301`
-- `src/services/mistakePuzzleService.ts:642`
-- `src/services/mistakePuzzleService.ts:955`
-- `src/services/mistakePuzzleService.ts:1303`
+- `src/services/mistakePuzzleService.ts:643`
+- `src/services/mistakePuzzleService.ts:956`
+- `src/services/mistakePuzzleService.ts:1304`
+- `src/services/reviewWalkOct1.test.ts:41`
 
 ## Tests
 
 - `src/services/mistakeNarration.boardTruth.test.ts`
 - `src/services/mistakeNarration.test.ts`
 - `src/services/mistakeNarrationVoice.test.ts`
+- `src/services/reviewWalkOct1.test.ts`
 
 ## Audits that reach it
 

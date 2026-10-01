@@ -33,3 +33,31 @@ describe('Review walk 2026-10-01', () => {
     expect(funds.map((f) => f.led).join(' | ')).not.toMatch(/stakes out the center/);
   });
 });
+
+import { generateMistakeNarration } from './mistakeNarration';
+
+describe('Tactics walk 2026-10-01 — My Mistakes', () => {
+  it('a solution step is never judged by the game move played on a different board', () => {
+    const n = generateMistakeNarration({
+      classification: 'inaccuracy', gamePhase: 'middlegame', playerMoveSan: 'Rxe8', bestMoveSan: 'R1f7+',
+      cpLoss: 856, fen: '4rR2/3b2kp/8/2p5/p7/3B4/P5PP/5RK1 w - - 3 29', moves: 'f1f7 g7h6 f7h7 h6g5 h2h4 g5g4',
+    });
+    expect(n.moveNarrations.join(' ')).not.toMatch(/Bxe8|your move let them/);
+  });
+});
+
+import { moveIsTheFork } from './setupTrainerService';
+
+describe('Setup Trainer walk 2026-10-01', () => {
+  it('a knight fork that is neither a capture nor a check is the tactic, not a quiet setup move', () => {
+    // After Nd6: the knight hits the queen on b7 and the rook on c8.
+    const c = new Chess('r1r3k1/pq3ppp/2n1pn2/8/2NP4/2B3P1/4PP1P/R2Q1RK1 w - - 0 1');
+    c.move('Nd6');
+    expect(moveIsTheFork(c.fen(), 'd6')).toBe(true);
+  });
+  it('a genuinely quiet move is not a fork', () => {
+    const c = new Chess('r1r3k1/pq3ppp/2n1pn2/8/2NP4/2B3P1/4PP1P/R2Q1RK1 w - - 0 1');
+    c.move('Qd3');
+    expect(moveIsTheFork(c.fen(), 'd3')).toBe(false);
+  });
+});

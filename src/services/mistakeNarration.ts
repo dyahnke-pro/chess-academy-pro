@@ -539,7 +539,7 @@ export function generateMistakeNarration(params: NarrationParams): MistakeNarrat
   const intro = introClauses.join(' ');
 
   // Per-move: the concrete point of each move, or silence.
-  const moveNarrations = buildMoveNarrations(fen, moves, params);
+  const moveNarrations = buildMoveNarrations(fen, moves);
 
   const outro = buildOutro(params, idea);
 
@@ -577,7 +577,7 @@ function buildConceptHint(
  *
  *  The final move is allowed one closing clause, because "and that finishes it"
  *  is genuinely new information — the line is over. */
-function buildMoveNarrations(fen: string, movesUci: string, params: NarrationParams): string[] {
+function buildMoveNarrations(fen: string, movesUci: string): string[] {
   const uciMoves = movesUci.trim().split(/\s+/).filter(Boolean);
   if (uciMoves.length === 0) return [];
 
@@ -614,7 +614,11 @@ function buildMoveNarrations(fen: string, movesUci: string, params: NarrationPar
       // or material-safe; a lone attack is neither.
       const geometry = describeMoveGeometry(fenBefore, san, moverColor);
       const point =
-        explainBestMoveGrounded(fenBefore, params.playerMoveSan, uciMoves[i], moverColor)
+        // No "played" move here: the student's GAME move (playerMoveSan) was made
+        // on the puzzle's first board only, and its cost belongs to the prompt.
+        // Passed per step, every later beat said "your move let them play Bxe8"
+        // about a board where Bxe8 is not even legal (walk 2026-10-01).
+        explainBestMoveGrounded(fenBefore, null, uciMoves[i], moverColor)
         ?? (geometry && !/^attacks\b/i.test(geometry.trim()) ? geometry : '')
         ?? '';
       const isFinal = playerIdx === playerMoveCount - 1;

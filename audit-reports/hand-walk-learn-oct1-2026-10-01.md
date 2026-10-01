@@ -89,3 +89,29 @@ dump of all three games through the production review with the real engine.
 | V7 | all | NEED: owed opening plies silent (7, 9, 15, 17 …) | measured: 7 of 9 are say-once silences (development / centre / fianchetto already taught) — now marked `sayOnce` in the coverage row and counted separately; the real gaps are Be2 (declining the bishop trade) and Ne4 (eyeing d6) — no computer yet |
 
 Tests: `src/services/reviewWalkOct1.test.ts` (4, all fail on the old code).
+
+Re-walk after the fixes (games 1 and 3): **NEED passes on both** — game 1 10/12
+(8 narrated, 2 say-once), game 3 11/12 (8 narrated, 3 say-once). Both runs were
+still marked CONTAMINATED: game 1 wedged at the final turning-point card (the
+driver could not answer it), game 3 at ply 15 (all three runs). Ply 15 is not a
+product freeze — a probe stepping the same game by hand, and one repeating the
+audit's exact explore (Nd6+ at ply 10) → Back → Play sequence, both ran past ply
+22 with every readout under 220 ms. The wedge is the audit's, recorded as such.
+
+## Tactics walk — My Mistakes + Setup Trainer (2026-10-01)
+
+Three real amateur games (825 / 1133 / 1525) seeded through the page and run
+through the production `generateMistakePuzzlesFromGame`; four puzzles produced
+and solved by hand, wrong tries first; every claim checked with Stockfish.
+
+| # | where | flag | fix |
+|---|---|---|---|
+| T1 | My Mistakes, 3 of 4 puzzles | a stored line ending on the OPPONENT's reply never completed — "3/3", no celebration, no why, no Next button, no capability evidence | the board completes after that final reply too (`finishSolved`) |
+| T2 | My Mistakes, steps 2-3 | "It forks the king … while your move let them play Bxe8, winning the rook" — Bxe8 is not legal there; the clause judged the GAME move on every later board | solution steps are never judged by the game move; the board recomputes step lines, so stored rows are fixed too |
+| T3 | My Mistakes prompt + voice | "a inaccuracy" | article by the word |
+| T4 | Setup Trainer, puzzle 1 | "find the quiet move that sets up the fork" — the answer, Nd6, IS the fork (queen b7 + rook c8) | a first move that is itself a fork is not a setup puzzle (`moveIsTheFork`, shared fork verifier); 20 of 502 beginner puzzles drop |
+
+Checked and fine: the wrong-try hints (board-true), the mate puzzle (Rd7+ Rd8+
+R1d7# completes with the why and Next), cxb6 "wins the pawn on b6".
+Tests: `reviewWalkOct1.test.ts` (Tactics + Setup cases),
+`MistakePuzzleBoard.endsOnReply.test.tsx` — all fail on the old code.

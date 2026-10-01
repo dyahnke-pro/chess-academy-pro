@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { generateMistakeNarration } from '../../services/mistakeNarration';
 import { Chess } from 'chess.js';
 import { ChessBoard } from '../Board/ChessBoard';
 import { usePieceSound } from '../../hooks/usePieceSound';
@@ -144,6 +145,21 @@ function parseUciMoves(uci: string): { from: string; to: string; promotion?: str
 }
 
 export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = false }: MistakePuzzleBoardProps): JSX.Element {
+  // The per-step lines are a pure function of the board, so they are computed
+  // here rather than read from the row: a puzzle stored before a narration fix
+  // keeps its old text forever otherwise (walk 2026-10-01 — saved rows said
+  // "your move let them play Bxe8" on boards where Bxe8 is illegal).
+  const stepNarrations = useMemo((): string[] => {
+    try {
+      return generateMistakeNarration({
+        classification: puzzle.classification, gamePhase: puzzle.gamePhase,
+        playerMoveSan: puzzle.playerMoveSan, bestMoveSan: puzzle.bestMoveSan,
+        cpLoss: puzzle.cpLoss, fen: puzzle.fen, moves: puzzle.moves,
+      }).moveNarrations;
+    } catch {
+      return puzzle.narration.moveNarrations;
+    }
+  }, [puzzle]);
   const meter = usePuzzleMeter();
   const consumedIdRef = useRef<string | null>(null);
   const [state, setState] = useState<PuzzleState>('loading');
@@ -439,7 +455,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
         setFen(step.fen);
         setBoardKey((k) => k + 1);
 
-        const mistakeMsg = `You played ${puzzle.playerMoveSan} here — ${puzzle.classification === 'miss' ? 'missing an opportunity' : `a ${puzzle.classification}`}. Let's find the best move.`;
+        const mistakeMsg = `You played ${puzzle.playerMoveSan} here — ${puzzle.classification === 'miss' ? 'missing an opportunity' : `${/^[aeiou]/.test(puzzle.classification) ? 'an' : 'a'} ${puzzle.classification}`}. Let's find the best move.`;
         setSubtitle(mistakeMsg);
 
         // Speak the mistake message, then start the puzzle and speak
@@ -663,7 +679,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       // Speak per-move narration
       const currentPlayerMove = playerMoveCountRef.current;
       playerMoveCountRef.current += 1;
-      const moveNarrations = puzzle.narration.moveNarrations;
+      const moveNarrations = stepNarrations;
       if (moveNarrations[currentPlayerMove]) {
         voiceService.stop();
         setSubtitle(moveNarrations[currentPlayerMove]);
@@ -672,8 +688,11 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
 
       const nextIndex = moveIndex + 1;
 
-      // Check if puzzle is fully solved
-      if (nextIndex >= allMoves.length) {
+      // SOLVED — on the student's last move OR on the opponent's reply when the
+      // stored line ends with one (walk 2026-10-01: three of four generated
+      // lines ended on a reply, and the board sat at "3/3" forever — no
+      // celebration, no why, no Next button, no capability evidence).
+      const finishSolved = (): void => {
         setState('correct');
         playCelebration();
         // Record outcome for cross-session coaching
@@ -719,6 +738,9 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
           voiceService.stop();
           void speakBestMoveWhy();
         }, 800);
+      };
+      if (nextIndex >= allMoves.length) {
+        finishSolved();
         // Stay on 'correct' state until the user taps Next.
         return;
       }
@@ -740,6 +762,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
             setFen(newFen);
             setBoardKey((k) => k + 1);
             setMoveIndex(nextIndex + 1);
+            if (nextIndex + 1 >= allMoves.length) finishSolved();
           } catch {
             // Invalid opponent move — puzzle data is corrupted, fail gracefully
             setState('incorrect');
@@ -818,7 +841,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       })();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- tracked for dedicated audit; intentional dep list.
-  }, [state, moveIndex, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints, puzzle.narration, tacticType, skipReplayContext, speakBestMoveWhy]);
+  }, [state, moveIndex, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints, puzzle.narration, tacticType, skipReplayContext, speakBestMoveWhy, stepNarrations]);
 
   // ── KEEP PLAYING (R4, David 2026-09-01) — after the puzzle is solved, let the
   // student play the position out; the computer answers each move. Reuses the
@@ -999,7 +1022,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       {state !== 'replay' && (
         <div className="text-sm text-theme-text-secondary space-y-1" data-testid="prompt-text">
           <p>
-            You played <span className="font-semibold text-red-400">{puzzle.playerMoveSan}</span> — {puzzle.classification === 'miss' ? 'missing an opportunity' : `a ${puzzle.classification}`}.
+            You played <span className="font-semibold text-red-400">{puzzle.playerMoveSan}</span> — {puzzle.classification === 'miss' ? 'missing an opportunity' : `${/^[aeiou]/.test(puzzle.classification) ? 'an' : 'a'} ${puzzle.classification}`}.
             {' '}Find the best move.
             {isMultiMove && (
               <span className="text-theme-text-muted ml-1">
