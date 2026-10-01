@@ -13,7 +13,7 @@
 //
 // Pure: the four engine reads are handed in (see `IntentReads`). No engine call
 // here, no model — the caller owns the search budget.
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 import type { AnalysisLine } from '../types';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { legalSeeGainFor, legalSeeGainOn } from './positionReadingService';
@@ -386,8 +386,19 @@ export function stopReason(fenAfter: string, stoppedUci: string, mover: 'w' | 'b
   try {
     c = new Chess(fenAfter);
     if (c.turn() !== opp) return null;
-    m = c.move({ from: stoppedUci.slice(0, 2), to: stoppedUci.slice(2, 4), promotion: stoppedUci.slice(4, 5) || undefined });
   } catch { return null; }
+  try {
+    m = c.move({ from: stoppedUci.slice(0, 2), to: stoppedUci.slice(2, 4), promotion: stoppedUci.slice(4, 5) || undefined });
+  } catch {
+    // ILLEGAL NOW — a king cannot step onto a covered square (Learn walk
+    // 2026-10-01: "a6 — now …Kb7 doesn't work." with no reason). The reason
+    // is the piece that covers it.
+    const to = stoppedUci.slice(2, 4);
+    if (c.get(stoppedUci.slice(0, 2) as Square)?.type !== 'k') return null;
+    const by = c.attackers(to as Square, mover)[0];
+    const pc = by ? c.get(by) : null;
+    return pc ? `your ${PIECE_NAME[pc.type]} on ${by} covers ${to}` : null;
+  }
   if (!m || m.captured || c.inCheck()) return null;
   if (legalSeeGainFor(c.fen(), m.to, mover) <= 0) return null;
   const mine = c.attackers(m.to, mover).length;

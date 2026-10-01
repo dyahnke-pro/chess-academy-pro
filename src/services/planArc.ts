@@ -88,7 +88,7 @@ export function aimsOf(side: SidePlan, seat: Seat): Aim[] {
     const name = PIECE[piece] ?? word;
     // Keyed by the PIECE: a knight heading for g3 that then heads on to h5 is
     // one journey, not a dropped plan and a new one (first real game read).
-    out.push({ id: `route:${piece}`, kind: 'route', squares: side.maneuver.path.slice(1), goal: dest, phrase: routePhrase(name, side.maneuver.path), from: side.maneuver.path[0] });
+    out.push({ id: `route:${piece}`, kind: 'route', squares: side.maneuver.path.slice(1), goal: dest, phrase: routePhrase(name, side.maneuver.path, side.maneuver.takes), from: side.maneuver.path[0] });
   }
   return out;
 }
@@ -96,10 +96,15 @@ export function aimsOf(side: SidePlan, seat: Seat): Aim[] {
 /** DESTINATION FIRST, then the path (census: piece maneuvers — his "the knight
  *  wants e5, by way of d2 and f3"): where it is going is the idea; the squares
  *  on the way are the how. */
-function routePhrase(name: string, path: readonly string[]): string {
+function routePhrase(name: string, path: readonly string[], takes?: string): string {
   const dest = path[path.length - 1];
   const via = path.slice(1, -1);
   const tail = via.length === 0 ? '' : via.length === 1 ? `, by way of ${via[0]}` : `, by way of ${via.slice(0, -1).join(', ')} and ${via[via.length - 1]}`;
+  // A destination their piece stands on is a CAPTURE (Learn walk 2026-10-01:
+  // "getting the knight to a7" was winning the a7 pawn).
+  // Said without naming the piece on the square, so the arrival line ("That
+  // was the plan: …") stays true once the pawn is gone.
+  if (takes) return `getting the ${name} to ${dest}${tail}, to take the ${takes} there`;
   return `getting the ${name} to ${dest}${tail}`;
 }
 
@@ -109,9 +114,10 @@ function routePhrase(name: string, path: readonly string[]): string {
 export function phraseFrom(aim: Aim, at: string): string {
   if (aim.kind !== 'route') return aim.phrase;
   const i = aim.squares.indexOf(at);
+  const takes = /, to take the (.+?) there$/.exec(aim.phrase)?.[1];
   const name = /^getting the (.+?) to /.exec(aim.phrase)?.[1];
   if (i < 0 || !name) return aim.phrase;
-  return routePhrase(name, [at, ...aim.squares.slice(i + 1)]);
+  return routePhrase(name, [at, ...aim.squares.slice(i + 1)], takes);
 }
 
 interface ArcEntry {

@@ -27,7 +27,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `threatAnswer` (function) — 3 call sites
-- `src/services/learnBoardTeaching.ts:514`
+- `src/services/learnBoardTeaching.ts:531`
 - `src/services/threatAnswer.test.ts:9`
 - `src/services/threatAnswer.test.ts:81`
 

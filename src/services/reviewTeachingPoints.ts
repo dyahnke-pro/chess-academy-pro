@@ -721,7 +721,9 @@ export function describeConcessions(fenBefore: string, san: string, moverIsStude
     if (foeQueen && shieldA < shieldB) out.push(`${poss} king's pawn cover thinned (${shieldB} shield pawns down to ${shieldA})`);
     if (sB && sA) {
       const passB = sB.pawns.passedPawns[enemy].length; const passA = sA.pawns.passedPawns[enemy].length;
-      if (passA > passB) out.push(`it hands the opponent a passed pawn on ${sA.pawns.passedPawns[enemy].find((p) => !sB.pawns.passedPawns[enemy].includes(p)) ?? sA.pawns.passedPawns[enemy][0]}`);
+      // FROM THE STUDENT'S SEAT (Learn walk 2026-10-01: "Their …f4: it hands
+      // the opponent a passed pawn" — said to the student, who IS the opponent).
+      if (passA > passB) out.push(`it hands ${moverIsStudent ? 'them' : 'you'} a passed pawn on ${sA.pawns.passedPawns[enemy].find((p) => !sB.pawns.passedPawns[enemy].includes(p)) ?? sA.pawns.passedPawns[enemy][0]}`);
       const isoB = sB.pawns.isolatedPawns[mover].length; const isoA = sA.pawns.isolatedPawns[mover].length;
       if (isoA > isoB) out.push(`${poss} pawn structure splinters — a new isolated pawn on ${sA.pawns.isolatedPawns[mover].find((p) => !sB.pawns.isolatedPawns[mover].includes(p)) ?? sA.pawns.isolatedPawns[mover][0]}`);
     }

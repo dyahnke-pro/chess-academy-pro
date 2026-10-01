@@ -36,7 +36,7 @@
 - `src/services/deliberation.ts:122`
 - `src/services/liveTacticsContext.ts:378`
 - `src/services/moveReason.ts:133`
-- `src/services/playedMoveGrade.ts:90`
+- `src/services/playedMoveGrade.ts:95`
 - `src/services/searchDepth.ts:69`
 - `src/services/tacticsDetector.ts:814`
 - `src/services/threatCheck.ts:55`

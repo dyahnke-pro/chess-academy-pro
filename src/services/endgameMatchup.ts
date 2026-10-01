@@ -201,8 +201,11 @@ function reduce(w: SideMaterial, b: SideMaterial, total: number): MatchupClass {
     // Queen vs rook imbalance (no other heavy pieces muddying it).
     const wIsQ = w.Q > 0 && w.R === 0 && minors(w) === 0;
     const bIsQ = b.Q > 0 && b.R === 0 && minors(b) === 0;
-    const wIsR = w.Q === 0 && w.R > 0 && minors(w) === 0;
-    const bIsR = b.Q === 0 && b.R > 0 && minors(b) === 0;
+    // ONE rook: queen against two rooks is not "queen versus rook" (the
+    // perpetual-check lesson — two rooks and a pawn against the queen — was
+    // taught "queen versus rook is a win with care").
+    const wIsR = w.Q === 0 && w.R === 1 && minors(w) === 0;
+    const bIsR = b.Q === 0 && b.R === 1 && minors(b) === 0;
     if ((wIsQ && bIsR) || (bIsQ && wIsR)) return 'queen-vs-rook';
     // Pure queen ending: queens (+ pawns) only, no rooks or minors.
     if (rs === 0 && ms === 0) return 'queen-endgame';

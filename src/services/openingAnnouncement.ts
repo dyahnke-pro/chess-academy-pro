@@ -88,7 +88,16 @@ export function openingAnnouncement(
   const main = departure.mainSan
     ? `; the usual move there was ${sayMoveNoun(departure.mainSan)}`
     : '';
-  return `${who} left the book with ${sayMoveNoun(departure.san)}${main}. The line was the ${spoken(det.name)}.`;
+  // THE LINE IS THE ONE ALREADY NAMED unless the move-order name sharpens it
+  // (Learn walk 2026-10-01: "transposed into the King's Indian Defense" and
+  // then, at the departure, "The line was the English Opening: Anglo-Indian
+  // Defense" — the move-order name the transposition had replaced). A name the
+  // student has just heard is not repeated.
+  // A generic family ("King's Pawn Game") still gives way to the real name.
+  const spokenIsVariation = spokenName.includes(':');
+  const line = det.name.startsWith(spokenName) || !spokenIsVariation ? det.name : spokenName;
+  const lineTail = line === spokenName ? '' : ` The line was the ${spoken(line)}.`;
+  return `${who} left the book with ${sayMoveNoun(departure.san)}${main}.${lineTail}`;
 }
 
 /** The same announcement read straight off the game's move history — the

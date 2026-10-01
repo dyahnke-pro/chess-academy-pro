@@ -539,7 +539,11 @@ export function computeMoveFundamentals(
         squares: [mv.to, ...guards],
       });
     }
-  } else if (mv.piece !== 'p' && mv.piece !== 'k' && rankOf(mv.from) !== homeRank && !out.some((f) => f.id === 'development' || f.id === 'outpost')) {
+  } else if (mv.piece !== 'p' && mv.piece !== 'k' && rankOf(mv.from) !== homeRank && !out.some((f) => f.id === 'development' || f.id === 'outpost')
+    // NOT IN AN ENDING, for every consumer (Learn walk 2026-10-01: "the best
+    // move is Rg5 — it takes aim at the center, hitting d5 and e5" in a rook
+    // ending; the filter lived in one caller and the question lane missed it).
+    && !isEndgameByMaterial(fenBefore)) {
     // A square holding the mover's OWN piece is defended, not "hit" — "Qf5
     // takes aim at the center, hitting d5 and e4 and e5" named three of Black's
     // own pawns (Blumenfeld walk F19).

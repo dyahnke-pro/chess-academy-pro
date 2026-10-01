@@ -72,6 +72,18 @@ export function reachesInOneMove(fen: string | undefined, from: string, to: stri
   return true;
 }
 
+/** What stands on a route's destination on the board the plan is read from:
+ *  the mover's own piece (no route there yet), theirs (the route takes it), or
+ *  nothing. */
+export function routeDestination(fen: string, dest: string, color: 'white' | 'black'): { kind: 'own' } | { kind: 'takes'; piece: string } | { kind: 'empty' } {
+  try {
+    const pc = new Chess(fen).get(dest as never) as { type?: string; color?: string } | undefined;
+    if (!pc?.type) return { kind: 'empty' };
+    if (pc.color === (color === 'white' ? 'w' : 'b')) return { kind: 'own' };
+    return { kind: 'takes', piece: PIECE_WORD[pc.type] ?? 'piece' };
+  } catch { return { kind: 'empty' }; }
+}
+
 export function waypointsOf(path: readonly string[]): string[] {
   if (path.length < 3) return [];
   const start = path[0];
@@ -216,7 +228,7 @@ export interface SidePlan {
    *  the journey, so a three-move regrouping read as two unrelated squares. The
    *  chain was already being reconstructed inside `planMarks` to place an
    *  arrow; here it becomes the sentence it always was. */
-  maneuver: { piece: string; path: string[] } | null;
+  maneuver: { piece: string; path: string[]; takes?: string } | null;
   /** Checks this side gives inside the horizon. `isCheck` has been computed on
    *  every ply since `pvPlayback` was written and read by nothing. */
   checks: number;
@@ -569,6 +581,30 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     }
   }
 
+  // A PASSER THE LINE TAKES STRAIGHT BACK WAS NEVER CREATED (Learn walk
+  // 2026-10-01: "exf3 was their move, to create a passed pawn on f3" — and
+  // Qxf3 takes it the next move). The pawn must still stand on its file at the
+  // end of the horizon, where it landed or further up.
+  {
+    const endFen = plies.slice(0, PLAN_HORIZON).at(-1)?.fenAfter;
+    if (endFen && passedPawns.length) {
+      try {
+        const end = new Chess(endFen);
+        const owner = color === 'white' ? 'w' : 'b';
+        const survives = (sq: string): boolean => {
+          const r0 = Number(sq[1]);
+          for (let r = 1; r <= 8; r += 1) {
+            if (owner === 'w' ? r < r0 : r > r0) continue;
+            const pc = end.get(`${sq[0]}${r}` as never) as { type?: string; color?: string } | undefined;
+            if (pc?.type === 'p' && pc.color === owner) return true;
+          }
+          return false;
+        };
+        for (let i = passedPawns.length - 1; i >= 0; i -= 1) if (!survives(passedPawns[i])) passedPawns.splice(i, 1);
+      } catch { /* unreadable end — keep the claim as the board gave it */ }
+    }
+  }
+
   // THE MATERIAL IS THE BOARD'S, AT A QUIET POINT — not a sum of per-capture
   // exchange guesses. Each ply's gain is a static exchange that assumes a
   // recapture; summing one side's captures double-counts the trade (McConnell
@@ -614,7 +650,8 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
   // A piece that moved once went somewhere; a piece that moved twice is being
   // REROUTED, and that is the sentence. Longest journey wins — three hops is a
   // more striking idea than two.
-  const maneuver = [...journeys.values()]
+  const rootFen = mine[0]?.fenBefore;
+  const maneuverPick = [...journeys.values()]
     .filter((j) => j.path.length >= 3)
     // A ROUTE MAY NOT NAME ITS OWN DESTINATION AS A WAYPOINT. From David's game
     // of 2026-08-11: "walk the queen round to c2, by way of c2 and b3" — and
@@ -644,7 +681,15 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     // cannot reach; when the start sees the destination on the ROOT board,
     // the waypoints are incident (a check, a chase), not the idea.
     .filter((j) => !reachesInOneMove(mine[0]?.fenBefore, j.path[0], j.path[j.path.length - 1]))
+    // A ROUTE ONTO A SQUARE ITS OWN PIECE HOLDS IS NO PLAN (Learn walk
+    // 2026-10-01: "getting the rook to c3, by way of c1" with White's knight
+    // on c3 — the line only works once that knight has gone).
+    .filter((j) => !rootFen || routeDestination(rootFen, j.path[j.path.length - 1], color).kind !== 'own')
     .sort((a, b) => b.path.length - a.path.length)[0] ?? null;
+  // …and onto a square THEIR piece holds, the route ends in a capture, so it
+  // is said as one ("getting the knight to a7" was taking the a7 pawn).
+  const maneuverDest = maneuverPick && rootFen ? routeDestination(rootFen, maneuverPick.path[maneuverPick.path.length - 1], color) : null;
+  const maneuver = maneuverPick && maneuverDest?.kind === 'takes' ? { ...maneuverPick, takes: maneuverDest.piece } : maneuverPick;
 
   const headingFor = [...destinations.entries()]
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
@@ -786,7 +831,8 @@ export function describePlan(
     // clause says nothing rather than saying something false.
     if (via.length > 0) {
       const dest = path[path.length - 1];
-      add(80, `walk the ${piece} round to ${dest}, by way of ${via.join(' and ')}`, [path[0], ...via, dest]);
+      const takes = plan.maneuver.takes ? ` and take the ${plan.maneuver.takes} there` : '';
+      add(80, `walk the ${piece} round to ${dest}, by way of ${via.join(' and ')}${takes}`, [path[0], ...via, dest]);
     }
   }
   // CHECKS ON THE WAY. Low weight on purpose — it is texture, not a plan — but

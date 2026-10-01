@@ -1137,7 +1137,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:7875`
 - `src/services/coachFeatureService.ts:4905`
 - `src/services/liveTacticsContext.ts:453`
-- `src/services/lookaheadPlan.ts:116`
+- `src/services/lookaheadPlan.ts:128`
 - `src/services/reviewBoardAwareness.test.ts:70`
 - `src/services/reviewBoardAwareness.test.ts:74`
 - `src/services/reviewBoardAwareness.test.ts:78`

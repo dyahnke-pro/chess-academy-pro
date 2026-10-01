@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1404 lines · 11 exports · 41 importers · 28 tests · 1 audits**
+**1409 lines · 11 exports · 42 importers · 29 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -50,6 +50,7 @@
 - `src/services/section14Diagnosis.test.ts`
 - `src/services/sweepCarriesPv.test.ts`
 - `src/services/sweepPassesEngineLines.test.ts`
+- `src/services/walkOct1Learn.test.ts`
 - `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/weaknessSpine.ts`
 - `src/services/yieldHonoured.test.ts`
@@ -84,7 +85,7 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:130`
 
-### `attributePrinciples` (function) — 69 call sites
+### `attributePrinciples` (function) — 70 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
 - `src/services/claimTruth.manual.test.ts:10`
 - `src/services/claimTruth.manual.test.ts:12`
@@ -151,6 +152,7 @@
 - `src/services/sweepCarriesPv.test.ts:129`
 - `src/services/sweepCarriesPv.test.ts:143`
 - `src/services/sweepPassesEngineLines.test.ts:91`
+- `src/services/walkOct1Learn.test.ts:76`
 - `src/services/yieldHonoured.test.ts:33`
 - `src/services/yieldHonoured.test.ts:69`
 - `src/services/yieldHonoured.test.ts:70`
@@ -196,6 +198,7 @@
 - `src/services/section14Diagnosis.test.ts`
 - `src/services/sweepCarriesPv.test.ts`
 - `src/services/sweepPassesEngineLines.test.ts`
+- `src/services/walkOct1Learn.test.ts`
 - `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/yieldHonoured.test.ts`
 

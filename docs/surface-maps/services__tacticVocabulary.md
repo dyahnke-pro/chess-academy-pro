@@ -38,7 +38,7 @@
 - `src/services/groundedAnswer.ts:5077`
 - `src/services/groundedAnswer.ts:5089`
 - `src/services/groundedAnswer.ts:5849`
-- `src/services/lookaheadPlan.ts:98`
+- `src/services/lookaheadPlan.ts:110`
 - `src/services/pvPlayback.test.ts:291`
 - `src/services/pvPlayback.test.ts:292`
 - `src/services/pvPlayback.test.ts:293`
@@ -62,7 +62,7 @@
 - `src/services/pvPlayback.ts:231`
 
 ### `patternAim` (function) — 5 call sites
-- `src/services/lookaheadPlan.ts:95`
+- `src/services/lookaheadPlan.ts:107`
 - `src/services/pvPlayback.ts:648`
 - `src/services/pvPlayback.ts:668`
 - `src/services/pvPlayback.ts:705`

@@ -219,6 +219,26 @@ function unpinPoint(fenBefore: string, chessAfter: Chess, mv: Move, moverIsStude
   return null;
 }
 
+/** A PAWN THAT KICKS a minor or major piece (Learn walk 2026-10-01: …h6
+ *  against Bg5 was called "luft"; its point was the bishop). */
+function pawnKickPoint(chessAfter: Chess, mv: Move): string | null {
+  if (mv.piece !== 'p' || mv.captured) return null;
+  const dir = mv.color === 'w' ? 1 : -1;
+  const f = mv.to.charCodeAt(0);
+  const r = Number(mv.to[1]) + dir;
+  const VALUE: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
+  let hit: { sq: string; type: string } | null = null;
+  for (const df of [-1, 1]) {
+    const file = String.fromCharCode(f + df);
+    if (file < 'a' || file > 'h' || r < 1 || r > 8) continue;
+    const sq = `${file}${r}`;
+    const c = chessAfter.get(sq as Sq);
+    if (!c || c.color === mv.color || !(c.type in VALUE)) continue;
+    if (!hit || VALUE[c.type] > VALUE[hit.type]) hit = { sq, type: c.type };
+  }
+  return hit ? `Kicks their ${PIECE_NOUN[hit.type]} off ${hit.sq}, gaining time.` : null;
+}
+
 /** LUFT — a quiet pawn step beside the CASTLED king that makes an escape square. */
 function luftPoint(chessAfter: Chess, mv: Move): string | null {
   if (mv.piece !== 'p' || mv.captured) return null;
@@ -246,7 +266,7 @@ export function quietMovePoint(fenBefore: string, san: string): string | null {
   const chess = new Chess(fenBefore);
   let mv: Move;
   try { mv = chess.move(san); } catch { return null; }
-  return unpinPoint(fenBefore, chess, mv, true) ?? luftPoint(chess, mv);
+  return unpinPoint(fenBefore, chess, mv, true) ?? pawnKickPoint(chess, mv) ?? luftPoint(chess, mv);
 }
 
 /**
@@ -409,7 +429,7 @@ export function buildReviewMoveTeaching(
     // the king sits on its castled back-rank square and this pawn just advanced
     // one rank on an adjacent file. That's back-rank insurance, a real teaching
     // point currently spoken as silence.
-    const luft = luftPoint(chess, mv);
+    const luft = pawnKickPoint(chess, mv) ?? luftPoint(chess, mv);
     if (luft) return luft;
     // quiet pawn with no structural point → fall through to the universal teacher
   }

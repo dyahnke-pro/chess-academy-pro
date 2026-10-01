@@ -138,6 +138,9 @@ const NON_MOVE_PHRASE_PRECEDERS = new Set([
   // it into a hypothetical retreat.
   'from', 'to', 'toward', 'towards', 'via', 'eyeing', 'eyed', 'controlling',
   'covering', 'hitting', 'targeting', 'attacking', 'defending', 'guarding',
+  // "kicks their knight off c6" names the square the piece LEAVES (Learn walk
+  // 2026-10-01: a c7→c6 arrow grew out of it). Same for "onto"/"into"/"past".
+  'off', 'onto', 'into', 'past',
 ]);
 
 /** Strip `[BOARD: ...]` directives so the SAN scan doesn't match the

@@ -32,7 +32,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/threatOut.test.ts:10`
 
 ### `computeMustDefend` (function) — 11 call sites
-- `src/services/playedMoveGrade.ts:77`
+- `src/services/playedMoveGrade.ts:82`
 - `src/services/positionFacts.ts:434`
 - `src/services/replayFence.modern1690.test.ts:160`
 - `src/services/replayFence.modern1690.test.ts:165`

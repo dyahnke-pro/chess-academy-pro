@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1483 lines · 25 exports · 13 importers · 9 tests · 0 audits**
+**1529 lines · 26 exports · 14 importers · 10 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -24,6 +24,7 @@
 - `src/services/planChooser.ts`
 - `src/services/reviewWalk900.test.ts`
 - `src/services/seatedTacticLine.test.ts`
+- `src/services/walkOct1Learn.test.ts`
 - `src/test/factories.ts`
 
 ## Exports and every call site
@@ -31,6 +32,11 @@
 ### `reachesInOneMove` (function) — 2 call sites
 - `src/services/reviewWalk900.test.ts:47`
 - `src/services/reviewWalk900.test.ts:49`
+
+### `routeDestination` (function) — 3 call sites
+- `src/services/walkOct1Learn.test.ts:42`
+- `src/services/walkOct1Learn.test.ts:44`
+- `src/services/walkOct1Learn.test.ts:45`
 
 ### `waypointsOf` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -173,8 +179,8 @@
 - `src/services/learnWalkBlumenfeld.test.ts:178`
 - `src/services/learnWalkBlumenfeld.test.ts:179`
 
-### `planFromUci` (function) — 27 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9523`
+### `planFromUci` (function) — 28 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9530`
 - `src/services/claimTruth.manual.test.ts:119`
 - `src/services/coachLaneWiring.test.ts:35`
 - `src/services/computedVoiceAudit.report.test.ts:216`
@@ -201,13 +207,14 @@
 - `src/services/planArc.test.ts:27`
 - `src/services/planChooser.ts:35`
 - `src/services/planChooser.ts:36`
+- `src/services/walkOct1Learn.test.ts:51`
 
 ### `gameArcs` (function) — 1 call site
 - `src/services/coachFeatureService.ts:1325`
 
 ### `aimsOf` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9536`
-- `src/components/Coach/CoachTeachPage.tsx:9540`
+- `src/components/Coach/CoachTeachPage.tsx:9543`
+- `src/components/Coach/CoachTeachPage.tsx:9547`
 - `src/services/planArc.phraseFrom.test.ts:30`
 - `src/services/planArc.phraseFrom.test.ts:31`
 - `src/services/planArc.test.ts:29`
@@ -216,8 +223,8 @@
 - `src/services/planChooser.ts:39`
 
 ### `aimWalkableNow` (re-export) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9536`
-- `src/components/Coach/CoachTeachPage.tsx:9540`
+- `src/components/Coach/CoachTeachPage.tsx:9543`
+- `src/components/Coach/CoachTeachPage.tsx:9547`
 - `src/services/planArc.phraseFrom.test.ts:19`
 - `src/services/planArc.phraseFrom.test.ts:22`
 - `src/services/planArc.test.ts:201`
@@ -231,17 +238,17 @@
 - `src/services/planArc.test.ts:253`
 - `src/services/planArc.test.ts:258`
 - `src/services/planArc.test.ts:262`
-- `src/services/planArc.ts:408`
+- `src/services/planArc.ts:414`
 
 ### `joinEmerges` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9552`
+- `src/components/Coach/CoachTeachPage.tsx:9559`
 - `src/services/planArc.test.ts:269`
 - `src/services/planArc.test.ts:276`
-- `src/services/planArc.ts:531`
+- `src/services/planArc.ts:537`
 
 ### `stepArc` (re-export) — 25 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9536`
-- `src/components/Coach/CoachTeachPage.tsx:9540`
+- `src/components/Coach/CoachTeachPage.tsx:9543`
+- `src/components/Coach/CoachTeachPage.tsx:9547`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.test.ts:94`
 - `src/services/planArc.test.ts:96`
@@ -264,7 +271,7 @@
 - `src/services/planArc.truth.test.ts:22`
 - `src/services/planArc.truth.test.ts:31`
 - `src/services/planArc.truth.test.ts:36`
-- `src/services/planArc.ts:242`
+- `src/services/planArc.ts:248`
 
 ### `EMPTY_ARC` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -280,6 +287,7 @@
 - `src/services/replayFence.modern1690.test.ts`
 - `src/services/reviewWalk900.test.ts`
 - `src/services/seatedTacticLine.test.ts`
+- `src/services/walkOct1Learn.test.ts`
 
 ## Audits that reach it
 

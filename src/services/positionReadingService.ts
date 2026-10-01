@@ -917,6 +917,35 @@ export function findRookLift(fen: string, color: Color): { rook: Square; to: Squ
     // The rank-2 square between must be empty too (rook needs to pass).
     const midSq = `${f}${color === 'w' ? 2 : 7}` as Square;
     if (chess.get(midSq)) continue;
+    // …and from there it must be able to SWING: the lift rank clear all the
+    // way to a file beside the king (Learn walk 2026-10-01: "Lift the rook to
+    // e3 and swing it along the third rank" with White's own pawn on g3
+    // blocking the only way toward the g8 king).
+    // And from some square it reaches along that rank, the rook must see INTO
+    // the king's zone up a file beside the king: the first thing up that file
+    // stands within a rank of their king (a shield pawn, a defender, the king).
+    const from = f.charCodeAt(0) - 97;
+    const kingRank = color === 'w' ? 8 : 1;
+    let kRank = kingRank;
+    for (const row of chess.board()) for (const c2 of row) if (c2 && c2.type === 'k' && c2.color === enemy) kRank = Number(c2.square[1]);
+    const up = color === 'w' ? 1 : -1;
+    const hitsZone = (x: number): boolean => {
+      if (Math.abs(x - kingFile) > 1) return false;
+      for (let r = liftRank + up; r >= 1 && r <= 8; r += up) {
+        const pc = chess.get(`${String.fromCharCode(97 + x)}${r}` as Square);
+        if (!pc) continue;
+        return pc.color === enemy && Math.abs(r - kRank) <= 1;
+      }
+      return false;
+    };
+    const step = kingFile > from ? 1 : -1;
+    let reaches = hitsZone(from);
+    for (let x = from + step; !reaches && x >= 0 && x <= 7; x += step) {
+      if (chess.get(`${String.fromCharCode(97 + x)}${liftRank}` as Square)) break;
+      reaches = hitsZone(x);
+      if (Math.abs(x - kingFile) > 1 && (step > 0 ? x > kingFile : x < kingFile)) break;
+    }
+    if (!reaches) continue;
     return { rook: cell.square, to: liftSq };
   }
   return null;

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2593 lines · 79 exports · 66 importers · 20 tests · 2 audits**
+**2622 lines · 79 exports · 67 importers · 21 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -77,6 +77,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/threatOut.ts`
 - `src/services/tradeQuality.ts`
 - `src/services/walk3.test.ts`
+- `src/services/walkOct1Learn.test.ts`
 - `src/test/kingIsNeverHanging.test.ts`
 
 ## Exports and every call site
@@ -125,13 +126,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveIntent.ts:291`
 - `src/services/moveIntent.ts:303`
 - `src/services/moveIntent.ts:323`
-- `src/services/moveIntent.ts:505`
+- `src/services/moveIntent.ts:516`
 - `src/services/opponentMovePurpose.ts:33`
 - `src/services/reviewTeachingPoints.ts:99`
 - `src/services/reviewTeachingPoints.ts:135`
 - `src/services/reviewTeachingPoints.ts:466`
 - `src/services/reviewTeachingPoints.ts:667`
-- `src/services/reviewTeachingPoints.ts:778`
+- `src/services/reviewTeachingPoints.ts:780`
 
 ### `landingIsSafe` (function) — 13 call sites
 - `src/services/computedMaterialTruth.corpus.test.ts:160`
@@ -146,11 +147,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/latentFork.ts:149`
 - `src/services/latentFork.ts:220`
 - `src/services/moveFundamentals.ts:312`
-- `src/services/moveFundamentals.ts:1263`
+- `src/services/moveFundamentals.ts:1267`
 
 ### `legalSeeGainFor` (function) — 37 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7965`
-- `src/components/Coach/CoachTeachPage.tsx:9492`
+- `src/components/Coach/CoachTeachPage.tsx:9499`
 - `src/services/arrowDoor.ts:161`
 - `src/services/bluffDetector.ts:53`
 - `src/services/bluffDetector.ts:63`
@@ -160,8 +161,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/computedMaterialTruth.corpus.test.ts:145`
 - `src/services/conversionMethod.ts:69`
 - `src/services/deliberation.ts:43`
-- `src/services/deliberation.ts:328`
-- `src/services/deliberation.ts:329`
+- `src/services/deliberation.ts:342`
+- `src/services/deliberation.ts:343`
 - `src/services/exchangeLedger.ts:75`
 - `src/services/falseAlarm.ts:62`
 - `src/services/groundedAnswer.ts:298`
@@ -173,7 +174,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:7092`
 - `src/services/groundedAnswer.ts:7143`
 - `src/services/learnTurnDoor.test.ts:238`
-- `src/services/moveIntent.ts:392`
+- `src/services/moveIntent.ts:403`
 - `src/services/moveOrder.ts:113`
 - `src/services/moveTiming.ts:51`
 - `src/services/nextPlans.ts:46`
@@ -190,8 +191,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `signedLegalSeeFor` (function) — 10 call sites
 - `src/components/Coach/CoachTeachPage.tsx:826`
 - `src/components/Coach/CoachTeachPage.tsx:7846`
-- `src/components/Coach/CoachTeachPage.tsx:10194`
-- `src/components/Coach/CoachTeachPage.tsx:10251`
+- `src/components/Coach/CoachTeachPage.tsx:10201`
+- `src/components/Coach/CoachTeachPage.tsx:10258`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
@@ -373,11 +374,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:840`
 - `src/services/positionReadingService.test.ts:843`
 
-### `findRookLift` (function) — 4 call sites
+### `findRookLift` (function) — 5 call sites
 - `src/services/danyaBehaviors.ts:808`
 - `src/services/groundedAnswer.ts:6420`
 - `src/services/positionReadingService.test.ts:846`
 - `src/services/positionReadingService.test.ts:849`
+- `src/services/walkOct1Learn.test.ts:71`
 
 ### `findBlockade` (function) — 6 call sites
 - `src/services/danyaBehaviors.ts:833`
@@ -388,7 +390,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:130`
 
 ### `structureTransfer` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9179`
+- `src/components/Coach/CoachTeachPage.tsx:9186`
 - `src/services/groundedAnswer.ts:6386`
 - `src/services/positionReadingService.test.ts:954`
 - `src/services/positionReadingService.test.ts:955`
@@ -397,7 +399,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:958`
 
 ### `namedPawnStructure` (function) — 22 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9174`
+- `src/components/Coach/CoachTeachPage.tsx:9181`
 - `src/services/claimTruth.manual.test.ts:64`
 - `src/services/claimTruth.manual.test.ts:66`
 - `src/services/danyaBehaviors.ts:372`
@@ -750,6 +752,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.najdorf1500.test.ts`
 - `src/services/replayFence.sicilianClosed1000.test.ts`
 - `src/services/walk3.test.ts`
+- `src/services/walkOct1Learn.test.ts`
 - `src/test/kingIsNeverHanging.test.ts`
 
 ## Audits that reach it

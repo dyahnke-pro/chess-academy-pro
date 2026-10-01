@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**644 lines · 4 exports · 12 importers · 3 tests · 0 audits**
+**664 lines · 4 exports · 13 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -24,13 +24,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewMoveTeaching.unpin.test.ts`
 - `src/services/reviewNarrationDefects.test.ts`
 - `src/services/reviewOpeningTheory.ts`
+- `src/services/walkOct1Learn.test.ts`
 
 ## Exports and every call site
 
-### `quietMovePoint` (function) — 3 call sites
+### `quietMovePoint` (function) — 4 call sites
 - `src/services/playCommentary.ts:999`
 - `src/services/reviewMoveTeaching.unpin.test.ts:11`
 - `src/services/reviewMoveTeaching.unpin.test.ts:15`
+- `src/services/walkOct1Learn.test.ts:67`
 
 ### `buildReviewMoveTeaching` (function) — 26 call sites
 - `src/components/Coach/CoachGameReview.tsx:1750`
@@ -83,6 +85,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewMoveTeaching.test.ts`
 - `src/services/reviewMoveTeaching.unpin.test.ts`
 - `src/services/reviewNarrationDefects.test.ts`
+- `src/services/walkOct1Learn.test.ts`
 
 ## Audits that reach it
 

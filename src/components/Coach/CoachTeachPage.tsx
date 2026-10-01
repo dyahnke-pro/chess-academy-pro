@@ -260,7 +260,7 @@ import type { OpeningRecord, OpeningVariation } from '../../types';
 import type { LiveState, TacticsLiveContext } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight, WalkableLine } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import { computePositionFacts, mustKey, conceptInstanceKey } from '../../services/positionFacts';
+import { computePositionFacts, mustKey, conceptInstanceKey, convertKey } from '../../services/positionFacts';
 import { gradePlayedMove } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause, gapEchoedByVerdict } from '../../services/opponentGap';
@@ -8857,8 +8857,15 @@ export function CoachTeachPage(): JSX.Element {
         // aloud unless it is a fault.
         const prevSan = move.history.length >= 2 ? move.history[move.history.length - 2] : null;
         const isRecapture = !!prevSan && new RegExp(`x${move.to}(?![1-8])`).test(prevSan) && move.san.includes('x');
+        // ONE VERDICT PER FOUND MOVE (Learn walk 2026-10-01: "rook takes f5: the
+        // only move that holds here" and, a beat later, "Rxf5 was the only move
+        // that kept the win here"). The found-move lane says it with the reason
+        // the others fail and the line, so the grade stands down for it.
+        const foundSpeaks = !!grade && (grade.reason === 'clear-best' || grade.reason === 'only-move') && (() => {
+          try { return !!foundMoveTeaching(fenBefore, move.san, preStudentRead?.topLines, playerColor === 'white' ? 'w' : 'b', move.to); } catch { return false; }
+        })();
         const speakGrade = !!grade?.worthSpeaking && !!grade.clause && ((grade.reason !== 'clear-best' && grade.reason !== 'only-move') || !!goodPoint)
-          && !(isRecapture && !grade.fault);
+          && !(isRecapture && !grade.fault) && !foundSpeaks;
         if (grade && speakGrade) {
           // The clause is a verdict ("that meets the threat.");
           // heard on its own it names no move. Lead with the move it grades.
@@ -9494,7 +9501,7 @@ export function CoachTeachPage(): JSX.Element {
                       })();
                       const quietButConcrete = step.switched?.to === 'positional'
                         && ((tctxNow.immediate?.length ?? 0) > 0 || (gap !== null && gap >= SHARP_GAP_CP) || looseNow);
-                      if (step.switched && !mateOnBoard && !quietOnCheck && !quietButConcrete) queueSpokenHint(probe.fen(), step.switched.text, 'character', undefined, step.switched.to === 'conversion' ? ['convert-method'] : undefined);
+                      if (step.switched && !mateOnBoard && !quietOnCheck && !quietButConcrete) queueSpokenHint(probe.fen(), step.switched.text, 'character', undefined, step.switched.to === 'conversion' ? ['convert-method', convertKey('trade-pieces')] : undefined);
                     } catch { /* the character read is a bonus, never a blocker */ }
 
                     // BOTH SIDES' PLANS, off the SAME engine read (David
@@ -10477,7 +10484,15 @@ export function CoachTeachPage(): JSX.Element {
                     // the last defender leaving, the file cracked open beside its
                     // own king — and otherwise judge the move against the
                     // engine's. Only the pronoun differs.
-                    const look = backwardLook({
+                    // A MOVE INSIDE A LOST POSITION IS NOT A BLUNDER WORTH CALLING
+                    // (Learn walk 2026-10-01: "Their Kg3 is a blunder — it gives away
+                    // real material" with mate already on the board). The contested
+                    // gate: a side five pawns down, or being mated, has nothing left
+                    // for one move to give away.
+                    const coachBeforeCp = mid.isMate
+                      ? (mid.mateIn !== null && mid.mateIn * sign < 0 ? -100_000 : 100_000)
+                      : mid.evaluation * sign;
+                    const look = coachBeforeCp <= -500 ? null : backwardLook({
                       fenBefore: cm.fenBefore,
                       fenAfter: cm.fenAfter,
                       playedSan: cm.playedSan,

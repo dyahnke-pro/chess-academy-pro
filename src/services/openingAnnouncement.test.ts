@@ -43,6 +43,11 @@ describe('openingAnnouncement — name it once, then once more where theory ends
     expect(openingAnnouncement({ name: 'Philidor Defense' }, dep(7, 'Bd3', 'w', 'Nxd4'), 'King\'s Pawn Game', 'w'))
       .toMatch(/^You left the book with/);
   });
+  it('at the departure, names the opening already announced — not the stale move-order name (Learn walk 2026-10-01)', () => {
+    const said = openingAnnouncement({ name: 'English Opening: Anglo-Indian Defense' }, dep(12, 'Bg5', 'w', 'Nc3'), "King's Indian Defense: King's Knight Variation", 'b');
+    expect(said).toMatch(/^They left the book with the bishop to g5/);
+    expect(said).not.toMatch(/English/);
+  });
   it('never repeats a name already said', () => {
     expect(openingAnnouncement({ name: 'Scandinavian Defense' }, dep(5, 'a3', 'w', null), 'Scandinavian Defense', 'w')).toBeNull();
     expect(openingAnnouncement(null, null, null, 'w')).toBeNull();

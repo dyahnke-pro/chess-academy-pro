@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**546 lines · 12 exports · 5 importers · 3 tests · 1 audits**
+**552 lines · 12 exports · 5 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,9 +30,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `aimsOf` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9536`
-- `src/components/Coach/CoachTeachPage.tsx:9540`
-- `src/services/lookaheadPlan.ts:1472`
+- `src/components/Coach/CoachTeachPage.tsx:9543`
+- `src/components/Coach/CoachTeachPage.tsx:9547`
+- `src/services/lookaheadPlan.ts:1518`
 - `src/services/planArc.phraseFrom.test.ts:30`
 - `src/services/planArc.phraseFrom.test.ts:31`
 - `src/services/planArc.test.ts:29`
@@ -56,9 +56,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `stepArc` (function) — 25 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9536`
-- `src/components/Coach/CoachTeachPage.tsx:9540`
-- `src/services/lookaheadPlan.ts:1472`
+- `src/components/Coach/CoachTeachPage.tsx:9543`
+- `src/components/Coach/CoachTeachPage.tsx:9547`
+- `src/services/lookaheadPlan.ts:1518`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.test.ts:94`
 - `src/services/planArc.test.ts:96`
@@ -83,8 +83,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planArc.truth.test.ts:36`
 
 ### `aimWalkableNow` (function) — 15 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9536`
-- `src/components/Coach/CoachTeachPage.tsx:9540`
+- `src/components/Coach/CoachTeachPage.tsx:9543`
+- `src/components/Coach/CoachTeachPage.tsx:9547`
 - `src/services/planArc.phraseFrom.test.ts:19`
 - `src/services/planArc.phraseFrom.test.ts:22`
 - `src/services/planArc.test.ts:201`
@@ -100,7 +100,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planArc.test.ts:262`
 
 ### `joinEmerges` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9552`
+- `src/components/Coach/CoachTeachPage.tsx:9559`
 - `src/services/planArc.test.ts:269`
 - `src/services/planArc.test.ts:276`
 

@@ -392,7 +392,11 @@ export function countMethodTeaching(fen: string, student: 'w' | 'b'): TeachingHi
 export function namedMoveArrows(text: string, fen: string, student: 'w' | 'b'): ArrowClaim[] {
   const out: ArrowClaim[] = [];
   const seen = new Set<string>();
+  const ruledOut = ruledOutSans(text);
   for (const san of extractMentionedSans(text)) {
+    // A move the line rules out is said, never arrowed (the arrow door's rule):
+    // "it stops your Ra5" drew Ra5 green as if to play it (Learn walk 2026-10-01).
+    if (ruledOut.has(san)) continue;
     for (const f of [fen, flipTurn(fen)]) {
       try {
         const c = new Chess(f);
@@ -406,6 +410,19 @@ export function namedMoveArrows(text: string, fen: string, student: 'w' | 'b'): 
         break;
       } catch { /* not legal on this side — try the other */ }
     }
+  }
+  return out;
+}
+/** SANs the text rules out: the one a move STOPS / prevents / takes away, a
+ *  "Why not X?", and an "X didn't work" / "X doesn't work". */
+export function ruledOutSans(text: string): Set<string> {
+  const out = new Set<string>();
+  const SAN = String.raw`(?:O-O(?:-O)?|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?)[+#]?`;
+  const before = new RegExp(String.raw`\b(?:stops|stop|prevents|prevent|takes away|rules out|why not)\s+(?:your\s+|their\s+|my\s+)?…?(${SAN})`, 'gi');
+  const after = new RegExp(String.raw`…?(${SAN})\s+(?:didn't|doesn't|does not|did not|no longer)\s+work`, 'g');
+  for (const re of [before, after]) {
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(text)) !== null) out.add(m[1]);
   }
   return out;
 }

@@ -83,7 +83,7 @@
 - `src/components/Coach/CoachGamePage.tsx:3312`
 - `src/components/Coach/CoachGamePage.tsx:3400`
 - `src/components/Coach/CoachTeachPage.tsx:8068`
-- `src/components/Coach/CoachTeachPage.tsx:9178`
+- `src/components/Coach/CoachTeachPage.tsx:9185`
 - `src/hooks/usePhaseNarration.ts:461`
 - `src/services/coachFeatureService.ts:2484`
 - `src/services/coachFeatureService.ts:2905`
@@ -265,7 +265,7 @@
 - `src/services/openingDetectionService.test.ts:371`
 - `src/services/openingGenerator.ts:3198`
 - `src/services/principleAttribution.section14.test.ts:90`
-- `src/services/principleAttribution.ts:1181`
+- `src/services/principleAttribution.ts:1186`
 
 ### `ForkBranch` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -371,8 +371,8 @@
 
 ### `studentSideForPlay` (function) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:5287`
-- `src/components/Coach/CoachTeachPage.tsx:12563`
-- `src/components/Coach/CoachTeachPage.tsx:12613`
+- `src/components/Coach/CoachTeachPage.tsx:12578`
+- `src/components/Coach/CoachTeachPage.tsx:12628`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:59`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:60`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:64`

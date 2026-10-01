@@ -1137,7 +1137,12 @@ const DETECTORS: Detector[] = [
         });
       } catch { return false; }
     };
-    const firstForcing = pvP.findIndex((san, i) => i % 2 === 0 && (isForcing(san) || threatens(i)));
+    // A RECAPTURE IS NOT A BLOW (Learn walk 2026-10-01: "Nothing hangs right
+    // away, which is the trap: after Rf8 hitting your rook, Rxf8+, Nxf8
+    // arrives" — Nxf8 only took back the rook in a plain trade).
+    const dest = (san: string): string => san.replace(/[+#]|=[QRBN]/g, '').slice(-2);
+    const recaptures = (i: number): boolean => i > 0 && pvP[i].includes('x') && pvP[i - 1].includes('x') && dest(pvP[i]) === dest(pvP[i - 1]);
+    const firstForcing = pvP.findIndex((san, i) => i % 2 === 0 && !recaptures(i) && (isForcing(san) || threatens(i)));
     if (firstForcing < 0) return no(c, 'calculation-depth', `no forcing move anywhere in the PV (${pvP.slice(0, 4).join(' ')})`);
     if (firstForcing < 2) {
       return yieldTo(c, 'calculation-depth', CALC_DEPTH_CLAIMANTS,

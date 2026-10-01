@@ -100,9 +100,9 @@
 - `src/services/conceptEngine.test.ts:285`
 - `src/services/endgameService.ts:90`
 - `src/services/endgameTablebaseService.ts:274`
-- `src/services/endgameTechnique.test.ts:63`
-- `src/services/endgameTechnique.test.ts:76`
-- `src/services/endgameTechnique.test.ts:226`
+- `src/services/endgameTechnique.test.ts:61`
+- `src/services/endgameTechnique.test.ts:74`
+- `src/services/endgameTechnique.test.ts:224`
 - `src/services/groundedAnswer.ts:3774`
 - `src/services/groundedAnswer.ts:6456`
 

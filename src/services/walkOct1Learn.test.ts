@@ -1,0 +1,79 @@
+// Learn hand walk 2026-10-01, game rgLTiUZAWQY (Scandinavian, student White).
+// Each case is a real position from the tape; each FAILS on the code it was
+// found against.
+import { describe, it, expect } from 'vitest';
+import { extractMentionedSans } from './arrowEngine';
+import { namedMoveArrows } from './learnBoardTeaching';
+import { stopReason } from './moveIntent';
+import { computeMoveFundamentals } from './moveFundamentals';
+import { routeDestination, planFromUci } from './lookaheadPlan';
+import { gradePlayedMove } from './playedMoveGrade';
+import { quietMovePoint } from './reviewMoveTeaching';
+import { findRookLift } from './positionReadingService';
+import { attributePrinciples } from './principleAttribution';
+
+describe('Learn walk 2026-10-01 — game 1 flags', () => {
+  it('a square a piece is kicked OFF is not a move (no c7-c6 arrow)', () => {
+    expect(extractMentionedSans('d5 kicks their knight off c6, gaining time.')).not.toContain('c6');
+  });
+
+  it('a move the line says is STOPPED is never arrowed as one to play', () => {
+    const fen = '3rk2r/ppp2pp1/4b1np/7R/1bP5/2N2N2/PP2BPP1/R1B1K3 w Qk - 2 15';
+    const arrows = namedMoveArrows('Their …Bb4 does two jobs: it stops your Ra5, and it prepares …O-O, to castle.', fen, 'w');
+    expect(arrows.some((a) => a.from === 'h5' && a.to === 'a5')).toBe(false);
+    const fen2 = '7r/p5p1/1p2k1p1/2pR4/P1P5/2P1B2p/3K1PP1/8 w - - 0 27';
+    const a2 = namedMoveArrows('Bf4 didn\'t work: Bf4, h2, Rd6+, Kf5, Bxh2 and Rxh2.', fen2, 'w');
+    expect(a2.some((a) => a.from === 'e3' && a.to === 'f4')).toBe(false);
+  });
+
+  it('a king move a pawn now covers says WHY it no longer works', () => {
+    const why = stopReason('8/2k3p1/P5R1/2p4r/2P3p1/2PKB3/5P2/8 b - - 0 35', 'c7b7', 'w');
+    expect(why).toMatch(/a6/);
+    expect(why).toMatch(/b7/);
+  });
+
+  it('an ending does not credit a rook with "taking aim at the center"', () => {
+    const f = computeMoveFundamentals('7r/p5p1/1p2k1p1/2pR3p/2P5/2P1B3/P4PP1/2K5 w - - 0 25', 'Rg5', 'white');
+    expect(f.some((x) => x.id === 'center')).toBe(false);
+  });
+
+  it('a route onto a square its own piece holds is no plan; onto theirs, it takes', () => {
+    // "getting the rook to c3, by way of c1" — White's own knight stands on c3.
+    expect(routeDestination('3rk2r/p1p2pp1/1p2b1np/7R/1bP5/2N1BN2/PP2BPP1/R3K3 w Qk - 0 16', 'c3', 'white')).toEqual({ kind: 'own' });
+    // "getting the knight to a7" — a7 holds their pawn.
+    expect(routeDestination('3rk2r/p1pb1pp1/1p4np/7R/1bPN4/2N1B3/PP2BPP1/2KR4 b k - 1 17', 'a7', 'white')).toEqual({ kind: 'takes', piece: 'pawn' });
+    expect(routeDestination('3rk2r/p1pb1pp1/1p4np/7R/1bPN4/2N1B3/PP2BPP1/2KR4 b k - 1 17', 'b5', 'white')).toEqual({ kind: 'empty' });
+  });
+});
+
+describe('Learn walk 2026-10-01 — games 2 and 3', () => {
+  it('a passer the line takes straight back is never "created" (exf3, then Qxf3)', () => {
+    const p = planFromUci('r2q1rk1/ppn3pp/2nb4/2p2p2/2P1p3/P1N2PP1/1PP3BP/R1BQR1K1 b - - 0 17', ['e4f3', 'd1f3', 'g8h8', 'c1f4', 'c6d4'], 'black');
+    expect(p?.mine.text ?? '').not.toMatch(/passed pawn on f3/);
+  });
+
+  it('a move is not "the only one that holds" when the runner-up still wins', () => {
+    const g = gradePlayedMove({
+      fenBefore: '6k1/4pp2/3p3p/3P2pP/4P1P1/r4PK1/r1b3B1/8 b - - 3 39', playedUci: 'c2e4',
+      fenAfter: '6k1/4pp2/3p3p/3P2pP/4b1P1/r4PK1/r5B1/8 w - - 0 40',
+      analysisBefore: { bestMove: 'c2e4', topLines: [
+        { rank: 1, evaluation: 0, mate: -5, moves: ['c2e4', 'g3h2'] },
+        { rank: 2, evaluation: -900, mate: null, moves: ['c2d3', 'e4e5'] },
+      ] } as never, studentColor: 'b' });
+    expect(g?.reason).not.toBe('only-move');
+  });
+
+  it('…h6 against a bishop on g5 is named for the kick, not for luft', () => {
+    expect(quietMovePoint('r1bq1rk1/pppnppbp/3p1np1/6B1/2PP4/5NP1/PP2PPBP/RN1Q1RK1 b - - 5 7', 'h6')).toMatch(/bishop off g5/);
+  });
+
+  it('no rook lift where the third rank is blocked short of the king', () => {
+    expect(findRookLift('r2q1rk1/ppn3pp/2nbb3/2p1pp2/8/P1NP2P1/1PPN1PBP/R1BQR1K1 w - - 5 15', 'w')).toBeNull();
+  });
+
+  it('a recapture inside a plain trade is not the "trap" a calculation missed', () => {
+    const hist = ['e4', 'c5', 'Nf3', 'Nf6', 'e5', 'Nd5', 'Nc3', 'e6', 'Ne4', 'f5', 'Nc3', 'Nb4', 'g3', 'd5', 'exd6', 'Bxd6', 'Bg2', 'O-O', 'O-O', 'e5', 'd3', 'N8c6', 'a3', 'Na6', 'Re1', 'Nc7', 'Nd2', 'Be6', 'Nc4', 'Bxc4', 'dxc4', 'e4', 'f3', 'Kh8', 'fxe4', 'f4', 'gxf4', 'Bxf4', 'Qxd8', 'Raxd8', 'Bxf4', 'Rxf4', 'Nd5', 'Rf7', 'Rf1', 'Rxf1+', 'Rxf1', 'Ne6', 'c3'];
+    const out = attributePrinciples({ historySans: hist, bestSan: 'e5', classification: 'inaccuracy', pvAfterPlayed: ['Rf8', 'Rxf8+', 'Nxf8', 'h4', 'Kg8'], evalBefore: 139, evalAfterPlayed: 46 } as never);
+    expect(out.map((a) => a.id)).not.toContain('calculation-depth');
+  });
+});

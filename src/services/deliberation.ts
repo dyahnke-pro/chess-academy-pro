@@ -299,7 +299,21 @@ export function moveWhy(fenBefore: string, san: string, mover: 'w' | 'b', oppone
   return materialWhy(fenBefore, san, mover, opponentLastSan)
     ?? threatAnswerWhy(fenBefore, san, mover)
     ?? threatMadeWhy(fenBefore, san, mover)
-    ?? strategicWhyLed(fenBefore, san, mover === 'w' ? 'white' : 'black');
+    ?? strategicWhyLed(fenBefore, san, mover === 'w' ? 'white' : 'black')
+    ?? checkWhy(fenBefore, san);
+}
+
+/** The plain fact of a check, when nothing richer is computed — in an ending
+ *  the centre reason no longer stands in for it (Rh5+ "takes aim at the
+ *  center, hitting d5" was the king on d5, Learn walk 2026-10-01). */
+function checkWhy(fenBefore: string, san: string): string | null {
+  if (!/\+$/.test(san)) return null;
+  try {
+    const c = new Chess(fenBefore);
+    const m = c.move(san);
+    const k = c.board().flat().find((x) => x && x.type === 'k' && x.color !== m.color);
+    return k ? `checks the king on ${k.square}` : null;
+  } catch { return null; }
 }
 
 /**

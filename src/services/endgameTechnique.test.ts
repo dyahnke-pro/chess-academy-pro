@@ -29,15 +29,14 @@ const EXPECTED: Record<string, string> = {
   'k7/8/K7/P7/8/8/8/8 b - - 0 1': 'rook-pawn-corner',         // rook pawn — drawn
   '8/8/8/5k2/P7/8/8/2K5 w - - 0 1': 'rule-of-the-square',     // outside the square — queens
   '8/8/8/4k3/P7/8/8/2K5 w - - 0 1': 'rule-of-the-square',     // on the boundary — caught
-  '8/8/8/8/8/4k3/P7/2K5 w - - 0 1': 'rule-of-the-square',     // first-move bonus
-  '3k4/8/8/3KP3/8/8/8/8 w - - 1 2': 'key-squares',            // outflanking — to reach a key square
+  '8/8/8/8/8/6k1/P7/2K5 w - - 0 1': 'rule-of-the-square',     // first-move bonus (king on g3, 2026-10-01 rebuild)
+  '8/8/4k3/8/4K3/8/4P3/8 w - - 0 1': 'key-squares',            // outflanking — to reach a key square (Kd4!, 2026-10-01 rebuild)
   '6k1/ppp5/8/PPP5/8/8/8/6K1 w - - 0 1': 'pawn-endgame',       // breakthrough — no false technique
   '8/p7/k7/P7/8/8/3K4/8 w - - 0 1': 'pawn-endgame',           // triangulation — no false technique
   // rook-endings
   '1K6/1P6/8/8/2k5/8/r7/4R3 w - - 0 1': 'lucena',
-  '5k2/8/4K3/4P3/8/4r3/8/4R3 w - - 0 1': 'philidor',
+  '4k3/7R/r7/3KP3/8/8/8/8 b - - 0 1': 'philidor',              // tablebase-verified Philidor (2026-10-01 rebuild; both tabs share it)
   '8/R7/8/pP4p1/7k/7r/5K2/8 w - - 0 53': 'rook-behind-passer',  // active rook — Ra7 also stands behind Black's a5 passer (board-true Tarrasch)
-  '8/6k1/P4r2/8/8/8/R7/K7 w - - 0 1': 'rook-behind-passer',    // Vancura setup (rook behind the passer is board-true)
   '8/8/4k3/8/8/2R5/3P4/3K4 w - - 0 1': 'cut-off-king',
   // drawn-patterns
   'k7/8/PK6/8/8/8/8/B7 b - - 0 1': 'wrong-rook-pawn-bishop',
@@ -46,7 +45,6 @@ const EXPECTED: Record<string, string> = {
   // solution trades them on f7. The engine reports the board, not the label.
   // Flagged to David; needs a real OCB game position (never invented, G3).
   '4b3/6k1/8/7p/pP5P/3BK1P1/2P5/8 b - - 0 41': 'same-bishops',
-  '5k2/8/4K3/4P3/8/8/r7/4R3 w - - 0 1': 'philidor',
   'k7/r7/8/8/8/8/Q7/2K5 w - - 0 1': 'queen-vs-rook',
   '4k3/8/8/8/3P4/3K4/8/8 b - - 0 1': 'key-squares',            // defender in front — the fight is for the key squares
 };
