@@ -15,11 +15,15 @@ describe('Database Schema', () => {
   });
 
   it('has the correct schema version', () => {
-    expect(db.verno).toBe(37);
+    expect(db.verno).toBe(38);
   });
 
   it('has the dataFiles store (v37 — large data files kept after one download)', () => {
     expect(db.tables.map((t) => t.name)).toContain('dataFiles');
+  });
+
+  it('has the puzzleMisses store (v38 — a missed puzzle reaches the student model)', () => {
+    expect(db.tables.map((t) => t.name)).toContain('puzzleMisses');
   });
 
   it('has srsOpeningCards table', () => {
