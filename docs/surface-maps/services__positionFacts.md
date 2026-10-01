@@ -92,7 +92,7 @@
 - `src/services/whyBestMove.ts:103`
 
 ### `computePositionFacts` (function) — 79 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9264`
+- `src/components/Coach/CoachTeachPage.tsx:9281`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:635`

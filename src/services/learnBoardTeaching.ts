@@ -33,6 +33,8 @@ import { tradeJudgement } from './tradeJudgement';
 import type { PieceValue } from './pieceValueRead';
 import { kneeJerk } from './kneeJerk';
 import { autopilotGuard, blunderCheck, keepPressing } from './safetyHabits';
+import { pawnEndingTrade, outsidePasserDecoy, spareTempoWasted, kingCourse } from './endgamePawnReads';
+import { readZugzwang, zugzwangSentence } from './zugzwang';
 import { strongChoice, warmStrongChoice } from './strongChoice';
 import { stalemateWatch } from './stalemateWatch';
 import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from './criticalMoment';
@@ -174,6 +176,19 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
     if (bc) out.push({ lane: 'blunderCheck', text: bc, squares: [], claims: ['method:blunder-check'], event: { name: 'coach_blunder_check_taught', props: { surface: 'coach-teach' } }, arrows: [] });
     const ap = autopilotGuard(i.san, i.cpLoss, i.popularTopSan ?? null);
     if (ap) out.push({ lane: 'autopilot', text: ap, squares: [to], claims: ['method:autopilot'], event: { name: 'coach_autopilot_taught', props: { surface: 'coach-teach' } }, arrows: [] });
+    // THE PAWN ENDING (Naroditsky's endgame series): the move that takes the
+    // last pieces off is counted first; and once only kings and pawns remain,
+    // an outside passer is a decoy. Each once per game (claims).
+    const st = spareTempoWasted(i.fenBefore, i.san, i.bestSan, i.cpLoss);
+    if (st) out.push({ lane: 'pawnEnding', text: st, squares: [to], claims: ['method:spare-tempo'], event: { name: 'coach_spare_tempo_taught', props: { surface: 'coach-teach' } }, arrows: [] });
+    const pe = pawnEndingTrade(i.fenBefore, i.san, i.reply, i.cpLoss, i.cpAfter);
+    if (pe) out.push({ lane: 'pawnEnding', text: pe.text, squares: [to], claims: ['method:pawn-ending-trade'], event: { name: 'coach_pawn_ending_trade', props: { surface: 'coach-teach', verdict: pe.verdict } }, arrows: [] });
+    try {
+      const me: 'w' | 'b' = i.fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
+      const c = new Chess(i.fenBefore); c.move(i.san);
+      const decoy = outsidePasserDecoy(c.fen(), me);
+      if (decoy) out.push({ lane: 'pawnEnding', text: decoy.text, squares: decoy.squares, claims: [`decoy:${decoy.passer[0]}`], event: { name: 'coach_outside_passer_decoy', props: { surface: 'coach-teach' } }, arrows: [] });
+    } catch { /* a bonus, never a blocker */ }
     const kp = keepPressing(i.fenBefore, i.san, i.bestSan, i.cpLoss, i.cpAfter);
     if (kp) out.push({ lane: 'keepPressing', text: kp, squares: [], claims: ['method:keep-pressing'], event: { name: 'coach_keep_pressing_taught', props: { surface: 'coach-teach' } }, arrows: [] });
   }
@@ -668,4 +683,21 @@ export function dangerAnswerLines(fen: string, student: 'w' | 'b', bestUci: stri
  *  so the student's next move from it is filed as PROMPTED — told, not proven. */
 export function announcesTheMove(spoke: readonly LearnLane[]): boolean {
   return spoke.some((l) => SAID_BEFORE_MOVE.has(l));
+}
+
+/** ZUGZWANG at the student's turn (tablebase, ≤7 pieces) — the fact that
+ *  decides pawn endings, said once per position. Null out of range. */
+export async function zugzwangTeaching(fen: string): Promise<TeachingHint | null> {
+  if (fen.split(' ')[0].replace(/[^a-zA-Z]/g, '').length > 7) return null;
+  const z = await readZugzwang(fen);
+  if (!z) return null;
+  return { lane: 'pawnEnding', text: zugzwangSentence(z, true), squares: [], claims: [`zugzwang:${fen.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_zugzwang_named', props: { surface: 'coach-teach', mutual: z.mutual } }, arrows: [] };
+}
+
+/** CHART A COURSE at the student's turn (kings and pawns only): the king's
+ *  target is the weak pawn, not the centre. Once per game (claim). */
+export function kingCourseTeaching(fen: string, student: 'w' | 'b'): TeachingHint | null {
+  const kc = kingCourse(fen, student);
+  if (!kc) return null;
+  return { lane: 'pawnEnding', text: kc.text, squares: [kc.target], claims: ['king-course'], event: { name: 'coach_king_course', props: { surface: 'coach-teach' } }, arrows: [] };
 }

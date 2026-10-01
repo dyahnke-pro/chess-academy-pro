@@ -67,6 +67,7 @@ import { resolveCoachNarration } from '../utils/coachNarration';
 import type { BadHabit, CoachContext, UserProfile, CoachNarration, OpeningKey, BoardArrow } from '../types';
 import { admitArrow, admitArrows, type ArrowClaim } from './arrowDoor';
 import { lineWins, lineArrows, mateLine } from './lineCalc';
+import { pawnEndingTrade, outsidePasserDecoy, spareTempoWasted } from './endgamePawnReads';
 import { theirOpeningVerdict } from './openingAnnouncement';
 import { departureRecordSentence, openingRecordClause } from './openingRecordBeat';
 import { ecoOfKey, openingEntryForKey, openingFamily, openingKeyFromSans } from './openingKey';
@@ -1379,6 +1380,8 @@ export function buildReviewSegments(
   /** Fundamentals already spoken in full this game — repeats get the short stem. */
   const seenFundamentals = new Set<import('./principleAttribution').FundamentalId>();
   const seenConversionSteps = new Set<ConversionStep>();
+  /** Outside-passer decoys already said this review (one per passer file). */
+  const seenDecoys = new Set<string>();
   /** S6 transfer: tactic motif → the move it was first SPOKEN this game. */
   const motifFirstMove: MotifLedger = new Map();
   /** S2: opening principles SPOKEN this game — committed after the door. */
@@ -1802,6 +1805,27 @@ export function buildReviewSegments(
         if (conv && !seenConversionSteps.has(conv.step)) {
           seenConversionSteps.add(conv.step);
           facets.push(`[technique] ${conv.text}`);
+        }
+      }
+      // THE PAWN ENDING (parity with Learn): the trade that takes the last
+      // pieces off, counted; an outside passer as a decoy, once per game.
+      if (moverColor === playerColor && studentColorWB && typeof m.preMoveEval === 'number' && typeof m.evaluation === 'number') {
+        const sign = moverColor === 'white' ? 1 : -1;
+        const pe = pawnEndingTrade(fenPair.fenBefore, m.san, moves[i + 1]?.san ?? null, Math.max(0, (m.preMoveEval - m.evaluation) * sign), m.evaluation * sign);
+        if (pe) facets.push(`[technique] ${pe.text}`);
+        if (m.bestMove) {
+          try {
+            const bm = new Chess(fenPair.fenBefore).move({ from: m.bestMove.slice(0, 2), to: m.bestMove.slice(2, 4), promotion: m.bestMove[4] });
+            const st = spareTempoWasted(fenPair.fenBefore, m.san, bm?.san ?? null, Math.max(0, (m.preMoveEval - m.evaluation) * sign));
+            if (st) facets.push(`[technique] ${st}`);
+          } catch { /* no best move to compare */ }
+        }
+        const decoy = outsidePasserDecoy(fenPair.fenAfter, studentColorWB);
+        if (decoy && !seenDecoys.has(decoy.passer[0])) {
+          seenDecoys.add(decoy.passer[0]);
+          const raw = `[technique] ${decoy.text}`;
+          facets.push(raw);
+          facetSquares.set(raw, decoy.squares);
         }
       }
       // THE LINE BEHIND A WINNING MOVE — parity with Learn (David 2026-09-30:

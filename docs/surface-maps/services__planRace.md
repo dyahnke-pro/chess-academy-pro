@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**279 lines · 9 exports · 4 importers · 1 tests · 0 audits**
+**322 lines · 9 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -39,7 +39,7 @@
 - `src/services/planRace.test.ts:62`
 - `src/services/planRace.test.ts:64`
 
-### `detectPlanRace` (function) — 9 call sites
+### `detectPlanRace` (function) — 12 call sites
 - `src/services/boardPlan.ts:124`
 - `src/services/planRace.test.ts:22`
 - `src/services/planRace.test.ts:27`
@@ -49,8 +49,11 @@
 - `src/services/planRace.test.ts:107`
 - `src/services/planRace.test.ts:114`
 - `src/services/planRace.test.ts:123`
+- `src/services/planRace.test.ts:155`
+- `src/services/planRace.test.ts:161`
+- `src/services/planRace.test.ts:165`
 
-### `planRaceClause` (function) — 14 call sites
+### `planRaceClause` (function) — 15 call sites
 - `src/services/boardPlan.ts:125`
 - `src/services/planRace.test.ts:23`
 - `src/services/planRace.test.ts:38`
@@ -64,10 +67,11 @@
 - `src/services/planRace.test.ts:79`
 - `src/services/planRace.test.ts:109`
 - `src/services/planRace.test.ts:115`
+- `src/services/planRace.test.ts:157`
 - `src/services/reviewFullData.ts:745`
 
 ### `fileClaimed` (function) — 4 call sites
-- `src/services/learnBoardTeaching.ts:167`
+- `src/services/learnBoardTeaching.ts:169`
 - `src/services/planRace.test.ts:140`
 - `src/services/planRace.test.ts:147`
 - `src/services/planRace.test.ts:148`

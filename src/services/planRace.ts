@@ -56,6 +56,10 @@ export interface PasserRace {
    *  king joins the escort once the queens come off" — and phase-blind advice
    *  is the defect that rule was written for. */
   queensOn: boolean;
+  /** Pure pawn ending only: the first new queen will cover the other pawn's
+   *  queening square (Naroditsky, Pawn Races: "queen first, and if your queen
+   *  covers their promotion square it never promotes"). Null when not read. */
+  firstQueenCovers: boolean | null;
 }
 
 export interface FileCollision {
@@ -129,6 +133,35 @@ function rookReachesFileNow(fen: string, file: string, color: Color): boolean {
  * THE RACE, or null. Computed from the board (G0) for BOTH seats, and stated
  * only when the two sides are genuinely running the same kind of plan.
  */
+/** THE FIRST QUEEN, ON ARRIVAL — in a pure pawn ending, does the new queen
+ *  cover the slower pawn's queening square (with that pawn where it will be
+ *  when the queen lands)? Kings and pawns only; anything else returns null. */
+function queenCovers(chess: Chess, race: PasserRace, studentColor: Color): boolean | null {
+  if (chess.board().flat().some((c) => !!c && c.type !== 'k' && c.type !== 'p')) return null;
+  const winner: Color = race.youQueenFirst ? studentColor : (studentColor === 'w' ? 'b' : 'w');
+  const loser: Color = winner === 'w' ? 'b' : 'w';
+  const wPawn = race.youQueenFirst ? race.yourPawn : race.theirPawn;
+  const lPawn = race.youQueenFirst ? race.theirPawn : race.yourPawn;
+  const wPushes = race.youQueenFirst ? race.yourPushes : race.theirPushes;
+  const winnerFirst = chess.turn() === winner;
+  const lDone = winnerFirst ? wPushes - 1 : wPushes;
+  const dir = loser === 'w' ? 1 : -1;
+  const lPromoRank = loser === 'w' ? 8 : 1;
+  // Where the slower pawn stands when the queen lands (single steps; a start-
+  // rank double step only brings it closer, so this never overstates cover).
+  const lRank = Math.min(8, Math.max(1, Number(lPawn[1]) + dir * Math.max(0, lDone)));
+  if (lRank === lPromoRank) return false;
+  const promo = `${wPawn[0]}${winner === 'w' ? 8 : 1}`;
+  const target = `${lPawn[0]}${lPromoRank}`;
+  try {
+    const b = new Chess(chess.fen());
+    b.remove(wPawn as Square); b.remove(lPawn as Square);
+    b.put({ type: 'p', color: loser }, `${lPawn[0]}${lRank}` as Square);
+    b.put({ type: 'q', color: winner }, promo as Square);
+    return b.isAttacked(target as Square, winner);
+  } catch { return null; }
+}
+
 export function detectPlanRace(fen: string, studentColor: Color): PlanRace | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
@@ -142,7 +175,7 @@ export function detectPlanRace(fen: string, studentColor: Color): PlanRace | nul
   if (mine && theirs) {
     const youMoveFirst = chess.turn() === studentColor;
     const queensOn = chess.board().flat().some((c) => !!c && c.type === 'q');
-    return {
+    const race: PasserRace = {
       kind: 'passer-race',
       queensOn,
       yourPawn: mine.sq,
@@ -153,7 +186,10 @@ export function detectPlanRace(fen: string, studentColor: Color): PlanRace | nul
       youQueenFirst: youMoveFirst
         ? mine.pushes <= theirs.pushes
         : mine.pushes < theirs.pushes,
+      firstQueenCovers: null,
     };
+    race.firstQueenCovers = queenCovers(chess, race, studentColor);
+    return race;
   }
 
   // 2. BOTH sides want the same open file — a collision, not a speed contest.
@@ -237,7 +273,14 @@ export function planRaceClause(
         : (race.queensOn
           ? 'they get there first, so the endgame favours them — keep the queens on and play for something else, or stop theirs before you trade'
           : "they get there first, so you can't just race — stop theirs before yours can decide anything"));
-    return `${counts}${tempoNote}; ${lesson}`;
+    // THE FIRST QUEEN, ON ARRIVAL (pure pawn ending): covering the other
+    // queening square ends the race outright.
+    const cover = race.firstQueenCovers
+      ? (race.youQueenFirst
+        ? (past ? ' — and your new queen would have covered their queening square, so theirs could never promote' : ' — and your new queen covers their queening square, so theirs never promotes')
+        : (past ? ' — and their new queen would have covered your queening square' : ' — and their new queen covers your queening square, so yours never promotes'))
+      : '';
+    return `${counts}${tempoNote}; ${lesson}${cover}`;
   }
 
   // File collision — silent unless exactly one side can take it this move,

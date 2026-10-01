@@ -61,7 +61,7 @@
 - `src/services/appAuditor.ts:2207`
 
 ### `emitLearnTurn` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:378`
+- `src/services/learnTurnDoor.ts:380`
 
 ## Tests
 

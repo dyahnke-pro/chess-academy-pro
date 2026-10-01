@@ -28,12 +28,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `verdictBand` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:1024`
+- `src/services/coachFeatureService.ts:1025`
 - `src/services/exchangeLedger.test.ts:128`
 - `src/services/exchangeLedger.test.ts:130`
 
 ### `assessPositionalEdge` (function) — 26 call sites
-- `src/services/coachFeatureService.ts:2843`
+- `src/services/coachFeatureService.ts:2867`
 - `src/services/exchangeLedger.test.ts:97`
 - `src/services/exchangeLedger.test.ts:98`
 - `src/services/exchangeLedger.test.ts:105`

@@ -148,3 +148,21 @@ describe('fileClaimed — the contested open file, taken (live, after the move)'
     expect(fileClaimed(FEN, 'h3')).toBeNull();
   });
 });
+
+describe('the first queen, on arrival (Naroditsky, Pawn Races)', () => {
+  it('your new queen covers their queening square — theirs never promotes', () => {
+    const fen = '8/4k3/8/P7/7p/8/8/2K5 w - - 0 1';
+    const r = detectPlanRace(fen, 'w');
+    expect(r && r.kind === 'passer-race' && r.firstQueenCovers).toBe(true);
+    expect(planRaceClause(fen, 'w', 'live')).toMatch(/your new queen covers their queening square, so theirs never promotes$/);
+  });
+  it('no cover claim when the queening squares are not on one line', () => {
+    const fen = '8/4k3/8/P7/6p1/8/8/2K5 w - - 0 1';
+    const r = detectPlanRace(fen, 'w');
+    expect(r && r.kind === 'passer-race' && r.firstQueenCovers).toBe(false);
+  });
+  it('not read with pieces on the board', () => {
+    const r = detectPlanRace('8/4k3/8/P7/7p/8/8/2K4R w - - 0 1', 'w');
+    expect(r && r.kind === 'passer-race' ? r.firstQueenCovers : 'x').toBeNull();
+  });
+});

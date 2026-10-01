@@ -56,8 +56,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:955`
 
 ### `studentJustLeftBook` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10122`
-- `src/components/Coach/CoachTeachPage.tsx:10151`
+- `src/components/Coach/CoachTeachPage.tsx:10139`
+- `src/components/Coach/CoachTeachPage.tsx:10168`
 - `src/services/openingAnnouncement.test.ts:136`
 - `src/services/openingAnnouncement.test.ts:145`
 - `src/services/openingAnnouncement.test.ts:146`
@@ -74,8 +74,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `theirOpeningVerdict` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10439`
-- `src/services/coachFeatureService.ts:1846`
+- `src/components/Coach/CoachTeachPage.tsx:10456`
+- `src/services/coachFeatureService.ts:1870`
 - `src/services/openingAnnouncement.test.ts:168`
 - `src/services/openingAnnouncement.test.ts:169`
 - `src/services/openingAnnouncement.test.ts:173`

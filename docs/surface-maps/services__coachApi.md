@@ -273,12 +273,12 @@
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:256`
 - `src/services/coachChatText.ts:221`
-- `src/services/coachFeatureService.ts:140`
-- `src/services/coachFeatureService.ts:390`
-- `src/services/coachFeatureService.ts:525`
+- `src/services/coachFeatureService.ts:141`
+- `src/services/coachFeatureService.ts:391`
 - `src/services/coachFeatureService.ts:526`
-- `src/services/coachFeatureService.ts:4771`
-- `src/services/coachFeatureService.ts:4924`
+- `src/services/coachFeatureService.ts:527`
+- `src/services/coachFeatureService.ts:4795`
+- `src/services/coachFeatureService.ts:4948`
 - `src/services/coachLaneWiring.test.ts:143`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`

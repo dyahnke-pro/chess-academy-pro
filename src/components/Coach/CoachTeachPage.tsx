@@ -30,7 +30,7 @@ import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePacka
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { announcesTheMove, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
+import { announcesTheMove, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -9035,6 +9035,23 @@ export function CoachTeachPage(): JSX.Element {
                     trapPendingRef.current = { fen: probe.fen(), slip: trap.trap.slip, warned: trap.trap.speak, confirmed: trap.trap.confirmed, state: trap.trap.state };
                     if (trap.trap.speak) queueSpokenHint(probe.fen(), trap.text, trap.lane, trap.squares, trap.claims, undefined, trap.arrows);
                     if (trap.event) captureEvent(trap.event.name, trap.event.props);
+                  }
+                  // ZUGZWANG (endgame comb 2026-10-01) — ≤7 pieces, tablebase-exact.
+                  // Never holds the turn: queued against this board when it resolves.
+                  const zzFen = probe.fen();
+                  void zugzwangTeaching(zzFen).then((zz) => {
+                    // Dropped only once the game has moved PAST this board (the live
+                    // ref may still trail the reply's animation by a beat).
+                    const plyOf = (f: string): number => { const p = f.split(' '); return (Number(p[5] ?? 1) - 1) * 2 + (p[1] === 'b' ? 1 : 0); };
+                    if (!zz || plyOf(liveFenRef.current) > plyOf(zzFen)) return;
+                    queueSpokenHint(zzFen, zz.text, zz.lane, zz.squares, zz.claims);
+                    if (zz.event) captureEvent(zz.event.name, zz.event.props);
+                  }).catch(() => { /* tablebase out of reach — nothing said */ });
+                  // CHART A COURSE (pawn ending) — the king heads for the weak pawn.
+                  const kc = kingCourseTeaching(probe.fen(), playerColor === 'white' ? 'w' : 'b');
+                  if (kc) {
+                    queueSpokenHint(probe.fen(), kc.text, kc.lane, kc.squares, kc.claims);
+                    if (kc.event) captureEvent(kc.event.name, kc.event.props);
                   }
                   // COUNT BEFORE YOU TAKE (P3 how-to-calculate) — the same moment.
                   const cnt = countMethodTeaching(probe.fen(), playerColor === 'white' ? 'w' : 'b');
