@@ -370,6 +370,10 @@ function detectCentralizeKing(ctx: ConceptCtx): ConceptBeat | null {
   if (!mv || mv.piece !== 'k' || mv.san.startsWith('O-O')) return null;
   if (pieceCount(ctx.fenAfter) > 12) return null;                        // endgame
   if (centreDistance(mv.to) >= centreDistance(mv.from)) return null; // must get MORE central
+  // "To the centre" means it is heading there — onto a centre file (c-f) or a
+  // centre rank (3-6), not a step along the edge (review walk 2026-10-01, ply
+  // 86: Kg8-g7 was "brings the king to the centre").
+  if (!'cdef'.includes(mv.to[0]) && (Number(mv.to[1]) < 3 || Number(mv.to[1]) > 6)) return null;
   const mine = MINE(ctx.moverColor, ctx.studentColor);
   const text = mine
     ? `In the endgame the king is a fighting piece — you're marching it to the centre where it shepherds your pawns and pressures theirs. Activating the king is often the whole plan.`
@@ -393,6 +397,10 @@ function advancedPawns(fen: string, color: 'w' | 'b'): number {
   return n;
 }
 
+/** WHY space matters, once — read by this beat and by the move-fundamentals
+ *  rule table, so the two never word it differently. */
+export const SPACE_RULE = 'space is a slow, real edge: keep it and your pieces breathe while theirs stumble over each other';
+
 /**
  * SPACE ADVANTAGE — a pawn PUSH that crosses into the enemy half and gives the
  * mover a clear space edge (≥2 more advanced pawns than the opponent). Board-
@@ -410,7 +418,7 @@ function detectSpaceAdvantage(ctx: ConceptCtx): ConceptBeat | null {
   if (advancedPawns(ctx.fenAfter, ctx.moverColor) - advancedPawns(ctx.fenAfter, enemy) < 2) return null;
   const mine = MINE(ctx.moverColor, ctx.studentColor);
   const text = mine
-    ? `That pawn push stakes out space — your pawns are cramping their pieces, leaving them less room to manoeuvre. Space is a slow, real edge: keep it and your pieces breathe while theirs stumble over each other.`
+    ? `That pawn push stakes out space — your pawns are cramping their pieces, leaving them less room to manoeuvre. ${SPACE_RULE[0].toUpperCase()}${SPACE_RULE.slice(1)}.`
     : `Your opponent's pawns are grabbing space and cramping you. Look to challenge the chain with a break, or trade a pair to get your pieces room to breathe.`;
   return { concept: 'space-advantage', text, source: 'concept:pos-space' };
 }
@@ -481,6 +489,9 @@ function detectCreateWeakness(ctx: ConceptCtx): ConceptBeat | null {
  * beats the very general "don't rush". Extend the taxonomy by adding detectors.
  */
 export function detectConcept(ctx: ConceptCtx): ConceptBeat | null {
+  // A MATING MOVE ends the game — no strategic theme describes it (review walk
+  // 2026-10-01: Rh8# was narrated as "seizes the open h-file … contest the file").
+  try { if (new Chess(ctx.fenAfter).isCheckmate()) return null; } catch { return null; }
   return detectOpenLinesAtKing(ctx)
     ?? detectOutpost(ctx)
     ?? detectRookActivation(ctx)

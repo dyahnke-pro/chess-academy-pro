@@ -1,6 +1,9 @@
 import { describe, it, expect } from 'vitest';
+import { Chess } from 'chess.js';
 import {
   computeMoveFundamentals,
+  principleLine,
+  ruleForPurpose,
   pickLeadingFundamentals,
   strategicWhyLed,
   strategicWhySelfContained,
@@ -281,18 +284,68 @@ describe('the rule behind a prepared move (B1)', () => {
   const fen = 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4';
   it('castling carries the king-safety rule', async () => {
     const { ruleForPurpose } = await import('./moveFundamentals');
-    const r = ruleForPurpose(fen, 'O-O', 'white', new Set());
+    const r = ruleForPurpose(fen, 'O-O', 'white', new Set(), 'student');
     expect(r?.text).toMatch(/king left in the middle/);
     expect(r?.keys).toContain('king-safety');
   });
   it('a rule already taught is not said again', async () => {
     const { ruleForPurpose } = await import('./moveFundamentals');
-    expect(ruleForPurpose(fen, 'O-O', 'white', new Set(['king-safety']))).toBeNull();
+    expect(ruleForPurpose(fen, 'O-O', 'white', new Set(['king-safety']), 'student')).toBeNull();
   });
   it('reads the prepared move with the mover to play (their plan, our turn)', async () => {
     const { ruleForPurpose } = await import('./moveFundamentals');
     // Same board with BLACK to move: White's O-O is still read as White's.
     const black = fen.replace(' w ', ' b ');
-    expect(ruleForPurpose(black, 'O-O', 'white', new Set())?.keys).toContain('king-safety');
+    expect(ruleForPurpose(black, 'O-O', 'white', new Set(), 'student')?.keys).toContain('king-safety');
+  });
+});
+
+describe('the space rule rides with a flank space-grab, once (B1)', () => {
+  it('a4 past the opening says why space matters, then only the purpose', () => {
+    const c = new Chess();
+    for (const s of 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6'.split(' ')) c.move(s);
+    const first = principleLine(c.fen(), 'a4', 'white', new Set(), 0);
+    expect(first?.text).toBe('a4 grabs space on the queenside — space is a slow, real edge: keep it and your pieces breathe while theirs stumble over each other.');
+    const again = principleLine(c.fen(), 'a4', 'white', new Set(['mg-rule:space']), 0);
+    expect(again?.text).toBe('a4 grabs space on the queenside.');
+  });
+});
+
+describe('a rule rides only where its reason is true (B1)', () => {
+  it('h3 on move 15, every black minor out, kicks the bishop without the "developing" reason', () => {
+    const c = new Chess();
+    for (const s of 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6'.split(' ')) c.move(s);
+    expect(principleLine(c.fen(), 'h3', 'white', new Set(), 0)?.text).toBe('h3 kicks their bishop off g4, gaining time.');
+  });
+});
+
+describe('prophylaxis carries its rule, once (B1, David 2026-10-01: "Add rule base")', () => {
+  it('g3 takes f4 from the knight and says why denying a square matters', () => {
+    const c = new Chess();
+    for (const s of 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6'.split(' ')) c.move(s);
+    expect(principleLine(c.fen(), 'g3', 'white', new Set(), 0)?.text).toBe('g3 takes the f4 square away from their knight — stop what they want before you chase what you want: a square their piece never reaches is a plan it never starts.');
+    expect(principleLine(c.fen(), 'g3', 'white', new Set(['mg-rule:prophylaxis']), 0)?.text).toBe('g3 takes the f4 square away from their knight.');
+  });
+});
+
+
+describe('the rule behind THEIR prepared move speaks from the right seat (Learn walk 2026-10-01)', () => {
+  it('their O-O prepares d5 to hit the knight — no "every move they spend retreating" said to the student', () => {
+    const c = new Chess();
+    for (const s of 'e4 e5 c3 Be7 d4 exd4 cxd4 Nf6 Nc3 Nc6 h3 d5 e5 Ne4 Bd3 Bb4 Bxe4 dxe4 Ne2 Be6 O-O'.split(' ')) c.move(s);
+    // The walk had already taught the centre rule, so tempo was next in line.
+    const theirs = ruleForPurpose(c.fen(), 'd5', 'white', new Set(['center']), 'opponent');
+    expect(theirs?.keys ?? []).not.toContain('tempo');
+    expect(theirs?.text ?? '').not.toMatch(/\bthey spend\b/);
+  });
+});
+
+describe('the outpost rule rides only with a piece standing on the hole (Learn walk 2026-10-01)', () => {
+  it('Nh6+ eyes g4 — no "stays there for the whole game"', () => {
+    const c = new Chess();
+    for (const s of 'h4 Nc6 c3 Nf6 f3 e5 g4 d5 b4 e4 h5 exf3 exf3 Bd6 Kf2 O-O d4 a5 b5 Ne7 a4 c5 g5 Nf5 gxf6 Qxf6 f4 cxd4 c4 dxc4 Bxc4 Bc5 Kf1 Be6 Bxe6 Qxe6 Qf3 Qc4+ Kg2 Qxc1 Ne2 Ne3+ Kg3 Qb2 Nbc3 dxc3 Rab1 Nf5+ Kg4'.split(' ')) c.move(s);
+    const r = principleLine(c.fen(), 'Nh6+', 'black', new Set(), 0);
+    expect(r?.text ?? '').toMatch(/eyes g4/);
+    expect(r?.text ?? '').not.toMatch(/stays there/);
   });
 });

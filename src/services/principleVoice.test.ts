@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { attributePrinciples, type FundamentalId } from './principleAttribution';
 import type { PrincipleAttribution } from './principleAttribution';
-import { renderFundamentalVerdict, renderFundamentalsRecap, renderPvEvidence } from './principleVoice';
+import { renderFundamentalVerdict, renderFundamentalsRecap, renderPvEvidence, verdictCanDropBetter } from './principleVoice';
 
 const ALAPIN = '1. e4 c5 2. c3 Nf6 3. e5 Nd5 4. d4 cxd4 5. cxd4 Nc6 6. Nc3 Nb6';
 const SANS = (() => { const c = new Chess(); c.loadPgn(ALAPIN); return c.history(); })();
@@ -101,3 +101,44 @@ describe('the short tempo stem says what happened only when it happened (g9 walk
     expect(renderFundamentalVerdict([a(1)], { seen, ply: 1, replySan: 'g4' } as never)).toBe('Another tempo handed over: g4 hits your knight on f5.');
   });
 });
+
+describe('a verdict beside a line that names the better move leaves it out (Learn walk 2026-10-01)', () => {
+  const FACTS = {
+    better: '', played: 'Rf6', plan: 'get your passed pawn on d4 promoting', homeMinors: 2, walked: 'f2',
+    situation: 'ahead', piece: 'knight', square: 'a3', file: 'e', king: 'g1', rook: 'd1', pawn: 'd5',
+    bishop: 'c1', drop: 2, pawns: 3,
+  };
+  const ids: FundamentalId[] = [
+    'neglected-development', 'king-left-in-centre', 'early-edge-pawns', 'passive-when-forcing-existed',
+    'wrong-trade-for-material', 'worst-piece-unimproved', 'rook-ignored-open-file', 'passive-king-endgame',
+    'rook-in-front-of-passer', 'passed-pawn-neglected', 'lost-the-opposition', 'passive-rook-endgame',
+    'kept-bad-bishop', 'capture-toward-centre', 'botched-conversion', 'no-plan',
+  ];
+  for (const id of ids) {
+    it(`${id}: no empty slot, full or short`, () => {
+      expect(verdictCanDropBetter(id)).toBe(true);
+      const a = { id, tag: 'x', weight: 1, coOccurrence: false, facts: FACTS, evidence: { moves: [], pvMoves: [] } } as unknown as PrincipleAttribution;
+      for (let ply = 1; ply <= 3; ply++) {
+        const full = renderFundamentalVerdict([a], { ply, seen: new Set(), replySan: null });
+        const short = renderFundamentalVerdict([a], { ply, seen: new Set([id]), replySan: null });
+        for (const t of [full, short]) {
+          expect(t).not.toMatch(/(?:—|;|:)\s*(?:was|does|keeps|takes|served|opens|\.|,)/);
+          expect(t).not.toMatch(/\s{2,}|\bundefined\b/);
+        }
+      }
+    });
+  }
+  it('no-plan no longer says the plan move a second time', () => {
+    const a = { id: 'no-plan', tag: 'x', weight: 1, coOccurrence: false, facts: FACTS, evidence: { moves: [], pvMoves: [] } } as unknown as PrincipleAttribution;
+    expect(renderFundamentalVerdict([a], { ply: 2, seen: new Set(), replySan: null })).not.toMatch(/plan move/);
+  });
+});
+
+describe('a pawn trade is not a poisoned grab (Learn walk 2026-10-01, game 1 ply 12)', () => {
+  it('…exf3 with exf3 to come is not greedy-pawn-grab', () => {
+    const sans = 'h4 Nc6 c3 Nf6 f3 e5 g4 d5 b4 e4 h5 exf3'.split(' ');
+    const a = attributePrinciples({ replySan: 'exf3', historySans: sans, bestSan: 'Bd6', classification: 'inaccuracy' });
+    expect(a.map((x) => x.id)).not.toContain('greedy-pawn-grab');
+  });
+});
+

@@ -10342,7 +10342,7 @@ export function CoachTeachPage(): JSX.Element {
                           recordHeld('no-plan', 60, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length) || planToldBoardsRef.current.has(fenBefore.split(' ').slice(0, 2).join(' ')), gameId: learnMemRef.current.gameId });
                           // B1: the rule behind what the move prepares, once a game
                           // (the same ledger the principle lines use).
-                          const prepRule = intent.prepares ? ruleForPurpose(fenAfterReply, intent.prepares.san, playerColor, learnMemRef.current.principleTaught) : null;
+                          const prepRule = intent.prepares ? ruleForPurpose(fenAfterReply, intent.prepares.san, playerColor, learnMemRef.current.principleTaught, 'student') : null;
                           if (prepRule) for (const k of prepRule.keys) learnMemRef.current.principleTaught.add(k);
                           const intentText = prepRule ? `${intent.text.replace(/\.$/, '')} — ${prepRule.text}.` : intent.text;
                           queueSpokenHint(fenAfterReply, intentText, 'moveIntent', intent.squares, [
@@ -10423,7 +10423,7 @@ export function CoachTeachPage(): JSX.Element {
                       ? moveIntent(move.fen, theirSan, { before: mid.topLines, after: afterRead.topLines, passBefore: passRead.topLines, passAfter: [] }, 'opponent', DEFAULT_INTENT)
                       : null;
                     if (theirIntent?.prepares) {
-                      const theirRule = ruleForPurpose(fenAfterReply, theirIntent.prepares.san, playerColor === 'white' ? 'black' : 'white', learnMemRef.current.principleTaught);
+                      const theirRule = ruleForPurpose(fenAfterReply, theirIntent.prepares.san, playerColor === 'white' ? 'black' : 'white', learnMemRef.current.principleTaught, 'opponent');
                       if (theirRule) for (const k of theirRule.keys) learnMemRef.current.principleTaught.add(k);
                       const theirText = theirRule ? `${theirIntent.text.replace(/\.$/, '')} — ${theirRule.text}.` : theirIntent.text;
                       queueSpokenHint(fenAfterReply, theirText, 'theirIntent', theirIntent.squares, [

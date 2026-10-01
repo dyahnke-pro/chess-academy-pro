@@ -4,20 +4,20 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2900 lines · 16 exports · 101 importers · 82 tests · 23 audits**
+**2900 lines · 16 exports · 103 importers · 83 tests · 23 audits**
 
 ## Locked rules that govern this surface
 
 - **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:353) — names `CLOUD_VOICES`, `voiceService`
 - **G4. TTS = streaming canonical. Buffered MP3 is gone.** (CLAUDE.md:797) — names `voiceService`
 - **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1169) — names `voiceService`
-- **G9.1 The PRO-REP DEEP BUILD DOCTRINE — locked (David 2026-05-28, emphatic).** (CLAUDE.md:1561) — names `sanitizeForTTS`
-- **Golden rules (the most important — read these every time)** (CLAUDE.md:2217) — names `voiceService`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3149) — names `voiceService`
-- **🧒 Kids section — non-negotiables** (CLAUDE.md:3326) — names `voiceService`
-- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3635) — names `voiceService`
-- **Shared types / services** (CLAUDE.md:5262) — names `voiceService`
-- **The standard post-deploy ritual** (CLAUDE.md:6041) — names `voiceService`
+- **G9.1 The PRO-REP DEEP BUILD DOCTRINE — locked (David 2026-05-28, emphatic).** (CLAUDE.md:1592) — names `sanitizeForTTS`
+- **Golden rules (the most important — read these every time)** (CLAUDE.md:2248) — names `voiceService`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3180) — names `voiceService`
+- **🧒 Kids section — non-negotiables** (CLAUDE.md:3357) — names `voiceService`
+- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3666) — names `voiceService`
+- **Shared types / services** (CLAUDE.md:5296) — names `voiceService`
+- **The standard post-deploy ritual** (CLAUDE.md:6104) — names `voiceService`
 
 ## Who calls in
 
@@ -29,6 +29,7 @@
 - `src/components/Coach/CoachAnalysePage.tsx`
 - `src/components/Coach/CoachChatPage.test.tsx`
 - `src/components/Coach/CoachChatPage.tsx`
+- `src/components/Coach/CoachEndgamePage.tsx`
 - `src/components/Coach/CoachGamePage.test.tsx`
 - `src/components/Coach/CoachGamePage.tsx`
 - `src/components/Coach/CoachGameReview.tsx`
@@ -89,6 +90,7 @@
 - `src/components/Puzzles/MistakePuzzleBoard.tsx`
 - `src/components/Puzzles/PuzzleBoard.tsx`
 - `src/components/Puzzles/PuzzleTrainerPage.tsx`
+- `src/components/Puzzles/WrongTryNote.tsx`
 - `src/components/Search/SmartSearchBar.tsx`
 - `src/components/Settings/NarrationAuditPanel.tsx`
 - `src/components/Settings/VoiceSettingsPanel.tsx`
@@ -167,7 +169,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolvePollyVoice` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:3677`
+- `src/components/Coach/CoachGamePage.tsx:3679`
 
 ### `resolvePollySecondaryVoice` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -209,10 +211,10 @@
 ### `normalizePieceShorthand` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `sanitizeForTTS` (function) — 49 call sites
-- `src/components/Openings/MiddlegamePractice.tsx:305`
-- `src/components/Openings/MiddlegamePractice.tsx:349`
-- `src/components/Openings/MiddlegamePractice.tsx:354`
+### `sanitizeForTTS` (function) — 51 call sites
+- `src/components/Openings/MiddlegamePractice.tsx:303`
+- `src/components/Openings/MiddlegamePractice.tsx:353`
+- `src/components/Openings/MiddlegamePractice.tsx:358`
 - `src/components/Openings/OpeningDetailPage.tsx:721`
 - `src/components/Settings/VoiceSettingsPanel.tsx:118`
 - `src/components/Settings/VoiceSettingsPanel.tsx:160`
@@ -259,6 +261,8 @@
 - `src/services/sanitizeForTTS.test.ts:265`
 - `src/services/sanitizeForTTS.test.ts:271`
 - `src/services/sanitizeForTTS.test.ts:274`
+- `src/services/sanitizeForTTS.test.ts:280`
+- `src/services/sanitizeForTTS.test.ts:283`
 
 ### `voiceService` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -316,6 +320,7 @@
 - `src/components/Puzzles/AdaptivePuzzlePage.repcap.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.capabilityEvidence.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.capabilityRow.test.tsx`
+- `src/components/Puzzles/MistakePuzzleBoard.endsOnReply.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.test.tsx`
 - `src/components/Tactics/TacticSetupBoard.test.tsx`

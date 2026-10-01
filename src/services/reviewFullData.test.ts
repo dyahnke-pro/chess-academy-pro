@@ -440,3 +440,22 @@ describe('the recapture read yields to the engine', () => {
     expect(trade).toMatch(/they can take back/);
   });
 });
+
+describe('a weak colour complex is said as what the computer counted (review walk 2026-10-01, game 1 ply 47)', () => {
+  it('"no pawn or bishop of yours can cover", never "nothing covers" with a queen on f3', () => {
+    const sans = 'h4 Nc6 c3 Nf6 f3 e5 g4 d5 b4 e4 h5 exf3 exf3 Bd6 Kf2 O-O d4 a5 b5 Ne7 a4 c5 g5 Nf5 gxf6 Qxf6 f4 cxd4 c4 dxc4 Bxc4 Bc5 Kf1 Be6 Bxe6 Qxe6 Qf3 Qc4+ Kg2 Qxc1 Ne2 Ne3+ Kg3 Qb2 Nbc3 dxc3 Rab1'.split(' ');
+    const fens = fensAfter(sans);
+    const ply = 47;
+    const facets = computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
+      fenBefore: fens[ply - 2], fenAfter: fens[ply - 1], san: 'Rab1', ply,
+      moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
+      evaluation: -640, preMoveEval: -640, classification: 'good', bestMoveSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: sans,
+      forcedRunStartPly: null, bestLineUci: [], replyBestSan: null,
+    });
+    const complex = facets.filter((f) => f.startsWith('[complex] Your'));
+    expect(complex.length).toBe(1);
+    expect(complex[0]).not.toMatch(/nothing covers/);
+    expect(complex[0]).toMatch(/no pawn or bishop of yours can cover/);
+  });
+});

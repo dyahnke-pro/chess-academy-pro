@@ -197,13 +197,16 @@ export async function compareTwoMoves(
     }
     return materialWhiteMinusBlack(c.fen());
   };
+  // RELATIVE, never "ahead" (review walk 2026-10-01, ply 77: "Rxd4 stays 2
+  // pawns of material ahead" with White six points DOWN). The count compares
+  // the two lines; it says nothing about who leads the game.
   const worseEval = better === 'A' ? eB : eA;
   const matDiffPts = sign * settled(betterFen, betterEval.pv) - sign * settled(worseFen, worseEval.pv);
   if (matDiffPts >= 1 && matDiffPts * 100 >= explainFraction * gapCp) {
     const pts = matDiffPts >= 9 ? 'the queen' : matDiffPts >= 5 ? 'a rook' : matDiffPts >= 3 ? 'a piece' : `${matDiffPts} pawn${matDiffPts > 1 ? 's' : ''}`;
     return {
       ...base,
-      delta: { kind: 'material', text: `it stays ${pts} of material ahead — ${base.sanWorse} gives that back`, proof: 'material-count' },
+      delta: { kind: 'material', text: `it comes out ${pts} better on material than ${base.sanWorse}`, proof: 'material-count' },
     };
   }
 

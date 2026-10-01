@@ -204,3 +204,16 @@ describe('reviewConcepts — convert-dont-rush', () => {
     expect(detectConcept(ctx(fen, 'Kf1', { evalBefore: 90, evalAfter: 90, studentColor: 'w' }))).toBeNull();
   });
 });
+
+describe('a mating move carries no strategic theme (review walk 2026-10-01, game 1 ply 88)', () => {
+  it('Rh8# is not "seizes the open h-file"', () => {
+    expect(detectConcept(ctx('5r2/5pk1/6p1/1P1R1P2/P1N4K/6r1/4n3/8 b - - 3 44', 'Rh8#', { evalBefore: -100000, evalAfter: -100000, studentColor: 'w' }))).toBeNull();
+  });
+});
+
+describe('"to the centre" means the king arrives there (review walk 2026-10-01, game 1 ply 86)', () => {
+  it('Kg8-g7 is not "brings the king to the centre"', () => {
+    const b = detectConcept(ctx('5rk1/5p2/6p1/NP1R1P2/P6K/6r1/4n3/8 b - - 1 43', 'Kg7', { evalBefore: -9990, evalAfter: -9990, studentColor: 'w' }));
+    expect(b?.concept).not.toBe('centralize-king');
+  });
+});

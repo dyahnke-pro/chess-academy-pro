@@ -663,6 +663,10 @@ const DETECTORS: Detector[] = [
     if (last.captured !== 'p') return null;
     if (!kingOnHome(c.before, mover) && homeMinorCount(c.before, mover) < 2) return null;
     if (best.captured === 'p') return null;
+    // A PAWN TRADE IS NOT A GRAB (Learn walk 2026-10-01, game 1 ply 12: …exf3
+    // exf3 was called "the pawn on f3 was poisoned"). When they can take back
+    // on that square without losing anything, nothing was won.
+    if (hangsBy(c.after, last.to) >= VAL.p) return null;
     const kick = kickAvailable(c.after, opp) ?? null;
     const check = legalMovesFor(c.after, opp).find((m) => m.san.includes('+') && landsSafely(c.after, m)) ?? null;
     const punish = kick?.san ?? check?.san;

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**679 lines · 6 exports · 12 importers · 9 tests · 3 audits**
+**718 lines · 7 exports · 12 importers · 9 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -29,7 +29,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `isMethodSentence` (function) — 2 call sites
 - `src/services/coachFeatureService.ts:4660`
-- `src/services/learnFundamentalNarration.ts:125`
+- `src/services/learnFundamentalNarration.ts:129`
 
 ### `fundamentalHow` (function) — 10 call sites
 - `src/services/fundamentalHow.test.ts:25`
@@ -43,17 +43,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/fundamentalHow.test.ts:77`
 - `src/services/principleAttribution.section14.test.ts:176`
 
+### `verdictCanDropBetter` (function) — 2 call sites
+- `src/services/learnFundamentalNarration.ts:111`
+- `src/services/principleVoice.test.ts:119`
+
 ### `FundamentalVerdictOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `renderFundamentalVerdict` (function) — 26 call sites
+### `renderFundamentalVerdict` (function) — 29 call sites
 - `src/services/coachFeatureService.ts:2467`
 - `src/services/fundLeadStems.test.ts:58`
 - `src/services/fundamentalHow.test.ts:47`
 - `src/services/fundamentalHow.test.ts:49`
 - `src/services/fundamentalHow.test.ts:55`
 - `src/services/fundamentalHow.test.ts:81`
-- `src/services/learnFundamentalNarration.ts:115`
+- `src/services/learnFundamentalNarration.ts:119`
 - `src/services/learnWalkBlumenfeld.test.ts:75`
 - `src/services/misconceptionClassifier.ts:259`
 - `src/services/principleAttribution.section14.test.ts:179`
@@ -69,6 +73,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleVoice.test.ts:32`
 - `src/services/principleVoice.test.ts:100`
 - `src/services/principleVoice.test.ts:101`
+- `src/services/principleVoice.test.ts:122`
+- `src/services/principleVoice.test.ts:123`
+- `src/services/principleVoice.test.ts:133`
 - `src/services/replayFence.mcconnell1000.test.ts:21`
 - `src/services/replayFence.sicilian1200.test.ts:54`
 - `src/services/replayFence.sicilian1200.test.ts:61`

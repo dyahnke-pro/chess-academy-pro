@@ -19,7 +19,7 @@
 import { Chess } from 'chess.js';
 import { type FundamentalId } from './principleAttribution';
 import { attributeLiveFundamental, LEARN_FUNDAMENTAL_CP_FLOOR, type LiveFundamentalReads } from './liveFundamental';
-import { renderFundamentalVerdict, isMethodSentence } from './principleVoice';
+import { renderFundamentalVerdict, isMethodSentence, verdictCanDropBetter } from './principleVoice';
 import { habitForCluster } from './coachDecider';
 import { liveHabitKey, type LiveHabit } from './methodBeat';
 import { fundamentalRecurrenceLine } from './fundamentalRecurrence';
@@ -104,7 +104,11 @@ export function learnFundamentalVerdict(
   const raw = attributeLiveFundamental(input);
   if (raw.length === 0) return null;
   const bare = (s: unknown): string => (typeof s === 'string' ? s : '').replace(/[+#]+$/, '');
-  const attrs = raw[0].id === 'botched-conversion' && input.betterNamed && bare(raw[0].facts.better) === bare(input.betterNamed)
+  // ONE FACT ONCE: the grade beside this verdict already names the better move
+  // ("Rfe8 was the move — …"), so the verdict leaves it out — for every
+  // fundamental whose stem names one, not only the conversion (Learn walk
+  // 2026-10-01: "Rfe8 was the plan move. … Rfe8 was the move").
+  const attrs = input.betterNamed && verdictCanDropBetter(raw[0].id) && bare(raw[0].facts.better) === bare(input.betterNamed)
     ? [{ ...raw[0], facts: { ...raw[0].facts, better: '' } }, ...raw.slice(1)]
     : raw;
 

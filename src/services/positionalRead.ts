@@ -398,7 +398,7 @@ function observationsFor(
       key: `${side}-complex-${cc.complex}`, side, kind: 'complex', rank: rank('complex'),
       squares: cc.squares.slice(0, 2),
       text: own
-        ? `Your ${cc.complex} squares are weak — with no bishop of that colour, nothing covers ${sqs}, and their ${cc.by} can settle there.`
+        ? `Your ${cc.complex} squares are weak — with no bishop of that colour, no pawn or bishop of yours can cover ${sqs}, and their ${cc.by} can settle there.`
         : `Their ${cc.complex} squares are weak — no bishop of theirs covers ${sqs}; ${cc.by === 'knight' ? 'a knight belongs on one' : 'your bishop can work on them'}.`,
     });
     break; // one complex read is enough — the second is the same lesson

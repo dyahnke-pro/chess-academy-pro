@@ -684,7 +684,18 @@ function punishmentOf(
   // cost three pawns; then the punishing move itself is the honest answer.
   const plan = planFromUci(fenAfter, replyLineUci, moverColor);
   const lead = plan?.theirs.spokenClauses[0];
-  if (lead?.text && !lead.drift && isCostClause(lead.text)) return { why: lead.text, first };
+  if (lead?.text && !lead.drift && isCostClause(lead.text)) {
+    // The square their line opens by taking on — so a caller that already
+    // said "that left your pawn on b5 hanging" can tell it is the same loss
+    // (Learn walk 2026-10-01, Benoni ply 26: the loss told twice in a row).
+    let taken: string | undefined;
+    try {
+      const u = replyLineUci[0];
+      const m = new Chess(fenAfter).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+      if (m?.captured) taken = m.to;
+    } catch { /* no square, the clause still stands */ }
+    return { why: lead.text, first, ...(taken ? { lostSquare: taken } : {}) };
+  }
   // A FORCED ANSWER IS NOT AN OPENING (1200 Sicilian walk 2026-09-27: "Nf6+
   // was a mistake — it let them in with Kg7"). When the played move gave check,
   // their first move is the reply the check forced; naming it as what the move

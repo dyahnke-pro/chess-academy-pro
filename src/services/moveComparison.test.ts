@@ -74,7 +74,7 @@ describe('compareTwoMoves — MATERIAL reconciles directly', () => {
     const cmp = await compareTwoMoves(base, 'cxd5', 'Kf1', eng);
     expect(cmp!.delta?.kind).toBe('material');
     expect(cmp!.delta?.proof).toBe('material-count');
-    expect(cmp!.delta?.text).toMatch(/material ahead/);
+    expect(cmp!.delta?.text).toMatch(/better on material than/);
   });
 });
 
@@ -114,6 +114,6 @@ describe('compareTwoMoves — material where the lines settle', () => {
     const fenB = fenAfter(base, 'cxd4');
     const eng = mockEngine({ [fenA]: { cp: -150, pv: ['g2f3', 'd8h4', 'g1g2'] }, [fenB]: { cp: -40, pv: ['f3d4'] } });
     const cmp = await compareTwoMoves(base, 'Bxf3', 'cxd4', eng);
-    expect(cmp!.delta?.text ?? '').not.toMatch(/material ahead/);
+    expect(cmp!.delta?.text ?? '').not.toMatch(/better on material/);
   });
 });

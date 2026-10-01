@@ -28,6 +28,7 @@ import { homeMinorCount, homeSquaresOf, isOnHomeSquare } from './development';
 import { centreDistance } from '../utils/centreDistance';
 import { isOutpost, noPawnCanChallenge } from './outpost';
 import { MATERIAL_VALUE } from './pieceValues';
+import { SPACE_RULE } from './reviewConcepts';
 
 export type MoveFundamentalId =
   | 'king-safety'
@@ -1156,9 +1157,54 @@ const PRINCIPLE_REASON: Record<MoveFundamental['id'], string | null> = {
   promotion: null,
   'passed-pawn': null,
   luft: null,
-  space: null,
-  prophylaxis: null,
+  space: SPACE_RULE,
+  // From the shipped concept:pos-prophylaxis ("prevents the opponent's plan before it starts").
+  prophylaxis: 'stop what they want before you chase what you want: a square their piece never reaches is a plan it never starts',
 };
+
+/** Whether a rule's reason is written from the MOVER's seat ("their camp",
+ *  "every move they spend retreating"). Said of the opponent's move, such a
+ *  reason points at the wrong side ("Their O-O prepares d5 … every move THEY
+ *  spend retreating" — the student's knight retreats; Learn walk 2026-10-01),
+ *  so `ruleForPurpose` speaks only seat-neutral reasons for the opponent. A
+ *  `Record`, so a new fundamental must say which it is. */
+const REASON_NAMES_SIDES: Record<MoveFundamental['id'], boolean> = {
+  development: false,
+  'open-diagonal': false,
+  center: false,
+  'king-safety': false,
+  outpost: false,
+  'open-file': true,
+  tempo: true,
+  'attack-defender': false,
+  'keep-working': false,
+  'prepare-break': false,
+  'development-complete': false,
+  'rook-behind-pawn': false,
+  'queen-off-file': false,
+  'king-activity': false,
+  promotion: false,
+  'passed-pawn': false,
+  luft: false,
+  space: true,
+  prophylaxis: true,
+};
+
+/** The reason a rule gives is TRUE on this board. The tempo reason talks about
+ *  developing, so past the point where the side kicked has any minor left at
+ *  home it is false ("h3 kicks their bishop … a move they do not spend
+ *  developing" on move 15 with every black minor out) — the move still says
+ *  what it does, without the reason. */
+function reasonHolds(f: Pick<MoveFundamental, 'id' | 'led'>, fenBefore: string, mover: 'white' | 'black'): boolean {
+  // The outpost reason is about a piece STANDING on the hole ("stays there for
+  // the whole game"); a knight that only EYES one is not there yet (Learn walk
+  // 2026-10-01: "Nh6+ eyes g4 … a piece no pawn can chase stays there").
+  if (f.id === 'outpost') return f.led.startsWith('lands');
+  if (f.id !== 'tempo') return true;
+  try {
+    return homeMinorCount(new Chess(fenBefore), mover === 'white' ? 'b' : 'w') > 0;
+  } catch { return false; }
+}
 
 /** A principle taught once per game on a quiet student opening ply (S2): the
  *  move, the rule it follows, and WHY the rule holds. The rule is the board's
@@ -1301,7 +1347,7 @@ export function principleLine(
     // its rule are each said once.
     const ruleKey = `mg-rule:${lead.id}`;
     const reason = PRINCIPLE_REASON[lead.id];
-    if (reason && !taught.has(ruleKey)) {
+    if (reason && !taught.has(ruleKey) && reasonHolds(lead, fenBefore, mover)) {
       return { id: `${middlegameKey(lead)}|${ruleKey}`, text: `${san} ${lead.led} — ${reason}.`, squares: lead.squares, first: true };
     }
     return { id: middlegameKey(lead), text: `${san} ${lead.led}.`, squares: lead.squares, first: true };
@@ -1393,6 +1439,8 @@ export function ruleForPurpose(
   preparedSan: string,
   mover: 'white' | 'black',
   taught: ReadonlySet<string>,
+  /** Whose move this purpose belongs to — required, so a caller decides. */
+  speaker: 'student' | 'opponent',
 ): { text: string; keys: string[] } | null {
   let fen = fenWherePlayed;
   try {
@@ -1404,7 +1452,7 @@ export function ruleForPurpose(
     new Chess(fen).move(preparedSan);
   } catch { return null; }
   const lead = computeMoveFundamentals(fen, preparedSan, mover)
-    .filter((f) => PRINCIPLE_REASON[f.id] && !taught.has(f.id) && !taught.has(`mg-rule:${f.id}`))
+    .filter((f) => PRINCIPLE_REASON[f.id] && !taught.has(f.id) && !taught.has(`mg-rule:${f.id}`) && reasonHolds(f, fen, mover) && (speaker === 'student' || !REASON_NAMES_SIDES[f.id]))
     .sort((a, b) => b.weight - a.weight)[0];
   if (!lead) return null;
   return { text: PRINCIPLE_REASON[lead.id] as string, keys: [lead.id, `mg-rule:${lead.id}`] };

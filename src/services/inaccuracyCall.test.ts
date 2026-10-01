@@ -467,3 +467,17 @@ describe('a route that collects material says the material', () => {
     expect(betterMoveReason(fen, 'O-O', 'Bf5', ['c8f5', 'e4f4', 'f5c2', 'a1c1', 'c2a4'], 'black')).toBe('it would win a pawn');
   });
 });
+
+describe('a pawn their line takes is a lost square the caller can match (Learn walk 2026-10-01, Benoni ply 26)', () => {
+  it('…b5 lets cxb5 win a pawn — lostSquare b5, so "your pawn on b5 hanging" is not said again', () => {
+    const c = new Chess();
+    for (const s of 'd4 c5 d5 d6 c4 Nf6 Nc3 e5 e4 Be7 Nf3 Bg4 h3 Bh5 Be2 O-O Be3 Nbd7 Nd2 Bg6 O-O a6 f4 exf4 Bxf4'.split(' ')) c.move(s);
+    const fenBefore = c.fen();
+    const call = callInaccuracy({
+      replyLineUci: ['c4b5', 'a6b5', 'e2b5', 'd8b6'], replySan: 'b3',
+      fenBefore, playedSan: 'b5', bestSan: 'Re8', cpLoss: 120, side: 'student', moverColor: 'black',
+    });
+    expect(call?.said ?? '').toMatch(/win a pawn/);
+    expect(call?.lostSquare).toBe('b5');
+  });
+});

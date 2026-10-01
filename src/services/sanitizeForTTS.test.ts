@@ -274,3 +274,12 @@ describe('a file name is never read as a piece (hand walk 2026-09-24)', () => {
     expect(sanitizeForTTS('save the B now')).toContain('the bishop');
   });
 });
+
+describe('a name that starts with a piece letter stays a name (Learn walk 2026-10-01)', () => {
+  it('"the Kádas Opening" is not read as "the kingádas Opening"', () => {
+    expect(sanitizeForTTS('This game is the Kádas Opening.')).toBe('This game is the Kádas Opening.');
+  });
+  it('a real piece letter after "the" still expands', () => {
+    expect(sanitizeForTTS('the K is exposed')).toBe('the king is exposed');
+  });
+});

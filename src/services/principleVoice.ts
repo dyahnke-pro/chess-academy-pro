@@ -158,10 +158,43 @@ export function fundamentalHow(id: FundamentalId, facts: Record<string, string |
   return FUNDAMENTAL_HOW[id] ?? null;
 }
 
+/** The verdict with the better move LEFT OUT — used when the line beside it
+ *  already names that move ("Rf6 was a little loose. Rfe8 was the move — …"),
+ *  so the move is heard once (Learn walk 2026-10-01: "Rfe8 was the plan move.
+ *  … Rfe8 was the move"). Only ids whose stems name `better` appear; the rule
+ *  itself still speaks. */
+type Facts = PrincipleAttribution['facts'];
+const VERDICT_WITHOUT_BETTER: Partial<Record<FundamentalId, (f: Facts) => string>> = {
+  'neglected-development': (f) => `Development first: ${f.homeMinors} of your pieces are still at home, and this move brought none of them out.`,
+  'king-left-in-centre': (f) => `Stepping the king to ${f.walked} throws castling away for good.`,
+  'early-edge-pawns': () => `An edge pawn this early does nothing for the centre.`,
+  'passive-when-forcing-existed': () => `Checks, captures, threats — there was a forcing move here, and this quiet move lets it go.`,
+  'wrong-trade-for-material': (f) => (f.situation === 'ahead'
+    ? `You're ahead in material — trade pieces and the win gets simpler.`
+    : `You're behind in material — trading pieces takes your chances with them.`),
+  'worst-piece-unimproved': (f) => `Improve your worst piece: the ${f.piece} on ${f.square} is doing the least.`,
+  'rook-ignored-open-file': (f) => `Rooks belong on open files: the ${f.file}-file was open, and leaving it lets them get there first.`,
+  'passive-king-endgame': (f) => `In the endgame the king is a piece: yours on ${f.king} should be walking in.`,
+  'rook-in-front-of-passer': (f) => `Rooks belong behind passed pawns: on ${f.rook} yours sits in front of the pawn on ${f.pawn}.`,
+  'passed-pawn-neglected': (f) => `Passed pawns must be pushed: your pawn on ${f.pawn} is passed, and every move it waits, they build a blockade in front of it.`,
+  'lost-the-opposition': () => `King-and-pawn endings turn on the opposition, and this move hands it to them.`,
+  'passive-rook-endgame': (f) => `An active rook is worth a pawn: the seventh was there on ${f.square}, and the played move leaves the rook passive.`,
+  'kept-bad-bishop': (f) => `Your worst piece is the bishop on ${f.bishop}, boxed in by pawns on its colour.`,
+  'capture-toward-centre': (f) => `Taking toward the centre is the usual rule, but here the other capture was better — it opens the ${f.file}-file for your rook.`,
+  'no-plan': (f) => `A move without a purpose: the board wanted you to ${f.plan}, and ${f.played} works on something else entirely.`,
+};
+
+/** Whether this fundamental's verdict can be spoken without its better move. */
+export function verdictCanDropBetter(id: FundamentalId): boolean {
+  return id === 'botched-conversion' || !!VERDICT_WITHOUT_BETTER[id];
+}
+
 /** The full verdict for one attribution. `v` picks the stem variant. */
 function fullVerdict(a: PrincipleAttribution, v: number): string {
   const f = a.facts;
   const e = a.evidence;
+  const elided = f.better === '' ? VERDICT_WITHOUT_BETTER[a.id] : undefined;
+  if (elided && (a.id !== 'king-left-in-centre' || f.walked)) return elided(f);
   const kick = e.moves.length ? listMoves(e.moves) : null;
   switch (a.id) {
     case 'same-piece-twice': {
@@ -231,7 +264,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     }
     case 'greedy-pawn-grab': {
       const s = [
-        `The pawn on ${f.pawn} was poisoned: taking it costs time, and ${f.punish} collects it straight away.`,
+        `The pawn on ${f.pawn} was poisoned: taking it costs time, and ${f.punish} hits back straight away.`,
         `A pawn grab with the pieces still at home — ${f.punish} answers, and the pawn isn't worth the tempo.`,
         `Greedy: the ${f.pawn} pawn buys you nothing but ${f.punish}, and you're behind in development for it.`,
       ];
@@ -495,6 +528,12 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
 function shortVerdict(a: PrincipleAttribution): string {
   const f = a.facts;
   const e = a.evidence;
+  // The line beside it names the better move — the short stem must not end on
+  // an empty slot ("Rushing the win again — was calmer.").
+  if (f.better === '' && (VERDICT_WITHOUT_BETTER[a.id] || a.id === 'botched-conversion')) {
+    if (a.id === 'botched-conversion') return `Rushing the win again.`;
+    if (a.id !== 'king-left-in-centre' || f.walked) return (VERDICT_WITHOUT_BETTER[a.id] as (x: Facts) => string)(f);
+  }
   switch (a.id) {
     case 'same-piece-twice': return `The same ${f.piece} again — its ${nth(Number(f.nth))} move.`;
     // Said as what HAPPENED only when they played the kick (g9 walk 2026-09-27:

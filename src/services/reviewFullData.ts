@@ -756,7 +756,7 @@ export function computeMoveFacets(
     }
     for (const cc of findColorComplexWeakness(fenAfter)) {
       const sqs = andList([...cc.squares]);
-      if (cc.side === studentColorWB) { const f = `[complex] Your ${cc.complex} squares are weak — with no bishop of that colour, nothing covers ${sqs}.`; facets.push(f); recSquares(f, cc.squares); break; }
+      if (cc.side === studentColorWB) { const f = `[complex] Your ${cc.complex} squares are weak — with no bishop of that colour, no pawn or bishop of yours can cover ${sqs}.`; facets.push(f); recSquares(f, cc.squares); break; }
     }
     // FORWARD PLANS — what to DO from here + exactly HOW (David 2026-07-20: "add
     // in more future plans … and exactly how to do those plans"). EVERY applicable
