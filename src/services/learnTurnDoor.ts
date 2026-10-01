@@ -167,8 +167,12 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // behind every stronger lead, though the computer fired 41 times offline on
   // 20 of his games. Their plan advancing IS the why of their move.
   planArc: { kind: 'plan', why: 'the plan taking shape / advancing / landing / given up — read twice, walkable from this board', lead: 70, always: true },
-  drawback: { kind: 'drawback', why: 'what the student’s own move handed over', lead: 83 },
-  mistake: { kind: 'mistake', why: 'the mistake call-out', lead: 85 },
+  // THE VERDICT ON THE STUDENT'S OWN MOVE always rides (Learn walk
+  // 2026-10-01, game 1: …Rf6 threw −0.2 → −2.9 and the turn spoke only the
+  // back-rank warning — the grade shared no square with it, so it was held).
+  // backwardLook returns ONE of these two per move, so this adds one sentence.
+  drawback: { kind: 'drawback', why: 'what the student’s own move handed over', lead: 83, always: true },
+  mistake: { kind: 'mistake', why: 'the mistake call-out', lead: 85, always: true },
   coachMistake: { kind: 'coachMistake', why: 'the coach owning its own inaccuracy', lead: 84 },
   fundamental: { kind: 'drawback', why: 'the fundamental the move broke', lead: 82 },
   movePoint: { kind: 'computed', why: 'the point of the student’s clean move', lead: 62 },

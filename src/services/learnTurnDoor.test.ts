@@ -299,3 +299,15 @@ describe('the fade — short phrasing when the skill is green (David 2026-09-30)
     expect(cold.faded).toEqual([]);
   });
 });
+
+describe('the verdict on the student\'s own move is never held (Learn walk 2026-10-01, game 1 ply 66)', () => {
+  it('a back-rank threat leads and the blunder grade still speaks', () => {
+    const fen = '4r2k/pp1R2pp/5r2/2P5/1P4P1/7P/3KR3/8 b - - 0 34';
+    const d = decideTurn([
+      { lane: 'threat', text: 'Watch out — your king on h8 has no escape square and the back rank can be invaded from e2.', fen, squares: ['h8', 'e2'] },
+      { lane: 'mistake', text: 'Rf6 was a blunder — it let them win the pawn on e2. Rc8 was the move.', fen, squares: ['f6', 'c8'] },
+    ]);
+    expect(d.spoke).toContain('threat');
+    expect(d.spoke).toContain('mistake');
+  });
+});
