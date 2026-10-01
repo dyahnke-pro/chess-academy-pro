@@ -77,6 +77,7 @@ function paramsFor(p: RawPuzzle, i: number): NarrationParams {
     gamePhase: phases[i % phases.length],
     playerMoveSan: 'Qh5',
     bestMoveSan,
+    allowedReplySan: null,
     cpLoss: 150 + (i % 4) * 100,
     fen: p.fen,
     moves: p.moves,

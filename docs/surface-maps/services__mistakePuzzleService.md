@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1447 lines · 24 exports · 28 importers · 16 tests · 4 audits**
+**1501 lines · 26 exports · 29 importers · 16 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,6 +16,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachGameReview.tsx`
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Insights/OpeningDrilldown.tsx`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx`
 - `src/components/Puzzles/MyMistakesPage.test.tsx`
 - `src/components/Puzzles/MyMistakesPage.tsx`
 - `src/components/Puzzles/WeaknessTagDrillPage.tsx`
@@ -82,7 +83,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakeProvenance.test.ts:106`
 - `src/services/mistakeProvenance.test.ts:111`
 
-### `uciToSan` (function) — 47 call sites
+### `uciToSan` (function) — 49 call sites
 - `scripts/find-line-reanchor.mjs:20`
 - `scripts/find-line-reanchor.mjs:38`
 - `scripts/pro-repertoire/build-dragodorf-sublines.mjs:41`
@@ -113,8 +114,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/endgameService.ts:197`
 - `src/services/endgameService.ts:252`
 - `src/services/endgameService.ts:259`
-- `src/services/mistakeNarration.ts:117`
-- `src/services/mistakeNarration.ts:591`
+- `src/services/mistakeNarration.ts:124`
+- `src/services/mistakeNarration.ts:615`
 - `src/services/openingGenerator.ts:3459`
 - `src/services/openingGenerator.ts:3658`
 - `src/services/openingGenerator.ts:3662`
@@ -128,6 +129,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleQuiz.ts:146`
 - `src/services/tacticClassifierService.ts:349`
 - `src/services/tacticClassifierService.ts:585`
+- `src/services/wrongTryRefutation.ts:63`
+- `src/services/wrongTryRefutation.ts:75`
 - `src/test/everySurfaceSpeaks.test.ts:47`
 - `src/test/everySurfaceSpeaks.test.ts:92`
 
@@ -181,6 +184,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakePuzzleService.test.ts:485`
 
 ### `CapturePuzzleInput` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `rerenderMistakeNarration` (function) — 1 call site
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:351`
+
+### `lineToUci` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `addMistakePuzzleFromCapture` (function) — 8 call sites

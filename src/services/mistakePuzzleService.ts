@@ -3,11 +3,12 @@ import { db } from '../db/schema';
 import { emitWeaknessModelChanged } from './weaknessModelEvents';
 import { createDefaultSrsFields, calculateNextInterval } from './srsEngine';
 import { stockfishEngine } from './stockfishEngine';
+import { gameReplyAfter } from './moveAllowed';
 import { generateMistakeNarration } from './mistakeNarration';
 import { voiceMistakeNarration } from './mistakeNarrationVoice';
 import { detectTacticType } from './missedTacticService';
 import { tacticTypeLabel } from './tacticAlertService';
-import type { TacticType } from '../types';
+import type { TacticType, MistakeNarration } from '../types';
 import {
   detectPositionTransformation,
   transformationPrompt,
@@ -631,6 +632,8 @@ async function analyzeGameWithStockfish(
       gameDate: gameContext.gameDate,
       openingName: gameContext.openingName,
       evalBefore: evalBeforeFromPlayer,
+      // What they answered in the game — the card leads with what it punished.
+      allowedReplySan: moves[moveIdx + 1] ?? null,
       // Mate for the OPPONENT after the move (both evals White POV).
       allowedMate: isMateEval(evalAfter) && (playerColor === 'white' ? evalAfter < 0 : evalAfter > 0),
     };
@@ -949,6 +952,10 @@ async function generateFromAnnotations(
       openingName: gameContext.openingName,
       // generateMistakeNarration expects evalBefore in PAWNS (player POV).
       evalBefore: evalBeforeCp !== null ? evalBeforeCp / 100 : null,
+      // What they answered in the game — the card leads with what it punished.
+      allowedReplySan: annotations.find(
+        (a) => (a.moveNumber - 1) * 2 + (a.color === 'black' ? 1 : 0) === fenIndex + 1,
+      )?.san ?? null,
     };
     const narration = await voiceMistakeNarration(
       generateMistakeNarration(narrationParams),
@@ -1087,6 +1094,48 @@ export interface CapturePuzzleInput {
    *  capture had no eval (a live slip with no engine read); the panel then
    *  honestly leaves that puzzle unclassified. Loop audit 2026-09-09. */
   evalBefore?: number | null;
+  /** The opponent's best reply to the played move (`pvAfterPlayed[0]`), when
+   *  the capture has it — the card leads with what that reply punishes. */
+  allowedReplySan?: string | null;
+  /** The engine line from this position starting with the best move
+   *  (`pvAfterBest`), SAN — classifies the tactic on the whole line. */
+  bestLineSan?: readonly string[];
+}
+
+/** A stored card's narration, rebuilt from its stored facts plus the move the
+ *  opponent actually answered with in the game — the same computer that built
+ *  it, so an old card reads like a new one. */
+export function rerenderMistakeNarration(p: MistakePuzzle, pgn: string | null): MistakeNarration {
+  return generateMistakeNarration({
+    classification: p.classification,
+    gamePhase: p.gamePhase,
+    playerMoveSan: p.playerMoveSan,
+    bestMoveSan: p.bestMoveSan,
+    cpLoss: p.cpLoss,
+    fen: p.fen,
+    moves: p.moves,
+    opponentName: p.opponentName,
+    gameDate: p.gameDate,
+    openingName: p.openingName,
+    evalBefore: p.evalBefore !== null ? p.evalBefore / 100 : null,
+    allowedMate: /forced mate/.test(p.narration.intro),
+    allowedReplySan: pgn ? gameReplyAfter(pgn, p.fen, p.playerMoveSan) : null,
+  });
+}
+
+/** SAN line → UCI from `fen`, stopping at the first move that does not play. */
+export function lineToUci(fen: string, sans: readonly string[] | undefined): string[] | undefined {
+  if (!sans || sans.length === 0) return undefined;
+  const out: string[] = [];
+  try {
+    const c = new Chess(fen);
+    for (const san of sans) {
+      const m = c.move(san);
+      if (!m) break;
+      out.push(`${m.from}${m.to}${m.promotion ?? ''}`);
+    }
+  } catch { /* keep what played */ }
+  return out.length > 0 ? out : undefined;
 }
 
 /** Option B of the weakness-spine unification (David 2026-05-25): a mistake
@@ -1196,7 +1245,11 @@ export function buildMistakePuzzleFromCapture(
   const cpLoss = input.cpLoss && input.cpLoss > 0 ? Math.round(input.cpLoss) : 150;
   const classification = classifyByCentipawnsFallback(cpLoss);
   const gamePhase = input.gamePhase ?? classifyGamePhase(fen, input.moveNumber ?? 20);
-  const tacticType = detectTacticType(fen, bestMove);
+  // Classify on the LINE, not the lone move. Without it almost every capture
+  // landed as the catch-all "tactical sequence" (666 of 997 cards on a real
+  // import, hand walk 2026-10-01) — a fork or mate two moves deep is invisible
+  // from the first move alone.
+  const tacticType = detectTacticType(fen, bestMove, lineToUci(fen, input.bestLineSan));
   const srsDefaults = createDefaultSrsFields();
   const narration = generateMistakeNarration({
     classification,
@@ -1207,6 +1260,7 @@ export function buildMistakePuzzleFromCapture(
     fen,
     moves: bestMove,
     openingName: input.openingName ?? null,
+    allowedReplySan: input.allowedReplySan ?? null,
   });
 
   return {

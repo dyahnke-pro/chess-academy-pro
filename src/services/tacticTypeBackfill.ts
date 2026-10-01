@@ -26,11 +26,14 @@
 import { db } from '../db/schema';
 import { detectTacticType } from './missedTacticService';
 import { logAppAudit } from './appAuditor';
-import type { ClassifiedTactic, MistakePuzzle } from '../types';
+import type { ClassifiedTactic, MistakePuzzle, MoveAnnotation } from '../types';
 
 /** Bump when the unified classifier's PROJECTION changes in a way that should
  *  reach already-persisted rows. */
-export const TACTIC_TYPE_REV = '2026-09-15-unified-classifier';
+// 2026-10-01: classify on the solution LINE read from the source game's
+// stored annotation when the row holds only the best move (capture-built rows
+// did, so 666 of 997 cards on a real import were the catch-all).
+export const TACTIC_TYPE_REV = '2026-10-01-line-from-game';
 
 export interface TacticTypeBackfillResult {
   /** Rows read across both stores. */
@@ -54,7 +57,13 @@ function pvOf(moves: string | undefined): readonly string[] | undefined {
 }
 
 /** Recompute one row. Returns the updated row, or null when it is current. */
-function retagMistakePuzzle(row: MistakePuzzle, r: TacticTypeBackfillResult): MistakePuzzle | null {
+function retagMistakePuzzle(
+  row: MistakePuzzle,
+  r: TacticTypeBackfillResult,
+  /** The engine line from the source game (`pv.afterBest`, UCI), when the row
+   *  itself holds only the best move. */
+  gameLine?: readonly string[],
+): MistakePuzzle | null {
   if (row.tacticTypeRev === TACTIC_TYPE_REV) return null;
   r.recomputed += 1;
   if (row.positionalMotif) {
@@ -65,7 +74,9 @@ function retagMistakePuzzle(row: MistakePuzzle, r: TacticTypeBackfillResult): Mi
     r.flagged += 1;
     return { ...row, tacticTypeRev: TACTIC_TYPE_REV, tacticTypeFlag: 'no-inputs' };
   }
-  const next = detectTacticType(row.fen, row.bestMove, pvOf(row.moves));
+  const own = pvOf(row.moves);
+  const line = own && own.length > 1 ? own : (gameLine && gameLine[0] === row.bestMove ? gameLine : own);
+  const next = detectTacticType(row.fen, row.bestMove, line);
   if (next !== row.tacticType) r.changed += 1;
   return { ...row, tacticType: next, tacticTypeRev: TACTIC_TYPE_REV, tacticTypeFlag: null };
 }
@@ -120,12 +131,24 @@ export async function reconcileTacticTypes(
       if (tw.length > 0) await db.classifiedTactics.bulkPut(tw);
     });
   };
+  // One cached read per source game; the annotation is found by move number
+  // and colour (both stored on the row), so no game is replayed.
+  const games = new Map<string, MoveAnnotation[] | null>();
+  const gameLineFor = async (row: MistakePuzzle): Promise<readonly string[] | undefined> => {
+    if (!row.sourceGameId) return undefined;
+    if (!games.has(row.sourceGameId)) {
+      const g = await db.games.get(row.sourceGameId).catch(() => undefined);
+      games.set(row.sourceGameId, g?.annotations ?? null);
+    }
+    const ann = games.get(row.sourceGameId)?.find((a) => a.moveNumber === row.moveNumber && a.color === row.playerColor);
+    return ann?.pv?.afterBest;
+  };
   let sinceFlush = 0;
   let first = true;
   for (const row of stalePuzzles) {
     if (!first) await schedule.yieldBetweenRows();
     first = false;
-    const next = retagMistakePuzzle(row, r);
+    const next = retagMistakePuzzle(row, r, await gameLineFor(row));
     if (next) { puzzleWrites.push(next); sinceFlush += 1; }
     if (sinceFlush >= batch) { await flush(); sinceFlush = 0; }
   }

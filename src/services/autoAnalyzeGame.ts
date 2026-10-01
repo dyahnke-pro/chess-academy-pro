@@ -573,6 +573,8 @@ async function persistMistakePuzzlesForBlunders(
       moveNumber: b.moveNumber,
       from,
       evalBefore: b.evalBefore ?? null,
+      allowedReplySan: b.pvAfterPlayed?.[0] ?? null,
+      ...(b.pvAfterBest ? { bestLineSan: b.pvAfterBest } : {}),
     });
     if (puzzle) fresh.push(puzzle);
   }

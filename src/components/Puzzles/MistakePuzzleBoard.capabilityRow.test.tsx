@@ -41,6 +41,8 @@ vi.mock('../Board/ChessBoard', () => ({
 /** After 1.e4 e5 — the position `capabilityEvidence.test.ts` proves Nf3 poses on. */
 const AFTER_1E4_E5 = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
 
+const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
+
 describe('a solved drill lands a HELD row in the capability store', () => {
   beforeEach(async () => {
     resetFactoryCounter();
@@ -61,6 +63,7 @@ describe('a solved drill lands a HELD row in the capability store', () => {
     });
     render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} skipReplayContext />);
     await screen.findByTestId('mock-board');
+    await act(async () => { await sleep(150); }); // the source-game read before play opens
 
     await act(async () => {
       latestOnMove!({ from: 'g1', to: 'f3', san: 'Nf3', fen: '', pgn: '', history: [], moveNumber: 2, turn: 'w' });

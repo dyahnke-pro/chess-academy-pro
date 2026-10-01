@@ -5,6 +5,7 @@ import { usePieceSound } from '../../hooks/usePieceSound';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useSettings } from '../../hooks/useSettings';
 import { readWrongTry } from '../../services/wrongTryRefutation';
+import { rerenderMistakeNarration } from '../../services/mistakePuzzleService';
 import { puzzleMethodLine } from '../../services/puzzleMethod';
 import type { MethodHabit } from '../../services/methodBeat';
 import { voiceService } from '../../services/voiceService';
@@ -148,6 +149,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   const [state, setState] = useState<PuzzleState>('loading');
   const resolvedForRef = useRef<string | null>(null);
   const tryTokenRef = useRef(0);
+  const narrationRef = useRef(puzzle.narration);
   const saidHabitsRef = useRef(new Set<MethodHabit>());
   const resolve = useCallback((correct: boolean, solveTimeMs: number): void => {
     if (resolvedForRef.current === puzzle.id) return;
@@ -294,6 +296,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   // Reset when puzzle changes — fetch source game and start replay
   useEffect(() => {
     tryTokenRef.current += 1;
+    narrationRef.current = puzzle.narration;
     const chess = new Chess(puzzle.fen);
     chessRef.current = chess;
     movesRef.current = parseUciMoves(puzzle.moves);
@@ -333,15 +336,25 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     const cancelledRef = { value: false };
     void (async () => {
       let steps: ReplayStep[] = [];
-      if (!skipReplayContext) {
+      let pgn: string | null = null;
+      try {
+        pgn = (await db.games.get(puzzle.sourceGameId))?.pgn ?? null;
+      } catch {
+        // No game found — no replay, and the stored narration stands
+      }
+      if (cancelledRef.value) return;
+      // Cards are re-rendered at open from the one narration computer, so a
+      // card stored before the 2026-10-01 rebuild leads with what the move
+      // allowed too — no migration. Before anything is spoken.
+      if (pgn) {
         try {
-          const game = await db.games.get(puzzle.sourceGameId);
-          if (game?.pgn && !cancelledRef.value) {
-            steps = extractReplayMoves(game.pgn, puzzle.fen, puzzle.playerColor, puzzle.moveNumber);
-          }
+          narrationRef.current = rerenderMistakeNarration(puzzle, pgn);
         } catch {
-          // No game found — skip replay
+          // keep the stored narration
         }
+      }
+      if (!skipReplayContext && pgn) {
+        steps = extractReplayMoves(pgn, puzzle.fen, puzzle.playerColor, puzzle.moveNumber);
       }
 
       if (cancelledRef.value) return;
@@ -376,18 +389,18 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
           // Caller already showed context — start immediately without
           // remounting the board so the position stays visually stable.
           setState('playing');
-          if (puzzle.narration.intro) {
-            setSubtitle(puzzle.narration.intro);
-            void voiceService.speak(puzzle.narration.intro);
+          if (narrationRef.current.intro) {
+            setSubtitle(narrationRef.current.intro);
+            void voiceService.speak(narrationRef.current.intro);
           }
         } else {
           setBoardKey((k) => k + 1);
           setState('loading');
           const timer = setTimeout(() => {
             setState('playing');
-            if (puzzle.narration.intro) {
-              setSubtitle(puzzle.narration.intro);
-              void voiceService.speak(puzzle.narration.intro);
+            if (narrationRef.current.intro) {
+              setSubtitle(narrationRef.current.intro);
+              void voiceService.speak(narrationRef.current.intro);
             }
           }, 400);
           replayTimerRef.current = timer;
@@ -456,9 +469,9 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
           setFen(puzzle.fen);
           setBoardKey((k) => k + 1);
           setState('playing');
-          if (puzzle.narration.intro) {
-            setSubtitle(puzzle.narration.intro);
-            void voiceService.speak(puzzle.narration.intro);
+          if (narrationRef.current.intro) {
+            setSubtitle(narrationRef.current.intro);
+            void voiceService.speak(narrationRef.current.intro);
           }
         };
 
@@ -516,9 +529,9 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     setLastMoveHighlight(null);
     setBoardKey((k) => k + 1);
     setState('playing');
-    if (puzzle.narration.intro) {
-      setSubtitle(puzzle.narration.intro);
-      void voiceService.speak(puzzle.narration.intro);
+    if (narrationRef.current.intro) {
+      setSubtitle(narrationRef.current.intro);
+      void voiceService.speak(narrationRef.current.intro);
     }
   }, [state, puzzle]);
 
@@ -535,7 +548,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     setSubtitle('Analyzing why this was the best move...');
     const rating = activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
     try {
-      const response = await explainPuzzleMoveGrounded({
+      const engineFramed = await explainPuzzleMoveGrounded({
         fen: puzzle.fen,
         bestMoveUci: puzzle.bestMove,
         bestMoveSan: puzzle.bestMoveSan,
@@ -545,6 +558,8 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
         pvUci: puzzle.moves ? puzzle.moves.split(/\s+/).filter(Boolean) : undefined,
       });
       setWhyLoading(false);
+      // The student played this move — it is theirs, not "the engine's".
+      const response = engineFramed.replace(/^The engine plays (\S+) — it /, '$1 — it ').replace(/^The engine plays (\S+)\./, '$1.');
       setSubtitle(response);
       await voiceService.speakGrounded(response, puzzle.fen, { bypassBriefCap: true });
     } catch {
@@ -563,7 +578,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
 
     if (state === 'playing') {
       // Spoiler-free hint during play — tactic-specific teaching, not generic position description
-      const hint = puzzle.narration.conceptHint;
+      const hint = narrationRef.current.conceptHint;
       if (hint) {
         setSubtitle(hint);
         void voiceService.speak(hint);
@@ -660,7 +675,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       // Speak per-move narration
       const currentPlayerMove = playerMoveCountRef.current;
       playerMoveCountRef.current += 1;
-      const moveNarrations = puzzle.narration.moveNarrations;
+      const moveNarrations = narrationRef.current.moveNarrations;
       if (moveNarrations[currentPlayerMove]) {
         voiceService.stop();
         setSubtitle(moveNarrations[currentPlayerMove]);
@@ -713,10 +728,16 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
         // "Why?" button gives. NO auto-advance — the student taps "Next puzzle"
         // themselves when they're done analyzing (David 2026-05-19: the deeper
         // meaning gets clipped otherwise).
-        outroTimerRef.current = setTimeout(() => {
-          voiceService.stop();
-          void speakBestMoveWhy();
-        }, 800);
+        // ONE REASON, SAID ONCE: when the solving move already spoke its
+        // computed reason ("Qc5 keeps your pawn on d6 protected"), a second,
+        // competing why on top of it is noise; "Explain why" still answers.
+        const spokeReason = narrationRef.current.moveNarrations.some((m) => m.trim().length > 0);
+        if (!spokeReason) {
+          outroTimerRef.current = setTimeout(() => {
+            voiceService.stop();
+            void speakBestMoveWhy();
+          }, 800);
+        }
         // Stay on 'correct' state until the user taps Next.
         return;
       }
@@ -767,8 +788,8 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       let hint = '';
 
       if (attempts === 1) {
-        if (puzzle.narration.conceptHint) {
-          hint = puzzle.narration.conceptHint;
+        if (narrationRef.current.conceptHint) {
+          hint = narrationRef.current.conceptHint;
         } else {
           // Classification-aware nudge when no concept hint exists
           const classificationHints: Record<string, string> = {

@@ -73,6 +73,7 @@ describe('MistakePuzzleBoard writes capability evidence at the solve', () => {
     const puzzle = buildMistakePuzzle();
     render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} skipReplayContext />);
     await screen.findByTestId('mock-board');
+    await act(async () => { await sleep(150); }); // the source-game read before play opens
     expect(latestOnMove).not.toBeNull();
 
     await solveCleanly();
@@ -96,6 +97,7 @@ describe('MistakePuzzleBoard writes capability evidence at the solve', () => {
     const onComplete = vi.fn();
     render(<MistakePuzzleBoard puzzle={buildMistakePuzzle()} onResolved={onResolved} onComplete={onComplete} skipReplayContext />);
     await screen.findByTestId('mock-board');
+    await act(async () => { await sleep(150); }); // the source-game read before play opens
     await solveCleanly();
     expect(onResolved).toHaveBeenCalledTimes(1);
     expect(onResolved).toHaveBeenCalledWith(true, expect.any(Number));
@@ -106,6 +108,7 @@ describe('MistakePuzzleBoard writes capability evidence at the solve', () => {
     const onResolved = vi.fn();
     render(<MistakePuzzleBoard puzzle={buildMistakePuzzle({ cpLoss: 150 })} onResolved={onResolved} onComplete={vi.fn()} skipReplayContext />);
     await screen.findByTestId('mock-board');
+    await act(async () => { await sleep(150); }); // the source-game read before play opens
     await act(async () => { latestOnMove!(mv('a2', 'a3', 'a3')); });
     await act(async () => { await sleep(1700); });
     await solveCleanly();
@@ -116,6 +119,7 @@ describe('MistakePuzzleBoard writes capability evidence at the solve', () => {
     const puzzle = buildMistakePuzzle({ cpLoss: 150 });
     render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} skipReplayContext />);
     await screen.findByTestId('mock-board');
+    await act(async () => { await sleep(150); }); // the source-game read before play opens
 
     await act(async () => { latestOnMove!(mv('a2', 'a3', 'a3')); });   // wrong
     await act(async () => { await sleep(1700); });                       // 'incorrect' -> 'playing'
@@ -133,6 +137,7 @@ describe('MistakePuzzleBoard writes capability evidence at the solve', () => {
     const puzzle = buildMistakePuzzle();
     render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} skipReplayContext />);
     await screen.findByTestId('mock-board');
+    await act(async () => { await sleep(150); }); // the source-game read before play opens
 
     const hintArea = await screen.findByTestId('puzzle-hint-area');
     const showMe = hintArea.querySelector('button');
