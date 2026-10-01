@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**496 lines · 3 exports · 4 importers · 3 tests · 0 audits**
+**496 lines · 3 exports · 5 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,6 +16,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewConcepts.test.ts`
 - `src/services/reviewWalk900.test.ts`
 - `src/services/reviewWalkCT.test.ts`
+- `src/services/reviewWalkOct1.test.ts`
 
 ## Exports and every call site
 
@@ -25,8 +26,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `ConceptBeat` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `detectConcept` (function) — 29 call sites
-- `src/services/coachFeatureService.ts:4417`
+### `detectConcept` (function) — 30 call sites
+- `src/services/coachFeatureService.ts:4474`
 - `src/services/reviewConcepts.test.ts:23`
 - `src/services/reviewConcepts.test.ts:26`
 - `src/services/reviewConcepts.test.ts:34`
@@ -55,12 +56,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewWalk900.test.ts:25`
 - `src/services/reviewWalkCT.test.ts:14`
 - `src/services/reviewWalkCT.test.ts:20`
+- `src/services/reviewWalkOct1.test.ts:21`
 
 ## Tests
 
 - `src/services/reviewConcepts.test.ts`
 - `src/services/reviewWalk900.test.ts`
 - `src/services/reviewWalkCT.test.ts`
+- `src/services/reviewWalkOct1.test.ts`
 
 ## Audits that reach it
 

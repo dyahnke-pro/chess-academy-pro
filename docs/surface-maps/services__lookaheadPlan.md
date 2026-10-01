@@ -210,7 +210,7 @@
 - `src/services/walkOct1Learn.test.ts:53`
 
 ### `gameArcs` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:1325`
+- `src/services/coachFeatureService.ts:1331`
 - `src/services/walkOct1Learn.test.ts:99`
 
 ### `aimsOf` (re-export) — 8 call sites

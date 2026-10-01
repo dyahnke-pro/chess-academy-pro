@@ -70,3 +70,22 @@ turning-point card) — ACC and SEAT green over 52 narrated plies. Read by hand:
 one defect, twice — "pushing the passed pawn on the a-file" (ply 57, …a6 still
 blocks a4) and "on the c-file" (ply 67, …c5 blocks c4). Review's hindsight arc
 skipped the walkability gate Learn applies; now both read it (`gameArcs`).
+
+## Review walk (same 3 games, clean re-run after the fixes)
+
+Game 2 (0ipLPOAN_m8) MEETS STANDARD on the audit; games 1 and 3 failed only on
+NEED (owed opening plies silent) — game 1 also SHOW at ply 13, game 3 wedged at
+ply 15 (harness, rerun). Every ply read by hand (game 2 in full) plus an offline
+dump of all three games through the production review with the real engine.
+
+| # | ply | flag | fix |
+|---|---|---|---|
+| V1 | g2 54 | "You could have won their knight on d3 with Bxd3 … You played Rxa4" — Rxa4 took back a QUEEN | a played capture worth as much as the missed win is never a miss (`findMissedChain`) |
+| V2 | g2 64 | "Your rook swings onto the open a-file" — R8a3 was already on it | the rook concept needs a change of file |
+| V3 | g1 18 | "e5 — the idea is to swing pieces toward their king" (the opponent's idea, said in their voice) | the opponent's better-move reason is seated to the student (`toStudentSeat`, every possessive) |
+| V4 | g2 44 | "…c4 stakes out the center and grabs space" in a queenside chain | a flank pawn touching no core square makes no central claim |
+| V5 | g2 49/50 | passer plan, then "wants to run", then "the plan for you here: pushing the passed pawn" | one claim per passer file per game; the full plan outranks the note and the arc |
+| V6 | g2 59/62/68 | "convert your extra material" → "trade pieces, not pawns" → "when you're ahead the plan is to trade" | one conversion claim per game; the concept fill gives the nod only |
+| V7 | all | NEED: owed opening plies silent (7, 9, 15, 17 …) | measured: 7 of 9 are say-once silences (development / centre / fianchetto already taught) — now marked `sayOnce` in the coverage row and counted separately; the real gaps are Be2 (declining the bishop trade) and Ne4 (eyeing d6) — no computer yet |
+
+Tests: `src/services/reviewWalkOct1.test.ts` (4, all fail on the old code).

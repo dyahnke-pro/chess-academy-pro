@@ -1101,7 +1101,11 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       const covered = owed.filter((r) => (r.heard ?? (r.source !== null)));
       const leaked = rows.filter((r) => !r.speak && r.spoke);
       await add('NEED coverage-rows-captured', rows.length > 0, `${rows.length} student plies scored; games=${cov.gamesPlayed} cold=${cov.gamesPlayed < 5}`);
-      await add('NEED owed-plies-narrated', owed.length > 0 && covered.length >= Math.ceil(owed.length * 0.8), `${covered.length}/${owed.length} owed opening plies narrated${covered.length < owed.length ? ` — silent: ${owed.filter((r) => !covered.includes(r)).map((r) => r.ply).join(',')}` : ''}`);
+      // `sayOnce` (2026-10-01): a quiet ply whose only lesson is a principle
+      // already taught this game is silent by the say-once rule — covered, and
+      // COUNTED separately so it can never hide a real gap.
+      const bySayOnce = covered.filter((r) => r.sayOnce);
+      await add('NEED owed-plies-narrated', owed.length > 0 && covered.length >= Math.ceil(owed.length * 0.8), `${covered.length}/${owed.length} owed opening plies covered (${covered.length - bySayOnce.length} narrated, ${bySayOnce.length} by say-once: ${bySayOnce.map((r) => `${r.ply}=${r.sayOnce}`).join(',') || 'none'})${covered.length < owed.length ? ` — silent: ${owed.filter((r) => !covered.includes(r)).map((r) => r.ply).join(',')}` : ''}`);
       // THE TEACH METER (WO-TEACH-02): of the student's spoken plies, how many
       // carried a TEACHING fact rather than only a description. The target is
       // Naroditsky, where every line teaches; the bar is 70%.
@@ -1326,7 +1330,12 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // flagged student ply the walk found (the fixture ply when the engine
   // flagged it).
   const showPly = [...flaggedLeads.keys()][0] ?? FUND_PLY;
-  await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 2000 }).catch(() => undefined);
+  // Pause only if it is PLAYING — a blind click on a paused walk STARTS it, and
+  // auto-play then fights goTo's back taps (game 1, 2026-10-01: asked for ply
+  // 13, the readout sat on 16).
+  if (await page.locator('[data-testid="review-play-pause-btn"][data-state="playing"]').count()) {
+    await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 2000 }).catch(() => undefined);
+  }
   const showArrived = await goTo(showPly);
   await settle();
   const showBtn = await has(page, '[data-testid="walk-show-me-btn"]');

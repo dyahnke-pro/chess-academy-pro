@@ -44,7 +44,7 @@ import { planRaceClause } from './planRace';
 import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, deriveNextPlans, findTrappedPiece } from './reviewTeachingPoints';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
-import { betterMoveReason } from './inaccuracyCall';
+import { betterMoveReason, toStudentSeat } from './inaccuracyCall';
 import { andList } from '../utils/andList';
 import { stemKeyOf } from '../utils/rotateStem';
 import { developedMinorCount, minorsAtHome } from './development';
@@ -414,7 +414,12 @@ export function computeMoveFacets(
     const reason0 = bestSan && fellShort
       ? betterMoveReason(fenBefore, san, bestSan, ctx.bestLineUci, ctx.moverColor)
       : null;
-    const reason = reason0 && ctx.studentColorWB ? seatPieceReferences(reason0, fenBefore, ctx.studentColorWB) : reason0;
+    // The opponent's better move is THEIR idea, said to the student: "toward
+    // their king" in the mover's voice is "toward your king" (review walk
+    // 2026-10-01, ply 18 "e5 — the idea is to swing pieces toward their king").
+    const opponentMoved = ctx.studentColorWB !== null && (ctx.moverColor === 'white' ? 'w' : 'b') !== ctx.studentColorWB;
+    const reason1 = reason0 && opponentMoved ? toStudentSeat(reason0) : reason0;
+    const reason = reason1 && ctx.studentColorWB ? seatPieceReferences(reason1, fenBefore, ctx.studentColorWB) : reason1;
     const better = bestSan && fellShort ? `the stronger move was ${bestSan}${reason ? ` — ${reason}` : ''}` : '';
     const tail = [whyBad, better].filter(Boolean).join('; ');
     const betterBit = tail ? ` — ${tail}` : '';

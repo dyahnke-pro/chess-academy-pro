@@ -65,7 +65,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/hooks/usePhaseNarration.ts:430`
 - `src/hooks/usePhaseNarration.ts:880`
 - `src/hooks/usePositionNarration.ts:314`
-- `src/services/coachFeatureService.ts:2286`
+- `src/services/coachFeatureService.ts:2329`
 - `src/services/coachSurfaceScorecard.report.test.ts:116`
 - `src/services/coachSurfaceScorecard.report.test.ts:138`
 - `src/services/coachSurfaceScorecard.report.test.ts:149`
@@ -137,7 +137,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:8880`
 - `src/components/Coach/CoachTeachPage.tsx:9830`
 - `src/components/Coach/CoachTeachPage.tsx:10633`
-- `src/services/coachFeatureService.ts:2291`
+- `src/services/coachFeatureService.ts:2334`
 - `src/services/voicePackage.test.ts:415`
 - `src/services/voicePackage.test.ts:424`
 - `src/services/voicePackage.test.ts:436`

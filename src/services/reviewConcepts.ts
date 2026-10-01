@@ -334,7 +334,7 @@ function detectRookActivation(ctx: ConceptCtx): ConceptBeat | null {
     return { concept: 'rook-seventh', text, source: 'concept:end-rook-7th' };
   }
   // Open file only counts if the rook actually just took it (moved onto it).
-  if (fileIsOpen(ctx.fenAfter, file)) {
+  if (fileIsOpen(ctx.fenAfter, file) && mv.from[0] !== dest[0]) {
     const text = mine
       ? `Your rook swings onto the open ${dest[0]}-file — the one highway into their position. Open files belong to rooks; this is how they get into the game.`
       : `Your opponent seizes the open ${dest[0]}-file with the rook — the highway into your camp. Contest the file or your own rooks stay passive.`;

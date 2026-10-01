@@ -121,7 +121,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tradeQuality.ts:144`
 
 ### `legalSeeGainOn` (function) — 12 call sites
-- `src/services/coachFeatureService.ts:2524`
+- `src/services/coachFeatureService.ts:2567`
 - `src/services/groundedAnswer.ts:6811`
 - `src/services/moveIntent.ts:291`
 - `src/services/moveIntent.ts:303`
@@ -147,7 +147,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/latentFork.ts:149`
 - `src/services/latentFork.ts:220`
 - `src/services/moveFundamentals.ts:312`
-- `src/services/moveFundamentals.ts:1267`
+- `src/services/moveFundamentals.ts:1285`
 
 ### `legalSeeGainFor` (function) — 37 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7970`
@@ -326,8 +326,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:97`
 - `src/services/positionalTruth.corpus.test.ts:102`
 - `src/services/replayFence.najdorf1500.test.ts:24`
-- `src/services/reviewFullData.ts:723`
-- `src/services/reviewFullData.ts:727`
+- `src/services/reviewFullData.ts:728`
+- `src/services/reviewFullData.ts:732`
 
 ### `MinorityAttack` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -342,8 +342,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.ts:366`
 - `src/services/positionalTruth.corpus.test.ts:110`
 - `src/services/positionalTruth.corpus.test.ts:115`
-- `src/services/reviewFullData.ts:719`
-- `src/services/reviewFullData.ts:721`
+- `src/services/reviewFullData.ts:724`
+- `src/services/reviewFullData.ts:726`
 
 ### `pieceScope` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

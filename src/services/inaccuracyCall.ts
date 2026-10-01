@@ -803,6 +803,11 @@ function discoveredBy(fen: string, uci: string): string | null {
 }
 
 /** A clause read in the OPPONENT's voice, said to the student. */
-function toStudentSeat(clause: string): string {
-  return clause.replace(/\btheir king\b/g, 'your king').replace(/\btheir pawns\b/g, 'your pawns');
+export function toStudentSeat(clause: string): string {
+  // Every possessive flips: in the mover's voice "their" is the student's and
+  // "your" is the mover's own. A placeholder keeps the swap from undoing itself.
+  return clause
+    .replace(/\byour\b/g, '@@YOUR@@')
+    .replace(/\btheir\b/g, 'your')
+    .replace(/@@YOUR@@/g, 'their');
 }

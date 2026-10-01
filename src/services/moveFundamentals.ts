@@ -468,7 +468,11 @@ export function computeMoveFundamentals(
     const contactBy = after.attackers(mv.to, mover === 'w' ? 'b' : 'w')
       .filter((sq) => after.get(sq)?.type === 'p');
     const contact = contactBy.length > 0;
-    out.push(contact ? {
+    // A FLANK pawn that touches none of the four core squares makes no central
+    // claim at all (review walk 2026-10-01: …c4 in a queenside pawn chain was
+    // "stakes out the center and grabs space").
+    const flankNoCore = !contact && mv.to[0] !== 'd' && mv.to[0] !== 'e' && coreHitBy(mv.to, mover).length === 0;
+    if (!flankNoCore) out.push(contact ? {
       id: 'center',
       weight: 66,
       led: `opens up the center`,
@@ -1233,6 +1237,20 @@ export function principleLine(
     .sort((a, b) => b.weight - a.weight)[0];
   if (!lead || !(REPEAT_TEACHES[lead.id] || lead.forcing)) return null;
   return { id: lead.id, text: `${san} ${lead.led}.`, squares: lead.squares, first: false };
+}
+
+/** The opening principle a quiet move applies that was ALREADY taught this
+ *  game — the reason `principleLine` stays silent on it. Null when the move
+ *  applies no opening principle, or one not yet taught. The coverage
+ *  instrument reads it so a say-once silence is told apart from a gap. */
+export function principleAlreadyTaught(
+  fenBefore: string, san: string, mover: 'white' | 'black', taught: ReadonlySet<string>,
+): string | null {
+  if (san.includes('x') || !openingWindowOpen(fenBefore, mover)) return null;
+  const lead = computeMoveFundamentals(fenBefore, san, mover)
+    .filter((f) => IS_OPENING_PRINCIPLE[f.id])
+    .sort((a, b) => b.weight - a.weight)[0];
+  return lead && taught.has(lead.id) ? lead.id : null;
 }
 
 /** The home-square bishop (c1/f1 or c8/f8) whose MOVES grew by at least two
