@@ -192,7 +192,11 @@ function PickerGrid({ lessons, tabLabel, tabSubtitle, onPick }: PickerGridProps)
                     {drillCount > 0 && (
                       <>
                         {' · '}
-                        {drillCount.toLocaleString()} drill puzzles
+                        {/* A lesson tagged only "endgame" drills the general pool,
+                            not its own principle — say so (endgame hand walk
+                            2026-10-01: "7,188 drill puzzles" on four unrelated
+                            principles). */}
+                        {drillCount.toLocaleString()} {(lesson.practiceThemes ?? []).every((t) => t === 'endgame') ? 'mixed endgame puzzles' : 'drill puzzles'}
                         {beginnerCount > 0 && (
                           <span className="text-theme-text-muted">
                             {' '}

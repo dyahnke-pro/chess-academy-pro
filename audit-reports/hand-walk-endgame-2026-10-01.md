@@ -49,5 +49,18 @@ tablebase contradicts; 8 rebuilt on tablebase-verified lines:
 | Perpetual check | illegal position, "up a rook" with no rook | two rooks + pawn vs queen, only checks hold |
 | Triangulation | still a draw — **OPEN**, needs a true mutual-zugzwang position | — |
 
-Not tablebase-checkable (>7 pieces, engine-only): breakthrough, OCB, activate the
-king, attack weak pawns, two weaknesses (E10), don't rush.
+Stalemate Stalking (E22) rebuilt too: 7k/8/5KQ1/8/8/8/8/r7 b — the king has no move, only
+Ra6+ draws (the desperado rook), tablebase-verified.
+
+## Engine check of the >7-piece lessons (`verify-lesson-keystones-engine.mjs`, Stockfish 18 d22)
+
+breakthrough +6.1, opposite-colour bishops −5.8 (claims black wins), activate the king +5.2,
+attack weak pawns +8.0, don't rush +7.5 — all hold at the start and the line end.
+**Two Weaknesses was 0.00 — a dead draw claiming a win (E10).** Rebuilt: the same pawns with
+White's king already on e4 (+6.3); the line Kd4 Kd7 Kc5 a5 bxa5 Kc7 g4 Kb7 Kd6 ends +9.5 and
+shows the plan (queenside target, then the g4 lever). From e2 the same pawns only draw.
+
+## Puzzle counts (E8)
+
+Lessons tagged only `endgame` now say "mixed endgame puzzles" instead of implying the pool
+drills that principle.

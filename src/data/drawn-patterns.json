@@ -225,11 +225,21 @@
     },
     "positions": [
       {
-        "fen": "7k/5K2/6Q1/8/8/8/8/8 b - - 0 1",
-        "title": "Stalemate trap in K+Q vs K",
-        "explanation": "Classic stalemate — Black king on h8, white queen on g6, white king on f7. It's Black to move and Black has NO legal moves: h7 is attacked by Qg6, g8 is attacked by Kf7 and Qg6, g7 is attacked by Qg6 and Kf7. Black not in check. Stalemate — drawn. The white queen got too close; should have stayed two moves away. This is THE classic K+Q technique trap.",
+        "fen": "7k/8/5KQ1/8/8/8/8/r7 b - - 0 1",
         "result": "draw",
-        "source": "Canonical K+Q vs K stalemate trap"
+        "bestMove": "Ra6+",
+        "title": "The desperado rook — give it away with check",
+        "explanation": "Black's king on h8 has no move: the queen covers g8, g7 and h7. So the rook is Black's only moving piece — and the whole point is to get rid of it. 1...Ra6+! and keep checking down the a-file. White's king cannot hide from the checks, and the moment it takes the rook, Black has no legal move and is not in check: stalemate. Every other move loses.",
+        "source": "Tablebase-verified (Lichess Syzygy) — Ra6+ is the only drawing move; every move in the line keeps the draw",
+        "solution": [
+          "Ra6+",
+          "Kf5",
+          "Ra5+",
+          "Ke4",
+          "Ra4+",
+          "Kd3",
+          "Ra3+"
+        ]
       }
     ],
     "practiceThemes": [

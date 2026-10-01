@@ -152,22 +152,22 @@
     },
     "positions": [
       {
-        "fen": "8/4k1p1/p3p2p/1p2P3/1P6/P5P1/4K2P/8 w - - 0 1",
-        "title": "Two weaknesses — queenside AND a kingside lever",
-        "explanation": "Black has the weak a6 pawn (target #1, queenside). White's plan: bring the king to attack a6, then create a second front by playing g4-g5 to fix Black's kingside pawns. Once Black has a weakness on each flank, the black king can't defend both — it commits to one and White wins the other.",
+        "fen": "8/4k1p1/p3p2p/1p2P3/1P2K3/P5P1/7P/8 w - - 0 1",
         "result": "white-wins",
-        "bestMove": "Kd3",
-        "source": "Teaching position — Capablanca's two-weakness principle",
-        "auditSkip": "Long-theoretical pawn endgame; the win takes 30+ moves of two-weaknesses technique that exceeds Stockfish-WASM-lite's reachable horizon at audit depth. Validated against Capablanca's principle in 'Chess Fundamentals' (1921).",
+        "bestMove": "Kd4",
+        "title": "Two weaknesses — the queenside first, then a kingside lever",
+        "explanation": "Black's queenside pawns on a6 and b5 are the first target, and White's king is already active on e4. Head for c5: 1.Kd4 Kd7 2.Kc5. If Black breaks with ...a5, bxa5 leaves White a passed a-pawn. With Black's king tied to the queenside, White opens a second front with g4 and walks the king in on the other side — Black's king cannot cover both. From e2 instead of e4 the same pawns only draw: the king has to be in time.",
+        "source": "Engine-verified (Stockfish 18, depth 22): +6.3 at the start, +9.5 at the end of the line",
         "solution": [
-          "Kd3",
-          "Kd7",
-          "Ke3",
-          "Kc6",
           "Kd4",
-          "Kb6",
-          "Ke4",
-          "Kc6"
+          "Kd7",
+          "Kc5",
+          "a5",
+          "bxa5",
+          "Kc7",
+          "g4",
+          "Kb7",
+          "Kd6"
         ]
       }
     ],
