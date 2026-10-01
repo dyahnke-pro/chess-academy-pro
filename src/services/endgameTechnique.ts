@@ -319,6 +319,39 @@ export function detectPhilidor(fen: string): PhilidorResult | null {
   return null;
 }
 
+export interface BackRankDefenceResult {
+  /** The DEFENDING side. */
+  side: Side;
+  pawn: Square;
+}
+
+/**
+ * The back-rank defence against a rook or knight pawn: the defending king sits
+ * on the queening square, the rook on the back rank well away from it (three
+ * files or more, so a check along that rank can be met). Against these pawns
+ * the attacker has no room to break it. Rook ending, attacker = rook + pawn.
+ * Tablebase sweep 2026-10-01 (scripts/endgame-drills/verify-rook-defence.ts):
+ * held in 156/156 and 176/176 random positions; a rook beside its king (Kg8 +
+ * Rh8 against Kg6, g5) lost to Ra8+, which is why the distance is required.
+ */
+export function detectBackRankDefence(fen: string): BackRankDefenceResult | null {
+  const board = scan(fen);
+  if (!board) return null;
+  for (const a of ['w', 'b'] as const) {
+    const dfd = other(a);
+    if (material(board, a) !== 'pr' || material(board, dfd) !== 'r') continue;
+    const pawn = only(board, a, 'p')[0];
+    if (pawn.sq.f > 1 && pawn.sq.f < 6) continue;            // rook and knight pawns only
+    const back = promoRank(a);
+    const dk = board.kings[dfd];
+    if (dk.f !== pawn.sq.f || dk.r !== back) continue;      // king on the queening square
+    const rook = only(board, dfd, 'r')[0];
+    if (rook.sq.r !== back || Math.abs(rook.sq.f - dk.f) < 3) continue;
+    return { side: sideOf(dfd), pawn: pawn.square };
+  }
+  return null;
+}
+
 export interface CutOffResult {
   side: Side;
   rook: Square;

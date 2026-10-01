@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**835 lines · 20 exports · 24 importers · 10 tests · 28 audits**
+**843 lines · 20 exports · 24 importers · 10 tests · 28 audits**
 
 ## Locked rules that govern this surface
 
@@ -89,7 +89,7 @@
 - `src/services/conceptEngine.test.ts:82`
 - `src/services/conceptEngine.test.ts:107`
 
-### `endgameConceptFor` (function) — 9 call sites
+### `endgameConceptFor` (function) — 10 call sites
 - `src/services/conceptEngine.test.ts:273`
 - `src/services/conceptEngine.test.ts:276`
 - `src/services/conceptEngine.test.ts:279`
@@ -99,6 +99,7 @@
 - `src/services/endgameService.ts:90`
 - `src/services/endgameTechnique.test.ts:63`
 - `src/services/endgameTechnique.test.ts:76`
+- `src/services/endgameTechnique.test.ts:226`
 
 ### `ConceptForBoardOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

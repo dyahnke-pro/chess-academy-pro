@@ -231,7 +231,7 @@ import { detectTactics } from './tacticsDetector';
 import { classifyMatchup } from './endgameMatchup';
 import {
   detectOpposition, detectKeySquares, detectRuleOfSquare, detectRookPawnCorner,
-  detectLucena, detectPhilidor, detectCutOff, detectRookBehindPasser,
+  detectLucena, detectPhilidor, detectBackRankDefence, detectCutOff, detectRookBehindPasser,
   detectBareKingMate, detectTwoPawnsVsKing,
 } from './endgameTechnique';
 
@@ -371,6 +371,14 @@ function namedTechniqueFor(fen: string, cls: MatchupClass): ComputedConcept | nu
           ? `A Philidor rook ending: the defending king sits in front of the ${phil.pawn} pawn and the rook already holds the third rank, so the attacking king cannot come forward. Hold that rank; the moment the pawn steps up, drop the rook back and check from behind.`
           : `A Philidor rook ending: the defending king sits in front of the ${phil.pawn} pawn, which has not crossed the fifth rank. The drawing plan is the third-rank defence — put the rook on the third rank to fence the attacking king out, and once the pawn advances, check it from behind for as long as it takes.`,
         'Philidor — hold the third rank.', [phil.pawn], 0.7,
+      );
+    }
+    const brd = detectBackRankDefence(fen);
+    if (brd) {
+      return technique(
+        'back-rank-defence', 'The back-rank defence',
+        `The back-rank defence against the ${brd.pawn} pawn: the defending king sits on the queening square and the rook stays on the back rank, well away from it, ready to meet a check along that rank. Against a rook or knight pawn there is no room to break it — it holds.`,
+        'Back-rank defence — it holds.', [brd.pawn], 0.7,
       );
     }
     const cut = detectCutOff(fen);

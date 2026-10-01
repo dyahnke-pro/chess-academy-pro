@@ -47,7 +47,7 @@
 - `src/data/endgameConceptDrills.test.ts:32`
 - `src/data/endgameConceptDrills.test.ts:56`
 - `src/services/boardPlan.ts:124`
-- `src/services/conceptEngine.ts:598`
+- `src/services/conceptEngine.ts:606`
 - `src/services/planRace.test.ts:22`
 - `src/services/planRace.test.ts:27`
 - `src/services/planRace.test.ts:34`
@@ -63,7 +63,7 @@
 
 ### `planRaceClause` (function) — 16 call sites
 - `src/services/boardPlan.ts:125`
-- `src/services/conceptEngine.ts:600`
+- `src/services/conceptEngine.ts:608`
 - `src/services/planRace.test.ts:23`
 - `src/services/planRace.test.ts:38`
 - `src/services/planRace.test.ts:39`

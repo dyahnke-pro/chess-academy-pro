@@ -166,7 +166,7 @@ describe('detectors — geometry, both colours', () => {
   });
 });
 
-import { detectBareKingMate, detectTwoPawnsVsKing } from './endgameTechnique';
+import { detectBareKingMate, detectTwoPawnsVsKing, detectBackRankDefence } from './endgameTechnique';
 
 describe('basic checkmates against a bare king', () => {
   it('queen, rook, two bishops and bishop+knight force mate; the rest cannot', () => {
@@ -206,5 +206,23 @@ describe('two pawns against a bare king', () => {
   });
   it('a lone pawn is not this rule', () => {
     expect(detectTwoPawnsVsKing('8/8/5k2/4P3/8/8/8/K7 b - - 0 1')).toBeNull();
+  });
+});
+
+describe('detectBackRankDefence — rook/knight pawn, king on the queening square (tablebase-checked)', () => {
+  it('fires on the knight-pawn hold (TB: draw)', () => {
+    expect(detectBackRankDefence('1r4k1/R7/5KP1/8/8/8/8/8 w - - 0 1')).toMatchObject({ side: 'black', pawn: 'g6' });
+  });
+  it('not against a bishop pawn (TB: White to move wins)', () => {
+    expect(detectBackRankDefence('1r3k2/R7/5P2/6K1/8/8/8/8 w - - 0 1')).toBeNull();
+  });
+  it('not with the rook beside its king (TB: Ra8+ wins)', () => {
+    expect(detectBackRankDefence('6kr/8/6K1/6P1/8/8/R7/8 b - - 0 1')).toBeNull();
+  });
+});
+
+describe('endgameConceptFor — the back-rank defence is spoken where it holds', () => {
+  it('names it on the knight-pawn hold', () => {
+    expect(endgameConceptFor('1r4k1/R7/5KP1/8/8/8/8/8 w - - 0 1')?.id).toBe('back-rank-defence');
   });
 });
