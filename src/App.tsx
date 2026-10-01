@@ -46,6 +46,7 @@ import { AccessGate } from './components/Paywall/AccessGate';
 import { initBilling, getStableAnalyticsId } from './services/billingService';
 import { useFreeTierStore } from './stores/freeTierStore';
 import { ReviewPrompt } from './components/Feedback/ReviewPrompt';
+import { withWebOrigin } from './utils/webOrigin';
 
 const AcademyPage = lazyPage('AcademyPage', () => import('./components/Academy/AcademyPage').then((m) => m.AcademyPage));
 const CourseSyllabusPage = lazyPage('CourseSyllabusPage', () => import('./components/Academy/CourseSyllabusPage').then((m) => m.CourseSyllabusPage));
@@ -504,7 +505,7 @@ export function App(): JSX.Element {
           void import('./services/lichessTablebaseService')
             .then((m) => m.lookupTablebase('8/8/8/4k3/8/8/4K3/6R1 w - - 0 1'))
             .catch(() => undefined);
-          void fetch(`/api/lichess-explorer?source=masters&fen=${encodeURIComponent(startFen)}`)
+          void fetch(withWebOrigin(`/api/lichess-explorer?source=masters&fen=${encodeURIComponent(startFen)}`))
             .then((r) => r.text())
             .catch(() => undefined);
         }, 3500);
