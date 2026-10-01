@@ -685,6 +685,13 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // walk reaches the last ply; wait for the stated line before the recap.
   const turnStated = await until(() => has(page, '[data-testid="review-turning-point-summary"]'), 45000, 500);
   log(`  [turning] stated line on screen after walk end: ${turnStated}`);
+  // …and it is SPOKEN after it renders: the voice event lands a beat later, so
+  // the THESIS row must not count before it arrives (2026-10-01 walk: the row
+  // read 0 while the report's own spoken list held the line).
+  if (turnStated) {
+    const heard = await until(() => spoken().some((x) => /The game turned at |The turning point was /.test(x.text)), 20000, 500);
+    log(`  [turning] stated line heard: ${heard}`);
+  }
 
   // STEP PAST THE LAST PLY — the closing lives at lastPly + 1, so something has
   // to take that step: auto-advance if it resumes, else the forward control.

@@ -232,7 +232,7 @@
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:43`
 - `src/components/Coach/CoachTeachPage.tsx:5690`
 - `src/components/Coach/CoachTeachPage.tsx:7340`
-- `src/services/coachLaneWiring.test.ts:348`
+- `src/services/coachLaneWiring.test.ts:350`
 - `src/services/inGameChatIntent.ts:163`
 - `src/services/inGameChatIntent.ts:174`
 - `src/services/openingDetectionService.test.ts:88`

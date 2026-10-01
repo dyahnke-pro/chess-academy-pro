@@ -285,7 +285,7 @@
 - `src/services/coachFeatureService.ts:558`
 - `src/services/coachFeatureService.ts:4921`
 - `src/services/coachFeatureService.ts:5074`
-- `src/services/coachLaneWiring.test.ts:143`
+- `src/services/coachLaneWiring.test.ts:145`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`
 - `src/services/contentGenerationService.ts:133`

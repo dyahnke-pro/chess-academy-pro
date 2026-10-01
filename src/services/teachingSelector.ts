@@ -349,7 +349,12 @@ export function renderThesis(t: Thesis, register: ThesisRegister): string {
   const label = t.label ? spokenMoveLabel(t.label) : t.label;
   switch (t.kind) {
     case 'turned': {
-      const swing = t.swingPawns !== null ? ` — about ${t.swingPawns.toFixed(1)} points` : '';
+      // A swing past 15 pawns is a MATE score read as centipawns — "about 296.4
+      // points" (review walk 2026-10-01, game 174083521118). No material count
+      // means anything there; the honest statement is that the game was decided.
+      const swing = t.swingPawns === null ? ''
+        : t.swingPawns > 15 ? ' — that move decided the game'
+          : ` — about ${t.swingPawns.toFixed(1)} points`;
       return register === 'retrospective'
         ? `The game turned at ${label}${swing}${word ? `; a ${word} landed there` : ''}.`
         : `This turns at ${label}${swing}${word ? ` — the ${word} lands there` : ''}.`;
