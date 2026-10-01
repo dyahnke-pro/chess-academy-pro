@@ -32,7 +32,7 @@ const EXPECTED: Record<string, string> = {
   '8/8/8/8/8/6k1/P7/2K5 w - - 0 1': 'rule-of-the-square',     // first-move bonus (king on g3, 2026-10-01 rebuild)
   '8/8/4k3/8/4K3/8/4P3/8 w - - 0 1': 'key-squares',            // outflanking — to reach a key square (Kd4!, 2026-10-01 rebuild)
   '6k1/ppp5/8/PPP5/8/8/8/6K1 w - - 0 1': 'pawn-endgame',       // breakthrough — no false technique
-  '8/p7/k7/P7/8/8/3K4/8 w - - 0 1': 'pawn-endgame',           // triangulation — no false technique
+  '8/2k5/1p6/1P6/2P1K3/8/8/8 w - - 0 1': 'pawn-endgame',      // triangulation (tablebase-verified, 2026-10-01) — no false technique
   // rook-endings
   '1K6/1P6/8/8/2k5/8/r7/4R3 w - - 0 1': 'lucena',
   '4k3/7R/r7/3KP3/8/8/8/8 b - - 0 1': 'philidor',              // tablebase-verified Philidor (2026-10-01 rebuild; both tabs share it)

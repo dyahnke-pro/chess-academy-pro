@@ -362,30 +362,23 @@
       "intro": "When you need to pass the move to your opponent — to put them in zugzwang — but a direct king move loses tempo, you triangulate: walk the king through three squares back to where it started. Same square, opposite turn. Now the opponent has to move into the bad position.",
       "rule": "Walk your king through three squares (a triangle) back to its original square. You spend three moves while they can only shuffle back and forth in two — net effect: same position, and now they are to move.",
       "why": "Chess requires you to move every turn. If a position is bad for whoever moves first (zugzwang), and YOU have the move, you'd rather your opponent did. Triangulation is the way to swap turns without changing anything else: take three king moves to traverse a triangle (e.g. e3 → d3 → e2 → e3). Your opponent, however, must move on each of their three turns — and in many positions they have only ONE useful move available, so the second and third are damaging shuffles. After the cycle: same king position, but now they're stuck having to move in a position where they have nothing to do. The triangle is a chess-clock manipulator.",
-      "history": "Triangulation is the practical application of 'corresponding squares' theory, formalized by Bähr (1936) and developed by Maizelis (1956). The technique itself is older — Lucena (1497) shows triangulation patterns without naming them.",
+      "history": "Triangulation is the practical application of 'corresponding squares' theory, formalized by Bähr (1936) and developed by Maizelis (1956).",
       "tip": "Triangulation only works when YOU have a triangle of squares your king can traverse and your opponent doesn't. Look for spare king moves; if you have one and they don't, triangulate."
     },
     "positions": [
       {
-        "fen": "8/p7/k7/P7/8/8/3K4/8 w - - 0 1",
-        "title": "Outside passed pawn — triangulate to win",
-        "explanation": "White's a5 is an outside passed pawn supported by the king coming from d2. The win requires putting Black in zugzwang at the right moment. White's king can triangulate: Kc3-Kb3-Kc2-Kb3 etc., losing a tempo to force the black king into a passive square. The exact triangle depends on positioning, but the technique converts a tempo advantage (white has spare moves; black doesn't) into material advantage (winning the a7 pawn or breaking through to support the a-pawn's promotion).",
+        "fen": "8/2k5/1p6/1P6/2P1K3/8/8/8 w - - 0 1",
+        "title": "Triangulation — e4, e5, d5 and back to e4",
+        "explanation": "With Black to move here, White wins: Black's king has to give way and White's king walks in to b6. With White to move it is only a draw if White charges straight in — Kd5 or Kd4 lets Black's king meet it. So White passes the move instead: Ke5, Kd5 and back to Ke4 is three king moves around a triangle, while Black's king can only shuffle c7–d7–c7. The board is the same as at the start, and now Black has to move.",
         "result": "white-wins",
-        "bestMove": "Kc3",
-        "source": "Teaching position — outside passed pawn + triangulation",
+        "bestMove": "Ke5",
+        "source": "Computed: tablebase-verified (only Ke5 wins; Kd5/Kd4 draw; the start with Black to move is lost)",
         "solution": [
-          "Kc3",
-          "Kxa5",
-          "Kb2",
-          "Ka4",
-          "Ka2",
-          "a5",
-          "Kb2",
-          "Kb4",
-          "Ka2",
-          "a4",
-          "Kb2",
-          "a3+"
+          "Ke5",
+          "Kd7",
+          "Kd5",
+          "Kc7",
+          "Ke4"
         ]
       }
     ],

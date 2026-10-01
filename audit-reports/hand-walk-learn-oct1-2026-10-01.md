@@ -62,3 +62,11 @@ are only the top three. All 16 flags above gone from the tape. New, fixed:
 | R-4 | "mate in 18" where the shortest was 5 | the count only up to five |
 | R-5 | "wins two pawns" for a knight won for a pawn / the exchange | said by the pieces that change hands |
 | R-6 | conversion said twice (62/64) — the claim fix missed the conversion lane | the conversion fact carries its step's claim |
+
+## Review walk (same 3 games) — game 1
+
+Contaminated run (page wedged at ply 94/95; the driver could not answer the
+turning-point card) — ACC and SEAT green over 52 narrated plies. Read by hand:
+one defect, twice — "pushing the passed pawn on the a-file" (ply 57, …a6 still
+blocks a4) and "on the c-file" (ply 67, …c5 blocks c4). Review's hindsight arc
+skipped the walkability gate Learn applies; now both read it (`gameArcs`).

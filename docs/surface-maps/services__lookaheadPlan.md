@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1533 lines · 26 exports · 14 importers · 10 tests · 0 audits**
+**1537 lines · 26 exports · 14 importers · 10 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -34,9 +34,9 @@
 - `src/services/reviewWalk900.test.ts:49`
 
 ### `routeDestination` (function) — 3 call sites
-- `src/services/walkOct1Learn.test.ts:43`
-- `src/services/walkOct1Learn.test.ts:45`
+- `src/services/walkOct1Learn.test.ts:44`
 - `src/services/walkOct1Learn.test.ts:46`
+- `src/services/walkOct1Learn.test.ts:47`
 
 ### `waypointsOf` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -207,10 +207,11 @@
 - `src/services/planArc.test.ts:27`
 - `src/services/planChooser.ts:35`
 - `src/services/planChooser.ts:36`
-- `src/services/walkOct1Learn.test.ts:52`
+- `src/services/walkOct1Learn.test.ts:53`
 
-### `gameArcs` (function) — 1 call site
+### `gameArcs` (function) — 2 call sites
 - `src/services/coachFeatureService.ts:1325`
+- `src/services/walkOct1Learn.test.ts:99`
 
 ### `aimsOf` (re-export) — 8 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9548`

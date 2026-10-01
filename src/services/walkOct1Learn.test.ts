@@ -4,6 +4,7 @@
 import { describe, it, expect } from 'vitest';
 import { extractMentionedSans } from './arrowEngine';
 import { lineWins } from './lineCalc';
+import { gameArcs } from './lookaheadPlan';
 import { namedMoveArrows } from './learnBoardTeaching';
 import { stopReason } from './moveIntent';
 import { computeMoveFundamentals } from './moveFundamentals';
@@ -90,4 +91,17 @@ describe('Learn re-walk 2026-10-01', () => {
     const w = lineWins('4k3/8/2p5/3n4/4P3/8/8/4K3 w - - 0 1', ['e4d5', 'c6d5', 'e1e2'], 'w');
     expect(w?.what).toBe('a knight for a pawn');
   });
+});
+
+describe('Review walk 2026-10-01', () => {
+  it('a passer is not announced before it exists (a4 with …a6 still blocking it)', () => {
+    const sans = ["e4", "d5", "exd5", "Nf6", "Bb5+", "Bd7", "Be2", "Nxd5", "d4", "Nc6", "c4", "Nf6", "d5", "Ne5", "Nf3", "Ng6", "h4", "h6", "h5", "Nxh5", "Rxh5", "e6", "dxe6", "Bxe6", "Qxd8+", "Rxd8", "Nc3", "Bb4", "Be3", "b6", "Nd4", "Bd7", "O-O-O", "Bxc3", "bxc3", "c5", "Nf5", "Bxf5", "Rxd8+", "Kxd8", "Rxf5", "Ke7", "Bh5", "Ke6", "Bxg6", "fxg6", "Rd5", "h5", "Kd2", "h4", "a4", "h3", "gxh3", "Rxh3", "Rd8", "a6", "Rb8", "Rh4", "Rxb6+", "Kd7", "Kd3", "g5", "Rxa6", "g4", "Rg6", "Rh5", "a5", "Kc7", "a6", "Kb8", "Rxg7", "Rh8", "Bxc5", "Ka8", "Bb6", "Rf8", "c5", "Rf3+", "Kc4", "Rf4+", "Kb5", "Rf8", "Rd7", "Kb8", "Rd8+", "Rxd8", "Bxd8", "Ka8", "c6", "Kb8", "Bb6", "Kc8", "a7", "g3", "a8=N"];
+    const arcs = gameArcs(sans, 'white');
+    // Index 56 is 29.Rb8 (ply 57): …a6 still stands in front of the a4 pawn.
+    for (let i = 0; i <= 58; i += 1) {
+      for (const e of arcs.get(i) ?? []) {
+        expect(JSON.stringify(e)).not.toMatch(/passed pawn on the a-file/);
+      }
+    }
+  }, 30_000);
 });

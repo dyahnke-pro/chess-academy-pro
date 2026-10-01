@@ -25,7 +25,7 @@ import { describeStructure } from './boardStructure';
 import { detectTactics } from './tacticsDetector';
 import { PATTERN_SPEECH, patternAim } from './tacticVocabulary';
 import type { PvLine, PvPly, PrevCaptureContext } from './pvPlayback';
-import { aimsOf, stepArc, EMPTY_ARC, type ArcEvent, type ArcMove, type Seat } from './planArc';
+import { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcEvent, type ArcMove, type Seat } from './planArc';
 // The PLAN ACROSS MOVES (planArc) — the memory this reader never had. Exposed
 // from here so a surface composes one plan module, not two.
 export { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcEvent, type ArcState, type ArcMove, type Seat, type Aim } from './planArc';
@@ -1519,7 +1519,11 @@ export function gameArcs(sans: readonly string[], studentColor: 'white' | 'black
     for (let i = color === 'w' ? 0 : 1; i < moved.length; i += 2) {
       const plan = planFromUci(fens[i + 1], uci.slice(i + 1, i + 1 + HINDSIGHT_PLIES), studentColor);
       const side = plan ? (seat === 'student' ? plan.mine : plan.theirs) : null;
-      const r = stepArc(state, side ? aimsOf(side, seat) : [], moved[i], fens[i + 1], color, seat);
+      // The SAME walkability Learn applies (review walk 2026-10-01: "pushing the
+      // passed pawn on the a-file" with …a6 still blocking it — the hindsight
+      // line makes the passer two moves later).
+      const aims = side ? aimsOf(side, seat).filter((a) => aimWalkableNow(a, fens[i + 1], color, sans.slice(0, i + 1))) : [];
+      const r = stepArc(state, aims, moved[i], fens[i + 1], color, seat);
       state = r.next;
       // A plan leaving the engine line is not something a player DID — "they
       // have let an attack on your king go" read as nonsense four times in one

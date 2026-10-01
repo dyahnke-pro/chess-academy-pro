@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { execFileSync } from 'node:child_process';
 import { join } from 'node:path';
 import {
@@ -61,22 +62,16 @@ describe('the derived voiced files are in sync with their source', () => {
   // first-person plural), so a rebuild now reproduces it exactly and this test
   // keeps it that way.
   it('rebuilding from data/video-narration-voiced reproduces all three files exactly', () => {
-    const before = {
-      w: readFileSync(WALKTHROUGHS),
-      t: readFileSync(TEACHINGS),
-      m: readFileSync(MATCHUPS),
-    };
+    // INTO A TEMP DIR, never over the shipped files: rebuilding in place and
+    // restoring after raced a concurrent prod build, which read
+    // voiced-walkthroughs.json half-written and failed (2026-10-01).
+    const out = mkdtempSync(join(tmpdir(), 'voiced-'));
     try {
       for (const script of [
         'scripts/build-voiced-walkthroughs.mjs',
         'scripts/build-voiced-teachings.mjs',
         'scripts/build-voiced-matchups.mjs',
-      ]) execFileSync('node', [script], { cwd: ROOT, stdio: 'ignore' });
-      const after = {
-        w: readFileSync(WALKTHROUGHS),
-        t: readFileSync(TEACHINGS),
-        m: readFileSync(MATCHUPS),
-      };
+      ]) execFileSync('node', [script], { cwd: ROOT, stdio: 'ignore', env: { ...process.env, VOICED_OUT_DIR: out } });
       // voiced-teachings.json stamps a "generatedAt" DATE. Comparing it raw made
       // this gate fail the moment the clock crossed midnight UTC — a false alarm
       // every day for anyone who had not rebuilt that day, which is exactly how
@@ -84,21 +79,18 @@ describe('the derived voiced files are in sync with their source', () => {
       // the byte comparison everywhere else.
       const stable = (b: Buffer): string =>
         b.toString('utf8').replace(/"generatedAt":\s*"[^"]*"/, '"generatedAt":"<stamp>"');
-
-      for (const [key, name, script] of [
-        ['w', 'voiced-walkthroughs.json', 'build-voiced-walkthroughs.mjs'],
-        ['t', 'voiced-teachings.json', 'build-voiced-teachings.mjs'],
-        ['m', 'voiced-matchups.json', 'build-voiced-matchups.mjs'],
+      for (const [shipped, name, script] of [
+        [WALKTHROUGHS, 'voiced-walkthroughs.json', 'build-voiced-walkthroughs.mjs'],
+        [TEACHINGS, 'voiced-teachings.json', 'build-voiced-teachings.mjs'],
+        [MATCHUPS, 'voiced-matchups.json', 'build-voiced-matchups.mjs'],
       ] as const) {
         expect(
-          stable(after[key]) === stable(before[key]),
+          stable(readFileSync(join(out, name))) === stable(readFileSync(shipped)),
           `${name} is not what its source builds — rerun scripts/${script} and commit`,
         ).toBe(true);
       }
     } finally {
-      writeFileSync(WALKTHROUGHS, before.w);
-      writeFileSync(TEACHINGS, before.t);
-      writeFileSync(MATCHUPS, before.m);
+      rmSync(out, { recursive: true, force: true });
     }
   }, 120_000);
 });

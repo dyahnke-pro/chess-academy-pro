@@ -28,7 +28,10 @@ import { reconstructSpineFen } from './voiced-authoring/fen-spine.mjs';
 import { depersonalize } from './voiced-authoring/depersonalize.mjs';
 
 const SRC = 'data/video-narration-voiced';
-const OUT = 'src/data/voiced-walkthroughs.json';
+// VOICED_OUT_DIR: write somewhere else (the integrity test rebuilds into a
+// temp dir — rebuilding over the shipped file raced a concurrent prod build,
+// which read it half-written, 2026-10-01).
+const OUT = process.env.VOICED_OUT_DIR ? `${process.env.VOICED_OUT_DIR}/voiced-walkthroughs.json` : 'src/data/voiced-walkthroughs.json';
 
 /** legal? replay the SAN array from the start; return true iff every move applies. */
 function lineIsLegal(sans) {
