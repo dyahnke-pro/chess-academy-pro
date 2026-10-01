@@ -48,6 +48,7 @@ import {
   getRookEndings,
 } from '../../services/endgameLessonsService';
 import { EndgameLessonTab } from './EndgameLessonTab';
+import { WrongTryNote } from '../Puzzles/WrongTryNote';
 import { EvalLabQuiz } from './EvalLabQuiz';
 import { FromYourGamesTab } from './FromYourGamesTab';
 import { useAppStore } from '../../stores/appStore';
@@ -1207,6 +1208,7 @@ function CuratedMatingLessonView({
               : `${playout.wrongAttempts} wrong tries.`}
           </div>
         )}
+        <WrongTryNote text={playout.wrongTryText} />
         <div className="flex items-center gap-3 px-1">
           {playout.hintMove && !playout.hintRevealed && (
             <button

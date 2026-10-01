@@ -53,6 +53,7 @@ import { EndgameRecapCard } from './EndgameRecapCard';
 import { teachingSourceForBoard, generalizedTeaching, spokenBeatText, endgameNoteForLesson } from '../../services/danyaTeachingService';
 import type { EndgameLesson, EndgameLessonPosition } from '../../types/endgameLesson';
 import type { EndgameProgressRecord } from '../../types';
+import { WrongTryNote } from '../Puzzles/WrongTryNote';
 
 const TIER_OPTIONS: { value: DrillTier; label: string }[] = [
   { value: 'beginner', label: 'Beginner' },
@@ -802,6 +803,7 @@ function PositionRunner({
         onReplayNarration={narrationText ? onReplayNarration : undefined}
         corpusNote={corpusNote}
       />
+      {!playout.isComplete && <WrongTryNote text={playout.wrongTryText} />}
       {posIndex === 0 && <NarrationPanel lesson={lesson} />}
       <div className="flex items-center justify-between gap-2">
         <button

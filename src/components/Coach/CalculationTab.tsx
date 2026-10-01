@@ -47,6 +47,9 @@ import { useAdaptiveEndgameSession } from '../../hooks/useAdaptiveEndgameSession
 import { useGameCalculationPuzzles } from '../../hooks/useGameCalculationPuzzles';
 import { voiceService } from '../../services/voiceService';
 import { useAppStore } from '../../stores/appStore';
+import { WrongTryNote } from '../Puzzles/WrongTryNote';
+import { hintSquareStyles } from '../../utils/hintSquareStyles';
+import { explainDrillConcept } from '../../services/puzzleConceptExplanation';
 
 interface CalculationTabProps {
   onExit: () => void;
@@ -315,6 +318,13 @@ function AdaptivePuzzleRunner({
     replyDelayMs: 450,
   });
   const clickToMove = useClickToMove(playout);
+  // SOLVED → TEACH THE CONCEPT (tactics map 2026-10-01: Calculation ended on
+  // "Solved — played to the win." and nothing else). The same computed
+  // explanation the puzzle board gives, for a student-to-move drill.
+  const solvedConcept = useMemo(
+    () => (playout.isComplete ? explainDrillConcept({ setupFen: drill.fen, solutionSan: drill.solution ?? [] }) : null),
+    [playout.isComplete, drill.fen, drill.solution],
+  );
 
   const [recorded, setRecorded] = useState(false);
 
@@ -343,19 +353,10 @@ function AdaptivePuzzleRunner({
     if (!playout.wrongSquare) return {};
     return { [playout.wrongSquare]: { background: 'rgba(239, 68, 68, 0.45)' } };
   }, [playout.wrongSquare]);
-  const hintStyles = useMemo<Record<string, CSSProperties>>(() => {
-    if (!playout.hintRevealed || !playout.hintMove) return {};
-    return {
-      [playout.hintMove.from]: {
-        background: 'rgba(251, 191, 36, 0.55)',
-        boxShadow: 'inset 0 0 0 2px rgba(251, 191, 36, 0.9)',
-      },
-      [playout.hintMove.to]: {
-        background: 'rgba(251, 191, 36, 0.35)',
-        boxShadow: 'inset 0 0 0 2px rgba(251, 191, 36, 0.7)',
-      },
-    };
-  }, [playout.hintRevealed, playout.hintMove]);
+  const hintStyles = useMemo<Record<string, CSSProperties>>(
+    () => hintSquareStyles(playout.hintMove, playout.hintRevealed),
+    [playout.hintRevealed, playout.hintMove],
+  );
   const mergedSquareStyles = useMemo<Record<string, CSSProperties>>(
     () => ({ ...clickToMove.squareStyles, ...hintStyles, ...wrongFlash }),
     [clickToMove.squareStyles, hintStyles, wrongFlash],
@@ -423,6 +424,11 @@ function AdaptivePuzzleRunner({
               : 'Played through to the win.'
             : 'Play the best move — keep going until the win.'}
         </p>
+        {solvedConcept && (
+          <p className="text-[12px] text-theme-text leading-relaxed" data-testid="calc-solved-concept">
+            {solvedConcept.spoken}
+          </p>
+        )}
         {!playout.isComplete && playout.wrongAttempts > 0 && drill.conceptHint && (
           <div
             className="text-[12px] text-amber-300 leading-relaxed border-l-2 border-amber-500/40 pl-2"
@@ -443,6 +449,7 @@ function AdaptivePuzzleRunner({
             Solved with hint or retry
           </div>
         )}
+        {!playout.isComplete && <WrongTryNote text={playout.wrongTryText} />}
         {!playout.isComplete && (
           <div className="flex items-center gap-3">
             <p className="text-[11px] text-cyan-400">

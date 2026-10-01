@@ -631,7 +631,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `samplePositionsFromGame` (function) — 4 call sites
-- `src/components/Tactics/AnalysisPracticePage.tsx:119`
+- `src/components/Tactics/AnalysisPracticePage.tsx:120`
 - `src/services/positionReadingService.test.ts:206`
 - `src/services/positionReadingService.test.ts:215`
 - `src/services/positionReadingService.test.ts:219`
@@ -640,7 +640,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `findMistakePositions` (function) — 5 call sites
-- `src/components/Tactics/AnalysisPracticePage.tsx:102`
+- `src/components/Tactics/AnalysisPracticePage.tsx:103`
 - `src/services/positionReadingService.test.ts:227`
 - `src/services/positionReadingService.test.ts:239`
 - `src/services/positionReadingService.test.ts:248`
@@ -669,7 +669,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `buildReadingQuestions` (function) — 34 call sites
 - `src/components/Coach/ReviewReadingChallenge.tsx:70`
-- `src/components/Tactics/AnalysisPracticePage.tsx:79`
+- `src/components/Tactics/AnalysisPracticePage.tsx:80`
 - `src/services/positionReadingService.test.ts:283`
 - `src/services/positionReadingService.test.ts:294`
 - `src/services/positionReadingService.test.ts:302`
@@ -704,7 +704,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:735`
 
 ### `readingHint` (function) — 5 call sites
-- `src/components/Tactics/AnalysisPracticePage.tsx:392`
+- `src/components/Tactics/AnalysisPracticePage.tsx:398`
 - `src/services/positionReadingService.test.ts:718`
 - `src/services/positionReadingService.test.ts:724`
 - `src/services/positionReadingService.test.ts:729`

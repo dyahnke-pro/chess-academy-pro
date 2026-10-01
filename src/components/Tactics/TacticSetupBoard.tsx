@@ -4,6 +4,7 @@ import { ChessBoard } from '../Board/ChessBoard';
 import { HintButton } from '../Coach/HintButton';
 import { motion } from 'framer-motion';
 import { useHintSystem } from '../../hooks/useHintSystem';
+import { useWrongTryRefutation } from '../../hooks/useWrongTryRefutation';
 import { useStruggleDetection } from '../../hooks/useStruggleDetection';
 import { useSettings } from '../../hooks/useSettings';
 import { useAppStore } from '../../stores/appStore';
@@ -46,6 +47,10 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
   const chessRef = useRef(new Chess(puzzle.setupFen));
   const [fen, setFen] = useState(puzzle.setupFen);
   const [boardState, setBoardState] = useState<BoardState>('thinking');
+  const wrongTry = useWrongTryRefutation();
+  const { refute: refuteTry, clearArrows: clearWrongArrows } = wrongTry;
+  const puzzleIdRef = useRef(puzzle.id);
+  puzzleIdRef.current = puzzle.id;
   const [moveIndex, setMoveIndex] = useState(0);
   const [message, setMessage] = useState('Find the quiet setup move');
   const [boardKey, setBoardKey] = useState(0);
@@ -220,19 +225,30 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
     setBoardState('incorrect');
     voiceService.stop();
 
-    const wrongMsg = setupIncorrect();
-    setMessage(wrongMsg);
-    void voiceService.speak(wrongMsg);
-
-    // ChessBoard applied the wrong move internally — force-reset it to the
-    // true position via a key change.
-    setFen(chessRef.current.fen());
-    setBoardKey((k) => k + 1);
-
-    setTimeout(() => {
+    // REFUTE IT, KEEP THE ANSWER (David 2026-10-01): their reply to this move,
+    // played out, while it is still on the board; the canned line is the
+    // fallback when nothing is computed (a quiet wrong setup often loses
+    // nothing — it just does not set the tactic up).
+    const puzzleAtTry = puzzle.id;
+    const fenBefore = chessRef.current.fen();
+    void (async () => {
+      const r = await refuteTry(fenBefore, move.san);
+      if (puzzleIdRef.current !== puzzleAtTry) return;
+      const wrongMsg = r?.text ?? setupIncorrect();
+      setMessage(wrongMsg);
+      const shownAt = Date.now();
+      await voiceService.speak(wrongMsg).catch(() => undefined);
+      const left = Math.max(0, (r ? 1800 + wrongMsg.length * 35 : 1500) - (Date.now() - shownAt));
+      await new Promise((res) => setTimeout(res, left));
+      if (puzzleIdRef.current !== puzzleAtTry) return;
+      // ChessBoard applied the wrong move internally — force-reset it to the
+      // true position via a key change.
+      setFen(chessRef.current.fen());
+      setBoardKey((k) => k + 1);
+      clearWrongArrows();
       setBoardState('thinking');
-    }, 1500);
-  }, [boardState, isPlayerTurn, moveIndex, line, puzzle.tacticType, finishSolved, resetHints]);
+    })();
+  }, [boardState, isPlayerTurn, moveIndex, line, puzzle.tacticType, puzzle.id, finishSolved, resetHints, refuteTry, clearWrongArrows]);
 
   const statusColor = boardState === 'solved'
     ? 'var(--color-success)'
@@ -266,7 +282,7 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
           showUndoButton={false}
           showResetButton={false}
           onMove={handleMove}
-          arrows={hintState.arrows.length > 0 ? hintState.arrows : undefined}
+          arrows={wrongTry.arrows.length > 0 ? wrongTry.arrows : hintState.arrows.length > 0 ? hintState.arrows : undefined}
           ghostMove={hintState.ghostMove}
         />
       </div>

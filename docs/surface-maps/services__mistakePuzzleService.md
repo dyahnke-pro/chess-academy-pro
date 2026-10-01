@@ -144,7 +144,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticClassifierService.ts:568`
 
 ### `determinePlayerColor` (function) — 3 call sites
-- `src/components/Tactics/AnalysisPracticePage.tsx:100`
+- `src/components/Tactics/AnalysisPracticePage.tsx:101`
 - `src/services/autoAnalyzeGame.ts:295`
 - `src/test/seatResolversReadDeclaredSeat.test.ts:15`
 
@@ -243,7 +243,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:2402`
 - `src/components/Puzzles/MyMistakesPage.tsx:227`
 - `src/components/Puzzles/WeaknessThemesPage.tsx:116`
-- `src/components/Tactics/TacticCreatePage.tsx:219`
+- `src/components/Tactics/TacticCreatePage.tsx:220`
 - `src/services/conceptSchedule.test.ts:41`
 - `src/services/conceptSchedule.test.ts:43`
 - `src/services/mistakePuzzleService.test.ts:495`

@@ -27,6 +27,7 @@ import { useAppStore } from '../../stores/appStore';
 import { MistakePuzzleBoard } from '../Puzzles/MistakePuzzleBoard';
 import type { TacticCreateItem, ReplayMove } from '../../services/tacticCreateService';
 import type { TacticType } from '../../types';
+import { db } from '../../db/schema';
 
 type Phase = 'loading' | 'replay' | 'solving' | 'feedback' | 'summary';
 
@@ -222,6 +223,8 @@ export function TacticCreatePage(): JSX.Element {
     if (activeProfile) {
       const newRating = updatePuzzleRating(activeProfile.puzzleRating, item.puzzle.rating, correct);
       setActiveProfile({ ...activeProfile, puzzleRating: newRating });
+      // Saved, not just held in memory — it was lost on reload (tactics map 2026-10-01).
+      void db.profiles.update(activeProfile.id, { puzzleRating: newRating });
     }
 
     // Show feedback briefly, then advance

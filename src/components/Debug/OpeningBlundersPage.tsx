@@ -36,6 +36,10 @@ import {
   type OpeningBlunderFamily,
 } from '../../services/openingBlunderService';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
+import { WrongTryNote } from '../Puzzles/WrongTryNote';
+import { hintSquareStyles } from '../../utils/hintSquareStyles';
+import { explainDrillConcept } from '../../services/puzzleConceptExplanation';
+import { db } from '../../db/schema';
 
 /** Difficulty band around the user's puzzle rating. Puzzles inside this
  *  band surface first; the rest are still reachable below the fold. */
@@ -373,6 +377,8 @@ export function OpeningBlundersPage(): JSX.Element {
         correct,
       );
       setActiveProfile({ ...activeProfile, puzzleRating: newRating });
+      // Saved, not just held in memory — it was lost on reload (tactics map 2026-10-01).
+      void db.profiles.update(activeProfile.id, { puzzleRating: newRating });
     }
   };
 
@@ -802,6 +808,13 @@ function PuzzleView({ puzzle, onExit, onResult, onNext }: PuzzleViewProps): JSX.
   }, [startFen, puzzle.moves]);
 
   const studentSide = puzzle.studentColor;
+  // Solved → the concept behind the punishing line (it ended on "that's the
+  // punishing line" and nothing else) — the same computed explanation the
+  // puzzle board gives, for a student-to-move line.
+  const solvedConcept = useMemo(
+    () => explainDrillConcept({ setupFen: startFen, solutionSan, themes: puzzle.themes }),
+    [startFen, solutionSan, puzzle.themes],
+  );
 
   // 'puzzle' = curated solution mode (default).
   // 'playing-out' = free-play vs Stockfish from the end of the
@@ -828,6 +841,12 @@ function PuzzleView({ puzzle, onExit, onResult, onNext }: PuzzleViewProps): JSX.
     studentSide,
   });
   const clickToMove = useClickToMove(playout);
+  // The Hint button used to do nothing visible: it revealed the move inside
+  // the playout and the board never drew it (David's tactics map, 2026-10-01).
+  const boardSquareStyles = useMemo(
+    () => ({ ...clickToMove.squareStyles, ...hintSquareStyles(playout.hintMove, playout.hintRevealed) }),
+    [clickToMove.squareStyles, playout.hintMove, playout.hintRevealed],
+  );
 
   // Fire onResult once when the puzzle reaches a terminal state.
   // Auto-advance is button-driven now ("Auto-advance" CTA below) —
@@ -976,7 +995,7 @@ function PuzzleView({ puzzle, onExit, onResult, onNext }: PuzzleViewProps): JSX.
       interactive={!walkthroughActive && playout.phase === 'student-to-move'}
       onPieceDrop={playout.onPieceDrop}
       onSquareClick={clickToMove.onSquareClick}
-      squareStyles={clickToMove.squareStyles}
+      squareStyles={boardSquareStyles}
     />
   );
 
@@ -991,6 +1010,11 @@ function PuzzleView({ puzzle, onExit, onResult, onNext }: PuzzleViewProps): JSX.
         {playout.isComplete && mode === 'puzzle' && (
           <p className="text-sm text-green-400 font-semibold">
             Solved — that&apos;s the punishing line.
+          </p>
+        )}
+        {playout.isComplete && mode === 'puzzle' && solvedConcept && (
+          <p className="text-xs text-theme-text leading-relaxed" data-testid="traps-solved-concept">
+            {solvedConcept.spoken}
           </p>
         )}
         {playout.isComplete && mode === 'playing-out' && (
@@ -1018,6 +1042,7 @@ function PuzzleView({ puzzle, onExit, onResult, onNext }: PuzzleViewProps): JSX.
               : `${playout.wrongAttempts} wrong tries.`}
           </p>
         )}
+        {!playout.isComplete && <WrongTryNote text={playout.wrongTryText} />}
       </div>
       {/* Optional "Show the opening" affordance — reconstructs the
           move sequence from start to the puzzle position via Lichess
