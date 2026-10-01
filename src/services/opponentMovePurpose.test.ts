@@ -28,3 +28,11 @@ describe('threatStoppedBy — why did they play that?', () => {
     expect(threatStoppedBy(g[2], g[3], 'Nc6', 'w')).toBeNull();
   });
 });
+
+describe('a take-back has no other point (Learn walk 2026-10-01, game 2 ply 45)', () => {
+  it('Qxc7 Rxc7 is never "it stops your Qxd8 fork"', () => {
+    const before = '3r2k1/2q1rpp1/p1p1pn1p/1p2Q3/3P4/P4N1P/1PP2PP1/3RR1K1 w - - 3 23';
+    const after = '3r2k1/2Q1rpp1/p1p1pn1p/1p6/3P4/P4N1P/1PP2PP1/3RR1K1 b - - 0 23';
+    expect(threatStoppedBy(before, after, 'Rxc7', 'w')).toBeNull();
+  });
+});

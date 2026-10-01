@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1409 lines · 11 exports · 42 importers · 29 tests · 1 audits**
+**1414 lines · 11 exports · 42 importers · 29 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -85,7 +85,7 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:130`
 
-### `attributePrinciples` (function) — 70 call sites
+### `attributePrinciples` (function) — 72 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
 - `src/services/claimTruth.manual.test.ts:10`
 - `src/services/claimTruth.manual.test.ts:12`
@@ -130,10 +130,12 @@
 - `src/services/principleAttribution.test.ts:143`
 - `src/services/principleAttributionEndgame.test.ts:43`
 - `src/services/principleAttributionEndgame.test.ts:57`
-- `src/services/principleAttributionEvalPv.test.ts:62`
-- `src/services/principleAttributionEvalPv.test.ts:76`
-- `src/services/principleAttributionEvalPv.test.ts:86`
-- `src/services/principleAttributionEvalPv.test.ts:103`
+- `src/services/principleAttributionEvalPv.test.ts:73`
+- `src/services/principleAttributionEvalPv.test.ts:87`
+- `src/services/principleAttributionEvalPv.test.ts:97`
+- `src/services/principleAttributionEvalPv.test.ts:112`
+- `src/services/principleAttributionEvalPv.test.ts:114`
+- `src/services/principleAttributionEvalPv.test.ts:126`
 - `src/services/principleVoice.test.ts:9`
 - `src/services/replayFence.bowdler1000.test.ts:37`
 - `src/services/replayFence.modern1690.test.ts:32`
@@ -152,7 +154,7 @@
 - `src/services/sweepCarriesPv.test.ts:129`
 - `src/services/sweepCarriesPv.test.ts:143`
 - `src/services/sweepPassesEngineLines.test.ts:91`
-- `src/services/walkOct1Learn.test.ts:78`
+- `src/services/walkOct1Learn.test.ts:94`
 - `src/services/yieldHonoured.test.ts:33`
 - `src/services/yieldHonoured.test.ts:69`
 - `src/services/yieldHonoured.test.ts:70`

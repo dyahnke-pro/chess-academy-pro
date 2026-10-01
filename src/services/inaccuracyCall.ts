@@ -628,7 +628,15 @@ function punishmentOf(
     const m = b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
     const NAME: Record<string, string> = { q: 'queen', r: 'rook', b: 'bishop', n: 'knight' };
     const outright = m?.captured ? legalSeeGain(fenAfter, m.to) >= MATERIAL_VALUE[m.captured] : false;
-    if (m?.captured && NAME[m.captured] && (MATERIAL_VALUE[m.captured] > MATERIAL_VALUE[m.piece] || outright)) {
+    // A RECAPTURE IS THE OTHER HALF OF A TRADE, NOT A LOSS (Learn walk
+    // 2026-10-01, game 1 ply 68: "Rxe2+ was a mistake — it let them take your
+    // rook on e2" — the rook had just taken theirs there). Taking back on the
+    // square the played move captured on, for no more than it took, costs
+    // nothing; the cost lives further down the line.
+    const played = new Chess(fenBefore).move(playedSan);
+    const tradeBack = !!(m?.captured && played.captured && m.to === played.to
+      && MATERIAL_VALUE[m.captured] <= MATERIAL_VALUE[played.captured]);
+    if (m?.captured && NAME[m.captured] && !tradeBack && (MATERIAL_VALUE[m.captured] > MATERIAL_VALUE[m.piece] || outright)) {
       return { why: `take your ${NAME[m.captured]} on ${m.to}`, first, lostSquare: m.to };
     }
   } catch { /* fall through to the plan read */ }

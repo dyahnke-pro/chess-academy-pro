@@ -25,8 +25,11 @@ function pieceOf(m: RegExpMatchArray): string {
   if (m[1]) {
     const base = PIECE_THE[m[1]];
     if (/^[a-h][1-8]$/.test(from)) return `${base} on ${from}`;
-    if (/^[a-h]$/.test(from)) return `${base} on the ${from}-file`;
-    if (/^[1-8]$/.test(from)) return `${base} on the ${RANK[Number(from)]} rank`;
+    // "the c-file rook to d8", never "the rook on the c-file to d8" — the
+    // prepositional form garbles once a clause follows it (Learn walk
+    // 2026-10-01: "The rook on the c-file to d8 can wait").
+    if (/^[a-h]$/.test(from)) return base.replace(/^the /, `the ${from}-file `);
+    if (/^[1-8]$/.test(from)) return base.replace(/^the /, `the ${RANK[Number(from)]}-rank `);
     return base;
   }
   // A pawn CAPTURE names its file — "the f-pawn taking on g3". Two pawns can

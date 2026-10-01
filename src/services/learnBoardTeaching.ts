@@ -424,6 +424,24 @@ export function ruledOutSans(text: string): Set<string> {
     let m: RegExpExecArray | null;
     while ((m = re.exec(text)) !== null) out.add(m[1]);
   }
+  // …and the WHOLE refuted line after it: "h4 didn't work: h4, hxg5 and hxg5 —
+  // you come out behind" (Learn walk 2026-10-01, game 2 ply 39: Nc5 was drawn
+  // green and …Nf4 red out of a line the sentence says fails).
+  // "Rc8? Then Bc2, c5, dxc5 … — you come out behind" (walk oct1b, game 3
+  // ply 30): the questioned candidate and its refutation are a failing line too.
+  const asked = new RegExp(String.raw`(${SAN})\?\s+Then\s+([^—.]*)`, 'g');
+  let q: RegExpExecArray | null;
+  const tok0 = new RegExp(SAN, 'g');
+  while ((q = asked.exec(text)) !== null) {
+    out.add(q[1]);
+    for (const t of q[2].match(tok0) ?? []) out.add(t);
+  }
+  const line = /(?:didn't|doesn't|does not|did not|no longer)\s+work:\s*([^—.]*)/g;
+  let l: RegExpExecArray | null;
+  const tok = new RegExp(SAN, 'g');
+  while ((l = line.exec(text)) !== null) {
+    for (const t of l[1].match(tok) ?? []) out.add(t);
+  }
   return out;
 }
 function flipTurn(fen: string): string {

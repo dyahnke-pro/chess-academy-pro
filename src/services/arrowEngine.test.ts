@@ -76,6 +76,15 @@ describe('extractMentionedSans', () => {
   });
 });
 
+describe('a square as the subject of a sentence (Learn walk 2026-10-01, game 2 ply 35)', () => {
+  it('"c5 is a hole in their camp" names a square, not the pawn move c5', () => {
+    expect(extractMentionedSans('Ng5 brings your knight into the attack on their king. c5 is a hole in their camp: your knight on g5 gets there via e4.')).toEqual(['Ng5']);
+  });
+  it('a real pawn move at sentence start still counts', () => {
+    expect(extractMentionedSans('c5 hits the centre at once.')).toEqual(['c5']);
+  });
+});
+
 describe('resolveSanToArrow', () => {
   it('resolves a legal move to from→to', () => {
     expect(resolveSanToArrow('Nf3', [new Chess().fen()])).toEqual({ from: 'g1', to: 'f3' });

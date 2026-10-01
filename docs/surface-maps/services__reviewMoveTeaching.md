@@ -35,7 +35,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewMoveTeaching.unpin.test.ts:15`
 - `src/services/reviewWalkOct1.test.ts:70`
 - `src/services/reviewWalkOct1.test.ts:76`
-- `src/services/walkOct1Learn.test.ts:69`
+- `src/services/walkOct1Learn.test.ts:85`
 
 ### `buildReviewMoveTeaching` (function) — 29 call sites
 - `src/components/Coach/CoachGameReview.tsx:1705`

@@ -381,7 +381,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:6420`
 - `src/services/positionReadingService.test.ts:846`
 - `src/services/positionReadingService.test.ts:849`
-- `src/services/walkOct1Learn.test.ts:73`
+- `src/services/walkOct1Learn.test.ts:89`
 
 ### `findBlockade` (function) — 6 call sites
 - `src/services/danyaBehaviors.ts:833`

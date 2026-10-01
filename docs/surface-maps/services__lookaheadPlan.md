@@ -34,9 +34,9 @@
 - `src/services/reviewWalk900.test.ts:49`
 
 ### `routeDestination` (function) — 3 call sites
-- `src/services/walkOct1Learn.test.ts:44`
-- `src/services/walkOct1Learn.test.ts:46`
-- `src/services/walkOct1Learn.test.ts:47`
+- `src/services/walkOct1Learn.test.ts:60`
+- `src/services/walkOct1Learn.test.ts:62`
+- `src/services/walkOct1Learn.test.ts:63`
 
 ### `waypointsOf` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -173,7 +173,7 @@
 - `src/services/concessionBeat.ts:455`
 - `src/services/inaccuracyCall.ts:271`
 - `src/services/inaccuracyCall.ts:284`
-- `src/services/inaccuracyCall.ts:642`
+- `src/services/inaccuracyCall.ts:650`
 - `src/services/learnWalkBlumenfeld.test.ts:176`
 - `src/services/learnWalkBlumenfeld.test.ts:177`
 - `src/services/learnWalkBlumenfeld.test.ts:178`
@@ -187,7 +187,7 @@
 - `src/services/concessionBeat.ts:449`
 - `src/services/inaccuracyCall.ts:227`
 - `src/services/inaccuracyCall.ts:231`
-- `src/services/inaccuracyCall.ts:640`
+- `src/services/inaccuracyCall.ts:648`
 - `src/services/lookaheadPlan.test.ts:228`
 - `src/services/lookaheadPlan.test.ts:236`
 - `src/services/lookaheadPlan.test.ts:241`
@@ -207,11 +207,11 @@
 - `src/services/planArc.test.ts:27`
 - `src/services/planChooser.ts:35`
 - `src/services/planChooser.ts:36`
-- `src/services/walkOct1Learn.test.ts:53`
+- `src/services/walkOct1Learn.test.ts:69`
 
 ### `gameArcs` (function) — 2 call sites
 - `src/services/coachFeatureService.ts:1331`
-- `src/services/walkOct1Learn.test.ts:99`
+- `src/services/walkOct1Learn.test.ts:115`
 
 ### `aimsOf` (re-export) — 8 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9548`

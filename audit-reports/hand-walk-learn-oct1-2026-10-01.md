@@ -115,3 +115,27 @@ Checked and fine: the wrong-try hints (board-true), the mate puzzle (Rd7+ Rd8+
 R1d7# completes with the why and Next), cxb6 "wins the pawn on b6".
 Tests: `reviewWalkOct1.test.ts` (Tactics + Setup cases),
 `MistakePuzzleBoard.endsOnReply.test.tsx` — all fail on the old code.
+
+## Learn walk, 3 more fresh games (am-174083521118 Van Geet/Black, am-173903420240 Scandinavian/White, am-173849611894 QGD/Black)
+
+Checker (depth 16): 58 of 140 claims machine-checked, 55 TRUE / 3 FALSE — all three
+are checker errors (lines legal on their own board; Nf5 is the engine's best at
+depth 20). Hand-read the other 82. **Accuracy: 138 / 140 board claims = 98.6%.**
+Game 3 stopped at ply 48 (driver's board refused f6 — harness).
+
+| # | ply | flag | fix |
+|---|---|---|---|
+| L1 | g1 10 | missed fork f6 called "Convert with patience: you were clearly winning" — a pawn DOWN on the board | `botched-conversion` needs a material lead to convert |
+| L2 | g1 68 | "Rxe2+ was a mistake — it let them take your rook on e2" — rook for rook | a take-back on the traded square is a trade, not a loss (`punishmentOf`) |
+| L3 | g1 44 | "The rook on the c-file to d8 can wait" | spoken disambiguation is "the c-file rook" (`sayMoveNoun`) |
+| L4 | g2 45 | "The point of their …Rxc7: it stops your Qxd8 fork" — taking back the queen | a take-back's point is the take-back (`threatStoppedBy`) |
+| L5 | g2 35 | "c5 is a hole…" drew a c6→c5 pawn arrow | a square that is a sentence's subject is a square (`arrowEngine`) |
+| L6 | g2 39/41 | moves inside lines that "didn't work" arrowed green/red | the whole refuted line is ruled out (`ruledOutSans`) |
+| L7 | g3 30 | "Rc8? Then Bc2, c5…" — refuted candidate and its refutation arrowed | the questioned candidate and its line are ruled out |
+| L8 | g2 Q26, g3 Q29 | "none are analyzed yet — so I can't read the mistakes you make" while the record held a repeated slip | the live record answers first (`reminderWithRecord`) |
+| open | g1 66 | …Rf6 (−0.2 → −2.9) got no grade, only a back-rank warning | replay pending — find which door rule held it |
+| open | g2 53 | b2→b4 arrow with no words | replay pending |
+
+Tests: each fix carries one that fails on the old code (`principleAttributionEvalPv`,
+`inaccuracyCall`, `spokenMove`, `opponentMovePurpose`, `arrowEngine`,
+`walkOct1Learn` ×2, `coachApi.reminderWithRecord`).

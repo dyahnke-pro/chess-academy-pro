@@ -160,9 +160,9 @@
 - `src/components/Dashboard/DashboardPage.tsx:133`
 - `src/components/Tactics/TacticalProfilePage.tsx:69`
 - `src/services/bucketPipelineAudit.ts:156`
-- `src/services/coachApi.ts:2160`
-- `src/services/coachApi.ts:4471`
-- `src/services/coachApi.ts:5040`
+- `src/services/coachApi.ts:2178`
+- `src/services/coachApi.ts:4489`
+- `src/services/coachApi.ts:5058`
 - `src/services/coachCurriculumService.ts:124`
 - `src/services/coachCurriculumService.ts:137`
 - `src/services/coachThread.ts:49`

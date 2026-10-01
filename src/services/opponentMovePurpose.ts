@@ -57,6 +57,18 @@ export function threatStoppedBy(
     if (!after.move(replySan)) return null;
   } catch { return null; }
   if (after.isGameOver()) return null;
+  // A TAKE-BACK'S POINT IS THE TAKE-BACK (Learn walk 2026-10-01, game 2 ply
+  // 45: Qxc7 Rxc7 heard "The point of their …Rxc7: it stops your Qxd8 fork").
+  // When the student's move captured and the reply takes back on that square,
+  // the reply restores the material — any threat it ends goes with the piece.
+  const replyMv = after.history({ verbose: true }).slice(-1)[0];
+  if (replyMv?.captured) {
+    const before = new Chess(studentFenBefore);
+    const studentMv = before.moves({ verbose: true }).find((m) => {
+      const c = new Chess(studentFenBefore); c.move(m.san); return c.fen() === studentFenAfter;
+    });
+    if (studentMv?.captured && studentMv.to === replyMv.to) return null;
+  }
   if (stillWorks(threat, after)) return null;
   // Named by its KIND, never by `threat.detail`: the detail names the squares
   // the threat hit on the board BEFORE the reply, and the reply often moved

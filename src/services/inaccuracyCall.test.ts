@@ -389,3 +389,18 @@ describe('a dictated move is said of them, never owned by the coach (David 2026-
     expect(call?.said ?? '').not.toMatch(/from me|\bmy\b|\bI\b/);
   });
 });
+
+describe('a take-back is the other half of a trade (Learn walk 2026-10-01, game 1 ply 68)', () => {
+  it('Rxe2+ Kxe2 is never "it let them take your rook on e2"', () => {
+    // Black's rook takes the rook on e2 with check; the king takes back. Rook
+    // for rook — the cost is the worse ending, not a lost rook.
+    const call = callInaccuracy({
+      fenBefore: '4r2k/pp1R2pp/5r2/2P5/1P4P1/7P/3KR3/8 b - - 0 34',
+      playedSan: 'Rxe2+', bestSan: 'Rc8', bestLineUci: ['e8c8', 'd7b7', 'h7h5', 'g4g5'],
+      replyLineUci: ['d2e2', 'h7h5', 'd7b7', 'h5g4'], replySan: 'Kxe2',
+      cpLoss: 110, moverEvalAfterCp: -430, side: 'student', moverColor: 'black',
+    });
+    expect(call).toBeTruthy();
+    expect(call!.said).not.toMatch(/take your rook/);
+  });
+});

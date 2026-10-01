@@ -132,24 +132,41 @@ describe('autoAnalyzeGameMisconceptions — passes evalAfterPlayed so eval-gated
     ],
   });
 
-  it('a thrown winning position on a real imported game is filed under botched-conversion', async () => {
-    await db.games.put(realGame('g-botched', 14));
+  // A KNIGHT UP and thrown (…Ng4?? Qxg4, then the slip 8.h3 with Bg5 holding +6).
+  const AHEAD_PGN = '1. e4 Nf6 2. Nc3 Ng4 3. Qxg4 d6 4. Nf3 e5 5. Bc4 Nc6 6. O-O Be7 7. d3 O-O 8. h3';
+  const aheadGame = (id: string, evaluation: number | null = 50) => buildGameRecord({
+    id, source: 'lichess', white: 'IcanonlybeatUbytime', black: 'Bloodsport55', whiteElo: 1728, blackElo: 1679,
+    pgn: AHEAD_PGN,
+    annotations: [
+      { moveNumber: 8, color: 'white', san: 'h3', evaluation, bestMove: 'c1g5', bestMoveEval: 600, classification: 'blunder', comment: null },
+    ],
+  });
+
+  it('a thrown winning position (material up) is filed under botched-conversion', async () => {
+    await db.games.put(aheadGame('g-botched'));
     const r = await autoAnalyzeGameMisconceptions('g-botched', 'IcanonlybeatUbytime');
     expect(r.logged).toBeGreaterThan(0);
     const rows = await db.misconceptionTags.where('sourceGameId').equals('g-botched').toArray();
     expect(rows.map((x) => x.fundamentalId)).toContain('botched-conversion');
-    expect(rows.find((x) => x.fundamentalId === 'botched-conversion')?.bestSan).toBe('Qd5');
+    expect(rows.find((x) => x.fundamentalId === 'botched-conversion')?.bestSan).toBe('Bg5');
+  });
+
+  it('NEGATIVE CONTROL — y36gvNEs 6.Nc3: +4 was the Qd5 tactic on LEVEL material — a missed punishment, never a botched conversion (Learn walk 2026-10-01)', async () => {
+    await db.games.put(realGame('g-botched-level', 14));
+    await autoAnalyzeGameMisconceptions('g-botched-level', 'IcanonlybeatUbytime');
+    const rows = await db.misconceptionTags.where('sourceGameId').equals('g-botched-level').toArray();
+    expect(rows.map((x) => x.fundamentalId)).not.toContain('botched-conversion');
   });
 
   it('NEGATIVE CONTROL — no after-eval on the annotation → the eval-gated detector stays silent (never invents)', async () => {
-    await db.games.put(realGame('g-botched-noeval', null));
+    await db.games.put(aheadGame('g-botched-noeval', null));
     await autoAnalyzeGameMisconceptions('g-botched-noeval', 'IcanonlybeatUbytime');
     const rows = await db.misconceptionTags.where('sourceGameId').equals('g-botched-noeval').toArray();
     expect(rows.map((x) => x.fundamentalId)).not.toContain('botched-conversion');
   });
 
   it('NEGATIVE CONTROL — still clearly winning after the move → not a botched conversion (the NUMBER decides, not its presence)', async () => {
-    await db.games.put(realGame('g-botched-stillwinning', 250));
+    await db.games.put(aheadGame('g-botched-stillwinning', 250));
     await autoAnalyzeGameMisconceptions('g-botched-stillwinning', 'IcanonlybeatUbytime');
     const rows = await db.misconceptionTags.where('sourceGameId').equals('g-botched-stillwinning').toArray();
     expect(rows.map((x) => x.fundamentalId)).not.toContain('botched-conversion');

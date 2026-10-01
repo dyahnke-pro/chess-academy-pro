@@ -105,8 +105,8 @@
 - `src/services/reviewFullData.ts:1148`
 
 ### `detectOpeningTranspositional` (function) — 5 call sites
-- `src/services/coachApi.ts:5417`
-- `src/services/coachApi.ts:6322`
+- `src/services/coachApi.ts:5435`
+- `src/services/coachApi.ts:6340`
 - `src/services/reviewGameAdapter.ts:170`
 - `src/services/reviewOpeningTheory.ts:315`
 - `src/services/reviewOpeningTheory.ts:316`
@@ -265,7 +265,7 @@
 - `src/services/openingDetectionService.test.ts:371`
 - `src/services/openingGenerator.ts:3198`
 - `src/services/principleAttribution.section14.test.ts:90`
-- `src/services/principleAttribution.ts:1186`
+- `src/services/principleAttribution.ts:1191`
 
 ### `ForkBranch` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

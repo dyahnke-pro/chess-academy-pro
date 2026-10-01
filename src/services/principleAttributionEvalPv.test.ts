@@ -50,12 +50,23 @@ const BOTCHED: AttributionInput = { replySan: null,
   evalAfterPlayed: 30,
 };
 
+// A conversion needs something to convert: White is a knight up (…Ng4?? Qxg4)
+// and then lets most of it go. (BOTCHED above is level material — see the
+// negative control below.)
+const BOTCHED_AHEAD: AttributionInput = { replySan: null,
+  historySans: ['e4', 'Nf6', 'Nc3', 'Ng4', 'Qxg4', 'd6', 'Nf3', 'e5', 'Bc4', 'Nc6', 'O-O', 'Be7', 'd3', 'O-O', 'h3'],
+  bestSan: 'Bg5',
+  classification: 'mistake',
+  evalBefore: 600,
+  evalAfterPlayed: 50,
+};
+
 describe('eval/PV fundamentals — Wave 3 detectors fire on real legal games', () => {
   const cases: { name: string; input: AttributionInput }[] = [
     { name: 'overvalued-attack', input: OVERVALUED },
     { name: 'poisoned-pawn', input: POISONED },
     { name: 'capture-toward-centre', input: CAPTURE },
-    { name: 'botched-conversion', input: BOTCHED },
+    { name: 'botched-conversion', input: BOTCHED_AHEAD },
   ];
   for (const { name, input } of cases) {
     it(`${name} is attributed and proven`, () => {
@@ -72,7 +83,7 @@ describe('eval/PV fundamentals — Wave 3 detectors fire on real legal games', (
   it('botched-conversion clamps a thrown MATE — no absurd "300 points" figure', () => {
     // Mate is eval-encoded as ±30000; a thrown mate must read as "a winning
     // position", never a three-digit pawn count.
-    const thrownMate: AttributionInput = { ...BOTCHED, evalBefore: 30000, evalAfterPlayed: 20 };
+    const thrownMate: AttributionInput = { ...BOTCHED_AHEAD, evalBefore: 30000, evalAfterPlayed: 20 };
     const out = attributePrinciples(thrownMate);
     const a = out.find((x) => x.id === 'botched-conversion');
     expect(a, 'botched-conversion did not fire on a thrown mate').toBeTruthy();
@@ -83,12 +94,24 @@ describe('eval/PV fundamentals — Wave 3 detectors fire on real legal games', (
   });
 
   it('botched-conversion with the better move named ELSEWHERE leaves it out (run I, 4GIsh ply 32)', () => {
-    const a = attributePrinciples(BOTCHED).find((x) => x.id === 'botched-conversion')!;
+    const a = attributePrinciples(BOTCHED_AHEAD).find((x) => x.id === 'botched-conversion')!;
     for (let ply = 0; ply < 3; ply++) {
       const text = renderFundamentalVerdict([{ ...a, facts: { ...a.facts, better: '' } }], { replySan: null, ply, seen: new Set() });
-      expect(text).not.toMatch(/Re8/);
+      expect(text).not.toMatch(/Bg5/);
       expect(text).not.toMatch(/;\s*(stays|keeps)|—\s+was the calm|\s{2}/);
     }
+  });
+
+  it('NO material lead → no "convert with patience" (Learn walk 2026-10-01, game 1 ply 10)', () => {
+    // Black is a PAWN DOWN; the +2.6 is the fork White just allowed (…f6 hits
+    // Bg5 while …d5 hits Ne4). Missing it is a missed punishment, not a rushed
+    // win, and the grade line already names f6.
+    const walk: AttributionInput = { replySan: null,
+      historySans: ['Nc3', 'e5', 'Nf3', 'Nc6', 'd4', 'e4', 'Nxe4', 'd5', 'Bg5', 'Be7'],
+      bestSan: 'f6', classification: 'blunder', evalBefore: 261, evalAfterPlayed: -157 };
+    expect(attributePrinciples(walk).map((x) => x.id)).not.toContain('botched-conversion');
+    // Level material, same eval story — still nothing to convert.
+    expect(attributePrinciples(BOTCHED).map((x) => x.id)).not.toContain('botched-conversion');
   });
 
   it('the eval/PV-GATED detectors stay SILENT without the persisted eval/PV', () => {

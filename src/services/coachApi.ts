@@ -1833,6 +1833,24 @@ export function uploadGamesReminder(topic: string, overview: { totalGames: numbe
   return `I can't read ${topic} yet — none of your real games are in here, and that's where I find your patterns. Import your Lichess or Chess.com games from Games then Import (just your username), and I'll break down exactly what to drill.`;
 }
 
+/** THE LIVE RECORD COUNTS (Learn walk 2026-10-01: "none are analyzed yet — so
+ *  I can't read the mistakes you make" in the same game that later said "taking
+ *  a poisoned pawn, the second game now"). Slips the coach recorded while the
+ *  student played here ARE their record: lead with the one that recurs, then
+ *  say what imported games would add. Otherwise the plain reminder. */
+export async function reminderWithRecord(topic: string, overview: { totalGames: number; analyzedGameCount: number }): Promise<string> {
+  if (topic === 'the mistakes you make') {
+    const top = (await getMisconceptionProfile({ countedOnly: true }).catch(() => []))
+      .filter((r) => r.tag !== 'other' && r.total >= 2)
+      .sort((a, b) => b.total - a.total)[0];
+    if (top) {
+      const label = `${top.label.charAt(0).toLowerCase()}${top.label.slice(1)}`;
+      return `The one that keeps coming back in your games here: ${label}, ${top.total} times. Import and analyze your Lichess or Chess.com games and I'll see the rest.`;
+    }
+  }
+  return uploadGamesReminder(topic, overview);
+}
+
 /** Is this turn a question answered from the student's OWN game history? — the
  *  intent set the upload-your-games gate fires on when no games are analyzed
  *  (David 2026-09-06: "ANY question about personal game data, when we have no
@@ -3829,7 +3847,7 @@ export async function getCoachChatResponse(
                 const onBoard = topic === 'the mistakes you make' && grounding.currentFen
                   ? boardWeaknessNow(grounding.currentFen, grounding.studentColor ?? ((grounding.currentFen.split(' ')[1] ?? 'w') === 'b' ? 'black' : 'white'))
                   : null;
-                const reminder = uploadGamesReminder(topic, overview);
+                const reminder = await reminderWithRecord(topic, overview);
                 const msg = onBoard ? `${onBoard} ${reminder}` : reminder;
                 const voiced = await voice(msg, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
                 return voiced ?? msg;
@@ -4427,7 +4445,7 @@ export async function getCoachChatResponse(
                 const onBoard = topic === 'the mistakes you make' && grounding.currentFen
                   ? boardWeaknessNow(grounding.currentFen, grounding.studentColor ?? ((grounding.currentFen.split(' ')[1] ?? 'w') === 'b' ? 'black' : 'white'))
                   : null;
-                const reminder = uploadGamesReminder(topic, overview);
+                const reminder = await reminderWithRecord(topic, overview);
                 const msg = onBoard ? `${onBoard} ${reminder}` : reminder;
                 const voiced = await voice(msg, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
                 return voiced ?? msg;

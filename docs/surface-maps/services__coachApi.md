@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6884 lines · 38 exports · 50 importers · 54 tests · 19 audits**
+**6902 lines · 39 exports · 51 importers · 55 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -45,6 +45,7 @@
 - `src/services/coachApi.keySquares.test.ts`
 - `src/services/coachApi.master-integration.test.ts`
 - `src/services/coachApi.pieceOptions.test.ts`
+- `src/services/coachApi.reminderWithRecord.test.ts`
 - `src/services/coachApi.speakableFacts.test.ts`
 - `src/services/coachApi.strip.test.ts`
 - `src/services/coachApi.toolName.test.ts`
@@ -164,6 +165,11 @@
 - `src/services/coachApi.uploadReminder.test.ts:13`
 - `src/services/coachApi.uploadReminder.test.ts:21`
 - `src/services/coachApi.uploadReminder.test.ts:29`
+
+### `reminderWithRecord` (function) — 3 call sites
+- `src/services/coachApi.reminderWithRecord.test.ts:18`
+- `src/services/coachApi.reminderWithRecord.test.ts:25`
+- `src/services/coachApi.reminderWithRecord.test.ts:33`
 
 ### `personalGameDataQuestion` (function) — 5 call sites
 - `src/services/coachApi.uploadReminder.test.ts:72`
@@ -404,6 +410,7 @@
 - `src/services/coachApi.keySquares.test.ts`
 - `src/services/coachApi.master-integration.test.ts`
 - `src/services/coachApi.pieceOptions.test.ts`
+- `src/services/coachApi.reminderWithRecord.test.ts`
 - `src/services/coachApi.speakableFacts.test.ts`
 - `src/services/coachApi.strip.test.ts`
 - `src/services/coachApi.toolName.test.ts`

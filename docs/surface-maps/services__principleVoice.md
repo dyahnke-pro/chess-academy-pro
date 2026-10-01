@@ -59,9 +59,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleAttribution.section14.test.ts:179`
 - `src/services/principleAttribution.section14.test.ts:182`
 - `src/services/principleAttributionEndgame.test.ts:49`
-- `src/services/principleAttributionEvalPv.test.ts:66`
-- `src/services/principleAttributionEvalPv.test.ts:79`
-- `src/services/principleAttributionEvalPv.test.ts:88`
+- `src/services/principleAttributionEvalPv.test.ts:77`
+- `src/services/principleAttributionEvalPv.test.ts:90`
+- `src/services/principleAttributionEvalPv.test.ts:99`
 - `src/services/principleVoice.test.ts:13`
 - `src/services/principleVoice.test.ts:24`
 - `src/services/principleVoice.test.ts:25`

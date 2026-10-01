@@ -169,6 +169,10 @@ export function extractMentionedSans(text: string): string[] {
       const w1 = (words[words.length - 1] ?? '').toLowerCase();
       const w2 = words[words.length - 2] ?? '';
       if (/^[a-h][1-8],$/.test(w1) || ((w1 === 'and' || w1 === 'or') && /^[a-h][1-8],?$/.test(w2))) continue;
+      // …and a square that is the SUBJECT of a sentence ("c5 is a hole in their
+      // camp") names the square, never the pawn move (Learn walk 2026-10-01: a
+      // c6→c5 arrow grew out of it).
+      if (/^\s+(?:is|was|stays|remains)\b/.test(cleaned.slice(match.index + san.length, match.index + san.length + 12))) continue;
     }
     out.push(san);
   }

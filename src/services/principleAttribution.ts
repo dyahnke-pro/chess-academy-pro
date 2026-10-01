@@ -1063,6 +1063,11 @@ const DETECTORS: Detector[] = [
     const { best, evalBefore: eb, evalAfterPlayed: ea } = c;
     if (eb === undefined || ea === undefined) return null;
     if (eb < 200 || ea >= 100) return null;
+    // CONVERTING NEEDS SOMETHING TO CONVERT (Learn walk 2026-10-01, game 1 ply
+    // 10): the +2.6 there was a fork the opponent had just allowed, with the
+    // student a pawn DOWN on the board. Missing it is a missed punishment, not
+    // a rushed win — so the mover must already be ahead in material.
+    if (material(c.before, c.mover) - material(c.before, c.opp) < 2) return null;
     // Mate is eval-encoded as a huge cp (±30000). Clamp to ±20 points so the
     // "points thrown away" figure stays sane — a thrown mate is "a winning
     // position", never "300 pawns".
