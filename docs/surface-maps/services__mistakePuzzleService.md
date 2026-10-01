@@ -175,7 +175,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `getMistakePuzzlesDue` (function) — 3 call sites
 - `src/services/mistakePuzzleService.test.ts:445`
 - `src/services/mistakePuzzleService.test.ts:458`
-- `src/services/puzzleService.ts:518`
+- `src/services/puzzleService.ts:534`
 
 ### `getMistakePuzzlesByGame` (function) — 1 call site
 - `src/services/mistakePuzzleService.test.ts:471`

@@ -126,7 +126,10 @@ export function createAdaptiveSession(
     bestStreak: 0,
     consecutiveWrong: 0,
     ratingHistory: [seedRating],
-    weakThemeBoost: false,
+    // The FIRST puzzle consults the student's record too: a student with an
+    // open hole starts on it, and a new student starts on a grey theme in
+    // rotation. After that, every `weaknessInterval` puzzles.
+    weakThemeBoost: true,
     totalPuzzles: 0,
     startedAt: new Date().toISOString(),
     themesEncountered: {},

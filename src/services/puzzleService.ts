@@ -293,7 +293,23 @@ export async function getWeakestThemes(limit: number = 3): Promise<string[]> {
     .then((m) => m.loadWeaknessSignals())
     .catch(() => []);
   const rotation = skills.reduce((n, s) => n + s.attempts, 0);
-  return rankThemeTargets(signals, skills, TACTICAL_THEMES, rotation, limit);
+  const targets = rankThemeTargets(signals, skills, TACTICAL_THEMES, rotation, limit);
+  // EMIT (algo-audit rule): which arm of the record chose each theme.
+  void import('./appAuditor').then(({ logAppAudit }) => logAppAudit({
+    kind: 'puzzle-themes-targeted',
+    category: 'subsystem',
+    source: 'puzzleService.getWeakestThemes',
+    summary: targets.length > 0
+      ? targets.map((t) => `${t.theme} (${t.from})`).join(', ')
+      : 'no theme target — rating-only selection',
+    details: JSON.stringify({
+      targets,
+      openHoles: signals.filter((w) => w.openCount > 0 && w.lifecycleStatus !== 'fixed').length,
+      themesTried: skills.length,
+      rotation,
+    }),
+  })).catch(() => undefined);
+  return targets.map((t) => t.theme);
 }
 
 // ─── Queries ────────────────────────────────────────────────────────────────

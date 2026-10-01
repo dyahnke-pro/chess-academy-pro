@@ -255,6 +255,10 @@ export type AuditKind =
   // candidates, floor, the chosen family and why — so an audit can prove a
   // 3-game line never wins and a student override sticks.
   | 'home-opening-chosen'
+  // Which puzzle themes the next puzzles target, and which arm of the student's
+  // record chose each (red = an open hole from games/drills/puzzles, weak =
+  // a puzzle theme missed over a real sample, grey = never tried, rotated).
+  | 'puzzle-themes-targeted'
   // Which games a batch analysis run picked and in what order (A2): the
   // home openings' games first, then newest — so an audit can prove the
   // priority instead of reading a progress label.

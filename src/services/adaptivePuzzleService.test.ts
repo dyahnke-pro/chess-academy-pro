@@ -150,6 +150,8 @@ describe('adaptivePuzzleService', () => {
     it('sets weakThemeBoost every N puzzles', () => {
       const interval = ADAPTIVE_CONFIGS.easy.weaknessInterval;
       let session = createAdaptiveSession('easy');
+      // The first puzzle reads the record, then every N.
+      expect(session.weakThemeBoost).toBe(true);
       for (let i = 1; i < interval; i++) {
         session = processAdaptiveResult(session, 1000, true, ['fork']);
         expect(session.weakThemeBoost).toBe(false);

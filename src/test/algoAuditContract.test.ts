@@ -33,7 +33,8 @@ type AlgoEmissionKind =
   | 'player-rating-estimated'
   | 'review-need-coverage'
   | 'home-opening-chosen'
-  | 'analysis-batch-ordered';
+  | 'analysis-batch-ordered'
+  | 'puzzle-themes-targeted';
 
 interface Contract {
   /** The audit that holds the contract. */
@@ -80,6 +81,11 @@ const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
     script: 'scripts/audit-home-opening-prod.mjs',
     contractMarker: 'ANALYSIS ORDER home-games-first-past-the-cap',
     emittedBy: 'src/services/gameAnalysisService.ts (analyzeAllGames via pickAnalysisBatch)',
+  },
+  'puzzle-themes-targeted': {
+    script: 'scripts/audit-tactics-record-prod.mjs',
+    contractMarker: 'TACTICS RECORD red-leads',
+    emittedBy: 'src/services/puzzleService.ts (getWeakestThemes via rankThemeTargets)',
   },
 };
 

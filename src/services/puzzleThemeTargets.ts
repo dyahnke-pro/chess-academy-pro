@@ -29,26 +29,39 @@ const MIN_ATTEMPTS = 3;
  * The list is a queue of targets, not a cap on teaching: the caller tries each
  * in turn and falls back to rating-only selection.
  */
+/** Which arm of the heat map put a theme in the queue — emitted so an audit
+ *  can see that the record, not the puzzles alone, chose it. */
+export type ThemeTargetSource = 'red' | 'weak' | 'grey';
+
+export interface ThemeTarget {
+  theme: string;
+  from: ThemeTargetSource;
+}
+
 export function rankThemeTargets(
   signals: readonly WeaknessSignal[],
   skills: readonly ThemeAccuracy[],
   allThemes: readonly string[],
   rotation: number,
   limit: number,
-): string[] {
-  const out: string[] = [];
-  const add = (t: string): void => { if (!out.includes(t)) out.push(t); };
+): ThemeTarget[] {
+  const out: ThemeTarget[] = [];
+  let from: ThemeTargetSource = 'red';
+  const add = (t: string): void => { if (!out.some((o) => o.theme === t)) out.push({ theme: t, from }); };
 
   const red = signals
     .filter((w) => w.openCount > 0 && w.lifecycleStatus !== 'fixed' && w.puzzleThemes.length > 0)
     .sort((a, b) => b.severity - a.severity || b.openCount - a.openCount);
   for (const w of red) for (const t of w.puzzleThemes) add(t);
 
+  from = 'weak';
+
   const weak = skills
     .filter((s) => s.attempts >= MIN_ATTEMPTS && s.accuracy < WEAK_ACCURACY)
     .sort((a, b) => a.accuracy - b.accuracy);
   for (const s of weak) add(s.theme);
 
+  from = 'grey';
   const tried = new Set(skills.map((s) => s.theme));
   const grey = allThemes.filter((t) => !tried.has(t));
   if (grey.length > 0) {
