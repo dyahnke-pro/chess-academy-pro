@@ -175,7 +175,10 @@ function compose(
   const idea = computed ? computedIdea(computed, true) : passageIdea;
 
   const parts: string[] = [];
-  if (line) parts.push(line.charAt(0).toUpperCase() + line.slice(1) + (/[.!?]$/.test(line) ? '' : '.'));
+  // Capitalise prose, never a pawn move: "H5, then f4" (calc hand walk
+  // 2026-10-01) — a SAN lead stays as written.
+  const sanLead = /^[a-h][1-8x]/.test(line);
+  if (line) parts.push((sanLead ? line : line.charAt(0).toUpperCase() + line.slice(1)) + (/[.!?]$/.test(line) ? '' : '.'));
   if (idea) parts.push(idea);
   const spoken = parts.join(' ').trim();
   if (!spoken) return null;

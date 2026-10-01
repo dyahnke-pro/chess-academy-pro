@@ -455,12 +455,20 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
     }
   }
 
-  const newOpenFiles = before && after
+  // A promotion empties the file by turning the pawn into a piece — that is
+  // not a file opened (calc hand walk 2026-10-01: "h1=Q, promoting to a queen,
+  // opening the h-file").
+  const newOpenFiles = before && after && !mv.promotion
     ? after.pawns.openFiles.filter((f) => !before.pawns.openFiles.includes(f))
     : [];
+  // A passer that merely ADVANCED is not a new one: "h4, creating a passed pawn
+  // on h4" was said of a pawn that was passed on h5 (same walk). A passer on a
+  // file that had one which is no longer standing is the same pawn moving.
   const newPassersFor = (side: 'w' | 'b'): string[] => {
     const had = before ? before.pawns.passedPawns[side] : [];
-    return after ? after.pawns.passedPawns[side].filter((sq) => !had.includes(sq)) : [];
+    const now = after ? after.pawns.passedPawns[side] : [];
+    const moved = had.filter((sq) => !now.includes(sq));
+    return now.filter((sq) => !had.includes(sq) && !moved.some((m) => m[0] === sq[0]));
   };
   const newPassedPawns = newPassersFor(mover);
   const passedPawnsHanded = newPassersFor(defender);

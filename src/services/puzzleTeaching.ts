@@ -25,11 +25,20 @@ import { admitArrows, type ArrowClaim } from './arrowDoor';
 import { explainDrillConcept, type PuzzleConceptExplanation } from './puzzleConceptExplanation';
 import type { BoardArrow } from '../types';
 
-/** The best line from a position, in UCI, side to move first. */
-export type PuzzleLineAnalyser = (fen: string) => Promise<readonly string[] | null>;
+/** The best line from a position, in UCI, side to move first — and, when the
+ *  engine gave one, its score in centipawns from WHITE's side (mate = ±big). */
+export type PuzzleLineRead = readonly string[] | { moves: readonly string[]; cpWhite: number | null };
+export type PuzzleLineAnalyser = (fen: string) => Promise<PuzzleLineRead | null>;
+
+/** Below this (solver's view, after the wrong move) the win is gone. */
+export const CHANCE_GONE_CP = 150;
 
 export interface WrongTryRefutation {
-  kind: 'mate' | 'material' | 'geometry';
+  /** mate / material / geometry: what their reply wins. chance-gone: the
+   *  move loses nothing but lets the win slip (their reply shown). not-best:
+   *  it keeps an edge, and something stronger is there (no line — that would
+   *  point at the answer). */
+  kind: 'mate' | 'material' | 'geometry' | 'chance-gone' | 'not-best';
   /** One or two sentences, from the solver's seat. */
   text: string;
   /** The board after the wrong move — where the line is played from. */
@@ -68,7 +77,11 @@ export async function refuteWrongTry(args: {
   const them: 'w' | 'b' = solver === 'w' ? 'b' : 'w';
 
   let line: readonly string[] | null = null;
-  try { line = await args.analyse(fenAfter); } catch { line = null; }
+  let cpWhite: number | null = null;
+  try {
+    const read = await args.analyse(fenAfter);
+    if (read && 'moves' in read) { line = read.moves; cpWhite = read.cpWhite; } else line = read;
+  } catch { line = null; }
 
   if (line && line.length) {
     const ml = mateLine(fenAfter, line, them, undefined, { minPlies: 1 });
@@ -94,6 +107,26 @@ export async function refuteWrongTry(args: {
   const geo = whyItFailed({ fenBefore: args.fenBefore, playedSan: args.wrongSan, studentColor: solver === 'w' ? 'white' : 'black' });
   if (geo) {
     return { kind: 'geometry', text: `${san}? ${geo.line}`, fenAfter, uci: [], arrows: [] };
+  }
+
+  // NOTHING LOST — BUT THE WIN SLIPPED (hand walk 2026-10-01: "…a6" in a fork
+  // puzzle drew only the old nudge). In a puzzle a slow move fails because it
+  // gives them a move: show the reply that takes the chance away. Still their
+  // move only — the answer is never named.
+  if (line && line.length && cpWhite !== null) {
+    const solverCp = solver === 'w' ? cpWhite : -cpWhite;
+    if (solverCp < CHANCE_GONE_CP) {
+      let reply = '';
+      try { const c = new Chess(fenAfter); const m = c.move({ from: line[0].slice(0, 2), to: line[0].slice(2, 4), promotion: line[0][4] }); reply = `${them === 'b' ? '…' : ''}${m.san}`; } catch { reply = ''; }
+      if (reply) {
+        return {
+          kind: 'chance-gone',
+          text: `${san}? Then ${reply} — and the chance is gone.`,
+          fenAfter, uci: [line[0]], arrows: lineArrows(fenAfter, [line[0]], 'puzzleTeaching.refute'),
+        };
+      }
+    }
+    return { kind: 'not-best', text: `${san} keeps an edge, but there is something stronger here.`, fenAfter, uci: [], arrows: [] };
   }
   return null;
 }

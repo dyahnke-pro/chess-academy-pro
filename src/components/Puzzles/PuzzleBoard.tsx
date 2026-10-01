@@ -319,10 +319,15 @@ export function PuzzleBoard({
     // post-attempt state). Pairs with `hint-revealed` via FEN equality
     // in analyticsService.recentHintActivity for hint effectiveness.
     // Drives analyticsService.moveAttemptsPerPuzzle aggregation.
+    // The position the student moved FROM: the puzzle replayed through the
+    // moves already played. (It used to be `new Chess(game.fen).undo()` — a
+    // board built from a FEN has no history, so undo did nothing and every
+    // `move-attempt` row, and the wrong-try refutation, got the position AFTER
+    // the move. Found on the hand walk, 2026-10-01.)
     let fenBeforeAttempt = game.fen;
     try {
-      const replay = new Chess(game.fen);
-      replay.undo();
+      const replay = new Chess(puzzle.fen);
+      for (const m of allMoves.slice(0, moveIndex)) replay.move({ from: m.from, to: m.to, promotion: m.promotion });
       fenBeforeAttempt = replay.fen();
     } catch {
       // Fall back to post-attempt fen — still a useful key for the

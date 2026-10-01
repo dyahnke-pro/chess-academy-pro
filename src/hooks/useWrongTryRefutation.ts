@@ -13,7 +13,7 @@
  * capped: a slow engine must never freeze the puzzle. No
  * answer in time → null, and the board keeps its own nudge.
  */
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { refuteWrongTry, refutationArrows, solvedDrillConcept, type WrongTryRefutation, type PuzzleLineAnalyser } from '../services/puzzleTeaching';
 import type { BoardArrow } from '../types';
@@ -23,7 +23,9 @@ const REFUTE_BUDGET_MS = 3000;
 
 export const engineLineAnalyser: PuzzleLineAnalyser = async (fen) => {
   const timeout = new Promise<null>((resolve) => setTimeout(() => resolve(null), REFUTE_BUDGET_MS));
-  const read = stockfishEngine.queueAnalysis(fen, REFUTE_DEPTH).then((a) => a.topLines[0]?.moves ?? null).catch(() => null);
+  const read = stockfishEngine.queueAnalysis(fen, REFUTE_DEPTH)
+    .then((a) => (a.topLines[0]?.moves?.length ? { moves: a.topLines[0].moves, cpWhite: a.topLines[0].evaluation ?? a.evaluation ?? null } : null))
+    .catch(() => null);
   return Promise.race([read, timeout]);
 };
 
@@ -41,6 +43,14 @@ export function useWrongTryRefutation(analyse: PuzzleLineAnalyser = engineLineAn
   const [text, setText] = useState<string | null>(null);
   const [arrows, setArrows] = useState<BoardArrow[]>([]);
   const token = useRef(0);
+  // WARM THE ENGINE ON MOUNT (hand walk 2026-10-01: the FIRST wrong try of a
+  // session drew nothing — the engine was still loading and missed the 3s
+  // cap). A depth-1 read of the start position costs nothing and is queued, so
+  // it never cancels anything.
+  useEffect(() => {
+    if (analyse !== engineLineAnalyser) return;
+    void stockfishEngine.queueAnalysis('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1).catch(() => null);
+  }, [analyse]);
 
   const refute = useCallback(async (fenBefore: string, wrongSan: string): Promise<WrongTryRefutation | null> => {
     const mine = ++token.current;

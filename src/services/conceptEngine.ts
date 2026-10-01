@@ -527,6 +527,7 @@ export function conceptForBoard(fen: string, opts: ConceptForBoardOptions = {}):
 // ─── conceptForLine — THE single walker (solution OR engine PV) ──────────────
 import { computePlyFacts, pvDepthForRating, type PrevCaptureContext } from './pvPlayback';
 import { classifyMatePattern } from './matePatterns';
+import { detectPlanRace, planRaceClause } from './planRace';
 import { Chess } from 'chess.js';
 
 export interface LineInput {
@@ -588,12 +589,32 @@ function importanceFromSwing(input: LineInput): number | null {
  * (the opposition) is preferred over the generic start principle; positional
  * ideas ride as supports. Ranked, multi-concept, G0 — the story of the line.
  */
+/** A pure pawn ending in which both sides have a runner and the student's
+ *  queens first — the counts come from `planRace`, the one race computer. */
+function pureRace(fen: string, studentColor: 'w' | 'b'): ComputedConcept | null {
+  let pure = false;
+  try { pure = new Chess(fen).board().flat().every((c) => !c || c.type === 'k' || c.type === 'p'); } catch { return null; }
+  if (!pure) return null;
+  const race = detectPlanRace(fen, studentColor);
+  if (!race || race.kind !== 'passer-race' || !race.youQueenFirst) return null;
+  const clause = planRaceClause(fen, studentColor, 'live');
+  if (!clause) return null;
+  return technique(
+    'won-pawn-race', 'A pawn race you win',
+    `It comes down to a pawn race — ${clause}.`,
+    'Count the race — yours queens first.', [race.yourPawn, race.theirPawn], 0.8,
+  );
+}
+
 export function conceptForLine(input: LineInput): ComputedConcept[] {
   const out: ComputedConcept[] = [];
   const seen = new Set<string>();
   const { fen, uci, studentColor } = input;
   const wants = (src: ConceptSource): boolean => !input.sources || input.sources.includes(src);
   let techConcept: ComputedConcept | null = null;
+  // Squares the line takes a piece on — a start-position technique naming a
+  // piece the solution captures is about a board the student just changed.
+  const capturedOn = new Set<string>();
 
   // No position, no concept: an unparseable root FEN must not reach the
   // endgame / positional beats below (the matchup parser once read "nope"
@@ -614,6 +635,16 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
       const fenAfter = c.fen();
       const facts = computePlyFacts(fenBefore, fenAfter, { captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion }, prev);
       prev = mv.captured ? { square: mv.to, capturedValue: MATERIAL_VALUE[mv.captured] ?? 0 } : { square: null, capturedValue: 0 };
+      if (mv.captured) capturedOn.add(mv.to);
+      // TRADE INTO A RACE YOU WIN (calc hand walk 2026-10-01: …Rxb6+ Kxb6 left
+      // two runners, Black's to move — the whole point of the sacrifice, and the
+      // panel instead described White's rook on b6, which was gone). Read after
+      // EVERY ply: the race exists once the recapture lands, which is the
+      // opponent's move.
+      if (!techConcept && wants('technique')) {
+        const race = pureRace(fenAfter, studentColor);
+        if (race) techConcept = { ...race, line: [...path], boardFen: fenAfter };
+      }
       if (mv.color !== studentColor) continue;
       // Key-move score: mate » real landed tactic (weighted by what it nets) »
       // material. Every term is board-true from computePlyFacts.
@@ -685,7 +716,9 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
   // Endgame teaching beat: the technique reached during the solution (preferred),
   // else the start-position matchup principle.
   try {
-    const eg = techConcept ?? ((wants('technique') || wants('matchup')) ? endgameConceptFor(fen) : null);
+    const start = !techConcept && (wants('technique') || wants('matchup')) ? endgameConceptFor(fen) : null;
+    const startStands = !start || start.source !== 'technique' || !start.squares.some((sq) => capturedOn.has(sq));
+    const eg = techConcept ?? (startStands ? start : null);
     if (eg && !seen.has(eg.id) && wants(eg.source)) {
       if (eg.source !== 'technique') eg.importance = 0.5;
       out.push(eg);

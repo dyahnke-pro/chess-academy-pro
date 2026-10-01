@@ -34,6 +34,8 @@ const REPLAY_CONTEXT_PLIES = 8;
 const REPLAY_MOVE_DELAY = 900;
 
 interface ReplayStep {
+  /** The position BEFORE this move (the replay's starting board, for step 0). */
+  fenBefore: string;
   fen: string;
   san: string;
   from: string;
@@ -77,8 +79,10 @@ function extractReplayMoves(pgn: string, _mistakeFen: string, playerColor: 'whit
     const isWhite = i % 2 === 0;
     const moveLabel = isWhite ? `${fullMoveNum}. ${move.san}` : `${fullMoveNum}... ${move.san}`;
 
+    const fenBefore = replayChess.fen();
     replayChess.move(move.san);
     steps.push({
+      fenBefore,
       fen: replayChess.fen(),
       san: move.san,
       from: move.from,
@@ -350,13 +354,10 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
 
       if (steps.length > 0) {
         // The starting FEN is the position before the first replay move
-        const preReplayFen = (() => {
-          // The first step's fen is AFTER the first replay move was played.
-          // We need the FEN BEFORE that move. We can reconstruct it from the first step.
-          const c = new Chess(steps[0].fen);
-          c.undo();
-          return c.fen();
-        })();
+        // The board BEFORE the first replay move. (It was rebuilt with
+        // `new Chess(steps[0].fen).undo()` — a FEN carries no history, so undo
+        // did nothing and the replay started one move late.)
+        const preReplayFen = steps[0].fenBefore;
 
         setFen(preReplayFen);
         setBoardKey((k) => k + 1);

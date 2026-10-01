@@ -380,11 +380,14 @@ export function buildReviewMoveTeaching(
         return `${mv.captured ? 'The capture means' : 'Now'} ${target}.`;
       }
     }
-    // Quiet central push (not a capture) — stake the center / gain space.
-    if (!mv.captured && CENTER.has(mv.to)) {
+    // Quiet central push (not a capture) — stake the center / gain space. Not
+    // in a pure pawn ending: there are no pieces to open lines for or cramp,
+    // and "f4, gains space and cramps the opponent" was said of a runner in a
+    // pawn race (calc hand walk 2026-10-01).
+    if (!mv.captured && CENTER.has(mv.to) && hasPieces(chess)) {
       return 'Stakes a claim in the center and opens lines for the pieces.';
     }
-    if (!mv.captured && BROAD_CENTER.has(mv.to) && (toRank === 4 || toRank === 5)) {
+    if (!mv.captured && BROAD_CENTER.has(mv.to) && (toRank === 4 || toRank === 5) && hasPieces(chess)) {
       // A c/f-file pawn that ATTACKS a central square is fighting for the centre
       // from the flank — NOT a space-grab / "cramp" (David 2026-09-14: "the first
       // pawn push on my side is not a land grab as much as fighting for the
@@ -449,13 +452,19 @@ export function buildReviewMoveTeaching(
   // (d) Controls central squares, or reaches into the opponent's half.
   // Q2, and NO SLICE (G4.5): `.slice(0, 3)` dropped computed squares the
   // student never heard. A long list is a phrasing problem — `list` handles it.
-  const targets = keyTargetSquares(chess, mv.color === 'w' ? 'white' : 'black');
+  // Not for a KING, and not in a pure pawn ending (calc hand walk 2026-10-01:
+  // "Kxb6, the king clamps down on c5, fighting for the center … Kb7, the king
+  // now covers c7, a7, b8, b6, c8, c6, a8, and a6"). A king always covers its
+  // neighbours and a pawn race has no centre to fight for — square lists there
+  // describe, they teach nothing. The king's own branch below speaks for it.
+  const coverageTeaches = mv.piece !== 'k' && hasPieces(chess);
+  const targets = coverageTeaches ? keyTargetSquares(chess, mv.color === 'w' ? 'white' : 'black') : [];
   const central = eyes.controlled.filter((s) => targets.includes(s));
   if (central.length) {
     const nearKing = kingZoneAmong(central, chess, mv.color === 'w' ? 'white' : 'black');
     return `The ${PIECE_NOUN[mv.piece]} clamps down on ${list(central)}, fighting for the center${kingZoneClause(nearKing)}.`;
   }
-  const advanced = eyes.controlled.filter((s) => (mv.color === 'w' ? Number(s[1]) >= 5 : Number(s[1]) <= 4));
+  const advanced = coverageTeaches ? eyes.controlled.filter((s) => (mv.color === 'w' ? Number(s[1]) >= 5 : Number(s[1]) <= 4)) : [];
   if (advanced.length) {
     // The PIECE's reach, not the piece: "the pawn reaches into your half" was
     // said of White's a4 — a pawn still in its own half whose CONTROL reaches
@@ -480,6 +489,11 @@ export function buildReviewMoveTeaching(
   const eyedEnemy = eyes.enemies.find((e) => e.type !== 'k');
   if (eyedEnemy) return `The ${PIECE_NOUN[mv.piece]} eyes the ${PIECE_NOUN[eyedEnemy.type]} on ${eyedEnemy.sq}.`;
   return `The ${PIECE_NOUN[mv.piece]} develops to ${mv.to}, joining the game.`;
+}
+
+/** Anything on the board besides kings and pawns. */
+function hasPieces(c: Chess): boolean {
+  return c.board().flat().some((x) => !!x && x.type !== 'p' && x.type !== 'k');
 }
 
 /**

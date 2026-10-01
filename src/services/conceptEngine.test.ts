@@ -285,3 +285,22 @@ describe('endgame rules from the material', () => {
     expect(endgameConceptFor('8/8/5k2/4PP2/8/8/8/K7 b - - 0 1')?.id).not.toBe('pawns-defend-each-other');
   });
 });
+
+describe('conceptForLine — a solution that trades into a pawn race (calc hand walk 2026-10-01)', () => {
+  // …Rxb6+ Kxb6 leaves two runners with Black to move: Black queens first and
+  // the new queen on h1 covers a8. The panel used to describe White's rook on
+  // b6 cutting the king off — a rook Black's first move captured.
+  const fen = '1r6/7k/1R6/1K5p/P7/8/8/8 b - - 0 1';
+  const uci = ['b8b6', 'b5b6', 'h5h4', 'b6b7', 'h4h3', 'a4a5', 'h3h2', 'b7b8', 'h2h1q'];
+  it('names the race the sacrifice wins, with the counts', () => {
+    const lead = conceptForLine({ fen, uci, studentColor: 'b' })[0];
+    expect(lead.id).toBe('won-pawn-race');
+    expect(lead.full).toContain('pawn race — both sides have a runner: yours on h5 is 4 pushes from queening, theirs on a4 is 4');
+    expect(lead.full).toContain('the move is yours');
+    expect(lead.full).toContain('covers their queening square');
+  });
+  it('never describes a piece the line captured', () => {
+    const all = conceptForLine({ fen, uci, studentColor: 'b', max: 5 });
+    expect(all.some((c) => c.id === 'cut-off-king')).toBe(false);
+  });
+});

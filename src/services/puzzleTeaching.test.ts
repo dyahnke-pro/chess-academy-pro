@@ -46,3 +46,23 @@ describe('refuteWrongTry — a wrong puzzle move is answered by their line', () 
     expect(await refuteWrongTry({ fenBefore: '4k3/8/8/8/8/8/8/4K2R w K - 0 1', wrongSan: 'Kd2', analyse: async () => { throw new Error('engine'); } })).toBeNull();
   });
 });
+
+describe('refuteWrongTry — a slow move that lets the win slip', () => {
+  const FORK = 'r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 3';
+  it('nothing lost but the chance gone: their reply is shown, the answer is not', async () => {
+    // After …a6, White simply defends — say the engine reads it level (+20 White).
+    const r = await refuteWrongTry({ fenBefore: '4k3/8/8/8/8/8/1q6/4K2R b K - 0 1', wrongSan: 'Kd7', analyse: async () => ({ moves: ['h1h7', 'd7c6'], cpWhite: 80 }) });
+    expect(r?.kind).toBe('chance-gone');
+    expect(r?.text).toBe('Kd7? Then Rh7+ — and the chance is gone.');
+    expect(r?.arrows).toHaveLength(1);
+  });
+  it('still winning after it: "something stronger", with no line at all', async () => {
+    const r = await refuteWrongTry({ fenBefore: '4k3/8/8/8/8/8/1q6/4K2R b K - 0 1', wrongSan: 'Kd7', analyse: async () => ({ moves: ['e1f1', 'b2b1'], cpWhite: -900 }) });
+    expect(r?.kind).toBe('not-best');
+    expect(r?.uci).toEqual([]);
+    expect(r?.text).not.toMatch(/Then/);
+  });
+  it('a plain line with no score keeps the old contract', async () => {
+    expect((await refuteWrongTry({ fenBefore: FORK, wrongSan: 'Nf6', analyse: async () => ['h5f7'] }))?.kind).toBe('mate');
+  });
+});
