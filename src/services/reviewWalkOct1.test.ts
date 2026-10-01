@@ -61,3 +61,54 @@ describe('Setup Trainer walk 2026-10-01', () => {
     expect(moveIsTheFork(c.fen(), 'd3')).toBe(false);
   });
 });
+
+import { quietMovePoint, buildReviewMoveTeaching } from './reviewMoveTeaching';
+
+describe('Review walk 2026-10-01 — a prepared kick is the point of h4', () => {
+  const pre = (() => { const c = new Chess(); for (const m of 'e4 d5 exd5 Nf6 Bb5+ Bd7 Be2 Nxd5 d4 Nc6 c4 Nf6 d5 Ne5 Nf3 Ng6'.split(' ')) c.move(m); return c.fen(); })();
+  it('h4 prepares h5 against the knight on g6', () => {
+    expect(quietMovePoint(pre, 'h4')).toBe('Prepares h5, which would kick their knight off g6.');
+    expect(buildReviewMoveTeaching(pre, 'h4')).toMatch(/Prepares h5, which would kick their knight off g6/);
+  });
+  it('not when the next square is covered by an enemy pawn', () => {
+    // After …h6 the h5 square is not attacked by a pawn, but a black pawn on g6 would cover h5.
+    const c = new Chess('rnbqkb1r/pppppp1p/5np1/8/8/7P/PPPPPPP1/RNBQKBNR w KQkq - 0 3');
+    expect(quietMovePoint(c.fen(), 'h4')).toBeNull();
+  });
+});
+
+describe('Review walk 2026-10-01 — a kick by the opponent is said in the student seat', () => {
+  it('their h4 prepares h5 against YOUR knight', () => {
+    const c = new Chess(); for (const m of 'e4 d5 exd5 Nf6 Bb5+ Bd7 Be2 Nxd5 d4 Nc6 c4 Nf6 d5 Ne5 Nf3 Ng6'.split(' ')) c.move(m);
+    expect(buildReviewMoveTeaching(c.fen(), 'h4', false)).toMatch(/kick your knight off g6/);
+  });
+  it('their pawn kick names your piece', () => {
+    const c = new Chess(); for (const m of 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 d3 h6 Nf3 e4 dxe4 Nxe4 Qe2 Nxc4 Qxc4'.split(' ')) c.move(m);
+    // after Qxc4, black to move: …b5 kicks the queen on c4
+    expect(buildReviewMoveTeaching(c.fen(), 'b5', false)).toMatch(/Kicks your queen off c4/);
+  });
+});
+
+import { principleLine } from './moveFundamentals';
+
+describe('Review walk 2026-10-01 — Be2 saves the attacked bishop', () => {
+  it('4.Be2: the b5 bishop, hit by …Bd7 and unguarded, steps away', () => {
+    const c = new Chess(); for (const m of 'e4 d5 exd5 Nf6 Bb5+ Bd7'.split(' ')) c.move(m);
+    const funds = computeMoveFundamentals(c.fen(), 'Be2', 'white');
+    expect(funds.map((f) => f.led).join(' | ')).toMatch(/saves the bishop from their bishop on d7/);
+    expect(principleLine(c.fen(), 'Be2', 'white', new Set(['development', 'center']), 0)?.text ?? '').toMatch(/bishop away from their bishop on d7/);
+  });
+});
+
+describe('Review walk 2026-10-01 — Ne4 eyes the d6 hole', () => {
+  it('5.Ne4 (after …c5 and …e6) heads for d6, which no black pawn can ever cover', () => {
+    const c = new Chess(); for (const m of 'e4 c5 Nf3 Nf6 e5 Nd5 Nc3 e6'.split(' ')) c.move(m);
+    const funds = computeMoveFundamentals(c.fen(), 'Ne4', 'white');
+    expect(funds.map((f) => f.led).join(' | ')).toMatch(/eyes d6, a square no pawn of theirs can ever cover/);
+  });
+  it('not f6, which the g7 pawn covers', () => {
+    const c = new Chess(); for (const m of 'e4 c5 Nf3 Nf6 e5 Nd5 Nc3 e6'.split(' ')) c.move(m);
+    const funds = computeMoveFundamentals(c.fen(), 'Ne4', 'white');
+    expect(funds.map((f) => f.led).join(' | ')).not.toMatch(/eyes f6/);
+  });
+});

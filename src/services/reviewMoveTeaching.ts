@@ -221,7 +221,7 @@ function unpinPoint(fenBefore: string, chessAfter: Chess, mv: Move, moverIsStude
 
 /** A PAWN THAT KICKS a minor or major piece (Learn walk 2026-10-01: …h6
  *  against Bg5 was called "luft"; its point was the bishop). */
-function pawnKickPoint(chessAfter: Chess, mv: Move): string | null {
+function pawnKickPoint(chessAfter: Chess, mv: Move, moverIsStudent: boolean): string | null {
   if (mv.piece !== 'p' || mv.captured) return null;
   const dir = mv.color === 'w' ? 1 : -1;
   const f = mv.to.charCodeAt(0);
@@ -236,7 +236,40 @@ function pawnKickPoint(chessAfter: Chess, mv: Move): string | null {
     if (!c || c.color === mv.color || !(c.type in VALUE)) continue;
     if (!hit || VALUE[c.type] > VALUE[hit.type]) hit = { sq, type: c.type };
   }
-  return hit ? `Kicks their ${PIECE_NOUN[hit.type]} off ${hit.sq}, gaining time.` : null;
+  return hit ? `Kicks ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[hit.type]} off ${hit.sq}, gaining time.` : null;
+}
+
+/** A KICK PREPARED — a quiet pawn step whose NEXT step would attack an enemy
+ *  piece (review walk 2026-10-01: 9.h4, heading for h5 against the knight on
+ *  g6, was explained as "keeps your bishop on c1 defended"). Only when that
+ *  next square is safe for the pawn: no enemy pawn covers it and it is
+ *  defended at least as often as it is attacked. */
+function pawnKickNextPoint(chessAfter: Chess, mv: Move, moverIsStudent: boolean): string | null {
+  if (mv.piece !== 'p' || mv.captured || mv.promotion) return null;
+  const dir = mv.color === 'w' ? 1 : -1;
+  const next = `${mv.to[0]}${Number(mv.to[1]) + dir}`;
+  if (Number(next[1]) < 2 || Number(next[1]) > 7 || chessAfter.get(next as Sq)) return null;
+  const them = mv.color === 'w' ? 'b' : 'w';
+  // Counted with the pawn already on the next square — the file behind it
+  // opens (h4-h5 lets the h1 rook defend h5).
+  const pushed = new Chess(chessAfter.fen());
+  pushed.remove(mv.to);
+  pushed.put({ type: 'p', color: mv.color }, next as Sq);
+  const attackers = pushed.attackers(next as Sq, them);
+  if (attackers.some((s) => pushed.get(s)?.type === 'p')) return null;
+  if (pushed.attackers(next as Sq, mv.color).length < attackers.length) return null;
+  const VALUE: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
+  const r = Number(next[1]) + dir;
+  let hit: { sq: string; type: string } | null = null;
+  for (const df of [-1, 1]) {
+    const file = String.fromCharCode(next.charCodeAt(0) + df);
+    if (file < 'a' || file > 'h') continue;
+    const sq = `${file}${r}`;
+    const c = chessAfter.get(sq as Sq);
+    if (!c || c.color === mv.color || !(c.type in VALUE)) continue;
+    if (!hit || VALUE[c.type] > VALUE[hit.type]) hit = { sq, type: c.type };
+  }
+  return hit ? `Prepares ${next}, which would kick ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[hit.type]} off ${hit.sq}.` : null;
 }
 
 /** LUFT — a quiet pawn step beside the CASTLED king that makes an escape square. */
@@ -266,7 +299,7 @@ export function quietMovePoint(fenBefore: string, san: string): string | null {
   const chess = new Chess(fenBefore);
   let mv: Move;
   try { mv = chess.move(san); } catch { return null; }
-  return unpinPoint(fenBefore, chess, mv, true) ?? pawnKickPoint(chess, mv) ?? luftPoint(chess, mv);
+  return unpinPoint(fenBefore, chess, mv, true) ?? pawnKickPoint(chess, mv, true) ?? luftPoint(chess, mv) ?? pawnKickNextPoint(chess, mv, true);
 }
 
 /**
@@ -429,7 +462,7 @@ export function buildReviewMoveTeaching(
     // the king sits on its castled back-rank square and this pawn just advanced
     // one rank on an adjacent file. That's back-rank insurance, a real teaching
     // point currently spoken as silence.
-    const luft = pawnKickPoint(chess, mv) ?? luftPoint(chess, mv);
+    const luft = pawnKickPoint(chess, mv, moverIsStudent) ?? luftPoint(chess, mv) ?? pawnKickNextPoint(chess, mv, moverIsStudent);
     if (luft) return luft;
     // quiet pawn with no structural point → fall through to the universal teacher
   }

@@ -62,11 +62,11 @@
 - `src/hooks/hintDialTally.test.ts:93`
 - `src/hooks/hintDialTally.test.ts:112`
 - `src/hooks/hintDialTally.test.ts:123`
-- `src/hooks/learnSilentCapture.test.ts:81`
-- `src/hooks/learnSilentCapture.test.ts:116`
-- `src/hooks/learnSilentCapture.test.ts:198`
-- `src/hooks/learnSilentCapture.test.ts:215`
-- `src/hooks/learnSilentCapture.test.ts:229`
+- `src/hooks/learnSilentCapture.test.ts:90`
+- `src/hooks/learnSilentCapture.test.ts:124`
+- `src/hooks/learnSilentCapture.test.ts:205`
+- `src/hooks/learnSilentCapture.test.ts:221`
+- `src/hooks/learnSilentCapture.test.ts:234`
 - `src/hooks/useDiscussionPractice.test.ts:70`
 - `src/hooks/useDiscussionPractice.test.ts:89`
 - `src/hooks/useDiscussionPractice.test.ts:126`

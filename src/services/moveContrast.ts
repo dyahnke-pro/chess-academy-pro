@@ -9,9 +9,23 @@
 //
 // Plan-layer teaching: the door orders it after safety and principle, and a
 // student who has proven the plan layer does not hear it.
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+
+/** Some enemy piece (side to move in `c`) has a legal move after which it
+ *  attacks `sq` — or attacks it already. */
+function reachableNextMove(c: Chess, sq: string): boolean {
+  const them = c.turn();
+  if (c.attackers(sq as Square, them).length > 0) return true;
+  for (const m of c.moves({ verbose: true })) {
+    if (m.to === sq) return true;
+    const d = new Chess(c.fen());
+    try { d.move(m); } catch { continue; }
+    if (d.attackers(sq as Square, them).length > 0) return true;
+  }
+  return false;
+}
 
 /** The mover's pieces (not the king) with no defender after `san`. */
 function looseAfter(fenBefore: string, san: string): Map<string, string> | null {
@@ -25,7 +39,13 @@ function looseAfter(fenBefore: string, san: string): Map<string, string> | null 
   for (const row of c.board()) {
     for (const cell of row) {
       if (!cell || cell.color !== me || cell.type === 'k') continue;
-      if (c.attackers(cell.square, me).length === 0) out.set(cell.square, cell.type);
+      if (c.attackers(cell.square, me).length > 0) continue;
+      // A loose PAWN is a lasting target. A loose PIECE is a difference only
+      // when they could hit it next move — a bishop at home on c1 that nothing
+      // can reach is no reason to prefer one move (review walk 2026-10-01:
+      // "h4 keeps your bishop on c1 defended, and Qb3 leaves it with no guard").
+      if (cell.type !== 'p' && !reachableNextMove(c, cell.square)) continue;
+      out.set(cell.square, cell.type);
     }
   }
   return out;

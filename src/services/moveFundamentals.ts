@@ -21,12 +21,12 @@ import { rotateStem } from '../utils/rotateStem';
 import { CENTRAL_SQUARES, CORE_CENTER, keyTargetSquares, kingZoneAmong, kingZoneClause, standingHoles } from './keySquares';
 import { andList } from '../utils/andList';
 import type { Square } from 'chess.js';
-import { landingIsSafe } from './positionReadingService';
+import { landingIsSafe, legalSeeGainFor } from './positionReadingService';
 import { classifyPhase, isEndgameByMaterial } from './gamePhaseService';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { homeMinorCount, homeSquaresOf, isOnHomeSquare } from './development';
 import { centreDistance } from '../utils/centreDistance';
-import { isOutpost } from './outpost';
+import { isOutpost, noPawnCanChallenge } from './outpost';
 import { MATERIAL_VALUE } from './pieceValues';
 
 export type MoveFundamentalId =
@@ -391,6 +391,41 @@ export function computeMoveFundamentals(
       imperative: `plant the ${name} on the ${mv.to} outpost, where no pawn can challenge it`,
       squares: [mv.to],
     });
+  }
+
+  // EYES A HOLE — a knight already in play re-routes to where it hits a
+  // square deep in their camp that no pawn of theirs can ever cover: the
+  // outpost it is heading for (review walk 2026-10-01: 5.Ne4 against …c5 and
+  // …e6, eyeing d6, went silent). Only a square it did not already hit, empty
+  // or holding an enemy piece, and only when the knight is safe where it lands.
+  if (mv.piece === 'n' && !mv.captured && !isOnHomeSquare('n', mover, mv.from) && !hangsThere && !out.some((f) => f.id === 'outpost')) {
+    let beforeBoard: Chess | null = null;
+    try { beforeBoard = new Chess(fenBefore); } catch { beforeBoard = null; }
+    const f0 = mv.to.charCodeAt(0);
+    const r0 = Number(mv.to[1]);
+    const jumps = [[1, 2], [2, 1], [-1, 2], [-2, 1], [1, -2], [2, -1], [-1, -2], [-2, -1]]
+      .map(([df, dr]) => [f0 + df, r0 + dr] as const)
+      .filter(([f, r]) => f >= 97 && f <= 104 && r >= 1 && r <= 8)
+      .map(([f, r]) => `${String.fromCharCode(f)}${r}`);
+    const targets = jumps
+      .filter((sq) => relRank(sq, mover) >= 5 && relRank(sq, mover) <= 6)
+      .filter((sq) => { const p = after.get(sq as Square); return !p || p.color === them; })
+      .filter((sq) => noPawnCanChallenge(after, sq, mover))
+      .filter((sq) => !(beforeBoard && beforeBoard.attackers(sq as Square, mover).includes(mv.from)));
+    if (targets.length > 0) {
+      // Every hole it now hits, never the first one only (G4.5).
+      const sqs = andList(targets);
+      const one = targets.length === 1;
+      const what = one ? 'a square no pawn of theirs can ever cover' : 'squares no pawn of theirs can ever cover';
+      out.push({
+        id: 'outpost',
+        weight: 70,
+        led: `eyes ${sqs}, ${what}`,
+        selfContained: `heads for ${sqs}, ${what}`,
+        imperative: `aim the knight at ${sqs}, ${one ? 'a hole' : 'holes'} no pawn of theirs can ever cover`,
+        squares: [mv.to, ...targets],
+      });
+    }
   }
 
   // ── DEVELOPMENT — a minor coming off its home rank into the game. Weight
@@ -823,6 +858,33 @@ function openingIdeas(
         imperative: `when a pawn kicks a piece, step it back to a square where it still works`,
         squares: kept ? [mv.to, kept.sq] : [mv.to],
       });
+    }
+  }
+
+  // SAVE THE PIECE — a piece their next capture would win (hanging, or hit by
+  // something cheaper) steps to a square where taking it no longer wins
+  // anything. The pawn case is `keep-working` above; this is every other
+  // attacker (review walk 2026-10-01: 4.Be2, the b5 bishop hit by …Bd7 with
+  // nothing guarding it, went silent).
+  if (isPiece && !mv.captured && !out.some((f) => f.id === 'keep-working')) {
+    const won = legalSeeGainFor(fenBefore, mv.from, them);
+    if (won > 0 && legalSeeGainFor(after.fen(), mv.to, them) === 0) {
+      const hitters = before.attackers(mv.from, them)
+        .flatMap((sq) => { const p = before.get(sq); return p ? [{ sq, p }] : []; })
+        .sort((a, b) => (MATERIAL_VALUE[a.p.type] ?? 0) - (MATERIAL_VALUE[b.p.type] ?? 0));
+      const h = hitters[0];
+      if (h?.p) {
+        const name = PIECE_NAME[mv.piece];
+        const by = h.p.type === 'p' ? `the pawn on ${h.sq}` : `their ${PIECE_NAME[h.p.type]} on ${h.sq}`;
+        out.push({
+          id: 'keep-working',
+          weight: 58,
+          led: `saves the ${name} from ${by}`,
+          selfContained: `saves the ${name} from ${by}`,
+          imperative: `move the ${name} away from ${by} before it is taken for nothing`,
+          squares: [mv.from, mv.to, h.sq],
+        });
+      }
     }
   }
 

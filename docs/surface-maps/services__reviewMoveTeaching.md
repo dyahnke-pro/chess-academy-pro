@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**664 lines · 4 exports · 13 importers · 4 tests · 0 audits**
+**697 lines · 4 exports · 14 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -24,17 +24,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewMoveTeaching.unpin.test.ts`
 - `src/services/reviewNarrationDefects.test.ts`
 - `src/services/reviewOpeningTheory.ts`
+- `src/services/reviewWalkOct1.test.ts`
 - `src/services/walkOct1Learn.test.ts`
 
 ## Exports and every call site
 
-### `quietMovePoint` (function) — 4 call sites
+### `quietMovePoint` (function) — 6 call sites
 - `src/services/playCommentary.ts:999`
 - `src/services/reviewMoveTeaching.unpin.test.ts:11`
 - `src/services/reviewMoveTeaching.unpin.test.ts:15`
+- `src/services/reviewWalkOct1.test.ts:70`
+- `src/services/reviewWalkOct1.test.ts:76`
 - `src/services/walkOct1Learn.test.ts:69`
 
-### `buildReviewMoveTeaching` (function) — 26 call sites
+### `buildReviewMoveTeaching` (function) — 29 call sites
 - `src/components/Coach/CoachGameReview.tsx:1705`
 - `src/services/coachFeatureService.ts:1104`
 - `src/services/coachFeatureService.ts:3169`
@@ -61,6 +64,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewNarrationDefects.test.ts:15`
 - `src/services/reviewNarrationDefects.test.ts:19`
 - `src/services/reviewOpeningTheory.ts:573`
+- `src/services/reviewWalkOct1.test.ts:71`
+- `src/services/reviewWalkOct1.test.ts:83`
+- `src/services/reviewWalkOct1.test.ts:88`
 
 ### `nameEndgamePhase` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:3080`
@@ -85,6 +91,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewMoveTeaching.test.ts`
 - `src/services/reviewMoveTeaching.unpin.test.ts`
 - `src/services/reviewNarrationDefects.test.ts`
+- `src/services/reviewWalkOct1.test.ts`
 - `src/services/walkOct1Learn.test.ts`
 
 ## Audits that reach it
