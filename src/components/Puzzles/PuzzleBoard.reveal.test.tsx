@@ -58,7 +58,6 @@ const PUZZLE: PuzzleRecord = {
   openingTags: null, popularity: 80, nbPlays: 1000, srsInterval: 0, srsEaseFactor: 2.5,
   srsRepetitions: 0, srsDueDate: '2026-10-01', srsLastReview: null, userRating: 1200, attempts: 0, successes: 0,
 };
-const AFTER_OPP = 'r2qkb1r/pp1nppp1/3p1n1p/2pP4/4N3/2P5/PP2QPPP/RNB1K2R w KQkq - 2 10';
 
 describe('PuzzleBoard revealOnFail', () => {
   beforeEach(() => { vi.clearAllMocks(); latestOnMove = null; readWrongTry.mockResolvedValue({ kind: 'refuted', text: 'Qe3? Then Qxe2.', replySan: 'Qxe2', replyFrom: 'd8', replyTo: 'e2' }); });

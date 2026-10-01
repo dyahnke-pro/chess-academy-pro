@@ -26,7 +26,7 @@ import { RollingNumber } from '../ui/RollingNumber';
  */
 
 const BEST_KEY = 'deep_run_best_v1';
-type Phase = 'intro' | 'loading' | 'running' | 'over';
+type Phase = 'intro' | 'loading' | 'running' | 'between' | 'over';
 
 async function readBest(): Promise<number> {
   const rec = await db.meta.get(BEST_KEY);
@@ -144,9 +144,19 @@ export function DeepRunPage(): JSX.Element {
       setBest(r.state.banked);
       void db.meta.put({ key: BEST_KEY, value: String(r.state.banked) });
     }
+    // HOLD ON THE SOLVED BOARD — the concept behind the solution is taught
+    // here (spoken + shown). Loading the next puzzle at once stopped it
+    // mid-sentence (David 2026-10-01: "not slacking on the teaching aspect").
+    setPhase('between');
+  }, [puzzle, rating, best]);
+
+  const next = useCallback((): void => {
+    const s = runRef.current;
+    if (!s || s.over) return;
+    voiceService.stop();
     setPhase('loading');
-    void fetchFor(r.state);
-  }, [puzzle, rating, best, fetchFor]);
+    void fetchFor(s);
+  }, [fetchFor]);
 
   const banked = run?.banked ?? 0;
   const rank = rankFor(banked);
@@ -228,6 +238,18 @@ export function DeepRunPage(): JSX.Element {
               <p className="mt-6 text-center text-theme-text-muted" data-testid="deep-run-loading">Finding a {run.depth}-move puzzle…</p>
             </>
           )}
+        </div>
+      )}
+
+      {phase === 'between' && run && (
+        <div className="mx-auto flex w-full max-w-lg justify-center">
+          <button
+            onClick={next}
+            className="animate-pulse rounded-2xl border-2 border-fuchsia-300 bg-fuchsia-500/20 px-8 py-3 text-lg font-black uppercase tracking-widest text-fuchsia-100 shadow-[0_0_28px_rgba(255,61,242,0.6)] transition-transform hover:scale-105"
+            data-testid="deep-run-next"
+          >
+            Next · {run.depth} moves ▶
+          </button>
         </div>
       )}
 

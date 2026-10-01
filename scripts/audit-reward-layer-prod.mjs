@@ -117,6 +117,12 @@ try {
     await solve(p1);
     await bannerWatch;
   }
+  // The solved board holds for the concept; NEXT names the coming depth.
+  const nextBtn = page.locator('[data-testid="deep-run-next"]');
+  const nextShown = await nextBtn.waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
+  const nextText = nextShown ? await nextBtn.innerText() : '';
+  check('A5 the solved board HOLDS for the concept; NEXT names the coming depth', nextShown && /3 moves/i.test(nextText), `"${nextText}"`);
+  if (nextShown) await nextBtn.click();
   const r2 = await waitRow('deep-run-step', 2, 20000);
   check('A3 solving it asks one move DEEPER (3) — or climbs rating when capped', !!r2 && (r2.details.askedDepth === 3 || r2.details.capped), r2?.summary ?? 'no second row');
   const banked = await page.locator('[data-testid="deep-run-banked"]').getAttribute('data-value').catch(() => null);
