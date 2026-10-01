@@ -111,7 +111,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:3241`
 - `src/services/groundedAnswer.ts:6765`
 - `src/services/inaccuracyCall.ts:223`
-- `src/services/inaccuracyCall.ts:651`
+- `src/services/inaccuracyCall.ts:667`
 - `src/services/moveTiming.ts:27`
 - `src/services/pvPlayback.ts:406`
 - `src/services/pvPlayback.ts:453`
@@ -179,7 +179,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveIntent.ts:403`
 - `src/services/moveOrder.ts:113`
 - `src/services/moveTiming.ts:51`
-- `src/services/nextPlans.ts:46`
+- `src/services/nextPlans.ts:47`
 - `src/services/perturbation.ts:69`
 - `src/services/playCommentary.ts:978`
 - `src/services/pvPlayback.ts:203`

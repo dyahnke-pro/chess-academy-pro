@@ -169,11 +169,12 @@
 - `src/services/lookaheadPlan.test.ts:956`
 - `src/services/lookaheadPlan.test.ts:967`
 
-### `isCostClause` (function) — 8 call sites
+### `isCostClause` (function) — 9 call sites
 - `src/services/concessionBeat.ts:455`
 - `src/services/inaccuracyCall.ts:276`
-- `src/services/inaccuracyCall.ts:289`
-- `src/services/inaccuracyCall.ts:671`
+- `src/services/inaccuracyCall.ts:283`
+- `src/services/inaccuracyCall.ts:297`
+- `src/services/inaccuracyCall.ts:687`
 - `src/services/learnWalkBlumenfeld.test.ts:176`
 - `src/services/learnWalkBlumenfeld.test.ts:177`
 - `src/services/learnWalkBlumenfeld.test.ts:178`
@@ -187,7 +188,7 @@
 - `src/services/concessionBeat.ts:449`
 - `src/services/inaccuracyCall.ts:232`
 - `src/services/inaccuracyCall.ts:236`
-- `src/services/inaccuracyCall.ts:669`
+- `src/services/inaccuracyCall.ts:685`
 - `src/services/lookaheadPlan.test.ts:228`
 - `src/services/lookaheadPlan.test.ts:236`
 - `src/services/lookaheadPlan.test.ts:241`

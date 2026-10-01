@@ -2680,7 +2680,9 @@ export function buildReviewSegments(
       // mechanism doesn't apply, teach THAT instead of the generic "for the
       // initiative" (David 2026-07-20 Opera: Rxd7 "still sounds generic"). This
       // clause NAMES the material give + the point, so it's the base sentence.
-      const kingShieldClause = isStudentSac && !mechanismClause
+      // Never the why of a sac the grade says failed (review walk 2026-10-01, ply 38).
+      const sacFailed = m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'miss';
+      const kingShieldClause = isStudentSac && !mechanismClause && !sacFailed
         ? describeSacBreaksKingShield(fenPair.fenBefore, m.san)
         : null;
       if (piece === 'queen') {
@@ -4014,6 +4016,10 @@ async function augmentWithProjections(
   // this pass reads them in its original order.
   const deepPv = new Map<string, PvLine | null>();
   for (const nf of deepFens.values()) deepPv.set(nf, await poolLine(nf, deepThreatPlies));
+  // A STANDING THREAT IS SAID ONCE (review walk 2026-10-01, plies 64/66/68/70:
+  // "if they sit still, it runs Bxe5+, Qxe5 and Qxe5+" four moves running). The
+  // key is the line itself, so a CHANGED threat still speaks.
+  const deepSaid = new Set<string>();
   for (const s of segments) {
     if (deepBudget <= 0) break;
     if (s.playerColor !== studentColorName) continue;
@@ -4066,6 +4072,9 @@ async function augmentWithProjections(
       // only describes where the game could go, and a long engine line speaks
       // only when it proves a point, so it stays quiet.
       if (!isForcingProjection(line)) continue;
+      const deepKey = line.plies.map((p) => p.san).join(' ');
+      if (deepSaid.has(deepKey)) continue;
+      deepSaid.add(deepKey);
       const deep = render(line, 'student');
       s.narration = deep
         ? `${s.narration ?? ''} And there's a deeper threat brewing — if they sit still, it runs ${deep}.`.trim()
@@ -4090,6 +4099,8 @@ async function augmentWithProjections(
   let deepOppBudget = scope === 'full' ? 999 : 2; // uncapped: every opponent deep threat
   const deepOppPv = new Map<string, PvLine | null>();
   for (const nf of deepOppFens.values()) deepOppPv.set(nf, await poolLine(nf, deepThreatPlies));
+  // Said once per line, as on the student's side (review walk 2026-10-01).
+  const deepOppSaid = new Set<string>();
   for (let i = 0; i < segments.length; i++) {
     const s = segments[i];
     if (deepOppBudget <= 0) break;
@@ -4122,6 +4133,9 @@ async function augmentWithProjections(
       const decisiveJump = oppPovNow !== null && oppPovTerminal !== null
         && oppPovTerminal - oppPovNow >= 250;
       if (!matesOut && !decisiveJump) continue;
+      const oppKey = line.plies.map((p) => p.san).join(' ');
+      if (deepOppSaid.has(oppKey)) continue;
+      deepOppSaid.add(oppKey);
       // David 2026-09-07 (#4): non-forcing decisive lines count too. Forcing →
       // "threat"; decisive non-forcing → "idea/plan" (honest label). The decisive
       // ≥250cp gate is the noise floor; "left alone" is true for both.

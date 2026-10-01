@@ -785,9 +785,14 @@ export function computeMoveFacets(
         // Seated: "It's a sacrifice" on the opponent's move read as the student's
         // own (prod 2026-09-23, QGD c4). The clauses are already seated.
         if (comp.length) facets.push(`[sac] ${moverWB === studentColorWB ? 'Your' : 'Their'} move is a sacrifice — compensation: ${comp.join('; ')}.`);
-        const mech = isStudent ? explainMatingSacMechanism(ctx.allSans, ply - 1) : null;
+        // WHY A SACRIFICE WORKS is never said of a move graded a mistake or a
+        // blunder (review walk 2026-10-01, ply 38: "You gave up the bishop, but
+        // … the attack rolls straight on" one clause after "that was a blunder,
+        // costing about 3.3 points"). The grade has already said it did not.
+        const sacFailed = ctx.classification === 'mistake' || ctx.classification === 'blunder' || ctx.classification === 'miss';
+        const mech = isStudent && !sacFailed ? explainMatingSacMechanism(ctx.allSans, ply - 1) : null;
         if (mech) facets.push(`[sac-why] ${cap(mech)}.`);
-        const shield = isStudent ? describeSacBreaksKingShield(fenBefore, san) : null;
+        const shield = isStudent && !sacFailed ? describeSacBreaksKingShield(fenBefore, san) : null;
         if (shield) facets.push(`[sac-why] ${shield}.`);
       }
     }

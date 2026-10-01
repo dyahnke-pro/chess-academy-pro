@@ -116,7 +116,14 @@ export function enemyKingStuckInCenter(fen: string, moverColorWB: 'w' | 'b'): bo
   try { board = new Chess(fen); } catch { return false; }
   const fullmove = Number(fen.split(' ')[5] ?? '0');
   const kingSq = findKing(board, enemy);
-  const central = kingSq !== null
+  // A king CASTLED LONG sits on c1/c8 with its rook beside it on d1/d8 — it
+  // has reached safety (review walk 2026-10-01, ply 26: "attack their king
+  // stuck on c1 before it ever reaches safety" about a castled king).
+  const backRank = enemy === 'w' ? '1' : '8';
+  const castledLong = kingSq !== null && kingSq === `c${backRank}`
+    && board.get(`d${backRank}` as Parameters<typeof board.get>[0])?.type === 'r'
+    && board.get(`d${backRank}` as Parameters<typeof board.get>[0])?.color === enemy;
+  const central = kingSq !== null && !castledLong
     && ['c', 'd', 'e', 'f'].includes(kingSq[0])
     && (enemy === 'w' ? ['1', '2'].includes(kingSq[1]) : ['7', '8'].includes(kingSq[1]));
   let openCentral = false;

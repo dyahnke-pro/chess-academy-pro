@@ -185,7 +185,20 @@ export async function compareTwoMoves(
 
   // ── 1. MATERIAL — the better line simply stays ahead on material. Magnitude
   // reconciles directly (a point of material ≈ 100cp); no experiment needed.
-  const matDiffPts = sign * materialWhiteMinusBlack(betterFen) - sign * materialWhiteMinusBlack(worseFen);
+  // MATERIAL WHERE EACH LINE SETTLES, not the instant after the move (review
+  // walk 2026-10-01, ply 42: "Bxf3 — it stays 2 pawns of material ahead —
+  // cxd4 gives that back" read Bxf3's knight against cxd4's pawn one ply in,
+  // with gxf3 taking the bishop straight back). Each move is replayed along its
+  // own engine line, the same depth for both.
+  const settled = (fen: string, pv: readonly string[] | undefined): number => {
+    const c = new Chess(fen);
+    for (const uci of (pv ?? []).slice(0, 8)) {
+      try { if (!c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.length > 4 ? uci[4] : undefined })) break; } catch { break; }
+    }
+    return materialWhiteMinusBlack(c.fen());
+  };
+  const worseEval = better === 'A' ? eB : eA;
+  const matDiffPts = sign * settled(betterFen, betterEval.pv) - sign * settled(worseFen, worseEval.pv);
   if (matDiffPts >= 1 && matDiffPts * 100 >= explainFraction * gapCp) {
     const pts = matDiffPts >= 9 ? 'the queen' : matDiffPts >= 5 ? 'a rook' : matDiffPts >= 3 ? 'a piece' : `${matDiffPts} pawn${matDiffPts > 1 ? 's' : ''}`;
     return {

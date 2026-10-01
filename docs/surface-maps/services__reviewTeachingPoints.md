@@ -79,7 +79,7 @@
 - `src/services/reviewTeachingPoints.test.ts:103`
 
 ### `buildReviewDeepestLookahead` (function) — 13 call sites
-- `src/services/coachFeatureService.ts:2769`
+- `src/services/coachFeatureService.ts:2771`
 - `src/services/reviewTeachingPoints.test.ts:283`
 - `src/services/reviewTeachingPoints.test.ts:286`
 - `src/services/reviewTeachingPoints.test.ts:287`
@@ -121,14 +121,14 @@
 - `src/services/reviewTeachingPoints.test.ts:245`
 
 ### `describeNotableMove` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:3109`
+- `src/services/coachFeatureService.ts:3111`
 - `src/services/reviewTeachingPoints.test.ts:176`
 - `src/services/reviewTeachingPoints.test.ts:183`
 - `src/services/reviewTeachingPoints.test.ts:197`
 - `src/services/reviewTeachingPoints.test.ts:207`
 
 ### `describeSimplifyingTrade` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2788`
+- `src/services/coachFeatureService.ts:2790`
 - `src/services/plyFactsDialing.test.ts:74`
 - `src/services/plyFactsDialing.test.ts:80`
 - `src/services/plyFactsDialing.test.ts:81`
@@ -137,7 +137,7 @@
 - `src/services/plyFactsDialing.test.ts:90`
 
 ### `describeTradeConsequence` (function) — 1 call site
-- `src/services/coachFeatureService.ts:2797`
+- `src/services/coachFeatureService.ts:2799`
 
 ### `describeConcessions` (function) — 9 call sites
 - `src/services/backwardLook.ts:413`
@@ -151,8 +151,8 @@
 - `src/services/theirMoveCost.ts:137`
 
 ### `findTrappedPiece` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:3119`
-- `src/services/coachFeatureService.ts:3120`
+- `src/services/coachFeatureService.ts:3121`
+- `src/services/coachFeatureService.ts:3122`
 - `src/services/reviewFullData.ts:708`
 - `src/services/reviewFullData.ts:710`
 - `src/services/reviewTeachingPoints.test.ts:253`
@@ -164,8 +164,8 @@
 ### `findWorstPlacedPiece` (re-export) — 7 call sites
 - `src/services/nextPlans.test.ts:10`
 - `src/services/nextPlans.test.ts:34`
-- `src/services/nextPlans.ts:80`
-- `src/services/nextPlans.ts:282`
+- `src/services/nextPlans.ts:81`
+- `src/services/nextPlans.ts:283`
 - `src/services/reviewNarrationDefects.test.ts:34`
 - `src/services/reviewNarrationDefects.test.ts:43`
 - `src/services/reviewNarrationDefects.test.ts:50`
@@ -176,7 +176,7 @@
 - `src/services/nextPlans.test.ts:16`
 - `src/services/nextPlans.test.ts:24`
 - `src/services/nextPlans.test.ts:45`
-- `src/services/nextPlans.ts:160`
+- `src/services/nextPlans.ts:161`
 - `src/services/planPrescriptions.test.ts:93`
 - `src/services/planPrescriptions.test.ts:102`
 - `src/services/planPrescriptions.test.ts:111`

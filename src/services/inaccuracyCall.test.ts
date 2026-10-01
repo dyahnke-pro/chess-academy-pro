@@ -443,3 +443,27 @@ describe('the grade carries the missed pattern (B3)', () => {
     expect(call?.pattern).toBeUndefined();
   });
 });
+
+// Review walk 2026-10-01 (game 173849611894, ply 37): "Be3 was the move — it
+// would walk the rook round to c4, by way of c1". A bishop move does not walk
+// the rook; another piece's route is the IDEA the move serves.
+describe('a route of another piece is the idea, not the move', () => {
+  it('Be3 does not "walk the rook"', async () => {
+    const { betterMoveReason } = await import('./inaccuracyCall');
+    const fen = '2rq1rk1/p1p2pbp/1p2p1p1/3bP3/3P4/5N1P/PP3PP1/R1BQR1K1 w - - 0 19';
+    const r = betterMoveReason(fen, 'Qd2', 'Be3', ['c1e3', 'd5b7', 'a1c1', 'd8d5', 'c1c4'], 'white') ?? '';
+    expect(r).not.toMatch(/^it would walk the rook/);
+    expect(r).toMatch(/^the idea is to walk the rook round to c4/);
+  });
+});
+
+// Review walk 2026-10-01 (game 174083521118, ply 16): "Bf5 was the move — it
+// would walk the bishop round to a4, by way of f5 and c2". The bishop's stop on
+// c2 wins the pawn; the material is the reason, not the walk.
+describe('a route that collects material says the material', () => {
+  it('Bf5 would win a pawn', async () => {
+    const { betterMoveReason } = await import('./inaccuracyCall');
+    const fen = 'r1bqk2r/ppp1nppp/2n5/8/3PQ3/5N2/PPP1PPPP/R3KB1R b KQkq - 0 8';
+    expect(betterMoveReason(fen, 'O-O', 'Bf5', ['c8f5', 'e4f4', 'f5c2', 'a1c1', 'c2a4'], 'black')).toBe('it would win a pawn');
+  });
+});

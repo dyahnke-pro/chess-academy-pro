@@ -273,8 +273,16 @@ function whyBetter(
   const firstTo = bestUci[0].slice(2, 4);
   const clauses = plan?.mine.spokenClauses.filter((c) => !sharedWin(c.text)) ?? [];
   if (plan && clauses.length === 0) return null;
-  const lead = clauses.find((c) => !c.drift && (isCostClause(c.text) || c.squares.includes(firstFrom) || c.squares.includes(firstTo)))
+  const lead0 = clauses.find((c) => !c.drift && (isCostClause(c.text) || c.squares.includes(firstFrom) || c.squares.includes(firstTo)))
     ?? clauses[0];
+  // A ROUTE THAT COLLECTS MATERIAL ON THE WAY: the material is the reason
+  // (review walk 2026-10-01, ply 16: "Bf5 was the move — it would walk the
+  // bishop round to a4, by way of f5 and c2", where the bishop's stop on c2
+  // wins the pawn and the plan's own "win a pawn" clause was passed over).
+  const collected = lead0 && /^walk the /.test(lead0.text)
+    ? clauses.find((c) => !c.drift && isCostClause(c.text) && c.squares.length > 0 && c.squares.every((sq) => lead0.squares.includes(sq)))
+    : undefined;
+  const lead = collected ?? lead0;
   // WHERE THE PIECES END UP IS NOT WHY THE MOVE WAS BETTER (review walks 900 +
   // 2065, 2026-09-26: "the stronger move was c6 — it would bring pieces to a5
   // and c6 over the next few moves"). With nothing but drift, name the move
@@ -287,7 +295,15 @@ function whyBetter(
     // bishop falls to …Kxd7 later). That one is the idea, said as such.
     const namedCapture = /\btake (?:the|their|your) \w+ on ([a-h][1-8])/.exec(lead.text);
     const costIsOwn = isCostClause(lead.text) && (!namedCapture || namedCapture[1] === firstTo);
-    const own = costIsOwn || lead.squares.includes(firstFrom) || lead.squares.includes(firstTo);
+    // A ROUTE is the move's own only when it routes the piece that moved
+    // (review walk 2026-10-01, ply 37: "Be3 was the move — it would walk the
+    // rook round to c4, by way of c1" — the rook's route passes c1, the square
+    // the bishop LEFT, so the square test credited it to Be3).
+    const routed = /\bwalk the (pawn|knight|bishop|rook|queen|king) round\b/.exec(lead.text)?.[1] ?? null;
+    let movedName: string | null = null;
+    try { const mv = new Chess(fenBefore).move({ from: firstFrom, to: firstTo, promotion: bestUci[0][4] }); movedName = mv ? ({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as Record<string, string>)[mv.piece] ?? null : null; } catch { movedName = null; }
+    const otherPieceRoute = routed !== null && movedName !== null && routed !== movedName;
+    const own = !otherPieceRoute && (costIsOwn || lead.squares.includes(firstFrom) || lead.squares.includes(firstTo));
     return { why: lead.text, square: lead.squares[0] ?? '', own };
   }
   // No clause carried a square (anything square-less that outranked the rest)

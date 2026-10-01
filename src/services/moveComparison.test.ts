@@ -103,3 +103,17 @@ describe('compareTwoMoves — honesty + robustness', () => {
     expect(await compareTwoMoves(base, 'c6', 'Qz9', mockEngine({}))).toBeNull();
   });
 });
+
+// Review walk 2026-10-01 (game 173849611894, ply 42): "Why Bxf3 was better — it
+// stays 2 pawns of material ahead — cxd4 gives that back." Bxf3 took a knight
+// and gxf3 takes the bishop back; material is level where both lines settle.
+describe('compareTwoMoves — material where the lines settle', () => {
+  it('a capture that is taken straight back is not "material ahead"', async () => {
+    const base = '2rq1rk1/pb3pbp/1p2p1p1/2p1P3/3P4/1P3N1P/PB1Q1PP1/R3R1K1 b - - 1 21';
+    const fenA = fenAfter(base, 'Bxf3');
+    const fenB = fenAfter(base, 'cxd4');
+    const eng = mockEngine({ [fenA]: { cp: -150, pv: ['g2f3', 'd8h4', 'g1g2'] }, [fenB]: { cp: -40, pv: ['f3d4'] } });
+    const cmp = await compareTwoMoves(base, 'Bxf3', 'cxd4', eng);
+    expect(cmp!.delta?.text ?? '').not.toMatch(/material ahead/);
+  });
+});

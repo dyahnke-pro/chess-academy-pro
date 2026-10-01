@@ -242,3 +242,15 @@ describe('the ledger speaks only a SETTLED trade (walk 6, R7)', () => {
     expect(computeExchangeLedger(start, [...pending, 'Nxf3'], 'w')?.settled).toBe(true);
   });
 });
+
+describe('a standing deep threat is said once (review walk 2026-10-01)', () => {
+  it('both deep-threat passes key a say-once on the line itself', async () => {
+    const { readFileSync } = await import('node:fs');
+    const { join } = await import('node:path');
+    const src = readFileSync(join(process.cwd(), 'src/services/coachFeatureService.ts'), 'utf8');
+    // "if they sit still, it runs Bxe5+, Qxe5 and Qxe5+" was said on four
+    // student moves running. The key is the line, so a CHANGED threat speaks.
+    expect(src).toMatch(/if \(deepSaid\.has\(deepKey\)\) continue;/);
+    expect(src).toMatch(/if \(deepOppSaid\.has\(oppKey\)\) continue;/);
+  });
+});

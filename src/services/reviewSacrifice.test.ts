@@ -97,3 +97,12 @@ describe('the compensation names the mover from the student\'s chair (walk 5, R1
     expect(theirs.join(' ')).toMatch(/they're already on top/);
   });
 });
+
+// Review walk 2026-10-01 (game 174083521118, ply 26): "attack their king stuck
+// on c1 before it ever reaches safety" — White had castled long (Kc1, Rd1).
+describe('a king castled long is not stuck in the centre', () => {
+  it('Kc1 with the rook on d1 has reached safety', async () => {
+    const { enemyKingStuckInCenter } = await import('./reviewSacrifice');
+    expect(enemyKingStuckInCenter('r4rk1/pppq2pp/2n2pn1/8/3Pb3/5NQ1/PPP2PPP/2KR1B1R w - - 0 14', 'b')).toBe(false);
+  });
+});

@@ -86,7 +86,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:9194`
 - `src/hooks/usePhaseNarration.ts:461`
 - `src/services/coachFeatureService.ts:2593`
-- `src/services/coachFeatureService.ts:3014`
+- `src/services/coachFeatureService.ts:3016`
 - `src/services/computedVoiceAudit.report.test.ts:300`
 - `src/services/oneOpeningKey.test.ts:43`
 - `src/services/openingDetectionService.test.ts:12`
@@ -101,8 +101,8 @@
 - `src/services/openingKey.ts:39`
 - `src/services/openingPositions.test.ts:27`
 - `src/services/openingPositions.test.ts:37`
-- `src/services/reviewFullData.ts:988`
-- `src/services/reviewFullData.ts:1164`
+- `src/services/reviewFullData.ts:993`
+- `src/services/reviewFullData.ts:1169`
 
 ### `detectOpeningTranspositional` (function) — 5 call sites
 - `src/services/coachApi.ts:5435`

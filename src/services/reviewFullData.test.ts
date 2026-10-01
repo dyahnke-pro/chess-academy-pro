@@ -405,3 +405,19 @@ describe('the missed pattern teaches its rule once (B3)', () => {
     expect(run(new Set(['def:fork'])).facets.some((f) => /Remember — a fork/.test(f))).toBe(false);
   });
 });
+
+// Review walk 2026-10-01 (game 174083521118, ply 38): 19…Bxc2?? was graded a
+// blunder and then explained as a sacrifice — "You gave up the bishop, but …
+// the attack rolls straight on". A failed sac gets no "why it works".
+describe('no sacrifice rationale on a move graded a blunder', () => {
+  it('19…Bxc2 carries no [sac-why]', () => {
+    const fenBefore = 'r4r1k/pp4pp/3p2n1/1B2p3/4b1q1/1Q3P2/PPP3PP/2KR3R b - - 0 19';
+    const c = new Chess(fenBefore); c.move('Bxc2');
+    const facets = computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
+      fenBefore, fenAfter: c.fen(), san: 'Bxc2', ply: 38, moverColor: 'black', playerColor: 'black', studentColorWB: 'b',
+      evaluation: 100, preMoveEval: -400, classification: 'blunder', bestMoveSan: 'Qg5+',
+      prevCap: { square: null, capturedValue: 0 }, allSans: ['Bxc2'], forcedRunStartPly: null,
+      bestLineUci: [], replyBestSan: 'Qxc2' });
+    expect(facets.filter((f) => f.startsWith('[sac-why]'))).toEqual([]);
+  });
+});
