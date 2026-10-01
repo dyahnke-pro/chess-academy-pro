@@ -102,26 +102,21 @@
     },
     "positions": [
       {
-        "fen": "5k2/8/4K3/4P3/8/8/r7/4R3 w - - 0 1",
-        "title": "Philidor setup — black to defend",
-        "explanation": "White: Ke6, Pe5, Re1. Black: Kf8, Ra2 (will go to Ra3 next move for the third-rank defense). The black rook on its 3rd rank (Ra3 or anywhere on rank 3) prevents White's king from breaking through to f6 or d6. Once white pushes e5-e6 (forced eventually), the defender drops the rook to a1 and starts perpetual checking from behind. White's king can never both escort and escape; drawn.",
+        "fen": "4k3/7R/r7/3KP3/8/8/8/8 b - - 0 1",
+        "title": "Philidor's defence — hold the 3rd rank, then check from behind",
+        "explanation": "Black's king stands in front of the pawn and the rook holds the 6th rank, so the white king cannot step up beside its pawn. Wait on that rank. The moment the pawn steps onto e6, the white king has no shelter left: drop the rook to the back rank and check it from behind. Every move in this line keeps the draw by the tablebase.",
         "result": "draw",
-        "source": "Philidor 1749 — third-rank defense",
+        "source": "Tablebase-verified (Lichess Syzygy) — the line holds the draw at every move",
         "solution": [
-          "Rd1",
-          "Ke8",
-          "Rd7",
-          "Rh2",
-          "Rf7",
-          "Rh1",
-          "Re7+",
-          "Kd8",
-          "Rd7+",
-          "Ke8",
-          "Rf7",
-          "Rh2"
+          "Rb6",
+          "e6",
+          "Rb1",
+          "Kd6",
+          "Rd1+",
+          "Ke5",
+          "Re1+"
         ],
-        "bestMove": "Rd1"
+        "bestMove": "Rb6"
       }
     ],
     "practiceThemes": [
