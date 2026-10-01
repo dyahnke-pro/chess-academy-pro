@@ -11,7 +11,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Brain, Trophy } from 'lucide-react';
 import { MistakePuzzleBoard } from './MistakePuzzleBoard';
-import { getMisconceptionDrillPuzzles, ensureSequenceSolution, gradeMistakePuzzle } from '../../services/mistakePuzzleService';
+import { getMisconceptionDrillPuzzles, ensureSequenceSolution } from '../../services/mistakePuzzleService';
 import { recordTagDrillResult } from '../../services/misconceptionService';
 import { logAppAudit } from '../../services/appAuditor';
 import type { MistakePuzzle } from '../../types';
@@ -66,16 +66,14 @@ export function WeaknessTagDrillPage(): JSX.Element {
     setPhase('summary');
   }, [tag]);
 
-  // Record the moment the puzzle resolves. This drill never graded at all —
-  // its results only bumped a session counter, so a weakness drilled here never
-  // reached SRS or the spine (hand walk 2026-10-01).
+  // The tag drill's puzzles are built per session and never saved, so there
+  // is no puzzle row to grade (a gradeMistakePuzzle call here found nothing and
+  // did nothing). Its record writes are the board's capability evidence on the
+  // first answer, plus `recordTagDrillResult` for the tag at session end.
   const resolvedRef = useRef<{ correct: boolean } | null>(null);
-  const handleResolved = useCallback((wasCorrect: boolean, solveTimeMs: number): void => {
-    const p = puzzles.at(index);
-    if (!p) return;
+  const handleResolved = useCallback((wasCorrect: boolean): void => {
     resolvedRef.current = { correct: wasCorrect };
-    void gradeMistakePuzzle(p.id, wasCorrect ? 'good' : 'again', wasCorrect, solveTimeMs);
-  }, [puzzles, index]);
+  }, []);
 
   const handleComplete = useCallback((): void => {
     const wasCorrect = resolvedRef.current?.correct ?? false;

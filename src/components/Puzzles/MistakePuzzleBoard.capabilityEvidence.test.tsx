@@ -133,6 +133,21 @@ describe('MistakePuzzleBoard writes capability evidence at the solve', () => {
     }));
   });
 
+  // 2026-10-01: [show me] AFTER a wrong first answer used to mark the row
+  // prompted, which the profile skips — erasing the failure already made.
+  it('a wrong answer, THEN [show me], is still BROKEN — the failure is kept', async () => {
+    const puzzle = buildMistakePuzzle({ cpLoss: 150 });
+    render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} skipReplayContext />);
+    await screen.findByTestId('mock-board');
+    await act(async () => { await sleep(150); }); // the source-game read before play opens
+    await act(async () => { latestOnMove!(mv('a2', 'a3', 'a3')); });   // wrong first
+    await act(async () => { await sleep(1700); });
+    const showMe = (await screen.findByTestId('puzzle-hint-area')).querySelector('button');
+    await act(async () => { showMe!.click(); });
+    await solveCleanly();
+    expect(recordCapabilityEvidence).toHaveBeenCalledWith(expect.objectContaining({ cpLoss: 150, prompted: false }));
+  });
+
   it('PROMPTED — [show me] before solving marks the record prompted (grey, not green)', async () => {
     const puzzle = buildMistakePuzzle();
     render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} skipReplayContext />);

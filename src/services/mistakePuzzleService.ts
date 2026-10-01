@@ -1441,6 +1441,9 @@ export async function gradeMistakePuzzle(
 
   // Invalidate the tactical profile cache so it recomputes with fresh data
   await db.meta.delete('tactical_profile');
+  // A drilled mistake changes the spine (status, lifecycle) — the coach must
+  // hear it on the next read, not after the 5-minute cache ages out.
+  emitWeaknessModelChanged();
 }
 
 // ─── Delete ─────────────────────────────────────────────────────────────────

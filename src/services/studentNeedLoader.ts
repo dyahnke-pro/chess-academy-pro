@@ -30,6 +30,7 @@ import { criticalityThresholds } from './criticalityScan';
 import { coldStudent, type StudentNeedContext } from './needScore';
 import type { GameRecord, OpeningKey, UserPreferences } from '../types';
 import { getCapabilityProfile } from './capabilityEvidence';
+import { onWeaknessModelChanged } from './weaknessModelEvents';
 import { openingEntryForKey, openingFamily, sameOpeningFamily } from './openingKey';
 import { fenKey } from './needScore';
 import { isFixtureGame } from './fixtureGames';
@@ -262,3 +263,6 @@ export async function loadStudentNeedContext(q: StudentNeedQuery): Promise<Stude
 export function invalidateStudentNeedContext(): void {
   baseCache = null;
 }
+// The need base folds in capabilities and the spine; a write to either must
+// reach the next read (it had no caller, so a solve waited out the TTL).
+onWeaknessModelChanged(invalidateStudentNeedContext);

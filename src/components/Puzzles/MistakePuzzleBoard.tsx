@@ -171,6 +171,12 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   // A ref, not hintState.level: `resetHints()` zeroes the level on the very
   // move that solves the puzzle, so by the solve moment the level is gone.
   const showMeUsedRef = useRef(false);
+  // TOLD BEFORE ANSWERING? Only that makes a row `prompted`. [show me] AFTER
+  // a wrong first answer used to mark the row prompted too, which the profile
+  // skips — so the failure the student had already made was erased from the
+  // record (2026-10-01). The first answer is the evidence.
+  const answeredRef = useRef(false);
+  const toldBeforeAnswerRef = useRef(false);
   const chessRef = useRef(new Chess(puzzle.fen));
 
   // Free-tier meter: count this puzzle against the 20-bucket once when it
@@ -323,6 +329,8 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     hasMadeMistakeRef.current = false;
     wrongAttemptsRef.current = 0;
     showMeUsedRef.current = false;
+    answeredRef.current = false;
+    toldBeforeAnswerRef.current = false;
     setWrongAttemptCount(0);
     setReplayIndex(-1);
 
@@ -664,6 +672,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     const expected = allMoves[moveIndex];
 
     const isCorrect = move.from === expected.from && move.to === expected.to && (!expected.promotion || move.promotion === expected.promotion);
+    answeredRef.current = true;
 
     if (isCorrect) {
       playMoveSound(move.san);
@@ -717,7 +726,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
           moverColor: puzzle.playerColor,
           cpLoss: hasMadeMistakeRef.current ? puzzle.cpLoss : 0,
           origin: 'drill',
-          prompted: showMeUsedRef.current,
+          prompted: toldBeforeAnswerRef.current,
           sourceGameId: puzzle.sourceGameId || undefined,
         });
         // Auto-speak the GROUNDED "why this was the best move" after the
@@ -1081,6 +1090,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
           <ShowMeButton
             onShow={() => {
               showMeUsedRef.current = true;
+              if (!answeredRef.current) toldBeforeAnswerRef.current = true;
               // Skip the hint ladder — jump straight to tier 3 (best
               // move arrow + final answer). requestHint() bumps one
               // tier; three consecutive calls reach tier 3.

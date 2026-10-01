@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**645 lines · 20 exports · 15 importers · 8 tests · 0 audits**
+**645 lines · 20 exports · 15 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -48,8 +48,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticAlertService.test.ts:101`
 
 ### `getCoachingMessage` (function) — 13 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:568`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:587`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:576`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:595`
 - `src/hooks/useStruggleDetection.ts:85`
 - `src/services/tacticAlertService.test.ts:114`
 - `src/services/tacticAlertService.test.ts:118`
@@ -123,7 +123,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/hooks/useCoachTips.ts:349`
 
 ### `tacticTypeLabel` (function) — 20 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:954`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:963`
 - `src/components/Puzzles/MyMistakesPage.tsx:210`
 - `src/components/Tactics/TacticCreatePage.tsx:305`
 - `src/components/Tactics/TacticCreatePage.tsx:579`
@@ -163,8 +163,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `recordTacticOutcome` (function) — 8 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:693`
-- `src/components/Puzzles/PuzzleBoard.tsx:286`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:702`
+- `src/components/Puzzles/PuzzleBoard.tsx:291`
 - `src/components/Tactics/TacticSetupBoard.tsx:177`
 - `src/hooks/useCoachTips.ts:230`
 - `src/services/tacticAlertService.test.ts:310`
@@ -189,6 +189,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
+- `src/components/Puzzles/PuzzleBoard.evidence.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.test.tsx`
 - `src/hooks/useCoachTips.test.ts`
 - `src/hooks/useStruggleDetection.test.ts`

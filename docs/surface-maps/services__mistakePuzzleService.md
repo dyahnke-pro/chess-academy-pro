@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1501 lines · 26 exports · 29 importers · 16 tests · 4 audits**
+**1504 lines · 26 exports · 29 importers · 16 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -187,7 +187,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `rerenderMistakeNarration` (function) — 1 call site
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:351`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:359`
 
 ### `lineToUci` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -203,7 +203,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakePuzzleCapture.test.ts:48`
 
 ### `ensureSequenceSolution` (function) — 7 call sites
-- `src/components/Puzzles/WeaknessTagDrillPage.tsx:118`
+- `src/components/Puzzles/WeaknessTagDrillPage.tsx:116`
 - `src/components/Puzzles/WeaknessThemesPage.tsx:142`
 - `src/services/mistakePuzzleService.sequence.test.ts:41`
 - `src/services/mistakePuzzleService.sequence.test.ts:50`
@@ -241,10 +241,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `getMistakePuzzlesByPhase` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `gradeMistakePuzzle` (function) — 9 call sites
+### `gradeMistakePuzzle` (function) — 8 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2351`
 - `src/components/Puzzles/MyMistakesPage.tsx:241`
-- `src/components/Puzzles/WeaknessTagDrillPage.tsx:77`
 - `src/components/Puzzles/WeaknessThemesPage.tsx:116`
 - `src/components/Tactics/TacticCreatePage.tsx:194`
 - `src/services/mistakePuzzleService.test.ts:495`

@@ -15,6 +15,8 @@ import { voiceService } from '../../services/voiceService';
 import { getWrongMoveHint } from '../../utils/puzzleHints';
 import { readWrongTry } from '../../services/wrongTryRefutation';
 import { puzzleMethodLine, cpFromThemes } from '../../services/puzzleMethod';
+import { recordCapabilityEvidence } from '../../services/capabilityEvidence';
+import { MISTAKE_CP } from '../../services/engineConstants';
 import type { MethodHabit } from '../../services/methodBeat';
 import { recordTacticOutcome } from '../../services/tacticAlertService';
 import { usePuzzleMeter } from '../../hooks/usePuzzleMeter';
@@ -94,6 +96,8 @@ export function PuzzleBoard({
   const terminal = terminalId === puzzle.id;
   const conceptSpokenRef = useRef<string | null>(null);
   const tryTokenRef = useRef(0);
+  // The FIRST answer is the evidence (see MistakePuzzleBoard): recorded once.
+  const answeredRef = useRef(false);
   // Habits taught this session — the method beat says each one once.
   const saidHabitsRef = useRef(new Set<MethodHabit>());
   // The solver's first move (a Lichess line opens with the opponent's move).
@@ -231,6 +235,7 @@ export function PuzzleBoard({
     showedSolutionRef.current = false;
     setTerminalId(null);
     tryTokenRef.current += 1;
+    answeredRef.current = false;
     setState('loading');
     resetHints();
     setSubtitle('');
@@ -355,6 +360,17 @@ export function PuzzleBoard({
       fen: fenBeforeAttempt,
     });
 
+    // CLOSE THE RECORD (2026-10-01): Lichess puzzles wrote nothing to the
+    // student model — solve fifty pins and the coach never learned it.
+    const firstAnswer = !answeredRef.current;
+    answeredRef.current = true;
+    if (firstAnswer && isCorrect) {
+      void recordCapabilityEvidence({
+        fenBefore: fenBeforeAttempt, playedSan: move.san, moverColor: userColor,
+        cpLoss: 0, origin: 'puzzle', prompted: hintUsedRef.current,
+      });
+    }
+
     if (isCorrect) {
       playMoveSound(move.san);
       resetHints();
@@ -420,6 +436,14 @@ export function PuzzleBoard({
         new Chess(fenBeforeAttempt),
       );
       void readWrongTry(fenBeforeAttempt, move.san).then((read) => {
+        // A first answer that is genuinely wrong breaks the capability; one
+        // that still wins ("also good") is not a failure and is not recorded.
+        if (firstAnswer && read?.kind !== 'also-good') {
+          void recordCapabilityEvidence({
+            fenBefore: fenBeforeAttempt, playedSan: move.san, moverColor: userColor,
+            cpLoss: cpFromThemes(puzzle.themes) ?? MISTAKE_CP, origin: 'puzzle', prompted: hintUsedRef.current,
+          });
+        }
         if (tryToken !== tryTokenRef.current) return;
         const line = read?.text ?? hint;
         setSubtitle(line);
