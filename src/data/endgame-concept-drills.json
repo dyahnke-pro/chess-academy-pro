@@ -1,0 +1,590 @@
+[
+  {
+    "id": "ecd-zz-0",
+    "concept": "zugzwang",
+    "lessonIds": [
+      "opposition",
+      "triangulation"
+    ],
+    "fen": "8/8/6k1/8/6K1/6P1/8/8 b - - 0 1",
+    "title": "Zugzwang",
+    "explanation": "Black to move — and that is the problem. On Black's move this loses for Black; if it were White's move, Black would hold the draw. Neither side wants to move here: in pawn endings, who has to move decides it.",
+    "result": "white-wins",
+    "bestMove": "Kf6",
+    "solution": [
+      "Kf6",
+      "Kh5",
+      "Kg7",
+      "Kg5",
+      "Kh7",
+      "Kf6"
+    ],
+    "source": "computed: tablebase (move vs pass)",
+    "conceptHint": "Who has to move decides it."
+  },
+  {
+    "id": "ecd-zz-1",
+    "concept": "zugzwang",
+    "lessonIds": [
+      "opposition",
+      "triangulation"
+    ],
+    "fen": "8/8/8/3k4/8/3K4/3P4/8 w - - 0 1",
+    "title": "Zugzwang",
+    "explanation": "White to move — and that is the problem. On White's move this is a draw for White; if it were Black's move, White would win. Neither side wants to move here: in pawn endings, who has to move decides it.",
+    "result": "draw",
+    "bestMove": "Kc2",
+    "solution": [
+      "Kc2",
+      "Kc4",
+      "d3+",
+      "Kb4",
+      "d4",
+      "Kc4"
+    ],
+    "source": "computed: tablebase (move vs pass)",
+    "conceptHint": "Who has to move decides it."
+  },
+  {
+    "id": "ecd-zz-2",
+    "concept": "zugzwang",
+    "lessonIds": [
+      "opposition",
+      "triangulation"
+    ],
+    "fen": "8/3k4/8/3K4/3P4/8/8/8 b - - 0 1",
+    "title": "Zugzwang",
+    "explanation": "Black to move — and that is the problem. On Black's move this loses for Black; if it were White's move, Black would hold the draw. Neither side wants to move here: in pawn endings, who has to move decides it.",
+    "result": "white-wins",
+    "bestMove": "Ke7",
+    "solution": [
+      "Ke7",
+      "Kc6",
+      "Ke8",
+      "Kc7",
+      "Ke7",
+      "d5"
+    ],
+    "source": "computed: tablebase (move vs pass)",
+    "conceptHint": "Who has to move decides it."
+  },
+  {
+    "id": "ecd-zz-3",
+    "concept": "zugzwang",
+    "lessonIds": [
+      "opposition",
+      "triangulation"
+    ],
+    "fen": "8/1k6/8/1K6/1P6/8/8/8 w - - 0 1",
+    "title": "Zugzwang",
+    "explanation": "White to move — and that is the problem. On White's move this is a draw for White; if it were Black's move, White would win. Neither side wants to move here: in pawn endings, who has to move decides it.",
+    "result": "draw",
+    "bestMove": "Ka4",
+    "solution": [
+      "Ka4",
+      "Ka6",
+      "b5+",
+      "Kb6",
+      "Ka3",
+      "Kxb5"
+    ],
+    "source": "computed: tablebase (move vs pass)",
+    "conceptHint": "Who has to move decides it."
+  },
+  {
+    "id": "ecd-zz-4",
+    "concept": "zugzwang",
+    "lessonIds": [
+      "opposition",
+      "triangulation"
+    ],
+    "fen": "8/8/6k1/8/6K1/6P1/8/8 w - - 0 1",
+    "title": "Zugzwang",
+    "explanation": "White to move — and that is the problem. On White's move this is a draw for White; if it were Black's move, White would win. Neither side wants to move here: in pawn endings, who has to move decides it.",
+    "result": "draw",
+    "bestMove": "Kf3",
+    "solution": [
+      "Kf3",
+      "Kf5",
+      "g4+",
+      "Ke5",
+      "g5",
+      "Kf5"
+    ],
+    "source": "computed: tablebase (move vs pass)",
+    "conceptHint": "Who has to move decides it."
+  },
+  {
+    "id": "ecd-zz-5",
+    "concept": "zugzwang",
+    "lessonIds": [
+      "opposition",
+      "triangulation"
+    ],
+    "fen": "8/8/8/5k2/8/5K2/5P2/8 w - - 0 1",
+    "title": "Zugzwang",
+    "explanation": "White to move — and that is the problem. On White's move this is a draw for White; if it were Black's move, White would win. Neither side wants to move here: in pawn endings, who has to move decides it.",
+    "result": "draw",
+    "bestMove": "Ke2",
+    "solution": [
+      "Ke2",
+      "Ke4",
+      "f3+",
+      "Kd4",
+      "f4",
+      "Ke4"
+    ],
+    "source": "computed: tablebase (move vs pass)",
+    "conceptHint": "Who has to move decides it."
+  },
+  {
+    "id": "ecd-decoy-0",
+    "concept": "decoy",
+    "lessonIds": [
+      "push-passed-pawns",
+      "breakthrough"
+    ],
+    "fen": "8/1k6/p7/3p3K/P7/P4P2/8/8 b - - 0 1",
+    "title": "The outside passer as a decoy",
+    "explanation": "Black to move and win. The passed pawn on d5 is far from everything else — push it, and White's king has to walk over to stop it. While it does, Black's king takes the pawns on the queenside.",
+    "result": "black-wins",
+    "bestMove": "d4",
+    "solution": [
+      "d4",
+      "Kg4",
+      "d3",
+      "Kg3",
+      "d2",
+      "Kf2",
+      "d1=Q",
+      "Kg2"
+    ],
+    "source": "computed: concept computer + tablebase win",
+    "conceptHint": "Use the far passer to pull their king away."
+  },
+  {
+    "id": "ecd-course-0",
+    "concept": "course",
+    "lessonIds": [
+      "activate-the-king",
+      "attack-weak-pawns"
+    ],
+    "fen": "8/1K6/3p4/6k1/6P1/5P2/8/8 w - - 0 1",
+    "title": "Chart a course",
+    "explanation": "White to move and win. Black's pawn on d6 has no pawn that can ever defend it, so that is where White's king is going — not to the centre, to the target.",
+    "result": "white-wins",
+    "bestMove": "Kc6",
+    "solution": [
+      "Kc6",
+      "Kf6",
+      "Kxd6",
+      "Kg6",
+      "f4",
+      "Kf7",
+      "g5",
+      "Kg7"
+    ],
+    "source": "computed: concept computer + tablebase win",
+    "conceptHint": "The king goes to the weak pawn."
+  },
+  {
+    "id": "ecd-course-1",
+    "concept": "course",
+    "lessonIds": [
+      "activate-the-king",
+      "attack-weak-pawns"
+    ],
+    "fen": "8/8/k7/8/5p2/1K5P/8/8 w - - 0 1",
+    "title": "Chart a course",
+    "explanation": "White to move and win. Black's pawn on f4 has no pawn that can ever defend it, so that is where White's king is going — not to the centre, to the target.",
+    "result": "white-wins",
+    "bestMove": "Kc2",
+    "solution": [
+      "Kc2",
+      "Ka5",
+      "h4",
+      "Ka4",
+      "h5",
+      "Ka3",
+      "h6",
+      "f3"
+    ],
+    "source": "computed: concept computer + tablebase win",
+    "conceptHint": "The king goes to the weak pawn."
+  },
+  {
+    "id": "ecd-course-2",
+    "concept": "course",
+    "lessonIds": [
+      "activate-the-king",
+      "attack-weak-pawns"
+    ],
+    "fen": "2k5/8/8/6p1/4Pp2/5P2/6K1/8 w - - 0 1",
+    "title": "Chart a course",
+    "explanation": "White to move and win. Black's pawn on g5 has no pawn that can ever defend it, so that is where White's king is going — not to the centre, to the target.",
+    "result": "white-wins",
+    "bestMove": "Kh3",
+    "solution": [
+      "Kh3",
+      "Kc7",
+      "Kg4",
+      "Kd6",
+      "Kxg5",
+      "Ke5",
+      "Kg4",
+      "Kd6"
+    ],
+    "source": "computed: concept computer + tablebase win",
+    "conceptHint": "The king goes to the weak pawn."
+  },
+  {
+    "id": "ecd-decoy-1",
+    "concept": "decoy",
+    "lessonIds": [
+      "push-passed-pawns",
+      "breakthrough"
+    ],
+    "fen": "8/6p1/5pk1/p7/7P/8/8/4K3 b - - 0 1",
+    "title": "The outside passer as a decoy",
+    "explanation": "Black to move and win. The passed pawn on a5 is far from everything else — push it, and White's king has to walk over to stop it. While it does, Black's king takes the pawns on the kingside.",
+    "result": "black-wins",
+    "bestMove": "a4",
+    "solution": [
+      "a4",
+      "Kd1",
+      "f5",
+      "Kc1",
+      "f4",
+      "Kd1",
+      "f3",
+      "Kd2"
+    ],
+    "source": "computed: concept computer + tablebase win",
+    "conceptHint": "Use the far passer to pull their king away."
+  },
+  {
+    "id": "ecd-course-3",
+    "concept": "course",
+    "lessonIds": [
+      "activate-the-king",
+      "attack-weak-pawns"
+    ],
+    "fen": "8/3k4/P5K1/8/2P1p3/1p6/8/8 b - - 0 1",
+    "title": "Chart a course",
+    "explanation": "Black to move and win. White's pawn on a6 has no pawn that can ever defend it, so that is where Black's king is going — not to the centre, to the target.",
+    "result": "black-wins",
+    "bestMove": "Kc6",
+    "solution": [
+      "Kc6",
+      "Kf5",
+      "e3",
+      "Kf4",
+      "e2",
+      "a7",
+      "Kb7",
+      "c5"
+    ],
+    "source": "computed: concept computer + tablebase win",
+    "conceptHint": "The king goes to the weak pawn."
+  },
+  {
+    "id": "ecd-course-4",
+    "concept": "course",
+    "lessonIds": [
+      "activate-the-king",
+      "attack-weak-pawns"
+    ],
+    "fen": "8/2K4p/8/7P/8/6k1/8/8 b - - 0 1",
+    "title": "Chart a course",
+    "explanation": "Black to move and win. White's pawn on h5 has no pawn that can ever defend it, so that is where Black's king is going — not to the centre, to the target.",
+    "result": "black-wins",
+    "bestMove": "Kg4",
+    "solution": [
+      "Kg4",
+      "h6",
+      "Kg5",
+      "Kb6",
+      "Kxh6",
+      "Kb5",
+      "Kg5",
+      "Kc4"
+    ],
+    "source": "computed: concept computer + tablebase win",
+    "conceptHint": "The king goes to the weak pawn."
+  },
+  {
+    "id": "ecd-course-5",
+    "concept": "course",
+    "lessonIds": [
+      "activate-the-king",
+      "attack-weak-pawns"
+    ],
+    "fen": "8/2p1k3/8/1P6/8/4p1K1/8/8 b - - 0 1",
+    "title": "Chart a course",
+    "explanation": "Black to move and win. White's pawn on b5 has no pawn that can ever defend it, so that is where Black's king is going — not to the centre, to the target.",
+    "result": "black-wins",
+    "bestMove": "Kd6",
+    "solution": [
+      "Kd6",
+      "Kf3",
+      "Kc5",
+      "Kxe3",
+      "Kxb5",
+      "Kd3",
+      "Kb4",
+      "Kc2"
+    ],
+    "source": "computed: concept computer + tablebase win",
+    "conceptHint": "The king goes to the weak pawn."
+  },
+  {
+    "id": "ecd-decoy-2",
+    "concept": "decoy",
+    "lessonIds": [
+      "push-passed-pawns",
+      "breakthrough"
+    ],
+    "fen": "8/8/5kP1/8/8/1P1Kp3/8/8 w - - 0 1",
+    "title": "The outside passer as a decoy",
+    "explanation": "White to move and win. The passed pawn on b3 is far from everything else — push it, and Black's king has to walk over to stop it. While it does, White's king takes the pawns on the kingside.",
+    "result": "white-wins",
+    "bestMove": "b4",
+    "solution": [
+      "b4",
+      "e2",
+      "Kxe2",
+      "Ke6",
+      "b5",
+      "Kf6",
+      "b6",
+      "Ke6"
+    ],
+    "source": "computed: concept computer + tablebase win",
+    "conceptHint": "Use the far passer to pull their king away."
+  },
+  {
+    "id": "ecd-decoy-3",
+    "concept": "decoy",
+    "lessonIds": [
+      "push-passed-pawns",
+      "breakthrough"
+    ],
+    "fen": "8/8/8/8/3p3k/p7/6P1/3K4 b - - 0 1",
+    "title": "The outside passer as a decoy",
+    "explanation": "Black to move and win. The passed pawn on a3 is far from everything else — push it, and White's king has to walk over to stop it. While it does, Black's king takes the pawns on the kingside.",
+    "result": "black-wins",
+    "bestMove": "a2",
+    "solution": [
+      "a2",
+      "Kc2",
+      "a1=Q",
+      "Kd3",
+      "Qc3+",
+      "Ke4",
+      "d3",
+      "Kf4"
+    ],
+    "source": "computed: concept computer + tablebase win",
+    "conceptHint": "Use the far passer to pull their king away."
+  },
+  {
+    "id": "ecd-decoy-4",
+    "concept": "decoy",
+    "lessonIds": [
+      "push-passed-pawns",
+      "breakthrough"
+    ],
+    "fen": "8/4p3/k7/8/3P4/1P6/P3K3/8 w - - 0 1",
+    "title": "The outside passer as a decoy",
+    "explanation": "White to move and win. The passed pawn on a2 is far from everything else — push it, and Black's king has to walk over to stop it. While it does, White's king takes the pawns on the kingside.",
+    "result": "white-wins",
+    "bestMove": "a4",
+    "solution": [
+      "a4",
+      "Ka5",
+      "Kd3",
+      "Kb4",
+      "Ke4",
+      "Ka5",
+      "Kd5",
+      "Kb4"
+    ],
+    "source": "computed: concept computer + tablebase win",
+    "conceptHint": "Use the far passer to pull their king away."
+  },
+  {
+    "id": "ecd-decoy-5",
+    "concept": "decoy",
+    "lessonIds": [
+      "push-passed-pawns",
+      "breakthrough"
+    ],
+    "fen": "8/5p2/8/5P2/1kp5/4P1p1/6K1/8 b - - 0 1",
+    "title": "The outside passer as a decoy",
+    "explanation": "Black to move and win. The passed pawn on c4 is far from everything else — push it, and White's king has to walk over to stop it. While it does, Black's king takes the pawns on the kingside.",
+    "result": "black-wins",
+    "bestMove": "c3",
+    "solution": [
+      "c3",
+      "Kf1",
+      "c2",
+      "Ke1",
+      "c1=Q+",
+      "Ke2",
+      "g2",
+      "Kf2"
+    ],
+    "source": "computed: concept computer + tablebase win",
+    "conceptHint": "Use the far passer to pull their king away."
+  },
+  {
+    "id": "ecd-race-0",
+    "concept": "race",
+    "lessonIds": [
+      "rule-of-the-square",
+      "push-passed-pawns"
+    ],
+    "fen": "8/2k1p3/8/5p2/5P2/p6P/8/5K2 b - - 0 1",
+    "title": "The race, and the first queen",
+    "explanation": "Black to move and win. Count it: the pawn on a3 needs 2, the one on h3 needs 5 — Black queens first, and the new queen covers h8, so White's pawn never promotes.",
+    "result": "black-wins",
+    "bestMove": "a2",
+    "solution": [
+      "a2",
+      "Ke1",
+      "a1=Q+",
+      "Kd2",
+      "e6",
+      "Kc2",
+      "e5",
+      "Kd2"
+    ],
+    "source": "computed: race count + tablebase win",
+    "conceptHint": "Count the pushes — and where the new queen stands."
+  },
+  {
+    "id": "ecd-race-1",
+    "concept": "race",
+    "lessonIds": [
+      "rule-of-the-square",
+      "push-passed-pawns"
+    ],
+    "fen": "8/2k5/8/P7/7p/8/3K4/8 b - - 0 1",
+    "title": "The race, and the first queen",
+    "explanation": "Black to move and win. Count it: the pawn on h4 needs 3, the one on a5 needs 3 — Black queens first, and the new queen covers a8, so White's pawn never promotes.",
+    "result": "black-wins",
+    "bestMove": "h3",
+    "solution": [
+      "h3",
+      "Kc1",
+      "h2",
+      "Kc2",
+      "h1=Q",
+      "a6",
+      "Qa1",
+      "Kd2"
+    ],
+    "source": "computed: race count + tablebase win",
+    "conceptHint": "Count the pushes — and where the new queen stands."
+  },
+  {
+    "id": "ecd-race-2",
+    "concept": "race",
+    "lessonIds": [
+      "rule-of-the-square",
+      "push-passed-pawns"
+    ],
+    "fen": "8/6K1/5p2/8/P1P3p1/7p/8/4k3 b - - 0 1",
+    "title": "The race, and the first queen",
+    "explanation": "Black to move and win. Count it: the pawn on h3 needs 2, the one on a4 needs 4 — Black queens first, and the new queen covers a8, so White's pawn never promotes.",
+    "result": "black-wins",
+    "bestMove": "h2",
+    "solution": [
+      "h2",
+      "Kg6",
+      "h1=Q",
+      "Kf5",
+      "g3",
+      "Kf4",
+      "g2",
+      "Ke3"
+    ],
+    "source": "computed: race count + tablebase win",
+    "conceptHint": "Count the pushes — and where the new queen stands."
+  },
+  {
+    "id": "ecd-race-3",
+    "concept": "race",
+    "lessonIds": [
+      "rule-of-the-square",
+      "push-passed-pawns"
+    ],
+    "fen": "8/2p5/2P5/3k4/p6P/8/7K/8 b - - 0 1",
+    "title": "The race, and the first queen",
+    "explanation": "Black to move and win. Count it: the pawn on a4 needs 3, the one on h4 needs 4 — Black queens first, and the new queen covers h8, so White's pawn never promotes.",
+    "result": "black-wins",
+    "bestMove": "a3",
+    "solution": [
+      "a3",
+      "Kg3",
+      "a2",
+      "Kf3",
+      "a1=Q",
+      "Ke3",
+      "Qe1+",
+      "Kd3"
+    ],
+    "source": "computed: race count + tablebase win",
+    "conceptHint": "Count the pushes — and where the new queen stands."
+  },
+  {
+    "id": "ecd-race-4",
+    "concept": "race",
+    "lessonIds": [
+      "rule-of-the-square",
+      "push-passed-pawns"
+    ],
+    "fen": "8/4K3/8/8/2k5/7p/P7/8 b - - 0 1",
+    "title": "The race, and the first queen",
+    "explanation": "Black to move and win. Count it: the pawn on h3 needs 2, the one on a2 needs 5 — Black queens first, and the new queen covers a8, so White's pawn never promotes.",
+    "result": "black-wins",
+    "bestMove": "h2",
+    "solution": [
+      "h2",
+      "Kd6",
+      "h1=Q",
+      "Ke5",
+      "Qd5+",
+      "Kf6",
+      "Kd3",
+      "Kg6"
+    ],
+    "source": "computed: race count + tablebase win",
+    "conceptHint": "Count the pushes — and where the new queen stands."
+  },
+  {
+    "id": "ecd-race-5",
+    "concept": "race",
+    "lessonIds": [
+      "rule-of-the-square",
+      "push-passed-pawns"
+    ],
+    "fen": "8/8/8/P3k2p/8/4K3/8/8 w - - 0 1",
+    "title": "The race, and the first queen",
+    "explanation": "White to move and win. Count it: the pawn on a5 needs 3, the one on h5 needs 4 — White queens first, and the new queen covers h1, so Black's pawn never promotes.",
+    "result": "white-wins",
+    "bestMove": "a6",
+    "solution": [
+      "a6",
+      "Ke6",
+      "a7",
+      "h4",
+      "a8=Q",
+      "h3",
+      "Qh1",
+      "Kd6"
+    ],
+    "source": "computed: race count + tablebase win",
+    "conceptHint": "Count the pushes — and where the new queen stands."
+  }
+]

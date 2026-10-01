@@ -133,6 +133,18 @@ function rookReachesFileNow(fen: string, file: string, color: Color): boolean {
  * THE RACE, or null. Computed from the board (G0) for BOTH seats, and stated
  * only when the two sides are genuinely running the same kind of plan.
  */
+/** Does a queen on `from` see `to` along an open file, rank or diagonal? */
+function queenSees(b: Chess, from: string, to: string): boolean {
+  const df = to.charCodeAt(0) - from.charCodeAt(0);
+  const dr = Number(to[1]) - Number(from[1]);
+  if (!(df === 0 || dr === 0 || Math.abs(df) === Math.abs(dr)) || (df === 0 && dr === 0)) return false;
+  const sf = Math.sign(df); const sr = Math.sign(dr);
+  for (let f = from.charCodeAt(0) + sf, r = Number(from[1]) + sr; f !== to.charCodeAt(0) || r !== Number(to[1]); f += sf, r += sr) {
+    if (b.get(`${String.fromCharCode(f)}${r}` as Square)) return false;
+  }
+  return true;
+}
+
 /** THE FIRST QUEEN, ON ARRIVAL — in a pure pawn ending, does the new queen
  *  cover the slower pawn's queening square (with that pawn where it will be
  *  when the queen lands)? Kings and pawns only; anything else returns null. */
@@ -158,7 +170,10 @@ function queenCovers(chess: Chess, race: PasserRace, studentColor: Color): boole
     b.remove(wPawn as Square); b.remove(lPawn as Square);
     b.put({ type: 'p', color: loser }, `${lPawn[0]}${lRank}` as Square);
     b.put({ type: 'q', color: winner }, promo as Square);
-    return b.isAttacked(target as Square, winner);
+    // THE QUEEN's line, not "attacked by anything": a king beside the square
+    // is not the new queen covering it (pass-3 drills: "covers a8" with the
+    // queen on g1 and only the king touching a8).
+    return queenSees(b, promo, target);
   } catch { return null; }
 }
 

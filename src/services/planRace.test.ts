@@ -166,3 +166,11 @@ describe('the first queen, on arrival (Naroditsky, Pawn Races)', () => {
     expect(r && r.kind === 'passer-race' ? r.firstQueenCovers : 'x').toBeNull();
   });
 });
+
+describe('the first queen covers by its own line, not by a king beside the square', () => {
+  it('a king next to the queening square is not the queen covering it', () => {
+    // Black queens first on g1; a8 is touched only by the black king on b7.
+    const r = detectPlanRace('8/1k6/4K3/8/P2P2p1/8/3P4/8 b - - 0 1', 'b');
+    expect(r && r.kind === 'passer-race' ? r.firstQueenCovers : 'x').toBe(false);
+  });
+});

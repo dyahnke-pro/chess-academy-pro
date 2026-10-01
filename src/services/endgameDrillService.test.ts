@@ -41,7 +41,9 @@ describe('endgameDrillService', () => {
       expect(d.bestMove).toBeDefined();
       expect(d.solution).toBeDefined();
       expect(d.solution?.length).toBeGreaterThan(0);
-      expect(d.source).toMatch(/Lichess puzzle/);
+      // Computed concept drills come first (their own gate:
+      // endgameConceptDrills.test); the rest are Lichess puzzles.
+      expect(d.source).toMatch(/Lichess puzzle|^computed:/);
     }
   });
 
@@ -148,6 +150,7 @@ describe('endgameDrillService', () => {
     let checked = 0;
     for (const lesson of lessons) {
       for (const d of getDrillPositionsForLesson(lesson, { limit: 3, seed: 1 })) {
+        if (/^computed:/.test(d.source ?? '')) continue; // computed drills: endgameConceptDrills.test
         const id = /#(\S+)/.exec(d.source ?? '')?.[1] ?? '';
         const raw = id ? byId.get(id) : undefined;
         expect(raw, `drill ${d.source} does not resolve to a puzzle`).toBeDefined();

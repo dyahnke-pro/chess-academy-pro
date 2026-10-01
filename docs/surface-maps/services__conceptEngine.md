@@ -116,7 +116,7 @@
 - `src/services/conceptEngine.test.ts:231`
 - `src/services/conceptEngine.test.ts:235`
 - `src/services/conceptEngine.test.ts:244`
-- `src/services/endgameDrillService.test.ts:160`
+- `src/services/endgameDrillService.test.ts:163`
 - `src/services/missedTacticService.ts:787`
 - `src/services/puzzleConceptExplanation.ts:111`
 - `src/services/puzzleConceptHint.ts:110`

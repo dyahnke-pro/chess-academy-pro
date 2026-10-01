@@ -108,9 +108,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/deliberation.ts:98`
 - `src/services/deliberation.ts:171`
 - `src/services/deliberation.ts:178`
-- `src/services/endgameDrillService.ts:102`
-- `src/services/endgameDrillService.ts:127`
-- `src/services/endgameDrillService.ts:132`
+- `src/services/endgameDrillService.ts:103`
+- `src/services/endgameDrillService.ts:139`
+- `src/services/endgameDrillService.ts:144`
 - `src/services/endgameService.ts:197`
 - `src/services/endgameService.ts:252`
 - `src/services/endgameService.ts:259`
