@@ -153,12 +153,6 @@ export function buildTurningPointQuestion(
   };
 }
 
-/** Grade a pick. The reveal is the same either way; this feeds the spoken
- *  lead-in and analytics. */
-export function judgeTurningPointPick(q: TurningPointQuestion, pickedPly: number): boolean {
-  return pickedPly === q.answer.ply;
-}
-
 // ─── THE CRITICAL MOMENT, ASKED ─────────────────────────────────────────────
 //
 // 🔒 REVIEW ASKS AT THE BIGGEST SWING; THE MOMENT WORTH TEACHING IS THE BIGGEST

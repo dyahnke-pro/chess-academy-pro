@@ -34,8 +34,7 @@ function renderedIds(): Set<string> {
 describe('review card scroll-into-view selectors', () => {
   it('lists at least the blocking cards', () => {
     const ids = scrollSelectorIds();
-    expect(ids.length).toBeGreaterThanOrEqual(13);
-    expect(ids).toContain('review-turning-point-card');
+    expect(ids.length).toBeGreaterThanOrEqual(11);
     expect(ids).toContain('review-find-shot-card');
   });
 

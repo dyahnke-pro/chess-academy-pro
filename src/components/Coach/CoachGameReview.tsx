@@ -49,7 +49,7 @@ import { findTheoryDeparture, walkBookLine, type TheoryDeparture, type BookLineP
 import { pauseBatchAnalysis, resumeBatchAnalysis, classifyCpLoss, scanCriticalMoments, recordPromptedFind } from '../../services/gameAnalysisService';
 import { classifyGameTheme, type GameThemeResult } from '../../services/gameThemeClassifier';
 import { findRewindTarget, type RewindTarget } from '../../services/blunderRewind';
-import { buildTurningPointQuestion, judgeTurningPointPick, buildCriticalMomentQuestion, judgeCriticalMomentPick, type TurningPointQuestion, type CriticalMomentQuestion } from '../../services/reviewTurningPoint';
+import { buildTurningPointQuestion, buildCriticalMomentQuestion, judgeCriticalMomentPick, type CriticalMomentQuestion } from '../../services/reviewTurningPoint';
 import { computeTurningPointHinge } from '../../services/reviewHinge';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 import { selectTeachingForSegments, renderThesis } from '../../services/teachingSelector';
@@ -976,20 +976,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const [rewindOffer, setRewindOffer] = useState<RewindTarget | null>(null);
   const rewindOfferedPliesRef = useRef<Set<number>>(new Set());
 
-  // TURNING-POINT question — asked ONCE per game when the walk reaches the
-  // end: "where do you think this game turned?" Candidates + answer are
-  // computed from the eval record (reviewTurningPoint.ts).
-  const [turningQ, setTurningQ] = useState<TurningPointQuestion | null>(null);
-  /** The retrospective "what it hinged on" line, computed async when the turning
-   *  point is set (Phase 5); appended to the reveal. */
-  const turningHingeRef = useRef<string>('');
-  const turningThesisRef = useRef<string>('');
-  const [turningReveal, setTurningReveal] = useState<{ correct: boolean; text: string } | null>(null);
+  // THE TURNING POINT — STATED once per game when the walk reaches the end,
+  // never asked. The "where do you think this game turned?" card is GONE
+  // (David 2026-10-01: "I don't want that card. It's stupid"). The answer it
+  // withheld — the selector's thesis, what it hinged on, the theme's reprise —
+  // is now simply said, so the game's one-line story is not lost with the card.
+  const [turningSummary, setTurningSummary] = useState<string | null>(null);
   const turningAskedRef = useRef(false);
-  // Preview-then-commit for the turning-point chips (David 2026-07-19: "chips
-  // are bare SAN, I can't recall the position"). First tap on a chip STEPS THE
-  // BOARD to that candidate; a second tap (or Confirm) commits it.
-  const [turningPreviewPly, setTurningPreviewPly] = useState<number | null>(null);
 
   // §4 TRAP — "this piece looks free — take it or leave it?" Fires only when the
   // student's flagged move GRABBED poisoned material (the question plan tags the
@@ -1027,15 +1020,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     shotAttemptsRef.current = 0;
     setRewindOffer(null);
     rewindOfferedPliesRef.current = new Set();
-    setTurningQ(null);
-    setTurningReveal(null);
+    setTurningSummary(null);
     turningAskedRef.current = false;
-    setTurningPreviewPly(null);
     setTrapQ(null);
     setTrapReveal(null);
   }, [props.gameId]);
 
-  const handleWalkForward = useCallback((source: 'manual' | 'auto' = 'manual'): ForwardOutcome => {
+  const handleWalkForward = useCallback((): ForwardOutcome => {
     // Unreachable today: `setReadingGate` is only ever called with null. Kept
     // because a guard that can fire must DECLARE what it does to the walk
     // rather than look like an advance.
@@ -1046,29 +1037,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     spokenLineTokenRef.current += 1;
     // FORWARD IS AN ESCAPE HATCH — never a frozen board (David 2026-07-19: "a
     // card popped up… i want to click forward to ignore it but the board is
-    // frozen"). When the why-picker faucet or the end-of-game turning-point card
-    // is open, forward DISMISSES it and advances rather than no-op'ing. (The
-    // turning-point one also fixes his "hit back to answer, couldn't go forward
-    // again" glitch — the card stayed open and froze forward.)
+    // frozen"). When the why-picker faucet is open, forward DISMISSES it and
+    // advances rather than no-op'ing.
     if (faucetPhase !== 'idle') {
       resetFaucet();
       setWalkExplorationFen(null);
       setWalkExplorationSan(null);
       setWalkExplorationArrows(null);
-      walkPlayback.goForward();
-      return { advanced: true };
-    }
-    if (turningQ) {
-      // A HUMAN tap dismisses the card (the escape hatch above). The
-      // AUTO-ADVANCE tick must NOT: the card was raised at the last ply and
-      // the question spoken, and the 0.5s tick then closed it before the
-      // student could read it — "One more thing — where do you think this
-      // game turned?" with no card on screen (WO-STANDARD-01 D-13, prod tape
-      // 2026-09-22). Auto-play stops here and waits for the pick.
-      if (source === 'auto') return { advanced: false, stop: 'turning-point' };
-      setTurningQ(null);
-      setTurningPreviewPly(null);
-      setWalkExplorationFen(null);
       walkPlayback.goForward();
       return { advanced: true };
     }
@@ -1255,7 +1230,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     }
     walkPlayback.goForward();
     return { advanced: true };
-  }, [readingGate, faucetPhase, resetFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, turningQ, trapQ, criticalMoment, criticalCard, rewindOffer, questionPlan, moves, moverIsStudent]);
+  }, [readingGate, faucetPhase, resetFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, trapQ, criticalMoment, criticalCard, rewindOffer, questionPlan, moves, moverIsStudent]);
   handleWalkForwardRef.current = handleWalkForward;
   /** A user's forward tap / key: pauses auto-play (only Play restarts it),
    *  then steps through the same card ladder. */
@@ -1462,83 +1437,59 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     }
   }, [walkPlayback.currentPly, walkNarration, props.gameId, openingName, result, playerColor, moves.length, playerRating]);
 
-  // ── Turning-point ask — fires once, when the walk reaches the last ply ────
+  // ── The turning point — STATED once, when the walk reaches the last ply ────
   useEffect(() => {
     if (turningAskedRef.current) return;
     if (!walkNarration || moves.length === 0) return;
     if (walkPlayback.currentPly !== moves.length) return;
-    turningAskedRef.current = true; // one ask per game, even when unanswerable
+    turningAskedRef.current = true; // once per game
     const q = buildTurningPointQuestion(walkNarration.segments);
-    if (!q) return; // clean game / single obvious moment — no question to ask
+    if (!q) return; // clean game / single obvious moment — nothing to say
     // THE ONE SELECTOR reads the whole game (unified-coach N1). Its thesis is
-    // the reveal — WITHHELD until the student commits (the honesty contract):
-    // the same biggest-swing moment the card asks about, plus the tactic that
-    // landed there and the chain's root cause when one links the moments.
-    turningThesisRef.current = '';
+    // spoken when it names the same biggest-swing moment; otherwise the
+    // computed reveal for that moment is.
+    let thesis = '';
     try {
       const pkg = selectTeachingForSegments(walkNarration.segments, playerColor, playerRating ?? undefined, 'review');
       if (pkg.thesis.kind === 'turned' && pkg.thesis.ply === q.answer.ply) {
-        turningThesisRef.current = renderThesis(pkg.thesis, registerFor('review'));
+        thesis = renderThesis(pkg.thesis, registerFor('review'));
       }
       void logAppAudit({
         kind: 'coach-surface-migrated',
         category: 'subsystem',
         source: 'CoachGameReview.teachingSelector',
-        // `card=` is the ply the turning-point card asks about. The thesis is
-        // spoken ONLY when kind==='turned' AND its ply equals that one — saying
-        // "the game turned at X" over a card whose answer is Y would contradict
-        // the card. Emitting both lets the prod audit tell a deliberate
-        // withhold from a broken wire instead of hard-failing on silence
-        // (2026-09-16).
-        summary: `selector read the game: thesis=${pkg.thesis.kind}@${pkg.thesis.ply ?? '-'} card=${q.answer.ply} moments=[${pkg.moments.map((m) => m.ply).join(',')}] thread=[${[...pkg.onThread].join(',')}]`,
+        // `turn=` is the biggest-swing ply. The thesis is spoken only when
+        // kind==='turned' AND its ply equals that one, so the audit can tell a
+        // deliberate fallback to the plain reveal from a broken wire.
+        summary: `selector read the game: thesis=${pkg.thesis.kind}@${pkg.thesis.ply ?? '-'} turn=${q.answer.ply} moments=[${pkg.moments.map((m) => m.ply).join(',')}] thread=[${[...pkg.onThread].join(',')}]`,
       });
-    } catch { turningThesisRef.current = ''; }
-    setTurningQ(q);
-    captureEvent('review_turning_point_asked', { candidates: q.candidates.length, answer_ply: q.answer.ply });
-    void reviewSay(q.question).catch(() => undefined);
-    // Phase 5 — compute "what it hinged on" for the answer's position, in the
-    // retrospective register, while the student decides. Appended to the reveal.
-    turningHingeRef.current = '';
-    if (q.answer.fenBefore) {
-      void computeTurningPointHinge({
-        fenBefore: q.answer.fenBefore,
-        studentColor: playerColor === 'white' ? 'w' : 'b',
-        evalBoard: (f) => stockfishEngine.evalBoard(f),
-      }).then((h) => { turningHingeRef.current = h; }).catch(() => undefined);
-    }
-  }, [walkPlayback.currentPly, walkNarration, moves.length]);
-
-  const handleTurningPick = useCallback((ply: number): void => {
-    if (!turningQ) return;
-    setTurningPreviewPly(null);
-    setWalkExplorationFen(null);
-    const correct = judgeTurningPointPick(turningQ, ply);
-    // Phase 5: the theme's reprise closes the reveal — but only when it
-    // was actually NAMED during the walk (never introduce it cold here).
+    } catch { thesis = ''; }
+    // Phase 5: the theme's reprise closes the line — but only when it was
+    // actually NAMED during the walk (never introduced cold here).
     const reprise = themeSpokenRef.current && themeRef.current
       ? ` It fits the thread of the game — ${themeRef.current.reprise}.`
       : '';
-    const hinge = turningHingeRef.current ? ` ${turningHingeRef.current}` : '';
-    const text = `${correct ? 'You called it.' : 'Not quite.'} ${turningThesisRef.current || turningQ.reveal}${hinge}${reprise}`;
-    captureEvent('review_turning_point_result', { correct, picked_ply: ply, answer_ply: turningQ.answer.ply, hinged: !!turningHingeRef.current });
-    setTurningQ(null);
-    setTurningReveal({ correct, text });
-    // Decisive-beat prosody spike (#25): the payoff line lifts only when
-    // the student CALLED it — a wrong pick keeps the flat register.
-    void reviewSay(text, correct ? { prosodySpike: true } : undefined).catch(() => undefined);
-  }, [turningQ]);
-
-  // First tap PREVIEWS the candidate on the board; a second tap on the SAME chip
-  // commits it (David 2026-07-19: "give board context, step to each candidate").
-  const handleTurningChip = useCallback((cand: { ply: number; fenBefore?: string }): void => {
-    if (turningPreviewPly === cand.ply) { handleTurningPick(cand.ply); return; }
-    setTurningPreviewPly(cand.ply);
-    if (cand.fenBefore) {
-      setWalkExplorationFen(cand.fenBefore);
-      setWalkExplorationSan(null);
-      setWalkExplorationArrows(null);
-    }
-  }, [turningPreviewPly, handleTurningPick]);
+    let cancelled = false;
+    const speak = (hinge: string): void => {
+      if (cancelled) return;
+      const text = `${thesis || q.reveal}${hinge ? ` ${hinge}` : ''}${reprise}`;
+      setTurningSummary(text);
+      captureEvent('review_turning_point_stated', { answer_ply: q.answer.ply, hinged: !!hinge });
+      void reviewSay(text).catch(() => undefined);
+    };
+    // "What it hinged on", in the retrospective register — computed before the
+    // line is said, bounded so a slow engine never holds the summary back.
+    if (!q.answer.fenBefore) { speak(''); return () => { cancelled = true; }; }
+    let done = false;
+    const timer = window.setTimeout(() => { if (!done) { done = true; speak(''); } }, 4000);
+    void computeTurningPointHinge({
+      fenBefore: q.answer.fenBefore,
+      studentColor: playerColor === 'white' ? 'w' : 'b',
+      evalBoard: (f) => stockfishEngine.evalBoard(f),
+    }).then((h) => { if (!done) { done = true; window.clearTimeout(timer); speak(h); } })
+      .catch(() => { if (!done) { done = true; window.clearTimeout(timer); speak(''); } });
+    return () => { cancelled = true; window.clearTimeout(timer); };
+  }, [walkPlayback.currentPly, walkNarration, moves.length]);
 
   /** They committed an answer at the critical moment. Grade it against the
    *  moves that actually held, then RECORD IT GREY — see `recordPromptedFind`:
@@ -2708,7 +2659,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const found = cameoAnchorRef.current;
     if (!found) return;
     if (walkPlayback.currentPly < found.anchor.plyIndex) return;
-    if (shotState || shotReveal || turningQ || rewindOffer || seqStateRef.current) return;
+    if (shotState || shotReveal || rewindOffer || seqStateRef.current) return;
     if (walkPlayback.currentPly >= moves.length) return; // game over → summary owns the wrap
     cameoShownRef.current = true;
     setCameoState({ anchor: found.anchor, playback: found.playback, stage: 'ask' });
@@ -2717,7 +2668,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       ply: found.anchor.plyIndex,
       ratio: found.anchor.cameo.ratio,
     });
-  }, [walkPlayback.currentPly, shotState, shotReveal, turningQ, rewindOffer, moves.length]);
+  }, [walkPlayback.currentPly, shotState, shotReveal, rewindOffer, moves.length]);
 
   // ── THEORY DEPARTURE (Phase 4, David 2026-07-18) ─────────────────────────
   // Danya quizzes theory before telling: at the ply where the game left
@@ -2995,7 +2946,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (!found) return;
     if (walkPlayback.currentPly < found.dep.departurePly) return;
     if (walkPlayback.currentPly >= moves.length) return;
-    if (shotState || shotReveal || turningQ || rewindOffer || seqStateRef.current || cameoStateRef.current || principleQuizStateRef.current) return;
+    if (shotState || shotReveal || rewindOffer || seqStateRef.current || cameoStateRef.current || principleQuizStateRef.current) return;
     theoryShownRef.current = true;
     setTheoryState({ dep: found.dep, bookLine: found.bookLine, stage: 'ask' });
     setWalkExplorationFen(found.dep.bookFen); // the ask happens AT the book position
@@ -3004,7 +2955,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     void voiceService
       .speakForced(`Book ended here — ${found.dep.departedSan} left known practice. What's the main move in this position?`)
       .catch(() => undefined);
-  }, [walkPlayback.currentPly, shotState, shotReveal, turningQ, rewindOffer, moves.length]);
+  }, [walkPlayback.currentPly, shotState, shotReveal, rewindOffer, moves.length]);
 
   // ── THEME OF THE GAME (Phase 5, David 2026-07-18) ────────────────────────
   // The theme EMERGES — never promised up front. Classified once from the
@@ -3045,18 +2996,18 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (!theme) return;
     if (walkPlayback.currentPly < theme.peakPly) return;
     // Non-blocking, but never talk over an open question or playback.
-    if (shotState || shotReveal || turningQ || rewindOffer || seqStateRef.current || cameoStateRef.current || theoryStateRef.current || principleQuizStateRef.current) return;
+    if (shotState || shotReveal || rewindOffer || seqStateRef.current || cameoStateRef.current || theoryStateRef.current || principleQuizStateRef.current) return;
     themeSpokenRef.current = true;
     captureEvent('review_theme_named', { theme: theme.theme, at_ply: walkPlayback.currentPly });
     void reviewSay(theme.line).catch(() => undefined);
-  }, [walkPlayback.currentPly, shotState, shotReveal, turningQ, rewindOffer]);
+  }, [walkPlayback.currentPly, shotState, shotReveal, rewindOffer]);
 
   // A blocking card the user can't SEE is indistinguishable from a hang
   // (David 2026-07-19: the why-picker opened below the fold on his phone
   // and the walk "froze"). Whenever any question/playback card opens,
   // scroll the first present one into view.
   const anyCardOpen = Boolean(
-    shotState || shotReveal || turningQ || trapQ || trapReveal || criticalCard || criticalReveal || rewindOffer || seqState || cameoState || theoryState || principleQuizState || faucetPhase !== 'idle',
+    shotState || shotReveal || trapQ || trapReveal || criticalCard || criticalReveal || rewindOffer || seqState || cameoState || theoryState || principleQuizState || faucetPhase !== 'idle',
   );
   useEffect(() => {
     if (!anyCardOpen) return;
@@ -3074,15 +3025,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           '[data-testid="review-theory-ask"]',
           '[data-testid="review-theory-playback"]',
           '[data-testid="review-principle-quiz"]',
-          // NB the id is `review-turning-point-card`. It read
-          // `review-turning-card` from the day this list was written, so the ONE
-          // card that blocks the walk — and gates the thesis — was the only card
-          // never scrolled into view. On desktop it opened below the fold inside
-          // the middle scroller, which is the "thin sliver below the board"
-          // defect this effect exists to kill. Gated now by
-          // CoachGameReview.cardScroll.test.ts so the two can never drift again.
-          '[data-testid="review-turning-point-card"]',
-          '[data-testid="review-turning-point-reveal"]',
           '[data-testid="review-trap-card"]',
           '[data-testid="review-rewind-card"]',
           '[data-testid="discussion-practice-panel"]',
@@ -3112,7 +3054,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // card follows another, `anyCardOpen` never transitions, so the second card
     // (the find-shot prompt) opened below the fold as a border-sliver (David
     // 2026-07-21, IMG_4581: "that thin purple line below the board").
-  }, [anyCardOpen, shotState, shotReveal, turningQ, trapQ, trapReveal, criticalCard, criticalReveal, rewindOffer, seqState, cameoState, theoryState, principleQuizState, faucetPhase]);
+  }, [anyCardOpen, shotState, shotReveal, trapQ, trapReveal, criticalCard, criticalReveal, rewindOffer, seqState, cameoState, theoryState, principleQuizState, faucetPhase]);
 
   // ship-4: `currentMove` removed — only the deleted analysis-phase
   // board read it. Walk render uses `walkPlayback.currentSegment` and
@@ -4603,42 +4545,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               </div>
             )}
 
-            {/* TURNING-POINT — asked once, at the end of the walk. Candidates
-                are the game's costed moments; the answer is the biggest swing. */}
-            {turningQ && (
-              <div data-testid="review-turning-point-card" className="mx-3 my-1 rounded-xl border-2 border-amber-500/40 bg-amber-500/10 px-3 py-2">
-                <div className="text-sm text-amber-100">{turningQ.question}</div>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {turningQ.candidates.map((c) => (
-                    <button key={c.ply} type="button" data-testid={`turning-point-pick-${c.ply}`}
-                      onClick={() => handleTurningChip(c)}
-                      className={`rounded-lg border px-2.5 py-1 text-xs font-semibold ${turningPreviewPly === c.ply ? 'border-amber-300 bg-amber-500/30 text-amber-50 ring-1 ring-amber-300' : 'border-amber-400/50 text-amber-200 hover:bg-amber-500/20'}`}>
-                      {c.label}
-                    </button>
-                  ))}
-                </div>
-                <div className="mt-1.5 text-[11px] text-amber-200/70">
-                  {turningPreviewPly !== null
-                    ? 'Board stepped to that moment — tap it again (or Confirm) to lock it in.'
-                    : 'Tap a move to see the position, then confirm your pick.'}
-                </div>
-                {turningPreviewPly !== null && (
-                  <button type="button" data-testid="review-turning-point-confirm"
-                    onClick={() => handleTurningPick(turningPreviewPly)}
-                    className="mt-1.5 rounded-lg border border-amber-400/50 bg-amber-500/20 px-2.5 py-1 text-xs font-semibold text-amber-100 hover:bg-amber-500/30">
-                    Confirm this turning point
-                  </button>
-                )}
-              </div>
-            )}
-            {turningReveal && (
-              <div data-testid="review-turning-point-reveal"
-                className={`mx-3 my-1 rounded-xl border-2 px-3 py-2 ${turningReveal.correct ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-amber-500/40 bg-amber-500/10'}`}>
-                <div className={`text-sm ${turningReveal.correct ? 'text-emerald-100' : 'text-amber-100'}`}>{turningReveal.text}</div>
-                <button type="button" data-testid="review-turning-point-done" onClick={() => setTurningReveal(null)}
-                  className="mt-1.5 rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20">
-                  Done
-                </button>
+            {/* THE TURNING POINT — stated once at the end of the walk, no
+                question, no buttons (the card is gone, David 2026-10-01). */}
+            {turningSummary && (
+              <div data-testid="review-turning-point-summary" className="mx-3 my-1 rounded-xl border border-amber-500/30 bg-amber-500/5 px-3 py-2 text-sm text-amber-100">
+                {turningSummary}
               </div>
             )}
             {/* §4 TRAP — "take it or leave it?" The answer is computed by static

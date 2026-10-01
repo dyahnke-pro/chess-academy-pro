@@ -266,9 +266,9 @@
 - `src/services/coachApi.speakableFacts.test.ts:53`
 
 ### `voiceFacts` (function) — 35 call sites
-- `src/components/Coach/CoachGameReview.tsx:1677`
-- `src/components/Coach/CoachGameReview.tsx:1796`
-- `src/components/Coach/CoachGameReview.tsx:1984`
+- `src/components/Coach/CoachGameReview.tsx:1628`
+- `src/components/Coach/CoachGameReview.tsx:1747`
+- `src/components/Coach/CoachGameReview.tsx:1935`
 - `src/hooks/usePhaseNarration.ts:731`
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:256`

@@ -18,7 +18,7 @@
  *   OPEN   first open analyses + the walk becomes startable (timed)
  *   FUND   ply-12 narration LEADS with the fundamentals (same piece / tempo / space)
  *   AUTO   the walk advances by itself after Start (no Forward click)
- *   THESIS the selector's thesis spoken once at the turning-point reveal, after the pick (N1)
+ *   THESIS the selector's thesis STATED once at the end of the walk — no turning-point question (N1)
  *   NEED   opening teaching covered AGAINST the student's computed need, never a sentence count (N2 — R2 retired)
  *   FREE   a piece moved on the board = exploring: banner up, walk PAUSED
  *   EXPL   the explored move is NARRATED and the engine REPLIES
@@ -438,44 +438,9 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // Pause first (any intervention pauses), then jump by clicking Back/Forward
   // like a human would. Cards that mount are resolved by clicking.
   await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 3000 }).catch(() => undefined);
-  // The turning-point card gets a BOUNDED number of answering rounds per run.
-  // Without a bound the walk loop re-entered the retry block on every one of
-  // its 80 iterations while the card sat there unanswered — 3 attempts x ~13s
-  // x 80 = the run never finished, and a hung audit tells you less than a
-  // failing one (2026-09-16).
-  //
-  // 🔴 BUT THE FIRST BOUND WAS A LATCH SET ON ENTRY, AND IT PRODUCED FOUR REDS
-  // FROM ONE HARNESS FAILURE (found 2026-09-20 reading a clean 43/9 run).
-  // `turningHandled = true` ran BEFORE a single attempt, so when all three
-  // attempts failed the card could never be answered again for the rest of the
-  // run. Everything downstream followed, and none of it was the product:
-  //   * the walk loop refuses to resume while the card is up (correctly —
-  //     resuming dismisses it unanswered), so the walk PARKED;
-  //   * the readout stayed READABLE while parked, so `wedgeWatch` never fired
-  //     and the WEDGE row passed — which is why the existing contamination
-  //     guard did not cover this;
-  //   * RECAP failed on `end reached=false`;
-  //   * the post-walk `resolveCards()` no-op'd on the spent latch, so THESIS
-  //     reported DRIVER;
-  //   * CRIT said "a moment was selected but nothing said it aloud", because
-  //     the walk never reached that moment.
-  // One latch, four rows, three of them blaming a coach that was fine.
-  //
-  // So: latch on SUCCESS, and bound the ROUNDS separately so the storm cannot
-  // come back. Three rounds is ~39s worst case against a run measured in tens
-  // of minutes, and it leaves the post-walk wait a real chance — which is the
-  // attempt that matters, since the card is RAISED at `currentPly ===
-  // moves.length`, i.e. after the step loop has already broken out.
-  let turningBudget = 3;
-  let turningRounds = 0;
-  let turningAnswered = false;
-  /** Rounds spent, with nothing to show for them. */
-  const turningSpent = () => !turningAnswered && turningRounds >= turningBudget;
-  /** Hand the driver one more answering round (see the post-walk call site). */
-  const grantTurningRound = () => { turningBudget += 1; };
-  /** True when the card was SEEN but the driver never got a reveal out of it —
-   *  the dependent rows must then blame the DRIVER, not the coach. */
-  let turningSeenUnanswered = false;
+  // THE TURNING-POINT CARD IS GONE (David 2026-10-01: "I don't want that card.
+  // It's stupid"). The review now STATES the turning point once at the end of
+  // the walk; there is nothing for the driver to answer.
   const resolveCards = async () => {
     for (const [c, sel] of [
       ['discussion-reason-picker', '[data-testid="discussion-reason-option"]'],
@@ -540,99 +505,6 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     }
     // THE TURNING-POINT CARD — answer it the way a human does: tap a candidate
     // to step the board to that moment, THEN commit. Two taps, in order.
-    if (!turningAnswered && await has(page, '[data-testid="review-turning-point-card"]')) {
-      if (turningRounds >= turningBudget) {
-        // SAY IT. A driver that quietly stops trying is the same disease as an
-        // audit that reports green having verified nothing: the run needs to
-        // record that the card is STILL UP and that this is the harness's
-        // failure, or the next reader blames the coach for the rows it takes
-        // down with it.
-        if (!turningSeenUnanswered) {
-          turningSeenUnanswered = true;
-          log(`  [turning] card is STILL UP after ${turningRounds} answering round(s) — `
-            + 'the DRIVER could not answer it. The walk cannot resume past this card, so RECAP, '
-            + 'THESIS and CRIT are all DRIVER failures from here on, not product failures.');
-        }
-        return;
-      }
-      turningRounds += 1;
-      turningSeenUnanswered = true;
-      // PAUSE FIRST. `handleWalkForward` DISMISSES this card by design (David
-      // 2026-07-19: forward must never leave a frozen board), and
-      // `turningAskedRef` means a dismissed card never returns. With playback
-      // still running, the walk advanced out from under the tap and Confirm
-      // never rendered — three attempts, three `confirm=false`, on a coach that
-      // works: the isolated probe (scripts/probe-turning-card.mjs), which pauses
-      // before answering, gets the thesis spoken every time.
-      // POLL until it is actually paused; never read the state ONCE. A single
-      // `getAttribute` that times out (or catches) returns null, which is not
-      // 'playing', so the pause was SKIPPED — the walk then advanced out from
-      // under the tap and `handleWalkForward` dismissed the card by design.
-      const pauseBtn = page.locator('[data-testid="review-play-pause-btn"]').first();
-      let paused = false;
-      for (let i = 0; i < 6 && !paused; i += 1) {
-        const st = await pauseBtn.getAttribute('data-state', { timeout: 2000 }).catch(() => null);
-        if (st === 'paused') { paused = true; break; }
-        await pauseBtn.click({ timeout: 2000, force: true }).catch(() => undefined);
-        await page.waitForTimeout(350);
-      }
-      log(`  [turning] playback paused=${paused}`);
-      const chip = page.locator('[data-testid^="turning-point-pick-"]').first();
-      const chips = await page.locator('[data-testid^="turning-point-pick-"]').count().catch(() => -1);
-      log(`  [turning] card present; ${chips} candidate chip(s)`);
-      if (await chip.count() > 0) {
-        // WAIT FOR STATE, NEVER A FIXED DELAY. The first tap only PREVIEWS; the
-        // Confirm button does not exist until React has re-rendered with that
-        // preview. A fixed 500ms then "tap the chip again" raced that render:
-        // if the first tap had not landed in state yet, the second tap just set
-        // the preview again and NOTHING ever committed — the card stayed up, no
-        // reveal was spoken, and the THESIS row failed on a coach that was fine
-        // (two full prod runs, 0 reveals, 2026-09-16). Retry the whole
-        // tap→confirm cycle and stop as soon as the reveal actually speaks.
-        const confirmSel = '[data-testid="review-turning-point-confirm"]';
-        const revealed = () => spoken().some((x) => /^(You called it\.|Not quite\.)/.test(x.text));
-        for (let attempt = 1; attempt <= 3 && !revealed(); attempt += 1) {
-          // Re-check the card EVERY attempt. Retrying against a card that is
-          // already gone reports three identical `confirm=false` lines and hides
-          // what actually happened (2026-09-16: the pause had silently no-op'd,
-          // so attempt 1 raced a forward that dismissed it).
-          if (!(await has(page, '[data-testid="review-turning-point-card"]'))) {
-            log(`  [turning] attempt ${attempt}: card is GONE before the tap — dismissed, not answered`);
-            break;
-          }
-          // Scroll it into view ourselves: the component's own
-          // scroll-the-card-into-view effect had the wrong testid for this one
-          // card (fixed 2026-09-16), and a smooth-scrolling container can still
-          // move the chip between Playwright's scroll and its click.
-          await chip.scrollIntoViewIfNeeded({ timeout: 2000 }).catch(() => undefined);
-          await chip.click({ timeout: 2000, force: true }).catch(() => undefined);
-          const confirmUp = await until(() => has(page, confirmSel), 5000, 250);
-          if (confirmUp) {
-            await page.locator(confirmSel).first().click({ timeout: 2000, force: true }).catch(() => undefined);
-          }
-          // TIME IT, don't just time out on it: the reveal is a state change
-          // after the tap, so how long it takes is itself the reading. A prod
-          // run (2026-09-25) timed out at 8s where the isolated probe saw it
-          // land — report when the element rendered and when the line spoke.
-          const t0 = Date.now();
-          const elUp = await until(() => has(page, '[data-testid="review-turning-point-reveal"]'), 20000, 250);
-          const elMs = Date.now() - t0;
-          const spoke = await until(revealed, 20000, 250);
-          const spokeMs = Date.now() - t0;
-          log(`  [turning] attempt ${attempt}: confirm=${confirmUp} revealEl=${elUp}@${elMs}ms reveal=${spoke}@${spokeMs}ms cardStill=${await has(page, '[data-testid="review-turning-point-card"]')}`);
-          // ANSWERED means the reveal SPOKE, never "we tapped something".
-          if (spoke) { turningAnswered = true; turningSeenUnanswered = false; break; }
-        }
-      }
-    }
-    if (await has(page, '[data-testid="review-turning-point-reveal"]')) {
-      // Wait for the reveal's spoken line (the thesis) to land in the listener,
-      // like a human who reads it before moving on; then Done.
-      await until(() => spoken().some((x) => /The game turned at |The turning point was /.test(x.text)), 12000, 300);
-      await page.waitForTimeout(600);
-      await page.locator('[data-testid="review-turning-point-done"]').first().click({ timeout: 1500, force: true }).catch(() => undefined);
-      await page.waitForTimeout(400);
-    }
   };
   const goTo = async (target) => {
     for (let i = 0; i < 80; i++) {
@@ -793,17 +665,6 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     if (n >= total) { reachedEnd = true; break; }
     wedgedReason = watch.observe(!!read, `ply ${lastReadPly}/${total}`);
     if (wedgedReason) { log(`  [walk] WEDGED: ${wedgedReason}`); break; }
-    // THE CARD THE DRIVER COULD NOT ANSWER PARKS THE WALK PERMANENTLY. The
-    // loop refuses to resume past it (correctly), so every remaining poll is
-    // dead time that ends in the same place — and the readout stays READABLE
-    // throughout, so the wedge watch will never call it. Stop now and let the
-    // post-walk block have its reserved round, rather than burning the budget
-    // and then reporting `end reached=false` as if the walk had been slow.
-    if (turningSpent() && await has(page, '[data-testid="review-turning-point-card"]')) {
-      log(`  [walk] STOPPING at ply ${lastReadPly}/${total}: the turning-point card is up and `
-        + 'the driver has spent its answering rounds. This is a DRIVER stop, not a slow walk.');
-      break;
-    }
     // PROGRESS, so a 10-minute walk is not 10 minutes of silence (CLAUDE.md
     // "never run blind, never wait silent"). Without this the recap phase is
     // indistinguishable from a hang, which is the exact failure this audit
@@ -816,63 +677,14 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
           + `(poll ${i}/${POLL_BUDGET}) — the walk element is not reporting a ply; `
           + `this is NOT "the walk is at ply 0"`);
     }
-    // NEVER RESUME WHILE THE TURNING-POINT CARD IS UP — resuming advances the
-    // walk, which dismisses it unanswered (see the pause note in resolveCards).
-    const cardBlocking = await has(page, '[data-testid="review-turning-point-card"]');
     const st = await page.locator('[data-testid="review-play-pause-btn"]').first().getAttribute('data-state', { timeout: 3000 }).catch(() => null);
-    if (st === 'paused' && !cardBlocking) { await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 2000 }).catch(() => undefined); }
+    if (st === 'paused') { await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 2000 }).catch(() => undefined); }
     await page.waitForTimeout(1000);
   }
-  // ── ORDER MATTERS, AND IT WAS WRONG (fixed 2026-09-17) ───────────────────
-  // The recap wait used to run HERE, before the turning-point card was
-  // answered. It could never pass. The closing is spoken by `useReviewPlayback`
-  // only at `lastPly + 1` (it clamps to `Math.min(ply, lastPly + 1)`), the card
-  // is raised AT `currentPly === moves.length`, and the walk loop above refuses
-  // to resume while that card is up — correctly, since resuming dismisses it
-  // unanswered. So the walk sat parked one step short of the closing for the
-  // whole 60s wait, and the row reported the PRODUCT silent when it was this
-  // instrument holding the door shut.
-  //
-  // The narration was never in doubt: driving the same Alapin game through the
-  // real `generateReviewNarration` returns "The pattern: one of your two
-  // flagged moves handed over a tempo." Answer the card, let the reveal speak,
-  // STEP PAST the last ply, and only then listen.
-  // THE TURNING-POINT CARD FIRES AFTER THE WALK ENDS — the component raises it
-  // when currentPly === moves.length, which is AFTER the step loop above has
-  // already broken out. So the loop's last `resolveCards()` ran before the card
-  // existed and nothing ever answered it (found 2026-09-16: the THESIS row read
-  // as a broken N1 wire for two runs while the product was fine). Wait for it
-  // here, answer it, and let the reveal speak.
-  const turnCardUp = await until(() => has(page, '[data-testid="review-turning-point-card"]'), 45000, 500);
-  log(`  [turning] waited for card after walk end: present=${turnCardUp}`);
-  // THE POST-WALK ATTEMPT GETS ITS OWN ROUND, ALWAYS. The card is RAISED at
-  // `currentPly === moves.length` with playback naturally stopped, which is the
-  // condition the answering sequence was designed for — so it is the attempt
-  // most likely to work, and starving it because earlier in-walk attempts
-  // burned the budget would throw away the good shot to protect against the
-  // retry storm the budget exists for.
-  grantTurningRound();
-  await resolveCards();
-  const revealed = await until(() => spoken().some((x) => /^(You called it\.|Not quite\.)/.test(x.text)), 20000, 500);
-  log(`  [turning] reveal spoken=${revealed}`);
-  // 🔒 THE DRIVER REPORTS ITS OWN FAILURES AS ROWS, NOT AS LOG LINES. A driver
-  // that gives up quietly is the same class as every instrument bug this file
-  // documents: the reader is left to INFER the harness broke from a downstream
-  // symptom (`end reached=false`), which is precisely how one latch got read as
-  // three product failures. Say it in the results, where the verdict counts it.
-  //
-  // It is skipped, not passed, when the card never appeared: a game with fewer
-  // than two costed moments raises no card by design, and a row that reports
-  // green for an event that could not happen is the self-declared n/a this
-  // audit has had to delete twice already.
-  if (turnCardUp || turningSeenUnanswered || turningAnswered) {
-    await add('DRIVER answered-the-turning-point-card', turningAnswered,
-      turningAnswered
-        ? `answered in ${turningRounds} round(s); reveal spoken`
-        : `the card defeated the driver after ${turningRounds} round(s) — no reveal was ever spoken. `
-          + 'The walk cannot pass this card, so RECAP, THESIS and CRIT below are DRIVER failures too. '
-          + 'This is the HARNESS, not the coach.');
-  }
+  // THE TURNING POINT IS STATED, NOT ASKED (2026-10-01). It is raised when the
+  // walk reaches the last ply; wait for the stated line before the recap.
+  const turnStated = await until(() => has(page, '[data-testid="review-turning-point-summary"]'), 45000, 500);
+  log(`  [turning] stated line on screen after walk end: ${turnStated}`);
 
   // STEP PAST THE LAST PLY — the closing lives at lastPly + 1, so something has
   // to take that step: auto-advance if it resumes, else the forward control.
@@ -915,51 +727,10 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   }, [GID, GAME.studentSide]).catch((e) => ({ n: -1, at: [], error: String(e) }));
   log(`  [engine record] ${dbFlagged.n} flagged student ply(s)${dbFlagged.at.length ? ' — ' + dbFlagged.at.join(', ') : ''}`);
 
-  // 🔒 THE DRIVER'S OWN FAILURES MUST NOT BE FILED AS THE COACH'S. When the
-  // turning-point card could not be answered, the walk parked before the end —
-  // so the closing was never reachable and the critical moment was never
-  // reached either. Both rows would then blame a coach that never got a turn.
-  // THESIS has said DRIVER since 2026-09-16; these two did not, which is how
-  // one latch bug produced four reds on a clean run (2026-09-20).
-  //
-  // This is deliberately NOT the wedge guard: a wedge is the READOUT dying,
-  // and here the readout answers perfectly while the walk is held by a card.
-  // The two failures look nothing alike from the instrument's side, which is
-  // exactly why one guard could not cover both.
-  //
-  // BOTH CONDITIONS, NEVER ONE. `turningSeenUnanswered` is set when a round
-  // STARTS, so on its own it would also be true for a card that was answered
-  // by some other path, or dismissed, after which the walk ran to the end
-  // perfectly well. A row that got its full chance and still failed is a REAL
-  // red, and excusing it would be this guard committing the sin it prevents —
-  // an instrument reporting a failure as not-applicable.
-  const driverStop = (!turningAnswered && turningSeenUnanswered && !reachedEnd)
-    ? 'DRIVER: the turning-point card was never answered and the walk never reached the end, '
-      + 'so this row had no chance to be true. Fix the driver, not the coach'
-    : null;
+  // The only card that could park the walk short of the end is gone, so no
+  // row is excused as a driver stop any more.
   const RECAP_RE = /The pattern:[^.]*flagged move|The pattern: you \w|carry into the next game/i;
-  // 🔴 A LOOP THAT CAN ADVANCE THE WALK MUST ANSWER THE CARDS IT RAISES
-  // (found 2026-09-21, from a prod run that looked like a different bug).
-  //
-  // This loop clicks Forward up to 20 times to reach the closing. When the walk
-  // parked SHORT of the end, the turning-point card had not been raised yet —
-  // so the wait above correctly reported `present=false` — and then one of
-  // THESE clicks landed on `moves.length`, raised the card, and the NEXT click
-  // dismissed it: `handleWalkForward` dismisses by design (David 2026-07-19,
-  // forward must never leave a frozen board) and `turningAskedRef` means a
-  // dismissed card never returns. The driver created the card and destroyed it
-  // one second apart, having already given up waiting for it.
-  //
-  // It read as "the card was never raised", and it was not: the ask line
-  // ("where do you think this game turned") was in the captured narration the
-  // whole time, one row away from the failure. Two sessions believed two
-  // different wrong things about it for an hour.
-  //
-  // This is the same ORDER class as the 2026-09-17 fix below — that one moved
-  // the recap wait AFTER the turning block, which is right when the walk
-  // reaches the end and silently wrong when it parks short. Resolving cards
-  // every iteration covers both, because it no longer depends on WHEN the card
-  // appears relative to the phases.
+  // Step past the last ply to the closing, answering any card the steps raise.
   for (let i = 0; i < 20; i += 1) {
     if (spoken().some((x) => RECAP_RE.test(x.text))) break;
     await resolveCards();
@@ -975,10 +746,6 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       .click({ timeout: 1500 }).catch(() => undefined);
     await page.waitForTimeout(1000);
   }
-  // One more reserved round, for the same reason the post-walk call has one:
-  // a card raised by the stepping above deserves the attempt that the loop's
-  // own budget may already have spent.
-  grantTurningRound();
   await resolveCards();
   await until(() => spoken().some((s) => RECAP_RE.test(s.text)), 60000, 1000);
   const recap = spoken().find((s) => RECAP_RE.test(s.text));
@@ -1001,69 +768,36 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
         : `the engine record carries ${dbFlagged.n} flagged student ply(s) (${dbFlagged.at.join(', ')}) and the walk recorded NONE — the walk stopped seeing them (end reached=${reachedEnd})`);
   } else {
     await add('RECAP fundamentals-aggregate', reachedEnd && !!recap, recap ? `"${recap.text.slice(0, 140)}"`
-      : driverStop ?? `end reached=${reachedEnd}; ${flaggedLeads.size} flagged ply(s) but no aggregate line spoken`);
+      : `end reached=${reachedEnd}; ${flaggedLeads.size} flagged ply(s) but no aggregate line spoken`);
   }
 
-  // THESIS (unified-coach N1, 2026-09-15): THE ONE SELECTOR's game-level thesis
-  // is spoken at the turning-point REVEAL, retrospective register, exactly once,
-  // and only after the student commits (withheld until the pick). The card is
-  // driven by resolveCards (confirm → done); its ask line is the marker that it
-  // fired at all. The legacy flat "The turning point was" reveal is a regression.
+  // THESIS (unified-coach N1): THE ONE SELECTOR's game-level thesis is STATED
+  // once at the end of the walk, retrospective register. The "where do you
+  // think this game turned?" card is gone (2026-10-01), so NO question may be
+  // asked, and the line is said exactly once.
   {
     const lines = spoken().map((x) => x.text);
-    const askIdx = lines.findIndex((t) => /where do you think this game turned/i.test(t));
-    const thesisIdx = lines.findIndex((t) => /The game turned at /.test(t));
+    const askCount = lines.filter((t) => /where do you think this game turned/i.test(t)).length;
+    await add('THESIS no-turning-question', askCount === 0, `turning-point questions asked=${askCount} (must be 0)`);
     const thesisCount = lines.filter((t) => /The game turned at /.test(t)).length;
     const legacyCount = lines.filter((t) => /The turning point was /.test(t)).length;
-    // THE APP TELLS US THE KIND — read it instead of guessing. CoachGameReview
-    // emits `selector read the game: thesis=<kind>@<ply> …`, and the thesis is
-    // spoken ONLY when kind==='turned' AND its ply is the one the card asks
-    // about (otherwise "the game turned at X" would contradict a card whose
-    // answer is Y — a deliberate withhold, not a miss). 2026-09-16: a prod run
-    // hard-failed this check at thesis lines=0 with no way to tell which case
-    // it was.
+    // THE APP TELLS US THE KIND — `selector read the game: thesis=<kind>@<ply>
+    // turn=<ply>`. The thesis is spoken only when it is 'turned' at that same
+    // ply; otherwise the plain computed line for the biggest swing is.
     const selLine = events()
       .map((e) => String(e.summary ?? ''))
       .filter((t) => /selector read the game/.test(t))
       .pop() ?? '';
     const kindM = /thesis=([a-z]+)@([0-9-]+)/.exec(selLine);
-    const thesisKind = kindM ? kindM[1] : null;
-    const thesisPly = kindM ? kindM[2] : null;
-    const cardM = /card=([0-9-]+)/.exec(selLine);
-    const cardPly = cardM ? cardM[1] : null;
-    // Owed only when the selector's thesis is a 'turned' one pointing at the
-    // very ply the card asks about.
-    const owed = thesisKind === 'turned' && (cardPly === null || thesisPly === cardPly);
-    if (askIdx === -1) {
-      await add('THESIS spoken-once-at-reveal', true, 'no turning-point card this game (fewer than 2 costed moments) — thesis withheld by design');
-    } else if (!lines.some((t) => /^(You called it\.|Not quite\.)/.test(t))) {
-      // The reveal is what SPEAKS the thesis, and it only fires on a commit.
-      // If no reveal line was ever spoken the card was never answered — that is
-      // a DRIVER failure, and reporting it as a broken N1 wire sent a session
-      // chasing a product bug that did not exist (2026-09-16).
-      // 🔒 "NEVER APPEARED" AND "NEVER ANSWERED" ARE DIFFERENT FACTS, and this
-      // row printed the same sentence for both until 2026-09-21. A reader
-      // (two of them) took "never answered" to mean the card had not rendered,
-      // spent an hour on that, and the truth — it rendered, spoke, and was
-      // dismissed unanswered — was one row away the whole time. A message that
-      // collapses two causes is how the wrong one gets picked.
-      //
-      // `askIdx !== -1` is already proof the card RENDERED: the ask is
-      // `turningQ.question`, drawn inside the same `{turningQ && …}` element
-      // the driver looks for. So this branch always means raised-then-lost;
-      // say that, and say WHERE it was lost.
-      await add('THESIS spoken-once-at-reveal', false,
-        'DRIVER: the card RENDERED (its ask was spoken) but no reveal line ever followed, so it was '
-        + `dismissed unanswered — ${turningAnswered ? 'after' : 'without'} a successful answering round `
-        + `(${turningRounds} attempted). The thesis had no moment to fire. Fix the driver, not the coach`);
-    } else if (!kindM) {
-      await add('THESIS spoken-once-at-reveal', false, `card rendered but the selector emitted NO thesis kind — the N1 wire did not run (spoken=${thesisCount})`);
-    } else if (!owed) {
-      await add('THESIS spoken-once-at-reveal', thesisCount === 0,
-        `n/a — selector thesis is ${thesisKind}@${thesisPly} while the card asks about ply ${cardPly ?? '?'}, so it is withheld by design (spoken=${thesisCount}, must be 0)`);
+    const turnM = /turn=([0-9-]+)/.exec(selLine);
+    if (!selLine) {
+      await add('THESIS stated-once', thesisCount === 0 && legacyCount === 0,
+        `no turning point this game (fewer than 2 costed moments, or the walk never reached the end=${reachedEnd}) — nothing stated (thesis=${thesisCount} legacy=${legacyCount})`);
+    } else if (kindM && kindM[1] === 'turned' && (!turnM || kindM[2] === turnM[1])) {
+      await add('THESIS stated-once', thesisCount === 1 && legacyCount === 0, `thesis lines=${thesisCount} legacy=${legacyCount}`);
     } else {
-      await add('THESIS spoken-once-at-reveal', thesisCount === 1 && legacyCount === 0, `thesis lines=${thesisCount} legacy=${legacyCount}${thesisIdx >= 0 ? ` "${lines[thesisIdx].slice(0, 100)}"` : ''}`);
-      await add('THESIS withheld-until-pick', thesisIdx === -1 || thesisIdx > askIdx, `ask@${askIdx} thesis@${thesisIdx}`);
+      await add('THESIS stated-once', thesisCount === 0 && legacyCount === 1,
+        `selector thesis ${kindM ? `${kindM[1]}@${kindM[2]}` : 'none'} vs turn ${turnM?.[1] ?? '?'} — the plain line speaks instead (thesis=${thesisCount} legacy=${legacyCount})`);
     }
   }
   // NEED COVERAGE (unified-coach N2, 2026-09-15 — the retired R2's replacement):
@@ -1654,8 +1388,8 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     spoken: spoken().map((x) => x.text),
   });
   await add('CRIT spoken-names-count-and-stake',
-    voice.pass || !!driverStop,
-    voice.verdict === 'silent' && driverStop ? driverStop : `${voice.verdict}: ${voice.detail}`);
+    voice.pass,
+    `${voice.verdict}: ${voice.detail}`);
   // "Keeps equality" is a claim about the EVALUATION and it is false when they
   // are winning (it keeps the WIN) and when they are lost (it promises a draw
   // that is not there). It must never appear.

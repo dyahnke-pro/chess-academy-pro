@@ -90,12 +90,12 @@ async function driveCards(maxSteps) {
       const dec = await has('review-rewind-decline', 500); if (dec) await tap('review-rewind-decline', 3000);
       rec('FS13 rewind card', true, dec, `decline=${dec}`); continue;
     }
-    if (await has('review-turning-point-card', 500) || await has('review-turning-card', 500)) {
+    // The turning point is STATED, never asked (2026-10-01): a summary line,
+    // no buttons. A question card here is a regression.
+    if (!cardsSeen.has('turning') && await has('review-turning-point-summary', 500)) {
       cardsSeen.add('turning');
-      const rev = await has('review-turning-point-reveal', 500); if (rev) await tap('review-turning-point-reveal', 3000);
-      if (await has('review-turning-point-confirm', 500)) await tap('review-turning-point-confirm', 3000);
-      if (await has('review-turning-point-done', 500)) await tap('review-turning-point-done', 3000);
-      rec('FS14 turning-point card', true, true, `reveal=${rev}`); continue;
+      const asked = await has('review-turning-point-card', 300);
+      rec('FS14 turning-point stated', !asked, true, `stated=true question-card=${asked}`);
     }
     if (await has('review-trap-card', 500)) {
       cardsSeen.add('trap');
@@ -185,7 +185,7 @@ for (const id of GAMES) {
 if (!anyWalk && !grid.some((g) => g.fn === 'FS2 open-game-card')) rec('FS2 open-game-card', false, false, 'no game opened across all ids');
 
 // cards that never surfaced across ALL walked games
-for (const [fn, key] of [['FS12 find-shot card', 'find-shot'], ['FS13 rewind card', 'rewind'], ['FS14 turning-point card', 'turning'], ['FS15 trap card', 'trap'], ['FS16 principle-quiz', 'quiz'], ['FS17 discussion why-picker', 'discussion'], ['FS18 capture flow', 'capture']]) {
+for (const [fn, key] of [['FS12 find-shot card', 'find-shot'], ['FS13 rewind card', 'rewind'], ['FS14 turning-point stated', 'turning'], ['FS15 trap card', 'trap'], ['FS16 principle-quiz', 'quiz'], ['FS17 discussion why-picker', 'discussion'], ['FS18 capture flow', 'capture']]) {
   if (!cardsSeen.has(key) && !grid.some((g) => g.fn === fn)) rec(fn, false, anyWalk, 'did not surface across walked games');
 }
 

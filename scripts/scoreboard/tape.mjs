@@ -15,12 +15,22 @@ const H = `http://localhost:${process.env.HAND_PORT ?? 7777}`;
 const games = JSON.parse(readFileSync(src, 'utf8'));
 const tape = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : {};
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+// A HUNG CALL IS A FINDING, NEVER SILENCE (2026-10-01: a walk printed nothing
+// for 38 minutes while every driver call timed out — a frozen page looked like a
+// slow one). Any call slower than 20s, and every failure, is logged with its ply.
+let where = '';
 async function call(path, body) {
   for (let a = 0; a < 3; a++) {
+    const t0 = Date.now();
     try {
       const r = await fetch(`${H}/${path}`, { method: body ? 'POST' : 'GET', body, signal: AbortSignal.timeout(120_000) });
-      return await r.json();
-    } catch (e) { if (a === 2) return { error: String(e) }; await sleep(2000); }
+      const j = await r.json();
+      if (Date.now() - t0 > 20_000) console.error(`[tape] SLOW ${path} ${Date.now() - t0}ms at ${where}`);
+      return j;
+    } catch (e) {
+      console.error(`[tape] FAIL ${path} attempt ${a + 1} after ${Date.now() - t0}ms at ${where}: ${String(e).slice(0, 120)}`);
+      if (a === 2) return { error: String(e) }; await sleep(2000);
+    }
   }
 }
 const count = (s) => (s.moves ? s.moves.split(' ').length : 0);
@@ -46,6 +56,8 @@ for (const g of games) {
   }) : []);
   let asked = 0;
   while (i < limit) {
+    where = `${id} ply ${i + 1} (${sans[i]})`;
+    console.error(`[tape] ${where}`);
     if (askAt.has(i)) {
       try {
         const mf = `/tmp/claude-0/q-moves-${id}.txt`;
@@ -82,6 +94,7 @@ for (const g of games) {
     for (let t = 0; t < 40; t++) {
       await sleep(1000);
       st = await call('state');
+      if (st.error) break;
       const fresh = st.spoken ?? [];
       spoken.push(...fresh);
       tagged.push(...(st.boards ?? []));
@@ -89,6 +102,7 @@ for (const g of games) {
       quiet = fresh.length ? 0 : quiet + 1;
       if (count(st) >= want && quiet >= 5) break;
     }
+    if (st.error) { rec.error = `ply ${i + 2}: the page stopped answering (${st.error.slice(0, 80)}) — a frozen page is a finding`; rec.plies[i + 1] = [...new Set(spoken)]; break; }
     if (count(st) < want) { rec.error = `ply ${i + 2}: coach did not play ${sans[i + 1]} (board ${st.moves})`; rec.plies[i + 1] = [...new Set(spoken)]; break; }
     // THE BOARD MUST BE THE GAME. When the coach plays its own reply instead of
     // the dictated one, every later line is about a board the checker does not
