@@ -486,10 +486,15 @@ export async function getPuzzlesInRatingBand(
  */
 export async function getDuePuzzles(limit: number = 20): Promise<PuzzleRecord[]> {
   const today = new Date().toISOString().split('T')[0];
-  const candidates = await db.puzzles
+  // "Due for REVIEW" means seen before and now due again. Every seeded puzzle
+  // starts with today's due date, so without this the whole bank (15,299 on a
+  // fresh install) read as a review backlog.
+  // Read by the index, filter in memory: a Dexie `.filter()` walks a cursor
+  // row by row, ~50x slower than `toArray()` over the whole seeded bank.
+  const candidates = (await db.puzzles
     .where('srsDueDate')
     .belowOrEqual(today)
-    .toArray();
+    .toArray()).filter((p) => p.attempts > 0);
   return shuffle(candidates).slice(0, limit);
 }
 
@@ -819,10 +824,9 @@ export interface PuzzleStats {
 
 export async function getPuzzleStats(): Promise<PuzzleStats> {
   const today = new Date().toISOString().split('T')[0];
-  const [all, dueCount] = await Promise.all([
-    db.puzzles.toArray(),
-    db.puzzles.where('srsDueDate').belowOrEqual(today).count(),
-  ]);
+  const all = await db.puzzles.toArray();
+  // Seen before and due again — see getDuePuzzles.
+  const dueCount = all.filter((p) => p.attempts > 0 && p.srsDueDate <= today).length;
 
   const attempted = all.filter((p) => p.attempts > 0);
   const totalAttempts = attempted.reduce((sum, p) => sum + p.attempts, 0);

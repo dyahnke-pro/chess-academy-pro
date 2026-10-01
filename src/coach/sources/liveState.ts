@@ -24,8 +24,7 @@ export function prepareLiveState(input: LiveState): LiveState {
     try {
       // Use the existing `classifyPhase` helper so the phase label
       // matches whatever the rest of the app reports.
-      const moveNumber = next.moveHistory?.length ?? 0;
-      next.phase = classifyPhase(next.fen, moveNumber);
+      next.phase = classifyPhase(next.fen, { ply: next.moveHistory?.length ?? 0 });
     } catch {
       // Ignore — phase remains undefined, and the envelope formatter
       // will simply omit it.

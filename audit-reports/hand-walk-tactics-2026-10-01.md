@@ -85,3 +85,35 @@ Calculation 3, Drill 1. Daily / Setup / Profile: 0.
   `/api/user/*` works. Imported via chess.com instead.
 - Withdrawn: "g5 was okay" grading flag — sign misread; ~1 pawn at depth 14,
   inaccuracy is fair.
+
+## Fix status (branch `tactics-walk-fixes`, not on main)
+
+| flag | status |
+|---|---|
+| AD6 next puzzle's solution spoken | fixed — resolution keyed by puzzle id |
+| W4 solve not recorded without Next | fixed — `onResolved` at the solve |
+| M2 Re-analyze deletes puzzles | fixed — removed; empty state starts the real analysis |
+| AD5 assisted solve climbs | fixed — clean / assisted / missed |
+| WK4 / WK1 / WK2 theme membership + raw labels | fixed — one membership rule, exhaustive labels |
+| T1 card leads with an unrelated fact | fixed — leads with what the move ALLOWED |
+| T2 no owner on pieces | fixed — the student's own loose piece only |
+| W1 wrong move says nothing about it | fixed — computed refutation of the tried move |
+| W3 solved line never closes on the threat | fixed — "Qc5 keeps your pawn on d6 protected" |
+| T4 / W2 template hints, Why repeats | fixed — "Teach me this position" (the shared read) |
+| AD4 smothered "in the corner", "checkmate — checkmate" | fixed — mate named, not described; # said once; opponent's replies are theirs |
+| catch-all `tactical_sequence` tag | fixed — classified on the line; boot backfill re-tags |
+| M5 moves 17–20 filed "Opening" | fixed — `classifyPhase` requires `{ ply }` or `{ fullMove }`; second classifier folded in; backfill re-files saved rows |
+| DT1 "15,299 due" | fixed — due = attempted and due again |
+| V1 "Let's …" | fixed |
+| V2 "second-rank rook" | fixed — "rook from the second rank to b3" |
+| V3 mistake announced twice | fixed — replay ends silent, intro names it |
+| PS1 "Computed live by" | fixed — removed |
+| PS2 no arrow on pattern example | fixed — pattern move arrow + the squares it hits |
+| AP1 correct answer flashes 0.9 s | fixed — answer spoken and shown; advance voice-gated |
+| OT1 trap groups lowercase / "other" | fixed — DB names restored, "Other openings" last |
+| Endgame Technique "Drill: Mixed" | fixed — card name is the title |
+| "1 attempts" | fixed |
+| Hint 2 without Hint 1 | fixed — every revealed hint stays, in order |
+| H1 26 hub tiles | fixed — grouped bars with a sentence each |
+| Unified algo | done — method beat via `decide()` with the whole record; theme targets from the whole record (`puzzle-themes-targeted`, audited) |
+| RT1 five ratings on one tab | OPEN — needs David's call on which ratings show |

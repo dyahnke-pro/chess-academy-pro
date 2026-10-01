@@ -60,6 +60,9 @@ export function TacticDrillPage(): JSX.Element {
 
   const filterThemes = (location.state as { filterThemes?: string[] } | null)?.filterThemes;
   const filterTypes = (location.state as { filterTypes?: string[] } | null)?.filterTypes;
+  /** The hub card's own name ("Endgame Technique") — a card that groups several
+   *  themes was titled "Drill: Mixed" (hand walk 2026-10-01). */
+  const filterLabel = (location.state as { filterLabel?: string } | null)?.filterLabel;
   const themes = filterThemes ?? filterTypes ?? ['fork'];
 
   // Resolve theme labels to Lichess tags
@@ -112,9 +115,10 @@ export function TacticDrillPage(): JSX.Element {
   useEffect(() => cancelAutoAdvance, [cancelAutoAdvance]);
 
   const currentPuzzle = puzzleHistory[currentIndex] ?? null;
-  const themeLabel = themes.length === 1
-    ? themes[0].replace(/([A-Z])/g, ' $1').replace(/^./, (s) => s.toUpperCase()).trim()
-    : 'Mixed';
+  const themeLabel = filterLabel
+    ?? (themes.length === 1
+      ? themes[0].replace(/([A-Z])/g, ' $1').replace(/^./, (s) => s.toUpperCase()).trim()
+      : 'Mixed');
 
   // Clear board context on unmount
   useEffect(() => {

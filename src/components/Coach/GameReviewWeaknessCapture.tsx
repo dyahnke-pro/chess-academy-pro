@@ -98,7 +98,7 @@ export function buildBlunders(moves: CoachGameMove[], playerColor: 'white' | 'bl
       bestSan,
       cpLoss: cpLoss !== undefined && cpLoss > 0 ? cpLoss : undefined,
       // Material-aware phase so endgame slips are filed as endgame.
-      gamePhase: classifyPhase(fenBefore, i + 1),
+      gamePhase: classifyPhase(fenBefore, { ply: i + 1 }),
       moveNumber: move.moveNumber,
       historySans,
       pvAfterPlayed,

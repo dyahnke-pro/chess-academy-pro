@@ -2322,7 +2322,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           fen: expected.fenBefore,
           playedSan: moveResult.san,
           bestSan: expected.san,
-          gamePhase: classifyPhase(expected.fenBefore, state.atPly),
+          gamePhase: classifyPhase(expected.fenBefore, { ply: state.atPly }),
           moveNumber: Math.ceil(state.atPly / 2),
           openingId: openingName ? resolveOpeningIdFromName(openingName) ?? undefined : undefined,
           openingName: openingName ?? undefined,

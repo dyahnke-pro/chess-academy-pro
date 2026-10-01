@@ -1,5 +1,5 @@
 import { Chess } from 'chess.js';
-import { classifyPhase, countMaterial, isEndgameByMaterial } from './gamePhaseService';
+import { classifyPhase, isEndgameByMaterial } from './gamePhaseService';
 
 /** Direct FEN-based castling check. Replaces the assessPosition call
  *  that WO-PHASE-FIX-01 used — assessPosition runs multiple analyzers
@@ -252,7 +252,7 @@ export function detectPhaseTransition(
     return null;
   }
 
-  const phase = classifyPhase(lastMove.fen, lastMove.moveNumber);
+  const phase = classifyPhase(lastMove.fen, { ply: lastMove.moveNumber });
 
   // ── Opening → middlegame ─────────────────────────────────────────
   // Per WO-PHASE-FIX-03 + WO-PHASE-FIX-02: seven-rule OR, first match
@@ -333,20 +333,6 @@ export function detectPhaseTransition(
   }
 
   return null;
-}
-
-/** Exposed for tests + future tuning — read-only view of the internal
- *  classifier so callers can understand why a detection fired or not. */
-export function debugPhaseDiagnostics(fen: string, moveNumber: number): {
-  phase: 'opening' | 'middlegame' | 'endgame';
-  material: number;
-  endgameByMaterialFallback: boolean;
-} {
-  return {
-    phase: classifyPhase(fen, moveNumber),
-    material: countMaterial(fen),
-    endgameByMaterialFallback: isEndgameByMaterial(fen),
-  };
 }
 
 /**
@@ -434,7 +420,7 @@ export function phaseTransitionDiagnostic(
     san: lastMove.san,
     isCoachMove: lastMove.isCoachMove,
     fullMoveNumber: Math.ceil(lastMove.moveNumber / 2),
-    phase: classifyPhase(lastMove.fen, lastMove.moveNumber),
+    phase: classifyPhase(lastMove.fen, { ply: lastMove.moveNumber }),
     studentCastled: hasCastled(lastMove.fen, playerColor),
     studentRooksOnBackRank: rooksConnected(lastMove.fen, playerColor),
     developedMinors: countDevelopedMinors(lastMove.fen),

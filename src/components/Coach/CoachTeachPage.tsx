@@ -8657,7 +8657,7 @@ export function CoachTeachPage(): JSX.Element {
         inBook: studentMoveInBook,
         bookMoveSan: studentMoveInBook ? move.san : undefined,
         learned: !!openingName,
-        gamePhase: classifyPhase(move.fen, (capturedMoveNumber ?? 1) * 2),
+        gamePhase: classifyPhase(move.fen, { fullMove: capturedMoveNumber ?? 1 }),
         moveNumber: capturedMoveNumber,
         openingName,
         // 🔴 WAS `puzzleRating ?? currentRating` — the PUZZLE SRS number, moved
@@ -9085,7 +9085,7 @@ export function CoachTeachPage(): JSX.Element {
                 // it ~1s to land, and opening positions repeat heavily across
                 // games so the session cache compounds. Narration reads the
                 // cache ONLY (the rate-limit contract).
-                if (classifyPhase(probe.fen(), historyAfterReply.length) === 'opening') {
+                if (classifyPhase(probe.fen(), { ply: historyAfterReply.length }) === 'opening') {
                   void warmAmateurPlay(probe.fen(), rating, 'coach-teach');
                 }
                 // The STUDENT'S recommended next move — COMPUTED in code, never the

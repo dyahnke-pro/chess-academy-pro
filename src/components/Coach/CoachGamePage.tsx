@@ -3321,7 +3321,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         cpLoss: evalLoss,
         shouldCount: !!openingName,
         reason: inBook ? 'left-book' : 'eval-drop',
-        gamePhase: classifyPhase(moveResult.fen, ply),
+        gamePhase: classifyPhase(moveResult.fen, { ply }),
         moveNumber: Math.ceil(ply / 2),
         openingName,
         studentRating: activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? undefined,

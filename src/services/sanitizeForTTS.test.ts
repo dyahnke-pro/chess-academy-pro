@@ -70,8 +70,8 @@ describe('sanitizeForTTS', () => {
     it('a sentence that says mate does not say it twice (F38)', () => {
       expect(sanitizeForTTS('Rxd1# is mate.')).toBe('rook takes d1 is checkmate.');
     });
-    it('rank-disambiguated "R1e2" → "first-rank rook to e2"', () => {
-      expect(sanitizeForTTS('R1e2 holds')).toBe('first-rank rook to e2 holds');
+    it('rank-disambiguated "R1e2" → "rook from the first rank to e2"', () => {
+      expect(sanitizeForTTS('R1e2 holds')).toBe('rook from the first rank to e2 holds');
     });
     it('natural disambiguation does not trip the sanitizer-leak detector', () => {
       // "knight b to d2" (old form) had a lone "b to" the leak detector

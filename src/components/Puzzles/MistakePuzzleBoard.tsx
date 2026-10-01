@@ -387,8 +387,8 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
 
         // Narrate the replay intro
         const contextMsg = puzzle.openingName
-          ? `Let's replay the ${puzzle.openingName}. Here's how the game reached this position.`
-          : `Let's see how the game reached this position.`;
+          ? `Your ${puzzle.openingName}, as the game went.`
+          : 'Your game, as it went.';
         setSubtitle(contextMsg);
         void voiceService.speak(contextMsg);
       } else {
@@ -460,16 +460,11 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
         setFen(step.fen);
         setBoardKey((k) => k + 1);
 
-        const mistakeMsg = `You played ${puzzle.playerMoveSan} here — ${puzzle.classification === 'miss' ? 'missing an opportunity' : `a ${puzzle.classification}`}. Let's find the best move.`;
-        setSubtitle(mistakeMsg);
-
-        // Speak the mistake message, then start the puzzle and speak
-        // its intro. Gating the intro on the mistake message's voice
-        // promise (instead of a fixed 2500ms timer) prevents the two
-        // narrations from overlapping when TTS takes longer than the
-        // arbitrary delay — the original cause of the "walked over"
-        // narration in Mixed Training. A 6s safety timer still fires
-        // if the speech promise hangs so the puzzle never gets stuck.
+        // The board shows the move; the intro that follows names it and says
+        // what it allowed. Announcing it here as well said the mistake twice
+        // back to back (hand walk 2026-10-01, V3) — so the replay ends on the
+        // board, silent, and hands over to the intro.
+        setSubtitle(`You played ${puzzle.playerMoveSan}.`);
         voiceService.stop();
 
         let advanced = false;
@@ -486,13 +481,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
           }
         };
 
-        const safetyTimer = setTimeout(advance, 6000);
-        replayTimerRef.current = safetyTimer;
-
-        void voiceService.speak(mistakeMsg).finally(() => {
-          clearTimeout(safetyTimer);
-          advance();
-        });
+        replayTimerRef.current = setTimeout(advance, REPLAY_MOVE_DELAY);
         return;
       }
 

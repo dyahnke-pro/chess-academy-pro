@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1504 lines · 26 exports · 29 importers · 16 tests · 4 audits**
+**1485 lines · 26 exports · 29 importers · 16 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -146,7 +146,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticClassifierService.ts:568`
 
 ### `determinePlayerColor` (function) — 3 call sites
-- `src/components/Tactics/AnalysisPracticePage.tsx:100`
+- `src/components/Tactics/AnalysisPracticePage.tsx:101`
 - `src/services/autoAnalyzeGame.ts:295`
 - `src/test/seatResolversReadDeclaredSeat.test.ts:15`
 
@@ -175,7 +175,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `getMistakePuzzlesDue` (function) — 3 call sites
 - `src/services/mistakePuzzleService.test.ts:445`
 - `src/services/mistakePuzzleService.test.ts:458`
-- `src/services/puzzleService.ts:534`
+- `src/services/puzzleService.ts:539`
 
 ### `getMistakePuzzlesByGame` (function) — 1 call site
 - `src/services/mistakePuzzleService.test.ts:471`

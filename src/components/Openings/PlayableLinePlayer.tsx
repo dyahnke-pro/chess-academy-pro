@@ -529,7 +529,7 @@ export function PlayableLinePlayer({
               playerColor: sideToMove === 'w' ? 'white' : 'black',
               inBook: false,
               learned: true,
-              gamePhase: classifyPhase(temp.fen(), chessRef.current.history().length + 1),
+              gamePhase: classifyPhase(temp.fen(), { ply: chessRef.current.history().length + 1 }),
               openingName: line.title,
               // Attribute the fundamental so a live slip feeds the
               // per-fundamental scorecard + drill queue (David 2026-09-07).

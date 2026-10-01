@@ -136,23 +136,26 @@ describe('TacticsPage', () => {
     expect(screen.getByText('Mating Nets')).toBeInTheDocument();
   });
 
-  it('My Profile spans full width', async () => {
+  it('every section is a full-width bar that says what it does', async () => {
     setProfile();
     render(<TacticsPage />);
 
     await waitFor(() => {
       expect(screen.getByTestId('section-spot')).toBeInTheDocument();
     });
-    expect(screen.getByTestId('section-spot').className).toContain('col-span-2');
+    const profile = screen.getByTestId('section-spot');
+    expect(profile.className).toContain('w-full');
+    expect(profile.textContent).toMatch(/strongest and weakest/i);
   });
 
-  it('theme cards are square', async () => {
+  it('theme cards are bars, in their own group', async () => {
     setProfile();
     render(<TacticsPage />);
 
     await waitFor(() => {
       expect(screen.getByTestId('section-forks')).toBeInTheDocument();
     });
-    expect(screen.getByTestId('section-forks').className).toContain('aspect-square');
+    expect(screen.getByTestId('section-forks').className).toContain('w-full');
+    expect(screen.getByText('Themes')).toBeInTheDocument();
   });
 });

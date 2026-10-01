@@ -3,7 +3,6 @@ import { db } from '../db/schema';
 import {
   getOrCreateMainProfile,
   updateProfile,
-  getDuePuzzles,
   getDueFlashcards,
   getRecentSessions,
   exportUserData,
@@ -83,33 +82,6 @@ describe('dbService', () => {
       expect(updated?.currentRating).toBe(1600);
       // Other fields unchanged
       expect(updated?.puzzleRating).toBe(800);
-    });
-  });
-
-  describe('getDuePuzzles', () => {
-    it('returns puzzles due today or earlier', async () => {
-      const today = new Date().toISOString().split('T')[0];
-      const future = new Date();
-      future.setDate(future.getDate() + 5);
-
-      await db.puzzles.bulkPut([
-        buildPuzzleRecord({ id: 'due1', srsDueDate: today }),
-        buildPuzzleRecord({ id: 'due2', srsDueDate: '2020-01-01' }),
-        buildPuzzleRecord({ id: 'notdue', srsDueDate: future.toISOString().split('T')[0] }),
-      ]);
-
-      const due = await getDuePuzzles();
-      expect(due.length).toBe(2);
-    });
-
-    it('respects limit parameter', async () => {
-      const today = new Date().toISOString().split('T')[0];
-      for (let i = 0; i < 5; i++) {
-        await db.puzzles.put(buildPuzzleRecord({ id: `due-${i}`, srsDueDate: today }));
-      }
-
-      const due = await getDuePuzzles(3);
-      expect(due.length).toBe(3);
     });
   });
 

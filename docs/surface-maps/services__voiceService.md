@@ -4,20 +4,20 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2900 lines · 16 exports · 101 importers · 82 tests · 23 audits**
+**2904 lines · 16 exports · 102 importers · 83 tests · 23 audits**
 
 ## Locked rules that govern this surface
 
 - **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:353) — names `CLOUD_VOICES`, `voiceService`
-- **G4. TTS = streaming canonical. Buffered MP3 is gone.** (CLAUDE.md:797) — names `voiceService`
-- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1169) — names `voiceService`
-- **G9.1 The PRO-REP DEEP BUILD DOCTRINE — locked (David 2026-05-28, emphatic).** (CLAUDE.md:1561) — names `sanitizeForTTS`
-- **Golden rules (the most important — read these every time)** (CLAUDE.md:2217) — names `voiceService`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3149) — names `voiceService`
-- **🧒 Kids section — non-negotiables** (CLAUDE.md:3326) — names `voiceService`
-- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3635) — names `voiceService`
-- **Shared types / services** (CLAUDE.md:5262) — names `voiceService`
-- **The standard post-deploy ritual** (CLAUDE.md:6041) — names `voiceService`
+- **G4. TTS = streaming canonical. Buffered MP3 is gone.** (CLAUDE.md:808) — names `voiceService`
+- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1180) — names `voiceService`
+- **G9.1 The PRO-REP DEEP BUILD DOCTRINE — locked (David 2026-05-28, emphatic).** (CLAUDE.md:1603) — names `sanitizeForTTS`
+- **Golden rules (the most important — read these every time)** (CLAUDE.md:2259) — names `voiceService`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3191) — names `voiceService`
+- **🧒 Kids section — non-negotiables** (CLAUDE.md:3368) — names `voiceService`
+- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3677) — names `voiceService`
+- **Shared types / services** (CLAUDE.md:5304) — names `voiceService`
+- **The standard post-deploy ritual** (CLAUDE.md:6085) — names `voiceService`
 
 ## Who calls in
 
@@ -92,6 +92,7 @@
 - `src/components/Search/SmartSearchBar.tsx`
 - `src/components/Settings/NarrationAuditPanel.tsx`
 - `src/components/Settings/VoiceSettingsPanel.tsx`
+- `src/components/Tactics/AnalysisPracticePage.tsx`
 - `src/components/Tactics/FindSquarePage.tsx`
 - `src/components/Tactics/TacticCreatePage.tsx`
 - `src/components/Tactics/TacticSetupBoard.tsx`
@@ -167,7 +168,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolvePollyVoice` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:3677`
+- `src/components/Coach/CoachGamePage.tsx:3680`
 
 ### `resolvePollySecondaryVoice` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -317,6 +318,7 @@
 - `src/components/Puzzles/MistakePuzzleBoard.capabilityEvidence.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.capabilityRow.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.test.tsx`
+- `src/components/Puzzles/PuzzleBoard.evidence.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.test.tsx`
 - `src/components/Tactics/TacticSetupBoard.test.tsx`
 - `src/hooks/hintDialTally.test.ts`

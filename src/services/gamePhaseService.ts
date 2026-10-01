@@ -39,21 +39,29 @@ export function countMaterial(fen: string): number {
   return total;
 }
 
-/**
- * Classify the game phase for a given position.
- *
- * - `opening`: moveNumber ≤ 10
- * - `endgame`: total piece material ≤ 13 (excluding kings)
- * - `middlegame`: everything else
- *
- * Note: moveNumber is 1-indexed (move 1, move 2, etc.)
- * where odd = white's move, even = black's move.
- * We use the chess "full move" number: Math.ceil(moveNumber / 2).
- */
-export function classifyPhase(fen: string, moveNumber: number): GamePhase {
-  const fullMoveNumber = Math.ceil(moveNumber / 2);
+/** WHERE IN THE GAME a position sits — REQUIRED to say which count it is.
+ *  `ply` is the half-move count (1-indexed, odd = White's move); `fullMove` is
+ *  the chess move number (the FEN's sixth field, what an annotation stores).
+ *  A bare number used to mean "ply", and three callers handed it a full move,
+ *  which this function then halved again: move 17 read as move 9, so
+ *  mistakes on moves 17–20 were filed under "Opening" (hand walk 2026-10-01,
+ *  M5). Naming the unit at every call makes that impossible to repeat. */
+export type GamePosition = { ply: number } | { fullMove: number };
 
-  if (fullMoveNumber <= OPENING_MOVE_CUTOFF) {
+function fullMoveOf(at: GamePosition): number {
+  return 'ply' in at ? Math.ceil(at.ply / 2) : at.fullMove;
+}
+
+/**
+ * Classify the game phase for a given position — the ONE phase classifier
+ * (mistake puzzles, the weakness spine, review and the live coach all read it).
+ *
+ * - `opening`: full move ≤ 10
+ * - `endgame`: queens off / a bare king and a piece (`isEndgameByMaterial`)
+ * - `middlegame`: everything else
+ */
+export function classifyPhase(fen: string, at: GamePosition): GamePhase {
+  if (fullMoveOf(at) <= OPENING_MOVE_CUTOFF) {
     return 'opening';
   }
 
@@ -106,7 +114,7 @@ export function getPhaseBreakdown(
       continue;
     }
 
-    const phase = classifyPhase(move.fen, move.moveNumber);
+    const phase = classifyPhase(move.fen, { ply: move.moveNumber });
     const bucket = phases[phase];
 
     // Win-percent must be from the moving side's perspective. Same

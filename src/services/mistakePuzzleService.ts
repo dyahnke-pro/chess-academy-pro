@@ -1,4 +1,5 @@
 import { Chess } from 'chess.js';
+import { classifyPhase } from './gamePhaseService';
 import { db } from '../db/schema';
 import { emitWeaknessModelChanged } from './weaknessModelEvents';
 import { createDefaultSrsFields, calculateNextInterval } from './srsEngine';
@@ -248,26 +249,6 @@ export function uciToSan(fen: string, uci: string): string {
   } catch {
     return uci;
   }
-}
-
-function classifyGamePhase(fen: string, moveNumber: number): MistakeGamePhase {
-  // Use both move number and piece count for classification
-  if (moveNumber <= 12) return 'opening';
-
-  // Count non-pawn, non-king pieces to detect endgame
-  const board = fen.split(' ')[0];
-  let minorMajorCount = 0;
-  for (const ch of board) {
-    if ('rnbqRNBQ'.includes(ch)) minorMajorCount++;
-  }
-
-  // Endgame: few pieces left or late in the game with reduced material
-  if (minorMajorCount <= 4 || (moveNumber > 35 && minorMajorCount <= 6)) return 'endgame';
-
-  // Opening extends a bit if still developing (many pieces, early moves)
-  if (moveNumber <= 15 && minorMajorCount >= 12) return 'opening';
-
-  return 'middlegame';
 }
 
 /**
@@ -564,7 +545,7 @@ async function analyzeGameWithStockfish(
 
     const bestMoveSan = uciToSan(fen, bestMove);
     const san = moves[moveIdx];
-    const gamePhase = classifyGamePhase(fen, moveNumber);
+    const gamePhase = classifyPhase(fen, { fullMove: moveNumber });
 
     // Player's actual move in UCI + SAN.
     // chess.js 1.4.0 RETURNS null on illegal moves (older versions
@@ -887,7 +868,7 @@ async function generateFromAnnotations(
       carried === 'miss' ? 'miss'
         : (carried === 'inaccuracy' || carried === 'mistake' || carried === 'blunder') ? carried
           : classifyByCentipawnsFallback(cpLoss);
-    const gamePhase = classifyGamePhase(fen, annotation.moveNumber);
+    const gamePhase = classifyPhase(fen, { fullMove: annotation.moveNumber });
 
     // Determine player's move in UCI + SAN format from annotation
     let playerMove = '';
@@ -1244,7 +1225,7 @@ export function buildMistakePuzzleFromCapture(
 
   const cpLoss = input.cpLoss && input.cpLoss > 0 ? Math.round(input.cpLoss) : 150;
   const classification = classifyByCentipawnsFallback(cpLoss);
-  const gamePhase = input.gamePhase ?? classifyGamePhase(fen, input.moveNumber ?? 20);
+  const gamePhase = input.gamePhase ?? classifyPhase(fen, { fullMove: input.moveNumber ?? 20 });
   // Classify on the LINE, not the lone move. Without it almost every capture
   // landed as the catch-all "tactical sequence" (666 of 997 cards on a real
   // import, hand walk 2026-10-01) — a fork or mate two moves deep is invisible

@@ -1179,7 +1179,7 @@ export function analyzeGameMistakes(game: GameRecord): GameMistake[] {
     // back to a ply guess that never falsely reports 'endgame'.)
     const positionFen = buildFenFromAnnotationIndex(game, i);
     const phase: 'opening' | 'middlegame' | 'endgame' = positionFen
-      ? classifyPhase(positionFen, i + 1)
+      ? classifyPhase(positionFen, { ply: i + 1 })
       : i < 20
         ? 'opening'
         : 'middlegame';

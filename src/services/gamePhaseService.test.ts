@@ -26,25 +26,31 @@ describe('classifyPhase', () => {
   const fullStartFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
   it('classifies early moves as opening', () => {
-    expect(classifyPhase(fullStartFen, 1)).toBe('opening');
-    expect(classifyPhase(fullStartFen, 10)).toBe('opening');
-    expect(classifyPhase(fullStartFen, 20)).toBe('opening'); // full move 10
+    expect(classifyPhase(fullStartFen, { ply: 1 })).toBe('opening');
+    expect(classifyPhase(fullStartFen, { ply: 10 })).toBe('opening');
+    expect(classifyPhase(fullStartFen, { ply: 20 })).toBe('opening'); // full move 10
   });
 
   it('classifies moves after opening with full material as middlegame', () => {
-    expect(classifyPhase(fullStartFen, 21)).toBe('middlegame'); // full move 11
-    expect(classifyPhase(fullStartFen, 30)).toBe('middlegame');
+    expect(classifyPhase(fullStartFen, { ply: 21 })).toBe('middlegame'); // full move 11
+    expect(classifyPhase(fullStartFen, { ply: 30 })).toBe('middlegame');
   });
 
   it('classifies low-material positions as endgame', () => {
     const endgameFen = 'r3k3/8/8/8/8/8/8/R3K3 w - - 0 40';
-    expect(classifyPhase(endgameFen, 60)).toBe('endgame');
+    expect(classifyPhase(endgameFen, { ply: 60 })).toBe('endgame');
   });
 
   it('opening takes priority over endgame-level material in early moves', () => {
     // Even if material is low, early moves are opening
     const lowMaterialFen = 'r3k3/8/8/8/8/8/8/R3K3 w - - 0 1';
-    expect(classifyPhase(lowMaterialFen, 1)).toBe('opening');
+    expect(classifyPhase(lowMaterialFen, { ply: 1 })).toBe('opening');
+  });
+
+  it('a FULL move number is read as one (M5: move 17 is not move 9)', () => {
+    expect(classifyPhase(fullStartFen, { fullMove: 17 })).toBe('middlegame');
+    expect(classifyPhase(fullStartFen, { fullMove: 10 })).toBe('opening');
+    expect(classifyPhase(fullStartFen, { ply: 17 })).toBe('opening'); // ply 17 = move 9
   });
 });
 

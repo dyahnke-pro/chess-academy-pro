@@ -9,9 +9,9 @@
 ## Locked rules that govern this surface
 
 - **Why determinism** (CLAUDE.md:57) — names `coachFeatureService`
-- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3749) — names `buildReviewSegments`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4069) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:6059) — names `coachFeatureService`
+- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3791) — names `buildReviewSegments`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4111) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6103) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -72,7 +72,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectBadHabitsFromGame` (function) — 8 call sites
-- `src/components/Coach/CoachGamePage.tsx:2097`
+- `src/components/Coach/CoachGamePage.tsx:2100`
 - `src/services/coachFeatureService.test.ts:200`
 - `src/services/coachFeatureService.test.ts:215`
 - `src/services/coachFeatureService.test.ts:238`
@@ -189,7 +189,7 @@
 - `src/services/coachFeatureService.trade.test.ts:15`
 - `src/services/loopCloses.review.integration.test.ts:89`
 - `src/services/methodBeat.test.ts:70`
-- `src/services/planArc.test.ts:130`
+- `src/services/planArc.test.ts:131`
 - `src/services/reviewCorpusNote.test.ts:40`
 - `src/services/reviewForesight.test.ts:52`
 - `src/services/reviewNeedGate.test.ts:30`
@@ -269,7 +269,7 @@
 - `src/services/reviewNarrationFidelity.test.ts:118`
 
 ### `pendingRecapture` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7537`
+- `src/components/Coach/CoachTeachPage.tsx:7514`
 - `src/services/coachFeatureService.test.ts:929`
 - `src/services/coachFeatureService.test.ts:930`
 - `src/utils/justCaptured.test.ts:20`
