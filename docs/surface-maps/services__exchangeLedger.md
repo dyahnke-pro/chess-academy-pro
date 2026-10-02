@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**239 lines · 10 exports · 9 importers · 3 tests · 0 audits**
+**253 lines · 10 exports · 10 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,6 +21,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/lineProof.test.ts`
 - `src/services/pieceOptions.ts`
 - `src/services/refutedAlternativeCore.ts`
+- `src/services/reviewWalkOct2a.test.ts`
 
 ## Exports and every call site
 
@@ -54,14 +55,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `LineProof` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `proofCut` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3624`
+### `proofCut` (function) — 9 call sites
+- `src/services/coachFeatureService.ts:3629`
 - `src/services/lineProof.test.ts:13`
 - `src/services/lineProof.test.ts:24`
 - `src/services/lineProof.test.ts:32`
 - `src/services/lineProof.test.ts:37`
 - `src/services/pieceOptions.ts:110`
 - `src/services/refutedAlternativeCore.ts:175`
+- `src/services/reviewWalkOct2a.test.ts:23`
+- `src/services/reviewWalkOct2a.test.ts:25`
 
 ### `describeProofResult` (function) — 4 call sites
 - `src/services/coachFeatureService.ts:3611`
@@ -85,6 +88,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.horizon.test.ts`
 - `src/services/exchangeLedger.test.ts`
 - `src/services/lineProof.test.ts`
+- `src/services/reviewWalkOct2a.test.ts`
 
 ## Audits that reach it
 

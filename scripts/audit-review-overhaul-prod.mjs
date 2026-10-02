@@ -980,7 +980,13 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     const posBefore = new Chess(); for (let k = 0; k < n - 1; k++) posBefore.move(SANS[k]);
     while ((m = re.exec(scan)) !== null) {
       const past = /^\s+(?:was|had been)\b/.test(scan.slice(m.index + m[0].length));
-      const cell = (past ? posBefore : pos).get(m[2].toLowerCase());
+      // THE BETTER MOVE IS ABOUT THE BOARD BEFORE THIS ONE (2026-10-02 false
+      // red: "the stronger move was gxf6 — it would take their knight on f6"
+      // read against the board after …Bxf6). A clause in the sentence of the
+      // alternative move is read where that move would have been played.
+      const sentence = scan.slice(scan.lastIndexOf('.', m.index) + 1, m.index);
+      const alternative = /\b(?:stronger move was|was the move|would)\b/i.test(sentence);
+      const cell = (past || alternative ? posBefore : pos).get(m[2].toLowerCase());
       if (!cell || cell.type !== PIECE[m[1].toLowerCase()]) accFails.push(`ply ${n}: "${m[1]} on ${m[2]}" but board has ${cell ? cell.type : 'empty'}`);
     }
     // SEAT — whose ply this is comes from the GAME (see `isStudentPly`), not

@@ -306,9 +306,9 @@ describe('the space rule rides with a flank space-grab, once (B1)', () => {
     const c = new Chess();
     for (const s of 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6'.split(' ')) c.move(s);
     const first = principleLine(c.fen(), 'a4', 'white', new Set(), 0);
-    expect(first?.text).toBe('a4 grabs space on the queenside — space is a slow, real edge: keep it and your pieces breathe while theirs stumble over each other.');
+    expect(first?.text).toBe('Your a4 grabs space on the queenside — space is a slow, real edge: keep it and your pieces breathe while theirs stumble over each other.');
     const again = principleLine(c.fen(), 'a4', 'white', new Set(['mg-rule:space']), 0);
-    expect(again?.text).toBe('a4 grabs space on the queenside.');
+    expect(again?.text).toBe('Your a4 grabs space on the queenside.');
   });
 });
 
@@ -316,7 +316,7 @@ describe('a rule rides only where its reason is true (B1)', () => {
   it('h3 on move 15, every black minor out, kicks the bishop without the "developing" reason', () => {
     const c = new Chess();
     for (const s of 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6'.split(' ')) c.move(s);
-    expect(principleLine(c.fen(), 'h3', 'white', new Set(), 0)?.text).toBe('h3 kicks their bishop off g4, gaining time.');
+    expect(principleLine(c.fen(), 'h3', 'white', new Set(), 0)?.text).toBe('Your h3 kicks their bishop off g4, gaining time.');
   });
 });
 
@@ -324,8 +324,8 @@ describe('prophylaxis carries its rule, once (B1, David 2026-10-01: "Add rule ba
   it('g3 takes f4 from the knight and says why denying a square matters', () => {
     const c = new Chess();
     for (const s of 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6'.split(' ')) c.move(s);
-    expect(principleLine(c.fen(), 'g3', 'white', new Set(), 0)?.text).toBe('g3 takes the f4 square away from their knight — stop what they want before you chase what you want: a square their piece never reaches is a plan it never starts.');
-    expect(principleLine(c.fen(), 'g3', 'white', new Set(['mg-rule:prophylaxis']), 0)?.text).toBe('g3 takes the f4 square away from their knight.');
+    expect(principleLine(c.fen(), 'g3', 'white', new Set(), 0)?.text).toBe('Your g3 takes the f4 square away from their knight — stop what they want before you chase what you want: a square their piece never reaches is a plan it never starts.');
+    expect(principleLine(c.fen(), 'g3', 'white', new Set(['mg-rule:prophylaxis']), 0)?.text).toBe('Your g3 takes the f4 square away from their knight.');
   });
 });
 

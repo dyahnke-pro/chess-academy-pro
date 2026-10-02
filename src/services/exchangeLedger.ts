@@ -161,7 +161,21 @@ export function proofCut(
   fenBefore: string,
   sans: readonly string[],
   studentColorWB: 'w' | 'b',
+  /** The move that led to `fenBefore`. When the line opens by taking back on
+   *  the square that move captured on, the ledger starts BEFORE it, so a
+   *  recapture is the other half of a trade, never a win (review walk
+   *  2026-10-02: "Why gxf6 was better — the line runs gxf6 — you win a
+   *  knight" after Nxf6+). Optional: a line from a quiet board has none. */
+  prior?: { fenBefore: string; san: string } | null,
 ): LineProof | null {
+  if (prior && sans.length > 0 && /x/.test(prior.san)) {
+    const sq = (san: string): string | undefined => /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(san)?.[1];
+    if (/x/.test(sans[0]) && sq(sans[0]) === sq(prior.san)) {
+      const p = proofCut(prior.fenBefore, [prior.san, ...sans], studentColorWB);
+      if (!p) return null;
+      return { ...p, plies: Math.max(1, p.plies - 1) };
+    }
+  }
   // The claim is what the WHOLE line ends on — mate, or its settled net. A
   // pawn grabbed on the way to a mate is not the point, so the cut is the
   // shortest prefix that already reaches the line's FINAL result.

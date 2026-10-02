@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2642 lines · 80 exports · 72 importers · 22 tests · 2 audits**
+**2665 lines · 81 exports · 73 importers · 23 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -70,6 +70,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewQuestionPlan.ts`
 - `src/services/reviewTeachingPoints.ts`
 - `src/services/reviewTrapQuestion.ts`
+- `src/services/reviewWalkOct2a.test.ts`
 - `src/services/ruleException.ts`
 - `src/services/safetyHabits.ts`
 - `src/services/tacticAlertService.ts`
@@ -216,7 +217,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/countMethod.ts:30`
 - `src/services/groundedAnswer.ts:6837`
 - `src/services/principleAttribution.ts:278`
-- `src/services/reviewFullData.ts:318`
+- `src/services/reviewFullData.ts:351`
 
 ### `capturesWinMaterial` (function) — 6 call sites
 - `src/services/computedMaterialTruth.corpus.test.ts:136`
@@ -225,6 +226,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:2704`
 - `src/services/tacticVerification.ts:75`
 - `src/services/tacticsDetector.ts:162`
+
+### `exchangeLosses` (function) — 2 call sites
+- `src/services/reviewFullData.ts:321`
+- `src/services/reviewWalkOct2a.test.ts:16`
 
 ### `seeSequence` (function) — 3 call sites
 - `src/services/positionReadingService.test.ts:595`
@@ -344,8 +349,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:97`
 - `src/services/positionalTruth.corpus.test.ts:102`
 - `src/services/replayFence.najdorf1500.test.ts:24`
-- `src/services/reviewFullData.ts:787`
-- `src/services/reviewFullData.ts:791`
+- `src/services/reviewFullData.ts:820`
+- `src/services/reviewFullData.ts:824`
 
 ### `MinorityAttack` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -360,8 +365,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.ts:366`
 - `src/services/positionalTruth.corpus.test.ts:110`
 - `src/services/positionalTruth.corpus.test.ts:115`
-- `src/services/reviewFullData.ts:783`
-- `src/services/reviewFullData.ts:785`
+- `src/services/reviewFullData.ts:816`
+- `src/services/reviewFullData.ts:818`
 
 ### `pieceScope` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -768,6 +773,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.modern1690.test.ts`
 - `src/services/replayFence.najdorf1500.test.ts`
 - `src/services/replayFence.sicilianClosed1000.test.ts`
+- `src/services/reviewWalkOct2a.test.ts`
 - `src/services/walk3.test.ts`
 - `src/services/walkOct1Learn.test.ts`
 - `src/services/walkOct2a.test.ts`

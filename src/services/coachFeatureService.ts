@@ -3619,9 +3619,14 @@ async function augmentWithProjections(
   /** How many plies of a line are SPOKEN (and so drawn): the proof's length,
    *  or just the first move when nothing settles. One answer for the voice and
    *  the arrows, so the board never plays moves the coach did not name. */
+  // The move that led to a line's start, so a line opening with a recapture is
+  // counted from before the capture it answers (`proofCut`'s `prior`).
+  const priorByFen = new Map<string, { fenBefore: string; san: string }>();
+  for (const seg of segments) if (seg.fenAfter && seg.fenBefore) priorByFen.set(seg.fenAfter.split(' ').slice(0, 4).join(' '), { fenBefore: seg.fenBefore, san: seg.san });
   const linePlies = (line: PvLine): { plies: number; proof: LineProof | null } => {
-    const proof = line.plies.length > 0
-      ? proofCut(line.plies[0].fenBefore, line.plies.map((p) => p.san), studentColorWB)
+    const start = line.plies[0]?.fenBefore;
+    const proof = start
+      ? proofCut(start, line.plies.map((p) => p.san), studentColorWB, priorByFen.get(start.split(' ').slice(0, 4).join(' ')) ?? null)
       : null;
     return { plies: proof ? proof.plies : Math.min(1, line.plies.length), proof };
   };

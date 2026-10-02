@@ -860,7 +860,7 @@ function openingIdeas(
         weight: 58,
         led: `steps out of the pawn's reach${tail}`,
         selfContained: `steps the ${name} out of the pawn's reach${tail}`,
-        imperative: `when a pawn kicks a piece, step it back to a square where it still works`,
+        imperative: `when a pawn kicks a piece, move it to a square where it still works`,
         squares: kept ? [mv.to, kept.sq] : [mv.to],
       });
     }
@@ -1361,9 +1361,9 @@ export function principleLine(
     const ruleKey = `mg-rule:${lead.id}`;
     const reason = reasonFor(lead);
     if (reason && !taught.has(ruleKey) && reasonHolds(lead, fenBefore, mover)) {
-      return { id: `${middlegameKey(lead)}|${ruleKey}`, text: `${san} ${lead.led} — ${reason}.`, squares: lead.squares, first: true };
+      return { id: `${middlegameKey(lead)}|${ruleKey}`, text: `Your ${san} ${lead.led} — ${reason}.`, squares: lead.squares, first: true };
     }
-    return { id: middlegameKey(lead), text: `${san} ${lead.led}.`, squares: lead.squares, first: true };
+    return { id: middlegameKey(lead), text: `Your ${san} ${lead.led}.`, squares: lead.squares, first: true };
   }
   const fresh = principleToTeach(fenBefore, san, mover, taught);
   if (fresh) return { id: fresh.id, text: principleOnceLine(san, fresh, stemKey), squares: fresh.squares, first: true };
@@ -1371,7 +1371,7 @@ export function principleLine(
     .filter((f) => IS_OPENING_PRINCIPLE[f.id])
     .sort((a, b) => b.weight - a.weight)[0];
   if (!lead || !(REPEAT_TEACHES[lead.id] || lead.forcing)) return null;
-  return { id: lead.id, text: `${san} ${lead.led}.`, squares: lead.squares, first: false };
+  return { id: lead.id, text: `Your ${san} ${lead.led}.`, squares: lead.squares, first: false };
 }
 
 /**

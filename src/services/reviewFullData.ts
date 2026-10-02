@@ -21,7 +21,7 @@ import { getPunishGemById } from '../data/lessons/punishGems';
 import { Chess, type Color, type Square } from 'chess.js';
 import { landedTacticFor, plyFactsForMove } from './pvPlayback';
 import { definitionKey, tacticInvariant } from './conceptEngine';
-import { findMinorityAttack, findColorComplexWeakness, signedLegalSeeFor } from './positionReadingService';
+import { findMinorityAttack, findColorComplexWeakness, signedLegalSeeFor, exchangeLosses } from './positionReadingService';
 import { detectTactics } from './tacticsDetector';
 import { verifyForkOnBoard } from './tacticVerification';
 import { seatPieceReferences, detectNewThreat } from './groundedAnswer';
@@ -302,7 +302,40 @@ export function computeMoveFacets(
       const NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
       const mine = NOUN[mv.piece] ?? 'piece';
       const theirs = NOUN[mv.captured ?? ''] ?? 'piece';
-      const what = mine === theirs ? `a ${mine} trade` : isStudent ? `your ${mine} for their ${theirs}` : `their ${mine} for your ${theirs}`;
+      // THE WHOLE EXCHANGE, not its first pair (review walk 2026-10-02:
+      // "They take on d4, and you can take back — their queen for your pawn"
+      // of Qxd4 Qxd4 Nxd4, which is a queen trade that costs the pawn). When
+      // this move retakes on the square the last move captured on, that pair
+      // was already named there and cancels here.
+      const moverLost: string[] = [];
+      const otherLost: string[] = [mv.captured ?? 'p'];
+      try {
+        const prevSan = ply >= 2 ? ctx.allSans[ply - 2] : null;
+        if (prevSan && /x/.test(prevSan) && /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(prevSan)?.[1] === mv.to) {
+          const prev = new Chess();
+          for (const m of ctx.allSans.slice(0, ply - 1)) prev.move(m);
+          const took = prev.history({ verbose: true }).at(-1)?.captured;
+          if (took) moverLost.push(took);
+        }
+      } catch { /* no history — read the exchange from this move on */ }
+      const cont = exchangeLosses(fenAfter, tradeSq as Square);
+      moverLost.push(...cont[mv.color]);
+      otherLost.push(...cont[mv.color === 'w' ? 'b' : 'w']);
+      const traded: string[] = [];
+      for (let i = moverLost.length - 1; i >= 0; i -= 1) {
+        const j = otherLost.indexOf(moverLost[i]);
+        if (j >= 0) { traded.unshift(moverLost[i]); otherLost.splice(j, 1); moverLost.splice(i, 1); }
+      }
+      const nouns = (xs: string[]): string => andList(xs.map((x) => NOUN[x] ?? 'piece'));
+      const studentLost = isStudent ? moverLost : otherLost;
+      const theirLost = isStudent ? otherLost : moverLost;
+      const tradePart = traded.length ? `a ${nouns([...new Set(traded)])} trade` : null;
+      const restPart = studentLost.length && theirLost.length
+        ? `your ${nouns(studentLost)} for their ${nouns(theirLost)}`
+        : theirLost.length ? `you win the ${nouns(theirLost)}`
+          : studentLost.length ? `they win the ${nouns(studentLost)}` : null;
+      const what = tradePart && restPart ? `${tradePart}, and ${restPart}` : tradePart ?? restPart
+        ?? (mine === theirs ? `a ${mine} trade` : isStudent ? `your ${mine} for their ${theirs}` : `their ${mine} for your ${theirs}`);
       // "Can take back" only when taking back does not lose material (review
       // walk 2026-09-27: 15.Nxh7 — …Rxh7 loses the rook to Qxh7).
       const recapturer: Color = mv.color === 'w' ? 'b' : 'w';
