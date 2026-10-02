@@ -382,7 +382,7 @@ export function PuzzleBoard({
     conceptSpokenRef.current = puzzle.id;
     const line = conceptExplanation?.spoken
       ?? (state === 'correct' && solveGeometry ? `That ${solveGeometry}.` : null);
-    if (line) void voiceService.speak(line);
+    if (line) void voiceService.speak(line, { sentenceFirst: true });
   }, [terminal, puzzle.id, state, settings.voiceEnabled, solveGeometry, conceptExplanation]);
 
   // Complete the puzzle with outcome metadata

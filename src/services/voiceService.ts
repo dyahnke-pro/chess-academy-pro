@@ -1127,9 +1127,13 @@ class VoiceService {
     this.kidVoiceLock = false;
   }
 
-  async speak(text: string): Promise<void> {
+  /** `sentenceFirst`: a long line COMPUTED on the spot (no one has heard it,
+   *  so nothing has it cached) speaks its first sentence while the rest load.
+   *  Opt-in: authored lines repeat across students and come back cached whole
+   *  in ~0.3s, so they stay whole (David 2026-10-02: "Keep whole"). */
+  async speak(text: string, opts?: { sentenceFirst?: boolean }): Promise<void> {
     this.logSpeakInvoked('speak', text);
-    return this.speakInternal(sanitizeForTTS(text), false);
+    return this.speakInternal(sanitizeForTTS(text), false, opts?.sentenceFirst ? { sentenceFirst: true } : undefined);
   }
 
   /** Speak only when nothing is currently playing — DROPS the request
@@ -1355,7 +1359,7 @@ class VoiceService {
   private async speakInternal(
     rawText: string,
     force: boolean,
-    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean },
+    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean; sentenceFirst?: boolean },
   ): Promise<void> {
     this.utterancesInFlight += 1;
     try {
@@ -1368,7 +1372,7 @@ class VoiceService {
   private async speakInternalTracked(
     rawText: string,
     force: boolean,
-    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean },
+    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean; sentenceFirst?: boolean },
   ): Promise<void> {
     // ── ONE SPACE BETWEEN TWO SENTENCES (prod, week of 2026-09-11) ──────────
     // A user heard, as one run-on:
@@ -1836,7 +1840,10 @@ class VoiceService {
         : prefs.coachPersonality && prefs.coachPersonality !== 'default'
           ? prefs.coachPersonality
           : undefined;
-      const success = await this.speakCloudChunked(text, voiceForSpeak, personalityStyle, opts?.prosodySpike ? 'spike' : undefined);
+      const prosody = opts?.prosodySpike ? 'spike' as const : undefined;
+      const success = opts?.sentenceFirst
+        ? await this.speakCloudChunked(text, voiceForSpeak, personalityStyle, prosody)
+        : await this.speakCloud(text, voiceForSpeak, personalityStyle, prosody);
       if (success) {
         this.lastTier = 'cloud';
         this.lastSpeakDiagnostic.tier = 'cloud';
@@ -2961,8 +2968,8 @@ audio.playbackRate = this.speed;
    *  the RAW text under no style, while `speak` keys the SANITIZED, spaced,
    *  personality-styled text — so any line containing a move ("Qxd7" → "queen
    *  takes d7") was fetched twice and never hit. It now runs the same
-   *  normalisation, the same voice and style, and the same sentence pieces the
-   *  long-line path plays. Audits and silent narration fetch nothing. */
+   *  normalisation, voice and style, whole lines only (a preloaded line has no
+   *  wait to cut). Audits and silent narration fetch nothing. */
   async prefetchAudio(texts: string[]): Promise<void> {
     if (this.isAuditMuted()) return;
     const prefs = await this.loadPrefs();
@@ -2990,7 +2997,7 @@ audio.playbackRate = this.speed;
       }
       for (const v of variants) {
         if (!/[\p{L}\p{N}]/u.test(v)) continue;
-        for (const c of splitSpokenChunks(v)) pieces.add(c);
+        pieces.add(v.trim());
       }
     }
     const todo = [...pieces].filter((c) => !this.audioCache.has(this.cloudKey(c, voice, style)));

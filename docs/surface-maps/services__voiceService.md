@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3081 lines · 18 exports · 105 importers · 88 tests · 23 audits**
+**3088 lines · 18 exports · 105 importers · 88 tests · 23 audits**
 
 ## Locked rules that govern this surface
 
@@ -185,7 +185,7 @@
 ### `LONG_LINE_CHARS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `splitSpokenChunks` (function) — 7 call sites
+### `splitSpokenChunks` (function) — 8 call sites
 - `src/services/voiceService.sentenceFirst.test.ts:34`
 - `src/services/voiceService.sentenceFirst.test.ts:38`
 - `src/services/voiceService.sentenceFirst.test.ts:47`
@@ -193,6 +193,7 @@
 - `src/services/voiceService.sentenceFirst.test.ts:53`
 - `src/services/voiceService.sentenceFirst.test.ts:66`
 - `src/services/voiceService.sentenceFirst.test.ts:100`
+- `src/services/voiceService.sentenceFirst.test.ts:140`
 
 ### `CLOUD_VOICES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -225,7 +226,7 @@
 ### `normalizePieceShorthand` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `sanitizeForTTS` (function) — 50 call sites
+### `sanitizeForTTS` (function) — 51 call sites
 - `src/components/Openings/MiddlegamePractice.tsx:305`
 - `src/components/Openings/MiddlegamePractice.tsx:349`
 - `src/components/Openings/MiddlegamePractice.tsx:354`
@@ -275,7 +276,8 @@
 - `src/services/sanitizeForTTS.test.ts:265`
 - `src/services/sanitizeForTTS.test.ts:271`
 - `src/services/sanitizeForTTS.test.ts:274`
-- `src/services/voiceService.sentenceFirst.test.ts:115`
+- `src/services/voiceService.sentenceFirst.test.ts:127`
+- `src/services/voiceService.sentenceFirst.test.ts:139`
 
 ### `voiceService` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

@@ -101,6 +101,18 @@ describe('speakCloudChunked', () => {
   });
 });
 
+describe('speak — whole unless asked (David 2026-10-02: "Keep whole")', () => {
+  afterEach(() => { vi.restoreAllMocks(); });
+  it('a plain speak is never split; only an opted-in computed line is', async () => {
+    const svc = await load() as Svc & { speak: (t: string, o?: { sentenceFirst?: boolean }) => Promise<void>; speakInternal: (...a: unknown[]) => Promise<void> };
+    const inner = vi.spyOn(svc, 'speakInternal').mockResolvedValue(undefined);
+    await svc.speak(LONG);
+    expect(inner.mock.calls[0][2]).toBeUndefined();
+    await svc.speak(LONG, { sentenceFirst: true });
+    expect(inner.mock.calls[1][2]).toEqual({ sentenceFirst: true });
+  });
+});
+
 describe('prefetchAudio', () => {
   afterEach(() => { vi.restoreAllMocks(); });
 
@@ -114,6 +126,18 @@ describe('prefetchAudio', () => {
     await svc.prefetchAudio(['b5 lets them play Qxd7, winning your bishop on d7.']);
     expect(got).toEqual([sanitizeForTTS('b5 lets them play Qxd7, winning your bishop on d7.')]);
     expect(got[0]).toContain('queen takes d7');
+  });
+
+  it('preloads a long authored line WHOLE — it is never split', async () => {
+    const svc = await load();
+    vi.spyOn(svc, 'loadPrefs').mockResolvedValue({ cloudEnabled: true, voiceEnabled: true, coachPersonality: 'default' });
+    vi.spyOn(svc, 'isPollyLive').mockReturnValue(true);
+    vi.spyOn(svc, 'isAuditMuted').mockReturnValue(false);
+    const got: string[] = [];
+    vi.spyOn(svc, 'fetchClipToCache').mockImplementation(async (t) => { got.push(t); });
+    await svc.prefetchAudio([LONG]);
+    expect(got).toContain(sanitizeForTTS(LONG));
+    for (const g of got) expect(splitSpokenChunks(LONG)).not.toContain(g);
   });
 
   it('an audit never synthesises', async () => {
