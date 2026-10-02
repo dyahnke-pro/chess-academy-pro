@@ -60,7 +60,7 @@ describe('forkTrick reaches both surfaces', () => {
     const facets = computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore, fenAfter: c.fen(), san: 'Bb3', ply: 13, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: 30, preMoveEval: 30, classification: 'good', bestMoveSan: null, prevCap: { square: null, capturedValue: 0 },
-      allSans: sans, forcedRunStartPly: null, bestLineUci: [], replyBestSan: null });
+      allSans: sans, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null });
     expect(facets.join(' ')).toMatch(/\[stopped\] .*their fork trick/);
   }, 30_000);
 });

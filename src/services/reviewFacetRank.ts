@@ -33,7 +33,7 @@ export type FacetTag =
   | 'verdict' | 'opening' | 'opp-dev' | 'opp-target' | 'endgame'
   | 'plan-now' | 'plan-race' | 'plan-arc' | 'plan-opening' | 'plan-middlegame' | 'plan-line' | 'consequence'
   | 'note' | 'method' | 'refuted' | 'bluff' | 'technique' | 'contrast' | 'timing' | 'praise'
-  | 'rule' | 'stopped' | 'stock' | 'trade';
+  | 'rule' | 'stopped' | 'stock' | 'trade' | 'point';
 
 /**
  * What a fact is worth on ANY board, highest first. The ordering principle,
@@ -95,6 +95,9 @@ export const FACET_RANK: Record<FacetTag, number> = {
   // The opening PRINCIPLE a quiet move follows, taught once per game (S2) —
   // above the opening's name, below the standing read.
   rule: 29,
+  // What a clean move is FOR (Learn's move-point computer, `studentMovePoint`):
+  // beside the rule it kept, never above the verdict on the move.
+  point: 28,
   opening: 28,
   // "That move has a point: it stops your threat" — the purpose of an
   // opponent move that threatens nothing (S3). Just above their targets.
@@ -171,6 +174,7 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   endgame: 'teach',        // the ending's technique, said once
   technique: 'teach',
   contrast: 'teach',
+  point: 'teach',
   timing: 'teach',
   'plan-race': 'teach',
   'plan-arc': 'teach',
@@ -270,7 +274,7 @@ export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   // PRINCIPLE — development, the king, the opening, converting.
   principle: 'principle', technique: 'principle', king: 'principle', opening: 'principle', endgame: 'principle',
   rule: 'principle',
-  does: 'principle', 'opp-dev': 'principle', fundamental: 'principle', convert: 'principle',
+  does: 'principle', point: 'plan', 'opp-dev': 'principle', fundamental: 'principle', convert: 'principle',
   status: 'principle',
   // PLAN — structure, targets, the plan and the long read.
   'plan-now': 'plan', contrast: 'plan', timing: 'plan', 'plan-race': 'plan', 'plan-arc': 'plan', 'plan-opening': 'plan', 'plan-middlegame': 'plan',

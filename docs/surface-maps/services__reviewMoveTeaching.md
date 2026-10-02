@@ -40,7 +40,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `buildReviewMoveTeaching` (function) — 29 call sites
 - `src/components/Coach/CoachGameReview.tsx:1698`
 - `src/services/coachFeatureService.ts:1136`
-- `src/services/coachFeatureService.ts:3238`
+- `src/services/coachFeatureService.ts:3239`
 - `src/services/discussionPractice.ts:169`
 - `src/services/dnaLineNarrator.ts:144`
 - `src/services/learnMoveTeaching.ts:44`
@@ -69,8 +69,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewWalkOct1.test.ts:88`
 
 ### `nameEndgamePhase` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3149`
-- `src/services/reviewFullData.ts:1030`
+- `src/services/coachFeatureService.ts:3150`
+- `src/services/reviewFullData.ts:1073`
 - `src/services/reviewMoveTeaching.test.ts:141`
 - `src/services/reviewMoveTeaching.test.ts:143`
 - `src/services/reviewMoveTeaching.test.ts:148`
@@ -78,7 +78,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewMoveTeaching.test.ts:157`
 
 ### `buildReviewConversionTeaching` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3146`
+- `src/services/coachFeatureService.ts:3147`
 - `src/services/reviewMoveTeaching.test.ts:122`
 - `src/services/reviewMoveTeaching.test.ts:125`
 - `src/services/reviewMoveTeaching.test.ts:131`

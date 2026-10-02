@@ -744,7 +744,7 @@ export function callInaccuracyDetailed(args: {
 /** What the played move let the OTHER side do: their best line after it, read
  *  by `whyBetter` (the capture it wins, else the plan's leading clause), plus
  *  that line's first move as SAN so the caller can say whether it was played. */
-function punishmentOf(
+export function punishmentOf(
   fenBefore: string, playedSan: string, replyLineUci: readonly string[], moverColor: 'white' | 'black',
 ): { why: string; first: string | null; lostSquare?: string } | null {
   if (!replyLineUci || replyLineUci.length < 4) return null;

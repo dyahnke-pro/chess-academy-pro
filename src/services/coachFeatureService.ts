@@ -1843,6 +1843,7 @@ export function buildReviewSegments(
         classification: m.classification ?? null,
         bestMoveSan,
         bestLineUci: m.bestMove ? [m.bestMove, ...(m.pv?.afterBest ?? [])] : [],
+        playedLineUci: m.pv?.afterPlayed ?? [],
         replyBestSan: i + 1 < moves.length ? uciToSanAt(moves[i + 1].bestMove ?? null, fenPair.fenAfter) : null,
         prevCap,
         allSans: sansForRun,

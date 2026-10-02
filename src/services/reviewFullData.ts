@@ -45,10 +45,11 @@ import { planRaceClause } from './planRace';
 import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, deriveNextPlans, findTrappedPiece } from './reviewTeachingPoints';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
-import { betterMoveReason, priorMoveLeadingTo, toStudentSeat } from './inaccuracyCall';
+import { betterMoveReason, priorMoveLeadingTo, punishmentOf, toStudentSeat } from './inaccuracyCall';
 import { andList } from '../utils/andList';
 import { stemKeyOf } from '../utils/rotateStem';
 import { developedMinorCount, minorsAtHome } from './development';
+import { studentMovePoint } from './playCommentary';
 
 interface Located { type: string; color: Color; square: string; }
 
@@ -137,6 +138,12 @@ export interface MoveFactContext {
    *  so the reason the better move is better is the same computer on every
    *  surface (`betterMoveReason`) — pass [] when the line is unknown. */
   bestLineUci: readonly string[];
+  /** The engine's line AFTER the played move (UCI, their reply first).
+   *  REQUIRED: what the move let them do is Learn's grade (`punishmentOf`), and
+   *  a better move named without its reason says that instead (review walk
+   *  2026-10-02, ply 85: "the stronger move was Rd3" and nothing else). Pass []
+   *  when the line is unknown. */
+  playedLineUci: readonly string[];
   /** The engine's best REPLY at `fenAfter` (the next ply's best move), SAN, or
    *  null when there is none. REQUIRED: whether a move gave material depends
    *  on whether the opponent should take it (`isSacrifice`). */
@@ -431,7 +438,21 @@ export function computeMoveFacets(
     const opponentMoved = ctx.studentColorWB !== null && (ctx.moverColor === 'white' ? 'w' : 'b') !== ctx.studentColorWB;
     const reason1 = reason0 && opponentMoved ? toStudentSeat(reason0) : reason0;
     const reason = reason1 && ctx.studentColorWB ? seatPieceReferences(reason1, fenBefore, ctx.studentColorWB) : reason1;
-    const better = bestSan && fellShort ? `the stronger move was ${bestSan}${reason ? ` — ${reason}` : ''}` : '';
+    // NAMED WITH ITS REASON, OR NOT NAMED (Learn's rule, 2026-09-24): with no
+    // reason computed, the teaching is what the move LET THEM DO — Learn's own
+    // reader over the line after it (review walk 2026-10-02, ply 85: "the
+    // stronger move was Rd3." and nothing else).
+    const punish = bestSan && fellShort && !reason && costsPoints
+      ? punishmentOf(fenBefore, san, ctx.playedLineUci, ctx.moverColor)
+      : null;
+    const punishWhy = punish
+      ? (opponentMoved ? toStudentSeat(punish.why) : punish.why)
+      : null;
+    const better = bestSan && fellShort
+      ? (reason ? `the stronger move was ${bestSan} — ${reason}`
+        : punishWhy ? `it let ${opponentMoved ? 'you' : 'them'} ${punishWhy}`
+          : `the stronger move was ${bestSan}`)
+      : '';
     const tail = [whyBad, better].filter(Boolean).join('; ');
     const betterBit = tail ? ` — ${tail}` : '';
     // CARRY THE MOVER'S SUBJECT (David 2026-07-20 opera-ply-14 bug): a quiet move
@@ -936,6 +957,28 @@ export function computeMoveFacets(
       // stem is its own move's fact and must not be eaten by that ledger.
       outIdentity?.set(f, lead.first ? `rule:${lead.id}` : `rule-stem:${ply}:${lead.id}`);
       recSquares(f, lead.squares);
+    } else {
+      // WHAT THE MOVE IS FOR, when it kept no rule — Learn's move-point
+      // computer, called (review walk 2026-10-02: 7.g4 owed and silent while
+      // Learn says "g4 prepares g5, which would kick their knight off f6").
+      // Learn's guard rides with it: a capture their reply can now win back
+      // is not a point.
+      try {
+        const point = studentMovePoint(fenBefore, san, ply >= 2 ? ctx.allSans[ply - 2] ?? null : null);
+        const mv = point ? new Chess(fenBefore).move(san) : null;
+        const reply = ctx.allSans[ply] ?? null;
+        let nowLoose = false;
+        if (mv?.captured && reply) {
+          const after = new Chess(fenAfter);
+          try { after.move(reply); nowLoose = signedLegalSeeFor(after.fen(), mv.to, after.turn() === 'w' ? 'b' : 'w') > 0; } catch { nowLoose = false; }
+        }
+        if (point && mv && !nowLoose) {
+          const f = `[point] ${point}`;
+          facets.push(f);
+          outIdentity?.set(f, `point:${ply}`);
+          recSquares(f, [mv.to]);
+        }
+      } catch { /* the point is a bonus, never a blocker */ }
     }
   }
 

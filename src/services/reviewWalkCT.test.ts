@@ -49,7 +49,7 @@ describe('"you can take back" only when taking back holds (15.Nxh7)', () => {
     return computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore, fenAfter: c.fen(), san, ply: 29, moverColor: 'white', playerColor: 'black', studentColorWB: 'b',
       evaluation: 0, preMoveEval: 0, classification: null, bestMoveSan: null,
-      prevCap: { square: null, capturedValue: 0 }, allSans: [], forcedRunStartPly: null, bestLineUci: [], replyBestSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: [], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
     }).filter((f) => f.startsWith('[trade]'));
   };
   it('Rxh7 loses the rook to Qxh7 — not offered as a take-back', () => {
@@ -69,7 +69,7 @@ describe('the better move\'s reason is seated on the board it describes (1200 Si
     return computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore, fenAfter: c.fen(), san, ply: 31, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: -150, preMoveEval: 20, classification: 'mistake', bestMoveSan: best,
-      prevCap: { square: null, capturedValue: 0 }, allSans: [], forcedRunStartPly: null, bestLineUci: line, replyBestSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: [], forcedRunStartPly: null, playedLineUci: [], bestLineUci: line, replyBestSan: null,
     }).filter((f) => f.startsWith('[quality]')).join(' ');
   };
   it('"take their knight on e4", never "your knight"', () => {
