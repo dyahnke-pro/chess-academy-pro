@@ -68,10 +68,19 @@ async function clickMove(uci) {
   await page.locator(`[data-square="${uci.slice(2, 4)}"]`).first().click({ force: true });
 }
 /** Solve whichever puzzle is on the board (read by its data-puzzle-id). */
+const solvedIds = new Set();
 async function solveCurrent() {
   const board = page.locator('[data-testid="puzzle-board"]');
   await board.waitFor({ timeout: 90000 });
-  const id = await board.getAttribute('data-puzzle-id');
+  // Wait for a puzzle we have NOT solved yet — after NEXT the old board can
+  // still be mounted for a beat, and re-solving it is a silent no-op.
+  let id = await board.getAttribute('data-puzzle-id');
+  for (let i = 0; i < 60 && (!id || solvedIds.has(id)); i += 1) {
+    await page.waitForTimeout(500);
+    id = await page.locator('[data-testid="puzzle-board"]').getAttribute('data-puzzle-id').catch(() => null);
+  }
+  if (!id || solvedIds.has(id)) return false;
+  solvedIds.add(id);
   const p = id ? await readPuzzle(id) : null;
   if (!p) return false;
   const moves = p.moves.trim().split(/\s+/);
@@ -121,8 +130,8 @@ try {
   for (let n = 0; n < 3; n += 1) {
     await solveCurrent();
     const next = page.locator('[data-testid="deep-run-next"]');
-    if (await next.waitFor({ timeout: 15000 }).then(() => true).catch(() => false)) {
-      if (n < 2) await next.click();
+    if (await next.waitFor({ timeout: 30000 }).then(() => true).catch(() => false)) {
+      if (n < 2) { await next.click(); await next.waitFor({ state: "detached", timeout: 15000 }).catch(() => {}); }
     }
   }
   await watchBanners(3000);
