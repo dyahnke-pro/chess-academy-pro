@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../stores/appStore';
 import { updateStreak } from '../../services/sessionGenerator';
@@ -9,7 +9,9 @@ import { PageHelp } from '../Layout/PageHelp';
 import { TableOfContents } from './TableOfContents';
 import { useSettings } from '../../hooks/useSettings';
 import { scaledShadow } from '../../utils/neonColors';
-import { useUpNext, useHomeSuggestion } from '../../hooks/useUpNext';
+import { useUpNext } from '../../hooks/useUpNext';
+import { loadHomeSuggestion, type FamilyCandidate } from '../../services/homeSuggestion';
+import { onUpNextChanged } from '../../services/upNextLoader';
 import type { UpNextPick } from '../../services/upNextPicker';
 import { TodayRing } from './TodayRing';
 import { sayPickOncePerDay } from '../../services/upNextHome';
@@ -121,6 +123,22 @@ function homePulseRoute(hub: string | null): string | null {
  *  the SAME selector (`buildTodaysReps`) the Training Plan reads. The coach
  *  says the reason once a day per pick, after the student's first tap —
  *  never on launch, and through the narration setting. */
+/** Home's rotating suggestion for this app open (`homeSuggestion`), refreshed
+ *  as bites finish — the family holds for the open, its pick moves on. */
+function useHomeSuggestion(): FamilyCandidate | null {
+  const [s, setS] = useState<FamilyCandidate | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    const load = (): void => {
+      void loadHomeSuggestion().then((c) => { if (!cancelled) setS(c); }).catch(() => undefined);
+    };
+    load();
+    const off = onUpNextChanged(load);
+    return () => { cancelled = true; off(); };
+  }, []);
+  return s;
+}
+
 /** The blinking row's reason, said once a day per pick after the student's
  *  first tap on Home (never on launch; through the narration setting). Home
  *  has no Up-next bar any more (David 2026-10-02) — the row IS the suggestion. */
