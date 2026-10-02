@@ -154,8 +154,11 @@ try {
     const kind = await page.locator('[data-testid="up-next-bar"]').getAttribute('data-pick-kind');
     await page.locator('[data-testid="up-next-bar"]').click();
     const count = kind === 'warm-up' ? 2 : 1;
+    console.log(`[D] bite ${bite} kind=${kind}`);
     for (let n = 0; n < count; n += 1) {
-      await solveCurrent();
+      const solved = await solveCurrent();
+      const pid = await page.locator('[data-testid="puzzle-board"]').getAttribute('data-puzzle-id').catch(() => null);
+      console.log(`[D]   puzzle ${n} solved=${solved} board=${pid} url=${page.url()}`);
       await page.waitForTimeout(3500);
       const cont = page.locator('[data-testid="concept-continue-btn"], [data-testid="next-puzzle-btn"]');
       if (await cont.count()) await cont.first().click().catch(() => {});
