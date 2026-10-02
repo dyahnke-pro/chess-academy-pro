@@ -75,7 +75,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectBadHabitsFromGame` (function) — 8 call sites
-- `src/components/Coach/CoachGamePage.tsx:2108`
+- `src/components/Coach/CoachGamePage.tsx:2107`
 - `src/services/coachFeatureService.test.ts:200`
 - `src/services/coachFeatureService.test.ts:215`
 - `src/services/coachFeatureService.test.ts:238`
@@ -91,7 +91,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `generateNarrativeSummary` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:540`
+- `src/components/Coach/CoachGameReview.tsx:538`
 - `src/services/recapSeat.test.ts:17`
 
 ### `recapSecondPerson` (function) — 9 call sites
@@ -133,7 +133,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildReviewCitations` (function) — 8 call sites
-- `src/components/Coach/CoachGameReview.tsx:600`
+- `src/components/Coach/CoachGameReview.tsx:598`
 - `src/services/coachFeatureService.test.ts:744`
 - `src/services/coachFeatureService.test.ts:752`
 - `src/services/coachFeatureService.test.ts:784`
@@ -147,7 +147,7 @@
 - `src/services/coachFeatureService.test.ts:24`
 
 ### `buildReviewSegments` (function) — 63 call sites
-- `src/components/Coach/CoachGameReview.tsx:1873`
+- `src/components/Coach/CoachGameReview.tsx:1871`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
 - `src/services/coachFeatureService.causalChain.test.ts:50`
@@ -227,7 +227,7 @@
 - `src/services/mapConcurrent.test.ts:37`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4820`
+- `src/components/Coach/CoachGameReview.tsx:4818`
 - `src/services/coachFeatureService.test.ts:814`
 - `src/services/coachFeatureService.test.ts:817`
 - `src/services/coachFeatureService.test.ts:824`
@@ -298,7 +298,7 @@
 - `src/services/reviewWalk1500.test.ts:17`
 
 ### `openingNameForKey` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:236`
+- `src/components/Coach/CoachGameReview.tsx:235`
 
 ### `generateReviewNarration` (function) — 14 call sites
 - `src/services/reviewBetterLineWhy.test.ts:58`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**64 lines · 2 exports · 3 importers · 1 tests · 0 audits**
+**64 lines · 2 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,8 +12,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
-- `src/components/Coach/CoachGamePage.tsx`
-- `src/components/Coach/CoachGameReview.tsx`
+- `src/services/autoAnalyzeGame.ts`
 - `src/services/teachingEffectService.test.ts`
 
 ## Exports and every call site
@@ -23,9 +22,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/teachingEffectService.test.ts:23`
 - `src/services/teachingEffectService.test.ts:24`
 
-### `reportTeachingEffects` (function) — 3 call sites
-- `src/components/Coach/CoachGamePage.tsx:2119`
-- `src/components/Coach/CoachGameReview.tsx:378`
+### `reportTeachingEffects` (function) — 2 call sites
+- `src/services/autoAnalyzeGame.ts:293`
 - `src/services/teachingEffectService.test.ts:38`
 
 ## Tests

@@ -168,8 +168,8 @@
 ### `pvUciToSan` (function) — 11 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
-- `src/services/autoAnalyzeGame.ts:373`
-- `src/services/autoAnalyzeGame.ts:376`
+- `src/services/autoAnalyzeGame.ts:384`
+- `src/services/autoAnalyzeGame.ts:387`
 - `src/services/coachFeatureService.ts:888`
 - `src/services/coachFeatureService.ts:890`
 - `src/services/discussionPractice.ts:353`

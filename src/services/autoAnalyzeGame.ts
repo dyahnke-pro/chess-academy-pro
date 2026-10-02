@@ -10,6 +10,7 @@ import { Chess } from 'chess.js';
 import { captureMisconception } from './discussionPractice';
 import { recordCapabilityEvidence } from './capabilityEvidence';
 import { db } from '../db/schema';
+import { reportTeachingEffects } from './teachingEffectService';
 import { useAppStore } from '../stores/appStore';
 import { logAppAudit } from './appAuditor';
 import { classifyMisconception } from './misconceptionClassifier';
@@ -232,6 +233,10 @@ export interface SweepOptions {
    *  (once per game). The batch sweep never passes this: a library import is
    *  not a decision about which lines the student knows. */
   reviewed?: boolean;
+  /** A discrete student event that adds evidence — a Play game finishing or a
+   *  Review opening. After the record is written, the teaching-effect door
+   *  runs once (`teachingEffectService`). The batch sweep never passes it. */
+  reportEffects?: 'play-finished' | 'review-opened';
 }
 
 /** Which username identifies the student in this game's headers — the
@@ -282,6 +287,12 @@ export async function autoAnalyzeGameMisconceptions(
   username?: string,
   opts: SweepOptions = {},
 ): Promise<AutoAnalyzeResult> {
+  if (opts.reportEffects) {
+    const { reportEffects, ...rest } = opts;
+    const r = await autoAnalyzeGameMisconceptions(gameId, username, rest);
+    void reportTeachingEffects(reportEffects).catch(() => undefined);
+    return r;
+  }
   const empty = NO_RESULT;
 
   const game = await db.games.get(gameId);

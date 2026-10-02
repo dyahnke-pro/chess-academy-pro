@@ -34,8 +34,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolveOpeningIdeas` (function) — 6 call sites
-- `src/components/Coach/CoachGameReview.tsx:2763`
-- `src/components/Coach/CoachGameReview.tsx:2768`
+- `src/components/Coach/CoachGameReview.tsx:2761`
+- `src/components/Coach/CoachGameReview.tsx:2766`
 - `src/services/reviewOpeningTheory.test.ts:81`
 - `src/services/reviewOpeningTheory.test.ts:88`
 - `src/services/reviewOpeningTheory.test.ts:94`
@@ -50,10 +50,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.test.ts:121`
 
 ### `warmLectureSources` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:2751`
+- `src/components/Coach/CoachGameReview.tsx:2749`
 
 ### `buildOpeningTheoryLecture` (function) — 13 call sites
-- `src/components/Coach/CoachGameReview.tsx:2759`
+- `src/components/Coach/CoachGameReview.tsx:2757`
 - `src/services/reviewOpeningTheory.test.ts:35`
 - `src/services/reviewOpeningTheory.test.ts:64`
 - `src/services/reviewOpeningTheory.test.ts:75`
@@ -71,15 +71,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `enrichLectureWithEngine` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:2767`
+- `src/components/Coach/CoachGameReview.tsx:2765`
 - `src/services/reviewOpeningTheory.test.ts:276`
 
 ### `TheoryLectureBeat` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildTheoryLectureBeats` (function) — 11 call sites
-- `src/components/Coach/CoachGameReview.tsx:2763`
-- `src/components/Coach/CoachGameReview.tsx:2768`
+- `src/components/Coach/CoachGameReview.tsx:2761`
+- `src/components/Coach/CoachGameReview.tsx:2766`
 - `src/services/reviewOpeningTheory.test.ts:149`
 - `src/services/reviewOpeningTheory.test.ts:166`
 - `src/services/reviewOpeningTheory.test.ts:201`

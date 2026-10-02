@@ -242,7 +242,7 @@ describe('C1 — the one writer: a reviewed imported game writes COUNTED rows an
   it('the review page hands the sweep its reviewed flag, and the capture button routes to the same writer (by statement)', async () => {
     const fs = await import('node:fs');
     const review = fs.readFileSync('src/components/Coach/CoachGameReview.tsx', 'utf8');
-    expect(review).toMatch(/autoAnalyzeGameMisconceptions\(gid, username, \{ reviewed: true \}\)/);
+    expect(review).toMatch(/autoAnalyzeGameMisconceptions\(gid, username, \{ reviewed: true(, reportEffects: 'review-opened')? \}\)/);
     const button = fs.readFileSync('src/components/Coach/GameReviewWeaknessCapture.tsx', 'utf8');
     expect(button).toMatch(/autoAnalyzeGameMisconceptions\(gameId, undefined, \{ reviewed: true \}\)/);
     expect(button, 'the component must not run a second capture beside the sweep').not.toMatch(/autoAnalyzeBlunders\(/);

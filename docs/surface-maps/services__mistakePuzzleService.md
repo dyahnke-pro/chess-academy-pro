@@ -72,7 +72,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `mistakeProvenanceFromGame` (function) — 3 call sites
-- `src/services/autoAnalyzeGame.ts:399`
+- `src/services/autoAnalyzeGame.ts:410`
 - `src/services/mistakeProvenance.test.ts:80`
 - `src/services/mistakeProvenance.test.ts:87`
 
@@ -103,7 +103,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/hooks/useAcceptableMoves.ts:88`
 - `src/hooks/useDiscussionPractice.ts:265`
 - `src/hooks/useDiscussionPractice.ts:390`
-- `src/services/autoAnalyzeGame.ts:315`
+- `src/services/autoAnalyzeGame.ts:326`
 - `src/services/computerAccuracy.audit.test.ts:107`
 - `src/services/deliberation.ts:98`
 - `src/services/deliberation.ts:171`
@@ -134,7 +134,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `replayPgnToFens` (function) — 9 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:47`
-- `src/services/autoAnalyzeGame.ts:297`
+- `src/services/autoAnalyzeGame.ts:308`
 - `src/services/gameAnalysisService.ts:353`
 - `src/services/gameAnalysisService.ts:1445`
 - `src/services/gameAnalysisService.ts:1704`
@@ -145,12 +145,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `determinePlayerColor` (function) — 3 call sites
 - `src/components/Tactics/AnalysisPracticePage.tsx:101`
-- `src/services/autoAnalyzeGame.ts:295`
+- `src/services/autoAnalyzeGame.ts:306`
 - `src/test/seatResolversReadDeclaredSeat.test.ts:15`
 
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
-- `src/components/Coach/CoachGamePage.tsx:2109`
-- `src/components/Coach/CoachGameReview.tsx:367`
+- `src/components/Coach/CoachGamePage.tsx:2108`
+- `src/components/Coach/CoachGameReview.tsx:366`
 - `src/services/gameAnalysisService.ts:2096`
 - `src/services/mistakePuzzleService.test.ts:109`
 - `src/services/mistakePuzzleService.test.ts:163`
@@ -210,7 +210,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakePuzzleService.sequence.test.ts:72`
 
 ### `buildMistakePuzzleFromCapture` (function) — 4 call sites
-- `src/services/autoAnalyzeGame.ts:567`
+- `src/services/autoAnalyzeGame.ts:578`
 - `src/services/misconceptionDrill.test.ts:21`
 - `src/services/misconceptionDrill.test.ts:23`
 - `src/services/misconceptionDrill.test.ts:32`

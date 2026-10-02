@@ -27,7 +27,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `classifyMisconception` (function) — 27 call sites
-- `src/services/autoAnalyzeGame.ts:488`
+- `src/services/autoAnalyzeGame.ts:499`
 - `src/services/discussionPractice.ts:250`
 - `src/services/misconceptionClassifier.test.ts:11`
 - `src/services/misconceptionClassifier.test.ts:20`

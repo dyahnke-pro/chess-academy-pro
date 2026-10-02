@@ -114,7 +114,7 @@
 
 ### `tryRouteIntent` (function) — 44 call sites
 - `src/components/Board/VoiceChatMic.tsx:237`
-- `src/components/Coach/CoachGameReview.tsx:3003`
+- `src/components/Coach/CoachGameReview.tsx:3001`
 - `src/components/Coach/CoachTeachPage.tsx:3111`
 - `src/components/Coach/GameChatPanel.tsx:516`
 - `src/services/coachHands.test.ts:35`
