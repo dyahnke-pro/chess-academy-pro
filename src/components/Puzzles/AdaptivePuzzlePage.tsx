@@ -38,6 +38,7 @@ import { AdaptiveSessionSummary } from './AdaptiveSessionSummary';
 import { db } from '../../db/schema';
 import { recordPositiveMoment } from '../../services/reviewPromptService';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
+import { finishBite } from '../../services/activeBite';
 
 type Phase = 'select' | 'loading' | 'solving' | 'checkpoint' | 'rep-complete' | 'summary';
 
@@ -75,6 +76,8 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
     misconceptionTag?: string;
     repKey?: string;
     repCap?: number;
+    /** Start straight away at the student's level (an Up-next warm-up bite). */
+    autoStart?: boolean;
   } | null;
   const forcedWeakThemes = navState?.forcedWeakThemes;
   // When the Training Plan deep-links a weakness rep here, the real
@@ -251,7 +254,7 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
 
   // Auto-start with medium difficulty when forcedWeakThemes are provided (from Lichess Dashboard)
   useEffect(() => {
-    if (!autoStartedRef.current && forcedWeakThemes && forcedWeakThemes.length > 0) {
+    if (!autoStartedRef.current && ((forcedWeakThemes && forcedWeakThemes.length > 0) || navState?.autoStart)) {
       autoStartedRef.current = true;
       void handleSelectDifficulty('medium');
     }
@@ -354,6 +357,7 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
       repCapReachedRef.current = true;
       voiceService.stop();
       void markRepCompletedToday(repKey);
+      void finishBite(['weakness', 'warm-up', 'long']);
       if (misconceptionTag && !spacedTagRef.current) {
         spacedTagRef.current = true;
         const accuracy = updatedSession.totalPuzzles > 0

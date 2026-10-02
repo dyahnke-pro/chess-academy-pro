@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { MistakePuzzleBoard } from './MistakePuzzleBoard';
 import {
@@ -19,6 +19,7 @@ import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { summarizeWeaknesses, mistakeWeaknessKey } from '../../services/coachDrillService';
 import type { MistakePuzzle, MistakeClassification, MistakePuzzleSourceMode, MistakePuzzleStatus, MistakeGamePhase } from '../../types';
+import { finishBite } from '../../services/activeBite';
 
 type ClassificationFilter = MistakeClassification | 'all';
 type SourceFilter = MistakePuzzleSourceMode | 'all';
@@ -76,6 +77,9 @@ interface MistakesPageLocationState {
   gameIds?: string[];
   /** Display label for the scope chip (e.g. the opening name). */
   scopeLabel?: string;
+  /** Open this puzzle straight away — an Up-next bite ("fix your slip from
+   *  your last game", "a puzzle grew"). */
+  openPuzzleId?: string;
 }
 
 export function MyMistakesPage(): JSX.Element {
@@ -150,6 +154,7 @@ export function MyMistakesPage(): JSX.Element {
 
   // The student's home-opening games (A5): their slips lead the list.
   const [homeGameIds, setHomeGameIds] = useState<ReadonlySet<string>>(() => new Set());
+  const openedFromNavRef = useRef(false);
   const loadData = useCallback(async () => {
     const [allPuzzles, puzzleStats, homeIds] = await Promise.all([
       getAllMistakePuzzles(),
@@ -160,7 +165,12 @@ export function MyMistakesPage(): JSX.Element {
     setStats(puzzleStats);
     setHomeGameIds(homeIds);
     setLoading(false);
-  }, []);
+    if (navState.openPuzzleId && !openedFromNavRef.current) {
+      openedFromNavRef.current = true;
+      const target = allPuzzles.find((p) => p.id === navState.openPuzzleId);
+      if (target) setActivePuzzle(target);
+    }
+  }, [navState.openPuzzleId]);
 
   useEffect(() => {
     void loadData();
@@ -240,6 +250,8 @@ export function MyMistakesPage(): JSX.Element {
   const handlePuzzleResolved = useCallback((correct: boolean, solveTimeMs: number): void => {
     if (!activePuzzle) return;
     setStreak((n) => (correct ? n + 1 : 0));
+    // The finish line of a mistake-puzzle bite (Up next).
+    void finishBite(['game-slip', 'grown']);
     void gradeMistakePuzzle(activePuzzle.id, correct ? 'good' : 'again', correct, solveTimeMs);
   }, [activePuzzle]);
 

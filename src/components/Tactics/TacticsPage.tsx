@@ -10,6 +10,8 @@ import { useSettings } from '../../hooks/useSettings';
 import { useCollapseOnScroll } from '../../hooks/useCollapseOnScroll';
 import { scaledShadow } from '../../utils/neonColors';
 import { logAppAudit } from '../../services/appAuditor';
+import { useUpNext } from '../../hooks/useUpNext';
+import { UpNextBar } from '../Dashboard/UpNextBar';
 
 // ─── Theme Category Definitions ──────────────────────────────────────────
 
@@ -126,6 +128,11 @@ export function TacticsPage(): JSX.Element {
   const gB = settings.glowBrightness;
   const gS = gB / 100;
   const { collapsed, onScroll } = useCollapseOnScroll();
+  // The Up-next pick, when it lives on this hub: pinned on top, and its real
+  // row pulses in place (the list never reorders — muscle memory).
+  const upNext = useUpNext();
+  const pick = upNext?.current?.hub.startsWith('tactics:') ? upNext.current : null;
+  const pulseKey = pick ? pick.hub.slice('tactics:'.length) : null;
 
   // Hub-visit signal so the audit stream can attribute downstream
   // surface events to the entry path through /tactics. Mirrors the
@@ -214,6 +221,12 @@ export function TacticsPage(): JSX.Element {
             (timer, tactic name, hints, voice). Closed by default. */}
         <PuzzleQuickSettings />
 
+        {pick && (
+          <div className="max-w-lg mx-auto w-full">
+            <UpNextBar pick={pick} surface="tactics" />
+          </div>
+        )}
+
         {HUB_GROUPS.map((group) => (
           <section key={group.title} className="flex flex-col gap-2 max-w-lg mx-auto w-full">
             <h2 className="text-xs font-semibold uppercase tracking-wide px-1" style={{ color: 'var(--color-text-muted)' }}>{group.title}</h2>
@@ -225,7 +238,8 @@ export function TacticsPage(): JSX.Element {
                 <button
                   key={row.key}
                   onClick={() => handleNavigate(row.route, row.label, row.state)}
-                  className={`${row.bgColor} rounded-2xl flex items-center gap-3 px-4 py-3.5 text-left transition-all duration-200 w-full`}
+                  className={`${row.bgColor} rounded-2xl flex items-center gap-3 px-4 py-3.5 text-left transition-all duration-200 w-full ${row.key === pulseKey ? 'ring-2 ring-fuchsia-300/80 upnext-glow' : ''}`}
+                  data-up-next={row.key === pulseKey ? 'true' : undefined}
                   style={{ ...neonBorderStyle(row.rgb, gS), boxShadow: shadow }}
                   onMouseEnter={(e) => { applyHoverBorder(e.currentTarget, row.rgb, gS); e.currentTarget.style.boxShadow = shadowHover; }}
                   onMouseLeave={(e) => { applyRestBorder(e.currentTarget, row.rgb, gS); e.currentTarget.style.boxShadow = shadow; }}

@@ -76,6 +76,7 @@ const DEFAULT_ROW: FreeTierRecord = {
   freeOpeningId: null,
   freeOpeningIds: [],
   earnedOpeningCredits: 0,
+  trainingOpeningCredits: 0,
   kidFirstAccessAt: null,
   coachLessonsUsed: 0,
   coachChatTurnsUsed: 0,
@@ -112,6 +113,7 @@ function normalizeRow(row: FreeTierRecord): FreeTierRecord {
     freeOpeningIds: merged,
     freeOpeningId: row.freeOpeningId ?? merged[0] ?? null,
     earnedOpeningCredits: Math.max(0, row.earnedOpeningCredits ?? 0),
+    trainingOpeningCredits: Math.max(0, row.trainingOpeningCredits ?? 0),
   };
 }
 
@@ -227,7 +229,7 @@ export type ClaimResult =
  * side effect — the gate uses this to decide, then persists via
  * `claimFreeOpening` in an effect.
  */
-type OpeningSlotState = Pick<FreeTierRecord, 'freeOpeningId' | 'freeOpeningIds' | 'earnedOpeningCredits'>;
+type OpeningSlotState = Pick<FreeTierRecord, 'freeOpeningId' | 'freeOpeningIds' | 'earnedOpeningCredits' | 'trainingOpeningCredits'>;
 
 /** The set of openings the user has claimed for free (legacy id folded in). Pure. */
 function claimedOpenings(state: OpeningSlotState): string[] {
@@ -238,8 +240,15 @@ function claimedOpenings(state: OpeningSlotState): string[] {
 }
 
 /** Total free-opening slots: the base 1 plus every earned reward credit. Pure. */
-export function openingAllowance(state: Pick<FreeTierRecord, 'earnedOpeningCredits'>): number {
-  return 1 + Math.max(0, state.earnedOpeningCredits ?? 0);
+export function openingAllowance(state: Pick<FreeTierRecord, 'earnedOpeningCredits' | 'trainingOpeningCredits'>): number {
+  return 1 + Math.max(0, state.earnedOpeningCredits ?? 0) + Math.max(0, state.trainingOpeningCredits ?? 0);
+}
+
+/** One opening earned by training (a gold week). Its own counter so the
+ *  referral sync can never absorb it. Returns the resulting row. */
+export async function grantTrainingOpeningCredit(): Promise<FreeTierRecord> {
+  const cur = await loadFreeTier();
+  return patch({ trainingOpeningCredits: Math.max(0, cur.trainingOpeningCredits ?? 0) + 1 });
 }
 
 /** Free-opening slots still available to claim (never negative). Pure. */

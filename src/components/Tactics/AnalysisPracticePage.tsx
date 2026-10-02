@@ -24,11 +24,22 @@ import { recordReadingResult } from '../../services/analysisPracticeStats';
 import { determinePlayerColor } from '../../services/mistakePuzzleService';
 import { captureEvent } from '../../services/analytics';
 import { logAppAudit } from '../../services/appAuditor';
+import { reward } from '../../services/rewardService';
+import { rewardSeed } from '../../services/rewardEvents';
 import { hintStartTier } from '../../services/skillScaling';
 import type { GameRecord } from '../../types';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
+
+/** The board square a clicked-square or played-move answer landed on, so the
+ *  reward light bursts from it; a typed answer has none. */
+function selectedSquareFor(answer: string): string | undefined {
+  const t = answer.trim();
+  if (/^[a-h][1-8]$/.test(t)) return t;
+  const san = /^(?:[NBRQK]?[a-h]?[1-8]?x?([a-h][1-8])(?:=[NBRQ])?[+#]?)$/.exec(t);
+  return san?.[1];
+}
 
 /** Few-piece positions read as endgames (gates the endgame question bucket). */
 function isEndgameFen(fen: string): boolean {
@@ -267,6 +278,7 @@ export function AnalysisPracticePage(): JSX.Element {
     captureEvent('analysis_practice_answer', { questionType: question.type, verdict: g.verdict, hintTier });
     if (g.verdict === 'correct') {
       correctRef.current += 1;
+      reward({ kind: 'solved', square: selectedSquareFor(text), seed: rewardSeed(`${position?.fen ?? ''}#${qIndex}`) });
       setGrade(g);
       // SAY the read and SHOW the line, then move on once both have landed —
       // a correct answer used to flash for 0.9 s, never spoken (hand walk
@@ -279,6 +291,7 @@ export function AnalysisPracticePage(): JSX.Element {
       return;
     }
     // Wrong / partial → progressive GROUNDED hint, let them retry.
+    reward({ kind: 'miss', square: selectedSquareFor(text) });
     attemptsRef.current += 1;
     if (attemptsRef.current >= 3) {
       setHintTier(3);
@@ -288,7 +301,7 @@ export function AnalysisPracticePage(): JSX.Element {
       setHintTier(Math.max(startTier, attemptsRef.current));
       setAnswer(''); setSelectedSquare(null);          // keep going
     }
-  }, [question, grading, grade, demoing, hintTier, playDemo, next, startTier]);
+  }, [question, grading, grade, demoing, hintTier, playDemo, next, startTier, position, qIndex]);
 
   const onSquareClick = useCallback((sqr: string) => {
     if (grade || demoing) return;

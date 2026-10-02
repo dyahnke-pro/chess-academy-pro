@@ -1,3 +1,4 @@
+import { HeatMapPanel } from './HeatMapPanel';
 import { PageHelp } from '../Layout/PageHelp';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -344,6 +345,10 @@ export function GameInsightsPage(): JSX.Element {
             />
           </div>
         )}
+
+        {/* THE HEAT MAP — red / green / grey per skill, from the student's own
+            record (David 2026-10-01: green finally has a screen). */}
+        <HeatMapPanel />
 
         {/* Tabs — horizontally scrollable so no tab clips off the right
             edge (5 tabs + the wide "Thinking Errors" label overflowed a

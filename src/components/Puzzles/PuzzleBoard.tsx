@@ -593,7 +593,7 @@ export function PuzzleBoard({
   }, [state, moveIndex, completePuzzle, playMoveSound, game]);
 
   return (
-    <div className="space-y-3" data-testid="puzzle-board">
+    <div className="space-y-3" data-testid="puzzle-board" data-puzzle-id={puzzle.id}>
       <PuzzleHeader total={totalMoves} done={pipsDone} difficulty={puzzle.rating} streak={streak} missed={missedPip}>
         {headerExtra}
       </PuzzleHeader>

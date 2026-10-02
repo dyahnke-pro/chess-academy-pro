@@ -76,14 +76,14 @@ await closeHelp();
 // ── Instrument 1: DOM — dashboard reps render ──────────────────────────────
 // 2026-07-31: reps live behind the collapsed "Today's training" bar
 // (fixed-height slot, no layout shift) — expand it first.
-await page.locator('[data-testid="dashboard-today-toggle"]').click({ timeout: 8000 }).catch(() => {});
+// The five-rep strip became the Up-next bar + today's ring (2026-10-01).
 await sleep(500);
-const repCards = await page.locator('[data-testid^="dashboard-rep-"]').count();
+const repCards = await page.locator('[data-testid="up-next-bar"]').count();
 console.log(`\n[DOM] dashboard rep cards: ${repCards}`);
 
 // Drive: tap a weakness rep → adaptive drill (emits navigation + tag events).
-if (await page.locator('[data-testid="dashboard-rep-weakness"]').count()) {
-  await page.locator('[data-testid="dashboard-rep-weakness"]').first().click({ timeout: 6000 }).catch(() => {});
+if (await page.locator('[data-testid="up-next-bar"][data-pick-kind="weakness"]').count()) {
+  await page.locator('[data-testid="up-next-bar"]').first().click({ timeout: 6000 }).catch(() => {});
   await sleep(2500);
   console.log(`[DOM] after weakness-rep tap → ${page.url()}`);
 }

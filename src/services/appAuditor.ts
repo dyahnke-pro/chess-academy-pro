@@ -266,6 +266,15 @@ export type AuditKind =
    *  finds do: clear-best, only-move, a parried threat, a punish, a gem).
    *  David 2026-10-01. */
   | 'learn-reward'
+  /** The Weaknesses heat map rendered: red / green / grey per skill and which
+   *  turned green since the last visit (David 2026-10-01). */
+  | 'heat-map-shown'
+  /** The student opened the Up-next pick (kind + key) — David 2026-10-01. */
+  | 'up-next-opened'
+  /** The day's ring frozen: which bites, from which parts of the record. */
+  | 'up-next-chosen'
+  /** Today's ring closed: trained days this week, gold week, opening earned. */
+  | 'today-ring-closed'
   // Which games a batch analysis run picked and in what order (A2): the
   // home openings' games first, then newest — so an audit can prove the
   // priority instead of reading a progress label.

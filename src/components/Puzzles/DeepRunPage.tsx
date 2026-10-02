@@ -17,6 +17,8 @@ import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 import type { PuzzleRecord } from '../../types';
 import { PuzzleBoard, type PuzzleOutcome } from './PuzzleBoard';
 import { RollingNumber } from '../ui/RollingNumber';
+import { finishBite } from '../../services/activeBite';
+import { DEEP_RUN_BITE } from '../../services/upNextPicker';
 
 /**
  * Deep Run — "How many moves deep can you accumulate!!! That's the one!!!"
@@ -125,9 +127,13 @@ export function DeepRunPage(): JSX.Element {
         void db.meta.put({ key: BEST_KEY, value: String(b) });
       }
       setPhase('over');
+      // A run that ends is a finished Deep Run bite (Up next) — the miss
+      // still taught the line.
+      void finishBite('deep-run');
       return;
     }
     const r = solve(s, solverMoves(puzzle), cappedRef.current);
+    if (r.state.solved >= DEEP_RUN_BITE) void finishBite('deep-run');
     runRef.current = r.state;
     setRun(r.state);
     // The bigger moment wins the banner; each fires once.

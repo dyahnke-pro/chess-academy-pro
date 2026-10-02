@@ -33,7 +33,18 @@ export async function getCompletedRepKeysToday(): Promise<Set<string>> {
   return new Set(parseKeys(record?.value));
 }
 
-/** Mark a rep done for today. Idempotent. */
+type RepListener = (repKey: string) => void;
+const listeners = new Set<RepListener>();
+
+/** Hear every rep the moment it is FIRST marked done today — the ONE
+ *  completion signal the reward layer listens to (today's ring, the finish
+ *  burst, the gold week). Surfaces only ever call `markRepCompletedToday`. */
+export function onRepCompleted(fn: RepListener): () => void {
+  listeners.add(fn);
+  return () => { listeners.delete(fn); };
+}
+
+/** Mark a rep done for today. Idempotent; announces the first mark. */
 export async function markRepCompletedToday(repKey: string): Promise<void> {
   const key = todayKey();
   const record = await db.meta.get(key);
@@ -41,4 +52,7 @@ export async function markRepCompletedToday(repKey: string): Promise<void> {
   if (keys.includes(repKey)) return;
   keys.push(repKey);
   await db.meta.put({ key, value: JSON.stringify(keys) });
+  for (const fn of listeners) {
+    try { fn(repKey); } catch { /* a listener's failure is its own */ }
+  }
 }

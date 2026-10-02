@@ -25,6 +25,7 @@ import { logAppAudit } from '../../services/appAuditor';
 import { voiceService } from '../../services/voiceService';
 import { cancelBackgroundAnalysis } from '../../services/gameAnalysisService';
 import { RewardLayer } from './RewardLayer';
+import { RingWatcher } from './RingWatcher';
 
 interface NavItem {
   to: string;
@@ -424,6 +425,7 @@ export function AppLayout(): JSX.Element {
         </nav>
 
         <RewardLayer />
+        <RingWatcher />
         {/* Main content */}
         <main ref={mainRef} className="relative flex flex-1 flex-col min-h-0 overflow-hidden">
           {(pull.pullDistance > 0 || pull.refreshing) && (

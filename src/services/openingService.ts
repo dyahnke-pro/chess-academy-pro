@@ -10,6 +10,8 @@ import { recordPositiveMoment } from './reviewPromptService';
 import openingManifests from '../data/opening-manifests.json';
 import antiOpeningsData from '../data/anti-openings.json';
 import gambitData from '../data/gambits.json';
+import { finishBite } from './activeBite';
+import { reward } from './rewardService';
 
 // ─── Opening name helpers ────────────────────────────────────────────────────
 
@@ -465,6 +467,14 @@ export async function markLinePlayed(
 /** Marks a WLPP rung complete for a line, backfilling every earlier rung
  *  (monotonic — finishing Practice implies Watch + Learn are done). One call
  *  the runtime can fire from any rung's completion without ordering bugs. */
+/** What finishing each rung unlocks — said on the banner. */
+const RUNG_UNLOCK_LABEL: Record<'watch' | 'learn' | 'practice' | 'play', string> = {
+  watch: 'Learn unlocked',
+  learn: 'Practice unlocked',
+  practice: 'Play unlocked',
+  play: 'Line mastered',
+};
+
 export async function markRungComplete(
   id: string,
   variationIndex: number,
@@ -483,7 +493,15 @@ export async function markRungComplete(
   if (upto.includes('learn')) add('linesLearned');
   if (upto.includes('practice')) add('linesPerfected');
   if (upto.includes('play')) add('linesPlayed');
-  if (Object.keys(patch).length) await db.openings.update(id, patch);
+  if (Object.keys(patch).length) {
+    await db.openings.update(id, patch);
+    // FIRST completion of this rung on this line: the next one unlocks — a
+    // small fanfare (David 2026-10-01, the Openings half of the reward sweep).
+    // Re-finishing a rung already done stays quiet.
+    reward({ kind: rung === 'play' ? 'rankUp' : 'levelUp', label: RUNG_UNLOCK_LABEL[rung], seed: variationIndex + 7 });
+  }
+  // A line played is the finish line of an opening bite (Up next).
+  void finishBite('opening');
 
   // Auto-enroll the learned line into spaced repetition (David 2026-05-25):
   // once you've Learned a line it enters SRS so it resurfaces for review and
