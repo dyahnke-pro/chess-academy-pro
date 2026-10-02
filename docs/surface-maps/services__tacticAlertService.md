@@ -123,7 +123,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `tacticTypeLabel` (function) — 20 call sites
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:992`
-- `src/components/Puzzles/MyMistakesPage.tsx:220`
+- `src/components/Puzzles/MyMistakesPage.tsx:235`
 - `src/components/Tactics/TacticCreatePage.tsx:305`
 - `src/components/Tactics/TacticCreatePage.tsx:579`
 - `src/components/Tactics/TacticSetupBoard.tsx:254`

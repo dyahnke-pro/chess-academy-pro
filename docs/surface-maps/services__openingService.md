@@ -10,7 +10,7 @@
 
 - **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:628) — names `markRungComplete`, `openingService`
 - **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4649) — names `markRungComplete`
-- **The standard post-deploy ritual** (CLAUDE.md:6089) — names `markRungComplete`
+- **The standard post-deploy ritual** (CLAUDE.md:6090) — names `markRungComplete`
 
 ## Who calls in
 
@@ -84,7 +84,7 @@
 - `src/services/gamesService.ts:75`
 - `src/services/gamesService.ts:82`
 - `src/services/gamesService.ts:150`
-- `src/services/weaknessAnalyzer.ts:997`
+- `src/services/weaknessAnalyzer.ts:993`
 
 ### `OPENING_ID_ALIASES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

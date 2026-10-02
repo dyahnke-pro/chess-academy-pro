@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6082) — names `reviewPromptService`
+- **The standard post-deploy ritual** (CLAUDE.md:6083) — names `reviewPromptService`
 
 ## Who calls in
 

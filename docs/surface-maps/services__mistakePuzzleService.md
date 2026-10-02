@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1525 lines · 27 exports · 29 importers · 16 tests · 4 audits**
+**1525 lines · 27 exports · 28 importers · 15 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6083) — names `gradeMistakePuzzle`
+- **The standard post-deploy ritual** (CLAUDE.md:6084) — names `gradeMistakePuzzle`
 
 ## Who calls in
 
@@ -20,7 +20,6 @@
 - `src/components/Puzzles/MyMistakesPage.test.tsx`
 - `src/components/Puzzles/MyMistakesPage.tsx`
 - `src/components/Puzzles/WeaknessTagDrillPage.tsx`
-- `src/components/Puzzles/WeaknessThemesPage.tsx`
 - `src/components/Tactics/AnalysisPracticePage.tsx`
 - `src/components/Tactics/TacticCreatePage.tsx`
 - `src/services/autoAnalyzeGame.ts`
@@ -203,8 +202,8 @@
 - `src/services/mistakePuzzleCapture.test.ts:48`
 
 ### `ensureSequenceSolution` (function) — 7 call sites
+- `src/components/Puzzles/MyMistakesPage.tsx:310`
 - `src/components/Puzzles/WeaknessTagDrillPage.tsx:116`
-- `src/components/Puzzles/WeaknessThemesPage.tsx:142`
 - `src/services/mistakePuzzleService.sequence.test.ts:41`
 - `src/services/mistakePuzzleService.sequence.test.ts:50`
 - `src/services/mistakePuzzleService.sequence.test.ts:57`
@@ -231,20 +230,18 @@
 - `src/services/misconceptionService.test.ts:161`
 - `src/services/misconceptionService.test.ts:169`
 
-### `getAllMistakePuzzles` (function) — 5 call sites
+### `getAllMistakePuzzles` (function) — 4 call sites
 - `src/components/Insights/OpeningDrilldown.tsx:152`
-- `src/components/Puzzles/MyMistakesPage.tsx:160`
-- `src/components/Puzzles/WeaknessThemesPage.tsx:66`
+- `src/components/Puzzles/MyMistakesPage.tsx:176`
 - `src/services/gameCalculationPuzzleService.ts:117`
 - `src/services/mistakePuzzleService.test.ts:597`
 
 ### `getMistakePuzzlesByPhase` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `gradeMistakePuzzle` (function) — 8 call sites
+### `gradeMistakePuzzle` (function) — 7 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2372`
-- `src/components/Puzzles/MyMistakesPage.tsx:255`
-- `src/components/Puzzles/WeaknessThemesPage.tsx:116`
+- `src/components/Puzzles/MyMistakesPage.tsx:288`
 - `src/components/Tactics/TacticCreatePage.tsx:194`
 - `src/services/mistakePuzzleService.test.ts:495`
 - `src/services/mistakePuzzleService.test.ts:516`
@@ -255,14 +252,14 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `deleteMistakePuzzle` (function) — 2 call sites
-- `src/components/Puzzles/MyMistakesPage.tsx:244`
+- `src/components/Puzzles/MyMistakesPage.tsx:277`
 - `src/services/mistakePuzzleService.test.ts:554`
 
 ### `MistakePuzzleStats` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getMistakePuzzleStats` (function) — 4 call sites
-- `src/components/Puzzles/MyMistakesPage.tsx:161`
+- `src/components/Puzzles/MyMistakesPage.tsx:177`
 - `src/services/gameInsightsService.ts:818`
 - `src/services/mistakePuzzleService.test.ts:571`
 - `src/services/mistakePuzzleService.test.ts:584`
@@ -270,7 +267,6 @@
 ## Tests
 
 - `src/components/Puzzles/MyMistakesPage.test.tsx`
-- `src/components/Puzzles/WeaknessThemesPage.test.tsx`
 - `src/services/chesscomService.test.ts`
 - `src/services/drillJoinDivergence.test.ts`
 - `src/services/gameAnalysisService.poolEngine.test.ts`

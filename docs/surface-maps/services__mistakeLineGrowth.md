@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6083) — names `mistakeLineGrowth`
+- **The standard post-deploy ritual** (CLAUDE.md:6084) — names `mistakeLineGrowth`
 
 ## Who calls in
 
