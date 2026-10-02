@@ -6,9 +6,10 @@ import {
   getMistakePuzzleStats,
   gradeMistakePuzzle,
   deleteMistakePuzzle,
+  ensureSequenceSolution,
   type MistakePuzzleStats,
 } from '../../services/mistakePuzzleService';
-import { ArrowLeft, Trash2, AlertTriangle, Trophy, CheckCircle, CircleDot, BookOpen, Swords, Crown, Search, X, Film } from 'lucide-react';
+import { ArrowLeft, Trash2, AlertTriangle, Trophy, CheckCircle, CircleDot, BookOpen, Swords, Crown, Search, X, Film, ChevronRight, Play, Sparkles } from 'lucide-react';
 import { logAppAudit } from '../../services/appAuditor';
 import { getHomeGameIds } from '../../services/homeOpeningService';
 import { tacticTypeLabel } from '../../services/tacticAlertService';
@@ -17,7 +18,8 @@ import { AnalyzeGamesButton } from '../Games/AnalyzeGamesButton';
 import { gameNeedsAnalysis } from '../../services/gameAnalysisService';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
-import { summarizeWeaknesses, mistakeWeaknessKey } from '../../services/coachDrillService';
+import { groupMistakesByWeakness, mistakeWeaknessKey } from '../../services/coachDrillService';
+import { classifyEndgameType, endgameTablebaseReady } from '../../services/endgameProfileService';
 import type { MistakePuzzle, MistakeClassification, MistakePuzzleSourceMode, MistakePuzzleStatus, MistakeGamePhase } from '../../types';
 import { finishBite } from '../../services/activeBite';
 
@@ -80,6 +82,8 @@ interface MistakesPageLocationState {
   /** Open this puzzle straight away — an Up-next bite ("fix your slip from
    *  your last game", "a puzzle grew"). */
   openPuzzleId?: string;
+  /** Open one weakness group (the heat map's "Drill it"). */
+  weaknessKey?: string;
 }
 
 export function MyMistakesPage(): JSX.Element {
@@ -119,7 +123,19 @@ export function MyMistakesPage(): JSX.Element {
   // The recurring-weakness chip filters by its BUCKET KEY (the same key the
   // count is computed from), not by fuzzy text — so tapping a chip always
   // shows exactly the puzzles it counted (David 2026-09-07).
-  const [weaknessKeyFilter, setWeaknessKeyFilter] = useState<string | null>(null);
+  const [weaknessKeyFilter, setWeaknessKeyFilter] = useState<string | null>(navState.weaknessKey ?? null);
+  // "Practice these": the group's open positions, played one after another.
+  const [practiceQueue, setPracticeQueue] = useState<MistakePuzzle[]>([]);
+  // The flat list of every position, for anyone who wants it over the groups.
+  // A deep link that arrives with a filter (Insights' "see your blunders")
+  // asked for positions, so it opens on them.
+  const [showAllPositions, setShowAllPositions] = useState(
+    !!(navState.initialPhase ?? navState.initialClassification ?? navState.initialStatus),
+  );
+  // Single-move `tactical_sequence` rows are extended into their forcing line
+  // before the board mounts, so the drill plays the SEQUENCE (moved here with
+  // the old My Weaknesses page, which did this and My Mistakes did not).
+  const [sequenceTried, setSequenceTried] = useState<ReadonlySet<string>>(() => new Set());
   const [loading, setLoading] = useState(true);
 
   // Mount audit — adds observability so the audit-stream can see
@@ -194,7 +210,6 @@ export function MyMistakesPage(): JSX.Element {
   // The EVIDENCE header (Phase 3, David 2026-08-26 "show the student's OWN
   // instances as proof"): their recurring weaknesses, most common first, from
   // the SAME buckets the drill queue uses. Tapping one filters the list to it.
-  const weaknessRows = useMemo(() => summarizeWeaknesses(puzzles).slice(0, 6), [puzzles]);
 
   const availableClassifications = useMemo(() => {
     const set = new Set<MistakeClassification>();
@@ -240,6 +255,24 @@ export function MyMistakesPage(): JSX.Element {
     return dateB - dateA;
   });
 
+  // The weakness groups, over everything the filters let through. The open
+  // group (if any) is the list below; with none open, the groups ARE the page.
+  // `filtered` already honours the open group, so with one open this is that
+  // single group in the page's own sort order.
+  const groups = groupMistakesByWeakness(filtered);
+  const openGroup = weaknessKeyFilter === null ? null : (groups.find((g) => g.key === weaknessKeyFilter) ?? null);
+  // Arriving SCOPED (this game, these games, one opening, a search) asks for
+  // positions, not patterns — the list shows straight away.
+  const scoped = gameFilter !== null || gameIdsFilter !== null || openingFilter !== null || !!searchQ;
+  const showList = !!openGroup || scoped || showAllPositions;
+
+  const startPractice = useCallback((list: readonly MistakePuzzle[]): void => {
+    const queue = list.filter((p) => p.status !== 'mastered');
+    if (queue.length === 0) return;
+    setPracticeQueue(queue.slice(1));
+    setActivePuzzle(queue[0]);
+  }, []);
+
   const handleDelete = useCallback(async (id: string) => {
     await deleteMistakePuzzle(id);
     if (activePuzzle?.id === id) setActivePuzzle(null);
@@ -256,9 +289,31 @@ export function MyMistakesPage(): JSX.Element {
   }, [activePuzzle]);
 
   const handlePuzzleComplete = useCallback((): void => {
+    // Practising a group: straight on to its next open position.
+    if (practiceQueue.length > 0) {
+      setActivePuzzle(practiceQueue[0]);
+      setPracticeQueue((q) => q.slice(1));
+      return;
+    }
     setActivePuzzle(null);
     void loadData();
-  }, [loadData]);
+  }, [loadData, practiceQueue]);
+
+  const preparingSequence = !!activePuzzle
+    && activePuzzle.tacticType === 'tactical_sequence'
+    && activePuzzle.moves.trim().split(/\s+/).filter(Boolean).length === 1
+    && !sequenceTried.has(activePuzzle.id);
+  useEffect(() => {
+    if (!preparingSequence || !activePuzzle) return;
+    const mp = activePuzzle;
+    let cancelled = false;
+    void ensureSequenceSolution(mp).then((upgraded) => {
+      if (cancelled) return;
+      setSequenceTried((prev) => new Set(prev).add(mp.id));
+      if (upgraded.moves !== mp.moves) setActivePuzzle(upgraded);
+    }).catch(() => { if (!cancelled) setSequenceTried((prev) => new Set(prev).add(mp.id)); });
+    return () => { cancelled = true; };
+  }, [preparingSequence, activePuzzle]);
 
   const getPhaseCount = (phase: MistakeGamePhase | 'all'): number => {
     if (!stats) return 0;
@@ -279,18 +334,26 @@ export function MyMistakesPage(): JSX.Element {
     return (
       <div className="p-4 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-xl mx-auto w-full space-y-4 flex-1 overflow-y-auto overscroll-contain min-h-0" data-testid="solving-mode">
         <button
-          onClick={() => setActivePuzzle(null)}
+          onClick={() => { setPracticeQueue([]); setActivePuzzle(null); }}
           className="flex items-center gap-1 text-sm text-theme-text-muted hover:text-theme-text"
+          data-testid="back-to-list"
         >
           <ArrowLeft size={16} />
           Back to list
         </button>
-        <MistakePuzzleBoard
-          puzzle={activePuzzle}
-          onResolved={handlePuzzleResolved}
-          onComplete={handlePuzzleComplete}
-          streak={streak}
-        />
+        {preparingSequence ? (
+          <p className="py-16 text-center text-sm text-theme-text-muted" data-testid="preparing-sequence">
+            Building the tactical sequence…
+          </p>
+        ) : (
+          <MistakePuzzleBoard
+            key={activePuzzle.id}
+            puzzle={activePuzzle}
+            onResolved={handlePuzzleResolved}
+            onComplete={handlePuzzleComplete}
+            streak={streak}
+          />
+        )}
       </div>
     );
   }
@@ -306,7 +369,7 @@ export function MyMistakesPage(): JSX.Element {
         >
           <ArrowLeft size={18} className="text-theme-text" />
         </button>
-        <h1 className="text-xl font-bold text-theme-text flex-1">My Mistakes</h1>
+        <h1 className="text-xl font-bold text-theme-text flex-1">My Weaknesses</h1>
         {/* The ONE analysis pipeline (home openings first, capped package).
             "Re-analyze Games" was a second pipeline that deleted every
             puzzle and its progress before re-running all games serially —
@@ -314,42 +377,16 @@ export function MyMistakesPage(): JSX.Element {
         <AnalyzeGamesButton variant="compact" source="MyMistakesPage" />
         <PageHelp
           helpId="tactics-mistakes"
-          title="How My Mistakes works"
+          title="How My Weaknesses works"
           steps={[
-            { label: 'What this is', body: 'Every mistake and blunder from your imported games, turned into a puzzle from the exact position where you went wrong.' },
-            { label: 'Where it comes from', body: 'When you import and analyze games, each error is logged here automatically — these are YOUR misses, not generic puzzles.' },
-            { label: 'Solve them', body: 'Replay the position and find the move you missed. Getting it right is how the pattern stops costing you games.' },
-            { label: 'Where it fits', body: 'Mistakes here feed your Weaknesses profile and the coach’s training lessons — fix them here, the holes close everywhere.' },
+            { label: 'What this is', body: 'Every mistake from your analyzed games, grouped by the pattern behind it — the worst pattern first.' },
+            { label: 'Your games first', body: 'Each group opens on the exact positions where YOU went wrong. Practice solves them one after another.' },
+            { label: 'Then more like it', body: 'Out of your own positions? "More like this" keeps going with puzzles on the same pattern from the puzzle database.' },
+            { label: 'Where it fits', body: 'Fix them here and the holes close everywhere — the coach, the heat map and your daily training all read the same record.' },
           ]}
         />
       </div>
 
-      {/* Evidence header — the student's recurring weaknesses as proof. Tap a
-          chip to filter the list to that pattern (reuses the tactic-label
-          search match). Hidden until there are at least two distinct patterns
-          worth contrasting. */}
-      {weaknessRows.length >= 2 && (
-        <div className="mb-4" data-testid="weakness-evidence-header">
-          <p className="text-xs text-theme-text-muted mb-1.5">Your recurring weaknesses — proof they keep costing you:</p>
-          <div className="flex flex-wrap gap-2">
-            {weaknessRows.map((w) => (
-              <button
-                key={w.key}
-                onClick={() => setWeaknessKeyFilter((k) => (k === w.key ? null : w.key))}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
-                  weaknessKeyFilter === w.key
-                    ? 'bg-theme-accent/20 border-theme-accent/50 text-theme-accent'
-                    : 'bg-theme-surface border-theme-border text-theme-text hover:border-theme-accent/40'
-                }`}
-                data-testid={`weakness-chip-${w.key}`}
-              >
-                <span>{w.label}</span>
-                <span className="text-theme-text-muted">×{w.count}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* Stats bar */}
       {stats && stats.total > 0 && (
@@ -550,7 +587,111 @@ export function MyMistakesPage(): JSX.Element {
         </div>
       )}
 
-      {/* Puzzle list */}
+      {/* One group open: its header + actions. Your positions first; "More like
+          this" continues from the puzzle database on the same pattern. */}
+      {openGroup && (
+        <div className="mb-3 rounded-2xl border border-rose-500/30 bg-rose-500/10 p-3" data-testid="weakness-group-open">
+          <button
+            onClick={() => setWeaknessKeyFilter(null)}
+            className="mb-2 flex items-center gap-1 text-xs text-theme-text-muted hover:text-theme-text"
+            data-testid="weakness-group-back"
+          >
+            <ArrowLeft size={12} /> All weaknesses
+          </button>
+          <div className="flex items-baseline justify-between gap-2">
+            <h2 className="text-base font-bold text-theme-text">{openGroup.label}</h2>
+            <span className="text-xs text-theme-text-muted">{openGroup.open} open · {openGroup.puzzles.length} from your games</span>
+          </div>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {openGroup.open > 0 && (
+              <button
+                onClick={() => startPractice(openGroup.puzzles)}
+                className="flex items-center gap-1 rounded-xl bg-theme-accent px-3 py-1.5 text-xs font-semibold text-white"
+                data-testid="weakness-group-practice"
+              >
+                <Play size={12} /> Practice your positions
+              </button>
+            )}
+            {openGroup.themes.length > 0 && (
+              <button
+                onClick={() => void navigate('/tactics/adaptive', { state: { forcedWeakThemes: openGroup.themes, autoStart: true } })}
+                className="flex items-center gap-1 rounded-xl border border-theme-border px-3 py-1.5 text-xs font-semibold text-theme-text"
+                data-testid="weakness-group-more"
+              >
+                <Sparkles size={12} /> More like this
+              </button>
+            )}
+            {(() => {
+              const egFen = openGroup.puzzles.map((p) => p.fen).find((f) => endgameTablebaseReady(f) && classifyEndgameType(f) !== 'other');
+              if (!egFen) return null;
+              return (
+                <button
+                  onClick={() => void navigate(`/coach/endgame-trainer/custom?fen=${encodeURIComponent(egFen)}`)}
+                  className="rounded-xl border border-blue-500/40 px-3 py-1.5 text-xs font-semibold text-blue-400"
+                  data-testid="weakness-group-play-out"
+                >
+                  Play it out
+                </button>
+              );
+            })()}
+          </div>
+        </div>
+      )}
+
+      {/* No group open and no search: the groups ARE the page, worst first. */}
+      {!showList && filtered.length > 0 && (
+        <div className="space-y-2" data-testid="weakness-groups">
+          {groups.map((g) => (
+            <div
+              key={g.key}
+              className="flex items-center gap-3 rounded-xl border border-theme-border bg-theme-surface p-3"
+              data-testid={`weakness-group-${g.key}`}
+            >
+              <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${g.open > 0 ? 'bg-red-400 shadow-[0_0_6px_rgba(248,113,113,0.8)]' : 'bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]'}`} />
+              <button
+                onClick={() => setWeaknessKeyFilter(g.key)}
+                className="flex min-w-0 flex-1 flex-col text-left"
+                data-testid={`weakness-group-open-${g.key}`}
+              >
+                <span className="truncate text-sm font-semibold text-theme-text">{g.label}</span>
+                <span className="text-xs text-theme-text-muted">
+                  {g.open > 0 ? `${g.open} open` : 'all fixed'} · {g.puzzles.length} from your games
+                </span>
+              </button>
+              {g.open > 0 && (
+                <button
+                  onClick={() => startPractice(g.puzzles)}
+                  className="rounded-lg bg-theme-accent/90 px-3 py-1.5 text-xs font-semibold text-white"
+                  data-testid={`weakness-group-practice-${g.key}`}
+                >
+                  Practice
+                </button>
+              )}
+              <ChevronRight size={16} className="shrink-0 text-theme-text-muted" />
+            </div>
+          ))}
+          <button
+            onClick={() => setShowAllPositions(true)}
+            className="w-full py-2 text-center text-xs text-theme-text-muted hover:text-theme-text"
+            data-testid="show-all-positions"
+          >
+            See all positions
+          </button>
+        </div>
+      )}
+
+      {showAllPositions && !openGroup && !scoped && (
+        <button
+          onClick={() => setShowAllPositions(false)}
+          className="mb-2 flex items-center gap-1 text-xs text-theme-text-muted hover:text-theme-text"
+          data-testid="back-to-groups"
+        >
+          <ArrowLeft size={12} /> Group by weakness
+        </button>
+      )}
+
+      {/* Positions: the open group's, a scoped arrival's, or every one. */}
+      {showList && (
       <div className="space-y-2" data-testid="puzzle-list">
         {filtered.map((puzzle) => (
           <div
@@ -638,6 +779,7 @@ export function MyMistakesPage(): JSX.Element {
           </div>
         ))}
       </div>
+      )}
     </div>
   );
 }

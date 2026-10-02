@@ -60,7 +60,6 @@ const AdaptivePuzzlePage = lazyPage<{ master?: boolean; length?: 'long' | 'veryL
 const MyMistakesPage = lazyPage('MyMistakesPage', () => import('./components/Puzzles/MyMistakesPage').then((m) => m.MyMistakesPage));
 const LichessDashboardPage = lazyPage('LichessDashboardPage', () => import('./components/Puzzles/LichessDashboardPage').then((m) => m.LichessDashboardPage));
 const WeaknessTagDrillPage = lazyPage('WeaknessTagDrillPage', () => import('./components/Puzzles/WeaknessTagDrillPage').then((m) => m.WeaknessTagDrillPage));
-const WeaknessThemesPage = lazyPage('WeaknessThemesPage', () => import('./components/Puzzles/WeaknessThemesPage').then((m) => m.WeaknessThemesPage));
 const CoachGamePage = lazyPage('CoachGamePage', () => import('./components/Coach/CoachGamePage').then((m) => m.CoachGamePage));
 const CoachChatPage = lazyPage('CoachChatPage', () => import('./components/Coach/CoachChatPage').then((m) => m.CoachChatPage));
 const CoachSessionPage = lazyPage('CoachSessionPage', () => import('./components/Coach/CoachSessionPage').then((m) => m.CoachSessionPage));
@@ -624,19 +623,19 @@ export function App(): JSX.Element {
           <Route path="/tactics/deep-run" element={<ErrorBoundary><DeepRunPage /></ErrorBoundary>} />
           <Route path="/tactics/classic" element={<ErrorBoundary><PuzzleTrainerPage /></ErrorBoundary>} />
           <Route path="/tactics/weakness-drill" element={<ErrorBoundary><WeaknessTagDrillPage /></ErrorBoundary>} />
-          <Route path="/tactics/weakness-themes" element={<ErrorBoundary><WeaknessThemesPage /></ErrorBoundary>} />
+          <Route path="/tactics/weakness-themes" element={<Navigate to="/tactics/mistakes" replace />} />
           <Route path="/tactics/lichess" element={<ErrorBoundary><LichessDashboardPage /></ErrorBoundary>} />
           {/* Backward-compat redirects */}
           <Route path="/puzzles" element={<Navigate to="/tactics" replace />} />
           <Route path="/puzzles/classic" element={<Navigate to="/tactics/classic" replace />} />
           <Route path="/puzzles/adaptive" element={<Navigate to="/tactics/adaptive" replace />} />
           <Route path="/puzzles/mistakes" element={<Navigate to="/tactics/mistakes" replace />} />
-          <Route path="/puzzles/weakness" element={<Navigate to="/tactics/weakness-themes" replace />} />
+          <Route path="/puzzles/weakness" element={<Navigate to="/tactics/mistakes" replace />} />
           <Route path="/puzzles/lichess-dashboard" element={<Navigate to="/tactics/lichess" replace />} />
           <Route path="/weaknesses" element={<ErrorBoundary><GameInsightsPage /></ErrorBoundary>} />
           <Route path="/weaknesses/games" element={<ErrorBoundary><GamesDrilldownPage /></ErrorBoundary>} />
           <Route path="/coach/report" element={<Navigate to="/weaknesses" replace />} />
-          <Route path="/weaknesses/puzzles" element={<Navigate to="/tactics/weakness-themes" replace />} />
+          <Route path="/weaknesses/puzzles" element={<Navigate to="/tactics/mistakes" replace />} />
           <Route path="/weaknesses/adaptive" element={<Navigate to="/tactics/adaptive" replace />} />
           <Route path="/weaknesses/classic" element={<Navigate to="/tactics/classic" replace />} />
           <Route path="/weaknesses/mistakes" element={<Navigate to="/tactics/mistakes" replace />} />

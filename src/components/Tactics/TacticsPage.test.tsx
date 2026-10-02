@@ -98,7 +98,7 @@ describe('TacticsPage', () => {
     expect(screen.getByText('Tactical Training')).toBeInTheDocument();
   });
 
-  it('shows My Profile and My Mistakes sections', async () => {
+  it('shows My Profile and the ONE merged My Weaknesses row', async () => {
     setProfile();
     render(<TacticsPage />);
 
@@ -107,7 +107,10 @@ describe('TacticsPage', () => {
     });
     expect(screen.getByTestId('section-my mistakes')).toBeInTheDocument();
     expect(screen.getByText('My Profile')).toBeInTheDocument();
-    expect(screen.getByText('My Mistakes')).toBeInTheDocument();
+    // My Mistakes + My Weaknesses are one row now (David 2026-10-02).
+    expect(screen.getAllByText('My Weaknesses')).toHaveLength(1);
+    expect(screen.queryByText('My Mistakes')).toBeNull();
+    expect(screen.queryByTestId('section-my-weaknesses')).toBeNull();
     // Master Level is reachable from the hub, not only from the coach (David 2026-09-14).
     expect(screen.getByText('Master Level')).toBeInTheDocument();
   });

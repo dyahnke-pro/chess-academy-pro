@@ -25,7 +25,7 @@ import { resolveRepRoute } from './repRouting';
 export type PickKind = 'deep-run' | 'game-slip' | 'weakness' | 'grown' | 'opening' | 'free-opening' | 'warm-up' | 'long';
 
 /** Which hub row a pick lives under — the row that pulses in place. */
-export type PickHub = 'tactics:deep-run' | 'tactics:my mistakes' | 'tactics:my-weaknesses' | 'tactics:daily' | 'tactics:long' | 'openings' | 'home';
+export type PickHub = 'tactics:deep-run' | 'tactics:my mistakes' | 'tactics:daily' | 'tactics:long' | 'openings' | 'home';
 
 export interface UpNextPick {
   kind: PickKind;
@@ -77,7 +77,7 @@ function weaknessPick(rep: RepCandidate): UpNextPick {
     bite: `${WEAKNESS_BITE} puzzles`,
     path: route.path,
     state: { ...(route.state ?? {}), autoStart: true, repKey: key, repCap: WEAKNESS_BITE },
-    hub: 'tactics:my-weaknesses',
+    hub: 'tactics:my mistakes',
   };
 }
 

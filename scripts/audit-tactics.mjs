@@ -407,8 +407,8 @@ async function main() {
         }
         return true;
       } },
-      { label: 'My Weaknesses + My Mistakes tiles', fn: async () =>
-        (await visible('section-my-weaknesses')) && (await visible('section-my mistakes')) },
+      { label: 'ONE merged My Weaknesses row (no second tile)', fn: async () =>
+        (await visible('section-my mistakes')) && !(await visible('section-my-weaknesses')) },
     ],
   );
 
@@ -984,33 +984,29 @@ async function main() {
   );
 
   // ═══════════════════════════════════════════════════════════════════
-  // /tactics/weakness-themes — WeaknessThemesPage
+  // My Weaknesses — the ONE merged row (My Mistakes + My Weaknesses,
+  // David 2026-10-02): your game positions grouped by pattern.
   // ═══════════════════════════════════════════════════════════════════
   await clickTacticsNav();
   await scenario(
-    '26-weakness-themes-mount',
+    '26-my-weaknesses-merged-row',
     async () => {
-      await page.locator('[data-testid="section-my-weaknesses"]').click();
-      await page.locator('[data-testid="weakness-themes-page"]').waitFor({ timeout: 8000 });
-      // Wait for loading → themes/summary transition
-      await waitUntil(async () =>
-        (await visible('themes-list')) || (await visible('session-summary')) ||
-        (await hasText('No weakness data')), 8000);
+      await page.locator('[data-testid="section-my mistakes"]').click();
+      await page.locator('[data-testid="my-mistakes-page"], [data-testid="empty-state"]').first().waitFor({ timeout: 8000 });
     },
     1000,
     [
-      { label: 'route /tactics/weakness-themes', fn: () => page.url().endsWith('/tactics/weakness-themes') },
-      { label: 'page mount', fn: () => visible('weakness-themes-page') },
-      { label: 'back-btn present', fn: () => visible('back-btn') },
-      { label: 'themes list OR empty CTA',
-        fn: async () => (await visible('themes-list')) || (await hasText('Import Games')) || (await visible('session-summary')) },
+      { label: 'route /tactics/mistakes', fn: () => page.url().includes('/tactics/mistakes') },
+      { label: 'page titled My Weaknesses', fn: () => hasText('My Weaknesses') },
+      { label: 'groups OR empty CTA',
+        fn: async () => (await visible('weakness-groups')) || (await visible('empty-state')) || (await visible('puzzle-list')) },
     ],
   );
 
   // /tactics/weakness (WeaknessPuzzlePage) was removed 2026-06-11 — the dead,
-  // unreachable legacy weakness drill superseded by /tactics/weakness-themes.
-  // Its scenario lived here; the redirect-coverage block below now asserts the
-  // legacy paths land on weakness-themes.
+  // unreachable legacy weakness drill. Its scenario lived here; the
+  // redirect-coverage block below asserts the legacy paths land on the merged
+  // My Weaknesses page (/tactics/mistakes) since 2026-10-02.
 
   // ═══════════════════════════════════════════════════════════════════
   // /tactics/mistakes — MyMistakesPage
@@ -1128,9 +1124,10 @@ async function main() {
     ['/puzzles/classic', '/tactics/classic'],
     ['/puzzles/adaptive', '/tactics/adaptive'],
     ['/puzzles/mistakes', '/tactics/mistakes'],
-    ['/puzzles/weakness', '/tactics/weakness-themes'],
+    ['/puzzles/weakness', '/tactics/mistakes'],
+    ['/tactics/weakness-themes', '/tactics/mistakes'],
     ['/puzzles/lichess-dashboard', '/tactics/lichess'],
-    ['/weaknesses/puzzles', '/tactics/weakness-themes'],
+    ['/weaknesses/puzzles', '/tactics/mistakes'],
     ['/weaknesses/adaptive', '/tactics/adaptive'],
     ['/weaknesses/classic', '/tactics/classic'],
     ['/weaknesses/mistakes', '/tactics/mistakes'],
@@ -1637,25 +1634,16 @@ async function main() {
     ],
   );
 
-  // 47. WeaknessThemesPage — Mixed Training surface exposes themes-list
-  // OR session-summary OR no-data state.
+  // 47. The retired My Weaknesses URL lands on the merged page.
   await page.goto(`${BASE_URL}/tactics/weakness-themes`, { waitUntil: 'domcontentloaded' }).catch(() => {});
   await page.waitForTimeout(SETTLE_SHORT);
   await scenario(
-    '47-weakness-themes-page-mounts-with-state',
+    '47-old-weakness-themes-url-lands-on-merged-page',
     async () => {},
     SETTLE_SHORT,
     [
-      { label: 'page route /tactics/weakness-themes', fn: () => page.url().endsWith('/tactics/weakness-themes') },
-      {
-        label: 'one of themes-list / session-summary / no-data state visible',
-        fn: async () =>
-          (await visible('themes-list')) ||
-          (await visible('session-summary')) ||
-          (await hasText('No weakness data')) ||
-          (await hasText('No themes')) ||
-          true /* lenient: page mount alone suffices */,
-      },
+      { label: 'redirected to /tactics/mistakes', fn: () => page.url().includes('/tactics/mistakes') },
+      { label: 'merged page mounted', fn: async () => (await visible('my-mistakes-page')) || (await visible('empty-state')) },
     ],
   );
 

@@ -150,15 +150,9 @@ export const APP_ROUTES_MANIFEST: RouteManifestEntry[] = [
   },
   {
     path: '/tactics/mistakes',
-    title: 'My Mistakes',
-    description: 'Re-drill mistakes from your own games.',
-    featuresAvailable: ['mistake-puzzles'],
-  },
-  {
-    path: '/tactics/weakness-themes',
-    title: 'Weakness Themes',
-    description: 'Browse available weakness themes.',
-    featuresAvailable: ['weakness-theme-picker'],
+    title: 'My Weaknesses',
+    description: 'Your own game mistakes grouped by the pattern behind them, then more puzzles like them.',
+    featuresAvailable: ['mistake-puzzles', 'weakness-theme-picker'],
   },
   {
     path: '/tactics/drill',

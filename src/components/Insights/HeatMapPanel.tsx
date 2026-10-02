@@ -96,6 +96,13 @@ export function HeatMapPanel(): JSX.Element | null {
 
   const drill = (t: HeatTile): void => {
     const hole = holes.find((h) => h.capabilityTag === t.tag && h.openCount > 0);
+    // Your own game positions first (David 2026-10-02): a hole the spine built
+    // from your mistakes opens that group on My Weaknesses — the same bucket
+    // key, so the group is exactly the positions this tile counted.
+    if (hole && hole.tag.startsWith('analysis:')) {
+      void navigate('/tactics/mistakes', { state: { weaknessKey: hole.tag.replace(/^analysis:/, '') } });
+      return;
+    }
     if (hole) {
       const route = resolveRepRoute({
         kind: 'weakness', key: `weakness:${hole.tag}:${hole.label}`, label: hole.label, subtitle: '',

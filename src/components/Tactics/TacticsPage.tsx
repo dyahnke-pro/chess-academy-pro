@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, AlertTriangle, Shuffle, Trophy, Wrench, Crosshair, MapPin, Lightbulb, Calculator, Swords, Crown, ChevronRight, Route, Flame } from 'lucide-react';
+import { Eye, AlertTriangle, Shuffle, Trophy, Wrench, MapPin, Lightbulb, Calculator, Swords, Crown, ChevronRight, Route, Flame } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PageHelp } from '../Layout/PageHelp';
@@ -71,8 +71,7 @@ const HUB_GROUPS: HubGroup[] = [
   {
     title: 'From your games',
     rows: [
-      { key: 'my mistakes', label: 'My Mistakes', description: 'Re-solve the exact positions you got wrong in your own games.', icon: AlertTriangle, route: '/tactics/mistakes', color: 'text-red-400', bgColor: 'bg-red-500/10', rgb: '239, 68, 68' },
-      { key: 'my-weaknesses', label: 'My Weaknesses', description: 'Drill the patterns your games keep missing, one theme at a time.', icon: Crosshair, route: '/tactics/weakness-themes', color: 'text-rose-400', bgColor: 'bg-rose-500/10', rgb: '244, 63, 94' },
+      { key: 'my mistakes', label: 'My Weaknesses', description: 'Your own game mistakes, grouped by the pattern behind them — then more puzzles like them.', icon: AlertTriangle, route: '/tactics/mistakes', color: 'text-red-400', bgColor: 'bg-red-500/10', rgb: '239, 68, 68' },
       { key: 'spot', label: 'My Profile', description: 'Your strongest and weakest tactical motifs.', icon: Eye, route: '/tactics/profile', color: 'text-amber-400', bgColor: 'bg-amber-500/10', rgb: '245, 158, 11' },
     ],
   },

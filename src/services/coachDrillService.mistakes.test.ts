@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-import { buildMistakeDrillQueue, drillKeyOf, mistakePuzzleToDrill, hasImportedGames, summarizeWeaknesses } from './coachDrillService';
+import { buildMistakeDrillQueue, drillKeyOf, mistakePuzzleToDrill, hasImportedGames, summarizeWeaknesses, groupMistakesByWeakness, mistakeWeaknessKey } from './coachDrillService';
 import type { MistakePuzzle, GameRecord } from '../types';
 
 /** Build a valid-enough MistakePuzzle for the fields the drill code
@@ -190,6 +190,31 @@ describe('summarizeWeaknesses — the evidence header, most common first', () =>
 
   it('returns [] for no mistakes', () => {
     expect(summarizeWeaknesses([])).toEqual([]);
+  });
+});
+
+describe('groupMistakesByWeakness — the merged My Weaknesses page', () => {
+  it('one group per spine bucket, the same key the chips and drill queue use, worst first', () => {
+    const back = mk({ id: 'p-back', fen: FORK_A.fen, moves: 'g1f3', tacticType: 'back_rank' });
+    const mastered = mk({ id: 'p-m', fen: FORK_A.fen, moves: 'g1f3', tacticType: 'back_rank', status: 'mastered' });
+    const groups = groupMistakesByWeakness([back, FORK_A, mastered, FORK_B]);
+    expect(groups.map((g) => g.key)).toEqual(['tactic:fork', 'tactic:back_rank']);
+    expect(groups[0]).toMatchObject({ open: 2 });
+    expect(groups[1]).toMatchObject({ open: 1 });
+    expect(groups[1].puzzles).toHaveLength(2);
+    for (const g of groups) for (const p of g.puzzles) expect(mistakeWeaknessKey(p)).toBe(g.key);
+  });
+
+  it('a mistake with no tactic falls to its phase bucket — never a guessed motif', () => {
+    const plain = mk({ id: 'p-plain', fen: FORK_A.fen, moves: 'g1f3', tacticType: undefined, gamePhase: 'middlegame' });
+    const [g] = groupMistakesByWeakness([plain]);
+    expect(g.key.startsWith('tactic:')).toBe(false);
+    expect(g.puzzles).toEqual([plain]);
+  });
+
+  it('a tactic group carries the puzzle-corpus themes for "More like this"', () => {
+    const [g] = groupMistakesByWeakness([FORK_A]);
+    expect(g.themes.length).toBeGreaterThan(0);
   });
 });
 
