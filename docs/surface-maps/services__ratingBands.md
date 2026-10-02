@@ -4,17 +4,19 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**212 lines · 12 exports · 52 importers · 5 tests · 0 audits**
+**238 lines · 14 exports · 59 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:877) — names `pvDepthForRating`
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3959) — names `explorerBandFor`, `ratingBands`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3989) — names `explorerBandFor`, `ratingBands`
-- **🔒🔒 ONE PUSH, NOT FIVE — ship-check remembers, and you check BEFORE you push (David 2026-09-24, furious: "You NEED TO FIGURE THIS SHIT OUT!! LOCK THIS IN FOR FUTURE SESSIONS").** (CLAUDE.md:6257) — names `ratingBands`
+- **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:666) — names `ratingBands`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:898) — names `pvDepthForRating`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4014) — names `explorerBandFor`, `ratingBands`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4044) — names `explorerBandFor`, `ratingBands`
+- **🔒🔒 ONE PUSH, NOT FIVE — ship-check remembers, and you check BEFORE you push (David 2026-09-24, furious: "You NEED TO FIGURE THIS SHIT OUT!! LOCK THIS IN FOR FUTURE SESSIONS").** (CLAUDE.md:6366) — names `ratingBands`
 
 ## Who calls in
 
+- `src/components/Coach/ChatMessage.tsx`
 - `src/components/Coach/CoachAnalysePage.tsx`
 - `src/components/Coach/CoachGamePage.tsx`
 - `src/components/Coach/CoachGameReview.tsx`
@@ -22,11 +24,13 @@
 - `src/components/Coach/ExplainPositionSessionView.tsx`
 - `src/components/Coach/GameChatPanel.tsx`
 - `src/components/Debug/OpeningBlundersPage.tsx`
+- `src/components/Legal/FirstRunStrength.tsx`
 - `src/components/Openings/MiddlegamePractice.tsx`
 - `src/components/Openings/OpeningPlayMode.tsx`
 - `src/components/Play/OpeningChallenge.tsx`
 - `src/components/Puzzles/AdaptivePuzzlePage.test.tsx`
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx`
+- `src/components/Puzzles/DeepRunPage.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx`
 - `src/components/Puzzles/PuzzleBoard.tsx`
 - `src/components/Puzzles/PuzzleTrainerPage.tsx`
@@ -41,6 +45,7 @@
 - `src/hooks/usePositionNarration.ts`
 - `src/hooks/useStudentNeed.ts`
 - `src/services/amateurPlayCache.ts`
+- `src/services/beginnerMode.test.ts`
 - `src/services/causalChainVoice.ts`
 - `src/services/coachDrillService.ts`
 - `src/services/coachFeatureService.ts`
@@ -60,11 +65,14 @@
 - `src/services/positionFacts.ts`
 - `src/services/positionReadingService.ts`
 - `src/services/principleAttribution.ts`
+- `src/services/puzzleMethod.ts`
 - `src/services/pvPlayback.ts`
 - `src/services/ratingBands.test.ts`
 - `src/services/slipDetector.ts`
+- `src/services/strengthCalibrationService.ts`
 - `src/services/teachingSelector.ts`
 - `src/services/theoryDeparture.ts`
+- `src/services/upNextLoader.ts`
 - `src/services/weaknessSpine.ts`
 - `src/services/whyBestMove.ts`
 
@@ -73,7 +81,8 @@
 ### `RatingTier` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `coreRatingTier` (function) — 11 call sites
+### `coreRatingTier` (function) — 12 call sites
+- `src/components/Coach/ChatMessage.tsx:116`
 - `src/services/hintRegister.ts:65`
 - `src/services/ratingBands.test.ts:15`
 - `src/services/ratingBands.test.ts:16`
@@ -88,6 +97,23 @@
 
 ### `DEFAULT_STUDENT_RATING` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
+
+### `SelfReportedBand` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `isBeginnerMode` (function) — 12 call sites
+- `src/components/Coach/CoachTeachPage.tsx:7530`
+- `src/components/Coach/CoachTeachPage.tsx:8603`
+- `src/components/Coach/CoachTeachPage.tsx:10788`
+- `src/services/beginnerMode.test.ts:8`
+- `src/services/beginnerMode.test.ts:9`
+- `src/services/beginnerMode.test.ts:12`
+- `src/services/beginnerMode.test.ts:15`
+- `src/services/beginnerMode.test.ts:16`
+- `src/services/beginnerMode.test.ts:17`
+- `src/services/beginnerMode.test.ts:18`
+- `src/services/beginnerMode.test.ts:19`
+- `src/services/upNextLoader.ts:47`
 
 ### `ExplorerBand` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -124,8 +150,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `pvDepthForRating` (function) — 10 call sites
-- `src/services/coachFeatureService.ts:3291`
-- `src/services/conceptEngine.ts:408`
+- `src/services/coachFeatureService.ts:3589`
+- `src/services/conceptEngine.ts:483`
 - `src/services/pvPlayback.test.ts:31`
 - `src/services/pvPlayback.test.ts:32`
 - `src/services/pvPlayback.test.ts:33`
@@ -138,6 +164,7 @@
 ## Tests
 
 - `src/components/Puzzles/AdaptivePuzzlePage.test.tsx`
+- `src/services/beginnerMode.test.ts`
 - `src/services/coachGameEngine.test.ts`
 - `src/services/dbService.test.ts`
 - `src/services/oneStudentRating.test.ts`

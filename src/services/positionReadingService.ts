@@ -239,26 +239,46 @@ function forceTurn(fen: string, color: Color): string {
  *  there in a move or two — otherwise "plant a knight there" is geometry with no
  *  knight.) Turn-independent, so it answers the PLAN, not just "this ply". */
 export function minorCanReachSquare(fen: string, target: Square, color: Color, maxMoves = 2): boolean {
+  return minorRouteToSquare(fen, target, color, maxMoves) !== null;
+}
+
+/** The same search, returning the ROUTE it found — the minor, where it stands,
+ *  and the stop on the way (null for a one-move reach) — so "your knight on f3
+ *  gets there via e5" is the very route the reach check proved. */
+export function minorRouteToSquare(
+  fen: string, target: Square, color: Color, maxMoves = 2,
+  /** Only this minor (a knight outpost wants a knight). */
+  only?: 'n' | 'b',
+): { piece: 'n' | 'b'; from: Square; via: Square | null } | null {
   let chess: Chess;
-  try { chess = new Chess(fen); } catch { return false; }
-  if (chess.get(target)) return false; // occupied — not an empty hole to plant on
-  const isMinorMove = (m: { piece: PieceSymbol }): boolean => m.piece === 'n' || m.piece === 'b';
+  try { chess = new Chess(fen); } catch { return null; }
+  if (chess.get(target)) return null; // occupied — not an empty hole to plant on
+  const isMinorMove = (m: { piece: PieceSymbol }): boolean => (only ? m.piece === only : m.piece === 'n' || m.piece === 'b');
   // reach-1: a minor of `color` can move straight onto the hole.
-  const gen = (f: string): { from: Square; to: Square; piece: PieceSymbol }[] => {
+  const gen = (f: string): { from: Square; to: Square; piece: PieceSymbol; captured?: PieceSymbol }[] => {
     try { return new Chess(f).moves({ verbose: true }).filter(isMinorMove); } catch { return []; }
   };
   const start = forceTurn(fen, color);
   const moves1 = gen(start);
-  if (moves1.some((m) => m.to === target)) return true;
-  if (maxMoves < 2) return false;
+  const direct = moves1.find((m) => m.to === target);
+  if (direct) return { piece: direct.piece as 'n' | 'b', from: direct.from, via: null };
+  if (maxMoves < 2) return null;
   // reach-2: a minor hops to an intermediate square, then onto the hole. Cap the
   // fan-out so a pathological position can't run away.
   for (const m of moves1.slice(0, 24)) {
+    // THE STOP MUST BE A SQUARE THE PIECE CAN STAND ON (walk 2026-09-30:
+    // "your bishop on f1 gets there via b5" — b5 held their pawn, defended
+    // by a6; the "route" lost the bishop). No capture on the way, and no
+    // stop they can simply win.
+    if (m.captured) continue;
     let mid: Chess;
     try { mid = new Chess(start); mid.move({ from: m.from, to: m.to }); } catch { continue; }
-    if (gen(forceTurn(mid.fen(), color)).some((m2) => m2.to === target)) return true;
+    if (legalSeeGainFor(mid.fen(), m.to, color === 'w' ? 'b' : 'w') > 0) continue;
+    if (gen(forceTurn(mid.fen(), color)).some((m2) => m2.from === m.to && m2.to === target)) {
+      return { piece: m.piece as 'n' | 'b', from: m.from, via: m.to };
+    }
   }
-  return false;
+  return null;
 }
 
 export interface HangingPiece {
@@ -576,6 +596,8 @@ export interface ColorComplexWeakness {
   complex: 'light' | 'dark';
   /** The holes of that colour the opponent can settle on. */
   squares: Square[];
+  /** The opponent's piece that can settle there — a knight when they have one. */
+  by: 'knight' | 'bishop';
 }
 
 /**
@@ -602,10 +624,23 @@ export function findColorComplexWeakness(fen: string): ColorComplexWeakness[] {
     // about squares in your camp the opponent settles on, not the shared centre.
     const sideHoles = (side === 'w' ? holes.white : holes.black)
       .filter((sq) => (side === 'w' ? Number(sq[1]) <= 4 : Number(sq[1]) >= 5));
+    // THE WEAKNESS NEEDS SOMEONE TO USE IT (hand walk 2026-09-27, a rook
+    // endgame: "their dark squares are weak — a knight belongs on one" with no
+    // knight on the board). A hole is only a hole to a piece that can sit on it
+    // — the opponent's knight, or their bishop of that colour.
+    const enemy: Color = side === 'w' ? 'b' : 'w';
+    const exploiter: Record<'light' | 'dark', 'knight' | 'bishop' | null> = { light: null, dark: null };
+    for (const row of chess.board()) for (const cell of row) {
+      if (!cell || cell.color !== enemy) continue;
+      if (cell.type === 'n') { exploiter.light = 'knight'; exploiter.dark = 'knight'; }
+      if (cell.type === 'b') { const k = squareColor(cell.square); exploiter[k] = exploiter[k] ?? 'bishop'; }
+    }
     for (const complex of ['light', 'dark'] as const) {
       if (hasBishopOfColor[complex]) continue; // a bishop of that colour still covers it
+      const by = exploiter[complex];
+      if (!by) continue; // nothing of theirs can settle there
       const cHoles = sideHoles.filter((sq) => squareColor(sq) === complex);
-      if (cHoles.length >= 2) out.push({ side, complex, squares: cHoles });
+      if (cHoles.length >= 2) out.push({ side, complex, squares: cHoles, by });
     }
   }
   return out;
@@ -811,6 +846,17 @@ export function findKnightReroute(fen: string, color: Color): { from: Square; to
     if (chess.get(s)) return false;
     if (!enemyHalf(Number(s[1]))) return false;
     if (chess.attackers(s, enemy).some((a) => chess.get(a)?.type === 'p')) return false;
+    // "A SQUARE NO PAWN CAN EVER CHASE IT FROM" — ever, not just now (claim
+    // check 2026-09-27: a4→c5 with …b6 one push away). Any enemy pawn on an
+    // adjacent file that can still advance to attack it disqualifies it.
+    const sf = s.charCodeAt(0) - 97; const sr = Number(s[1]);
+    for (const df of [-1, 1]) {
+      const ff = sf + df; if (ff < 0 || ff > 7) continue;
+      for (let rr = 1; rr <= 8; rr += 1) {
+        const p = chess.get(`${String.fromCharCode(97 + ff)}${rr}` as Square);
+        if (p && p.type === 'p' && p.color === enemy && (enemy === 'b' ? rr > sr : rr < sr)) return false;
+      }
+    }
     return chess.attackers(s, color).some((a) => chess.get(a)?.type === 'p');
   };
   // STRICT to keep intent: only a knight genuinely STUCK ON THE RIM (a- or
@@ -871,6 +917,35 @@ export function findRookLift(fen: string, color: Color): { rook: Square; to: Squ
     // The rank-2 square between must be empty too (rook needs to pass).
     const midSq = `${f}${color === 'w' ? 2 : 7}` as Square;
     if (chess.get(midSq)) continue;
+    // …and from there it must be able to SWING: the lift rank clear all the
+    // way to a file beside the king (Learn walk 2026-10-01: "Lift the rook to
+    // e3 and swing it along the third rank" with White's own pawn on g3
+    // blocking the only way toward the g8 king).
+    // And from some square it reaches along that rank, the rook must see INTO
+    // the king's zone up a file beside the king: the first thing up that file
+    // stands within a rank of their king (a shield pawn, a defender, the king).
+    const from = f.charCodeAt(0) - 97;
+    const kingRank = color === 'w' ? 8 : 1;
+    let kRank = kingRank;
+    for (const row of chess.board()) for (const c2 of row) if (c2 && c2.type === 'k' && c2.color === enemy) kRank = Number(c2.square[1]);
+    const up = color === 'w' ? 1 : -1;
+    const hitsZone = (x: number): boolean => {
+      if (Math.abs(x - kingFile) > 1) return false;
+      for (let r = liftRank + up; r >= 1 && r <= 8; r += up) {
+        const pc = chess.get(`${String.fromCharCode(97 + x)}${r}` as Square);
+        if (!pc) continue;
+        return pc.color === enemy && Math.abs(r - kRank) <= 1;
+      }
+      return false;
+    };
+    const step = kingFile > from ? 1 : -1;
+    let reaches = hitsZone(from);
+    for (let x = from + step; !reaches && x >= 0 && x <= 7; x += step) {
+      if (chess.get(`${String.fromCharCode(97 + x)}${liftRank}` as Square)) break;
+      reaches = hitsZone(x);
+      if (Math.abs(x - kingFile) > 1 && (step > 0 ? x > kingFile : x < kingFile)) break;
+    }
+    if (!reaches) continue;
     return { rook: cell.square, to: liftSq };
   }
   return null;
@@ -895,6 +970,22 @@ export function findBlockade(fen: string, color: Color): { blocker: Square; pawn
     if (p && p.color === color && (p.type === 'n' || p.type === 'b')) return { blocker: front, pawn };
   }
   return null;
+}
+
+/** STRUCTURE TRANSFER (census: "structure transfer on the opening name"): the
+ *  opening a named structure is at home in. When the game reached it from a
+ *  DIFFERENT opening, the plans of the home opening carry over — the idea that
+ *  lets a student reuse what they know. Only structures with one clear home. */
+const STRUCTURE_HOME: ReadonlyArray<{ match: RegExp; home: string; family: RegExp }> = [
+  { match: /^French-type pawn chain$/, home: 'French Defense', family: /French/i },
+  { match: /^Closed centre$/, home: "King's Indian", family: /King['’]s Indian/i },
+  { match: /isolated queen['’]s pawn/i, home: 'Tarrasch Defense', family: /Tarrasch|Panov/i },
+];
+export function structureTransfer(structureName: string, openingName: string | null | undefined): string | null {
+  if (!openingName) return null;
+  const h = STRUCTURE_HOME.find((x) => x.match.test(structureName));
+  if (!h || h.family.test(openingName)) return null;
+  return `It is the structure the ${h.home} is built on, so its plans carry over here.`;
 }
 
 /** A NAMED PAWN STRUCTURE + its standing plan — Naroditsky's closing lesson
@@ -926,16 +1017,26 @@ export function namedPawnStructure(
       ? { name: 'French-type pawn chain', plan: 'the break comes at the base of the chain — they hit d4 with …c5 and …f6; you defend the head on e5 and play on the kingside' }
       : { name: 'French-type pawn chain', plan: 'the break comes at the base of the chain — you hit d4 with …c5 and …f6; they defend the head on e5 and play on the kingside' };
   }
-  // KING'S-INDIAN CLOSED CENTRE — White d5+e4 vs Black d6+e5.
+  // CLOSED CENTRE — White d5+e4 vs Black d6+e5. Named by the STRUCTURE, never
+  // by an opening: the same chain arises from the Damiano, the Philidor and the
+  // Old Indian, and "King's-Indian" in a Damiano (1000 walk 2026-09-27, 4.d5)
+  // named an opening the student was not playing. The plan is the chain's own.
   if (w('d5') && w('e4') && b('d6') && b('e5')) {
+    // The queenside break is c5 only while c5 is free: with Black's own pawn
+    // already on c5 (the Benoni/Czech chain) White breaks with b4 (manual claim
+    // check 2026-09-30, item 160: "you break on the queenside with c5" there).
+    const qBreak = b('c5') ? 'b4' : 'c5';
     return studentColor === 'w'
-      ? { name: 'King’s-Indian closed centre', plan: 'the wings decide: they storm the kingside with …f5-f4 and a pawn avalanche; you break on the queenside with c5' }
-      : { name: 'King’s-Indian closed centre', plan: 'the wings decide: you storm the kingside with …f5-f4 and a pawn avalanche; they break on the queenside with c5' };
+      ? { name: 'Closed centre', plan: `the wings decide: they storm the kingside with …f5-f4 and a pawn avalanche; you break on the queenside with ${qBreak}` }
+      : { name: 'Closed centre', plan: `the wings decide: you storm the kingside with …f5-f4 and a pawn avalanche; they break on the queenside with ${qBreak}` };
   }
   // ISOLATED QUEEN’S PAWN — a d-pawn with no friendly c- or e-pawns.
   const holder = (white: boolean): string => ((white ? 'w' : 'b') === studentColor ? 'You hold' : 'They hold');
   for (const [set, white] of [[wp, true], [bp, false]] as const) {
-    const dRank = [...set].find((s) => s[0] === 'd');
+    // An isolani is a d4/d5 pawn — its whole plan is the d4/d5 outpost and the
+    // central files (Sicilian walk 2026-09-27: "the isolated queen's pawn … the
+    // d5/d4 outpost" about a pawn on d3 in a rook ending).
+    const dRank = [...set].find((s) => s === (white ? 'd4' : 'd5') || s === (white ? 'd5' : 'd4'));
     // A true isolani: no friendly c/e-pawn, and no enemy d-pawn on the file.
     const enemy = white ? bp : wp;
     // …and exactly ONE d-pawn, standing in the centre (4th or 5th rank): doubled
@@ -943,7 +1044,16 @@ export function namedPawnStructure(
     // 2026-09-30, Ruy 15…exd4), and a pawn still on d6 is not its outpost story.
     const oneCentral = fileCount(set, 'd') === 1 && !!dRank && (dRank[1] === '4' || dRank[1] === '5');
     if (dRank && oneCentral && fileCount(set, 'c') === 0 && fileCount(set, 'e') === 0 && fileCount(enemy, 'd') === 0) {
-      return { name: `${holder(white)} the isolated queen’s pawn`, plan: 'the isolani gives active pieces and the d5/d4 outpost now, but becomes a target in the endgame — the owner attacks, the blockader trades down' };
+      // SEATED, AND WHAT TO DO (walk 2026-09-30: "the owner attacks, the
+      // blockader trades down" never said which one the student is).
+      const front = `${dRank[0]}${Number(dRank[1]) + (white ? 1 : -1)}`;
+      const mine = (white ? 'w' : 'b') === studentColor;
+      return {
+        name: `${holder(white)} the isolated queen’s pawn`,
+        plan: mine
+          ? `play actively while pieces are on — the isolani gives you open files and the outposts beside it, but every trade makes it weaker, so avoid simplifying`
+          : `blockade it on ${front}, ideally with a knight, and trade pieces — every trade makes the pawn weaker, and in the endgame it becomes a target`,
+      };
     }
   }
   // HANGING PAWNS — c- and d-pawns abreast on the 4th/5th with no b/e neighbours.
@@ -1172,12 +1282,32 @@ export function kingActivation(fen: string, color: Color): { to: Square } | null
       if (m.piece !== 'k') continue;
       const d = centreDist(m.to);
       if (d >= bestDist) continue;
+      // NEVER ONTO A SQUARE THAT BURIES ITS OWN BISHOP (hand walk 2026-09-27,
+      // Najdorf: "walk it up … starting with d7" with the c8 bishop still at
+      // home — d7 is its only way out). A home-rank bishop's first diagonal
+      // steps stay free; the king goes round (Kc7, as Naroditsky plays it).
+      if (blocksHomeBishop(c, m.to, color)) continue;
       const probe = new Chess(forceTurn(fen, color));
       probe.move({ from: m.from, to: m.to });
       if (probe.attackers(m.to, enemy).length === 0) { best = m.to; bestDist = d; }
     }
   } catch { return null; }
   return best ? { to: best } : null;
+}
+
+/** True when `to` is a first diagonal step of a `color` bishop still on its
+ *  home rank — putting the king there shuts that bishop in. */
+function blocksHomeBishop(chess: Chess, to: Square, color: Color): boolean {
+  const home = color === 'w' ? 1 : 8;
+  const step = color === 'w' ? 1 : -1;
+  if (Number(to[1]) !== home + step) return false;
+  for (const df of [-1, 1]) {
+    const f = to.charCodeAt(0) - df;
+    if (f < 97 || f > 104) continue;
+    const p = chess.get(`${String.fromCharCode(f)}${home}` as Square);
+    if (p && p.type === 'b' && p.color === color) return true;
+  }
+  return false;
 }
 
 /** ROOK BEHIND THE PASSED PAWN — the Tarrasch rule (David 2026-08-23). Fires
@@ -1209,7 +1339,15 @@ export function rookBehindPasser(fen: string, color: Color): { rook: Square; paw
     } catch { return null; }
     return null;
   };
+  // A pawn that cannot step forward is not shoved by a rook behind it (pass-2
+  // walk 2026-09-30: "put your rook behind the passed pawn on a2" with their
+  // rook sitting on a1, the queening square).
+  const blocked = (pawn: Square, pawnIsWhite: boolean): boolean => {
+    const ahead = `${pawn[0]}${Number(pawn[1]) + (pawnIsWhite ? 1 : -1)}` as Square;
+    return !!chess.get(ahead);
+  };
   for (const p of findPassedPawns(fen, color)) {
+    if (blocked(p, color === 'w')) continue;
     const rk = reach(p, color === 'w');
     if (rk) return { rook: rk, pawn: p, own: true };
   }
@@ -1265,7 +1403,10 @@ export function bestMinorToKeep(fen: string, color: Color): { note: ActivePieceN
   const theirs = minorsOf(color === 'w' ? 'b' : 'w');
   const best = ours[0];
   const enemyBest = theirs[0]?.scope ?? 0;
-  return { note: best, dominant: best.scope >= enemyBest + 3 };
+  // Dominant is a comparison WITH their minor — with none on the board there is
+  // nothing to outclass (Bowdler walk 2026-09-27, 41…Bxf2: "it outclasses their
+  // minor; don't trade it off" against a lone rook).
+  return { note: best, dominant: theirs.length > 0 && best.scope >= enemyBest + 3 };
 }
 
 /** BISHOP PAIR — does `color` hold two bishops while the opponent does not?
@@ -1350,6 +1491,27 @@ export function opponentIntentRead(fen: string, studentColor: Color | 'white' | 
       // "Bxf2+ that just drops the bishop" false-positive). Pin-aware so a
       // pinned student recapturer can't be counted (2026-09-13 sweep).
       if (!landingIsSafe(after.fen(), mv.to)) continue;
+      // …AND NOT BE TRADED OFF. A capture of the forker by an equal-or-cheaper
+      // piece nets the student ≥ 0 and dissolves the fork (hand walk 1690,
+      // 2026-09-27: "they want Qf4, forking your queen on h6 and your knight
+      // on e3" — Qxf4 simply trades the forking queen). SEE reads 0 for that
+      // trade, which is why the safety test above lets it through.
+      // The trade must leave nothing behind: after their cheapest recapture,
+      // the recapturing piece may not hit a piece worth more than it (the
+      // Carlsen–Aronian …Ne4+ Nxe4 dxe4 lands a pawn on the queen — a real fork).
+      const tradedOff = after.moves({ verbose: true }).some((r) => {
+        if (r.to !== mv.to || !r.captured || (PIECE_VALUE[r.piece] ?? 99) > (PIECE_VALUE[mv.piece] ?? 0)) return false;
+        let t: Chess;
+        try { t = new Chess(after.fen()); t.move(r); } catch { return false; }
+        const recaps = t.moves({ verbose: true }).filter((x) => x.to === mv.to && !!x.captured)
+          .sort((a, b) => (PIECE_VALUE[a.piece] ?? 0) - (PIECE_VALUE[b.piece] ?? 0));
+        if (recaps.length === 0) return true;
+        try { t.move(recaps[0]); } catch { return false; }
+        const hitter = PIECE_VALUE[recaps[0].piece] ?? 0;
+        return !t.board().flat().some((c) => !!c && c.color === student && c.type !== 'k'
+          && (PIECE_VALUE[c.type] ?? 0) > hitter && t.attackers(c.square, opp).includes(mv.to));
+      });
+      if (tradedOff) continue;
       const hitFen = after.fen().split(' '); hitFen[1] = opp; // keep opp as attacker to read attacks
       let probe: Chess;
       try { probe = new Chess(hitFen.join(' ')); } catch { continue; }
@@ -2447,4 +2609,13 @@ export function gradeReadingAnswerDeterministic(q: ReadingQuestion, userAnswer: 
     return { verdict: 'wrong', correctAnswer: q.answer, note: 'There IS something here to find.' };
   }
   return { verdict: 'partial', correctAnswer: q.answer, note: 'On the right track, but name the exact square or idea.' };
+}
+
+/** ONE KEY FOR "THIS PIECE IS WELL PLACED, AND WHY" — shared by the positional
+ *  read and the piece-activity behaviour. A file reason is keyed on the FILE
+ *  (the rook sliding g8→g6 is the same idea); an outpost or a bad piece on its
+ *  square (a different square is a different post). */
+export function goodPieceIdeaKey(side: string, piece: string, kind: string, square: string): string {
+  const where = kind === 'open-file' || kind === 'semi-open-file' ? square[0] : square;
+  return `${side}-good-${piece}-${kind}-${where}`;
 }

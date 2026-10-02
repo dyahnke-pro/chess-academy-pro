@@ -12,14 +12,16 @@
  * and the gaps are visible. Each facet is a labeled prose clause.
  */
 import { inFluxAfter } from './boardState';
+import { readTrade } from './tradeQuality';
 import { readTiming, timingClause } from './moveTiming';
 import { contrastMoves, contrastClause } from './moveContrast';
 import { detectBluff, bluffClause } from './bluffDetector';
 import { computeGemCrush } from './gemCrushLines';
 import { getPunishGemById } from '../data/lessons/punishGems';
 import { Chess, type Color, type Square } from 'chess.js';
-import { plyFactsForMove } from './pvPlayback';
-import { findMinorityAttack, findColorComplexWeakness } from './positionReadingService';
+import { landedTacticFor, plyFactsForMove } from './pvPlayback';
+import { definitionKey, tacticInvariant } from './conceptEngine';
+import { findMinorityAttack, findColorComplexWeakness, signedLegalSeeFor } from './positionReadingService';
 import { detectTactics } from './tacticsDetector';
 import { verifyForkOnBoard } from './tacticVerification';
 import { seatPieceReferences, detectNewThreat } from './groundedAnswer';
@@ -28,10 +30,10 @@ import { describeStructure } from './boardStructure';
 import { assessPositionalEdge, phaseVerdictLine } from './reviewPositionalAssessment';
 import type { RefutedAlternative } from './refutedAlternative';
 import { MIN_ALTERNATIVE_SHARE } from './refutedAlternativeCore';
-import { principleLine } from './moveFundamentals';
+import { principleLine, principleContrastLine } from './moveFundamentals';
 import { threatStoppedBy } from './opponentMovePurpose';
 import { trickSidestepped } from './forkTrick';
-import { isMateEval } from './engineConstants';
+import { isMateEval, MISTAKE_CP } from './engineConstants';
 import { computeBoardDelta } from './boardDelta';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
 import { explainMatingSacMechanism } from './reviewForcedSequence';
@@ -43,10 +45,12 @@ import { planRaceClause } from './planRace';
 import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, deriveNextPlans, findTrappedPiece } from './reviewTeachingPoints';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
-import { betterMoveReason } from './inaccuracyCall';
+import { betterMoveReason, priorMoveLeadingTo, punishmentOf, toStudentSeat } from './inaccuracyCall';
 import { andList } from '../utils/andList';
 import { stemKeyOf } from '../utils/rotateStem';
 import { developedMinorCount, minorsAtHome } from './development';
+import { slipAnswerText, studentMovePoint } from './playCommentary';
+import { theirMoveCost } from './theirMoveCost';
 
 interface Located { type: string; color: Color; square: string; }
 
@@ -135,6 +139,12 @@ export interface MoveFactContext {
    *  so the reason the better move is better is the same computer on every
    *  surface (`betterMoveReason`) — pass [] when the line is unknown. */
   bestLineUci: readonly string[];
+  /** The engine's line AFTER the played move (UCI, their reply first).
+   *  REQUIRED: what the move let them do is Learn's grade (`punishmentOf`), and
+   *  a better move named without its reason says that instead (review walk
+   *  2026-10-02, ply 85: "the stronger move was Rd3" and nothing else). Pass []
+   *  when the line is unknown. */
+  playedLineUci: readonly string[];
   /** The engine's best REPLY at `fenAfter` (the next ply's best move), SAN, or
    *  null when there is none. REQUIRED: whether a move gave material depends
    *  on whether the opponent should take it (`isSacrifice`). */
@@ -293,10 +303,40 @@ export function computeMoveFacets(
       const mine = NOUN[mv.piece] ?? 'piece';
       const theirs = NOUN[mv.captured ?? ''] ?? 'piece';
       const what = mine === theirs ? `a ${mine} trade` : isStudent ? `your ${mine} for their ${theirs}` : `their ${mine} for your ${theirs}`;
-      const f = isStudent
-        ? `[trade] You take on ${tradeSq}, and they can take back — ${what}.`
-        : `[trade] They take on ${tradeSq}, and you can take back — ${what}.`;
-      facets.push(f);
+      // "Can take back" only when taking back does not lose material (review
+      // walk 2026-09-27: 15.Nxh7 — …Rxh7 loses the rook to Qxh7).
+      const recapturer: Color = mv.color === 'w' ? 'b' : 'w';
+      // …and the static count yields to the engine (review walk 2026-10-01,
+      // ply 63: 32.Nxe5 "taking back would cost them more than the pawn" — the
+      // count says Rxe5 dxe5 drops the exchange, but dxe5 opens the d-file and
+      // …Rxd1+ wins it back; the engine graded Nxe5 a blunder). A capture that
+      // cost its mover a mistake's worth is never "safe from recapture".
+      const moverCost = ctx.preMoveEval != null && ctx.evaluation != null && !isMateEval(ctx.preMoveEval) && !isMateEval(ctx.evaluation)
+        ? (ctx.preMoveEval - ctx.evaluation) * (ctx.moverColor === 'white' ? 1 : -1)
+        : null;
+      const engineSaysCostly = moverCost !== null && moverCost >= MISTAKE_CP;
+      const safe = engineSaysCostly || signedLegalSeeFor(fenAfter, tradeSq as Square, recapturer) >= 0;
+      const lost = NOUN[mv.captured ?? ''] ?? 'piece';
+      const f = safe
+        ? isStudent
+          ? `[trade] You take on ${tradeSq}, and they can take back — ${what}.`
+          : `[trade] They take on ${tradeSq}, and you can take back — ${what}.`
+        : isStudent
+          ? `[trade] You take on ${tradeSq} — taking back would cost them more than the ${lost}.`
+          : `[trade] They take on ${tradeSq} — taking back would cost you more than the ${lost}.`;
+      // HOW GOOD THE TRADE IS (David 2026-09-27: "how well the trade benefits
+      // the user"). The same computer Learn speaks from; the engine has the
+      // last word through the mover's own cost on this ply.
+      const moverSign = ctx.moverColor === 'white' ? 1 : -1;
+      const cost = ctx.preMoveEval != null && ctx.evaluation != null
+        ? (ctx.preMoveEval - ctx.evaluation) * moverSign
+        : null;
+      const judged = ctx.studentColorWB ? readTrade(fenBefore, san, ctx.studentColorWB, cost) : null;
+      if (judged) {
+        const jf = `[trade] ${judged.text}`;
+        facets.push(jf);
+        recSquares(jf, judged.squares);
+      } else facets.push(f);
     } catch { /* no trade line */ }
   } else if (influence) { const f = `[${influenceShape.hitsPiece ? 'does' : 'delta'}] ${influence}`; facets.push(f); recSquares(f, influenceSquares); }
 
@@ -355,7 +395,14 @@ export function computeMoveFacets(
     const costsPoints = ctx.classification === 'inaccuracy'
       || ctx.classification === 'mistake'
       || ctx.classification === 'blunder';
-    const swingBit = swing != null && costsPoints ? `, costing about ${(swing / 100).toFixed(1)} points` : '';
+    // The grade is in win chances; the points are centipawns. In a decided
+    // position they part ways — "an inaccuracy, costing about 9.2 points"
+    // (amateur review walk 2026-09-27). The label stands; the number goes.
+    const pointsAgree = swing != null && (ctx.classification === 'blunder' || swing < 300);
+    // A cost that rounds to 0.0 contradicts its own grade ("a mistake,
+    // costing about 0.0 points" — corpus sweep 2026-10-02): the grade is in
+    // win chances, so the number goes and the label stands.
+    const swingBit = swing != null && swing >= 5 && costsPoints && pointsAgree ? `, costing about ${(swing / 100).toFixed(1)} points` : '';
     // WHY it's a mistake, when we can prove it (a premature central break). Danya
     // leads with the positional reason, THEN names the better move — so does this.
     const whyBad = (ctx.classification === 'mistake' || ctx.classification === 'blunder' || ctx.classification === 'inaccuracy')
@@ -369,10 +416,55 @@ export function computeMoveFacets(
     const fellShort = costsPoints || ctx.classification === 'miss';
     // THE REASON, from the one computer Learn's verdict uses (checks first,
     // then what the line wins) — review used to name the move and stop.
-    const reason = ctx.bestMoveSan && fellShort
-      ? betterMoveReason(fenBefore, san, ctx.bestMoveSan, ctx.bestLineUci, ctx.moverColor)
+    // The better move comes off the engine LINE when the annotation carries no
+    // SAN (review walk 2026-09-27, Carlsen–Aronian: three plies said only
+    // "You: that was an inaccuracy, costing about 0.7 points." — a verdict
+    // with nothing to learn from it).
+    let bestSan = ctx.bestMoveSan;
+    if (!bestSan && fellShort && ctx.bestLineUci[0]) {
+      try {
+        const u = ctx.bestLineUci[0];
+        bestSan = new Chess(fenBefore).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san;
+      } catch { bestSan = null; }
+    }
+    if (bestSan && bestSan === san) bestSan = null;
+    // Seated on the board it DESCRIBES — the one before the move. The review's
+    // global seating pass reads the board after it, and after 16.Nxe4 "the
+    // knight on e4" there was White's: "Qxe4 — it would take your knight on e4"
+    // (1200 review walk 2026-09-27). A seated reference is left alone later.
+    const reason0 = bestSan && fellShort
+      ? betterMoveReason(fenBefore, san, bestSan, ctx.bestLineUci, ctx.moverColor,
+        priorMoveLeadingTo(ply >= 2 && ctx.teaching.prevFenBefore ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : null, fenBefore))
       : null;
-    const better = ctx.bestMoveSan && fellShort ? `the stronger move was ${ctx.bestMoveSan}${reason ? ` — ${reason}` : ''}` : '';
+    // The opponent's better move is THEIR idea, said to the student: "toward
+    // their king" in the mover's voice is "toward your king" (review walk
+    // 2026-10-01, ply 18 "e5 — the idea is to swing pieces toward their king").
+    const opponentMoved = ctx.studentColorWB !== null && (ctx.moverColor === 'white' ? 'w' : 'b') !== ctx.studentColorWB;
+    const reason1 = reason0 && opponentMoved ? toStudentSeat(reason0) : reason0;
+    const reason = reason1 && ctx.studentColorWB ? seatPieceReferences(reason1, fenBefore, ctx.studentColorWB) : reason1;
+    // NAMED WITH ITS REASON, OR NOT NAMED (Learn's rule, 2026-09-24): with no
+    // reason computed, the teaching is what the move LET THEM DO — Learn's own
+    // reader over the line after it (review walk 2026-10-02, ply 85: "the
+    // stronger move was Rd3." and nothing else).
+    const punish = bestSan && fellShort && !reason && costsPoints
+      ? punishmentOf(fenBefore, san, ctx.playedLineUci, ctx.moverColor)
+      : null;
+    const punishWhy = punish
+      ? (opponentMoved ? toStudentSeat(punish.why) : punish.why)
+      : null;
+    // THEIR SLIP IS THE STUDENT'S CHANCE (clean-win review 2026-10-02: plies
+    // 44/54/58/60 of a won game said only "the stronger move was Qc7" — their
+    // better move, nothing the student can use). With no material cost to
+    // name, the teaching is the student's answer and its point, from the same
+    // move-point computer Learn uses.
+    const answer = opponentMoved && bestSan && fellShort && costsPoints && !reason && !punishWhy
+      ? studentAnswer(fenAfter, san, ctx.replyBestSan)
+      : null;
+    const better = bestSan && fellShort
+      ? (reason ? `the stronger move was ${bestSan} — ${reason}`
+        : punishWhy ? `it let ${opponentMoved ? 'you' : 'them'} ${punishWhy}`
+          : answer ?? `the stronger move was ${bestSan}`)
+      : '';
     const tail = [whyBad, better].filter(Boolean).join('; ');
     const betterBit = tail ? ` — ${tail}` : '';
     // CARRY THE MOVER'S SUBJECT (David 2026-07-20 opera-ply-14 bug): a quiet move
@@ -393,6 +485,21 @@ export function computeMoveFacets(
     }
     // The cost the move already paid — only on a class that cost something.
     if (costsPoints) recStakes(qf, costStakes(swing));
+    // THE PATTERN MISSED, AND ITS RULE (unify-the-coach B3, parity with Learn's
+    // grade): when the stronger move would have landed a tactic, its definition
+    // is taught the first time the game meets it — the same say-once ledger as
+    // the principles (`rule:` identity, committed only if it spoke).
+    const missed = isStudent && bestSan && fellShort ? landedTacticFor(fenBefore, bestSan) : null;
+    const inv = missed ? tacticInvariant(missed) : null;
+    if (missed && inv && !ctx.teaching.principlesTaught.has(definitionKey(missed))) {
+      const rf = `[rule] Remember — ${inv.full}`;
+      facets.push(rf);
+      outIdentity?.set(rf, `rule:${definitionKey(missed)}`);
+      try {
+        const bm = new Chess(fenBefore).move(bestSan ?? '');
+        if (bm) recSquares(rf, [bm.from, bm.to]);
+      } catch { /* no squares → it supports nothing and stays quiet */ }
+    }
   }
   // ── 2a. THE FUNDAMENTAL NEGLECTED (David 2026-09-05) — the attributed rule
   // the flagged move crossed, proven on the board; stated as its own facet so
@@ -553,14 +660,17 @@ export function computeMoveFacets(
       // bishop on g4" then "Watch out — that pawn leaves your bishop on g4
       // loose", back to back). A student piece the opponent's move ATTACKS is
       // stated by the opponent read below, which names the attacker.
+      // BOTH SEATS (Carlsen–Topalov review walk 2026-09-27: "Newly undefended:
+      // their bishop on b5" on …a6, beside "your pawn on a6 now eyes their
+      // bishop on b5") — a piece the move just ATTACKED is not newly
+      // undefended; the attack line names it, with its attacker.
       let attackedByMover: (sq: string) => boolean = () => false;
-      if (!isStudent && studentColorWB) {
-        try {
-          const b = new Chess(fenAfter);
-          const to = new Chess(fenBefore).move(san).to;
-          attackedByMover = (sq) => b.get(sq as Square)?.color === studentColorWB && b.attackers(sq as Square, studentColorWB === 'w' ? 'b' : 'w').includes(to);
-        } catch { attackedByMover = () => false; }
-      }
+      try {
+        const b = new Chess(fenAfter);
+        const moved = new Chess(fenBefore).move(san);
+        const victim: 'w' | 'b' = moved.color === 'w' ? 'b' : 'w';
+        attackedByMover = (sq) => b.get(sq as Square)?.color === victim && b.attackers(sq as Square, moved.color).includes(moved.to);
+      } catch { attackedByMover = () => false; }
       const fresh = t.hangingPieces.filter((h) => !before.has(`${h.piece}${h.square}`)
         && 'nbr'.includes(h.piece.toLowerCase())
         && exchangeStakes(fenAfter, [h.square]) !== null
@@ -657,7 +767,11 @@ export function computeMoveFacets(
     const worst = worstPlacedFriendlyPiece(fenAfter, studentColorWB);
     if (worst) facets.push(`[worst] ${cap(worst)}.`);
     const passer = struct?.pawns.passedPawns[studentColorWB][0] ?? null; // reuse §5's struct
-    const passNote = passedPawnPush(fenAfter, studentColorWB, passer);
+    // Not on the move that PUSHES it — the move's own point says "pushes your
+    // passed pawn" (amateur review walk 2026-09-27: both, one ply).
+    let pushedThisPasser = false;
+    try { const pm = new Chess(fenBefore).move(san); pushedThisPasser = pm.piece === 'p' && pm.to === passer; } catch { pushedThisPasser = false; }
+    const passNote = pushedThisPasser ? null : passedPawnPush(fenAfter, studentColorWB, passer);
     if (passNote) { const f = `[passer] ${cap(passNote)}.`; facets.push(f); recSquares(f, [passer]); }
 
     // ── 6c. WIDENED BOARD AWARENESS ON REVIEW (David 2026-09-13: "I also want
@@ -672,11 +786,11 @@ export function computeMoveFacets(
     if (theirMinority) { const f = `[minority] They have a minority attack on the ${theirMinority.flank} — ${theirMinority.leverSan} is the lever, leaving you a weak pawn on ${theirMinority.target} to watch.`; facets.push(f); recSquares(f, [theirMinority.target]); }
     for (const cc of findColorComplexWeakness(fenAfter)) {
       const sqs = andList([...cc.squares]);
-      if (cc.side === enemyWB2) { const f = `[complex] Their ${cc.complex} squares are weak — ${sqs} ${cc.squares.length === 1 ? 'is a hole' : 'are holes'} their bishop can't cover; a knight belongs on one.`; facets.push(f); recSquares(f, cc.squares); break; }
+      if (cc.side === enemyWB2) { const f = `[complex] Their ${cc.complex} squares are weak — ${sqs} ${cc.squares.length === 1 ? 'is a hole' : 'are holes'} no bishop of theirs covers; ${cc.by === 'knight' ? 'a knight belongs on one' : 'your bishop can work on them'}.`; facets.push(f); recSquares(f, cc.squares); break; }
     }
     for (const cc of findColorComplexWeakness(fenAfter)) {
       const sqs = andList([...cc.squares]);
-      if (cc.side === studentColorWB) { const f = `[complex] Your ${cc.complex} squares are weak — with no bishop of that colour, nothing covers ${sqs}.`; facets.push(f); recSquares(f, cc.squares); break; }
+      if (cc.side === studentColorWB) { const f = `[complex] Your ${cc.complex} squares are weak — with no bishop of that colour, no pawn or bishop of yours can cover ${sqs}.`; facets.push(f); recSquares(f, cc.squares); break; }
     }
     // FORWARD PLANS — what to DO from here + exactly HOW (David 2026-07-20: "add
     // in more future plans … and exactly how to do those plans"). EVERY applicable
@@ -714,9 +828,14 @@ export function computeMoveFacets(
         // Seated: "It's a sacrifice" on the opponent's move read as the student's
         // own (prod 2026-09-23, QGD c4). The clauses are already seated.
         if (comp.length) facets.push(`[sac] ${moverWB === studentColorWB ? 'Your' : 'Their'} move is a sacrifice — compensation: ${comp.join('; ')}.`);
-        const mech = isStudent ? explainMatingSacMechanism(ctx.allSans, ply - 1) : null;
+        // WHY A SACRIFICE WORKS is never said of a move graded a mistake or a
+        // blunder (review walk 2026-10-01, ply 38: "You gave up the bishop, but
+        // … the attack rolls straight on" one clause after "that was a blunder,
+        // costing about 3.3 points"). The grade has already said it did not.
+        const sacFailed = ctx.classification === 'mistake' || ctx.classification === 'blunder' || ctx.classification === 'miss';
+        const mech = isStudent && !sacFailed ? explainMatingSacMechanism(ctx.allSans, ply - 1) : null;
         if (mech) facets.push(`[sac-why] ${cap(mech)}.`);
-        const shield = isStudent ? describeSacBreaksKingShield(fenBefore, san) : null;
+        const shield = isStudent && !sacFailed ? describeSacBreaksKingShield(fenBefore, san) : null;
         if (shield) facets.push(`[sac-why] ${shield}.`);
       }
     }
@@ -838,7 +957,11 @@ export function computeMoveFacets(
   if (isStudent && (ctx.classification === null || ctx.classification === 'book' || ctx.classification === 'good')) {
     // Full the first time a principle speaks this game, a short stem after —
     // the one helper Learn's composer reads (`principleLine`).
-    const lead = principleLine(fenBefore, san, moverColor, ctx.teaching.principlesTaught, stemKeyOf(fenBefore));
+    const lead = principleLine(fenBefore, san, moverColor, ctx.teaching.principlesTaught, stemKeyOf(fenBefore))
+      // A clean move that kept no opening rule: the rule the engine's move
+      // kept (review walk 2026-10-02 — h4, g4, h5 were owed and silent). Never
+      // on a book move: theory is not corrected.
+      ?? (ctx.classification === 'book' ? null : principleContrastLine(fenBefore, san, ctx.bestMoveSan ?? null, moverColor, ctx.teaching.principlesTaught, stemKeyOf(fenBefore)));
     if (lead) {
       const f = `[rule] ${lead.text}`;
       facets.push(f);
@@ -846,6 +969,27 @@ export function computeMoveFacets(
       // stem is its own move's fact and must not be eaten by that ledger.
       outIdentity?.set(f, lead.first ? `rule:${lead.id}` : `rule-stem:${ply}:${lead.id}`);
       recSquares(f, lead.squares);
+    } else {
+      // WHAT THE MOVE IS FOR, when it kept no rule — Learn's move-point
+      // computer, called (review walk 2026-10-02: 7.g4 owed and silent while
+      // Learn says "g4 prepares g5, which would kick their knight off f6").
+      // QUIET MOVES ONLY: a capture's point is the trade, and review's own
+      // trade/material facets say it (Learn: "a capture's point and the trade
+      // verdict are one claim") — and "wins the pawn on g3" said over the
+      // board after Kxg3 names a pawn where the king now stands (corpus sweep
+      // 2026-10-02, mg-lichess-6YRWrSqn ply 49).
+      try {
+        const mv = new Chess(fenBefore).move(san);
+        const point = mv && !mv.captured
+          ? studentMovePoint(fenBefore, san, ply >= 2 ? ctx.allSans[ply - 2] ?? null : null)
+          : null;
+        if (point && mv) {
+          const f = `[point] ${point}`;
+          facets.push(f);
+          outIdentity?.set(f, `point:${ply}`);
+          recSquares(f, [mv.to]);
+        }
+      } catch { /* the point is a bonus, never a blocker */ }
     }
   }
 
@@ -858,6 +1002,19 @@ export function computeMoveFacets(
     const f = `[stopped] ${stop.text}`;
     facets.push(f);
     recSquares(f, [stop.threat.from, stop.threat.landing]);
+  }
+  // …and what THEIR move gave up that the student can use — the same board
+  // computer Learn speaks (`theirMoveCost`): a new hole a knight reaches,
+  // their bishop shut in, castling lost (David 2026-10-02: "teachings on
+  // opponents moves" — Review said what their move stopped, never what it cost).
+  if (!isStudent && studentColorWB) {
+    const cost = theirMoveCost(fenBefore, san, studentColorWB);
+    if (cost) {
+      const f = `[their-cost] ${cost.text}`;
+      facets.push(f);
+      outIdentity?.set(f, `their-cost:${cost.kind}:${cost.squares[0] ?? ''}`);
+      recSquares(f, cost.squares);
+    }
   }
   // …and the fork trick, both seats — the same computer Learn's composer reads
   // (re-walk 1380: 7.Bb3 sidestepping …Nxe4 Nxe4 d5 said nothing).
@@ -938,7 +1095,7 @@ export function computeMoveFacets(
 
   // ── 12. ENDGAME PHASE ──
   const phase = nameEndgamePhase(fenAfter);
-  if (phase) facets.push(`[endgame] The position is ${phase}.`);
+  if (phase) facets.push(`[endgame] You've reached ${phase}.`);
 
   return facets;
 }
@@ -1093,4 +1250,10 @@ function settledVariation(allSans: readonly string[], variationOf: (n: string | 
   try { v = variationOf(detectOpening([...allSans])?.name ?? null); } catch { v = null; }
   settledCache.set(allSans, v);
   return v;
+}
+
+/** The student's answer to the opponent's slip, in Review's retrospective
+ *  voice — the one wording Learn speaks too (`slipAnswerText`). */
+export function studentAnswer(fenAfter: string, theirSan: string, answerSan: string | null): string | null {
+  return slipAnswerText(fenAfter, theirSan, answerSan, 'review');
 }

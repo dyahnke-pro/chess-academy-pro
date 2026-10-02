@@ -71,10 +71,23 @@ export async function loadWeaknessSignals(): Promise<WeaknessSignal[]> {
   return inflight;
 }
 
+/** The PROVEN tags on their own — the fade's input (short phrasing when a
+ *  skill is green). Separate from the signals because a student can be green
+ *  on a skill they never got wrong, which has no weakness signal to ride on.
+ *  Memoized on the same TTL; a failed read is an empty set (nothing fades). */
+let provenCache: { at: number; tags: Set<string> } | null = null;
+export async function loadProvenTags(): Promise<Set<string>> {
+  if (provenCache && Date.now() - provenCache.at < TTL_MS) return provenCache.tags;
+  const tags = await provenTagSet();
+  provenCache = { at: Date.now(), tags };
+  return tags;
+}
+
 /** Drop the memo — call after the weakness model changes (new mistake captured /
  *  drill completed) so the next load reflects it. */
 export function invalidateWeaknessSignals(): void {
   cache = null;
+  provenCache = null;
 }
 
 // THE WRITERS TELL US (WO-LOOP-01, 2026-09-20). `invalidateWeaknessSignals` had

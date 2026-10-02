@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1097 lines · 8 exports · 7 importers · 8 tests · 0 audits**
+**1260 lines · 9 exports · 9 importers · 10 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:915) — names `reviewFullData`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:936) — names `reviewFullData`
 
 ## Who calls in
 
@@ -17,13 +17,15 @@
 - `src/services/prematureBreak.test.ts`
 - `src/services/reviewFullData.test.ts`
 - `src/services/reviewWalk2065.test.ts`
+- `src/services/reviewWalkCT.test.ts`
+- `src/services/slipAnswer.test.ts`
 - `src/services/unifiedBetterMoveReason.test.ts`
 - `src/test/teach02Wired.test.ts`
 
 ## Exports and every call site
 
 ### `prematureBreakWhy` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:1002`
+- `src/services/coachFeatureService.ts:1061`
 - `src/services/prematureBreak.test.ts:15`
 - `src/services/prematureBreak.test.ts:25`
 - `src/services/prematureBreak.test.ts:30`
@@ -42,10 +44,10 @@
 ### `EVAL_FACET_MIN_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeMoveFacets` (function) — 24 call sites
+### `computeMoveFacets` (function) — 34 call sites
 - `src/services/boardDelta.test.ts:13`
 - `src/services/boardDelta.test.ts:66`
-- `src/services/coachFeatureService.ts:1758`
+- `src/services/coachFeatureService.ts:1840`
 - `src/services/forkTrick.test.ts:60`
 - `src/services/reviewFullData.test.ts:15`
 - `src/services/reviewFullData.test.ts:19`
@@ -62,14 +64,24 @@
 - `src/services/reviewFullData.test.ts:261`
 - `src/services/reviewFullData.test.ts:286`
 - `src/services/reviewFullData.test.ts:314`
-- `src/services/reviewFullData.test.ts:343`
-- `src/services/reviewFullData.test.ts:363`
+- `src/services/reviewFullData.test.ts:349`
+- `src/services/reviewFullData.test.ts:369`
+- `src/services/reviewFullData.test.ts:391`
+- `src/services/reviewFullData.test.ts:416`
+- `src/services/reviewFullData.test.ts:433`
+- `src/services/reviewFullData.test.ts:449`
+- `src/services/reviewFullData.test.ts:468`
+- `src/services/reviewFullData.test.ts:484`
+- `src/services/reviewFullData.test.ts:514`
+- `src/services/reviewFullData.test.ts:524`
+- `src/services/reviewWalkCT.test.ts:49`
+- `src/services/reviewWalkCT.test.ts:69`
 - `src/services/unifiedBetterMoveReason.test.ts:36`
 - `src/test/teach02Wired.test.ts:26`
 - `src/test/teach02Wired.test.ts:66`
 
 ### `computeThroughLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:4844`
+- `src/services/coachFeatureService.ts:5142`
 - `src/services/reviewFullData.test.ts:204`
 - `src/services/reviewFullData.test.ts:207`
 - `src/services/reviewFullData.test.ts:215`
@@ -79,6 +91,13 @@
 - `src/services/reviewNarrationFidelity.test.ts:129`
 - `src/services/reviewNarrationFidelity.test.ts:141`
 
+### `studentAnswer` (function) — 5 call sites
+- `src/services/reviewFullData.test.ts:500`
+- `src/services/reviewFullData.test.ts:505`
+- `src/services/reviewFullData.test.ts:506`
+- `src/services/slipAnswer.test.ts:19`
+- `src/services/slipAnswer.test.ts:20`
+
 ## Tests
 
 - `src/services/boardDelta.test.ts`
@@ -87,6 +106,8 @@
 - `src/services/reviewFullData.test.ts`
 - `src/services/reviewNarrationFidelity.test.ts`
 - `src/services/reviewWalk2065.test.ts`
+- `src/services/reviewWalkCT.test.ts`
+- `src/services/slipAnswer.test.ts`
 - `src/services/unifiedBetterMoveReason.test.ts`
 - `src/test/teach02Wired.test.ts`
 

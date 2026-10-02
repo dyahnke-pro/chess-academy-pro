@@ -125,7 +125,39 @@ async function main() {
     C.ok === true && !C.spinner,
     `${(C.ms / 1000).toFixed(1)}s cacheHit=${C.cacheHit} regenerated=${C.regenerated} spinner=${C.spinner} pill=${C.pill}`);
 
-  writeFileSync(`${OUT}/report.json`, JSON.stringify({ base: BASE, rows, A, B, C, events: events().slice(-120) }, null, 2));
+  // D — a game that ARRIVES and is prepared in the background (the Play-end
+  // path, `gameAnalysisService.prepareReview`), then opened. Dev server only:
+  // it imports the service from the page. Prepare time is background work the
+  // student never waits on; the open after it is what they feel.
+  let D = null;
+  if (/localhost|127\.0\.0\.1/.test(BASE)) {
+    const GID2 = `${GID}-prepared`;
+    await page.evaluate(async ({ gid, pgn }) => {
+      const db = await new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+      await new Promise((res, rej) => { const t = db.transaction('games', 'readwrite'); t.objectStore('games').put({ id: gid, pgn, white: 'KaiserlicheHoheit', black: 'Knight_Mare_01', result: '0-1', date: '2026.09.04', event: 'probe', eco: 'B22', whiteElo: 1392, blackElo: 1378, source: 'chesscom', termination: 'resignation', annotations: null, coachAnalysis: null, isMasterGame: false, openingId: null, fullyAnalyzed: false }); t.oncomplete = () => res(true); t.onerror = () => rej(t.error); });
+    }, { gid: GID2, pgn: PGN });
+    const tp = Date.now();
+    const prep = await page.evaluate(async (gid) => {
+      const m = await import('/src/services/gameAnalysisService.ts');
+      await m.prepareReview(gid, 'probe');
+      return true;
+    }, GID2).catch((e) => String(e));
+    const prepMs = Date.now() - tp;
+    const card2 = `[data-testid="review-game-card-${GID2}"]`;
+    await page.goto(`${BASE}/coach/review`, { waitUntil: 'domcontentloaded', timeout: 45000 });
+    await dismiss();
+    await until(() => has(page, card2), 25000);
+    const mark = events().length;
+    const t = Date.now();
+    await page.locator(card2).first().click({ timeout: 5000 }).catch(() => undefined);
+    const ok = await until(startable, 300000, 250);
+    D = { prep, prepMs, ms: Date.now() - t, ok, cacheHit: sawSince(mark, /review-walk-skipped/), regenerated: sawSince(mark, /review-segments-generated/), spinner: await has(page, '[data-testid="review-analyze-spinner"]') };
+    log(`[D] ${JSON.stringify(D)}`);
+    rec('D open after background prepare is served from cache', D.ok === true && D.cacheHit === true && D.ms < 8000,
+      `prepare ${(prepMs / 1000).toFixed(1)}s (background), open ${(D.ms / 1000).toFixed(1)}s cacheHit=${D.cacheHit} regenerated=${D.regenerated} spinner=${D.spinner}`);
+  }
+
+  writeFileSync(`${OUT}/report.json`, JSON.stringify({ base: BASE, rows, A, B, C, D, events: events().slice(-120) }, null, 2));
   console.log(`\n${rows.filter((r) => r.pass).length}/${rows.length} — ${OUT}/report.json`);
   console.log('VERDICT: B is the real contract. If B is a cache hit and fast, the product is fine and the overhaul row is mis-scoped to C.');
   await browser.close().catch(() => {});

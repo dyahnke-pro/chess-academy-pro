@@ -66,12 +66,57 @@ async function state() {
     .filter((e) => e.kind === 'coach-narration-spoken')
     .map((e) => (e.narrationText ?? e.summary ?? '').trim())
     .filter((t) => t && !NOISE.test(t));
+  // A line that reached the VOICE without its own narration event (a verdict
+  // spoken straight through speakForced) shows only as a 40-char `voice=`
+  // stub. Keep it, marked "…", so a walk log never undercounts what was
+  // heard (hand walk 2026-09-27: "dxe5: nice — that was the only…" missing).
+  for (const e of fresh) {
+    const m = /voice=\S+ personality=\S+ text="(.*)"$/.exec(e.narrationText ?? e.summary ?? '');
+    if (!m) continue;
+    const stub = m[1].replace(/\s+/g, ' ').trim();
+    const norm = (t) => t.toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (stub && !spoken.some((t) => norm(t).includes(norm(stub).slice(0, 30)))) spoken.push(`${stub}… [voice]`);
+  }
+  // BOARD TAGS (plan 1.6): each spoken fact with the board it was graded on.
+  const boards = [];
+  for (const e of fresh) {
+    if (e.kind !== 'coach-narration-spoken' || !e.details) continue;
+    try { for (const f of JSON.parse(e.details).facts ?? []) if (f?.text && f?.fen) boards.push({ text: f.text, fen: f.fen }); } catch { /* not a tagged event */ }
+  }
   const cmd = fresh
     .filter((e) => /coachMoveCommand|walkthrough/i.test(`${e.source ?? ''}`))
     .map((e) => `${e.kind} ${e.source}: ${(e.summary ?? '').slice(0, 160)}`);
   const chat = (await page.locator('[data-testid="chat-message-assistant"]').first().innerText().catch(() => '')).replace(/\s+/g, ' ');
   const busy = await page.locator('[data-testid="chat-text-input"]').isDisabled().catch(() => null);
-  return { moves: chess.history().join(' '), turn: chess.turn(), lastChat: chat.slice(0, 400), spoken, cmd, inputBusy: busy, errors: errors.splice(0) };
+  // THE ARROWS ON THE BOARD RIGHT NOW (David 2026-09-30: "make sure arrows
+  // are firing to illustrate the ideas that are being spoken"). react-chessboard
+  // draws each arrow as an SVG path in a 2048-wide viewBox; the first point is
+  // just off the start square's centre and the last just short of the target's,
+  // so rounding each to the nearest square centre recovers from→to. The board
+  // orientation comes from the a-file label position.
+  const arrows = await page.evaluate(() => {
+    const svgs = [...document.querySelectorAll('svg[viewBox^="0 0 2048"]')];
+    const out = [];
+    const flipped = !!document.querySelector('[data-testid="board-orientation-black"]')
+      || (() => { const sq = document.querySelector('[data-square="a1"]'); const sq8 = document.querySelector('[data-square="a8"]'); return !!(sq && sq8 && sq.getBoundingClientRect().top < sq8.getBoundingClientRect().top); })();
+    const toSq = (x, y) => {
+      let c = Math.min(7, Math.max(0, Math.floor(x / 256)));
+      let r = Math.min(7, Math.max(0, Math.floor(y / 256)));
+      if (flipped) { c = 7 - c; r = 7 - r; }
+      return `${'abcdefgh'[c]}${8 - r}`;
+    };
+    for (const svg of svgs) {
+      for (const p of svg.querySelectorAll('path')) {
+        if (p.closest('defs,marker')) continue;
+        const nums = (p.getAttribute('d') ?? '').match(/-?\d+(?:\.\d+)?/g)?.map(Number) ?? [];
+        if (nums.length < 4) continue;
+        const color = p.getAttribute('stroke') ?? '';
+        out.push(`${toSq(nums[0], nums[1])}-${toSq(nums[nums.length - 2], nums[nums.length - 1])}${color ? `:${color}` : ''}`);
+      }
+    }
+    return out;
+  }).catch(() => []);
+  return { moves: chess.history().join(' '), turn: chess.turn(), lastChat: chat.slice(0, 400), spoken, boards, arrows, cmd, inputBusy: busy, errors: errors.splice(0) };
 }
 
 const routes = {
@@ -133,6 +178,14 @@ const routes = {
       .map((e) => `${e.kind} | ${e.source ?? ''} | ${(e.narrationText ?? e.summary ?? '').slice(0, 1200)}`)
       .filter((l) => !re || re.test(l)).slice(-n);
   },
+  /** Every `learn-reason-source` row this session: the board, the move, the
+   *  spoken mistake line and the engine lines it was read from — so a walk can
+   *  check a reason against its own source (2026-10-01). `/sources` */
+  async sources() {
+    return listener.getCapturedEvents()
+      .filter((e) => e.kind === 'learn-reason-source')
+      .map((e) => { let d = {}; try { d = JSON.parse(String(e.details ?? '{}')); } catch { d = {}; } return { fen: e.fen ?? null, ...d }; });
+  },
   /** The page's console lines — `/console?n=40&grep=pf-debug`. */
   async console(q) {
     const n = Number(q.get('n') ?? 40);
@@ -189,6 +242,13 @@ const routes = {
     }
     await sleep(Number(q.get('ms') ?? 1500));
     return routes.page(q);
+  },
+  // Take the Nth tile of the open "Which line?" picker (0 = main line).
+  async pick(q) {
+    const row = page.getByText('Which line?', { exact: false }).first().locator('xpath=..');
+    await row.locator('button').nth(Number(q.get('n') ?? 0)).click({ force: true, timeout: 10000 });
+    await sleep(1500);
+    return state();
   },
   async wait(q) { await sleep(Number(q.get('ms') ?? 5000)); return state(); },
   state,

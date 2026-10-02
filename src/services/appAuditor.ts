@@ -27,7 +27,8 @@
  */
 import { db } from '../db/schema';
 import { mirrorAuditEvent } from './analytics';
-import { onCoachDecision, onNeedScore, type CoachDecisionRow, type NeedScoreRow } from './coachDecisionEvents';
+import { onCoachDecision, onLearnTurn, onNeedScore, type CoachDecisionRow, type LearnTurnRow, type NeedScoreRow } from './coachDecisionEvents';
+import { onSearchDepth } from './searchDepthEvents';
 
 const APP_AUDIT_LOG_META_KEY = 'app-audit-log.v1';
 const APP_AUDIT_LOG_MAX_ENTRIES = 300;
@@ -126,6 +127,7 @@ export type AuditKind =
   // Records the user's Allow/Don't-allow choice for sending gameplay data to
   // the third-party AI + voice providers before any such call is made.
   | 'ai-consent-decision'
+  | 'strength-band-picked'
   // Voice instrumentation (WO-LEGACY-VOICE-01)
   | 'voice-speak-invoked'
   | 'voice-speak-silenced'
@@ -239,6 +241,24 @@ export type AuditKind =
   // gate closed it and how many facts survived — so the WEIGHTING can be
   // trended by an audit instead of judged by reading prose.
   | 'coach-decision'
+  // One entry per burst of Learn door decisions (learnTurnDoor.decideTurn) —
+  // offered / spoke / lead / held lanes, aggregated like coach-decision.
+  | 'learn-turn-decision'
+  // THE ENGINE LINES A LEARN MISTAKE LINE WAS READ FROM (2026-10-01). A
+  // reason like "d5 was their move, to win a piece" comes off the live,
+  // time-boxed PV; a deeper read may refute it, and without the source line a
+  // walk cannot tell a wrong reader from a shallow line. One row per spoken
+  // mistake line: the board, the move, the best line and the reply line.
+  | 'learn-reason-source'
+  // One held row written by a Learn teaching lane (capabilityEvidence.recordLaneEvidence).
+  | 'lane-evidence'
+  | 'concept-srs-pulled'
+  | 'review-voice-package'
+  // How deep Stockfish searched and whether the answer SETTLED
+  // (`searchUntilStable`, David 2026-09-27: "algo the stockfish depth"). One
+  // row per search — so an audit can hold that verdicts were voiced off
+  // settled searches and that sharp positions went deeper than quiet ones.
+  | 'search-depth'
   // The NEED score's per-term breakdown, AGGREGATED. One row per ply would
   // be hundreds of Dexie writes per review (`computeNeed` runs over every
   // move), so the subscriber buffers and emits ONE distribution per burst —
@@ -903,6 +923,9 @@ export type AuditKind =
   // the Training Plan assembles the day's reps from the bucket.
   | 'faucet-slip-detected'
   | 'misconception-captured'
+  // Does teaching work? Per mistake kind, the slip rate before vs after the
+  // coach taught it (`teachingEffectService`).
+  | 'teaching-effect'
   | 'misconception-drill-result'
   | 'todays-reps-built'
   // Voice INPUT / mic instrumentation (David 2026-06-12 — the "weird iPhone"
@@ -2192,4 +2215,42 @@ onCoachDecision((row) => {
     decisionFlush = setTimeout(flushCoachDecisions, 1500);
     (decisionFlush as unknown as { unref?: () => void }).unref?.();
   }
+});
+
+// THE LEARN DOOR, aggregated the same way (a per-turn entry is the same
+// high-frequency shape that once cost the narration its sidecar events).
+let learnTurnBuffer: LearnTurnRow[] = [];
+let learnTurnFlush: ReturnType<typeof setTimeout> | null = null;
+function flushLearnTurns(): void {
+  learnTurnFlush = null;
+  const rows = learnTurnBuffer;
+  learnTurnBuffer = [];
+  if (rows.length === 0) return;
+  void logAppAudit({
+    kind: 'learn-turn-decision',
+    category: 'subsystem',
+    source: 'learnTurnDoor.decideTurn',
+    summary: `${rows.length} turn(s) — ${rows.filter((r) => r.spoke.length > 0).length} spoke, ${rows.filter((r) => r.held.length > 0).length} held something`,
+    details: JSON.stringify({ rows }),
+  });
+}
+onLearnTurn((row) => {
+  learnTurnBuffer.push(row);
+  if (learnTurnBuffer.length >= 200) { if (learnTurnFlush) clearTimeout(learnTurnFlush); flushLearnTurns(); return; }
+  if (!learnTurnFlush) {
+    learnTurnFlush = setTimeout(flushLearnTurns, 1500);
+    (learnTurnFlush as unknown as { unref?: () => void }).unref?.();
+  }
+});
+
+// One row per settled-or-not search. Searches are few (one per question, one
+// per review key moment), so each is logged as it lands.
+onSearchDepth((row) => {
+  void logAppAudit({
+    kind: 'search-depth',
+    category: 'subsystem',
+    source: 'searchDepth.searchUntilStable',
+    summary: `${row.purpose} sharp=${row.sharpness} floor=${row.minDepth} reached=${row.depthReached} ${row.stable ? 'settled' : `UNSETTLED (${row.reason})`} in ${row.elapsedMs}ms`,
+    details: JSON.stringify(row),
+  });
 });

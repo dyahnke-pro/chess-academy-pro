@@ -150,6 +150,7 @@ const MATCHUP_PRINCIPLE: Record<MatchupClass, Register | null> = {
   'rook-endgame': { full: 'in a rook ending activity is everything: put the rook behind the passed pawn and keep the king in the fight.', short: 'Rook ending — activity first.' },
   'queen-endgame': { full: 'a queen ending turns on checks and your own king\'s safety — cover the perpetual before you push.', short: 'Queen ending — mind perpetual check.' },
   'queen-vs-rook': { full: 'queen versus rook is a win with care, but the rook fights on with a fortress and stalemate tricks.', short: 'Queen vs rook — fortress tricks.' },
+  'pieces-vs-pawns': { full: 'pieces against bare pawns — the pawns are the only counterplay, so stop the most advanced one first; then king and pieces together finish it.', short: 'Stop the pawns first.' },
   'rook-vs-minor': { full: 'a rook against a minor piece usually converts, but watch for a fortress the minor can build.', short: 'Rook vs minor — watch fortresses.' },
   'opposite-bishops': { full: 'opposite-coloured bishops are famously drawish — each bishop guards squares the other can never touch.', short: 'Opposite bishops — drawish.' },
   'same-bishops': { full: 'a same-coloured bishop ending goes to the better bishop and the more active king.', short: 'Bishop ending — the better bishop.' },
@@ -230,8 +231,52 @@ import { detectTactics } from './tacticsDetector';
 import { classifyMatchup } from './endgameMatchup';
 import {
   detectOpposition, detectKeySquares, detectRuleOfSquare, detectRookPawnCorner,
-  detectLucena, detectPhilidor, detectCutOff, detectRookBehindPasser,
+  detectLucena, detectPhilidor, detectBackRankDefence, detectCutOff, detectRookBehindPasser,
+  detectBareKingMate, detectTwoPawnsVsKing,
 } from './endgameTechnique';
+
+const KIND_WORDS: Record<string, string> = {
+  queen: 'a queen', rook: 'a rook', 'two-bishops': 'two bishops', 'bishop-knight': 'a bishop and a knight',
+};
+
+/** The basic checkmates and what cannot mate — the material rule, one sentence. */
+function bareKingConcept(fen: string): ComputedConcept | null {
+  const m = detectBareKingMate(fen);
+  if (!m) return null;
+  if (m.kind === 'queen' || m.kind === 'rook' || m.kind === 'two-bishops') {
+    const how = m.kind === 'queen'
+      ? 'box the king in with the queen a knight\'s move away, shrink the box until it is on the edge, then bring your own king up — and watch for stalemate when the box gets small'
+      : m.kind === 'rook'
+        ? 'use the rook to cut the king off along a rank or file, bring your own king up to face it, and push it back one line at a time until it is on the edge'
+        : 'keep the bishops side by side on neighbouring diagonals as a wall, drive the king to the edge and then into a corner, with your own king helping';
+    return technique(
+      'basic-mate', 'The basic checkmate',
+      `King and ${KIND_WORDS[m.kind]} against a bare king is a forced mate — at most ${m.maxMoves} moves from any start. The method: ${how}.`,
+      'Forced mate — drive it to the edge.', [], 0.7,
+    );
+  }
+  if (m.kind === 'bishop-knight') {
+    return technique(
+      'bishop-knight-mate', 'Bishop and knight mate',
+      `King, bishop and knight against a bare king is a forced mate, but the hardest of the basic ones — up to ${m.maxMoves} moves — and it only works in a corner of the bishop's colour: ${m.corners[0] === 'a1' ? 'a1 or h8 with a dark-squared bishop, h1 or a8 with a light-squared one' : 'h1 or a8 with a light-squared bishop, a1 or h8 with a dark-squared one'}. Drive the king to the edge first, then walk it along the edge into one of those corners.`,
+      `Mate only in the bishop's corner.`, m.corners, 0.75,
+    );
+  }
+  if (m.kind === 'two-knights') {
+    return technique(
+      'two-knights-no-mate', 'Two knights cannot force mate',
+      'Two knights and a king cannot force mate against a bare king: a mate position exists, but the defending king always has a way to step out of it unless it walks in by mistake. This is a draw.',
+      'Two knights — no forced mate.', [], 0.6,
+    );
+  }
+  return technique(
+    'insufficient-material', 'Not enough to mate',
+    m.kind === 'same-colour-bishops'
+      ? 'Two bishops on the SAME colour cannot mate at all — they can never cover the squares of the other colour around the king. This is a draw.'
+      : 'A single bishop or knight cannot mate a bare king, however it is placed. This is a draw.',
+    'Not enough to mate — a draw.', [], 0.55,
+  );
+}
 
 /**
  * The NAMED endgame technique a position teaches, when one of the deterministic
@@ -241,7 +286,22 @@ import {
  * general rule; none claims a game result (the other king may still decide it).
  */
 function namedTechniqueFor(fen: string, cls: MatchupClass): ComputedConcept | null {
+  if (cls === 'mating-material' || cls === 'minor-endgame') {
+    const mate = bareKingConcept(fen);
+    if (mate) return mate;
+  }
   if (cls === 'kp-vs-k') {
+    const two = detectTwoPawnsVsKing(fen);
+    if (two) {
+      const what = two.kind === 'connected' ? 'Connected pawns' : two.kind === 'one-file-gap' ? 'Two pawns with one file between them' : 'Two pawns far apart';
+      return two.selfDefending
+        ? technique(
+          'pawns-defend-each-other', 'The pawns defend each other',
+          `${what} on ${two.pawns.join(' and ')} look after themselves: if the king takes either one, it lands outside the square of the other, and that pawn runs to queen. So the king can only stand in front of them and wait while your own king walks up.`,
+          'Neither pawn can be taken.', [...two.pawns], 0.65,
+        )
+        : null;
+    }
     const ks = detectKeySquares(fen);
     if (ks?.kingOnKeySquare) {
       return technique(
@@ -311,6 +371,14 @@ function namedTechniqueFor(fen: string, cls: MatchupClass): ComputedConcept | nu
           ? `A Philidor rook ending: the defending king sits in front of the ${phil.pawn} pawn and the rook already holds the third rank, so the attacking king cannot come forward. Hold that rank; the moment the pawn steps up, drop the rook back and check from behind.`
           : `A Philidor rook ending: the defending king sits in front of the ${phil.pawn} pawn, which has not crossed the fifth rank. The drawing plan is the third-rank defence — put the rook on the third rank to fence the attacking king out, and once the pawn advances, check it from behind for as long as it takes.`,
         'Philidor — hold the third rank.', [phil.pawn], 0.7,
+      );
+    }
+    const brd = detectBackRankDefence(fen);
+    if (brd) {
+      return technique(
+        'back-rank-defence', 'The back-rank defence',
+        `The back-rank defence against the ${brd.pawn} pawn: the defending king sits on the queening square and the rook stays on the back rank, well away from it, ready to meet a check along that rank. Against a rook or knight pawn there is no room to break it — it holds.`,
+        'Back-rank defence — it holds.', [brd.pawn], 0.7,
       );
     }
     const cut = detectCutOff(fen);
@@ -467,6 +535,7 @@ export function conceptForBoard(fen: string, opts: ConceptForBoardOptions = {}):
 // ─── conceptForLine — THE single walker (solution OR engine PV) ──────────────
 import { computePlyFacts, pvDepthForRating, type PrevCaptureContext } from './pvPlayback';
 import { classifyMatePattern } from './matePatterns';
+import { detectPlanRace, planRaceClause } from './planRace';
 import { Chess } from 'chess.js';
 
 export interface LineInput {
@@ -528,12 +597,32 @@ function importanceFromSwing(input: LineInput): number | null {
  * (the opposition) is preferred over the generic start principle; positional
  * ideas ride as supports. Ranked, multi-concept, G0 — the story of the line.
  */
+/** A pure pawn ending in which both sides have a runner and the student's
+ *  queens first — the counts come from `planRace`, the one race computer. */
+function pureRace(fen: string, studentColor: 'w' | 'b'): ComputedConcept | null {
+  let pure = false;
+  try { pure = new Chess(fen).board().flat().every((c) => !c || c.type === 'k' || c.type === 'p'); } catch { return null; }
+  if (!pure) return null;
+  const race = detectPlanRace(fen, studentColor);
+  if (!race || race.kind !== 'passer-race' || !race.youQueenFirst) return null;
+  const clause = planRaceClause(fen, studentColor, 'live');
+  if (!clause) return null;
+  return technique(
+    'won-pawn-race', 'A pawn race you win',
+    `It comes down to a pawn race — ${clause}.`,
+    'Count the race — yours queens first.', [race.yourPawn, race.theirPawn], 0.8,
+  );
+}
+
 export function conceptForLine(input: LineInput): ComputedConcept[] {
   const out: ComputedConcept[] = [];
   const seen = new Set<string>();
   const { fen, uci, studentColor } = input;
   const wants = (src: ConceptSource): boolean => !input.sources || input.sources.includes(src);
   let techConcept: ComputedConcept | null = null;
+  // Squares the line takes a piece on — a start-position technique naming a
+  // piece the solution captures is about a board the student just changed.
+  const capturedOn = new Set<string>();
 
   // No position, no concept: an unparseable root FEN must not reach the
   // endgame / positional beats below (the matchup parser once read "nope"
@@ -554,6 +643,16 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
       const fenAfter = c.fen();
       const facts = computePlyFacts(fenBefore, fenAfter, { captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion }, prev);
       prev = mv.captured ? { square: mv.to, capturedValue: MATERIAL_VALUE[mv.captured] ?? 0 } : { square: null, capturedValue: 0 };
+      if (mv.captured) capturedOn.add(mv.to);
+      // TRADE INTO A RACE YOU WIN (calc hand walk 2026-10-01: …Rxb6+ Kxb6 left
+      // two runners, Black's to move — the whole point of the sacrifice, and the
+      // panel instead described White's rook on b6, which was gone). Read after
+      // EVERY ply: the race exists once the recapture lands, which is the
+      // opponent's move.
+      if (!techConcept && wants('technique')) {
+        const race = pureRace(fenAfter, studentColor);
+        if (race) techConcept = { ...race, line: [...path], boardFen: fenAfter };
+      }
       if (mv.color !== studentColor) continue;
       // Key-move score: mate » real landed tactic (weighted by what it nets) »
       // material. Every term is board-true from computePlyFacts.
@@ -564,7 +663,11 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
       }
       if (!techConcept && wants('technique')) {
         const tech = endgameConceptFor(fenAfter);
-        if (tech && tech.source === 'technique') techConcept = tech;
+        // A technique found further down the line is about THAT board, so it
+        // carries the line that reaches it — the same "After …" the tactic
+        // concept rides (claim check 2026-09-27: "the rook on e6 stands behind
+        // its own e2 pawn" with the rook still on e8; e6 was three plies away).
+        if (tech && tech.source === 'technique') techConcept = { ...tech, line: [...path], boardFen: fenAfter };
       }
     }
 
@@ -621,7 +724,9 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
   // Endgame teaching beat: the technique reached during the solution (preferred),
   // else the start-position matchup principle.
   try {
-    const eg = techConcept ?? ((wants('technique') || wants('matchup')) ? endgameConceptFor(fen) : null);
+    const start = !techConcept && (wants('technique') || wants('matchup')) ? endgameConceptFor(fen) : null;
+    const startStands = !start || start.source !== 'technique' || !start.squares.some((sq) => capturedOn.has(sq));
+    const eg = techConcept ?? (startStands ? start : null);
     if (eg && !seen.has(eg.id) && wants(eg.source)) {
       if (eg.source !== 'technique') eg.importance = 0.5;
       out.push(eg);

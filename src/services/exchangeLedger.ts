@@ -217,3 +217,22 @@ export function proofAgainstMover(fen: string, uci: readonly string[], moverWB: 
   if (!proof.ledger || proof.ledger.netPawns >= 0) return null;
   return `${moves} — ${describeProofResult(proof.ledger)}`;
 }
+
+/** THE WINNING LINE, played out (WO-TEACH-GAPS P2 #3 — his "if X, then Y, and
+ *  Z"): the line cut to where it PROVES FOR the side that starts it — that side
+ *  mates, or settles a material gain — said from the student's seat. Null when
+ *  the line proves nothing, or runs past the horizon a listener can follow. */
+export function proofForMover(fen: string, uci: readonly string[], moverWB: 'w' | 'b'): { text: string; plies: number } | null {
+  const sans: string[] = [];
+  try {
+    const c = new Chess(fen);
+    for (const u of uci) sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined }).san);
+  } catch { /* the playable prefix is what we have */ }
+  if (sans.length === 0) return null;
+  const proof = proofCut(fen, sans, moverWB);
+  if (!proof || proof.plies > MAX_PV_DEPTH_PLIES) return null;
+  const moves = andList(sans.slice(0, proof.plies));
+  if (proof.mate) return proof.plies % 2 === 1 ? { text: `${moves} — and it's mate`, plies: proof.plies } : null;
+  if (!proof.ledger || proof.ledger.netPawns <= 0) return null;
+  return { text: `${moves} — ${describeProofResult(proof.ledger)}`, plies: proof.plies };
+}

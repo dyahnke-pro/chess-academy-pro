@@ -3,13 +3,13 @@
  * the full 3-INSTRUMENT protocol (G1 + David 2026-07-19: "Loop audit —
  * listening tool included"):
  *   1. Playwright — the three review repros drive the surface for real
- *      (sequence + calculation bucket, model-game cameo, theory departure).
+ *      (sequence + calculation bucket, theory departure).
  *   2. Live audit-stream — pulled BEFORE and AFTER each pass so the delta
  *      is exactly this pass's server-side events.
  *   3. Narration listener sidecar — AUDIT_LISTENER=1 attaches the local
  *      listener inside each repro; every repro asserts the lines Ruth
- *      actually SPOKE (sequence playback + Phase-5 theme, cameo intro +
- *      tie-back, theory ask + masters stats).
+ *      actually SPOKE (sequence playback + Phase-5 theme,
+ *      theory ask + masters stats).
  *
  * 3-PASS CONTRACT: MET only on 3 CONSECUTIVE fully-green passes; ANY red
  * resets the streak to 0. Run against LIVE prod by default.
@@ -24,7 +24,7 @@ const BASE = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.ap
 const SECRET = process.env.AUDIT_STREAM_SECRET ?? '';
 const PASSES_REQUIRED = Number(process.env.AUDIT_PASSES ?? 3);
 const MAX_PASSES = Number(process.env.AUDIT_MAX_PASSES ?? 6);
-const SCRIPTS = ['audit-review-sequence.mjs', 'audit-review-cameo.mjs', 'audit-review-theory.mjs'];
+const SCRIPTS = ['audit-review-sequence.mjs', 'audit-review-theory.mjs'];
 
 async function streamCount() {
   if (!SECRET || !BASE.startsWith('https://chess-academy-pro')) return null;

@@ -5,7 +5,7 @@
 // surfaces (learn/play/openings) call this; kid surfaces NEVER do.
 
 import { useEffect, useRef } from 'react';
-import { loadWeaknessSignals } from '../services/weaknessSignalLoader';
+import { loadProvenTags, loadWeaknessSignals } from '../services/weaknessSignalLoader';
 import { onWeaknessModelChanged } from '../services/weaknessModelEvents';
 import type { WeaknessSignal } from '../services/weaknessSignal';
 
@@ -23,6 +23,20 @@ export function useWeaknessSignals(): React.RefObject<readonly WeaknessSignal[]>
     load();
     // A slip recorded mid-session (the sweep after a game, a live capture)
     // reaches the NEXT sentence on this mount, not the next mount.
+    const off = onWeaknessModelChanged(load);
+    return () => { alive = false; off(); };
+  }, []);
+  return ref;
+}
+
+/** The student's PROVEN skills as a ref (empty until loaded — nothing fades
+ *  on a cold read, which is the safe direction: grey teaches in full). */
+export function useProvenTags(): React.RefObject<ReadonlySet<string>> {
+  const ref = useRef<ReadonlySet<string>>(new Set());
+  useEffect(() => {
+    let alive = true;
+    const load = (): void => { void loadProvenTags().then((t) => { if (alive) ref.current = t; }); };
+    load();
     const off = onWeaknessModelChanged(load);
     return () => { alive = false; off(); };
   }, []);

@@ -5,8 +5,11 @@
 // Philidor Antoshin (looked "dead-level", was -1.58). Run: node scripts/soundness-sweep.mjs
 import { Chess } from 'chess.js'; import { spawn } from 'child_process';
 import { build } from 'esbuild'; import { tmpdir } from 'os'; import { join } from 'path';
-const SF='/usr/games/stockfish';
-function ev(fen){return new Promise(res=>{const sf=spawn(SF);let cp=null;sf.stdout.on('data',d=>{const s=d.toString();const m=s.match(/score cp (-?\d+)/g);if(m)cp=parseInt(m[m.length-1].match(/-?\d+/)[0]);const mt=s.match(/score mate (-?\d+)/);if(mt)cp=parseInt(mt[1])>0?10000:-10000;if(/bestmove/.test(s)){sf.kill();res(cp);}});sf.stdin.write(`position fen ${fen}\ngo depth 18\n`);setTimeout(()=>{try{sf.kill()}catch{};res(cp)},12000);});}
+// Native binary by default; SF_JS=1 runs the npm build under Node (containers
+// without /usr/games/stockfish).
+const SF=process.env.SF_JS?process.execPath:'/usr/games/stockfish';
+const SF_ARGS=process.env.SF_JS?['node_modules/stockfish/bin/stockfish.js']:[];
+function ev(fen){return new Promise(res=>{const sf=spawn(SF,SF_ARGS);let cp=null;sf.stdout.on('data',d=>{const s=d.toString();const m=s.match(/score cp (-?\d+)/g);if(m)cp=parseInt(m[m.length-1].match(/-?\d+/)[0]);const mt=s.match(/score mate (-?\d+)/);if(mt)cp=parseInt(mt[1])>0?10000:-10000;if(/bestmove/.test(s)){sf.kill();res(cp);}});sf.stdin.write(`position fen ${fen}\ngo depth 18\n`);setTimeout(()=>{try{sf.kill()}catch{};res(cp)},process.env.SF_JS?40000:12000);});}
 const o=join(tmpdir(),`lb-${Date.now()}.mjs`);
 await build({entryPoints:['src/data/lessons/index.ts'],bundle:true,format:'esm',platform:'node',outfile:o,loader:{'.json':'json'},logLevel:'error'});
 const {getAllLessonScripts}=await import(o);

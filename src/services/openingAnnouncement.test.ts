@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach, vi } from 'vitest';
-import { openingAnnouncement } from './openingAnnouncement';
+import { openingAnnouncement, spokenOpeningLabel, theirOpeningVerdict } from './openingAnnouncement';
 import { bookDeparture } from './bookDeparture';
 import { __setLocalDbForTests, lookupMasterPlay } from './masterPlayLookup';
 import { masterPlayCache, positionFen } from './masterPlayCache';
@@ -42,6 +42,11 @@ describe('openingAnnouncement — name it once, then once more where theory ends
       .toBe('They left the book with the bishop to e7; the usual move there was the knight to f6. The line was the Philidor Defense.');
     expect(openingAnnouncement({ name: 'Philidor Defense' }, dep(7, 'Bd3', 'w', 'Nxd4'), 'King\'s Pawn Game', 'w'))
       .toMatch(/^You left the book with/);
+  });
+  it('at the departure, names the opening already announced — not the stale move-order name (Learn walk 2026-10-01)', () => {
+    const said = openingAnnouncement({ name: 'English Opening: Anglo-Indian Defense' }, dep(12, 'Bg5', 'w', 'Nc3'), "King's Indian Defense: King's Knight Variation", 'b');
+    expect(said).toMatch(/^They left the book with the bishop to g5/);
+    expect(said).not.toMatch(/English/);
   });
   it('never repeats a name already said', () => {
     expect(openingAnnouncement({ name: 'Scandinavian Defense' }, dep(5, 'a3', 'w', null), 'Scandinavian Defense', 'w')).toBeNull();
@@ -105,5 +110,73 @@ describe('bookDeparture reads the LIVE explorer answers from the cache', () => {
     await lookupMasterPlay(fens[0], { triggeredBy: 'book-departure', skipLocalDb: true });
     expect(calls.some((u) => u.includes('openings-masters-db'))).toBe(false);
     vi.restoreAllMocks();
+  });
+});
+
+describe('a plural "Variations" tail is a DB grouping, not a name (1200 walk 2026-09-27)', () => {
+  it('"Sicilian Defense: Modern Variations" is said as the family', () => {
+    expect(spokenOpeningLabel('Sicilian Defense: Modern Variations')).toBe('Sicilian Defense');
+  });
+  it('NEGATIVE CONTROL: a singular named variation stays', () => {
+    expect(spokenOpeningLabel('Sicilian Defense: Alapin Variation')).toBe('Sicilian Defense: Alapin Variation');
+  });
+});
+
+describe('a departure is news only when it just happened (run C walk 2026-09-30)', () => {
+  it('a departure forty moves old says nothing; one just played is announced', async () => {
+    vi.resetModules();
+    vi.doMock('./bookDeparture', async (orig) => ({
+      ...(await orig<typeof import('./bookDeparture')>()),
+      bookDeparture: () => ({ ply: 6, san: 'h5', mover: 'b', mainSan: null }),
+    }));
+    const { openingAnnouncementForGame } = await import('./openingAnnouncement');
+    const det = { name: 'Indian Defense: Knights Variation, East Indian' } as never;
+    const long = Array.from({ length: 40 }, () => 'x');
+    expect(openingAnnouncementForGame(det, long, 'Indian Defense: Knights Variation', 'b')).toBeNull();
+    expect(openingAnnouncementForGame(det, long.slice(0, 6), 'Indian Defense: Knights Variation', 'b')).toMatch(/^You left the book with/);
+    vi.doUnmock('./bookDeparture');
+  });
+});
+
+describe('studentJustLeftBook (run D walk 2026-09-30: the departure said twice)', () => {
+  it('true only on the student move that left book', async () => {
+    vi.resetModules();
+    vi.doMock('./bookDeparture', async (orig) => ({
+      ...(await orig<typeof import('./bookDeparture')>()),
+      bookDeparture: () => ({ ply: 6, san: 'Bc5', mover: 'b', mainSan: 'Nc6' }),
+    }));
+    const { studentJustLeftBook } = await import('./openingAnnouncement');
+    const h = ['e4', 'e5', 'Nf3', 'Nf6', 'Nc3', 'Bc5'];
+    expect(studentJustLeftBook(h, 'b')).toBe(true);
+    expect(studentJustLeftBook(h, 'w')).toBe(false);
+    expect(studentJustLeftBook([...h, 'Nxe5', 'O-O'], 'b')).toBe(false);
+    vi.doUnmock('./bookDeparture');
+  });
+});
+
+describe('theirOpeningVerdict — a verdict on their opening choice (pass-2 walk 2026-09-30)', () => {
+  afterEach(() => __setLocalDbForTests(null));
+  // 1.e4 c5 2.Nf3 Nc6 3.d4 cxd4 4.Nxd4 g6 5.Be3 Bg7 6.c3 — masters play Nc3.
+  const history = ['e4', 'c5', 'Nf3', 'Nc6', 'd4', 'cxd4', 'Nxd4', 'g6', 'Be3', 'Bg7', 'c3'];
+  const seed = (): void => {
+    masterPlayCache.clear();
+    const positions: Record<string, Array<{ san: string; games: number }>> = {};
+    const b = new Chess();
+    history.forEach((san, i) => {
+      positions[b.fen().split(' ').slice(0, 4).join(' ')] = i === 10 ? [{ san: 'Nc3', games: 900 }, { san: 'c4', games: 200 }] : [{ san, games: 500 }];
+      b.move(san);
+    });
+    __setLocalDbForTests({ positions } as unknown as Parameters<typeof __setLocalDbForTests>[0]);
+  };
+  it('a costly departure is judged, with the usual move named', () => {
+    seed();
+    expect(theirOpeningVerdict(history, 'b', 45, false)).toBe('It is a weaker choice than the knight to c3 — it costs them about half a pawn.');
+    expect(theirOpeningVerdict(history, 'b', 120, false)).toMatch(/^That is a dubious choice — the knight to c3 is the move here/);
+  });
+  it('a fair sideline, the student\'s own move, or a real coach slip says nothing', () => {
+    seed();
+    expect(theirOpeningVerdict(history, 'b', 10, false)).toBeNull();
+    expect(theirOpeningVerdict(history, 'w', 45, false)).toBeNull();
+    expect(theirOpeningVerdict(history, 'b', 150, true)).toBeNull();
   });
 });

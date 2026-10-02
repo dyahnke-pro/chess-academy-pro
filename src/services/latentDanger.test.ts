@@ -26,7 +26,7 @@ describe('detectLatentDanger — the pin-in-waiting (David\'s heartbreak case)',
     // Rook e8, white knight e5 (the shield), white bishop e3, white king e1.
     const d = detectLatentDanger('4r1k1/8/8/4N3/8/4B3/8/4K3 w - - 0 1', 'w');
     expect(d).toMatchObject({ frontSquare: 'e3', backSquare: 'e1', latent: true });
-    expect(latentDangerClause(d!)).toMatch(/mind it before you open the line/);
+    expect(latentDangerClause(d!)).toMatch(/their rook on e8 looks through your knight on e5 at your bishop on e3 and your king behind it — move the knight and the bishop is pinned/);
   });
 
   it('a pawn shield on a file is not a line the student opens (e4-Be2-Ke1)', () => {

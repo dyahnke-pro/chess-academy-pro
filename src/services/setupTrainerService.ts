@@ -18,7 +18,8 @@
  * — arbitrary, fragile (exact-FEN match), and only ever asked for one move
  * before auto-playing the rest.
  */
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
+import { verifyForkOnBoard } from './tacticVerification';
 import { db } from '../db/schema';
 import { calculateRatingDelta, shuffleArray } from './puzzleService';
 import { createDefaultSrsFields } from './srsEngine';
@@ -124,7 +125,31 @@ export function firstSolverMoveIsQuiet(fen: string, moves: string): boolean {
     const result = chess.move({ from: solver.from, to: solver.to, promotion: solver.promotion });
     const isCapture = result.isCapture() || result.isEnPassant();
     const givesCheck = chess.inCheck(); // side-to-move (opponent) now in check
-    return !isCapture && !givesCheck;
+    return !isCapture && !givesCheck && !moveIsTheFork(chess.fen(), solver.to);
+  } catch {
+    return false;
+  }
+}
+
+/** The move that just landed on `to` IS a fork (two or more enemy pieces it
+ *  attacks, judged live or a real threat by the shared fork verifier). A
+ *  non-capturing, non-checking fork passed the "quiet" filter, so the Setup
+ *  Trainer asked "find the quiet move that sets up the fork" of a puzzle whose
+ *  answer was the fork itself (Setup walk 2026-10-01: Nd6 hitting b7 and c8). */
+export function moveIsTheFork(fenAfter: string, to: string): boolean {
+  try {
+    const c = new Chess(fenAfter);
+    const piece = c.get(to as Square);
+    if (!piece) return false;
+    const parts = fenAfter.split(' ');
+    parts[1] = piece.color;
+    parts[3] = '-';
+    const mover = new Chess(parts.join(' '));
+    const targets = mover.moves({ square: to as Square, verbose: true })
+      .filter((m) => m.captured && m.captured !== 'p')
+      .map((m) => m.to);
+    if (new Set(targets).size < 2) return false;
+    return verifyForkOnBoard(fenAfter, to, [...new Set(targets)]).status !== 'none';
   } catch {
     return false;
   }

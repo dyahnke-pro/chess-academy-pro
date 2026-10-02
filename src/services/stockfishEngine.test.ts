@@ -844,6 +844,28 @@ describe('StockfishEngine', () => {
       expect(analysis.isMate).toBe(true);
     });
 
+    it('a BOUNDED mate score never overwrites the exact score (Learn walk 2026-10-02, …Rg2)', async () => {
+      const { stockfishEngine } = await getEngine();
+      await initEngine(stockfishEngine);
+      const pmMock = mockWorker.instance.postMessage as ReturnType<typeof vi.fn>;
+      pmMock.mockImplementation((msg: string) => {
+        mockWorker.postMessageCalls.push(msg);
+        if (msg === 'isready') queueMicrotask(() => mockWorker.emit('readyok'));
+        if (msg.startsWith('go ')) {
+          queueMicrotask(() => {
+            mockWorker.emit('info depth 14 multipv 1 score cp 700 pv g3g2 g7g5');
+            // The search was stopped mid-iteration on an aspiration fail-high.
+            mockWorker.emit('info depth 15 multipv 1 score mate 9 lowerbound pv g3g2');
+            mockWorker.emit('bestmove g3g2');
+          });
+        }
+      });
+      const analysis = await stockfishEngine.analyzePosition(STARTING_FEN);
+      expect(analysis.isMate).toBe(false);
+      expect(analysis.mateIn).toBeNull();
+      expect(analysis.evaluation).toBe(700);
+    });
+
     it('sets mateIn to the mate distance', async () => {
       const { stockfishEngine } = await getEngine();
       await initEngine(stockfishEngine);

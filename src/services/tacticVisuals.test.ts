@@ -10,7 +10,7 @@ describe('buildTacticVisuals', () => {
     // The key move is always drawn from→to.
     const keyMove = arrows.find((a) => a.startSquare === 'b5' && a.endSquare === 'c7');
     expect(keyMove).toBeDefined();
-    expect(keyMove?.color).toMatch(/34, 197, 94/); // green
+    expect(keyMove?.color).toBe('#22c55e'); // green — the arrow door's colour for your move
 
     // The landing square is highlighted so the eye lands on it.
     expect(highlights.some((h) => h.square === 'c7')).toBe(true);
@@ -39,10 +39,11 @@ describe('buildTacticVisuals', () => {
     expect(start.arrows).toEqual([]);
   });
 
-  it('never throws on an illegal move line — still shows the move arrow', () => {
+  it('never throws on an illegal move line — and never arrows an illegal move (arrow door, 2026-09-29)', () => {
     const fen = 'r3k3/8/8/1N6/8/8/8/4K3 w - - 0 1';
-    const { arrows } = buildTacticVisuals(fen, ['b5b6']); // legal knight? no — b5-b6 illegal for a knight
-    // Even if the move is illegal to replay, the key-move arrow is still drawn.
-    expect(arrows.some((a) => a.startSquare === 'b5' && a.endSquare === 'b6')).toBe(true);
+    // b5-b6 is not a knight move. The old contract drew it anyway; an arrow is
+    // read as "play this", so the door refuses a move that cannot be played.
+    const { arrows } = buildTacticVisuals(fen, ['b5b6']);
+    expect(arrows.some((a) => a.startSquare === 'b5' && a.endSquare === 'b6')).toBe(false);
   });
 });

@@ -9,11 +9,16 @@ describe('principle-once line', () => {
     const lead = principleToTeach(start, 'Nc6', 'black', new Set());
     expect(lead?.id).toBe('development');
     const line = principleOnceLine('Nc6', lead!, 0);
-    expect(line.startsWith('Nc6 follows a principle worth keeping: ')).toBe(true);
-    // Rotated, not rolled: every key names the move and the SAME rule.
+    expect(line.startsWith('Nc6 follows a rule worth keeping: ')).toBe(true);
+    // Rotated, not rolled: every key names the move, the SAME rule, and WHY
+    // the rule holds — the imperative alone teaches nothing (David 2026-09-27).
     const all = new Set([0, 1, 2, 3].map((k) => principleOnceLine('Nc6', lead!, k)));
     expect(all.size).toBeGreaterThan(1);
-    for (const t of all) { expect(t).toMatch(/Nc6/); expect(t).toContain(lead!.imperative); }
+    for (const t of all) {
+      expect(t).toMatch(/Nc6/); expect(t).toContain(lead!.imperative);
+      expect(t).toMatch(/cannot join the fight/);
+      expect(t).not.toMatch(/does what the opening asks/);
+    }
     expect(line).not.toMatch(/now eyes|newly undefended/i);
   });
 

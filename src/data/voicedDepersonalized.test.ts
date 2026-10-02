@@ -17,6 +17,12 @@ const BANNED: Array<[string, RegExp]> = [
   ['from his course', /\bfrom his course\b/i],
   ['As I said/showed', /\bAs I (said|showed|mentioned)\b/i],
   ["I've played in the", /\bI['’]ve (already )?played (it )?in\b/i],
+  // STREAM RESIDUE (WO-TEACH-GAPS P5 #55, measured 2026-09-30: five notes
+  // still addressed a live audience).
+  ['viewers', /\bviewers?\b/i],
+  ['these guys', /\bthese guys\b/i],
+  ['any one video', /\bany one video\b/i],
+  ['One comment:', /\bOne comment:/],
 ];
 
 function ideasOf(node: { idea?: string; children?: Array<{ node: unknown }> }): string[] {
@@ -49,4 +55,20 @@ describe('voiced narration is depersonalized (no pro-personal references)', () =
       expect(re.test(teachingsRaw), `voiced-teachings.json still contains ${label}`).toBe(false);
     });
   }
+});
+
+// FIRST PERSON — the coach is the voice, not the pro (David 2026-08-26). 700
+// voiced notes still say "I"/"my" (measured 2026-09-30, P5 #55): "I have to
+// recapture with the knight", "I'll admit I missed it". Each needs an authoring
+// decision — flip to "you" or drop the sentence — so it is not bulk-rewritten;
+// it is held to a ceiling that can only SHRINK as the authoring pass lands.
+const FIRST_PERSON_CEILING = 700;
+describe('voiced teaching notes — first person only shrinks', () => {
+  it(`at most ${FIRST_PERSON_CEILING} notes speak in the first person`, () => {
+    const raw = JSON.parse(readFileSync(join(process.cwd(), 'public/data/voiced-teachings.json'), 'utf8')) as { notes: Array<{ explains?: unknown; teaches?: unknown; plans?: unknown }> };
+    const arr = (x: unknown): string[] => (Array.isArray(x) ? x.filter((v): v is string => typeof v === 'string') : typeof x === 'string' ? [x] : []);
+    const fp = raw.notes.filter((n) => /\b(I|I'm|I'll|I've|I'd|my|me|mine)\b/.test([...arr(n.explains), ...arr(n.teaches), ...arr(n.plans)].join(' ')));
+    expect(raw.notes.length).toBeGreaterThan(1000);   // non-vacuous: the file was read
+    expect(fp.length).toBeLessThanOrEqual(FIRST_PERSON_CEILING);
+  });
 });

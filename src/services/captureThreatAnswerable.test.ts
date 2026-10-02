@@ -18,3 +18,14 @@ describe('a capture threat the victim walks away from is not a win', () => {
     expect(captureThreatIsAnswerable('4k3/8/8/4n3/3P4/8/8/4R1K1 b - - 0 1', 'w')).toBe(false);
   });
 });
+
+// Review walk 2026-10-01 (game 173903420240, ply 45): 23.Qxc7 took the queen
+// and was told "you're now threatening Qxd8+ — it wins their rook on d8 and
+// forks the king and their rook on e7" while …Rxc7 takes the queen back.
+describe('a threat from a piece they can simply take is no threat', () => {
+  it('Qxc7 threatens nothing — the queen is recaptured', () => {
+    const before = '3r2k1/2q1rpp1/p1p1pn1p/1p2Q3/3P4/P4N1P/1PP2PP1/3RR1K1 w - - 3 23';
+    const after = '3r2k1/2Q1rpp1/p1p1pn1p/1p6/3P4/P4N1P/1PP2PP1/3RR1K1 b - - 0 23';
+    expect(detectNewThreat(before, after, 'w')).toBeNull();
+  });
+});

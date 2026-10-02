@@ -21,13 +21,14 @@ import { rotateStem } from '../utils/rotateStem';
 import { CENTRAL_SQUARES, CORE_CENTER, keyTargetSquares, kingZoneAmong, kingZoneClause, standingHoles } from './keySquares';
 import { andList } from '../utils/andList';
 import type { Square } from 'chess.js';
-import { landingIsSafe } from './positionReadingService';
+import { landingIsSafe, legalSeeGainFor } from './positionReadingService';
 import { classifyPhase, isEndgameByMaterial } from './gamePhaseService';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { homeMinorCount, homeSquaresOf, isOnHomeSquare } from './development';
 import { centreDistance } from '../utils/centreDistance';
-import { isOutpost } from './outpost';
+import { isOutpost, noPawnCanChallenge } from './outpost';
 import { MATERIAL_VALUE } from './pieceValues';
+import { SPACE_RULE } from './reviewConcepts';
 
 export type MoveFundamentalId =
   | 'king-safety'
@@ -110,6 +111,15 @@ export interface MoveFundamental {
   imperative: string;
   /** Board squares the clause references (arrows / highlights). */
   squares: string[];
+  /** The opponent must answer it (a developing move that hits their queen or
+   *  rook). A consequence, so it teaches even when the principle is known. */
+  forcing?: boolean;
+  /** The reason this SHAPE of the principle holds, when it differs from the
+   *  id's general reason (a flank pawn's is not a center pawn's). `null` = this
+   *  shape has NO reason of its own and the id's must not ride with it either
+   *  (a knight that only EYES an outpost is not standing on one). Set where the
+   *  fact is made, never read back off the prose. */
+  reason?: string | null;
 }
 
 /**
@@ -190,6 +200,9 @@ function relRank(sq: string, color: 'w' | 'b'): number {
 
 /** No enemy pawn can ever advance to attack `sq` — the classic outpost test. */
 /** Central squares the piece on `to` now attacks (from the after-move board). */
+/** The files a minor piece starts on. */
+const ORIGINAL_FILES: Record<'n' | 'b', string> = { n: 'bg', b: 'cf' };
+
 function eyesCenter(after: Chess, to: string, mover: 'w' | 'b'): string[] {
   // Q2 — the centre AND the squares beside their king. Filtering the Q1 list
   // here is why `Bc4` could never be said to look at f7.
@@ -356,7 +369,22 @@ export function computeMoveFundamentals(
   // Not on a CAPTURE: taking a piece is its own reason, and the hanging-piece
   // and tactic lanes name it (hand walk 2026-09-24: 23.Bxe6+ was "plant the
   // bishop on the e6 outpost" — it takes a knight with check).
-  if ((mv.piece === 'n' || mv.piece === 'b') && !mv.captured && relRank(mv.to, mover) >= 5 && isOutpost(after, mv.to, mover, false)) {
+  // …and not a square where the piece simply hangs: "Bh6 lands on the h6
+  // outpost" was said beside "your bishop on h6 is attacked and nothing's
+  // defending it" (Damiano walk 2026-09-27). No pawn can evict it; a rook can
+  // still take it for free.
+  const them: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
+  // …and not a square a minor of theirs takes it on right now: that is a
+  // trade offer, not an outpost (hand walk 2026-09-27, Alekhine: "Be5 lands
+  // on the e5 outpost" with …Nxe5 the next move — Naroditsky's point was that
+  // Be5 OFFERS the trade to shift their rook).
+  const hangsThere = (() => {
+    try {
+      if (after.isAttacked(mv.to as never, them) && after.attackers(mv.to as never, mover).length === 0) return true;
+      return after.attackers(mv.to as never, them).some((sq) => ['n', 'b'].includes(after.get(sq as never)?.type ?? ''));
+    } catch { return false; }
+  })();
+  if ((mv.piece === 'n' || mv.piece === 'b') && !mv.captured && relRank(mv.to, mover) >= 5 && !hangsThere && isOutpost(after, mv.to, mover, false)) {
     const name = PIECE_NAME[mv.piece];
     out.push({
       id: 'outpost',
@@ -366,6 +394,43 @@ export function computeMoveFundamentals(
       imperative: `plant the ${name} on the ${mv.to} outpost, where no pawn can challenge it`,
       squares: [mv.to],
     });
+  }
+
+  // EYES A HOLE — a knight already in play re-routes to where it hits a
+  // square deep in their camp that no pawn of theirs can ever cover: the
+  // outpost it is heading for (review walk 2026-10-01: 5.Ne4 against …c5 and
+  // …e6, eyeing d6, went silent). Only a square it did not already hit, empty
+  // or holding an enemy piece, and only when the knight is safe where it lands.
+  if (mv.piece === 'n' && !mv.captured && !isOnHomeSquare('n', mover, mv.from) && !hangsThere && !out.some((f) => f.id === 'outpost')) {
+    let beforeBoard: Chess | null = null;
+    try { beforeBoard = new Chess(fenBefore); } catch { beforeBoard = null; }
+    const f0 = mv.to.charCodeAt(0);
+    const r0 = Number(mv.to[1]);
+    const jumps = [[1, 2], [2, 1], [-1, 2], [-2, 1], [1, -2], [2, -1], [-1, -2], [-2, -1]]
+      .map(([df, dr]) => [f0 + df, r0 + dr] as const)
+      .filter(([f, r]) => f >= 97 && f <= 104 && r >= 1 && r <= 8)
+      .map(([f, r]) => `${String.fromCharCode(f)}${r}`);
+    const targets = jumps
+      .filter((sq) => relRank(sq, mover) >= 5 && relRank(sq, mover) <= 6)
+      .filter((sq) => { const p = after.get(sq as Square); return !p || p.color === them; })
+      .filter((sq) => noPawnCanChallenge(after, sq, mover))
+      .filter((sq) => !(beforeBoard && beforeBoard.attackers(sq as Square, mover).includes(mv.from)));
+    if (targets.length > 0) {
+      // Every hole it now hits, never the first one only (G4.5).
+      const sqs = andList(targets);
+      const one = targets.length === 1;
+      const what = one ? 'a square no pawn of theirs can ever cover' : 'squares no pawn of theirs can ever cover';
+      out.push({
+        id: 'outpost',
+        weight: 70,
+        led: `eyes ${sqs}, ${what}`,
+        // "Stays there for the whole game" is about a piece ON the hole.
+        reason: null,
+        selfContained: `heads for ${sqs}, ${what}`,
+        imperative: `aim the knight at ${sqs}, ${one ? 'a hole' : 'holes'} no pawn of theirs can ever cover`,
+        squares: [mv.to, ...targets],
+      });
+    }
   }
 
   // ── DEVELOPMENT — a minor coming off its home rank into the game. Weight
@@ -414,6 +479,7 @@ export function computeMoveFundamentals(
       selfContained: `develops the ${name} into the game${tempo}${centerTail}`,
       imperative: `develop into the game${tempo}${centerTail}`,
       squares: hit ? [mv.to, hit.square, ...eyes] : [mv.to, ...eyes],
+      forcing: !!hit,
     });
   }
 
@@ -442,7 +508,11 @@ export function computeMoveFundamentals(
     const contactBy = after.attackers(mv.to, mover === 'w' ? 'b' : 'w')
       .filter((sq) => after.get(sq)?.type === 'p');
     const contact = contactBy.length > 0;
-    out.push(contact ? {
+    // A FLANK pawn that touches none of the four core squares makes no central
+    // claim at all (review walk 2026-10-01: …c4 in a queenside pawn chain was
+    // "stakes out the center and grabs space").
+    const flankNoCore = !contact && mv.to[0] !== 'd' && mv.to[0] !== 'e' && coreHitBy(mv.to, mover).length === 0;
+    if (!flankNoCore) out.push(contact ? {
       id: 'center',
       weight: 66,
       led: `opens up the center`,
@@ -452,6 +522,17 @@ export function computeMoveFundamentals(
       // twice and taught nothing (Blumenfeld walk F2).
       imperative: `open up the center — challenge their pawn on ${andList(contactBy)}`,
       squares: [mv.to],
+    } : mv.to[0] !== 'd' && mv.to[0] !== 'e' && coreHitBy(mv.to, mover).length > 0 ? {
+      // A FLANK PAWN fights for the center from the side — it does not stake
+      // it out (hand walk 2026-09-27: "stake out the center … with the pawn
+      // to c5" on 1…c5, the Sicilian's whole idea being to contest d4).
+      id: 'center',
+      weight: 66,
+      led: `fights for ${andList(coreHitBy(mv.to, mover))} from the side`,
+      selfContained: `fights for ${andList(coreHitBy(mv.to, mover))} from the side with the pawn to ${mv.to}`,
+      imperative: `fight for ${andList(coreHitBy(mv.to, mover))} from the side`,
+      reason: 'a flank pawn that trades itself for a center pawn leaves you two center pawns against their one',
+      squares: [mv.to, ...coreHitBy(mv.to, mover)],
     } : {
       id: 'center',
       weight: 66,
@@ -502,7 +583,11 @@ export function computeMoveFundamentals(
         squares: [mv.to, ...guards],
       });
     }
-  } else if (mv.piece !== 'p' && mv.piece !== 'k' && rankOf(mv.from) !== homeRank && !out.some((f) => f.id === 'development' || f.id === 'outpost')) {
+  } else if (mv.piece !== 'p' && mv.piece !== 'k' && rankOf(mv.from) !== homeRank && !out.some((f) => f.id === 'development' || f.id === 'outpost')
+    // NOT IN AN ENDING, for every consumer (Learn walk 2026-10-01: "the best
+    // move is Rg5 — it takes aim at the center, hitting d5 and e5" in a rook
+    // ending; the filter lived in one caller and the question lane missed it).
+    && !isEndgameByMaterial(fenBefore)) {
     // A square holding the mover's OWN piece is defended, not "hit" — "Qf5
     // takes aim at the center, hitting d5 and e4 and e5" named three of Black's
     // own pawns (Blumenfeld walk F19).
@@ -522,7 +607,9 @@ export function computeMoveFundamentals(
 
   // ── OPEN FILE — a rook (or queen) onto an open / half-open file: the file
   //    where a rook belongs.
-  if (mv.piece === 'r' || mv.piece === 'q') {
+  // A rook already on the file does not "take" it by sliding along it (manual
+  // claim check 2026-09-30, item 11: Rd8-d7 "takes the half-open d-file").
+  if ((mv.piece === 'r' || mv.piece === 'q') && fileOf(mv.from) !== fileOf(mv.to)) {
     const openness = fileOpenness(after, fileOf(mv.to), mover);
     if (openness) {
       const name = PIECE_NAME[mv.piece];
@@ -685,7 +772,11 @@ export function computeMoveFundamentals(
   // "Prepares d4" is the better statement of "supports the center, guarding
   // d4" — the same pawn, the same square — so the support clause steps aside.
   const prepared = ideas.find((f) => f.id === 'prepare-break');
-  const kept = prepared ? out.filter((f) => !(f.id === 'center' && f.led.startsWith('supports the center'))) : out;
+  // "Completes your development" already says the piece develops — one
+  // development claim per move (Bowdler walk 2026-09-27, 20…Nc6 spoke both,
+  // joined by "and").
+  const completes = ideas.some((f) => f.id === 'development-complete');
+  const kept = out.filter((f) => !(prepared && f.id === 'center' && f.led.startsWith('supports the center')) && !(completes && f.id === 'development'));
   kept.push(...ideas);
   return kept.sort((a, b) => b.weight - a.weight);
 }
@@ -775,6 +866,33 @@ function openingIdeas(
     }
   }
 
+  // SAVE THE PIECE — a piece their next capture would win (hanging, or hit by
+  // something cheaper) steps to a square where taking it no longer wins
+  // anything. The pawn case is `keep-working` above; this is every other
+  // attacker (review walk 2026-10-01: 4.Be2, the b5 bishop hit by …Bd7 with
+  // nothing guarding it, went silent).
+  if (isPiece && !mv.captured && !out.some((f) => f.id === 'keep-working')) {
+    const won = legalSeeGainFor(fenBefore, mv.from, them);
+    if (won > 0 && legalSeeGainFor(after.fen(), mv.to, them) === 0) {
+      const hitters = before.attackers(mv.from, them)
+        .flatMap((sq) => { const p = before.get(sq); return p ? [{ sq, p }] : []; })
+        .sort((a, b) => (MATERIAL_VALUE[a.p.type] ?? 0) - (MATERIAL_VALUE[b.p.type] ?? 0));
+      const h = hitters[0];
+      if (h?.p) {
+        const name = PIECE_NAME[mv.piece];
+        const by = h.p.type === 'p' ? `the pawn on ${h.sq}` : `their ${PIECE_NAME[h.p.type]} on ${h.sq}`;
+        out.push({
+          id: 'keep-working',
+          weight: 58,
+          led: `saves the ${name} from ${by}`,
+          selfContained: `saves the ${name} from ${by}`,
+          imperative: `move the ${name} away from ${by} before it is taken for nothing`,
+          squares: [mv.from, mv.to, h.sq],
+        });
+      }
+    }
+  }
+
   // STEP THE QUEEN OFF THE FILE — the queens face each other on a file with
   // only pawns between; one pawn exchange there opens it and trades them off.
   // Leaving the file first keeps them on (his 11.Qe1 before e5). Board-only:
@@ -849,7 +967,9 @@ function openingIdeas(
   }
 
   // DEVELOPMENT COMPLETE — the last minor off its home square.
-  if ((mv.piece === 'n' || mv.piece === 'b') && rankOf(mv.from) === homeRank && homeMinorCount(after, mover) === 0) {
+  // Only from a starting square: on move 39 a bishop that wandered back to its
+  // home rank and out again "completed your development" (review walk 2026-09-27).
+  if ((mv.piece === 'n' || mv.piece === 'b') && rankOf(mv.from) === homeRank && ORIGINAL_FILES[mv.piece].includes(mv.from[0]) && homeMinorCount(after, mover) === 0) {
     out.push({
       id: 'development-complete',
       weight: 70,
@@ -967,6 +1087,24 @@ function renderStrategic(
   return lead.map((f) => f[form]).join(', and ');
 }
 
+/** The CLAIM KEYS a strategic why makes — computed from the fundamentals
+ *  themselves, never read back out of the prose. The keys the positional read
+ *  writes for the same ideas, so one idea is one saying across lanes. */
+export function strategicClaims(
+  fenBefore: string,
+  moveSan: string,
+  moverColor: 'white' | 'black',
+): string[] {
+  if (isForcedReply(fenBefore, moveSan)) return [];
+  return leadingFundamentals(fenBefore, moveSan, moverColor).flatMap((f) =>
+    f.id === 'open-file' && f.squares[0] ? [`file-${f.squares[0][0]}`]
+      : f.id === 'king-safety' ? ['castle-now']
+        // A pawn push the plan names is the same idea as "g4 is the pawn
+        // break" said by another lane (Alekhine re-walk ply 75).
+        : f.id === 'space' && f.squares[0] ? [`break-${f.squares[0]}`]
+          : []);
+}
+
 /** The LED positional clause (verb-first) — for a surface that has ALREADY named
  *  the move, e.g. the hint ("Your knight to f3 — {this}"). Null when quiet. */
 export function strategicWhyLed(
@@ -998,23 +1136,130 @@ export function strategicWhyImperative(
   return renderStrategic(fenBefore, moveSan, moverColor, 'imperative');
 }
 
+/** WHY the rule holds — one clause, said with the principle the one time it is
+ *  taught. The imperative alone ("develop into the game, fighting for the
+ *  center on d4 and e5") names what the move does and teaches nothing (David
+ *  2026-09-27: "There needs to be a teaching element"); the reason is the
+ *  lesson. Null where the imperative already carries its reason ("prepare f5 —
+ *  when the f-pawn goes forward, it will be supported"). A `Record` so a new
+ *  fundamental fails to compile until someone decides its reason. */
+const PRINCIPLE_REASON: Record<MoveFundamental['id'], string | null> = {
+  development: 'a piece left at home cannot join the fight, and whoever has more pieces out wins the fights when the center opens',
+  'open-diagonal': 'a bishop shut in behind its own pawns is a spectator',
+  center: 'pieces behind a strong center reach either wing in a move or two',
+  'king-safety': 'a king left in the middle gets caught the moment the center opens',
+  outpost: 'a piece no pawn can chase stays there for the whole game',
+  'open-file': 'a rook needs an open file to reach their camp',
+  tempo: 'every move they spend retreating is a move they do not spend developing',
+  'attack-defender': null,
+  'keep-working': null,
+  'prepare-break': null,
+  'development-complete': null,
+  'rook-behind-pawn': null,
+  'queen-off-file': null,
+  'king-activity': null,
+  promotion: null,
+  'passed-pawn': null,
+  luft: null,
+  space: SPACE_RULE,
+  // From the shipped concept:pos-prophylaxis ("prevents the opponent's plan before it starts").
+  prophylaxis: 'stop what they want before you chase what you want: a square their piece never reaches is a plan it never starts',
+};
+
+/** THE ONE PLACE a fundamental's reason is resolved: its own shape's reason,
+ *  `null` when the shape carries none, else the id's general reason. Every
+ *  caller reads it here, so the opening and middlegame paths cannot disagree. */
+function reasonFor(f: Pick<MoveFundamental, 'id' | 'reason'>): string | null {
+  return f.reason !== undefined ? f.reason : PRINCIPLE_REASON[f.id];
+}
+
+/** Whether a rule's reason is written from the MOVER's seat ("their camp",
+ *  "every move they spend retreating"). Said of the opponent's move, such a
+ *  reason points at the wrong side ("Their O-O prepares d5 … every move THEY
+ *  spend retreating" — the student's knight retreats; Learn walk 2026-10-01),
+ *  so `ruleForPurpose` speaks only seat-neutral reasons for the opponent. A
+ *  `Record`, so a new fundamental must say which it is. */
+const REASON_NAMES_SIDES: Record<MoveFundamental['id'], boolean> = {
+  development: false,
+  'open-diagonal': false,
+  center: false,
+  'king-safety': false,
+  outpost: false,
+  'open-file': true,
+  tempo: true,
+  'attack-defender': false,
+  'keep-working': false,
+  'prepare-break': false,
+  'development-complete': false,
+  'rook-behind-pawn': false,
+  'queen-off-file': false,
+  'king-activity': false,
+  promotion: false,
+  'passed-pawn': false,
+  luft: false,
+  space: true,
+  prophylaxis: true,
+};
+
+/** The reason a rule gives is TRUE on this board. The tempo reason talks about
+ *  developing, so past the point where the side kicked has any minor left at
+ *  home it is false ("h3 kicks their bishop … a move they do not spend
+ *  developing" on move 15 with every black minor out) — the move still says
+ *  what it does, without the reason. */
+function reasonHolds(f: Pick<MoveFundamental, 'id'>, fenBefore: string, mover: 'white' | 'black'): boolean {
+  if (f.id !== 'tempo') return true;
+  try {
+    return homeMinorCount(new Chess(fenBefore), mover === 'white' ? 'b' : 'w') > 0;
+  } catch { return false; }
+}
+
 /** A principle taught once per game on a quiet student opening ply (S2): the
- *  move, and the rule it follows. The rule is the board's own imperative clause
- *  (`computeMoveFundamentals`), so nothing here is asserted without proof. */
+ *  move, the rule it follows, and WHY the rule holds. The rule is the board's
+ *  own imperative clause (`computeMoveFundamentals`), so nothing here is
+ *  asserted without proof. */
 export function principleOnceLine(
   san: string,
-  f: Pick<MoveFundamental, 'imperative'>,
+  f: Pick<MoveFundamental, 'imperative' | 'id'> & Pick<MoveFundamental, 'reason'>,
   /** Rotation key — required, stable about the moment (`stemKeyOf` of the
    *  board the move was played from). Only the wrapper rotates. */
   stemKey: number,
 ): string {
+  const reason = reasonFor(f);
+  if (!reason) return `${san}: ${f.imperative}.`;
   return rotateStem([
-    `${san} follows a principle worth keeping: ${f.imperative}.`,
-    `The principle behind ${san}: ${f.imperative}.`,
-    `${san} does what the opening asks — ${f.imperative}.`,
-    `There's a rule behind ${san}: ${f.imperative}.`,
+    `${san} follows a rule worth keeping: ${f.imperative} — ${reason}.`,
+    `The rule behind ${san}: ${f.imperative}, because ${reason}.`,
   ], stemKey);
 }
+
+/** Which repeats still TEACH once their principle has been taught. A stem that
+ *  only restates the rule on a new square ("Bg7 develops into the game,
+ *  fighting for the center on e5") names what the student can see and teaches
+ *  nothing (David 2026-09-27) — silent. One whose clause is a consequence the
+ *  student must weigh (a kick that gains time, the lone guard, a break
+ *  prepared, a rook behind its pawn) speaks. Development speaks on repeat only
+ *  when it is `forcing` (it hits their queen or rook). */
+const REPEAT_TEACHES: Record<MoveFundamental['id'], boolean> = {
+  development: false,
+  'open-diagonal': false,
+  center: false,
+  'king-safety': false,
+  outpost: true,
+  'open-file': true,
+  tempo: true,
+  'attack-defender': true,
+  'keep-working': true,
+  'prepare-break': true,
+  'development-complete': true,
+  'rook-behind-pawn': true,
+  'queen-off-file': true,
+  'king-activity': false,
+  promotion: false,
+  'passed-pawn': false,
+  luft: false,
+  space: false,
+  prophylaxis: false,
+};
 
 /** Which positive fundamentals are opening PRINCIPLES a beginner is taught.
  *  Space grabs with a flank pawn and prophylaxis are real fundamentals but not
@@ -1072,8 +1317,11 @@ function middlegameKey(f: MoveFundamental): string {
  * One helper for every surface (Learn's composer and review's [rule] facet).
  */
 export function principleLine(
-  fenBefore: string, san: string, mover: 'white' | 'black', taught: ReadonlySet<string>, stemKey: number,
+  fenBefore: string, san: string, mover: 'white' | 'black', taughtIds: ReadonlySet<string>, stemKey: number,
 ): { id: string; text: string; squares: string[]; first: boolean } | null {
+  // A line that carries two claims ("mg:…|mg-rule:…") is committed as one id by
+  // some callers and split by others — read it the same either way.
+  const taught: ReadonlySet<string> = new Set([...taughtIds].flatMap((k) => k.split('|')));
   // PAST THE OPENING a clean move still has a why — its lead fundamental as a
   // stem, every time (Rd1 "takes the open d-file", g4 "kicks their knight off
   // h5"). Before this, the rule lane closed with the opening and every quiet
@@ -1098,15 +1346,81 @@ export function principleLine(
       .filter((f) => !(endgame && (f.id === 'center' || f.id === 'space')))
       .sort((a, b) => b.weight - a.weight)
       .find((f) => !taught.has(middlegameKey(f)));
-    return lead ? { id: middlegameKey(lead), text: `${san} ${lead.led}.`, squares: lead.squares, first: true } : null;
+    if (!lead) return null;
+    // THE RULE RIDES WITH THE PURPOSE, once a game (unify-the-coach B1, David
+    // 2026-10-01: "Rules to follow, golden nuggets"). "Ne3 lands on the e3
+    // outpost" described the move; the first outpost of the game also says
+    // why outposts matter. The id carries both keys ('|'), so the fact and
+    // its rule are each said once.
+    const ruleKey = `mg-rule:${lead.id}`;
+    const reason = reasonFor(lead);
+    if (reason && !taught.has(ruleKey) && reasonHolds(lead, fenBefore, mover)) {
+      return { id: `${middlegameKey(lead)}|${ruleKey}`, text: `${san} ${lead.led} — ${reason}.`, squares: lead.squares, first: true };
+    }
+    return { id: middlegameKey(lead), text: `${san} ${lead.led}.`, squares: lead.squares, first: true };
   }
   const fresh = principleToTeach(fenBefore, san, mover, taught);
   if (fresh) return { id: fresh.id, text: principleOnceLine(san, fresh, stemKey), squares: fresh.squares, first: true };
   const lead = computeMoveFundamentals(fenBefore, san, mover)
     .filter((f) => IS_OPENING_PRINCIPLE[f.id])
     .sort((a, b) => b.weight - a.weight)[0];
-  if (!lead) return null;
+  if (!lead || !(REPEAT_TEACHES[lead.id] || lead.forcing)) return null;
   return { id: lead.id, text: `${san} ${lead.led}.`, squares: lead.squares, first: false };
+}
+
+/**
+ * THE RULE THE BEST MOVE KEPT, ON A MOVE THAT KEPT NONE (review walk
+ * 2026-10-02, game 1: h4, g4 and h5 were owed teaching and went silent — none
+ * was graded a mistake, so no fundamental fired, and `principleLine` has
+ * nothing to say about a move that follows no opening rule). The board answers
+ * it without judging the move played: the engine's move applies an opening
+ * principle, and that principle is the lesson. Says nothing about `san` itself
+ * (it was not flagged, so no cost may be claimed). Full once per principle —
+ * sharing `principleLine`'s say-once ids, so a rule taught either way is not
+ * taught twice — then the move and what it does.
+ */
+export function principleContrastLine(
+  fenBefore: string, san: string, bestSan: string | null, mover: 'white' | 'black', taughtIds: ReadonlySet<string>, stemKey: number,
+): { id: string; text: string; squares: string[]; first: boolean } | null {
+  if (!bestSan) return null;
+  const strip = (x: string): string => x.replace(/[+#!?]+$/, '');
+  if (strip(bestSan) === strip(san)) return null;
+  if (!openingWindowOpen(fenBefore, mover)) return null;
+  if (isForcedReply(fenBefore, san)) return null;
+  const played = computeMoveFundamentals(fenBefore, san, mover).filter((f) => IS_OPENING_PRINCIPLE[f.id]);
+  if (played.length) return null;
+  const lead = computeMoveFundamentals(fenBefore, bestSan, mover)
+    .filter((f) => IS_OPENING_PRINCIPLE[f.id])
+    .sort((a, b) => b.weight - a.weight)[0];
+  if (!lead) return null;
+  const taught: ReadonlySet<string> = new Set([...taughtIds].flatMap((k) => k.split('|')));
+  const best = strip(bestSan);
+  const reason = reasonFor(lead);
+  if (!taught.has(lead.id) && reason && reasonHolds(lead, fenBefore, mover)) {
+    return {
+      id: lead.id,
+      text: rotateStem([
+        `${best} was the opening move here — ${lead.imperative}: ${reason}.`,
+        `The opening rule in this spot: ${lead.imperative} (${best}) — ${reason}.`,
+      ], stemKey),
+      squares: lead.squares, first: true,
+    };
+  }
+  return { id: `contrast:${lead.id}`, text: `${best} ${lead.led} — the opening move here.`, squares: lead.squares, first: false };
+}
+
+/** The opening principle a quiet move applies that was ALREADY taught this
+ *  game — the reason `principleLine` stays silent on it. Null when the move
+ *  applies no opening principle, or one not yet taught. The coverage
+ *  instrument reads it so a say-once silence is told apart from a gap. */
+export function principleAlreadyTaught(
+  fenBefore: string, san: string, mover: 'white' | 'black', taught: ReadonlySet<string>,
+): string | null {
+  if (san.includes('x') || !openingWindowOpen(fenBefore, mover)) return null;
+  const lead = computeMoveFundamentals(fenBefore, san, mover)
+    .filter((f) => IS_OPENING_PRINCIPLE[f.id])
+    .sort((a, b) => b.weight - a.weight)[0];
+  return lead && taught.has(lead.id) ? lead.id : null;
 }
 
 /** The home-square bishop (c1/f1 or c8/f8) whose MOVES grew by at least two
@@ -1150,4 +1464,44 @@ function tempoTarget(
     }
   }
   return null;
+}
+
+/** The core center squares (d4 e4 d5 e5) a pawn on `sq` attacks. */
+function coreHitBy(sq: string, color: 'w' | 'b'): string[] {
+  const f = sq.charCodeAt(0); const r = Number(sq[1]) + (color === 'w' ? 1 : -1);
+  return [f - 1, f + 1].map((x) => `${String.fromCharCode(x)}${r}`).filter((t) => ['d4', 'e4', 'd5', 'e5'].includes(t));
+}
+
+/**
+ * THE RULE BEHIND A PREPARED MOVE (unify-the-coach B1, 2026-10-01). A purpose
+ * line ("Bc4 clears the way to castle", "…Nbd7 prepares …Rad8") described the
+ * plan and never said why it is worth having. The prepared move's own lead
+ * fundamental, read on the board where it would be played, carries the reason
+ * from the one table (`PRINCIPLE_REASON`) — once a game, on the same ledger the
+ * principle lines use (`keys` holds both the opening id and the middlegame rule
+ * key, so neither surface re-teaches it). Null when the move follows no rule
+ * with a reason, or the rule was already taught.
+ */
+export function ruleForPurpose(
+  fenWherePlayed: string,
+  preparedSan: string,
+  mover: 'white' | 'black',
+  taught: ReadonlySet<string>,
+  /** Whose move this purpose belongs to — required, so a caller decides. */
+  speaker: 'student' | 'opponent',
+): { text: string; keys: string[] } | null {
+  let fen = fenWherePlayed;
+  try {
+    // The prepared move is the MOVER's next one; read it with the mover to play.
+    const parts = fen.split(' ');
+    parts[1] = mover === 'white' ? 'w' : 'b';
+    parts[3] = '-';
+    fen = parts.join(' ');
+    new Chess(fen).move(preparedSan);
+  } catch { return null; }
+  const lead = computeMoveFundamentals(fen, preparedSan, mover)
+    .filter((f) => reasonFor(f) && !taught.has(f.id) && !taught.has(`mg-rule:${f.id}`) && reasonHolds(f, fen, mover) && (speaker === 'student' || !REASON_NAMES_SIDES[f.id]))
+    .sort((a, b) => b.weight - a.weight)[0];
+  if (!lead) return null;
+  return { text: reasonFor(lead) as string, keys: [lead.id, `mg-rule:${lead.id}`] };
 }

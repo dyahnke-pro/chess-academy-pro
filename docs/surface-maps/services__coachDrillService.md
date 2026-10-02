@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6082) — names `coachDrillService`
+- **The standard post-deploy ritual** (CLAUDE.md:6129) — names `coachDrillService`
 
 ## Who calls in
 
@@ -24,8 +24,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isDrillableAid` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2755`
-- `src/components/Coach/CoachTeachPage.tsx:4202`
+- `src/components/Coach/CoachTeachPage.tsx:2830`
+- `src/components/Coach/CoachTeachPage.tsx:4278`
 - `src/services/coachDrillService.test.ts:72`
 - `src/services/coachDrillService.test.ts:75`
 - `src/services/coachDrillService.test.ts:109`
@@ -34,9 +34,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `pickCoachDrill` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2650`
-- `src/components/Coach/CoachTeachPage.tsx:2766`
-- `src/components/Coach/CoachTeachPage.tsx:4218`
+- `src/components/Coach/CoachTeachPage.tsx:2725`
+- `src/components/Coach/CoachTeachPage.tsx:2841`
+- `src/components/Coach/CoachTeachPage.tsx:4294`
 - `src/services/coachDrillService.test.ts:12`
 - `src/services/coachDrillService.test.ts:52`
 - `src/services/coachDrillService.test.ts:60`
@@ -46,7 +46,7 @@
 - `src/services/coachDrillService.test.ts:81`
 
 ### `pickMasterDrill` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2428`
+- `src/components/Coach/CoachTeachPage.tsx:2503`
 - `src/services/coachDrillService.test.ts:114`
 - `src/services/coachDrillService.test.ts:125`
 
@@ -54,7 +54,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `drillKeyOf` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2599`
+- `src/components/Coach/CoachTeachPage.tsx:2674`
 - `src/services/coachDrillService.mistakes.test.ts:74`
 
 ### `mistakePuzzleToDrill` (function) — 5 call sites
@@ -65,7 +65,7 @@
 - `src/services/coachDrillService.test.ts:40`
 
 ### `hasImportedGames` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2481`
+- `src/components/Coach/CoachTeachPage.tsx:2556`
 - `src/services/coachDrillService.mistakes.test.ts:230`
 - `src/services/coachDrillService.mistakes.test.ts:238`
 - `src/services/coachDrillService.mistakes.test.ts:246`
@@ -91,8 +91,8 @@
 - `src/services/coachDrillService.mistakes.test.ts:216`
 
 ### `buildMistakeDrillQueue` (function) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2444`
-- `src/components/Coach/CoachTeachPage.tsx:2528`
+- `src/components/Coach/CoachTeachPage.tsx:2519`
+- `src/components/Coach/CoachTeachPage.tsx:2603`
 - `src/services/coachDrillService.mistakes.test.ts:58`
 - `src/services/coachDrillService.mistakes.test.ts:66`
 - `src/services/coachDrillService.mistakes.test.ts:72`
@@ -115,23 +115,23 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `advanceMistakeDrill` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2620`
+- `src/components/Coach/CoachTeachPage.tsx:2695`
 - `src/services/coachDrillAdvance.test.ts:18`
 - `src/services/coachDrillAdvance.test.ts:28`
 - `src/services/coachDrillAdvance.test.ts:39`
 - `src/services/coachDrillAdvance.test.ts:50`
 
 ### `drillWrongMoveBeat` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:2705`
+- `src/components/Coach/CoachTeachPage.tsx:2780`
 
 ### `drillSolvedBeat` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:2603`
+- `src/components/Coach/CoachTeachPage.tsx:2678`
 
 ### `drillHintBeat` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:10629`
+- `src/components/Coach/CoachTeachPage.tsx:11548`
 
 ### `drillContinueBeat` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:2730`
+- `src/components/Coach/CoachTeachPage.tsx:2805`
 
 ## Tests
 

@@ -780,8 +780,11 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
         reward({ kind: 'pip', square: move.to, step: currentPlayerMove, seed: rewardSeed(puzzle.id) + currentPlayerMove });
       }
 
-      // Check if puzzle is fully solved
-      if (nextIndex >= allMoves.length) {
+      // SOLVED — on the student's last move OR on the opponent's reply when the
+      // stored line ends with one (walk 2026-10-01: three of four generated
+      // lines ended on a reply, and the board sat at "3/3" forever — no
+      // celebration, no why, no Next button, no capability evidence).
+      const finishSolved = (): void => {
         setState('correct');
         resolve(!hasMadeMistakeRef.current, Math.round(elapsedMs));
         reward({ kind: 'solved', square: move.to, step: currentPlayerMove, seed: rewardSeed(puzzle.id) });
@@ -834,6 +837,9 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
             void speakBestMoveWhy();
           }, 800);
         }
+      };
+      if (nextIndex >= allMoves.length) {
+        finishSolved();
         // Stay on 'correct' state until the user taps Next.
         return;
       }
@@ -855,6 +861,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
             setFen(newFen);
             setBoardKey((k) => k + 1);
             setMoveIndex(nextIndex + 1);
+            if (nextIndex + 1 >= allMoves.length) finishSolved();
           } catch {
             // Invalid opponent move — puzzle data is corrupted, fail gracefully
             setState('incorrect');

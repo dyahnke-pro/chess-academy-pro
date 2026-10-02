@@ -23,6 +23,7 @@ import { recordCapabilityEvidence } from '../../services/capabilityEvidence';
 import { MISTAKE_CP } from '../../services/engineConstants';
 import type { MethodHabit } from '../../services/methodBeat';
 import { recordTacticOutcome } from '../../services/tacticAlertService';
+import { recordPuzzleMiss, type PuzzleMissRecord } from '../../services/puzzleMissService';
 import { usePuzzleMeter } from '../../hooks/usePuzzleMeter';
 import { getTacticTypeFromThemes, getPrimaryThemeLabel } from '../../services/tacticClassifierService';
 import { describeMoveGeometry } from '../../services/groundedAnswer';
@@ -75,6 +76,9 @@ interface PuzzleBoardProps {
   /** Size the board to the screen HEIGHT as well as its width, so a surface
    *  with a score row above it never pushes the bottom rank off-screen. */
   fitViewport?: boolean;
+  /** Which Tactics surface hosts the board — a missed puzzle is recorded
+   *  under it (`recordPuzzleMiss`). REQUIRED so a new host has to answer. */
+  surface: PuzzleMissRecord['surface'];
 }
 
 function parseUciMoves(uci: string): { from: string; to: string; promotion?: string }[] {
@@ -94,6 +98,7 @@ export function PuzzleBoard({
   headerExtra,
   hintOnMiss = false,
   fitViewport = false,
+  surface,
 }: PuzzleBoardProps): JSX.Element {
   // The line's depth, counted (never a theme tag), and how far the student is.
   const totalMoves = useMemo(() => Math.max(1, solverMoves(puzzle)), [puzzle]);
@@ -406,6 +411,18 @@ export function PuzzleBoard({
     if (consumedIdRef.current !== puzzle.id) {
       consumedIdRef.current = puzzle.id;
       meter.consume();
+      // DUAL-USE (David 2026-10-01): a puzzle that ends unsolved is a miss of
+      // its motif — recorded once, as weaker evidence than a game miss.
+      if (!correct) {
+        let solveFen = puzzle.fen;
+        try {
+          const c = new Chess(puzzle.fen);
+          const first = movesRef.current[0];
+          if (first) c.move({ from: first.from, to: first.to, promotion: first.promotion });
+          solveFen = c.fen();
+        } catch { /* the setup FEN is the honest fallback */ }
+        void recordPuzzleMiss({ puzzleId: puzzle.id, themes: puzzle.themes, fen: solveFen, rating: puzzle.rating, surface });
+      }
     }
     onComplete({
       correct,
@@ -415,7 +432,7 @@ export function PuzzleBoard({
       cleanMoves: cleanMovesRef.current,
       solveTimeMs: Date.now() - solveStartRef.current,
     });
-  }, [onComplete, tacticType, subtitle, puzzle.id, meter]);
+  }, [onComplete, tacticType, subtitle, puzzle.id, puzzle.fen, puzzle.themes, puzzle.rating, surface, meter]);
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing' || disabled) return;

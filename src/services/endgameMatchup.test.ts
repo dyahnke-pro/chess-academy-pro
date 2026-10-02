@@ -36,7 +36,9 @@ describe('endgameMatchup — class reducer', () => {
   });
 
   it('queen-endgame: queens and pawns only', () => {
-    expectClass('6k1/5p2/8/8/8/8/5PQ1/6K1 w - - 0 1', 'queen-endgame');
+    expectClass('q5k1/5p2/8/8/8/8/5PQ1/6K1 w - - 0 1', 'queen-endgame');
+    // One queen against bare pawns is not a queen ending (Damiano walk 2026-09-27).
+    expectClass('6k1/5p2/8/8/8/8/5PQ1/6K1 w - - 0 1', 'pieces-vs-pawns');
   });
 
   it('queen-vs-rook: Q for one side, R for the other', () => {

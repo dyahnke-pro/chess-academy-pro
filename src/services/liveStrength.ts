@@ -45,8 +45,18 @@ export function startLiveStrength(rating: number): LiveStrength {
  */
 export function updateLiveStrength(
   s: LiveStrength,
-  move: { fenBefore: string; san: string; moverColor: 'white' | 'black'; cpLoss: number | null },
+  move: {
+    fenBefore: string; san: string; moverColor: 'white' | 'black'; cpLoss: number | null;
+    /** What the move said in gem terms (`gemMoveSignal`) — a trap walked into
+     *  or a refutation found/missed. Counts even where no fundamental was posed:
+     *  gems are mined at amateur bands, so each one places the player. */
+    gem?: 'walked-into' | 'punished' | 'missed-punish' | null;
+  },
 ): LiveStrength {
+  if (move.gem) {
+    const next = move.gem === 'punished' ? s.rating + STEP_UP : s.rating - STEP_DOWN;
+    return { rating: Math.min(LIVE_MAX, Math.max(LIVE_MIN, next)), evidence: s.evidence + 1 };
+  }
   if (move.cpLoss == null) return s;
   let posed: ReturnType<typeof capabilitiesPosed>;
   try { posed = capabilitiesPosed(move.fenBefore, move.san, move.moverColor); } catch { return s; }

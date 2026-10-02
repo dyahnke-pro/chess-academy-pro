@@ -10,7 +10,7 @@ import { dispatchCoachTurn } from '../../coach/dispatchCoachTurn';
 import { detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { extractMoveArrows } from '../../services/coachMoveExtractor';
-import { groundArrows } from '../../utils/arrowGrounding';
+import { admitArrows, namedMoveClaim } from '../../services/arrowDoor';
 import { detectInGameChatIntent } from '../../services/inGameChatIntent';
 import { tryCaptureForgetIntent, tryCaptureOpeningIntent } from '../../services/openingIntentCapture';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
@@ -1135,9 +1135,13 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           // the geometry wrong (David 2026-06-15: a bogus knight arrow on the
           // play board). CoachTeachPage already grounds at its arrow site; this
           // in-game chat path did not, so the bad arrows reached the board.
+          // Through the arrow door: the model chose these squares, so each is
+          // checked as an unvouched move — legal and safe on this board, or a
+          // real sight line — and coloured by whose piece it is.
           for (const cmd of annotations) {
             if (cmd.type === 'arrow' && cmd.arrows) {
-              cmd.arrows = groundArrows(cmd.arrows, fen);
+              const ctx = { fen, studentColor: playerColor };
+              cmd.arrows = admitArrows(cmd.arrows.map((a) => namedMoveClaim(a.startSquare, a.endSquare, ctx, undefined, 'gameChat.marker')), ctx).arrows;
             }
           }
           const { actions: streamedActions } = parseActions(answer.text);

@@ -16,9 +16,11 @@
 import { Chess } from 'chess.js';
 import type { StockfishAnalysis } from '../types';
 import { findHangingPieces } from './tacticClassifier';
-import { proofAgainstMover } from './exchangeLedger';
+import { proofAgainstMover, proofForMover } from './exchangeLedger';
 import { strategicWhyLed } from './moveFundamentals';
 import { legalSeeGainFor } from './positionReadingService';
+import { isPinnedPiece } from './nextPlans';
+import { andList, orList } from '../utils/andList';
 
 const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 
@@ -88,6 +90,9 @@ export interface Deliberation {
   /** Why the best move is best, from the board (`strategicWhyLed`). Null when
    *  the board gives no reason — then the verdict is not spoken. */
   bestWhy: string | null;
+  /** The best move's own line, played out, when it proves a win of material
+   *  or mate within the horizon — the "if X, then Y" half of the verdict. */
+  bestLine?: string | null;
 }
 
 function uciToSan(fen: string, uci: string): string | null {
@@ -174,7 +179,12 @@ export function buildDeliberation(input: {
     if (!san || san === bestSan || san === excludeSan) continue;
     const evalCp = moverEval(l);
     const deltaCp = Math.max(0, bestEval - evalCp);
-    const drop = dropsAfter(fenBefore, l.moves[0], moverColor);
+    // A DROP THE ENGINE DOES NOT PUNISH IS NOT A DROP (Damiano walk 2026-09-27:
+    // "Bh6 was cleaner" then "Bh6? That drops the knight on a7" — the knight is
+    // loose, but taking it walks into something worse, so the line holds). A
+    // piece left en prise only counts when the eval says it costs.
+    const loose = dropsAfter(fenBefore, l.moves[0], moverColor);
+    const drop = loose && Math.max(0, bestEval - moverEval(l)) >= CLEARLY_WORSE_CP ? loose : null;
     const shortfall: Shortfall = drop ? 'drops-material' : deltaCp >= CLEARLY_WORSE_CP ? 'clearly-worse' : 'less-precise';
     const proof = proofAgainstMover(fenBefore, l.moves, moverColor);
     alternatives.push({
@@ -185,7 +195,11 @@ export function buildDeliberation(input: {
   }
 
   const bestWhy = moveWhy(fenBefore, bestSan, moverColor, input.opponentLastSan);
-  return { best, alternatives, isRealChoice: alternatives.length > 0, bestWhy };
+  // Played out only when it takes more than the move itself to see (3+ plies):
+  // a one-move win is already the reason.
+  const played = proofForMover(fenBefore, bestLine.moves, moverColor);
+  const bestLineText = played && played.plies >= 3 ? played.text : null;
+  return { best, alternatives, isRealChoice: alternatives.length > 0, bestWhy, bestLine: bestLineText };
 }
 
 
@@ -232,13 +246,47 @@ export function deliberationFacts(d: Deliberation): string {
   // "Clearly worse here" is a verdict, not a reason (rule 1, hand walk 1380:
   // "cxb3? Clearly worse here."). An alternative is ruled out loud only with
   // the line that proves it or the piece it drops.
-  const reasoned = meaningfulAlternatives(d).filter((a) => !!a.proof || (a.shortfall === 'drops-material' && !!a.drops));
+  const reasoned = reasonedAlternatives(d);
   if (!d.isRealChoice || reasoned.length === 0) return '';
   // THE VERDICT CARRIES ITS REASON, or it is not said (David 2026-09-24:
   // "The move is Rxf3" alone is an order, not teaching). The weighing still
   // stands on its own — ruling the bad moves out IS the thinking out loud.
-  const verdict = d.bestWhy ? ` The move is ${d.best.san} — it ${d.bestWhy}.` : '';
-  return `${reasoned.map(shortfallText).join(' ')}${verdict}`;
+  const line = d.bestLine ? ` ${d.bestLine[0].toUpperCase()}${d.bestLine.slice(1)}.` : '';
+  const verdict = d.bestWhy ? ` The move is ${d.best.san} — it ${d.bestWhy}.${line}` : '';
+  // WEIGH THE CANDIDATES BEFORE NAMING ONE (plan P2 #4): name the moves on the
+  // table first, then rule the bad ones out, then conclude. Said only when a
+  // conclusion follows — naming candidates and never choosing is not thinking
+  // out loud. Alphabetical, so the order never telegraphs the answer.
+  const opener = verdict
+    ? `Candidates: ${orList([...new Set([...reasoned.map((a) => a.san), d.best.san])].sort())}. `
+    : '';
+  return `${opener}${reasoned.map(shortfallText).join(' ')}${verdict}`;
+}
+
+/** The alternatives ruled out WITH a reason — the line that proves it or the
+ *  piece it drops. The weighing speaks only these. */
+function reasonedAlternatives(d: Deliberation): Candidate[] {
+  return meaningfulAlternatives(d).filter((a) => !!a.proof || (a.shortfall === 'drops-material' && !!a.drops));
+}
+
+/**
+ * THE WEIGHING WITH THE ANSWER HELD BACK (David 2026-10-02: "hold the move only
+ * at deciding moments, and the student's next move on the board is the answer").
+ * The bad moves are ruled out loud — that is the thinking — and the move that
+ * holds is kept for after the student has answered on the board. Empty when
+ * there is nothing reasoned to rule out.
+ */
+export function deliberationWeighing(d: Deliberation): string {
+  if (!d.isRealChoice) return '';
+  return reasonedAlternatives(d).map(shortfallText).join(' ');
+}
+
+/** The held answer — the move and the reason it is the move, or null when no
+ *  reason is computed (a bare "the move is X" is an order, not teaching). */
+export interface HeldVerdict { san: string; why: string; line: string | null }
+export function deliberationVerdict(d: Deliberation): HeldVerdict | null {
+  if (!d.isRealChoice || !d.bestWhy) return null;
+  return { san: d.best.san, why: d.bestWhy, line: d.bestLine ?? null };
 }
 
 /** The alternatives that are a real fork in the road — they drop material or
@@ -274,5 +322,102 @@ export function deliberationAlternativesFacts(d: Deliberation): string {
  *  d5"). The ONE reason computer behind "The move is X" — shared so every lane
  *  that names a move gives the same reason. Null when nothing is computable. */
 export function moveWhy(fenBefore: string, san: string, mover: 'w' | 'b', opponentLastSan: string | null): string | null {
-  return materialWhy(fenBefore, san, mover, opponentLastSan) ?? strategicWhyLed(fenBefore, san, mover === 'w' ? 'white' : 'black');
+  return materialWhy(fenBefore, san, mover, opponentLastSan)
+    ?? threatAnswerWhy(fenBefore, san, mover)
+    ?? threatMadeWhy(fenBefore, san, mover)
+    ?? strategicWhyLed(fenBefore, san, mover === 'w' ? 'white' : 'black')
+    ?? checkWhy(fenBefore, san);
+}
+
+/** The plain fact of a check, when nothing richer is computed — in an ending
+ *  the centre reason no longer stands in for it (Rh5+ "takes aim at the
+ *  center, hitting d5" was the king on d5, Learn walk 2026-10-01). */
+function checkWhy(fenBefore: string, san: string): string | null {
+  if (!/\+$/.test(san)) return null;
+  try {
+    const c = new Chess(fenBefore);
+    const m = c.move(san);
+    const k = c.board().flat().find((x) => x && x.type === 'k' && x.color !== m.color);
+    return k ? `checks the king on ${k.square}` : null;
+  } catch { return null; }
+}
+
+/**
+ * THE THREAT, AND THE MOVE THAT MEETS IT (David 2026-09-27 — the corpus names
+ * the threat and the answer together: "the threat is Qe7 hitting e4, so you
+ * double back to f3"). The coach named the threat and stopped; when the move
+ * IS the answer, its reason should say so. Two board-true shapes:
+ *  - another of the mover's pieces (a minor or more) that the opponent was
+ *    winning is safe after the move — a defender arrived or the attacker was
+ *    blocked;
+ *  - a piece pinned to the king before the move is free after it.
+ * The moved piece itself is `strategicWhyLed`'s "steps out of reach", not this.
+ */
+export function threatAnswerWhy(fenBefore: string, san: string, mover: 'w' | 'b'): string | null {
+  try {
+    const board0 = new Chess(fenBefore);
+    const after = new Chess(fenBefore);
+    const m = after.move(san);
+    if (!m) return null;
+    const opp: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
+    const mine = board0.board().flat().flatMap((c) => (c && c.color === mover && c.type !== 'k' ? [c] : []));
+    for (const c of mine) {
+      if (c.square === m.from || VAL[c.type] < 3) continue;
+      const still = after.get(c.square);
+      if (!still || still.color !== mover) continue;
+      if (legalSeeGainFor(fenBefore, c.square, opp) <= 0) continue;
+      if (legalSeeGainFor(after.fen(), c.square, opp) > 0) continue;
+      // TAKING THE ATTACKER IS NOT GUARDING (hand walk 1690, 2026-09-27:
+      // 18.Nxf7 "guards the queen on h6" — it removed the knight that forked it).
+      if (m.captured && board0.attackers(c.square, opp).includes(m.to)) {
+        return `takes the ${PNAME[m.captured]} that was hitting the ${PNAME[c.type]} on ${c.square}`;
+      }
+      return `guards the ${PNAME[c.type]} on ${c.square}, which they were about to win`;
+    }
+    for (const c of mine) {
+      if (c.square === m.from) continue;
+      if (isPinnedPiece(board0, c.square, mover) && !isPinnedPiece(after, c.square, mover) && after.get(c.square)?.color === mover) {
+        return `breaks the pin on the ${PNAME[c.type]} on ${c.square}`;
+      }
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * THE MOVE MAKES A THREAT (question walk 2026-09-27: "why did they play e5?"
+ * was graded and costed but never said e5 hits the knight on f6). The moved
+ * piece now attacks an enemy piece that is worth more than it, or that nothing
+ * defends — the question the opponent must answer next move.
+ */
+export function threatMadeWhy(fenBefore: string, san: string, mover: 'w' | 'b'): string | null {
+  try {
+    const after = new Chess(fenBefore);
+    const m = after.move(san);
+    if (!m || m.captured || after.inCheck()) return null;
+    const opp: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
+    const targets = after.board().flat()
+      .flatMap((c) => (c && c.color === opp && c.type !== 'k' && c.type !== 'p' ? [c] : []))
+      .filter((c) => after.attackers(c.square, mover).includes(m.to))
+      .filter((c) => VAL[c.type] > VAL[m.piece] || after.attackers(c.square, opp).length === 0)
+      .sort((a, b) => VAL[b.type] - VAL[a.type]);
+    if (targets.length === 0) return null;
+    return `attacks ${andList(targets.map((t) => `the ${PNAME[t.type]} on ${t.square}`))}`;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The held answer in words. `now` — the student tapped "show me" before
+ * moving; `found` — they played it; `missed` — they played something else and
+ * nothing before this named the move. The reason always rides with the move.
+ */
+export function heldVerdictText(v: HeldVerdict, when: 'now' | 'found' | 'missed'): string {
+  const line = v.line ? ` ${v.line[0].toUpperCase()}${v.line.slice(1)}.` : '';
+  if (when === 'found') return `That was the move here — it ${v.why}.`;
+  if (when === 'missed') return `The move here was ${v.san} — it ${v.why}.${line}`;
+  return `The move is ${v.san} — it ${v.why}.${line}`;
 }

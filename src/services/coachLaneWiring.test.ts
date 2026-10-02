@@ -42,7 +42,6 @@ describe('every producer we added has a live consumer', () => {
     ['the rear-facing PV', BACKWARD, 'whatItAllowed('],
     ['the structural drawback', BACKWARD, 'findStudentDrawback('],
     ['the backward look, from the surface', TEACH, 'backwardLook('],
-    ['the backward look, from the hook', HOOK, 'backwardLook('],
   ];
   for (const [name, file, symbol] of wired) {
     it(`${name} is called`, () => {
@@ -59,14 +58,14 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
   it('the plan arc is queued on its own lane (closed until WO-2 proves it true)', () => {
     // It carried kind 'plan', which the old DNA kind whitelist never listed, so
     // from 2026-09-27 to 2026-09-29 it was computed every turn and never heard.
-    expect(TEACH).toMatch(/queueSpokenHint\(probe\.fen\(\), line, 'planArc', e\.squares\)/);
+    expect(TEACH).toMatch(/queueSpokenHint\(probe\.fen\(\), line, 'planArc', e\.squares[,)]/);
   });
 
   it('the coach callout is queued at the rank the model gives it', () => {
     // Not a literal 'coachMistake' any more: the coach half runs through
     // `backwardLook`, which returns the lane along with the line, so the rank
     // is decided in ONE place for both sides instead of at each call site.
-    expect(TEACH).toMatch(/queueSpokenHint\(cm\.fenAfter, look\.line, look\.kind\)/);
+    expect(TEACH).toMatch(/queueSpokenHint\(cm\.fenAfter, look\.line, look\.kind[,)]/);
     expect(BACKWARD, "the coach's lane is not the one David ranked second")
       .toMatch(/kind: 'coachMistake'/);
   });
@@ -85,9 +84,17 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     // WITHOUT its opening loss when the verdict already named that loss — one
     // fact once. The verdict still leads.)
     expect(TEACH).toMatch(/const evidence = sameLoss && look\.withoutAttempt \? look\.withoutAttempt\.line : look\.line;/);
-    expect(TEACH).toMatch(/const line = fundamental\s*\?\s*`\$\{fundamental\.verdict\}[\s\S]{0,160}?\$\{evidence\}[\s\S]{0,20}?`\s*:\s*look\.line/);
+    // (2026-09-27: the line now closes with the move's concession, review
+    // parity — the verdict still leads, the evidence still follows it.)
+    // (Najdorf re-walk 2026-09-27: the verdict stands down only when the grade
+    // already names the SAME lost square — `lossInGrade`.)
+    expect(TEACH).toMatch(/const line = `\$\{fundamental\s*\?\s*`\$\{lossInGrade \? '' : bookSaid \? fundamental\.howOnly : fundamental\.verdict\}[\s\S]{0,160}?\$\{evidence\}[\s\S]{0,20}?`\.trim\(\)\s*:\s*`\$\{look\.line\}\$\{takeDefinition\(look\.pattern\)\}`\}\$\{concession \? ` \$\{concession\}` : ''\}`;/);
+    // (unify-the-coach B3, 2026-10-01: the grade's missed pattern carries its
+    // rule once a game, from the one definition ledger.)
+    expect(TEACH).toMatch(/const concession = lookConcession\(fenBefore, move\.san, cpLoss\);/);
     // A fundamental with NO material drawback still speaks, on its own.
-    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, fundamental\.verdict, 'fundamental', \[\]\)/);
+    // (Colle re-walk 2026-09-27: graded on the student-move board, `move.fen`.)
+    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, bookSaidAlone \? fundamental\.howOnly : fundamental\.verdict, 'fundamental', \[\], [^,]*\? \['convert-method'\] : undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines\)/);
   });
 
   it('the hint register speaks rather than only prompting', () => {
@@ -131,16 +138,20 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
   });
 
   it('the queued package is actually spoken', () => {
-    expect(TEACH).toMatch(/speakTrackA\(hintPkg\.spoken\)/);
+    expect(TEACH).toMatch(/speakTrackA\(hintPkg\.spoken[,)]/);
   });
 
   it('every Track A line reaches the voice THROUGH voiceFacts (G0 — handed to the model seam)', () => {
     // David 2026-09-24: "everything built needs to be deterministic, worded by
     // the DNA, and handed to LLM". Track A used to call speakForced(line)
     // directly, so Learn's computed lines never met the one chokepoint.
-    const body = TEACH.slice(TEACH.indexOf('const speakTrackA = (line: string)'), TEACH.indexOf('instantSpokenText = instantSpokenText'));
+    const body = TEACH.slice(TEACH.indexOf('const speakTrackA = (line: string'), TEACH.indexOf('instantSpokenText = instantSpokenText'));
     expect(body.length).toBeGreaterThan(0);
     expect(body).toMatch(/speakComputed\(line, \{ forced: true, intent: 'learn-live' \}\)/);
+    // …and a question-then-answer line (the think pause) speaks BOTH halves
+    // through the same seam.
+    expect(body).toMatch(/speakComputed\(qa\[0\], \{ forced: true, intent: 'learn-live' \}\)/);
+    expect(body).toMatch(/speakComputed\(qa\[1\], \{ forced: true, intent: 'learn-live' \}\)/);
     expect(body).not.toMatch(/voiceService\.speak/);
   });
 });
@@ -294,8 +305,11 @@ describe('the couplings that make the wiring safe', () => {
   });
 
   it('one model computes the backward look, so the two callers cannot drift', () => {
-    expect(HOOK_CODE, 'the hook re-implements the lanes instead of calling the model')
-      .toMatch(/backwardLook\(\{/);
+    // The hook used to call the model too, for `lastMoveDrawback` — a value no
+    // surface read (the page is pinned NOT to, above). Deleted 2026-10-02
+    // (G8.5: nothing computed and dropped). The hook may neither re-implement
+    // the lanes nor bring the orphan back.
+    expect(HOOK_CODE, 'the hook computes a backward look nobody reads').not.toMatch(/backwardLook\(\{/);
     expect(HOOK_CODE).not.toMatch(/findStudentDrawback\(\{/);
     // The import may carry sibling exports (`lastCoachVerdictDecline` joined
     // it 2026-09); what is pinned is that `backwardLook` itself is imported
@@ -501,7 +515,10 @@ describe('the couplings that make the wiring safe', () => {
     // `opening-to-middlegame` at ply 15, his move 8 — and a prod probe caught
     // it being called with correct arguments. The report was built and thrown
     // away, which is the hardest kind of dead lane to see: everything works.
-    expect(TEACH).toMatch(/runPhaseTransition\(liveFenRef\.current, move\.san/);
+    // Captured from the live board up front; the call itself now waits for the
+    // move verdict (see the ply-28 block below) but still reads that board.
+    expect(TEACH_CODE).toMatch(/const phaseFen = liveFenRef\.current;/);
+    expect(TEACH_CODE).toMatch(/runPhaseTransition\(phaseFen, phaseSan/);
     expect(TEACH_CODE, 'the transition is judged against a board that has already moved on')
       .not.toMatch(/runPhaseTransition\(move\.fen/);
   });
@@ -566,5 +583,17 @@ describe('the couplings that make the wiring safe', () => {
     expect(TEACH).toMatch(/const rating = studentPlayingRating\(activeProfile\)/);
     expect(TEACH_CODE, 'the game record rebuilt the rating resolution inline')
       .not.toMatch(/const rating = activeProfile\?\.currentRating \?\? activeProfile\?\.puzzleRating/);
+  });
+});
+
+describe('the move verdict goes before the phase beat (Sicilian Closed ply 28, 2026-09-27)', () => {
+  it('the phase transition waits for the verdict pass and stands down on a mistake', () => {
+    // e6 lost the queen; in the same breath the phase beat took stock ("You're
+    // down 2 points of material here", "Their rook on f3 is well placed").
+    expect(TEACH_CODE).toMatch(/const verdictPass = factsReady\.then\(/);
+    expect(TEACH_CODE).toMatch(/if \(look \|\| fundamental\) mistakeCalledThisTurn = true;/);
+    expect(TEACH_CODE).toMatch(/verdictPass\.then\([\s\S]{0,200}if \(mistakeCalledThisTurn \|\| liveFenRef\.current !== phaseFen\) return;\s*runPhaseTransition\(phaseFen/);
+    // NEGATIVE: no call fires the transition straight from the move handler.
+    expect(TEACH_CODE).not.toMatch(/runPhaseTransition\(liveFenRef\.current/);
   });
 });

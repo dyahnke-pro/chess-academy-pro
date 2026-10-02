@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { transferClause, recordMotif, withTransfer, type MotifLedger } from './motifLedger';
+import { transferClause, transferMotifOf, recordMotif, withTransfer, type MotifLedger } from './motifLedger';
 
 describe('motifLedger — same idea as move N', () => {
   it('refers back to the first move the motif was taught, for a NEW instance', () => {
@@ -22,5 +22,16 @@ describe('motifLedger — same idea as move N', () => {
       .toBe("There's a pin here for you — the same idea as move 3. Remember — a pin freezes.");
     expect(withTransfer('No phrase.', '')).toBe('No phrase.');
     expect(withTransfer('No terminal', ' — x')).toBe('No terminal — x.');
+  });
+});
+
+describe('only a tactic motif transfers (review walks 2026-09-27)', () => {
+  it('a principle identity is not a motif', () => {
+    expect(transferMotifOf('rule-stem:12:development')).toBeNull();
+    expect(transferMotifOf('rule:development')).toBeNull();
+    expect(transferMotifOf('refuted:Nxe4')).toBeNull();
+  });
+  it('NEGATIVE CONTROL: a tactic identity is', () => {
+    expect(transferMotifOf('motif:pin@w:g5f6d8')).toEqual({ motif: 'pin@w', instance: 'g5f6d8' });
   });
 });

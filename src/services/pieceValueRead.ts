@@ -27,6 +27,9 @@ import { Chess, type Square } from 'chess.js';
 import { CAPTURE_VALUE } from './pieceValues';
 import { findPieceQuality } from './positionReadingService';
 import { isOnHomeSquare } from './development';
+import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
+import { THINK_MARK } from '../utils/thinkPause';
+import type { ArrowClaim } from './arrowDoor';
 
 export interface PieceValue {
   square: string;
@@ -156,10 +159,35 @@ export function strongestByDelta(
   return { square: best.v.square, piece: best.v.piece, contribution: +Math.abs(own(best.v)).toFixed(2), delta: +best.d.toFixed(2) };
 }
 
+/** The colour's UNDERPERFORMING piece — lowest contribution vs its own kind.
+ *  The twin of `strongestByDelta`, on the same scale-free delta, so "best" and
+ *  "worst" can never disagree. Excludes king + pawns. */
+export function weakestByDelta(
+  values: readonly PieceValue[],
+  color: 'w' | 'b',
+): { square: string; piece: string; contribution: number; delta: number } | null {
+  if (values.length === 0) return null;
+  const own = (v: PieceValue): number => (v.color === 'w' ? v.value : -v.value);
+  const mean = meanByType(values);
+  const cand = values.filter((v) => v.color === color && !'kp'.includes(v.piece.toLowerCase()));
+  if (cand.length === 0) return null;
+  const worst = cand
+    .map((v) => ({ v, d: Math.abs(own(v)) - (mean.get(v.piece.toLowerCase()) ?? Math.abs(own(v))) }))
+    .sort((a, b) => a.d - b.d)[0];
+  return { square: worst.v.square, piece: worst.v.piece, contribution: +Math.abs(own(worst.v)).toFixed(2), delta: +worst.d.toFixed(2) };
+}
+
 export interface PieceQualityLine {
   text: string;
   kind: 'their-best-piece' | 'your-worst-piece';
+  /** The idea this line states, in the ledger other lanes share — an unmoved
+   *  piece is the DEVELOPMENT idea, which the positional read and the
+   *  behaviour lane also state (fresh-game walk 2026-09-27: development said
+   *  three ways on one move). */
+  ideaKey?: string;
   squares: string[];
+  /** The answer's move, drawn when the answer is spoken. */
+  arrows?: ArrowClaim[];
 }
 
 /**
@@ -232,8 +260,21 @@ export function pieceQualityLines(
   },
 ): PieceQualityLine[] {
   const out: PieceQualityLine[] = [];
-  if (values.length === 0) return out;
   const me: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+  // THE TABLE MUST DESCRIBE THIS BOARD (manual claim check 2026-09-30, item
+  // 195: "the bishop on e6" with e6 empty). The engine's `eval` answer is
+  // async and can belong to an earlier position; an entry whose square does
+  // not hold that piece now is dropped, never spoken.
+  if (opts?.fen) {
+    try {
+      const board = new Chess(opts.fen);
+      values = values.filter((v) => {
+        const cell = board.get(v.square as Square);
+        return !!cell && cell.color === v.color && cell.type === v.piece.toLowerCase();
+      });
+    } catch { /* unreadable board: keep the table as read */ }
+  }
+  if (values.length === 0) return out;
 
   // Contribution is printed white-positive; each side's own good is the
   // magnitude in their direction.
@@ -262,21 +303,20 @@ export function pieceQualityLines(
   // already doing work this early IS the exception worth naming.
   const best = theirs.filter((v) => v.piece.toLowerCase() !== 'p')
     .filter((v) => opts?.isMiddlegame === true || !onHomeSquare(v))
-    // …and a MINOR still on its home square is never their best piece, in any
-    // phase — it is undeveloped (walk 3UqPa5eV2e0, 18…e5: "their knight on g8
-    // is the piece doing the most work for them"). The middlegame lifts the
-    // home-square guard for rooks and the queen, which can work from home.
-    .filter((v) => !('nb'.includes(v.piece.toLowerCase()) && onHomeSquare(v)))
+    // …and in ANY phase a piece still on its home square is doing work only as
+    // a rook or queen looking down a file free of its own pawns (fresh-game
+    // walk 2026-09-27, move 10: "their queen on d1 is the piece doing the most
+    // work" — an unmoved queen behind its own d2-pawn, crowned because it
+    // measured a shade above the other side's unmoved queen).
+    .filter((v) => !onHomeSquare(v) || ('rq'.includes(v.piece.toLowerCase()) && (!opts?.fen || rookFileFree(opts.fen, v))))
     .filter((v) => opts?.isMiddlegame === true || !'nb'.includes(v.piece.toLowerCase()))
     // …and a pre-middlegame ROOK counts as "doing work" only on a file free of
     // its own pawns. Castling is not work: on move six of a Philidor (hand walk
     // 2026-09-24) the rook that had just castled to f8, behind its own f7-pawn,
     // was crowned "the piece doing the most work for them".
-    .filter((v) => opts?.isMiddlegame === true || v.piece.toLowerCase() !== 'r' || rookFileFree(opts?.fen, v))
-    // …and in the middlegame too, when the board is in hand: a rook behind its
-    // own pawn is not their best piece (walk 3UqPa5eV2e0, 18…e5 after the Ng8
-    // fix: "their rook on h8 is the piece doing the most work" — h6 in front).
-    .filter((v) => opts?.isMiddlegame !== true || !opts?.fen || v.piece.toLowerCase() !== 'r' || rookFileFree(opts.fen, v))
+    // …in EVERY phase (walk 2026-09-30, move 10: "the rook on b1 is doing the
+    // most work" standing behind its own b-pawn).
+    .filter((v) => v.piece.toLowerCase() !== 'r' || (opts?.fen ? rookFileFree(opts.fen, v) : opts?.isMiddlegame === true))
     // …and a piece the student can simply TAKE is not one to "trade off"
     // (hand walk 2000: Rxd8 just took, nothing defended it, and the coach said
     // "their rook on d8 is the piece doing the most work — trade it off").
@@ -297,10 +337,15 @@ export function pieceQualityLines(
     const key = `best:${phase}`;
     if (!said?.has(key)) {
       said?.add(key);
+      // QUESTION FIRST, THEN THE ANSWER (David 2026-09-30): he asks which
+      // piece is doing the work, lets you look, then names it — and the move
+      // that challenges it, when there is one.
+      const ch = challengeMove(opts?.fen, best.v.square, me);
       out.push({
         kind: 'their-best-piece',
-        squares: [best.v.square],
-        text: `Their ${NAME[best.v.piece.toLowerCase()]} on ${best.v.square} is the piece doing the most work for them — trading it off takes the sting out of the position.`,
+        squares: [best.v.square, ...(ch ? [ch.to] : [])],
+        text: `Which of their pieces is doing the most work? ${THINK_MARK} The ${NAME[best.v.piece.toLowerCase()]} on ${best.v.square}${ch ? ` — ${ch.san} challenges it` : ''}, and trading it off takes the sting out of the position.`,
+        arrows: ch ? [{ from: ch.from, to: ch.to, role: 'play', source: 'pieceQuality.challenge' }] : undefined,
       });
     }
   }
@@ -314,11 +359,17 @@ export function pieceQualityLines(
   // the same wrong-intent as the queen case). Danya reroutes minors, not rooks.
   // Also a MIDDLEGAME idea only — in the opening a minor is idle because it
   // isn't developed YET, not because it is misplaced (the caller passes phase).
-  const worst = mine.filter((v) => v.piece.toLowerCase() === 'n' || v.piece.toLowerCase() === 'b')
+  const minors = mine.filter((v) => v.piece.toLowerCase() === 'n' || v.piece.toLowerCase() === 'b')
     .filter((v) => !atWork(opts?.fen, v.square, me))
-    .filter((v) => v.square !== opts?.justMovedTo)
-    .map((v) => ({ v, d: delta(v) }))
-    .sort((a, b) => a.d - b.d)[0];
+    .filter((v) => v.square !== opts?.justMovedTo);
+  // A MINOR STILL AT HOME IS THE WORST PIECE, whatever the table says about
+  // the developed ones (hand walk 2026-09-27, Alekhine: "your knight on c3 is
+  // doing the least of anything you own" with the f1 bishop not yet moved).
+  // Development comes before rerouting.
+  const home = opts?.isMiddlegame === true ? minors.find((v) => onHomeSquare(v)) : undefined;
+  const worst = home
+    ? { v: home, d: -1 }
+    : minors.map((v) => ({ v, d: delta(v) })).sort((a, b) => a.d - b.d)[0];
   if (opts?.isMiddlegame !== false && worst && worst.d <= -0.3) {
     const key = `worst:${phase}`;
     if (!said?.has(key)) {
@@ -326,6 +377,7 @@ export function pieceQualityLines(
       out.push({
         kind: 'your-worst-piece',
         squares: [worst.v.square],
+        ideaKey: onHomeSquare(worst.v) ? 'student-development' : undefined,
         // Still on its home square it is UNDEVELOPED, not misplaced — the
         // advice is the development rule, not a reroute (hand walk
         // 2026-09-24: the c1-bishop at move nine; his line a few moves later
@@ -333,12 +385,59 @@ export function pieceQualityLines(
         // to finish").
         text: onHomeSquare(worst.v)
           ? `Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} hasn't moved yet — in general, finish your development before starting anything new.`
-          : `Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} is doing the least of anything you own — finding it a better square is worth more than a new plan.`,
+          // The metric compares a piece with the others of its KIND on this
+          // board, so that is all the sentence claims.
+          : betterSquare(opts?.fen, worst.v.square)
+            ? `Which of your pieces is doing the least? ${THINK_MARK} Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} — ${betterSquare(opts?.fen, worst.v.square)?.text}`
+            : `Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} is doing less than a ${NAME[worst.v.piece.toLowerCase()]} should here — finding it a better square is worth more than a new plan.`,
+        arrows: onHomeSquare(worst.v) ? undefined : betterSquare(opts?.fen, worst.v.square)?.arrows,
       });
     }
   }
 
   return out;
+}
+
+/** A move that CHALLENGES their best piece: a piece of the student's, of
+ *  equal or lower value, lands on a safe square attacking it. Null if none. */
+function challengeMove(fen: string | undefined, square: string, me: 'w' | 'b'): { san: string; from: string; to: string } | null {
+  if (!fen) return null;
+  try {
+    const parts = fen.split(' '); parts[1] = me; parts[3] = '-';
+    const b = new Chess(parts.join(' '));
+    if (b.inCheck()) return null;
+    const target = b.get(square as Square);
+    if (!target) return null;
+    const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
+    for (const m of b.moves({ verbose: true })) {
+      if (m.captured || m.piece === 'k' || m.piece === 'p') continue;
+      if ((CAPTURE_VALUE[m.piece] ?? 0) > (CAPTURE_VALUE[target.type] ?? 0)) continue;
+      const after = new Chess(b.fen());
+      after.move(m.san);
+      if (!after.attackers(square as Square, me).includes(m.to)) continue;
+      if (after.attackers(m.to, them).length > after.attackers(m.to, me).length) continue;
+      // A challenger a cheaper piece simply takes is not a challenge (manual
+      // claim check 2026-09-30, item 136: "Nd5 challenges it" — …exd5).
+      const cheapest = Math.min(...after.attackers(m.to, them).map((sq) => CAPTURE_VALUE[after.get(sq)?.type ?? 'k'] ?? 99));
+      if (cheapest < (CAPTURE_VALUE[m.piece] ?? 0)) continue;
+      return { san: m.san, from: m.from, to: m.to };
+    }
+  } catch { /* none */ }
+  return null;
+}
+
+/** Where the student's worst minor wants to go, and how — from the route
+ *  computers. Null when neither finds a better square. */
+function betterSquare(fen: string | undefined, square: string): { text: string; arrows: ArrowClaim[] } | null {
+  if (!fen) return null;
+  const knight = computePieceRoute(fen, square as Square);
+  const route = knight ? { target: knight.target, route: knight.route } : computeSliderRoute(fen, square as Square);
+  if (!route || route.route.length === 0) return null;
+  const via = route.route.slice(0, -1);
+  return {
+    text: `it wants ${route.target}${via.length ? `, via ${via.join(' and ')}` : ''}.`,
+    arrows: [{ from: square, to: route.route[0], role: 'play', source: 'pieceQuality.route' }],
+  };
 }
 
 /** Squares as chess.js types them, for the callers that mark the board. */

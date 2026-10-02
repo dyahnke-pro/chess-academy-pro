@@ -51,4 +51,8 @@ export interface MatingPattern {
   lessonPositions: MatingLessonPosition[];
   /** Hand-crafted narration. Read aloud via Polly TTS. */
   narration: MatingPatternNarration;
+  /** Where the definition and history were checked (David 2026-10-01: books
+   *  and other sources beyond Wikipedia). Each entry resolves through
+   *  `narrationSources` — a concept id, a Gutenberg book, a game page. */
+  sources: string[];
 }

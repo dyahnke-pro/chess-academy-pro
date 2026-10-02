@@ -3,6 +3,7 @@ import { Chess } from 'chess.js';
 import {
   computeLeadEyeArrows,
   extractMentionedSans,
+  extractArrowableSans,
   resolveSanToArrow,
   colorForRank,
   injectCandidateArrows,
@@ -76,6 +77,25 @@ describe('extractMentionedSans', () => {
   });
 });
 
+describe('a square as the subject of a sentence (Learn walk 2026-10-01, game 2 ply 35)', () => {
+  it('"c5 is a hole in their camp" names a square, not the pawn move c5', () => {
+    expect(extractMentionedSans('Ng5 brings your knight into the attack on their king. c5 is a hole in their camp: your knight on g5 gets there via e4.')).toEqual(['Ng5']);
+  });
+  it('a real pawn move at sentence start still counts', () => {
+    expect(extractMentionedSans('c5 hits the centre at once.')).toEqual(['c5']);
+  });
+});
+
+describe('one refuted-line rule for every surface (2026-10-01)', () => {
+  it('a chat answer never arrows the candidate it refutes, nor its refutation', () => {
+    const text = 'Candidates: Nf5 or Rc8. Rc8? Then Bc2, c5, dxc5, Qxd1 and Bxd1 — you come out behind. The move is Nf5.';
+    expect([...new Set(extractArrowableSans(text))]).toEqual(['Nf5']);
+  });
+  it('a line that "didn\'t work" keeps none of its moves', () => {
+    expect(extractArrowableSans('Nf3 held. h4 didn\'t work: h4, hxg5 and hxg5 — you lose a piece.')).toEqual(['Nf3']);
+  });
+});
+
 describe('resolveSanToArrow', () => {
   it('resolves a legal move to from→to', () => {
     expect(resolveSanToArrow('Nf3', [new Chess().fen()])).toEqual({ from: 'g1', to: 'f3' });
@@ -146,7 +166,7 @@ describe('injectCandidateArrows', () => {
     );
     expect(text).not.toContain('g1-f3'); // the already-played move — no arrow
     expect(injected.some((i) => i.san === 'Nf3')).toBe(false);
-    expect(text).toContain('[BOARD: arrow:b1-c3:yellow]'); // the other move still arrowed
+    expect(text).toContain('[BOARD: arrow:b1-c3:blue]'); // the other move still arrowed — a runner-up is blue (arrow door, 2026-09-29)
     expect(injected.some((i) => i.san === 'Nc3')).toBe(true);
   });
 

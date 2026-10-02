@@ -2,6 +2,7 @@ import { Chess } from 'chess.js';
 import { classifyPhase } from './gamePhaseService';
 import { db } from '../db/schema';
 import { emitWeaknessModelChanged } from './weaknessModelEvents';
+import { conceptSiblingsToPull, mistakeConcept } from './conceptSchedule';
 import { createDefaultSrsFields, calculateNextInterval } from './srsEngine';
 import { stockfishEngine } from './stockfishEngine';
 import { growOneMove, shrinkOnMiss, solveLengthOf } from './mistakeLineGrowth';
@@ -1425,6 +1426,26 @@ export async function gradeMistakePuzzle(
   await db.mistakePuzzles.update(id, updates);
   if (correct) void growMistakePuzzle(id);
 
+  // THE CONCEPT SCHEDULE: a miss fails the IDEA, so its other open cards come
+  // due today and the queue retests the concept on fresh boards.
+  if (!correct) {
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      const pull = conceptSiblingsToPull(puzzle, await db.mistakePuzzles.toArray(), today);
+      for (const sid of pull) await db.mistakePuzzles.update(sid, { srsDueDate: today });
+      if (pull.length > 0) {
+        const { logAppAudit } = await import('./appAuditor');
+        void logAppAudit({
+          kind: 'concept-srs-pulled',
+          category: 'subsystem',
+          source: 'mistakePuzzleService.gradeMistakePuzzle',
+          summary: `${mistakeConcept(puzzle)} missed — ${pull.length} card(s) of the same idea due today`,
+          details: JSON.stringify({ concept: mistakeConcept(puzzle), pulled: pull.length }),
+        });
+      }
+    } catch { /* the card's own grade already landed */ }
+  }
+
   // Invalidate the tactical profile cache so it recomputes with fresh data
   await db.meta.delete('tactical_profile');
   // A drilled mistake changes the spine (status, lifecycle) — the coach must
@@ -1465,6 +1486,24 @@ export async function growMistakePuzzle(id: string, evaluate: EvaluateMulti = en
   } catch {
     // Engine unavailable — the puzzle simply does not grow this time.
   }
+}
+
+// ─── Drilled motifs (positive transfer) ─────────────────────────────────────
+
+/** The tactic motifs the student has SOLVED from their own mistakes, each with
+ *  the opponent of the game it came from (most recent first) — so a live find
+ *  of the same motif can be tied back to the drill ("the fork you drilled from
+ *  your game against X"). Read once per game; a failed read is empty. */
+export async function loadDrilledMotifs(): Promise<Map<TacticType, { opponentName: string | null }>> {
+  const out = new Map<TacticType, { opponentName: string | null }>();
+  try {
+    const rows = await db.mistakePuzzles.toArray();
+    rows
+      .filter((r) => r.tacticType && r.tacticType !== 'tactical_sequence' && r.successes > 0)
+      .sort((a, b) => (b.srsLastReview ?? '').localeCompare(a.srsLastReview ?? ''))
+      .forEach((r) => { if (r.tacticType && !out.has(r.tacticType)) out.set(r.tacticType, { opponentName: r.opponentName }); });
+  } catch { /* no store — nothing drilled */ }
+  return out;
 }
 
 // ─── Delete ─────────────────────────────────────────────────────────────────

@@ -312,10 +312,11 @@ describe('the rear-facing PV — what the move let them do', () => {
 
   it('speaks when the structural read has nothing to say', () => {
     const said = whatItAllowed({
-      fenAfter: AFTER_SLIP,
+      fenBefore: AFTER_SLIP, fenAfter: AFTER_SLIP,
       opponentPv: lineFrom(AFTER_SLIP),
       studentColor: 'white',
       cpLoss: 200,
+      playedSan: null,
     });
     // Not every line describes something, but when it does it must be framed
     // as a consequence rather than as a forecast.
@@ -326,16 +327,17 @@ describe('the rear-facing PV — what the move let them do', () => {
     // Below the bar the opponent's line is just a normal reply, and "that let
     // them…" about ordinary play teaches the student to distrust the coach.
     expect(whatItAllowed({
-      fenAfter: AFTER_SLIP,
+      fenBefore: AFTER_SLIP, fenAfter: AFTER_SLIP,
       opponentPv: lineFrom(AFTER_SLIP),
       studentColor: 'white',
       cpLoss: 20,
+      playedSan: null,
     })).toBeNull();
   });
 
   it('stays quiet when the line is too short to read', () => {
     expect(whatItAllowed({
-      fenAfter: AFTER_SLIP, opponentPv: ['b8c6'], studentColor: 'white', cpLoss: 300,
+      fenBefore: AFTER_SLIP, fenAfter: AFTER_SLIP, opponentPv: ['b8c6'], studentColor: 'white', cpLoss: 300, playedSan: null,
     })).toBeNull();
   });
 
@@ -343,7 +345,7 @@ describe('the rear-facing PV — what the move let them do', () => {
     // The honesty contract holds looking backward as much as forward.
     for (const cp of [80, 200, 900]) {
       const said = whatItAllowed({
-        fenAfter: AFTER_SLIP, opponentPv: lineFrom(AFTER_SLIP), studentColor: 'white', cpLoss: cp,
+        fenBefore: AFTER_SLIP, fenAfter: AFTER_SLIP, opponentPv: lineFrom(AFTER_SLIP), studentColor: 'white', cpLoss: cp, playedSan: null,
       });
       if (said) expect(said.line).not.toMatch(/\b[NBRQK][a-h]?[1-8]?x?[a-h][1-8]\b/);
     }
@@ -351,7 +353,7 @@ describe('the rear-facing PV — what the move let them do', () => {
 
   it('survives an unreadable board without throwing', () => {
     expect(() => whatItAllowed({
-      fenAfter: 'not a fen', opponentPv: lineFrom(AFTER_SLIP), studentColor: 'white', cpLoss: 300,
+      fenBefore: 'not a fen', fenAfter: 'not a fen', opponentPv: lineFrom(AFTER_SLIP), studentColor: 'white', cpLoss: 300, playedSan: null,
     })).not.toThrow();
   });
 });

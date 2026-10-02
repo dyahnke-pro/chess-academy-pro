@@ -92,7 +92,9 @@ describe('positionalTruth — weak colour complex (2026-09-13 add)', () => {
   it('fires when the bishop of that colour is gone and ≥2 own-camp holes are that colour', () => {
     // Black has a light bishop (c8) but NO dark bishop; d6/f6/h6 are dark holes
     // in Black's camp → a dark-square complex weakness for Black.
-    const cc = findColorComplexWeakness('2b3k1/pp3p1p/4p1p1/8/8/8/8/4K3 w - - 0 1');
+    // White keeps a knight — the piece that can settle on those holes (a hole
+    // nothing of theirs can use is not a weakness: hand walk 2026-09-27).
+    const cc = findColorComplexWeakness('2b3k1/pp3p1p/4p1p1/8/8/8/8/N3K3 w - - 0 1');
     expect(cc.some((c) => c.side === 'b' && c.complex === 'dark' && c.squares.includes('d6'))).toBe(true);
   });
   it('does NOT fire when a bishop of that colour still covers the squares', () => {

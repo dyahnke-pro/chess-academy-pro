@@ -176,4 +176,16 @@ describe('TacticSetupBoard', () => {
 
     expect(screen.getByText(/find the quiet move that sets up the/)).toBeInTheDocument();
   });
+
+  // THE FAIL PATH (2026-10-01 tactics walk): a setup the student cannot find
+  // used to have no way out but "End session", and nothing could ever be
+  // counted missed. Show Solution plays the line out and reports a miss.
+  it('Show Solution plays the line out and completes as a miss', async () => {
+    const puzzle = buildSetupPuzzle();
+    const onComplete = vi.fn();
+    render(<TacticSetupBoard puzzle={puzzle} onComplete={onComplete} />);
+    fireEvent.click(screen.getByTestId('setup-show-solution'));
+    await waitFor(() => expect(onComplete).toHaveBeenCalledWith(false), { timeout: 8000 });
+    expect(onComplete).toHaveBeenCalledTimes(1);
+  }, 10000);
 });

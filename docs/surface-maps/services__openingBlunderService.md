@@ -21,9 +21,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `openingFamily` (function) — 9 call sites
-- `src/components/Debug/OpeningBlundersPage.tsx:919`
-- `src/services/coachFeatureService.ts:2799`
-- `src/services/coachFeatureService.ts:3105`
+- `src/components/Debug/OpeningBlundersPage.tsx:935`
+- `src/services/coachFeatureService.ts:3019`
+- `src/services/coachFeatureService.ts:3347`
 - `src/services/homeOpening.ts:114`
 - `src/services/homeOpening.ts:194`
 - `src/services/openingKey.test.ts:50`
@@ -35,7 +35,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `familyLabel` (function) — 4 call sites
-- `src/components/Debug/OpeningBlundersPage.tsx:920`
+- `src/components/Debug/OpeningBlundersPage.tsx:936`
 - `src/services/openingBlunderService.labels.test.ts:6`
 - `src/services/openingBlunderService.labels.test.ts:7`
 - `src/services/openingBlunderService.labels.test.ts:11`
@@ -47,7 +47,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `groupByOpeningFamily` (function) — 2 call sites
-- `src/components/Debug/OpeningBlundersPage.tsx:292`
+- `src/components/Debug/OpeningBlundersPage.tsx:296`
 - `src/services/openingBlunderService.labels.test.ts:12`
 
 ## Tests

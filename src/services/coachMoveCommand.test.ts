@@ -149,8 +149,9 @@ describe('parseCoachMoveCommand — the coach\'s side is read first on the stude
     expect(cmd?.san).toBe('c6');
     expect(cmd?.playableNow).toBe(false);
   });
-  it('NEGATIVE CONTROL: without the coach\'s colour the old reading returns', () => {
-    expect(parseCoachMoveCommand('play c6', board.fen())?.san).toBe('Bc6+');
+  it('a bare square is a pawn even without the coach\'s colour (2026-09-27); a named piece still reaches the bishop', () => {
+    expect(parseCoachMoveCommand('play c6', board.fen())?.san).toBe('c6');
+    expect(parseCoachMoveCommand('play Bc6', board.fen())?.san).toBe('Bc6+');
   });
   it('the game-start hand-over still works ("you play d4" gives the coach White)', () => {
     const cmd = parseCoachMoveCommand('you play d4', new Chess().fen(), 'black');
@@ -159,3 +160,26 @@ describe('parseCoachMoveCommand — the coach\'s side is read first on the stude
   });
 });
 
+
+describe('a bare square is a pawn move (g9 walk, 2026-09-27)', () => {
+  // Black to move, king on d6 in check; White's d5 pawn cannot push yet.
+  const FEN = '2r2b1r/pp3ppp/3k1q2/1B1P1n2/1P3B2/1P6/4NPPP/R2QK2R b KQ - 5 21';
+  it('"play d6+" arms the pawn push for after the student moves — never Bxd6', () => {
+    const cmd = parseCoachMoveCommand('play d6+', FEN, 'white');
+    expect(cmd?.san).toBe('d6+');
+    expect(cmd?.playableNow).toBe(false);
+  });
+});
+
+describe('a bare square is the pawn push, never a capture (pass-3 walk 2026-10-01)', () => {
+  it('"play b5" with our knight on b5 does not arm axb5', async () => {
+    const { Chess } = await import('chess.js');
+    const c = new Chess();
+    for (const m of 'e4 e5 Nc3 Nc6 Nf3 Nf6 d4 exd4 Nd5 Be7 Bd3 d6 h3 Be6 Nxe7 Qxe7 O-O O-O Bg5 h6 Bh4 Ne5 Nxd4 Ng6 Bg3 c5 Nb5 Rad8 Re1 a6'.split(' ')) c.move(m);
+    // White to move, knight on b5, b-pawn blocked: "b5" must not become axb5.
+    const cmd = parseCoachMoveCommand('play b5', c.fen(), 'black');
+    expect(cmd?.san).not.toBe('axb5');
+    c.move('Nc3');
+    expect(parseCoachMoveCommand('play b5', c.fen(), 'black')?.san).toBe('b5');
+  });
+});

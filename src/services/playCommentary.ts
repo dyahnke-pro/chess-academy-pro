@@ -13,6 +13,7 @@
 // them. That is the locked voice law ("speak when it instructs") and the
 // narration rules' "silence is acceptable" — a coach who comments on every
 // recapture teaches nothing and gets tuned out.
+import { THINK_MARK } from '../utils/thinkPause';
 import { Chess } from 'chess.js';
 import type { Square, PieceSymbol } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
@@ -107,7 +108,7 @@ function withTurn(fen: string, color: 'w' | 'b'): string {
  *  actually be exploited"). Can a student slider of `types` reach a square from
  *  which it ATTACKS one of the aligned pieces — already, or within ~2 moves? An
  *  alignment no slider can contest is tidy geometry, not a threat. */
-function toolCanContest(fen: string, aSq: Square, bSq: Square, me: 'w' | 'b', types: PieceSymbol[]): PieceSymbol | null {
+function toolCanContest(fen: string, aSq: Square, bSq: Square, me: 'w' | 'b', types: PieceSymbol[], skipKingEnd = false): PieceSymbol | null {
   // A move that TAKES one of the aligned pair has destroyed the alignment, not
   // exploited it (hand walk 2026-09-24: Rd7 + Qd6 "line up on the d-file" was
   // "contested" by Rxd7 then Rxd6 — the rook ate the geometry it was naming).
@@ -137,7 +138,13 @@ function toolCanContest(fen: string, aSq: Square, bSq: Square, me: 'w' | 'b', ty
   const VAL = CAPTURE_VALUE;
   const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
   const contests = (c: Chess): PieceSymbol | null => {
-    for (const sq of [...c.attackers(aSq, me), ...c.attackers(bSq, me)]) {
+    // WITH A PIECE BETWEEN, HITTING THE KING IS ONLY A CHECK (hand walk 1690,
+    // 2026-09-27: queen d8 / rook f8 / king g8 "line up on the 8th rank, and
+    // you have a queen that moves along it" — the only standpoint was h8,
+    // beside the king, and the rook blocks any x-ray to the queen). The
+    // alignment is used only by hitting the OTHER end through the gap.
+    const ends = [aSq, bSq].filter((e) => !(skipKingEnd && c.get(e)?.type === 'k'));
+    for (const sq of ends.flatMap((e) => c.attackers(e, me))) {
       const p = c.get(sq);
       if (!p || !types.includes(p.type) || !onLine(sq)) continue;
       const hitters = c.attackers(sq, them);
@@ -280,7 +287,7 @@ function findAlignmentSeed(
       // EXPLOITABILITY (David 2026-08-23): the tool must be able to CONTEST the
       // line — attack an aligned piece now or within ~2 moves. "You have a rook
       // that moves along it" is a lie if no rook can ever get onto that line.
-      const contester = toolCanContest(fen, a.square as Square, b.square as Square, me, toolKinds);
+      const contester = toolCanContest(fen, a.square as Square, b.square as Square, me, toolKinds, betweenCount(a, b) === 1);
       if (!contester) continue;
       tool = NAME[contester as string] ?? tool;
       // An alignment is only worth a word if a slider can actually GET on the
@@ -513,7 +520,10 @@ export function buildRejectedTempting(args: {
   /** Engine multipv lines, best first: first move + its reply (UCI), eval
    *  from the STUDENT's perspective in centipawns. */
   lines: Array<{ uci: string; replyUci?: string | null; evalCp: number }>;
-}): { facts: string; hint: HintPackage; temptingSan: string; refutationSan: string } | null {
+  /** Where the opponent's last move landed. A tempting capture ON it is
+   *  their BAIT (census #48: "f4 invites exf4, then Bxf4+"). */
+  baitSquare?: string | null;
+}): { facts: string; hint: HintPackage; temptingSan: string; refutationSan: string; bait: boolean; spoken: string; refutation: { from: string; to: string; fenBefore: string } } | null {
   if (args.lines.length < 2) return null;
   const me: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
   let base: Chess;
@@ -533,6 +543,15 @@ export function buildRejectedTempting(args: {
       // Tempting = it LOOKS like it wins something or forces something.
       const looksGood = tempting.captured !== undefined || probe.isCheck();
       if (!looksGood) continue;
+      // Not bait, not refuted (manual claim check 2026-09-30, items 37, 144):
+      // "Can you take the rook on d7? No — it's bait" when Rxd7 was the BEST
+      // move, and "Bxg5 runs into h6" when Qxg5 won the pawn and Bxg5 still
+      // came out clearly ahead. The best move taking on the same square means
+      // the capture is right, just with another piece; a line that still
+      // leaves the student two pawns up is not refuted.
+      if (tempting.captured !== undefined && args.lines[0].uci.slice(2, 4) === tempting.to) continue;
+      if (line.evalCp >= 200) continue;
+      const fenBeforeRefutation = probe.fen();
       const refutation = probe.move({ from: line.replyUci.slice(0, 2) as Square, to: line.replyUci.slice(2, 4) as Square, promotion: (line.replyUci[4] as 'q' | undefined) ?? undefined });
       if (!refutation) continue;
       const dropPawns = ((bestEval - line.evalCp) / 100).toFixed(1);
@@ -543,15 +562,25 @@ export function buildRejectedTempting(args: {
       // (hintRegister.packageForRegister). The anchor carries both moves
       // because the tempting move alone, without its refutation, would read as
       // a recommendation — every tier has to stand on its own.
+      // THEIR BAIT, question first (David 2026-09-30): the piece their last
+      // move put en prise, taken, runs into the refutation.
+      const bait = !!args.baitSquare && tempting.captured !== undefined && tempting.to === args.baitSquare;
+      // THE SPOKEN PACKAGE — question first, the answer, then what the
+      // register adds (2026-09-30: the old package carried prompt text —
+      // "Name X exactly as given. Do NOT…" — and Learn speaks it raw).
       const hint: HintPackage = {
-        anchor: `TEMPTING BUT REFUTED: ${tempting.san} looks natural — ${why} — but the reply ${refutation.san} refutes it.`,
-        detail: `That line leaves the student about ${dropPawns} points worse than the best plan.`,
-        stakes: 'Teach the habit from this: calculate the opponent\'s most forcing reply BEFORE trusting a tempting move.',
-        withhold: `Name ${tempting.san} and ${refutation.san} exactly as given. Do NOT name or hint at the best move.`,
+        anchor: bait
+          ? `Can you take the ${NAME[tempting.captured ?? 'p'] ?? 'piece'} on ${tempting.to}? ${THINK_MARK} No — it's bait: ${tempting.san} runs into ${refutation.san}.`
+          : `Why not ${tempting.san}? ${THINK_MARK} ${why.charAt(0).toUpperCase()}${why.slice(1)}, but ${refutation.san} refutes it.`,
+        detail: `That line gives up about ${dropPawns} points against the best move.`,
+        stakes: 'Before trusting a tempting move, calculate their most forcing reply.',
       };
       return {
         temptingSan: tempting.san,
         refutationSan: refutation.san,
+        bait,
+        spoken: hint.anchor,
+        refutation: { from: refutation.from, to: refutation.to, fenBefore: fenBeforeRefutation },
         hint,
         facts: packageForRegister(hint, 'moderate'),
       };
@@ -572,7 +601,7 @@ export function buildPriorityFirst(args: {
   studentColor: 'white' | 'black';
   /** Engine best move for the student, UCI. */
   bestUci: string;
-}): { facts: string; hint: HintPackage; targetSquare: string } | null {
+}): { facts: string; hint: HintPackage; targetSquare: string; spoken: string; arrow: { from: string; to: string } } | null {
   const me: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
   const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
   let chess: Chess;
@@ -610,16 +639,23 @@ export function buildPriorityFirst(args: {
     // The detail tier deliberately does NOT name the attacking piece: naming
     // it is naming the move on most boards, and the withhold below would then
     // be contradicting the package it ships with.
+    // THE SPOKEN PACKAGE — the register decides how much is handed over:
+    // the priority always, the move from moderate up, the habit at obvious.
     const hint: HintPackage = {
-      anchor: `PRIORITY FIRST: the opponent's pawn on ${target.square} is ${flaw}, and the strongest plan ATTACKS it.`,
-      detail: `Frame the thought the way strong players do — "our priority is the ${target.square} pawn" — and let them find the move that fits the priority.`,
-      stakes: `A pawn like that cannot run and cannot be defended by a pawn, so every piece aimed at ${target.square} keeps working for free.`,
-      withhold: 'Do NOT name the move or the piece that attacks it.',
+      anchor: `What's the priority here? ${THINK_MARK} Their pawn on ${target.square} — it's ${flaw}.`,
+      detail: `Aim at it: ${moved.san} does.`,
+      stakes: `A pawn like that cannot be defended by a pawn, so every piece aimed at ${target.square} keeps working for free.`,
     };
     return {
       targetSquare: target.square,
       hint,
       facts: packageForRegister(hint, 'moderate'),
+      // WHAT THE STUDENT HEARS — question first, then the priority and the
+      // move that serves it, with its reason (Learn names the move with its
+      // reason, 2026-09-24). The package above is prompt material and must
+      // never reach the voice raw (2026-09-30).
+      spoken: packageForRegister(hint, 'moderate'),
+      arrow: { from: moved.from, to: moved.to },
     };
   } catch {
     return null;
@@ -831,7 +867,9 @@ export function buildPlayCommentary(args: {
     const seedBeat: PlayCommentary = {
       kind: 'seeding-observation',
       key: `seed:${seed.what}:${seed.line}`,
-      spoken: `Their ${seed.what} line up on the same ${seed.line}, and you have a ${seed.tool} that moves along it.${once('worth-noticing', ' Worth noticing.')}`,
+      // WHY it matters, not "worth noticing" (walk 2026-09-30): two pieces on
+      // one line are where a pin or a skewer comes from.
+      spoken: `Their ${seed.what} line up on the same ${seed.line}, and you have a ${seed.tool} that moves along it${once('alignment-why', ' — two pieces on one line is where a pin or a skewer comes from, so keep an eye on it')}.`,
       facts: [
         `ALIGNMENT: the opponent's ${seed.what} line up on the same ${seed.line}. The student owns a ${seed.tool} that moves along that geometry. Point out the alignment as something worth noticing — nothing more. Do NOT suggest a move.`,
       ],
@@ -960,4 +998,34 @@ export function studentMovePoint(
   // and read as its answer. A verb-first point says whose move it is.
   const point = quietMovePoint(fenBefore, san);
   return point ? `${san} ${point.charAt(0).toLowerCase()}${point.slice(1)}` : null;
+}
+
+/** THEIR SLIP IS YOUR CHANCE — the one wording, Learn and Review (David
+ *  2026-10-02: "adding in teachings on opponents moves"). The student's answer
+ *  to the opponent's slip, said with its computed point:
+ *   - `found`: the student played it — "You found it: c5 kicks their rook…"
+ *   - `missed`: they did not — "c5 was the answer to their slip, which…"
+ *   - `review`: retrospective — "your answer was c5, which…"
+ *   - `now`: asked in Play's chat — "Your answer is c5, which…"
+ *  Null when the move-point computer finds no point: a move is named with its
+ *  reason or not at all, and a bare "you found it" is the acknowledgment
+ *  Voice Rule 5 bans. */
+export function slipAnswerText(
+  fenAfterSlip: string,
+  theirSan: string,
+  answerSan: string | null,
+  when: 'found' | 'missed' | 'review' | 'now',
+): string | null {
+  if (!answerSan) return null;
+  const point = studentMovePoint(fenAfterSlip, answerSan, theirSan);
+  // No point → nothing: a bare "you found it" is an acknowledgment, and the
+  // board changing is the acknowledgment (Voice Rule 5; Learn walk 2026-10-02).
+  if (!point) return null;
+  const body = point.replace(/\.$/, '');
+  const sanLed = body.startsWith(`${answerSan} `);
+  const rest = sanLed ? body.slice(answerSan.length + 1) : `${body.charAt(0).toLowerCase()}${body.slice(1)}`;
+  if (when === 'found') return sanLed ? `You found it: ${answerSan} ${rest}.` : `You found it: ${rest}.`;
+  if (when === 'now') return sanLed ? `Your answer is ${answerSan}, which ${rest}.` : `Your answer is ${answerSan}: ${rest}.`;
+  if (when === 'missed') return sanLed ? `${answerSan} was the answer to their slip, which ${rest}.` : `${answerSan} was the answer to their slip: ${rest}.`;
+  return sanLed ? `your answer was ${answerSan}, which ${rest}` : `your answer was ${answerSan}: ${rest}`;
 }

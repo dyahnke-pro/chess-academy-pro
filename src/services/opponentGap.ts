@@ -113,7 +113,28 @@ export function opponentGapClause(
   // game, 2026-09-26): after "You'd love to play Nc5 — but they answer Nxc6",
   // "That reply gives you something" read as Nxc6 when it meant their Nd4.
   const stem = seat === 'dictated' && opponentLastSan ? `${opponentLastSan} gives you something` : GAP_STEM[seat];
-  return `${cap(stem)}: ${san} — it ${why}.`;
+  // A stem that OPENS with their move keeps the move's own case: "c5" is a pawn
+  // move, "C5" is not a move at all (Bowdler walk 2026-09-27, 40…c5).
+  const led = seat === 'dictated' && opponentLastSan ? stem : cap(stem);
+  return `${led}: ${san} — it ${why}.`;
 }
 
 const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+
+/** ONE MOVE, ONE VOICE (Colle walk 2026-09-27, 26…Rxc3: "Rxc3 gives you
+ *  something: Bf6 — it lands on the f6 outpost … The move is Bf6 — it lands on
+ *  the f6 outpost"). When the weighing already concludes on the gap's move, the
+ *  gap line is its echo and stays quiet — the weighing carries more. */
+export function gapEchoedByVerdict(
+  gapSan: string | null,
+  clauses: ReadonlyArray<{ kind: string; text: string; squares?: readonly string[] }>,
+  /** The square the gap's move lands on. A tactic concept whose agent lands
+   *  there (its first square) is the same move told better — "After Ne5, your
+   *  knight on e5 forks …" beside "g4 gives you something: Ne5 — it attacks
+   *  the rook on d7 and the rook on g6" (hand walk 2026-09-27, Alekhine). */
+  gapTo: string | null = null,
+): boolean {
+  if (!gapSan) return false;
+  if (gapTo && clauses.some((c) => c.kind === 'concept' && c.squares?.[0] === gapTo)) return true;
+  return clauses.some((c) => c.kind === 'deliberation' && c.text.includes(`The move is ${gapSan} `));
+}

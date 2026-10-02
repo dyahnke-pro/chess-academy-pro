@@ -89,3 +89,13 @@ describe('the past-tense pass leaves instructions alone and keeps one tense (wal
     expect(out).toMatch(/Qxh7 captured the pawn, created a passed pawn on h2, won material/);
   });
 });
+
+describe('one clause list, one tense (review walk 2026-09-27)', () => {
+  it('"you have the bishop pair" follows "you were up a pawn" into the past', () => {
+    expect(past("Before the endgame gets going, the balance sheet: you're clearly better — you're up a pawn and you have the bishop pair."))
+      .toBe('Before the endgame gets going, the balance sheet: you were clearly better — you were up a pawn and you had the bishop pair.');
+  });
+  it('NEGATIVE CONTROL: "you have to" is a modal and stays', () => {
+    expect(past('You have to keep the knight.')).toBe('You have to keep the knight.');
+  });
+});

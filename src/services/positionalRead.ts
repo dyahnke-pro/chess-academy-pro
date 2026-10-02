@@ -25,6 +25,8 @@
 // It is the LOWEST-priority lane by design. It should never displace a tactic,
 // a threat, a gem or a taught note — it is what plays when none of them have
 // anything, which per the measurement is about half the game.
+import { describeStructure } from './boardStructure';
+import { homeMinorCount } from './development';
 import { Chess, type Color, type Square } from 'chess.js';
 import {
   kingSafetyRead,
@@ -39,6 +41,7 @@ import {
   findOpenFiles,
   bishopBlockingPawns,
   namedPawnStructure,
+  goodPieceIdeaKey,
 } from './positionReadingService';
 
 const NAME: Record<string, string> = {
@@ -62,8 +65,16 @@ export type ObservationKind =
   | 'minority' | 'passer' | 'complex' | 'file';
 
 export interface PositionalObservation {
-  /** Dedupe key for the caller's said-set. */
+  /** Dedupe key for the caller's said-set — keyed on the IDEA, never on a
+   *  square a piece is standing on (fresh-game walk 2026-09-27: "your rook on
+   *  g8 / g7 / g6 has the half-open g-file" four times as the rook slid down
+   *  the file, and "their passed pawn on h2 / h4 / h5 is the danger" three
+   *  times as it ran — every step was a new square, so a new key). */
   key: string;
+  /** Other claims this one also makes — a rook that owns the d-file and "the
+   *  d-file is open" are one claim. Skipped when any is said; all are
+   *  remembered when it speaks. */
+  aliases?: readonly string[];
   /** Whose feature this is. */
   side: 'student' | 'opponent';
   kind: ObservationKind;
@@ -141,7 +152,20 @@ export function castleIsOneMoveAway(fen: string, color: Color): boolean {
   const clear = (files: readonly string[]): boolean => files.every((f) => !b.get(`${f}${r}` as Square));
   const kingSide = rights.includes(color === 'w' ? 'K' : 'k') && clear(['f', 'g']);
   const queenSide = rights.includes(color === 'w' ? 'Q' : 'q') && clear(['b', 'c', 'd']);
-  return kingSide || queenSide;
+  if (!kingSide && !queenSide) return false;
+  // …AND LEGAL: not in check, not through or onto an attacked square (claim
+  // check 2026-09-27: "castling is one move away" twice where the king could
+  // not castle — the squares were empty but attacked). Read with the colour
+  // to move, so the answer is about THEIR next move whoever is on move now.
+  try {
+    const parts = fen.split(' ');
+    parts[1] = color;
+    parts[3] = '-';
+    const probe = new Chess(parts.join(' '));
+    return probe.moves({ verbose: true }).some((m) => m.isKingsideCastle() || m.isQueensideCastle());
+  } catch {
+    return false;
+  }
 }
 
 /** Every observation for one side. */
@@ -179,7 +203,7 @@ function observationsFor(
       key: `${side}-king-centre`, side, kind: 'king', rank: rank('king'),
       squares: [king.square],
       text: own
-        ? 'Your king is still in the centre and castling is ready — getting it tucked away is worth more than anything else right now.'
+        ? 'Your king is still in the centre and castling is one move away — tuck it in before the centre opens.'
         : 'Their king is still in the centre — every line that opens toward it is worth looking at.',
     });
   }
@@ -200,11 +224,27 @@ function observationsFor(
   if (king?.exposed && roads.length > 0 && heavyAttackers > 0) {
     const files = roads.slice(0, 2).join(' and ');
     const plural = roads.length > 1 ? 's are' : ' is';
+    // AND WHAT TO DO ABOUT IT — never the road alone (David 2026-09-30:
+    // "describing the board is what we do not want"). Your king: step it off
+    // the road, or put your own rook on it. Their king: put yours on it.
+    const road = roads[0];
+    const castle = own ? castleOffFile(fen, color) : null;
+    const onto = heavyPieceToFile(fen, own ? color : foeColor, road);
+    const todo = castle
+      ? ` Castle and the king steps off it.`
+      : onto
+        // The IDEA, never the move: a board read speaks every ply, and naming
+        // the move there hands it over (narrationAdversarial). The move is the
+        // student's to find.
+        ? own
+          ? ` Contest it — get your ${onto.piece} onto the ${road}-file first.`
+          : ` Take it — get your ${onto.piece} onto the ${road}-file.`
+        : '';
     out.push({
       key: `${side}-king-open-file`, side, kind: 'king', rank: rank('king'),
       text: own
-        ? `The ${files} file${plural} open toward your king — that is the road an attack would come down.`
-        : `The ${files} file${plural} open toward their king — that is the road an attack would come down.`,
+        ? `The ${files} file${plural} open toward your king — that is the road an attack would come down.${todo}`
+        : `The ${files} file${plural} open toward their king — that is the road an attack would come down.${todo}`,
     });
   }
 
@@ -217,14 +257,20 @@ function observationsFor(
     // One tempo is not a lead in the first moves — White moves first, and
     // "they are ahead in development" after 1.e4 c6 2.Nf3 d5 3.e5 is a nag
     // about one knight (hand walk 1600). Two pieces, or one past move five.
-    const lead = other.developedMinors - mine.developedMinors;
+    // Measured as pieces still AT HOME, the work left — not pieces out, which
+    // read a side that had lost a minor as "behind" with 2 at home each
+    // (claim check 2026-09-28).
+    const lead = asleep - (other.totalMinors - other.developedMinors);
     const moveNo = Number(fen.split(' ')[5] ?? '1') || 1;
     if (asleep >= 2 && (lead >= 2 || (lead >= 1 && moveNo >= 6))) {
       out.push({
         key: `${side}-development`, side, kind: 'development', rank: rank('development'),
         text: own
           ? `You still have ${asleep} minor pieces at home and they are ahead in development — the next move probably belongs to a piece, not a pawn.`
-          : `They still have ${asleep} minor pieces at home — a lead in development is only worth something while it lasts.`,
+          // SEATED AND WHAT TO DO (walk 2026-09-30: "a lead in development is
+          // only worth something while it lasts" never said whose lead, or how
+          // to use it). The lead is the student's; its use is opening the game.
+          : `You're ahead in development — they still have ${asleep} minor pieces at home, so open the position before they catch up.`,
       });
     }
   }
@@ -233,7 +279,8 @@ function observationsFor(
   const outpost = quality.find((q) => q.color === color && q.quality === 'good');
   if (outpost) {
     out.push({
-      key: `${side}-good-${outpost.square}`, side, kind: 'piece', rank: rank('piece'),
+      key: goodPieceIdeaKey(side, outpost.piece, outpost.kind, outpost.square), side, kind: 'piece', rank: rank('piece'),
+      aliases: outpost.kind === 'open-file' || outpost.kind === 'semi-open-file' ? [`file-${outpost.square[0]}`] : [],
       squares: [outpost.square],
       text: own
         ? `Your ${NAME[outpost.piece] ?? 'piece'} on ${outpost.square} is your best-placed piece — ${goodPieceClause(outpost.kind, outpost.square)}.`
@@ -268,9 +315,14 @@ function observationsFor(
   // (hand walk 2340: both said it on one move).
   const isolani = /isolated queen/i.test(namedPawnStructure(fen, color)?.name ?? '');
   if (isolani) weak.isolated = weak.isolated.filter((sq) => sq[0] !== 'd');
+  // A passed pawn is a runner, not a long-term target — the passer read owns it.
+  // (An ADVANCED one — four squares or fewer to queen; a passer still at home
+  // can be a target like any isolated pawn.)
+  const toGo = (sq: Square): number => (color === 'w' ? 8 - Number(sq[1]) : Number(sq[1]) - 1);
+  weak.isolated = weak.isolated.filter((sq) => !(findPassedPawns(fen, color).includes(sq) && toGo(sq) <= 4));
   if (weak.isolated.length > 0) {
     out.push({
-      key: `${side}-iso-${weak.isolated[0]}`, side, kind: 'structure', rank: rank('structure'),
+      key: `${side}-iso-${weak.isolated[0][0]}`, side, kind: 'structure', rank: rank('structure'),
       squares: [weak.isolated[0]],
       text: own
         ? `Your pawn on ${weak.isolated[0]} is isolated — no friendly pawn can ever defend it, so a piece has to.`
@@ -287,13 +339,20 @@ function observationsFor(
   }
 
   const turned = withTurn(fen, color);
-  const breaks = turned ? findPawnBreaks(turned) : [];
+  // NO LEVER TALK BEFORE THE PIECES ARE OUT (hand walk 2026-09-27: "you have
+  // a pawn break on f5" after 1.e4 c5 2.Nf3 d6). With three or more of that
+  // side's minors still at home, development decides the game and the
+  // principle lane owns the teaching; a French at move 8 (…f6, …c4) keeps its
+  // levers because by then the break IS the plan.
+  let undeveloped = 0;
+  try { undeveloped = homeMinorCount(new Chess(fen), color); } catch { undeveloped = 0; }
+  const breaks = turned && undeveloped < 3 ? findPawnBreaks(turned) : [];
   if (breaks.length > 0) {
     out.push({
       key: `${side}-break-${breaks[0]}`, side, kind: 'lever', rank: rank('lever'),
       squares: [breaks[0]],
       text: own
-        ? `A pawn break is available on ${breaks[0]} — the pawn levers are where the play comes from.`
+        ? `You have a pawn break on ${breaks[0]} — the pawn levers are where the play comes from.`
         : `${you.charAt(0).toUpperCase()}${you.slice(1)} have a pawn break available on ${breaks[0]} — that is where their play comes from.`,
     });
   }
@@ -319,7 +378,7 @@ function observationsFor(
   const passers = findPassedPawns(fen, color);
   if (passers.length > 0) {
     out.push({
-      key: `${side}-passer-${passers[0]}`, side, kind: 'passer', rank: rank('passer'),
+      key: `${side}-passer-${passers[0][0]}`, side, kind: 'passer', rank: rank('passer'),
       squares: [passers[0]],
       text: own
         ? `Your passed pawn on ${passers[0]} is a long-term trump — every trade that clears its path makes it stronger.`
@@ -339,8 +398,8 @@ function observationsFor(
       key: `${side}-complex-${cc.complex}`, side, kind: 'complex', rank: rank('complex'),
       squares: cc.squares.slice(0, 2),
       text: own
-        ? `Your ${cc.complex} squares are weak — with no bishop of that colour, nothing covers ${sqs}, so a piece has to babysit them.`
-        : `Their ${cc.complex} squares are weak — ${sqs} are holes their bishop can't cover; a knight belongs on one.`,
+        ? `Your ${cc.complex} squares are weak — with no bishop of that colour, no pawn or bishop of yours can cover ${sqs}, and their ${cc.by} can settle there.`
+        : `Their ${cc.complex} squares are weak — no bishop of theirs covers ${sqs}; ${cc.by === 'knight' ? 'a knight belongs on one' : 'your bishop can work on them'}.`,
     });
     break; // one complex read is enough — the second is the same lesson
   }
@@ -364,6 +423,7 @@ function observationsFor(
     if (file) {
       out.push({
         key: `${side}-file-${file}`, side, kind: 'file', rank: rank('file'),
+        aliases: [`file-${file}`],
         text: `The ${file}-file is open — that is where a rook wants to be.`,
       });
     }
@@ -447,8 +507,8 @@ function joinsFor(
         rank: RANK.plan - (side === 'opponent' ? OPPONENT_PENALTY : 0),
         squares: [b.square, mv.to],
         text: side === 'student'
-          ? `Your ${NAME[b.piece] ?? 'piece'} on ${b.square} is your problem piece — ${b.reason} — and the pawn move to ${mv.to} is what fixes it — that pairing is the plan, and the pawn move is not about the pawn.`
-          : `Their ${NAME[b.piece] ?? 'piece'} on ${b.square} is their problem piece — ${b.reason} — and a pawn to ${mv.to} would fix it, so stopping that pawn is worth more than it looks.`,
+          ? `Your ${NAME[b.piece] ?? 'piece'} on ${b.square} is your problem piece — ${b.reason} — and your pawn from ${mv.from} to ${mv.to} is what frees it — that pairing is the plan, and the pawn move is not about the pawn.`
+          : `Their ${NAME[b.piece] ?? 'piece'} on ${b.square} is their problem piece — ${b.reason} — and their pawn from ${mv.from} to ${mv.to} would free it, so stopping that pawn is worth more than it looks.`,
       });
       break; // one join per bad piece; the first proved fix is enough to teach
     }
@@ -482,7 +542,14 @@ export function readPosition(
     all.filter((o) => o.kind === 'plan').map((o) => o.key.split('-')[2]),
   );
   const deduped = all.filter((o) => !(o.kind === 'piece' && joinedSquares.has(o.key.split('-').pop() ?? '')));
-  return deduped.sort((a, b) => b.rank - a.rank);
+  // A PAWN RACE IS THE WHOLE POSITION (g9 walk 2026-09-27: "their pawn on b4
+  // is isolated", "their b-pawns are doubled", "a5 is a pawn break for you" —
+  // while their d-pawn stood two squares from queening). With a passed pawn
+  // that close, the slow structural reads are scenery: only the passer itself
+  // and danger to a king still speak.
+  const racing = racingPasser(fen);
+  const kept = racing ? deduped.filter((o) => o.kind === 'passer' || o.kind === 'king') : deduped;
+  return kept.sort((a, b) => b.rank - a.rank);
 }
 
 /**
@@ -512,6 +579,11 @@ export function buildPositionalRead(
   /** Keys another lane already spoke this game (the phase turn's balance
    *  sheet names the same facts under the same keys). Read, never written. */
   heard?: ReadonlySet<string>,
+  /** The square the student's piece JUST landed on. That move's own purpose is
+   *  what speaks this turn; calling the same piece "your problem piece" beside
+   *  it is two coaches (run E walk 2026-09-30: "Nxh3, not gxh3 …" then "Your
+   *  knight on h3 is your problem piece"). Skipped, not said — it can come back. */
+  justMoved?: string | null,
 ): PositionalObservation | null {
   // Returns the whole observation (not just its text) so the caller can mark the
   // squares it named (David 2026-09-13: "add highlights to all spoken key
@@ -522,9 +594,11 @@ export function buildPositionalRead(
   // break square is still news; the lesson around it is not.
   const leverTaught = (side: string): boolean => [...(said ?? []), ...(heard ?? [])].some((k) => k.startsWith(`${side}-break-`));
   for (const o of readPosition(fen, studentColor)) {
-    if (said?.has(o.key) || heard?.has(o.key)) continue;
+    const keys = [o.key, ...(o.aliases ?? [])];
+    if (keys.some((k) => said?.has(k) || heard?.has(k))) continue;
+    if (justMoved && o.kind === 'piece' && o.side === 'student' && (o.squares ?? []).includes(justMoved)) continue;
     const stem = o.kind === 'lever' && leverTaught(o.side) ? leverStem(o) : null;
-    said?.add(o.key);
+    for (const k of keys) said?.add(k);
     return stem ? { ...o, text: stem } : o;
   }
   return null;
@@ -548,4 +622,57 @@ export function attackerCanUseFile(fen: string, file: string, attacker: 'w' | 'b
     }
     return true;
   } catch { return true; }
+}
+
+/** THE FIRST STEP ONTO A FILE (walk 2026-09-30: "the e-file is open toward
+ *  their king" said nothing about what to do with it). A rook — or, with no
+ *  rook able to, the queen — of `color` that lands on `file` in one move on a
+ *  square nothing of theirs attacks. Rook first: the rook is the piece a file
+ *  is for. Null when no such move exists, and then nothing is suggested. */
+export function heavyPieceToFile(fen: string, color: Color, file: string): { san: string; from: string; to: string; piece: 'rook' | 'queen' } | null {
+  try {
+    const parts = fen.split(' ');
+    parts[1] = color;
+    parts[3] = '-';
+    const b = new Chess(parts.join(' '));
+    if (b.inCheck()) return null;
+    const foe: Color = color === 'w' ? 'b' : 'w';
+    for (const type of ['r', 'q'] as const) {
+      if (b.board().flat().some((c) => c && c.color === color && c.type === type && c.square[0] === file)) return null;
+      for (const m of b.moves({ verbose: true })) {
+        if (m.piece !== type || m.to[0] !== file || m.from[0] === file || m.captured) continue;
+        const after = new Chess(b.fen());
+        after.move(m.san);
+        if (after.attackers(m.to, foe).length > 0) continue;
+        return { san: m.san, from: m.from, to: m.to, piece: type === 'r' ? 'rook' : 'queen' };
+      }
+    }
+  } catch { /* no suggestion */ }
+  return null;
+}
+
+/** Castling that takes `color`'s king off the board's open files, when legal. */
+export function castleOffFile(fen: string, color: Color): string | null {
+  try {
+    const parts = fen.split(' ');
+    parts[1] = color;
+    parts[3] = '-';
+    const b = new Chess(parts.join(' '));
+    const m = b.moves().find((x) => x === 'O-O' || x === 'O-O+') ?? b.moves().find((x) => x.startsWith('O-O-O'));
+    return m ?? null;
+  } catch { return null; }
+}
+
+
+/** A passed pawn, either side, two squares or fewer from promoting. */
+export function racingPasser(fen: string): string | null {
+  const st = describeStructure(fen);
+  if (!st) return null;
+  for (const color of ['w', 'b'] as const) {
+    for (const sq of st.pawns.passedPawns[color]) {
+      const rank = Number(sq[1]);
+      if ((color === 'w' && rank >= 6) || (color === 'b' && rank <= 3)) return sq;
+    }
+  }
+  return null;
 }

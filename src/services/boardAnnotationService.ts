@@ -15,6 +15,8 @@ const BOARD_TAG_REGEX = /\\?\[BOARD:\s*(arrow|highlight|position|practice|clear)
 const VALID_SQUARE = /^[a-h][1-8]$/;
 
 function resolveColor(name: string): string {
+  // A door colour arrives as hex and passes through unchanged.
+  if (/^#[0-9a-f]{6}$/i.test(name.trim())) return name.trim();
   return COLOR_MAP[name.toLowerCase().trim()] ?? COLOR_MAP.green;
 }
 

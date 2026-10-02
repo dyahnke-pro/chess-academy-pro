@@ -365,26 +365,28 @@ describe('GameChapterPage', () => {
   });
 
   it('puzzle phase shows puzzle counter and chat panel', async () => {
+    // Same budget as the hint test below: passes in ms alone, timed out at the
+    // 5s default beside ~350 files in a related-tests run (2026-09-27).
     renderChapterPage();
 
     await waitFor(() => {
       expect(screen.getByTestId('chapter-begin-btn')).toBeInTheDocument();
-    });
+    }, { timeout: 10000 });
 
     fireEvent.click(screen.getByTestId('chapter-begin-btn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('chapter-next-btn')).toBeInTheDocument();
-    });
+    }, { timeout: 10000 });
 
     fireEvent.click(screen.getByTestId('chapter-next-btn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
-    });
+    }, { timeout: 10000 });
 
     expect(screen.getByText('Puzzle 1 of 1')).toBeInTheDocument();
-  });
+  }, 30000);
 
   it('hint button advances through hint levels and reveals nudge text', async () => {
     // 10s waits: alone this passes in ms, but beside ~300 files in ship-check's

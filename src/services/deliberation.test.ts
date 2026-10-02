@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { Chess } from 'chess.js';
 import { buildDeliberation, deliberationFacts, deliberationAlternativesFacts } from './deliberation';
 
 // Italian, White to move after 1.e4 e5 2.Nf3 Nc6 3.Bc4. A real choice: castle
@@ -181,5 +182,51 @@ describe('mate is the reason (hand walk 1200: "Qxd6# — it wins the bishop on d
     const analysis = { topLines: [{ rank: 1, evaluation: 0, mate: 1, moves: ['d1d8'] }, line(2, 300, 'g1f1')] };
     const d = buildDeliberation({ analysis, fenBefore: c.fen(), moverColor: 'w', opponentLastSan: null })!;
     expect(d.bestWhy).toBe('ends the game');
+  });
+});
+
+describe('the best move played out (P2 #3)', () => {
+  it('a forcing best line that wins is said after the verdict', () => {
+    const c = new Chess();
+    for (const m of 'e4 e5 Nf3 Nc6 Bc4 Nd4 Nxe5'.split(' ')) c.move(m);
+    const fen = c.fen();
+    const uci = (sans: string[]): string[] => { const b = new Chess(fen); return sans.map((s) => { const m = b.move(s); return `${m.from}${m.to}`; }); };
+    const analysis = { topLines: [
+      { rank: 1, evaluation: -700, mate: null, moves: uci(['Qg5', 'Nxf7', 'Qxg2', 'Rf1', 'Qxe4+', 'Be2', 'Nf3#']), depth: 16 },
+      { rank: 2, evaluation: 50, mate: null, moves: uci(['Nf6', 'O-O']), depth: 16 },
+    ] };
+    const d = buildDeliberation({ analysis: analysis as never, fenBefore: fen, moverColor: 'b', opponentLastSan: 'Nxe5' })!;
+    expect(d.bestLine ?? '').toMatch(/Qg5/);
+  });
+});
+
+describe('weighing the candidates (P2 #4)', () => {
+  it('names the candidates before ruling any out, and only when a verdict follows', () => {
+    const c = new Chess();
+    for (const m of 'e4 e5 Nf3 Nc6 Bc4 Nd4 Nxe5'.split(' ')) c.move(m);
+    const fen = c.fen();
+    const uci = (sans: string[]): string[] => { const b = new Chess(fen); return sans.map((s) => { const m = b.move(s); return `${m.from}${m.to}`; }); };
+    const analysis = { topLines: [
+      { rank: 1, evaluation: -700, mate: null, moves: uci(['Qg5', 'Nxf7', 'Qxg2', 'Rf1', 'Qxe4+', 'Be2', 'Nf3#']), depth: 16 },
+      { rank: 2, evaluation: 50, mate: null, moves: uci(['Nf6', 'O-O']), depth: 16 },
+    ] };
+    const d = buildDeliberation({ analysis: analysis as never, fenBefore: fen, moverColor: 'b', opponentLastSan: 'Nxe5' })!;
+    const text = deliberationFacts(d);
+    if (text.includes('The move is')) {
+      expect(text).toMatch(/^Candidates: .*Qg5/);
+      expect(text.indexOf('Candidates')).toBeLessThan(text.indexOf('The move is'));
+    } else {
+      expect(text).not.toMatch(/Candidates/);
+    }
+  });
+});
+
+describe('heldVerdictText — the held answer always carries its reason', async () => {
+  const { heldVerdictText } = await import('./deliberation');
+  const v = { san: 'Nf5', why: 'eyes d4', line: null };
+  it('now / found / missed', () => {
+    expect(heldVerdictText(v, 'now')).toBe('The move is Nf5 — it eyes d4.');
+    expect(heldVerdictText(v, 'found')).toBe('That was the move here — it eyes d4.');
+    expect(heldVerdictText(v, 'missed')).toBe('The move here was Nf5 — it eyes d4.');
   });
 });

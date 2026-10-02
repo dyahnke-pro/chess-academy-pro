@@ -64,7 +64,7 @@ describe('BehaviorScheduler — fires at the corpus RATE (stride scheduling)', (
   // Two behaviors, weights 3:1 → over many always-applicable turns the spoken
   // share must converge to 3:1.
   function hit(id: string, weight: number): BehaviorHit {
-    return { id, fact: id, squares: [], weight };
+    return { id, fact: id, squares: [], keys: [], weight };
   }
 
   it('reproduces the target weight ratio when both behaviors always fire', () => {
@@ -273,5 +273,13 @@ describe('the piece that just arrived is not a static "they win it" (hand walk 2
     for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 c6 Kh1 Nh5 Be3 f5 Qd2 f4 Bf2 Be5 Nc2 Ng3+ Kg1 Qh4 Bd4 Nxf1 Bxf1 Be6 Bxe5 dxe5 Qd6 Nd7 Qc7 Qd8 Qxd8 Raxd8 Kf2 Nc5 Rd1 a5 Rxd8 Rxd8 Ke1 Kf7 Be2 g5 h3 h5 b3 Kf6 Nd1 g4 hxg4 hxg4 Nf2 g3 Nd1 Rh8 Nc3 Rh2 Bf1 Bh3 Ne2'.split(' ')) c.move(m);
     const hits = detectBehaviors({ fen: c.fen(), studentColor: 'black', studentLastTo: 'h3' });
     expect(hits.some((h) => /eyeing gxh3/.test(h.fact))).toBe(false);
+  });
+});
+
+describe('the move they are eyeing is drawn (walk 2026-09-30: arrows illustrate what is spoken)', () => {
+  it('"They\'re eyeing dxc6" carries a threat arrow d5-c6', () => {
+    const hits = detectBehaviors({ fen: 'r3k3/5pp1/p1b1p3/2pP4/2B5/7r/PP2KP1q/R1BQ1R2 b q - 4 23', studentColor: 'black' });
+    const eyed = hits.find((h) => /eyeing dxc6/.test(h.fact));
+    expect(eyed?.arrows).toEqual([{ from: 'd5', to: 'c6', role: 'threat', source: 'behavior.eyeing' }]);
   });
 });

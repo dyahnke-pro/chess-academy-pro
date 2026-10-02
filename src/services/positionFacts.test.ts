@@ -294,7 +294,7 @@ describe('the latent-danger prevention clause (fires through positionFacts)', ()
     });
     expect(r.latentDanger).toMatchObject({ frontSquare: 'e3', backPiece: 'k', latent: true });
     const texts = clauseText(r.clauses);
-    expect(texts.some((t) => /bishop on e3.*king.*file.*open the line/i.test(t))).toBe(true);
+    expect(texts.some((t) => /rook on e8 looks through your knight on e5 at your bishop on e3 and your king behind it/i.test(t))).toBe(true);
   });
 
   it('a STANDING pin is not restated as a latent danger (hand walk 2340: said twice)', async () => {
@@ -406,6 +406,29 @@ describe('the verdict and its plan echo are one fact (hand walk 2340)', () => {
     const r = await computePositionFacts({ posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [] });
     expect(r.clauses.map((c) => c.kind)).toEqual(expect.arrayContaining(['fundamental']));
     expect(r.clauses.some((c) => c.kind === 'deliberation')).toBe(false);
+  });
+});
+
+describe('at a deciding moment the move is HELD for the student to answer (David 2026-10-02)', () => {
+  const line = (rank: number, evaluation: number, uci: string) => ({ rank, evaluation, moves: [uci], mate: null });
+  const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 3 14';
+  // One move holds; every other loses heavily — the board's own fork in the road.
+  const deciding = { evaluation: 30, bestMove: 'e1g1', depth: 16, topLines: [line(1, 30, 'e1g1'), line(2, -400, 'f3e5'), line(3, -420, 'd2d3')] } as never;
+
+  it('rules the bad moves out, keeps "The move is" back, and hands the answer to the surface', async () => {
+    const r = await computePositionFacts({ posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis: deciding, teachingBeat: true });
+    expect(r.moveAdvice?.reason).toBe('deciding');
+    expect(r.heldVerdict?.san).toBe('O-O');
+    expect(r.heldVerdict?.why.length).toBeGreaterThan(3);
+    expect(r.clauses.some((c) => / The move is /.test(` ${c.text}`))).toBe(false);
+  });
+
+  it('a move earned by the student\'s RECORD is still named, not held', async () => {
+    const hole = [{ clusterId: 'analysis:phase:middlegame', bucket: 'middlegame', label: 'x', openCount: 2, severity: 50, puzzleThemes: [], total: 3 }] as never;
+    const quiet = { evaluation: 30, bestMove: 'e1g1', depth: 16, topLines: [line(1, 30, 'e1g1'), line(2, -250, 'f3e5'), line(3, 10, 'd2d3')] } as never;
+    const r = await computePositionFacts({ posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis: quiet, teachingBeat: true, studentWeaknesses: hole });
+    expect(r.moveAdvice?.reason).toBe('phase-record');
+    expect(r.heldVerdict).toBeNull();
   });
 });
 

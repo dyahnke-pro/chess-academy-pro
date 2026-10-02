@@ -4,7 +4,7 @@ import type { RepCandidate } from './trainingPlanSelector';
 
 const weak: RepCandidate = { kind: 'weakness', key: 'weakness:hung-material:Hung a piece', label: 'Hung a piece or pawn', subtitle: '', tag: 'hung-material', puzzleThemes: ['hangingPiece'] };
 const srs: RepCandidate = { kind: 'srs', key: 'srs:italian-game', label: 'Italian Game', subtitle: '', openingId: 'italian-game' };
-const base: UpNextInput = { reps: [], latestGameSlip: null, grownPuzzle: null, freeOpeningOpen: false, coldStart: false };
+const base: UpNextInput = { reps: [], latestGameSlip: null, grownPuzzle: null, freeOpeningOpen: false, coldStart: false, startSteps: [] };
 
 describe('upNextPicker', () => {
   it('a first visit leads with a 60-second Deep Run', () => {

@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6083) — names `reviewPromptService`
+- **The standard post-deploy ritual** (CLAUDE.md:6130) — names `reviewPromptService`
 
 ## Who calls in
 
@@ -29,7 +29,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `recordPositiveMoment` (function) — 13 call sites
-- `src/components/Coach/CoachGamePage.tsx:2024`
+- `src/components/Coach/CoachGamePage.tsx:2025`
 - `src/components/Openings/SrsTrainerPage.tsx:315`
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx:293`
 - `src/services/openingService.ts:528`

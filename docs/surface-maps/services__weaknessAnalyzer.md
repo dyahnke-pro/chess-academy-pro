@@ -26,15 +26,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `computeWeaknessProfile` (function) — 6 call sites
-- `src/components/Coach/CoachGamePage.tsx:2105`
+- `src/components/Coach/CoachGamePage.tsx:2113`
 - `src/components/Stats/StatsPage.tsx:50`
 - `src/services/analyticsService.ts:462`
-- `src/services/gameAnalysisService.ts:2599`
+- `src/services/gameAnalysisService.ts:2639`
 - `src/services/weaknessAnalyzer.test.ts:526`
 - `src/services/weaknessAnalyzer.test.ts:542`
 
 ### `getStoredWeaknessProfile` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10300`
+- `src/components/Coach/CoachTeachPage.tsx:11208`
 - `src/components/Stats/StatsPage.tsx:68`
 - `src/services/coachChatService.ts:188`
 - `src/services/coachContextSnapshot.ts:85`

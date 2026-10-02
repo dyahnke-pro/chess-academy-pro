@@ -44,9 +44,9 @@ describe('ReviewCitationPreviews', () => {
     expect(screen.getByText('Move 2')).toBeInTheDocument();
   });
 
-  it('passes the played + suggested squares to the board as arrows', () => {
+  it('arrows only the better move — the played mistake is never arrowed (arrow door, 2026-09-29)', () => {
     render(<ReviewCitationPreviews citations={[cite({ ply: 3 })]} onJumpToPly={() => {}} />);
-    expect(screen.getByTestId('preview-board').getAttribute('data-arrows')).toBe('d1h5,g1f3');
+    expect(screen.getByTestId('preview-board').getAttribute('data-arrows')).toBe('g1f3');
   });
 
   it('jumps to the cited ply on tap', () => {

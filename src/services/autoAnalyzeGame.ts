@@ -10,6 +10,7 @@ import { Chess } from 'chess.js';
 import { captureMisconception } from './discussionPractice';
 import { recordCapabilityEvidence } from './capabilityEvidence';
 import { db } from '../db/schema';
+import { reportTeachingEffects } from './teachingEffectService';
 import { useAppStore } from '../stores/appStore';
 import { logAppAudit } from './appAuditor';
 import { classifyMisconception } from './misconceptionClassifier';
@@ -232,6 +233,15 @@ export interface SweepOptions {
    *  (once per game). The batch sweep never passes this: a library import is
    *  not a decision about which lines the student knows. */
   reviewed?: boolean;
+  /** A discrete student event that adds evidence — a Play game finishing or a
+   *  Review opening. After the record is written, the teaching-effect door
+   *  runs once (`teachingEffectService`). The batch sweep never passes it. */
+  reportEffects?: 'play-finished' | 'review-opened';
+  /** A finished Play game: after the record, deepen its analysis and pre-build
+   *  its review narration (`gameAnalysisService.prepareReview`), so opening
+   *  the review neither re-searches every ply nor builds the narration twice
+   *  (review-load trace 2026-10-02: Play games were saved at depth 10). */
+  prepareReview?: boolean;
 }
 
 /** Which username identifies the student in this game's headers — the
@@ -282,6 +292,18 @@ export async function autoAnalyzeGameMisconceptions(
   username?: string,
   opts: SweepOptions = {},
 ): Promise<AutoAnalyzeResult> {
+  if (opts.reportEffects || opts.prepareReview) {
+    const { reportEffects, prepareReview, ...rest } = opts;
+    const r = await autoAnalyzeGameMisconceptions(gameId, username, rest);
+    if (reportEffects) void reportTeachingEffects(reportEffects).catch(() => undefined);
+    if (prepareReview) {
+      // Dynamic: gameAnalysisService imports this module.
+      void import('./gameAnalysisService')
+        .then((m) => m.prepareReview(gameId, 'play-end'))
+        .catch(() => undefined);
+    }
+    return r;
+  }
   const empty = NO_RESULT;
 
   const game = await db.games.get(gameId);

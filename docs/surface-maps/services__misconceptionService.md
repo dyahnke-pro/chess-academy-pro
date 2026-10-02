@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**337 lines · 11 exports · 23 importers · 15 tests · 4 audits**
+**337 lines · 11 exports · 24 importers · 15 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6108) — names `misconceptionService`
+- **The standard post-deploy ritual** (CLAUDE.md:6155) — names `misconceptionService`
 
 ## Who calls in
 
@@ -17,6 +17,7 @@
 - `src/components/Insights/MisconceptionsTab.tsx`
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx`
 - `src/components/Puzzles/WeaknessTagDrillPage.tsx`
+- `src/components/Tactics/AnalysisPracticePage.tsx`
 - `src/services/bucketPipelineAudit.test.ts`
 - `src/services/bucketPipelineAudit.ts`
 - `src/services/coachApi.ts`
@@ -45,13 +46,13 @@
 - `src/services/bucketPipelineAudit.ts:252`
 - `src/services/misconceptionService.test.ts:114`
 - `src/services/misconceptionService.test.ts:149`
-- `src/services/weaknessSpine.ts:460`
+- `src/services/weaknessSpine.ts:461`
 
 ### `LogMisconceptionInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `logMisconception` (function) — 54 call sites
-- `src/components/Coach/CoachGameReview.tsx:2320`
+- `src/components/Coach/CoachGameReview.tsx:2329`
 - `src/components/Coach/FundamentalsPage.test.tsx:92`
 - `src/components/Coach/FundamentalsPage.test.tsx:129`
 - `src/components/Coach/FundamentalsPage.test.tsx:130`
@@ -124,11 +125,12 @@
 ### `MisconceptionAggregate` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `getMisconceptionProfile` (function) — 16 call sites
+### `getMisconceptionProfile` (function) — 17 call sites
 - `src/components/Insights/MisconceptionsTab.tsx:77`
 - `src/components/Insights/MisconceptionsTab.tsx:87`
 - `src/services/bucketPipelineAudit.ts:157`
-- `src/services/coachApi.ts:4434`
+- `src/services/coachApi.ts:1843`
+- `src/services/coachApi.ts:4578`
 - `src/services/fixtureGames.test.tsx:113`
 - `src/services/fixtureGames.test.tsx:122`
 - `src/services/fundamentalsPipeline.realGame.test.ts:226`
@@ -140,12 +142,14 @@
 - `src/services/misconceptionService.test.ts:98`
 - `src/services/misconceptionService.test.ts:116`
 - `src/services/weaknessAnalyzer.ts:994`
-- `src/services/weaknessSpine.ts:869`
+- `src/services/weaknessSpine.ts:917`
 
-### `recordTagDrillResult` (function) — 8 call sites
+### `recordTagDrillResult` (function) — 10 call sites
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx:278`
-- `src/components/Puzzles/AdaptivePuzzlePage.tsx:369`
+- `src/components/Puzzles/AdaptivePuzzlePage.tsx:368`
 - `src/components/Puzzles/WeaknessTagDrillPage.tsx:64`
+- `src/components/Tactics/AnalysisPracticePage.tsx:285`
+- `src/components/Tactics/AnalysisPracticePage.tsx:302`
 - `src/services/misconceptionService.test.ts:107`
 - `src/services/misconceptionService.test.ts:124`
 - `src/services/misconceptionService.test.ts:130`

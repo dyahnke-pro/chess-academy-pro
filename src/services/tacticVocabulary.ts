@@ -96,6 +96,43 @@ export function tacticWord(type: string): string {
   return (TACTIC_WORD as Record<string, string>)[type] ?? type.replace(/_/g, ' ');
 }
 
+/**
+ * THE LIVE DETECTOR'S WORDS — one table for every sentence that names a
+ * `TacticPatternType` (the noun) or the AIM of a line that lands one (the verb
+ * phrase, base and third person). It replaced two hand-copied noun tables
+ * (pvPlayback, lookaheadPlan) and a `land a ${word}` template that read "land a
+ * overloaded defender" (hand walk 1690, 2026-09-27): wrong article, and a
+ * defender is overloaded, not landed. A `Record` over the union so a new
+ * pattern fails to compile until it has all three.
+ */
+export const PATTERN_SPEECH: Record<TacticPatternType, { word: string; aim: string; ing: string; aims: string }> = {
+  fork: { word: 'fork', aim: 'land a fork', ing: 'landing a fork', aims: 'lands a fork' },
+  pin: { word: 'pin', aim: 'set up a pin', ing: 'setting up a pin', aims: 'sets up a pin' },
+  skewer: { word: 'skewer', aim: 'land a skewer', ing: 'landing a skewer', aims: 'lands a skewer' },
+  discovery: { word: 'discovered attack', aim: 'unleash a discovered attack', ing: 'unleashing a discovered attack', aims: 'unleashes a discovered attack' },
+  double_check: { word: 'double check', aim: 'land a double check', ing: 'landing a double check', aims: 'lands a double check' },
+  back_rank: { word: 'back-rank threat', aim: 'hit the back rank', ing: 'hitting the back rank', aims: 'hits the back rank' },
+  removal_of_guard: { word: 'removal of the defender', aim: 'remove the defender', ing: 'removing the defender', aims: 'removes the defender' },
+  trapped_piece: { word: 'piece trap', aim: 'trap a piece', ing: 'trapping a piece', aims: 'traps a piece' },
+  mate_threat: { word: 'mating threat', aim: 'set up a mating threat', ing: 'setting up a mating threat', aims: 'sets up a mating threat' },
+  overload: { word: 'overloaded defender', aim: 'overload a defender', ing: 'overloading a defender', aims: 'overloads a defender' },
+  battery: { word: 'battery', aim: 'build a battery', ing: 'building a battery', aims: 'builds a battery' },
+  none: { word: '', aim: '', ing: '', aims: '' },
+};
+
+/** The spoken noun for a detector pattern; unknown strings read as prose. */
+export function patternWord(type: string): string {
+  return (PATTERN_SPEECH as Record<string, { word: string }>)[type]?.word || type.replace(/_/g, ' ');
+}
+
+/** The aim of a line that lands this pattern, as a verb phrase (null if none). */
+export function patternAim(type: string | null, form: 'base' | 'third' | 'ing' = 'base'): string | null {
+  if (!type) return null;
+  const e = (PATTERN_SPEECH as Record<string, { aim: string; aims: string; ing: string }>)[type];
+  if (!e) return null;
+  return (form === 'third' ? e.aims : form === 'ing' ? e.ing : e.aim) || null;
+}
+
 export const TACTIC_TO_PATTERN: Record<TacticType, TacticPatternType | null> = {
   fork: 'fork',
   pin: 'pin',

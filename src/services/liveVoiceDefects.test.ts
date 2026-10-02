@@ -13,7 +13,6 @@ import { tacticalReadFromLines, uncertaintyClause } from './tacticalRead';
 import { buildGuidedFindChallenge } from './guidedFindTheMove';
 import { callInaccuracy, callInaccuracyDetailed } from './inaccuracyCall';
 import { backwardLook, lastCoachVerdictDecline } from './backwardLook';
-import { beatSubject } from './curatedBeatSource';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { pickNarration } from './openingNarrationService';
 import { getCorrectMoveMessage, getWelcomeMessage } from './gamesService';
@@ -70,7 +69,7 @@ describe('L1 — the guard sits at the one queue every late lane funnels through
     const src = fs.readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     const start = src.indexOf('const queueSpokenHint = useCallback(');
     expect(start, 'queueSpokenHint moved or was renamed').toBeGreaterThan(-1);
-    const body = src.slice(start, start + 3000);
+    const body = src.slice(start, start + 5000);
     expect(body).toMatch(/new Chess\(fen\)\.isGameOver\(\)/);
     // It must guard the QUEUED position, not some other board in scope.
     expect(body).not.toMatch(/liveFenRef\.current\)\.isGameOver/);
@@ -158,7 +157,7 @@ describe('L4 — a refusal names the guard that refused', () => {
     // The backlog concluded the floor was "mis-scaled or inverted" from a log
     // line reading "under the floor". It is neither — MISTAKE_CP is 100.
     for (const cpLoss of [122, 184]) {
-      expect(callInaccuracy({ replyLineUci: [], replySan: null,
+      expect(callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null,
         fenBefore, playedSan: 'Nf6', bestSan: 'Bc5', bestLineUci: ['f8c5', 'c2c3'],
         cpLoss, missedMate: null, allowedMate: null, side: 'coach', moverColor: 'black',
       })).not.toBeNull();
@@ -176,52 +175,31 @@ describe('L4 — a refusal names the guard that refused', () => {
     // not even an inaccuracy. The floor band is 50..<100: an inaccuracy the
     // coach deliberately does not stop for. That these two report differently
     // is the whole point of the change.
-    expect(callInaccuracyDetailed({ replyLineUci: [], replySan: null, ...base, cpLoss: 40 }).declined).toBe('quality-not-worth-saying');
-    expect(callInaccuracyDetailed({ replyLineUci: [], replySan: null, ...base, cpLoss: 60 }).declined).toBe('under-the-floor');
-    expect(callInaccuracyDetailed({ replyLineUci: [], replySan: null, ...base, cpLoss: 184, bestSan: null }).declined).toBe('no-better-move-supplied');
+    expect(callInaccuracyDetailed({ priorMove: null, replyLineUci: [], replySan: null, ...base, cpLoss: 40 }).declined).toBe('quality-not-worth-saying');
+    expect(callInaccuracyDetailed({ priorMove: null, replyLineUci: [], replySan: null, ...base, cpLoss: 60 }).declined).toBe('under-the-floor');
+    expect(callInaccuracyDetailed({ priorMove: null, replyLineUci: [], replySan: null, ...base, cpLoss: 184, bestSan: null }).declined).toBe('no-better-move-supplied');
     // PLAYING THE BEST MOVE is SHADOWED by the quality guard and never reaches
     // its own arm: `classifyMove({ wasBest: true })` returns 'best', which is
     // not in WORTH_SAYING, so the first guard answers. Asserted as it ACTUALLY
     // behaves rather than as the arm reads — a test written to the code's
     // apparent shape instead of its measured one is how a dead branch acquires
     // a green test and outlives the reason it was added.
-    expect(callInaccuracyDetailed({ replyLineUci: [], replySan: null, ...base, cpLoss: 184, playedSan: 'Bc5' }).declined).toBe('quality-not-worth-saying');
+    expect(callInaccuracyDetailed({ priorMove: null, replyLineUci: [], replySan: null, ...base, cpLoss: 184, playedSan: 'Bc5' }).declined).toBe('quality-not-worth-saying');
     // Bh6 needs the g7 pawn out of the way, so it is illegal here. (Qh4 is
     // NOT — the e-pawn is on e5, so the d8-h4 diagonal is open. Checked against
     // chess.js rather than eyeballed, which is the same discipline this whole
     // work order is about.)
-    expect(callInaccuracyDetailed({ replyLineUci: [], replySan: null, ...base, cpLoss: 184, bestSan: 'Bh6' }).declined).toBe('best-move-illegal-here');
-    expect(callInaccuracyDetailed({ replyLineUci: [], replySan: null, ...base, cpLoss: 184 }).declined).toBeUndefined();
+    expect(callInaccuracyDetailed({ priorMove: null, replyLineUci: [], replySan: null, ...base, cpLoss: 184, bestSan: 'Bh6' }).declined).toBe('best-move-illegal-here');
+    expect(callInaccuracyDetailed({ priorMove: null, replyLineUci: [], replySan: null, ...base, cpLoss: 184 }).declined).toBeUndefined();
   });
 
   it('backwardLook publishes the reason its coach lane declined', () => {
-    const got = backwardLook({ replySan: null,
+    const got = backwardLook({ priorMove: null, replySan: null,
       fenBefore, fenAfter: fenBefore, playedSan: 'Nf6', bestSan: null,
       cpLoss: 184, studentColor: 'black', side: 'coach',
     });
     expect(got).toBeNull();
     expect(lastCoachVerdictDecline()).toBe('no-better-move-supplied');
-  });
-});
-
-describe('L5 — a second lesson on the same move does not re-announce it', () => {
-  it('the subject is recognised from the beat’s own moves, never invented', () => {
-    expect(beatSubject('Bc4 — the Italian bishop.', ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4'])).toBe('Bc4');
-    expect(beatSubject('Bc4 — the Italian bishop, pointed straight at f7.', ['e4', 'e5', 'Bc4'])).toBe('Bc4');
-    expect(beatSubject('c3 — quiet, but loaded.', ['e4', 'e5', 'c3'])).toBe('c3');
-    // A leading token that is NOT one of the beat's own moves is not a subject.
-    expect(beatSubject('Nf6 is the reply you must know.', ['e4', 'e5', 'Bc4'])).toBeNull();
-    // Prose that does not open on a move gets null rather than a guess.
-    expect(beatSubject('The centre is the whole story here.', ['e4', 'e5'])).toBeNull();
-  });
-
-  it('the two real Italian beats that repeated share one subject', () => {
-    // These are the exact pair read off the live walk. They differ in ID and in
-    // wording, so neither the ID set nor the sentence-novelty set could see them.
-    const a = beatSubject('Bc4 — the Italian bishop.', ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4']);
-    const b = beatSubject('Bc4 — the Italian bishop, pointed straight at f7.', ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4']);
-    expect(a).toBe(b);
-    expect(a).not.toBeNull();
   });
 });
 

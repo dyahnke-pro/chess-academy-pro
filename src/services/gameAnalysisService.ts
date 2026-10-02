@@ -429,6 +429,7 @@ class DedicatedWorker {
 
       const blackToMove = fen.split(' ')[1] === 'b';
       let lastEval = 0;
+      let sawExact = false;
       let lastDepth = 0;
       let lastPv: string[] = [];
 
@@ -445,7 +446,10 @@ class DedicatedWorker {
           const depthMatch = /\bdepth (\d+)/.exec(data);
           if (depthMatch) lastDepth = Number(depthMatch[1]) || lastDepth;
           const scoreMatch = /score (cp|mate) (-?\d+)/.exec(data);
-          if (scoreMatch) {
+          // A bounded score is not a verdict; keep the last exact one.
+          const bounded = /\b(?:lowerbound|upperbound)\b/.test(data);
+          if (scoreMatch && !(bounded && sawExact)) {
+            if (!bounded) sawExact = true;
             const scoreType = scoreMatch[1];
             const scoreValue = parseInt(scoreMatch[2]);
             lastEval = scoreType === 'mate'
@@ -453,7 +457,8 @@ class DedicatedWorker {
               : scoreValue;
           }
           const pvMatch = / pv (.+)$/.exec(data);
-          if (pvMatch) lastPv = pvMatch[1].trim().split(/\s+/).slice(0, 8);
+          // The line belongs to its score: a bound kept out above keeps its pv out too.
+          if (pvMatch && !(bounded && sawExact && scoreMatch)) lastPv = pvMatch[1].trim().split(/\s+/).slice(0, 8);
         }
 
         const bmMatch = /^bestmove (\S+)/.exec(data);
@@ -547,7 +552,12 @@ class DedicatedWorker {
           const bd = /\b(lowerbound|upperbound)\b/.exec(data);
           const bound: 'lower' | 'upper' | null = bd ? (bd[1] === 'lowerbound' ? 'lower' : 'upper') : null;
           const prev = best.get(rank);
-          // Deeper always wins; at equal depth an EXACT score replaces a bound.
+          // Deeper wins, EXCEPT a bound never replaces an exact score — a
+          // search stopped on an aspiration fail-high leaves "mate 9
+          // lowerbound" as its last word, and that is not a proven mate
+          // (Learn walk 2026-10-02, …Rg2). At equal depth an exact score
+          // replaces a bound.
+          if (prev && bound !== null && prev.bound === null) return;
           if (prev && !(seen > prev.depth || (seen === prev.depth && prev.bound !== null && bound === null))) return;
           const pvm = / pv (.+)$/.exec(data);
           best.set(rank, {
@@ -1627,8 +1637,10 @@ export async function analyzeGameOnWorker(
     // A cached best-move search at this position is as good as running one.
     const hit = cached.get(moveIdx);
     if (hit?.bestMove && hit.depth >= BEST_MOVE_DEPTH) {
-      annotations[moveIdx].bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], hit.bestMove) ? null : hit.bestMove;
+      const hitSame = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], hit.bestMove);
+      annotations[moveIdx].bestMove = hitSame ? null : hit.bestMove;
       annotations[moveIdx].bestMoveEval = hit.evaluation;
+      if (hitSame) annotations[moveIdx].classification = 'good';
       continue;
     }
     try {
@@ -1638,9 +1650,10 @@ export async function analyzeGameOnWorker(
       // (David 2026-09-05). The refined best move is re-deepened with the game
       // when it's next opened on a fast engine, same as the eval curve.
       const result = await worker.analyzePosition(fens[moveIdx], BEST_MOVE_DEPTH, BATCH_POSITION_BUDGET_MS);
-      annotations[moveIdx].bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], result.bestMove)
-        ? null
-        : result.bestMove;
+      const same = !!result.bestMove && bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], result.bestMove);
+      annotations[moveIdx].bestMove = same ? null : result.bestMove;
+      // The deeper search played it too — not a mistake (see the review path).
+      if (same) annotations[moveIdx].classification = 'good';
       // Overwrite the shallow bestMoveEval with the deeper-depth value
       // for this position. Same engine, deeper search — keeps the swing
       // math (detectMisses / detectMissedTactics) on the most reliable
@@ -1967,14 +1980,21 @@ async function analyzeGamePositions(
               // The dive already searched this exact position deep — the move it
               // found IS the refinement. Same engine, same depth the verdict was
               // settled at; a second search here bought nothing but wall-clock.
-              bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], reused) ? null : reused;
+              const reusedSame = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], reused);
+              bestMove = reusedSame ? null : reused;
               refinedBestMoveEval = evalBefore;
+              // THE DEEP SEARCH PLAYED IT TOO — the shallow cost was noise, not
+              // a mistake (review walk 2026-09-27: three plies said "that was an
+              // inaccuracy" with no better move to name, because the deeper
+              // engine's best WAS the move played).
+              if (reusedSame) classification = 'good';
             } else try {
               const bestAnalysis = await deepSearch(fens[moveIdx], BEST_MOVE_DEPTH);
               bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], bestAnalysis.bestMove)
                 ? null
                 : bestAnalysis.bestMove;
               refinedBestMoveEval = bestAnalysis.evaluation;
+              if (!!bestAnalysis.bestMove && bestMove === null) classification = 'good';
               if (Number.isFinite(bestAnalysis.depth) && bestAnalysis.depth > 0) {
                 toStore.push({ fen: fens[moveIdx], evaluation: bestAnalysis.evaluation, depth: bestAnalysis.depth, bestMove: bestAnalysis.bestMove });
               }
@@ -2569,12 +2589,32 @@ export async function analyzeAllGames(
         .filter((g) => analyzedSet.has(g.id))
         .sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''))[0];
       if (!newest) return;
-      const { prebuildReviewNarration } = await import('./reviewNarrationBuild');
-      await prebuildReviewNarration(newest.id, 'import-batch');
+      // FINISH THE ANALYSIS FIRST, THEN BUILD (David 2026-10-02: "three
+      // analysis runs — once on import, once before review, and another before
+      // review starts"). The batch is a shallow sweep, so this game still
+      // needed its key-moment deep dive — which the review then ran on open,
+      // rewriting the annotations the narration had just been built from. Run
+      // the deep dive here (sweep plies come from the eval cache; it is
+      // coalesced, so a review opened meanwhile joins this same run), then
+      // build: the open finds nothing left to analyse and a cached narration.
+      await prepareReview(newest.id, 'import-batch');
     })().catch(() => undefined);
   }
 
   return analyzed;
+}
+
+/** Get a game's review READY before it is opened: run the key-moment deep
+ *  dive if the stored analysis is shallow, THEN build the narration — so the
+ *  open finds nothing left to analyse and a cached narration that the deep
+ *  dive will not invalidate. One door for every "a game just arrived" path
+ *  (the import batch's newest game, a finished Play game). Coalesced with an
+ *  open that starts meanwhile (`analyzeSingleGame` shares one run). */
+export async function prepareReview(gameId: string, reason: string): Promise<void> {
+  const fresh = await db.games.get(gameId);
+  if (fresh && gameNeedsAnalysis(fresh)) await analyzeSingleGame(gameId);
+  const { prebuildReviewNarration } = await import('./reviewNarrationBuild');
+  await prebuildReviewNarration(gameId, reason);
 }
 
 /**

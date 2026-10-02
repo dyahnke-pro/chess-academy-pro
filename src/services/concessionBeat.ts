@@ -26,6 +26,7 @@ import { Chess, type Color, type Square } from 'chess.js';
 import { findWeakPawns, findPieceQuality } from './positionReadingService';
 import { planFromUci, isCostClause } from './lookaheadPlan';
 import { isEndgameByMaterial } from './gamePhaseService';
+import { MATERIAL_VALUE as VALUE } from './pieceValues';
 
 export type DrawbackKind =
   | 'defender-left'
@@ -235,7 +236,7 @@ export function findConcession(args: {
   // that way by it (hand walk 2340, move 21: a2 had been isolated since the
   // c-pawn traded; the best move only would have MENDED it).
   const weakBefore = findWeakPawns(args.fen, me);
-  const newIsolated = weakNow.isolated.find((sq) => !weakAlt.isolated.includes(sq) && !weakBefore.isolated.includes(sq));
+  const newIsolated = weakNow.isolated.find((sq) => !weakAlt.isolated.includes(sq) && !weakBefore.isolated.some((b) => b[0] === sq[0]));
   if (newIsolated) {
     return {
       kind: 'pawn-weakened',
@@ -271,7 +272,16 @@ export function findConcession(args: {
     const wentTo = ranksFromHome(moved.to, me);
     const altTo = alt.history({ verbose: true })[0];
     const altRank = altTo ? ranksFromHome(altTo.to, me) : wentTo;
-    if (wentTo >= 5 && wentTo > altRank + 1) {
+    // A PIECE ON A MISSION IS NOT OFFSIDE (hand walk 1690, 2026-09-27: 7.Bh6
+    // in the 150 attack read "your piece went a long way from your king" —
+    // it went there to trade off the g7 bishop). When the piece now attacks an
+    // enemy piece worth at least as much, it went to trade or to win, not astray.
+    const onMission = after.board().flat().some((c) => {
+      if (!c || c.color === me || c.type === 'k') return false;
+      if (!after.attackers(c.square, me).includes(moved.to)) return false;
+      return (VALUE[c.type] ?? 0) >= (VALUE[moved.piece] ?? 0);
+    });
+    if (wentTo >= 5 && wentTo > altRank + 1 && !onMission) {
       return {
         kind: 'piece-offside',
         square: moved.to,
@@ -292,7 +302,13 @@ export function findConcession(args: {
   const goodAlt = new Set(
     findPieceQuality(alt.fen()).filter((q) => q.color === them && isOutpost(q)).map((q) => q.square as string),
   );
-  const conceded = goodNow.find((q) => !goodAlt.has(q.square as string));
+  // …and not one they ALREADY had (hand walk 1690, 2026-09-27: 37.Ng5 "handed
+  // me g3" — the knight had stood on that outpost for six plies). A square is
+  // handed over by this move only if it was not theirs before it.
+  const goodBefore = new Set(
+    findPieceQuality(args.fen).filter((q) => q.color === them && isOutpost(q)).map((q) => q.square as string),
+  );
+  const conceded = goodNow.find((q) => !goodAlt.has(q.square as string) && !goodBefore.has(q.square as string));
   if (conceded) {
     return {
       kind: 'outpost-conceded',
@@ -409,6 +425,9 @@ export function findStudentDrawback(args: {
  * looking backward as much as forward.
  */
 export function whatItAllowed(args: {
+  /** The position BEFORE the student's move. With `playedSan` it tells the
+   *  plan when their line only takes back what the student just took. */
+  fenBefore: string;
   /** The position AFTER the student's move — the opponent is to play. */
   fenAfter: string;
   /** The opponent's best line from there, UCI, straight off the engine. */
@@ -418,17 +437,32 @@ export function whatItAllowed(args: {
    *  describes a normal reply rather than a consequence, and saying "that let
    *  them…" about ordinary play teaches the student to distrust the coach. */
   cpLoss: number;
+  /** The student's move that led to `fenAfter`, SAN. REQUIRED: a capture of
+   *  theirs that is simply taken back is a trade, and "that let them win a
+   *  pawn, starting with Bxc4" after …bxc4 is false (run I, manual check). */
+  playedSan: string | null;
 }): { line: string; square: string } | null {
   if (args.cpLoss < 60) return null;
   if (args.opponentPv.length < 4) return null;
-  const plan = planFromUci(args.fenAfter, args.opponentPv, args.studentColor);
+  // Their first move taking back on the square the student just captured on
+  // returns the student's own capture — the plan counts from before the trade
+  // (`planFromUci`'s last move), so it is never a win.
+  const plan = planFromUci(args.fenAfter, args.opponentPv, args.studentColor,
+    args.playedSan ? { fenBefore: args.fenBefore, san: args.playedSan } : null);
   // `theirs` is the opponent — the side to move here, whose line this is.
   // ONE CLAUSE, AND ONLY A COST (`isCostClause`): the price of the move is
   // what it lost, never the opponent's whole want-list or where their pieces
   // drift to (Blumenfeld walk F18/F32).
   const lead = plan?.theirs.spokenClauses[0];
   if (!lead?.text || lead.drift || !isCostClause(lead.text)) return null;
-  const line = `That let them ${lead.text.trim().replace(/\.$/, '')}.`;
+  // NAMED WITH THE MOVE THAT DOES IT (McConnell walk 2026-09-27: a bare "That
+  // let them win a pawn." left the student to find which pawn and how).
+  let first: string | null = null;
+  try {
+    const u = args.opponentPv[0];
+    first = new Chess(args.fenAfter).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] })?.san ?? null;
+  } catch { first = null; }
+  const line = `That let them ${lead.text.trim().replace(/\.$/, '')}${first ? `, starting with ${first}` : ''}.`;
 
   // The square to mark: where their line actually lands first, so the eye goes
   // to the consequence rather than to the move that caused it.

@@ -28,6 +28,7 @@ import type { PieceDropHandlerArgs } from 'react-chessboard';
 import { getCoachMove, resolveConfig } from '../services/coachPlaySession';
 import { reward } from '../services/rewardService';
 import type { RequestedDifficulty } from '../types';
+import { useWrongTryRefutation } from './useWrongTryRefutation';
 
 /** Strip annotations from a SAN so comparison is robust to "+#!?"
  *  decorations or promotion suffix differences. */
@@ -122,6 +123,11 @@ export interface EndgamePlayoutState {
   /** Last wrong destination square for red-flash UI. null when no
    *  recent wrong attempt OR when the flash timer has expired. */
   wrongSquare: string | null;
+  /** WHY the last wrong try fails — their reply, played out in words
+   *  (`refuteWrongTry`, David 2026-10-01: "Refute it, keep the answer").
+   *  Null until computed, when nothing is, and after the next move. The
+   *  wrong move is never put on this board, so there are no arrows. */
+  wrongTryText: string | null;
   /** Whether the student got the answer right on the FIRST try
    *  across the entire playout. Goes false the moment they make
    *  one wrong drop. Used for "perfect run" UI badges. */
@@ -250,6 +256,7 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
   const [studentMovesPlayed, setStudentMovesPlayed] = useState<number>(0);
   const [wrongAttempts, setWrongAttempts] = useState<number>(0);
   const [wrongSquare, setWrongSquare] = useState<string | null>(null);
+  const { text: wrongTryText, refute: refuteTry, clear: clearWrongTry } = useWrongTryRefutation();
   const [firstTryPerfect, setFirstTryPerfect] = useState<boolean>(true);
   // Phase 7c (free-play piece-mates): when there's no curated line but
   // stockfishFallback is on, the student starts in 'student-to-move' so
@@ -275,6 +282,7 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
     setStudentMovesPlayed(0);
     setWrongAttempts(0);
     setWrongSquare(null);
+    clearWrongTry();
     setFirstTryPerfect(true);
     setFallbackPliesPlayed(0);
     setFallbackOutcome(effectiveLine.length > 0 ? 'curated' : 'survived');
@@ -463,8 +471,10 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
           setWrongAttempts((n) => n + 1);
           setFirstTryPerfect(false);
           reward({ kind: 'miss', square: to });
+          void refuteTry(chessRef.current.fen(), played.san);
           return false;
         }
+        clearWrongTry();
         // Skill earns the reward: each curated move is a pip; the line's last
         // one is the solve. Engine-fallback moves (below) earn nothing.
         const nth = studentMovesPlayed + 1;
@@ -500,7 +510,7 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
       void playOpponentReply();
       return true;
     },
-    [phase, expectedSan, acceptableSans, playOpponentReply, studentMovesPlayed, curatedStudentMoves],
+    [phase, expectedSan, acceptableSans, playOpponentReply, studentMovesPlayed, curatedStudentMoves, refuteTry, clearWrongTry],
   );
 
   const onPieceDrop = useCallback(
@@ -517,6 +527,7 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
     setStudentMovesPlayed(0);
     setWrongAttempts(0);
     setWrongSquare(null);
+    clearWrongTry();
     setFirstTryPerfect(true);
     setFallbackPliesPlayed(0);
     setFallbackOutcome(effectiveLine.length > 0 ? 'curated' : 'survived');
@@ -529,7 +540,7 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
           : 'complete',
     );
     setStudentMoveLog([]);
-  }, [startFen, effectiveLine.length, stockfishFallback]);
+  }, [startFen, effectiveLine.length, stockfishFallback, clearWrongTry]);
 
   const reveal = useCallback((): void => {
     // Auto-play the entire remaining curated line and mark complete
@@ -586,6 +597,7 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
     curatedStudentMoves,
     wrongAttempts,
     wrongSquare,
+    wrongTryText,
     firstTryPerfect,
     isComplete: phase === 'complete',
     fallbackOutcome,

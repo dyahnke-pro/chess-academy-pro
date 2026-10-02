@@ -8,7 +8,7 @@ const FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 
 describe('a move question that narrowed to one piece', () => {
   it('says plainly that the answer is not the piece asked about', () => {
     // e1g1 = O-O. This is his case: asked about a pawn, answered with a king move.
-    const a = assembleMoveEvalAnswer({ fen: FEN, bestMoveUci: 'e1g1', evalCp: 140, askedPiece: 'pawn' });
+    const a = assembleMoveEvalAnswer({ studentColor: null, fen: FEN, bestMoveUci: 'e1g1', evalCp: 140, askedPiece: 'pawn' });
     expect(a?.facts).toContain('No pawn move is the answer here');
     // The move is still named — the honest answer is not withheld, only framed.
     expect(a?.facts).toContain('O-O');
@@ -16,13 +16,13 @@ describe('a move question that narrowed to one piece', () => {
 
   it('says nothing extra when the best move IS the piece asked about', () => {
     // d2d4 is a pawn move.
-    const a = assembleMoveEvalAnswer({ fen: FEN, bestMoveUci: 'd2d4', evalCp: 140, askedPiece: 'pawn' });
+    const a = assembleMoveEvalAnswer({ studentColor: null, fen: FEN, bestMoveUci: 'd2d4', evalCp: 140, askedPiece: 'pawn' });
     expect(a?.facts.startsWith('The best move is d4.')).toBe(true);
     expect(a?.facts).not.toContain('No pawn move');
   });
 
   it('is unchanged when the question named no piece', () => {
-    const a = assembleMoveEvalAnswer({ fen: FEN, bestMoveUci: 'e1g1', evalCp: 140 });
+    const a = assembleMoveEvalAnswer({ studentColor: null, fen: FEN, bestMoveUci: 'e1g1', evalCp: 140 });
     expect(a?.facts.startsWith('The best move is O-O.')).toBe(true);
   });
 

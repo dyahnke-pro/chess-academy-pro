@@ -35,6 +35,18 @@ export const DECISIVE_MATERIAL = 3;
 /** A best-move gap this wide means there is one right move to find. */
 export const SHARP_GAP_CP = 150;
 
+/** Evaluation, in centipawns, past which a game is decided either way. */
+export const DECIDED_CP = 300;
+
+/** The best-move gap that makes a position SHARP — none when the second-best
+ *  move still wins (or still loses) as clearly as the best. +9 against +6.5 is
+ *  a wide gap and no question at all (walk 2026-09-30, game 2 ply 57). */
+export function sharpGap(bestCp: number | null | undefined, secondCp: number | null | undefined): number | null {
+  if (typeof bestCp !== 'number' || typeof secondCp !== 'number') return null;
+  const sameSideDecided = (bestCp >= DECIDED_CP && secondCp >= DECIDED_CP) || (bestCp <= -DECIDED_CP && secondCp <= -DECIDED_CP);
+  return sameSideDecided ? 0 : Math.abs(bestCp - secondCp);
+}
+
 /** A tactic counts as LIVE only when a verifier PROVED it wins something.
  *  The detector reports a pin's geometry with no verdict, and a standing pin
  *  (…Bg4 on Nf3/d1) is not the position turning sharp — hand walk 2026-09-30
@@ -69,13 +81,16 @@ export const EMPTY_CHARACTER: CharacterState = {
 };
 
 const SWITCH: Record<Character, readonly string[]> = {
+  // WITH ITS REASON (walk 2026-09-30: "the position has turned sharp" said
+  // nothing about WHY, or what to do about it). The tactical stems name what
+  // made it sharp — see TACTICAL_WHY — and every stem says what to do now.
   tactical: [
-    'The position has turned sharp — now it is about calculation, not plans.',
+    'The position has turned sharp — calculate before you move.',
     'Things have got concrete — check every forcing move before anything quiet.',
   ],
   positional: [
-    'The tactics have settled — it is back to improving pieces and the long plan.',
-    'The dust has cleared — now it is a quiet game of who places their pieces better.',
+    'The tactics have settled — now ask which of your pieces is doing the least, and improve it.',
+    'The dust has cleared — it is a quiet game now: improve your worst piece before starting anything new.',
   ],
   conversion: [
     'You are up material now — the job changes to trading down and converting.',
@@ -95,11 +110,26 @@ export interface CharacterStep {
 
 /** One read of the position. The first read settles the character silently —
  *  the game does not "change" into the character it started in. */
-export function stepCharacter(state: CharacterState, now: Character): CharacterStep {
+/** What made it sharp, when the caller knows: a tactic live on the board, or
+ *  one move far better than every other (the engine's best-move gap). */
+export type SharpReason = 'tactic' | 'gap';
+
+const TACTICAL_WHY: Record<SharpReason, readonly string[]> = {
+  tactic: [
+    'The position has turned sharp — there is a tactic on the board, so check every capture and check before anything quiet.',
+    'Things have got concrete — a tactic is live, so look at every forcing move first.',
+  ],
+  gap: [
+    'The position has turned sharp — one move here is far better than the rest, so calculate before you move.',
+    'Things have got concrete — only one move really works here; find it before anything else.',
+  ],
+};
+
+export function stepCharacter(state: CharacterState, now: Character, reason?: SharpReason): CharacterStep {
   if (state.current === null) return { next: { ...state, current: now, pending: null }, switched: null };
   if (now === state.current) return { next: { ...state, pending: null }, switched: null };
   if (state.pending !== now) return { next: { ...state, pending: now }, switched: null };
-  const stems = SWITCH[now];
+  const stems = now === 'tactical' && reason ? TACTICAL_WHY[reason] : SWITCH[now];
   const text = stems[state.spoken[now] % stems.length];
   return {
     next: { current: now, pending: null, spoken: { ...state.spoken, [now]: state.spoken[now] + 1 } },

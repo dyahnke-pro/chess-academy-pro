@@ -30,6 +30,8 @@ import {
   type EndgameMoveGrade,
 } from '../../services/endgameTablebaseService';
 import { endgameMistakeConcept } from '../../services/endgameProfileService';
+import { admitArrow } from '../../services/arrowDoor';
+import type { BoardArrow } from '../../types';
 
 interface EndgameTablebaseTrainerProps {
   /** Start position (≤7 pieces). */
@@ -51,7 +53,7 @@ export function EndgameTablebaseTrainer({ fen, studentColor, title, intro, onExi
   const [boardFen, setBoardFen] = useState(fen);
   const [boardKey, setBoardKey] = useState(0);
   const [highlight, setHighlight] = useState<{ from: string; to: string } | null>(null);
-  const [arrows, setArrows] = useState<Array<{ startSquare: string; endSquare: string; color: string }>>([]);
+  const [arrows, setArrows] = useState<BoardArrow[]>([]);
   const [status, setStatus] = useState<string>('Watch the technique first.');
   const [feedback, setFeedback] = useState<{ text: string; correctable: boolean } | null>(null);
   const [thinking, setThinking] = useState(false);
@@ -85,9 +87,13 @@ export function EndgameTablebaseTrainer({ fen, studentColor, title, intro, onExi
       setBoardFen(step.fenBefore);
       setBoardKey((k) => k + 1);
       const from = step.uci.slice(0, 2); const to = step.uci.slice(2, 4);
-      setArrows([{ startSquare: from, endSquare: to, color: '#22c55e' }]);
-      say(`${sideWord(step.mover, studentColor)} ${step.note}.`);
-      await wait(1700);
+      // One ply of the tablebase's perfect line, on the board before it.
+      const ply = admitArrow({ from, to, role: 'line', fen: step.fenBefore, source: 'tablebase.watch' }, { fen: step.fenBefore, studentColor });
+      setArrows(ply ? [ply] : []);
+      // Advance when the line has been SAID (the voice promise), never on a
+      // timer that cuts a longer teaching sentence off mid-word.
+      const line = step.teaching ? `${sideWord(step.mover, studentColor)} ${step.note}. ${step.teaching}` : `${sideWord(step.mover, studentColor)} ${step.note}.`;
+      await Promise.all([voiceService.speakForced(line).catch(() => {}), wait(900)]);
       try { board.move({ from, to, promotion: step.uci.length > 4 ? step.uci[4] : undefined }); } catch { break; }
       setBoardFen(board.fen());
       setBoardKey((k) => k + 1);

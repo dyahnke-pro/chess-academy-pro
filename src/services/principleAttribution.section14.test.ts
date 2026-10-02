@@ -68,10 +68,12 @@ describe('section 14 — calculation-depth (PV-gated)', () => {
   // 7th move" — ply 13. A blow past the coach's own horizon is not a
   // calculation lapse anyone could be held to.
   it('negative control: a blow past the 7-ply horizon is not a depth error', () => {
-    const deep = ['Nf3', 'd6', 'Bd3', 'g6', 'O-O', 'Bg7', 'h3', 'O-O', 'exd6'];   // lands at ply 9
+    // The blow is Bxg6, a capture: exd6 here is a pawn swap (…exd6 takes back),
+    // and a pawn swap is not a blow at any depth (Learn walk 2026-10-02).
+    const deep = ['Nf3', 'd6', 'Bd3', 'g6', 'O-O', 'Bg7', 'h3', 'O-O', 'Bxg6'];   // lands at ply 9
     expect(attributePrinciples({ replySan: null, ...base, pvAfterPlayed: deep }).find((a) => a.id === 'calculation-depth')).toBeUndefined();
     // …and ply 7 still counts.
-    const edge = ['Nf3', 'd6', 'Bd3', 'g6', 'O-O', 'Bg7', 'exd6'];
+    const edge = ['Nf3', 'd6', 'Bd3', 'g6', 'O-O', 'Bg7', 'Bxg6'];
     expect(attributePrinciples({ replySan: null, ...base, pvAfterPlayed: edge }).find((a) => a.id === 'calculation-depth')?.facts.depth).toBe(7);
   });
   it('negative control: no real cost → silent; no PV → silent (live path)', () => {

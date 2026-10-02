@@ -689,6 +689,15 @@ export function findMissedChain(historySans: readonly string[], studentMovePly: 
   // "don't overstate the why"). A quiet or equal-trade move that let a free win
   // slip is a genuine miss; a check is not second-guessed.
   if (/[+#]/.test(actual)) return null;
+  // Nor when the move played took at least as much as the "missed" win — a
+  // recaptured queen is not a miss for a loose knight (review walk 2026-10-01:
+  // "You could have won their knight on d3 with Bxd3 … You played Rxa4", where
+  // Rxa4 took back a queen).
+  const tsq = chainTargetSquare(avail.chain);
+  const target = tsq ? before.chess.get(tsq) : null;
+  let tookValue = 0;
+  try { const mv = new Chess(before.chess.fen()).move(actual); if (mv?.captured) tookValue = VAL[mv.captured] ?? 0; } catch { tookValue = 0; }
+  if (target && tookValue >= (VAL[target.type] ?? 0)) return null;
   return { ...avail.chain, stance: 'missed', missedMove: avail.moveSan, playedInstead: historySans[studentMovePly - 1] };
 }
 

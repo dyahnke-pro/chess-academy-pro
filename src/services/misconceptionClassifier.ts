@@ -14,7 +14,7 @@
 // import-time auto-analysis. All three call captureMisconception → here.
 
 import { Chess, type Color } from 'chess.js';
-import { attributePrinciples } from './principleAttribution';
+import { attributePrinciples, captureIsTrade } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
 import { detectTactics } from './tacticsDetector';
 import { homeMinorCount } from './development';
@@ -291,7 +291,7 @@ function classifyMisconceptionImpl(
 
   // (c) GREEDY PAWN GRAB — in the opening, snatched a pawn (the eval already
   // says it cost you, or we wouldn't be classifying).
-  if (phase === 'opening' && move.captured === 'p') {
+  if (phase === 'opening' && move.captured === 'p' && !captureIsTrade(input.fen, input.playedSan, previousMoveOf(input.historySans, input.fen))) {
     return {
       tag: 'greedy-pawn-grab',
       coachNote: `Taking the pawn on ${move.to} costs time and development you needed.`,
@@ -463,6 +463,21 @@ function classifyMisconceptionImpl(
 /** Public entry point. Keeps the Promise-returning signature the three faucets
  *  (Discussion Practice / Game Review / auto-analysis) await, while the
  *  classification itself runs synchronously in code — no LLM, no I/O. */
+/** The move before the played one, read off the game's own history and
+ *  trusted only when replaying it lands on `fen` (a history from a custom
+ *  start position cannot be replayed from the standard one). */
+function previousMoveOf(historySans: readonly string[] | undefined, fen: string): { to: string; captured: boolean } | null {
+  if (!historySans || historySans.length < 2) return null;
+  try {
+    const c = new Chess();
+    let last: ReturnType<Chess['move']> | null = null;
+    for (const san of historySans.slice(0, -1)) last = c.move(san);
+    const key = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+    if (!last || key(c.fen()) !== key(fen)) return null;
+    return { to: last.to, captured: !!last.captured };
+  } catch { return null; }
+}
+
 export function classifyMisconception(
   input: ClassifyMisconceptionInput,
 ): Promise<MisconceptionClassification | null> {

@@ -94,6 +94,14 @@ export type VoiceFactKind =
 
 export interface VoiceFact {
   kind: VoiceFactKind;
+  /** THE CLAIMS THIS FACT MAKES, as keys computed where the fact is computed —
+   *  a tactic is `concept:<type>:<squares>`, a positional idea is its idea key.
+   *  The sentence ledger below catches the same WORDS twice; this catches the
+   *  same FACT in different words ("You have a back-rank threat: the king on
+   *  g8…" / "Their king on g8 has no escape square…", 1200 walk 2026-09-27).
+   *  A fact whose claim is already in the game ledger is dropped; a kept fact
+   *  writes its claims there. Bookkeeping on keys, never a read of prose (G0). */
+  claims?: readonly string[];
   /** Spoken VERBATIM. If it cannot be said to a student out loud, it does not
    *  belong in a package — put it in the caller's own prompt/log instead. */
   text: string;
@@ -102,6 +110,10 @@ export interface VoiceFact {
    *  those differ during an animation, and judging a fact by the wrong board is
    *  the bug this whole file exists to prevent. */
   fen: string;
+  /** A second board the claim may be about — review speaks about the move, so
+   *  a sentence may describe the board BEFORE it ("the knight on f3 was the
+   *  defender"). A sentence survives if it is true on either. */
+  altFen?: string;
   /** THE SQUARES THIS FACT IS ABOUT — the board's half of the package.
    *
    *  David 2026-08-10: "It needs to be deterministic, handed in the package."
@@ -245,28 +257,56 @@ export interface VoicePackage {
  *  package passed all 61 of them through to be spoken. That is precisely the
  *  failure `voiceFacts` documents from a prod run: the coach reading its own
  *  directive out loud. A law with no check is a comment. */
+/** Sentences that explain the one before them and cannot open an utterance. */
+const DEPENDENT = /^(?:Remember —|Here's how:|The habit that fixes it:|Next time:)/;
+
 const NOT_SPEAKABLE: Array<{ re: RegExp; why: string }> = [
   { re: /\n/, why: 'multi-line block, not an utterance' },
   { re: /\[(?:BOARD|VOICE|EVAL|FACT)S?\b/i, why: 'control tag' },
   { re: /\b[A-Z][A-Z0-9]{2,}(?:\s+[A-Z][A-Z0-9]{2,})+/, why: 'shouted header (prompt scaffolding)' },
-  { re: /\b(?:REQUIRED|GROUND TRUTH|DO NOT|NEVER (?:say|invent|repeat)|you MUST)\b/i, why: 'instruction to a model' },
+  // SHOUTED only: prompt scaffolding is capitalised. Case-insensitive, it
+  // refused real teaching — "Do not move the pawns in front of your own king"
+  // is a fundamental's how-to (review measurement 2026-09-30).
+  { re: /\b(?:REQUIRED|GROUND TRUTH|DO NOT|you MUST)\b/, why: 'instruction to a model' },
+  { re: /\bNEVER (?:say|invent|repeat)\b/i, why: 'instruction to a model' },
 ];
 
+/** THE DNA VOICE RULES (docs/DNA-outline.md), held at the one door every
+ *  spoken fact passes (Learn and Review). The computers are written to them;
+ *  this is the backstop, and a fact it refuses is a template to fix.
+ *  • no praise or acknowledgement — the position is the acknowledgement;
+ *  • no interface talk — the voice knows the position, not the buttons. */
+const DNA_REFUSE: Array<{ re: RegExp; why: string }> = [
+  // Sentence-OPENING praise only: "the only good move here" is teaching.
+  { re: /(?:^|[.!?]\s+)(?:great|nice|good|excellent|brilliant|well)\s+(?:move|job|find|done|play|shot)\b|\bwell done\b|\bgood job\b|(?:^|[.!?]\s+)(?:excellent|correct|great|nice|perfect)[!.]/i, why: 'dna: praise' },
+  { re: /\b(?:tap|click|press)\s+(?:the|a|on)\b|\b(?:button|menu)\b/i, why: 'dna: interface talk' },
+];
+/** DNA rule 7 — no move-number prefixes ("12.Nf3" is read "twelve"). A
+ *  rephrase, never a drop: the move stays, the number goes. */
+export function stripMoveNumbers(text: string): string {
+  return text.replace(/(?<![\w.])\d{1,3}\s?(?:\.\.\.|…|\.)\s?(?=(?:[NBRQK][a-h1-8x]|O-O|[a-h][1-8x]))/g, (m) => (/(?:\.\.\.|…)/.test(m) ? '…' : ''));
+}
+
 function verify(fact: VoiceFact): { text: string } | { reason: string } {
-  const raw = fact.text.trim();
+  const raw = stripMoveNumbers(fact.text.trim());
   if (!raw) return { reason: 'empty' };
 
   for (const s of NOT_SPEAKABLE) if (s.re.test(raw)) return { reason: s.why };
+  for (const s of DNA_REFUSE) if (s.re.test(raw)) return { reason: s.why };
 
   // Square-anchored claims: "the knight on f6" when f6 is empty.
-  const graded = gradeNarrationText(raw, fact.fen, `voicePackage.${fact.kind}`)?.trim();
+  let graded = gradeNarrationText(raw, fact.fen, `voicePackage.${fact.kind}`)?.trim();
+  if (fact.altFen && (graded ?? '') !== raw) {
+    const alt = gradeNarrationText(raw, fact.altFen, `voicePackage.${fact.kind}`)?.trim();
+    if ((alt ?? '').length > (graded ?? '').length) graded = alt;
+  }
   if (!graded) return { reason: 'no sentence survived board grading' };
 
   // Structural claims naming NO square, which the grader above cannot settle:
   // "doubled rooks on the open file" with every rook at home. A note reached by
   // pattern is exactly the kind that asserts a configuration it cannot see.
   const bad = falseConfigurationClaim(graded, fact.fen);
-  if (bad) return { reason: `board lacks ${bad}` };
+  if (bad && !(fact.altFen && !falseConfigurationClaim(graded, fact.altFen))) return { reason: `board lacks ${bad}` };
 
   return { text: graded };
 }
@@ -325,10 +365,21 @@ const sayKey = (s: string): string => {
   // were spoken back to back, because the prefix twin-check never saw them
   // as one). The key drops a leading "watch out / careful / check" so one
   // claim is one key however it is introduced — never down to nothing.
-  const bare = s.replace(/^\s*(?:(?:watch out|careful|check|look out|heads up|remember|note)\s*[—–:,.!-]*\s*)+/i, '');
+  // …and a naming frame ("You have a back-rank threat:") and the owner word
+  // ("the / their / your king on g8…") are not the claim either — the 1200
+  // walk (2026-09-27) heard "You have a back-rank threat: the king on g8 has no
+  // escape square…" and then "Their king on g8 has no escape square…".
+  const bare = s
+    .replace(/^\s*(?:(?:watch out|careful|check|look out|heads up|remember|note)\s*[—–:,.!-]*\s*)+/i, '')
+    .replace(/^\s*you (?:have|'ve got|’ve got) an? [\w -]{2,30}?:\s*/i, '')
+    .replace(/^\s*(?:the|their|your|my)\s+(?=(?:king|queen|rook|bishop|knight|pawn)\b)/i, 'the ');
   const key = bare.toLowerCase().replace(/[^a-z0-9]/g, '');
   return key.length >= 12 ? key : full;
 };
+
+/** A claim's key in the ledger. Namespaced with a colon, which `sayKey` never
+ *  produces, so a claim can never collide with a sentence. */
+const claimKey = (c: string): string => `claim:${c}`;
 
 export function buildVoicePackage(
   facts: VoiceFact[],
@@ -399,6 +450,7 @@ export function buildVoicePackage(
   // made borrowed teaching yield to an event on THIS board, went 2026-09-29:
   // no surface produced either kind any more — G8.5.)
   for (const { f } of ordered) {
+    if (f.claims?.some((c) => seen.has(claimKey(c)))) { dropped.push({ fact: f, reason: 'claim already said' }); continue; }
     const result = verify(f);
     if ('reason' in result) { dropped.push({ fact: f, reason: result.reason }); continue; }
     // Same sentence from two producers is one sentence to the ear — and the two
@@ -406,8 +458,15 @@ export function buildVoicePackage(
     // seeded above rather than starting empty.
     const fresh: string[] = [];
     const why = new Set<string>();
+    // A sentence that EXPLAINS the one before it ("Remember — a pin freezes…",
+    // "Here's how: …") never stands alone: when its fact sentence was dropped
+    // as a repeat, it goes too (walk 2026-09-30, game 2: the pin definition
+    // spoken a move after the pin, on its own).
+    let prevKept = false;
     for (const s of sentencesOf(result.text)) {
       const k = sayKey(s);
+      if (DEPENDENT.test(s) && !prevKept) { why.add('duplicate'); continue; }
+      prevKept = false;
       if (seen.has(k)) { why.add(saidEarlier.has(k) ? 'already said this turn' : 'duplicate'); continue; }
       const near = [...seen].find((prior) => {
         const n = sharedPrefix(prior, k);
@@ -419,6 +478,7 @@ export function buildVoicePackage(
       }
       seen.add(k);
       fresh.push(s);
+      prevKept = true;
     }
     if (fresh.length === 0) {
       // Whole-fact refusals report the STRONGEST cause, so a fact that lost one
@@ -450,6 +510,7 @@ export function buildVoicePackage(
     // names a square — so it cannot collapse two genuinely different warnings
     // that happen to open "Watch out —".
     seen.add(key);
+    for (const c of f.claims ?? []) seen.add(claimKey(c));
     // A line rides only when EVERY sentence survived: a trimmed fact may have
     // lost the very sentence that named the moves.
     kept.push({ ...f, text: fresh.join(' '), lines: why.size === 0 ? f.lines : undefined });
@@ -483,7 +544,10 @@ export function buildVoicePackage(
  *  `buildVoicePackage`, so a key added here is a key that suppresses there. */
 export function spokenSentenceKeys(pkg: { kept: VoiceFact[] }): string[] {
   const out: string[] = [];
-  for (const f of pkg.kept) for (const s of sentencesOf(f.text)) out.push(sayKey(s));
+  for (const f of pkg.kept) {
+    for (const s of sentencesOf(f.text)) out.push(sayKey(s));
+    for (const c of f.claims ?? []) out.push(claimKey(c));
+  }
   return out;
 }
 

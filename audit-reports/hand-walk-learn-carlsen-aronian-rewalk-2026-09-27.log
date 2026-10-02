@@ -1,0 +1,85 @@
+=== ply 1 d4 -> Nf6 | ok
+  > This game is the Indian Defense.
+=== ply 3 c4 -> e6 | ok
+  > You have a pawn break on d5 — the pawn levers are where the play comes from.
+=== ply 5 Nf3 -> d5 | ok
+  > It's the Anti-Nimzo-Indian.
+=== ply 7 Nc3 -> Bb4 | ok
+  > Black pins the c3-knight with the Ragozin's Bb4, adding pressure to the centre. It's an active try, but it also commits the bishop early — and this repertoire knows exactly how to make that commitment a liability rather than an asset. Watch out — their bishop on b4 pins your knight on c3 against your king on e1. Remember — a pin freezes the piece in front: it can't move without exposing the more valuable piece behind it, so it can be piled on.
+  > Black pins the c3-knight with the Ragozin's bishop to b4, adding pressure to the centre. It's an active try, but it also commits the bishop early — and this repertoire knows exactly how to make that commitment a liability rather than an asset. Watch out — their bishop on b4 pins your knight on c3 against your king on e1. Remember — a pin freezes the piece in front: it can't move without exposing the more valuable piece behind it, so it can be piled on.
+=== ply 9 cxd5 -> exd5 | ok
+  > They have a pawn break available on c5 — that is where their play comes from.
+=== ply 11 Bg5 -> h6 | ok
+  > The c-file is half-open — your rook belongs there. They still have 2 minor pieces at home — a lead in development is only worth something while it lasts.
+=== ply 13 Bh4 -> Nbd7 | ok
+=== ply 15 e3 -> g5 | ok
+  > The opponent is eyeing gxh4 — it would win your bishop on h4.
+  > You’d love to play the knight taking on g5 — but they take back and it falls apart.
+  > Look ahead — if you play the bishop to g3, they have the knight to e4: a fork in 2 — spot it before it lands.
+  > The opponent is eyeing g-pawn takes h4 — it would win your bishop on h4.
+  > Material is even — nothing is decided yet; it's about the plans and the tactics.
+  > Their bishop on b4 pins your knight on c3 against your king on e1.
+=== ply 17 Bg3 -> Ne4 | ok
+  > f5 is a hole in their camp — a piece planted there can't be kicked. h4 is a pawn break for you now.
+  > Their knight on e4 is the piece doing the most work for them — trading it off takes the sting out of the position. Your knight on f3 is doing the least of anything you own — finding it a better square is worth more than a new plan.
+=== ply 19 Nd2 -> Nxg3 | ok
+  > Their knight on g3 just took and nothing defends it — the material comes back.
+  > The habit here is order of operations: their threat first, your idea second. Never the other way round.
+=== ply 21 fxg3 -> Nb6 | ok
+  > You left the book with the f-pawn taking on g3; the usual move there was the h-pawn taking on g3. The line was the Queen's Gambit Declined: Ragozin Defense.
+  > Heads up: your knight on d2 and your king share that diagonal — mind it before you open the line.
+=== ply 23 Bd3 -> Qe7 | ok
+  > Watch your backward pawn on e3 — don't let it become a target. Your king is still in the centre and castling is ready — getting it tucked away is worth more than anything else right now.
+=== ply 25 Qf3 -> Be6 | ok
+  > 2 attackers on d5 against 2 defenders — pile on one more and it falls. Your pawns on the g-file are doubled — they can't defend each other, so each one needs a neighbour or a piece to guard it.
+=== ply 27 a3 -> Bxc3 | ok
+  > Their bishop on c3 just took and nothing defends it — the material comes back.
+  > O-O? That drops the knight on d2. The move is bxc3 — it takes back the bishop. Start with the forcing moves here — every check, every capture, before you look at anything quiet.
+  > castle kingside? That drops the knight on d2. The move is b-pawn takes c3 — it takes back the bishop. Start with the forcing moves here — every check, every capture, before you look at anything quiet.
+=== ply 29 bxc3 -> O-O-O | ok
+  > e4 is the pawn break that cracks the position open — and it's ready now. Your pawn on a3 is isolated — no friendly pawn can ever defend it, so a piece has to.
+=== ply 31 a4 -> Bd7 | ok
+  > Lift the rook to a3 and swing it along the third rank into the attack. c4 is a pawn break for you now.
+=== ply 33 a5 -> Na4 | ok
+  > The opponent is eyeing Nxc3 — it would win your pawn on c3. You have a minority attack on the queenside — a6 makes contact and leaves them a weak pawn on b7.
+  > Kf2? Then Rde8, Rhe1 and Nxc3 — they win a pawn. The move is a6 — it grabs space on the queenside.
+  > The opponent is eyeing knight takes c3 — it would win your pawn on c3. You have a minority attack on the queenside — a6 makes contact and leaves them a weak pawn on b7.
+=== ply 35 a6 -> Rhe8 | ok
+  > Watch out — their rook on e8 and their queen on e7 form a battery on the file, bearing down on your pawn on e3. Remember — a battery stacks two pieces on the same line, multiplying their pressure down it.
+  > Kf2? Then b5, Rhe1 and Nxc3 — they win a pawn.
+=== ply 37 Kf2 -> Kb8 | ok
+  > Watch your backward pawn on c3 — don't let it become a target. Their rook on e8 is well placed — it has the half-open e-file.
+  > Kf2 unpins your pawn on e3, freeing it to join the game.
+=== ply 39 Rhe1 -> Nxc3 | ok
+  > The opponent wants Ne4+, forking your knight on d2 and your king on f2 — take the square away from them.
+  > The opponent wants knight to e4, check, forking your knight on d2 and your king on f2 — take the square away from them.
+=== ply 41 axb7 -> Qb4 | ok
+  > Their king on b8 and queen on b4 line up on the same b-file, and you have a queen that moves along it. c5 is a hole in their camp — a piece planted there can't be kicked. Your rook on a1 is your best-placed piece — it has the half-open a-file.
+=== ply 43 Kg1 -> Qb2 | ok
+  > Watch out — their queen on b2 forks your knight on d2 and your rook on a1. Remember — a fork hits two targets at once, and only one can escape — the other falls.
+  > You’d love to play the rook taking on a7 — but they take back and it falls apart. Nb3? Then Qxb3 and Qxf7 — you come out behind on material, a pawn for a knight. Two moves keep you level here. The rest give it away. Your passed pawn on b7 is a trump, but their king blockades it — challenge or dislodge that blockader before it can run.
+=== ply 45 Nf1 -> f5 | ok
+  > The isolated pawn on a7 is a weakness — pile up on it. Your passed pawn on b7 is a long-term trump — every trade that clears its path makes it stronger.
+=== ply 47 Ra5 -> Ba4 | ok
+  > The opponent is eyeing Qxb7 — it would win your pawn on b7. Their passed pawn on a7 is the danger — get a piece in front of it and blockade before it runs.
+  > The opponent is eyeing queen takes b7 — it would win your pawn on b7. Their passed pawn on a7 is the danger — get a piece in front of it and blockade before it runs.
+=== ply 49 Rc5 -> Rf8 | ok
+  > Your pawn on b7 is isolated — no friendly pawn can ever defend it, so a piece has to.
+  > Tempo lost — after this they get g4 for free, hitting your queen on f3, and your next move is forced to react. Here's how: Count it out loud: does this move force them to answer, or do they get a free turn? When a move gives them a tempo, look for one that develops AND asks a question. That eyed the knight on c3, but the queen on b2 holds it — taking there gives up your rook for the knight.
+=== ply 51 h3 -> Rf6 | ok
+  > Their dark squares are weak — e5 and c5 are holes their bishop can't cover; a knight belongs on one.
+  > Your king's cover is thin — 2 of the pawns in front of it are gone and they already have pieces aimed at it. Look after the king before you throw more forces forward. h3 makes luft — a breathing hole for the king, so a back-rank check can never turn into mate.
+=== ply 53 Nh2 -> Rdf8 | ok
+  > g4 is the pawn break that cracks the position open — and it's ready now. Your knight on h2 is your problem piece — knight on the rim, so improving it is a plan in itself.
+  > As for your next move: the queen to f2 is a fine alternative to the queen to f1 here; the two are within a whisker.
+=== ply 55 Qf1 -> Ne4 | ok
+  > Their knight on e4 is well placed — it sits on an outpost no pawn can kick.
+  > You’d love to play the bishop taking on e4 — but they take back and it falls apart.
+=== ply 57 Re2 -> Qa3 | ok
+  > Watch out — their queen on a3 forks your rook on c5 and your bishop on d3.
+  > That left your rook on c5 hanging to Nxc5 — they missed it this time. One move keeps you level here, and only one. Worth thinking it through.
+  > That left your rook on c5 hanging to knight takes c5 — they missed it this time. One move keeps you level here, and only one. Worth thinking it through.
+=== ply 59 Bxe4 -> fxe4 | ok
+  > Watch out — their rook on f8 and their rook on f6 form a battery on the file, bearing down on your queen on f1.
+  > This is the fork in the road: one move keeps you level. Take the extra minute.
+DONE

@@ -27,8 +27,14 @@ import type { Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { detectTactics } from './tacticsDetector';
 import type { PlanBeat } from './reviewStrategicOrientation';
+import type { BoardArrow } from '../types';
+import { admitArrows, type ArrowClaim } from './arrowDoor';
 
-const OPP_AMBER = '#f59e0b';
+/** Every arrow here goes through the arrow door: their piece's sight lines
+ *  read red (coming at you), a threat must actually win something. */
+function doorArrows(claims: ArrowClaim[], fen: string, studentColorWB: 'w' | 'b'): BoardArrow[] {
+  return admitArrows(claims, { fen, studentColor: studentColorWB === 'w' ? 'white' : 'black' }).arrows;
+}
 
 const PIECE_LABEL: Record<string, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
@@ -71,7 +77,7 @@ export function buildOpponentMoveTeaching(
         return {
           id: 'opponent-move',
           text: `Watch out — that ${movedLabel} attacks your ${PIECE_LABEL[hp.piece] ?? 'piece'} on ${hp.square}, and nothing defends it.`,
-          arrows: [{ startSquare: to, endSquare: hp.square, color: OPP_AMBER }],
+          arrows: doorArrows([{ from: to, to: hp.square, role: 'threat', source: 'reviewOpponent.hanging' }], fenAfter, studentColorWB),
           squares: [to, hp.square],
         };
       }
@@ -99,7 +105,7 @@ export function buildOpponentMoveTeaching(
             // Present tense, not "lasting" — durability is a future claim
             // this read can't verify (board-awareness sweep, 2026-07-22).
             text: `Your opponent's ${movedLabel} trains on your weak pawn on ${sq} — a target they can keep working on.`,
-            arrows: [{ startSquare: to, endSquare: sq, color: OPP_AMBER }],
+            arrows: doorArrows([{ from: to, to: sq, role: 'vision', source: 'reviewOpponent.eyes' }], fenAfter, studentColorWB),
             squares: [to, sq],
           };
         }
@@ -145,7 +151,7 @@ export function buildOpponentMoveTeaching(
           // EVERY square the sentence just named. The text says
           // `eyed.join(' and ')` — all of them — while this drew the first two,
           // so the student heard three squares and found two arrows.
-          arrows: eyed.map((sq) => ({ startSquare: to, endSquare: sq, color: OPP_AMBER })),
+          arrows: doorArrows(eyed.map((sq): ArrowClaim => ({ from: to, to: sq, role: 'vision', source: 'reviewOpponent.eyes' })), fenAfter, studentColorWB),
           squares: [to, ...eyed],
         };
       }

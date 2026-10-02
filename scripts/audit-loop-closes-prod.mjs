@@ -376,7 +376,7 @@ const run = async () => {
     await loop.page.locator('[data-testid="start-walk-btn"]').first().click({ timeout: 5000 }).catch(() => undefined);
     await loop.page.locator('[data-testid="coach-game-review-walk"]').first().waitFor({ timeout: 20000 }).catch(() => undefined);
     const skips = [
-      ['review-find-shot-card', '[data-testid="review-find-shot-skip"]'], ['review-cameo-ask', '[data-testid="review-cameo-skip"]'],
+      ['review-find-shot-card', '[data-testid="review-find-shot-skip"]'],
       ['review-theory-ask', '[data-testid="review-theory-skip"]'], ['review-trap-card', '[data-testid="review-trap-pick-leave"]'],
       ['review-trap-reveal', '[data-testid="review-trap-done"]'], ['review-critical-reveal', '[data-testid="review-critical-done"]'],
       ['review-rewind-card', '[data-testid="review-rewind-decline"]'],

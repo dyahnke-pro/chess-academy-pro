@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4056) — names `amateurPlayCache`, `ratingBandFor`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4059) — names `amateurPlayCache`, `ratingBandFor`
 
 ## Who calls in
 
@@ -39,13 +39,13 @@
 - `src/services/theoryDeparture.ts:114`
 
 ### `getCachedAmateurPlay` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8918`
+- `src/components/Coach/CoachTeachPage.tsx:9060`
 - `src/services/amateurPlayCache.test.ts:37`
-- `src/services/coachApi.ts:1718`
+- `src/services/coachApi.ts:1753`
 - `src/services/refutedAlternative.ts:141`
 
 ### `warmAmateurPlay` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8969`
+- `src/components/Coach/CoachTeachPage.tsx:9119`
 - `src/services/masterPlayWatcher.ts:169`
 
 ### `__clearAmateurPlayCache` (function) — 3 call sites

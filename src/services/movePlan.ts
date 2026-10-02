@@ -82,7 +82,11 @@ export function missedPlanClause(fenBefore: string, playedUci: string, bestUci: 
   if (best === 'castle') return `The real priority here was getting the king to safety — castling first.`;
   if (best === 'center-break') {
     const san = sanOf(fenBefore, bestUci);
-    return san ? `The position was calling for the strike in the centre with ${san}, not a quiet move.` : '';
+    // "Not a quiet move" is a claim about the PLAYED move — false of a check or
+    // a capture (UVJ75kdDdt8 walk, Rh3+: "…with exd5, not a quiet move").
+    const playedSan = sanOf(fenBefore, playedUci) ?? '';
+    const tail = /[x+#]/.test(playedSan) ? '' : ', not a quiet move';
+    return san ? `The position was calling for the strike in the centre with ${san}${tail}.` : '';
   }
   return '';
 }

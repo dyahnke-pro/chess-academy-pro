@@ -132,3 +132,52 @@ describe('planRace — the race, not just the plans', () => {
     expect(s.endsWith('.')).toBe(true);
   });
 });
+
+describe('fileClaimed — the contested open file, taken (live, after the move)', () => {
+  const FEN = 'r5k1/5ppp/8/8/8/8/5PPP/R5K1 w - - 0 1';
+  it('the rook landing on the contested file is named', async () => {
+    const { fileClaimed } = await import('./planRace');
+    const f = fileClaimed(FEN, 'Rb1');
+    expect(f?.file).toBe('b');
+    expect(f?.contested).toBe(true);
+    expect(f?.text).toMatch(/open b-file first/);
+  });
+  it('silent for any other move (negative control)', async () => {
+    const { fileClaimed } = await import('./planRace');
+    expect(fileClaimed(FEN, 'Kf1')).toBeNull();
+    expect(fileClaimed(FEN, 'h3')).toBeNull();
+  });
+});
+
+describe('the first queen, on arrival (Naroditsky, Pawn Races)', () => {
+  it('your new queen covers their queening square — theirs never promotes', () => {
+    const fen = '8/4k3/8/P7/7p/8/8/2K5 w - - 0 1';
+    const r = detectPlanRace(fen, 'w');
+    expect(r && r.kind === 'passer-race' && r.firstQueenCovers).toBe(true);
+    expect(planRaceClause(fen, 'w', 'live')).toMatch(/your new queen covers their queening square, so theirs never promotes$/);
+  });
+  it('no cover claim when the queening squares are not on one line', () => {
+    const fen = '8/4k3/8/P7/6p1/8/8/2K5 w - - 0 1';
+    const r = detectPlanRace(fen, 'w');
+    expect(r && r.kind === 'passer-race' && r.firstQueenCovers).toBe(false);
+  });
+  it('not read with pieces on the board', () => {
+    const r = detectPlanRace('8/4k3/8/P7/7p/8/8/2K4R w - - 0 1', 'w');
+    expect(r && r.kind === 'passer-race' ? r.firstQueenCovers : 'x').toBeNull();
+  });
+});
+
+describe('the first queen covers by its own line, not by a king beside the square', () => {
+  it('a king next to the queening square is not the queen covering it', () => {
+    // Black queens first on g1; a8 is touched only by the black king on b7.
+    const r = detectPlanRace('8/1k6/4K3/8/P2P2p1/8/3P4/8 b - - 0 1', 'b');
+    expect(r && r.kind === 'passer-race' ? r.firstQueenCovers : 'x').toBe(false);
+  });
+});
+
+describe('a side in check makes no file race (review walk 2026-10-01, game 2 ply 67)', () => {
+  it('after Rb7+ the black rook on d8 is not "unable" to reach the e-file', () => {
+    // White just played Rb7+; Black's rook on d8 could take e8 any other move.
+    expect(detectPlanRace('3r4/1R3k1p/p1rP2p1/2P2p2/N7/1P5P/P5P1/6K1 b - - 2 34', 'b')?.kind).not.toBe('file-collision');
+  });
+});

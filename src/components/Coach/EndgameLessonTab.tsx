@@ -53,6 +53,7 @@ import { EndgameRecapCard } from './EndgameRecapCard';
 import { teachingSourceForBoard, generalizedTeaching, spokenBeatText, endgameNoteForLesson } from '../../services/danyaTeachingService';
 import type { EndgameLesson, EndgameLessonPosition } from '../../types/endgameLesson';
 import type { EndgameProgressRecord } from '../../types';
+import { WrongTryNote } from '../Puzzles/WrongTryNote';
 
 const TIER_OPTIONS: { value: DrillTier; label: string }[] = [
   { value: 'beginner', label: 'Beginner' },
@@ -191,7 +192,11 @@ function PickerGrid({ lessons, tabLabel, tabSubtitle, onPick }: PickerGridProps)
                     {drillCount > 0 && (
                       <>
                         {' · '}
-                        {drillCount.toLocaleString()} drill puzzles
+                        {/* A lesson tagged only "endgame" drills the general pool,
+                            not its own principle — say so (endgame hand walk
+                            2026-10-01: "7,188 drill puzzles" on four unrelated
+                            principles). */}
+                        {drillCount.toLocaleString()} {(lesson.practiceThemes ?? []).every((t) => t === 'endgame') ? 'mixed endgame puzzles' : 'drill puzzles'}
                         {beginnerCount > 0 && (
                           <span className="text-theme-text-muted">
                             {' '}
@@ -802,6 +807,7 @@ function PositionRunner({
         onReplayNarration={narrationText ? onReplayNarration : undefined}
         corpusNote={corpusNote}
       />
+      {!playout.isComplete && <WrongTryNote text={playout.wrongTryText} />}
       {posIndex === 0 && <NarrationPanel lesson={lesson} />}
       <div className="flex items-center justify-between gap-2">
         <button

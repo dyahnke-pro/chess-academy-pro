@@ -230,13 +230,25 @@ export function whyItFailed(args: {
   // causal link is proven, not guessed: mv.from was among the piece's defenders
   // before, and the swap-off there is now losing for you.
   let worstAbandon: { sq: Square; type: string; attacker: { sq: Square; type: string } } | null = null;
+  // THE SWAP-OFF MUST BE NEW (walk 2026-09-30: "your bishop was the only thing
+  // guarding the queen on d6" — c7 guarded it too, and a bishop takes a queen
+  // whoever guards it). The same board before the move, them to move: if they
+  // already won as much there, leaving did not cause it.
+  let beforeTheirs: Chess | null = null;
+  try {
+    const parts = before.fen().split(' ');
+    parts[1] = parts[1] === 'w' ? 'b' : 'w'; parts[3] = '-';
+    beforeTheirs = new Chess(parts.join(' '));
+  } catch { beforeTheirs = null; }
   for (const row of after.board()) {
     for (const cell of row) {
       if (!cell || cell.color !== me || cell.type === 'k' || cell.square === mv.to) continue;
       let defendedByMover = false;
       try { defendedByMover = before.attackers(cell.square, me).includes(mv.from); } catch { /* skip */ }
       if (!defendedByMover) continue;
-      if (seeGain(after, cell.square) <= 0) continue; // opponent can't actually win it
+      const gainNow = seeGain(after, cell.square);
+      if (gainNow <= 0) continue; // opponent can't actually win it
+      if (beforeTheirs && seeGain(beforeTheirs, cell.square) >= gainNow) continue;
       const attacker = leastValuableAttackerOf(after, cell.square);
       if (!attacker) continue;
       if (!worstAbandon || (VALUE[cell.type] ?? 0) > (VALUE[worstAbandon.type] ?? 0)) {
@@ -248,7 +260,9 @@ export function whyItFailed(args: {
     return {
       kind: 'abandoned-defender',
       squares: [worstAbandon.sq, worstAbandon.attacker.sq],
-      line: `Your ${NAME[mv.piece]} was the only thing guarding the ${NAME[worstAbandon.type]} on ${worstAbandon.sq} — once it left, the ${NAME[worstAbandon.attacker.type]} on ${worstAbandon.attacker.sq} takes it.`,
+      line: after.attackers(worstAbandon.sq, me).length === 0
+        ? `Your ${NAME[mv.piece]} was the only thing guarding the ${NAME[worstAbandon.type]} on ${worstAbandon.sq} — once it left, the ${NAME[worstAbandon.attacker.type]} on ${worstAbandon.attacker.sq} takes it.`
+        : `Your ${NAME[mv.piece]} was holding the ${NAME[worstAbandon.type]} on ${worstAbandon.sq} together — once it left, the ${NAME[worstAbandon.attacker.type]} on ${worstAbandon.attacker.sq} wins it.`,
     };
   }
 
@@ -300,7 +314,11 @@ export function whyItFailed(args: {
   // and Nxd5 won the game).
   const realGuards = guards.filter((g) => !pinnedToMore(after, g, me));
   const pinsTarget = pinnedToMore(after, target.sq, me);
-  if (swap < 0 && swap >= -2 && realGuards.length > 0 && !pinsTarget) {
+  // A CAPTURE'S IDEA IS THE CAPTURE (1200 Sicilian walk 2026-09-27: 17.Bxd4
+  // "That eyed the pawn on g7…", 19.Nxc5 "That eyed the pawn on b7…"). What
+  // the piece happens to see from its new square is not what the student took
+  // for — the capture itself is, and the landing-square rule above answers it.
+  if (!mv.captured && swap < 0 && swap >= -2 && realGuards.length > 0 && !pinsTarget) {
     const guard = leastValuableAttackerOf(after, target.sq);
     if (guard) {
       // The COMPUTED cost of the swap-off, never "the exchange" — that term

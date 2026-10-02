@@ -155,7 +155,7 @@ async function mastersMoves(uci: string[], tries = 2): Promise<MasterMove[] | nu
   const url = `${PROXY}?source=masters&play=${uci.join(',')}`;
   for (let t = 0; t < tries; t++) {
     try {
-      const r = await fetch(url);
+      const r = await fetch(url, { signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
       if (!r.ok) { await sleep(500); continue; }
       const j = await r.json();
       return (j.moves ?? []).map((m: { san: string; white: number; draws: number; black: number }) => ({
@@ -170,7 +170,7 @@ async function mastersMovesByFen(fen: string, tries = 2): Promise<MasterMove[] |
   const url = `${PROXY}?source=masters&fen=${encodeURIComponent(fen)}`;
   for (let t = 0; t < tries; t++) {
     try {
-      const r = await fetch(url);
+      const r = await fetch(url, { signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
       if (!r.ok) { await sleep(500); continue; }
       const j = await r.json();
       return (j.moves ?? []).map((m: { san: string; white: number; draws: number; black: number }) => ({
@@ -182,6 +182,14 @@ async function mastersMovesByFen(fen: string, tries = 2): Promise<MasterMove[] |
 }
 
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
+// A hung explorer connection used to sit until the whole test's 300s budget
+// ran out (stockfish-soundness red on 2026-09-30 and 2026-10-01, network not
+// code). Each lookup is capped; a timed-out one is "unknown" (null), exactly
+// like any other network failure.
+const FETCH_TIMEOUT_MS = 15_000;
+/** Budget for a test making `lookups` explorer calls: every call may use both
+ *  tries at the cap, plus the pacing sleep. Never below the old 300s. */
+const lookupBudgetMs = (lookups: number): number => Math.max(300_000, lookups * (2 * FETCH_TIMEOUT_MS + 1_300));
 
 function deepestBeat(lessonBeats: { moves: string[] }[]): string[] {
   let d: string[] = [];
@@ -533,7 +541,7 @@ describe.runIf(RUN)('Hole 7a — masters legitimacy of middlegame plan lines', (
         console.log(`  [${openingId} plans] ${beyondBook} ply past masters' book → deferred to Stockfish`);
       }
       expect(suspects, `${openingId}: master-divergent plan move(s):\n  ${suspects.join('\n  ')}`).toEqual([]);
-    }, 300000);
+    }, lookupBudgetMs(plans.reduce((n, p) => n + (p.playableLines ?? []).reduce((m, l) => m + l.moves.length, 0), 0)));
   }
 });
 

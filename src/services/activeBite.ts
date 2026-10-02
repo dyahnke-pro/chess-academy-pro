@@ -50,6 +50,35 @@ export async function finishBite(kinds: PickKind | readonly PickKind[], now: num
   return true;
 }
 
+/** A finish line that belongs to ONE pick (the Start-here steps share a kind,
+ *  so the kind alone cannot tell "the fundamentals were read" from "the
+ *  Italian was watched"). Ends the bite only when it is that pick. */
+export async function finishBiteByKey(key: string, now: number = Date.now()): Promise<boolean> {
+  const bite = await current();
+  if (!bite || now - bite.at > BITE_TTL_MS || bite.key !== key) return false;
+  active = null;
+  await db.meta.delete(META_KEY).catch(() => undefined);
+  await markRepCompletedToday(bite.key);
+  return true;
+}
+
+// The Start-here "first coached game" step: any game saved against the coach
+// is its finish line. Scheduled out of the Dexie transaction the hook runs in.
+try {
+  db.games.hook('creating', (_key, obj) => {
+    if (obj.source === 'coach') setTimeout(() => { void finishBiteByKey('up:start:first-game'); }, 0);
+  });
+} catch { /* a test db without hooks */ }
+
+/** The meta row that marks the Start-here Fundamentals step done for good. */
+export const START_FUNDAMENTALS_KEY = 'start-path:fundamentals';
+
+/** The Fundamentals page opened: the Start-here step is done, for good. */
+export async function markFundamentalsVisited(): Promise<void> {
+  await db.meta.put({ key: START_FUNDAMENTALS_KEY, value: new Date().toISOString() }).catch(() => undefined);
+  await finishBiteByKey('up:start:fundamentals');
+}
+
 /** Test hook. */
 export function __resetActiveBiteForTests(): void {
   active = null;

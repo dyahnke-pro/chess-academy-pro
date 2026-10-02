@@ -393,6 +393,10 @@ const ALTERNATIVES_QUESTION_RE = anyOf([
   String.raw`\bwhat\s+else\s+(?:could|can|should|would|might)\s+i\s+(?:play|do|try|consider)\b`,
   // "what are my (other) options/choices/alternatives/candidate moves"
   String.raw`\bwhat\s+(?:are|about)\s+(?:my|the)\s+(?:other\s+)?(?:options?|choices?|alternatives?|candidate\s+moves?)\b`,
+  // "my three best candidate moves", "the top 3 moves", "best few moves", "how
+  // do they compare" (pass-3 walk 2026-10-01: answered with ONE move).
+  String.raw`\b(?:two|three|four|five|2|3|4|5|few|top|best)\s+(?:best\s+|top\s+|candidate\s+|good\s+)*(?:moves|candidates|options|choices)\b`,
+  String.raw`\bhow\s+do\s+(?:they|those|these|the\s+(?:moves|candidates|options))\s+compare\b`,
   // "compare it/that/the best move to/with/against the alternatives/other moves"
   String.raw`\bcompare\b[\s\S]{0,30}\b(?:alternatives?|other\s+moves?|options?|candidates?)\b`,
   // "(are there) any other (good) moves (here / that work)"
@@ -444,7 +448,13 @@ const WHY_BEST_MOVE_RE = anyOf([
   String.raw`\bhow\s+does\s+(?:the\s+)?(?:engine|computer|stockfish)\s+(?:see|read|evaluate|view)\b`,
   String.raw`\bwhat\s+does\s+(?:the\s+)?(?:engine|computer|stockfish)\s+see\b`,
   // "walk/talk me through the (best) line / the engine line / the reasoning"
-  String.raw`\b(?:walk|talk|take)\s+me\s+through\s+(?:the\s+)?(?:engine(?:'?s)?\s+)?(?:line|reasoning|thinking|idea|plan|move)\b`,
+  String.raw`\b(?:walk|talk|take)\s+me\s+through\s+(?:the\s+)?(?:(?:best|main|top|engine(?:'?s)?)\s+)?(?:line|reasoning|thinking|idea|plan|move)\b`,
+  // "show me the line / the best line", "what's the best line here", "move by
+  // move" (pass-3 walk 2026-10-01: "the BEST line" broke every pattern above,
+  // and the ask fell to a one-move answer).
+  String.raw`\b(?:show|give|tell)\s+me\s+(?:the\s+)?(?:best|main|engine(?:'?s)?|critical)\s+line\b`,
+  String.raw`\bwhat(?:'?s| is)\s+the\s+(?:best|main|engine(?:'?s)?|critical)\s+line\b`,
+  String.raw`\bmove\s+by\s+move\b`,
   // bare "why is it best / why though" right after a best-move answer.
   String.raw`\bwhy\s+(?:is\s+it|though|that|is\s+that)\b`,
 ]);
@@ -548,6 +558,16 @@ function normalizeSan(tok: string): string {
   const up = tok.toUpperCase();
   if (up === '0-0-0' || up === 'O-O-O') return 'O-O-O';
   if (up === '0-0' || up === 'O-O') return 'O-O';
+  // A lower-case "b" straight onto a rank is the b-PAWN, not a bishop: "Is b5 a
+  // sound sacrifice?" read as "B5" and was answered "B5 isn't a legal move"
+  // (question walk 2026-09-27). "b" is the one piece letter that is also a file,
+  // so only a square after it ("bc4", "bxc6") can make it a bishop.
+  // A pawn onto the last rank with no piece named IS a promotion — "promote on
+  // d1" read as the move "d1", which chess.js calls illegal, and the question
+  // fell to grading the move before it. The queen is what people mean.
+  const promo = /^([a-h](?:x[a-h])?[18])([+#]?)$/i.exec(tok);
+  if (promo) return `${promo[1].toLowerCase()}=Q${promo[2]}`;
+  if (/^b[1-8]/.test(tok)) return tok.toLowerCase();
   if (/^[kqrbn]/i.test(tok)) return tok[0].toUpperCase() + tok.slice(1).toLowerCase();
   return tok.toLowerCase().replace(/=([qrbn])/i, (_m, p: string) => `=${p.toUpperCase()}`);
 }
@@ -610,6 +630,8 @@ const CANDIDATE_MOVE_RE = anyOf([
   // one form the list somehow never carried (caught 2026-08-06 while
   // re-verifying the inversion inventory).
   String.raw`\bwhat\s+(?:if|happens?\s+(?:if|when|after))\b`,
+  // the bare conditional — "if I play Nxe5, what do they answer?" (pass-3 walk).
+  String.raw`\b(?:if|suppose|say)\s+i\s+(?:play|go|take|push|move|castle|try)\b`,
   String.raw`\bis\s+it\s+(?:ok(?:ay)?|fine|safe|good|playable|alright)\s+to\s+(?:play|castle)\b`,
   String.raw`\bwould\s+[A-Za-z0-9+#=-]{2,6}\s+(?:be\s+)?(?:ok(?:ay)?|fine|work|playable|good|sound|safe)\b`,
   String.raw`\bdoes\s+[A-Za-z0-9+#=-]{2,6}\s+(?:work|hold|lose|win|blunder)\b`,
@@ -676,10 +698,111 @@ export function isStopCommand(text: string | undefined): boolean {
   return /^\s*(?:(?:ok(?:ay)?|coach|please)[,\s]+)?(?:stop(?:\s+(?:talking|it|please))?|wait(?:\s+a\s+(?:sec(?:ond)?|minute|moment))?|hold\s+on|hang\s+on|pause|shh+|quiet|be\s+quiet|silence|enough|one\s+sec(?:ond)?)(?:[,\s]+please)?\s*[.!]*\s*$/i.test(text);
 }
 
+/** TWO MOVES NAMED AS A CHOICE — "dxe5 or Qxe5?", "should I recapture with the
+ *  pawn or the queen?" (question walk 2026-09-27: both fell to the best-move
+ *  answer, which never said why the other one is worse — here, …Qxe5 drops the
+ *  queen to the bishop on b2). Returns the two moves as SAN tokens, or as the
+ *  two PIECES named; the board resolves pieces to moves. Text only. */
+export type CompareMovesAsk =
+  | { kind: 'sans'; a: string; b: string }
+  | { kind: 'pieces'; a: string; b: string }
+  /** "Why is that better than e5?" — the ENGINE's move against the named one. */
+  | { kind: 'versus-best'; b: string };
+const PIECE_WORD_RE = '(pawn|knight|night|bishop|rook|queen|king)';
+export function compareMovesAsk(ask: string | undefined): CompareMovesAsk | null {
+  if (!ask) return null;
+  // "X better than Y" / "that better than Y" / "instead of Y" — a comparison
+  // with no "or" (question walk 2026-09-27: "Why is that better than e5?" went
+  // to the generic why-best lane and e5 was never mentioned).
+  const than = new RegExp(`\\b(?:better|stronger|worse|weaker)\\s+than\\s+(?:playing\\s+)?${SAN_TOKEN_RE.source.replace(/^\\b/, '')}`, 'i').exec(ask);
+  if (than) {
+    const b = normalizeSan(than[1]);
+    const lead = ask.slice(0, than.index).match(new RegExp(SAN_TOKEN_RE.source, 'gi'));
+    const a = lead ? normalizeSan(lead[lead.length - 1]) : null;
+    if (b && a && a !== b) return { kind: 'sans', a, b };
+    if (b && !a) return { kind: 'versus-best', b };
+  }
+  if (!/\bor\b/i.test(ask)) return null;
+  const pieces = new RegExp(`\\bwith\\s+(?:the|my|a)?\\s*${PIECE_WORD_RE}\\s+or\\s+(?:with\\s+)?(?:the|my|a)?\\s*${PIECE_WORD_RE}\\b`, 'i').exec(ask);
+  if (pieces) {
+    const norm = (w: string): string => (w.toLowerCase() === 'night' ? 'knight' : w.toLowerCase());
+    return { kind: 'pieces', a: norm(pieces[1]), b: norm(pieces[2]) };
+  }
+  const [left, ...rest] = ask.split(/\bor\b/i);
+  const right = rest.join(' or ');
+  const tokA = left.match(new RegExp(SAN_TOKEN_RE.source, 'gi'));
+  const tokB = right.match(new RegExp(SAN_TOKEN_RE.source, 'i'));
+  if (!tokA || !tokB) return null;
+  const a = normalizeSan(tokA[tokA.length - 1]);
+  const b = normalizeSan(tokB[1] ?? tokB[0]);
+  return a && b && a !== b ? { kind: 'sans', a, b } : null;
+}
+
+/** "Can they take on c5?" / "can I capture on e5?" / "can he win the pawn on
+ *  d4?" — who can capture on a SQUARE (question walk 2026-09-27: no lane, and
+ *  the chat refused). Text only; the board answers it. */
+export function captureOnAsk(ask: string | undefined): { capturer: 'student' | 'opponent'; square: string } | null {
+  if (!ask) return null;
+  const m = /\bcan\s+(i|we|they|he|she|my\s+opponent|the\s+opponent|white|black)\s+(?:just\s+)?(?:take|capture|win|grab)\s+(?:on\s+|the\s+(?:pawn|knight|bishop|rook|queen|piece)\s+on\s+|at\s+)?([a-h][1-8])\b/i.exec(ask);
+  if (!m) return null;
+  const who = m[1].toLowerCase();
+  const capturer: 'student' | 'opponent' = who === 'i' || who === 'we' ? 'student' : 'opponent';
+  return { capturer, square: m[2].toLowerCase() };
+}
+
+/** "Is my d-pawn strong?" / "how good is my passed pawn on the c-file?" —
+ *  a question about ONE pawn (question walk 2026-09-27: answered with the best
+ *  move). Returns the file; the board reads the pawn. */
+export function pawnStrengthAsk(ask: string | undefined): { file: string } | null {
+  if (!ask) return null;
+  const m = /\b(?:is|how\s+(?:strong|good|dangerous|weak)\s+is)\s+my\s+(?:passed\s+)?([a-h])[\s-]?pawn\b/i.exec(ask)
+    ?? /\bmy\s+(?:passed\s+)?pawn\s+on\s+the\s+([a-h])[\s-]?file\b/i.exec(ask)
+    ?? /\bmy\s+(?:passed\s+)?pawn\s+on\s+([a-h])[1-8]\b.*\b(?:strong|weak|good|dangerous|safe|passed)\b/i.exec(ask)
+    // The SQUARE form (question walk 2026-09-27: "Is my d4 pawn weak?" had no
+    // lane and was graded as the move 4.d4).
+    ?? /\bmy\s+(?:passed\s+)?([a-h])[1-8][\s-]?pawn\b/i.exec(ask);
+  return m ? { file: m[1].toLowerCase() } : null;
+}
+
+/** "Should I trade queens?" — the piece kind the student asks about trading
+ *  (question walk 2026-09-27: it fell through to the best move and the trade
+ *  was never addressed). `any` = "pieces". */
+export function tradeAsk(ask: string | undefined): 'q' | 'r' | 'b' | 'n' | 'any' | null {
+  if (!ask) return null;
+  const PIECE = String.raw`(queens?|rooks?|bishops?|knights?|minor\s+pieces|pieces)`;
+  const m = new RegExp(String.raw`\b(?:should|shall|can|could|do|would)\s+i\s+(?:want\s+to\s+|be\s+)?(?:trade|trading|exchange|exchanging|swap|swapping)\s+(?:off\s+)?(?:the\s+|my\s+)?${PIECE}\b`, 'i').exec(ask)
+    ?? new RegExp(String.raw`\b(?:is|would\s+be|are)\s+(?:it\s+(?:good|wise|right|smart)\s+to\s+(?:trade|exchange|swap)|trading|exchanging|swapping)\s+(?:off\s+)?(?:the\s+)?${PIECE}\s*(?:good|wise|right|a\s+good\s+idea|ok(?:ay)?|smart)?\b`, 'i').exec(ask)
+    ?? new RegExp(String.raw`^\s*(?:trade|exchange|swap)\s+(?:off\s+)?(?:the\s+)?${PIECE}\s*\?\s*$`, 'i').exec(ask);
+  if (!m) return null;
+  const w = m[1].toLowerCase();
+  if (w.startsWith('queen')) return 'q';
+  if (w.startsWith('rook')) return 'r';
+  if (w.startsWith('bishop')) return 'b';
+  if (w.startsWith('knight')) return 'n';
+  return 'any';
+}
+
+/** "What if THEY play d5?" — a move the OPPONENT might make, named ahead of
+ *  time (question walk 2026-09-27: routed as the student's candidate, the coach
+ *  graded the student playing d5). The subject is the opponent and the tense is
+ *  forward — "why did they play" is the retrospective opponent-move lane. */
+const OPPONENT_HYPOTHETICAL_RE = anyOf([
+  String.raw`\b(?:what\s+(?:if|happens?\s+(?:if|when))|if|when|suppose|say)\s+(?:they|he|she|(?:my|the)\s+opponent|the\s+(?:bot|computer|engine))\s+(?:play|plays|go|goes|push|pushes|take|takes|answer|answers|respond|responds|reply|replies|tr(?:y|ies)|get|gets|castle|castles|move|moves|put|puts)\b`,
+  String.raw`\b(?:can|could|will|would|might)\s+(?:they|he|she|(?:my|the)\s+opponent)\s+(?:play|go|push|take|get|try|answer|castle)\b`,
+  String.raw`\b(?:should|do|must)\s+i\s+(?:worry|be\s+worried|care)\s+about\s+(?:their|his|her|the)\b`,
+]);
+
+export function isOpponentHypotheticalQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  if (!extractCandidateSan(ask)) return false;
+  return OPPONENT_HYPOTHETICAL_RE.test(ask);
+}
+
 export function isCandidateMoveQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
   if (isWhyBestMoveQuestion(ask)) return false; // "why is X best" is engine-reasoning
   if (!extractCandidateSan(ask)) return false;  // must NAME a move
+  if (isOpponentHypotheticalQuestion(ask)) return false; // THEIR move, their lane
   return CANDIDATE_MOVE_RE.test(ask);
 }
 
@@ -690,6 +813,10 @@ export function isCandidateMoveQuestion(ask: string | undefined): boolean {
  *  inversion (Phase 2) routes it through `assembleTacticsAnswer` → voiceFacts
  *  and the LLM voices the engine's facts, deciding nothing. */
 const TACTICS_QUESTION_RE = anyOf([
+  // "the most forcing move here" / "any forcing moves" — the checks, captures
+  // and threats on THIS board (pass-3 walk 2026-10-01).
+  String.raw`\b(?:most\s+)?forcing\s+(?:move|moves|line|continuation)s?\b`,
+  String.raw`\b(?:is\s+there|any)\s+(?:a\s+)?tactic`,
   String.raw`\bhang(?:ing|s)?\b`,
   String.raw`\ben\s*prise\b`,
   String.raw`\bloose\s+piece`,
@@ -769,6 +896,10 @@ export function isTacticsQuestion(ask: string | undefined): boolean {
  *  to the tactic scan, so a middlegame mate-combination ask is unaffected. */
 export function isMateQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
+  // A mate question that NAMES ITS MATERIAL ("how many moves to mate with
+  // bishop and knight") asks a rule, not about this board — localhost chat walk
+  // 2026-10-01 answered it "No forced mate here".
+  if (endgameRuleMaterial(ask) !== null) return false;
   return /\b(?:force\s+(?:a\s+)?(?:mate|checkmate)|forced\s+(?:mate|checkmate|win\s+by\s+mate)|mate\s+in\s+(?:how\s+many|\d)|how\s+(?:many\s+moves?|long)\s+(?:to|until|before)\s+(?:i\s+)?(?:force\s+)?(?:mate|checkmate)|moves?\s+to\s+(?:force\s+)?(?:mate|checkmate)|can\s+i\s+(?:force\s+)?(?:deliver\s+)?(?:mate|checkmate)|is\s+there\s+(?:a\s+)?(?:forced\s+)?(?:mate|checkmate)|mate\s+the\s+(?:lone\s+)?king|(?:fastest|quickest)\s+(?:way\s+to\s+)?(?:mate|checkmate|win)|how\s+(?:fast|quickly|soon)\s+can\s+i\s+(?:mate|win))\b/i.test(ask);
 }
 
@@ -971,13 +1102,46 @@ const ENDGAME_QUESTION_RE = anyOf([
   String.raw`\b(?:what(?:'?s| is)?\s+the\s+)?(?:winning\s+)?technique\s+to\s+(?:convert|win|hold|draw|promote)\b`,
   String.raw`\bhow\s+do\s+i\s+(?:not\s+lose|avoid\s+losing)\s+(?:this|the)\s+(?:ending|endgame)\b`,
 ]);
+/** The material a board-free ENDGAME RULE question names ("can two knights
+ *  checkmate?", "can a king stop two pawns?", "is king and bishop vs king a
+ *  draw?"). The answer is computed by building that material and asking the
+ *  same detectors the board speaks through (`assembleEndgameRuleAnswer`), so a
+ *  rule said in chat and a rule said over a live board are one sentence. Null
+ *  for a question about THIS position (the board lanes answer those) and for
+ *  material the detectors have no rule for (queen vs rook, …). */
+export type EndgameRuleMaterial =
+  | 'queen' | 'rook' | 'two-bishops' | 'bishop-knight' | 'two-knights' | 'bishop' | 'knight' | 'two-pawns';
+export function endgameRuleMaterial(ask: string | undefined): EndgameRuleMaterial | null {
+  if (!ask) return null;
+  const a = ask.toLowerCase();
+  if (/\b(?:here|this\s+position|this\s+game|this\s+ending|this\s+endgame|on\s+the\s+board|right\s+now)\b/.test(a)) return null;
+  if (/\b(?:defen[cs]e|gambit|opening|variation)\b/.test(a)) return null;
+  const pieces = new Set<string>();
+  for (const p of ['queen', 'rook', 'bishop', 'knight', 'pawn']) if (new RegExp(`\\b${p}s?\\b`).test(a)) pieces.add(p);
+  if (pieces.size === 1 && pieces.has('pawn')) {
+    if (/\b(?:two|2)\s+(?:connected\s+)?pawns\b/.test(a) && /\bking\b/.test(a) && /\b(?:stop|catch|win|take|hold|beat|against|vs\.?|versus)\b/.test(a)) return 'two-pawns';
+    return null;
+  }
+  // A mating-material question: a mate / draw word and the lone king implied.
+  if (!/\b(?:check)?mate\b|\bmating\b|\bforce\b|\benough\b|\binsufficient\b|\bdraw\b|\bwin\b/.test(a)) return null;
+  if (pieces.size === 2 && pieces.has('bishop') && pieces.has('knight')) return 'bishop-knight';
+  if (pieces.size !== 1) return null;
+  if (/\b(?:two|2)\s+bishops\b|\bbishop\s+pair\b|\bpair\s+of\s+bishops\b/.test(a)) return 'two-bishops';
+  if (/\b(?:two|2)\s+knights\b/.test(a)) return 'two-knights';
+  if (pieces.has('queen')) return 'queen';
+  if (pieces.has('rook')) return 'rook';
+  if (pieces.has('bishop')) return 'bishop';
+  if (pieces.has('knight')) return 'knight';
+  return null;
+}
+
 export function isEndgameQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
   // "I always/keep LOSE the endgame" is a phase-WEAKNESS statement about the
   // student over time, NOT "is THIS endgame winning" — the bare "endgame" token
   // would misroute it to the live tablebase (matrix pass 11, 2026-07-10).
   if (/\bi\s+(?:always|keep|usually|constantly|often|tend\s+to)\s+(?:los|blunder|struggl|mess|screw)/i.test(ask)) return false;
-  return ENDGAME_QUESTION_RE.test(ask) || isEndgamePlayRequest(ask);
+  return ENDGAME_QUESTION_RE.test(ask) || isEndgamePlayRequest(ask) || endgameRuleMaterial(ask) !== null;
 }
 
 /** "Play / practise / train / let me try the <ending> with me" — the INTERACTIVE
@@ -1073,8 +1237,11 @@ export function isPlayerGamesQuestion(ask: string | undefined): boolean {
   // mean?" (David 2026-09-09 teach audit).
   // …but "do you have a game in this line?" is an availability ask about the
   // pro's corpus, not a question about a move the coach played, so it is exempt.
+  // THIRD-person pronouns too: "why did THEY play Ne4?" is the opponent's
+  // move on this board, never a player named "they" (question walk 2026-09-27:
+  // it answered "Carlsen has 74 reference games in the Najdorf").
   if (!GAME_AVAILABILITY_RE.test(ask)
-    && /\b(?:did|has|do|does|will|would|can)\s+(?:i|you)\b/i.test(ask)) return false;
+    && /\b(?:did|has|have|do|does|will|would|can)\s+(?:i|you|they|my\s+opponent|the\s+opponent|the\s+coach)\b/i.test(ask)) return false;
   return PLAYER_GAMES_QUESTION_RE.test(ask);
 }
 
@@ -1126,6 +1293,10 @@ export function isConceptQuestion(ask: string | undefined): boolean {
   // student asking about the app was taught what a fork is (2026-08-13
   // all-questions audit, run allq-msrzt11w).
   if (/\b(?:tab|page|screen|section|button|menu|the\s+app)\b/i.test(ask)) return false;
+  // A PIECE ON A SQUARE is this board, never a glossary entry (question run
+  // 2026-09-27: "What does their bishop on c8 do?" was answered with a book
+  // passage on doubled pawns).
+  if (/\b(?:knight|night|bishop|rook|queen|king|pawn)\s+on\s+[a-h][1-8]\b/i.test(ask)) return false;
   // NOTE: the broad "what's <word>" / "how does the" shapes below DO also match
   // some self-knowledge / app-method / why-best-move asks. That over-match is
   // handled at DISPATCH now (coach audit 2026-09-11): the concept lane answers
@@ -1170,11 +1341,15 @@ export function isFundamentalsQuestion(ask: string | undefined): boolean {
  *  pawn is strong") must not deliver a lesson, and a board question ("is my
  *  attack sound") stays with the board-assessment lane. */
 const FUND_LESSON_FRAME =
-  /\b(?:teach|learn|explain|show\s+me|cover|go\s+over|help\s+me\s+(?:with|understand)|what\s+(?:is|are|does)|what'?s|why\s+(?:is|are|do|does)|why'?s|how\s+do\s+i\s+(?:stop|avoid|fix|not)|when\s+(?:should|do|to)|tell\s+me\s+about)\b/i;
+  /\b(?:teach|learn|explain|show\s+me|cover|go\s+over|help\s+me\s+(?:with|understand)|what\s+(?:is|are|does)|what'?s|why\s+(?:is|are|do|does)|why'?s|how\s+(?:do|can|could|should)\s+i\s+(?:stop|avoid|fix|not|get\s+better|improve|learn|practi[sc]e|train|visuali[sz]e|calculate|see|think)|why\s+(?:do|can'?t|cant)\s+i\s+(?:struggle|keep|always|never|not)|when\s+(?:should|do|to)|tell\s+me\s+about)\b/i;
 export function isFundamentalLessonQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
   // App-surface asks ("what does the fundamentals TAB do") are app-help.
   if (/\b(?:tab|page|screen|section|button|menu|the\s+app)\b/i.test(ask)) return false;
+  // A question about THIS board is not a lesson request — "what is the most
+  // forcing move HERE, and does it work?" got the forcing-moves lecture
+  // (pass-3 walk 2026-10-01). Same board-cue veto the concept lane uses.
+  if (CONCEPT_POSITIONAL_CUE_RE.test(ask) || /\b(?:does\s+it\s+work|is\s+there\s+(?:a|any))\b/i.test(ask)) return false;
   return FUND_LESSON_FRAME.test(ask) && resolveTaughtFundamental(ask) !== null;
 }
 
@@ -1227,6 +1402,8 @@ export function isTheoryQuestion(ask: string | undefined): boolean {
   if (/\bhow\s+(?:do|can)\s+i\s+(?:improve|get\s+better|rank\s+up|climb|gain\s+rating)\b/i.test(ask)) return false;
   // A NAMED opening → opening profile ("how do I play the Sicilian").
   if (openingExistenceQuery(ask)) return false;
+  // "what is the Alekhine about" is the identity lane, not generic theory.
+  if (openingIdentityQuery(ask)) return false;
   return THEORY_QUESTION_RE.test(ask);
 }
 
@@ -2078,6 +2255,26 @@ export function openingExistenceQuery(ask: string | undefined): string | null {
     ?? /\bis\s+(?:the\s+)?(.{2,60}?)\s+(?:an?\s+)?opening\s+(?:that\s+exists|in\s+(?:the|your)\s+(?:database|book))[?!.\s]*$/i.exec(ask);
   const name = m?.[1]?.trim() ?? null;
   return name && name.length >= 2 ? name : null;
+}
+
+/** "what is the Alekhine about?" / "what's the idea behind the Marshall?" / "is
+ *  the Najdorf sharp?" / "why do people play the London?" — the candidate NAME,
+ *  answered from the opening-identity computer (provokes / aims / gambit /
+ *  sharpness / famous games), after a DB lookup confirms it is an opening. */
+export function openingIdentityQuery(ask: string | undefined): string | null {
+  if (!ask) return null;
+  const m =
+    /\bwhat(?:'s|\s+is)\s+(?:the\s+)?(.{2,60}?)\s+(?:all\s+)?about[?!.\s]*$/i.exec(ask)
+    ?? /\b(?:idea|point|purpose|concept|plan)s?\s+(?:behind|of)\s+(?:the\s+)?(.{2,60}?)[?!.\s]*$/i.exec(ask)
+    ?? /\bis\s+(?:the\s+)?(.{2,60}?)\s+(?:a\s+)?(?:sharp|solid|aggressive|quiet|theoretical|theory[- ]heavy|gambit)\b(?:\s+opening)?[?!.\s]*$/i.exec(ask)
+    ?? /\bwhy\s+(?:do|would|does)\s+(?:people|players|anyone|someone|masters|you)\s+play\s+(?:the\s+)?(.{2,60}?)[?!.\s]*$/i.exec(ask)
+    ?? /\btell\s+me\s+about\s+(?:the\s+)?(.{2,60}?)[?!.\s]*$/i.exec(ask);
+  const name = m?.[1]?.trim() ?? null;
+  if (!name || name.length < 3) return null;
+  // Deictic or board words are not an opening name — those are board asks.
+  if (/^(?:this|that|it|here|the\s+position|position|move|game|my\s+game|this\s+(?:position|move|game|opening|line))$/i.test(name)) return null;
+  if (/\b(?:move|position|piece|knight|bishop|rook|queen|king|pawn|square)\b/i.test(name) && !/\b(?:gambit|defen[cs]e|opening|attack|variation|game|system)\b/i.test(name)) return null;
+  return name;
 }
 
 export function isCounterRepertoireQuestion(ask: string | undefined): boolean {
@@ -3041,6 +3238,7 @@ export function buildQuestionGrounding(
     lastGameQuestion: isLastGameQuestion(a),
     lastGameMistakeQuestion: isLastGameMistakeQuestion(a),
     nameOpeningQuestion: isNameOpeningQuestion(a),
+    openingIdentityName: openingIdentityQuery(a) ?? undefined,
     // "what piece just moved and where is it?" — the neutral, factual last-move
     // read (either side). Disjoint from opponentMove/rating (those carry "why").
     lastMoveQuestion: isLastMoveQuestion(a),
@@ -3131,4 +3329,45 @@ export function looksLikeConversationalReply(input: string | undefined): boolean
   const t = input.trim().replace(/[.!,\s]+$/, '');
   if (!t) return false;
   return CONFIRMATION_RE.test(t) || NEGATION_RE.test(t);
+}
+
+/** ONE QUESTION, SEVERAL ASKS (pass-3 walk 2026-10-01: "What should I play
+ *  here, what is their best plan, and is there a tactic for either side? Show
+ *  me the lines." — one lane answered one part, or none). Splits a message
+ *  into its asks when two or more of them claim DIFFERENT board lanes, so each
+ *  is answered by its own computer, in the order asked. "Show me the lines"
+ *  folds into the best-move part as the line walk. Null when it is one ask. */
+export type MultiAskKey = 'best' | 'line' | 'their-plan' | 'my-plan' | 'tactic' | 'eval' | 'break' | 'candidates';
+export function multiAskKey(part: string): MultiAskKey | null {
+  const t = part.toLowerCase();
+  if (/\b(?:their|the\s+opponent'?s|his|her)\s+(?:best\s+)?plan\b|\bwhat\s+(?:are|is)\s+(?:they|he|she)\s+(?:up\s+to|planning|going\s+for)\b/.test(t)) return 'their-plan';
+  if (isAlternativesQuestion(part)) return 'candidates';
+  if (isWhyBestMoveQuestion(part) || /\bshow\s+me\s+(?:the\s+)?lines?\b/.test(t)) return 'line';
+  if (isTacticsQuestion(part)) return 'tactic';
+  if (/\b(?:pawn\s+)?breaks?\b/.test(t)) return 'break';
+  if (/\b(?:who'?s|who\s+is)\s+(?:better|winning)\b|\bhow\s+do\s+i\s+stand\b|\bam\s+i\s+(?:better|winning|worse)\b/.test(t)) return 'eval';
+  if (/\b(?:my|our)\s+plan\b|\bwhat(?:'?s| is)\s+the\s+plan\b/.test(t)) return 'my-plan';
+  if (isBestMoveQuestion(part) || /\bwhat\s+should\s+i\s+(?:play|do)\b/.test(t)) return 'best';
+  return null;
+}
+export function splitMultiAsk(ask: string | undefined): string[] | null {
+  // A typed question carries a question mark; composed scaffolds do not.
+  if (!ask || ask.length > 400 || /\[/.test(ask) || !ask.includes('?')) return null;
+  const parts = ask
+    .split(/\?|;|,\s*(?:and\s+)?(?=(?:what|is|are|how|which|who|show|where|why|do|does|can|should|any)\b)|\s+and\s+(?=(?:what|is|are|how|which|who|show|where|why|do|does|can|should|any)\b)|\.\s+(?=[A-Z])/i)
+    .map((p) => p.trim().replace(/^(?:and|also|then)\s+/i, ''))
+    .filter((p) => p.length >= 4);
+  if (parts.length < 2) return null;
+  const keyed: Array<{ key: MultiAskKey; text: string }> = [];
+  for (const p of parts) {
+    const key = multiAskKey(p);
+    if (!key || keyed.some((k) => k.key === key)) continue;
+    keyed.push({ key, text: /[?.!]$/.test(p) ? p : `${p}?` });
+  }
+  // "Show me the lines" beside "what should I play" is ONE ask: the best move,
+  // walked as its line.
+  const best = keyed.findIndex((k) => k.key === 'best');
+  const line = keyed.findIndex((k) => k.key === 'line');
+  if (best >= 0 && line >= 0) { keyed[best] = { key: 'line', text: 'Walk me through the best line here?' }; keyed.splice(line, 1); }
+  return keyed.length >= 2 ? keyed.map((k) => k.text) : null;
 }

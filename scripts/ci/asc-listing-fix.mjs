@@ -225,6 +225,15 @@ async function main() {
   // block from the current prices every run.
   const at = current.indexOf(MARKER);
   let head = at >= 0 ? current.slice(0, at).replace(/\s+$/, '') : current;
+  const liveHead = head;
+  // NEW MARKETING COPY (David 2026-10-02: "update both"). When MARKETING_FILE is
+  // set, the copy above the subscription block is replaced by that file's text;
+  // the block below is still rebuilt from pricing.ts, so the Apple-required
+  // subscription terms can never be dropped by a copy change.
+  if (process.env.MARKETING_FILE) {
+    head = readFileSync(new URL(`../../${process.env.MARKETING_FILE}`, import.meta.url), 'utf8').replace(/\s+$/, '');
+    console.log(`\nmarketing copy replaced from ${process.env.MARKETING_FILE} (${head.length} chars)`);
+  }
   const existingBlock = at >= 0 ? current.slice(at) : null;
 
   // Spelling pass over the marketing copy (never the generated block).
@@ -242,7 +251,7 @@ async function main() {
 
   if (at >= 0) {
     const blockSame = existingBlock.trim() === BLOCK.trim();
-    const headSame = head === headBefore;
+    const headSame = head === headBefore && head === liveHead;
     console.log(`\nsubscription block: ${blockSame ? 'up to date' : 'STALE — will be replaced'}`);
     if (!blockSame) {
       const oldPrices = [...existingBlock.matchAll(/\$\d+\.\d{2}/g)].map((m) => m[0]);

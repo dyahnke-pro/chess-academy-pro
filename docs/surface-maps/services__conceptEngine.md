@@ -4,22 +4,27 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**738 lines · 20 exports · 21 importers · 8 tests · 28 audits**
+**843 lines · 20 exports · 27 importers · 10 tests · 28 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:24) — names `conceptEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:6058) — names `conceptEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:6126) — names `conceptEngine`
 
 ## Who calls in
 
 - `src/components/Coach/CoachTeachPage.tsx`
+- `src/services/claimKeyParity.test.ts`
 - `src/services/conceptCoverage.report.test.ts`
+- `src/services/conceptEngine.futureTechnique.test.ts`
 - `src/services/conceptEngine.test.ts`
 - `src/services/conceptVocabulary.test.ts`
 - `src/services/dnaLineNarrator.ts`
 - `src/services/endgameDrillService.test.ts`
+- `src/services/endgameService.ts`
+- `src/services/endgameTablebaseService.ts`
 - `src/services/endgameTechnique.test.ts`
+- `src/services/groundedAnswer.ts`
 - `src/services/groundedMoveWhy.ts`
 - `src/services/liveTacticsContext.ts`
 - `src/services/missedTacticService.ts`
@@ -31,6 +36,7 @@
 - `src/services/puzzleGenerator.ts`
 - `src/services/refutedAlternative.ts`
 - `src/services/refutedAlternativeCore.ts`
+- `src/services/reviewFullData.ts`
 - `src/services/tacticAlertService.ts`
 - `src/services/tacticTypeUnification.test.ts`
 - `src/test/auditConceptGameplayCues.test.ts`
@@ -49,7 +55,7 @@
 - `src/services/conceptEngine.test.ts:13`
 - `src/services/groundedMoveWhy.ts:73`
 - `src/services/groundedMoveWhy.ts:99`
-- `src/services/mistakeNarration.ts:373`
+- `src/services/mistakeNarration.ts:380`
 
 ### `solvingSide` (function) — 2 call sites
 - `src/services/conceptEngine.test.ts:19`
@@ -78,7 +84,7 @@
 - `src/services/conceptEngine.test.ts:86`
 - `src/services/conceptEngine.test.ts:88`
 - `src/services/conceptEngine.test.ts:97`
-- `src/services/learnWalkBlumenfeld.test.ts:128`
+- `src/services/learnWalkBlumenfeld.test.ts:130`
 
 ### `renderMatchupConcept` (function) — 4 call sites
 - `src/services/conceptEngine.test.ts:71`
@@ -86,14 +92,26 @@
 - `src/services/conceptEngine.test.ts:82`
 - `src/services/conceptEngine.test.ts:107`
 
-### `endgameConceptFor` (function) — 2 call sites
-- `src/services/endgameTechnique.test.ts:63`
-- `src/services/endgameTechnique.test.ts:76`
+### `endgameConceptFor` (function) — 13 call sites
+- `src/services/conceptEngine.test.ts:273`
+- `src/services/conceptEngine.test.ts:276`
+- `src/services/conceptEngine.test.ts:279`
+- `src/services/conceptEngine.test.ts:280`
+- `src/services/conceptEngine.test.ts:284`
+- `src/services/conceptEngine.test.ts:285`
+- `src/services/endgameService.ts:90`
+- `src/services/endgameTablebaseService.ts:275`
+- `src/services/endgameTechnique.test.ts:61`
+- `src/services/endgameTechnique.test.ts:74`
+- `src/services/endgameTechnique.test.ts:224`
+- `src/services/groundedAnswer.ts:3774`
+- `src/services/groundedAnswer.ts:6491`
 
 ### `ConceptForBoardOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `conceptForBoard` (function) — 10 call sites
+### `conceptForBoard` (function) — 11 call sites
+- `src/services/claimKeyParity.test.ts:24`
 - `src/services/conceptEngine.test.ts:119`
 - `src/services/conceptEngine.test.ts:126`
 - `src/services/conceptEngine.test.ts:132`
@@ -102,19 +120,22 @@
 - `src/services/conceptEngine.test.ts:170`
 - `src/services/conceptEngine.test.ts:206`
 - `src/services/conceptEngine.test.ts:224`
-- `src/services/liveTacticsContext.ts:110`
-- `src/services/positionFacts.ts:746`
+- `src/services/liveTacticsContext.ts:116`
+- `src/services/positionFacts.ts:774`
 
 ### `LineInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `conceptForLine` (function) — 10 call sites
+### `conceptForLine` (function) — 13 call sites
+- `src/services/conceptEngine.futureTechnique.test.ts:12`
 - `src/services/conceptEngine.test.ts:231`
 - `src/services/conceptEngine.test.ts:235`
 - `src/services/conceptEngine.test.ts:244`
-- `src/services/endgameDrillService.test.ts:160`
+- `src/services/conceptEngine.test.ts:296`
+- `src/services/conceptEngine.test.ts:303`
+- `src/services/endgameDrillService.test.ts:163`
 - `src/services/missedTacticService.ts:787`
-- `src/services/puzzleConceptExplanation.ts:111`
+- `src/services/puzzleConceptExplanation.ts:119`
 - `src/services/puzzleConceptHint.ts:110`
 - `src/services/puzzleGenerator.ts:206`
 - `src/services/refutedAlternative.ts:112`
@@ -137,19 +158,23 @@
 - `src/services/conceptEngine.test.ts:197`
 - `src/services/conceptVocabulary.test.ts:63`
 
-### `definitionKey` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7660`
-- `src/components/Coach/CoachTeachPage.tsx:7664`
-- `src/services/learnWalkBlumenfeld.test.ts:131`
-- `src/services/positionFacts.ts:973`
-- `src/services/positionFacts.ts:1349`
+### `definitionKey` (function) — 8 call sites
+- `src/components/Coach/CoachTeachPage.tsx:7482`
+- `src/components/Coach/CoachTeachPage.tsx:7486`
+- `src/services/learnWalkBlumenfeld.test.ts:133`
+- `src/services/positionFacts.ts:1064`
+- `src/services/positionFacts.ts:1067`
+- `src/services/positionFacts.ts:1453`
+- `src/services/reviewFullData.ts:494`
+- `src/services/reviewFullData.ts:497`
 
-### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7661`
-- `src/services/dnaLineNarrator.ts:185`
-- `src/services/dnaLineNarrator.ts:216`
-- `src/services/dnaLineNarrator.ts:252`
-- `src/services/puzzleConceptExplanation.ts:100`
+### `tacticInvariant` (function) — 9 call sites
+- `src/components/Coach/CoachTeachPage.tsx:7483`
+- `src/services/dnaLineNarrator.ts:187`
+- `src/services/dnaLineNarrator.ts:218`
+- `src/services/dnaLineNarrator.ts:254`
+- `src/services/puzzleConceptExplanation.ts:108`
+- `src/services/reviewFullData.ts:493`
 - `src/services/tacticAlertService.ts:141`
 - `src/services/tacticTypeUnification.test.ts:199`
 - `src/test/auditConceptGameplayCues.test.ts:24`
@@ -207,12 +232,14 @@
 - `src/services/narratedContinuation.test.ts:19`
 - `src/services/narratedContinuation.ts:85`
 - `src/services/pieceValues.ts:52`
-- `src/services/positionCharacter.ts:39`
+- `src/services/positionCharacter.ts:60`
 - `src/test/onePieceValueTable.test.ts:46`
 
 ## Tests
 
+- `src/services/claimKeyParity.test.ts`
 - `src/services/conceptCoverage.report.test.ts`
+- `src/services/conceptEngine.futureTechnique.test.ts`
 - `src/services/conceptEngine.test.ts`
 - `src/services/conceptVocabulary.test.ts`
 - `src/services/endgameDrillService.test.ts`

@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **⏰ Standing notes** (CLAUDE.md:2527) — names `reconcileTacticTypes`
-- **The standard post-deploy ritual** (CLAUDE.md:6103) — names `tacticTypeBackfill`
+- **The standard post-deploy ritual** (CLAUDE.md:6150) — names `tacticTypeBackfill`
 
 ## Who calls in
 
@@ -34,7 +34,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `reconcileTacticTypes` (function) — 14 call sites
-- `src/services/dataLoader.ts:974`
+- `src/services/dataLoader.ts:973`
 - `src/services/tacticTypeBackfill.test.ts:88`
 - `src/services/tacticTypeBackfill.test.ts:104`
 - `src/services/tacticTypeBackfill.test.ts:111`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**471 lines · 3 exports · 5 importers · 4 tests · 1 audits**
+**486 lines · 3 exports · 5 importers · 4 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,8 +26,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `MisconceptionClassification` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `classifyMisconception` (function) — 25 call sites
-- `src/services/autoAnalyzeGame.ts:488`
+### `classifyMisconception` (function) — 27 call sites
+- `src/services/autoAnalyzeGame.ts:510`
 - `src/services/discussionPractice.ts:250`
 - `src/services/misconceptionClassifier.test.ts:11`
 - `src/services/misconceptionClassifier.test.ts:20`
@@ -51,6 +51,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/misconceptionClassifier.test.ts:220`
 - `src/services/misconceptionClassifier.test.ts:232`
 - `src/services/misconceptionClassifier.test.ts:240`
+- `src/services/misconceptionClassifier.test.ts:252`
+- `src/services/misconceptionClassifier.test.ts:262`
 - `src/services/section14Diagnosis.test.ts:74`
 
 ## Tests

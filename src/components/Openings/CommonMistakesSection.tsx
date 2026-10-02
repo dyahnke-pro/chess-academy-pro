@@ -5,6 +5,7 @@ import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import { Ban, BookOpen as LearnIcon, Brain, ChevronDown, ChevronUp, PlayCircle, Swords } from 'lucide-react';
 import type { CommonMistake } from '../../types';
 import type { BoardArrow } from '../Chessboard/ConsistentChessboard';
+import { admitArrow } from '../../services/arrowDoor';
 
 /** Resolve a SAN move against a FEN into {from, to} squares. */
 function resolveMoveSquares(
@@ -20,7 +21,6 @@ function resolveMoveSquares(
   }
 }
 
-const WRONG_ARROW_COLOR = 'rgba(239, 68, 68, 0.85)'; // red
 const CORRECT_ARROW_COLOR = 'rgba(34, 197, 94, 0.85)'; // green
 
 type PitfallAction = 'watch' | 'learn' | 'practice' | 'play';
@@ -97,16 +97,16 @@ function MistakeCard({
   // board without arrows rather than crashing — curated data sometimes
   // has moves in non-standard notation.
   const arrows = useMemo((): BoardArrow[] => {
-    const out: BoardArrow[] = [];
-    const wrong = resolveMoveSquares(mistake.fen, mistake.wrongMove);
+    // Only the CORRECT move is arrowed (the curated answer — vouched by the
+    // book). The wrong move is a bad move, and a bad move is never arrowed
+    // (David 2026-09-29); the card names it in words.
     const correct = resolveMoveSquares(mistake.fen, mistake.correctMove);
-    if (wrong) {
-      out.push({ startSquare: wrong.from, endSquare: wrong.to, color: WRONG_ARROW_COLOR });
-    }
-    if (correct) {
-      out.push({ startSquare: correct.from, endSquare: correct.to, color: CORRECT_ARROW_COLOR });
-    }
-    return out;
+    if (!correct) return [];
+    const right = admitArrow(
+      { from: correct.from, to: correct.to, role: 'play', vouchedBy: 'book', source: 'pitfalls' },
+      { fen: mistake.fen, studentColor: mistake.fen.split(' ')[1] === 'b' ? 'black' : 'white' },
+    );
+    return right ? [right] : [];
   }, [mistake.fen, mistake.wrongMove, mistake.correctMove]);
 
   // Only offer the WLPP row when the antidote line is buildable (the correct
@@ -201,12 +201,9 @@ function MistakeCard({
             </BoardVoiceOverlay>
           </div>
           <div className="flex items-center gap-3 text-[11px] text-theme-text-muted">
-            <span className="flex items-center gap-1">
-              <span
-                className="inline-block w-2.5 h-2.5 rounded-full"
-                style={{ background: WRONG_ARROW_COLOR }}
-              />
-              Wrong move
+            {/* The wrong move is named, never arrowed (arrow door, 2026-09-29). */}
+            <span className="flex items-center gap-1" data-testid="pitfall-wrong-move">
+              Wrong move: <span className="font-semibold text-red-400">{mistake.wrongMove}</span>
             </span>
             <span className="flex items-center gap-1">
               <span

@@ -127,21 +127,6 @@ export function getMaterialAdvantage(fen: string): number {
 }
 
 /**
- * Convert a UCI move string to a board arrow for react-chessboard.
- */
-export function uciToArrow(
-  uci: string,
-  color: string,
-): { startSquare: string; endSquare: string; color: string } | null {
-  if (!uci || uci.length < 4) return null;
-  return {
-    startSquare: uci.slice(0, 2),
-    endSquare: uci.slice(2, 4),
-    color,
-  };
-}
-
-/**
  * Get Unicode symbol for a piece character.
  */
 export function pieceToUnicode(piece: string): string {

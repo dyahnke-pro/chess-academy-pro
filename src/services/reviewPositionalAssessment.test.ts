@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assessPositionalEdge } from './reviewPositionalAssessment';
+import { assessPositionalEdge, phaseVerdictLine } from './reviewPositionalAssessment';
 
 describe('assessPositionalEdge (David 2026-07-20 — the enumerated positional verdict)', () => {
   it('gives a verdict word from the student-POV eval', () => {
@@ -78,5 +78,18 @@ describe('the reasons explain the verdict — D-16 (WO-STANDARD-01, prod tape 20
     expect(worse.reasons.some((r) => /you're .* further developed/.test(r))).toBe(false);
     const better = assessPositionalEdge(DEV, 'w', 300);
     expect(better.reasons.some((r) => /you're two pieces further developed/.test(r))).toBe(true);
+  });
+});
+
+describe('the overall verdict is ONE comparison (census P3)', () => {
+  const FEN = '6k1/5ppp/8/4p3/3n4/8/PP3PPP/2B2BK1 w - - 0 1';
+  it('names the other side of the scale and what it weighs', () => {
+    const line = phaseVerdictLine(FEN, 'w', 80, 'middlegame', new Set()) ?? '';
+    expect(line).toMatch(/you have the bishop pair/);
+    expect(line).toMatch(/what they have in return: their knight sits on a protected outpost on d4[^;]*, and it keeps it close\.$/);
+  });
+  it('a counter asset already heard is not said again', () => {
+    const line = phaseVerdictLine(FEN, 'w', 80, 'middlegame', new Set(['opponent-good-n-outpost-d4'])) ?? '';
+    expect(line).not.toMatch(/in return/);
   });
 });

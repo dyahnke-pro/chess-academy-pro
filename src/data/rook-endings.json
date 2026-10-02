@@ -47,33 +47,28 @@
     "order": 2,
     "narration": {
       "intro": "The Philidor Position is the canonical drawing technique for the side without the pawn in R+P vs R. Defender's king occupies the queening square's file; defender's rook patrols the 3rd rank (from defender's POV) keeping the attacking king OFF the 6th rank. The moment the attacker's pawn reaches the 5th rank, the defender swings the rook to the 1st rank and starts perpetual checks. The attacking king cannot both escort the pawn AND escape checks. Drawn.",
-      "rule": "Defender: king in front of pawn, rook on the 3rd rank. When pawn reaches the 5th, drop the rook to the back rank and check forever.",
+      "rule": "Defender: king in front of the pawn, rook on its 3rd rank to keep the attacking king out. The moment the pawn steps onto that rank, drop the rook to the back rank and check from behind.",
       "why": "Winning R+P vs R requires getting the attacker's king to the 6th rank ahead of the pawn — that's the only way to support the pawn through promotion. The 3rd-rank defense prevents this directly: any time the attacker tries to move the king up, the rook on the 3rd rank cuts it off. The attacker's only progress is to push the pawn — which the defender allows up to the 4th rank. But once the pawn pushes to the 5th, it has stepped INTO the territory the defender's third-rank rook was guarding. The defender's rook is now free to drop to the back (1st) rank and check from behind. The attacker's king has nowhere to hide; perpetual checks end the game in a draw.",
       "history": "François-André Danican Philidor described this defense in 'Analyse du jeu des Échecs' (1749). It's been the gold-standard R+P vs R defense for 275+ years.",
       "tip": "Down a pawn in a rook ending? Memorize this position. Get the king in front of the pawn. Get the rook to the 3rd rank. Profit."
     },
     "positions": [
       {
-        "fen": "5k2/8/4K3/4P3/8/4r3/8/4R3 w - - 0 1",
-        "title": "Philidor third-rank defense",
-        "explanation": "White: Ke6 (already on the 6th — but blocked from advancing further), Pe5, Re1. Black: Kf8, Re3 (the third-rank rook, from Black's POV — rank 3). The black rook prevents White from making any further progress with the king. White's only plan: push e5-e6. But the moment the pawn reaches e6, Black plays ...Re1+ swinging behind. White's king has no shelter from checks. Drawn by perpetual.",
+        "fen": "4k3/7R/r7/3KP3/8/8/8/8 b - - 0 1",
+        "title": "Philidor's defence — hold the 3rd rank, then check from behind",
+        "explanation": "Black's king stands in front of the pawn and the rook holds the 6th rank, so the white king cannot step up beside its pawn. Wait on that rank. The moment the pawn steps onto e6, the white king has no shelter left: drop the rook to the back rank and check it from behind. Every move in this line keeps the draw by the tablebase.",
         "result": "draw",
-        "source": "Philidor 1749 — third-rank defense",
+        "source": "Tablebase-verified (Lichess Syzygy) — the line holds the draw at every move",
         "solution": [
-          "Rxe3",
-          "Kg7",
-          "Rg3+",
-          "Kh6",
-          "Kd6",
-          "Kh5",
-          "Kd7",
-          "Kh6",
-          "Rg1",
-          "Kh5",
+          "Rb6",
           "e6",
-          "Kh4"
+          "Rb1",
+          "Kd6",
+          "Rd1+",
+          "Ke5",
+          "Re1+"
         ],
-        "bestMove": "Rxe3"
+        "bestMove": "Rb6"
       }
     ],
     "practiceThemes": [
@@ -120,33 +115,26 @@
     "order": 4,
     "narration": {
       "intro": "Rook + rook-pawn vs rook is the most common winning rook ending — and the one with the most surprising drawing technique. The defending rook does NOT block the pawn directly. Instead it goes to the SIDE of the board on the 3rd rank (6th rank from the defender's POV) and gives perpetual side checks. The attacking king can never both escort the pawn and escape the checks. Drawn.",
-      "rule": "Defending against R + rook-pawn vs R: park the defending rook on the SIDE of the 3rd rank (from the pawn's POV), pawn distance away, and check perpetually whenever the attacking king tries to advance.",
+      "rule": "Against rook + rook pawn on the 6th: put the defending rook level with the pawn, attacking it from the side, and keep the king on the far side. The attacking rook stays tied in front of the pawn, and when the attacking king comes over to shelter it, the rook checks it away.",
       "why": "The naive defense — putting the rook in front of the pawn on the a-file — loses because the attacking king can shoulder it aside, then promote. The Vancura works because it doesn't try to block the pawn at all; it threatens the white king from the side. Put the black rook on f6 (with white pawn on a6), and any white king move toward the queenside walks into rook checks: Rf1+, Rf2+, Rf3+ — always a check from the f-file. The white king has to retreat or hide on the a-file (where the rook can't reach), but on the a-file the king can't shoulder anyone. Drawn.",
       "history": "Josef Vancura, Czech composer, published this defense in 1924. Without it, R+RP vs R is a clear win; with Vancura's resource, it's a clear draw. One of the most important theoretical discoveries in 20th-century rook endings.",
       "tip": "Defending K+R vs K+R+rook-pawn? Get the rook to the f-file (or c-file for an h-pawn), 3rd rank from the pawn's POV. Side checks forever. Drawn."
     },
     "positions": [
       {
-        "fen": "8/6k1/P4r2/8/8/8/R7/K7 w - - 0 1",
-        "title": "Vancura defense — black rook on f6, side checks forever",
-        "explanation": "White Ka1, Pa6, Ra2. Black Kg7, Rf6. White's pawn is supported by the white rook; white wants to advance the king to escort the pawn to a8. But the black rook on f6 attacks a6 (the pawn). White's king tries 1.Kb1 — Rf1+ 2.Ka2 Rf2+ 3.Kb3 Rf3+ 4.Kc4 Rf4+ — perpetual side checks. White can never escape and escort the pawn simultaneously. Drawn. Black's king on g7 stays safe; black's rook does all the work.",
+        "fen": "R7/6k1/P4r2/8/8/8/8/K7 b - - 0 1",
         "result": "draw",
-        "source": "Vancura 1924 — canonical R+RP vs R drawing technique",
+        "bestMove": "Rb6",
+        "title": "Vančura defence — attack the pawn from the side",
+        "explanation": "White's rook is stuck in front of the a-pawn on a8. Keep your rook on the 6th rank, attacking the pawn from the side, and keep the king on g7, which covers h7 and h8 so the white rook can never step out with check. When the pawn advances to a7, get the rook behind it on the a-file with check.",
         "solution": [
+          "Rb6",
           "a7",
-          "Rf1+",
-          "Kb2",
-          "Rf2+",
-          "Kb3",
-          "Rf3+",
-          "Kc4",
-          "Rf4+",
-          "Kd5",
-          "Rf5+",
-          "Ke6",
-          "Rf6+"
+          "Ra6+",
+          "Kb1",
+          "Ra3"
         ],
-        "bestMove": "a7"
+        "source": "Tablebase-verified (Lichess Syzygy) — every move in the line keeps the result"
       }
     ],
     "practiceThemes": [

@@ -199,6 +199,19 @@ export function appealScore(mv: {
   return { score, appeal };
 }
 
+/** How eye-catching the engine's BEST move is. A tempting move has to pull the
+ *  eye AWAY from it, so it must out-appeal it: with a free recapture on the
+ *  board the natural move IS the recapture, and "you'd love to play the knight
+ *  to e4" beside it (question walk 2026-09-27, 13.Nxe5 and 27.Rxc5) described
+ *  a temptation no student feels. */
+export function bestMoveAppeal(fen: string, bestUci: string | undefined): number {
+  if (!bestUci || bestUci.length < 4) return 0;
+  try {
+    const mv = new Chess(fen).move({ from: bestUci.slice(0, 2), to: bestUci.slice(2, 4), promotion: bestUci.length > 4 ? bestUci.slice(4) : undefined });
+    return appealScore({ isCapture: mv.captured != null, isPromotion: mv.promotion != null, san: mv.san, piece: mv.piece, to: mv.to, from: mv.from }).score;
+  } catch { return 0; }
+}
+
 /** From scored candidates, the seductive-but-wrong one: the highest-appeal move
  *  that is clearly inferior to best (≥ `dropThresholdCp` worse, student POV). */
 /** A tempting move that still leaves the student this far ahead has not
@@ -279,7 +292,7 @@ export async function computeTacticalRead(
       })
       // Nobody is TEMPTED by an underpromotion (Blumenfeld walk: "You'd love to
       // push it and queen with the pawn to d1, promoting to a bishop").
-      .filter((c) => c.score > 0 && c.uci !== first.uci && !(c.mv.promotion && c.mv.promotion !== 'q'))
+      .filter((c) => c.score > bestMoveAppeal(fen, first.uci) && c.uci !== first.uci && !(c.mv.promotion && c.mv.promotion !== 'q'))
       .sort((a, b) => b.score - a.score)
       .slice(0, maxProbe);
     const scored: Array<{ san: string; uci: string; appeal: string; appealScore: number; studentCp: number }> = [];
@@ -381,7 +394,25 @@ export function tacticalReadFromLines(
     const runner = topLines[1];
     const gap = bestStudentCp - toStudentCp(runner.evaluation, studentColor);
     const rUci = runner?.moves?.[0];
-    if (rUci && rUci.length >= 4 && rUci !== first.uci && gap >= 0 && gap <= 40) {
+    // A LOST POSITION HAS NO COIN-FLIP (g9 walk 2026-09-27: "nothing to lose
+    // sleep over — Ke7 does the same job as Kxc8", with mate in one after
+    // either). Two moves that lose equally are not a reassuring choice: the
+    // hedge speaks only in a live position. A forced mate against the student
+    // arrives here as a huge negative score, so the one bound covers it.
+    const live = bestStudentCp > -300;
+    // TWO RECAPTURES ON ONE SQUARE ARE NOT A COIN-FLIP when one is a pawn:
+    // they leave different structures (run I, manual check: "gxf3 does the
+    // same job as Nxf3" — 70cp apart at depth). The recapture lane owns that.
+    // Nor are two PAWN recaptures (walk 2026-09-30: "dxc3 works just as well as
+    // bxc3", 44cp apart at depth, and each leaves its own structure).
+    const sameSquareDifferentKind = ((): boolean => {
+      try {
+        const a = new Chess(fen).move({ from: first.uci.slice(0, 2), to: first.uci.slice(2, 4), promotion: first.uci[4] });
+        const b = rUci ? new Chess(fen).move({ from: rUci.slice(0, 2), to: rUci.slice(2, 4), promotion: rUci[4] }) : null;
+        return !!a && !!b && a.to === b.to && !!a.captured && !!b.captured;
+      } catch { return false; }
+    })();
+    if (live && rUci && rUci.length >= 4 && rUci !== first.uci && gap >= 0 && gap <= 40 && !sameSquareDifferentKind) {
       const rp = replayUci(fen, [rUci]);
       if (rp.length) closeAlternative = { san: rp[0].san, gapCp: gap };
     }
@@ -522,14 +553,19 @@ export function uncertaintyClause(read: TacticalRead, opts: { spoken?: boolean; 
   // The caller passes the ply; the same ply always gets the same stem
   // (resume-safe, testable — never Math.random).
   const alt = sayN(read.closeAlternative.san);
+  // EVERY STEM NAMES BOTH MOVES (fresh-game walk 2026-09-27: "nothing to lose
+  // sleep over — the king to c7 does the same job" — the same job as what? The
+  // best move was never said beside it). The register only speaks where naming
+  // the move is earned, so naming it here leaks nothing.
+  const best = sayN(read.bestMoveSan);
   const stems = [
-    `It’s genuinely close — ${alt} is about as good, so don’t agonise.`,
-    `${alt.charAt(0).toUpperCase()}${alt.slice(1)} is a fine alternative here; the two are within a whisker.`,
-    `Nothing to lose sleep over — ${alt} does the same job.`,
+    `It’s genuinely close — ${alt} is about as good as ${best}, so don’t agonise.`,
+    `${alt.charAt(0).toUpperCase()}${alt.slice(1)} is a fine alternative to ${best} here; the two are within a whisker.`,
+    `Nothing to lose sleep over — ${alt} does the same job as ${best}.`,
     // No COUNT stem ("there are two good moves here…"): the critical-moment
     // read already counts the moves that hold, and the two spoke back to back
     // as one fact said twice (hand walk 2026-09-24).
-    `${alt.charAt(0).toUpperCase()}${alt.slice(1)} works just as well here.`,
+    `${alt.charAt(0).toUpperCase()}${alt.slice(1)} works just as well as ${best} here.`,
   ];
   return stems[Math.abs(opts.rotation ?? 0) % stems.length];
 }
@@ -646,6 +682,7 @@ export function temptingFromAnalysis(
   if (!best || best.moves.length === 0) return null;
   const bestUci = best.moves.at(0);
   const bestStudentCp = toStudentCp(best.evaluation, studentColor);
+  const bestAppeal = bestMoveAppeal(fen, bestUci);
   const scored: Array<{ san: string; uci: string; appeal: string; appealScore: number; studentCp: number; replySan: string | null }> = [];
   for (let i = 1; i < topLines.length; i += 1) {
     const line = topLines.at(i);
@@ -662,7 +699,7 @@ export function temptingFromAnalysis(
     if (opts.requireForcing && !(mv.captured != null || probe.inCheck())) continue;
     if (mv.promotion && mv.promotion !== 'q') continue; // no one is tempted by an underpromotion
     const { score, appeal } = appealScore({ isCapture: mv.captured != null, isPromotion: mv.promotion != null, san: mv.san, piece: mv.piece, to: mv.to, from: mv.from });
-    if (score <= 0) continue;
+    if (score <= 0 || score <= bestAppeal) continue;
     let replySan: string | null = null;
     const replyUci = line.moves.at(1);
     if (replyUci && replyUci.length >= 4) {

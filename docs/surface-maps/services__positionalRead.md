@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**552 lines · 7 exports · 8 importers · 5 tests · 1 audits**
+**679 lines · 10 exports · 17 importers · 13 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,12 +13,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/components/Coach/CoachTeachPage.tsx`
+- `src/services/boardPlan.ideaKey.test.ts`
+- `src/services/claimChecker.measure.test.ts`
 - `src/services/danyaBehaviors.ts`
 - `src/services/groundedAnswer.ts`
 - `src/services/learnWalkNimzo.test.ts`
 - `src/services/narrationAdversarial.test.ts`
 - `src/services/positionReadComposer.ts`
+- `src/services/positionalRead.fileStep.test.ts`
+- `src/services/positionalRead.ideaKey.test.ts`
+- `src/services/positionalRead.justMoved.test.ts`
+- `src/services/positionalRead.race.test.ts`
 - `src/services/positionalRead.test.ts`
+- `src/services/recaptureChoice.ts`
+- `src/services/replayFence.modern1690.test.ts`
+- `src/services/replayFence.najdorf1500.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 
 ## Exports and every call site
@@ -29,20 +38,27 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `PositionalObservation` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `rookReachesFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:578`
+### `rookReachesFile` (function) — 3 call sites
+- `src/components/Coach/CoachTeachPage.tsx:10395`
+- `src/services/danyaBehaviors.ts:695`
+- `src/services/recaptureChoice.ts:63`
 
-### `castleIsOneMoveAway` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:222`
+### `castleIsOneMoveAway` (function) — 4 call sites
+- `src/services/danyaBehaviors.ts:291`
+- `src/services/replayFence.modern1690.test.ts:133`
+- `src/services/replayFence.modern1690.test.ts:134`
+- `src/services/replayFence.modern1690.test.ts:135`
 
-### `readPosition` (function) — 42 call sites
-- `src/services/groundedAnswer.ts:1309`
-- `src/services/lookaheadPlan.ts:920`
-- `src/services/lookaheadPlan.ts:1189`
-- `src/services/lookaheadPlan.ts:1543`
-- `src/services/narrationAdversarial.test.ts:87`
-- `src/services/narrationAdversarial.test.ts:173`
-- `src/services/positionReadComposer.ts:128`
+### `readPosition` (function) — 46 call sites
+- `src/services/boardPlan.ideaKey.test.ts:13`
+- `src/services/groundedAnswer.ts:1421`
+- `src/services/lookaheadPlan.ts:1053`
+- `src/services/lookaheadPlan.ts:1322`
+- `src/services/lookaheadPlan.ts:1399`
+- `src/services/narrationAdversarial.test.ts:85`
+- `src/services/narrationAdversarial.test.ts:176`
+- `src/services/positionReadComposer.ts:168`
+- `src/services/positionalRead.race.test.ts:10`
 - `src/services/positionalRead.test.ts:28`
 - `src/services/positionalRead.test.ts:43`
 - `src/services/positionalRead.test.ts:46`
@@ -63,43 +79,74 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.test.ts:256`
 - `src/services/positionalRead.test.ts:268`
 - `src/services/positionalRead.test.ts:276`
-- `src/services/positionalRead.test.ts:286`
-- `src/services/positionalRead.test.ts:291`
-- `src/services/positionalRead.test.ts:298`
-- `src/services/positionalRead.test.ts:302`
-- `src/services/positionalRead.test.ts:309`
-- `src/services/positionalRead.test.ts:313`
-- `src/services/positionalRead.test.ts:320`
-- `src/services/positionalRead.test.ts:328`
-- `src/services/positionalRead.test.ts:337`
-- `src/services/positionalRead.test.ts:341`
-- `src/services/positionalRead.test.ts:352`
-- `src/services/positionalRead.test.ts:364`
-- `src/services/positionalRead.test.ts:373`
-- `src/services/positionalRead.test.ts:378`
+- `src/services/positionalRead.test.ts:287`
+- `src/services/positionalRead.test.ts:292`
+- `src/services/positionalRead.test.ts:299`
+- `src/services/positionalRead.test.ts:303`
+- `src/services/positionalRead.test.ts:310`
+- `src/services/positionalRead.test.ts:314`
+- `src/services/positionalRead.test.ts:321`
+- `src/services/positionalRead.test.ts:329`
+- `src/services/positionalRead.test.ts:338`
+- `src/services/positionalRead.test.ts:342`
+- `src/services/positionalRead.test.ts:353`
+- `src/services/positionalRead.test.ts:365`
+- `src/services/positionalRead.test.ts:374`
+- `src/services/positionalRead.test.ts:379`
+- `src/services/replayFence.najdorf1500.test.ts:25`
+- `src/services/replayFence.najdorf1500.test.ts:36`
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
-### `buildPositionalRead` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8289`
-- `src/services/learnWalkBlumenfeld.test.ts:116`
-- `src/services/learnWalkNimzo.test.ts:34`
-- `src/services/narrationAdversarial.test.ts:106`
-- `src/services/narrationAdversarial.test.ts:174`
+### `buildPositionalRead` (function) — 17 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8507`
+- `src/services/claimChecker.measure.test.ts:132`
+- `src/services/learnWalkBlumenfeld.test.ts:118`
+- `src/services/learnWalkNimzo.test.ts:35`
+- `src/services/narrationAdversarial.test.ts:104`
+- `src/services/narrationAdversarial.test.ts:177`
+- `src/services/positionalRead.ideaKey.test.ts:18`
+- `src/services/positionalRead.ideaKey.test.ts:30`
+- `src/services/positionalRead.justMoved.test.ts:10`
 - `src/services/positionalRead.test.ts:164`
 - `src/services/positionalRead.test.ts:167`
 - `src/services/positionalRead.test.ts:176`
 - `src/services/positionalRead.test.ts:187`
 - `src/services/positionalRead.test.ts:192`
+- `src/services/replayFence.modern1690.test.ts:189`
+- `src/services/replayFence.modern1690.test.ts:193`
+- `src/services/replayFence.modern1690.test.ts:201`
 
 ### `attackerCanUseFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:207`
+- `src/services/danyaBehaviors.ts:264`
+
+### `heavyPieceToFile` (function) — 4 call sites
+- `src/services/danyaBehaviors.ts:271`
+- `src/services/positionalRead.fileStep.test.ts:10`
+- `src/services/positionalRead.fileStep.test.ts:16`
+- `src/services/positionalRead.fileStep.test.ts:20`
+
+### `castleOffFile` (function) — 2 call sites
+- `src/services/positionalRead.fileStep.test.ts:26`
+- `src/services/positionalRead.fileStep.test.ts:29`
+
+### `racingPasser` (function) — 2 call sites
+- `src/services/positionalRead.race.test.ts:9`
+- `src/services/positionalRead.race.test.ts:15`
 
 ## Tests
 
+- `src/services/boardPlan.ideaKey.test.ts`
+- `src/services/claimChecker.measure.test.ts`
 - `src/services/learnWalkBlumenfeld.test.ts`
 - `src/services/learnWalkNimzo.test.ts`
 - `src/services/narrationAdversarial.test.ts`
+- `src/services/positionalRead.fileStep.test.ts`
+- `src/services/positionalRead.ideaKey.test.ts`
+- `src/services/positionalRead.justMoved.test.ts`
+- `src/services/positionalRead.race.test.ts`
 - `src/services/positionalRead.test.ts`
+- `src/services/replayFence.modern1690.test.ts`
+- `src/services/replayFence.najdorf1500.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 
 ## Audits that reach it

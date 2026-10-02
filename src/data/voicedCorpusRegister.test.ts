@@ -51,18 +51,28 @@ const ALL = new Set([
 ]);
 
 // Measured 2026-09-16 across 11,809 unique spoken strings.
-const BASELINE_FIRST_PERSON = 521;
+const BASELINE_FIRST_PERSON = 494; // 521 -> 494 (2026-09-27: seat split, XzgnlvT5-6Y + the King's Indian lesson rewritten)
 const BASELINE_FRAGMENT = 81;
 const BASELINE_META = 0;
+// VIDEO RESIDUE (teach walk 2026-09-27): the King's Indian lesson opened with
+// "You have Black against a strong player" and "White switches into bullet
+// mode" — the video's circumstances, not the position's teaching.
+const VIDEO_RESIDUE = /\b(?:bullet|speedrun|my opponent|against a strong player)\b/i;
+const BASELINE_VIDEO_RESIDUE = 10;
 // 1145 -> 34 (2026-09-19, in two passes). `scripts/voiced-authoring/degender.mjs` rewrote the
 // AUTHORED source offline, so every change landed in a readable diff and these
 // gates ran on it. What survives is what the script REFUSED rather than
 // guessed: "he's pinned" is ambiguous — "he IS pinned" and "he HAS pinned" are
 // both real chess sentences and pluralise differently (they're / they've).
 // Those need a human, so they are still counted here. Lower this as they go.
-const BASELINE_MASCULINE_OPPONENT = 34;
+const BASELINE_MASCULINE_OPPONENT = 33;
 
 describe('voiced corpus register — shrink-only backlog', () => {
+  it(`video residue never grows (baseline ${BASELINE_VIDEO_RESIDUE})`, () => {
+    const hits = [...ALL].filter((s) => VIDEO_RESIDUE.test(s));
+    expect(hits.length, `video residue grew to ${hits.length}; e.g.\n${hits.slice(0, 3).join('\n')}`).toBeLessThanOrEqual(BASELINE_VIDEO_RESIDUE);
+  });
+
   it('the corpus is actually loaded (non-vacuous)', () => {
     expect(ALL.size).toBeGreaterThan(5000);
   });

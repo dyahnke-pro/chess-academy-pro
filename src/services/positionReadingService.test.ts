@@ -938,3 +938,23 @@ describe('doubled pawns are not a minority attack (hand walk 2026-09-24)', () =>
     expect(findMinorityAttack('3q1r1k/pp4pp/2p1B3/4Pp1P/1b6/2N1BR1P/PPP5/4Q1K1 w - - 1 24', 'w')).toBeNull();
   });
 });
+
+describe('minorRouteToSquare never routes through a capture or a losing stop (walk 2026-09-30)', () => {
+  it('Bf1 to c6 "via b5" is refused: b5 holds their pawn, defended by a6', async () => {
+    const { minorRouteToSquare } = await import('./positionReadingService');
+    const fen = 'r1bqk1nr/2pnppb1/p2p2p1/1p5p/3PP2P/2N1BP2/PPPQ2P1/R3KBNR w KQkq - 1 8';
+    const r = minorRouteToSquare(fen, 'c6' as never, 'w');
+    expect(r?.via).not.toBe('b5');
+  });
+});
+
+describe('structureTransfer — a known structure reached from another opening', () => {
+  it('names the home opening only when the game came from elsewhere', async () => {
+    const { structureTransfer } = await import('./positionReadingService');
+    expect(structureTransfer('French-type pawn chain', 'Caro-Kann Defense: Advance Variation')).toMatch(/French Defense is built on/);
+    expect(structureTransfer('French-type pawn chain', 'French Defense: Advance Variation')).toBeNull();
+    expect(structureTransfer('You hold the isolated queen’s pawn', 'Sicilian Defense: Alapin Variation')).toMatch(/Tarrasch Defense/);
+    expect(structureTransfer('You have the hanging pawns', 'Queen\'s Gambit Declined')).toBeNull();
+    expect(structureTransfer('Closed centre', null)).toBeNull();
+  });
+});

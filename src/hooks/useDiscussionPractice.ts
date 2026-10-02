@@ -29,7 +29,6 @@ import { Chess } from 'chess.js';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { detectSlip, slipWarrantsInterjection, isNearBest, slipSeverityLabel, type SlipSeverity } from '../services/slipDetector';
 import { startDial, recordAttempt, type HintDial } from '../services/hintRegister';
-import { backwardLook, type BackwardLook } from '../services/backwardLook';
 import { buildWhyPrompt, buildGroundedReveal, buildSlipReveal, captureMisconception, engineLinesForCapture, findMoverTactic, recordMoveEvidence, withReasonLead, type CapabilityOrigin } from '../services/discussionPractice';
 import { buildMisconceptionCallback } from '../services/misconceptionCallbacks';
 import { buildMoveReasonOptions } from '../services/moveReasonOptions';
@@ -39,6 +38,7 @@ import { getMisconceptionTag } from '../data/misconceptionTags';
 import { principleFor } from '../data/principles';
 import type { MisconceptionSource } from '../types';
 import { COACH_TURN_DEPTH } from '../services/engineConstants';
+import { gemMoveSignal, warmGemIndexes, type GemMoveSignal } from '../services/gemCrushLines';
 
 /** Sentinel the panel's Hint button submits — the hook treats it as an honest
  *  "I couldn't say" (reveal the answer, log the gap), never a typed reason. */
@@ -99,6 +99,11 @@ export interface EvaluatePlayerMoveArgs {
    *  MiddlegamePractice) has no game, and `origin: 'drill'` is the right answer
    *  there — never a fabricated game id. */
   sourceGameId?: string;
+  /** WAS THE STUDENT TOLD before they moved? REQUIRED (the capability record's
+   *  own rule): Learn announces critical moments ("only one move holds") BEFORE
+   *  the move, so a find right after one is not unaided evidence. Surfaces that
+   *  say nothing before the move pass `false`. */
+  prompted: boolean;
   /** Every SAN up to AND INCLUDING the played move. When present, a captured
    *  slip is attributed to the specific FUNDAMENTAL it neglected (David
    *  2026-09-07: one coach, one memory) — so a live Learn/Play slip lands in the
@@ -144,12 +149,6 @@ export interface UseDiscussionPracticeResult {
    *  actually found (David 2026-08-09). Read it at narration time; it moves on
    *  its own as the game goes. */
   hintDial: HintDial;
-  /** WHY THE LAST MOVE WAS BAD, when code can name it (David 2026-08-10: "can
-   *  we have the coach mention why my previous move was bad? Have the PV look
-   *  backward?"). The look-ahead only faces forward, so a move already played
-   *  is behind it; this is the same drawback comparison aimed at the student's
-   *  own move. Null when nothing nameable was given up — which is most moves. */
-  lastMoveDrawback: BackwardLook | null;
   // THE COACH'S OWN PRE-MOVE POSITION IS NO LONGER HANDED UP.
   //
   // It used to be, as a ref, so the Learn surface could judge the coach's reply
@@ -320,7 +319,6 @@ export function useDiscussionPractice(
    *  found/missed run. Seeded from the rating on the first move evaluated,
    *  because the rating arrives per-move rather than at construction. */
   const [hintDial, setHintDial] = useState<HintDial>(() => startDial(undefined));
-  const [lastMoveDrawback, setLastMoveDrawback] = useState<BackwardLook | null>(null);
   const dialSeededRef = useRef(false);
 
   // TWO different switches, deliberately separated (David 2026-08-05).
@@ -401,34 +399,6 @@ export function useDiscussionPractice(
       // would let a dozen prepared plies talk the register up to subtle right
       // before the student reaches the middlegame — the exact moment they need
       // the help most.
-      // THE BACKWARD LOOK. Same comparison the coach runs on its own moves,
-      // pointed at the student's — so it fires only when code can NAME what the
-      // move handed over, never on "that was worse by 80 centipawns".
-      // ONE MODEL, TWO CALLERS. The three lanes used to be an inline IIFE here;
-      // they now live in `backwardLook` because the LEARN SURFACE needs the same
-      // answer SOONER than this hook can give it. This call is deferred by a
-      // deliberate `setTimeout(…, 6000)` at the call site so the engine worker
-      // stays free for narration — right for bookkeeping, fatal for speech,
-      // since the voice was reading this state two seconds after the move and
-      // therefore describing the PREVIOUS one. The surface now computes it
-      // itself, from the same function, off analyses it already holds.
-      setLastMoveDrawback(backwardLook({
-        fenBefore: args.fenBefore,
-        fenAfter: args.fenAfter,
-        playedSan: args.playedSan,
-        // `?? null` and not just `bestSan`: the rest of this hook carries it as
-        // `string | undefined`, the model asks for `string | null`, and "no best
-        // move" must mean the same thing on both sides of that boundary.
-        bestSan: bestSan ?? null,
-        bestPvUci,
-        replyPvUci,
-        // Recorded before the reply exists.
-        replySan: null,
-        cpLoss,
-        studentColor: args.playerColor,
-        missedMate: bestLineMate ?? null,
-        allowedMate: null,
-      }));
 
       const followedBook = args.inBook && !!args.bookMoveSan
         && args.playedSan.replace(/[+#]$/, '') === args.bookMoveSan.replace(/[+#]$/, '');
@@ -482,17 +452,12 @@ export function useDiscussionPractice(
         moverColor: args.playerColor,
         cpLoss,
         origin: opts.capabilityOrigin,
-        // UNPROMPTED, and provably so at THIS point in the turn: every reveal
-        // this hook delivers (`buildGroundedReveal`, `buildSlipReveal`, the
-        // teach card) fires AFTER the move is on the board, so nothing has
-        // told the student anything about the position they just answered.
-        //
-        // 🚨 THIS BECOMES DYNAMIC the moment the coach speaks BEFORE the move —
-        // the critical-moment announcement in PLAN.md ("only one move keeps you
-        // level") is exactly that, and a find after it must record
-        // `prompted: true` or the coach's own teaching inflates the model it
-        // uses to decide whether to teach.
-        prompted: false,
+        // DYNAMIC, from the surface (2026-09-30): this hook's own reveals fire
+        // AFTER the move, but Learn announces critical moments BEFORE it ("only
+        // one move holds"), and a find after that is prompted — recorded as
+        // unaided it inflated the model the coach uses to decide whether to
+        // teach. The surface knows what it said; it answers.
+        prompted: args.prompted,
         sourceGameId: args.sourceGameId,
       });
 
@@ -770,6 +735,9 @@ export function useDiscussionPractice(
         playerColor: moverChar === 'w' ? 'white' : 'black', inBook: false,
         learned: args.shouldCount, gamePhase: args.gamePhase, moveNumber: args.moveNumber,
         openingId: args.openingId, openingName: args.openingName, studentRating: args.studentRating,
+        // The review asks about a move already played in a real game, where
+        // nothing was said before it: unprompted.
+        prompted: false,
       },
       bestSan: args.bestSan, cpLoss: args.cpLoss, kind: 'slip',
       shouldCount: args.shouldCount, reveal, moverChar, options,
@@ -822,7 +790,12 @@ export function useDiscussionPractice(
   // `evaluatePlayerMove`, so a surface that opts out of recording stays inert.
   const liveRef = useRef<{ gameId: string; s: LiveStrength } | null>(null);
   const liveFor = useCallback((gameId: string, seed: number): { gameId: string; s: LiveStrength } => {
-    if (!liveRef.current || liveRef.current.gameId !== gameId) liveRef.current = { gameId, s: startLiveStrength(seed) };
+    if (!liveRef.current || liveRef.current.gameId !== gameId) {
+      liveRef.current = { gameId, s: startLiveStrength(seed) };
+      // Gem hits feed the strength; build their index now, in chunks, so it is
+      // warm well before the first gem position of the game.
+      warmGemIndexes();
+    }
     return liveRef.current;
   }, []);
   const liveRating = useCallback((gameId: string, seed: number): number => liveFor(gameId, seed).s.rating, [liveFor]);
@@ -830,7 +803,9 @@ export function useDiscussionPractice(
   const recordGradedMove = useCallback((args: GradedMoveArgs): void => {
     // The opponent's strength moves on every graded move, recorded or not.
     const live = liveFor(args.sourceGameId, args.seedRating);
-    live.s = updateLiveStrength(live.s, { fenBefore: args.fenBefore, san: args.playedSan, moverColor: args.moverColor, cpLoss: args.cpLoss });
+    let gem: GemMoveSignal | null = null;
+    try { gem = gemMoveSignal(args.fenBefore, args.playedSan); } catch { gem = null; }
+    live.s = updateLiveStrength(live.s, { fenBefore: args.fenBefore, san: args.playedSan, moverColor: args.moverColor, cpLoss: args.cpLoss, gem });
     if (!recording) return;
     if (args.cpLoss === null) return;   // unknown is not clean
     void recordMoveEvidence({
@@ -854,7 +829,6 @@ export function useDiscussionPractice(
     teach,
     goodMove,
     hintDial,
-    lastMoveDrawback,
     evaluatePlayerMove,
     recordGradedMove,
     raiseSlipPrompt,

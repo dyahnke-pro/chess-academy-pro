@@ -181,7 +181,12 @@ function pinnedSquares(fen: string, color: 'w' | 'b'): Set<string> {
               if (pc.color === color && pc.type !== 'k') a = { sq: s, val: val(pc.type) };
               else break; // enemy piece, or our king as the first piece → no pin starts here
             } else {
-              if (pc.color === color && val(pc.type) > a.val) out.add(a.sq); // A pinned to a costlier friend (incl. king)
+              // A pinned to a costlier friend (incl. king) — and the pin must
+              // COST something: the rear piece is the king, worth more than the
+              // pinner, or undefended. "Nf6 unpins your pawn on f7" was a pawn
+              // in front of a defended knight on g8 (walk 2026-09-27).
+              const rearCosts = pc.type === 'k' || val(pc.type) > val(cell.type) || chess.attackers(s as Sq, color).length === 0;
+              if (pc.color === color && val(pc.type) > a.val && rearCosts) out.add(a.sq);
               break; // the second piece resolves the line
             }
           }
@@ -214,6 +219,59 @@ function unpinPoint(fenBefore: string, chessAfter: Chess, mv: Move, moverIsStude
   return null;
 }
 
+/** A PAWN THAT KICKS a minor or major piece (Learn walk 2026-10-01: …h6
+ *  against Bg5 was called "luft"; its point was the bishop). */
+function pawnKickPoint(chessAfter: Chess, mv: Move, moverIsStudent: boolean): string | null {
+  if (mv.piece !== 'p' || mv.captured) return null;
+  const dir = mv.color === 'w' ? 1 : -1;
+  const f = mv.to.charCodeAt(0);
+  const r = Number(mv.to[1]) + dir;
+  const VALUE: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
+  let hit: { sq: string; type: string } | null = null;
+  for (const df of [-1, 1]) {
+    const file = String.fromCharCode(f + df);
+    if (file < 'a' || file > 'h' || r < 1 || r > 8) continue;
+    const sq = `${file}${r}`;
+    const c = chessAfter.get(sq as Sq);
+    if (!c || c.color === mv.color || !(c.type in VALUE)) continue;
+    if (!hit || VALUE[c.type] > VALUE[hit.type]) hit = { sq, type: c.type };
+  }
+  return hit ? `Kicks ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[hit.type]} off ${hit.sq}, gaining time.` : null;
+}
+
+/** A KICK PREPARED — a quiet pawn step whose NEXT step would attack an enemy
+ *  piece (review walk 2026-10-01: 9.h4, heading for h5 against the knight on
+ *  g6, was explained as "keeps your bishop on c1 defended"). Only when that
+ *  next square is safe for the pawn: no enemy pawn covers it and it is
+ *  defended at least as often as it is attacked. */
+function pawnKickNextPoint(chessAfter: Chess, mv: Move, moverIsStudent: boolean): string | null {
+  if (mv.piece !== 'p' || mv.captured || mv.promotion) return null;
+  const dir = mv.color === 'w' ? 1 : -1;
+  const next = `${mv.to[0]}${Number(mv.to[1]) + dir}`;
+  if (Number(next[1]) < 2 || Number(next[1]) > 7 || chessAfter.get(next as Sq)) return null;
+  const them = mv.color === 'w' ? 'b' : 'w';
+  // Counted with the pawn already on the next square — the file behind it
+  // opens (h4-h5 lets the h1 rook defend h5).
+  const pushed = new Chess(chessAfter.fen());
+  pushed.remove(mv.to);
+  pushed.put({ type: 'p', color: mv.color }, next as Sq);
+  const attackers = pushed.attackers(next as Sq, them);
+  if (attackers.some((s) => pushed.get(s)?.type === 'p')) return null;
+  if (pushed.attackers(next as Sq, mv.color).length < attackers.length) return null;
+  const VALUE: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
+  const r = Number(next[1]) + dir;
+  let hit: { sq: string; type: string } | null = null;
+  for (const df of [-1, 1]) {
+    const file = String.fromCharCode(next.charCodeAt(0) + df);
+    if (file < 'a' || file > 'h') continue;
+    const sq = `${file}${r}`;
+    const c = chessAfter.get(sq as Sq);
+    if (!c || c.color === mv.color || !(c.type in VALUE)) continue;
+    if (!hit || VALUE[c.type] > VALUE[hit.type]) hit = { sq, type: c.type };
+  }
+  return hit ? `Prepares ${next}, which would kick ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[hit.type]} off ${hit.sq}.` : null;
+}
+
 /** LUFT — a quiet pawn step beside the CASTLED king that makes an escape square. */
 function luftPoint(chessAfter: Chess, mv: Move): string | null {
   if (mv.piece !== 'p' || mv.captured) return null;
@@ -241,7 +299,7 @@ export function quietMovePoint(fenBefore: string, san: string): string | null {
   const chess = new Chess(fenBefore);
   let mv: Move;
   try { mv = chess.move(san); } catch { return null; }
-  return unpinPoint(fenBefore, chess, mv, true) ?? luftPoint(chess, mv);
+  return unpinPoint(fenBefore, chess, mv, true) ?? pawnKickPoint(chess, mv, true) ?? luftPoint(chess, mv) ?? pawnKickNextPoint(chess, mv, true);
 }
 
 /**
@@ -375,11 +433,14 @@ export function buildReviewMoveTeaching(
         return `${mv.captured ? 'The capture means' : 'Now'} ${target}.`;
       }
     }
-    // Quiet central push (not a capture) — stake the center / gain space.
-    if (!mv.captured && CENTER.has(mv.to)) {
+    // Quiet central push (not a capture) — stake the center / gain space. Not
+    // in a pure pawn ending: there are no pieces to open lines for or cramp,
+    // and "f4, gains space and cramps the opponent" was said of a runner in a
+    // pawn race (calc hand walk 2026-10-01).
+    if (!mv.captured && CENTER.has(mv.to) && hasPieces(chess)) {
       return 'Stakes a claim in the center and opens lines for the pieces.';
     }
-    if (!mv.captured && BROAD_CENTER.has(mv.to) && (toRank === 4 || toRank === 5)) {
+    if (!mv.captured && BROAD_CENTER.has(mv.to) && (toRank === 4 || toRank === 5) && hasPieces(chess)) {
       // A c/f-file pawn that ATTACKS a central square is fighting for the centre
       // from the flank — NOT a space-grab / "cramp" (David 2026-09-14: "the first
       // pawn push on my side is not a land grab as much as fighting for the
@@ -401,7 +462,7 @@ export function buildReviewMoveTeaching(
     // the king sits on its castled back-rank square and this pawn just advanced
     // one rank on an adjacent file. That's back-rank insurance, a real teaching
     // point currently spoken as silence.
-    const luft = luftPoint(chess, mv);
+    const luft = pawnKickPoint(chess, mv, moverIsStudent) ?? luftPoint(chess, mv) ?? pawnKickNextPoint(chess, mv, moverIsStudent);
     if (luft) return luft;
     // quiet pawn with no structural point → fall through to the universal teacher
   }
@@ -444,13 +505,19 @@ export function buildReviewMoveTeaching(
   // (d) Controls central squares, or reaches into the opponent's half.
   // Q2, and NO SLICE (G4.5): `.slice(0, 3)` dropped computed squares the
   // student never heard. A long list is a phrasing problem — `list` handles it.
-  const targets = keyTargetSquares(chess, mv.color === 'w' ? 'white' : 'black');
+  // Not for a KING, and not in a pure pawn ending (calc hand walk 2026-10-01:
+  // "Kxb6, the king clamps down on c5, fighting for the center … Kb7, the king
+  // now covers c7, a7, b8, b6, c8, c6, a8, and a6"). A king always covers its
+  // neighbours and a pawn race has no centre to fight for — square lists there
+  // describe, they teach nothing. The king's own branch below speaks for it.
+  const coverageTeaches = mv.piece !== 'k' && hasPieces(chess);
+  const targets = coverageTeaches ? keyTargetSquares(chess, mv.color === 'w' ? 'white' : 'black') : [];
   const central = eyes.controlled.filter((s) => targets.includes(s));
   if (central.length) {
     const nearKing = kingZoneAmong(central, chess, mv.color === 'w' ? 'white' : 'black');
     return `The ${PIECE_NOUN[mv.piece]} clamps down on ${list(central)}, fighting for the center${kingZoneClause(nearKing)}.`;
   }
-  const advanced = eyes.controlled.filter((s) => (mv.color === 'w' ? Number(s[1]) >= 5 : Number(s[1]) <= 4));
+  const advanced = coverageTeaches ? eyes.controlled.filter((s) => (mv.color === 'w' ? Number(s[1]) >= 5 : Number(s[1]) <= 4)) : [];
   if (advanced.length) {
     // The PIECE's reach, not the piece: "the pawn reaches into your half" was
     // said of White's a4 — a pawn still in its own half whose CONTROL reaches
@@ -475,6 +542,11 @@ export function buildReviewMoveTeaching(
   const eyedEnemy = eyes.enemies.find((e) => e.type !== 'k');
   if (eyedEnemy) return `The ${PIECE_NOUN[mv.piece]} eyes the ${PIECE_NOUN[eyedEnemy.type]} on ${eyedEnemy.sq}.`;
   return `The ${PIECE_NOUN[mv.piece]} develops to ${mv.to}, joining the game.`;
+}
+
+/** Anything on the board besides kings and pawns. */
+function hasPieces(c: Chess): boolean {
+  return c.board().flat().some((x) => !!x && x.type !== 'p' && x.type !== 'k');
 }
 
 /**

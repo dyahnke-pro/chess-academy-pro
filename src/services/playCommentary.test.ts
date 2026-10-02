@@ -1,6 +1,7 @@
 // The running commentary must be RIGHT about whose piece it names and silent on
 // an unremarkable position — a coach who comments on every recapture teaches
 // nothing (the locked voice law: speak when it instructs).
+import { packageForRegister } from './hintRegister';
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence, studentMovePoint } from './playCommentary';
@@ -144,7 +145,10 @@ describe('buildPriorityFirst', () => {
     expect(pf2?.targetSquare).toBe('d5');
     expect(pf2?.facts).toContain('d5');
     expect(pf2?.facts).toContain('isolated');
-    expect(pf2?.facts).not.toContain('Nc3');
+    // The register decides: subtle keeps the move back, moderate names it
+    // with its reason (Learn names the move, 2026-09-24).
+    expect(packageForRegister(pf2!.hint, 'subtle')).not.toContain('Nc3');
+    expect(packageForRegister(pf2!.hint, 'moderate')).toContain('Nc3');
   });
 
   it('a healthy pawn target means no priority beat', () => {
@@ -629,5 +633,29 @@ describe('a capture is never described as its side effect (hand walk 2026-09-25)
     const c = new Chess();
     for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 c6 Kh1 Nh5 Be3 f5 Qd2 f4 Bf2 Be5 Nc2 Ng3+ Kg1 Qh4 Bd4 Nxf1 Bxf1 Be6 Bxe5 dxe5 Qd6 Nd7 Qc7 Qd8 Qxd8'.split(' ')) c.move(m);
     expect(studentMovePoint(c.fen(), 'Raxd8', 'Qxd8')).toBeNull();
+  });
+});
+
+describe('the spoken form is the student\'s, never the prompt package (2026-09-30)', () => {
+  const fen = 'rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+  const lines = [
+    { uci: 'e4e5', replyUci: 'c7c5', evalCp: 40 },
+    { uci: 'e4d5', replyUci: 'd8d5', evalCp: -140 },
+  ];
+  it('asks "why not" first, then refutes — no instruction text', () => {
+    const rt = buildRejectedTempting({ fen, studentColor: 'white', lines });
+    expect(rt?.spoken).toBe('Why not exd5? ‖ It grabs the pawn on d5, but Qxd5 refutes it.');
+    expect(rt?.spoken).not.toMatch(/Do NOT|exactly as given|TEMPTING BUT/);
+    expect(rt?.refutation).toMatchObject({ from: 'd8', to: 'd5' });
+  });
+  it('a capture on the square their last move landed on is their BAIT', () => {
+    const rt = buildRejectedTempting({ fen, studentColor: 'white', lines, baitSquare: 'd5' });
+    expect(rt?.bait).toBe(true);
+    expect(rt?.spoken).toBe('Can you take the pawn on d5? ‖ No — it\'s bait: exd5 runs into Qxd5.');
+  });
+  it('the priority is asked, then named with the move that serves it', () => {
+    const pf = buildPriorityFirst({ fen: '6k1/pp3ppp/8/3p4/8/8/PP1N1PPP/1N4K1 w - - 0 20', studentColor: 'white', bestUci: 'b1c3' });
+    expect(pf?.spoken).toMatch(/^What's the priority here\? ‖ Their pawn on d5 — it's isolated .* Nc3 does\.$/);
+    expect(pf?.spoken).not.toMatch(/Do NOT|PRIORITY FIRST/);
   });
 });

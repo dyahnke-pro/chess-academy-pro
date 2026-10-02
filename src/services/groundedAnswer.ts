@@ -14,25 +14,28 @@
  */
 import { isSacrifice } from './factStakes';
 import { seatPieceReferences } from '../utils/seatPieces';
-import { deriveNextPlans } from './nextPlans';
+import { deriveNextPlans, mobilityMap } from './nextPlans';
 import { Chess } from 'chess.js';
 import { isRealPin } from './pinGeometry';
 import { tacticWord } from './tacticVocabulary';
 import { CENTRAL_SQUARES, keyTargetSquares, kingZoneAmong, kingZoneClause, POSITIONAL_TARGETS } from './keySquares';
 import type { Square, PieceSymbol, Move } from 'chess.js';
 import {
-  legalSeeGain, legalSeeGainOn, landingIsSafe, capturesWinMaterial, legalSeeGainFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
+  legalSeeGain, legalSeeGainOn, landingIsSafe, capturesWinMaterial, legalSeeGainFor, signedLegalSeeFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
   strongestWeakestPiece, pressuredTargets, findAttackTargets, findPawnGrabs,
-  namedPawnStructure, findXrays, findKnightReroute, findRookLift, findFianchetto,
+  namedPawnStructure, structureTransfer, findXrays, findKnightReroute, findRookLift, findFianchetto,
   findBlockade, kingActivation, oppositionRead, rookBehindPasser, bestMinorToKeep,
-  bishopPair, computeSpace, findPassedPawns, findForcingCandidates, findHangingBySee,
+  bishopPair, computeSpace, findPassedPawns, findForcingCandidates, findHangingBySee, minorRouteToSquare,
 } from './positionReadingService';
 import type { PressureCount } from './positionReadingService';
 import { readPosition } from './positionalRead';
 import { structurePlan } from './boardPlan';
+import { structureSignature } from './boardStructure';
+import { materialEdgeWords } from './reviewPositionalAssessment';
 import { strategicWhyLed, strategicWhyImperative } from './moveFundamentals';
+import { threatMadeWhy } from './deliberation';
 import { liveMethodBeatFor } from './methodBeat';
-import { detectKingExposure, kingExposureClause } from './kingSafety';
+import { countKingAttack, detectKingExposure, kingExposureClause } from './kingSafety';
 import { extractQuestionFocus, PURE_BOARD_ASPECTS } from './boardQuestionRouter';
 import type { QuestionAspect } from '../data/boardQuestionBuckets';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
@@ -46,6 +49,9 @@ import { andList, orList, fileList } from '../utils/andList';
 import { isUndevelopedInOpening } from '../utils/undeveloped';
 import { pieceIsOn } from './tacticsContextIdentity';
 import { clearsVolumeFloor } from './openingVolumeFloor';
+import { endgameConceptFor } from './conceptEngine';
+import { detectTwoPawnsVsKing } from './endgameTechnique';
+import type { EndgameRuleMaterial } from '../coach/questionIntents';
 
 // Pure board-fact constants — universal chess values, leaf-local so this module
 // imports nothing that could loop back. coachFeatureService imports these FROM
@@ -72,7 +78,7 @@ export interface GroundedAnswer {
 
 /** Convert a centipawn eval (side-to-move POV) into a grounded phrase. Never
  *  invents a number — rounds the real one. */
-function evalPhrase(evalCp: number | null | undefined, mateIn: number | null | undefined, mover: 'white' | 'black', studentColor?: 'white' | 'black' | null): string | null {
+function evalPhrase(evalCp: number | null | undefined, mateIn: number | null | undefined, mover: 'white' | 'black', studentColor: 'white' | 'black' | null): string | null {
   // ONE PERSPECTIVE: when the student's seat is known, the better side is
   // "you" or "they" — never a bare colour (Learn walk 2026-09-23: "White is
   // slightly better" to the student playing White).
@@ -273,34 +279,52 @@ export function assembleHangingAnswer(fen: string, ask: string | null | undefine
   const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
   const t = (ask ?? '').toLowerCase();
   const scanTheirs = /\b(their|his|her|opponent|black'?s|white'?s|win\s+material|can\s+i\s+(?:win|take|grab)|free\s+material)\b/.test(t);
-  const victimColor = scanTheirs ? them : me;
-  const loose: Array<{ sq: Square; type: PieceSymbol; g: number }> = [];
-  for (const row of chess.board()) {
-    for (const cell of row) {
-      if (!cell || cell.color !== victimColor || cell.type === 'k') continue;
-      // Pin-aware (2026-09-12): a pinned attacker can't legally take, so it must
-      // not read as "hanging"; a pinned defender can't recapture, so a real hang
-      // isn't masked. `seeGain` (geometric) got both wrong.
-      const capturer: 'w' | 'b' = victimColor === 'w' ? 'b' : 'w';
-      let g = 0;
-      try { g = legalSeeGainFor(fen, cell.square, capturer); } catch { g = 0; }
-      if (g > 0) loose.push({ sq: cell.square, type: cell.type, g });
+  // "What's hanging?" with no owner asks about the WHOLE board (question walk
+  // 2026-09-27: after 13.Nxe5 it answered "Nothing of yours is hanging" while
+  // their knight stood on e5 waiting to be taken back). Only an ask that names
+  // an owner is scoped to one side.
+  const scanMine = !scanTheirs;
+  const scanBoth = !scanTheirs && !/\b(my|mine|i|me)\b/.test(t);
+  const looseOf = (victimColor: 'w' | 'b'): Array<{ sq: Square; type: PieceSymbol; g: number }> => {
+    const out: Array<{ sq: Square; type: PieceSymbol; g: number }> = [];
+    for (const row of chess.board()) {
+      for (const cell of row) {
+        if (!cell || cell.color !== victimColor || cell.type === 'k') continue;
+        // Pin-aware (2026-09-12): a pinned attacker can't legally take, so it must
+        // not read as "hanging"; a pinned defender can't recapture, so a real hang
+        // isn't masked. `seeGain` (geometric) got both wrong.
+        const capturer: 'w' | 'b' = victimColor === 'w' ? 'b' : 'w';
+        let g = 0;
+        try { g = legalSeeGainFor(fen, cell.square, capturer); } catch { g = 0; }
+        if (g > 0) out.push({ sq: cell.square, type: cell.type, g });
+      }
     }
-  }
-  loose.sort((a, b) => b.g - a.g);
-  if (loose.length === 0) {
+    return out.sort((a, b) => b.g - a.g);
+  };
+  const say = (list: Array<{ sq: Square; type: PieceSymbol; g: number }>, mine: boolean): string => {
+    const named = andList(list.map((l) => `the ${REVIEW_PIECE_NAME[l.type]} on ${l.sq}`));
+    const pts = `${list[0].g} point${list[0].g === 1 ? '' : 's'}`;
+    return mine
+      ? `Careful — ${named} ${list.length > 1 ? 'are' : 'is'} hanging; they can win about ${pts}.`
+      : `${cap(named.replace(/^the /, 'their '))} ${list.length > 1 ? 'are' : 'is'} loose — you can win about ${pts}.`;
+  };
+  const mineLoose = scanMine ? looseOf(me) : [];
+  const theirLoose = scanTheirs || scanBoth ? looseOf(them) : [];
+  if (mineLoose.length === 0 && theirLoose.length === 0) {
     return {
-      facts: scanTheirs
-        ? `Nothing of theirs is hanging — there's no free material to grab right now.`
-        : `Nothing of yours is hanging — your pieces are all defended.`,
+      facts: scanBoth
+        ? `Nothing is hanging on either side right now.`
+        : scanTheirs
+          ? `Nothing of theirs is hanging — there's no free material to grab right now.`
+          : `Nothing of yours is hanging — your pieces are all defended.`,
       bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
     };
   }
-  const named = andList(loose.map((l) => `the ${REVIEW_PIECE_NAME[l.type]} on ${l.sq}`));
-  const pts = `${loose[0].g} point${loose[0].g === 1 ? '' : 's'}`;
-  const facts = scanTheirs
-    ? `Yes — ${named} ${loose.length > 1 ? 'are' : 'is'} loose; you can win about ${pts}.`
-    : `Careful — ${named} ${loose.length > 1 ? 'are' : 'is'} hanging; they can win about ${pts}.`;
+  const parts: string[] = [];
+  if (mineLoose.length > 0) parts.push(say(mineLoose, true));
+  else if (scanBoth) parts.push('Nothing of yours is hanging.');
+  if (theirLoose.length > 0) parts.push(scanTheirs && !scanBoth ? `Yes — ${say(theirLoose, false).charAt(0).toLowerCase()}${say(theirLoose, false).slice(1)}` : say(theirLoose, false));
+  const facts = parts.join(' ');
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
 }
 
@@ -372,7 +396,16 @@ export function assembleBoardPlanAnswer(
   // that earns no structural plan.
   // The levers below still speak AFTER the plans: a lever is a computed fact
   // the ranker never dropped (G4.5), and the worst-piece bar is its own lesson.
-  const withMethod = deriveNextPlans(fen, myC).map((p) => cap(p));
+  // Each plan is a sentence: `deriveNextPlans` returns clauses without their
+  // full stop, and joined bare they ran on ("…pins the king back The plan from
+  // here is…", question walk 2026-09-27).
+  // Stacked plans vary the stem after the first — the same rule the review
+  // narrator follows (question walk 2026-09-27: "The plan from here is to…"
+  // three times in one answer). Every plan survives; only the opener changes.
+  const STEMS = ['Alongside that, aim to ', 'On top of that, work to ', 'And the third piece of it: '];
+  const withMethod = deriveNextPlans(fen, myC).map((p) => cap(p))
+    .map((p, i) => (i === 0 ? p : p.replace(/^The plan from here is to /, STEMS[(i - 1) % STEMS.length])))
+    .map((p) => (/[.!?]$/.test(p.trim()) ? p.trim() : `${p.trim()}.`));
   const levers: string[] = [];
 
   // A pawn break to open the position (findPawnBreaks reads the side to move).
@@ -420,12 +453,17 @@ export function assembleBoardPlanAnswer(
   // most→least decisive, so a long list reads as a ranked plan, not a dump.
   const top = levers;
   const head = [trump, ...withMethod].filter((x): x is string => !!x).join(' ');
+  // THE THREAT COMES BEFORE THE PLAN (question run 2026-09-27: "the plan is to
+  // break with a4…" with the student's queen hanging on g4). A piece of yours
+  // that can be taken right now is the first move of any plan.
+  const loose = findHangingBySee(fen).filter((h) => h.color === myC).sort((a, b) => b.gain - a.gain)[0];
+  const urgent = loose ? `First, your ${REVIEW_PIECE_NAME[loose.piece]} on ${loose.square} can be taken — that comes before any plan. ` : '';
   if (head && top.length) {
-    return { facts: `${head} Beyond that: ${top.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    return { facts: `${urgent}${head} Beyond that: ${top.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
-  if (head) return { facts: head, bestMoveSan: null, bestMoveFromTo: null, sources: src };
-  if (top.length) return { facts: `No single trump yet — the plan is to ${top.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
-  return null;
+  if (head) return { facts: `${urgent}${head}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  if (top.length) return { facts: `${urgent}${urgent ? 'Then' : 'No single trump yet —'} the plan is to ${top.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  return urgent ? { facts: urgent.trim(), bestMoveSan: null, bestMoveFromTo: null, sources: src } : null;
 }
 
 // ── PIECE SAFETY — "is my knight on d5 safe?" ────────────────────────────────
@@ -525,7 +563,28 @@ export function assembleKingSafetyAnswer(fen: string, studentColor: 'white' | 'b
   const whose = side === 'opponent' ? 'their' : 'your';
   const exposure = detectKingExposure(fen, target);
   if (!exposure) {
-    return { facts: `${whose === 'your' ? 'Your' : 'Their'} king looks safe — no open lines or attackers on it right now.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+    // Say only what was checked (walk 2026-09-30, game 1: "no open lines" with
+    // the g-file in front of the king wide open). Name any file beside the king
+    // with none of its own pawns on it.
+    let openFiles: string[] = [];
+    try {
+      const c = new Chess(fen);
+      const k = c.board().flat().find((x) => x && x.type === 'k' && x.color === target);
+      if (k) {
+        const f = k.square.charCodeAt(0);
+        for (const df of [-1, 0, 1]) {
+          const file = String.fromCharCode(f + df);
+          if (file < 'a' || file > 'h') continue;
+          const hasPawn = c.board().flat().some((x) => x && x.type === 'p' && x.color === target && x.square[0] === file);
+          if (!hasPawn) openFiles.push(`${file}-file`);
+        }
+      }
+    } catch { openFiles = []; }
+    const Whose = whose === 'your' ? 'Your' : 'Their';
+    const facts = openFiles.length
+      ? `${Whose} king is not under attack right now, and most of its cover is in place — but the ${andList(openFiles)} beside it ${openFiles.length === 1 ? 'is' : 'are'} open, so watch for a rook or queen landing there.`
+      : `${Whose} king looks safe — its pawn cover is in place and nothing is attacking it right now.`;
+    return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
   }
   const clause = kingExposureClause(exposure);
   const lead = whose === 'your' ? 'Your king' : 'Their king';
@@ -973,8 +1032,13 @@ export function assemblePiecePlanAnswer(
   // "plan for my bishop" is really asking about).
   const scopeCount = (sq: Square): number => squaresAttackedBy(chess, sq, me).length;
   const engineFrom = engineBestUci && engineBestUci.length >= 4 ? (engineBestUci.slice(0, 2) as Square) : null;
+  // A piece they are about to win is the one the question is really about
+  // (question walk 2026-09-27: "where should my knight go?" answered for the
+  // c6 knight while e5 was hitting the one on f6).
+  const underFire = candidates.find((c) => { try { return legalSeeGainFor(fen, c, them) > 0; } catch { return false; } }) ?? null;
   const sq = parsed.square
     ?? (engineFrom && candidates.includes(engineFrom) ? engineFrom : null)
+    ?? underFire
     ?? [...candidates].sort((a, b) => scopeCount(a) - scopeCount(b))[0];
 
   // ── THE LINES IT SITS ON, and what blocks them ────────────────────────────
@@ -1101,6 +1165,11 @@ export function assemblePieceActivityAnswer(
   officers.sort((a, b) => (a.scope - b.scope) || ((REVIEW_PIECE_VALUE[b.type] ?? 0) - (REVIEW_PIECE_VALUE[a.type] ?? 0)));
   const worst = officers[0];
   const name = REVIEW_PIECE_NAME[worst.type];
+  // ONE PIECE HAS NO "WORST" (question walk 2026-09-27, rook ending: "your
+  // least active piece is the rook on d8", then "is it good?" → "Good").
+  if (officers.length === 1 && !wantType) {
+    return { facts: `Your ${name} on ${worst.sq} is your only piece besides the king, so there's nothing to rank it against — the question is only whether it stands on its best square.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+  }
   const homeRank = me === 'w' ? '1' : '8';
   const undeveloped = worst.sq[1] === homeRank && (worst.type === 'n' || worst.type === 'b');
   const tail = worst.scope === 0
@@ -1144,7 +1213,9 @@ export function assemblePieceActivityAnswer(
 const BALANCED = [
   'The position is roughly balanced.',
   'Materially and positionally, this is level.',
-  'Neither side has anything concrete here yet.',
+  // Was "Neither side has anything concrete here yet." — asked "who stands
+  // better?", that read as a dodge (question walk 2026-09-27). It says level.
+  "It's level — neither side is better yet.",
   'Dead level — this one gets decided by ideas, not by the count.',
 ];
 const SLIGHT_EDGE = [
@@ -1218,6 +1289,22 @@ export function assemblePositionAssessment(opts: {
   const sc: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
   const parts: string[] = [];
 
+  // A FINISHED GAME HAS A RESULT, NOT AN ASSESSMENT (question walk 2026-09-27:
+  // after …Rxd1# the coach said "The position is roughly balanced. Their king on
+  // g1 has no escape square…"). A mated board still has pieces on it, so every
+  // reader below finds something to say; the result is the only true sentence.
+  if (opts.fen) {
+    try {
+      const over = new Chess(opts.fen);
+      if (over.isGameOver()) {
+        const facts = over.isCheckmate()
+          ? (over.turn() === sc ? 'Checkmate — you lost this one.' : 'Checkmate — you won.')
+          : 'The game is over — it ends in a draw.';
+        return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+      }
+    } catch { /* unreadable FEN — read what we can below */ }
+  }
+
   // WHITE-perspective eval → student POV (flip sign for Black).
   const studentEvalCp = typeof opts.evalCp === 'number' ? (studentColor === 'white' ? opts.evalCp : -opts.evalCp) : null;
   const studentMateIn = typeof opts.mateIn === 'number' ? (studentColor === 'white' ? opts.mateIn : -opts.mateIn) : null;
@@ -1239,6 +1326,31 @@ export function assemblePositionAssessment(opts: {
     else if (mag < 1.0) parts.push(pick(ahead ? SLIGHT_EDGE : SLIGHT_DEFICIT, seed).replace('{m}', mag.toFixed(1)));
     else if (mag < 2.5) parts.push(pick(ahead ? CLEAR_EDGE : CLEAR_DEFICIT, seed).replace('{m}', mag.toFixed(1)));
     else parts.push(pick(ahead ? WINNING : LOSING, seed).replace('{m}', mag.toFixed(1)));
+    // THE MATERIAL BESIDE THE EVAL (question walk 2026-09-27: "Did I get enough
+    // for the pawn?" got "+0.3" and two weaknesses, never the pawn). When the
+    // count and the eval point different ways, the gap between them IS the
+    // answer — compensation, or material that isn't worth what it counts.
+    if (opts.fen) {
+      try {
+        const c = new Chess(opts.fen);
+        let w = 0, b = 0;
+        for (const row of c.board()) for (const cell of row) {
+          if (!cell || cell.type === 'k') continue;
+          const v = REVIEW_PIECE_VALUE[cell.type] ?? 0;
+          if (cell.color === 'w') w += v; else b += v;
+        }
+        const mine = sc === 'w' ? w : b; const theirs = sc === 'w' ? b : w;
+        const diff = mine - theirs;
+        const pts = (n: number): string => `${n} point${n === 1 ? '' : 's'}`;
+        if (diff < 0 && studentEvalCp >= -30) {
+          parts.push(`You're ${pts(-diff)} down in material (${mine} to ${theirs}) and still holding your own — the compensation is real.`);
+        } else if (diff > 0 && studentEvalCp <= 30) {
+          parts.push(`You're ${pts(diff)} up in material (${mine} to ${theirs}), but the position gives it back — the extra material isn't the whole story.`);
+        } else if (diff !== 0) {
+          parts.push(`Material: you're ${diff > 0 ? 'up' : 'down'} ${pts(Math.abs(diff))} (${mine} to ${theirs}).`);
+        }
+      } catch { /* bad fen — the eval stands alone */ }
+    }
   } else if (opts.fen) {
     // No engine eval available (e.g. inside a walkthrough with no warm analysis)
     // — give a board-true material read so "is this winning for me?" gets a real
@@ -1328,72 +1440,6 @@ export function assemblePositionAssessment(opts: {
     ...(keySquares.length > 0 ? { keySquares } : {}) };
 }
 
-/** The enemy king's square + its on-board neighbours — where an attack lands. */
-function kingZoneSquares(kingSq: string): Square[] {
-  const f = kingSq.charCodeAt(0) - 97;
-  const r = Number(kingSq[1]);
-  const out: Square[] = [];
-  for (let df = -1; df <= 1; df += 1) {
-    for (let dr = -1; dr <= 1; dr += 1) {
-      const nf = f + df;
-      const nr = r + dr;
-      if (nf < 0 || nf > 7 || nr < 1 || nr > 8) continue;
-      out.push(`${String.fromCharCode(97 + nf)}${nr}` as Square);
-    }
-  }
-  return out;
-}
-
-/** The unit direction [df,dr] from a piece's OWN king through the piece, when the
- *  piece is ABSOLUTELY pinned (removing it exposes the king to an enemy slider
- *  along that exact line); null when the piece is not absolutely pinned. Used to
- *  refuse counting a pinned piece as an attacker/defender on a king-zone square
- *  it cannot legally act toward — the pin-blind `attackers()` count would flip
- *  "you have a real attack, press it" on a losing attack (deep-dive A#7). */
-function absolutePinRay(c: Chess, sq: Square): [number, number] | null {
-  const p = c.get(sq);
-  if (!p || p.type === 'k') return null;
-  const me = p.color;
-  const them = me === 'w' ? 'b' : 'w';
-  let king: Square | null = null;
-  for (const row of c.board()) for (const cell of row) if (cell && cell.type === 'k' && cell.color === me) king = cell.square;
-  if (!king) return null;
-  const kf = king.charCodeAt(0) - 97, kr = Number(king[1]);
-  const sf = sq.charCodeAt(0) - 97, sr = Number(sq[1]);
-  const df = sf - kf, dr = sr - kr;
-  const collinear = (df === 0 && dr !== 0) || (dr === 0 && df !== 0) || (Math.abs(df) === Math.abs(dr) && df !== 0);
-  if (!collinear) return null;
-  const ud: [number, number] = [Math.sign(df), Math.sign(dr)];
-  let test: Chess;
-  try { test = new Chess(c.fen()); test.remove(sq); } catch { return null; }
-  let f = kf + ud[0], r = kr + ud[1];
-  while (f >= 0 && f <= 7 && r >= 1 && r <= 8) {
-    const s = `${String.fromCharCode(97 + f)}${r}` as Square;
-    const hit = test.get(s);
-    if (hit) {
-      if (hit.color !== them) return null; // first piece past the pinned one is friendly → no pin
-      const diagonal = Math.abs(ud[0]) === 1 && Math.abs(ud[1]) === 1;
-      const straight = ud[0] === 0 || ud[1] === 0;
-      if ((diagonal && (hit.type === 'b' || hit.type === 'q')) || (straight && (hit.type === 'r' || hit.type === 'q'))) return ud;
-      return null; // an enemy piece, but not one that pins along this line
-    }
-    f += ud[0]; r += ud[1];
-  }
-  return null;
-}
-
-/** Does the piece on `pieceSq` genuinely bear on `targetSq` — i.e. it attacks it
- *  AND, if absolutely pinned, `targetSq` lies on its pin ray (the only squares a
- *  pinned piece can still act toward)? Caller has already confirmed the attack. */
-function bearsOnSquare(c: Chess, pieceSq: Square, targetSq: Square): boolean {
-  const ray = absolutePinRay(c, pieceSq);
-  if (!ray) return true;
-  const df = (targetSq.charCodeAt(0) - 97) - (pieceSq.charCodeAt(0) - 97);
-  const dr = Number(targetSq[1]) - Number(pieceSq[1]);
-  const ud: [number, number] = [Math.sign(df), Math.sign(dr)];
-  return (ud[0] === ray[0] && ud[1] === ray[1]) || (ud[0] === -ray[0] && ud[1] === -ray[1]);
-}
-
 /**
  * assembleAttackAssessment — the GROUNDED answer to "do I have an attack lined
  * up?" / "is my kingside attack good?" (David 2026-09-06: "if an attack on the
@@ -1411,21 +1457,11 @@ export function assembleAttackAssessment(fen: string, studentColor: 'white' | 'b
   const me: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
   const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
 
-  let ek: Square | null = null;
-  for (const row of c.board()) for (const cell of row) if (cell && cell.type === 'k' && cell.color === them) ek = cell.square;
-  if (!ek) return null;
-
-  const zone = kingZoneSquares(ek);
-  const attackerSet = new Set<string>();
-  const defenderSet = new Set<string>();
-  for (const sq of zone) {
-    try {
-      for (const a of c.attackers(sq, me)) { const p = c.get(a); if (p && p.type !== 'k' && bearsOnSquare(c, a, sq)) attackerSet.add(a); }
-      for (const d of c.attackers(sq, them)) { const p = c.get(d); if (p && p.type !== 'k' && bearsOnSquare(c, d, sq)) defenderSet.add(d); }
-    } catch { /* skip a bad square */ }
-  }
-  const attackers = attackerSet.size;
-  const defenders = defenderSet.size;
+  const count = countKingAttack(c, me);
+  if (!count) return null;
+  const ek = count.king as Square;
+  const attackers = count.attackers.size;
+  const defenders = count.defenders.size;
   const defWord = `${defenders} defender${defenders === 1 ? '' : 's'}`;
   const atkWord = `${attackers} piece${attackers === 1 ? '' : 's'}`;
 
@@ -1604,6 +1640,8 @@ export function assembleMoveEvalAnswer(opts: {
   fen: string;
   /** Engine best move in UCI (e.g. `g1f3`) — from Stockfish PV[0]. */
   bestMoveUci: string | null;
+  /** The previous move's capture, when the caller has the game. */
+  prevCapture?: { square: string; capturedValue: number } | null;
   evalCp?: number | null;
   mateIn?: number | null;
   /** Whose game this is. When the position is NOT the student's to move, the
@@ -1614,7 +1652,7 @@ export function assembleMoveEvalAnswer(opts: {
    *  twenty-one seconds later. Every "best move" in that report was advice for
    *  his opponent, read to him as his own. He described it as the hints being
    *  bad moves; they were good moves for the wrong player. */
-  studentColor?: 'white' | 'black' | null;
+  studentColor: 'white' | 'black' | null;
   /** THE PIECE THE STUDENT ASKED ABOUT, when they restricted the question.
    *
    *  🔒 ANSWER THE QUESTION THAT WAS ASKED (David 2026-08-11: "the coach could
@@ -1663,7 +1701,7 @@ export function assembleMoveEvalAnswer(opts: {
 
   // The GROUNDED reason it's strong — no LLM. (playedSan null: we're not
   // contrasting a played move here, just stating what the best move achieves.)
-  const why = explainBestMoveGrounded(fen, null, bestMoveUci, mover);
+  const why = explainBestMoveGrounded(fen, null, bestMoveUci, mover, opts.prevCapture ?? null);
   const evalText = evalPhrase(opts.evalCp, opts.mateIn, mover, opts.studentColor ?? null);
 
   const theirMove = Boolean(opts.studentColor) && opts.studentColor !== mover;
@@ -1680,6 +1718,14 @@ export function assembleMoveEvalAnswer(opts: {
         : `The best move is ${bestMoveSan}.`,
   ];
   if (why) parts.push(why);
+  else {
+    // NAMED WITH ITS REASON (question walk 2026-09-27: "The best move is g3."
+    // and nothing else). What the move does on the board, else the fact that
+    // makes a quiet best move best: nothing forcing does better.
+    const geo = describeMoveGeometry(fen, bestMoveSan, mover);
+    if (geo && !geo.startsWith('attacks')) parts.push(`It ${geo}.`);
+    else if (!/[x+#]/.test(bestMoveSan)) parts.push("It's a quiet move — nothing forcing does better here, so the engine improves the position instead.");
+  }
   if (evalText) parts.push(`${evalText.charAt(0).toUpperCase()}${evalText.slice(1)}.`);
 
   const sources = ['engine:stockfish', 'board:chess.js'];
@@ -1696,13 +1742,13 @@ export function assembleMoveEvalAnswer(opts: {
  *  the moved piece there for ≥2 points, i.e. it's a sacrifice. Returns the point
  *  value offered, or null when the move loses nothing (not a sac). Pure chess.js
  *  + SEE (`seeGain` > 0 = the enemy wins material by capturing on that square). */
-function sacrificeOffer(fen: string, candSan: string): number | null {
+function sacrificeOffer(fen: string, candSan: string, minGain = 2): number | null {
   try {
     const c = new Chess(fen);
     const mv = c.move(candSan);
     if (!mv) return null;
     const gain = legalSeeGain(c.fen(), mv.to); // opponent to move — their legal winning capture
-    return gain >= 2 ? gain : null;
+    return gain >= minGain ? gain : null;
   } catch {
     return null;
   }
@@ -1737,8 +1783,25 @@ export function assembleCandidateMoveAnswer(opts: {
   candidateMateIn?: number | null;
   /** % of master games that play the candidate here, when the explorer has it. */
   masterFreqPct?: number | null;
+  /** Best play AFTER the candidate (UCI, from the position after it). REQUIRED:
+   *  "what happens if I play X" is a question about the line, and an answer
+   *  without it said "d1=Q+ is the best move. It gives check." about a queen
+   *  sacrifice that mates next move (question walk 2026-09-27). Pass [] when
+   *  no engine line exists. */
+  candidateLineUci: readonly string[];
+  /** Did the search behind `candidateEvalCp` SETTLE (`searchUntilStable`)?
+   *  REQUIRED: a verdict off a search that was still changing its mind is said
+   *  as a first read, never as fact — above all on a sacrifice, where the
+   *  truth hides deepest. `null` = no search ran (no eval to hedge). */
+  candidateSettled: boolean | null;
+  /** The student's seat — REQUIRED so the eval is said as "you"/"they", never a
+   *  colour to the player of that colour (question walk 2026-09-27). */
+  studentColor: 'white' | 'black' | null;
 }): GroundedAnswer | null {
   const { fen, candidateSan } = opts;
+  const hedge = opts.candidateSettled === false
+    ? "Take that line as a first read, not a final word."
+    : null;
   const raw = (candidateSan ?? '').trim();
   if (!raw) return null;
 
@@ -1795,12 +1858,32 @@ export function assembleCandidateMoveAnswer(opts: {
       ? `Masters play it about ${Math.round(opts.masterFreqPct)}% of the time here.`
       : null;
 
-  // Candidate IS the engine's best move → affirm it (with the grounded why).
-  if (bestSan && candNorm === bestSan) {
+  // THE LINE the candidate leads to — engine best play after it, in SAN, to
+  // mate or six plies (a projected line's length, not a cap on facts).
+  const lineSan: string[] = [];
+  try {
+    const c = new Chess(fen);
+    c.move(candNorm);
+    for (const u of opts.candidateLineUci.slice(0, 6)) {
+      const mv = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined });
+      if (!mv) break;
+      lineSan.push(mv.san);
+      if (c.isCheckmate()) break;
+    }
+  } catch { /* an unreadable line is no line */ }
+  const lineText = lineSan.length > 0 ? `The line: ${[candNorm, ...lineSan].join(' ')}.` : null;
+  const sacOfferEarly = sacrificeOffer(fen, candNorm);
+
+  // Candidate IS the engine's best move → affirm it (with the grounded why) —
+  // unless it GIVES material: then "is it sound" is the question, and the
+  // sacrifice verdict below answers it.
+  if (bestSan && candNorm === bestSan && sacOfferEarly === null) {
     const why = explainBestMoveGrounded(fen, null, opts.bestMoveUci, mover);
     const parts = [`Yes — ${candNorm} is the best move here.`];
     if (why) parts.push(why);
+    if (lineText) parts.push(lineText);
     if (freqText) parts.push(freqText);
+    if (hedge) parts.push(hedge);
     return { facts: parts.join(' '), bestMoveSan: bestSan, bestMoveFromTo: bestFromTo, sources };
   }
 
@@ -1816,11 +1899,11 @@ export function assembleCandidateMoveAnswer(opts: {
   // moved piece can be won on its landing square (SEE) — the honest answer is
   // sound / speculative / unsound, judged by the engine eval of best play AFTER
   // the sac (mover POV), not a bare cp-loss grade. All computed (G0).
-  const sacOffer = sacrificeOffer(fen, candNorm);
+  const sacOffer = sacOfferEarly;
   if (sacOffer !== null) {
     const stmEval = typeof opts.candidateEvalCp === 'number' ? opts.candidateEvalCp : null;
     const give = sacOffer >= 5 ? 'the exchange or more' : sacOffer >= 3 ? 'a piece' : 'a pawn';
-    const after = evalPhrase(opts.candidateEvalCp, opts.candidateMateIn, mover);
+    const after = evalPhrase(opts.candidateEvalCp, opts.candidateMateIn, mover, opts.studentColor);
     let verdict: string | null = null;
     if (typeof opts.candidateMateIn === 'number' && opts.candidateMateIn > 0) {
       verdict = `${candNorm} is a sound sacrifice — it forces mate in ${opts.candidateMateIn}.`;
@@ -1833,8 +1916,12 @@ export function assembleCandidateMoveAnswer(opts: {
     }
     if (verdict) {
       const parts = [verdict];
-      if (geo && !geo.startsWith('attacks')) parts.push(`It ${geo}.`);
+      // Named, not "It": after "Play Bd7 instead" a bare "It gives check" was
+      // heard as Bd7 giving check (question walk 2026-09-27).
+      if (geo && !geo.startsWith('attacks')) parts.push(`${candNorm} ${geo}.`);
+      if (lineText) parts.push(lineText);
       if (freqText) parts.push(freqText);
+      if (hedge) parts.push(hedge);
       return { facts: parts.join(' '), bestMoveSan: bestSan, bestMoveFromTo: bestFromTo, sources };
     }
   }
@@ -1865,9 +1952,11 @@ export function assembleCandidateMoveAnswer(opts: {
   // Name WHAT the candidate does when the geometry is concrete (not a bare
   // "attacks"), so the student hears the reason, not just the grade.
   if (geo && !geo.startsWith('attacks')) parts.push(`It ${geo}.`);
-  const evalText = evalPhrase(opts.candidateEvalCp, opts.candidateMateIn, mover);
+  const evalText = evalPhrase(opts.candidateEvalCp, opts.candidateMateIn, mover, opts.studentColor);
   if (evalText) parts.push(`After it, ${evalText}.`);
+  if (lineText) parts.push(lineText);
   if (freqText) parts.push(freqText);
+  if (hedge) parts.push(hedge);
 
   return {
     facts: parts.join(' '),
@@ -1875,6 +1964,221 @@ export function assembleCandidateMoveAnswer(opts: {
     bestMoveFromTo: bestFromTo,
     sources,
   };
+}
+
+/** "What if THEY play d5?" — the opponent's named move, answered from the
+ *  student's seat (question walk 2026-09-27: routed as a student candidate, the
+ *  coach graded the STUDENT playing d5). Played on `opponentMoveBoard` — the
+ *  live board, or the tempo-flipped one when it is the student's turn — and
+ *  judged by what it changes: the eval now versus the eval once they have it
+ *  in, both from the student's side. The student's best answer comes from the
+ *  engine line after it. Every fact computed (G0); the model only phrases. */
+export function assembleOpponentHypotheticalAnswer(opts: {
+  /** The board the move is played on (their turn), from `opponentMoveBoard`.
+   *  null = they cannot get a move in (the student is in check). */
+  board: string | null;
+  theirSan: string;
+  studentColor: 'white' | 'black';
+  /** Student-POV eval of the live position before their move. */
+  nowEvalCp: number | null;
+  /** Student-POV eval once their move is on the board. */
+  afterEvalCp: number | null;
+  afterMateIn: number | null;
+  /** Best play after their move — the student's answer first (UCI). */
+  lineUci: readonly string[];
+  settled: boolean | null;
+}): GroundedAnswer | null {
+  const raw = (opts.theirSan ?? '').trim();
+  if (!raw) return null;
+  const sources = ['engine:stockfish', 'board:chess.js'];
+  if (!opts.board) {
+    return { facts: "You're in check, so they don't get a free move — deal with the check first.", bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+  }
+  const them: 'white' | 'black' = opts.studentColor === 'white' ? 'black' : 'white';
+  let theirNorm: string | null = null;
+  try { theirNorm = new Chess(opts.board).move(raw)?.san ?? null; } catch { theirNorm = null; }
+  if (!theirNorm) {
+    return { facts: `${raw} isn't a move they can play here.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+  }
+  const geo = describeMoveGeometry(opts.board, theirNorm, them);
+  const after = evalPhrase(opts.afterEvalCp, opts.afterMateIn, opts.studentColor, opts.studentColor);
+  const parts: string[] = [];
+  if (geo) {
+    parts.push(`If they get ${theirNorm} in, it ${geo}.`);
+    if (after) parts.push(`After it, ${after}.`);
+  } else {
+    parts.push(after ? `If they get ${theirNorm} in, ${after}.` : `If they get ${theirNorm} in`);
+  }
+  if (typeof opts.nowEvalCp === 'number' && typeof opts.afterEvalCp === 'number') {
+    const swing = (opts.nowEvalCp - opts.afterEvalCp) / 100;
+    if (swing >= 1) parts.push(`That would cost you about ${swing.toFixed(1)} points — it's the move to watch for.`);
+    else if (swing >= 0.3) parts.push(`It takes about ${swing.toFixed(1)} of a point off your position.`);
+    else if (swing <= -0.3) parts.push(`It would only help you — about ${(-swing).toFixed(1)} ${-swing >= 1 ? 'points' : 'of a point'} more for you than now.`);
+    else parts.push("It doesn't change much.");
+  }
+  // The student's best answer and the line it starts.
+  let bestSan: string | null = null;
+  let bestFromTo: { from: string; to: string } | null = null;
+  const lineSan: string[] = [];
+  try {
+    const c = new Chess(opts.board);
+    c.move(theirNorm);
+    for (const u of opts.lineUci.slice(0, 6)) {
+      const mv = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined });
+      if (!mv) break;
+      if (!bestSan) { bestSan = mv.san; bestFromTo = { from: mv.from, to: mv.to }; }
+      lineSan.push(mv.san);
+      if (c.isCheckmate()) break;
+    }
+  } catch { /* an unreadable line is no line */ }
+  if (bestSan) parts.push(`Your best answer is ${bestSan}${lineSan.length > 1 ? `: ${lineSan.join(' ')}` : ''}.`);
+  // NO ENGINE READ, NO DANGLING HEAD (question walk 2026-09-27: "If they get d5
+  // in:" and nothing after it). Say what is missing instead.
+  if (parts.length === 1 && !/[.!?]$/.test(parts[0])) {
+    return { facts: `I don't have an engine read on ${theirNorm} for them yet — ask me again in a moment.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+  }
+  if (opts.settled === false) parts.push("Take that line as a first read, not a final word.");
+  return { facts: parts.join(' '), bestMoveSan: bestSan, bestMoveFromTo: bestFromTo, sources };
+}
+
+// ── "SHOULD I TRADE QUEENS?" (question walk 2026-09-27) ──────────────────────
+//
+// The ask fell through to the best-move lane and the trade was never addressed.
+// Two computed halves: WHICH move trades (chess.js — a capture of their piece
+// by ours of the same kind, else a move that offers it on a defended square),
+// and WHAT IT COSTS against the best move (the engine, searched until it
+// settles). The material count adds the one principle that is always true:
+// trades favour the side that is ahead.
+
+export type TradePiece = 'q' | 'r' | 'b' | 'n' | 'any';
+const TRADE_WORD: Record<Exclude<TradePiece, 'any'>, [string, string]> = {
+  q: ['queen', 'queens'], r: ['rook', 'rooks'], b: ['bishop', 'bishops'], n: ['knight', 'knights'],
+};
+
+/** The move that trades `piece` now — a same-kind capture first, else a move
+ *  that offers it (lands where their same-kind piece hits it, defended). SAN,
+ *  or null when no such trade is on the board. Deterministic: first by SAN. */
+export function findTradeMove(fen: string, piece: TradePiece): { san: string; kind: 'capture' | 'offer' } | null {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return null; }
+  const me = c.turn();
+  const kinds: Array<'q' | 'r' | 'b' | 'n'> = piece === 'any' ? ['q', 'r', 'b', 'n'] : [piece];
+  const moves = c.moves({ verbose: true });
+  const same = (a: string, b: string | undefined): boolean => a === b || (piece === 'any' && (a === 'b' || a === 'n') && (b === 'b' || b === 'n'));
+  const captures = moves.filter((m) => kinds.includes(m.piece as 'q') && m.captured && same(m.piece, m.captured))
+    .map((m) => m.san).sort();
+  if (captures.length > 0) return { san: captures[0], kind: 'capture' };
+  const offers = moves.filter((m) => {
+    if (!kinds.includes(m.piece as 'q') || m.captured) return false;
+    const b = new Chess(fen);
+    const mv = b.move(m.san);
+    if (!mv || b.isCheckmate()) return false;
+    const foe = b.turn();
+    const hitBySame = b.attackers(mv.to, foe).some((sq) => same(mv.piece, b.get(sq)?.type));
+    const defended = b.attackers(mv.to, me).some((sq) => sq !== mv.to);
+    const otherAttackers = b.attackers(mv.to, foe).some((sq) => !same(mv.piece, b.get(sq)?.type));
+    return hitBySame && defended && !otherAttackers;
+  }).map((m) => m.san).sort();
+  return offers.length > 0 ? { san: offers[0], kind: 'offer' } : null;
+}
+
+export function assembleTradeAnswer(opts: {
+  fen: string;
+  piece: TradePiece;
+  studentColor: 'white' | 'black';
+  trade: { san: string; kind: 'capture' | 'offer' } | null;
+  /** Student-POV eval of the best move now, and of the position after the trade move. */
+  bestEvalCp: number | null;
+  tradeEvalCp: number | null;
+  tradeMateIn: number | null;
+  bestSan: string | null;
+  settled: boolean | null;
+}): GroundedAnswer | null {
+  let c: Chess;
+  try { c = new Chess(opts.fen); } catch { return null; }
+  const [one, many] = opts.piece === 'any' ? ['piece', 'pieces'] : TRADE_WORD[opts.piece];
+  const me = opts.studentColor === 'white' ? 'w' : 'b';
+  const pts = (col: 'w' | 'b'): number => c.board().flat().reduce((n, x) => n + (x && x.color === col ? (REVIEW_PIECE_VALUE[x.type] ?? 0) : 0), 0);
+  const edge = pts(me) - pts(me === 'w' ? 'b' : 'w');
+  const principle = edge >= 2
+    ? "You're ahead in material, so trades are on your side — every trade makes the extra material count for more."
+    : edge <= -2
+      ? "You're behind in material — trades help the side that's ahead, so keep pieces on unless the trade wins something."
+      : null;
+  const parts: string[] = [];
+  if (!opts.trade) {
+    parts.push(`There's no ${one} trade on the board this move — nothing of yours can take or offer to take their ${opts.piece === 'any' ? 'pieces' : one}.`);
+    if (principle) parts.push(principle);
+    return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+  }
+  const t = opts.trade;
+  parts.push(t.kind === 'capture' ? `${t.san} trades the ${many}.` : `${t.san} offers the ${one} trade.`);
+  if (typeof opts.bestEvalCp === 'number' && typeof opts.tradeEvalCp === 'number') {
+    const loss = Math.max(0, opts.bestEvalCp - opts.tradeEvalCp) / 100;
+    if (opts.bestSan && opts.bestSan === t.san) parts.push("It's also the engine's first choice.");
+    else if (loss <= 0.3) parts.push(`It keeps you level with the best move${opts.bestSan ? `, ${opts.bestSan}` : ''} — a fine choice.`);
+    else if (loss < 1) parts.push(`It gives up about ${loss.toFixed(1)} of a point next to ${opts.bestSan ?? 'the best move'}.`);
+    else parts.push(`It costs about ${loss.toFixed(1)} points next to ${opts.bestSan ?? 'the best move'} — not now.`);
+  }
+  const mover = c.turn() === 'w' ? 'white' : 'black';
+  const after = evalPhrase(opts.tradeEvalCp, opts.tradeMateIn, mover, opts.studentColor);
+  if (after) parts.push(`After it, ${after}.`);
+  if (principle) parts.push(principle);
+  if (opts.settled === false) parts.push("Take that line as a first read, not a final word.");
+  return { facts: parts.join(' '), bestMoveSan: opts.bestSan, bestMoveFromTo: null, sources: ['engine:stockfish', 'board:chess.js'] };
+}
+
+/** "WHAT SHOULD I AIM FOR IN THE ENDGAME?" asked before there is one (question
+ *  run 2026-09-27: answered with the middlegame plan, twice in one run). What
+ *  the structure will be worth once the pieces come off: the material edge, the
+ *  passed pawns, a queenside majority, the bishop pair — each computed, and the
+ *  honest "nothing decides it yet" when none of them is there. */
+export function assembleEndgameOutlookAnswer(fen: string, studentColor: 'white' | 'black'): GroundedAnswer | null {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return null; }
+  const me: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+  const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
+  const all = c.board().flat().filter((x): x is NonNullable<typeof x> => !!x);
+  const pts = (col: 'w' | 'b'): number => all.reduce((n, x) => n + (x.color === col && x.type !== 'k' ? (REVIEW_PIECE_VALUE[x.type] ?? 0) : 0), 0);
+  const edge = pts(me) - pts(them);
+  const parts: string[] = [];
+  if (edge >= 1) parts.push(`You're up ${materialEdgeWords(all, me, them)} — an endgame is where that counts, so every trade brings it closer.`);
+  else if (edge <= -1) parts.push(`You're down ${materialEdgeWords(all, them, me)} — an endgame is where that tells, so keep the pieces on for now.`);
+  const myP = findPassedPawns(fen, me);
+  const theirP = findPassedPawns(fen, them);
+  if (myP.length > 0) parts.push(`Your passed pawn${myP.length > 1 ? 's' : ''} on ${andList(myP)} ${myP.length > 1 ? 'are' : 'is'} the endgame's trump — ${myP.length > 1 ? 'they run' : 'it runs'} once the pieces come off.`);
+  if (theirP.length > 0) parts.push(`Their passed pawn${theirP.length > 1 ? 's' : ''} on ${andList(theirP)} ${theirP.length > 1 ? 'are' : 'is'} the one to stop before it gets going.`);
+  const sig = structureSignature(fen);
+  if (sig?.queensideMajority === me) parts.push('You hold the queenside pawn majority — in an endgame it makes a passed pawn far from both kings.');
+  else if (sig?.queensideMajority === them) parts.push('They hold the queenside pawn majority — in an endgame it makes a passed pawn far from both kings, so keep it in check.');
+  if (bishopPair(fen, me)) parts.push('Your bishop pair grows stronger as pawns come off.');
+  else if (bishopPair(fen, them)) parts.push('Their bishop pair grows stronger as pawns come off.');
+  const men = all.length;
+  const head = `You're not in an endgame yet — ${men} pieces are still on the board.`;
+  if (parts.length === 0) {
+    return { facts: `${head} Nothing in the structure decides an endgame yet — material and pawns are balanced, so the middlegame will decide what the ending looks like.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+  }
+  return { facts: `${head} If it comes to one: ${parts[0].charAt(0).toLowerCase()}${parts[0].slice(1)}${parts.length > 1 ? ` ${parts.slice(1).join(' ')}` : ''}`, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+}
+
+/** THE WEAKNESS ON THIS BOARD, for "what's my biggest weakness?" asked over a
+ *  live game with no imported games to read (question run 2026-09-27: the
+ *  answer was only "import your games" while the student's queen hung on g4).
+ *  A loose piece first — the one that costs most — then a structural pawn
+ *  weakness. Null when the board shows neither. */
+export function boardWeaknessNow(fen: string, studentColor: 'white' | 'black'): string | null {
+  const me: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+  const loose = findHangingBySee(fen).filter((h) => h.color === me).sort((a, b) => b.gain - a.gain)[0];
+  if (loose) return `On this board, your biggest weakness is your ${REVIEW_PIECE_NAME[loose.piece]} on ${loose.square} — it can be taken right now.`;
+  const w = findWeakPawns(fen, me);
+  const WHY: Record<string, string> = {
+    isolated: 'no pawn can ever defend it, so it is the target',
+    backward: 'it cannot be supported by a pawn, and the square in front of it is theirs',
+    doubled: 'two pawns on one file cover less than two side by side',
+  };
+  const kind = w.isolated.length ? ['isolated', w.isolated[0]] : w.backward.length ? ['backward', w.backward[0]] : w.doubled.length ? ['doubled', w.doubled[0]] : null;
+  if (kind) return `On this board, your biggest weakness is your ${kind[0]} pawn on ${kind[1]} — ${WHY[kind[0]]}.`;
+  return null;
 }
 
 /** One engine line for the alternatives comparison: the first move (SAN),
@@ -1908,6 +2212,8 @@ export interface AlternativeLineFact {
 export function assembleAlternativesAnswer(opts: {
   fen: string;
   lines: ReadonlyArray<AlternativeLineFact>;
+  /** The student's seat — REQUIRED, see `evalPhrase`. */
+  studentColor: 'white' | 'black' | null;
 }): GroundedAnswer | null {
   const { fen, lines } = opts;
   if (!lines || lines.length < 2) return null;
@@ -2020,7 +2326,7 @@ export function assembleAlternativesAnswer(opts: {
   }
 
   // 3. The verdict eval of best play.
-  const evalText = evalPhrase(bestEvalStm, bestMateStm, mover);
+  const evalText = evalPhrase(bestEvalStm, bestMateStm, mover, opts.studentColor);
   if (evalText) parts.push(`With ${bestSan}, ${evalText}.`);
 
   return {
@@ -2044,6 +2350,10 @@ export function explainBestMoveGrounded(
   playedSan: string | null,
   bestMoveUci: string | null,
   moverColor: 'white' | 'black',
+  /** The capture the previous move made, when the caller has the history —
+   *  so taking back is said as taking back, not as winning (question walk
+   *  2026-09-27: "dxe5 … wins the knight on e5" after Nxe5). */
+  prevCapture: { square: string; capturedValue: number } | null = null,
 ): string | null {
   if (!bestMoveUci || bestMoveUci.length < 4) return null;
   const mc: 'w' | 'b' = moverColor === 'white' ? 'w' : 'b';
@@ -2064,7 +2374,11 @@ export function explainBestMoveGrounded(
       // are all forcing or material-safe. Falls back to the narrow capture/check
       // read when no strong geometry is computable.
       const geo = describeMoveGeometry(fenBefore, mv.san, moverColor);
-      if (geo && !geo.startsWith('attacks')) {
+      const takesBack = captured && prevCapture && prevCapture.square === to
+        && (REVIEW_PIECE_VALUE[captured.type] ?? 0) <= prevCapture.capturedValue;
+      if (takesBack && captured) {
+        bestClause = `it takes back the ${REVIEW_PIECE_NAME[captured.type]} on ${to}`;
+      } else if (geo && !geo.startsWith('attacks')) {
         bestClause = `it ${geo}`;
       } else if (captured && captured.color !== mc) {
         const recapturable = c.attackers(to as never, captured.color).length > 0;
@@ -2689,7 +3003,7 @@ export function assembleMovePurpose(opts: {
   const ss = opts.studentSide ?? opts.moverColor;
   const studentEvalCp = opts.evalCp == null ? null : (ss === 'white' ? opts.evalCp : -opts.evalCp);
   const studentMate = opts.mateIn == null ? null : (ss === 'white' ? opts.mateIn : -opts.mateIn);
-  const ev = evalPhrase(studentEvalCp, studentMate, ss);
+  const ev = evalPhrase(studentEvalCp, studentMate, ss, opts.studentSide ?? null);
   if (ev) clauses.push(`${upperFirst(ev)}.`);
 
   if (clauses.length === 0) return null;
@@ -2839,7 +3153,7 @@ export function assembleEngineReasoning(opts: {
   const ss = opts.studentSide ?? opts.moverColor;
   const studentEvalCp = opts.evalCp == null ? null : (ss === 'white' ? opts.evalCp : -opts.evalCp);
   const studentMate = opts.mateIn == null ? null : (ss === 'white' ? opts.mateIn : -opts.mateIn);
-  const ev = evalPhrase(studentEvalCp, studentMate, ss);
+  const ev = evalPhrase(studentEvalCp, studentMate, ss, opts.studentSide ?? null);
   if (ev) clauses.push(`${cap(ev)}.`);
 
   const first = plies[0];
@@ -3432,6 +3746,84 @@ export function assembleEndgameAnswer(opts: {
 // tablebase verdict (a LIVE ≤7-piece board): this answers a general "how do I
 // win/hold X" with no board, or where the tablebase missed. The canonical FEN is
 // carried through so a later step can walk the line (P-V.2).
+/** The position each rule question is answered on: that material against a
+ *  bare king. The answer is whatever `endgameConceptFor` says about it — the
+ *  same sentence a live board with that material speaks, never a second copy. */
+const RULE_POSITION: Record<Exclude<EndgameRuleMaterial, 'two-pawns'>, string> = {
+  queen: '4k3/8/8/8/8/8/8/3QK3 w - - 0 1',
+  rook: '4k3/8/8/8/8/8/8/R3K3 w - - 0 1',
+  'two-bishops': '4k3/8/8/8/8/8/8/2B1KB2 w - - 0 1',
+  'bishop-knight': '4k3/8/8/8/8/8/8/2B1K1N1 w - - 0 1',
+  'two-knights': '4k3/8/8/8/8/8/8/1N2K1N1 w - - 0 1',
+  bishop: '4k3/8/8/8/8/8/8/2B1K3 w - - 0 1',
+  knight: '4k3/8/8/8/8/8/8/1N2K3 w - - 0 1',
+};
+
+/**
+ * A board-free ENDGAME RULE ("can two knights checkmate?", "can a king stop two
+ * pawns?") — computed, never recalled (G0). Mating material is answered on that
+ * material against a bare king; two pawns get the rule `detectTwoPawnsVsKing`
+ * computes, because whether the king can take one depends on where they stand
+ * (d5 and e5 with the king on d7 fall; other set-ups do not).
+ */
+export function assembleEndgameRuleAnswer(material: EndgameRuleMaterial): GroundedAnswer | null {
+  if (material === 'two-pawns') {
+    const facts = twoPawnsPlacementRule();
+    return facts ? { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['endgame:two-pawns-vs-king'] } : null;
+  }
+  const concept = endgameConceptFor(RULE_POSITION[material]);
+  if (!concept) return null;
+  return { facts: concept.full, bestMoveSan: null, bestMoveFromTo: null, sources: [`concept:${concept.id}`] };
+}
+
+/** Two pawns against a lone king: WHERE the pawns must stand (David
+ *  2026-10-01: "say it depends on pawn placement and then describe what that
+ *  means — where the pawn needs to be"). Each placement is said only when
+ *  `detectTwoPawnsVsKing` agrees on that exact board, so the examples cannot
+ *  drift from the computer that judges live positions. */
+function twoPawnsPlacementRule(): string | null {
+  const board = (a: string, b: string): string => {
+    const g: string[][] = Array.from({ length: 8 }, () => Array<string>(8).fill(''));
+    const put = (sq: string, p: string): void => { g[8 - Number(sq[1])][sq.charCodeAt(0) - 97] = p; };
+    put(a, 'P'); put(b, 'P'); put('h1', 'K'); put('a8', 'k');
+    const rows = g.map((r) => { let out = ''; let e = 0; for (const x of r) { if (!x) e += 1; else { if (e) out += String(e); e = 0; out += x; } } if (e) out += String(e); return out; });
+    return `${rows.join('/')} b - - 0 1`;
+  };
+  const holds = (a: string, b: string): boolean | null => {
+    const r = detectTwoPawnsVsKing(board(a, b));
+    return r ? r.selfDefending : null;
+  };
+  const parts: string[] = ['It depends on where the pawns stand.'];
+  if (holds('d4', 'e5') && holds('d5', 'e6')) {
+    parts.push('If one pawn protects the other — like d4 and e5 — the king cannot take the front one, and if it takes the back one, the front pawn runs out of its reach and queens.');
+  }
+  if (holds('b5', 'f5') && holds('b6', 'f6')) {
+    parts.push('If they are far apart on the same rank — like b5 and f5 — the king can take one, but from that square it is outside the square of the other, which runs through.');
+  }
+  if (holds('d5', 'e5') === false) {
+    parts.push('Side by side on the same rank — like d5 and e5 — neither protects the other, so the king can attack them; there your own king has to come and guard them.');
+  }
+  parts.push('The test every time: from the square where the king captures, is it still inside the square of the other pawn?');
+  return parts.length > 2 ? parts.join(' ') : null;
+}
+
+/** A board the coach sets up to DEMONSTRATE the rule (David 2026-10-01: "set
+ *  up the board a couple moves out and show how to do it") — the trainer plays
+ *  it out from the tablebase, then the student tries. Only for material that
+ *  WINS (a draw has nothing to show how to do); each was checked against the
+ *  tablebase: queen mate in 15, rook 23, two bishops 29, bishop + knight 57,
+ *  the protected pawn pair 33. */
+const RULE_DEMO: Partial<Record<EndgameRuleMaterial, string>> = {
+  queen: '4k3/8/8/8/8/8/8/3QK3 w - - 0 1',
+  rook: '4k3/8/8/8/8/8/8/R3K3 w - - 0 1',
+  'two-bishops': '4k3/8/8/8/8/8/8/2B1KB2 w - - 0 1',
+  'bishop-knight': '4k3/8/8/8/8/8/8/2B1K1N1 w - - 0 1',
+  'two-pawns': '8/8/2k5/4P3/3P4/8/8/7K w - - 0 1',
+};
+export function endgameRuleDemoFen(material: EndgameRuleMaterial): string | null {
+  return RULE_DEMO[material] ?? null;
+}
+
 export function assembleEndgameTechniqueAnswer(opts: {
   name: string;
   rule: string;
@@ -3755,6 +4147,11 @@ export function notationQuestionSan(text: string | null | undefined): string | n
   // to d4" (broken-map #1). A genuine notation query ("what is Bxe7", "what does
   // e4 mean") never has one of these words immediately before the token.
   if (/\b(?:with|against|versus|vs\.?|v\.?|playing|facing|in)\s+(?:the\s+)?$/i.test(before)) return null;
+  // A MOVE IN A CONDITIONAL is a board question, not a notation one — "if they
+  // play Re3, what is my best reply" was answered "'Re3' is chess notation"
+  // (pass-3 walk 2026-10-01). The verb before the token decides it.
+  if (/\b(?:play|plays|played|playing|go|goes|take|takes|push|pushes|answer|answers|reply|replies|move|moves|try|tries)\s+$/i.test(before)) return null;
+  if (/\b(?:best\s+(?:reply|response|answer|move)|who\s+(?:comes\s+out|is)\s+(?:ahead|better))\b/i.test(text)) return null;
   return normalizeBeginnerSan(m[0]);
 }
 
@@ -3772,6 +4169,41 @@ function normalizeBeginnerSan(tok: string): string {
     Math.abs(lead.toLowerCase().charCodeAt(0) - destFile.charCodeAt(0)) === 1;
   if (isPawnCapture) return tok; // genuine pawn capture like bxc3 — leave as-is
   return `${lead.toUpperCase()}${disamb}${x}${destFile}${destRank}${promo ?? ''}${chk ?? ''}`;
+}
+
+/** One SYMBOL of notation, not a whole move — real users asked "what does G
+ *  mean" and "what is bxe7" (2026-10). Uppercase K Q R B N are pieces; the
+ *  letters a–h (any case but the piece letters) are files; x, +, #, = and the
+ *  castling marks each have one meaning. Pure decode — nothing on the board is
+ *  claimed (G0). Null when the ask is not "what does <symbol> mean". */
+const SYMBOL_MEANING: Record<string, string> = {
+  K: 'the king', Q: 'the queen', R: 'a rook', B: 'a bishop',
+  N: 'a knight — N, because K is already the king',
+  x: 'a capture: "Nxe5" means the knight takes whatever is on e5',
+  '+': 'check — the move attacks the king',
+  '#': 'checkmate',
+  '=': 'a promotion: "e8=Q" means the pawn reaches e8 and becomes a queen',
+  'O-O': 'castling kingside', 'O-O-O': 'castling queenside',
+};
+export function explainNotationSymbol(text: string | null | undefined): string | null {
+  if (!text) return null;
+  const t = text.trim();
+  const quoted = String.raw`["'“‘]?(O-O-O|O-O|[A-Za-z]|[x+#=])["'”’]?`;
+  const m = t.match(new RegExp(String.raw`\bwhat\s+(?:does|do|is|'?s)\s+(?:the\s+|a\s+|an\s+|this\s+|that\s+)?${quoted}\s+(?:mean|means|stand\s+for|stands\s+for)\b`, 'i'))
+    ?? t.match(new RegExp(String.raw`^what(?:'?s|\s+is)\s+["'“‘]?([A-HKQRN]|O-O-O|O-O)["'”’]?\s*\??$`));
+  if (!m) return null;
+  const sym = m[1];
+  if (sym === 'O-O' || sym === 'O-O-O' || ['x', '+', '#', '='].includes(sym)) {
+    return `"${sym}" in chess notation means ${SYMBOL_MEANING[sym]}.`;
+  }
+  if (/^[KQRBN]$/.test(sym)) {
+    return `"${sym}" in chess notation means ${SYMBOL_MEANING[sym]}. A move like "${sym}f3" is that piece moving to f3; a pawn move has no letter at all, just the square, like "e4".`;
+  }
+  if (/^[a-h]$/i.test(sym)) {
+    const f = sym.toLowerCase();
+    return `"${sym}" in chess notation is the ${f}-file — the ${f} column of squares, written in lowercase. A square is its file then its rank, so "${f}4" is the ${f}-file on the fourth rank. On its own at the front of a capture, like "${f}xd5", it is the pawn on the ${f}-file taking.`;
+  }
+  return null;
 }
 
 /** Decode a SAN move into a plain-English explanation for a beginner. Uses the
@@ -5268,13 +5700,18 @@ export function assembleRetrospectiveAnswer(r: RetrospectiveMoveLike): GroundedA
   // form is written from the mover's chair, so its possessives are re-seated
   // for a move the student did not make ("my king" for the coach's castle).
   const ledRaw = describeMoveGeometry(r.fenBefore, r.playedSan, r.moverColor)
+    ?? threatMadeWhy(r.fenBefore, r.playedSan, r.moverColor === 'white' ? 'w' : 'b')
     ?? strategicWhyLed(r.fenBefore, r.playedSan, r.moverColor);
+  // The mover's chair re-seated for a move the student did not make — applied
+  // to EVERY clause written from the mover's side ("your move let them play
+  // Nxe5" said of the coach's own e5, question walk 2026-09-27).
   const reseat: Record<string, string> = r.mover === 'coach'
-    ? { your: 'my', their: 'your', Your: 'My', Their: 'Your' }
+    ? { your: 'my', their: 'your', Your: 'My', Their: 'Your', them: 'you', they: 'you', They: 'You' }
     : r.mover === 'opponent'
-      ? { your: 'their', their: 'your', Your: 'Their', Their: 'Your' }
+      ? { your: 'their', their: 'your', Your: 'Their', Their: 'Your', them: 'you', they: 'you', They: 'You' }
       : {};
-  const did = ledRaw ? ledRaw.replace(/\b(your|their|Your|Their)\b/g, (w) => reseat[w] ?? w) : null;
+  const reseatText = (t: string): string => t.replace(/\b(your|their|Your|Their|them|they|They)\b/g, (w) => reseat[w] ?? w);
+  const did = ledRaw ? reseatText(ledRaw) : null;
   const didClause = did ? ` — it ${did.replace(/[.!?]+$/, '')}` : '';
 
   // The engine's better move, by COORDINATES — the same move renders Nxd4 or
@@ -5302,9 +5739,10 @@ export function assembleRetrospectiveAnswer(r: RetrospectiveMoveLike): GroundedA
   }
 
   const noRead = r.quality === null;
-  const why = r.bestMoveUci ? explainBestMoveGrounded(r.fenBefore, r.playedSan, r.bestMoveUci, r.moverColor) : null;
+  const whyRaw = r.bestMoveUci ? explainBestMoveGrounded(r.fenBefore, r.playedSan, r.bestMoveUci, r.moverColor) : null;
+  const why = whyRaw ? reseatText(whyRaw) : null;
   const better = bestSan
-    ? ` The engine preferred ${bestSan}${why ? `: ${why.replace(/[.!?]+$/, '')}` : ''}.`
+    ? ` The engine preferred ${bestSan}${why ? `: ${(/^[A-Z][a-z]+(?=[\s,])/.test(why) && !/^I\b/.test(why) ? why.charAt(0).toLowerCase() + why.slice(1) : why).replace(/[.!?]+$/, '')}` : ''}.`
     : '';
 
   if (noRead) {
@@ -5729,7 +6167,12 @@ export type PositionalTopic =
 
 const PIECE_WORD: Record<string, string> = { p: 'pawns', n: 'knights', b: 'bishops', r: 'rooks', q: 'queen', k: 'king' };
 
-export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'black', topic: PositionalTopic, ask?: string): GroundedAnswer | null {
+export function assemblePositionalAnswer(
+  fen: string, studentColor: 'white' | 'black', topic: PositionalTopic, ask?: string,
+  /** The game's opening, when the caller knows it — the structure answer names
+   *  the opening a structure is at home in when the game came from another. */
+  openingName?: string | null,
+): GroundedAnswer | null {
   // Board-validity guard (2026-09-09): every branch reads the FEN through
   // chess.js, so an unparseable FEN can only produce garbage — degrade to a
   // null (honest decline) rather than a bogus read. Must NOT rely on
@@ -5843,8 +6286,14 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
     const myHoles = me === 'white' ? holes.white : holes.black;
     const oppHoles = me === 'white' ? holes.black : holes.white;
     if (myHoles.length === 0 && oppHoles.length === 0) return { facts: `No weak squares for either side yet — every pawn is still covered. A pawn break is how you create one.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    // …and WHO gets there, how (the same route Learn names — one computer,
+    // chat and Learn say it the same way, walk 2026-09-30).
+    const route = oppHoles.map((h) => ({ h, r: minorRouteToSquare(fen, h, me === 'white' ? 'w' : 'b') })).find((x) => x.r);
+    const getThere = route?.r
+      ? ` Your ${REVIEW_PIECE_NAME[route.r.piece]} on ${route.r.from} gets to ${route.h}${route.r.via ? ` via ${route.r.via}` : ' in one move'}.`
+      : '';
     const targets = oppHoles.length
-      ? `${opp === 'white' ? 'White' : 'Black'} can't cover ${oppHoles.join(', ')} — those are your outpost targets, especially for a knight.`
+      ? `${opp === 'white' ? 'White' : 'Black'} can't cover ${oppHoles.join(', ')} — those are your outpost targets, especially for a knight.${getThere}`
       : '';
     const own = myHoles.length
       ? `Watch your own weak squares on ${myHoles.join(', ')} — no pawn of yours can guard ${myHoles.length === 1 ? 'it' : 'them'}.`
@@ -5968,7 +6417,10 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
 
   if (topic === 'structure-name') {
     const s = namedPawnStructure(fen, myC);
-    if (s) return { facts: `This is ${s.name}. ${s.plan}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    if (s) {
+      const transfer = structureTransfer(s.name, openingName);
+      return { facts: `This is ${s.name}. ${s.plan}${transfer ? ` ${transfer}` : ''}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    }
     // Not a textbook-named structure — still describe it board-truthfully from
     // the pawn faults on each side rather than declining.
     const mineWp = findWeakPawns(fen, myC);
@@ -6029,12 +6481,55 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
     if (op) bits.push(op.holds ? 'you hold the opposition' : 'fight for the opposition');
     if (rb) bits.push(`get your rook behind the passer on ${rb.pawn}`);
     if (bm) bits.push(`keep your ${REVIEW_PIECE_NAME[bm.note.piece]} on ${bm.note.square}${bm.dominant ? ' — it dominates' : ''}`);
-    if (bits.length === 0) return null;
-    return { facts: `Endgame technique: ${bits.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    // THE ENDING'S OWN RULE LEADS (2026-10-01): the one endgame computer that
+    // speaks over the live board — a named technique (Lucena, Philidor, the
+    // basic mates, two pawns that defend each other) — so the chat answer and
+    // the board say the same thing. A bare matchup principle stays out: it is
+    // generic beside the concrete steps below.
+    let rule: string | null = null;
+    try {
+      const c = endgameConceptFor(fen);
+      if (c && c.source === 'technique') rule = c.full;
+    } catch { rule = null; }
+    if (!rule && bits.length === 0) return null;
+    const steps = bits.length ? `Endgame technique: ${bits.join('; ')}.` : '';
+    return { facts: [rule, steps].filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
   // piece quality
   const quality = findPieceQuality(fen).filter((q) => q.color === myC);
+  // "IS MY BISHOP ON E3 GOOD OR BAD?" ASKS ABOUT ONE PIECE (question walk
+  // 2026-09-27: answered "none of your pieces stand out" — a survey, not the
+  // piece). The quality read when it has one, else the board facts that make
+  // the verdict: its squares, what it hits, and for a bishop its pawns' colour.
+  const named = ask ? /\b(knight|night|bishop|rook|queen)\s+on\s+([a-h][1-8])\b|\bmy\s+([a-h][1-8])[\s-]?(knight|night|bishop|rook|queen)\b/i.exec(ask) : null;
+  if (named) {
+    const sq = (named[2] ?? named[3]).toLowerCase() as Square;
+    const w0 = (named[1] ?? named[4]).toLowerCase(); const word = w0 === 'night' ? 'knight' : w0;
+    const board = new Chess(fen);
+    const here = board.get(sq);
+    const type = ({ knight: 'n', bishop: 'b', rook: 'r', queen: 'q' } as Record<string, string>)[word];
+    if (here && here.color === myC && here.type === type) {
+      const q = quality.find((x) => x.square === sq);
+      if (q) {
+        return { facts: `${q.quality === 'good' ? 'Good' : 'Bad'} — your ${word} on ${sq}: ${q.reason}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+      }
+      const moves = mobilityMap(board, myC).get(sq) ?? 0;
+      const enemy: 'w' | 'b' = myC === 'w' ? 'b' : 'w';
+      const hits = board.board().flat()
+        .filter((x): x is NonNullable<typeof x> => !!x && x.color === enemy && x.type !== 'k' && board.attackers(x.square, myC).includes(sq))
+        .map((x) => `${REVIEW_PIECE_NAME[x.type]} on ${x.square}`);
+      const bits = [`Neither — your ${word} on ${sq} is doing an ordinary job: it has ${moves} square${moves === 1 ? '' : 's'} to go to`];
+      if (type === 'b') {
+        const parity = (s2: string): number => (s2.charCodeAt(0) - 97 + Number(s2[1])) % 2;
+        const mine = board.board().flat().filter((x) => x && x.color === myC && x.type === 'p');
+        const same = mine.filter((x) => x && parity(x.square) === parity(sq)).length;
+        bits.push(`${same} of your ${mine.length} pawns stand on its colour`);
+      }
+      if (hits.length > 0) bits.push(`it hits their ${andList(hits)}`);
+      return { facts: `${andList(bits)}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    }
+  }
   if (quality.length === 0) return { facts: `None of your pieces stand out as especially good or bad right now.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   const good = quality.filter((q) => q.quality === 'good').map((q) => `${PIECE_WORD[q.piece] ?? q.piece} on ${q.square} (${q.reason})`);
   const bad = quality.filter((q) => q.quality === 'bad').map((q) => `${PIECE_WORD[q.piece] ?? q.piece} on ${q.square} (${q.reason})`);
@@ -6322,6 +6817,25 @@ export function detectNewThreat(
     // computed stakes it LED the ply at nine points, though the queen just
     // moved). It stands only if EVERY reply still leaves a winning capture.
     if (threat.kind === 'capture' && captureThreatIsAnswerable(fenAfter, moverWB)) return null;
+    // A THREAT FROM THE MIDDLE OF A TRADE IS NO THREAT (review walk 2026-10-01,
+    // ply 45: 23.Qxc7 took the queen and was told "you're now threatening
+    // Qxd8+ — it wins their rook on d8 and forks…" while …Rxc7 takes the queen
+    // straight back). The agent just captured something worth at least itself
+    // and they recapture it without losing material: the trade completes and
+    // the threat never exists. A piece that took LESS than itself (Nxe5 taking
+    // a pawn) still threatens — a swap is one answer, not the end of it.
+    const enemyWB: 'w' | 'b' = moverWB === 'w' ? 'b' : 'w';
+    let tookValue = 0;
+    try {
+      const was = new Chess(fenBefore).get(threat.from as Square);
+      if (was && was.color === enemyWB) tookValue = PIECE_VALUE_LOCAL[was.type] ?? 0;
+    } catch { tookValue = 0; }
+    const agent = after.get(threat.from as Square);
+    const midTrade = !!agent && tookValue > 0 && tookValue >= (PIECE_VALUE_LOCAL[agent.type] ?? 99)
+      && after.turn() === enemyWB
+      && after.moves({ verbose: true }).some((m) => m.to === threat.from && !!m.captured)
+      && signedLegalSeeFor(fenAfter, threat.from as Square, enemyWB) >= 0;
+    if (midTrade) return null;
     // NEW threats only — a threat that already existed before the move was
     // not created by it, and re-narrating a standing threat every ply is
     // noise (the repetition class).
@@ -6542,4 +7056,222 @@ export function describeThreatPrevention(
   } catch {
     return null;
   }
+}
+
+/** One side of a two-move comparison, mover POV (positive = good for the side
+ *  choosing). `lineUci` is best play AFTER the move. */
+export interface ComparedMove {
+  san: string;
+  evalCp: number | null;
+  mateIn: number | null;
+  lineUci: readonly string[];
+}
+
+const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/**
+ * assembleCompareMovesAnswer — "dxe5 or Qxe5?" (question walk 2026-09-27). The
+ * engine scores both; the better one is named; the worse one is shown WITH its
+ * refutation — the reply the engine plays and what it takes — so the student
+ * hears why, not only which. Both equal → said so. All computed (G0).
+ */
+export function assembleCompareMovesAnswer(opts: { fen: string; a: ComparedMove; b: ComparedMove; studentColor: 'white' | 'black' | null }): GroundedAnswer | null {
+  const score = (m: ComparedMove): number | null =>
+    typeof m.mateIn === 'number' ? (m.mateIn > 0 ? 100000 - m.mateIn : -100000 - m.mateIn) : m.evalCp;
+  const sa = score(opts.a); const sb = score(opts.b);
+  if (sa === null || sb === null) return null;
+  const [better, worse] = sa >= sb ? [opts.a, opts.b] : [opts.b, opts.a];
+  const gap = Math.abs(sa - sb);
+  const mover: 'white' | 'black' = opts.fen.split(' ')[1] === 'b' ? 'black' : 'white';
+  const refutation = (m: ComparedMove): string | null => {
+    try {
+      const c = new Chess(opts.fen);
+      c.move(m.san);
+      const u = m.lineUci[0];
+      if (!u) return null;
+      const reply = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined });
+      if (!reply) return null;
+      if (c.isCheckmate()) return `${reply.san} is mate`;
+      if (reply.captured) return `${reply.san} — it takes your ${PIECE_NAME[reply.captured] ?? 'piece'} on ${reply.to}`;
+      return reply.san;
+    } catch { return null; }
+  };
+  if (gap <= 30) {
+    const after = evalPhrase(better.evalCp, better.mateIn, mover, opts.studentColor);
+    return {
+      facts: `${opts.a.san} and ${opts.b.san} come to about the same${after ? ` — ${after} either way` : ''}.`,
+      bestMoveSan: better.san, bestMoveFromTo: null, sources: ['engine:stockfish', 'board:chess.js'],
+    };
+  }
+  const why = refutation(worse);
+  const pawns = gap >= 10000 ? null : (gap / 100).toFixed(1);
+  const parts = [`${better.san} is better.`];
+  parts.push(why
+    ? `${worse.san}? Then ${why}${pawns ? ` — about ${pawns} points worse` : ''}.`
+    : `${worse.san} is about ${pawns ?? 'a lot'} points worse.`);
+  let fromTo: { from: string; to: string } | null = null;
+  try { const mv = new Chess(opts.fen).move(better.san); fromTo = { from: mv.from, to: mv.to }; } catch { /* keep null */ }
+  return { facts: parts.join(' '), bestMoveSan: better.san, bestMoveFromTo: fromTo, sources: ['engine:stockfish', 'board:chess.js'] };
+}
+
+/**
+ * assembleCaptureOnAnswer — "can they take on c5?" / "can I take on e5?"
+ * (question walk 2026-09-27: the flat refusal "I can't verify that" while the
+ * app computes exactly this for every hanging-piece read). Lists the side's
+ * legal captures on the square — asked hypothetically, so the turn is flipped
+ * when it is not theirs — and says whether the exchange wins material, from the
+ * same pin-aware SEE as the hanging read. All computed (G0).
+ */
+export function assembleCaptureOnAnswer(opts: { fen: string; square: string; capturer: 'student' | 'opponent'; studentColor: 'white' | 'black' }): GroundedAnswer | null {
+  const me: 'w' | 'b' = opts.studentColor === 'white' ? 'w' : 'b';
+  const side: 'w' | 'b' = opts.capturer === 'student' ? me : (me === 'w' ? 'b' : 'w');
+  const sq = opts.square as Square;
+  let board: Chess;
+  try {
+    const parts = opts.fen.split(' ');
+    parts[1] = side; parts[3] = '-';
+    board = new Chess(parts.join(' '));
+  } catch { return null; }
+  const target = board.get(sq);
+  const who = opts.capturer === 'student' ? 'you' : 'they';
+  const Who = cap(who);
+  if (!target || target.color === side) {
+    return { facts: `There's nothing of ${opts.capturer === 'student' ? 'theirs' : 'yours'} on ${sq} to take.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+  }
+  const captures = board.moves({ verbose: true }).filter((m) => m.to === sq && m.captured);
+  if (captures.length === 0) {
+    return { facts: `No — nothing of ${opts.capturer === 'student' ? 'yours' : 'theirs'} can take on ${sq} right now.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+  }
+  let gain = 0;
+  try { gain = legalSeeGainFor(opts.fen, sq, side); } catch { gain = 0; }
+  const sans = orList(captures.map((m) => m.san));
+  const victim = `${opts.capturer === 'student' ? 'their' : 'your'} ${REVIEW_PIECE_NAME[target.type] ?? 'piece'} on ${sq}`;
+  const notTheirTurn = new Chess(opts.fen).turn() !== side;
+  const facts = gain > 0
+    ? `Yes — ${sans} wins ${victim}, about ${gain} point${gain === 1 ? '' : 's'}${notTheirTurn && opts.capturer === 'opponent' ? ' if you leave it' : ''}.`
+    : `${Who} can take with ${sans}, but it doesn't win anything — ${victim} is defended well enough.`;
+  const first = captures[0];
+  return { facts, bestMoveSan: null, bestMoveFromTo: gain > 0 ? { from: first.from, to: first.to } : null, sources: ['board:chess.js'] };
+}
+
+/**
+ * assemblePawnStrengthAnswer — "is my d-pawn strong?" (question walk
+ * 2026-09-27: answered with the best move). Reads the pawn itself off the
+ * board: passed or not, protected by a pawn, blockaded, squares to queening,
+ * and whether it can be won right now. Every clause is a chess.js fact (G0).
+ */
+export function assemblePawnStrengthAnswer(opts: { fen: string; file: string; studentColor: 'white' | 'black' }): GroundedAnswer | null {
+  let board: Chess;
+  try { board = new Chess(opts.fen); } catch { return null; }
+  const me: 'w' | 'b' = opts.studentColor === 'white' ? 'w' : 'b';
+  const dir = me === 'w' ? 1 : -1;
+  const f = opts.file.toLowerCase();
+  const fileIdx = f.charCodeAt(0) - 97;
+  if (fileIdx < 0 || fileIdx > 7) return null;
+  const mine: Square[] = [];
+  for (let r = 1; r <= 8; r += 1) {
+    const sq = `${f}${r}` as Square;
+    const p = board.get(sq);
+    if (p && p.type === 'p' && p.color === me) mine.push(sq);
+  }
+  if (mine.length === 0) {
+    return { facts: `You don't have a pawn on the ${f}-file.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+  }
+  // The most advanced one is the one people ask about.
+  const sq = mine.sort((a, b) => (Number(b[1]) - Number(a[1])) * dir)[0];
+  const rank = Number(sq[1]);
+  const toGo = me === 'w' ? 8 - rank : rank - 1;
+  const passed = findPassedPawns(opts.fen, me).includes(sq);
+  const protectedBy: string[] = [];
+  for (const df of [-1, 1]) {
+    const pf = fileIdx + df; const pr = rank - dir;
+    if (pf < 0 || pf > 7 || pr < 1 || pr > 8) continue;
+    const s = `${String.fromCharCode(97 + pf)}${pr}` as Square;
+    const p = board.get(s);
+    if (p && p.type === 'p' && p.color === me) protectedBy.push(s);
+  }
+  const frontRank = rank + dir;
+  const front = frontRank >= 1 && frontRank <= 8 ? board.get(`${f}${frontRank}` as Square) : undefined;
+  const blockader = front && front.color !== me ? `${REVIEW_PIECE_NAME[front.type] ?? 'piece'} on ${f}${frontRank}` : null;
+  let loseable = 0;
+  try { loseable = legalSeeGainFor(opts.fen, sq, me === 'w' ? 'b' : 'w'); } catch { loseable = 0; }
+  const parts: string[] = [];
+  const squares = `${toGo} square${toGo === 1 ? '' : 's'} from queening`;
+  const strong = passed && !blockader && loseable === 0 && (protectedBy.length > 0 || toGo <= 3);
+  if (passed) {
+    // One answer to "strong?" and "weak?" alike: a healthy passer is named as
+    // a strength, never a bare "Yes" that reads as agreeing it is weak
+    // (question walk 2026-09-27: "Is my e6 pawn weak?" → "Yes — … passed").
+    parts.push(`${strong ? "It's a strength — " : ''}your pawn on ${sq} is a passed pawn, ${squares}${blockader ? `, but their ${blockader} blocks it` : ', and nothing stands in front of it'}.`);
+  } else {
+    // "IS IT WEAK?" IS ABOUT HEALTH, NOT RUNNING (question walk 2026-09-27:
+    // "Is my d4 pawn weak?" was answered "it isn't passed"). The structural
+    // reads — isolated, doubled, backward — then the live count of who hits it.
+    const enemy: 'w' | 'b' = me === 'w' ? 'b' : 'w';
+    const adj = [fileIdx - 1, fileIdx + 1].filter((i) => i >= 0 && i <= 7).map((i) => String.fromCharCode(97 + i));
+    const ownOn = (file: string): number[] => {
+      const out: number[] = [];
+      for (let r = 1; r <= 8; r += 1) { const p = board.get(`${file}${r}` as Square); if (p && p.type === 'p' && p.color === me) out.push(r); }
+      return out;
+    };
+    const isolated = adj.every((a) => ownOn(a).length === 0);
+    const doubled = mine.length > 1;
+    const stop = frontRank >= 1 && frontRank <= 8 ? (`${f}${frontRank}` as Square) : null;
+    const stopHitByPawn = !!stop && board.attackers(stop, enemy).some((x) => board.get(x)?.type === 'p');
+    // Backward = every neighbour pawn is already PAST it, so none can come up
+    // beside it; a neighbour level with it (d4 next to e4) is not that.
+    const neighbourRanks = adj.flatMap((a) => ownOn(a));
+    const allAhead = neighbourRanks.length > 0 && neighbourRanks.every((r) => (r - rank) * dir > 0);
+    const backward = !isolated && protectedBy.length === 0 && allAhead && stopHitByPawn;
+    const faults: string[] = [];
+    if (isolated) faults.push(`isolated — no pawn on the ${adj.map((a) => `${a}-file`).join(' or ')} can ever defend it`);
+    if (backward) faults.push(`backward — no pawn can come up to support it, and their pawn controls ${stop}`);
+    if (doubled) faults.push(`doubled with your other ${f}-pawn`);
+    parts.push(faults.length > 0
+      ? `Yes — your pawn on ${sq} is ${andList(faults)}.`
+      : `Not structurally — your pawn on ${sq} isn't isolated, doubled or backward.`);
+    const name = (x: Square): string => `${REVIEW_PIECE_NAME[board.get(x)?.type ?? 'p'] ?? 'piece'} on ${x}`;
+    const hitters = board.attackers(sq, enemy);
+    const guards = board.attackers(sq, me);
+    if (hitters.length > 0) {
+      parts.push(`Right now it's attacked ${hitters.length === 1 ? 'once' : `${hitters.length} times`} (${andList(hitters.map(name))}) and defended ${guards.length === 0 ? 'by nothing' : guards.length === 1 ? 'once' : `${guards.length} times`}${guards.length > 0 ? ` (${andList(guards.map(name))})` : ''}.`);
+    }
+  }
+  if (protectedBy.length > 0) parts.push(`It's protected by your pawn on ${andList(protectedBy)}.`);
+  else if (passed) parts.push(`No pawn protects it, so it needs a piece behind it.`);
+  if (loseable > 0) parts.push(`Careful — right now it can be won.`);
+  return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+}
+
+/**
+ * The soundness verdict on a sacrifice ALREADY PLAYED — "was b5 a sound
+ * sacrifice?" (question walk 2026-09-27: the played-move lane graded it as a
+ * move choice and never answered "sound?"). The same bands as the candidate
+ * lane, judged by the eval after it, mover POV. Null when the move gave nothing.
+ */
+export function playedSacrificeVerdict(fenBefore: string, san: string, evalAfterMoverCp: number | null, cpLoss: number | null): string | null {
+  // A GAMBIT PAWN counts here: the student called it a sacrifice, and the
+  // board confirms the pawn is on offer. (The candidate lane keeps 2 so an
+  // ordinary pawn push is never announced as a sacrifice unprompted.)
+  const offer = sacrificeOffer(fenBefore, san, 1);
+  if (offer === null || evalAfterMoverCp === null) return null;
+  const give = offer >= 5 ? 'the exchange or more' : offer >= 3 ? 'a piece' : 'a pawn';
+  // Judged by what the sacrifice COST against best play, not by the eval
+  // alone: an opening that is already a touch worse for you does not make the
+  // engine's own top move "speculative" (it said both, in one answer).
+  const cost = cpLoss ?? Math.max(0, -evalAfterMoverCp);
+  if (cost <= 30 || evalAfterMoverCp >= -30) return `${san} was a sound sacrifice — you gave ${give} and the position held up.`;
+  if (cost <= 150) return `${san} was speculative — you gave ${give}, and the compensation doesn't quite cover it.`;
+  return `${san} was unsound — you gave ${give} for too little.`;
+}
+
+/** The capture the last move of a game made (square + points), or null. */
+export function lastCaptureOf(history: readonly string[] | undefined): { square: string; capturedValue: number } | null {
+  if (!history || history.length === 0) return null;
+  try {
+    const c = new Chess();
+    let last: Move | null = null;
+    for (const san of history) last = c.move(san);
+    return last?.captured ? { square: last.to, capturedValue: REVIEW_PIECE_VALUE[last.captured] ?? 0 } : null;
+  } catch { return null; }
 }

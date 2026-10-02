@@ -1,0 +1,791 @@
+{
+"11": {
+"fenBefore": "r1bqk1nr/ppp2ppp/2n5/2b1p3/2B1P3/2N5/PPPP1PPP/R1BQK2R w KQkq - 0 6",
+"san": "d3",
+"before": [
+{
+"cp": -378,
+"mate": null,
+"pv": [
+"d1h5",
+"d8f6",
+"e1g1",
+"g8e7",
+"c3b5",
+"c5b6",
+"d2d3",
+"e8g8"
+]
+},
+{
+"cp": -384,
+"mate": null,
+"pv": [
+"f2f4",
+"g8f6",
+"f4f5",
+"d8d4",
+"d1e2",
+"d4d6",
+"c3b5",
+"d6d7",
+"d2d4",
+"c6d4"
+]
+},
+{
+"cp": -408,
+"mate": null,
+"pv": [
+"d2d3",
+"g8f6",
+"d1f3",
+"e8g8",
+"f3g3",
+"g8h8",
+"c1e3",
+"c6d4"
+]
+}
+],
+"after": [
+{
+"cp": -417,
+"mate": null,
+"pv": [
+"g8f6",
+"e1g1",
+"e8g8",
+"a2a4",
+"c8e6",
+"c1e3",
+"c5e3",
+"f2e3",
+"e6c4",
+"d3c4"
+]
+},
+{
+"cp": -365,
+"mate": null,
+"pv": [
+"d8h4",
+"g2g3",
+"h4d8",
+"d1h5",
+"g7g6",
+"h5f3",
+"c8e6",
+"c3d5"
+]
+},
+{
+"cp": -358,
+"mate": null,
+"pv": [
+"c8e6",
+"c4e6",
+"f7e6",
+"d1h5",
+"g7g6",
+"h5h3",
+"d8d7",
+"c1e3",
+"c6d4",
+"e1c1"
+]
+}
+],
+"passBefore": [
+{
+"cp": -466,
+"mate": null,
+"pv": [
+"c5f2",
+"e1f2",
+"d8d4",
+"f2e1",
+"d4c4",
+"d2d3",
+"c4e6",
+"c1e3",
+"e6d6",
+"c3d5"
+]
+},
+{
+"cp": -430,
+"mate": null,
+"pv": [
+"g8f6",
+"c3d5",
+"f6d5",
+"e4d5",
+"c6e7",
+"d2d4",
+"c5d4",
+"c2c3",
+"d4c5",
+"d1e2"
+]
+},
+{
+"cp": -403,
+"mate": null,
+"pv": [
+"g8e7",
+"d2d3",
+"e8g8",
+"d1h5",
+"c6d4",
+"e1g1"
+]
+}
+],
+"passAfter": [
+{
+"cp": -327,
+"mate": null,
+"pv": [
+"d1h5",
+"g7g6",
+"h5f3",
+"c8e6",
+"e1g1",
+"e6c4",
+"d3c4",
+"c6d4",
+"f3g3",
+"d8e7"
+]
+},
+{
+"cp": -331,
+"mate": null,
+"pv": [
+"f2f4",
+"g8f6",
+"f4f5",
+"h7h6",
+"c1d2",
+"a7a6"
+]
+},
+{
+"cp": -358,
+"mate": null,
+"pv": [
+"e1g1",
+"g8f6",
+"c1g5",
+"h7h6",
+"g5e3",
+"c5e3",
+"f2e3",
+"c8e6",
+"c4e6",
+"f7e6"
+]
+}
+],
+"his": "You play d3, part of finishing development \u2014 castle next, then start thinking in earnest."
+},
+"13": {
+"fenBefore": "r1b1k1nr/ppp2ppp/2n2q2/2b1p3/2B1P3/2NP4/PPP2PPP/R1BQK2R w KQkq - 1 7",
+"san": "O-O",
+"before": [
+{
+"cp": -316,
+"mate": null,
+"pv": [
+"e1g1",
+"g8e7",
+"c1e3",
+"c5b6",
+"e3b6",
+"c7b6",
+"c3d5",
+"e7d5",
+"e4d5",
+"c6e7"
+]
+},
+{
+"cp": -323,
+"mate": null,
+"pv": [
+"c1e3",
+"c5e3",
+"f2e3",
+"c8e6",
+"c3d5",
+"f6h4",
+"g2g3",
+"h4d8",
+"e1g1",
+"h7h5"
+]
+},
+{
+"cp": -352,
+"mate": null,
+"pv": [
+"h1f1",
+"f6h4",
+"c3d5",
+"c5d6",
+"d1f3",
+"c8e6",
+"c1e3",
+"c6d4",
+"e3d4",
+"e5d4"
+]
+}
+],
+"after": [
+{
+"cp": -322,
+"mate": null,
+"pv": [
+"g8e7",
+"g1h1",
+"c5d6",
+"c3b5",
+"c8e6",
+"c4e6",
+"f6e6",
+"f2f4",
+"e8c8",
+"f4f5"
+]
+},
+{
+"cp": -296,
+"mate": null,
+"pv": [
+"f6h4",
+"c3d5",
+"c5d6",
+"c2c3",
+"g8e7",
+"f2f4",
+"c8g4",
+"d1a4",
+"e8g8",
+"f4f5"
+]
+},
+{
+"cp": -285,
+"mate": null,
+"pv": [
+"c8e6",
+"c3d5",
+"e6d5",
+"e4d5",
+"c6e7",
+"c2c3",
+"a7a6",
+"c1e3",
+"f6d6",
+"e3c5"
+]
+}
+],
+"passBefore": [
+{
+"cp": null,
+"mate": -1,
+"pv": [
+"f6f2"
+]
+},
+{
+"cp": -582,
+"mate": null,
+"pv": [
+"c5f2",
+"e1f1",
+"f2h4",
+"d1f3",
+"f6f3",
+"g2f3",
+"c8h3",
+"f1e2",
+"c6d4",
+"e2d1"
+]
+},
+{
+"cp": -433,
+"mate": null,
+"pv": [
+"b7b5",
+"e1g1",
+"b5c4",
+"d3c4",
+"f6d6",
+"c1e3",
+"c5e3",
+"f2e3"
+]
+}
+],
+"passAfter": [
+{
+"cp": -210,
+"mate": null,
+"pv": [
+"c3d5",
+"f6d8",
+"b2b4",
+"c5d6",
+"a2a3",
+"c8e6",
+"f2f4",
+"e5f4",
+"d3d4",
+"g8e7"
+]
+},
+{
+"cp": -245,
+"mate": null,
+"pv": [
+"c1e3",
+"c5d4",
+"c3d5",
+"f6d6",
+"d1f3",
+"g8f6",
+"c2c3",
+"d4e3",
+"f2e3",
+"e8g8"
+]
+},
+{
+"cp": -249,
+"mate": null,
+"pv": [
+"d3d4",
+"c5d4",
+"c3d5",
+"f6d8",
+"d1f3",
+"c8e6",
+"c2c3",
+"d4c5",
+"c1g5",
+"d8c8"
+]
+}
+],
+"his": "You castle, defending f2. The trouble with the queen on f6 is that it invites a later knight to d5."
+},
+"15": {
+"fenBefore": "r1b1k2r/ppp1nppp/2n2q2/2b1p3/2B1P3/2NP4/PPP2PPP/R1BQ1RK1 w kq - 3 8",
+"san": "Kh1",
+"before": [
+{
+"cp": -320,
+"mate": null,
+"pv": [
+"c1e3",
+"c5b6",
+"e3b6",
+"c7b6",
+"c3d5",
+"f6d6",
+"f2f4",
+"e5f4",
+"d5f4",
+"e8g8"
+]
+},
+{
+"cp": -336,
+"mate": null,
+"pv": [
+"g1h1",
+"c8e6",
+"c3d5",
+"e6d5",
+"e4d5",
+"c6a5",
+"f2f4",
+"a5c4",
+"f4e5",
+"f6e5"
+]
+},
+{
+"cp": -356,
+"mate": null,
+"pv": [
+"a2a4",
+"e8g8",
+"c3b5",
+"c5b6",
+"b5c3",
+"a7a6",
+"g1h1",
+"f6h4",
+"f2f4",
+"c8g4"
+]
+}
+],
+"after": [
+{
+"cp": -338,
+"mate": null,
+"pv": [
+"c5d6",
+"f2f4",
+"e5f4",
+"c3b5",
+"e7g6",
+"d3d4",
+"e8g8",
+"e4e5",
+"c6e5",
+"b5d6"
+]
+},
+{
+"cp": -298,
+"mate": null,
+"pv": [
+"f6h4",
+"f2f4",
+"c8g4",
+"d1d2",
+"g4e6",
+"c3d5",
+"c5d6",
+"g2g3",
+"h4h3",
+"d2f2"
+]
+},
+{
+"cp": -279,
+"mate": null,
+"pv": [
+"c6a5",
+"c4b5",
+"c7c6",
+"f2f4",
+"e8g8",
+"f4e5",
+"f6g6",
+"b5a4",
+"b7b5",
+"d3d4"
+]
+}
+],
+"passBefore": [
+{
+"cp": -372,
+"mate": null,
+"pv": [
+"e8g8",
+"c1e3",
+"b7b6",
+"d1d2",
+"c6d4"
+]
+},
+{
+"cp": -362,
+"mate": null,
+"pv": [
+"a7a6",
+"c1e3",
+"c5d4",
+"c3d5",
+"e7d5",
+"e4d5",
+"c6e7",
+"c2c3",
+"d4a7",
+"e3a7"
+]
+},
+{
+"cp": -357,
+"mate": null,
+"pv": [
+"f6g6",
+"g1h1",
+"e8g8",
+"f2f4",
+"e5f4",
+"c1f4",
+"c8e6",
+"c3d5",
+"e6d5",
+"c4d5"
+]
+}
+],
+"passAfter": [
+{
+"cp": -210,
+"mate": null,
+"pv": [
+"f2f4",
+"f6h4",
+"f4f5",
+"c8d7",
+"a2a3",
+"a7a6",
+"b2b4",
+"c5d4",
+"c1d2",
+"d4c3"
+]
+},
+{
+"cp": -267,
+"mate": null,
+"pv": [
+"c1e3",
+"c5b6",
+"e3d2",
+"c6a5",
+"c4b5",
+"c7c6",
+"f2f4",
+"e5f4",
+"f1f4"
+]
+},
+{
+"cp": -286,
+"mate": null,
+"pv": [
+"c3b5",
+"c5b6",
+"f2f4",
+"c8e6",
+"f4e5",
+"f6g6",
+"c4e6",
+"f7e6",
+"a2a4",
+"a7a6"
+]
+}
+],
+"his": "You want f4 to prise open the f-file for chances \u2014 so first the king steps to h1, the classic preparation."
+},
+"41": {
+"fenBefore": "3r1rk1/pp3ppp/4b1n1/2bN3q/2B1P3/3P2QP/PPP3P1/R4R1K w - - 1 21",
+"san": "c3",
+"before": [
+{
+"cp": -370,
+"mate": null,
+"pv": [
+"a1e1",
+"g8h8",
+"c4b3",
+"c5d6",
+"g3f2",
+"h5g5",
+"f2a7",
+"e6d5",
+"b3d5",
+"g6f4"
+]
+},
+{
+"cp": -373,
+"mate": null,
+"pv": [
+"c4b3",
+"g8h8",
+"a1e1",
+"c5d6",
+"g3f2",
+"h5g5",
+"f2a7",
+"e6d5",
+"b3d5",
+"g6f4"
+]
+},
+{
+"cp": -377,
+"mate": null,
+"pv": [
+"a1d1",
+"c5d6",
+"g3f2",
+"h5e5",
+"f2g1",
+"g8h8",
+"d1e1",
+"e5h5",
+"g1e3",
+"h5h4"
+]
+}
+],
+"after": [
+{
+"cp": -379,
+"mate": null,
+"pv": [
+"c5d6",
+"g3e3",
+"h5e5",
+"e3g1",
+"g8h8",
+"c4b3",
+"e6d5",
+"f1f5",
+"e5g3",
+"f5f3"
+]
+},
+{
+"cp": -357,
+"mate": null,
+"pv": [
+"h5e5",
+"g3e5",
+"g6e5",
+"b2b3",
+"e6d5",
+"e4d5",
+"c5d6",
+"a2a4",
+"d8c8",
+"g2g4"
+]
+},
+{
+"cp": -337,
+"mate": null,
+"pv": [
+"g8h8",
+"d3d4",
+"c5d6",
+"g3f3",
+"h5g5",
+"e4e5",
+"g6h4",
+"f3f2",
+"d6e5",
+"d4e5"
+]
+}
+],
+"passBefore": [
+{
+"cp": -400,
+"mate": null,
+"pv": [
+"g8h8",
+"c4b3",
+"a7a5",
+"d5f4",
+"g6f4",
+"f1f4",
+"c5d6",
+"f4h4",
+"h5e5",
+"g3e5"
+]
+},
+{
+"cp": -395,
+"mate": null,
+"pv": [
+"c5d6",
+"g3e3",
+"h5e5",
+"e3g1",
+"g8h8",
+"a1e1",
+"e5b2",
+"g1a7",
+"b2e5",
+"a7g1"
+]
+},
+{
+"cp": -357,
+"mate": null,
+"pv": [
+"b7b6",
+"c2c3",
+"c5d6",
+"g3e3",
+"h5e5",
+"e3g1",
+"g8h8",
+"a1e1",
+"e5g5",
+"d3d4"
+]
+}
+],
+"passAfter": [
+{
+"cp": -319,
+"mate": null,
+"pv": [
+"d3d4",
+"c5d6",
+"g3f3",
+"h5f3",
+"f1f3",
+"h7h5",
+"a1f1",
+"h5h4",
+"c4b3",
+"g8h7"
+]
+},
+{
+"cp": -331,
+"mate": null,
+"pv": [
+"a1e1",
+"c5d6",
+"g3e3",
+"h5e5",
+"e3g1",
+"e5g5",
+"g1a7",
+"e6d5",
+"c4d5",
+"g6f4"
+]
+},
+{
+"cp": -354,
+"mate": null,
+"pv": [
+"a1c1",
+"c5d6",
+"g3e3",
+"h5e5",
+"e3g1",
+"a7a6",
+"c1e1",
+"e5g5",
+"d3d4",
+"d6g3"
+]
+}
+],
+"his": "You play c3, preparing to roll the centre with d4 and later e4\u2013e5."
+}
+}

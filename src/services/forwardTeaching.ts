@@ -13,11 +13,15 @@
 // explainConditionalCapture never earned a call site. Only the route survives.)
 
 import { Chess, type Square, type Color } from 'chess.js';
+import { CAPTURE_VALUE } from './pieceValues';
 
 const FILES = 'abcdefgh';
 const KNIGHT_DELTAS: ReadonlyArray<readonly [number, number]> = [
   [1, 2], [2, 1], [-1, 2], [-2, 1], [1, -2], [2, -1], [-1, -2], [-2, -1],
 ];
+
+const DIAG: ReadonlyArray<readonly [number, number]> = [[1, 1], [1, -1], [-1, 1], [-1, -1]];
+const ORTHO: ReadonlyArray<readonly [number, number]> = [[1, 0], [-1, 0], [0, 1], [0, -1]];
 
 function toSquare(file: number, rank: number): Square | null {
   if (file < 0 || file > 7 || rank < 1 || rank > 8) return null;
@@ -122,8 +126,25 @@ function bfsRoute(
     return null;
   }
   const piece = chess.get(fromSquare);
-  if (!piece || piece.type !== 'n') return null; // knights only — see the note above
+  if (!piece || !(piece.type === 'n' || piece.type === 'b' || piece.type === 'r')) return null;
   const color = piece.color;
+  // One hop = one quiet move: a knight jump, or a slide along an open ray that
+  // stops before the first piece (empty squares only — see the note above).
+  const hops = (from: Square): Square[] => {
+    const f0 = fileIdx(from); const r0 = rankIdx(from);
+    if (piece.type === 'n') {
+      return KNIGHT_DELTAS.map(([df, dr]) => toSquare(f0 + df, r0 + dr)).filter((q): q is Square => !!q && !chess.get(q));
+    }
+    const out: Square[] = [];
+    for (const [df, dr] of piece.type === 'b' ? DIAG : ORTHO) {
+      for (let k = 1; k < 8; k++) {
+        const q = toSquare(f0 + df * k, r0 + dr * k);
+        if (!q || chess.get(q)) break;
+        out.push(q);
+      }
+    }
+    return out;
+  };
 
   const visited = new Set<string>([fromSquare]);
   const queue: Array<{ sq: Square; path: Square[] }> = [{ sq: fromSquare, path: [] }];
@@ -132,13 +153,8 @@ function bfsRoute(
     if (!head) break;
     const { sq: cur, path } = head;
     if (path.length >= maxHops) continue;
-    const cf = fileIdx(cur);
-    const cr = rankIdx(cur);
-    for (const [df, dr] of KNIGHT_DELTAS) {
-      const next = toSquare(cf + df, cr + dr);
-      if (!next || visited.has(next)) continue;
-      // The knight can only travel through / land on empty squares.
-      if (chess.get(next)) continue;
+    for (const next of hops(cur)) {
+      if (visited.has(next)) continue;
       visited.add(next);
       const nextPath = [...path, next];
       if (stop(chess, next, color)) {
@@ -168,6 +184,7 @@ export function movesToReach(
 }
 
 export function computePieceRoute(fen: string, fromSquare: Square): PieceRoute | null {
+  try { if (new Chess(fen).get(fromSquare)?.type !== 'n') return null; } catch { return null; }
   const found = bfsRoute(fen, fromSquare, (c, sq, color) => isKnightOutpost(c, sq, color), 4);
   if (!found) return null;
   return {
@@ -177,4 +194,77 @@ export function computePieceRoute(fen: string, fromSquare: Square): PieceRoute |
     route: found.route,
     why: outpostWhy(found.chess, found.target, found.color),
   };
+}
+
+/** Squares a bishop or rook on `sq` sweeps (empty squares plus the first piece
+ *  it meets), the board as it stands. */
+function sliderScope(c: Chess, sq: Square, type: 'b' | 'r'): number {
+  let n = 0;
+  for (const [df, dr] of type === 'b' ? DIAG : ORTHO) {
+    for (let k = 1; k < 8; k++) {
+      const q = toSquare(fileIdx(sq) + df * k, rankIdx(sq) + dr * k);
+      if (!q) break;
+      n++;
+      if (c.get(q)) break;
+    }
+  }
+  return n;
+}
+
+/** A square the piece can stand on: no enemy pawn hits it, and no enemy piece
+ *  worth less than it does either. */
+function safeFor(c: Chess, sq: Square, color: Color, value: number): boolean {
+  const enemy: Color = color === 'w' ? 'b' : 'w';
+  return !c.attackers(sq, enemy).some((a) => CAPTURE_VALUE[c.get(a)?.type ?? 'k'] < value);
+}
+
+export interface SliderRoute {
+  piece: 'b' | 'r';
+  from: Square;
+  target: Square;
+  route: Square[];
+  why: string;
+}
+
+/**
+ * Census #15, the wishlist: where does a passive bishop or rook WANT to be, and
+ * how does it get there (at most two quiet moves)? A bishop wants a safe square
+ * that sweeps at least three more squares than it does now (and seven or more);
+ * a rook wants a safe square on a file with no pawn of its own. Null when no
+ * such square is two quiet moves away — silence, not a guess.
+ */
+export function computeSliderRoute(fen: string, fromSquare: Square): SliderRoute | null {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return null; }
+  const p = c.get(fromSquare);
+  if (!p || (p.type !== 'b' && p.type !== 'r')) return null;
+  const type = p.type;
+  const color = p.color;
+  const value = type === 'b' ? 3 : 5;
+  const now = sliderScope(c, fromSquare, type);
+  // A bishop is passive only when it sweeps four squares or fewer.
+  if (type === 'b' && now > 4) return null;
+  const ownPawnOn = (file: string): boolean => {
+    for (let r = 1; r <= 8; r++) { const q = c.get(`${file}${r}` as Square); if (q?.type === 'p' && q.color === color) return true; }
+    return false;
+  };
+  const found = bfsRoute(fen, fromSquare, (board, sq) => {
+    if (!safeFor(board, sq, color, value)) return false;
+    // Measure from the target with the piece moved there.
+    const moved = new Chess(board.fen());
+    moved.remove(fromSquare);
+    moved.put({ type, color }, sq);
+    if (type === 'b') {
+      const scope = sliderScope(moved, sq, 'b');
+      return scope >= 7 && scope >= now + 3;
+    }
+    return sq[0] !== fromSquare[0] && !ownPawnOn(sq[0]);
+  }, 2);
+  if (!found) return null;
+  // Every stop on the way must be safe too, not only the destination.
+  if (!found.route.every((sq) => safeFor(c, sq, color, value))) return null;
+  const why = type === 'b'
+    ? `a long diagonal instead of ${now} squares`
+    : `the ${found.target[0]}-file, with no pawn of yours in the way`;
+  return { piece: type, from: fromSquare, target: found.target, route: found.route, why };
 }

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { methodBeatFor } from './methodBeat';
+import { methodBeatFor, liveMethodBeat } from './methodBeat';
 
 const base = { tier: 'swing' as const, cpLossCp: null, bestSan: null, ignoredThreat: false, isStudentMove: true };
 
@@ -88,5 +88,14 @@ describe('mate answers every threat (hand walk 1200: "their threat first" beside
   it('no threat-first habit when the best move mates', async () => {
     const { liveMethodBeatFor } = await import('./methodBeat');
     expect(liveMethodBeatFor({ isStudentMove: true, threatStanding: true, bestSan: 'Qxd6#', tier: 'critical' }) ?? '').not.toMatch(/their threat first|what are they threatening|their last move doing/i);
+  });
+});
+
+describe('the threat habit never asks and walks away (hand walk 2026-09-27)', () => {
+  it('names what the threat hits when the probe found it', () => {
+    for (const ply of [0, 1, 2]) {
+      const b = liveMethodBeat({ bestSan: 'Bd6', threatStanding: true, threatTarget: 'your pawn on e5', isStudentMove: true }, ply);
+      expect(b?.text).toMatch(/your pawn on e5/);
+    }
   });
 });

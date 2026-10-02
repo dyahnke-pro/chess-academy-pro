@@ -66,6 +66,11 @@ describe('SEAT — an opponent ply must not narrate the student as the actor', (
     expect(onStudentPly('Your opponent takes on e5.')).toBe(true);
     expect(onStudentPly('They push the h-pawn.')).toBe(true);
     expect(onStudentPly('You take on e5 and the centre opens.')).toBe(false);
+    // The consequence of the student's move, said from the right seat (review
+    // walk 2026-10-02, game 1: Nc4 allowed Rh8#).
+    expect(onStudentPly('They have mate in one with their rook on h8.')).toBe(false);
+    expect(onStudentPly("They're threatening the queen now.")).toBe(false);
+    expect(onStudentPly('They still take on e5.')).toBe(true);
   });
 
   it('CAN FIRE — a negative control on the seam itself', () => {

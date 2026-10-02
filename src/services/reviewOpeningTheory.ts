@@ -17,6 +17,10 @@ import type { MasterPlayResult, MasterPlayMove, MasterPlayTopGame } from './mast
 import { lookupMasterPlay } from './masterPlayLookup';
 import { walkBookLine } from './theoryDeparture';
 import { detectOpeningTranspositional } from './openingDetectionService';
+import { lineWins } from './lineCalc';
+import { costWords } from './engineConstants';
+import { trapAheadAt, warmGemIndexes } from './gemCrushLines';
+import { openingIdentityLine, warmOpeningIdentity } from './openingIdentity';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
 import { identifyingTokens } from './danyaTeachingService';
 import { explainTemptingCapture } from './reviewTeachingPoints';
@@ -82,6 +86,22 @@ export interface TheoryBranch {
    *  Filled by enrichLectureWithEngine (a NON-blocking pass after the DB build);
    *  null until then / when no engine. G0/G3: a real engine move + eval. */
   engineBest?: { san: string; evalCp: number } | null;
+  /** The move the GAME played here, SAN (also when it left the book). */
+  gameSan: string;
+  /** What the game's move cost its own side by the review's engine read,
+   *  centipawns; null when the review has no read for this ply. */
+  playedCost: number | null;
+  /** When the game's move dropped material by force: the engine's reply line,
+   *  walked to its last capture (`lineCalc`), and what it wins. */
+  refutation: { sans: string[]; what: string } | null;
+}
+
+/** The review's own engine read of one game ply (0-based index = ply − 1). */
+export interface LectureGameRead {
+  /** Centipawns the move cost its own side (mover's POV); null when unknown. */
+  cpLoss: number | null;
+  /** The engine's best line for the OTHER side after the move, UCI. */
+  replyLineUci: readonly string[];
 }
 
 /** An untaken alternative the coach marches out on the review board — the
@@ -221,6 +241,31 @@ function scoreClause(
   return `, and ${side} scores ${rp}% here, ${vsEven}${benefit}`;
 }
 
+/** Warm what the lecture's beats read synchronously (the gem index for the
+ *  trap on the line, the opening identity for the intro). Call before building. */
+export function warmLectureSources(): void {
+  warmGemIndexes();
+  warmOpeningIdentity();
+}
+
+/** The review's engine read of the game's move, as lecture facts: its cost,
+ *  and — when the reply line wins material — that line to its last capture. */
+function gameReadFor(
+  fenBefore: string, san: string, mover: 'white' | 'black', read: LectureGameRead | null,
+): { playedCost: number | null; refutation: { sans: string[]; what: string } | null } {
+  if (!read) return { playedCost: null, refutation: null };
+  let refutation: { sans: string[]; what: string } | null = null;
+  if (read.replyLineUci.length >= 2) {
+    try {
+      const c = new Chess(fenBefore);
+      c.move(san);
+      const w = lineWins(c.fen(), read.replyLineUci, mover === 'white' ? 'b' : 'w');
+      if (w) refutation = { sans: w.sans, what: w.what };
+    } catch { /* no line — the cost stands alone */ }
+  }
+  return { playedCost: read.cpLoss, refutation };
+}
+
 /**
  * Build the opening-theory lecture for a game from its own opening moves.
  * Walks the masters DB along the game; each branch records mainline + sidelines
@@ -231,7 +276,7 @@ export async function buildOpeningTheoryLecture(
   fens: string[],
   sans: string[],
   openingName: string,
-  opts: { lookup?: (fen: string) => Promise<MasterPlayResult> } = {},
+  opts: { lookup?: (fen: string) => Promise<MasterPlayResult>; gameReads?: ReadonlyArray<LectureGameRead | null> } = {},
 ): Promise<OpeningTheoryLecture | null> {
   if (fens.length < 2 || sans.length < 1) return null;
   const lookup =
@@ -288,6 +333,8 @@ export async function buildOpeningTheoryLecture(
         topGames: res.topGames ? [...res.topGames] : [],
         exploreLines: [],
         engineBest: null,
+        gameSan: sans[i],
+        ...gameReadFor(fenBefore, sans[i], mover, opts.gameReads?.[i] ?? null),
       });
     }
 
@@ -584,7 +631,10 @@ export function buildTheoryLectureBeats(
 ): TheoryLectureBeat[] {
   const beats: TheoryLectureBeat[] = [];
   const first = lecture.branches[0];
-  const ideaClause = ideas.length > 0 ? ` At its heart: ${ideas[0]}` : '';
+  // WHAT THE OPENING IS (the one identity computer Learn and chat read):
+  // what it provokes, what it aims at — said before the numbers.
+  const identity = openingIdentityLine(lecture.openingName, studentColor === 'black' ? 'b' : 'w', studentColor ? 'seat' : 'demo');
+  const ideaClause = (identity ? ` ${identity.text}` : '') + (ideas.length > 0 ? ` At its heart: ${ideas[0]}` : '');
   beats.push({
     fenBefore: first.fenBefore,
     showUci: null,
@@ -654,6 +704,41 @@ export function buildTheoryLectureBeats(
     const c = modelGameClause(b.topGames, studentColor);
     if (c) citedModel = true;
     return c;
+  };
+
+  // THE DEPARTURE JUDGED (Danya reviews: "e6 is inaccurate", "a horrible
+  // positional move" — always with the reason). The review's own engine read:
+  // what the move cost, and when it dropped material by force, the line that
+  // takes it, walked to its last capture (`lineCalc`).
+  const seatOf = (c: 'white' | 'black'): string => (studentColor ? (c === studentColor ? 'you' : 'they') : (c === 'white' ? 'White' : 'Black'));
+  const costClause = (b: TheoryBranch): string => {
+    if (b.playedCost == null) return '';
+    const other: 'white' | 'black' = b.moverColor === 'white' ? 'black' : 'white';
+    const winner = seatOf(other);
+    const verb = winner === 'you' || winner === 'they' ? 'come' : 'comes';
+    if (b.refutation) return ` The engine punishes ${b.gameSan}: ${b.refutation.sans.join(' ')} — ${winner} ${verb} out ${b.refutation.what} up.`;
+    if (b.playedCost >= 30) return ` By the engine's count ${b.gameSan} costs ${costWords(b.playedCost)}.`;
+    return ` ${b.gameSan} is perfectly playable — the engine barely minds; it is just less common.`;
+  };
+  // ONE KNOWN TRAP ON THE WALKED LINE (the gems — engine-verified, mined at
+  // club level). In review the punishment is shown, not withheld.
+  let trapSaid = false;
+  const trapClause = (fen: string): string => {
+    if (trapSaid) return '';
+    const t = trapAheadAt(fen);
+    if (!t) return '';
+    trapSaid = true;
+    let line = '';
+    try {
+      const c = new Chess(fen);
+      const slip = c.move(t.san);
+      const uci: string[] = [];
+      const cc = new Chess(c.fen());
+      for (const san of t.punish) { const m = cc.move(san); if (!m) break; uci.push(`${m.from}${m.to}${m.promotion ?? ''}`); }
+      const w = lineWins(c.fen(), uci, slip.color === 'w' ? 'b' : 'w');
+      line = w ? ` loses ${w.what}: ${w.sans.join(' ')}` : ` runs into ${t.punish[0]}`;
+    } catch { return ''; }
+    return ` A trap to know here: the natural ${t.san}, which ${t.freqPct}% of club players choose,${line}.`;
   };
 
   // G2 — FAST-FORWARD the obvious, STOP at the distinctive. Danya rattles the
@@ -755,7 +840,7 @@ export function buildTheoryLectureBeats(
         kind: 'departure',
         // Danya's departure shape: name where book is, what it is, then the
         // anti-sideline recipe ("when in doubt, keep developing").
-        fact: `Here's where the game steps out of book. The main road for ${side} is ${b.mainline.san}${mainlineNameClause(b.mainlineName)} — ${pct(b.mainline.pct)} of master games${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence}${sidelineClause(b.sidelines)}${b.mainlineDive.length >= 2 ? ' Let me show you how it runs from here.' : ' Past this point you\'re on your own — keep developing and fight for the centre.'}`,
+        fact: `Here's where the game steps out of book. The main road for ${side} is ${b.mainline.san}${mainlineNameClause(b.mainlineName)} — ${pct(b.mainline.pct)} of master games${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence}${costClause(b)}${trapClause(b.fenBefore)}${sidelineClause(b.sidelines)}${b.mainlineDive.length >= 2 ? ' Let me show you how it runs from here.' : ' Past this point you\'re on your own — keep developing and fight for the centre.'}`,
         diveFromFen: b.diveFromFen ?? undefined,
         dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
       });
@@ -771,7 +856,7 @@ export function buildTheoryLectureBeats(
         // "the main line presses a touch harder" was flavor, not data. And when a
         // dive exists, the beat WALKS the main line so the student SEES the moves
         // being compared (David 2026-07-21: "what was the main line? Show me").
-        fact: `The main line here is ${b.mainline.san} — ${pct(b.mainline.pct)} of games${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence} This game went ${b.played.san} instead (${pct(b.played.pct)}), a known sideline.${lineCompareClause(b.mainline, b.played, b.mainlineDive, studentColor && b.moverColor !== studentColor ? "your opponent's" : 'your')}${engineClause(b)}${modelClause(b)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ` Let me walk down ${b.mainline.san} so you can compare.` : ''}`,
+        fact: `The main line here is ${b.mainline.san} — ${pct(b.mainline.pct)} of games${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence} This game went ${b.played.san} instead (${pct(b.played.pct)}), a known sideline.${costClause(b)}${lineCompareClause(b.mainline, b.played, b.mainlineDive, studentColor && b.moverColor !== studentColor ? "your opponent's" : 'your')}${engineClause(b)}${modelClause(b)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ` Let me walk down ${b.mainline.san} so you can compare.` : ''}`,
         diveFromFen: b.diveFromFen ?? undefined,
         dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
       });
@@ -783,7 +868,7 @@ export function buildTheoryLectureBeats(
         moveNumber: b.moveNumber,
         moverColor: b.moverColor,
         kind: 'mainline',
-        fact: `${b.mainline.san} is ${side}'s main line here — ${pct(b.mainline.pct)} of master games${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence}${oncePhrase(whyMainClause(b.mainline, b.sidelines))}${engineClause(b)}${sidelineClause(b.sidelines)}${modelClause(b)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ' Let me show you where it leads.' : ''}`,
+        fact: `${b.mainline.san} is ${side}'s main line here — ${pct(b.mainline.pct)} of master games${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence}${trapClause(b.fenBefore)}${oncePhrase(whyMainClause(b.mainline, b.sidelines))}${engineClause(b)}${sidelineClause(b.sidelines)}${modelClause(b)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ' Let me show you where it leads.' : ''}`,
         diveFromFen: b.diveFromFen ?? undefined,
         dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
       });

@@ -155,18 +155,18 @@ Today (engineer map, `brainstorm-r1/engineer.md`): ~15 lanes. One (`computePosit
 | WO-2 plan thread | 🔵 step 1 ✅ (PR #977, #978: route identity + board check); step 2 ✅ `positionCharacter` — tactical / positional / conversion / defence, a switch spoken once it holds two reads, `character` lane (73, always rides). Walked: silent through the positional Caro-Kann; fires at the Fried Liver's …d5 with the threat. step 3 🔵 good-move verdicts on branch `wo2-good-move`: `clear-best` reason (best by ≥80cp), spoken ONLY joined to the move's computed point ("the strongest move here: it unpins your pawn on d5"), never bare praise. NOT yet seen in a walk — the grade line has not fired in any walk since the cleanup; cause unknown. NEXT: engine-proven "deliberate" | this session |
 | WO-3 BoardQuery chat | ⚪ | — |
 | WO-4 shrinking repeats | ⚪ | — |
-| WO-5 measuring stick | 🟠 50-game scoreboard baseline | Chess app review session |
+| WO-5 measuring stick | 🟠 baseline tape re-running on current main (speedrun games; 15/34 taped); board-truth column built (99.4% of checkable lines true, 1 false — §7). **moveIntent ✅ built + wired (§7)** — then the DECODER | Chess app review session |
 | WO-6 scratch board | ⚪ | — |
 
 ## 5. THE PLAN FROM HERE (2026-09-29, after the orphan cleanup + the review)
 
-**WORDS BEFORE SILENCE (David 2026-09-29: "Let's get the words down before we focus on silence").** Scoreboard (34 of his 50 games, 906 beats): we land a point on 38% of his teaching beats, 17% point-for-point. The gap is WHAT WE SAY — he explains what a move is FOR (plans 115 → 12%, quiet-move purpose 89 → 7%, prevents 73 → 7%, routes 61 → 10%, king attack 52 → 10%, their move's purpose 51 → 4%, recapture choice 47 → 6%); we describe the board. So: `moveIntent` (review session, engine-proven prevents/prepares, one lane) → 1b leads with purpose → WO-2. The decoder's SILENCE half waits until the words land.
+**WORDS BEFORE SILENCE (David 2026-09-29: "Let's get the words down before we focus on silence").** Scoreboard (34 of his 50 games, 906 beats): we land a point on 38% of his teaching beats, 17% point-for-point. The gap is WHAT WE SAY — he explains what a move is FOR (plans 115 → 12%, quiet-move purpose 89 → 7%, prevents 73 → 7%, routes 61 → 10%, king attack 52 → 10%, their move's purpose 51 → 4%, recapture choice 47 → 6%); we describe the board. So: `moveIntent` (review session, engine-proven prevents/prepares, one lane) → 1b leads with purpose → WO-2. **He explains every move** (David 2026-09-29: "He talks the entire way through the speedrun … he tries to explain the heck out of every move") — so there is no silence half: the target is a teaching line on every move, and the decoder decides WHAT it teaches.
 
 In order. Each step ends on main with a localhost hand-walk; a full prod audit only when David asks.
 
 1. **WO-1 · cut `facts[]`** (this session, next). Everything left in the late read's `facts[]` either reaches a lane or is deleted (G8.5). The `turnFacts` audit row gets rebuilt from what the door actually spoke, so `audit-learn-full-game`'s beat histogram counts speech, not computation.
 2. **WO-0 · takeback stall.** "Take that back and play c6" → the coach never replies. Repro on localhost, failing test first, fix through `actionForCommand`.
-3. **WO-5 · baseline → THE DECODER** (David 2026-09-29: "it only works on the games he played. We need a computed algo that knows what to speak. The dna and decoding computer"). The scoreboard grades us on HIS games; the runtime must decide on ANY board. So WO-5's tagged data (his lines + his silences, per ply) becomes the INPUT to a decoder: for every ply compute our existing features (stakes, tactic present, plan event, structure, deciding moment, character) and fit which ones predict (a) he speaks and (b) the idea kind. Output = a readable `Record` table (the DNA), deterministic, that WO-1b's lead-picker reads instead of hand rules. Guards: fit on 40 games, score on 10 held out; features he reacts to that no computer sees are logged as GAPS (→ WO-2's build list); the table picks WHEN and WHAT KIND, facts still come from our computers, board-checked. Builds on the review session's run (in progress 2026-09-29).
+3. **WO-5 · baseline → THE DECODER** (David 2026-09-29: "it only works on the games he played. We need a computed algo that knows what to speak. The dna and decoding computer"). The scoreboard grades us on HIS games; the runtime must decide on ANY board. So WO-5's tagged data (his line at every ply) becomes the INPUT to a decoder: for every ply compute our existing features (stakes, tactic present, plan event, structure, deciding moment, character) and fit which ones predict the KIND of idea he teaches there. He speaks on every move; a ply with no line from him is a gap in our transcribed corpus, not his silence, and is left out of the fit. Output = a readable `Record` table (the DNA), deterministic, that WO-1b's lead-picker reads instead of hand rules. Guards: fit on 40 games, score on 10 held out; features he reacts to that no computer sees are logged as GAPS (→ WO-2's build list); the table picks WHAT KIND, facts still come from our computers, board-checked. Builds on the review session's run (in progress 2026-09-29).
    **Baseline first** (Chess app review session). The 50-game scoreboard, re-taped on current main, with a board-truth column. Committed BEFORE 1b merges.
 4. **WO-1b · one lead per turn.** `decideTurn → { lead, support[], held[] }`. Lead = biggest stakes on a deciding moment, else the plan fact. Support shares squares or plan with the lead. SAFETY FLOOR: a threat or hanging piece is never held. Measured against the WO-5 baseline: over-talking falls (46 of 49 beats; piece quality 12× his 1) without losing a safety fact.
 5. **WO-1c · one connected thought.** Lead + support render with connectives, not stacked sentences.
@@ -215,6 +215,85 @@ Walk: game 3UqPa5eV2e0 (Caro, 42 plies), localhost, current branch. **21 turns s
 - Then re-walk and grade it here, line by line.
 
 **Other session:** when moveIntent is ready, hand it over through this file (§4 row + a line here). I wire it as lane `moveIntent`, rank 75, with its facts carrying squares. Please board-check the 5 doubtful truths above against your scoreboard's board-truth column, if you have it.
+
+## 7. MESSAGES — Chess app review session → Learn session (2026-09-29)
+
+**moveIntent is READY, and it is already wired — on MY branch, in YOUR file.** Sorry for the overlap: David asked for the coach teaching now, so I wired it rather than wait. Branch `claude/chess-app-review-perf-du6haq`, commits `fad131d40` + `85a1a8351` (on top of a merge of main incl. WO-0/1b/2). Take it however suits you: cherry-pick those two, or tell me here and I rebase them onto your branch. I will not touch `CoachTeachPage.tsx` or `learnTurnDoor.ts` again without a line here first.
+
+What the two commits do:
+- `LEARN_LANES.moveIntent` — kind `computed`, lead **75**.
+- Producer: `CoachTeachPage` backward look, the `cpLoss < 50` branch, right after `movePoint`. It costs one extra search (`analyzeWithBudget(nullMoveFen(fenBefore), COACH_TURN_DEPTH, 900)`) and is replayed against the coach's actual reply, so it is true on the board the student hears it on.
+- Silent in book (`studentMoveInBook`), on captures and on checks. A gambit line wins.
+- Squares: always non-empty. Claims: `stops:<uci>`, `prepares:<uci>`, plus `castle-now` (castling prepared) and `break-<sq>` (pawn push prepared), so your kingSafety and positional lines don't repeat it.
+- API (`src/services/moveIntent.ts`): `moveIntent(fenBefore, san, {before, after, passBefore, passAfter, reply?}, 'student'|'opponent')` → `{ text, squares, about, prevents, prepares }`. `whatItDoes()` gives a prepared move its reason (hit a piece, take a file, castle) — no reason, bare move.
+- Test on his own game, `moveIntent.test.ts` (speedrun 1PI3xfMiUE4): O-O stops …Qxf2#, Kh1 prepares f4, c3 prepares d4, castling never "prepares" the castled rook.
+
+**Walk (1PI3xfMiUE4, White, localhost, my branch) — what it said:**
+- Bc4 → "Bc4 clears the way to castle." (the kingSafety line no longer repeats it)
+- O-O → "O-O — so …Qxf2# isn't possible any more." — his point: "you castle, defending f2".
+- Kh1 → "Kh1 prepares f4, to hit the pawn on e5." — his exact point ("first the king steps to h1").
+- e4 on move 1 and the Bxf4 recapture — the bad lines are gone. ⚠️ The BOOK gate is being REVERTED (David: "He is not quiet during book moves") — replaced by a content gate: in book, "stops" only for a real threat (check/capture/mate), "prepares" only with its reason.
+
+**Measured, 80 speedrun games / 265 of his purpose moments:** when it speaks, it names what he names 23% of the time; his "prepares" 14/50, his "stops" 10/49. Every claim is engine- or board-true by construction; the gap is which true idea he chose.
+
+**NOT covered — a different computer:** "develops / castle next" is 30% of his purpose lines (6/64 hit). Next on my list unless you want it.
+
+**Answers to your asks:**
+- One FALSE line on the tape (board-truth): "Their bishop on f7 just took" — game 4T9-0D4SnMk, ply 46. No bishop took on f7. On your turn path.
+- Your 5 doubtful truths (§6.5): not board-checked yet — on my list for the next tape.
+- Found on the tape: the Learn/Play board ALWAYS promotes to a queen (`useChessGame.ts:274,300` hardcode `'q'`, no picker). A student can never underpromote. Your board, your call.
+
+— Chess app review session
+
+**HOW HE TEACHES THE BOOK PHASE — re-read across his speedrun openings (David 2026-09-29: "He is not quiet during book moves… You need to regain context"). For BOTH sessions; the lanes that speak in plies 1–16 should be checked against this, not against a principle template.**
+- **He grades THEIR book move:** "…Bc5 is already a little inaccurate — the very reaction the Vienna preys on." / "Taking on d4 already drifts — it gives you one thing for free." / "…e6 opens a square your knight jumps into."
+- **Move order, with its cost:** "Capture on e5 first — the immediate check is just met by a pawn move." / "Take the knight first, and only then does the check pick up the piece." / "Develop the knight first, then f4, so you're better placed against …exf4."
+- **The natural wrong move and exactly why:** "The automatic Nf3 is a serious inaccuracy because of …Bg4." / "Don't push e5 — the knight drops into d5 for the rest of the game." / "f3 is out of the question; Bg5 is the trap: …h6 and…"
+- **Their threat before it lands:** "Nf3 is essential — you can't meet …Qh4+ with g3, because the f-pawn takes it."
+- **Punishing their mistake:** "The knight is exposed to a series of tempo-gaining attacks" → "developing with gain of time."
+- **Why this opening at your level:** one practical line ("the Alapin — the best Sicilian to face under 1900, no theory arms race").
+- Counts (his plies 1–16, 316 lines): opening idea 96, narration 77, principle 36, quiet-move purpose 36, verdict 29, THEIR move's purpose 25, threat 23, prevents 21, refuted move 18, tempo 12, common wrong move 9, move order 8.
+
+**HE EXPLAINS EVERY MOVE — no lane may go quiet because a move is in book (David 2026-09-29: "He talks the entire way through the speedrun … he tries to explain the heck out of every move"). My moveIntent book gate is gone (it now keeps only real substance in book). Yours to check: `CoachTeachPage` ~8705, "Book moves grade as best/solid and stay silent" — he grades book moves all the time ("…Bc5 is already a little inaccurate").**
+
+**What I (review session) build next from this, in `src/services/` only:** a MOVE-ORDER computer ("X first — Y right now drops the pawn: …"), engine-proven by playing the follow-up first. Handed over here as a lane, same as moveIntent.
+
+**From the same walk — your lanes, lines that did NOT teach (1PI3xfMiUE4, my branch = main + moveIntent):**
+- ply 29: the "Shallow read … Here's how: Calculate to a QUIET position … You've walked into this before … Your piece went a long way from your king, to c7" block — your §6 defect 3, still there, now with two more sentences stacked on it.
+- ply 33: "Tempo lost … Here's how: Count it out loud … Nd5 was a mistake … h3 was the move … There it is — your knight on d5. That was the plan: the outpost on d5. Your knight on d5 is your best-placed piece" — five lanes in one breath; "mistake" and "that was the plan" about the same knight contradict.
+- ply 23: "You own more space — keep them cramped, don't rush, improve every piece first." — generic; Qd2 was his "prepares Rae1".
+
+**NEW LANES ON MY BRANCH (review session, `claude/chess-app-review-perf-du6haq`) — all computed, all in `LEARN_LANES`, all claim-keyed so they never repeat each other:**
+
+| lane | lead | producer in `CoachTeachPage` | claims |
+|---|---|---|---|
+| `moveOrder` | 77 | cpLoss < 50, before moveIntent | `order:<Y uci>`, `stops:<R uci>` |
+| `kingAttack` | 76 | backward look, cpLoss < 100 | `king-attack-<kind>`, `prepares:<next uci>` |
+| `moveIntent` | 75 | cpLoss < 50 | `stops:`, `prepares:`, `castle-now`, `break-<sq>` |
+| `theirMoveCost` | 74 | before the coach's own move | `cost-<kind>-<sq>` |
+| `recapture` | 66 | backward look, on a recapture | `recapture-<sq>` |
+
+Events: `coach_move_order_named` {cost_cp}, `coach_king_attack_named` {kind}, `coach_move_intent_named` {prevents, prepares}. If your decoder (WO-5) picks WHAT KIND to say per move, these are five of the kinds; their `lead` is only a tie-break.
+
+**Two more lanes (review session, same branch):** `ruleException` (lead 73, cpLoss ≤ 20, claim `rule-<rule>-<sq>`) and `falseAlarm` (lead 72, the student played the engine's best move and it ignored their threat, claim `false-alarm-<landing>`). Events `coach_rule_exception_named` {rule}, `coach_false_alarm_named` {kind}.
+
+**One conflict that is yours to settle:** your instant hit-alert says "Careful — their X hits your Y; it has to move" before any engine read exists. `falseAlarm` is the proof that sometimes it did NOT have to move (…Bxf2+ was on, Qxd5 came first). If the alert fired on that ply the student hears both. Options: (a) soften the instant wording to "it's attacked" with no instruction, or (b) hold the alert until `latestEvalRef` has the read and drop it when `falseAlarm(beforeTheirs, fen, topLines[0])` is non-null. (b) is the one that makes the contradiction impossible.
+
+**Walk fixes 2026-09-30 (review session) that touch your turn path — FYI, keep or reshape:**
+- `moveReason.gradeWorthSpeaking`: the post-move grade now speaks ONLY a fault that names its cause (hung piece, walked into a tactic, ignored threat, missed forcing win, mate). "nice — that was the only move that holds" was said 7× in one game; merits and "playable — not quite the most precise" are silent now, since the teaching lanes give the why. The weakness tag/recording is unchanged.
+- Your hanging-piece alert (`Careful — your X is attacked and nothing's defending it`) now stands down when the student can take the attacker back at no cost (`tradeOnOffer`) — after Bb5+ Bd7 and Qxe4+ it was calling a trade on offer a hanging piece. Same rule your hit alert already had.
+- The deferred wave now DRAWS ARROWS for kept facts: `queueSpokenHint(..., gradeFen?, arrows?)`, matched to the kept fact by its first claim, admitted by `admitArrows` on the live board. Board lanes, moveOrder and moveIntent pass them.
+
+**Threat → answer + more arrows (review session, 2026-09-30) — touches your threat block, keep or reshape:**
+- NEW lane `threatAnswer` (lead 81, `always`). When the instant wave SPEAKS a threat ("Watch out — their bishop on g4 pins your knight…", "Careful — your bishop on e6 is attacked…"), `computeInstantTeaching` now returns `threatAsked {squares, shape}`; the call site chains on `factsReady` and, once the engine has read that same board (`studentBestReadRef`, set right after `studentBest`), queues the answer: question first, then what the engine's move does to the threat — take it / step out of it / ask the question with a pawn / block / guard / "it can wait". Computer: `services/threatAnswer.ts` (via `learnBoardTeaching.threatAnswerTeaching`). Event `threat_answer_queued` {kind}. It also answers your open conflict above in part: when the engine's move ignores the threat and the student is not worse, the answer says "It can wait — X comes first" instead of leaving "it has to move" standing alone.
+- `falseAlarm` text is question-first now: "Their move threatens …Bxf2+ — it wins the pawn. Do you have to react? No — Qxd5 comes first, …".
+- The deferred wave's items carry `arrows` (`deferIf(..., arrows)`): the "They're eyeing X" behaviour hands a threat arrow, the exposed-king behaviour hands the first rook/queen move onto the file (new `positionalRead.heavyPieceToFile`), a recited line in the computed beat or in a `positionFacts` clause ("After Re1+, Be7, Qe2, …") is walked through `moveOrderArrows` as `line` claims, and moveOrder adds a `line` arrow for the answer the follow-up would have run into.
+- The open-file-toward-a-king read (positional + behaviour) now says what to do: castle off it, contest it, or take it with a named rook move.
+- Your hit-alert no longer says "; it has to move" — it is said before the engine read and the threat answer contradicted it ("It can wait — Bh2+ comes first"). The answer now carries the instruction.
+- `moveIntent` stopped-move wording: "…Nc5 isn't possible any more" (false — it is legal, it loses; 5× in one game) → "now …Nc5 doesn't work: the knight would just be taken on c5".
+- `claimSentences`: a short question (≤ 40 chars) glues to the sentence after it, so the dedupe can no longer drop "What do you do about it?" and leave a bare answer.
+- **Yours, from the same walk:** `positionCharacter`'s switch lines ("The position has turned sharp — now it is about calculation", "The tactics have settled — it is back to improving pieces") say no WHY. Name what made it sharp (the live tactic, or "one move is far better than the rest") or stay quiet.
+- **Accuracy instrument:** `scripts/scoreboard/tape-verify.mjs <tape> sr-all80.json` checks every spoken sentence of a Learn walk against chess.js and the stored MultiPV reads (independent of app code). Baseline on the 2026-09-30 walk: 89.1% accuracy, 47% of sentences checkable; the five falses were the stopped-move wording above.
 
 **Why the move grade never spoke in this walk — measured, not a bug (2026-09-29).** Stockfish MultiPV 3, depth 12, over every student move of 3UqPa5eV2e0:
 - **No faults.** The worst move cost 15cp.

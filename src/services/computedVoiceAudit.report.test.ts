@@ -25,7 +25,6 @@ import { buildTacticsLiveContext } from './liveTacticsContext';
 import { buildPlayCommentary } from './playCommentary';
 import { findLivePunishment } from './gemCrushLines';
 import { teachingSourceForBoard, spokenBeatText } from './danyaTeachingService';
-import { curatedBeatAt } from './curatedBeatSource';
 import { detectOpening } from './openingDetectionService';
 import { noteStaysInScope } from './noteAnchorIntegrity';
 import { gradeBorrowedTeaching } from './coachAnswerGates';
@@ -150,7 +149,6 @@ describe('computed voice audit', () => {
       let lastComputedKey = '';
       const spokenTacticLines = new Set<string>();
       const spokenThreatLines = new Set<string>();
-      const curatedSeen = new Set<string>();
       const corpusSeen = new Set<string>();
       let openingName: string | null = null;
       let gameVoice = 0;
@@ -178,7 +176,7 @@ describe('computed voice audit', () => {
         };
 
         // ── THE BACKWARD LOOK on the student's own move ────────────────────
-        const look = backwardLook({ replySan: null,
+        const look = backwardLook({ priorMove: null, replySan: null,
           fenBefore,
           fenAfter: fenAfterStudent,
           playedSan: studentMove.san,
@@ -203,7 +201,7 @@ describe('computed voice audit', () => {
 
         const coachColor = game.student === 'white' ? 'black' : 'white';
         const cSign = coachColor === 'white' ? 1 : -1;
-        const coachLook = backwardLook({ replySan: null,
+        const coachLook = backwardLook({ priorMove: null, replySan: null,
           fenBefore: fenAfterStudent,
           fenAfter: fenAfterReply,
           playedSan: coachMove.san,
@@ -215,7 +213,7 @@ describe('computed voice audit', () => {
         });
 
         // ── THE PLAN, off the engine's own line from the settled board ─────
-        const plan = planFromUci(fenAfterReply, readAfterReply.pv, game.student, planSaid);
+        const plan = planFromUci(fenAfterReply, readAfterReply.pv, game.student, null, planSaid);
         let planLine: string | null = null;
         if (plan) {
           const parts = [
@@ -304,15 +302,10 @@ describe('computed voice audit', () => {
         const announced = openingAnnouncement(det, bookDeparture(history), openingName, game.student === 'white' ? 'w' : 'b');
         if (det && announced) { openingName = det.name; announceLine = announced; }
 
-        let noteLine: string | null = null;
+        // The hand-written beat no longer speaks on a live board (David
+        // 2026-09-30); no note rides the instant package.
+        const noteLine: string | null = null;
         let noteTier = '';
-        // Tier 1 (corpus) is measured below via the position-keyed note; here the
-        // curated masterclass beat is the first ladder rung (the generic bake is
-        // gone — David 2026-08-24).
-        try {
-          const beat = curatedBeatAt(history, fenAfterReply, curatedSeen, openingName, game.student === 'black' ? 'black' : 'white', 'live');
-          if (beat) { curatedSeen.add(beat.id); noteLine = beat.text; noteTier = 'curated'; }
-        } catch { /* bonus */ }
 
         // ── WHAT THE LADDER NEVER ASKED ───────────────────────────────────
         // The teaching ladder is `if (!noteLine)` chained: bake, then curated,
@@ -326,10 +319,6 @@ describe('computed voice audit', () => {
         // this turn but never got a turn.
         const avail: Record<string, boolean> = {};
         for (const [tier, text] of Object.entries({
-          curated: (() => {
-            try { return curatedBeatAt(history, fenAfterReply, curatedSeen, openingName, game.student === 'black' ? 'black' : 'white', 'live')?.text ?? ''; }
-            catch { return ''; }
-          })(),
           corpus: (() => {
             try {
               const src = teachingSourceForBoard(history, fenAfterReply, openingName, game.student,

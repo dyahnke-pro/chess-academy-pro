@@ -60,9 +60,15 @@ describe('the post-move-grade helpers', () => {
     expect(gradeWorthSpeaking('solid')).toBe(false);
     expect(gradeWorthSpeaking('best')).toBe(false);
     expect(gradeWorthSpeaking('hung-piece')).toBe(true);
+    // Bare merits and soft faults name no cause — silent (walk 2026-09-30);
+    // only-move and clear-best speak, joined to their point by the caller.
     expect(gradeWorthSpeaking('only-move')).toBe(true);
-    expect(gradeWorthSpeaking('wins-material')).toBe(true);
     expect(gradeWorthSpeaking('clear-best')).toBe(true);
+    expect(gradeWorthSpeaking('wins-material')).toBe(false);
+    expect(gradeWorthSpeaking('defends-threat')).toBe(false);
+    expect(gradeWorthSpeaking('second-best')).toBe(false);
+    expect(gradeWorthSpeaking('lost-the-thread')).toBe(false);
+    expect(gradeWorthSpeaking('walked-into-tactic')).toBe(true);
   });
   it('names the pattern (not the SAN) and the hung piece when known', () => {
     expect(moveReasonClause('walked-into-tactic', { named: 'a knight fork' })).toMatch(/walked into a knight fork/);

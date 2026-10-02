@@ -95,33 +95,28 @@
     "order": 3,
     "narration": {
       "intro": "Rook + pawn vs rook — one of the most common endgames in chess and the one position every player must know cold to defend. The defender (down a pawn) places the rook on the third rank and the king in front of the pawn. The third-rank rook keeps the attacking king from advancing to the 6th. Once the pawn reaches the 5th rank, the defender's rook drops to the 1st (or 8th) rank to harass the attacker's king from behind. Drawn.",
-      "rule": "Defender: king on the queening square's file, rook on the 3rd rank. When the pawn reaches the 5th rank, swing the rook behind to the 1st rank for perpetual checks.",
+      "rule": "Defender: king on the queening square's file, rook on its 3rd rank. The moment the pawn steps onto that rank, swing the rook to the back rank and check from behind.",
       "why": "The attacker wants to bring the king to the 6th rank — that's the key to winning R+P vs R. The defender's rook on the 3rd rank prevents this directly: any white king move to the 6th rank means the defender's king on the 8th rank is no longer pinned, and Black takes opposition. So white must push the pawn to the 5th first to break the third-rank wall. But once the pawn reaches the 5th, the third rank is no longer needed — the defender swings the rook to the 1st rank and gives perpetual checks from behind. The white king can never both escort the pawn AND escape the checks. Drawn.",
       "history": "François-André Danican Philidor described this in 'Analyse du jeu des Échecs' (1749). It's been the standard defense for 275 years and counting.",
       "tip": "Down a pawn in a rook endgame? Get your king in front of the pawn. Get your rook to the 3rd rank. When the enemy pawn reaches the 5th, swing the rook to the back rank and check forever."
     },
     "positions": [
       {
-        "fen": "5k2/8/4K3/4P3/8/8/r7/4R3 w - - 0 1",
-        "title": "Philidor setup — black to defend",
-        "explanation": "White: Ke6, Pe5, Re1. Black: Kf8, Ra2 (will go to Ra3 next move for the third-rank defense). The black rook on its 3rd rank (Ra3 or anywhere on rank 3) prevents White's king from breaking through to f6 or d6. Once white pushes e5-e6 (forced eventually), the defender drops the rook to a1 and starts perpetual checking from behind. White's king can never both escort and escape; drawn.",
+        "fen": "4k3/7R/r7/3KP3/8/8/8/8 b - - 0 1",
+        "title": "Philidor's defence — hold the 3rd rank, then check from behind",
+        "explanation": "Black's king stands in front of the pawn and the rook holds the 6th rank, so the white king cannot step up beside its pawn. Wait on that rank. The moment the pawn steps onto e6, the white king has no shelter left: drop the rook to the back rank and check it from behind. Every move in this line keeps the draw by the tablebase.",
         "result": "draw",
-        "source": "Philidor 1749 — third-rank defense",
+        "source": "Tablebase-verified (Lichess Syzygy) — the line holds the draw at every move",
         "solution": [
-          "Rd1",
-          "Ke8",
-          "Rd7",
-          "Rh2",
-          "Rf7",
-          "Rh1",
-          "Re7+",
-          "Kd8",
-          "Rd7+",
-          "Ke8",
-          "Rf7",
-          "Rh2"
+          "Rb6",
+          "e6",
+          "Rb1",
+          "Kd6",
+          "Rd1+",
+          "Ke5",
+          "Re1+"
         ],
-        "bestMove": "Rd1"
+        "bestMove": "Rb6"
       }
     ],
     "practiceThemes": [
@@ -134,19 +129,36 @@
     "category": "drawn-pattern",
     "order": 4,
     "narration": {
-      "intro": "Queen vs lone rook is winning for the queen — but only with technique that takes 30+ moves. With ANY pawn added to the rook side, the position can become a fortress that the queen cannot crack. The defender places the rook in front of the king on the edge of the board, the king tucked behind it; the queen has no entry square.",
-      "rule": "Defender: king on the edge, rook in front of the king blocking the queen's penetration squares.",
-      "why": "The queen's strength is its mobility. To win, the queen needs to coordinate with its own king to deliver mate or win the rook. In a fortress setup, the defender's king is on the edge and the rook is the wall — the queen approaches but every penetration square is covered by the rook. The attacking king tries to come help, but the defender's rook gives checks the moment the attacking king crosses any critical square. The queen and king can never coordinate; the queen circles, the rook checks, nothing changes. 50-move rule eventually saves the defender.",
+      "intro": "Queen against a lone rook is a win for the queen, though it takes careful technique. Give the rook side a single pawn and it can become a fortress the queen cannot crack: the rook sits on its third rank, protected by the pawn, with the king right beside them.",
+      "rule": "Defender: rook on its 3rd rank, protected by a pawn on its 2nd, king next to the pawn. Shuttle the rook along that rank; the queen finds no way in.",
+      "why": "The rook can never be taken for free — the pawn guards it on every square it shuttles to along that rank — and the attacking king cannot cross the rank the rook holds. The queen checks, the king steps aside and comes back, and the rook keeps sliding between its protected squares. Nothing changes, so it is a draw.",
       "history": "Documented in early endgame manuals — see Berger (1890) and Averbakh's 'Comprehensive Chess Endings' Vol. 4 (1986). The fortress is a textbook example of why eval engines return inflated numbers in queen-vs-rook positions; tablebase and human pattern recognition agree, eval doesn't.",
-      "tip": "Queen vs rook + ANY pawn? Don't assume you're winning just because the eval says +5. Look for fortress structures first."
+      "tip": "Queen against rook and pawn? Before you play for the win, check whether the rook already sits on a protected square with its king beside it — then it is a fortress."
     },
     "positions": [
+      {
+        "fen": "8/5pk1/6r1/8/8/8/3Q4/3K4 b - - 0 1",
+        "title": "The fortress — rook on g6, pawn on f7, king on g7",
+        "explanation": "Black's rook stands on g6, protected by the f7 pawn, with the king beside it on g7. Keep the rook sliding between g6 and e6 — both protected by the pawn — and answer each check with a king step that keeps the pawn guarded. The queen never gets in: the tablebase calls it a draw.",
+        "result": "draw",
+        "source": "Tablebase-verified fortress (Lichess Syzygy) — every move in the line keeps the draw",
+        "solution": [
+          "Re6",
+          "Qc1",
+          "Rg6",
+          "Qa1+",
+          "Kh6",
+          "Qc1+",
+          "Kg7"
+        ],
+        "bestMove": "Re6"
+      },
       {
         "fen": "k7/r7/8/8/8/8/Q7/2K5 w - - 0 1",
         "title": "Q vs R alone — winning, but tedious",
         "explanation": "Queen vs lone rook is winning but takes precise technique (~30 moves with optimal play). Adding a pawn near the defending king can turn this into a fortress. The point: even with a clear material advantage, queen vs rook isn't 'free' — and queen vs rook + pawn often isn't winning at all. Always check for fortress structures before assuming the eval.",
         "result": "white-wins",
-        "source": "Q vs R technique — see Karpov-Korchnoi 1978 for a famous instance",
+        "source": "Q vs R — a tablebase win",
         "solution": [
           "Qg8+",
           "Kb7",
@@ -206,18 +218,28 @@
     "order": 6,
     "narration": {
       "intro": "When you're losing on material but your king is restricted to a small area, deliberately strip your own legal moves — sacrifice pieces, walk into the corner — until any move by your opponent creates a stalemate. Material disadvantage erased by clever defense.",
-      "rule": "Reduce your own legal moves to zero. If the opponent doesn't give you a check or capture, it's stalemate.",
+      "rule": "Stalemate is when the side to move has no legal move and is not in check — a draw. Strip your own moves so that their natural move leaves you with none.",
       "why": "Stalemate counts as a draw. A defender who can FORCE stalemate from a lost position has saved the half-point. The trick: the defender plays moves that leave the king with no legal moves once the opponent ALSO restricts the king. If you can sacrifice every other piece you have, leaving a bare king with no escape squares, the opponent's next 'natural' move (taking a piece, advancing a pawn, etc.) creates the stalemate. This is why K+Q vs K technique requires care: a careless queen move can stalemate the lone king and turn a winning position into a draw.",
       "history": "Stalemate has been a draw since the 19th century in modern rules (it was a win for some games in earlier eras). Stalemate-stalking endgame studies date back to Loyd, Troitsky, and the early 20th-century composers.",
       "tip": "If you're losing AND your king is in a corner, look for ways to GIVE AWAY all your other pieces. Stalemate saves the day surprisingly often."
     },
     "positions": [
       {
-        "fen": "7k/5K2/6Q1/8/8/8/8/8 b - - 0 1",
-        "title": "Stalemate trap in K+Q vs K",
-        "explanation": "Classic stalemate — Black king on h8, white queen on g6, white king on f7. It's Black to move and Black has NO legal moves: h7 is attacked by Qg6, g8 is attacked by Kf7 and Qg6, g7 is attacked by Qg6 and Kf7. Black not in check. Stalemate — drawn. The white queen got too close; should have stayed two moves away. This is THE classic K+Q technique trap.",
+        "fen": "7k/8/5KQ1/8/8/8/8/r7 b - - 0 1",
         "result": "draw",
-        "source": "Canonical K+Q vs K stalemate trap"
+        "bestMove": "Ra6+",
+        "title": "The desperado rook — give it away with check",
+        "explanation": "Black's king on h8 has no move: the queen covers g8, g7 and h7. So the rook is Black's only moving piece — and the whole point is to get rid of it. 1...Ra6+! and keep checking down the a-file. White's king cannot hide from the checks, and the moment it takes the rook, Black has no legal move and is not in check: stalemate. Every other move loses.",
+        "source": "Tablebase-verified (Lichess Syzygy) — Ra6+ is the only drawing move; every move in the line keeps the draw",
+        "solution": [
+          "Ra6+",
+          "Kf5",
+          "Ra5+",
+          "Ke4",
+          "Ra4+",
+          "Kd3",
+          "Ra3+"
+        ]
       }
     ],
     "practiceThemes": [
@@ -231,25 +253,28 @@
     "order": 7,
     "narration": {
       "intro": "When you're losing on material but your queen (or rook) can deliver checks the opponent can't escape, you check forever. Three repetitions of the same position with the same player to move = automatic draw. This is the great escape mechanism of queen endings — the side that's lost on material can often force perpetual check if the opposing king has no shelter.",
-      "rule": "Find a sequence of checks where the king's escape squares are all controlled. Repeat the sequence three times to claim a draw.",
+      "rule": "Find a sequence of checks where the king's escape squares are all controlled. When the same position comes up three times, the game is a draw.",
       "why": "The threefold repetition rule and the 50-move rule are the two automatic draws. Perpetual check exploits both: the defender keeps checking, the attacker has no way to block or escape (the checking piece is too valuable to capture, and the king has no shelter), so the position repeats. After three identical positions, draw is claimable. This is the most common drawing technique in queen endings — a queen with no shelter can almost always be perpetually checked.",
       "history": "Threefold repetition has been a drawing rule for over 200 years. Classic study: Réti's perpetual-check position (1922) is the gold standard.",
       "tip": "Down a queen but YOUR queen has open lines and the enemy king has no pawns shielding it? Look for two-move check cycles. Perpetual check saves the game."
     },
     "positions": [
       {
-        "fen": "5rk1/6pp/8/8/8/8/4q3/3K4 b - - 0 1",
-        "title": "Black checks forever — the queen alone holds the draw",
-        "explanation": "White is up a rook. But Black's queen on e2 can perpetually check: 1...Qe1+ 2.Kc2 Qe2+ 3.Kc1 Qe1+ — three repetitions, drawn. White's king has no shelter from queen checks; the queen never lets up. A losing position turned into a half point.",
+        "fen": "6k1/RR6/8/8/8/4q3/6P1/7K b - - 0 1",
         "result": "draw",
+        "bestMove": "Qe1+",
+        "title": "Checks only — the queen holds the draw",
+        "explanation": "White has two rooks and a pawn against your queen, and the rooks on the 7th threaten your king. Any quiet move loses — only checks hold. 1...Qe1+ 2.Kh2 Qh4+ 3.Kg1 Qe1+ and the white king can never get out of the checks; when the same position comes up three times, it is a draw.",
         "solution": [
           "Qe1+",
-          "Kc2",
-          "Qe2+",
-          "Kc1",
-          "Qe1+"
+          "Kh2",
+          "Qh4+",
+          "Kg1",
+          "Qe1+",
+          "Kh2",
+          "Qh4+"
         ],
-        "source": "Perpetual check pattern — common in queen endings"
+        "source": "Tablebase-verified (Lichess Syzygy) — every move in the line keeps the result"
       }
     ],
     "practiceThemes": [
@@ -262,10 +287,10 @@
     "category": "drawn-pattern",
     "order": 8,
     "narration": {
-      "intro": "Some material configurations cannot deliver checkmate at all, no matter how the pieces are arranged. King vs king. King and bishop vs king. King and knight vs king. Two knights vs lone king (without pawns). These positions are automatic draws by FIDE rule — the game ends without play.",
-      "rule": "If neither side has enough material to force mate, the game is drawn immediately.",
-      "why": "Mate requires a piece configuration that can attack and trap the enemy king. A lone bishop or knight cannot — the opponent's king can always escape to a square the piece doesn't cover. Two knights uniquely cannot force mate (the lone king can always reach a square a knight can't cover) although mate IS possible with cooperation; FIDE rules class this as 'insufficient' regardless. Knowing the list saves you from playing on in lost-on-material positions that are actually drawn — and from blundering INTO insufficient material (capturing your own way to a draw).",
-      "history": "FIDE Laws of Chess Article 5.2.b. The list has been formalized since the 19th century.",
+      "intro": "Some material can never deliver checkmate, however the pieces are arranged: king against king, king and bishop against king, king and knight against king. The game is drawn on the spot — no move order can ever produce a mate. Two knights are different: they cannot FORCE mate, but a mate position exists, so the game goes on.",
+      "rule": "If neither side can checkmate by any series of legal moves, the game is drawn immediately. If mate is merely impossible to force (two knights), the game continues — it ends in a draw by the fifty-move rule or repetition.",
+      "why": "Mate needs every square around the king covered. A lone bishop or knight never covers enough of them, so no position with that material is mate. Two knights can cover the squares, which is why they can mate a king that walks into it — but the defending king can always step aside, so with correct defence it is a draw. Knowing the list stops you playing on for a win that cannot come, and stops you trading your own way into it.",
+      "history": "FIDE Laws of Chess, Article 5.2.2: the game is drawn when neither player can checkmate by any series of legal moves. King and two knights is not covered by it.",
       "tip": "Up an exchange with bishops of the same color and no pawns? Make sure you don't accidentally trade pieces into K+B vs K. That's a draw."
     },
     "positions": [
@@ -315,10 +340,10 @@
       },
       {
         "fen": "k7/8/8/8/8/8/8/3NKN2 w - - 0 1",
-        "title": "K + 2 knights vs K — drawn by FIDE rule",
-        "explanation": "Two knights vs lone king CAN deliver checkmate in some positions — but cannot FORCE it. The lone king can always reach a square none of the two knights can simultaneously attack. FIDE classifies this as insufficient material because no FORCED mate exists, even though mate IS possible. Don't try to win this; you'll only embarrass yourself with a 50-move-rule draw.",
+        "title": "K + 2 knights vs K — no forced mate",
+        "explanation": "Two knights against a bare king cannot force mate. A mate position does exist, so the game is not over by rule — but the defending king always has a square to step to, and with correct defence this ends as a draw by the fifty-move rule. Play on only if the defender might walk into the corner.",
         "result": "draw",
-        "source": "Two-knight checkmate impossibility — FIDE Laws",
+        "source": "FIDE Laws Article 5.2.2 (mate possible, so not a dead position); en.wikipedia.org/wiki/Two_knights_endgame",
         "solution": [
           "Nfe3",
           "Kb7",

@@ -28,7 +28,7 @@ const facetsAt = (ply: number, sans: string[], f: string[], player: 'white' | 'b
     fenBefore: f[ply - 1], fenAfter: f[ply], san: sans[ply - 1], ply,
     moverColor: ply % 2 === 1 ? 'white' : 'black', playerColor: player, studentColorWB: player === 'white' ? 'w' : 'b',
     evaluation, preMoveEval: 20, classification, bestMoveSan: null,
-    prevCap: { square: null, capturedValue: 0 }, allSans: sans, forcedRunStartPly: null, bestLineUci: [], replyBestSan: null,
+    prevCap: { square: null, capturedValue: 0 }, allSans: sans, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
   });
 
 describe('review — the four facts are facets, so they go through the door', () => {
@@ -41,13 +41,13 @@ describe('review — the four facts are facets, so they go through the door', ()
     expect(f.some((x) => x.startsWith('[stopped]'))).toBe(false);
   });
 
-  it('[rule] teaches the principle in full once, then a short stem about the move (re-walk 1380)', () => {
+  it('[rule] teaches the principle once WITH its reason, then stays silent (David 2026-09-27)', () => {
     const f = facetsAt(4, SCH, S, 'black', NO_TEACHING_CONTEXT);
-    expect(f.find((x) => x.startsWith('[rule]'))).toMatch(/^\[rule\] Nc6 follows a principle worth keeping: /);
+    expect(f.find((x) => x.startsWith('[rule]'))).toMatch(/^\[rule\] Nc6 follows a rule worth keeping: .*cannot join the fight/);
     const taught = facetsAt(4, SCH, S, 'black', { ...NO_TEACHING_CONTEXT, principlesTaught: new Set(['development', 'center']) });
-    // Taught already: the rule is not restated — the move gets its own stem.
-    expect(taught.some((x) => /principle worth keeping|the principle behind|rule behind|what the opening asks/i.test(x))).toBe(false);
-    expect(taught.find((x) => x.startsWith('[rule]'))).toMatch(/^\[rule\] Nc6 develops into the game/);
+    // Taught already: "Nc6 develops into the game…" names what the student
+    // can see and teaches nothing — no [rule] facet at all.
+    expect(taught.some((x) => x.startsWith('[rule]'))).toBe(false);
   });
 
   it('[refuted] speaks the engine-computed alternative on the student\'s ply', () => {
@@ -66,7 +66,7 @@ describe('review — the four facts are facets, so they go through the door', ()
     const at = (teaching: MoveTeachingContext): string[] => computeMoveFacets({
       seenFundamentals: new Set(), teaching, fenBefore: before, fenAfter: after, san: 'O-O', ply: 15,
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w', evaluation: 300, preMoveEval: 300,
-      classification: 'good', bestMoveSan: null, prevCap: { square: null, capturedValue: 0 }, allSans: [], forcedRunStartPly: null, bestLineUci: [], replyBestSan: null,
+      classification: 'good', bestMoveSan: null, prevCap: { square: null, capturedValue: 0 }, allSans: [], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
     });
     expect(at({ ...NO_TEACHING_CONTEXT, phaseTurn: 'middlegame' }).find((x) => x.startsWith('[stock]')))
       .toMatch(/^\[stock\] .*middlegame.*: you're clearly better — you're up a piece/);

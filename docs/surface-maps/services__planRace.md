@@ -4,15 +4,20 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**254 lines · 8 exports · 3 importers · 1 tests · 0 audits**
+**341 lines · 9 exports · 7 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **G4.5.3 NEVER HAND OUT AN INSTRUCTION YOU HAVE NOT TESTED — and two plans only RACE when they run the same kind of plan (found reading the code, 2026-09-17).** (CLAUDE.md:840) — names `planRace`
+- **The tools are COMPUTERS** (CLAUDE.md:25) — names `planRace`
+- **G4.5.3 NEVER HAND OUT AN INSTRUCTION YOU HAVE NOT TESTED — and two plans only RACE when they run the same kind of plan (found reading the code, 2026-09-17).** (CLAUDE.md:1137) — names `planRace`
 
 ## Who calls in
 
+- `scripts/endgame-drills/generate.ts`
+- `src/data/endgameConceptDrills.test.ts`
 - `src/services/boardPlan.ts`
+- `src/services/conceptEngine.ts`
+- `src/services/learnBoardTeaching.ts`
 - `src/services/planRace.test.ts`
 - `src/services/reviewFullData.ts`
 
@@ -37,8 +42,12 @@
 - `src/services/planRace.test.ts:62`
 - `src/services/planRace.test.ts:64`
 
-### `detectPlanRace` (function) — 9 call sites
-- `src/services/boardPlan.ts:116`
+### `detectPlanRace` (function) — 18 call sites
+- `scripts/endgame-drills/generate.ts:311`
+- `src/data/endgameConceptDrills.test.ts:32`
+- `src/data/endgameConceptDrills.test.ts:56`
+- `src/services/boardPlan.ts:124`
+- `src/services/conceptEngine.ts:606`
 - `src/services/planRace.test.ts:22`
 - `src/services/planRace.test.ts:27`
 - `src/services/planRace.test.ts:34`
@@ -47,9 +56,15 @@
 - `src/services/planRace.test.ts:107`
 - `src/services/planRace.test.ts:114`
 - `src/services/planRace.test.ts:123`
+- `src/services/planRace.test.ts:155`
+- `src/services/planRace.test.ts:161`
+- `src/services/planRace.test.ts:165`
+- `src/services/planRace.test.ts:173`
+- `src/services/planRace.test.ts:181`
 
-### `planRaceClause` (function) — 14 call sites
-- `src/services/boardPlan.ts:117`
+### `planRaceClause` (function) — 16 call sites
+- `src/services/boardPlan.ts:125`
+- `src/services/conceptEngine.ts:608`
 - `src/services/planRace.test.ts:23`
 - `src/services/planRace.test.ts:38`
 - `src/services/planRace.test.ts:39`
@@ -62,12 +77,24 @@
 - `src/services/planRace.test.ts:79`
 - `src/services/planRace.test.ts:109`
 - `src/services/planRace.test.ts:115`
-- `src/services/reviewFullData.ts:512`
+- `src/services/planRace.test.ts:157`
+- `src/services/reviewFullData.ts:809`
+
+### `fileClaimed` (function) — 4 call sites
+- `src/services/learnBoardTeaching.ts:173`
+- `src/services/planRace.test.ts:140`
+- `src/services/planRace.test.ts:147`
+- `src/services/planRace.test.ts:148`
 
 ## Tests
 
+- `src/data/endgameConceptDrills.test.ts`
 - `src/services/planRace.test.ts`
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._

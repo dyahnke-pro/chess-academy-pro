@@ -34,8 +34,8 @@ function renderedIds(): Set<string> {
 describe('review card scroll-into-view selectors', () => {
   it('lists at least the blocking cards', () => {
     const ids = scrollSelectorIds();
-    expect(ids.length).toBeGreaterThanOrEqual(13);
-    expect(ids).toContain('review-turning-point-card');
+    // 10 since the cameo card (two selectors) was removed, 2026-10-02.
+    expect(ids.length).toBeGreaterThanOrEqual(10);
     expect(ids).toContain('review-find-shot-card');
   });
 

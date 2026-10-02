@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4928 lines · 34 exports · 38 importers · 36 tests · 5 audits**
+**5227 lines · 36 exports · 42 importers · 40 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
 - **Why determinism** (CLAUDE.md:57) — names `coachFeatureService`
-- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3791) — names `buildReviewSegments`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4111) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:6108) — names `coachFeatureService`
+- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3804) — names `buildReviewSegments`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4124) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6165) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -25,6 +25,9 @@
 - `src/hooks/useReviewPlayback.ts`
 - `src/services/coachFeatureService.causalChain.test.ts`
 - `src/services/coachFeatureService.cpLossSign.test.ts`
+- `src/services/coachFeatureService.introResult.test.ts`
+- `src/services/coachFeatureService.learnLanes.test.ts`
+- `src/services/coachFeatureService.learnParity.test.ts`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts`
 - `src/services/coachFeatureService.planChange.test.ts`
 - `src/services/coachFeatureService.recurrence.test.ts`
@@ -35,6 +38,7 @@
 - `src/services/gameThemeClassifier.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/mapConcurrent.test.ts`
+- `src/services/namedMoveArrows.test.ts`
 - `src/services/reviewBetterLineWhy.test.ts`
 - `src/services/reviewCorpusNote.test.ts`
 - `src/services/reviewCorpusSweep.test.ts`
@@ -72,14 +76,14 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectBadHabitsFromGame` (function) — 8 call sites
-- `src/components/Coach/CoachGamePage.tsx:2100`
+- `src/components/Coach/CoachGamePage.tsx:2108`
 - `src/services/coachFeatureService.test.ts:200`
 - `src/services/coachFeatureService.test.ts:215`
 - `src/services/coachFeatureService.test.ts:238`
 - `src/services/coachFeatureService.test.ts:257`
 - `src/services/coachFeatureService.test.ts:277`
 - `src/services/coachFeatureService.test.ts:289`
-- `src/services/gameAnalysisService.ts:2083`
+- `src/services/gameAnalysisService.ts:2103`
 
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -88,7 +92,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `generateNarrativeSummary` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:517`
+- `src/components/Coach/CoachGameReview.tsx:539`
 - `src/services/recapSeat.test.ts:17`
 
 ### `recapSecondPerson` (function) — 9 call sites
@@ -117,6 +121,11 @@
 - `src/services/coachFeatureService.test.ts:309`
 - `src/services/coachFeatureService.test.ts:315`
 
+### `segmentNamedArrows` (function) — 3 call sites
+- `src/components/Coach/CoachGameReview.tsx:3612`
+- `src/services/namedMoveArrows.test.ts:54`
+- `src/services/namedMoveArrows.test.ts:58`
+
 ### `ReviewMoveSegment` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
@@ -130,7 +139,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildReviewCitations` (function) — 8 call sites
-- `src/components/Coach/CoachGameReview.tsx:577`
+- `src/components/Coach/CoachGameReview.tsx:599`
 - `src/services/coachFeatureService.test.ts:744`
 - `src/services/coachFeatureService.test.ts:752`
 - `src/services/coachFeatureService.test.ts:784`
@@ -143,18 +152,22 @@
 - `src/services/coachFeatureService.test.ts:15`
 - `src/services/coachFeatureService.test.ts:24`
 
-### `buildReviewSegments` (function) — 59 call sites
-- `src/components/Coach/CoachGameReview.tsx:1882`
-- `src/services/coachFeatureService.causalChain.test.ts:27`
-- `src/services/coachFeatureService.causalChain.test.ts:41`
-- `src/services/coachFeatureService.causalChain.test.ts:47`
-- `src/services/coachFeatureService.causalChain.test.ts:55`
-- `src/services/coachFeatureService.causalChain.test.ts:69`
-- `src/services/coachFeatureService.causalChain.test.ts:78`
-- `src/services/coachFeatureService.causalChain.test.ts:93`
-- `src/services/coachFeatureService.causalChain.test.ts:97`
+### `buildReviewSegments` (function) — 63 call sites
+- `src/components/Coach/CoachGameReview.tsx:1885`
+- `src/services/coachFeatureService.causalChain.test.ts:30`
+- `src/services/coachFeatureService.causalChain.test.ts:44`
+- `src/services/coachFeatureService.causalChain.test.ts:50`
+- `src/services/coachFeatureService.causalChain.test.ts:58`
+- `src/services/coachFeatureService.causalChain.test.ts:72`
+- `src/services/coachFeatureService.causalChain.test.ts:81`
+- `src/services/coachFeatureService.causalChain.test.ts:96`
+- `src/services/coachFeatureService.causalChain.test.ts:100`
 - `src/services/coachFeatureService.cpLossSign.test.ts:40`
 - `src/services/coachFeatureService.cpLossSign.test.ts:47`
+- `src/services/coachFeatureService.learnLanes.test.ts:25`
+- `src/services/coachFeatureService.learnParity.test.ts:46`
+- `src/services/coachFeatureService.learnParity.test.ts:52`
+- `src/services/coachFeatureService.learnParity.test.ts:71`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:37`
 - `src/services/coachFeatureService.planChange.test.ts:14`
 - `src/services/coachFeatureService.recurrence.test.ts:37`
@@ -189,7 +202,7 @@
 - `src/services/coachFeatureService.trade.test.ts:15`
 - `src/services/loopCloses.review.integration.test.ts:89`
 - `src/services/methodBeat.test.ts:70`
-- `src/services/planArc.test.ts:131`
+- `src/services/planArc.test.ts:134`
 - `src/services/reviewCorpusNote.test.ts:40`
 - `src/services/reviewForesight.test.ts:52`
 - `src/services/reviewNeedGate.test.ts:30`
@@ -207,6 +220,12 @@
 ### `reviewOpeningRecord` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `defaultIntroText` (function) — 4 call sites
+- `src/services/coachFeatureService.introResult.test.ts:9`
+- `src/services/coachFeatureService.introResult.test.ts:14`
+- `src/services/coachFeatureService.introResult.test.ts:15`
+- `src/services/coachFeatureService.introResult.test.ts:16`
+
 ### `mapConcurrent` (function) — 4 call sites
 - `src/services/mapConcurrent.test.ts:9`
 - `src/services/mapConcurrent.test.ts:18`
@@ -214,7 +233,7 @@
 - `src/services/mapConcurrent.test.ts:37`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4997`
+- `src/components/Coach/CoachGameReview.tsx:4842`
 - `src/services/coachFeatureService.test.ts:814`
 - `src/services/coachFeatureService.test.ts:817`
 - `src/services/coachFeatureService.test.ts:824`
@@ -268,8 +287,9 @@
 - `src/services/reviewNarrationFidelity.test.ts:112`
 - `src/services/reviewNarrationFidelity.test.ts:118`
 
-### `pendingRecapture` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7535`
+### `pendingRecapture` (function) — 10 call sites
+- `src/components/Coach/CoachTeachPage.tsx:7571`
+- `src/components/Coach/CoachTeachPage.tsx:7660`
 - `src/services/coachFeatureService.test.ts:929`
 - `src/services/coachFeatureService.test.ts:930`
 - `src/utils/justCaptured.test.ts:20`
@@ -284,7 +304,7 @@
 - `src/services/reviewWalk1500.test.ts:17`
 
 ### `openingNameForKey` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:214`
+- `src/components/Coach/CoachGameReview.tsx:236`
 
 ### `generateReviewNarration` (function) — 14 call sites
 - `src/services/reviewBetterLineWhy.test.ts:58`
@@ -310,7 +330,7 @@
 ### `detectBadHabits` (re-export) — 8 call sites
 - `src/components/Stats/StatsPage.tsx:65`
 - `src/services/badHabitDetector.ts:21`
-- `src/services/coachApi.ts:4933`
+- `src/services/coachApi.ts:5077`
 - `src/services/coachFeatureService.test.ts:126`
 - `src/services/coachFeatureService.test.ts:147`
 - `src/services/coachFeatureService.test.ts:166`
@@ -326,6 +346,9 @@
 - `src/hooks/useReviewPlayback.test.ts`
 - `src/services/coachFeatureService.causalChain.test.ts`
 - `src/services/coachFeatureService.cpLossSign.test.ts`
+- `src/services/coachFeatureService.introResult.test.ts`
+- `src/services/coachFeatureService.learnLanes.test.ts`
+- `src/services/coachFeatureService.learnParity.test.ts`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts`
 - `src/services/coachFeatureService.planChange.test.ts`
 - `src/services/coachFeatureService.recurrence.test.ts`
@@ -335,6 +358,7 @@
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/mapConcurrent.test.ts`
 - `src/services/methodBeat.test.ts`
+- `src/services/namedMoveArrows.test.ts`
 - `src/services/planArc.test.ts`
 - `src/services/recapSeat.test.ts`
 - `src/services/reviewBetterLineWhy.test.ts`

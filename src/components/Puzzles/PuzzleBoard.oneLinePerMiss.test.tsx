@@ -74,7 +74,7 @@ describe('PuzzleBoard — one spoken line per miss', () => {
     let resolveRead: (v: unknown) => void = () => undefined;
     readWrongTry.mockReturnValue(new Promise((r) => { resolveRead = r; }));
     const { voiceService } = await import('../../services/voiceService');
-    render(<PuzzleBoard puzzle={PUZZLE} onComplete={vi.fn<(o: PuzzleOutcome) => void>()} maxWrongAttempts={5} />);
+    render(<PuzzleBoard surface="classic" puzzle={PUZZLE} onComplete={vi.fn<(o: PuzzleOutcome) => void>()} maxWrongAttempts={5} />);
     await screen.findByTestId('chess-board');
     await waitFor(() => expect(screen.queryByTestId('puzzle-loading')).not.toBeInTheDocument(), { timeout: 2000 });
     act(() => { latestOnMove!({ from: 'e2', to: 'e3', san: 'Qe3' }); });
@@ -89,7 +89,7 @@ describe('PuzzleBoard — one spoken line per miss', () => {
 
   it('with no miss pending, a struggle line waits for the voice to be free — never cuts, never drops', async () => {
     const { voiceService } = await import('../../services/voiceService');
-    render(<PuzzleBoard puzzle={PUZZLE} onComplete={vi.fn<(o: PuzzleOutcome) => void>()} />);
+    render(<PuzzleBoard surface="classic" puzzle={PUZZLE} onComplete={vi.fn<(o: PuzzleOutcome) => void>()} />);
     await screen.findByTestId('chess-board');
     act(() => { latestOnCoach!('Take your time.', 'nudge'); });
     // Never over a line already playing: it waits its turn, it is not dropped.

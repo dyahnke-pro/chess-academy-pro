@@ -49,3 +49,32 @@ describe('liveStrength', () => {
     expect(updateLiveStrength(s, { fenBefore: b.fen, san: b.san, moverColor: b.color, cpLoss: null })).toEqual(s);
   });
 });
+
+describe('gem hits place the player (the strongest early signal)', () => {
+  it('walking into a gem steps down; punishing one steps up; missing it steps down', async () => {
+    const { Chess } = await import('chess.js');
+    const { getAllPunishGems, isSurfaceableGem } = await import('../data/lessons/punishGems');
+    const { gemMoveSignal, warmGemIndexes } = await import('./gemCrushLines');
+    const { vi } = await import('vitest');
+    const gem = getAllPunishGems().find(isSurfaceableGem);
+    expect(gem, 'no surfaceable gem in the data').toBeTruthy();
+    if (!gem) return;
+    const c = new Chess();
+    for (const san of gem.lineMoves.split(/\s+/).filter(Boolean)) c.move(san);
+    const beforeSlip = c.fen();
+    // Cold: the index is never built on the move path — no signal yet.
+    expect(gemMoveSignal(beforeSlip, gem.inaccuracy)).toBeNull();
+    warmGemIndexes();
+    await vi.waitFor(() => expect(gemMoveSignal(beforeSlip, gem.inaccuracy)).toBe('walked-into'), { timeout: 20000, interval: 50 });
+    c.move(gem.inaccuracy);
+    const afterSlip = c.fen();
+    expect(gemMoveSignal(afterSlip, gem.punishSeq[0] ?? gem.punish)).toBe('punished');
+    const other = c.moves().find((m) => m.replace(/[+#]/g, '') !== (gem.punishSeq[0] ?? gem.punish).replace(/[+#]/g, ''));
+    if (other) expect(gemMoveSignal(afterSlip, other)).toBe('missed-punish');
+    expect(gemMoveSignal(new Chess().fen(), 'a3')).toBeNull();
+
+    const s = startLiveStrength(1000);
+    expect(updateLiveStrength(s, { fenBefore: beforeSlip, san: gem.inaccuracy, moverColor: 'white', cpLoss: null, gem: 'walked-into' }).rating).toBe(1000 - STEP_DOWN);
+    expect(updateLiveStrength(s, { fenBefore: afterSlip, san: 'x', moverColor: 'white', cpLoss: null, gem: 'punished' }).rating).toBe(1000 + STEP_UP);
+  }, 30000);
+});

@@ -18,6 +18,7 @@
  */
 import { Chess } from 'chess.js';
 import type { TablebaseCategory } from './lichessTablebaseService';
+import { endgameConceptFor } from './conceptEngine';
 import { WEB_ORIGIN, withWebOrigin } from '../utils/webOrigin';
 
 const TABLEBASE_PROXY_PATH = '/api/lichess-tablebase';
@@ -200,18 +201,22 @@ function buildEndgameWhy(fen: string, best: TablebaseMove, verdict: EndgameMoveV
 
 /** The best move's concrete board point from chess.js geometry — a capture, a
  *  check, a promotion, else the square it takes. Honest and terse. */
-function bestMovePoint(fen: string, best: TablebaseMove): string | null {
+function bestMovePoint(fen: string, best: TablebaseMove, subject: 'move' | 'side' = 'move'): string | null {
+  // `move` reads after the SAN ("Kd6 walks the king to d6"); `side` after
+  // "You" / "They" ("They walk the king to d6") — the Watch narration put
+  // "They" in front of the move form and said "They walks" (2026-10-01).
+  const v = (third: string, base: string): string => (subject === 'side' ? base : third);
   try {
     const c = new Chess(fen);
     const mv = c.move({ from: best.uci.slice(0, 2), to: best.uci.slice(2, 4), promotion: best.uci.length > 4 ? best.uci[4] : undefined });
     if (!mv) return null;
-    if (mv.san.includes('#')) return 'is checkmate';
-    if (mv.promotion) return 'queens the pawn';
-    if (mv.captured) return `takes on ${mv.to}`;
-    if (mv.san.includes('+')) return 'checks the king';
-    if (mv.piece === 'k') return `walks the king to ${mv.to}`;
-    if (mv.piece === 'p') return `pushes to ${mv.to}`;
-    return `goes to ${mv.to}`;
+    if (mv.san.includes('#')) return subject === 'side' ? 'deliver checkmate' : 'is checkmate';
+    if (mv.promotion) return v('queens the pawn', 'queen the pawn');
+    if (mv.captured) return v(`takes on ${mv.to}`, `take on ${mv.to}`);
+    if (mv.san.includes('+')) return v('checks the king', 'check the king');
+    if (mv.piece === 'k') return v(`walks the king to ${mv.to}`, `walk the king to ${mv.to}`);
+    if (mv.piece === 'p') return v(`pushes to ${mv.to}`, `push to ${mv.to}`);
+    return v(`goes to ${mv.to}`, `go to ${mv.to}`);
   } catch {
     return null;
   }
@@ -224,8 +229,13 @@ export interface EndgameWalkStep {
   san: string;
   fenAfter: string;
   mover: 'white' | 'black';
-  /** Grounded note for the Watch narration — the move's board point. */
+  /** Grounded note for the Watch narration — the move's board point, phrased
+   *  to follow "You" / "They". */
   note: string;
+  /** The ending's technique, the FIRST time it stands on the board in this
+   *  walk (the endgame computer's own sentence) — so the demonstration says
+   *  WHY, not only what moved. Null on every other ply. */
+  teaching: string | null;
 }
 
 /**
@@ -239,6 +249,7 @@ export interface EndgameWalkStep {
  */
 export async function buildTablebaseWalk(fen: string, maxPlies = 24): Promise<EndgameWalkStep[]> {
   const steps: EndgameWalkStep[] = [];
+  const taught = new Set<string>();
   let cur = fen;
   for (let i = 0; i < maxPlies; i++) {
     if (countPieces(cur) > 7) break;
@@ -258,7 +269,15 @@ export async function buildTablebaseWalk(fen: string, maxPlies = 24): Promise<En
       san: mv.san,
       fenAfter: board.fen(),
       mover,
-      note: bestMovePoint(cur, best) ?? mv.san,
+      note: bestMovePoint(cur, best, 'side') ?? mv.san,
+      teaching: (() => {
+        try {
+          const c = endgameConceptFor(board.fen());
+          if (!c || c.source !== 'technique' || taught.has(c.id)) return null;
+          taught.add(c.id);
+          return c.full;
+        } catch { return null; }
+      })(),
     });
     if (board.isGameOver()) break;
     cur = board.fen();

@@ -33,7 +33,7 @@ export type FacetTag =
   | 'verdict' | 'opening' | 'opp-dev' | 'opp-target' | 'endgame'
   | 'plan-now' | 'plan-race' | 'plan-arc' | 'plan-opening' | 'plan-middlegame' | 'plan-line' | 'consequence'
   | 'note' | 'method' | 'refuted' | 'bluff' | 'technique' | 'contrast' | 'timing' | 'praise'
-  | 'rule' | 'stopped' | 'stock' | 'trade';
+  | 'rule' | 'stopped' | 'stock' | 'trade' | 'point' | 'their-cost';
 
 /**
  * What a fact is worth on ANY board, highest first. The ordering principle,
@@ -95,10 +95,17 @@ export const FACET_RANK: Record<FacetTag, number> = {
   // The opening PRINCIPLE a quiet move follows, taught once per game (S2) —
   // above the opening's name, below the standing read.
   rule: 29,
+  // What a clean move is FOR (Learn's move-point computer, `studentMovePoint`):
+  // beside the rule it kept, never above the verdict on the move.
+  point: 28,
   opening: 28,
   // "That move has a point: it stops your threat" — the purpose of an
   // opponent move that threatens nothing (S3). Just above their targets.
   stopped: 27,
+  // What THEIR move gave up that the student can use — a hole a knight can
+  // reach, their bishop shut in, castling lost (Learn's `theirMoveCost`).
+  // Beside the purpose of their move, which says what it was FOR.
+  'their-cost': 27,
   'opp-target': 26,
   'opp-dev': 24,
   endgame: 22,
@@ -171,6 +178,8 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   endgame: 'teach',        // the ending's technique, said once
   technique: 'teach',
   contrast: 'teach',
+  point: 'teach',
+  'their-cost': 'teach',
   timing: 'teach',
   'plan-race': 'teach',
   'plan-arc': 'teach',
@@ -235,6 +244,7 @@ export const CLAUSE_ROLE: Record<ClauseKind, FacetRole> = {
   rule: 'teach',
   stopped: 'teach',
   stock: 'teach',
+  trade: 'teach',
   'student-leans': 'describe',
   'opponent-leans': 'describe',
 };
@@ -269,7 +279,7 @@ export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   // PRINCIPLE — development, the king, the opening, converting.
   principle: 'principle', technique: 'principle', king: 'principle', opening: 'principle', endgame: 'principle',
   rule: 'principle',
-  does: 'principle', 'opp-dev': 'principle', fundamental: 'principle', convert: 'principle',
+  does: 'principle', point: 'plan', 'their-cost': 'plan', 'opp-dev': 'principle', fundamental: 'principle', convert: 'principle',
   status: 'principle',
   // PLAN — structure, targets, the plan and the long read.
   'plan-now': 'plan', contrast: 'plan', timing: 'plan', 'plan-race': 'plan', 'plan-arc': 'plan', 'plan-opening': 'plan', 'plan-middlegame': 'plan',
@@ -307,6 +317,7 @@ const CLAUSE_TIE: Record<ClauseKind, number> = {
   rule: FACET_RANK.rule,
   stopped: FACET_RANK.stopped,
   stock: FACET_RANK.stock,
+  trade: FACET_RANK.trade,
 };
 export const TIE_ORDER: Record<FactKind, number> = { ...FACET_RANK, ...CLAUSE_TIE };
 

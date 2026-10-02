@@ -161,3 +161,30 @@ describe('play surface: engine down / no board threaded', () => {
     expect(r).not.toContain('llm_was_called');
   });
 });
+
+describe('question run 2026-09-27 — Colle, White, move 16 (real path)', () => {
+  const COLLE = 'r1bqrnk1/5ppp/p3p3/1p1pn1bN/3p2Q1/2PB4/PP3PPP/R1B1R1K1 w - - 0 16';
+  const learn = { surface: 'game-chat' as const, fen: COLLE, whoseTurn: 'white' as const, studentColor: 'white' as const, currentRoute: '/coach/teach', engineBestMoveUci: 'e1e5', evalCp: 50 };
+  it('"What does their bishop on c8 do?" reads that bishop, never a book passage', async () => {
+    const r = await ask('What does their bishop on c8 do?', learn);
+    expect(r).not.toContain('llm_was_called');
+    expect(r).not.toMatch(/doubled pawns/);
+    expect(r).toMatch(/bishop on c8/);
+  });
+  it('"What should I aim for in the endgame?" answers the endgame outlook, not the middlegame plan', async () => {
+    const r = await ask('What should I aim for in the endgame?', learn);
+    expect(r).not.toContain('llm_was_called');
+    expect(r).toMatch(/not in an endgame yet/);
+    expect(r).not.toMatch(/no single trump yet/);
+  });
+});
+
+describe('question run 2026-09-27 — "What\'s my biggest weakness?" with no games, on a live board', () => {
+  const COLLE = 'r1bqrnk1/5ppp/p3p3/1p1pn1bN/3p2Q1/2PB4/PP3PPP/R1B1R1K1 w - - 0 16';
+  const learn = { surface: 'game-chat' as const, fen: COLLE, whoseTurn: 'white' as const, studentColor: 'white' as const, currentRoute: '/coach/teach', engineBestMoveUci: 'e1e5', evalCp: 50 };
+  it('reads this board\'s weakness before the import reminder', async () => {
+    const r = await ask("What's my biggest weakness?", learn);
+    expect(r).not.toContain('llm_was_called');
+    expect(r).toMatch(/on this board, your biggest weakness is your queen on g4/);
+  });
+});

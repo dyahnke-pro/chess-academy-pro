@@ -64,13 +64,19 @@ describe('G8.5 — no lane without a live producer, no producer without a lane',
   // The backward look queues under its own verdict kind, one producer for three lanes.
   const VIA_BACKWARD_LOOK = new Set<LearnLane>(['drawback', 'mistake', 'coachMistake']);
 
+  // The board-level teaching lanes are produced in ONE composer the page calls
+  // (surfaceComposition gate); a lane there counts only while the page calls it.
+  const BOARD_CODE = readFileSync('src/services/learnBoardTeaching.ts', 'utf8');
+  const pageCallsBoard = /studentMoveTeaching\(|theirMoveTeaching\(/.test(TEACH_CODE);
+
   it('every lane in the table is fed by live code in CoachTeachPage', () => {
     for (const lane of Object.keys(LEARN_LANES) as LearnLane[]) {
       if (VIA_BACKWARD_LOOK.has(lane)) continue;
-      const fed = new RegExp(`queueSpokenHint\\([^;]*'${lane}'|deferIf\\([^;]*'${lane}'|lane: '${lane}'|'${lane}' as const`).test(TEACH_CODE);
+      const fed = new RegExp(`queueSpokenHint\\([^;]*'${lane}'|deferIf\\([^;]*'${lane}'|lane: '${lane}'|'${lane}' as const`).test(TEACH_CODE)
+        || (pageCallsBoard && new RegExp(`lane: '${lane}'`).test(BOARD_CODE));
       expect(fed, `lane '${lane}' is in the table and nothing feeds it`).toBe(true);
     }
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(cm\.fenAfter, look\.line, look\.kind\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(cm\.fenAfter, look\.line, look\.kind[,)]/);
   });
 
   it('the producers deleted with their lanes stay deleted', () => {
@@ -147,7 +153,7 @@ describe('WO-1b — one lead per turn', () => {
 describe('WO-1b — board descriptions wait for the turn\'s one decision', () => {
   it('the instant wave carries only urgent lanes; descriptions are deferred to the late wave', () => {
     const start = TEACH_CODE.indexOf('const instantDecision = decideTurn([');
-    const end = TEACH_CODE.indexOf('learnMemRef.current.spokenKeys);', start);
+    const end = TEACH_CODE.indexOf('learnMemRef.current.spokenKeys, null, provenTagsRef.current', start);
     const instantCall = TEACH_CODE.slice(start, end);
     for (const lane of ['commentary', 'behavior', 'positional', 'kingSafety']) {
       expect(instantCall, `${lane} speaks instantly again — it will lead the turn by arriving first`).not.toContain(`'${lane}'`);
@@ -161,7 +167,7 @@ describe('WO-1b — board descriptions wait for the turn\'s one decision', () =>
 
 describe('WO-2 — a verdict on a good move carries its reason', () => {
   it('clear-best speaks only with the move\'s computed point', () => {
-    expect(TEACH_CODE).toMatch(/grade\.reason !== 'clear-best' \|\| !!goodPoint/);
+    expect(TEACH_CODE).toMatch(/\(grade\.reason !== 'clear-best' && grade\.reason !== 'only-move'\) \|\| !!goodPoint/);
     expect(TEACH_CODE).toMatch(/studentMovePoint\(fenBefore, move\.san/);
     // A recapture is never graded aloud unless it is a fault (hand walk 2026-09-30).
     expect(TEACH_CODE).toMatch(/&& !\(isRecapture && !grade\.fault\)/);
@@ -200,11 +206,11 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
     expect(d.pkg.kept[0]?.lines).toBeUndefined();
   });
   it('Learn hands every line-speaking producer\'s lines to the queue, and draws on-screen and earlier boards apart', () => {
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), registerNow, 'register', undefined, pendingRegisterLines\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), registerNow, 'register', undefined, undefined, undefined, undefined, pendingRegisterLines\)/);
     expect(TEACH_CODE).toMatch(/pendingRegisterLines = \[\{ fen: probe\.fen\(\), sans: \[compareRead\.bestSan\] \}/);
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, undefined, c\.lines\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, undefined, c\.claim \? \[c\.claim\] : undefined, undefined, undefined, c\.lines\)/);
     expect(TEACH_CODE).toMatch(/fundamental\?\.lines\)/);
-    expect(TEACH_CODE).toMatch(/'fundamental', \[\], fundamental\.lines\)/);
+    expect(TEACH_CODE).toMatch(/'fundamental', \[\], [^,]*\? \['convert-method'\] : undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines\)/);
     expect(TEACH_CODE).toMatch(/keptLines\(hintPkg,/);
     // Their move's purpose leads over a board description (hand walk 2026-09-30, …g6).
     expect(TEACH_CODE).toMatch(/c\.kind === 'stopped' \? 'theirPurpose' as const/);
@@ -257,5 +263,73 @@ describe('the character read counts tactics, not a piece that can step away (han
   it('a hanging piece alone does not make the position sharp', () => {
     expect(TEACH_CODE).toMatch(/tacticLive: provenTacticLive\(tctxNow\.immediate\),/);
     expect(TEACH_CODE).not.toMatch(/tacticLive: tctxNow\.immediate\.length > 0 \|\| tctxNow\.hanging/);
+  });
+});
+
+describe('"the tactics have settled" is never said with material loose (run J, UVJ ply 50)', () => {
+  it('the positional switch is held while either side can win a piece by exchange', async () => {
+    const { readFileSync } = await import('node:fs');
+    const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
+    expect(src).toMatch(/legalSeeGainFor\(probe\.fen\(\), c\.square,[^)]*\) > 0/);
+    expect(src).toMatch(/\|\| looseNow\)/);
+  });
+});
+
+describe('the fade — short phrasing when the skill is green (David 2026-09-30)', () => {
+  const TWO = 'That trade gives up your better minor piece. Keep the bishop that has open diagonals and trade the one blocked by its own pawns.';
+  it('a lane on a PROVEN tag speaks only its first sentence', async () => {
+    const { fadeWhenGreen } = await import('./learnTurnDoor');
+    expect(fadeWhenGreen('trade', TWO, new Set(['bad-trade']))).toBe('That trade gives up your better minor piece.');
+  });
+  it('grey or red keeps the full teaching (negative controls)', async () => {
+    const { fadeWhenGreen } = await import('./learnTurnDoor');
+    expect(fadeWhenGreen('trade', TWO, new Set())).toBe(TWO);
+    expect(fadeWhenGreen('trade', TWO, null)).toBe(TWO);
+    expect(fadeWhenGreen('trade', TWO, new Set(['hung-material']))).toBe(TWO);
+  });
+  it('a lane whose held half is not wired never fades — the app cannot see it green', async () => {
+    const { fadeWhenGreen } = await import('./learnTurnDoor');
+    // blunderCheck is tagged hung-material but only speaks on a slip.
+    expect(fadeWhenGreen('blunderCheck', TWO, new Set(['hung-material']))).toBe(TWO);
+  });
+  it('the door records the fade on its row', () => {
+    const d = decideTurn([{ lane: 'trade', text: TWO, fen: FEN }], undefined, undefined, null, new Set(['bad-trade']));
+    expect(d.faded).toEqual(['trade']);
+    const cold = decideTurn([{ lane: 'trade', text: TWO, fen: FEN }], undefined, undefined, null, null);
+    expect(cold.faded).toEqual([]);
+  });
+});
+
+describe('the verdict on the student\'s own move is never held (Learn walk 2026-10-01, game 1 ply 66)', () => {
+  it('a back-rank threat leads and the blunder grade still speaks', () => {
+    const fen = '4r2k/pp1R2pp/5r2/2P5/1P4P1/7P/3KR3/8 b - - 0 34';
+    const d = decideTurn([
+      { lane: 'threat', text: 'Watch out — your king on h8 has no escape square and the back rank can be invaded from e2.', fen, squares: ['h8', 'e2'] },
+      { lane: 'mistake', text: 'Rf6 was a blunder — it let them win the pawn on e2. Rc8 was the move.', fen, squares: ['f6', 'c8'] },
+    ]);
+    expect(d.spoke).toContain('threat');
+    expect(d.spoke).toContain('mistake');
+  });
+});
+
+describe('beginner mode — the fundamental behind a slip always rides (David 2026-10-02)', () => {
+  const LEAD = 'Their knight on c6 defends the pawn on e5.';
+  const FUND = 'You moved the same piece twice — develop a new one first.';
+  const facts = (): Parameters<typeof decideTurn>[0] => [
+    { lane: 'mistake', text: LEAD, fen: FEN, squares: ['c6', 'e5'] },
+    { lane: 'fundamental', text: FUND, fen: FEN, squares: ['g1'] },
+  ];
+
+  it('held for everyone else when it shares no square with the lead', () => {
+    const d = decideTurn(facts());
+    expect(d.held).toContain('fundamental');
+    expect(d.pkg.spoken).not.toContain('same piece twice');
+  });
+
+  it('spoken for a beginner, without changing what leads', () => {
+    const d = decideTurn(facts(), undefined, undefined, null, null, true);
+    expect(d.spoke).toContain('fundamental');
+    expect(d.lead?.lane).toBe('mistake');
+    expect(d.pkg.spoken).toContain('same piece twice');
   });
 });

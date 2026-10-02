@@ -4,8 +4,6 @@
  *
  * Three consumers lean on this:
  *   • pvPlayback's rich narration fact bundles (R1 — variety by content),
- *   • modelGameMatcher's "fits the structure on the board" signature
- *     (David 2026-07-18: any game matching the structure; GM preferred),
  *   • gameThemeClassifier's evidence predicates (Phase 5).
  *
  * Everything here is chess.js board truth — no engine, no LLM, no guesses
@@ -285,7 +283,7 @@ export function describeStructure(fen: string): StructureFacts | null {
 }
 
 /**
- * Compact comparable signature for structure MATCHING (Phase 2 cameos): the
+ * Compact comparable signature for structure MATCHING: the
  * salient features a teacher would call "the same kind of position".
  */
 export interface StructureSignature {
@@ -370,99 +368,3 @@ export function structureSignature(fen: string): StructureSignature | null {
   };
 }
 
-/** Detailed shared-feature overlap between two positions — the Phase 2
- *  match metric. `score/weight` is the 0..1 ratio; `weight` is how much
- *  structural evidence PARTICIPATED. A high ratio on a tiny weight is a
- *  vacuous match (two featureless middlegames) — the matcher must floor
- *  on BOTH. Weights favor the features Danya cites when comparing
- *  ("same outpost", "same race shape", "same ending", "the isolani"). */
-export interface StructureMatchDetail {
-  score: number;
-  weight: number;
-}
-
-export function structureMatchDetail(
-  a: StructureSignature,
-  b: StructureSignature,
-): StructureMatchDetail {
-  let score = 0;
-  let max = 0;
-  // Only feature classes PRESENT on at least one side participate — matching
-  // on shared absence ("neither has an outpost") is not a teaching hook, and
-  // counting it would make two featureless positions look alike.
-  // Outposts — the strongest teaching hook. Same square = strong.
-  if (a.outpostSquares.length > 0 || b.outpostSquares.length > 0) {
-    max += 4;
-    const shared = a.outpostSquares.filter((sq) => b.outpostSquares.includes(sq));
-    if (shared.length > 0) score += 4;
-    else if (a.outpostSquares.length > 0 && b.outpostSquares.length > 0) score += 2;
-  }
-  // Opposite-wing kings (the race shape).
-  if (a.oppositeWings || b.oppositeWings) {
-    max += 3;
-    if (a.oppositeWings && b.oppositeWings) score += 3;
-  }
-  // The isolani — a named teaching structure.
-  if (a.iqp || b.iqp) {
-    max += 3;
-    if (a.iqp && b.iqp) score += 3;
-  }
-  // Locked central chains — a named structure class (French/KID centres);
-  // weighted like the isolani so a chain-vs-chain match can carry a cameo.
-  if (a.lockedCenter || b.lockedCenter) {
-    max += 3;
-    if (a.lockedCenter && b.lockedCenter) score += 3;
-  }
-  // Split majorities with the SAME orientation (whose queenside it is
-  // matters — the minority attack runs at a specific side). Same
-  // orientation is a named structure class (Carlsbad) — isolani-class
-  // weight; opposite-orientation splits share only the race idea.
-  if (a.queensideMajority !== null || b.queensideMajority !== null) {
-    max += 3;
-    if (a.queensideMajority !== null && a.queensideMajority === b.queensideMajority) score += 3;
-    else if (a.queensideMajority !== null && b.queensideMajority !== null) score += 1;
-  }
-  // Open files.
-  if (a.openFiles.length > 0 || b.openFiles.length > 0) {
-    max += 2;
-    if (a.openFiles.some((f) => b.openFiles.includes(f))) score += 2;
-    else if (a.openFiles.length > 0 && b.openFiles.length > 0) score += 1;
-  }
-  // Doubled pawns.
-  if (a.doubled || b.doubled) {
-    max += 1;
-    if (a.doubled && b.doubled) score += 1;
-  }
-  // Passed pawns.
-  if (a.passedPawnCount > 0 || b.passedPawnCount > 0) {
-    max += 1;
-    if (a.passedPawnCount > 0 && b.passedPawnCount > 0) score += 1;
-  }
-  // Endgame type — exact 3; sharing one side's exact label ("R+minor+P"
-  // vs "R+minor+P vs R+P") 2; both endgames of different types 1.
-  if (a.endgameType !== null || b.endgameType !== null) {
-    max += 3;
-    if (a.endgameType !== null && b.endgameType !== null) {
-      if (a.endgameType === b.endgameType) score += 3;
-      else {
-        const sidesA = a.endgameType.split(' vs ');
-        const sidesB = b.endgameType.split(' vs ');
-        score += sidesA.some((s) => sidesB.includes(s)) ? 2 : 1;
-      }
-    }
-  }
-  // Queens on/off is a TIEBREAK only — it participates only when real
-  // structural evidence already did, so it can never carry a match alone.
-  if (max > 0) {
-    max += 1;
-    if (a.queensOn === b.queensOn) score += 1;
-  }
-  return { score, weight: max };
-}
-
-/** Ratio form of structureMatchDetail, 0..1. Two positions with no
- *  participating features score 0. */
-export function structureMatchScore(a: StructureSignature, b: StructureSignature): number {
-  const d = structureMatchDetail(a, b);
-  return d.weight > 0 ? d.score / d.weight : 0;
-}

@@ -43,6 +43,9 @@ const NON_ACTION = "'re|'ve|'ll|'d|are|was|were|have|had|has|need|want|know|knew
 /** Quantifiers and adverbs that may sit between "you" and its verb. */
 const HEDGE = /^(you)\s+(?:both|also|still|already|now|never|only|again|clearly)\s+/i;
 
+const THEIR_HEDGE = /^(they|your opponent)\s+(?:both|also|still|already|now|never|only|again|clearly)\s+/i;
+const THEIR_ACTION_RE = new RegExp(`^(?:they|your opponent)\\s+(?!(?:${NON_ACTION})(?:s|d|ed|ing)?\\b)[a-z]`, 'i');
+
 const SEAT_RE = new RegExp(`^you\\s+(?!(?:${NON_ACTION})(?:s|d|ed|ing)?\\b)[a-z]`, 'i');
 
 /**
@@ -55,7 +58,11 @@ export function seatReattributes(head, studentPly) {
   if (studentPly) {
     // The mirror: the student moved, so the narration must not open by giving
     // the move to the opponent.
-    return /^(your opponent|they )/i.test(text)
+    // The same state/action split as the other seat: "They have mate in one
+    // with their rook" after the student's Nc4 is the CONSEQUENCE of the
+    // student's move and is true (review walk 2026-10-02, game 1 ply 87) — only
+    // "they push / your opponent takes" hands the student's move away.
+    return THEIR_ACTION_RE.test(text.replace(THEIR_HEDGE, '$1 '))
       ? { fails: true, reason: 'student ply narrated as the opponent acting' }
       : { fails: false, reason: '' };
   }

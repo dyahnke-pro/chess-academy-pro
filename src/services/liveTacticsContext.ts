@@ -83,9 +83,15 @@ export function buildTacticsLiveContext(
   let threats: TacticsLiveContext['threats'] = [];
   let opportunities: TacticsLiveContext['opportunities'] = [];
   if (analysis && analysis.topLines.length > 0) {
+    // Only lines worth playing: a line a pawn or more worse than the engine's
+    // best is not a plan for either side (walk 2026-09-27: "you've got a pin
+    // coming: Nxg5, hxg5, Bxg5" one sentence after "Nxg5 falls apart").
+    const bestEval = analysis.topLines[0]?.evaluation ?? null;
+    const playable = analysis.topLines.filter((l, i) => i === 0 || bestEval === null || l.mate != null
+      || Math.abs((l.evaluation ?? bestEval) - bestEval) < 100);
     const upcoming = scanUpcomingTactics(
       fen,
-      analysis.topLines,
+      playable,
       playerColor,
       lookaheadDepth,
     );
@@ -578,7 +584,12 @@ export function speakDeepestLookahead(
     return `Look a couple of moves ahead — you've got a ${pattern} coming, ${pick.depthAhead} deep: ${ownedProse}.${holeTag}`;
   }
   if (studentOpens && spoken.length >= 2) {
-    const reply = spoken.slice(1);
+    // Every ply after the first names its owner too — "they have the knight to
+    // a5, then the pawn to c5" read the student's own c5 as theirs (hand walk
+    // 2026-09-27, Alekhine). Ply 0 is the student's, so odd plies are theirs.
+    const theirs = seat === 'student' ? 'their' : 'my';
+    // The first reply is owned by the stem ("they have …"); every later ply names its owner.
+    const reply = spoken.slice(1).map((m, j) => (j > 0 && /^the /.test(m) ? `${j % 2 === 0 ? theirs : 'your'} ${m.slice(4)}` : m));
     const replyProse = reply.length === 1 ? reply[0] : `${reply[0]}, then ${reply.slice(1).join(', ')}`;
     return `${CONDITIONAL_THREAT_STEM[seat](pattern, pick.depthAhead, spoken[0], replyProse)}${holeTag}`;
   }

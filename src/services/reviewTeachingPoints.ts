@@ -33,6 +33,7 @@
  */
 import { Chess, type Color, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
+import { inFluxAfter } from './boardState';
 import { legalSeeGainOn, bishopHemmedByOwnPawns } from './positionReadingService';
 import { captureHasCounterTactic, detectNewThreat, forkAlignmentClause, type DetectedThreat } from './groundedAnswer';
 import { cells, PIECE_NOUN, findWorstPlacedPiece, deriveNextPlans } from './nextPlans';
@@ -685,6 +686,11 @@ export function describeTradeConsequence(
  * Returns a compact clause or null when no structural concession shows.
  */
 export function describeConcessions(fenBefore: string, san: string, moverIsStudent: boolean): string | null {
+  // NEVER MID-EXCHANGE (Learn walk g9, 2026-09-27): after …cxd5 the new pawn
+  // on d5 looked isolated — then exd5 took it and the isolani was White's. A
+  // capture they can take back leaves a structure that is still changing, so
+  // there is no lasting concession to name yet.
+  if (inFluxAfter(fenBefore, san)) return null;
   try {
     const b = new Chess(fenBefore);
     const mv = b.move(san);
@@ -709,10 +715,15 @@ export function describeConcessions(fenBefore: string, san: string, moverIsStude
         && (Number(p.square[1]) - kr) * dir >= 1 && (Number(p.square[1]) - kr) * dir <= 2).length;
     };
     const shieldB = shield(before, mover); const shieldA = shield(after, mover);
-    if (shieldA < shieldB) out.push(`${poss} king's pawn cover thinned (${shieldB} shield pawns down to ${shieldA})`);
+    // The shield only matters while their queen can use the gap (a rook
+    // endgame king is meant to walk out — hand walk 2026-09-27).
+    const foeQueen = after.board().flat().some((p) => p?.type === 'q' && p.color === enemy);
+    if (foeQueen && shieldA < shieldB) out.push(`${poss} king's pawn cover thinned (${shieldB} shield pawns down to ${shieldA})`);
     if (sB && sA) {
       const passB = sB.pawns.passedPawns[enemy].length; const passA = sA.pawns.passedPawns[enemy].length;
-      if (passA > passB) out.push(`it hands the opponent a passed pawn on ${sA.pawns.passedPawns[enemy].find((p) => !sB.pawns.passedPawns[enemy].includes(p)) ?? sA.pawns.passedPawns[enemy][0]}`);
+      // FROM THE STUDENT'S SEAT (Learn walk 2026-10-01: "Their …f4: it hands
+      // the opponent a passed pawn" — said to the student, who IS the opponent).
+      if (passA > passB) out.push(`it hands ${moverIsStudent ? 'them' : 'you'} a passed pawn on ${sA.pawns.passedPawns[enemy].find((p) => !sB.pawns.passedPawns[enemy].includes(p)) ?? sA.pawns.passedPawns[enemy][0]}`);
       const isoB = sB.pawns.isolatedPawns[mover].length; const isoA = sA.pawns.isolatedPawns[mover].length;
       if (isoA > isoB) out.push(`${poss} pawn structure splinters — a new isolated pawn on ${sA.pawns.isolatedPawns[mover].find((p) => !sB.pawns.isolatedPawns[mover].includes(p)) ?? sA.pawns.isolatedPawns[mover][0]}`);
     }

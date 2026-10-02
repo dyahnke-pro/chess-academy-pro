@@ -32,6 +32,8 @@ export interface MoveOrderArrow {
   /** Which side played it — callers colour the two sides differently so a
    *  student can see whose move is whose without being told. */
   color: 'w' | 'b';
+  /** The board BEFORE this move — what the arrow door checks it on. */
+  fenBefore: string;
 }
 
 /** SAN tokens as they appear in note prose. Deliberately strict: a bare square
@@ -66,6 +68,7 @@ export function moveOrderArrows(noteText: string, fen: string, maxPlies = 8): Mo
   const out: MoveOrderArrow[] = [];
   for (const raw of tokens) {
     if (out.length >= maxPlies) break;
+    const fenBefore = board.fen();
     let mv;
     try {
       mv = board.move(raw);
@@ -88,6 +91,7 @@ export function moveOrderArrows(noteText: string, fen: string, maxPlies = 8): Mo
       order: out.length + 1,
       san: mv.san,
       color: mv.color,
+      fenBefore,
     });
   }
 

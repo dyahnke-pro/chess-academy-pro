@@ -70,6 +70,7 @@ describe('useDiscussionPractice — Play stays pure (non-interruptive)', () => {
     const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'play' }));
     await act(async () => {
       await result.current.evaluatePlayerMove({
+        prompted: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
         playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
       });
@@ -88,6 +89,7 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
     const { result } = renderHook(() => useDiscussionPractice(true, opts));
     await act(async () => {
       await result.current.evaluatePlayerMove({
+        prompted: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
         playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
         studentRating: 1200,
@@ -125,6 +127,7 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
     );
     await act(async () => {
       await result.current.evaluatePlayerMove({
+        prompted: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
         playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
         studentRating: 1200,
@@ -146,6 +149,7 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
     const { result } = renderHook(() => useDiscussionPractice(true, opts));
     await act(async () => {
       await result.current.evaluatePlayerMove({
+        prompted: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
         playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
         studentRating: 1200,
@@ -161,6 +165,7 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
     const { result } = renderHook(() => useDiscussionPractice(true, opts));
     await act(async () => {
       await result.current.evaluatePlayerMove({
+        prompted: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
         playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
         studentRating: 1200,
@@ -200,6 +205,7 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
     const beginner = renderHook(() => useDiscussionPractice(true, opts));
     await act(async () => {
       await beginner.result.current.evaluatePlayerMove({
+        prompted: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
         playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
         studentRating: 800,
@@ -212,6 +218,7 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
     const inter = renderHook(() => useDiscussionPractice(true, opts));
     await act(async () => {
       await inter.result.current.evaluatePlayerMove({
+        prompted: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
         playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
         studentRating: 1200,
@@ -234,6 +241,7 @@ describe('capability evidence is recorded from LIVE play', () => {
     const { result } = renderHook(() => useDiscussionPractice(true, opts));
     await act(async () => {
       await result.current.evaluatePlayerMove({
+        prompted: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
         playerColor: 'white', inBook: false, learned: true,
         gamePhase: 'opening', moveNumber: 1, sourceGameId: 'teach-abc',
@@ -247,11 +255,26 @@ describe('capability evidence is recorded from LIVE play', () => {
     expect(arg.sourceGameId).toBe('teach-abc');
   });
 
+  it('a move made right after the coach announced the moment is recorded as PROMPTED', async () => {
+    setEvals(20, 15);
+    const { result } = renderHook(() => useDiscussionPractice(true, opts));
+    await act(async () => {
+      await result.current.evaluatePlayerMove({
+        prompted: true,
+        fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
+        playerColor: 'white', inBook: false, learned: true,
+        gamePhase: 'opening', moveNumber: 1, sourceGameId: 'teach-abc',
+      });
+    });
+    expect(vi.mocked(recordMoveEvidence).mock.calls[0][0].prompted).toBe(true);
+  });
+
   it('records on a BLUNDER too — the same computer, the other direction', async () => {
     setEvals(100, -200);
     const { result } = renderHook(() => useDiscussionPractice(true, opts));
     await act(async () => {
       await result.current.evaluatePlayerMove({
+        prompted: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
         playerColor: 'white', inBook: false, learned: true,
         gamePhase: 'opening', moveNumber: 1,

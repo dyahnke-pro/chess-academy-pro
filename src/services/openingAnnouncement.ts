@@ -14,6 +14,9 @@
 
 import { bookDeparture, warmBookPosition, type BookDeparture } from './bookDeparture';
 import { sayMoveNoun } from './spokenMove';
+import { costWords, MISTAKE_CP } from './engineConstants';
+import { transposedOpening } from './openingPositions';
+import type { DetectedOpening } from '../types';
 
 export interface DetectedName {
   name: string;
@@ -29,10 +32,16 @@ export interface DetectedName {
  * `studentColor` is REQUIRED: "you left" and "they left" are different claims.
  */
 /** Lichess filler labels that name no line a student can look up. */
-const GENERIC_TAIL = /^(?:main line|normal variation|rare (?:defen[cs]es?|variations?|lines?)|other (?:variations?|lines?))\b/i;
+// A PLURAL "… Variations" is the DB's grouping label, not a line ("Sicilian
+// Defense: Modern Variations" → "It's the Modern Variations", 1200 walk
+// 2026-09-27); a singular named variation stays.
+const GENERIC_TAIL = /^(?:main line|normal variation|rare (?:defen[cs]es?|variations?|lines?)|other (?:variations?|lines?)|\w+ variations$)/i;
 
 /** The name as it is SAID: a filler tail is dropped ("Indian Defense: Normal
  *  Variation" → "Indian Defense"), a real one kept. */
+export function spokenOpeningLabel(name: string): string {
+  return spoken(name);
+}
 function spoken(name: string): string {
   const [family, ...rest] = name.split(':');
   const tail = rest.join(':').trim();
@@ -46,6 +55,9 @@ export function openingAnnouncement(
   departure: BookDeparture | null,
   spokenName: string | null,
   studentColor: 'w' | 'b',
+  /** The name was read off the POSITION after a different move order
+   *  (`transposedOpening`) — a family change is then news, said as one. */
+  transposed = false,
 ): string | null {
   if (!det || !det.name || det.name === spokenName) return null;
   if (spokenName === null) return `This game is the ${spoken(det.name)}.`;
@@ -61,6 +73,7 @@ export function openingAnnouncement(
     const spokenFamily = spokenName.split(':')[0].trim();
     const newFamily = det.name.split(':')[0].trim();
     if (!det.name.startsWith(spokenName)) {
+      if (transposed && newFamily !== spokenFamily) return `By a different move order, the game has transposed into the ${spoken(det.name)}.`;
       if (newFamily === spokenFamily || !newFamily.includes(spokenFamily)) return null;
       return `It's the ${newFamily}.`;
     }
@@ -75,7 +88,16 @@ export function openingAnnouncement(
   const main = departure.mainSan
     ? `; the usual move there was ${sayMoveNoun(departure.mainSan)}`
     : '';
-  return `${who} left the book with ${sayMoveNoun(departure.san)}${main}. The line was the ${spoken(det.name)}.`;
+  // THE LINE IS THE ONE ALREADY NAMED unless the move-order name sharpens it
+  // (Learn walk 2026-10-01: "transposed into the King's Indian Defense" and
+  // then, at the departure, "The line was the English Opening: Anglo-Indian
+  // Defense" — the move-order name the transposition had replaced). A name the
+  // student has just heard is not repeated.
+  // A generic family ("King's Pawn Game") still gives way to the real name.
+  const spokenIsVariation = spokenName.includes(':');
+  const line = det.name.startsWith(spokenName) || !spokenIsVariation ? det.name : spokenName;
+  const lineTail = line === spokenName ? '' : ` The line was the ${spoken(line)}.`;
+  return `${who} left the book with ${sayMoveNoun(departure.san)}${main}.${lineTail}`;
 }
 
 /** The same announcement read straight off the game's move history — the
@@ -86,12 +108,66 @@ export function openingAnnouncementForGame(
   history: readonly string[],
   spokenName: string | null,
   studentColor: 'w' | 'b',
+  transposed = false,
 ): string | null {
-  return openingAnnouncement(det, bookDeparture(history), spokenName, studentColor);
+  const dep = bookDeparture(history);
+  // A DEPARTURE IS NEWS ONLY WHEN IT JUST HAPPENED. Found late — a name the
+  // detector sharpened forty moves in — it announced "You left the book with
+  // the pawn to h5" at move 39 (run C walk 2026-09-30). Stale: say nothing.
+  if (spokenName !== null && dep && history.length - dep.ply > 1) return null;
+  return openingAnnouncement(det, dep, spokenName, studentColor, transposed);
 }
 
 /** Warm the book read for the position now on the board — the surface calls
  *  this once per new position, so the announcement never waits on a fetch. */
 export function warmOpeningBook(fen: string, surface: string): void {
   warmBookPosition(fen, surface);
+}
+
+/** Did THIS student move leave the book? The opening lane announces such a
+ *  departure; a lane that would say it again reads this instead of the book. */
+export function studentJustLeftBook(history: readonly string[], studentColor: 'w' | 'b'): boolean {
+  const dep = bookDeparture(history);
+  return !!dep && dep.mover === studentColor && history.length - dep.ply <= 1;
+}
+
+/** The name to announce for this board: the move-order match, or — when the
+ *  board is a named DB position the move order never reached — that position's
+ *  name, flagged as a transposition (`openingPositions`). */
+export function openingNameForBoard(
+  byOrder: DetectedOpening | null,
+  fen: string,
+  historyLength: number,
+): { det: DetectedName | null; transposed: boolean } {
+  const t = transposedOpening(fen, historyLength, byOrder);
+  if (t) return { det: { name: t }, transposed: true };
+  return { det: byOrder, transposed: false };
+}
+
+/** Below this an opponent's sideline is fair — the announcement already named
+ *  the usual move, and a verdict would be noise. */
+export const SIDELINE_FAIR_CP = 30;
+/** From here their sideline is dubious, said as such. */
+export const SIDELINE_DUBIOUS_CP = 80;
+
+/**
+ * A VERDICT ON THEIR OPENING CHOICE (pass-2 walk 2026-09-30, his most frequent
+ * missing idea: "…Bg4 is dubious", "c3 is already a mediocre move"). Only on
+ * the move that just left the masters' book, only the opponent's, and only
+ * with the engine's cost of it — the book says what is usual, the engine says
+ * whether leaving it costs anything. A fair sideline says nothing.
+ */
+export function theirOpeningVerdict(
+  history: readonly string[], studentColor: 'w' | 'b', cpLoss: number,
+  /** The coach chose this move itself — a real slip (>= the mistake floor) is
+   *  then the coach-verdict lane's, not this one's. */
+  coachChose: boolean,
+): string | null {
+  if (coachChose && cpLoss >= MISTAKE_CP) return null;
+  const dep = bookDeparture(history);
+  if (!dep || dep.ply !== history.length || dep.mover === studentColor || !dep.mainSan) return null;
+  if (cpLoss < SIDELINE_FAIR_CP) return null;
+  const main = sayMoveNoun(dep.mainSan);
+  if (cpLoss >= SIDELINE_DUBIOUS_CP) return `That is a dubious choice — ${main} is the move here, and this one costs them ${costWords(cpLoss)}.`;
+  return `It is a weaker choice than ${main} — it costs them ${costWords(cpLoss)}.`;
 }

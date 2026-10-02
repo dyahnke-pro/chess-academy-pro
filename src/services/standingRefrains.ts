@@ -181,15 +181,16 @@ export const STANDING_REFRAINS: StandingRefrain[] = [
   },
   // MATERIAL and KING SAFETY (WO-TEACH-02 S4) — the count is the instance, the
   // same as the development lead: up a pawn and up a piece are different facts.
+  // The edge is said in pieces (`materialEdgeWords`): "a bishop for two pawns".
   {
     id: 'my-material',
-    re: /you're up (a pawn|a piece|\d+ points of material)/g,
+    re: /you're up ((?:(?:a|two|three|four|five|six|seven|eight) (?:pawns?|knights?|bishops?|rooks?|queens?|piece))(?:(?:, | and | for )(?:a|two|three|four|five|six|seven|eight) (?:pawns?|knights?|bishops?|rooks?|queens?|piece))*|\d+ points of material|material)/g,
     keyOf: (m) => m[1],
     refrain: (m) => `still up ${m[1]}`,
   },
   {
     id: 'their-material',
-    re: /they're up (a pawn|a piece|\d+ points of material)/g,
+    re: /they're up ((?:(?:a|two|three|four|five|six|seven|eight) (?:pawns?|knights?|bishops?|rooks?|queens?|piece))(?:(?:, | and | for )(?:a|two|three|four|five|six|seven|eight) (?:pawns?|knights?|bishops?|rooks?|queens?|piece))*|\d+ points of material|material)/g,
     keyOf: (m) => m[1],
     refrain: (m) => `they're still up ${m[1]}`,
   },

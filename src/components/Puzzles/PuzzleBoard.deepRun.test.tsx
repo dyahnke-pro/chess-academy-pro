@@ -67,7 +67,7 @@ describe('PuzzleBoard — unlimited tries, hint on miss, clean moves', () => {
   beforeEach(() => { vi.clearAllMocks(); latestOnMove = null; readWrongTry.mockResolvedValue({ kind: 'refuted', text: 'Qe3? Then Qxe2.', replySan: 'Qxe2', replyFrom: 'd8', replyTo: 'e2' }); });
 
   async function mount(onComplete: (o: PuzzleOutcome) => void): Promise<void> {
-    render(<PuzzleBoard puzzle={PUZZLE} onComplete={onComplete} maxWrongAttempts={Number.POSITIVE_INFINITY} hintOnMiss />);
+    render(<PuzzleBoard surface="classic" puzzle={PUZZLE} onComplete={onComplete} maxWrongAttempts={Number.POSITIVE_INFINITY} hintOnMiss />);
     await screen.findByTestId('chess-board');
     await waitFor(() => expect(screen.queryByTestId('puzzle-loading')).not.toBeInTheDocument(), { timeout: 2000 });
   }

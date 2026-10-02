@@ -93,7 +93,7 @@ describe('mistake narration is true of the board', () => {
 
   it('sweeps a real corpus (sanity: the sample is not empty)', () => {
     expect(cases.length).toBeGreaterThan(500);
-  }, 120_000);
+  }, 300_000); // the shared narration pass runs ~80 s alone and ~155 s beside one other file in the pre-commit batch
 
   /** The position each narration line describes.
    *
@@ -155,7 +155,7 @@ describe('mistake narration is true of the board', () => {
 
     expect(violations.slice(0, 10).join('\n')).toBe('');
     expect(violations).toHaveLength(0);
-  }, 120_000);
+  }, 300_000);
 
   it('the deleted template pools never resurface across the corpus', () => {
     const POOLS = [
@@ -186,7 +186,7 @@ describe('mistake narration is true of the board', () => {
 
     expect(violations.slice(0, 10).join('\n')).toBe('');
     expect(violations).toHaveLength(0);
-  }, 120_000);
+  }, 300_000);
 
   it('silence is reached, not papered over', () => {
     // Proof the empty-beats-generic rule is live: across a corpus this wide,
@@ -194,5 +194,5 @@ describe('mistake narration is true of the board', () => {
     // a fallback pool has crept back in.
     const emptyOutros = cases.filter(({ params }) => !narrated(params).outro.trim());
     expect(emptyOutros.length).toBeGreaterThan(0);
-  }, 120_000);
+  }, 300_000);
 });

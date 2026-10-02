@@ -101,7 +101,7 @@ const run = async () => {
     if (await has(page, '[data-testid="walk-show-me-btn"]')) { sawShowMe = true; break; }
     // resolve any picker quickly so the walk keeps moving
     if (await has(page, '[data-testid="discussion-reason-option"]')) { await page.locator('[data-testid="discussion-reason-option"]').first().click({ timeout: 1500 }).catch(() => {}); for (let d = 0; d < 20; d++) { const x = page.locator('[data-testid="explanation-card"] button[aria-label="Dismiss"]').first(); if (await x.count()) { await x.click({ timeout: 1500 }).catch(() => {}); break; } await page.waitForTimeout(600); } await page.waitForTimeout(2000); }
-    for (const sel of ['[data-testid="review-find-shot-skip"]', '[data-testid="review-cameo-skip"]', '[data-testid="review-rewind-decline"]', '[data-testid="review-trap-pick-leave"]', '[data-testid="review-trap-done"]']) { if (await has(page, sel)) { await page.locator(sel).first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(400); } }
+    for (const sel of ['[data-testid="review-find-shot-skip"]', '[data-testid="review-rewind-decline"]', '[data-testid="review-trap-pick-leave"]', '[data-testid="review-trap-done"]']) { if (await has(page, sel)) { await page.locator(sel).first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(400); } }
     await fwd.click({ force: true }).catch(() => {});
     await page.waitForTimeout(650);
   }

@@ -1,0 +1,63 @@
+# App Store copy — native release, version after 4.0.5 (David 2026-10-02, approved)
+
+> Rule: every line must be TRUE of the build being submitted. David approved
+> this copy on 2026-10-02 ("Capabilities version", plus the new-player line;
+> description + promo text updated too). Claims checked against the merged
+> build: Review "starts the second your game ends" = prepares at game end
+> (NOT "ready instantly" — a cold-opened game still takes ~40 s).
+
+## Subtitle (30 max)
+A coach that thinks with you
+
+## Promotional text (170 max)
+It reads every move, remembers every mistake, and speaks up at the exact moment it matters. This is what having a real chess coach feels like.
+
+## What's New
+Your coach now reads your opponent. Every move they make, what it's after, and how to punish it.
+
+• New to chess? Tell us on day one and your coach starts where you are: plain-word moves, the fundamentals behind every slip, and a Start-here path to your first opening.
+• Review starts the second your game ends. Their mistakes, your missed chances, the move it turned on.
+• Tactics that hit. Rewards on every solve, Deep Run, and "Up next" picks the puzzle you need most.
+• Coach on call. Ask anything mid-game in Play; every coaching tool answers.
+• Weaknesses, sorted by cause. Mistakes grouped by the habit behind them.
+• More arrows: moves the coach names, and whole lines, now show on the board.
+
+## Description
+It sees the fork before you do. Then it teaches you to see it first.
+
+Chess Academy Pro isn't a puzzle feed. It's a coach with a real chess engine for a brain and a memory for everything you've ever played.
+
+IT THINKS OUT LOUD, WITH YOU
+Every move you consider, your coach weighs too. "Take on d4? The knight forks your rook. Here's the move that holds." It rules out the bad move, shows you the good one, and tells you why. That's the moment it clicks.
+
+IT READS BOTH SIDES OF THE BOARD
+Your opponent's move isn't random. Your coach tells you what it's after, what it just gave away, and how to make them pay. Their mistake becomes your winning move.
+
+IT KNOWS WHEN IT MATTERS
+Not every move needs a lecture. Your coach measures every position and speaks up at the turning points, the moments where one move decides the game. When it talks, lean in.
+
+IT REMEMBERS EVERYTHING
+Every game you play is analyzed and filed. The fork you missed, the piece you hung, the opening you keep losing with: it all shapes what your coach says next. Your next game starts where your last one left off.
+
+IT SETS TRAPS FOR YOU, ON PURPOSE
+It knows the traps players your level fall into. First time, it warns you. Next time, it goes quiet and watches to see if you remember.
+
+IT TURNS YOUR MISTAKES INTO YOUR TRAINING
+Every blunder from your real games becomes a puzzle built from that exact position. Solve it, and the coach records that you've fixed it. Miss it, and it comes back. "Up next" always picks the one you need most.
+
+IT MATCHES YOUR STRENGTH FROM MOVE ONE
+Tell it how much you've played, or skip the question. Either way your opponent adjusts as you go: strong enough to push you, never a wall.
+
+IT REWARDS FINDING THE MOVE
+Every solve lands. Streaks build. Deep Run goes deeper the better you play. Getting better finally feels like getting better.
+
+IT FINDS THE STORY OF EVERY GAME
+The second a game ends, your coach gets to work: the turning point, the chance you missed, and the slip your opponent got away with.
+
+IT SPEAKS YOUR LEVEL
+Brand new? Every move is spelled out in plain words, the fundamentals come first, and a Start-here path takes you to your first opening. Experienced? It skips the basics and goes straight to what you don't know yet.
+
+IT NEVER MAKES THINGS UP
+Every move, line and evaluation comes from a real chess engine and real games. No guesses. No invented lines. Just chess.
+
+Your coach is ready. Make your first move.

@@ -107,7 +107,22 @@ export function reasonWeaknessTag(r: MoveReason): string | null {
  *  spot) say nothing; a fault, an only-move found, a threat met, a real material
  *  win, or mate does. (`book` is an input label, never a classifier output.) */
 export function gradeWorthSpeaking(r: MoveReason): boolean {
-  return r !== 'solid' && r !== 'best';
+  // A GRADE SPEAKS ONLY WHEN IT NAMES A CAUSE (David 2026-09-30: describing
+  // with no why is "what we do not want"). The merits — "nice — that was the
+  // only move that holds", "good — that meets the threat cleanly", "that wins
+  // material" — and the soft faults ("playable — not quite the most precise",
+  // "no tactic — but the plan drifted there") are verdicts with no reason:
+  // measured on three of his games they were 14% of everything said, "the
+  // only move that holds" seven times in one game, and "that wins material"
+  // on three recaptures. The teaching lanes now say WHY a good move is good
+  // (what it stops or prepares, move order, the attack), so a bare merit adds
+  // nothing but a label. Silence here is computed, not a cap.
+  // The two merits that name a real DECISION (only-move, clear-best) may speak —
+  // and only joined to the move's computed point; the caller enforces that
+  // (WO-2 #986). Every other merit is a bare label.
+  return r === 'mate' || r === 'hung-piece' || r === 'ignored-threat'
+    || r === 'walked-into-tactic' || r === 'missed-forcing-win'
+    || r === 'only-move' || r === 'clear-best';
 }
 
 /** Compute the SEE net of material the MOVER left hanging after their move — the

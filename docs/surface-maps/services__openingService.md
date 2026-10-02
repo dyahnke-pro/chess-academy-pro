@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**754 lines · 38 exports · 47 importers · 24 tests · 14 audits**
+**757 lines · 38 exports · 47 importers · 24 tests · 14 audits**
 
 ## Locked rules that govern this surface
 
 - **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:628) — names `markRungComplete`, `openingService`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4649) — names `markRungComplete`
-- **The standard post-deploy ritual** (CLAUDE.md:6090) — names `markRungComplete`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4662) — names `markRungComplete`
+- **The standard post-deploy ritual** (CLAUDE.md:6147) — names `markRungComplete`
 
 ## Who calls in
 
@@ -71,7 +71,7 @@
 ### `getRepertoireOpenings` (function) — 16 call sites
 - `src/components/BoardTest/BoardTestPage.tsx:16`
 - `src/components/Openings/OpeningExplorerPage.tsx:61`
-- `src/components/Play/BlindfolTrainer.tsx:64`
+- `src/components/Play/BlindfolTrainer.tsx:65`
 - `src/components/Play/OpeningSpeedrun.tsx:109`
 - `src/services/coachContextEnricher.ts:308`
 - `src/services/coachContextEnricher.ts:494`
@@ -92,14 +92,14 @@
 ### `getOpeningById` (function) — 19 call sites
 - `src/components/Academy/CourseSyllabusPage.tsx:38`
 - `src/components/Academy/CourseTrainerPage.tsx:47`
-- `src/components/Coach/CoachTeachPage.tsx:10172`
+- `src/components/Coach/CoachTeachPage.tsx:11091`
 - `src/components/Openings/OpeningDetailPage.tsx:381`
 - `src/components/Openings/OpeningDetailPage.tsx:388`
 - `src/components/Openings/OpeningDetailPage.tsx:396`
 - `src/components/Openings/SrsTrainerPage.tsx:198`
-- `src/services/coachApi.ts:4059`
-- `src/services/coachApi.ts:4169`
-- `src/services/coachApi.ts:5233`
+- `src/services/coachApi.ts:4197`
+- `src/services/coachApi.ts:4307`
+- `src/services/coachApi.ts:5391`
 - `src/services/dbService.test.ts:148`
 - `src/services/dbService.test.ts:153`
 - `src/services/dbService.test.ts:166`
@@ -115,18 +115,19 @@
 - `src/coach/tools/cerebrum/saveOpeningToRepertoire.ts:58`
 - `src/components/Analysis/OpeningExplorerPanel.tsx:40`
 
-### `searchOpenings` (function) — 13 call sites
+### `searchOpenings` (function) — 14 call sites
 - `src/coach/tools/cerebrum/favoriteOpening.ts:69`
 - `src/coach/tools/cerebrum/saveOpeningToRepertoire.ts:54`
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:74`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:50`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:55`
-- `src/components/Coach/CoachTeachPage.tsx:3078`
-- `src/components/Coach/CoachTeachPage.tsx:5670`
+- `src/components/Coach/CoachTeachPage.tsx:3153`
+- `src/components/Coach/CoachTeachPage.tsx:5758`
 - `src/components/Openings/OpeningExplorerPage.tsx:94`
 - `src/services/coachActionDispatcher.ts:249`
-- `src/services/coachApi.ts:4191`
-- `src/services/coachApi.ts:5692`
+- `src/services/coachApi.ts:4329`
+- `src/services/coachApi.ts:5989`
+- `src/services/coachApi.ts:6009`
 - `src/services/smartSearchService.ts:229`
 - `src/services/walkthroughResolver.ts:51`
 
@@ -144,21 +145,21 @@
 - `src/components/Play/OpeningSpeedrun.tsx:172`
 
 ### `getWeakestOpenings` (function) — 5 call sites
-- `src/services/coachApi.ts:3812`
-- `src/services/coachApi.ts:4066`
-- `src/services/coachApi.ts:5053`
+- `src/services/coachApi.ts:3938`
+- `src/services/coachApi.ts:4204`
+- `src/services/coachApi.ts:5211`
 - `src/services/coachTrainingService.ts:168`
 - `src/services/gamesService.ts:67`
 
 ### `getStrongestOpenings` (function) — 4 call sites
-- `src/services/coachApi.ts:4064`
-- `src/services/coachApi.ts:4214`
-- `src/services/coachApi.ts:4215`
-- `src/services/coachApi.ts:5058`
+- `src/services/coachApi.ts:4202`
+- `src/services/coachApi.ts:4352`
+- `src/services/coachApi.ts:4353`
+- `src/services/coachApi.ts:5216`
 
 ### `getMostPlayedOpenings` (function) — 5 call sites
-- `src/services/coachApi.ts:4062`
-- `src/services/coachApi.ts:5048`
+- `src/services/coachApi.ts:4200`
+- `src/services/coachApi.ts:5206`
 - `src/services/openingService.mostPlayed.test.ts:32`
 - `src/services/openingService.mostPlayed.test.ts:47`
 - `src/services/openingService.mostPlayed.test.ts:59`
@@ -177,7 +178,7 @@
 ### `recordDrillAttempt` (function) — 4 call sites
 - `src/components/Openings/DrillMode.tsx:280`
 - `src/components/Openings/PracticeMode.tsx:241`
-- `src/components/Play/BlindfolTrainer.tsx:162`
+- `src/components/Play/BlindfolTrainer.tsx:163`
 - `src/components/Play/OpeningChallenge.tsx:177`
 
 ### `markLineDiscovered` (function) — 1 call site
@@ -270,7 +271,7 @@
 
 ### `toggleFavorite` (function) — 5 call sites
 - `src/coach/tools/cerebrum/favoriteOpening.ts:100`
-- `src/components/Coach/CoachTeachPage.tsx:3082`
+- `src/components/Coach/CoachTeachPage.tsx:3157`
 - `src/components/Openings/OpeningDetailPage.tsx:703`
 - `src/components/Openings/OpeningExplorerPage.tsx:140`
 - `src/components/Openings/ProPlayerPage.tsx:29`
@@ -279,13 +280,13 @@
 - `src/coach/tools/cerebrum/saveOpeningToRepertoire.ts:64`
 
 ### `getFavoriteOpenings` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:1093`
-- `src/components/Coach/TrainingPlanRolodexPage.tsx:260`
+- `src/components/Coach/CoachTeachPage.tsx:1120`
+- `src/components/Coach/TrainingPlanRolodexPage.tsx:261`
 - `src/services/gamesService.ts:64`
 
 ### `getUnlearnedFavoriteOpenings` (function) — 2 call sites
-- `src/components/Coach/TrainingPlanRolodexPage.tsx:73`
-- `src/services/upNextLoader.ts:44`
+- `src/components/Coach/TrainingPlanRolodexPage.tsx:74`
+- `src/services/upNextLoader.ts:67`
 
 ## Tests
 

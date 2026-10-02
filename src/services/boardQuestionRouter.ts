@@ -59,7 +59,13 @@ export function extractQuestionFocus(ask: string | null | undefined): QuestionFo
   const purpose = /\b(aim(?:ing|s)?|attack(?:ing|s)?|doing|does|cover(?:ing|s)?|eye(?:ing|s)?|control(?:ling|s)?|hit(?:ting|s)?|target(?:ing|s)?|point(?:ing|s)?|rake(?:s|ing)?|see(?:ing|s)?)\b/.test(t);
   const safety = /\b(safe|safely|survive|surviving|hang(?:s|ing)?|protected|defended|drop(?:s|ping)?|en\s*prise|lose\s+(?:my|the|a)\s+\w+)\b/.test(t);
   const control = /\b(control(?:s|ling)?|owns?|contest(?:s|ing)?|dominat\w*|holds?|has|fight(?:s|ing)?\s+for|whose)\b/.test(t);
-  const threat = /\b(threat(?:s|en(?:s|ing)?)?)\b/.test(t);
+  // The THREAT question in words — "if I do nothing, what do they do to me?"
+  // is the null-move question (pass-3 walk 2026-10-01: answered with the best
+  // move, since only the literal word "threat" was read).
+  const threat = /\b(threat(?:s|en(?:s|ing)?)?)\b/.test(t)
+    || /\bif\s+i\s+(?:do\s+nothing|pass|sit\s+still|wait|don'?t\s+(?:do\s+anything|move))\b/.test(t)
+    || /\bwhat\s+(?:do|does|would|will|can)\s+(?:they|he|she|my\s+opponent)\s+(?:want|do\s+to\s+me|have\s+in\s+mind|threaten)\b/.test(t)
+    || /\bwhat\s+(?:are|is)\s+(?:they|he|she|my\s+opponent)\s+(?:up\s+to|threatening|planning|after|going\s+for)\b/.test(t);
   const hanging = /\b(hang(?:s|ing)?|loose|undefended|en\s*prise|drop(?:s|ping)?)\b/.test(t);
   const check = /\b(check(?:s|ing)?)\b/.test(t) && !/checkmate/.test(t);
   const kingSafety = /\bking\b/.test(t) && /\b(safe|safety|exposed|attack|danger|weak|open|shelter|shield)\b/.test(t);
@@ -123,10 +129,15 @@ export function extractQuestionFocus(ask: string | null | undefined): QuestionFo
   //    doing", "where does my rook belong". Before purpose: "be doing" is a
   //    purpose verb too, but the student asked what the piece should DO NEXT,
   //    not what it hits now (PLAN §E5, prod 2026-09-22). ──
-  const piecePlan = piecePlanW && nonKingPiece && side !== 'opponent' && !activityW && !safety;
+  // A PAWN BREAK is a structure question with its own reader (findPawnBreaks
+  // via positionalTopic 'pawn-breaks'), never one pawn's itinerary — "which
+  // pawn break should I aim for" came back "Your pawn on a7: it reaches 1
+  // square from a7" (pass-3 walk 2026-10-01).
+  const breakAsk = /\b(?:pawn\s+)?breaks?\b|\blever\b/.test(t);
+  const piecePlan = piecePlanW && nonKingPiece && side !== 'opponent' && !activityW && !safety && !breakAsk;
   if (piecePlan) add('piece-plan');
   // ── PIECE purpose ──
-  if (nonKingPiece && purpose && !safety && !activityW && !piecePlan) add('piece-purpose');
+  if (nonKingPiece && purpose && !safety && !activityW && !piecePlan && !breakAsk) add('piece-purpose');
   // ── SQUARE control ──
   if (squares.length >= 1 && moves.length === 0) {
     if (control) add('square-control');
@@ -137,7 +148,7 @@ export function extractQuestionFocus(ask: string | null | undefined): QuestionFo
   if (hanging && pieces.length === 0) add('hanging');
   if (kingSafety) add(side === 'opponent' ? 'king-safety-theirs' : 'king-safety-mine');
   if (check) add('checks');
-  if (planW) add(side === 'opponent' ? 'opponent-plan' : 'my-plan');
+  if (planW && !breakAsk) add(side === 'opponent' ? 'opponent-plan' : 'my-plan');
   if (whyFailedW && moves.length === 0) add('why-failed');
   if (masterW) add('master-play');
   if (endgameW) add('endgame-result');

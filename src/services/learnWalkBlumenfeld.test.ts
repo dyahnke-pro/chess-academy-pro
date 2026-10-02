@@ -81,7 +81,7 @@ describe('F17 — the tempo verdict names the kick they PLAYED', () => {
 describe('F16/F23/F31 — a grade says what the move cost, and whether they took it', () => {
   it('…Qd7 names what it let them do, and that Nf1 missed it', async () => {
     const { callInaccuracyDetailed } = await import('./inaccuracyCall');
-    const v = callInaccuracyDetailed({
+    const v = callInaccuracyDetailed({ priorMove: null,
       fenBefore: fenAt(29), playedSan: 'Qd7', bestSan: 'Rad8',
       bestLineUci: ['a8d8', 'd2f1', 'f6d7', 'a2a4', 'c7b8', 'f1g3'],
       cpLoss: 374, side: 'student', moverColor: 'black',
@@ -93,13 +93,15 @@ describe('F16/F23/F31 — a grade says what the move cost, and whether they took
     expect(said).toMatch(/they missed it/);
     expect(said).not.toMatch(/their king/);
   });
-  it('with no reply line the grade stands alone, naming no cost it cannot prove', async () => {
+  it('with no reply line the grade names only the cost it can prove — the eval it gave away', async () => {
     const { callInaccuracyDetailed } = await import('./inaccuracyCall');
-    const v = callInaccuracyDetailed({
+    const v = callInaccuracyDetailed({ priorMove: null,
       fenBefore: fenAt(29), playedSan: 'Qd7', bestSan: 'Rad8', bestLineUci: [],
       cpLoss: 374, side: 'student', moverColor: 'black', replyLineUci: [], replySan: null,
     });
-    expect(v.call?.said).toBe('Qd7 was a blunder.');
+    // Never a bare grade (run B walk 2026-09-30); the eval drop is measured,
+    // what they could take is not, so only the first is said.
+    expect(v.call?.said).toBe('Qd7 was a blunder — it cost about a piece of advantage.');
   });
 });
 
@@ -137,7 +139,7 @@ describe('F2 — a principle never restates the move it explains', () => {
     const { computeMoveFundamentals, principleOnceLine } = await import('./moveFundamentals');
     const centre = computeMoveFundamentals(fenAt(5), 'c5', 'black').find((f) => f.id === 'center');
     expect(centre?.imperative).toMatch(/challenge their pawn on d4/);
-    for (let k = 0; k < 4; k++) expect(principleOnceLine('c5', centre ?? { imperative: '' }, k)).not.toMatch(/c5.*pawn to c5/);
+    for (let k = 0; k < 4; k++) expect(principleOnceLine('c5', centre ?? { id: 'center', imperative: '' }, k)).not.toMatch(/c5.*pawn to c5/);
   });
 });
 
@@ -179,8 +181,8 @@ describe('F18 / F32 — the price of a move is one cost, never a want-list', () 
   it('after …d3 Rxc5 the backward look says one cost or nothing', async () => {
     const { whatItAllowed } = await import('./concessionBeat');
     const said = whatItAllowed({
-      fenAfter: fenAt(56), opponentPv: ['c2c5', 'c7c5', 'c1c5', 'd6d8', 'c5c8', 'd8c8'],
-      studentColor: 'black', cpLoss: 250,
+      fenBefore: fenAt(55), fenAfter: fenAt(56), opponentPv: ['c2c5', 'c7c5', 'c1c5', 'd6d8', 'c5c8', 'd8c8'],
+      studentColor: 'black', cpLoss: 250, playedSan: 'd3',
     });
     if (said) {
       expect(said.line).toMatch(/^That let them (win|take|mate|checkmate|trap|pull the pawns)/);
@@ -205,7 +207,7 @@ describe('F37 — nobody is tempted by an underpromotion', () => {
 describe('re-walk — the better move\'s reason is about the move', () => {
   it('Rad8 is not credited with a knight journey', async () => {
     const { betterMoveReason } = await import('./inaccuracyCall');
-    const why = betterMoveReason(fenAt(29), 'Qd7', 'Rad8', ['a8d8', 'd2f1', 'f6d7', 'a2a4', 'c7b8', 'f1g3'], 'black');
+    const why = betterMoveReason(fenAt(29), 'Qd7', 'Rad8', ['a8d8', 'd2f1', 'f6d7', 'a2a4', 'c7b8', 'f1g3'], 'black', null);
     expect(why ?? '').not.toMatch(/it would [^.]*knight/);
   });
   it('the own-move point names its move, so it cannot answer someone else\'s question', async () => {

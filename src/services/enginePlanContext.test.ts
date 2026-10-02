@@ -186,3 +186,29 @@ describe('a fresh plan search self-limits', () => {
     expect(plan?.bestMoveUci).toBe('g1f3');
   });
 });
+
+describe('a cached read is the answer only when it is deep enough (algo depth, 2026-09-27)', () => {
+  beforeEach(() => {
+    analyzeWithBudget.mockReset();
+    getCachedStockfish.mockReset();
+  });
+  it('a shallow cache is deepened by the settle search, and its answer wins', async () => {
+    getCachedStockfish.mockReturnValue(analysis({ depth: 8, bestMove: 'a2a3', topLines: [{ rank: 1, evaluation: 5, mate: null, moves: ['a2a3'] }] }));
+    analyzeWithBudget.mockImplementation(async (_f, depth) => analysis({ depth }));
+    const plan = await buildEnginePlan(START, 'white');
+    expect(analyzeWithBudget).toHaveBeenCalled();
+    expect(plan!.bestMoveUci).toBe('e2e4');
+    expect(plan!.depth).toBeGreaterThanOrEqual(12);
+  });
+  it('NEGATIVE CONTROL: a deep cache answers alone — no second search', async () => {
+    getCachedStockfish.mockReturnValue(analysis({ depth: 20 }));
+    const plan = await buildEnginePlan(START, 'white');
+    expect(analyzeWithBudget).not.toHaveBeenCalled();
+    expect(plan!.depth).toBe(20);
+  });
+  it('a failed deepening keeps the cached read', async () => {
+    getCachedStockfish.mockReturnValue(analysis({ depth: 8, topLines: [{ rank: 1, evaluation: 5, mate: null, moves: ['d2d4'] }], bestMove: 'd2d4' }));
+    analyzeWithBudget.mockRejectedValue(new Error('worker crash'));
+    expect((await buildEnginePlan(START, 'white'))!.bestMoveUci).toBe('d2d4');
+  });
+});

@@ -267,15 +267,16 @@ describe('a problem piece is joined to the pawn that BLOCKS it, once (WO-STANDAR
     const c = new Chess(); for (const s of ['e4', 'e5', 'Nf3', 'Bc5', 'Nxe5', 'd6', 'Nf3', 'Nf6', 'd4', 'Bb6']) c.move(s);
     const obs = [...readPosition(c.fen(), 'black'), ...readPosition(c.fen(), 'white')];
     expect(obs.filter((o) => /problem piece/.test(o.text) && /b6/.test(o.text))).toEqual([]);
-    expect(obs.filter((o) => /would fix it/.test(o.text) && /b6/.test(o.text))).toEqual([]);
+    expect(obs.filter((o) => /would free it|is what frees it/.test(o.text) && /b6/.test(o.text))).toEqual([]);
   });
   it('a genuinely buried bishop gets ONE join, and the fixing pawn is one of its blockers', () => {
     // White Bd2 behind c3/e3, past the opening. The only pawns that can free
     // it are c3 and e3; a3/h3 "fixes" (the count trick) are gone.
     const fen = '4k3/pppppppp/8/8/8/2P1P3/PP1B1PPP/4K3 w - - 0 20';
-    const joins = readPosition(fen, 'white').filter((o) => /would fix it/.test(o.text) && /d2/.test(o.text));
+    const joins = readPosition(fen, 'white').filter((o) => /would free it|is what frees it/.test(o.text) && /d2/.test(o.text));
     expect(joins.length).toBeLessThanOrEqual(1);
-    for (const j of joins) expect(j.text).toMatch(/pawn to (c4|e4)/);
+    expect(joins.length).toBe(1);
+    for (const j of joins) expect(j.text).toMatch(/your pawn from (c3|e3) to (c4|e4)/);
   });
 });
 
@@ -326,7 +327,7 @@ describe('their good piece is a fact, not a second "best piece" (hand walk 2340)
   it('names why it is good without crowning it or trailing a plan sentence', () => {
     // Black rook on the open d-file.
     const obs = readPosition('3r2k1/pp3ppp/8/8/8/8/PP3PPP/4R1K1 w - - 0 25', 'white');
-    const good = obs.find((o) => o.key === 'opponent-good-d8');
+    const good = obs.find((o) => o.key.startsWith('opponent-good-') && o.key.endsWith('-d'));
     expect(good?.text).toBe('Their rook on d8 is well placed — it owns the open d-file.');
   });
 });

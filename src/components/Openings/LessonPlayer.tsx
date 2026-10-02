@@ -12,6 +12,7 @@ import { buildNarrationSegments } from '../../services/narrationSegments';
 import { useLocalizedBeats } from '../../services/narrationI18n';
 import { useCoachBoardStore } from '../../stores/coachBoardStore';
 import type { LessonScript, LessonBeat } from '../../types';
+import { admitArrow, narrationArrowsThroughDoor } from '../../services/arrowDoor';
 
 interface LessonPlayerProps {
   script: LessonScript;
@@ -286,7 +287,6 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
     // to pace against here). Mid-lesson beats play only a move or two of new
     // material under the voice — those stay at the deliberate teaching cadence.
     const STEP_MS = idx === 0 ? 500 : 1300;
-    const TRAIL = 'rgba(255,170,60,0.6)';
     const accumulated: BoardArrow[] = [];
     let delay = 300; // brief look at the fork before the first move
     for (let k = cp + 1; k <= curMoves.length; k += 1) {
@@ -295,7 +295,8 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
       const isLast = k === curMoves.length;
       const t = window.setTimeout(() => {
         setDisplayFen(fen);
-        if (sq) { accumulated.push({ startSquare: sq.from, endSquare: sq.to, color: TRAIL }); setTrailArrows([...accumulated]); }
+        const trail = sq ? admitArrow({ from: sq.from, to: sq.to, role: 'played', source: 'lessonPlayer.trail' }, { fen, studentColor: 'white' }) : null;
+        if (trail) { accumulated.push(trail); setTrailArrows([...accumulated]); }
         if (isLast) { if (idx === 0) firstWalkDoneRef.current = true; setSettled(true); animResolveRef.current?.(); }
       }, delay);
       timersRef.current.push(t);
@@ -327,13 +328,13 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
   const boardArrows: BoardArrow[] = [
     ...trailArrows,
     ...(settled
-      ? [...(beat.arrows ?? []), ...mentionArrows]
-          .filter((a) => revealedSquares.has(a.to) || revealedSquares.has(a.from))
-          .map((a) => ({
-            startSquare: a.from,
-            endSquare: a.to,
-            color: a.color ?? 'rgba(40,185,95,0.92)',
-          }))
+      ? narrationArrowsThroughDoor(
+        [...(beat.arrows ?? []), ...mentionArrows]
+          .filter((a) => revealedSquares.has(a.to) || revealedSquares.has(a.from)),
+        { fen: displayFen, studentColor: beat.orientation ?? script.orientation },
+        'book',
+        'lessonPlayer',
+      )
       : []),
   ];
 

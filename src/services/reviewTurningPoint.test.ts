@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
   buildTurningPointQuestion,
-  judgeTurningPointPick,
   minSwingPawns,
   turningPointCandidates,
   CANDIDATE_SHARE_OF_ANSWER,
@@ -126,17 +125,6 @@ describe('the importance model — band-free + contested (B6, 2026-09-22)', () =
     const q = buildTurningPointQuestion(segs);
     expect(q).not.toBeNull();
     expect(q!.candidates.map((c) => c.ply)).toContain(9);
-  });
-});
-
-describe('judgeTurningPointPick', () => {
-  it('grades the pick against the computed answer', () => {
-    const q = buildTurningPointQuestion([
-      seg({ ply: 9, playerColor: 'white', evalBefore: 100, evalAfter: -50 }),
-      seg({ ply: 18, playerColor: 'black', evalBefore: -30, evalAfter: 370 }),
-    ])!;
-    expect(judgeTurningPointPick(q, 18)).toBe(true);
-    expect(judgeTurningPointPick(q, 9)).toBe(false);
   });
 });
 

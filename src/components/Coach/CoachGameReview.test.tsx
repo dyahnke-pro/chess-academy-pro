@@ -85,6 +85,7 @@ vi.mock('../../hooks/useSettings', () => ({
 }));
 
 vi.mock('../../services/coachFeatureService', () => ({
+  segmentNamedArrows: () => [],
   generateNarrativeSummary: vi.fn().mockResolvedValue('This was a well-played game with some key moments.'),
   generateReviewNarrationSegments: vi.fn().mockResolvedValue({ intro: 'Let us review this game.', closing: 'That concludes the review.' }),
   // generateReviewNarration was added to CoachGameReview.tsx after
@@ -178,7 +179,6 @@ vi.mock('../../services/accuracyService', () => ({
 vi.mock('../../services/boardUtils', () => ({
   getCapturedPieces: vi.fn().mockReturnValue({ white: [], black: [] }),
   getMaterialAdvantage: vi.fn().mockReturnValue(0),
-  uciToArrow: vi.fn().mockReturnValue(null),
 }));
 
 vi.mock('../Board/ChessBoard', () => ({
@@ -361,11 +361,14 @@ let CoachGameReviewComponent: typeof import('./CoachGameReview').CoachGameReview
 // ─── Tests ──────────────────────────────────────────────────────────────────
 
 describe('CoachGameReview', () => {
+  // The first call cold-imports the whole review component (its service graph
+  // is large); on a loaded machine that alone passes 10s. The hook only
+  // imports — a generous ceiling here hides nothing the tests assert.
   beforeEach(async () => {
     vi.clearAllMocks();
     const mod = await import('./CoachGameReview');
     CoachGameReviewComponent = mod.CoachGameReview;
-  });
+  }, 60_000);
 
   it('renders empty state when no moves', () => {
     renderReview({ moves: [] });

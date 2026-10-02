@@ -61,3 +61,23 @@ describe('stepCharacter — a switch is spoken only once it holds', () => {
     expect(said[0]).not.toBe(said[2]); // two tactical switches, two different stems
   });
 });
+
+describe('the switch says WHY it turned sharp (walk 2026-09-30)', () => {
+  it('names a live tactic, or the one move that works', () => {
+    const settled = { ...EMPTY_CHARACTER, current: 'positional' as const };
+    const hold = stepCharacter(settled, 'tactical', 'tactic').next;
+    expect(stepCharacter(hold, 'tactical', 'tactic').switched?.text).toMatch(/there is a tactic on the board/);
+    expect(stepCharacter(stepCharacter(settled, 'tactical', 'gap').next, 'tactical', 'gap').switched?.text).toMatch(/one move here is far better than the rest/);
+  });
+});
+
+describe('sharpGap — a decided game has no sharp gap', () => {
+  it('+9 against +6.5 is no question; +0.4 against -1.5 is', async () => {
+    const { sharpGap } = await import('./positionCharacter');
+    expect(sharpGap(907, 650)).toBe(0);
+    expect(sharpGap(-900, -400)).toBe(0);
+    expect(sharpGap(40, -150)).toBe(190);
+    expect(sharpGap(500, 100)).toBe(400);
+    expect(sharpGap(null, 10)).toBeNull();
+  });
+});

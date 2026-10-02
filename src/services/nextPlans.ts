@@ -13,6 +13,7 @@ import { Chess, type Color, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { isKnightOutpost } from './forwardTeaching';
 import { legalSeeGainFor } from './positionReadingService';
+import { enemyKingStuckInCenter } from './reviewSacrifice';
 
 export const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -198,9 +199,9 @@ export function deriveNextPlans(
   // "attack their king stuck on f2" in a rook ending (review tape 2026-09-25)
   // is the middlegame worry the king reads already drop without queens.
   const queensOn = all.some((c) => c.type === 'q');
-  if (enemyKing && queensOn && fullmove >= 8 && 'cdef'.includes(enemyKing.square[0])
-    && (enemy === 'w' ? '12'.includes(enemyKing.square[1]) : '78'.includes(enemyKing.square[1]))
-    && openCentralFile) {
+  // ONE stuck-king reader (`enemyKingStuckInCenter`), shared with the sacrifice
+  // compensation — this used to be a second copy of the same test.
+  if (enemyKing && queensOn && openCentralFile && enemyKingStuckInCenter(fen, studentColorWB)) {
     // The soft squares in front of a stuck king — where a sac usually lands.
     // Rook clause scales to the rooks the student actually HAS (prescription
     // gate, David 2026-07-22 — never prescribe a piece that isn't there).

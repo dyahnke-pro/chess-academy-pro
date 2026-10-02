@@ -6,6 +6,8 @@ import {
   clampRating,
   applyStrength,
   calibrateStrength,
+  applySkillBand,
+  needsStrengthQuestion,
 } from './strengthCalibrationService';
 import type { RatingEstimate } from './playerRatingService';
 
@@ -185,6 +187,36 @@ describe('strengthCalibrationService', () => {
       for (const r of ratings) {
         expect(clampRating(r)).toBe(r);
       }
+    });
+  });
+
+  describe('the first-run strength question (2026-10-02)', () => {
+    it('asked once, after consent, of a profile with no measured strength', () => {
+      expect(needsStrengthQuestion(buildUserProfile({ aiDataConsent: 'granted', strengthCalibrated: false }))).toBe(true);
+      expect(needsStrengthQuestion(buildUserProfile({ aiDataConsent: undefined, strengthCalibrated: false }))).toBe(false);
+      expect(needsStrengthQuestion(buildUserProfile({ aiDataConsent: 'granted', strengthCalibrated: true }))).toBe(false);
+      expect(needsStrengthQuestion(buildUserProfile({ aiDataConsent: 'granted', strengthCalibrated: false, skillBand: 'skipped' }))).toBe(false);
+      expect(needsStrengthQuestion(buildUserProfile({ aiDataConsent: 'granted', strengthCalibrated: false, isKidMode: true }))).toBe(false);
+    });
+
+    it('a picked band seeds both ratings AND the anchor, so the first opponent starts there', async () => {
+      const profile = buildUserProfile({ currentRating: 400, puzzleRating: 800, ratingBaseline: 400, strengthCalibrated: false });
+      await db.profiles.put(profile);
+      const updated = await applySkillBand(profile, 'beginner');
+      const stored = await db.profiles.get(profile.id);
+      for (const p of [updated, stored]) {
+        expect(p?.skillBand).toBe('beginner');
+        expect(p?.currentRating).toBe(900);
+        expect(p?.puzzleRating).toBe(900);
+        expect(p?.ratingBaseline).toBe(900);
+      }
+    });
+
+    it('Skip records the answer and changes nothing else', async () => {
+      const profile = buildUserProfile({ currentRating: 400, puzzleRating: 800, strengthCalibrated: false });
+      await db.profiles.put(profile);
+      const updated = await applySkillBand(profile, 'skipped');
+      expect(updated).toMatchObject({ skillBand: 'skipped', currentRating: 400, puzzleRating: 800, strengthCalibrated: false });
     });
   });
 });

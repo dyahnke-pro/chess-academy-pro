@@ -822,8 +822,23 @@ function computeRoutedIntent(
   // doesn't get caught by the new "take" capture verb in matchPlayMove.
   // Window widened to 15 chars so phrasings like "take both back" /
   // "take that move back" / "take the move back" all match.
+  // 🔴 "TAKE BACK" IS ALSO THE CHESS WORD FOR RECAPTURE (question walk,
+  // 2026-09-27). "Should I take back with the pawn or the queen?" matched the
+  // undo pattern below and the coach UNDID the exchange the student was asking
+  // about — "Took the last exchange back." A takeback names a MOVE to remove
+  // ("take that back", "take back my move"); a recapture names the PIECE that
+  // takes or the SQUARE it takes on ("take back with the pawn", "take back on
+  // e5"). Asked as a question it is a question, and a missed command costs a
+  // retype while a false one destroys the position being asked about.
+  const recaptureSense = /\b(?:take\s+(?:it\s+|them\s+)?back|recapture)\s+(?:with|on|using|by)\b/i.test(text)
+    || /\brecapture\b/i.test(text);
+  const asksAdvice = /\?\s*$/.test(text.trim())
+    || /^\s*(?:should|shall|do|does|would|could|can|which|is\s+it|what|how|why)\b/i.test(text);
+  if (recaptureSense && asksAdvice) return null;
   if (
-    /\b(take.{0,15}back|undo|let me try (that |this )?again|go back|rewind)\b/i.test(text)
+    !recaptureSense
+    && /\b(take.{0,15}back|undo|let me try (that |this )?again|go back|rewind)\b/i.test(text)
+    && !(asksAdvice && /^\s*(?:should|shall|which|is\s+it)\b/i.test(text))
   ) {
     // "two" / "both" / "2" / "two moves" / "both moves" / "whole exchange" → count=2
     const twoBack = /\b(both|two|2|two\s+moves|both\s+moves|whole\s+exchange)\b/i.test(text);

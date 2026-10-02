@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**109 lines · 10 exports · 3 importers · 2 tests · 0 audits**
+**139 lines · 13 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,14 +30,26 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `SHARP_GAP_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `provenTacticLive` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9174`
+### `DECIDED_CP` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `sharpGap` (function) — 6 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9578`
+- `src/services/positionCharacter.test.ts:77`
+- `src/services/positionCharacter.test.ts:78`
+- `src/services/positionCharacter.test.ts:79`
+- `src/services/positionCharacter.test.ts:80`
+- `src/services/positionCharacter.test.ts:81`
+
+### `provenTacticLive` (function) — 5 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9587`
+- `src/components/Coach/CoachTeachPage.tsx:9592`
 - `src/services/positionCharacter.pin.test.ts:17`
 - `src/services/positionCharacter.pin.test.ts:23`
 - `src/services/positionCharacter.pin.test.ts:27`
 
 ### `characterOf` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9166`
+- `src/components/Coach/CoachTeachPage.tsx:9579`
 - `src/services/positionCharacter.test.ts:10`
 - `src/services/positionCharacter.test.ts:14`
 - `src/services/positionCharacter.test.ts:15`
@@ -54,10 +66,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `CharacterStep` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `stepCharacter` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9177`
+### `SharpReason` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `stepCharacter` (function) — 6 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9593`
 - `src/services/positionCharacter.test.ts:31`
 - `src/services/positionCharacter.test.ts:56`
+- `src/services/positionCharacter.test.ts:68`
+- `src/services/positionCharacter.test.ts:69`
+- `src/services/positionCharacter.test.ts:70`
 
 ## Tests
 

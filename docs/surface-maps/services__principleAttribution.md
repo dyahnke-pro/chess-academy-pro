@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1351 lines · 11 exports · 38 importers · 24 tests · 1 audits**
+**1517 lines · 12 exports · 42 importers · 29 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6060) — names `FundamentalId`
+- **The standard post-deploy ritual** (CLAUDE.md:6166) — names `FundamentalId`
 
 ## Who calls in
 
@@ -20,6 +20,7 @@
 - `src/services/attributionNeverBlind.test.ts`
 - `src/services/autoAnalyzeGame.ts`
 - `src/services/causalChain.ts`
+- `src/services/claimTruth.manual.test.ts`
 - `src/services/coachApi.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/discussionPractice.ts`
@@ -42,11 +43,14 @@
 - `src/services/principleAttributionEvalPv.test.ts`
 - `src/services/principleVoice.test.ts`
 - `src/services/principleVoice.ts`
+- `src/services/replayFence.bowdler1000.test.ts`
+- `src/services/replayFence.sicilian1200.test.ts`
 - `src/services/reviewFullData.ts`
 - `src/services/section14Coverage.measure.test.ts`
 - `src/services/section14Diagnosis.test.ts`
 - `src/services/sweepCarriesPv.test.ts`
 - `src/services/sweepPassesEngineLines.test.ts`
+- `src/services/walkOct1Learn.test.ts`
 - `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/weaknessSpine.ts`
 - `src/services/yieldHonoured.test.ts`
@@ -74,16 +78,26 @@
 ### `ATTRIBUTION_MAX` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `captureIsTrade` (function) — 1 call site
+- `src/services/misconceptionClassifier.ts:294`
+
 ### `planTargets` (function) — 2 call sites
-- `src/services/principleAttribution.section14.test.ts:127`
-- `src/services/principleAttribution.section14.test.ts:139`
+- `src/services/principleAttribution.section14.test.ts:129`
+- `src/services/principleAttribution.section14.test.ts:141`
 
 ### `planHeadline` (function) — 1 call site
-- `src/services/principleAttribution.section14.test.ts:130`
+- `src/services/principleAttribution.section14.test.ts:132`
 
-### `attributePrinciples` (function) — 60 call sites
+### `attributePrinciples` (function) — 78 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
-- `src/services/coachFeatureService.ts:840`
+- `src/services/claimTruth.manual.test.ts:10`
+- `src/services/claimTruth.manual.test.ts:12`
+- `src/services/claimTruth.manual.test.ts:106`
+- `src/services/claimTruth.manual.test.ts:114`
+- `src/services/claimTruth.manual.test.ts:172`
+- `src/services/claimTruth.manual.test.ts:177`
+- `src/services/claimTruth.manual.test.ts:185`
+- `src/services/coachFeatureService.ts:898`
 - `src/services/learnWalkBlumenfeld.test.ts:65`
 - `src/services/liveFundamental.ts:135`
 - `src/services/misconceptionClassifier.ts:244`
@@ -92,18 +106,18 @@
 - `src/services/principleAttribution.section14.test.ts:37`
 - `src/services/principleAttribution.section14.test.ts:54`
 - `src/services/principleAttribution.section14.test.ts:64`
-- `src/services/principleAttribution.section14.test.ts:72`
-- `src/services/principleAttribution.section14.test.ts:75`
-- `src/services/principleAttribution.section14.test.ts:78`
-- `src/services/principleAttribution.section14.test.ts:79`
-- `src/services/principleAttribution.section14.test.ts:104`
-- `src/services/principleAttribution.section14.test.ts:115`
-- `src/services/principleAttribution.section14.test.ts:119`
-- `src/services/principleAttribution.section14.test.ts:147`
-- `src/services/principleAttribution.section14.test.ts:151`
-- `src/services/principleAttribution.section14.test.ts:160`
-- `src/services/principleAttribution.section14.test.ts:196`
-- `src/services/principleAttribution.section14.test.ts:210`
+- `src/services/principleAttribution.section14.test.ts:74`
+- `src/services/principleAttribution.section14.test.ts:77`
+- `src/services/principleAttribution.section14.test.ts:80`
+- `src/services/principleAttribution.section14.test.ts:81`
+- `src/services/principleAttribution.section14.test.ts:106`
+- `src/services/principleAttribution.section14.test.ts:117`
+- `src/services/principleAttribution.section14.test.ts:121`
+- `src/services/principleAttribution.section14.test.ts:149`
+- `src/services/principleAttribution.section14.test.ts:153`
+- `src/services/principleAttribution.section14.test.ts:162`
+- `src/services/principleAttribution.section14.test.ts:198`
+- `src/services/principleAttribution.section14.test.ts:212`
 - `src/services/principleAttribution.test.ts:20`
 - `src/services/principleAttribution.test.ts:39`
 - `src/services/principleAttribution.test.ts:47`
@@ -122,10 +136,20 @@
 - `src/services/principleAttribution.test.ts:143`
 - `src/services/principleAttributionEndgame.test.ts:43`
 - `src/services/principleAttributionEndgame.test.ts:57`
-- `src/services/principleAttributionEvalPv.test.ts:62`
-- `src/services/principleAttributionEvalPv.test.ts:76`
-- `src/services/principleAttributionEvalPv.test.ts:94`
+- `src/services/principleAttributionEvalPv.test.ts:73`
+- `src/services/principleAttributionEvalPv.test.ts:87`
+- `src/services/principleAttributionEvalPv.test.ts:97`
+- `src/services/principleAttributionEvalPv.test.ts:112`
+- `src/services/principleAttributionEvalPv.test.ts:114`
+- `src/services/principleAttributionEvalPv.test.ts:126`
 - `src/services/principleVoice.test.ts:9`
+- `src/services/principleVoice.test.ts:140`
+- `src/services/principleVoice.test.ts:149`
+- `src/services/principleVoice.test.ts:158`
+- `src/services/replayFence.bowdler1000.test.ts:37`
+- `src/services/replayFence.modern1690.test.ts:32`
+- `src/services/replayFence.sicilian1200.test.ts:29`
+- `src/services/replayFence.sicilian1200.test.ts:48`
 - `src/services/section14Coverage.measure.test.ts:77`
 - `src/services/section14Diagnosis.test.ts:21`
 - `src/services/section14Diagnosis.test.ts:25`
@@ -139,6 +163,7 @@
 - `src/services/sweepCarriesPv.test.ts:129`
 - `src/services/sweepCarriesPv.test.ts:143`
 - `src/services/sweepPassesEngineLines.test.ts:91`
+- `src/services/walkOct1Learn.test.ts:94`
 - `src/services/yieldHonoured.test.ts:33`
 - `src/services/yieldHonoured.test.ts:69`
 - `src/services/yieldHonoured.test.ts:70`
@@ -146,10 +171,10 @@
 ### `pvUciToSan` (function) — 11 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
-- `src/services/autoAnalyzeGame.ts:373`
-- `src/services/autoAnalyzeGame.ts:376`
-- `src/services/coachFeatureService.ts:845`
-- `src/services/coachFeatureService.ts:847`
+- `src/services/autoAnalyzeGame.ts:395`
+- `src/services/autoAnalyzeGame.ts:398`
+- `src/services/coachFeatureService.ts:903`
+- `src/services/coachFeatureService.ts:905`
 - `src/services/discussionPractice.ts:353`
 - `src/services/discussionPractice.ts:361`
 - `src/services/liveFundamental.ts:125`
@@ -161,6 +186,7 @@
 - `src/components/Coach/FundamentalsPage.test.tsx`
 - `src/data/fundamentalLessons.test.ts`
 - `src/services/attributionNeverBlind.test.ts`
+- `src/services/claimTruth.manual.test.ts`
 - `src/services/fundLeadStems.test.ts`
 - `src/services/fundamentalHow.test.ts`
 - `src/services/fundamentalReachesDecider.test.ts`
@@ -175,11 +201,15 @@
 - `src/services/principleAttributionEndgame.test.ts`
 - `src/services/principleAttributionEvalPv.test.ts`
 - `src/services/principleVoice.test.ts`
+- `src/services/replayFence.bowdler1000.test.ts`
+- `src/services/replayFence.modern1690.test.ts`
+- `src/services/replayFence.sicilian1200.test.ts`
 - `src/services/reviewFullData.test.ts`
 - `src/services/section14Coverage.measure.test.ts`
 - `src/services/section14Diagnosis.test.ts`
 - `src/services/sweepCarriesPv.test.ts`
 - `src/services/sweepPassesEngineLines.test.ts`
+- `src/services/walkOct1Learn.test.ts`
 - `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/yieldHonoured.test.ts`
 

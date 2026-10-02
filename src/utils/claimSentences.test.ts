@@ -31,3 +31,13 @@ describe('a stripper never orphans a move question', () => {
     expect(clean).toContain('Development comes first.');
   });
 });
+
+describe('a teaching question stays with its answer (walk 2026-09-30)', () => {
+  it('glues a short question stem to the answer after it', () => {
+    expect(claimSentences('Watch out — the pin. What do you do about it? Take it — Bxd1 removes the queen.'))
+      .toEqual(['Watch out — the pin.', 'What do you do about it? Take it — Bxd1 removes the queen.']);
+  });
+  it('a question that ends the text stays alone', () => {
+    expect(claimSentences('You have a fork. See it?')).toEqual(['You have a fork.', 'See it?']);
+  });
+});

@@ -53,7 +53,7 @@ export type StakeId = 'mate' | 'win' | 'on-top' | 'edge' | 'level' | 'in-it' | '
 /** Why a read could not be trusted to a count. Named rather than swallowed: an
  *  instrument that goes quiet without saying why is indistinguishable from one
  *  that found nothing (CLAUDE.md, never run blind). */
-export type UnresolvedReason = 'fan-too-narrow' | 'bounded-score' | 'count-fills-fan';
+export type UnresolvedReason = 'fan-too-narrow' | 'bounded-score' | 'count-fills-fan' | 'band-edge';
 
 export interface CriticalMomentRead {
   /** Moves scoring within `toleranceCp` of the best, mover-POV. */
@@ -93,7 +93,13 @@ function moverCp(line: CriticalFanLine, moverColor: 'w' | 'b'): number {
 
 /** Best to worst — a move keeps a stake when its own band is at least as
  *  good. Held as a Record so a new stake fails to compile until it is placed. */
-const STAKE_ORDER: Record<StakeId, number> = { mate: 6, win: 5, 'on-top': 4, edge: 3, level: 2, 'in-it': 1, damage: 0 };
+
+/** The lowest score still inside each band — the edge a "keeps it" claim is
+ *  about. `damage` has no floor (it is kept by staying near the best). */
+const STAKE_FLOOR: Record<StakeId, number | null> = { mate: MATE_CP, win: 300, 'on-top': 100, edge: 50, level: -99, 'in-it': -200, damage: null };
+/** A move this close under a band's floor is neither clearly in it nor clearly
+ *  out, so a count that turns on it is unproven. */
+const BAND_EDGE_CP = 50;
 
 function stakeFor(bestCp: number): StakeId | null {
   if (bestCp >= MATE_CP) return 'mate';
@@ -106,7 +112,10 @@ function stakeFor(bestCp: number): StakeId | null {
   // moves keep you level" (hand walk 2340, moves 12 and 15).
   if (bestCp >= 50) return 'edge';
   if (bestCp > -100) return 'level';
-  if (bestCp >= -300) return 'in-it';
+  // Two pawns down is still a game; three is not "in it" (Learn walk
+  // 2026-10-02, ply 62: "the only move that kept you in it" at −3.2). Below
+  // −2 the honest claim is limiting the damage.
+  if (bestCp >= -200) return 'in-it';
   return 'damage';
 }
 
@@ -179,15 +188,18 @@ export function readCriticalMoment(input: {
   // keep the win — the rest concede" on eight moves running). The band IS the
   // claim, so a move that stays in the band holds.
   const bestStake = stakeFor(bestCp);
-  // Within tolerance still holds (near equality the bands are a few cp wide
-  // and would split hairs); the band only ever ADDS holders, so this can only
-  // remove a false "the rest concede", never invent a new critical moment.
+  // THE BAND IS THE CLAIM (claim check 2026-09-28: "two moves keep you on top"
+  // at 128/36 — the second move was LEVEL, counted only because it sat within
+  // the 100cp tolerance of the best). A move holds only inside the band the
+  // sentence names; `damage` has no band, so there the tolerance still decides.
+  // A move just UNDER the band's floor makes the count unprovable either way
+  // (272 against "keeps the win" at 300), and an unprovable count is silence.
+  const floor = bestStake ? STAKE_FLOOR[bestStake] : null;
   const holds = (cp: number): boolean => {
-    if (bestCp - cp <= tolerance) return true;
-    if (bestStake === null || bestStake === 'damage') return false;
-    const s = stakeFor(cp);
-    return s !== null && s !== 'damage' && STAKE_ORDER[s] >= STAKE_ORDER[bestStake];
+    if (floor === null) return bestCp - cp <= tolerance;
+    return cp >= floor;
   };
+  const onBandEdge = floor !== null && cps.some((cp) => cp < floor && floor - cp <= BAND_EDGE_CP);
   const within = cps.filter(holds).length;
   const gapCp = cps.length >= 2 ? bestCp - cps[1] : 0;
 
@@ -202,7 +214,9 @@ export function readCriticalMoment(input: {
       ? 'fan-too-narrow'
       : within >= lines.length
         ? 'count-fills-fan'
-        : null;
+        : onBandEdge
+          ? 'band-edge'
+          : null;
 
   const holdingSans: string[] = [];
   const discardedSans: string[] = [];
@@ -336,4 +350,20 @@ export function criticalMomentReveal(read: CriticalMomentRead | null): string | 
 export function criticalMomentHeld(read: CriticalMomentRead | null, playedSan: string | null): boolean {
   if (!criticalMomentSpeaks(read) || !playedSan) return false;
   return read.holdingSans.includes(playedSan);
+}
+
+/**
+ * THE VERDICT ON A FOUND MOVE (WO-TEACH-GAPS P2 #2 — his most frequent verdict
+ * is on a GOOD move, and after one we said nothing). Live register: the
+ * student just played one of the moves that held at a real decision moment.
+ * No praise word — the fact is the verdict: how few moves held, that this was
+ * one, and why the tempting others failed (each proved by its own line).
+ */
+export function criticalMomentFound(read: CriticalMomentRead | null, playedSan: string | null): string | null {
+  if (!criticalMomentHeld(read, playedSan) || !read) return null;
+  const stake = stakeText(read.stake as StakeId, { plural: false, past: true });
+  const fails = (read.discardedProofs ?? []).map((d) => ` ${d.san} didn't work: ${d.text}.`).join('');
+  return read.count === 1
+    ? `${playedSan} was the only move that ${stake} here.${fails}`
+    : `${playedSan} was one of just two moves that ${stake} here.${fails}`;
 }

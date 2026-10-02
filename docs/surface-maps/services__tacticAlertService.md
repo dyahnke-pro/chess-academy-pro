@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**645 lines · 20 exports · 15 importers · 10 tests · 0 audits**
+**645 lines · 20 exports · 16 importers · 11 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,6 +21,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/hooks/useStruggleDetection.test.ts`
 - `src/hooks/useStruggleDetection.ts`
 - `src/services/computedMaterialTruth.corpus.test.ts`
+- `src/services/learnBoardTeaching.ts`
 - `src/services/liveTacticsContext.ts`
 - `src/services/mistakePuzzleService.ts`
 - `src/services/ratingBands.test.ts`
@@ -48,7 +49,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticAlertService.test.ts:101`
 
 ### `getCoachingMessage` (function) — 12 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:603`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:641`
 - `src/hooks/useStruggleDetection.ts:85`
 - `src/services/tacticAlertService.test.ts:114`
 - `src/services/tacticAlertService.test.ts:118`
@@ -88,7 +89,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isCriticalThreat` (function) — 21 call sites
-- `src/components/Coach/CoachGamePage.tsx:2897`
+- `src/components/Coach/CoachGamePage.tsx:2905`
 - `src/services/computedMaterialTruth.corpus.test.ts:248`
 - `src/services/computedMaterialTruth.corpus.test.ts:257`
 - `src/services/tacticAlertService.criticalThreat.test.ts:26`
@@ -121,17 +122,18 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/hooks/useCoachTips.ts:320`
 - `src/hooks/useCoachTips.ts:349`
 
-### `tacticTypeLabel` (function) — 20 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:992`
+### `tacticTypeLabel` (function) — 21 call sites
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:1044`
 - `src/components/Puzzles/MyMistakesPage.tsx:235`
-- `src/components/Tactics/TacticCreatePage.tsx:305`
-- `src/components/Tactics/TacticCreatePage.tsx:579`
-- `src/components/Tactics/TacticSetupBoard.tsx:254`
+- `src/components/Tactics/TacticCreatePage.tsx:308`
+- `src/components/Tactics/TacticCreatePage.tsx:582`
+- `src/components/Tactics/TacticSetupBoard.tsx:307`
 - `src/components/Tactics/TacticSetupPage.tsx:203`
 - `src/hooks/useCoachTips.ts:327`
-- `src/services/mistakePuzzleService.ts:663`
-- `src/services/mistakePuzzleService.ts:964`
-- `src/services/mistakePuzzleService.ts:1267`
+- `src/services/learnBoardTeaching.ts:598`
+- `src/services/mistakePuzzleService.ts:664`
+- `src/services/mistakePuzzleService.ts:965`
+- `src/services/mistakePuzzleService.ts:1268`
 - `src/services/tacticNarrationService.ts:82`
 - `src/services/tacticNarrationService.ts:133`
 - `src/services/tacticNarrationService.ts:153`
@@ -161,10 +163,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `TacticOutcome` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `recordTacticOutcome` (function) — 8 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:731`
-- `src/components/Puzzles/PuzzleBoard.tsx:376`
-- `src/components/Tactics/TacticSetupBoard.tsx:179`
+### `recordTacticOutcome` (function) — 9 call sites
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:772`
+- `src/components/Puzzles/PuzzleBoard.tsx:397`
+- `src/components/Tactics/TacticSetupBoard.tsx:188`
+- `src/components/Tactics/TacticSetupBoard.tsx:285`
 - `src/hooks/useCoachTips.ts:230`
 - `src/services/tacticAlertService.test.ts:310`
 - `src/services/tacticAlertService.test.ts:322`
@@ -190,6 +193,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/components/Puzzles/PuzzleBoard.deepRun.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.evidence.test.tsx`
+- `src/components/Puzzles/PuzzleBoard.oneLinePerMiss.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.test.tsx`
 - `src/hooks/useCoachTips.test.ts`
 - `src/hooks/useStruggleDetection.test.ts`

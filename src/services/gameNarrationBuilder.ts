@@ -27,9 +27,11 @@ import type { WalkthroughSession } from '../types/walkthrough';
 // coach says them. Exhaustive now, so a new classification fails to compile
 // until someone writes its line, and a phantom one cannot be added at all.
 const CLASSIFICATION_LINES: Record<MoveClassification, string> = {
-  brilliant: 'Brilliant — the best move in a sharp position.',
-  great: 'Great move.',
-  good: 'A solid move.',
+  // DNA (no praise, no filler): the position is the acknowledgement. A strong
+  // move says what it was; a good one is silent.
+  brilliant: 'The best move in a sharp position.',
+  great: 'The strongest move here.',
+  good: '',
   book: 'Still in theory.',
   inaccuracy: 'Slightly inaccurate — there was a stronger continuation.',
   mistake: 'A mistake — this loses tempo or material.',

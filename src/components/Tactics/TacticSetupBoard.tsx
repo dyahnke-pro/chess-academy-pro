@@ -4,6 +4,7 @@ import { ChessBoard } from '../Board/ChessBoard';
 import { HintButton } from '../Coach/HintButton';
 import { motion } from 'framer-motion';
 import { useHintSystem } from '../../hooks/useHintSystem';
+import { useWrongTryRefutation } from '../../hooks/useWrongTryRefutation';
 import { useStruggleDetection } from '../../hooks/useStruggleDetection';
 import { useSettings } from '../../hooks/useSettings';
 import { useAppStore } from '../../stores/appStore';
@@ -19,7 +20,7 @@ import type { CoachingTier } from '../../services/tacticAlertService';
 import type { SetupPuzzle } from '../../types';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
-type BoardState = 'thinking' | 'incorrect' | 'solved';
+type BoardState = 'thinking' | 'incorrect' | 'solved' | 'revealing';
 
 interface TacticSetupBoardProps {
   puzzle: SetupPuzzle;
@@ -48,6 +49,10 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
   const chessRef = useRef(new Chess(puzzle.setupFen));
   const [fen, setFen] = useState(puzzle.setupFen);
   const [boardState, setBoardState] = useState<BoardState>('thinking');
+  const wrongTry = useWrongTryRefutation();
+  const { refute: refuteTry, clearArrows: clearWrongArrows } = wrongTry;
+  const puzzleIdRef = useRef(puzzle.id);
+  puzzleIdRef.current = puzzle.id;
   const [moveIndex, setMoveIndex] = useState(0);
   const [message, setMessage] = useState('Find the quiet setup move');
   const [boardKey, setBoardKey] = useState(0);
@@ -58,6 +63,10 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
 
   const line = useMemo(() => puzzle.solutionMoves.split(' ').filter(Boolean), [puzzle.solutionMoves]);
   const totalSolverMoves = Math.ceil(line.length / 2);
+  /** Same bar as PuzzleBoard: the second wrong try makes this puzzle a miss,
+   *  even if the student goes on to find it. Without it nothing here could
+   *  ever be missed, so the rating only climbed. */
+  const MAX_WRONG_ATTEMPTS = 2;
   const isPlayerTurn = moveIndex % 2 === 0; // student plays even indices
 
   const orientation = puzzle.playerColor === 'black' ? 'black' : 'white';
@@ -182,7 +191,8 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
       wasCoached: wrongAttemptsRef.current > 0,
       context: 'setup',
     });
-    setTimeout(() => onComplete(true), 1400);
+    const counted = wrongAttemptsRef.current < MAX_WRONG_ATTEMPTS;
+    setTimeout(() => onComplete(counted), 1400);
   }, [puzzle.tacticType, onComplete, payoffGeometry]);
 
   const handleMove = useCallback((move: MoveResult): void => {
@@ -231,19 +241,62 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
     reward({ kind: 'miss', square: move.to });
     voiceService.stop();
 
-    const wrongMsg = setupIncorrect();
-    setMessage(wrongMsg);
-    void voiceService.speak(wrongMsg);
-
-    // ChessBoard applied the wrong move internally — force-reset it to the
-    // true position via a key change.
-    setFen(chessRef.current.fen());
-    setBoardKey((k) => k + 1);
-
-    setTimeout(() => {
+    // REFUTE IT, KEEP THE ANSWER (David 2026-10-01): their reply to this move,
+    // played out, while it is still on the board; the canned line is the
+    // fallback when nothing is computed (a quiet wrong setup often loses
+    // nothing — it just does not set the tactic up).
+    const puzzleAtTry = puzzle.id;
+    const fenBefore = chessRef.current.fen();
+    void (async () => {
+      const r = await refuteTry(fenBefore, move.san);
+      if (puzzleIdRef.current !== puzzleAtTry) return;
+      const wrongMsg = r?.text ?? setupIncorrect();
+      setMessage(wrongMsg);
+      const shownAt = Date.now();
+      await voiceService.speak(wrongMsg).catch(() => undefined);
+      const left = Math.max(0, (r ? 1800 + wrongMsg.length * 35 : 1500) - (Date.now() - shownAt));
+      await new Promise((res) => setTimeout(res, left));
+      if (puzzleIdRef.current !== puzzleAtTry || hasCompleted.current) return;
+      // ChessBoard applied the wrong move internally — force-reset it to the
+      // true position via a key change.
+      setFen(chessRef.current.fen());
+      setBoardKey((k) => k + 1);
+      clearWrongArrows();
       setBoardState('thinking');
-    }, 1500);
-  }, [boardState, isPlayerTurn, moveIndex, line, puzzle.id, puzzle.tacticType, finishSolved, resetHints]);
+    })();
+  }, [boardState, isPlayerTurn, moveIndex, line, puzzle.tacticType, puzzle.id, finishSolved, resetHints, refuteTry, clearWrongArrows]);
+
+  // Show Solution: play the rest of the line on the board, then count it as
+  // missed — the fail path this trainer lacked (a student who could not find
+  // the setup had no way out but the End-session button).
+  const handleShowSolution = useCallback((): void => {
+    if (hasCompleted.current || boardState === 'solved') return;
+    hasCompleted.current = true;
+    voiceService.stop();
+    clearWrongArrows();
+    setBoardState('revealing');
+    let i = moveIndex;
+    const step = (): void => {
+      if (i >= line.length) {
+        const base = setupRevealComplete(puzzle.tacticType);
+        const msg = payoffGeometry ? `${base} That ${payoffGeometry}.` : base;
+        setMessage(msg);
+        void voiceService.speak(msg);
+        recordTacticOutcome({ tacticType: puzzle.tacticType, found: false, wasCoached: true, context: 'setup' });
+        setTimeout(() => onComplete(false), 2200);
+        return;
+      }
+      const p = parseUciMove(line[i]);
+      try { chessRef.current.move({ from: p.from, to: p.to, promotion: p.promotion }); } catch { /* keep going */ }
+      setFen(chessRef.current.fen());
+      setBoardKey((k) => k + 1);
+      i += 1;
+      setMoveIndex(i);
+      setTimeout(step, 700);
+    };
+    setMessage('Here is the line');
+    step();
+  }, [boardState, moveIndex, line, puzzle.tacticType, payoffGeometry, onComplete, clearWrongArrows]);
 
   const statusColor = boardState === 'solved'
     ? 'var(--color-success)'
@@ -277,7 +330,7 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
           showUndoButton={false}
           showResetButton={false}
           onMove={handleMove}
-          arrows={hintState.arrows.length > 0 ? hintState.arrows : undefined}
+          arrows={wrongTry.arrows.length > 0 ? wrongTry.arrows : hintState.arrows.length > 0 ? hintState.arrows : undefined}
           ghostMove={hintState.ghostMove}
         />
       </div>
@@ -296,6 +349,17 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
             </p>
           )}
         </div>
+      )}
+
+      {(boardState === 'thinking' || boardState === 'incorrect') && (
+        <button
+          onClick={handleShowSolution}
+          className="self-center text-xs underline opacity-70 hover:opacity-100"
+          style={{ color: 'var(--color-text-muted)' }}
+          data-testid="setup-show-solution"
+        >
+          Show Solution
+        </button>
       )}
 
       {/* Move indicator */}

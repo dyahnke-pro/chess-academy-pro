@@ -5,7 +5,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { readFileSync } from 'node:fs';
 import { planFromUci } from './lookaheadPlan';
-import { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcEvent, type Aim } from './planArc';
+import { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcEvent, type Aim } from './planArc';
 
 const GAME = 'd4 Nf6 c4 e6 Nf3 c5 d5 b5 b3 Bb7 Nbd2 exd5 cxb5 d6 Bb2 Be7 e3 O-O Bd3 Nbd7 O-O Qc7 Re1 Ne5 Nxe5 dxe5 Rc1 e4 Be2 Qd7 Nf1 Rac8 a4 Qf5 Ng3 Qg6 Be5 Rfd8 a5 Bd6 Bxd6 Rxd6 a6 Ba8 Nh5 Nxh5 Bxh5 Qg5 Qg4 Qxg4 Bxg4 Rc7 Rc2 d4 Rec1 d3 Rxc5 Rxc5 Rxc5 g6 Rc8+ Kg7 Rxa8 d2 Rc8 d1=Q+ Bxd1 Rxd1#'.split(' ');
 
@@ -24,7 +24,7 @@ function walk(color: 'w' | 'b'): Said[] {
   let st = EMPTY_ARC; const out: Said[] = [];
   for (let i = color === 'w' ? 0 : 1; i < GAME.length; i += 2) {
     // Review's hindsight read: the plan the side actually went on to play.
-    const plan = planFromUci(fens[i + 1], uci.slice(i + 1, i + 9), 'black');
+    const plan = planFromUci(fens[i + 1], uci.slice(i + 1, i + 9), 'black', null);
     const side = color === 'w' ? plan?.theirs : plan?.mine;
     const r = stepArc(st, side ? aimsOf(side, seat) : [], mv[i], fens[i + 1], color, seat);
     st = r.next;
@@ -65,7 +65,7 @@ describe('planArc on a real game', () => {
   it('an announced route keeps its name until it lands', () => {
     const rookWalk = white.filter((e) => e.id === 'route:r').map((e) => e.text);
     expect(rookWalk.length).toBeGreaterThan(2);
-    expect(rookWalk.every((t) => /walk from \w\d to c8/.test(t))).toBe(true);
+    expect(rookWalk.every((t) => /getting the rook to c8/.test(t))).toBe(true);
   });
 
   it('pawn pushes step toward the passer, and promotion is its arrival', () => {
@@ -97,13 +97,16 @@ describe('stepArc rules', () => {
     expect(b.events.map((e) => e.kind)).toEqual(['emerge']);
   });
 
-  it('drops only after two reads missing, and never says it twice', () => {
+  it('a plan never pursued leaves silently — no "they have let it go" (2026-09-30)', () => {
+    // Measured on 20 of his games: 18 of 23 announced opponent plans were
+    // "let go" within two moves with no move made toward them — the engine's
+    // line changing, not the opponent changing their mind.
     let st = stepArc(EMPTY_ARC, [outpost], null, EMPTY_BOARD, 'w', 'opponent').next;
     st = stepArc(st, [outpost], null, EMPTY_BOARD, 'w', 'opponent').next;
     const miss1 = stepArc(st, [], null, EMPTY_BOARD, 'w', 'opponent');
     expect(miss1.events).toEqual([]);
     const miss2 = stepArc(miss1.next, [], null, EMPTY_BOARD, 'w', 'opponent');
-    expect(miss2.events.map((e) => e.kind)).toEqual(['drop']);
+    expect(miss2.events).toEqual([]);
     expect(stepArc(miss2.next, [], null, EMPTY_BOARD, 'w', 'opponent').events).toEqual([]);
   });
 
@@ -129,10 +132,26 @@ describe('the arc reaches the review narration', () => {
     const c = new Chess();
     const inputs = GAME.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 0, classification: 'good', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as Input; });
     const segs = buildReviewSegments(inputs, 'black', 'Blumenfeld Countergambit', true, 1500);
-    const arcs = segs.filter((s) => /That was the plan|plan is taking shape|what (they are after|you are building)|let .* go\./.test(s.narration ?? ''));
+    const arcs = segs.filter((s) => /That was the plan|plan is taking shape|what (they are after|you are building)|given up on/.test(s.narration ?? ''));
     expect(arcs.length).toBeGreaterThan(0);
     expect(segs.some((s) => /There it is — their knight on g3/.test(s.narration ?? ''))).toBe(true);
   }, 120000);
+});
+
+describe('an attack on the king needs queens and a middlegame (review walk 2026-09-27)', () => {
+  const aim = { id: 'king-attack', kind: 'king-attack' as const, squares: ['g7'], goal: null, phrase: 'an attack on your king' };
+  const run = (fen: string) => {
+    let st = EMPTY_ARC;
+    const out: string[] = [];
+    for (let i = 0; i < 3; i++) { const r = stepArc(st, [aim], null, fen, 'b', 'opponent'); st = r.next; out.push(...r.events.map((e) => e.kind)); }
+    return out;
+  };
+  it('a rook endgame announces no king attack', () => {
+    expect(run('6k1/5ppp/8/8/8/8/5PPP/3R2K1 b - - 0 40')).not.toContain('emerge');
+  });
+  it('NEGATIVE CONTROL: queens on, move 20 — it still emerges', () => {
+    expect(run('3q2k1/5ppp/8/8/8/8/5PPP/3Q2K1 b - - 0 20')).toContain('emerge');
+  });
 });
 
 describe('a route only takes shape toward ONE goal', () => {
@@ -172,6 +191,16 @@ describe('aimWalkableNow — a live guess is said only if it can be walked from 
   };
   const route = (piece: string, path: string[]): Aim => ({
     id: `route:${piece}`, kind: 'route', squares: path.slice(1), goal: path[path.length - 1], phrase: 'x', from: path[0],
+  });
+
+  it('a route back to where the piece just came from is not a plan (manual check 2026-09-30)', () => {
+    const h = 'e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 O-O O-O Qe2 d6 Qd1 a6'.split(' ');
+    const c = new Chess();
+    for (const san of h) c.move(san);
+    // White's queen just went e2 → d1: "the queen's walk from d1 to e2" is a retreat, not a plan.
+    expect(aimWalkableNow(route('q', ['d1', 'e2']), c.fen(), 'w', h)).toBe(false);
+    // Without history the guard cannot apply (and the route is otherwise legal).
+    expect(aimWalkableNow(route('q', ['d1', 'e2']), c.fen(), 'w')).toBe(true);
   });
 
   it('a bishop route through a diagonal the queen blocks is refused (FqVMAv3wKes ply 36)', () => {
@@ -234,3 +263,26 @@ describe('aimWalkableNow — an outpost is pawn-guarded and pawn-proof', () => {
   });
 });
 
+describe('joinEmerges — the plan said as a plan (P2 #1)', () => {
+  it('two aims on one move become one "X, then Y" line', () => {
+    const ev = (text: string, sq: string): ArcEvent => ({ id: text, kind: 'emerge', seat: 'student', text, squares: [sq] });
+    const out = joinEmerges([ev('The plan for you here: the knight\'s walk from f3 to d4.', 'd4'), ev('Your plan from here: the c-file.', 'c1')]);
+    expect(out).toHaveLength(1);
+    expect(out[0].text).toBe("The plan for you here: the knight's walk from f3 to d4, then the c-file.");
+    expect(out[0].squares).toEqual(['d4', 'c1']);
+  });
+  it('one aim passes through unchanged', () => {
+    const e: ArcEvent = { id: 'a', kind: 'emerge', seat: 'student', text: 'The plan for you here: x.', squares: [] };
+    expect(joinEmerges([e])).toEqual([e]);
+  });
+});
+
+describe('the move → plan link (P3): advance events carry their step', () => {
+  it('the Learn page speaks the student FIRST step and the landing, never every step', async () => {
+    const { readFileSync } = await import('node:fs');
+    const page = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
+    expect(page).toMatch(/e\.kind === 'arrive' \|\| \(e\.kind === 'advance' && e\.step === 1\)/);
+    // A move after the student's plan was told is prompted for the plan skill.
+    expect(page).toMatch(/recordHeld\('no-plan'[^\n]*planToldBoardsRef\.current\.has/);
+  });
+});

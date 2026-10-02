@@ -28,8 +28,10 @@
 // G0 throughout: every branch is arithmetic or chess.js geometry over an engine
 // line. Nothing here asks a model anything.
 import { findConcession, findStudentDrawback, whatItAllowed } from './concessionBeat';
-import { callInaccuracy, callInaccuracyDetailed, type InaccuracyDecline } from './inaccuracyCall';
+import { callInaccuracy, callInaccuracyDetailed, type InaccuracyDecline, type PriorMove } from './inaccuracyCall';
+export { priorMoveLeadingTo } from './inaccuracyCall';
 import { whyItFailed } from './whyItFailed';
+import { describeConcessions } from './reviewTeachingPoints';
 import { INACCURACY_CP, BLUNDER_CP } from './engineConstants';
 import { logAppAudit } from './appAuditor';
 
@@ -45,12 +47,25 @@ export interface BackwardLook {
    *  One lane for the coach because it is one voice — owning a blunder and
    *  owning a positional concession are the same act at different scales. */
   kind: 'mistake' | 'drawback' | 'coachMistake';
+  /** The tactic the better move would have landed (B3) — the caller teaches
+   *  its rule once a game, from its own definition ledger. */
+  pattern?: string;
   /** The line WITHOUT its opening "that left your X on Y hanging" sentence,
    *  and the square that sentence is about — set only when the line has one.
    *  A caller that already named that loss (the live fundamental verdict)
    *  speaks this instead, so the loss is said once and the rest — the cost,
    *  the better move — still speaks (re-walk 1380, 24.Bg5). */
   withoutAttempt?: { line: string; square: string };
+  /** The punishing line the words play out, from `fen` (`InaccuracyCall.line`). */
+  punishLine?: { fen: string; uci: string[] };
+  /** The student piece the grade says was left to be taken (from
+   *  `InaccuracyCall.lostSquare`). The live fundamental verdict names the same
+   *  loss as "that left your rook on b2 hanging"; one of them speaks. */
+  lostSquare?: string;
+  /** The better move the line names (`InaccuracyCall.namesBetter`). */
+  namesBetter?: string;
+  /** The coach's slip left the student something to find (`InaccuracyCall.offersStudent`). */
+  offersStudent?: true;
 }
 
 /**
@@ -83,6 +98,10 @@ export function backwardLook(args: {
   /** Position after the student moved — the opponent is on move. */
   fenAfter: string;
   playedSan: string;
+  /** The move that produced `fenBefore` (their last move), or null at the
+   *  start. REQUIRED: a better move that only takes back what that move
+   *  captured is not "win a pawn" (David 2026-10-02). */
+  priorMove: PriorMove;
   /** The engine's preferred move at `fenBefore`. Null → the first two lanes
    *  cannot run; the third still can. */
   bestSan: string | null;
@@ -120,6 +139,9 @@ export function backwardLook(args: {
    *  implementations of one question is how "inaccuracy" comes to mean one
    *  thing on one surface and something else on another. */
   side?: 'student' | 'coach';
+  /** The coach played it because the student dictated it: said of THEM
+   *  (the concession lane speaks in the first person, so it stands down). */
+  dictated?: boolean;
 }): BackwardLook | null {
   const side = args.side ?? 'student';
   const mover = args.studentColor;
@@ -146,7 +168,7 @@ export function backwardLook(args: {
   // `callInaccuracy` already hands that over without naming the punishment.
   if (side === 'coach') {
     lastCoachDecline = 'no-concession-and-no-call';
-    if (args.bestSan && !gained) {
+    if (args.bestSan && !gained && !args.dictated) {
       try {
         const c = findConcession({
           fen: args.fenBefore,
@@ -167,15 +189,17 @@ export function backwardLook(args: {
         missedMate: args.missedMate ?? null,
         allowedMate: args.allowedMate ?? null,
         side: 'coach',
+        ...(args.dictated ? { dictated: true } : {}),
         moverColor: mover,
         replyLineUci: args.replyPvUci ?? [],
         replySan: args.replySan ?? null,
+        priorMove: args.priorMove,
       });
       // THE REASON TRAVELS WITH THE REFUSAL. The caller logs why the coach said
       // nothing, and until now it printed "under the floor" for all five
       // reasons — see `InaccuracyVerdict`. Handing the computed reason back is
       // what makes that log a measurement instead of an assertion.
-      if (verdict.call) return { line: verdict.call.said, square: verdict.call.square, kind: 'coachMistake' };
+      if (verdict.call) return { line: verdict.call.said, square: verdict.call.square, kind: 'coachMistake', ...(verdict.call.offersStudent ? { offersStudent: true as const } : {}) };
       lastCoachDecline = verdict.declined;
       return null;
     } catch { lastCoachDecline = 'threw'; return null; }
@@ -283,6 +307,8 @@ export function backwardLook(args: {
       // order moves. It is strictly more teaching in the same slot, which is the
       // right direction ("The longer narrations are good. Do not cap them.").
       let instead: string | null = null;
+      let insteadLost: string | undefined;
+      let insteadBetter: string | undefined;
       if (args.bestSan) {
         try {
           const call = callInaccuracy({
@@ -298,8 +324,11 @@ export function backwardLook(args: {
             moverColor: args.studentColor,
             replyLineUci: args.replyPvUci ?? [],
             replySan: args.replySan ?? null,
+            priorMove: args.priorMove,
           });
           instead = call?.said ?? null;
+          insteadLost = call?.lostSquare;
+          insteadBetter = call?.namesBetter;
         } catch { /* the alternative is a bonus; the read still stands */ }
       }
       const line = [attempt, cost ? `${cost.said} ${cost.opening}` : '', instead ?? '']
@@ -310,6 +339,12 @@ export function backwardLook(args: {
       return {
         line, square: attemptSquare || cost?.square || '', kind: 'drawback',
         ...(attempt && attemptSquare ? { withoutAttempt: { line: rest, square: attemptSquare } } : {}),
+        // The grade's lost square rides here too, so the fundamental that names
+        // the same hung piece stays quiet (run B walk 2026-09-30, Ng3: "that
+        // left your knight on g3 hanging…" then "it let them take your knight
+        // on g3" in one breath).
+        ...(insteadLost ? { lostSquare: insteadLost } : {}),
+        ...(insteadBetter ? { namesBetter: insteadBetter } : {}),
       };
     }
   }
@@ -332,8 +367,9 @@ export function backwardLook(args: {
         moverColor: args.studentColor,
         replyLineUci: args.replyPvUci ?? [],
         replySan: args.replySan ?? null,
+        priorMove: args.priorMove,
       });
-      if (call) return { line: call.said, square: call.square, kind: 'mistake' };
+      if (call) return { line: call.said, square: call.square, kind: 'mistake', ...(call.pattern ? { pattern: call.pattern } : {}), ...(call.lostSquare ? { lostSquare: call.lostSquare } : {}), ...(call.namesBetter ? { namesBetter: call.namesBetter } : {}), ...(call.line ? { punishLine: call.line } : {}) };
     } catch { /* fall through */ }
   }
 
@@ -344,10 +380,12 @@ export function backwardLook(args: {
   // from here says what the move allowed, in moves they would really play.
   try {
     const allowed = whatItAllowed({
+      fenBefore: args.fenBefore,
       fenAfter: args.fenAfter,
       opponentPv: args.replyPvUci ?? [],
       studentColor: args.studentColor,
       cpLoss: args.cpLoss,
+      playedSan: args.playedSan,
     });
     // 🚨 LOG THE INPUTS, NOT JUST THE SENTENCE (David's prod game, 2026-08-16).
     //
@@ -375,3 +413,14 @@ export function backwardLook(args: {
     return allowed ? { ...allowed, kind: 'drawback' } : null;
   } catch { return null; }
 }
+
+/**
+ * WHAT THE STUDENT'S FLAGGED MOVE GAVE UP FOR GOOD — king cover thinned, a
+ * passer granted, a new isolani (capability parity with review, 2026-09-27).
+ * The look owns the move's cost, so its lasting damage lives here too. Null on
+ * a move that was not flagged, and never mid-exchange (`describeConcessions`).
+ */
+export function lookConcession(fenBefore: string, playedSan: string, cpLoss: number): string | null {
+  return cpLoss >= INACCURACY_CP ? describeConcessions(fenBefore, playedSan, true) : null;
+}
+

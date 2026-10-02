@@ -36,3 +36,28 @@ describe('refuted alternative — the proof is against the mover', () => {
     expect(out.lineSans).toEqual(['Qg5', 'Nxg5']);
   });
 });
+
+describe('droppedJob — the alternative fails because its piece had a job (census #11)', () => {
+  it('Ng5 walks the f3-knight off e5, and …Nxe5 takes it', async () => {
+    const { droppedJob } = await import('./refutedAlternativeCore');
+    // The pawn on e5 is guarded only by the knight on f3; the knight leaves, …Nxe5 wins it.
+    const fen = 'r1bqkb1r/pppp1ppp/2n2n2/4P3/8/5N2/PPPP1PPP/RNBQKB1R w KQkq - 1 4';
+    expect(droppedJob(fen, ['Ng5', 'Nxe5'])).toBe('the knight on f3 was guarding e5');
+  });
+
+  it('a piece that moved INTO the capture is a hang, not a job', async () => {
+    const { droppedJob } = await import('./refutedAlternativeCore');
+    const fen = 'r1bqkb1r/pppp1ppp/2n2n2/4P3/8/5N2/PPPP1PPP/RNBQKB1R w KQkq - 1 4';
+    expect(droppedJob(fen, ['Nd4', 'Nxd4'])).toBeNull();
+  });
+
+  it('the proven line names the job it dropped', async () => {
+    const { renderRefutedAlternative } = await import('./refutedAlternativeCore');
+    const text = renderRefutedAlternative({
+      alt: 'Ng5', games: 120, pct: 40, costCp: 150, line: null, concept: null,
+      lineSans: ['…Nxe5'], proofResult: 'they win a pawn', source: 'amateur',
+      job: 'the knight on f3 was guarding e5',
+    }, 'Qe2', 1);
+    expect(text).toMatch(/, but the knight on f3 was guarding e5: …Nxe5 — they win a pawn\./);
+  });
+});

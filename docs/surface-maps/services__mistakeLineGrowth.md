@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6084) — names `mistakeLineGrowth`
+- **The standard post-deploy ritual** (CLAUDE.md:6131) — names `mistakeLineGrowth`
 
 ## Who calls in
 
@@ -20,11 +20,11 @@
 ## Exports and every call site
 
 ### `solveLengthOf` (function) — 7 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:204`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:350`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:216`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:380`
 - `src/services/mistakeLineGrowth.test.ts:15`
-- `src/services/mistakePuzzleService.ts:1402`
-- `src/services/mistakePuzzleService.ts:1455`
+- `src/services/mistakePuzzleService.ts:1403`
+- `src/services/mistakePuzzleService.ts:1476`
 - `src/services/upNextLoader.ts:60`
 - `src/services/upNextLoader.ts:65`
 
@@ -32,8 +32,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `pliesFor` (function) — 5 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:204`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:350`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:216`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:380`
 - `src/services/mistakeLineGrowth.test.ts:17`
 - `src/services/mistakeLineGrowth.test.ts:18`
 - `src/services/mistakeLineGrowth.test.ts:19`
@@ -47,13 +47,13 @@
 - `src/services/mistakeLineGrowth.test.ts:49`
 - `src/services/mistakeLineGrowth.test.ts:60`
 - `src/services/mistakeLineGrowth.test.ts:68`
-- `src/services/mistakePuzzleService.ts:1459`
+- `src/services/mistakePuzzleService.ts:1480`
 
 ### `shrinkOnMiss` (function) — 4 call sites
 - `src/services/mistakeLineGrowth.test.ts:23`
 - `src/services/mistakeLineGrowth.test.ts:24`
 - `src/services/mistakeLineGrowth.test.ts:25`
-- `src/services/mistakePuzzleService.ts:1402`
+- `src/services/mistakePuzzleService.ts:1403`
 
 ## Tests
 

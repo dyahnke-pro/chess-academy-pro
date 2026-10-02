@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { attributePrinciples, type FundamentalId } from './principleAttribution';
 import type { PrincipleAttribution } from './principleAttribution';
-import { renderFundamentalVerdict, renderFundamentalsRecap, renderPvEvidence } from './principleVoice';
+import { renderFundamentalVerdict, renderFundamentalsRecap, renderPvEvidence, verdictCanDropBetter } from './principleVoice';
 
 const ALAPIN = '1. e4 c5 2. c3 Nf6 3. e5 Nd5 4. d4 cxd4 5. cxd4 Nc6 6. Nc3 Nb6';
 const SANS = (() => { const c = new Chess(); c.loadPgn(ALAPIN); return c.history(); })();
@@ -88,6 +88,86 @@ describe('the recap SUBJECT reads as English at every count', () => {
     for (let n = 1; n <= 6; n += 1) {
       const text = renderFundamentalsRecap(attrs(n), n) ?? '';
       expect(text, `n=${n}: ${text}`).not.toMatch(/\b(\w+) of your \1\b/i);
+    }
+  });
+});
+
+describe('the short tempo stem says what happened only when it happened (g9 walk 2026-09-27)', () => {
+  it('an unplayed kick is "on offer", never "handed over"', async () => {
+    const { renderFundamentalVerdict } = await import('./principleVoice');
+    const a = (played: number) => ({ id: 'tempo-handed', facts: { target: 'knight on f5', kick: 'g4', played }, evidence: { moves: ['g4'], pvMoves: [] } }) as never;
+    const seen = new Set(['tempo-handed']) as never;
+    expect(renderFundamentalVerdict([a(0)], { seen, ply: 1, replySan: 'Rc1' } as never)).toBe('Another tempo on offer: g4 would hit your knight on f5.');
+    expect(renderFundamentalVerdict([a(1)], { seen, ply: 1, replySan: 'g4' } as never)).toBe('Another tempo handed over: g4 hits your knight on f5.');
+  });
+});
+
+describe('a verdict beside a line that names the better move leaves it out (Learn walk 2026-10-01)', () => {
+  const FACTS = {
+    better: '', played: 'Rf6', plan: 'get your passed pawn on d4 promoting', homeMinors: 2, walked: 'f2',
+    situation: 'ahead', piece: 'knight', square: 'a3', file: 'e', king: 'g1', rook: 'd1', pawn: 'd5',
+    bishop: 'c1', drop: 2, pawns: 3,
+  };
+  const ids: FundamentalId[] = [
+    'neglected-development', 'king-left-in-centre', 'early-edge-pawns', 'passive-when-forcing-existed',
+    'wrong-trade-for-material', 'worst-piece-unimproved', 'rook-ignored-open-file', 'passive-king-endgame',
+    'rook-in-front-of-passer', 'passed-pawn-neglected', 'lost-the-opposition', 'passive-rook-endgame',
+    'kept-bad-bishop', 'capture-toward-centre', 'botched-conversion', 'no-plan',
+  ];
+  for (const id of ids) {
+    it(`${id}: no empty slot, full or short`, () => {
+      expect(verdictCanDropBetter(id)).toBe(true);
+      const a = { id, tag: 'x', weight: 1, coOccurrence: false, facts: FACTS, evidence: { moves: [], pvMoves: [] } } as unknown as PrincipleAttribution;
+      for (let ply = 1; ply <= 3; ply++) {
+        const full = renderFundamentalVerdict([a], { ply, seen: new Set(), replySan: null });
+        const short = renderFundamentalVerdict([a], { ply, seen: new Set([id]), replySan: null });
+        for (const t of [full, short]) {
+          expect(t).not.toMatch(/(?:—|;|:)\s*(?:was|does|keeps|takes|served|opens|\.|,)/);
+          expect(t).not.toMatch(/\s{2,}|\bundefined\b/);
+        }
+      }
+    });
+  }
+  it('no-plan no longer says the plan move a second time', () => {
+    const a = { id: 'no-plan', tag: 'x', weight: 1, coOccurrence: false, facts: FACTS, evidence: { moves: [], pvMoves: [] } } as unknown as PrincipleAttribution;
+    expect(renderFundamentalVerdict([a], { ply: 2, seen: new Set(), replySan: null })).not.toMatch(/plan move/);
+  });
+});
+
+describe('a pawn trade is not a poisoned grab (Learn walk 2026-10-01, game 1 ply 12)', () => {
+  it('…exf3 with exf3 to come is not greedy-pawn-grab', () => {
+    const sans = 'h4 Nc6 c3 Nf6 f3 e5 g4 d5 b4 e4 h5 exf3'.split(' ');
+    const a = attributePrinciples({ replySan: 'exf3', historySans: sans, bestSan: 'Bd6', classification: 'inaccuracy' });
+    expect(a.map((x) => x.id)).not.toContain('greedy-pawn-grab');
+  });
+});
+
+
+describe('an ignored threat can be a LINE, not only a hanging piece (A3, review walk 2026-10-01, game 3)', () => {
+  const G3 = 'e4 e5 c3 Be7 d4 exd4 cxd4 Nf6 Nc3 Nc6 h3 d5 e5 Ne4 Bd3 Bb4 Bxe4 dxe4 Ne2 Be6 O-O Bc4 Be3 Bxc3 bxc3 O-O Re1 Bd5 Qc2 Na5 Nf4 c6 Qa4 Nc4 Rab1 b5 Qc2 a6 Nxd5 cxd5 Qe2 f5 exf6 Qxf6 Rf1 Qg6 Qg4 Qxg4 hxg4 Rf7 g5 Raf8 Kh2'.split(' ');
+  it('Kh2 with …Nxe3 fxe3 Rxf1 already on and Rfc1 stopping it attaches ignored-threat as a line', () => {
+    const a = attributePrinciples({ replySan: 'Nxe3', historySans: G3, bestSan: 'Rfc1', classification: 'blunder', pvAfterPlayed: ['Nxe3', 'fxe3', 'Rxf1'] });
+    const t = a.find((x) => x.id === 'ignored-threat');
+    expect(t?.facts.line).toBe('Nxe3, fxe3, Rxf1');
+    expect(t?.facts.square).toBe('f1');
+    const said = renderFundamentalVerdict([t!], { ply: 53, seen: new Set(), replySan: null });
+    expect(said).toMatch(/Nxe3, fxe3, Rxf1/);
+    expect(said).not.toMatch(/was hanging|already attacked/);
+  });
+  it('a trade is not a threat: Be3 with …Bxc3 bxc3 attaches nothing of the kind', () => {
+    const a = attributePrinciples({ replySan: 'Bxc3', historySans: G3.slice(0, 23), bestSan: 'Nxe4', classification: 'inaccuracy', pvAfterPlayed: ['Bxc3', 'bxc3'] });
+    expect(a.some((x) => x.id === 'ignored-threat' && x.facts.line)).toBe(false);
+  });
+});
+
+describe('the king verdict claims only what the attributor proved (Learn walk 2026-10-01)', () => {
+  // The attributor proves their king CAN step up, never that it already has —
+  // Kf7 heard "the other king is already marching" with White's king on g1.
+  it('never says their king is already marching', () => {
+    const a = { id: 'passive-king-endgame', tag: 'x', weight: 1, coOccurrence: false, facts: { king: 'g8', better: 'Kf7' }, evidence: { moves: [], pvMoves: [] } } as unknown as PrincipleAttribution;
+    for (let ply = 1; ply <= 6; ply++) {
+      const t = renderFundamentalVerdict([a], { ply, seen: new Set(), replySan: null });
+      expect(t).not.toMatch(/already marching|and theirs is\b/);
     }
   });
 });

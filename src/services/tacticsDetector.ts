@@ -1,4 +1,5 @@
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
+import { MATERIAL_VALUE } from './pieceValues';
 import type { BoardHighlight } from '../types';
 import type { TacticPattern, HangingPiece } from '../types/tacticTypes';
 import { findHangingPieces } from './tacticClassifier';
@@ -402,8 +403,30 @@ function findBackRankWeakness(chess: Chess): TacticPattern[] {
     const enemy: Color = color === 'w' ? 'b' : 'w';
     const probe = withTurn(chess, enemy);
     if (!probe) continue;
+    // …and the check must not simply LOSE the invader: a landing square a
+    // cheaper piece takes on is not an invasion (hand walk 2026-09-27,
+    // Alekhine: "the back rank can be invaded from f1" with Rf8+ met by
+    // …Bxf8). An even trade still counts — the defender's rook is tied to the
+    // rank, which is the weakness. The king may take only an unprotected
+    // invader.
+    const survives = (m: { from: Square; to: Square; san: string; piece: string; captured?: string }): boolean => {
+      try {
+        const after = withTurn(chess, enemy);
+        if (!after) return false;
+        after.move(m.san);
+        const cheaper = after.attackers(m.to, color).filter((sq) => {
+          const t = after.get(sq)?.type;
+          return t !== undefined && t !== 'k' && MATERIAL_VALUE[t] < MATERIAL_VALUE[m.piece as PieceSymbol];
+        });
+        // Rxd8+ Nxd8 is rook for rook, still an invasion; Rf8+ Bxf8 is a rook for nothing.
+        const net = (m.captured ? MATERIAL_VALUE[m.captured] : 0) - MATERIAL_VALUE[m.piece];
+        if (cheaper.length > 0 && net < 0) return false;
+        const kingTakes = after.attackers(m.to, color).some((sq) => after.get(sq)?.type === 'k');
+        return !kingTakes || after.attackers(m.to, enemy).length > 0;
+      } catch { return false; }
+    };
     const invader = probe.moves({ verbose: true }).find((m) =>
-      (m.piece === 'r' || m.piece === 'q') && rankOfSquare(m.to) === rank && m.san.includes('+'));
+      (m.piece === 'r' || m.piece === 'q') && rankOfSquare(m.to) === rank && m.san.includes('+') && survives(m));
     if (invader) {
       out.push({
         type: 'back_rank',
@@ -584,7 +607,10 @@ function findDiscoveredAttacks(chess: Chess): TacticPattern[] {
           type: 'discovery',
           beneficiary: p.color,
           involvedSquares: [blocker.square, sq, target.square],
-          description: `Moving the ${PIECE_NAMES[blocker.type]} on ${blocker.square} would unveil the ${PIECE_NAMES[p.type]} on ${sq} against the ${PIECE_NAMES[target.type]} on ${target.square}`,
+          // THE PIECE IS THE SUBJECT (hand walk 2026-09-27, Alekhine: "After
+          // d5, moving your pawn on d5 would unveil…" named the pawn twice).
+          // Read alone or after "After d5, …", it says one thing.
+          description: `The ${PIECE_NAMES[blocker.type]} on ${blocker.square} is a discovered attack in waiting — moving it unveils the ${PIECE_NAMES[p.type]} on ${sq} against the ${PIECE_NAMES[target.type]} on ${target.square}`,
         });
       }
     }
@@ -612,13 +638,25 @@ function findRemovableGuards(chess: Chess): TacticPattern[] {
         const defenders = chess.attackers(targetSq, enemy).filter((d) => d !== targetSq);
         if (defenders.length !== 1) continue;
         const guardSq = defenders[0];
+        // A KING cannot be removed — "your king on f8 is the only defender of
+        // your rook on g7 — and it can be taken" (Bowdler walk 2026-09-27, 35…Rg7
+        // Rh8+) read a check as a capture. A king guard is a check or a
+        // deflection question, never a removal.
+        if (chess.get(guardSq)?.type === 'k') continue;
         const takers = attackersOfSquare(chess, guardSq, color);
         if (takers.length === 0) continue;
         // Taking a DEFENDED guard with a pricier piece is a losing trade, not
         // a removal — a pawn guard covered by another pawn is not removable
         // by a knight. Undefended guards are removable by anything.
         const guardVal = PIECE_VALUE[chess.get(guardSq)?.type ?? 'p'];
-        const guardIsDefended = chess.attackers(guardSq, enemy).some((d) => d !== guardSq);
+        const guardDefenders = chess.attackers(guardSq, enemy).filter((d) => d !== guardSq);
+        // THE TARGET RECAPTURING IS NOT A REMOVAL (Alekhine re-walk ply 41:
+        // "the queen on a4 is the only defender of the bishop on b5 — and it
+        // can be taken" — Qxa4 Bxa4, and the bishop simply walks off b5). When
+        // the target itself guards the guard, taking the guard leaves nothing
+        // to win; an outright win of the guard is the hanging-piece lane's.
+        if (guardDefenders.length > 0 && guardDefenders.every((d) => d === targetSq)) continue;
+        const guardIsDefended = guardDefenders.length > 0;
         const cheapestTaker = Math.min(...takers.map((p) => PIECE_VALUE[p]));
         if (guardIsDefended && cheapestTaker > guardVal) continue;
         out.push({

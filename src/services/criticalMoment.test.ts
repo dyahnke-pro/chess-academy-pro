@@ -22,10 +22,25 @@ describe('criticalMoment — the count IS the trigger', () => {
     expect(r?.resolved).toBe(true);
   });
 
-  it('two moves within tolerance is a forgiving fork, and it SPEAKS', () => {
-    const r = readCriticalMoment({ topLines: fan(50, -20, -400), moverColor: 'w' });
+  it('two moves inside the band is a forgiving fork, and it SPEAKS', () => {
+    const r = readCriticalMoment({ topLines: fan(80, 60, -400), moverColor: 'w' });
     expect(r?.count).toBe(2);
     expect(criticalMomentSpeaks(r)).toBe(true);
+  });
+
+  it('a move within tolerance but OUT of the band does not "keep" it (claim check 2026-09-28)', () => {
+    // +0.5 → −0.2: the second move is level, not an edge. Counting it by the
+    // 100cp tolerance said "two moves keep your edge", which is false.
+    expect(readCriticalMoment({ topLines: fan(50, -20, -400), moverColor: 'w' })?.count).toBe(1);
+    // Real game (naro-26ZXZEiudhA ply 39): 128/36/−16 is one move on top, not two.
+    expect(readCriticalMoment({ topLines: fan(128, 36, -16), moverColor: 'w' })?.count).toBe(1);
+  });
+
+  it('a move just under the band floor leaves the count unproven — SILENT', () => {
+    // naro-4_Ev1a1_2Mg ply 23: 304/272/196 — is 272 "keeping the win"? Too close to say.
+    const r = readCriticalMoment({ topLines: fan(304, 272, 196), moverColor: 'w' });
+    expect(r?.unresolvedReason).toBe('band-edge');
+    expect(criticalMomentSpeaks(r)).toBe(false);
   });
 
   it('three within tolerance means nothing hinges — SILENT, and honestly unresolved', () => {

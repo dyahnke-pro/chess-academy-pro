@@ -4,6 +4,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { phaseVerdictLine, phaseVerdictKeys } from './reviewPositionalAssessment';
 import { buildPositionalRead } from './positionalRead';
+import { opponentGapClause } from './opponentGap';
 
 const GAME = 'd4 Nf6 c4 e6 Nc3 Bb4 Nf3 b6 a3 Bxc3+ bxc3 Bb7 Bb2 O-O e3 d6 Be2 Nbd7 O-O Ne4 Qc2 f5 Rad1 Qe7 Rfe1 Rad8 d5 exd5 cxd5 Ndf6 c4 c6 dxc6 Bxc6 a4 Qe8 Nd4 Bxa4 Qd2'.split(' ');
 function fenAt(ply: number): string {
@@ -20,10 +21,10 @@ describe('one say-once ledger across the balance sheet and the positional read',
     const line = phaseVerdictLine(fen, 'b', 80, 'middlegame', new Set());
     const keys = phaseVerdictKeys(fen, 'b', 80, new Set());
     expect(line).toMatch(/isolated/);
-    expect(keys).toContain('opponent-iso-a3');
+    expect(keys).toContain('opponent-iso-a');
   });
   it('a reason already heard is not spoken again by the balance sheet', () => {
-    const line = phaseVerdictLine(fen, 'b', 80, 'middlegame', new Set(['opponent-iso-a3']));
+    const line = phaseVerdictLine(fen, 'b', 80, 'middlegame', new Set(['opponent-iso-a']));
     expect(line ?? '').not.toMatch(/a3 is isolated/);
   });
   it('the positional read skips a fact the balance sheet already spoke', () => {
@@ -49,8 +50,7 @@ describe('the instant lane states the threat; the move that meets it comes from 
     expect(hits.some((h) => /eyeing Nxf5/.test(h.fact))).toBe(true);   // the fact still speaks
     for (const h of hits) expect(h.fact).not.toMatch(/deal with that first/i);
   });
-  it('a dictated reply is named, never "that reply"', async () => {
-    const { opponentGapClause } = await import('./opponentGap');
+  it('a dictated reply is named, never "that reply"', () => {
     const said = opponentGapClause({ opportunityUci: 'c6a4' } as never, 'dictated', fen, 'b', 'Nd4');
     expect(said).toMatch(/^Nd4 gives you something: Bxa4/);
     expect(said ?? '').not.toMatch(/that reply/i);

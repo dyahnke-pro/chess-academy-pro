@@ -68,6 +68,7 @@ import { coldStudent } from './needScore';
 import { getPlayerRating } from './playerRatingService';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { selectTeaching, summarizeTeaching, renderThesis, pliesFromSans, type SelectorPly } from './teachingSelector';
+import { loadOpeningIdentity, openingIdentityLine } from './openingIdentity';
 import { registerFor } from '../coach/surfaceContract';
 import { detectTactics } from './tacticsDetector';
 import { stageArrayHasUsableEntry } from './stageEntryValidity';
@@ -400,7 +401,7 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // 2026-09-24 (WO-TEACH-02): the refuted-alternative beat now states its real
 // share and source (never "most" on a 1% stray — cached trees could still say
 // so), a 10% floor, the line as proof, and rotated DNA stems. ONE bump.
-const WALKTHROUGH_GEN_REV = '2026-09-24-refuted-share-stems';
+const WALKTHROUGH_GEN_REV = '2026-09-30-opening-identity';
 
 export async function getCachedOpening(
   name: string,
@@ -2474,14 +2475,20 @@ async function generateOpeningFromDbNarration(
       summary: `selector read "${entry.canonicalName}": thesis=${pkg.thesis.kind}${pkg.thesis.tactic ? `/${pkg.thesis.tactic}` : ''}@${pkg.thesis.ply ?? '-'} moments=[${pkg.moments.map((m) => m.ply).join(',')}] thread=[${[...pkg.onThread].join(',')}]`,
     });
   } catch { teaching = undefined; }
+  // WHAT THE OPENING IS (the identity computer) — what it provokes, the
+  // structure its master main line reaches, a lasting gambit, sharpness, OTB
+  // master games — from the student's seat, after the thesis.
+  let identityLine = '';
+  try {
+    await loadOpeningIdentity();
+    identityLine = openingIdentityLine(entry.canonicalName, studentSide === 'black' ? 'b' : 'w', 'seat')?.text ?? '';
+  } catch { identityLine = ''; }
   const tree: WalkthroughTree = {
     ...(teaching ? { teaching } : {}),
     openingName: displayName,
     eco: entry.eco,
     studentSide,
-    intro: thesisLine
-      ? `${displayName}. ${thesisLine}`
-      : `${displayName} — let's walk through the main line.`,
+    intro: [thesisLine ? `${displayName}. ${thesisLine}` : `${displayName} — let's walk through the main line.`, identityLine].filter(Boolean).join(' '),
     outro: `Drill the moves to lock them in.`,
     root: { san: null, movedBy: null, idea: '', children: nextChildren },
   };

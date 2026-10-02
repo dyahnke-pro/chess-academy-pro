@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6038) — names `tacticClassifierService`
+- **The standard post-deploy ritual** (CLAUDE.md:6072) — names `tacticClassifierService`
 
 ## Who calls in
 
@@ -37,7 +37,7 @@
 - `src/components/Puzzles/PuzzleBoard.tsx:136`
 
 ### `classifyTacticsFromGame` (function) — 6 call sites
-- `src/services/gameAnalysisService.ts:2081`
+- `src/services/gameAnalysisService.ts:2091`
 - `src/services/tacticClassifierService.fill.test.ts:61`
 - `src/services/tacticClassifierService.fill.test.ts:65`
 - `src/services/tacticClassifierService.fill.test.ts:66`

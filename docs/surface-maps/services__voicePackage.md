@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**552 lines · 12 exports · 8 importers · 5 tests · 2 audits**
+**616 lines · 13 exports · 11 importers · 7 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,10 +15,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachGameReview.tsx`
 - `src/hooks/usePhaseNarration.ts`
 - `src/hooks/usePositionNarration.ts`
+- `src/services/coachFeatureService.ts`
 - `src/services/coachSurfaceScorecard.report.test.ts`
 - `src/services/computedVoiceAudit.report.test.ts`
+- `src/services/dnaDoor.test.ts`
 - `src/services/laneReachability.test.ts`
 - `src/services/learnTurnDoor.ts`
+- `src/services/replayFence.najdorf1500.test.ts`
 - `src/services/voicePackage.test.ts`
 
 ## Exports and every call site
@@ -33,7 +36,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `markableSquares` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9903`
+- `src/components/Coach/CoachTeachPage.tsx:10829`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
@@ -44,21 +47,37 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `VoicePackage` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildVoicePackage` (function) — 58 call sites
-- `src/components/Coach/CoachGameReview.tsx:1983`
-- `src/components/Coach/CoachGameReview.tsx:2021`
-- `src/components/Coach/CoachTeachPage.tsx:7532`
+### `stripMoveNumbers` (function) — 8 call sites
+- `scripts/convert-lichess-tsv.mjs:19`
+- `scripts/convert-lichess-tsv.mjs:45`
+- `scripts/danya-corpus/merge-corpus.mjs:36`
+- `scripts/danya-corpus/merge-corpus.mjs:110`
+- `scripts/danya-corpus/merge-corpus.mjs:111`
+- `scripts/danya-corpus/merge-corpus.mjs:112`
+- `src/services/dnaDoor.test.ts:9`
+- `src/services/dnaDoor.test.ts:10`
+
+### `buildVoicePackage` (function) — 73 call sites
+- `src/components/Coach/CoachGameReview.tsx:1987`
+- `src/components/Coach/CoachGameReview.tsx:2026`
+- `src/components/Coach/CoachGameReview.tsx:2035`
+- `src/components/Coach/CoachTeachPage.tsx:7679`
 - `src/hooks/usePhaseNarration.ts:430`
 - `src/hooks/usePhaseNarration.ts:880`
-- `src/hooks/usePositionNarration.ts:314`
+- `src/hooks/usePositionNarration.ts:323`
+- `src/services/coachFeatureService.ts:2412`
 - `src/services/coachSurfaceScorecard.report.test.ts:116`
 - `src/services/coachSurfaceScorecard.report.test.ts:138`
 - `src/services/coachSurfaceScorecard.report.test.ts:149`
 - `src/services/coachSurfaceScorecard.report.test.ts:170`
-- `src/services/computedVoiceAudit.report.test.ts:363`
-- `src/services/computedVoiceAudit.report.test.ts:395`
+- `src/services/computedVoiceAudit.report.test.ts:352`
+- `src/services/computedVoiceAudit.report.test.ts:384`
+- `src/services/dnaDoor.test.ts:14`
+- `src/services/dnaDoor.test.ts:39`
+- `src/services/dnaDoor.test.ts:46`
 - `src/services/laneReachability.test.ts:136`
-- `src/services/learnTurnDoor.ts:170`
+- `src/services/learnTurnDoor.ts:340`
+- `src/services/replayFence.najdorf1500.test.ts:50`
 - `src/services/voicePackage.test.ts:19`
 - `src/services/voicePackage.test.ts:32`
 - `src/services/voicePackage.test.ts:44`
@@ -103,23 +122,34 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:473`
 - `src/services/voicePackage.test.ts:480`
 - `src/services/voicePackage.test.ts:488`
+- `src/services/voicePackage.test.ts:499`
+- `src/services/voicePackage.test.ts:504`
+- `src/services/voicePackage.test.ts:511`
+- `src/services/voicePackage.test.ts:515`
+- `src/services/voicePackage.test.ts:529`
+- `src/services/voicePackage.test.ts:542`
+- `src/services/voicePackage.test.ts:543`
+- `src/services/voicePackage.test.ts:549`
+- `src/services/voicePackage.test.ts:550`
 
-### `spokenSentenceKeys` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7412`
-- `src/components/Coach/CoachTeachPage.tsx:8643`
-- `src/components/Coach/CoachTeachPage.tsx:9461`
-- `src/components/Coach/CoachTeachPage.tsx:9885`
+### `spokenSentenceKeys` (function) — 9 call sites
+- `src/components/Coach/CoachTeachPage.tsx:7549`
+- `src/components/Coach/CoachTeachPage.tsx:8976`
+- `src/components/Coach/CoachTeachPage.tsx:9938`
+- `src/components/Coach/CoachTeachPage.tsx:10811`
+- `src/services/coachFeatureService.ts:2417`
 - `src/services/voicePackage.test.ts:415`
 - `src/services/voicePackage.test.ts:424`
 - `src/services/voicePackage.test.ts:436`
+- `src/services/voicePackage.test.ts:514`
 
 ### `describeVoicePackage` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9453`
-- `src/components/Coach/CoachTeachPage.tsx:9950`
+- `src/components/Coach/CoachTeachPage.tsx:9927`
+- `src/components/Coach/CoachTeachPage.tsx:10911`
 - `src/services/voicePackage.test.ts:38`
 
 ### `joinSpoken` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:204`
+- `src/services/learnTurnDoor.ts:389`
 
 ### `LineArrow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -128,17 +158,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `keptLines` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9923`
-- `src/services/learnTurnDoor.test.ts:182`
+- `src/components/Coach/CoachTeachPage.tsx:10871`
 - `src/services/learnTurnDoor.test.ts:188`
 - `src/services/learnTurnDoor.test.ts:194`
+- `src/services/learnTurnDoor.test.ts:200`
 
 ## Tests
 
 - `src/hooks/usePhaseNarration.test.ts`
 - `src/services/coachSurfaceScorecard.report.test.ts`
 - `src/services/computedVoiceAudit.report.test.ts`
+- `src/services/dnaDoor.test.ts`
 - `src/services/laneReachability.test.ts`
+- `src/services/replayFence.najdorf1500.test.ts`
 - `src/services/voicePackage.test.ts`
 
 ## Audits that reach it

@@ -32,12 +32,16 @@ import { useEndgamePlayout } from '../../hooks/useEndgamePlayout';
 import { useClickToMove } from '../../hooks/useClickToMove';
 import { useAdaptiveEndgameSession } from '../../hooks/useAdaptiveEndgameSession';
 import { useNarration } from '../../hooks/useNarration';
+import { voiceService } from '../../services/voiceService';
 import { getMasteredCount } from '../../services/endgameProgressService';
 import {
   getAllPatterns,
   getPatternById,
   getPracticePuzzleCount,
+  hasPlayableLesson,
+  explainMate,
   buildMatingPatternLesson,
+  patternRule,
   type EndgameTier,
 } from '../../services/endgameService';
 import {
@@ -47,6 +51,7 @@ import {
   getRookEndings,
 } from '../../services/endgameLessonsService';
 import { EndgameLessonTab } from './EndgameLessonTab';
+import { WrongTryNote } from '../Puzzles/WrongTryNote';
 import { EvalLabQuiz } from './EvalLabQuiz';
 import { FromYourGamesTab } from './FromYourGamesTab';
 import { useAppStore } from '../../stores/appStore';
@@ -360,7 +365,7 @@ function PatternPicker({ onPick, onBack, activeTab, onTabChange }: PickerProps):
               control was effectively dead UI for tagged patterns. */}
 
           <PatternSection title="Named Patterns" patterns={named} onPick={onPick} />
-          <PatternSection title="Piece Mates" patterns={piece} onPick={onPick} subtitle="Recognition only — practice corpus coming soon" />
+          <PatternSection title="Piece Mates" patterns={piece} onPick={onPick} subtitle="Play them out — the engine defends; drive its king to mate." />
         </>
       )}
 
@@ -449,7 +454,7 @@ function PatternSection({ title, subtitle, patterns, onPick }: SectionProps): JS
               <div className="text-[10px] text-theme-text-muted mt-1.5">
                 {hasPractice
                   ? `${count} practice ${count === 1 ? 'puzzle' : 'puzzles'}`
-                  : 'Recognition only'}
+                  : hasPlayableLesson(p) ? 'Play it out' : 'Recognition only'}
               </div>
             </button>
           );
@@ -719,7 +724,7 @@ function LessonView({
               ? `Mate in ${lessonMeta.movesToMate} · rating ${lessonMeta.rating}`
               : hasPractice
                 ? 'Adaptive drill'
-                : 'Recognition only'}
+                : hasPlayableLesson(pattern) ? 'Play it out' : 'Recognition only'}
           </p>
         </div>
         <div className="flex items-center gap-1">
@@ -755,6 +760,31 @@ function LessonView({
   // Lichess theme tag NOR a curated playable position render as
   // recognition-only (the final fallback).
   if (!hasPractice) {
+    // Phase 7d: piece-mate fundamentals (K+Q vs K, K+R vs K, K+B+B vs K,
+    // K+B+N vs K, …) have no single "correct" technique — so they are free
+    // play even when a curated line exists (the queen, rook, two-rook and
+    // one B+N entry carried a line and fell into one-answer mode, rejecting
+    // moves that still force mate: endgame hand walk 2026-10-01) — the student drives the lone king to mate
+    // against Stockfish defense. Route them through CuratedMatingLessonView
+    // in free-play mode (any legal move accepted, ends when mate is on
+    // the board).
+    if (pattern.category === 'piece-mate' && pattern.lessonPositions[0]) {
+      return (
+        <CuratedMatingLessonView
+          pattern={pattern}
+          positions={[
+            {
+              fen: pattern.lessonPositions[0].fen,
+              solution: [],
+              movesToMate: null,
+            },
+          ]}
+          freePlay
+          header={header}
+          onExit={onExit}
+        />
+      );
+    }
     // Phase 7b: surface every curated playable position, sorted shallow→deep,
     // so a pattern's mate-in-1 reference and its longer game-citation
     // setups both get airtime. The CuratedMatingLessonView walks them
@@ -771,29 +801,6 @@ function LessonView({
         <CuratedMatingLessonView
           pattern={pattern}
           positions={curatedPlayables}
-          header={header}
-          onExit={onExit}
-        />
-      );
-    }
-    // Phase 7d: piece-mate fundamentals (K+Q vs K, K+B+B vs K, K+Q+B vs K,
-    // K+Q+N vs K) have no curated solution because there's no single
-    // "correct" technique — the student drives the lone king to mate
-    // against Stockfish defense. Route them through CuratedMatingLessonView
-    // in free-play mode (any legal move accepted, ends when mate is on
-    // the board).
-    if (pattern.category === 'piece-mate' && pattern.lessonPositions[0]) {
-      return (
-        <CuratedMatingLessonView
-          pattern={pattern}
-          positions={[
-            {
-              fen: pattern.lessonPositions[0].fen,
-              solution: [],
-              movesToMate: null,
-            },
-          ]}
-          freePlay
           header={header}
           onExit={onExit}
         />
@@ -1032,8 +1039,12 @@ function CuratedMatingLessonView({
     startFen: current.fen,
     solution,
     stockfishFallback: freePlay,
-    extendToObviousWin: freePlay,
-    fallbackPliesToPlay: freePlay ? 50 : undefined,
+    // A basic mate starts a rook or more ahead, so the material "obvious win"
+    // ended the drill after ONE move (hand walk 2026-10-01: "That's Rook Mate.
+    // Played perfectly." with no mate on the board). Free play ends at mate,
+    // stalemate or the move cap — the board decides.
+    extendToObviousWin: false,
+    fallbackPliesToPlay: freePlay ? 60 : undefined,
     fallbackDifficulty: 'hard',
     replyDelayMs: 450,
   });
@@ -1054,12 +1065,15 @@ function CuratedMatingLessonView({
   // `speak()` to the hook's internal `speakForced` semantics so
   // pattern narration matches EndgameLessonTab's keystone narration
   // (both are opt-in lesson content, pref gate should not mute).
+  const rule = useMemo(() => patternRule(pattern), [pattern]);
   const matingNarrationText = useMemo<string>(
     () =>
-      [`${pattern.name}.`, pattern.narration.intro, pattern.narration.recognition]
+      // A piece mate's computed rule IS its method; the authored intro said the
+      // same thing a sentence earlier (hand walk 2026-10-01).
+      [`${pattern.name}.`, pattern.category === 'piece-mate' && rule ? null : pattern.narration.intro, rule, pattern.narration.recognition]
         .filter(Boolean)
         .join(' '),
-    [pattern.name, pattern.narration.intro, pattern.narration.recognition],
+    [pattern, rule],
   );
   useNarration({ text: matingNarrationText });
   const wrongFlashStyles = useMemo<Record<string, React.CSSProperties>>(() => {
@@ -1089,6 +1103,25 @@ function CuratedMatingLessonView({
     ...wrongFlashStyles,
   }), [clickToMove.squareStyles, hintStyles, wrongFlashStyles]);
 
+  // THE END, READ OFF THE BOARD (hand walk 2026-10-01): mate says why it is
+  // mate (`explainMate`); a stalemate or the move cap says so instead of
+  // "Played perfectly" over a board with no mate on it.
+  const endLine = useMemo<string>(() => {
+    if (!playout.isComplete) return '';
+    let c: Chess | null = null;
+    try { c = new Chess(playout.fen); } catch { c = null; }
+    if (c?.isCheckmate()) {
+      const why = explainMate(playout.fen);
+      return `That's ${pattern.name}.${playout.firstTryPerfect && !freePlay ? ' Played perfectly.' : ''}${why ? ` ${why}` : ''}`;
+    }
+    if (c?.isStalemate()) return "Stalemate — their king had no move but was not in check, so it's a draw. Always leave the king a square until the mating move.";
+    if (c?.isDraw()) return "That's a draw on the board — no mate this time. Try it again.";
+    return 'No mate yet — the moves ran out. Try it again and keep shrinking the king\'s box.';
+  }, [playout.isComplete, playout.fen, playout.firstTryPerfect, pattern.name, freePlay]);
+  useEffect(() => {
+    if (endLine) void voiceService.speak(endLine);
+  }, [endLine]);
+
   const board = (
     <ConsistentChessboard
       fen={playout.fen}
@@ -1104,10 +1137,8 @@ function CuratedMatingLessonView({
   if (playout.isComplete) {
     controls = (
       <div className="flex flex-col gap-3 px-2">
-        <div className="text-sm leading-relaxed text-theme-text">
-          That&apos;s {pattern.name}.{' '}
-          {playout.firstTryPerfect ? 'Played perfectly.' : 'Line completed.'} The geometry is the same
-          every time you spot this pattern in your own games.
+        <div className="text-sm leading-relaxed text-theme-text" data-testid="curated-mating-result">
+          {endLine}
         </div>
         {canNext ? (
           <button
@@ -1191,6 +1222,11 @@ function CuratedMatingLessonView({
                 ? 'Stockfish defends. Any legal move is fine — find mate.'
                 : `Drag a piece — ${playout.curatedStudentMoves - playout.studentMovesPlayed} move${playout.curatedStudentMoves - playout.studentMovesPlayed === 1 ? '' : 's'} to mate.`}
             </div>
+            {rule && (
+              <div className="mt-1.5 text-[11px] text-theme-text leading-snug" data-testid="mating-rule">
+                {rule}
+              </div>
+            )}
           </div>
         </div>
         {playout.wrongAttempts > 0 && (
@@ -1200,6 +1236,7 @@ function CuratedMatingLessonView({
               : `${playout.wrongAttempts} wrong tries.`}
           </div>
         )}
+        <WrongTryNote text={playout.wrongTryText} />
         <div className="flex items-center gap-3 px-1">
           {playout.hintMove && !playout.hintRevealed && (
             <button

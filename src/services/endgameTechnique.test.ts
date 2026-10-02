@@ -29,15 +29,14 @@ const EXPECTED: Record<string, string> = {
   'k7/8/K7/P7/8/8/8/8 b - - 0 1': 'rook-pawn-corner',         // rook pawn — drawn
   '8/8/8/5k2/P7/8/8/2K5 w - - 0 1': 'rule-of-the-square',     // outside the square — queens
   '8/8/8/4k3/P7/8/8/2K5 w - - 0 1': 'rule-of-the-square',     // on the boundary — caught
-  '8/8/8/8/8/4k3/P7/2K5 w - - 0 1': 'rule-of-the-square',     // first-move bonus
-  '3k4/8/8/3KP3/8/8/8/8 w - - 1 2': 'key-squares',            // outflanking — to reach a key square
+  '8/8/8/8/8/6k1/P7/2K5 w - - 0 1': 'rule-of-the-square',     // first-move bonus (king on g3, 2026-10-01 rebuild)
+  '8/8/4k3/8/4K3/8/4P3/8 w - - 0 1': 'key-squares',            // outflanking — to reach a key square (Kd4!, 2026-10-01 rebuild)
   '6k1/ppp5/8/PPP5/8/8/8/6K1 w - - 0 1': 'pawn-endgame',       // breakthrough — no false technique
-  '8/p7/k7/P7/8/8/3K4/8 w - - 0 1': 'pawn-endgame',           // triangulation — no false technique
+  '8/2k5/1p6/1P6/2P1K3/8/8/8 w - - 0 1': 'pawn-endgame',      // triangulation (tablebase-verified, 2026-10-01) — no false technique
   // rook-endings
   '1K6/1P6/8/8/2k5/8/r7/4R3 w - - 0 1': 'lucena',
-  '5k2/8/4K3/4P3/8/4r3/8/4R3 w - - 0 1': 'philidor',
+  '4k3/7R/r7/3KP3/8/8/8/8 b - - 0 1': 'philidor',              // tablebase-verified Philidor (2026-10-01 rebuild; both tabs share it)
   '8/R7/8/pP4p1/7k/7r/5K2/8 w - - 0 53': 'rook-behind-passer',  // active rook — Ra7 also stands behind Black's a5 passer (board-true Tarrasch)
-  '8/6k1/P4r2/8/8/8/R7/K7 w - - 0 1': 'rook-behind-passer',    // Vancura setup (rook behind the passer is board-true)
   '8/8/4k3/8/8/2R5/3P4/3K4 w - - 0 1': 'cut-off-king',
   // drawn-patterns
   'k7/8/PK6/8/8/8/8/B7 b - - 0 1': 'wrong-rook-pawn-bishop',
@@ -46,7 +45,6 @@ const EXPECTED: Record<string, string> = {
   // solution trades them on f7. The engine reports the board, not the label.
   // Flagged to David; needs a real OCB game position (never invented, G3).
   '4b3/6k1/8/7p/pP5P/3BK1P1/2P5/8 b - - 0 41': 'same-bishops',
-  '5k2/8/4K3/4P3/8/8/r7/4R3 w - - 0 1': 'philidor',
   'k7/r7/8/8/8/8/Q7/2K5 w - - 0 1': 'queen-vs-rook',
   '4k3/8/8/8/3P4/3K4/8/8 b - - 0 1': 'key-squares',            // defender in front — the fight is for the key squares
 };
@@ -163,5 +161,66 @@ describe('detectors — geometry, both colours', () => {
     expect(detectRookBehindPasser('R7/6k1/P7/8/8/8/8/K3r3 w - - 0 1')).toBeNull();
     // Not a passed pawn → nothing.
     expect(detectRookBehindPasser('8/p5k1/8/8/P7/8/R7/K7 w - - 0 1')).toBeNull();
+  });
+});
+
+import { detectBareKingMate, detectTwoPawnsVsKing, detectBackRankDefence } from './endgameTechnique';
+
+describe('basic checkmates against a bare king', () => {
+  it('queen, rook, two bishops and bishop+knight force mate; the rest cannot', () => {
+    expect(detectBareKingMate('8/8/8/4k3/8/8/8/3QK3 w - - 0 1')).toMatchObject({ kind: 'queen', forced: true, maxMoves: 10 });
+    expect(detectBareKingMate('8/8/8/4k3/8/8/8/R3K3 w - - 0 1')).toMatchObject({ kind: 'rook', forced: true, maxMoves: 16 });
+    expect(detectBareKingMate('8/8/8/4k3/8/8/8/2B1KB2 w - - 0 1')).toMatchObject({ kind: 'two-bishops', forced: true, maxMoves: 19 });
+    // c1 and e1 are both dark — same colour, no mate at all.
+    expect(detectBareKingMate('8/8/8/4k3/8/8/8/2B1B1K1 w - - 0 1')).toMatchObject({ kind: 'same-colour-bishops', forced: false });
+    expect(detectBareKingMate('8/8/8/4k3/8/8/8/1N2K1N1 w - - 0 1')).toMatchObject({ kind: 'two-knights', forced: false });
+    expect(detectBareKingMate('8/8/8/4k3/8/8/8/4K1N1 w - - 0 1')).toMatchObject({ kind: 'lone-minor', forced: false });
+  });
+  it('bishop + knight: mate only in the corners of the bishop\'s colour', () => {
+    // f1 is a light square → h1 / a8.
+    expect(detectBareKingMate('8/8/8/4k3/8/8/8/1N2KB2 w - - 0 1')?.corners).toEqual(['h1', 'a8']);
+    // c1 is dark → a1 / h8.
+    expect(detectBareKingMate('8/8/8/4k3/8/8/8/2B1K1N1 w - - 0 1')?.corners).toEqual(['a1', 'h8']);
+  });
+  it('the side with the material can be Black, and pawns take it out of the rule', () => {
+    expect(detectBareKingMate('3qk3/8/8/8/8/8/8/4K3 w - - 0 1')).toMatchObject({ side: 'black', kind: 'queen' });
+    expect(detectBareKingMate('8/8/8/4k3/8/8/4P3/3QK3 w - - 0 1')).toBeNull();
+  });
+});
+
+describe('two pawns against a bare king', () => {
+  it('a protected chain: the front pawn is guarded, and taking the back one lets the front one queen', () => {
+    // e6 guarded by f5; Kxf5 and e7-e8 is out of reach.
+    expect(detectTwoPawnsVsKing('8/8/4Pk2/5P2/8/8/8/K7 b - - 0 1')).toMatchObject({ kind: 'connected', selfDefending: true });
+  });
+  it('pawns side by side with the king to move can lose one: Kxe5, f6, Kxf6', () => {
+    expect(detectTwoPawnsVsKing('8/8/5k2/4PP2/8/8/8/K7 b - - 0 1')).toMatchObject({ kind: 'connected', selfDefending: false });
+  });
+  it('a king behind its target never catches the other pawn (Kxd2, e4 runs)', () => {
+    expect(detectTwoPawnsVsKing('8/8/8/8/8/4k3/3PP3/7K b - - 0 1')).toMatchObject({ kind: 'connected', selfDefending: true });
+  });
+  it('one file apart is reported as such and computed, not assumed', () => {
+    expect(detectTwoPawnsVsKing('8/8/5k2/4P1P1/8/8/8/K7 b - - 0 1')).toMatchObject({ kind: 'one-file-gap', selfDefending: false });
+  });
+  it('a lone pawn is not this rule', () => {
+    expect(detectTwoPawnsVsKing('8/8/5k2/4P3/8/8/8/K7 b - - 0 1')).toBeNull();
+  });
+});
+
+describe('detectBackRankDefence — rook/knight pawn, king on the queening square (tablebase-checked)', () => {
+  it('fires on the knight-pawn hold (TB: draw)', () => {
+    expect(detectBackRankDefence('1r4k1/R7/5KP1/8/8/8/8/8 w - - 0 1')).toMatchObject({ side: 'black', pawn: 'g6' });
+  });
+  it('not against a bishop pawn (TB: White to move wins)', () => {
+    expect(detectBackRankDefence('1r3k2/R7/5P2/6K1/8/8/8/8 w - - 0 1')).toBeNull();
+  });
+  it('not with the rook beside its king (TB: Ra8+ wins)', () => {
+    expect(detectBackRankDefence('6kr/8/6K1/6P1/8/8/R7/8 b - - 0 1')).toBeNull();
+  });
+});
+
+describe('endgameConceptFor — the back-rank defence is spoken where it holds', () => {
+  it('names it on the knight-pawn hold', () => {
+    expect(endgameConceptFor('1r4k1/R7/5KP1/8/8/8/8/8 w - - 0 1')?.id).toBe('back-rank-defence');
   });
 });

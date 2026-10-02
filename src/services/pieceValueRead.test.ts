@@ -353,3 +353,34 @@ describe('one idea, said once a phase — not once per square (re-walk 1380, 202
     expect(pieceQualityLines(at('e6', 'b2'), 'white', undefined, { isMiddlegame: true }).find((l) => l.kind === 'your-worst-piece')?.text).toMatch(/bishop on b2/);
   });
 });
+
+describe('an unmoved queen behind its own pawn is not doing the most work (fresh-game walk 2026-09-27)', () => {
+  it('Carlsen–Topalov move 10: the d1-queen is not crowned', async () => {
+    const { Chess } = await import('chess.js');
+    const c = new Chess();
+    for (const s of 'e4 c5 Nf3 d6 Bb5+ Nd7 O-O Nf6 Re1 a6 Bd3 b5 c4 g5 Nxg5 Ne5 Be2 bxc4 Na3'.split(' ')) c.move(s);
+    const values = [
+      { piece: 'q', color: 'w', square: 'd1', value: 1.2 },
+      { piece: 'q', color: 'b', square: 'd8', value: -0.2 },
+    ] as never;
+    const lines = pieceQualityLines(values, 'black', undefined, { isMiddlegame: true, fen: c.fen() });
+    expect(lines.some((l) => /queen on d1/.test(l.text))).toBe(false);
+  });
+});
+
+describe('question first, then the answer with its move (David 2026-09-30)', () => {
+  // Walk 2026-09-30, uJro3yCDEgk after 10…Nbxd7: "Their knight on f6 is the
+  // piece doing the most work" named the piece and stopped.
+  const fen = 'r2qkb1r/pp1n1ppp/5n2/2pp4/3P4/2P2N2/PP3PPP/RNBQK2R w KQkq - 0 10';
+  const values = [
+    { piece: 'n', color: 'b', square: 'f6', value: -1.6 },
+    { piece: 'n', color: 'b', square: 'd7', value: -0.4 },
+    { piece: 'b', color: 'w', square: 'c1', value: 0.2 },
+    { piece: 'n', color: 'w', square: 'f3', value: 0.8 },
+  ] as never;
+  it('asks which piece, pauses, then names it and the move that challenges it', () => {
+    const best = pieceQualityLines(values, 'white', undefined, { isMiddlegame: true, fen }).find((l) => l.kind === 'their-best-piece');
+    expect(best?.text).toMatch(/^Which of their pieces is doing the most work\? ‖ The knight on f6 — Bg5 challenges it/);
+    expect(best?.arrows?.[0]).toMatchObject({ from: 'c1', to: 'g5', role: 'play' });
+  });
+});

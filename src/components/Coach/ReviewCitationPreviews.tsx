@@ -9,6 +9,7 @@
 
 import { ConsistentChessboard, type BoardArrow } from '../Chessboard/ConsistentChessboard';
 import type { ReviewMoveCitation } from '../../services/coachFeatureService';
+import { admitArrow } from '../../services/arrowDoor';
 
 const PLAYED_ARROW = '#ef4444'; // red — the move you played
 const SUGGESTED_ARROW = '#22c55e'; // green — the engine's better move
@@ -33,15 +34,17 @@ export interface ReviewCitationPreviewsProps {
   limit?: number;
 }
 
+/** Only the better move is arrowed, through the arrow door. The move that was
+ *  played is a mistake — a bad move is never arrowed (David 2026-09-29); the
+ *  caption names it ("You played …") in its colour instead. */
 function buildArrows(c: ReviewMoveCitation): BoardArrow[] {
-  const arrows: BoardArrow[] = [];
-  if (c.playedSquares) {
-    arrows.push({ startSquare: c.playedSquares[0], endSquare: c.playedSquares[1], color: PLAYED_ARROW });
-  }
-  if (c.suggestedSquares) {
-    arrows.push({ startSquare: c.suggestedSquares[0], endSquare: c.suggestedSquares[1], color: SUGGESTED_ARROW });
-  }
-  return arrows;
+  if (!c.suggestedSquares) return [];
+  const studentColor = c.fenBefore.split(' ')[1] === 'b' ? 'black' : 'white';
+  const better = admitArrow(
+    { from: c.suggestedSquares[0], to: c.suggestedSquares[1], role: 'play', vouchedBy: 'engine', source: 'reviewCitation' },
+    { fen: c.fenBefore, studentColor },
+  );
+  return better ? [better] : [];
 }
 
 export function ReviewCitationPreviews({ citations, onJumpToPly, limit }: ReviewCitationPreviewsProps): JSX.Element | null {

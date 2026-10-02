@@ -1,6 +1,6 @@
 import { Chess } from 'chess.js';
 import { gameArcs, type ArcEvent } from './lookaheadPlan';
-import { FUNDAMENTAL_CLAIM_FAMILY, type MoveFundamentalId } from './moveFundamentals';
+import { FUNDAMENTAL_CLAIM_FAMILY, principleAlreadyTaught, type MoveFundamentalId } from './moveFundamentals';
 import type { Square } from 'chess.js';
 import { legalSeeGainOn } from './positionReadingService';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat, detectNewThreat, describeThreatPrevention } from './groundedAnswer';
@@ -22,7 +22,7 @@ import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGround
 import { getHisPlayDb } from './hisPlayLookup';
 import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
 import { refutedAlternative, candidatesForPosition, type RefutedAlternative } from './refutedAlternative';
-import { transferClause, recordMotif, withTransfer, type MotifLedger } from './motifLedger';
+import { transferClause, transferMotifOf, recordMotif, withTransfer, type MotifLedger } from './motifLedger';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectOpening } from './openingDetectionService';
 import { resolveCuratedOpeningIdeas } from './reviewOpeningTheory';
@@ -42,7 +42,7 @@ import { recurrenceFor, recurrenceLine } from './misconceptionCallbacks';
 import { fundamentalRecurrenceLine } from './fundamentalRecurrence';
 import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
-import type { FactStakes } from './factStakes';
+import { MATE_POINTS, type FactStakes } from './factStakes';
 import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead, buildMissedShotSignal } from './reviewTeachingPoints';
 import { computeGemCrush, buildReviewGemSay } from './gemCrushLines';
 import { buildOpeningMoveDetail } from './reviewStrategicOrientation';
@@ -56,7 +56,7 @@ import { voiceFacts } from './coachApi';
 // LLM call (those are deterministic via `buildReviewSegments`).
 import { logAppAudit } from './appAuditor';
 import { whyItFailed } from './whyItFailed';
-import { betterMoveReason } from './inaccuracyCall';
+import { betterMoveReason, priorMoveLeadingTo } from './inaccuracyCall';
 import { attributePrinciples, pvUciToSan, type PrincipleAttribution } from './principleAttribution';
 import { buildCausalChain, causalChainArrows, causalChainMistakeTags, findMissedChain, findAllowedChain } from './causalChain';
 import { renderCausalChain } from './causalChainVoice';
@@ -64,12 +64,19 @@ import { matchFundamental, matchTag, type WeaknessSignal } from './weaknessSigna
 import { loadWeaknessSignals } from './weaknessSignalLoader';
 import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap, isMethodSentence } from './principleVoice';
 import { resolveCoachNarration } from '../utils/coachNarration';
-import type { BadHabit, CoachContext, UserProfile, CoachNarration, OpeningKey } from '../types';
+import type { BadHabit, CoachContext, UserProfile, CoachNarration, OpeningKey, BoardArrow } from '../types';
+import { admitArrow, admitArrows, type ArrowClaim } from './arrowDoor';
+import { lineWins, lineArrows, mateLine } from './lineCalc';
+import { pawnEndingTrade, outsidePasserDecoy, spareTempoWasted } from './endgamePawnReads';
+import { theirOpeningVerdict } from './openingAnnouncement';
 import { departureRecordSentence, openingRecordClause } from './openingRecordBeat';
 import { ecoOfKey, openingEntryForKey, openingFamily, openingKeyFromSans } from './openingKey';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { describeEvalCp, isMateEval } from './engineConstants';
 import { isMinorAtHome } from './development';
+import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
+import { studentMoveTeaching, namedMoveArrows } from './learnBoardTeaching';
+import type { FacetTag } from './reviewFacetRank';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
 
@@ -78,6 +85,35 @@ import { isMinorAtHome } from './development';
 // without the coachApi↔coachFeatureService import cycle (WO stumbling-block #1).
 // Re-exported here so existing consumers (StatsPage, CoachGamePage,
 // gameAnalysisService) keep importing it from this module unchanged.
+
+/** The lanes `studentMoveTeaching` emits — the Learn student-move computer. */
+type StudentMoveLane = 'recapture' | 'movePoint' | 'kneeJerk' | 'strongChoice' | 'fileRace' | 'blunderCheck'
+  | 'autopilot' | 'pawnEnding' | 'keepPressing' | 'trade' | 'timing' | 'kingAttack' | 'ruleException'
+  | 'falseAlarm' | 'pushOrHold';
+
+/** Which review facet each Learn student-move lane speaks as (unify-the-coach
+ *  A2). Exhaustive, so a new lane fails to compile until someone decides. NULL
+ *  = review already has its own producer for that fact (the winning line, the
+ *  pawn-ending reads, the trade read, the timing facet, the plan race, the
+ *  opening facets) — merging those is its own step, never a second voice. */
+const REVIEW_TAG_FOR_LANE: Record<StudentMoveLane, FacetTag | null> = {
+  recapture: 'rule',
+  kneeJerk: 'rule',
+  blunderCheck: 'rule',
+  autopilot: 'rule',
+  keepPressing: 'rule',
+  ruleException: 'rule',
+  falseAlarm: 'rule',
+  kingAttack: 'rule',
+  pushOrHold: 'rule',
+  movePoint: null,
+  pawnEnding: null,
+  trade: null,
+  timing: null,
+  fileRace: null,
+  strongChoice: null,
+};
+
 export { detectBadHabits };
 
 export async function updateBadHabits(profile: UserProfile): Promise<BadHabit[]> {
@@ -552,6 +588,21 @@ export function buildProfileContext(profile: UserProfile): CoachContext {
  *  plus the per-ply narration string the LLM returned. A null `narration`
  *  means "this move passes in silence" — the review UI advances the
  *  board but speaks nothing. */
+/** EVERY MOVE A REVIEW BEAT NAMES GETS ITS ARROW (David 2026-10-02: "Make
+ *  sure all stated moves have arrows"). The beat's text, resolved on the
+ *  board the walk shows (after the move), with the board before it for a
+ *  "was cleaner" move and a line walked ply by ply — the same resolver Learn
+ *  uses, through the arrow door. Computed at display time, so a cached
+ *  review gains its arrows without a rebuild. */
+export function segmentNamedArrows(
+  seg: Pick<ReviewMoveSegment, 'narration' | 'fenAfter' | 'fenBefore'>,
+  studentColor: 'white' | 'black',
+): BoardArrow[] {
+  if (!seg.narration) return [];
+  const claims = namedMoveArrows(seg.narration, seg.fenAfter, studentColor === 'white' ? 'w' : 'b', seg.fenBefore);
+  return admitArrows(claims, { fen: seg.fenAfter, studentColor }).arrows;
+}
+
 export interface ReviewMoveSegment {
   /** 1-indexed ply count. Ply 1 = White's first move, ply 2 = Black's first. */
   ply: number;
@@ -575,6 +626,12 @@ export interface ReviewMoveSegment {
    *  only). The quiet per-move opening beat speaks only when `need.speak`;
    *  flags / plan one-shots / moments speak on their own importance. */
   need?: NeedVerdict;
+  /** The ply where the conversion was first TAUGHT (the plan or the method),
+   *  so the later concept fill hears the claim as already made. */
+  convertTaught?: true;
+  /** A silent student ply whose only lesson — this opening principle — was
+   *  already taught earlier in the game (say-once). Read by need coverage. */
+  principleTaughtEarlier?: string;
   /** The fundamentals this (student, flagged) move neglected — attributed on
    *  the board (principleAttribution), spoken FIRST in `narration`, and
    *  aggregated into the closing. Undefined when nothing attached. */
@@ -588,7 +645,8 @@ export interface ReviewMoveSegment {
    *  beat (opening-development / middlegame orientation). The board stays put —
    *  these arrows SHOW the plan instead of moving pieces (David 2026-07-19).
    *  Undefined on ordinary moves. */
-  planArrows?: Array<{ startSquare: string; endSquare: string; color: string }>;
+  /** Arrow-door output only (`arrowDoor`). */
+  planArrows?: BoardArrow[];
   /** The projected line this segment's narration MENTIONS in prose — the delta
    *  ("the line runs h3, then d5, then e5…"), the opponent-punishment line
    *  ("here's how you take advantage: Ne5, then bxc5…"), or the deep-threat line
@@ -914,7 +972,8 @@ export function buildReviewCitations(
     // order, then what the line wins). The board-only mechanism is the fallback
     // when the engine line cannot name one.
     const shared = suggestedSan && m.bestMove
-      ? betterMoveReason(fenBefore, m.san, suggestedSan, [m.bestMove, ...(m.pv?.afterBest ?? [])], isWhiteMove ? 'white' : 'black')
+      ? betterMoveReason(fenBefore, m.san, suggestedSan, [m.bestMove, ...(m.pv?.afterBest ?? [])], isWhiteMove ? 'white' : 'black',
+        priorMoveLeadingTo(i > 0 ? { fenBefore: chain[i - 1].fenBefore, san: moves[i - 1].san } : null, fenBefore))
       : null;
     const whyBetter = shared
       ? `${suggestedSan} was better — ${shared}.`
@@ -1059,7 +1118,7 @@ function buildDeterministicNarration(params: {
       if (playedMerit) return `And there it is — it ${playedMerit}.`;
       const stems = [
         'And there it is — that was the move.',
-        'Brilliant find. This was the game.',
+        'That was the move — the game turned on it.',
         'There it is. The position asked for exactly this.',
       ];
       return stems[variant];
@@ -1374,10 +1433,21 @@ export function buildReviewSegments(
   /** Fundamentals already spoken in full this game — repeats get the short stem. */
   const seenFundamentals = new Set<import('./principleAttribution').FundamentalId>();
   const seenConversionSteps = new Set<ConversionStep>();
+  /** Outside-passer decoys already said this review (one per passer file). */
+  const seenDecoys = new Set<string>();
   /** S6 transfer: tactic motif → the move it was first SPOKEN this game. */
   const motifFirstMove: MotifLedger = new Map();
   /** S2: opening principles SPOKEN this game — committed after the door. */
   const principlesTaught = new Set<string>();
+  /** The ply each principle was first spoken — read by the coverage marker. */
+  const principleTaughtAt = new Map<string, number>();
+  // THE ONE DOOR, REVIEW SIDE (David 2026-09-30: "Review yes, Play no"). Every
+  // uncapped ply's lines pass the same package Learn speaks through — board
+  // grading (true on the board before OR after the move), the not-speakable
+  // screen, and the per-game sentence + claim ledger — so a line said at move
+  // 9 is not said again at move 22. Counted for the audit row below.
+  const reviewSpokenKeys = new Set<string>();
+  const reviewPkgTally = { plies: 0, parts: 0, dropped: 0, reasons: {} as Record<string, number>, drops: [] as Array<{ ply: number; reason: string; text: string }> };
   /** S4: the first ply of each phase the game reaches after the opening. */
   const phaseTurnAt = new Map<number, 'middlegame' | 'endgame'>();
   {
@@ -1455,8 +1525,19 @@ export function buildReviewSegments(
   // ply later. Square specifics are stripped from the key so "attack the king on
   // e8" and "attack the king on e8 before it runs" collapse to one goal.
   const planGoalsSeen = new Set<string>();
+  // ONE CLAIM, MANY LANES (review walk 2026-10-01). "Convert your extra
+  // material" (the plan), "trade pieces, not pawns" (the conversion method) and
+  // "when you're ahead the plan is to trade" (the concept fill) are one claim;
+  // so are "get your passed pawn on c3 promoting", "your passed pawn on c3
+  // wants to run" and "the plan for you here: pushing the passed pawn on the
+  // c-file". The first lane to speak claims it for the game.
+  let convertTaughtPly: number | null = null;
+  const passerPlanFiles = new Set<string>();
+  const conversionFacets = new Set<string>();
   /** Refuted alternatives already SPOKEN this game, by the move refuted. */
   const refutedSaid = new Set<string>();
+  // Learn-computer hints already spoken this game (A2), by claim identity.
+  const hintsSaid = new Set<string>();
   // The RACE verdict last spoken. Keyed on WHO ARRIVES FIRST, not on the counts:
   // the counts change on every push, so keying on them would re-announce the race
   // each ply. A flip — you were winning the race and now you are not — IS the
@@ -1734,9 +1815,10 @@ export function buildReviewSegments(
             }
           }
           if (chain.stance === 'played' || chain.stance === 'allowed') {
-            const CHAIN_ARROW_HEX: Record<string, string> = { green: '#22c55e', yellow: '#eab308', red: '#ef4444', blue: '#3b82f6' };
+            // Sight lines (the piece that attacks the loose target) through the
+            // arrow door, on the board after the move — each takes its owner's colour.
             const arr = causalChainArrows(chain);
-            if (arr.length) causalArrows = arr.map((a) => ({ startSquare: a.from, endSquare: a.to, color: CHAIN_ARROW_HEX[a.color] ?? '#22c55e' }));
+            if (arr.length) causalArrows = admitArrows(arr.map((a): ArrowClaim => ({ from: a.from, to: a.to, role: 'vision', source: 'review.causalChain' })), { fen: fenPair.fenAfter, studentColor: playerColor ?? moverColor }).arrows;
           }
         }
       } catch { causalLead = null; }
@@ -1776,6 +1858,7 @@ export function buildReviewSegments(
         classification: m.classification ?? null,
         bestMoveSan,
         bestLineUci: m.bestMove ? [m.bestMove, ...(m.pv?.afterBest ?? [])] : [],
+        playedLineUci: m.pv?.afterPlayed ?? [],
         replyBestSan: i + 1 < moves.length ? uciToSanAt(moves[i + 1].bestMove ?? null, fenPair.fenAfter) : null,
         prevCap,
         allSans: sansForRun,
@@ -1786,10 +1869,106 @@ export function buildReviewSegments(
       // per game (the step only changes when the board does).
       if (moverColor === playerColor && studentColorWB) {
         const conv = readConversion(fenPair.fenAfter, studentColorWB);
-        if (conv && !seenConversionSteps.has(conv.step)) {
+        if (conv && !seenConversionSteps.has(conv.step) && !(conv.step === 'trade-pieces' && convertTaughtPly !== null)) {
           seenConversionSteps.add(conv.step);
-          facets.push(`[technique] ${conv.text}`);
+          const raw = `[technique] ${conv.text}`;
+          facets.push(raw);
+          if (conv.step === 'trade-pieces') conversionFacets.add(raw);
         }
+      }
+      // THE PAWN ENDING (parity with Learn): the trade that takes the last
+      // pieces off, counted; an outside passer as a decoy, once per game.
+      if (moverColor === playerColor && studentColorWB && typeof m.preMoveEval === 'number' && typeof m.evaluation === 'number') {
+        const sign = moverColor === 'white' ? 1 : -1;
+        const pe = pawnEndingTrade(fenPair.fenBefore, m.san, moves[i + 1]?.san ?? null, Math.max(0, (m.preMoveEval - m.evaluation) * sign), m.evaluation * sign);
+        if (pe) facets.push(`[technique] ${pe.text}`);
+        if (m.bestMove) {
+          try {
+            const bm = new Chess(fenPair.fenBefore).move({ from: m.bestMove.slice(0, 2), to: m.bestMove.slice(2, 4), promotion: m.bestMove[4] });
+            const st = spareTempoWasted(fenPair.fenBefore, m.san, bm?.san ?? null, Math.max(0, (m.preMoveEval - m.evaluation) * sign));
+            if (st) facets.push(`[technique] ${st}`);
+          } catch { /* no best move to compare */ }
+        }
+        const decoy = outsidePasserDecoy(fenPair.fenAfter, studentColorWB);
+        if (decoy && !seenDecoys.has(decoy.passer[0])) {
+          seenDecoys.add(decoy.passer[0]);
+          const raw = `[technique] ${decoy.text}`;
+          facets.push(raw);
+          facetSquares.set(raw, decoy.squares);
+        }
+      }
+      // THE LEARN COMPUTERS, CALLED — not copied (unify-the-coach A2, David
+      // 2026-10-01: "one coach, every surface"). The student-move computer Learn
+      // speaks from runs here on the same move; `REVIEW_TAG_FOR_LANE` routes each
+      // lane to a review facet, and a lane review already has its own producer
+      // for maps to null so nothing is said twice. Each hint is said once a
+      // game, keyed on its own claims (committed only when it spoke).
+      if (moverColor === playerColor && studentColorWB && typeof m.preMoveEval === 'number' && typeof m.evaluation === 'number') {
+        const sign = moverColor === 'white' ? 1 : -1;
+        const bothCp = Math.abs(m.preMoveEval) < 5000 && Math.abs(m.evaluation) < 5000;
+        const hints = studentMoveTeaching({
+          fenBefore: fenPair.fenBefore,
+          san: m.san,
+          history: sansForRun.slice(0, m.ply),
+          cpLoss: Math.max(0, (m.preMoveEval - m.evaluation) * sign),
+          bothCp,
+          bestSan: bestMoveSan,
+          bestLine: m.bestMove ? { rank: 1, evaluation: m.preMoveEval, moves: [m.bestMove, ...(m.pv?.afterBest ?? [])], mate: null } : undefined,
+          reply: sansForRun[m.ply] ?? null,
+          cpAfter: bothCp ? m.evaluation * sign : null,
+        });
+        for (const h of hints) {
+          const tag = (REVIEW_TAG_FOR_LANE as Partial<Record<string, FacetTag | null>>)[h.lane] ?? null;
+          if (!tag) continue;
+          const id = `hint:${h.claims.join('|') || h.lane}`;
+          if (hintsSaid.has(id)) continue;
+          const raw = `[${tag}] ${h.text}`;
+          facets.push(raw);
+          facetIdentity.set(raw, id);
+          if (h.squares.length) facetSquares.set(raw, h.squares);
+        }
+      }
+      // THE LINE BEHIND A WINNING MOVE — parity with Learn (David 2026-09-30:
+      // "teach more line calculations"; one coach everywhere). The student
+      // played the engine's move and its line wins material: said to the last
+      // capture, drawn ply by ply.
+      if (moverColor === playerColor && studentColorWB) {
+        try {
+          const played = new Chess(fenPair.fenBefore).move(m.san);
+          const playedUci = played ? `${played.from}${played.to}${played.promotion ?? ''}` : null;
+          const line = m.bestMove && playedUci === m.bestMove ? [m.bestMove, ...(m.pv?.afterBest ?? [])]
+            : playedUci && m.pv?.afterPlayed?.length && (m.classification === 'great' || m.classification === 'brilliant' || m.classification === 'good') ? [playedUci, ...m.pv.afterPlayed]
+              : null;
+          // A line that MATES is said as the mate (and the quiet move that
+          // started it) — a material count would undersell it.
+          const ml = line ? mateLine(fenPair.fenBefore, line, studentColorWB, m.san) : null;
+          if (ml) {
+            const raw = `[tactic] ${ml.text}`;
+            facets.push(raw);
+            facetStakes.set(raw, { points: MATE_POINTS, plies: 0 });
+            if (ml.taken.length) facetSquares.set(raw, ml.taken);
+            if (!causalArrows || causalArrows.length === 0) {
+              causalArrows = admitArrows(lineArrows(fenPair.fenBefore, line ?? [], 'review.mateLine'), { fen: fenPair.fenBefore, studentColor: playerColor ?? moverColor }).arrows;
+            }
+          }
+          const won = !ml && line ? lineWins(fenPair.fenBefore, line, studentColorWB, m.san) : null;
+          if (won) {
+            const raw = `[tactic] That wins ${won.what}: ${won.sans.join(' ')}.`;
+            facets.push(raw);
+            facetStakes.set(raw, { points: won.net, plies: 0 });
+            if (!causalArrows || causalArrows.length === 0) {
+              causalArrows = admitArrows(lineArrows(fenPair.fenBefore, line ?? [], 'review.winningLine'), { fen: fenPair.fenBefore, studentColor: playerColor ?? moverColor }).arrows;
+            }
+          }
+        } catch { /* a bonus, never a blocker */ }
+      }
+      // A VERDICT ON THEIR OPENING CHOICE — parity with Learn: their move that
+      // left the masters' book, judged by the engine's cost of it.
+      if (moverColor !== playerColor && studentColorWB && typeof m.preMoveEval === 'number' && typeof m.evaluation === 'number') {
+        const sign = moverColor === 'white' ? 1 : -1;
+        const oppLoss = (m.preMoveEval - m.evaluation) * sign;
+        const verdict = theirOpeningVerdict(moves.slice(0, i + 1).map((x) => x.san), studentColorWB, oppLoss, false);
+        if (verdict) facets.push(`[opening] ${verdict}`);
       }
       for (const e of arcByIndex.get(i) ?? []) {
         const raw = `[plan-arc] ${e.text}`;
@@ -1846,9 +2025,11 @@ export function buildReviewSegments(
       const claim = (key: string): boolean => { if (claimedThisPly.has(key)) return false; claimedThisPly.add(key); return true; };
       const keep = (raw: string, commit?: () => void): void => { keptRaw.push(raw); if (commit) commitByRaw.set(raw, commit); };
       let verdictWordThisPly: string | null = null;
+      const planNowPasserFiles = new Set(facets.flatMap((x) => (/^\[plan-now\].*passed pawn on ([a-h])[1-8] promoting/i.exec(x)?.[1] ?? [])));
       for (const f of facets) {
         // A refuted alternative is said once per game (identity `refuted:<move>`).
         { const id = facetIdentity.get(f); if (id?.startsWith('refuted:') && (refutedSaid.has(id) || !claim(id))) continue; }
+        { const id = facetIdentity.get(f); if (id?.startsWith('hint:') && (hintsSaid.has(id) || !claim(id))) continue; }
         // Positional VERDICT — atom-diffed. Speak the verdict WORD when it
         // changes, and only the REASONS not yet stated, so a growing edge adds
         // the new asset instead of re-reciting the pile every ply.
@@ -1884,18 +2065,41 @@ export function buildReviewSegments(
             : /^\[plan-now\]\s*The plan from here is to /i.test(f)
               ? f.replace(/^\[plan-now\]\s*The plan from here is to /i, '[plan-now] The plan changes here — now it\'s to ')
               : f.replace(/^\[plan-now\]\s*(.)/, (_m, c: string) => `[plan-now] The plan changes here: ${c.toLowerCase()}`);
-          keep(said, () => planGoalsSeen.add(goalKey));
+          const passerFile = /passed pawn on ([a-h])[1-8] promoting/i.exec(f)?.[1] ?? null;
+          if (passerFile && passerPlanFiles.has(passerFile)) continue;
+          if (goalKey.startsWith('convert') && (convertTaughtPly !== null || !claim('convert'))) continue;
+          keep(said, () => {
+            planGoalsSeen.add(goalKey);
+            if (goalKey.startsWith('convert')) convertTaughtPly ??= m.ply;
+            if (passerFile) passerPlanFiles.add(passerFile);
+          });
           continue;
         }
         // The RACE — once, then only when the verdict FLIPS (see lastRaceVerdict).
         if (/^\[plan-race\]/.test(f)) {
-          const verdict = /they get there first|they got there first/i.test(f) ? 'them' : 'you';
+          const verdict = /they get there first|they got there first|they would get there first/i.test(f) ? 'them' : 'you';
           if (lastRaceVerdict === verdict || !claim(`race:${verdict}`)) continue;
           keep(f, () => { lastRaceVerdict = verdict; });
           continue;
         }
         // STANDING teaching read (live tactic / undefended piece / count /
         // royal-fork target / rook-on-7th) — taught ONCE per game by signature.
+        if (conversionFacets.has(f)) {
+          if (convertTaughtPly !== null || !claim('convert')) continue;
+          keep(f, () => { convertTaughtPly ??= m.ply; });
+          continue;
+        }
+        {
+          const pf = /^\[passer\]/.test(f) ? (/passed pawn on ([a-h])[1-8]/i.exec(f)?.[1] ?? null)
+            : /^\[plan-arc\] The plan for you here: pushing the passed pawn on the ([a-h])-file/i.exec(f)?.[1] ?? null;
+          if (pf) {
+            // The full plan outranks the one-line note and the arc for the same
+            // pawn: when it is on this ply, they defer to it.
+            if (passerPlanFiles.has(pf) || planNowPasserFiles.has(pf) || !claim(`passer:${pf}`)) continue;
+            keep(f, () => passerPlanFiles.add(pf));
+            continue;
+          }
+        }
         if (STANDING_STATE_RE.test(f)) {
           const sig = standingSig(f);
           if (standingSpoken.has(sig) || !claim(`standing:${sig}`)) continue;
@@ -2190,15 +2394,36 @@ export function buildReviewSegments(
           const raw = keptRaw[kept.indexOf(uncappedParts[k])] ?? uncappedParts[k];
           const identity = facetIdentity.get(raw);
           if (!identity) continue;
-          if (identity.startsWith('rule:')) { principlesTaught.add(identity.slice(5)); continue; }
+          if (identity.startsWith('rule:')) { for (const k of identity.slice(5).split('|')) { principlesTaught.add(k); if (!principleTaughtAt.has(k)) principleTaughtAt.set(k, m.ply); } continue; }
           if (identity.startsWith('refuted:')) { refutedSaid.add(identity); continue; }
+          if (identity.startsWith('hint:')) { hintsSaid.add(identity); continue; }
+          // ONLY a tactic motif transfers (`transferMotifOf`).
           // `motif:<type>:<squares>` — the squares make it THIS instance, so a
           // standing tactic is never "the same idea as move N" of itself.
-          const [motif, instance = ''] = identity.slice('motif:'.length).split(':');
+          const tm = transferMotifOf(identity);
+          if (!tm) continue;
+          const { motif, instance } = tm;
           uncappedParts[k] = withTransfer(uncappedParts[k], transferClause(motif, instance, fullMove, motifFirstMove));
           recordMotif(motif, instance, fullMove, motifFirstMove);
         }
       }
+      const doorNarration = (() => {
+        if (uncappedParts.length === 0) return null;
+        const pkg = buildVoicePackage(
+          uncappedParts.map((text) => ({ kind: 'computed' as const, text, fen: fenPair.fenAfter, altFen: fenPair.fenBefore })),
+          undefined,
+          reviewSpokenKeys,
+        );
+        for (const k of spokenSentenceKeys(pkg)) reviewSpokenKeys.add(k);
+        reviewPkgTally.plies += 1;
+        reviewPkgTally.parts += uncappedParts.length;
+        for (const d of pkg.dropped) {
+          reviewPkgTally.dropped += 1;
+          reviewPkgTally.reasons[d.reason] = (reviewPkgTally.reasons[d.reason] ?? 0) + 1;
+          reviewPkgTally.drops.push({ ply: m.ply, reason: d.reason, text: d.fact.text.slice(0, 200) });
+        }
+        return pkg.spoken || null;
+      })();
       segments.push({
         ply: m.ply,
         moveNumber: fullMove,
@@ -2211,9 +2436,9 @@ export function buildReviewSegments(
         evalAfter: m.evaluation,
         bestMoveSan,
         bestMoveUci: m.bestMove,
-        narration: uncappedParts.length ? uncappedParts.join(' ') : null,
-        narrationSource: uncappedParts.length ? 'per-move' : null,
-        ...(uncappedParts.length ? { teaches: decision.teaches } : {}),
+        narration: doorNarration,
+        narrationSource: doorNarration ? 'per-move' : null,
+        ...(doorNarration ? { teaches: decision.teaches } : {}),
         ...(needHere ? { need: needHere } : {}),
         ...(causalArrows && causalArrows.length ? { planArrows: causalArrows } : {}),
         ...(fundamentals.length ? { fundamentals } : {}),
@@ -2472,7 +2697,9 @@ export function buildReviewSegments(
       // mechanism doesn't apply, teach THAT instead of the generic "for the
       // initiative" (David 2026-07-20 Opera: Rxd7 "still sounds generic"). This
       // clause NAMES the material give + the point, so it's the base sentence.
-      const kingShieldClause = isStudentSac && !mechanismClause
+      // Never the why of a sac the grade says failed (review walk 2026-10-01, ply 38).
+      const sacFailed = m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'miss';
+      const kingShieldClause = isStudentSac && !mechanismClause && !sacFailed
         ? describeSacBreaksKingShield(fenPair.fenBefore, m.san)
         : null;
       if (piece === 'queen') {
@@ -2543,7 +2770,8 @@ export function buildReviewSegments(
           // Draw the student's threatened move (green — your attack).
           try {
             const tc = new Chess(nullFen).move(threatSan.replace(/[.,]$/, ''));
-            if (tc) threatArrows = [{ startSquare: tc.from, endSquare: tc.to, color: '#22c55e' }];
+            const yours = tc ? admitArrow({ from: tc.from, to: tc.to, role: 'play', fen: nullFen, source: 'review.yourThreat' }, { fen: fenPair.fenAfter, studentColor: playerColor }) : null;
+            if (yours) threatArrows = [yours];
           } catch { /* arrow is a bonus — never block the narration */ }
         }
       }
@@ -2631,10 +2859,16 @@ export function buildReviewSegments(
         narrationSource = narrationSource ?? 'per-move';
         // Draw the danger (red): the threatened move from → landing, plus a ray
         // to each fork victim so the eye lands on what's under attack.
-        threatArrows = [
-          { startSquare: oppThreat.from, endSquare: oppThreat.landing, color: '#ef4444' },
-          ...oppThreat.targetSquares.map((sq) => ({ startSquare: oppThreat.landing, endSquare: sq, color: '#f97316' })),
-        ];
+        // Their move is a plan of theirs (a fork lands quietly, so it is not a
+        // capture that wins now); the rays to what it hits are sight lines on
+        // the board AFTER it lands — the piece is not on the landing square yet.
+        const threatCtx = { fen: fenPair.fenAfter, studentColor: playerColor };
+        let landedFen: string | null = null;
+        try { const lc = new Chess(fenPair.fenAfter); if (lc.move({ from: oppThreat.from, to: oppThreat.landing, promotion: 'q' })) landedFen = lc.fen(); } catch { landedFen = null; }
+        threatArrows = admitArrows([
+          { from: oppThreat.from, to: oppThreat.landing, role: 'theirs', vouchedBy: 'engine', source: 'review.oppThreat' },
+          ...(landedFen ? oppThreat.targetSquares.map((sq): ArrowClaim => ({ from: oppThreat.landing, to: sq, role: 'vision', fen: landedFen, source: 'review.oppThreat.ray' })) : []),
+        ], threatCtx).arrows;
       }
       // GEM CRUSH IN REVIEW (David: "add the gem calculator into review… showing
       // crush lines during review!!!"). If the path BEFORE this move is exactly a
@@ -2655,11 +2889,12 @@ export function buildReviewSegments(
           });
           narration = narration ? `${narration} ${gemSay}` : gemSay;
           narrationSource = narrationSource ?? 'per-move';
-          const gemArrows = gemCrush.arrows.map((a) => ({
-            startSquare: a.from,
-            endSquare: a.to,
-            color: a.color === 'green' ? '#22c55e' : a.color === 'red' ? '#ef4444' : '#3b82f6',
-          }));
+          // The crush is the engine's own reply; the red "tempting mistake"
+          // arrow is a bad move and is never drawn.
+          const gemArrows = admitArrows(
+            gemCrush.arrows.filter((a) => a.color !== 'red').map((a): ArrowClaim => ({ from: a.from, to: a.to, role: 'play', vouchedBy: 'engine', source: 'review.gemCrush' })),
+            { fen: fenPair.fenAfter, studentColor: playerColor },
+          ).arrows;
           threatArrows = [...(threatArrows ?? []), ...gemArrows];
         }
       }
@@ -3083,6 +3318,28 @@ export function buildReviewSegments(
       prevCap = { square: null, capturedValue: 0 };
     }
   }
+  if (reviewPkgTally.plies > 0) {
+    void logAppAudit({
+      kind: 'review-voice-package',
+      category: 'subsystem',
+      source: 'coachFeatureService.buildReviewSegments',
+      summary: `${reviewPkgTally.plies} plies, ${reviewPkgTally.parts} parts, ${reviewPkgTally.dropped} dropped at the door`,
+      details: JSON.stringify(reviewPkgTally),
+    });
+  }
+  if (convertTaughtPly !== null) {
+    const at = segments.find((x) => x.ply === convertTaughtPly);
+    if (at) at.convertTaught = true;
+  }
+  // SAY-ONCE, MADE VISIBLE: a quiet student move whose only lesson is a
+  // principle already taught this game stays silent on purpose. Mark it, so the
+  // coverage instrument tells that silence apart from a ply nothing taught.
+  for (const sg of segments) {
+    if (sg.narration || sg.playerColor !== playerColor) continue;
+    const before = new Set([...principleTaughtAt].filter(([, at]) => at < sg.ply).map(([id]) => id));
+    const id = principleAlreadyTaught(sg.fenBefore, sg.san, sg.playerColor, before);
+    if (id) sg.principleTaughtEarlier = id;
+  }
   return segments;
 }
 
@@ -3111,7 +3368,7 @@ export function reviewOpeningRecord(params: {
   return parts.length > 0 ? parts.join(' ') : null;
 }
 
-function defaultIntroText(params: {
+export function defaultIntroText(params: {
   playerColor: 'white' | 'black';
   result: string;
   openingName: string | null;
@@ -3125,13 +3382,19 @@ function defaultIntroText(params: {
   // 'win'/'loss'/'draw'. The old ternary only checked the latter, so a raw
   // '1-0' fell through to "a draw" — the coach opened a WIN by calling it a draw
   // (David 2026-07-19). Grounded certainty: we computed the result, so state it.
-  const outcome: 'win' | 'loss' | 'draw' =
-    params.result === 'win' || params.result === 'loss' || params.result === 'draw'
-      ? params.result
-      : params.result === '1-0' || params.result === '0-1'
-        ? ((params.result === '1-0') === (params.playerColor === 'white') ? 'win' : 'loss')
-        : 'draw';
-  const resultPhrase = outcome === 'win' ? 'a win' : outcome === 'loss' ? 'a loss' : 'a draw';
+  // …and ONLY a drawn score reads as a draw (Carlsen–Topalov review walk
+  // 2026-09-27: an unfinished game, `*`, opened "it ended in a draw"). An
+  // unknown result names no result.
+  const raw = params.result.trim().toLowerCase();
+  const outcome: 'win' | 'loss' | 'draw' | null =
+    raw === 'win' || raw === 'loss' || raw === 'draw'
+      ? raw
+      : raw === '1-0' || raw === '0-1'
+        ? ((raw === '1-0') === (params.playerColor === 'white') ? 'win' : 'loss')
+        : raw === '1/2-1/2' || raw === '½-½' || raw === 'drawn'
+          ? 'draw'
+          : null;
+  const resultBit = outcome === 'win' ? ' and it ended in a win' : outcome === 'loss' ? ' and it ended in a loss' : outcome === 'draw' ? ' and it ended in a draw' : '';
   const framedIntro = params.openingName ? frameOpeningForStudent(params.openingName, params.playerColor) : null;
   const openingBit = framedIntro
     ? (framedIntro.owned ? ` in the ${framedIntro.label}` : ` against the ${framedIntro.label}`)
@@ -3140,7 +3403,7 @@ function defaultIntroText(params: {
     ? ` You had ${params.mistakeCount === 1 ? 'one moment' : `${params.mistakeCount} moments`} worth a second look — here's each one.`
     : ` Clean play throughout — here's what worked.`;
   const recordBit = params.record ? ` ${params.record}` : '';
-  return `Here's your game${openingBit} — you had ${colorWord} and it ended in ${resultPhrase}.${recordBit}${momentBit}`;
+  return `Here's your game${openingBit} — you had ${colorWord}${resultBit}.${recordBit}${momentBit}`;
 }
 
 /**
@@ -3645,7 +3908,17 @@ async function augmentWithProjections(
     flaggedForPunish.forEach((s, i) => {
       const line = lines[i];
       const isStudentSlip = s.playerColor === studentColorName;
-      const proof = line && line.delivers && line.plies.length >= 2 ? render(line, isStudentSlip ? 'opponent' : 'student') : '';
+      // A line that opens by TAKING BACK on the square this move just captured
+      // on proves nothing new — "Here's how you take advantage: Qxc5 — you win
+      // a bishop" after …Bxc5 was the recapture the trade line had already
+      // named (1200 review walk 2026-09-27).
+      let opensWithRecapture = false;
+      try {
+        const played = new Chess(s.fenBefore).move(s.san);
+        const firstTo = line?.plies[0]?.san.match(/x([a-h][1-8])/)?.[1] ?? null;
+        opensWithRecapture = !!played.captured && firstTo === played.to;
+      } catch { opensWithRecapture = false; }
+      const proof = line && line.delivers && line.plies.length >= 2 && !opensWithRecapture ? render(line, isStudentSlip ? 'opponent' : 'student') : '';
       if (line && proof) {
         const frame = isStudentSlip
           ? `Here's how it gets punished from here: ${proof}.`
@@ -3700,7 +3973,10 @@ async function augmentWithProjections(
       const strip = (x: string): string => x.replace(/[+#!?]+$/, '');
       const [threat, punish] = await Promise.all([poolLine(nullFen, 3), poolLine(s.fenAfter, 6)]);
       const t = threat?.plies[0]?.san;
-      if (t && punish?.plies[0] && strip(punish.plies[0].san) === strip(t) && strip(line.plies[1].san) !== strip(t)) {
+      // ONE FACT ONCE (A3): the ply's fundamental already named this threat as
+      // a line ("Their threat first: Nxe3 was already on … Rfc1 does").
+      const namedAsThreat = (s.fundamentals ?? []).some((f) => f.id === 'ignored-threat' && !!f.facts.threat && strip(String(f.facts.threat)) === strip(t ?? ''));
+      if (t && !namedAsThreat && punish?.plies[0] && strip(punish.plies[0].san) === strip(t) && strip(line.plies[1].san) !== strip(t)) {
         s.narration = `${s.narration ?? ''} ${line.plies[0].san} first was the preventive move — it takes away their ${t}, and that is exactly the reply that punishes this.`.trim();
       }
     }
@@ -3760,6 +4036,10 @@ async function augmentWithProjections(
   // this pass reads them in its original order.
   const deepPv = new Map<string, PvLine | null>();
   for (const nf of deepFens.values()) deepPv.set(nf, await poolLine(nf, deepThreatPlies));
+  // A STANDING THREAT IS SAID ONCE (review walk 2026-10-01, plies 64/66/68/70:
+  // "if they sit still, it runs Bxe5+, Qxe5 and Qxe5+" four moves running). The
+  // key is the line itself, so a CHANGED threat still speaks.
+  const deepSaid = new Set<string>();
   for (const s of segments) {
     if (deepBudget <= 0) break;
     if (s.playerColor !== studentColorName) continue;
@@ -3812,6 +4092,9 @@ async function augmentWithProjections(
       // only describes where the game could go, and a long engine line speaks
       // only when it proves a point, so it stays quiet.
       if (!isForcingProjection(line)) continue;
+      const deepKey = line.plies.map((p) => p.san).join(' ');
+      if (deepSaid.has(deepKey)) continue;
+      deepSaid.add(deepKey);
       const deep = render(line, 'student');
       s.narration = deep
         ? `${s.narration ?? ''} And there's a deeper threat brewing — if they sit still, it runs ${deep}.`.trim()
@@ -3836,6 +4119,8 @@ async function augmentWithProjections(
   let deepOppBudget = scope === 'full' ? 999 : 2; // uncapped: every opponent deep threat
   const deepOppPv = new Map<string, PvLine | null>();
   for (const nf of deepOppFens.values()) deepOppPv.set(nf, await poolLine(nf, deepThreatPlies));
+  // Said once per line, as on the student's side (review walk 2026-10-01).
+  const deepOppSaid = new Set<string>();
   for (let i = 0; i < segments.length; i++) {
     const s = segments[i];
     if (deepOppBudget <= 0) break;
@@ -3868,6 +4153,9 @@ async function augmentWithProjections(
       const decisiveJump = oppPovNow !== null && oppPovTerminal !== null
         && oppPovTerminal - oppPovNow >= 250;
       if (!matesOut && !decisiveJump) continue;
+      const oppKey = line.plies.map((p) => p.san).join(' ');
+      if (deepOppSaid.has(oppKey)) continue;
+      deepOppSaid.add(oppKey);
       // David 2026-09-07 (#4): non-forcing decisive lines count too. Forcing →
       // "threat"; decisive non-forcing → "idea/plan" (honest label). The decisive
       // ≥250cp gate is the noise floor; "left alone" is true for both.
@@ -4024,11 +4312,10 @@ async function groundOpeningPlanInBook(segments: ReviewMoveSegment[]): Promise<v
   // Blue = the student's pieces, amber = the opponent's (devArrows' scheme).
   const studentIsWhite = seg.playerColor === 'white';
   const sideOf = (home: string): 'student' | 'opponent' => ((home[1] === '1') === studentIsWhite ? 'student' : 'opponent');
-  seg.planArrows = [...targets.entries()].map(([from, t]) => ({
-    startSquare: from,
-    endSquare: t.to,
-    color: sideOf(from) === 'student' ? '#3b82f6' : '#f59e0b',
-  }));
+  seg.planArrows = admitArrows(
+    [...targets.entries()].map(([from, t]): ArrowClaim => ({ from, to: t.to, role: sideOf(from) === 'student' ? 'play' : 'theirs', source: 'review.devTargets' })),
+    { fen: seg.fenAfter, studentColor: seg.playerColor },
+  ).arrows;
   // SPEAK the scheme SEAT-AWARE — "your f1-bishop to d3", "expect their knight
   // to head for e7" — never a sideless mix of both armies in one clause.
   const mineT = [...targets.entries()].filter(([f]) => sideOf(f) === 'student');
@@ -4276,6 +4563,7 @@ export function narrationCoversFacets(det: string, warmed: string): boolean {
 // No per-game total (G4.5): a cap cannot know what it deletes. Repetition is
 // handled by the per-concept dedupe below — full once, a nod once, then silent.
 function fillConceptBeats(segments: ReviewMoveSegment[], playerColor: 'white' | 'black'): void {
+  const convertTaughtPly = segments.find((x) => x.convertTaught === true)?.ply ?? null;
   const studentColor: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
   const shown = new Map<string, number>();
   for (const s of segments) {
@@ -4289,7 +4577,10 @@ function fillConceptBeats(segments: ReviewMoveSegment[], playerColor: 'white' | 
       });
     } catch { beat = null; }
     if (!beat) continue;
-    const n = shown.get(beat.concept) ?? 0;
+    // The conversion was already taught by the plan or the method — the trade
+    // concept is the same claim, so it gets the nod, never the lecture again.
+    const taughtElsewhere = beat.concept === 'simplify-when-ahead' && moverColor === studentColor && convertTaughtPly !== null && s.ply > convertTaughtPly;
+    const n = Math.max(shown.get(beat.concept) ?? 0, taughtElsewhere ? 1 : 0);
     shown.set(beat.concept, n + 1);
     if (n === 0) { s.narration = beat.text; s.narrationSource = 'orientation'; s.teaches = true; }
     else if (n === 1 && beat.concept === 'simplify-when-ahead') {
@@ -4369,7 +4660,10 @@ const SERIES_VERB = new RegExp(`, ${V_ALT}\\b`, 'g');
 // one happened to sit after it: the same walk said "Watch what they're building"
 // on one ply and "Watch what they were building" on another, purely on ordering.
 // Registers don't take turns in one string, so the decision is made PER SENTENCE.
-const PRESCRIPTIVE = /(the plan (?:from here|is|changes)|so the plan is|here's (?:exactly )?how|your defense starts with|watch what they|follow it up|don't play|spend two or three tempi|that's your cue|is your cue|your whole job|wants to run)/i;
+// …and a method list or a conditional race is advice, not history (amateur
+// review walk 2026-09-27: "Checks, captured, threats"; a passer race "you got
+// there first once the queens came off" while the queens were still on).
+const PRESCRIPTIVE = /(the plan (?:from here|is|changes)|so the plan is|here's (?:exactly )?how|your defense starts with|watch what they|follow it up|don't play|spend two or three tempi|that's your cue|is your cue|your whole job|wants to run|checks, captures|pushes from queening|once the queens come off)/i;
 /** Case-preserving contraction rewrite: "You're" → "You were", never "you were"
  *  mid-narration with a lowercase head (the `/gi` replacement used to lowercase
  *  every sentence it opened). */
@@ -4391,6 +4685,10 @@ function toPastSentence(sentence: string): string {
   h = sub(h, /\byou're\b/gi, 'you were');
   h = sub(h, /\bthey're\b/gi, 'they were');
   h = sub(h, /\bthere's\b/gi, 'there was');
+  // "you were up a pawn and you have the bishop pair" split one clause list
+  // across two tenses (review walk 2026-09-27). Possession only — "have to"
+  // is a modal and stays.
+  h = h.replace(/\b(you|they|You|They) have (the|a|an|two|more|both)\b/g, (_m, who: string, what: string) => `${who} had ${what}`);
   h = sub(h, /\bis still\b/gi, 'was still');
   // "points a pawn storm" is a verb; "2 points of material" is a noun — only the verb.
   h = h.replace(/\bpoints a\b/gi, 'pointed a');
@@ -4867,8 +5165,9 @@ export async function generateReviewNarration(params: {
   // and the tape disagreed (prod 2026-09-24: row 8/12, tape 11/12).
   {
     const heard = (sg: ReviewMoveSegment): boolean => !!(sg.narration ?? '').trim();
+    const coveredBySayOnce = (sg: ReviewMoveSegment): boolean => !heard(sg) && !!sg.principleTaughtEarlier;
     const rows = segments.flatMap((sg) => sg.need
-      ? [{ ply: sg.ply, score: sg.need.score, speak: sg.need.speak, prior: sg.need.prior, spoke: sg.narrationSource === 'per-move', heard: heard(sg), teaches: sg.teaches === true, source: sg.narrationSource ?? null }]
+      ? [{ ply: sg.ply, score: sg.need.score, speak: sg.need.speak, prior: sg.need.prior, spoke: sg.narrationSource === 'per-move', heard: heard(sg) || coveredBySayOnce(sg), sayOnce: sg.principleTaughtEarlier ?? null, teaches: sg.teaches === true, source: sg.narrationSource ?? null }]
       : []);
     const owed = rows.filter((r) => r.speak && r.ply <= OPENING_TEACH_MAX_PLY);
     const covered = owed.filter((r) => r.heard);

@@ -45,6 +45,7 @@ import { MISTAKE_CP } from './engineConstants';
 import { logAppAudit } from './appAuditor';
 import { emitWeaknessModelChanged } from './weaknessModelEvents';
 import { leadingFundamentals, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
+import { stalemateWatch } from './stalemateWatch';
 import { isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
 
 /** How live the fundamental had to be on THIS board before answering it counts
@@ -304,8 +305,19 @@ export function capabilitiesPosed(
     seen.add(tag);
     out.push({ tag, posedImportance: f.weight });
   }
+  // A WON GAME WITH A STALEMATE ON THE BOARD (P3 heat map): the board asked
+  // "which of your moves throws the win away?". A stalemating move costs the
+  // whole game, so `movePlayedCleanly` sorts held from broken on its own.
+  if (!seen.has('botched-conversion')) {
+    try {
+      if (stalemateWatch(fenBefore, moverColor === 'white' ? 'w' : 'b')) out.push({ tag: 'botched-conversion', posedImportance: STALEMATE_POSED });
+    } catch { /* an unreadable board posed nothing */ }
+  }
   return out;
 }
+
+/** A win on the line is a question worth the green bar. */
+const STALEMATE_POSED = 90;
 
 /**
  * Record what a move demonstrated — OR FAILED TO. Fire-and-forget; never throws
@@ -372,6 +384,43 @@ export async function recordCapabilityEvidence(args: {
     return rows.length;
   } catch {
     return 0;   // never break the caller's turn over telemetry
+  }
+}
+
+/**
+ * ONE held/broken row from a Learn teaching lane (WO-TEACH-GAPS P4: every
+ * computer is dual-use — the lane that TEACHES a found move also RECORDS that
+ * the student found it). The lane computed both halves already: the board posed
+ * the question (it would not speak otherwise) and the student's move answered
+ * it. Writers pass `prompted` honestly; a prompted row counts as neither.
+ */
+export async function recordLaneEvidence(args: {
+  tag: MisconceptionTagId;
+  outcome: CapabilityOutcome;
+  fen: string;
+  playedSan: string;
+  posedImportance: number;
+  origin: CapabilityEvidenceRecord['origin'];
+  prompted: boolean;
+  sourceGameId?: string;
+}): Promise<boolean> {
+  try {
+    await db.capabilityEvidence.add({
+      id: newId(), tag: args.tag, outcome: args.outcome, fen: args.fen, playedSan: args.playedSan,
+      posedImportance: args.posedImportance, recordedAt: Date.now(), origin: args.origin, prompted: args.prompted,
+      ...(args.sourceGameId ? { sourceGameId: args.sourceGameId } : {}),
+    });
+    void logAppAudit({
+      kind: 'lane-evidence',
+      category: 'subsystem',
+      source: 'capabilityEvidence.recordLaneEvidence',
+      summary: `${args.outcome} [${args.tag}] from ${args.origin}${args.prompted ? ' (prompted)' : ''}`,
+      details: JSON.stringify({ origin: args.origin, outcome: args.outcome, tags: [args.tag], prompted: args.prompted }),
+      fen: args.fen,
+    });
+    return true;
+  } catch {
+    return false;   // never break the caller's turn over telemetry
   }
 }
 

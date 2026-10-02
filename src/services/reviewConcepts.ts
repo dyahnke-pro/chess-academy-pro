@@ -171,7 +171,17 @@ function detectOpenLinesAtKing(ctx: ConceptCtx): ConceptBeat | null {
   //       forces lines open (the 4.d4 idea: "tearing the centre apart").
   const fromFile = mv.from[0];
   const toFile = mv.to[0];
-  const centralCapture = !!mv.captured && fromFile >= 'c' && fromFile <= 'f';
+  // The line that opens must run AT the king — within a file of it (review
+  // walk 2026-09-27: 7.c4 hitting b5 "tore the centre open" at a king on e8).
+  let kingFile = -9;
+  try {
+    const kb = new Chess(ctx.fenAfter);
+    const ks = kb.board().flat().find((c) => c && c.type === 'k' && c.color === enemy)?.square;
+    if (ks) kingFile = ks.charCodeAt(0) - 97;
+  } catch { /* no king read — nothing speaks */ }
+  const nearKing = (f: number): boolean => Math.abs(f - kingFile) <= 1;
+  const centralCapture = !!mv.captured && fromFile >= 'c' && fromFile <= 'f'
+    && (nearKing(fromFile.charCodeAt(0) - 97) || nearKing(toFile.charCodeAt(0) - 97));
   let breakPush = false;
   if (!mv.captured && toFile >= 'c' && toFile <= 'f') {
     const after = new Chess(ctx.fenBefore);       // scan the pre-move board for an enemy centre pawn the push attacks
@@ -183,7 +193,7 @@ function detectOpenLinesAtKing(ctx: ConceptCtx): ConceptBeat | null {
       if (f < 0 || f > 7 || capRank < 1 || capRank > 8) continue;
       const sq = `${String.fromCharCode(97 + f)}${capRank}` as Square;
       const p = after.get(sq);
-      if (p && p.type === 'p' && p.color === enemy) breakPush = true;
+      if (p && p.type === 'p' && p.color === enemy && (nearKing(f) || nearKing(tf))) breakPush = true;
     }
   }
   if (!centralCapture && !breakPush) return null;
@@ -299,7 +309,7 @@ function detectPassedPawnPush(ctx: ConceptCtx): ConceptBeat | null {
   const file = dest[0];
   const text = mine
     ? `You're pushing your passed pawn on the ${file}-file — passed pawns are made to be pushed. It ties a piece down to babysit it, and the moment it's ignored, it queens.`
-    : `Your opponent's passed pawn on the ${file}-file is rolling — it will tie your pieces down to stop it. Blockade it on a dark/light square a knight or king can hold.`;
+    : `Your opponent's passed pawn on the ${file}-file is rolling — it will tie your pieces down to stop it. Blockade it on ${file}${ctx.moverColor === 'w' ? rank + 1 : rank - 1}, the square in front of it — a knight or the king holds a blockade best.`;
   return { concept: 'passed-pawn-push', text, source: 'concept:pawn-passed' };
 }
 
@@ -324,7 +334,7 @@ function detectRookActivation(ctx: ConceptCtx): ConceptBeat | null {
     return { concept: 'rook-seventh', text, source: 'concept:end-rook-7th' };
   }
   // Open file only counts if the rook actually just took it (moved onto it).
-  if (fileIsOpen(ctx.fenAfter, file)) {
+  if (fileIsOpen(ctx.fenAfter, file) && mv.from[0] !== dest[0]) {
     const text = mine
       ? `Your rook swings onto the open ${dest[0]}-file — the one highway into their position. Open files belong to rooks; this is how they get into the game.`
       : `Your opponent seizes the open ${dest[0]}-file with the rook — the highway into your camp. Contest the file or your own rooks stay passive.`;
@@ -360,6 +370,10 @@ function detectCentralizeKing(ctx: ConceptCtx): ConceptBeat | null {
   if (!mv || mv.piece !== 'k' || mv.san.startsWith('O-O')) return null;
   if (pieceCount(ctx.fenAfter) > 12) return null;                        // endgame
   if (centreDistance(mv.to) >= centreDistance(mv.from)) return null; // must get MORE central
+  // "To the centre" means it is heading there — onto a centre file (c-f) or a
+  // centre rank (3-6), not a step along the edge (review walk 2026-10-01, ply
+  // 86: Kg8-g7 was "brings the king to the centre").
+  if (!'cdef'.includes(mv.to[0]) && (Number(mv.to[1]) < 3 || Number(mv.to[1]) > 6)) return null;
   const mine = MINE(ctx.moverColor, ctx.studentColor);
   const text = mine
     ? `In the endgame the king is a fighting piece — you're marching it to the centre where it shepherds your pawns and pressures theirs. Activating the king is often the whole plan.`
@@ -383,6 +397,10 @@ function advancedPawns(fen: string, color: 'w' | 'b'): number {
   return n;
 }
 
+/** WHY space matters, once — read by this beat and by the move-fundamentals
+ *  rule table, so the two never word it differently. */
+export const SPACE_RULE = 'space is a slow, real edge: keep it and your pieces breathe while theirs stumble over each other';
+
 /**
  * SPACE ADVANTAGE — a pawn PUSH that crosses into the enemy half and gives the
  * mover a clear space edge (≥2 more advanced pawns than the opponent). Board-
@@ -400,7 +418,7 @@ function detectSpaceAdvantage(ctx: ConceptCtx): ConceptBeat | null {
   if (advancedPawns(ctx.fenAfter, ctx.moverColor) - advancedPawns(ctx.fenAfter, enemy) < 2) return null;
   const mine = MINE(ctx.moverColor, ctx.studentColor);
   const text = mine
-    ? `That pawn push stakes out space — your pawns are cramping their pieces, leaving them less room to manoeuvre. Space is a slow, real edge: keep it and your pieces breathe while theirs stumble over each other.`
+    ? `That pawn push stakes out space — your pawns are cramping their pieces, leaving them less room to manoeuvre. ${SPACE_RULE[0].toUpperCase()}${SPACE_RULE.slice(1)}.`
     : `Your opponent's pawns are grabbing space and cramping you. Look to challenge the chain with a break, or trade a pair to get your pieces room to breathe.`;
   return { concept: 'space-advantage', text, source: 'concept:pos-space' };
 }
@@ -471,6 +489,9 @@ function detectCreateWeakness(ctx: ConceptCtx): ConceptBeat | null {
  * beats the very general "don't rush". Extend the taxonomy by adding detectors.
  */
 export function detectConcept(ctx: ConceptCtx): ConceptBeat | null {
+  // A MATING MOVE ends the game — no strategic theme describes it (review walk
+  // 2026-10-01: Rh8# was narrated as "seizes the open h-file … contest the file").
+  try { if (new Chess(ctx.fenAfter).isCheckmate()) return null; } catch { return null; }
   return detectOpenLinesAtKing(ctx)
     ?? detectOutpost(ctx)
     ?? detectRookActivation(ctx)

@@ -492,3 +492,61 @@ describe('"Remember —" is a frame too (walk 2340, move 28)', () => {
     expect(pkg.spoken.match(/unveils a second attacker/g)?.length).toBe(1);
   });
 });
+
+describe('one claim, however it is framed (1200 walk 2026-09-27)', () => {
+  it('"You have a back-rank threat: the king on g8…" then "Their king on g8…" is one claim', () => {
+    const first = 'You have a back-rank threat: the king on g8 has no escape square and the back rank can be invaded from d1.';
+    const pkg = buildVoicePackage([{ text: 'Their king on g8 has no escape square and the back rank can be invaded from d1 — a back-rank weakness leaves the king boxed in.', rank: 'computed' } as never], first);
+    expect(pkg.spoken).not.toMatch(/king on g8 has no escape/);
+  });
+  it('NEGATIVE CONTROL: a different claim about the same king still speaks', () => {
+    const first = 'You have a back-rank threat: the king on g8 has no escape square and the back rank can be invaded from d1.';
+    const pkg = buildVoicePackage([{ text: 'Their king on g8 is short of defenders on the dark squares.', rank: 'computed' } as never], first);
+    expect(pkg.spoken).toMatch(/dark squares/);
+  });
+});
+
+describe('the claim ledger — checked at speak time (1200 walk 2026-09-27, ply 37)', () => {
+  const key = 'concept:back_rank:d1,d8,g8';
+  const instant = buildVoicePackage([
+    { kind: 'tactic', text: 'You have a back-rank threat: the king on g8 has no escape square.', claims: [key] },
+  ] as never);
+  const ledger = new Set(spokenSentenceKeys(instant));
+  const late = (claims?: string[]) => buildVoicePackage([
+    { kind: 'computed', text: 'Nxc5 was a blunder — Qxc5 was the move.' },
+    { kind: 'computed', text: 'A boxed-in monarch on the eighth rank can be mated by a rook arriving on d8.', claims },
+  ] as never, undefined, ledger);
+  it('a claim the instant lane spoke is dropped from the late package — only that clause', () => {
+    const pkg = late([key]);
+    expect(pkg.spoken).toMatch(/Qxc5 was the move/);
+    expect(pkg.spoken).not.toMatch(/boxed-in monarch/);
+  });
+  it('NEGATIVE CONTROL: the same words with no claim, or another claim, still speak', () => {
+    expect(late(undefined).spoken).toMatch(/boxed-in monarch/);
+    expect(late(['concept:pin:c6,c8,d8']).spoken).toMatch(/boxed-in monarch/);
+  });
+  it('within one package the second fact with the claim is dropped', () => {
+    const pkg = buildVoicePackage([
+      { kind: 'tactic', text: 'You have a back-rank threat on g8.', claims: [key] },
+      { kind: 'computed', text: 'A boxed-in monarch on the eighth rank.', claims: [key] },
+    ] as never);
+    expect(pkg.spoken).toMatch(/back-rank threat/);
+    expect(pkg.spoken).not.toMatch(/boxed-in/);
+  });
+});
+
+describe('review door fixes (2026-09-30)', () => {
+  const FEN0 = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+  it('"Do not move the pawns…" is teaching, not a model instruction; shouted scaffolding still is', async () => {
+    const { buildVoicePackage } = await import('./voicePackage');
+    expect(buildVoicePackage([{ kind: 'computed', text: 'Do not move the pawns in front of your own king without a concrete reason.', fen: FEN0 }]).spoken).toMatch(/^Do not move/);
+    expect(buildVoicePackage([{ kind: 'computed', text: 'DO NOT invent squares.', fen: FEN0 }]).spoken).toBe('');
+  });
+  it('a sentence true on the board BEFORE the move survives when altFen names it', async () => {
+    const { buildVoicePackage } = await import('./voicePackage');
+    const after = 'rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq - 1 1';
+    const text = 'Your knight on g1 was still at home.';
+    expect(buildVoicePackage([{ kind: 'computed', text, fen: after }]).spoken).toBe('');
+    expect(buildVoicePackage([{ kind: 'computed', text, fen: after, altFen: FEN0 }]).spoken).toBe(text);
+  });
+});

@@ -656,8 +656,18 @@ The pattern (battle-tested 2026-05-16 + 2026-05-28):
    `[data-testid="strength-calibration-bubble"]` and click a skill band, is
    DELETED rather than annotated** (the Lake Butler rule: when you correct a
    claim, remove the one you are replacing, or the next reader can pick either
-   side). Nothing in `src/` renders that testid; difficulty is fully adaptive
-   with no first-run step. Consent is now the only first-run prompt.
+   side). Nothing in `src/` renders that testid.
+
+   🔄 **A NEW first-run question exists as of 2026-10-02 (David: "make sure the
+   strength question is still available first time you open the app").** It is
+   `FirstRunStrength` (`data-testid="first-run-strength"`, bands
+   `first-run-band-*`, `first-run-skip`): one skippable screen AFTER consent,
+   shown only to a profile with no measured strength. New to chess / Beginner
+   turn on `isBeginnerMode` (ratingBands) until their measured rating reaches
+   1000. `autoDismissCalibration` neutralizes it by CSS and answers Skip, so
+   an audit sees the fully adaptive app it always measured;
+   `audit-strength-calibration.mjs` drives it on purpose. It is a NEW testid —
+   never wait on the old bubble's.
 
    It was not free to leave lying around. On 2026-09-17 a sweep found **159
    audit scripts still waiting on it — 52.6 minutes of dead wall-clock per
@@ -3713,7 +3723,10 @@ that already states it.
 
 **Sweep status:** `curatedBeatAt` (2026-09-17, `IndexedBeat.seat` from
 `lesson.orientation`), `noteAtPosition` / `teachingSourceForBoard` /
-`supportNoteForPly` / `noteCoverageForLine` (2026-09-17, `noteSeatMatches`).
+`supportNoteForPly` / `noteCoverageForLine` (2026-09-17, `noteSeatMatches`),
+`resolveVoicedWalkthrough` (2026-09-27: a REQUIRED `side`; the builder groups
+voiced trees by opening AND seat — 34 of 207 lessons had merged both seats, so
+a Black King's Indian lesson said "You claim space with c4").
 When you add a new teaching source, ask which seat it is written from before you
 ask which position it is about.
 
@@ -5648,6 +5661,50 @@ The order is locked:
 Save the flag list to `audit-reports/hand-walk-<topic>-<date>.md`. Before
 blaming the coach for a "repeat", check the instrument: the page logs each line
 once in SAN and the voice logs it once spoken — two events, one utterance.
+
+### 🔒🔒 THE ACCURACY BAR IS 100% — every board claim true, no stopping short (David 2026-10-01: "We go until 100% accuracy. No reason to stop short. Set the new bar in memory")
+
+🔴 **This REPLACES the old "≥97% of all claims" bar, which is DELETED rather than
+annotated (the Lake Butler rule).** A walk is not done at 97%: every false claim
+found is a defect to fix at its computer, with a test that fails on the old code,
+and the walk repeats until a fresh-game walk of Learn AND Review comes back with
+zero false claims over EVERY sentence with a board claim (machine-checked plus
+hand-checked — see rule 1 below). Report it as "X of all Y claims", and treat any
+X < Y as open work, never as "meets standard".
+
+Two honest exceptions, both named in the report, never silently counted true:
+- a CHECKER misread (the line is legal on its own board, the count matches) is
+  not a false claim — say which and why;
+- a claim the walk CANNOT decide (an engine read deeper than the stored lines) is
+  listed as undecided and settled by a deeper engine read, not by assumption.
+
+### 🔒🔒 THE DETAILS A WALK MUST CATCH (David 2026-09-30: "These are the details you need to be catching. Lock in!!")
+
+Every one of these was missed by a green walk until David asked. Check each, on
+every walk, without being asked:
+
+1. **UNCHECKED IS NOT SKIPPED.** `tape-verify` reads ~40% of sentences; the rest
+   are hand-checked against their board (dump with `DUMP_U=…`, read each with
+   chess.js + the stored engine lines). Accuracy is reported over EVERY sentence
+   with a board claim, never over the machine-readable 40% alone.
+2. **ARROWS: every move a line NAMES gets one, and a LINE is drawn in FULL.** A
+   punishment, a refutation or a played-out sequence is arrowed ply by ply to
+   where it lands — never its first move only. Count arrows per ply on the tape
+   (the 2026-09-30 walk had 7 of 64 plies) and read them against the words.
+3. **THE SEAT.** Every lane that addresses "you" fires for the student's move
+   only — a warning about their move to the student (the trap warning on White's
+   Nxd4 to a Black student) is a seat bug.
+4. **HELD ≠ WORKING.** A new lane that never appears on the tape was held by the
+   door, not absent from the board — check `learn-turn-decision` rows before
+   calling a computer wired (the opening identity was built, tested, and silent
+   all game).
+5. **ENGINE CLAIMS IN DECIDED POSITIONS.** "X was cleaner / the only move" where
+   two engines disagree at +8 is not a truth — count it against us and tighten
+   the lane, never excuse it.
+6. **WORDING THAT LIES BY OMISSION.** Two rooks spoken identically, a route that
+   passes through the square the piece is on, a definition landing a move after
+   its fact, a how-to that contradicts the advice before it — read every line
+   aloud as the student hears it.
 
 ### 🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!").
 

@@ -264,5 +264,5 @@ export function latentForkClause(fork: LatentFork, studentSide: 'white' | 'black
     // THE ROUTE IS NAMED (David 2026-09-24: Learn names the move; "the route
     // is yours to find" belonged to the old question cards — walk 1500, 38.Ne3).
     ? `Your knight has a fork waiting on ${fork.square} — via ${fork.via}, then ${fork.square}, it hits their ${list}.`
-    : `Watch ${fork.square} — a knight lands there in ${fork.moves} and forks your ${list}. Take the square away before it arrives.`;
+    : `Watch ${fork.square} — a knight lands there in ${fork.moves} and forks your ${list}, so take the square away before it arrives.`;
 }

@@ -40,6 +40,7 @@ const BEFORE = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2';
 const AFTER = 'rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 
 const move = (over: Record<string, unknown> = {}) => ({
+  prompted: false,
   fenBefore: BEFORE,
   fenAfter: AFTER,
   playedSan: 'Nf6',

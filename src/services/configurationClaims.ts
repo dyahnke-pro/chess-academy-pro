@@ -128,9 +128,26 @@ export function falseConfigurationClaim(text: string, fen: string): string | nul
   const b = read(fen);
   if (!b) return null;               // unreadable board judges nothing
   for (const c of CLAIMS) {
-    if (c.re.test(text) && !c.holds(b)) return c.label;
+    if (!c.re.test(text) || c.holds(b)) continue;
+    if (claimsThePresent(text, c.re)) return c.label;
   }
   return null;
+}
+
+/** A structure named as a GOAL or a PRINCIPLE is not a claim about this board:
+ *  "here is what to build toward: a passed pawn on the c-file", "a rook needs
+ *  an open file". The review door refused both (measurement 2026-09-30), and
+ *  the Learn plan line shares the checker. A match counts only when no
+ *  aspiration word comes before it in its own sentence. */
+const ASPIRATION = /\b(?:toward|towards|build|builds|create|creates|make|makes|needs?|wants?|aims?|plan|taking shape|to get|would|could|if)\b/i;
+function claimsThePresent(text: string, re: RegExp): boolean {
+  const global = new RegExp(re.source, re.flags.includes('g') ? re.flags : `${re.flags}g`);
+  for (const m of text.matchAll(global)) {
+    const start = m.index ?? 0;
+    const sentenceStart = text.lastIndexOf('. ', start) + 1;
+    if (!ASPIRATION.test(text.slice(sentenceStart, start))) return true;
+  }
+  return false;
 }
 
 /** Convenience: is this text safe to speak over this board? */

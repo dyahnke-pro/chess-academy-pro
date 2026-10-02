@@ -53,3 +53,15 @@ describe('configuration claims', () => {
     expect(falseConfigurationClaim(THE_LIE, 'not a fen')).toBeNull();
   });
 });
+
+describe('a structure named as a goal or a principle is not a board claim (review door 2026-09-30)', () => {
+  const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+  it('goals and principles pass; present claims are still refused', async () => {
+    const { falseConfigurationClaim } = await import('./configurationClaims');
+    expect(falseConfigurationClaim('Here is what to build toward: a passed pawn on the c-file.', START)).toBeNull();
+    expect(falseConfigurationClaim('Their plan is taking shape: a passed pawn on the d-file.', START)).toBeNull();
+    expect(falseConfigurationClaim('Take the c-file — a rook needs an open file to reach their camp.', START)).toBeNull();
+    expect(falseConfigurationClaim('Your passed pawn on d5 decides it.', START)).toBe('passed pawn');
+    expect(falseConfigurationClaim('Your rook owns the open file.', START)).toBe('open file');
+  });
+});

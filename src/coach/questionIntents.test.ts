@@ -1481,3 +1481,20 @@ describe('a fundamentals question wins over progress (David 2026-09-08 "unable t
     }
   });
 });
+
+describe('how-to-think asks reach the calculation lesson (real users 2026-10)', async () => {
+  const { isFundamentalLessonQuestion } = await import('./questionIntents');
+  const { resolveTaughtFundamental } = await import('../data/fundamentalLessons');
+  it.each([
+    'How can I visualize moves?',
+    'how do I get better at calculation',
+    'how can I see more moves ahead',
+    'Why do I struggle with calculation?',
+  ])('%s → calculation-depth', (q) => {
+    expect(resolveTaughtFundamental(q)).toBe('calculation-depth');
+    expect(isFundamentalLessonQuestion(q)).toBe(true);
+  });
+  it('a board question is still not a lesson', () => {
+    expect(isFundamentalLessonQuestion('can I calculate whether the sacrifice here works?')).toBe(false);
+  });
+});

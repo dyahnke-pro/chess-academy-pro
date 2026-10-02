@@ -28,6 +28,7 @@
  * file has no hard dep on the engine singleton and stays unit-testable.
  */
 import { Chess, type Move, type Square } from 'chess.js';
+import { admitArrow, arrowColorName } from './arrowDoor';
 
 export type FromTo = { from: string; to: string };
 export type ArrowColor = 'green' | 'blue' | 'yellow' | 'red';
@@ -137,6 +138,9 @@ const NON_MOVE_PHRASE_PRECEDERS = new Set([
   // it into a hypothetical retreat.
   'from', 'to', 'toward', 'towards', 'via', 'eyeing', 'eyed', 'controlling',
   'covering', 'hitting', 'targeting', 'attacking', 'defending', 'guarding',
+  // "kicks their knight off c6" names the square the piece LEAVES (Learn walk
+  // 2026-10-01: a c7→c6 arrow grew out of it). Same for "onto"/"into"/"past".
+  'off', 'onto', 'into', 'past',
 ]);
 
 /** Strip `[BOARD: ...]` directives so the SAN scan doesn't match the
@@ -149,8 +153,22 @@ export function stripBoardMarkers(text: string): string {
 /** Every SAN-shaped move the coach mentioned in prose, descriptive
  *  square-references filtered out. Markers stripped first. */
 export function extractMentionedSans(text: string): string[] {
+  return extractMentionedSanSpans(text).map((t) => t.san);
+}
+
+/** A bare square after one of these is the square, never a pawn move:
+ *  "costs them d3", "guard e5 before the push", "by way of b2", "via c4,
+ *  then d2", "Watch c7" (Learn walk 2026-10-01: each drew a pawn arrow). Kept
+ *  apart from NON_MOVE_PHRASE_PRECEDERS because these words DO precede real
+ *  piece moves ("then Bxf7", "guard it with Nf3"). */
+const SQUARE_ONLY_PRECEDERS = new Set(['them', 'us', 'you', 'of', 'guard', 'guards', 'then', 'watch', 'reach', 'reaches', 'over', 'behind', 'beside']);
+
+/** The mentioned SANs with where they sit in the (marker-stripped) text, so a
+ *  run of moves can be read as one LINE. Same filtering as
+ *  `extractMentionedSans`. */
+export function extractMentionedSanSpans(text: string): Array<{ san: string; index: number; end: number; text: string }> {
   const cleaned = stripBoardMarkers(text);
-  const out: string[] = [];
+  const out: Array<{ san: string; index: number; end: number; text: string }> = [];
   let match: RegExpExecArray | null;
   SAN_TOKEN_RE.lastIndex = 0;
   while ((match = SAN_TOKEN_RE.exec(cleaned)) !== null) {
@@ -158,9 +176,66 @@ export function extractMentionedSans(text: string): string[] {
     const before = cleaned.slice(Math.max(0, match.index - 16), match.index);
     const precedingWord = before.trim().split(/\s+/).pop()?.toLowerCase() ?? '';
     if (NON_MOVE_PHRASE_PRECEDERS.has(precedingWord)) continue;
-    out.push(san);
+    // A square in a LIST of squares ("hitting d4 and e5", "d4, e5") is a
+    // square too (Learn walk 2026-10-01: an e7→e5 arrow off "and e5").
+    if (/^[a-h][1-8]$/.test(san)) {
+      if (SQUARE_ONLY_PRECEDERS.has(precedingWord.replace(/[,;:]$/, ''))) continue;
+      const words = cleaned.slice(Math.max(0, match.index - 24), match.index).trim().split(/\s+/);
+      const w1 = (words[words.length - 1] ?? '').toLowerCase();
+      const w2 = words[words.length - 2] ?? '';
+      if (/^[a-h][1-8],$/.test(w1) || ((w1 === 'and' || w1 === 'or') && /^[a-h][1-8],?$/.test(w2))) continue;
+      // …and a square that is the SUBJECT of a sentence ("c5 is a hole in their
+      // camp") names the square, never the pawn move (Learn walk 2026-10-01: a
+      // c6→c5 arrow grew out of it).
+      if (/^\s+(?:is|was|stays|remains)\b/.test(cleaned.slice(match.index + san.length, match.index + san.length + 12))) continue;
+    }
+    out.push({ san, index: match.index, end: match.index + san.length, text: cleaned });
   }
   return out;
+}
+
+/** SANs the text rules out: the one a move STOPS / prevents / takes away, a
+ *  "Why not X?", and an "X didn't work" / "X doesn't work". */
+export function ruledOutSans(text: string): Set<string> {
+  const out = new Set<string>();
+  const SAN = String.raw`(?:O-O(?:-O)?|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?)[+#]?`;
+  const before = new RegExp(String.raw`\b(?:stops|stop|prevents|prevent|takes away|rules out|why not)\s+(?:your\s+|their\s+|my\s+)?…?(${SAN})`, 'gi');
+  const after = new RegExp(String.raw`…?(${SAN})\s+(?:didn't|doesn't|does not|did not|no longer)\s+work`, 'g');
+  // "it takes Rxe5 away" and a move the line calls a mistake: said, never arrowed.
+  const away = new RegExp(String.raw`\btakes\s+(?:your\s+|their\s+)?…?(${SAN})\s+away`, 'gi');
+  const bad = new RegExp(String.raw`…?(${SAN})\s+(?:was|is)\s+(?:a|an)\s+(?:mistake|blunder|inaccuracy)`, 'g');
+  for (const re of [before, after, away, bad]) {
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(text)) !== null) out.add(m[1]);
+  }
+  // …and the WHOLE refuted line after it: "h4 didn't work: h4, hxg5 and hxg5 —
+  // you come out behind" (Learn walk 2026-10-01, game 2 ply 39: Nc5 was drawn
+  // green and …Nf4 red out of a line the sentence says fails).
+  // "Rc8? Then Bc2, c5, dxc5 … — you come out behind" (walk oct1b, game 3
+  // ply 30): the questioned candidate and its refutation are a failing line too.
+  const asked = new RegExp(String.raw`(${SAN})\?\s+Then\s+([^—.]*)`, 'g');
+  let q: RegExpExecArray | null;
+  const tok0 = new RegExp(SAN, 'g');
+  while ((q = asked.exec(text)) !== null) {
+    out.add(q[1]);
+    for (const t of q[2].match(tok0) ?? []) out.add(t);
+  }
+  const line = /(?:didn't|doesn't|does not|did not|no longer)\s+work:\s*([^—.]*)/g;
+  let l: RegExpExecArray | null;
+  const tok = new RegExp(SAN, 'g');
+  while ((l = line.exec(text)) !== null) {
+    for (const t of l[1].match(tok) ?? []) out.add(t);
+  }
+  return out;
+}
+/** The SANs a line may ARROW: every mentioned move except the ones it rules
+ *  out (a move it stops, a "Why not X?", a line that "didn't work", an
+ *  "X? Then …" refutation). One rule for every surface — Learn, chat, the
+ *  live coach, Middlegame Practice (Learn walk 2026-10-01: the rule lived in
+ *  Learn only, so chat still arrowed a refuted candidate). */
+export function extractArrowableSans(text: string): string[] {
+  const out = ruledOutSans(text);
+  return extractMentionedSans(text).filter((s) => !out.has(s));
 }
 
 /** Resolve a SAN to its from→to squares, trying the running position,
@@ -250,7 +325,7 @@ export async function injectCandidateArrows(
   // preserve newlines — only collapse the double-spaces a stripped
   // inline marker leaves behind.
   const base = stripBoardMarkers(text).replace(/ {2,}/g, ' ').trim();
-  const sans = Array.from(new Set(extractMentionedSans(text)));
+  const sans = Array.from(new Set(extractArrowableSans(text)));
   if (sans.length === 0) return { text: base, injected: [] };
 
   // The just-played move is ALREADY on the board — don't arrow it (David
@@ -327,13 +402,25 @@ export async function injectCandidateArrows(
 
   // Suggestions first (they're the point), then spoken threats fill the rest.
   const finalArrows = [
-    ...capped.map((r) => ({ san: r.san, from: r.from, to: r.to, color: r.color })),
-    ...threats,
+    ...capped.map((r) => ({ san: r.san, from: r.from, to: r.to, color: r.color, rank: r.rank })),
+    ...threats.map((t) => ({ ...t, rank: null as number | null })),
   ].slice(0, MAX_CANDIDATE_ARROWS);
+  // THROUGH THE DOOR (`arrowDoor`): a suggestion is the engine's own ranked move
+  // for the side to move; a threat must be THEIRS, legal now and winning
+  // something now (the chat once drew "Qxd3" red — the punishment of a move the
+  // student had not played). The marker carries the door's colour.
+  const studentColor: 'white' | 'black' = fen.split(' ')[1] === 'b' ? 'black' : 'white';
   const markers: string[] = [];
   const injected: { san: string; color: ArrowColor }[] = [];
-  for (const { san, from, to, color } of finalArrows) {
-    markers.push(`[BOARD: arrow:${from}-${to}:${color}]`);
+  for (const { san, from, to, color, rank } of finalArrows) {
+    const admitted = admitArrow(
+      color === 'red'
+        ? { from, to, role: 'threat', source: 'arrowEngine.threat' }
+        : { from, to, role: 'play', rank, vouchedBy: 'engine', source: 'arrowEngine.candidate' },
+      { fen, studentColor },
+    );
+    if (!admitted) continue;
+    markers.push(`[BOARD: arrow:${from}-${to}:${arrowColorName(admitted.color)}]`);
     injected.push({ san, color });
   }
   if (markers.length === 0) return { text: base, injected: [] };

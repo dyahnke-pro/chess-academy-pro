@@ -17,6 +17,8 @@ const NOT_PER_GAME: Record<string, string> = {
   // Scoped to the trap MENU by opening, not to a game: forgetting it would
   // re-offer a trap the coach just taught (the file's own comment says so).
   taughtGemIdsRef: 'trap-menu scope, keyed by opening — not per game',
+  // One engine read of ONE board, matched by FEN before use — per turn.
+  studentBestReadRef: 'per-turn engine read, keyed by its FEN — not per game',
 };
 
 function censusOrphans(): string[] {
@@ -100,14 +102,14 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
     const mem = createLearnMemory();
     mem.spokenOpeningName = 'Scandinavian Defense: Lasker Variation';
     mem.detectedOpeningName = 'Scandinavian Defense: Lasker Variation';
-    mem.curatedBeatSeen.add('beat-1');
+    mem.structureSaid.add('masters-plan');
     expect(mem.observe(14), 'a game in progress must not forget').toBe(false);
     expect(mem.observe(16)).toBe(false);
     // A NEW game: the board is back near the start.
     expect(mem.observe(1), 'fewer plies than before = a new or rewound game').toBe(true);
     expect(mem.spokenOpeningName).toBeNull();
     expect(mem.detectedOpeningName).toBeNull();
-    expect(mem.curatedBeatSeen.size).toBe(0);
+    expect(mem.structureSaid.size).toBe(0);
   });
 
   // ── R1 OF THE ARC: QUEUEING IS NOT SAYING (2026-09-18) ──────────────────
@@ -192,7 +194,7 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
   it('the Learn page routes every fresh game through ONE reset, and the memory owns the signal', () => {
     const src = readFileSync(PAGE, 'utf8');
     expect(src.match(/learnMemRef\.current\.newGame\(\)/g) ?? [], 'exactly one newGame() call site').toHaveLength(1);
-    expect((src.match(/resetPerGameMemory\(\)/g) ?? []).length, 'both fresh-game doors go through it').toBeGreaterThanOrEqual(2);
+    expect((src.match(/resetPerGameMemory\(\)/g) ?? []).length, 'the ask door goes through it (the board door is observe())').toBeGreaterThanOrEqual(1);
     expect(src, 'the memory fires the page-ref forgetter on EVERY reset, including observe()\'s own')
       .toMatch(/createLearnMemory\(\(\) => \{ forgetPageRefsRef\.current\(\); \}\)/);
   });

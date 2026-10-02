@@ -18,39 +18,22 @@
 // EVERY claim here is arithmetic over moves the engine actually played (G0/G3).
 // Nothing is inferred about intentions: "heading for e5" means a piece of that
 // colour lands on e5 inside the line, not that the model believes it wants to.
+import { seatPieceReferences } from '../utils/seatPieces';
 import { Chess, type Square } from 'chess.js';
 import { computePlyFacts } from './pvPlayback';
 import { describeStructure } from './boardStructure';
 import { detectTactics } from './tacticsDetector';
+import { PATTERN_SPEECH, patternAim } from './tacticVocabulary';
 import type { PvLine, PvPly, PrevCaptureContext } from './pvPlayback';
-import { aimsOf, stepArc, EMPTY_ARC, type ArcEvent, type ArcMove, type Seat } from './planArc';
+import { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcEvent, type ArcMove, type Seat } from './planArc';
 // The PLAN ACROSS MOVES (planArc) — the memory this reader never had. Exposed
 // from here so a surface composes one plan module, not two.
-export { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcEvent, type ArcState, type ArcMove, type Seat, type Aim } from './planArc';
+export { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcEvent, type ArcState, type ArcMove, type Seat, type Aim } from './planArc';
 
 type ChessCtor = InstanceType<typeof Chess>;
 
 const PIECE_WORD: Record<string, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen',
-};
-
-/** Tactic names in English.
- *
- *  `tacticsDetector` types are snake_case identifiers, and the first version of
- *  this spoke them raw — a 60-gem sweep produced "You want to land a
- *  mate_threat", which is the coach reading a variable name aloud. A detector
- *  enum is a program's word for a thing, never a person's. */
-const TACTIC_WORD: Record<string, string> = {
-  fork: 'fork',
-  pin: 'pin',
-  skewer: 'skewer',
-  discovery: 'discovered attack',
-  back_rank: 'back-rank threat',
-  mate_threat: 'mating threat',
-  removal_of_guard: 'removal of the defender',
-  trapped_piece: 'piece trap',
-  double_check: 'double check',
-  overload: 'overloaded defender',
 };
 
 /**
@@ -89,6 +72,18 @@ export function reachesInOneMove(fen: string | undefined, from: string, to: stri
   return true;
 }
 
+/** What stands on a route's destination on the board the plan is read from:
+ *  the mover's own piece (no route there yet), theirs (the route takes it), or
+ *  nothing. */
+export function routeDestination(fen: string, dest: string, color: 'white' | 'black'): { kind: 'own' } | { kind: 'takes'; piece: string } | { kind: 'empty' } {
+  try {
+    const pc = new Chess(fen).get(dest as never) as { type?: string; color?: string } | undefined;
+    if (!pc?.type) return { kind: 'empty' };
+    if (pc.color === (color === 'white' ? 'w' : 'b')) return { kind: 'own' };
+    return { kind: 'takes', piece: PIECE_WORD[pc.type] ?? 'piece' };
+  } catch { return { kind: 'empty' }; }
+}
+
 export function waypointsOf(path: readonly string[]): string[] {
   if (path.length < 3) return [];
   const start = path[0];
@@ -105,9 +100,34 @@ export function waypointsOf(path: readonly string[]): string[] {
 
 /** Speakable name for a tactic, or null when it has none — an unknown tactic
  *  is dropped rather than read out as its identifier. */
+/** Tactic names and aims in English come from the ONE table,
+ *  `tacticVocabulary.PATTERN_SPEECH` — never a snake_case enum read aloud
+ *  ("You want to land a mate_threat"), never a hand-copied list. */
+export function tacticAim(kind: string | null): string | null {
+  return kind && kind !== 'battery' ? patternAim(kind) : null;
+}
+
 export function tacticWord(kind: string | null): string | null {
-  if (!kind) return null;
-  return TACTIC_WORD[kind] ?? null;
+  if (!kind || kind === 'battery' || kind === 'none') return null;
+  return (PATTERN_SPEECH as Record<string, { word: string }>)[kind]?.word ?? null;
+}
+
+/**
+ * THE STUDENT'S OWN TACTIC, SEATED FROM THE BOARD (run C walk 2026-09-30: "You
+ * have a pin: bishop on h3 pins rook on g2 against king on f1" — nobody's
+ * pieces). Whose each piece is, is read off the board by the one seating
+ * computer (`seatPieceReferences`), never guessed from word order: a back-rank
+ * description names the VICTIM king first, and a word-order guess called it
+ * "your king on g1" (run F walk 2026-09-30). When the description already
+ * names the motif, it IS the sentence.
+ */
+export function seatedTacticLine(word: string, description: string | null | undefined, fen: string, student: 'w' | 'b'): string {
+  if (!description) return `You have a ${word}.`;
+  let d = description.trim().replace(/[.!]$/, '');
+  d = d.charAt(0).toLowerCase() + d.slice(1);
+  d = seatPieceReferences(d, fen, student);
+  const body = d.charAt(0).toUpperCase() + d.slice(1);
+  return new RegExp(`\\b${word}\\b`).test(d) ? `${body}.` : `You have a ${word}: ${d}.`;
 }
 
 /** How close a landing square has to be to a king to count as "coming at it".
@@ -155,8 +175,16 @@ export interface SidePlan {
   outposts: string[];
   /** Net material this side wins across the horizon, in points. */
   materialSwing: number;
+  /** WHAT was won and what was given for it, counted off the board at the
+   *  same quiet point as `materialSwing` — so a bishop taken for a pawn is said
+   *  as that, never rounded to "a pawn" (manual claim check 2026-09-30, 190). */
+  materialDeal?: { took: string; gave: string | null };
   /** Passed pawns this side creates. */
   passedPawns: string[];
+  /** Passed pawns this side PUSHES — a passer that already stood and steps on.
+   *  Kept apart from `passedPawns` so it is never voiced as "create" (calc hand
+   *  walk 2026-10-01: an advancing passer read as a new one on every push). */
+  pushedPassers?: string[];
   /** Enemy king-shield pawns this side strips away. */
   shieldStripped: number;
   /** A tactic that LANDS inside the line ('fork' | 'pin' | 'skewer' | …). */
@@ -200,7 +228,7 @@ export interface SidePlan {
    *  the journey, so a three-move regrouping read as two unrelated squares. The
    *  chain was already being reconstructed inside `planMarks` to place an
    *  arrow; here it becomes the sentence it always was. */
-  maneuver: { piece: string; path: string[] } | null;
+  maneuver: { piece: string; path: string[]; takes?: string } | null;
   /** Checks this side gives inside the horizon. `isCheck` has been computed on
    *  every ply since `pvPlayback` was written and read by nothing. */
   checks: number;
@@ -441,14 +469,37 @@ export function keySquaresOf(plies: readonly PvPly[]): KeySquare[] {
     .sort((a, b) => b.weight - a.weight || a.square.localeCompare(b.square));
 }
 
-function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
+/** Material for `color` minus the other side's, in points, off the board. */
+function sideBalance(fen: string, color: 'white' | 'black'): number {
+  const V: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+  const me = color === 'white' ? 'w' : 'b';
+  let net = 0;
+  try {
+    for (const cell of new Chess(fen).board().flat()) {
+      if (cell) net += (cell.color === me ? 1 : -1) * (V[cell.type] ?? 0);
+    }
+  } catch { return 0; }
+  return net;
+}
+
+function planFor(
+  plies: readonly PvPly[],
+  color: 'white' | 'black',
+  /** The board before an exchange the line is FINISHING (the line opens by
+   *  taking back on the square the previous move captured on). Material is
+   *  counted from here, so a recapture is the other half of a trade, never a
+   *  win. Null when the line starts on a quiet board. */
+  exchangeStartFen: string | null,
+): SidePlan {
   const mine = plies.slice(0, PLAN_HORIZON).filter((p) => p.moverColor === color);
   const destinations = new Map<string, number>();
   const opening = new Set<string>();
   const trading: string[] = [];
   const outposts: string[] = [];
   const passedPawns: string[] = [];
+  const pushedPassers: string[] = [];
   let materialSwing = 0;
+  let materialDeal: { took: string; gave: string | null } | undefined;
   let shieldStripped = 0;
   let tactic: string | null = null;
   let tacticSquare: string | null = null;
@@ -511,6 +562,11 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
         if (piece?.type === 'p' && piece.color === owner) passedPawns.push(sq);
       } catch { /* unreadable board — claim nothing */ }
     }
+    // A pawn move that lands as a passer it already was: pushing the passer.
+    if (!/^[KQRBNO]/.test(ply.san) && !ply.facts.newPassedPawns.includes(to)) {
+      const passed = describeStructure(ply.fenAfter)?.pawns.passedPawns[owner] ?? [];
+      if (passed.includes(to)) pushedPassers.push(to);
+    }
     materialSwing += ply.facts.materialGained;
     if (ply.facts.materialGained > 0) materialSquares.push(to);
     shieldStripped += ply.facts.shieldLost;
@@ -524,9 +580,64 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     // before the move, so it describes where the piece is heading rather than
     // where the king ended up after being chased.
     const enemyKing = kingSquare(ply.fenBefore, color === 'white' ? 'b' : 'w');
-    if (enemyKing && chebyshev(to, enemyKing) <= KING_ZONE) {
+    // PIECES only: a king walking over or a pawn run is not "swinging pieces
+    // toward their king" (hand walk 2026-09-27, a king-and-pawn ending: "h6 was
+    // the move, to swing pieces toward their king" with no pieces on the board).
+    if (enemyKing && /^[QRBN]/.test(ply.san) && chebyshev(to, enemyKing) <= KING_ZONE) {
       nearEnemyKing += 1;
       kingAttackSquares.push(to);
+    }
+  }
+
+  // A PASSER THE LINE TAKES STRAIGHT BACK WAS NEVER CREATED (Learn walk
+  // 2026-10-01: "exf3 was their move, to create a passed pawn on f3" — and
+  // Qxf3 takes it the next move). The pawn must still stand on its file at the
+  // end of the horizon, where it landed or further up.
+  {
+    const endFen = plies.slice(0, PLAN_HORIZON).at(-1)?.fenAfter;
+    if (endFen && passedPawns.length) {
+      try {
+        const end = new Chess(endFen);
+        const owner = color === 'white' ? 'w' : 'b';
+        const survives = (sq: string): boolean => {
+          const r0 = Number(sq[1]);
+          for (let r = 1; r <= 8; r += 1) {
+            if (owner === 'w' ? r < r0 : r > r0) continue;
+            const pc = end.get(`${sq[0]}${r}` as never) as { type?: string; color?: string } | undefined;
+            if (pc?.type === 'p' && pc.color === owner) return true;
+          }
+          return false;
+        };
+        for (let i = passedPawns.length - 1; i >= 0; i -= 1) if (!survives(passedPawns[i])) passedPawns.splice(i, 1);
+      } catch { /* unreadable end — keep the claim as the board gave it */ }
+    }
+  }
+
+  // THE MATERIAL IS THE BOARD'S, AT A QUIET POINT — not a sum of per-capture
+  // exchange guesses. Each ply's gain is a static exchange that assumes a
+  // recapture; summing one side's captures double-counts the trade (McConnell
+  // walk 2026-09-27: O-O Bg4 Bg5 Qxg5 Bxf7+ Ke7 Nxg5 Bxd1 read "win a rook" —
+  // +1 for f7 and +9 for the queen, never the bishop and queen given back).
+  // The count is taken where the line is QUIET — the last ply the next move
+  // does not capture — so a horizon that ends mid-exchange claims nothing
+  // from the half it did not see.
+  {
+    const horizon = plies.slice(0, PLAN_HORIZON);
+    let quietAt = -1;
+    for (let i = 0; i < horizon.length; i++) {
+      const next = horizon[i + 1];
+      if (next ? !/x/.test(next.san) : !/x/.test(horizon[i].san)) quietAt = i;
+    }
+    // A RECAPTURE IS NOT A WIN (David 2026-10-02: "win a pawn" on a
+    // recapture). The line may open mid-exchange — their pawn took on d4 and
+    // the line starts cxd4 — so the baseline is the board before the
+    // exchange began, not the board the line was handed.
+    const base = exchangeStartFen ?? horizon[0]?.fenBefore;
+    materialSwing = quietAt >= 0 && horizon.length > 0 && base
+      ? sideBalance(horizon[quietAt].fenAfter, color) - sideBalance(base, color)
+      : 0;
+    if (quietAt >= 0 && horizon.length > 0 && base && materialSwing >= 1) {
+      materialDeal = dealOf(base, horizon[quietAt].fenAfter, color);
     }
   }
 
@@ -552,7 +663,8 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
   // A piece that moved once went somewhere; a piece that moved twice is being
   // REROUTED, and that is the sentence. Longest journey wins — three hops is a
   // more striking idea than two.
-  const maneuver = [...journeys.values()]
+  const rootFen = mine[0]?.fenBefore;
+  const maneuverPick = [...journeys.values()]
     .filter((j) => j.path.length >= 3)
     // A ROUTE MAY NOT NAME ITS OWN DESTINATION AS A WAYPOINT. From David's game
     // of 2026-08-11: "walk the queen round to c2, by way of c2 and b3" — and
@@ -582,7 +694,19 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     // cannot reach; when the start sees the destination on the ROOT board,
     // the waypoints are incident (a check, a chase), not the idea.
     .filter((j) => !reachesInOneMove(mine[0]?.fenBefore, j.path[0], j.path[j.path.length - 1]))
+    // A ROUTE ONTO A SQUARE ITS OWN PIECE HOLDS IS NO PLAN (Learn walk
+    // 2026-10-01: "getting the rook to c3, by way of c1" with White's knight
+    // on c3 — the line only works once that knight has gone).
+    .filter((j) => !rootFen || routeDestination(rootFen, j.path[j.path.length - 1], color).kind !== 'own')
+    // …nor a heavy piece walking back to its own first rank (Learn walk
+    // 2026-10-01: "getting the rook to d1, by way of d5" — a retreat, not a
+    // plan). A minor's Nd2–f1 regroup is the classic reroute and stays.
+    .filter((j) => !((j.piece === 'rook' || j.piece === 'queen') && j.path[j.path.length - 1][1] === (color === 'white' ? '1' : '8')))
     .sort((a, b) => b.path.length - a.path.length)[0] ?? null;
+  // …and onto a square THEIR piece holds, the route ends in a capture, so it
+  // is said as one ("getting the knight to a7" was taking the a7 pawn).
+  const maneuverDest = maneuverPick && rootFen ? routeDestination(rootFen, maneuverPick.path[maneuverPick.path.length - 1], color) : null;
+  const maneuver = maneuverPick && maneuverDest?.kind === 'takes' ? { ...maneuverPick, takes: maneuverDest.piece } : maneuverPick;
 
   const headingFor = [...destinations.entries()]
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
@@ -595,7 +719,9 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     trading,
     outposts,
     materialSwing,
+    ...(materialDeal ? { materialDeal } : {}),
     passedPawns,
+    ...(pushedPassers.length ? { pushedPassers } : {}),
     shieldStripped,
     tactic,
     tacticSquare,
@@ -707,8 +833,8 @@ export function describePlan(
   if (plan.promotes) {
     add(150, `push a pawn through to a new queen on ${plan.promotes}`, [plan.promotes]);
   }
-  const tactic = tacticWord(plan.tactic);
-  if (tactic) add(90, `land a ${tactic}`, plan.tacticSquare ? [plan.tacticSquare] : []);
+  const tactic = tacticAim(plan.tactic);
+  if (tactic) add(90, tactic, plan.tacticSquare ? [plan.tacticSquare] : []);
   // THE REROUTE — the most characteristic thing a coach says about a line, and
   // the plan had the data and no sentence for it: `headingFor` kept the
   // destinations and lost the journey, so a three-move regrouping read as two
@@ -722,7 +848,8 @@ export function describePlan(
     // clause says nothing rather than saying something false.
     if (via.length > 0) {
       const dest = path[path.length - 1];
-      add(80, `walk the ${piece} round to ${dest}, by way of ${via.join(' and ')}`, [path[0], ...via, dest]);
+      const takes = plan.maneuver.takes ? ` and take the ${plan.maneuver.takes} there` : '';
+      add(80, `walk the ${piece} round to ${dest}, by way of ${via.join(' and ')}${takes}`, [path[0], ...via, dest]);
     }
   }
   // CHECKS ON THE WAY. Low weight on purpose — it is texture, not a plan — but
@@ -744,8 +871,13 @@ export function describePlan(
 
   // King attack, scaled by how many pieces are really arriving. Two is a
   // gesture; four is an assault and the sentence should lead with it.
+  // …but never above a PIECE the line actually wins (Learn walk 2026-10-02,
+  // ply 32: "Ne3 was cleaner — it would swing pieces toward their king" for a
+  // knight fork that wins the queen; the king read scored 98, the queen 95).
   if (plan.nearEnemyKing >= 2) {
-    add(50 + plan.nearEnemyKing * 12, `swing pieces toward ${theirKing}`, plan.kingAttackSquares);
+    const kingWeight = 50 + plan.nearEnemyKing * 12;
+    const capped = plan.materialSwing >= 3 ? Math.min(kingWeight, 34 + plan.materialSwing * 10) : kingWeight;
+    add(capped, `swing pieces toward ${theirKing}`, plan.kingAttackSquares);
   }
   // Shield pawns are worth more per pawn than a piece walking over: a pawn that
   // has gone is not coming back.
@@ -753,7 +885,9 @@ export function describePlan(
   // Material, by what it actually is. A rook is not a pawn and the ranking
   // should not pretend otherwise.
   if (plan.materialSwing >= 1) {
-    const what = plan.materialSwing >= 5 ? 'a rook' : plan.materialSwing >= 3 ? 'a piece' : 'a pawn';
+    const what = plan.materialDeal
+      ? `${plan.materialDeal.took}${plan.materialDeal.gave ? ` for ${plan.materialDeal.gave}` : ''}`
+      : plan.materialSwing >= 5 ? 'a rook' : plan.materialSwing >= 3 ? 'a piece' : 'a pawn';
     add(35 + plan.materialSwing * 10, `win ${what}`, plan.materialSquares);
   }
   // A passed pawn matters more the closer it is to promoting — the one fact
@@ -766,6 +900,12 @@ export function describePlan(
     // the third is a long-term asset that should not outrank a knight sitting
     // on an outpost right now.
     add(10 + advanced * 8, `create a passed pawn on ${sq}`, [sq]);
+  }
+  if (plan.passedPawns.length === 0 && plan.pushedPassers?.length) {
+    const sq = plan.pushedPassers[plan.pushedPassers.length - 1];
+    const rank = Number(sq[1]);
+    const advanced = plan.color === 'white' ? rank : 9 - rank;
+    add(10 + advanced * 8, `push the passed pawn on to ${sq}`, [sq]);
   }
   if (plan.outposts.length > 0) {
     add(35, `park a piece on ${plan.outposts[0]}, where none of their pawns can attack it`, [plan.outposts[0]]);
@@ -887,12 +1027,14 @@ export function buildLookaheadPlan(
   line: PvLine,
   studentColor: 'white' | 'black',
   /** Clauses already spoken this game — see `describePlan`. */
-  said?: Set<string>,
+  said: Set<string> | undefined,
+  /** See `planFor` — the board before the exchange the line finishes. */
+  exchangeStartFen: string | null,
 ): LookaheadPlan | null {
   if (line.plies.length < 4) return null;
 
-  const white = planFor(line.plies, 'white');
-  const black = planFor(line.plies, 'black');
+  const white = planFor(line.plies, 'white', exchangeStartFen);
+  const black = planFor(line.plies, 'black', exchangeStartFen);
   const mine = studentColor === 'white' ? white : black;
   const theirs = studentColor === 'white' ? black : white;
   mine.text = describePlan(mine, 'mine', said);
@@ -1258,6 +1400,51 @@ function shortLineRead(
   };
 }
 
+/** Is this plan clause a COST — something that was taken or broken, as opposed
+ *  to where pieces go? The one test both backward readers use ("that let them
+ *  …", "it let them …"): Blumenfeld walk F32 heard "That let them walk the rook
+ *  round to h5, by way of c5, pull the pawns away, win a pawn, prise open the
+ *  c-file and trade off the rook", and F18 "That gave them the run of b4 and
+ *  c3" — plans and drift said as if they were the price of the move. */
+export function isCostClause(text: string): boolean {
+  return /^(win|take|mate|checkmate|trap|pull the pawns)\b/.test(text.trim());
+}
+
+/** Pieces of each kind a side lost between two boards (minors counted as one kind). */
+function lostCounts(before: string, after: string, side: 'w' | 'b'): Record<string, number> {
+  const count = (fen: string): Record<string, number> => {
+    const out: Record<string, number> = { q: 0, r: 0, m: 0, p: 0 };
+    for (const c of new Chess(fen).board().flat()) {
+      if (!c || c.color !== side || c.type === 'k') continue;
+      out[c.type === 'n' || c.type === 'b' ? 'm' : c.type] += 1;
+    }
+    return out;
+  };
+  const a = count(before); const b = count(after);
+  return { q: Math.max(0, a.q - b.q), r: Math.max(0, a.r - b.r), m: Math.max(0, a.m - b.m), p: Math.max(0, a.p - b.p) };
+}
+const DEAL_ONE: Record<string, string> = { p: 'a pawn', m: 'a piece', r: 'a rook', q: 'the queen' };
+const DEAL_MANY: Record<string, string> = { p: 'pawns', m: 'pieces', r: 'rooks', q: 'queens' };
+const COUNT_WORD = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
+function dealWords(n: Record<string, number>): string | null {
+  const words = (['q', 'r', 'm', 'p'] as const).filter((t) => n[t] > 0)
+    .map((t) => (n[t] === 1 ? DEAL_ONE[t] : `${COUNT_WORD[n[t]] ?? n[t]} ${DEAL_MANY[t]}`));
+  return words.length ? words.join(' and ') : null;
+}
+/** What `color` took and gave between two boards — "a piece for a pawn".
+ *  Like-for-like cancels: a bishop and two pawns for a bishop is two pawns. */
+function dealOf(before: string, after: string, color: 'white' | 'black'): { took: string; gave: string | null } | undefined {
+  try {
+    const me: 'w' | 'b' = color === 'white' ? 'w' : 'b';
+    const took = lostCounts(before, after, me === 'w' ? 'b' : 'w');
+    const gave = lostCounts(before, after, me);
+    for (const t of ['q', 'r', 'm', 'p']) { const k = Math.min(took[t], gave[t]); took[t] -= k; gave[t] -= k; }
+    const t = dealWords(took);
+    if (!t) return undefined;
+    return { took: t, gave: dealWords(gave) };
+  } catch { return undefined; }
+}
+
 /**
  * The plan from a raw engine PV, with no second search and no engine handle.
  *
@@ -1271,20 +1458,16 @@ function shortLineRead(
  * than guessed, so `describe` falls back to the squares the pieces are heading
  * for — less to say, and nothing invented (G0).
  */
-/** Is this plan clause a COST — something that was taken or broken, as opposed
- *  to where pieces go? The one test both backward readers use ("that let them
- *  …", "it let them …"): Blumenfeld walk F32 heard "That let them walk the rook
- *  round to h5, by way of c5, pull the pawns away, win a pawn, prise open the
- *  c-file and trade off the rook", and F18 "That gave them the run of b4 and
- *  c3" — plans and drift said as if they were the price of the move. */
-export function isCostClause(text: string): boolean {
-  return /^(win|take|mate|checkmate|trap|pull the pawns)\b/.test(text.trim());
-}
-
 export function planFromUci(
   fen: string,
   uciMoves: readonly string[],
   studentColor: 'white' | 'black',
+  /** The move that PRODUCED `fen`, or null when there is none to hand.
+   *  REQUIRED, so every caller decides it: when that move was a capture and
+   *  the line opens by taking back on its square, the line is finishing a
+   *  trade and its material is counted from before the trade began. Without
+   *  it a recapture read as "win a pawn" (David 2026-10-02). */
+  lastMove: { fenBefore: string; san: string } | null,
   said?: Set<string>,
 ): LookaheadPlan | null {
   // A SHORT LINE IS NOT NOTHING. This used to bail at fewer than four plies,
@@ -1300,6 +1483,16 @@ export function planFromUci(
   // Carried so a recapture is recognised as one, exactly as the engine path
   // does — without it every exchange reads as two separate captures.
   let prevCap: PrevCaptureContext = { square: null, capturedValue: 0 };
+  let exchangeStartFen: string | null = null;
+  if (lastMove) {
+    try {
+      const lm = new Chess(lastMove.fenBefore).move(lastMove.san);
+      if (lm?.captured && uciMoves[0]?.slice(2, 4) === lm.to) {
+        exchangeStartFen = lastMove.fenBefore;
+        prevCap = { square: lm.to, capturedValue: PIECE_POINTS[PIECE_WORD[lm.captured] ?? ''] ?? 0 };
+      }
+    } catch { /* an unreadable last move — count from the board as given */ }
+  }
   for (const uci of uciMoves.slice(0, PLAN_HORIZON)) {
     if (!uci || uci.length < 4) break;
     const fenBefore = board.fen();
@@ -1328,6 +1521,7 @@ export function planFromUci(
     { plies, rootEvalCp: 0, terminalEvalCp: null, delivers: true, closeAlternative: null },
     studentColor,
     said,
+    exchangeStartFen,
   );
 }
 
@@ -1360,11 +1554,18 @@ export function gameArcs(sans: readonly string[], studentColor: 'white' | 'black
     const seat: Seat = color === studentWB ? 'student' : 'opponent';
     let state = EMPTY_ARC;
     for (let i = color === 'w' ? 0 : 1; i < moved.length; i += 2) {
-      const plan = planFromUci(fens[i + 1], uci.slice(i + 1, i + 1 + HINDSIGHT_PLIES), studentColor);
+      const plan = planFromUci(fens[i + 1], uci.slice(i + 1, i + 1 + HINDSIGHT_PLIES), studentColor, { fenBefore: fens[i], san: sans[i] });
       const side = plan ? (seat === 'student' ? plan.mine : plan.theirs) : null;
-      const r = stepArc(state, side ? aimsOf(side, seat) : [], moved[i], fens[i + 1], color, seat);
+      // The SAME walkability Learn applies (review walk 2026-10-01: "pushing the
+      // passed pawn on the a-file" with …a6 still blocking it — the hindsight
+      // line makes the passer two moves later).
+      const aims = side ? aimsOf(side, seat).filter((a) => aimWalkableNow(a, fens[i + 1], color, sans.slice(0, i + 1))) : [];
+      const r = stepArc(state, aims, moved[i], fens[i + 1], color, seat);
       state = r.next;
-      const spoken = r.events.filter((e) => e.kind !== 'advance');
+      // A plan leaving the engine line is not something a player DID — "they
+      // have let an attack on your king go" read as nonsense four times in one
+      // review (Carlsen–Topalov walk 2026-09-27). Emerge and arrive speak.
+      const spoken = r.events.filter((e) => e.kind === 'emerge' || e.kind === 'arrive');
       if (spoken.length) out.set(i, [...(out.get(i) ?? []), ...spoken]);
     }
   }

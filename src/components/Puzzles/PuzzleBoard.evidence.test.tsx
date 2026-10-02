@@ -60,7 +60,7 @@ const PUZZLE: PuzzleRecord = {
 const AFTER_OPP = 'r2qkb1r/pp1nppp1/3p1n1p/2pP4/4N3/2P5/PP2QPPP/RNB1K2R w KQkq - 2 10';
 
 async function ready(): Promise<void> {
-  render(<PuzzleBoard puzzle={PUZZLE} onComplete={vi.fn()} />);
+  render(<PuzzleBoard surface="classic" puzzle={PUZZLE} onComplete={vi.fn()} />);
   await screen.findByTestId('chess-board');
   await waitFor(() => expect(screen.queryByTestId('puzzle-loading')).not.toBeInTheDocument(), { timeout: 2000 });
 }

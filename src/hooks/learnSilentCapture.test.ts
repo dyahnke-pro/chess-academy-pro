@@ -17,7 +17,7 @@
 //      150cp mistake fell under the bar and never reached their own drill queue.
 //
 // `mistakePuzzleCapture.test` covers the writer. Nothing covered REACHING it.
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
 import { renderHook } from '@testing-library/react';
 
 // `vi.hoisted` — vi.mock is hoisted above every import, so a factory that
@@ -51,6 +51,7 @@ vi.mock('../services/voiceService', () => ({
  *  The engine is stubbed, so what matters is that before/after differ by 150cp
  *  from the MOVER's side and a best move exists to drill toward. */
 const SLIP = {
+  prompted: false,
   fenBefore: 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2',
   fenAfter: 'rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3',
   playedSan: 'Nf6',
@@ -60,6 +61,16 @@ const SLIP = {
   inBook: false,
   learned: true,
 };
+
+// THE COLD IMPORT IS PAID ONCE, OUTSIDE ANY TEST (2026-10-01). `importOriginal`
+// on discussionPractice pulls in the misconception + mistake-puzzle chain — ~7s
+// cold. Paid inside the first test, it timed out under ship-check load and its
+// still-running evaluate then landed in the NEXT test ("called 2 times"). A
+// race, not a flake.
+let useDiscussionPractice: typeof import('./useDiscussionPractice').useDiscussionPractice;
+beforeAll(async () => {
+  ({ useDiscussionPractice } = await import('./useDiscussionPractice'));
+}, 120_000);
 
 describe('a mistake is captured with no card ever shown', () => {
   beforeEach(() => {
@@ -76,7 +87,6 @@ describe('a mistake is captured with no card ever shown', () => {
     // 800-rated: `slipWarrantsInterjection(150, 800)` is false, so no card is
     // ever raised. The mistake must still reach the weakness bucket — that is
     // the whole point of keeping capture when the pop-ups go.
-    const { useDiscussionPractice } = await import('./useDiscussionPractice');
     const { result } = renderHook(() => useDiscussionPractice(true, { surface: 'coach-teach', capabilityOrigin: 'learn' }));
 
     // Awaited directly rather than through `waitFor` — the capture is
@@ -111,7 +121,6 @@ describe('a mistake is captured with no card ever shown', () => {
     // queue, not just the coarse tag. The classifier needs the SAN history to
     // prove WHICH fundamental a slip neglected — so evaluatePlayerMove must
     // forward it into the capture's classifyInput.
-    const { useDiscussionPractice } = await import('./useDiscussionPractice');
     const { result } = renderHook(() => useDiscussionPractice(true, { surface: 'coach-teach', capabilityOrigin: 'learn' }));
 
     const history = ['e4', 'e5', 'Nf3', 'Nf6'];
@@ -193,7 +202,6 @@ describe('C3 — the live capture carries the engine lines + evals the sweep wri
   });
 
   it('BEHAVIOURAL: the punishing line (SAN, from the board after the move), the best line minus its first move, and MOVER-POV evals all reach the classifier', async () => {
-    const { useDiscussionPractice } = await import('./useDiscussionPractice');
     const { result } = renderHook(() => useDiscussionPractice(true, { surface: 'coach-teach', capabilityOrigin: 'learn' }));
     await result.current.evaluatePlayerMove({ ...SLIP, studentRating: 800, historySans: ['e4', 'e5', 'Nf3', 'Nf6'] });
     expect(captureMisconception).toHaveBeenCalledTimes(1);
@@ -210,7 +218,6 @@ describe('C3 — the live capture carries the engine lines + evals the sweep wri
     analyze.mockImplementation(async (fen: string) => (fen === SLIP.fenBefore
       ? { evaluation: 0, bestMove: 'b8c6', isMate: false, topLines: [{ moves: ['b8c6', 'f1c4', 'g8f6'] }] }
       : { evaluation: 10000, bestMove: 'f3e5', isMate: true, mateIn: 5, topLines: [{ moves: ['f3e5'] }] }));
-    const { useDiscussionPractice } = await import('./useDiscussionPractice');
     const { result } = renderHook(() => useDiscussionPractice(true, { surface: 'coach-teach', capabilityOrigin: 'learn' }));
     await result.current.evaluatePlayerMove({ ...SLIP, studentRating: 800, historySans: ['e4', 'e5', 'Nf3', 'Nf6'] });
     expect(captureMisconception).toHaveBeenCalledTimes(1);
@@ -224,7 +231,6 @@ describe('C3 — the live capture carries the engine lines + evals the sweep wri
     analyze.mockImplementation(async (fen: string) => (fen === SLIP.fenBefore
       ? { evaluation: 0, bestMove: 'b8c6', isMate: false, topLines: [{ moves: ['d7d6', 'f1c4'] }] }
       : { evaluation: 150, bestMove: 'f3e5', isMate: false, topLines: [{ moves: ['f3e5', 'd7d6', 'e5f3'] }] }));
-    const { useDiscussionPractice } = await import('./useDiscussionPractice');
     const { result } = renderHook(() => useDiscussionPractice(true, { surface: 'coach-teach', capabilityOrigin: 'learn' }));
     await result.current.evaluatePlayerMove({ ...SLIP, studentRating: 800, historySans: ['e4', 'e5', 'Nf3', 'Nf6'] });
     expect(captureMisconception).toHaveBeenCalledTimes(1);

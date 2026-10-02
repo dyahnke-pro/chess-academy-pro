@@ -29,6 +29,7 @@ import { rewardSeed } from '../../services/rewardEvents';
 import { hintStartTier } from '../../services/skillScaling';
 import type { GameRecord } from '../../types';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
+import { recordTagDrillResult } from '../../services/misconceptionService';
 
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
 
@@ -278,6 +279,10 @@ export function AnalysisPracticePage(): JSX.Element {
     captureEvent('analysis_practice_answer', { questionType: question.type, verdict: g.verdict, hintTier });
     if (g.verdict === 'correct') {
       correctRef.current += 1;
+      // DUAL-USE (tactics map 2026-10-01): every question carries the
+      // misconception it tests, and the page used to drop it. A solve with no
+      // hint advances that tag's review; a hinted one does not count as held.
+      if (question.misconceptionTag && hintTier === 0 && attemptsRef.current === 0) void recordTagDrillResult(question.misconceptionTag, true);
       reward({ kind: 'solved', square: selectedSquareFor(text), seed: rewardSeed(`${position?.fen ?? ''}#${qIndex}`) });
       setGrade(g);
       // SAY the read and SHOW the line, then move on once both have landed —
@@ -294,6 +299,7 @@ export function AnalysisPracticePage(): JSX.Element {
     reward({ kind: 'miss', square: selectedSquareFor(text) });
     attemptsRef.current += 1;
     if (attemptsRef.current >= 3) {
+      if (question.misconceptionTag) void recordTagDrillResult(question.misconceptionTag, false);
       setHintTier(3);
       setGrade(g);                                     // reveal answer + Next
       await playDemo(question.demoLine);

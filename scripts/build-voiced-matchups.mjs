@@ -21,7 +21,10 @@ import { Chess } from '../node_modules/chess.js/dist/esm/chess.js';
 import { reconstructSpineFen } from './voiced-authoring/fen-spine.mjs';
 
 const SRC = 'data/video-narration-voiced';
-const OUT = 'src/data/voiced-matchups.json';
+// VOICED_OUT_DIR: write somewhere else (the integrity test rebuilds into a
+// temp dir — rebuilding over the shipped file raced a concurrent prod build,
+// which read it half-written, 2026-10-01).
+const OUT = process.env.VOICED_OUT_DIR ? `${process.env.VOICED_OUT_DIR}/voiced-matchups.json` : 'src/data/voiced-matchups.json';
 
 // A global EXACT-POSITION note index (board+turn+castling+ep → spoken), built
 // from EVERY voiced video. A matchup line that transposes into a position some

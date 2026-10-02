@@ -133,7 +133,7 @@ describe('delta probe', () => {
         allowedMate: after.mate,
       });
 
-      const look = backwardLook({ replySan: null,
+      const look = backwardLook({ priorMove: null, replySan: null,
         fenBefore,
         fenAfter,
         playedSan: played.san,

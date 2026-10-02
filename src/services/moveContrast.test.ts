@@ -1,4 +1,5 @@
 // WO-LAYERS-01 step 6 — two good moves, one board-true difference.
+import { Chess } from 'chess.js';
 import { describe, it, expect } from 'vitest';
 import { contrastMoves, contrastClause } from './moveContrast';
 
@@ -17,5 +18,12 @@ describe('contrastMoves', () => {
 
   it('no single difference → nothing to say', () => {
     expect(contrastMoves(FEN, 'h3', 'g3')).toBeNull();
+  });
+});
+
+describe('contrastMoves — a loose piece nothing can reach is no difference (review walk 2026-10-01)', () => {
+  it('h4 vs Qb3: the c1 bishop is unreachable, so nothing separates the moves', () => {
+    const fen = (() => { const c = new Chess(); for (const m of 'e4 d5 exd5 Nf6 Bb5+ Bd7 Be2 Nxd5 d4 Nc6 c4 Nf6 d5 Ne5 Nf3 Ng6'.split(' ')) c.move(m); return c.fen(); })();
+    expect(contrastMoves(fen, 'h4', 'Qb3')).toBeNull();
   });
 });

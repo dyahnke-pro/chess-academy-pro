@@ -15,7 +15,7 @@
       {
         "fen": "6k1/4Rppp/8/8/8/8/5PPP/6K1 w - - 0 1",
         "movesToMate": 1,
-        "sourceComment": "A Back-Rank Mate (also known as Corridor Mate) is a checkmate delivered by a rook or queen along the back rank in which the mated king is unable to move up the board because the king is blocked by friendly pieces (usually pawns) on the second rank."
+        "sourceComment": "A rook or queen gives mate along the last rank, because the king's own pawns sit in front of it and leave no square to step up to."
       },
       {
         "fen": "2r1r1k1/5ppp/8/8/Q7/8/5PPP/4R1K1 w - - 0 1",
@@ -28,11 +28,15 @@
       }
     ],
     "narration": {
-      "intro": "The back-rank mate is the simplest pattern in chess and the most common. Your rook or queen slides to the enemy's back rank, and the king has nowhere to run because its own pawns block the escape squares above it.",
+      "intro": "The back-rank mate is one of the simplest and most common patterns. Your rook or queen slides to the enemy's back rank, and the king has nowhere to run because its own pawns block the escape squares above it.",
       "recognition": "Whenever you see an enemy king tucked behind unmoved pawns on f7, g7, and h7, ask yourself if a rook can land on the eighth rank with check.",
-      "history": "Back-rank mates have ended more master games than any other single pattern in chess history.",
+      "history": "One of the most common mates in real games — and the reason strong players make 'luft', a little breathing square for the king, before trouble starts.",
       "tip": "The cure is making luft — pushing one of those pawns to give the king a square. The disease is forgetting to do it."
-    }
+    },
+    "sources": [
+      "https://en.wikipedia.org/wiki/Checkmate_pattern",
+      "concept:mate-back-rank"
+    ]
   },
   {
     "id": "hook-mate",
@@ -48,7 +52,7 @@
       {
         "fen": "R7/4kp2/5N2/4P3/8/8/8/6K1 w - - 0 1",
         "movesToMate": 1,
-        "sourceComment": "The Hook Mate involves the use of a white rook, knight, and pawn along with one black pawn to limit the black king's escape. The rook is protected by the knight and the knight is protected by the pawn."
+        "sourceComment": "Rook, knight and pawn as one chain: the pawn guards the knight, the knight guards the rook, and the rook mates next to the king while one of the king's own pawns takes its last square."
       },
       {
         "fen": "5r1b/2R1R3/P4r2/2p2Nkp/2b3pN/6P1/4PP2/6K1 w - - 0 1",
@@ -65,8 +69,11 @@
       "intro": "The hook mate uses three pieces in a chain. A pawn protects the knight, the knight protects the rook, and the rook delivers the check from a square the king cannot escape.",
       "recognition": "When you have a rook and knight pressing the king to the side of the board with a pawn nearby for support, hunt for the hook.",
       "tip": "Each piece protects the next — that's why it's called a hook. Break any link and the pattern fails.",
-      "history": "Named for its hook-like shape — a rook and knight as a team, the knight (supported, often by an f-pawn) covering the king's flight squares while the rook delivers mate."
-    }
+      "history": "Named for the hook the knight and rook draw around the king."
+    },
+    "sources": [
+      "https://en.wikipedia.org/wiki/Checkmate_pattern"
+    ]
   },
   {
     "id": "anastasias-mate",
@@ -81,7 +88,7 @@
       {
         "fen": "5r2/1b2Nppk/8/2R5/8/8/5PPP/6K1 w - - 0 1",
         "movesToMate": 1,
-        "sourceComment": "In Anastasia's Mate, a knight and rook team up to trap the opposing king between the side of the board on one side and a friendly piece on the other. This checkmate got its name from the novel \"Anastasia und das Schachspiel\" by Johann Jakob Wilhelm Heinse."
+        "sourceComment": "Knight and rook trap the king against the edge: the knight covers the squares in front of it, one of its own pieces blocks the other side, and the rook mates down the edge file."
       },
       {
         "fen": "5r1k/1b2Nppp/8/2R5/4Q3/8/5PPP/6K1 w - - 0 1",
@@ -98,10 +105,14 @@
       }
     ],
     "narration": {
-      "intro": "Anastasia's mate is a knight and rook tag team. The knight perches near the king and controls a critical escape square. Then the rook slides in along the seventh rank to deliver mate, with one of the king's own pieces sealing the third escape.",
-      "recognition": "Look for this whenever your knight is on e7 or e2 and the enemy king is stuck on the h-file. A rook landing on the seventh rank turns it into mate.",
-      "history": "It's named after the 1803 German novel Anastasia und das Schachspiel by Wilhelm Heinse, where the pattern appears in the closing scene."
-    }
+      "intro": "Anastasia's mate is a knight and rook tag team. The knight perches near the king and takes away its escape squares, one of the king's own pieces blocks another, and the rook checks down the edge file for mate.",
+      "recognition": "Look for this whenever your knight sits on e7 or e2 next to a king stuck on the h-file. A rook or queen check down the h-file turns it into mate.",
+      "history": "Named after Wilhelm Heinse's 1803 novel 'Anastasia und das Schachspiel' — though Heinse took the position from an earlier essay by the Italian master Giambattista Lolli."
+    },
+    "sources": [
+      "https://en.wikipedia.org/wiki/Johann_Jakob_Wilhelm_Heinse",
+      "concept:mate-anastasia"
+    ]
   },
   {
     "id": "blind-swine-mate",
@@ -116,7 +127,7 @@
       {
         "fen": "5rk1/1R2R1pp/8/8/8/8/8/1K6 w - - 0 1",
         "movesToMate": 3,
-        "sourceComment": "The name of this pattern is attributed to Polish master Dawid Janowski referring to coupled rooks on a player's 7th rank as swine. For this type of mate, the rooks on white's 7th rank can start out on any two of the files from a to e, and although black pawns are commonly present, they are not necessary to effect the mate."
+        "sourceComment": "Two rooks doubled on the opponent's second rank mate the king in its corner, usually after eating the pawns on that rank on the way."
       },
       {
         "fen": "r4rk1/2R5/1n2N1pp/2Rp4/p2P4/P3P2P/qP3PPK/8 w - - 0 1",
@@ -130,10 +141,14 @@
       }
     ],
     "narration": {
-      "intro": "Two rooks doubled on the seventh rank — Polish master Dawid Janowski called them blind swine because they look hungry. They roll back and forth gobbling pawns, and one eventually slides to the eighth rank for mate while the other prevents the king from escaping.",
+      "intro": "Two rooks doubled on the seventh rank — the 'blind swine', as Dawid Janowski is said to have called them. They roll along the rank eating pawns, and in the end one gives check on the seventh while the other covers the king's escape.",
       "recognition": "Whenever you can double rooks on the seventh, your opponent should already be sweating. The mate often comes within two or three moves.",
-      "history": "Janowski's term stuck because doubled rooks really do feast on the second rank — pawns, the king, anything in their path."
-    }
+      "history": "The name is traditionally credited to Dawid Janowski, who called two rooks on the seventh rank 'swine' — they gobble everything in their path."
+    },
+    "sources": [
+      "https://www.chess.com/blog/KevinSmithIdiot/secrets-of-trapping-pieces-blind-swine-mate",
+      "https://lichess.org/@/dirkster99/blog/the-blind-swine-mate-and-corner-mate/wAuqgyRN"
+    ]
   },
   {
     "id": "smothered-mate",
@@ -150,7 +165,7 @@
       {
         "fen": "6rk/6pp/8/6N1/8/8/8/7K w - - 0 1",
         "movesToMate": 1,
-        "sourceComment": "Smothered Mate occurs when a knight checkmates a king that is smothered (surrounded) by his friendly pieces and he has nowhere to move nor is there any way to capture the knight. It is also known as \"Philidor's Legacy\" after François-André Danican Philidor, though its documentation predates Philidor by several hundred years."
+        "sourceComment": "A knight gives mate to a king boxed in by its own pieces: there is no square to run to and nothing can take the knight."
       },
       {
         "fen": "6rk/6pp/6q1/6N1/8/7Q/6PP/6K1 w - - 0 1",
@@ -168,10 +183,14 @@
       }
     ],
     "narration": {
-      "intro": "A smothered mate is the prettiest checkmate in chess. Your knight delivers the final blow, and the king has no escape because it is completely surrounded by its own pieces. The pieces that should have defended the king now suffocate it.",
+      "intro": "A smothered mate is one of the most striking finishes in chess. Your knight delivers the final blow, and the king has no escape because it is completely surrounded by its own pieces. The pieces that should have defended the king now suffocate it.",
       "recognition": "Watch for this when the enemy king is in the corner with its own pieces packed around it. A knight check from the right square ends the game.",
-      "history": "Also called Philidor's Legacy. The classic version arrives via a queen sacrifice on g8 followed by Nf7 mate — the most beautiful sequence in chess."
-    }
+      "history": "Its best-known form — queen to g8, rook takes, knight to f7 mate — is called Philidor's Legacy, yet it was already printed by Lucena around 1497, centuries before Philidor."
+    },
+    "sources": [
+      "https://en.wikipedia.org/wiki/Smothered_mate",
+      "concept:mate-smothered"
+    ]
   },
   {
     "id": "arabian-mate",
@@ -186,7 +205,7 @@
       {
         "fen": "7k/5R2/5N2/8/8/8/8/7K w - - 0 1",
         "movesToMate": 1,
-        "sourceComment": "In the Arabian Mate, the knight and the rook team up to trap the opposing king on a corner of the board. The rook sits on a square adjacent to the king both to prevent escape along the diagonal and to deliver checkmate while the knight sits two squares away diagonally from the king to prevent escape on the square next to the king and to protect the rook."
+        "sourceComment": "Knight and rook in the corner: the rook gives check from the square right next to the king, and the knight guards the rook while covering the diagonal escape."
       },
       {
         "fen": "r4nk1/pp2r1p1/2p1P2p/3p1P1N/8/8/PPPK4/6RR w - - 0 1",
@@ -202,8 +221,12 @@
     "narration": {
       "intro": "The Arabian mate is one of the oldest patterns in chess history. A knight and rook trap the enemy king in a corner. The rook delivers mate while the knight controls the diagonal escape square.",
       "recognition": "When the king is on h8 or a8 and your rook can land on h7 or a7 with knight support nearby, you have an Arabian mate.",
-      "history": "First documented in the ninth century by Arab chess players, hundreds of years before modern chess rules existed. It has never gone out of style."
-    }
+      "history": "Found in the early Arabic chess manuscripts and often called the oldest recorded mate — it worked even before the modern queen and bishop existed."
+    },
+    "sources": [
+      "https://www.chess.com/blog/zibbit/checkmate-patterns-arabian-mate",
+      "https://en.wikipedia.org/wiki/Checkmate_pattern"
+    ]
   },
   {
     "id": "bodens-mate",
@@ -218,7 +241,7 @@
       {
         "fen": "2kr4/3p4/8/8/5B2/8/8/5BK1 w - - 0 1",
         "movesToMate": 1,
-        "sourceComment": "In Boden's Mate, two attacking bishops on criss-crossing diagonals deliver mate to a king obstructed by friendly pieces, usually a rook and a pawn."
+        "sourceComment": "Two bishops on crossing diagonals give mate to a king whose escape squares are blocked by its own pieces — very often a king castled on the queenside."
       },
       {
         "fen": "2k1rb1r/ppp3pp/2n2q2/3B1b2/5P2/2P1BQ2/PP1N1P1P/2KR3R b - - 0 1",
@@ -234,8 +257,12 @@
     "narration": {
       "intro": "Boden's mate is a two-bishop pattern. Both bishops fire on criss-crossing diagonals into the king's position. The king is usually castled queenside, with its own rook and pawn obstructing every escape square. The bishops alone deliver mate.",
       "recognition": "Look for this whenever the enemy king is on c8 with a rook on d8 and a pawn on d7. A bishop check on a6 supported by a bishop on g3 is mate.",
-      "history": "Named after Samuel Boden, who showed the pattern in a famous 1853 game. The classic version arrives after a queen sacrifice that opens the diagonals."
-    }
+      "history": "Named after Samuel Boden, who finished Schulder–Boden, London 1853, with a bishop mate on a3 — though the idea had already appeared a few years earlier."
+    },
+    "sources": [
+      "https://www.chessgames.com/perl/chessgame?gid=1262425",
+      "concept:mate-boden"
+    ]
   },
   {
     "id": "balestra-mate",
@@ -250,14 +277,17 @@
       {
         "fen": "5k2/8/6Q1/8/8/6B1/8/6K1 w - - 0 1",
         "movesToMate": 1,
-        "sourceComment": "The Balestra Mate is similar to Boden's Mate, but instead of two bishops, a bishop and a queen is used. The bishop delivers the checkmate, while the queen blocks the remaining escape squares."
+        "sourceComment": "Boden's idea with a queen in place of one bishop: the bishop gives mate from a distance and the queen covers every square the king could flee to."
       }
     ],
     "narration": {
-      "intro": "The Balestra mate is Boden's older cousin. Instead of two bishops, a queen and bishop combine to attack the king on diagonals. The bishop delivers mate, and the queen blocks the king's last escape square.",
+      "intro": "The Balestra mate is a cousin of Boden's. Instead of two bishops, a queen and bishop combine on the king. The bishop gives mate from a distance, and the queen covers the squares the king could run to.",
       "recognition": "Whenever your queen and bishop both have lines to the enemy king, ask if their two diagonals cover every escape.",
-      "history": "‘Balestra’ is Italian for crossbow: the queen cuts off the king's escape along rank and diagonal while the bishop fires in the mating blow."
-    }
+      "history": "'Balestra' is Italian for crossbow — and a fencing word for the hop before a lunge: the bishop's shot comes from far away."
+    },
+    "sources": [
+      "https://en.wikipedia.org/wiki/Balestra"
+    ]
   },
   {
     "id": "corner-mate",
@@ -272,7 +302,7 @@
       {
         "fen": "7k/7p/8/6N1/8/8/8/6RK w - - 0 1",
         "movesToMate": 1,
-        "sourceComment": "The Corner Mate works by confining the king to the corner using a rook or queen and using a knight to engage the checkmate."
+        "sourceComment": "A rook or queen shuts the king into the corner along the file beside it, and a knight gives the check."
       },
       {
         "fen": "5rk1/3Q1p2/6p1/P5r1/R1q1n3/7B/7P/5R1K b - - 0 1",
@@ -281,10 +311,13 @@
       }
     ],
     "narration": {
-      "intro": "The corner mate traps the king in the corner of the board. The rook seals one rank, the knight covers the diagonal escape, and the king has no air left.",
-      "recognition": "When you push the enemy king to h8 or a1, a knight on f6 or c2 supports a back-rank rook check for mate.",
-      "history": "An elementary pattern — the king is driven into the corner, a knight covers its last flight square, and a rook delivers mate down the edge."
-    }
+      "intro": "The corner mate traps the king in the corner of the board. A rook or queen seals the file next to it, the king's own pawn blocks the other side, and a knight gives the check.",
+      "recognition": "When the enemy king is boxed in on h8 behind its h-pawn and your rook controls the g-file, a knight landing on f7 is mate.",
+      "history": "An elementary pattern: the king is pushed into the corner, a rook or queen walls it in, and the knight lands the check."
+    },
+    "sources": [
+      "https://lichess.org/@/dirkster99/blog/the-blind-swine-mate-and-corner-mate/wAuqgyRN"
+    ]
   },
   {
     "id": "double-bishop-mate",
@@ -317,11 +350,13 @@
       }
     ],
     "narration": {
-      "intro": "The double bishop mate is the gentleman's checkmate. Two bishops, no other pieces, drive the king to the corner using their long diagonals. The killing move is a discovered check the king cannot block or flee.",
-      "recognition": "When you have both bishops aimed at the enemy king and a discovered-check setup is brewing, slow down and find the corner.",
-      "tip": "Boden's pattern becomes Double Bishop when you've already traded down to just bishops. Mostly an endgame finish, but devastating when it lands.",
-      "history": "Two bishops raking adjacent diagonals trap the king on the edge — the same battery behind Boden's and the classic two-bishop mate of a bare king."
-    }
+      "intro": "Two bishops on neighbouring diagonals mate a king on the edge: one gives the check along the long diagonal, the other takes away the squares next to it, and the king's own pawn blocks the rest.",
+      "recognition": "When both your bishops aim at a cornered king and one of its own pawns blocks its escape, look for the bishop check that leaves no square.",
+      "history": "Two bishops on neighbouring diagonals form a wall the king cannot cross — the same idea behind Boden's mate and the two-bishop endgame."
+    },
+    "sources": [
+      "https://en.wikipedia.org/wiki/Checkmate_pattern"
+    ]
   },
   {
     "id": "morphys-mate",
@@ -336,7 +371,7 @@
       {
         "fen": "7k/5p1p/8/8/7B/8/8/6RK w - - 0 1",
         "movesToMate": 1,
-        "sourceComment": "Morphy's Mate is named after Paul Morphy. It works by using the bishop to attack the enemy king while your rook and an enemy pawn helps to confine it."
+        "sourceComment": "A bishop checks the cornered king along the long diagonal while a rook and one of the king's own pawns take away its other squares."
       },
       {
         "fen": "5rk1/p4p1p/1p1rpp2/3qB3/3PR3/7P/PP3PP1/6K1 w - - 0 1",
@@ -355,10 +390,14 @@
       }
     ],
     "narration": {
-      "intro": "Morphy's mate uses a bishop and a rook to corner the enemy king. The bishop shines from afar, hitting the king while the rook delivers mate from the back rank. An enemy pawn on f7 or h7 keeps the king from running.",
-      "recognition": "If the king is on h8 with a pawn on h7 and your bishop is on a long diagonal aiming at it, look for a rook check on g1 or g8.",
-      "history": "Named for Paul Morphy, the American genius of the 1850s. He used this pattern so often it became his signature."
-    }
+      "intro": "Morphy's mate uses a bishop and a rook to corner the king. The rook seals the file next to it, the king's own pawn blocks the square above, and the bishop gives mate along the long diagonal.",
+      "recognition": "If the king is on h8 behind its h7 pawn and your rook controls the g-file, look for a bishop check on the long diagonal.",
+      "history": "Named after Paul Morphy, the American player who dominated chess in the late 1850s."
+    },
+    "sources": [
+      "https://www.britannica.com/biography/Paul-Morphy",
+      "https://en.wikipedia.org/wiki/Checkmate_pattern"
+    ]
   },
   {
     "id": "pillsburys-mate",
@@ -373,7 +412,7 @@
       {
         "fen": "5rk1/5p1p/8/8/8/8/1B6/4K2R w - - 0 1",
         "movesToMate": 1,
-        "sourceComment": "Pillsbury's Mate is named for Harry Nelson Pillsbury and is a variation of Morphy's Mate. The rook delivers checkmate while the bishop prevents the King from fleeing to the corner square."
+        "sourceComment": "A close cousin of Morphy's mate: here the rook gives mate along the file and the bishop takes the corner square away."
       },
       {
         "fen": "2rqnrk1/pp3ppp/1b1p4/3p2Q1/2n1P3/3B1P2/PB2NP1P/R5RK w - - 0 1",
@@ -382,10 +421,14 @@
       }
     ],
     "narration": {
-      "intro": "Pillsbury's mate is a variation of Morphy's idea. The rook delivers mate on the back rank, while the bishop on a strong diagonal stops the king from escaping to the corner. The two pieces share the work.",
-      "recognition": "When you have a bishop on b2 or g2 and a rook ready to swing to the back rank, ask if Pillsbury's mate is the path.",
-      "history": "Named for Harry Nelson Pillsbury, the American champion who died young but left a remarkable trail of attacking games."
-    }
+      "intro": "Pillsbury's mate is a variation of Morphy's idea with the roles swapped. The rook gives mate down the g-file, while the bishop on the long diagonal takes away the corner square.",
+      "recognition": "When your bishop on b2 or g2 covers the corner and your rook can swing to the g-file, ask if Pillsbury's mate is the path.",
+      "history": "Named after Harry Nelson Pillsbury, winner of Hastings 1895 and US champion, who died in 1906 aged just 33."
+    },
+    "sources": [
+      "https://www.chessgames.com/perl/chessplayer?pid=10506",
+      "https://www.chess.com/article/view/harry-nelson-pillsbury"
+    ]
   },
   {
     "id": "damianos-mate",
@@ -402,7 +445,7 @@
         "solution": [
           "Qh7#"
         ],
-        "sourceComment": "Damiano's Mate is a classic method of checkmating and one of the oldest. It works by confining the king with a pawn or bishop and using a queen to initiate the final blow. Damiano's mate is often arrived at by first sacrificing a rook on the h-file, then checking the king with the queen on the h-file, and then moving in for the mate. The checkmate was first published by Pedro Damiano in 1512."
+        "sourceComment": "The queen mates on the square right in front of the castled king, protected by a pawn or bishop — often after a sacrifice has opened the h-file."
       },
       {
         "fen": "4rk2/1p1q1p2/3p1Bn1/p1pP1p2/P1P5/1PK3Q1/8/7R w - - 0 1",
@@ -421,10 +464,14 @@
       }
     ],
     "narration": {
-      "intro": "Damiano's mate is one of the oldest in the books, dating to Pedro Damiano's 1512 chess treatise. A pawn or bishop pins the king to a square, and the queen swings in for the killing blow.",
-      "recognition": "When you can sacrifice on the h-file to open lines, then bring the queen to h8 with check, you may be looking at Damiano's mate.",
-      "history": "Damiano was a Portuguese pharmacist who wrote one of the first printed chess books. Five hundred years later, his pattern still wins games."
-    }
+      "intro": "Damiano's mate is one of the oldest in the books, dating to Pedro Damiano's 1512 chess treatise. A pawn or bishop covers the king's escape squares and protects the queen, and the queen lands right beside the king for the killing blow.",
+      "recognition": "When a pawn on the sixth rank guards the square beside the king and a sacrifice can open the h-file, the queen lands on that guarded square with mate — that is Damiano's mate.",
+      "history": "Named after Pedro Damiano, a Portuguese apothecary whose 1512 chess book was one of the first ever printed."
+    },
+    "sources": [
+      "https://www.chessgames.com/perl/chessplayer?pid=93013",
+      "concept:mate-damiano"
+    ]
   },
   {
     "id": "lollis-mate",
@@ -441,7 +488,7 @@
         "solution": [
           "Qg7#"
         ],
-        "sourceComment": "Lolli's Mate involves infiltrating Black's fianchetto position using both a pawn and queen. The queen often gets to the h6 square by means of sacrifices on the h-file. It is named after Giambattista Lolli."
+        "sourceComment": "Against a fianchettoed king, a pawn on f6 and the queen break in: the queen mates on g7 with the pawn protecting her. Sacrifices on the h-file often bring the queen to h6 first."
       },
       {
         "fen": "r4r2/1q3pkp/p1b1p1n1/1p4QP/4P3/1BP3P1/P4P2/R2R2K1 w - - 0 1",
@@ -455,10 +502,13 @@
       }
     ],
     "narration": {
-      "intro": "Lolli's mate attacks the fianchetto position — that's when the bishop has been developed to g7 or g2. A pawn lands on h6 or h3 and supports a queen invasion the fianchetto bishop cannot defend.",
-      "recognition": "If your opponent has played g6 or g3 and the dark-square bishop is still on its long diagonal, the king can be vulnerable to a pawn-and-queen attack.",
-      "history": "Named for Giambattista Lolli, an eighteenth-century Italian master who catalogued attacks against weak king positions."
-    }
+      "intro": "Lolli's mate attacks the fianchetto position. A pawn wedged on f6 (or f3) guards g7, and the queen arrives on h6 and then mates on g7, where the missing fianchetto bishop can no longer defend.",
+      "recognition": "If your pawn reaches f6 against a king behind a g6 pawn and your queen can reach h6, the mate on g7 is close.",
+      "history": "Named after Giambattista Lolli, the Italian master whose huge 1763 treatise is remembered for its openings and its endgame studies."
+    },
+    "sources": [
+      "https://en.wikipedia.org/wiki/Giambattista_Lolli"
+    ]
   },
   {
     "id": "opera-mate",
@@ -473,7 +523,7 @@
       {
         "fen": "4k3/5p2/8/6B1/8/8/8/3R2K1 w - - 0 1",
         "movesToMate": 1,
-        "sourceComment": "The Opera Mate works by attacking the king on the back rank with a rook using a bishop to protect it. A pawn or other piece other than a knight of the enemy king's is used to restrict its movement. The checkmate was named after its implementation by Paul Morphy in 1858 at a game at the Paris opera against Duke Karl of Brunswick and Count Isouard, known as the \"The Opera Game\"."
+        "sourceComment": "A rook mates on the back rank, protected by a bishop, while a piece of the king's own side next to it takes away the escape."
       },
       {
         "fen": "rn1r2k1/ppp2ppp/3q1n2/4b1B1/4P1b1/1BP1Q3/PP3PPP/RN2K1NR b KQ - 0 1",
@@ -489,8 +539,12 @@
     "narration": {
       "intro": "The Opera mate uses a rook and bishop. The rook delivers mate on the back rank, and the bishop guards the rook from a long diagonal. An enemy piece — usually a pawn — locks the king in place.",
       "recognition": "When the enemy king is on e8, you have a rook ready to land on d8 with bishop support, and a piece keeps the king from f7 or e7, the Opera mate is on.",
-      "history": "Famous from Paul Morphy's 1858 game in the Paris Opera House, played against a duke and a count. Morphy sacrificed his queen and finished with this pattern."
-    }
+      "history": "From Morphy's 1858 game at the Paris opera against the Duke of Brunswick and Count Isouard: a queen sacrifice on b8, then rook to d8 mate."
+    },
+    "sources": [
+      "https://www.chessgames.com/perl/chessgame?gid=1233404",
+      "https://en.chessbase.com/post/50-games-paul-morphy-simple-powerful-strong"
+    ]
   },
   {
     "id": "anderssens-mate",
@@ -507,7 +561,7 @@
         "solution": [
           "Rh8#"
         ],
-        "sourceComment": "In Anderssen's mate, named for Adolf Anderssen, the rook or queen is supported by a diagonally-attacking piece such as a pawn or bishop as it checkmates the opposing king along the eighth rank."
+        "sourceComment": "A rook or queen mates along the back rank, protected along the diagonal by a pawn or bishop standing right beside the king."
       },
       {
         "fen": "1k2r3/pP3pp1/8/3P1B1p/5q2/N1P2b2/PP3Pp1/R5K1 b - - 0 1",
@@ -523,8 +577,12 @@
     "narration": {
       "intro": "Anderssen's mate combines a heavy piece with a supporting attacker. The rook or queen delivers mate on the eighth rank, supported diagonally by a pawn or bishop on the seventh.",
       "recognition": "When you can land a rook on h8 protected by a pawn on g7, you have Anderssen's mate.",
-      "history": "Named for Adolf Anderssen, winner of the 1851 London tournament — the first international chess event in history."
-    }
+      "history": "Named after Adolf Anderssen, winner of London 1851 — the first international chess tournament."
+    },
+    "sources": [
+      "https://www.britannica.com/biography/Adolf-Anderssen",
+      "https://www.chess.com/article/view/london-1851-the-first-international-chess-tournament"
+    ]
   },
   {
     "id": "dovetail-mate",
@@ -538,7 +596,7 @@
       {
         "fen": "1r6/pk6/4Q3/3P4/8/8/8/6K1 w - - 0 1",
         "movesToMate": 1,
-        "sourceComment": "In the Dovetail Mate, the mating queen is one square diagonally from the mated king which escape is blocked by two friendly non-Knight pieces."
+        "sourceComment": "The queen gives mate from a square diagonally next to the king, protected by another piece, while the king's own pieces block its two flight squares behind it."
       },
       {
         "fen": "r1b1q1r1/ppp3kp/1bnp4/4p1B1/3PP3/2P2Q2/PP3PPP/RN3RK1 w - - 0 1",
@@ -553,17 +611,21 @@
       {
         "fen": "rR6/5k2/2p3q1/4Qpb1/2PB1Pb1/4P3/r5R1/6K1 w - - 0 1",
         "movesToMate": 1,
-        "sourceComment": "Other variations of the Dovetail Mate can occur if a queen delivers mate by checking the king from a diagonally adjacent square while supported by a friendly piece and you also control the two potential escape squares with other pieces, typically a bishop.",
+        "sourceComment": "The same mate works with other blockers: any diagonal-adjacent queen check backed by a friendly piece mates once your other pieces cover the two escape squares.",
         "solution": [
           "Qe8#"
         ]
       }
     ],
     "narration": {
-      "intro": "The dovetail mate has a queen one square diagonally from the enemy king. Both of the king's escape squares are blocked by its own pieces — anything but knights, which would defend the queen instead.",
+      "intro": "The dovetail mate has a queen one square diagonally from the enemy king, protected by another piece. Both of the king's escape squares behind it are blocked by its own pieces — not knights, which could take the queen.",
       "recognition": "When the enemy king is hemmed in by its own minor pieces or rooks and your queen can land one diagonal step away, the dovetail is a clean finish.",
-      "history": "Also called the Cozio mate when seen from the other side."
-    }
+      "history": "The king's escape squares form the dovetail shape of a woodworking joint. Some books call it Cozio's mate, after a position in Carlo Cozio's 1766 book."
+    },
+    "sources": [
+      "https://en.wikipedia.org/wiki/Carlo_Cozio",
+      "https://lichess.org/forum/general-chess-discussion/difference-between-cozios-mate-and-dovetail-mate"
+    ]
   },
   {
     "id": "cozios-mate",
@@ -581,14 +643,18 @@
           "Kg3",
           "Qh2#"
         ],
-        "sourceComment": "Cozio's Mate is an upside down version of the Dovetail Mate. It was named after a study by Carlo Cozio that was published in 1766."
+        "sourceComment": "The dovetail mate turned upside down: the queen checks from the diagonal on the other side, and the king's own pieces still block its escape."
       }
     ],
     "narration": {
       "intro": "Cozio's mate is the dovetail mate flipped. The queen approaches from a different diagonal angle, but the principle is the same. The king is suffocated by its own pieces and the queen lands one square away.",
       "recognition": "Same recognition as the dovetail. The only difference is the queen's approach line.",
-      "history": "Named after a 1766 study by the Italian master Carlo Cozio."
-    }
+      "history": "Named after a position in Carlo Cozio's chess book, published in Turin in 1766; many sources treat it as the dovetail seen from the other side."
+    },
+    "sources": [
+      "https://en.wikipedia.org/wiki/Carlo_Cozio",
+      "https://lichess.org/forum/general-chess-discussion/difference-between-cozios-mate-and-dovetail-mate"
+    ]
   },
   {
     "id": "swallows-tail-mate",
@@ -605,7 +671,7 @@
       {
         "fen": "3r1r2/4k3/R7/3Q4/8/8/8/6K1 w - - 0 1",
         "movesToMate": 1,
-        "sourceComment": "The Swallow's Tail Mate works by attacking the enemy king with a queen that is protected by a rook or other piece. The enemy king's own pieces block its means of escape. It is also known as the Guéridon Mate."
+        "sourceComment": "The queen mates on the square directly in front of the king, guarded by a rook or another piece behind her, while the king's own pieces block both diagonal escapes."
       },
       {
         "fen": "8/8/2P5/3K1k2/2R3p1/2q5/8/8 b - - 0 1",
@@ -614,10 +680,13 @@
       }
     ],
     "narration": {
-      "intro": "The swallow's tail mate happens when the enemy king is hemmed in by two of its own pieces standing on rooks' squares. Your queen delivers mate from one square away, and the king has no flight.",
-      "recognition": "Look for this when the enemy king is on a back rank and rooks or queens are standing on either side of it. A queen check on the king's neighbour ends the game.",
-      "history": "Also called the Guéridon mate, after the small French table the pattern resembles."
-    }
+      "intro": "The swallow's tail mate: the queen checks from the square directly in front of the king, protected by a rook or another piece, while the king's own pieces stand on both of its back corners and block the diagonal escapes.",
+      "recognition": "Look for this when the enemy king stands in front of two of its own pieces and your queen can check from the square straight in front of it with support.",
+      "history": "Also called the Guéridon mate, after a small round French pedestal table — the queen is the stem and the king's blockers the tabletop."
+    },
+    "sources": [
+      "https://en.wikipedia.org/wiki/Checkmate_pattern"
+    ]
   },
   {
     "id": "epaulette-mate",
@@ -631,7 +700,7 @@
       {
         "fen": "3rkr2/8/5Q2/8/8/8/8/6K1 w - - 0 1",
         "movesToMate": 1,
-        "sourceComment": "The Epaulette Mate is a checkmate where two parallel retreat squares for a checked king are occupied by its own pieces, preventing its escape."
+        "sourceComment": "The king's two side squares are filled by its own pieces, so a check straight down the file in front of it is mate."
       },
       {
         "fen": "1k1r4/pp1q1B1p/3bQp2/2p2r2/P6P/2BnP3/1P6/5RKR b - - 0 1",
@@ -645,10 +714,13 @@
       }
     ],
     "narration": {
-      "intro": "An epaulette mate happens when the king's two parallel retreat squares are occupied by its own rooks — like the shoulder boards on a military uniform. The queen delivers a frontal check and the king cannot move.",
+      "intro": "An epaulette mate happens when the squares on both sides of the king are occupied by its own pieces — usually rooks — like the ornaments on an officer's shoulders. A check down the file in front of it is mate.",
       "recognition": "When the enemy king has rooks on either side and a queen can give a check head-on, the king is paralyzed.",
-      "history": "The name comes from French military epaulettes — the two rooks look like shoulder decorations."
-    }
+      "history": "Named after epaulettes, the ornaments on an officer's shoulders: the king's own pieces sit on both its shoulders and cost it the escape."
+    },
+    "sources": [
+      "https://en.wikipedia.org/wiki/Checkmate_pattern"
+    ]
   },
   {
     "id": "pawn-mate",
@@ -667,7 +739,7 @@
         "solution": [
           "b5#"
         ],
-        "sourceComment": "Although the Pawn Mate can take many forms, it is generally characterized as a mate in which a pawn is the final attacking piece and where enemy pawns are nearby. The Pawn Mate is sometimes also called the David and Goliath Mate, named after the biblical account of David and Goliath."
+        "sourceComment": "A pawn gives the final check, with the king already boxed in — usually by its own pawns nearby."
       },
       {
         "fen": "r1b3nr/ppp3qp/1bnpk3/4p1BQ/3PP3/2P5/PP3PPP/RN3RK1 w - - 0 1",
@@ -683,8 +755,11 @@
     "narration": {
       "intro": "Pawn mates are unusual because the final blow comes from the smallest piece on the board. A pawn moves forward and delivers a check that no piece can block or capture, with enemy pawns blocking the king's flight.",
       "recognition": "Whenever a pawn arrives next to the enemy king with support nearby, check if any king escape is also blocked by other pawns.",
-      "history": "Sometimes called the David and Goliath mate — a pawn taking down a king is the underdog story of chess."
-    }
+      "history": "Sometimes called the David and Goliath mate — the smallest unit takes down the king."
+    },
+    "sources": [
+      "https://en.wikipedia.org/wiki/Checkmate_pattern"
+    ]
   },
   {
     "id": "suffocation-mate",
@@ -701,7 +776,7 @@
         "solution": [
           "Ne7#"
         ],
-        "sourceComment": "The Suffocation Mate works by using the knight to attack the enemy king and the bishop to confine the king's escape routes."
+        "sourceComment": "A knight checks the king and a bishop seals off the only squares it could run to."
       },
       {
         "fen": "r4k1r/1q3p1p/p1N2p2/1pp5/8/1PPP4/1P3PPP/R1B1R1K1 w - - 0 1",
@@ -721,8 +796,11 @@
     "narration": {
       "intro": "The suffocation mate uses a knight and a bishop. The knight delivers the check, and the bishop covers every escape square. The king is suffocated by squares it cannot reach.",
       "recognition": "When your knight is in checking distance and your bishop hits the king's escape squares from a distance, suffocation is the finish.",
-      "history": "The king is smothered by his own pieces: a knight gives check while a bishop or queen seals the remaining flight squares, leaving no breathing room."
-    }
+      "history": "The king is suffocated by its own pieces: a knight checks while a bishop seals the squares left over."
+    },
+    "sources": [
+      "https://en.wikipedia.org/wiki/Checkmate_pattern"
+    ]
   },
   {
     "id": "grecos-mate",
@@ -739,7 +817,7 @@
         "solution": [
           "Qh5#"
         ],
-        "sourceComment": "Greco's Mate is named after the famous Italian checkmate cataloguer Gioachino Greco. It works by using the bishop to contain the black king by use of the black g-pawn and subsequently using the queen or a rook to checkmate the king by moving it to the edge of the board."
+        "sourceComment": "A bishop and the king's own g-pawn shut the king into the corner, and a queen or rook then mates along the h-file."
       },
       {
         "fen": "r4r1k/ppn1NBpp/4b3/4P3/3p1R2/1P6/P1P3PP/R5K1 w - - 0 1",
@@ -759,9 +837,12 @@
     ],
     "narration": {
       "intro": "Greco's mate is named after Gioachino Greco, the seventeenth-century Italian who wrote down many opening traps that still work today. The bishop traps the king against its own g-pawn, and the queen invades on the h-file for mate.",
-      "recognition": "When the enemy king has played g6 or g3 and your queen can swing to h7 or h2 with bishop support, Greco's mate is the finish.",
-      "history": "Named after Gioachino Greco, the great Italian master of the early 1600s — the bishop seals one escape, the king's own pawn blocks the other, and the rook mates along the edge."
-    }
+      "recognition": "When the enemy king sits on h8 behind its g7 pawn and your bishop covers g8, a queen or rook check down the h-file is mate.",
+      "history": "Named after Gioachino Greco, the Italian player of the early 1600s whose collected games taught attacking chess for centuries."
+    },
+    "sources": [
+      "https://www.britannica.com/biography/Gioachino-Greco"
+    ]
   },
   {
     "id": "max-langes-mate",
@@ -778,7 +859,7 @@
         "solution": [
           "Qg8#"
         ],
-        "sourceComment": "Max Lange's Mate is named after German chess player and problem composer Max Lange. It works by using the bishop and queen in combination to checkmate the king."
+        "sourceComment": "Queen and bishop work together: the queen mates on the edge, protected by the bishop, which also takes away an escape square."
       },
       {
         "fen": "r3k3/ppp2pp1/8/2bpP2P/4q3/1B1p1Q2/PPPP2P1/RNB4K b q - 0 1",
@@ -789,8 +870,11 @@
     "narration": {
       "intro": "Max Lange's mate combines a queen and bishop. The queen lands on the back rank and the bishop covers the king's escape diagonal. The king cannot capture, cannot move, cannot block.",
       "recognition": "When your queen and bishop are both bearing down on the king's position, check if their lines cover every dark and light escape square.",
-      "history": "Max Lange was a nineteenth-century German master and chess problem composer."
-    }
+      "history": "Named after Max Lange, the 19th-century German master, writer and problem composer."
+    },
+    "sources": [
+      "https://en.wikipedia.org/wiki/Max_Lange"
+    ]
   },
   {
     "id": "blackburnes-mate",
@@ -808,7 +892,7 @@
         "solution": [
           "Bxh7#"
         ],
-        "sourceComment": "Blackburne's Mate is named for Joseph Henry Blackburne. This checkmate utilizes an enemy rook (or bishop or queen) to confine the black king's escape to the f8 square.. One of the bishops confines the black king's movement by operating at a distance, while the knight and the other bishop operate within close range."
+        "sourceComment": "The king's own piece on f8 takes its last escape. One bishop works from long range on the diagonal while the knight and the other bishop give the mate up close."
       },
       {
         "fen": "r2q1rk1/pp2bp2/2n3p1/3b2Np/8/1P1B4/PB3PPP/R2Q1RK1 w - - 0 1",
@@ -821,10 +905,13 @@
       }
     ],
     "narration": {
-      "intro": "Blackburne's mate uses a knight and two bishops. The knight delivers the check, the bishops cover the diagonals, and the enemy king is pinned to its corner with no way out.",
-      "recognition": "When you have a knight, two bishops, and an open enemy kingside, look for the corner mate that uses all three pieces at once.",
-      "history": "Named for Joseph Blackburne, the great English attacking master of the late 1800s."
-    }
+      "intro": "Blackburne's mate uses two bishops and a knight. One bishop covers g7 from the long diagonal, the knight protects the other bishop, which gives mate on h7, and the king's own rook on f8 blocks its last square.",
+      "recognition": "When you have both bishops and a knight aimed at an open kingside, look for the bishop mate on h7 that uses all three pieces at once.",
+      "history": "Named after Joseph Henry Blackburne, one of the leading English masters of the late 1800s."
+    },
+    "sources": [
+      "https://www.britannica.com/biography/Joseph-Henry-Blackburne"
+    ]
   },
   {
     "id": "retis-mate",
@@ -841,14 +928,17 @@
         "solution": [
           "Bd8#"
         ],
-        "sourceComment": "Réti's Mate is named after Richard Réti, who delivered it in an 11-move game against Savielly Tartakower in 1910 in Vienna. It works by trapping the enemy king with four of its own pieces that are situated on flight squares and then attacking it with a bishop that is protected by a rook or queen."
+        "sourceComment": "The king is hemmed in by four of its own pieces on its flight squares, and a bishop gives mate, protected by a rook."
       }
     ],
     "narration": {
-      "intro": "Réti's mate is a stunning pattern where the enemy king is trapped by its own pieces, and a single bishop and rook combination ends the game. The bishop pins from a long diagonal, the rook delivers.",
-      "recognition": "When the enemy king is hemmed in by its own pieces on c-file or f-file squares, Réti's mate may be a sacrifice or simple infiltration away.",
-      "history": "Richard Réti delivered this mate in an eleven-move game against Tartakower in 1910 — one of the shortest grandmaster wins in history."
-    }
+      "intro": "Réti's mate traps the king among its own pieces. A bishop gives the mate, protected by a rook along the file, and the king's own pieces stand on every square it could flee to.",
+      "recognition": "When the enemy king is surrounded by its own pieces, look for a bishop check backed up by a rook — sometimes after a queen sacrifice to drag the king into place.",
+      "history": "From Réti–Tartakower, Vienna 1910: a queen sacrifice on d8 and a bishop mate on move eleven, a famous miniature between two future greats."
+    },
+    "sources": [
+      "https://www.chessgames.com/perl/chessgame?gid=1250654"
+    ]
   },
   {
     "id": "legals-mate",
@@ -866,14 +956,18 @@
         "solution": [
           "Nd5#"
         ],
-        "sourceComment": "In Légal's Mate, the knight moves into a position to check the king. The bishop is guarded by the other knight, and the enemy pieces block the king's escape."
+        "sourceComment": "After the queen is given up, a knight gives the check, the bishop on f7 is guarded by the other knight, and the king's own pieces block every escape."
       }
     ],
     "narration": {
-      "intro": "Légal's mate is a knight-and-bishop trap that punishes a careless pin. The knight ignores the pin and moves anyway. When the enemy queen captures the queen behind it, a bishop arrives with checkmate.",
-      "recognition": "Whenever your queen is pinned by a bishop and the pinning bishop is undefended, look for the Légal mate counter.",
-      "history": "Named after Sire de Légall, an eighteenth-century French master who used this pattern in a coffeehouse game in Paris."
-    }
+      "intro": "Légal's mate punishes a greedy pin. The pinned knight moves anyway and gives up its queen. When their bishop takes the queen, a bishop check on f7 and a knight jump to d5 give mate.",
+      "recognition": "Whenever their bishop pins your knight to your queen and their king is still uncastled, look for Légal's idea: let the queen go and mate with the minor pieces.",
+      "history": "Named after Kermur Sire de Légal, who is said to have played it against Saint Brie at the Café de la Régence in Paris, 1750."
+    },
+    "sources": [
+      "https://www.chessgames.com/perl/chessgame?gid=1251892",
+      "concept:mate-legal"
+    ]
   },
   {
     "id": "kill-box-mate",
@@ -888,14 +982,17 @@
       {
         "fen": "2kr4/8/1Q6/8/8/8/5PPP/3R1RK1 w - - 0 1",
         "movesToMate": 1,
-        "sourceComment": "The Kill Box Mate occurs when a rook is next to the enemy king and support by a queen that also block the king's escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\"."
+        "sourceComment": "A rook checks from the square next to the king, protected by the queen, which also covers every other square — the king is caught in a three-by-three box."
       }
     ],
     "narration": {
       "intro": "The kill box mate happens when a queen and rook trap the king inside a three-by-three square. The rook is next to the king and the queen sits two squares away, supporting the rook and blocking every escape.",
       "recognition": "When you have a queen and rook coordinating against a king on the open files, sketch a three-by-three box around the king and check if you can occupy the right squares.",
-      "history": "The name is military — a ‘kill box’ is a sealed area where anything inside is a target. Queen and rook box the king into a 3×3 zone; the rook mates, the queen guards."
-    }
+      "history": "A modern descriptive name: queen and rook seal the king inside a three-by-three box."
+    },
+    "sources": [
+      "https://en.wikipedia.org/wiki/Checkmate_pattern"
+    ]
   },
   {
     "id": "triangle-mate",
@@ -912,14 +1009,17 @@
         "solution": [
           "Qe5#"
         ],
-        "sourceComment": "A Triangle Mate is delivered by a queen attacking an enemy king, while it is supported by a rook. The queen and rook are one square away from the enemy king. They are on the same rank or file, separated by one square, with the enemy king being between them one square away, forming a triangle. The king must be restricted from escaping to the middle square behind it away from the queen and rook, by the edge of the board, a piece blocking it, or by controlling that square with a third piece."
+        "sourceComment": "Queen and rook stand on the same line with one square between them and the king just off that line; the queen gives the check, guarded by the rook, which also seals the line."
       }
     ],
     "narration": {
       "intro": "The triangle mate uses a queen and rook in a geometric pattern. The queen attacks the enemy king, the rook supports the queen, and they form a triangle with the king at one vertex. The king cannot escape any of the three points.",
       "recognition": "When your queen and rook are within one square of the enemy king and they support each other, the triangle is often the cleanest mate.",
-      "history": "Queen and rook two squares apart form a triangle with the king — the queen delivers mate on the edge while the rook backs it up and seals the file."
-    }
+      "history": "Queen and rook, two squares apart on one line, make a triangle with the king between them."
+    },
+    "sources": [
+      "https://en.wikipedia.org/wiki/Checkmate_pattern"
+    ]
   },
   {
     "id": "vukovic-mate",
@@ -934,7 +1034,7 @@
       {
         "fen": "4k3/R7/4N3/3r4/8/B7/4K3/8 w - - 0 1",
         "movesToMate": 1,
-        "sourceComment": "In the Vukovic Mate, a rook and knight team up to mate the king on the edge of the board. The rook delivers mate while supported by a third piece, and the knight is used to block the king's escape squares."
+        "sourceComment": "Rook and knight mate on the edge: the rook gives check with support from a third piece, and the knight covers the king's escape squares."
       },
       {
         "fen": "R7/8/8/7p/6n1/6k1/3r4/5K2 b - - 0 1",
@@ -950,8 +1050,11 @@
     "narration": {
       "intro": "The Vukovic mate uses a rook and a knight to mate the king on the edge of the board. The rook delivers the check, while a third piece supports it. The knight blocks the king's escape squares.",
       "recognition": "When your rook can reach the king's rank with knight support nearby, and a third piece guards the rook from being captured, the Vukovic mate is set.",
-      "history": "Named after Vladimir Vuković, the Croatian master and prolific chess author."
-    }
+      "history": "Named after Vladimir Vuković, the Croatian master who wrote 'The Art of Attack in Chess' (1965)."
+    },
+    "sources": [
+      "https://en.wikipedia.org/wiki/Vladimir_Vukovi%C4%87"
+    ]
   },
   {
     "id": "queen-mate",
@@ -965,7 +1068,7 @@
       {
         "fen": "8/8/3k4/8/8/4K3/8/4Q3 w - - 0 1",
         "movesToMate": null,
-        "sourceComment": "Use your queen to restrict the king, force it to the edge of the board and deliver checkmate. The queen can't do it alone, so use your king to help. Mate in 6 if played perfectly.",
+        "sourceComment": "Use the queen to shrink the king's box and drive it to the edge, then bring your own king up — the queen cannot mate alone. With best play: mate in 6.",
         "solution": [
           "Qa5",
           "Ke6",
@@ -991,8 +1094,12 @@
       "intro": "King and queen against a lone king is the simplest mate to deliver. The technique is two stages. First, drive the enemy king to the edge of the board using your queen on a knight's-move distance. Then bring your own king up to support the final mating square.",
       "recognition": "Whenever you have a queen and the opponent has only a king, the win is automatic if you avoid stalemate.",
       "tip": "Stay one knight's move away from the enemy king. The queen restricts, the king closes in, and only the last move is a check.",
-      "history": "The most elementary checkmate — king and queen versus a lone king — in every primer since the earliest manuals; the queen walks the king to the edge for mate."
-    }
+      "history": "The first mate every beginner learns: queen and king against a lone king."
+    },
+    "sources": [
+      "https://www.gutenberg.org/ebooks/33870",
+      "https://lichess.org/practice"
+    ]
   },
   {
     "id": "rook-mate",
@@ -1006,7 +1113,7 @@
       {
         "fen": "8/8/3k4/8/8/4K3/8/4R3 w - - 0 1",
         "movesToMate": null,
-        "sourceComment": "Use your rook to restrict the king, force it to the edge of the board and deliver checkmate. The rook can't do it alone, so use your king to help. Mate in 11 if played perfectly.",
+        "sourceComment": "Cut the king off with the rook, march your king up to stand opposite it, and push it to the last rank — the rook needs the king's help. With best play: mate in 11.",
         "solution": [
           "Kd4",
           "Kc6",
@@ -1036,8 +1143,11 @@
       "intro": "King and rook against a lone king takes more technique than the queen mate, but the principle is the same. Your rook cuts off ranks or files to drive the enemy king toward the edge. Your own king pushes from the opposite side.",
       "recognition": "The two kings end up facing each other one rank apart, and the rook delivers the mate from the side.",
       "tip": "Use the opposition. When your king stands directly across from the enemy king with one square between them, you control the next move.",
-      "history": "The classic king-and-rook mate of a bare king: the rook cuts the king to a rank while the kings stand in opposition. A staple of every endgame primer."
-    }
+      "history": "Capablanca opens Chess Fundamentals with this mate: drive the lone king to the edge, keeping your own king close."
+    },
+    "sources": [
+      "https://www.gutenberg.org/ebooks/33870"
+    ]
   },
   {
     "id": "two-rook-mate",
@@ -1055,7 +1165,7 @@
       {
         "fen": "8/8/3k4/8/8/4K3/8/R6R w - - 0 1",
         "movesToMate": null,
-        "sourceComment": "Use your rooks to restrict the king and deliver checkmate. Mate in 4 if played perfectly.",
+        "sourceComment": "The two rooks take turns checking and cutting off one rank at a time, walking the king to the edge like a ladder. With best play: mate in 4.",
         "solution": [
           "Ra5",
           "Kc6",
@@ -1073,8 +1183,11 @@
       "intro": "Two rooks make checkmate effortless. The pattern is called the ladder mate or lawnmower mate. The rooks alternate ranks, pushing the enemy king up the board one row at a time until it has no squares left.",
       "recognition": "Whenever you have two rooks and the enemy king is in the open, the technique is mechanical. Cut off one rank with the first rook, then push with the second.",
       "tip": "If the enemy king attacks one of your rooks, swing that rook to the far side of the board. The other rook continues the push uninterrupted.",
-      "history": "The ladder (or ‘lawnmower’) mate — two rooks march the king up the board rank by rank to the edge. One of the first checkmates every beginner learns."
-    }
+      "history": "The ladder mate — two rooks climb the board one rank at a time."
+    },
+    "sources": [
+      "https://lichess.org/practice"
+    ]
   },
   {
     "id": "two-bishop-mate",
@@ -1088,15 +1201,19 @@
       {
         "fen": "8/8/3k4/8/8/2BBK3/8/8 w - - 0 1",
         "movesToMate": null,
-        "sourceComment": "When trying to checkmate with two bishops, there are two important principles to follow. One, the bishops are best when they are near the center of the board and on adjacent diagonals. This cuts off the opposing king. Two, the king must be used aggressively, in conjunction with the bishops.\n\nMate in 13 if played perfectly."
+        "sourceComment": "Keep the two bishops side by side near the centre on neighbouring diagonals so they form a wall, and bring your king up; the bare king can only be mated in a corner. With best play: mate in 13."
       }
     ],
     "narration": {
       "intro": "Two bishops can mate a lone king, but the technique is harder than two rooks. The bishops have to work together to drive the king to a corner — any corner. Then your own king closes the trap.",
       "recognition": "When you have two bishops and the opponent has nothing but a king, the corner is your target. Both bishops on adjacent diagonals form a wall the king cannot cross.",
       "tip": "The bishops do not deliver mate on their own. Bring your king up; the bishops only restrict squares.",
-      "history": "King and two bishops versus a bare king — the bishops sweep adjacent diagonals to herd the king into a corner for mate, a fundamental endgame technique."
-    }
+      "history": "A fundamental endgame technique: the bishops build a diagonal wall while the king helps push the lone king into a corner."
+    },
+    "sources": [
+      "https://lichess.org/practice",
+      "https://www.gutenberg.org/ebooks/33870"
+    ]
   },
   {
     "id": "knight-bishop-mate",
@@ -1113,12 +1230,12 @@
       {
         "fen": "8/8/1k1K4/8/2BN4/8/8/8 w - - 0 1",
         "movesToMate": null,
-        "sourceComment": "Of the basic checkmates, this is the most difficult one to force, because the knight and bishop cannot form a linear barrier to the enemy king from a distance. The checkmate can be forced only in a corner that the bishop controls. The mating process often requires accurate play, since a few errors could result in a draw either by the fifty-move rule or stalemate.\n\nMate in 10 if played perfectly."
+        "sourceComment": "The hardest of the basic mates: knight and bishop cannot build a long barrier, and the mate is only possible in a corner of the bishop's colour. With best play: mate in 10."
       },
       {
         "fen": "8/8/3k4/3B4/3K4/8/3N4/8 w - - 0 1",
         "movesToMate": null,
-        "sourceComment": "Of the basic checkmates, this is the most difficult one to force, because the knight and bishop cannot form a linear barrier to the enemy king from a distance. The checkmate can be forced only in a corner that the bishop controls. The mating process often requires accurate play, since a few errors could result in a draw either by the fifty-move rule or stalemate.\n\nMate in 19 if played perfectly.",
+        "sourceComment": "The hardest of the basic mates: knight and bishop cannot build a long barrier, and the mate is only possible in a corner of the bishop's colour. With best play: mate in 19.",
         "solution": [
           "Nc4+",
           "Kd7",
@@ -1161,11 +1278,15 @@
       }
     ],
     "narration": {
-      "intro": "The bishop and knight mate is the famous hard one. Most players never learn it, so most players never deliver it. The trick is the king must be driven into the specific corner that matches your bishop's color.",
+      "intro": "The bishop and knight mate is the hard one among the basic mates. It is rare in real games, but the method teaches how pieces coordinate. The king must be driven into the corner that matches your bishop's colour.",
       "recognition": "When you have only a bishop and a knight against a lone king, the win exists but the technique requires patience. Practice the W-maneuver with the knight to drive the king from the wrong corner to the right one.",
-      "tip": "If your bishop is light-squared, the king must end up on a light corner — a1 or h8. The knight does the work of switching corners.",
-      "history": "The hardest basic mate — king, bishop and knight must drive the lone king into the corner of the bishop's colour. A famous test of technique since the early manuals."
-    }
+      "tip": "If your bishop is light-squared, the king must end up in a light corner — a8 or h1. The knight does the work of switching corners.",
+      "history": "The hardest of the basic mates. Capablanca stresses that it can only be given in a corner of the bishop's colour."
+    },
+    "sources": [
+      "https://www.gutenberg.org/ebooks/33870",
+      "concept:end-mate-bn"
+    ]
   },
   {
     "id": "queen-bishop-mate",
@@ -1179,14 +1300,17 @@
       {
         "fen": "8/8/3k4/8/8/2QBK3/8/8 w - - 0 1",
         "movesToMate": null,
-        "sourceComment": "Use your queen and bishop to restrict the king and deliver checkmate. Mate in 5 if played perfectly."
+        "sourceComment": "Queen and bishop box the king in and mate it together. With best play: mate in 5."
       }
     ],
     "narration": {
       "intro": "Queen plus bishop is overwhelming force. The queen does most of the work; the bishop covers a diagonal escape or supports a critical square. Mate usually arrives within five or six moves.",
       "recognition": "Drive the king to the edge using the queen alone. Use the bishop to cover the diagonal escape route the queen cannot reach.",
-      "history": "A queen-and-bishop battery on one diagonal — the bishop supports the queen as she delivers mate against an edge-bound or castled king."
-    }
+      "history": "Queen and bishop on one diagonal — the bishop backs the queen as she mates a king pushed to the edge."
+    },
+    "sources": [
+      "https://lichess.org/practice"
+    ]
   },
   {
     "id": "queen-knight-mate",
@@ -1200,13 +1324,16 @@
       {
         "fen": "8/8/3k4/8/8/2QNK3/8/8 w - - 0 1",
         "movesToMate": null,
-        "sourceComment": "Use your queen and knight to restrict the king and deliver checkmate. Mate in 5 if played perfectly."
+        "sourceComment": "Queen and knight box the king in and mate it together. With best play: mate in 5."
       }
     ],
     "narration": {
       "intro": "Queen plus knight covers every square the queen alone cannot reach. The queen restricts the king's movement, and the knight handles the L-shaped escape that the queen's straight lines miss.",
-      "recognition": "Use the queen to push the king to a corner. The knight's job is to block the squares the queen cannot — diagonally adjacent dark squares when the queen is on light, and vice versa.",
-      "history": "Queen and knight combine where neither mates alone — the queen delivers the blow while the knight covers a flight square, a recurring attacking-pattern mate."
-    }
+      "recognition": "Use the queen to push the king to the edge, then let the knight take away the last square the queen cannot reach.",
+      "history": "Queen and knight combine where neither mates alone: the knight covers the square the queen cannot."
+    },
+    "sources": [
+      "https://lichess.org/practice"
+    ]
   }
 ]

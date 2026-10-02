@@ -47,6 +47,11 @@ import { useAdaptiveEndgameSession } from '../../hooks/useAdaptiveEndgameSession
 import { useGameCalculationPuzzles } from '../../hooks/useGameCalculationPuzzles';
 import { voiceService } from '../../services/voiceService';
 import { useAppStore } from '../../stores/appStore';
+import { WrongTryNote } from '../Puzzles/WrongTryNote';
+import { hintSquareStyles } from '../../utils/hintSquareStyles';
+import { useSolvedDrillConcept } from '../../hooks/useWrongTryRefutation';
+
+const EMPTY_LINE: readonly string[] = [];
 
 interface CalculationTabProps {
   onExit: () => void;
@@ -315,6 +320,10 @@ function AdaptivePuzzleRunner({
     replyDelayMs: 450,
   });
   const clickToMove = useClickToMove(playout);
+  // SOLVED → TEACH THE CONCEPT (tactics map 2026-10-01: Calculation ended on
+  // "Solved — played to the win." and nothing else). The same computed
+  // explanation the puzzle board gives, for a student-to-move drill.
+  const solvedConcept = useSolvedDrillConcept(playout.isComplete, drill.fen, drill.solution ?? EMPTY_LINE);
 
   const [recorded, setRecorded] = useState(false);
 
@@ -322,20 +331,33 @@ function AdaptivePuzzleRunner({
   // wrong first attempt), when the user hasn't turned it off. The
   // AdaptivePuzzleRunner is remounted per puzzle (see the `key` in
   // AdaptiveDrillScreen), so this ref resets naturally each puzzle.
-  // Routed through speakLecture — streams per G4, isn't clipped by the
-  // brief cap, and still stays silent when Coach Narration is 'silent'.
   const hintSpokenRef = useRef(false);
   const showHint =
     !playout.isComplete && playout.wrongAttempts > 0 && Boolean(drill.conceptHint);
+  // ONE spoken line per wrong try: the refutation first (why THEIR move
+  // fails), then the concept hint the first time it appears. Speaking them
+  // separately cut the hint mid-sentence when the refutation landed (speak()
+  // stops what is playing). When no refutation comes back the hint still
+  // speaks on its own once the engine has had its chance.
+  const wrongTryText = playout.wrongTryText;
   useEffect(() => {
-    if (!showHint || hintSpokenRef.current) return;
-    hintSpokenRef.current = true;
+    if (playout.isComplete) return;
     const speakHints =
       useAppStore.getState().activeProfile?.preferences.calcHintVoice ?? true;
-    if (speakHints && drill.conceptHint) {
-      void voiceService.speakLecture(drill.conceptHint);
+    const hint = showHint && speakHints && !hintSpokenRef.current ? drill.conceptHint : null;
+    if (wrongTryText) {
+      if (hint) hintSpokenRef.current = true;
+      void voiceService.speak(hint ? `${wrongTryText} ${hint}` : wrongTryText);
+      return;
     }
-  }, [showHint, drill.conceptHint]);
+    if (!hint) return;
+    const id = setTimeout(() => {
+      if (hintSpokenRef.current) return;
+      hintSpokenRef.current = true;
+      void voiceService.speakLecture(hint);
+    }, 3500);
+    return () => clearTimeout(id);
+  }, [showHint, wrongTryText, playout.isComplete, drill.conceptHint]);
   // Stop any in-flight hint speech when leaving the puzzle/drill.
   useEffect(() => () => voiceService.stop(), []);
 
@@ -343,19 +365,10 @@ function AdaptivePuzzleRunner({
     if (!playout.wrongSquare) return {};
     return { [playout.wrongSquare]: { background: 'rgba(239, 68, 68, 0.45)' } };
   }, [playout.wrongSquare]);
-  const hintStyles = useMemo<Record<string, CSSProperties>>(() => {
-    if (!playout.hintRevealed || !playout.hintMove) return {};
-    return {
-      [playout.hintMove.from]: {
-        background: 'rgba(251, 191, 36, 0.55)',
-        boxShadow: 'inset 0 0 0 2px rgba(251, 191, 36, 0.9)',
-      },
-      [playout.hintMove.to]: {
-        background: 'rgba(251, 191, 36, 0.35)',
-        boxShadow: 'inset 0 0 0 2px rgba(251, 191, 36, 0.7)',
-      },
-    };
-  }, [playout.hintRevealed, playout.hintMove]);
+  const hintStyles = useMemo<Record<string, CSSProperties>>(
+    () => hintSquareStyles(playout.hintMove, playout.hintRevealed),
+    [playout.hintRevealed, playout.hintMove],
+  );
   const mergedSquareStyles = useMemo<Record<string, CSSProperties>>(
     () => ({ ...clickToMove.squareStyles, ...hintStyles, ...wrongFlash }),
     [clickToMove.squareStyles, hintStyles, wrongFlash],
@@ -423,6 +436,11 @@ function AdaptivePuzzleRunner({
               : 'Played through to the win.'
             : 'Play the best move — keep going until the win.'}
         </p>
+        {solvedConcept && (
+          <p className="text-[12px] text-theme-text leading-relaxed" data-testid="calc-solved-concept">
+            {solvedConcept}
+          </p>
+        )}
         {!playout.isComplete && playout.wrongAttempts > 0 && drill.conceptHint && (
           <div
             className="text-[12px] text-amber-300 leading-relaxed border-l-2 border-amber-500/40 pl-2"
@@ -443,6 +461,7 @@ function AdaptivePuzzleRunner({
             Solved with hint or retry
           </div>
         )}
+        {!playout.isComplete && <WrongTryNote text={playout.wrongTryText} speak={false} />}
         {!playout.isComplete && (
           <div className="flex items-center gap-3">
             <p className="text-[11px] text-cyan-400">

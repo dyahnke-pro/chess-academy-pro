@@ -223,3 +223,14 @@ describe('endgameService — getRecognitionPosition', () => {
     expect(rp!.movesToMate).toBe(1);
   });
 });
+
+describe('patternRule — the Mating tab hears the computed rule', () => {
+  it('basic mates carry their method and move ceiling; B+N names its corners', async () => {
+    const { getPatternById, patternRule } = await import('./endgameService');
+    expect(patternRule(getPatternById('queen-mate')!)).toMatch(/at most 10 moves/);
+    expect(patternRule(getPatternById('rook-mate')!)).toMatch(/at most 16 moves/);
+    expect(patternRule(getPatternById('two-bishop-mate')!)).toMatch(/at most 19 moves/);
+    expect(patternRule(getPatternById('knight-bishop-mate')!)).toMatch(/h1 or a8/);
+    expect(patternRule(getPatternById('back-rank-mate')!)).toBeNull();
+  });
+});

@@ -70,7 +70,12 @@ export function gradePlayedMove(input: {
   if (!played) return null;                       // outside the fan → defer
   const cpLossCp = Math.max(0, bestEval - moverEval(played));
   const isBest = analysisBefore.bestMove === playedUci || lines[0].moves[0] === playedUci;
-  const gap12 = lines.length >= 2 ? bestEval - moverEval(lines[1]) : 0;
+  // A GAP IS NOT A DECISION WHEN THE RUNNER-UP STILL WINS (Learn walk
+  // 2026-10-01: "Bxe4: the only move that holds" with three moves mating —
+  // the in-app read had the second as a big plus). Only-move and clear-best
+  // both need the second move to give the win away.
+  const secondStillWins = lines.length >= 2 && moverEval(lines[1]) >= 300 && bestEval >= 300;
+  const gap12 = lines.length >= 2 && !secondStillWins ? bestEval - moverEval(lines[1]) : 0;
   const label = labelFor(cpLossCp, isBest);
 
   // Board-only signals (synchronous).

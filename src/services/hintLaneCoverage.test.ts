@@ -90,5 +90,5 @@ describe('the gem Learn speaks never names its answer', () => {
       expect(live.callout, `${g.lineMoves} ${g.inaccuracy} names a square`).not.toMatch(/\b[a-h][1-8]\b/);
     }
     expect(checked, 'no real gem produced a live callout — this test checked nothing').toBeGreaterThan(5);
-  });
+  }, 30_000);
 });

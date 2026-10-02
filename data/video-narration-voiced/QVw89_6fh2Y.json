@@ -151,7 +151,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "The problem with e5 now is that it allows a queen trade, and I want more than an endgame. So because White played the knight to c3, I like c5 a lot more — after White's standard d5, you have a tactic: a knight to e4, exposing the bishop on b2 and grabbing the bishop pair."
+   "spoken": "e5 now allows a queen trade, and you want more than an endgame. Because White played the knight to c3, c5 is stronger — after White's usual d5, a knight to e4 exposes their bishop on b2 and grabs the bishop pair."
   },
   {
    "ply": 13,
@@ -244,7 +244,7 @@
    "line": [
     "Ke2"
    ],
-   "spoken": "White bites the bullet with the king to e2, but it brings little relief. A common mistake is to win a pawn and rest on your laurels — dropping back or trading knights — but you have a better way."
+   "spoken": "White steps the king to e2, but it brings little relief. A common mistake is to win a pawn and then rest — dropping back or trading knights — but you have a better way."
   },
   {
    "ply": 24,
@@ -312,14 +312,14 @@
    "line": [
     "Bd7"
    ],
-   "spoken": "A bishop to g4 trading minor pieces is fine, but to win efficiently I want to open a rook's file. Playing a5 immediately creates a weak square on b5 for White's bishop — pedantic here, but let's start with a bishop to d7 to make the a5-a4 push smoother."
+   "spoken": "Trading minor pieces with the bishop to g4 is fine, but to win efficiently, open a file for a rook. Playing a5 at once hands White's bishop the b5 square, so start with the bishop to d7 to make the a5-a4 push smoother."
   },
   {
    "ply": 31,
    "t": 474.5,
    "fen": "r1b2rk1/pp2pp1p/3p2p1/2pP4/8/1P1BPN2/3K1PPP/3R4 b - - 0 16",
    "line": [],
-   "spoken": "Would my opponent really play a bishop to b5 at this level? Probably not.",
+   "spoken": "",
    "reanchor": true
   },
   {
@@ -329,7 +329,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": "But the point of the speedrun is to build good habits early.",
+   "spoken": "Good habits are worth building early.",
    "reanchor": true
   },
   {
@@ -428,7 +428,7 @@
     "Bd3",
     "Bxc4"
    ],
-   "spoken": "Just trading — I'm playing quickly here.",
+   "spoken": "You simply trade.",
    "reanchor": true
   },
   {

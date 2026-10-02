@@ -21,7 +21,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `reconstructPathForPuzzle` (function) — 9 call sites
-- `src/components/Debug/OpeningBlundersPage.tsx:866`
+- `src/components/Debug/OpeningBlundersPage.tsx:882`
 - `src/services/openingWalkthroughService.test.ts:63`
 - `src/services/openingWalkthroughService.test.ts:76`
 - `src/services/openingWalkthroughService.test.ts:89`

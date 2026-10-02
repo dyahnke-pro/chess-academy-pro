@@ -17,12 +17,14 @@
 // This returns the ONE step the board is on, board-true (chess.js +
 // `describeStructure`), or null when the mover is not clearly ahead. No
 // engine; the eval gate belongs to the caller that already holds one.
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
-import { findHangingBySee } from './positionReadingService';
+import { findHangingBySee, legalSeeGainFor } from './positionReadingService';
 import { homeMinorCount } from './development';
+import { MATERIAL_VALUE } from './pieceValues';
+import { countKingAttack } from './kingSafety';
 
-export type ConversionStep = 'finish-development' | 'trade-pieces' | 'make-passer' | 'escort-passer' | 'cut-off-king';
+export type ConversionStep = 'finish-development' | 'attack-king' | 'trade-pieces' | 'make-passer' | 'escort-passer' | 'cut-off-king';
 
 export interface ConversionRead {
   step: ConversionStep;
@@ -48,7 +50,42 @@ export function readConversion(fen: string, student: 'w' | 'b'): ConversionRead 
   // rook up" with the rook on d8 about to be taken back). Take off the most
   // the opponent wins by capturing a student piece now — the undercount is
   // deliberate: a smaller edge costs a sentence, a bigger one is a false claim.
-  const owed = Math.max(0, ...findHangingBySee(fen).filter((h) => h.color === student).map((h) => h.gain));
+  // …BUT ONLY WHAT CANNOT BE SAVED (claim check 2026-09-27: "you're a piece
+  // up" a queen up, because the rook on e4 was attacked — on the student's own
+  // move, where it simply steps away). On their move the biggest hang is owed;
+  // on the student's move only the SECOND biggest, since one piece can be saved.
+  // A hanging piece counts as SAVED when, on the student's move, it has a move
+  // that does not lose material: to a safe square, or a trade that takes back
+  // at least what it gives (the 1380 rook on d8 trades itself with Rxf8+). A
+  // saving move WITH CHECK buys a second save, since the opponent must answer
+  // the check first (claim check: Rxe1+ then the queen steps away — "a piece
+  // up" said a queen up, engine +7).
+  const hangs = findHangingBySee(fen).filter((h) => h.color === student).sort((x, y) => y.gain - x.gain);
+  const rescue = (sq: string): { ok: boolean; check: boolean } => {
+    let ok = false; let check = false;
+    for (const m of c.moves({ square: sq as Square, verbose: true })) {
+      try {
+        c.move(m);
+        const net = (m.captured ? MATERIAL_VALUE[m.captured] ?? 0 : 0) - legalSeeGainFor(c.fen(), m.to, c.turn());
+        const gives = c.inCheck();
+        c.undo();
+        if (net >= 0) { ok = true; if (gives) check = true; }
+      } catch { /* illegal on this board */ }
+    }
+    return { ok, check };
+  };
+  const studentToMove = c.turn() === student;
+  let lost = hangs;
+  if (studentToMove && hangs.length) {
+    const reads = hangs.map((h) => ({ h, ...rescue(h.square) }));
+    const tempo = reads.find((r) => r.ok && r.check);
+    const rest = reads.filter((r) => r !== tempo);
+    const saved = new Set<typeof hangs[number]>();
+    if (tempo) saved.add(tempo.h);
+    if (rest[0]?.ok) saved.add(rest[0].h);
+    lost = hangs.filter((h) => !saved.has(h));
+  }
+  const owed = Math.max(0, lost[0]?.gain ?? 0);
   const edge = raw - owed;
   if (edge < CONVERSION_EDGE) return null;
   const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
@@ -66,29 +103,60 @@ export function readConversion(fen: string, student: 'w' | 'b'): ConversionRead 
   let text: string;
   if (homeMinorCount(c, student) >= 2 || (!castled && theirPieces >= 3)) {
     step = 'finish-development';
-    text = `You're ${edgeWords(edge)} up — before any plan, finish developing and get your king safe. Up material, the only way to lose is to get careless.`;
+    text = `You're ${edgeWords(edge, c, student)} up — before any plan, finish developing and get your king safe. Up material, the only way to lose is to get careless.`;
   } else if (theirPieces === 0 && theirPawns === 0) {
     step = 'cut-off-king';
     const heavy = (['q', 'r'] as const).find((t) => c.board().some((row) => row.some((x) => x && x.color === student && x.type === t)));
     text = heavy
       ? `Their king is alone — cut it off: put your ${heavy === 'q' ? 'queen' : 'rook'} on a file or rank it can't cross, then drive it to the edge and mate.`
       : `Their king is alone — drive it to the edge with your king and pieces together, then mate.`;
+  } else if (kingOpen(c, student)) {
+    // THE CHOICE (census #9 — "when ahead: trade, attack or convert"). Ahead AND
+    // their king is short of defenders: trading would let it off the hook.
+    const k = countKingAttack(c, student);
+    step = 'attack-king';
+    text = `You're ${edgeWords(edge, c, student)} up and their king is short of defenders — ${k?.attackers.size ?? 0} of your pieces on it against ${k?.defenders.size ?? 0}. Don't cash in with trades yet: the attack is the fastest win.`;
   } else if (theirPieces >= 2) {
     step = 'trade-pieces';
-    text = `You're ${edgeWords(edge)} up — trade pieces, not pawns. Every piece that comes off makes your extra material count for more.`;
+    text = `You're ${edgeWords(edge, c, student)} up — trade pieces, not pawns. Every piece that comes off makes your extra material count for more.`;
   } else if (!passer) {
     step = 'make-passer';
-    text = `You're ${edgeWords(edge)} up with few pieces left — now make a passed pawn. The extra material wins by making a new queen, not by hunting the king.`;
+    text = `You're ${edgeWords(edge, c, student)} up with few pieces left — now make a passed pawn. The extra material wins by making a new queen, not by hunting the king.`;
   } else {
     step = 'escort-passer';
-    text = `Your passed pawn on ${passer} is the win — push it, with your king and pieces escorting it one safe square at a time.`;
+    // "and pieces" only when there are pieces — a pawn ending escorts with the
+    // king alone (hand walk 2026-09-27).
+    const escorts = pieces(student) > 0 ? 'your king and pieces' : 'your king';
+    text = `Your passed pawn on ${passer} is the win — push it, with ${escorts} escorting it one safe square at a time.`;
   }
   return { step, edge, passer, text };
 }
 
-function edgeWords(edge: number): string {
-  if (edge >= 9) return 'a queen';
-  if (edge >= 5) return 'a rook';
+/** Their king is the target: your queen is on, at least three of your pieces
+ *  bear on it and they outnumber its defenders. */
+function kingOpen(c: Chess, student: 'w' | 'b'): boolean {
+  const hasQueen = c.board().some((row) => row.some((x) => x?.type === 'q' && x.color === student));
+  if (!hasQueen) return false;
+  const k = countKingAttack(c, student);
+  return !!k && k.attackers.size >= 3 && k.attackers.size > k.defenders.size;
+}
+
+/** The edge in words — a PIECE name only when that piece is really the extra
+ *  one on the board. "You're a queen up" with no queens on it (Damiano walk
+ *  2026-09-27: rook+bishop+knight against a rook) named a piece nobody had. */
+function edgeWords(edge: number, c: Chess, student: 'w' | 'b'): string {
+  const count = (color: 'w' | 'b', t: string): number => {
+    let n = 0;
+    for (const row of c.board()) for (const x of row) if (x && x.color === color && x.type === t) n += 1;
+    return n;
+  };
+  const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
+  const extra = (t: string): boolean => count(student, t) > count(them, t);
+  // NAME A PIECE ONLY WHEN THE LEAD IS WORTH ABOUT THAT PIECE (claim check
+  // 2026-09-27: "you're a rook up" at +8 and +9 — a rook and a minor more).
+  if (edge >= 8 && edge <= 10 && extra('q')) return 'a queen';
+  if (edge >= 4 && edge <= 6 && extra('r')) return 'a rook';
+  if (edge >= 5) return `${Math.round(edge)} points`;
   return 'a piece'; // readConversion never calls below CONVERSION_EDGE
 }
 

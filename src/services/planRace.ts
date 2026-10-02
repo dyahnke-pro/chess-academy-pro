@@ -56,6 +56,10 @@ export interface PasserRace {
    *  king joins the escort once the queens come off" — and phase-blind advice
    *  is the defect that rule was written for. */
   queensOn: boolean;
+  /** Pure pawn ending only: the first new queen will cover the other pawn's
+   *  queening square (Naroditsky, Pawn Races: "queen first, and if your queen
+   *  covers their promotion square it never promotes"). Null when not read. */
+  firstQueenCovers: boolean | null;
 }
 
 export interface FileCollision {
@@ -129,6 +133,50 @@ function rookReachesFileNow(fen: string, file: string, color: Color): boolean {
  * THE RACE, or null. Computed from the board (G0) for BOTH seats, and stated
  * only when the two sides are genuinely running the same kind of plan.
  */
+/** Does a queen on `from` see `to` along an open file, rank or diagonal? */
+function queenSees(b: Chess, from: string, to: string): boolean {
+  const df = to.charCodeAt(0) - from.charCodeAt(0);
+  const dr = Number(to[1]) - Number(from[1]);
+  if (!(df === 0 || dr === 0 || Math.abs(df) === Math.abs(dr)) || (df === 0 && dr === 0)) return false;
+  const sf = Math.sign(df); const sr = Math.sign(dr);
+  for (let f = from.charCodeAt(0) + sf, r = Number(from[1]) + sr; f !== to.charCodeAt(0) || r !== Number(to[1]); f += sf, r += sr) {
+    if (b.get(`${String.fromCharCode(f)}${r}` as Square)) return false;
+  }
+  return true;
+}
+
+/** THE FIRST QUEEN, ON ARRIVAL — in a pure pawn ending, does the new queen
+ *  cover the slower pawn's queening square (with that pawn where it will be
+ *  when the queen lands)? Kings and pawns only; anything else returns null. */
+function queenCovers(chess: Chess, race: PasserRace, studentColor: Color): boolean | null {
+  if (chess.board().flat().some((c) => !!c && c.type !== 'k' && c.type !== 'p')) return null;
+  const winner: Color = race.youQueenFirst ? studentColor : (studentColor === 'w' ? 'b' : 'w');
+  const loser: Color = winner === 'w' ? 'b' : 'w';
+  const wPawn = race.youQueenFirst ? race.yourPawn : race.theirPawn;
+  const lPawn = race.youQueenFirst ? race.theirPawn : race.yourPawn;
+  const wPushes = race.youQueenFirst ? race.yourPushes : race.theirPushes;
+  const winnerFirst = chess.turn() === winner;
+  const lDone = winnerFirst ? wPushes - 1 : wPushes;
+  const dir = loser === 'w' ? 1 : -1;
+  const lPromoRank = loser === 'w' ? 8 : 1;
+  // Where the slower pawn stands when the queen lands (single steps; a start-
+  // rank double step only brings it closer, so this never overstates cover).
+  const lRank = Math.min(8, Math.max(1, Number(lPawn[1]) + dir * Math.max(0, lDone)));
+  if (lRank === lPromoRank) return false;
+  const promo = `${wPawn[0]}${winner === 'w' ? 8 : 1}`;
+  const target = `${lPawn[0]}${lPromoRank}`;
+  try {
+    const b = new Chess(chess.fen());
+    b.remove(wPawn as Square); b.remove(lPawn as Square);
+    b.put({ type: 'p', color: loser }, `${lPawn[0]}${lRank}` as Square);
+    b.put({ type: 'q', color: winner }, promo as Square);
+    // THE QUEEN's line, not "attacked by anything": a king beside the square
+    // is not the new queen covering it (pass-3 drills: "covers a8" with the
+    // queen on g1 and only the king touching a8).
+    return queenSees(b, promo, target);
+  } catch { return null; }
+}
+
 export function detectPlanRace(fen: string, studentColor: Color): PlanRace | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
@@ -142,7 +190,7 @@ export function detectPlanRace(fen: string, studentColor: Color): PlanRace | nul
   if (mine && theirs) {
     const youMoveFirst = chess.turn() === studentColor;
     const queensOn = chess.board().flat().some((c) => !!c && c.type === 'q');
-    return {
+    const race: PasserRace = {
       kind: 'passer-race',
       queensOn,
       yourPawn: mine.sq,
@@ -153,7 +201,10 @@ export function detectPlanRace(fen: string, studentColor: Color): PlanRace | nul
       youQueenFirst: youMoveFirst
         ? mine.pushes <= theirs.pushes
         : mine.pushes < theirs.pushes,
+      firstQueenCovers: null,
     };
+    race.firstQueenCovers = queenCovers(chess, race, studentColor);
+    return race;
   }
 
   // 2. BOTH sides want the same open file — a collision, not a speed contest.
@@ -167,7 +218,11 @@ export function detectPlanRace(fen: string, studentColor: Color): PlanRace | nul
   }
   const myHeavy = heavyFiles[studentColor];
   const theirHeavy = heavyFiles[opp];
-  if (rookCount[studentColor] > 0 && rookCount[opp] > 0) {
+  // A side in CHECK has only its check answers to choose from, so "only their
+  // rook could take it" is the check talking, not the file (review walk
+  // 2026-10-01, game 2 ply 67: after Rb7+ the black rook on d8 could not go to
+  // e8 only because the king had to move).
+  if (rookCount[studentColor] > 0 && rookCount[opp] > 0 && !chess.inCheck()) {
     for (const file of s.pawns.openFiles) {
       if (myHeavy.has(file) || theirHeavy.has(file)) continue;
       return {
@@ -225,19 +280,26 @@ export function planRaceClause(
     const lesson = race.youQueenFirst
       ? (past
         ? (race.queensOn
-          ? 'you got there first once the queens came off — that race was the reason to trade into the endgame'
-          : 'you got there first if nobody interfered, so the race was yours to take — pushing beat stopping to defend')
+          ? 'you would get there first once the queens came off — that race was the reason to trade into the endgame'
+          : 'you would get there first if nobody interfered, so the race was yours to take — pushing beat stopping to defend')
         : (race.queensOn
           ? 'you get there first once the queens come off — that race is your reason to trade into the endgame, not to go pushing into the middlegame'
           : "you get there first if nobody interferes, so the race is yours — push, and make them be the one who stops to defend"))
       : (past
         ? (race.queensOn
-          ? 'they got there first, so the endgame was theirs — that race was the reason to keep the queens on and play for something else'
-          : 'they got there first, so racing lost it — theirs had to be stopped before yours could decide anything')
+          ? 'they would get there first, so the endgame was theirs — that race was the reason to keep the queens on and play for something else'
+          : 'they would get there first, so racing lost it — theirs had to be stopped before yours could decide anything')
         : (race.queensOn
           ? 'they get there first, so the endgame favours them — keep the queens on and play for something else, or stop theirs before you trade'
           : "they get there first, so you can't just race — stop theirs before yours can decide anything"));
-    return `${counts}${tempoNote}; ${lesson}`;
+    // THE FIRST QUEEN, ON ARRIVAL (pure pawn ending): covering the other
+    // queening square ends the race outright.
+    const cover = race.firstQueenCovers
+      ? (race.youQueenFirst
+        ? (past ? ' — and your new queen would have covered their queening square, so theirs could never promote' : ' — and your new queen covers their queening square, so theirs never promotes')
+        : (past ? ' — and their new queen would have covered your queening square' : ' — and their new queen covers your queening square, so yours never promotes'))
+      : '';
+    return `${counts}${tempoNote}; ${lesson}${cover}`;
   }
 
   // File collision — silent unless exactly one side can take it this move,
@@ -250,4 +312,29 @@ export function planRaceClause(
     : (past
       ? `you both wanted the open ${race.file}-file, but only their rook could take it — it was theirs first`
       : `you both want the open ${race.file}-file, but only their rook can take it right now — contest it or they own it`);
+}
+
+/**
+ * THE FILE, TAKEN — the live half of the file collision, said AFTER the move
+ * (never "claim it now", which would name the student's next move unearned).
+ * Both sides wanted the same open file and the student's rook got there. Null
+ * unless the move itself is the rook landing on the contested file.
+ */
+export function fileClaimed(fenBefore: string, san: string): { file: string; contested: boolean; text: string } | null {
+  let chess: Chess;
+  try { chess = new Chess(fenBefore); } catch { return null; }
+  const mover = chess.turn();
+  const race = detectPlanRace(fenBefore, mover);
+  if (!race || race.kind !== 'file-collision' || !race.yoursNow) return null;
+  let mv;
+  try { mv = chess.move(san); } catch { return null; }
+  if (mv.piece !== 'r' || mv.to[0] !== race.file) return null;
+  const file = race.file;
+  return {
+    file,
+    contested: race.theirsNow,
+    text: race.theirsNow
+      ? `You took the open ${file}-file first — their rook could have reached it too, so now they have to contest it.`
+      : `You took the open ${file}-file before either of their rooks could reach it.`,
+  };
 }

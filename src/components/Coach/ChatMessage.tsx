@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import type { ChatMessage as ChatMessageType, WalkableLine } from '../../types';
 import { stripCoachMarkup } from '../../services/sanitizeCoachText';
 import { useLocalizedContent } from '../../services/coachChatText';
+import { useAppStore } from '../../stores/appStore';
+import { coreRatingTier } from '../../services/ratingBands';
+import { movesInWords } from '../../utils/sanToSpeech';
 
 /** Render basic markdown-style formatting: **bold** and *italic*.
  *  Defense-in-depth: strip any coach directive markup
@@ -105,7 +108,13 @@ function ActionButton({ action, onClick }: {
  *  component every coach bubble renders through, so one call covers all six
  *  surfaces and the seventh. See `services/coachChatText.ts`. */
 export function ChatMessage({ message, isStreaming, onPickChoice, onWalkLine }: ChatMessageProps): JSX.Element {
-  const shownContent = useLocalizedContent(message.content, message.role, { streaming: isStreaming });
+  const localized = useLocalizedContent(message.content, message.role, { streaming: isStreaming });
+  // THE BEGINNER REGISTER (2026-10-02: real users asked what "G" and "bxe7"
+  // mean). Below 1000 — and unrated, which defaults there: an empty record
+  // teaches — every move in a coach bubble reads in words with its notation
+  // after it. Phrasing only; how much the coach says is not the rating's call.
+  const beginner = useAppStore((s) => coreRatingTier(s.activeProfile?.currentRating) === 'beginner');
+  const shownContent = beginner && message.role === 'assistant' ? movesInWords(localized) : localized;
   const navigate = useNavigate();
   const isUser = message.role === 'user';
   const actions = message.metadata?.actions ?? [];

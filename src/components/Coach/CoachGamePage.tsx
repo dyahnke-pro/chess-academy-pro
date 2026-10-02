@@ -1,3 +1,4 @@
+import { captureEvent } from '../../services/analytics';
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
@@ -2026,6 +2027,13 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
 
     const keyMoments = findKeyMoments(gameState.moves);
 
+    // THE FUNNEL'S MISSING STEP (2026-10-02): a finished Play game emitted
+    // nothing, so "how many players reach the auto-review" was unanswerable —
+    // Play page views and review events, with no way to join them.
+    captureEvent('coach_game_finished', {
+      result, end_reason: endReason ?? 'board', plies: gameState.moves.length, player_color: playerColor,
+    });
+
     // Show the final board position with game-over overlay before transitioning
     setGameState((prev) => ({
       ...prev,
@@ -2107,7 +2115,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       // Thinking-Errors capture from this game's annotations — the live "why
       // did you play that?" faucet is retired, so capture happens here on
       // game-end (deterministic, idempotent per game).
-      void autoAnalyzeGameMisconceptions(gameRecord.id);
+      void autoAnalyzeGameMisconceptions(gameRecord.id, undefined, { reportEffects: 'play-finished', prepareReview: true });
     });
   }, [gameState.status, gameState.moves, gameState.hintsUsed, gameState.gameId, playerColor, difficulty, game.history, activeProfile, playerRating, targetStrength, detectedOpening, timeControl, convDrill, initialGameFen]);
 

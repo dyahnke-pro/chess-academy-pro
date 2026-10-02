@@ -37,4 +37,9 @@ describe('player-games: the second-person veto', () => {
       "how did he win with this?",
     ]) expect(isPlayerGamesQuestion(ask), ask).toBe(true);
   });
+
+  it('"why did THEY play Ne4?" is the opponent\'s move, never a pro lookup (question walk 2026-09-27)', () => {
+    for (const ask of ['Why did they play Ne4?', 'why did my opponent play e5', 'what did the opponent do there?'])
+      expect(isPlayerGamesQuestion(ask), ask).toBe(false);
+  });
 });

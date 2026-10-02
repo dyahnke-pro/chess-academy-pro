@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6069) — names `dnaLineNarrator`
+- **The standard post-deploy ritual** (CLAUDE.md:6116) — names `dnaLineNarrator`
 
 ## Who calls in
 
@@ -34,8 +34,8 @@
 - `src/services/dnaLineNarrator.test.ts:55`
 
 ### `firstTacticInvariant` (function) — 4 call sites
-- `src/components/Coach/CoachGameReview.tsx:1643`
-- `src/components/Coach/CoachGameReview.tsx:1726`
+- `src/components/Coach/CoachGameReview.tsx:1646`
+- `src/components/Coach/CoachGameReview.tsx:1729`
 - `src/services/dnaLineNarrator.test.ts:120`
 - `src/services/dnaLineNarrator.test.ts:124`
 
@@ -44,7 +44,7 @@
 - `src/services/dnaLineNarrator.test.ts:102`
 - `src/services/dnaLineNarrator.test.ts:110`
 - `src/services/dnaLineNarrator.test.ts:111`
-- `src/services/openingGenerator.ts:2225`
+- `src/services/openingGenerator.ts:2226`
 - `src/services/teachingSelector.ts:201`
 
 ### `narrateDnaLine` (function) — 12 call sites

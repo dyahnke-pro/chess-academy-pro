@@ -4,23 +4,29 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**331 lines · 12 exports · 7 importers · 3 tests · 1 audits**
+**357 lines · 12 exports · 13 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:25) — names `methodBeat`
 - **Why determinism** (CLAUDE.md:57) — names `methodBeat`
-- **G4.5.16 TEACH THE METHOD, NOT ONLY THE BOARD (David 2026-09-16: "Calling out pins and forks isn't teaching. Future moves, how to think, threat identification, that is teaching").** (CLAUDE.md:1044) — names `methodBeat`
+- **G4.5.16 TEACH THE METHOD, NOT ONLY THE BOARD (David 2026-09-16: "Calling out pins and forks isn't teaching. Future moves, how to think, threat identification, that is teaching").** (CLAUDE.md:1065) — names `methodBeat`
 
 ## Who calls in
 
+- `src/components/Puzzles/MistakePuzzleBoard.tsx`
+- `src/components/Puzzles/PuzzleBoard.tsx`
 - `src/services/coachDecider.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/groundedAnswer.ts`
+- `src/services/learnFundamentalNarration.ts`
+- `src/services/looseTrigger.test.ts`
 - `src/services/methodBeat.live.test.ts`
 - `src/services/methodBeat.need.test.ts`
 - `src/services/methodBeat.test.ts`
 - `src/services/positionFacts.ts`
+- `src/services/puzzleMethod.test.ts`
+- `src/services/puzzleMethod.ts`
 
 ## Exports and every call site
 
@@ -37,8 +43,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `habitIsOwed` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:2288`
-- `src/services/positionFacts.ts:762`
+- `src/services/coachFeatureService.ts:2548`
+- `src/services/positionFacts.ts:897`
 
 ### `methodBeatFor` (function) — 43 call sites
 - `src/services/coachDecider.ts:393`
@@ -94,18 +100,23 @@
 ### `LiveMethodBeat` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `liveHabitKey` (function) — 2 call sites
+### `liveHabitKey` (function) — 3 call sites
+- `src/services/learnFundamentalNarration.ts:125`
 - `src/services/methodBeat.live.test.ts:112`
 - `src/services/methodBeat.live.test.ts:119`
 
-### `liveMethodBeat` (function) — 4 call sites
+### `liveMethodBeat` (function) — 8 call sites
+- `src/services/looseTrigger.test.ts:17`
+- `src/services/looseTrigger.test.ts:18`
+- `src/services/looseTrigger.test.ts:19`
 - `src/services/methodBeat.live.test.ts:111`
 - `src/services/methodBeat.live.test.ts:115`
 - `src/services/methodBeat.live.test.ts:118`
-- `src/services/positionFacts.ts:725`
+- `src/services/methodBeat.test.ts:97`
+- `src/services/positionFacts.ts:800`
 
 ### `liveMethodBeatFor` (function) — 22 call sites
-- `src/services/groundedAnswer.ts:3138`
+- `src/services/groundedAnswer.ts:3428`
 - `src/services/methodBeat.live.test.ts:15`
 - `src/services/methodBeat.live.test.ts:19`
 - `src/services/methodBeat.live.test.ts:20`
@@ -130,9 +141,11 @@
 
 ## Tests
 
+- `src/services/looseTrigger.test.ts`
 - `src/services/methodBeat.live.test.ts`
 - `src/services/methodBeat.need.test.ts`
 - `src/services/methodBeat.test.ts`
+- `src/services/puzzleMethod.test.ts`
 
 ## Audits that reach it
 

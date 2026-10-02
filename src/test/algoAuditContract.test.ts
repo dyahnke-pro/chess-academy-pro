@@ -34,6 +34,10 @@ type AlgoEmissionKind =
   | 'review-need-coverage'
   | 'home-opening-chosen'
   | 'analysis-batch-ordered'
+  | 'search-depth'
+  | 'learn-turn-decision'
+  | 'lane-evidence'
+  | 'review-voice-package'
   | 'puzzle-themes-targeted'
   | 'deep-run-step'
   | 'learn-reward';
@@ -49,6 +53,21 @@ interface Contract {
 }
 
 const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
+  'learn-turn-decision': {
+    script: 'scripts/audit-concept-gameplay-prod.mjs',
+    contractMarker: 'the LEARN door EMITTED',
+    emittedBy: 'src/services/learnTurnDoor.ts (decideTurn), aggregated by appAuditor',
+  },
+  'lane-evidence': {
+    script: 'scripts/audit-concept-gameplay-prod.mjs',
+    contractMarker: 'LANE EVIDENCE rows are held-only',
+    emittedBy: 'src/services/capabilityEvidence.ts (recordLaneEvidence)',
+  },
+  'review-voice-package': {
+    script: 'scripts/audit-review-overhaul-prod.mjs',
+    contractMarker: 'REVIEW DOOR package ran',
+    emittedBy: 'src/services/coachFeatureService.ts (buildReviewSegments → buildVoicePackage)',
+  },
   'coach-decision': {
     script: 'scripts/audit-concept-gameplay-prod.mjs',
     contractMarker: 'the deciding door EMITTED',
@@ -83,6 +102,11 @@ const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
     script: 'scripts/audit-home-opening-prod.mjs',
     contractMarker: 'ANALYSIS ORDER home-games-first-past-the-cap',
     emittedBy: 'src/services/gameAnalysisService.ts (analyzeAllGames via pickAnalysisBatch)',
+  },
+  'search-depth': {
+    script: 'scripts/audit-search-depth-prod.mjs',
+    contractMarker: 'SEARCH DEPTH emitted',
+    emittedBy: 'src/services/searchDepthEvents.ts (searchDepth.searchUntilStable)',
   },
   'puzzle-themes-targeted': {
     script: 'scripts/audit-tactics-record-prod.mjs',

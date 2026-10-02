@@ -1,0 +1,52 @@
+50 plies FAILS STANDARD
+15 GOOD | Their plan is taking shape: the knight's walk to c4. Your opponent's plan is to push on the kingside, where they hold the majority.
+16 GOOD | Your knight on e5 now eyes their pawn on c4 and their bishop on d3. Ne5 does what the opening asks — go after their bishop on d3, the only guard of their pawn on c4. Your plan is taking shape: the knight's walk to b6. And there's a deeper threat brewing — if they sit still, it starts with Nxd3.
+18 GOOD | You took on c4 — taking back would cost them more than the pawn.
+20 GOOD | Your rook on g8 now eyes their knight on g5. The principle behind Rg8: take the half-open g-file, where the rook belongs. Your plan is to advance your queenside pawn majority and make it count.
+21 INACCURACY | Your opponent: that was an inaccuracy, costing about 0.7 points — the stronger move was d4. They take on c4, and you can take back — their knight for your pawn. Here is what they are after: an attack on your king.
+22 GOOD | You took on c4, and they can take back — a knight trade.
+23 GOOD | Watch where their moves are going — a passed pawn on the h-file. Watch what they're building — left alone, their idea starts with Bxc4.
+24 GOOD | Your knight on b6 now fights for d5. The plan from here is to convert your extra material. Here's how: offer a trade of pieces at every chance but keep the pawns on, steer straight for an endgame where the extra piece is decisive, and don't get greedy or complicate — simplicity is what wins a won game. There it is — your knight on b6. That was the plan: the knight's walk to b6.
+25 GOOD | Their bishop on h5 pins your pawn on f7 against your king on e8 — you saw this idea on move 3. Their bishop on h5 now eyes your pawn on f7. Watch what they're building — left alone, their threat runs Bxf7+, Kd7, Bxg8 and Nxg8 — you come out behind on material, a bishop for a rook and a pawn.
+26 GOOD | You took on h5, and they can take back — your knight for their bishop.
+27 GREAT | Their queen on h5 pins your pawn on f7 against your king on e8 — it was the idea from move 3 again. Your opponent: that was a great move. Their queen on h5 now eyes your pawn on f7 and your pawn on h7. Your opponent's queen trains on your weak pawn on h7 — a target they can keep working on. The plan changes here — now it's to make your bishop pair count. Here's how: trade pawns to rip the position open, guard both bishops from any swap, and point them at both wings at once — in an open board two bishops rake the whole thing and simply outgun their knight and bishop. The pair is only an advantage while both live; you trade one at the very end, when it wins something concrete. Watch what they'
+28 INACCURACY | Your bishop on f8 is shut in behind g7 — a piece that can't move is a piece you don't have. Here's how: Before you park a rook in front of your own bishop, ask which diagonal it shuts. Develop the bishop first, or put the rook where the bishop still sees past it. You: that was an inaccuracy, costing about 0.7 points — the stronger move was Rg6 — the idea is to prise open the d-file. The plan changes here — now it's to rescue your worst piece, your bishop on f8. Here's how: don't play a single attacking move until it's fixed — spend two or three tempi walking it to a square where it actually bites, because a piece doing nothing means you're effectively playing down a piece. Here is what you a
+29 GOOD | They take on h7 — taking back would cost you more than the pawn. Watch what they're building — left alone, their threat starts with Nxf8.
+31 GOOD | They take on c5, and you can take back — a pawn trade. Watch what they're building — left alone, their threat runs cxb6 — they win a knight.
+32 GOOD | You took on c5, and they can take back — a pawn trade.
+33 INACCURACY | Your opponent: that was an inaccuracy, costing about 0.6 points — the stronger move was Nxf8 — it would swing pieces toward their king. Your bishop on f8 is doing nothing where it sits — improving it is the biggest gain on the board.
+34 GREAT | You're now threatening Qxg2# — it delivers checkmate. You both wanted the open d-file, but only their rook could take it — it was theirs first.
+35 GOOD | f3 isn't idle — it stops the mate with Qxg2. The plan changes here — now it's to seize the open d-file. Here's how: put a rook on it right away before they contest it, double the second rook behind the first so nothing can challenge you, and drive down to the seventh rank where a rook chews through pawns and pins the king back. Watch what they're building — left alone, their idea runs Nxf8, Rg8 and Nh7 — they win a bishop.
+36 GOOD | You're now threatening Qxg2# — it delivers checkmate. Their queen on h5 is the only defender of their knight on h7 — and it can be taken. Your rook on g7 and your queen on g6 form a battery on the file, bearing down on their pawn on g2. Your queen on g6 now eyes their knight on h7, their queen on h5 and their pawn on g2, fights for e4. Qg6 goes after their queen on h5, the only piece guarding their knight on h7. There it is — your queen on g6. That was the plan: the queen's walk to g6.
+37 GREAT | Their move is a sacrifice — compensation: your king is stuck in the centre with the files opening around it. Nf6+ has a point: it stops the mate with Qxg2. Their plan is taking shape: a passed pawn on the h-file.
+38 GOOD | You're now threatening Qxg2# — it delivers checkmate. Their knight on f6 is the only defender of their queen on h5 — and it can be taken — you saw this idea on move 18. The timing of Kd8 matters — a move earlier, Nxf8 would have won your bishop.
+39 GOOD | They take on g6, and you can take back — a queen trade. Watch what they're building — left alone, their idea starts with Rd1+.
+40 GOOD | Before the endgame gets going, the balance sheet: you were clearly better — you were up a pawn and you had the bishop pair. And there's a deeper threat brewing — if they sit still, it starts with exf6.
+42 GOOD | Your bishop on b7 now eyes their knight on e4, fights for d5. Bb7 develops into the game, fighting for the center on d5 and e4 — the same idea as move 18.
+43 GREAT | Here is what they are after: the bishop's walk to c3.
+45 GOOD | Watch what they're building — left alone, their threat runs hxg6, Bxe4, Rxe4 and fxg6 — you come out behind on material, a knight and a pawn for a rook and a bishop.
+46 GOOD | Your rook on g8 now eyes their pawn on g2. Rg8 follows a principle worth keeping: when a pawn kicks a piece, step it back to a square where it still works.
+48 GOOD | Their knight on e4 is the only defender of their bishop on d2 — and it can be taken — the same idea as move 18. Your knight on c4 now eyes their pawn on e5, their pawn on b2 and their bishop on d2. Your moves are pointing at the bishop's walk to f4.
+49 GOOD | Their bishop on c3 now fights for d4. There it is — their bishop on c3. That was the plan: the bishop's walk to c3. Watch where their moves are going — the rook's walk to d3.
+50 GOOD | Bh6 develops into the game, leaning on e3 — you saw this idea on move 18. The timing of Bh6 matters — a move earlier, Bxh6 would have won your bishop.
+51 GOOD | Your opponent seizes the open d-file with the rook — the highway into your camp. Contest the file or your own rooks stay passive.
+52 GOOD | Your plan is taking shape: an attack on their king.
+53 GOOD | Their rook on d3 now fights for d4 and d5. There it is — their rook on d3. That was the plan: the rook's walk to d3.
+54 GOOD | Your bishop on f4 now eyes their pawn on e5. There it is — your bishop on f4. That was the plan: the bishop's walk to f4.
+57 GOOD | Watch what they're building — left alone, their idea runs Nxf4 — they win a bishop.
+58 GREAT | And there's a deeper threat brewing — if they sit still, it starts with Bxe1.
+61 GOOD | Their plan is taking shape: the b-file.
+62 INACCURACY | The cost is time: b3 is now on for them, hitting your knight on c4, and you would spend your next move on the same piece again. Here's how: Count it out loud: does this move force them to answer, or do they get a free turn? When a move gives them a tempo, look for one that develops AND asks a question. You: that was an inaccuracy, costing about 0.9 points — the stronger move was Nb6 — it would land a discovered attack.
+64 GREAT | You took on e5, and they can take back — your bishop for their pawn. Your move is a sacrifice — compensation: the position holds up completely.
+65 GOOD | Watch what they're building — left alone, their idea runs Bxe5 — they win a bishop.
+66 GOOD | You took on c3, and they can take back — a bishop trade.
+67 GOOD | The plan changes here — now it's to win their weak pawn on c3. Here's how: keep your knight planted on c4, right in front of it, so it can never advance to free itself; then stack your heavy pieces on the file to gang up on it, trade off the pieces that defend it one by one, and either win it outright or tie their whole army to babysitting it. The plan from here is to seize the open b-file. Here's how: put a rook on it right away before they contest it, double the second rook behind the first so nothing can challenge you, and drive down to the seventh rank where a rook chews through pawns and pins the king back. Here is what they are after: an attack on your king. Watch what they're building
+70 GOOD | Your rook on h8 now eyes their pawn on h5. Rh8 takes the half-open h-file, where the rook belongs.
+71 GOOD | Watch what they're building — left alone, their idea starts with Nxc4.
+72 GOOD | You took on e5, and they can take back — a knight trade.
+74 GOOD | You're up material with the position simplified — no need to force anything. Improve your worst piece, trade when it's offered, and let the extra material decide. Winning won positions is about patience, not haste.
+76 GOOD | Your pawn on f6 now eyes their rook on e5. f6 kicks their rook off e5, gaining time.
+78 GOOD | Their light squares are weak — c4 and d3 are holes their bishop can't cover; a knight belongs on one. Bb5 develops into the game, leaning on d3 — e2 and f1 sit right beside their king.
+79 GOOD | Their rook on e1 and their rook on e6 form a battery on the file, bearing down on your pawn on e7. Their rook on e1 now fights for e4 and e5. Watch what they're building — left alone, their idea runs Rxe7 — they win a pawn.
+80 GOOD | Rc7 puts the rook behind your c5 pawn — it guards it now, and owns the c-file when it opens.
+INTRO Here's your game in the Sicilian Defense: Moscow Variation — you had Black. You had 2 moments worth a second look — here's each one.

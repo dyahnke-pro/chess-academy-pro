@@ -81,8 +81,8 @@
     "order": 2,
     "narration": {
       "intro": "For every pawn there's a small set of squares — the key squares — where if the attacking king occupies one, the win is automatic. The defender's only job is to keep the king out of these squares. Master both lists and most K+P endgames become bookkeeping.",
-      "rule": "For a non-rook pawn, the three squares two ranks ahead of the pawn are the key squares. For a rook pawn, there are no key squares — the pawn only draws.",
-      "why": "A king on a key square has 'taken the opposition zone' — every defender retreat exposes a path for the pawn to advance. Concretely: with white pawn on e4, the key squares are d6, e6, and f6. If white's king reaches any of those, the pawn promotes regardless of whose turn it is. Why those exact squares? Because from any of them the white king controls e7 and e8 — the squares the black king needs to occupy to stop promotion — AND the white king is far enough ahead of the pawn that the pawn can advance without abandoning its protector. Anything closer (5th rank) leaves the king tangled with the pawn; anything farther (7th rank) is unnecessary, the win is already won.",
+      "rule": "For a pawn on its 2nd to 4th rank, the key squares are the three squares two ranks in front of it; once it crosses the middle, the squares one and two ranks in front all count. A rook pawn has key squares too — b7 and b8 for an a-pawn — and the defender draws by reaching the corner first.",
+      "why": "A king on a key square has 'taken the opposition zone' — every defender retreat exposes a path for the pawn to advance. Concretely: with white pawn on e4, the key squares are d6, e6, and f6. If white's king reaches any of those, the pawn promotes regardless of whose turn it is. Why those exact squares? Because from any of them the white king covers e7 — the square the black king needs to block the pawn — AND the white king is far enough ahead of the pawn that the pawn can advance without abandoning its protector. Anything closer (5th rank) leaves the king tangled with the pawn; anything farther (7th rank) is unnecessary, the win is already won.",
       "history": "Key squares are formalized in Maizelis 'King and Pawn Endgames' (1956) and Mark Dvoretsky's 'Endgame Manual' (2003), but the underlying analysis goes back to Bilguer's Handbuch (1843). The rule is empirical, derived from exhaustive analysis of every K+P vs K position.",
       "tip": "Identify the three key squares before you start moving. White pawn on e4? The three are d6/e6/f6. Race your king to ANY one of them; the pawn handles itself."
     },
@@ -111,18 +111,18 @@
       },
       {
         "fen": "4k3/8/4P3/3K4/8/8/8/8 w - - 0 1",
-        "title": "Pawn ahead of king — must regroup",
-        "explanation": "The pawn raced ahead of its king. White must NOT push 1.e7? Kxe7 (defender's king reaches the queening square first). The right plan: 1.Kd6 first, securing the key square, then push the pawn with full king escort. This is the practical lesson — pushing the pawn before establishing the king on a key square loses the win.",
-        "result": "white-wins",
+        "result": "draw",
         "bestMove": "Kd6",
-        "source": "Teaching position — key square comes first",
+        "title": "Pawn ahead of its king — too late, it's a draw",
+        "explanation": "The pawn ran ahead of its king, and the black king already stands in front of it. Now even the best try only draws: 1.Kd6 Kd8 2.e7+ Ke8 3.Ke6 and Black has no move — stalemate. The lesson is the order: bring the king up to a key square first, and only then push the pawn.",
         "solution": [
-          "Ke5",
-          "Ke7",
-          "Kd5",
+          "Kd6",
+          "Kd8",
+          "e7+",
           "Ke8",
-          "Ke5"
-        ]
+          "Ke6"
+        ],
+        "source": "Tablebase-verified (Lichess Syzygy) — every move in the line keeps the result"
       },
       {
         "fen": "k7/8/K7/P7/8/8/8/8 b - - 0 1",
@@ -203,26 +203,21 @@
         ]
       },
       {
-        "fen": "8/8/8/8/8/4k3/P7/2K5 w - - 0 1",
-        "title": "First-move bonus — the pawn pushes two",
-        "explanation": "Pawn on a2 with the option to push two squares on its first move. After 1.a4! the pawn skips a3 entirely; the new square is a4-a8-d8-d4. Black's king on e3 is outside it. Without the two-square first move (i.e., if you mistakenly play 1.a3), Black catches with 1...Kd3 2.a4 Kc4 3.a5 Kb5 — drawn. Always remember: pawn's first move is a tempo gift; use it when racing.",
+        "fen": "8/8/8/8/8/6k1/P7/2K5 w - - 0 1",
         "result": "white-wins",
         "bestMove": "a4",
-        "source": "Two-square first-move bonus in the rule of the square",
+        "title": "First-move bonus — the pawn pushes two",
+        "explanation": "From a2 the pawn may jump two squares. After 1.a4! its square runs a4 to e8, and the black king on g3 is outside it — the pawn walks in. 1.a3? would only draw: the square from a3 reaches f8, and the king steps inside it with ...Kf4.",
         "solution": [
-          "Kb2",
-          "Kd4",
-          "Kb3",
-          "Kc5",
-          "Kc3",
-          "Kb5",
-          "Kd4",
-          "Kb4",
-          "Kd5",
-          "Kb5",
-          "Kd6",
-          "Kb6"
-        ]
+          "a4",
+          "Kf2",
+          "a5",
+          "Ke1",
+          "a6",
+          "Ke2",
+          "a7"
+        ],
+        "source": "Tablebase-verified (Lichess Syzygy) — every move in the line keeps the result"
       }
     ],
     "practiceThemes": [
@@ -306,23 +301,17 @@
     },
     "positions": [
       {
-        "fen": "3k4/8/8/3KP3/8/8/8/8 w - - 1 2",
-        "title": "Outflank to the left",
-        "explanation": "White king on d5 with the e5 pawn, Black king has just yielded with 1...Kd8. The pawn can't push safely yet (Black would chase). White's plan: outflank. 2.Kc6! shoulders Black's king aside and takes a key square on the c-file. After 2...Kc8 3.Kd6 the white king is now ahead of the pawn AND Black has lost the opposition again — the pawn marches home. Outflanking turns a stalled opposition into a winning structure.",
+        "fen": "8/8/4k3/8/4K3/8/4P3/8 w - - 0 1",
         "result": "white-wins",
-        "bestMove": "Kc6",
-        "source": "Teaching position — outflanking from a stalled opposition",
+        "bestMove": "Kd4",
+        "title": "Outflank — step aside, then use the spare pawn move",
+        "explanation": "The kings face each other and it is White to move, so White does not have the opposition. Don't push yet: step aside with 1.Kd4!, threatening to walk round on the d-file. When Black follows with ...Kd6, the pawn's spare move 2.e3 hands Black the move — now Black must give way.",
         "solution": [
-          "Kc6",
-          "Kc8",
+          "Kd4",
           "Kd6",
-          "Kd8",
-          "e6",
-          "Ke8",
-          "e7",
-          "Kf7",
-          "e8=Q+"
-        ]
+          "e3"
+        ],
+        "source": "Tablebase-verified (Lichess Syzygy) — every move in the line keeps the result"
       }
     ],
     "practiceThemes": [
@@ -371,32 +360,25 @@
     "order": 7,
     "narration": {
       "intro": "When you need to pass the move to your opponent — to put them in zugzwang — but a direct king move loses tempo, you triangulate: walk the king through three squares back to where it started. Same square, opposite turn. Now the opponent has to move into the bad position.",
-      "rule": "Walk your king through three squares (a triangle) back to its original square. You've used three of your moves and one of your opponent's — net effect: same position, opposite turn.",
+      "rule": "Walk your king through three squares (a triangle) back to its original square. You spend three moves while they can only shuffle back and forth in two — net effect: same position, and now they are to move.",
       "why": "Chess requires you to move every turn. If a position is bad for whoever moves first (zugzwang), and YOU have the move, you'd rather your opponent did. Triangulation is the way to swap turns without changing anything else: take three king moves to traverse a triangle (e.g. e3 → d3 → e2 → e3). Your opponent, however, must move on each of their three turns — and in many positions they have only ONE useful move available, so the second and third are damaging shuffles. After the cycle: same king position, but now they're stuck having to move in a position where they have nothing to do. The triangle is a chess-clock manipulator.",
-      "history": "Triangulation is the practical application of 'corresponding squares' theory, formalized by Bähr (1936) and developed by Maizelis (1956). The technique itself is older — Lucena (1497) shows triangulation patterns without naming them.",
+      "history": "Triangulation is the practical application of 'corresponding squares' theory, formalized by Bähr (1936) and developed by Maizelis (1956).",
       "tip": "Triangulation only works when YOU have a triangle of squares your king can traverse and your opponent doesn't. Look for spare king moves; if you have one and they don't, triangulate."
     },
     "positions": [
       {
-        "fen": "8/p7/k7/P7/8/8/3K4/8 w - - 0 1",
-        "title": "Outside passed pawn — triangulate to win",
-        "explanation": "White's a5 is an outside passed pawn supported by the king coming from d2. The win requires putting Black in zugzwang at the right moment. White's king can triangulate: Kc3-Kb3-Kc2-Kb3 etc., losing a tempo to force the black king into a passive square. The exact triangle depends on positioning, but the technique converts a tempo advantage (white has spare moves; black doesn't) into material advantage (winning the a7 pawn or breaking through to support the a-pawn's promotion).",
+        "fen": "8/2k5/1p6/1P6/2P1K3/8/8/8 w - - 0 1",
+        "title": "Triangulation — e4, e5, d5 and back to e4",
+        "explanation": "With Black to move here, White wins: Black's king has to give way and White's king walks in to b6. With White to move it is only a draw if White charges straight in — Kd5 or Kd4 lets Black's king meet it. So White passes the move instead: Ke5, Kd5 and back to Ke4 is three king moves around a triangle, while Black's king can only shuffle c7–d7–c7. The board is the same as at the start, and now Black has to move.",
         "result": "white-wins",
-        "bestMove": "Kc3",
-        "source": "Teaching position — outside passed pawn + triangulation",
+        "bestMove": "Ke5",
+        "source": "Computed: tablebase-verified (only Ke5 wins; Kd5/Kd4 draw; the start with Black to move is lost)",
         "solution": [
-          "Kc3",
-          "Kxa5",
-          "Kb2",
-          "Ka4",
-          "Ka2",
-          "a5",
-          "Kb2",
-          "Kb4",
-          "Ka2",
-          "a4",
-          "Kb2",
-          "a3+"
+          "Ke5",
+          "Kd7",
+          "Kd5",
+          "Kc7",
+          "Ke4"
         ]
       }
     ],

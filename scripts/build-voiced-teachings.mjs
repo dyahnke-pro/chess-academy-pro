@@ -21,7 +21,10 @@ import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { reconstructSpineFen } from './voiced-authoring/fen-spine.mjs';
 
 const SRC = 'data/video-narration-voiced';
-const OUT = 'public/data/voiced-teachings.json';
+// VOICED_OUT_DIR: write somewhere else (the integrity test rebuilds into a
+// temp dir — rebuilding over the shipped file raced a concurrent prod build,
+// which read it half-written, 2026-10-01).
+const OUT = process.env.VOICED_OUT_DIR ? `${process.env.VOICED_OUT_DIR}/voiced-teachings.json` : 'public/data/voiced-teachings.json';
 // The secondary-corpus gate bans the medium/attribution + move-number prefixes.
 const BANNED = /\b(naroditsky|danya|aman|hambleton|chessbrah|in this video|in the video|the streamer|chat|subscribe|this stream|speedrun)\b/i;
 const MOVE_NUM = /\d{1,2}(\.|…|\.\.\.)(?=[NBRQKO]|[a-h][1-8x])/;

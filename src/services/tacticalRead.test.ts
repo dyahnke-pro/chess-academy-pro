@@ -597,3 +597,14 @@ describe('a recapture is not "the forcing move first" (hand walk 2026-09-24)', (
     expect(candidateCompareClause(fen, lines, 'white', { spoken: true, recaptureOn: null })).not.toBeNull();
   });
 });
+
+describe('the hedge never reassures in a lost position (g9 walk 2026-09-27)', () => {
+  it('two moves within 40cp of each other, both losing, carry no closeAlternative', async () => {
+    const { tacticalReadFromLines } = await import('./tacticalRead');
+    const fen = '2Qk1b1r/1p3ppp/p4q2/1B3n2/1P3B2/1P6/4NPPP/3QK2R b K - 0 26';
+    const lost = tacticalReadFromLines(fen, [
+      { moves: ['d8c8'], evaluation: 99_000 }, { moves: ['d8e7'], evaluation: 98_980 },
+    ], 'black');
+    expect(lost?.closeAlternative ?? null).toBeNull();
+  });
+});

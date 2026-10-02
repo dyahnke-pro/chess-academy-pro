@@ -146,3 +146,16 @@ describe('N5 — the student\'s holes re-rank comparable moments', () => {
     expect(rankSwingCandidates(big, landed, [forkHole]).map((c) => c.ply)).toEqual([8, 13]);
   });
 });
+
+// Review walk 2026-10-01 (game 174083521118): "The game turned at move 35, rook
+// to f4 — about 296.4 points." A mate score read as pawns.
+describe('the thesis never states a mate score as a point count', () => {
+  it('a decisive swing says the move decided the game', () => {
+    const t = renderThesis({ kind: 'turned', ply: 70, label: '35.Rf4', swingPawns: 296.4, tactic: null, plan: null, chainRoot: null }, 'retrospective');
+    expect(t).not.toMatch(/296|points/);
+    expect(t).toMatch(/decided the game/);
+  });
+  it('an ordinary swing still says its size', () => {
+    expect(renderThesis({ kind: 'turned', ply: 20, label: '10.Nd5', swingPawns: 2.4, tactic: null, plan: null, chainRoot: null }, 'retrospective')).toMatch(/about 2\.4 points/);
+  });
+});

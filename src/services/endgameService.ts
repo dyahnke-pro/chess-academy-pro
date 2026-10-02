@@ -24,6 +24,7 @@
 import { Chess } from 'chess.js';
 import matingPatternsData from '../data/mating-patterns.json';
 import puzzlesData from '../data/puzzles.json';
+import { endgameConceptFor } from './conceptEngine';
 import type {
   MatingPattern,
   MatingLessonPosition,
@@ -77,6 +78,19 @@ export function getPatternById(id: string): MatingPattern | null {
 /** The recognition position is the first lessonPosition with
  *  movesToMate === 1 — the "what does the finished pattern look like"
  *  diagnostic shown briefly while the intro narration plays. */
+/** The computed RULE a piece-mate pattern teaches, from its own lesson board
+ *  (`endgameConceptFor` — the same computer Learn and Play read): the forced
+ *  mate with its move ceiling and method, the bishop's corners for B+N, or why
+ *  the material cannot mate. Null for any other pattern. */
+const MATE_RULE_IDS = new Set(['basic-mate', 'bishop-knight-mate', 'two-knights-no-mate', 'insufficient-material']);
+export function patternRule(pattern: MatingPattern): string | null {
+  if (pattern.category !== 'piece-mate') return null;
+  const fen = pattern.lessonPositions[0]?.fen;
+  if (!fen) return null;
+  const c = endgameConceptFor(fen);
+  return c && MATE_RULE_IDS.has(c.id) ? c.full : null;
+}
+
 export function getRecognitionPosition(
   pattern: MatingPattern,
 ): MatingLessonPosition | null {
@@ -434,6 +448,7 @@ export function buildMatingPatternLesson(
   // Intro: combine the hand-crafted prose into one read-aloud script.
   const introParts = [
     pattern.narration.intro,
+    patternRule(pattern),
     pattern.narration.recognition,
     pattern.narration.history,
     pattern.narration.tip,
@@ -480,6 +495,16 @@ export function buildMatingPatternLesson(
  *  UI to show "X positions, increasing difficulty". Cheap — runs
  *  once at module load. */
 let _puzzleCountCache: Map<string, number> | null = null;
+/** Whether the pattern opens into something the student PLAYS — a piece mate
+ *  (free play against the engine) or a curated position with its line. The
+ *  card label reads this, not the puzzle count: a pattern with no practice
+ *  puzzles was labelled "Recognition only" while its lesson played (endgame
+ *  hand walk 2026-10-01). */
+export function hasPlayableLesson(pattern: MatingPattern): boolean {
+  if (pattern.category === 'piece-mate' && pattern.lessonPositions[0]) return true;
+  return pattern.lessonPositions.some((lp) => (lp.solution?.length ?? 0) > 0);
+}
+
 export function getPracticePuzzleCount(pattern: MatingPattern): number {
   if (!_puzzleCountCache) {
     _puzzleCountCache = new Map();
@@ -493,3 +518,7 @@ export function getPracticePuzzleCount(pattern: MatingPattern): number {
   }
   return _puzzleCountCache.get(pattern.id) ?? 0;
 }
+
+/** Why a mated board is mate — the mate computer, exposed through the endgame
+ *  door so surfaces read it here rather than importing the computer. */
+export { explainMate } from './matePatterns';

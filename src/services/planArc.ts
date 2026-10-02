@@ -19,6 +19,7 @@
 // Pure and deterministic (G0): the identity of an aim is WHAT IT IS AIMED AT
 // (`outpost:d5`, `file:c`, `route:n:e5`), never its wording, so a pushed pawn
 // or a knight one hop closer is the same plan, not a new one.
+import { THINK_MARK } from '../utils/thinkPause';
 import { Chess, type Square } from 'chess.js';
 // TYPE-ONLY on purpose: `lookaheadPlan` re-exports this module (the arc is the
 // plan reader's memory, and the Learn surface reaches it through the reader it
@@ -64,12 +65,18 @@ export function aimsOf(side: SidePlan, seat: Seat): Aim[] {
     const onFile = ['1', '2', '3', '4', '5', '6', '7', '8'].map((r) => `${f}${r}`);
     out.push({ id: `file:${f}`, kind: 'file', squares: onFile, goal: null, phrase: `the ${f}-file` });
   }
-  for (const sq of side.passedPawns) {
+  const passerFiles = new Set<string>();
+  for (const sq of [...side.passedPawns, ...(side.pushedPassers ?? [])]) {
+    if (passerFiles.has(sq[0])) continue;
+    passerFiles.add(sq[0]);
     // Every square of the file: each push is a step, not only the square it
     // stood on when the plan was read (a first read counted d4 toward the king
     // attack because the passer's squares held only d5).
     const onFile = ['1', '2', '3', '4', '5', '6', '7', '8'].map((r) => `${sq[0]}${r}`);
-    out.push({ id: `passer:${sq[0]}`, kind: 'passer', squares: onFile, goal: null, phrase: `a passed pawn on the ${sq[0]}-file` });
+    // The aim only stands once the passer is on the board (`aimWalkableNow`), so
+    // it is PUSHED, never built: "a step toward a passed pawn" on a pawn that
+    // was already passed (pass-2 walk 2026-09-30, three times in one ending).
+    out.push({ id: `passer:${sq[0]}`, kind: 'passer', squares: onFile, goal: null, phrase: `pushing ${seat === 'opponent' ? 'their' : 'the'} passed pawn on the ${sq[0]}-file` });
   }
   if (side.maneuver && side.maneuver.path.length >= 2) {
     const dest = side.maneuver.path[side.maneuver.path.length - 1];
@@ -81,9 +88,36 @@ export function aimsOf(side: SidePlan, seat: Seat): Aim[] {
     const name = PIECE[piece] ?? word;
     // Keyed by the PIECE: a knight heading for g3 that then heads on to h5 is
     // one journey, not a dropped plan and a new one (first real game read).
-    out.push({ id: `route:${piece}`, kind: 'route', squares: side.maneuver.path.slice(1), goal: dest, phrase: `the ${name}'s walk from ${side.maneuver.path[0]} to ${dest}`, from: side.maneuver.path[0] });
+    out.push({ id: `route:${piece}`, kind: 'route', squares: side.maneuver.path.slice(1), goal: dest, phrase: routePhrase(name, side.maneuver.path, side.maneuver.takes), from: side.maneuver.path[0] });
   }
   return out;
+}
+
+/** DESTINATION FIRST, then the path (census: piece maneuvers — his "the knight
+ *  wants e5, by way of d2 and f3"): where it is going is the idea; the squares
+ *  on the way are the how. */
+function routePhrase(name: string, path: readonly string[], takes?: string): string {
+  const dest = path[path.length - 1];
+  const via = path.slice(1, -1);
+  const tail = via.length === 0 ? '' : via.length === 1 ? `, by way of ${via[0]}` : `, by way of ${via.slice(0, -1).join(', ')} and ${via[via.length - 1]}`;
+  // A destination their piece stands on is a CAPTURE (Learn walk 2026-10-01:
+  // "getting the knight to a7" was winning the a7 pawn).
+  // Said without naming the piece on the square, so the arrival line ("That
+  // was the plan: …") stays true once the pawn is gone.
+  if (takes) return `getting the ${name} to ${dest}${tail}, to take the ${takes} there`;
+  return `getting the ${name} to ${dest}${tail}`;
+}
+
+/** A route aim, re-phrased from where the piece stands NOW: the squares
+ *  already reached drop out of "by way of" (walk 2026-09-30, game 1: "getting
+ *  the rook to e2, by way of e1" with the rook already on e1). */
+export function phraseFrom(aim: Aim, at: string): string {
+  if (aim.kind !== 'route') return aim.phrase;
+  const i = aim.squares.indexOf(at);
+  const takes = /, to take the (.+?) there$/.exec(aim.phrase)?.[1];
+  const name = /^getting the (.+?) to /.exec(aim.phrase)?.[1];
+  if (i < 0 || !name) return aim.phrase;
+  return routePhrase(name, [at, ...aim.squares.slice(i + 1)], takes);
 }
 
 interface ArcEntry {
@@ -115,10 +149,13 @@ const EMERGE: Record<Seat, ReadonlyArray<(p: string) => string>> = {
     (p) => `Here is what they are after: ${p}.`,
     (p) => `Watch where their moves are going — ${p}.`,
   ],
+  // PRESCRIPTIVE, not descriptive (WO-TEACH-GAPS P2 #1): the read is the
+  // engine's plan FOR the student, which they may not be following yet — "your
+  // plan is taking shape" claimed they were. He says "the plan here is …".
   student: [
-    (p) => `Your plan is taking shape: ${p}.`,
-    (p) => `Here is what you are building: ${p}.`,
-    (p) => `Your moves are pointing at ${p}.`,
+    (p) => `The plan for you here: ${p}.`,
+    (p) => `Here is what you build toward: ${p}.`,
+    (p) => `Your plan from here: ${p}.`,
   ],
 };
 
@@ -134,6 +171,8 @@ export interface ArcEvent {
   seat: Seat;
   text: string;
   squares: string[];
+  /** For an `advance`: which step toward the aim this move is (1 = the first). */
+  step?: number;
 }
 
 /** The side's move this read follows, or null on the first read. */
@@ -146,12 +185,27 @@ export interface ArcMove {
   promotion?: string;
 }
 
+/** A passed pawn's push, counted: "Your passed pawn is on a3 — two squares from queening." */
+function passerStep(to: string, color: 'w' | 'b', their: boolean): string {
+  const togo = color === 'w' ? 8 - Number(to[1]) : Number(to[1]) - 1;
+  const left = togo === 1 ? 'one square' : `${['no', 'one', 'two', 'three', 'four', 'five', 'six'][togo] ?? togo} squares`;
+  return `${their ? 'Their' : 'Your'} passed pawn is on ${to} now — ${left} from queening.`;
+}
+
 /** Can THIS move be a step toward the aim — not only land on its squares? */
 function stepsToward(aim: Aim, moved: ArcMove): boolean {
   if (!aim.squares.includes(moved.to)) return false;
   // A route is ONE piece's journey: a bishop landing on d6 is not the rook's
   // walk to d6 (first real game read).
-  if (aim.kind === 'route') return moved.piece === aim.id.split(':')[1];
+  // And it is the SAME piece: it moved off the route's start or a square on
+  // it. A knight arriving from b1 is not "the knight's walk from f3" (manual
+  // claim check 2026-09-30, items 162 and 236).
+  if (aim.kind === 'route') {
+    return moved.piece === aim.id.split(':')[1] && (moved.from === aim.from || aim.squares.includes(moved.from));
+  }
+  // A file is taken by its heavy pieces: a knight capture that happens to land
+  // on c3 is not "a step toward the c-file" (items 171, 172).
+  if (aim.kind === 'file') return moved.piece === 'r' || moved.piece === 'q';
   // A passer is pushed by its own pawn.
   if (aim.kind === 'passer') return moved.piece === 'p';
   // "An attack on your king" is brought by PIECES; pawns storming the king are
@@ -160,7 +214,6 @@ function stepsToward(aim: Aim, moved: ArcMove): boolean {
   return true;
 }
 
-const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 
 /** Is the aim done on this board? */
 function arrived(aim: Aim, fen: string, color: 'w' | 'b', promoted: string | null = null): { done: boolean; what: string } {
@@ -194,12 +247,32 @@ function arrived(aim: Aim, fen: string, color: 'w' | 'b', promoted: string | nul
  */
 export function stepArc(
   state: ArcState,
-  aimsNow: readonly Aim[],
+  aimsIn: readonly Aim[],
   moved: ArcMove | null,
   fenAfter: string,
   color: 'w' | 'b',
   seat: Seat,
 ): { next: ArcState; events: ArcEvent[] } {
+  // AN ATTACK ON THE KING NEEDS THE QUEENS AND A MIDDLEGAME (review walk
+  // 2026-09-27, Carlsen–Aronian: "their plan: an attack on your king" at move 7
+  // and again in a rook endgame). Two pieces near a king is not a plan then.
+  let kingPlanLive = true;
+  try {
+    const b = new Chess(fenAfter);
+    const queens = b.board().flat().filter((c) => c?.type === 'q').length;
+    kingPlanLive = queens >= 2 && b.moveNumber() > 10;
+  } catch { kingPlanLive = false; }
+  const liveAims = kingPlanLive ? aimsIn : aimsIn.filter((a) => a.kind !== 'king-attack' && a.kind !== 'shield');
+  // A FILE IS A SIDE'S PLAN ONLY IF ITS OWN PAWN IS OFF IT (manual claim check
+  // 2026-09-30: "their plan is taking shape: the c-file" with White's own pawn
+  // on c2 — a file half-open for the OTHER side, or closed).
+  let ownPawnFiles = new Set<string>();
+  try {
+    ownPawnFiles = new Set(new Chess(fenAfter).board().flat()
+      .filter((c): c is NonNullable<typeof c> => !!c && c.type === 'p' && c.color === color)
+      .map((c) => c.square[0]));
+  } catch { /* unreadable board: keep the aims as read */ }
+  const aimsNow = liveAims.filter((a) => a.kind !== 'file' || !ownPawnFiles.has(a.id.split(':')[1]));
   const their = seat === 'opponent';
   const events: ArcEvent[] = [];
   let emerged = state.emerged;
@@ -237,10 +310,15 @@ export function stepArc(
         continue; // done — the aim leaves the arc for the rest of the game
       }
       events.push({
-        id, kind: 'advance', seat, squares: [moved.to],
-        text: their
-          ? `${cap(PIECE[moved.piece] ?? 'piece')} to ${moved.to} is ${entry.steps === 1 ? 'a step' : 'another step'} toward ${e.aim.phrase}.`
-          : `Your ${PIECE[moved.piece] ?? 'piece'} to ${moved.to} is ${entry.steps === 1 ? 'a step' : 'another step'} toward ${e.aim.phrase}.`,
+        id, kind: 'advance', seat, squares: [moved.to], step: entry.steps,
+        // WHY THEY PLAYED IT, question first (David 2026-09-30): the move
+        // they actually made, read as a step of the plan announced earlier.
+        // A passer's step is counted in squares to go, not "toward" itself.
+        text: e.aim.kind === 'passer'
+          ? passerStep(moved.to, color, their)
+          : their
+          ? `What is their ${PIECE[moved.piece] ?? 'piece'} on ${moved.to} doing? ${THINK_MARK} It's ${entry.steps === 1 ? 'a step' : 'another step'} toward ${phraseFrom(e.aim, moved.to)}.`
+          : `Your ${PIECE[moved.piece] ?? 'piece'} to ${moved.to} is ${entry.steps === 1 ? 'a step' : 'another step'} toward ${phraseFrom(e.aim, moved.to)}.`,
       });
     }
     // Present now — or just advanced by the move (a step toward an aim is not
@@ -250,10 +328,15 @@ export function stepArc(
       continue;
     }
     const missing = entry.missing + 1;
+    // A plan is "let go" only if it was PURSUED — at least one move made
+    // toward it. An announced aim the engine's next reads simply stopped
+    // showing was never the student's news (measured 2026-09-30: 18 of 23
+    // announced opponent plans were "let go" within two moves, none walked).
+    if (entry.announced && missing >= 2 && entry.steps === 0) continue;
     if (entry.announced && missing >= 2) {
       events.push({
         id, kind: 'drop', seat, squares: [],
-        text: their ? `They have let ${e.aim.phrase} go.` : `You have let ${e.aim.phrase} go.`,
+        text: their ? `They have given up on ${e.aim.phrase}.` : `You have given up on ${e.aim.phrase}.`,
       });
       continue;
     }
@@ -328,11 +411,33 @@ export function stepArc(
  * to the side's own minor pieces there. Other aims pass: they are regions or
  * files, not a piece's journey.
  */
-export function aimWalkableNow(aim: Aim, fen: string, color: 'w' | 'b'): boolean {
-  if (aim.kind !== 'route' && aim.kind !== 'outpost' && aim.kind !== 'king-attack' && aim.kind !== 'shield') return true;
+export function aimWalkableNow(aim: Aim, fen: string, color: 'w' | 'b', history?: readonly string[]): boolean {
+  // A ROUTE BACK TO WHERE THE PIECE JUST WAS is not a plan (manual check
+  // 2026-09-30: "the queen's walk from c2 to d7" said the move after the queen
+  // came from d7 to c2). Reject it when one of the side's last two moves took
+  // that piece from the goal to the route's start.
+  if (aim.kind === 'route' && aim.goal && aim.from && history && justLeft(history, color, aim.goal, aim.from)) return false;
+  if (aim.kind !== 'route' && aim.kind !== 'outpost' && aim.kind !== 'king-attack' && aim.kind !== 'shield' && aim.kind !== 'passer') return true;
   let board: Chess;
   try { board = new Chess(fen); } catch { return false; }
   const foe: 'w' | 'b' = color === 'w' ? 'b' : 'w';
+  if (aim.kind === 'passer') {
+    // A PASSED PAWN IS ON THE BOARD, not at the end of an engine line (walk
+    // 2026-09-30: "a passed pawn on the g-file" with no g-pawn — only …fxg2,
+    // beside the king that just takes it, would make one).
+    const file = aim.squares[0]?.[0];
+    if (!file) return false;
+    const cells = board.board().flat().filter((c): c is NonNullable<typeof c> => c !== null);
+    const pawns = cells.filter((c) => c.type === 'p' && c.color === color && c.square[0] === file);
+    if (!pawns.length) return false;
+    const fi = file.charCodeAt(0);
+    return pawns.some((p) => {
+      const r = Number(p.square[1]);
+      return !cells.some((c) => c.type === 'p' && c.color === foe
+        && Math.abs(c.square.charCodeAt(0) - fi) <= 1
+        && (color === 'w' ? Number(c.square[1]) > r : Number(c.square[1]) < r));
+    });
+  }
   if (aim.kind === 'king-attack' || aim.kind === 'shield') {
     // "An attack on your king" is a claim about the board NOW (walk 3,
     // 2026-09-29: said with no black piece bearing on g1 while the real threat
@@ -368,6 +473,9 @@ export function aimWalkableNow(aim: Aim, fen: string, color: 'w' | 'b'): boolean
     // can ever attack (walk 4, 2026-09-29: "the outpost on d5" said with no
     // black pawn touching d5). Both, on the board as it is.
     const f = goal.charCodeAt(0); const r = Number(goal[1]);
+    // A square a PAWN stands on is no outpost (Learn walk 2026-10-02: "the
+    // outpost on h5" with White's pawn on h5).
+    if (board.get(goal)?.type === 'p') return false;
     const up = color === 'w' ? 1 : -1;
     const ownPawnGuards = [f - 1, f + 1].some((pf) => {
       if (pf < 97 || pf > 104) return false;
@@ -414,4 +522,33 @@ export function aimWalkableNow(aim: Aim, fen: string, color: 'w' | 'b'): boolean
     here = next;
   }
   return !lostThere(piece);
+}
+
+/** True when one of `color`'s last two moves in `history` went `from` → `to`. */
+function justLeft(history: readonly string[], color: 'w' | 'b', from: string, to: string): boolean {
+  const c = new Chess();
+  const moves: { color: string; from: string; to: string }[] = [];
+  for (const san of history) {
+    try { const m = c.move(san); moves.push({ color: m.color, from: m.from, to: m.to }); } catch { return false; }
+  }
+  return moves.filter((m) => m.color === color).slice(-2).some((m) => m.from === from && m.to === to);
+}
+
+/** Two or more of the student's plans read on one move are ONE line, "X, then
+ *  Y" (P2 #1) — never two announcements back to back. The first emerge keeps
+ *  its stem; the rest join as its next steps. */
+export function joinEmerges(events: readonly ArcEvent[]): ArcEvent[] {
+  if (events.length < 2) return [...events];
+  const phrase = (e: ArcEvent): string => {
+    const i = e.text.indexOf(': ');
+    return (i >= 0 ? e.text.slice(i + 2) : e.text).replace(/\.$/, '');
+  };
+  const head = events[0];
+  const stem = head.text.slice(0, head.text.indexOf(': ') + 2);
+  const rest = events.slice(1).map(phrase);
+  return [{
+    ...head,
+    text: `${stem}${phrase(head)}, then ${rest.join(', then ')}.`,
+    squares: [...new Set(events.flatMap((e) => e.squares))],
+  }];
 }

@@ -356,7 +356,7 @@ export interface ModelGameCriticalMoment {
   color: 'white' | 'black';
   // NO `fen`: stripped from the data 2026-07-22 ("replay is the truth"). The
   // type said it was required while no moment had one, so a reader compiled
-  // and found nothing (the model-game cameo, dead two months). Replay the pgn.
+  // and found nothing. Replay the pgn.
   annotation: string;
   concept: string;
   arrows?: AnnotationArrow[];
@@ -1163,6 +1163,9 @@ export interface UserProfile {
    *  (imports) or an explicit picker choice has seeded BOTH currentRating
    *  and puzzleRating. See strengthCalibrationService. */
   strengthCalibrated?: boolean;
+  /** The band picked on the first-run strength screen (or `skipped`). Absent
+   *  on profiles that never saw it. Read through `isBeginnerMode`. */
+  skillBand?: import('../services/ratingBands').SelfReportedBand;
   /** Consent for sending gameplay data (board positions, chat questions,
    *  and — when the mic is used — the spoken transcript) to the third-party
    *  AI + voice providers (DeepSeek, Anthropic, AWS Polly) that power the

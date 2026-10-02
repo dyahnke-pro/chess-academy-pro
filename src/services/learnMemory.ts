@@ -50,13 +50,6 @@
 export const NEVER_FIRED = -999;
 
 export interface LearnMemory {
-  /** Curated masterclass beats already spoken this game (by beat key). */
-  readonly curatedBeatSeen: Set<string>;
-  /** MOVES a curated beat has already taught this game — the dedupe term that
-   *  the ID set and the sentence-novelty set both miss, because two lessons
-   *  teaching the same move are a different beat AND a different sentence.
-   *  See `beatSubject` in `curatedBeatSource`. */
-  readonly curatedBeatSubjects: Set<string>;
   /** Explainer lines already given this game. */
   readonly saidExplainers: Set<string>;
   /** The last gem callout spoken — suppresses the identical callout. */
@@ -67,6 +60,15 @@ export interface LearnMemory {
    *  board — then it is resolved (found / missed) with narration, arrows and a
    *  Walk button. Never shown before the move (honesty contract). */
   gemPending: import('./gemCrushLines').LivePunishment | null;
+  /** The move held back at a deciding moment (David 2026-10-02), the board it
+   *  belongs to, and whether "Show me" already said it — resolved when the
+   *  student moves from that board, exactly like `gemPending`. */
+  heldMove: (import('./deliberation').HeldVerdict & { fen: string; shown: boolean }) | null;
+  /** The board the opponent's slip left the student, after the coach said
+   *  "look for it" — and the slip itself (SAN), so a capture back on its
+   *  square reads as a recapture. Resolved when the student moves from it:
+   *  "you found it" or the answer with its point (David 2026-10-02). */
+  slipAnswer: { fen: string; theirSan: string } | null;
   /** The coach's last reply, when the STUDENT dictated it (its SAN) — so
    *  "that was a mistake from me" would be false (hand walk 2026-09-24). */
   lastReplyDictated: string | null;
@@ -88,6 +90,9 @@ export interface LearnMemory {
   lastThreatKey: string;
   readonly spokenTacticLines: Set<string>;
   readonly spokenThreatLines: Set<string>;
+  /** Threat answers said this game — rotates their question stem by
+   *  occurrence, so consecutive answers never open with the same words. */
+  readonly questionsAnswered: Set<string>;
   /** Pieces already called out this game by `pieceQualityLines`. */
   readonly pieceQualitySaid: Set<string>;
   /** EVERY phrase the coach has spoken this game, across every lane and both
@@ -113,6 +118,9 @@ export interface LearnMemory {
    *  spoke "This game is now the Caro-Kann Defense." on two consecutive plies
    *  (Learn walk 2026-09-23). One queue per name per game. */
   queuedOpeningName: string | null;
+  /** The opening-identity paragraph queued this game (its claim key) — what
+   *  the opening provokes/aims for is said ONCE per game, after the name. */
+  identityQueued: string | null;
   /**
    * The opening name the student has actually HEARD. Per game: a second game of
    * the same line must be named again, because the student is being told what
@@ -201,8 +209,6 @@ function mintGameId(): string {
  *   inside it — the callback forgets the CALLER's state, not this one's.
  */
 export function createLearnMemory(onNewGame?: () => void): LearnMemory {
-  const curatedBeatSeen = new Set<string>();
-  const curatedBeatSubjects = new Set<string>();
   const saidExplainers = new Set<string>();
   const structureSaid = new Set<string>();
   const pieceQualitySaid = new Set<string>();
@@ -212,11 +218,10 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
   const motifFirstMove = new Map<string, { move: number; instance: string }>();
   const spokenTacticLines = new Set<string>();
   const spokenThreatLines = new Set<string>();
+  const questionsAnswered = new Set<string>();
   let lastPlies = 0;
   const mem: LearnMemory = {
     gameId: mintGameId(),
-    curatedBeatSeen,
-    curatedBeatSubjects,
     saidExplainers,
     structureSaid,
     pieceQualitySaid,
@@ -226,16 +231,20 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
     motifFirstMove,
     lastTacticKey: '',
     lastThreatKey: '',
+    questionsAnswered,
     spokenTacticLines,
     spokenThreatLines,
     gemSeen: null,
     gemFen: null,
     gemPending: null,
+    heldMove: null,
+    slipAnswer: null,
     lastReplyDictated: null,
     lastComputed: '',
     spokenOpeningName: null,
     detectedOpeningName: null,
     queuedOpeningName: null,
+    identityQueued: null,
     observe(plies: number): boolean {
       const forgot = plies < lastPlies;
       if (forgot) mem.newGame();
@@ -243,8 +252,6 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
       return forgot;
     },
     newGame(): void {
-      curatedBeatSeen.clear();
-      curatedBeatSubjects.clear();
       saidExplainers.clear();
       structureSaid.clear();
       pieceQualitySaid.clear();
@@ -256,14 +263,18 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
       spokenThreatLines.clear();
       mem.lastTacticKey = '';
       mem.lastThreatKey = '';
+      questionsAnswered.clear();
       mem.gemSeen = null;
       mem.gemFen = null;
       mem.gemPending = null;
+      mem.heldMove = null;
+      mem.slipAnswer = null;
       mem.lastReplyDictated = null;
       mem.lastComputed = '';
       mem.spokenOpeningName = null;
       mem.detectedOpeningName = null;
       mem.queuedOpeningName = null;
+      mem.identityQueued = null;
       lastPlies = 0;
       // A NEW GAME IS A NEW ID. Re-minting here (rather than at a call site)
       // is what makes it impossible to record game 2's slips against game 1.

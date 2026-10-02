@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**404 lines · 8 exports · 8 importers · 7 tests · 0 audits**
+**441 lines · 9 exports · 8 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
 - **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:281) — names `curatedBeatSource`
-- **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:3672) — names `BeatRegister`, `beatRegister`, `curatedBeatAt`
-- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4244) — names `curatedBeatAt`
+- **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:3703) — names `BeatRegister`, `beatRegister`, `curatedBeatAt`
+- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4278) — names `curatedBeatAt`
 
 ## Who calls in
 
@@ -29,24 +29,27 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `beatSubject` (function) — 7 call sites
+- `src/services/liveVoiceDefects.test.ts:209`
+- `src/services/liveVoiceDefects.test.ts:210`
 - `src/services/liveVoiceDefects.test.ts:211`
-- `src/services/liveVoiceDefects.test.ts:212`
 - `src/services/liveVoiceDefects.test.ts:213`
 - `src/services/liveVoiceDefects.test.ts:215`
-- `src/services/liveVoiceDefects.test.ts:217`
-- `src/services/liveVoiceDefects.test.ts:223`
-- `src/services/liveVoiceDefects.test.ts:224`
+- `src/services/liveVoiceDefects.test.ts:221`
+- `src/services/liveVoiceDefects.test.ts:222`
 
-### `beatRegister` (function) — 10 call sites
-- `src/services/curatedBeatRegister.test.ts:17`
-- `src/services/curatedBeatRegister.test.ts:21`
-- `src/services/curatedBeatRegister.test.ts:25`
-- `src/services/curatedBeatRegister.test.ts:32`
-- `src/services/curatedBeatRegister.test.ts:37`
+### `beatRegister` (function) — 13 call sites
+- `src/services/curatedBeatRegister.test.ts:19`
+- `src/services/curatedBeatRegister.test.ts:23`
+- `src/services/curatedBeatRegister.test.ts:27`
+- `src/services/curatedBeatRegister.test.ts:34`
 - `src/services/curatedBeatRegister.test.ts:39`
-- `src/services/curatedBeatRegister.test.ts:46`
-- `src/services/curatedBeatRegister.test.ts:66`
-- `src/services/curatedBeatRegister.test.ts:107`
+- `src/services/curatedBeatRegister.test.ts:41`
+- `src/services/curatedBeatRegister.test.ts:48`
+- `src/services/curatedBeatRegister.test.ts:68`
+- `src/services/curatedBeatRegister.test.ts:109`
+- `src/services/curatedBeatRegister.test.ts:122`
+- `src/services/curatedBeatRegister.test.ts:123`
+- `src/services/curatedBeatRegister.test.ts:124`
 - `src/services/voicedCorpusRegister.measure.test.ts:58`
 
 ### `CuratedBeat` (interface) — 0 call sites
@@ -55,22 +58,28 @@
 ### `warmCuratedBeatIndex` (function) — 3 call sites
 - `src/services/curatedBeatSource.test.ts:133`
 - `src/services/curatedBeatSource.warmSlice.test.ts:19`
-- `src/services/dataLoader.ts:1011`
+- `src/services/dataLoader.ts:1042`
 
-### `warmCuratedBeatIndexSync` (function) — 3 call sites
+### `warmCuratedBeatIndexSync` (function) — 4 call sites
 - `src/services/beatVsCorpus.report.test.ts:34`
-- `src/services/curatedBeatRegister.test.ts:12`
+- `src/services/curatedBeatRegister.test.ts:14`
 - `src/services/curatedBeatSource.test.ts:21`
+- `src/services/curatedBeatSource.test.ts:175`
 
-### `curatedBeatAt` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8120`
+### `namesUnreachedOpening` (function) — 3 call sites
+- `src/services/curatedBeatSource.test.ts:187`
+- `src/services/curatedBeatSource.test.ts:188`
+- `src/services/curatedBeatSource.test.ts:190`
+
+### `curatedBeatAt` (function) — 21 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8247`
 - `src/services/beatVsCorpus.report.test.ts:73`
-- `src/services/computedVoiceAudit.report.test.ts:319`
-- `src/services/computedVoiceAudit.report.test.ts:336`
-- `src/services/curatedBeatRegister.test.ts:61`
-- `src/services/curatedBeatRegister.test.ts:62`
-- `src/services/curatedBeatRegister.test.ts:82`
-- `src/services/curatedBeatRegister.test.ts:83`
+- `src/services/computedVoiceAudit.report.test.ts:313`
+- `src/services/computedVoiceAudit.report.test.ts:330`
+- `src/services/curatedBeatRegister.test.ts:63`
+- `src/services/curatedBeatRegister.test.ts:64`
+- `src/services/curatedBeatRegister.test.ts:84`
+- `src/services/curatedBeatRegister.test.ts:85`
 - `src/services/curatedBeatSource.test.ts:29`
 - `src/services/curatedBeatSource.test.ts:38`
 - `src/services/curatedBeatSource.test.ts:52`
@@ -83,10 +92,11 @@
 - `src/services/curatedBeatSource.test.ts:157`
 - `src/services/curatedBeatSource.test.ts:164`
 - `src/services/curatedBeatSource.test.ts:170`
+- `src/services/curatedBeatSource.test.ts:181`
 
 ### `curatedBeatStats` (function) — 6 call sites
 - `src/services/beatVsCorpus.report.test.ts:35`
-- `src/services/curatedBeatRegister.test.ts:93`
+- `src/services/curatedBeatRegister.test.ts:95`
 - `src/services/curatedBeatSource.test.ts:119`
 - `src/services/curatedBeatSource.test.ts:131`
 - `src/services/curatedBeatSource.test.ts:134`

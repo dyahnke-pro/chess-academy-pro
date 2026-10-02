@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**617 lines · 9 exports · 8 importers · 5 tests · 1 audits**
+**632 lines · 9 exports · 8 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -24,9 +24,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `buildOpeningMoveDetail` (function) — 1 call site
-- `src/services/coachFeatureService.ts:2878`
+- `src/services/coachFeatureService.ts:3113`
 
-### `PlanArrow` (interface) — 0 call sites
+### `PlanArrow` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `PlanBeatId` (type) — 0 call sites
@@ -41,11 +41,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planBeatShape.test.ts:78`
 
 ### `buildOpeningDevelopmentPlan` (function) — 12 call sites
-- `src/services/coachFeatureService.ts:2712`
+- `src/services/coachFeatureService.ts:2947`
 - `src/services/planPrescriptions.test.ts:53`
 - `src/services/planPrescriptions.test.ts:61`
 - `src/services/planPrescriptions.test.ts:74`
-- `src/services/reviewFullData.ts:890`
+- `src/services/reviewFullData.ts:1047`
 - `src/services/reviewStrategicOrientation.test.ts:48`
 - `src/services/reviewStrategicOrientation.test.ts:65`
 - `src/services/reviewStrategicOrientation.test.ts:66`
@@ -55,20 +55,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewStrategicOrientation.test.ts:110`
 
 ### `buildHisGroundedPlanBeat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2710`
+- `src/services/coachFeatureService.ts:2945`
 - `src/services/groundedPlanBeat.test.ts:21`
 - `src/services/groundedPlanBeat.test.ts:31`
 - `src/services/groundedPlanBeat.test.ts:55`
 
 ### `buildMastersGroundedPlanBeat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2711`
+- `src/services/coachFeatureService.ts:2946`
 - `src/services/groundedPlanBeat.test.ts:41`
 - `src/services/groundedPlanBeat.test.ts:49`
 - `src/services/groundedPlanBeat.test.ts:56`
 
 ### `buildMiddlegameOrientation` (function) — 15 call sites
-- `src/services/coachFeatureService.ts:2733`
-- `src/services/reviewFullData.ts:896`
+- `src/services/coachFeatureService.ts:2968`
+- `src/services/reviewFullData.ts:1053`
 - `src/services/reviewStrategicOrientation.test.ts:4`
 - `src/services/reviewStrategicOrientation.test.ts:8`
 - `src/services/reviewStrategicOrientation.test.ts:16`

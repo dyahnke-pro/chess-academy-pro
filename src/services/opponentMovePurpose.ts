@@ -57,6 +57,18 @@ export function threatStoppedBy(
     if (!after.move(replySan)) return null;
   } catch { return null; }
   if (after.isGameOver()) return null;
+  // A TAKE-BACK'S POINT IS THE TAKE-BACK (Learn walk 2026-10-01, game 2 ply
+  // 45: Qxc7 Rxc7 heard "The point of their …Rxc7: it stops your Qxd8 fork").
+  // When the student's move captured and the reply takes back on that square,
+  // the reply restores the material — any threat it ends goes with the piece.
+  const replyMv = after.history({ verbose: true }).slice(-1)[0];
+  if (replyMv?.captured) {
+    const before = new Chess(studentFenBefore);
+    const studentMv = before.moves({ verbose: true }).find((m) => {
+      const c = new Chess(studentFenBefore); c.move(m.san); return c.fen() === studentFenAfter;
+    });
+    if (studentMv?.captured && studentMv.to === replyMv.to) return null;
+  }
   if (stillWorks(threat, after)) return null;
   // Named by its KIND, never by `threat.detail`: the detail names the squares
   // the threat hit on the board BEFORE the reply, and the reply often moved
@@ -69,10 +81,14 @@ export function threatStoppedBy(
       : `your ${san}, which was winning material`;
   // Rotated on the board the student's threat stood on — only the wrapper
   // varies; which threat, and that it stopped, never do.
+  // THEIR move, said as theirs (walk 2026-09-30: "The point of Kxg1: it stops
+  // the mate" — no seat, no dots, and it read as the student's move).
+  let theirs = replySan;
+  try { if (new Chess(studentFenAfter).turn() === 'b' && !theirs.startsWith('…')) theirs = `…${theirs}`; } catch { /* keep bare */ }
   const text = rotateStem([
-    `${replySan} has a point: it stops ${what}.`,
-    `${replySan} isn't idle — it stops ${what}.`,
-    `The point of ${replySan}: it stops ${what}.`,
+    `Their ${theirs} has a point: it stops ${what}.`,
+    `Their ${theirs} isn't idle — it stops ${what}.`,
+    `The point of their ${theirs}: it stops ${what}.`,
   ], stemKeyOf(studentFenAfter));
   return { threat, reply: replySan, text };
 }

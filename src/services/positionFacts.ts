@@ -13,6 +13,8 @@
 //  • `computeCriticality` is the sharpness SCORE (from the same analysis);
 //    `computeImportance` is the speak/rank verdict. One analysis, both reads.
 //  • Perturbation (expensive) runs ONLY when importance says the moment matters.
+import { readTrade, findTradeTarget } from './tradeQuality';
+import { conceptInstanceKey, forkThreatKey } from './conceptKey';
 import { layerStandings } from './teachingLayers';
 import { seatBare } from '../utils/seatPieces';
 import { detectBluff, bluffClause, type Bluff } from './bluffDetector';
@@ -20,7 +22,7 @@ import { readConversion } from './conversionMethod';
 import type { StockfishAnalysis } from '../types';
 import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRead } from './criticality';
 import { Chess } from 'chess.js';
-import { strategicWhyImperative, principleLine, isForcedReply } from './moveFundamentals';
+import { strategicWhyImperative, strategicClaims, principleLine, principleContrastLine, isForcedReply } from './moveFundamentals';
 import { isBookLine } from './openingDetectionService';
 import { refutedFromFan, candidatesFromAmateur, type FanLine, type RefutedAlternative } from './refutedAlternativeCore';
 import { threatStoppedBy } from './opponentMovePurpose';
@@ -30,12 +32,12 @@ import { stemKeyOf } from '../utils/rotateStem';
 import { type ImportanceVerdict, type ImportanceSignals } from './narrationImportance';
 import { judgeMoment, decide, type SurfacePosture } from './coachDecider';
 import { isMateEval } from './engineConstants';
-import { boardStateAfter, mateInOneOnBoard, type BoardState } from './boardState';
+import { boardStateAfter, inFluxAfter, mateInOneOnBoard, type BoardState } from './boardState';
 import type { QuietFact } from './factSelector';
 import { criticalityThresholds, type Severity } from './criticalityScan';
 import { computeMustDefend, type MustDefend } from './threatOut';
 import { computeLeansOn, type LeansOn, type EvalBoardFn } from './perturbation';
-import { buildDeliberation, deliberationFacts, type Deliberation } from './deliberation';
+import { buildDeliberation, deliberationFacts, deliberationWeighing, deliberationVerdict, type Deliberation, type HeldVerdict } from './deliberation';
 import { detectLatentFork, latentForkClause, type LatentFork } from './latentFork';
 import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDangerClause, type LatentDanger, type TradeDanger } from './latentDanger';
 import { detectKingExposure, kingExposureClause, detectCentralKingDanger, centralKingDangerClause, type KingExposure, type CentralKingDanger } from './kingSafety';
@@ -112,6 +114,7 @@ import { readCriticalMoment, criticalMomentStatement, type CriticalMomentRead } 
 import { costStakes, exchangeStakes, forkPoints, lineTacticPoints, type FactStakes } from './factStakes';
 import { nextMoveAdvice, type MoveAdviceVerdict } from './nextMoveAdvice';
 import { classifyPhase } from './gamePhaseService';
+import { looseTrigger } from './looseTrigger';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -276,12 +279,18 @@ export interface PositionFactsResult {
    *  the opponent's ply. Surfaces gate their own move-choice lines on it (the
    *  but-turn / hedge / compare), so there is one decision, not one per lane. */
   moveAdvice: MoveAdviceVerdict | null;
+  /** The move held back at a deciding moment, with its reason — the surface
+   *  reveals it after the student has answered on the board (or on "show me").
+   *  Null whenever the move was named, not earned, or has no computed reason. */
+  heldVerdict: HeldVerdict | null;
 }
 
 export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'latent-chance' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'fundamental' | 'structure-plan' | 'convert' | 'concept' | 'method' | 'bluff'
   // WO-TEACH-02: the same four teaching kinds review carries as facets — one
   // name on both sides, so FACT_ROLE / FACT_LAYER / TIE_ORDER answer once.
-  | 'refuted' | 'rule' | 'stopped' | 'stock';
+  | 'refuted' | 'rule' | 'stopped' | 'stock'
+  // How good a trade is (`tradeQuality`) — the same name review's facet uses.
+  | 'trade';
 
 /** STATUS bands from the student's POV (cp). The general's opening read. */
 type StatusBand = 'lost' | 'worse' | 'level' | 'better' | 'winning';
@@ -341,6 +350,11 @@ export interface ClauseItem {
    *  The door orders by it. Omitted where the clause carries no material
    *  (a plan, the status band, a habit): those rank below every staked fact. */
   stakes?: FactStakes;
+  /** THE CLAIM this clause makes, when it makes one another lane can make too
+   *  (a tactic concept: `conceptInstanceKey`). The voice package drops a fact
+   *  whose claim was already spoken this game — checked at SPEAK time, so a
+   *  lane that ran before the claim was recorded cannot repeat it. */
+  claim?: string;
   /** The lines the clause SAYS, each from the board it starts on — a concept
    *  on a future board is said with the line that reaches it ("If you play
    *  Qd2, …", "After Qd2, Nf6, …"); "g6 has a point: it stops the mate with
@@ -701,8 +715,11 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // ONE identity rule for "the same plan" — `planMemory.stepPlan`, the fold
   // review's selector already runs — so the two surfaces cannot disagree.
   const planEvent = stepPlan(lastPlan ? { plan: null, id: lastPlan.id, announcedAt: null } : EMPTY_PLAN_STATE, plyNumberForPlan(fen), planFact).event;
-  const planKey = planFact && (planEvent === 'announce' || planEvent === 'changed') ? `plan:${planFact.id}#${(lastPlan?.n ?? 0) + 1}` : null;
-  const structureText = planFact && planEvent === 'announce' ? planFact.text
+  // The same idea already spoken by the positional read speaks nowhere else.
+  const planIdeaHeard = !!planFact?.ideaKey && !!input.alreadySaid?.has(planFact.ideaKey);
+  const planKey = planFact && !planIdeaHeard && (planEvent === 'announce' || planEvent === 'changed') ? `plan:${planFact.id}#${(lastPlan?.n ?? 0) + 1}` : null;
+  const structureText = planIdeaHeard ? ''
+    : planFact && planEvent === 'announce' ? planFact.text
     : planFact && planEvent === 'changed' ? planChangedText(planFact.text)
       : '';
 
@@ -715,6 +732,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // already earns voice or the caller flagged a teaching beat — so it rides the
   // notable moments, never every quiet ply.
   let fundamentalText = '';
+  let fundamentalClaim: string | null = null;
   const bestUci = analysis.topLines?.[0]?.moves?.[0] ?? null;
   // The engine's move here as SAN, resolved ONCE. The fundamental clause needs
   // it, and so does the method beat — whose whole gate is "is the move that is
@@ -734,7 +752,12 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   }
   if (studentToMove && !openingPhase && (importance.speak || input.teachingBeat) && bestSanHere) {
     const idea = strategicWhyImperative(fen, bestSanHere, moverColor === 'w' ? 'white' : 'black');
-    if (idea) fundamentalText = `The plan here: ${idea}.`;
+    // A plan names where it happens — "the plan here: develop into the game"
+    // (hand walk 2026-09-27, a queenless ending) points at nothing on the board.
+    if (idea && /\b[a-h][1-8]\b|-file\b|castle/.test(idea)) {
+      fundamentalText = `The plan here: ${idea}.`;
+      fundamentalClaim = strategicClaims(fen, bestSanHere, moverColor === 'w' ? 'white' : 'black')[0] ?? null;
+    }
   }
 
   // THE COMPUTED CONCEPT — the teachable idea of this position, from the SAME
@@ -746,7 +769,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // `fundamental`, it IS the teaching idea). Positional leads are excluded here:
   // `fundamental` / `structure-plan` already carry them — no walk-over. Never
   // fails the briefing.
-  let concept: { id: string; source: string; full: string; instance?: string; squares: readonly string[]; boardFen?: string; line?: string[] } | null = null;
+  let concept: { id: string; source: string; full: string; short?: string; instance?: string; squares: readonly string[]; boardFen?: string; line?: string[] } | null = null;
   try {
     const lead = conceptForBoard(fen, { analysis, studentSide: studentColor === 'w' ? 'white' : 'black', rating, max: 1 })[0];
     // The board the concept is ABOUT travels with it — a concept found on the
@@ -754,7 +777,14 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     // board; seated on this one it came out half-owned (the rook not there yet).
     // A rule with no pieces named is not spoken live (16.Rxf3 "A trapped piece
     // has no safe square…" about nothing on the board).
-    if (lead && lead.source !== 'positional' && !lead.bare) concept = { id: lead.id, source: lead.source, full: lead.full, squares: lead.squares, boardFen: lead.boardFen, line: lead.line };
+    // A STANDING concept (an endgame technique, a matchup) is a claim about the
+    // board as it stands, so it is false on a board in flux (hand walk
+    // 2026-09-27: "pieces against bare pawns" after Rxf3, with exf3 pending —
+    // the next move was a pure pawn ending). A tactic concept is about the
+    // move and may still speak.
+    const fluxBy = studentToMove ? input.opponentLastMove : input.lastMove;
+    const inFlux = !!fluxBy && !!inFluxAfter(fluxBy.fenBefore, fluxBy.san);
+    if (lead && lead.source !== 'positional' && !lead.bare && !(inFlux && lead.source !== 'tactic')) concept = { id: lead.id, source: lead.source, full: lead.full, short: lead.short, squares: lead.squares, boardFen: lead.boardFen, line: lead.line };
   } catch { concept = null; }
 
   // THE METHOD BEAT — the same computer the review path uses, in its live
@@ -770,9 +800,14 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     const mb = liveMethodBeat({
       bestSan: bestSanHere,
       threatStanding: mustDefend.net > 0,
+      // Only where the must-defend clause stays quiet (below a piece's worth):
+      // above it, that clause names the threat and the habit teaches only the
+      // routine.
+      threatTarget: mustDefend.net < 3 && mustDefend.pieces[0] ? `your ${PNAME[mustDefend.pieces[0].piece.toLowerCase()]} on ${mustDefend.pieces[0].square}` : null,
       isStudentMove: studentToMove,
       realChoice: !!deliberation?.isRealChoice,
       tier: importance.tier,
+      looseTarget: studentToMove ? looseTrigger(fen, bestSanHere) : null,
     }, halfmove, input.alreadySaid);
     methodBeat = mb?.text ?? null;
     methodKey = mb?.key ?? null;
@@ -788,12 +823,16 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // S2 — otherwise the why of a clean move: in the opening the principle it
   // kept (full once, a stem after); past it, its lead fundamental as a stem.
   // `principleLine` decides which, from the board.
+  const lmBook = !!lm && lm.historySans != null && isBookLine(lm.historySans);
   const ruleHere = !refutedHere && studentToMove && lm && input.taughtPrinciples
     // GRADED clean only — an ungraded move is not a clean one. The 2026-09-24
     // Learn tape praised "O-O-O does what the opening asks" one line after
     // another lane called O-O-O a mistake: the grade had not reached here yet.
-    && ((lm.historySans !== null && isBookLine(lm.historySans)) || ((gradedLoss(lm, studentColor) ?? Infinity) < 50))
-    ? principleLine(lm.fenBefore, lm.san, studentSeat, input.taughtPrinciples, stemKeyOf(lm.fenBefore))
+    && (lmBook || ((gradedLoss(lm, studentColor) ?? Infinity) < 50))
+    ? (principleLine(lm.fenBefore, lm.san, studentSeat, input.taughtPrinciples, stemKeyOf(lm.fenBefore))
+      // A clean move that kept no opening rule: the rule the engine's move kept
+      // (never on a book move — theory is not corrected).
+      ?? (lmBook || !lm.reads ? null : principleContrastLine(lm.fenBefore, lm.san, uciToSanAt(lm.fenBefore, lm.reads.bestMoveUci), studentSeat, input.taughtPrinciples, stemKeyOf(lm.fenBefore))))
     : null;
   // S3 — the opponent's reply took the student's threat off the board.
   const stoppedReply = studentToMove && lm && input.opponentLastMove
@@ -830,8 +869,32 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     ? phaseVerdictKeys(fen, studentColor, evalCpWhitePov * sSign, input.alreadySaid ?? new Set())
     : [];
 
+  // TRADES, JUDGED (David 2026-09-27: "how well the trade benefits the
+  // user"). The move just played on either side, and — with the student to
+  // move — their worst piece against the opponent's best when one can reach
+  // the other. The verdict never contradicts the engine: the student's own
+  // move carries its graded cost; the opponent's is judged on the board alone.
+  const tradeClauses: ClauseItem[] = [];
+  let tradeTargetKey: string | null = null;
+  try {
+    if (lm) {
+      const t = readTrade(lm.fenBefore, lm.san, studentColor, gradedLoss(lm, studentColor));
+      if (t) tradeClauses.push({ kind: 'trade', rank: 36, text: t.text, squares: t.squares });
+    }
+    if (input.opponentLastMove) {
+      const t = readTrade(input.opponentLastMove.fenBefore, input.opponentLastMove.san, studentColor, null);
+      if (t) tradeClauses.push({ kind: 'trade', rank: 36, text: t.text, squares: t.squares });
+    }
+    if (studentToMove) {
+      const tt = findTradeTarget(fen, studentColor);
+      if (tt && !(input.alreadySaid?.has(tt.key))) {
+        tradeTargetKey = tt.key;
+        tradeClauses.push({ kind: 'trade', rank: 34, text: tt.text, squares: tt.squares });
+      }
+    }
+  } catch { /* the trade read is a bonus, never a blocker */ }
   const composedAll = applyWeaknessBoost(
-    buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt) } : null, rule: ruleHere && lm ? { text: ruleHere.text, squares: ruleHere.squares } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: input.alreadySaid }),
+    [...buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt) } : null, rule: ruleHere && lm ? { id: ruleHere.id, text: ruleHere.text, squares: ruleHere.squares } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, fundamentalClaim, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: input.alreadySaid }), ...tradeClauses],
     input.studentWeaknesses ?? [],
   );
 
@@ -875,9 +938,21 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       motifHole: needFor.hole,
     })
     : null;
+  // QUESTION FIRST AT A DECIDING MOMENT (David 2026-10-02: "The safe version
+  // holds the move only at deciding moments, and the student's next move on
+  // the board is the answer, so nothing blocks play"). The bad moves are still
+  // ruled out loud; the move that holds is HELD and handed back to the surface,
+  // which reveals it once the student has played. Only the board's own fork in
+  // the road holds — a move earned by the student's record is named as before.
+  const heldVerdict: HeldVerdict | null = moveAdvice?.speak && moveAdvice.reason === 'deciding' && deliberation
+    ? deliberationVerdict(deliberation)
+    : null;
+  const heldWeighing = heldVerdict && deliberation ? deliberationWeighing(deliberation) : '';
   const adviceDropped = moveAdvice && !moveAdvice.speak
     ? composedAll.filter((c) => c.kind !== 'deliberation')
-    : composedAll;
+    : heldVerdict
+      ? composedAll.flatMap((c) => (c.kind !== 'deliberation' ? [c] : heldWeighing ? [{ ...c, text: heldWeighing }] : []))
+      : composedAll;
   // ONE FACT ONCE: the verdict ("The move is Nf3 — it takes aim at the
   // center…") and the fundamental ("The plan here: take aim at the center…")
   // are the same computer on the same move. Where the verdict speaks, the plan
@@ -981,22 +1056,25 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     remember: [
       ...clauses.filter((c) => SAY_ONCE_KINDS.has(c.kind)).map((c) => c.text),
       ...(methodKey && clauses.some((c) => c.kind === 'method') ? [methodKey] : []),
-      ...(planKey && clauses.some((c) => c.kind === 'structure-plan') ? [planKey] : []),
+      ...(tradeTargetKey && clauses.some((c) => c.kind === 'trade' && c.rank === 34) ? [tradeTargetKey] : []),
+      ...(planKey && clauses.some((c) => c.kind === 'structure-plan') ? [planKey, ...(planFact?.ideaKey ? [planFact.ideaKey] : [])] : []),
       ...convertRemember(clauses, input.fen, studentSeat),
       // The balance sheet's reasons, under the keys the positional read uses.
       ...(clauses.some((c) => c.kind === 'stock') ? stockKeys : []),
       ...(concept?.source === 'tactic' && clauses.some((c) => c.kind === 'concept') ? [definitionKey(concept.id), conceptInstanceKey(concept.id, concept.squares)] : []),
+      // A technique's definition is said once a game too (walk 2026-09-30: the
+      // opposition defined on two consecutive moves).
+      ...(concept?.source === 'technique' && clauses.some((c) => c.kind === 'concept') ? [definitionKey(concept.id)] : []),
     ],
     // Only a principle the door actually SPOKE is committed as taught.
     principleSpoken: ruleHere && clauses.some((c) => c.kind === 'rule') ? ruleHere.id : null,
     moveAdvice,
+    heldVerdict,
   };
 }
 
 /** The say-once key for one tactic INSTANCE — its type on its squares. */
-export function conceptInstanceKey(id: string, squares: readonly string[]): string {
-  return `concept:${id}:${[...squares].sort().join('')}`;
-}
+export { conceptInstanceKey };
 
 /** The say-once key for "this piece must be answered", shared by every lane
  *  that warns about a piece under fire (instant alert + composer). Keyed to
@@ -1149,7 +1227,7 @@ function buildClauses(a: {
   /** The alternative, plus its squares on the board it was an alternative ON
    *  (the student's pre-move board — coupled there, never from prose). */
   refuted: { fact: RefutedAlternative; squares: readonly string[] } | null;
-  rule: { text: string; squares: readonly string[] } | null;
+  rule: { id: string; text: string; squares: readonly string[] } | null;
   stopped: ReadonlyArray<{ text: string; squares: readonly string[]; lines?: ReadonlyArray<{ fen: string; sans: readonly string[] }> }>;
   stock: string | null;
   leansOn: LeansOn | null;
@@ -1168,6 +1246,8 @@ function buildClauses(a: {
   statusText: string;
   structureText: string;
   fundamentalText: string;
+  /** The claim key the fundamental makes (`strategicClaims`), or null. */
+  fundamentalClaim?: string | null;
   /** Student-POV eval (cp) at this position. Gates the prophylaxis clause. */
   studentEvalCp: number;
   kingExposure: KingExposure | null;
@@ -1175,7 +1255,7 @@ function buildClauses(a: {
   /** The lead COMPUTED CONCEPT of the position (conceptEngine, from the same
    *  analysis) — the teachable idea, joined to the briefing as a ranked fact.
    *  Null when nothing teachable / positional-only (no walk-over). */
-  concept: { id: string; source: string; full: string; instance?: string; squares: readonly string[]; boardFen?: string; line?: string[] } | null;
+  concept: { id: string; source: string; full: string; short?: string; instance?: string; squares: readonly string[]; boardFen?: string; line?: string[] } | null;
   /** The habit to run in this position, present tense. Null when none earned. */
   methodBeat: string | null;
 }): ClauseItem[] {
@@ -1224,7 +1304,7 @@ function buildClauses(a: {
     // — that diagonal is a pin". One fact once.
     ranked.push({
       kind: 'latent-danger', rank: 80, text: latentDangerClause(latentDanger),
-      squares: [latentDanger.enemySquare, latentDanger.frontSquare, latentDanger.backSquare],
+      squares: [latentDanger.enemySquare, latentDanger.frontSquare, latentDanger.backSquare, ...(latentDanger.shieldSquare ? [latentDanger.shieldSquare] : [])],
       // A LATENT line needs their piece to arrive first.
       stakes: { points: lineTacticPoints(latentDanger.frontPiece, latentDanger.backPiece), plies: 3 },
     });
@@ -1236,7 +1316,7 @@ function buildClauses(a: {
   // material, which is plainly wrong. Foresight is valuable and it is not
   // urgent. (Whether the existing 80/82 is itself too high is a real question
   // and a separate one — not to be changed as a side effect of this build.)
-  if (latentFork) {
+  if (latentFork && !a.alreadySaid?.has(forkThreatKey(latentFork.square, latentFork.targets.map((t) => t.square)))) {
     ranked.push({
       // 🔒 THE SEAT DECIDES THE KIND. `latentForkClause` has always rendered the
       // two seats differently; the KIND did not, and three consumers read it:
@@ -1249,6 +1329,7 @@ function buildClauses(a: {
       // The destination and both targets ARE the claim — so a tactic clause
       // about the same geometry subsumes this one rather than stacking on it.
       squares: [latentFork.square, ...latentFork.targets.map((t) => t.square)],
+      claim: forkThreatKey(latentFork.square, latentFork.targets.map((t) => t.square)),
       // The fork wins the lesser target, `moves` moves away.
       stakes: { points: forkPoints(latentFork.targets.map((t) => t.piece)), plies: 2 * latentFork.moves },
     });
@@ -1311,7 +1392,10 @@ function buildClauses(a: {
   if (a.refuted) {
     ranked.push({ kind: 'refuted', rank: 82, text: a.refuted.fact.text, stakes: costStakes(a.refuted.fact.costCp) ?? undefined, squares: [...a.refuted.squares] });
   }
-  if (a.rule) ranked.push({ kind: 'rule', rank: 29, text: a.rule.text, squares: [...a.rule.squares] });
+  // A rook or queen principle about a FILE claims that file — the key the
+  // positional read's "owns the open d-file" writes too, so one file is one
+  // saying across lanes (hand walk 2026-09-27, Rad8: said twice in one turn).
+  if (a.rule) ranked.push({ kind: 'rule', rank: 29, text: a.rule.text, squares: [...a.rule.squares], claim: /open-file|semi-open/.test(a.rule.id) && a.rule.squares[0] ? `file-${a.rule.squares[0][0]}` : undefined });
   for (const st of a.stopped) ranked.push({ kind: 'stopped', rank: 27, text: st.text, squares: [...st.squares], lines: st.lines });
   if (a.stock) ranked.push({ kind: 'stock', rank: 35, text: a.stock });
   // §9 delayed-castling — speaks IN the opening too (the "castle now" moment),
@@ -1334,7 +1418,12 @@ function buildClauses(a: {
   // up — trade pieces" and "a piece up — trade pieces" were two facts, and the
   // same step spoke on three moves running. The step is the idea.
   if (conversion && a.alreadySaid?.has(convertKey(conversion.step))) { /* heard this step already */ }
-  else if (conversion) ranked.push({ kind: 'convert', rank: 36, text: conversion.text });
+  // The escort step speaks about ONE passer — the claim the behaviour lane's
+  // "long-term trump" writes too, so the pawn is praised once a turn.
+  // The step's own key is the claim (walk 2026-10-01: "a piece up — trade
+  // pieces" and, two plies on, the character switch "up material — trade
+  // down" — one idea, and the switch could not see it had been said).
+  else if (conversion) ranked.push({ kind: 'convert', rank: 36, text: conversion.text, claim: conversion.step === 'escort-passer' && conversion.passer ? `passer-${conversion.passer}` : convertKey(conversion.step) });
   else if (importance.tier === 'convert') ranked.push({ kind: 'convert', rank: 20, text: `This is technique now — convert it cleanly, no heroics.` });
   if (openingPhase) return ranked;
 
@@ -1361,13 +1450,14 @@ function buildClauses(a: {
       // 2026-09-24: "Bishop on h5 pins knight on e2 against queen on d1").
       // The definition is taught once a game (`definitionKey`); after that the
       // board fact speaks alone.
-      kind: 'concept', rank, text: concept.source === 'tactic' ? afterLine(concept.line, concept.boardFen, a.fen, studentSeat === 'white' ? 'w' : 'b', seatBare(concept.instance && a.alreadySaid?.has(definitionKey(concept.id)) ? `${concept.instance}.` : concept.full, concept.boardFen ?? a.fen, studentSeat === 'white' ? 'w' : 'b')) : concept.full,
+      kind: 'concept', rank, text: concept.source === 'tactic' ? afterLine(concept.line, concept.boardFen, a.fen, studentSeat === 'white' ? 'w' : 'b', seatBare(concept.instance && a.alreadySaid?.has(definitionKey(concept.id)) ? `${concept.instance}.` : concept.full, concept.boardFen ?? a.fen, studentSeat === 'white' ? 'w' : 'b')) : (concept.source === 'technique' && a.alreadySaid?.has(definitionKey(concept.id)) && concept.short ? concept.short : concept.full),
       conceptId: concept.source === 'tactic' ? concept.id : undefined,
       // `ComputedConcept.squares` is the engine's own lead-the-eye set (agent
       // first, then targets) — exactly the geometry the sentence names.
       squares: concept.squares,
       // What the idea wins on its own targets (agent first, then targets).
       stakes: concept.source === 'tactic' ? (exchangeStakes(a.fen, concept.squares.slice(1)) ?? undefined) : undefined,
+      claim: concept.source === 'tactic' ? conceptInstanceKey(concept.id, concept.squares) : undefined,
       // The line `afterLine` names is the one drawn — only when it named one.
       lines: concept.source === 'tactic' && concept.line && concept.line.length > 0 && concept.boardFen && !samePlacementFen(concept.boardFen, a.fen) ? [{ fen: a.fen, sans: concept.line }] : undefined,
     });
@@ -1423,13 +1513,13 @@ function buildClauses(a: {
     // fall back to the generic sharpness line when there's no concrete move.
     if (opponentIntent) {
       ranked.push({
-        kind: 'opponent-intent', rank: 55, text: opponentIntentFacts(opponentIntent, { revealReply: false }),
+        kind: 'opponent-intent', rank: 55, text: opponentIntentFacts(opponentIntent),
         // The idea the sentence actually names is plan[0] — couple ITS squares,
         // not every plan's, or the set stops describing the claim.
         squares: opponentIntent.plans[0]?.squares,
       });
     } else if (importance.tier === 'only-move') {
-      ranked.push({ kind: 'opponent-intent', rank: 55, text: `The opponent is on a knife-edge here — only one move keeps them in it.` });
+      ranked.push({ kind: 'opponent-intent', rank: 55, text: `They're on a knife-edge here — only one move keeps them in it.` });
     } else if (importance.tier === 'critical') {
       ranked.push({ kind: 'opponent-intent', rank: 50, text: `This is where the opponent has to find something — the position is sharp for them.` });
     }
@@ -1447,7 +1537,11 @@ function buildClauses(a: {
   });
   // The FUNDAMENTAL the student's best move serves — the teaching idea, ranked
   // just above the structural plan (it is the concrete plan for THIS move).
-  if (fundamentalText) ranked.push({ kind: 'fundamental', rank: 38, text: fundamentalText });
+  // "The plan here: castle…" is the claim the positional read's "castling is
+  // ready" makes — one key, so the ledger says it once.
+  // Likewise "take the half-open b-file" claims that file. Computed from the
+  // fundamental, never read back out of the sentence.
+  if (fundamentalText) ranked.push({ kind: 'fundamental', rank: 38, text: fundamentalText, claim: a.fundamentalClaim ?? undefined });
   // The campaign's structural plan — the textbook idea the pawn structure sets.
   if (structureText) ranked.push({ kind: 'structure-plan', rank: 35, text: structureText });
   // Convert-mode — decided game, one beat.

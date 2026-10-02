@@ -72,6 +72,33 @@ export function voicedTreeContainsLine(tree: WalkthroughTree, moves: readonly st
   return true;
 }
 
+/**
+ * THE LINE THE STUDENT ASKED FOR LEADS AT EVERY FORK.
+ *
+ * A voiced tree's child order is the order its videos were merged in, so the
+ * first child can be a sideline: "teach me the King's Indian Defense" walked
+ * 3.d5 — "unusual, played in bullet" — because that game was merged first,
+ * and the main line (c4, Nc3) sat behind a fork tile (teach walk 2026-09-27).
+ * Along the resolved entry's moves, the matching child moves to the front;
+ * past the end of the entry line, the child with the most narrated beats leads.
+ * The tree is copied, never mutated — the shared JSON stays as built.
+ */
+function leadWithLine(root: WalkthroughTreeNode, line: readonly string[]): WalkthroughTreeNode {
+  const narrated = (n: WalkthroughTreeNode): number =>
+    (n.idea && n.idea.trim() ? 1 : 0) + n.children.reduce((sum, c) => sum + narrated(c.node), 0);
+  const walk = (node: WalkthroughTreeNode, depth: number): WalkthroughTreeNode => {
+    const want = line[depth];
+    const kids = node.children.map((c) => ({ ...c, node: walk(c.node, depth + 1) }));
+    const byLine = want ? kids.findIndex((c) => c.node.san === want) : -1;
+    const lead = byLine >= 0
+      ? byLine
+      : kids.reduce((best, c, i) => (narrated(c.node) > narrated(kids[best].node) ? i : best), 0);
+    if (kids.length > 1 && lead > 0) kids.unshift(...kids.splice(lead, 1));
+    return { ...node, children: kids };
+  };
+  return walk(root, 0);
+}
+
 function pickRichest(pool: VoicedEntry[], reqTokens: string[]): VoicedEntry | null {
   let best: VoicedEntry | null = null;
   let bestScore = -1;
@@ -110,8 +137,16 @@ function pickRichest(pool: VoicedEntry[], reqTokens: string[]): VoicedEntry | nu
  *     "Scandinavian Defense (2.e5 Advance)") falls back to name tokens, but
  *     EVERY content token must hit — a partial overlap never serves a family.
  */
-export function resolveVoicedWalkthrough(query: string): WalkthroughTree | null {
+export function resolveVoicedWalkthrough(
+  query: string,
+  // The seat the student takes. REQUIRED: a voiced tree is written from one
+  // seat ("you claim space with c4" is White's lesson), so the seat is part of
+  // what selects it — a Black King's Indian lesson must never be served the
+  // White-seat tree (teach walk 2026-09-27).
+  side: 'white' | 'black',
+): WalkthroughTree | null {
   if (!query || !query.trim()) return null;
+  const seated = ENTRIES.filter((e) => e.studentSide === side);
   // A "X vs Y" matchup is NOT a single-opening lesson — leave it to the
   // matchup planner (planOpeningMatchup), which constructs the two openings
   // colliding on one board. Declining here keeps a fall-through from ever
@@ -127,15 +162,15 @@ export function resolveVoicedWalkthrough(query: string): WalkthroughTree | null 
     entryMoves = null;
   }
   if (entryMoves && entryMoves.length > 0) {
-    const containing = ENTRIES.filter((e) => voicedTreeContainsLine(e.tree, entryMoves));
+    const containing = seated.filter((e) => voicedTreeContainsLine(e.tree, entryMoves));
     const best = pickRichest(containing, reqTokens);
-    if (best) return { ...best.tree, studentSide: best.studentSide };
+    if (best) return { ...best.tree, root: leadWithLine(best.tree.root, entryMoves), studentSide: best.studentSide };
     // The corpus voices nothing that teaches this line. Do NOT fall back to
     // a name match — that is exactly how the wrong family lesson got served.
     return null;
   }
 
-  const exact = ENTRIES.filter((e) => scoreMatch(reqTokens, new Set(tokens(e.openingName))) === reqTokens.length);
+  const exact = seated.filter((e) => scoreMatch(reqTokens, new Set(tokens(e.openingName))) === reqTokens.length);
   const best = pickRichest(exact, reqTokens);
   return best ? { ...best.tree, studentSide: best.studentSide } : null;
 }

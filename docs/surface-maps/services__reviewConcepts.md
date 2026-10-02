@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**486 lines · 3 exports · 3 importers · 2 tests · 0 audits**
+**507 lines · 4 exports · 6 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,8 +13,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/coachFeatureService.ts`
+- `src/services/moveFundamentals.ts`
 - `src/services/reviewConcepts.test.ts`
 - `src/services/reviewWalk900.test.ts`
+- `src/services/reviewWalkCT.test.ts`
+- `src/services/reviewWalkOct1.test.ts`
 
 ## Exports and every call site
 
@@ -24,8 +27,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `ConceptBeat` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `detectConcept` (function) — 27 call sites
-- `src/services/coachFeatureService.ts:4286`
+### `SPACE_RULE` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `detectConcept` (function) — 32 call sites
+- `src/services/coachFeatureService.ts:4574`
 - `src/services/reviewConcepts.test.ts:23`
 - `src/services/reviewConcepts.test.ts:26`
 - `src/services/reviewConcepts.test.ts:34`
@@ -51,12 +57,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewConcepts.test.ts:189`
 - `src/services/reviewConcepts.test.ts:198`
 - `src/services/reviewConcepts.test.ts:204`
+- `src/services/reviewConcepts.test.ts:210`
+- `src/services/reviewConcepts.test.ts:216`
 - `src/services/reviewWalk900.test.ts:25`
+- `src/services/reviewWalkCT.test.ts:14`
+- `src/services/reviewWalkCT.test.ts:20`
+- `src/services/reviewWalkOct1.test.ts:21`
 
 ## Tests
 
 - `src/services/reviewConcepts.test.ts`
 - `src/services/reviewWalk900.test.ts`
+- `src/services/reviewWalkCT.test.ts`
+- `src/services/reviewWalkOct1.test.ts`
 
 ## Audits that reach it
 

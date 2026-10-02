@@ -10,6 +10,11 @@
 // voice package only; the strippers each split on their own and reopened it.
 // One splitter makes the orphan impossible to express.
 //
+// A TEACHING QUESTION BELONGS TO ITS ANSWER too ("What do you do about it?
+// Take it — Bxd1 …", "Do you have to react? No — Qxd5 comes first"). Split
+// apart, the dedupe dropped the stem as said-before and left a bare answer
+// (walk 2026-09-30). A short question (≤ 40 characters) glues to the next.
+//
 // Likewise "Here's how: …" belongs to the sentence it explains.
 
 const BREAK = /(?<=[.!?])\s+/;
@@ -19,7 +24,7 @@ export function claimSentences(text: string, opts: { newlines?: boolean } = {}):
   const raw = text.split(opts.newlines ? BREAK_OR_NEWLINE : BREAK).map((s) => s.trim()).filter(Boolean);
   const out: string[] = [];
   for (let i = 0; i < raw.length; i += 1) {
-    if (/^[^\s]{1,12}\?$/.test(raw[i]) && i + 1 < raw.length) {
+    if ((/^[^\s]{1,12}\?$/.test(raw[i]) || (raw[i].length <= 40 && raw[i].endsWith('?'))) && i + 1 < raw.length) {
       out.push(`${raw[i]} ${raw[i + 1]}`);
       i += 1;
     } else if (/^Here['’]s how:/.test(raw[i]) && out.length > 0) {

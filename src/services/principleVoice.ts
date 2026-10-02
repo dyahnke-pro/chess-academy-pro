@@ -77,7 +77,7 @@ const FUNDAMENTAL_HOW: Record<FundamentalId, string> = {
     'Rooks go BEHIND passed pawns and onto the seventh. Before defending passively, look for the active square — an active rook is often worth a pawn in a rook ending.',
   // ── threats and tactics ──
   'loose-piece':
-    'End every move with a sweep: what of mine is undefended right now? Loose pieces are what makes their tactic work, so defend it or move it before it becomes their idea.',
+    'End every move with a sweep: what of mine is undefended right now? Loose pieces are what make their tactics work — defend a loose piece or move it before it becomes their idea.',
   'ignored-threat':
     'Their move first, always. Before you look for your own idea, answer what their last move threatens — if it threatens something, that is the move you have to meet.',
   'passive-when-forcing-existed':
@@ -104,8 +104,10 @@ const FUNDAMENTAL_HOW: Record<FundamentalId, string> = {
   // ── trades ──
   'traded-active-for-passive':
     'Before a trade, compare the two pieces honestly: which one is doing more work right now? Trade your worst piece for their best, never the other way round.',
+  // Fits BOTH directions of this fundamental (walk 2026-09-30, game 1: "Rxe1+
+  // was the trade to make" followed by a how-to about bad trades).
   'wrong-trade-for-material':
-    'Material is not the only ledger. Ask what the position looks like after the trade — a piece count that improves while your structure or king safety gets worse is a bad deal.',
+    'Count the material before every exchange. Ahead, look for the move that takes pieces off; behind, the move that keeps them on.',
   // ── endgame ──
   'passive-king-endgame':
     'When the queens come off, the king becomes a fighting piece — march it toward the centre. In endgames the side whose king arrives first usually wins.',
@@ -156,10 +158,44 @@ export function fundamentalHow(id: FundamentalId, facts: Record<string, string |
   return FUNDAMENTAL_HOW[id] ?? null;
 }
 
+/** The verdict with the better move LEFT OUT — used when the line beside it
+ *  already names that move ("Rf6 was a little loose. Rfe8 was the move — …"),
+ *  so the move is heard once (Learn walk 2026-10-01: "Rfe8 was the plan move.
+ *  … Rfe8 was the move"). Only ids whose stems name `better` appear; the rule
+ *  itself still speaks. */
+type Facts = PrincipleAttribution['facts'];
+const VERDICT_WITHOUT_BETTER: Partial<Record<FundamentalId, (f: Facts) => string>> = {
+  'neglected-development': (f) => `Development first: ${f.homeMinors} of your pieces are still at home, and this move brought none of them out.`,
+  'king-left-in-centre': (f) => `Stepping the king to ${f.walked} throws castling away for good.`,
+  'early-edge-pawns': () => `An edge pawn this early does nothing for the centre.`,
+  'passive-when-forcing-existed': () => `Checks, captures, threats — there was a forcing move here, and this quiet move lets it go.`,
+  'wrong-trade-for-material': (f) => (f.situation === 'ahead'
+    ? `You're ahead in material — trade pieces and the win gets simpler.`
+    : `You're behind in material — trading pieces takes your chances with them.`),
+  'worst-piece-unimproved': (f) => `Improve your worst piece: the ${f.piece} on ${f.square} is doing the least.`,
+  'rook-ignored-open-file': (f) => `Rooks belong on open files: the ${f.file}-file was open, and leaving it lets them get there first.`,
+  'passive-king-endgame': (f) => `In the endgame the king is a piece: yours on ${f.king} should be walking in.`,
+  'rook-in-front-of-passer': (f) => `Rooks belong behind passed pawns: on ${f.rook} yours sits in front of the pawn on ${f.pawn}.`,
+  'passed-pawn-neglected': (f) => `Passed pawns must be pushed: your pawn on ${f.pawn} is passed, and every move it waits, they build a blockade in front of it.`,
+  'lost-the-opposition': () => `King-and-pawn endings turn on the opposition, and this move hands it to them.`,
+  'passive-rook-endgame': (f) => `An active rook is worth a pawn: the seventh was there on ${f.square}, and the played move leaves the rook passive.`,
+  'kept-bad-bishop': (f) => `Your worst piece is the bishop on ${f.bishop}, boxed in by pawns on its colour.`,
+  'capture-toward-centre': (f) => `Taking toward the centre is the usual rule, but here the other capture was better — it opens the ${f.file}-file for your rook.`,
+  'no-plan': (f) => `A move without a purpose: the board wanted you to ${f.plan}, and ${f.played} works on something else entirely.`,
+  'ignored-threat': (f) => `Their threat first: ${f.threat} was already on — ${f.line}, and the ${f.piece} on ${f.square} goes — and this move doesn't stop it.`,
+};
+
+/** Whether this fundamental's verdict can be spoken without its better move. */
+export function verdictCanDropBetter(id: FundamentalId): boolean {
+  return id === 'botched-conversion' || !!VERDICT_WITHOUT_BETTER[id];
+}
+
 /** The full verdict for one attribution. `v` picks the stem variant. */
 function fullVerdict(a: PrincipleAttribution, v: number): string {
   const f = a.facts;
   const e = a.evidence;
+  const elided = f.better === '' ? VERDICT_WITHOUT_BETTER[a.id] : undefined;
+  if (elided && (a.id !== 'king-left-in-centre' || f.walked)) return elided(f);
   const kick = e.moves.length ? listMoves(e.moves) : null;
   switch (a.id) {
     case 'same-piece-twice': {
@@ -229,7 +265,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     }
     case 'greedy-pawn-grab': {
       const s = [
-        `The pawn on ${f.pawn} was poisoned: taking it costs time, and ${f.punish} collects it straight away.`,
+        `The pawn on ${f.pawn} was poisoned: taking it costs time, and ${f.punish} hits back straight away.`,
         `A pawn grab with the pieces still at home — ${f.punish} answers, and the pawn isn't worth the tempo.`,
         `Greedy: the ${f.pawn} pawn buys you nothing but ${f.punish}, and you're behind in development for it.`,
       ];
@@ -284,6 +320,16 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       return s[v % s.length];
     }
     case 'ignored-threat': {
+      // THE THREAT AS A LINE (A3): nothing simply hung — their line won
+      // material before your move and still does, so name the line, never "the
+      // rook was already attacked".
+      if (f.line) {
+        const t = [
+          `Their threat first: ${f.threat} was already on — ${f.line}, and the ${f.piece} on ${f.square} goes — and this move doesn't stop it${f.better ? `; ${f.better} does` : ''}.`,
+          `Before your own plan, answer theirs: ${f.line} was waiting, it wins the ${f.piece} on ${f.square}, and this move leaves it on${f.better ? ` — ${f.better} takes it away` : ''}.`,
+        ];
+        return t[v % t.length];
+      }
       const s = [
         `Their threat first: the ${f.piece} on ${f.square} was already attacked, and this move doesn't deal with it — ${kick ?? 'the capture'} wins it.`,
         `The ${f.piece} on ${f.square} was hanging before you moved, and it's still hanging after; ${kick ?? 'they take it'} next.`,
@@ -361,8 +407,8 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     }
     case 'passive-king-endgame': {
       const s = [
-        `In the endgame the king is a piece: yours on ${f.king} should be walking in — ${f.better} — and theirs is.`,
-        `Activate the king: ${f.better} brings him toward the action while the other king is already marching.`,
+        `In the endgame the king is a piece: yours on ${f.king} should be walking in — ${f.better} — before theirs does.`,
+        `Activate the king: ${f.better} brings him toward the action, and their king is free to step up too.`,
         `Queens off, king on — ${f.better} was the move; the king on ${f.king} can't win this from the back.`,
       ];
       return s[v % s.length];
@@ -424,6 +470,15 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       return s[v % s.length];
     }
     case 'poisoned-pawn': {
+      // Taken on its landing square: the pawn was DEFENDED, nothing was hunted.
+      if (f.fled === 0) {
+        const d = [
+          `That pawn was defended: your ${f.piece} takes on ${f.square} and is taken on the spot — it cost you far more than a pawn.`,
+          `Count the guards before you grab: the ${f.piece} that took on ${f.square} is captured straight away, and the pawn was never worth it.`,
+          `The pawn on ${f.square} was covered — your ${f.piece} goes the moment it lands, a piece for a pawn.`,
+        ];
+        return d[v % d.length];
+      }
       const s = [
         `That pawn was poisoned: your ${f.piece} takes on ${f.square} and then gets trapped — the engine wins it straight back, and it cost you far more than a pawn.`,
         `A pawn grab with the ${f.piece} that ends badly — chased down after ${f.square}, it's snared for more than it took.`,
@@ -444,9 +499,11 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       // (thrown mate / a rout) names no exact figure — "a winning position".
       const lost = Number(f.drop) >= 6 ? 'a winning position' : `about ${f.drop} point${Number(f.drop) === 1 ? '' : 's'} of your edge`;
       const s = [
-        `You had it won and rushed — this move throws away ${lost}; ${f.better} keeps it simple and holds the advantage.`,
-        `Convert with patience: you were clearly winning and this hands most of it back — ${f.better} was the calm move.`,
-        `A won position needs care, not haste — this gives up ${lost}; ${f.better} stays on track.`,
+        // An empty `better` means the line beside this verdict already names
+        // the move (Learn's grade: "h5 was the move — …") — one fact once.
+        `You had it won and rushed — this move throws away ${lost}${f.better ? `; ${f.better} keeps it simple and holds the advantage` : ''}.`,
+        `Convert with patience: you were clearly winning and this hands most of it back${f.better ? ` — ${f.better} was the calm move` : ''}.`,
+        `A won position needs care, not haste — this gives up ${lost}${f.better ? `; ${f.better} stays on track` : ''}.`,
       ];
       return s[v % s.length];
     }
@@ -482,9 +539,20 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
 function shortVerdict(a: PrincipleAttribution): string {
   const f = a.facts;
   const e = a.evidence;
+  // The line beside it names the better move — the short stem must not end on
+  // an empty slot ("Rushing the win again — was calmer.").
+  if (f.better === '' && (VERDICT_WITHOUT_BETTER[a.id] || a.id === 'botched-conversion')) {
+    if (a.id === 'botched-conversion') return `Rushing the win again.`;
+    if (a.id !== 'king-left-in-centre' || f.walked) return (VERDICT_WITHOUT_BETTER[a.id] as (x: Facts) => string)(f);
+  }
   switch (a.id) {
     case 'same-piece-twice': return `The same ${f.piece} again — its ${nth(Number(f.nth))} move.`;
-    case 'tempo-handed': return `Another tempo handed over: ${listMoves(e.moves)} hits your ${f.target}.`;
+    // Said as what HAPPENED only when they played the kick (g9 walk 2026-09-27:
+    // "g4 hits your knight on f5" after they had played Rc1) — the same
+    // `played` fact the full stem already reads.
+    case 'tempo-handed': return Number(f.played) === 1
+      ? `Another tempo handed over: ${listMoves(e.moves)} hits your ${f.target}.`
+      : `Another tempo on offer: ${listMoves(e.moves)} would hit your ${f.target}.`;
     case 'space-conceded': return `Space given up again — ${f.push} takes ${f.square}.`;
     case 'neglected-development': return `Development again — ${f.homeMinors} pieces still at home.`;
     case 'early-queen-sortie': return `The early queen again — ${f.kick} hits her.`;
@@ -496,7 +564,7 @@ function shortVerdict(a: PrincipleAttribution): string {
     case 'premature-centre-break': return `Another early break on ${f.pawn}.`;
     case 'knight-to-the-rim': return `A knight on the rim again, on ${f.square}.`;
     case 'loose-piece': return `Loose piece again — the ${f.piece} on ${f.square} hangs.`;
-    case 'ignored-threat': return `Their threat again — the ${f.piece} on ${f.square} is still hanging.`;
+    case 'ignored-threat': return f.line ? `Their threat again — ${f.threat} was still on, and the ${f.piece} on ${f.square} with it.` : `Their threat again — the ${f.piece} on ${f.square} was still hanging.`;
     case 'passive-when-forcing-existed': return `A forcing move missed again: ${f.better}.`;
     case 'weakened-king-shield': return `The king's shelter loosened again — ${f.punish}.`;
     case 'created-pawn-weakness': return `Another weak pawn, on ${f.pawn}.`;
@@ -513,10 +581,10 @@ function shortVerdict(a: PrincipleAttribution): string {
     case 'passive-rook-endgame': return `The rook still passive — ${f.better} takes the seventh.`;
     case 'kept-bad-bishop': return `The bad bishop on ${f.bishop} still buried — ${f.better}.`;
     case 'overvalued-attack': return `The attack overvalued again — ${f.move} doesn't hold up.`;
-    case 'poisoned-pawn': return `Another poisoned pawn — the ${f.piece} on ${f.square} is snared.`;
+    case 'poisoned-pawn': return f.fled === 0 ? `Another guarded pawn grabbed — the ${f.piece} on ${f.square} is taken.` : `Another poisoned pawn — the ${f.piece} on ${f.square} is snared.`;
     case 'capture-toward-centre': return `The recapture again — ${f.better} opens the ${f.file}-file.`;
     case 'botched-conversion': return `Rushing the win again — ${f.better} was calmer.`;
-    case 'calculation-depth': return `Stopped calculating early again — ${f.punish} was waiting deeper.`;
+    case 'calculation-depth': return `Stopped calculating early again — their ${f.punish} was waiting deeper.`;
     case 'left-book-early': return `Out of book early again — ${f.book} was the line.`;
     case 'no-plan': return `Another move without a plan — ${f.better} served the position.`;
   }

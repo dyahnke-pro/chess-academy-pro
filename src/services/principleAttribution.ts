@@ -25,6 +25,7 @@
  * principleVoice.ts; persisted PVs (annotation.pv) come from the review's
  * deep dive.
  */
+import { lineWithReasons } from './lineReasons';
 import { Chess, type Color, type Square, type Move, type PieceSymbol } from 'chess.js';
 import { signedLegalSeeFor, bishopHemmedByOwnPawns } from './positionReadingService';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
@@ -251,6 +252,26 @@ function pawnAttacks(sq: string, color: Color): string[] {
  *  helper (2026-09-13): a pinned attacker no longer invents a hang, a pinned
  *  defender no longer masks one, and the sign the tempo detectors rely on is
  *  preserved (unlike the floored primitives). */
+/** Was this pawn capture a TRADE rather than a grab? (David 2026-10-02: "a
+ *  pawn trade filed as a greedy grab, then offered as a lesson".) Two shapes,
+ *  both from the board: it takes back on the square the previous move captured
+ *  on, or the opponent can win the pawn straight back. The ONE answer for every
+ *  producer of the greedy-grab tag — the attributor and the classifier's
+ *  fallback must never disagree about it. */
+export function captureIsTrade(
+  fenBefore: string,
+  san: string,
+  previous: { to: string; captured: boolean } | null,
+): boolean {
+  try {
+    const c = new Chess(fenBefore);
+    const m = c.move(san);
+    if (!m?.captured) return false;
+    if (previous?.captured && previous.to === m.to) return true;
+    return hangsBy(c, m.to) >= VAL[m.captured];
+  } catch { return false; }
+}
+
 function hangsBy(chess: Chess, sq: Square): number {
   const p = chess.get(sq);
   if (!p) return 0;
@@ -391,17 +412,22 @@ function pvWinsMaterial(chess: Chess, pv: readonly string[] | undefined, mover: 
 /** Replaying `pv` from `after` (opponent to move), does the `grabber`-owned piece
  *  that stands on `startSq` get CAPTURED by the opponent — following it as it
  *  flees? Proves a grab was poisoned: you win the pawn, lose the piece. */
-function grabberCaptured(after: Chess, startSq: Square, grabber: Color, pv: readonly string[] | undefined): boolean {
-  if (!pv || pv.length === 0) return false;
+/** How many times the grabbing piece FLED before the opponent took it, or null
+ *  when the line never takes it. 0 = taken on its landing square (the pawn was
+ *  defended); ≥1 = hunted down (trapped). The voice says which — "gets trapped"
+ *  of a bishop taken on the spot was false (1200 Sicilian walk, 17.Bxd4). */
+function grabberCaptured(after: Chess, startSq: Square, grabber: Color, pv: readonly string[] | undefined): number | null {
+  if (!pv || pv.length === 0) return null;
   const c = new Chess(after.fen());
   let sq: string = startSq;
+  let fled = 0;
   for (const raw of pv.slice(0, 6)) {
     let m: Move;
-    try { m = c.move(raw.replace(/[?!]+$/, '')); } catch { return false; }
-    if (m.color === grabber) { if (m.from === sq) sq = m.to; }   // the grabber fled
-    else if (m.to === sq) return true;                          // the opponent took it
+    try { m = c.move(raw.replace(/[?!]+$/, '')); } catch { return null; }
+    if (m.color === grabber) { if (m.from === sq) { sq = m.to; fled++; } } // the grabber fled
+    else if (m.to === sq) return fled;                                      // the opponent took it
   }
-  return false;
+  return null;
 }
 /** The file `best` (a pawn capture AWAY from the centre) opens for a `mover` rook
  *  or queen: the pawn vacates its file, that file had a mover pawn before and
@@ -418,6 +444,23 @@ function openedRookLane(before: Chess, best: Move, mover: Color): string | null 
 }
 /** File-distance from the centre seam (files d/e). Lower = more central. */
 function centreBias(sq: string): number { return Math.abs(fileIdx(sq) - 3.5); }
+
+/** Material `opp` nets over `sans` played from `fen` with `opp` to move, or
+ *  null when the line is not legal there. Captures only, in points. */
+function lineNetForSide(fen: string, sans: readonly string[], opp: Color): number | null {
+  const parts = fen.split(' ');
+  if (parts[1] !== opp) { parts[1] = opp; parts[3] = '-'; }
+  let b: Chess;
+  try { b = new Chess(parts.join(' ')); } catch { return null; }
+  let net = 0;
+  for (const san of sans) {
+    let m: Move | null = null;
+    try { m = b.move(san); } catch { return null; }
+    if (!m) return null;
+    if (m.captured) net += (m.color === opp ? 1 : -1) * VAL[m.captured];
+  }
+  return net;
+}
 
 // ─── the attributor ─────────────────────────────────────────────────────────
 
@@ -508,6 +551,43 @@ function yieldTo(c: Ctx, from: FundamentalId, to: readonly FundamentalId[], reas
 
 function att(id: FundamentalId, weight: number, evidence: Omit<PrincipleEvidence, 'counterfactualClean'>, facts: Record<string, string | number> = {}): Omit<PrincipleAttribution, 'tag' | 'coOccurrence'> {
   return { id, weight, evidence: { ...evidence, counterfactualClean: true }, facts };
+}
+
+/** IGNORED THREAT, AS A LINE (unify-the-coach A3, review walk 2026-10-01,
+ *  game 3 ply 53: Kh2 with …Nxe3 fxe3 Rxf1 on the board). Nothing was simply
+ *  hanging, so the one-move check saw nothing and every other fundamental
+ *  stood down — yet the opponent's line won the exchange BEFORE the move, still
+ *  won it AFTER, and the best move took it away. Same three reads Review's
+ *  "preventive move" lane makes with the engine, done on the board here so
+ *  Learn and Review attach the same fundamental. */
+function comboThreatIgnored(c: Ctx): ReturnType<typeof att> | null {
+  const line = (c.pvP ?? []).slice(0, 6);
+  if (line.length < 2) return null;
+  const after = lineNetForSide(c.after.fen(), line, c.opp);
+  if (after === null || after < 2) return null;
+  const before = lineNetForSide(c.before.fen(), line, c.opp);
+  if (before === null || before < 2) return null;
+  const withBest = lineNetForSide(c.afterBest.fen(), line, c.opp);
+  if (withBest !== null && withBest >= 2) return null;
+  // What the line takes: the most valuable of the mover's pieces it captures.
+  let victim: { type: PieceSymbol; square: string } | null = null;
+  let lastCapture = 0;
+  try {
+    const b = new Chess(c.after.fen());
+    line.forEach((san, i) => {
+      const m = b.move(san);
+      if (m?.captured) {
+        lastCapture = i;
+        if (m.color === c.opp && (!victim || VAL[m.captured] > VAL[victim.type])) victim = { type: m.captured, square: m.to };
+      }
+    });
+  } catch { return null; }
+  const v = victim as { type: PieceSymbol; square: string } | null;
+  if (!v) return null;
+  const shown = line.slice(0, lastCapture + 1);
+  return att('ignored-threat', 3, {
+    squares: [v.square], moves: [shown.join(' ')], pvMoves: pvHas(c.pvP, (s) => s === line[0]),
+  }, { piece: PNAME[v.type], square: v.square, threat: line[0], line: shown.join(', '), better: c.best.san });
 }
 
 const DETECTORS: Detector[] = [
@@ -657,6 +737,11 @@ const DETECTORS: Detector[] = [
     if (last.captured !== 'p') return null;
     if (!kingOnHome(c.before, mover) && homeMinorCount(c.before, mover) < 2) return null;
     if (best.captured === 'p') return null;
+    // A PAWN TRADE IS NOT A GRAB (Learn walk 2026-10-01, game 1 ply 12: …exf3
+    // exf3 was called "the pawn on f3 was poisoned"). When they can take back
+    // on that square without losing anything, nothing was won.
+    const prev = c.history.length >= 2 ? c.history[c.history.length - 2] : null;
+    if (captureIsTrade(c.before.fen(), last.san, prev ? { to: prev.to, captured: !!prev.captured } : null)) return null;
     const kick = kickAvailable(c.after, opp) ?? null;
     const check = legalMovesFor(c.after, opp).find((m) => m.san.includes('+') && landsSafely(c.after, m)) ?? null;
     const punish = kick?.san ?? check?.san;
@@ -737,8 +822,13 @@ const DETECTORS: Detector[] = [
   // 13. Loose piece — after the move a piece (≥3pts, non-king) can be taken for
   // material RIGHT NOW; after the best move nothing of the kind hangs.
   (c) => {
-    const { mover } = c;
-    const hangingAfter = pieces(c.after, mover).filter((p) => p.type !== 'k' && VAL[p.type] >= 3 && hangsBy(c.after, p.square) >= 2)
+    const { mover, last } = c;
+    // A capture that is recaptured is a TRADE, not a loose piece (manual claim
+    // check 2026-09-30, items 133-135: Bxf6 …Qxf6 was spoken as "the bishop
+    // on f6 hangs", "loose piece, the third game now" and "let them win a
+    // piece"). The piece that just captured is netted against what it took.
+    const net = (sq: Square): number => hangsBy(c.after, sq) - (sq === last.to && last.captured ? VAL[last.captured] ?? 0 : 0);
+    const hangingAfter = pieces(c.after, mover).filter((p) => p.type !== 'k' && VAL[p.type] >= 3 && net(p.square) >= 2)
       .sort((a, b) => VAL[b.type] - VAL[a.type]);
     if (hangingAfter.length === 0) return null;
     const hangingBest = pieces(c.afterBest, mover).filter((p) => p.type !== 'k' && VAL[p.type] >= 3 && hangsBy(c.afterBest, p.square) >= 2);
@@ -752,7 +842,7 @@ const DETECTORS: Detector[] = [
   (c) => {
     const { mover, last } = c;
     const threatened = pieces(c.before, mover).filter((p) => p.type !== 'k' && VAL[p.type] >= 3 && hangsBy(c.before, p.square) >= 2);
-    if (threatened.length === 0) return null;
+    if (threatened.length === 0) return comboThreatIgnored(c);
     const still = threatened.filter((p) => p.square !== last.from && hangsBy(c.after, p.square) >= 2);
     if (still.length === 0) return null;
     const fixedByBest = threatened.every((p) => !c.afterBest.get(p.square) || c.afterBest.get(p.square)?.color !== mover || hangsBy(c.afterBest, p.square) < 2);
@@ -799,9 +889,14 @@ const DETECTORS: Detector[] = [
   // 17. Created pawn weakness — the move leaves a new isolated/doubled pawn the
   // opponent can attack; the best move does not.
   (c) => {
-    const { mover, opp } = c;
+    const { mover, opp, last } = c;
     const weakBefore = new Set([...isolatedPawns(c.before, mover), ...doubledPawns(c.before, mover)]);
-    const weakAfter = [...isolatedPawns(c.after, mover), ...doubledPawns(c.after, mover)].filter((s) => !weakBefore.has(s));
+    // A pawn capture that is simply taken back does not leave doubled pawns
+    // (manual claim check 2026-09-30, item 294: …bxc3 "doubled" c5 and c3 for
+    // one ply, then bxc3 — and "c5 is a weak pawn now" with d6 beside it).
+    const recapturable = last.piece === 'p' && !!last.captured && c.after.attackers(last.to, opp).length > 0;
+    const doubledAfter = doubledPawns(c.after, mover).filter((s) => !(recapturable && s[0] === last.to[0]));
+    const weakAfter = [...isolatedPawns(c.after, mover), ...doubledAfter].filter((s) => !weakBefore.has(s));
     if (weakAfter.length === 0) return null;
     const weakBest = new Set([...isolatedPawns(c.afterBest, mover), ...doubledPawns(c.afterBest, mover)]);
     const newOnlyHere = weakAfter.filter((s) => !weakBest.has(s));
@@ -857,12 +952,20 @@ const DETECTORS: Detector[] = [
   // 21. Worst piece unimproved — the best move improves the mover's least
   // mobile piece; the played move does not, and that piece stays stuck.
   (c) => {
-    const { last, best, mover } = c;
+    const { last, best, mover, opp } = c;
     if (c.opening) return null;
     const cands = pieces(c.before, mover).filter((p) => p.type === 'n' || p.type === 'b' || p.type === 'r');
     if (cands.length < 2) return null;
     const worst = cands.map((p) => ({ p, mob: pieceMobility(c.before, p.square, mover) })).sort((a, b) => a.mob - b.mob)[0];
     if (worst.mob > 2) return null;
+    // A GUARD IS NOT IDLE (Learn walk 2026-10-02, ply 56: "the knight on h6 is
+    // doing nothing" while it was the only thing guarding the queen on g4 that
+    // they were about to take). A piece defending one of the mover's attacked
+    // pieces has a job, however few squares it has.
+    const guardsAttacked = pieces(c.after, mover).some((q) => q.square !== worst.p.square && q.type !== 'k'
+      && c.after.attackers(q.square, opp).length > 0
+      && c.after.attackers(q.square, mover).includes(worst.p.square));
+    if (guardsAttacked) return null;
     if (best.from !== worst.p.square || last.from === worst.p.square) return null;
     if (pieceMobility(c.after, worst.p.square, mover) > 2) return null;
     return att('worst-piece-unimproved', 1, { squares: [worst.p.square], moves: [best.san], pvMoves: [] }, { piece: PNAME[worst.p.type], square: worst.p.square, better: best.san });
@@ -884,6 +987,11 @@ const DETECTORS: Detector[] = [
     const { last, best, mover, opp } = c;
     if (!c.endgame || best.piece !== 'k' || last.piece === 'k') return null;
     const bk = kingSquare(c.before, mover); if (!bk) return null;
+    // WALKING IN means toward the centre (Bowdler walk 2026-09-27: "yours on g8
+    // should be walking in — Kh8"). A king move to the corner is something else
+    // — a safety step — and this rule has nothing to say about it.
+    const centreDist = (sq: string): number => Math.max(Math.abs(fileIdx(sq) - 3.5), Math.abs(Number(sq[1]) - 4.5));
+    if (centreDist(best.to) >= centreDist(bk)) return null;
     const oppKingUp = legalMovesFor(c.after, opp).some((m) => m.piece === 'k' && relRank(m.to, opp) > relRank(m.from, opp));
     if (!oppKingUp) return null;
     return att('passive-king-endgame', 1, { squares: [bk, best.to], moves: [best.san], pvMoves: [] }, { king: bk, better: best.san });
@@ -982,6 +1090,17 @@ const DETECTORS: Detector[] = [
     // GRAB. A piece taking a pawn that then gets trapped is a poisoned pawn (its
     // own detector), so exclude piece-takes-pawn here to keep the two distinct.
     if (last.captured === 'p' && VAL[last.piece] >= 3) return null;
+    // A RECAPTURE is not an investment — Bxc5 Nxc5 was called "that sacrifice
+    // doesn't land" (1200 Sicilian walk 2026-09-27). Taking back on the square
+    // they just captured on is an exchange; whatever it lost, the loose-piece
+    // and trade rules name.
+    const prevMove = c.history[c.history.length - 2];
+    if (last.captured && prevMove?.captured && prevMove.to === last.to) return null;
+    // AN EVEN TRADE INVESTS NOTHING (hand walk 1690, 2026-09-27: 11.Bxg7 read
+    // "the attack was overvalued: Bxg7 commits material" — bishop for bishop;
+    // the material at stake was the knight left on c3, which the loose-piece
+    // and ignored-threat rules name).
+    if (last.captured && VAL[last.captured] >= VAL[last.piece]) return null;
     const offered = hangsBy(c.after, last.to) > 0;
     if (!offered && !isForcing(last.san)) return null;       // an aggressive commitment
     // A piece that can simply be TAKEN on the square it landed on is not an
@@ -1002,9 +1121,10 @@ const DETECTORS: Detector[] = [
     const { last, opp } = c;
     if (last.captured !== 'p' || last.piece === 'p' || last.piece === 'k') return null;
     if (!pvWinsMaterial(c.after, c.pvP, opp)) return null;
-    if (!grabberCaptured(c.after, last.to, last.color, c.pvP)) return null;
+    const fled = grabberCaptured(c.after, last.to, last.color, c.pvP);
+    if (fled === null) return null;
     if (c.pvB && pvWinsMaterial(c.afterBest, c.pvB, opp)) return null;
-    return att('poisoned-pawn', 4, { squares: [last.to], moves: [], pvMoves: (c.pvP ?? []).slice(0, 4) }, { piece: PNAME[last.piece], square: last.to });
+    return att('poisoned-pawn', 4, { squares: [last.to], moves: [], pvMoves: (c.pvP ?? []).slice(0, 4) }, { piece: PNAME[last.piece], square: last.to, fled });
   },
   // 32. Recaptured the wrong way (eval-gated, David 2026-09-06: "capturing with
   // the B or G pawn was best because it opens a lane for the rook"). PATTERN: a
@@ -1030,6 +1150,11 @@ const DETECTORS: Detector[] = [
     const { best, evalBefore: eb, evalAfterPlayed: ea } = c;
     if (eb === undefined || ea === undefined) return null;
     if (eb < 200 || ea >= 100) return null;
+    // CONVERTING NEEDS SOMETHING TO CONVERT (Learn walk 2026-10-01, game 1 ply
+    // 10): the +2.6 there was a fork the opponent had just allowed, with the
+    // student a pawn DOWN on the board. Missing it is a missed punishment, not
+    // a rushed win — so the mover must already be ahead in material.
+    if (material(c.before, c.mover) - material(c.before, c.opp) < 2) return null;
     // Mate is eval-encoded as a huge cp (±30000). Clamp to ±20 points so the
     // "points thrown away" figure stays sane — a thrown mate is "a winning
     // position", never "300 pawns".
@@ -1084,7 +1209,48 @@ const DETECTORS: Detector[] = [
     // line — pvP opens on the opponent's reply, so their moves are the even
     // plies (walk 700, 16…a6: "Qxb6 was waiting deeper" beside "Qb6 was the
     // move" — the capture was a queen trade inside the student's own line).
-    const firstForcing = pvP.findIndex((san, i) => i % 2 === 0 && isForcing(san));
+    // A THREAT is forcing too (manual claim check 2026-09-30, item 189: after
+    // …Bc2 the blow was g4 hitting the queen, and "their gxf5 was waiting
+    // deeper" named a capture three plies later). A move that attacks the
+    // queen, or a piece worth more than the mover, or an undefended piece, is
+    // as forcing as a check.
+    const threatens = (i: number): boolean => {
+      try {
+        const b = new Chess(c.after.fen());
+        for (let k = 0; k < i; k += 1) b.move(pvP[k]);
+        const m = b.move(pvP[i]);
+        if (!m) return false;
+        const victim = m.color === 'w' ? 'b' : 'w';
+        const probe = new Chess(b.fen().replace(/ [wb] /, ` ${m.color} `).replace(/ [a-h][36] /, ' - '));
+        return probe.moves({ square: m.to, verbose: true }).some((x) => {
+          if (!x.captured) return false;
+          const guarded = b.attackers(x.to, victim).length > 0;
+          return x.captured === 'q' || VAL[x.captured] > VAL[m.piece] || !guarded;
+        });
+      } catch { return false; }
+    };
+    // A RECAPTURE IS NOT A BLOW (Learn walk 2026-10-01: "Nothing hangs right
+    // away, which is the trap: after Rf8 hitting your rook, Rxf8+, Nxf8
+    // arrives" — Nxf8 only took back the rook in a plain trade).
+    const dest = (san: string): string => san.replace(/[+#]|=[QRBN]/g, '').slice(-2);
+    const recaptures = (i: number): boolean => i > 0 && pvP[i].includes('x') && pvP[i - 1].includes('x') && dest(pvP[i]) === dest(pvP[i - 1]);
+    // A PAWN SWAP IS NOT A BLOW (Learn walk 2026-10-02: "their exf6 was
+    // waiting deeper" for an en-passant reply to the student's own …f5, and
+    // "their axb5" for a pawn swap). A pawn taking a pawn that can be taken
+    // straight back trades nothing; a piece capture can still be the blow (a
+    // bishop for the knight that doubles the pawns).
+    const pawnSwap = (i: number): boolean => {
+      try {
+        const b = new Chess(c.after.fen());
+        for (let k = 0; k < i; k += 1) b.move(pvP[k]);
+        const m = b.move(pvP[i]);
+        if (!m?.captured || m.piece !== 'p' || m.captured !== 'p') return false;
+        const victim = m.color === 'w' ? 'b' : 'w';
+        return b.attackers(m.to, victim).length > 0;
+      } catch { return false; }
+    };
+    const blow = (san: string, i: number): boolean => (isForcing(san) && !pawnSwap(i)) || threatens(i);
+    const firstForcing = pvP.findIndex((san, i) => i % 2 === 0 && !recaptures(i) && blow(san, i));
     if (firstForcing < 0) return no(c, 'calculation-depth', `no forcing move anywhere in the PV (${pvP.slice(0, 4).join(' ')})`);
     if (firstForcing < 2) {
       return yieldTo(c, 'calculation-depth', CALC_DEPTH_CLAIMANTS,
@@ -1110,7 +1276,7 @@ const DETECTORS: Detector[] = [
       // THE PATH TRAVELS WITH THE BLOW (Blumenfeld walk F21: "breaks on Nxh5"
       // with nothing on h5 yet) — the moves that lead to it, so the student
       // can follow the thread that was lost.
-      { played: last.san, punish: pvP[firstForcing], depth: firstForcing + 1, path: pvP.slice(0, firstForcing).join(', ') });
+      { played: last.san, punish: pvP[firstForcing], depth: firstForcing + 1, path: lineWithReasons(c.after.fen(), pvP.slice(0, firstForcing), last.color) });
   },
   // 35. Left theory early (opening, DB-anchored — G3: the Lichess DB is canon).
   // PATTERN: the position BEFORE the move is in the openings DB with named

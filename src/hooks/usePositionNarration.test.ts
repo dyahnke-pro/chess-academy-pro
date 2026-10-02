@@ -130,7 +130,11 @@ describe('usePositionNarration', () => {
   });
 
   it('hands COMPUTED facts to voiceFacts in the seat they were computed in (G0, walk 6 P1)', async () => {
-    const { result } = renderHook(() => usePositionNarration(defaultArgs()));
+    // A quiet Italian at move 7, White developed: a board where the read has
+    // something true to say. (After 1.e4 alone it rightly says only the phase —
+    // no lever talk with the minors at home, hand walk 2026-09-27.)
+    const ITALIAN = 'r1bq1rk1/ppp1bppp/2np1n2/4p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 w - - 0 7';
+    const { result } = renderHook(() => usePositionNarration({ ...defaultArgs(), fen: ITALIAN }));
 
     act(() => {
       void result.current.narrate();

@@ -15,6 +15,7 @@
  * overstate the why, I don't want non-applicable reasons stated").
  */
 import { andList } from '../utils/andList';
+import { goodPieceIdeaKey } from './positionReadingService';
 import { Chess, type Color } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { MATERIAL_VALUE } from './pieceValues';
@@ -33,6 +34,11 @@ export interface PositionalAssessment {
    *  move (Learn walk, fresh Nimzo game, 2026-09-26: said on three moves
    *  running through two lanes). Same order as `reasons`. */
   reasonKeys: Array<string | null>;
+  /** THE OTHER SIDE OF THE SCALE (overall verdict as ONE comparison, census
+   *  P3): the assets of the side the verdict does NOT favour, phrased from the
+   *  student's seat, with their say-once keys. Absent on older callers. */
+  counter?: string[];
+  counterKeys?: Array<string | null>;
 }
 
 interface Located { type: string; color: Color; square: string; }
@@ -99,8 +105,39 @@ export function assessPositionalEdge(
   const assets = worse
     ? assetsFor(chess, struct, all, enemy, me, 'theirs')
     : assetsFor(chess, struct, all, me, enemy, 'yours');
+  const counter = worse
+    ? assetsFor(chess, struct, all, me, enemy, 'yours')
+    : assetsFor(chess, struct, all, enemy, me, 'theirs');
 
-  return { verdict, reasons: assets.map((a) => a.text), reasonKeys: assets.map((a) => a.key) };
+  return {
+    verdict, reasons: assets.map((a) => a.text), reasonKeys: assets.map((a) => a.key),
+    counter: counter.map((a) => a.text), counterKeys: counter.map((a) => a.key),
+  };
+}
+
+const EDGE_NAME: Record<string, [string, string]> = {
+  q: ['a queen', 'queens'], r: ['a rook', 'rooks'], b: ['a bishop', 'bishops'], n: ['a knight', 'knights'], p: ['a pawn', 'pawns'],
+};
+const COUNT_WORD = ['', 'a', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
+
+/** The material edge in pieces: "a pawn", "a bishop for two pawns", "a rook
+ *  for a knight and a pawn". Pure count by type — the side's extras, then what
+ *  the other side holds in return. */
+export function materialEdgeWords(all: ReadonlyArray<{ type: string; color: Color }>, side: Color, other: Color): string {
+  const n = (c: Color, t: string): number => all.filter((p) => p.color === c && p.type === t).length;
+  const list = (from: Color, to: Color): string[] => ['q', 'r', 'b', 'n', 'p'].flatMap((t) => {
+    const d = n(from, t) - n(to, t);
+    if (d <= 0) return [];
+    const [one, many] = EDGE_NAME[t];
+    return [d === 1 ? one : `${COUNT_WORD[d] ?? d} ${many}`];
+  });
+  const join = (xs: string[]): string => (xs.length <= 1 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
+  const mine = list(side, other);
+  const theirs = list(other, side);
+  if (mine.length === 0) return 'material';
+  // A lone extra minor is "a piece" — the idiom every strong player uses.
+  if (theirs.length === 0 && (mine[0] === 'a bishop' || mine[0] === 'a knight') && mine.length === 1) return 'a piece';
+  return theirs.length === 0 ? join(mine) : `${join(mine)} for ${join(theirs)}`;
 }
 
 /**
@@ -134,7 +171,10 @@ function assetsFor(
   // side actually holds; a level count says nothing.
   const count = (c: Color): number => all.filter((p) => p.color === c).reduce((n, p) => n + (MATERIAL_VALUE[p.type] ?? 0), 0);
   const up = count(side) - count(other);
-  if (up >= 1) reasons.push(`${youre} up ${up === 1 ? 'a pawn' : up === 3 ? 'a piece' : `${up} points of material`}`);
+  // SAID AS WHAT IS ON THE BOARD, not as a point total (Bowdler walk
+  // 2026-09-27, 9.Qxe7+ Bxe7: "you're up a pawn" with a bishop against two
+  // pawns). The count decides whether there is an edge; the pieces say what it is.
+  if (up >= 1) reasons.push(`${youre} up ${materialEdgeWords(all, side, other)}`);
 
   // 0b. KING SAFETY — castled against a king still in the centre, with queens
   // on (without queens a central king is an endgame asset, not a target).
@@ -150,7 +190,8 @@ function assetsFor(
   // 1. Bishop pair — two bishops vs one-or-none, on a reasonably open board.
   const myB = all.filter((p) => p.type === 'b' && p.color === side).length;
   const enemyB = all.filter((p) => p.type === 'b' && p.color === other).length;
-  if (myB >= 2 && enemyB <= 1) reasons.push(`${you} have the bishop pair`);
+  // Keyed like the move point that wins it (`student-bishop-pair`) — one claim.
+  if (myB >= 2 && enemyB <= 1) reasons.push(`${you} have the bishop pair`, `${holder}-bishop-pair`);
 
   // 2. An outpost — a knight/bishop on a square no enemy pawn can chase.
   const myOutpost = struct.outposts.find((o) => o.color === side);
@@ -158,7 +199,7 @@ function assetsFor(
     const name = myOutpost.piece === 'n' ? 'knight' : 'bishop';
     reasons.push(own
       ? `your ${name} sits on a protected outpost on ${myOutpost.square} where no enemy pawn attacks the square`
-      : `their ${name} sits on a protected outpost on ${myOutpost.square} where no pawn of yours attacks the square`, `${holder}-good-${myOutpost.square}`);
+      : `their ${name} sits on a protected outpost on ${myOutpost.square} where no pawn of yours attacks the square`, goodPieceIdeaKey(holder, myOutpost.piece, 'outpost', myOutpost.square));
   }
 
   // 3. Control of an open file — a rook or queen on a fully open file the
@@ -170,7 +211,7 @@ function assetsFor(
     && struct.pawns.openFiles.includes(p.square[0])
     && !all.some((q) => (q.type === 'r' || q.type === 'q') && q.color === other && q.square[0] === p.square[0]));
   if (myHeavyOnOpen) {
-    reasons.push(`${you} own the open ${myHeavyOnOpen.square[0]}-file`, `${holder}-file-${myHeavyOnOpen.square[0]}`);
+    reasons.push(`${you} own the open ${myHeavyOnOpen.square[0]}-file`, `file-${myHeavyOnOpen.square[0]}`);
   }
 
   // 4. An enemy weak pawn to target. DURABILITY HONESTY (board-awareness
@@ -181,7 +222,7 @@ function assetsFor(
   // structural read — skip it; and speak present tense, never "lasting".
   const enemyIso = struct.pawns.isolatedPawns[other][0];
   const enemyDoubledFile = struct.pawns.doubledFiles[other][0];
-  if (enemyIso) reasons.push(`${their} pawn on ${enemyIso} is isolated — a target ${you} can pile on`, `${loser}-iso-${enemyIso}`);
+  if (enemyIso) reasons.push(`${their} pawn on ${enemyIso} is isolated — a target ${you} can pile on`, `${loser}-iso-${enemyIso[0]}`);
   else if (enemyDoubledFile) {
     const doubledStable = !all.some((p) => p.type === 'p' && p.color === other
       && p.square[0] === enemyDoubledFile
@@ -192,7 +233,7 @@ function assetsFor(
 
   // 5. A passed pawn of your own.
   const myPassed = struct.pawns.passedPawns[side][0];
-  if (myPassed) reasons.push(`${your} passed pawn on ${myPassed} is a long-term trump`, `${holder}-passer-${myPassed}`);
+  if (myPassed) reasons.push(`${your} passed pawn on ${myPassed} is a long-term trump`, `${holder}-passer-${myPassed[0]}`);
 
   // 6. A development lead (only meaningful in the opening/early middlegame).
   const lead = developedCount(all, side) - developedCount(all, other);
@@ -223,11 +264,22 @@ export function phaseVerdictLine(
   if (!a.verdict || a.reasons.length === 0) return null;
   const standing = a.verdict === 'balanced' ? "it's level" : `you're ${a.verdict}`;
   const why = a.reasons.length === 0 ? '' : ` — ${andList(a.reasons)}`;
+  // ONE COMPARISON, not a list: the other side of the scale, and what it
+  // weighs. Level → the two sides' trumps hold each other; a bit → theirs keeps
+  // it close; clearly / in trouble → it is not enough.
+  const counter = a.counter ?? [];
+  const inReturn = (() => {
+    if (counter.length === 0) return '';
+    const worse = a.verdict === 'a bit worse' || a.verdict === 'in trouble';
+    if (a.verdict === 'balanced') return `; on the other side, ${andList(counter)} — and the two hold each other`;
+    const weight = a.verdict === 'clearly better' || a.verdict === 'in trouble' ? "and it isn't enough" : 'and it keeps it close';
+    return `; what ${worse ? 'you have' : 'they have'} in return: ${andList(counter)}, ${weight}`;
+  })();
   // Rotated on the board — the verdict and its reasons never vary.
   return rotateStem([
-    `Taking stock as the ${phase} begins: ${standing}${why}.`,
-    `The ${phase} starts here, so take stock: ${standing}${why}.`,
-    `Before the ${phase} gets going, the balance sheet: ${standing}${why}.`,
+    `Taking stock as the ${phase} begins: ${standing}${why}${inReturn}.`,
+    `The ${phase} starts here, so take stock: ${standing}${why}${inReturn}.`,
+    `Before the ${phase} gets going, the balance sheet: ${standing}${why}${inReturn}.`,
   ], stemKeyOf(fen));
 }
 
@@ -236,12 +288,16 @@ export function phaseVerdictLine(
 export function phaseVerdictKeys(fen: string, studentColorWB: Color, studentPovEvalCp: number | null, heard: ReadonlySet<string>): string[] {
   const a = freshAssessment(fen, studentColorWB, studentPovEvalCp, heard);
   if (!a.verdict || a.reasons.length === 0) return [];
-  return a.reasonKeys.filter((k): k is string => k !== null);
+  return [...a.reasonKeys, ...(a.counterKeys ?? [])].filter((k): k is string => k !== null);
 }
 
 /** The assessment minus the reasons whose key was already heard. */
 function freshAssessment(fen: string, studentColorWB: Color, studentPovEvalCp: number | null, heard: ReadonlySet<string>): PositionalAssessment {
   const a = assessPositionalEdge(fen, studentColorWB, studentPovEvalCp);
   const keep = a.reasonKeys.map((k) => k === null || !heard.has(k));
-  return { verdict: a.verdict, reasons: a.reasons.filter((_, i) => keep[i]), reasonKeys: a.reasonKeys.filter((_, i) => keep[i]) };
+  const keepC = (a.counterKeys ?? []).map((k) => k === null || !heard.has(k));
+  return {
+    verdict: a.verdict, reasons: a.reasons.filter((_, i) => keep[i]), reasonKeys: a.reasonKeys.filter((_, i) => keep[i]),
+    counter: (a.counter ?? []).filter((_, i) => keepC[i]), counterKeys: (a.counterKeys ?? []).filter((_, i) => keepC[i]),
+  };
 }

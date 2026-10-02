@@ -15,7 +15,7 @@
     "d4",
     "Nf6"
    ],
-   "spoken": "You have Black against a strong player — White opens the pawn to d4 and you answer the knight to f6."
+   "spoken": "White opens with the pawn to d4 and you answer with the knight to f6."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "White pushes the pawn to d5 — unusual, and played in bullet by some strong grandmasters. It's not terrible, but only good if White follows it up very carefully."
+   "spoken": "White pushes the pawn to d5 — unusual. It is not bad, but it only works if White follows it up carefully."
   },
   {
    "ply": 4,
@@ -124,7 +124,7 @@
     "cxd5",
     "Qc2"
    ],
-   "spoken": "You capture on d5, and White switches into bullet mode with the queen to c2."
+   "spoken": "After your capture on d5, White brings the queen to c2."
   },
   {
    "ply": 14,
@@ -152,7 +152,7 @@
     "d6",
     "N2b3"
    ],
-   "spoken": "The knight to d4 threatens nothing, so you develop with the pawn to d6, and White reroutes the knight to b3. Now the decisive central invasion begins — I'm focused on the centre, where White has a failing pawn structure."
+   "spoken": "The knight to d4 threatened nothing, so you developed with d6, and White reroutes the knight to b3. Now aim at the centre, where White's pawn structure is failing."
   },
   {
    "ply": 18,

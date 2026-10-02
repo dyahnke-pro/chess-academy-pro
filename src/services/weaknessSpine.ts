@@ -38,6 +38,7 @@ import { isFixtureDerived, isFixtureGame } from './fixtureGames';
 import type { MisconceptionBucket } from '../data/misconceptionTags';
 import type { ClassifiedTactic, MistakePuzzle, MistakeGamePhase, OpeningWeakSpot, TacticType, GameRecord } from '../types';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
+import { PUZZLE_MISS_SEVERITY, PUZZLE_MISS_SEVERITY_CAP, type PuzzleMissRecord } from './puzzleMissService';
 
 /** A weak spot not re-drilled within this window is "open" again. */
 const WEAKSPOT_STALE_MS = 3 * 24 * 60 * 60 * 1000;
@@ -630,6 +631,53 @@ export function aggregateClassifiedTactics(tactics: ClassifiedTactic[]): Unified
   return out;
 }
 
+/** How long a missed puzzle stays OPEN. A puzzle miss has no "fixed" state of
+ *  its own (the student never replays that exact puzzle on purpose), so it
+ *  decays by age instead. */
+export const PUZZLE_MISS_OPEN_MS = 30 * 24 * 60 * 60 * 1000;
+
+/**
+ * Missed Lichess puzzles, per motif — WEAKER evidence than a game miss (David
+ * 2026-10-01): the puzzle announced a tactic was there. Keyed like the game
+ * tactic rows (`analysis:tactic:<type>`) so `mergeByKey` folds both into ONE
+ * hole per motif — one vocabulary — with puzzles adding at half the severity
+ * and never past `PUZZLE_MISS_SEVERITY_CAP`. A miss with no mapped motif says
+ * nothing about a hole, so it is dropped rather than guessed.
+ */
+export function aggregatePuzzleMisses(rows: readonly PuzzleMissRecord[], now: number = Date.now()): UnifiedWeakness[] {
+  const groups = new Map<TacticType, PuzzleMissRecord[]>();
+  for (const r of rows) {
+    if (!r.tacticType) continue;
+    const g = groups.get(r.tacticType);
+    if (g) g.push(r); else groups.set(r.tacticType, [r]);
+  }
+  const out: UnifiedWeakness[] = [];
+  for (const [type, g] of groups) {
+    g.sort((a, b) => b.recordedAt - a.recordedAt);
+    const open = g.filter((r) => now - r.recordedAt <= PUZZLE_MISS_OPEN_MS).length;
+    out.push({
+      key: `analysis:tactic:${type}`,
+      tag: `analysis:tactic:${type}`,
+      label: `Missed ${tacticLabel(type)}`,
+      bucket: 'tactical',
+      openCount: open,
+      total: g.length,
+      severity: Math.min(PUZZLE_MISS_SEVERITY_CAP, open * PUZZLE_MISS_SEVERITY),
+      sources: ['analysis'],
+      capabilityTag: null,
+      puzzleThemes: themesForTactic(type),
+      // A Lichess puzzle is not the student's own position: no replay rows,
+      // no games — honest empties, never a borrowed game.
+      positions: [],
+      lastSeenAt: g[0]?.recordedAt ?? 0,
+      gameIds: [],
+      // Every miss IS a drill.
+      lastDrilledAt: g[0]?.recordedAt ?? null,
+    });
+  }
+  return out;
+}
+
 /** Roll up blown-winning-position games into a single conversion weakness.
  *  PREVIOUSLY MISSING: per-move evals were stored but never scanned for the
  *  "was winning, didn't convert" pattern. */
@@ -891,6 +939,9 @@ export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
     getSquareHeatmap(),
     getAddressedConversions(),
   ]);
+  // Its own store, read on its own (like the heatmap) — never inside the
+  // shared transaction above, and never the 15k-row puzzles table.
+  const puzzleMisses = await db.puzzleMisses.toArray().catch(() => [] as PuzzleMissRecord[]);
   const { misAgg, allMis, mistakes, weakSpots, tactics, games } = direct;
 
   const prefs = useAppStore.getState().activeProfile?.preferences;
@@ -942,6 +993,7 @@ export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
   const analysisRows = mergeByKey([
     ...aggregateMistakePuzzles(mistakes, coachKeys),
     ...aggregateClassifiedTactics(tactics),
+    ...aggregatePuzzleMisses(puzzleMisses),
     ...aggregateOpeningWeakSpots(weakSpots),
     ...aggregateConversionFailures(conversions, games, gameIndex),
     ...aggregateBoardVision(heatmap),

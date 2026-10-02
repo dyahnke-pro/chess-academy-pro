@@ -28,7 +28,7 @@ import { criticalityThresholds } from './criticalityScan';
 import { stockfishEngine } from './stockfishEngine';
 import { getCachedAmateurPlay } from './amateurPlayCache';
 import {
-  pickAlternative, renderRefutedAlternative, candidatesFromMasters, candidatesFromAmateur, provenPrefix,
+  pickAlternative, renderRefutedAlternative, candidatesFromMasters, candidatesFromAmateur, provenPrefix, droppedJob,
   type AlternativeCandidate, type RefutedAlternative,
 } from './refutedAlternativeCore';
 
@@ -124,7 +124,7 @@ export async function refutedAlternative(input: RefutedAlternativeInput): Promis
   const sans = altLine.plies.map((p) => p.san);
   const studentWB: 'w' | 'b' = input.studentColor === 'white' ? 'w' : 'b';
   const { lineSans, proofResult } = provenPrefix(input.fenBefore, sans, studentWB);
-  const facts = { alt: alt.san, games: alt.games, pct: alt.pct, costCp, line: altLine, concept, lineSans, proofResult, source: alt.source ?? 'masters' };
+  const facts = { alt: alt.san, games: alt.games, pct: alt.pct, costCp, line: altLine, concept, lineSans, proofResult, source: alt.source ?? 'masters', job: droppedJob(input.fenBefore, sans) };
   return { ...facts, text: renderRefutedAlternative(facts, input.taughtSan, stemKeyOf(input.fenBefore)) };
 }
 

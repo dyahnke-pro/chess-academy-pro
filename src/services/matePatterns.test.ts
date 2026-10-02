@@ -58,3 +58,18 @@ describe('classifyMatePattern — proven on the mating-patterns lesson corpus', 
     expect(classifyMatePattern('7k/6Q1/5K2/8/8/8/8/8 b - - 0 1')?.id).toBe('queen-mate');
   });
 });
+
+describe('explainMate — why this board is mate', () => {
+  it("Damiano's: the queen on h7, protected by the g6 pawn", async () => {
+    const { explainMate } = await import('./matePatterns');
+    const t = explainMate('5rk1/6pQ/6P1/8/8/8/8/6K1 b - - 0 1');
+    expect(t).toContain('the queen on h7 checks the king on g8');
+    expect(t).toContain('protected by the pawn on g6');
+    expect(t).toContain('its own pieces block f8 and g7');
+    expect(t).toContain('f7 and h8 are covered');
+  });
+  it('null when the position is not mate', async () => {
+    const { explainMate } = await import('./matePatterns');
+    expect(explainMate('5rk1/6p1/6P1/7Q/8/8/8/6K1 w - - 0 1')).toBeNull();
+  });
+});

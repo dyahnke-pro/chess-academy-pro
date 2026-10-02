@@ -43,8 +43,37 @@ export interface RefutedAlternative {
   proofResult?: string | null;
   /** Whose games the popularity is counted over. */
   source?: 'amateur' | 'masters';
+  /** The job the alternative's piece dropped — "the knight on f3 was
+   *  guarding e5" — when the punishment takes on exactly that square. */
+  job?: string | null;
   /** DNA-register text, present tense. */
   text: string;
+}
+
+const JOB_PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/**
+ * ALTERNATIVE REFUTED BECAUSE IT FAILS A JOB (census #11, 177 of his lines —
+ * "that knight is the only guard of e5"). `sans` is the alternative followed by
+ * the punishing line. When the alternative moved a piece that guarded a
+ * square, it guards it no longer, and the punishment's first move captures on
+ * exactly that square, the job is the reason. Null otherwise — never a guess.
+ */
+export function droppedJob(fenBefore: string, sans: readonly string[]): string | null {
+  if (sans.length < 2) return null;
+  try {
+    const c = new Chess(fenBefore);
+    const mover = c.turn();
+    const alt = c.move(sans[0]);
+    const punish = new Chess(c.fen()).move(sans[1]);
+    if (!alt || !punish?.captured) return null;
+    const sq = punish.to;
+    if (alt.to === sq) return null; // it moved INTO the capture — that is a hang, not a job
+    const before = new Chess(fenBefore);
+    if (!before.attackers(sq, mover).includes(alt.from)) return null;
+    if (c.attackers(sq, mover).includes(alt.to)) return null;
+    return `the ${JOB_PIECE[alt.piece]} on ${alt.from} was guarding ${sq}`;
+  } catch { return null; }
 }
 
 /** Below this share a move is not what people REACH FOR here — it is a stray
@@ -103,6 +132,7 @@ export function renderRefutedAlternative(
   }
   if (proven) {
     const close = rotateStem([`${taughtSan} avoids that.`, `${taughtSan} sidesteps it.`, `${taughtSan} keeps that from happening.`], stemKey);
+    if (f.job) return `${lead}, but ${f.job}:${proven} ${close}`;
     return `${lead}, and it loses material:${proven} ${close}`;
   }
   // "holds the balance" was the old close, and it is only true of a level
@@ -191,6 +221,6 @@ export function refutedFromFan(input: {
     for (const u of altLine.moves) sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined }).san);
   } catch { /* the playable prefix is what we have */ }
   const { lineSans, proofResult } = provenPrefix(input.fenBefore, sans, input.moverWB);
-  const facts = { alt: alt.san, games: alt.games, pct: alt.pct, costCp, line: null, concept: null, lineSans, proofResult, source: alt.source ?? 'masters' as const };
+  const facts = { alt: alt.san, games: alt.games, pct: alt.pct, costCp, line: null, concept: null, lineSans, proofResult, source: alt.source ?? 'masters' as const, job: droppedJob(input.fenBefore, sans) };
   return { ...facts, text: renderRefutedAlternative(facts, input.playedSan, stemKeyOf(input.fenBefore)) };
 }

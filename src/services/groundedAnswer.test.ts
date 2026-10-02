@@ -13,7 +13,7 @@ describe('assembleMoveEvalAnswer', () => {
   const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
   it('grounds the best move as a real SAN + arrow from the engine UCI', () => {
-    const a = assembleMoveEvalAnswer({ fen: START, bestMoveUci: 'g1f3', evalCp: 30 });
+    const a = assembleMoveEvalAnswer({ studentColor: null, fen: START, bestMoveUci: 'g1f3', evalCp: 30 });
     expect(a).not.toBeNull();
     expect(a!.bestMoveSan).toBe('Nf3');
     expect(a!.bestMoveFromTo).toEqual({ from: 'g1', to: 'f3' });
@@ -24,36 +24,36 @@ describe('assembleMoveEvalAnswer', () => {
   it('grounds a legal sliding move to its real SAN (1.e4 e5 → Qh5)', () => {
     // After 1.e4 e5 the e2 square is empty, so Qd1-h5 is legal.
     const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
-    const a = assembleMoveEvalAnswer({ fen, bestMoveUci: 'd1h5', evalCp: 60 });
+    const a = assembleMoveEvalAnswer({ studentColor: null, fen, bestMoveUci: 'd1h5', evalCp: 60 });
     expect(a).not.toBeNull();
     expect(a!.bestMoveSan).toBe('Qh5');
   });
 
   it('phrases the real eval, never invents a number', () => {
-    const a = assembleMoveEvalAnswer({ fen: START, bestMoveUci: 'e2e4', evalCp: 280 });
+    const a = assembleMoveEvalAnswer({ studentColor: null, fen: START, bestMoveUci: 'e2e4', evalCp: 280 });
     expect(a!.facts.toLowerCase()).toMatch(/winning|clearly better|2\.8/);
     // balanced case
-    const b = assembleMoveEvalAnswer({ fen: START, bestMoveUci: 'e2e4', evalCp: 10 });
+    const b = assembleMoveEvalAnswer({ studentColor: null, fen: START, bestMoveUci: 'e2e4', evalCp: 10 });
     expect(b!.facts.toLowerCase()).toContain('balanced');
   });
 
   it('reports a forced mate when given one', () => {
-    const a = assembleMoveEvalAnswer({ fen: START, bestMoveUci: 'e2e4', mateIn: 3 });
+    const a = assembleMoveEvalAnswer({ studentColor: null, fen: START, bestMoveUci: 'e2e4', mateIn: 3 });
     expect(a!.facts.toLowerCase()).toContain('forced mate in 3');
   });
 
   it('returns null (never fabricates) when there is no engine move', () => {
-    expect(assembleMoveEvalAnswer({ fen: START, bestMoveUci: null })).toBeNull();
-    expect(assembleMoveEvalAnswer({ fen: START, bestMoveUci: '' })).toBeNull();
+    expect(assembleMoveEvalAnswer({ studentColor: null, fen: START, bestMoveUci: null })).toBeNull();
+    expect(assembleMoveEvalAnswer({ studentColor: null, fen: START, bestMoveUci: '' })).toBeNull();
   });
 
   it('returns null on an illegal engine move rather than inventing a SAN', () => {
     // e2e5 is not a legal first move (pawn can't jump 3).
-    expect(assembleMoveEvalAnswer({ fen: START, bestMoveUci: 'e2e5' })).toBeNull();
+    expect(assembleMoveEvalAnswer({ studentColor: null, fen: START, bestMoveUci: 'e2e5' })).toBeNull();
   });
 
   it('returns null on an unparseable FEN (never blanks/fabricates)', () => {
-    expect(assembleMoveEvalAnswer({ fen: 'garbage', bestMoveUci: 'g1f3' })).toBeNull();
+    expect(assembleMoveEvalAnswer({ studentColor: null, fen: 'garbage', bestMoveUci: 'g1f3' })).toBeNull();
   });
 });
 
@@ -977,8 +977,10 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
   it('appends the top live-tactics fact (a hanging student piece) alongside the eval', () => {
     const a = assemblePositionAssessment({
       evalCp: -250, mateIn: null, studentColor: 'white',
-      tactics: tactics({ fen: '4k3/8/8/3N4/8/8/8/4K3 w - - 0 1', hanging: [{ square: 'd5', piece: 'n', color: 'w' }] }),
-      fen: '4k3/8/8/3N4/8/8/8/4K3 w - - 0 1',
+      // A pawn each: K+N v K is insufficient material — a finished game, which
+      // the assessor now reports as its result (question walk 2026-09-27).
+      tactics: tactics({ fen: '4k3/p7/8/3N4/8/8/P7/4K3 w - - 0 1', hanging: [{ square: 'd5', piece: 'n', color: 'w' }] }),
+      fen: '4k3/p7/8/3N4/8/8/P7/4K3 w - - 0 1',
     });
     // -250 white-POV, student is White: the DIRECTION and the MAGNITUDE are
     // the contract; the sentence around them rotates.
@@ -1246,37 +1248,37 @@ describe('assembleCandidateMoveAnswer — evaluate the NAMED move', () => {
   const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
   it('affirms when the named move IS the engine best move', () => {
-    const a = assembleCandidateMoveAnswer({ fen: START, candidateSan: 'e4', bestMoveUci: 'e2e4', bestEvalCp: 30, candidateEvalCp: 30 });
+    const a = assembleCandidateMoveAnswer({ studentColor: null, candidateLineUci: [], candidateSettled: null, fen: START, candidateSan: 'e4', bestMoveUci: 'e2e4', bestEvalCp: 30, candidateEvalCp: 30 });
     expect(a?.facts).toMatch(/e4 is the best move/i);
   });
 
   it('answers an ILLEGAL named move honestly, never fabricating an eval', () => {
-    const a = assembleCandidateMoveAnswer({ fen: START, candidateSan: 'e5', bestMoveUci: 'e2e4', bestEvalCp: 30, candidateEvalCp: 0 });
+    const a = assembleCandidateMoveAnswer({ studentColor: null, candidateLineUci: [], candidateSettled: null, fen: START, candidateSan: 'e5', bestMoveUci: 'e2e4', bestEvalCp: 30, candidateEvalCp: 0 });
     expect(a?.facts).toMatch(/isn't a legal move/i);
     expect(a?.bestMoveSan).toBeNull();
   });
 
   it('grades a slightly-worse legal move as PLAYABLE (cp-loss vs best), not "best is X"', () => {
     // best e4 (+0.3 mover POV), candidate a3 (-0.1 mover POV) → 40cp loss.
-    const a = assembleCandidateMoveAnswer({ fen: START, candidateSan: 'a3', bestMoveUci: 'e2e4', bestEvalCp: 30, candidateEvalCp: -10 });
+    const a = assembleCandidateMoveAnswer({ studentColor: null, candidateLineUci: [], candidateSettled: null, fen: START, candidateSan: 'a3', bestMoveUci: 'e2e4', bestEvalCp: 30, candidateEvalCp: -10 });
     expect(a?.facts).toMatch(/a3/);
     expect(a?.facts).toMatch(/playable|fine|slightly worse/i);
     expect(a?.facts).not.toMatch(/best move is a3/i);
   });
 
   it('grades a large cp-loss as a mistake and names the better move', () => {
-    const a = assembleCandidateMoveAnswer({ fen: START, candidateSan: 'a3', bestMoveUci: 'e2e4', bestEvalCp: 30, candidateEvalCp: -300 });
+    const a = assembleCandidateMoveAnswer({ studentColor: null, candidateLineUci: [], candidateSettled: null, fen: START, candidateSan: 'a3', bestMoveUci: 'e2e4', bestEvalCp: 30, candidateEvalCp: -300 });
     expect(a?.facts).toMatch(/mistake/i);
     expect(a?.facts).toMatch(/\be4\b/);
   });
 
   it('flags a candidate that walks into mate', () => {
-    const a = assembleCandidateMoveAnswer({ fen: START, candidateSan: 'a3', bestMoveUci: 'e2e4', candidateMateIn: -2 });
+    const a = assembleCandidateMoveAnswer({ studentColor: null, candidateLineUci: [], candidateSettled: null, fen: START, candidateSan: 'a3', bestMoveUci: 'e2e4', candidateMateIn: -2 });
     expect(a?.facts).toMatch(/mate in 2/i);
   });
 
   it('cites master frequency when the DB covers the move (DB ground alongside engine)', () => {
-    const a = assembleCandidateMoveAnswer({ fen: START, candidateSan: 'a3', bestMoveUci: 'e2e4', bestEvalCp: 30, candidateEvalCp: 22, masterFreqPct: 8 });
+    const a = assembleCandidateMoveAnswer({ studentColor: null, candidateLineUci: [], candidateSettled: null, fen: START, candidateSan: 'a3', bestMoveUci: 'e2e4', bestEvalCp: 30, candidateEvalCp: 22, masterFreqPct: 8 });
     expect(a?.facts).toMatch(/8%/);
   });
 
@@ -1285,18 +1287,18 @@ describe('assembleCandidateMoveAnswer — evaluate the NAMED move', () => {
   // verdict is sound/speculative/unsound by the engine eval of best play AFTER.
   const GREEK = 'r1bq1rk1/ppp2ppp/2n2n2/4p3/3P4/2NB1N2/PPP2PPP/R2QK2R w KQ - 0 1';
   it('calls a material-offering sac SOUND when the eval holds up', () => {
-    const a = assembleCandidateMoveAnswer({ fen: GREEK, candidateSan: 'Bxh7+', bestMoveUci: 'd3e2', bestEvalCp: 60, candidateEvalCp: 50 });
+    const a = assembleCandidateMoveAnswer({ studentColor: null, candidateLineUci: [], candidateSettled: null, fen: GREEK, candidateSan: 'Bxh7+', bestMoveUci: 'd3e2', bestEvalCp: 60, candidateEvalCp: 50 });
     expect(a?.facts).toMatch(/sound/i);
     expect(a?.facts).not.toMatch(/unsound/i);
     expect(a?.facts).toMatch(/Bxh7/);
   });
   it('calls the sac UNSOUND when the attack does not cover the material', () => {
-    const a = assembleCandidateMoveAnswer({ fen: GREEK, candidateSan: 'Bxh7+', bestMoveUci: 'd3e2', bestEvalCp: 40, candidateEvalCp: -260 });
+    const a = assembleCandidateMoveAnswer({ studentColor: null, candidateLineUci: [], candidateSettled: null, fen: GREEK, candidateSan: 'Bxh7+', bestMoveUci: 'd3e2', bestEvalCp: 40, candidateEvalCp: -260 });
     expect(a?.facts).toMatch(/unsound/i);
     expect(a?.facts).toMatch(/down a piece|just down/i);
   });
   it('calls the sac SPECULATIVE in the middle band', () => {
-    const a = assembleCandidateMoveAnswer({ fen: GREEK, candidateSan: 'Bxh7+', bestMoveUci: 'd3e2', bestEvalCp: 40, candidateEvalCp: -80 });
+    const a = assembleCandidateMoveAnswer({ studentColor: null, candidateLineUci: [], candidateSettled: null, fen: GREEK, candidateSan: 'Bxh7+', bestMoveUci: 'd3e2', bestEvalCp: 40, candidateEvalCp: -80 });
     expect(a?.facts).toMatch(/speculative/i);
   });
 });
@@ -1323,7 +1325,7 @@ describe('assembleAlternativesAnswer — grounded "why are the alternatives wors
   const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
   it('names the best move, grades each alternative by cp-gap, cites the punishing reply', () => {
-    const a = assembleAlternativesAnswer({
+    const a = assembleAlternativesAnswer({ studentColor: null,
       fen: START,
       lines: [
         { san: 'e4', replySan: 'e5', evalCp: 30, mateIn: null },
@@ -1346,7 +1348,7 @@ describe('assembleAlternativesAnswer — grounded "why are the alternatives wors
     // for White = -0.3 mover POV)… a Black alternative at +2.0 White-persp is
     // a 170cp mover-POV loss.
     const AFTER_E4 = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
-    const a = assembleAlternativesAnswer({
+    const a = assembleAlternativesAnswer({ studentColor: null,
       fen: AFTER_E4,
       lines: [
         { san: 'c5', replySan: 'Nf3', evalCp: 30, mateIn: null },
@@ -1360,7 +1362,7 @@ describe('assembleAlternativesAnswer — grounded "why are the alternatives wors
 
   it('says an alternative walks into mate when its line is mated', () => {
     // Scholar's-mate-threat board: White to move; f3-ish junk alt gets mated.
-    const a = assembleAlternativesAnswer({
+    const a = assembleAlternativesAnswer({ studentColor: null,
       fen: START,
       lines: [
         { san: 'e4', replySan: 'e5', evalCp: 30, mateIn: null },
@@ -1371,12 +1373,12 @@ describe('assembleAlternativesAnswer — grounded "why are the alternatives wors
   });
 
   it('returns null with fewer than 2 lines (nothing to compare — falls through)', () => {
-    expect(assembleAlternativesAnswer({ fen: START, lines: [{ san: 'e4', replySan: null, evalCp: 30, mateIn: null }] })).toBeNull();
-    expect(assembleAlternativesAnswer({ fen: START, lines: [] })).toBeNull();
+    expect(assembleAlternativesAnswer({ studentColor: null, fen: START, lines: [{ san: 'e4', replySan: null, evalCp: 30, mateIn: null }] })).toBeNull();
+    expect(assembleAlternativesAnswer({ studentColor: null, fen: START, lines: [] })).toBeNull();
   });
 
   it('drops an illegal alternative line instead of fabricating', () => {
-    const a = assembleAlternativesAnswer({
+    const a = assembleAlternativesAnswer({ studentColor: null,
       fen: START,
       lines: [
         { san: 'e4', replySan: 'e5', evalCp: 30, mateIn: null },

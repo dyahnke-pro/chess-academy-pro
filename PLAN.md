@@ -13,6 +13,87 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🏹 WO-ARROW-01 — ONE DOOR FOR EVERY BOARD ARROW (David 2026-09-29: "Can we reduce to one source for arrows?")
+
+**Why.** His Learn game (2026-09-27, 21:41, PostHog device `da84d189`): a green
+f3→d3 with the black queen on c4 — Qd3 hangs the queen. Source:
+`planMarks` drew a move from DEEPER in the engine line on the current board,
+checking only legality. Learn alone had 13 arrow producers each calling
+`setArrows` with its own checks (legal / piece-there / sight / none); ~120
+setter sites app-wide (Learn 30 + walkthrough 23, Review 27, Play 8, Openings 21).
+Colours were chaos: red, #ef4444, green, #22c55e, rgba-green, yellow, blue,
+orange, cyan. `groundArrows` banned red (2026-07-06) while threats drew red around it.
+
+**Decisions (David 2026-09-29).** Every coach surface. A ruled-out move is NEVER
+arrowed (said + highlighted only). Threats ARE drawn, red, always from THEIR
+piece, and only when they win something — this replaces the 2026-07-06 red ban.
+
+**The door** — `src/services/arrowDoor.ts` `admitArrows(claims, {fen, studentColor})`.
+Producers decide WHAT; the door decides WHETHER and the COLOUR. Roles:
+`play` (student's, green / rank shades, legal + safe by exchange unless
+`engineBacked`), `threat` (theirs, red, must win material or check),
+`line` (one ply on its OWN board, coloured by mover), `vision` (sight line).
+A producer DECLARES its role — the door never infers a role from a colour.
+
+**Order.** 1 ✅ door + 13 tests (David's Qd3 refused, engine sac admitted) ·
+2 Learn: CoachTeachPage's 13 producers (the fact-chain's red "lurking slip"
+arrow is a bad move → dropped) · 3 useTeachWalkthrough · 4 Review · 5 Play,
+Openings, chat, the rest · 6 gate `arrowDoor.gate.test.ts`: no `set*Arrows(`
+outside the door's output, allowlist of unmigrated files shrinks only.
+
+**DONE 2026-09-29.** All six steps landed. The gate's ceiling is EMPTY; only the
+board renderers, the `[BOARD:]` decoder and kid mode are exempt. Dead producers
+deleted (`uciToArrow`, `groundArrows`). Hints draw for the side to move (a hint
+is always for the player on move). Pitfalls name the wrong move in text, never
+as an arrow.
+
+## 📊 SCOREBOARD v1 — reach vs Naroditsky, 50 voiced games (2026-09-29)
+
+`scripts/scoreboard/` — his per-ply lines tagged with the census taxonomy
+(`his-tags.json`, 1,394 lines, one offline DeepSeek pass, temperature 0), our
+harvested claims (`claimChecker.measure.test.ts`) mapped kind→code in
+`score.py`. Match = same game, same ply, same code.
+
+**20.7%** (268 / 1,294 code-moments at student-move plies). What it measures is
+REACH — a computer HAS the point at that moment — not what the decider speaks;
+the harvest covers four lanes (facts, behaviors, backward look, positional read)
+and not the opening idea, refuted alternative, opponent purpose or plan arc, so
+those rows read low until the harvest widens. 1,115 more of his code-moments
+sit on the OPPONENT's plies, which the harvest never runs.
+
+Worst rows (his count, ours): quiet-move purpose 92/0 · plan 88/26 · verdict on
+a GOOD move 75/7 · the move prevents something 71/0 · king attack 46/5 ·
+recapture choice 42/0 · threat 46/8. Best: passers 80%, piece quality 52%,
+structure 52%, principles 51%, breaks 50%.
+
+**Read.** The top gaps are what the student's OWN move is for (prepares /
+prevents / two jobs) — the intent ledger — and grading good moves (we grade
+only mistakes). Next: widen the harvest to every lane + opponent plies so the
+number is honest, then build the ledger and watch these rows move.
+
+## 🧭 2026-09-29 — RE-EVALUATION: how the coach gets to Naroditsky (after WO-ACC-01 measured 99.6%)
+
+Measured: 14,317 claims / 100 games · spoken 99.6% of checked (was 97.9) ·
+10 FALSE left · but only 62% of spoken lines are checkable — the unchecked 38%
+is plans / why / method, i.e. the Naroditsky layer.
+
+**The correction.** The census ranked him by CATEGORY and implied one computer
+per category. Read end to end, his games show the gap is the THREAD: intent
+announced ("sacrifice — but not yet"), prepared ("you want f4, so Kh1 first"),
+executed ("the first progress"), then paid off or failed ("my trick half-worked").
+Six of the top ten missing items exist only BETWEEN moves.
+
+**Order (David may reorder):** 1 arrow door → 2 SCOREBOARD vs his 430 games
+(run our coach on his positions; per-moment match by taxonomy code, never word
+count; every new computer must raise it with accuracy ≥97%, silent first) →
+3 INTENT LEDGER (each side's plan from the engine line, remembered across plies;
+every move read as prepares / executes / stops theirs / abandons — engine-grounded,
+so plan lines become checkable) → 4 one thread per move (routine = a few words,
+decision moments = two candidates weighed) → 5 remaining gaps by scoreboard
+deficit (king attack, practical play, recapture, when-ahead).
+Not copied: self-critique, repertoire advice, humour, first person; opening
+lectures belong to the parked "teach me X".
+
 ## 🏁 WO-STANDARD-01 — THE FULL BOARD: everything the 2026-09-22 evaluation found, in build order (David: "get my app up to standard" · "i want a full plan listed first, not just one section" · "i will not always be here — work independently")
 
 **How this was found.** One session, 2026-09-22: four levels of context, three
@@ -460,6 +541,40 @@ every WO-TEACH-02 line against it:
 
 **Order:** S0 → S1 → S8 → S2 → S3 → S4 → S5 → S7 → S6. Verify: the meter,
 ship-check, both prod audits muted, narrations read and quoted here.
+
+## 🎯 WO-ACC-01 — measure the coach's accuracy, then raise it to 97% before adding computers (David 2026-09-27: "We don't even have the accuracy with the current build" · "I like the plan")
+
+**Why.** The 1690 hand walk measured ~78% of spoken lines true (13 of ~60 false, all
+fixed). Hand walks find ~1 new error class per game, one game an hour — too slow to
+reach 97%, and no way to know when we got there. New computers wait until the base
+is measured at 97%.
+
+**The instrument (built 2026-09-27).**
+- Corpus: 50 Naroditsky games rebuilt from the voiced notes (`data/sources/acc-naro/`,
+  25 White / 25 Black, ≥40 plies) + 50 chess.com amateur games 800–1800
+  (`data/sources/acc-corpus/`, via `build-wo4-corpus.mjs --fetch`). Engine: the app's
+  own Stockfish 18, top-3 lines at depth 14 for every position
+  (`scripts/acc-annotate.mjs`). All gitignored research data; reproducible.
+- Pass 1 HARVEST — `src/services/claimChecker.measure.test.ts`: every student move,
+  the same computers Learn calls after the reply with the same inputs
+  (`computePositionFacts`, `detectBehaviors`, `buildPositionalRead`, `backwardLook`).
+- Pass 2 VERIFY — `scripts/claim-verify.mjs`: every claim checked by board (chess.js)
+  and engine, INDEPENDENT of app code (a verifier calling the helper it checks agrees
+  by construction). TRUE / FALSE with reason / UNVERIFIED (judgment — counted and
+  sampled, never passed). Reports spoken lanes (facts + backward look) apart from
+  candidate lanes (behaviour + positional).
+- Limit, stated: it checks the computers, not the page's selection/ordering glue —
+  that stays with the hand walks and, after ACC-1, the extracted Learn service.
+
+**Fixed from the first 12-game run** (each with a test on the real position):
+future-board endgame technique spoken as current (`conceptEngine` now carries the
+line — "After Rce6, …"); "castling is one move away" when castling was illegal
+(`castleIsOneMoveAway` asks chess.js); plans offered while the student was in check
+(`detectBehaviors` stands down); "a rook up" at +8/+9 (`conversionMethod`); "no pawn
+can ever chase it" when …b6 could (`findKnightReroute`).
+
+**Next:** full 100-game number → fix error classes by frequency → ACC-1 extract Learn's
+builder so the checker can run what is actually spoken.
 
 ## 🎙️ WO-DANYA-01 — Learn free play taught like the video (David 2026-09-24: "I want to be taught like the video I sent you! That's the only reason I'm making this app.")
 

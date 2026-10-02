@@ -19,7 +19,7 @@
 import { Chess } from 'chess.js';
 import { type FundamentalId } from './principleAttribution';
 import { attributeLiveFundamental, LEARN_FUNDAMENTAL_CP_FLOOR, type LiveFundamentalReads } from './liveFundamental';
-import { renderFundamentalVerdict, isMethodSentence } from './principleVoice';
+import { renderFundamentalVerdict, isMethodSentence, verdictCanDropBetter } from './principleVoice';
 import { habitForCluster } from './coachDecider';
 import { liveHabitKey, type LiveHabit } from './methodBeat';
 import { fundamentalRecurrenceLine } from './fundamentalRecurrence';
@@ -39,6 +39,10 @@ export interface LearnFundamentalInput extends LiveFundamentalReads {
    * self-count.
    */
   currentGameId: string | null;
+  /** The better move another line on this turn already NAMES (the grade's
+   *  "h5 was the move — …", `BackwardLook.namesBetter`). A verdict that would
+   *  name the same move leaves it out — one fact once (run I, 4GIsh ply 32). */
+  betterNamed?: string | null;
   // `replySan` is inherited from `LiveFundamentalReads` — ONE field for both
   // readers: the attributor names the kick they PLAYED (F17), and this verdict
   // says "they missed it" of a loose piece they did not take (re-walk 1380,
@@ -63,6 +67,11 @@ export interface LearnFundamental {
    *  same fact (re-walk 1380, 24.Bg5: "the bishop on g5 hangs" and "that left
    *  your bishop on g5 hanging" in one breath). */
   square: string | null;
+  /** The HOW sentences alone — for a turn where another lane already said the
+   *  diagnosis (the book departure is announced by the opening lane; run D
+   *  walk 2026-09-30 heard "You left the book with Bc5…" then "That leaves the
+   *  book — … Bc5 steps out of every known line"). Empty when there is no HOW. */
+  howOnly: string;
   /** The lines the verdict SAYS, each from the board it starts on
    *  (`VoiceFact.lines`): the move a "forcing win was on the board" names, from
    *  the board before the student's move; the path to the blow a
@@ -92,8 +101,16 @@ export function learnFundamentalVerdict(
    *  threatens…"). */
   said?: Set<string>,
 ): LearnFundamental | null {
-  const attrs = attributeLiveFundamental(input);
-  if (attrs.length === 0) return null;
+  const raw = attributeLiveFundamental(input);
+  if (raw.length === 0) return null;
+  const bare = (s: unknown): string => (typeof s === 'string' ? s : '').replace(/[+#]+$/, '');
+  // ONE FACT ONCE: the grade beside this verdict already names the better move
+  // ("Rfe8 was the move — …"), so the verdict leaves it out — for every
+  // fundamental whose stem names one, not only the conversion (Learn walk
+  // 2026-10-01: "Rfe8 was the plan move. … Rfe8 was the move").
+  const attrs = input.betterNamed && verdictCanDropBetter(raw[0].id) && bare(raw[0].facts.better) === bare(input.betterNamed)
+    ? [{ ...raw[0], facts: { ...raw[0].facts, better: '' } }, ...raw.slice(1)]
+    : raw;
 
   // First appearance THIS game → the recurrence clause may follow the full
   // verdict; a repeat within the game already got its short stem and says
@@ -123,9 +140,10 @@ export function learnFundamentalVerdict(
     })
     : null;
   const sq = attrs[0].facts.square;
+  const howOnly = verdict.split(/(?<=[.!?])\s+/).filter(isMethodSentence).join(' ');
   const a0 = attrs[0];
   const lines = fundamentalLines(a0, input.fenBefore, input.playedSan, firstThisGame);
-  return { id: a0.id, tag: a0.tag, verdict, recurrence, square: typeof sq === 'string' ? sq : null, lines };
+  return { id: a0.id, tag: a0.tag, verdict, recurrence, square: typeof sq === 'string' ? sq : null, lines, howOnly };
 }
 
 /** The lines a fundamental's verdict names, each from the board it starts on.

@@ -47,6 +47,9 @@ function presentTense(text: string): string {
     /\bwatch what they're building\b/i, /\bplayed out from here\b/i,
     /\bif they sit still\b/i, /\ba deeper threat brewing\b/i, /\bhere's exactly how\b/i,
     /\bhow you take advantage\b/i, /\byou're now threatening\b/i, /\bwatch out\b/i,
+    // A conditional ("Qxd4 would put the queen on d4, where …Nc6 hits it") is
+    // about a board that never happened (recapture-choice lane, A2).
+    /\bwould (?:put|leave|land|place|bring)\b/i,
   ];
   let cut = text.length;
   for (const re of markers) {

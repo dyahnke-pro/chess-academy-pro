@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**661 lines · 6 exports · 10 importers · 7 tests · 3 audits**
+**729 lines · 7 exports · 12 importers · 9 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,13 +21,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleAttributionEndgame.test.ts`
 - `src/services/principleAttributionEvalPv.test.ts`
 - `src/services/principleVoice.test.ts`
+- `src/services/replayFence.mcconnell1000.test.ts`
+- `src/services/replayFence.sicilian1200.test.ts`
 - `src/services/reviewFullData.ts`
 
 ## Exports and every call site
 
 ### `isMethodSentence` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:4386`
-- `src/services/learnFundamentalNarration.ts:105`
+- `src/services/coachFeatureService.ts:4680`
+- `src/services/learnFundamentalNarration.ts:129`
 
 ### `fundamentalHow` (function) — 10 call sites
 - `src/services/fundamentalHow.test.ts:25`
@@ -39,40 +41,55 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/fundamentalHow.test.ts:71`
 - `src/services/fundamentalHow.test.ts:76`
 - `src/services/fundamentalHow.test.ts:77`
-- `src/services/principleAttribution.section14.test.ts:176`
+- `src/services/principleAttribution.section14.test.ts:178`
+
+### `verdictCanDropBetter` (function) — 2 call sites
+- `src/services/learnFundamentalNarration.ts:111`
+- `src/services/principleVoice.test.ts:119`
 
 ### `FundamentalVerdictOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `renderFundamentalVerdict` (function) — 20 call sites
-- `src/services/coachFeatureService.ts:2259`
+### `renderFundamentalVerdict` (function) — 31 call sites
+- `src/services/coachFeatureService.ts:2484`
 - `src/services/fundLeadStems.test.ts:58`
 - `src/services/fundamentalHow.test.ts:47`
 - `src/services/fundamentalHow.test.ts:49`
 - `src/services/fundamentalHow.test.ts:55`
 - `src/services/fundamentalHow.test.ts:81`
-- `src/services/learnFundamentalNarration.ts:95`
+- `src/services/learnFundamentalNarration.ts:119`
 - `src/services/learnWalkBlumenfeld.test.ts:75`
 - `src/services/misconceptionClassifier.ts:259`
-- `src/services/principleAttribution.section14.test.ts:179`
-- `src/services/principleAttribution.section14.test.ts:182`
+- `src/services/principleAttribution.section14.test.ts:181`
+- `src/services/principleAttribution.section14.test.ts:184`
 - `src/services/principleAttributionEndgame.test.ts:49`
-- `src/services/principleAttributionEvalPv.test.ts:66`
-- `src/services/principleAttributionEvalPv.test.ts:79`
+- `src/services/principleAttributionEvalPv.test.ts:77`
+- `src/services/principleAttributionEvalPv.test.ts:90`
+- `src/services/principleAttributionEvalPv.test.ts:99`
 - `src/services/principleVoice.test.ts:13`
 - `src/services/principleVoice.test.ts:24`
 - `src/services/principleVoice.test.ts:25`
 - `src/services/principleVoice.test.ts:31`
 - `src/services/principleVoice.test.ts:32`
-- `src/services/reviewFullData.ts:401`
+- `src/services/principleVoice.test.ts:100`
+- `src/services/principleVoice.test.ts:101`
+- `src/services/principleVoice.test.ts:122`
+- `src/services/principleVoice.test.ts:123`
+- `src/services/principleVoice.test.ts:133`
+- `src/services/principleVoice.test.ts:153`
+- `src/services/principleVoice.test.ts:169`
+- `src/services/replayFence.mcconnell1000.test.ts:21`
+- `src/services/replayFence.sicilian1200.test.ts:54`
+- `src/services/replayFence.sicilian1200.test.ts:61`
+- `src/services/reviewFullData.ts:508`
 
 ### `renderPvEvidence` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2270`
+- `src/services/coachFeatureService.ts:2495`
 - `src/services/principleVoice.test.ts:38`
 - `src/services/principleVoice.test.ts:40`
 
 ### `renderFundamentalsRecap` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:4850`
+- `src/services/coachFeatureService.ts:5148`
 - `src/services/principleVoice.test.ts:48`
 - `src/services/principleVoice.test.ts:53`
 - `src/services/principleVoice.test.ts:57`
@@ -91,6 +108,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleAttributionEndgame.test.ts`
 - `src/services/principleAttributionEvalPv.test.ts`
 - `src/services/principleVoice.test.ts`
+- `src/services/replayFence.mcconnell1000.test.ts`
+- `src/services/replayFence.sicilian1200.test.ts`
 
 ## Audits that reach it
 

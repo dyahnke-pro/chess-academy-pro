@@ -73,13 +73,10 @@ export type ForwardStop =
   | 'quiz-open'
   /** The critical-moment question card is up, awaiting an answer. */
   | 'critical-ask'
-  /** A planned question card (turning point / find-the-shot) is up. */
+  /** A planned question card (find-the-shot) is up. */
   | 'planned-question'
   /** The find-the-shot card is up. */
   | 'find-the-shot'
-  /** The end-of-walk turning-point card is up. Auto-play must not dismiss it
-   *  (D-13): the question was just spoken and the card is the answer slot. */
-  | 'turning-point'
   /** A legacy reading gate is open. Unreachable today — `setReadingGate` is
    *  only ever called with null — and kept so the guard declares itself
    *  rather than pretending to advance. */
@@ -100,7 +97,6 @@ const AUTO_ADVANCE_ON_STOP: Record<ForwardStop, 'reschedule' | 'pause'> = {
   'critical-ask': 'pause',
   'planned-question': 'pause',
   'find-the-shot': 'pause',
-  'turning-point': 'pause',
   'reading-gate': 'pause',
 };
 

@@ -599,6 +599,7 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
               puzzle={currentPuzzle}
               onComplete={(outcome) => void handlePuzzleComplete(outcome)}
               disabled={awaitingConcept}
+              surface={master ? 'master' : 'adaptive'}
               streak={session.streak}
             />
           </div>
