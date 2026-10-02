@@ -840,10 +840,21 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         // Let the walk's opening narration and the review's own deep dive get
         // the engine first — this pass is background, and the question is not
         // needed until the walk reaches its ply.
-        await new Promise((r) => setTimeout(r, 3_000));
-        if (ac.signal.aborted) return;
-        const reads = await scanCriticalMoments({ plies, rating: playerRating || DEFAULT_STUDENT_RATING, signal: ac.signal });
-        if (ac.signal.aborted) return;
+        // The engine READS depend only on the game's positions, never on the
+        // narration — so a narration rebuild (the deepen) re-asks the question
+        // over the cached reads instead of re-running every ply at depth 14
+        // (review-load trace 2026-10-02: the scan re-ran on each rebuild).
+        const cached = criticalReadsRef.current;
+        let reads: Awaited<ReturnType<typeof scanCriticalMoments>>;
+        if (cached && cached.gameId === props.gameId) {
+          reads = cached.reads;
+        } else {
+          await new Promise((r) => setTimeout(r, 3_000));
+          if (ac.signal.aborted) return;
+          reads = await scanCriticalMoments({ plies, rating: playerRating || DEFAULT_STUDENT_RATING, signal: ac.signal });
+          if (ac.signal.aborted) return;
+          criticalReadsRef.current = { gameId: props.gameId, reads };
+        }
         const q = buildCriticalMomentQuestion(walkNarration.segments, reads, playerColor);
         if (!q) return;   // none yet — a later narration rebuild may still find one
         criticalScanGameRef.current = props.gameId;
@@ -1009,6 +1020,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
    *  ref, not the state, because the effect is declared above the state and
    *  because reading state here would churn the dep list. */
   const criticalScanGameRef = useRef<string | undefined>(undefined);
+  const criticalReadsRef = useRef<{ gameId: string | undefined; reads: Awaited<ReturnType<typeof scanCriticalMoments>> } | null>(null);
 
   useEffect(() => {
     // Fresh game → fresh question state. THE CRITICAL MOMENT RESETS HERE, with
@@ -1018,6 +1030,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setCriticalReveal(null);
     criticalDoneRef.current = new Set();
     criticalScanGameRef.current = undefined;
+    criticalReadsRef.current = null;
     setShotState(null);
     setShotReveal(null);
     shotAttemptsRef.current = 0;

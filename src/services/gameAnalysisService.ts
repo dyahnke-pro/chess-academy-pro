@@ -2597,14 +2597,24 @@ export async function analyzeAllGames(
       // the deep dive here (sweep plies come from the eval cache; it is
       // coalesced, so a review opened meanwhile joins this same run), then
       // build: the open finds nothing left to analyse and a cached narration.
-      const fresh = await db.games.get(newest.id);
-      if (fresh && gameNeedsAnalysis(fresh)) await analyzeSingleGame(newest.id);
-      const { prebuildReviewNarration } = await import('./reviewNarrationBuild');
-      await prebuildReviewNarration(newest.id, 'import-batch');
+      await prepareReview(newest.id, 'import-batch');
     })().catch(() => undefined);
   }
 
   return analyzed;
+}
+
+/** Get a game's review READY before it is opened: run the key-moment deep
+ *  dive if the stored analysis is shallow, THEN build the narration — so the
+ *  open finds nothing left to analyse and a cached narration that the deep
+ *  dive will not invalidate. One door for every "a game just arrived" path
+ *  (the import batch's newest game, a finished Play game). Coalesced with an
+ *  open that starts meanwhile (`analyzeSingleGame` shares one run). */
+export async function prepareReview(gameId: string, reason: string): Promise<void> {
+  const fresh = await db.games.get(gameId);
+  if (fresh && gameNeedsAnalysis(fresh)) await analyzeSingleGame(gameId);
+  const { prebuildReviewNarration } = await import('./reviewNarrationBuild');
+  await prebuildReviewNarration(gameId, reason);
 }
 
 /**

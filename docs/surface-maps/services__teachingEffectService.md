@@ -23,7 +23,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/teachingEffectService.test.ts:24`
 
 ### `reportTeachingEffects` (function) — 2 call sites
-- `src/services/autoAnalyzeGame.ts:293`
+- `src/services/autoAnalyzeGame.ts:298`
 - `src/services/teachingEffectService.test.ts:38`
 
 ## Tests

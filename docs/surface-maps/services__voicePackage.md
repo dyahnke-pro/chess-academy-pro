@@ -58,9 +58,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/dnaDoor.test.ts:10`
 
 ### `buildVoicePackage` (function) — 73 call sites
-- `src/components/Coach/CoachGameReview.tsx:1973`
-- `src/components/Coach/CoachGameReview.tsx:2012`
-- `src/components/Coach/CoachGameReview.tsx:2021`
+- `src/components/Coach/CoachGameReview.tsx:1986`
+- `src/components/Coach/CoachGameReview.tsx:2025`
+- `src/components/Coach/CoachGameReview.tsx:2034`
 - `src/components/Coach/CoachTeachPage.tsx:7657`
 - `src/hooks/usePhaseNarration.ts:430`
 - `src/hooks/usePhaseNarration.ts:880`
