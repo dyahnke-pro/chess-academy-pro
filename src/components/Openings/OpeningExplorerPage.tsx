@@ -16,6 +16,8 @@ import { GambitsTab } from './GambitsTab';
 import { MasterclassesTab } from './MasterclassesTab';
 import { CounterWeaponsTab } from './CounterWeaponsTab';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
+import { useUpNext } from '../../hooks/useUpNext';
+import { UpNextBar } from '../Dashboard/UpNextBar';
 import { BookOpen, Library, ChevronDown, ChevronRight, Users, Swords, Sparkles, GraduationCap, Shield } from 'lucide-react';
 
 type TabMode = 'masterclasses' | 'pro' | 'gambits' | 'counter' | 'all';
@@ -40,6 +42,8 @@ const ECO_DESCRIPTIONS: Record<string, string> = {
 export function OpeningExplorerPage(): JSX.Element {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const upNext = useUpNext();
+  const upNextPick = upNext?.current?.hub === 'openings' ? upNext.current : null;
   const [repertoire, setRepertoire] = useState<OpeningRecord[]>([]);
   const [searchResultIds, setSearchResultIds] = useState<Set<string> | null>(null);
   const [loading, setLoading] = useState(true);
@@ -189,6 +193,13 @@ export function OpeningExplorerPage(): JSX.Element {
           />
         </div>
       </div>
+
+      {/* Up next, pinned — only when the record says the next bite is an opening */}
+      {upNextPick && (
+        <div className="mb-4">
+          <UpNextBar pick={upNextPick} surface="openings" />
+        </div>
+      )}
 
       {/* SRS Trainer entry tile */}
       <button
