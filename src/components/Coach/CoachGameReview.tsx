@@ -1000,6 +1000,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const [criticalReveal, setCriticalReveal] = useState<{ correct: boolean; text: string } | null>(null);
   /** Plies this review has already spoken the moment at — one per game. */
   const criticalDoneRef = useRef<Set<number>>(new Set());
+  /** A critical moment whose beat YIELDED to a planned card on its ply (review
+   *  walk 2026-10-02, ply 77: the card took the stop, and the moment — "one
+   *  move kept you in it" — was never said anywhere). Said once that card has
+   *  closed and the walk has moved past it. */
+  const yieldedCriticalRef = useRef<{ ply: number; text: string } | null>(null);
   /** The game a moment has already been FOUND for — see the scan effect. A
    *  ref, not the state, because the effect is declared above the state and
    *  because reading state here would churn the dep list. */
@@ -1122,6 +1127,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       //
       // The beat yields. The forward does not: fall through so the planned
       // card opens on THIS step.
+      if (questionPlan.has(atPly)) {
+        if (criticalMoment.reveal) yieldedCriticalRef.current = { ply: atPly, text: criticalMoment.reveal };
+      }
       if (!questionPlan.has(atPly)) {
       captureEvent('review_critical_moment', {
         ply: atPly, register: criticalMoment.register, count: criticalMoment.count,
@@ -1561,6 +1569,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     fellOff?: boolean;
   }
   const [seqState, setSeqState] = useState<SeqState | null>(null);
+  // THE YIELDED MOMENT, SAID WHEN ITS CARD HAS CLOSED (see yieldedCriticalRef).
+  // Only past its ply, and only with no card, rewind, quiz or line playback
+  // open — so it never hands a card its answer and never talks over one.
+  useEffect(() => {
+    const y = yieldedCriticalRef.current;
+    if (!y || walkPlayback.currentPly < y.ply) return;
+    if (faucetPhase !== 'idle' || shotState || trapQ || criticalCard || rewindOffer || principleQuizState || seqState) return;
+    yieldedCriticalRef.current = null;
+    void reviewSay(y.text).catch(() => undefined);
+  }, [walkPlayback.currentPly, faucetPhase, shotState, trapQ, criticalCard, rewindOffer, principleQuizState, seqState, reviewSay]);
   const seqStateRef = useRef<SeqState | null>(null);
   useEffect(() => { seqStateRef.current = seqState; }, [seqState]);
   /** Cancellation token for the playback loop — bumped to cancel. */
@@ -1582,6 +1600,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     seqRunTokenRef.current += 1;
     pvPrefetchRef.current = new Map();
     lastShotPlyRef.current = null;
+    yieldedCriticalRef.current = null;
   }, [props.gameId]);
 
   const cancelSequence = useCallback((): void => {

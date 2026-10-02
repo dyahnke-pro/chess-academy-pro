@@ -147,7 +147,7 @@
 - `src/services/coachFeatureService.test.ts:24`
 
 ### `buildReviewSegments` (function) — 63 call sites
-- `src/components/Coach/CoachGameReview.tsx:1852`
+- `src/components/Coach/CoachGameReview.tsx:1871`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
 - `src/services/coachFeatureService.causalChain.test.ts:50`
@@ -227,7 +227,7 @@
 - `src/services/mapConcurrent.test.ts:37`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4799`
+- `src/components/Coach/CoachGameReview.tsx:4818`
 - `src/services/coachFeatureService.test.ts:814`
 - `src/services/coachFeatureService.test.ts:817`
 - `src/services/coachFeatureService.test.ts:824`
