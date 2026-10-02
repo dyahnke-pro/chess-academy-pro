@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, ChevronDown, ChevronUp, Eye, Shield, Crosshair, Swords } from 'lucide-react';
 import { Chess } from 'chess.js';
 import { ConsistentChessboard, type BoardArrow } from '../Chessboard/ConsistentChessboard';
+import { admitArrow } from '../../services/arrowDoor';
 import { detectTactics } from '../../services/tacticsDetector';
 import { PATTERN_REGISTRY, type TacticPatternLesson } from '../../data/patternRegistry';
 import { getPuzzlesByTheme } from '../../services/puzzleService';
@@ -33,7 +34,6 @@ interface ExampleBoard {
   targets: string[];
 }
 
-const PATTERN_ARROW = 'rgba(34, 197, 94, 0.85)';
 const TARGET_SQUARE = { background: 'rgba(250, 204, 21, 0.45)' };
 
 /** The Lichess puzzle `fen` is the position BEFORE the setup move; moves[0]
@@ -60,7 +60,12 @@ function exampleFromPuzzle(fen: string, movesUci: string): ExampleBoard | null {
     return {
       fen: live,
       orientation,
-      arrows: [{ startSquare: from, endSquare: to, color: PATTERN_ARROW }],
+      // Through the arrow door: the puzzle's solving move, played from the
+      // student's seat on the live board (a puzzle line is engine-checked).
+      arrows: (() => {
+        const a = admitArrow({ from, to, role: 'play', vouchedBy: 'engine', source: 'PatternSchoolPage.example' }, { fen: live, studentColor: orientation });
+        return a ? [a] : [];
+      })(),
       targets: landed ? landed.involvedSquares.slice(1) : [],
     };
   } catch {
