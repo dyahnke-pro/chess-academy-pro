@@ -74,15 +74,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseVerdict.test.ts:18`
 - `src/services/phaseVerdict.test.ts:23`
 - `src/services/phaseVerdict.test.ts:28`
-- `src/services/positionFacts.ts:858`
-- `src/services/reviewFullData.ts:962`
+- `src/services/positionFacts.ts:862`
+- `src/services/reviewFullData.ts:966`
 - `src/services/reviewPositionalAssessment.test.ts:87`
 - `src/services/reviewPositionalAssessment.test.ts:92`
 
 ### `phaseVerdictKeys` (function) — 3 call sites
 - `src/services/learnWalkNimzo.test.ts:22`
 - `src/services/learnWalkNimzo.test.ts:31`
-- `src/services/positionFacts.ts:861`
+- `src/services/positionFacts.ts:865`
 
 ## Tests
 

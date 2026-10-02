@@ -110,8 +110,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:2489`
 - `src/services/groundedAnswer.ts:3241`
 - `src/services/groundedAnswer.ts:6765`
-- `src/services/inaccuracyCall.ts:223`
-- `src/services/inaccuracyCall.ts:667`
+- `src/services/inaccuracyCall.ts:268`
+- `src/services/inaccuracyCall.ts:718`
 - `src/services/moveTiming.ts:27`
 - `src/services/pvPlayback.ts:406`
 - `src/services/pvPlayback.ts:453`
@@ -147,7 +147,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/latentFork.ts:149`
 - `src/services/latentFork.ts:220`
 - `src/services/moveFundamentals.ts:316`
-- `src/services/moveFundamentals.ts:1415`
+- `src/services/moveFundamentals.ts:1456`
 
 ### `legalSeeGainFor` (function) — 39 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7988`
@@ -272,7 +272,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `bishopHemmedByOwnPawns` (function) — 3 call sites
 - `src/services/positionReadingService.test.ts:902`
-- `src/services/principleAttribution.ts:989`
+- `src/services/principleAttribution.ts:1043`
 - `src/services/reviewTeachingPoints.ts:202`
 
 ### `findPieceQuality` (function) — 29 call sites

@@ -3956,7 +3956,10 @@ async function augmentWithProjections(
       const strip = (x: string): string => x.replace(/[+#!?]+$/, '');
       const [threat, punish] = await Promise.all([poolLine(nullFen, 3), poolLine(s.fenAfter, 6)]);
       const t = threat?.plies[0]?.san;
-      if (t && punish?.plies[0] && strip(punish.plies[0].san) === strip(t) && strip(line.plies[1].san) !== strip(t)) {
+      // ONE FACT ONCE (A3): the ply's fundamental already named this threat as
+      // a line ("Their threat first: Nxe3 was already on … Rfc1 does").
+      const namedAsThreat = (s.fundamentals ?? []).some((f) => f.id === 'ignored-threat' && !!f.facts.threat && strip(String(f.facts.threat)) === strip(t ?? ''));
+      if (t && !namedAsThreat && punish?.plies[0] && strip(punish.plies[0].san) === strip(t) && strip(line.plies[1].san) !== strip(t)) {
         s.narration = `${s.narration ?? ''} ${line.plies[0].san} first was the preventive move — it takes away their ${t}, and that is exactly the reply that punishes this.`.trim();
       }
     }

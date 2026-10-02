@@ -22,7 +22,7 @@ import { readConversion } from './conversionMethod';
 import type { StockfishAnalysis } from '../types';
 import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRead } from './criticality';
 import { Chess } from 'chess.js';
-import { strategicWhyImperative, strategicClaims, principleLine, isForcedReply } from './moveFundamentals';
+import { strategicWhyImperative, strategicClaims, principleLine, principleContrastLine, isForcedReply } from './moveFundamentals';
 import { isBookLine } from './openingDetectionService';
 import { refutedFromFan, candidatesFromAmateur, type FanLine, type RefutedAlternative } from './refutedAlternativeCore';
 import { threatStoppedBy } from './opponentMovePurpose';
@@ -819,12 +819,16 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // S2 — otherwise the why of a clean move: in the opening the principle it
   // kept (full once, a stem after); past it, its lead fundamental as a stem.
   // `principleLine` decides which, from the board.
+  const lmBook = !!lm && lm.historySans != null && isBookLine(lm.historySans);
   const ruleHere = !refutedHere && studentToMove && lm && input.taughtPrinciples
     // GRADED clean only — an ungraded move is not a clean one. The 2026-09-24
     // Learn tape praised "O-O-O does what the opening asks" one line after
     // another lane called O-O-O a mistake: the grade had not reached here yet.
-    && ((lm.historySans !== null && isBookLine(lm.historySans)) || ((gradedLoss(lm, studentColor) ?? Infinity) < 50))
-    ? principleLine(lm.fenBefore, lm.san, studentSeat, input.taughtPrinciples, stemKeyOf(lm.fenBefore))
+    && (lmBook || ((gradedLoss(lm, studentColor) ?? Infinity) < 50))
+    ? (principleLine(lm.fenBefore, lm.san, studentSeat, input.taughtPrinciples, stemKeyOf(lm.fenBefore))
+      // A clean move that kept no opening rule: the rule the engine's move kept
+      // (never on a book move — theory is not corrected).
+      ?? (lmBook || !lm.reads ? null : principleContrastLine(lm.fenBefore, lm.san, uciToSanAt(lm.fenBefore, lm.reads.bestMoveUci), studentSeat, input.taughtPrinciples, stemKeyOf(lm.fenBefore))))
     : null;
   // S3 — the opponent's reply took the student's threat off the board.
   const stoppedReply = studentToMove && lm && input.opponentLastMove

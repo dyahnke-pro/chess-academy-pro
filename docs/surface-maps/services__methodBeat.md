@@ -40,7 +40,7 @@
 
 ### `habitIsOwed` (function) — 2 call sites
 - `src/services/coachFeatureService.ts:2531`
-- `src/services/positionFacts.ts:889`
+- `src/services/positionFacts.ts:893`
 
 ### `methodBeatFor` (function) — 43 call sites
 - `src/services/coachDecider.ts:393`

@@ -190,6 +190,51 @@ function playedGain(fenBefore: string, playedSan: string | null): number {
   } catch { return 0; }
 }
 
+/** A WIN THE DEFENDER COULD HAVE DODGED IS NOT A REASON (Learn walk
+ *  2026-10-01, recorded live lines: "d5 was their move, to win a piece" read off
+ *  d5 Ne5 f4 Ng6 e5 Bc5? exf6 — the piece falls only because the time-boxed
+ *  line has the defender blunder on a quiet move; at depth the knight retreats.
+ *  Same shape: "f5 … to land a skewer" after the defender walks the queen in).
+ *  A material or tactic reason must already be TRUE on the line cut at the
+ *  defender's second free choice (not a check answer, not a recapture) — past that the shallow line is guessing at
+ *  their choices. Material is counted directly; a tactic must show in the
+ *  plan of the cut line. Any other reason (a route, a file) passes. */
+function survivesForcingCut(fenBefore: string, bestUci: readonly string[], moverColor: 'white' | 'black', text: string): boolean {
+  const material = isCostClause(text) ? (winClauseValue(text) ?? 0) : null;
+  const tactic = /\bland an? \w/.test(text);
+  if (material === null && !tactic) return true;
+  let cut = bestUci.length;
+  let net = 0;
+  let netAtCut = 0;
+  let quiet = 0;
+  try {
+    const b = new Chess(fenBefore);
+    const me = b.turn();
+    let prev: { to: string; captured: boolean } | null = null;
+    for (let i = 0; i < bestUci.length; i += 1) {
+      const u = bestUci[i];
+      const inCheck = b.inCheck();
+      const m = b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+      if (!m) break;
+      // A defender move is FORCED only when it answers a check or takes back
+      // on the square just captured on; anything else is their choice, and
+      // the time-boxed line may have chosen badly for them.
+      const forced = inCheck || (!!m.captured && !!prev?.captured && m.to === prev.to);
+      if (cut === bestUci.length && i % 2 === 1 && !forced) {
+        quiet += 1;
+        if (quiet === 2) { cut = i; netAtCut = net; }
+      }
+      if (m.captured) net += (m.color === me ? 1 : -1) * MATERIAL_VALUE[m.captured];
+      prev = { to: m.to, captured: !!m.captured };
+    }
+  } catch { return false; }
+  if (cut >= bestUci.length) return true;
+  // Everything the line wins must already be won before the guessing starts.
+  if (material !== null) return netAtCut > 0 && netAtCut >= net;
+  const plan = planFromUci(fenBefore, bestUci.slice(0, cut), moverColor);
+  return !!plan?.mine.spokenClauses.some((c) => c.text === text);
+}
+
 function whyBetter(
   fenBefore: string,
   bestUci: readonly string[],
@@ -304,12 +349,14 @@ function whyBetter(
     try { const mv = new Chess(fenBefore).move({ from: firstFrom, to: firstTo, promotion: bestUci[0][4] }); movedName = mv ? ({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as Record<string, string>)[mv.piece] ?? null : null; } catch { movedName = null; }
     const otherPieceRoute = routed !== null && movedName !== null && routed !== movedName;
     const own = !otherPieceRoute && (costIsOwn || lead.squares.includes(firstFrom) || lead.squares.includes(firstTo));
+    if (!survivesForcingCut(fenBefore, bestUci, moverColor, lead.text)) return null;
     return { why: lead.text, square: lead.squares[0] ?? '', own };
   }
   // No clause carried a square (anything square-less that outranked the rest)
   // — fall back to the sentence, which in that case IS one clause.
   const want = /^You want to ([^.]+)\./.exec(text);
   if (!want) return null;
+  if (!survivesForcingCut(fenBefore, bestUci, moverColor, want[1])) return null;
   const square = plan?.mine.spokenClauses.flatMap((c) => c.squares)[0] ?? '';
   return { why: want[1], square, own: false };
 }
@@ -603,7 +650,11 @@ export function callInaccuracyDetailed(args: {
   // NAMED WITH ITS REASON, OR NOT NAMED (Learn walk, fresh Nimzo game,
   // 2026-09-26: "exd5 was a mistake. e5 was the move." — nothing said why).
   const should = reason ? ` ${args.bestSan} was the move — ${reason}.` : '';
-  const grade = quality === 'blunder' ? 'a blunder' : quality === 'mistake' ? 'a mistake' : 'a little loose';
+  // The grade is read off win chances, the cost in pawns: a two-pawn drop in
+  // a lost position grades as an inaccuracy. "A little" beside "about two
+  // pawns" contradicts itself (Learn walk 2026-10-01, Rc8), so the word for an
+  // inaccuracy follows the cost the sentence states.
+  const grade = quality === 'blunder' ? 'a blunder' : quality === 'mistake' ? 'a mistake' : cost >= MISTAKE_CP ? 'loose' : 'a little loose';
   const head = punishment
     ? `${args.playedSan} was ${grade} — it let them ${punishment.why}${punishment.first && args.replySan !== null && bare(args.replySan) !== bare(punishment.first) ? ', and they missed it' : ''}.`
     : (args.missedMate ?? null) !== null

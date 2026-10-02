@@ -425,6 +425,23 @@ function openedRookLane(before: Chess, best: Move, mover: Color): string | null 
 /** File-distance from the centre seam (files d/e). Lower = more central. */
 function centreBias(sq: string): number { return Math.abs(fileIdx(sq) - 3.5); }
 
+/** Material `opp` nets over `sans` played from `fen` with `opp` to move, or
+ *  null when the line is not legal there. Captures only, in points. */
+function lineNetForSide(fen: string, sans: readonly string[], opp: Color): number | null {
+  const parts = fen.split(' ');
+  if (parts[1] !== opp) { parts[1] = opp; parts[3] = '-'; }
+  let b: Chess;
+  try { b = new Chess(parts.join(' ')); } catch { return null; }
+  let net = 0;
+  for (const san of sans) {
+    let m: Move | null = null;
+    try { m = b.move(san); } catch { return null; }
+    if (!m) return null;
+    if (m.captured) net += (m.color === opp ? 1 : -1) * VAL[m.captured];
+  }
+  return net;
+}
+
 // ─── the attributor ─────────────────────────────────────────────────────────
 
 interface Ctx {
@@ -514,6 +531,43 @@ function yieldTo(c: Ctx, from: FundamentalId, to: readonly FundamentalId[], reas
 
 function att(id: FundamentalId, weight: number, evidence: Omit<PrincipleEvidence, 'counterfactualClean'>, facts: Record<string, string | number> = {}): Omit<PrincipleAttribution, 'tag' | 'coOccurrence'> {
   return { id, weight, evidence: { ...evidence, counterfactualClean: true }, facts };
+}
+
+/** IGNORED THREAT, AS A LINE (unify-the-coach A3, review walk 2026-10-01,
+ *  game 3 ply 53: Kh2 with …Nxe3 fxe3 Rxf1 on the board). Nothing was simply
+ *  hanging, so the one-move check saw nothing and every other fundamental
+ *  stood down — yet the opponent's line won the exchange BEFORE the move, still
+ *  won it AFTER, and the best move took it away. Same three reads Review's
+ *  "preventive move" lane makes with the engine, done on the board here so
+ *  Learn and Review attach the same fundamental. */
+function comboThreatIgnored(c: Ctx): ReturnType<typeof att> | null {
+  const line = (c.pvP ?? []).slice(0, 6);
+  if (line.length < 2) return null;
+  const after = lineNetForSide(c.after.fen(), line, c.opp);
+  if (after === null || after < 2) return null;
+  const before = lineNetForSide(c.before.fen(), line, c.opp);
+  if (before === null || before < 2) return null;
+  const withBest = lineNetForSide(c.afterBest.fen(), line, c.opp);
+  if (withBest !== null && withBest >= 2) return null;
+  // What the line takes: the most valuable of the mover's pieces it captures.
+  let victim: { type: PieceSymbol; square: string } | null = null;
+  let lastCapture = 0;
+  try {
+    const b = new Chess(c.after.fen());
+    line.forEach((san, i) => {
+      const m = b.move(san);
+      if (m?.captured) {
+        lastCapture = i;
+        if (m.color === c.opp && (!victim || VAL[m.captured] > VAL[victim.type])) victim = { type: m.captured, square: m.to };
+      }
+    });
+  } catch { return null; }
+  const v = victim as { type: PieceSymbol; square: string } | null;
+  if (!v) return null;
+  const shown = line.slice(0, lastCapture + 1);
+  return att('ignored-threat', 3, {
+    squares: [v.square], moves: [shown.join(' ')], pvMoves: pvHas(c.pvP, (s) => s === line[0]),
+  }, { piece: PNAME[v.type], square: v.square, threat: line[0], line: shown.join(', '), better: c.best.san });
 }
 
 const DETECTORS: Detector[] = [
@@ -767,7 +821,7 @@ const DETECTORS: Detector[] = [
   (c) => {
     const { mover, last } = c;
     const threatened = pieces(c.before, mover).filter((p) => p.type !== 'k' && VAL[p.type] >= 3 && hangsBy(c.before, p.square) >= 2);
-    if (threatened.length === 0) return null;
+    if (threatened.length === 0) return comboThreatIgnored(c);
     const still = threatened.filter((p) => p.square !== last.from && hangsBy(c.after, p.square) >= 2);
     if (still.length === 0) return null;
     const fixedByBest = threatened.every((p) => !c.afterBest.get(p.square) || c.afterBest.get(p.square)?.color !== mover || hangsBy(c.afterBest, p.square) < 2);

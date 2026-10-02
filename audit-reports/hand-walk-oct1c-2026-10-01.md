@@ -27,3 +27,25 @@ Repeats removed (not false, said twice): better move named by verdict AND grade 
 - Learn: "d5 … to win a piece", "f5 … to land a skewer", "Rc8 a little loose" (3.5-pawn drop), "a bit better" at +1.9 — all read off Learn's 900 ms live PV; the d16 read refutes each and the tape does not store the live line. Next: record the source line per claim, then gate PV-derived reasons on line depth.
 - Review g3 FUNDLEAD 0/6 — ignored-threat sees only one-move hanging pieces; combination threats / walked-into forks attach no fundamental (plan A3).
 - Review g1 owed plies 1/7/11 (h4, g4, h5) silent — no computer has a true thing to say about early edge pawns that the engine does not flag.
+
+## Re-walk 2026-10-02 — Review
+
+- **The ply-23 "wedge" was the AUDIT, not the app.** Bisecting by commit was
+  inconclusive (the same commit passed once, wedged once). Capturing the page at
+  the wedge showed it idle on `/coach/home`: the audit force-tapped the cameo
+  card's Skip at screen coordinates while the card was still scrolling into
+  view, and the tap landed on the bottom nav's Coach tab. After the card's own
+  scroll settles, Skip is uncovered (checked with `elementFromPoint`), so a
+  person's tap works. Fix: the audit DOM-clicks the button and logs any cover
+  that remains after settling; every card tap and every navigation is logged.
+- **SEAT check too blunt:** "They have mate in one with their rook" after the
+  student's Nc4 (Rh8# is real) — the consequence of the student's move, right
+  seat. The student-ply check now mirrors the opponent-ply one (action verbs
+  fail, state verbs pass), with cases in `seatReattribution.test.ts`.
+- **Owed opening plies silent (h4, g4, h5):** unflagged, so no fundamental, and
+  `principleLine` had nothing for a move that keeps no opening rule. New
+  `principleContrastLine` (Learn + Review): the opening rule the engine's move
+  kept, said once in full, then as a stem; never on book moves; says nothing
+  about the move played.
+- Results on 6fde1eec4 (before this batch): game 1 = owed plies + SEAT (both
+  fixed here); game 2 = 0 fails; game 3 = FUNDLEAD 0/5 (A3, fixed in this batch).

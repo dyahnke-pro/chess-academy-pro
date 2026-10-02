@@ -8,6 +8,7 @@ import {
   strategicWhyLed,
   strategicWhySelfContained,
   type MoveFundamental,
+  principleContrastLine,
 } from './moveFundamentals';
 
 const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -347,5 +348,25 @@ describe('the outpost rule rides only with a piece standing on the hole (Learn w
     const r = principleLine(c.fen(), 'Nh6+', 'black', new Set(), 0);
     expect(r?.text ?? '').toMatch(/eyes g4/);
     expect(r?.text ?? '').not.toMatch(/stays there/);
+  });
+});
+
+describe('principleContrastLine — the rule the best move kept, on a move that kept none (review walk 2026-10-02)', () => {
+  const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+  it('1.h4 (owed, silent before): names the rule e4 kept, says nothing about h4', () => {
+    const r = principleContrastLine(START, 'h4', 'e4', 'white', new Set(), 0);
+    expect(r?.first).toBe(true);
+    expect(r?.text).toMatch(/^e4 was the opening move here — stake out the center/);
+    expect(r?.text).not.toMatch(/h4/);
+  });
+  it('a rule already taught is a stem, not the rule again', () => {
+    const r = principleContrastLine(START, 'h4', 'e4', 'white', new Set(['center']), 0);
+    expect(r?.first).toBe(false);
+    expect(r?.text).toBe('e4 stakes out the center and grabs space — the opening move here.');
+  });
+  it('silent when the played move keeps a rule of its own, or IS the best move', () => {
+    expect(principleContrastLine(START, 'd4', 'e4', 'white', new Set(), 0)).toBeNull();
+    expect(principleContrastLine(START, 'e4', 'e4', 'white', new Set(), 0)).toBeNull();
+    expect(principleContrastLine(START, 'h4', null, 'white', new Set(), 0)).toBeNull();
   });
 });

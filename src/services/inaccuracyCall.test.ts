@@ -481,3 +481,33 @@ describe('a pawn their line takes is a lost square the caller can match (Learn w
     expect(call?.lostSquare).toBe('b5');
   });
 });
+
+describe('a win the defender could dodge is not a reason (Learn walk 2026-10-01, recorded live lines)', () => {
+  it('h3 with d5 best: the piece falls only to a deep defender blunder, so no "to win a piece"', () => {
+    const call = callInaccuracy({
+      replyLineUci: [], replySan: null, side: 'coach', dictated: true, moverColor: 'white', cpLoss: 180,
+      fenBefore: 'r1bqk2r/ppppbppp/2n2n2/8/3PP3/2N5/PP3PPP/R1BQKBNR w KQkq - 3 6', playedSan: 'h3', bestSan: 'd5',
+      bestLineUci: 'd4d5 c6e5 f2f4 e5g6 e4e5 e7c5 e5f6 e8g8 f6g7 f8e8 f1e2 d8h4'.split(' '),
+    });
+    expect(call?.said ?? '').not.toMatch(/win a piece/);
+  });
+  it('Bd5 with f5 best: the skewer needs White to walk the queen into it, so no "land a skewer"', () => {
+    const call = callInaccuracy({
+      replyLineUci: [], replySan: null, side: 'student', moverColor: 'black', cpLoss: 130,
+      fenBefore: 'r2q1rk1/ppp2ppp/2n5/4P3/2bPp3/2P1B2P/P3NPP1/R2QR1K1 b - - 2 14', playedSan: 'Bd5', bestSan: 'f5',
+      bestLineUci: 'f7f5 e5f6 d8f6 d1b1 b7b6 b1e4 a8e8 e4g4 f6f7'.split(' '),
+    });
+    expect(call?.said ?? '').not.toMatch(/skewer/);
+  });
+});
+
+describe('the inaccuracy word follows the cost it states (Learn walk 2026-10-01, Rc8)', () => {
+  it('a two-pawn drop graded an inaccuracy is "loose", never "a little loose"', () => {
+    const call = callInaccuracy({
+      replyLineUci: [], replySan: null, side: 'student', moverColor: 'black', cpLoss: 210, moverEvalAfterCp: -800,
+      fenBefore: '3r4/2R4p/p1rP2p1/2Pk1p2/NP6/7P/P5P1/6K1 b - - 2 36', playedSan: 'Rc8', bestSan: 'Rcxd6',
+    });
+    expect(call?.quality).toBe('inaccuracy');
+    expect(call?.said).toBe('Rc8 was loose — it gave away about two pawns.');
+  });
+});

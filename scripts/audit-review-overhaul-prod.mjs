@@ -258,6 +258,9 @@ const run = async () => {
   // Worker-target census at every phase boundary: 128 DedicatedWorker threads
   // were found in the wedged renderer (2026-09-06) — the count tells WHEN they
   // pile up, which names the spawner.
+  // A review that leaves its own route is a finding: log every top-frame
+  // navigation with the time, so a dead readout is tied to the URL change.
+  page.on('framenavigated', (f) => { if (f === page.mainFrame()) log(`  [nav] ${f.url()}`); });
   page.on('dialog', (d) => { log(`  [dialog] ${d.type()}: ${d.message().slice(0, 120)} — dismissed`); d.dismiss().catch(() => undefined); });
   const cdp0 = await ctx.newCDPSession(page).catch(() => null);
   const workerCount = async () => {
@@ -501,7 +504,28 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       ['review-sequence-ask', '[data-testid="review-sequence-skip"]'],
       ['review-sequence-playback', '[data-testid="review-sequence-skip"]'],
     ]) {
-      if (await has(page, `[data-testid="${c}"]`) && await has(page, sel)) { await page.locator(sel).first().click({ timeout: 1500, force: true }).catch(() => undefined); await page.waitForTimeout(400); }
+      if (await has(page, `[data-testid="${c}"]`) && await has(page, sel)) {
+        // Every card the audit answers is LOGGED — a run that left the review
+        // must be able to say which tap (if any) took it there (2026-10-02).
+        const at = (await readWalkPly(page).catch(() => null))?.n ?? '?';
+        log(`  [card] ply ${at}: ${c} → ${sel}`);
+        // A DOM click on the BUTTON ITSELF, never a coordinate tap: the walk
+        // scrolls a blocking card into view as it mounts, so a forced tap at the
+        // located point landed on the header's Back arrow and left the review
+        // (2026-10-02, game 1 ply 23 — read as a "wedge" for three runs).
+        // A person reads the card first: let the card's own scroll-into-view
+        // settle, so "covered" means a human tap would land on something else.
+        await page.waitForTimeout(1200);
+        const hit = await page.locator(sel).first().evaluate((el) => {
+          const r = el.getBoundingClientRect();
+          const at = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+          const same = !!at && (at === el || el.contains(at));
+          el.click();
+          return same ? null : (at?.closest('[aria-label],[data-testid]')?.getAttribute('aria-label') ?? at?.closest('[data-testid]')?.getAttribute('data-testid') ?? at?.tagName ?? 'nothing');
+        }, undefined, { timeout: 1500 }).catch(() => undefined);
+        if (hit) log(`  [card] COVERED after the scroll settled: a tap on ${sel} lands on "${hit}"`);
+        await page.waitForTimeout(400);
+      }
     }
     // THE TURNING-POINT CARD — answer it the way a human does: tap a candidate
     // to step the board to that moment, THEN commit. Two taps, in order.
@@ -542,7 +566,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // hand-maintained lists that must agree is the drift this repo keeps paying
   // for, so when a NEW fundamental gets a voice, its stem belongs here in the
   // same commit — or this row silently under-counts it forever.
-  const FUND_RE = /same (knight|bishop|rook|queen|piece) (for the|again|moves)|its (second|third|fourth|fifth) (move|trip)|on its (second|third|fourth|fifth) move|hand(?:s|ed) (?:them|over) a tempo|tempo lost|the cost is time|another tempo handed|gave up [a-h][1-8]|concedes the [a-h][1-8] square|space handed over|space given up|development first|pieces before pawns|develops nothing while|queen came out too early|early queen sortie|queen before the pieces|castling was there|castle first|uncastled one move too long|pawn grab with the pieces|^greedy:|edge pawn this early|edge pawns wait|both bishops are committed|knights before bishops|bishops declared their squares|buries your own bishop|a centre break|open the centre only when|knight on the rim is dim|knights belong in the centre|loose pieces drop off|their threat first|answer the threat before|checks, captures, threats|a forcing win was on the board|always run the forcing moves|loosens the shelter|pawns in front of the king move only|creates a weakness|pawns don't move backwards|a structural cost|advanced past its support|too far, too soon|trades your active|trade your worst piece|an exchange that improves them|ahead in material — trade|every piece off the board|ahead means simplify|behind in material|when you're down, keep the pieces|behind means complicate|improve your worst piece|looks fine for two moves|nothing hangs right away|shallow read:|holds against the first replies|that leaves the book|theory ends with|out of book early|what was .{1,12} for\?|a move without a purpose|name the target before you move|the open [a-h]-file was yours|an open file is a highway|rooks belong on open files|trade the bad bishop|a bishop hemmed in by its own pawns|your worst piece is the bishop|that break is mistimed|before the pieces were ready|a pawn break needs its pieces behind it|in the endgame the king is a piece|activate the king|queens off, king on|rooks belong behind passed pawns|in front of the passer the rook blocks|the wrong way round|passed pawns must be pushed|a passer is a rocket|push the passer|take the opposition|turn on the opposition|whoever has to move gives ground|an active rook is worth a pawn|rooks belong on the seventh|the seventh rank is the rook[’']s home|the attack was overvalued|that sacrifice doesn[’']t land|before the attack was real|that pawn was poisoned|that pawn was defended:|count the guards before you grab|was covered — your|a pawn grab with the|don[’']t reach for that pawn|recapture direction|normally you capture toward the centre|the other capture was the one|you had it won and rushed|convert with patience|a won position needs care|poisoned: taking it costs time|spends a tempo on the rim|is shut in behind|loses its diagonal to|break comes too soon|is on the edge of the board|wins it outright|is free material|was hanging before you moved|is airier for it|is overextended|is your least active piece|find the piece doing nothing and fix it|they missed it this time/i;
+  const FUND_RE = /same (knight|bishop|rook|queen|piece) (for the|again|moves)|its (second|third|fourth|fifth) (move|trip)|on its (second|third|fourth|fifth) move|hand(?:s|ed) (?:them|over) a tempo|tempo lost|the cost is time|another tempo handed|gave up [a-h][1-8]|concedes the [a-h][1-8] square|space handed over|space given up|development first|pieces before pawns|develops nothing while|queen came out too early|early queen sortie|queen before the pieces|castling was there|castle first|uncastled one move too long|pawn grab with the pieces|^greedy:|edge pawn this early|edge pawns wait|both bishops are committed|knights before bishops|bishops declared their squares|buries your own bishop|a centre break|open the centre only when|knight on the rim is dim|knights belong in the centre|loose pieces drop off|answer theirs|their threat first|answer the threat before|checks, captures, threats|a forcing win was on the board|always run the forcing moves|loosens the shelter|pawns in front of the king move only|creates a weakness|pawns don't move backwards|a structural cost|advanced past its support|too far, too soon|trades your active|trade your worst piece|an exchange that improves them|ahead in material — trade|every piece off the board|ahead means simplify|behind in material|when you're down, keep the pieces|behind means complicate|improve your worst piece|looks fine for two moves|nothing hangs right away|shallow read:|holds against the first replies|that leaves the book|theory ends with|out of book early|what was .{1,12} for\?|a move without a purpose|name the target before you move|the open [a-h]-file was yours|an open file is a highway|rooks belong on open files|trade the bad bishop|a bishop hemmed in by its own pawns|your worst piece is the bishop|that break is mistimed|before the pieces were ready|a pawn break needs its pieces behind it|in the endgame the king is a piece|activate the king|queens off, king on|rooks belong behind passed pawns|in front of the passer the rook blocks|the wrong way round|passed pawns must be pushed|a passer is a rocket|push the passer|take the opposition|turn on the opposition|whoever has to move gives ground|an active rook is worth a pawn|rooks belong on the seventh|the seventh rank is the rook[’']s home|the attack was overvalued|that sacrifice doesn[’']t land|before the attack was real|that pawn was poisoned|that pawn was defended:|count the guards before you grab|was covered — your|a pawn grab with the|don[’']t reach for that pawn|recapture direction|normally you capture toward the centre|the other capture was the one|you had it won and rushed|convert with patience|a won position needs care|poisoned: taking it costs time|spends a tempo on the rim|is shut in behind|loses its diagonal to|break comes too soon|is on the edge of the board|wins it outright|is free material|was hanging before you moved|is airier for it|is overextended|is your least active piece|find the piece doing nothing and fix it|they missed it this time/i;
   const lead = fundNarr.split(/(?<=[.!?])\s+/)[0] || '';
   const flagged = /INACCUR|MISTAKE|BLUNDER/i.test(fundBadge);
   // The fixture ply: WHEN the engine flags it, the narration must LEAD with the
@@ -664,7 +688,38 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     }
     if (n >= total) { reachedEnd = true; break; }
     wedgedReason = watch.observe(!!read, `ply ${lastReadPly}/${total}`);
-    if (wedgedReason) { log(`  [walk] WEDGED: ${wedgedReason}`); break; }
+    if (wedgedReason) {
+      log(`  [walk] WEDGED: ${wedgedReason}`);
+      // NAME THE FROZEN FUNCTION, not just the ply (2026-10-02: a ply-22 wedge
+      // was bisected by commit with nothing saying where the thread was spinning).
+      // A hung evaluate = main thread blocked; a landed pause gives the stack.
+      if (cdp0) {
+        const probe = await Promise.race([
+          cdp0.send('Runtime.evaluate', { expression: '1+1', returnByValue: true }).then(() => 'answered', (e) => `error ${String(e.message ?? e).slice(0, 80)}`),
+          new Promise((r) => setTimeout(() => r('HUNG >3s'), 3000)),
+        ]);
+        log(`  [wedge] cdp Runtime.evaluate: ${probe}`);
+        // An idle thread with no readout is a DOM state, not a hang: say which.
+        const dom = await Promise.race([page.evaluate(() => ({
+          walk: !!document.querySelector('[data-testid="coach-game-review-walk"]'),
+          ids: [...new Set([...document.querySelectorAll('[data-testid]')].map((e) => e.getAttribute('data-testid')))].slice(0, 80),
+          text: (document.body.innerText || '').replace(/\s+/g, ' ').slice(0, 600),
+        })), new Promise((r) => setTimeout(() => r(null), 4000))]).catch((e) => ({ error: String(e).slice(0, 200) }));
+        log(`  [wedge] dom: ${JSON.stringify(dom)}`);
+        await page.screenshot({ path: `audit-reports/wedge-${GID}.png` }).catch(() => undefined);
+        const paused = new Promise((r) => { cdp0.on('Debugger.paused', (e) => r(e)); });
+        await cdp0.send('Debugger.enable').catch(() => undefined);
+        void cdp0.send('Debugger.pause').catch(() => undefined);
+        const got = await Promise.race([paused, new Promise((r) => setTimeout(() => r(null), 10000))]);
+        if (!got) log('  [wedge] Debugger.pause NEVER LANDED in 10s (no interrupt check: regex or C++ builtin)');
+        else {
+          log(`  [wedge] Debugger.pause LANDED — top frames:`);
+          for (const f of (got.callFrames || []).slice(0, 16)) log(`     ${f.functionName || '(anon)'} @ ${String(f.url || '').split('/').pop()}:${f.location?.lineNumber}`);
+          await cdp0.send('Debugger.resume').catch(() => undefined);
+        }
+      }
+      break;
+    }
     // PROGRESS, so a 10-minute walk is not 10 minutes of silence (CLAUDE.md
     // "never run blind, never wait silent"). Without this the recap phase is
     // indistinguishable from a hang, which is the exact failure this audit

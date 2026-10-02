@@ -162,9 +162,9 @@
 - `src/components/Coach/CoachTeachPage.tsx:7451`
 - `src/components/Coach/CoachTeachPage.tsx:7455`
 - `src/services/learnWalkBlumenfeld.test.ts:133`
-- `src/services/positionFacts.ts:1044`
-- `src/services/positionFacts.ts:1047`
-- `src/services/positionFacts.ts:1432`
+- `src/services/positionFacts.ts:1048`
+- `src/services/positionFacts.ts:1051`
+- `src/services/positionFacts.ts:1436`
 - `src/services/reviewFullData.ts:460`
 - `src/services/reviewFullData.ts:463`
 

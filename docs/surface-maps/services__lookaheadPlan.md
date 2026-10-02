@@ -169,26 +169,28 @@
 - `src/services/lookaheadPlan.test.ts:956`
 - `src/services/lookaheadPlan.test.ts:967`
 
-### `isCostClause` (function) — 9 call sites
+### `isCostClause` (function) — 10 call sites
 - `src/services/concessionBeat.ts:455`
-- `src/services/inaccuracyCall.ts:276`
-- `src/services/inaccuracyCall.ts:283`
-- `src/services/inaccuracyCall.ts:297`
-- `src/services/inaccuracyCall.ts:687`
+- `src/services/inaccuracyCall.ts:203`
+- `src/services/inaccuracyCall.ts:321`
+- `src/services/inaccuracyCall.ts:328`
+- `src/services/inaccuracyCall.ts:342`
+- `src/services/inaccuracyCall.ts:738`
 - `src/services/learnWalkBlumenfeld.test.ts:176`
 - `src/services/learnWalkBlumenfeld.test.ts:177`
 - `src/services/learnWalkBlumenfeld.test.ts:178`
 - `src/services/learnWalkBlumenfeld.test.ts:179`
 
-### `planFromUci` (function) — 28 call sites
+### `planFromUci` (function) — 29 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9553`
 - `src/services/claimTruth.manual.test.ts:119`
 - `src/services/coachLaneWiring.test.ts:35`
 - `src/services/computedVoiceAudit.report.test.ts:216`
 - `src/services/concessionBeat.ts:449`
-- `src/services/inaccuracyCall.ts:232`
-- `src/services/inaccuracyCall.ts:236`
-- `src/services/inaccuracyCall.ts:685`
+- `src/services/inaccuracyCall.ts:234`
+- `src/services/inaccuracyCall.ts:277`
+- `src/services/inaccuracyCall.ts:281`
+- `src/services/inaccuracyCall.ts:736`
 - `src/services/lookaheadPlan.test.ts:228`
 - `src/services/lookaheadPlan.test.ts:236`
 - `src/services/lookaheadPlan.test.ts:241`

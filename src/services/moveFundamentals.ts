@@ -1369,6 +1369,47 @@ export function principleLine(
   return { id: lead.id, text: `${san} ${lead.led}.`, squares: lead.squares, first: false };
 }
 
+/**
+ * THE RULE THE BEST MOVE KEPT, ON A MOVE THAT KEPT NONE (review walk
+ * 2026-10-02, game 1: h4, g4 and h5 were owed teaching and went silent — none
+ * was graded a mistake, so no fundamental fired, and `principleLine` has
+ * nothing to say about a move that follows no opening rule). The board answers
+ * it without judging the move played: the engine's move applies an opening
+ * principle, and that principle is the lesson. Says nothing about `san` itself
+ * (it was not flagged, so no cost may be claimed). Full once per principle —
+ * sharing `principleLine`'s say-once ids, so a rule taught either way is not
+ * taught twice — then the move and what it does.
+ */
+export function principleContrastLine(
+  fenBefore: string, san: string, bestSan: string | null, mover: 'white' | 'black', taughtIds: ReadonlySet<string>, stemKey: number,
+): { id: string; text: string; squares: string[]; first: boolean } | null {
+  if (!bestSan) return null;
+  const strip = (x: string): string => x.replace(/[+#!?]+$/, '');
+  if (strip(bestSan) === strip(san)) return null;
+  if (!openingWindowOpen(fenBefore, mover)) return null;
+  if (isForcedReply(fenBefore, san)) return null;
+  const played = computeMoveFundamentals(fenBefore, san, mover).filter((f) => IS_OPENING_PRINCIPLE[f.id]);
+  if (played.length) return null;
+  const lead = computeMoveFundamentals(fenBefore, bestSan, mover)
+    .filter((f) => IS_OPENING_PRINCIPLE[f.id])
+    .sort((a, b) => b.weight - a.weight)[0];
+  if (!lead) return null;
+  const taught: ReadonlySet<string> = new Set([...taughtIds].flatMap((k) => k.split('|')));
+  const best = strip(bestSan);
+  const reason = reasonFor(lead);
+  if (!taught.has(lead.id) && reason && reasonHolds(lead, fenBefore, mover)) {
+    return {
+      id: lead.id,
+      text: rotateStem([
+        `${best} was the opening move here — ${lead.imperative}: ${reason}.`,
+        `The opening rule in this spot: ${lead.imperative} (${best}) — ${reason}.`,
+      ], stemKey),
+      squares: lead.squares, first: true,
+    };
+  }
+  return { id: `contrast:${lead.id}`, text: `${best} ${lead.led} — the opening move here.`, squares: lead.squares, first: false };
+}
+
 /** The opening principle a quiet move applies that was ALREADY taught this
  *  game — the reason `principleLine` stays silent on it. Null when the move
  *  applies no opening principle, or one not yet taught. The coverage

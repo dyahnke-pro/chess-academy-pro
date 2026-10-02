@@ -30,7 +30,7 @@ import { describeStructure } from './boardStructure';
 import { assessPositionalEdge, phaseVerdictLine } from './reviewPositionalAssessment';
 import type { RefutedAlternative } from './refutedAlternative';
 import { MIN_ALTERNATIVE_SHARE } from './refutedAlternativeCore';
-import { principleLine } from './moveFundamentals';
+import { principleLine, principleContrastLine } from './moveFundamentals';
 import { threatStoppedBy } from './opponentMovePurpose';
 import { trickSidestepped } from './forkTrick';
 import { isMateEval, MISTAKE_CP } from './engineConstants';
@@ -923,7 +923,11 @@ export function computeMoveFacets(
   if (isStudent && (ctx.classification === null || ctx.classification === 'book' || ctx.classification === 'good')) {
     // Full the first time a principle speaks this game, a short stem after —
     // the one helper Learn's composer reads (`principleLine`).
-    const lead = principleLine(fenBefore, san, moverColor, ctx.teaching.principlesTaught, stemKeyOf(fenBefore));
+    const lead = principleLine(fenBefore, san, moverColor, ctx.teaching.principlesTaught, stemKeyOf(fenBefore))
+      // A clean move that kept no opening rule: the rule the engine's move
+      // kept (review walk 2026-10-02 — h4, g4, h5 were owed and silent). Never
+      // on a book move: theory is not corrected.
+      ?? (ctx.classification === 'book' ? null : principleContrastLine(fenBefore, san, ctx.bestMoveSan ?? null, moverColor, ctx.teaching.principlesTaught, stemKeyOf(fenBefore)));
     if (lead) {
       const f = `[rule] ${lead.text}`;
       facets.push(f);

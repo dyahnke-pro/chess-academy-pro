@@ -101,8 +101,8 @@
 - `src/services/openingKey.ts:39`
 - `src/services/openingPositions.test.ts:27`
 - `src/services/openingPositions.test.ts:37`
-- `src/services/reviewFullData.ts:1002`
-- `src/services/reviewFullData.ts:1178`
+- `src/services/reviewFullData.ts:1006`
+- `src/services/reviewFullData.ts:1182`
 
 ### `detectOpeningTranspositional` (function) — 5 call sites
 - `src/services/coachApi.ts:5435`
@@ -217,7 +217,7 @@
 - `src/services/isBookLine.test.ts:18`
 - `src/services/isBookLine.test.ts:25`
 - `src/services/mistakePuzzleService.ts:494`
-- `src/services/positionFacts.ts:826`
+- `src/services/positionFacts.ts:822`
 
 ### `getOpeningMoves` (function) — 28 call sites
 - `src/coach/tools/cerebellum/localOpeningBook.ts:84`
@@ -265,7 +265,7 @@
 - `src/services/openingDetectionService.test.ts:371`
 - `src/services/openingGenerator.ts:3198`
 - `src/services/principleAttribution.section14.test.ts:90`
-- `src/services/principleAttribution.ts:1195`
+- `src/services/principleAttribution.ts:1249`
 
 ### `ForkBranch` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
