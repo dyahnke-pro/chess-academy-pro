@@ -11,6 +11,7 @@
  * uncapped review speaks these verbatim (un-warmed) so no fact is compressed away
  * and the gaps are visible. Each facet is a labeled prose clause.
  */
+import { lastMoveFromSan } from './material';
 import { inFluxAfter } from './boardState';
 import { readTrade } from './tradeQuality';
 import { readTiming, timingClause } from './moveTiming';
@@ -739,7 +740,7 @@ export function computeMoveFacets(
   // Skip on a mating move — "checkmate" is the verdict, not "you're balanced"
   // (the eval at the mated position reads 0/odd). The mate is named by [move].
   if (studentColorWB && !san.includes('#')) {
-    const assess = assessPositionalEdge(fenAfter, studentColorWB, studentPovCp);
+    const assess = assessPositionalEdge(fenAfter, studentColorWB, studentPovCp, lastMoveFromSan(fenBefore, san));
     // A BARE "you're balanced" IN THE OPENING SAYS NOTHING (David 2026-09-16,
     // reading ply 1 of his own game: "You're balanced" after 1.e4). It is
     // trivially true of every opening position — the student knows the game
@@ -1064,7 +1065,7 @@ export function computeMoveFacets(
   if (studentColorWB && ctx.teaching.phaseTurn) {
     const cp = ctx.evaluation === null ? null : (studentColorWB === 'w' ? ctx.evaluation : -ctx.evaluation);
     // Review's own say-once ledger decides repeats downstream; nothing heard here.
-    const line = phaseVerdictLine(fenAfter, studentColorWB, cp, ctx.teaching.phaseTurn, new Set());
+    const line = phaseVerdictLine(fenAfter, studentColorWB, cp, ctx.teaching.phaseTurn, new Set(), lastMoveFromSan(fenBefore, san));
     if (line) facets.push(`[stock] ${line}`);
   }
 

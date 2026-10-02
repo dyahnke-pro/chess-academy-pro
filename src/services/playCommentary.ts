@@ -13,6 +13,7 @@
 // them. That is the locked voice law ("speak when it instructs") and the
 // narration rules' "silence is acceptable" — a coach who comments on every
 // recapture teaches nothing and gets tuned out.
+import { captureNet } from './material';
 import { THINK_MARK } from '../utils/thinkPause';
 import { Chess } from 'chess.js';
 import type { Square, PieceSymbol } from 'chess.js';
@@ -363,27 +364,6 @@ export function buildInstantReplyLine(m: {
  *  attacker until nobody wants to, which is exactly what a coach means by
  *  "does this win anything". Bounded, and it needs no engine.
  */
-function exchangeNet(fenAfterCapture: string, square: string, moverColor: 'w' | 'b', firstGain: number): number {
-  const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
-  const board = new Chess(fenAfterCapture);
-  let net = firstGain;
-  let onSquare = board.get(square as never)?.type ?? 'p';
-  for (let ply = 0; ply < 8; ply += 1) {
-    const side = board.turn();
-    const recaptures = board.moves({ verbose: true }).filter((m) => m.to === square && m.captured);
-    if (recaptures.length === 0) break;
-    // Least valuable attacker — taking with the queen when a pawn can is not
-    // what either side would do, and scoring it that way flatters the move.
-    recaptures.sort((a, b) => (VAL[a.piece] ?? 0) - (VAL[b.piece] ?? 0));
-    const take = recaptures[0];
-    const gain = VAL[onSquare] ?? 0;
-    net += side === moverColor ? gain : -gain;
-    onSquare = take.piece;
-    board.move(take);
-  }
-  return net;
-}
-
 export function describeMoveConsequence(fenBefore: string, san: string): string {
   try {
     const probe = new Chess(fenBefore);
@@ -391,8 +371,7 @@ export function describeMoveConsequence(fenBefore: string, san: string): string 
     if (mv.san.includes('#')) return ' — checkmate';
     const capturedName = mv.captured ? (NAME[mv.captured] ?? 'piece') : null;
     if (capturedName) {
-      const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
-      const net = exchangeNet(probe.fen(), mv.to, mv.color, VAL[mv.captured ?? 'p'] ?? 0);
+      const net = captureNet(fenBefore, mv.san) ?? 0;
       const check = mv.san.includes('+') ? ' with check' : '';
       // WINS material → say so. BREAKS EVEN → it is a trade, and calling a
       // trade a win is the lie. LOSES material → the engine may still like it

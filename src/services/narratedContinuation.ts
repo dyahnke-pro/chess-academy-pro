@@ -28,6 +28,7 @@ export function nonPawnMaterial(fen: string): number {
 }
 
 import { materialBalance, MATERIAL_VALUE } from './pieceValues';
+import { settledBalance, type LastMove } from './material';
 import type { GamePhase } from '../types';
 export type { GamePhase };
 
@@ -71,18 +72,21 @@ export function continuationNarration(
   newFen: string,
   ply: number,
   prev: ContinuationState,
+  /** The move that produced `newFen` — required, so a board read mid-recapture
+   *  (Nxf6+ with …Bxf6 coming) is never announced as a piece won. */
+  lastMove: LastMove | null,
 ): { text: string | null; state: ContinuationState } {
   const phase = detectPhase(newFen, ply);
   // 1) Phase transition — the single most useful thing to call out.
   if (phase !== prev.phase && phase !== 'opening') {
     const text =
       phase === 'middlegame'
-        ? "The pieces are developed and the kings are safe — we're into the middlegame."
+        ? "The pieces are developed and the kings are safe — it's a middlegame now."
         : 'The heavy pieces are coming off — this is an endgame now.';
     return { text, state: { phase, announcedBalance: prev.announcedBalance } };
   }
   // 2) Decisive, NEW material swing (≥ a full point of change, ≥ a pawn lead).
-  const bal = materialBalance(newFen);
+  const bal = settledBalance(newFen, lastMove);
   if (Math.abs(bal) >= 1 && Math.abs(bal - prev.announcedBalance) >= 2) {
     return { text: describeLead(bal), state: { phase, announcedBalance: bal } };
   }

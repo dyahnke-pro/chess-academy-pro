@@ -21,7 +21,7 @@ describe('should I trade queens — the trade lane (question walk 2026-09-27)', 
     expect(t).toEqual({ san: 'Qxd8+', kind: 'capture' });
     const f = assembleTradeAnswer({
       fen: BERLIN, piece: 'q', studentColor: 'white', trade: t,
-      bestEvalCp: 15, tradeEvalCp: 14, tradeMateIn: null, bestSan: 'Qxd8+', settled: true,
+      bestEvalCp: 15, tradeEvalCp: 14, tradeMateIn: null, bestSan: 'Qxd8+', settled: true, lastMove: null,
     })?.facts ?? '';
     expect(f).toMatch(/^Qxd8\+ trades the queens\. It's also the engine's first choice\./);
   });
@@ -29,7 +29,7 @@ describe('should I trade queens — the trade lane (question walk 2026-09-27)', 
   it('a trade that costs is said as a cost against the best move', () => {
     const f = assembleTradeAnswer({
       fen: BERLIN, piece: 'q', studentColor: 'white', trade: { san: 'Qxd8+', kind: 'capture' },
-      bestEvalCp: 180, tradeEvalCp: 20, tradeMateIn: null, bestSan: 'Nc3', settled: true,
+      bestEvalCp: 180, tradeEvalCp: 20, tradeMateIn: null, bestSan: 'Nc3', settled: true, lastMove: null,
     })?.facts ?? '';
     expect(f).toMatch(/costs about 1\.6 points next to Nc3 — not now/);
   });
@@ -38,7 +38,7 @@ describe('should I trade queens — the trade lane (question walk 2026-09-27)', 
     expect(findTradeMove(SICILIAN_1200, 'q')).toBeNull();
     const f = assembleTradeAnswer({
       fen: SICILIAN_1200, piece: 'q', studentColor: 'white', trade: null,
-      bestEvalCp: null, tradeEvalCp: null, tradeMateIn: null, bestSan: null, settled: null,
+      bestEvalCp: null, tradeEvalCp: null, tradeMateIn: null, bestSan: null, settled: null, lastMove: null,
     })?.facts ?? '';
     expect(f).toMatch(/There's no queen trade on the board this move/);
   });
@@ -47,7 +47,7 @@ describe('should I trade queens — the trade lane (question walk 2026-09-27)', 
     // White a clean rook up: trades are on the student's side.
     const f = assembleTradeAnswer({
       fen: '4k3/8/8/8/8/8/8/R3K3 w - - 0 1', piece: 'any', studentColor: 'white', trade: null,
-      bestEvalCp: null, tradeEvalCp: null, tradeMateIn: null, bestSan: null, settled: null,
+      bestEvalCp: null, tradeEvalCp: null, tradeMateIn: null, bestSan: null, settled: null, lastMove: null,
     })?.facts ?? '';
     expect(f).toMatch(/You're ahead in material, so trades are on your side/);
   });

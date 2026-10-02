@@ -13,6 +13,42 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## ⚖️ WO-MATERIAL-01 — ONE MATERIAL COMPUTER (David 2026-10-02: "You said that before. Check the root cause")
+
+**Root cause.** The oct2a walks found the same false line five times in one day —
+"you're behind" mid-recapture, "gxf6 wins a knight", "their queen for your pawn",
+"win a rook" a line later gives back — and each fix patched ONE counter. The census
+(2026-10-02) found **57 private piece-value tables, ~25 material counters and ~12
+exchange calculators**. None knows (1) whether the board is mid-exchange, nor (2) the
+move that led to it, so a recapture cannot be told from a free piece. Every one of
+them will keep saying the same false sentence on the next game it meets.
+
+**The rule (G0's determinism law applied to material).** One module owns material:
+`pieceValues.ts`. Every count a sentence rests on goes through it, settled. A new
+private table, counter or SEE fails the build.
+
+### Phases (one push each, re-walk after the last)
+1. **The module.** In `pieceValues.ts`: `MATERIAL_VALUE`/`CAPTURE_VALUE` (exist),
+   `materialBalance(fen)` raw, `settledBalance(fen, { prior? })` — the lead with the
+   exchange on the last capture square played out by the LEGAL SEE, counted from
+   before `prior` when the position is a recapture's midpoint. One legal SEE
+   (`legalSeeGainFor`) — `seeGain` (pin-blind) delegates or is retired.
+2. **The ten spoken sites** (census top 10): narratedContinuation `describeLead`,
+   reviewMoveBriefing `materialNet`, groundedAnswer `countMaterial`/`pts`,
+   reviewPositionalAssessment count, danyaBehaviors, socraticNudge (ALSO the
+   side-to-move-as-"you" seat bug), playCommentary `exchangeNet` (no stand-pat),
+   tacticalRead/engineDeltaLines/gemFinder/gemCrushLines terminal counts,
+   reviewTrapQuestion `seeSequence`, openingGenerator/pvWinsMaterial. Each with a
+   test on a mid-exchange board that fails before.
+3. **The rest of the counters** onto the module; delete the private tables
+   (57). `REVIEW_PIECE_VALUE` k:99 and `tacticAlertService` centipawns reconciled.
+4. **The gate** `src/test/oneMaterialComputer.test.ts`: no `{p:1,n:3,…}` literal,
+   no material counter, no swap-list SEE outside `pieceValues.ts` /
+   `positionReadingService.ts` SEE block — blamed by statement.
+5. **Re-walk** Learn + Review on fresh games to 100%.
+
+Status: phase 1 in progress.
+
 ## 🏹 WO-ARROW-01 — ONE DOOR FOR EVERY BOARD ARROW (David 2026-09-29: "Can we reduce to one source for arrows?")
 
 **Why.** His Learn game (2026-09-27, 21:41, PostHog device `da84d189`): a green

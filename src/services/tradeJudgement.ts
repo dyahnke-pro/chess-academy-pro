@@ -18,7 +18,7 @@
 // A LEAF: chess.js + the structure reader.
 import { Chess } from 'chess.js';
 import { describeStructure } from './boardStructure';
-import { settledLead } from './positionReadingService';
+import { settledLeadFor } from './material';
 import { MATERIAL_VALUE } from './pieceValues';
 import { strongestByDelta, weakestByDelta, type PieceValue } from './pieceValueRead';
 
@@ -51,7 +51,7 @@ export function tradeJudgement(fenBefore: string, san: string, reply: string | n
   if (!s) return null;
   // The student is to move with the recapture on mine.to still to come —
   // read the lead with that exchange settled, never mid-sequence.
-  const edge = settledLead(c, student, mine.to);
+  const edge = settledLeadFor(c.fen(), student, { to: theirs.to, captured: theirs.captured ?? null });
   const gave = NAME[mine.piece] ?? 'piece';
   const got = NAME[mine.captured] ?? 'piece';
   // GOOD PIECE, BAD PIECE — read off the engine's table of THIS board, on the

@@ -1,3 +1,4 @@
+import { lastMoveFromSan } from './material';
 import { Chess } from 'chess.js';
 import { gameArcs, type ArcEvent } from './lookaheadPlan';
 import { FUNDAMENTAL_CLAIM_FAMILY, principleAlreadyTaught, type MoveFundamentalId } from './moveFundamentals';
@@ -2992,7 +2993,7 @@ export function buildReviewSegments(
       && !enemyKingStuckInCenter(fenPair.fenAfter, studentColorWB)
     ) {
       const studentPovCp = m.evaluation != null ? (studentColorWB === 'w' ? m.evaluation : -m.evaluation) : null;
-      const assess = assessPositionalEdge(fenPair.fenAfter, studentColorWB, studentPovCp);
+      const assess = assessPositionalEdge(fenPair.fenAfter, studentColorWB, studentPovCp, lastMoveFromSan(fenPair.fenBefore, m.san));
       if (assess.reasons.length >= 2 && assess.verdict && assess.verdict !== 'balanced') {
         narration = `Step back and take stock — you're ${assess.verdict} here, and it's worth knowing exactly why: ${joinClauses(assess.reasons)}.`;
         assessmentShown = true;

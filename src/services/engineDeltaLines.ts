@@ -18,6 +18,7 @@
  * G0/G3: every square is board-derived (chess.js / the engine PV); the voice
  * only phrases computed facts, never decides them. Present-tense, side-framed.
  */
+import { settledLeadFor, lastMoveOf } from './material';
 import { Chess, type Square } from 'chess.js';
 import { detectNewThreat } from './groundedAnswer';
 import { computePieceRoute } from './forwardTeaching';
@@ -178,18 +179,7 @@ const DECISIVE_CP = 1000;
 /** How many plies of the PV we replay to judge the combination. */
 const SEQUENCE_PLIES = 6;
 
-const PIECE_VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 /** Net material (student − opponent, pawns) on a live chess.js position. */
-function netMaterial(c: Chess, studentWB: 'w' | 'b'): number {
-  let net = 0;
-  for (const row of c.board()) {
-    for (const sq of row) {
-      if (!sq) continue;
-      net += (sq.color === studentWB ? 1 : -1) * PIECE_VAL[sq.type];
-    }
-  }
-  return net;
-}
 
 export function detectEnginePunish(
   fen: string,
@@ -226,7 +216,7 @@ export function detectEnginePunish(
   let wonMaterial = false;
   try {
     const c = new Chess(fen);
-    const netStart = netMaterial(c, studentWB);
+    const netStart = settledLeadFor(c.fen(), studentWB, null);
     let ply = 0;
     for (const u of best.moves.slice(0, SEQUENCE_PLIES)) {
       const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u.slice(4) : undefined });
@@ -236,7 +226,7 @@ export function detectEnginePunish(
       sans.push(cleanSan(m.san));
       ply += 1;
     }
-    wonMaterial = netMaterial(c, studentWB) - netStart >= 1;
+    wonMaterial = settledLeadFor(c.fen(), studentWB, lastMoveOf(c)) - netStart >= 1;
   } catch {
     return null;
   }

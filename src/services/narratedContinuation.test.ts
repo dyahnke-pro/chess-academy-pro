@@ -1,3 +1,4 @@
+import { Chess } from 'chess.js';
 import { describe, it, expect } from 'vitest';
 import {
   materialBalance,
@@ -30,26 +31,35 @@ describe('narratedContinuation helpers', () => {
   it('announces a phase transition once', () => {
     const s0 = initialContinuationState(START, 2);
     // move into middlegame territory (ply 18, full board still)
-    const r = continuationNarration(START, 18, s0);
+    const r = continuationNarration(START, 18, s0, null);
     expect(r.text).toMatch(/middlegame/i);
     // same phase next move → silent
-    const r2 = continuationNarration(START, 19, r.state);
+    const r2 = continuationNarration(START, 19, r.state, null);
     expect(r2.text).toBeNull();
   });
 
   it('announces a decisive material swing once, then stays quiet', () => {
     const s0 = initialContinuationState(START, 20); // already middlegame
     const upAPiece = 'rnbqkb1r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'; // white +3
-    const r = continuationNarration(upAPiece, 22, s0);
+    const r = continuationNarration(upAPiece, 22, s0, null);
     expect(r.text).toMatch(/up a piece/i);
     // same balance next move → no repeat
-    const r2 = continuationNarration(upAPiece, 23, r.state);
+    const r2 = continuationNarration(upAPiece, 23, r.state, null);
     expect(r2.text).toBeNull();
+  });
+
+  it('a recapture midpoint is not "up a piece" (WO-MATERIAL-01)', () => {
+    const s0 = { phase: 'middlegame' as const, announcedBalance: 0 };
+    // Bxf6 just took a knight; …gxf6 (or …Bxf6) retakes — level, not +3.
+    const c = new Chess();
+    for (const m of 'd4 Nf6 c4 e6 Nc3 d5 Bg5 Be7 Nf3 O-O e3 h6 Bxf6'.split(' ')) c.move(m);
+    const last = c.history({ verbose: true }).at(-1)!;
+    expect(continuationNarration(c.fen(), 26, s0, { to: last.to, captured: last.captured ?? null }).text).toBeNull();
   });
 
   it('stays silent on a routine, level move', () => {
     const s0 = { phase: 'middlegame' as const, announcedBalance: 0 };
-    expect(continuationNarration(START, 24, s0).text).toBeNull();
+    expect(continuationNarration(START, 24, s0, null).text).toBeNull();
   });
 
   it('names the winner on checkmate (side to move is the mated side)', () => {

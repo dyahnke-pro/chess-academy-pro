@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6933 lines · 39 exports · 51 importers · 55 tests · 19 audits**
+**6936 lines · 39 exports · 51 importers · 55 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -236,7 +236,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:571`
-- `src/components/Coach/CoachTeachPage.tsx:3366`
+- `src/components/Coach/CoachTeachPage.tsx:3367`
 - `src/services/coachSessionRouter.ts:117`
 - `src/services/coachSettingsAction.ts:242`
 
@@ -279,12 +279,12 @@
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:260`
 - `src/services/coachChatText.ts:221`
-- `src/services/coachFeatureService.ts:172`
-- `src/services/coachFeatureService.ts:422`
-- `src/services/coachFeatureService.ts:557`
+- `src/services/coachFeatureService.ts:173`
+- `src/services/coachFeatureService.ts:423`
 - `src/services/coachFeatureService.ts:558`
-- `src/services/coachFeatureService.ts:4955`
-- `src/services/coachFeatureService.ts:5108`
+- `src/services/coachFeatureService.ts:559`
+- `src/services/coachFeatureService.ts:4961`
+- `src/services/coachFeatureService.ts:5114`
 - `src/services/coachLaneWiring.test.ts:144`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`
@@ -334,8 +334,8 @@
 - `src/services/voiceFactsFidelity.test.ts:65`
 
 ### `explainPuzzleMoveGrounded` (function) — 2 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:626`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:713`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:636`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:727`
 
 ### `currentAskFromContent` (function) — 4 call sites
 - `src/services/coachApi.currentAsk.test.ts:31`

@@ -9,6 +9,7 @@
  * / reset_board markers parsed from its response. Same room, different
  * actions.
  */
+import { lastMoveFromHistory } from '../../services/material';
 import { characterOf, provenTacticLive, sharpGap, stepCharacter, EMPTY_CHARACTER, SHARP_GAP_CP, type CharacterState } from '../../services/positionCharacter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStandingFactMemory, fullmoveOf } from '../../services/standingFactMemory';
@@ -8451,6 +8452,7 @@ export function CoachTeachPage(): JSX.Element {
           studentColor: args.studentColor,
           studentLastTo: studentLastSan?.match(/([a-h][1-8])(?:=[NBRQ])?[+#]?$/)?.[1] ?? null,
           opponentLastTo: args.historyAfterReply[args.historyAfterReply.length - 1]?.match(/([a-h][1-8])(?:=[NBRQ])?[+#]?$/)?.[1] ?? null,
+          lastMove: lastMoveFromHistory(args.historyAfterReply, args.fenAfterReply),
         });
         // The move that WON the bishop pair already says so (the move point,
         // "now you have the two bishops") — the standing read stands aside
@@ -11663,7 +11665,7 @@ export function CoachTeachPage(): JSX.Element {
 
         // Keystone lines (phase change, decisive material) still take
         // precedence — they carry more than the move itself does.
-        const { text: keystone, state: next } = continuationNarration(local.fen(), ply, state);
+        const { text: keystone, state: next } = continuationNarration(local.fen(), ply, state, { to: landed.to, captured: landed.captured ?? null });
         const phaseChanged = next.phase !== state.phase;
         state = next;
         const text = keystone ?? perMove.say;

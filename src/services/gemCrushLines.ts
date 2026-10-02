@@ -25,6 +25,7 @@
  * arrow squares via chess.js. Only surfaceable (weapon-tier + narrated) gems
  * qualify.
  */
+import { settledBalance, type LastMove } from './material';
 import type { WalkableLine, WalkPly } from '../types';
 import { computeExchangeLedger } from './exchangeLedger';
 import { Chess } from 'chess.js';
@@ -219,18 +220,8 @@ function gemsAtPosition(pathSans: string[]): PunishGem[] {
   }
 }
 
-const PIECE_VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 
 /** Net material (white − black, pawns) read straight off a FEN board. */
-function boardMaterial(fen: string): number {
-  let net = 0;
-  for (const ch of fen.split(' ')[0]) {
-    const v = PIECE_VAL[ch.toLowerCase()];
-    if (v === undefined) continue;
-    net += ch === ch.toUpperCase() ? v : -v;
-  }
-  return net;
-}
 
 /** A crush's payoff, READ OFF THE BOARD — never inferred from `tier`. Replays
  *  the curated punish line to its quiet end and measures the punisher's real
@@ -262,17 +253,19 @@ function computePayoffUncached(
   tier: 'confirmed' | 'positional',
 ): { payoff: string; winsMaterial: boolean } {
   let mated = false;
-  let endMaterial = boardMaterial(staticFen);
+  let endMaterial = settledBalance(staticFen, null);
   try {
     const c = new Chess(staticFen);
     c.move(inaccuracy);
+    let lastMv: LastMove | null = null;
     for (const s of punishSeq) {
       const m = c.move(s);
       if (!m) break;
+      lastMv = { to: m.to, captured: m.captured ?? null };
       if (m.san.includes('#')) mated = true;
     }
     if (c.isCheckmate()) mated = true;
-    endMaterial = boardMaterial(c.fen());
+    endMaterial = settledBalance(c.fen(), lastMv);
   } catch {
     /* keep fallback */
   }
@@ -835,13 +828,14 @@ export function findLivePunishment(
     try {
       const c = new Chess(curFen);
       c.move(gem.punish);
-      const finalGain = (): number => (punisher === 'w' ? boardMaterial(c.fen()) : -boardMaterial(c.fen()));
       const played: string[] = [];
       const gains: number[] = [];
       for (const san of continuation) {
-        if (!c.move(san)) break;
+        const m = c.move(san);
+        if (!m) break;
         played.push(cleanSan(san));
-        gains.push(finalGain());
+        const b = settledBalance(c.fen(), { to: m.to, captured: m.captured ?? null });
+        gains.push(punisher === 'w' ? b : -b);
       }
       if (played.length === 0) return [];
       const end = gains[gains.length - 1];

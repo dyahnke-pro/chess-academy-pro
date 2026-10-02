@@ -16,11 +16,11 @@
  * PURE assemblers (verdict, key-tactic pick, tempting pick) are exported and
  * unit-tested with hand-fed data — the engine wiring is a thin shell over them.
  */
+import { settledLineEnd } from './material';
 import { rotateStem } from '../utils/rotateStem';
 import { Chess } from 'chess.js';
 import { computePvLine, computePlyFacts, type PvEngine, type PvLine, type PvPly } from './pvPlayback';
 import { detectTactics } from './tacticsDetector';
-import { getMaterialAdvantage } from './boardUtils';
 import { sayMoveClause, sayMoveNoun } from './spokenMove';
 import type { TacticPattern } from '../types/tacticTypes';
 
@@ -138,14 +138,11 @@ export function summarizeVerdict(
  *  position — the board-fact that licenses a material claim in the verdict. Null
  *  when no ply carries a resolvable fenAfter. */
 function terminalMaterialDelta(line: PvPly[], studentColor: 'white' | 'black'): number | null {
-  for (let i = line.length - 1; i >= 0; i -= 1) {
-    const f = line[i].fenAfter;
-    if (f && f.length > 0) {
-      const whitePov = getMaterialAdvantage(f);
-      return studentColor === 'white' ? whitePov : -whitePov;
-    }
-  }
-  return null;
+  // SETTLED (WO-MATERIAL-01): a line cut mid-recapture is not a material win.
+  const plies = line.filter((p) => p.fenAfter && p.fenAfter.length > 0);
+  const whitePov = settledLineEnd(plies);
+  if (whitePov === null) return null;
+  return studentColor === 'white' ? whitePov : -whitePov;
 }
 
 /** The decisive tactic in the line: the first ply whose move LANDS a tactic,

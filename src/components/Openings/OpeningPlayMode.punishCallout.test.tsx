@@ -16,22 +16,23 @@ import { voiceService } from '../../services/voiceService';
 
 vi.mock('../../services/coachGameEngine', () => ({
   getAdaptiveMove: vi.fn().mockResolvedValue({
-    move: 'e7e5',
-    analysis: { evaluation: 0, bestMove: 'e7e5', isMate: false, mateIn: null, depth: 10, topLines: [], nodesPerSecond: 0 },
+    move: 'f7f5',
+    analysis: { evaluation: 0, bestMove: 'f7f5', isMate: false, mateIn: null, depth: 10, topLines: [], nodesPerSecond: 0 },
   }),
-  getRandomLegalMove: vi.fn().mockReturnValue('e7e5'),
+  getRandomLegalMove: vi.fn().mockReturnValue('f7f5'),
   getTargetStrength: () => 1320,
 }));
 
 // A clearly winning single-best line for WHITE (student): Nf3 at +3.4, the
 // runner-up far behind — so detectEnginePunish fires (bestCp≥150, gap≥150).
 vi.mock('../../services/stockfishEngine', () => {
-  // A forcing SEQUENCE for WHITE (student) after 1.e4 e5: Qh5, Nc6, Qxe5+ wins
-  // the e5 pawn with check — a real combination → detectEnginePunish fires.
+  // A forcing SEQUENCE for WHITE (student) after 1.e4 f5: exf5 g6 fxg6 — the
+  // pawn won stands once …hxg6 retakes (settled count, WO-MATERIAL-01). The old
+  // fixture (1.e4 e5 Qh5 Nc6 exf5+) dropped the queen to …Nxe5.
   const WIN = {
-    bestMove: 'd1h5', evaluation: 210, isMate: false, mateIn: null, depth: 12, nodesPerSecond: 0,
+    bestMove: 'e4f5', evaluation: 210, isMate: false, mateIn: null, depth: 12, nodesPerSecond: 0,
     topLines: [
-      { rank: 1, evaluation: 210, moves: ['d1h5', 'b8c6', 'h5e5'], mate: null },
+      { rank: 1, evaluation: 210, moves: ['e4f5', 'g7g6', 'f5g6'], mate: null },
       { rank: 2, evaluation: 40, moves: ['g1f3'], mate: null },
     ],
   };
@@ -76,7 +77,7 @@ describe('OpeningPlayMode — live punishment callout wiring', () => {
 
   it('renders the callout (move withheld) and Show-the-line reveals + speaks it', async () => {
     const speakSpy = vi.spyOn(voiceService, 'speak').mockResolvedValue(undefined);
-    render(<OpeningPlayMode opening={buildOpeningRecord({ id: 'callout-test', name: 'Vienna Game', pgn: 'e4 e5 Nc3', color: 'white' })} onExit={vi.fn()} />);
+    render(<OpeningPlayMode opening={buildOpeningRecord({ id: 'callout-test', name: 'Vienna Game', pgn: 'e4 f5 exf5', color: 'white' })} onExit={vi.fn()} />);
 
     // Real timers: wait out the ~3s pregame, then play a move so the game
     // advances to the student's turn where the mocked winning eval drives the
@@ -90,7 +91,7 @@ describe('OpeningPlayMode — live punishment callout wiring', () => {
 
     // Contract 1: the callout WITHHOLDS the moves (no SAN in the probe).
     const text = screen.getByTestId('punish-callout-text').textContent ?? '';
-    expect(text).not.toMatch(/Qxe5/);
+    expect(text).not.toMatch(/exf5/);
     expect(text.toLowerCase()).toMatch(/combination|sequence|tactic|find|do you see/);
 
     // Contract 2: Show-the-line reveals the move + speaks it.
@@ -98,11 +99,11 @@ describe('OpeningPlayMode — live punishment callout wiring', () => {
     act(() => { fireEvent.click(showBtn); });
 
     await waitFor(() => {
-      expect(screen.getByTestId('punish-callout-text').textContent ?? '').toMatch(/Qxe5/);
+      expect(screen.getByTestId('punish-callout-text').textContent ?? '').toMatch(/exf5/);
     });
     // The reveal was spoken (voice fired with the move-naming line).
     expect(speakSpy).toHaveBeenCalled();
-    const spokenReveal = speakSpy.mock.calls.some((c) => c[0].includes('Qxe5'));
+    const spokenReveal = speakSpy.mock.calls.some((c) => c[0].includes('exf5'));
     expect(spokenReveal).toBe(true);
     // Button gone after reveal.
     expect(screen.queryByTestId('show-the-line')).not.toBeInTheDocument();

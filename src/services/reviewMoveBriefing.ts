@@ -24,6 +24,7 @@
  * (the student's own finished game) with the locked perspective: the student is
  * "you", the opponent "they".
  */
+import { settledLeadFor, type LastMove } from './material';
 import { Chess } from 'chess.js';
 import { computePlyFacts, tacticWord, type PrevCaptureContext } from './pvPlayback';
 import { detectNewThreat } from './groundedAnswer';
@@ -72,15 +73,10 @@ function newNamedTactic(fenBefore: string, fenAfter: string, toSquare: string | 
   }
 }
 
-const MAT_VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
-
-/** Net material (student − opponent, points) on the board. */
-function materialNet(fen: string, studentWB: 'w' | 'b'): number {
-  try {
-    let net = 0;
-    for (const row of new Chess(fen).board()) for (const sq of row) if (sq) net += (sq.color === studentWB ? 1 : -1) * (MAT_VAL[sq.type] ?? 0);
-    return net;
-  } catch { return 0; }
+/** Net material (student − opponent, points), with the exchange the last
+ *  capture started played out — a recapture midpoint is not "up a piece". */
+function materialNet(fen: string, studentWB: 'w' | 'b', lastMove: LastMove | null): number {
+  try { return settledLeadFor(fen, studentWB, lastMove); } catch { return 0; }
 }
 function materialWord(pts: number): string {
   if (pts >= 8) return 'a queen';
@@ -109,11 +105,11 @@ function evalVerdict(studentPovCp: number): string {
 /** The board-true imbalances that EXPLAIN the eval sign — material, king safety,
  *  pawn structure — ordered by magnitude, filtered to the eval's side (David
  *  2026-09-07: "why does Stockfish call it balanced / tipping"). */
-function evalWhy(fen: string, studentPovCp: number, studentWB: 'w' | 'b'): string[] {
+function evalWhy(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lastMove: LastMove | null): string[] {
   const oppWB: 'w' | 'b' = studentWB === 'w' ? 'b' : 'w';
   const s = describeStructure(fen);
   const cands: { text: string; mag: number; sign: number }[] = [];
-  const net = materialNet(fen, studentWB);
+  const net = materialNet(fen, studentWB, lastMove);
   if (net >= 1) cands.push({ text: `you're up ${materialWord(net)}`, mag: net, sign: 1 });
   else if (net <= -1) cands.push({ text: `you're down ${materialWord(-net)}`, mag: -net, sign: -1 });
   if (s) {
@@ -142,8 +138,8 @@ function evalWhy(fen: string, studentPovCp: number, studentWB: 'w' | 'b'): strin
     : matching.map((c) => c.text).slice(0, 2);
 }
 /** The eval VERDICT + WHY as a lead sentence. */
-function explainEval(fen: string, studentPovCp: number, studentWB: 'w' | 'b'): string {
-  const why = evalWhy(fen, studentPovCp, studentWB);
+function explainEval(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lastMove: LastMove | null): string {
+  const why = evalWhy(fen, studentPovCp, studentWB, lastMove);
   const verdict = evalVerdict(studentPovCp);
   const V = verdict.charAt(0).toUpperCase() + verdict.slice(1);
   return why.length ? `${V} — ${why.join(', ')}.` : `${V}.`;
@@ -311,7 +307,7 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
     const swing = input.studentSwingCp ?? (povBefore != null ? povAfter - povBefore : 0);
     const bandChanged = povBefore != null && evalBand(povAfter) !== evalBand(povBefore);
     if (bandChanged || Math.abs(swing) >= 40) {
-      evalLead = explainEval(fenAfter, povAfter, input.studentColorWB);
+      evalLead = explainEval(fenAfter, povAfter, input.studentColorWB, { to: mv.to, captured: mv.captured ?? null });
       deltaTail = deltaTailClause(swing) ?? '';
     }
   }

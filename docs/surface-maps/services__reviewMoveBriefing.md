@@ -4,15 +4,16 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**355 lines · 2 exports · 4 importers · 1 tests · 0 audits**
+**351 lines · 2 exports · 5 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:2521) — names `buildReviewMoveBriefing`
+- **⏰ Standing notes** (CLAUDE.md:2584) — names `buildReviewMoveBriefing`
 
 ## Who calls in
 
 - `src/services/coachFeatureService.ts`
+- `src/services/materialSites.test.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/reviewMoveBriefing.test.ts`
 - `src/services/walkthroughLlmNarrator.ts`
@@ -22,10 +23,11 @@
 ### `ReviewMoveBriefingInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewMoveBriefing` (function) — 16 call sites
-- `src/services/coachFeatureService.ts:1583`
-- `src/services/openingGenerator.ts:1686`
-- `src/services/openingGenerator.ts:2545`
+### `buildReviewMoveBriefing` (function) — 17 call sites
+- `src/services/coachFeatureService.ts:1721`
+- `src/services/materialSites.test.ts:18`
+- `src/services/openingGenerator.ts:1690`
+- `src/services/openingGenerator.ts:2555`
 - `src/services/reviewMoveBriefing.test.ts:10`
 - `src/services/reviewMoveBriefing.test.ts:22`
 - `src/services/reviewMoveBriefing.test.ts:27`
@@ -42,6 +44,7 @@
 
 ## Tests
 
+- `src/services/materialSites.test.ts`
 - `src/services/reviewMoveBriefing.test.ts`
 
 ## Audits that reach it

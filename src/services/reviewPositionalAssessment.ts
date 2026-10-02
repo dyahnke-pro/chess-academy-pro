@@ -14,6 +14,7 @@
  * when it is true — never invented, never padded (David 2026-07-19: "don't
  * overstate the why, I don't want non-applicable reasons stated").
  */
+import { settledLeadFor, type LastMove } from './material';
 import { andList } from '../utils/andList';
 import { goodPieceIdeaKey } from './positionReadingService';
 import { Chess, type Color } from 'chess.js';
@@ -80,6 +81,9 @@ export function assessPositionalEdge(
   fen: string,
   studentColorWB: Color,
   studentPovEvalCp: number | null,
+  /** The move that produced `fen`, when known — the material reason is read
+   *  SETTLED, so a recapture still to come is not an edge (WO-MATERIAL-01). */
+  lastMove?: LastMove | null,
 ): PositionalAssessment {
   const empty: PositionalAssessment = { verdict: null, reasons: [], reasonKeys: [] };
   let chess: Chess;
@@ -102,12 +106,13 @@ export function assessPositionalEdge(
   // reasons are THEIR assets, phrased from the student's seat ("they have the
   // bishop pair"). Balanced / unknown keeps the student's own reading.
   const worse = verdict === 'a bit worse' || verdict === 'in trouble';
+  const lm = lastMove ?? null;
   const assets = worse
-    ? assetsFor(chess, struct, all, enemy, me, 'theirs')
-    : assetsFor(chess, struct, all, me, enemy, 'yours');
+    ? assetsFor(chess, struct, all, enemy, me, 'theirs', lm)
+    : assetsFor(chess, struct, all, me, enemy, 'yours', lm);
   const counter = worse
-    ? assetsFor(chess, struct, all, me, enemy, 'yours')
-    : assetsFor(chess, struct, all, enemy, me, 'theirs');
+    ? assetsFor(chess, struct, all, me, enemy, 'yours', lm)
+    : assetsFor(chess, struct, all, enemy, me, 'theirs', lm);
 
   return {
     verdict, reasons: assets.map((a) => a.text), reasonKeys: assets.map((a) => a.key),
@@ -153,6 +158,7 @@ function assetsFor(
   side: Color,
   other: Color,
   who: 'yours' | 'theirs',
+  lastMove: LastMove | null,
 ): Array<{ text: string; key: string | null }> {
   const found: Array<{ text: string; key: string | null }> = [];
   const own = who === 'yours';
@@ -170,11 +176,20 @@ function assetsFor(
   // "who's better and why" had no material in it at all). Only an edge the
   // side actually holds; a level count says nothing.
   const count = (c: Color): number => all.filter((p) => p.color === c).reduce((n, p) => n + (MATERIAL_VALUE[p.type] ?? 0), 0);
-  const up = count(side) - count(other);
+  const raw = count(side) - count(other);
+  // SETTLED (WO-MATERIAL-01): the exchange the last capture started is played
+  // out, so a recapture still to come is not an edge.
+  const up = settledLeadFor(chess.fen(), side, lastMove);
   // SAID AS WHAT IS ON THE BOARD, not as a point total (Bowdler walk
   // 2026-09-27, 9.Qxe7+ Bxe7: "you're up a pawn" with a bishop against two
-  // pawns). The count decides whether there is an edge; the pieces say what it is.
-  if (up >= 1) reasons.push(`${youre} up ${materialEdgeWords(all, side, other)}`);
+  // pawns). The count decides whether there is an edge; the pieces say what it
+  // is — and mid-exchange, where the pieces on the board are not the ones that
+  // will be left, the points and where the trade lands.
+  if (up >= 1) {
+    reasons.push(up === raw
+      ? `${youre} up ${materialEdgeWords(all, side, other)}`
+      : `${youre} up ${up === 1 ? 'a pawn' : `${up} points`} once the trade on ${lastMove?.to ?? 'the board'} is done`);
+  }
 
   // 0b. KING SAFETY — castled against a king still in the centre, with queens
   // on (without queens a central king is an endgame asset, not a target).
@@ -257,8 +272,10 @@ export function phaseVerdictLine(
   /** Say-once keys already spoken this game. Required: a reason the student
    *  already heard ("their pawn on a3 is isolated") is not repeated here. */
   heard: ReadonlySet<string>,
+  /** The move that produced `fen`, when known (settled material). */
+  lastMove?: LastMove | null,
 ): string | null {
-  const a = freshAssessment(fen, studentColorWB, studentPovEvalCp, heard);
+  const a = freshAssessment(fen, studentColorWB, studentPovEvalCp, heard, lastMove ?? null);
   // WHO'S BETTER *AND WHY*: a verdict with no reason is a description, not a
   // lesson (a prod review said "you were a bit worse" and nothing else).
   if (!a.verdict || a.reasons.length === 0) return null;
@@ -285,15 +302,15 @@ export function phaseVerdictLine(
 
 /** The say-once keys of the reasons `phaseVerdictLine` speaks for the same
  *  inputs — empty when it speaks nothing. One computation, two reads. */
-export function phaseVerdictKeys(fen: string, studentColorWB: Color, studentPovEvalCp: number | null, heard: ReadonlySet<string>): string[] {
-  const a = freshAssessment(fen, studentColorWB, studentPovEvalCp, heard);
+export function phaseVerdictKeys(fen: string, studentColorWB: Color, studentPovEvalCp: number | null, heard: ReadonlySet<string>, lastMove?: LastMove | null): string[] {
+  const a = freshAssessment(fen, studentColorWB, studentPovEvalCp, heard, lastMove ?? null);
   if (!a.verdict || a.reasons.length === 0) return [];
   return [...a.reasonKeys, ...(a.counterKeys ?? [])].filter((k): k is string => k !== null);
 }
 
 /** The assessment minus the reasons whose key was already heard. */
-function freshAssessment(fen: string, studentColorWB: Color, studentPovEvalCp: number | null, heard: ReadonlySet<string>): PositionalAssessment {
-  const a = assessPositionalEdge(fen, studentColorWB, studentPovEvalCp);
+function freshAssessment(fen: string, studentColorWB: Color, studentPovEvalCp: number | null, heard: ReadonlySet<string>, lastMove: LastMove | null): PositionalAssessment {
+  const a = assessPositionalEdge(fen, studentColorWB, studentPovEvalCp, lastMove);
   const keep = a.reasonKeys.map((k) => k === null || !heard.has(k));
   const keepC = (a.counterKeys ?? []).map((k) => k === null || !heard.has(k));
   return {

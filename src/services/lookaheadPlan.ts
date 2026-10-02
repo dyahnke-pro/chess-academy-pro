@@ -21,7 +21,7 @@
 import { seatPieceReferences } from '../utils/seatPieces';
 import { Chess, type Square } from 'chess.js';
 import { computePlyFacts } from './pvPlayback';
-import { settledLead } from './positionReadingService';
+import { settledLeadFor, lastMoveFromUci } from './material';
 import { describeStructure } from './boardStructure';
 import { detectTactics } from './tacticsDetector';
 import { PATTERN_SPEECH, patternAim } from './tacticVocabulary';
@@ -650,8 +650,7 @@ function planFor(
     const last = horizon.at(-1);
     if (materialSwing > 0 && last && base) {
       try {
-        const end = new Chess(last.fenAfter);
-        const endSwing = settledLead(end, color === 'white' ? 'w' : 'b', last.uci.slice(2, 4) as Square) - sideBalance(base, color);
+        const endSwing = settledLeadFor(last.fenAfter, color === 'white' ? 'w' : 'b', lastMoveFromUci(last.fenBefore, last.uci)) - sideBalance(base, color);
         materialSwing = Math.min(materialSwing, endSwing);
       } catch { /* unreadable end — keep the quiet read */ }
     }

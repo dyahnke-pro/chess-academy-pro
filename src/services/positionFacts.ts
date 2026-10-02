@@ -13,6 +13,7 @@
 //  • `computeCriticality` is the sharpness SCORE (from the same analysis);
 //    `computeImportance` is the speak/rank verdict. One analysis, both reads.
 //  • Perturbation (expensive) runs ONLY when importance says the moment matters.
+import { lastMoveFromSan } from './material';
 import { readTrade, findTradeTarget } from './tradeQuality';
 import { conceptInstanceKey, forkThreatKey } from './conceptKey';
 import { layerStandings } from './teachingLayers';
@@ -862,11 +863,14 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     if (theirs) stoppedHere.push(theirs);
   }
   // S4 — who's better, and why, at the turn of the game.
+  // The move that produced `fen` — material in the verdict is read settled.
+  const producedBy = studentToMove ? input.opponentLastMove : input.lastMove;
+  const fenMove = producedBy ? lastMoveFromSan(producedBy.fenBefore, producedBy.san) : null;
   const stockHere = input.phaseTurn && !analysis.isMate
-    ? phaseVerdictLine(fen, studentColor, evalCpWhitePov * sSign, input.phaseTurn, input.alreadySaid ?? new Set())
+    ? phaseVerdictLine(fen, studentColor, evalCpWhitePov * sSign, input.phaseTurn, input.alreadySaid ?? new Set(), fenMove)
     : null;
   const stockKeys = stockHere
-    ? phaseVerdictKeys(fen, studentColor, evalCpWhitePov * sSign, input.alreadySaid ?? new Set())
+    ? phaseVerdictKeys(fen, studentColor, evalCpWhitePov * sSign, input.alreadySaid ?? new Set(), fenMove)
     : [];
 
   // TRADES, JUDGED (David 2026-09-27: "how well the trade benefits the
@@ -986,7 +990,6 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
 
   const clauseByText = new Map<string, ClauseItem>();
   for (const c of composed) if (!clauseByText.has(c.text)) clauseByText.set(c.text, c);
-  const producedBy = studentToMove ? input.opponentLastMove : input.lastMove;
   const boardHere: BoardState = producedBy
     ? boardStateAfter(producedBy.fenBefore, producedBy.san, fen, evalCpWhitePov)
     : { inFlux: null, mateOnBoard: isMateEval(evalCpWhitePov) || mateInOneOnBoard(fen) };

@@ -12,6 +12,7 @@
  * Pure + side-effect-free so it's trivially testable and can't regress the
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
+import { settledLeadFor, type LastMove } from './material';
 import { isSacrifice } from './factStakes';
 import { seatPieceReferences } from '../utils/seatPieces';
 import { deriveNextPlans, mobilityMap } from './nextPlans';
@@ -2093,13 +2094,15 @@ export function assembleTradeAnswer(opts: {
   tradeMateIn: number | null;
   bestSan: string | null;
   settled: boolean | null;
+  /** The move that produced `fen` (null when unknown) — so a board read
+   *  mid-recapture is never called "ahead" or "behind" (WO-MATERIAL-01). */
+  lastMove: LastMove | null;
 }): GroundedAnswer | null {
   let c: Chess;
   try { c = new Chess(opts.fen); } catch { return null; }
   const [one, many] = opts.piece === 'any' ? ['piece', 'pieces'] : TRADE_WORD[opts.piece];
   const me = opts.studentColor === 'white' ? 'w' : 'b';
-  const pts = (col: 'w' | 'b'): number => c.board().flat().reduce((n, x) => n + (x && x.color === col ? (REVIEW_PIECE_VALUE[x.type] ?? 0) : 0), 0);
-  const edge = pts(me) - pts(me === 'w' ? 'b' : 'w');
+  const edge = settledLeadFor(opts.fen, me, opts.lastMove);
   const principle = edge >= 2
     ? "You're ahead in material, so trades are on your side — every trade makes the extra material count for more."
     : edge <= -2
@@ -2133,14 +2136,13 @@ export function assembleTradeAnswer(opts: {
  *  the structure will be worth once the pieces come off: the material edge, the
  *  passed pawns, a queenside majority, the bishop pair — each computed, and the
  *  honest "nothing decides it yet" when none of them is there. */
-export function assembleEndgameOutlookAnswer(fen: string, studentColor: 'white' | 'black'): GroundedAnswer | null {
+export function assembleEndgameOutlookAnswer(fen: string, studentColor: 'white' | 'black', lastMove: LastMove | null): GroundedAnswer | null {
   let c: Chess;
   try { c = new Chess(fen); } catch { return null; }
   const me: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
   const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
   const all = c.board().flat().filter((x): x is NonNullable<typeof x> => !!x);
-  const pts = (col: 'w' | 'b'): number => all.reduce((n, x) => n + (x.color === col && x.type !== 'k' ? (REVIEW_PIECE_VALUE[x.type] ?? 0) : 0), 0);
-  const edge = pts(me) - pts(them);
+  const edge = settledLeadFor(fen, me, lastMove);
   const parts: string[] = [];
   if (edge >= 1) parts.push(`You're up ${materialEdgeWords(all, me, them)} — an endgame is where that counts, so every trade brings it closer.`);
   else if (edge <= -1) parts.push(`You're down ${materialEdgeWords(all, them, me)} — an endgame is where that tells, so keep the pieces on for now.`);
@@ -6172,6 +6174,9 @@ export function assemblePositionalAnswer(
   /** The game's opening, when the caller knows it — the structure answer names
    *  the opening a structure is at home in when the game came from another. */
   openingName?: string | null,
+  /** The move that produced `fen`, when known — the material balance is read
+   *  settled, so a pending recapture is not "down a piece" (WO-MATERIAL-01). */
+  lastMove?: LastMove | null,
 ): GroundedAnswer | null {
   // Board-validity guard (2026-09-09): every branch reads the FEN through
   // chess.js, so an unparseable FEN can only produce garbage — degrade to a
@@ -6230,7 +6235,14 @@ export function assemblePositionalAnswer(
       .filter((p) => (mineCount[p] ?? 0) > 0)
       .map((p) => `${mineCount[p]} ${PIECE_WORD[p]}`)
       .join(', ');
-    const balance = adv === 0 ? 'Material is even.' : adv > 0 ? `You're up ${adv} point${adv === 1 ? '' : 's'} of material.` : `You're down ${Math.abs(adv)} point${Math.abs(adv) === 1 ? '' : 's'} of material.`;
+    const settledAdv = settledLeadFor(fen, myC, lastMove ?? null);
+    const words = (n: number): string => n === 0 ? 'Material is even.' : n > 0 ? `You're up ${n} point${n === 1 ? '' : 's'} of material.` : `You're down ${Math.abs(n)} point${Math.abs(n) === 1 ? '' : 's'} of material.`;
+    // Mid-exchange: say what the board shows AND where the trade lands — a raw
+    // "you're down 3" while the recapture is yours to make is a false read.
+    const pendingSq = lastMove?.captured ? lastMove.to : null;
+    const balance = settledAdv !== adv && pendingSq
+      ? `${words(settledAdv).replace(/\.$/, '')} once the trade on ${pendingSq} is finished.`
+      : words(adv);
     return { facts: `${balance} You have ${pieces}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 

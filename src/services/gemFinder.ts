@@ -18,6 +18,7 @@
  * G0/G3: every move is the explorer's (human) or the engine's, replayed through
  * chess.js; every word is composed from the board. The model decides nothing.
  */
+import { settledBalance, lastMoveOf } from './material';
 import { Chess } from 'chess.js';
 import { lookupAmateurPlay } from './amateurPlayLookup';
 import { lookupMasterPlay } from './masterPlayLookup';
@@ -243,7 +244,8 @@ async function verifySlip(
   // quiet terminus, or it's a forced mate. An eval edge with no material behind
   // it is NOT a gem (David 2026-09-10: "ideally winning a piece or material").
   const isMate = deep.isMate;
-  const materialGain = studentMaterial(b2.fen()) - M0;
+  const settledEnd = settledBalance(b2.fen(), lastMoveOf(b2));
+  const materialGain = (studentIsWhite ? settledEnd : -settledEnd) - M0;
   if (!isMate && materialGain < MATERIAL_GAIN_MIN) return null;
 
   const gemId = `found:${positionKey(baseFen)}:${cleanSan(slipSan)}`;

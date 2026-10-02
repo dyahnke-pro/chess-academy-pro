@@ -1,4 +1,5 @@
 // All LLM API calls must go through this file only — per CLAUDE.md
+import { lastMoveFromHistory } from './material';
 import { dangerAnswerLines, planArcAnswerLines, studentMoveAnswerLines, theirMoveAnswerLines } from './learnBoardTeaching';
 import OpenAI from 'openai';
 import { detectLanguage } from '../utils/detectLanguage';
@@ -5817,7 +5818,7 @@ export async function getCoachChatResponse(
           && /\b(?:aim|aiming|plan|goal|steer|head(?:ing)?|want|go\s+for|looking\s+for)\b/i.test(grounding.cleanAsk ?? lastUserMessage() ?? '')) {
           const sc: 'white' | 'black' = grounding.studentColor
             ?? ((grounding.currentFen.split(' ')[1] ?? 'w') === 'b' ? 'black' : 'white');
-          const outlook = assembleEndgameOutlookAnswer(grounding.currentFen, sc);
+          const outlook = assembleEndgameOutlookAnswer(grounding.currentFen, sc, lastMoveFromHistory(grounding.moveHistory, grounding.currentFen));
           if (outlook) {
             const voiced = await voice(outlook.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
             if (voiced) return voiced;
@@ -5870,6 +5871,7 @@ export async function getCoachChatResponse(
             tradeMateIn: pov(tr.mateIn),
             bestSan,
             settled: tr.settled,
+            lastMove: lastMoveFromHistory(grounding.moveHistory, grounding.currentFen),
           });
           if (answer) {
             const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'candidate-move', preferRaw: true });
@@ -6368,7 +6370,8 @@ export async function getCoachChatResponse(
             ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
           const histSans = (grounding.moveHistory ?? []).map((m) => m.replace(/^\d+\.+/, '').trim()).filter(Boolean);
           const answer = assemblePositionalAnswer(grounding.currentFen, sc, grounding.positionalTopic, grounding.cleanAsk ?? lastUserMessage(),
-            histSans.length > 0 ? detectOpeningTranspositional(histSans)?.name ?? null : null);
+            histSans.length > 0 ? detectOpeningTranspositional(histSans)?.name ?? null : null,
+            lastMoveFromHistory(histSans, grounding.currentFen));
           if (answer) {
             const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'positional-feature', preferRaw: true });
             if (voiced) return voiced;

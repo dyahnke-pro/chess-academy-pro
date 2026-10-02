@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1523 lines · 12 exports · 43 importers · 30 tests · 1 audits**
+**1524 lines · 12 exports · 43 importers · 30 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -98,7 +98,7 @@
 - `src/services/claimTruth.manual.test.ts:172`
 - `src/services/claimTruth.manual.test.ts:177`
 - `src/services/claimTruth.manual.test.ts:185`
-- `src/services/coachFeatureService.ts:898`
+- `src/services/coachFeatureService.ts:899`
 - `src/services/learnWalkBlumenfeld.test.ts:65`
 - `src/services/liveFundamental.ts:135`
 - `src/services/misconceptionClassifier.ts:244`
@@ -175,8 +175,8 @@
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
 - `src/services/autoAnalyzeGame.ts:395`
 - `src/services/autoAnalyzeGame.ts:398`
-- `src/services/coachFeatureService.ts:903`
-- `src/services/coachFeatureService.ts:905`
+- `src/services/coachFeatureService.ts:904`
+- `src/services/coachFeatureService.ts:906`
 - `src/services/discussionPractice.ts:353`
 - `src/services/discussionPractice.ts:361`
 - `src/services/liveFundamental.ts:125`

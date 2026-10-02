@@ -27,7 +27,8 @@
  */
 import { lineWithReasons } from './lineReasons';
 import { Chess, type Color, type Square, type Move, type PieceSymbol } from 'chess.js';
-import { signedLegalSeeFor, bishopHemmedByOwnPawns, settledLead } from './positionReadingService';
+import { signedLegalSeeFor, bishopHemmedByOwnPawns } from './positionReadingService';
+import { settledLeadFor } from './material';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { findContinuationsAtPly } from './openingDetectionService';
 import { deriveNextPlans } from './nextPlans';
@@ -941,7 +942,7 @@ const DETECTORS: Detector[] = [
     const { last, best, mover } = c;
     // Settled, never mid-recapture: read the lead AFTER the move, with the
     // exchange on its square played out.
-    const lead = settledLead(c.after, mover, last.to);
+    const lead = settledLeadFor(c.after.fen(), mover, { to: last.to, captured: last.captured ?? null });
     const isPieceTrade = (m: Move) => !!m.captured && m.captured !== 'p' && m.piece !== 'p' && VAL[m.captured] === VAL[m.piece];
     if (lead >= 2 && isPieceTrade(best) && !isPieceTrade(last) && !last.captured) {
       return att('wrong-trade-for-material', 1, { squares: [best.to], moves: [best.san], pvMoves: [] }, { situation: 'ahead', better: best.san });

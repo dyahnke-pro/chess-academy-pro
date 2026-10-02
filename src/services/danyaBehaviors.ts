@@ -25,6 +25,7 @@
 import { castleRoute, castleAdvice } from './kingSafety';
 import { andList, fileList } from '../utils/andList';
 import { Chess } from 'chess.js';
+import { settledLeadFor, type LastMove } from './material';
 import type { ArrowClaim } from './arrowDoor';
 import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
 import type { Color, PieceSymbol, Square } from 'chess.js';
@@ -43,7 +44,6 @@ import {
   developmentRead,
   findPieceQuality,
   goodPieceClause, goodPieceIdeaKey,
-  countMaterial,
   findPassedPawns,
   findPawnBreaks,
   findOpenFiles,
@@ -112,6 +112,9 @@ export interface BehaviorContext {
    *  win the knight on f6 — it can't be held" beside the engine's "…exf6
    *  falls apart"). The engine lanes speak for it. */
   opponentLastTo?: string | null;
+  /** The move that produced `fen`, when known — material is read SETTLED, so
+   *  a recapture still to come is not "down material" (WO-MATERIAL-01). */
+  lastMove?: LastMove | null;
 }
 
 export interface BehaviorHit {
@@ -165,6 +168,7 @@ interface NormalizedCtx {
   isEndgame: boolean;
   studentLastTo: string | null;
   opponentLastTo: string | null;
+  lastMove: LastMove | null;
 }
 
 function normalize(ctx: BehaviorContext): NormalizedCtx | null {
@@ -184,6 +188,7 @@ function normalize(ctx: BehaviorContext): NormalizedCtx | null {
     isEndgame: phase === 'endgame',
     studentLastTo: ctx.studentLastTo ?? null,
     opponentLastTo: ctx.opponentLastTo ?? null,
+    lastMove: ctx.lastMove ?? null,
   };
 }
 
@@ -533,12 +538,10 @@ export const DANYA_BEHAVIORS: Behavior[] = [
   {
     id: 'material',
     weight: 302,
-    detect: ({ fen, student }) => {
-      const { advantage } = countMaterial(fen);
-      // advantage is WHITE-positive; convert to the student's side. Require ≥2
-      // so a mid-exchange transient (one side has captured, recapture pending)
-      // doesn't read as a durable material edge.
-      const studentAdv = student === 'w' ? advantage : -advantage;
+    detect: ({ fen, student, lastMove }) => {
+      // SETTLED (WO-MATERIAL-01): a recapture still to come is played out, so
+      // a mid-exchange board never reads as a material edge. The ≥2 bar stays.
+      const studentAdv = settledLeadFor(fen, student, lastMove);
       // UP MATERIAL HAS ONE OWNER — `conversionMethod`, through the live
       // composer (re-walk 1380, 2026-09-25: "you're a rook up — trade pieces,
       // not pawns" and "you're up material — trade pieces, keep pawns" were

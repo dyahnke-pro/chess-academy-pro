@@ -4,7 +4,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { costWords } from './engineConstants';
-import { settledLead } from './positionReadingService';
+import { settledLeadFor, lastMoveOf } from './material';
 import { tradeJudgement } from './tradeJudgement';
 import { whyItFailed } from './whyItFailed';
 import { computeMoveFundamentals } from './moveFundamentals';
@@ -26,7 +26,7 @@ describe('Learn walk oct2a', () => {
   it('F3/F4: a recapture is not "behind in material"', () => {
     const c = play(`${QGD} Be7 Nxf6+`);           // Black to recapture on f6
     const after = new Chess(c.fen()); after.move('Bxf6');
-    expect(settledLead(after, 'b', 'f6')).toBe(0);
+    expect(settledLeadFor(after.fen(), 'b', lastMoveOf(after))).toBe(0);
     const t = tradeJudgement(c.fen(), 'Bxf6', 'Bxf6', 'b', 160);
     expect(t?.reason).not.toBe('behind');
   });
