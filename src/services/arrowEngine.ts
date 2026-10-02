@@ -403,3 +403,81 @@ export function injectCandidateHighlights(text: string): { markers: string[]; sq
 export function keySquareHighlightMarker(squares: readonly string[]): string {
   return `[BOARD: highlight:${squares.map((s) => `${s}:yellow`).join(',')}]`;
 }
+
+/** Board colours for a spoken puzzle line's arrows. */
+export const LINE_ARROW_GOOD = 'rgba(34, 197, 94, 0.85)';
+export const LINE_ARROW_THREAT = 'rgba(239, 68, 68, 0.85)';
+
+/**
+ * EVERY MOVE A PUZZLE SAYS, ON THE BOARD (David 2026-10-02: "Make sure all
+ * stated moves have arrows"). Walks the SANs a spoken line names IN ORDER
+ * through the real position — "b5? Then Qc6, forking…" resolves Qc6 on the
+ * board AFTER b5 — so a follow-up move lands on its true squares, never on a
+ * turn-flipped guess (the source of the stray red arrows of 2026-08-07).
+ *
+ * Colour is the seat plus the line's verdict (David, same day):
+ *  - the student's move in a line about a MISTAKE gets NO arrow — an arrow on
+ *    a bad move reads as "play this";
+ *  - the opponent's move is RED — it punishes, or it threatens;
+ *  - the student's move in a good line is GREEN.
+ * A move already on the board (`exclude`) keeps its highlight and no arrow.
+ * A SAN that will not play legally along the chain is skipped, never guessed.
+ */
+export function spokenLineArrows(
+  text: string,
+  fen: string,
+  opts: { studentColor: 'w' | 'b'; studentMovesAreBad?: boolean; exclude?: readonly FromTo[] },
+): Array<{ startSquare: string; endSquare: string; color: string }> {
+  const sans = lineMoveSans(text);
+  if (sans.length === 0) return [];
+  const skip = new Set((opts.exclude ?? []).map((e) => `${e.from}-${e.to}`));
+  const out: Array<{ startSquare: string; endSquare: string; color: string }> = [];
+  let running: Chess;
+  try { running = new Chess(fen); } catch { return []; }
+  for (const san of sans) {
+    let mv: ReturnType<Chess['move']> | null = null;
+    const mover = running.turn();
+    try { mv = running.move(san, { strict: false }); } catch { mv = null; }
+    if (!mv) continue;
+    const key = `${mv.from}-${mv.to}`;
+    if (skip.has(key)) continue;
+    skip.add(key);
+    if (mover === opts.studentColor) {
+      if (opts.studentMovesAreBad) continue;
+      out.push({ startSquare: mv.from, endSquare: mv.to, color: LINE_ARROW_GOOD });
+    } else {
+      out.push({ startSquare: mv.from, endSquare: mv.to, color: LINE_ARROW_THREAT });
+    }
+  }
+  return out;
+}
+
+/** Words after which a bare coordinate is a pawn MOVE, not a square. */
+const PAWN_MOVE_VERBS = new Set([
+  'then', 'play', 'plays', 'played', 'playing', 'answer', 'answers', 'answered',
+  'reply', 'replies', 'push', 'pushes', 'pushing', 'meet', 'meets',
+]);
+
+/** The moves a line names, in order. A bare coordinate ("c4") is a pawn move
+ *  only where the prose plays it — sentence-initial, or marked "c4?" / "c4!" —
+ *  never inside a list of squares ("eyeing d5, c4 and f5"). */
+function lineMoveSans(text: string): string[] {
+  const cleaned = stripBoardMarkers(text);
+  const out: string[] = [];
+  const re = new RegExp(SAN_TOKEN_RE.source, 'g');
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(cleaned)) !== null) {
+    const san = m[0];
+    const before = cleaned.slice(0, m.index);
+    const precedingWord = before.trim().split(/\s+/).pop()?.toLowerCase().replace(/[^a-z']/g, '') ?? '';
+    if (NON_MOVE_PHRASE_PRECEDERS.has(precedingWord)) continue;
+    if (/^[a-h][1-8]$/.test(san)) {
+      const after = cleaned.charAt(m.index + san.length);
+      const sentenceStart = /(^|[.!?]\s*|—\s*)$/.test(before);
+      const played = PAWN_MOVE_VERBS.has(precedingWord);
+      if (after !== '?' && after !== '!' && !sentenceStart && !played) continue;
+    }
+    out.push(san);
+  }
+  return out;
+}

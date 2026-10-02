@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo, type ReactNode } from 'react';
+import { spokenLineArrows } from '../../services/arrowEngine';
+import type { BoardArrow } from '../Chessboard/ConsistentChessboard';
 import { captureEvent } from '../../services/analytics';
 import { Chess } from 'chess.js';
 import { ControlledChessBoard } from '../Board/ControlledChessBoard';
@@ -134,6 +136,8 @@ export function PuzzleBoard({
   const [terminalId, setTerminalId] = useState<string | null>(null);
   const terminal = terminalId === puzzle.id;
   const conceptSpokenRef = useRef<string | null>(null);
+  /** Arrows for the moves the current spoken line names (`spokenLineArrows`). */
+  const [lineArrows, setLineArrows] = useState<BoardArrow[]>([]);
   const tryTokenRef = useRef(0);
   /** A wrong try's refutation is still being read. While it is, a coaching
    *  line the SAME miss triggered (the struggle coach's method beat) waits and
@@ -325,6 +329,7 @@ export function PuzzleBoard({
     setPipsDone(0);
     setMissedPip(false);
     setLastMoveHighlight(null);
+    setLineArrows([]);
     setFlashClass('');
     hasMadeMistakeRef.current = false;
     wrongAttemptsRef.current = 0;
@@ -414,6 +419,7 @@ export function PuzzleBoard({
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing' || disabled) return;
+    setLineArrows([]); // the last line's moves belong to the last position
 
     const allMoves = movesRef.current;
     if (moveIndex >= allMoves.length) return;
@@ -574,6 +580,12 @@ export function PuzzleBoard({
           ? composeWrongTryLine(read.text, held, hint)
           : composeWrongTryLine(read?.text ?? hint, held, null);
         setSubtitle(line);
+        // Every move the line names, on the board: their punishing reply red,
+        // your try none (it was just taken back).
+        setLineArrows(spokenLineArrows(line, fenBeforeAttempt, {
+          studentColor: userColor === 'white' ? 'w' : 'b',
+          studentMovesAreBad: read?.kind !== 'also-good',
+        }));
         voiceService.stop();
         if (settings.voiceEnabled) void voiceService.speak(line);
       });
@@ -617,10 +629,15 @@ export function PuzzleBoard({
     }
 
     setState('loading'); // Disable interaction during solution playback
+    // A local copy of the position, so each clause's arrows resolve from the
+    // board BEFORE its move (the hook's fen is a render snapshot).
+    const track = new Chess(game.fen);
     void (async () => {
       for (let i = from; i < allMoves.length; i += 1) {
         if (stale()) return;
         const move = allMoves[i];
+        const fenBefore = track.fen();
+        try { track.move({ from: move.from, to: move.to, promotion: move.promotion }); } catch { /* the board decides */ }
         const result = game.makeMove(move.from, move.to, move.promotion);
         if (result) {
           playMoveSound(result.san);
@@ -628,6 +645,12 @@ export function PuzzleBoard({
         }
         setMoveIndex(i + 1);
         const clause = speakAlong ? clauseAt(i) : '';
+        // The move that just landed keeps its highlight; anything else the
+        // clause names gets its arrow.
+        setLineArrows(clause ? spokenLineArrows(clause, fenBefore, {
+          studentColor: userColor === 'white' ? 'w' : 'b',
+          exclude: [{ from: move.from, to: move.to }],
+        }) : []);
         // Never faster than a readable move, never ahead of the voice.
         await Promise.all([clause ? voiceService.speak(clause).catch(() => undefined) : null, sleep(600)]);
         if (clause) await sleep(250);
@@ -640,7 +663,7 @@ export function PuzzleBoard({
         completePuzzle(false);
       }, speakAlong ? 800 : 1500);
     })();
-  }, [state, moveIndex, completePuzzle, playMoveSound, game, puzzle.id, conceptExplanation, settings.voiceEnabled]);
+  }, [state, moveIndex, completePuzzle, playMoveSound, game, puzzle.id, conceptExplanation, settings.voiceEnabled, userColor]);
 
   return (
     <div className="space-y-3" data-testid="puzzle-board" data-puzzle-id={puzzle.id}>
@@ -665,7 +688,7 @@ export function PuzzleBoard({
           showResetButton={false}
           onMove={handleChessBoardMove}
           highlightSquares={lastMoveHighlight}
-          arrows={hintState.arrows.length > 0 ? hintState.arrows : undefined}
+          arrows={hintState.arrows.length > 0 ? hintState.arrows : lineArrows.length > 0 ? lineArrows : undefined}
           ghostMove={hintState.ghostMove}
         />
       </div>
