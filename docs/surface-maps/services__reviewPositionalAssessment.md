@@ -41,7 +41,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseVerdict.test.ts:10`
 - `src/services/planPrescriptions.test.ts:84`
 - `src/services/planPrescriptions.test.ts:91`
-- `src/services/reviewFullData.ts:697`
+- `src/services/reviewFullData.ts:705`
 - `src/services/reviewPositionalAssessment.test.ts:4`
 - `src/services/reviewPositionalAssessment.test.ts:7`
 - `src/services/reviewPositionalAssessment.test.ts:8`
@@ -75,7 +75,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseVerdict.test.ts:23`
 - `src/services/phaseVerdict.test.ts:28`
 - `src/services/positionFacts.ts:866`
-- `src/services/reviewFullData.ts:1009`
+- `src/services/reviewFullData.ts:1017`
 - `src/services/reviewPositionalAssessment.test.ts:87`
 - `src/services/reviewPositionalAssessment.test.ts:92`
 

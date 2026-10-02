@@ -154,7 +154,7 @@ const EMERGE: Record<Seat, ReadonlyArray<(p: string) => string>> = {
   // plan is taking shape" claimed they were. He says "the plan here is …".
   student: [
     (p) => `The plan for you here: ${p}.`,
-    (p) => `Here is what to build toward: ${p}.`,
+    (p) => `Here is what you build toward: ${p}.`,
     (p) => `Your plan from here: ${p}.`,
   ],
 };

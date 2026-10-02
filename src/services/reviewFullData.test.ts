@@ -493,3 +493,16 @@ describe('a better move with no reason is not named bare — the grade says what
     expect(q).not.toMatch(/the stronger move was exd5\./);
   });
 });
+
+describe('studentAnswer — their slip is your chance (clean-win review 2026-10-02)', () => {
+  it('names the student answer with its point', async () => {
+    const { studentAnswer } = await import('./reviewFullData');
+    expect(studentAnswer('2r3k1/7p/p2r2p1/3P1p2/NpPR4/1P5P/P5P1/6K1 w - - 1 31', 'Rd6', 'c5'))
+      .toBe('your answer was c5, which kicks their rook off d6, gaining time');
+  });
+  it('says nothing when the answer has no computed point (a queen trade)', async () => {
+    const { studentAnswer } = await import('./reviewFullData');
+    expect(studentAnswer('2r2rk1/7p/p5p1/2pP1p2/NpPq1Q2/1P5P/P5P1/4R1K1 w - - 5 28', 'Qd4+', 'Qxd4')).toBeNull();
+    expect(studentAnswer('2r2rk1/7p/p5p1/2pP1p2/NpPq1Q2/1P5P/P5P1/4R1K1 w - - 5 28', 'Qd4+', null)).toBeNull();
+  });
+});

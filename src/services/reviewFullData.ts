@@ -448,10 +448,18 @@ export function computeMoveFacets(
     const punishWhy = punish
       ? (opponentMoved ? toStudentSeat(punish.why) : punish.why)
       : null;
+    // THEIR SLIP IS THE STUDENT'S CHANCE (clean-win review 2026-10-02: plies
+    // 44/54/58/60 of a won game said only "the stronger move was Qc7" — their
+    // better move, nothing the student can use). With no material cost to
+    // name, the teaching is the student's answer and its point, from the same
+    // move-point computer Learn uses.
+    const answer = opponentMoved && bestSan && fellShort && costsPoints && !reason && !punishWhy
+      ? studentAnswer(fenAfter, san, ctx.replyBestSan)
+      : null;
     const better = bestSan && fellShort
       ? (reason ? `the stronger move was ${bestSan} — ${reason}`
         : punishWhy ? `it let ${opponentMoved ? 'you' : 'them'} ${punishWhy}`
-          : `the stronger move was ${bestSan}`)
+          : answer ?? `the stronger move was ${bestSan}`)
       : '';
     const tail = [whyBad, better].filter(Boolean).join('; ');
     const betterBit = tail ? ` — ${tail}` : '';
@@ -1070,7 +1078,7 @@ export function computeMoveFacets(
 
   // ── 12. ENDGAME PHASE ──
   const phase = nameEndgamePhase(fenAfter);
-  if (phase) facets.push(`[endgame] The position is ${phase}.`);
+  if (phase) facets.push(`[endgame] You've reached ${phase}.`);
 
   return facets;
 }
@@ -1225,4 +1233,17 @@ function settledVariation(allSans: readonly string[], variationOf: (n: string | 
   try { v = variationOf(detectOpening([...allSans])?.name ?? null); } catch { v = null; }
   settledCache.set(allSans, v);
   return v;
+}
+
+/** The student's answer to the opponent's slip, said with its point — or null
+ *  when the move-point computer finds no point (named with a reason, or not
+ *  named). `theirSan` is the slip itself: a capture on its square is a
+ *  recapture, never material won. */
+export function studentAnswer(fenAfter: string, theirSan: string, answerSan: string | null): string | null {
+  if (!answerSan) return null;
+  const point = studentMovePoint(fenAfter, answerSan, theirSan);
+  if (!point) return null;
+  const body = point.replace(/\.$/, '');
+  if (body.startsWith(`${answerSan} `)) return `your answer was ${answerSan}, which ${body.slice(answerSan.length + 1)}`;
+  return `your answer was ${answerSan} — ${body.charAt(0).toLowerCase()}${body.slice(1)}`;
 }

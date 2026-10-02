@@ -329,8 +329,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:97`
 - `src/services/positionalTruth.corpus.test.ts:102`
 - `src/services/replayFence.najdorf1500.test.ts:24`
-- `src/services/reviewFullData.ts:775`
-- `src/services/reviewFullData.ts:779`
+- `src/services/reviewFullData.ts:783`
+- `src/services/reviewFullData.ts:787`
 
 ### `MinorityAttack` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -345,8 +345,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.ts:366`
 - `src/services/positionalTruth.corpus.test.ts:110`
 - `src/services/positionalTruth.corpus.test.ts:115`
-- `src/services/reviewFullData.ts:771`
-- `src/services/reviewFullData.ts:773`
+- `src/services/reviewFullData.ts:779`
+- `src/services/reviewFullData.ts:781`
 
 ### `pieceScope` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

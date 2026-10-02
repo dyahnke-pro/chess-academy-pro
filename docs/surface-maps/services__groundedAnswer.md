@@ -1080,7 +1080,7 @@
 - `src/services/falseAlarm.ts:60`
 - `src/services/learnMoveTeaching.ts:125`
 - `src/services/opponentMovePurpose.ts:52`
-- `src/services/reviewFullData.ts:679`
+- `src/services/reviewFullData.ts:687`
 - `src/services/reviewMoveBriefing.ts:237`
 - `src/services/reviewNarrationFidelity.test.ts:218`
 - `src/services/reviewNarrationFidelity.test.ts:227`
@@ -1156,7 +1156,7 @@
 - `src/services/reviewFullData.ts:287`
 - `src/services/reviewFullData.ts:355`
 - `src/services/reviewFullData.ts:440`
-- `src/services/reviewFullData.ts:592`
+- `src/services/reviewFullData.ts:600`
 - `src/services/reviewNarrationFidelity.test.ts:85`
 - `src/services/reviewNarrationFidelity.test.ts:95`
 - `src/services/reviewNarrationFidelity.test.ts:101`
