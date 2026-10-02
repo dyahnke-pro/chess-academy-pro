@@ -144,7 +144,7 @@
 
 ### `recordTagDrillResult` (function) — 8 call sites
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx:278`
-- `src/components/Puzzles/AdaptivePuzzlePage.tsx:366`
+- `src/components/Puzzles/AdaptivePuzzlePage.tsx:369`
 - `src/components/Puzzles/WeaknessTagDrillPage.tsx:64`
 - `src/services/misconceptionService.test.ts:107`
 - `src/services/misconceptionService.test.ts:124`
