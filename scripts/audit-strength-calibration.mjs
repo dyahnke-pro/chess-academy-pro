@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 /**
- * Verifies FIRST-RUN DIFFICULTY IS FULLY ADAPTIVE — no calibration step.
+ * Verifies FIRST-RUN STRENGTH: the one skippable question (back 2026-10-02),
+ * then fully adaptive from there. Scenario 1 below supersedes the "no picker"
+ * contract this file asserted from 2026-09-12 until David asked for it back.
  *
  * REWRITTEN 2026-09-12: the first-run skill-band calibration bubble was
  * REMOVED by David on 2026-09-02 ("remove strength calibration → go fully
@@ -119,16 +121,36 @@ async function main() {
 
   const tests = [
     {
-      label: 'Fully adaptive: NO calibration bubble / skill-band picker on first run',
+      // THE QUESTION IS BACK (David 2026-10-02: "make sure the strength
+      // question is still available first time you open the app"). Driven like
+      // a person: answer consent, see the question, pick Beginner.
+      label: 'First run asks the strength question after consent; Beginner seeds 900 + beginner mode',
       run: async () => {
         await freshLoad();
-        // Give boot + the deferred profile-create effect room; the bubble (if
-        // it regressed back) auto-pops within a couple of seconds of mount.
-        await page.waitForTimeout(12_000);
-        const bubble = await page.locator('[data-testid="strength-calibration-bubble"]').count();
-        const bands = await page.locator('[data-testid^="skill-band-"]').count();
-        const ok = bubble === 0 && bands === 0;
-        return { ok, why: ok ? 'no first-run picker (fully adaptive)' : `REGRESSED: bubble=${bubble} skill-bands=${bands} — the removed calibration picker is back` };
+        const allow = page.locator('[data-testid="ai-consent-allow"]');
+        await allow.waitFor({ timeout: 30_000 }).catch(() => {});
+        if (await allow.count()) await allow.first().click();
+        const screen = page.locator('[data-testid="first-run-strength"]');
+        const shown = await screen.waitFor({ timeout: 20_000 }).then(() => true).catch(() => false);
+        if (!shown) return { ok: false, why: 'the first-run strength question never appeared after consent' };
+        const bands = await page.locator('[data-testid^="first-run-band-"]').count();
+        await page.locator('[data-testid="first-run-band-beginner"]').click();
+        const closed = await screen.waitFor({ state: 'detached', timeout: 10_000 }).then(() => true).catch(() => false);
+        await page.waitForTimeout(1500);
+        const profile = await readProfile();
+        const ok = bands === 4 && closed && profile?.skillBand === 'beginner' && Number(profile?.currentRating) === 900;
+        return { ok, why: `bands=${bands} closed=${closed} skillBand=${profile?.skillBand} currentRating=${profile?.currentRating}` };
+      },
+    },
+    {
+      label: 'Beginner mode: Up next leads with the Start-here path',
+      run: async () => {
+        await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+        const bar = page.locator('[data-testid="dashboard-up-next"]');
+        await bar.waitFor({ timeout: 30_000 }).catch(() => {});
+        const text = (await bar.innerText().catch(() => '')).replace(/\s+/g, ' ');
+        const ok = /Start here: the fundamentals/.test(text);
+        return { ok, why: ok ? `up next: ${text.slice(0, 80)}` : `up next did not lead with Start here: "${text.slice(0, 120)}"` };
       },
     },
     {

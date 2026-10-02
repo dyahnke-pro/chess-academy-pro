@@ -23,7 +23,12 @@ export function autoDismissCalibration() {
     // a full-screen dialog and intercepts the first click on the surface behind
     // it (e.g. the puzzle quick-settings toggle). Neutralize it the same way.
     '[data-testid="page-help-modal"]{pointer-events:none!important;opacity:0!important;}' +
-    '[data-testid="page-help-modal"] *{pointer-events:none!important;}';
+    '[data-testid="page-help-modal"] *{pointer-events:none!important;}' +
+    // The first-run strength question (back 2026-10-02) is a full-screen
+    // dialog on a fresh device. Neutralized the same write-independent way;
+    // the Skip click below answers it when Dexie writes work.
+    '[data-testid="first-run-strength"]{pointer-events:none!important;opacity:0!important;}' +
+    '[data-testid="first-run-strength"] *{pointer-events:none!important;}';
   const inject = () => {
     if (!document.head && !document.documentElement) { setTimeout(inject, 20); return; }
     if (document.getElementById('__audit_kill_calib')) return;
@@ -38,6 +43,12 @@ export function autoDismissCalibration() {
     if (!document.querySelector('[data-testid="strength-calibration-bubble"]')) return;
     const btn = document.querySelector('[data-testid="skill-band-intermediate"]');
     if (btn) btn.click();
+  };
+  // best-effort: answer the first-run strength question with Skip, so the app
+  // stays fully adaptive exactly as audits have always measured it.
+  const skipStrength = () => {
+    const skip = document.querySelector('[data-testid="first-run-skip"]');
+    if (skip) skip.click();
   };
   // best-effort: also CLOSE the page-help modal outright when it auto-opens.
   const closePageHelp = () => {
@@ -83,7 +94,7 @@ export function autoDismissCalibration() {
       window.__auditConsentStuck = true;
     }
   };
-  const sweep = () => { inject(); clickBand(); closePageHelp(); acceptAiConsent(); };
+  const sweep = () => { inject(); clickBand(); closePageHelp(); acceptAiConsent(); skipStrength(); };
   const start = () => {
     if (!document.body) { setTimeout(start, 50); return; }
     new MutationObserver(sweep).observe(document.body, { childList: true, subtree: true });

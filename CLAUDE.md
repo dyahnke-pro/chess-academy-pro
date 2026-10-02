@@ -656,8 +656,18 @@ The pattern (battle-tested 2026-05-16 + 2026-05-28):
    `[data-testid="strength-calibration-bubble"]` and click a skill band, is
    DELETED rather than annotated** (the Lake Butler rule: when you correct a
    claim, remove the one you are replacing, or the next reader can pick either
-   side). Nothing in `src/` renders that testid; difficulty is fully adaptive
-   with no first-run step. Consent is now the only first-run prompt.
+   side). Nothing in `src/` renders that testid.
+
+   🔄 **A NEW first-run question exists as of 2026-10-02 (David: "make sure the
+   strength question is still available first time you open the app").** It is
+   `FirstRunStrength` (`data-testid="first-run-strength"`, bands
+   `first-run-band-*`, `first-run-skip`): one skippable screen AFTER consent,
+   shown only to a profile with no measured strength. New to chess / Beginner
+   turn on `isBeginnerMode` (ratingBands) until their measured rating reaches
+   1000. `autoDismissCalibration` neutralizes it by CSS and answers Skip, so
+   an audit sees the fully adaptive app it always measured;
+   `audit-strength-calibration.mjs` drives it on purpose. It is a NEW testid —
+   never wait on the old bubble's.
 
    It was not free to leave lying around. On 2026-09-17 a sweep found **159
    audit scripts still waiting on it — 52.6 minutes of dead wall-clock per

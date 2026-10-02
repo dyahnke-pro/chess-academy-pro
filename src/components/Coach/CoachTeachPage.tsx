@@ -70,7 +70,7 @@ import { useChessGame, type MoveResult } from '../../hooks/useChessGame';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { usePhaseNarration } from '../../hooks/usePhaseNarration';
 import { useStudentNeed } from '../../hooks/useStudentNeed';
-import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
+import { DEFAULT_STUDENT_RATING, isBeginnerMode } from '../../services/ratingBands';
 import { useProvenTags, useWeaknessSignals } from '../../hooks/useWeaknessSignals';
 import {
   createPhaseTransitionState,
@@ -7527,7 +7527,7 @@ export function CoachTeachPage(): JSX.Element {
       const prior = turnLeadRef.current && samePosition(turnLeadRef.current.fen, liveFenRef.current ?? fen)
         ? turnLeadRef.current.lead
         : null;
-      const d = decideTurn([{ lane: 'phase', text, fen }], undefined, learnMemRef.current.spokenKeys, prior, provenTagsRef.current);
+      const d = decideTurn([{ lane: 'phase', text, fen }], undefined, learnMemRef.current.spokenKeys, prior, provenTagsRef.current, isBeginnerMode(useAppStore.getState().activeProfile));
       // A held sentence was not spoken, so it must not ride the narration
       // kind every listener reads as speech.
       void logAppAudit(d.pkg.spoken ? {
@@ -8600,7 +8600,7 @@ export function CoachTeachPage(): JSX.Element {
       // priorKeys = every phrase spoken EARLIER this game, so no lane repeats a
       // phrase across turns (David 2026-09-13). Within-turn dedupe is separate
       // (the late package's `alreadySaid`); this is the cross-turn guarantee.
-    ], undefined, learnMemRef.current.spokenKeys, null, provenTagsRef.current);
+    ], undefined, learnMemRef.current.spokenKeys, null, provenTagsRef.current, isBeginnerMode(useAppStore.getState().activeProfile));
     // Every lane's speak/silent answer is the door's lane table now
     // (`learnTurnDoor.LEARN_LANES`), not a kind whitelist applied after the
     // fact. NO COUNT CAP (David 2026-09-13) still holds — repetition is caught
@@ -10775,6 +10775,7 @@ export function CoachTeachPage(): JSX.Element {
                     // if it outranks what the instant wave led with.
                     instantLead,
                     provenTagsRef.current,
+                    isBeginnerMode(useAppStore.getState().activeProfile),
                   );
                   const hintPkg = lateDecision.pkg;
                   if (announcesTheMove(lateDecision.spoke)) announcedBoardsRef.current.add(pending.fen.split(' ').slice(0, 2).join(' '));

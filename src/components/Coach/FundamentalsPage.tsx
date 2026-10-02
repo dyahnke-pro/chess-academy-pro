@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Compass, Crosshair, Rocket, Shield, Layers, Swords, Crown, Play, Square, Clapperboard, Target, ArrowLeft, Volume2, GraduationCap } from 'lucide-react';
 import { PageHelp } from '../Layout/PageHelp';
+import { markFundamentalsVisited } from '../../services/activeBite';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { useProseReader, type ProseUnit } from '../../hooks/useProseReader';
 import { assembleFundamentalsAnswer } from '../../services/groundedAnswer';
@@ -84,6 +85,8 @@ export function FundamentalsPage(): JSX.Element {
   // The student's own per-fundamental slip counts (from the recorded weaknesses).
   // A fundamental never slipped on is absent → "not yet".
   const [counts, setCounts] = useState<Partial<Record<FundamentalId, FundamentalStat>>>({});
+  // Opening this page is the Start-here path's first step (beginner mode).
+  useEffect(() => { void markFundamentalsVisited(); }, []);
   useEffect(() => {
     let alive = true;
     void getFundamentalCounts().then((c) => { if (alive) setCounts(c); });

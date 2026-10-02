@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:236) — names `WeaknessProvenance`
-- **The standard post-deploy ritual** (CLAUDE.md:6155) — names `weaknessSpine`
+- **The standard post-deploy ritual** (CLAUDE.md:6165) — names `weaknessSpine`
 
 ## Who calls in
 
@@ -158,7 +158,7 @@
 
 ### `getUnifiedWeaknessProfile` (function) — 39 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2646`
-- `src/components/Coach/CoachTeachPage.tsx:11182`
+- `src/components/Coach/CoachTeachPage.tsx:11183`
 - `src/components/Coach/TrainingPlanRolodexPage.tsx:72`
 - `src/components/Insights/HeatMapPanel.tsx:55`
 - `src/components/Tactics/TacticalProfilePage.tsx:69`
@@ -180,7 +180,7 @@
 - `src/services/loopCloses.review.integration.test.ts:74`
 - `src/services/puzzleMissService.test.ts:40`
 - `src/services/upNextHome.ts:25`
-- `src/services/upNextLoader.ts:42`
+- `src/services/upNextLoader.ts:65`
 - `src/services/weaknessSignalLoader.ts:58`
 - `src/services/weaknessSpine.fundamentals.test.ts:48`
 - `src/services/weaknessSpine.fundamentals.test.ts:62`

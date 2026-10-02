@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **G4.5.2 NEVER TELL A STUDENT TO FIND A MOVE THEY PLAYED (found reading the shipped register, 2026-09-16).** (CLAUDE.md:1078) — names `buildReviewDeepestLookahead`
-- **G4.5.3 NEVER HAND OUT AN INSTRUCTION YOU HAVE NOT TESTED — and two plans only RACE when they run the same kind of plan (found reading the code, 2026-09-17).** (CLAUDE.md:1105) — names `deriveNextPlan`
+- **G4.5.2 NEVER TELL A STUDENT TO FIND A MOVE THEY PLAYED (found reading the shipped register, 2026-09-16).** (CLAUDE.md:1088) — names `buildReviewDeepestLookahead`
+- **G4.5.3 NEVER HAND OUT AN INSTRUCTION YOU HAVE NOT TESTED — and two plans only RACE when they run the same kind of plan (found reading the code, 2026-09-17).** (CLAUDE.md:1115) — names `deriveNextPlan`
 
 ## Who calls in
 

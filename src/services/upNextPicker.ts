@@ -22,7 +22,7 @@
 import type { RepCandidate } from './trainingPlanSelector';
 import { resolveRepRoute } from './repRouting';
 
-export type PickKind = 'deep-run' | 'game-slip' | 'weakness' | 'grown' | 'opening' | 'free-opening' | 'warm-up' | 'long';
+export type PickKind = 'deep-run' | 'game-slip' | 'weakness' | 'grown' | 'opening' | 'free-opening' | 'warm-up' | 'long' | 'start';
 
 /** Which hub row a pick lives under — the row that pulses in place. */
 export type PickHub = 'tactics:deep-run' | 'tactics:my mistakes' | 'tactics:daily' | 'tactics:long' | 'openings' | 'home';
@@ -52,6 +52,44 @@ export interface UpNextInput {
   freeOpeningOpen: boolean;
   /** No games, no record — a first visit. */
   coldStart: boolean;
+  /** Beginner mode's Start-here steps not yet done, in order (empty when the
+   *  student is not in beginner mode or has finished them). */
+  startSteps: readonly StartStep[];
+}
+
+/** THE START-HERE PATH (David 2026-10-02: "cater to new players. Explain
+ *  fundamentals, teach an easy opening that follows the fundamentals").
+ *  Fundamentals first, then the opening that does exactly what they say
+ *  (the Italian: center, develop, castle), then a game the coach talks them
+ *  through, then the same ideas as Black (…e5 and the Two Knights). */
+export type StartStep = 'fundamentals' | 'italian' | 'first-game' | 'black-e5';
+export const START_STEPS: readonly StartStep[] = ['fundamentals', 'italian', 'first-game', 'black-e5'];
+
+const START_PICK: Record<StartStep, Omit<UpNextPick, 'kind' | 'key'>> = {
+  fundamentals: {
+    label: 'Start here: the fundamentals',
+    reason: 'Every strong player starts here: control the center, bring out your pieces, keep your king safe.',
+    bite: 'one section', path: '/coach/fundamentals', hub: 'home',
+  },
+  italian: {
+    label: 'Your first opening: the Italian',
+    reason: 'It does exactly what the fundamentals say. Take the center, develop your knight and bishop, castle.',
+    bite: 'watch one line', path: '/openings/italian-game', hub: 'openings',
+  },
+  'first-game': {
+    label: 'Play your first coached game',
+    reason: 'Play a game and your coach talks you through it, move by move.',
+    bite: 'one game', path: '/coach/teach', hub: 'home',
+  },
+  'black-e5': {
+    label: 'As Black: meet e4 with e5',
+    reason: 'The same ideas from the other side. Answer e4 with e5, develop your knights, castle.',
+    bite: 'watch one line', path: '/openings/two-knights-defence', hub: 'openings',
+  },
+};
+
+function startPick(step: StartStep): UpNextPick {
+  return { kind: 'start', key: `up:start:${step}`, ...START_PICK[step] };
 }
 
 /** Puzzles a weakness bite asks for — two, a couple of minutes. */
@@ -95,6 +133,9 @@ function openingPick(rep: RepCandidate): UpNextPick {
  *  day's ring and the first not-done one as Up next. */
 export function rankUpNext(i: UpNextInput): UpNextPick[] {
   const out: UpNextPick[] = [];
+  // A beginner's next step leads, ahead of everything: a puzzle about a pin
+  // means little before they know what the center is for.
+  if (i.startSteps.length > 0) out.push(startPick(i.startSteps[0]));
   if (i.coldStart) out.push(deepRun());
   if (i.latestGameSlip) {
     const vs = i.latestGameSlip.opponent ? ` vs ${i.latestGameSlip.opponent}` : '';

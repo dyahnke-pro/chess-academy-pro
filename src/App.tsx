@@ -11,6 +11,7 @@ import { calibrateStrength } from './services/strengthCalibrationService';
 import { warmHomeSteer } from './services/homeOpeningSteer';
 import { PRODUCTION_BACKFILL_SCHEDULE } from './services/backfillSchedule';
 import { AiConsentModal } from './components/Legal/AiConsentModal';
+import { FirstRunStrength } from './components/Legal/FirstRunStrength';
 import { useAiConsentStore } from './stores/aiConsentStore';
 import { getThemeById, applyTheme } from './services/themeService';
 import { seedDatabase } from './services/dataLoader';
@@ -175,9 +176,9 @@ export function App(): JSX.Element {
   // First-run AI data-sharing consent (Apple 5.1.1). If this profile has never
   // answered the consent prompt (undefined ⇒ new install OR an existing profile
   // that predates the field), surface the blocking AiConsentModal before any
-  // coach call can share gameplay data with the third-party AI providers. (The
-  // strength-picker bubble that used to gate this was removed 2026-08-22 — see
-  // the calibration block below — so consent is now the ONLY first-run prompt.)
+  // coach call can share gameplay data with the third-party AI providers. The
+  // one-time strength question (FirstRunStrength) follows consent; it waits
+  // until consent is answered (needsStrengthQuestion).
   useEffect(() => {
     if (!activeProfile) return;
     if (activeProfile.aiDataConsent !== undefined) return;
@@ -368,8 +369,10 @@ export function App(): JSX.Element {
         // spend synchronously. Dormant unless the gate is live + non-Pro.
         void useFreeTierStore.getState().hydrate();
 
-        // Difficulty is FULLY ADAPTIVE — no calibration step, no picker (David
-        // 2026-09-02: "remove strength calibration → go fully adaptive").
+        // Difficulty is FULLY ADAPTIVE (David 2026-09-02). The one-time,
+        // skippable strength question is back as of 2026-10-02 (FirstRunStrength,
+        // mounted below): it only seeds the starting point, and the measurement
+        // below moves the rating from there.
         //
         // 🔴 The sentence that used to sit here — "with no import we write
         // NOTHING … rather than a guessed band" — is DELETED, not annotated,
@@ -751,6 +754,8 @@ export function App(): JSX.Element {
           Router throws "Cannot destructure property 'basename' from null" and
           white-screens the whole app (P0, David 2026-07-02). */}
       <AiConsentModal />
+      {/* The one-time strength question, after consent (David 2026-10-02). */}
+      <FirstRunStrength />
       {/* Two-step review prompt — armed by reviewPromptService after enough
           positive moments; renders only when open. Global so it can surface
           from any surface that recorded the win. */}

@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:25) — names `planRace`
-- **G4.5.3 NEVER HAND OUT AN INSTRUCTION YOU HAVE NOT TESTED — and two plans only RACE when they run the same kind of plan (found reading the code, 2026-09-17).** (CLAUDE.md:1127) — names `planRace`
+- **G4.5.3 NEVER HAND OUT AN INSTRUCTION YOU HAVE NOT TESTED — and two plans only RACE when they run the same kind of plan (found reading the code, 2026-09-17).** (CLAUDE.md:1137) — names `planRace`
 
 ## Who calls in
 

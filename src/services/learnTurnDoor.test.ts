@@ -153,7 +153,7 @@ describe('WO-1b — one lead per turn', () => {
 describe('WO-1b — board descriptions wait for the turn\'s one decision', () => {
   it('the instant wave carries only urgent lanes; descriptions are deferred to the late wave', () => {
     const start = TEACH_CODE.indexOf('const instantDecision = decideTurn([');
-    const end = TEACH_CODE.indexOf('learnMemRef.current.spokenKeys, null, provenTagsRef.current);', start);
+    const end = TEACH_CODE.indexOf('learnMemRef.current.spokenKeys, null, provenTagsRef.current', start);
     const instantCall = TEACH_CODE.slice(start, end);
     for (const lane of ['commentary', 'behavior', 'positional', 'kingSafety']) {
       expect(instantCall, `${lane} speaks instantly again — it will lead the turn by arriving first`).not.toContain(`'${lane}'`);
@@ -309,5 +309,27 @@ describe('the verdict on the student\'s own move is never held (Learn walk 2026-
     ]);
     expect(d.spoke).toContain('threat');
     expect(d.spoke).toContain('mistake');
+  });
+});
+
+describe('beginner mode — the fundamental behind a slip always rides (David 2026-10-02)', () => {
+  const LEAD = 'Their knight on c6 defends the pawn on e5.';
+  const FUND = 'You moved the same piece twice — develop a new one first.';
+  const facts = (): Parameters<typeof decideTurn>[0] => [
+    { lane: 'mistake', text: LEAD, fen: FEN, squares: ['c6', 'e5'] },
+    { lane: 'fundamental', text: FUND, fen: FEN, squares: ['g1'] },
+  ];
+
+  it('held for everyone else when it shares no square with the lead', () => {
+    const d = decideTurn(facts());
+    expect(d.held).toContain('fundamental');
+    expect(d.pkg.spoken).not.toContain('same piece twice');
+  });
+
+  it('spoken for a beginner, without changing what leads', () => {
+    const d = decideTurn(facts(), undefined, undefined, null, null, true);
+    expect(d.spoke).toContain('fundamental');
+    expect(d.lead?.lane).toBe('mistake');
+    expect(d.pkg.spoken).toContain('same piece twice');
   });
 });

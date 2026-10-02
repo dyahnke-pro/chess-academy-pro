@@ -8,9 +8,9 @@
 
 ## Locked rules that govern this surface
 
-- **STEP 11 — Add model games (multi-game per variation)** (CLAUDE.md:2045) — names `Moment`
-- **⏰ Standing notes** (CLAUDE.md:2576) — names `Thesis`
-- **The standard post-deploy ritual** (CLAUDE.md:6105) — names `Moment`
+- **STEP 11 — Add model games (multi-game per variation)** (CLAUDE.md:2055) — names `Moment`
+- **⏰ Standing notes** (CLAUDE.md:2586) — names `Thesis`
+- **The standard post-deploy ritual** (CLAUDE.md:6115) — names `Moment`
 
 ## Who calls in
 

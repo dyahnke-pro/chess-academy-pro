@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**754 lines · 38 exports · 47 importers · 24 tests · 14 audits**
+**757 lines · 38 exports · 47 importers · 24 tests · 14 audits**
 
 ## Locked rules that govern this surface
 
 - **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:628) — names `markRungComplete`, `openingService`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4652) — names `markRungComplete`
-- **The standard post-deploy ritual** (CLAUDE.md:6137) — names `markRungComplete`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4662) — names `markRungComplete`
+- **The standard post-deploy ritual** (CLAUDE.md:6147) — names `markRungComplete`
 
 ## Who calls in
 
@@ -92,7 +92,7 @@
 ### `getOpeningById` (function) — 19 call sites
 - `src/components/Academy/CourseSyllabusPage.tsx:38`
 - `src/components/Academy/CourseTrainerPage.tsx:47`
-- `src/components/Coach/CoachTeachPage.tsx:11080`
+- `src/components/Coach/CoachTeachPage.tsx:11081`
 - `src/components/Openings/OpeningDetailPage.tsx:381`
 - `src/components/Openings/OpeningDetailPage.tsx:388`
 - `src/components/Openings/OpeningDetailPage.tsx:396`
@@ -286,7 +286,7 @@
 
 ### `getUnlearnedFavoriteOpenings` (function) — 2 call sites
 - `src/components/Coach/TrainingPlanRolodexPage.tsx:74`
-- `src/services/upNextLoader.ts:44`
+- `src/services/upNextLoader.ts:67`
 
 ## Tests
 

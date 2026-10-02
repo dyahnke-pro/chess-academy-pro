@@ -22,6 +22,7 @@
 import { db } from '../db/schema';
 import { DEFAULT_RATING, getPlayerRatingEstimate, type RatingSource } from './playerRatingService';
 import type { UserProfile } from '../types';
+import type { SelfReportedBand } from './ratingBands';
 
 /** Sane Elo bounds for a stored baseline. Lichess puzzles bottom out
  *  near 400 and the engine floor is 400; nobody needs > 2800. */
@@ -169,4 +170,44 @@ export async function calibrateStrength(
   }
 
   return { result: { calibrated: false, rating: profile.currentRating, source: 'no-signal' }, profile };
+}
+
+/**
+ * THE FIRST-RUN STRENGTH SCREEN, BACK (David 2026-10-02: "make sure the
+ * strength question is still available first time you open the app").
+ *
+ * Asked once, skippable. Profiles that never answered and have no measured
+ * strength see it; a student whose games already measured them is never
+ * asked what the record already says.
+ */
+export function needsStrengthQuestion(profile: UserProfile | null | undefined): boolean {
+  if (!profile || profile.isKidMode) return false;
+  if (profile.skillBand !== undefined) return false;
+  if (profile.aiDataConsent === undefined) return false; // consent is asked first
+  return profile.strengthCalibrated !== true;
+}
+
+/**
+ * Record the student's answer. A band seeds BOTH ratings AND the adaptive
+ * anchor from what they said — so the first opponent starts at their level
+ * and the running estimate over their coach games climbs from there, rather
+ * than from the unknown-student default. `skipped` changes nothing but the
+ * answer: the app stays fully adaptive, exactly as before the screen.
+ */
+export async function applySkillBand(
+  profile: UserProfile,
+  band: SelfReportedBand,
+): Promise<UserProfile> {
+  const picked = SKILL_BANDS.find((b) => b.id === band);
+  const patch: Partial<UserProfile> = picked
+    ? {
+      skillBand: band,
+      currentRating: clampRating(picked.rating),
+      puzzleRating: clampRating(picked.rating),
+      ratingBaseline: clampRating(picked.rating),
+      strengthCalibrated: true,
+    }
+    : { skillBand: band };
+  await db.profiles.update(profile.id, patch);
+  return { ...profile, ...patch };
 }

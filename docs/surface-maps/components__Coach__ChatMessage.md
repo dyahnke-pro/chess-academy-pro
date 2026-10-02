@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **Test Data Factories** (CLAUDE.md:5224) — names `ChatMessage`
+- **Test Data Factories** (CLAUDE.md:5234) — names `ChatMessage`
 
 ## Who calls in
 

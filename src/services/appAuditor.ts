@@ -127,6 +127,7 @@ export type AuditKind =
   // Records the user's Allow/Don't-allow choice for sending gameplay data to
   // the third-party AI + voice providers before any such call is made.
   | 'ai-consent-decision'
+  | 'strength-band-picked'
   // Voice instrumentation (WO-LEGACY-VOICE-01)
   | 'voice-speak-invoked'
   | 'voice-speak-silenced'

@@ -21,6 +21,9 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ---
 
+## 000b. NEW PLAYERS — strength question + beginner mode (David 2026-10-02)
+- ✅ first-run strength question back (skippable, after consent; `FirstRunStrength`) · ✅ beginner mode (`isBeginnerMode`: New to chess / Beginner until measured ≥1000) · ✅ fundamental behind a slip rides every Learn turn for beginners · ✅ Start-here path leads Up next (fundamentals → Italian → coached game → …e5 / Two Knights) · ✅ gentler first opponent (band seeds rating + anchor) · 🟠 prod walk of a fresh beginner device owed (`audit-strength-calibration.mjs`)
+
 ## 000. WO-ARROW-01 — one arrow door
 - ✅ door + tests · ✅ Learn · ✅ walkthrough · ✅ Review · ✅ Play/Openings/chat/trainers · ✅ gate (ceiling empty — no file outside the door builds an arrow)
 

@@ -8,9 +8,9 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:4997) — names `BLUNDER_CARD_ENABLED`, `CoachGamePage`
-- **The standard post-deploy ritual** (CLAUDE.md:6102) — names `CoachGamePage`
-- **🔒🔒 THE FULL-GAME AUDIT STANDARD (David 2026-07-13, LOCKED: "Save this audit format plz. This is the new standard.")** (CLAUDE.md:6233) — names `BLUNDER_CARD_ENABLED`, `PLAY_VOLUNTEERS_COACHING`
+- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5007) — names `BLUNDER_CARD_ENABLED`, `CoachGamePage`
+- **The standard post-deploy ritual** (CLAUDE.md:6112) — names `CoachGamePage`
+- **🔒🔒 THE FULL-GAME AUDIT STANDARD (David 2026-07-13, LOCKED: "Save this audit format plz. This is the new standard.")** (CLAUDE.md:6243) — names `BLUNDER_CARD_ENABLED`, `PLAY_VOLUNTEERS_COACHING`
 
 ## Who calls in
 

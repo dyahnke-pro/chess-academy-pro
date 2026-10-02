@@ -128,6 +128,10 @@ const INFRA = new Set([
   // decided by the caller (or `learnReward`, which stays counted). Added when
   // the endgame playout began firing pips (2026-10-02); it did NOT move a ceiling.
   'rewardService',
+  // `activeBite` is Up next's finish-line bookkeeping (which bite is running,
+  // mark it done) — it computes no chess fact. The Fundamentals page reports
+  // its Start-here step through it (2026-10-02).
+  'activeBite',
 
 
   // `learnMemory` is the same class again: the Learn producer's per-game

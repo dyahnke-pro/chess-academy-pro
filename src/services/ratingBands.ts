@@ -64,6 +64,32 @@ export function coreRatingTier(rating: number | undefined | null): RatingTier {
  */
 export const DEFAULT_STUDENT_RATING = 400;
 
+// ── Beginner mode ───────────────────────────────────────────────────────────
+/** The plain-language band a student picked on first run (the strength
+ *  screen), or `skipped`. Absent on profiles that never saw the screen. */
+export type SelfReportedBand = 'newcomer' | 'beginner' | 'intermediate' | 'advanced' | 'skipped';
+
+/**
+ * BEGINNER MODE (David 2026-10-02: "If beginner or new to chess is selected
+ * then coach should be able to treat them as such" → "Yes, automatically").
+ *
+ * ON when the student SAID they are new or a beginner, and their record has
+ * not yet shown otherwise. It turns itself OFF the moment their measured
+ * strength reaches the intermediate tier: the picker writes 600 or 900, and
+ * only a measurement (imported games, or the running ELO over their coach
+ * games) can move `currentRating` past the boundary — so graduation is their
+ * own games deciding, never a timer.
+ *
+ * What it changes is the REGISTER, never the volume of teaching (an unrated
+ * student already gets every detector): plain words, the fundamental behind
+ * a slip named every time, the Start-here path, a gentler first opponent.
+ */
+export function isBeginnerMode(p: { skillBand?: SelfReportedBand; currentRating: number } | null | undefined): boolean {
+  if (!p) return false;
+  if (p.skillBand !== 'newcomer' && p.skillBand !== 'beginner') return false;
+  return coreRatingTier(p.currentRating) === 'beginner';
+}
+
 const EXPLORER_BUCKETS = [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2500] as const;
 
 export interface ExplorerBand {

@@ -10,7 +10,7 @@
 
 - **The tools are COMPUTERS** (CLAUDE.md:25) — names `methodBeat`
 - **Why determinism** (CLAUDE.md:57) — names `methodBeat`
-- **G4.5.16 TEACH THE METHOD, NOT ONLY THE BOARD (David 2026-09-16: "Calling out pins and forks isn't teaching. Future moves, how to think, threat identification, that is teaching").** (CLAUDE.md:1055) — names `methodBeat`
+- **G4.5.16 TEACH THE METHOD, NOT ONLY THE BOARD (David 2026-09-16: "Calling out pins and forks isn't teaching. Future moves, how to think, threat identification, that is teaching").** (CLAUDE.md:1065) — names `methodBeat`
 
 ## Who calls in
 

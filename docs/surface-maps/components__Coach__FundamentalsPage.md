@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**286 lines · 1 exports · 2 importers · 1 tests · 1 audits**
+**289 lines · 1 exports · 1 importers · 1 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,7 +12,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
-- `src/App.tsx`
 - `src/components/Coach/FundamentalsPage.test.tsx`
 
 ## Exports and every call site
@@ -25,5 +24,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/FundamentalsPage.test.tsx`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-fundamentals-tab-prod.mjs`

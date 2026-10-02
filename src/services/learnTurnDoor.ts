@@ -304,6 +304,9 @@ export function fadeWhenGreen(lane: LearnLane, text: string, green: ReadonlySet<
   return first && first.length < text.length ? first : text;
 }
 
+/** Lanes that always ride for a beginner: the principle, said every time. */
+export const BEGINNER_ALWAYS: ReadonlySet<LearnLane> = new Set<LearnLane>(['fundamental', 'ruleException']);
+
 /** The door. Every Learn free-play utterance is assembled here. */
 export function decideTurn(
   facts: readonly LaneFact[],
@@ -318,6 +321,11 @@ export function decideTurn(
   /** The tags the student's record has PROVEN (`loadProvenTags`) — lanes on
    *  them fade to their short phrasing. Null when the record is not loaded. */
   green?: ReadonlySet<string> | null,
+  /** Beginner mode (`isBeginnerMode`): the fundamental behind a slip and the
+   *  beginner's rule a move breaks ride every turn instead of competing for
+   *  the lead (David 2026-10-02: "Explain fundamentals"). Register only — the
+   *  other lanes decide exactly as for anyone else. */
+  beginner = false,
 ): TurnDecision {
   const offered: LearnLane[] = [];
   const faded: LearnLane[] = [];
@@ -354,7 +362,7 @@ export function decideTurn(
     // most work"). Support must ADD a square, or come from a lane that teaches.
     const restates = LEARN_LANES[x.lane].lead <= DESCRIPTION_LEAD
       && (x.fact.squares ?? []).length > 0 && (x.fact.squares ?? []).every((q) => anchor.includes(q));
-    const speak = x === ownLead || LEARN_LANES[x.lane].always === true || (shares(x.fact.squares) && !restates);
+    const speak = x === ownLead || LEARN_LANES[x.lane].always === true || (beginner && BEGINNER_ALWAYS.has(x.lane)) || (shares(x.fact.squares) && !restates);
     if (speak) {
       keep.push(x.fact);
       if (!spoke.includes(x.lane)) spoke.push(x.lane);

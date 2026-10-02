@@ -14,7 +14,10 @@ import { isFixtureGame, isFixtureGameId } from './fixtureGames';
 import { loadFreeTier, hasFreeOpeningRoom } from './freeTierService';
 import { isPaywallGateEnabled, useEntitlementStore } from '../stores/entitlementStore';
 import { solveLengthOf } from './mistakeLineGrowth';
-import { rankUpNext, currentPick, type UpNextPick, type UpNextInput } from './upNextPicker';
+import { rankUpNext, currentPick, START_STEPS, type UpNextPick, type UpNextInput, type StartStep } from './upNextPicker';
+import { isBeginnerMode } from './ratingBands';
+import { START_FUNDAMENTALS_KEY } from './activeBite';
+import { useAppStore } from '../stores/appStore';
 import { RING_SIZE, dayKey } from './trainingWeek';
 import { logAppAudit } from './appAuditor';
 
@@ -37,14 +40,35 @@ export function freeUserOnPaywall(): boolean {
   }
 }
 
+/** Which Start-here steps are left, read from the record: the Fundamentals
+ *  page opened, the Italian / Two Knights main line watched, a coach game
+ *  played. Empty outside beginner mode. */
+export async function loadStartSteps(): Promise<StartStep[]> {
+  if (!isBeginnerMode(useAppStore.getState().activeProfile)) return [];
+  const [fund, italian, twoKnights, coachGames] = await Promise.all([
+    db.meta.get(START_FUNDAMENTALS_KEY).catch(() => undefined),
+    db.openings.get('italian-game').catch(() => undefined),
+    db.openings.get('two-knights-defence').catch(() => undefined),
+    db.games.where('source').equals('coach').count().catch(() => 0),
+  ]);
+  const done: Record<StartStep, boolean> = {
+    fundamentals: !!fund,
+    italian: (italian?.linesDiscovered?.length ?? 0) > 0,
+    'first-game': coachGames > 0,
+    'black-e5': (twoKnights?.linesDiscovered?.length ?? 0) > 0,
+  };
+  return START_STEPS.filter((s) => !done[s]);
+}
+
 export async function loadUpNextInput(): Promise<UpNextInput> {
-  const [weaknesses, srsDue, newLines, mistakes, ownGames, freeTier] = await Promise.all([
+  const [weaknesses, srsDue, newLines, mistakes, ownGames, freeTier, startSteps] = await Promise.all([
     getUnifiedWeaknessProfile().catch(() => []),
     getSrsDueOpenings().catch(() => []),
     getUnlearnedFavoriteOpenings().catch(() => []),
     db.mistakePuzzles.toArray().catch(() => []),
     db.games.filter((g) => !g.isMasterGame && !isFixtureGame(g)).count().catch(() => 0),
     loadFreeTier(),
+    loadStartSteps().catch(() => [] as StartStep[]),
   ]);
   const reps = buildTodaysReps({ weaknesses, srsDue, newLines, total: 5 });
 
@@ -65,6 +89,7 @@ export async function loadUpNextInput(): Promise<UpNextInput> {
     grownPuzzle: grown ? { puzzleId: grown.id, length: solveLengthOf(grown) } : null,
     freeOpeningOpen: freeUserOnPaywall() && hasFreeOpeningRoom(freeTier),
     coldStart: ownGames === 0 && own.length === 0,
+    startSteps,
   };
 }
 
@@ -116,8 +141,11 @@ async function loadUpNextFresh(now: Date): Promise<UpNextState> {
       }),
     });
   }
-  // Up next: the ring first; once it is closed, whatever the record says next.
-  const current = currentPick(ring, done) ?? currentPick(ranked, done);
+  // Up next: a beginner's next Start-here step leads even over today's frozen
+  // ring (the ring may have frozen before they answered the strength
+  // question); then the ring; once it is closed, whatever the record says next.
+  const start = input.startSteps.length > 0 ? ranked.find((p) => p.kind === 'start' && !done.has(p.key)) : undefined;
+  const current = start ?? currentPick(ring, done) ?? currentPick(ranked, done);
   return { ring, done, current };
 }
 

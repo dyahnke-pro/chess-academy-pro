@@ -9,15 +9,15 @@
 ## Locked rules that govern this surface
 
 - **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:353) — names `CLOUD_VOICES`, `voiceService`
-- **G4. TTS = streaming canonical. Buffered MP3 is gone.** (CLAUDE.md:808) — names `voiceService`
-- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1180) — names `voiceService`
-- **G9.1 The PRO-REP DEEP BUILD DOCTRINE — locked (David 2026-05-28, emphatic).** (CLAUDE.md:1603) — names `sanitizeForTTS`
-- **Golden rules (the most important — read these every time)** (CLAUDE.md:2259) — names `voiceService`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3191) — names `voiceService`
-- **🧒 Kids section — non-negotiables** (CLAUDE.md:3368) — names `voiceService`
-- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3677) — names `voiceService`
-- **Shared types / services** (CLAUDE.md:5307) — names `voiceService`
-- **The standard post-deploy ritual** (CLAUDE.md:6137) — names `voiceService`
+- **G4. TTS = streaming canonical. Buffered MP3 is gone.** (CLAUDE.md:818) — names `voiceService`
+- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1190) — names `voiceService`
+- **G9.1 The PRO-REP DEEP BUILD DOCTRINE — locked (David 2026-05-28, emphatic).** (CLAUDE.md:1613) — names `sanitizeForTTS`
+- **Golden rules (the most important — read these every time)** (CLAUDE.md:2269) — names `voiceService`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3201) — names `voiceService`
+- **🧒 Kids section — non-negotiables** (CLAUDE.md:3378) — names `voiceService`
+- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3687) — names `voiceService`
+- **Shared types / services** (CLAUDE.md:5317) — names `voiceService`
+- **The standard post-deploy ritual** (CLAUDE.md:6147) — names `voiceService`
 
 ## Who calls in
 

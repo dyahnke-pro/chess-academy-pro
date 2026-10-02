@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6131) — names `gradeMistakePuzzle`
+- **The standard post-deploy ritual** (CLAUDE.md:6141) — names `gradeMistakePuzzle`
 
 ## Who calls in
 

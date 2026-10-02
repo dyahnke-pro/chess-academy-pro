@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3160) — names `detectOpening`, `findContinuationsAtPly`, `findOpeningByPgnPrefix`, `findSiblingExtensionBranches`, `isTeachable`, `openingDetectionService`, `resolveOpeningEntry`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3170) — names `detectOpening`, `findContinuationsAtPly`, `findOpeningByPgnPrefix`, `findSiblingExtensionBranches`, `isTeachable`, `openingDetectionService`, `resolveOpeningEntry`
 
 ## Who calls in
 
@@ -371,8 +371,8 @@
 
 ### `studentSideForPlay` (function) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:5332`
-- `src/components/Coach/CoachTeachPage.tsx:12764`
-- `src/components/Coach/CoachTeachPage.tsx:12814`
+- `src/components/Coach/CoachTeachPage.tsx:12765`
+- `src/components/Coach/CoachTeachPage.tsx:12815`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:59`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:60`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:64`

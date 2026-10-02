@@ -36,7 +36,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `markableSquares` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10818`
+- `src/components/Coach/CoachTeachPage.tsx:10819`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
@@ -76,7 +76,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/dnaDoor.test.ts:39`
 - `src/services/dnaDoor.test.ts:46`
 - `src/services/laneReachability.test.ts:136`
-- `src/services/learnTurnDoor.ts:332`
+- `src/services/learnTurnDoor.ts:340`
 - `src/services/replayFence.najdorf1500.test.ts:50`
 - `src/services/voicePackage.test.ts:19`
 - `src/services/voicePackage.test.ts:32`
@@ -136,7 +136,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:7549`
 - `src/components/Coach/CoachTeachPage.tsx:8966`
 - `src/components/Coach/CoachTeachPage.tsx:9928`
-- `src/components/Coach/CoachTeachPage.tsx:10800`
+- `src/components/Coach/CoachTeachPage.tsx:10801`
 - `src/services/coachFeatureService.ts:2402`
 - `src/services/voicePackage.test.ts:415`
 - `src/services/voicePackage.test.ts:424`
@@ -145,11 +145,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `describeVoicePackage` (function) — 3 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9917`
-- `src/components/Coach/CoachTeachPage.tsx:10900`
+- `src/components/Coach/CoachTeachPage.tsx:10901`
 - `src/services/voicePackage.test.ts:38`
 
 ### `joinSpoken` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:381`
+- `src/services/learnTurnDoor.ts:389`
 
 ### `LineArrow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -158,7 +158,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `keptLines` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10860`
+- `src/components/Coach/CoachTeachPage.tsx:10861`
 - `src/services/learnTurnDoor.test.ts:188`
 - `src/services/learnTurnDoor.test.ts:194`
 - `src/services/learnTurnDoor.test.ts:200`

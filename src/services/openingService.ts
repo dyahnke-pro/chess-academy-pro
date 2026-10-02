@@ -10,7 +10,7 @@ import { recordPositiveMoment } from './reviewPromptService';
 import openingManifests from '../data/opening-manifests.json';
 import antiOpeningsData from '../data/anti-openings.json';
 import gambitData from '../data/gambits.json';
-import { finishBite } from './activeBite';
+import { finishBite, finishBiteByKey } from './activeBite';
 import { reward } from './rewardService';
 
 // ─── Opening name helpers ────────────────────────────────────────────────────
@@ -502,6 +502,9 @@ export async function markRungComplete(
   }
   // A line played is the finish line of an opening bite (Up next).
   void finishBite('opening');
+  // The Start-here openings: watching the line is that step's finish line.
+  if (id === 'italian-game') void finishBiteByKey('up:start:italian');
+  if (id === 'two-knights-defence') void finishBiteByKey('up:start:black-e5');
 
   // Auto-enroll the learned line into spaced repetition (David 2026-05-25):
   // once you've Learned a line it enters SRS so it resurfaces for review and
