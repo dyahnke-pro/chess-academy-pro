@@ -62,7 +62,14 @@ async function readPuzzle(id) {
     open.onerror = () => res(null);
   }), id);
 }
+/** The app's own review prompt can open after a clean solve and cover the
+ *  board — a real user closes it, so the audit does too. */
+async function closeReviewPrompt() {
+  const close = page.locator('[data-testid="review-prompt-close"]');
+  if (await close.count()) await close.first().click().catch(() => {});
+}
 async function clickMove(uci) {
+  await closeReviewPrompt();
   await page.locator(`[data-square="${uci.slice(0, 2)}"]`).first().click({ force: true });
   await page.waitForTimeout(150);
   await page.locator(`[data-square="${uci.slice(2, 4)}"]`).first().click({ force: true });
