@@ -902,6 +902,9 @@ export type AuditKind =
   // the Training Plan assembles the day's reps from the bucket.
   | 'faucet-slip-detected'
   | 'misconception-captured'
+  // Does teaching work? Per mistake kind, the slip rate before vs after the
+  // coach taught it (`teachingEffectService`).
+  | 'teaching-effect'
   | 'misconception-drill-result'
   | 'todays-reps-built'
   // Voice INPUT / mic instrumentation (David 2026-06-12 — the "weird iPhone"

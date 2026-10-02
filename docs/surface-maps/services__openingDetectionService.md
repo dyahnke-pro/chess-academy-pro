@@ -79,9 +79,9 @@
 - `src/coach/sources/middlegamePlan.ts:51`
 - `src/coach/sources/modelGames.ts:57`
 - `src/coach/sources/playerGames.ts:160`
-- `src/components/Coach/CoachGamePage.tsx:1802`
-- `src/components/Coach/CoachGamePage.tsx:3320`
-- `src/components/Coach/CoachGamePage.tsx:3408`
+- `src/components/Coach/CoachGamePage.tsx:1803`
+- `src/components/Coach/CoachGamePage.tsx:3323`
+- `src/components/Coach/CoachGamePage.tsx:3411`
 - `src/components/Coach/CoachTeachPage.tsx:8101`
 - `src/components/Coach/CoachTeachPage.tsx:9223`
 - `src/hooks/usePhaseNarration.ts:461`
@@ -132,7 +132,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolveOpeningEntry` (function) — 58 call sites
-- `src/components/Coach/CoachGamePage.tsx:1098`
+- `src/components/Coach/CoachGamePage.tsx:1099`
 - `src/components/Coach/CoachTeachPage.tsx:4767`
 - `src/components/Coach/CoachTeachPage.tsx:5439`
 - `src/data/voicedWalkthroughs.test.ts:100`
@@ -221,11 +221,11 @@
 
 ### `getOpeningMoves` (function) — 28 call sites
 - `src/coach/tools/cerebellum/localOpeningBook.ts:84`
-- `src/components/Coach/CoachGamePage.tsx:608`
-- `src/components/Coach/CoachGamePage.tsx:706`
-- `src/components/Coach/CoachGamePage.tsx:2417`
-- `src/components/Coach/CoachGamePage.tsx:3321`
-- `src/components/Coach/CoachGamePage.tsx:3429`
+- `src/components/Coach/CoachGamePage.tsx:609`
+- `src/components/Coach/CoachGamePage.tsx:707`
+- `src/components/Coach/CoachGamePage.tsx:2420`
+- `src/components/Coach/CoachGamePage.tsx:3324`
+- `src/components/Coach/CoachGamePage.tsx:3432`
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:55`
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:74`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:37`

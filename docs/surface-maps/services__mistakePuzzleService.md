@@ -149,8 +149,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/seatResolversReadDeclaredSeat.test.ts:15`
 
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
-- `src/components/Coach/CoachGamePage.tsx:2108`
-- `src/components/Coach/CoachGameReview.tsx:366`
+- `src/components/Coach/CoachGamePage.tsx:2109`
+- `src/components/Coach/CoachGameReview.tsx:367`
 - `src/services/gameAnalysisService.ts:2096`
 - `src/services/mistakePuzzleService.test.ts:109`
 - `src/services/mistakePuzzleService.test.ts:163`

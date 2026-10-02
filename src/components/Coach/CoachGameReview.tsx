@@ -87,6 +87,7 @@ import { resolveCoachNarration } from '../../utils/coachNarration';
 import { logAppAudit } from '../../services/appAuditor';
 import { generateMistakePuzzlesFromGame } from '../../services/mistakePuzzleService';
 import { autoAnalyzeGameMisconceptions } from '../../services/autoAnalyzeGame';
+import { reportTeachingEffects } from '../../services/teachingEffectService';
 import { db } from '../../db/schema';
 import { getOrBuildReviewNarration, isReviewUncapped, reviewMoveInputsFrom } from '../../services/reviewNarrationBuild';
 import { CLASSIFICATION_STYLES } from './classificationStyles';
@@ -374,6 +375,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         // and this sweep always pre-empted. Idempotent on a later mount.
         if (!cancelled) {
           try { await autoAnalyzeGameMisconceptions(gid, username, { reviewed: true }); } catch { /* best-effort */ }
+          void reportTeachingEffects('review-opened').catch(() => undefined);
         }
         if (!cancelled && made > 0) {
           void logAppAudit({

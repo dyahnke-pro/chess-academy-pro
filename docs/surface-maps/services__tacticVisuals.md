@@ -21,7 +21,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildTacticVisuals` (function) — 6 call sites
-- `src/components/Coach/CoachGamePage.tsx:1456`
+- `src/components/Coach/CoachGamePage.tsx:1457`
 - `src/services/tacticVisuals.test.ts:8`
 - `src/services/tacticVisuals.test.ts:21`
 - `src/services/tacticVisuals.test.ts:36`

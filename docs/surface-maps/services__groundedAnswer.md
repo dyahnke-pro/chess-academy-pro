@@ -960,8 +960,8 @@
 - `src/services/groundedAnswer.routerE.test.ts:206`
 
 ### `assembleSlipNarration` (function) — 4 call sites
-- `src/components/Coach/CoachGamePage.tsx:3840`
-- `src/components/Coach/CoachGamePage.tsx:3998`
+- `src/components/Coach/CoachGamePage.tsx:3843`
+- `src/components/Coach/CoachGamePage.tsx:4001`
 - `src/services/groundedAnswer.test.ts:725`
 - `src/services/groundedAnswer.test.ts:740`
 
