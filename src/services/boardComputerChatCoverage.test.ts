@@ -45,6 +45,8 @@ const NOT_A_CHAT_LANE = new Set<string>([
   'goodPieceIdeaKey',
   // material arithmetic for the trade judgements — states nothing on its own
   'settledLead',
+  // the pieces an exchange costs each side — counted for the trade summaries
+  'exchangeLosses',
   // low-level helpers other computers call
   'seeSequence', 'minorCanReachSquare', 'pieceScope', 'pressureCount',
   'forcingPrefix', 'findForcingCandidates',
