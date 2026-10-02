@@ -155,6 +155,7 @@ try {
   check('A2d a new app open shows a DIFFERENT family', !!second && second.details.shown !== first?.details?.shown, `${first?.details?.shown} → ${second?.details?.shown}`);
   check('A2e Play is never a suggestion', !rowsOf('home-suggestion-chosen').some((r) => /play/i.test(r.details?.shown ?? '')));
   check('A2f the Tactics hub bar leads with Deep Run', /deep run/i.test(await (await tacticsBar()).locator('[data-testid="up-next-label"]').innerText()));
+  await home();
   check('A3 the ring reads 0/3', /0\/3/.test(await page.locator('[data-testid="today-ring-label"]').innerText()));
   await page.goto(`${BASE}/weaknesses`, { waitUntil: 'domcontentloaded' });
   await page.locator('[data-testid="heat-map"]').waitFor({ timeout: 60000 });
