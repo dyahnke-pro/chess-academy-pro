@@ -1,3 +1,4 @@
+import { Chess } from 'chess.js';
 // positionReadComposer — THE READ OF A POSITION, composed in ONE place
 // (WO-STANDARD-01, 2026-09-22). `usePositionNarration` used to compose this
 // itself from six computers — the note, the phase, the position facts, the
@@ -17,6 +18,7 @@ import { lastMoveIfStudent, sansOfPgn } from './lastMoveOfLine';
 import type { StudentNeedContext } from './needScore';
 import type { StockfishAnalysis } from '../types';
 import type { WeaknessSignal } from './weaknessSignal';
+import type { ImportanceTier } from './narrationImportance';
 
 /** The seat every sentence of the read is computed in. The facts computers
  *  write "you / they", so the read speaks that seat end to end and the phraser
@@ -31,6 +33,11 @@ const PHASE_LINE: Record<ReturnType<typeof detectPhase>, string> = {
   middlegame: 'This is the middlegame now.',
   endgame: 'This is the endgame now.',
 };
+
+/** Moments where the position has one thing to say — positional observations
+ *  stay quiet so they cannot point away from it. The one deciding door's own
+ *  tiers, never a second criticality. */
+const DECIDING_TIERS: ReadonlySet<ImportanceTier> = new Set<ImportanceTier>(['mate', 'only-move', 'blunder', 'must-defend']);
 
 export interface PositionReadInput {
   fen: string;
@@ -51,6 +58,29 @@ export interface PositionReadInput {
   /** May a corpus note lead the read? REQUIRED (2026-09-23): Learn free play
    *  carries no corpus notes; the surface that mounts the read decides. */
   corpusNotes: boolean;
+  /** A move the read must NOT give away — a puzzle's solution before the
+   *  student has answered (Tactics "Teach me this position", 2026-10-01).
+   *  REQUIRED: `null` on a live board. When set, the weighing lane (it names
+   *  the move) stays quiet, and any line naming the move or its squares is
+   *  dropped — the read teaches the POSITION, never the answer. */
+  withhold: string | null;
+}
+
+/** The SAN and the two squares a withheld move would reveal. */
+function withheldMarks(fen: string, san: string | null): { san: string; squares: string[] } | null {
+  if (!san) return null;
+  try {
+    const m = new Chess(fen).move(san);
+    return m ? { san: m.san.replace(/[+#]$/, ''), squares: [m.from, m.to] } : null;
+  } catch {
+    return null;
+  }
+}
+
+function reveals(text: string, marks: { san: string; squares: string[] } | null): boolean {
+  if (!marks) return false;
+  if (text.includes(marks.san)) return true;
+  return marks.squares.some((sq) => new RegExp(`\\b${sq}\\b`).test(text));
 }
 
 /**
@@ -61,6 +91,7 @@ export interface PositionReadInput {
 export async function composePositionRead(i: PositionReadInput): Promise<string> {
   const studentCC: 'w' | 'b' = i.playerColor === 'white' ? 'w' : 'b';
   const sans = sansOfPgn(i.pgn);
+  const marks = withheldMarks(i.fen, i.withhold);
 
   // The bounded tactics context — the engine's deepest look-ahead is read off
   // it below. Reuses the analysis the caller already took (no extra engine
@@ -92,6 +123,7 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
   // 3. POSITION FACTS — the computed board-truth supply (importance-gated,
   //    DNA): the decision/intent read, the must-defend, the why-probe.
   let positionFactsBlock = '';
+  let decidingMoment = false;
   try {
     if (i.analysis?.topLines?.length) {
       const lm = lastMoveIfStudent(sans, i.playerColor, i.fen);
@@ -113,7 +145,10 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
         ...((): { lastMove?: LastMoveInput } => (lm ? { lastMove: lm } : {}))(),
         studentNeedContext: i.studentNeedContext,
       });
-      positionFactsBlock = clauseText(pf.clauses).join(' ');
+      decidingMoment = DECIDING_TIERS.has(pf.importance.tier);
+      positionFactsBlock = clauseText(
+        marks ? pf.clauses.filter((c) => c.kind !== 'deliberation' && !reveals(c.text, marks)) : pf.clauses,
+      ).join(' ');
     }
   } catch { positionFactsBlock = ''; }
   if (i.isCancelled()) return '';
@@ -123,7 +158,12 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
   //    hears what it ranked. An observation whose square the facts above
   //    already named is skipped — say a thing once.
   const readLines: string[] = [];
-  try {
+  // A DECIDING MOMENT IS THE LESSON (2026-10-01). On a board with mate in two
+  // the read went on to "their passed pawn is the danger — blockade it" and
+  // "a long-term target": positional observations appended AFTER the decider,
+  // so nothing judged them, pointing the student away from the answer. When
+  // the one door says the moment decides the game, they yield.
+  if (!decidingMoment) try {
     const already = `${noteLine} ${positionFactsBlock}`.toLowerCase();
     for (const o of readPosition(i.fen, i.playerColor)) {
       const naming = o.text.toLowerCase().match(/[a-h][1-8]/)?.[0];
@@ -144,5 +184,6 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
   return [noteLine, phaseLine, positionFactsBlock, ...readLines, lookaheadLine ?? '']
     .map((t) => t.trim())
     .filter(Boolean)
+    .filter((t) => !reveals(t, marks))
     .join(' ');
 }

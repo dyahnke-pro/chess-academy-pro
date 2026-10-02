@@ -46,6 +46,7 @@ import { AccessGate } from './components/Paywall/AccessGate';
 import { initBilling, getStableAnalyticsId } from './services/billingService';
 import { useFreeTierStore } from './stores/freeTierStore';
 import { ReviewPrompt } from './components/Feedback/ReviewPrompt';
+import { withWebOrigin } from './utils/webOrigin';
 
 const AcademyPage = lazyPage('AcademyPage', () => import('./components/Academy/AcademyPage').then((m) => m.AcademyPage));
 const CourseSyllabusPage = lazyPage('CourseSyllabusPage', () => import('./components/Academy/CourseSyllabusPage').then((m) => m.CourseSyllabusPage));
@@ -54,11 +55,11 @@ const OpeningExplorerPage = lazyPage('OpeningExplorerPage', () => import('./comp
 const OpeningDetailPage = lazyPage('OpeningDetailPage', () => import('./components/Openings/OpeningDetailPage').then((m) => m.OpeningDetailPage));
 const SrsTrainerPage = lazyPage('SrsTrainerPage', () => import('./components/Openings/SrsTrainerPage').then((m) => m.SrsTrainerPage));
 const PuzzleTrainerPage = lazyPage('PuzzleTrainerPage', () => import('./components/Puzzles/PuzzleTrainerPage').then((m) => m.PuzzleTrainerPage));
-const AdaptivePuzzlePage = lazyPage<{ master?: boolean }>('AdaptivePuzzlePage', () => import('./components/Puzzles/AdaptivePuzzlePage').then((m) => m.AdaptivePuzzlePage));
+const DeepRunPage = lazyPage('DeepRunPage', () => import('./components/Puzzles/DeepRunPage').then((m) => m.DeepRunPage));
+const AdaptivePuzzlePage = lazyPage<{ master?: boolean; length?: 'long' | 'veryLong' }>('AdaptivePuzzlePage', () => import('./components/Puzzles/AdaptivePuzzlePage').then((m) => m.AdaptivePuzzlePage));
 const MyMistakesPage = lazyPage('MyMistakesPage', () => import('./components/Puzzles/MyMistakesPage').then((m) => m.MyMistakesPage));
 const LichessDashboardPage = lazyPage('LichessDashboardPage', () => import('./components/Puzzles/LichessDashboardPage').then((m) => m.LichessDashboardPage));
 const WeaknessTagDrillPage = lazyPage('WeaknessTagDrillPage', () => import('./components/Puzzles/WeaknessTagDrillPage').then((m) => m.WeaknessTagDrillPage));
-const WeaknessThemesPage = lazyPage('WeaknessThemesPage', () => import('./components/Puzzles/WeaknessThemesPage').then((m) => m.WeaknessThemesPage));
 const CoachGamePage = lazyPage('CoachGamePage', () => import('./components/Coach/CoachGamePage').then((m) => m.CoachGamePage));
 const CoachChatPage = lazyPage('CoachChatPage', () => import('./components/Coach/CoachChatPage').then((m) => m.CoachChatPage));
 const CoachSessionPage = lazyPage('CoachSessionPage', () => import('./components/Coach/CoachSessionPage').then((m) => m.CoachSessionPage));
@@ -504,7 +505,7 @@ export function App(): JSX.Element {
           void import('./services/lichessTablebaseService')
             .then((m) => m.lookupTablebase('8/8/8/4k3/8/8/4K3/6R1 w - - 0 1'))
             .catch(() => undefined);
-          void fetch(`/api/lichess-explorer?source=masters&fen=${encodeURIComponent(startFen)}`)
+          void fetch(withWebOrigin(`/api/lichess-explorer?source=masters&fen=${encodeURIComponent(startFen)}`))
             .then((r) => r.text())
             .catch(() => undefined);
         }, 3500);
@@ -618,21 +619,23 @@ export function App(): JSX.Element {
           <Route path="/tactics/calculation" element={<ErrorBoundary><CalculationDrillPage /></ErrorBoundary>} />
           <Route path="/tactics/adaptive" element={<ErrorBoundary><AdaptivePuzzlePage /></ErrorBoundary>} />
           <Route path="/tactics/master" element={<ErrorBoundary><AdaptivePuzzlePage master /></ErrorBoundary>} />
+          <Route path="/tactics/long" element={<ErrorBoundary><AdaptivePuzzlePage length="long" /></ErrorBoundary>} />
+          <Route path="/tactics/deep-run" element={<ErrorBoundary><DeepRunPage /></ErrorBoundary>} />
           <Route path="/tactics/classic" element={<ErrorBoundary><PuzzleTrainerPage /></ErrorBoundary>} />
           <Route path="/tactics/weakness-drill" element={<ErrorBoundary><WeaknessTagDrillPage /></ErrorBoundary>} />
-          <Route path="/tactics/weakness-themes" element={<ErrorBoundary><WeaknessThemesPage /></ErrorBoundary>} />
+          <Route path="/tactics/weakness-themes" element={<Navigate to="/tactics/mistakes" replace />} />
           <Route path="/tactics/lichess" element={<ErrorBoundary><LichessDashboardPage /></ErrorBoundary>} />
           {/* Backward-compat redirects */}
           <Route path="/puzzles" element={<Navigate to="/tactics" replace />} />
           <Route path="/puzzles/classic" element={<Navigate to="/tactics/classic" replace />} />
           <Route path="/puzzles/adaptive" element={<Navigate to="/tactics/adaptive" replace />} />
           <Route path="/puzzles/mistakes" element={<Navigate to="/tactics/mistakes" replace />} />
-          <Route path="/puzzles/weakness" element={<Navigate to="/tactics/weakness-themes" replace />} />
+          <Route path="/puzzles/weakness" element={<Navigate to="/tactics/mistakes" replace />} />
           <Route path="/puzzles/lichess-dashboard" element={<Navigate to="/tactics/lichess" replace />} />
           <Route path="/weaknesses" element={<ErrorBoundary><GameInsightsPage /></ErrorBoundary>} />
           <Route path="/weaknesses/games" element={<ErrorBoundary><GamesDrilldownPage /></ErrorBoundary>} />
           <Route path="/coach/report" element={<Navigate to="/weaknesses" replace />} />
-          <Route path="/weaknesses/puzzles" element={<Navigate to="/tactics/weakness-themes" replace />} />
+          <Route path="/weaknesses/puzzles" element={<Navigate to="/tactics/mistakes" replace />} />
           <Route path="/weaknesses/adaptive" element={<Navigate to="/tactics/adaptive" replace />} />
           <Route path="/weaknesses/classic" element={<Navigate to="/tactics/classic" replace />} />
           <Route path="/weaknesses/mistakes" element={<Navigate to="/tactics/mistakes" replace />} />

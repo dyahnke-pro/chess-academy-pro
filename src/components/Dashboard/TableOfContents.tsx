@@ -112,8 +112,7 @@ const SECTIONS: TocSection[] = [
     colorClass: 'text-emerald-400',
     icon: Target,
     items: [
-      { label: 'My Mistakes', route: '/tactics/mistakes', desc: 'Re-solve the exact blunders from your games.' },
-      { label: 'My Weaknesses', route: '/tactics/weakness-themes', desc: 'Drill the motifs you miss most.' },
+      { label: 'My Weaknesses', route: '/tactics/mistakes', desc: 'Your own game mistakes, grouped by pattern — then more like them.' },
       { label: 'My Profile', route: '/tactics/profile', desc: 'Your strongest and weakest tactical motifs.' },
       { label: 'Daily Training', route: '/tactics/classic', desc: 'A graded puzzle set for today.' },
       { label: 'Setup Trainer', route: '/tactics/setup', desc: 'Drill the quiet moves that set tactics up.' },

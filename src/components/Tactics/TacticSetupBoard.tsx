@@ -14,6 +14,8 @@ import { voiceService } from '../../services/voiceService';
 import { setupIntro, setupPrepPlanted, setupRevealComplete, setupIncorrect } from '../../services/tacticNarrationService';
 import { describeMoveGeometry } from '../../services/groundedAnswer';
 import { recordTacticOutcome } from '../../services/tacticAlertService';
+import { reward } from '../../services/rewardService';
+import { rewardSeed } from '../../services/rewardEvents';
 import type { CoachingTier } from '../../services/tacticAlertService';
 import type { SetupPuzzle } from '../../types';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
@@ -110,6 +112,9 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
     active: boardState === 'thinking' && isPlayerTurn,
     wrongAttempts: wrongAttemptCount,
     onCoach: handleStruggleCoach,
+    // A setup puzzle always names its tactic, so the pattern's own coaching
+    // speaks; there is no unnamed case to fill.
+    earnedMethod: () => null,
   });
 
   // Derive the expected move for the hint system (always the student's next move).
@@ -209,9 +214,14 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
       const nextIndex = moveIndex + 1;
       setMoveIndex(nextIndex);
 
+      const studentStep = Math.floor(moveIndex / 2);
       if (nextIndex >= line.length) {
+        reward({ kind: 'solved', square: move.to, step: studentStep, seed: rewardSeed(puzzle.id) });
         finishSolved();
-      } else if (wasFirstMove) {
+        return;
+      }
+      reward({ kind: 'pip', square: move.to, step: studentStep, seed: rewardSeed(puzzle.id) });
+      if (wasFirstMove) {
         // The quiet setup just landed — the tactic is now on.
         const prepMsg = setupPrepPlanted(puzzle.tacticType);
         setMessage(prepMsg);
@@ -228,6 +238,7 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
     wrongAttemptsRef.current += 1;
     setWrongAttemptCount(wrongAttemptsRef.current);
     setBoardState('incorrect');
+    reward({ kind: 'miss', square: move.to });
     voiceService.stop();
 
     // REFUTE IT, KEEP THE ANSWER (David 2026-10-01): their reply to this move,

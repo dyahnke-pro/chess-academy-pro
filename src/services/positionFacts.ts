@@ -933,7 +933,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   const moveAdvice: MoveAdviceVerdict | null = studentIsMoving
     ? nextMoveAdvice({
       tier: importance.tier,
-      phase: classifyPhase(fen, plyNumber),
+      phase: classifyPhase(fen, { ply: plyNumber }),
       weaknesses: input.studentWeaknesses ?? [],
       motifHole: needFor.hole,
     })

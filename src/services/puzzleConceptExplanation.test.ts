@@ -56,7 +56,19 @@ describe('explainPuzzleConcept (teach the concept behind the solution)', () => {
     const r = explainPuzzleConcept({ fen: '5r1k/6pp/8/6N1/8/8/8/7K b - - 0 1', solutionUci: ['f8g8', 'g5f7'], themes: ['mate', 'mateIn1'] });
     expect(r!.computedId).toBe('smothered-mate');
     expect(r!.conceptName).toBe('Smothered Mate');
-    expect(r!.idea).toMatch(/Smothered Mate — /);
+    // After the mate the pattern is NAMED, never described with recognition
+    // advice that may be false of this king ("…in the corner").
+    expect(r!.idea).toBe('That pattern is called Smothered Mate.');
+  });
+
+  it('after a delivered mate, nothing speaks of the mate as still coming', () => {
+    // Student (Black) Qxf2+ Kh2 Qxg2# — classified only as a mating threat.
+    const r = explainDrillConcept({ setupFen: '8/2Q3bk/2p2q1p/N1P4P/6p1/6N1/2r2PP1/1R4K1 b - - 0 1', solutionSan: ['Qxf2+', 'Kh2', 'Qxg2#'] });
+    expect(r!.conceptName).toBe('Checkmate');
+    expect(r!.spoken).not.toMatch(/is coming|unless/i);
+    expect(r!.spoken).not.toMatch(/checkmate.*checkmate/i);
+    // The opponent's reply is theirs, not the student's.
+    expect(r!.spoken).toMatch(/they answer Kh2/);
   });
 
   it('is G0-safe: never throws on a bad FEN or empty solution', () => {

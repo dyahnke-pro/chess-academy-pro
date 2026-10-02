@@ -33,6 +33,8 @@ await ctx.addInitScript(stampAuditRunId(`hand-${Math.random().toString(36).slice
 const page = await ctx.newPage();
 const errors = [];
 page.on('pageerror', (e) => errors.push(String(e)));
+page.on('crash', () => { errors.push('PAGE CRASHED'); console.log('PAGE CRASHED'); });
+page.on('close', () => console.log('PAGE CLOSED'));
 // The page's console, so a walk can read a debug line without a new audit
 // event (`/console?grep=…`).
 const consoleLines = [];
@@ -173,7 +175,7 @@ const routes = {
     const n = Number(q.get('n') ?? 40);
     const re = q.get('grep') ? new RegExp(q.get('grep'), 'i') : null;
     return listener.getCapturedEvents().slice(-400)
-      .map((e) => `${e.kind} | ${e.source ?? ''} | ${(e.summary ?? '').slice(0, 300)}`)
+      .map((e) => `${e.kind} | ${e.source ?? ''} | ${(e.narrationText ?? e.summary ?? '').slice(0, 1200)}`)
       .filter((l) => !re || re.test(l)).slice(-n);
   },
   /** Every `learn-reason-source` row this session: the board, the move, the
@@ -190,11 +192,56 @@ const routes = {
     const re = q.get('grep') ? new RegExp(q.get('grep'), 'i') : null;
     return consoleLines.filter((l) => !re || re.test(l)).slice(-n);
   },
-  // Tap a visible control by its text (line pickers, fork tiles, Skip).
+  /** Any surface, not only Learn — `/goto?path=/tactics`. Returns the page's
+   *  visible text and its testids, so a walk reads what a person would. */
+  async goto(q) {
+    await page.goto(`${BASE}${q.get('path') ?? '/'}`, { waitUntil: 'domcontentloaded' });
+    await sleep(Number(q.get('ms') ?? 3000));
+    const allow = page.locator('[data-testid="ai-consent-allow"]');
+    if (await allow.count()) await allow.first().click().catch(() => {});
+    return routes.page(q);
+  },
+  /** Tap by testid (`/click?id=section-my-mistakes`) or by visible text
+   *  (`/click?text=Hint`), then read the page back. */
   async click(q) {
-    await page.getByText(q.get('text') ?? '', { exact: false }).first().click({ force: true, timeout: 10000 });
-    await sleep(1500);
-    return state();
+    const loc = q.get('id') ? page.locator(`[data-testid="${q.get('id')}"]`) : page.getByText(q.get('text') ?? '', { exact: false });
+    const n = await loc.count();
+    if (!n) return { error: `nothing to click for ${q.get('id') ?? q.get('text')}`, ...(await routes.page(q)) };
+    await loc.first().click({ force: true }).catch((e) => errors.push(String(e)));
+    await sleep(Number(q.get('ms') ?? 1500));
+    return routes.page(q);
+  },
+  /** Run a snippet in the page (diagnosis only) — body = an async arrow's body. */
+  async js(_q, body) {
+    return page.evaluate(`(async () => { ${body} })()`).catch((e) => ({ error: String(e) }));
+  },
+  /** Type into a field by testid like a person — `/fill?id=username-input`, body = text. */
+  async fill(q, body) {
+    const loc = page.locator(`[data-testid="${q.get('id')}"]`).first();
+    await loc.click({ force: true }).catch(() => {});
+    await loc.pressSequentially(body, { delay: 15 });
+    await sleep(500);
+    return routes.page(q);
+  },
+  /** What a person sees: url, visible text, the testids on screen, new
+   *  spoken lines and page errors. */
+  async page(q) {
+    const text = (await page.locator('main, body').first().innerText().catch(() => '')).replace(/\n{2,}/g, '\n').slice(0, Number(q?.get?.('chars') ?? 1500));
+    const ids = await page.$$eval('[data-testid]', (els) => els.filter((e) => e.getClientRects().length).map((e) => e.getAttribute('data-testid'))).catch(() => []);
+    const evs = listener.getCapturedEvents();
+    const fresh = evs.slice(seen); seen = evs.length;
+    const spoken = fresh.filter((e) => e.kind === 'coach-narration-spoken').map((e) => (e.narrationText ?? e.summary ?? '').trim()).filter(Boolean);
+    return { url: page.url(), text, ids: [...new Set(ids)].slice(0, 80), spoken, placement: await readPlacement(page).catch(() => null), errors: errors.splice(0) };
+  },
+  /** Drag/click a move on the board by squares — `/sq?from=e2&to=e4` — for
+   *  surfaces whose position the mirror does not track (puzzles). */
+  async sq(q) {
+    for (const s of [q.get('from'), q.get('to')]) {
+      await page.locator(`[data-square="${s}"]`).first().click({ force: true }).catch((e) => errors.push(String(e)));
+      await sleep(250);
+    }
+    await sleep(Number(q.get('ms') ?? 1500));
+    return routes.page(q);
   },
   // Take the Nth tile of the open "Which line?" picker (0 = main line).
   async pick(q) {

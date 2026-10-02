@@ -57,6 +57,7 @@ import { buildOpeningTheoryLecture, buildTheoryLectureBeats, resolveOpeningIdeas
 import { reviewTheoryLookup } from '../../services/reviewOpeningsSource';
 import { sanToSpeech } from '../../utils/sanToSpeech';
 import { captureEvent } from '../../services/analytics';
+import { reward } from '../../services/rewardService';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import {
   generateNarrativeSummary,
@@ -2331,7 +2332,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           fen: expected.fenBefore,
           playedSan: moveResult.san,
           bestSan: expected.san,
-          gamePhase: classifyPhase(expected.fenBefore, state.atPly),
+          gamePhase: classifyPhase(expected.fenBefore, { ply: state.atPly }),
           moveNumber: Math.ceil(state.atPly / 2),
           openingId: openingName ? resolveOpeningIdFromName(openingName) ?? undefined : undefined,
           openingName: openingName ?? undefined,
@@ -3916,10 +3917,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                       captureEvent('review_find_shot_result', { outcome: 'found', attempts: shotAttemptsRef.current + 1, answer: shotState.challenge.answerSan });
                       setShotState(null);
                       setShotReveal(text);
+                      // Finding the shot you missed in the game is the skill moment of a review.
+                      reward({ kind: 'solved', square: moveResult.to, label: 'Found it' });
                       // Decisive-beat prosody spike (#25) — the found shot is THE payoff.
                       void reviewSay(text, { prosodySpike: true }).catch(() => undefined);
                     } else if (verdict === 'retry') {
                       shotAttemptsRef.current += 1;
+                      reward({ kind: 'miss', square: moveResult.to });
                       captureEvent('review_find_shot_result', { outcome: 'retry', attempts: shotAttemptsRef.current, answer: shotState.challenge.answerSan });
                       setShotBoardEpoch((e) => e + 1); // takeback: remount → initialFen
                       void reviewSay(shotState.challenge.retry).catch(() => undefined);

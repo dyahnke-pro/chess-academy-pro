@@ -32,6 +32,9 @@ export interface UsePositionNarrationArgs {
   /** May a corpus note lead the read? REQUIRED, no default (2026-09-23): Learn
    *  free play passes false; the mounting surface decides. */
   corpusNotes: boolean;
+  /** A move the read must not give away (a puzzle's solution before it is
+   *  answered). REQUIRED — `null` on a live board. See `PositionReadInput`. */
+  withhold: string | null;
 }
 
 export interface UsePositionNarrationResult {
@@ -235,6 +238,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         evalBoard: (f) => stockfishEngine.evalBoard(f),
         isCancelled: () => token !== activeTokenRef.current,
         corpusNotes: args.corpusNotes,
+        withhold: args.withhold,
       });
       if (token !== activeTokenRef.current) return;
       if (!facts) {
@@ -254,8 +258,13 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       try {
         spoken = (await withTimeout(
           voiceFacts(facts, {
-            warm: true,
             intent: 'position-read',
+            // COMPUTED PROSE SPEAKS (G0). The warm pass added a conclusion of
+            // its own on a mate-in-two ("Let's not overthink it: contain the
+            // runner…", 2026-10-01) — the model deciding what the position
+            // means. The read is computed; the model only phrases, so it gets
+            // no room to add. (`warm` overrides `preferRaw`, so it is off.)
+            preferRaw: true,
             perspective: { mode: READ_SEAT, studentSide: args.playerColor },
             directives: 'The student tapped "read this position" and is listening to you live. Speak every fact given, most important first; the first sentence must stand alone. Do not suggest a move. Do not recap the last move.',
           }),

@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **G4.5.2 NEVER TELL A STUDENT TO FIND A MOVE THEY PLAYED (found reading the shipped register, 2026-09-16).** (CLAUDE.md:1067) — names `buildReviewDeepestLookahead`
-- **G4.5.3 NEVER HAND OUT AN INSTRUCTION YOU HAVE NOT TESTED — and two plans only RACE when they run the same kind of plan (found reading the code, 2026-09-17).** (CLAUDE.md:1094) — names `deriveNextPlan`
+- **G4.5.2 NEVER TELL A STUDENT TO FIND A MOVE THEY PLAYED (found reading the shipped register, 2026-09-16).** (CLAUDE.md:1078) — names `buildReviewDeepestLookahead`
+- **G4.5.3 NEVER HAND OUT AN INSTRUCTION YOU HAVE NOT TESTED — and two plans only RACE when they run the same kind of plan (found reading the code, 2026-09-17).** (CLAUDE.md:1105) — names `deriveNextPlan`
 
 ## Who calls in
 
@@ -109,7 +109,7 @@
 - `src/services/reviewTeachingPoints.test.ts:391`
 
 ### `explainTemptingCapture` (function) — 10 call sites
-- `src/components/Coach/CoachGameReview.tsx:1735`
+- `src/components/Coach/CoachGameReview.tsx:1736`
 - `src/services/reviewOpeningTheory.ts:375`
 - `src/services/reviewOpeningTheory.ts:411`
 - `src/services/reviewTeachingPoints.test.ts:127`

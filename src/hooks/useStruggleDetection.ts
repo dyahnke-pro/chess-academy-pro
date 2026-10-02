@@ -29,6 +29,10 @@ export interface UseStruggleDetectionConfig {
   wrongAttempts: number;
   /** Callback when coaching message should be delivered */
   onCoach: (message: string, tier: CoachingTier) => void;
+  /** REQUIRED: what to say when the tactic names no pattern ("tactical
+   *  sequence"): the EARNED method beat (`puzzleMethodLine`), or null for
+   *  silence. Required so no board can fall back to generic advice again. */
+  earnedMethod: () => string | null;
 }
 
 export interface UseStruggleDetectionReturn {
@@ -44,12 +48,15 @@ export function useStruggleDetection({
   active,
   wrongAttempts,
   onCoach,
+  earnedMethod,
 }: UseStruggleDetectionConfig): UseStruggleDetectionReturn {
   const elapsedRef = useRef(0);
   const lastTierRef = useRef<CoachingTier>('none');
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const onCoachRef = useRef(onCoach);
   onCoachRef.current = onCoach;
+  const earnedMethodRef = useRef(earnedMethod);
+  earnedMethodRef.current = earnedMethod;
 
   const reset = useCallback((): void => {
     elapsedRef.current = 0;
@@ -75,7 +82,7 @@ export function useStruggleDetection({
     const newIdx = tierOrder.indexOf(tier);
     if (newIdx <= currentIdx) return;
 
-    const message = getCoachingMessage(tacticType, tier, playerRating);
+    const message = getCoachingMessage(tacticType, tier, playerRating) ?? earnedMethodRef.current();
     if (message) {
       lastTierRef.current = tier;
       onCoachRef.current(message, tier);

@@ -90,7 +90,15 @@ function firstSentence(text: string): string | null {
 /** The general IDEA a computed concept teaches — the invariant alone for a
  *  tactic (the instance is already narrated by the line), the full register
  *  otherwise. Capitalised, sentence-terminated. */
-function computedIdea(c: ComputedConcept, reveal: boolean): string {
+function computedIdea(c: ComputedConcept, reveal: boolean): string | null {
+  // AFTER the mate is on the board the prospective registers are false: a
+  // delivered mate is not "coming", and a pattern's recognition text ("watch
+  // for this when the enemy king is in the corner…") is advice for spotting
+  // it, not a description of THIS king (the e8 smothered mate heard "corner").
+  // The reveal names the pattern (Narration Voice Rule 7) and stops; a mate
+  // with no named pattern is already said by the line itself.
+  if (reveal && c.source === 'mate') return `That pattern is called ${c.name}.`;
+  if (reveal && c.id === 'mate_threat') return null;
   // Two registers. The post-solve EXPLANATION (reveal) speaks the full register
   // = the board-true INSTANCE ("bishop on g5 forks king e7 and queen d8") + the
   // invariant — the line only says "landing a fork" and never names the
@@ -127,7 +135,7 @@ export function conceptIdeaForThemes(
     const turn = board.fen.split(' ')[1] === 'b' ? 'b' : 'w';
     const studentColor: 'w' | 'b' = board.studentToMove ? turn : (turn === 'w' ? 'b' : 'w');
     const lead = computedLead({ fen: board.fen, uci: board.uci, studentColor });
-    if (lead) return { conceptName: lead.name, conceptId: lead.id, idea: computedIdea(lead, false) };
+    if (lead) return { conceptName: lead.name, conceptId: lead.id, idea: computedIdea(lead, false) ?? lead.full };
   }
   for (const t of themes) {
     const id = THEME_TO_CONCEPT_ID[t];
@@ -149,9 +157,12 @@ function compose(
   themes: string[],
   arrow: { from: string; to: string } | null,
   computed: ComputedConcept | null,
+  /** The student's colour — the line alternates movers, so the opponent's
+   *  replies are spoken as theirs ("they answer Kh2"), never as the student's. */
+  studentColor: 'w' | 'b',
 ): PuzzleConceptExplanation | null {
   if (keyPlies.length === 0) return null;
-  const line = narrateDnaLine(keyPlies);
+  const line = narrateDnaLine(keyPlies, { studentColor });
 
   // Tag-mapped book passage (kept for sourcing + as the fallback idea).
   let conceptId: string | null = null;
@@ -171,7 +182,9 @@ function compose(
 
   // THE COMPUTED CONCEPT LEADS (P3): the board classified the solution, so the
   // name + idea come from the engine; the tag table only fills in behind it.
-  const conceptName = computed?.name ?? tagName;
+  // A delivered mate the classifier only read as a "threat" is named for what
+  // it is — the mate is on the board.
+  const conceptName = computed?.id === 'mate_threat' ? 'Checkmate' : (computed?.name ?? tagName);
   const idea = computed ? computedIdea(computed, true) : passageIdea;
 
   const parts: string[] = [];
@@ -239,7 +252,7 @@ export function explainPuzzleConcept(args: {
     : null;
 
   const computed = computedLead({ fen, uci: solutionUci, studentColor });
-  return compose(keyPlies.map((p) => ({ fenBefore: p.fenBefore, san: p.san })), themes, arrow, computed);
+  return compose(keyPlies.map((p) => ({ fenBefore: p.fenBefore, san: p.san })), themes, arrow, computed, studentColor);
 }
 
 /**
@@ -275,5 +288,5 @@ export function explainDrillConcept(args: {
   } catch {
     return null;
   }
-  return compose(plies, themes, arrow, computedLead({ fen: setupFen, uci, studentColor }));
+  return compose(plies, themes, arrow, computedLead({ fen: setupFen, uci, studentColor }), studentColor);
 }

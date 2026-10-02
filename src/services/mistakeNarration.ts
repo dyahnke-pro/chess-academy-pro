@@ -7,6 +7,8 @@ import { gradeNarrationText } from './coachAnswerGates';
 import type { MistakeClassification, MistakeGamePhase, MistakeNarration } from '../types';
 import { sideToMove } from './conceptEngine';
 import { stemKeyOf } from '../utils/rotateStem';
+import { describeWhatMoveAllowed, punishmentOf } from './moveAllowed';
+import { legalSeeGain } from './positionReadingService';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -26,6 +28,11 @@ export interface NarrationParams {
    *  call that "about 3.5 points" (walk 6, S2) — the size of a mate is not a
    *  number of points. */
   allowedMate?: boolean;
+  /** REQUIRED: the opponent's reply to the played move — the engine's
+   *  (`pvAfterPlayed[0]`) where known, else the move actually answered in the
+   *  game, else null. The card leads with what that reply punished
+   *  (`describeWhatMoveAllowed`). Required so every producer decides. */
+  allowedReplySan: string | null;
 }
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -205,12 +212,10 @@ function analyzeMoveIdea(fen: string, bestMoveSan: string, gamePhase: MistakeGam
       idea.conceptHints.push(`Think about getting your ${idea.pieceMoved} into the game with tempo.`);
       idea.conceptHints.push('Focus on developing a piece to an active square.');
     }
-    if (idea.movesToCenter && idea.pieceMoved === 'pawn') {
-      idea.conceptHints.push('Consider reinforcing your control of the center.');
-      idea.conceptHints.push('There\'s a pawn move that stakes a claim in the center.');
-    } else if (idea.movesToCenter) {
-      idea.conceptHints.push(`Think about placing your ${idea.pieceMoved} on a more active central square.`);
-    }
+    // The center-square hints are gone (hand walk 2026-10-01): a destination
+    // being central is not why a move is best, and they spoke "stakes a claim
+    // in the center" over rook endings and "a more active central square" for
+    // a queen guarding a loose pawn.
     if (idea.isPromotion) {
       idea.conceptHints.push('One of your pawns is ready to become something much stronger.');
     }
@@ -258,11 +263,13 @@ export function describePositionIdea(fen: string, bestMoveSan: string, gamePhase
 
 // ─── Intro Templates ────────────────────────────────────────────────────────
 
+const ASKS = ['What should you have played?', 'Find the stronger move.', 'Can you find the better move?'];
+
 const INTRO_TEMPLATES: Record<MistakeClassification, string[]> = {
   blunder: [
     'You played {playerMove} here, but that was a blunder costing {cpText}. Can you find the better move?',
     '{playerMove} was a serious mistake — you lost {cpText}. What should you have played?',
-    'Uh oh — {playerMove} dropped {cpText}. Find the right move.',
+    '{playerMove} dropped {cpText}. Find the right move.',
   ],
   mistake: [
     'You played {playerMove}, but there was something significantly better — that cost {cpText}. What was it?',
@@ -272,7 +279,7 @@ const INTRO_TEMPLATES: Record<MistakeClassification, string[]> = {
   inaccuracy: [
     '{playerMove} was okay, but there\'s a more precise option. Can you find it?',
     'Slight slip with {playerMove}. What\'s the sharper move?',
-    'Not a bad move with {playerMove}, but the engine found something better. What is it?',
+    'Not a bad move with {playerMove}, but there was something better. What is it?',
   ],
   miss: [
     'Your opponent slipped here and you missed it! What was the best response?',
@@ -391,30 +398,18 @@ function buildNoteRead(
 }
 
 function buildPositionRead(fen: string, avoidSquares: Set<string> = new Set()): string {
+  // ONLY the student's own loose piece (hand walk 2026-10-01). This used to
+  // lead with the first detected pattern NOT touching the solution — which,
+  // by construction, was a pattern unrelated to the lesson ("Bishop on h8
+  // pins pawn on b2" over a hung rook) and named no owner. A loose piece of
+  // YOURS is the one board fact that is always about you.
   try {
-    const { tactics, hangingPieces } = detectTactics(fen);
-
-    // A named pattern is the strongest thing the board can offer, and rule #7
-    // says name the pattern. Its description already carries the squares.
-    //
-    // SPOILER GUARD: skip any pattern that sits on the squares the solution
-    // moves through. `detectTactics` does not know which tactic the puzzle is
-    // asking for, so without this the intro can hand over the answer before
-    // the student has tried — the exact thing rule #8 forbids. Cheap and
-    // deterministic: compare against the best move's from/to.
-    const safe = tactics.find(
-      (t) => t.description && !t.involvedSquares.some((sq) => avoidSquares.has(sq)),
-    );
-    if (safe) return `${safe.description.replace(/\.$/, '')}.`;
-
-    // Otherwise: material actually left loose. Concrete, and the single most
-    // common thing a mistake puzzle turns on.
-    const hp = hangingPieces.find((h) => !avoidSquares.has(h.square));
+    const mover = new Chess(fen).turn();
+    const { hangingPieces } = detectTactics(fen);
+    const hp = hangingPieces.find((h) => h.color === mover && !avoidSquares.has(h.square));
     if (hp) {
-      // `piece` is the chess.js symbol ("p"), never speakable as-is — Polly
-      // reads it as the letter.
       const word = PIECE_WORD[hp.piece.toLowerCase()] ?? 'piece';
-      return `The ${word} on ${hp.square} is loose.`;
+      return `Your ${word} on ${hp.square} is loose.`;
     }
   } catch {
     /* board reads are a bonus, never a blocker */
@@ -518,28 +513,37 @@ export function generateMistakeNarration(params: NarrationParams): MistakeNarrat
   // ("What should you have played?"), and anything after that reads as an
   // afterthought tacked on past the point of the sentence.
   const spoilers = solutionSquares(moves);
+  // WHAT THE MOVE ALLOWED LEADS (hand walk 2026-10-01). The lesson of a
+  // mistake is what it let them do — "R2b3 lets them play Qxd6, winning your
+  // pawn on d6" — and that explains the wrong move, never the right one, so it
+  // spoils nothing. With it in hand the move is not named a second time; the
+  // cost and the ask close the intro.
+  const allowed = params.allowedMate ? null : describeWhatMoveAllowed(fen, playerMoveSan, params.allowedReplySan);
   const introClauses = [
     buildContextSentence(params),
-    // Unconditional now — see buildStandingSentence. This is the clause that
-    // was silently lost on any puzzle without opponent metadata.
     buildStandingSentence(params),
-    // THE STANDARD: the distilled note leads; the computed board read is the
-    // fallback when the corpus has never taught this position; silence is the
-    // fallback below that.
-    // A move that allowed MATE is the whole story: a loose pawn read in front
-    // of it buries the one thing the student must see (walk 6, S2: "The pawn
-    // on f3 is loose. Rd1 was a serious mistake — you lost about 3.5 points").
-    params.allowedMate ? '' : (buildNoteRead(fen, params.openingName, spoilers, params.evalBefore)
-      || buildPositionRead(fen, spoilers)),
-    pick(INTRO_TEMPLATES[classification], fen)
-      .replace(/\{playerMove\}/g, playerMoveSan)
-      .replace(/\{bestMove\}/g, bestMoveSan)
-      .replace(/\{cpText\}/g, cpText),
+    allowed
+      ?? (params.allowedMate ? '' : (buildNoteRead(fen, params.openingName, spoilers, params.evalBefore)
+        || buildPositionRead(fen, spoilers))),
+    allowed
+      ? `That cost ${cpText}. ${pick(ASKS, fen)}`
+      : pick(INTRO_TEMPLATES[classification], fen)
+        .replace(/\{playerMove\}/g, playerMoveSan)
+        .replace(/\{bestMove\}/g, bestMoveSan)
+        .replace(/\{cpText\}/g, cpText),
   ].filter((c) => c.trim().length > 0);
   const intro = introClauses.join(' ');
 
   // Per-move: the concrete point of each move, or silence.
   const moveNarrations = buildMoveNarrations(fen, moves);
+  // CLOSE THE LOOP (W3): when the intro said the move dropped a piece and the
+  // answer is what keeps it, the first beat says so — "Qc5 keeps your pawn on
+  // d6 protected" — instead of a description of where the queen went.
+  const kept = keepsWhatWasDropped(fen, playerMoveSan, params.allowedReplySan, bestMoveSan);
+  if (kept && moveNarrations.length > 0) {
+    const reply = moveNarrations[0].match(/ Your opponent replies [^.]+\.$/)?.[0] ?? '';
+    moveNarrations[0] = `${kept}${reply}`;
+  }
 
   const outro = buildOutro(params, idea);
 
@@ -550,6 +554,26 @@ export function generateMistakeNarration(params: NarrationParams): MistakeNarrat
   const conceptHint = buildConceptHint(fen, idea, spoilers, introClauses);
 
   return { intro, moveNarrations, outro, conceptHint };
+}
+
+/** "Qc5 keeps your pawn on d6 protected." when the played move let them win
+ *  a piece on a square and the best move leaves that capture losing. */
+function keepsWhatWasDropped(fen: string, playedSan: string, replySan: string | null, bestSan: string): string | null {
+  const p = punishmentOf(fen, playedSan, replySan);
+  const target = p?.gerund.match(/^winning your (\w+) on ([a-h][1-8])$/);
+  if (!target) return null;
+  const [, piece, square] = target;
+  try {
+    const c = new Chess(fen);
+    const best = c.move(bestSan);
+    if (!best || best.captured) return null; // a capture answers differently
+    const there = c.get(square as Parameters<Chess['get']>[0]);
+    if (!there || there.color !== best.color) return null;
+    if (legalSeeGain(c.fen(), square as Parameters<Chess['get']>[0]) > 0) return null;
+    return `${bestSan} keeps your ${piece} on ${square} protected.`;
+  } catch {
+    return null;
+  }
 }
 
 /** A hint that points at the board, not at the answer, and does not repeat a

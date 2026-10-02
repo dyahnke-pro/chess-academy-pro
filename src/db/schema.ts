@@ -118,6 +118,12 @@ export interface FreeTierRecord {
    *  (David 2026-09-06). Server (api/referrals) is the source of truth for the
    *  cross-device referral count; this mirrors it. Backfills to 0. */
   earnedOpeningCredits?: number;
+  /** Openings EARNED BY TRAINING — a gold week (5 trained days), at most one
+   *  per calendar month, free users on paywall builds only (David
+   *  2026-10-01). Its own field ON PURPOSE: `earnedOpeningCredits` is synced
+   *  max-wins from the server's referral count, so a credit stored there
+   *  would be silently absorbed by the next referral sync. Backfills to 0. */
+  trainingOpeningCredits?: number;
   /** Unix ms of the FIRST kid-section access, or null if never entered.
    *  Starts the 7-day free kid window. */
   kidFirstAccessAt: number | null;

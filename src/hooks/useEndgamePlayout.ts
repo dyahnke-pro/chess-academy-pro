@@ -26,6 +26,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 import type { PieceDropHandlerArgs } from 'react-chessboard';
 import { getCoachMove, resolveConfig } from '../services/coachPlaySession';
+import { reward } from '../services/rewardService';
 import type { RequestedDifficulty } from '../types';
 import { useWrongTryRefutation } from './useWrongTryRefutation';
 
@@ -469,10 +470,16 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
           setWrongSquare(to);
           setWrongAttempts((n) => n + 1);
           setFirstTryPerfect(false);
+          reward({ kind: 'miss', square: to });
           void refuteTry(chessRef.current.fen(), played.san);
           return false;
         }
         clearWrongTry();
+        // Skill earns the reward: each curated move is a pip; the line's last
+        // one is the solve. Engine-fallback moves (below) earn nothing.
+        const nth = studentMovesPlayed + 1;
+        if (nth >= curatedStudentMoves) reward({ kind: 'solved', square: to, seed: nth });
+        else reward({ kind: 'pip', square: to, step: nth - 1, seed: nth });
         // Correct curated move.
         const fenBefore = chessRef.current.fen();
         chessRef.current.move(played.san);
@@ -503,7 +510,7 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
       void playOpponentReply();
       return true;
     },
-    [phase, expectedSan, acceptableSans, playOpponentReply, refuteTry, clearWrongTry],
+    [phase, expectedSan, acceptableSans, playOpponentReply, studentMovesPlayed, curatedStudentMoves, refuteTry, clearWrongTry],
   );
 
   const onPieceDrop = useCallback(

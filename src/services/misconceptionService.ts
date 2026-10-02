@@ -306,6 +306,7 @@ export async function recordTagDrillResult(tag: string, success: boolean): Promi
       });
     }
   }
+  if (due.length > 0) emitWeaknessModelChanged();
   void logAppAudit({
     kind: 'misconception-drill-result',
     category: 'subsystem',

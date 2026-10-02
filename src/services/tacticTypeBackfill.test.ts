@@ -98,6 +98,14 @@ describe('tacticTypeBackfill — persisted tags are re-tagged through the ONE un
     expect(t.tacticTypeRev).toBe(TACTIC_TYPE_REV);
   });
 
+  it('re-files a mistake filed in the wrong PHASE (M5: move 17 read as move 9)', async () => {
+    const MIDDLEGAME_FEN = 'r1bq1rk1/pp2bppp/2n1pn2/3p4/2PP4/2N1PN2/P3BPPP/R2QKB1R w KQ - 0 17';
+    await db.mistakePuzzles.put(puzzle({ id: 'm5', fen: MIDDLEGAME_FEN, bestMove: 'f1d3', moves: 'f1d3', moveNumber: 17, gamePhase: 'opening' }));
+    const r = await reconcileTacticTypes(IMMEDIATE_BACKFILL_SCHEDULE);
+    expect(r.phaseChanged).toBe(1);
+    expect((await db.mistakePuzzles.get('m5'))!.gamePhase).toBe('middlegame');
+  });
+
   it('is idempotent — a second boot recomputes nothing', async () => {
     await db.mistakePuzzles.put(puzzle({ id: 'p', tacticType: 'skewer' as TacticType }));
     await reconcileTacticTypes(IMMEDIATE_BACKFILL_SCHEDULE);

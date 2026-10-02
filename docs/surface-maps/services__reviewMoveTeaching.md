@@ -38,11 +38,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/walkOct1Learn.test.ts:85`
 
 ### `buildReviewMoveTeaching` (function) — 29 call sites
-- `src/components/Coach/CoachGameReview.tsx:1730`
+- `src/components/Coach/CoachGameReview.tsx:1731`
 - `src/services/coachFeatureService.ts:1136`
 - `src/services/coachFeatureService.ts:3239`
 - `src/services/discussionPractice.ts:169`
-- `src/services/dnaLineNarrator.ts:144`
+- `src/services/dnaLineNarrator.ts:146`
 - `src/services/learnMoveTeaching.ts:44`
 - `src/services/learnMoveTeaching.ts:102`
 - `src/services/reviewMoveBriefing.ts:285`

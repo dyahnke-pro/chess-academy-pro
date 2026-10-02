@@ -29,7 +29,7 @@ export interface PuzzleMissRecord {
   fen: string;
   rating: number;
   /** Which Tactics surface — honest about where it came from. */
-  surface: 'classic' | 'master' | 'drill' | 'adaptive' | 'other';
+  surface: 'classic' | 'master' | 'drill' | 'adaptive' | 'deep-run' | 'other';
   recordedAt: number;
 }
 

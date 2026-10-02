@@ -47,6 +47,7 @@ import { logAppAudit } from '../../services/appAuditor';
 import { RolodexCardStack } from './RolodexCardStack';
 import { HomeOpeningPlanSection } from './HomeOpeningPlanSection';
 import { PageHelp } from '../Layout/PageHelp';
+import { WeekProgress } from '../Dashboard/WeekProgress';
 import type { OpeningRecord } from '../../types';
 
 type RolodexColor = 'white' | 'black';
@@ -435,6 +436,7 @@ export function TrainingPlanRolodexPage(): JSX.Element {
         <p className="text-sm text-theme-text-muted mt-1">
           Built on your home openings first; your favorited openings below.
         </p>
+        <div className="mt-3"><WeekProgress /></div>
         <HomeOpeningPlanSection onLoaded={onHomeLoaded} />
         <div
           className="mt-8 rounded-2xl border-2 border-theme-border bg-theme-surface/40 p-8 text-center opacity-80"
@@ -471,6 +473,10 @@ export function TrainingPlanRolodexPage(): JSX.Element {
       <p className="text-sm text-theme-text-muted mt-1">
         Built on your home openings first; your favorited openings below.
       </p>
+
+      {/* The week (trained days, proven / to fix, Deep Run best) — Home's
+          "0/3 training" counter opens this page (David 2026-10-02). */}
+      <div className="mt-3"><WeekProgress /></div>
 
       {/* THE HOME OPENINGS FIRST (A4): the reps computed inside what the
           student plays most — analyse, weakest line, departure, the

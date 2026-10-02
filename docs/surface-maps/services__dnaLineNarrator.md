@@ -4,16 +4,15 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**269 lines · 5 exports · 7 importers · 2 tests · 0 audits**
+**271 lines · 5 exports · 6 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5958) — names `dnaLineNarrator`
+- **The standard post-deploy ritual** (CLAUDE.md:6116) — names `dnaLineNarrator`
 
 ## Who calls in
 
 - `src/components/Coach/CoachGameReview.tsx`
-- `src/services/coachFeatureService.ts`
 - `src/services/dnaLineNarrator.test.ts`
 - `src/services/engineDeltaLines.ts`
 - `src/services/openingGenerator.ts`
@@ -29,40 +28,38 @@
 - `src/services/dnaLineNarrator.test.ts:10`
 - `src/services/dnaLineNarrator.test.ts:20`
 - `src/services/dnaLineNarrator.test.ts:29`
-- `src/services/dnaLineNarrator.test.ts:34`
-- `src/services/dnaLineNarrator.test.ts:46`
-- `src/services/dnaLineNarrator.test.ts:53`
+- `src/services/dnaLineNarrator.test.ts:35`
+- `src/services/dnaLineNarrator.test.ts:47`
 - `src/services/dnaLineNarrator.test.ts:54`
+- `src/services/dnaLineNarrator.test.ts:55`
 
 ### `firstTacticInvariant` (function) — 4 call sites
-- `src/components/Coach/CoachGameReview.tsx:1673`
-- `src/components/Coach/CoachGameReview.tsx:1756`
-- `src/services/dnaLineNarrator.test.ts:119`
-- `src/services/dnaLineNarrator.test.ts:123`
+- `src/components/Coach/CoachGameReview.tsx:1646`
+- `src/components/Coach/CoachGameReview.tsx:1729`
+- `src/services/dnaLineNarrator.test.ts:120`
+- `src/services/dnaLineNarrator.test.ts:124`
 
 ### `landedTacticTeaching` (function) — 6 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
-- `src/services/dnaLineNarrator.test.ts:101`
-- `src/services/dnaLineNarrator.test.ts:109`
+- `src/services/dnaLineNarrator.test.ts:102`
 - `src/services/dnaLineNarrator.test.ts:110`
-- `src/services/openingGenerator.ts:2222`
+- `src/services/dnaLineNarrator.test.ts:111`
+- `src/services/openingGenerator.ts:2226`
 - `src/services/teachingSelector.ts:201`
 
-### `narrateDnaLine` (function) — 14 call sites
-- `src/services/coachFeatureService.ts:3202`
-- `src/services/coachFeatureService.ts:3430`
-- `src/services/dnaLineNarrator.test.ts:64`
-- `src/services/dnaLineNarrator.test.ts:77`
-- `src/services/dnaLineNarrator.test.ts:79`
-- `src/services/dnaLineNarrator.test.ts:88`
-- `src/services/dnaLineNarrator.test.ts:136`
-- `src/services/dnaLineNarrator.test.ts:139`
-- `src/services/dnaLineNarrator.test.ts:153`
+### `narrateDnaLine` (function) — 12 call sites
+- `src/services/dnaLineNarrator.test.ts:65`
+- `src/services/dnaLineNarrator.test.ts:78`
+- `src/services/dnaLineNarrator.test.ts:80`
+- `src/services/dnaLineNarrator.test.ts:89`
+- `src/services/dnaLineNarrator.test.ts:137`
+- `src/services/dnaLineNarrator.test.ts:140`
+- `src/services/dnaLineNarrator.test.ts:154`
 - `src/services/engineDeltaLines.ts:126`
 - `src/services/exchangeLedger.test.ts:67`
 - `src/services/exchangeLedger.test.ts:77`
 - `src/services/exchangeLedger.test.ts:87`
-- `src/services/puzzleConceptExplanation.ts:154`
+- `src/services/puzzleConceptExplanation.ts:165`
 
 ## Tests
 

@@ -13,9 +13,11 @@
  * bookkeeping, the LLM decides nothing.
  */
 import { getDeviceId } from './deviceIdentity';
+import { isAuditMarkedPage } from './appAuditor';
 import { syncOpeningCredits } from './freeTierService';
 import { captureEvent } from './analytics';
 import { db } from './../db/schema';
+import { withWebOrigin } from '../utils/webOrigin';
 
 const API = '/api/referrals';
 const QUALIFY_REPORTED_KEY = 'referral.qualifyReported';
@@ -40,9 +42,12 @@ export interface ReferralStatus {
 /** Fetch this device's referral status AND mirror credits into the ledger.
  *  Never throws — returns null when the API is unreachable/unconfigured. */
 export async function getStatus(): Promise<ReferralStatus | null> {
+  // An audit page's fresh device would mint a referral code in Redis on every
+  // boot; it never asks (the server refuses it too — api/_lib/auditTraffic.ts).
+  if (isAuditMarkedPage()) return null;
   try {
     const device = await getDeviceId();
-    const res = await fetch(`${API}?device=${encodeURIComponent(device)}&cb=${Date.now()}`, { cache: 'no-store' });
+    const res = await fetch(withWebOrigin(`${API}?device=${encodeURIComponent(device)}&cb=${Date.now()}`), { cache: 'no-store' });
     if (!res.ok) return null;
     const data = (await res.json()) as {
       code?: unknown; credits?: unknown; recruits?: unknown;
@@ -77,7 +82,7 @@ export async function claimCode(code: string): Promise<ClaimOutcome> {
   if (!c) return 'error';
   try {
     const device = await getDeviceId();
-    const res = await fetch(API, {
+    const res = await fetch(withWebOrigin(API), {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ action: 'claim', device, code: c }),
@@ -108,7 +113,7 @@ export async function reportQualifyingUse(): Promise<void> {
   } catch { /* fall through — the server is idempotent anyway */ }
   try {
     const device = await getDeviceId();
-    const res = await fetch(API, {
+    const res = await fetch(withWebOrigin(API), {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ action: 'qualify', device }),
@@ -130,7 +135,7 @@ export async function reportQualifyingUse(): Promise<void> {
 export async function grantReviewReward(): Promise<void> {
   try {
     const device = await getDeviceId();
-    const res = await fetch(API, {
+    const res = await fetch(withWebOrigin(API), {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ action: 'reviewReward', device }),

@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1588 lines · 27 exports · 29 importers · 17 tests · 4 audits**
+**1564 lines · 28 exports · 29 importers · 16 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **The standard post-deploy ritual** (CLAUDE.md:6131) — names `gradeMistakePuzzle`
 
 ## Who calls in
 
@@ -16,10 +16,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachGameReview.tsx`
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Insights/OpeningDrilldown.tsx`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx`
 - `src/components/Puzzles/MyMistakesPage.test.tsx`
 - `src/components/Puzzles/MyMistakesPage.tsx`
 - `src/components/Puzzles/WeaknessTagDrillPage.tsx`
-- `src/components/Puzzles/WeaknessThemesPage.tsx`
 - `src/components/Tactics/AnalysisPracticePage.tsx`
 - `src/components/Tactics/TacticCreatePage.tsx`
 - `src/services/autoAnalyzeGame.ts`
@@ -83,7 +83,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakeProvenance.test.ts:106`
 - `src/services/mistakeProvenance.test.ts:111`
 
-### `uciToSan` (function) — 47 call sites
+### `uciToSan` (function) — 49 call sites
 - `scripts/find-line-reanchor.mjs:20`
 - `scripts/find-line-reanchor.mjs:38`
 - `scripts/pro-repertoire/build-dragodorf-sublines.mjs:41`
@@ -95,8 +95,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:7410`
-- `src/components/Coach/CoachTeachPage.tsx:7416`
+- `src/components/Coach/CoachTeachPage.tsx:7431`
+- `src/components/Coach/CoachTeachPage.tsx:7437`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
@@ -114,8 +114,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/endgameService.ts:211`
 - `src/services/endgameService.ts:266`
 - `src/services/endgameService.ts:273`
-- `src/services/mistakeNarration.ts:117`
-- `src/services/mistakeNarration.ts:591`
+- `src/services/mistakeNarration.ts:124`
+- `src/services/mistakeNarration.ts:615`
 - `src/services/openingGenerator.ts:3466`
 - `src/services/openingGenerator.ts:3665`
 - `src/services/openingGenerator.ts:3669`
@@ -129,6 +129,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleQuiz.ts:146`
 - `src/services/tacticClassifierService.ts:349`
 - `src/services/tacticClassifierService.ts:585`
+- `src/services/wrongTryRefutation.ts:63`
+- `src/services/wrongTryRefutation.ts:75`
 - `src/test/everySurfaceSpeaks.test.ts:47`
 - `src/test/everySurfaceSpeaks.test.ts:92`
 
@@ -144,13 +146,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticClassifierService.ts:568`
 
 ### `determinePlayerColor` (function) — 3 call sites
-- `src/components/Tactics/AnalysisPracticePage.tsx:101`
+- `src/components/Tactics/AnalysisPracticePage.tsx:113`
 - `src/services/autoAnalyzeGame.ts:317`
 - `src/test/seatResolversReadDeclaredSeat.test.ts:15`
 
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
-- `src/components/Coach/CoachGamePage.tsx:2108`
-- `src/components/Coach/CoachGameReview.tsx:366`
+- `src/components/Coach/CoachGamePage.tsx:2109`
+- `src/components/Coach/CoachGameReview.tsx:367`
 - `src/services/gameAnalysisService.ts:2096`
 - `src/services/mistakePuzzleService.test.ts:109`
 - `src/services/mistakePuzzleService.test.ts:163`
@@ -170,16 +172,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/lichessService.ts:167`
 - `src/services/mistakePuzzleService.test.ts:423`
 
-### `ReanalysisProgress` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `reanalyzeImportedGames` (function) — 1 call site
-- `src/components/Puzzles/MyMistakesPage.tsx:238`
-
 ### `getMistakePuzzlesDue` (function) — 3 call sites
 - `src/services/mistakePuzzleService.test.ts:445`
 - `src/services/mistakePuzzleService.test.ts:458`
-- `src/services/puzzleService.ts:515`
+- `src/services/puzzleService.ts:558`
 
 ### `getMistakePuzzlesByGame` (function) — 1 call site
 - `src/services/mistakePuzzleService.test.ts:471`
@@ -188,6 +184,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakePuzzleService.test.ts:485`
 
 ### `CapturePuzzleInput` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `rerenderMistakeNarration` (function) — 1 call site
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:438`
+
+### `lineToUci` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `addMistakePuzzleFromCapture` (function) — 8 call sites
@@ -201,8 +203,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakePuzzleCapture.test.ts:48`
 
 ### `ensureSequenceSolution` (function) — 7 call sites
-- `src/components/Puzzles/WeaknessTagDrillPage.tsx:105`
-- `src/components/Puzzles/WeaknessThemesPage.tsx:147`
+- `src/components/Puzzles/MyMistakesPage.tsx:310`
+- `src/components/Puzzles/WeaknessTagDrillPage.tsx:116`
 - `src/services/mistakePuzzleService.sequence.test.ts:41`
 - `src/services/mistakePuzzleService.sequence.test.ts:50`
 - `src/services/mistakePuzzleService.sequence.test.ts:57`
@@ -229,21 +231,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/misconceptionService.test.ts:161`
 - `src/services/misconceptionService.test.ts:169`
 
-### `getAllMistakePuzzles` (function) — 5 call sites
+### `getAllMistakePuzzles` (function) — 4 call sites
 - `src/components/Insights/OpeningDrilldown.tsx:152`
-- `src/components/Puzzles/MyMistakesPage.tsx:141`
-- `src/components/Puzzles/WeaknessThemesPage.tsx:66`
+- `src/components/Puzzles/MyMistakesPage.tsx:176`
 - `src/services/gameCalculationPuzzleService.ts:117`
 - `src/services/mistakePuzzleService.test.ts:597`
 
 ### `getMistakePuzzlesByPhase` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `gradeMistakePuzzle` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2426`
-- `src/components/Puzzles/MyMistakesPage.tsx:227`
-- `src/components/Puzzles/WeaknessThemesPage.tsx:116`
-- `src/components/Tactics/TacticCreatePage.tsx:220`
+### `gradeMistakePuzzle` (function) — 9 call sites
+- `src/components/Coach/CoachTeachPage.tsx:2447`
+- `src/components/Puzzles/MyMistakesPage.tsx:288`
+- `src/components/Tactics/TacticCreatePage.tsx:195`
 - `src/services/conceptSchedule.test.ts:41`
 - `src/services/conceptSchedule.test.ts:43`
 - `src/services/mistakePuzzleService.test.ts:495`
@@ -251,19 +251,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakePuzzleService.test.ts:537`
 - `src/services/mistakePuzzleService.test.ts:545`
 
+### `growMistakePuzzle` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `loadDrilledMotifs` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:1770`
+- `src/components/Coach/CoachTeachPage.tsx:1791`
 - `src/services/conceptSchedule.test.ts:58`
 
 ### `deleteMistakePuzzle` (function) — 2 call sites
-- `src/components/Puzzles/MyMistakesPage.tsx:220`
+- `src/components/Puzzles/MyMistakesPage.tsx:277`
 - `src/services/mistakePuzzleService.test.ts:554`
 
 ### `MistakePuzzleStats` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getMistakePuzzleStats` (function) — 4 call sites
-- `src/components/Puzzles/MyMistakesPage.tsx:142`
+- `src/components/Puzzles/MyMistakesPage.tsx:177`
 - `src/services/gameInsightsService.ts:818`
 - `src/services/mistakePuzzleService.test.ts:571`
 - `src/services/mistakePuzzleService.test.ts:584`
@@ -271,7 +274,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Tests
 
 - `src/components/Puzzles/MyMistakesPage.test.tsx`
-- `src/components/Puzzles/WeaknessThemesPage.test.tsx`
 - `src/services/chesscomService.test.ts`
 - `src/services/conceptSchedule.test.ts`
 - `src/services/drillJoinDivergence.test.ts`

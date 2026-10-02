@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo, type ReactNode } from 'react';
 import { captureEvent } from '../../services/analytics';
 import { Chess } from 'chess.js';
 import { ControlledChessBoard } from '../Board/ControlledChessBoard';
@@ -7,13 +7,19 @@ import { usePieceSound } from '../../hooks/usePieceSound';
 import { useSettings } from '../../hooks/useSettings';
 import { useChessGame } from '../../hooks/useChessGame';
 import { useHintSystem } from '../../hooks/useHintSystem';
-import { useWrongTryRefutation } from '../../hooks/useWrongTryRefutation';
 import { useStruggleDetection } from '../../hooks/useStruggleDetection';
+import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { Eye } from 'lucide-react';
 import type { MoveResult } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { voiceService } from '../../services/voiceService';
 import { getWrongMoveHint } from '../../utils/puzzleHints';
+import { readWrongTry, composeWrongTryLine } from '../../services/wrongTryRefutation';
+import { puzzleMethodLine, cpFromThemes } from '../../services/puzzleMethod';
+import { useStudentRecord } from '../../hooks/useStudentRecord';
+import { recordCapabilityEvidence } from '../../services/capabilityEvidence';
+import { MISTAKE_CP } from '../../services/engineConstants';
+import type { MethodHabit } from '../../services/methodBeat';
 import { recordTacticOutcome } from '../../services/tacticAlertService';
 import { recordPuzzleMiss, type PuzzleMissRecord } from '../../services/puzzleMissService';
 import { usePuzzleMeter } from '../../hooks/usePuzzleMeter';
@@ -25,6 +31,10 @@ import { logAppAudit } from '../../services/appAuditor';
 import type { CoachingTier } from '../../services/tacticAlertService';
 import type { PuzzleRecord } from '../../types';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
+import { solverMoves } from '../../services/puzzleDepth';
+import { reward } from '../../services/rewardService';
+import { rewardSeed } from '../../services/rewardEvents';
+import { PuzzleHeader } from './PuzzleHeader';
 
 type PuzzleState = 'loading' | 'playing' | 'correct' | 'incorrect';
 
@@ -36,6 +46,10 @@ export interface PuzzleOutcome {
   hadRetry: boolean;
   /** True if the player explicitly viewed the solution. */
   showedSolution: boolean;
+  /** Solver moves found with no wrong try and no hint since the previous
+   *  one — Deep Run banks exactly these (David 2026-10-02: "Only clean moves
+   *  bank"). */
+  cleanMoves: number;
   /** Time from first player move opportunity to completion (ms). */
   solveTimeMs: number;
 }
@@ -46,6 +60,20 @@ interface PuzzleBoardProps {
   disabled?: boolean;
   /** Maximum wrong attempts before auto-failing the puzzle (default: 2). */
   maxWrongAttempts?: number;
+  /** Puzzles solved in a row, shown in the header; omit on surfaces with no
+   *  session. */
+  streak?: number;
+  /** A surface's own score row (deep-run) above the pips. */
+  headerExtra?: ReactNode;
+  /** Each wrong try climbs one rung of the puzzle's hint ladder for THAT
+   *  move (theme → piece → square); at the top, Show solution lights up. It
+   *  stays one tap away throughout (David 2026-10-02:
+   *  "Hints are given until top of ladder is reached. Then show solution
+   *  button. But we give the user as many tries as they want"). */
+  hintOnMiss?: boolean;
+  /** Size the board to the screen HEIGHT as well as its width, so a surface
+   *  with a score row above it never pushes the bottom rank off-screen. */
+  fitViewport?: boolean;
   /** Which Tactics surface hosts the board — a missed puzzle is recorded
    *  under it (`recordPuzzleMiss`). REQUIRED so a new host has to answer. */
   surface: PuzzleMissRecord['surface'];
@@ -64,8 +92,17 @@ export function PuzzleBoard({
   onComplete,
   disabled = false,
   maxWrongAttempts = 2,
+  streak,
+  headerExtra,
+  hintOnMiss = false,
+  fitViewport = false,
   surface,
 }: PuzzleBoardProps): JSX.Element {
+  // The line's depth, counted (never a theme tag), and how far the student is.
+  const totalMoves = useMemo(() => Math.max(1, solverMoves(puzzle)), [puzzle]);
+  const [pipsDone, setPipsDone] = useState(0);
+  const [missedPip, setMissedPip] = useState(false);
+  const seed = useMemo(() => rewardSeed(puzzle.id), [puzzle.id]);
   const meter = usePuzzleMeter();
   const consumedIdRef = useRef<string | null>(null);
   const [state, setState] = useState<PuzzleState>('loading');
@@ -76,10 +113,16 @@ export function PuzzleBoard({
   const wrongAttemptsRef = useRef(0);
   const hintUsedRef = useRef(false);
   const showedSolutionRef = useRef(false);
+  const cleanMovesRef = useRef(0);
+  /** A wrong try or a hint on the CURRENT move — it no longer counts clean. */
+  const moveAssistedRef = useRef(false);
+  /** Wrong tries on the CURRENT move — the hint ladder's rung (hintOnMiss). */
+  const moveWrongRef = useRef(0);
+  const [ladderTop, setLadderTop] = useState(false);
   const completionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const solveStartRef = useRef<number>(Date.now());
   const movesRef = useRef(parseUciMoves(puzzle.moves));
-  const { playMoveSound, playErrorPing, playSuccessChime } = usePieceSound();
+  const { playMoveSound } = usePieceSound();
   const { settings } = useSettings();
   const activeProfile = useAppStore((s) => s.activeProfile);
   const [subtitle, setSubtitle] = useState<string>('');
@@ -88,12 +131,53 @@ export function PuzzleBoard({
   // TEACH the concept behind the solution (David 2026-09-14: "not just a hint
   // with an arrow, but an explanation of the concepts to understand the
   // solution"). Distinct from the transient 'incorrect' of a single wrong try.
-  const [terminal, setTerminal] = useState(false);
-  const conceptSpokenRef = useRef(false);
-  const wrongTry = useWrongTryRefutation();
-  const { refute: refuteTry, clear: clearWrongTry, clearArrows: clearWrongArrows } = wrongTry;
-  const puzzleIdRef = useRef(puzzle.id);
-  puzzleIdRef.current = puzzle.id;
+  // Resolution belongs to ONE puzzle: the id that was resolved, never a bare
+  // boolean. A boolean outlived the puzzle by a render on every swap, so the
+  // concept effect saw "resolved, not yet spoken" against the NEXT puzzle and
+  // read its whole solution aloud before the student moved (hand walk
+  // 2026-10-01). Keyed by id, a stale resolution cannot match a new puzzle.
+  const [terminalId, setTerminalId] = useState<string | null>(null);
+  const terminal = terminalId === puzzle.id;
+  const conceptSpokenRef = useRef<string | null>(null);
+  const tryTokenRef = useRef(0);
+  /** A wrong try's refutation is still being read. While it is, a coaching
+   *  line the SAME miss triggered (the struggle coach's method beat) waits and
+   *  is spoken with it as ONE line — spoken separately, the refutation landed
+   *  ~80ms later and cut the method off mid-sentence (PostHog, David's phone,
+   *  2026-10-02: "This was the moment to slow down — positions where one move"
+   *  → "rook to e1? Then a-pawn takes b5…"). */
+  const wrongTryPendingRef = useRef(false);
+  const heldCoachRef = useRef<string | null>(null);
+  // The FIRST answer is the evidence (see MistakePuzzleBoard): recorded once.
+  const answeredRef = useRef(false);
+  // Habits taught this session — the method beat says each one once.
+  const saidHabitsRef = useRef(new Set<MethodHabit>());
+  // The student's WHOLE record (holes + proven), so the method beat is decided
+  // from their games and drills together, not from the puzzles alone.
+  const recordRef = useStudentRecord();
+  // The board the solver faces: a Lichess line opens with the opponent's move.
+  const solverFen = useMemo((): string => {
+    try {
+      const c = new Chess(puzzle.fen);
+      const [opp] = parseUciMoves(puzzle.moves);
+      if (opp) c.move({ from: opp.from, to: opp.to, promotion: opp.promotion });
+      return c.fen();
+    } catch {
+      return puzzle.fen;
+    }
+  }, [puzzle.fen, puzzle.moves]);
+  // The solver's first move (a Lichess line opens with the opponent's move).
+  const solverFirstSan = useMemo((): string | null => {
+    try {
+      const c = new Chess(puzzle.fen);
+      const [opp, mine] = parseUciMoves(puzzle.moves);
+      if (!opp || !mine) return null;
+      c.move({ from: opp.from, to: opp.to, promotion: opp.promotion });
+      return c.move({ from: mine.from, to: mine.to, promotion: mine.promotion }).san;
+    } catch {
+      return null;
+    }
+  }, [puzzle.fen, puzzle.moves]);
 
   // Determine which color the user plays (opposite of who moves first in the FEN)
   const fenTurn = puzzle.fen.split(' ')[1];
@@ -147,17 +231,51 @@ export function PuzzleBoard({
 
   // Proactive struggle detection — coach speaks up when player is stuck
   const handleStruggleCoach = useCallback((message: string, _tier: CoachingTier) => {
-    voiceService.stop();
-    setSubtitle(message);
-    void voiceService.speak(message);
+    if (wrongTryPendingRef.current) {
+      heldCoachRef.current = message;
+      return;
+    }
+    // Never over the top of a line already playing (the refutation of the
+    // last try, the intro): wait for it to finish. A new try supersedes it.
+    const token = tryTokenRef.current;
+    void voiceService.speakWhenIdle(message, {
+      stale: () => tryTokenRef.current !== token,
+      onStart: () => setSubtitle(message),
+    });
   }, []);
+
+  // "TEACH ME THIS POSITION" — the one read every surface shares, fed by the
+  // student's whole record through the one deciding door. Before the answer it
+  // teaches the position and withholds the move; once resolved, the full read.
+  const teach = usePositionNarration({
+    fen: solverFen,
+    pgn: '',
+    moveNumber: Number(solverFen.split(' ')[5] ?? 1),
+    playerColor: userColor,
+    openingName: null,
+    corpusNotes: true, // the tactics drill is a kept corpus surface
+    withhold: terminal ? null : solverFirstSan,
+  });
+  const handleTeach = useCallback((): void => {
+    // Taught before answering → the answer is recorded as prompted.
+    if (!answeredRef.current) hintUsedRef.current = true;
+    voiceService.stop();
+    void teach.narrate();
+  }, [teach]);
+  useEffect(() => {
+    if (teach.currentText) setSubtitle(teach.currentText);
+  }, [teach.currentText]);
 
   const { reset: resetStruggle } = useStruggleDetection({
     tacticType,
     playerRating: activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING,
     active: state === 'playing',
-    wrongAttempts: wrongAttemptCount,
+    // On the ladder (hintOnMiss) each miss already speaks its rung — the
+    // struggle coach reacting to the same miss talked over it and pinned the
+    // ladder at rung one. It keeps its stuck-too-long nudge.
+    wrongAttempts: hintOnMiss ? 0 : wrongAttemptCount,
     onCoach: handleStruggleCoach,
+    earnedMethod: () => puzzleMethodLine(solverFirstSan, cpFromThemes(puzzle.themes), saidHabitsRef.current, recordRef.current),
   });
 
   // Derive the expected move for the hint system
@@ -190,6 +308,7 @@ export function PuzzleBoard({
   // Track hint usage
   const handleRequestHint = useCallback((): void => {
     hintUsedRef.current = true;
+    moveAssistedRef.current = true;
     requestHint();
   }, [requestHint]);
 
@@ -208,15 +327,21 @@ export function PuzzleBoard({
     game.setOrientation(userColor);
     movesRef.current = parseUciMoves(puzzle.moves);
     setMoveIndex(0);
+    setPipsDone(0);
+    setMissedPip(false);
     setLastMoveHighlight(null);
     setFlashClass('');
     hasMadeMistakeRef.current = false;
-    clearWrongTry();
     wrongAttemptsRef.current = 0;
     hintUsedRef.current = false;
     showedSolutionRef.current = false;
-    setTerminal(false);
-    conceptSpokenRef.current = false;
+    cleanMovesRef.current = 0;
+    moveAssistedRef.current = false;
+    moveWrongRef.current = 0;
+    setLadderTop(false);
+    setTerminalId(null);
+    tryTokenRef.current += 1;
+    answeredRef.current = false;
     setState('loading');
     resetHints();
     setSubtitle('');
@@ -249,7 +374,7 @@ export function PuzzleBoard({
       voiceService.stop();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [puzzle, playMoveSound, resetHints, resetStruggle, clearWrongTry]);
+  }, [puzzle, playMoveSound, resetHints, resetStruggle]);
 
   // TEACH THE CONCEPT when the puzzle resolves (solved or shown) — the computed
   // explanation of WHY the solution works, not just the grounded geometry of
@@ -258,16 +383,16 @@ export function PuzzleBoard({
   // computable, and to silence when neither is (voice rule #5, no filler).
   // Verbosity-gated via voiceService.speak (speakInternal honours the setting).
   useEffect(() => {
-    if (!settings.voiceEnabled || !terminal || conceptSpokenRef.current) return;
-    conceptSpokenRef.current = true;
+    if (!settings.voiceEnabled || !terminal || conceptSpokenRef.current === puzzle.id) return;
+    conceptSpokenRef.current = puzzle.id;
     const line = conceptExplanation?.spoken
       ?? (state === 'correct' && solveGeometry ? `That ${solveGeometry}.` : null);
-    if (line) void voiceService.speak(line);
-  }, [terminal, state, settings.voiceEnabled, solveGeometry, conceptExplanation]);
+    if (line) void voiceService.speak(line, { sentenceFirst: true });
+  }, [terminal, puzzle.id, state, settings.voiceEnabled, solveGeometry, conceptExplanation]);
 
   // Complete the puzzle with outcome metadata
   const completePuzzle = useCallback((correct: boolean): void => {
-    setTerminal(true); // resolved — teach the concept (render + speak below)
+    setTerminalId(puzzle.id); // resolved — teach the concept (render + speak below)
     if (tacticType && tacticType !== 'tactical_sequence') {
       recordTacticOutcome({
         tacticType,
@@ -299,13 +424,13 @@ export function PuzzleBoard({
       usedHint: hintUsedRef.current,
       hadRetry: hasMadeMistakeRef.current,
       showedSolution: showedSolutionRef.current,
+      cleanMoves: cleanMovesRef.current,
       solveTimeMs: Date.now() - solveStartRef.current,
     });
   }, [onComplete, tacticType, subtitle, puzzle.id, puzzle.fen, puzzle.themes, puzzle.rating, surface, meter]);
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing' || disabled) return;
-    clearWrongTry();
 
     const allMoves = movesRef.current;
     if (moveIndex >= allMoves.length) return;
@@ -319,19 +444,20 @@ export function PuzzleBoard({
     // post-attempt state). Pairs with `hint-revealed` via FEN equality
     // in analyticsService.recentHintActivity for hint effectiveness.
     // Drives analyticsService.moveAttemptsPerPuzzle aggregation.
-    // The position the student moved FROM: the puzzle replayed through the
-    // moves already played. (It used to be `new Chess(game.fen).undo()` — a
-    // board built from a FEN has no history, so undo did nothing and every
-    // `move-attempt` row, and the wrong-try refutation, got the position AFTER
-    // the move. Found on the hand walk, 2026-10-01.)
+    // The board BEFORE this attempt, rebuilt from the puzzle line: the
+    // solution moves already played from `puzzle.fen`. The old version undid
+    // on a fresh Chess with no history (a no-op), so this always held the
+    // board AFTER the attempt — wrong for the analytics join, and wrong for
+    // reading what the try runs into.
     let fenBeforeAttempt = game.fen;
     try {
       const replay = new Chess(puzzle.fen);
-      for (const m of allMoves.slice(0, moveIndex)) replay.move({ from: m.from, to: m.to, promotion: m.promotion });
+      for (const m of movesRef.current.slice(0, moveIndex)) {
+        replay.move({ from: m.from, to: m.to, promotion: m.promotion });
+      }
       fenBeforeAttempt = replay.fen();
     } catch {
-      // Fall back to post-attempt fen — still a useful key for the
-      // join logic, just slightly less precise.
+      // Keep the post-attempt fen — still a usable key for the join.
     }
     const timeFromStart = Date.now() - solveStartRef.current;
     void logAppAudit({
@@ -353,11 +479,29 @@ export function PuzzleBoard({
       fen: fenBeforeAttempt,
     });
 
+    // CLOSE THE RECORD (2026-10-01): Lichess puzzles wrote nothing to the
+    // student model — solve fifty pins and the coach never learned it.
+    const firstAnswer = !answeredRef.current;
+    answeredRef.current = true;
+    if (firstAnswer && isCorrect) {
+      void recordCapabilityEvidence({
+        fenBefore: fenBeforeAttempt, playedSan: move.san, moverColor: userColor,
+        cpLoss: 0, origin: 'puzzle', prompted: hintUsedRef.current,
+      });
+    }
+
     if (isCorrect) {
+      if (!moveAssistedRef.current) cleanMovesRef.current += 1;
+      moveAssistedRef.current = false;
+      moveWrongRef.current = 0;
+      setLadderTop(false);
       playMoveSound(move.san);
       resetHints();
       setLastMoveHighlight({ from: move.from, to: move.to });
       const nextIndex = moveIndex + 1;
+      const step = pipsDone;
+      setPipsDone(step + 1);
+      setMissedPip(false);
 
       // Check if puzzle is fully solved
       if (nextIndex >= movesRef.current.length) {
@@ -368,12 +512,14 @@ export function PuzzleBoard({
         });
         setState('correct');
         triggerFlash('board-flash-success');
-        playSuccessChime();
+        reward({ kind: 'solved', square: move.to, step, seed });
         completionTimerRef.current = setTimeout(() => {
           completePuzzle(true);
         }, 2500);
         return;
       }
+
+      reward({ kind: 'pip', square: move.to, step, seed: seed + step });
 
       // Auto-play opponent's response
       if (nextIndex < allMoves.length) {
@@ -388,47 +534,73 @@ export function PuzzleBoard({
         }, 400);
       }
     } else {
-      // Wrong move — flash red, play error sound, and REFUTE it (David
-      // 2026-10-01: "Refute it, keep the answer"): the wrong move stays on the
-      // board while their reply line is drawn and said, then it is taken back.
+      // Wrong move — undo, flash red, play error sound
       hasMadeMistakeRef.current = true;
+      moveAssistedRef.current = true;
       wrongAttemptsRef.current += 1;
       setWrongAttemptCount((c) => c + 1);
+      game.undoMove();
       triggerFlash('board-flash-error');
-      playErrorPing();
+      setMissedPip(true);
+      reward({ kind: 'miss' });
+      moveWrongRef.current += 1;
+      // THE LADDER is the puzzle's own graded rungs (theme → piece → square),
+      // one per wrong try ON THIS MOVE. Not the hint button: that one is "one
+      // tap = the answer" (David 2026-09-06), which on a miss skipped every
+      // rung and handed the move over (hand walk 2026-10-02).
+      if (hintOnMiss && moveWrongRef.current >= 3) setLadderTop(true);
 
       // Record the failure at max wrong attempts, but don't lock the board
-      if (wrongAttemptsRef.current === maxWrongAttempts) {
-        completePuzzle(false);
-      }
+      if (wrongAttemptsRef.current === maxWrongAttempts) completePuzzle(false);
 
       setState('incorrect');
       voiceService.stop();
-      const attempt = wrongAttemptsRef.current;
-      const puzzleAtTry = puzzle.id;
-      void (async () => {
-        const r = await refuteTry(fenBeforeAttempt, move.san);
-        if (puzzleIdRef.current !== puzzleAtTry) return;
-        const shownAt = Date.now();
-        if (r) {
-          if (settings.voiceEnabled) await voiceService.speak(r.text).catch(() => undefined);
-          // Long enough to read when the voice is off or quick.
-          const left = Math.max(0, 1800 + r.text.length * 35 - (Date.now() - shownAt));
-          await new Promise((res) => setTimeout(res, left));
-        } else if (settings.voiceEnabled) {
-          // Nothing computed: the progressive nudge, as before.
-          game.undoMove();
-          void voiceService.speak(getWrongMoveHint(attempt, puzzle.themes, expected.from, expected.to, new Chess(game.fen)));
-          setTimeout(() => setState('playing'), 1000);
-          return;
+
+      // WHY THE TRY FAILS first (Learn's weighing, brought to puzzles — hand
+      // walk 2026-10-01): "Qe3? Then Bxg5, winning your pawn on g5." The
+      // template hint toward the answer stays as the fallback when the
+      // refutation is quiet. A token drops a late engine read once a newer
+      // try or a new puzzle has arrived.
+      const tryToken = ++tryTokenRef.current;
+      const hint = getWrongMoveHint(
+        hintOnMiss ? moveWrongRef.current : wrongAttemptsRef.current,
+        puzzle.themes,
+        expected.from,
+        expected.to,
+        new Chess(fenBeforeAttempt),
+      );
+      wrongTryPendingRef.current = true;
+      heldCoachRef.current = null;
+      void readWrongTry(fenBeforeAttempt, move.san).catch(() => null).then((read) => {
+        // A first answer that is genuinely wrong breaks the capability; one
+        // that still wins ("also good") is not a failure and is not recorded.
+        if (firstAnswer && read?.kind !== 'also-good') {
+          void recordCapabilityEvidence({
+            fenBefore: fenBeforeAttempt, playedSan: move.san, moverColor: userColor,
+            cpLoss: cpFromThemes(puzzle.themes) ?? MISTAKE_CP, origin: 'puzzle', prompted: hintUsedRef.current,
+          });
         }
-        if (puzzleIdRef.current !== puzzleAtTry) return;
-        game.undoMove();
-        clearWrongArrows();
+        if (tryToken !== tryTokenRef.current) return;
+        wrongTryPendingRef.current = false;
+        const held = heldCoachRef.current;
+        heldCoachRef.current = null;
+        // ONE line per miss. On the ladder: why the try fails, the method,
+        // then the next rung. Off it: the refutation (or the rung when the
+        // try is quietly fine), then the method.
+        const line = hintOnMiss && read && read.kind !== 'also-good'
+          ? composeWrongTryLine(read.text, held, hint)
+          : composeWrongTryLine(read?.text ?? hint, held, null);
+        setSubtitle(line);
+        voiceService.stop();
+        if (settings.voiceEnabled) void voiceService.speak(line);
+      });
+
+      // Brief feedback then back to playing — user can keep trying.
+      setTimeout(() => {
         setState('playing');
-      })();
+      }, 1000);
     }
-  }, [state, disabled, moveIndex, completePuzzle, playMoveSound, playErrorPing, playSuccessChime, resetHints, triggerFlash, maxWrongAttempts, settings.voiceEnabled, puzzle.themes, puzzle.id, tacticType, game, refuteTry, clearWrongTry, clearWrongArrows]);
+  }, [state, disabled, moveIndex, pipsDone, seed, hintOnMiss, completePuzzle, playMoveSound, resetHints, triggerFlash, maxWrongAttempts, settings.voiceEnabled, puzzle.themes, puzzle.id, tacticType, game]);
 
   // With ControlledChessBoard, the move is already applied to the game object
   const handleChessBoardMove = handleMove;
@@ -437,6 +609,11 @@ export function PuzzleBoard({
   const handleShowSolution = useCallback((): void => {
     if (state !== 'playing' && state !== 'incorrect') return;
     showedSolutionRef.current = true;
+    // Teach WHILE the line plays, not after it (David 2026-10-02: "The
+    // narrations at the end also played out after the moves. They need to be
+    // at the same time"). Resolving now starts the concept read as the first
+    // solution move lands.
+    setTerminalId(puzzle.id);
 
     // Play remaining moves in sequence
     const allMoves = movesRef.current;
@@ -472,10 +649,13 @@ export function PuzzleBoard({
 
     setState('loading'); // Disable interaction during solution playback
     playNextMove();
-  }, [state, moveIndex, completePuzzle, playMoveSound, game]);
+  }, [state, moveIndex, completePuzzle, playMoveSound, game, puzzle.id]);
 
   return (
-    <div className="space-y-3" data-testid="puzzle-board">
+    <div className="space-y-3" data-testid="puzzle-board" data-puzzle-id={puzzle.id}>
+      <PuzzleHeader total={totalMoves} done={pipsDone} difficulty={puzzle.rating} streak={streak} missed={missedPip}>
+        {headerExtra}
+      </PuzzleHeader>
       {/* Puzzle theme label — big neon text above the board */}
       {themeLabel && (
         <h2
@@ -485,7 +665,7 @@ export function PuzzleBoard({
           {themeLabel}
         </h2>
       )}
-      <div className={`w-full md:max-w-[420px] mx-auto rounded-lg overflow-hidden ${flashClass}`} data-testid="board-wrapper">
+      <div className={`w-full md:max-w-[420px] mx-auto rounded-lg overflow-hidden ${fitViewport ? 'max-w-[calc(100dvh-22rem)] min-w-[16rem]' : ''} ${flashClass}`} data-testid="board-wrapper">
         <ControlledChessBoard
           game={game}
           interactive={state === 'playing' && !disabled}
@@ -494,24 +674,30 @@ export function PuzzleBoard({
           showResetButton={false}
           onMove={handleChessBoardMove}
           highlightSquares={lastMoveHighlight}
-          arrows={wrongTry.arrows.length > 0 ? wrongTry.arrows : hintState.arrows.length > 0 ? hintState.arrows : undefined}
+          arrows={hintState.arrows.length > 0 ? hintState.arrows : undefined}
           ghostMove={hintState.ghostMove}
         />
       </div>
-
-      {/* The wrong try, refuted — on screen as well as spoken, so a student
-          with voice off sees why the move fails. */}
-      {wrongTry.text && (
-        <p className="text-sm text-red-400 px-1" data-testid="wrong-try-refutation">
-          {wrongTry.text}
-        </p>
-      )}
 
       {/* Coaching subtitle from struggle detection */}
       {subtitle && state === 'playing' && (
         <p className="text-sm text-amber-400 px-1" data-testid="coaching-subtitle">
           {subtitle}
         </p>
+      )}
+
+      {/* After it resolves, the full read stays one tap away */}
+      {terminal && (
+        <div className="flex justify-end">
+          <button
+            onClick={handleTeach}
+            disabled={teach.isNarrating}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-theme-text-muted hover:text-theme-text rounded-lg border border-theme-border hover:bg-theme-surface transition-colors disabled:opacity-50"
+            data-testid="teach-position-button"
+          >
+            {teach.isNarrating ? 'Reading the position…' : 'Teach me this position'}
+          </button>
+        </div>
       )}
 
       {/* Hint + Show Solution controls */}
@@ -532,8 +718,16 @@ export function PuzzleBoard({
             </div>
           )}
           <button
+            onClick={handleTeach}
+            disabled={teach.isNarrating}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-theme-text-muted hover:text-theme-text rounded-lg border border-theme-border hover:bg-theme-surface transition-colors disabled:opacity-50"
+            data-testid="teach-position-button"
+          >
+            {teach.isNarrating ? 'Reading the position…' : 'Teach me this position'}
+          </button>
+          <button
             onClick={handleShowSolution}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-theme-text-muted hover:text-theme-text rounded-lg border border-theme-border hover:bg-theme-surface transition-colors"
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg border transition-colors ${ladderTop ? 'animate-pulse border-amber-400/60 text-amber-200 bg-amber-500/10' : 'text-theme-text-muted hover:text-theme-text border-theme-border hover:bg-theme-surface'}`}
             data-testid="show-solution-button"
           >
             <Eye size={14} />
@@ -575,15 +769,6 @@ export function PuzzleBoard({
         </div>
       )}
 
-      {/* Puzzle info with rating badge + tactic type */}
-      <div className="flex items-center gap-3 text-xs text-theme-text-muted flex-wrap">
-        <span
-          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-theme-surface font-semibold text-theme-text ${flashClass.includes('success') || state === 'correct' ? 'rating-bump' : ''}`}
-          data-testid="puzzle-rating-badge"
-        >
-          Puzzle Rating: {puzzle.rating}
-        </span>
-      </div>
     </div>
   );
 }

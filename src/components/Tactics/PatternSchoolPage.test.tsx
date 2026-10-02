@@ -13,7 +13,9 @@ vi.mock('../../services/puzzleService', () => ({
   ]),
 }));
 vi.mock('../Chessboard/ConsistentChessboard', () => ({
-  ConsistentChessboard: ({ fen }: { fen: string }) => <div data-testid="mock-board" data-fen={fen} />,
+  ConsistentChessboard: ({ fen, arrows }: { fen: string; arrows?: Array<{ startSquare: string; endSquare: string }> }) => (
+    <div data-testid="mock-board" data-fen={fen} data-arrows={(arrows ?? []).map((a) => `${a.startSquare}${a.endSquare}`).join(',')} />
+  ),
 }));
 
 describe('PatternSchoolPage', () => {
@@ -37,6 +39,8 @@ describe('PatternSchoolPage', () => {
     // The example board shows the position AFTER the setup move (pattern live).
     const board = screen.getByTestId('mock-board');
     expect(board.getAttribute('data-fen')).toContain(' w ');
+    // The eye is led to the pattern: an arrow on the move that springs it.
+    expect(board.getAttribute('data-arrows')).toBe('g1f3');
     expect(screen.getByTestId('pattern-drill-fork')).toBeInTheDocument();
   });
 });

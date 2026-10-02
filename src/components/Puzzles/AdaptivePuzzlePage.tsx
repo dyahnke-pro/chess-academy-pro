@@ -2,7 +2,8 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Brain, BookOpen, AlertTriangle, Crown } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
-import { seedPuzzles, seedMasterPuzzles, recordAttempt, getPuzzleStats } from '../../services/puzzleService';
+import { seedPuzzles, seedMasterPuzzles, seedLongPuzzles, recordAttempt, getPuzzleStats } from '../../services/puzzleService';
+import { LENGTH_RANGE, type PuzzleLength } from '../../services/puzzleDepth';
 import type { PuzzleStats } from '../../services/puzzleService';
 import { recordTagDrillResult } from '../../services/misconceptionService';
 import { markRepCompletedToday } from '../../services/repCompletion';
@@ -23,6 +24,7 @@ import {
   nextTarget,
   reachTier,
   type ReachState,
+  type ReachOutcome,
 } from '../../services/reachRating';
 import { reachCueFor, spikeIncomingCue, type ReachCue } from '../../services/reachCue';
 import type { PuzzleRecord } from '../../types';
@@ -36,6 +38,7 @@ import { AdaptiveSessionSummary } from './AdaptiveSessionSummary';
 import { db } from '../../db/schema';
 import { recordPositiveMoment } from '../../services/reviewPromptService';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
+import { finishBite } from '../../services/activeBite';
 
 type Phase = 'select' | 'loading' | 'solving' | 'checkpoint' | 'rep-complete' | 'summary';
 
@@ -46,7 +49,24 @@ const RATING_DELTA_CLEAN = 20;
 const RATING_DELTA_ASSISTED = 5;
 const RATING_DELTA_FAILED = -20;
 
-export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}): JSX.Element {
+/** "+12" / "-8" / "0". */
+function signed(n: number): string {
+  return n > 0 ? `+${n}` : `${n}`;
+}
+
+/** The summary measures the ONE puzzle rating (the reach ladder), not the
+ *  session's internal selection rating. */
+function withReach(summary: SummaryData, history: readonly number[]): SummaryData {
+  if (history.length === 0) return summary;
+  return { ...summary, startRating: history[0], endRating: history[history.length - 1], ratingHistory: [...history] };
+}
+
+export function AdaptivePuzzlePage({ master = false, length }: { master?: boolean; length?: PuzzleLength } = {}): JSX.Element {
+  // A POOLED page (Master Level, the Long tab) skips the difficulty select,
+  // lazily fetches its own CC0 pool and auto-starts.
+  const pooled = master || length !== undefined;
+  const [lengthMode, setLengthMode] = useState<PuzzleLength | undefined>(length);
+  const lengthModeRef = useRef<PuzzleLength | undefined>(length);
   const activeProfile = useAppStore((s) => s.activeProfile);
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
   const location = useLocation();
@@ -56,6 +76,8 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
     misconceptionTag?: string;
     repKey?: string;
     repCap?: number;
+    /** Start straight away at the student's level (an Up-next warm-up bite). */
+    autoStart?: boolean;
   } | null;
   const forcedWeakThemes = navState?.forcedWeakThemes;
   // When the Training Plan deep-links a weakness rep here, the real
@@ -113,12 +135,19 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
       ?? (activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING) + (master ? 0 : 200),
   );
   const [reachDelta, setReachDelta] = useState<number | null>(null);
+  /** The ONE puzzle rating (the reach ladder) across this session — the panel,
+   *  the checkpoint and the summary all measure it, so the tab shows one number
+   *  that moves, not a second "session rating" scored from the difficulty's
+   *  fixed start (hand walk 2026-10-01, RT1: five ratings on one tab). */
+  const [reachHistory, setReachHistory] = useState<number[]>([]);
   const [cue, setCue] = useState<ReachCue | null>(null);
-  const [masterReady, setMasterReady] = useState<boolean>(!master);
+  const [masterReady, setMasterReady] = useState<boolean>(!pooled);
   // Master concept-review pause: hold on the solved board until the student taps
   // Continue, so the concept lesson lands (the classroom teaching beat).
   const [awaitingConcept, setAwaitingConcept] = useState(false);
   const pendingSessionRef = useRef<AdaptiveSessionState | null>(null);
+  const reachHistoryRef = useRef<number[]>([]);
+  reachHistoryRef.current = reachHistory;
 
   // Keep playerRating synced with profile
   useEffect(() => {
@@ -131,6 +160,7 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
   const persistReach = useCallback((next: ReachState): void => {
     reachRef.current = next;
     setReachRating(next.rating);
+    setReachHistory((h) => [...h, next.rating]);
     if (activeProfile) {
       const preferences = {
         ...activeProfile.preferences,
@@ -163,13 +193,13 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
   // Master Level: lazily fetch the elite (2400+) CC0 pool the first time this
   // section is opened, then flag it ready so the auto-start below can fire.
   useEffect(() => {
-    if (!master) return;
-    void seedMasterPuzzles()
+    if (!pooled) return;
+    void (master ? seedMasterPuzzles() : seedLongPuzzles())
       .catch((err: unknown) => {
-        console.warn('[AdaptivePuzzlePage] master pool seeding failed:', err);
+        console.warn('[AdaptivePuzzlePage] puzzle pool seeding failed:', err);
       })
       .finally(() => setMasterReady(true));
-  }, [master]);
+  }, [master, pooled]);
 
   const fetchNextPuzzle = useCallback(async (sess: AdaptiveSessionState): Promise<void> => {
     // The reach controller decides the target difficulty + whether this is a
@@ -184,11 +214,12 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
     const puzzle = await getNextAdaptivePuzzle(sess, seenIdsRef.current, {
       targetOverride: target,
       preferMultiMove: true,
+      depth: lengthModeRef.current ? LENGTH_RANGE[lengthModeRef.current] : undefined,
     });
     if (!puzzle) {
       // No more puzzles available — end session
       voiceService.stop();
-      setSummary(getAdaptiveSessionSummary(sess));
+      setSummary(withReach(getAdaptiveSessionSummary(sess), reachHistoryRef.current));
       setPhase('summary');
       return;
     }
@@ -215,6 +246,7 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
     );
     reachRef.current = reach;
     setReachRating(reach.rating);
+    setReachHistory([reach.rating]);
     setReachDelta(null);
     setPhase('loading');
     await fetchNextPuzzle(newSession);
@@ -222,7 +254,7 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
 
   // Auto-start with medium difficulty when forcedWeakThemes are provided (from Lichess Dashboard)
   useEffect(() => {
-    if (!autoStartedRef.current && forcedWeakThemes && forcedWeakThemes.length > 0) {
+    if (!autoStartedRef.current && ((forcedWeakThemes && forcedWeakThemes.length > 0) || navState?.autoStart)) {
       autoStartedRef.current = true;
       void handleSelectDifficulty('medium');
     }
@@ -231,11 +263,11 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
   // Master Level auto-starts (no difficulty select) once the elite pool is
   // ready — the master reach ladder seeds/floors it in the 2400+ band.
   useEffect(() => {
-    if (master && masterReady && !autoStartedRef.current) {
+    if (pooled && masterReady && !autoStartedRef.current) {
       autoStartedRef.current = true;
       void handleSelectDifficulty('hard');
     }
-  }, [master, masterReady, handleSelectDifficulty]);
+  }, [pooled, masterReady, handleSelectDifficulty]);
 
   // On session end, space out the misconception tag that sent us here:
   // a solid session (≥60% accuracy) advances its SRS interval so it
@@ -251,11 +283,14 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
 
     // Determine WO-specified rating delta
     let delta: number;
+    let askedForReview = false;
     if (outcome.correct && !outcome.usedHint && !outcome.hadRetry && !outcome.showedSolution) {
       // Clean solve: no hints, 1st try
       delta = RATING_DELTA_CLEAN;
-      // A clean solve is a genuine "win" — feed the review-prompt gate.
-      void recordPositiveMoment('puzzle-clean-solve');
+      // A clean solve is a genuine "win" — feed the review-prompt gate. When
+      // THIS solve opens the prompt, the board holds below so the ask lands
+      // on the solved position, never over the next puzzle (David 2026-10-02).
+      askedForReview = await recordPositiveMoment('puzzle-clean-solve').catch(() => false);
     } else if (outcome.correct) {
       // Correct but used hint or had retry
       delta = RATING_DELTA_ASSISTED;
@@ -277,7 +312,10 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
     // ── The reach ladder: float to ~80% success, fire the felt cues ──
     const reach = reachRef.current;
     if (reach) {
-      const r = recordReachResult(reach, outcome.correct, {
+      const reachOutcome: ReachOutcome = !outcome.correct
+        ? 'missed'
+        : outcome.usedHint || outcome.hadRetry || outcome.showedSolution ? 'assisted' : 'clean';
+      const r = recordReachResult(reach, reachOutcome, {
         wasSpike: spikeServedRef.current,
         master,
       });
@@ -320,8 +358,8 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
       updatedSession.totalPuzzles >= repCap
     ) {
       repCapReachedRef.current = true;
-      voiceService.stop();
       void markRepCompletedToday(repKey);
+      void finishBite(['weakness', 'warm-up', 'long']);
       if (misconceptionTag && !spacedTagRef.current) {
         spacedTagRef.current = true;
         const accuracy = updatedSession.totalPuzzles > 0
@@ -329,22 +367,44 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
           : 0;
         void recordTagDrillResult(misconceptionTag, accuracy >= 0.6);
       }
+      // The solve's line finishes before the screen changes (2026-10-02).
+      await voiceService.untilQuiet();
+      voiceService.stop();
       setPhase('rep-complete');
       return;
     }
 
-    // Pause on the finished board so the CONCEPT lesson (rendered + spoken in
-    // PuzzleBoard) is actually read/heard before advancing — the "classroom"
-    // teaching beat (David 2026-09-14). Master-only until 2026-10-01: on the
-    // adaptive surface the next puzzle's `voiceService.stop()` cut the lesson
-    // mid-sentence, and a FAILED puzzle was replaced before its solution was
-    // ever shown. Keeps PuzzleBoard mounted; Continue runs the normal
-    // checkpoint-or-fetch below.
-    pendingSessionRef.current = updatedSession;
-    setAwaitingConcept(true);
-  }, [session, currentPuzzle, playerRating, userRating, activeProfile, setActiveProfile, repKey, repCap, misconceptionTag]);
+    // Master Level: pause on the solved board so the CONCEPT lesson (rendered +
+    // spoken in PuzzleBoard) is actually read/heard before advancing — the
+    // "classroom" teaching beat (David 2026-09-14). Keeps PuzzleBoard mounted;
+    // Continue runs the normal checkpoint-or-fetch below. Other surfaces keep
+    // their existing cadence (the voice still carries the concept there).
+    // …and EVERY surface holds after a MISS (2026-10-01): the result is
+    // already recorded above, only the advance waits. Jumping straight on made
+    // "Teach me this position" unreachable on exactly the puzzles where it
+    // teaches most. A clean solve keeps the fast cadence — except the once a
+    // solve opens the review prompt, which gets the same hold.
+    if (master || !outcome.correct || askedForReview) {
+      pendingSessionRef.current = updatedSession;
+      setAwaitingConcept(true);
+      return;
+    }
 
-  /** Concept-review Continue → run the deferred checkpoint-or-fetch. */
+    // NO AUTO-ADVANCE CUTS THE VOICE (David 2026-10-02): the solve's concept
+    // line is spoken to its last word, then a breath, before the board moves on.
+    await voiceService.untilQuiet();
+
+    // Check if checkpoint
+    if (updatedSession.totalPuzzles > 0 && updatedSession.totalPuzzles % CHECKPOINT_INTERVAL === 0) {
+      setPhase('checkpoint');
+      return;
+    }
+
+    // Fetch next puzzle
+    await fetchNextPuzzle(updatedSession);
+  }, [session, currentPuzzle, playerRating, userRating, activeProfile, setActiveProfile, fetchNextPuzzle, repKey, repCap, misconceptionTag, master]);
+
+  /** Master concept-review Continue → run the deferred checkpoint-or-fetch. */
   const handleContinueAfterConcept = useCallback(async (): Promise<void> => {
     const updatedSession = pendingSessionRef.current;
     pendingSessionRef.current = null;
@@ -369,7 +429,7 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
 
   const handleEndSession = useCallback((): void => {
     if (!session) return;
-    setSummary(getAdaptiveSessionSummary(session));
+    setSummary(withReach(getAdaptiveSessionSummary(session), reachHistoryRef.current));
     setPhase('summary');
     void getPuzzleStats().then(setStats);
   }, [session]);
@@ -398,16 +458,16 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
         <button
-          onClick={master || phase === 'select' ? () => navigate('/tactics') : handleBackToSelect}
+          onClick={pooled || phase === 'select' ? () => navigate('/tactics') : handleBackToSelect}
           className="p-2 rounded-lg hover:bg-theme-surface transition-colors"
-          aria-label={master || phase === 'select' ? 'Back to Tactics' : 'Back to difficulty select'}
+          aria-label={pooled || phase === 'select' ? 'Back to Tactics' : 'Back to difficulty select'}
           data-testid="back-button"
         >
           <ArrowLeft size={18} className="text-theme-text" />
         </button>
         <div className="flex items-center gap-2">
           <Brain size={24} className="text-theme-accent" />
-          <h1 className="text-xl font-bold text-theme-text">{master ? 'Master Level' : 'Puzzles'}</h1>
+          <h1 className="text-xl font-bold text-theme-text">{master ? 'Master Level' : length ? 'Long Puzzles' : 'Puzzles'}</h1>
         </div>
         <div className="flex-1" />
         {/* Reach-ladder badge: Level + reach rating with animated delta */}
@@ -443,6 +503,36 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
         </div>
       )}
 
+      {/* Long tab: the two lengths, switchable mid-session (the next puzzle
+          takes the new length; the one on the board stays). */}
+      {length && (
+        <div className="mb-3 flex justify-center gap-2" role="radiogroup" aria-label="Puzzle length" data-testid="length-toggle">
+          {(['long', 'veryLong'] as const).map((m) => (
+            <button
+              key={m}
+              role="radio"
+              aria-checked={lengthMode === m}
+              onClick={() => { lengthModeRef.current = m; setLengthMode(m); }}
+              className={`rounded-full border-2 px-4 py-1.5 text-sm font-bold transition-colors ${
+                lengthMode === m
+                  ? 'border-cyan-300 bg-cyan-400/15 text-cyan-200 shadow-[0_0_14px_rgba(0,229,255,0.5)]'
+                  : 'border-theme-border text-theme-text-muted hover:text-theme-text'
+              }`}
+              data-testid={`length-${m}`}
+            >
+              {m === 'long' ? 'Long · 3–4 moves' : 'Very Long · 5+ moves'}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Long tab warm-up: fetching the long pool + auto-starting. */}
+      {length && phase === 'select' && (
+        <div className="flex flex-col items-center justify-center flex-1 gap-3" data-testid="long-loading">
+          <p className="text-theme-text">Loading long puzzles…</p>
+        </div>
+      )}
+
       {/* Master Level warm-up: fetching the elite pool + auto-starting. */}
       {master && phase === 'select' && (
         <div className="flex flex-col items-center justify-center flex-1 gap-3" data-testid="master-loading">
@@ -452,7 +542,7 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
       )}
 
       {/* Difficulty Select (normal tactics only) */}
-      {!master && phase === 'select' && (
+      {!pooled && phase === 'select' && (
         <div className="space-y-6">
           {stats && (
             <div className="flex flex-wrap gap-4 text-sm text-theme-text-muted">
@@ -510,10 +600,11 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
               onComplete={(outcome) => void handlePuzzleComplete(outcome)}
               disabled={awaitingConcept}
               surface={master ? 'master' : 'adaptive'}
+              streak={session.streak}
             />
           </div>
           <div className="space-y-4">
-            <AdaptiveSessionPanel session={session} />
+            <AdaptiveSessionPanel session={session} ratingHistory={reachHistory} />
             {awaitingConcept ? (
               <button
                 onClick={() => void handleContinueAfterConcept()}
@@ -546,8 +637,11 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
               {session.puzzlesSolved} solved, {session.puzzlesFailed} missed
             </p>
             <p className="text-sm mt-2">
-              Session Rating:{' '}
-              <span className="font-bold text-theme-text">{session.sessionRating}</span>
+              Puzzle rating:{' '}
+              <span className="font-bold text-theme-text">{reachRating}</span>
+              {reachHistory.length > 1 && (
+                <span className="text-theme-text-muted">{' '}({signed(reachRating - reachHistory[0])} this session)</span>
+              )}
             </p>
           </div>
           <div className="flex gap-3">
@@ -606,7 +700,7 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
       {phase === 'summary' && summary && (
         <AdaptiveSessionSummary
           summary={summary}
-          onBackToSelect={master ? () => navigate('/tactics') : handleBackToSelect}
+          onBackToSelect={pooled ? () => navigate('/tactics') : handleBackToSelect}
           onPlayAgain={() => void handlePlayAgain()}
         />
       )}

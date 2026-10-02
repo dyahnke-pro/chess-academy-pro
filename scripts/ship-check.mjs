@@ -311,6 +311,8 @@ const GATE_TESTS = [
   'api/audit-stream.refuse.test.ts',
   'api/audit-stream.batch.test.ts',
   'api/store-degraded.test.ts',
+  // 🔒 AUDIT TRAFFIC NEVER TOUCHES REDIS (2026-09-30) — every Redis door checks it.
+  'api/auditTraffic.gate.test.ts',
   'src/hooks/learnSilentCapture.test.ts',
   'src/services/oneStudentRating.test.ts',
   'src/data/proGameReferences.test.ts',
@@ -634,6 +636,7 @@ const GATE_TESTS = [
   // 159 scripts waited on an element deleted 2026-09-02 — 52.6 min of dead
   // wall-clock per fleet run, and two pro-rep audits crashing outright.
   'src/test/noDeadCalibrationBubble.test.ts',
+  'src/test/nativeApiOrigin.test.ts',
   // The board's FEN must be LIVE, not the render snapshot — a same-tick read
   // after a mutation returned the PRE-mutation position and broke a takeback.
   'src/hooks/useChessGame.liveFen.test.tsx',

@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4287) — names `PositionRead`
+- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4298) — names `PositionRead`
 
 ## Who calls in
 
@@ -47,10 +47,10 @@
 - `src/services/replayFence.modern1690.test.ts:80`
 
 ### `tacticWord` (function) — 23 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7846`
+- `src/components/Coach/CoachTeachPage.tsx:7868`
 - `src/services/computedVoiceAudit.report.test.ts:254`
-- `src/services/dnaLineNarrator.ts:129`
-- `src/services/dnaLineNarrator.ts:218`
+- `src/services/dnaLineNarrator.ts:131`
+- `src/services/dnaLineNarrator.ts:220`
 - `src/services/groundedAnswer.ts:5112`
 - `src/services/groundedAnswer.ts:5124`
 - `src/services/groundedAnswer.ts:5884`
@@ -72,7 +72,7 @@
 - `src/services/teachingSelector.ts:347`
 
 ### `seatedTacticLine` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7857`
+- `src/components/Coach/CoachTeachPage.tsx:7879`
 - `src/services/seatedTacticLine.test.ts:8`
 - `src/services/seatedTacticLine.test.ts:13`
 - `src/services/seatedTacticLine.test.ts:19`
@@ -183,7 +183,7 @@
 - `src/services/learnWalkBlumenfeld.test.ts:179`
 
 ### `planFromUci` (function) — 30 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9577`
+- `src/components/Coach/CoachTeachPage.tsx:9633`
 - `src/services/claimTruth.manual.test.ts:119`
 - `src/services/coachLaneWiring.test.ts:35`
 - `src/services/computedVoiceAudit.report.test.ts:216`
@@ -220,8 +220,8 @@
 - `src/services/walkOct1Learn.test.ts:115`
 
 ### `aimsOf` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9590`
-- `src/components/Coach/CoachTeachPage.tsx:9594`
+- `src/components/Coach/CoachTeachPage.tsx:9646`
+- `src/components/Coach/CoachTeachPage.tsx:9650`
 - `src/services/planArc.phraseFrom.test.ts:30`
 - `src/services/planArc.phraseFrom.test.ts:31`
 - `src/services/planArc.test.ts:29`
@@ -230,8 +230,8 @@
 - `src/services/planChooser.ts:49`
 
 ### `aimWalkableNow` (re-export) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9590`
-- `src/components/Coach/CoachTeachPage.tsx:9594`
+- `src/components/Coach/CoachTeachPage.tsx:9646`
+- `src/components/Coach/CoachTeachPage.tsx:9650`
 - `src/services/planArc.phraseFrom.test.ts:19`
 - `src/services/planArc.phraseFrom.test.ts:22`
 - `src/services/planArc.test.ts:201`
@@ -250,14 +250,14 @@
 - `src/services/planChooser.ts:47`
 
 ### `joinEmerges` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9606`
+- `src/components/Coach/CoachTeachPage.tsx:9662`
 - `src/services/planArc.test.ts:269`
 - `src/services/planArc.test.ts:276`
 - `src/services/planArc.ts:540`
 
 ### `stepArc` (re-export) — 25 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9590`
-- `src/components/Coach/CoachTeachPage.tsx:9594`
+- `src/components/Coach/CoachTeachPage.tsx:9646`
+- `src/components/Coach/CoachTeachPage.tsx:9650`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.test.ts:94`
 - `src/services/planArc.test.ts:96`

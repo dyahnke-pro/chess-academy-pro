@@ -27,7 +27,8 @@ describe('dnaMoveClause', () => {
     const c = new Chess();
     c.move('f3'); c.move('e5'); c.move('g4');
     const { text } = dnaMoveClause(c.fen(), 'Qh4#');
-    expect(text).toMatch(/checkmate/i);
+    // The SAN's "#" is spoken as "checkmate" — a suffix said it twice.
+    expect(text).toBe('Qh4#');
   });
 
   it('gives a quiet developing move its board-true concept (not a bare SAN)', () => {

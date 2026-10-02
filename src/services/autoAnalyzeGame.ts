@@ -354,7 +354,7 @@ export async function autoAnalyzeGameMisconceptions(
       // it drains) and for mate-encoded evals, where a centipawn difference is a
       // six-figure sentinel rather than a cost.
       cpLoss: measuredCpLoss(ann) ?? (ann.classification === 'blunder' ? 350 : 175),
-      gamePhase: classifyPhase(fen, ann.moveNumber),
+      gamePhase: classifyPhase(fen, { fullMove: ann.moveNumber }),
       moveNumber: ann.moveNumber,
       ...(sans.length > fenIndex ? { historySans: sans.slice(0, fenIndex + 1) } : {}),
       // Pre-move eval (mover POV, centipawns) so the persisted mistakePuzzle can
@@ -595,6 +595,8 @@ async function persistMistakePuzzlesForBlunders(
       moveNumber: b.moveNumber,
       from,
       evalBefore: b.evalBefore ?? null,
+      allowedReplySan: b.pvAfterPlayed?.[0] ?? null,
+      ...(b.pvAfterBest ? { bestLineSan: b.pvAfterBest } : {}),
     });
     if (puzzle) fresh.push(puzzle);
   }

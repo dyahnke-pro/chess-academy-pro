@@ -30,6 +30,7 @@
 
 import { Chess } from 'chess.js';
 import { fetchLichessExplorer } from './lichessExplorerService';
+import { withWebOrigin } from '../utils/webOrigin';
 
 const PROXY_PATH = '/api/lichess-puzzle';
 const FETCH_TIMEOUT_MS = 6_000;
@@ -146,7 +147,7 @@ export async function reconstructPathForPuzzle(
 ): Promise<OpeningWalkthroughResult> {
   let data: LichessPuzzleResponse | null = null;
   try {
-    const resp = await fetch(`${PROXY_PATH}?id=${encodeURIComponent(puzzleId)}`, {
+    const resp = await fetch(withWebOrigin(`${PROXY_PATH}?id=${encodeURIComponent(puzzleId)}`), {
       signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
     });
     if (!resp.ok) return { sans: [], found: false };

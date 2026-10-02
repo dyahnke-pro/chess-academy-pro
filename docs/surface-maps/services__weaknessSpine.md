@@ -4,18 +4,18 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1013 lines · 23 exports · 32 importers · 16 tests · 2 audits**
+**1013 lines · 23 exports · 34 importers · 16 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
 - **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:236) — names `WeaknessProvenance`
-- **The standard post-deploy ritual** (CLAUDE.md:6138) — names `weaknessSpine`
+- **The standard post-deploy ritual** (CLAUDE.md:6155) — names `weaknessSpine`
 
 ## Who calls in
 
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Coach/TrainingPlanRolodexPage.tsx`
-- `src/components/Dashboard/DashboardPage.tsx`
+- `src/components/Insights/HeatMapPanel.tsx`
 - `src/components/Tactics/TacticalProfilePage.tsx`
 - `src/services/bookDepartureWeakness.ts`
 - `src/services/bucketPipelineAudit.ts`
@@ -38,6 +38,8 @@
 - `src/services/mistakePuzzleService.ts`
 - `src/services/puzzleMissService.test.ts`
 - `src/services/tacticTypeBackfill.test.ts`
+- `src/services/upNextHome.ts`
+- `src/services/upNextLoader.ts`
 - `src/services/weaknessLifecycle.ts`
 - `src/services/weaknessProvenance.test.ts`
 - `src/services/weaknessSignal.test.ts`
@@ -58,7 +60,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `playedAtMs` (function) — 4 call sites
-- `src/services/mistakePuzzleService.ts:212`
+- `src/services/mistakePuzzleService.ts:215`
 - `src/services/weaknessProvenance.test.ts:108`
 - `src/services/weaknessProvenance.test.ts:109`
 - `src/services/weaknessProvenance.test.ts:110`
@@ -75,19 +77,20 @@
 ### `latestDrillMs` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `bucketForMistake` (function) — 8 call sites
+### `bucketForMistake` (function) — 9 call sites
 - `src/services/coachDrillService.ts:350`
+- `src/services/coachDrillService.ts:510`
 - `src/services/conceptSchedule.ts:18`
 - `src/services/tacticTypeBackfill.test.ts:94`
-- `src/services/tacticTypeBackfill.test.ts:115`
+- `src/services/tacticTypeBackfill.test.ts:123`
 - `src/services/weaknessLifecycle.ts:108`
 - `src/services/weaknessSpine.test.ts:353`
 - `src/services/weaknessSpine.test.ts:364`
 - `src/services/weaknessSpine.test.ts:369`
 
 ### `themesForTactic` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2701`
-- `src/services/coachDrillService.ts:562`
+- `src/components/Coach/CoachTeachPage.tsx:2722`
+- `src/services/coachDrillService.ts:596`
 - `src/services/drillVocabulary.test.ts:43`
 - `src/services/drillVocabulary.test.ts:53`
 
@@ -153,11 +156,11 @@
 - `src/services/weaknessSpine.test.ts:259`
 - `src/services/weaknessSpine.test.ts:272`
 
-### `getUnifiedWeaknessProfile` (function) — 37 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2625`
-- `src/components/Coach/CoachTeachPage.tsx:11126`
-- `src/components/Coach/TrainingPlanRolodexPage.tsx:71`
-- `src/components/Dashboard/DashboardPage.tsx:133`
+### `getUnifiedWeaknessProfile` (function) — 39 call sites
+- `src/components/Coach/CoachTeachPage.tsx:2646`
+- `src/components/Coach/CoachTeachPage.tsx:11182`
+- `src/components/Coach/TrainingPlanRolodexPage.tsx:72`
+- `src/components/Insights/HeatMapPanel.tsx:55`
 - `src/components/Tactics/TacticalProfilePage.tsx:69`
 - `src/services/bucketPipelineAudit.ts:156`
 - `src/services/coachApi.ts:2178`
@@ -176,6 +179,8 @@
 - `src/services/homeOpeningPlan.ts:180`
 - `src/services/loopCloses.review.integration.test.ts:74`
 - `src/services/puzzleMissService.test.ts:40`
+- `src/services/upNextHome.ts:25`
+- `src/services/upNextLoader.ts:42`
 - `src/services/weaknessSignalLoader.ts:58`
 - `src/services/weaknessSpine.fundamentals.test.ts:48`
 - `src/services/weaknessSpine.fundamentals.test.ts:62`

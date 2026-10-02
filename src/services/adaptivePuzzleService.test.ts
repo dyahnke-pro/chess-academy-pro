@@ -150,6 +150,8 @@ describe('adaptivePuzzleService', () => {
     it('sets weakThemeBoost every N puzzles', () => {
       const interval = ADAPTIVE_CONFIGS.easy.weaknessInterval;
       let session = createAdaptiveSession('easy');
+      // The first puzzle reads the record, then every N.
+      expect(session.weakThemeBoost).toBe(true);
       for (let i = 1; i < interval; i++) {
         session = processAdaptiveResult(session, 1000, true, ['fork']);
         expect(session.weakThemeBoost).toBe(false);
@@ -289,12 +291,37 @@ describe('adaptivePuzzleService', () => {
 
   // ── Adaptive Reach Ladder (P2): targetOverride + multi-move favoring ──
   describe('reach-ladder selection hooks', () => {
-    it('isMultiMovePuzzle flags long / veryLong / mateIn2+ but not short/oneMove', () => {
-      expect(isMultiMovePuzzle({ themes: ['long', 'fork'] })).toBe(true);
-      expect(isMultiMovePuzzle({ themes: ['veryLong'] })).toBe(true);
-      expect(isMultiMovePuzzle({ themes: ['mateIn3'] })).toBe(true);
-      expect(isMultiMovePuzzle({ themes: ['short', 'fork'] })).toBe(false);
-      expect(isMultiMovePuzzle({ themes: ['oneMove', 'mateIn1'] })).toBe(false);
+    it('isMultiMovePuzzle COUNTS solver moves — a two-move `short` puzzle is multi-move', () => {
+      // Lichess line: setup move + solver moves. 4 plies = 2 solver moves.
+      expect(isMultiMovePuzzle({ moves: 'a b c d' })).toBe(true);
+      expect(isMultiMovePuzzle({ moves: 'a b' })).toBe(false);
+      expect(isMultiMovePuzzle({ moves: 'a b c' })).toBe(false);
+      // Training pool has no setup move: 3 plies = 2 solver moves.
+      expect(isMultiMovePuzzle({ moves: 'a b c', source: 'training' })).toBe(true);
+    });
+
+    it('depth window never serves a puzzle outside it, widening the band instead', async () => {
+      await db.puzzles.bulkPut([
+        makePuzzle({ id: 'near-short', rating: 1500, moves: 'a b c d' }),
+        makePuzzle({ id: 'far-long', rating: 1900, moves: 'a b c d e f g h i j' }),
+      ]);
+      const session = createAdaptiveSession('hard');
+      const p = await getNextAdaptivePuzzle(session, new Set(), {
+        targetOverride: 1500, depth: { min: 5, max: Infinity },
+      });
+      expect(p?.id).toBe('far-long');
+    });
+
+    it('serves from the whole band, not the 80 easiest in it', async () => {
+      // 100 easy rows at the band floor + one exactly on target: the old
+      // `.limit(80)` never saw the target row.
+      await db.puzzles.bulkPut([
+        ...Array.from({ length: 100 }, (_, i) => makePuzzle({ id: `floor-${i}`, rating: 1350 })),
+        makePuzzle({ id: 'on-target', rating: 1500 }),
+      ]);
+      const session = createAdaptiveSession('hard');
+      const p = await getNextAdaptivePuzzle(session, new Set(), { targetOverride: 1500 });
+      expect(p?.id).toBe('on-target');
     });
 
     it('targetOverride selects around the OVERRIDE rating, not the session rating', async () => {
@@ -313,11 +340,11 @@ describe('adaptivePuzzleService', () => {
       // the exact target. preferMultiMove must pick a multi-move one.
       const at = 1500;
       await db.puzzles.bulkPut([
-        makePuzzle({ id: 's1', rating: at, themes: ['short'] }),
-        makePuzzle({ id: 's2', rating: at, themes: ['oneMove'] }),
-        makePuzzle({ id: 'm1', rating: at + 5, themes: ['long'] }),
-        makePuzzle({ id: 'm2', rating: at + 8, themes: ['veryLong'] }),
-        makePuzzle({ id: 'm3', rating: at + 12, themes: ['mateIn3'] }),
+        makePuzzle({ id: 's1', rating: at, moves: 'a b' }),
+        makePuzzle({ id: 's2', rating: at, moves: 'a b' }),
+        makePuzzle({ id: 'm1', rating: at + 5, moves: 'a b c d' }),
+        makePuzzle({ id: 'm2', rating: at + 8, moves: 'a b c d e f' }),
+        makePuzzle({ id: 'm3', rating: at + 12, moves: 'a b c d e f g h' }),
       ]);
       const session = createAdaptiveSession('hard');
       const ids = new Set<string>();
@@ -336,9 +363,9 @@ describe('adaptivePuzzleService', () => {
       // Only ONE multi-move in band (< 3 threshold) → selection must not starve;
       // it falls back to the full pool rather than returning null.
       await db.puzzles.bulkPut([
-        makePuzzle({ id: 's1', rating: 1500, themes: ['short'] }),
-        makePuzzle({ id: 's2', rating: 1505, themes: ['short'] }),
-        makePuzzle({ id: 'm1', rating: 1502, themes: ['long'] }),
+        makePuzzle({ id: 's1', rating: 1500, moves: 'a b' }),
+        makePuzzle({ id: 's2', rating: 1505, moves: 'a b' }),
+        makePuzzle({ id: 'm1', rating: 1502, moves: 'a b c d' }),
       ]);
       const session = createAdaptiveSession('hard');
       const p = await getNextAdaptivePuzzle(session, new Set(), {

@@ -198,6 +198,7 @@ import { commonMistakeToPlayableLine } from '../../utils/commonMistakeLine';
 import middlegamePlansData from '../../data/middlegame-plans.json';
 import checkpointQuizzesData from '../../data/checkpoint-quizzes.json';
 import type { CommonMistake, CheckpointQuizItem } from '../../types';
+import { finishBite } from '../../services/activeBite';
 import {
   getOpeningById,
   getMasteryPercent,
@@ -807,6 +808,7 @@ export function OpeningDetailPage(): JSX.Element {
     if (!hasDrilledThisOpening) return;
     void claimFreeOpening(id).then((result) => {
       if (result === 'ok') {
+        void finishBite('free-opening');
         trackFreeOpeningClaimed(id);
         setJustClaimedFree(true);
       }

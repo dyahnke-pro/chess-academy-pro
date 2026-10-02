@@ -8,6 +8,7 @@ function buildParams(overrides?: Partial<NarrationParams>): NarrationParams {
     gamePhase: 'middlegame',
     playerMoveSan: 'Bxh7',
     bestMoveSan: 'Nf3',
+    allowedReplySan: null,
     cpLoss: 150,
     fen: 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4',
     moves: 'd2d4 d7d5 c4b5 c6a5 b5d3',
@@ -285,7 +286,7 @@ describe('mistake card — walk 6, S2', () => {
     const { generateMistakeNarration } = await import('./mistakeNarration');
     const n = generateMistakeNarration({
       classification: 'blunder', gamePhase: 'endgame', playerMoveSan: 'Rd1', bestMoveSan: 'Kg2',
-      cpLoss: 350, fen: '6k1/5ppp/8/8/8/5P2/5PPP/3R2K1 w - - 0 36', moves: 'g1g2', allowedMate: true,
+      cpLoss: 350, fen: '6k1/5ppp/8/8/8/5P2/5PPP/3R2K1 w - - 0 36', moves: 'g1g2', allowedMate: true, allowedReplySan: null,
     });
     expect(n.intro).toMatch(/forced mate/);
     expect(n.intro).not.toMatch(/3\.5 points/);
@@ -295,7 +296,7 @@ describe('mistake card — walk 6, S2', () => {
     const { generateMistakeNarration } = await import('./mistakeNarration');
     // White pawn f3, hit by the black rook on f4, nothing guarding it.
     const fen = '6k1/6pp/8/8/5r2/5P2/7P/3R2K1 w - - 0 36';
-    const base = { classification: 'blunder' as const, gamePhase: 'endgame' as const, playerMoveSan: 'Rd1', bestMoveSan: 'Kg2', cpLoss: 350, fen, moves: 'g1g2' };
+    const base = { classification: 'blunder' as const, gamePhase: 'endgame' as const, playerMoveSan: 'Rd1', bestMoveSan: 'Kg2', cpLoss: 350, fen, moves: 'g1g2', allowedReplySan: null };
     // Control: without a mate, the loose pawn IS the read.
     expect(generateMistakeNarration(base).intro).toMatch(/on f3 is loose/);
     expect(generateMistakeNarration({ ...base, allowedMate: true }).intro).not.toMatch(/loose/);

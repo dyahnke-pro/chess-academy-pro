@@ -4,16 +4,16 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7278 lines · 162 exports · 70 importers · 44 tests · 8 audits**
+**7278 lines · 162 exports · 71 importers · 44 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
 - **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:244) — names `describeThreatRecognition`
 - **G0. THE LLM DECIDES NOTHING — it voices facts computed in code (David 2026-06-10, LOCKED, supreme law).** (CLAUDE.md:305) — names `explainBestMoveGrounded`, `groundedAnswer`
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:885) — names `groundedAnswer`
-- **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:3694) — names `describeThreatRecognition`
-- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3785) — names `explainBestMoveGrounded`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5998) — names `describeThreatRecognition`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:896) — names `groundedAnswer`
+- **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:3705) — names `describeThreatRecognition`
+- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3796) — names `explainBestMoveGrounded`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6009) — names `describeThreatRecognition`
 
 ## Who calls in
 
@@ -75,6 +75,7 @@
 - `src/services/learnMoveTeaching.ts`
 - `src/services/liveVoiceDefects.test.ts`
 - `src/services/mistakeNarration.ts`
+- `src/services/moveAllowed.ts`
 - `src/services/opponentMovePurpose.ts`
 - `src/services/pieceActivity.test.ts`
 - `src/services/piecePurpose.test.ts`
@@ -346,7 +347,7 @@
 - `src/services/groundedAnswer.test.ts:1045`
 - `src/services/groundedAnswer.test.ts:1054`
 - `src/services/learnMoveTeaching.ts:43`
-- `src/services/mistakeNarration.ts:621`
+- `src/services/mistakeNarration.ts:645`
 - `src/services/reviewNarrationFidelity.test.ts:167`
 - `src/services/reviewNarrationFidelity.test.ts:173`
 - `src/services/whyBestMove.ts:75`
@@ -354,9 +355,9 @@
 ### `captureHasCounterTactic` (function) — 1 call site
 - `src/services/reviewTeachingPoints.ts:101`
 
-### `describeMoveGeometry` (function) — 19 call sites
-- `src/components/Puzzles/PuzzleBoard.tsx:120`
-- `src/components/Tactics/TacticSetupBoard.tsx:91`
+### `describeMoveGeometry` (function) — 20 call sites
+- `src/components/Puzzles/PuzzleBoard.tsx:204`
+- `src/components/Tactics/TacticSetupBoard.tsx:93`
 - `src/hooks/useHintSystem.ts:356`
 - `src/services/computedVoiceGrounding.test.ts:53`
 - `src/services/computedVoiceGrounding.test.ts:111`
@@ -371,7 +372,8 @@
 - `src/services/groundedMoveWhy.ts:79`
 - `src/services/guidedFindTheMove.ts:176`
 - `src/services/guidedFindTheMove.ts:212`
-- `src/services/mistakeNarration.ts:615`
+- `src/services/mistakeNarration.ts:639`
+- `src/services/moveAllowed.ts:56`
 - `src/services/reviewBoardAwareness.test.ts:16`
 - `src/services/reviewBoardAwareness.test.ts:25`
 
@@ -960,8 +962,8 @@
 - `src/services/groundedAnswer.routerE.test.ts:206`
 
 ### `assembleSlipNarration` (function) — 4 call sites
-- `src/components/Coach/CoachGamePage.tsx:3840`
-- `src/components/Coach/CoachGamePage.tsx:3998`
+- `src/components/Coach/CoachGamePage.tsx:3841`
+- `src/components/Coach/CoachGamePage.tsx:3999`
 - `src/services/groundedAnswer.test.ts:725`
 - `src/services/groundedAnswer.test.ts:740`
 
@@ -1142,7 +1144,7 @@
 - `src/services/coachApi.ts:5904`
 
 ### `seatPieceReferences` (re-export) — 28 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7908`
+- `src/components/Coach/CoachTeachPage.tsx:7930`
 - `src/services/coachFeatureService.ts:5050`
 - `src/services/liveTacticsContext.ts:453`
 - `src/services/lookaheadPlan.ts:128`

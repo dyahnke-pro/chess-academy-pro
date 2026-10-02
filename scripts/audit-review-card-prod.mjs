@@ -15,10 +15,10 @@
  *     chess-site value in `platform`.
  *
  *  2. THE HANDOFF. Every user who pressed import succeeded, Stockfish ran, the
- *     weaknesses landed (234 for one new user in one session) — and both new
- *     importers went to /weaknesses and left without ever opening a review. The
- *     analysis was paid for and shown to nobody. ReviewLastGameCard is the tap
- *     between them.
+ *     weaknesses landed — and both new importers left without opening a
+ *     review. The ReviewLastGameCard that bridged them was REMOVED 2026-10-02
+ *     (David: redundant with Up next's "Fix your slip"); its checks went with
+ *     it, and this audit now asserts only that it stays gone.
  *
  * THREE INSTRUMENTS (G1), never Playwright alone:
  *   1. Playwright drives live prod — real clicks, real Dexie, real routing.
@@ -74,29 +74,6 @@ function decodeBatch(buf) {
   } catch { return []; }
 }
 
-const SEED_GAMES = `
-(async () => {
-  const open = () => new Promise((res, rej) => {
-    const r = indexedDB.open('ChessAcademyDB');
-    r.onsuccess = () => res(r.result);
-    r.onerror = () => rej(r.error);
-  });
-  const db = await open();
-  const tx = db.transaction('games', 'readwrite');
-  const store = tx.objectStore('games');
-  const base = (id, date, white, black) => ({
-    id, pgn: '1. e4 e5 2. Nf3 Nc6 *', white, black, result: '0-1', date,
-    event: 'Live Chess', eco: 'C50', whiteElo: 640, blackElo: 655,
-    source: 'chesscom', annotations: null, coachAnalysis: null,
-    isMasterGame: false, openingId: null,
-  });
-  store.put(base('audit-game-new', '2026-09-11', 'auditstudent', 'Rival_640'));
-  store.put(base('audit-game-old', '2026-09-02', 'auditstudent', 'Rival_610'));
-  store.put({ ...base('sample-morphy-opera-1858', '2026-09-12', 'Morphy', 'Duke'), source: 'master' });
-  await new Promise((res, rej) => { tx.oncomplete = res; tx.onerror = () => rej(tx.error); });
-  db.close();
-  return 'seeded';
-})()`;
 
 async function pullStream(since) {
   const secret = process.env.AUDIT_STREAM_SECRET || '';
@@ -139,41 +116,14 @@ async function main() {
   });
 
   try {
-    // ── 1. Fresh install: no game, no nag ────────────────────────────────
+    // The "Review your last game" card that sections 1-5 tested was REMOVED
+    // from Home (David 2026-10-02: the "redundant review button" — Up next
+    // already sends the student to the slip from their last game). What stays
+    // is the half of this audit that never depended on it: the import funnel
+    // and the platform super-property.
     await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 90_000 });
     await page.waitForSelector('[data-testid="dashboard"]', { timeout: 60_000 });
-    await page.waitForTimeout(3_000);
-    const cardCold = await page.locator('[data-testid="dashboard-review-last-game"]').count();
-    record('fresh install shows no review card (no nag)', cardCold === 0, `count=${cardCold}`);
-
-    // ── 2. With a real game, the card renders ────────────────────────────
-    const seeded = await page.evaluate(SEED_GAMES);
-    record('seeded real games into Dexie', seeded === 'seeded', String(seeded));
-    await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 90_000 });
-    await page.waitForSelector('[data-testid="dashboard-review-last-game"]', { timeout: 30_000 });
-    const copy = (await page.locator('[data-testid="dashboard-review-last-game"]').innerText()).replace(/\s+/g, ' ');
-    record('review card renders for a real game', true, copy.slice(0, 80));
-    record('card names the actual game, not a sample', /auditstudent/.test(copy) && !/Morphy/.test(copy), copy.slice(0, 60));
-
-    // ── 3. It opens the newest game's review ─────────────────────────────
-    await page.locator('[data-testid="dashboard-review-last-game-open"]').click();
-    await page.waitForURL(/\/coach\/review\/audit-game-new/, { timeout: 30_000 });
-    record('opens the newest game review', true, new URL(page.url()).pathname);
-
-    // ── 4. It advances rather than repeating ─────────────────────────────
-    await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 90_000 });
-    await page.waitForSelector('[data-testid="dashboard-review-last-game"]', { timeout: 30_000 });
-    const advanced = (await page.locator('[data-testid="dashboard-review-last-game"]').innerText()).replace(/\s+/g, ' ');
-    record('advances to the next game once opened', /Rival_610/.test(advanced), advanced.slice(0, 60));
-
-    // ── 5. Dismissible, and it stays dismissed ───────────────────────────
-    await page.locator('[data-testid="dashboard-review-last-game-dismiss"]').click();
-    await page.waitForTimeout(1_000);
-    await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 90_000 });
-    await page.waitForSelector('[data-testid="dashboard"]', { timeout: 60_000 });
-    await page.waitForTimeout(3_000);
-    const afterDismiss = await page.locator('[data-testid="dashboard-review-last-game"]').count();
-    record('dismissal persists across reload (not mandatory)', afterDismiss === 0, `count=${afterDismiss}`);
+    record('the removed review card is gone from Home', await page.locator('[data-testid="dashboard-review-last-game"]').count() === 0);
 
     // ── 6. The import funnel, with the platform dimension intact ─────────
     await page.goto(`${BASE}/games/import`, { waitUntil: 'domcontentloaded', timeout: 90_000 });

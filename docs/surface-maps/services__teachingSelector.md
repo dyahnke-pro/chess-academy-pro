@@ -8,9 +8,9 @@
 
 ## Locked rules that govern this surface
 
-- **STEP 11 — Add model games (multi-game per variation)** (CLAUDE.md:2034) — names `Moment`
-- **⏰ Standing notes** (CLAUDE.md:2565) — names `Thesis`
-- **The standard post-deploy ritual** (CLAUDE.md:6094) — names `Moment`
+- **STEP 11 — Add model games (multi-game per variation)** (CLAUDE.md:2045) — names `Moment`
+- **⏰ Standing notes** (CLAUDE.md:2576) — names `Thesis`
+- **The standard post-deploy ritual** (CLAUDE.md:6105) — names `Moment`
 
 ## Who calls in
 
@@ -77,7 +77,7 @@
 
 ### `renderThesis` (function) — 10 call sites
 - `src/coach/surfaceContract.scan.test.ts:50`
-- `src/components/Coach/CoachGameReview.tsx:1474`
+- `src/components/Coach/CoachGameReview.tsx:1475`
 - `src/hooks/usePhaseNarration.ts:549`
 - `src/services/openingGenerator.ts:2470`
 - `src/services/teachingSelector.test.ts:45`
@@ -99,7 +99,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `selectTeachingForSegments` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:1472`
+- `src/components/Coach/CoachGameReview.tsx:1473`
 
 ### `TreeTeaching` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

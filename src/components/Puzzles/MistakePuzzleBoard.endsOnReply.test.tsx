@@ -6,7 +6,8 @@ import { buildMistakePuzzle, resetFactoryCounter } from '../../test/factories';
 import type { MoveResult } from '../../hooks/useChessGame';
 
 const recordCapabilityEvidence = vi.fn().mockResolvedValue(1);
-vi.mock('../../services/capabilityEvidence', () => ({
+vi.mock('../../services/capabilityEvidence', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('../../services/capabilityEvidence')>()),
   recordCapabilityEvidence: (...a: unknown[]) => recordCapabilityEvidence(...a),
 }));
 
@@ -50,8 +51,9 @@ describe('MistakePuzzleBoard — a line that ends on the opponent\'s reply', () 
 
   it('is solved once that reply lands: the Next button appears and the evidence is written', async () => {
     const puzzle = buildMistakePuzzle({ moves: 'd2d4 d7d5' });
-    render(<MistakePuzzleBoard puzzle={puzzle} onComplete={vi.fn()} skipReplayContext />);
+    render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} skipReplayContext />);
     await screen.findByTestId('mock-board');
+    await act(async () => { await sleep(100); });
     await act(async () => { latestOnMove!(mv('d2', 'd4', 'd4')); });
     await act(async () => { await sleep(900); });
     expect(screen.getByTestId('puzzle-next-btn')).toBeInTheDocument();

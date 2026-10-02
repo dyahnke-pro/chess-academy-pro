@@ -929,7 +929,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
       let teachingPhase: 'opening' | 'middlegame' | 'endgame' = 'middlegame';
       try {
         if (input.liveState.fen) {
-          teachingPhase = classifyPhase(input.liveState.fen, Math.ceil((input.liveState.moveHistory?.length ?? 0) / 2));
+          teachingPhase = classifyPhase(input.liveState.fen, { ply: input.liveState.moveHistory?.length ?? 0 });
         }
       } catch { /* default middlegame */ }
       const block = buildDanyaTeachingBlock({

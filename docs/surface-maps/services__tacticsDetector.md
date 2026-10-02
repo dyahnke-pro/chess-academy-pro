@@ -4,16 +4,17 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**896 lines · 2 exports · 34 importers · 16 tests · 0 audits**
+**896 lines · 2 exports · 35 importers · 16 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:24) — names `detectTactics`
-- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5010) — names `detectTactics`
+- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5021) — names `detectTactics`
 
 ## Who calls in
 
 - `src/components/Board/BoardPageLayout.tsx`
+- `src/components/Tactics/PatternSchoolPage.tsx`
 - `src/services/boardConcepts.ts`
 - `src/services/coachPrompts.ts`
 - `src/services/computerAccuracy.audit.test.ts`
@@ -53,8 +54,9 @@
 ### `TacticsDetectionResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `detectTactics` (function) — 100 call sites
+### `detectTactics` (function) — 98 call sites
 - `src/components/Board/BoardPageLayout.tsx:124`
+- `src/components/Tactics/PatternSchoolPage.tsx:59`
 - `src/services/boardConcepts.ts:304`
 - `src/services/coachPrompts.ts:1097`
 - `src/services/coachPrompts.ts:1103`
@@ -71,7 +73,7 @@
 - `src/services/lookaheadPlan.ts:1327`
 - `src/services/misconceptionClassifier.ts:113`
 - `src/services/misconceptionClassifier.ts:264`
-- `src/services/mistakeNarration.ts:395`
+- `src/services/mistakeNarration.ts:408`
 - `src/services/openingGenerator.ts:3552`
 - `src/services/pinGeometry.test.ts:72`
 - `src/services/pinGeometry.test.ts:74`
@@ -149,10 +151,7 @@
 - `src/services/tacticsDetector.test.ts:380`
 - `src/services/tacticsDetector.test.ts:388`
 - `src/services/tacticsDetector.test.ts:393`
-- `src/services/weaknessAnalyzer.ts:1185`
-- `src/services/weaknessAnalyzer.ts:1283`
-- `src/services/weaknessAnalyzer.ts:1444`
-- `src/services/weaknessAnalyzer.ts:1450`
+- `src/services/weaknessAnalyzer.ts:1182`
 - `src/test/narrationScanner.ts:128`
 
 ## Tests

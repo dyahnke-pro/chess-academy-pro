@@ -40,7 +40,7 @@ describe('Tactics walk 2026-10-01 — My Mistakes', () => {
   it('a solution step is never judged by the game move played on a different board', () => {
     const n = generateMistakeNarration({
       classification: 'inaccuracy', gamePhase: 'middlegame', playerMoveSan: 'Rxe8', bestMoveSan: 'R1f7+',
-      cpLoss: 856, fen: '4rR2/3b2kp/8/2p5/p7/3B4/P5PP/5RK1 w - - 3 29', moves: 'f1f7 g7h6 f7h7 h6g5 h2h4 g5g4',
+      cpLoss: 856, fen: '4rR2/3b2kp/8/2p5/p7/3B4/P5PP/5RK1 w - - 3 29', moves: 'f1f7 g7h6 f7h7 h6g5 h2h4 g5g4', allowedReplySan: null,
     });
     expect(n.moveNarrations.join(' ')).not.toMatch(/Bxe8|your move let them/);
   });

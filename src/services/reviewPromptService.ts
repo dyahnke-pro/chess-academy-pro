@@ -79,8 +79,12 @@ async function saveState(state: ReviewPromptState): Promise<void> {
  * Record a genuine positive moment (a win). Call this from win surfaces —
  * puzzle solved, lesson mastered, game review finished. When enough have
  * accumulated and we haven't asked yet, it arms the soft prompt.
+ *
+ * Resolves TRUE only on the call that opened the prompt, so a surface whose
+ * board would otherwise move on (the puzzle trainer's fast advance) can hold
+ * still while it is up — the ask lands in a gap, never over the next puzzle.
  */
-export async function recordPositiveMoment(source: string): Promise<void> {
+export async function recordPositiveMoment(source: string): Promise<boolean> {
   // A genuine win is the "actually used the app" signal that qualifies a
   // referral (David 2026-09-06: reward unlocks on real use, not on install).
   // Idempotent + co-located with the existing win instrumentation. Runs
@@ -88,12 +92,12 @@ export async function recordPositiveMoment(source: string): Promise<void> {
   void reportQualifyingUse();
 
   const state = await loadState();
-  if (state.asked || state.rated) return; // ask once; don't nag
+  if (state.asked || state.rated) return false; // ask once; don't nag
 
   state.moments += 1;
   if (state.moments < POSITIVE_MOMENTS_THRESHOLD) {
     await saveState(state);
-    return;
+    return false;
   }
 
   // Threshold reached — arm the prompt now.
@@ -107,6 +111,7 @@ export async function recordPositiveMoment(source: string): Promise<void> {
     source: `reviewPromptService.recordPositiveMoment:${source}`,
     summary: `armed after ${state.moments} positive moments`,
   });
+  return true;
 }
 
 /** User said "yes, love it" — request the native store-review dialog. */

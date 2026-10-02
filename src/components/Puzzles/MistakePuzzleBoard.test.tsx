@@ -6,16 +6,16 @@ import { buildMistakePuzzle, resetFactoryCounter } from '../../test/factories';
 const mockSpeak = vi.fn().mockResolvedValue(undefined);
 const mockStop = vi.fn();
 
-vi.mock('../../services/voiceService', () => ({
-  voiceService: {
-    speak: (...args: unknown[]): Promise<void> => mockSpeak(...args) as Promise<void>,
-    speakGrounded: (...args: unknown[]): Promise<void> => mockSpeak(...args) as Promise<void>,
-    stop: (): void => { mockStop(); },
-    warmup: vi.fn().mockResolvedValue(undefined),
-    clearCache: vi.fn(),
-    isPlaying: vi.fn().mockReturnValue(false),
-  },
-}));
+vi.mock('../../services/voiceService', async () => {
+  const { buildVoiceServiceMock } = await import('../../test/mocks/voice-service');
+  return {
+    voiceService: buildVoiceServiceMock({
+      speak: vi.fn((...args: unknown[]): Promise<void> => mockSpeak(...args) as Promise<void>),
+      speakGrounded: vi.fn((...args: unknown[]): Promise<void> => mockSpeak(...args) as Promise<void>),
+      stop: vi.fn((): void => { mockStop(); }),
+    }),
+  };
+});
 
 vi.mock('../../hooks/usePieceSound', () => ({
   usePieceSound: () => ({
@@ -33,7 +33,7 @@ describe('MistakePuzzleBoard', () => {
 
   it('renders the board with classification badge', () => {
     const puzzle = buildMistakePuzzle({ classification: 'blunder' });
-    render(<MistakePuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} />);
 
     expect(screen.getByTestId('mistake-puzzle-board')).toBeInTheDocument();
     expect(screen.getByTestId('classification-badge')).toHaveTextContent('?? Blunder');
@@ -41,14 +41,14 @@ describe('MistakePuzzleBoard', () => {
 
   it('shows inaccuracy badge for inaccuracy classification', () => {
     const puzzle = buildMistakePuzzle({ classification: 'inaccuracy' });
-    render(<MistakePuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} />);
 
     expect(screen.getByTestId('classification-badge')).toHaveTextContent('?! Inaccuracy');
   });
 
   it('shows mistake badge for mistake classification', () => {
     const puzzle = buildMistakePuzzle({ classification: 'mistake' });
-    render(<MistakePuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} />);
 
     expect(screen.getByTestId('classification-badge')).toHaveTextContent('? Mistake');
   });
@@ -58,7 +58,7 @@ describe('MistakePuzzleBoard', () => {
       playerMoveSan: 'Ng5',
       classification: 'mistake',
     });
-    render(<MistakePuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} />);
 
     const prompt = screen.getByTestId('prompt-text');
     expect(prompt).toHaveTextContent('You played Ng5');
@@ -70,7 +70,7 @@ describe('MistakePuzzleBoard', () => {
       opponentName: 'Magnus',
       gameDate: new Date().toISOString().split('T')[0],
     });
-    render(<MistakePuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} />);
 
     const context = screen.getByTestId('game-context');
     expect(context).toHaveTextContent('vs Magnus');
@@ -81,7 +81,7 @@ describe('MistakePuzzleBoard', () => {
     const puzzle = buildMistakePuzzle({
       openingName: 'Sicilian Defense',
     });
-    render(<MistakePuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} />);
 
     expect(screen.getByTestId('opening-name')).toHaveTextContent('Sicilian Defense');
   });
@@ -91,14 +91,14 @@ describe('MistakePuzzleBoard', () => {
       opponentName: null,
       gameDate: null,
     });
-    render(<MistakePuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} />);
 
     expect(screen.getByTestId('game-context')).toHaveTextContent('From your game');
   });
 
   it('shows move number and cp loss info', () => {
     const puzzle = buildMistakePuzzle({ moveNumber: 12, cpLoss: 250 });
-    render(<MistakePuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} />);
 
     expect(screen.getByText('Move 12')).toBeInTheDocument();
     expect(screen.getByText('250cp loss')).toBeInTheDocument();
@@ -106,7 +106,7 @@ describe('MistakePuzzleBoard', () => {
 
   it('renders board oriented to player color', () => {
     const puzzle = buildMistakePuzzle({ playerColor: 'black' });
-    render(<MistakePuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} />);
 
     // Board is rendered (orientation is internal to ChessBoard)
     expect(screen.getByTestId('mistake-puzzle-board')).toBeInTheDocument();
@@ -121,7 +121,7 @@ describe('MistakePuzzleBoard', () => {
         conceptHint: '',
       },
     });
-    render(<MistakePuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} />);
 
     await waitFor(() => {
       expect(mockSpeak).toHaveBeenCalledWith('You played Ng5, but d4 was better.');
@@ -134,7 +134,7 @@ describe('MistakePuzzleBoard', () => {
 
   it('stops voice on unmount', () => {
     const puzzle = buildMistakePuzzle();
-    const { unmount } = render(<MistakePuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    const { unmount } = render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} />);
 
     unmount();
     expect(mockStop).toHaveBeenCalled();
@@ -144,7 +144,7 @@ describe('MistakePuzzleBoard', () => {
     const puzzle = buildMistakePuzzle({
       narration: { intro: '', moveNarrations: [], outro: '', conceptHint: '' },
     });
-    render(<MistakePuzzleBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} />);
 
     // Wait for loading to finish
     await waitFor(() => {

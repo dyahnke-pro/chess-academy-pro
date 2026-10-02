@@ -2,7 +2,8 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, ChevronDown, ChevronUp, Eye, Shield, Crosshair, Swords } from 'lucide-react';
 import { Chess } from 'chess.js';
-import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { ConsistentChessboard, type BoardArrow } from '../Chessboard/ConsistentChessboard';
+import { detectTactics } from '../../services/tacticsDetector';
 import { PATTERN_REGISTRY, type TacticPatternLesson } from '../../data/patternRegistry';
 import { getPuzzlesByTheme } from '../../services/puzzleService';
 import { captureEvent } from '../../services/analytics';
@@ -25,7 +26,15 @@ import { captureEvent } from '../../services/analytics';
 interface ExampleBoard {
   fen: string;
   orientation: 'white' | 'black';
+  /** The move that springs the pattern, and the squares it hits — computed
+   *  from the board, so the eye lands on the pattern instead of hunting for it
+   *  (hand walk 2026-10-01, PS2). */
+  arrows: BoardArrow[];
+  targets: string[];
 }
+
+const PATTERN_ARROW = 'rgba(34, 197, 94, 0.85)';
+const TARGET_SQUARE = { background: 'rgba(250, 204, 21, 0.45)' };
 
 /** The Lichess puzzle `fen` is the position BEFORE the setup move; moves[0]
  *  (UCI) is the opponent's move that creates the tactic. Apply it so the
@@ -37,7 +46,23 @@ function exampleFromPuzzle(fen: string, movesUci: string): ExampleBoard | null {
     if (!first || first.length < 4) return null;
     const applied = c.move({ from: first.slice(0, 2), to: first.slice(2, 4), promotion: first.length > 4 ? first.slice(4) : undefined });
     if (!applied) return null;
-    return { fen: c.fen(), orientation: c.turn() === 'w' ? 'white' : 'black' };
+    const live = c.fen();
+    const orientation = c.turn() === 'w' ? 'white' : 'black';
+    const second = movesUci.trim().split(/\s+/)[1];
+    if (!second || second.length < 4) return { fen: live, orientation, arrows: [], targets: [] };
+    const from = second.slice(0, 2);
+    const to = second.slice(2, 4);
+    // The tactic the pattern move lands: the detector's own pattern whose agent
+    // stands on the arrival square; its other squares are what it hits.
+    const after = new Chess(live);
+    after.move({ from, to, promotion: second.length > 4 ? second.slice(4) : undefined });
+    const landed = detectTactics(after.fen()).tactics.find((t) => t.involvedSquares[0] === to);
+    return {
+      fen: live,
+      orientation,
+      arrows: [{ startSquare: from, endSquare: to, color: PATTERN_ARROW }],
+      targets: landed ? landed.involvedSquares.slice(1) : [],
+    };
   } catch {
     return null;
   }
@@ -120,15 +145,18 @@ function PatternCard({ lesson }: { lesson: TacticPatternLesson }): JSX.Element {
           )}
           {exampleState === 'ready' && example && (
             <div data-testid={`pattern-example-board-${lesson.id}`}>
-              <p className="text-xs text-theme-text-muted mb-1.5">A real position — the pattern is on the board. {example.orientation === 'white' ? 'White' : 'Black'} to move.</p>
+              <p className="text-xs text-theme-text-muted mb-1.5">A real position — the arrow springs the pattern; yellow marks what it hits. {example.orientation === 'white' ? 'White' : 'Black'} to move.</p>
               <div className="max-w-[320px] mx-auto">
-                <ConsistentChessboard fen={example.fen} boardOrientation={example.orientation} interactive={false} />
+                <ConsistentChessboard
+                  fen={example.fen}
+                  boardOrientation={example.orientation}
+                  interactive={false}
+                  arrows={example.arrows}
+                  squareStyles={Object.fromEntries(example.targets.map((sq) => [sq, TARGET_SQUARE]))}
+                />
               </div>
             </div>
           )}
-          <p className="text-[11px] text-theme-text-muted leading-relaxed">
-            Computed live by: {lesson.detector}
-          </p>
           <button
             type="button"
             onClick={startDrill}

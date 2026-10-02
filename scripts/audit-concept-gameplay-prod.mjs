@@ -661,6 +661,20 @@ async function main() {
         : `${staleEvents.length} stale: ${staleEvents.slice(0, 3).map((e) => String(e.summary ?? e.source ?? '')).join(' | ')}`,
     );
 
+    // ── RW: THE REWARD LAYER (David 2026-10-01) ───────────────────────────
+    // Only skill earns a chime. The rows are the grade + what it earned; the
+    // contract is the rule itself: no fault ever earns a reward, no book move
+    // is ever graded, no recapture earns one.
+    const rewardRows = listener.getCapturedEvents().filter((e) => e.kind === 'learn-reward').map((e) => {
+      try { return typeof e.details === 'string' ? JSON.parse(e.details) : e.details; } catch { return null; }
+    }).filter(Boolean);
+    const rewardBreaches = rewardRows.filter((r) => (r.fault && r.earned) || r.inBook || (r.recapture && r.earned && !r.fault));
+    record(
+      'RW. LEARN REWARD only skill earns a chime (no fault, book move or recapture rewarded)',
+      rewardBreaches.length === 0,
+      `${rewardRows.length} graded moves, ${rewardRows.filter((r) => r.earned).length} rewarded (${[...new Set(rewardRows.map((r) => r.earned).filter(Boolean))].join(',') || 'none'})${rewardBreaches.length ? ` BREACH ${JSON.stringify(rewardBreaches[0])}` : ''}`,
+    );
+
     record('F3. no uncaught page errors', pageErrors.length === 0, pageErrors.slice(0, 2).join(' | '));
   } finally {
     await browser.close().catch(() => {});

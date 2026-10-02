@@ -32,6 +32,7 @@
  * Redis is the durable tier; do NOT reintroduce per-event object storage.
  */
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { isAuditTraffic } from './_lib/auditTraffic.js';
 
 interface AuditStreamEntry {
   timestamp: number;
@@ -230,8 +231,7 @@ export default async function handler(
     // memory buffer. The sidecar and the route-capture interceptors never
     // reach this handler, so audits lose nothing; only the shared Upstash
     // budget is protected.
-    const ua = String(req.headers['user-agent'] ?? '');
-    if (req.headers['x-audit-marked'] || /HeadlessChrome|AuditCoachPlayBot|Playwright/i.test(ua)) {
+    if (isAuditTraffic(req.headers)) {
       res.status(200).json({ ok: true, storage: 'refused', stored: 0, refused: 'audit' });
       return;
     }

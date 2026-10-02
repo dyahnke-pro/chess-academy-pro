@@ -7,7 +7,10 @@ vi.mock('../services/coachPlaySession', () => ({
   getCoachMove: vi.fn(),
 }));
 
+vi.mock('../services/rewardService', () => ({ reward: vi.fn() }));
+
 import { useEndgamePlayout } from './useEndgamePlayout';
+import { reward } from '../services/rewardService';
 import { getCoachMove } from '../services/coachPlaySession';
 import type { PieceDropHandlerArgs } from 'react-chessboard';
 
@@ -20,6 +23,21 @@ const KP_FEN = '8/8/8/5k2/P7/8/8/2K5 w - - 0 1';
 describe('useEndgamePlayout', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  describe('rewards — only skill earns one', () => {
+    it('a curated move is a pip, the line\'s last move is the solve, a wrong move is a miss', async () => {
+      const { result } = renderHook(() =>
+        useEndgamePlayout({ startFen: KP_FEN, solution: ['a5', 'Ke5', 'a6'], replyDelayMs: 0 }),
+      );
+      act(() => { result.current.onPieceDrop(drop('c1', 'd1')); });
+      expect(vi.mocked(reward)).toHaveBeenLastCalledWith(expect.objectContaining({ kind: 'miss' }));
+      act(() => { result.current.onPieceDrop(drop('a4', 'a5')); });
+      expect(vi.mocked(reward)).toHaveBeenLastCalledWith(expect.objectContaining({ kind: 'pip', square: 'a5', step: 0 }));
+      await waitFor(() => expect(result.current.phase).toBe('student-to-move'));
+      act(() => { result.current.onPieceDrop(drop('a5', 'a6')); });
+      expect(vi.mocked(reward)).toHaveBeenLastCalledWith(expect.objectContaining({ kind: 'solved', square: 'a6' }));
+    });
   });
 
   describe('curated line — happy path', () => {

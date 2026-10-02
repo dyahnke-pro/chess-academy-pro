@@ -4,16 +4,18 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**357 lines · 12 exports · 9 importers · 4 tests · 1 audits**
+**357 lines · 12 exports · 13 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:25) — names `methodBeat`
 - **Why determinism** (CLAUDE.md:57) — names `methodBeat`
-- **G4.5.16 TEACH THE METHOD, NOT ONLY THE BOARD (David 2026-09-16: "Calling out pins and forks isn't teaching. Future moves, how to think, threat identification, that is teaching").** (CLAUDE.md:1044) — names `methodBeat`
+- **G4.5.16 TEACH THE METHOD, NOT ONLY THE BOARD (David 2026-09-16: "Calling out pins and forks isn't teaching. Future moves, how to think, threat identification, that is teaching").** (CLAUDE.md:1055) — names `methodBeat`
 
 ## Who calls in
 
+- `src/components/Puzzles/MistakePuzzleBoard.tsx`
+- `src/components/Puzzles/PuzzleBoard.tsx`
 - `src/services/coachDecider.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/groundedAnswer.ts`
@@ -23,6 +25,8 @@
 - `src/services/methodBeat.need.test.ts`
 - `src/services/methodBeat.test.ts`
 - `src/services/positionFacts.ts`
+- `src/services/puzzleMethod.test.ts`
+- `src/services/puzzleMethod.ts`
 
 ## Exports and every call site
 
@@ -141,6 +145,7 @@
 - `src/services/methodBeat.live.test.ts`
 - `src/services/methodBeat.need.test.ts`
 - `src/services/methodBeat.test.ts`
+- `src/services/puzzleMethod.test.ts`
 
 ## Audits that reach it
 

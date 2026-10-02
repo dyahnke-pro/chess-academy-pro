@@ -17,6 +17,7 @@
  * object storage (the 2026-06-11 blob-ops incident).
  */
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { isAuditTraffic } from './_lib/auditTraffic.js';
 
 export interface Broadcast {
   id: string;
@@ -142,9 +143,18 @@ function isAdmin(req: VercelRequest): boolean {
 export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'content-type, x-admin-secret');
+  res.setHeader('Access-Control-Allow-Headers', 'content-type, x-admin-secret, x-audit-marked');
   res.setHeader('Access-Control-Max-Age', '86400');
   if (req.method === 'OPTIONS') { res.status(204).end(); return; }
+
+  // 🔒 Audit traffic never touches Redis (auditTraffic.ts). The bell answers
+  // empty — the pinned welcome set is served from origin, so an audit still
+  // sees it — and a feedback/reply POST is acknowledged, not stored.
+  if (isAuditTraffic(req.headers)) {
+    res.setHeader('x-store', 'refused-audit');
+    res.status(200).json(req.method === 'GET' ? { broadcasts: [], thread: [], refused: 'audit' } : { ok: true, refused: 'audit' });
+    return;
+  }
 
   const store = await getStore();
 

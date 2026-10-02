@@ -14,6 +14,7 @@
 
 import { Chess } from 'chess.js';
 import puzzlesRaw from '../data/puzzles.json';
+import openingsDb from '../data/openings-lichess.json';
 
 const TACTICAL_OUTCOME_THEMES = new Set<string>([
   'mate',
@@ -82,15 +83,35 @@ const puzzles = puzzlesRaw as RawPuzzle[];
  *  Returns 'other' when no tag is present. */
 export function openingFamily(p: { openingTags?: string | string[] }): string {
   const t = p.openingTags;
-  if (!t) return 'other';
+  if (!t) return OTHER_FAMILY;
   const first = Array.isArray(t) ? t[0] : t.split(/\s+/)[0];
-  if (!first) return 'other';
+  if (!first) return OTHER_FAMILY;
   return first.toLowerCase().replace(/\s+/g, '_');
 }
 
-/** Human-readable label for a family slug (turn underscores into spaces). */
+/** Lichess opening tags drop punctuation ("Kings_Pawn_Game"), so the slug is
+ *  joined back to the opening DB's own family name — "King's Pawn Game" — the
+ *  canon for opening names (hand walk 2026-10-01, OT1). */
+const FAMILY_NAME_BY_SLUG: ReadonlyMap<string, string> = (() => {
+  const m = new Map<string, string>();
+  for (const e of openingsDb as Array<{ name: string }>) {
+    const fam = e.name.split(':')[0].trim();
+    const slug = fam.replace(/'/g, '').replace(/[^A-Za-z0-9]+/g, '_').toLowerCase();
+    if (!m.has(slug)) m.set(slug, fam);
+  }
+  return m;
+})();
+
+/** The bucket for puzzles with no opening tag. */
+export const OTHER_FAMILY = 'other';
+
+/** Human-readable label for a family slug — the DB's name when it has one. */
 export function familyLabel(family: string): string {
-  return family.replace(/_/g, ' ');
+  if (family === OTHER_FAMILY) return 'Other openings';
+  const named = FAMILY_NAME_BY_SLUG.get(family);
+  if (named) return named;
+  const words = family.replace(/_/g, ' ');
+  return words.charAt(0).toUpperCase() + words.slice(1);
 }
 
 /** Side the puzzle's STUDENT plays — i.e., the side to move after the
@@ -190,5 +211,7 @@ export function groupByOpeningFamily(): OpeningBlunderFamily[] {
       white: lists.white,
       black: lists.black,
     }))
-    .sort((a, b) => b.white.length + b.black.length - (a.white.length + a.black.length));
+    // Named openings by size; the untagged bucket last, never above a real one.
+    .sort((a, b) => Number(a.family === OTHER_FAMILY) - Number(b.family === OTHER_FAMILY)
+      || b.white.length + b.black.length - (a.white.length + a.black.length));
 }

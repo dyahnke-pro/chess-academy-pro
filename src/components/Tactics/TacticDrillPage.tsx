@@ -61,6 +61,9 @@ export function TacticDrillPage(): JSX.Element {
 
   const filterThemes = (location.state as { filterThemes?: string[] } | null)?.filterThemes;
   const filterTypes = (location.state as { filterTypes?: string[] } | null)?.filterTypes;
+  /** The hub card's own name ("Endgame Technique") — a card that groups several
+   *  themes was titled "Drill: Mixed" (hand walk 2026-10-01). */
+  const filterLabel = (location.state as { filterLabel?: string } | null)?.filterLabel;
   const themes = filterThemes ?? filterTypes ?? ['fork'];
 
   // Resolve theme labels to Lichess tags
@@ -73,6 +76,7 @@ export function TacticDrillPage(): JSX.Element {
   const [puzzleHistory, setPuzzleHistory] = useState<PuzzleRecord[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [solved, setSolved] = useState(0);
+  const [streak, setStreak] = useState(0);
   const [failed, setFailed] = useState(0);
   // Seed from the shared reach ladder (docs/plans/2026-09-14-adaptive-reach-
   // ladder.md P5) so a higher-rated player never gets easy drills here either —
@@ -113,9 +117,10 @@ export function TacticDrillPage(): JSX.Element {
   useEffect(() => cancelAutoAdvance, [cancelAutoAdvance]);
 
   const currentPuzzle = puzzleHistory[currentIndex] ?? null;
-  const themeLabel = themes.length === 1
-    ? themes[0].replace(/([A-Z])/g, ' $1').replace(/^./, (s) => s.toUpperCase()).trim()
-    : 'Mixed';
+  const themeLabel = filterLabel
+    ?? (themes.length === 1
+      ? themes[0].replace(/([A-Z])/g, ' $1').replace(/^./, (s) => s.toUpperCase()).trim()
+      : 'Mixed');
 
   // Clear board context on unmount
   useEffect(() => {
@@ -144,6 +149,7 @@ export function TacticDrillPage(): JSX.Element {
     completedRef.current = new Set();
     resultsRef.current = [];
     setSolved(0);
+    setStreak(0);
     setFailed(0);
     setRatingDelta(null);
     void logAppAudit({
@@ -213,8 +219,10 @@ export function TacticDrillPage(): JSX.Element {
         ratingBump = ASSISTED_SOLVE_BONUS;
       }
       setSolved((s) => s + 1);
+      setStreak((n) => n + 1);
     } else {
       ratingBump = FAIL_PENALTY;
+      setStreak(0);
       setFailed((f) => f + 1);
     }
 
@@ -407,6 +415,7 @@ export function TacticDrillPage(): JSX.Element {
             puzzle={currentPuzzle}
             onComplete={handlePuzzleComplete}
             surface="drill"
+            streak={streak}
           />
 
           {/* Navigation arrows */}

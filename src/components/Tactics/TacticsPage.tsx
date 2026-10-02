@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, AlertTriangle, Shuffle, Trophy, Wrench, Crosshair, MapPin, Lightbulb, Calculator, Swords, Crown } from 'lucide-react';
+import { Eye, AlertTriangle, Shuffle, Trophy, Wrench, MapPin, Lightbulb, Calculator, Swords, Crown, ChevronRight, Route, Flame } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PageHelp } from '../Layout/PageHelp';
@@ -10,6 +10,8 @@ import { useSettings } from '../../hooks/useSettings';
 import { useCollapseOnScroll } from '../../hooks/useCollapseOnScroll';
 import { scaledShadow } from '../../utils/neonColors';
 import { logAppAudit } from '../../services/appAuditor';
+import { useUpNext } from '../../hooks/useUpNext';
+import { UpNextBar } from '../Dashboard/UpNextBar';
 
 // ─── Theme Category Definitions ──────────────────────────────────────────
 
@@ -42,32 +44,57 @@ const THEME_CARDS: ThemeCard[] = Object.entries(THEME_MAP).map(([label, themes])
 
 // ─── Main Page ──────────────────────────────────────────────────────────────
 
-// Fixed-position buttons with their own rgb values
-const FIXED_BUTTONS: { key: string; label: string; icon: React.ComponentType<{ size?: number; className?: string }>; route: string; color: string; bgColor: string; rgb: string; colSpan: boolean; py: string; iconSize: number; textSize: string; state?: Record<string, unknown> }[] = [
-  { key: 'spot', label: 'My Profile', icon: Eye, route: '/tactics/profile', color: 'text-amber-400', bgColor: 'bg-amber-500/10', rgb: '245, 158, 11', colSpan: true, py: 'py-8', iconSize: 40, textSize: 'text-lg' },
-  { key: 'daily', label: 'Daily Training', icon: Trophy, route: '/tactics/classic', color: 'text-violet-400', bgColor: 'bg-violet-500/10', rgb: '139, 92, 246', colSpan: false, py: 'py-6', iconSize: 28, textSize: 'text-sm' },
-  { key: 'setup', label: 'Setup Trainer', icon: Wrench, route: '/tactics/setup', color: 'text-teal-400', bgColor: 'bg-teal-500/10', rgb: '45, 212, 191', colSpan: false, py: 'py-6', iconSize: 28, textSize: 'text-sm' },
-  { key: 'random-mix', label: 'Random Mix', icon: Shuffle, route: '/tactics/drill', color: 'text-emerald-400', bgColor: 'bg-emerald-500/10', rgb: '52, 211, 153', colSpan: true, py: 'py-6', iconSize: 32, textSize: 'text-base', state: { filterThemes: ['fork', 'pin', 'skewer', 'discoveredAttack', 'backRankMate', 'sacrifice', 'deflection'] } },
-];
+/** One row on the hub. A bar carries the name AND a sentence saying what the
+ *  section does — a square carried a one-word label and asked the student to
+ *  guess (the Home screen made the same change, 2026-09-03; hand walk
+ *  2026-10-01: 26 squares, 23 users open the hub, 9 go further). */
+interface HubRow {
+  key: string;
+  label: string;
+  description: string;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+  route: string;
+  color: string;
+  bgColor: string;
+  rgb: string;
+  state?: Record<string, unknown>;
+}
 
-// Priority "from your games" buttons — pinned to the TOP of the grid so the
-// drilling that targets David's own mistakes/weaknesses is the first thing he
-// reaches, ahead of the generic themed sets (David 2026-06-11).
-const TOP_BUTTONS: { key: string; label: string; icon: React.ComponentType<{ size?: number; className?: string }>; route: string; color: string; bgColor: string; rgb: string }[] = [
-  { key: 'pattern-school', label: 'Pattern Recognition', icon: Swords, route: '/tactics/patterns', color: 'text-indigo-400', bgColor: 'bg-indigo-500/10', rgb: '99, 102, 241' },
-  // Master Level — the elite (2400+) pool, reachable from the Tactics hub as
-  // well as from the coach ("quiz me master puzzles") — David 2026-09-14: "I do
-  // also want a master level puzzle square in tactics … reach it from both
-  // surfaces." The route already existed; only the coach door led to it.
-  { key: 'master-level', label: 'Master Level', icon: Crown, route: '/tactics/master', color: 'text-yellow-400', bgColor: 'bg-yellow-500/10', rgb: '250, 204, 21' },
-  { key: 'my mistakes', label: 'My Mistakes', icon: AlertTriangle, route: '/tactics/mistakes', color: 'text-red-400', bgColor: 'bg-red-500/10', rgb: '239, 68, 68' },
-  { key: 'my-weaknesses', label: 'My Weaknesses', icon: Crosshair, route: '/tactics/weakness-themes', color: 'text-rose-400', bgColor: 'bg-rose-500/10', rgb: '244, 63, 94' },
-  { key: 'analysis-practice', label: 'Analysis Practice', icon: Lightbulb, route: '/tactics/analysis-practice', color: 'text-indigo-400', bgColor: 'bg-indigo-500/10', rgb: '99, 102, 241' },
-  { key: 'calculation', label: 'Calculation', icon: Calculator, route: '/tactics/calculation', color: 'text-blue-400', bgColor: 'bg-blue-500/10', rgb: '59, 130, 246' },
-];
+interface HubGroup {
+  title: string;
+  rows: HubRow[];
+}
 
-const BOTTOM_BUTTONS: { key: string; label: string; icon: React.ComponentType<{ size?: number; className?: string }>; route: string; color: string; bgColor: string; rgb: string }[] = [
-  { key: 'find-the-square', label: 'Find the Square', icon: MapPin, route: '/tactics/find-square', color: 'text-cyan-400', bgColor: 'bg-cyan-500/10', rgb: '34, 211, 238' },
+// Ordered as the loop runs: your own games first, then training, then the
+// skills that sit underneath it. Test ids are unchanged (`section-<key>`).
+const HUB_GROUPS: HubGroup[] = [
+  {
+    title: 'From your games',
+    rows: [
+      { key: 'my mistakes', label: 'My Weaknesses', description: 'Your own game mistakes, grouped by the pattern behind them — then more puzzles like them.', icon: AlertTriangle, route: '/tactics/mistakes', color: 'text-red-400', bgColor: 'bg-red-500/10', rgb: '239, 68, 68' },
+      { key: 'spot', label: 'My Profile', description: 'Your strongest and weakest tactical motifs.', icon: Eye, route: '/tactics/profile', color: 'text-amber-400', bgColor: 'bg-amber-500/10', rgb: '245, 158, 11' },
+    ],
+  },
+  {
+    title: 'Train',
+    rows: [
+      { key: 'deep-run', label: 'Deep Run', description: 'Each puzzle one move longer. How many moves deep can you go?', icon: Flame, route: '/tactics/deep-run', color: 'text-fuchsia-400', bgColor: 'bg-fuchsia-500/10', rgb: '232, 121, 249' },
+      { key: 'daily', label: 'Daily Training', description: 'A mixed set at your level; missed puzzles come back on a schedule.', icon: Trophy, route: '/tactics/classic', color: 'text-violet-400', bgColor: 'bg-violet-500/10', rgb: '139, 92, 246' },
+      { key: 'random-mix', label: 'Random Mix', description: 'Forks, pins, skewers, discoveries and more, shuffled.', icon: Shuffle, route: '/tactics/drill', color: 'text-emerald-400', bgColor: 'bg-emerald-500/10', rgb: '52, 211, 153', state: { filterThemes: ['fork', 'pin', 'skewer', 'discoveredAttack', 'backRankMate', 'sacrifice', 'deflection'], filterLabel: 'Random Mix' } },
+      { key: 'long', label: 'Long Puzzles', description: 'Three, four, five moves deep — calculate the whole line.', icon: Route, route: '/tactics/long', color: 'text-cyan-400', bgColor: 'bg-cyan-500/10', rgb: '34, 211, 238' },
+      { key: 'master-level', label: 'Master Level', description: 'Puzzles from the elite 2400+ pool.', icon: Crown, route: '/tactics/master', color: 'text-yellow-400', bgColor: 'bg-yellow-500/10', rgb: '250, 204, 21' },
+      { key: 'setup', label: 'Setup Trainer', description: 'Find the quiet move that sets the tactic up.', icon: Wrench, route: '/tactics/setup', color: 'text-teal-400', bgColor: 'bg-teal-500/10', rgb: '45, 212, 191' },
+    ],
+  },
+  {
+    title: 'Skills',
+    rows: [
+      { key: 'pattern-school', label: 'Pattern Recognition', description: 'Each pattern: how to spot it, use it, and stop it.', icon: Swords, route: '/tactics/patterns', color: 'text-indigo-400', bgColor: 'bg-indigo-500/10', rgb: '99, 102, 241' },
+      { key: 'analysis-practice', label: 'Analysis Practice', description: 'Read a position before you look for a move.', icon: Lightbulb, route: '/tactics/analysis-practice', color: 'text-indigo-400', bgColor: 'bg-indigo-500/10', rgb: '99, 102, 241' },
+      { key: 'calculation', label: 'Calculation', description: 'See a line through to the end before you play it.', icon: Calculator, route: '/tactics/calculation', color: 'text-blue-400', bgColor: 'bg-blue-500/10', rgb: '59, 130, 246' },
+      { key: 'find-the-square', label: 'Find the Square', description: 'Name squares fast to sharpen board vision.', icon: MapPin, route: '/tactics/find-square', color: 'text-cyan-400', bgColor: 'bg-cyan-500/10', rgb: '34, 211, 238' },
+    ],
+  },
 ];
 
 function neonBorderStyle(rgb: string, gS: number): React.CSSProperties {
@@ -100,6 +127,11 @@ export function TacticsPage(): JSX.Element {
   const gB = settings.glowBrightness;
   const gS = gB / 100;
   const { collapsed, onScroll } = useCollapseOnScroll();
+  // The Up-next pick, when it lives on this hub: pinned on top, and its real
+  // row pulses in place (the list never reorders — muscle memory).
+  const upNext = useUpNext();
+  const pick = upNext?.current?.hub.startsWith('tactics:') ? upNext.current : null;
+  const pulseKey = pick ? pick.hub.slice('tactics:'.length) : null;
 
   // Hub-visit signal so the audit stream can attribute downstream
   // surface events to the entry path through /tactics. Mirrors the
@@ -181,109 +213,78 @@ export function TacticsPage(): JSX.Element {
 
       {/* Scrollable body */}
       <div
-        className="flex-1 min-h-0 overflow-y-auto px-4 pt-4 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 flex flex-col gap-4"
+        className="flex-1 min-h-0 overflow-y-auto px-4 pt-4 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 flex flex-col gap-5"
         onScroll={onScroll}
       >
         {/* Quick settings — collapsible toggles for puzzle UX prefs
             (timer, tactic name, hints, voice). Closed by default. */}
         <PuzzleQuickSettings />
 
-        {/* Grid */}
-        <div className="grid grid-cols-2 gap-3 content-start max-w-lg mx-auto w-full">
-        {/* Priority row — My Mistakes / My Weaknesses, pinned to the top */}
-        {TOP_BUTTONS.map((btn) => {
-          const Icon = btn.icon;
-          const shadow = scaledShadow(btn.rgb, gB);
-          const shadowHover = scaledShadow(btn.rgb, Math.min(200, gB * 1.4));
-          return (
-            <button
-              key={btn.key}
-              onClick={() => handleNavigate(btn.route, btn.label)}
-              className={`py-8 ${btn.bgColor} rounded-2xl flex flex-col items-center justify-center gap-3 transition-all duration-200`}
-              style={{ ...neonBorderStyle(btn.rgb, gS), boxShadow: shadow }}
-              onMouseEnter={(e) => { applyHoverBorder(e.currentTarget, btn.rgb, gS); e.currentTarget.style.boxShadow = shadowHover; }}
-              onMouseLeave={(e) => { applyRestBorder(e.currentTarget, btn.rgb, gS); e.currentTarget.style.boxShadow = shadow; }}
-              data-testid={`section-${btn.key}`}
-            >
-              <Icon size={36} className={btn.color} />
-              <span className={`text-base font-bold ${btn.color} text-center px-2 leading-tight`}>{btn.label}</span>
-            </button>
-          );
-        })}
+        {pick && (
+          <div className="max-w-lg mx-auto w-full">
+            <UpNextBar pick={pick} surface="tactics" />
+          </div>
+        )}
 
-        {/* Fixed buttons (Profile, Daily, Setup, Random Mix) */}
-        {FIXED_BUTTONS.map((btn) => {
-          const Icon = btn.icon;
-          const shadow = scaledShadow(btn.rgb, gB);
-          const shadowHover = scaledShadow(btn.rgb, Math.min(200, gB * 1.4));
-          return (
-            <button
-              key={btn.key}
-              onClick={() => handleNavigate(btn.route, btn.label, btn.state)}
-              className={`${btn.colSpan ? 'col-span-2' : ''} ${btn.py} ${btn.bgColor} rounded-2xl flex flex-col items-center justify-center gap-3 transition-all duration-200`}
-              style={{ ...neonBorderStyle(btn.rgb, gS), boxShadow: shadow }}
-              onMouseEnter={(e) => { applyHoverBorder(e.currentTarget, btn.rgb, gS); e.currentTarget.style.boxShadow = shadowHover; }}
-              onMouseLeave={(e) => { applyRestBorder(e.currentTarget, btn.rgb, gS); e.currentTarget.style.boxShadow = shadow; }}
-              data-testid={`section-${btn.key}`}
-            >
-              <Icon size={btn.iconSize} className={btn.color} />
-              <span className={`${btn.textSize} font-bold ${btn.color}`}>{btn.label}</span>
-            </button>
-          );
-        })}
+        {HUB_GROUPS.map((group) => (
+          <section key={group.title} className="flex flex-col gap-2 max-w-lg mx-auto w-full">
+            <h2 className="text-xs font-semibold uppercase tracking-wide px-1" style={{ color: 'var(--color-text-muted)' }}>{group.title}</h2>
+            {group.rows.map((row) => {
+              const Icon = row.icon;
+              const shadow = scaledShadow(row.rgb, gB);
+              const shadowHover = scaledShadow(row.rgb, Math.min(200, gB * 1.4));
+              return (
+                <button
+                  key={row.key}
+                  onClick={() => handleNavigate(row.route, row.label, row.state)}
+                  className={`${row.bgColor} rounded-2xl flex items-center gap-3 px-4 py-3.5 text-left transition-all duration-200 w-full ${row.key === pulseKey ? 'ring-2 ring-fuchsia-300/80 upnext-glow' : ''}`}
+                  data-up-next={row.key === pulseKey ? 'true' : undefined}
+                  style={{ ...neonBorderStyle(row.rgb, gS), boxShadow: shadow }}
+                  onMouseEnter={(e) => { applyHoverBorder(e.currentTarget, row.rgb, gS); e.currentTarget.style.boxShadow = shadowHover; }}
+                  onMouseLeave={(e) => { applyRestBorder(e.currentTarget, row.rgb, gS); e.currentTarget.style.boxShadow = shadow; }}
+                  data-testid={`section-${row.key}`}
+                >
+                  <Icon size={28} className={`${row.color} shrink-0`} />
+                  <span className="flex flex-col min-w-0 flex-1">
+                    <span className="text-base font-bold" style={{ color: 'var(--color-text)' }}>{row.label}</span>
+                    <span className="text-xs leading-snug" style={{ color: 'var(--color-text-muted)' }}>{row.description}</span>
+                  </span>
+                  <ChevronRight size={18} className="shrink-0 opacity-40" style={{ color: 'var(--color-text-muted)' }} />
+                </button>
+              );
+            })}
+          </section>
+        ))}
 
-        {/* Individual tactic categories */}
-        {THEME_CARDS.map((card) => {
-          const shadow = scaledShadow(card.rgb, gB);
-          const shadowHover = scaledShadow(card.rgb, Math.min(200, gB * 1.4));
-          // 'Opening Traps' was a stale theme-filter pipe into the
-          // generic drill page — wiped per the user's morning request:
-          // "Wipe that tab clean / hide the data. Organize by opening.
-          // Separate white and black." Now routes to the dedicated
-          // /tactics/opening-traps surface (family-grouped + W/B split,
-          // mined from the 625 opening + tactical puzzles in the local
-          // Lichess corpus).
-          const onClick =
-            card.label === 'Opening Traps'
-              ? () => handleNavigate('/tactics/opening-traps', card.label)
-              : () => handleNavigate('/tactics/drill', card.label, { filterThemes: card.themes });
-          return (
-            <button
-              key={card.label}
-              onClick={onClick}
-              className={`${card.bgColor} rounded-2xl flex flex-col items-center justify-center gap-2 transition-all duration-200 aspect-square`}
-              style={{ ...neonBorderStyle(card.rgb, gS), boxShadow: shadow }}
-              onMouseEnter={(e) => { applyHoverBorder(e.currentTarget, card.rgb, gS); e.currentTarget.style.boxShadow = shadowHover; }}
-              onMouseLeave={(e) => { applyRestBorder(e.currentTarget, card.rgb, gS); e.currentTarget.style.boxShadow = shadow; }}
-              data-testid={`section-${card.label.toLowerCase()}`}
-            >
-              <span className="text-2xl">{card.emoji}</span>
-              <span className={`text-sm font-bold ${card.color} text-center px-2 leading-tight`}>{card.label}</span>
-            </button>
-          );
-        })}
-
-        {/* Square tiles that sit inline with the theme cards (Find the Square) */}
-        {BOTTOM_BUTTONS.map((btn) => {
-          const Icon = btn.icon;
-          const shadow = scaledShadow(btn.rgb, gB);
-          const shadowHover = scaledShadow(btn.rgb, Math.min(200, gB * 1.4));
-          return (
-            <button
-              key={btn.key}
-              onClick={() => handleNavigate(btn.route, btn.label)}
-              className={`${btn.bgColor} rounded-2xl flex flex-col items-center justify-center gap-2 transition-all duration-200 aspect-square`}
-              style={{ ...neonBorderStyle(btn.rgb, gS), boxShadow: shadow }}
-              onMouseEnter={(e) => { applyHoverBorder(e.currentTarget, btn.rgb, gS); e.currentTarget.style.boxShadow = shadowHover; }}
-              onMouseLeave={(e) => { applyRestBorder(e.currentTarget, btn.rgb, gS); e.currentTarget.style.boxShadow = shadow; }}
-              data-testid={`section-${btn.key}`}
-            >
-              <Icon size={28} className={btn.color} />
-              <span className={`text-sm font-bold ${btn.color} text-center px-2 leading-tight`}>{btn.label}</span>
-            </button>
-          );
-        })}
-        </div>
+        {/* Themed sets — one motif per bar. */}
+        <section className="flex flex-col gap-2 max-w-lg mx-auto w-full">
+          <h2 className="text-xs font-semibold uppercase tracking-wide px-1" style={{ color: 'var(--color-text-muted)' }}>Themes</h2>
+          {THEME_CARDS.map((card) => {
+            const shadow = scaledShadow(card.rgb, gB);
+            const shadowHover = scaledShadow(card.rgb, Math.min(200, gB * 1.4));
+            // Opening Traps has its own surface (family-grouped, White/Black
+            // split); every other theme opens the drill, titled by its card.
+            const onClick =
+              card.label === 'Opening Traps'
+                ? () => handleNavigate('/tactics/opening-traps', card.label)
+                : () => handleNavigate('/tactics/drill', card.label, { filterThemes: card.themes, filterLabel: card.label });
+            return (
+              <button
+                key={card.label}
+                onClick={onClick}
+                className={`${card.bgColor} rounded-2xl flex items-center gap-3 px-4 py-2.5 text-left transition-all duration-200 w-full`}
+                style={{ ...neonBorderStyle(card.rgb, gS), boxShadow: shadow }}
+                onMouseEnter={(e) => { applyHoverBorder(e.currentTarget, card.rgb, gS); e.currentTarget.style.boxShadow = shadowHover; }}
+                onMouseLeave={(e) => { applyRestBorder(e.currentTarget, card.rgb, gS); e.currentTarget.style.boxShadow = shadow; }}
+                data-testid={`section-${card.label.toLowerCase()}`}
+              >
+                <span className="text-xl w-7 text-center shrink-0" aria-hidden="true">{card.emoji}</span>
+                <span className="text-sm font-bold flex-1" style={{ color: 'var(--color-text)' }}>{card.label}</span>
+                <ChevronRight size={16} className="shrink-0 opacity-40" style={{ color: 'var(--color-text-muted)' }} />
+              </button>
+            );
+          })}
+        </section>
       </div>
     </div>
   );

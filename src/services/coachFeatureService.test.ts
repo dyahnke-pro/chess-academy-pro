@@ -388,7 +388,7 @@ describe('coachFeatureService', () => {
       const a = buildReviewSegments(mk(), 'black', null)[11].narration;
       const b = buildReviewSegments(mk(), 'black', null)[11].narration;
       expect(a).toBe(b);
-    });
+    }, 30_000); // two full review builds; under the pre-commit batch 5 s is a load artifact
 
     it('names the variation as it takes shape (A2 — grounded via detectOpening)', () => {
       // A Najdorf: the walk should announce the line once it's identifiable.

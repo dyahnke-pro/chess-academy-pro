@@ -1438,7 +1438,7 @@ export function buildReviewSegments(
   {
     let prevPhase: string | null = null;
     for (let k = 0; k < usable; k += 1) {
-      const phase = classifyPhase(fenChain[k].fenAfter, moves[k].ply);
+      const phase = classifyPhase(fenChain[k].fenAfter, { ply: moves[k].ply });
       if (prevPhase !== null && phase !== prevPhase && (phase === 'middlegame' || phase === 'endgame')
         && ![...phaseTurnAt.values()].includes(phase)) phaseTurnAt.set(moves[k].ply, phase);
       prevPhase = phase;

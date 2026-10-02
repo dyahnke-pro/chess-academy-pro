@@ -30,6 +30,13 @@ describe('reviewPromptService — two-step gate logic', () => {
     expect(useReviewPromptStore.getState().isOpen).toBe(true);
   });
 
+  it('reports true only on the call that opened the prompt, so a surface can hold its board', async () => {
+    const results: boolean[] = [];
+    for (let i = 0; i < POSITIVE_MOMENTS_THRESHOLD + 2; i++) results.push(await recordPositiveMoment('test'));
+    expect(results.filter(Boolean)).toHaveLength(1);
+    expect(results[POSITIVE_MOMENTS_THRESHOLD - 1]).toBe(true);
+  });
+
   it('does not re-arm after it has already been shown', async () => {
     for (let i = 0; i < POSITIVE_MOMENTS_THRESHOLD; i++) await recordPositiveMoment('test');
     useReviewPromptStore.setState({ isOpen: false }); // user dismissed

@@ -214,6 +214,40 @@ export function getTtsUrl(text: string, voice: string, useSsml = true, style?: s
   return `${base}/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(voice)}${ssmlParam}${styleParam}${prosodyParam}&v=3`;
 }
 
+/** Lines at or under this length are synthesised whole — measured 2026-10-02,
+ *  they already start in about a second, so splitting buys nothing. */
+export const LONG_LINE_CHARS = 150;
+/** A piece shorter than this is merged into the next, so a line never breaks
+ *  into choppy fragments ("Right." / "Now look at e5."). */
+const MIN_CHUNK_CHARS = 40;
+
+/**
+ * SENTENCE-FIRST FOR LONG LINES (David 2026-10-02: "Only where there is a
+ * delay"). `/api/tts` synthesises the whole line before it sends a byte, so
+ * the first sound waits ~0.6s + ~1s per 100 characters — 4-7s on an opening
+ * beat or a review paragraph, measured against prod. Speaking the first
+ * sentence alone puts sound out in about a second while the rest loads behind
+ * it. Short lines come back as one piece, unchanged.
+ */
+export function splitSpokenChunks(text: string): string[] {
+  const t = text.trim();
+  if (t.length <= LONG_LINE_CHARS) return t ? [t] : [];
+  const pieces = t.split(/(?<=[.!?]["')\]]?)\s+(?=\S)/u).map((x) => x.trim()).filter(Boolean);
+  const out: string[] = [];
+  let carry = '';
+  for (const p of pieces) {
+    const joined = carry ? `${carry} ${p}` : p;
+    if (joined.length < MIN_CHUNK_CHARS) { carry = joined; continue; }
+    out.push(joined);
+    carry = '';
+  }
+  if (carry) {
+    if (out.length > 0) out[out.length - 1] = `${out[out.length - 1]} ${carry}`;
+    else out.push(carry);
+  }
+  return out;
+}
+
 /** Available Amazon Polly voices (served via /api/tts endpoint) */
 export const CLOUD_VOICES = [
   { id: 'ruth',     name: 'Ruth',     description: 'Generative female', engine: 'generative' },
@@ -415,7 +449,8 @@ const MOVE_NUMBER_PREFIX_RE = /\b\d{1,3}(?:\.\.\.|…|\.)(?=[NBRQKO]|[a-h][1-8x]
  *  qualifier (returns "" for no disambiguation, else a trailing-space
  *  prefix that sits BEFORE the piece name):
  *    "b"  → "b-"             ("Nbd2" → "b-knight to d2")
- *    "1"  → "first-rank "    ("R1e2" → "first-rank rook to e2")
+ *    (A rank — "R1e2" — is read after the piece by the caller: "rook from the
+ *    first rank to e2".)
  *    "h4" → "h4 "            (rare full-square disambig — read as-is)
  *  The single-file form is hyphenated ("b-file") deliberately so the
  *  case-insensitive sanitizer-leak detector never re-flags a lone "b"
@@ -425,7 +460,6 @@ function speakDisambiguation(disambig: string): string {
   // "the b-knight", "the f-rook" — how a coach says it (Blumenfeld walk F12:
   // "b-file knight to d7" / "f-file rook to d8" read like a spreadsheet).
   if (/^[a-h]$/.test(disambig)) return `${disambig}-`;
-  if (/^[1-8]$/.test(disambig)) return `${RANK_ORDINALS[Number(disambig) - 1]}-rank `;
   return `${disambig} `;
 }
 
@@ -482,9 +516,13 @@ export function sanitizeForTTS(text: string): string {
     // case-insensitive LEAK_DETECTOR_RE false-positive — the old trailing
     // "knight b to d2" had a lone "b to" that the leak auditor flagged as
     // un-expanded piece-letter shorthand (prod sanitizer-leak noise).
-    const dis = speakDisambiguation(disambig);
     const verb = capture === 'x' ? 'takes' : 'to';
-    const spoken = `${dis}${name} ${verb} ${dest}`;
+    // A RANK disambiguation reads after the piece: "R2b3" → "rook from the
+    // second rank to b3". The leading form ("second-rank rook to b3") is not
+    // how anyone says it (hand walk 2026-10-01, V2).
+    const spoken = /^[1-8]$/.test(disambig)
+      ? `${name} from the ${RANK_ORDINALS[Number(disambig) - 1]} rank ${verb} ${dest}`
+      : `${speakDisambiguation(disambig)}${name} ${verb} ${dest}`;
     pieceExpansions.push({ san, spoken });
     return spoken;
   });
@@ -1089,9 +1127,13 @@ class VoiceService {
     this.kidVoiceLock = false;
   }
 
-  async speak(text: string): Promise<void> {
+  /** `sentenceFirst`: a long line COMPUTED on the spot (no one has heard it,
+   *  so nothing has it cached) speaks its first sentence while the rest load.
+   *  Opt-in: authored lines repeat across students and come back cached whole
+   *  in ~0.3s, so they stay whole (David 2026-10-02: "Keep whole"). */
+  async speak(text: string, opts?: { sentenceFirst?: boolean }): Promise<void> {
     this.logSpeakInvoked('speak', text);
-    return this.speakInternal(sanitizeForTTS(text), false);
+    return this.speakInternal(sanitizeForTTS(text), false, opts?.sentenceFirst ? { sentenceFirst: true } : undefined);
   }
 
   /** Speak only when nothing is currently playing — DROPS the request
@@ -1118,6 +1160,23 @@ class VoiceService {
       }).catch(() => undefined);
       return;
     }
+    return this.speakInternal(sanitizeForTTS(text), false);
+  }
+
+  /** Speak once the current line has FINISHED — never cut it, never drop the
+   *  new one (PostHog, David's phone, 2026-10-02: a puzzle's struggle coach
+   *  fired over the wrong-try refutation and cut it mid-sentence). Waits while
+   *  audio is in flight; gives up only when `stale()` says the moment has
+   *  passed (a new try, a new puzzle) or after `maxWaitMs`. */
+  async speakWhenIdle(text: string, opts?: { stale?: () => boolean; maxWaitMs?: number; onStart?: () => void }): Promise<void> {
+    const deadline = Date.now() + (opts?.maxWaitMs ?? 20_000);
+    while ((this.isPlaying() || speechService.isSpeaking) && Date.now() < deadline) {
+      if (opts?.stale?.()) return;
+      await new Promise((r) => setTimeout(r, 200));
+    }
+    if (opts?.stale?.()) return;
+    opts?.onStart?.();
+    this.logSpeakInvoked('speakWhenIdle', text);
     return this.speakInternal(sanitizeForTTS(text), false);
   }
 
@@ -1276,10 +1335,44 @@ class VoiceService {
     });
   }
 
+  /** Utterances between speak and finish — INCLUDING the synthesis fetch,
+   *  which `isPlaying()` cannot see (it flips only when audio starts). */
+  private utterancesInFlight = 0;
+
+  /**
+   * NO TRANSITION CUTS THE VOICE (David 2026-10-02: "Auto advance needs to not
+   * cut off narrations … Instant after last word can sound like cut off").
+   * Resolves once nothing is being fetched or spoken, then holds a breath.
+   * `graceMs` covers a line a just-rendered effect is about to start. The wait
+   * is bounded so a wedged voice can never strand the screen.
+   */
+  async untilQuiet(opts?: { maxWaitMs?: number; breathMs?: number; graceMs?: number }): Promise<void> {
+    const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
+    const deadline = Date.now() + (opts?.maxWaitMs ?? 25_000);
+    await sleep(opts?.graceMs ?? 300);
+    const busy = (): boolean => this.utterancesInFlight > 0 || this.isPlaying() || speechService.isSpeaking;
+    if (!busy()) return;
+    while (busy() && Date.now() < deadline) await sleep(150);
+    await sleep(opts?.breathMs ?? 800);
+  }
+
   private async speakInternal(
     rawText: string,
     force: boolean,
-    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean },
+    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean; sentenceFirst?: boolean },
+  ): Promise<void> {
+    this.utterancesInFlight += 1;
+    try {
+      await this.speakInternalTracked(rawText, force, opts);
+    } finally {
+      this.utterancesInFlight -= 1;
+    }
+  }
+
+  private async speakInternalTracked(
+    rawText: string,
+    force: boolean,
+    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean; sentenceFirst?: boolean },
   ): Promise<void> {
     // ── ONE SPACE BETWEEN TWO SENTENCES (prod, week of 2026-09-11) ──────────
     // A user heard, as one run-on:
@@ -1747,7 +1840,10 @@ class VoiceService {
         : prefs.coachPersonality && prefs.coachPersonality !== 'default'
           ? prefs.coachPersonality
           : undefined;
-      const success = await this.speakCloud(text, voiceForSpeak, personalityStyle, opts?.prosodySpike ? 'spike' : undefined);
+      const prosody = opts?.prosodySpike ? 'spike' as const : undefined;
+      const success = opts?.sentenceFirst
+        ? await this.speakCloudChunked(text, voiceForSpeak, personalityStyle, prosody)
+        : await this.speakCloud(text, voiceForSpeak, personalityStyle, prosody);
       if (success) {
         this.lastTier = 'cloud';
         this.lastSpeakDiagnostic.tier = 'cloud';
@@ -1999,9 +2095,17 @@ class VoiceService {
     const ms = Math.min(12_000, Math.max(400, Math.round((words / 150) * 60_000)));
     const genAtStart = this.stopGeneration;
     const step = 100;
-    for (let waited = 0; waited < ms; waited += step) {
-      if (this.stopGeneration !== genAtStart) return; // superseded — stop early
-      await new Promise((r) => setTimeout(r, Math.min(step, ms - waited)));
+    // A muted line is "playing" for its simulated duration, exactly as a real
+    // one is — so `isPlaying()` (and everything that waits on it) behaves the
+    // same in an audit as on a phone.
+    this.playing = true;
+    try {
+      for (let waited = 0; waited < ms; waited += step) {
+        if (this.stopGeneration !== genAtStart) return; // superseded — stop early
+        await new Promise((r) => setTimeout(r, Math.min(step, ms - waited)));
+      }
+    } finally {
+      if (this.stopGeneration === genAtStart) this.playing = false;
     }
   }
 
@@ -2491,6 +2595,75 @@ audio.playbackRate = this.speed;
     return true;
   }
 
+  /** Clips being fetched ahead of time, by cache key — so the speak path waits
+   *  for a fetch already in flight instead of paying for a second one. */
+  private prefetchInflight = new Map<string, Promise<void>>();
+
+  private cloudKey(text: string, voice: string, style?: string, prosody?: 'spike'): string {
+    return this.pollyKey(text, voice) + (style ? `|${style}` : '') + (prosody ? `|${prosody}` : '');
+  }
+
+  /** Fetch one clip into the audio cache. Shares any fetch already in flight. */
+  private fetchClipToCache(text: string, voice: string, style?: string, prosody?: 'spike'): Promise<void> {
+    const key = this.cloudKey(text, voice, style, prosody);
+    if (this.audioCache.has(key)) return Promise.resolve();
+    const running = this.prefetchInflight.get(key);
+    if (running) return running;
+    const job = (async () => {
+      try {
+        const res = await fetch(getTtsUrl(text, voice, true, style, prosody), { signal: createTimeoutSignal(10_000) });
+        if (!res.ok) return;
+        const buf = await res.arrayBuffer();
+        // A truncated body is not a clip (see playViaElementBuffered).
+        if (buf.byteLength >= 512) this.setAudioCacheEntry(key, buf);
+      } catch { /* a failed prefetch only means the speak path fetches it */ }
+    })().finally(() => { this.prefetchInflight.delete(key); });
+    this.prefetchInflight.set(key, job);
+    return job;
+  }
+
+  /**
+   * Speak a line through the cloud voice, sentence-first when it is long
+   * (`splitSpokenChunks`). The first piece plays as soon as it is synthesised
+   * while the rest are fetched behind it; each later piece is then a cache hit.
+   * Returns false only when nothing was spoken, so the caller's fallback runs
+   * exactly as it does for a whole line. A stop() or newer line ends the chain.
+   */
+  private async speakCloudChunked(text: string, voice: string, style?: string, prosody?: 'spike'): Promise<boolean> {
+    const chunks = splitSpokenChunks(text);
+    if (chunks.length <= 1 || this.audioCache.has(this.cloudKey(text, voice, style, prosody))) {
+      return this.speakCloud(text, voice, style, prosody);
+    }
+    const gen = this.stopGeneration;
+    // One at a time behind the first: the pieces arrive in the order they play.
+    void (async () => {
+      for (const c of chunks.slice(1)) {
+        if (this.stopGeneration !== gen) return;
+        await this.fetchClipToCache(c, voice, style, prosody);
+      }
+    })();
+    try {
+      for (let i = 0; i < chunks.length; i += 1) {
+        const ok = await this.speakCloud(chunks[i], voice, style, prosody);
+        if (this.stopGeneration !== gen) return i > 0 || ok;
+        if (!ok) {
+          if (i === 0) return false;
+          // Part of the line already spoke — finish it in the device voice
+          // rather than restart it from the top.
+          this.playing = false;
+          await this.speakFallback(chunks.slice(i).join(' '));
+          return true;
+        }
+        // No gap between pieces for a waiting line to slip into.
+        if (i < chunks.length - 1) this.playing = true;
+      }
+      return true;
+    } finally {
+      // Never leave the bridge flag up past the chain's own end.
+      if (this.stopGeneration === gen) this.playing = false;
+    }
+  }
+
   private async speakCloud(text: string, voice: string, style?: string, prosody?: 'spike'): Promise<boolean> {
     // No speakable content (empty string, whitespace, or pure punctuation left by
     // a sentence-split) → never build a /api/tts URL for it. Prod returns 400 on
@@ -2503,7 +2676,9 @@ audio.playbackRate = this.speed;
     try {
       // Cache key includes style so a style change doesn't return
       // a stale audio buffer from an earlier prosody setting.
-      const key = this.pollyKey(text, voice) + (style ? `|${style}` : '') + (prosody ? `|${prosody}` : '');
+      const key = this.cloudKey(text, voice, style, prosody);
+      const inflight = this.prefetchInflight.get(key);
+      if (inflight) await inflight;
       const cachedBuffer = this.touchAudioCacheEntry(key);
 
       // Cache hit → play the buffered audio directly (no fetch). On iOS
@@ -2786,37 +2961,50 @@ audio.playbackRate = this.speed;
     }
   }
 
-  /** Pre-fetch Polly audio for a list of texts. Call on mount when all
-   *  annotations are known so playback is instant later. */
+  /** Pre-fetch the cloud voice for lines a surface already knows it will say,
+   *  so they play the moment they are asked for.
+   *
+   *  KEYED EXACTLY AS THE SPEAK PATH KEYS THEM (2026-10-02). This used to cache
+   *  the RAW text under no style, while `speak` keys the SANITIZED, spaced,
+   *  personality-styled text — so any line containing a move ("Qxd7" → "queen
+   *  takes d7") was fetched twice and never hit. It now runs the same
+   *  normalisation, voice and style, whole lines only (a preloaded line has no
+   *  wait to cut). Audits and silent narration fetch nothing. */
   async prefetchAudio(texts: string[]): Promise<void> {
+    if (this.isAuditMuted()) return;
     const prefs = await this.loadPrefs();
     if (!prefs?.cloudEnabled || !this.isPollyLive() || !prefs.voiceEnabled) return;
+    const verbosity = resolveCoachNarration(useAppStore.getState().activeProfile?.preferences);
+    if (verbosity === 'silent') return;
+    // A translated line is a different string; it is fetched when it is said.
+    if (spokenLanguageName()) return;
 
-    const voice = resolvePollyVoice(
-      prefs.coachPersonality,
-      prefs.coachPersonalityVoices,
-      prefs.pollyVoice,
-    );
-    const uncached = texts.filter(t => t && !this.audioCache.has(this.pollyKey(t, voice)));
-    if (uncached.length === 0) return;
+    const voice = this.kidVoiceLock
+      ? PERSONALITY_VOICE_DEFAULTS.default
+      : resolvePollyVoice(prefs.coachPersonality, prefs.coachPersonalityVoices, prefs.pollyVoice);
+    const style = this.kidVoiceLock
+      ? undefined
+      : prefs.coachPersonality && prefs.coachPersonality !== 'default' ? prefs.coachPersonality : undefined;
 
-    // Fetch in parallel, 4 at a time to avoid overwhelming the server
+    const pieces = new Set<string>();
+    for (const raw of texts) {
+      if (!raw) continue;
+      const full = sanitizeForTTS(raw).replace(/([.!?])([A-Z])/g, '$1 $2');
+      const variants = [full];
+      if (NARRATION_BRIEF_CAP_ENABLED && verbosity === 'brief') {
+        const cap = applyBriefVoiceCap(full, 'brief');
+        if (cap.truncated) variants.push(cap.text);
+      }
+      for (const v of variants) {
+        if (!/[\p{L}\p{N}]/u.test(v)) continue;
+        pieces.add(v.trim());
+      }
+    }
+    const todo = [...pieces].filter((c) => !this.audioCache.has(this.cloudKey(c, voice, style)));
+    // Four at a time — the order they are asked for is roughly the order said.
     const BATCH = 4;
-    for (let i = 0; i < uncached.length; i += BATCH) {
-      const batch = uncached.slice(i, i + BATCH);
-      await Promise.allSettled(
-        batch.map(async (text) => {
-          try {
-            const url = getTtsUrl(text, voice);
-            const res = await fetch(url, { signal: createTimeoutSignal(5000) });
-            if (res.ok) {
-              this.setAudioCacheEntry(this.pollyKey(text, voice), await res.arrayBuffer());
-            }
-          } catch {
-            // Prefetch failure is non-fatal
-          }
-        }),
-      );
+    for (let i = 0; i < todo.length; i += BATCH) {
+      await Promise.allSettled(todo.slice(i, i + BATCH).map((c) => this.fetchClipToCache(c, voice, style)));
     }
   }
 

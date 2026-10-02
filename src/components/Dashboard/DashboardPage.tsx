@@ -1,21 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../stores/appStore';
 import { updateStreak } from '../../services/sessionGenerator';
 import { seedDatabase } from '../../services/dataLoader';
-import { BookOpen, GraduationCap, Target, AlertTriangle, Upload, ChevronRight, CheckCircle2, Baby } from 'lucide-react';
+import { BookOpen, GraduationCap, Target, AlertTriangle, Upload, ChevronRight, Baby } from 'lucide-react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PageHelp } from '../Layout/PageHelp';
-import { ReviewLastGameCard } from './ReviewLastGameCard';
 import { TableOfContents } from './TableOfContents';
 import { useSettings } from '../../hooks/useSettings';
 import { scaledShadow } from '../../utils/neonColors';
-import { getUnifiedWeaknessProfile } from '../../services/weaknessSpine';
-import { getUnlearnedFavoriteOpenings } from '../../services/openingService';
-import { getSrsDueOpenings } from '../../services/srsOpeningService';
-import { buildTodaysReps, type RepCandidate } from '../../services/trainingPlanSelector';
-import { getCompletedRepKeysToday } from '../../services/repCompletion';
-import { resolveRepRoute } from '../../services/repRouting';
+import { useUpNext } from '../../hooks/useUpNext';
+import type { UpNextState } from '../../services/upNextLoader';
+import { UpNextBar } from './UpNextBar';
+import { TodayRing } from './TodayRing';
+import { sayPickOncePerDay } from '../../services/upNextHome';
 
 interface SectionItem {
   label: string;
@@ -108,99 +106,43 @@ const KIDS_SECTION: SectionItem = {
   rgb: '251, 146, 60',
 };
 
-/** Live loop-state strip (David 2026-05-25): the Dashboard is the status
- *  board for the one training loop, not just static tiles. Pulls today's
- *  reps from the same three sources as the Training Plan (unified
- *  weaknesses + SRS-due + new lines) and routes into the hub. Renders
- *  nothing until there's something to do, so a fresh user isn't nagged. */
-/** Route a Today's rep into its drill — same logic as the Training Plan hub
- *  (TrainingPlanRolodexPage) so the dashboard tasks and the plan agree. */
-function navigateToRep(navigate: ReturnType<typeof useNavigate>, rep: RepCandidate): void {
-  const route = resolveRepRoute(rep);
-  void navigate(route.path, route.state ? { state: route.state } : undefined);
+/** Which Home row the Up-next pick lives under — that row pulses in place. */
+function homePulseRoute(hub: string | null): string | null {
+  if (!hub) return null;
+  if (hub.startsWith('tactics:')) return '/tactics';
+  if (hub === 'openings') return '/openings';
+  return null;
 }
 
-function TodayStatus(): JSX.Element | null {
-  const navigate = useNavigate();
-  const [reps, setReps] = useState<RepCandidate[] | null>(null);
-  const [completedKeys, setCompletedKeys] = useState<Set<string>>(new Set());
-  const [expanded, setExpanded] = useState(false);
+/** THE UP-NEXT SECTION (David 2026-10-01) — replaces the old five-rep list.
+ *  One pick, pinned and pulsing, with its reason and finish line; today's
+ *  ring of three bites; the week's trained days; what got better. Built on
+ *  the SAME selector (`buildTodaysReps`) the Training Plan reads. The coach
+ *  says the reason once a day per pick, after the student's first tap —
+ *  never on launch, and through the narration setting. */
+function UpNextSection({ upNext }: { upNext: UpNextState | null }): JSX.Element {
+  const spokeRef = useRef(false);
 
+  // The gentle voice: after the first tap anywhere on Home, once a day per pick.
   useEffect(() => {
-    let cancelled = false;
-    void (async () => {
-      const [weaknesses, srsDue, newLines, done] = await Promise.all([
-        getUnifiedWeaknessProfile(),
-        getSrsDueOpenings(),
-        getUnlearnedFavoriteOpenings(),
-        getCompletedRepKeysToday(),
-      ]);
-      if (cancelled) return;
-      setReps(buildTodaysReps({ weaknesses, srsDue, newLines, total: 5 }));
-      setCompletedKeys(done);
-    })();
-    return () => { cancelled = true; };
-  }, []);
+    const pick = upNext?.current;
+    if (!pick) return;
+    const say = (): void => {
+      if (spokeRef.current) return;
+      spokeRef.current = true;
+      void sayPickOncePerDay(pick.key, pick.reason);
+    };
+    window.addEventListener('pointerdown', say, { once: true });
+    return () => window.removeEventListener('pointerdown', say);
+  }, [upNext?.current]);
 
-  // The slot is RESERVED from first paint (fixed min-height) so the reps
-  // arriving async never push the section grid down mid-tap — David's
-  // misclick report (2026-07-31): the late-loading tiles shifted the
-  // layout and his Coach tap landed on a training row. Collapsed by
-  // default; expanding is user-initiated, so that shift is fine.
-  const doneCount = reps?.filter((r) => completedKeys.has(r.key)).length ?? 0;
-  const allDone = reps !== null && reps.length > 0 && doneCount === reps.length;
-
+  // Today's count is the small pill in the title row; the week, proven / to
+  // fix and the Deep Run best moved to the full plan (`WeekProgress`) — so the
+  // four sections sit right under Up next (David 2026-10-02).
+  if (!upNext?.current) return <></>;
   return (
-    <div className="max-w-lg mx-auto w-full flex flex-col gap-2 min-h-[2.75rem]" data-testid="dashboard-due-board">
-      {reps !== null && reps.length > 0 && (
-        <button
-          onClick={() => setExpanded((e) => !e)}
-          className={`w-full h-11 flex items-center gap-2 px-4 rounded-xl border transition-all hover:opacity-80 ${allDone ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-theme-accent/10 border-theme-accent/30'}`}
-          data-testid="dashboard-today-toggle"
-          data-expanded={expanded ? 'true' : 'false'}
-        >
-          <Target size={16} className="text-theme-accent shrink-0" />
-          <span className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
-            Today&apos;s training
-          </span>
-          <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-            {doneCount}/{reps.length} done
-          </span>
-          <ChevronRight
-            size={16}
-            className={`ml-auto shrink-0 text-theme-text-muted transition-transform ${expanded ? 'rotate-90' : ''}`}
-          />
-        </button>
-      )}
-      {expanded && reps !== null && reps.map((rep) => {
-        const done = completedKeys.has(rep.key);
-        return (
-          <button
-            key={rep.key}
-            onClick={() => navigateToRep(navigate, rep)}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all hover:opacity-80 ${done ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-theme-accent/10 border-theme-accent/30'}`}
-            data-testid={`dashboard-rep-${rep.kind}`}
-            data-rep-done={done ? 'true' : 'false'}
-          >
-            <div className="flex-1 text-left min-w-0">
-              <span className={`text-sm font-medium ${done ? 'line-through opacity-70' : ''}`} style={{ color: 'var(--color-text)' }}>{rep.label}</span>
-              <p className="text-xs truncate" style={{ color: 'var(--color-text-muted)' }}>{done ? 'Done for today — tap for more.' : rep.subtitle}</p>
-            </div>
-            {done
-              ? <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
-              : <ChevronRight size={16} className="text-theme-text-muted shrink-0" />}
-          </button>
-        );
-      })}
-      {expanded && (
-        <button
-          onClick={() => void navigate('/coach/plan')}
-          className="self-end px-1 text-xs text-theme-text-muted hover:text-theme-accent transition-colors"
-          data-testid="dashboard-today-seeall"
-        >
-          See full plan
-        </button>
-      )}
+    <div className="max-w-lg mx-auto w-full shrink-0" data-testid="dashboard-up-next">
+      <UpNextBar pick={upNext.current} surface="home" />
     </div>
   );
 }
@@ -212,6 +154,7 @@ export function DashboardPage(): JSX.Element {
   const { settings } = useSettings();
   const gB = settings.glowBrightness;
   const gS = gB / 100;
+  const upNextForPulse = useUpNext();
 
   useEffect(() => {
     void seedDatabase();
@@ -226,6 +169,7 @@ export function DashboardPage(): JSX.Element {
   }, [activeProfile, setActiveProfile]);
 
   if (!activeProfile) return <></>;
+  const pulseRoute = homePulseRoute(upNextForPulse?.current?.hub ?? null);
 
   return (
     <div
@@ -233,11 +177,10 @@ export function DashboardPage(): JSX.Element {
       style={{ color: 'var(--color-text)' }}
       data-testid="dashboard"
     >
-      <div className="relative mt-2">
-        <h1 className="text-xl font-bold text-center">
-          Chess Academy Pro
-        </h1>
-        <div className="absolute left-0 top-1/2 -translate-y-1/2">
+      {/* Three columns of equal side width so the title stays centred and the
+          "0/3 training" counter never collides with it on a phone. */}
+      <div className="mt-2 grid grid-cols-[5.5rem_1fr_5.5rem] items-center">
+        <div className="justify-self-start">
           <PageHelp
             helpId="dashboard"
             suppressAutoOpen={activeProfile?.strengthCalibrated === false}
@@ -251,6 +194,12 @@ export function DashboardPage(): JSX.Element {
               { label: 'The loop', body: 'Learn it → play it → find the holes → drill them shut. The four sections below are the steps of that one cycle.' },
             ]}
           />
+        </div>
+        <h1 className="text-lg font-bold text-center whitespace-nowrap">
+          Chess Academy Pro
+        </h1>
+        <div className="justify-self-end">
+          {upNextForPulse && <TodayRing ring={upNextForPulse.ring} done={upNextForPulse.done} />}
         </div>
       </div>
 
@@ -278,13 +227,12 @@ export function DashboardPage(): JSX.Element {
         <SmartSearchBar />
       </div>
 
-      {/* Live loop status — today's reps, routes into the Training Plan hub */}
-      <TodayStatus />
+      {/* Up next + today's ring — routes into one short bite */}
+      <UpNextSection upNext={upNextForPulse} />
 
-      {/* The import→review handoff. Analysis already ran on their games and
-          nobody was being shown it — see ReviewLastGameCard for the numbers.
-          Renders nothing until they have a game of their own; dismissible. */}
-      <ReviewLastGameCard />
+      {/* The "Review your last game" card is gone (David 2026-10-02: the
+          "redundant review button") — Up next already sends the student to
+          the slip from their last game, so it pointed at the same game twice. */}
 
       {/* "The Philosophy of A General" (our book) now lives in The Coaches
           Library (Coach › The Coaches Library), so its dashboard tile is gone. */}
@@ -321,7 +269,8 @@ export function DashboardPage(): JSX.Element {
             <button
               key={section.route}
               onClick={() => void navigate(section.route)}
-              className={`${section.bgColor} rounded-2xl flex items-center gap-3 px-4 py-3.5 text-left transition-all duration-200 w-full ${isKids ? 'mt-2' : ''}`}
+              className={`${section.bgColor} rounded-2xl flex items-center gap-3 px-4 py-3.5 text-left transition-all duration-200 w-full ${isKids ? 'mt-2' : ''} ${section.route === pulseRoute ? 'ring-2 ring-fuchsia-300/80 upnext-glow' : ''}`}
+              data-up-next={section.route === pulseRoute ? 'true' : undefined}
               style={{
                 borderTop: `1px solid rgba(${section.rgb}, ${Math.min(1, 0.1 * gS)})`,
                 borderRight: `1px solid rgba(${section.rgb}, ${Math.min(1, 0.1 * gS)})`,

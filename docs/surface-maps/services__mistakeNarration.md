@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**676 lines · 3 exports · 6 importers · 4 tests · 0 audits**
+**700 lines · 3 exports · 6 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,7 +12,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
-- `src/components/Puzzles/MistakePuzzleBoard.tsx`
+- `src/services/mistakeNarration.allowed.test.ts`
 - `src/services/mistakeNarration.boardTruth.test.ts`
 - `src/services/mistakeNarration.test.ts`
 - `src/services/mistakeNarrationVoice.ts`
@@ -27,41 +27,47 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `describePositionIdea` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `generateMistakeNarration` (function) — 31 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:154`
+### `generateMistakeNarration` (function) — 36 call sites
+- `src/services/mistakeNarration.allowed.test.ts:17`
+- `src/services/mistakeNarration.allowed.test.ts:22`
+- `src/services/mistakeNarration.allowed.test.ts:27`
+- `src/services/mistakeNarration.allowed.test.ts:37`
+- `src/services/mistakeNarration.allowed.test.ts:47`
 - `src/services/mistakeNarration.boardTruth.test.ts:26`
-- `src/services/mistakeNarration.test.ts:27`
-- `src/services/mistakeNarration.test.ts:37`
-- `src/services/mistakeNarration.test.ts:44`
-- `src/services/mistakeNarration.test.ts:49`
-- `src/services/mistakeNarration.test.ts:54`
-- `src/services/mistakeNarration.test.ts:61`
-- `src/services/mistakeNarration.test.ts:71`
-- `src/services/mistakeNarration.test.ts:80`
-- `src/services/mistakeNarration.test.ts:85`
-- `src/services/mistakeNarration.test.ts:91`
-- `src/services/mistakeNarration.test.ts:96`
-- `src/services/mistakeNarration.test.ts:102`
-- `src/services/mistakeNarration.test.ts:107`
-- `src/services/mistakeNarration.test.ts:113`
-- `src/services/mistakeNarration.test.ts:118`
-- `src/services/mistakeNarration.test.ts:126`
-- `src/services/mistakeNarration.test.ts:134`
-- `src/services/mistakeNarration.test.ts:142`
-- `src/services/mistakeNarration.test.ts:152`
-- `src/services/mistakeNarration.test.ts:181`
-- `src/services/mistakeNarration.test.ts:259`
-- `src/services/mistakeNarration.test.ts:270`
-- `src/services/mistakeNarration.test.ts:286`
-- `src/services/mistakeNarration.test.ts:300`
+- `src/services/mistakeNarration.test.ts:28`
+- `src/services/mistakeNarration.test.ts:38`
+- `src/services/mistakeNarration.test.ts:45`
+- `src/services/mistakeNarration.test.ts:50`
+- `src/services/mistakeNarration.test.ts:55`
+- `src/services/mistakeNarration.test.ts:62`
+- `src/services/mistakeNarration.test.ts:72`
+- `src/services/mistakeNarration.test.ts:81`
+- `src/services/mistakeNarration.test.ts:86`
+- `src/services/mistakeNarration.test.ts:92`
+- `src/services/mistakeNarration.test.ts:97`
+- `src/services/mistakeNarration.test.ts:103`
+- `src/services/mistakeNarration.test.ts:108`
+- `src/services/mistakeNarration.test.ts:114`
+- `src/services/mistakeNarration.test.ts:119`
+- `src/services/mistakeNarration.test.ts:127`
+- `src/services/mistakeNarration.test.ts:135`
+- `src/services/mistakeNarration.test.ts:143`
+- `src/services/mistakeNarration.test.ts:153`
+- `src/services/mistakeNarration.test.ts:182`
+- `src/services/mistakeNarration.test.ts:260`
+- `src/services/mistakeNarration.test.ts:271`
+- `src/services/mistakeNarration.test.ts:287`
 - `src/services/mistakeNarration.test.ts:301`
-- `src/services/mistakePuzzleService.ts:643`
-- `src/services/mistakePuzzleService.ts:956`
-- `src/services/mistakePuzzleService.ts:1304`
+- `src/services/mistakeNarration.test.ts:302`
+- `src/services/mistakePuzzleService.ts:628`
+- `src/services/mistakePuzzleService.ts:945`
+- `src/services/mistakePuzzleService.ts:1093`
+- `src/services/mistakePuzzleService.ts:1238`
 - `src/services/reviewWalkOct1.test.ts:41`
 
 ## Tests
 
+- `src/services/mistakeNarration.allowed.test.ts`
 - `src/services/mistakeNarration.boardTruth.test.ts`
 - `src/services/mistakeNarration.test.ts`
 - `src/services/mistakeNarrationVoice.test.ts`

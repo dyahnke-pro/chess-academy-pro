@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:24) — names `conceptEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:6105) — names `conceptEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:6116) — names `conceptEngine`
 
 ## Who calls in
 
@@ -55,7 +55,7 @@
 - `src/services/conceptEngine.test.ts:13`
 - `src/services/groundedMoveWhy.ts:73`
 - `src/services/groundedMoveWhy.ts:99`
-- `src/services/mistakeNarration.ts:373`
+- `src/services/mistakeNarration.ts:380`
 
 ### `solvingSide` (function) — 2 call sites
 - `src/services/conceptEngine.test.ts:19`
@@ -100,7 +100,7 @@
 - `src/services/conceptEngine.test.ts:284`
 - `src/services/conceptEngine.test.ts:285`
 - `src/services/endgameService.ts:90`
-- `src/services/endgameTablebaseService.ts:274`
+- `src/services/endgameTablebaseService.ts:275`
 - `src/services/endgameTechnique.test.ts:61`
 - `src/services/endgameTechnique.test.ts:74`
 - `src/services/endgameTechnique.test.ts:224`
@@ -135,7 +135,7 @@
 - `src/services/conceptEngine.test.ts:303`
 - `src/services/endgameDrillService.test.ts:163`
 - `src/services/missedTacticService.ts:787`
-- `src/services/puzzleConceptExplanation.ts:111`
+- `src/services/puzzleConceptExplanation.ts:119`
 - `src/services/puzzleConceptHint.ts:110`
 - `src/services/puzzleGenerator.ts:206`
 - `src/services/refutedAlternative.ts:112`
@@ -159,8 +159,8 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `definitionKey` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7461`
-- `src/components/Coach/CoachTeachPage.tsx:7465`
+- `src/components/Coach/CoachTeachPage.tsx:7482`
+- `src/components/Coach/CoachTeachPage.tsx:7486`
 - `src/services/learnWalkBlumenfeld.test.ts:133`
 - `src/services/positionFacts.ts:1064`
 - `src/services/positionFacts.ts:1067`
@@ -169,11 +169,11 @@
 - `src/services/reviewFullData.ts:497`
 
 ### `tacticInvariant` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7462`
-- `src/services/dnaLineNarrator.ts:185`
-- `src/services/dnaLineNarrator.ts:216`
-- `src/services/dnaLineNarrator.ts:252`
-- `src/services/puzzleConceptExplanation.ts:100`
+- `src/components/Coach/CoachTeachPage.tsx:7483`
+- `src/services/dnaLineNarrator.ts:187`
+- `src/services/dnaLineNarrator.ts:218`
+- `src/services/dnaLineNarrator.ts:254`
+- `src/services/puzzleConceptExplanation.ts:108`
 - `src/services/reviewFullData.ts:493`
 - `src/services/tacticAlertService.ts:141`
 - `src/services/tacticTypeUnification.test.ts:199`

@@ -1,27 +1,28 @@
 import { LineChart, Line, ResponsiveContainer, YAxis } from 'recharts';
 import { Flame, Target, TrendingUp, TrendingDown } from 'lucide-react';
 import type { AdaptiveSessionState } from '../../services/adaptivePuzzleService';
-import { ADAPTIVE_CONFIGS } from '../../services/adaptivePuzzleService';
 
 interface AdaptiveSessionPanelProps {
   session: AdaptiveSessionState;
+  /** The student's ONE puzzle rating across this session, first to latest. */
+  ratingHistory: readonly number[];
 }
 
-export function AdaptiveSessionPanel({ session }: AdaptiveSessionPanelProps): JSX.Element {
-  const config = ADAPTIVE_CONFIGS[session.difficulty];
+export function AdaptiveSessionPanel({ session, ratingHistory }: AdaptiveSessionPanelProps): JSX.Element {
   const accuracy = session.totalPuzzles > 0
     ? Math.round((session.puzzlesSolved / session.totalPuzzles) * 100)
     : 0;
 
-  const ratingDelta = session.sessionRating - config.startRating;
-  const chartData = session.ratingHistory.map((rating, i) => ({ index: i, rating }));
+  const current = ratingHistory.length > 0 ? ratingHistory[ratingHistory.length - 1] : null;
+  const ratingDelta = current !== null ? current - ratingHistory[0] : 0;
+  const chartData = ratingHistory.map((rating, i) => ({ index: i, rating }));
 
   return (
     <div className="bg-theme-surface rounded-lg p-4 space-y-4" data-testid="adaptive-session-panel">
-      {/* Session Rating */}
+      {/* The one puzzle rating, this session */}
       <div>
         <div className="flex items-center justify-between mb-1">
-          <h3 className="text-sm font-semibold text-theme-text">Session Rating</h3>
+          <h3 className="text-sm font-semibold text-theme-text">Puzzle rating this session</h3>
           <div className="flex items-center gap-1" style={{ color: ratingDelta >= 0 ? 'var(--color-success)' : 'var(--color-error)' }}>
             {ratingDelta >= 0
               ? <TrendingUp size={14} />
@@ -32,7 +33,7 @@ export function AdaptiveSessionPanel({ session }: AdaptiveSessionPanelProps): JS
           </div>
         </div>
         <div className="text-2xl font-bold text-theme-text" data-testid="session-rating">
-          {session.sessionRating}
+          {current ?? '—'}
         </div>
       </div>
 
@@ -41,7 +42,7 @@ export function AdaptiveSessionPanel({ session }: AdaptiveSessionPanelProps): JS
         <div className="h-16" data-testid="rating-chart">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
-              <YAxis domain={[config.ratingFloor, config.ratingCeiling]} hide />
+              <YAxis domain={['dataMin - 20', 'dataMax + 20']} hide />
               <Line
                 type="monotone"
                 dataKey="rating"

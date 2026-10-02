@@ -10,11 +10,11 @@
 
 - **The tools are COMPUTERS** (CLAUDE.md:24) — names `positionFacts`
 - **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:287) — names `positionFacts`
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:907) — names `positionFacts`
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3867) — names `ClauseKind`, `positionFacts`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4019) — names `positionFacts`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5998) — names `positionFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:6105) — names `positionFacts`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:918) — names `positionFacts`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3878) — names `ClauseKind`, `positionFacts`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4030) — names `positionFacts`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6009) — names `positionFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:6116) — names `positionFacts`
 
 ## Who calls in
 
@@ -88,11 +88,11 @@
 - `src/services/positionFacts.test.ts:306`
 - `src/services/positionFacts.test.ts:364`
 - `src/services/positionFacts.test.ts:365`
-- `src/services/positionReadComposer.ts:116`
+- `src/services/positionReadComposer.ts:149`
 - `src/services/whyBestMove.ts:103`
 
 ### `computePositionFacts` (function) — 81 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9326`
+- `src/components/Coach/CoachTeachPage.tsx:9382`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:635`
@@ -160,7 +160,7 @@
 - `src/services/positionFacts.weakness.test.ts:48`
 - `src/services/positionFacts.weakness.test.ts:62`
 - `src/services/positionFacts.weakness.test.ts:63`
-- `src/services/positionReadComposer.ts:98`
+- `src/services/positionReadComposer.ts:130`
 - `src/services/whyBestMove.needWire.test.ts:10`
 - `src/services/whyBestMove.ts:89`
 - `src/test/computedOrderWired.test.ts:32`
@@ -175,10 +175,10 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8056`
+- `src/components/Coach/CoachTeachPage.tsx:8078`
 
 ### `convertKey` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9551`
+- `src/components/Coach/CoachTeachPage.tsx:9607`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 
 ### `afterLine` (function) — 5 call sites
@@ -189,7 +189,7 @@
 - `src/services/positionFacts.afterLine.test.ts:25`
 
 ### `conceptInstanceKey` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8037`
+- `src/components/Coach/CoachTeachPage.tsx:8059`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.ts:9`

@@ -4,15 +4,16 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**149 lines · 3 exports · 2 importers · 1 tests · 0 audits**
+**190 lines · 3 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4253) — names `composePositionRead`
+- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4298) — names `composePositionRead`
 
 ## Who calls in
 
 - `src/hooks/usePositionNarration.ts`
+- `src/services/positionReadComposer.withhold.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 
 ## Exports and every call site
@@ -23,12 +24,14 @@
 ### `PositionReadInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `composePositionRead` (function) — 2 call sites
-- `src/hooks/usePositionNarration.ts:225`
+### `composePositionRead` (function) — 3 call sites
+- `src/hooks/usePositionNarration.ts:228`
+- `src/services/positionReadComposer.withhold.test.ts:18`
 - `src/test/everySurfaceSpeaks.test.ts:131`
 
 ## Tests
 
+- `src/services/positionReadComposer.withhold.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 
 ## Audits that reach it

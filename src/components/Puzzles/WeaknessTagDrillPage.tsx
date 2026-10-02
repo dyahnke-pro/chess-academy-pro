@@ -66,7 +66,18 @@ export function WeaknessTagDrillPage(): JSX.Element {
     setPhase('summary');
   }, [tag]);
 
-  const handleComplete = useCallback((wasCorrect: boolean): void => {
+  // The tag drill's puzzles are built per session and never saved, so there
+  // is no puzzle row to grade (a gradeMistakePuzzle call here found nothing and
+  // did nothing). Its record writes are the board's capability evidence on the
+  // first answer, plus `recordTagDrillResult` for the tag at session end.
+  const resolvedRef = useRef<{ correct: boolean } | null>(null);
+  const handleResolved = useCallback((wasCorrect: boolean): void => {
+    resolvedRef.current = { correct: wasCorrect };
+  }, []);
+
+  const handleComplete = useCallback((): void => {
+    const wasCorrect = resolvedRef.current?.correct ?? false;
+    resolvedRef.current = null;
     const nextCorrect = correct + (wasCorrect ? 1 : 0);
     setCorrect(nextCorrect);
     if (index + 1 >= puzzles.length) {
@@ -191,7 +202,8 @@ export function WeaknessTagDrillPage(): JSX.Element {
         <MistakePuzzleBoard
           key={puzzle.id}
           puzzle={puzzle}
-          onComplete={(wasCorrect) => handleComplete(wasCorrect)}
+          onResolved={handleResolved}
+          onComplete={handleComplete}
         />
       )}
     </div>

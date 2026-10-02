@@ -20,13 +20,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `mistakeConcept` (function) — 4 call sites
 - `src/services/conceptSchedule.test.ts:21`
 - `src/services/conceptSchedule.test.ts:22`
-- `src/services/mistakePuzzleService.ts:1504`
-- `src/services/mistakePuzzleService.ts:1505`
+- `src/services/mistakePuzzleService.ts:1442`
+- `src/services/mistakePuzzleService.ts:1443`
 
 ### `conceptSiblingsToPull` (function) — 3 call sites
 - `src/services/conceptSchedule.test.ts:27`
 - `src/services/conceptSchedule.test.ts:31`
-- `src/services/mistakePuzzleService.ts:1496`
+- `src/services/mistakePuzzleService.ts:1434`
 
 ## Tests
 

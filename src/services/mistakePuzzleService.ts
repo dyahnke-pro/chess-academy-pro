@@ -1,14 +1,18 @@
 import { Chess } from 'chess.js';
+import { classifyPhase } from './gamePhaseService';
 import { db } from '../db/schema';
 import { emitWeaknessModelChanged } from './weaknessModelEvents';
 import { conceptSiblingsToPull, mistakeConcept } from './conceptSchedule';
 import { createDefaultSrsFields, calculateNextInterval } from './srsEngine';
 import { stockfishEngine } from './stockfishEngine';
+import { growOneMove, shrinkOnMiss, solveLengthOf } from './mistakeLineGrowth';
+import type { EvaluateMulti } from './criticalityScan';
+import { gameReplyAfter } from './moveAllowed';
 import { generateMistakeNarration } from './mistakeNarration';
 import { voiceMistakeNarration } from './mistakeNarrationVoice';
 import { detectTacticType } from './missedTacticService';
 import { tacticTypeLabel } from './tacticAlertService';
-import type { TacticType } from '../types';
+import type { TacticType, MistakeNarration } from '../types';
 import {
   detectPositionTransformation,
   transformationPrompt,
@@ -19,7 +23,6 @@ import { isFixtureGame } from './fixtureGames';
 import { playedAtMs, type WeaknessProvenance } from './weaknessSpine';
 import { capEval } from './accuracyService';
 import { verifySacrificeDeep, SAC_VERIFY_DEPTH } from './brilliancy';
-import { useAppStore } from '../stores/appStore';
 import { MISTAKE_CP, BLUNDER_CP, isMateEval } from './engineConstants';
 import { winPctLost, bandForWinPctLost } from './accuracyService';
 import type {
@@ -249,26 +252,6 @@ export function uciToSan(fen: string, uci: string): string {
   } catch {
     return uci;
   }
-}
-
-function classifyGamePhase(fen: string, moveNumber: number): MistakeGamePhase {
-  // Use both move number and piece count for classification
-  if (moveNumber <= 12) return 'opening';
-
-  // Count non-pawn, non-king pieces to detect endgame
-  const board = fen.split(' ')[0];
-  let minorMajorCount = 0;
-  for (const ch of board) {
-    if ('rnbqRNBQ'.includes(ch)) minorMajorCount++;
-  }
-
-  // Endgame: few pieces left or late in the game with reduced material
-  if (minorMajorCount <= 4 || (moveNumber > 35 && minorMajorCount <= 6)) return 'endgame';
-
-  // Opening extends a bit if still developing (many pieces, early moves)
-  if (moveNumber <= 15 && minorMajorCount >= 12) return 'opening';
-
-  return 'middlegame';
 }
 
 /**
@@ -565,7 +548,7 @@ async function analyzeGameWithStockfish(
 
     const bestMoveSan = uciToSan(fen, bestMove);
     const san = moves[moveIdx];
-    const gamePhase = classifyGamePhase(fen, moveNumber);
+    const gamePhase = classifyPhase(fen, { fullMove: moveNumber });
 
     // Player's actual move in UCI + SAN.
     // chess.js 1.4.0 RETURNS null on illegal moves (older versions
@@ -633,6 +616,8 @@ async function analyzeGameWithStockfish(
       gameDate: gameContext.gameDate,
       openingName: gameContext.openingName,
       evalBefore: evalBeforeFromPlayer,
+      // What they answered in the game — the card leads with what it punished.
+      allowedReplySan: moves[moveIdx + 1] ?? null,
       // Mate for the OPPONENT after the move (both evals White POV).
       allowedMate: isMateEval(evalAfter) && (playerColor === 'white' ? evalAfter < 0 : evalAfter > 0),
     };
@@ -886,7 +871,7 @@ async function generateFromAnnotations(
       carried === 'miss' ? 'miss'
         : (carried === 'inaccuracy' || carried === 'mistake' || carried === 'blunder') ? carried
           : classifyByCentipawnsFallback(cpLoss);
-    const gamePhase = classifyGamePhase(fen, annotation.moveNumber);
+    const gamePhase = classifyPhase(fen, { fullMove: annotation.moveNumber });
 
     // Determine player's move in UCI + SAN format from annotation
     let playerMove = '';
@@ -951,6 +936,10 @@ async function generateFromAnnotations(
       openingName: gameContext.openingName,
       // generateMistakeNarration expects evalBefore in PAWNS (player POV).
       evalBefore: evalBeforeCp !== null ? evalBeforeCp / 100 : null,
+      // What they answered in the game — the card leads with what it punished.
+      allowedReplySan: annotations.find(
+        (a) => (a.moveNumber - 1) * 2 + (a.color === 'black' ? 1 : 0) === fenIndex + 1,
+      )?.san ?? null,
     };
     const narration = await voiceMistakeNarration(
       generateMistakeNarration(narrationParams),
@@ -1022,107 +1011,6 @@ export async function generateMistakePuzzlesForBatch(
   return total;
 }
 
-// ─── Re-analysis ─────────────────────────────────────────────────────────────
-
-export interface ReanalysisProgress {
-  current: number;
-  total: number;
-  puzzlesFound: number;
-  /** Human-readable reason the analysis couldn't run or produced no
-   *  puzzles — surfaced so the UI can tell the user exactly what to
-   *  fix (e.g. "set your chess.com username in Settings"). */
-  warning?: string;
-}
-
-/**
- * Re-analyze all imported games that haven't produced mistake puzzles.
- * Clears cached meta keys and existing puzzles, then re-runs Stockfish analysis.
- * Reports progress via callback so the UI can show a progress indicator.
- */
-export async function reanalyzeImportedGames(
-  onProgress?: (progress: ReanalysisProgress) => void,
-): Promise<number> {
-  // Find all imported games (chesscom + lichess)
-  const allGames = await db.games
-    .filter((g) => g.source === 'chesscom' || g.source === 'lichess')
-    .toArray();
-
-  if (allGames.length === 0) return 0;
-
-  // Clear all existing mistake puzzles from imported games
-  const importedPuzzles = await db.mistakePuzzles
-    .filter((p) => p.sourceMode === 'chesscom' || p.sourceMode === 'lichess')
-    .toArray();
-  if (importedPuzzles.length > 0) {
-    await db.mistakePuzzles.bulkDelete(importedPuzzles.map((p) => p.id));
-  }
-
-  // Clear cached meta keys so games get re-processed
-  const metaKeys = allGames.map((g) => `mistakes_generated_${g.id}`);
-  await db.meta.bulkDelete(metaKeys);
-
-  // Also clear annotations on games that had none originally (so Stockfish re-analyzes)
-  for (const game of allGames) {
-    if (game.annotations && game.annotations.length > 0) {
-      // Check if these annotations came from our Stockfish analysis (no eval comments in PGN)
-      // by seeing if annotations only cover mistakes (not full game annotations)
-      const hasFullAnnotations = game.annotations.length > 5;
-      if (!hasFullAnnotations) {
-        await db.games.update(game.id, { annotations: null });
-      }
-    }
-  }
-
-  // Pull the student's real usernames from their profile. Previously
-  // we assumed the first game's white player was the user — that
-  // silently dropped every game where they played black, and worse, if
-  // their first import was a game where THEY played black, the
-  // assumed "username" was actually the opponent and ZERO puzzles
-  // generated for the whole batch. Read the saved usernames instead.
-  const profile = useAppStore.getState().activeProfile;
-  const chessComUsername = profile?.preferences.chessComUsername;
-  const lichessUsername = profile?.preferences.lichessUsername;
-
-  // Warn early if the user has imported games but never told us which
-  // side they played. The old silent-zero-puzzles behavior looked like
-  // a broken feature.
-  const hasChesscomGames = allGames.some((g) => g.source === 'chesscom');
-  const hasLichessGames = allGames.some((g) => g.source === 'lichess');
-  const missing: string[] = [];
-  if (hasChesscomGames && !chessComUsername) missing.push('chess.com');
-  if (hasLichessGames && !lichessUsername) missing.push('lichess');
-  if (missing.length > 0) {
-    onProgress?.({
-      current: 0,
-      total: allGames.length,
-      puzzlesFound: 0,
-      warning: `Set your ${missing.join(' and ')} username in Settings → Games so we know which side you played.`,
-    });
-    return 0;
-  }
-
-  // Re-run analysis on all games
-  let totalPuzzles = 0;
-  for (let i = 0; i < allGames.length; i++) {
-    onProgress?.({ current: i + 1, total: allGames.length, puzzlesFound: totalPuzzles });
-
-    // Re-fetch game since we may have cleared annotations
-    const freshGame = await db.games.get(allGames[i].id);
-    if (!freshGame) continue;
-
-    const username = freshGame.source === 'chesscom'
-      ? chessComUsername
-      : freshGame.source === 'lichess'
-        ? lichessUsername
-        : undefined;
-
-    const count = await generateMistakePuzzlesFromGame(freshGame.id, username);
-    totalPuzzles += count;
-  }
-
-  onProgress?.({ current: allGames.length, total: allGames.length, puzzlesFound: totalPuzzles });
-  return totalPuzzles;
-}
 
 // ─── Queries ────────────────────────────────────────────────────────────────
 
@@ -1190,6 +1078,48 @@ export interface CapturePuzzleInput {
    *  capture had no eval (a live slip with no engine read); the panel then
    *  honestly leaves that puzzle unclassified. Loop audit 2026-09-09. */
   evalBefore?: number | null;
+  /** The opponent's best reply to the played move (`pvAfterPlayed[0]`), when
+   *  the capture has it — the card leads with what that reply punishes. */
+  allowedReplySan?: string | null;
+  /** The engine line from this position starting with the best move
+   *  (`pvAfterBest`), SAN — classifies the tactic on the whole line. */
+  bestLineSan?: readonly string[];
+}
+
+/** A stored card's narration, rebuilt from its stored facts plus the move the
+ *  opponent actually answered with in the game — the same computer that built
+ *  it, so an old card reads like a new one. */
+export function rerenderMistakeNarration(p: MistakePuzzle, pgn: string | null): MistakeNarration {
+  return generateMistakeNarration({
+    classification: p.classification,
+    gamePhase: p.gamePhase,
+    playerMoveSan: p.playerMoveSan,
+    bestMoveSan: p.bestMoveSan,
+    cpLoss: p.cpLoss,
+    fen: p.fen,
+    moves: p.moves,
+    opponentName: p.opponentName,
+    gameDate: p.gameDate,
+    openingName: p.openingName,
+    evalBefore: p.evalBefore !== null ? p.evalBefore / 100 : null,
+    allowedMate: /forced mate/.test(p.narration.intro),
+    allowedReplySan: pgn ? gameReplyAfter(pgn, p.fen, p.playerMoveSan) : null,
+  });
+}
+
+/** SAN line → UCI from `fen`, stopping at the first move that does not play. */
+export function lineToUci(fen: string, sans: readonly string[] | undefined): string[] | undefined {
+  if (!sans || sans.length === 0) return undefined;
+  const out: string[] = [];
+  try {
+    const c = new Chess(fen);
+    for (const san of sans) {
+      const m = c.move(san);
+      if (!m) break;
+      out.push(`${m.from}${m.to}${m.promotion ?? ''}`);
+    }
+  } catch { /* keep what played */ }
+  return out.length > 0 ? out : undefined;
 }
 
 /** Option B of the weakness-spine unification (David 2026-05-25): a mistake
@@ -1298,8 +1228,12 @@ export function buildMistakePuzzleFromCapture(
 
   const cpLoss = input.cpLoss && input.cpLoss > 0 ? Math.round(input.cpLoss) : 150;
   const classification = classifyByCentipawnsFallback(cpLoss);
-  const gamePhase = input.gamePhase ?? classifyGamePhase(fen, input.moveNumber ?? 20);
-  const tacticType = detectTacticType(fen, bestMove);
+  const gamePhase = input.gamePhase ?? classifyPhase(fen, { fullMove: input.moveNumber ?? 20 });
+  // Classify on the LINE, not the lone move. Without it almost every capture
+  // landed as the catch-all "tactical sequence" (666 of 997 cards on a real
+  // import, hand walk 2026-10-01) — a fork or mate two moves deep is invisible
+  // from the first move alone.
+  const tacticType = detectTacticType(fen, bestMove, lineToUci(fen, input.bestLineSan));
   const srsDefaults = createDefaultSrsFields();
   const narration = generateMistakeNarration({
     classification,
@@ -1310,6 +1244,7 @@ export function buildMistakePuzzleFromCapture(
     fen,
     moves: bestMove,
     openingName: input.openingName ?? null,
+    allowedReplySan: input.allowedReplySan ?? null,
   });
 
   return {
@@ -1464,6 +1399,8 @@ export async function gradeMistakePuzzle(
   // until the puzzle is solved correctly so a fast wrong attempt
   // doesn't poison the "best" metric.
   const updates: Partial<MistakePuzzle> = {
+    // A miss drops a grown line back one move (never below one).
+    ...(!correct && solveLengthOf(puzzle) > 1 ? { solveLength: shrinkOnMiss(puzzle.solveLength) } : {}),
     srsInterval: srs.interval,
     srsEaseFactor: srs.easeFactor,
     srsRepetitions: srs.repetitions,
@@ -1487,6 +1424,7 @@ export async function gradeMistakePuzzle(
   }
 
   await db.mistakePuzzles.update(id, updates);
+  if (correct) void growMistakePuzzle(id);
 
   // THE CONCEPT SCHEDULE: a miss fails the IDEA, so its other open cards come
   // due today and the queue retests the concept on fresh boards.
@@ -1510,6 +1448,44 @@ export async function gradeMistakePuzzle(
 
   // Invalidate the tactical profile cache so it recomputes with fresh data
   await db.meta.delete('tactical_profile');
+  // A drilled mistake changes the spine (status, lifecycle) — the coach must
+  // hear it on the next read, not after the 5-minute cache ages out.
+  emitWeaknessModelChanged();
+}
+
+// ─── Growth (David 2026-10-01: "puzzles from my mistakes that grow") ────────
+
+/** The engine as the criticality scan asks for it: MultiPV candidates,
+ *  white-POV centipawns (mates already folded in by the engine). */
+const engineMulti: EvaluateMulti = async (fen, multiPV) => {
+  const a = await stockfishEngine.analyzePosition(fen, 16, { MultiPV: multiPV });
+  return a.topLines
+    .filter((l) => l.moves.length > 0)
+    .map((l) => ({ uci: l.moves[0], cp: l.evaluation }));
+};
+
+/**
+ * After a CLEAN solve, try to grow the puzzle by one move. Runs in the
+ * background (the engine is slow; nothing waits on it) and writes only when
+ * the line is still forced. Called from the one grading door, so every
+ * surface that drills a mistake grows it the same way.
+ */
+export async function growMistakePuzzle(id: string, evaluate: EvaluateMulti = engineMulti): Promise<void> {
+  const puzzle = await db.mistakePuzzles.get(id);
+  if (!puzzle) return;
+  const L = solveLengthOf(puzzle);
+  if (puzzle.growthCappedAt !== undefined && puzzle.growthCappedAt <= L) return;
+  const moves = puzzle.moves.trim().split(/\s+/).filter(Boolean);
+  try {
+    const g = await growOneMove(puzzle.fen, moves, L, evaluate);
+    if (g.cappedAt !== null) {
+      await db.mistakePuzzles.update(id, { growthCappedAt: g.cappedAt });
+      return;
+    }
+    await db.mistakePuzzles.update(id, { moves: g.moves.join(' '), solveLength: g.solveLength });
+  } catch {
+    // Engine unavailable — the puzzle simply does not grow this time.
+  }
 }
 
 // ─── Drilled motifs (positive transfer) ─────────────────────────────────────
