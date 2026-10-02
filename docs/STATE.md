@@ -47,7 +47,7 @@ exactly the drifting-constant the rot rule bans.
 
 - **CoachTeachPage.tsx**: 99
 - **CoachGamePage.tsx**: 46
-- **CoachGameReview.tsx**: 43
+- **CoachGameReview.tsx**: 44
 
 Each surface composing its own producer is the tax on the ONE mechanism the app
 grows by. Shrink-only; `surfaceComposition.scan.test.ts` holds the ceiling.

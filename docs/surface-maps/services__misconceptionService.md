@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6106) — names `misconceptionService`
+- **The standard post-deploy ritual** (CLAUDE.md:6107) — names `misconceptionService`
 
 ## Who calls in
 
@@ -51,7 +51,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `logMisconception` (function) — 54 call sites
-- `src/components/Coach/CoachGameReview.tsx:2319`
+- `src/components/Coach/CoachGameReview.tsx:2320`
 - `src/components/Coach/FundamentalsPage.test.tsx:92`
 - `src/components/Coach/FundamentalsPage.test.tsx:129`
 - `src/components/Coach/FundamentalsPage.test.tsx:130`

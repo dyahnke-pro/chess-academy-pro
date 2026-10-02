@@ -10,7 +10,7 @@
 
 - **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:628) — names `markRungComplete`, `openingService`
 - **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4649) — names `markRungComplete`
-- **The standard post-deploy ritual** (CLAUDE.md:6088) — names `markRungComplete`
+- **The standard post-deploy ritual** (CLAUDE.md:6089) — names `markRungComplete`
 
 ## Who calls in
 
@@ -70,7 +70,7 @@
 
 ### `getRepertoireOpenings` (function) — 16 call sites
 - `src/components/BoardTest/BoardTestPage.tsx:16`
-- `src/components/Openings/OpeningExplorerPage.tsx:57`
+- `src/components/Openings/OpeningExplorerPage.tsx:61`
 - `src/components/Play/BlindfolTrainer.tsx:64`
 - `src/components/Play/OpeningSpeedrun.tsx:109`
 - `src/services/coachContextEnricher.ts:308`
@@ -123,7 +123,7 @@
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:55`
 - `src/components/Coach/CoachTeachPage.tsx:3078`
 - `src/components/Coach/CoachTeachPage.tsx:5670`
-- `src/components/Openings/OpeningExplorerPage.tsx:90`
+- `src/components/Openings/OpeningExplorerPage.tsx:94`
 - `src/services/coachActionDispatcher.ts:249`
 - `src/services/coachApi.ts:4191`
 - `src/services/coachApi.ts:5692`
@@ -134,7 +134,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getOpeningsByEcoLetter` (function) — 1 call site
-- `src/components/Openings/OpeningExplorerPage.tsx:110`
+- `src/components/Openings/OpeningExplorerPage.tsx:114`
 
 ### `updateDrillProgress` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -272,7 +272,7 @@
 - `src/coach/tools/cerebrum/favoriteOpening.ts:100`
 - `src/components/Coach/CoachTeachPage.tsx:3082`
 - `src/components/Openings/OpeningDetailPage.tsx:703`
-- `src/components/Openings/OpeningExplorerPage.tsx:136`
+- `src/components/Openings/OpeningExplorerPage.tsx:140`
 - `src/components/Openings/ProPlayerPage.tsx:29`
 
 ### `saveOpeningToRepertoire` (function) — 1 call site

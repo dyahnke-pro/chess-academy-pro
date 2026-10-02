@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6082) — names `gradeMistakePuzzle`
+- **The standard post-deploy ritual** (CLAUDE.md:6083) — names `gradeMistakePuzzle`
 
 ## Who calls in
 
@@ -152,7 +152,7 @@
 
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
 - `src/components/Coach/CoachGamePage.tsx:2101`
-- `src/components/Coach/CoachGameReview.tsx:344`
+- `src/components/Coach/CoachGameReview.tsx:345`
 - `src/services/gameAnalysisService.ts:2076`
 - `src/services/mistakePuzzleService.test.ts:109`
 - `src/services/mistakePuzzleService.test.ts:163`

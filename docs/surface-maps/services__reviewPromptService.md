@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **The standard post-deploy ritual** (CLAUDE.md:6082) — names `reviewPromptService`
 
 ## Who calls in
 

@@ -34,8 +34,8 @@
 - `src/services/dnaLineNarrator.test.ts:55`
 
 ### `firstTacticInvariant` (function) — 4 call sites
-- `src/components/Coach/CoachGameReview.tsx:1642`
-- `src/components/Coach/CoachGameReview.tsx:1725`
+- `src/components/Coach/CoachGameReview.tsx:1643`
+- `src/components/Coach/CoachGameReview.tsx:1726`
 - `src/services/dnaLineNarrator.test.ts:120`
 - `src/services/dnaLineNarrator.test.ts:124`
 
