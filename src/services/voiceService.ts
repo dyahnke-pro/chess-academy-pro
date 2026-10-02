@@ -415,7 +415,8 @@ const MOVE_NUMBER_PREFIX_RE = /\b\d{1,3}(?:\.\.\.|…|\.)(?=[NBRQKO]|[a-h][1-8x]
  *  qualifier (returns "" for no disambiguation, else a trailing-space
  *  prefix that sits BEFORE the piece name):
  *    "b"  → "b-"             ("Nbd2" → "b-knight to d2")
- *    "1"  → "first-rank "    ("R1e2" → "first-rank rook to e2")
+ *    (A rank — "R1e2" — is read after the piece by the caller: "rook from the
+ *    first rank to e2".)
  *    "h4" → "h4 "            (rare full-square disambig — read as-is)
  *  The single-file form is hyphenated ("b-file") deliberately so the
  *  case-insensitive sanitizer-leak detector never re-flags a lone "b"
@@ -425,7 +426,6 @@ function speakDisambiguation(disambig: string): string {
   // "the b-knight", "the f-rook" — how a coach says it (Blumenfeld walk F12:
   // "b-file knight to d7" / "f-file rook to d8" read like a spreadsheet).
   if (/^[a-h]$/.test(disambig)) return `${disambig}-`;
-  if (/^[1-8]$/.test(disambig)) return `${RANK_ORDINALS[Number(disambig) - 1]}-rank `;
   return `${disambig} `;
 }
 
@@ -482,9 +482,13 @@ export function sanitizeForTTS(text: string): string {
     // case-insensitive LEAK_DETECTOR_RE false-positive — the old trailing
     // "knight b to d2" had a lone "b to" that the leak auditor flagged as
     // un-expanded piece-letter shorthand (prod sanitizer-leak noise).
-    const dis = speakDisambiguation(disambig);
     const verb = capture === 'x' ? 'takes' : 'to';
-    const spoken = `${dis}${name} ${verb} ${dest}`;
+    // A RANK disambiguation reads after the piece: "R2b3" → "rook from the
+    // second rank to b3". The leading form ("second-rank rook to b3") is not
+    // how anyone says it (hand walk 2026-10-01, V2).
+    const spoken = /^[1-8]$/.test(disambig)
+      ? `${name} from the ${RANK_ORDINALS[Number(disambig) - 1]} rank ${verb} ${dest}`
+      : `${speakDisambiguation(disambig)}${name} ${verb} ${dest}`;
     pieceExpansions.push({ san, spoken });
     return spoken;
   });

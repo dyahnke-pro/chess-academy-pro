@@ -4,6 +4,12 @@ import { ChessBoard } from '../Board/ChessBoard';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useSettings } from '../../hooks/useSettings';
+import { readWrongTry } from '../../services/wrongTryRefutation';
+import { usePositionNarration } from '../../hooks/usePositionNarration';
+import { rerenderMistakeNarration } from '../../services/mistakePuzzleService';
+import { puzzleMethodLine } from '../../services/puzzleMethod';
+import { useStudentRecord } from '../../hooks/useStudentRecord';
+import type { MethodHabit } from '../../services/methodBeat';
 import { voiceService } from '../../services/voiceService';
 import { explainPuzzleMoveGrounded } from '../../services/coachApi';
 import { coachService } from '../../coach/coachService';
@@ -23,6 +29,10 @@ import type { CoachingTier } from '../../services/tacticAlertService';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MistakePuzzle, MistakeClassification } from '../../types';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
+import { pliesFor, solveLengthOf } from '../../services/mistakeLineGrowth';
+import { reward } from '../../services/rewardService';
+import { rewardSeed } from '../../services/rewardEvents';
+import { PuzzleHeader } from './PuzzleHeader';
 
 type PuzzleState = 'loading' | 'replay' | 'playing' | 'correct' | 'incorrect' | 'freeplay';
 
@@ -91,15 +101,19 @@ function extractReplayMoves(pgn: string, _mistakeFen: string, playerColor: 'whit
 
 interface MistakePuzzleBoardProps {
   puzzle: MistakePuzzle;
-  /** Called when the student finishes the puzzle (either correct
-   *  or after revealing). solveTimeMs is the elapsed playing time
-   *  in ms — hosts pipe it to gradeMistakePuzzle for /weaknesses
-   *  aggregation. Optional so legacy callers that don't care still
-   *  work; the board always tracks it regardless of the visible-
-   *  clock toggle (per David's 2026-05-19 background-mode design). */
-  onComplete: (correct: boolean, solveTimeMs?: number) => void;
+  /** Fires ONCE per puzzle the moment it resolves — solved, or failed on bad
+   *  data — so the host can record it. REQUIRED: the result used to ride the
+   *  "Next puzzle" tap, so a student who solved and backed out recorded
+   *  nothing, and one host (the tag drill) never recorded at all (hand walk
+   *  2026-10-01). `correct` is false when any wrong move came first.
+   *  solveTimeMs is the elapsed playing time. */
+  onResolved: (correct: boolean, solveTimeMs: number) => void;
+  /** The student is done with this puzzle — advance. Records nothing. */
+  onComplete: () => void;
   /** Skip the internal game replay — use when the caller already showed context */
   skipReplayContext?: boolean;
+  /** Puzzles solved in a row on the host surface, shown in the header. */
+  streak?: number;
 }
 
 const CLASSIFICATION_BADGE: Record<MistakeClassification, { label: string; symbol: string; color: string }> = {
@@ -137,10 +151,22 @@ function parseUciMoves(uci: string): { from: string; to: string; promotion?: str
   }));
 }
 
-export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = false }: MistakePuzzleBoardProps): JSX.Element {
+export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayContext = false, streak }: MistakePuzzleBoardProps): JSX.Element {
   const meter = usePuzzleMeter();
   const consumedIdRef = useRef<string | null>(null);
   const [state, setState] = useState<PuzzleState>('loading');
+  const resolvedForRef = useRef<string | null>(null);
+  const tryTokenRef = useRef(0);
+  const narrationRef = useRef(puzzle.narration);
+  const saidHabitsRef = useRef(new Set<MethodHabit>());
+  // The student's WHOLE record (holes + proven), so the method beat is decided
+  // from their games and drills together, not from the puzzles alone.
+  const recordRef = useStudentRecord();
+  const resolve = useCallback((correct: boolean, solveTimeMs: number): void => {
+    if (resolvedForRef.current === puzzle.id) return;
+    resolvedForRef.current = puzzle.id;
+    onResolved(correct, solveTimeMs);
+  }, [puzzle.id, onResolved]);
   const [moveIndex, setMoveIndex] = useState(0);
   const [fen, setFen] = useState(puzzle.fen);
   const [moveCount, setMoveCount] = useState(0);
@@ -156,6 +182,12 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
   // A ref, not hintState.level: `resetHints()` zeroes the level on the very
   // move that solves the puzzle, so by the solve moment the level is gone.
   const showMeUsedRef = useRef(false);
+  // TOLD BEFORE ANSWERING? Only that makes a row `prompted`. [show me] AFTER
+  // a wrong first answer used to mark the row prompted too, which the profile
+  // skips — so the failure the student had already made was erased from the
+  // record (2026-10-01). The first answer is the evidence.
+  const answeredRef = useRef(false);
+  const toldBeforeAnswerRef = useRef(false);
   const chessRef = useRef(new Chess(puzzle.fen));
 
   // Free-tier meter: count this puzzle against the 20-bucket once when it
@@ -167,9 +199,11 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       meter.consume();
     }
   }, [state, puzzle.id, meter]);
-  const movesRef = useRef(parseUciMoves(puzzle.moves));
+  // Only as many moves as the puzzle asks for TODAY — it grows by one per
+  // clean solve (mistakeLineGrowth).
+  const movesRef = useRef(parseUciMoves(pliesFor(puzzle.moves.trim().split(/\s+/).filter(Boolean), solveLengthOf(puzzle)).join(' ')));
   const playerMoveCountRef = useRef(0);
-  const { playMoveSound, playCelebration, playEncouragement } = usePieceSound();
+  const { playMoveSound } = usePieceSound();
   const { settings } = useSettings();
   const activeProfile = useAppStore((s) => s.activeProfile);
   const puzzleShowTacticName = useAppStore((s) => s.puzzleShowTacticName);
@@ -208,7 +242,6 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     // every tick.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
-  const [whyLoading, setWhyLoading] = useState(false);
   const [wrongAttemptCount, setWrongAttemptCount] = useState(0);
   // Coach chat — visible after the puzzle is solved (state === 'correct').
   // Lets the student ask follow-up questions about the position without
@@ -240,6 +273,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     active: state === 'playing',
     wrongAttempts: wrongAttemptCount,
     onCoach: handleStruggleCoach,
+    earnedMethod: () => puzzleMethodLine(puzzle.bestMoveSan, puzzle.cpLoss, saidHabitsRef.current, recordRef.current),
   });
 
   // Replay state
@@ -248,6 +282,36 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
   const replayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const outroTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const completionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // THE CONTINUATION IS STILL TAUGHT (David 2026-10-01: "make sure we are
+  // not slacking on the teaching aspect"). A growing puzzle asks for only
+  // `solveLength` moves today, but the engine line runs on — so after the
+  // solve the board plays the rest out: you see how it continues before the
+  // puzzle grows to ask you for it.
+  const [continuing, setContinuing] = useState(false);
+  const continuedForRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (state !== 'correct' || continuedForRef.current === puzzle.id) return;
+    continuedForRef.current = puzzle.id;
+    const full = parseUciMoves(puzzle.moves);
+    const rest = full.slice(movesRef.current.length);
+    if (rest.length === 0) return;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    timers.push(setTimeout(() => setContinuing(true), 1200));
+    rest.forEach((m, i) => {
+      timers.push(setTimeout(() => {
+        try {
+          const r = chessRef.current.move({ from: m.from, to: m.to, promotion: m.promotion });
+          playMoveSound(r.san);
+          setLastMoveHighlight({ from: m.from, to: m.to });
+          setFen(chessRef.current.fen());
+          setBoardKey((k) => k + 1);
+        } catch { /* a stale line — stop where it stops */ }
+      }, 1200 + 1000 * (i + 1)));
+    });
+    return () => { for (const t of timers) clearTimeout(t); };
+  }, [state, puzzle.id, puzzle.moves, playMoveSound]);
+  useEffect(() => { setContinuing(false); }, [puzzle.id]);
 
   const badge = CLASSIFICATION_BADGE[puzzle.classification];
   const totalMoves = movesRef.current.length;
@@ -279,13 +343,16 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
 
   // Reset when puzzle changes — fetch source game and start replay
   useEffect(() => {
+    tryTokenRef.current += 1;
+    narrationRef.current = puzzle.narration;
     const chess = new Chess(puzzle.fen);
     chessRef.current = chess;
-    movesRef.current = parseUciMoves(puzzle.moves);
+    movesRef.current = parseUciMoves(pliesFor(puzzle.moves.trim().split(/\s+/).filter(Boolean), solveLengthOf(puzzle)).join(' '));
     if (movesRef.current.length === 0) {
       // No moves in puzzle — skip it. No elapsed value to report since
       // the student never had a chance to play.
-      onComplete(false, 0);
+      // No moves → the student never answered; record nothing, just move on.
+      onComplete();
       return;
     }
 
@@ -300,10 +367,11 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     setMoveCount(0);
     setLastMoveHighlight(null);
     setSubtitle('');
-    setWhyLoading(false);
     hasMadeMistakeRef.current = false;
     wrongAttemptsRef.current = 0;
     showMeUsedRef.current = false;
+    answeredRef.current = false;
+    toldBeforeAnswerRef.current = false;
     setWrongAttemptCount(0);
     setReplayIndex(-1);
 
@@ -317,15 +385,25 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     const cancelledRef = { value: false };
     void (async () => {
       let steps: ReplayStep[] = [];
-      if (!skipReplayContext) {
+      let pgn: string | null = null;
+      try {
+        pgn = (await db.games.get(puzzle.sourceGameId))?.pgn ?? null;
+      } catch {
+        // No game found — no replay, and the stored narration stands
+      }
+      if (cancelledRef.value) return;
+      // Cards are re-rendered at open from the one narration computer, so a
+      // card stored before the 2026-10-01 rebuild leads with what the move
+      // allowed too — no migration. Before anything is spoken.
+      if (pgn) {
         try {
-          const game = await db.games.get(puzzle.sourceGameId);
-          if (game?.pgn && !cancelledRef.value) {
-            steps = extractReplayMoves(game.pgn, puzzle.fen, puzzle.playerColor, puzzle.moveNumber);
-          }
+          narrationRef.current = rerenderMistakeNarration(puzzle, pgn);
         } catch {
-          // No game found — skip replay
+          // keep the stored narration
         }
+      }
+      if (!skipReplayContext && pgn) {
+        steps = extractReplayMoves(pgn, puzzle.fen, puzzle.playerColor, puzzle.moveNumber);
       }
 
       if (cancelledRef.value) return;
@@ -347,8 +425,8 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
 
         // Narrate the replay intro
         const contextMsg = puzzle.openingName
-          ? `Let's replay the ${puzzle.openingName}. Here's how the game reached this position.`
-          : `Let's see how the game reached this position.`;
+          ? `Your ${puzzle.openingName}, as the game went.`
+          : 'Your game, as it went.';
         setSubtitle(contextMsg);
         void voiceService.speak(contextMsg);
       } else {
@@ -360,18 +438,18 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
           // Caller already showed context — start immediately without
           // remounting the board so the position stays visually stable.
           setState('playing');
-          if (puzzle.narration.intro) {
-            setSubtitle(puzzle.narration.intro);
-            void voiceService.speak(puzzle.narration.intro);
+          if (narrationRef.current.intro) {
+            setSubtitle(narrationRef.current.intro);
+            void voiceService.speak(narrationRef.current.intro);
           }
         } else {
           setBoardKey((k) => k + 1);
           setState('loading');
           const timer = setTimeout(() => {
             setState('playing');
-            if (puzzle.narration.intro) {
-              setSubtitle(puzzle.narration.intro);
-              void voiceService.speak(puzzle.narration.intro);
+            if (narrationRef.current.intro) {
+              setSubtitle(narrationRef.current.intro);
+              void voiceService.speak(narrationRef.current.intro);
             }
           }, 400);
           replayTimerRef.current = timer;
@@ -420,16 +498,11 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
         setFen(step.fen);
         setBoardKey((k) => k + 1);
 
-        const mistakeMsg = `You played ${puzzle.playerMoveSan} here — ${puzzle.classification === 'miss' ? 'missing an opportunity' : `a ${puzzle.classification}`}. Let's find the best move.`;
-        setSubtitle(mistakeMsg);
-
-        // Speak the mistake message, then start the puzzle and speak
-        // its intro. Gating the intro on the mistake message's voice
-        // promise (instead of a fixed 2500ms timer) prevents the two
-        // narrations from overlapping when TTS takes longer than the
-        // arbitrary delay — the original cause of the "walked over"
-        // narration in Mixed Training. A 6s safety timer still fires
-        // if the speech promise hangs so the puzzle never gets stuck.
+        // The board shows the move; the intro that follows names it and says
+        // what it allowed. Announcing it here as well said the mistake twice
+        // back to back (hand walk 2026-10-01, V3) — so the replay ends on the
+        // board, silent, and hands over to the intro.
+        setSubtitle(`You played ${puzzle.playerMoveSan}.`);
         voiceService.stop();
 
         let advanced = false;
@@ -440,19 +513,13 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
           setFen(puzzle.fen);
           setBoardKey((k) => k + 1);
           setState('playing');
-          if (puzzle.narration.intro) {
-            setSubtitle(puzzle.narration.intro);
-            void voiceService.speak(puzzle.narration.intro);
+          if (narrationRef.current.intro) {
+            setSubtitle(narrationRef.current.intro);
+            void voiceService.speak(narrationRef.current.intro);
           }
         };
 
-        const safetyTimer = setTimeout(advance, 6000);
-        replayTimerRef.current = safetyTimer;
-
-        void voiceService.speak(mistakeMsg).finally(() => {
-          clearTimeout(safetyTimer);
-          advance();
-        });
+        replayTimerRef.current = setTimeout(advance, REPLAY_MOVE_DELAY);
         return;
       }
 
@@ -500,9 +567,9 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     setLastMoveHighlight(null);
     setBoardKey((k) => k + 1);
     setState('playing');
-    if (puzzle.narration.intro) {
-      setSubtitle(puzzle.narration.intro);
-      void voiceService.speak(puzzle.narration.intro);
+    if (narrationRef.current.intro) {
+      setSubtitle(narrationRef.current.intro);
+      void voiceService.speak(narrationRef.current.intro);
     }
   }, [state, puzzle]);
 
@@ -515,11 +582,10 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
   // still honors the SILENT gate. Shared by the auto-fire on solve and the
   // manual "Why?" button so both speak the same explanation.
   const speakBestMoveWhy = useCallback(async (): Promise<void> => {
-    setWhyLoading(true);
     setSubtitle('Analyzing why this was the best move...');
     const rating = activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
     try {
-      const response = await explainPuzzleMoveGrounded({
+      const engineFramed = await explainPuzzleMoveGrounded({
         fen: puzzle.fen,
         bestMoveUci: puzzle.bestMove,
         bestMoveSan: puzzle.bestMoveSan,
@@ -528,43 +594,43 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
         // engine-reasoning walk, not just the single move (David 2026-07-10).
         pvUci: puzzle.moves ? puzzle.moves.split(/\s+/).filter(Boolean) : undefined,
       });
-      setWhyLoading(false);
+      // The student played this move — it is theirs, not "the engine's".
+      const response = engineFramed.replace(/^The engine plays (\S+) — it /, '$1 — it ').replace(/^The engine plays (\S+)\./, '$1.');
       setSubtitle(response);
       await voiceService.speakGrounded(response, puzzle.fen, { bypassBriefCap: true });
     } catch {
-      setWhyLoading(false);
       // Fallback to tactic-specific coaching
       const coaching = getCoachingMessage(tacticType, 'guide', rating);
-      const fallback = coaching ?? 'The best move exploits a tactical pattern in this position.';
-      setSubtitle(fallback);
-      void voiceService.speak(fallback);
+      setSubtitle(coaching ?? '');
+      if (coaching) void voiceService.speak(coaching);
     }
   }, [puzzle, activeProfile?.currentRating, tacticType]);
 
-  // "Why?" button — explain the concept without revealing the move
-  const handleWhy = useCallback(() => {
-    if (state !== 'playing' && state !== 'correct') return;
+  // "TEACH ME THIS POSITION" (David 2026-10-01: "on demand teaching without
+  // forcing it on the user"). The ONE read every surface shares — Learn's and
+  // Play's "Read this position" — fed by the student's WHOLE record (spine,
+  // needs, proven capabilities) through the one deciding door. Before the
+  // answer it teaches the position and withholds the move; after it, the full
+  // read, including why the alternatives fall short.
+  const teach = usePositionNarration({
+    fen: puzzle.fen,
+    pgn: '',
+    moveNumber: puzzle.moveNumber,
+    playerColor: puzzle.playerColor,
+    openingName: puzzle.openingName,
+    corpusNotes: true, // the tactics drill is a kept corpus surface
+    withhold: state === 'correct' ? null : puzzle.bestMoveSan,
+  });
+  const handleTeach = useCallback(() => {
+    // Taught before answering → the answer is `prompted` (neither proven nor
+    // failed): the student was helped, and the record says so.
+    if (!answeredRef.current) toldBeforeAnswerRef.current = true;
     voiceService.stop();
-
-    if (state === 'playing') {
-      // Spoiler-free hint during play — tactic-specific teaching, not generic position description
-      const hint = puzzle.narration.conceptHint;
-      if (hint) {
-        setSubtitle(hint);
-        void voiceService.speak(hint);
-      } else {
-        const rating = activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
-        const coaching = getCoachingMessage(tacticType, 'teach', rating);
-        const message = coaching ?? 'Take your time. Look for checks, captures, and threats.';
-        setSubtitle(message);
-        void voiceService.speak(message);
-      }
-      return;
-    }
-
-    // state === 'correct' — the grounded why.
-    void speakBestMoveWhy();
-  }, [state, puzzle, activeProfile?.currentRating, tacticType, speakBestMoveWhy]);
+    void teach.narrate();
+  }, [teach]);
+  useEffect(() => {
+    if (teach.currentText) setSubtitle(teach.currentText);
+  }, [teach.currentText]);
 
   // Ask Coach — chat handler for the post-solve chat bar. Sends the
   // student's question + position context to the LLM, displays the
@@ -632,6 +698,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     const expected = allMoves[moveIndex];
 
     const isCorrect = move.from === expected.from && move.to === expected.to && (!expected.promotion || move.promotion === expected.promotion);
+    answeredRef.current = true;
 
     if (isCorrect) {
       playMoveSound(move.san);
@@ -643,7 +710,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       // Speak per-move narration
       const currentPlayerMove = playerMoveCountRef.current;
       playerMoveCountRef.current += 1;
-      const moveNarrations = puzzle.narration.moveNarrations;
+      const moveNarrations = narrationRef.current.moveNarrations;
       if (moveNarrations[currentPlayerMove]) {
         voiceService.stop();
         setSubtitle(moveNarrations[currentPlayerMove]);
@@ -651,11 +718,15 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       }
 
       const nextIndex = moveIndex + 1;
+      if (nextIndex < allMoves.length) {
+        reward({ kind: 'pip', square: move.to, step: currentPlayerMove, seed: rewardSeed(puzzle.id) + currentPlayerMove });
+      }
 
       // Check if puzzle is fully solved
       if (nextIndex >= allMoves.length) {
         setState('correct');
-        playCelebration();
+        resolve(!hasMadeMistakeRef.current, Math.round(elapsedMs));
+        reward({ kind: 'solved', square: move.to, step: currentPlayerMove, seed: rewardSeed(puzzle.id) });
         // Record outcome for cross-session coaching
         recordTacticOutcome({
           tacticType,
@@ -684,7 +755,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
           moverColor: puzzle.playerColor,
           cpLoss: hasMadeMistakeRef.current ? puzzle.cpLoss : 0,
           origin: 'drill',
-          prompted: showMeUsedRef.current,
+          prompted: toldBeforeAnswerRef.current,
           sourceGameId: puzzle.sourceGameId || undefined,
         });
         // Auto-speak the GROUNDED "why this was the best move" after the
@@ -695,10 +766,16 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
         // "Why?" button gives. NO auto-advance — the student taps "Next puzzle"
         // themselves when they're done analyzing (David 2026-05-19: the deeper
         // meaning gets clipped otherwise).
-        outroTimerRef.current = setTimeout(() => {
-          voiceService.stop();
-          void speakBestMoveWhy();
-        }, 800);
+        // ONE REASON, SAID ONCE: when the solving move already spoke its
+        // computed reason ("Qc5 keeps your pawn on d6 protected"), a second,
+        // competing why on top of it is noise; "Explain why" still answers.
+        const spokeReason = narrationRef.current.moveNarrations.some((m) => m.trim().length > 0);
+        if (!spokeReason) {
+          outroTimerRef.current = setTimeout(() => {
+            voiceService.stop();
+            void speakBestMoveWhy();
+          }, 800);
+        }
         // Stay on 'correct' state until the user taps Next.
         return;
       }
@@ -724,8 +801,9 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
             // Invalid opponent move — puzzle data is corrupted, fail gracefully
             setState('incorrect');
             const elapsedAtFail = Math.round(elapsedMs);
+            resolve(false, elapsedAtFail);
             completionTimerRef.current = setTimeout(() => {
-              onComplete(false, elapsedAtFail);
+              onComplete();
             }, 1200);
             return;
           }
@@ -740,7 +818,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       const prevFen = chessRef.current.fen();
       setState('incorrect');
       voiceService.stop();
-      playEncouragement();
+      reward({ kind: 'miss' });
 
       // Progressive verbal hints based on consecutive wrong attempts
       const attempts = wrongAttemptsRef.current;
@@ -748,8 +826,8 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       let hint = '';
 
       if (attempts === 1) {
-        if (puzzle.narration.conceptHint) {
-          hint = puzzle.narration.conceptHint;
+        if (narrationRef.current.conceptHint) {
+          hint = narrationRef.current.conceptHint;
         } else {
           // Classification-aware nudge when no concept hint exists
           const classificationHints: Record<string, string> = {
@@ -771,8 +849,17 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
         hint = `The key square is ${expectedMove.to}. What can reach it?`;
       }
 
-      setSubtitle(hint);
-      void voiceService.speak(hint);
+      // Why the try fails before the next hint (Learn's weighing, hand walk
+      // 2026-10-01): "a6? Then Qxd6, winning your pawn on d6." The escalating
+      // hint is the fallback when the refutation is quiet; the token drops a
+      // late engine read once a newer try or a new puzzle has arrived.
+      const tryToken = ++tryTokenRef.current;
+      void readWrongTry(prevFen, move.san).then((read) => {
+        if (tryToken !== tryTokenRef.current) return;
+        const line = read ? `${read.text} ${hint}` : hint;
+        setSubtitle(line);
+        void voiceService.speak(line);
+      });
 
       setFen(prevFen);
       setBoardKey((k) => k + 1);
@@ -783,7 +870,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       }, 1500);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- tracked for dedicated audit; intentional dep list.
-  }, [state, moveIndex, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints, puzzle.narration, tacticType, skipReplayContext, speakBestMoveWhy]);
+  }, [state, moveIndex, onComplete, playMoveSound, resetHints, puzzle.narration, tacticType, skipReplayContext, speakBestMoveWhy]);
 
   // ── KEEP PLAYING (R4, David 2026-09-01) — after the puzzle is solved, let the
   // student play the position out; the computer answers each move. Reuses the
@@ -960,6 +1047,15 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
         </div>
       )}
 
+      {state !== 'replay' && (
+        <PuzzleHeader
+          total={Math.ceil(totalMoves / 2)}
+          done={state === 'correct' ? Math.ceil(totalMoves / 2) : moveCount}
+          streak={streak}
+          missed={state === 'incorrect'}
+        />
+      )}
+
       {/* Show the wrong move before asking for the correct one */}
       {state !== 'replay' && (
         <div className="text-sm text-theme-text-secondary space-y-1" data-testid="prompt-text">
@@ -1005,17 +1101,17 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
         </div>
       )}
 
-      {/* Why button — explains the concept behind the best move */}
+      {/* Teach me this position — on demand, never forced */}
       {(state === 'playing' || state === 'correct') && (
         <div className="flex justify-end">
           <button
-            onClick={handleWhy}
-            disabled={whyLoading}
+            onClick={handleTeach}
+            disabled={teach.isNarrating}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-accent text-sm transition-colors border border-theme-border disabled:opacity-50 disabled:cursor-wait"
-            data-testid="why-button"
+            data-testid="teach-position-button"
           >
             <HelpCircle size={14} />
-            <span>{whyLoading ? 'Thinking...' : state === 'correct' ? 'Explain why' : 'Why?'}</span>
+            <span>{teach.isNarrating ? 'Reading the position…' : 'Teach me this position'}</span>
           </button>
         </div>
       )}
@@ -1032,6 +1128,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
           <ShowMeButton
             onShow={() => {
               showMeUsedRef.current = true;
+              if (!answeredRef.current) toldBeforeAnswerRef.current = true;
               // Skip the hint ladder — jump straight to tier 3 (best
               // move arrow + final answer). requestHint() bumps one
               // tier; three consecutive calls reach tier 3.
@@ -1050,19 +1147,6 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
         </div>
       )}
 
-      {/* Progress indicator for multi-move */}
-      {isMultiMove && state === 'playing' && moveCount > 0 && (
-        <div className="flex items-center gap-2 text-xs text-theme-text-muted" data-testid="move-progress">
-          <div className="flex-1 h-1.5 rounded-full bg-theme-border overflow-hidden">
-            <div
-              className="h-full rounded-full bg-theme-accent transition-all"
-              style={{ width: `${(moveCount / Math.ceil(totalMoves / 2)) * 100}%` }}
-            />
-          </div>
-          <span>{moveCount}/{Math.ceil(totalMoves / 2)}</span>
-        </div>
-      )}
-
       {/* Status feedback */}
       {state === 'correct' && (
         <div className="space-y-3" data-testid="puzzle-correct">
@@ -1072,6 +1156,11 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
               Correct!{isMultiMove ? ` You found all ${Math.ceil(totalMoves / 2)} moves.` : ` The best move was ${puzzle.bestMoveSan}.`}
             </span>
           </div>
+          {continuing && (
+            <p className="text-xs text-cyan-300" data-testid="mistake-continuation">
+              Here&apos;s how the line continues — next time you&apos;ll be asked to find more of it.
+            </p>
+          )}
 
           {/* Keep playing (R4) — play the solved position out; the computer
               answers each move. Reuses the coach play loop. */}
@@ -1138,7 +1227,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
               outro narration. */}
           <button
             type="button"
-            onClick={() => onComplete(!hasMadeMistakeRef.current, Math.round(elapsedMs))}
+            onClick={() => onComplete()}
             className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-theme-accent text-white font-semibold hover:opacity-90 transition-opacity"
             data-testid="puzzle-next-btn"
           >

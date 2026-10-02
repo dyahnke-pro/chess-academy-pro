@@ -4,15 +4,22 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**150 lines · 6 exports · 2 importers · 1 tests · 1 audits**
+**183 lines · 6 exports · 8 importers · 4 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5979) — names `tacticTypeBackfill`
+- **⏰ Standing notes** (CLAUDE.md:2527) — names `reconcileTacticTypes`
+- **The standard post-deploy ritual** (CLAUDE.md:6103) — names `tacticTypeBackfill`
 
 ## Who calls in
 
+- `src/services/analyticsService.foundTactics.test.ts`
+- `src/services/analyticsService.ts`
 - `src/services/dataLoader.ts`
+- `src/services/gameInsightsService.tacticsMissed.test.ts`
+- `src/services/gameInsightsService.ts`
+- `src/services/tacticClassifierService.fill.test.ts`
+- `src/services/tacticClassifierService.ts`
 - `src/services/tacticTypeBackfill.test.ts`
 
 ## Exports and every call site
@@ -26,20 +33,21 @@
 ### `TacticTypeBackfillSchedule` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `reconcileTacticTypes` (function) — 13 call sites
-- `src/services/dataLoader.ts:943`
+### `reconcileTacticTypes` (function) — 14 call sites
+- `src/services/dataLoader.ts:974`
 - `src/services/tacticTypeBackfill.test.ts:88`
-- `src/services/tacticTypeBackfill.test.ts:103`
 - `src/services/tacticTypeBackfill.test.ts:104`
-- `src/services/tacticTypeBackfill.test.ts:110`
-- `src/services/tacticTypeBackfill.test.ts:121`
-- `src/services/tacticTypeBackfill.test.ts:130`
-- `src/services/tacticTypeBackfill.test.ts:136`
+- `src/services/tacticTypeBackfill.test.ts:111`
+- `src/services/tacticTypeBackfill.test.ts:112`
+- `src/services/tacticTypeBackfill.test.ts:118`
+- `src/services/tacticTypeBackfill.test.ts:129`
 - `src/services/tacticTypeBackfill.test.ts:138`
-- `src/services/tacticTypeBackfill.test.ts:151`
-- `src/services/tacticTypeBackfill.test.ts:158`
-- `src/services/tacticTypeBackfill.test.ts:165`
-- `src/services/tacticTypeBackfill.test.ts:178`
+- `src/services/tacticTypeBackfill.test.ts:144`
+- `src/services/tacticTypeBackfill.test.ts:146`
+- `src/services/tacticTypeBackfill.test.ts:159`
+- `src/services/tacticTypeBackfill.test.ts:166`
+- `src/services/tacticTypeBackfill.test.ts:173`
+- `src/services/tacticTypeBackfill.test.ts:186`
 
 ### `PRODUCTION_BACKFILL_SCHEDULE` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -49,6 +57,9 @@
 
 ## Tests
 
+- `src/services/analyticsService.foundTactics.test.ts`
+- `src/services/gameInsightsService.tacticsMissed.test.ts`
+- `src/services/tacticClassifierService.fill.test.ts`
 - `src/services/tacticTypeBackfill.test.ts`
 
 ## Audits that reach it

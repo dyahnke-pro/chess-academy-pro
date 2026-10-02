@@ -1,4 +1,5 @@
 import { loadDataJson } from './dataFile';
+import { rankThemeTargets } from './puzzleThemeTargets';
 import { db } from '../db/schema';
 import { safeRatingKey } from '../utils/ratingKey';
 import { calculateNextInterval, createDefaultSrsFields } from './srsEngine';
@@ -152,36 +153,44 @@ export async function seedPuzzles(): Promise<void> {
 // ─── Master Level pool (lazy — David 2026-09-14) ────────────────────────────
 
 const MASTER_SEED_KEY = 'master_puzzles_seeded_v1';
+const LONG_SEED_KEY = 'long_puzzles_seeded_v1';
 
-/** Whether the Master Level elite pool has been fetched into Dexie. */
-export async function isMasterPoolSeeded(): Promise<boolean> {
-  const record = await db.meta.get(MASTER_SEED_KEY);
+/** A lazily-fetched CC0 pool: where it lives and how its rows are tagged. */
+interface LazyPool { key: string; url: string; source: 'master' | 'long' }
+const MASTER_POOL: LazyPool = { key: MASTER_SEED_KEY, url: '/data/master-puzzles.json', source: 'master' };
+const LONG_POOL: LazyPool = { key: LONG_SEED_KEY, url: '/data/long-puzzles.json', source: 'long' };
+
+async function isPoolSeeded(pool: LazyPool): Promise<boolean> {
+  const record = await db.meta.get(pool.key);
   return record?.value === 'true';
 }
 
+/** Whether the Master Level elite pool has been fetched into Dexie. */
+export async function isMasterPoolSeeded(): Promise<boolean> {
+  return isPoolSeeded(MASTER_POOL);
+}
+
 /**
- * Lazily fetch the elite (2400+) CC0 Master Level pool from
- * `public/data/master-puzzles.json` (NOT bundled — keeps the JS bundle lean)
- * and seed it into the shared `puzzles` store tagged `source: 'master'`. Called
- * only when the Master Level section is opened, so a user who never touches it
- * never pays the ~1MB fetch. Idempotent + StrictMode-safe like seedPuzzles.
- * Returns the number of master puzzles available after seeding.
+ * Fetch a lazy pool (NOT bundled — keeps the JS bundle lean) into the shared
+ * `puzzles` store, tagged with its `source`. Called only when the surface that
+ * needs it opens, so a user who never touches it never pays the fetch.
+ * Idempotent + StrictMode-safe like seedPuzzles. Returns the pool's size.
  */
-export async function seedMasterPuzzles(): Promise<number> {
-  if (!(await isMasterPoolSeeded())) {
+async function seedLazyPool(pool: LazyPool): Promise<number> {
+  if (!(await isPoolSeeded(pool))) {
     // Web: same-origin fetch. Native: app bundle → web origin (the pool is
     // kept in the `puzzles` store below, so dataFile need not keep it too).
-    const loaded = await loadDataJson('/data/master-puzzles.json', { persist: false });
+    const loaded = await loadDataJson(pool.url, { persist: false });
     const raw: RawPuzzle[] = Array.isArray(loaded) ? (loaded as RawPuzzle[]) : [];
     // An unreachable pool must NOT mark the pool seeded — that used to leave
     // Master Level permanently empty after one offline open.
     if (raw.length === 0) {
-      console.warn('[puzzleService] master pool unavailable — will retry next open');
-      return db.puzzles.filter((p) => p.source === 'master').count();
+      console.warn(`[puzzleService] ${pool.source} pool unavailable — will retry next open`);
+      return db.puzzles.filter((p) => p.source === pool.source).count();
     }
 
     await db.transaction('rw', db.puzzles, db.meta, async () => {
-      if (await isMasterPoolSeeded()) return;
+      if (await isPoolSeeded(pool)) return;
       const defaults = createDefaultSrsFields();
       const today = new Date().toISOString().split('T')[0];
       const existingIds = new Set(await db.puzzles.toCollection().primaryKeys());
@@ -197,7 +206,7 @@ export async function seedMasterPuzzles(): Promise<number> {
           popularity: p.popularity,
           nbPlays: p.nbPlays,
           movingPiece: p.movingPiece,
-          source: 'master' as const,
+          source: pool.source,
           srsInterval: defaults.interval,
           srsEaseFactor: defaults.easeFactor,
           srsRepetitions: defaults.repetitions,
@@ -208,10 +217,21 @@ export async function seedMasterPuzzles(): Promise<number> {
           successes: 0,
         }));
       if (records.length > 0) await db.puzzles.bulkAdd(records);
-      await db.meta.put({ key: MASTER_SEED_KEY, value: 'true' });
+      await db.meta.put({ key: pool.key, value: 'true' });
     });
   }
-  return db.puzzles.filter((p) => p.source === 'master').count();
+  return db.puzzles.filter((p) => p.source === pool.source).count();
+}
+
+/** The elite (2400+) Master Level pool (David 2026-09-14). */
+export async function seedMasterPuzzles(): Promise<number> {
+  return seedLazyPool(MASTER_POOL);
+}
+
+/** The long-calculation pool — 3+ solver moves across every rating band, for
+ *  the Long tab and deep-run (David 2026-10-01). */
+export async function seedLongPuzzles(): Promise<number> {
+  return seedLazyPool(LONG_POOL);
 }
 
 // ─── Adaptive Difficulty ────────────────────────────────────────────────────
@@ -281,16 +301,34 @@ export async function getThemeSkills(): Promise<ThemeSkill[]> {
 }
 
 /**
- * Returns the themes where the user has the lowest accuracy.
+ * The themes the next puzzles should train — ranked from the student's WHOLE
+ * record (`rankThemeTargets`): open holes from games, drills and puzzles
+ * first, then weak puzzle themes, then untried themes in rotation.
  */
 export async function getWeakestThemes(limit: number = 3): Promise<string[]> {
   const skills = await getThemeSkills();
-  // Themes never attempted are considered weakest
-  const attempted = new Set(skills.map((s) => s.theme));
-  const unattempted = TACTICAL_THEMES.filter((t) => !attempted.has(t));
-
-  const weakest = [...unattempted, ...skills.map((s) => s.theme)];
-  return weakest.slice(0, limit);
+  // Imported lazily: the weakness spine reads puzzle data through this module.
+  const signals = await import('./weaknessSignalLoader')
+    .then((m) => m.loadWeaknessSignals())
+    .catch(() => []);
+  const rotation = skills.reduce((n, s) => n + s.attempts, 0);
+  const targets = rankThemeTargets(signals, skills, TACTICAL_THEMES, rotation, limit);
+  // EMIT (algo-audit rule): which arm of the record chose each theme.
+  void import('./appAuditor').then(({ logAppAudit }) => logAppAudit({
+    kind: 'puzzle-themes-targeted',
+    category: 'subsystem',
+    source: 'puzzleService.getWeakestThemes',
+    summary: targets.length > 0
+      ? targets.map((t) => `${t.theme} (${t.from})`).join(', ')
+      : 'no theme target — rating-only selection',
+    details: JSON.stringify({
+      targets,
+      openHoles: signals.filter((w) => w.openCount > 0 && w.lifecycleStatus !== 'fixed').length,
+      themesTried: skills.length,
+      rotation,
+    }),
+  })).catch(() => undefined);
+  return targets.map((t) => t.theme);
 }
 
 // ─── Queries ────────────────────────────────────────────────────────────────
@@ -467,10 +505,15 @@ export async function getPuzzlesInRatingBand(
  */
 export async function getDuePuzzles(limit: number = 20): Promise<PuzzleRecord[]> {
   const today = new Date().toISOString().split('T')[0];
-  const candidates = await db.puzzles
+  // "Due for REVIEW" means seen before and now due again. Every seeded puzzle
+  // starts with today's due date, so without this the whole bank (15,299 on a
+  // fresh install) read as a review backlog.
+  // Read by the index, filter in memory: a Dexie `.filter()` walks a cursor
+  // row by row, ~50x slower than `toArray()` over the whole seeded bank.
+  const candidates = (await db.puzzles
     .where('srsDueDate')
     .belowOrEqual(today)
-    .toArray();
+    .toArray()).filter((p) => p.attempts > 0);
   return shuffle(candidates).slice(0, limit);
 }
 
@@ -800,10 +843,9 @@ export interface PuzzleStats {
 
 export async function getPuzzleStats(): Promise<PuzzleStats> {
   const today = new Date().toISOString().split('T')[0];
-  const [all, dueCount] = await Promise.all([
-    db.puzzles.toArray(),
-    db.puzzles.where('srsDueDate').belowOrEqual(today).count(),
-  ]);
+  const all = await db.puzzles.toArray();
+  // Seen before and due again — see getDuePuzzles.
+  const dueCount = all.filter((p) => p.attempts > 0 && p.srsDueDate <= today).length;
 
   const attempted = all.filter((p) => p.attempts > 0);
   const totalAttempts = attempted.reduce((sum, p) => sum + p.attempts, 0);

@@ -112,15 +112,6 @@ export async function updateProfile(
 
 // ─── Puzzles ──────────────────────────────────────────────────────────────────
 
-export async function getDuePuzzles(limit: number = 20): Promise<PuzzleRecord[]> {
-  const today = new Date().toISOString().split('T')[0];
-  return db.puzzles
-    .where('srsDueDate')
-    .belowOrEqual(today)
-    .limit(limit)
-    .toArray();
-}
-
 export async function updatePuzzleSrs(
   id: string,
   srsData: Pick<PuzzleRecord, 'srsInterval' | 'srsEaseFactor' | 'srsRepetitions' | 'srsDueDate' | 'srsLastReview'>,

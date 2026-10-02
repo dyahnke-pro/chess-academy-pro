@@ -10,6 +10,8 @@ import {
   drawRandomSquare, recordAttempt, sequenceLengthForStreak, getBestStreak,
 } from '../../services/findSquareService';
 import { logAppAudit } from '../../services/appAuditor';
+import { reward } from '../../services/rewardService';
+import { rewardSeed } from '../../services/rewardEvents';
 
 /**
  * FindSquarePage — board-vision drill.
@@ -134,6 +136,7 @@ export function FindSquarePage(): JSX.Element {
       // Last square in the sequence? Round complete → bump streak,
       // start a new round.
       if (targetIndex + 1 >= targets.length) {
+        reward({ kind: 'solved', square: clicked, step: targetIndex, seed: rewardSeed(targets.join(',')) });
         const nextStreak = streak + 1;
         setStreak(nextStreak);
         setBestStreak((b) => Math.max(b, nextStreak));
@@ -141,6 +144,7 @@ export function FindSquarePage(): JSX.Element {
         // round overwrites the targets.
         setTimeout(() => startNewRound(nextStreak), 600);
       } else {
+        reward({ kind: 'pip', square: clicked, step: targetIndex, seed: rewardSeed(targets.join(',')) });
         // Move to next square in the sequence.
         const nextIdx = targetIndex + 1;
         setTargetIndex(nextIdx);
@@ -150,6 +154,7 @@ export function FindSquarePage(): JSX.Element {
     } else {
       // Wrong → reset streak, restart round with sequence length
       // dropped back to 2 (or 1 in single mode).
+      reward({ kind: 'miss', square: clicked });
       setStreak(0);
       setTimeout(() => startNewRound(0), 700);
     }

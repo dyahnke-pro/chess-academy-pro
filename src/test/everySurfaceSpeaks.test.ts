@@ -133,7 +133,7 @@ export async function sweep(): Promise<Violation[]> {
         openingName: null, rating, analysis: analysis(p.after), tacticsSkill: undefined,
         studentWeaknesses: [], studentNeedContext: null,
         evalBoard: () => Promise.reject(new Error('no engine in the sweep')),
-        isCancelled: () => false, corpusNotes: false,
+        isCancelled: () => false, corpusNotes: false, withhold: null,
       });
       if (read) check(v, game, p.ply, 'read position', read, board);
     }

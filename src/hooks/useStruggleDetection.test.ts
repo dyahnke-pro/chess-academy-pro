@@ -36,6 +36,7 @@ describe('useStruggleDetection', () => {
     const onCoach = vi.fn();
     renderHook(() =>
       useStruggleDetection({
+        earnedMethod: () => null,
         tacticType: 'fork',
         playerRating: 1200,
         active: false,
@@ -52,6 +53,7 @@ describe('useStruggleDetection', () => {
     const onCoach = vi.fn();
     renderHook(() =>
       useStruggleDetection({
+        earnedMethod: () => null,
         tacticType: null,
         playerRating: 1200,
         active: true,
@@ -68,6 +70,7 @@ describe('useStruggleDetection', () => {
     const onCoach = vi.fn();
     renderHook(() =>
       useStruggleDetection({
+        earnedMethod: () => null,
         tacticType: 'fork',
         playerRating: 1200,
         active: true,
@@ -91,6 +94,7 @@ describe('useStruggleDetection', () => {
     const { rerender } = renderHook(
       ({ wrongAttempts }) =>
         useStruggleDetection({
+        earnedMethod: () => null,
           tacticType: 'pin',
           playerRating: 1200,
           active: true,
@@ -111,6 +115,7 @@ describe('useStruggleDetection', () => {
     const { rerender } = renderHook(
       ({ wrongAttempts }) =>
         useStruggleDetection({
+        earnedMethod: () => null,
           tacticType: 'fork',
           playerRating: 1200,
           active: true,
@@ -144,6 +149,7 @@ describe('useStruggleDetection', () => {
     const { result, rerender } = renderHook(
       ({ wrongAttempts }) =>
         useStruggleDetection({
+        earnedMethod: () => null,
           tacticType: 'fork',
           playerRating: 1200,
           active: true,
@@ -170,6 +176,7 @@ describe('useStruggleDetection', () => {
     const onCoach = vi.fn();
     const { unmount } = renderHook(() =>
       useStruggleDetection({
+        earnedMethod: () => null,
         tacticType: 'fork',
         playerRating: 1200,
         active: true,

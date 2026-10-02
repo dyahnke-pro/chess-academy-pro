@@ -43,6 +43,7 @@
 import { db } from '../db/schema';
 import { MISTAKE_CP } from './engineConstants';
 import { logAppAudit } from './appAuditor';
+import { emitWeaknessModelChanged } from './weaknessModelEvents';
 import { leadingFundamentals, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
 import { isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
 
@@ -74,8 +75,12 @@ export interface CapabilityEvidenceRecord {
   /** How live the fundamental was on that board, 0-100. */
   posedImportance: number;
   recordedAt: number;
-  /** Which surface saw it — an honest null is better than a guess. */
-  origin: 'play' | 'review' | 'learn' | 'drill';
+  /** Which surface saw it — an honest null is better than a guess.
+   *  `puzzle` = a GENERIC position (Lichess puzzle), not one from the
+   *  student's own games. It carries no `sourceGameId`, so it counts toward a
+   *  held streak but never toward the distinct-GAMES bar: generic puzzles can
+   *  support a capability and can break one, but can never prove it alone. */
+  origin: 'play' | 'review' | 'learn' | 'drill' | 'puzzle';
   /**
    * WAS THE STUDENT TOLD? REQUIRED, so a new writer has to answer.
    *
@@ -354,6 +359,8 @@ export async function recordCapabilityEvidence(args: {
       ...(args.sourceGameId ? { sourceGameId: args.sourceGameId } : {}),
     }));
     await db.capabilityEvidence.bulkAdd(rows);
+    // Green/red moved: every reader of the student model refreshes now.
+    emitWeaknessModelChanged();
     void logAppAudit({
       kind: 'coach-surface-migrated',
       category: 'subsystem',

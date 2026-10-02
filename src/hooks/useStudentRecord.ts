@@ -1,0 +1,25 @@
+// useStudentRecord — BOTH halves of the student model in one handle: the holes
+// they keep falling in (the weakness spine) and what they have PROVEN (the
+// capability profile). A surface that loads one without the other can raise a
+// red hole and never notice a green one, so they load together, the same way
+// `loadStudentNeedBase` keeps them together. A REF, so a narration callback
+// reads the latest at fire time; empty until loaded, which reads as a cold
+// student (teach), never as silence. Refreshes when the model changes.
+
+import { useEffect, useRef } from 'react';
+import { onWeaknessModelChanged } from '../services/weaknessModelEvents';
+import { loadStudentRecord, type StudentRecord } from '../services/studentRecord';
+
+export function useStudentRecord(): React.RefObject<StudentRecord> {
+  const ref = useRef<StudentRecord>({ weaknesses: [], capabilities: null });
+  useEffect(() => {
+    let alive = true;
+    const load = (): void => {
+      void loadStudentRecord().then((record) => { if (alive) ref.current = record; });
+    };
+    load();
+    const off = onWeaknessModelChanged(load);
+    return () => { alive = false; off(); };
+  }, []);
+  return ref;
+}

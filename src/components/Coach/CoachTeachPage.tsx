@@ -21,6 +21,10 @@ import type { Square } from 'chess.js';
 import { registerCoachHands } from '../../services/coachActuator';
 import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, ChevronLeft, ChevronsLeft, ChevronsRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2, Swords } from 'lucide-react';
 import { TeachGameOverCard, type TeachGameResult } from './TeachGameOverCard';
+import { LearnRewardBar } from './LearnRewardBar';
+import { learnRewardFor, tallyMove, fireLearnReward, EMPTY_TALLY, type LearnTally } from '../../services/learnReward';
+import { useProvenWatcher } from '../../hooks/useProvenWatcher';
+import { getMisconceptionTag } from '../../data/misconceptionTags';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
@@ -1679,6 +1683,11 @@ export function CoachTeachPage(): JSX.Element {
   /** The page's OWN per-game refs — the ones not yet migrated into
    *  `learnMemory`. Never call `newGame()` from here: this runs AS the
    *  memory's `onNewGame`, so it would recurse. The list is the debt. */
+  // THE REWARD LAYER'S GAME TALLY (David 2026-10-01): the decision streak, the
+  // recap medals and the capabilities this game turned green.
+  const [learnTally, setLearnTally] = useState<LearnTally>(EMPTY_TALLY);
+  const learnTallyRef = useRef<LearnTally>(EMPTY_TALLY);
+  const [provenTags, setProvenTags] = useState<string[]>([]);
   const forgetPageRefsRef = useRef<() => void>(() => undefined);
   const forgetPageRefs = useCallback((): void => {
     announcedPliesRef.current.clear();
@@ -1689,11 +1698,23 @@ export function CoachTeachPage(): JSX.Element {
     positionalSaidRef.current.clear();
     rejectedTemptingCountRef.current = 0;
     priorityFirstLastPlyRef.current = -999;
+    learnTallyRef.current = EMPTY_TALLY;
+    setLearnTally(EMPTY_TALLY);
+    setProvenTags([]);
   }, []);
   /** A fresh game, from a CALLER (the student asked / the board reset handler).
    *  Goes through the memory so the single `onNewGame` signal fires — the
    *  board-driven path inside `observe()` reaches the same handler. */
   forgetPageRefsRef.current = forgetPageRefs;
+  // A capability turned GREEN during this game → the tile, mid-game (David
+  // 2026-10-01: "add the tile to mid game for now").
+  useProvenWatcher(true, (tag) => {
+    setProvenTags((prev) => (prev.includes(tag) ? prev : [...prev, tag]));
+    const next = { ...learnTallyRef.current, proven: learnTallyRef.current.proven + 1 };
+    learnTallyRef.current = next;
+    setLearnTally(next);
+    fireLearnReward({ kind: 'proven', label: `Fixed: ${getMisconceptionTag(tag)?.label ?? tag}` });
+  });
   const resetPerGameMemory = useCallback((): void => {
     learnMemRef.current.newGame();
   }, []);
@@ -7358,6 +7379,7 @@ export function CoachTeachPage(): JSX.Element {
     openingName: walkthrough.tree?.openingName ?? null,
     // Learn free play carries no corpus notes (David 2026-09-23).
     corpusNotes: false,
+    withhold: null, // a live game: nothing to withhold
   });
 
   // PHASE TRANSITIONS — Learn never had them (2026-08-05). `usePhaseNarration`
@@ -8500,6 +8522,9 @@ export function CoachTeachPage(): JSX.Element {
     // Pre-move FEN (before we overwrite liveFenRef below) — the slip faucet
     // needs the position the student moved FROM.
     const fenBefore = liveFenRef.current;
+    // One reward per move: a found gem is the bigger moment, so the grade's
+    // own chime stands down for it.
+    let gemRewarded = false;
     // THE GEM, RESOLVED (David 2026-09-24: "After you've played it (or missed
     // it): then the full narration, arrows, and Walk button"). The callout only
     // said there was something to find; now the student has answered, so the
@@ -8524,6 +8549,13 @@ export function CoachTeachPage(): JSX.Element {
             } catch { /* the arrow is a bonus */ }
           }
           captureEvent('gem_resolved', { surface: 'coach-teach', found: res.found, plies: res.line.plies.length });
+          if (res.found) {
+            gemRewarded = true;
+            fireLearnReward({ kind: 'gem', square: move.to, label: 'Gem found', seed: move.history.length });
+            const next = tallyMove(learnTallyRef.current, 'gem', false);
+            learnTallyRef.current = next;
+            setLearnTally(next);
+          }
         }
       } else if (pendingGem && gemAt && !samePosition(gemAt, fenBefore)) {
         learnMemRef.current.gemPending = null;
@@ -8632,6 +8664,30 @@ export function CoachTeachPage(): JSX.Element {
         // aloud unless it is a fault.
         const prevSan = move.history.length >= 2 ? move.history[move.history.length - 2] : null;
         const isRecapture = !!prevSan && new RegExp(`x${move.to}(?![1-8])`).test(prevSan) && move.san.includes('x');
+        // THE REWARD LAYER (David 2026-10-01): only a move that took finding
+        // chimes — the grade above already says what it was; `learnRewardFor`
+        // only says which grades earn one. Fired before the spoken grade so
+        // the chime never lands on top of the voice.
+        if (grade) {
+          const earned = gemRewarded ? null : learnRewardFor({ reason: grade.reason, fault: grade.fault, isRecapture });
+          if (earned) fireLearnReward({ kind: earned, square: move.to, seed: move.history.length });
+          const next = tallyMove(learnTallyRef.current, earned, grade.fault);
+          if (next !== learnTallyRef.current) {
+            learnTallyRef.current = next;
+            setLearnTally(next);
+          }
+          void logAppAudit({
+            kind: 'learn-reward',
+            category: 'subsystem',
+            source: 'CoachTeachPage.handleStudentMove',
+            summary: `${move.san}: ${grade.reason} → ${earned ?? 'none'} (streak ${next.streak})`,
+            details: JSON.stringify({
+              ply: move.history.length - 1, san: move.san, reason: grade.reason, fault: grade.fault,
+              recapture: isRecapture, inBook: studentMoveInBook, earned, streak: next.streak,
+            }),
+            fen: fenBefore,
+          });
+        }
         const speakGrade = !!grade?.worthSpeaking && !!grade.clause && (grade.reason !== 'clear-best' || !!goodPoint)
           && !(isRecapture && !grade.fault);
         if (grade && speakGrade) {
@@ -8656,7 +8712,7 @@ export function CoachTeachPage(): JSX.Element {
         inBook: studentMoveInBook,
         bookMoveSan: studentMoveInBook ? move.san : undefined,
         learned: !!openingName,
-        gamePhase: classifyPhase(move.fen, (capturedMoveNumber ?? 1) * 2),
+        gamePhase: classifyPhase(move.fen, { fullMove: capturedMoveNumber ?? 1 }),
         moveNumber: capturedMoveNumber,
         openingName,
         // 🔴 WAS `puzzleRating ?? currentRating` — the PUZZLE SRS number, moved
@@ -9084,7 +9140,7 @@ export function CoachTeachPage(): JSX.Element {
                 // it ~1s to land, and opening positions repeat heavily across
                 // games so the session cache compounds. Narration reads the
                 // cache ONLY (the rate-limit contract).
-                if (classifyPhase(probe.fen(), historyAfterReply.length) === 'opening') {
+                if (classifyPhase(probe.fen(), { ply: historyAfterReply.length }) === 'opening') {
                   void warmAmateurPlay(probe.fen(), rating, 'coach-teach');
                 }
                 // The STUDENT'S recommended next move — COMPUTED in code, never the
@@ -11056,6 +11112,8 @@ export function CoachTeachPage(): JSX.Element {
           />
         </div>
 
+        {!walkthrough.isActive && <LearnRewardBar streak={learnTally.streak} provenTags={provenTags} />}
+
         {/* The "Read this position" banner is GONE (David 2026-07-10: "no more
             special place for them"). The read now STREAMS into the chat panel
             (see the streaming effect above). Voice still plays live. */}
@@ -11224,6 +11282,7 @@ export function CoachTeachPage(): JSX.Element {
             byMate={finishedGame.byMate}
             onReview={() => { void navigate(`/coach/review/${finishedGame.id}`); }}
             onStay={() => setFinishedGame(null)}
+            tally={learnTally}
           />
         )}
 

@@ -133,7 +133,73 @@ export class SoundService {
   }
   play(type: SoundType): void {
     if (!this.enabled) return;
+    // REAL WOOD for every adult set (David 2026-10-01: "change the sound of the
+    // pieces hitting the board"): recorded CC0 wood impacts, not synthesis.
+    // Kids keep the cartoon synth. Until the samples have decoded (first move
+    // of a session) the synth answers, so a move is never silent.
+    if (this.currentSet !== 'cartoon' && this.playWood(type)) return;
     this.synth(SOUND_PARAMS[this.currentSet][type]);
+  }
+
+  // ── Real wood (Kenney "Impact Sounds", CC0 — public/sounds/wood) ──────────
+  private wood: { move: AudioBuffer[]; capture: AudioBuffer[] } | null = null;
+  private woodLoading = false;
+  /** Rotates through the five recordings so repeated moves are not one
+   *  identical click (deterministic, not random). */
+  private woodTurn = 0;
+
+  private loadWood(): void {
+    if (this.wood || this.woodLoading) return;
+    this.woodLoading = true;
+    const load = async (name: string): Promise<AudioBuffer> => {
+      const res = await fetch(`/sounds/wood/${name}.mp3`);
+      const bytes = await res.arrayBuffer();
+      return getSharedAudioContext().decodeAudioData(bytes);
+    };
+    const idx = [0, 1, 2, 3, 4];
+    void Promise.all([
+      Promise.all(idx.map((i) => load(`move-${i}`))),
+      Promise.all(idx.map((i) => load(`capture-${i}`))),
+    ])
+      .then(([move, capture]) => { this.wood = { move, capture }; })
+      .catch(() => { /* offline / no decoder — the synth stays the voice */ })
+      .finally(() => { this.woodLoading = false; });
+  }
+
+  /** Play the recorded wood for this move type. False when not loaded yet. */
+  private playWood(type: SoundType): boolean {
+    if (!this.wood) { this.loadWood(); return false; }
+    try {
+      const c = getSharedAudioContext();
+      if (c.state === 'suspended') { void c.resume().catch(() => undefined); return false; }
+      const pick = (set: AudioBuffer[]): AudioBuffer => set[(this.woodTurn++) % set.length];
+      const rate = Math.min(2, Math.max(0.5, sliderToMultiplier(this.customization.pitch)));
+      const cutoff = Math.min(12000, 6000 * toneToCutoffMultiplier(this.customization.tone));
+      const hit = (buf: AudioBuffer, at: number, gain: number): void => {
+        const src = c.createBufferSource();
+        const g = c.createGain();
+        const lpf = c.createBiquadFilter();
+        lpf.type = 'lowpass';
+        lpf.frequency.setValueAtTime(cutoff, c.currentTime);
+        src.buffer = buf;
+        src.playbackRate.setValueAtTime(rate, c.currentTime);
+        g.gain.setValueAtTime(gain * this.volume, c.currentTime);
+        src.connect(lpf); lpf.connect(g); g.connect(c.destination);
+        src.start(c.currentTime + at);
+      };
+      if (type === 'move') hit(pick(this.wood.move), 0, 0.9);
+      else if (type === 'capture') hit(pick(this.wood.capture), 0, 1);
+      else if (type === 'castle') { hit(pick(this.wood.move), 0, 0.85); hit(pick(this.wood.move), 0.09, 0.8); }
+      else {
+        // Check: the wood, plus the existing bright check tone underneath so a
+        // check still sounds different from a quiet move.
+        hit(pick(this.wood.capture), 0, 0.95);
+        this.synth({ ...SOUND_PARAMS.classic.check, v: 0.35 });
+      }
+      return true;
+    } catch {
+      return false;
+    }
   }
   playKidCelebration(): void {
     if (!this.enabled) return;
@@ -228,7 +294,7 @@ export class SoundService {
       }
     } catch { /* swallow – synthesis failed */ }
   }
-  preload(): void {}
+  preload(): void { if (this.currentSet !== 'cartoon') this.loadWood(); }
   static soundTypeFromSan(san: string): SoundType {
     if (san === 'O-O' || san === 'O-O-O') return 'castle';
     if (san.includes('+') || san.includes('#')) return 'check';

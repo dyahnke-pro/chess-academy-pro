@@ -107,6 +107,16 @@ const INFRA = new Set([
   'spokenSquares',
 
 
+  // `rewardService` is the felt-reward OUTPUT — sound, haptics, light — the
+  // same class as `voiceService` (a chokepoint that renders, never decides).
+  // Provable it answers no question about the board: its imports are Capacitor
+  // haptics, the shared AudioContext, its own event bus and the app store, and
+  // its source names no piece, square, eval or tactic. WHAT earns a reward is
+  // decided by the caller (or `learnReward`, which stays counted). Added when
+  // the endgame playout began firing pips (2026-10-02); it did NOT move a ceiling.
+  'rewardService',
+
+
   // `learnMemory` is the same class again: the Learn producer's per-game
   // say-once slots and one `newGame()` that forgets them. It was EXTRACTED OUT
   // of CoachTeachPage, so the import count rose by one while the coupling FELL
@@ -222,7 +232,7 @@ const SURFACES = [
 
 // ── SHRINK-ONLY CEILINGS, measured 2026-09-17. Lower them when you route a
 //    call through the composer. NEVER raise one.
-const TOTAL_CEILING = 254;
+const TOTAL_CEILING = 253;
 const PER_FILE_CEILING: Record<string, number> = {
   'components/Coach/CoachTeachPage.tsx': 62,
   'components/Coach/CoachGamePage.tsx': 33,

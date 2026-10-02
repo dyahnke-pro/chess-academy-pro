@@ -72,7 +72,7 @@ export function AdaptiveSessionSummary({
       {/* Rating Change */}
       <div className="bg-theme-surface rounded-lg p-4 w-full">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-sm font-semibold text-theme-text">Session Rating</h3>
+          <h3 className="text-sm font-semibold text-theme-text">Puzzle rating this session</h3>
           <div className="flex items-center gap-1">
             {ratingDelta >= 0
               ? <TrendingUp size={16} style={{ color: 'var(--color-success)' }} />

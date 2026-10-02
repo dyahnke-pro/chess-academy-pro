@@ -102,7 +102,7 @@ export function PuzzleTrainerPage(): JSX.Element {
   }, [session]);
 
   const handleTimeout = useCallback((): void => {
-    handlePuzzleComplete({ correct: false, usedHint: false, hadRetry: false, showedSolution: false, solveTimeMs: 0 });
+    handlePuzzleComplete({ correct: false, usedHint: false, hadRetry: false, showedSolution: false, cleanMoves: 0, solveTimeMs: 0 });
   }, [handlePuzzleComplete]);
 
   const handleGrade = useCallback(async (grade: SrsGrade): Promise<void> => {
@@ -244,6 +244,7 @@ export function PuzzleTrainerPage(): JSX.Element {
               puzzle={currentPuzzle}
               onComplete={handlePuzzleComplete}
               disabled={phase === 'grading'}
+              streak={session.streak}
             />
 
             {/* SRS Grade buttons */}

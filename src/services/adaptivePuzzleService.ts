@@ -2,6 +2,7 @@ import { db } from '../db/schema';
 import { getWeakestThemes } from './puzzleService';
 import { safeRatingKey } from '../utils/ratingKey';
 import type { PuzzleRecord } from '../types';
+import { solverMoves, ONE_MOVER_CEILING } from './puzzleDepth';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -126,7 +127,10 @@ export function createAdaptiveSession(
     bestStreak: 0,
     consecutiveWrong: 0,
     ratingHistory: [seedRating],
-    weakThemeBoost: false,
+    // The FIRST puzzle consults the student's record too: a student with an
+    // open hole starts on it, and a new student starts on a grey theme in
+    // rotation. After that, every `weaknessInterval` puzzles.
+    weakThemeBoost: true,
     totalPuzzles: 0,
     startedAt: new Date().toISOString(),
     themesEncountered: {},
@@ -219,20 +223,23 @@ export function getAdaptiveSessionSummary(session: AdaptiveSessionState): Adapti
  *  a ceiling; a 3-mover can be rated 900 or 2200). `long`=3 plies, `veryLong`=5+,
  *  and any forced mate ≥2 is a real sequence. `short`/`oneMove`/`mateIn1` are
  *  the single-shot puzzles we DON'T bias toward. */
-export const MULTI_MOVE_THEMES: readonly string[] = [
-  'long', 'veryLong', 'mateIn2', 'mateIn3', 'mateIn4', 'mateIn5',
-];
-
-export function isMultiMovePuzzle(p: Pick<PuzzleRecord, 'themes'>): boolean {
-  return p.themes.some((t) => MULTI_MOVE_THEMES.includes(t));
+/** A puzzle the solver plays two or more moves in — COUNTED off the line
+ *  (`solverMoves`), never read off Lichess's theme tags, which file every
+ *  two-move `short` puzzle as a one-mover. */
+export function isMultiMovePuzzle(p: Pick<PuzzleRecord, 'moves' | 'source'>): boolean {
+  return solverMoves(p) >= 2;
 }
 
 export interface NextPuzzleOptions {
   /** Override the selection target (e.g. a boss-spike rating from the reach
    *  controller) instead of session.sessionRating. */
   targetOverride?: number;
-  /** Bias selection toward multi-move sequences (the reach ladder default). */
+  /** Bias selection toward multi-move sequences (the reach ladder default).
+   *  Below ONE_MOVER_CEILING the bias is off — one-movers are fair there. */
   preferMultiMove?: boolean;
+  /** Hard depth window in solver moves (the Long tab, deep-run). A puzzle
+   *  outside it is never served. */
+  depth?: { min: number; max: number };
 }
 
 /**
@@ -246,48 +253,62 @@ export async function getNextAdaptivePuzzle(
 ): Promise<PuzzleRecord | null> {
   const config = ADAPTIVE_CONFIGS[session.difficulty];
   const targetRating = opts.targetOverride ?? session.sessionRating;
-  const preferMultiMove = opts.preferMultiMove ?? false;
+  const pick: SelectionPick = {
+    preferMultiMove: (opts.preferMultiMove ?? false) && targetRating >= ONE_MOVER_CEILING,
+    depth: opts.depth,
+  };
 
   // If forced weak themes (from Lichess Dashboard), always target those first
   if (session.forcedWeakThemes && session.forcedWeakThemes.length > 0) {
     for (const theme of session.forcedWeakThemes) {
-      const puzzle = await findPuzzleInBand(targetRating, config.bandWidth * 2, seenIds, theme, preferMultiMove);
+      const puzzle = await findPuzzleInBand(targetRating, config.bandWidth * 2, seenIds, theme, pick);
       if (puzzle) return puzzle;
     }
   } else if (session.weakThemeBoost) {
     // Standard periodic weakness boost using local DB history
     const weakThemes = await getWeakestThemes(3);
     for (const theme of weakThemes) {
-      const puzzle = await findPuzzleInBand(targetRating, config.bandWidth, seenIds, theme, preferMultiMove);
+      const puzzle = await findPuzzleInBand(targetRating, config.bandWidth, seenIds, theme, pick);
       if (puzzle) return puzzle;
     }
   }
 
-  // Standard: find puzzle in rating band, widening if needed
-  const bandWidths = [config.bandWidth, config.bandWidth * 2, config.bandWidth * 3];
+  // Standard: find puzzle in rating band, widening if needed. A depth window
+  // widens further — a long puzzle a little off-rating beats no long puzzle.
+  const bandWidths = opts.depth
+    ? [config.bandWidth, config.bandWidth * 2, config.bandWidth * 3, config.bandWidth * 5]
+    : [config.bandWidth, config.bandWidth * 2, config.bandWidth * 3];
   for (const bw of bandWidths) {
-    const puzzle = await findPuzzleInBand(targetRating, bw, seenIds, undefined, preferMultiMove);
+    const puzzle = await findPuzzleInBand(targetRating, bw, seenIds, undefined, pick);
     if (puzzle) return puzzle;
   }
 
   return null;
 }
 
+interface SelectionPick {
+  preferMultiMove: boolean;
+  depth?: { min: number; max: number };
+}
+
 async function findPuzzleInBand(
   targetRating: number,
   bandWidth: number,
   seenIds: Set<string>,
-  theme?: string,
-  preferMultiMove = false,
+  theme: string | undefined,
+  pick: SelectionPick,
 ): Promise<PuzzleRecord | null> {
   const r = safeRatingKey(targetRating);
   const min = r - bandWidth;
   const max = r + bandWidth;
 
+  // The WHOLE band, not `.limit(80)`: the rating index returns rows in rating
+  // order, so a limit kept only the 80 easiest puzzles in the band — every
+  // pick sat near the band's floor, ~100 points under the target, whatever the
+  // student's rating (found 2026-10-01).
   let puzzles = await db.puzzles
     .where('rating')
     .between(min, max)
-    .limit(80)
     .toArray();
 
   // Filter out seen puzzles
@@ -298,13 +319,21 @@ async function findPuzzleInBand(
     puzzles = puzzles.filter((p) => p.themes.includes(theme));
   }
 
+  const depth = pick.depth;
+  if (depth) {
+    puzzles = puzzles.filter((p) => {
+      const d = solverMoves(p);
+      return d >= depth.min && d <= depth.max;
+    });
+  }
+
   if (puzzles.length === 0) return null;
 
-  // FAVOR multi-move sequences (David 2026-09-14) — when a healthy multi-move
-  // pool exists in-band, draw from it; otherwise fall back to the full pool so
-  // selection never starves at a rating where long puzzles are thin.
+  // FAVOR multi-move sequences (David 2026-09-14 / 2026-10-01: "no one likes
+  // simple one movers") — when a healthy multi-move pool exists in-band, draw
+  // from it; otherwise fall back to the full pool so selection never starves.
   let candidates = puzzles;
-  if (preferMultiMove) {
+  if (pick.preferMultiMove) {
     const multi = puzzles.filter(isMultiMovePuzzle);
     if (multi.length >= 3) candidates = multi;
   }
@@ -316,8 +345,12 @@ async function findPuzzleInBand(
     return distA - distB;
   });
 
-  // Pick from top 10 closest with random selection for variety
-  const pool = candidates.slice(0, Math.min(10, candidates.length));
+  // Variety among the ten closest — but only those within 75 of the nearest,
+  // so a dense band at its floor can never outvote a puzzle on target.
+  const nearest = Math.abs(candidates[0].rating - targetRating);
+  const pool = candidates
+    .slice(0, Math.min(10, candidates.length))
+    .filter((p) => Math.abs(p.rating - targetRating) <= nearest + 75);
   const idx = Math.floor(Math.random() * pool.length);
   return pool[idx];
 }

@@ -180,11 +180,33 @@ function rampMult(streakAfter: number): number {
  * (from nextTarget().isSpike) → reduced miss penalty + a spike-cleared cue on a
  * correct answer.
  */
+/** What the student did: solved first try unaided, solved after a retry / a
+ *  hint, or missed. Three states, not a boolean — an ASSISTED solve counted as
+ *  a win climbed the ladder like a clean one, inflating the 80% success target
+ *  for exactly the student who needed help (hand walk 2026-10-01). */
+export type ReachOutcome = 'clean' | 'assisted' | 'missed';
+
 export function recordReachResult(
   state: ReachState,
-  correct: boolean,
+  outcome: ReachOutcome,
   opts: { wasSpike?: boolean; master?: boolean } = {},
 ): ReachResult {
+  if (outcome === 'assisted') {
+    // Held: no climb, no drop, no cue, the streak neither grows nor breaks.
+    // The spike, if one was served, is still consumed.
+    const spikeServed = state.spikePending;
+    return {
+      state: {
+        ...state,
+        solved: state.solved + 1,
+        sinceSpike: spikeServed ? 0 : state.sinceSpike,
+        spikePending: false,
+      },
+      delta: 0,
+      events: [],
+    };
+  }
+  const correct = outcome === 'clean';
   const floor = opts.master ? MASTER_FLOOR : FLOOR;
   const ceiling = opts.master ? MASTER_CEILING : CEILING;
   const events: ReachEvent[] = [];

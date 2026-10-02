@@ -255,6 +255,26 @@ export type AuditKind =
   // candidates, floor, the chosen family and why — so an audit can prove a
   // 3-game line never wins and a student override sticks.
   | 'home-opening-chosen'
+  // Which puzzle themes the next puzzles target, and which arm of the student's
+  // record chose each (red = an open hole from games/drills/puzzles, weak =
+  // a puzzle theme missed over a real sample, grey = never tried, rotated).
+  | 'puzzle-themes-targeted'
+  /** Deep Run asked for a depth + rating and the selector served one (or hit
+   *  the pool's cap, so the rating climbs instead). David 2026-10-01. */
+  | 'deep-run-step'
+  /** A Learn move graded at play time and whether it earned a reward (only
+   *  finds do: clear-best, only-move, a parried threat, a punish, a gem).
+   *  David 2026-10-01. */
+  | 'learn-reward'
+  /** The Weaknesses heat map rendered: red / green / grey per skill and which
+   *  turned green since the last visit (David 2026-10-01). */
+  | 'heat-map-shown'
+  /** The student opened the Up-next pick (kind + key) — David 2026-10-01. */
+  | 'up-next-opened'
+  /** The day's ring frozen: which bites, from which parts of the record. */
+  | 'up-next-chosen'
+  /** Today's ring closed: trained days this week, gold week, opening earned. */
+  | 'today-ring-closed'
   // Which games a batch analysis run picked and in what order (A2): the
   // home openings' games first, then newest — so an audit can prove the
   // priority instead of reading a progress label.

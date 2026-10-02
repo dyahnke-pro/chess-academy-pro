@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**336 lines · 11 exports · 23 importers · 15 tests · 4 audits**
+**337 lines · 11 exports · 23 importers · 15 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5984) — names `misconceptionService`
+- **The standard post-deploy ritual** (CLAUDE.md:6108) — names `misconceptionService`
 
 ## Who calls in
 
@@ -51,7 +51,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `logMisconception` (function) — 54 call sites
-- `src/components/Coach/CoachGameReview.tsx:2349`
+- `src/components/Coach/CoachGameReview.tsx:2320`
 - `src/components/Coach/FundamentalsPage.test.tsx:92`
 - `src/components/Coach/FundamentalsPage.test.tsx:129`
 - `src/components/Coach/FundamentalsPage.test.tsx:130`
@@ -128,7 +128,7 @@
 - `src/components/Insights/MisconceptionsTab.tsx:77`
 - `src/components/Insights/MisconceptionsTab.tsx:87`
 - `src/services/bucketPipelineAudit.ts:157`
-- `src/services/coachApi.ts:4408`
+- `src/services/coachApi.ts:4434`
 - `src/services/fixtureGames.test.tsx:113`
 - `src/services/fixtureGames.test.tsx:122`
 - `src/services/fundamentalsPipeline.realGame.test.ts:226`
@@ -139,12 +139,12 @@
 - `src/services/misconceptionService.test.ts:90`
 - `src/services/misconceptionService.test.ts:98`
 - `src/services/misconceptionService.test.ts:116`
-- `src/services/weaknessAnalyzer.ts:997`
+- `src/services/weaknessAnalyzer.ts:994`
 - `src/services/weaknessSpine.ts:869`
 
 ### `recordTagDrillResult` (function) — 8 call sites
-- `src/components/Puzzles/AdaptivePuzzlePage.tsx:246`
-- `src/components/Puzzles/AdaptivePuzzlePage.tsx:330`
+- `src/components/Puzzles/AdaptivePuzzlePage.tsx:278`
+- `src/components/Puzzles/AdaptivePuzzlePage.tsx:369`
 - `src/components/Puzzles/WeaknessTagDrillPage.tsx:64`
 - `src/services/misconceptionService.test.ts:107`
 - `src/services/misconceptionService.test.ts:124`

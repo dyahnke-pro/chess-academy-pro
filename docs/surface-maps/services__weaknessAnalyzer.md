@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1534 lines · 7 exports · 11 importers · 7 tests · 0 audits**
+**1239 lines · 5 exports · 10 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,7 +14,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/components/Coach/CoachGamePage.tsx`
 - `src/components/Coach/CoachTeachPage.tsx`
-- `src/components/Puzzles/WeaknessThemesPage.tsx`
 - `src/components/Stats/StatsPage.tsx`
 - `src/services/coachChatService.ts`
 - `src/services/coachContextSnapshot.ts`
@@ -27,60 +26,40 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `computeWeaknessProfile` (function) — 6 call sites
-- `src/components/Coach/CoachGamePage.tsx:2071`
+- `src/components/Coach/CoachGamePage.tsx:2105`
 - `src/components/Stats/StatsPage.tsx:50`
-- `src/services/analyticsService.ts:463`
-- `src/services/gameAnalysisService.ts:2581`
-- `src/services/weaknessAnalyzer.test.ts:528`
-- `src/services/weaknessAnalyzer.test.ts:544`
+- `src/services/analyticsService.ts:462`
+- `src/services/gameAnalysisService.ts:2599`
+- `src/services/weaknessAnalyzer.test.ts:526`
+- `src/services/weaknessAnalyzer.test.ts:542`
 
 ### `getStoredWeaknessProfile` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10731`
+- `src/components/Coach/CoachTeachPage.tsx:10300`
 - `src/components/Stats/StatsPage.tsx:68`
 - `src/services/coachChatService.ts:188`
 - `src/services/coachContextSnapshot.ts:85`
 - `src/services/coachTrainingService.ts:92`
-- `src/services/weaknessAnalyzer.test.ts:535`
-- `src/services/weaknessAnalyzer.test.ts:555`
-- `src/services/weaknessAnalyzer.test.ts:569`
+- `src/services/weaknessAnalyzer.test.ts:533`
+- `src/services/weaknessAnalyzer.test.ts:553`
+- `src/services/weaknessAnalyzer.test.ts:567`
 
 ### `filterWeaknessesByCategory` (function) — 3 call sites
 - `src/components/Stats/StatsPage.tsx:233`
-- `src/services/weaknessAnalyzer.test.ts:735`
-- `src/services/weaknessAnalyzer.test.ts:739`
+- `src/services/weaknessAnalyzer.test.ts:733`
+- `src/services/weaknessAnalyzer.test.ts:737`
 
 ### `analyzeGameMistakes` (function) — 5 call sites
-- `src/services/weaknessAnalyzer.test.ts:749`
-- `src/services/weaknessAnalyzer.test.ts:754`
-- `src/services/weaknessAnalyzer.test.ts:770`
-- `src/services/weaknessAnalyzer.test.ts:791`
-- `src/services/weaknessAnalyzer.test.ts:807`
-
-### `detectWeaknessThemes` (function) — 8 call sites
-- `src/components/Puzzles/WeaknessThemesPage.tsx:68`
-- `src/services/weaknessAnalyzer.test.ts:818`
-- `src/services/weaknessAnalyzer.test.ts:828`
-- `src/services/weaknessAnalyzer.test.ts:843`
-- `src/services/weaknessAnalyzer.test.ts:854`
-- `src/services/weaknessAnalyzer.test.ts:866`
-- `src/services/weaknessAnalyzer.test.ts:880`
-- `src/services/weaknessAnalyzer.test.ts:897`
-
-### `generatePersonalizedDrill` (function) — 7 call sites
-- `src/components/Puzzles/WeaknessThemesPage.tsx:79`
-- `src/services/weaknessAnalyzer.test.ts:913`
-- `src/services/weaknessAnalyzer.test.ts:926`
-- `src/services/weaknessAnalyzer.test.ts:939`
-- `src/services/weaknessAnalyzer.test.ts:953`
-- `src/services/weaknessAnalyzer.test.ts:967`
-- `src/services/weaknessAnalyzer.test.ts:979`
+- `src/services/weaknessAnalyzer.test.ts:747`
+- `src/services/weaknessAnalyzer.test.ts:752`
+- `src/services/weaknessAnalyzer.test.ts:768`
+- `src/services/weaknessAnalyzer.test.ts:789`
+- `src/services/weaknessAnalyzer.test.ts:805`
 
 ### `_testing` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ## Tests
 
-- `src/components/Puzzles/WeaknessThemesPage.test.tsx`
 - `src/components/Stats/StatsPage.test.tsx`
 - `src/services/coachContextSnapshot.test.ts`
 - `src/services/coachTrainingService.test.ts`

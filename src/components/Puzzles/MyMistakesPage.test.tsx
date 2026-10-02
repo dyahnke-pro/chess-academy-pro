@@ -26,7 +26,6 @@ vi.mock('../../services/mistakePuzzleService', () => ({
   getMistakePuzzleStats: vi.fn(() => Promise.resolve(mockStats)),
   gradeMistakePuzzle: vi.fn(() => Promise.resolve()),
   deleteMistakePuzzle: vi.fn(() => Promise.resolve()),
-  reanalyzeImportedGames: vi.fn(() => Promise.resolve(0)),
 }));
 
 const mockNavigate = vi.fn();
@@ -68,6 +67,14 @@ function setMockData(puzzles: MistakePuzzle[], stats?: Partial<MistakePuzzleStat
   });
 }
 
+/** The unscoped page opens on the GROUPS; these tests drive the flat list. */
+async function renderAllPositions(): Promise<void> {
+  render(<MyMistakesPage />);
+  await waitFor(() => expect(screen.queryByTestId('loading')).toBeNull());
+  const all = screen.queryByTestId('show-all-positions');
+  if (all) fireEvent.click(all);
+}
+
 describe('MyMistakesPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -90,7 +97,7 @@ describe('MyMistakesPage', () => {
       buildMistakePuzzle({ id: 'p2', classification: 'mistake', moveNumber: 12 }),
     ]);
 
-    render(<MyMistakesPage />);
+    await renderAllPositions();
 
     await waitFor(() => {
       expect(screen.getAllByTestId('puzzle-card')).toHaveLength(2);
@@ -109,7 +116,7 @@ describe('MyMistakesPage', () => {
       buildMistakePuzzle({ id: 'p3', status: 'mastered' }),
     ]);
 
-    render(<MyMistakesPage />);
+    await renderAllPositions();
 
     await waitFor(() => {
       expect(screen.getByTestId('stats-bar')).toBeInTheDocument();
@@ -121,10 +128,7 @@ describe('MyMistakesPage', () => {
     expect(screen.getByText('1 mastered')).toBeInTheDocument();
   });
 
-  it('tapping a recurring-weakness chip filters the list to that bucket (not empty)', async () => {
-    // Regression: the chip counted by weakness BUCKET but filtered by fuzzy
-    // TEXT, so "Missed tactical sequences ×N" showed "No puzzles" (David
-    // 2026-09-07). Now the chip filters by the same bucket key it counts.
+  it('groups positions by weakness, worst first; opening a group lists exactly its positions', async () => {
     setMockData([
       buildMistakePuzzle({ id: 'f1', tacticType: 'fork', gamePhase: 'middlegame', moveNumber: 11 }),
       buildMistakePuzzle({ id: 'f2', tacticType: 'fork', gamePhase: 'middlegame', moveNumber: 14 }),
@@ -136,22 +140,45 @@ describe('MyMistakesPage', () => {
     render(<MyMistakesPage />);
 
     await waitFor(() => {
-      expect(screen.getAllByTestId('puzzle-card')).toHaveLength(5);
+      expect(screen.getByTestId('weakness-groups')).toBeInTheDocument();
     });
+    const rows = screen.getAllByTestId(/^weakness-group-tactic:/);
+    expect(rows.map((r) => r.getAttribute('data-testid'))).toEqual(['weakness-group-tactic:fork', 'weakness-group-tactic:pin']);
+    expect(screen.queryByTestId('puzzle-card')).toBeNull();
 
-    // Tap the "Missed forks" chip (bucket key tactic:fork).
-    fireEvent.click(screen.getByTestId('weakness-chip-tactic:fork'));
-
+    fireEvent.click(screen.getByTestId('weakness-group-open-tactic:fork'));
     await waitFor(() => {
       expect(screen.getAllByTestId('puzzle-card')).toHaveLength(3);
     });
-    // Never the empty state — that was the bug.
-    expect(screen.queryByTestId('no-matches')).toBeNull();
+    expect(screen.getByTestId('weakness-group-open')).toHaveTextContent('3 open');
+    expect(screen.getByTestId('weakness-group-more')).toBeInTheDocument();
 
-    // Tapping again clears the filter.
-    fireEvent.click(screen.getByTestId('weakness-chip-tactic:fork'));
+    fireEvent.click(screen.getByTestId('weakness-group-back'));
     await waitFor(() => {
-      expect(screen.getAllByTestId('puzzle-card')).toHaveLength(5);
+      expect(screen.getByTestId('weakness-groups')).toBeInTheDocument();
+    });
+  });
+
+  it('Practice plays the group\'s own positions one after another', async () => {
+    setMockData([
+      buildMistakePuzzle({ id: 'f1', tacticType: 'fork', gamePhase: 'middlegame' }),
+      buildMistakePuzzle({ id: 'f2', tacticType: 'fork', gamePhase: 'middlegame' }),
+    ]);
+    render(<MyMistakesPage />);
+    await waitFor(() => expect(screen.getByTestId('weakness-group-practice-tactic:fork')).toBeInTheDocument());
+    fireEvent.click(screen.getByTestId('weakness-group-practice-tactic:fork'));
+    await waitFor(() => expect(screen.getByTestId('solving-mode')).toBeInTheDocument());
+  });
+
+  it('More like this continues on the puzzle database with the group\'s themes', async () => {
+    setMockData([buildMistakePuzzle({ id: 'f1', tacticType: 'fork', gamePhase: 'middlegame' })]);
+    render(<MyMistakesPage />);
+    await waitFor(() => expect(screen.getByTestId('weakness-group-open-tactic:fork')).toBeInTheDocument());
+    fireEvent.click(screen.getByTestId('weakness-group-open-tactic:fork'));
+    await waitFor(() => expect(screen.getByTestId('weakness-group-more')).toBeInTheDocument());
+    fireEvent.click(screen.getByTestId('weakness-group-more'));
+    expect(mockNavigate).toHaveBeenCalledWith('/tactics/adaptive', {
+      state: expect.objectContaining({ autoStart: true, forcedWeakThemes: expect.arrayContaining([expect.any(String)]) }),
     });
   });
 
@@ -161,7 +188,7 @@ describe('MyMistakesPage', () => {
       buildMistakePuzzle({ id: 'p2', classification: 'inaccuracy', moveNumber: 7 }),
     ]);
 
-    render(<MyMistakesPage />);
+    await renderAllPositions();
 
     await waitFor(() => {
       expect(screen.getAllByTestId('puzzle-card')).toHaveLength(2);
@@ -186,7 +213,7 @@ describe('MyMistakesPage', () => {
       buildMistakePuzzle({ id: 'p2', classification: 'mistake', moveNumber: 7 }),
     ]);
 
-    render(<MyMistakesPage />);
+    await renderAllPositions();
 
     await waitFor(() => {
       expect(screen.getAllByTestId('puzzle-card')).toHaveLength(2);
@@ -207,7 +234,7 @@ describe('MyMistakesPage', () => {
       buildMistakePuzzle({ id: 'p2', sourceMode: 'lichess', moveNumber: 7 }),
     ]);
 
-    render(<MyMistakesPage />);
+    await renderAllPositions();
 
     await waitFor(() => {
       expect(screen.getAllByTestId('puzzle-card')).toHaveLength(2);
@@ -228,7 +255,7 @@ describe('MyMistakesPage', () => {
       buildMistakePuzzle({ id: 'p2', status: 'mastered' }),
     ]);
 
-    render(<MyMistakesPage />);
+    await renderAllPositions();
 
     await waitFor(() => {
       expect(screen.getAllByTestId('puzzle-card')).toHaveLength(2);
@@ -248,7 +275,7 @@ describe('MyMistakesPage', () => {
       buildMistakePuzzle({ id: 'p1', sourceGameId: 'g-123', moveNumber: 17 }),
     ]);
 
-    render(<MyMistakesPage />);
+    await renderAllPositions();
 
     await waitFor(() => {
       expect(screen.getByTestId('view-in-game-button')).toBeInTheDocument();
@@ -260,7 +287,7 @@ describe('MyMistakesPage', () => {
       buildMistakePuzzle({ id: 'p1', sourceGameId: '', moveNumber: 17 }),
     ]);
 
-    render(<MyMistakesPage />);
+    await renderAllPositions();
 
     await waitFor(() => {
       expect(screen.getByTestId('puzzle-card')).toBeInTheDocument();
@@ -274,7 +301,7 @@ describe('MyMistakesPage', () => {
       buildMistakePuzzle({ id: 'p1', sourceGameId: 'g-456', moveNumber: 23 }),
     ]);
 
-    render(<MyMistakesPage />);
+    await renderAllPositions();
 
     await waitFor(() => {
       expect(screen.getByTestId('view-in-game-button')).toBeInTheDocument();
@@ -293,7 +320,7 @@ describe('MyMistakesPage', () => {
       buildMistakePuzzle({ id: 'p1', moveNumber: 5 }),
     ]);
 
-    render(<MyMistakesPage />);
+    await renderAllPositions();
 
     await waitFor(() => {
       expect(screen.getByTestId('puzzle-card')).toBeInTheDocument();
@@ -311,7 +338,7 @@ describe('MyMistakesPage', () => {
       buildMistakePuzzle({ id: 'p1', classification: 'blunder' }),
     ]);
 
-    render(<MyMistakesPage />);
+    await renderAllPositions();
 
     await waitFor(() => {
       expect(screen.getByTestId('puzzle-card')).toBeInTheDocument();
@@ -329,7 +356,7 @@ describe('MyMistakesPage', () => {
 
   it('has filter controls', async () => {
     setMockData([buildMistakePuzzle({ id: 'p1' })]);
-    render(<MyMistakesPage />);
+    await renderAllPositions();
 
     await waitFor(() => {
       expect(screen.getByTestId('filters')).toBeInTheDocument();
@@ -353,7 +380,7 @@ describe('MyMistakesPage', () => {
       }),
     ]);
 
-    render(<MyMistakesPage />);
+    await renderAllPositions();
 
     await waitFor(() => {
       expect(screen.getByTestId('narration-preview')).toBeInTheDocument();
@@ -372,7 +399,7 @@ describe('MyMistakesPage', () => {
       }),
     ]);
 
-    render(<MyMistakesPage />);
+    await renderAllPositions();
 
     await waitFor(() => {
       expect(screen.getByTestId('puzzle-card')).toBeInTheDocument();
@@ -446,6 +473,11 @@ describe('MyMistakesPage', () => {
 
     fireEvent.click(screen.getByTestId('opening-filter-badge'));
 
+    // Unscoped again → back on the groups, covering both openings' positions.
+    await waitFor(() => {
+      expect(screen.getByTestId('weakness-groups')).toBeInTheDocument();
+    });
+    fireEvent.click(screen.getByTestId('show-all-positions'));
     await waitFor(() => {
       expect(screen.getAllByTestId('puzzle-card')).toHaveLength(2);
     });

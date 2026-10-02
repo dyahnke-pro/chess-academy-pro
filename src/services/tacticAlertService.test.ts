@@ -150,13 +150,22 @@ describe('tacticAlertService', () => {
         'fork', 'pin', 'skewer', 'discovered_attack', 'back_rank',
         'hanging_piece', 'promotion', 'deflection', 'overloaded_piece',
         'trapped_piece', 'clearance', 'interference', 'zwischenzug',
-        'x_ray', 'double_check', 'removing_the_guard', 'checkmate', 'tactical_sequence',
+        'x_ray', 'double_check', 'removing_the_guard', 'checkmate',
       ];
       for (const type of types) {
         for (const tier of ['nudge', 'teach', 'guide'] as const) {
           const msg = getCoachingMessage(type as Parameters<typeof getCoachingMessage>[0], tier, 1200);
           expect(msg).toBeTruthy();
         }
+      }
+    });
+
+    // Hand walk 2026-10-01: an unnamed puzzle got "look for checks, captures,
+    // and threats" even when the answer was quiet. It names no pattern, so it
+    // gets nothing here; boards speak the EARNED method beat instead.
+    it('says nothing for an unnamed "tactical sequence"', () => {
+      for (const tier of ['nudge', 'teach', 'guide'] as const) {
+        expect(getCoachingMessage('tactical_sequence', tier, 1200)).toBeNull();
       }
     });
   });

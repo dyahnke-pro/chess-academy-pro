@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback, type CSSProperties } from 'react';
+import { voiceService } from '../../services/voiceService';
 import { useNavigate } from 'react-router-dom';
 import { Lightbulb, ArrowRight, RefreshCw, Check, X, Minus, HelpCircle, Play, Mic } from 'lucide-react';
 import { Chess } from 'chess.js';
@@ -23,11 +24,22 @@ import { recordReadingResult } from '../../services/analysisPracticeStats';
 import { determinePlayerColor } from '../../services/mistakePuzzleService';
 import { captureEvent } from '../../services/analytics';
 import { logAppAudit } from '../../services/appAuditor';
+import { reward } from '../../services/rewardService';
+import { rewardSeed } from '../../services/rewardEvents';
 import { hintStartTier } from '../../services/skillScaling';
 import type { GameRecord } from '../../types';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
+
+/** The board square a clicked-square or played-move answer landed on, so the
+ *  reward light bursts from it; a typed answer has none. */
+function selectedSquareFor(answer: string): string | undefined {
+  const t = answer.trim();
+  if (/^[a-h][1-8]$/.test(t)) return t;
+  const san = /^(?:[NBRQK]?[a-h]?[1-8]?x?([a-h][1-8])(?:=[NBRQ])?[+#]?)$/.exec(t);
+  return san?.[1];
+}
 
 /** Few-piece positions read as endgames (gates the endgame question bucket). */
 function isEndgameFen(fen: string): boolean {
@@ -266,12 +278,20 @@ export function AnalysisPracticePage(): JSX.Element {
     captureEvent('analysis_practice_answer', { questionType: question.type, verdict: g.verdict, hintTier });
     if (g.verdict === 'correct') {
       correctRef.current += 1;
+      reward({ kind: 'solved', square: selectedSquareFor(text), seed: rewardSeed(`${position?.fen ?? ''}#${qIndex}`) });
       setGrade(g);
-      await playDemo(question.demoLine);               // show the why
-      advanceTimer.current = setTimeout(() => next(), 900); // auto-advance, no click
+      // SAY the read and SHOW the line, then move on once both have landed —
+      // a correct answer used to flash for 0.9 s, never spoken (hand walk
+      // 2026-10-01, AP1). The computed answer is the confirmation; no praise.
+      await Promise.all([
+        playDemo(question.demoLine),
+        voiceService.speak(question.answer).catch(() => undefined),
+      ]);
+      advanceTimer.current = setTimeout(() => next(), 1200);
       return;
     }
     // Wrong / partial → progressive GROUNDED hint, let them retry.
+    reward({ kind: 'miss', square: selectedSquareFor(text) });
     attemptsRef.current += 1;
     if (attemptsRef.current >= 3) {
       setHintTier(3);
@@ -281,7 +301,7 @@ export function AnalysisPracticePage(): JSX.Element {
       setHintTier(Math.max(startTier, attemptsRef.current));
       setAnswer(''); setSelectedSquare(null);          // keep going
     }
-  }, [question, grading, grade, demoing, hintTier, playDemo, next, startTier]);
+  }, [question, grading, grade, demoing, hintTier, playDemo, next, startTier, position, qIndex]);
 
   const onSquareClick = useCallback((sqr: string) => {
     if (grade || demoing) return;
@@ -389,7 +409,14 @@ export function AnalysisPracticePage(): JSX.Element {
         const squareStyles: Record<string, CSSProperties> = {};
         if (selectedSquare) squareStyles[selectedSquare] = { background: 'rgba(99,102,241,0.45)' };
         if (grade) for (const s of question.answerSquares ?? []) squareStyles[s] = { background: 'rgba(34,197,94,0.45)' };
-        const hint = hintTier > 0 ? readingHint(question, Math.min(hintTier, 3) as 1 | 2 | 3) : null;
+        // Every hint revealed so far, in order — the student keeps hint 1 while
+        // reading hint 2 (it used to be replaced, labelled "Hint 2" with hint 1
+        // gone). A tier that repeats an earlier one adds nothing and is skipped.
+        const hints: string[] = [];
+        for (let t = 1; t <= Math.min(hintTier, 3); t += 1) {
+          const h = readingHint(question, t as 1 | 2 | 3);
+          if (h && !hints.includes(h)) hints.push(h);
+        }
         // Two-column rectangle (David 2026-06-28): board + turn indicator on
         // the left, the discussion/answer panel on the right at md+, stacked
         // on mobile. Wider container so the board gets real room.
@@ -436,10 +463,14 @@ export function AnalysisPracticePage(): JSX.Element {
 
             {!grade && (
               <>
-                {hint && (
+                {hints.length > 0 && (
                   <div className="rounded-xl p-3 text-sm mb-3 flex items-start gap-2" style={{ background: 'rgba(245,158,11,0.1)', color: 'var(--color-text)' }} data-testid="analysis-practice-hint">
                     <HelpCircle size={16} className="text-amber-400 shrink-0 mt-0.5" />
-                    <span><span style={{ color: 'var(--color-text-muted)' }}>Hint {hintTier}: </span>{hint}</span>
+                    <ol className="space-y-1">
+                      {hints.map((h, i) => (
+                        <li key={h}><span style={{ color: 'var(--color-text-muted)' }}>Hint {i + 1}: </span>{h}</li>
+                      ))}
+                    </ol>
                   </div>
                 )}
                 <div className="flex gap-2">
@@ -485,11 +516,9 @@ export function AnalysisPracticePage(): JSX.Element {
                   <span className="font-bold" data-testid="analysis-practice-verdict">{VERDICT_STYLE[grade.verdict].label}</span>
                   {demoing && <span className="text-xs flex items-center gap-1" style={{ color: 'var(--color-text-muted)' }}><Play size={12} /> showing the line…</span>}
                 </div>
-                {grade.verdict !== 'correct' && (
-                  <div className="rounded-xl p-3 text-sm" style={{ background: 'var(--color-bg)', color: 'var(--color-text)' }} data-testid="analysis-practice-answer">
-                    <span style={{ color: 'var(--color-text-muted)' }}>Answer: </span>{grade.correctAnswer}
-                  </div>
-                )}
+                <div className="rounded-xl p-3 text-sm" style={{ background: 'var(--color-bg)', color: 'var(--color-text)' }} data-testid="analysis-practice-answer">
+                  <span style={{ color: 'var(--color-text-muted)' }}>Answer: </span>{grade.correctAnswer}
+                </div>
                 {/* On a correct read the surface auto-advances; only the miss path needs a button. */}
                 {grade.verdict !== 'correct' && (
                   <button

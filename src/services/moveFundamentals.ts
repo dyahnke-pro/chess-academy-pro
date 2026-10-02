@@ -272,7 +272,7 @@ export function openingWindowOpen(fenBefore: string, mover: 'white' | 'black'): 
   // (walk 900). The one phase classifier decides.
   const fullmove = Number(fenBefore.split(' ')[5] ?? '1') || 1;
   const ply = (fullmove - 1) * 2 + (board.turn() === 'b' ? 2 : 1);
-  if (classifyPhase(fenBefore, ply) !== 'opening') return false;
+  if (classifyPhase(fenBefore, { ply }) !== 'opening') return false;
   const rights = board.getCastlingRights(wb);
   return rights.k || rights.q;
 }
@@ -302,8 +302,7 @@ export function computeMoveFundamentals(
   // merit). Castling / passed-pawn pushes clear this trivially.
   if (!landingIsSafe(after.fen(), mv.to)) return [];
 
-  const moveNumber = Number(fenBefore.split(' ')[5]) || 1;
-  const phase = classifyPhase(fenBefore, moveNumber);
+  const phase = classifyPhase(fenBefore, { fullMove: Number(fenBefore.split(' ')[5]) || 1 });
   const out: MoveFundamental[] = [];
 
   // ── KING SAFETY — castling. The one move that both tucks the king away and

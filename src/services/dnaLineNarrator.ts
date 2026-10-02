@@ -107,8 +107,10 @@ export function dnaMoveClause(
   const saysTheyTake = theirs && !!mv.captured && facts.materialGained >= 1;
   const lead = theirs && !saysTheyTake ? `they answer ${mv.san}` : mv.san;
 
-  // Mate ends the line — nothing else matters.
-  if (facts.isMate) return { text: `${lead} — checkmate`, prev: nextPrev, tacticLanded: null, concept: null };
+  // Mate ends the line — nothing else matters. The SAN's "#" IS the word: the
+  // TTS sanitizer speaks it as "checkmate", so a "— checkmate" suffix was
+  // heard twice ("queen takes g2, checkmate — checkmate").
+  if (facts.isMate) return { text: lead, prev: nextPrev, tacticLanded: null, concept: null };
 
   // Tactical outcome, in the DNA register. A winning capture NAMES the piece
   // it wins (concrete + naturally varied by piece) rather than the flat,

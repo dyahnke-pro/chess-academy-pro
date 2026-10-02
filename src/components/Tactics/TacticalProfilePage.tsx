@@ -303,7 +303,7 @@ function ThemeRow({ category, onTrain }: { category: ThemeCategoryStats; onTrain
 
       {category.attempts > 0 && (
         <div className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
-          {category.attempts} attempts
+          {category.attempts} {category.attempts === 1 ? 'attempt' : 'attempts'}
         </div>
       )}
     </button>

@@ -218,8 +218,10 @@ describe('puzzleService', () => {
       const tomorrowStr = tomorrow.toISOString().split('T')[0];
 
       await db.puzzles.bulkPut([
-        makePuzzle({ id: 'due', srsDueDate: today }),
-        makePuzzle({ id: 'not-due', srsDueDate: tomorrowStr }),
+        makePuzzle({ id: 'due', srsDueDate: today, attempts: 1 }),
+        makePuzzle({ id: 'not-due', srsDueDate: tomorrowStr, attempts: 1 }),
+        // Never attempted: not a review, whatever its default due date says.
+        makePuzzle({ id: 'never-seen', srsDueDate: today, attempts: 0 }),
       ]);
 
       const due = await getDuePuzzles();
@@ -603,14 +605,15 @@ describe('puzzleService', () => {
       const futureStr = future.toISOString().split('T')[0];
 
       await db.puzzles.bulkPut([
-        makePuzzle({ id: 's1', srsDueDate: today }),
-        makePuzzle({ id: 's2', srsDueDate: today }),
-        makePuzzle({ id: 's3', srsDueDate: futureStr }),
+        makePuzzle({ id: 's1', srsDueDate: today, attempts: 1 }),
+        makePuzzle({ id: 's2', srsDueDate: today, attempts: 2 }),
+        makePuzzle({ id: 's3', srsDueDate: futureStr, attempts: 1 }),
+        makePuzzle({ id: 's4', srsDueDate: today, attempts: 0 }),
       ]);
 
       const stats = await getPuzzleStats();
       expect(stats.duePuzzles).toBe(2);
-      expect(stats.totalPuzzles).toBe(3);
+      expect(stats.totalPuzzles).toBe(4);
     });
   });
 

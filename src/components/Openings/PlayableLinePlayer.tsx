@@ -27,6 +27,8 @@ import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { BOARD_DEMO_ANIMATION_MS } from '../../hooks/useBoardTheme';
 import type { PlayableMiddlegameLine, AnnotationArrow, AnnotationHighlight } from '../../types';
 import type { PieceDropHandlerArgs, SquareHandlerArgs } from 'react-chessboard';
+import { reward } from '../../services/rewardService';
+import { rewardSeed } from '../../services/rewardEvents';
 
 interface PlayableLinePlayerProps {
   line: PlayableMiddlegameLine;
@@ -85,7 +87,7 @@ export function PlayableLinePlayer({
   onContinuePlaying,
   onAdvanceToLearn,
 }: PlayableLinePlayerProps): JSX.Element {
-  const { playMoveSound, playCelebration, playEncouragement } = usePieceSound();
+  const { playMoveSound } = usePieceSound();
 
   // 'learn' and 'practice' are board-play modes — they skip the auto-demo
   // and go straight to playing the line. 'learn' adds voice + move hints.
@@ -141,16 +143,17 @@ export function PlayableLinePlayer({
     if (completedRef.current) return;
     completedRef.current = true;
     setMemoryComplete(true);
-    // The celebration sound + completion UI IS the feedback. No spoken
-    // acknowledgment ("Excellent!" etc. are banned) and Practice stays silent.
-    playCelebration();
+    // The celebration (the shared reward layer: chord + light + buzz) + the
+    // completion UI IS the feedback. No spoken acknowledgment ("Excellent!"
+    // etc. are banned) and Practice stays silent.
+    reward({ kind: 'solved', seed: rewardSeed(line.title) });
     onCompleteRef.current();
     // The win is recorded by markRungComplete / markWeaponRungComplete, which
     // every onComplete here routes through. Recording it a second time from the
     // player double-counted the same win and, worse, counted a REPLAY of a line
     // already finished — the markers gate on first-time completion, this did
     // not. One win, one place.
-  }, [playCelebration]);
+  }, [line.title]);
 
   // Celebrate, then auto-advance (David 2026-09-02). The completion write
   // (onComplete → markRungComplete) already fired in finishLine(); this effect
@@ -496,6 +499,8 @@ export function PlayableLinePlayer({
         clearSelection();
 
         const nextIndex = memoryMoveIndex + 1;
+        // A correct move climbs the scale; the last one is the line's chord.
+        if (nextIndex < expectedMoves.length) reward({ kind: 'pip', square: to, step: memoryMoveIndex, seed: rewardSeed(line.title) + memoryMoveIndex });
 
         setTimeout(() => {
           setShowCorrectFlash(false);
@@ -529,7 +534,7 @@ export function PlayableLinePlayer({
               playerColor: sideToMove === 'w' ? 'white' : 'black',
               inBook: false,
               learned: true,
-              gamePhase: classifyPhase(temp.fen(), chessRef.current.history().length + 1),
+              gamePhase: classifyPhase(temp.fen(), { ply: chessRef.current.history().length + 1 }),
               openingName: line.title,
               // Attribute the fundamental so a live slip feeds the
               // per-fundamental scorecard + drill queue (David 2026-09-07).
@@ -539,7 +544,7 @@ export function PlayableLinePlayer({
         }
         setShowWrongFlash(true);
         setShakeBoard(true);
-        playEncouragement();
+        reward({ kind: 'miss' });
         clearSelection();
 
         setTimeout(() => {
@@ -548,7 +553,7 @@ export function PlayableLinePlayer({
         }, 1200);
       }
     },
-    [phase, memoryMoveIndex, expectedMoves, showWrongFlash, showCorrectFlash, playMoveSound, playEncouragement, clearSelection, finishLine, mode, discussion, line.title],
+    [phase, memoryMoveIndex, expectedMoves, showWrongFlash, showCorrectFlash, playMoveSound, clearSelection, finishLine, mode, discussion, line.title],
   );
 
   // Audit-only deterministic move hook — gated behind the `auditMoveHook`

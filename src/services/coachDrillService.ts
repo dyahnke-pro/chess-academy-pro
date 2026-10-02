@@ -485,6 +485,40 @@ export function summarizeWeaknesses(mistakes: MistakePuzzle[]): WeaknessSummaryR
   return [...rows.values()].sort((a, z) => (z.count - a.count) || a.label.localeCompare(z.label));
 }
 
+/** One weakness group on the merged My Weaknesses page: the student's OWN
+ *  game positions for one spine bucket, plus the puzzle-corpus themes that
+ *  drill the same pattern once those run out (David 2026-10-02: "in-game
+ *  mistakes first, then databases"). */
+export interface WeaknessGroup {
+  key: string;
+  label: string;
+  /** puzzles.json themes for "More like this" — empty when the corpus has none. */
+  themes: string[];
+  /** In the order given (callers pass their own sort). */
+  puzzles: MistakePuzzle[];
+  /** Not yet mastered — what the group still costs. */
+  open: number;
+}
+
+/** Group mistakes by the ONE spine bucket (`bucketForMistake`, the same key
+ *  `summarizeWeaknesses`, the drill queue and Up next read). Every mistake
+ *  lands in exactly one group; one with no tactic falls to its phase bucket,
+ *  never a guessed motif. Worst first: most open, then most total. */
+export function groupMistakesByWeakness(mistakes: readonly MistakePuzzle[]): WeaknessGroup[] {
+  const groups = new Map<string, WeaknessGroup>();
+  for (const mp of mistakes) {
+    const b = bucketForMistake(mp);
+    const key = b.clusterId.replace(/^analysis:/, '');
+    const g = groups.get(key) ?? { key, label: b.label, themes: b.themes, puzzles: [], open: 0 };
+    g.puzzles.push(mp);
+    if (mp.status !== 'mastered') g.open += 1;
+    groups.set(key, g);
+  }
+  return [...groups.values()].sort(
+    (a, z) => (z.open - a.open) || (z.puzzles.length - a.puzzles.length) || a.label.localeCompare(z.label),
+  );
+}
+
 export async function buildMistakeDrillQueue(
   options: {
     today?: string; cementReps?: number; rating?: number; gameId?: string; motif?: string;
