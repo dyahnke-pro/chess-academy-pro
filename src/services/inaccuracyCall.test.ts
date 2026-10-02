@@ -11,7 +11,7 @@
 // "inaccuracy" in review.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { callInaccuracy, gambitFile } from './inaccuracyCall';
+import { betterMoveReason, callInaccuracy, gambitFile } from './inaccuracyCall';
 import { classifyMove } from './moveRating';
 import { MISTAKE_CP } from './engineConstants';
 
@@ -527,7 +527,34 @@ describe('their slip is offered as what it really is (Learn walk 2026-10-02, 6.h
   it('clearly worse → a way back', () => {
     expect(callInaccuracy({ ...base, moverEvalAfterCp: 140 })?.said ?? '').toMatch(/way back into the game/);
   });
-  it('now better → go and take it', () => {
-    expect(callInaccuracy({ ...base, moverEvalAfterCp: -120 })?.said ?? '').toMatch(/go and take it/);
+  it('clearly better → something to find, never "take" (there may be no capture)', () => {
+    const said = callInaccuracy({ ...base, moverEvalAfterCp: -120 })?.said ?? '';
+    expect(said).toMatch(/something here for you now — look for it/);
+    expect(said).not.toMatch(/take it/);
+  });
+  it('a small edge is not a prize (Learn walk 2026-10-02: "go and take it" at +0.45)', () => {
+    const said = callInaccuracy({ ...base, moverEvalAfterCp: -45 })?.said ?? '';
+    expect(said).toMatch(/brings you level/);
+    expect(callInaccuracy({ ...base, moverEvalAfterCp: -80 })?.said ?? '').toMatch(/tips the game your way/);
+  });
+});
+
+describe('the reason is this move\'s own (Learn walk 2026-10-02, board-checked)', () => {
+  it('ply 32: a knight fork that wins the queen says so, not "swing pieces toward their king"', () => {
+    expect(betterMoveReason('r1b2rk1/1p3ppp/3b1q2/pP3n1P/P1Bp1P2/8/5K2/RNBQ2NR b - - 0 16', 'Bc5', 'Ne3',
+      ['f5e3', 'g1f3', 'e3d1', 'h1d1', 'c8g4', 'c1d2', 'g4f3', 'f2f3', 'f8c8'], 'black', null))
+      .toBe('it would win the queen for a piece');
+  });
+  it('ply 30: Nf3 is not credited with a rook\'s walk', () => {
+    expect(betterMoveReason('r1b2rk1/1p3ppp/3b1q2/pP3n1P/P1pp1P2/8/5K2/RNBQ1BNR w - - 0 16', 'Bxc4', 'Nf3',
+      ['g1f3', 'd4d3', 'a1a2', 'd6c5', 'f2g2', 'b7b6', 'h1h3', 'f5e3', 'c1e3', 'c8h3'], 'white', null) ?? '').not.toMatch(/walk the rook/);
+  });
+  it('ply 28: f6 is not credited with the queen\'s walk', () => {
+    expect(betterMoveReason('r2q1rk1/ppp2ppp/2n5/4P3/2bPp3/2P1B2P/P3NPP1/R2QR1K1 b - - 2 14', 'Bd5', 'f6',
+      ['f7f6', 'e5f6', 'd8f6', 'd1b1', 'c6e7', 'e2g3', 'c4d5', 'c3c4', 'd5c4', 'b1b7'], 'black', null) ?? '').not.toMatch(/walk the queen/);
+  });
+  it('ply 50: a queen trade is not "swing pieces toward your king"', () => {
+    expect(betterMoveReason('r4rk1/7p/p4qp1/2pPQp2/NpP5/1P5P/P5P1/5RK1 w - - 1 26', 'Qf4', 'Qxf6',
+      ['e5f6', 'f8f6', 'a4c5', 'a8e8', 'c5d3', 'g8f7', 'd3b4', 'e8e4', 'b4c6', 'f7e8'], 'white', null) ?? '').not.toMatch(/swing pieces/);
   });
 });

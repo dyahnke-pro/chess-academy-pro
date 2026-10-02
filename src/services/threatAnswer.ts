@@ -79,7 +79,12 @@ export function threatAnswer(input: {
   if (c.turn() !== student) return null;
   const foe: Color = student === 'w' ? 'b' : 'w';
   const squares = input.squares.filter(isSq);
-  const victims = squares.filter((s) => c.get(s)?.color === student);
+  // A VICTIM IS A PIECE THE ATTACKER REALLY HITS. For a hit, a square of
+  // ours the detector listed but nothing of theirs attacks is not under threat
+  // ("Move it with gain — Rxb6" moved the c6 rook while the c8 rook was the one
+  // hit, Learn walk 2026-10-02). A line threat keeps its x-rayed back piece.
+  const victims0 = squares.filter((s) => c.get(s)?.color === student);
+  const victims = input.shape === 'hit' ? victims0.filter((v) => c.attackers(v, foe).length > 0) : victims0;
   // A hit piece's line often names only the victim ("your bishop on e6 is
   // attacked"); whoever attacks it is the board's fact, read here.
   const named = squares.filter((s) => c.get(s)?.color === foe);
@@ -142,7 +147,11 @@ export function threatAnswer(input: {
       answer = newDef && newDef !== m.to
         ? `Guard it — after ${m.san} your ${piece(newDef, after)} on ${newDef} defends it.`
         : `Guard it — ${m.san} adds a defender to your ${piece(guarded)} on ${guarded}.`;
-    } else if (studentCp !== null && studentCp >= THREAT_WAIT_FLOOR_CP && !new Chess(fen).inCheck()) {
+    } else if (studentCp !== null && studentCp >= THREAT_WAIT_FLOOR_CP && !new Chess(fen).inCheck()
+      // A move that rescues a piece en prise is the ANSWER to a threat, never
+      // "it can wait" (Learn walk 2026-10-02: "It can wait — Qd2 comes first"
+      // with Qd2 moving the queen Rxb2 was about to take).
+      && legalSeeGainFor(fen, m.from, foe) <= 0) {
       kind = 'wait';
       answer = `It can wait — ${m.san} comes first.`;
     }

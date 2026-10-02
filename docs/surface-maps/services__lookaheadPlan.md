@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1569 lines · 26 exports · 15 importers · 10 tests · 0 audits**
+**1574 lines · 26 exports · 15 importers · 10 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -173,10 +173,10 @@
 ### `isCostClause` (function) — 10 call sites
 - `src/services/concessionBeat.ts:457`
 - `src/services/inaccuracyCall.ts:234`
-- `src/services/inaccuracyCall.ts:359`
-- `src/services/inaccuracyCall.ts:366`
-- `src/services/inaccuracyCall.ts:380`
-- `src/services/inaccuracyCall.ts:793`
+- `src/services/inaccuracyCall.ts:372`
+- `src/services/inaccuracyCall.ts:379`
+- `src/services/inaccuracyCall.ts:393`
+- `src/services/inaccuracyCall.ts:808`
 - `src/services/learnWalkBlumenfeld.test.ts:176`
 - `src/services/learnWalkBlumenfeld.test.ts:177`
 - `src/services/learnWalkBlumenfeld.test.ts:178`
@@ -190,7 +190,7 @@
 - `src/services/concessionBeat.ts:450`
 - `src/services/inaccuracyCall.ts:276`
 - `src/services/inaccuracyCall.ts:319`
-- `src/services/inaccuracyCall.ts:791`
+- `src/services/inaccuracyCall.ts:806`
 - `src/services/lookaheadPlan.test.ts:228`
 - `src/services/lookaheadPlan.test.ts:236`
 - `src/services/lookaheadPlan.test.ts:241`
@@ -226,10 +226,10 @@
 - `src/services/planArc.phraseFrom.test.ts:31`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.ts:52`
-- `src/services/planChooser.ts:42`
-- `src/services/planChooser.ts:43`
+- `src/services/planChooser.ts:48`
+- `src/services/planChooser.ts:49`
 
-### `aimWalkableNow` (re-export) — 16 call sites
+### `aimWalkableNow` (re-export) — 18 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9590`
 - `src/components/Coach/CoachTeachPage.tsx:9594`
 - `src/services/planArc.phraseFrom.test.ts:19`
@@ -246,12 +246,14 @@
 - `src/services/planArc.test.ts:258`
 - `src/services/planArc.test.ts:262`
 - `src/services/planArc.ts:414`
+- `src/services/planChooser.test.ts:54`
+- `src/services/planChooser.ts:47`
 
 ### `joinEmerges` (re-export) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9606`
 - `src/services/planArc.test.ts:269`
 - `src/services/planArc.test.ts:276`
-- `src/services/planArc.ts:537`
+- `src/services/planArc.ts:540`
 
 ### `stepArc` (re-export) — 25 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9590`

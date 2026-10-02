@@ -5,7 +5,7 @@
 // off lines the engine already computed (MultiPV) — no extra search.
 import { Chess } from 'chess.js';
 import { planFromUci } from './lookaheadPlan';
-import { aimsOf } from './planArc';
+import { aimWalkableNow, aimsOf } from './planArc';
 
 /** The first full move a plan choice may be taught on. */
 export const PLAN_CHOICE_FROM_MOVE = 10;
@@ -39,8 +39,14 @@ export function planChoice(
   const p0 = planFromUci(fen, l0.moves, studentColor, lastMove);
   const p1 = planFromUci(fen, l1.moves, studentColor, lastMove);
   if (!p0 || !p1) return null;
-  const a0 = aimsOf(p0.mine, 'student')[0];
-  const a1 = aimsOf(p1.mine, 'student')[0];
+  // An OUTPOST is a fact about the board now — a square a pawn holds, or one
+  // their pawn can still hit, is none (Learn walk 2026-10-02: "the outpost on
+  // h5" with White's pawn on h5). Routes and files may need the line's own
+  // preparation (d3 before Nd2), so only outposts are held to the board.
+  const seat: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+  const sayable = (a: ReturnType<typeof aimsOf>[number]): boolean => a.kind !== 'outpost' || aimWalkableNow(a, fen, seat);
+  const a0 = aimsOf(p0.mine, 'student').find(sayable);
+  const a1 = aimsOf(p1.mine, 'student').find(sayable);
   if (!a0 || !a1 || a0.id === a1.id) return null;
   const gap = Math.abs(l0.evaluation - l1.evaluation);
   // A PLAN IS QUIET PLAY (pass-2 walk 2026-09-30: "the stronger is an attack on

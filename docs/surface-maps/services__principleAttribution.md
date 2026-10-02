@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1493 lines · 12 exports · 42 importers · 29 tests · 1 audits**
+**1517 lines · 12 exports · 42 importers · 29 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -82,18 +82,21 @@
 - `src/services/misconceptionClassifier.ts:294`
 
 ### `planTargets` (function) — 2 call sites
-- `src/services/principleAttribution.section14.test.ts:127`
-- `src/services/principleAttribution.section14.test.ts:139`
+- `src/services/principleAttribution.section14.test.ts:129`
+- `src/services/principleAttribution.section14.test.ts:141`
 
 ### `planHeadline` (function) — 1 call site
-- `src/services/principleAttribution.section14.test.ts:130`
+- `src/services/principleAttribution.section14.test.ts:132`
 
-### `attributePrinciples` (function) — 75 call sites
+### `attributePrinciples` (function) — 78 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
 - `src/services/claimTruth.manual.test.ts:10`
 - `src/services/claimTruth.manual.test.ts:12`
 - `src/services/claimTruth.manual.test.ts:106`
 - `src/services/claimTruth.manual.test.ts:114`
+- `src/services/claimTruth.manual.test.ts:172`
+- `src/services/claimTruth.manual.test.ts:177`
+- `src/services/claimTruth.manual.test.ts:185`
 - `src/services/coachFeatureService.ts:883`
 - `src/services/learnWalkBlumenfeld.test.ts:65`
 - `src/services/liveFundamental.ts:135`
@@ -103,18 +106,18 @@
 - `src/services/principleAttribution.section14.test.ts:37`
 - `src/services/principleAttribution.section14.test.ts:54`
 - `src/services/principleAttribution.section14.test.ts:64`
-- `src/services/principleAttribution.section14.test.ts:72`
-- `src/services/principleAttribution.section14.test.ts:75`
-- `src/services/principleAttribution.section14.test.ts:78`
-- `src/services/principleAttribution.section14.test.ts:79`
-- `src/services/principleAttribution.section14.test.ts:104`
-- `src/services/principleAttribution.section14.test.ts:115`
-- `src/services/principleAttribution.section14.test.ts:119`
-- `src/services/principleAttribution.section14.test.ts:147`
-- `src/services/principleAttribution.section14.test.ts:151`
-- `src/services/principleAttribution.section14.test.ts:160`
-- `src/services/principleAttribution.section14.test.ts:196`
-- `src/services/principleAttribution.section14.test.ts:210`
+- `src/services/principleAttribution.section14.test.ts:74`
+- `src/services/principleAttribution.section14.test.ts:77`
+- `src/services/principleAttribution.section14.test.ts:80`
+- `src/services/principleAttribution.section14.test.ts:81`
+- `src/services/principleAttribution.section14.test.ts:106`
+- `src/services/principleAttribution.section14.test.ts:117`
+- `src/services/principleAttribution.section14.test.ts:121`
+- `src/services/principleAttribution.section14.test.ts:149`
+- `src/services/principleAttribution.section14.test.ts:153`
+- `src/services/principleAttribution.section14.test.ts:162`
+- `src/services/principleAttribution.section14.test.ts:198`
+- `src/services/principleAttribution.section14.test.ts:212`
 - `src/services/principleAttribution.test.ts:20`
 - `src/services/principleAttribution.test.ts:39`
 - `src/services/principleAttribution.test.ts:47`

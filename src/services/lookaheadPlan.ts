@@ -871,8 +871,13 @@ export function describePlan(
 
   // King attack, scaled by how many pieces are really arriving. Two is a
   // gesture; four is an assault and the sentence should lead with it.
+  // …but never above a PIECE the line actually wins (Learn walk 2026-10-02,
+  // ply 32: "Ne3 was cleaner — it would swing pieces toward their king" for a
+  // knight fork that wins the queen; the king read scored 98, the queen 95).
   if (plan.nearEnemyKing >= 2) {
-    add(50 + plan.nearEnemyKing * 12, `swing pieces toward ${theirKing}`, plan.kingAttackSquares);
+    const kingWeight = 50 + plan.nearEnemyKing * 12;
+    const capped = plan.materialSwing >= 3 ? Math.min(kingWeight, 34 + plan.materialSwing * 10) : kingWeight;
+    add(capped, `swing pieces toward ${theirKing}`, plan.kingAttackSquares);
   }
   // Shield pawns are worth more per pawn than a piece walking over: a pawn that
   // has gone is not coming back.

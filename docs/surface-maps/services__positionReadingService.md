@@ -111,7 +111,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:3241`
 - `src/services/groundedAnswer.ts:6800`
 - `src/services/inaccuracyCall.ts:311`
-- `src/services/inaccuracyCall.ts:773`
+- `src/services/inaccuracyCall.ts:788`
 - `src/services/moveTiming.ts:27`
 - `src/services/pvPlayback.ts:406`
 - `src/services/pvPlayback.ts:453`
@@ -149,7 +149,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveFundamentals.ts:316`
 - `src/services/moveFundamentals.ts:1456`
 
-### `legalSeeGainFor` (function) — 39 call sites
+### `legalSeeGainFor` (function) — 40 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7998`
 - `src/components/Coach/CoachTeachPage.tsx:9546`
 - `src/services/arrowDoor.ts:161`
@@ -188,7 +188,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/safetyHabits.ts:38`
 - `src/services/tacticAlertService.ts:329`
 - `src/services/tacticVerification.ts:101`
-- `src/services/threatAnswer.ts:98`
+- `src/services/threatAnswer.ts:103`
+- `src/services/threatAnswer.ts:154`
 
 ### `signedLegalSeeFor` (function) — 11 call sites
 - `src/components/Coach/CoachTeachPage.tsx:827`
@@ -272,7 +273,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `bishopHemmedByOwnPawns` (function) — 3 call sites
 - `src/services/positionReadingService.test.ts:902`
-- `src/services/principleAttribution.ts:1064`
+- `src/services/principleAttribution.ts:1072`
 - `src/services/reviewTeachingPoints.ts:202`
 
 ### `findPieceQuality` (function) — 29 call sites

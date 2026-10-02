@@ -96,7 +96,7 @@ function moverCp(line: CriticalFanLine, moverColor: 'w' | 'b'): number {
 
 /** The lowest score still inside each band — the edge a "keeps it" claim is
  *  about. `damage` has no floor (it is kept by staying near the best). */
-const STAKE_FLOOR: Record<StakeId, number | null> = { mate: MATE_CP, win: 300, 'on-top': 100, edge: 50, level: -99, 'in-it': -300, damage: null };
+const STAKE_FLOOR: Record<StakeId, number | null> = { mate: MATE_CP, win: 300, 'on-top': 100, edge: 50, level: -99, 'in-it': -200, damage: null };
 /** A move this close under a band's floor is neither clearly in it nor clearly
  *  out, so a count that turns on it is unproven. */
 const BAND_EDGE_CP = 50;
@@ -112,7 +112,10 @@ function stakeFor(bestCp: number): StakeId | null {
   // moves keep you level" (hand walk 2340, moves 12 and 15).
   if (bestCp >= 50) return 'edge';
   if (bestCp > -100) return 'level';
-  if (bestCp >= -300) return 'in-it';
+  // Two pawns down is still a game; three is not "in it" (Learn walk
+  // 2026-10-02, ply 62: "the only move that kept you in it" at −3.2). Below
+  // −2 the honest claim is limiting the damage.
+  if (bestCp >= -200) return 'in-it';
   return 'damage';
 }
 

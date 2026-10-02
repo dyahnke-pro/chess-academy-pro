@@ -264,8 +264,8 @@
 - `src/services/openingDetectionService.test.ts:357`
 - `src/services/openingDetectionService.test.ts:371`
 - `src/services/openingGenerator.ts:3198`
-- `src/services/principleAttribution.section14.test.ts:90`
-- `src/services/principleAttribution.ts:1270`
+- `src/services/principleAttribution.section14.test.ts:92`
+- `src/services/principleAttribution.ts:1294`
 
 ### `ForkBranch` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

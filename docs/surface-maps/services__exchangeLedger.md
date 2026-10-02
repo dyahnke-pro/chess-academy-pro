@@ -70,7 +70,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/refutedAlternativeCore.ts:183`
 
 ### `proofAgainstMover` (function) — 4 call sites
-- `src/services/criticalMoment.ts:230`
+- `src/services/criticalMoment.ts:233`
 - `src/services/deliberation.ts:189`
 - `src/services/exchangeLedger.horizon.test.ts:16`
 - `src/services/exchangeLedger.horizon.test.ts:21`

@@ -41,7 +41,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/fundamentalHow.test.ts:71`
 - `src/services/fundamentalHow.test.ts:76`
 - `src/services/fundamentalHow.test.ts:77`
-- `src/services/principleAttribution.section14.test.ts:176`
+- `src/services/principleAttribution.section14.test.ts:178`
 
 ### `verdictCanDropBetter` (function) — 2 call sites
 - `src/services/learnFundamentalNarration.ts:111`
@@ -60,8 +60,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnFundamentalNarration.ts:119`
 - `src/services/learnWalkBlumenfeld.test.ts:75`
 - `src/services/misconceptionClassifier.ts:259`
-- `src/services/principleAttribution.section14.test.ts:179`
-- `src/services/principleAttribution.section14.test.ts:182`
+- `src/services/principleAttribution.section14.test.ts:181`
+- `src/services/principleAttribution.section14.test.ts:184`
 - `src/services/principleAttributionEndgame.test.ts:49`
 - `src/services/principleAttributionEvalPv.test.ts:77`
 - `src/services/principleAttributionEvalPv.test.ts:90`

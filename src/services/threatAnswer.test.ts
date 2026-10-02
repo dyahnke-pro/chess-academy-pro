@@ -87,3 +87,21 @@ describe('threatAnswer', () => {
     expect(a?.kind === 'guard').toBe(false);
   });
 });
+
+describe('Learn walk 2026-10-02 — "it can wait" is never a rescue', () => {
+  it('ply 48: the hanging-knight warning, best Qd2 rescues the queen Rxb2 hits — not "it can wait"', () => {
+    const fen = 'r4rk1/1p3ppp/8/pPb2n1P/P4PK1/2p2Q2/1q2N3/1R5R b - - 3 25';
+    const a = threatAnswer({ fen, squares: ['f5'], bestUci: 'b2d2', studentCp: 640, student: 'b', ply: 48, shape: 'hit' });
+    expect(a?.kind).not.toBe('wait');
+  });
+  it('ply 70: the discovery-in-waiting warning, best Nc3 rescues the knight Rxe2 hits — not "it can wait"', () => {
+    const fen = '4rrk1/1p3ppp/8/pP3P1P/Pb2N1K1/4R3/4n3/7R b - - 2 36';
+    const a = threatAnswer({ fen, squares: ['e4', 'e3', 'e8'], bestUci: 'e2c3', studentCp: 530, student: 'b', ply: 70, shape: 'line' });
+    expect(a?.kind).not.toBe('wait');
+  });
+  it('ply 72: a forked rook leaving with a capture is still "move it with gain" (it IS one of the forked pieces)', () => {
+    const fen = '2r5/2R4p/pNrP2p1/2Pk1p2/1P6/7P/P5P1/6K1 b - - 4 37';
+    const a = threatAnswer({ fen, squares: ['c7', 'c8', 'c6'], bestUci: 'c6b6', studentCp: -800, student: 'b', ply: 72, shape: 'hit' });
+    expect(a?.kind).toBe('with-gain');
+  });
+});

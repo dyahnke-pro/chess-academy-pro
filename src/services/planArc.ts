@@ -473,6 +473,9 @@ export function aimWalkableNow(aim: Aim, fen: string, color: 'w' | 'b', history?
     // can ever attack (walk 4, 2026-09-29: "the outpost on d5" said with no
     // black pawn touching d5). Both, on the board as it is.
     const f = goal.charCodeAt(0); const r = Number(goal[1]);
+    // A square a PAWN stands on is no outpost (Learn walk 2026-10-02: "the
+    // outpost on h5" with White's pawn on h5).
+    if (board.get(goal)?.type === 'p') return false;
     const up = color === 'w' ? 1 : -1;
     const ownPawnGuards = [f - 1, f + 1].some((pf) => {
       if (pf < 97 || pf > 104) return false;

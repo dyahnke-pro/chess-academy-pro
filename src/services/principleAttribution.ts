@@ -952,12 +952,20 @@ const DETECTORS: Detector[] = [
   // 21. Worst piece unimproved — the best move improves the mover's least
   // mobile piece; the played move does not, and that piece stays stuck.
   (c) => {
-    const { last, best, mover } = c;
+    const { last, best, mover, opp } = c;
     if (c.opening) return null;
     const cands = pieces(c.before, mover).filter((p) => p.type === 'n' || p.type === 'b' || p.type === 'r');
     if (cands.length < 2) return null;
     const worst = cands.map((p) => ({ p, mob: pieceMobility(c.before, p.square, mover) })).sort((a, b) => a.mob - b.mob)[0];
     if (worst.mob > 2) return null;
+    // A GUARD IS NOT IDLE (Learn walk 2026-10-02, ply 56: "the knight on h6 is
+    // doing nothing" while it was the only thing guarding the queen on g4 that
+    // they were about to take). A piece defending one of the mover's attacked
+    // pieces has a job, however few squares it has.
+    const guardsAttacked = pieces(c.after, mover).some((q) => q.square !== worst.p.square && q.type !== 'k'
+      && c.after.attackers(q.square, opp).length > 0
+      && c.after.attackers(q.square, mover).includes(worst.p.square));
+    if (guardsAttacked) return null;
     if (best.from !== worst.p.square || last.from === worst.p.square) return null;
     if (pieceMobility(c.after, worst.p.square, mover) > 2) return null;
     return att('worst-piece-unimproved', 1, { squares: [worst.p.square], moves: [best.san], pvMoves: [] }, { piece: PNAME[worst.p.type], square: worst.p.square, better: best.san });
@@ -1226,7 +1234,23 @@ const DETECTORS: Detector[] = [
     // arrives" — Nxf8 only took back the rook in a plain trade).
     const dest = (san: string): string => san.replace(/[+#]|=[QRBN]/g, '').slice(-2);
     const recaptures = (i: number): boolean => i > 0 && pvP[i].includes('x') && pvP[i - 1].includes('x') && dest(pvP[i]) === dest(pvP[i - 1]);
-    const firstForcing = pvP.findIndex((san, i) => i % 2 === 0 && !recaptures(i) && (isForcing(san) || threatens(i)));
+    // A PAWN SWAP IS NOT A BLOW (Learn walk 2026-10-02: "their exf6 was
+    // waiting deeper" for an en-passant reply to the student's own …f5, and
+    // "their axb5" for a pawn swap). A pawn taking a pawn that can be taken
+    // straight back trades nothing; a piece capture can still be the blow (a
+    // bishop for the knight that doubles the pawns).
+    const pawnSwap = (i: number): boolean => {
+      try {
+        const b = new Chess(c.after.fen());
+        for (let k = 0; k < i; k += 1) b.move(pvP[k]);
+        const m = b.move(pvP[i]);
+        if (!m?.captured || m.piece !== 'p' || m.captured !== 'p') return false;
+        const victim = m.color === 'w' ? 'b' : 'w';
+        return b.attackers(m.to, victim).length > 0;
+      } catch { return false; }
+    };
+    const blow = (san: string, i: number): boolean => (isForcing(san) && !pawnSwap(i)) || threatens(i);
+    const firstForcing = pvP.findIndex((san, i) => i % 2 === 0 && !recaptures(i) && blow(san, i));
     if (firstForcing < 0) return no(c, 'calculation-depth', `no forcing move anywhere in the PV (${pvP.slice(0, 4).join(' ')})`);
     if (firstForcing < 2) {
       return yieldTo(c, 'calculation-depth', CALC_DEPTH_CLAIMANTS,

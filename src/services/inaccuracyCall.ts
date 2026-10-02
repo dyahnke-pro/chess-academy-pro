@@ -63,7 +63,7 @@ export interface InaccuracyCall {
    *  rule once (unify-the-coach B3). Structured, never read off the prose. */
   pattern?: string;
   /** Set when the call ends by telling the student their slip left something
-   *  to find ("look for it" / "go and take it") — so the caller can reveal the
+   *  to find ("look for it") — so the caller can reveal the
    *  answer after the student moves. Structured, never read off the prose. */
   offersStudent?: true;
 }
@@ -354,7 +354,20 @@ function whyBetter(
   // touch the move's own squares, or it describes some other piece's journey.
   const firstFrom = bestUci[0].slice(0, 2);
   const firstTo = bestUci[0].slice(2, 4);
-  const clauses = plan?.mine.spokenClauses.filter((c) => !sharedWin(c.text)) ?? [];
+  let movedName: string | null = null;
+  try { const mv = new Chess(fenBefore).move({ from: firstFrom, to: firstTo, promotion: bestUci[0][4] }); movedName = mv ? ({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as Record<string, string>)[mv.piece] ?? null : null; } catch { movedName = null; }
+  // ANOTHER PIECE'S WALK IS THIS MOVE'S IDEA ONLY WHEN THE MOVE OPENS IT —
+  // the route runs through the square the move vacated (Be3 clearing c1 for
+  // the rook). Otherwise it is some other move's work (Learn walk 2026-10-02:
+  // "Rh3 was their move, to walk the knight round to b4", "f6 — the idea is
+  // to walk the queen round to e6", "Nf3 … walk the rook round to c3"), and it
+  // is dropped as a candidate so the next real reason — or none — speaks.
+  const routeOf = (t: string): string | null => /\bwalk the (pawn|knight|bishop|rook|queen|king) round\b/.exec(t)?.[1] ?? null;
+  const clauses = (plan?.mine.spokenClauses.filter((c) => !sharedWin(c.text)) ?? [])
+    .filter((c) => {
+      const r = routeOf(c.text);
+      return r === null || movedName === null || r === movedName || c.squares.includes(firstFrom);
+    });
   if (plan && clauses.length === 0) return null;
   const lead0 = clauses.find((c) => !c.drift && (isCostClause(c.text) || c.squares.includes(firstFrom) || c.squares.includes(firstTo)))
     ?? clauses[0];
@@ -382,9 +395,7 @@ function whyBetter(
     // (review walk 2026-10-01, ply 37: "Be3 was the move — it would walk the
     // rook round to c4, by way of c1" — the rook's route passes c1, the square
     // the bishop LEFT, so the square test credited it to Be3).
-    const routed = /\bwalk the (pawn|knight|bishop|rook|queen|king) round\b/.exec(lead.text)?.[1] ?? null;
-    let movedName: string | null = null;
-    try { const mv = new Chess(fenBefore).move({ from: firstFrom, to: firstTo, promotion: bestUci[0][4] }); movedName = mv ? ({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as Record<string, string>)[mv.piece] ?? null : null; } catch { movedName = null; }
+    const routed = routeOf(lead.text);
     const otherPieceRoute = routed !== null && movedName !== null && routed !== movedName;
     const own = !otherPieceRoute && (costIsOwn || lead.squares.includes(firstFrom) || lead.squares.includes(firstTo));
     if (!survivesForcingCut(fenBefore, bestUci, moverColor, lead.text, priorMove)) return null;
@@ -598,7 +609,11 @@ export function callInaccuracyDetailed(args: {
     const studentAfter = typeof moverAfter === 'number' ? -moverAfter : null;
     if (studentAfter !== null && studentAfter < -50) return ' That gives you a way back into the game — look for it.';
     if (studentAfter !== null && studentAfter <= 50) return ' That brings you level — look for the move that does it.';
-    return ' There is something here for you now — go and take it.';
+    // A SMALL EDGE IS NOT A PRIZE, and "take" promises a capture the board may
+    // not have (Learn walk 2026-10-02: "go and take it" at +0.45 with nothing
+    // to take). A clear edge is something to find; a small one is to keep.
+    if (studentAfter !== null && studentAfter < 100) return ' That tips the game your way — look for the move that keeps it.';
+    return ' There is something here for you now — look for it.';
   };
   // A DICTATED MOVE IS THEIRS, NOT THE COACH'S (David 2026-09-30: "Speak
   // dictated moves"): the student told the coach to play it, so the coach

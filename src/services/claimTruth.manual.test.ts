@@ -165,3 +165,24 @@ describe('run I manual check: a recapture is not a win, a pawn recapture is not 
     for (let r = 0; r < 4; r++) expect(read ? uncertaintyClause(read, { rotation: r }) : null).toBeNull();
   });
 });
+
+describe('an even trade is not "waiting deeper" (Learn walk 2026-10-02, plies 26 and 38)', () => {
+  const g = ['e4', 'e5', 'c3', 'Be7', 'd4', 'exd4', 'cxd4', 'Nf6', 'Nc3', 'Nc6', 'h3', 'd5', 'e5', 'Ne4', 'Bd3', 'Bb4', 'Bxe4', 'dxe4', 'Ne2', 'Be6', 'O-O', 'Bc4', 'Be3', 'Bxc3', 'bxc3', 'O-O'];
+  it('…O-O: exf6 en passant against the student\'s own …f5 is not the blow', () => {
+    const out = attributePrinciples({ replySan: 'Re1', historySans: g, bestSan: 'Ne7', classification: 'mistake', pvAfterPlayed: ['Re1', 'f5', 'exf6', 'Qxf6'], evalBefore: 66, evalAfterPlayed: -31 } as never);
+    expect(out.find((a) => a.id === 'calculation-depth')?.evidence?.moves?.[0]).not.toBe('exf6');
+  });
+  it('…a6: axb5 axb5 is a pawn swap, not the blow', () => {
+    const h = [...g, 'Re1', 'Bd5', 'Qc2', 'Na5', 'Nf4', 'c6', 'Qa4', 'Nc4', 'Rab1', 'b5', 'Qc2', 'a6'];
+    const out = attributePrinciples({ replySan: 'Nxd5', historySans: h, bestSan: 'Qd7', classification: 'mistake', pvAfterPlayed: ['Qe2', 'f6', 'a4', 'Qd7', 'axb5', 'axb5'], evalBefore: 131, evalAfterPlayed: 40 } as never);
+    expect(out.find((a) => a.id === 'calculation-depth')?.evidence?.moves?.[0]).not.toBe('axb5');
+  });
+});
+
+describe('a guard is not the piece doing nothing (Learn walk 2026-10-02, ply 56)', () => {
+  it('…Qg4+ with the knight on h6 guarding the queen: no "improve your worst piece"', () => {
+    const h = ['h4', 'Nc6', 'c3', 'Nf6', 'f3', 'e5', 'g4', 'd5', 'b4', 'e4', 'h5', 'exf3', 'exf3', 'Bd6', 'Kf2', 'O-O', 'd4', 'a5', 'b5', 'Ne7', 'a4', 'c5', 'g5', 'Nf5', 'gxf6', 'Qxf6', 'f4', 'cxd4', 'c4', 'dxc4', 'Bxc4', 'Bc5', 'Kf1', 'Be6', 'Bxe6', 'Qxe6', 'Qf3', 'Qc4+', 'Kg2', 'Qxc1', 'Ne2', 'Ne3+', 'Kg3', 'Qb2', 'Nbc3', 'dxc3', 'Rab1', 'Nf5+', 'Kg4', 'Nh6+', 'Kh3', 'Qa2', 'Nxc3', 'Qe6+', 'Kg2', 'Qg4+'];
+    const out = attributePrinciples({ replySan: 'Qxg4', historySans: h, bestSan: 'Nf5', classification: 'blunder' });
+    expect(out.map((a) => a.id)).not.toContain('worst-piece-unimproved');
+  });
+});
