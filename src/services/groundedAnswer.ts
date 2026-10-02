@@ -4171,6 +4171,41 @@ function normalizeBeginnerSan(tok: string): string {
   return `${lead.toUpperCase()}${disamb}${x}${destFile}${destRank}${promo ?? ''}${chk ?? ''}`;
 }
 
+/** One SYMBOL of notation, not a whole move — real users asked "what does G
+ *  mean" and "what is bxe7" (2026-10). Uppercase K Q R B N are pieces; the
+ *  letters a–h (any case but the piece letters) are files; x, +, #, = and the
+ *  castling marks each have one meaning. Pure decode — nothing on the board is
+ *  claimed (G0). Null when the ask is not "what does <symbol> mean". */
+const SYMBOL_MEANING: Record<string, string> = {
+  K: 'the king', Q: 'the queen', R: 'a rook', B: 'a bishop',
+  N: 'a knight — N, because K is already the king',
+  x: 'a capture: "Nxe5" means the knight takes whatever is on e5',
+  '+': 'check — the move attacks the king',
+  '#': 'checkmate',
+  '=': 'a promotion: "e8=Q" means the pawn reaches e8 and becomes a queen',
+  'O-O': 'castling kingside', 'O-O-O': 'castling queenside',
+};
+export function explainNotationSymbol(text: string | null | undefined): string | null {
+  if (!text) return null;
+  const t = text.trim();
+  const quoted = String.raw`["'“‘]?(O-O-O|O-O|[A-Za-z]|[x+#=])["'”’]?`;
+  const m = t.match(new RegExp(String.raw`\bwhat\s+(?:does|do|is|'?s)\s+(?:the\s+|a\s+|an\s+|this\s+|that\s+)?${quoted}\s+(?:mean|means|stand\s+for|stands\s+for)\b`, 'i'))
+    ?? t.match(new RegExp(String.raw`^what(?:'?s|\s+is)\s+["'“‘]?([A-HKQRN]|O-O-O|O-O)["'”’]?\s*\??$`));
+  if (!m) return null;
+  const sym = m[1];
+  if (sym === 'O-O' || sym === 'O-O-O' || ['x', '+', '#', '='].includes(sym)) {
+    return `"${sym}" in chess notation means ${SYMBOL_MEANING[sym]}.`;
+  }
+  if (/^[KQRBN]$/.test(sym)) {
+    return `"${sym}" in chess notation means ${SYMBOL_MEANING[sym]}. A move like "${sym}f3" is that piece moving to f3; a pawn move has no letter at all, just the square, like "e4".`;
+  }
+  if (/^[a-h]$/i.test(sym)) {
+    const f = sym.toLowerCase();
+    return `"${sym}" in chess notation is the ${f}-file — the ${f} column of squares, written in lowercase. A square is its file then its rank, so "${f}4" is the ${f}-file on the fourth rank. On its own at the front of a capture, like "${f}xd5", it is the pawn on the ${f}-file taking.`;
+  }
+  return null;
+}
+
 /** Decode a SAN move into a plain-English explanation for a beginner. Uses the
  *  live FEN (when legal there) to name the captured piece; otherwise decodes
  *  the notation itself. Written form (squares un-spaced) — voiceFacts +

@@ -61,7 +61,7 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
 }
 import { lookupMasterPlay } from './masterPlayLookup';
 import { isEndgameByMaterial } from './gamePhaseService';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleOpponentHypotheticalAnswer, assembleTradeAnswer, assembleEndgameOutlookAnswer, boardWeaknessNow, assembleCompareMovesAnswer, assembleCaptureOnAnswer, assemblePawnStrengthAnswer, playedSacrificeVerdict, lastCaptureOf, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFundamentalLessonAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleLastMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleEndgameRuleAnswer, endgameRuleDemoFen, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer, type WeakFundamental, type PositionalTopic as PositionalTopicType } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleOpponentHypotheticalAnswer, assembleTradeAnswer, assembleEndgameOutlookAnswer, boardWeaknessNow, assembleCompareMovesAnswer, assembleCaptureOnAnswer, assemblePawnStrengthAnswer, playedSacrificeVerdict, lastCaptureOf, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, explainNotationSymbol, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFundamentalLessonAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleLastMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleEndgameRuleAnswer, endgameRuleDemoFen, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer, type WeakFundamental, type PositionalTopic as PositionalTopicType } from './groundedAnswer';
 import { getFundamentalCounts, FUNDAMENTAL_LABEL, fundamentalDevice } from './fundamentalsCatalog';
 import type { FundamentalId } from './principleAttribution';
 import { matchRouteByTopic } from './navigationRouter';
@@ -3644,6 +3644,17 @@ export async function getCoachChatResponse(
       }
       return undefined;
     })();
+    // A single SYMBOL ("what does G mean", "what is x") — before the move
+    // decoder, which needs a whole move.
+    const symbolExplained = explainNotationSymbol(earlyUserMsg);
+    if (symbolExplained) {
+      const voiced = await voice(symbolExplained, { studentMessage: earlyUserMsg, providerConfig: config, intent: 'notation', preferRaw: true });
+      if (voiced) {
+        emitGroundingCoverage('notation-help', grounding.surface ?? 'unknown', grounding.sessionId, { question: (earlyUserMsg ?? '').slice(0, 100), path: 'early-symbol' });
+        if (onStream) onStream(voiced);
+        return voiced;
+      }
+    }
     const earlyNotationSan = notationQuestionSan(earlyUserMsg);
     if (earlyNotationSan) {
       const explained = explainSanNotation(earlyNotationSan, grounding.currentFen ?? null);
@@ -5115,6 +5126,20 @@ export async function getCoachChatResponse(
             // the board and produces a non-answer — G0).  This is the documented
             // contract from assembleProgressAnswer's docstring: "caller takes the
             // one fallback — e.g. 'play a few games and I'll spot patterns'".
+            // A SKILL NAMED, NO GAMES YET (real users 2026-10: "Why do I
+            // struggle with calculation?" got only "import your games"). The
+            // record is empty, so the honest answer is the skill itself — the
+            // same authored lesson the fundamentals lane teaches — and then
+            // what the games would add. Empty record = TEACH (the heat map's
+            // grey), never a deflection.
+            {
+              const skill = resolveTaughtFundamental(lastUserMessage() ?? '');
+              const lesson = skill ? assembleFundamentalLessonAnswer(skill) : null;
+              if (lesson) {
+                const voicedSkill = await voice(`${lesson.facts} Once your games are in, I'll show you exactly where this has cost you.`, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'concept', preferRaw: true });
+                if (voicedSkill) { lastCoachActionOffer = [IMPORT_ANALYZE_OFFER]; return voicedSkill; }
+              }
+            }
             const noDataFact = "Import your games and I'll analyze your weaknesses. Connect your chess.com or lichess account, or paste a game — once your games are in and analyzed, I'll show you the patterns in your play and drill them with you.";
             const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
             if (voicedNoData) { lastCoachActionOffer = [IMPORT_ANALYZE_OFFER]; return voicedNoData; }

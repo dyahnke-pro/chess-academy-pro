@@ -42,7 +42,6 @@ describe('every producer we added has a live consumer', () => {
     ['the rear-facing PV', BACKWARD, 'whatItAllowed('],
     ['the structural drawback', BACKWARD, 'findStudentDrawback('],
     ['the backward look, from the surface', TEACH, 'backwardLook('],
-    ['the backward look, from the hook', HOOK, 'backwardLook('],
   ];
   for (const [name, file, symbol] of wired) {
     it(`${name} is called`, () => {
@@ -306,8 +305,11 @@ describe('the couplings that make the wiring safe', () => {
   });
 
   it('one model computes the backward look, so the two callers cannot drift', () => {
-    expect(HOOK_CODE, 'the hook re-implements the lanes instead of calling the model')
-      .toMatch(/backwardLook\(\{/);
+    // The hook used to call the model too, for `lastMoveDrawback` — a value no
+    // surface read (the page is pinned NOT to, above). Deleted 2026-10-02
+    // (G8.5: nothing computed and dropped). The hook may neither re-implement
+    // the lanes nor bring the orphan back.
+    expect(HOOK_CODE, 'the hook computes a backward look nobody reads').not.toMatch(/backwardLook\(\{/);
     expect(HOOK_CODE).not.toMatch(/findStudentDrawback\(\{/);
     // The import may carry sibling exports (`lastCoachVerdictDecline` joined
     // it 2026-09); what is pinned is that `backwardLook` itself is imported

@@ -1341,7 +1341,7 @@ export function isFundamentalsQuestion(ask: string | undefined): boolean {
  *  pawn is strong") must not deliver a lesson, and a board question ("is my
  *  attack sound") stays with the board-assessment lane. */
 const FUND_LESSON_FRAME =
-  /\b(?:teach|learn|explain|show\s+me|cover|go\s+over|help\s+me\s+(?:with|understand)|what\s+(?:is|are|does)|what'?s|why\s+(?:is|are|do|does)|why'?s|how\s+do\s+i\s+(?:stop|avoid|fix|not)|when\s+(?:should|do|to)|tell\s+me\s+about)\b/i;
+  /\b(?:teach|learn|explain|show\s+me|cover|go\s+over|help\s+me\s+(?:with|understand)|what\s+(?:is|are|does)|what'?s|why\s+(?:is|are|do|does)|why'?s|how\s+(?:do|can|could|should)\s+i\s+(?:stop|avoid|fix|not|get\s+better|improve|learn|practi[sc]e|train|visuali[sz]e|calculate|see|think)|why\s+(?:do|can'?t|cant)\s+i\s+(?:struggle|keep|always|never|not)|when\s+(?:should|do|to)|tell\s+me\s+about)\b/i;
 export function isFundamentalLessonQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
   // App-surface asks ("what does the fundamentals TAB do") are app-help.

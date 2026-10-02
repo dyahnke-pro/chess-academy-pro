@@ -249,7 +249,7 @@ import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
 import { mateContext } from '../../utils/mateContext';
 import { speakComputed } from '../../services/speakComputed';
-import { heldVerdictText, type HeldVerdict } from '../../services/deliberation';
+import { heldVerdictText } from '../../services/deliberation';
 import { applyCoachSetting } from '../../services/coachSettingsAction';
 import { detectStudentLanguage } from '../../services/spokenLanguage';
 import { translateToEnglish } from '../../services/coachApi';
@@ -1718,6 +1718,9 @@ export function CoachTeachPage(): JSX.Element {
   /** The page's OWN per-game refs — the ones not yet migrated into
    *  `learnMemory`. Never call `newGame()` from here: this runs AS the
    *  memory's `onNewGame`, so it would recurse. The list is the debt. */
+  /** The board a move is held on (the "Show me" label) — the move itself
+   *  lives in `learnMemRef.current.heldMove`. */
+  const [heldMoveFen, setHeldMoveFen] = useState<string | null>(null);
   const forgetPageRefsRef = useRef<() => void>(() => undefined);
   const forgetPageRefs = useCallback((): void => {
     announcedPliesRef.current.clear();
@@ -1732,6 +1735,8 @@ export function CoachTeachPage(): JSX.Element {
     positionalSaidRef.current.clear();
     rejectedTemptingCountRef.current = 0;
     priorityFirstLastPlyRef.current = -999;
+    lastBoardMoveRef.current = null;
+    setHeldMoveFen(null);
   }, []);
   /** A fresh game, from a CALLER (the student asked / the board reset handler).
    *  Goes through the memory so the single `onNewGame` signal fires — the
@@ -1901,11 +1906,6 @@ export function CoachTeachPage(): JSX.Element {
   const pendingCoachPhraseRef = useRef<string | null>(null);
   const rejectedTemptingCountRef = useRef(0);
   const priorityFirstLastPlyRef = useRef(-999);
-  /** THE MOVE HELD AT A DECIDING MOMENT (David 2026-10-02) — the position it
-   *  belongs to, the answer, and whether "show me" already said it. Consumed by
-   *  the student's next move from that position. */
-  const heldRevealRef = useRef<(HeldVerdict & { fen: string; shown: boolean }) | null>(null);
-  const [heldMoveFen, setHeldMoveFen] = useState<string | null>(null);
   // SESSION BOOKENDS (David 2026-07-11): running tallies for the closing
   // takeaway spoken on End Lesson — questions asked/found + slips stopped on.
   // All computed; the closer is a deterministic line (no LLM needed).
@@ -9380,7 +9380,7 @@ export function CoachTeachPage(): JSX.Element {
                       taughtPrinciples: learnMemRef.current.principleTaught,
                     });
                     moveAdviceHere = pf.moveAdvice;
-                    heldRevealRef.current = pf.heldVerdict ? { ...pf.heldVerdict, fen: probe.fen(), shown: false } : null;
+                    learnMemRef.current.heldMove = pf.heldVerdict ? { ...pf.heldVerdict, fen: probe.fen(), shown: false } : null;
                     setHeldMoveFen(pf.heldVerdict ? probe.fen() : null);
                     if (pf.heldVerdict) captureEvent('learn_move_held', { surface: 'coach-teach', tier: pf.importance.tier });
                     const held = !!pf.heldVerdict;
@@ -9471,7 +9471,7 @@ export function CoachTeachPage(): JSX.Element {
                         priorityFirstLastPlyRef.current = plyNow;
                         captureEvent('priority_first_offered', { surface: 'coach-teach', target: pf.targetSquare });
                         // A held move keeps its arrow back too — the arrow IS the answer.
-                        const moveHeld = heldRevealRef.current?.fen === probe.fen();
+                        const moveHeld = learnMemRef.current.heldMove?.fen === probe.fen();
                         queueSpokenHint(probe.fen(), packageForRegister(pf.hint, discussion.hintDial.register), 'priorityFirst', [pf.targetSquare], undefined, undefined, moveHeld ? undefined : [{ from: pf.arrow.from, to: pf.arrow.to, role: 'play', vouchedBy: 'engine', source: 'learn.priorityFirst' }]);
                       }
                     }
@@ -10165,10 +10165,10 @@ export function CoachTeachPage(): JSX.Element {
                     // verdict on their move already named it. Matched by
                     // COORDINATES, never SAN string (G4.5.2).
                     try {
-                      const heldNow = heldRevealRef.current;
+                      const heldNow = learnMemRef.current.heldMove;
                       const boardOf = (f: string): string => f.split(' ').slice(0, 4).join(' ');
                       if (heldNow && boardOf(heldNow.fen) === boardOf(fenBefore)) {
-                        heldRevealRef.current = null;
+                        learnMemRef.current.heldMove = null;
                         setHeldMoveFen(null);
                         const heldMove = new Chess(fenBefore).move(heldNow.san);
                         const found = !!heldMove && heldMove.from === move.from && heldMove.to === move.to;
@@ -11443,7 +11443,7 @@ export function CoachTeachPage(): JSX.Element {
     // SHOW ME (David 2026-10-02): at a deciding moment the move was held back;
     // the button says it now, with its reason, and the reveal after the move
     // stays quiet because it has been said.
-    const heldNow = heldRevealRef.current;
+    const heldNow = learnMemRef.current.heldMove;
     if (heldNow && heldNow.fen.split(' ').slice(0, 4).join(' ') === fen.split(' ').slice(0, 4).join(' ') && !heldNow.shown) {
       heldNow.shown = true;
       const text = heldVerdictText(heldNow, 'now');

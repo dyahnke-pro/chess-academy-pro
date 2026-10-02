@@ -79,9 +79,9 @@
 - `src/coach/sources/middlegamePlan.ts:51`
 - `src/coach/sources/modelGames.ts:57`
 - `src/coach/sources/playerGames.ts:160`
-- `src/components/Coach/CoachGamePage.tsx:1801`
-- `src/components/Coach/CoachGamePage.tsx:3312`
-- `src/components/Coach/CoachGamePage.tsx:3400`
+- `src/components/Coach/CoachGamePage.tsx:1802`
+- `src/components/Coach/CoachGamePage.tsx:3320`
+- `src/components/Coach/CoachGamePage.tsx:3408`
 - `src/components/Coach/CoachTeachPage.tsx:8101`
 - `src/components/Coach/CoachTeachPage.tsx:9223`
 - `src/hooks/usePhaseNarration.ts:461`
@@ -105,8 +105,8 @@
 - `src/services/reviewFullData.ts:1183`
 
 ### `detectOpeningTranspositional` (function) — 5 call sites
-- `src/services/coachApi.ts:5435`
-- `src/services/coachApi.ts:6340`
+- `src/services/coachApi.ts:5460`
+- `src/services/coachApi.ts:6365`
 - `src/services/reviewGameAdapter.ts:170`
 - `src/services/reviewOpeningTheory.ts:315`
 - `src/services/reviewOpeningTheory.ts:316`
@@ -132,7 +132,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolveOpeningEntry` (function) — 58 call sites
-- `src/components/Coach/CoachGamePage.tsx:1097`
+- `src/components/Coach/CoachGamePage.tsx:1098`
 - `src/components/Coach/CoachTeachPage.tsx:4767`
 - `src/components/Coach/CoachTeachPage.tsx:5439`
 - `src/data/voicedWalkthroughs.test.ts:100`
@@ -221,18 +221,18 @@
 
 ### `getOpeningMoves` (function) — 28 call sites
 - `src/coach/tools/cerebellum/localOpeningBook.ts:84`
-- `src/components/Coach/CoachGamePage.tsx:607`
-- `src/components/Coach/CoachGamePage.tsx:705`
-- `src/components/Coach/CoachGamePage.tsx:2409`
-- `src/components/Coach/CoachGamePage.tsx:3313`
-- `src/components/Coach/CoachGamePage.tsx:3421`
+- `src/components/Coach/CoachGamePage.tsx:608`
+- `src/components/Coach/CoachGamePage.tsx:706`
+- `src/components/Coach/CoachGamePage.tsx:2417`
+- `src/components/Coach/CoachGamePage.tsx:3321`
+- `src/components/Coach/CoachGamePage.tsx:3429`
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:55`
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:74`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:37`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:43`
 - `src/components/Coach/CoachTeachPage.tsx:5714`
 - `src/components/Coach/CoachTeachPage.tsx:7364`
-- `src/services/coachLaneWiring.test.ts:350`
+- `src/services/coachLaneWiring.test.ts:352`
 - `src/services/inGameChatIntent.ts:163`
 - `src/services/inGameChatIntent.ts:174`
 - `src/services/openingDetectionService.test.ts:88`

@@ -60,6 +60,10 @@ export interface LearnMemory {
    *  board — then it is resolved (found / missed) with narration, arrows and a
    *  Walk button. Never shown before the move (honesty contract). */
   gemPending: import('./gemCrushLines').LivePunishment | null;
+  /** The move held back at a deciding moment (David 2026-10-02), the board it
+   *  belongs to, and whether "Show me" already said it — resolved when the
+   *  student moves from that board, exactly like `gemPending`. */
+  heldMove: (import('./deliberation').HeldVerdict & { fen: string; shown: boolean }) | null;
   /** The coach's last reply, when the STUDENT dictated it (its SAN) — so
    *  "that was a mistake from me" would be false (hand walk 2026-09-24). */
   lastReplyDictated: string | null;
@@ -228,6 +232,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
     gemSeen: null,
     gemFen: null,
     gemPending: null,
+    heldMove: null,
     lastReplyDictated: null,
     lastComputed: '',
     spokenOpeningName: null,
@@ -256,6 +261,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
       mem.gemSeen = null;
       mem.gemFen = null;
       mem.gemPending = null;
+      mem.heldMove = null;
       mem.lastReplyDictated = null;
       mem.lastComputed = '';
       mem.spokenOpeningName = null;

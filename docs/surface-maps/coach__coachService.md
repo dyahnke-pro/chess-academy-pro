@@ -196,7 +196,7 @@
 - `src/coach/questionIntents.ts:1144`
 - `src/coach/questionIntents.ts:1156`
 - `src/coach/questionIntents.ts:3252`
-- `src/services/coachApi.ts:6305`
+- `src/services/coachApi.ts:6330`
 
 ### `isEndgameWeaknessQuestion` (re-export) — 6 call sites
 - `src/coach/questionIntents.test.ts:591`
@@ -253,8 +253,10 @@
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:43`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:93`
 
-### `isFundamentalLessonQuestion` (re-export) — 10 call sites
+### `isFundamentalLessonQuestion` (re-export) — 12 call sites
 - `src/coach/pass3Questions.test.ts:34`
+- `src/coach/questionIntents.test.ts:1495`
+- `src/coach/questionIntents.test.ts:1498`
 - `src/coach/questionIntents.ts:1345`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:78`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:79`

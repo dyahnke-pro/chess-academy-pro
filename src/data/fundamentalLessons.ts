@@ -57,7 +57,12 @@ const FUNDAMENTAL_MATCH: ReadonlyArray<readonly [FundamentalId, RegExp]> = [
   ['capture-toward-centre', /\bcaptur(?:e|ing)\s+toward|\brecaptur(?:e|ing)\s+(?:the\s+)?(?:right|wrong|correct)\s+way\b|\bwhich\s+way\s+to\s+(?:re)?capture\b|\brecaptur(?:e|ing)\s+toward\s+(?:the\s+)?cent(?:er|re)\b/],
   ['loose-piece', /\bloose\s+pieces?\b|\bundefended\s+pieces?\b|\bhang(?:ing)?\s+(?:a\s+)?pieces?\b|\bleav(?:e|ing)\s+(?:a\s+)?piece\s+(?:loose|hanging|undefended)\b/],
   ['ignored-threat', /\bignor(?:e|ing)\s+(?:a\s+|the\s+|their\s+)?threats?\b|\bmiss(?:ing|ed)?\s+(?:a\s+|the\s+|their\s+)?threats?\b|\bopponent(?:'s)?\s+threats?\b/],
-  ['passive-when-forcing-existed', /\bforcing\s+moves?\b|\bchecks?\s*,?\s*captures?\s*,?\s*(?:and\s+)?threats?\b|\bcalculat(?:e|ing|ion)\b/],
+  // CALCULATION AS A SKILL (real users 2026-10: "How can I visualize moves?",
+  // "Why do I struggle with calculation?") — seeing ahead is the depth habit,
+  // not the forcing-scan order. Before the forcing entry, which also says
+  // "calculate".
+  ['calculation-depth', /\bvisuali[sz](?:e|ing|ation)\b|\bsee\s+(?:more\s+|further\s+|moves\s+)?ahead\b|\bthink\s+(?:more\s+)?(?:moves\s+)?ahead\b|\bmoves\s+ahead\b|\bcalculat(?:e|ing|ion)\b|\bcalc\b/],
+  ['passive-when-forcing-existed', /\bforcing\s+moves?\b|\bchecks?\s*,?\s*captures?\s*,?\s*(?:and\s+)?threats?\b/],
   ['overvalued-attack', /\bovervalu(?:e|ing|ed)\s+(?:the\s+|my\s+|an\s+)?attack\b|\bunsound\s+(?:attack|sacrifice|sac)\b|\bis\s+(?:my\s+|the\s+|this\s+)?(?:attack|sacrifice|sac)\s+sound\b|\bcount(?:ing)?\s+attackers?\b|\battackers?\s+(?:and|vs|versus)\s+defenders?\b/],
   ['wrong-trade-for-material', /\bwrong\s+trade\s+for\s+(?:the\s+)?material\b|\btrad(?:e|ing)\s+for\s+(?:the\s+)?material\b|\bwhen\s+to\s+trade\b|\btrad(?:e|ing)\s+when\s+(?:ahead|behind|up|down)\b|\btrad(?:e|ing)\s+pieces\s+(?:when\s+)?(?:ahead|behind|up|down|winning|losing)\b|\bsimplif(?:y|ying)\s+when\b/],
   ['passive-king-endgame', /\b(?:active|passive)\s+king\b|\bking\s+in\s+the\s+end(?:game|ing)\b|\bactivat(?:e|ing)\s+(?:my\s+|the\s+)?king\b|\bking\s+(?:is\s+)?a\s+(?:fighting\s+)?piece\b/],

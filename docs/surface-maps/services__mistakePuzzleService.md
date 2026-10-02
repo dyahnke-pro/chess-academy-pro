@@ -149,7 +149,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/seatResolversReadDeclaredSeat.test.ts:15`
 
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
-- `src/components/Coach/CoachGamePage.tsx:2100`
+- `src/components/Coach/CoachGamePage.tsx:2108`
 - `src/components/Coach/CoachGameReview.tsx:366`
 - `src/services/gameAnalysisService.ts:2086`
 - `src/services/mistakePuzzleService.test.ts:109`
@@ -252,7 +252,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakePuzzleService.test.ts:545`
 
 ### `loadDrilledMotifs` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:1765`
+- `src/components/Coach/CoachTeachPage.tsx:1770`
 - `src/services/conceptSchedule.test.ts:58`
 
 ### `deleteMistakePuzzle` (function) — 2 call sites

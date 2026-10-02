@@ -305,7 +305,7 @@
 - `src/coach/batteryRouting.test.ts:109`
 - `src/coach/coachService.ts:1421`
 - `src/services/coachApi.ts:2473`
-- `src/services/coachApi.ts:6117`
+- `src/services/coachApi.ts:6142`
 - `src/services/endgameRuleAnswer.test.ts:87`
 - `src/services/endgameRuleAnswer.test.ts:88`
 
@@ -345,7 +345,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `endgameRuleMaterial` (function) — 2 call sites
-- `src/services/coachApi.ts:3778`
+- `src/services/coachApi.ts:3789`
 - `src/services/endgameRuleAnswer.test.ts:30`
 
 ### `isEndgameQuestion` (function) — 10 call sites
@@ -365,7 +365,7 @@
 - `src/coach/questionIntents.test.ts:571`
 - `src/coach/questionIntents.test.ts:579`
 - `src/coach/questionIntents.test.ts:585`
-- `src/services/coachApi.ts:6305`
+- `src/services/coachApi.ts:6330`
 
 ### `isEndgameWeaknessQuestion` (function) — 4 call sites
 - `src/coach/coachService.ts:1288`
@@ -415,9 +415,11 @@
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:43`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:93`
 
-### `isFundamentalLessonQuestion` (function) — 10 call sites
+### `isFundamentalLessonQuestion` (function) — 12 call sites
 - `src/coach/coachService.ts:1277`
 - `src/coach/pass3Questions.test.ts:34`
+- `src/coach/questionIntents.test.ts:1495`
+- `src/coach/questionIntents.test.ts:1498`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:78`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:79`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:80`
@@ -428,7 +430,7 @@
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:94`
 
 ### `fundamentalsTopicFromText` (function) — 6 call sites
-- `src/services/coachApi.ts:5267`
+- `src/services/coachApi.ts:5292`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:47`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:48`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:49`
@@ -473,7 +475,7 @@
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:143`
 
 ### `famousGameFromText` (function) — 2 call sites
-- `src/services/coachApi.ts:5222`
+- `src/services/coachApi.ts:5247`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:135`
 
 ### `isProgressQuestion` (function) — 27 call sites

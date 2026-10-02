@@ -105,7 +105,7 @@
 - `src/services/endgameTechnique.test.ts:74`
 - `src/services/endgameTechnique.test.ts:224`
 - `src/services/groundedAnswer.ts:3774`
-- `src/services/groundedAnswer.ts:6456`
+- `src/services/groundedAnswer.ts:6491`
 
 ### `ConceptForBoardOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
