@@ -66,7 +66,7 @@ describe('Learn walk 2026-10-01 — game 1 flags', () => {
 
 describe('Learn walk 2026-10-01 — games 2 and 3', () => {
   it('a passer the line takes straight back is never "created" (exf3, then Qxf3)', () => {
-    const p = planFromUci('r2q1rk1/ppn3pp/2nb4/2p2p2/2P1p3/P1N2PP1/1PP3BP/R1BQR1K1 b - - 0 17', ['e4f3', 'd1f3', 'g8h8', 'c1f4', 'c6d4'], 'black');
+    const p = planFromUci('r2q1rk1/ppn3pp/2nb4/2p2p2/2P1p3/P1N2PP1/1PP3BP/R1BQR1K1 b - - 0 17', ['e4f3', 'd1f3', 'g8h8', 'c1f4', 'c6d4'], 'black', null);
     expect(p?.mine.text ?? '').not.toMatch(/passed pawn on f3/);
   });
 

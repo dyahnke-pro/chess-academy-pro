@@ -28,7 +28,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `isMethodSentence` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:4663`
+- `src/services/coachFeatureService.ts:4664`
 - `src/services/learnFundamentalNarration.ts:129`
 
 ### `fundamentalHow` (function) — 10 call sites
@@ -51,7 +51,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `renderFundamentalVerdict` (function) — 31 call sites
-- `src/services/coachFeatureService.ts:2467`
+- `src/services/coachFeatureService.ts:2468`
 - `src/services/fundLeadStems.test.ts:58`
 - `src/services/fundamentalHow.test.ts:47`
 - `src/services/fundamentalHow.test.ts:49`
@@ -81,15 +81,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.mcconnell1000.test.ts:21`
 - `src/services/replayFence.sicilian1200.test.ts:54`
 - `src/services/replayFence.sicilian1200.test.ts:61`
-- `src/services/reviewFullData.ts:474`
+- `src/services/reviewFullData.ts:475`
 
 ### `renderPvEvidence` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2478`
+- `src/services/coachFeatureService.ts:2479`
 - `src/services/principleVoice.test.ts:38`
 - `src/services/principleVoice.test.ts:40`
 
 ### `renderFundamentalsRecap` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:5131`
+- `src/services/coachFeatureService.ts:5132`
 - `src/services/principleVoice.test.ts:48`
 - `src/services/principleVoice.test.ts:53`
 - `src/services/principleVoice.test.ts:57`

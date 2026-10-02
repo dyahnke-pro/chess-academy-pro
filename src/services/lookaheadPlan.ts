@@ -482,7 +482,15 @@ function sideBalance(fen: string, color: 'white' | 'black'): number {
   return net;
 }
 
-function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
+function planFor(
+  plies: readonly PvPly[],
+  color: 'white' | 'black',
+  /** The board before an exchange the line is FINISHING (the line opens by
+   *  taking back on the square the previous move captured on). Material is
+   *  counted from here, so a recapture is the other half of a trade, never a
+   *  win. Null when the line starts on a quiet board. */
+  exchangeStartFen: string | null,
+): SidePlan {
   const mine = plies.slice(0, PLAN_HORIZON).filter((p) => p.moverColor === color);
   const destinations = new Map<string, number>();
   const opening = new Set<string>();
@@ -620,11 +628,16 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
       const next = horizon[i + 1];
       if (next ? !/x/.test(next.san) : !/x/.test(horizon[i].san)) quietAt = i;
     }
-    materialSwing = quietAt >= 0 && horizon.length > 0
-      ? sideBalance(horizon[quietAt].fenAfter, color) - sideBalance(horizon[0].fenBefore, color)
+    // A RECAPTURE IS NOT A WIN (David 2026-10-02: "win a pawn" on a
+    // recapture). The line may open mid-exchange — their pawn took on d4 and
+    // the line starts cxd4 — so the baseline is the board before the
+    // exchange began, not the board the line was handed.
+    const base = exchangeStartFen ?? horizon[0]?.fenBefore;
+    materialSwing = quietAt >= 0 && horizon.length > 0 && base
+      ? sideBalance(horizon[quietAt].fenAfter, color) - sideBalance(base, color)
       : 0;
-    if (quietAt >= 0 && horizon.length > 0 && materialSwing >= 1) {
-      materialDeal = dealOf(horizon[0].fenBefore, horizon[quietAt].fenAfter, color);
+    if (quietAt >= 0 && horizon.length > 0 && base && materialSwing >= 1) {
+      materialDeal = dealOf(base, horizon[quietAt].fenAfter, color);
     }
   }
 
@@ -1009,12 +1022,14 @@ export function buildLookaheadPlan(
   line: PvLine,
   studentColor: 'white' | 'black',
   /** Clauses already spoken this game — see `describePlan`. */
-  said?: Set<string>,
+  said: Set<string> | undefined,
+  /** See `planFor` — the board before the exchange the line finishes. */
+  exchangeStartFen: string | null,
 ): LookaheadPlan | null {
   if (line.plies.length < 4) return null;
 
-  const white = planFor(line.plies, 'white');
-  const black = planFor(line.plies, 'black');
+  const white = planFor(line.plies, 'white', exchangeStartFen);
+  const black = planFor(line.plies, 'black', exchangeStartFen);
   const mine = studentColor === 'white' ? white : black;
   const theirs = studentColor === 'white' ? black : white;
   mine.text = describePlan(mine, 'mine', said);
@@ -1442,6 +1457,12 @@ export function planFromUci(
   fen: string,
   uciMoves: readonly string[],
   studentColor: 'white' | 'black',
+  /** The move that PRODUCED `fen`, or null when there is none to hand.
+   *  REQUIRED, so every caller decides it: when that move was a capture and
+   *  the line opens by taking back on its square, the line is finishing a
+   *  trade and its material is counted from before the trade began. Without
+   *  it a recapture read as "win a pawn" (David 2026-10-02). */
+  lastMove: { fenBefore: string; san: string } | null,
   said?: Set<string>,
 ): LookaheadPlan | null {
   // A SHORT LINE IS NOT NOTHING. This used to bail at fewer than four plies,
@@ -1457,6 +1478,16 @@ export function planFromUci(
   // Carried so a recapture is recognised as one, exactly as the engine path
   // does — without it every exchange reads as two separate captures.
   let prevCap: PrevCaptureContext = { square: null, capturedValue: 0 };
+  let exchangeStartFen: string | null = null;
+  if (lastMove) {
+    try {
+      const lm = new Chess(lastMove.fenBefore).move(lastMove.san);
+      if (lm?.captured && uciMoves[0]?.slice(2, 4) === lm.to) {
+        exchangeStartFen = lastMove.fenBefore;
+        prevCap = { square: lm.to, capturedValue: PIECE_POINTS[PIECE_WORD[lm.captured] ?? ''] ?? 0 };
+      }
+    } catch { /* an unreadable last move — count from the board as given */ }
+  }
   for (const uci of uciMoves.slice(0, PLAN_HORIZON)) {
     if (!uci || uci.length < 4) break;
     const fenBefore = board.fen();
@@ -1485,6 +1516,7 @@ export function planFromUci(
     { plies, rootEvalCp: 0, terminalEvalCp: null, delivers: true, closeAlternative: null },
     studentColor,
     said,
+    exchangeStartFen,
   );
 }
 
@@ -1517,7 +1549,7 @@ export function gameArcs(sans: readonly string[], studentColor: 'white' | 'black
     const seat: Seat = color === studentWB ? 'student' : 'opponent';
     let state = EMPTY_ARC;
     for (let i = color === 'w' ? 0 : 1; i < moved.length; i += 2) {
-      const plan = planFromUci(fens[i + 1], uci.slice(i + 1, i + 1 + HINDSIGHT_PLIES), studentColor);
+      const plan = planFromUci(fens[i + 1], uci.slice(i + 1, i + 1 + HINDSIGHT_PLIES), studentColor, { fenBefore: fens[i], san: sans[i] });
       const side = plan ? (seat === 'student' ? plan.mine : plan.theirs) : null;
       // The SAME walkability Learn applies (review walk 2026-10-01: "pushing the
       // passed pawn on the a-file" with …a6 still blocking it — the hindsight

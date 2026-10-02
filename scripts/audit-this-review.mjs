@@ -108,7 +108,6 @@ const run = async () => {
     'discussion-prompt', 'discussion-reason-picker',
     'review-find-shot-card', 'review-find-shot-reveal',
     'review-rewind-card', 'review-turning-point-card', 'review-turning-point-reveal',
-    'review-cameo-ask', 'review-cameo-playback',
     'review-theory-ask', 'review-theory-playback',
     'review-principle-quiz', 'review-sequence-ask', 'review-sequence-playback',
     'review-capture-teach', 'review-capture-continue',
@@ -195,10 +194,6 @@ const run = async () => {
       if (await has(page, '[data-testid="review-sequence-playback"]')) {
         await page.locator('[data-testid="review-sequence-skip"]').first().click({ timeout: 1500 }).catch(() => {});
         await page.waitForTimeout(400);
-      }
-      // CAMEO (famous-game echo): skip (ask) or stop (playback).
-      for (const sel of ['[data-testid="review-cameo-skip"]', '[data-testid="review-cameo-stop"]']) {
-        if (await has(page, sel)) { await page.locator(sel).first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(400); }
       }
       // THEORY-DEPARTURE: skip (ask) or stop (playback).
       for (const sel of ['[data-testid="review-theory-skip"]', '[data-testid="review-theory-stop"]']) {

@@ -46,7 +46,7 @@ describe('ply 54 — Kh8 is not "walking the king in"', () => {
 
 describe('ply 58 — Kf8 does not serve another piece\'s plan', () => {
   it('the better-move reason is not "the idea is to park a piece on d4"', () => {
-    const f = betterMoveFact(fenAt(57), 'Rd4+', 'Kf8', ['g8f8', 'g4h5', 'f6f5', 'f2f4', 'a8b8', 'b7a7', 'e5d4', 'g1g6'], 'black');
+    const f = betterMoveFact(fenAt(57), 'Rd4+', 'Kf8', ['g8f8', 'g4h5', 'f6f5', 'f2f4', 'a8b8', 'b7a7', 'e5d4', 'g1g6'], 'black', null);
     expect(f ? phraseBetterMove(f) : '').not.toMatch(/the idea is to/);
   });
 });

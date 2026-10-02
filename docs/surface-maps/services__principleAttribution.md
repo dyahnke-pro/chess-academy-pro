@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1472 lines · 11 exports · 42 importers · 29 tests · 1 audits**
+**1493 lines · 12 exports · 42 importers · 29 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -77,6 +77,9 @@
 
 ### `ATTRIBUTION_MAX` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
+
+### `captureIsTrade` (function) — 1 call site
+- `src/services/misconceptionClassifier.ts:294`
 
 ### `planTargets` (function) — 2 call sites
 - `src/services/principleAttribution.section14.test.ts:127`

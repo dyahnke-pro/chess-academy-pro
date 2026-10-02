@@ -9,19 +9,19 @@ const B = ['b1c3', 'f8c5', 'd2d3', 'd7d6', 'c1g5', 'h7h6', 'g5h4', 'g7g5', 'h4g3
 
 describe('the plan chooser (census #52)', () => {
   it('two different plans that come out level: choose the one you understand', () => {
-    expect(planChoice(FEN, [{ moves: A, evaluation: 30 }, { moves: B, evaluation: 20 }], 'white')?.text)
+    expect(planChoice(FEN, [{ moves: A, evaluation: 30 }, { moves: B, evaluation: 20 }], 'white', null)?.text)
       .toMatch(/^Two plans hold here — getting the knight to f1, by way of d2, or getting the bishop to h4, by way of g5\./);
   });
   it('a clear gap names the stronger plan and what the other costs', () => {
-    expect(planChoice(FEN, [{ moves: A, evaluation: 130 }, { moves: B, evaluation: 20 }], 'white')?.text)
+    expect(planChoice(FEN, [{ moves: A, evaluation: 130 }, { moves: B, evaluation: 20 }], 'white', null)?.text)
       .toMatch(/the stronger is getting the knight to f1, by way of d2; getting the bishop to h4, by way of g5 falls about 1\.1 pawns short\.$/);
   });
   it('silent in the grey zone, on a mate, or with one line (negative controls)', () => {
-    expect(planChoice(FEN, [{ moves: A, evaluation: 80 }, { moves: B, evaluation: 20 }], 'white')).toBeNull();
+    expect(planChoice(FEN, [{ moves: A, evaluation: 80 }, { moves: B, evaluation: 20 }], 'white', null)).toBeNull();
     // Too early in the game: silent (walk 2026-09-30, game 2).
-    expect(planChoice(EARLY, [{ moves: A, evaluation: 30 }, { moves: B, evaluation: 20 }], 'white')).toBeNull();
-    expect(planChoice(FEN, [{ moves: A, evaluation: 0, mate: 3 }, { moves: B, evaluation: 20 }], 'white')).toBeNull();
-    expect(planChoice(FEN, [{ moves: A, evaluation: 30 }], 'white')).toBeNull();
+    expect(planChoice(EARLY, [{ moves: A, evaluation: 30 }, { moves: B, evaluation: 20 }], 'white', null)).toBeNull();
+    expect(planChoice(FEN, [{ moves: A, evaluation: 0, mate: 3 }, { moves: B, evaluation: 20 }], 'white', null)).toBeNull();
+    expect(planChoice(FEN, [{ moves: A, evaluation: 30 }], 'white', null)).toBeNull();
   });
 });
 
@@ -31,7 +31,7 @@ describe('planChoice — never mid-combination', () => {
     const out = planChoice(fen, [
       { moves: ['f6d5', 'c4d5', 'g7c3', 'b2c3'], evaluation: -270 },
       { moves: ['c6b4', 'e1g1', 'b4d3', 'd1d3'], evaluation: 0 },
-    ], 'black');
+    ], 'black', null);
     expect(out).toBeNull();
   });
 });

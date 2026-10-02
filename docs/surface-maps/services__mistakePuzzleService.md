@@ -95,14 +95,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:7400`
-- `src/components/Coach/CoachTeachPage.tsx:7406`
+- `src/components/Coach/CoachTeachPage.tsx:7410`
+- `src/components/Coach/CoachTeachPage.tsx:7416`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
 - `src/hooks/useAcceptableMoves.ts:88`
-- `src/hooks/useDiscussionPractice.ts:272`
-- `src/hooks/useDiscussionPractice.ts:398`
+- `src/hooks/useDiscussionPractice.ts:265`
+- `src/hooks/useDiscussionPractice.ts:390`
 - `src/services/autoAnalyzeGame.ts:315`
 - `src/services/computerAccuracy.audit.test.ts:107`
 - `src/services/deliberation.ts:98`
@@ -150,7 +150,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
 - `src/components/Coach/CoachGamePage.tsx:2100`
-- `src/components/Coach/CoachGameReview.tsx:367`
+- `src/components/Coach/CoachGameReview.tsx:366`
 - `src/services/gameAnalysisService.ts:2086`
 - `src/services/mistakePuzzleService.test.ts:109`
 - `src/services/mistakePuzzleService.test.ts:163`
@@ -240,7 +240,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `gradeMistakePuzzle` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2416`
+- `src/components/Coach/CoachTeachPage.tsx:2426`
 - `src/components/Puzzles/MyMistakesPage.tsx:227`
 - `src/components/Puzzles/WeaknessThemesPage.tsx:116`
 - `src/components/Tactics/TacticCreatePage.tsx:220`
@@ -252,7 +252,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakePuzzleService.test.ts:545`
 
 ### `loadDrilledMotifs` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:1760`
+- `src/components/Coach/CoachTeachPage.tsx:1765`
 - `src/services/conceptSchedule.test.ts:58`
 
 ### `deleteMistakePuzzle` (function) — 2 call sites

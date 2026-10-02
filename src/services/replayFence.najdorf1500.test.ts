@@ -59,7 +59,7 @@ describe('one loss, one saying (Najdorf ply 48)', () => {
   // "That left your rook on b2 hanging to Rxb2 — they missed it this time. Kc7
   // was a blunder — it let them take your rook on b2, and they missed it."
   it('the grade carries the lost square as data, so Learn can drop the twin', () => {
-    const call = callInaccuracy({
+    const call = callInaccuracy({ priorMove: null,
       fenBefore: '1k5r/1p3p1p/p3p3/5p2/PR6/2P2P2/1r5P/R5K1 b - - 3 24',
       playedSan: 'Kc7', bestSan: 'Rxb4', bestLineUci: ['b2b4', 'c3b4', 'h8d8', 'g1f2'],
       cpLoss: 500, missedMate: null, allowedMate: null, moverEvalAfterCp: -400,

@@ -56,7 +56,7 @@ import { voiceFacts } from './coachApi';
 // LLM call (those are deterministic via `buildReviewSegments`).
 import { logAppAudit } from './appAuditor';
 import { whyItFailed } from './whyItFailed';
-import { betterMoveReason } from './inaccuracyCall';
+import { betterMoveReason, priorMoveLeadingTo } from './inaccuracyCall';
 import { attributePrinciples, pvUciToSan, type PrincipleAttribution } from './principleAttribution';
 import { buildCausalChain, causalChainArrows, causalChainMistakeTags, findMissedChain, findAllowedChain } from './causalChain';
 import { renderCausalChain } from './causalChainVoice';
@@ -957,7 +957,8 @@ export function buildReviewCitations(
     // order, then what the line wins). The board-only mechanism is the fallback
     // when the engine line cannot name one.
     const shared = suggestedSan && m.bestMove
-      ? betterMoveReason(fenBefore, m.san, suggestedSan, [m.bestMove, ...(m.pv?.afterBest ?? [])], isWhiteMove ? 'white' : 'black')
+      ? betterMoveReason(fenBefore, m.san, suggestedSan, [m.bestMove, ...(m.pv?.afterBest ?? [])], isWhiteMove ? 'white' : 'black',
+        priorMoveLeadingTo(i > 0 ? { fenBefore: chain[i - 1].fenBefore, san: moves[i - 1].san } : null, fenBefore))
       : null;
     const whyBetter = shared
       ? `${suggestedSan} was better — ${shared}.`

@@ -24,7 +24,7 @@ function walk(color: 'w' | 'b'): Said[] {
   let st = EMPTY_ARC; const out: Said[] = [];
   for (let i = color === 'w' ? 0 : 1; i < GAME.length; i += 2) {
     // Review's hindsight read: the plan the side actually went on to play.
-    const plan = planFromUci(fens[i + 1], uci.slice(i + 1, i + 9), 'black');
+    const plan = planFromUci(fens[i + 1], uci.slice(i + 1, i + 9), 'black', null);
     const side = color === 'w' ? plan?.theirs : plan?.mine;
     const r = stepArc(st, side ? aimsOf(side, seat) : [], mv[i], fens[i + 1], color, seat);
     st = r.next;

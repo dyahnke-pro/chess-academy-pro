@@ -24,7 +24,7 @@ describe('review walk 2065', () => {
   });
 
   it('the better move Qxh5 is "take the queen", not "win a rook" (ply 21)', () => {
-    const why = betterMoveReason(fenAt(20), 'Bxf7', 'Qxh5', uciLine(20, ['Qxh5', 'Be6', 'Bxe6', 'Rf8', 'Bb3']), 'white');
+    const why = betterMoveReason(fenAt(20), 'Bxf7', 'Qxh5', uciLine(20, ['Qxh5', 'Be6', 'Bxe6', 'Rf8', 'Bb3']), 'white', null);
     expect(why).toMatch(/queen/);
     expect(why ?? '').not.toMatch(/rook/);
   });

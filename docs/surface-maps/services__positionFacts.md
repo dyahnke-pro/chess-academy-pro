@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1573 lines · 15 exports · 20 importers · 19 tests · 3 audits**
+**1590 lines · 15 exports · 20 importers · 19 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -91,8 +91,8 @@
 - `src/services/positionReadComposer.ts:116`
 - `src/services/whyBestMove.ts:103`
 
-### `computePositionFacts` (function) — 79 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9311`
+### `computePositionFacts` (function) — 81 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9326`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:635`
@@ -149,11 +149,13 @@
 - `src/services/positionFacts.test.ts:387`
 - `src/services/positionFacts.test.ts:399`
 - `src/services/positionFacts.test.ts:406`
-- `src/services/positionFacts.test.ts:418`
-- `src/services/positionFacts.test.ts:421`
-- `src/services/positionFacts.test.ts:432`
-- `src/services/positionFacts.test.ts:436`
-- `src/services/positionFacts.test.ts:440`
+- `src/services/positionFacts.test.ts:419`
+- `src/services/positionFacts.test.ts:429`
+- `src/services/positionFacts.test.ts:441`
+- `src/services/positionFacts.test.ts:444`
+- `src/services/positionFacts.test.ts:455`
+- `src/services/positionFacts.test.ts:459`
+- `src/services/positionFacts.test.ts:463`
 - `src/services/positionFacts.weakness.test.ts:22`
 - `src/services/positionFacts.weakness.test.ts:48`
 - `src/services/positionFacts.weakness.test.ts:62`
@@ -173,10 +175,10 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8046`
+- `src/components/Coach/CoachTeachPage.tsx:8056`
 
 ### `convertKey` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9527`
+- `src/components/Coach/CoachTeachPage.tsx:9551`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 
 ### `afterLine` (function) — 5 call sites
@@ -187,7 +189,7 @@
 - `src/services/positionFacts.afterLine.test.ts:25`
 
 ### `conceptInstanceKey` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8027`
+- `src/components/Coach/CoachTeachPage.tsx:8037`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.ts:9`

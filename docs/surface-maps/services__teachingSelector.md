@@ -58,7 +58,7 @@
 
 ### `selectTeaching` (function) — 14 call sites
 - `src/hooks/usePhaseNarration.ts:545`
-- `src/services/coachFeatureService.ts:1398`
+- `src/services/coachFeatureService.ts:1399`
 - `src/services/needCoverage.report.test.ts:60`
 - `src/services/openingGenerator.ts:523`
 - `src/services/openingGenerator.ts:2468`
@@ -77,7 +77,7 @@
 
 ### `renderThesis` (function) — 10 call sites
 - `src/coach/surfaceContract.scan.test.ts:50`
-- `src/components/Coach/CoachGameReview.tsx:1460`
+- `src/components/Coach/CoachGameReview.tsx:1453`
 - `src/hooks/usePhaseNarration.ts:549`
 - `src/services/openingGenerator.ts:2470`
 - `src/services/teachingSelector.test.ts:45`
@@ -99,7 +99,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `selectTeachingForSegments` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:1458`
+- `src/components/Coach/CoachGameReview.tsx:1451`
 
 ### `TreeTeaching` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

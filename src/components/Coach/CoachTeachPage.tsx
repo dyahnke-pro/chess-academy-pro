@@ -190,7 +190,7 @@ import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead
 import { scaleGap, packageForRegister } from '../../services/hintRegister';
 import { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcState, planFromUci, tacticWord, seatedTacticLine } from '../../services/lookaheadPlan';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
-import { backwardLook, lastCoachVerdictDecline, lookConcession } from '../../services/backwardLook';
+import { backwardLook, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo } from '../../services/backwardLook';
 import { learnFundamentalVerdict } from '../../services/learnFundamentalNarration';
 import type { FundamentalId } from '../../services/principleAttribution';
 import { FUNDAMENTAL_LABEL } from '../../services/fundamentalsCatalog';
@@ -249,6 +249,7 @@ import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
 import { mateContext } from '../../utils/mateContext';
 import { speakComputed } from '../../services/speakComputed';
+import { heldVerdictText, type HeldVerdict } from '../../services/deliberation';
 import { applyCoachSetting } from '../../services/coachSettingsAction';
 import { detectStudentLanguage } from '../../services/spokenLanguage';
 import { translateToEnglish } from '../../services/coachApi';
@@ -1346,6 +1347,10 @@ export function CoachTeachPage(): JSX.Element {
   // that: each play_move handler writes the chess instance's current
   // FEN into it, and getLiveFen reads from this ref. */
   const liveFenRef = useRef(game.fen);
+  /** The last move that reached the board, either side — the "prior move" a
+   *  reason needs to tell a recapture from a win. Trusted only through
+   *  `priorMoveLeadingTo`, so a reset can never make it lie. */
+  const lastBoardMoveRef = useRef<{ fenBefore: string; san: string } | null>(null);
   /** Latest handleStudentMove — lets the (earlier-declared) handleSubmit hand a
    *  typed move report to the exact board-move flow without a TDZ dep. */
   const handleStudentMoveRef = useRef<((move: MoveResult) => void) | null>(null);
@@ -1896,6 +1901,11 @@ export function CoachTeachPage(): JSX.Element {
   const pendingCoachPhraseRef = useRef<string | null>(null);
   const rejectedTemptingCountRef = useRef(0);
   const priorityFirstLastPlyRef = useRef(-999);
+  /** THE MOVE HELD AT A DECIDING MOMENT (David 2026-10-02) — the position it
+   *  belongs to, the answer, and whether "show me" already said it. Consumed by
+   *  the student's next move from that position. */
+  const heldRevealRef = useRef<(HeldVerdict & { fen: string; shown: boolean }) | null>(null);
+  const [heldMoveFen, setHeldMoveFen] = useState<string | null>(null);
   // SESSION BOOKENDS (David 2026-07-11): running tallies for the closing
   // takeaway spoken on End Lesson — questions asked/found + slips stopped on.
   // All computed; the closer is a deterministic line (no LLM needed).
@@ -8734,6 +8744,8 @@ export function CoachTeachPage(): JSX.Element {
     // Pre-move FEN (before we overwrite liveFenRef below) — the slip faucet
     // needs the position the student moved FROM.
     const fenBefore = liveFenRef.current;
+    const priorMove = fenBefore ? priorMoveLeadingTo(lastBoardMoveRef.current, fenBefore) : null;
+    if (fenBefore) lastBoardMoveRef.current = { fenBefore, san: move.san };
     if (fenBefore && announcedBoardsRef.current.has(fenBefore.split(' ').slice(0, 2).join(' '))) announcedPliesRef.current.add(move.history.length);
     // A KNOWN TRAP, ANSWERED (David 2026-09-30): whether it was warned or held
     // back as a test, the move is the student's answer — recorded either way.
@@ -9020,6 +9032,7 @@ export function CoachTeachPage(): JSX.Element {
               const probe = new Chess(move.fen);
               const m = probe.move(reply);
               if (m) {
+                lastBoardMoveRef.current = { fenBefore: move.fen, san: m.san };
                 // 4. REAL tactics + loose pieces in the resulting position (student
                 //    to move) — the true fork/pin/threat, so the coach narrates the
                 //    ACTUAL tactic instead of inventing one (the validators were
@@ -9108,6 +9121,7 @@ export function CoachTeachPage(): JSX.Element {
                 // a deciding moment, or this student's own record — below.
                 let pendingRegister: string | null = null;
                 let pendingRegisterNoHedge: string | null = null;
+                let pendingButTurn: string | null = null;
                 /** The but-turn's two moves (the tempting one and the answer
                  *  that refutes it) — drawn as arrows if the register speaks. */
                 let pendingRegisterLines: SpokenLine[] | undefined;
@@ -9158,6 +9172,7 @@ export function CoachTeachPage(): JSX.Element {
                       const reg = [butTurn, hedge, compare].filter(Boolean).join(' ');
                       const gradedReg = reg ? gradeNarrationText(reg, probe.fen(), 'CoachTeachPage.register')?.trim() : '';
                       pendingRegister = gradedReg || null;
+                      pendingButTurn = butTurn ? (gradeNarrationText(butTurn, probe.fen(), 'CoachTeachPage.register')?.trim() || null) : null;
                       // ONE FACT ONCE (rule 3): the hedge ("X works just as well")
                       // and the critical-moment count ("two moves keep you level")
                       // are one fact from two lanes. Kept ready without the hedge
@@ -9365,8 +9380,15 @@ export function CoachTeachPage(): JSX.Element {
                       taughtPrinciples: learnMemRef.current.principleTaught,
                     });
                     moveAdviceHere = pf.moveAdvice;
+                    heldRevealRef.current = pf.heldVerdict ? { ...pf.heldVerdict, fen: probe.fen(), shown: false } : null;
+                    setHeldMoveFen(pf.heldVerdict ? probe.fen() : null);
+                    if (pf.heldVerdict) captureEvent('learn_move_held', { surface: 'coach-teach', tier: pf.importance.tier });
+                    const held = !!pf.heldVerdict;
                     const countSpoken = pf.clauses.some((c) => c.kind === 'key-moment');
-                    const registerNow = countSpoken ? pendingRegisterNoHedge : pendingRegister;
+                    // A HELD move keeps only the but-turn, which names the
+                    // TEMPTING move and its refutation; the hedge and the compare
+                    // name the move that holds, which is the answer being held.
+                    const registerNow = held ? pendingButTurn : countSpoken ? pendingRegisterNoHedge : pendingRegister;
                     if (registerNow && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), registerNow, 'register', undefined, undefined, undefined, undefined, pendingRegisterLines);
                     const gapEchoed = gapEchoedByVerdict(gapPending?.san ?? null, pf.clauses, gapPending?.square ?? null);
                     if (gapPending && moveAdviceHere?.speak && !gapEchoed) queueSpokenHint(probe.fen(), gapPending.text, 'gap', [gapPending.square], [`gap:${gapPending.square}:${probe.history().length}`]);
@@ -9448,7 +9470,9 @@ export function CoachTeachPage(): JSX.Element {
                       if (pf) {
                         priorityFirstLastPlyRef.current = plyNow;
                         captureEvent('priority_first_offered', { surface: 'coach-teach', target: pf.targetSquare });
-                        queueSpokenHint(probe.fen(), packageForRegister(pf.hint, discussion.hintDial.register), 'priorityFirst', [pf.targetSquare], undefined, undefined, [{ from: pf.arrow.from, to: pf.arrow.to, role: 'play', vouchedBy: 'engine', source: 'learn.priorityFirst' }]);
+                        // A held move keeps its arrow back too — the arrow IS the answer.
+                        const moveHeld = heldRevealRef.current?.fen === probe.fen();
+                        queueSpokenHint(probe.fen(), packageForRegister(pf.hint, discussion.hintDial.register), 'priorityFirst', [pf.targetSquare], undefined, undefined, moveHeld ? undefined : [{ from: pf.arrow.from, to: pf.arrow.to, role: 'play', vouchedBy: 'engine', source: 'learn.priorityFirst' }]);
                       }
                     }
                     // THE REJECTED TEMPTING MOVE (the speedrun's warning
@@ -9540,7 +9564,7 @@ export function CoachTeachPage(): JSX.Element {
                     try {
                       const tl2 = studentBest?.topLines ?? [];
                       const pcHint = tl2.length >= 2
-                        ? planChoiceTeaching(probe.fen(), tl2.map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate })), playerColor)
+                        ? planChoiceTeaching(probe.fen(), tl2.map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate })), playerColor, { fenBefore: move.fen, san: m.san })
                         : null;
                       if (pcHint) {
                         queueSpokenHint(probe.fen(), pcHint.text, pcHint.lane, pcHint.squares, pcHint.claims);
@@ -9550,7 +9574,7 @@ export function CoachTeachPage(): JSX.Element {
                     try {
                       const pv = studentBest?.topLines?.[0]?.moves;
                       const plan = Array.isArray(pv)
-                        ? planFromUci(probe.fen(), pv, playerColor)
+                        ? planFromUci(probe.fen(), pv, playerColor, { fenBefore: move.fen, san: m.san })
                         : null;
                       if (plan) {
                         // THE PLAN ACROSS MOVES — one step of each side's arc
@@ -10089,6 +10113,7 @@ export function CoachTeachPage(): JSX.Element {
                       fenBefore,
                       fenAfter: move.fen,
                       playedSan: move.san,
+                      priorMove,
                       bestSan: studentBestSan,
                       bestPvUci: preStudentRead.topLines?.[0]?.moves ?? [],
                       replyPvUci: mid.topLines?.[0]?.moves ?? [],
@@ -10133,6 +10158,32 @@ export function CoachTeachPage(): JSX.Element {
                       ...mateContext(preStudentRead, mid, playerColor),
                     }, fundamentalSeenRef.current, weaknessSignalsRef.current, standingRef.current.said);
                     if (look || fundamental) mistakeCalledThisTurn = true;
+                    // THE HELD ANSWER (David 2026-10-02): the move held back at a
+                    // deciding moment is revealed now that the student has
+                    // answered on the board — "that was the move" when they found
+                    // it, the move and its reason when they did not, unless the
+                    // verdict on their move already named it. Matched by
+                    // COORDINATES, never SAN string (G4.5.2).
+                    try {
+                      const heldNow = heldRevealRef.current;
+                      const boardOf = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+                      if (heldNow && boardOf(heldNow.fen) === boardOf(fenBefore)) {
+                        heldRevealRef.current = null;
+                        setHeldMoveFen(null);
+                        const heldMove = new Chess(fenBefore).move(heldNow.san);
+                        const found = !!heldMove && heldMove.from === move.from && heldMove.to === move.to;
+                        if (!heldNow.shown && heldMove) {
+                          const foundText = heldVerdictText(heldNow, 'found');
+                          const missedText = heldVerdictText(heldNow, 'missed');
+                          if (found) {
+                            queueSpokenHint(fenAfterReply, foundText, 'heldMove', [move.to], [`found-${move.san}`], fenBefore);
+                          } else if (look?.namesBetter !== heldNow.san) {
+                            queueSpokenHint(fenAfterReply, missedText, 'heldMove', [heldMove.to], [`held-best:${heldNow.san}`], fenBefore, undefined, [{ fen: fenBefore, sans: [heldNow.san] }]);
+                          }
+                        }
+                        captureEvent('learn_move_held_answered', { surface: 'coach-teach', found, shown: heldNow.shown });
+                      }
+                    } catch { /* the reveal is a bonus, never a blocker */ }
                     if (look) {
                       // THE SQUARE TRAVELS WITH THE SENTENCE, and is drawn below
                       // only if the package KEPT it. Not `look.line.includes(sq)`
@@ -10528,6 +10579,7 @@ export function CoachTeachPage(): JSX.Element {
                       fenBefore: cm.fenBefore,
                       fenAfter: cm.fenAfter,
                       playedSan: cm.playedSan,
+                      priorMove: fenBefore ? priorMoveLeadingTo({ fenBefore, san: move.san }, cm.fenBefore) : null,
                       bestSan: uciSanAt(cm.fenBefore, mid.bestMove),
                       bestPvUci: mid.topLines?.[0]?.moves ?? [],
                       // The student has not answered the coach's move yet.
@@ -11388,6 +11440,17 @@ export function CoachTeachPage(): JSX.Element {
     // With the question cards gone (2026-08-05) Hint has ONE job again: the
     // engine's best move on the live board.
     const fen = liveFenRef.current;
+    // SHOW ME (David 2026-10-02): at a deciding moment the move was held back;
+    // the button says it now, with its reason, and the reveal after the move
+    // stays quiet because it has been said.
+    const heldNow = heldRevealRef.current;
+    if (heldNow && heldNow.fen.split(' ').slice(0, 4).join(' ') === fen.split(' ').slice(0, 4).join(' ') && !heldNow.shown) {
+      heldNow.shown = true;
+      const text = heldVerdictText(heldNow, 'now');
+      setMessages((prev) => [...prev, { id: uid('held-show'), role: 'assistant', content: text, timestamp: Date.now() }]);
+      void speakComputed(text, { forced: true, intent: 'learn' }).catch(() => undefined);
+      captureEvent('learn_move_held_shown', { surface: 'coach-teach' });
+    }
     // Hint-reliance signal (Phase 6): note that the student leaned on Hint for
     // the active drill, so the wrong-answer feedback eases sooner.
     if (activeDrillRef.current) {
@@ -12296,7 +12359,7 @@ export function CoachTeachPage(): JSX.Element {
               ) : (
                 <Lightbulb size={16} />
               )}
-              <span>{hintBusy ? 'Thinking…' : 'Hint'}</span>
+              <span>{hintBusy ? 'Thinking…' : heldMoveFen ? 'Show me' : 'Hint'}</span>
             </button>
             <button
               onClick={handleReadPosition}

@@ -28,7 +28,8 @@
 // G0 throughout: every branch is arithmetic or chess.js geometry over an engine
 // line. Nothing here asks a model anything.
 import { findConcession, findStudentDrawback, whatItAllowed } from './concessionBeat';
-import { callInaccuracy, callInaccuracyDetailed, type InaccuracyDecline } from './inaccuracyCall';
+import { callInaccuracy, callInaccuracyDetailed, type InaccuracyDecline, type PriorMove } from './inaccuracyCall';
+export { priorMoveLeadingTo } from './inaccuracyCall';
 import { whyItFailed } from './whyItFailed';
 import { describeConcessions } from './reviewTeachingPoints';
 import { INACCURACY_CP, BLUNDER_CP } from './engineConstants';
@@ -95,6 +96,10 @@ export function backwardLook(args: {
   /** Position after the student moved — the opponent is on move. */
   fenAfter: string;
   playedSan: string;
+  /** The move that produced `fenBefore` (their last move), or null at the
+   *  start. REQUIRED: a better move that only takes back what that move
+   *  captured is not "win a pawn" (David 2026-10-02). */
+  priorMove: PriorMove;
   /** The engine's preferred move at `fenBefore`. Null → the first two lanes
    *  cannot run; the third still can. */
   bestSan: string | null;
@@ -186,6 +191,7 @@ export function backwardLook(args: {
         moverColor: mover,
         replyLineUci: args.replyPvUci ?? [],
         replySan: args.replySan ?? null,
+        priorMove: args.priorMove,
       });
       // THE REASON TRAVELS WITH THE REFUSAL. The caller logs why the coach said
       // nothing, and until now it printed "under the floor" for all five
@@ -316,6 +322,7 @@ export function backwardLook(args: {
             moverColor: args.studentColor,
             replyLineUci: args.replyPvUci ?? [],
             replySan: args.replySan ?? null,
+            priorMove: args.priorMove,
           });
           instead = call?.said ?? null;
           insteadLost = call?.lostSquare;
@@ -358,6 +365,7 @@ export function backwardLook(args: {
         moverColor: args.studentColor,
         replyLineUci: args.replyPvUci ?? [],
         replySan: args.replySan ?? null,
+        priorMove: args.priorMove,
       });
       if (call) return { line: call.said, square: call.square, kind: 'mistake', ...(call.pattern ? { pattern: call.pattern } : {}), ...(call.lostSquare ? { lostSquare: call.lostSquare } : {}), ...(call.namesBetter ? { namesBetter: call.namesBetter } : {}), ...(call.line ? { punishLine: call.line } : {}) };
     } catch { /* fall through */ }
@@ -370,6 +378,7 @@ export function backwardLook(args: {
   // from here says what the move allowed, in moves they would really play.
   try {
     const allowed = whatItAllowed({
+      fenBefore: args.fenBefore,
       fenAfter: args.fenAfter,
       opponentPv: args.replyPvUci ?? [],
       studentColor: args.studentColor,
@@ -412,3 +421,4 @@ export function backwardLook(args: {
 export function lookConcession(fenBefore: string, playedSan: string, cpLoss: number): string | null {
   return cpLoss >= INACCURACY_CP ? describeConcessions(fenBefore, playedSan, true) : null;
 }
+

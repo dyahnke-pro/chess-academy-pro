@@ -25,15 +25,19 @@ export interface PlanChoiceLine { moves: readonly string[]; evaluation: number; 
 
 /** `lines` = the student's MultiPV at `fen` (student to move), best first,
  *  `evaluation` in White-POV centipawns. */
-export function planChoice(fen: string, lines: readonly PlanChoiceLine[], studentColor: 'white' | 'black'): { text: string; key: string } | null {
+export function planChoice(
+  fen: string, lines: readonly PlanChoiceLine[], studentColor: 'white' | 'black',
+  /** The move that produced `fen` — see `planFromUci`. REQUIRED. */
+  lastMove: { fenBefore: string; san: string } | null,
+): { text: string; key: string } | null {
   // A plan is chosen once the opening is played: at move 2 "two plans hold —
   // an attack on their king, or the bishop to a4" is noise (walk 2026-09-30,
   // game 2). Move 10 is where the pieces are out.
   if (Number(fen.split(' ')[5] ?? '1') < PLAN_CHOICE_FROM_MOVE) return null;
   const [l0, l1] = lines;
   if (!l0 || !l1 || l0.mate != null || l1.mate != null) return null;
-  const p0 = planFromUci(fen, l0.moves, studentColor);
-  const p1 = planFromUci(fen, l1.moves, studentColor);
+  const p0 = planFromUci(fen, l0.moves, studentColor, lastMove);
+  const p1 = planFromUci(fen, l1.moves, studentColor, lastMove);
   if (!p0 || !p1) return null;
   const a0 = aimsOf(p0.mine, 'student')[0];
   const a1 = aimsOf(p1.mine, 'student')[0];

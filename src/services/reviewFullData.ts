@@ -45,7 +45,7 @@ import { planRaceClause } from './planRace';
 import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, deriveNextPlans, findTrappedPiece } from './reviewTeachingPoints';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
-import { betterMoveReason, toStudentSeat } from './inaccuracyCall';
+import { betterMoveReason, priorMoveLeadingTo, toStudentSeat } from './inaccuracyCall';
 import { andList } from '../utils/andList';
 import { stemKeyOf } from '../utils/rotateStem';
 import { developedMinorCount, minorsAtHome } from './development';
@@ -422,7 +422,8 @@ export function computeMoveFacets(
     // knight on e4" there was White's: "Qxe4 — it would take your knight on e4"
     // (1200 review walk 2026-09-27). A seated reference is left alone later.
     const reason0 = bestSan && fellShort
-      ? betterMoveReason(fenBefore, san, bestSan, ctx.bestLineUci, ctx.moverColor)
+      ? betterMoveReason(fenBefore, san, bestSan, ctx.bestLineUci, ctx.moverColor,
+        priorMoveLeadingTo(ply >= 2 && ctx.teaching.prevFenBefore ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : null, fenBefore))
       : null;
     // The opponent's better move is THEIR idea, said to the student: "toward
     // their king" in the mover's voice is "toward your king" (review walk

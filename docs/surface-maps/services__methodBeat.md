@@ -39,8 +39,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `habitIsOwed` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:2531`
-- `src/services/positionFacts.ts:893`
+- `src/services/coachFeatureService.ts:2532`
+- `src/services/positionFacts.ts:897`
 
 ### `methodBeatFor` (function) — 43 call sites
 - `src/services/coachDecider.ts:393`
@@ -109,7 +109,7 @@
 - `src/services/methodBeat.live.test.ts:115`
 - `src/services/methodBeat.live.test.ts:118`
 - `src/services/methodBeat.test.ts:97`
-- `src/services/positionFacts.ts:796`
+- `src/services/positionFacts.ts:800`
 
 ### `liveMethodBeatFor` (function) — 22 call sites
 - `src/services/groundedAnswer.ts:3428`

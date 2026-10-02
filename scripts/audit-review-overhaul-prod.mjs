@@ -471,10 +471,8 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       ['discussion-practice-panel', '[data-testid="discussion-skip"]'],
       ['review-principle-quiz', '[data-testid="principle-quiz-skip"]'],
       ['review-find-shot-reveal', '[data-testid="review-find-shot-continue"]'],
-      ['review-cameo-playback', '[data-testid="review-cameo-stop"]'],
       ['review-theory-playback', '[data-testid="review-theory-stop"]'],
       ['review-find-shot-card', '[data-testid="review-find-shot-skip"]'],
-      ['review-cameo-ask', '[data-testid="review-cameo-skip"]'],
       ['review-theory-ask', '[data-testid="review-theory-skip"]'],
       ['review-trap-card', '[data-testid="review-trap-pick-leave"]'],
       ['review-trap-reveal', '[data-testid="review-trap-done"]'],
@@ -541,7 +539,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     }
     return ((await readWalkPly(page))?.n ?? 0) === target;
   };
-  // Cards mount a beat AFTER a ply lands (cameo / theory asks); a human reads
+  // Cards mount a beat AFTER a ply lands (theory asks); a human reads
   // them and taps. Settle, then resolve whatever appeared, twice.
   const settle = async () => { for (let i = 0; i < 3; i++) { await page.waitForTimeout(900); await resolveCards(); } };
   const onFund = await goTo(FUND_PLY);
@@ -1056,6 +1054,11 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   }
   await add('ACC board-accuracy', accFails.length === 0, accFails.length ? accFails.slice(0, 3).join(' | ') : `no false piece-on-square claims across ${plyNarr.size} narrated plies`);
   await add('SEAT mover-never-reattributed', seatFails.length === 0, seatFails.length ? seatFails.slice(0, 3).join(' | ') : `every narrated ply keeps its seat (${plyNarr.size} plies)`);
+  // EVERY NARRATED PLY SAYS WHOSE IT IS (David 2026-10-02: "review lines with
+  // no 'you' or 'they'"). A ply narration with neither leaves the student to
+  // guess whose move, plan or piece it describes.
+  const seatless = [...plyNarr.entries()].filter(([, v]) => !/\b(you|your|yours|they|their|them|theirs)\b/i.test(v.narr));
+  await add('SEAT every-ply-names-a-seat', seatless.length === 0, seatless.length ? seatless.slice(0, 3).map(([n, v]) => `ply ${n}: "${v.narr.slice(0, 90)}"`).join(' | ') : `all ${plyNarr.size} narrated plies say you or they`);
   await add('NOTRADEWIN even-trade-not-profit', tradeFails.length === 0, tradeFails.length ? tradeFails.slice(0, 3).join(' | ') : 'no even trade narrated as material won');
 
 

@@ -34,15 +34,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolveOpeningIdeas` (function) — 6 call sites
-- `src/components/Coach/CoachGameReview.tsx:2858`
-- `src/components/Coach/CoachGameReview.tsx:2863`
+- `src/components/Coach/CoachGameReview.tsx:2742`
+- `src/components/Coach/CoachGameReview.tsx:2747`
 - `src/services/reviewOpeningTheory.test.ts:81`
 - `src/services/reviewOpeningTheory.test.ts:88`
 - `src/services/reviewOpeningTheory.test.ts:94`
 - `src/services/reviewOpeningTheory.test.ts:95`
 
 ### `resolveCuratedOpeningIdeas` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:1331`
+- `src/services/coachFeatureService.ts:1332`
 - `src/services/reviewOpeningTheory.test.ts:104`
 - `src/services/reviewOpeningTheory.test.ts:105`
 - `src/services/reviewOpeningTheory.test.ts:108`
@@ -50,10 +50,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.test.ts:121`
 
 ### `warmLectureSources` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:2846`
+- `src/components/Coach/CoachGameReview.tsx:2730`
 
 ### `buildOpeningTheoryLecture` (function) — 13 call sites
-- `src/components/Coach/CoachGameReview.tsx:2854`
+- `src/components/Coach/CoachGameReview.tsx:2738`
 - `src/services/reviewOpeningTheory.test.ts:35`
 - `src/services/reviewOpeningTheory.test.ts:64`
 - `src/services/reviewOpeningTheory.test.ts:75`
@@ -71,15 +71,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `enrichLectureWithEngine` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:2862`
+- `src/components/Coach/CoachGameReview.tsx:2746`
 - `src/services/reviewOpeningTheory.test.ts:276`
 
 ### `TheoryLectureBeat` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildTheoryLectureBeats` (function) — 11 call sites
-- `src/components/Coach/CoachGameReview.tsx:2858`
-- `src/components/Coach/CoachGameReview.tsx:2863`
+- `src/components/Coach/CoachGameReview.tsx:2742`
+- `src/components/Coach/CoachGameReview.tsx:2747`
 - `src/services/reviewOpeningTheory.test.ts:149`
 - `src/services/reviewOpeningTheory.test.ts:166`
 - `src/services/reviewOpeningTheory.test.ts:201`

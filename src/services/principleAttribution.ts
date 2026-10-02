@@ -252,6 +252,26 @@ function pawnAttacks(sq: string, color: Color): string[] {
  *  helper (2026-09-13): a pinned attacker no longer invents a hang, a pinned
  *  defender no longer masks one, and the sign the tempo detectors rely on is
  *  preserved (unlike the floored primitives). */
+/** Was this pawn capture a TRADE rather than a grab? (David 2026-10-02: "a
+ *  pawn trade filed as a greedy grab, then offered as a lesson".) Two shapes,
+ *  both from the board: it takes back on the square the previous move captured
+ *  on, or the opponent can win the pawn straight back. The ONE answer for every
+ *  producer of the greedy-grab tag — the attributor and the classifier's
+ *  fallback must never disagree about it. */
+export function captureIsTrade(
+  fenBefore: string,
+  san: string,
+  previous: { to: string; captured: boolean } | null,
+): boolean {
+  try {
+    const c = new Chess(fenBefore);
+    const m = c.move(san);
+    if (!m?.captured) return false;
+    if (previous?.captured && previous.to === m.to) return true;
+    return hangsBy(c, m.to) >= VAL[m.captured];
+  } catch { return false; }
+}
+
 function hangsBy(chess: Chess, sq: Square): number {
   const p = chess.get(sq);
   if (!p) return 0;
@@ -720,7 +740,8 @@ const DETECTORS: Detector[] = [
     // A PAWN TRADE IS NOT A GRAB (Learn walk 2026-10-01, game 1 ply 12: …exf3
     // exf3 was called "the pawn on f3 was poisoned"). When they can take back
     // on that square without losing anything, nothing was won.
-    if (hangsBy(c.after, last.to) >= VAL.p) return null;
+    const prev = c.history.length >= 2 ? c.history[c.history.length - 2] : null;
+    if (captureIsTrade(c.before.fen(), last.san, prev ? { to: prev.to, captured: !!prev.captured } : null)) return null;
     const kick = kickAvailable(c.after, opp) ?? null;
     const check = legalMovesFor(c.after, opp).find((m) => m.san.includes('+') && landsSafely(c.after, m)) ?? null;
     const punish = kick?.san ?? check?.san;

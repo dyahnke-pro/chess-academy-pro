@@ -2579,6 +2579,16 @@ export async function analyzeAllGames(
         .filter((g) => analyzedSet.has(g.id))
         .sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''))[0];
       if (!newest) return;
+      // FINISH THE ANALYSIS FIRST, THEN BUILD (David 2026-10-02: "three
+      // analysis runs — once on import, once before review, and another before
+      // review starts"). The batch is a shallow sweep, so this game still
+      // needed its key-moment deep dive — which the review then ran on open,
+      // rewriting the annotations the narration had just been built from. Run
+      // the deep dive here (sweep plies come from the eval cache; it is
+      // coalesced, so a review opened meanwhile joins this same run), then
+      // build: the open finds nothing left to analyse and a cached narration.
+      const fresh = await db.games.get(newest.id);
+      if (fresh && gameNeedsAnalysis(fresh)) await analyzeSingleGame(newest.id);
       const { prebuildReviewNarration } = await import('./reviewNarrationBuild');
       await prebuildReviewNarration(newest.id, 'import-batch');
     })().catch(() => undefined);

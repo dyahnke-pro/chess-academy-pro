@@ -136,7 +136,7 @@ describe.skipIf(!HAVE)('claim checker — harvest', () => {
           try {
             const bestSan = (() => { try { const t = new Chess(before.fen); return t.move({ from: pre.bestMove.slice(0, 2), to: pre.bestMove.slice(2, 4), promotion: pre.bestMove[4] }).san; } catch { return null; } })();
             if (bestSan) {
-              const look = backwardLook({
+              const look = backwardLook({ priorMove: null,
                 fenBefore: before.fen, fenAfter: mid.fen, playedSan: before.san, bestSan,
                 bestPvUci: pre.topLines[0]?.moves ?? [], replyPvUci: midA.topLines[0]?.moves ?? [],
                 replySan: mid.san, cpLoss: cpLoss ?? 0, moverEvalAfterCp: moverAfter, studentColor: seat,

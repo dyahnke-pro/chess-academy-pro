@@ -88,7 +88,7 @@ const run = async () => {
 
   // 2) Step forward until a picker/card opens, then assert it's ON-SCREEN.
   const fwd = page.locator('[data-testid="review-forward-btn"]').first();
-  const CARDS = ['discussion-reason-picker', 'review-find-shot-card', 'review-cameo-ask', 'review-turning-point-card', 'review-rewind-card'];
+  const CARDS = ['discussion-reason-picker', 'review-find-shot-card', 'review-turning-point-card', 'review-rewind-card'];
   let cardSel = null;
   for (let step = 0; step < 60 && !cardSel; step++) {
     for (const c of CARDS) { if (await has(page, `[data-testid="${c}"]`)) { cardSel = c; break; } }

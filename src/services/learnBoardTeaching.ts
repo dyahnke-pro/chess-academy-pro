@@ -352,8 +352,11 @@ export function checkMethodTeaching(fen: string, student: 'w' | 'b', bestUci: st
 
 /** The plan chooser (census #52): the engine's two best lines carry
  *  different plans for the student — level, or one clearly stronger. */
-export function planChoiceTeaching(fen: string, lines: readonly PlanChoiceLine[], studentColor: 'white' | 'black'): TeachingHint | null {
-  const pc = planChoice(fen, lines, studentColor);
+export function planChoiceTeaching(
+  fen: string, lines: readonly PlanChoiceLine[], studentColor: 'white' | 'black',
+  lastMove: { fenBefore: string; san: string } | null,
+): TeachingHint | null {
+  const pc = planChoice(fen, lines, studentColor, lastMove);
   if (!pc) return null;
   return {
     lane: 'planArc', text: pc.text, squares: [], claims: ['plan-choice', pc.key],

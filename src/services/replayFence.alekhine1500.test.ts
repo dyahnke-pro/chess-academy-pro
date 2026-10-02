@@ -51,10 +51,10 @@ describe('the reason must be what the played move did NOT do (Alekhine ply 37)',
   const fen = '1nkr3r/ppp1bppp/4p3/1PP1Pb2/3P4/Q3BN1P/P1q1BKP1/R6R w - - 1 19';
   const line = ['h1c1', 'c2e4', 'a3a7', 'b8d7'];
   it('no "win a pawn" when the played move already took a pawn', () => {
-    expect(betterMoveReason(fen, 'Qxa7', 'Rhc1', line, 'white') ?? '').not.toMatch(/win a pawn/);
+    expect(betterMoveReason(fen, 'Qxa7', 'Rhc1', line, 'white', null) ?? '').not.toMatch(/win a pawn/);
   });
   it('NEGATIVE CONTROL: a quiet played move still hears it', () => {
-    expect(betterMoveReason(fen, 'Kg1', 'Rhc1', line, 'white')).toMatch(/win a pawn/);
+    expect(betterMoveReason(fen, 'Kg1', 'Rhc1', line, 'white', null)).toMatch(/win a pawn/);
   });
 });
 
@@ -89,7 +89,7 @@ describe('removal of the defender needs something left to win (Alekhine ply 41)'
 
 describe('a trade is not an entry (Alekhine ply 49)', () => {
   it('"it let them in with Bxf3" is not said of a bishop trade', () => {
-    const call = callInaccuracy({
+    const call = callInaccuracy({ priorMove: null,
       fenBefore: '1nkr3r/1pp1b1pp/2b1pp2/2P1P3/2NP4/4B2P/P3BKP1/1R2R3 w - - 2 25',
       playedSan: 'Bf3', bestSan: 'Rb4', bestLineUci: ['b1b4', 'f6e5', 'c4e5', 'c6d5'],
       cpLoss: 150, missedMate: null, allowedMate: null, moverEvalAfterCp: 50,

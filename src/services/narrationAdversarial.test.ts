@@ -59,7 +59,7 @@ describe('ADVERSARIAL: 60 machine-played games through every computed lane', () 
         const board = new Chess(fen);
 
         // 1. THE PLAN
-        const plan = planFromUci(fen, uci.slice(i, i + 8), studentColor, said);
+        const plan = planFromUci(fen, uci.slice(i, i + 8), studentColor, null, said);
         if (plan) {
           plansBuilt += 1;
           const parts = [
@@ -175,7 +175,7 @@ describe('ADVERSARIAL: malformed and hostile input', () => {
     for (const fen of JUNK) {
       expect(() => readPosition(fen, 'white'), fen).not.toThrow();
       expect(() => buildPositionalRead(fen, 'black'), fen).not.toThrow();
-      expect(() => planFromUci(fen, ['e2e4', 'e7e5', 'g1f3', 'b8c6'], 'white'), fen).not.toThrow();
+      expect(() => planFromUci(fen, ['e2e4', 'e7e5', 'g1f3', 'b8c6'], 'white', null), fen).not.toThrow();
       expect(() => findConcession({ fen, playedSan: 'e4', bestSan: 'd4', coachColor: 'white' }), fen).not.toThrow();
       expect(() => findStudentDrawback({ fen, playedSan: 'e4', bestSan: 'd4', studentColor: 'white' }), fen).not.toThrow();
     }
@@ -185,7 +185,7 @@ describe('ADVERSARIAL: malformed and hostile input', () => {
     const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
     for (const moves of [[], ['zzzz'], ['e2e4', ''], ['e2e4', 'e2e4', 'e2e4', 'e2e4'],
       Array.from({ length: 200 }, () => 'e2e4'), ['e2e4e', 'x'], ['12', '34', '56', '78']]) {
-      expect(() => planFromUci(START, moves, 'white'), JSON.stringify(moves.slice(0, 3))).not.toThrow();
+      expect(() => planFromUci(START, moves, 'white', null), JSON.stringify(moves.slice(0, 3))).not.toThrow();
     }
   });
 

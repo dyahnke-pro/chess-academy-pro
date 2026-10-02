@@ -176,7 +176,7 @@ describe('computed voice audit', () => {
         };
 
         // ── THE BACKWARD LOOK on the student's own move ────────────────────
-        const look = backwardLook({ replySan: null,
+        const look = backwardLook({ priorMove: null, replySan: null,
           fenBefore,
           fenAfter: fenAfterStudent,
           playedSan: studentMove.san,
@@ -201,7 +201,7 @@ describe('computed voice audit', () => {
 
         const coachColor = game.student === 'white' ? 'black' : 'white';
         const cSign = coachColor === 'white' ? 1 : -1;
-        const coachLook = backwardLook({ replySan: null,
+        const coachLook = backwardLook({ priorMove: null, replySan: null,
           fenBefore: fenAfterStudent,
           fenAfter: fenAfterReply,
           playedSan: coachMove.san,
@@ -213,7 +213,7 @@ describe('computed voice audit', () => {
         });
 
         // ── THE PLAN, off the engine's own line from the settled board ─────
-        const plan = planFromUci(fenAfterReply, readAfterReply.pv, game.student, planSaid);
+        const plan = planFromUci(fenAfterReply, readAfterReply.pv, game.student, null, planSaid);
         let planLine: string | null = null;
         if (plan) {
           const parts = [

@@ -409,6 +409,29 @@ describe('the verdict and its plan echo are one fact (hand walk 2340)', () => {
   });
 });
 
+describe('at a deciding moment the move is HELD for the student to answer (David 2026-10-02)', () => {
+  const line = (rank: number, evaluation: number, uci: string) => ({ rank, evaluation, moves: [uci], mate: null });
+  const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 3 14';
+  // One move holds; every other loses heavily — the board's own fork in the road.
+  const deciding = { evaluation: 30, bestMove: 'e1g1', depth: 16, topLines: [line(1, 30, 'e1g1'), line(2, -400, 'f3e5'), line(3, -420, 'd2d3')] } as never;
+
+  it('rules the bad moves out, keeps "The move is" back, and hands the answer to the surface', async () => {
+    const r = await computePositionFacts({ posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis: deciding, teachingBeat: true });
+    expect(r.moveAdvice?.reason).toBe('deciding');
+    expect(r.heldVerdict?.san).toBe('O-O');
+    expect(r.heldVerdict?.why.length).toBeGreaterThan(3);
+    expect(r.clauses.some((c) => / The move is /.test(` ${c.text}`))).toBe(false);
+  });
+
+  it('a move earned by the student\'s RECORD is still named, not held', async () => {
+    const hole = [{ clusterId: 'analysis:phase:middlegame', bucket: 'middlegame', label: 'x', openCount: 2, severity: 50, puzzleThemes: [], total: 3 }] as never;
+    const quiet = { evaluation: 30, bestMove: 'e1g1', depth: 16, topLines: [line(1, 30, 'e1g1'), line(2, -250, 'f3e5'), line(3, 10, 'd2d3')] } as never;
+    const r = await computePositionFacts({ posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis: quiet, teachingBeat: true, studentWeaknesses: hole });
+    expect(r.moveAdvice?.reason).toBe('phase-record');
+    expect(r.heldVerdict).toBeNull();
+  });
+});
+
 describe('a structure plan is said once by its PLAN, not its words (hand walk 1200)', () => {
   const flatAnalysis = { evaluation: 0, bestMove: '', depth: 12, topLines: [], nodesPerSecond: 0 } as unknown as Parameters<typeof computePositionFacts>[0]['analysis'];
   it('the pawn race does not repeat when only the counts move', async () => {

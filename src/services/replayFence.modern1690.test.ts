@@ -85,7 +85,7 @@ describe('a tactic aim reads as English (ply 51)', () => {
 describe('a won position after the move is not a blunder (ply 91)', () => {
   it('46.Rxc5 at +9 with a mate seen before it: "still wins", never "a blunder"', async () => {
     const { callInaccuracy } = await import('./inaccuracyCall');
-    const c = callInaccuracy({
+    const c = callInaccuracy({ priorMove: null,
       fenBefore: fenAt(90), playedSan: 'Rxc5', bestSan: 'Nxc5', bestLineUci: ['d3c5', 'd6c7', 'd7a4'],
       cpLoss: 0, missedMate: 12, moverEvalAfterCp: 915, side: 'student', moverColor: 'white',
       replyLineUci: ['d6d7'], replySan: 'Kxd7',

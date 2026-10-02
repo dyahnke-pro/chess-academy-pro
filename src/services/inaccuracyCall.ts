@@ -134,10 +134,11 @@ export type BetterMoveFact =
  */
 export function betterMoveFact(
   fenBefore: string, playedSan: string, bestSan: string, bestLineUci: readonly string[], moverColor: 'white' | 'black',
+  priorMove: PriorMove,
 ): BetterMoveFact | null {
   const order = checksFirst(fenBefore, playedSan, bestSan, bestLineUci);
   if (order) return { kind: 'checks-first', ...order };
-  const better = whyBetter(fenBefore, bestLineUci, moverColor, playedSan);
+  const better = whyBetter(fenBefore, bestLineUci, moverColor, playedSan, priorMove);
   if (!better) return null;
   // A KING MOVE DOES NOT SERVE ANOTHER PIECE'S PLAN (Bowdler walk 2026-09-27:
   // "Kf8 was the move — the idea is to park a piece on d4"). A plan clause that
@@ -166,9 +167,35 @@ export function phraseBetterMove(f: BetterMoveFact): string {
 /** Convenience: the fact, computed and worded — or null. */
 export function betterMoveReason(
   fenBefore: string, playedSan: string, bestSan: string, bestLineUci: readonly string[], moverColor: 'white' | 'black',
+  priorMove: PriorMove,
 ): string | null {
-  const f = betterMoveFact(fenBefore, playedSan, bestSan, bestLineUci, moverColor);
+  const f = betterMoveFact(fenBefore, playedSan, bestSan, bestLineUci, moverColor, priorMove);
   return f ? phraseBetterMove(f) : null;
+}
+
+/** The move that PRODUCED the position a reason is read at — the opponent's
+ *  last move — or null when there was none (the start position). REQUIRED on
+ *  every reason entry point: a line that opens by taking back on the square
+ *  that move captured on is finishing a trade, and without it a recapture
+ *  read as "win a pawn" (David 2026-10-02). */
+export type PriorMove = { fenBefore: string; san: string } | null;
+
+/** The last move on the board, if it really produced `fen` — the surface keeps
+ *  a running "last move" and resets happen (a new line, a drill, a takeback),
+ *  so the candidate is only trusted when replaying it lands on this exact
+ *  position. Anything else is null: an unknown prior move is said honestly as
+ *  unknown, never guessed. */
+export function priorMoveLeadingTo(
+  candidate: { fenBefore: string; san: string } | null | undefined,
+  fen: string,
+): PriorMove {
+  if (!candidate) return null;
+  try {
+    const c = new Chess(candidate.fenBefore);
+    if (!c.move(candidate.san)) return null;
+    const key = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+    return key(c.fen()) === key(fen) ? { fenBefore: candidate.fenBefore, san: candidate.san } : null;
+  } catch { return null; }
 }
 
 /** What a "win …" clause is worth, in pawns — null when it is not a material
@@ -199,7 +226,7 @@ function playedGain(fenBefore: string, playedSan: string | null): number {
  *  defender's second free choice (not a check answer, not a recapture) — past that the shallow line is guessing at
  *  their choices. Material is counted directly; a tactic must show in the
  *  plan of the cut line. Any other reason (a route, a file) passes. */
-function survivesForcingCut(fenBefore: string, bestUci: readonly string[], moverColor: 'white' | 'black', text: string): boolean {
+function survivesForcingCut(fenBefore: string, bestUci: readonly string[], moverColor: 'white' | 'black', text: string, priorMove: PriorMove): boolean {
   const material = isCostClause(text) ? (winClauseValue(text) ?? 0) : null;
   const tactic = /\bland an? \w/.test(text);
   if (material === null && !tactic) return true;
@@ -211,6 +238,17 @@ function survivesForcingCut(fenBefore: string, bestUci: readonly string[], mover
     const b = new Chess(fenBefore);
     const me = b.turn();
     let prev: { to: string; captured: boolean } | null = null;
+    // A line that takes back on the square their last move captured on is
+    // finishing that trade: their capture counts against the line.
+    if (priorMove) {
+      try {
+        const lm = new Chess(priorMove.fenBefore).move(priorMove.san);
+        if (lm?.captured && bestUci[0]?.slice(2, 4) === lm.to) {
+          net -= MATERIAL_VALUE[lm.captured];
+          prev = { to: lm.to, captured: true };
+        }
+      } catch { /* unreadable — count from the board as given */ }
+    }
     for (let i = 0; i < bestUci.length; i += 1) {
       const u = bestUci[i];
       const inCheck = b.inCheck();
@@ -231,7 +269,7 @@ function survivesForcingCut(fenBefore: string, bestUci: readonly string[], mover
   if (cut >= bestUci.length) return true;
   // Everything the line wins must already be won before the guessing starts.
   if (material !== null) return netAtCut > 0 && netAtCut >= net;
-  const plan = planFromUci(fenBefore, bestUci.slice(0, cut), moverColor);
+  const plan = planFromUci(fenBefore, bestUci.slice(0, cut), moverColor, priorMove);
   return !!plan?.mine.spokenClauses.some((c) => c.text === text);
 }
 
@@ -244,6 +282,7 @@ function whyBetter(
   // move was better (Alekhine walk 2026-09-27: "Qxa7 was a blunder. Rhc1 was
   // the move — it would win a pawn", one breath after Qxa7 took the a-pawn).
   playedSan: string | null,
+  priorMove: PriorMove,
 ): { why: string; square: string; own: boolean } | null {
   if (bestUci.length < 4) return null;
   const alreadyWon = playedGain(fenBefore, playedSan);
@@ -269,16 +308,11 @@ function whyBetter(
     if (first?.captured && NAME[first.captured] && (MATERIAL_VALUE[first.captured] > MATERIAL_VALUE[first.piece] || winsOutright)) {
       return { why: `take the ${NAME[first.captured]} on ${first.to}`, square: first.to, own: true };
     }
-    // A CAPTURE THAT "WINS A PAWN" MAY ONLY BE TAKING IT BACK (Colle walk
-    // 2026-09-27: "cxd4 was the move — it would win a pawn" one move after
-    // …cxd4). The board cannot say whether the pawn just arrived, so the
-    // reason says what is certainly true of both: it takes the pawn.
-    if (first?.captured === 'p') {
-      const plan0 = planFromUci(fenBefore, bestUci, moverColor)?.mine.text?.trim() ?? '';
-      if (/win a pawn/.test(plan0) && alreadyWon === 0) return { why: `take the pawn on ${first.to}`, square: first.to, own: true };
-    }
+    // A recapture ("cxd4 was the move — it would win a pawn" one move after
+    // …cxd4, Colle walk 2026-09-27) is handled at the source now: the plan is
+    // read from before the trade (`priorMove`), so it never counts as a win.
   } catch { /* fall through to the plan read */ }
-  const plan = planFromUci(fenBefore, bestUci, moverColor);
+  const plan = planFromUci(fenBefore, bestUci, moverColor, priorMove);
   const text = plan?.mine.text?.trim();
   if (!text) return null;
   // "You want to win a pawn and open the d-file." → "win a pawn and open the
@@ -349,14 +383,14 @@ function whyBetter(
     try { const mv = new Chess(fenBefore).move({ from: firstFrom, to: firstTo, promotion: bestUci[0][4] }); movedName = mv ? ({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as Record<string, string>)[mv.piece] ?? null : null; } catch { movedName = null; }
     const otherPieceRoute = routed !== null && movedName !== null && routed !== movedName;
     const own = !otherPieceRoute && (costIsOwn || lead.squares.includes(firstFrom) || lead.squares.includes(firstTo));
-    if (!survivesForcingCut(fenBefore, bestUci, moverColor, lead.text)) return null;
+    if (!survivesForcingCut(fenBefore, bestUci, moverColor, lead.text, priorMove)) return null;
     return { why: lead.text, square: lead.squares[0] ?? '', own };
   }
   // No clause carried a square (anything square-less that outranked the rest)
   // — fall back to the sentence, which in that case IS one clause.
   const want = /^You want to ([^.]+)\./.exec(text);
   if (!want) return null;
-  if (!survivesForcingCut(fenBefore, bestUci, moverColor, want[1])) return null;
+  if (!survivesForcingCut(fenBefore, bestUci, moverColor, want[1], priorMove)) return null;
   const square = plan?.mine.spokenClauses.flatMap((c) => c.squares)[0] ?? '';
   return { why: want[1], square, own: false };
 }
@@ -432,6 +466,8 @@ export function callInaccuracyDetailed(args: {
   /** Their ACTUAL reply, SAN, or null when not played yet — so a punishment
    *  they did not play is "and they missed it", never a loss that happened. */
   replySan: string | null;
+  /** The move that produced `fenBefore` — see `PriorMove`. REQUIRED. */
+  priorMove: PriorMove;
 }): InaccuracyVerdict {
   const bare = (s: string): string => s.replace(/[+#]$/, '');
   const wasBest = Boolean(args.bestSan) && bare(args.playedSan) === bare(args.bestSan ?? '');
@@ -542,7 +578,7 @@ export function callInaccuracyDetailed(args: {
   const better = stopsMate
     ? { why: 'stop the mate', square: '', own: true }
     : args.bestLineUci
-      ? whyBetter(args.fenBefore, args.bestLineUci, args.moverColor, args.playedSan)
+      ? whyBetter(args.fenBefore, args.bestLineUci, args.moverColor, args.playedSan, args.priorMove)
       : null;
   const cost = Math.round(Math.max(0, args.cpLoss));
 
@@ -624,7 +660,7 @@ export function callInaccuracyDetailed(args: {
   // checks first, then what the line wins. A mate stop overrides it.
   const reason = stopsMate
     ? 'it would stop the mate'
-    : args.bestLineUci ? betterMoveReason(args.fenBefore, args.playedSan, args.bestSan, args.bestLineUci, args.moverColor) : null;
+    : args.bestLineUci ? betterMoveReason(args.fenBefore, args.playedSan, args.bestSan, args.bestLineUci, args.moverColor, args.priorMove) : null;
   const after = args.moverEvalAfterCp;
   // …and CLEARLY BETTER is not a mistake either (pass-2 walk 2026-09-30: his
   // Bxc5 went +3.1 → +1.9 and was graded "a mistake" where he said "knocking
@@ -733,7 +769,7 @@ function punishmentOf(
   // Only a clause that IS a cost — material, mate, the king's shelter. "Trade
   // off the knight" was the lead for …Qd7 (Blumenfeld walk), true and not why it
   // cost three pawns; then the punishing move itself is the honest answer.
-  const plan = planFromUci(fenAfter, replyLineUci, moverColor);
+  const plan = planFromUci(fenAfter, replyLineUci, moverColor, { fenBefore, san: playedSan });
   const lead = plan?.theirs.spokenClauses[0];
   if (lead?.text && !lead.drift && isCostClause(lead.text)) {
     // The square their line opens by taking on — so a caller that already

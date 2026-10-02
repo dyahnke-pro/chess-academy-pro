@@ -245,3 +245,25 @@ describe('classifyMisconception — the attributed fundamental is the tag when t
     expect(typeof r?.tag).toBe('string');
   });
 });
+
+describe('a pawn TRADE is never filed as a greedy grab (David 2026-10-02)', () => {
+  it('taking back on the square their last move captured on is a recapture', async () => {
+    // 1.e4 d5 2.exd5 Qxd5 — the queen takes back the pawn that took on d5.
+    const r = await classifyMisconception({
+      fen: 'rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2',
+      playedSan: 'Qxd5',
+      gamePhase: 'opening',
+      historySans: ['e4', 'd5', 'exd5', 'Qxd5'],
+    });
+    expect(r?.tag).not.toBe('greedy-pawn-grab');
+  });
+  it('a pawn they win straight back is a trade', async () => {
+    // 1.e4 e5 2.d4 exd4: Black's pawn takes on d4 and White can take back (Qxd4).
+    const r = await classifyMisconception({
+      fen: 'rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2',
+      playedSan: 'exd4',
+      gamePhase: 'opening',
+    });
+    expect(r?.tag).not.toBe('greedy-pawn-grab');
+  });
+});

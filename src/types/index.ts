@@ -347,7 +347,7 @@ export interface ModelGameCriticalMoment {
   color: 'white' | 'black';
   // NO `fen`: stripped from the data 2026-07-22 ("replay is the truth"). The
   // type said it was required while no moment had one, so a reader compiled
-  // and found nothing (the model-game cameo, dead two months). Replay the pgn.
+  // and found nothing. Replay the pgn.
   annotation: string;
   concept: string;
   arrows?: AnnotationArrow[];

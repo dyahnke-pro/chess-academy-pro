@@ -116,7 +116,7 @@ describe('Bc2 in ktoa6lk6qNk: the blow is g4 and it wins a piece (items 189, 190
   });
   it('the plan reader says "a piece for a pawn", not "a pawn"', async () => {
     const { planFromUci } = await import('./lookaheadPlan');
-    const p = planFromUci('2r3k1/1p3p1p/p5p1/5q2/1P6/1B5P/2bQ1PP1/3R2K1 w - - 1 32', ['g2g4', 'f5f3', 'b3c2', 'f3h3', 'd2e2', 'h3c3'], 'black');
+    const p = planFromUci('2r3k1/1p3p1p/p5p1/5q2/1P6/1B5P/2bQ1PP1/3R2K1 w - - 1 32', ['g2g4', 'f5f3', 'b3c2', 'f3h3', 'd2e2', 'h3c3'], 'black', null);
     expect(p?.theirs?.text).toMatch(/win a piece for a pawn/);
   });
 });
@@ -150,7 +150,7 @@ describe('run I manual check: a recapture is not a win, a pawn recapture is not 
       opponentPv: ['b3c4', 'f6g4', 'h2h3', 'd6h2', 'g1h1', 'h2c7'],
       studentColor: 'black' as const, cpLoss: 120,
     };
-    expect(whatItAllowed({ ...args, playedSan: 'bxc4' })?.line ?? '').not.toMatch(/win a pawn/);
+    expect(whatItAllowed({ ...args, fenBefore: 'r2qk2r/5pp1/p1bbpn2/1pp4p/2PP4/1B6/PPN2PPP/R1BQ1RK1 b kq - 0 13', playedSan: 'bxc4' })?.line ?? '').not.toMatch(/win a pawn/);
   });
   it('Nxf3 vs gxf3 is never "does the same job"', async () => {
     const { tacticalReadFromLines, uncertaintyClause } = await import('./tacticalRead');

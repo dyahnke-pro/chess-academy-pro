@@ -68,7 +68,7 @@ describe('two plans, one line', () => {
   it('attributes each side\'s moves to that side', () => {
     // The easiest thing to get backwards and the most damaging: a student told
     // the opponent's plan is their own defends the wrong square.
-    const plan = buildLookaheadPlan(line(plies(START, ['e4', 'c5', 'Nf3', 'd6'])), 'white');
+    const plan = buildLookaheadPlan(line(plies(START, ['e4', 'c5', 'Nf3', 'd6'])), 'white', undefined, null);
     expect(plan).not.toBeNull();
     expect(plan?.white.headingFor).toContain('e4');
     expect(plan?.white.headingFor).toContain('f3');
@@ -79,8 +79,8 @@ describe('two plans, one line', () => {
 
   it('points mine/theirs at the student\'s actual colour', () => {
     const p = plies(START, ['e4', 'c5', 'Nf3', 'd6']);
-    const asWhite = buildLookaheadPlan(line(p), 'white');
-    const asBlack = buildLookaheadPlan(line(p), 'black');
+    const asWhite = buildLookaheadPlan(line(p), 'white', undefined, null);
+    const asBlack = buildLookaheadPlan(line(p), 'black', undefined, null);
     expect(asWhite?.mine).toBe(asWhite?.white);
     expect(asWhite?.theirs).toBe(asWhite?.black);
     expect(asBlack?.mine).toBe(asBlack?.black);
@@ -88,7 +88,7 @@ describe('two plans, one line', () => {
   });
 
   it('speaks the student\'s plan as "you" and the opponent\'s as "they"', () => {
-    const plan = buildLookaheadPlan(line(plies(START, ['e4', 'c5', 'Nf3', 'd6'])), 'white');
+    const plan = buildLookaheadPlan(line(plies(START, ['e4', 'c5', 'Nf3', 'd6'])), 'white', undefined, null);
     // When BOTH sides fall back to the drift clause the two are merged into one
     // sentence (see the twin-drift describe below — David heard the unmerged
     // pair as a stutter), so the contract is about the whole utterance rather
@@ -112,7 +112,7 @@ describe('two plans, one line', () => {
   it('reports a trade on the side that made it', () => {
     const plan = buildLookaheadPlan(
       line(plies(START, ['e4', 'd5', 'exd5', 'Qxd5'])),
-      'white',
+      'white', undefined, null,
     );
     expect(plan?.white.trading).toContain('pawn');
     expect(plan?.black.trading).toContain('pawn');
@@ -123,7 +123,7 @@ describe('two plans, one line', () => {
     // d-file and trade off the pawn" — and says nothing: pawns come off in
     // almost every line. Trading a PIECE is an intention; trading a pawn is
     // weather.
-    const plan = buildLookaheadPlan(line(plies(START, ['e4', 'd5', 'exd5', 'Qxd5'])), 'white');
+    const plan = buildLookaheadPlan(line(plies(START, ['e4', 'd5', 'exd5', 'Qxd5'])), 'white', undefined, null);
     expect(plan?.white.text).not.toContain('trade off the pawn');
   });
 
@@ -134,7 +134,7 @@ describe('two plans, one line', () => {
     const afterNf3 = new Chess(); for (const s of ['e4', 'e5', 'Nf3']) afterNf3.move(s);
     const plan = buildLookaheadPlan(
       line(plies(afterNf3.fen(), ['Nc6', 'Nxe5', 'Nxe5', 'd4'])),
-      'white',
+      'white', undefined, null,
     );
     // White's Nxe5 takes a PAWN; it is Black who takes the knight back — so
     // the piece-trade clause belongs to Black, which is also a second check
@@ -143,7 +143,7 @@ describe('two plans, one line', () => {
   });
 
   it('refuses to call a move and a reply a plan', () => {
-    expect(buildLookaheadPlan(line(plies(START, ['e4', 'c5'])), 'white')).toBeNull();
+    expect(buildLookaheadPlan(line(plies(START, ['e4', 'c5'])), 'white', undefined, null)).toBeNull();
   });
 
   it('stops reading at the horizon', () => {
@@ -154,13 +154,13 @@ describe('two plans, one line', () => {
       'e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'Be3', 'e5',
     ]);
     expect(long.length).toBeGreaterThan(PLAN_HORIZON);
-    const plan = buildLookaheadPlan(line(long), 'white');
+    const plan = buildLookaheadPlan(line(long), 'white', undefined, null);
     // Be3 is ply 11 (0-indexed 10), past the horizon — its square must not appear.
     expect(plan?.white.headingFor).not.toContain('e3');
   });
 
   it('says nothing rather than something empty', () => {
-    const plan = buildLookaheadPlan(line(plies(START, ['Nf3', 'Nf6', 'Ng1', 'Ng8'])), 'white');
+    const plan = buildLookaheadPlan(line(plies(START, ['Nf3', 'Nf6', 'Ng1', 'Ng8'])), 'white', undefined, null);
     // Knights shuffling out and back: no captures, no files, no outposts — but
     // the squares are still real, so a "pieces toward" line is honest.
     expect(typeof plan?.mine.text).toBe('string');
@@ -196,14 +196,14 @@ describe('every claim traces to a move the engine actually played', () => {
     for (const k of keySquaresOf(p)) {
       expect(touched.has(k.square), `${k.square} appeared in the read but no move touched it`).toBe(true);
     }
-    const plan = buildLookaheadPlan(line(p), 'white');
+    const plan = buildLookaheadPlan(line(p), 'white', undefined, null);
     for (const sq of [...(plan?.white.headingFor ?? []), ...(plan?.black.headingFor ?? [])]) {
       expect(touched.has(sq)).toBe(true);
     }
   });
 
   it('never hands over a move', () => {
-    const plan = buildLookaheadPlan(line(plies(START, ['e4', 'd5', 'exd5', 'Qxd5'])), 'white');
+    const plan = buildLookaheadPlan(line(plies(START, ['e4', 'd5', 'exd5', 'Qxd5'])), 'white', undefined, null);
     for (const text of [plan?.mine.text ?? '', plan?.theirs.text ?? '']) {
       expect(text, `a move leaked into the plan: ${text}`)
         .not.toMatch(/\b[NBRQK][a-h]?[1-8]?x?[a-h][1-8]\b/);
@@ -225,7 +225,7 @@ describe('the read sees the whole line, not just where pieces land', () => {
     // be the Scandinavian 1.e4 d5 2.exd5 Qxd5, where the pawn is recaptured
     // at once and the honest per-ply material read — SEE, not face value —
     // correctly reports ZERO; the test had been red on main.)
-    const plan = planFromUci(START, uci(['e2e4', 'e7e5', 'g1f3', 'g8f6', 'f3e5', 'd7d6']), 'white');
+    const plan = planFromUci(START, uci(['e2e4', 'e7e5', 'g1f3', 'g8f6', 'f3e5', 'd7d6']), 'white', null);
     expect(plan, 'the line did not replay').not.toBeNull();
     expect(plan?.white.materialSwing).toBeGreaterThan(0);
   });
@@ -233,12 +233,12 @@ describe('the read sees the whole line, not just where pieces land', () => {
   it('counts pieces converging on the enemy king', () => {
     // Scholar's shape: queen and bishop both arrive next to the black king.
     // "They are coming for you" as arithmetic rather than atmosphere.
-    const plan = planFromUci(START, uci(['e2e4', 'e7e5', 'f1c4', 'b8c6', 'd1h5', 'g8f6', 'h5f7', 'e8f7']), 'white');
+    const plan = planFromUci(START, uci(['e2e4', 'e7e5', 'f1c4', 'b8c6', 'd1h5', 'g8f6', 'h5f7', 'e8f7']), 'white', null);
     expect(plan?.white.nearEnemyKing).toBeGreaterThanOrEqual(2);
   });
 
   it('fills every field the engine path computes, not a subset', () => {
-    const plan = planFromUci(START, uci(['e2e4', 'c7c5', 'g1f3', 'd7d6', 'd2d4', 'c5d4']), 'white');
+    const plan = planFromUci(START, uci(['e2e4', 'c7c5', 'g1f3', 'd7d6', 'd2d4', 'c5d4']), 'white', null);
     for (const side of [plan?.white, plan?.black]) {
       expect(side).toBeTruthy();
       expect(typeof side?.materialSwing).toBe('number');
@@ -254,14 +254,14 @@ describe('the read sees the whole line, not just where pieces land', () => {
     // last moves of every game — a full-game walk ended with three silent
     // plies including the checkmate, the worst possible moment to have nothing
     // to say. A plan needs four plies; a board read needs none.
-    const plan = planFromUci(START, uci(['e2e4', 'c7c5']), 'white');
+    const plan = planFromUci(START, uci(['e2e4', 'c7c5']), 'white', null);
     expect(plan, 'a short line went silent again').not.toBeNull();
     expect(plan?.mine.headingFor, 'a two-ply line was described as an intention').toEqual([]);
     expect(plan?.read).toBeTruthy();
   });
 
   it('claims no intention it cannot support from a short line', () => {
-    const plan = planFromUci(START, uci(['e2e4', 'e7e5', 'zzzz', 'd7d5']), 'white');
+    const plan = planFromUci(START, uci(['e2e4', 'e7e5', 'zzzz', 'd7d5']), 'white', null);
     expect(plan?.mine.materialSwing).toBe(0);
     expect(plan?.mine.trading).toEqual([]);
     expect(plan?.keySquares).toEqual([]);
@@ -272,7 +272,7 @@ describe('the read sees the whole line, not just where pieces land', () => {
     // exactly the moment the coach must not be quiet.
     const board = new Chess();
     for (const san of ['f3', 'e5', 'g4', 'Qh4#']) board.move(san);
-    const plan = planFromUci(board.fen(), [], 'white');
+    const plan = planFromUci(board.fen(), [], 'white', null);
     expect(plan?.theirs.text.toLowerCase(), 'silent at checkmate').toContain('mate');
   });
 
@@ -282,7 +282,7 @@ describe('the read sees the whole line, not just where pieces land', () => {
     // is not decoration once the game is over.
     const board = new Chess();
     for (const san of ['f3', 'e5', 'g4', 'Qh4#']) board.move(san);
-    const plan = planFromUci(board.fen(), [], 'white');
+    const plan = planFromUci(board.fen(), [], 'white', null);
     const said = `${plan?.mine.text} ${plan?.theirs.text}`.toLowerCase();
     expect(said, 'invited the student to find a mate already on the board').not.toContain("if you can find it");
     expect(said).toContain('game over');
@@ -485,7 +485,7 @@ describe('the read sees the board as it stands, not only what the line changes',
   // `describeStructure` was computed twice per ply and then discarded except
   // for two of its fields. Both are chess.js geometry — no engine, no excuse.
   it('reports material balance and pawn islands from the root position', () => {
-    const plan = planFromUci(START, ['e2e4', 'd7d5', 'e4d5', 'd8d5'], 'white');
+    const plan = planFromUci(START, ['e2e4', 'd7d5', 'e4d5', 'd8d5'], 'white', null);
     expect(plan?.read).toBeTruthy();
     expect(typeof plan?.read.materialBalance).toBe('number');
     expect(plan?.read.islands.white).toBeGreaterThan(0);
@@ -495,7 +495,7 @@ describe('the read sees the board as it stands, not only what the line changes',
   it('leaves the eval swing NULL rather than guessing when no engine verified the line', () => {
     // `planFromUci` has no engine, so it has no terminal eval. Saying so beats
     // inventing a number the student would take as measured.
-    expect(planFromUci(START, ['e2e4', 'c7c5', 'g1f3', 'd7d6'], 'white')?.read.evalSwingCp).toBeNull();
+    expect(planFromUci(START, ['e2e4', 'c7c5', 'g1f3', 'd7d6'], 'white', null)?.read.evalSwingCp).toBeNull();
   });
 
 });
@@ -512,7 +512,7 @@ describe('the two sides never say the same sentence twice', () => {
 
   /** A line where neither side captures anything — the drift case. */
   function driftPlan(studentColor: 'white' | 'black'): LookaheadPlan | null {
-    return planFromUci(QUIET, ['b8c6', 'd2d4', 'g8f6', 'b1c3'], studentColor);
+    return planFromUci(QUIET, ['b8c6', 'd2d4', 'g8f6', 'b1c3'], studentColor, null);
   }
 
   it('merges the twin drift sentence into one', () => {
@@ -549,7 +549,7 @@ describe('the two sides never say the same sentence twice', () => {
         uci.push(`${ms[0].from}${ms[0].to}`);
       }
       const studentColor = new Chess(fen).turn() === 'w' ? 'white' : 'black';
-      const plan = planFromUci(fen, uci, studentColor);
+      const plan = planFromUci(fen, uci, studentColor, null);
       if (!plan) continue;
       const shapes = [plan.theirs.text, plan.mine.text].filter(Boolean)
         // Strip everything that differs between the two voices, leaving the
@@ -620,7 +620,7 @@ describe('a passed pawn belongs to the side that has it', () => {
     const board = new Chess();
     for (let i = 0; i < GAME.length; i += 1) {
       board.move(GAME[i]);
-      const plan = planFromUci(board.fen(), uci.slice(i + 1, i + 9), 'white');
+      const plan = planFromUci(board.fen(), uci.slice(i + 1, i + 9), 'white', null);
       if (!plan) continue;
       // Every claimed passer must be a pawn of that colour somewhere in the
       // line — verified independently here, from the same board the coach saw.
@@ -681,7 +681,7 @@ describe('the rest of what the line has to say', () => {
   // Spoken when they apply." Each of these was computable from plies already
   // replayed and read by nothing.
   const plan = (sans: string[], color: 'white' | 'black' = 'white') =>
-    buildLookaheadPlan(line(plies(START, sans)), color);
+    buildLookaheadPlan(line(plies(START, sans)), color, undefined, null);
 
   it('names the piece being REROUTED, with the squares it travels', () => {
     // The most characteristic thing a coach says about a line, and the plan had
@@ -701,7 +701,7 @@ describe('the rest of what the line has to say', () => {
     // Through `planFromUci`, which computes the per-ply facts for real — the
     // hand-built fixture above fills them from a blank template, so `isCheck`
     // there is always false and would test nothing.
-    const real = planFromUci(START, ['e2e4', 'f7f5', 'd1h5', 'g7g6', 'h5g6', 'h7g6'], 'white');
+    const real = planFromUci(START, ['e2e4', 'f7f5', 'd1h5', 'g7g6', 'h5g6', 'h7g6'], 'white', null);
     expect(real?.white.checks, 'checks were never read off the plies').toBeGreaterThanOrEqual(2);
   });
 
@@ -733,7 +733,7 @@ describe('the reroute clause survived its own prod run', () => {
     // The clause had been added twice — an interrupted edit that partly
     // applied — so the coach said "walk the knight round to c6, by way of f3
     // and d4, walk the knight round from g1 to c6, by way of f3 and d4".
-    const p = buildLookaheadPlan(line(plies(START, ['Nf3', 'e5', 'Nd4', 'd5', 'Nb5', 'a6'])), 'white');
+    const p = buildLookaheadPlan(line(plies(START, ['Nf3', 'e5', 'Nd4', 'd5', 'Nb5', 'a6'])), 'white', undefined, null);
     const said = p?.white.text ?? '';
     expect(said.match(/walk the/g)?.length ?? 0, `doubled: ${said}`).toBeLessThanOrEqual(1);
   });
@@ -745,7 +745,7 @@ describe('the reroute clause survived its own prod run', () => {
     // g1 → f3 → g1: the knight ends where it started. (The first fixture I
     // wrote added a third hop and ended on f3, which is a genuine reroute —
     // the test was wrong, not the guard.)
-    const p = buildLookaheadPlan(line(plies(START, ['Nf3', 'e5', 'Ng1', 'd5'])), 'white');
+    const p = buildLookaheadPlan(line(plies(START, ['Nf3', 'e5', 'Ng1', 'd5'])), 'white', undefined, null);
     expect(p?.white.maneuver, 'a round trip was reported as a reroute').toBeNull();
   });
 });
@@ -760,7 +760,7 @@ describe('the rest of the inventory — everything the line leaves behind', () =
     // ever described it that way. Found by printing what the lane actually
     // says, not by an assertion failing.
     // A black pawn walking b5 → b4 → b3: three squares, one pawn.
-    const p = buildLookaheadPlan(line(plies(START, ['e4', 'b5', 'd4', 'b4', 'Nf3', 'b3'])), 'black');
+    const p = buildLookaheadPlan(line(plies(START, ['e4', 'b5', 'd4', 'b4', 'Nf3', 'b3'])), 'black', undefined, null);
     expect(p?.black.maneuver, 'a pawn was called a reroute').toBeNull();
     expect(p?.black.text ?? '').not.toContain('walk the pawn');
   });
@@ -979,7 +979,7 @@ describe('the trade clause belongs to the move that sets it up (WO-STANDARD-01 D
     const afterNf3 = new Chess(); for (const s of ['e4', 'e5', 'Nf3']) afterNf3.move(s);
     const plan = buildLookaheadPlan(
       line(plies(afterNf3.fen(), ['Nc6', 'Bb5', 'a6', 'Bxc6', 'dxc6'])),
-      'white',
+      'white', undefined, null,
     );
     expect(plan?.black.trading).toContain('bishop');
     expect(plan?.black.tradeIntended).toEqual([]);
@@ -989,8 +989,21 @@ describe('the trade clause belongs to the move that sets it up (WO-STANDARD-01 D
     // Nc6 attacks e5; Black's next own move is Nxe5. The existing "DOES call a
     // piece trade a plan" case, asserted on the new field.
     const afterNf3 = new Chess(); for (const s of ['e4', 'e5', 'Nf3']) afterNf3.move(s);
-    const plan = buildLookaheadPlan(line(plies(afterNf3.fen(), ['Nc6', 'Nxe5', 'Nxe5', 'd4'])), 'white');
+    const plan = buildLookaheadPlan(line(plies(afterNf3.fen(), ['Nc6', 'Nxe5', 'Nxe5', 'd4'])), 'white', undefined, null);
     expect(plan?.black.tradeIntended).toEqual(['knight']);
     expect(plan?.black.text).toContain('trade off the knight');
+  });
+});
+
+describe('a recapture is the other half of a trade, never a win (David 2026-10-02)', () => {
+  // Colle walk 2026-09-27, ply 27: …cxd4 took White's pawn; the line opens cxd4.
+  const FEN = 'r1bqrnk1/4bppp/p1n1p3/1p1pP2N/3p4/2PB1N2/PP3PPP/R1BQR1K1 w - - 0 14';
+  const PV = ['c3d4', 'c8b7', 'c1d2', 'a8c8', 'd1e2', 'c6a5', 'h2h4', 'a5c4'];
+  const PRIOR = { fenBefore: 'r1bqrnk1/4bppp/p1n1p3/1pppP2N/3P4/2PB1N2/PP3PPP/R1BQR1K1 b - - 0 13', san: 'cxd4' };
+  it('counts material from before the trade when the line takes back', () => {
+    expect(planFromUci(FEN, PV, 'white', PRIOR)?.mine.text ?? '').not.toMatch(/win a pawn/);
+  });
+  it('the board alone cannot tell — which is why the prior move is REQUIRED', () => {
+    expect(planFromUci(FEN, PV, 'white', null)?.mine.text ?? '').toMatch(/win a pawn/);
   });
 });

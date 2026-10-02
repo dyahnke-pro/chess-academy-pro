@@ -47,7 +47,7 @@ describe('ply 55 — a bishop that hangs on h6 is not on an "outpost"', () => {
 
 describe('ply 63 — losing a forced mate is the cost, not "let them in with Kg6"', () => {
   it('the grade names the slipped mate, never the king step', () => {
-    const v = callInaccuracyDetailed({
+    const v = callInaccuracyDetailed({ priorMove: null,
       fenBefore: fenAt(62), playedSan: 'Rxc7', bestSan: 'Ng4+',
       bestLineUci: ['h2g4', 'h6h5', 'g7g5', 'h5h4', 'g4h2', 'b3d3'],
       cpLoss: 0, missedMate: 4, side: 'student', moverColor: 'white',

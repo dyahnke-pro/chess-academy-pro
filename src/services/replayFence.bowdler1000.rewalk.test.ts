@@ -9,7 +9,7 @@ describe('ply 58 — …Rd4+ walked into a discovered check, and the grade says 
   // Real Stockfish 18, depth 16: before …Rd4+ Black is +166 (best …Kf8);
   // after it White answers Kf5+, the king leaving the g-file and the rook on g1
   // checking behind it.
-  const args = {
+  const args = { priorMove: null,
     fenBefore: 'r5k1/pR6/5p1p/2p1b3/2P3KP/3r4/PP3P2/6R1 b - - 1 29', playedSan: 'Rd4+', bestSan: 'Kf8',
     bestLineUci: ['g8f8', 'g4h5', 'f6f5', 'f2f4', 'e5d4', 'g1g6'],
     cpLoss: 143, side: 'student' as const, moverColor: 'black' as const,

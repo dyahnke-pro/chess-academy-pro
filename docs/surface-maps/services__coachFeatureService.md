@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5210 lines · 35 exports · 41 importers · 39 tests · 5 audits**
+**5211 lines · 35 exports · 41 importers · 39 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -91,7 +91,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `generateNarrativeSummary` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:539`
+- `src/components/Coach/CoachGameReview.tsx:538`
 - `src/services/recapSeat.test.ts:17`
 
 ### `recapSecondPerson` (function) — 9 call sites
@@ -133,7 +133,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildReviewCitations` (function) — 8 call sites
-- `src/components/Coach/CoachGameReview.tsx:599`
+- `src/components/Coach/CoachGameReview.tsx:598`
 - `src/services/coachFeatureService.test.ts:744`
 - `src/services/coachFeatureService.test.ts:752`
 - `src/services/coachFeatureService.test.ts:784`
@@ -147,7 +147,7 @@
 - `src/services/coachFeatureService.test.ts:24`
 
 ### `buildReviewSegments` (function) — 63 call sites
-- `src/components/Coach/CoachGameReview.tsx:1859`
+- `src/components/Coach/CoachGameReview.tsx:1852`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
 - `src/services/coachFeatureService.causalChain.test.ts:50`
@@ -227,7 +227,7 @@
 - `src/services/mapConcurrent.test.ts:37`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4954`
+- `src/components/Coach/CoachGameReview.tsx:4799`
 - `src/services/coachFeatureService.test.ts:814`
 - `src/services/coachFeatureService.test.ts:817`
 - `src/services/coachFeatureService.test.ts:824`
@@ -282,8 +282,8 @@
 - `src/services/reviewNarrationFidelity.test.ts:118`
 
 ### `pendingRecapture` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7539`
-- `src/components/Coach/CoachTeachPage.tsx:7628`
+- `src/components/Coach/CoachTeachPage.tsx:7549`
+- `src/components/Coach/CoachTeachPage.tsx:7638`
 - `src/services/coachFeatureService.test.ts:929`
 - `src/services/coachFeatureService.test.ts:930`
 - `src/utils/justCaptured.test.ts:20`
@@ -298,7 +298,7 @@
 - `src/services/reviewWalk1500.test.ts:17`
 
 ### `openingNameForKey` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:236`
+- `src/components/Coach/CoachGameReview.tsx:235`
 
 ### `generateReviewNarration` (function) — 14 call sites
 - `src/services/reviewBetterLineWhy.test.ts:58`

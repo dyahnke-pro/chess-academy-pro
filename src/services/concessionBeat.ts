@@ -425,6 +425,9 @@ export function findStudentDrawback(args: {
  * looking backward as much as forward.
  */
 export function whatItAllowed(args: {
+  /** The position BEFORE the student's move. With `playedSan` it tells the
+   *  plan when their line only takes back what the student just took. */
+  fenBefore: string;
   /** The position AFTER the student's move — the opponent is to play. */
   fenAfter: string;
   /** The opponent's best line from there, UCI, straight off the engine. */
@@ -441,19 +444,17 @@ export function whatItAllowed(args: {
 }): { line: string; square: string } | null {
   if (args.cpLoss < 60) return null;
   if (args.opponentPv.length < 4) return null;
-  // Their first move takes back on the square the student just captured on:
-  // the material the plan counts from here is the student's own capture being
-  // returned, not a win.
-  const studentTo = /x([a-h][1-8])/.exec(args.playedSan ?? '')?.[1] ?? null;
-  const recaptures = !!studentTo && args.opponentPv[0]?.slice(2, 4) === studentTo;
-  const plan = planFromUci(args.fenAfter, args.opponentPv, args.studentColor);
+  // Their first move taking back on the square the student just captured on
+  // returns the student's own capture — the plan counts from before the trade
+  // (`planFromUci`'s last move), so it is never a win.
+  const plan = planFromUci(args.fenAfter, args.opponentPv, args.studentColor,
+    args.playedSan ? { fenBefore: args.fenBefore, san: args.playedSan } : null);
   // `theirs` is the opponent — the side to move here, whose line this is.
   // ONE CLAUSE, AND ONLY A COST (`isCostClause`): the price of the move is
   // what it lost, never the opponent's whole want-list or where their pieces
   // drift to (Blumenfeld walk F18/F32).
   const lead = plan?.theirs.spokenClauses[0];
   if (!lead?.text || lead.drift || !isCostClause(lead.text)) return null;
-  if (recaptures && /^win\b/.test(lead.text.trim())) return null;
   // NAMED WITH THE MOVE THAT DOES IT (McConnell walk 2026-09-27: a bare "That
   // let them win a pawn." left the student to find which pawn and how).
   let first: string | null = null;

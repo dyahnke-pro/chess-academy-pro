@@ -39,7 +39,6 @@ import { firstTacticInvariant } from '../../services/dnaLineNarrator';
 import { explainTemptingCapture } from '../../services/reviewTeachingPoints';
 import { judgeSequenceAttempt, moverPlies, type SequenceVerdict } from '../../services/sequenceChallenge';
 import { resolveReachState, reachAskDepth } from '../../services/reachRating';
-import { pickCameoAnchor, buildCameoPlayback, type CameoAnchor, type CameoPlayback } from '../../services/modelGameMatcher';
 import { voiceFacts } from '../../services/coachApi';
 import { logMisconception } from '../../services/misconceptionService';
 import { buildMisconceptionCallback } from '../../services/misconceptionCallbacks';
@@ -956,17 +955,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
    *  block) so handleShotContinue, declared earlier, can call it without a
    *  forward reference. */
   const tryStartSequenceRef = useRef<(() => boolean) | null>(null);
-  /** Mirror of the cameo card state (declared with the cameo block below);
-   *  early handlers read it through this ref, same pattern as seqStateRef. */
-  const cameoStateRef = useRef<{ stage: 'ask' | 'playback' } | null>(null);
   /** Mirror of the theory-departure card state (Phase 4 block below). */
   const theoryStateRef = useRef<{ stage: 'ask' | 'playback' } | null>(null);
   /** Late-bound canceller for the cards declared BELOW handleWalkForward
-   *  (sequence / cameo / theory). Populated by an effect once those cancel
+   *  (sequence / theory). Populated by an effect once those cancel
    *  helpers exist, so forward can DISMISS them (escape-hatch) instead of
-   *  no-op'ing — the "board frozen behind the card" bug (David 2026-07-19),
-   *  which the real-game audit caught still live for the cameo (stall at
-   *  ply 21, 2026-07-20). */
+   *  no-op'ing — the "board frozen behind the card" bug (David 2026-07-19). */
   const dismissLateCardsRef = useRef<(() => void) | null>(null);
 
   // BLUNDER REWIND (David 2026-07-11: "return to the last moment you had a
@@ -1067,11 +1061,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     }
     // FORWARD IS ALWAYS AN ESCAPE HATCH — dismiss any open card + advance, never
     // freeze the board (David 2026-07-19). These cards are declared BELOW, so
-    // rewind uses its in-scope setter and seq/cameo/theory go through the
-    // late-bound canceller ref. (The real-game audit caught the cameo still
-    // freezing forward at ply 21, 2026-07-20.)
+    // rewind uses its in-scope setter and seq/theory go through the
+    // late-bound canceller ref.
     if (rewindOffer) { setRewindOffer(null); walkPlayback.goForward(); return { advanced: true }; }
-    if (seqStateRef.current || cameoStateRef.current || theoryStateRef.current) {
+    if (seqStateRef.current || theoryStateRef.current) {
       dismissLateCardsRef.current?.();
       walkPlayback.goForward();
       return { advanced: true };
@@ -2560,119 +2553,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   }, [walkNarration]);
   const engineLines = useReviewEngineLines({ fens: reviewFens, enabled: engineLinesEnabled });
 
-  // ── MODEL-GAME CAMEO (Phase 2, David 2026-07-18) ─────────────────────────
-  // Danya's cameo: RARE (one per review, never more), NAMED (players, year,
-  // event), entering at the THEMATIC moment, with the comparison verified on
-  // BOTH boards (sharedFeatures are computed feature intersections — G0).
-  // The anchor ply is where the student game's structural match against the
-  // corpus PEAKS; the card offers the classic, never forces it.
-  interface CameoState {
-    anchor: CameoAnchor;
-    playback: CameoPlayback;
-    stage: 'ask' | 'playback';
-  }
-  const [cameoState, setCameoState] = useState<CameoState | null>(null);
-  useEffect(() => { cameoStateRef.current = cameoState; }, [cameoState]);
-  const cameoAnchorRef = useRef<{ anchor: CameoAnchor; playback: CameoPlayback } | null>(null);
-  const cameoScanDoneRef = useRef(false);
-  const cameoShownRef = useRef(false);
-  const cameoRunTokenRef = useRef(0);
-
   useEffect(() => {
-    setCameoState(null);
-    cameoAnchorRef.current = null;
-    cameoScanDoneRef.current = false;
-    cameoShownRef.current = false;
-    cameoRunTokenRef.current += 1;
     setPrincipleQuizState(null);
     principleQuizRef.current = null;
     principleQuizShownRef.current = false;
   }, [props.gameId]);
-
-  // One corpus scan per game, deferred off the mount path.
-  useEffect(() => {
-    if (cameoScanDoneRef.current || !reviewFens || reviewFens.length === 0) return;
-    cameoScanDoneRef.current = true;
-    const fens = reviewFens;
-    const family = openingName ? openingName.toLowerCase().replace(/[^a-z0-9]+/g, '-') : null;
-    const t = window.setTimeout(() => {
-      const anchor = pickCameoAnchor(fens, { openingFamily: family });
-      const playback = anchor ? buildCameoPlayback(anchor.cameo) : null;
-      if (anchor && playback) cameoAnchorRef.current = { anchor, playback };
-      void logAppAudit({
-        kind: 'coach-surface-migrated',
-        category: 'subsystem',
-        source: 'CoachGameReview.cameoScan',
-        summary: `cameo scan: ${anchor ? (playback ? `found ${anchor.cameo.white} vs ${anchor.cameo.black} @ ply ${anchor.plyIndex}` : 'found-but-unplayable') : 'no-match-above-floor'}`,
-      });
-    }, 250);
-    return () => window.clearTimeout(t);
-  }, [reviewFens, openingName]);
-
-  const cancelCameo = useCallback((): void => {
-    cameoRunTokenRef.current += 1;
-    if (cameoStateRef.current) {
-      setCameoState(null);
-      setWalkExplorationFen(null);
-      setWalkExplorationSan(null);
-    }
-  }, []);
-
-  /** Play the classic's thematic stretch on the review board: intro line,
-   *  silent voice-free plies (the board is the lesson), then the tie-back
-   *  citing the SHARED feature — every word computed metadata (G0). */
-  const runCameoPlayback = useCallback(async (state: CameoState): Promise<void> => {
-    const token = ++cameoRunTokenRef.current;
-    setCameoState({ ...state, stage: 'playback' });
-    const { anchor, playback } = state;
-    const c = anchor.cameo;
-    const yearPart = c.year !== null ? `, ${c.year}` : '';
-    const eventPart = c.event ? `. ${c.event}` : '';
-    const feature = c.sharedFeatures[0] ?? 'the same structure';
-    const intro = `${c.white} against ${c.black}${yearPart}${eventPart}. Same fabric as your game — ${feature}. Watch.`;
-    setWalkExplorationFen(playback.startFen);
-    setWalkExplorationSan(null);
-    try {
-      await reviewSay(intro);
-    } catch { /* voice failure never blocks the board */ }
-    if (cameoRunTokenRef.current !== token || !walkMountedRef.current) return;
-    for (const p of playback.plies) {
-      await new Promise((r) => setTimeout(r, 1100));
-      if (cameoRunTokenRef.current !== token || !walkMountedRef.current) return;
-      setWalkExplorationFen(p.fenAfter);
-      setWalkExplorationSan(p.san);
-      playMoveSound(p.san);
-    }
-    await new Promise((r) => setTimeout(r, 900));
-    if (cameoRunTokenRef.current !== token || !walkMountedRef.current) return;
-    const tieBack = `Back to your board — ${feature}, just like theirs.`;
-    try {
-      await reviewSay(tieBack);
-    } catch { /* ignore */ }
-    if (cameoRunTokenRef.current !== token || !walkMountedRef.current) return;
-    setCameoState(null);
-    setWalkExplorationFen(null);
-    setWalkExplorationSan(null);
-    captureEvent('review_cameo_watched', { game_id: c.gameId, ratio: c.ratio, matched: c.matched });
-  }, [playMoveSound]);
-
-  // Fire the ask ONCE, when the walk reaches the anchor ply and no other
-  // card is open. The card is an offer — Skip costs nothing.
-  useEffect(() => {
-    if (cameoShownRef.current) return;
-    const found = cameoAnchorRef.current;
-    if (!found) return;
-    if (walkPlayback.currentPly < found.anchor.plyIndex) return;
-    if (shotState || shotReveal || rewindOffer || seqStateRef.current) return;
-    if (walkPlayback.currentPly >= moves.length) return; // game over → summary owns the wrap
-    cameoShownRef.current = true;
-    setCameoState({ anchor: found.anchor, playback: found.playback, stage: 'ask' });
-    captureEvent('review_cameo_offered', {
-      game_id: found.anchor.cameo.gameId,
-      ply: found.anchor.plyIndex,
-      ratio: found.anchor.cameo.ratio,
-    });
-  }, [walkPlayback.currentPly, shotState, shotReveal, rewindOffer, moves.length]);
 
   // ── THEORY DEPARTURE (Phase 4, David 2026-07-18) ─────────────────────────
   // Danya quizzes theory before telling: at the ply where the game left
@@ -2702,7 +2587,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // their temporal dead zone.)
   useEffect(() => {
     if (walkExplorationFen !== null || walkShowMeActive) return; // a walkout owns the board
-    if (shotState || seqState || cameoState || theoryState) return; // a card owns the board
+    if (shotState || seqState || theoryState) return; // a card owns the board
     const seg = walkPlayback.currentSegment;
     const arrows = seg?.spokenLineArrows;
     // Clear ONLY when the ply changed — a fresh ply starts with a clean board.
@@ -2755,7 +2640,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         setWalkExplorationArrows([...painted]);
       }, Math.round(step * (i + 1)));
     });
-  }, [walkPlayback.currentPly, walkPlayback.currentSegment, walkPlayback.narrationState, walkExplorationFen, walkShowMeActive, shotState, seqState, cameoState, theoryState]);
+  }, [walkPlayback.currentPly, walkPlayback.currentSegment, walkPlayback.narrationState, walkExplorationFen, walkShowMeActive, shotState, seqState, theoryState]);
 
   const theoryFoundRef = useRef<{ dep: TheoryDeparture; bookLine: BookLinePly[] } | null>(null);
   const theoryScanDoneRef = useRef(false);
@@ -2824,16 +2709,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   }, []);
 
   // Wire the late-bound canceller so handleWalkForward (declared ABOVE these
-  // cards) can DISMISS the sequence / cameo / theory cards + advance, instead of
+  // cards) can DISMISS the sequence / theory cards + advance, instead of
   // freezing the board behind them (the ply-21 stall the audit caught).
   useEffect(() => {
     dismissLateCardsRef.current = (): void => {
       cancelSequence();
-      cancelCameo();
       cancelTheory();
     };
     return () => { dismissLateCardsRef.current = null; };
-  }, [cancelSequence, cancelCameo, cancelTheory]);
+  }, [cancelSequence, cancelTheory]);
 
   // Build the opening-theory lecture once per game (masters-DB tour of the
   // mainline / sidelines / best moves / departure), deferred off the mount path.
@@ -2950,7 +2834,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (!found) return;
     if (walkPlayback.currentPly < found.dep.departurePly) return;
     if (walkPlayback.currentPly >= moves.length) return;
-    if (shotState || shotReveal || rewindOffer || seqStateRef.current || cameoStateRef.current || principleQuizStateRef.current) return;
+    if (shotState || shotReveal || rewindOffer || seqStateRef.current || principleQuizStateRef.current) return;
     theoryShownRef.current = true;
     setTheoryState({ dep: found.dep, bookLine: found.bookLine, stage: 'ask' });
     setWalkExplorationFen(found.dep.bookFen); // the ask happens AT the book position
@@ -3000,7 +2884,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (!theme) return;
     if (walkPlayback.currentPly < theme.peakPly) return;
     // Non-blocking, but never talk over an open question or playback.
-    if (shotState || shotReveal || rewindOffer || seqStateRef.current || cameoStateRef.current || theoryStateRef.current || principleQuizStateRef.current) return;
+    if (shotState || shotReveal || rewindOffer || seqStateRef.current || theoryStateRef.current || principleQuizStateRef.current) return;
     themeSpokenRef.current = true;
     captureEvent('review_theme_named', { theme: theme.theme, at_ply: walkPlayback.currentPly });
     void reviewSay(theme.line).catch(() => undefined);
@@ -3011,7 +2895,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // and the walk "froze"). Whenever any question/playback card opens,
   // scroll the first present one into view.
   const anyCardOpen = Boolean(
-    shotState || shotReveal || trapQ || trapReveal || criticalCard || criticalReveal || rewindOffer || seqState || cameoState || theoryState || principleQuizState || faucetPhase !== 'idle',
+    shotState || shotReveal || trapQ || trapReveal || criticalCard || criticalReveal || rewindOffer || seqState || theoryState || principleQuizState || faucetPhase !== 'idle',
   );
   useEffect(() => {
     if (!anyCardOpen) return;
@@ -3024,9 +2908,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           '[data-testid="review-find-shot-reveal"]',
           '[data-testid="review-sequence-ask"]',
           '[data-testid="review-sequence-playback"]',
-          '[data-testid="review-cameo-ask"]',
-          '[data-testid="review-cameo-playback"]',
-          '[data-testid="review-theory-ask"]',
+                              '[data-testid="review-theory-ask"]',
           '[data-testid="review-theory-playback"]',
           '[data-testid="review-principle-quiz"]',
           '[data-testid="review-trap-card"]',
@@ -3058,7 +2940,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // card follows another, `anyCardOpen` never transitions, so the second card
     // (the find-shot prompt) opened below the fold as a border-sliver (David
     // 2026-07-21, IMG_4581: "that thin purple line below the board").
-  }, [anyCardOpen, shotState, shotReveal, trapQ, trapReveal, criticalCard, criticalReveal, rewindOffer, seqState, cameoState, theoryState, principleQuizState, faucetPhase]);
+  }, [anyCardOpen, shotState, shotReveal, trapQ, trapReveal, criticalCard, criticalReveal, rewindOffer, seqState, theoryState, principleQuizState, faucetPhase]);
 
   // ship-4: `currentMove` removed — only the deleted analysis-phase
   // board read it. Walk render uses `walkPlayback.currentSegment` and
@@ -3680,7 +3562,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         // NEVER paint the better-move arrow while a find-the-shot question is
         // open — the arrow IS the answer (honesty contract rule 1). Same for
         // the spot-the-sequence ask: an arrow would leak the next ply.
-        if (shotState || seqState || cameoState || theoryState) return undefined;
+        if (shotState || seqState || theoryState) return undefined;
         // Better-line PLAYOUT arrows: the board is on the exploration FEN and each
         // played ply paints a green lead-the-eye arrow on the move being narrated
         // (David 2026-07-19: the stronger line "has no arrows"). Take precedence
@@ -3723,9 +3605,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // sets `walkExplorationFen` on the first tick (which would
       // otherwise flip this true via the second clause below).
       // THE BOARD IS FREE on every ply (David 2026-09-05). Only a playout that
-      // drives the board itself (show-me / sequence / cameo / theory) locks it —
+      // drives the board itself (show-me / sequence / theory) locks it —
       // no mid-animation drags. Everywhere else a piece moved = exploring.
-      const walkBoardInteractive = !(walkShowMeActive || seqState?.stage === 'playback' || cameoState !== null || theoryState?.stage === 'playback');
+      const walkBoardInteractive = !(walkShowMeActive || seqState?.stage === 'playback' || theoryState?.stage === 'playback');
       // During a find-the-shot the board MUST sit on the shot's own position
       // (the pre-move FEN where the better move is legal) — otherwise it shows
       // the position AFTER the played move and the answer can't be played at
@@ -3968,7 +3850,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   // advances (the review's "next phrase"), and stand down while a
                   // card/walkout/exploration owns the board so nothing double-marks.
                   annotationHighlights={(() => {
-                    if (walkExplorationFen || walkShowMeActive || shotState || seqState || cameoState || theoryState) return undefined;
+                    if (walkExplorationFen || walkShowMeActive || shotState || seqState || theoryState) return undefined;
                     const ks = seg?.keySquares;
                     return ks && ks.length ? ks.map((square) => ({ square, color: '#eab308' })) : undefined;
                   })()}
@@ -4436,43 +4318,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               </div>
             )}
 
-            {/* MODEL-GAME CAMEO (Phase 2) — the ONE classic whose structure
-                matches this game, offered at the thematic ply. */}
-            {cameoState?.stage === 'ask' && (
-              <div data-testid="review-cameo-ask" className="mx-3 my-1 rounded-xl border-2 border-amber-500/40 bg-amber-500/10 px-3 py-2">
-                <div className="text-sm text-amber-100">
-                  This structure has a famous echo — {cameoState.anchor.cameo.white} vs {cameoState.anchor.cameo.black}
-                  {cameoState.anchor.cameo.year !== null ? `, ${cameoState.anchor.cameo.year}` : ''}
-                  {cameoState.anchor.cameo.event ? ` (${cameoState.anchor.cameo.event})` : ''}.
-                  <span className="ml-1 text-amber-300/80">Shared with your game: {cameoState.anchor.cameo.sharedFeatures[0]}.</span>
-                </div>
-                <div className="mt-1.5 flex gap-2">
-                  <button type="button" data-testid="review-cameo-watch"
-                    onClick={() => { if (cameoStateRef.current) void runCameoPlayback(cameoState); }}
-                    className="rounded-lg border border-amber-400/50 px-2.5 py-1 text-xs font-semibold text-amber-200 hover:bg-amber-500/20">
-                    Watch the classic
-                  </button>
-                  <button type="button" data-testid="review-cameo-skip"
-                    onClick={() => { cancelCameo(); }}
-                    className="rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20">
-                    Skip
-                  </button>
-                </div>
-              </div>
-            )}
-            {cameoState?.stage === 'playback' && (
-              <div data-testid="review-cameo-playback" className="mx-3 my-1 rounded-xl border-2 border-amber-500/40 bg-amber-500/10 px-3 py-2">
-                <div className="text-sm text-amber-100">
-                  {cameoState.anchor.cameo.white} vs {cameoState.anchor.cameo.black} — the thematic stretch…
-                </div>
-                <button type="button" data-testid="review-cameo-stop"
-                  onClick={() => { cancelCameo(); }}
-                  className="mt-1.5 rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20">
-                  Back to my game
-                </button>
-              </div>
-            )}
-
             {/* THEORY DEPARTURE (Phase 4) — book ended here: quiz the main
                 move on the board, then play the book line with stats. */}
             {theoryState?.stage === 'ask' && (
@@ -4782,7 +4627,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 <KeyMomentNav
                   moves={moves}
                   currentIndex={walkMoveIndex}
-                  onNavigate={(idx: number) => { cancelSequence(); cancelCameo(); cancelTheory(); setPrincipleQuizState(null); walkPlayback.jumpToPly(idx + 1); }}
+                  onNavigate={(idx: number) => { cancelSequence(); cancelTheory(); setPrincipleQuizState(null); walkPlayback.jumpToPly(idx + 1); }}
                   className=""
                   extraIndices={walkPlayback.hintPlies.map((ply) => ply - 1)}
                 />
@@ -4792,7 +4637,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   moves={moves}
                   openingName={openingName}
                   currentMoveIndex={walkMoveIndex >= 0 ? walkMoveIndex : null}
-                  onMoveClick={(idx: number) => { cancelSequence(); cancelCameo(); cancelTheory(); setPrincipleQuizState(null); walkPlayback.jumpToPly(idx + 1); }}
+                  onMoveClick={(idx: number) => { cancelSequence(); cancelTheory(); setPrincipleQuizState(null); walkPlayback.jumpToPly(idx + 1); }}
                   className="h-full"
                 />
               </div>
@@ -4804,7 +4649,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 tapping jumps the main board to that ply. */}
             <ReviewCitationPreviews
               citations={reviewCitations}
-              onJumpToPly={(ply: number) => { cancelSequence(); cancelCameo(); cancelTheory(); setPrincipleQuizState(null); walkPlayback.jumpToPly(ply); }}
+              onJumpToPly={(ply: number) => { cancelSequence(); cancelTheory(); setPrincipleQuizState(null); walkPlayback.jumpToPly(ply); }}
             />
 
             {/* Missed tactics — ship-1 made this non-empty for every

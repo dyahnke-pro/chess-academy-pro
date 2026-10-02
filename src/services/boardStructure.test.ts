@@ -2,8 +2,6 @@ import { describe, it, expect } from 'vitest';
 import {
   describeStructure,
   structureSignature,
-  structureMatchScore,
-  structureMatchDetail,
 } from './boardStructure';
 
 const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -89,39 +87,14 @@ describe('boardStructure — pure structural facts (Phase 0)', () => {
     expect(describeStructure('not a fen')).toBeNull();
   });
 
-  describe('structureSignature + matching (Phase 2 metric)', () => {
-    it('a FEATURED position matches itself at 1.0', () => {
-      const sig = structureSignature('r1bqkb1r/pp3ppp/2n2n2/3N4/4P3/8/PPPP1PPP/R1BQKBNR w KQkq - 0 1')!;
-      expect(structureMatchScore(sig, sig)).toBe(1);
-    });
-
-    it('two FEATURELESS positions score 0 — vacuous matches are rejected, not perfect', () => {
-      // The start position has no outposts, no passed pawns, no open files,
-      // no iqp, no locked centre, no split majority, no endgame — nothing a
-      // teacher could point at as "the same kind of position". Weight 0.
-      const sig = structureSignature(START)!;
-      const d = structureMatchDetail(sig, sig);
-      expect(d.weight).toBe(0);
-      expect(structureMatchScore(sig, sig)).toBe(0);
-    });
-
-    it('two outpost positions on the SAME square score higher than unrelated shapes', () => {
-      const outpostA = structureSignature('r1bqkb1r/pp3ppp/2n2n2/3N4/4P3/8/PPPP1PPP/R1BQKBNR w KQkq - 0 1')!;
-      const outpostB = structureSignature('r2qkb1r/pp3ppp/2n1bn2/3N4/4P3/5N2/PPPP1PPP/R1BQKB1R w KQkq - 0 1')!;
-      const unrelated = structureSignature('4k3/1r3ppp/8/8/8/8/R4PPP/4K3 w - - 0 1')!;
-      expect(structureMatchScore(outpostA, outpostB)).toBeGreaterThan(structureMatchScore(outpostA, unrelated));
-      expect(structureMatchScore(outpostA, outpostB)).toBeGreaterThanOrEqual(0.6);
-    });
-
-    it('flags the isolani (IQP) and matches two IQP middlegames on it', () => {
+  describe('structureSignature', () => {
+    it('flags the isolani (IQP)', () => {
       // Classic White IQP on d4 (c- and e-pawns gone both sides).
       const iqpA = structureSignature('r2q1rk1/pp2bppp/2n1bn2/8/2BP4/2N2N2/PP3PPP/R1BQR1K1 w - - 4 12')!;
       expect(iqpA.iqp).toBe(true);
       // Another IQP shape (different game, same structure class).
       const iqpB = structureSignature('r1bq1rk1/pp2bppp/2n2n2/8/2BP4/2N2N2/PP2QPPP/R1B2RK1 w - - 0 11')!;
       expect(iqpB.iqp).toBe(true);
-      const d = structureMatchDetail(iqpA, iqpB);
-      expect(d.score / d.weight).toBeGreaterThanOrEqual(0.6);
     });
 
     it('flags a locked French-style centre', () => {

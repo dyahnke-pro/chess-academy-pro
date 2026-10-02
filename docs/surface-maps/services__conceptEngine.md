@@ -121,7 +121,7 @@
 - `src/services/conceptEngine.test.ts:206`
 - `src/services/conceptEngine.test.ts:224`
 - `src/services/liveTacticsContext.ts:116`
-- `src/services/positionFacts.ts:770`
+- `src/services/positionFacts.ts:774`
 
 ### `LineInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -159,22 +159,22 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `definitionKey` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7451`
-- `src/components/Coach/CoachTeachPage.tsx:7455`
+- `src/components/Coach/CoachTeachPage.tsx:7461`
+- `src/components/Coach/CoachTeachPage.tsx:7465`
 - `src/services/learnWalkBlumenfeld.test.ts:133`
-- `src/services/positionFacts.ts:1048`
-- `src/services/positionFacts.ts:1051`
-- `src/services/positionFacts.ts:1436`
-- `src/services/reviewFullData.ts:460`
-- `src/services/reviewFullData.ts:463`
+- `src/services/positionFacts.ts:1064`
+- `src/services/positionFacts.ts:1067`
+- `src/services/positionFacts.ts:1453`
+- `src/services/reviewFullData.ts:461`
+- `src/services/reviewFullData.ts:464`
 
 ### `tacticInvariant` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7452`
+- `src/components/Coach/CoachTeachPage.tsx:7462`
 - `src/services/dnaLineNarrator.ts:185`
 - `src/services/dnaLineNarrator.ts:216`
 - `src/services/dnaLineNarrator.ts:252`
 - `src/services/puzzleConceptExplanation.ts:100`
-- `src/services/reviewFullData.ts:459`
+- `src/services/reviewFullData.ts:460`
 - `src/services/tacticAlertService.ts:141`
 - `src/services/tacticTypeUnification.test.ts:199`
 - `src/test/auditConceptGameplayCues.test.ts:24`
