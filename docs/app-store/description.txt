@@ -1,28 +1,3 @@
-# App Store copy — native release, version after 4.0.5 (David 2026-10-02, approved)
-
-> Rule: every line must be TRUE of the build being submitted. David approved
-> this copy on 2026-10-02 ("Capabilities version", plus the new-player line;
-> description + promo text updated too). Claims checked against the merged
-> build: Review "starts the second your game ends" = prepares at game end
-> (NOT "ready instantly" — a cold-opened game still takes ~40 s).
-
-## Subtitle (30 max)
-A coach that thinks with you
-
-## Promotional text (170 max)
-It reads every move, remembers every mistake, and speaks up at the exact moment it matters. This is what having a real chess coach feels like.
-
-## What's New
-Your coach now reads your opponent. Every move they make, what it's after, and how to punish it.
-
-• New to chess? Tell us on day one and your coach starts where you are: plain-word moves, the fundamentals behind every slip, and a Start-here path to your first opening.
-• Review starts the second your game ends. Their mistakes, your missed chances, the move it turned on.
-• Tactics that hit. Rewards on every solve, Deep Run, and "Up next" picks the puzzle you need most.
-• Coach on call. Ask anything mid-game in Play; every coaching tool answers.
-• Weaknesses, sorted by cause. Mistakes grouped by the habit behind them.
-• More arrows: moves the coach names, and whole lines, now show on the board.
-
-## Description
 It sees the fork before you do. Then it teaches you to see it first.
 
 Chess Academy Pro isn't a puzzle feed. It's a coach with a real chess engine for a brain and a memory for everything you've ever played.

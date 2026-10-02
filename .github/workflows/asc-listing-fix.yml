@@ -7,6 +7,10 @@ on:
         description: 'Set to "1" to PATCH the live description (otherwise dry-run)'
         required: false
         default: ''
+      marketing_file:
+        description: 'Repo path of new marketing copy to replace the description above the subscription block (blank = keep)'
+        required: false
+        default: ''
       subtitle:
         description: 'App Store subtitle (<=30 chars). Leave blank to only REPORT the current one.'
         required: false
@@ -38,4 +42,5 @@ jobs:
           # analysis, which appeared in no field before.
           KEYWORDS: 'tactics,puzzles,endgame,strategy,lessons,analysis,gambit,learn,study,stockfish,checkmate,openings'
           SUBTITLE: ${{ github.event.inputs.subtitle }}
+          MARKETING_FILE: ${{ github.event.inputs.marketing_file }}
         run: node scripts/ci/asc-listing-fix.mjs
