@@ -1125,6 +1125,23 @@ class VoiceService {
     return this.speakInternal(sanitizeForTTS(text), false);
   }
 
+  /** Speak once the current line has FINISHED — never cut it, never drop the
+   *  new one (PostHog, David's phone, 2026-10-02: a puzzle's struggle coach
+   *  fired over the wrong-try refutation and cut it mid-sentence). Waits while
+   *  audio is in flight; gives up only when `stale()` says the moment has
+   *  passed (a new try, a new puzzle) or after `maxWaitMs`. */
+  async speakWhenIdle(text: string, opts?: { stale?: () => boolean; maxWaitMs?: number; onStart?: () => void }): Promise<void> {
+    const deadline = Date.now() + (opts?.maxWaitMs ?? 20_000);
+    while ((this.isPlaying() || speechService.isSpeaking) && Date.now() < deadline) {
+      if (opts?.stale?.()) return;
+      await new Promise((r) => setTimeout(r, 200));
+    }
+    if (opts?.stale?.()) return;
+    opts?.onStart?.();
+    this.logSpeakInvoked('speakWhenIdle', text);
+    return this.speakInternal(sanitizeForTTS(text), false);
+  }
+
   /** Speak using the personality's SECONDARY voice — for short tactic
    *  Speak regardless of the voiceEnabled preference.
    *  Used by streaming sentence chains, walkthroughs, voice-chat mic
@@ -2003,9 +2020,17 @@ class VoiceService {
     const ms = Math.min(12_000, Math.max(400, Math.round((words / 150) * 60_000)));
     const genAtStart = this.stopGeneration;
     const step = 100;
-    for (let waited = 0; waited < ms; waited += step) {
-      if (this.stopGeneration !== genAtStart) return; // superseded — stop early
-      await new Promise((r) => setTimeout(r, Math.min(step, ms - waited)));
+    // A muted line is "playing" for its simulated duration, exactly as a real
+    // one is — so `isPlaying()` (and everything that waits on it) behaves the
+    // same in an audit as on a phone.
+    this.playing = true;
+    try {
+      for (let waited = 0; waited < ms; waited += step) {
+        if (this.stopGeneration !== genAtStart) return; // superseded — stop early
+        await new Promise((r) => setTimeout(r, Math.min(step, ms - waited)));
+      }
+    } finally {
+      if (this.stopGeneration === genAtStart) this.playing = false;
     }
   }
 

@@ -3,10 +3,10 @@ import { render, screen, waitFor, act } from '../../test/utils';
 import { PuzzleBoard, type PuzzleOutcome } from './PuzzleBoard';
 import type { PuzzleRecord } from '../../types';
 
-// DEEP RUN'S BOARD CONTRACT (David 2026-10-02): "we give the user as many tries
-// as they want to solve on their own … Hints are given until top of ladder is
-// reached" and "Only clean moves bank". A wrong try never resolves the puzzle;
-// it climbs the hint ladder, and the move it was made on stops counting clean.
+// ONE LINE PER MISS (PostHog, David's phone, 2026-10-02): the struggle
+// coach's method beat and the wrong-try refutation were spoken separately ~80ms
+// apart, so the refutation cut the method off mid-sentence. The method that a
+// miss earns now waits for the refutation and is spoken WITH it.
 
 const makeMoveSpy = vi.hoisted(() => vi.fn().mockReturnValue({ san: 'Nbd7' }));
 let latestOnMove: ((m: { from: string; to: string; san: string }) => void) | null = null;
@@ -44,7 +44,11 @@ vi.mock('../../services/voiceService', async () => {
   voiceService.speakWhenIdle.mockImplementation((_t: string, o?: { onStart?: () => void }): void => { o?.onStart?.(); });
   return { voiceService };
 });
-vi.mock('../../hooks/useStruggleDetection', () => { const reset = vi.fn(); return { useStruggleDetection: () => ({ reset }) }; });
+let latestOnCoach: ((m: string, t: string) => void) | null = null;
+vi.mock('../../hooks/useStruggleDetection', () => {
+  const reset = vi.fn();
+  return { useStruggleDetection: (o: { onCoach: (m: string, t: string) => void }) => { latestOnCoach = o.onCoach; return { reset }; } };
+});
 vi.mock('../../services/tacticAlertService', () => ({ recordTacticOutcome: vi.fn() }));
 vi.mock('../../services/tacticClassifierService', () => ({
   getTacticTypeFromThemes: vi.fn().mockReturnValue(null), getPrimaryThemeLabel: vi.fn().mockReturnValue(null),
@@ -63,44 +67,33 @@ const PUZZLE: PuzzleRecord = {
   srsRepetitions: 0, srsDueDate: '2026-10-01', srsLastReview: null, userRating: 1200, attempts: 0, successes: 0,
 };
 
-describe('PuzzleBoard — unlimited tries, hint on miss, clean moves', () => {
-  beforeEach(() => { vi.clearAllMocks(); latestOnMove = null; readWrongTry.mockResolvedValue({ kind: 'refuted', text: 'Qe3? Then Qxe2.', replySan: 'Qxe2', replyFrom: 'd8', replyTo: 'e2' }); });
+describe('PuzzleBoard — one spoken line per miss', () => {
+  beforeEach(() => { vi.clearAllMocks(); latestOnMove = null; latestOnCoach = null; });
 
-  async function mount(onComplete: (o: PuzzleOutcome) => void): Promise<void> {
-    render(<PuzzleBoard puzzle={PUZZLE} onComplete={onComplete} maxWrongAttempts={Number.POSITIVE_INFINITY} hintOnMiss />);
+  it('the method beat the miss earned is spoken WITH the refutation, never cut by it', async () => {
+    let resolveRead: (v: unknown) => void = () => undefined;
+    readWrongTry.mockReturnValue(new Promise((r) => { resolveRead = r; }));
+    const { voiceService } = await import('../../services/voiceService');
+    render(<PuzzleBoard puzzle={PUZZLE} onComplete={vi.fn<(o: PuzzleOutcome) => void>()} maxWrongAttempts={5} />);
     await screen.findByTestId('chess-board');
     await waitFor(() => expect(screen.queryByTestId('puzzle-loading')).not.toBeInTheDocument(), { timeout: 2000 });
-  }
-
-  it('a clean solve reports every solver move clean', async () => {
-    const onComplete = vi.fn<(o: PuzzleOutcome) => void>();
-    await mount(onComplete);
-    act(() => { latestOnMove!({ from: 'e4', to: 'd6', san: 'Nd6#' }); });
-    await waitFor(() => expect(onComplete).toHaveBeenCalled(), { timeout: 4000 });
-    expect(onComplete.mock.calls[0][0]).toMatchObject({ correct: true, cleanMoves: 1, showedSolution: false });
+    act(() => { latestOnMove!({ from: 'e2', to: 'e3', san: 'Qe3' }); });
+    // The struggle coach reacts to the miss BEFORE the refutation is read.
+    act(() => { latestOnCoach!('This was the moment to slow down', 'nudge'); });
+    expect(voiceService.speak).not.toHaveBeenCalled();
+    expect(voiceService.speakWhenIdle).not.toHaveBeenCalled();
+    await act(async () => { resolveRead({ kind: 'refuted', text: 'Qe3? Then Qxe2.', replySan: 'Qxe2', replyFrom: 'd8', replyTo: 'e2' }); });
+    await waitFor(() => expect(voiceService.speak).toHaveBeenCalledTimes(1));
+    expect(voiceService.speak).toHaveBeenCalledWith('Qe3? Then Qxe2. This was the moment to slow down.');
   });
 
-  it('a wrong try does NOT end the puzzle, reads why it fails + the next rung, and the move no longer banks', async () => {
-    const onComplete = vi.fn<(o: PuzzleOutcome) => void>();
-    await mount(onComplete);
-    act(() => { latestOnMove!({ from: 'e2', to: 'e3', san: 'Qe3' }); });
-    // The ladder is the puzzle's own rungs — never the one-tap-answer button.
-    const requestHint = (globalThis as { __requestHint?: ReturnType<typeof vi.fn> }).__requestHint!;
-    expect(requestHint).not.toHaveBeenCalled();
+  it('with no miss pending, a struggle line waits for the voice to be free — never cuts, never drops', async () => {
     const { voiceService } = await import('../../services/voiceService');
-    await waitFor(() => expect(voiceService.speak).toHaveBeenCalledWith(expect.stringMatching(/^Qe3\? Then Qxe2\. /)));
-    await new Promise((r) => setTimeout(r, 1200)); // back to playing
-    expect(onComplete).not.toHaveBeenCalled();
-    act(() => { latestOnMove!({ from: 'e2', to: 'e3', san: 'Qe3' }); });
-    await new Promise((r) => setTimeout(r, 1200));
-    expect(onComplete).not.toHaveBeenCalled(); // as many tries as they want
-    act(() => { latestOnMove!({ from: 'e4', to: 'd6', san: 'Nd6#' }); });
-    await waitFor(() => expect(onComplete).toHaveBeenCalled(), { timeout: 4000 });
-    expect(onComplete.mock.calls[0][0]).toMatchObject({ correct: true, cleanMoves: 0, hadRetry: true });
-  }, 15000);
-
-  it('Show solution stays on the board while playing', async () => {
-    await mount(vi.fn());
-    expect(screen.getByTestId('show-solution-button')).toBeInTheDocument();
+    render(<PuzzleBoard puzzle={PUZZLE} onComplete={vi.fn<(o: PuzzleOutcome) => void>()} />);
+    await screen.findByTestId('chess-board');
+    act(() => { latestOnCoach!('Take your time.', 'nudge'); });
+    // Never over a line already playing: it waits its turn, it is not dropped.
+    expect(voiceService.speakWhenIdle).toHaveBeenCalledWith('Take your time.', expect.objectContaining({ stale: expect.any(Function) }));
+    expect(voiceService.stop).not.toHaveBeenCalled();
   });
 });

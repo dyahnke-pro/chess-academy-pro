@@ -35,9 +35,10 @@ vi.mock('../../hooks/useHintSystem', () => {
   return { useHintSystem: () => ({ hintState, requestHint, resetHints }) };
 });
 vi.mock('../../hooks/useBoardContext', () => ({ useBoardContext: vi.fn() }));
-vi.mock('../../services/voiceService', () => ({
-  voiceService: { speak: vi.fn().mockResolvedValue(undefined), stop: vi.fn(), isPlaying: vi.fn().mockReturnValue(false), warmup: vi.fn().mockResolvedValue(undefined) },
-}));
+vi.mock('../../services/voiceService', async () => {
+  const { buildVoiceServiceMock } = await import('../../test/mocks/voice-service');
+  return { voiceService: buildVoiceServiceMock() };
+});
 vi.mock('../../hooks/useStruggleDetection', () => { const reset = vi.fn(); return { useStruggleDetection: () => ({ reset }) }; });
 vi.mock('../../services/tacticAlertService', () => ({ recordTacticOutcome: vi.fn() }));
 vi.mock('../../services/tacticClassifierService', () => ({
@@ -47,7 +48,7 @@ vi.mock('../../stores/appStore', () => ({ useAppStore: () => null }));
 vi.mock('../../hooks/useStudentRecord', () => ({ useStudentRecord: () => ({ current: { weaknesses: [], capabilities: null } }) }));
 vi.mock('../../services/capabilityEvidence', () => ({ recordCapabilityEvidence: vi.fn().mockResolvedValue(1) }));
 const readWrongTry = vi.fn();
-vi.mock('../../services/wrongTryRefutation', () => ({ readWrongTry: (...a: unknown[]) => readWrongTry(...a) }));
+vi.mock('../../services/wrongTryRefutation', async (orig) => ({ ...(await orig<typeof import('../../services/wrongTryRefutation')>()), readWrongTry: (...a: unknown[]) => readWrongTry(...a) }));
 
 const PUZZLE: PuzzleRecord = {
   id: '0Flch',

@@ -4,7 +4,7 @@ import { ChessBoard } from '../Board/ChessBoard';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useSettings } from '../../hooks/useSettings';
-import { readWrongTry } from '../../services/wrongTryRefutation';
+import { readWrongTry, composeWrongTryLine } from '../../services/wrongTryRefutation';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { rerenderMistakeNarration } from '../../services/mistakePuzzleService';
 import { puzzleMethodLine } from '../../services/puzzleMethod';
@@ -157,6 +157,14 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   const [state, setState] = useState<PuzzleState>('loading');
   const resolvedForRef = useRef<string | null>(null);
   const tryTokenRef = useRef(0);
+  /** A wrong try's refutation is still being read. While it is, a coaching
+   *  line the SAME miss triggered (the struggle coach's method beat) waits and
+   *  is spoken with it as ONE line — spoken separately, the refutation landed
+   *  ~80ms later and cut the method off mid-sentence (PostHog, David's phone,
+   *  2026-10-02: "This was the moment to slow down — positions where one move"
+   *  → "rook to e1? Then a-pawn takes b5…"). */
+  const wrongTryPendingRef = useRef(false);
+  const heldCoachRef = useRef<string | null>(null);
   const narrationRef = useRef(puzzle.narration);
   const saidHabitsRef = useRef(new Set<MethodHabit>());
   // The student's WHOLE record (holes + proven), so the method beat is decided
@@ -262,9 +270,17 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
 
   // Proactive struggle detection — coach speaks up when player is stuck
   const handleStruggleCoach = useCallback((message: string, _tier: CoachingTier) => {
-    voiceService.stop();
-    setSubtitle(message);
-    void voiceService.speak(message);
+    if (wrongTryPendingRef.current) {
+      heldCoachRef.current = message;
+      return;
+    }
+    // Never over the top of a line already playing (the refutation of the
+    // last try, the intro): wait for it to finish. A new try supersedes it.
+    const token = tryTokenRef.current;
+    void voiceService.speakWhenIdle(message, {
+      stale: () => tryTokenRef.current !== token,
+      onStart: () => setSubtitle(message),
+    });
   }, []);
 
   const { reset: resetStruggle } = useStruggleDetection({
@@ -854,10 +870,17 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       // hint is the fallback when the refutation is quiet; the token drops a
       // late engine read once a newer try or a new puzzle has arrived.
       const tryToken = ++tryTokenRef.current;
-      void readWrongTry(prevFen, move.san).then((read) => {
+      wrongTryPendingRef.current = true;
+      heldCoachRef.current = null;
+      void readWrongTry(prevFen, move.san).catch(() => null).then((read) => {
         if (tryToken !== tryTokenRef.current) return;
-        const line = read ? `${read.text} ${hint}` : hint;
+        wrongTryPendingRef.current = false;
+        const held = heldCoachRef.current;
+        heldCoachRef.current = null;
+        // ONE line per miss: why the try fails, the method, then the rung.
+        const line = composeWrongTryLine(read?.text ?? null, held, hint);
         setSubtitle(line);
+        voiceService.stop();
         void voiceService.speak(line);
       });
 

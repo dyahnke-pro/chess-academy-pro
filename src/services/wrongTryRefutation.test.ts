@@ -41,3 +41,16 @@ describe('readWrongTry — what a wrong try runs into', () => {
     expect(await readWrongTry(FEN, 'Qh1', engineSays('d3d6', 66))).toBeNull();
   });
 });
+
+describe('composeWrongTryLine — one line per miss', () => {
+  it('orders why → method → where, as one line', async () => {
+    const { composeWrongTryLine } = await import('./wrongTryRefutation');
+    expect(composeWrongTryLine('Re1? Then axb5, winning your bishop on b5.', 'This was the moment to slow down', 'Look at what your queen can do.'))
+      .toBe('Re1? Then axb5, winning your bishop on b5. This was the moment to slow down. Look at what your queen can do.');
+  });
+  it('drops empty parts and says a repeated part once', async () => {
+    const { composeWrongTryLine } = await import('./wrongTryRefutation');
+    expect(composeWrongTryLine(null, null, 'Look for the most forcing move.')).toBe('Look for the most forcing move.');
+    expect(composeWrongTryLine('Look for a fork.', 'Look for a fork.', null)).toBe('Look for a fork.');
+  });
+});

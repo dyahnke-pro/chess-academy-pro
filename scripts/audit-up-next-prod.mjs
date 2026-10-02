@@ -24,6 +24,7 @@ import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } f
 import { muteTtsForAudit, stampAuditRunId } from './audit-lib/mute-tts.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
+import { until } from './audit-lib/wedge-watch.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const results = [];
@@ -109,12 +110,13 @@ async function solveCurrent() {
   return true;
 }
 async function watchBanners(ms) {
-  const t0 = Date.now();
-  while (Date.now() - t0 < ms) {
+  // Collect every banner for the whole window — the predicate never ends the
+  // wait early; `until` bounds each read against the remaining budget.
+  await until(async () => {
     const t = await page.locator('[data-testid="reward-banner"]').innerText().catch(() => '');
     if (t && banners[banners.length - 1] !== t) banners.push(t);
-    await page.waitForTimeout(250);
-  }
+    return false;
+  }, ms, 250);
 }
 async function home() {
   await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 45000 });

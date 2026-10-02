@@ -24,6 +24,7 @@ import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } f
 import { muteTtsForAudit, stampAuditRunId } from './audit-lib/mute-tts.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
+import { until } from './audit-lib/wedge-watch.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 
@@ -54,13 +55,9 @@ const rowsOf = (kind) => listener.getCapturedEvents().filter((e) => e.kind === k
   return { summary: String(e.summary ?? ''), details };
 });
 async function waitRow(kind, n, ms = 30000) {
-  const t0 = Date.now();
-  while (Date.now() - t0 < ms) {
-    const r = rowsOf(kind);
-    if (r.length >= n) return r[n - 1];
-    await page.waitForTimeout(300);
-  }
-  return null;
+  await until(() => rowsOf(kind).length >= n, ms, 300);
+  const r = rowsOf(kind);
+  return r.length >= n ? r[n - 1] : null;
 }
 /** The puzzle record, read straight from the app's IndexedDB. */
 async function readPuzzle(id) {

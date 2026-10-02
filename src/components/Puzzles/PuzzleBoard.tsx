@@ -14,7 +14,7 @@ import type { MoveResult } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { voiceService } from '../../services/voiceService';
 import { getWrongMoveHint } from '../../utils/puzzleHints';
-import { readWrongTry } from '../../services/wrongTryRefutation';
+import { readWrongTry, composeWrongTryLine } from '../../services/wrongTryRefutation';
 import { puzzleMethodLine, cpFromThemes } from '../../services/puzzleMethod';
 import { useStudentRecord } from '../../hooks/useStudentRecord';
 import { recordCapabilityEvidence } from '../../services/capabilityEvidence';
@@ -135,6 +135,14 @@ export function PuzzleBoard({
   const terminal = terminalId === puzzle.id;
   const conceptSpokenRef = useRef<string | null>(null);
   const tryTokenRef = useRef(0);
+  /** A wrong try's refutation is still being read. While it is, a coaching
+   *  line the SAME miss triggered (the struggle coach's method beat) waits and
+   *  is spoken with it as ONE line — spoken separately, the refutation landed
+   *  ~80ms later and cut the method off mid-sentence (PostHog, David's phone,
+   *  2026-10-02: "This was the moment to slow down — positions where one move"
+   *  → "rook to e1? Then a-pawn takes b5…"). */
+  const wrongTryPendingRef = useRef(false);
+  const heldCoachRef = useRef<string | null>(null);
   // The FIRST answer is the evidence (see MistakePuzzleBoard): recorded once.
   const answeredRef = useRef(false);
   // Habits taught this session — the method beat says each one once.
@@ -218,9 +226,17 @@ export function PuzzleBoard({
 
   // Proactive struggle detection — coach speaks up when player is stuck
   const handleStruggleCoach = useCallback((message: string, _tier: CoachingTier) => {
-    voiceService.stop();
-    setSubtitle(message);
-    void voiceService.speak(message);
+    if (wrongTryPendingRef.current) {
+      heldCoachRef.current = message;
+      return;
+    }
+    // Never over the top of a line already playing (the refutation of the
+    // last try, the intro): wait for it to finish. A new try supersedes it.
+    const token = tryTokenRef.current;
+    void voiceService.speakWhenIdle(message, {
+      stale: () => tryTokenRef.current !== token,
+      onStart: () => setSubtitle(message),
+    });
   }, []);
 
   // "TEACH ME THIS POSITION" — the one read every surface shares, fed by the
@@ -536,7 +552,9 @@ export function PuzzleBoard({
         expected.to,
         new Chess(fenBeforeAttempt),
       );
-      void readWrongTry(fenBeforeAttempt, move.san).then((read) => {
+      wrongTryPendingRef.current = true;
+      heldCoachRef.current = null;
+      void readWrongTry(fenBeforeAttempt, move.san).catch(() => null).then((read) => {
         // A first answer that is genuinely wrong breaks the capability; one
         // that still wins ("also good") is not a failure and is not recorded.
         if (firstAnswer && read?.kind !== 'also-good') {
@@ -546,11 +564,17 @@ export function PuzzleBoard({
           });
         }
         if (tryToken !== tryTokenRef.current) return;
-        // On the ladder, the student hears WHY the try fails AND the next rung.
-        const line = hintOnMiss
-          ? (read && read.kind !== 'also-good' ? `${read.text} ${hint}` : read?.text ?? hint)
-          : read?.text ?? hint;
+        wrongTryPendingRef.current = false;
+        const held = heldCoachRef.current;
+        heldCoachRef.current = null;
+        // ONE line per miss. On the ladder: why the try fails, the method,
+        // then the next rung. Off it: the refutation (or the rung when the
+        // try is quietly fine), then the method.
+        const line = hintOnMiss && read && read.kind !== 'also-good'
+          ? composeWrongTryLine(read.text, held, hint)
+          : composeWrongTryLine(read?.text ?? hint, held, null);
         setSubtitle(line);
+        voiceService.stop();
         if (settings.voiceEnabled) void voiceService.speak(line);
       });
 

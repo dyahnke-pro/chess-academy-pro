@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2904 lines · 16 exports · 104 importers · 84 tests · 23 audits**
+**2929 lines · 16 exports · 104 importers · 86 tests · 23 audits**
 
 ## Locked rules that govern this surface
 
@@ -322,6 +322,7 @@
 - `src/components/Puzzles/MistakePuzzleBoard.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.deepRun.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.evidence.test.tsx`
+- `src/components/Puzzles/PuzzleBoard.oneLinePerMiss.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.test.tsx`
 - `src/components/Tactics/TacticSetupBoard.test.tsx`
 - `src/hooks/hintDialTally.test.ts`
@@ -348,6 +349,7 @@
 - `src/services/voiceService.fallover.test.ts`
 - `src/services/voiceService.narrationRecord.test.ts`
 - `src/services/voiceService.overlapPacing.test.ts`
+- `src/services/voiceService.speakWhenIdle.test.ts`
 - `src/services/voiceService.test.ts`
 - `src/services/voiceServiceLegacyPref.test.ts`
 - `src/services/walkthroughRunner.test.ts`

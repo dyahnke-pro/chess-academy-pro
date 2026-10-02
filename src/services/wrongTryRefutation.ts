@@ -80,3 +80,25 @@ function uciToSan(fen: string, uci: string): { san: string; from: string; to: st
     return null;
   }
 }
+
+/**
+ * ONE spoken line per wrong try (PostHog, David's phone, 2026-10-02): the
+ * refutation, the method the miss earned, and the next hint rung used to go
+ * out as separate `speak` calls a few ms apart, so each cut off the one before
+ * it. Order is pedagogical — why the try fails, how to think about it, where
+ * to look next. Empty parts drop; a part that repeats an earlier one is said
+ * once.
+ */
+export function composeWrongTryLine(
+  refutation: string | null,
+  method: string | null,
+  hint: string | null,
+): string {
+  const parts: string[] = [];
+  for (const raw of [refutation, method, hint]) {
+    const p = raw?.trim();
+    if (!p || parts.some((q) => q === p || q.includes(p))) continue;
+    parts.push(/[.!?…]$/.test(p) ? p : `${p}.`);
+  }
+  return parts.join(' ');
+}
