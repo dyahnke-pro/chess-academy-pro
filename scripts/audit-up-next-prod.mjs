@@ -118,7 +118,7 @@ async function watchBanners(ms) {
 async function home() {
   await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await dismissModals();
-  await page.locator('[data-testid="up-next-bar"]').waitFor({ timeout: 90000 });
+  await page.locator('[data-testid="up-next-bar"], [data-testid="today-ring"]').first().waitFor({ timeout: 90000 });
 }
 
 try {
