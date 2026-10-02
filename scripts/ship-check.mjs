@@ -588,10 +588,6 @@ const GATE_TESTS = [
   // The live surfaces see the student's NEED, and only on their own ply — the
   // mover guard is what stops half of every game going mute.
   'src/services/liveNeedGate.test.ts',
-  // A Watch-register beat speaking on a live board narrates the student to a
-  // third party — "he takes away Black's pin", said to the person who just
-  // played it. The register is part of the selection, like the seat.
-  'src/services/curatedBeatRegister.test.ts',
   // A Lichess puzzle carries the opening's tag whichever side is solving, so
   // 58% of the punish stage seated the student in the opponent's chair.
   'src/services/punishStageSeat.test.ts',
@@ -933,6 +929,15 @@ async function runTestFiles(label, files) {
     memory.markTests([], toRun);
   }
   return ok;
+}
+// A GATE FILE THAT NO LONGER EXISTS IS A GATE THAT SILENTLY STOPPED (2026-10-02:
+// `curatedBeatRegister.test.ts` was deleted with the live-board beats and stayed
+// listed; it only surfaced when green memory reused every other gate and vitest
+// was handed the missing file alone). Name it, never let it pass by omission.
+const _missingGates = GATE_TESTS.filter((f) => !existsSync(join(REPO_ROOT, f)));
+if (_missingGates.length > 0) {
+  console.error(`✗ ship-check: listed content gate(s) do not exist — remove them from GATE_TESTS or restore them:\n${_missingGates.map((f) => `    ${f}`).join('\n')}`);
+  process.exit(1);
 }
 const laneGates = async () => {
   // Under three lanes a 4s test reads as a 5s timeout; the per-test ceiling is
