@@ -358,7 +358,6 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
       updatedSession.totalPuzzles >= repCap
     ) {
       repCapReachedRef.current = true;
-      voiceService.stop();
       void markRepCompletedToday(repKey);
       void finishBite(['weakness', 'warm-up', 'long']);
       if (misconceptionTag && !spacedTagRef.current) {
@@ -368,6 +367,9 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
           : 0;
         void recordTagDrillResult(misconceptionTag, accuracy >= 0.6);
       }
+      // The solve's line finishes before the screen changes (2026-10-02).
+      await voiceService.untilQuiet();
+      voiceService.stop();
       setPhase('rep-complete');
       return;
     }
@@ -387,6 +389,10 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
       setAwaitingConcept(true);
       return;
     }
+
+    // NO AUTO-ADVANCE CUTS THE VOICE (David 2026-10-02): the solve's concept
+    // line is spoken to its last word, then a breath, before the board moves on.
+    await voiceService.untilQuiet();
 
     // Check if checkpoint
     if (updatedSession.totalPuzzles > 0 && updatedSession.totalPuzzles % CHECKPOINT_INTERVAL === 0) {

@@ -62,9 +62,10 @@ vi.mock('../../services/misconceptionService', () => ({
   recordTagDrillResult: (...args: unknown[]) => mockRecordTagDrillResult(...args) as Promise<void>,
 }));
 
-vi.mock('../../services/voiceService', () => ({
-  voiceService: { stop: vi.fn(), speak: vi.fn() },
-}));
+vi.mock('../../services/voiceService', async () => {
+  const { buildVoiceServiceMock } = await import('../../test/mocks/voice-service');
+  return { voiceService: buildVoiceServiceMock() };
+});
 
 vi.mock('../../db/schema', () => ({
   db: { profiles: { update: vi.fn().mockResolvedValue(1) }, meta: { get: vi.fn().mockResolvedValue(null), put: vi.fn() } },

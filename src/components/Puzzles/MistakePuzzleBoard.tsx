@@ -40,6 +40,10 @@ type PuzzleState = 'loading' | 'replay' | 'playing' | 'correct' | 'incorrect' | 
 const REPLAY_CONTEXT_PLIES = 8;
 /** Delay between auto-played replay moves (ms) */
 const REPLAY_MOVE_DELAY = 900;
+/** The longest the play-out waits on the solve's voice before going anyway. */
+const SOLVE_VOICE_MAX_WAIT_MS = 25_000;
+/** A breath after the last word, so the board moving never reads as a cut. */
+const AFTER_VOICE_BREATH_MS = 800;
 
 interface ReplayStep {
   fen: string;
@@ -306,6 +310,11 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   // puzzle grows to ask you for it.
   const [continuing, setContinuing] = useState(false);
   const continuedForRef = useRef<string | null>(null);
+  // THE SOLVE'S VOICE OWNS THE MOMENT (David 2026-10-02: "Auto advance needs to
+  // not cut off narrations … Instant after last word can sound like cut off").
+  // The play-out used to start 1.2s after the solve — before the TTS fetch had
+  // even returned — so the board moved over the explanation. It now waits for
+  // the solving line (or the outro why) to finish, then a breath.
   useEffect(() => {
     if (state !== 'correct' || continuedForRef.current === puzzle.id) return;
     continuedForRef.current = puzzle.id;
@@ -313,19 +322,24 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     const rest = full.slice(movesRef.current.length);
     if (rest.length === 0) return;
     const timers: ReturnType<typeof setTimeout>[] = [];
-    timers.push(setTimeout(() => setContinuing(true), 1200));
-    rest.forEach((m, i) => {
-      timers.push(setTimeout(() => {
-        try {
-          const r = chessRef.current.move({ from: m.from, to: m.to, promotion: m.promotion });
-          playMoveSound(r.san);
-          setLastMoveHighlight({ from: m.from, to: m.to });
-          setFen(chessRef.current.fen());
-          setBoardKey((k) => k + 1);
-        } catch { /* a stale line — stop where it stops */ }
-      }, 1200 + 1000 * (i + 1)));
+    let cancelled = false;
+    // The grace covers the 800ms before the outro's why starts.
+    void voiceService.untilQuiet({ graceMs: 1200, breathMs: AFTER_VOICE_BREATH_MS, maxWaitMs: SOLVE_VOICE_MAX_WAIT_MS }).then(() => {
+      if (cancelled) return;
+      setContinuing(true);
+      rest.forEach((m, i) => {
+        timers.push(setTimeout(() => {
+          try {
+            const r = chessRef.current.move({ from: m.from, to: m.to, promotion: m.promotion });
+            playMoveSound(r.san);
+            setLastMoveHighlight({ from: m.from, to: m.to });
+            setFen(chessRef.current.fen());
+            setBoardKey((k) => k + 1);
+          } catch { /* a stale line — stop where it stops */ }
+        }, 1000 * (i + 1)));
+      });
     });
-    return () => { for (const t of timers) clearTimeout(t); };
+    return () => { cancelled = true; for (const t of timers) clearTimeout(t); };
   }, [state, puzzle.id, puzzle.moves, playMoveSound]);
   useEffect(() => { setContinuing(false); }, [puzzle.id]);
 

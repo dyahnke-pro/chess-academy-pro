@@ -1297,7 +1297,41 @@ class VoiceService {
     });
   }
 
+  /** Utterances between speak and finish — INCLUDING the synthesis fetch,
+   *  which `isPlaying()` cannot see (it flips only when audio starts). */
+  private utterancesInFlight = 0;
+
+  /**
+   * NO TRANSITION CUTS THE VOICE (David 2026-10-02: "Auto advance needs to not
+   * cut off narrations … Instant after last word can sound like cut off").
+   * Resolves once nothing is being fetched or spoken, then holds a breath.
+   * `graceMs` covers a line a just-rendered effect is about to start. The wait
+   * is bounded so a wedged voice can never strand the screen.
+   */
+  async untilQuiet(opts?: { maxWaitMs?: number; breathMs?: number; graceMs?: number }): Promise<void> {
+    const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
+    const deadline = Date.now() + (opts?.maxWaitMs ?? 25_000);
+    await sleep(opts?.graceMs ?? 300);
+    const busy = (): boolean => this.utterancesInFlight > 0 || this.isPlaying() || speechService.isSpeaking;
+    if (!busy()) return;
+    while (busy() && Date.now() < deadline) await sleep(150);
+    await sleep(opts?.breathMs ?? 800);
+  }
+
   private async speakInternal(
+    rawText: string,
+    force: boolean,
+    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean },
+  ): Promise<void> {
+    this.utterancesInFlight += 1;
+    try {
+      await this.speakInternalTracked(rawText, force, opts);
+    } finally {
+      this.utterancesInFlight -= 1;
+    }
+  }
+
+  private async speakInternalTracked(
     rawText: string,
     force: boolean,
     opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean },
