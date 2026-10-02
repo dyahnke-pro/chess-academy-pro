@@ -1646,7 +1646,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   try {
     const dir = `audit-reports/review-overhaul-${new Date().toISOString().replace(/[:.]/g, '-')}`;
     mkdirSync(dir, { recursive: true });
-    writeFileSync(`${dir}/report.json`, JSON.stringify({ base: BASE, gid: GID, verdict: wedged ? 'CONTAMINATED (instrument wedged)' : allPass ? 'MEETS STANDARD' : 'FAILS STANDARD', wedged: wedged ?? null, results, engine: annots, spoken: all.map((x) => x.text), plies: [...plyNarr.entries()].map(([ply, v]) => ({ ply, ...v })), streamBefore, streamAfter, coachDecisions: decisions, needScores: needAgg, errors: errs }, null, 2));
+    writeFileSync(`${dir}/report.json`, JSON.stringify({ base: BASE, gid: GID, verdict: wedged ? 'CONTAMINATED (instrument wedged)' : allPass ? 'MEETS STANDARD' : 'FAILS STANDARD', wedged: wedged ?? null, results, engine: annots, spoken: all.map((x) => x.text), plies: [...plyNarr.entries()].map(([ply, v]) => ({ ply, ...v })), streamBefore, streamAfter, coachDecisions: decisions, needScores: needAgg, needCoverage: (() => { const ev = listener.getCapturedEvents().filter((e) => e.kind === 'review-need-coverage').pop(); try { return ev ? JSON.parse(ev.details ?? '{}').rows ?? null : null; } catch { return null; } })(), errors: errs }, null, 2));
     log(`report: ${dir}/report.json`);
   } catch (e) { log(`(report not written: ${String(e).slice(0, 80)})`); }
   await listener.stop();

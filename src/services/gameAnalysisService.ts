@@ -429,6 +429,7 @@ class DedicatedWorker {
 
       const blackToMove = fen.split(' ')[1] === 'b';
       let lastEval = 0;
+      let sawExact = false;
       let lastDepth = 0;
       let lastPv: string[] = [];
 
@@ -445,7 +446,10 @@ class DedicatedWorker {
           const depthMatch = /\bdepth (\d+)/.exec(data);
           if (depthMatch) lastDepth = Number(depthMatch[1]) || lastDepth;
           const scoreMatch = /score (cp|mate) (-?\d+)/.exec(data);
-          if (scoreMatch) {
+          // A bounded score is not a verdict; keep the last exact one.
+          const bounded = /\b(?:lowerbound|upperbound)\b/.test(data);
+          if (scoreMatch && !(bounded && sawExact)) {
+            if (!bounded) sawExact = true;
             const scoreType = scoreMatch[1];
             const scoreValue = parseInt(scoreMatch[2]);
             lastEval = scoreType === 'mate'
@@ -453,7 +457,8 @@ class DedicatedWorker {
               : scoreValue;
           }
           const pvMatch = / pv (.+)$/.exec(data);
-          if (pvMatch) lastPv = pvMatch[1].trim().split(/\s+/).slice(0, 8);
+          // The line belongs to its score: a bound kept out above keeps its pv out too.
+          if (pvMatch && !(bounded && sawExact && scoreMatch)) lastPv = pvMatch[1].trim().split(/\s+/).slice(0, 8);
         }
 
         const bmMatch = /^bestmove (\S+)/.exec(data);
@@ -547,7 +552,12 @@ class DedicatedWorker {
           const bd = /\b(lowerbound|upperbound)\b/.exec(data);
           const bound: 'lower' | 'upper' | null = bd ? (bd[1] === 'lowerbound' ? 'lower' : 'upper') : null;
           const prev = best.get(rank);
-          // Deeper always wins; at equal depth an EXACT score replaces a bound.
+          // Deeper wins, EXCEPT a bound never replaces an exact score — a
+          // search stopped on an aspiration fail-high leaves "mate 9
+          // lowerbound" as its last word, and that is not a proven mate
+          // (Learn walk 2026-10-02, …Rg2). At equal depth an exact score
+          // replaces a bound.
+          if (prev && bound !== null && prev.bound === null) return;
           if (prev && !(seen > prev.depth || (seen === prev.depth && prev.bound !== null && bound === null))) return;
           const pvm = / pv (.+)$/.exec(data);
           best.set(rank, {

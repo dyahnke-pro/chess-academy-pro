@@ -2126,7 +2126,14 @@ class StockfishEngine {
           bound: boundMatch ? (boundMatch[1] === 'lowerbound' ? 'lower' : 'upper') : null,
         };
 
-        this.pending.lines.set(rank, line);
+        // A BOUNDED SCORE IS NOT A VERDICT (Learn walk 2026-10-02, 41…Rg2:
+        // "There's a forced mate here" where depth 26 finds +8 and no mate).
+        // A time-boxed search stopped mid-iteration can leave an aspiration
+        // fail-high ("score mate 9 lowerbound") as its last word for a line;
+        // stored over the last exact score, it reads as a proven mate. Keep
+        // the exact score the line already has.
+        const prior = this.pending.lines.get(rank);
+        if (!(line.bound && prior && !prior.bound)) this.pending.lines.set(rank, line);
       }
     }
 

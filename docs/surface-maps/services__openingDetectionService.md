@@ -207,9 +207,9 @@
 ### `isBookLine` (function) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8842`
 - `src/services/bookDeparture.ts:66`
-- `src/services/gameAnalysisService.ts:1289`
-- `src/services/gameAnalysisService.ts:1554`
-- `src/services/gameAnalysisService.ts:1922`
+- `src/services/gameAnalysisService.ts:1299`
+- `src/services/gameAnalysisService.ts:1564`
+- `src/services/gameAnalysisService.ts:1932`
 - `src/services/gameImportUtils.ts:124`
 - `src/services/isBookLine.test.ts:11`
 - `src/services/isBookLine.test.ts:14`
@@ -371,8 +371,8 @@
 
 ### `studentSideForPlay` (function) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:5311`
-- `src/components/Coach/CoachTeachPage.tsx:12674`
-- `src/components/Coach/CoachTeachPage.tsx:12724`
+- `src/components/Coach/CoachTeachPage.tsx:12678`
+- `src/components/Coach/CoachTeachPage.tsx:12728`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:59`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:60`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:64`

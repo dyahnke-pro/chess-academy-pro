@@ -79,7 +79,7 @@ describe('it names the better move AND what it was for', () => {
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', cpLoss: 150,
       side: 'student', moverColor: 'white',
     });
-    expect(call?.said).toMatch(/^a3 was a mistake — it gave away more than a pawn\.$/);
+    expect(call?.said).toMatch(/^a3 was a mistake — it cost more than a pawn of advantage\.$/);
   });
 });
 
@@ -502,12 +502,30 @@ describe('a win the defender could dodge is not a reason (Learn walk 2026-10-01,
 });
 
 describe('the inaccuracy word follows the cost it states (Learn walk 2026-10-01, Rc8)', () => {
-  it('a two-pawn drop graded an inaccuracy is "loose", never "a little loose"', () => {
+  it('a two-pawn drop graded an inaccuracy is "imprecise", never "a little imprecise" — and never "loose"', () => {
     const call = callInaccuracy({ priorMove: null,
       replyLineUci: [], replySan: null, side: 'student', moverColor: 'black', cpLoss: 210, moverEvalAfterCp: -800,
       fenBefore: '3r4/2R4p/p1rP2p1/2Pk1p2/NP6/7P/P5P1/6K1 b - - 2 36', playedSan: 'Rc8', bestSan: 'Rcxd6',
     });
     expect(call?.quality).toBe('inaccuracy');
-    expect(call?.said).toBe('Rc8 was loose — it gave away about two pawns.');
+    expect(call?.said).toBe('Rc8 was imprecise — it cost about two pawns of advantage.');
+  });
+});
+
+describe('their slip is offered as what it really is (Learn walk 2026-10-02, 6.h3)', () => {
+  // White (dictated, the opponent) played h3 from +2.06; Black, the student,
+  // is still −0.45 after it — level-ish, not a prize to "go and take".
+  const fen = 'r1bqk2r/ppppbppp/2n2n2/8/3PP3/2N5/PP3PPP/R1BQKBNR w KQkq - 3 6';
+  const base = { priorMove: null, replyLineUci: [], replySan: null, fenBefore: fen, playedSan: 'h3', bestSan: 'd5', cpLoss: 160, side: 'coach' as const, moverColor: 'white' as const, dictated: true };
+  it('still a little worse → level, not "go and take it"', () => {
+    const said = callInaccuracy({ ...base, moverEvalAfterCp: 45 })?.said ?? '';
+    expect(said).toMatch(/brings you level/);
+    expect(said).not.toMatch(/go and take it/);
+  });
+  it('clearly worse → a way back', () => {
+    expect(callInaccuracy({ ...base, moverEvalAfterCp: 140 })?.said ?? '').toMatch(/way back into the game/);
+  });
+  it('now better → go and take it', () => {
+    expect(callInaccuracy({ ...base, moverEvalAfterCp: -120 })?.said ?? '').toMatch(/go and take it/);
   });
 });

@@ -10588,6 +10588,10 @@ export function CoachTeachPage(): JSX.Element {
                       studentColor: coachColor,
                       ...mateContext(mid, { isMate: cm.afterIsMate, mateIn: cm.afterMateIn }, coachColor),
                       side: 'coach',
+                      // Where the coach's move LEFT it, mover POV — so the
+                      // offer to the student matches the board ("go and take
+                      // it" said at −0.45 for the student, walk 2026-10-02).
+                      moverEvalAfterCp: cm.afterIsMate ? null : cm.evalAfterWhiteCp * sign,
                       // Dictated moves are spoken too (David 2026-09-30), of THEM.
                       dictated: learnMemRef.current.lastReplyDictated !== null,
                     });

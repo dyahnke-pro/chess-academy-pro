@@ -49,3 +49,15 @@ Repeats removed (not false, said twice): better move named by verdict AND grade 
   about the move played.
 - Results on 6fde1eec4 (before this batch): game 1 = owed plies + SEAT (both
   fixed here); game 2 = 0 fails; game 3 = FUNDLEAD 0/5 (A3, fixed in this batch).
+
+## Re-walk 3 (2026-10-02) — after the false-claim fixes and the held move
+
+Learn, same three games (`learn-walk-oct1c-re3-tape.json`):
+- 192 sentences, 175 with a board claim. Machine-checked 66 — all true.
+- Hand-checked from the remaining 109: every count/defender claim (5600 p16, p26; 8806 p12, p20; 0920 p20), the timing claim (0920 p14), the shield (8806 p46), the doubled pawns (0920 p48), the held-by claims (5600 p68, p72; 0920 p10), every "their X is a mistake/blunder" (engine before/after: h3 1.6, Qf4 1.4, b3 3.0, Be3 1.3, f3 2.0, Qc2 1.0), both mates, and "it can wait — Rad8" (5600 p58, still +5.3 after Kxg4).
+- Held move at deciding moments: no "The move is X" before any student move; found → the found-move line; missed → the verdict names the move, so the reveal stays quiet. As designed.
+
+FALSE / misleading, all fixed at the computer:
+1. **5600 p80 "There's a forced mate here, starting with Rg2"** — depth 26: +8, no mate. A time-boxed read stopped on an aspiration fail-high left "score mate N lowerbound" as its last word, stored over the exact score. Fix: a bounded score never replaces an exact one (`stockfishEngine`, and the pool's two parsers in `gameAnalysisService`). Test fails on the old code.
+2. **"Nc6 / Kd5 / Rc8 / Rf6 / Bd5 was loose — it gave away …"** — "loose" is a board word (an undefended piece); the grade of a move is "imprecise", and its cost is advantage, not material ("it cost about two pawns of advantage").
+3. **0920 p10 "go and take it"** said with the student still −0.45 after their slip — the offer now follows where the slip left the board: a way back / level / go and take it.

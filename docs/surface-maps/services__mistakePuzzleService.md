@@ -136,9 +136,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:47`
 - `src/services/autoAnalyzeGame.ts:297`
 - `src/services/gameAnalysisService.ts:353`
-- `src/services/gameAnalysisService.ts:1435`
-- `src/services/gameAnalysisService.ts:1694`
-- `src/services/gameAnalysisService.ts:2233`
+- `src/services/gameAnalysisService.ts:1445`
+- `src/services/gameAnalysisService.ts:1704`
+- `src/services/gameAnalysisService.ts:2243`
 - `src/services/tacticClassifierService.ts:207`
 - `src/services/tacticClassifierService.ts:292`
 - `src/services/tacticClassifierService.ts:568`
@@ -151,7 +151,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
 - `src/components/Coach/CoachGamePage.tsx:2108`
 - `src/components/Coach/CoachGameReview.tsx:366`
-- `src/services/gameAnalysisService.ts:2086`
+- `src/services/gameAnalysisService.ts:2096`
 - `src/services/mistakePuzzleService.test.ts:109`
 - `src/services/mistakePuzzleService.test.ts:163`
 - `src/services/mistakePuzzleService.test.ts:189`

@@ -101,7 +101,7 @@ describe('F16/F23/F31 — a grade says what the move cost, and whether they took
     });
     // Never a bare grade (run B walk 2026-09-30); the eval drop is measured,
     // what they could take is not, so only the first is said.
-    expect(v.call?.said).toBe('Qd7 was a blunder — it gave away about a piece.');
+    expect(v.call?.said).toBe('Qd7 was a blunder — it cost about a piece of advantage.');
   });
 });
 

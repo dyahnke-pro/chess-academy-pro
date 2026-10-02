@@ -111,7 +111,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:3241`
 - `src/services/groundedAnswer.ts:6800`
 - `src/services/inaccuracyCall.ts:307`
-- `src/services/inaccuracyCall.ts:754`
+- `src/services/inaccuracyCall.ts:767`
 - `src/services/moveTiming.ts:27`
 - `src/services/pvPlayback.ts:406`
 - `src/services/pvPlayback.ts:453`
