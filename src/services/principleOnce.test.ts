@@ -31,4 +31,9 @@ describe('principle-once line', () => {
     const start = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
     expect(principleToTeach(start, 'Nc6', 'black', new Set(['development']))).toBeNull();
   });
+
+  it('the reasonless form still names whose move it is (prod Review audit 2026-10-02)', () => {
+    const line = principleOnceLine('Be6', { id: 'development', imperative: 'get the last minor piece out, then bring the rooks', reason: null } as never, 0);
+    expect(line).toBe('Your Be6: get the last minor piece out, then bring the rooks.');
+  });
 });

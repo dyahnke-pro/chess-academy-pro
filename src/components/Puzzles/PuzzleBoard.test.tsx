@@ -267,7 +267,7 @@ describe('PuzzleBoard — resolution belongs to one puzzle', () => {
     const speak = vi.mocked(voiceService.speak);
     const releases: Array<() => void> = [];
     speak.mockImplementation(() => new Promise<void>((r) => { releases.push(r); }));
-    render(<PuzzleBoard puzzle={next} onComplete={vi.fn()} />);
+    render(<PuzzleBoard surface="classic" puzzle={next} onComplete={vi.fn()} />);
     const show = await screen.findByTestId('show-solution-button', {}, { timeout: 2000 });
     const before = speak.mock.calls.length;
     act(() => { show.click(); });

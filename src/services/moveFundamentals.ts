@@ -1225,7 +1225,9 @@ export function principleOnceLine(
   stemKey: number,
 ): string {
   const reason = reasonFor(f);
-  if (!reason) return `${san}: ${f.imperative}.`;
+  // Seated (prod Review audit 2026-10-02: "Be6: get the last minor piece out"
+  // named no side). Both callers pass only the STUDENT's own move.
+  if (!reason) return `Your ${san}: ${f.imperative}.`;
   return rotateStem([
     `${san} follows a rule worth keeping: ${f.imperative} — ${reason}.`,
     `The rule behind ${san}: ${f.imperative}, because ${reason}.`,
