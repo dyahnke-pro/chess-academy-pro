@@ -6,16 +6,16 @@ import { buildMistakePuzzle, resetFactoryCounter } from '../../test/factories';
 const mockSpeak = vi.fn().mockResolvedValue(undefined);
 const mockStop = vi.fn();
 
-vi.mock('../../services/voiceService', () => ({
-  voiceService: {
-    speak: (...args: unknown[]): Promise<void> => mockSpeak(...args) as Promise<void>,
-    speakGrounded: (...args: unknown[]): Promise<void> => mockSpeak(...args) as Promise<void>,
-    stop: (): void => { mockStop(); },
-    warmup: vi.fn().mockResolvedValue(undefined),
-    clearCache: vi.fn(),
-    isPlaying: vi.fn().mockReturnValue(false),
-  },
-}));
+vi.mock('../../services/voiceService', async () => {
+  const { buildVoiceServiceMock } = await import('../../test/mocks/voice-service');
+  return {
+    voiceService: buildVoiceServiceMock({
+      speak: vi.fn((...args: unknown[]): Promise<void> => mockSpeak(...args) as Promise<void>),
+      speakGrounded: vi.fn((...args: unknown[]): Promise<void> => mockSpeak(...args) as Promise<void>),
+      stop: vi.fn((): void => { mockStop(); }),
+    }),
+  };
+});
 
 vi.mock('../../hooks/usePieceSound', () => ({
   usePieceSound: () => ({

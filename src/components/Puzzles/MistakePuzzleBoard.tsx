@@ -410,6 +410,14 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     voiceService.stop();
 
     void voiceService.warmup();
+    // The lines this puzzle will say are already computed — load them now so
+    // the intro, the first hint and the solve explanation play the moment
+    // they are due (measured 2026-10-02: ~1s of silence each otherwise).
+    void voiceService.prefetchAudio([
+      puzzle.narration.intro,
+      puzzle.narration.conceptHint,
+      ...puzzle.narration.moveNarrations,
+    ].filter((t) => t.trim().length > 0));
 
     // Try to load the source game for replay context (skip if caller already showed it)
     const cancelledRef = { value: false };

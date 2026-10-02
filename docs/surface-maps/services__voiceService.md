@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2963 lines · 16 exports · 104 importers · 87 tests · 23 audits**
+**3081 lines · 18 exports · 105 importers · 88 tests · 23 audits**
 
 ## Locked rules that govern this surface
 
@@ -121,6 +121,7 @@
 - `src/services/ttsProsody.test.ts`
 - `src/services/upNextHome.ts`
 - `src/services/voiceService.fallover.test.ts`
+- `src/services/voiceService.sentenceFirst.test.ts`
 - `src/services/voiceService.test.ts`
 - `src/services/walkthroughRunner.test.ts`
 - `src/services/walkthroughRunner.ts`
@@ -181,6 +182,18 @@
 - `src/services/ttsProsody.test.ts:53`
 - `src/services/ttsProsody.test.ts:54`
 
+### `LONG_LINE_CHARS` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `splitSpokenChunks` (function) — 7 call sites
+- `src/services/voiceService.sentenceFirst.test.ts:34`
+- `src/services/voiceService.sentenceFirst.test.ts:38`
+- `src/services/voiceService.sentenceFirst.test.ts:47`
+- `src/services/voiceService.sentenceFirst.test.ts:48`
+- `src/services/voiceService.sentenceFirst.test.ts:53`
+- `src/services/voiceService.sentenceFirst.test.ts:66`
+- `src/services/voiceService.sentenceFirst.test.ts:100`
+
 ### `CLOUD_VOICES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
@@ -212,7 +225,7 @@
 ### `normalizePieceShorthand` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `sanitizeForTTS` (function) — 49 call sites
+### `sanitizeForTTS` (function) — 50 call sites
 - `src/components/Openings/MiddlegamePractice.tsx:305`
 - `src/components/Openings/MiddlegamePractice.tsx:349`
 - `src/components/Openings/MiddlegamePractice.tsx:354`
@@ -262,6 +275,7 @@
 - `src/services/sanitizeForTTS.test.ts:265`
 - `src/services/sanitizeForTTS.test.ts:271`
 - `src/services/sanitizeForTTS.test.ts:274`
+- `src/services/voiceService.sentenceFirst.test.ts:115`
 
 ### `voiceService` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -349,6 +363,7 @@
 - `src/services/voiceService.fallover.test.ts`
 - `src/services/voiceService.narrationRecord.test.ts`
 - `src/services/voiceService.overlapPacing.test.ts`
+- `src/services/voiceService.sentenceFirst.test.ts`
 - `src/services/voiceService.speakWhenIdle.test.ts`
 - `src/services/voiceService.test.ts`
 - `src/services/voiceService.untilQuiet.test.ts`
