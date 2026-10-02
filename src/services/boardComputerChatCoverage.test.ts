@@ -43,6 +43,8 @@ const NOT_A_CHAT_LANE = new Set<string>([
   'goodPieceClause',
   // a say-once KEY builder — names an idea for the memory, states nothing
   'goodPieceIdeaKey',
+  // material arithmetic for the trade judgements — states nothing on its own
+  'settledLead',
   // low-level helpers other computers call
   'seeSequence', 'minorCanReachSquare', 'pieceScope', 'pressureCount',
   'forcingPrefix', 'findForcingCandidates',
