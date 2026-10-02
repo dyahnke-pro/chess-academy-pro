@@ -80,6 +80,15 @@ async function solveCurrent() {
     id = await page.locator('[data-testid="puzzle-board"]').getAttribute('data-puzzle-id').catch(() => null);
   }
   if (!id || solvedIds.has(id)) return false;
+  // A cold lazy pool (the long bundle) can swap the first board for the real
+  // puzzle a beat later — solve only once the id has held still for 2s.
+  for (let i = 0; i < 20; i += 1) {
+    await page.waitForTimeout(2000);
+    const again = await page.locator('[data-testid="puzzle-board"]').getAttribute('data-puzzle-id').catch(() => null);
+    if (again === id) break;
+    id = again;
+  }
+  if (!id || solvedIds.has(id)) return false;
   solvedIds.add(id);
   const p = id ? await readPuzzle(id) : null;
   if (!p) return false;
