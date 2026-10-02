@@ -1007,9 +1007,9 @@ export function studentMovePoint(
  *   - `missed`: they did not — "c5 was the answer to their slip, which…"
  *   - `review`: retrospective — "your answer was c5, which…"
  *   - `now`: asked in Play's chat — "Your answer is c5, which…"
- *  Null when the move-point computer finds no point and the move would be
- *  named bare (named with its reason, or not named). `found` alone may speak
- *  without a point: it names nothing the student did not just play. */
+ *  Null when the move-point computer finds no point: a move is named with its
+ *  reason or not at all, and a bare "you found it" is the acknowledgment
+ *  Voice Rule 5 bans. */
 export function slipAnswerText(
   fenAfterSlip: string,
   theirSan: string,
@@ -1018,7 +1018,9 @@ export function slipAnswerText(
 ): string | null {
   if (!answerSan) return null;
   const point = studentMovePoint(fenAfterSlip, answerSan, theirSan);
-  if (!point) return when === 'found' ? 'You found the answer to their slip.' : null;
+  // No point → nothing: a bare "you found it" is an acknowledgment, and the
+  // board changing is the acknowledgment (Voice Rule 5; Learn walk 2026-10-02).
+  if (!point) return null;
   const body = point.replace(/\.$/, '');
   const sanLed = body.startsWith(`${answerSan} `);
   const rest = sanLed ? body.slice(answerSan.length + 1) : `${body.charAt(0).toLowerCase()}${body.slice(1)}`;
