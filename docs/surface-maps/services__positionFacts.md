@@ -92,7 +92,7 @@
 - `src/services/whyBestMove.ts:103`
 
 ### `computePositionFacts` (function) — 81 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9382`
+- `src/components/Coach/CoachTeachPage.tsx:9392`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:635`
@@ -178,7 +178,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:8078`
 
 ### `convertKey` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9607`
+- `src/components/Coach/CoachTeachPage.tsx:9617`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 
 ### `afterLine` (function) — 5 call sites

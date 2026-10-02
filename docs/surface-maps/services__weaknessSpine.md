@@ -158,7 +158,7 @@
 
 ### `getUnifiedWeaknessProfile` (function) — 39 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2646`
-- `src/components/Coach/CoachTeachPage.tsx:11183`
+- `src/components/Coach/CoachTeachPage.tsx:11193`
 - `src/components/Coach/TrainingPlanRolodexPage.tsx:72`
 - `src/components/Insights/HeatMapPanel.tsx:55`
 - `src/components/Tactics/TacticalProfilePage.tsx:69`

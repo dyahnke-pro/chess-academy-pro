@@ -64,7 +64,7 @@ import {
   buildReviewCitations,
   buildReviewSegments,
   frameOpeningForStudent,
-  openingNameForKey } from '../../services/coachFeatureService';
+  openingNameForKey, segmentNamedArrows } from '../../services/coachFeatureService';
 import type { OpeningKey } from '../../types';
 import type {
   NarrativeMoveData,
@@ -3607,17 +3607,24 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         // PLAN-IDEA arrows (opening development / middlegame orientation): the
         // board stays put and these arrows SHOW the plan instead of moving
         // pieces (David 2026-07-19). They live on the segment itself.
-        if (seg?.planArrows && seg.planArrows.length) return seg.planArrows;
-        if (!seg || !hasArrow) return undefined;
+        // Every move the beat NAMES is arrowed too (David 2026-10-02), on top
+        // of the plan arrows or the better-move arrow.
+        const named = seg ? segmentNamedArrows(seg, playerColor) : [];
+        const withNamed = (base: BoardArrow[]): BoardArrow[] | undefined => {
+          const all = [...base, ...named.filter((n) => !base.some((b) => b.startSquare === n.startSquare && b.endSquare === n.endSquare))];
+          return all.length ? all : undefined;
+        };
+        if (seg?.planArrows && seg.planArrows.length) return withNamed(seg.planArrows);
+        if (!seg || !hasArrow) return withNamed([]);
         const uci = seg.bestMoveUci;
-        if (!uci) return undefined;
+        if (!uci) return withNamed([]);
         // The better move lives on the board BEFORE the student's move, and
         // the walk shows the board AFTER it — the door checks both.
         const missed = admitArrow(
           { from: uci.slice(0, 2), to: uci.slice(2, 4), role: 'missed', fen: seg.fenBefore, source: 'review.betterMove' },
           { fen: displayFen, studentColor: playerColor },
         );
-        return missed ? [missed] : undefined;
+        return withNamed(missed ? [missed] : []);
       })();
       // Walk-mode board is interactive only when a green arrow is on
       // screen — the student can grab the suggested piece and play it

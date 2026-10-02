@@ -79,7 +79,7 @@
 - `src/services/reviewTeachingPoints.test.ts:103`
 
 ### `buildReviewDeepestLookahead` (function) — 13 call sites
-- `src/services/coachFeatureService.ts:2773`
+- `src/services/coachFeatureService.ts:2788`
 - `src/services/reviewTeachingPoints.test.ts:283`
 - `src/services/reviewTeachingPoints.test.ts:286`
 - `src/services/reviewTeachingPoints.test.ts:287`
@@ -100,7 +100,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildMissedShotSignal` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2535`
+- `src/services/coachFeatureService.ts:2550`
 - `src/services/reviewTeachingPoints.test.ts:355`
 - `src/services/reviewTeachingPoints.test.ts:368`
 - `src/services/reviewTeachingPoints.test.ts:377`
@@ -121,14 +121,14 @@
 - `src/services/reviewTeachingPoints.test.ts:245`
 
 ### `describeNotableMove` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:3113`
+- `src/services/coachFeatureService.ts:3128`
 - `src/services/reviewTeachingPoints.test.ts:176`
 - `src/services/reviewTeachingPoints.test.ts:183`
 - `src/services/reviewTeachingPoints.test.ts:197`
 - `src/services/reviewTeachingPoints.test.ts:207`
 
 ### `describeSimplifyingTrade` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2792`
+- `src/services/coachFeatureService.ts:2807`
 - `src/services/plyFactsDialing.test.ts:74`
 - `src/services/plyFactsDialing.test.ts:80`
 - `src/services/plyFactsDialing.test.ts:81`
@@ -137,12 +137,12 @@
 - `src/services/plyFactsDialing.test.ts:90`
 
 ### `describeTradeConsequence` (function) — 1 call site
-- `src/services/coachFeatureService.ts:2801`
+- `src/services/coachFeatureService.ts:2816`
 
 ### `describeConcessions` (function) — 9 call sites
 - `src/services/backwardLook.ts:424`
-- `src/services/coachFeatureService.ts:2482`
-- `src/services/coachFeatureService.ts:2548`
+- `src/services/coachFeatureService.ts:2497`
+- `src/services/coachFeatureService.ts:2563`
 - `src/services/concessionInFlux.test.ts:13`
 - `src/services/concessionInFlux.test.ts:18`
 - `src/services/reviewTeachingPoints.test.ts:211`
@@ -151,8 +151,8 @@
 - `src/services/theirMoveCost.ts:142`
 
 ### `findTrappedPiece` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:3123`
-- `src/services/coachFeatureService.ts:3124`
+- `src/services/coachFeatureService.ts:3138`
+- `src/services/coachFeatureService.ts:3139`
 - `src/services/reviewFullData.ts:751`
 - `src/services/reviewFullData.ts:753`
 - `src/services/reviewTeachingPoints.test.ts:253`

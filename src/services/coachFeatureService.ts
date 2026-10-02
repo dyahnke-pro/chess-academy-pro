@@ -75,7 +75,7 @@ import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { describeEvalCp, isMateEval } from './engineConstants';
 import { isMinorAtHome } from './development';
 import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
-import { studentMoveTeaching } from './learnBoardTeaching';
+import { studentMoveTeaching, namedMoveArrows } from './learnBoardTeaching';
 import type { FacetTag } from './reviewFacetRank';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
@@ -588,6 +588,21 @@ export function buildProfileContext(profile: UserProfile): CoachContext {
  *  plus the per-ply narration string the LLM returned. A null `narration`
  *  means "this move passes in silence" — the review UI advances the
  *  board but speaks nothing. */
+/** EVERY MOVE A REVIEW BEAT NAMES GETS ITS ARROW (David 2026-10-02: "Make
+ *  sure all stated moves have arrows"). The beat's text, resolved on the
+ *  board the walk shows (after the move), with the board before it for a
+ *  "was cleaner" move and a line walked ply by ply — the same resolver Learn
+ *  uses, through the arrow door. Computed at display time, so a cached
+ *  review gains its arrows without a rebuild. */
+export function segmentNamedArrows(
+  seg: Pick<ReviewMoveSegment, 'narration' | 'fenAfter' | 'fenBefore'>,
+  studentColor: 'white' | 'black',
+): BoardArrow[] {
+  if (!seg.narration) return [];
+  const claims = namedMoveArrows(seg.narration, seg.fenAfter, studentColor === 'white' ? 'w' : 'b', seg.fenBefore);
+  return admitArrows(claims, { fen: seg.fenAfter, studentColor }).arrows;
+}
+
 export interface ReviewMoveSegment {
   /** 1-indexed ply count. Ply 1 = White's first move, ply 2 = Black's first. */
   ply: number;

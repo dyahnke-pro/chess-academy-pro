@@ -8734,10 +8734,20 @@ export function CoachTeachPage(): JSX.Element {
       ? pendingVoiceRef.current
       : { fen, lines: [] as Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[] }> };
     // EVERY MOVE A LINE NAMES GETS ITS ARROW (G6) — the lane's own arrows
-    // when it computed them, else each move the sentence names.
-    const drawn = arrows && arrows.length > 0
-      ? arrows
-      : namedMoveArrows(text, gradeFen ?? fen, playerColorRef.current === 'white' ? 'w' : 'b');
+    // AND every other move the sentence names (a lane that drew its line
+    // used to leave the rest of the sentence's moves bare). The board before
+    // the last move places a "was cleaner" move where it was missed.
+    const prevFen = ((): string | null => {
+      try {
+        const c = new Chess();
+        c.loadPgn(gameRef.current.pgn);
+        if (!samePosition(c.fen(), gradeFen ?? fen)) return null;
+        return c.undo() ? c.fen() : null;
+      } catch { return null; }
+    })();
+    const named = namedMoveArrows(text, gradeFen ?? fen, playerColorRef.current === 'white' ? 'w' : 'b', prevFen);
+    const own = arrows ?? [];
+    const drawn = [...own, ...named.filter((n) => !own.some((a) => a.from === n.from && a.to === n.to))];
     if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ lane, text, squares, claims, gradeFen, arrows: drawn, lines });
     pendingVoiceRef.current = pending;
   }, []);

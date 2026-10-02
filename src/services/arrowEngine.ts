@@ -153,8 +153,22 @@ export function stripBoardMarkers(text: string): string {
 /** Every SAN-shaped move the coach mentioned in prose, descriptive
  *  square-references filtered out. Markers stripped first. */
 export function extractMentionedSans(text: string): string[] {
+  return extractMentionedSanSpans(text).map((t) => t.san);
+}
+
+/** A bare square after one of these is the square, never a pawn move:
+ *  "costs them d3", "guard e5 before the push", "by way of b2", "via c4,
+ *  then d2", "Watch c7" (Learn walk 2026-10-01: each drew a pawn arrow). Kept
+ *  apart from NON_MOVE_PHRASE_PRECEDERS because these words DO precede real
+ *  piece moves ("then Bxf7", "guard it with Nf3"). */
+const SQUARE_ONLY_PRECEDERS = new Set(['them', 'us', 'you', 'of', 'guard', 'guards', 'then', 'watch', 'reach', 'reaches', 'over', 'behind', 'beside']);
+
+/** The mentioned SANs with where they sit in the (marker-stripped) text, so a
+ *  run of moves can be read as one LINE. Same filtering as
+ *  `extractMentionedSans`. */
+export function extractMentionedSanSpans(text: string): Array<{ san: string; index: number; end: number; text: string }> {
   const cleaned = stripBoardMarkers(text);
-  const out: string[] = [];
+  const out: Array<{ san: string; index: number; end: number; text: string }> = [];
   let match: RegExpExecArray | null;
   SAN_TOKEN_RE.lastIndex = 0;
   while ((match = SAN_TOKEN_RE.exec(cleaned)) !== null) {
@@ -165,6 +179,7 @@ export function extractMentionedSans(text: string): string[] {
     // A square in a LIST of squares ("hitting d4 and e5", "d4, e5") is a
     // square too (Learn walk 2026-10-01: an e7→e5 arrow off "and e5").
     if (/^[a-h][1-8]$/.test(san)) {
+      if (SQUARE_ONLY_PRECEDERS.has(precedingWord.replace(/[,;:]$/, ''))) continue;
       const words = cleaned.slice(Math.max(0, match.index - 24), match.index).trim().split(/\s+/);
       const w1 = (words[words.length - 1] ?? '').toLowerCase();
       const w2 = words[words.length - 2] ?? '';
@@ -174,7 +189,7 @@ export function extractMentionedSans(text: string): string[] {
       // c6→c5 arrow grew out of it).
       if (/^\s+(?:is|was|stays|remains)\b/.test(cleaned.slice(match.index + san.length, match.index + san.length + 12))) continue;
     }
-    out.push(san);
+    out.push({ san, index: match.index, end: match.index + san.length, text: cleaned });
   }
   return out;
 }
@@ -186,7 +201,10 @@ export function ruledOutSans(text: string): Set<string> {
   const SAN = String.raw`(?:O-O(?:-O)?|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?)[+#]?`;
   const before = new RegExp(String.raw`\b(?:stops|stop|prevents|prevent|takes away|rules out|why not)\s+(?:your\s+|their\s+|my\s+)?…?(${SAN})`, 'gi');
   const after = new RegExp(String.raw`…?(${SAN})\s+(?:didn't|doesn't|does not|did not|no longer)\s+work`, 'g');
-  for (const re of [before, after]) {
+  // "it takes Rxe5 away" and a move the line calls a mistake: said, never arrowed.
+  const away = new RegExp(String.raw`\btakes\s+(?:your\s+|their\s+)?…?(${SAN})\s+away`, 'gi');
+  const bad = new RegExp(String.raw`…?(${SAN})\s+(?:was|is)\s+(?:a|an)\s+(?:mistake|blunder|inaccuracy)`, 'g');
+  for (const re of [before, after, away, bad]) {
     let m: RegExpExecArray | null;
     while ((m = re.exec(text)) !== null) out.add(m[1]);
   }

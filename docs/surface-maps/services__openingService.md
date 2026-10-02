@@ -92,7 +92,7 @@
 ### `getOpeningById` (function) — 19 call sites
 - `src/components/Academy/CourseSyllabusPage.tsx:38`
 - `src/components/Academy/CourseTrainerPage.tsx:47`
-- `src/components/Coach/CoachTeachPage.tsx:11081`
+- `src/components/Coach/CoachTeachPage.tsx:11091`
 - `src/components/Openings/OpeningDetailPage.tsx:381`
 - `src/components/Openings/OpeningDetailPage.tsx:388`
 - `src/components/Openings/OpeningDetailPage.tsx:396`

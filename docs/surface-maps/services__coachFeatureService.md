@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5212 lines · 35 exports · 41 importers · 39 tests · 5 audits**
+**5227 lines · 36 exports · 42 importers · 40 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -38,6 +38,7 @@
 - `src/services/gameThemeClassifier.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/mapConcurrent.test.ts`
+- `src/services/namedMoveArrows.test.ts`
 - `src/services/reviewBetterLineWhy.test.ts`
 - `src/services/reviewCorpusNote.test.ts`
 - `src/services/reviewCorpusSweep.test.ts`
@@ -119,6 +120,11 @@
 - `src/services/coachFeatureService.test.ts:297`
 - `src/services/coachFeatureService.test.ts:309`
 - `src/services/coachFeatureService.test.ts:315`
+
+### `segmentNamedArrows` (function) — 3 call sites
+- `src/components/Coach/CoachGameReview.tsx:3612`
+- `src/services/namedMoveArrows.test.ts:54`
+- `src/services/namedMoveArrows.test.ts:58`
 
 ### `ReviewMoveSegment` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -227,7 +233,7 @@
 - `src/services/mapConcurrent.test.ts:37`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4835`
+- `src/components/Coach/CoachGameReview.tsx:4842`
 - `src/services/coachFeatureService.test.ts:814`
 - `src/services/coachFeatureService.test.ts:817`
 - `src/services/coachFeatureService.test.ts:824`
@@ -352,6 +358,7 @@
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/mapConcurrent.test.ts`
 - `src/services/methodBeat.test.ts`
+- `src/services/namedMoveArrows.test.ts`
 - `src/services/planArc.test.ts`
 - `src/services/recapSeat.test.ts`
 - `src/services/reviewBetterLineWhy.test.ts`

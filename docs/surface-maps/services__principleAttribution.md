@@ -97,7 +97,7 @@
 - `src/services/claimTruth.manual.test.ts:172`
 - `src/services/claimTruth.manual.test.ts:177`
 - `src/services/claimTruth.manual.test.ts:185`
-- `src/services/coachFeatureService.ts:883`
+- `src/services/coachFeatureService.ts:898`
 - `src/services/learnWalkBlumenfeld.test.ts:65`
 - `src/services/liveFundamental.ts:135`
 - `src/services/misconceptionClassifier.ts:244`
@@ -173,8 +173,8 @@
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
 - `src/services/autoAnalyzeGame.ts:395`
 - `src/services/autoAnalyzeGame.ts:398`
-- `src/services/coachFeatureService.ts:888`
-- `src/services/coachFeatureService.ts:890`
+- `src/services/coachFeatureService.ts:903`
+- `src/services/coachFeatureService.ts:905`
 - `src/services/discussionPractice.ts:353`
 - `src/services/discussionPractice.ts:361`
 - `src/services/liveFundamental.ts:125`

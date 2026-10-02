@@ -104,7 +104,7 @@
 ### `isBeginnerMode` (function) — 12 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7530`
 - `src/components/Coach/CoachTeachPage.tsx:8603`
-- `src/components/Coach/CoachTeachPage.tsx:10778`
+- `src/components/Coach/CoachTeachPage.tsx:10788`
 - `src/services/beginnerMode.test.ts:8`
 - `src/services/beginnerMode.test.ts:9`
 - `src/services/beginnerMode.test.ts:12`
@@ -150,7 +150,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `pvDepthForRating` (function) — 10 call sites
-- `src/services/coachFeatureService.ts:3574`
+- `src/services/coachFeatureService.ts:3589`
 - `src/services/conceptEngine.ts:483`
 - `src/services/pvPlayback.test.ts:31`
 - `src/services/pvPlayback.test.ts:32`

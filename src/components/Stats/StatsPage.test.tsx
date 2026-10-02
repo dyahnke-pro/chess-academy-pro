@@ -19,6 +19,7 @@ vi.mock('../../services/puzzleService', () => ({
 }));
 
 vi.mock('../../services/coachFeatureService', () => ({
+  segmentNamedArrows: () => [],
   detectBadHabits: (...args: unknown[]): unknown => mockDetectBadHabits(...args),
 }));
 

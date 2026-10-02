@@ -50,7 +50,7 @@ import { planChoice, type PlanChoiceLine } from './planChooser';
 import { openingIdentityLine, warmOpeningIdentity } from './openingIdentity';
 import { trapAheadAt } from './gemCrushLines';
 import { noteTrapMeeting, trapSpeaks, type TrapState } from './trapLearning';
-import { ruledOutSans, extractMentionedSans } from './arrowEngine';
+import { ruledOutSans, extractMentionedSanSpans } from './arrowEngine';
 import { slipAnswerText, studentMovePoint } from './playCommentary';
 import { threatStoppedBy } from './opponentMovePurpose';
 import { trickSidestepped } from './forkTrick';
@@ -392,30 +392,84 @@ export function countMethodTeaching(fen: string, student: 'w' | 'b'): TeachingHi
 }
 
 /** EVERY MOVE A LINE NAMES GETS ITS ARROW (G6; the walk 2026-09-30 drew
- *  arrows on 7 of 64 plies — "Their Bg3 prepares h4", "Rxe1+ was the trade"
- *  and "Kd8 refutes it" all spoke with none). The fallback for a line that
- *  carries no arrows of its own: each SAN it names, resolved on its board
- *  (or the other side to move), the student's in `play`, theirs in `theirs`. */
-export function namedMoveArrows(text: string, fen: string, student: 'w' | 'b'): ArrowClaim[] {
+ *  arrows on 7 of 64 plies, and on 2026-10-02 still 60 of 143 named moves —
+ *  "Their Bg3 prepares h4", "Rxe1+ was the trade" and "Kd8 refutes it" all
+ *  spoke with none). Each SAN the sentence names, resolved on its board:
+ *   • a RUN of moves ("…Nf5+ Kg4 …Nd4 Rxb4") is a LINE, drawn ply by ply,
+ *     each ply on the board before it — not just its first move;
+ *   • a single move on this board (or with the other side to move) is that
+ *     side's move, vouched by the engine (every sentence here is computed);
+ *   • the move JUST PLAYED is already lit on the board — no second arrow;
+ *   • a move only legal on the board BEFORE the last move ("Ne3 was
+ *     cleaner") is the better move missed there.
+ *  A move the sentence rules out is said, never arrowed. */
+export function namedMoveArrows(text: string, fen: string, student: 'w' | 'b', prevFen?: string | null): ArrowClaim[] {
   const out: ArrowClaim[] = [];
   const seen = new Set<string>();
   const ruledOut = ruledOutSans(text);
-  for (const san of extractMentionedSans(text)) {
-    // A move the line rules out is said, never arrowed (the arrow door's rule):
-    // "it stops your Ra5" drew Ra5 green as if to play it (Learn walk 2026-10-01).
-    if (ruledOut.has(san)) continue;
-    for (const f of [fen, flipTurn(fen)]) {
-      try {
-        const c = new Chess(f);
-        const mv = c.move(san);
-        if (!mv) continue;
-        const k = `${mv.from}${mv.to}`;
-        if (!seen.has(k)) {
-          seen.add(k);
-          out.push({ from: mv.from, to: mv.to, role: mv.color === student ? 'play' : 'theirs', fen: f, source: 'learn.namedMove' });
+  const push = (c: ArrowClaim): void => {
+    const k = `${c.from}${c.to}`;
+    if (seen.has(k)) return;
+    seen.add(k);
+    out.push(c);
+  };
+  const tryMove = (f: string, san: string): { from: string; to: string; color: 'w' | 'b'; after: string } | null => {
+    try {
+      const c = new Chess(f);
+      const mv = c.move(san.replace(/^…/, ''));
+      return mv ? { from: mv.from, to: mv.to, color: mv.color, after: c.fen() } : null;
+    } catch { return null; }
+  };
+  const boardOf = (f: string): string => f.split(' ').slice(0, 2).join(' ');
+  const playedHere = (san: string): boolean => {
+    if (!prevFen) return false;
+    const m = tryMove(prevFen, san);
+    return !!m && boardOf(m.after).split(' ')[0] === boardOf(fen).split(' ')[0];
+  };
+
+  // Group the mentioned moves into runs: tokens separated only by spaces,
+  // commas, ellipses or "and".
+  const spans = extractMentionedSanSpans(text);
+  const runs: string[][] = [];
+  for (let i = 0; i < spans.length; i++) {
+    const gap = i > 0 ? spans[i].text.slice(spans[i - 1].end, spans[i].index) : null;
+    if (gap !== null && /^[\s,…]*(?:and\s+|then\s+)?…?$/.test(gap) && runs.length > 0) runs[runs.length - 1].push(spans[i].san);
+    else runs.push([spans[i].san]);
+  }
+
+  for (const run of runs) {
+    const live = run.filter((s) => !ruledOut.has(s));
+    if (live.length === 0) continue;
+    if (run.length >= 2 && live.length === run.length) {
+      // A LINE: find the board its first move is played on, then walk it.
+      const starts = [fen, flipTurn(fen), ...(prevFen ? [prevFen] : [])];
+      let drawn = false;
+      for (const start of starts) {
+        let f = start;
+        const plies: ArrowClaim[] = [];
+        for (const san of run) {
+          const m = tryMove(f, san);
+          if (!m) break;
+          plies.push({ from: m.from, to: m.to, role: 'line', fen: f, source: 'learn.namedLine' });
+          f = m.after;
         }
+        if (plies.length >= 2) { plies.forEach(push); drawn = true; break; }
+      }
+      if (drawn) continue;
+    }
+    for (const san of live) {
+      if (playedHere(san)) continue;
+      let placed = false;
+      for (const f of [fen, flipTurn(fen)]) {
+        const m = tryMove(f, san);
+        if (!m) continue;
+        push({ from: m.from, to: m.to, role: m.color === student ? 'play' : 'theirs', fen: f, vouchedBy: 'engine', source: 'learn.namedMove' });
+        placed = true;
         break;
-      } catch { /* not legal on this side — try the other */ }
+      }
+      if (placed || !prevFen) continue;
+      const m = tryMove(prevFen, san);
+      if (m) push({ from: m.from, to: m.to, role: 'missed', fen: prevFen, vouchedBy: 'engine', source: 'learn.namedMissed' });
     }
   }
   return out;

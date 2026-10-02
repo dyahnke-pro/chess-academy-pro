@@ -85,6 +85,7 @@ vi.mock('../../hooks/useSettings', () => ({
 }));
 
 vi.mock('../../services/coachFeatureService', () => ({
+  segmentNamedArrows: () => [],
   generateNarrativeSummary: vi.fn().mockResolvedValue('This was a well-played game with some key moments.'),
   generateReviewNarrationSegments: vi.fn().mockResolvedValue({ intro: 'Let us review this game.', closing: 'That concludes the review.' }),
   // generateReviewNarration was added to CoachGameReview.tsx after
