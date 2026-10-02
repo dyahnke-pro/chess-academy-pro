@@ -42,4 +42,10 @@ describe('upNextPicker', () => {
     const r = rankUpNext({ ...base, reps: [weak, srs], coldStart: true, freeOpeningOpen: true });
     expect(new Set(r.map((p) => p.key)).size).toBe(r.length);
   });
+  it('every puzzle bite opens straight onto a puzzle — a start screen is a bite with no finish line', () => {
+    const r = rankUpNext({ ...base, reps: [weak, srs], coldStart: true, freeOpeningOpen: true });
+    const puzzleBites = r.filter((p) => p.path === '/tactics/adaptive' || p.path === '/tactics/long');
+    expect(puzzleBites.length).toBeGreaterThanOrEqual(2);
+    for (const p of puzzleBites) expect((p.state as { autoStart?: boolean } | undefined)?.autoStart).toBe(true);
+  });
 });

@@ -76,7 +76,7 @@ function weaknessPick(rep: RepCandidate): UpNextPick {
     reason: `${rep.label} keeps coming up in your games. Two quick puzzles on it.`,
     bite: `${WEAKNESS_BITE} puzzles`,
     path: route.path,
-    state: { ...(route.state ?? {}), repKey: key, repCap: WEAKNESS_BITE },
+    state: { ...(route.state ?? {}), autoStart: true, repKey: key, repCap: WEAKNESS_BITE },
     hub: 'tactics:my-weaknesses',
   };
 }
@@ -149,7 +149,7 @@ export function rankUpNext(i: UpNextInput): UpNextPick[] {
       kind: 'long', key: 'up:long', label: 'One long puzzle',
       reason: 'One puzzle, three or four moves deep. Calculate the whole line.',
       bite: '1 puzzle', path: '/tactics/long',
-      state: { repKey: 'up:long', repCap: 1 }, hub: 'tactics:long',
+      state: { autoStart: true, repKey: 'up:long', repCap: 1 }, hub: 'tactics:long',
     },
   );
   const seen = new Set<string>();
