@@ -121,7 +121,15 @@ async function watchBanners(ms) {
 async function home() {
   await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await dismissModals();
-  await page.locator('[data-testid="up-next-bar"], [data-testid="today-ring"]').first().waitFor({ timeout: 90000 });
+  await page.locator('[data-testid="today-ring"]').first().waitFor({ timeout: 90000 });
+}
+// Home has no bar (David 2026-10-02): a bite starts from its hub's bar.
+async function tacticsBar() {
+  await page.goto(`${BASE}/tactics`, { waitUntil: 'domcontentloaded', timeout: 45000 });
+  await dismissModals();
+  const bar = page.locator('[data-testid="up-next-bar"]');
+  await bar.waitFor({ timeout: 90000 });
+  return bar;
 }
 
 try {
@@ -130,7 +138,23 @@ try {
   const chosen = rowsOf('up-next-chosen')[0];
   const kinds = chosen?.details?.ring?.map((r) => r.kind) ?? [];
   check('A UP NEXT fresh-device ring — three bites, Deep Run first', kinds.length === 3 && kinds[0] === 'deep-run', JSON.stringify(kinds));
-  check('A2 the bar leads with Deep Run', /deep run/i.test(await page.locator('[data-testid="up-next-label"]').innerText()));
+  // HOME ROTATES A ROW, NOT A BAR (David 2026-10-02): exactly one of the
+  // section rows blinks, picked by the record; never the same family twice in
+  // a row across app opens; never Play.
+  await until(async () => rowsOf('home-suggestion-chosen').length > 0, 30000, 300);
+  check('A2 Home has no Up-next bar', await page.locator('[data-testid="up-next-bar"]').count() === 0);
+  const blinking = await page.locator('[data-up-next="true"]').count();
+  const first = rowsOf('home-suggestion-chosen')[0];
+  check('A2b exactly one section row blinks, chosen by the record', blinking === 1 && !!first, `${blinking} blinking · ${first?.summary ?? 'no row'}`);
+  check('A2c fresh device with no games: the blinking row asks for games (Weaknesses)',
+    first?.details?.shown === 'upload' && /weakness/i.test(await page.locator('[data-up-next="true"]').innerText().catch(() => '')), first?.summary);
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await dismissModals();
+  await until(async () => rowsOf('home-suggestion-chosen').length > 1, 30000, 300);
+  const second = rowsOf('home-suggestion-chosen')[1];
+  check('A2d a new app open shows a DIFFERENT family', !!second && second.details.shown !== first?.details?.shown, `${first?.details?.shown} → ${second?.details?.shown}`);
+  check('A2e Play is never a suggestion', !rowsOf('home-suggestion-chosen').some((r) => /play/i.test(r.details?.shown ?? '')));
+  check('A2f the Tactics hub bar leads with Deep Run', /deep run/i.test(await (await tacticsBar()).locator('[data-testid="up-next-label"]').innerText()));
   check('A3 the ring reads 0/3', /0\/3/.test(await page.locator('[data-testid="today-ring-label"]').innerText()));
   await page.goto(`${BASE}/weaknesses`, { waitUntil: 'domcontentloaded' });
   await page.locator('[data-testid="heat-map"]').waitFor({ timeout: 60000 });
@@ -138,8 +162,7 @@ try {
   check('B HEAT MAP fresh device is all grey — never "mastered"', heat && heat.details.red.length === 0 && heat.details.green.length === 0, heat?.summary ?? 'no row');
 
   // ── C. Deep Run bite ─────────────────────────────────────────────────────
-  await home();
-  await page.locator('[data-testid="up-next-bar"]').click();
+  await (await tacticsBar()).click();
   await page.waitForURL(/deep-run/, { timeout: 15000 });
   check('C the bar opens the bite (an up-next-opened row)', rowsOf('up-next-opened').length >= 1, rowsOf('up-next-opened')[0]?.summary);
   const start = page.locator('[data-testid="deep-run-start"]');
@@ -160,9 +183,9 @@ try {
 
   // ── D. Close the ring ────────────────────────────────────────────────────
   for (let bite = 0; bite < 2; bite += 1) {
-    await home();
-    const kind = await page.locator('[data-testid="up-next-bar"]').getAttribute('data-pick-kind');
-    await page.locator('[data-testid="up-next-bar"]').click();
+    const bar = await tacticsBar();
+    const kind = await bar.getAttribute('data-pick-kind');
+    await bar.click();
     const count = kind === 'warm-up' ? 2 : 1;
     console.log(`[D] bite ${bite} kind=${kind}`);
     for (let n = 0; n < count; n += 1) {

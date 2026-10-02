@@ -9,9 +9,8 @@ import { PageHelp } from '../Layout/PageHelp';
 import { TableOfContents } from './TableOfContents';
 import { useSettings } from '../../hooks/useSettings';
 import { scaledShadow } from '../../utils/neonColors';
-import { useUpNext } from '../../hooks/useUpNext';
-import type { UpNextState } from '../../services/upNextLoader';
-import { UpNextBar } from './UpNextBar';
+import { useUpNext, useHomeSuggestion } from '../../hooks/useUpNext';
+import type { UpNextPick } from '../../services/upNextPicker';
 import { TodayRing } from './TodayRing';
 import { sayPickOncePerDay } from '../../services/upNextHome';
 
@@ -111,6 +110,8 @@ function homePulseRoute(hub: string | null): string | null {
   if (!hub) return null;
   if (hub.startsWith('tactics:')) return '/tactics';
   if (hub === 'openings') return '/openings';
+  if (hub === 'coach' || hub === 'home') return '/coach/home';
+  if (hub === 'weaknesses') return '/weaknesses';
   return null;
 }
 
@@ -120,12 +121,12 @@ function homePulseRoute(hub: string | null): string | null {
  *  the SAME selector (`buildTodaysReps`) the Training Plan reads. The coach
  *  says the reason once a day per pick, after the student's first tap —
  *  never on launch, and through the narration setting. */
-function UpNextSection({ upNext }: { upNext: UpNextState | null }): JSX.Element {
+/** The blinking row's reason, said once a day per pick after the student's
+ *  first tap on Home (never on launch; through the narration setting). Home
+ *  has no Up-next bar any more (David 2026-10-02) — the row IS the suggestion. */
+function useSayPickReason(pick: UpNextPick | null): void {
   const spokeRef = useRef(false);
-
-  // The gentle voice: after the first tap anywhere on Home, once a day per pick.
   useEffect(() => {
-    const pick = upNext?.current;
     if (!pick) return;
     const say = (): void => {
       if (spokeRef.current) return;
@@ -134,17 +135,7 @@ function UpNextSection({ upNext }: { upNext: UpNextState | null }): JSX.Element 
     };
     window.addEventListener('pointerdown', say, { once: true });
     return () => window.removeEventListener('pointerdown', say);
-  }, [upNext?.current]);
-
-  // Today's count is the small pill in the title row; the week, proven / to
-  // fix and the Deep Run best moved to the full plan (`WeekProgress`) — so the
-  // four sections sit right under Up next (David 2026-10-02).
-  if (!upNext?.current) return <></>;
-  return (
-    <div className="max-w-lg mx-auto w-full shrink-0" data-testid="dashboard-up-next">
-      <UpNextBar pick={upNext.current} surface="home" />
-    </div>
-  );
+  }, [pick]);
 }
 
 export function DashboardPage(): JSX.Element {
@@ -155,6 +146,9 @@ export function DashboardPage(): JSX.Element {
   const gB = settings.glowBrightness;
   const gS = gB / 100;
   const upNextForPulse = useUpNext();
+  // Which row blinks ROTATES per app open (homeSuggestion); the ring pill stays the day's.
+  const suggestion = useHomeSuggestion();
+  useSayPickReason(suggestion?.pick ?? null);
 
   useEffect(() => {
     void seedDatabase();
@@ -169,7 +163,7 @@ export function DashboardPage(): JSX.Element {
   }, [activeProfile, setActiveProfile]);
 
   if (!activeProfile) return <></>;
-  const pulseRoute = homePulseRoute(upNextForPulse?.current?.hub ?? null);
+  const pulseRoute = homePulseRoute(suggestion?.pick.hub ?? null);
 
   return (
     <div
@@ -228,7 +222,6 @@ export function DashboardPage(): JSX.Element {
       </div>
 
       {/* Up next + today's ring — routes into one short bite */}
-      <UpNextSection upNext={upNextForPulse} />
 
       {/* The "Review your last game" card is gone (David 2026-10-02: the
           "redundant review button") — Up next already sends the student to
@@ -269,7 +262,7 @@ export function DashboardPage(): JSX.Element {
             <button
               key={section.route}
               onClick={() => void navigate(section.route)}
-              className={`${section.bgColor} rounded-2xl flex items-center gap-3 px-4 py-3.5 text-left transition-all duration-200 w-full ${isKids ? 'mt-2' : ''} ${section.route === pulseRoute ? 'ring-2 ring-fuchsia-300/80 upnext-glow' : ''}`}
+              className={`${section.bgColor} rounded-2xl flex items-center gap-3 px-4 py-3.5 text-left transition-all duration-200 w-full ${isKids ? 'mt-2' : ''} ${section.route === pulseRoute ? 'ring-2 ring-fuchsia-300 upnext-glow' : ''}`}
               data-up-next={section.route === pulseRoute ? 'true' : undefined}
               style={{
                 borderTop: `1px solid rgba(${section.rgb}, ${Math.min(1, 0.1 * gS)})`,

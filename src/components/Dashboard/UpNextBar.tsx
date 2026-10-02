@@ -28,7 +28,7 @@ export function UpNextBar({ pick, surface }: { pick: UpNextPick; surface: string
   return (
     <button
       onClick={open}
-      className="relative w-full overflow-hidden rounded-2xl border-2 border-fuchsia-300/80 bg-fuchsia-500/15 px-4 py-3 text-left upnext-glow transition-transform active:scale-[0.98]"
+      className="relative w-full overflow-hidden rounded-2xl border-2 border-fuchsia-300 bg-fuchsia-500/15 px-4 py-3 text-left upnext-glow transition-transform active:scale-[0.98]"
       data-testid="up-next-bar"
       data-pick-kind={pick.kind}
     >
