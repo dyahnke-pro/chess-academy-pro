@@ -74,7 +74,11 @@ export interface IdentityLine { text: string; squares: string[]; key: string }
  */
 /** Names that are WAYPOINTS, not openings: what the detector says before an
  *  opening exists ("King's Pawn Game" after 1.e4 e5). No identity to teach. */
-const WAYPOINT = /^(?:King's Pawn Game|Queen's Pawn Game|Indian Defense|King's Pawn|Queen's Pawn)(?::|$)/;
+// "King's Knight Opening" is 1.e4 e5 2.Nf3 — the Ruy, the Italian, the Scotch
+// and the Petrov all pass through it, so its "master line" is one of theirs
+// (walk 2026-10-02: "a quiet opening … almost no captures" said of a Scotch).
+const WAYPOINT = /^(?:King's Pawn Game|Queen's Pawn Game|Indian Defense|King's Pawn|Queen's Pawn|King's Knight Opening)(?::|$)/;
+export function isWaypointOpening(name: string): boolean { return WAYPOINT.test(name.trim()); }
 
 export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'seat' | 'demo'): IdentityLine | null {
   if (WAYPOINT.test(name.trim())) return null;

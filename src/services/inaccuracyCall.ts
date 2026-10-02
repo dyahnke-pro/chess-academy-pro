@@ -733,7 +733,7 @@ export function callInaccuracyDetailed(args: {
       // NEVER A BARE GRADE (run B walk 2026-09-30: "Nf5 was a mistake." and
       // nothing else). With no punishment and no better-move reason, the one
       // computed fact left is what it cost.
-      : `${args.playedSan} was ${grade}${should ? '' : ` — it cost ${costWords(cost)} of advantage`}.`;
+      : `${args.playedSan} was ${grade}${should ? '' : ` — it cost ${costWords(cost)}${costWords(cost) === 'a little' ? '' : ' of advantage'}`}.`;
   // THE PUNISHING LINE, PLAYED OUT (David 2026-09-30: "teach more line
   // calculations"): to where their material lands, with what it wins.
   let lineTail = '';

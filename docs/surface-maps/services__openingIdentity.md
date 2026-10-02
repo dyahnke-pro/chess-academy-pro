@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**144 lines · 7 exports · 4 importers · 1 tests · 0 audits**
+**148 lines · 8 exports · 6 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,9 +13,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/learnBoardTeaching.ts`
+- `src/services/openingAnnouncement.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/openingIdentity.test.ts`
 - `src/services/reviewOpeningTheory.ts`
+- `src/services/walkOct2a.test.ts`
 
 ## Exports and every call site
 
@@ -40,7 +42,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `IdentityLine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `openingIdentityLine` (function) — 12 call sites
+### `isWaypointOpening` (function) — 1 call site
+- `src/services/openingAnnouncement.ts:81`
+
+### `openingIdentityLine` (function) — 13 call sites
 - `src/services/coachApi.ts:5471`
 - `src/services/coachApi.ts:5994`
 - `src/services/learnBoardTeaching.ts:602`
@@ -53,10 +58,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingIdentity.test.ts:31`
 - `src/services/openingIdentity.test.ts:32`
 - `src/services/reviewOpeningTheory.ts:636`
+- `src/services/walkOct2a.test.ts:67`
 
 ## Tests
 
 - `src/services/openingIdentity.test.ts`
+- `src/services/walkOct2a.test.ts`
 
 ## Audits that reach it
 

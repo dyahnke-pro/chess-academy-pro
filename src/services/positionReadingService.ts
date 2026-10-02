@@ -32,6 +32,26 @@ const PIECE_NAME: Record<PieceSymbol, string> = {
 };
 
 /**
+ * Material lead for `color` once the exchange on `square` has SETTLED: the raw
+ * count, corrected by what the side to move wins by capturing on `square`
+ * (`seeGain`). A trade read mid-recapture is not a lead or a deficit — after
+ * Nxf6+ Bxf6 the bishop still stands to be taken and retaken, and the raw
+ * count calls the side that just recaptured "a piece down" (Learn walk
+ * 2026-10-02, "You're behind in material" with material level).
+ */
+export function settledLead(chess: Chess, color: Color, square: Square): number {
+  let lead = 0;
+  for (const row of chess.board()) for (const p of row) {
+    if (!p || p.type === 'k') continue;
+    lead += p.color === color ? PIECE_VALUE[p.type] : -PIECE_VALUE[p.type];
+  }
+  const victim = chess.get(square);
+  if (!victim) return lead;
+  const gain = Math.max(0, seeGain(chess, square));
+  return victim.color === color ? lead - gain : lead + gain;
+}
+
+/**
  * Static Exchange Evaluation on `square`: the material the side NOT owning the
  * piece there gains by initiating a capture sequence, both sides playing
  * least-valuable-attacker and stopping when the trade turns unfavorable. The

@@ -27,7 +27,7 @@
  */
 import { lineWithReasons } from './lineReasons';
 import { Chess, type Color, type Square, type Move, type PieceSymbol } from 'chess.js';
-import { signedLegalSeeFor, bishopHemmedByOwnPawns } from './positionReadingService';
+import { signedLegalSeeFor, bishopHemmedByOwnPawns, settledLead } from './positionReadingService';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { findContinuationsAtPly } from './openingDetectionService';
 import { deriveNextPlans } from './nextPlans';
@@ -938,8 +938,10 @@ const DETECTORS: Detector[] = [
   // 20. Wrong trade for the material situation — ahead: trade pieces; behind:
   // keep pieces (trade pawns). The best move does the opposite of the played.
   (c) => {
-    const { last, best, mover, opp } = c;
-    const lead = material(c.before, mover) - material(c.before, opp);
+    const { last, best, mover } = c;
+    // Settled, never mid-recapture: read the lead AFTER the move, with the
+    // exchange on its square played out.
+    const lead = settledLead(c.after, mover, last.to);
     const isPieceTrade = (m: Move) => !!m.captured && m.captured !== 'p' && m.piece !== 'p' && VAL[m.captured] === VAL[m.piece];
     if (lead >= 2 && isPieceTrade(best) && !isPieceTrade(last) && !last.captured) {
       return att('wrong-trade-for-material', 1, { squares: [best.to], moves: [best.san], pvMoves: [] }, { situation: 'ahead', better: best.san });
@@ -986,6 +988,10 @@ const DETECTORS: Detector[] = [
   (c) => {
     const { last, best, mover, opp } = c;
     if (!c.endgame || best.piece !== 'k' || last.piece === 'k') return null;
+    // IN CHECK, THE KING MOVE IS AN ANSWER, NOT A WALK (walk 2026-10-02: after
+    // Rg8+, "…Rxg8 was a blunder" was followed by "yours on d8 should be
+    // walking in" — hxg8=Q+ mates; Kd7 was the escape, not activity).
+    if (c.before.inCheck()) return null;
     const bk = kingSquare(c.before, mover); if (!bk) return null;
     // WALKING IN means toward the centre (Bowdler walk 2026-09-27: "yours on g8
     // should be walking in — Kh8"). A king move to the corner is something else

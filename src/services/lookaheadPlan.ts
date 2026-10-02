@@ -21,6 +21,7 @@
 import { seatPieceReferences } from '../utils/seatPieces';
 import { Chess, type Square } from 'chess.js';
 import { computePlyFacts } from './pvPlayback';
+import { settledLead } from './positionReadingService';
 import { describeStructure } from './boardStructure';
 import { detectTactics } from './tacticsDetector';
 import { PATTERN_SPEECH, patternAim } from './tacticVocabulary';
@@ -570,7 +571,13 @@ function planFor(
     materialSwing += ply.facts.materialGained;
     if (ply.facts.materialGained > 0) materialSquares.push(to);
     shieldStripped += ply.facts.shieldLost;
-    if (!tactic && ply.facts.tacticLanded) {
+    // A DISCOVERY THE NEXT MOVE TAKES AWAY IS NOT A PLAN (walk 2026-10-02:
+    // "d5 was their move, to unleash a discovered attack" — the line's dxe6
+    // sets up exf7+ against the rook on e8, and its own next move …fxe6 takes
+    // the pawn). A discovery in waiting lands only if the blocker survives.
+    const reply = plies[plies.indexOf(ply) + 1];
+    const blockerTaken = ply.facts.tacticLanded === 'discovery' && !!reply && reply.moverColor !== color && reply.uci.slice(2, 4) === to;
+    if (!tactic && ply.facts.tacticLanded && !blockerTaken) {
       tactic = ply.facts.tacticLanded;
       tacticSquare = to;
     }
@@ -636,6 +643,18 @@ function planFor(
     materialSwing = quietAt >= 0 && horizon.length > 0 && base
       ? sideBalance(horizon[quietAt].fenAfter, color) - sideBalance(base, color)
       : 0;
+    // A WIN MUST STILL STAND WHERE THE LINE ENDS (walk 2026-10-02: "Rf7 would
+    // win a rook for a piece" — Rf7 Rxe6 Kxe6 Bc4+ d5 Bxd5+ Kxd5 Rxf7 gives
+    // it all back after the quiet point). The end is read with the last
+    // capture's exchange settled, so a line cut mid-recapture is not a loss.
+    const last = horizon.at(-1);
+    if (materialSwing > 0 && last && base) {
+      try {
+        const end = new Chess(last.fenAfter);
+        const endSwing = settledLead(end, color === 'white' ? 'w' : 'b', last.uci.slice(2, 4) as Square) - sideBalance(base, color);
+        materialSwing = Math.min(materialSwing, endSwing);
+      } catch { /* unreadable end — keep the quiet read */ }
+    }
     if (quietAt >= 0 && horizon.length > 0 && base && materialSwing >= 1) {
       materialDeal = dealOf(base, horizon[quietAt].fenAfter, color);
     }

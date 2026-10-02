@@ -164,8 +164,11 @@ export function limitStrengthElo(targetElo: number): number {
  *  2026-09-30: "about 1.4 points" where a deeper read said 1.8). */
 export function costWords(cp: number): string {
   const p = cp / 100;
+  // Each bucket straddles the depth noise either side of its edge (walk
+  // 2026-10-02: 0.2 said as "about half a pawn", 0.92 as "more than a pawn").
+  if (p < 0.45) return 'a little';
   if (p < 0.75) return 'about half a pawn';
-  if (p < 1) return 'most of a pawn';
+  if (p < 1.25) return 'about a pawn';
   if (p < 2) return 'more than a pawn';
   if (p < 3) return 'about two pawns';
   if (p < 5) return 'about a piece';

@@ -18,6 +18,7 @@
 // A LEAF: chess.js + the structure reader.
 import { Chess } from 'chess.js';
 import { describeStructure } from './boardStructure';
+import { settledLead } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
 import { strongestByDelta, weakestByDelta, type PieceValue } from './pieceValueRead';
 
@@ -48,7 +49,9 @@ export function tradeJudgement(fenBefore: string, san: string, reply: string | n
   if (MATERIAL_VALUE[mine.captured] !== MATERIAL_VALUE[mine.piece]) return null;
   const s = describeStructure(c.fen());
   if (!s) return null;
-  const edge = student === 'w' ? s.material.balance : -s.material.balance;
+  // The student is to move with the recapture on mine.to still to come —
+  // read the lead with that exchange settled, never mid-sequence.
+  const edge = settledLead(c, student, mine.to);
   const gave = NAME[mine.piece] ?? 'piece';
   const got = NAME[mine.captured] ?? 'piece';
   // GOOD PIECE, BAD PIECE — read off the engine's table of THIS board, on the
@@ -85,7 +88,7 @@ export function tradeJudgement(fenBefore: string, san: string, reply: string | n
   }
   const king = c.board().flat().find((p) => p && p.type === 'k' && p.color === student)?.square;
   if (king && dist(mine.to, king) <= 2) {
-    return { reason: 'attacker-gone', squares: [mine.to, king], text: `A good trade — their ${got} stood right next to your king, and now it is gone.` };
+    return { reason: 'attacker-gone', squares: [mine.to, king], text: `A good trade — their ${got} stood ${dist(mine.to, king) === 1 ? 'right next to' : 'close to'} your king, and now it is gone.` };
   }
   return null;
 }

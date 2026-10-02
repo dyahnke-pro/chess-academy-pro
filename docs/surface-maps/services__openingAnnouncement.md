@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**174 lines · 10 exports · 5 importers · 4 tests · 1 audits**
+**180 lines · 10 exports · 6 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,6 +17,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/computedVoiceAudit.report.test.ts`
 - `src/services/openingAnnouncement.test.ts`
 - `src/services/openingPositions.test.ts`
+- `src/services/walkOct2a.test.ts`
 
 ## Exports and every call site
 
@@ -29,7 +30,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingAnnouncement.test.ts:118`
 - `src/services/openingAnnouncement.test.ts:121`
 
-### `openingAnnouncement` (function) — 17 call sites
+### `openingAnnouncement` (function) — 18 call sites
 - `src/services/computedVoiceAudit.report.test.ts:302`
 - `src/services/openingAnnouncement.test.ts:15`
 - `src/services/openingAnnouncement.test.ts:18`
@@ -47,6 +48,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingAnnouncement.test.ts:52`
 - `src/services/openingAnnouncement.test.ts:53`
 - `src/services/openingPositions.test.ts:32`
+- `src/services/walkOct2a.test.ts:71`
 
 ### `openingAnnouncementForGame` (function) — 3 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8136`
@@ -89,6 +91,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingAnnouncement.test.ts`
 - `src/services/openingAnnouncementIdea.test.ts`
 - `src/services/openingPositions.test.ts`
+- `src/services/walkOct2a.test.ts`
 
 ## Audits that reach it
 

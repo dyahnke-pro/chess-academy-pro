@@ -116,6 +116,20 @@ function seeInitiate(board: Chess, sq: Square): number {
  *  side worth more than it that `by` did not attack before, it stands in front
  *  of that piece — a RELATIVE pin chess.js's legality cannot see (the knight on
  *  b6 may legally recapture on d5; it just hands over the queen behind it). */
+/** After `from`x`to` by the side to move in `pos`, the most `me` wins back by
+ *  any capture of theirs (a static exchange on each of their pieces). */
+function counterWinsBack(pos: Chess, from: Square, to: Square, me: 'w' | 'b'): number {
+  let b: Chess;
+  try { b = new Chess(pos.fen()); b.move({ from, to, promotion: 'q' }); } catch { return 0; }
+  let best = 0;
+  for (const row of b.board()) for (const cell of row) {
+    if (!cell || cell.color === me || cell.type === 'k') continue;
+    if (b.attackers(cell.square, me).length === 0) continue;
+    best = Math.max(best, seeGain(b, cell.square));
+  }
+  return best;
+}
+
 export function pinnedToMore(board: Chess, sq: Square, by: 'w' | 'b'): boolean {
   const piece = board.get(sq);
   if (!piece || piece.color === by) return false;
@@ -251,6 +265,11 @@ export function whyItFailed(args: {
       if (beforeTheirs && seeGain(beforeTheirs, cell.square) >= gainNow) continue;
       const attacker = leastValuableAttackerOf(after, cell.square);
       if (!attacker) continue;
+      // THE WIN MUST BE CLEAN (walk 2026-10-02: "once it left, the knight on
+      // f3 wins it" — Nxd4 leaves their own knight on e4 hanging to …Nxe4).
+      // After their capture, if you win back at least as much anywhere else,
+      // the piece was not lost to that capture.
+      if (counterWinsBack(after, attacker.sq, cell.square, me) >= gainNow) continue;
       if (!worstAbandon || (VALUE[cell.type] ?? 0) > (VALUE[worstAbandon.type] ?? 0)) {
         worstAbandon = { sq: cell.square, type: cell.type, attacker };
       }

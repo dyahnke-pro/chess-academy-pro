@@ -16,6 +16,7 @@ import { bookDeparture, warmBookPosition, type BookDeparture } from './bookDepar
 import { sayMoveNoun } from './spokenMove';
 import { costWords, MISTAKE_CP } from './engineConstants';
 import { transposedOpening } from './openingPositions';
+import { isWaypointOpening } from './openingIdentity';
 import type { DetectedOpening } from '../types';
 
 export interface DetectedName {
@@ -73,6 +74,11 @@ export function openingAnnouncement(
     const spokenFamily = spokenName.split(':')[0].trim();
     const newFamily = det.name.split(':')[0].trim();
     if (!det.name.startsWith(spokenName)) {
+      // FROM A WAYPOINT, THE FIRST REAL NAME IS NEWS — and no transposition:
+      // "King's Knight Opening" → the Scotch by the Scotch's own move order
+      // (walk 2026-10-02: "By a different move order, the game has transposed
+      // into the Scotch Game: Lolli Variation" on 3.d4 exd4 4.Nxd4 Nxd4).
+      if (isWaypointOpening(spokenName) && newFamily !== spokenFamily) return `It's the ${spoken(det.name)}.`;
       if (transposed && newFamily !== spokenFamily) return `By a different move order, the game has transposed into the ${spoken(det.name)}.`;
       if (newFamily === spokenFamily || !newFamily.includes(spokenFamily)) return null;
       return `It's the ${newFamily}.`;

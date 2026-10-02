@@ -970,12 +970,16 @@ function openingIdeas(
   // Only from a starting square: on move 39 a bishop that wandered back to its
   // home rank and out again "completed your development" (review walk 2026-09-27).
   if ((mv.piece === 'n' || mv.piece === 'b') && rankOf(mv.from) === homeRank && ORIGINAL_FILES[mv.piece].includes(mv.from[0]) && homeMinorCount(after, mover) === 0) {
+    // "Then the rooks" only while a rook still stands in its corner — with both
+    // already out it sends the student to do what they did (walk 2026-10-02,
+    // "…then bring the rooks" with rooks on b8 and d8).
+    const rookHome = ['a', 'h'].some((f) => { const p = after.get(`${f}${homeRank}` as Square); return p?.type === 'r' && p.color === mover; });
     out.push({
       id: 'development-complete',
       weight: 70,
-      led: 'completes your development — every minor piece is out, so the rooks come next',
-      selfContained: `brings out the last minor piece — development is done, and the rooks come next`,
-      imperative: 'get the last minor piece out, then bring the rooks',
+      led: rookHome ? 'completes your development — every minor piece is out, so the rooks come next' : 'completes your development — every minor piece is out',
+      selfContained: rookHome ? `brings out the last minor piece — development is done, and the rooks come next` : `brings out the last minor piece — development is done`,
+      imperative: rookHome ? 'get the last minor piece out, then bring the rooks' : 'get the last minor piece out',
       squares: [mv.to],
     });
   }

@@ -18,7 +18,9 @@ describe('tradeJudgement (P3, T3)', () => {
     expect(t?.text).toMatch(/^A knight for a knight — and trading is exactly right when you are ahead/);
   });
   it('a bishop hemmed in by its own centre pawns is a good one to give', () => {
-    const t = tradeJudgement('4k3/4n3/8/3b4/2P1B3/3P1P2/8/4K3 w - - 0 1', 'Bxd5', 'Nxd5', 'w', 0);
+    // Recaptured by the e-pawn: with …Nxd5 instead, cxd5 wins the knight and
+    // the settled read is honestly "ahead" (walk 2026-10-02, settledLead).
+    const t = tradeJudgement('4k3/4n3/4p3/3b4/2P1B3/3P1P2/8/4K3 w - - 0 1', 'Bxd5', 'exd5', 'w', 0);
     expect(t?.reason).toBe('bad-bishop');
     expect(t?.text).toMatch(/3 of your own centre pawns stand on its light squares/);
   });

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2622 lines · 79 exports · 69 importers · 21 tests · 2 audits**
+**2642 lines · 80 exports · 72 importers · 22 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -41,6 +41,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts`
 - `src/services/inaccuracyCall.ts`
 - `src/services/latentFork.ts`
+- `src/services/lookaheadPlan.ts`
 - `src/services/minorityLeverCheck.test.ts`
 - `src/services/mistakeNarration.ts`
 - `src/services/moveAllowed.ts`
@@ -77,14 +78,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/theirMoveCost.ts`
 - `src/services/threatAnswer.ts`
 - `src/services/threatOut.ts`
+- `src/services/tradeJudgement.ts`
 - `src/services/tradeQuality.ts`
 - `src/services/walk3.test.ts`
 - `src/services/walkOct1Learn.test.ts`
+- `src/services/walkOct2a.test.ts`
 - `src/test/kingIsNeverHanging.test.ts`
 
 ## Exports and every call site
 
-### `seeGain` (function) — 15 call sites
+### `settledLead` (function) — 4 call sites
+- `src/services/lookaheadPlan.ts:654`
+- `src/services/principleAttribution.ts:944`
+- `src/services/tradeJudgement.ts:54`
+- `src/services/walkOct2a.test.ts:29`
+
+### `seeGain` (function) — 16 call sites
 - `src/services/computedMaterialTruth.corpus.test.ts:119`
 - `src/services/computedMaterialTruth.corpus.test.ts:144`
 - `src/services/computedMaterialTruth.corpus.test.ts:159`
@@ -96,10 +105,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:52`
 - `src/services/positionReadingService.test.ts:57`
 - `src/services/positionReadingService.test.ts:64`
-- `src/services/whyItFailed.ts:138`
-- `src/services/whyItFailed.ts:146`
-- `src/services/whyItFailed.ts:249`
-- `src/services/whyItFailed.ts:251`
+- `src/services/whyItFailed.ts:128`
+- `src/services/whyItFailed.ts:152`
+- `src/services/whyItFailed.ts:160`
+- `src/services/whyItFailed.ts:263`
+- `src/services/whyItFailed.ts:265`
 
 ### `legalSeeGain` (function) — 21 call sites
 - `src/services/computedTruth.fuzz.test.ts:91`
@@ -151,7 +161,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/latentFork.ts:149`
 - `src/services/latentFork.ts:220`
 - `src/services/moveFundamentals.ts:316`
-- `src/services/moveFundamentals.ts:1455`
+- `src/services/moveFundamentals.ts:1461`
 
 ### `legalSeeGainFor` (function) — 40 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8020`
@@ -277,7 +287,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `bishopHemmedByOwnPawns` (function) — 3 call sites
 - `src/services/positionReadingService.test.ts:902`
-- `src/services/principleAttribution.ts:1072`
+- `src/services/principleAttribution.ts:1078`
 - `src/services/reviewTeachingPoints.ts:202`
 
 ### `findPieceQuality` (function) — 29 call sites
@@ -760,6 +770,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.sicilianClosed1000.test.ts`
 - `src/services/walk3.test.ts`
 - `src/services/walkOct1Learn.test.ts`
+- `src/services/walkOct2a.test.ts`
 - `src/test/kingIsNeverHanging.test.ts`
 
 ## Audits that reach it
