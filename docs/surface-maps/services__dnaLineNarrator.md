@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**271 lines · 5 exports · 6 importers · 2 tests · 0 audits**
+**286 lines · 6 exports · 6 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -59,7 +59,10 @@
 - `src/services/exchangeLedger.test.ts:67`
 - `src/services/exchangeLedger.test.ts:77`
 - `src/services/exchangeLedger.test.ts:87`
-- `src/services/puzzleConceptExplanation.ts:165`
+- `src/services/puzzleConceptExplanation.ts:171`
+
+### `dnaLineClauses` (function) — 1 call site
+- `src/services/puzzleConceptExplanation.ts:177`
 
 ## Tests
 

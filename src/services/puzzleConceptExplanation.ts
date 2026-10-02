@@ -18,7 +18,7 @@
  * arrow on the student's key move, and the concept name/id for sourcing.
  */
 import { Chess } from 'chess.js';
-import { narrateDnaLine, type DnaLinePly } from './dnaLineNarrator';
+import { narrateDnaLine, dnaLineClauses, type DnaLinePly } from './dnaLineNarrator';
 import { getConcept } from './chessConceptService';
 import { conceptForLine, tacticInvariant, type ComputedConcept } from './conceptEngine';
 
@@ -76,6 +76,12 @@ export interface PuzzleConceptExplanation {
   arrow: { from: string; to: string } | null;
   /** The composed explanation — ready to display AND to voice. */
   spoken: string;
+  /** The line one clause per ply, sentence-cased, aligned to `clausePlyStart`
+   *  onward in the solution — so a board playing the line says each move as it
+   *  lands. `spoken` = these joined + the idea. */
+  clauses: string[];
+  /** Index in the solution of the ply `clauses[0]` describes. */
+  clausePlyStart: number;
 }
 
 /** First sentence of a passage, trimmed — the crisp idea, not the whole essay. */
@@ -163,6 +169,12 @@ function compose(
 ): PuzzleConceptExplanation | null {
   if (keyPlies.length === 0) return null;
   const line = narrateDnaLine(keyPlies, { studentColor });
+  const sentence = (c: string): string => {
+    const t = c.trim();
+    return t.charAt(0).toUpperCase() + t.slice(1) + (/[.!?]$/.test(t) ? '' : '.');
+  };
+  // One per ply, '' where a ply says nothing — kept, so index = ply.
+  const clauses = dnaLineClauses(keyPlies, { studentColor }).map((c) => (c.trim() ? sentence(c) : ''));
 
   // Tag-mapped book passage (kept for sourcing + as the fallback idea).
   let conceptId: string | null = null;
@@ -195,7 +207,7 @@ function compose(
 
   return {
     conceptName, conceptId, computedId: computed?.id ?? null, computedSource: computed?.source ?? null,
-    line, idea, arrow, spoken,
+    line, idea, arrow, spoken, clauses, clausePlyStart: 0,
   };
 }
 
@@ -249,7 +261,8 @@ export function explainPuzzleConcept(args: {
     : null;
 
   const computed = computedLead({ fen, uci: solutionUci, studentColor });
-  return compose(keyPlies.map((p) => ({ fenBefore: p.fenBefore, san: p.san })), themes, arrow, computed, studentColor);
+  const out = compose(keyPlies.map((p) => ({ fenBefore: p.fenBefore, san: p.san })), themes, arrow, computed, studentColor);
+  return out ? { ...out, clausePlyStart: idx } : null;
 }
 
 /**

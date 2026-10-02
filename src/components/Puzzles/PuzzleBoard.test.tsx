@@ -97,14 +97,10 @@ vi.mock('../../hooks/useHintSystem', () => {
 
 vi.mock('../../hooks/useBoardContext', () => ({ useBoardContext: vi.fn() }));
 
-vi.mock('../../services/voiceService', () => ({
-  voiceService: {
-    speak: vi.fn().mockResolvedValue(undefined),
-    stop: vi.fn(),
-    isPlaying: vi.fn().mockReturnValue(false),
-    warmup: vi.fn().mockResolvedValue(undefined),
-  },
-}));
+vi.mock('../../services/voiceService', async () => {
+  const { buildVoiceServiceMock } = await import('../../test/mocks/voice-service');
+  return { voiceService: buildVoiceServiceMock() };
+});
 
 vi.mock('../../hooks/useStruggleDetection', () => {
   const reset = vi.fn();
@@ -261,4 +257,29 @@ describe('PuzzleBoard — resolution belongs to one puzzle', () => {
     const spokenAfter = speak.mock.calls.slice(before).map((c) => c[0]);
     expect(spokenAfter.filter((t) => /g1/i.test(t))).toEqual([]);
   });
+
+  // David 2026-10-02: "Make sure the narrations fire at appropriate times
+  // (with the moves)". Show solution used to read the whole line as one
+  // sentence while the board raced through it; now each move is said as it
+  // lands and the next move waits for the voice.
+  it('Show solution says each move as it lands; the next move waits for the voice', async () => {
+    const { voiceService } = await import('../../services/voiceService');
+    const speak = vi.mocked(voiceService.speak);
+    const releases: Array<() => void> = [];
+    speak.mockImplementation(() => new Promise<void>((r) => { releases.push(r); }));
+    render(<PuzzleBoard puzzle={next} onComplete={vi.fn()} />);
+    const show = await screen.findByTestId('show-solution-button', {}, { timeout: 2000 });
+    const before = speak.mock.calls.length;
+    act(() => { show.click(); });
+    await waitFor(() => expect(speak.mock.calls.length).toBe(before + 1), { timeout: 2000 });
+    // The voice is still on move one — the board must not move on without it.
+    await new Promise((r) => setTimeout(r, 1500));
+    expect(speak.mock.calls.length).toBe(before + 1);
+    const first = speak.mock.calls[before][0];
+    expect(first.length).toBeLessThan(120);           // one move, not the whole line
+    act(() => { releases[releases.length - 1](); });
+    await waitFor(() => expect(speak.mock.calls.length).toBe(before + 2), { timeout: 2000 });
+    speak.mockResolvedValue(undefined);
+    for (const r of releases) r();
+  }, 10_000);
 });

@@ -588,51 +588,59 @@ export function PuzzleBoard({
   // With ControlledChessBoard, the move is already applied to the game object
   const handleChessBoardMove = handleMove;
 
-  // Show Solution: auto-play remaining moves and mark as failed
+  // Show Solution: play the remaining moves, each SAID AS IT LANDS (David
+  // 2026-10-02: "Make sure the narrations fire at appropriate times (with the
+  // moves)"). The line used to be read as one long sentence while the board
+  // raced through it at 0.6s a move — the moves were over before the voice had
+  // finished the first. Now each move waits for its own clause, then a beat.
+  const solutionRunRef = useRef(0);
+  useEffect(() => () => { solutionRunRef.current += 1; }, [puzzle.id]);
   const handleShowSolution = useCallback((): void => {
     if (state !== 'playing' && state !== 'incorrect') return;
     showedSolutionRef.current = true;
-    // Teach WHILE the line plays, not after it (David 2026-10-02: "The
-    // narrations at the end also played out after the moves. They need to be
-    // at the same time"). Resolving now starts the concept read as the first
-    // solution move lands.
+    const ex = conceptExplanation;
+    const speakAlong = settings.voiceEnabled && ex !== null;
+    // The synced read below replaces the whole-line read the concept card
+    // would otherwise start.
+    if (speakAlong) conceptSpokenRef.current = puzzle.id;
     setTerminalId(puzzle.id);
 
-    // Play remaining moves in sequence
     const allMoves = movesRef.current;
-    let currentIndex = moveIndex;
-
-    const playNextMove = (): void => {
-      if (currentIndex >= allMoves.length) {
-        setState('incorrect');
-        completionTimerRef.current = setTimeout(() => {
-          completePuzzle(false);
-        }, 1500);
-        return;
-      }
-
-      const move = allMoves[currentIndex];
-      const result = game.makeMove(move.from, move.to, move.promotion);
-      if (result) {
-        playMoveSound(result.san);
-        setLastMoveHighlight({ from: move.from, to: move.to });
-      }
-      currentIndex += 1;
-      setMoveIndex(currentIndex);
-
-      if (currentIndex < allMoves.length) {
-        setTimeout(playNextMove, 600);
-      } else {
-        setState('incorrect');
-        completionTimerRef.current = setTimeout(() => {
-          completePuzzle(false);
-        }, 1500);
-      }
-    };
+    const from = moveIndex;
+    const run = ++solutionRunRef.current;
+    const stale = (): boolean => run !== solutionRunRef.current;
+    const sleep = (ms: number): Promise<void> => new Promise((r) => { setTimeout(r, ms); });
+    const clauseAt = (i: number): string => (ex ? ex.clauses[i - ex.clausePlyStart] ?? '' : '');
+    if (speakAlong) {
+      voiceService.stop();
+      void voiceService.prefetchAudio(allMoves.map((_, i) => clauseAt(i)).slice(from).filter(Boolean));
+    }
 
     setState('loading'); // Disable interaction during solution playback
-    playNextMove();
-  }, [state, moveIndex, completePuzzle, playMoveSound, game, puzzle.id]);
+    void (async () => {
+      for (let i = from; i < allMoves.length; i += 1) {
+        if (stale()) return;
+        const move = allMoves[i];
+        const result = game.makeMove(move.from, move.to, move.promotion);
+        if (result) {
+          playMoveSound(result.san);
+          setLastMoveHighlight({ from: move.from, to: move.to });
+        }
+        setMoveIndex(i + 1);
+        const clause = speakAlong ? clauseAt(i) : '';
+        // Never faster than a readable move, never ahead of the voice.
+        await Promise.all([clause ? voiceService.speak(clause).catch(() => undefined) : null, sleep(600)]);
+        if (clause) await sleep(250);
+      }
+      if (stale()) return;
+      if (speakAlong && ex.idea) await voiceService.speak(ex.idea).catch(() => undefined);
+      if (stale()) return;
+      setState('incorrect');
+      completionTimerRef.current = setTimeout(() => {
+        completePuzzle(false);
+      }, speakAlong ? 800 : 1500);
+    })();
+  }, [state, moveIndex, completePuzzle, playMoveSound, game, puzzle.id, conceptExplanation, settings.voiceEnabled]);
 
   return (
     <div className="space-y-3" data-testid="puzzle-board" data-puzzle-id={puzzle.id}>

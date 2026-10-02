@@ -240,8 +240,31 @@ export function narrateDnaLine(
     studentColor?: 'w' | 'b' | null;
   } = {},
 ): string {
+  const parts = dnaLineClauses(plies, opts);
+  if (parts.length === 0) return '';
+  // Mostly comma-joined (reads like a coach talking), with an occasional
+  // "then" so a long line has a beat — never "then" between every move (the
+  // old template's monotony). First transition gets the "then"; the rest flow.
+  if (parts.length === 1) return parts[0];
+  return parts.reduce((acc, part, i) => {
+    if (i === 0) return part;
+    const connector = i === 1 ? ', then ' : ', ';
+    return acc + connector + part;
+  }, '');
+}
+
+/**
+ * The same line as `narrateDnaLine`, one clause PER PLY — so a surface that
+ * plays the line on the board can say each move as it lands instead of reading
+ * the whole line over moves that have already happened (David 2026-10-02:
+ * "Make sure the narrations fire at appropriate times (with the moves)").
+ */
+export function dnaLineClauses(
+  plies: readonly DnaLinePly[],
+  opts: { max?: number; teachInvariant?: boolean; studentColor?: 'w' | 'b' | null } = {},
+): string[] {
   const take = plies.slice(0, opts.max ?? plies.length);
-  if (take.length === 0) return '';
+  if (take.length === 0) return [];
   let prev: PrevCaptureContext = NO_PREV;
   const parts: string[] = [];
   let taught = false;
@@ -258,13 +281,5 @@ export function narrateDnaLine(
     }
     parts.push(text);
   }
-  // Mostly comma-joined (reads like a coach talking), with an occasional
-  // "then" so a long line has a beat — never "then" between every move (the
-  // old template's monotony). First transition gets the "then"; the rest flow.
-  if (parts.length === 1) return parts[0];
-  return parts.reduce((acc, part, i) => {
-    if (i === 0) return part;
-    const connector = i === 1 ? ', then ' : ', ';
-    return acc + connector + part;
-  }, '');
+  return parts;
 }
