@@ -45,7 +45,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planPrescriptions.test.ts:53`
 - `src/services/planPrescriptions.test.ts:61`
 - `src/services/planPrescriptions.test.ts:74`
-- `src/services/reviewFullData.ts:1030`
+- `src/services/reviewFullData.ts:1047`
 - `src/services/reviewStrategicOrientation.test.ts:48`
 - `src/services/reviewStrategicOrientation.test.ts:65`
 - `src/services/reviewStrategicOrientation.test.ts:66`
@@ -68,7 +68,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `buildMiddlegameOrientation` (function) — 15 call sites
 - `src/services/coachFeatureService.ts:2953`
-- `src/services/reviewFullData.ts:1036`
+- `src/services/reviewFullData.ts:1053`
 - `src/services/reviewStrategicOrientation.test.ts:4`
 - `src/services/reviewStrategicOrientation.test.ts:8`
 - `src/services/reviewStrategicOrientation.test.ts:16`

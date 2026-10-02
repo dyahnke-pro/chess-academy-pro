@@ -30,7 +30,7 @@
 ## Exports and every call site
 
 ### `attackerDefenderCount` (function) — 7 call sites
-- `src/services/reviewFullData.ts:755`
+- `src/services/reviewFullData.ts:759`
 - `src/services/reviewNarrationDefects.test.ts:86`
 - `src/services/reviewNarrationDefects.test.ts:95`
 - `src/services/reviewTeachingPoints.test.ts:21`
@@ -44,29 +44,29 @@
 - `src/services/reviewTeachingPoints.test.ts:432`
 
 ### `royalDefenderTarget` (function) — 3 call sites
-- `src/services/reviewFullData.ts:757`
+- `src/services/reviewFullData.ts:761`
 - `src/services/reviewNarrationFidelity.test.ts:150`
 - `src/services/reviewTeachingPoints.test.ts:39`
 
 ### `rookOnSeventh` (function) — 2 call sites
-- `src/services/reviewFullData.ts:759`
+- `src/services/reviewFullData.ts:763`
 - `src/services/reviewTeachingPoints.test.ts:47`
 
 ### `badEnemyBishop` (function) — 5 call sites
-- `src/services/reviewFullData.ts:761`
+- `src/services/reviewFullData.ts:765`
 - `src/services/reviewTeachingPoints.test.ts:52`
 - `src/services/reviewTeachingPoints.test.ts:53`
 - `src/services/reviewTeachingPoints.test.ts:459`
 - `src/services/reviewTeachingPoints.test.ts:463`
 
 ### `worstPlacedFriendlyPiece` (function) — 4 call sites
-- `src/services/reviewFullData.ts:763`
+- `src/services/reviewFullData.ts:767`
 - `src/services/reviewNarrationDefects.test.ts:33`
 - `src/services/reviewNarrationDefects.test.ts:51`
 - `src/services/reviewTeachingPoints.test.ts:75`
 
 ### `passedPawnPush` (function) — 5 call sites
-- `src/services/reviewFullData.ts:770`
+- `src/services/reviewFullData.ts:774`
 - `src/services/reviewTeachingPoints.test.ts:57`
 - `src/services/reviewTeachingPoints.test.ts:63`
 - `src/services/reviewTeachingPoints.test.ts:66`
@@ -140,7 +140,7 @@
 - `src/services/coachFeatureService.ts:2801`
 
 ### `describeConcessions` (function) — 9 call sites
-- `src/services/backwardLook.ts:422`
+- `src/services/backwardLook.ts:424`
 - `src/services/coachFeatureService.ts:2482`
 - `src/services/coachFeatureService.ts:2548`
 - `src/services/concessionInFlux.test.ts:13`
@@ -148,13 +148,13 @@
 - `src/services/reviewTeachingPoints.test.ts:211`
 - `src/services/reviewTeachingPoints.test.ts:218`
 - `src/services/reviewTeachingPoints.test.ts:227`
-- `src/services/theirMoveCost.ts:137`
+- `src/services/theirMoveCost.ts:142`
 
 ### `findTrappedPiece` (function) — 9 call sites
 - `src/services/coachFeatureService.ts:3123`
 - `src/services/coachFeatureService.ts:3124`
-- `src/services/reviewFullData.ts:747`
-- `src/services/reviewFullData.ts:749`
+- `src/services/reviewFullData.ts:751`
+- `src/services/reviewFullData.ts:753`
 - `src/services/reviewTeachingPoints.test.ts:253`
 - `src/services/reviewTeachingPoints.test.ts:258`
 - `src/services/reviewTeachingPoints.test.ts:269`
@@ -183,7 +183,7 @@
 - `src/services/planPrescriptions.test.ts:119`
 - `src/services/principleAttribution.section14.test.ts:138`
 - `src/services/principleAttribution.ts:1289`
-- `src/services/reviewFullData.ts:796`
+- `src/services/reviewFullData.ts:800`
 - `src/services/reviewNarrationDefects.test.ts:35`
 - `src/services/reviewNarrationDefects.test.ts:45`
 - `src/services/reviewNarrationDefects.test.ts:52`

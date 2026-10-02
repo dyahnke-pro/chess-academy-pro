@@ -43,7 +43,7 @@ export function seatPieceReferences(
     const ADJ = 'passed|weak|isolated|doubled|backward|extra|lone|bad|connected|protected|central|advanced|remaining|outside';
     return text.replace(
       new RegExp(
-        `(\\b(?:[Ww]hite|[Bb]lack)'s\\s+|\\b[Yy]our opponent's\\s+|\\b[Yy]our\\s+|\\b[Tt]heir\\s+|\\b[Tt]he\\s+|\\b[Tt]h(?:at|is|ose|ese)\\s+|\\b[Aa]n?\\s+)?((?:${ADJ})\\s+)?\\b(Knight|Bishop|Rook|Queen|Pawn|King|knight|bishop|rook|queen|pawn|king)\\s+on\\s+([a-h][1-8])\\b`,
+        `(\\b(?:[Ww]hite|[Bb]lack)'s\\s+|\\b[Yy]our opponent's\\s+|\\b[Yy]our\\s+own\\s+|\\b[Tt]heir\\s+own\\s+|\\b[Yy]our\\s+|\\b[Tt]heir\\s+|\\b[Tt]he\\s+|\\b[Tt]h(?:at|is|ose|ese)\\s+|\\b[Aa]n?\\s+)?((?:${ADJ})\\s+)?\\b(Knight|Bishop|Rook|Queen|Pawn|King|knight|bishop|rook|queen|pawn|king)\\s+on\\s+([a-h][1-8])\\b`,
         'g',
       ),
       (whole, lead: string | undefined, adj: string | undefined, piece: string, sq: string, offset: number, all: string) => {

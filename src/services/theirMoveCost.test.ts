@@ -1,5 +1,6 @@
 // What their move cost them (census #5), on his own games.
 import { describe, it, expect } from 'vitest';
+import { Chess } from 'chess.js';
 import { theirMoveCost } from './theirMoveCost';
 import fixture from './__fixtures__/theirMoveCost-his.json';
 
@@ -40,5 +41,23 @@ describe('theirMoveCost — his "what their move cost them"', () => {
     const fen = 'rnbqk2r/pppp1ppp/5n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 5 4';
     const out = theirMoveCost(fen, 'Kf8', 'w');
     expect(out?.kind).toBe('castling');
+  });
+});
+
+describe('a bishop out in front of the chain is not shut in (chat probe 2026-10-02)', () => {
+  it('e3 with the bishop already on g5 — silent on the bishop', () => {
+    const c = new Chess();
+    for (const s of 'd4 d5 c4 e6 Nc3 Nf6 Bg5 Be7'.split(' ')) c.move(s);
+    expect(theirMoveCost(c.fen(), 'e3', 'b')?.kind).not.toBe('bishop-shut');
+  });
+  it('…d6 with the bishop already on c5 — silent on the bishop', () => {
+    const c = new Chess();
+    for (const s of 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3'.split(' ')) c.move(s);
+    expect(theirMoveCost(c.fen(), 'd6', 'w')?.kind).not.toBe('bishop-shut');
+  });
+  it('…e6 with the bishop still on c8 — named', () => {
+    const c = new Chess();
+    for (const s of 'd4 d5 c4'.split(' ')) c.move(s);
+    expect(theirMoveCost(c.fen(), 'e6', 'w')?.text).toMatch(/shuts in their own bishop on c8/);
   });
 });

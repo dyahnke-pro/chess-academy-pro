@@ -64,6 +64,8 @@ export interface BackwardLook {
   lostSquare?: string;
   /** The better move the line names (`InaccuracyCall.namesBetter`). */
   namesBetter?: string;
+  /** The coach's slip left the student something to find (`InaccuracyCall.offersStudent`). */
+  offersStudent?: true;
 }
 
 /**
@@ -197,7 +199,7 @@ export function backwardLook(args: {
       // nothing, and until now it printed "under the floor" for all five
       // reasons — see `InaccuracyVerdict`. Handing the computed reason back is
       // what makes that log a measurement instead of an assertion.
-      if (verdict.call) return { line: verdict.call.said, square: verdict.call.square, kind: 'coachMistake' };
+      if (verdict.call) return { line: verdict.call.said, square: verdict.call.square, kind: 'coachMistake', ...(verdict.call.offersStudent ? { offersStudent: true as const } : {}) };
       lastCoachDecline = verdict.declined;
       return null;
     } catch { lastCoachDecline = 'threw'; return null; }

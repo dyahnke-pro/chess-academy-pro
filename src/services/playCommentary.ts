@@ -999,3 +999,31 @@ export function studentMovePoint(
   const point = quietMovePoint(fenBefore, san);
   return point ? `${san} ${point.charAt(0).toLowerCase()}${point.slice(1)}` : null;
 }
+
+/** THEIR SLIP IS YOUR CHANCE — the one wording, Learn and Review (David
+ *  2026-10-02: "adding in teachings on opponents moves"). The student's answer
+ *  to the opponent's slip, said with its computed point:
+ *   - `found`: the student played it — "You found it: c5 kicks their rook…"
+ *   - `missed`: they did not — "c5 was the answer to their slip, which…"
+ *   - `review`: retrospective — "your answer was c5, which…"
+ *   - `now`: asked in Play's chat — "Your answer is c5, which…"
+ *  Null when the move-point computer finds no point and the move would be
+ *  named bare (named with its reason, or not named). `found` alone may speak
+ *  without a point: it names nothing the student did not just play. */
+export function slipAnswerText(
+  fenAfterSlip: string,
+  theirSan: string,
+  answerSan: string | null,
+  when: 'found' | 'missed' | 'review' | 'now',
+): string | null {
+  if (!answerSan) return null;
+  const point = studentMovePoint(fenAfterSlip, answerSan, theirSan);
+  if (!point) return when === 'found' ? 'You found the answer to their slip.' : null;
+  const body = point.replace(/\.$/, '');
+  const sanLed = body.startsWith(`${answerSan} `);
+  const rest = sanLed ? body.slice(answerSan.length + 1) : `${body.charAt(0).toLowerCase()}${body.slice(1)}`;
+  if (when === 'found') return sanLed ? `You found it: ${answerSan} ${rest}.` : `You found it: ${rest}.`;
+  if (when === 'now') return sanLed ? `Your answer is ${answerSan}, which ${rest}.` : `Your answer is ${answerSan}: ${rest}.`;
+  if (when === 'missed') return sanLed ? `${answerSan} was the answer to their slip, which ${rest}.` : `${answerSan} was the answer to their slip: ${rest}.`;
+  return sanLed ? `your answer was ${answerSan}, which ${rest}` : `your answer was ${answerSan}: ${rest}`;
+}

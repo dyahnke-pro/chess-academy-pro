@@ -31,7 +31,7 @@ import { buildPositionalRead, rookReachesFile } from '../../services/positionalR
 import { DEFAULT_INTENT, intentRule, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { announcesTheMove, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
-import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
+import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
 // EVERY ARROW ON THIS PAGE COMES OUT OF THE ARROW DOOR (`arrowDoor`, David
@@ -10164,10 +10164,12 @@ export function CoachTeachPage(): JSX.Element {
                     // it, the move and its reason when they did not, unless the
                     // verdict on their move already named it. Matched by
                     // COORDINATES, never SAN string (G4.5.2).
+                    let heldRevealedHere = false;
                     try {
                       const heldNow = learnMemRef.current.heldMove;
                       const boardOf = (f: string): string => f.split(' ').slice(0, 4).join(' ');
                       if (heldNow && boardOf(heldNow.fen) === boardOf(fenBefore)) {
+                        heldRevealedHere = true;
                         learnMemRef.current.heldMove = null;
                         setHeldMoveFen(null);
                         const heldMove = new Chess(fenBefore).move(heldNow.san);
@@ -10182,6 +10184,28 @@ export function CoachTeachPage(): JSX.Element {
                           }
                         }
                         captureEvent('learn_move_held_answered', { surface: 'coach-teach', found, shown: heldNow.shown });
+                      }
+                    } catch { /* the reveal is a bonus, never a blocker */ }
+                    // THEIR SLIP, ANSWERED (David 2026-10-02: "teachings on
+                    // opponents moves"). The coach said "look for it" after its
+                    // own slip; now the student has moved from that board, say
+                    // whether they found it — or the answer and its point. The
+                    // held move, when it held this same board, already did.
+                    // Matched by COORDINATES, never SAN string (G4.5.2).
+                    try {
+                      const slip = learnMemRef.current.slipAnswer;
+                      const boardOf = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+                      if (slip && boardOf(slip.fen) === boardOf(fenBefore)) {
+                        learnMemRef.current.slipAnswer = null;
+                        const answer = studentBestSan ? new Chess(fenBefore).move(studentBestSan) : null;
+                        const found = !!answer && answer.from === move.from && answer.to === move.to;
+                        if (answer && !heldRevealedHere) {
+                          const text = slipAnswerText(fenBefore, slip.theirSan, studentBestSan ?? null, found ? 'found' : 'missed');
+                          if (text && (found || look?.namesBetter !== studentBestSan)) {
+                            queueSpokenHint(fenAfterReply, text, 'slipAnswer', [answer.to], [found ? `slip-found:${move.san}` : `slip-answer:${studentBestSan}`], fenBefore, undefined, found ? undefined : [{ fen: fenBefore, sans: [studentBestSan as string] }]);
+                          }
+                        }
+                        captureEvent('learn_slip_answered', { surface: 'coach-teach', found });
                       }
                     } catch { /* the reveal is a bonus, never a blocker */ }
                     if (look) {
@@ -10614,6 +10638,9 @@ export function CoachTeachPage(): JSX.Element {
                       && samePosition(learnMemRef.current.gemFen, cm.fenAfter);
                     if (look && !gemCalledIt) {
                       queueSpokenHint(cm.fenAfter, look.line, look.kind, undefined, [`look:${look.kind}:coach:${cm.fenAfter.split(' ').slice(0, 2).join(' ')}`]);
+                      // The coach told the student to look — remember the board
+                      // so the answer is revealed once they have moved from it.
+                      learnMemRef.current.slipAnswer = look.offersStudent ? { fen: cm.fenAfter, theirSan: cm.playedSan } : null;
                       logReasonSource(cm.fenBefore, cm.playedSan, look.line, mid.topLines?.[0]?.moves ?? [], []);
                       captureEvent('coach_inaccuracy_called', {
                         surface: 'coach-teach', kind: look.kind, cost: Math.round(cpLoss),

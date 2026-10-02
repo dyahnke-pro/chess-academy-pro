@@ -64,6 +64,11 @@ export interface LearnMemory {
    *  belongs to, and whether "Show me" already said it — resolved when the
    *  student moves from that board, exactly like `gemPending`. */
   heldMove: (import('./deliberation').HeldVerdict & { fen: string; shown: boolean }) | null;
+  /** The board the opponent's slip left the student, after the coach said
+   *  "look for it" — and the slip itself (SAN), so a capture back on its
+   *  square reads as a recapture. Resolved when the student moves from it:
+   *  "you found it" or the answer with its point (David 2026-10-02). */
+  slipAnswer: { fen: string; theirSan: string } | null;
   /** The coach's last reply, when the STUDENT dictated it (its SAN) — so
    *  "that was a mistake from me" would be false (hand walk 2026-09-24). */
   lastReplyDictated: string | null;
@@ -233,6 +238,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
     gemFen: null,
     gemPending: null,
     heldMove: null,
+    slipAnswer: null,
     lastReplyDictated: null,
     lastComputed: '',
     spokenOpeningName: null,
@@ -262,6 +268,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
       mem.gemFen = null;
       mem.gemPending = null;
       mem.heldMove = null;
+      mem.slipAnswer = null;
       mem.lastReplyDictated = null;
       mem.lastComputed = '';
       mem.spokenOpeningName = null;

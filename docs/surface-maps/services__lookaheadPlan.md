@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1569 lines · 26 exports · 14 importers · 10 tests · 0 audits**
+**1569 lines · 26 exports · 15 importers · 10 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,6 +17,7 @@
 - `src/services/computedVoiceAudit.report.test.ts`
 - `src/services/concessionBeat.ts`
 - `src/services/inaccuracyCall.ts`
+- `src/services/learnBoardTeaching.ts`
 - `src/services/lookaheadPlan.test.ts`
 - `src/services/narrationAdversarial.test.ts`
 - `src/services/planArc.test.ts`
@@ -171,11 +172,11 @@
 
 ### `isCostClause` (function) — 10 call sites
 - `src/services/concessionBeat.ts:457`
-- `src/services/inaccuracyCall.ts:230`
-- `src/services/inaccuracyCall.ts:355`
-- `src/services/inaccuracyCall.ts:362`
-- `src/services/inaccuracyCall.ts:376`
-- `src/services/inaccuracyCall.ts:787`
+- `src/services/inaccuracyCall.ts:234`
+- `src/services/inaccuracyCall.ts:359`
+- `src/services/inaccuracyCall.ts:366`
+- `src/services/inaccuracyCall.ts:380`
+- `src/services/inaccuracyCall.ts:793`
 - `src/services/learnWalkBlumenfeld.test.ts:176`
 - `src/services/learnWalkBlumenfeld.test.ts:177`
 - `src/services/learnWalkBlumenfeld.test.ts:178`
@@ -187,9 +188,9 @@
 - `src/services/coachLaneWiring.test.ts:35`
 - `src/services/computedVoiceAudit.report.test.ts:216`
 - `src/services/concessionBeat.ts:450`
-- `src/services/inaccuracyCall.ts:272`
-- `src/services/inaccuracyCall.ts:315`
-- `src/services/inaccuracyCall.ts:785`
+- `src/services/inaccuracyCall.ts:276`
+- `src/services/inaccuracyCall.ts:319`
+- `src/services/inaccuracyCall.ts:791`
 - `src/services/lookaheadPlan.test.ts:228`
 - `src/services/lookaheadPlan.test.ts:236`
 - `src/services/lookaheadPlan.test.ts:241`
@@ -213,8 +214,9 @@
 - `src/services/planChooser.ts:40`
 - `src/services/walkOct1Learn.test.ts:69`
 
-### `gameArcs` (function) — 2 call sites
+### `gameArcs` (function) — 3 call sites
 - `src/services/coachFeatureService.ts:1363`
+- `src/services/learnBoardTeaching.ts:712`
 - `src/services/walkOct1Learn.test.ts:115`
 
 ### `aimsOf` (re-export) — 8 call sites

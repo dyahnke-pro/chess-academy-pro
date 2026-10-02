@@ -51,6 +51,10 @@ import { openingIdentityLine, warmOpeningIdentity } from './openingIdentity';
 import { trapAheadAt } from './gemCrushLines';
 import { noteTrapMeeting, trapSpeaks, type TrapState } from './trapLearning';
 import { ruledOutSans, extractMentionedSans } from './arrowEngine';
+import { slipAnswerText, studentMovePoint } from './playCommentary';
+import { threatStoppedBy } from './opponentMovePurpose';
+import { trickSidestepped } from './forkTrick';
+import { gameArcs } from './lookaheadPlan';
 
 export interface TeachingHint {
   lane: LearnLane;
@@ -647,7 +651,14 @@ export function studentMoveAnswerLines(history: readonly string[], ply: number, 
     fenBefore, san: history[ply], history: history.slice(0, ply + 1), cpLoss, bothCp: true,
     bestSan, bestLine: undefined, reply: history[ply + 1] ?? null, cpAfter: null,
   });
-  return hints.map((h) => h.text);
+  const out = hints.map((h) => h.text);
+  // WHAT A QUIET MOVE IS FOR — Learn's move point (Play on demand, David
+  // 2026-10-02). Quiet moves only: a capture's point is the trade.
+  if (out.length === 0 && !/x/.test(history[ply])) {
+    const point = studentMovePoint(fenBefore, history[ply], ply >= 1 ? history[ply - 1] : null);
+    if (point) out.push(point);
+  }
+  return out;
 }
 
 /** "What did their move do? Do I have to deal with it?" — what it cost them,
@@ -663,10 +674,50 @@ export function theirMoveAnswerLines(history: readonly string[], ply: number, st
     const fa = after ? falseAlarm(fenBefore, after, best, null) : null;
     if (fa) out.push(fa.text);
   }
+  // WHAT IT STOPPED — the threat of yours their move took away, or the fork
+  // trick it sidestepped. The same static computers Learn and Review speak
+  // (Play on demand, David 2026-10-02).
+  const prev = ply >= 1 ? replayTo(history, ply - 1) : null;
+  const stop = prev ? threatStoppedBy(prev, fenBefore, history[ply], student) : null;
+  const mover: 'w' | 'b' = student === 'w' ? 'b' : 'w';
+  const trick = stop ? null : trickSidestepped(fenBefore, history[ply], mover, 'your');
+  if (stop) out.push(stop.text);
+  else if (trick) out.push(trick.text);
   const cost = theirMoveTeaching(fenBefore, history[ply], student);
   if (cost) out.push(cost.text);
   const tempo = tempoTeaching(history.slice(0, ply + 1), student);
   if (tempo) out.push(tempo.text);
+  // YOUR ANSWER, when their move left you clearly better — the move and its
+  // point. Asked for, so it is named (the student's own question).
+  if (best && ply === history.length - 1 && best.moves[0]) {
+    const studentPov = student === 'w' ? best.evaluation : -best.evaluation;
+    const after = replayTo(history, ply + 1);
+    if (after && studentPov >= 100) {
+      try {
+        const u = best.moves[0];
+        const answerSan = new Chess(after).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] })?.san ?? null;
+        const text = slipAnswerText(after, history[ply], answerSan, 'now');
+        if (text) out.push(text);
+      } catch { /* the answer is a bonus */ }
+    }
+  }
+  return out;
+}
+
+/** "What's the plan?" — the plan each side has been building so far, from the
+ *  same plan-arc computer Learn speaks live and Review reads over the game
+ *  (Play on demand, David 2026-10-02). The latest plan per side that EMERGED
+ *  or ARRIVED; yours first. */
+export function planArcAnswerLines(history: readonly string[], studentColor: 'white' | 'black'): string[] {
+  const arcs = gameArcs(history, studentColor);
+  const plies = [...arcs.keys()].sort((a, b) => b - a);
+  const out: string[] = [];
+  for (const seat of ['student', 'opponent'] as const) {
+    for (const p of plies) {
+      const ev = (arcs.get(p) ?? []).find((e) => e.seat === seat);
+      if (ev) { out.push(ev.text); break; }
+    }
+  }
   return out;
 }
 

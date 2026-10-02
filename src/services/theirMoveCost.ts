@@ -98,6 +98,11 @@ export function theirMoveCost(fenBefore: string, san: string, studentColor: 'w' 
     for (const b of bishops) {
       const bDark = (b.charCodeAt(0) - 97 + Number(b[1]) - 1) % 2 === 0;
       if (bDark !== toDark) continue;
+      // SHUT IN means BEHIND the chain. A bishop already out in front of the
+      // pawn is the good bishop of that structure (…d6 with the bishop on c5,
+      // e3 with it on g5 — chat probe 2026-10-02 called both "shut in").
+      const behind = them === 'w' ? Number(b[1]) < Number(mv.to[1]) : Number(b[1]) > Number(mv.to[1]);
+      if (!behind) continue;
       const drop = bishopMobility(before, b) - bishopMobility(after, b);
       if (drop >= 3) {
         return {

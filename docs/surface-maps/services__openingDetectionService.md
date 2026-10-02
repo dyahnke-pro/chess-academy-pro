@@ -101,12 +101,12 @@
 - `src/services/openingKey.ts:39`
 - `src/services/openingPositions.test.ts:27`
 - `src/services/openingPositions.test.ts:37`
-- `src/services/reviewFullData.ts:1057`
-- `src/services/reviewFullData.ts:1233`
+- `src/services/reviewFullData.ts:1074`
+- `src/services/reviewFullData.ts:1250`
 
 ### `detectOpeningTranspositional` (function) — 5 call sites
 - `src/services/coachApi.ts:5460`
-- `src/services/coachApi.ts:6365`
+- `src/services/coachApi.ts:6371`
 - `src/services/reviewGameAdapter.ts:170`
 - `src/services/reviewOpeningTheory.ts:315`
 - `src/services/reviewOpeningTheory.ts:316`
@@ -371,8 +371,8 @@
 
 ### `studentSideForPlay` (function) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:5311`
-- `src/components/Coach/CoachTeachPage.tsx:12678`
-- `src/components/Coach/CoachTeachPage.tsx:12728`
+- `src/components/Coach/CoachTeachPage.tsx:12705`
+- `src/components/Coach/CoachTeachPage.tsx:12755`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:59`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:60`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:64`

@@ -81,7 +81,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.mcconnell1000.test.ts:21`
 - `src/services/replayFence.sicilian1200.test.ts:54`
 - `src/services/replayFence.sicilian1200.test.ts:61`
-- `src/services/reviewFullData.ts:504`
+- `src/services/reviewFullData.ts:508`
 
 ### `renderPvEvidence` (function) — 3 call sites
 - `src/services/coachFeatureService.ts:2480`

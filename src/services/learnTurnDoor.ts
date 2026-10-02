@@ -59,6 +59,7 @@ export type LearnLane =
   | 'movePoint'
   | 'foundMove'
   | 'heldMove'
+  | 'slipAnswer'
   | 'moveIntent'
   | 'moveOrder'
   | 'theirMoveCost'
@@ -118,7 +119,7 @@ const BEAT_ORDER: Record<DnaBeat, number> = { name: 0, affirm: 1, but: 2, refute
  *  compile until it does. */
 export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   opening: 'name', openingIdentity: 'name',
-  foundMove: 'affirm', heldMove: 'affirm', movePoint: 'affirm', moveIntent: 'affirm', recapture: 'affirm', kingAttack: 'affirm',
+  foundMove: 'affirm', heldMove: 'affirm', slipAnswer: 'affirm', movePoint: 'affirm', moveIntent: 'affirm', recapture: 'affirm', kingAttack: 'affirm',
   ruleException: 'affirm', fileRace: 'affirm', trade: 'affirm', timing: 'affirm', strongChoice: 'affirm',
   falseAlarm: 'affirm', tempo: 'affirm', pushOrHold: 'affirm',
   mistake: 'but', drawback: 'but', fundamental: 'but', register: 'but', rejectedTempting: 'but', kneeJerk: 'but',
@@ -184,6 +185,7 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // move was held back; once the student has played, it is revealed with its
   // reason. Always rides — a question posed and never answered is a tease.
   heldMove: { kind: 'computed', why: 'the move held back at a deciding moment, revealed after the student answered', lead: 80, always: true },
+  slipAnswer: { kind: 'computed', why: 'the answer to the opponent\'s slip, revealed after the student moved from the board the coach said to look at', lead: 80, always: true },
   // What a quiet move is FOR — the reply it took away or the move it made
   // possible, both engine-proven (moveIntent). His most frequent point on a
   // clean move, and the one a board description never says.

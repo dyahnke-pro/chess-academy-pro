@@ -110,8 +110,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:2489`
 - `src/services/groundedAnswer.ts:3241`
 - `src/services/groundedAnswer.ts:6800`
-- `src/services/inaccuracyCall.ts:307`
-- `src/services/inaccuracyCall.ts:767`
+- `src/services/inaccuracyCall.ts:311`
+- `src/services/inaccuracyCall.ts:773`
 - `src/services/moveTiming.ts:27`
 - `src/services/pvPlayback.ts:406`
 - `src/services/pvPlayback.ts:453`
@@ -193,15 +193,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `signedLegalSeeFor` (function) — 11 call sites
 - `src/components/Coach/CoachTeachPage.tsx:827`
 - `src/components/Coach/CoachTeachPage.tsx:7879`
-- `src/components/Coach/CoachTeachPage.tsx:10276`
-- `src/components/Coach/CoachTeachPage.tsx:10333`
+- `src/components/Coach/CoachTeachPage.tsx:10300`
+- `src/components/Coach/CoachTeachPage.tsx:10357`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
 - `src/services/countMethod.ts:30`
 - `src/services/groundedAnswer.ts:6837`
 - `src/services/principleAttribution.ts:278`
-- `src/services/reviewFullData.ts:317`
+- `src/services/reviewFullData.ts:318`
 
 ### `capturesWinMaterial` (function) — 6 call sites
 - `src/services/computedMaterialTruth.corpus.test.ts:136`
@@ -329,8 +329,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:97`
 - `src/services/positionalTruth.corpus.test.ts:102`
 - `src/services/replayFence.najdorf1500.test.ts:24`
-- `src/services/reviewFullData.ts:783`
 - `src/services/reviewFullData.ts:787`
+- `src/services/reviewFullData.ts:791`
 
 ### `MinorityAttack` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -345,8 +345,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.ts:366`
 - `src/services/positionalTruth.corpus.test.ts:110`
 - `src/services/positionalTruth.corpus.test.ts:115`
-- `src/services/reviewFullData.ts:779`
-- `src/services/reviewFullData.ts:781`
+- `src/services/reviewFullData.ts:783`
+- `src/services/reviewFullData.ts:785`
 
 ### `pieceScope` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

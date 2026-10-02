@@ -194,8 +194,8 @@
 ### `assemblePositionAssessment` (function) — 22 call sites
 - `src/services/coachApi.ts:2401`
 - `src/services/coachApi.ts:2572`
-- `src/services/coachApi.ts:6263`
-- `src/services/coachApi.ts:6380`
+- `src/services/coachApi.ts:6269`
+- `src/services/coachApi.ts:6386`
 - `src/services/groundedAnswer.sacLine.test.ts:33`
 - `src/services/groundedAnswer.sacLine.test.ts:38`
 - `src/services/groundedAnswer.seatedTactic.test.ts:14`
@@ -220,7 +220,7 @@
 - `src/services/attackAssessment.test.ts:37`
 - `src/services/attackAssessment.test.ts:44`
 - `src/services/attackAssessment.test.ts:49`
-- `src/services/coachApi.ts:6114`
+- `src/services/coachApi.ts:6120`
 - `src/services/computedVoiceGrounding.test.ts:120`
 - `src/services/computedVoiceGrounding.test.ts:127`
 
@@ -467,7 +467,7 @@
 - `src/services/groundedAnswer.routerE.test.ts:105`
 
 ### `assembleTacticsAnswer` (function) — 18 call sites
-- `src/services/coachApi.ts:6130`
+- `src/services/coachApi.ts:6136`
 - `src/services/groundedAnswer.test.ts:69`
 - `src/services/groundedAnswer.test.ts:73`
 - `src/services/groundedAnswer.test.ts:77`
@@ -487,13 +487,13 @@
 - `src/test/everySurfaceSpeaks.test.ts:129`
 
 ### `assembleMasterPlayAnswer` (function) — 4 call sites
-- `src/services/coachApi.ts:6177`
+- `src/services/coachApi.ts:6183`
 - `src/services/groundedAnswer.test.ts:811`
 - `src/services/groundedAnswer.test.ts:820`
 - `src/services/groundedAnswer.test.ts:821`
 
 ### `assemblePlayerGamesAnswer` (function) — 6 call sites
-- `src/services/coachApi.ts:6195`
+- `src/services/coachApi.ts:6201`
 - `src/services/groundedAnswer.test.ts:909`
 - `src/services/groundedAnswer.test.ts:920`
 - `src/services/groundedAnswer.test.ts:924`
@@ -502,8 +502,8 @@
 
 ### `assembleEndgameAnswer` (function) — 9 call sites
 - `src/services/coachApi.ts:2559`
-- `src/services/coachApi.ts:6149`
-- `src/services/coachApi.ts:6249`
+- `src/services/coachApi.ts:6155`
+- `src/services/coachApi.ts:6255`
 - `src/services/groundedAnswer.test.ts:934`
 - `src/services/groundedAnswer.test.ts:939`
 - `src/services/groundedAnswer.test.ts:943`
@@ -530,14 +530,14 @@
 
 ### `assembleEndgameTechniqueAnswer` (function) — 2 call sites
 - `src/services/coachApi.ts:2174`
-- `src/services/coachApi.ts:6337`
+- `src/services/coachApi.ts:6343`
 
 ### `assembleTheoryAnswer` (function) — 5 call sites
 - `src/services/coachApi.ts:2168`
 - `src/services/coachApi.ts:4486`
 - `src/services/coachApi.ts:5343`
 - `src/services/coachApi.ts:5370`
-- `src/services/coachApi.ts:6299`
+- `src/services/coachApi.ts:6305`
 
 ### `assembleConceptAnswer` (function) — 5 call sites
 - `src/services/coachApi.ts:5330`
@@ -605,8 +605,8 @@
 - `src/services/coachApi.currentAsk.test.ts:51`
 - `src/services/coachApi.currentAsk.test.ts:56`
 - `src/services/coachApi.ts:3658`
-- `src/services/coachApi.ts:6686`
-- `src/services/coachApi.ts:6784`
+- `src/services/coachApi.ts:6692`
+- `src/services/coachApi.ts:6790`
 - `src/services/groundedAnswer.test.ts:1476`
 - `src/services/groundedAnswer.test.ts:1477`
 - `src/services/groundedAnswer.test.ts:1478`
@@ -635,8 +635,8 @@
 
 ### `explainSanNotation` (function) — 9 call sites
 - `src/services/coachApi.ts:3660`
-- `src/services/coachApi.ts:6688`
-- `src/services/coachApi.ts:6786`
+- `src/services/coachApi.ts:6694`
+- `src/services/coachApi.ts:6792`
 - `src/services/groundedAnswer.test.ts:1518`
 - `src/services/groundedAnswer.test.ts:1522`
 - `src/services/groundedAnswer.test.ts:1523`
@@ -789,7 +789,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleLastGameMistakeAnswer` (function) — 8 call sites
-- `src/services/coachApi.ts:6090`
+- `src/services/coachApi.ts:6096`
 - `src/services/groundedAnswer.test.ts:427`
 - `src/services/groundedAnswer.test.ts:437`
 - `src/services/groundedAnswer.test.ts:443`
@@ -802,7 +802,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleRecentGamesMistakeAnswer` (function) — 4 call sites
-- `src/services/coachApi.ts:6075`
+- `src/services/coachApi.ts:6081`
 - `src/services/groundedAnswer.test.ts:467`
 - `src/services/groundedAnswer.test.ts:475`
 - `src/services/groundedAnswer.test.ts:479`
@@ -1022,7 +1022,7 @@
 
 ### `assemblePositionalAnswer` (function) — 21 call sites
 - `src/coach/questionWalk.sicilian1200.test.ts:69`
-- `src/services/coachApi.ts:6364`
+- `src/services/coachApi.ts:6370`
 - `src/services/endgameRuleAnswer.test.ts:74`
 - `src/services/endgameRuleAnswer.test.ts:79`
 - `src/services/groundedAnswer.positional.test.ts:6`
@@ -1080,7 +1080,7 @@
 - `src/services/falseAlarm.ts:60`
 - `src/services/learnMoveTeaching.ts:125`
 - `src/services/opponentMovePurpose.ts:52`
-- `src/services/reviewFullData.ts:687`
+- `src/services/reviewFullData.ts:691`
 - `src/services/reviewMoveBriefing.ts:237`
 - `src/services/reviewNarrationFidelity.test.ts:218`
 - `src/services/reviewNarrationFidelity.test.ts:227`
@@ -1141,7 +1141,7 @@
 - `src/services/coachApi.ts:2383`
 - `src/services/coachApi.ts:5904`
 
-### `seatPieceReferences` (re-export) — 26 call sites
+### `seatPieceReferences` (re-export) — 28 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7908`
 - `src/services/coachFeatureService.ts:5050`
 - `src/services/liveTacticsContext.ts:453`
@@ -1153,10 +1153,10 @@
 - `src/services/reviewBoardAwareness.test.ts:107`
 - `src/services/reviewBoardAwareness.test.ts:108`
 - `src/services/reviewBoardAwareness.test.ts:109`
-- `src/services/reviewFullData.ts:287`
-- `src/services/reviewFullData.ts:355`
-- `src/services/reviewFullData.ts:440`
-- `src/services/reviewFullData.ts:600`
+- `src/services/reviewFullData.ts:288`
+- `src/services/reviewFullData.ts:356`
+- `src/services/reviewFullData.ts:444`
+- `src/services/reviewFullData.ts:604`
 - `src/services/reviewNarrationFidelity.test.ts:85`
 - `src/services/reviewNarrationFidelity.test.ts:95`
 - `src/services/reviewNarrationFidelity.test.ts:101`
@@ -1166,6 +1166,8 @@
 - `src/services/reviewNarrationFidelity.test.ts:305`
 - `src/services/reviewNarrationFidelity.test.ts:312`
 - `src/services/reviewNarrationFidelity.test.ts:326`
+- `src/utils/seatPieces.test.ts:42`
+- `src/utils/seatPieces.test.ts:44`
 - `src/utils/seatPieces.ts:11`
 - `src/utils/seatPieces.ts:18`
 

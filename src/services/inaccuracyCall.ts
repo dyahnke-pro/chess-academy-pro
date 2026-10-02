@@ -62,6 +62,10 @@ export interface InaccuracyCall {
    *  that move — the pattern the student missed, so a caller can teach its
    *  rule once (unify-the-coach B3). Structured, never read off the prose. */
   pattern?: string;
+  /** Set when the call ends by telling the student their slip left something
+   *  to find ("look for it" / "go and take it") — so the caller can reveal the
+   *  answer after the student moves. Structured, never read off the prose. */
+  offersStudent?: true;
 }
 
 /** Only the three that are worth stopping for. `good` and above stay silent —
@@ -616,7 +620,8 @@ export function callInaccuracyDetailed(args: {
       : stillHanging
         ? ` Your ${stillHanging.piece} on ${stillHanging.square} is still hanging, though — see to it.`
         : theirSlipOffer(args.moverEvalAfterCp);
-    return { call: { quality, side: 'coach', cost, said: `${head}${should}${punish}`, square: better?.square ?? '' } };
+    const offers = quality !== 'inaccuracy' && !stillHanging ? { offersStudent: true as const } : {};
+    return { call: { quality, side: 'coach', cost, said: `${head}${should}${punish}`, square: better?.square ?? '', ...offers } };
   }
   if (args.side === 'coach') {
     const head = quality === 'blunder'
@@ -643,7 +648,8 @@ export function callInaccuracyDetailed(args: {
       : stillHanging
         ? ` Your ${stillHanging.piece} on ${stillHanging.square} is still hanging, though — see to it.`
         : theirSlipOffer(args.moverEvalAfterCp);
-    return { call: { quality, side: 'coach', cost, said: `${head}${should}${punish}`, square: better?.square ?? '' } };
+    const offers = quality !== 'inaccuracy' && !stillHanging ? { offersStudent: true as const } : {};
+    return { call: { quality, side: 'coach', cost, said: `${head}${should}${punish}`, square: better?.square ?? '', ...offers } };
   }
 
   // THE STUDENT'S OWN MOVE, in the retroactive register the backward look uses:

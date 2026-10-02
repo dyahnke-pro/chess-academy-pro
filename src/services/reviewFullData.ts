@@ -49,7 +49,8 @@ import { betterMoveReason, priorMoveLeadingTo, punishmentOf, toStudentSeat } fro
 import { andList } from '../utils/andList';
 import { stemKeyOf } from '../utils/rotateStem';
 import { developedMinorCount, minorsAtHome } from './development';
-import { studentMovePoint } from './playCommentary';
+import { slipAnswerText, studentMovePoint } from './playCommentary';
+import { theirMoveCost } from './theirMoveCost';
 
 interface Located { type: string; color: Color; square: string; }
 
@@ -398,7 +399,10 @@ export function computeMoveFacets(
     // position they part ways — "an inaccuracy, costing about 9.2 points"
     // (amateur review walk 2026-09-27). The label stands; the number goes.
     const pointsAgree = swing != null && (ctx.classification === 'blunder' || swing < 300);
-    const swingBit = swing != null && costsPoints && pointsAgree ? `, costing about ${(swing / 100).toFixed(1)} points` : '';
+    // A cost that rounds to 0.0 contradicts its own grade ("a mistake,
+    // costing about 0.0 points" — corpus sweep 2026-10-02): the grade is in
+    // win chances, so the number goes and the label stands.
+    const swingBit = swing != null && swing >= 5 && costsPoints && pointsAgree ? `, costing about ${(swing / 100).toFixed(1)} points` : '';
     // WHY it's a mistake, when we can prove it (a premature central break). Danya
     // leads with the positional reason, THEN names the better move — so does this.
     const whyBad = (ctx.classification === 'mistake' || ctx.classification === 'blunder' || ctx.classification === 'inaccuracy')
@@ -999,6 +1003,19 @@ export function computeMoveFacets(
     facets.push(f);
     recSquares(f, [stop.threat.from, stop.threat.landing]);
   }
+  // …and what THEIR move gave up that the student can use — the same board
+  // computer Learn speaks (`theirMoveCost`): a new hole a knight reaches,
+  // their bishop shut in, castling lost (David 2026-10-02: "teachings on
+  // opponents moves" — Review said what their move stopped, never what it cost).
+  if (!isStudent && studentColorWB) {
+    const cost = theirMoveCost(fenBefore, san, studentColorWB);
+    if (cost) {
+      const f = `[their-cost] ${cost.text}`;
+      facets.push(f);
+      outIdentity?.set(f, `their-cost:${cost.kind}:${cost.squares[0] ?? ''}`);
+      recSquares(f, cost.squares);
+    }
+  }
   // …and the fork trick, both seats — the same computer Learn's composer reads
   // (re-walk 1380: 7.Bb3 sidestepping …Nxe4 Nxe4 d5 said nothing).
   if (studentColorWB && !stop) {
@@ -1235,15 +1252,8 @@ function settledVariation(allSans: readonly string[], variationOf: (n: string | 
   return v;
 }
 
-/** The student's answer to the opponent's slip, said with its point — or null
- *  when the move-point computer finds no point (named with a reason, or not
- *  named). `theirSan` is the slip itself: a capture on its square is a
- *  recapture, never material won. */
+/** The student's answer to the opponent's slip, in Review's retrospective
+ *  voice — the one wording Learn speaks too (`slipAnswerText`). */
 export function studentAnswer(fenAfter: string, theirSan: string, answerSan: string | null): string | null {
-  if (!answerSan) return null;
-  const point = studentMovePoint(fenAfter, answerSan, theirSan);
-  if (!point) return null;
-  const body = point.replace(/\.$/, '');
-  if (body.startsWith(`${answerSan} `)) return `your answer was ${answerSan}, which ${body.slice(answerSan.length + 1)}`;
-  return `your answer was ${answerSan} — ${body.charAt(0).toLowerCase()}${body.slice(1)}`;
+  return slipAnswerText(fenAfter, theirSan, answerSan, 'review');
 }

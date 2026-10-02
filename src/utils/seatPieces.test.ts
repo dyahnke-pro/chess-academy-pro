@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { seatBare } from './seatPieces';
+import { seatBare, seatPieceReferences } from './seatPieces';
 
 // Naroditsky's game after 22.Nc3 Rd8 (hand walk 2026-09-24), student White.
 const FEN = '2kr4/1r3ppp/Rn1q2b1/1Ppp4/6P1/2NP3P/2P2PB1/Q4RK1 w - - 5 23';
@@ -33,5 +33,15 @@ describe('a colour possessive is replaced, never stacked (hand walk 2340)', () =
     const fen = '4r1k1/5ppp/8/8/8/6n1/5PPP/3R1RK1 w - - 0 20';
     expect(seatBare("White's king on g1 has no escape square", fen, 'w')).toBe('Your king on g1 has no escape square');
     expect(seatBare('Knight on g3 forks rook on f1 and king on g1', fen, 'b')).toBe('Your knight on g3 forks their rook on f1 and their king on g1');
+  });
+});
+
+describe('"their own" / "your own" is already seated (corpus sweep 2026-10-02)', () => {
+  it('never stamps a second owner after "own"', () => {
+    const fen = 'rnbqkbnr/ppp2ppp/3p4/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3';
+    expect(seatPieceReferences('Their …d6 shuts in their own bishop on f8.', fen, 'w'))
+      .toBe('Their …d6 shuts in their own bishop on f8.');
+    expect(seatPieceReferences('That blocks your own knight on g1.', fen, 'w'))
+      .toBe('That blocks your own knight on g1.');
   });
 });

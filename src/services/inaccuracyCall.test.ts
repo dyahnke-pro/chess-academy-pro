@@ -91,6 +91,7 @@ describe('the coach owns its own mistakes', () => {
     });
     expect(call?.said).toMatch(/from me/);
     expect(call?.said, 'did not point the student at the punishment').toContain('something here for you');
+    expect(call?.offersStudent, 'the offer travels as data, so Learn can reveal the answer after the move').toBe(true);
   });
 
   it('does NOT promise a punishment for a mere inaccuracy', () => {
@@ -292,6 +293,7 @@ describe('a coach MISS is not a giveaway (walk 6, L4)', () => {
     const call = callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null, fenBefore: fen, playedSan: 'd6', bestSan: 'Qxg5', cpLoss: 400, side: 'coach', moverColor: 'black' });
     expect(call?.said).toMatch(/knight on g5 is still hanging/);
     expect(call?.said).not.toMatch(/go and take it/);
+    expect(call?.offersStudent, 'a still-hanging warning offers nothing to find').toBeUndefined();
   });
 });
 

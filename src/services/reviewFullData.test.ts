@@ -506,3 +506,26 @@ describe('studentAnswer — their slip is your chance (clean-win review 2026-10-
     expect(studentAnswer('2r2rk1/7p/p5p1/2pP1p2/NpPq1Q2/1P5P/P5P1/4R1K1 w - - 5 28', 'Qd4+', null)).toBeNull();
   });
 });
+
+describe('Review says what THEIR move gave up — Learn\'s theirMoveCost (David 2026-10-02)', () => {
+  it('…Kf8 gives up castling, said on the opponent ply', () => {
+    const fenBefore = 'rnbqk2r/pppp1ppp/5n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 5 4';
+    const c = new Chess(fenBefore); c.move('Kf8');
+    const facets = computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
+      fenBefore, fenAfter: c.fen(), san: 'Kf8', ply: 8, moverColor: 'black', playerColor: 'white', studentColorWB: 'w',
+      evaluation: 80, preMoveEval: 20, classification: 'inaccuracy', bestMoveSan: 'O-O',
+      prevCap: { square: null, capturedValue: 0 }, allSans: ['Kf8'], forcedRunStartPly: null,
+      playedLineUci: [], bestLineUci: [], replyBestSan: null });
+    expect(facets.some((f) => f.startsWith('[their-cost] Their …Kf8 gives up castling'))).toBe(true);
+  });
+  it('is silent on the student\'s own move', () => {
+    const fenBefore = 'rnbqk2r/pppp1ppp/5n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 5 4';
+    const c = new Chess(fenBefore); c.move('Kf1');
+    const facets = computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
+      fenBefore, fenAfter: c.fen(), san: 'Kf1', ply: 7, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
+      evaluation: -50, preMoveEval: 20, classification: 'inaccuracy', bestMoveSan: 'O-O',
+      prevCap: { square: null, capturedValue: 0 }, allSans: ['Kf1'], forcedRunStartPly: null,
+      playedLineUci: [], bestLineUci: [], replyBestSan: null });
+    expect(facets.some((f) => f.startsWith('[their-cost]'))).toBe(false);
+  });
+});

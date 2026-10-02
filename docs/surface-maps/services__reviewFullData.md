@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1250 lines · 9 exports · 8 importers · 9 tests · 0 audits**
+**1260 lines · 9 exports · 9 importers · 10 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,6 +18,7 @@
 - `src/services/reviewFullData.test.ts`
 - `src/services/reviewWalk2065.test.ts`
 - `src/services/reviewWalkCT.test.ts`
+- `src/services/slipAnswer.test.ts`
 - `src/services/unifiedBetterMoveReason.test.ts`
 - `src/test/teach02Wired.test.ts`
 
@@ -43,7 +44,7 @@
 ### `EVAL_FACET_MIN_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeMoveFacets` (function) — 32 call sites
+### `computeMoveFacets` (function) — 34 call sites
 - `src/services/boardDelta.test.ts:13`
 - `src/services/boardDelta.test.ts:66`
 - `src/services/coachFeatureService.ts:1825`
@@ -71,6 +72,8 @@
 - `src/services/reviewFullData.test.ts:449`
 - `src/services/reviewFullData.test.ts:468`
 - `src/services/reviewFullData.test.ts:484`
+- `src/services/reviewFullData.test.ts:514`
+- `src/services/reviewFullData.test.ts:524`
 - `src/services/reviewWalkCT.test.ts:49`
 - `src/services/reviewWalkCT.test.ts:69`
 - `src/services/unifiedBetterMoveReason.test.ts:36`
@@ -88,10 +91,12 @@
 - `src/services/reviewNarrationFidelity.test.ts:129`
 - `src/services/reviewNarrationFidelity.test.ts:141`
 
-### `studentAnswer` (function) — 3 call sites
+### `studentAnswer` (function) — 5 call sites
 - `src/services/reviewFullData.test.ts:500`
 - `src/services/reviewFullData.test.ts:505`
 - `src/services/reviewFullData.test.ts:506`
+- `src/services/slipAnswer.test.ts:19`
+- `src/services/slipAnswer.test.ts:20`
 
 ## Tests
 
@@ -102,6 +107,7 @@
 - `src/services/reviewNarrationFidelity.test.ts`
 - `src/services/reviewWalk2065.test.ts`
 - `src/services/reviewWalkCT.test.ts`
+- `src/services/slipAnswer.test.ts`
 - `src/services/unifiedBetterMoveReason.test.ts`
 - `src/test/teach02Wired.test.ts`
 

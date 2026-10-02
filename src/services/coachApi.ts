@@ -1,5 +1,5 @@
 // All LLM API calls must go through this file only — per CLAUDE.md
-import { dangerAnswerLines, studentMoveAnswerLines, theirMoveAnswerLines } from './learnBoardTeaching';
+import { dangerAnswerLines, planArcAnswerLines, studentMoveAnswerLines, theirMoveAnswerLines } from './learnBoardTeaching';
 import OpenAI from 'openai';
 import { detectLanguage } from '../utils/detectLanguage';
 import { parseJsonSalvaging, isTruncatedJson } from '../utils/salvageJson';
@@ -5954,7 +5954,13 @@ export async function getCoachChatResponse(
             const phaseRead = grounding.endgameQuestion === true && !boardIsAnEnding && menOnBoard > 0
               ? `You're not in an endgame yet — ${menOnBoard} pieces are still on the board. From here: `
               : '';
-            const voiced = await voice(`${phaseRead}${answer.facts}`, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'plan', preferRaw: true });
+            // The plan each side has been BUILDING — the plan-arc computer Learn
+            // and Review speak (Play on demand, David 2026-10-02).
+            const arcLines = grounding.moveHistory && grounding.moveHistory.length > 0
+              ? planArcAnswerLines(grounding.moveHistory, grounding.enginePlan.studentSide)
+              : [];
+            const arcBit = arcLines.length ? ` So far: ${arcLines.join(' ')}` : '';
+            const voiced = await voice(`${phaseRead}${answer.facts}${arcBit}`, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'plan', preferRaw: true });
             if (voiced) {
               return answer.bestMoveFromTo
                 ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`

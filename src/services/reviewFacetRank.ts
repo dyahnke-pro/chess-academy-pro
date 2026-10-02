@@ -33,7 +33,7 @@ export type FacetTag =
   | 'verdict' | 'opening' | 'opp-dev' | 'opp-target' | 'endgame'
   | 'plan-now' | 'plan-race' | 'plan-arc' | 'plan-opening' | 'plan-middlegame' | 'plan-line' | 'consequence'
   | 'note' | 'method' | 'refuted' | 'bluff' | 'technique' | 'contrast' | 'timing' | 'praise'
-  | 'rule' | 'stopped' | 'stock' | 'trade' | 'point';
+  | 'rule' | 'stopped' | 'stock' | 'trade' | 'point' | 'their-cost';
 
 /**
  * What a fact is worth on ANY board, highest first. The ordering principle,
@@ -102,6 +102,10 @@ export const FACET_RANK: Record<FacetTag, number> = {
   // "That move has a point: it stops your threat" — the purpose of an
   // opponent move that threatens nothing (S3). Just above their targets.
   stopped: 27,
+  // What THEIR move gave up that the student can use — a hole a knight can
+  // reach, their bishop shut in, castling lost (Learn's `theirMoveCost`).
+  // Beside the purpose of their move, which says what it was FOR.
+  'their-cost': 27,
   'opp-target': 26,
   'opp-dev': 24,
   endgame: 22,
@@ -175,6 +179,7 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   technique: 'teach',
   contrast: 'teach',
   point: 'teach',
+  'their-cost': 'teach',
   timing: 'teach',
   'plan-race': 'teach',
   'plan-arc': 'teach',
@@ -274,7 +279,7 @@ export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   // PRINCIPLE — development, the king, the opening, converting.
   principle: 'principle', technique: 'principle', king: 'principle', opening: 'principle', endgame: 'principle',
   rule: 'principle',
-  does: 'principle', point: 'plan', 'opp-dev': 'principle', fundamental: 'principle', convert: 'principle',
+  does: 'principle', point: 'plan', 'their-cost': 'plan', 'opp-dev': 'principle', fundamental: 'principle', convert: 'principle',
   status: 'principle',
   // PLAN — structure, targets, the plan and the long read.
   'plan-now': 'plan', contrast: 'plan', timing: 'plan', 'plan-race': 'plan', 'plan-arc': 'plan', 'plan-opening': 'plan', 'plan-middlegame': 'plan',

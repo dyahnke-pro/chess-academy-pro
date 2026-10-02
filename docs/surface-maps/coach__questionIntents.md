@@ -305,7 +305,7 @@
 - `src/coach/batteryRouting.test.ts:109`
 - `src/coach/coachService.ts:1421`
 - `src/services/coachApi.ts:2473`
-- `src/services/coachApi.ts:6142`
+- `src/services/coachApi.ts:6148`
 - `src/services/endgameRuleAnswer.test.ts:87`
 - `src/services/endgameRuleAnswer.test.ts:88`
 
@@ -365,7 +365,7 @@
 - `src/coach/questionIntents.test.ts:571`
 - `src/coach/questionIntents.test.ts:579`
 - `src/coach/questionIntents.test.ts:585`
-- `src/services/coachApi.ts:6330`
+- `src/services/coachApi.ts:6336`
 
 ### `isEndgameWeaknessQuestion` (function) — 4 call sites
 - `src/coach/coachService.ts:1288`
