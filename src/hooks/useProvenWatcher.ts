@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { onWeaknessModelChanged } from '../services/weaknessModelEvents';
-import { getCapabilityProfile, capabilityProven } from '../services/capabilityEvidence';
+import { loadProvenTags } from '../services/studentRecord';
 
 /**
  * Watch for a capability turning GREEN while the student plays (David
@@ -20,12 +20,7 @@ export function useProvenWatcher(active: boolean, onProven: (tag: string) => voi
     if (!active) return;
     let cancelled = false;
     let known: Set<string> | null = null;
-    const read = async (): Promise<Set<string>> => {
-      const profile = await getCapabilityProfile();
-      const proven = new Set<string>();
-      for (const [tag, entry] of profile) if (capabilityProven(entry)) proven.add(tag);
-      return proven;
-    };
+    const read = loadProvenTags;
     void read().then((s) => { if (!cancelled) known = s; }).catch(() => { known = new Set(); });
     const off = onWeaknessModelChanged(() => {
       void read().then((now) => {

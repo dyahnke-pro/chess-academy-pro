@@ -283,11 +283,14 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
 
     // Determine WO-specified rating delta
     let delta: number;
+    let askedForReview = false;
     if (outcome.correct && !outcome.usedHint && !outcome.hadRetry && !outcome.showedSolution) {
       // Clean solve: no hints, 1st try
       delta = RATING_DELTA_CLEAN;
-      // A clean solve is a genuine "win" — feed the review-prompt gate.
-      void recordPositiveMoment('puzzle-clean-solve');
+      // A clean solve is a genuine "win" — feed the review-prompt gate. When
+      // THIS solve opens the prompt, the board holds below so the ask lands
+      // on the solved position, never over the next puzzle (David 2026-10-02).
+      askedForReview = await recordPositiveMoment('puzzle-clean-solve').catch(() => false);
     } else if (outcome.correct) {
       // Correct but used hint or had retry
       delta = RATING_DELTA_ASSISTED;
@@ -377,8 +380,9 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
     // …and EVERY surface holds after a MISS (2026-10-01): the result is
     // already recorded above, only the advance waits. Jumping straight on made
     // "Teach me this position" unreachable on exactly the puzzles where it
-    // teaches most. A clean solve keeps the fast cadence.
-    if (master || !outcome.correct) {
+    // teaches most. A clean solve keeps the fast cadence — except the once a
+    // solve opens the review prompt, which gets the same hold.
+    if (master || !outcome.correct || askedForReview) {
       pendingSessionRef.current = updatedSession;
       setAwaitingConcept(true);
       return;

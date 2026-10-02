@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { loadUpNext, type UpNextState } from '../services/upNextLoader';
-import { onRepCompleted } from '../services/repCompletion';
+import { loadUpNext, onUpNextChanged, type UpNextState } from '../services/upNextLoader';
 
 /** The day's Up-next state (today's ring + the current pick), refreshed the
  *  moment any bite finishes so the pick ROTATES without a reload. */
@@ -12,7 +11,7 @@ export function useUpNext(): UpNextState | null {
       void loadUpNext().then((s) => { if (!cancelled) setState(s); }).catch(() => undefined);
     };
     load();
-    const off = onRepCompleted(() => load());
+    const off = onUpNextChanged(load);
     return () => { cancelled = true; off(); };
   }, []);
   return state;

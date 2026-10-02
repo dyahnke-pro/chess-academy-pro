@@ -120,3 +120,9 @@ async function loadUpNextFresh(now: Date): Promise<UpNextState> {
   const current = currentPick(ring, done) ?? currentPick(ranked, done);
   return { ring, done, current };
 }
+
+/** Up next may have changed (a bite finished): the one signal a surface needs
+ *  to re-read the pick, so it never reaches past this door. */
+export function onUpNextChanged(fn: () => void): () => void {
+  return onRepCompleted(() => fn());
+}

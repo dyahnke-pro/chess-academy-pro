@@ -7,20 +7,15 @@
 // student (teach), never as silence. Refreshes when the model changes.
 
 import { useEffect, useRef } from 'react';
-import { loadWeaknessSignals } from '../services/weaknessSignalLoader';
 import { onWeaknessModelChanged } from '../services/weaknessModelEvents';
-import { getCapabilityProfile, type CapabilityProfile } from '../services/capabilityEvidence';
-import type { StudentRecord } from '../services/puzzleMethod';
+import { loadStudentRecord, type StudentRecord } from '../services/studentRecord';
 
 export function useStudentRecord(): React.RefObject<StudentRecord> {
   const ref = useRef<StudentRecord>({ weaknesses: [], capabilities: null });
   useEffect(() => {
     let alive = true;
     const load = (): void => {
-      void Promise.all([
-        loadWeaknessSignals().catch(() => []),
-        getCapabilityProfile().catch((): CapabilityProfile => new Map()),
-      ]).then(([weaknesses, capabilities]) => { if (alive) ref.current = { weaknesses, capabilities }; });
+      void loadStudentRecord().then((record) => { if (alive) ref.current = record; });
     };
     load();
     const off = onWeaknessModelChanged(load);

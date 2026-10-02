@@ -76,6 +76,7 @@ async function clickMove(uci) {
 }
 /** Solve whichever puzzle is on the board (read by its data-puzzle-id). */
 const solvedIds = new Set();
+let reviewHold = null;
 async function solveCurrent() {
   const board = page.locator('[data-testid="puzzle-board"]');
   await board.waitFor({ timeout: 90000 });
@@ -167,11 +168,18 @@ try {
       const pid = await page.locator('[data-testid="puzzle-board"]').getAttribute('data-puzzle-id').catch(() => null);
       console.log(`[D]   puzzle ${n} solved=${solved} board=${pid} url=${page.url()}`);
       await page.waitForTimeout(3500);
-      const cont = page.locator('[data-testid="concept-continue-btn"], [data-testid="next-puzzle-btn"]');
+      if (!reviewHold && await page.locator('[data-testid="review-prompt"]').count()) {
+        const held = await page.locator('[data-testid="puzzle-board"]').getAttribute('data-puzzle-id').catch(() => null);
+        reviewHold = { held, solvedId: pid, cont: await page.locator('[data-testid="concept-continue"]').count() };
+      }
+      await closeReviewPrompt();
+      const cont = page.locator('[data-testid="concept-continue"], [data-testid="next-puzzle-btn"]');
       if (await cont.count()) await cont.first().click().catch(() => {});
     }
     await watchBanners(3000);
   }
+  check('D4 the review prompt opens over the SOLVED board, held behind Continue — never over the next puzzle',
+    !!reviewHold && reviewHold.held === reviewHold.solvedId && reviewHold.cont > 0, JSON.stringify(reviewHold));
   const closed = rowsOf('today-ring-closed')[0];
   check('D UP NEXT ring closes — a today-ring-closed row', !!closed, closed?.summary ?? 'no row');
   await home();

@@ -222,7 +222,7 @@ const SURFACES = [
 
 // ── SHRINK-ONLY CEILINGS, measured 2026-09-17. Lower them when you route a
 //    call through the composer. NEVER raise one.
-const TOTAL_CEILING = 254;
+const TOTAL_CEILING = 253;
 const PER_FILE_CEILING: Record<string, number> = {
   'components/Coach/CoachTeachPage.tsx': 62,
   'components/Coach/CoachGamePage.tsx': 33,
