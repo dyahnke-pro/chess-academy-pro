@@ -31,7 +31,7 @@ vi.mock('./PuzzleBoard', () => ({
     <button
       data-testid="mock-solve"
       onClick={() =>
-        onComplete({ correct: true, usedHint: false, hadRetry: false, showedSolution: false, solveTimeMs: 1000 })
+        onComplete({ correct: true, usedHint: false, hadRetry: false, showedSolution: false, cleanMoves: 0, solveTimeMs: 1000 })
       }
     >
       solve

@@ -76,6 +76,9 @@ const FLASH_COLORS: Record<string, string> = {
   blunder: 'rgba(239, 68, 68, 0.95)',
 };
 
+/** How close one drop's twin onPieceDrop/onSquareClick events land. */
+const TWIN_EVENT_MS = 300;
+
 export function ControlledChessBoard({
   game,
   positionOverride,
@@ -165,11 +168,20 @@ export function ControlledChessBoard({
   // and is a no-op. (Root fix for the teach-mode "I played X" x2 + piled-up
   // arrows + double slip-faucet, David 2026-06-03 — replaces a downstream
   // handleSubmit time-dedup bandaid.)
-  const lastEmittedFenRef = useRef<string | null>(null);
+  //
+  // TWINS ONLY — the guard is time-boxed. Keyed on FEN alone it outlived the
+  // interaction: a puzzle undoes a wrong try, so the student repeating that
+  // try lands on the SAME FEN and was silently dropped — the move stayed on
+  // the board, never undone, and the puzzle went dead (hand walk 2026-10-02,
+  // David: "Drag a piece doesnt work"). One physical drop's twin events land
+  // within a few ms; a deliberate second try cannot.
+  const lastEmittedRef = useRef<{ fen: string; at: number } | null>(null);
   const emitMove = useCallback(
     (result: MoveResult): void => {
-      if (result.fen === lastEmittedFenRef.current) return;
-      lastEmittedFenRef.current = result.fen;
+      const now = Date.now();
+      const last = lastEmittedRef.current;
+      if (last && last.fen === result.fen && now - last.at < TWIN_EVENT_MS) return;
+      lastEmittedRef.current = { fen: result.fen, at: now };
       onMove?.(result);
       playMoveSound(result.san);
     },
@@ -184,12 +196,18 @@ export function ControlledChessBoard({
         return false;
       }
       const result = game.onDrop(sourceSquare, targetSquare);
-      if (result) {
-        emitMove(result);
-      } else {
+      if (!result) {
         game.clearSelection();
+        return false;
       }
-      return result !== null;
+      emitMove(result);
+      // A drop is drawn optimistically by react-chessboard and only resynced
+      // when `position` CHANGES. A parent that undoes the move in the same
+      // tick (a puzzle's wrong try) leaves `position` unchanged, so the
+      // dropped piece stayed drawn on its wrong square and the board went dead
+      // to the student (David 2026-10-02: "Drag a piece doesnt work"). Report
+      // the drop as accepted only if the game still stands on it.
+      return game.getFen() === result.fen;
     },
     [interactive, game, emitMove],
   );
@@ -347,8 +365,14 @@ export function ControlledChessBoard({
           />
         )}
 
+        {/* touch-none while a piece can be dragged: on iOS the page scroll
+            otherwise claims the touch and the drag never starts (David
+            2026-10-02: "Drag a piece doesnt work") — the same rule the
+            walkthrough board has always carried. The board is promoted to its
+            own compositor layer so 32 glow-filtered pieces are not repainted on
+            every scroll frame ("Board is choppy when scrolling"). */}
         <div
-          className="relative flex-1"
+          className={`relative flex-1 [transform:translateZ(0)] [contain:paint] ${dragAllowed ? 'touch-none select-none [-webkit-touch-callout:none]' : ''}`}
           data-testid="board-wrapper"
           style={boardColorScheme.borderGlow
             ? {

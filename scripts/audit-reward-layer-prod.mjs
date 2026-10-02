@@ -125,10 +125,12 @@ try {
   if (nextShown) await nextBtn.click();
   const r2 = await waitRow('deep-run-step', 2, 20000);
   check('A3 solving it asks one move DEEPER (3) — or climbs rating when capped', !!r2 && (r2.details.askedDepth === 3 || r2.details.capped), r2?.summary ?? 'no second row');
+  check('A6 a clean solve pitches the next puzzle HARDER (run rating climbed)', !!r1 && !!r2 && r2.details.targetRating > r1.details.targetRating, `${r1?.details?.targetRating} → ${r2?.details?.targetRating}`);
   const banked = await page.locator('[data-testid="deep-run-banked"]').getAttribute('data-value').catch(() => null);
   check('A4 the score banked the 2 moves', banked === '2', `banked=${banked}`);
 
-  // ── B. A wrong move ends the run ──────────────────────────────────────────
+  // ── B. Unlimited tries (David 2026-10-02): a wrong move climbs the hint
+  //    ladder and the run goes ON; only Show solution ends it. ─────────────
   const p2 = r2?.details?.puzzleId ? await readPuzzle(r2.details.puzzleId) : null;
   if (p2) {
     await page.waitForTimeout(1500);
@@ -138,9 +140,14 @@ try {
     const wrong = c.moves({ verbose: true }).find((m) => `${m.from}${m.to}` !== ms[1].slice(0, 4));
     if (wrong) await clickMove(`${wrong.from}${wrong.to}`);
   }
-  const over = await page.locator('[data-testid="deep-run-over"]').waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
-  check('B a wrong move ENDS the run', over);
-  const best = Number(await page.locator('[data-testid="deep-run-best-top"]').innerText().then((t) => t.replace(/\D/g, '')).catch(() => '0'));
+  await page.waitForTimeout(2500);
+  const overEarly = await page.locator('[data-testid="deep-run-over"]').count();
+  const stillPlaying = await page.locator('[data-testid="show-solution-button"]').count();
+  check('B a wrong move does NOT end the run — the board is back in play', !!p2 && overEarly === 0 && stillPlaying === 1, `over=${overEarly} showSolution=${stillPlaying}`);
+  if (stillPlaying) await page.locator('[data-testid="show-solution-button"]').click();
+  const over = await page.locator('[data-testid="deep-run-over"]').waitFor({ timeout: 20000 }).then(() => true).catch(() => false);
+  check('B1 Show solution ENDS the run', over);
+  const best = Number(await page.locator('[data-testid="deep-run-best"]').innerText().then((t) => t.replace(/\D/g, '')).catch(() => '0'));
   check('B2 the best is remembered (≥ the 2 banked)', best >= 2, `best=${best}`);
 
   // ── C. The light ──────────────────────────────────────────────────────────

@@ -1,12 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor, act } from '../../test/utils';
-import { PuzzleBoard } from './PuzzleBoard';
+import { PuzzleBoard, type PuzzleOutcome } from './PuzzleBoard';
 import type { PuzzleRecord } from '../../types';
 
-// A MISS STILL TEACHES THE LINE (David 2026-10-01: "make sure we are not
-// slacking on the teaching aspect"). Deep Run ends on one miss; with
-// `revealOnFail` the refutation is read and then the solution is PLAYED OUT on
-// the board, instead of leaving a dead board.
+// DEEP RUN'S BOARD CONTRACT (David 2026-10-02): "we give the user as many tries
+// as they want to solve on their own … Hints are given until top of ladder is
+// reached" and "Only clean moves bank". A wrong try never resolves the puzzle;
+// it climbs the hint ladder, and the move it was made on stops counting clean.
 
 const makeMoveSpy = vi.hoisted(() => vi.fn().mockReturnValue({ san: 'Nbd7' }));
 let latestOnMove: ((m: { from: string; to: string; san: string }) => void) | null = null;
@@ -33,6 +33,7 @@ vi.mock('../../hooks/usePieceSound', () => {
 });
 vi.mock('../../hooks/useHintSystem', () => {
   const requestHint = vi.fn(); const resetHints = vi.fn();
+  (globalThis as { __requestHint?: unknown }).__requestHint = requestHint;
   const hintState = { level: 0 as const, arrows: [] as never[], ghostMove: null, nudgeText: '', isAnalyzing: false };
   return { useHintSystem: () => ({ hintState, requestHint, resetHints }) };
 });
@@ -59,27 +60,44 @@ const PUZZLE: PuzzleRecord = {
   srsRepetitions: 0, srsDueDate: '2026-10-01', srsLastReview: null, userRating: 1200, attempts: 0, successes: 0,
 };
 
-describe('PuzzleBoard revealOnFail', () => {
+describe('PuzzleBoard — unlimited tries, hint on miss, clean moves', () => {
   beforeEach(() => { vi.clearAllMocks(); latestOnMove = null; readWrongTry.mockResolvedValue({ kind: 'refuted', text: 'Qe3? Then Qxe2.', replySan: 'Qxe2', replyFrom: 'd8', replyTo: 'e2' }); });
 
-  async function play(reveal: boolean): Promise<void> {
-    render(<PuzzleBoard puzzle={PUZZLE} onComplete={vi.fn()} maxWrongAttempts={1} revealOnFail={reveal} />);
+  async function mount(onComplete: (o: PuzzleOutcome) => void): Promise<void> {
+    render(<PuzzleBoard puzzle={PUZZLE} onComplete={onComplete} maxWrongAttempts={Number.POSITIVE_INFINITY} hintOnMiss />);
     await screen.findByTestId('chess-board');
     await waitFor(() => expect(screen.queryByTestId('puzzle-loading')).not.toBeInTheDocument(), { timeout: 2000 });
-    makeMoveSpy.mockClear();
-    act(() => { latestOnMove!({ from: 'e2', to: 'e3', san: 'Qe3' }); });
   }
 
-  it('a miss on the last try reads the refutation, then PLAYS the solution on the board', async () => {
-    const { voiceService } = await import('../../services/voiceService');
-    await play(true);
-    await waitFor(() => expect(voiceService.speak).toHaveBeenCalledWith('Qe3? Then Qxe2.'));
-    await waitFor(() => expect(makeMoveSpy).toHaveBeenCalledWith('e4', 'd6', undefined), { timeout: 6000 });
+  it('a clean solve reports every solver move clean', async () => {
+    const onComplete = vi.fn<(o: PuzzleOutcome) => void>();
+    await mount(onComplete);
+    act(() => { latestOnMove!({ from: 'e4', to: 'd6', san: 'Nd6#' }); });
+    await waitFor(() => expect(onComplete).toHaveBeenCalled(), { timeout: 4000 });
+    expect(onComplete.mock.calls[0][0]).toMatchObject({ correct: true, cleanMoves: 1, showedSolution: false });
   });
 
-  it('without revealOnFail nothing is played for the student', async () => {
-    await play(false);
-    await new Promise((r) => setTimeout(r, 4000));
-    expect(makeMoveSpy).not.toHaveBeenCalled();
+  it('a wrong try does NOT end the puzzle, reads why it fails + the next rung, and the move no longer banks', async () => {
+    const onComplete = vi.fn<(o: PuzzleOutcome) => void>();
+    await mount(onComplete);
+    act(() => { latestOnMove!({ from: 'e2', to: 'e3', san: 'Qe3' }); });
+    // The ladder is the puzzle's own rungs — never the one-tap-answer button.
+    const requestHint = (globalThis as { __requestHint?: ReturnType<typeof vi.fn> }).__requestHint!;
+    expect(requestHint).not.toHaveBeenCalled();
+    const { voiceService } = await import('../../services/voiceService');
+    await waitFor(() => expect(voiceService.speak).toHaveBeenCalledWith(expect.stringMatching(/^Qe3\? Then Qxe2\. /)));
+    await new Promise((r) => setTimeout(r, 1200)); // back to playing
+    expect(onComplete).not.toHaveBeenCalled();
+    act(() => { latestOnMove!({ from: 'e2', to: 'e3', san: 'Qe3' }); });
+    await new Promise((r) => setTimeout(r, 1200));
+    expect(onComplete).not.toHaveBeenCalled(); // as many tries as they want
+    act(() => { latestOnMove!({ from: 'e4', to: 'd6', san: 'Nd6#' }); });
+    await waitFor(() => expect(onComplete).toHaveBeenCalled(), { timeout: 4000 });
+    expect(onComplete.mock.calls[0][0]).toMatchObject({ correct: true, cleanMoves: 0, hadRetry: true });
+  }, 15000);
+
+  it('Show solution stays on the board while playing', async () => {
+    await mount(vi.fn());
+    expect(screen.getByTestId('show-solution-button')).toBeInTheDocument();
   });
 });

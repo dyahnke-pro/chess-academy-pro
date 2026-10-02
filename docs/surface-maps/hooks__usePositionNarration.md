@@ -43,7 +43,7 @@
 - `src/components/Coach/CoachGamePage.tsx:1806`
 - `src/components/Coach/CoachTeachPage.tsx:7374`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:615`
-- `src/components/Puzzles/PuzzleBoard.tsx:215`
+- `src/components/Puzzles/PuzzleBoard.tsx:229`
 - `src/hooks/usePositionNarration.degrade.test.ts:85`
 - `src/hooks/usePositionNarration.test.ts:126`
 - `src/hooks/usePositionNarration.test.ts:133`
@@ -59,8 +59,8 @@
 
 ## Tests
 
+- `src/components/Puzzles/PuzzleBoard.deepRun.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.evidence.test.tsx`
-- `src/components/Puzzles/PuzzleBoard.reveal.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.test.tsx`
 - `src/hooks/usePositionNarration.corpus.test.ts`
 - `src/hooks/usePositionNarration.degrade.test.ts`

@@ -7,23 +7,38 @@
  * PURE: every decision about the run lives here and is tested; the page only
  * renders it and fetches the puzzle it asks for.
  *
- *  - The SCORE is MOVES BANKED: the solver moves of every puzzle solved this
- *    run. A six-mover banks six. Depth is the thing being rewarded, so a run
- *    of five two-movers (10) loses to a pair of sixes (12).
- *  - DEPTH climbs one solver move per solve, from START_DEPTH. Where the
- *    pool has nothing deeper at this rating (the CC0 data is thin below 800),
- *    depth holds and the RATING climbs instead — harder every time, either way.
- *  - A miss (or Show solution) ENDS the run. The next run starts at
- *    START_DEPTH — two, not one: one-movers are for true beginners only.
+ *  - UNLIMITED TRIES, HINTS ON THE WAY (David 2026-10-02: "we give the user
+ *    as many tries as they want to solve on their own. Make the show solution
+ *    always available"). A wrong try does not end the run. Show solution does.
+ *  - The SCORE is CLEAN MOVES BANKED: a solver move found with no wrong try
+ *    and no hint since the last one banks 1; an assisted move banks 0 and the
+ *    run goes on (David: "Only clean moves bank").
+ *  - DEPTH climbs one solver move per solve, from START_DEPTH.
+ *  - DIFFICULTY is a live per-run PERFORMANCE RATING (David: "Algo this to the
+ *    user"). It starts at the student's own puzzle rating and moves by the
+ *    same Elo expectation their puzzle rating uses, with a run-sized K: the
+ *    score of a puzzle is the share of its moves found clean, so a clean solve
+ *    of a hard puzzle pushes it up hard and a struggle pulls it back. Longer
+ *    AND harder, at the pace the student actually plays.
  *  - No multiplier (David: "1 no"): the score stays an honest count of depth.
  */
 
 export const START_DEPTH = 2;
-/** Rating step when depth can climb no further in the pool. */
-export const RATING_STEP = 75;
-/** A run opens a little under the student's puzzle rating — the length is
- *  the difficulty at first, the rating joins in later. */
-export const START_RATING_OFFSET = -100;
+/** Elo K inside a run — larger than the stored rating's 32 so one run can
+ *  find the student's edge, small enough that one puzzle never swings 300. */
+export const RUN_K = 96;
+export const RUN_RATING_FLOOR = 400;
+export const RUN_RATING_CEILING = 3000;
+
+/** The run's next rating after a puzzle rated `puzzleRating`, scored as the
+ *  share of its solver moves found clean (0..1). */
+export function nextRunRating(runRating: number, puzzleRating: number, score: number): number {
+  if (!Number.isFinite(puzzleRating)) return runRating;
+  const expected = 1 / (1 + Math.pow(10, (puzzleRating - runRating) / 400));
+  const s = Math.max(0, Math.min(1, score));
+  const next = Math.round(runRating + RUN_K * (s - expected));
+  return Math.max(RUN_RATING_FLOOR, Math.min(RUN_RATING_CEILING, next));
+}
 
 export interface Rank { min: number; name: string }
 
@@ -52,6 +67,7 @@ export function nextRank(banked: number): Rank | null {
 export interface DeepRunState {
   /** Solver moves the NEXT puzzle should have. */
   depth: number;
+  /** The live performance rating the next puzzle is pitched at. */
   targetRating: number;
   banked: number;
   solved: number;
@@ -63,7 +79,7 @@ export interface DeepRunState {
 export function startRun(puzzleRating: number, best: number): DeepRunState {
   return {
     depth: START_DEPTH,
-    targetRating: Math.max(400, Math.round(puzzleRating + START_RATING_OFFSET)),
+    targetRating: Math.max(RUN_RATING_FLOOR, Math.min(RUN_RATING_CEILING, Math.round(puzzleRating))),
     banked: 0,
     solved: 0,
     bestBefore: best,
@@ -80,22 +96,32 @@ export interface SolveResult {
   newBest: boolean;
 }
 
-/**
- * Bank a solved puzzle. `servedDepth` is the depth actually played (the pool
- * may have served shallower than asked); `capped` says the pool had nothing
- * deeper at this rating, so the rating climbs instead of the depth.
- */
-export function solve(s: DeepRunState, servedDepth: number, capped: boolean): SolveResult {
-  const banked = s.banked + servedDepth;
+export interface SolvedPuzzle {
+  /** Solver moves the puzzle actually had (the pool may serve shallower). */
+  servedDepth: number;
+  /** Of those, how many were found with no wrong try and no hint. */
+  cleanMoves: number;
+  /** The puzzle's own rating — what the performance is measured against. */
+  puzzleRating: number;
+  /** The pool had nothing at the asked depth, so depth cannot climb. */
+  capped: boolean;
+}
+
+/** Bank a solved puzzle: clean moves score, depth climbs, the run rating
+ *  follows the performance. */
+export function solve(s: DeepRunState, p: SolvedPuzzle): SolveResult {
+  const clean = Math.max(0, Math.min(p.servedDepth, p.cleanMoves));
+  const banked = s.banked + clean;
   const before = rankFor(s.banked);
   const after = rankFor(banked);
-  const climbDepth = !capped;
+  const climbDepth = !p.capped;
+  const score = p.servedDepth > 0 ? clean / p.servedDepth : 0;
   const state: DeepRunState = {
     ...s,
     banked,
     solved: s.solved + 1,
     depth: climbDepth ? s.depth + 1 : s.depth,
-    targetRating: climbDepth ? s.targetRating : s.targetRating + RATING_STEP,
+    targetRating: nextRunRating(s.targetRating, p.puzzleRating, score),
   };
   return {
     state,

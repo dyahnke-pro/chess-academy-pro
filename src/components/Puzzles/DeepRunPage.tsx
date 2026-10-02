@@ -114,10 +114,11 @@ export function DeepRunPage(): JSX.Element {
   const handleComplete = useCallback((outcome: PuzzleOutcome): void => {
     const s = runRef.current;
     if (!s || !puzzle || s.over) return;
-    void recordAttempt(puzzle.id, outcome.correct, rating, outcome.correct ? 'good' : 'again');
-    // A run is clean depth: any wrong try or Show solution ends it.
-    const clean = outcome.correct && !outcome.hadRetry && !outcome.showedSolution;
-    if (!clean) {
+    const solvedClean = outcome.correct && !outcome.showedSolution && !outcome.hadRetry && !outcome.usedHint;
+    void recordAttempt(puzzle.id, solvedClean, rating, solvedClean ? 'good' : 'again');
+    // Unlimited tries (David 2026-10-02): only Show solution ends the run.
+    // Wrong tries and hints just stop that move banking.
+    if (!outcome.correct || outcome.showedSolution) {
       const over = miss(s);
       runRef.current = over;
       setRun(over);
@@ -132,7 +133,12 @@ export function DeepRunPage(): JSX.Element {
       void finishBite('deep-run');
       return;
     }
-    const r = solve(s, solverMoves(puzzle), cappedRef.current);
+    const r = solve(s, {
+      servedDepth: solverMoves(puzzle),
+      cleanMoves: outcome.cleanMoves,
+      puzzleRating: puzzle.rating,
+      capped: cappedRef.current,
+    });
     if (r.state.solved >= DEEP_RUN_BITE) void finishBite('deep-run');
     runRef.current = r.state;
     setRun(r.state);
@@ -192,7 +198,7 @@ export function DeepRunPage(): JSX.Element {
   );
 
   return (
-    <div className="flex flex-col flex-1 gap-4 p-4 md:p-6 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 overflow-y-auto" data-testid="deep-run-page">
+    <div className="flex flex-col flex-1 gap-4 p-4 md:p-6 pb-[calc(10rem+env(safe-area-inset-bottom,0px))] md:pb-24 overflow-y-auto" data-testid="deep-run-page">
       <div className="flex items-center gap-3">
         <button
           onClick={() => { void navigate('/tactics'); }}
@@ -204,15 +210,13 @@ export function DeepRunPage(): JSX.Element {
         </button>
         <Flame size={24} className="text-fuchsia-400 drop-shadow-[0_0_8px_rgba(255,61,242,0.8)]" />
         <h1 className="text-xl font-black uppercase tracking-wide text-fuchsia-200">Deep Run</h1>
-        <div className="flex-1" />
-        <span className="text-xs font-bold uppercase tracking-widest text-amber-300" data-testid="deep-run-best-top">Best {best}</span>
       </div>
 
       {phase === 'intro' && (
         <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center gap-5 text-center" data-testid="deep-run-intro">
           <p className="text-lg font-bold text-theme-text">How many moves deep can you go?</p>
           <p className="text-sm text-theme-text-muted">
-            Each puzzle is one move longer than the last. Every move you find is banked. One miss ends the run.
+            Each puzzle is one move longer and pitched harder as you play well. Every move you find on your own is banked. Take as many tries as you need; a wrong try climbs the hint ladder. Show solution ends the run.
           </p>
           <button
             onClick={begin}
@@ -225,15 +229,20 @@ export function DeepRunPage(): JSX.Element {
         </div>
       )}
 
-      {(phase === 'running' || phase === 'loading' || phase === 'over') && run && (
+      {/* The board STAYS through 'between' — the solved position is where the
+          concept is taught; unmounting it left a lone button floating below
+          the fold (David 2026-10-02: "scroll down for next was hard to
+          find"). */}
+      {(phase === 'running' || phase === 'loading' || phase === 'between' || phase === 'over') && run && (
         <div className="mx-auto w-full max-w-lg">
           {puzzle ? (
             <PuzzleBoard
               key={puzzle.id}
               puzzle={puzzle}
               onComplete={handleComplete}
-              maxWrongAttempts={1}
-              revealOnFail
+              maxWrongAttempts={Number.POSITIVE_INFINITY}
+              hintOnMiss
+              fitViewport
               disabled={phase !== 'running'}
               streak={run.solved}
               headerExtra={scoreRow}
@@ -248,7 +257,7 @@ export function DeepRunPage(): JSX.Element {
       )}
 
       {phase === 'between' && run && (
-        <div className="mx-auto flex w-full max-w-lg justify-center">
+        <div className="fixed inset-x-0 bottom-[calc(4.5rem+env(safe-area-inset-bottom,0px))] z-30 flex justify-center px-4 md:bottom-6" data-testid="deep-run-next-dock">
           <button
             onClick={next}
             className="animate-pulse rounded-2xl border-2 border-fuchsia-300 bg-fuchsia-500/20 px-8 py-3 text-lg font-black uppercase tracking-widest text-fuchsia-100 shadow-[0_0_28px_rgba(255,61,242,0.6)] transition-transform hover:scale-105"

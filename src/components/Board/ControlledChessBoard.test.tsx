@@ -351,3 +351,34 @@ describe('ControlledChessBoard', () => {
     });
   });
 });
+
+// A wrong try a puzzle undoes, played AGAIN, is a new try (hand walk
+// 2026-10-02): the FEN-keyed twin guard used to swallow it, leaving the move on
+// the board, never undone, and the puzzle dead. Twins are time-boxed now.
+describe('ControlledChessBoard — repeated tries vs twin events', () => {
+  beforeEach(() => { vi.clearAllMocks(); });
+
+  it('a twin event for the same drop (within ms) still emits once', () => {
+    const result = buildMoveResult({ fen: 'after-e4' });
+    const game = buildMockGame({ onDrop: vi.fn().mockReturnValue(result), getFen: vi.fn().mockReturnValue('after-e4') });
+    const onMove = vi.fn();
+    render(<ControlledChessBoard game={game} interactive onMove={onMove} />);
+    fireEvent.click(screen.getByTestId('drop-e2-e4'));
+    fireEvent.click(screen.getByTestId('drop-e2-e4'));
+    expect(onMove).toHaveBeenCalledTimes(1);
+  });
+
+  it('the SAME move played again after the parent undid it reaches the parent', () => {
+    const now = vi.spyOn(Date, 'now');
+    now.mockReturnValue(1_000);
+    const result = buildMoveResult({ fen: 'after-e4' });
+    const game = buildMockGame({ onDrop: vi.fn().mockReturnValue(result), getFen: vi.fn().mockReturnValue(START_FEN) });
+    const onMove = vi.fn();
+    render(<ControlledChessBoard game={game} interactive onMove={onMove} />);
+    fireEvent.click(screen.getByTestId('drop-e2-e4'));
+    now.mockReturnValue(2_500);
+    fireEvent.click(screen.getByTestId('drop-e2-e4'));
+    expect(onMove).toHaveBeenCalledTimes(2);
+    now.mockRestore();
+  });
+});

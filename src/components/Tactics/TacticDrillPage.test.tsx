@@ -20,13 +20,13 @@ vi.mock('../Puzzles/PuzzleBoard', () => ({
     <div data-testid="stub-board">
       <button
         data-testid="stub-solve"
-        onClick={() => onComplete({ correct: true, usedHint: false, hadRetry: false, showedSolution: false, solveTimeMs: 5000 })}
+        onClick={() => onComplete({ correct: true, usedHint: false, hadRetry: false, showedSolution: false, cleanMoves: 0, solveTimeMs: 5000 })}
       >
         solve
       </button>
       <button
         data-testid="stub-fail"
-        onClick={() => onComplete({ correct: false, usedHint: false, hadRetry: true, showedSolution: true, solveTimeMs: 9000 })}
+        onClick={() => onComplete({ correct: false, usedHint: false, hadRetry: true, showedSolution: true, cleanMoves: 0, solveTimeMs: 9000 })}
       >
         fail
       </button>
