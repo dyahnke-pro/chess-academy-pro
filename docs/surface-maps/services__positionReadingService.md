@@ -190,7 +190,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticVerification.ts:101`
 - `src/services/threatAnswer.ts:98`
 
-### `signedLegalSeeFor` (function) — 12 call sites
+### `signedLegalSeeFor` (function) — 11 call sites
 - `src/components/Coach/CoachTeachPage.tsx:827`
 - `src/components/Coach/CoachTeachPage.tsx:7879`
 - `src/components/Coach/CoachTeachPage.tsx:10276`
@@ -202,7 +202,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:6837`
 - `src/services/principleAttribution.ts:278`
 - `src/services/reviewFullData.ts:317`
-- `src/services/reviewFullData.ts:973`
 
 ### `capturesWinMaterial` (function) — 6 call sites
 - `src/services/computedMaterialTruth.corpus.test.ts:136`

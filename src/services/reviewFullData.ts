@@ -961,18 +961,17 @@ export function computeMoveFacets(
       // WHAT THE MOVE IS FOR, when it kept no rule — Learn's move-point
       // computer, called (review walk 2026-10-02: 7.g4 owed and silent while
       // Learn says "g4 prepares g5, which would kick their knight off f6").
-      // Learn's guard rides with it: a capture their reply can now win back
-      // is not a point.
+      // QUIET MOVES ONLY: a capture's point is the trade, and review's own
+      // trade/material facets say it (Learn: "a capture's point and the trade
+      // verdict are one claim") — and "wins the pawn on g3" said over the
+      // board after Kxg3 names a pawn where the king now stands (corpus sweep
+      // 2026-10-02, mg-lichess-6YRWrSqn ply 49).
       try {
-        const point = studentMovePoint(fenBefore, san, ply >= 2 ? ctx.allSans[ply - 2] ?? null : null);
-        const mv = point ? new Chess(fenBefore).move(san) : null;
-        const reply = ctx.allSans[ply] ?? null;
-        let nowLoose = false;
-        if (mv?.captured && reply) {
-          const after = new Chess(fenAfter);
-          try { after.move(reply); nowLoose = signedLegalSeeFor(after.fen(), mv.to, after.turn() === 'w' ? 'b' : 'w') > 0; } catch { nowLoose = false; }
-        }
-        if (point && mv && !nowLoose) {
+        const mv = new Chess(fenBefore).move(san);
+        const point = mv && !mv.captured
+          ? studentMovePoint(fenBefore, san, ply >= 2 ? ctx.allSans[ply - 2] ?? null : null)
+          : null;
+        if (point && mv) {
           const f = `[point] ${point}`;
           facets.push(f);
           outIdentity?.set(f, `point:${ply}`);

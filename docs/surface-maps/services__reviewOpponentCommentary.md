@@ -23,7 +23,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachFeatureService.ts:3205`
 - `src/services/planBeatShape.test.ts:39`
 - `src/services/planBeatShape.test.ts:53`
-- `src/services/reviewFullData.ts:1056`
+- `src/services/reviewFullData.ts:1055`
 - `src/services/reviewOpponentCommentary.test.ts:12`
 - `src/services/reviewOpponentCommentary.test.ts:20`
 - `src/services/reviewOpponentCommentary.test.ts:33`
@@ -34,7 +34,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `buildOpponentDevelopmentRead` (function) — 8 call sites
 - `src/services/coachFeatureService.ts:3182`
 - `src/services/planBeatShape.test.ts:69`
-- `src/services/reviewFullData.ts:1068`
+- `src/services/reviewFullData.ts:1067`
 - `src/services/reviewOpponentCommentary.test.ts:73`
 - `src/services/reviewOpponentCommentary.test.ts:77`
 - `src/services/reviewOpponentCommentary.test.ts:89`
