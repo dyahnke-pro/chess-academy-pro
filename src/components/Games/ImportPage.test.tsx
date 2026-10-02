@@ -24,6 +24,11 @@ vi.mock('../../services/chesscomService', () => ({
     mockImportChessComStats(...args),
 }));
 
+const mockReward = vi.fn();
+vi.mock('../../services/rewardService', () => ({
+  reward: (...args: unknown[]): unknown => mockReward(...args),
+}));
+
 describe('ImportPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -113,6 +118,23 @@ describe('ImportPage', () => {
       expect(screen.getByTestId('import-error')).toBeInTheDocument();
     });
     expect(screen.getByTestId('import-error')).toHaveTextContent('User not found');
+  });
+
+  it('celebrates the first import once, never a later one', async () => {
+    await db.meta.delete('first_import_rewarded_v1');
+    const runImport = async (): Promise<void> => {
+      const { unmount } = render(<ImportPage />);
+      fireEvent.change(screen.getByTestId('username-input'), { target: { value: 'testplayer' } });
+      fireEvent.click(screen.getByTestId('import-btn'));
+      await waitFor(() => expect(screen.getByTestId('import-result')).toBeInTheDocument());
+      unmount();
+    };
+    await runImport();
+    await waitFor(() => expect(mockReward).toHaveBeenCalledTimes(1));
+    expect(mockReward).toHaveBeenCalledWith(expect.objectContaining({ kind: 'rankUp' }));
+    await runImport();
+    await new Promise((r) => setTimeout(r, 50));
+    expect(mockReward).toHaveBeenCalledTimes(1);
   });
 
   it('displays success result after importing', async () => {

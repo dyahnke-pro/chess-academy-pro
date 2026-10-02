@@ -10,6 +10,7 @@ import { db } from '../../db/schema';
 import { ArrowLeft, Loader2, CheckCircle, TrendingUp, Brain, ExternalLink } from 'lucide-react';
 import type { PlatformStats, UserProfile } from '../../types';
 import { captureEvent } from '../../services/analytics';
+import { reward } from '../../services/rewardService';
 import { invalidateHomeSteer, warmHomeSteer } from '../../services/homeOpeningSteer';
 
 type Platform = 'lichess' | 'chesscom';
@@ -178,6 +179,8 @@ export function ImportPage(): JSX.Element {
       // As with `import_failed`: the games really were imported, so the event
       // fires whether or not the page is still on screen.
       captureEvent('import_succeeded', { import_source: platform, game_count: count });
+      // The first import is the loop's first input — celebrate it once, ever.
+      if (count > 0) void celebrateFirstImport(count);
 
       // Import stats
       if (mountedRef.current) setProgressStatus('Fetching player stats...');
@@ -491,4 +494,16 @@ export function ImportPage(): JSX.Element {
       )}
     </div>
   );
+}
+
+const FIRST_IMPORT_KEY = 'first_import_rewarded_v1';
+
+/** One burst for the first games ever imported: from here the coach reads
+ *  THEIR play. Once per device; later imports are routine. */
+async function celebrateFirstImport(count: number): Promise<void> {
+  try {
+    if (await db.meta.get(FIRST_IMPORT_KEY)) return;
+    await db.meta.put({ key: FIRST_IMPORT_KEY, value: String(Date.now()) });
+    reward({ kind: 'rankUp', label: `${count} games in — the coach can read your play` });
+  } catch { /* a reward must never break the import */ }
 }
