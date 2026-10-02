@@ -188,6 +188,15 @@ try {
   check('D2 Home says today is done', /done/i.test(await page.locator('[data-testid="today-ring-label"]').innerText()), await page.locator('[data-testid="today-ring-label"]').innerText());
   check('D3 the finish rewards fired (banners)', banners.some((b) => /done/i.test(b)), JSON.stringify(banners));
 
+  // ── F. Home layout (David 2026-10-02): today's count is a small pill in
+  //    the title row that opens the plan; the week lives on the plan; the
+  //    "Review your last game" card is gone. ─────────────────────────────────
+  await home();
+  check('F the "Review your last game" card is gone from Home', await page.locator('[data-testid="dashboard-review-last-game"]').count() === 0);
+  await page.locator('[data-testid="today-ring"]').click();
+  await page.waitForURL(/\/coach\/plan/, { timeout: 15000 }).catch(() => undefined);
+  const week = await page.locator('[data-testid="week-progress"]').waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
+  check('F2 the training counter opens the plan, with the week on it', /\/coach\/plan/.test(page.url()) && week, page.url());
   // ── E. Vacuity + health ───────────────────────────────────────────────────
   check('E1 listener captured events', listener.getCapturedEvents().length > 0, `${listener.getCapturedEvents().length}`);
   check('E2 zero pageerrors', pageErrors.length === 0, pageErrors.slice(0, 3).join(' | '));

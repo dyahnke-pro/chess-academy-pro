@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../stores/appStore';
 import { updateStreak } from '../../services/sessionGenerator';
@@ -6,17 +6,14 @@ import { seedDatabase } from '../../services/dataLoader';
 import { BookOpen, GraduationCap, Target, AlertTriangle, Upload, ChevronRight, Baby } from 'lucide-react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PageHelp } from '../Layout/PageHelp';
-import { ReviewLastGameCard } from './ReviewLastGameCard';
 import { TableOfContents } from './TableOfContents';
 import { useSettings } from '../../hooks/useSettings';
 import { scaledShadow } from '../../utils/neonColors';
-import { db } from '../../db/schema';
 import { useUpNext } from '../../hooks/useUpNext';
 import type { UpNextState } from '../../services/upNextLoader';
 import { UpNextBar } from './UpNextBar';
 import { TodayRing } from './TodayRing';
-import { getTrainedDays, daysTrainedThisWeek } from '../../services/trainingWeek';
-import { loadWhatGotBetter, sayPickOncePerDay } from '../../services/upNextHome';
+import { sayPickOncePerDay } from '../../services/upNextHome';
 
 interface SectionItem {
   label: string;
@@ -124,17 +121,7 @@ function homePulseRoute(hub: string | null): string | null {
  *  says the reason once a day per pick, after the student's first tap —
  *  never on launch, and through the narration setting. */
 function UpNextSection({ upNext }: { upNext: UpNextState | null }): JSX.Element {
-  const navigate = useNavigate();
-  const [days, setDays] = useState(0);
-  const [better, setBetter] = useState<{ green: number; red: number; newly: number } | null>(null);
-  const [deepBest, setDeepBest] = useState(0);
   const spokeRef = useRef(false);
-
-  useEffect(() => {
-    void getTrainedDays().then((d) => setDays(daysTrainedThisWeek(d, new Date())));
-    void loadWhatGotBetter().then(setBetter).catch(() => undefined);
-    void db.meta.get('deep_run_best_v1').then((r) => setDeepBest(Number(r?.value) || 0)).catch(() => undefined);
-  }, [upNext]);
 
   // The gentle voice: after the first tap anywhere on Home, once a day per pick.
   useEffect(() => {
@@ -149,25 +136,13 @@ function UpNextSection({ upNext }: { upNext: UpNextState | null }): JSX.Element 
     return () => window.removeEventListener('pointerdown', say);
   }, [upNext?.current]);
 
+  // Today's count is the small pill in the title row; the week, proven / to
+  // fix and the Deep Run best moved to the full plan (`WeekProgress`) — so the
+  // four sections sit right under Up next (David 2026-10-02).
+  if (!upNext?.current) return <></>;
   return (
-    <div className="max-w-lg mx-auto w-full flex flex-col gap-2 shrink-0" data-testid="dashboard-up-next">
-      {upNext?.current && <UpNextBar pick={upNext.current} surface="home" />}
-      {upNext && <TodayRing ring={upNext.ring} done={upNext.done} daysThisWeek={days} />}
-      {better && (better.green > 0 || better.red > 0 || deepBest > 0) && (
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 px-1 text-[11px] font-semibold" data-testid="what-got-better">
-          {better.newly > 0 && <span className="text-green-300">{better.newly} skill{better.newly === 1 ? '' : 's'} turned green this week</span>}
-          <span className="text-green-300/80">{better.green} proven</span>
-          <span className="text-rose-300/80">{better.red} to fix</span>
-          {deepBest > 0 && <span className="text-fuchsia-300">Deep Run best {deepBest}</span>}
-        </div>
-      )}
-      <button
-        onClick={() => void navigate('/coach/plan')}
-        className="self-end px-1 text-xs text-theme-text-muted hover:text-theme-accent transition-colors"
-        data-testid="dashboard-today-seeall"
-      >
-        See full plan
-      </button>
+    <div className="max-w-lg mx-auto w-full shrink-0" data-testid="dashboard-up-next">
+      <UpNextBar pick={upNext.current} surface="home" />
     </div>
   );
 }
@@ -202,11 +177,10 @@ export function DashboardPage(): JSX.Element {
       style={{ color: 'var(--color-text)' }}
       data-testid="dashboard"
     >
-      <div className="relative mt-2">
-        <h1 className="text-xl font-bold text-center">
-          Chess Academy Pro
-        </h1>
-        <div className="absolute left-0 top-1/2 -translate-y-1/2">
+      {/* Three columns of equal side width so the title stays centred and the
+          "0/3 training" counter never collides with it on a phone. */}
+      <div className="mt-2 grid grid-cols-[5.5rem_1fr_5.5rem] items-center">
+        <div className="justify-self-start">
           <PageHelp
             helpId="dashboard"
             suppressAutoOpen={activeProfile?.strengthCalibrated === false}
@@ -220,6 +194,12 @@ export function DashboardPage(): JSX.Element {
               { label: 'The loop', body: 'Learn it → play it → find the holes → drill them shut. The four sections below are the steps of that one cycle.' },
             ]}
           />
+        </div>
+        <h1 className="text-lg font-bold text-center whitespace-nowrap">
+          Chess Academy Pro
+        </h1>
+        <div className="justify-self-end">
+          {upNextForPulse && <TodayRing ring={upNextForPulse.ring} done={upNextForPulse.done} />}
         </div>
       </div>
 
@@ -250,10 +230,9 @@ export function DashboardPage(): JSX.Element {
       {/* Up next + today's ring — routes into one short bite */}
       <UpNextSection upNext={upNextForPulse} />
 
-      {/* The import→review handoff. Analysis already ran on their games and
-          nobody was being shown it — see ReviewLastGameCard for the numbers.
-          Renders nothing until they have a game of their own; dismissible. */}
-      <ReviewLastGameCard />
+      {/* The "Review your last game" card is gone (David 2026-10-02: the
+          "redundant review button") — Up next already sends the student to
+          the slip from their last game, so it pointed at the same game twice. */}
 
       {/* "The Philosophy of A General" (our book) now lives in The Coaches
           Library (Coach › The Coaches Library), so its dashboard tile is gone. */}
