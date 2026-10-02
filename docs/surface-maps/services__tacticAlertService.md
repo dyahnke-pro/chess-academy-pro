@@ -123,10 +123,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `tacticTypeLabel` (function) — 20 call sites
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:992`
-- `src/components/Puzzles/MyMistakesPage.tsx:210`
+- `src/components/Puzzles/MyMistakesPage.tsx:220`
 - `src/components/Tactics/TacticCreatePage.tsx:305`
 - `src/components/Tactics/TacticCreatePage.tsx:579`
-- `src/components/Tactics/TacticSetupBoard.tsx:246`
+- `src/components/Tactics/TacticSetupBoard.tsx:254`
 - `src/components/Tactics/TacticSetupPage.tsx:203`
 - `src/hooks/useCoachTips.ts:327`
 - `src/services/mistakePuzzleService.ts:663`
@@ -164,7 +164,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `recordTacticOutcome` (function) — 8 call sites
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:731`
 - `src/components/Puzzles/PuzzleBoard.tsx:354`
-- `src/components/Tactics/TacticSetupBoard.tsx:177`
+- `src/components/Tactics/TacticSetupBoard.tsx:179`
 - `src/hooks/useCoachTips.ts:230`
 - `src/services/tacticAlertService.test.ts:310`
 - `src/services/tacticAlertService.test.ts:322`

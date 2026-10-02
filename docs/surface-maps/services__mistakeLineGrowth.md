@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**101 lines · 6 exports · 3 importers · 1 tests · 0 audits**
+**101 lines · 6 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,15 +15,18 @@
 - `src/components/Puzzles/MistakePuzzleBoard.tsx`
 - `src/services/mistakeLineGrowth.test.ts`
 - `src/services/mistakePuzzleService.ts`
+- `src/services/upNextLoader.ts`
 
 ## Exports and every call site
 
-### `solveLengthOf` (function) — 5 call sites
+### `solveLengthOf` (function) — 7 call sites
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:204`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:350`
 - `src/services/mistakeLineGrowth.test.ts:15`
 - `src/services/mistakePuzzleService.ts:1402`
 - `src/services/mistakePuzzleService.ts:1455`
+- `src/services/upNextLoader.ts:60`
+- `src/services/upNextLoader.ts:65`
 
 ### `MAX_SOLVE_LENGTH` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

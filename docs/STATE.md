@@ -12,7 +12,7 @@
 
 - **21** modules record a MISS.
 - **10** record a HOLD (`capabilityEvidence`).
-- **5** read the capability profile back.
+- **7** read the capability profile back.
 
 Green has a reader — the heat map can lower as well as raise.
 

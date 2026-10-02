@@ -146,7 +146,7 @@
 - `src/services/tacticClassifierService.ts:568`
 
 ### `determinePlayerColor` (function) — 3 call sites
-- `src/components/Tactics/AnalysisPracticePage.tsx:101`
+- `src/components/Tactics/AnalysisPracticePage.tsx:112`
 - `src/services/autoAnalyzeGame.ts:295`
 - `src/test/seatResolversReadDeclaredSeat.test.ts:15`
 
@@ -233,7 +233,7 @@
 
 ### `getAllMistakePuzzles` (function) — 5 call sites
 - `src/components/Insights/OpeningDrilldown.tsx:152`
-- `src/components/Puzzles/MyMistakesPage.tsx:155`
+- `src/components/Puzzles/MyMistakesPage.tsx:160`
 - `src/components/Puzzles/WeaknessThemesPage.tsx:66`
 - `src/services/gameCalculationPuzzleService.ts:117`
 - `src/services/mistakePuzzleService.test.ts:597`
@@ -243,7 +243,7 @@
 
 ### `gradeMistakePuzzle` (function) — 8 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2372`
-- `src/components/Puzzles/MyMistakesPage.tsx:243`
+- `src/components/Puzzles/MyMistakesPage.tsx:255`
 - `src/components/Puzzles/WeaknessThemesPage.tsx:116`
 - `src/components/Tactics/TacticCreatePage.tsx:194`
 - `src/services/mistakePuzzleService.test.ts:495`
@@ -255,14 +255,14 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `deleteMistakePuzzle` (function) — 2 call sites
-- `src/components/Puzzles/MyMistakesPage.tsx:234`
+- `src/components/Puzzles/MyMistakesPage.tsx:244`
 - `src/services/mistakePuzzleService.test.ts:554`
 
 ### `MistakePuzzleStats` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getMistakePuzzleStats` (function) — 4 call sites
-- `src/components/Puzzles/MyMistakesPage.tsx:156`
+- `src/components/Puzzles/MyMistakesPage.tsx:161`
 - `src/services/gameInsightsService.ts:818`
 - `src/services/mistakePuzzleService.test.ts:571`
 - `src/services/mistakePuzzleService.test.ts:584`

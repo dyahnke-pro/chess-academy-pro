@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2904 lines · 16 exports · 103 importers · 84 tests · 23 audits**
+**2904 lines · 16 exports · 104 importers · 84 tests · 23 audits**
 
 ## Locked rules that govern this surface
 
@@ -119,6 +119,7 @@
 - `src/services/speakComputed.ts`
 - `src/services/streamingSpeaker.ts`
 - `src/services/ttsProsody.test.ts`
+- `src/services/upNextHome.ts`
 - `src/services/voiceService.fallover.test.ts`
 - `src/services/voiceService.test.ts`
 - `src/services/walkthroughRunner.test.ts`
@@ -215,7 +216,7 @@
 - `src/components/Openings/MiddlegamePractice.tsx:305`
 - `src/components/Openings/MiddlegamePractice.tsx:349`
 - `src/components/Openings/MiddlegamePractice.tsx:354`
-- `src/components/Openings/OpeningDetailPage.tsx:721`
+- `src/components/Openings/OpeningDetailPage.tsx:722`
 - `src/components/Settings/VoiceSettingsPanel.tsx:118`
 - `src/components/Settings/VoiceSettingsPanel.tsx:160`
 - `src/hooks/useProseReader.ts:66`
