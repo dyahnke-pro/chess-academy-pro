@@ -76,6 +76,8 @@ const FUNDAMENTAL_HOW: Record<FundamentalId, string> = {
   'passive-rook-endgame':
     'Rooks go BEHIND passed pawns and onto the seventh. Before defending passively, look for the active square — an active rook is often worth a pawn in a rook ending.',
   // ── threats and tactics ──
+  'blocked-own-retreat':
+    'Before a piece lands, look at what it stands on and what it stands in front of: did another of your pieces need that square, or the road through it, to get home? A piece with one retreat is one pawn move from trapped — keep that square clear.',
   'loose-piece':
     'End every move with a sweep: what of mine is undefended right now? Loose pieces are what make their tactics work — defend a loose piece or move it before it becomes their idea.',
   'ignored-threat':
@@ -319,6 +321,14 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
         `A knight on the rim is dim: on ${f.square} it covers little, and ${f.kick} drives it back anyway.`,
         `The knight on ${f.square} is on the edge of the board — ${f.kick} kicks it, and it never did anything there.`,
         `Knights belong in the centre; on ${f.square} this one gets hit by ${f.kick} for nothing.`,
+      ];
+      return s[v % s.length];
+    }
+    case 'blocked-own-retreat': {
+      const road = Number(f.onIt) === 1 ? `on ${f.retreat}, the ${f.piece}'s way home` : `in the ${f.piece}'s road back to ${f.retreat}`;
+      const s = [
+        `Your ${f.blocker} now stands ${road} — and ${f.trap} hits the ${f.piece} on ${f.square} with nowhere left to go.`,
+        `That ${f.blocker} on ${f.blockerSq} takes the ${f.piece}'s retreat: after ${f.trap} the ${f.piece} on ${f.square} is trapped.`,
       ];
       return s[v % s.length];
     }
@@ -583,6 +593,7 @@ function shortVerdict(a: PrincipleAttribution): string {
     case 'buried-own-bishop': return Number(f.squaresLeft ?? 0) === 0 ? `Your bishop on ${f.bishop} is shut in again.` : `Your bishop on ${f.bishop} is cramped again.`;
     case 'premature-centre-break': return `Another early break on ${f.pawn}.`;
     case 'knight-to-the-rim': return `A knight on the rim again, on ${f.square}.`;
+    case 'blocked-own-retreat': return `A retreat blocked again — ${f.trap} traps the ${f.piece} on ${f.square}.`;
     case 'loose-piece': return `Loose piece again — the ${f.piece} on ${f.square} hangs.`;
     case 'ignored-threat': return f.line ? `Their threat again — ${f.threat} was still on, and the ${f.piece} on ${f.square} with it.` : `Their threat again — the ${f.piece} on ${f.square} was still hanging.`;
     case 'passive-when-forcing-existed': return `You missed a forcing move again: ${f.better}.`;
@@ -715,6 +726,7 @@ const RECAP_NOUN: Record<FundamentalId, string> = {
   'calculation-depth': 'stopped calculating too early',
   'left-book-early': 'left the book early',
   'no-plan': 'played without a plan',
+  'blocked-own-retreat': 'blocked your own piece\'s retreat',
 };
 
 /**

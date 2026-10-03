@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1537 lines · 12 exports · 43 importers · 30 tests · 1 audits**
+**1625 lines · 12 exports · 44 importers · 31 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,6 +19,7 @@
 - `src/data/fundamentalLessons.ts`
 - `src/services/attributionNeverBlind.test.ts`
 - `src/services/autoAnalyzeGame.ts`
+- `src/services/blockedOwnRetreat.test.ts`
 - `src/services/causalChain.ts`
 - `src/services/claimTruth.manual.test.ts`
 - `src/services/coachApi.ts`
@@ -59,7 +60,7 @@
 ## Exports and every call site
 
 ### `FUNDAMENTAL_IDS` (const) — 1 call site
-- `src/services/fundamentalsCatalog.ts:174`
+- `src/services/fundamentalsCatalog.ts:177`
 
 ### `FundamentalId` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -89,8 +90,12 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:132`
 
-### `attributePrinciples` (function) — 82 call sites
+### `attributePrinciples` (function) — 86 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
+- `src/services/blockedOwnRetreat.test.ts:23`
+- `src/services/blockedOwnRetreat.test.ts:32`
+- `src/services/blockedOwnRetreat.test.ts:42`
+- `src/services/blockedOwnRetreat.test.ts:46`
 - `src/services/claimTruth.manual.test.ts:10`
 - `src/services/claimTruth.manual.test.ts:12`
 - `src/services/claimTruth.manual.test.ts:106`
@@ -165,7 +170,7 @@
 - `src/services/section14Diagnosis.test.ts:102`
 - `src/services/section14Diagnosis.test.ts:103`
 - `src/services/sweepCarriesPv.test.ts:129`
-- `src/services/sweepCarriesPv.test.ts:143`
+- `src/services/sweepCarriesPv.test.ts:146`
 - `src/services/sweepPassesEngineLines.test.ts:91`
 - `src/services/walkOct1Learn.test.ts:94`
 - `src/services/walkOct2a.test.ts:77`
@@ -191,6 +196,7 @@
 - `src/components/Coach/FundamentalsPage.test.tsx`
 - `src/data/fundamentalLessons.test.ts`
 - `src/services/attributionNeverBlind.test.ts`
+- `src/services/blockedOwnRetreat.test.ts`
 - `src/services/claimTruth.manual.test.ts`
 - `src/services/fundLeadStems.test.ts`
 - `src/services/fundamentalHow.test.ts`
