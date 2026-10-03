@@ -36,6 +36,7 @@ import { MATERIAL_VALUE } from './pieceValues';
 import { lineWins, mateLine } from './lineCalc';
 import { landedTacticFor } from './pvPlayback';
 import { proofCut } from './exchangeLedger';
+import { signedLegalSeeFor } from './positionReadingService';
 
 export interface InaccuracyCall {
   /** Straight from `moveRating.classifyMove` — never re-derived here. */
@@ -653,7 +654,7 @@ export function callInaccuracyDetailed(args: {
     // The plan reason is read in the MOVER's voice ("their king" = the
     // student's); said to the student it is "your king" (walk 2026-10-01).
     const should = better ? ` ${args.bestSan} was their move, to ${toStudentSeat(better.why)}.` : '';
-    const stillHanging = missedCaptureStillOn(args.fenBefore, args.playedSan, args.bestSan);
+    const stillHanging = missedCaptureStillOn(args.fenBefore, args.playedSan, args.bestSan, args.bestLineUci ?? null, args.priorMove);
     const punish = quality === 'inaccuracy'
       ? ''
       : stillHanging
@@ -681,7 +682,7 @@ export function callInaccuracyDetailed(args: {
     // hanging and the student has nothing to take. The old line promised
     // "something here for you — go and take it" after the coach had merely
     // declined Qxg5, with the student's knight still en prise.
-    const stillHanging = missedCaptureStillOn(args.fenBefore, args.playedSan, args.bestSan);
+    const stillHanging = missedCaptureStillOn(args.fenBefore, args.playedSan, args.bestSan, args.bestLineUci ?? null, args.priorMove);
     const punish = quality === 'inaccuracy'
       ? ''
       : stillHanging
@@ -945,12 +946,32 @@ const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop'
 
 /** The coach's best move was a capture it did not play, and after the move it
  *  DID play that capture is still on: the student's piece is still hanging. */
-function missedCaptureStillOn(fenBefore: string, playedSan: string, bestSan: string | null): { piece: string; square: string } | null {
-  if (!bestSan) return null;
+function missedCaptureStillOn(
+  fenBefore: string,
+  playedSan: string,
+  bestSan: string | null,
+  // REQUIRED (WO-OUTCOME-01): "hanging" is a material outcome, so it is read
+  // off the engine's line, never off "is it attacked" (Learn walk oct3c,
+  // 2.Bb5+: "your pawn on d5 is still hanging" — exd5 Qxd5 is an even trade).
+  bestLineUci: readonly string[] | null,
+  priorMove: PriorMove,
+): { piece: string; square: string } | null {
+  if (!bestSan || !bestLineUci || bestLineUci.length === 0) return null;
   try {
     const probe = new Chess(fenBefore);
     const best = probe.move(bestSan);
     if (!best?.captured) return null;
+    if (bestLineUci[0] !== `${best.from}${best.to}${best.promotion ?? ''}`) return null;
+    const line = new Chess(fenBefore);
+    const sans: string[] = [];
+    for (const u of bestLineUci) {
+      let mv;
+      try { mv = line.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { break; }
+      if (!mv) break;
+      sans.push(mv.san);
+    }
+    const proof = proofCut(fenBefore, sans, best.color, priorMove);
+    if (!proof || !(proof.mate || (!!proof.ledger && proof.ledger.netPawns > 0))) return null;
     const after = new Chess(fenBefore);
     after.move(playedSan);
     const victim = after.get(best.to);
@@ -960,7 +981,9 @@ function missedCaptureStillOn(fenBefore: string, playedSan: string, bestSan: str
     parts[1] = best.color;
     parts[3] = '-';
     const again = new Chess(parts.join(' '));
-    const stillOn = again.moves({ verbose: true }).some((m) => m.to === best.to && !!m.captured);
+    const stillOn = again.moves({ verbose: true }).some((m) => m.to === best.to && !!m.captured)
+      // The played move may have defended it: still won on the board it left.
+      && signedLegalSeeFor(after.fen(), best.to, best.color) > 0;
     return stillOn ? { piece: PIECE_NAME[victim.type] ?? 'piece', square: best.to } : null;
   } catch { return null; }
 }

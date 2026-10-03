@@ -128,18 +128,24 @@ describe('two plans, one line', () => {
   });
 
   it('DOES call a piece trade a plan', () => {
-    // The line starts at the position Black is to move in (a PV starts at the
-    // current board, D-6): Black's first move Nc6 attacks e5, and Black takes
-    // the knight back there two plies later.
+    // White opens the exchange itself: Bxc6 takes the knight, …dxc6 takes back.
+    const afterA6 = new Chess(); for (const s of ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6']) afterA6.move(s);
+    const plan = buildLookaheadPlan(
+      line(plies(afterA6.fen(), ['Bxc6', 'dxc6', 'O-O', 'f6'])),
+      'white', undefined, null,
+    );
+    expect(plan?.white.text).toContain('trade off the knight');
+  });
+
+  it('a RECAPTURE is not a trade the side chose (walk oct3c)', () => {
+    // …Nc6 Nxe5 …Nxe5: White grabbed the pawn, Black takes the knight back.
+    // That is not …Nc6's idea "to trade off the knight".
     const afterNf3 = new Chess(); for (const s of ['e4', 'e5', 'Nf3']) afterNf3.move(s);
     const plan = buildLookaheadPlan(
       line(plies(afterNf3.fen(), ['Nc6', 'Nxe5', 'Nxe5', 'd4'])),
       'white', undefined, null,
     );
-    // White's Nxe5 takes a PAWN; it is Black who takes the knight back — so
-    // the piece-trade clause belongs to Black, which is also a second check
-    // that trades land on the side that made them.
-    expect(plan?.black.text).toContain('trade off the knight');
+    expect(plan?.black.text ?? '').not.toContain('trade off the knight');
   });
 
   it('refuses to call a move and a reply a plan', () => {
@@ -993,13 +999,12 @@ describe('the trade clause belongs to the move that sets it up (WO-STANDARD-01 D
     expect(plan?.black.tradeIntended).toEqual([]);
     expect(plan?.black.text).not.toContain('trade off the bishop');
   });
-  it('NEGATIVE CONTROL: a first move that attacks the square the capture lands on keeps its trade WHY', () => {
-    // Nc6 attacks e5; Black's next own move is Nxe5. The existing "DOES call a
-    // piece trade a plan" case, asserted on the new field.
-    const afterNf3 = new Chess(); for (const s of ['e4', 'e5', 'Nf3']) afterNf3.move(s);
-    const plan = buildLookaheadPlan(line(plies(afterNf3.fen(), ['Nc6', 'Nxe5', 'Nxe5', 'd4'])), 'white', undefined, null);
-    expect(plan?.black.tradeIntended).toEqual(['knight']);
-    expect(plan?.black.text).toContain('trade off the knight');
+  it('NEGATIVE CONTROL: a first move that attacks the square, then OPENS the exchange there, keeps its trade WHY', () => {
+    // Nc3 attacks d5; White's next own move is Nxd5, the first capture there.
+    const afterD5 = new Chess(); for (const s of ['d4', 'd5', 'c4', 'Nf6', 'cxd5', 'Nxd5']) afterD5.move(s);
+    const plan = buildLookaheadPlan(line(plies(afterD5.fen(), ['Nc3', 'e6', 'Nxd5', 'exd5'])), 'black', undefined, null);
+    expect(plan?.white.tradeIntended).toEqual(['knight']);
+    expect(plan?.white.text).toContain('trade off the knight');
   });
 });
 

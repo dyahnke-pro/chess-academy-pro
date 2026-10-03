@@ -532,7 +532,16 @@ function planFor(
         // square Nc6 never looked at). A trade is this move's intention only
         // when the move IS the capture, or lands where it attacks the square
         // the capture happens on — read off the board after the first move.
-        if (tradeSetUpByFirstMove(mine[0], to, color)) tradeIntended.push(taken);
+        // A RECAPTURE IS NOT A TRADE THIS SIDE CHOSE (Learn walk oct3c, 4.Nf3:
+        // "the idea is to trade off the knight" over Nf3 …Qc7 O-O …Nxe5 Nxe5 —
+        // Black started it, on a pawn it was winning). The trade is this side's
+        // only when its capture opens the exchange on that square.
+        const at = plies.indexOf(ply);
+        const prev = at > 0 ? plies[at - 1] : undefined;
+        const recapture = prev
+          ? prev.moverColor !== color && !!prev.facts.captured && squaresOf(prev).to === to
+          : at === 0 && exchangePrior !== null && priorCaptureSquare(exchangePrior) === to;
+        if (!recapture && tradeSetUpByFirstMove(mine[0], to, color)) tradeIntended.push(taken);
       }
     }
     if (ply.facts.outpostGained) outposts.push(ply.facts.outpostGained);
@@ -755,6 +764,14 @@ function planFor(
  *  True when the first move IS that capture, or when the piece it moved
  *  attacks `captureSq` from where it landed. Board-read; never inferred from
  *  the SAN. */
+/** The square the move before the line captured on, or null. */
+function priorCaptureSquare(prior: { fenBefore: string; san: string }): string | null {
+  try {
+    const m = new Chess(prior.fenBefore).move(prior.san);
+    return m?.captured ? m.to : null;
+  } catch { return null; }
+}
+
 function tradeSetUpByFirstMove(first: PvPly | undefined, captureSq: string, color: 'white' | 'black'): boolean {
   if (!first) return false;
   const { to } = squaresOf(first);

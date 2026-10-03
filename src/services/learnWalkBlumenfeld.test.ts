@@ -217,7 +217,7 @@ describe('re-walk — the better move\'s reason is about the move', () => {
   });
   it('the own-move point names its move, so it cannot answer someone else\'s question', async () => {
     const { studentMovePoint } = await import('./playCommentary');
-    const p = studentMovePoint(fenAt(33), 'Qf5', 'a4');
+    const p = studentMovePoint(fenAt(33), 'Qf5', 'a4', null);
     if (p) expect(p).toMatch(/^Qf5 /);
   });
 });

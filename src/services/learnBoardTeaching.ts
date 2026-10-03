@@ -709,7 +709,8 @@ export function studentMoveAnswerLines(history: readonly string[], ply: number, 
   // WHAT A QUIET MOVE IS FOR — Learn's move point (Play on demand, David
   // 2026-10-02). Quiet moves only: a capture's point is the trade.
   if (out.length === 0 && !/x/.test(history[ply])) {
-    const point = studentMovePoint(fenBefore, history[ply], ply >= 1 ? history[ply - 1] : null);
+    // Quiet moves only — nothing material is claimed, so no line is needed.
+    const point = studentMovePoint(fenBefore, history[ply], ply >= 1 ? history[ply - 1] : null, null);
     if (point) out.push(point);
   }
   return out;
@@ -750,7 +751,7 @@ export function theirMoveAnswerLines(history: readonly string[], ply: number, st
       try {
         const u = best.moves[0];
         const answerSan = new Chess(after).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] })?.san ?? null;
-        const text = slipAnswerText(after, history[ply], answerSan, 'now');
+        const text = slipAnswerText(after, history[ply], answerSan, 'now', best.moves);
         if (text) out.push(text);
       } catch { /* the answer is a bonus */ }
     }

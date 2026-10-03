@@ -52,8 +52,9 @@ export interface RefutedAlternativeInput {
   maxPlies?: number;
 }
 
-/** The singleton as a scorer: `searchmoves` rides its queued search. */
-const SINGLETON: PvEngine & MoveScorer = {
+/** The singleton as a scorer: `searchmoves` rides its queued search. One
+ *  scorer for every one-search cost (the refuted alternative, Learn's move cost). */
+export const SINGLETON_SCORER: PvEngine & MoveScorer = {
   analyzePosition: (fen, depth) => stockfishEngine.analyzePosition(fen, depth),
   async scoreMoves(fen, ucis, depth) {
     const r = await stockfishEngine.analyzePosition(fen, depth, { searchmoves: ucis.join(' ') });
@@ -78,7 +79,7 @@ function sanToUci(fen: string, san: string): string | null {
  * and (B6) never a rating.
  */
 export async function refutedAlternative(input: RefutedAlternativeInput): Promise<RefutedAlternative | null> {
-  const engine = input.engine ?? SINGLETON;
+  const engine = input.engine ?? SINGLETON_SCORER;
   const depth = input.depth ?? 12;
   const maxPlies = input.maxPlies ?? 6;
   const alt = pickAlternative(input.taughtSan, input.candidates);

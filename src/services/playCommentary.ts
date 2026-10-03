@@ -22,7 +22,7 @@ import { phaseOfFen } from './boardConcepts';
 import { packageForRegister, type HintPackage } from './hintRegister';
 import { CAPTURE_VALUE } from './pieceValues';
 import { quietMovePoint } from './reviewMoveTeaching';
-import { legalSeeGainFor } from './positionReadingService';
+import { settledExchange } from './exchangeLedger';
 import { seatBare } from '../utils/seatPieces';
 
 export type CommentaryKind =
@@ -943,6 +943,10 @@ export function studentMovePoint(
    *  a capture on the square they just captured on is a RECAPTURE — the trade
    *  finishing, never material won (Bxc3 after …Bxc3). */
   opponentLastSan: string | null,
+  /** The engine's line from `fenBefore`, UCI, starting with `san`, or null.
+   *  REQUIRED (WO-OUTCOME-01): "that wins the X — nothing takes it back" is
+   *  an outcome, read off this line by the one ledger. No line, no claim. */
+  lineUci: readonly string[] | null,
 ): string | null {
   let after: Chess;
   try {
@@ -954,7 +958,19 @@ export function studentMovePoint(
   try { mv = after.move(san); } catch { return null; }
   if (!mv) return null;
   const recapture = !!opponentLastSan && new RegExp(`x${mv.to}(?![1-8])`).test(opponentLastSan);
-  const net = mv.captured && !recapture ? legalSeeGainFor(fenBefore, mv.to, mv.color) : 0;
+  let net = 0;
+  if (mv.captured && !recapture && lineUci && lineUci[0] === `${mv.from}${mv.to}${mv.promotion ?? ''}`) {
+    const sans: string[] = [];
+    const r = new Chess(fenBefore);
+    for (const u of lineUci) {
+      let m;
+      try { m = r.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { break; }
+      if (!m) break;
+      sans.push(m.san);
+    }
+    const ledger = settledExchange(fenBefore, sans, mv.color, null);
+    net = ledger ? ledger.netPawns : 0;
+  }
   if (mv.captured && net > 0) {
     const takenVal = CAPTURE_VALUE[mv.captured] ?? 0;
     // Free only when the whole piece is kept; otherwise they take back and the
@@ -994,9 +1010,12 @@ export function slipAnswerText(
   theirSan: string,
   answerSan: string | null,
   when: 'found' | 'missed' | 'review' | 'now',
+  /** The engine's line from `fenAfterSlip` starting with the answer, UCI, or
+   *  null — what the answer wins is read off it (WO-OUTCOME-01). */
+  answerLineUci: readonly string[] | null,
 ): string | null {
   if (!answerSan) return null;
-  const point = studentMovePoint(fenAfterSlip, answerSan, theirSan);
+  const point = studentMovePoint(fenAfterSlip, answerSan, theirSan, answerLineUci);
   // No point → nothing: a bare "you found it" is an acknowledgment, and the
   // board changing is the acknowledgment (Voice Rule 5; Learn walk 2026-10-02).
   if (!point) return null;

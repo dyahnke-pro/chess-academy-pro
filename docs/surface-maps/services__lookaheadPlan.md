@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1590 lines · 26 exports · 15 importers · 10 tests · 0 audits**
+**1607 lines · 26 exports · 15 importers · 10 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -47,7 +47,7 @@
 - `src/services/replayFence.modern1690.test.ts:80`
 
 ### `tacticWord` (function) — 23 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7868`
+- `src/components/Coach/CoachTeachPage.tsx:7870`
 - `src/services/computedVoiceAudit.report.test.ts:254`
 - `src/services/dnaLineNarrator.ts:131`
 - `src/services/dnaLineNarrator.ts:220`
@@ -72,7 +72,7 @@
 - `src/services/teachingSelector.ts:347`
 
 ### `seatedTacticLine` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7879`
+- `src/components/Coach/CoachTeachPage.tsx:7881`
 - `src/services/seatedTacticLine.test.ts:8`
 - `src/services/seatedTacticLine.test.ts:13`
 - `src/services/seatedTacticLine.test.ts:19`
@@ -103,111 +103,112 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `keySquaresOf` (function) — 4 call sites
-- `src/services/lookaheadPlan.test.ts:173`
 - `src/services/lookaheadPlan.test.ts:179`
 - `src/services/lookaheadPlan.test.ts:185`
-- `src/services/lookaheadPlan.test.ts:196`
+- `src/services/lookaheadPlan.test.ts:191`
+- `src/services/lookaheadPlan.test.ts:202`
 
 ### `describePlan` (function) — 36 call sites
-- `src/services/lookaheadPlan.test.ts:303`
-- `src/services/lookaheadPlan.test.ts:304`
-- `src/services/lookaheadPlan.test.ts:316`
-- `src/services/lookaheadPlan.test.ts:352`
-- `src/services/lookaheadPlan.test.ts:423`
-- `src/services/lookaheadPlan.test.ts:440`
-- `src/services/lookaheadPlan.test.ts:447`
-- `src/services/lookaheadPlan.test.ts:456`
-- `src/services/lookaheadPlan.test.ts:483`
-- `src/services/lookaheadPlan.test.ts:484`
-- `src/services/lookaheadPlan.test.ts:586`
-- `src/services/lookaheadPlan.test.ts:587`
-- `src/services/lookaheadPlan.test.ts:599`
-- `src/services/lookaheadPlan.test.ts:601`
-- `src/services/lookaheadPlan.test.ts:606`
+- `src/services/lookaheadPlan.test.ts:309`
+- `src/services/lookaheadPlan.test.ts:310`
+- `src/services/lookaheadPlan.test.ts:322`
+- `src/services/lookaheadPlan.test.ts:358`
+- `src/services/lookaheadPlan.test.ts:429`
+- `src/services/lookaheadPlan.test.ts:446`
+- `src/services/lookaheadPlan.test.ts:453`
+- `src/services/lookaheadPlan.test.ts:462`
+- `src/services/lookaheadPlan.test.ts:489`
+- `src/services/lookaheadPlan.test.ts:490`
+- `src/services/lookaheadPlan.test.ts:592`
+- `src/services/lookaheadPlan.test.ts:593`
+- `src/services/lookaheadPlan.test.ts:605`
 - `src/services/lookaheadPlan.test.ts:607`
-- `src/services/lookaheadPlan.test.ts:668`
-- `src/services/lookaheadPlan.test.ts:670`
-- `src/services/lookaheadPlan.test.ts:675`
-- `src/services/lookaheadPlan.test.ts:677`
-- `src/services/lookaheadPlan.test.ts:682`
+- `src/services/lookaheadPlan.test.ts:612`
+- `src/services/lookaheadPlan.test.ts:613`
+- `src/services/lookaheadPlan.test.ts:674`
+- `src/services/lookaheadPlan.test.ts:676`
+- `src/services/lookaheadPlan.test.ts:681`
 - `src/services/lookaheadPlan.test.ts:683`
-- `src/services/lookaheadPlan.test.ts:790`
-- `src/services/lookaheadPlan.test.ts:810`
-- `src/services/lookaheadPlan.test.ts:828`
-- `src/services/lookaheadPlan.test.ts:838`
+- `src/services/lookaheadPlan.test.ts:688`
+- `src/services/lookaheadPlan.test.ts:689`
+- `src/services/lookaheadPlan.test.ts:796`
+- `src/services/lookaheadPlan.test.ts:816`
+- `src/services/lookaheadPlan.test.ts:834`
 - `src/services/lookaheadPlan.test.ts:844`
 - `src/services/lookaheadPlan.test.ts:850`
-- `src/services/lookaheadPlan.test.ts:857`
-- `src/services/lookaheadPlan.test.ts:859`
-- `src/services/lookaheadPlan.test.ts:874`
-- `src/services/lookaheadPlan.test.ts:900`
-- `src/services/lookaheadPlan.test.ts:911`
-- `src/services/lookaheadPlan.test.ts:919`
-- `src/services/lookaheadPlan.test.ts:927`
+- `src/services/lookaheadPlan.test.ts:856`
+- `src/services/lookaheadPlan.test.ts:863`
+- `src/services/lookaheadPlan.test.ts:865`
+- `src/services/lookaheadPlan.test.ts:880`
+- `src/services/lookaheadPlan.test.ts:906`
+- `src/services/lookaheadPlan.test.ts:917`
+- `src/services/lookaheadPlan.test.ts:925`
+- `src/services/lookaheadPlan.test.ts:933`
 - `src/services/narrationAdversarial.test.ts:203`
 
-### `buildLookaheadPlan` (function) — 19 call sites
+### `buildLookaheadPlan` (function) — 20 call sites
 - `src/services/lookaheadPlan.test.ts:71`
 - `src/services/lookaheadPlan.test.ts:82`
 - `src/services/lookaheadPlan.test.ts:83`
 - `src/services/lookaheadPlan.test.ts:91`
 - `src/services/lookaheadPlan.test.ts:113`
 - `src/services/lookaheadPlan.test.ts:126`
-- `src/services/lookaheadPlan.test.ts:135`
-- `src/services/lookaheadPlan.test.ts:146`
-- `src/services/lookaheadPlan.test.ts:157`
+- `src/services/lookaheadPlan.test.ts:133`
+- `src/services/lookaheadPlan.test.ts:144`
+- `src/services/lookaheadPlan.test.ts:152`
 - `src/services/lookaheadPlan.test.ts:163`
-- `src/services/lookaheadPlan.test.ts:199`
-- `src/services/lookaheadPlan.test.ts:206`
-- `src/services/lookaheadPlan.test.ts:692`
-- `src/services/lookaheadPlan.test.ts:744`
-- `src/services/lookaheadPlan.test.ts:756`
-- `src/services/lookaheadPlan.test.ts:771`
-- `src/services/lookaheadPlan.test.ts:988`
-- `src/services/lookaheadPlan.test.ts:1000`
-- `src/services/lookaheadPlan.test.ts:1022`
+- `src/services/lookaheadPlan.test.ts:169`
+- `src/services/lookaheadPlan.test.ts:205`
+- `src/services/lookaheadPlan.test.ts:212`
+- `src/services/lookaheadPlan.test.ts:698`
+- `src/services/lookaheadPlan.test.ts:750`
+- `src/services/lookaheadPlan.test.ts:762`
+- `src/services/lookaheadPlan.test.ts:777`
+- `src/services/lookaheadPlan.test.ts:994`
+- `src/services/lookaheadPlan.test.ts:1005`
+- `src/services/lookaheadPlan.test.ts:1027`
 
 ### `mergeTwinDriftForTest` (function) — 2 call sites
-- `src/services/lookaheadPlan.test.ts:964`
-- `src/services/lookaheadPlan.test.ts:975`
+- `src/services/lookaheadPlan.test.ts:970`
+- `src/services/lookaheadPlan.test.ts:981`
 
 ### `isCostClause` (function) — 10 call sites
 - `src/services/concessionBeat.ts:457`
-- `src/services/inaccuracyCall.ts:234`
-- `src/services/inaccuracyCall.ts:392`
-- `src/services/inaccuracyCall.ts:399`
-- `src/services/inaccuracyCall.ts:413`
-- `src/services/inaccuracyCall.ts:844`
+- `src/services/inaccuracyCall.ts:235`
+- `src/services/inaccuracyCall.ts:393`
+- `src/services/inaccuracyCall.ts:400`
+- `src/services/inaccuracyCall.ts:414`
+- `src/services/inaccuracyCall.ts:845`
 - `src/services/learnWalkBlumenfeld.test.ts:181`
 - `src/services/learnWalkBlumenfeld.test.ts:182`
 - `src/services/learnWalkBlumenfeld.test.ts:183`
 - `src/services/learnWalkBlumenfeld.test.ts:184`
 
 ### `planFromUci` (function) — 31 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9644`
+- `src/components/Coach/CoachTeachPage.tsx:9646`
 - `src/services/claimTruth.manual.test.ts:119`
 - `src/services/coachLaneWiring.test.ts:35`
 - `src/services/computedVoiceAudit.report.test.ts:216`
 - `src/services/concessionBeat.ts:450`
-- `src/services/inaccuracyCall.ts:278`
-- `src/services/inaccuracyCall.ts:339`
-- `src/services/inaccuracyCall.ts:842`
-- `src/services/lookaheadPlan.test.ts:228`
-- `src/services/lookaheadPlan.test.ts:233`
-- `src/services/lookaheadPlan.test.ts:240`
-- `src/services/lookaheadPlan.test.ts:245`
-- `src/services/lookaheadPlan.test.ts:261`
-- `src/services/lookaheadPlan.test.ts:268`
-- `src/services/lookaheadPlan.test.ts:279`
-- `src/services/lookaheadPlan.test.ts:289`
-- `src/services/lookaheadPlan.test.ts:496`
-- `src/services/lookaheadPlan.test.ts:506`
-- `src/services/lookaheadPlan.test.ts:523`
-- `src/services/lookaheadPlan.test.ts:560`
-- `src/services/lookaheadPlan.test.ts:631`
-- `src/services/lookaheadPlan.test.ts:712`
-- `src/services/lookaheadPlan.test.ts:1012`
-- `src/services/lookaheadPlan.test.ts:1015`
+- `src/services/inaccuracyCall.ts:279`
+- `src/services/inaccuracyCall.ts:340`
+- `src/services/inaccuracyCall.ts:843`
+- `src/services/lookaheadPlan.test.ts:234`
+- `src/services/lookaheadPlan.test.ts:239`
+- `src/services/lookaheadPlan.test.ts:246`
+- `src/services/lookaheadPlan.test.ts:251`
+- `src/services/lookaheadPlan.test.ts:267`
+- `src/services/lookaheadPlan.test.ts:274`
+- `src/services/lookaheadPlan.test.ts:285`
+- `src/services/lookaheadPlan.test.ts:295`
+- `src/services/lookaheadPlan.test.ts:502`
+- `src/services/lookaheadPlan.test.ts:512`
+- `src/services/lookaheadPlan.test.ts:529`
+- `src/services/lookaheadPlan.test.ts:566`
+- `src/services/lookaheadPlan.test.ts:637`
+- `src/services/lookaheadPlan.test.ts:718`
+- `src/services/lookaheadPlan.test.ts:1017`
+- `src/services/lookaheadPlan.test.ts:1020`
 - `src/services/narrationAdversarial.test.ts:62`
 - `src/services/narrationAdversarial.test.ts:178`
 - `src/services/narrationAdversarial.test.ts:188`
@@ -218,12 +219,12 @@
 
 ### `gameArcs` (function) — 3 call sites
 - `src/services/coachFeatureService.ts:1380`
-- `src/services/learnBoardTeaching.ts:766`
+- `src/services/learnBoardTeaching.ts:767`
 - `src/services/walkOct1Learn.test.ts:115`
 
 ### `aimsOf` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9657`
-- `src/components/Coach/CoachTeachPage.tsx:9661`
+- `src/components/Coach/CoachTeachPage.tsx:9659`
+- `src/components/Coach/CoachTeachPage.tsx:9663`
 - `src/services/planArc.phraseFrom.test.ts:30`
 - `src/services/planArc.phraseFrom.test.ts:31`
 - `src/services/planArc.test.ts:29`
@@ -232,8 +233,8 @@
 - `src/services/planChooser.ts:49`
 
 ### `aimWalkableNow` (re-export) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9657`
-- `src/components/Coach/CoachTeachPage.tsx:9661`
+- `src/components/Coach/CoachTeachPage.tsx:9659`
+- `src/components/Coach/CoachTeachPage.tsx:9663`
 - `src/services/planArc.phraseFrom.test.ts:19`
 - `src/services/planArc.phraseFrom.test.ts:22`
 - `src/services/planArc.test.ts:201`
@@ -252,14 +253,14 @@
 - `src/services/planChooser.ts:47`
 
 ### `joinEmerges` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9673`
+- `src/components/Coach/CoachTeachPage.tsx:9675`
 - `src/services/planArc.test.ts:269`
 - `src/services/planArc.test.ts:276`
 - `src/services/planArc.ts:540`
 
 ### `stepArc` (re-export) — 25 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9657`
-- `src/components/Coach/CoachTeachPage.tsx:9661`
+- `src/components/Coach/CoachTeachPage.tsx:9659`
+- `src/components/Coach/CoachTeachPage.tsx:9663`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.test.ts:94`
 - `src/services/planArc.test.ts:96`

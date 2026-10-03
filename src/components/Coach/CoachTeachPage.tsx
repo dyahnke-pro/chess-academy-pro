@@ -285,6 +285,8 @@ import { legalSeeGainFor, namedPawnStructure, structureTransfer, signedLegalSeeF
 import { BehaviorScheduler, detectBehaviors } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
+import { moveCostOneSearch, uciOfSan } from '../../services/moveCost';
+import { SINGLETON_SCORER } from '../../services/refutedAlternative';
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingRating } from '../../services/coachGameEngine';
@@ -8927,7 +8929,7 @@ export function CoachTeachPage(): JSX.Element {
         // verdict — and a `clear-best` with no point stays silent, because a
         // verdict with no reason is bare praise (Narration Voice Rule 5).
         const goodPoint = grade && (grade.reason === 'clear-best' || grade.reason === 'only-move')
-          ? studentMovePoint(fenBefore, move.san, move.history.length >= 2 ? move.history[move.history.length - 2] : null)
+          ? studentMovePoint(fenBefore, move.san, move.history.length >= 2 ? move.history[move.history.length - 2] : null, preStudentRead?.topLines?.find((l) => l.moves[0] === `${move.from}${move.to}${move.promotion ?? ''}`)?.moves ?? null)
           : null;
         // A RECAPTURE IS NOT A FIND (hand walk 2026-09-30, Ruy: "c-pawn takes d4:
         // nice — that was the only move that holds", then the same for Qxd4 —
@@ -10128,8 +10130,11 @@ export function CoachTeachPage(): JSX.Element {
                     // either is a mate the delta is meaningless and the mate
                     // fields carry the story instead — same rule as the coach's.
                     const bothCp = !preStudentRead.isMate && !mid.isMate;
+                    // THE COST FROM ONE SEARCH (walk oct3c): the played move
+                    // against the best one in the same tree — never a read
+                    // before minus a time-boxed read after.
                     const cpLoss = bothCp
-                      ? (preStudentRead.evaluation * sign) - (mid.evaluation * sign)
+                      ? (await moveCostOneSearch({ fenBefore, playedUci: `${move.from}${move.to}${move.promotion ?? ''}`, fan: preStudentRead, scorer: SINGLETON_SCORER, depth: COACH_TURN_DEPTH }) ?? 0)
                       : 0;
                     const studentBestSan = uciSanAt(fenBefore, preStudentRead.bestMove);
                     // THE BOARD-LEVEL TEACHING of the student's move — recapture
@@ -10268,7 +10273,7 @@ export function CoachTeachPage(): JSX.Element {
                         const answer = studentBestSan ? new Chess(fenBefore).move(studentBestSan) : null;
                         const found = !!answer && answer.from === move.from && answer.to === move.to;
                         if (answer && !heldRevealedHere) {
-                          const text = slipAnswerText(fenBefore, slip.theirSan, studentBestSan ?? null, found ? 'found' : 'missed');
+                          const text = slipAnswerText(fenBefore, slip.theirSan, studentBestSan ?? null, found ? 'found' : 'missed', preStudentRead.topLines?.[0]?.moves ?? null);
                           if (text && (found || look?.namesBetter !== studentBestSan)) {
                             // FOUND, the text IS this move's point — the same claim the
                             // move-point lane makes, so it carries that key and the
@@ -10420,7 +10425,7 @@ export function CoachTeachPage(): JSX.Element {
                         }
                       } catch { /* the verdict is a bonus, never a blocker */ }
                       if (gambitLine) queueSpokenHint(fenAfterReply, gambitLine, 'movePoint', [], [`gambit:${move.to}`]);
-                      const point = gambitLine ? null : studentMovePoint(fenBefore, move.san, move.history.length >= 2 ? move.history[move.history.length - 2] : null);
+                      const point = gambitLine ? null : studentMovePoint(fenBefore, move.san, move.history.length >= 2 ? move.history[move.history.length - 2] : null, preStudentRead?.topLines?.find((l) => l.moves[0] === `${move.from}${move.to}${move.promotion ?? ''}`)?.moves ?? null);
                       // SPOKEN ON THE BOARD AFTER THEIR REPLY, SO TRUE THERE
                       // (fresh-game walk 2026-09-27: "That wins the pawn on c4 —
                       // nothing takes it back safely" heard after Na3 hit c4).
@@ -10637,8 +10642,7 @@ export function CoachTeachPage(): JSX.Element {
                   // the coach chose it (a real slip is the verdict lane's).
                   try {
                     if (cm && mid && samePosition(cm.fenAfter, fenAfterReply) && !mid.isMate && !cm.afterIsMate) {
-                      const oppSign = playerColor === 'white' ? -1 : 1;
-                      const oppLoss = (mid.evaluation * oppSign) - (cm.evalAfterWhiteCp * oppSign);
+                      const oppLoss = await moveCostOneSearch({ fenBefore: cm.fenBefore, playedUci: uciOfSan(cm.fenBefore, cm.playedSan) ?? '', fan: mid, scorer: SINGLETON_SCORER, depth: COACH_TURN_DEPTH }) ?? 0;
                       const dictated = learnMemRef.current.lastReplyDictated !== null;
                       const verdict = theirOpeningVerdict([...move.history, cm.playedSan], playerColor === 'white' ? 'w' : 'b', oppLoss, !dictated);
                       if (verdict) {
@@ -10656,7 +10660,9 @@ export function CoachTeachPage(): JSX.Element {
                     // swing into or out of one would be reported to the student
                     // as a cost of a hundred thousand centipawns.
                     const bothCp = !mid.isMate && !cm.afterIsMate;
-                    const cpLoss = bothCp ? (mid.evaluation * sign) - (cm.evalAfterWhiteCp * sign) : 0;
+                    const cpLoss = bothCp
+                      ? (await moveCostOneSearch({ fenBefore: cm.fenBefore, playedUci: uciOfSan(cm.fenBefore, cm.playedSan) ?? '', fan: mid, scorer: SINGLETON_SCORER, depth: COACH_TURN_DEPTH }) ?? 0)
+                      : 0;
                     // THE SAME MODEL THE STUDENT'S MOVE GOES THROUGH, pointed at
                     // the coach's. It asks the identical question, so it runs the
                     // identical lanes: name the thing conceded if code can —

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**144 lines · 6 exports · 4 importers · 2 tests · 0 audits**
+**145 lines · 7 exports · 5 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@
 
 ## Who calls in
 
+- `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/coachFeatureService.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/refutedAlternative.test.ts`
@@ -21,6 +22,9 @@
 ## Exports and every call site
 
 ### `RefutedAlternativeInput` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `SINGLETON_SCORER` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `refutedAlternative` (function) — 8 call sites

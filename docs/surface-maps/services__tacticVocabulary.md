@@ -31,7 +31,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `tacticWord` (function) — 23 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7868`
+- `src/components/Coach/CoachTeachPage.tsx:7870`
 - `src/services/computedVoiceAudit.report.test.ts:254`
 - `src/services/dnaLineNarrator.ts:131`
 - `src/services/dnaLineNarrator.ts:220`
@@ -59,7 +59,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `patternClaimsMaterial` (function) — 1 call site
-- `src/services/lookaheadPlan.ts:577`
+- `src/services/lookaheadPlan.ts:586`
 
 ### `patternWord` (function) — 1 call site
 - `src/services/pvPlayback.ts:243`

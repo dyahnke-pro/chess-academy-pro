@@ -21,6 +21,7 @@ import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { findPieceQuality, legalSeeGain, type PieceQualityNote } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
 import { settledLeadFor, type LastMove } from './material';
+import { describeStructure } from './boardStructure';
 
 const VAL: Readonly<Record<string, number>> = MATERIAL_VALUE;
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -67,22 +68,26 @@ function kingGuardCount(chess: Chess, sq: Square, color: Color): number {
 /** Does taking back on `sq` cost the recapturer structure — every legal
  *  recapture is a pawn that ends up doubled, or one pulled off the king's
  *  cover? Read on the board after the trade move, recapturer to move. */
-function recaptureDamage(after: Chess, sq: Square): 'doubled' | 'isolated' | 'king-cover' | null {
+export function recaptureDamage(after: Chess, sq: Square): 'doubled' | 'isolated' | 'king-cover' | null {
   const caps = after.moves({ verbose: true }).filter((m) => m.to === sq && m.captured);
   if (caps.length === 0 || caps.some((m) => m.piece !== 'p')) return null;
   const side = after.turn();
   const other: Color = side === 'w' ? 'b' : 'w';
-  const king = after.board().flat().find((c) => c && c.type === 'k' && c.color === side);
   const queensOn = after.board().flat().some((c) => c && c.type === 'q' && c.color === other);
+  // KING COVER is the app's ONE shield rule (`boardStructure.shieldPawns`:
+  // within a file of the king, up to two ranks in front) — this read used to
+  // keep a private one that counted a pawn on any rank.
+  const shieldBefore = describeStructure(after.fen())?.kings.shieldPawns[side] ?? 0;
   let kingCover = queensOn; let doubled = true; let isolated = true;
   for (const m of caps) {
     after.move(m);
     const pawns = after.board().flat().flatMap((c) => (c && c.type === 'p' && c.color === side ? [c] : []));
+    const shieldAfter = describeStructure(after.fen())?.kings.shieldPawns[side] ?? 0;
     after.undo();
     const file = m.to.charCodeAt(0);
     if (pawns.filter((p) => p.square.charCodeAt(0) === file).length < 2) doubled = false;
     if (pawns.some((p) => Math.abs(p.square.charCodeAt(0) - file) === 1)) isolated = false;
-    if (!king || Math.abs(m.from.charCodeAt(0) - king.square.charCodeAt(0)) > 1) kingCover = false;
+    if (shieldAfter >= shieldBefore) kingCover = false;
   }
   if (doubled) return 'doubled';
   if (isolated) return 'isolated';

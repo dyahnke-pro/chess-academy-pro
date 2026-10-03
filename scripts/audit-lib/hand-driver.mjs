@@ -136,7 +136,13 @@ const routes = {
     return state();
   },
   async move(q) {
-    await syncBoard();
+    // The board may be REPLAYING a line (a slip answer, a refutation) and
+    // show an earlier position for tens of seconds; a click then lands on the
+    // replay. Wait until it shows the live game again.
+    for (let t = Date.now(); Date.now() - t < 90_000; await sleep(500)) {
+      await syncBoard();
+      if (samePlacement(await readPlacement(page), placementOf(chess.fen()))) break;
+    }
     const m = chess.move(q.get('san'));
     const ok = await clickMove(page, m, chess.fen());
     if (!ok) { chess.undo(); return { error: `board did not take ${q.get('san')}`, ...(await state()) }; }

@@ -503,7 +503,7 @@ export function computeMoveFacets(
     // name, the teaching is the student's answer and its point, from the same
     // move-point computer Learn uses.
     const answer = opponentMoved && bestSan && fellShort && costsPoints && !reason && !punishWhy
-      ? studentAnswer(fenAfter, san, ctx.replyBestSan)
+      ? studentAnswer(fenAfter, san, ctx.replyBestSan, ctx.playedLineUci)
       : null;
     const better = bestSan && fellShort
       ? (reason ? `the stronger move was ${bestSan} — ${reason}`
@@ -1026,7 +1026,7 @@ export function computeMoveFacets(
       try {
         const mv = new Chess(fenBefore).move(san);
         const point = mv && !mv.captured
-          ? studentMovePoint(fenBefore, san, ply >= 2 ? ctx.allSans[ply - 2] ?? null : null)
+          ? studentMovePoint(fenBefore, san, ply >= 2 ? ctx.allSans[ply - 2] ?? null : null, null)
           : null;
         if (point && mv) {
           const f = `[point] ${point}`;
@@ -1299,6 +1299,10 @@ function settledVariation(allSans: readonly string[], variationOf: (n: string | 
 
 /** The student's answer to the opponent's slip, in Review's retrospective
  *  voice — the one wording Learn speaks too (`slipAnswerText`). */
-export function studentAnswer(fenAfter: string, theirSan: string, answerSan: string | null): string | null {
-  return slipAnswerText(fenAfter, theirSan, answerSan, 'review');
+export function studentAnswer(
+  fenAfter: string, theirSan: string, answerSan: string | null,
+  /** The engine's line after their move, UCI (the answer first), or null. */
+  answerLineUci: readonly string[] | null,
+): string | null {
+  return slipAnswerText(fenAfter, theirSan, answerSan, 'review', answerLineUci);
 }
