@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**218 lines · 7 exports · 2 importers · 1 tests · 0 audits**
+**226 lines · 7 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,9 +21,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `openingFamily` (function) — 9 call sites
-- `src/components/Debug/OpeningBlundersPage.tsx:935`
-- `src/services/coachFeatureService.ts:3019`
-- `src/services/coachFeatureService.ts:3347`
+- `src/components/Debug/OpeningBlundersPage.tsx:938`
+- `src/services/coachFeatureService.ts:3046`
+- `src/services/coachFeatureService.ts:3377`
 - `src/services/homeOpening.ts:114`
 - `src/services/homeOpening.ts:194`
 - `src/services/openingKey.test.ts:50`
@@ -34,11 +34,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `OTHER_FAMILY` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `familyLabel` (function) — 4 call sites
-- `src/components/Debug/OpeningBlundersPage.tsx:936`
+### `familyLabel` (function) — 7 call sites
+- `src/components/Debug/OpeningBlundersPage.tsx:939`
 - `src/services/openingBlunderService.labels.test.ts:6`
 - `src/services/openingBlunderService.labels.test.ts:7`
 - `src/services/openingBlunderService.labels.test.ts:11`
+- `src/services/openingBlunderService.labels.test.ts:20`
+- `src/services/openingBlunderService.labels.test.ts:21`
+- `src/services/openingBlunderService.labels.test.ts:22`
 
 ### `getOpeningBlunderPuzzles` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -46,9 +49,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `OpeningBlunderFamily` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `groupByOpeningFamily` (function) — 2 call sites
-- `src/components/Debug/OpeningBlundersPage.tsx:296`
+### `groupByOpeningFamily` (function) — 3 call sites
+- `src/components/Debug/OpeningBlundersPage.tsx:297`
 - `src/services/openingBlunderService.labels.test.ts:12`
+- `src/services/openingBlunderService.labels.test.ts:23`
 
 ## Tests
 
