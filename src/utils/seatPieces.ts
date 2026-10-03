@@ -77,7 +77,11 @@ export function seatPieceReferences(
           const cellD = board.get(sq as Square);
           if (!cellD || cellD.type !== WANT[piece.toLowerCase()]) return whole;
           const ownerD = cellD.color === studentColorWB ? 'your' : 'their';
-          return `${ownerD} ${adj ?? ''}${piece} on ${sq}`;
+          // The replaced determiner's case carries over: "That queen on d3
+          // takes…" opening a beat must become "Your queen…", never "your
+          // queen…" (review walk oct3g, game 2 ply 11).
+          const capD = (lead ?? '').charAt(0) === 'T';
+          return `${capD ? cap(ownerD) : ownerD} ${adj ?? ''}${piece} on ${sq}`;
         }
         const cell = board.get(sq as Square);
         if (!cell || cell.type !== WANT[piece.toLowerCase()]) return whole;
