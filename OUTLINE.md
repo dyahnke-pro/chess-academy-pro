@@ -21,6 +21,9 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ---
 
+## 000c. WO-OUTCOME-01 — one computer for "what does this line win" (2026-10-03)
+- ✅ A one line reader (`proofCut`) · ✅ B lanes with a line read the ledger (playedMoveGrade, loose/ignored, dnaLineNarrator, moveOrder, explainBestMoveGrounded) · ✅ C no-line lanes say the board fact (danyaBehaviors, must-defend, reviewHinge) · ✅ D gate `outcomeSentences.gate` (baseline 31 files / 65 lines, shrink-only) · 🟠 baseline backlog: chat null-line callers, drill reasons · 🔴 clean-pass walk (Learn + Review, 3 fresh games) running
+
 ## 000b. NEW PLAYERS — strength question + beginner mode (David 2026-10-02)
 - ✅ first-run strength question back (skippable, after consent; `FirstRunStrength`) · ✅ beginner mode (`isBeginnerMode`: New to chess / Beginner until measured ≥1000) · ✅ fundamental behind a slip rides every Learn turn for beginners · ✅ Start-here path leads Up next (fundamentals → Italian → coached game → …e5 / Two Knights) · ✅ gentler first opponent (band seeds rating + anchor) · 🟠 prod walk of a fresh beginner device owed (`audit-strength-calibration.mjs`)
 
