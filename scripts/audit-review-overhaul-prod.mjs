@@ -418,7 +418,11 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     // when the truth is "its input never arrived".
     const flagged = anns.filter((a) => /inaccuracy|mistake|blunder/i.test(String(a.classification ?? '')));
     const flaggedWithPv = flagged.filter((a) => (a.pv?.afterPlayed?.length ?? 0) > 0 || (a.pv?.afterBest?.length ?? 0) > 0).length;
-    return { depth: g?.analysisDepth, fully: g?.fullyAnalyzed, rows, total: anns.length, nullEval, nullBest, flagged: flagged.length, flaggedWithPv };
+    // THE LINES THE NARRATION READ, per flagged ply — a line claim ("it would
+    // win the queen and a piece for a rook") can only be checked against the
+    // line the app read it off, and depth-12 lines differ from any re-search.
+    const lines = flagged.map((a) => ({ ply: anns.indexOf(a) + 1, san: a.san, best: a.bestMove, afterBest: a.pv?.afterBest ?? [], afterPlayed: a.pv?.afterPlayed ?? [] }));
+    return { depth: g?.analysisDepth, fully: g?.fullyAnalyzed, rows, total: anns.length, nullEval, nullBest, flagged: flagged.length, flaggedWithPv, lines };
   }, GID).catch((e) => ({ error: String(e) }));
   log(`  [engine] depth=${annots.depth} fullyAnalyzed=${annots.fully}`);
   (annots.rows ?? []).forEach((r) => log(`  [engine] ${r}`));
