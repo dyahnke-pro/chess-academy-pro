@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**227 lines · 11 exports · 5 importers · 2 tests · 0 audits**
+**243 lines · 12 exports · 5 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,7 +27,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `droppedJob` (function) — 3 call sites
-- `src/services/refutedAlternative.ts:127`
+- `src/services/refutedAlternative.ts:126`
 - `src/services/refutedAlternativeCore.test.ts:45`
 - `src/services/refutedAlternativeCore.test.ts:51`
 
@@ -35,44 +35,47 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `pickAlternative` (function) — 6 call sites
-- `src/services/refutedAlternative.test.ts:41`
-- `src/services/refutedAlternative.test.ts:42`
 - `src/services/refutedAlternative.test.ts:45`
 - `src/services/refutedAlternative.test.ts:46`
-- `src/services/refutedAlternative.test.ts:142`
-- `src/services/refutedAlternative.ts:85`
+- `src/services/refutedAlternative.test.ts:49`
+- `src/services/refutedAlternative.test.ts:50`
+- `src/services/refutedAlternative.test.ts:167`
+- `src/services/refutedAlternative.ts:84`
 
 ### `renderRefutedAlternative` (function) — 8 call sites
-- `src/services/refutedAlternative.test.ts:118`
-- `src/services/refutedAlternative.test.ts:123`
-- `src/services/refutedAlternative.test.ts:135`
 - `src/services/refutedAlternative.test.ts:143`
-- `src/services/refutedAlternative.test.ts:150`
-- `src/services/refutedAlternative.test.ts:151`
-- `src/services/refutedAlternative.ts:128`
+- `src/services/refutedAlternative.test.ts:148`
+- `src/services/refutedAlternative.test.ts:160`
+- `src/services/refutedAlternative.test.ts:168`
+- `src/services/refutedAlternative.test.ts:175`
+- `src/services/refutedAlternative.test.ts:176`
+- `src/services/refutedAlternative.ts:127`
 - `src/services/refutedAlternativeCore.test.ts:56`
 
 ### `candidatesFromMasters` (function) — 6 call sites
-- `src/services/refutedAlternative.test.ts:39`
-- `src/services/refutedAlternative.test.ts:47`
-- `src/services/refutedAlternative.test.ts:62`
-- `src/services/refutedAlternative.test.ts:88`
-- `src/services/refutedAlternative.test.ts:114`
-- `src/services/refutedAlternative.ts:143`
+- `src/services/refutedAlternative.test.ts:43`
+- `src/services/refutedAlternative.test.ts:51`
+- `src/services/refutedAlternative.test.ts:66`
+- `src/services/refutedAlternative.test.ts:92`
+- `src/services/refutedAlternative.test.ts:139`
+- `src/services/refutedAlternative.ts:142`
 
 ### `candidatesFromAmateur` (function) — 2 call sites
-- `src/services/positionFacts.ts:821`
-- `src/services/refutedAlternative.ts:142`
+- `src/services/positionFacts.ts:831`
+- `src/services/refutedAlternative.ts:141`
 
 ### `FanLine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `provenPrefix` (function) — 2 call sites
-- `src/services/refutedAlternative.ts:126`
+- `src/services/refutedAlternative.ts:125`
 - `src/services/refutedAlternativeCore.test.ts:34`
 
+### `alternativeCostCp` (function) — 1 call site
+- `src/services/refutedAlternative.ts:98`
+
 ### `refutedFromFan` (function) — 2 call sites
-- `src/services/positionFacts.ts:821`
+- `src/services/positionFacts.ts:831`
 - `src/services/refutedAlternativeCore.test.ts:14`
 
 ## Tests

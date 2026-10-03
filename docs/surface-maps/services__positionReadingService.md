@@ -120,8 +120,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakeNarration.ts:572`
 - `src/services/moveAllowed.ts:78`
 - `src/services/moveTiming.ts:27`
-- `src/services/pvPlayback.ts:406`
-- `src/services/pvPlayback.ts:453`
+- `src/services/pvPlayback.ts:418`
+- `src/services/pvPlayback.ts:465`
 - `src/services/reviewQuestionPlan.ts:67`
 - `src/services/reviewTrapQuestion.ts:113`
 - `src/services/threatOut.ts:91`

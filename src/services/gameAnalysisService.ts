@@ -197,7 +197,7 @@ import {
   BLUNDER_WIN_PCT, EXCELLENT_WIN_PCT,
 } from './engineConstants';
 import { capEval, winPctLost, bandForWinPctLost } from './accuracyService';
-import type { PvEngine } from './pvPlayback';
+import type { PvEngine, MoveScorer, ScoredMove } from './pvPlayback';
 import { detectBrilliancy, verifySacrificeDeep, SAC_VERIFY_DEPTH } from './brilliancy';
 import { lookupPositionEvals, storePositionEvals, prunePositionEvalCache, type EvalToStore } from './positionEvalCache';
 
@@ -519,6 +519,8 @@ class DedicatedWorker {
     lines: number,
     depth: number,
     budgetMs: number,
+    /** Restrict the search to these moves (UCI), or null for all of them. */
+    searchmoves: readonly string[] | null,
   ): Promise<Array<{ rank: number; evaluation: number; mate: number | null; bound: 'lower' | 'upper' | null; moves: string[] }>> {
     return new Promise((resolve, reject) => {
       const deterministic = deterministicAnalysisForAudit();
@@ -595,9 +597,10 @@ class DedicatedWorker {
         // the clock). Product code never sets the flag.
         if (deterministic) this.worker.postMessage('ucinewgame');
         this.worker.postMessage(`position fen ${fen}`);
+        const only = searchmoves && searchmoves.length > 0 ? ` searchmoves ${searchmoves.join(' ')}` : '';
         this.worker.postMessage(deterministic
-          ? `go depth ${depth} nodes ${DETERMINISTIC_FAN_NODES}`
-          : `go depth ${depth} movetime ${budgetMs}`);
+          ? `go depth ${depth} nodes ${DETERMINISTIC_FAN_NODES}${only}`
+          : `go depth ${depth} movetime ${budgetMs}${only}`);
       } catch {
         cleanup();
         reject(new Error('Worker is dead'));
@@ -886,7 +889,7 @@ function scheduleIdleRetire(): void {
  * quieter.
  */
 export interface PooledPvEngines {
-  engines: PvEngine[];
+  engines: Array<PvEngine & MoveScorer>;
   release: () => void;
 }
 
@@ -901,7 +904,11 @@ export async function acquirePvEngines(
     return null; // no worker at all — caller falls back to the singleton
   }
   if (workers.length === 0) return null;
-  const engines: PvEngine[] = workers.map((w) => ({
+  const engines: Array<PvEngine & MoveScorer> = workers.map((w) => ({
+    async scoreMoves(fen: string, ucis: readonly string[], depth: number): Promise<ScoredMove[]> {
+      const fan = await w.analyzeFan(fen, ucis.length, depth, budgetMs, ucis);
+      return fan.map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: l.moves }));
+    },
     async analyzePosition(fen: string, depth: number): Promise<StockfishAnalysis> {
       const r = await w.analyzePosition(fen, depth, budgetMs);
       const mate = Math.abs(r.evaluation) >= MATE_EVAL_THRESHOLD;
@@ -987,7 +994,7 @@ export async function scanCriticalMoments(args: {
         // NOT `reviewBudget(...)`: the fan's determinism is a node limit inside
         // `analyzeFan`, never a lifted clock (measured 2026-09-20: unbounded, it
         // never finished before the reopen and the question never fired).
-        const fan = await w.analyzeFan(p.fen, CRITICAL_FAN_LINES, CRITICAL_FAN_DEPTH, CRITICAL_FAN_BUDGET_MS);
+        const fan = await w.analyzeFan(p.fen, CRITICAL_FAN_LINES, CRITICAL_FAN_DEPTH, CRITICAL_FAN_BUDGET_MS, null);
         const read = readCriticalMoment({
           topLines: fan, moverColor: p.moverColor, fen: p.fen,
         });

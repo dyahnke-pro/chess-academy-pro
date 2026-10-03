@@ -62,11 +62,11 @@
 - `src/services/pvPlayback.test.ts:297`
 - `src/services/pvPlayback.test.ts:299`
 - `src/services/pvPlayback.test.ts:300`
-- `src/services/pvPlayback.ts:230`
-- `src/services/pvPlayback.ts:648`
-- `src/services/pvPlayback.ts:668`
-- `src/services/pvPlayback.ts:705`
-- `src/services/pvPlayback.ts:798`
+- `src/services/pvPlayback.ts:242`
+- `src/services/pvPlayback.ts:660`
+- `src/services/pvPlayback.ts:680`
+- `src/services/pvPlayback.ts:717`
+- `src/services/pvPlayback.ts:810`
 - `src/services/reviewMoveBriefing.ts:246`
 - `src/services/tacticVocabulary.ts:95`
 - `src/services/teachingSelector.ts:347`

@@ -193,6 +193,26 @@ export function provenPrefix(fenBefore: string, sans: readonly string[], moverWB
  * is silent whenever the popular move was not among the engine's lines: an
  * alternative the engine never evaluated has no cost we can state.
  */
+/**
+ * THE ONE COST (oct3a review walk, move one: "d4 … gives away about 0.6
+ * points" — one search scores e4 and d4 twelve centipawns apart). What the
+ * alternative costs the mover against the played move, read off ONE search
+ * that scored both: same root, same depth. Null when that search did not
+ * reach both moves — an alternative the engine never compared has no cost we
+ * can state. Every refuted-alternative path reads its cost here and nowhere
+ * else.
+ */
+export function alternativeCostCp(
+  playedUci: string, altUci: string, fan: readonly FanLine[], moverWB: 'w' | 'b',
+): number | null {
+  const altLine = fan.find((l) => l.moves[0] === altUci);
+  const playedLine = fan.find((l) => l.moves[0] === playedUci);
+  if (!altLine || !playedLine) return null;
+  const sign = moverWB === 'w' ? 1 : -1;
+  const cp = (l: FanLine): number => (l.mate != null ? (l.mate > 0 ? MATE_CP : -MATE_CP) : l.evaluation) * sign;
+  return Math.round(cp(playedLine) - cp(altLine));
+}
+
 export function refutedFromFan(input: {
   fenBefore: string;
   playedSan: string;
@@ -209,12 +229,8 @@ export function refutedFromFan(input: {
   const playedUci = uciOf(input.playedSan);
   if (!altUci || !playedUci) return null;
   const altLine = input.fan.find((l) => l.moves[0] === altUci);
-  const playedLine = input.fan.find((l) => l.moves[0] === playedUci);
-  if (!altLine || !playedLine) return null;
-  const sign = input.moverWB === 'w' ? 1 : -1;
-  const cp = (l: FanLine): number => (l.mate != null ? (l.mate > 0 ? MATE_CP : -MATE_CP) : l.evaluation) * sign;
-  const costCp = Math.round(cp(playedLine) - cp(altLine));
-  if (costCp < criticalityThresholds().notable) return null;
+  const costCp = alternativeCostCp(playedUci, altUci, input.fan, input.moverWB);
+  if (!altLine || costCp === null || costCp < criticalityThresholds().notable) return null;
   const sans: string[] = [];
   try {
     const c = new Chess(input.fenBefore);

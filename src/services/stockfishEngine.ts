@@ -1607,6 +1607,9 @@ class StockfishEngine {
             this.send('setoption name Skill Level value 20');
           }
           for (const [key, value] of Object.entries(opts)) {
+            // `searchmoves` is a GO argument, not an engine option: it limits
+            // THIS search to the listed moves (MoveScorer).
+            if (key === 'searchmoves') continue;
             this.send(`setoption name ${key} value ${value}`);
           }
           this.send(`position fen ${fen}`);
@@ -1614,7 +1617,8 @@ class StockfishEngine {
           // single-threaded variants get `movetime` alongside `depth` so the
           // search can NEVER outlive the budget; fast variants keep pure depth.
           const budgetMs = this.workerVariant ? SEARCH_BUDGET_MS[this.workerVariant] : undefined;
-          this.send(budgetMs ? `go depth ${depth} movetime ${budgetMs}` : `go depth ${depth}`);
+          const only = typeof opts.searchmoves === 'string' && opts.searchmoves ? ` searchmoves ${opts.searchmoves}` : '';
+          this.send(budgetMs ? `go depth ${depth} movetime ${budgetMs}${only}` : `go depth ${depth}${only}`);
           this._analysisStarted = true;
           // Stall watchdog: if THIS analysis is still pending after the
           // window (no bestmove came back), screen the dead engine to the

@@ -4,13 +4,17 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { refutedAlternative, pickAlternative, candidatesFromMasters, renderRefutedAlternative, candidatesForPosition, type AlternativeCandidate } from './refutedAlternative';
-import type { PvEngine } from './pvPlayback';
+import type { PvEngine, MoveScorer } from './pvPlayback';
 import type { StockfishAnalysis } from '../types';
 
 /** Canned engine: fen → analysis; unknown fen → a flat 0 read (a quiet end that
  *  does not "deliver", so the root promise is what gets graded). */
-function cannedEngine(map: Record<string, Partial<StockfishAnalysis>>): PvEngine {
+function cannedEngine(map: Record<string, Partial<StockfishAnalysis>>): PvEngine & MoveScorer {
   return {
+    // `searchmoves`: the root's lines, restricted to the moves asked about.
+    scoreMoves: (fen: string, ucis: readonly string[]) => Promise.resolve(
+      (map[fen]?.topLines ?? []).filter((l) => ucis.includes(l.moves[0]))
+        .map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: l.moves }))),
     analyzePosition: (fen: string): Promise<StockfishAnalysis> => {
       const hit = map[fen] ?? {};
       return Promise.resolve({
@@ -109,8 +113,29 @@ describe('refutedAlternative', () => {
     expect(r!.text).not.toMatch(/fork|pin|mate/i);
   });
 
+  it('move one: the cost is ONE search, never two graded differently (oct3a review walk)', async () => {
+    // One search scores e4 and d4 12cp apart. Separate reads after each move
+    // would disagree by far more — and must never become the cost.
+    const START = new Chess().fen();
+    // Like the pooled engine: the root search returns ONE line, so a two-search
+    // reader has to read d4 from a separate search after it (-40).
+    const base = cannedEngine({
+      [START]: { evaluation: 43, topLines: [{ rank: 1, moves: ['e2e4', 'e7e5'], evaluation: 43, mate: null }] },
+      [after(START, ['d2d4'])]: { evaluation: -40, topLines: [{ rank: 1, moves: ['g8f6'], evaluation: -40, mate: null }] },
+    });
+    const engine: PvEngine & MoveScorer = {
+      analyzePosition: base.analyzePosition,
+      scoreMoves: () => Promise.resolve([
+        { evaluation: 43, mate: null, moves: ['e2e4', 'e7e5'] },
+        { evaluation: 31, mate: null, moves: ['d2d4', 'g8f6'] },
+      ]),
+    };
+    const r = await refutedAlternative({ fenBefore: START, taughtSan: 'e4', candidates: [{ san: 'e4', games: 500, pct: 50 }, { san: 'd4', games: 360, pct: 36 }], studentColor: 'white', engine });
+    expect(r).toBeNull();
+  });
+
   it('a dead engine → null, never a throw', async () => {
-    const engine: PvEngine = { analyzePosition: () => Promise.reject(new Error('dead')) };
+    const engine: PvEngine & MoveScorer = { analyzePosition: () => Promise.reject(new Error('dead')), scoreMoves: () => Promise.reject(new Error('dead')) };
     await expect(refutedAlternative({ fenBefore: FEN, taughtSan: 'g6', candidates: candidatesFromMasters(MASTERS), studentColor: 'black', engine })).resolves.toBeNull();
   });
 

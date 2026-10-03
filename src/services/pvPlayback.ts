@@ -220,6 +220,18 @@ export interface PvEngine {
   analyzePosition(fen: string, depth: number): Promise<StockfishAnalysis>;
 }
 
+/** One move's score from a search restricted to the moves being compared. */
+export interface ScoredMove { evaluation: number; mate: number | null; moves: string[] }
+
+/** SCORES EXACTLY THESE MOVES IN ONE SEARCH (UCI `searchmoves`) — the only
+ *  honest way to say what one move costs against another. Two separate
+ *  searches graded at different points are not comparable (oct3a review walk,
+ *  move one: "d4 gives away 0.6" where one search scores the pair 12cp apart).
+ *  White-POV evaluations, one entry per move the engine reached. */
+export interface MoveScorer {
+  scoreMoves(fen: string, ucis: readonly string[], depth: number): Promise<ScoredMove[]>;
+}
+
 /** English for a tacticsDetector type. The detector enums are snake_case program
  *  identifiers ('mate_threat', 'removal_of_guard', 'back_rank', 'trapped_piece');
  *  spoken raw they read as the coach saying a variable name — David 2026-09-07

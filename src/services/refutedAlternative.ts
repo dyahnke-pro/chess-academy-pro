@@ -21,14 +21,14 @@
 // gen), the review (the student's own departure — from the game's stored eval
 // + PV, no new engine call), and the live coach on demand.
 import { Chess } from 'chess.js';
-import { computePvLine, type PvEngine, type PvLine } from './pvPlayback';
+import { computePvLine, type PvEngine, type PvLine, type MoveScorer } from './pvPlayback';
 import { conceptForLine } from './conceptEngine';
 import { stemKeyOf } from '../utils/rotateStem';
 import { criticalityThresholds } from './criticalityScan';
 import { stockfishEngine } from './stockfishEngine';
 import { getCachedAmateurPlay } from './amateurPlayCache';
 import {
-  pickAlternative, renderRefutedAlternative, candidatesFromMasters, candidatesFromAmateur, provenPrefix, droppedJob,
+  pickAlternative, renderRefutedAlternative, candidatesFromMasters, candidatesFromAmateur, provenPrefix, droppedJob, alternativeCostCp,
   type AlternativeCandidate, type RefutedAlternative,
 } from './refutedAlternativeCore';
 
@@ -44,11 +44,22 @@ export interface RefutedAlternativeInput {
    *  supplies them from the masters DB / the openings DB — never from memory). */
   candidates: readonly AlternativeCandidate[];
   studentColor: 'white' | 'black';
-  engine?: PvEngine;
-  /** Engine depth for the two reads (taught / alternative). */
+  /** Scores both moves in ONE search (the cost) and plays the alternative's
+   *  line (the proof). Defaults to the singleton. */
+  engine?: PvEngine & MoveScorer;
+  /** Engine depth for the comparison and the proof line. */
   depth?: number;
   maxPlies?: number;
 }
+
+/** The singleton as a scorer: `searchmoves` rides its queued search. */
+const SINGLETON: PvEngine & MoveScorer = {
+  analyzePosition: (fen, depth) => stockfishEngine.analyzePosition(fen, depth),
+  async scoreMoves(fen, ucis, depth) {
+    const r = await stockfishEngine.analyzePosition(fen, depth, { searchmoves: ucis.join(' ') });
+    return r.topLines.map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: l.moves }));
+  },
+};
 
 function sanToUci(fen: string, san: string): string | null {
   try {
@@ -59,18 +70,6 @@ function sanToUci(fen: string, san: string): string | null {
 }
 
 
-/** Mover-POV eval of a line's promise, graded at the QUIET END when the verify
- *  pass ran (the gem doctrine: never a one-ply eval). */
-function moverEval(line: PvLine, moverIsWhite: boolean): number {
-  // The quiet-end read is only trusted when the verify pass ran AND the line
-  // held its promise; otherwise the root promise is the honest number.
-  const cp = line.delivers && line.terminalEvalCp != null ? line.terminalEvalCp : line.rootEvalCp;
-  return moverIsWhite ? cp : -cp;
-}
-
-
-
-
 /**
  * Compute the refuted alternative for a taught move, or null when there is no
  * real alternative, the engine cannot read the position, or the alternative
@@ -79,7 +78,7 @@ function moverEval(line: PvLine, moverIsWhite: boolean): number {
  * and (B6) never a rating.
  */
 export async function refutedAlternative(input: RefutedAlternativeInput): Promise<RefutedAlternative | null> {
-  const engine = input.engine ?? stockfishEngine;
+  const engine = input.engine ?? SINGLETON;
   const depth = input.depth ?? 12;
   const maxPlies = input.maxPlies ?? 6;
   const alt = pickAlternative(input.taughtSan, input.candidates);
@@ -89,18 +88,18 @@ export async function refutedAlternative(input: RefutedAlternativeInput): Promis
   if (!taughtUci || !altUci) return null;
   const moverIsWhite = new Chess(input.fenBefore).turn() === 'w';
 
-  let taughtLine: PvLine | null = null;
-  let altLine: PvLine | null = null;
-  // SEQUENTIAL, never Promise.all: a pooled caller hands in ONE lane's
-  // worker, and two searches at once on one worker corrupt each other; the
-  // singleton queues them anyway, so parallel bought nothing there.
+  // THE COST: both moves scored in ONE search (alternativeCostCp). The
+  // alternative's own line is played afterwards only to PROVE the cost.
+  // SEQUENTIAL, never Promise.all: a pooled caller hands in ONE lane's worker.
+  let costCp: number | null;
+  let altLine: PvLine | null;
   try {
-    taughtLine = await computePvLine(input.fenBefore, { firstUci: taughtUci, maxPlies, depth, engine });
+    const fan = await engine.scoreMoves(input.fenBefore, [taughtUci, altUci], depth);
+    costCp = alternativeCostCp(taughtUci, altUci, fan, moverIsWhite ? 'w' : 'b');
+    if (costCp === null || costCp < criticalityThresholds().notable) return null;
     altLine = await computePvLine(input.fenBefore, { firstUci: altUci, maxPlies, depth, engine });
   } catch { return null; }
-  if (!taughtLine || !altLine) return null;
-  const costCp = Math.round(moverEval(taughtLine, moverIsWhite) - moverEval(altLine, moverIsWhite));
-  if (costCp < criticalityThresholds().notable) return null;
+  if (!altLine) return null;
 
   // The concept the PUNISHMENT lands — the opponent's line after the alt, read
   // from the opponent's seat (they are the one landing the tactic).
