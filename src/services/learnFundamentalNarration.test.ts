@@ -26,7 +26,7 @@ const NB6: LearnFundamentalInput = {
   playedSan: SANS[11],       // 'Nb6'
   bestSan: 'e6',
   studentColor: 'black',
-  evalBeforeWhiteCp: -30,    // +30 mover POV
+  costCp: null, evalBeforeWhiteCp: -30,    // +30 mover POV
   evalAfterWhiteCp: 90,      // −90 mover POV → cpLoss 120, flagged
 };
 
@@ -143,7 +143,7 @@ describe('a hung piece they did not take is a miss, not free material (re-walk 1
   const c = new Chess(); c.move('e4'); c.move('d5');
   const BC4: LearnFundamentalInput = {
     currentGameId: 'live-now', replySan: null, fenBefore: c.fen(), historySans: ['e4', 'd5', 'Bc4'],
-    playedSan: 'Bc4', bestSan: 'exd5', studentColor: 'white', evalBeforeWhiteCp: 30, evalAfterWhiteCp: -300,
+    playedSan: 'Bc4', bestSan: 'exd5', studentColor: 'white', costCp: null, evalBeforeWhiteCp: 30, evalAfterWhiteCp: -300,
   };
   it('names the miss when their reply does not take', () => {
     const out = learnFundamentalVerdict({ ...BC4, replySan: 'Nf6' }, new Set());

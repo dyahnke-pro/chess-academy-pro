@@ -9422,6 +9422,7 @@ export function CoachTeachPage(): JSX.Element {
                           bestMoveUci: preStudentRead.bestMove || null,
                           bestPvUci: preStudentRead.topLines?.[0]?.moves ?? [],
                           playedPvUci: midReadForFacts?.topLines?.[0]?.moves ?? [],
+                          costCp: studentCpLoss,
                           evalBeforeWhiteCp: preStudentRead.isMate ? undefined : preStudentRead.evaluation,
                           evalAfterWhiteCp: midReadForFacts && !midReadForFacts.isMate ? midReadForFacts.evaluation : undefined,
                           ...mateContext(preStudentRead, midReadForFacts, playerColor),
@@ -10222,6 +10223,7 @@ export function CoachTeachPage(): JSX.Element {
                       playedSan: move.san,
                       bestSan: studentBestSan ?? null,
                       studentColor: playerColor,
+                      costCp: bothCp ? cpLoss : null,
                       evalBeforeWhiteCp: preStudentRead.isMate ? undefined : preStudentRead.evaluation,
                       evalAfterWhiteCp: mid.isMate ? undefined : mid.evaluation,
                       bestPvUci: preStudentRead.topLines?.[0]?.moves ?? [],
@@ -10284,6 +10286,18 @@ export function CoachTeachPage(): JSX.Element {
                         captureEvent('learn_slip_answered', { surface: 'coach-teach', found });
                       }
                     } catch { /* the reveal is a bonus, never a blocker */ }
+                    // THE LINES BEHIND EVERY VERDICT ARE RECORDED (walk oct3d,
+                    // 15.d6: "dxc6 … would win a rook and a piece and a pawn"
+                    // could not be checked — the line was never written
+                    // down). Every graded move, so the fundamental lane's line is
+                    // there too. A diagnostic, never spoken.
+                    void logAppAudit({
+                      kind: 'coach-surface-migrated',
+                      category: 'subsystem',
+                      source: 'CoachTeachPage.backwardLook.line',
+                      summary: `${move.san} best=${studentBestSan ?? '?'} line=${(preStudentRead.topLines?.[0]?.moves ?? []).join(' ')} reply=${(mid.topLines?.[0]?.moves ?? []).join(' ')}`,
+                      fen: fenBefore,
+                    });
                     if (look) {
                       // THE SQUARE TRAVELS WITH THE SENTENCE, and is drawn below
                       // only if the package KEPT it. Not `look.line.includes(sq)`

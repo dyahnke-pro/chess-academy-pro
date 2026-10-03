@@ -444,6 +444,8 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
             bestMoveUci: n.bestMoveUci,
             bestPvUci: n.bestPvUci,
             playedPvUci: n.replyPvUci,
+            // No one-search cost on this notification: the two evals decide.
+            costCp: null,
             evalBeforeWhiteCp: n.evalBefore,
             evalAfterWhiteCp: n.evalAfter,
             missedMate: null,

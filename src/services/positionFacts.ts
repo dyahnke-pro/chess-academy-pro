@@ -56,7 +56,7 @@ import { attributeLiveFundamental, uciToSanAt, type LiveFundamentalReads } from 
  * attributes the neglected FUNDAMENTAL from them (`attributeLiveFundamental`)
  * and hands the id to need — the same id Learn speaks, computed once.
  */
-export interface LiveMoveReads extends Pick<LiveFundamentalReads, 'historySans' | 'bestPvUci' | 'playedPvUci' | 'evalBeforeWhiteCp' | 'evalAfterWhiteCp' | 'missedMate' | 'allowedMate'> {
+export interface LiveMoveReads extends Pick<LiveFundamentalReads, 'historySans' | 'costCp' | 'bestPvUci' | 'playedPvUci' | 'evalBeforeWhiteCp' | 'evalAfterWhiteCp' | 'missedMate' | 'allowedMate'> {
   /** The engine's best move at `fenBefore`, UCI, or null when no read landed. */
   bestMoveUci: string | null;
 }
@@ -626,6 +626,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
         historySans: lm.reads.historySans,
         bestPvUci: lm.reads.bestPvUci,
         playedPvUci: lm.reads.playedPvUci,
+        costCp: lm.reads.costCp,
         evalBeforeWhiteCp: lm.reads.evalBeforeWhiteCp,
         evalAfterWhiteCp: lm.reads.evalAfterWhiteCp,
         missedMate: lm.reads.missedMate,

@@ -180,9 +180,11 @@ const routes = {
   async events(q) {
     const n = Number(q.get('n') ?? 40);
     const re = q.get('grep') ? new RegExp(q.get('grep'), 'i') : null;
-    return listener.getCapturedEvents().slice(-400)
-      .map((e) => `${e.kind} | ${e.source ?? ''} | ${(e.narrationText ?? e.summary ?? '').slice(0, 1200)}`)
-      .filter((l) => !re || re.test(l)).slice(-n);
+    // Filter FIRST, then trim: a grep for a rare row must not lose it to the
+    // last-400 window (oct3e walk, the recorded engine lines).
+    const all = listener.getCapturedEvents()
+      .map((e) => `${e.kind} | ${e.source ?? ''} | ${(e.narrationText ?? e.summary ?? '').slice(0, 1200)}`);
+    return (re ? all.filter((l) => re.test(l)) : all.slice(-400)).slice(-n);
   },
   /** Every `learn-reason-source` row this session: the board, the move, the
    *  spoken mistake line and the engine lines it was read from — so a walk can

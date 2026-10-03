@@ -34,6 +34,12 @@ export interface LiveFundamentalReads {
   bestSan: string | null;
   /** Which side the student is — the mover here. */
   studentColor: 'white' | 'black';
+  /** What the played move cost its mover, in cp, read inside ONE search (the
+   *  played move against the best one — `liveMoveCost`, the fan grade). When
+   *  present it decides whether the move is flagged; null falls back to the
+   *  two evals below. REQUIRED (walk oct3c): Learn's flag was a read before
+   *  minus a separate time-boxed read after, which misjudged costs by a pawn. */
+  costCp: number | null;
   /** Engine eval at fenBefore, WHITE POV in cp (mate encoded as the sentinel).
    *  Undefined when the read is unavailable. */
   evalBeforeWhiteCp?: number;
@@ -109,9 +115,11 @@ export function attributeLiveFundamental(input: LiveFundamentalReads): Principle
   // Mate cases skip the centipawn arithmetic (sentinels don't subtract) but are
   // always worth naming.
   const mateSwing = (input.missedMate ?? null) !== null || (input.allowedMate ?? null) !== null;
-  const cpLoss = evalBeforeMover !== undefined && evalAfterMover !== undefined
-    ? evalBeforeMover - evalAfterMover
-    : 0;
+  const cpLoss = input.costCp !== null
+    ? input.costCp
+    : evalBeforeMover !== undefined && evalAfterMover !== undefined
+      ? evalBeforeMover - evalAfterMover
+      : 0;
   const flagged = mateSwing || cpLoss >= LEARN_FUNDAMENTAL_CP_FLOOR;
   if (!flagged) return [];
 

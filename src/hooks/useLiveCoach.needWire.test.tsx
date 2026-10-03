@@ -57,7 +57,7 @@ const move = (ply: number): PlayerMoveNotification => ({
 });
 
 type Seen = {
-  lastMove?: { fenBefore: string; san: string; cpLoss: number | null; reads: { historySans: readonly string[]; bestMoveUci: string | null; bestPvUci?: readonly string[]; playedPvUci?: readonly string[]; evalBeforeWhiteCp?: number; evalAfterWhiteCp?: number; missedMate?: number | null; allowedMate?: number | null } | null };
+  lastMove?: { fenBefore: string; san: string; cpLoss: number | null; reads: { historySans: readonly string[]; bestMoveUci: string | null; bestPvUci?: readonly string[]; playedPvUci?: readonly string[]; costCp?: number | null; evalBeforeWhiteCp?: number; evalAfterWhiteCp?: number; missedMate?: number | null; allowedMate?: number | null } | null };
   studentNeedContext?: { gamesPlayed: number } | null;
 };
 
@@ -85,7 +85,7 @@ describe('useLiveCoach hands the composer the student model (B3)', () => {
     const seen = computePositionFacts.mock.calls[0][0] as Seen;
     expect(seen.lastMove?.reads).toEqual({
       historySans: ['Nf3'], bestMoveUci: 'g1f3', bestPvUci: ['g1f3', 'g8f6'], playedPvUci: ['g8f6', 'd2d4'],
-      evalBeforeWhiteCp: 20, evalAfterWhiteCp: 120, missedMate: null, allowedMate: null,
+      costCp: null, evalBeforeWhiteCp: 20, evalAfterWhiteCp: 120, missedMate: null, allowedMate: null,
     });
   });
 

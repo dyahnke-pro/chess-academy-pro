@@ -100,7 +100,7 @@
 - `src/services/claimTruth.manual.test.ts:185`
 - `src/services/coachFeatureService.ts:899`
 - `src/services/learnWalkBlumenfeld.test.ts:65`
-- `src/services/liveFundamental.ts:135`
+- `src/services/liveFundamental.ts:143`
 - `src/services/misconceptionClassifier.ts:244`
 - `src/services/principleAttribution.section14.test.ts:22`
 - `src/services/principleAttribution.section14.test.ts:32`
@@ -180,8 +180,8 @@
 - `src/services/coachFeatureService.ts:906`
 - `src/services/discussionPractice.ts:353`
 - `src/services/discussionPractice.ts:361`
-- `src/services/liveFundamental.ts:125`
-- `src/services/liveFundamental.ts:132`
+- `src/services/liveFundamental.ts:133`
+- `src/services/liveFundamental.ts:140`
 - `src/services/principleAttribution.test.ts:46`
 
 ## Tests

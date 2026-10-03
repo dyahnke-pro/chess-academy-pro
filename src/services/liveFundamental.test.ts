@@ -11,7 +11,7 @@ const fenBefore = (ply: number): string => { const c = new Chess(); for (const s
 /** Ply 12 = 6...Nb6, Black's flagged move (best 6...e6): −30 → +90 White POV. */
 const NB6: LiveFundamentalReads = { replySan: null,
   fenBefore: fenBefore(12), historySans: SANS.slice(0, 12), playedSan: 'Nb6', bestSan: 'e6',
-  studentColor: 'black', evalBeforeWhiteCp: -30, evalAfterWhiteCp: 90,
+  studentColor: 'black', costCp: null, evalBeforeWhiteCp: -30, evalAfterWhiteCp: 90,
 };
 
 describe('attributeLiveFundamental', () => {
@@ -25,6 +25,13 @@ describe('attributeLiveFundamental', () => {
     expect(attributeLiveFundamental({ ...NB6, bestSan: null })).toEqual([]);
     expect(attributeLiveFundamental({ ...NB6, evalAfterWhiteCp: -30 + (LEARN_FUNDAMENTAL_CP_FLOOR - 10) })).toEqual([]);
     expect(attributeLiveFundamental({ ...NB6, historySans: [] })).toEqual([]);
+  });
+
+  it('the one-search cost decides the flag, not two separate reads (walk oct3c)', () => {
+    // The two evals say 120cp; the one search says 20 — no flag.
+    expect(attributeLiveFundamental({ ...NB6, costCp: 20 })).toEqual([]);
+    // The two evals say nothing; the one search says it cost a pawn and more.
+    expect(attributeLiveFundamental({ ...NB6, evalAfterWhiteCp: -30, costCp: 150 }).length).toBeGreaterThan(0);
   });
 
   it('a mate sentinel is never subtracted; a mate swing still flags', () => {
