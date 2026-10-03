@@ -67,6 +67,13 @@ const NOT_A_CHAT_LANE = new Set<string>([
   // narration / reading-drill renderers + graders (not typed Q&A)
   'formatReadingFacts', 'samplePositionsFromGame', 'findMistakePositions',
   'buildReadingQuestions', 'readingHint', 'gradeReadingAnswerDeterministic',
+  // the reading drill's answer-SHAPE check (2026-10-03): says what form an
+  // answer to this question takes ("White by 2"), states no board fact
+  'readingAnswerShape',
+  // the reading drill's material ANSWER sentence (2026-10-03); the chat's
+  // material question is answered by assembleMaterialAnswer, and both count
+  // through pieceValues.MATERIAL_VALUE
+  'materialRead',
 ]);
 
 describe('board-awareness computers all reach the chat Q&A (built-but-unwired gate)', () => {

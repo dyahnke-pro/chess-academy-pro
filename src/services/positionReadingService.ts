@@ -23,6 +23,7 @@ import type { WeaknessCategory } from '../types';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { developedMinorCount, totalMinorCount } from './development';
 import { isOutpost } from './outpost';
+import { MATERIAL_VALUE } from './pieceValues';
 
 /** Centipawn-free piece values for SEE + material reasoning (king ~ ∞). */
 const PIECE_VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
@@ -2581,12 +2582,14 @@ export function readingHint(q: ReadingQuestion, tier: 1 | 2 | 3): string | null 
 export function materialRead(fen: string): { answer: string; tokens: string[] } | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
-  const VAL: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+  // THE material table (pieceValues.ts) — never a private copy, so this drill
+  // and the chat's material lane can never count the same board differently.
   let w = 0;
   let b = 0;
   for (const row of chess.board()) for (const p of row) {
     if (!p) continue;
-    if (p.color === 'w') w += VAL[p.type]; else b += VAL[p.type];
+    const v = MATERIAL_VALUE[p.type] ?? 0;
+    if (p.color === 'w') w += v; else b += v;
   }
   if (w === b) {
     return { answer: `Material is even — ${w} points each.`, tokens: ['even', 'equal', 'level', 'same'] };
