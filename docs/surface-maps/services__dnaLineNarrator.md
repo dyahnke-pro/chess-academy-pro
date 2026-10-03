@@ -47,7 +47,7 @@
 - `src/services/openingGenerator.ts:2227`
 - `src/services/teachingSelector.ts:201`
 
-### `narrateDnaLine` (function) — 12 call sites
+### `narrateDnaLine` (function) — 11 call sites
 - `src/services/dnaLineNarrator.test.ts:65`
 - `src/services/dnaLineNarrator.test.ts:78`
 - `src/services/dnaLineNarrator.test.ts:80`
@@ -59,12 +59,10 @@
 - `src/services/exchangeLedger.test.ts:68`
 - `src/services/exchangeLedger.test.ts:78`
 - `src/services/exchangeLedger.test.ts:88`
-- `src/services/puzzleConceptExplanation.ts:171`
 
-### `dnaLineClauses` (function) — 3 call sites
+### `dnaLineClauses` (function) — 2 call sites
 - `src/services/dnaLineNarrator.test.ts:174`
 - `src/services/dnaLineNarrator.test.ts:181`
-- `src/services/puzzleConceptExplanation.ts:177`
 
 ## Tests
 

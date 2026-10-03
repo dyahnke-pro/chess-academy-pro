@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6936 lines · 39 exports · 51 importers · 55 tests · 19 audits**
+**6936 lines · 39 exports · 52 importers · 56 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -34,6 +34,7 @@
 - `src/components/Openings/MasterclassCoachChat.test.tsx`
 - `src/components/Openings/MiddlegamePractice.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx`
+- `src/components/Puzzles/PuzzleBoard.tsx`
 - `src/hooks/useLiveCoach.ts`
 - `src/hooks/usePhaseNarration.ts`
 - `src/hooks/usePositionNarration.ts`
@@ -271,10 +272,12 @@
 - `src/services/coachApi.speakableFacts.test.ts:52`
 - `src/services/coachApi.speakableFacts.test.ts:53`
 
-### `voiceFacts` (function) — 35 call sites
+### `voiceFacts` (function) — 37 call sites
 - `src/components/Coach/CoachGameReview.tsx:1658`
 - `src/components/Coach/CoachGameReview.tsx:1777`
 - `src/components/Coach/CoachGameReview.tsx:1966`
+- `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx:102`
+- `src/components/Puzzles/PuzzleBoard.tsx:94`
 - `src/hooks/usePhaseNarration.ts:731`
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:260`
@@ -334,8 +337,8 @@
 - `src/services/voiceFactsFidelity.test.ts:65`
 
 ### `explainPuzzleMoveGrounded` (function) — 2 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:636`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:727`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:630`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:721`
 
 ### `currentAskFromContent` (function) — 4 call sites
 - `src/services/coachApi.currentAsk.test.ts:31`
@@ -396,6 +399,7 @@
 - `src/components/Openings/OpeningExplorerPage.test.tsx`
 - `src/components/Openings/PracticeMode.test.tsx`
 - `src/components/Openings/WalkthroughIntegration.test.tsx`
+- `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx`
 - `src/components/Search/SmartSearchBar.test.tsx`
 - `src/components/Tactics/TacticSetupBoard.test.tsx`
 - `src/hooks/useLiveCoach.needWire.test.tsx`
