@@ -42,28 +42,28 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `computeExchangeLedger` (function) — 10 call sites
-- `src/services/exchangeLedger.test.ts:12`
-- `src/services/exchangeLedger.test.ts:50`
+- `src/services/exchangeLedger.test.ts:13`
 - `src/services/exchangeLedger.test.ts:51`
-- `src/services/exchangeLedger.test.ts:55`
-- `src/services/exchangeLedger.test.ts:241`
+- `src/services/exchangeLedger.test.ts:52`
+- `src/services/exchangeLedger.test.ts:56`
 - `src/services/exchangeLedger.test.ts:242`
+- `src/services/exchangeLedger.test.ts:243`
 - `src/services/exchangeLedger.test.ts:264`
 - `src/services/exchangeLedger.test.ts:269`
 - `src/services/exchangeLedger.test.ts:276`
 - `src/services/gemCrushLines.ts:267`
 
 ### `describeExchange` (function) — 4 call sites
-- `src/services/exchangeLedger.test.ts:18`
-- `src/services/exchangeLedger.test.ts:40`
-- `src/services/exchangeLedger.test.ts:45`
+- `src/services/exchangeLedger.test.ts:19`
+- `src/services/exchangeLedger.test.ts:41`
 - `src/services/exchangeLedger.test.ts:46`
+- `src/services/exchangeLedger.test.ts:47`
 
 ### `exchangeNetForLine` (function) — 4 call sites
-- `src/services/exchangeLedger.test.ts:23`
-- `src/services/exchangeLedger.test.ts:29`
-- `src/services/exchangeLedger.test.ts:34`
-- `src/services/exchangeLedger.test.ts:238`
+- `src/services/exchangeLedger.test.ts:24`
+- `src/services/exchangeLedger.test.ts:30`
+- `src/services/exchangeLedger.test.ts:35`
+- `src/services/exchangeLedger.test.ts:239`
 
 ### `settledNetForLine` (function) — 2 call sites
 - `src/services/moveComparison.ts:199`

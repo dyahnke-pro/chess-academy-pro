@@ -31,15 +31,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `verdictBand` (function) — 3 call sites
 - `src/services/coachFeatureService.ts:1085`
-- `src/services/exchangeLedger.test.ts:128`
-- `src/services/exchangeLedger.test.ts:130`
+- `src/services/exchangeLedger.test.ts:129`
+- `src/services/exchangeLedger.test.ts:131`
 
 ### `assessPositionalEdge` (function) — 28 call sites
 - `src/services/coachFeatureService.ts:3005`
-- `src/services/exchangeLedger.test.ts:97`
 - `src/services/exchangeLedger.test.ts:98`
-- `src/services/exchangeLedger.test.ts:105`
-- `src/services/exchangeLedger.test.ts:128`
+- `src/services/exchangeLedger.test.ts:99`
+- `src/services/exchangeLedger.test.ts:106`
+- `src/services/exchangeLedger.test.ts:129`
 - `src/services/materialSites.test.ts:72`
 - `src/services/phaseVerdict.test.ts:10`
 - `src/services/planPrescriptions.test.ts:84`

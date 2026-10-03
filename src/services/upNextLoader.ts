@@ -26,6 +26,8 @@ export interface UpNextState {
   done: Set<string>;
   /** The first not-done pick — the ring's, then anything after it. */
   current: UpNextPick | null;
+  /** Every candidate, best first — what a hub reads its own section's pick from. */
+  ranked: UpNextPick[];
 }
 
 const ringKey = (d: Date): string => `today_ring_${dayKey(d)}`;
@@ -146,7 +148,7 @@ async function loadUpNextFresh(now: Date): Promise<UpNextState> {
   // question); then the ring; once it is closed, whatever the record says next.
   const start = input.startSteps.length > 0 ? ranked.find((p) => p.kind === 'start' && !done.has(p.key)) : undefined;
   const current = start ?? currentPick(ring, done) ?? currentPick(ranked, done);
-  return { ring, done, current };
+  return { ring, done, current, ranked };
 }
 
 /** Up next may have changed (a bite finished): the one signal a surface needs

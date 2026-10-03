@@ -16,3 +16,4 @@ export function useUpNext(): UpNextState | null {
   }, []);
   return state;
 }
+

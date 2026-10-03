@@ -18,6 +18,7 @@ import { CounterWeaponsTab } from './CounterWeaponsTab';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { useUpNext } from '../../hooks/useUpNext';
 import { UpNextBar } from '../Dashboard/UpNextBar';
+import { sectionPick } from '../../services/upNextPicker';
 import { BookOpen, Library, ChevronDown, ChevronRight, Users, Swords, Sparkles, GraduationCap, Shield } from 'lucide-react';
 
 type TabMode = 'masterclasses' | 'pro' | 'gambits' | 'counter' | 'all';
@@ -43,7 +44,8 @@ export function OpeningExplorerPage(): JSX.Element {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const upNext = useUpNext();
-  const upNextPick = upNext?.current?.hub === 'openings' ? upNext.current : null;
+  // This hub's own next step, whatever Home is showing (David 2026-10-02).
+  const upNextPick = upNext ? sectionPick(upNext.ranked, upNext.done, (h) => h === 'openings') : null;
   const [repertoire, setRepertoire] = useState<OpeningRecord[]>([]);
   const [searchResultIds, setSearchResultIds] = useState<Set<string> | null>(null);
   const [loading, setLoading] = useState(true);

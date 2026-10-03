@@ -22,10 +22,10 @@
 import type { RepCandidate } from './trainingPlanSelector';
 import { resolveRepRoute } from './repRouting';
 
-export type PickKind = 'deep-run' | 'game-slip' | 'weakness' | 'grown' | 'opening' | 'free-opening' | 'warm-up' | 'long' | 'start';
+export type PickKind = 'deep-run' | 'game-slip' | 'weakness' | 'grown' | 'opening' | 'free-opening' | 'warm-up' | 'long' | 'start' | 'upload' | 'learn';
 
 /** Which hub row a pick lives under — the row that pulses in place. */
-export type PickHub = 'tactics:deep-run' | 'tactics:my mistakes' | 'tactics:daily' | 'tactics:long' | 'openings' | 'home';
+export type PickHub = 'tactics:deep-run' | 'tactics:my mistakes' | 'tactics:daily' | 'tactics:long' | 'openings' | 'coach' | 'weaknesses' | 'home';
 
 export interface UpNextPick {
   kind: PickKind;
@@ -200,4 +200,10 @@ export function rankUpNext(i: UpNextInput): UpNextPick[] {
 /** Up next = the first pick not done today. */
 export function currentPick(ranked: readonly UpNextPick[], done: ReadonlySet<string>): UpNextPick | null {
   return ranked.find((p) => !done.has(p.key)) ?? null;
+}
+
+/** A hub's own pick: the first not-done one that lives in that section (the
+ *  hub's bar blinks its section's next step, whatever Home is showing). */
+export function sectionPick(ranked: readonly UpNextPick[], done: ReadonlySet<string>, inSection: (hub: PickHub) => boolean): UpNextPick | null {
+  return ranked.find((p) => inSection(p.hub) && !done.has(p.key)) ?? null;
 }

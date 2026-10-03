@@ -320,13 +320,14 @@ html[data-theme="kid-mode"] {
 /* Up next (David 2026-10-01): the suggested bar and its row BREATHE with a
    neon glow — the text never fades, unlike Tailwind's opacity pulse. Reduced
    motion keeps the static glow. */
+/* Brighter and 1/8 s faster (David 2026-10-02): 2.4s → 2.275s. */
 @keyframes upnext-glow {
-  0%, 100% { box-shadow: 0 0 10px rgba(255, 61, 242, 0.35); }
-  50% { box-shadow: 0 0 28px rgba(255, 61, 242, 0.8); }
+  0%, 100% { box-shadow: 0 0 12px rgba(255, 61, 242, 0.5); }
+  50% { box-shadow: 0 0 34px rgba(255, 61, 242, 1); }
 }
 .upnext-glow {
-  animation: upnext-glow 2.4s ease-in-out infinite;
+  animation: upnext-glow 2.275s ease-in-out infinite;
 }
 @media (prefers-reduced-motion: reduce) {
-  .upnext-glow { animation: none; box-shadow: 0 0 16px rgba(255, 61, 242, 0.55); }
+  .upnext-glow { animation: none; box-shadow: 0 0 20px rgba(255, 61, 242, 0.75); }
 }

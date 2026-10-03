@@ -285,6 +285,47 @@ export function GameInsightsPage(): JSX.Element {
           </div>
         </div>
 
+        {/* Tabs AT THE TOP (David 2026-10-02) — right under the title, above
+            the search and stats. Horizontally scrollable so no tab clips off the right
+            edge (5 tabs + the wide "Thinking Errors" label overflowed a
+            fixed-width flex-1 row and cut "Tactics" off). Buttons size to
+            their label and the row scrolls left/right. */}
+        <div
+          className="flex gap-2 py-2 overflow-x-auto shrink-0"
+          style={{ scrollbarWidth: 'none' }}
+          data-testid="insights-tab-row"
+        >
+          {TABS.map((t) => {
+            const isActive = tab === t.id;
+            return (
+              <button
+                key={t.id}
+                onClick={() => {
+                  if (t.id !== tab) {
+                    void logAppAudit({
+                      kind: 'insights-tab-switched',
+                      category: 'subsystem',
+                      source: 'GameInsightsPage.tabSwitch',
+                      summary: `${tab} → ${t.id}`,
+                      details: JSON.stringify({ fromTab: tab, toTab: t.id }),
+                    });
+                  }
+                  setTab(t.id);
+                }}
+                className="shrink-0 whitespace-nowrap text-center py-2.5 px-3.5 text-sm font-semibold rounded-lg transition-all"
+                style={{
+                  color: isActive ? 'var(--color-accent)' : 'var(--color-text-muted)',
+                  border: isActive ? '1px solid var(--color-accent)' : '1px solid var(--color-border)',
+                  background: isActive ? 'color-mix(in srgb, var(--color-accent) 8%, var(--color-surface))' : 'transparent',
+                  boxShadow: isActive ? '0 0 8px color-mix(in srgb, var(--color-accent) 40%, transparent)' : 'none',
+                }}
+                data-testid={`tab-${t.id}`}
+              >
+                {t.label}
+              </button>
+            );
+          })}
+        </div>
         {/* Search bar */}
         <form onSubmit={(e) => { void handleSearch(e); }} className="mb-3">
           <div
@@ -346,50 +387,6 @@ export function GameInsightsPage(): JSX.Element {
           </div>
         )}
 
-        {/* THE HEAT MAP — red / green / grey per skill, from the student's own
-            record (David 2026-10-01: green finally has a screen). */}
-        <HeatMapPanel />
-
-        {/* Tabs — horizontally scrollable so no tab clips off the right
-            edge (5 tabs + the wide "Thinking Errors" label overflowed a
-            fixed-width flex-1 row and cut "Tactics" off). Buttons size to
-            their label and the row scrolls left/right. */}
-        <div
-          className="flex gap-2 py-2 overflow-x-auto shrink-0"
-          style={{ scrollbarWidth: 'none' }}
-          data-testid="insights-tab-row"
-        >
-          {TABS.map((t) => {
-            const isActive = tab === t.id;
-            return (
-              <button
-                key={t.id}
-                onClick={() => {
-                  if (t.id !== tab) {
-                    void logAppAudit({
-                      kind: 'insights-tab-switched',
-                      category: 'subsystem',
-                      source: 'GameInsightsPage.tabSwitch',
-                      summary: `${tab} → ${t.id}`,
-                      details: JSON.stringify({ fromTab: tab, toTab: t.id }),
-                    });
-                  }
-                  setTab(t.id);
-                }}
-                className="shrink-0 whitespace-nowrap text-center py-2.5 px-3.5 text-sm font-semibold rounded-lg transition-all"
-                style={{
-                  color: isActive ? 'var(--color-accent)' : 'var(--color-text-muted)',
-                  border: isActive ? '1px solid var(--color-accent)' : '1px solid var(--color-border)',
-                  background: isActive ? 'color-mix(in srgb, var(--color-accent) 8%, var(--color-surface))' : 'transparent',
-                  boxShadow: isActive ? '0 0 8px color-mix(in srgb, var(--color-accent) 40%, transparent)' : 'none',
-                }}
-                data-testid={`tab-${t.id}`}
-              >
-                {t.label}
-              </button>
-            );
-          })}
-        </div>
       </div>
 
       {/* Content — in the page's single scroll flow (no nested scroller). */}
@@ -409,6 +406,9 @@ export function GameInsightsPage(): JSX.Element {
                 main page of weaknesses. That needs to be somewhere more
                 visible!"). Re-reads when the library or the analysis state
                 changes so accuracy fills in as the sweep lands. */}
+            {/* THE HEAT MAP — on Overview only (David 2026-10-02: not on every
+                tab), each skill faded red → green over 26 weeks. */}
+            <HeatMapPanel />
             <RecentGamesStrip refreshKey={`${totalGames}-${String(bgAnalysisRunning)}`} />
             {/* The home openings (WO-HOME-OPENING-01 A3): the two families the
                 coach works inside first, read off the record with a one-tap

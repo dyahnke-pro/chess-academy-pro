@@ -12,6 +12,7 @@ import { scaledShadow } from '../../utils/neonColors';
 import { logAppAudit } from '../../services/appAuditor';
 import { useUpNext } from '../../hooks/useUpNext';
 import { UpNextBar } from '../Dashboard/UpNextBar';
+import { sectionPick } from '../../services/upNextPicker';
 
 // ─── Theme Category Definitions ──────────────────────────────────────────
 
@@ -127,10 +128,11 @@ export function TacticsPage(): JSX.Element {
   const gB = settings.glowBrightness;
   const gS = gB / 100;
   const { collapsed, onScroll } = useCollapseOnScroll();
-  // The Up-next pick, when it lives on this hub: pinned on top, and its real
-  // row pulses in place (the list never reorders — muscle memory).
+  // This hub's own next step, pinned on top whatever Home is showing (David
+  // 2026-10-02: hubs blink their own), and its real row pulses in place (the
+  // list never reorders — muscle memory).
   const upNext = useUpNext();
-  const pick = upNext?.current?.hub.startsWith('tactics:') ? upNext.current : null;
+  const pick = upNext ? sectionPick(upNext.ranked, upNext.done, (h) => h.startsWith('tactics:')) : null;
   const pulseKey = pick ? pick.hub.slice('tactics:'.length) : null;
 
   // Hub-visit signal so the audit stream can attribute downstream
@@ -237,7 +239,7 @@ export function TacticsPage(): JSX.Element {
                 <button
                   key={row.key}
                   onClick={() => handleNavigate(row.route, row.label, row.state)}
-                  className={`${row.bgColor} rounded-2xl flex items-center gap-3 px-4 py-3.5 text-left transition-all duration-200 w-full ${row.key === pulseKey ? 'ring-2 ring-fuchsia-300/80 upnext-glow' : ''}`}
+                  className={`${row.bgColor} rounded-2xl flex items-center gap-3 px-4 py-3.5 text-left transition-all duration-200 w-full ${row.key === pulseKey ? 'ring-2 ring-fuchsia-300 upnext-glow' : ''}`}
                   data-up-next={row.key === pulseKey ? 'true' : undefined}
                   style={{ ...neonBorderStyle(row.rgb, gS), boxShadow: shadow }}
                   onMouseEnter={(e) => { applyHoverBorder(e.currentTarget, row.rgb, gS); e.currentTarget.style.boxShadow = shadowHover; }}

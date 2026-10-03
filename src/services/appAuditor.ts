@@ -293,6 +293,9 @@ export type AuditKind =
   | 'up-next-opened'
   /** The day's ring frozen: which bites, from which parts of the record. */
   | 'up-next-chosen'
+  /** Home's rotating suggestion this app open: the ranked families, the one
+   *  skipped as last open's, the one shown. */
+  | 'home-suggestion-chosen'
   /** Today's ring closed: trained days this week, gold week, opening earned. */
   | 'today-ring-closed'
   // Which games a batch analysis run picked and in what order (A2): the
