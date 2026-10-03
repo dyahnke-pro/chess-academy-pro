@@ -255,7 +255,7 @@ describe('the computed explanation wins over a theme note', () => {
     vi.clearAllMocks();
   });
 
-  it('no theme note under a puzzle the board already explains', async () => {
+  it('hands the note lookup the solution, so it can defer to the computed line', async () => {
     // A real puzzle (0CCT1, Ne2+ Kf1 Nxc3) — the computer explains it.
     getPuzzle.mockImplementation(async () => buildPuzzleRecord({
       id: '0CCT1', fen: '7R/1p4r1/1kp1P3/1p4p1/1q3nBp/5N1P/1PQ2PP1/6K1 w - - 3 33',
@@ -265,8 +265,11 @@ describe('the computed explanation wins over a theme note', () => {
     await act(async () => { await vi.advanceTimersByTimeAsync(50); });
     fireEvent.click(screen.getByTestId('stub-fail'));
     await act(async () => { await vi.advanceTimersByTimeAsync(100); });
-    expect(screen.queryByTestId('post-solve-note')).toBeNull();
-    expect(themedNote).not.toHaveBeenCalled();
+    // The decision lives in the note lookup (tacticPuzzleNotes.test): the page
+    // must hand it the solution so it can see the board explains itself.
+    expect(themedNote).toHaveBeenCalledWith(expect.objectContaining({
+      solutionUci: ['c2c3', 'f4e2', 'g1f1', 'e2c3'],
+    }));
   });
 
   it('the theme note still fills in where nothing was computed', async () => {

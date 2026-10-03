@@ -3,8 +3,8 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { CalculationTab } from './CalculationTab';
 
 const recordCalculationFirstAnswer = vi.fn(async () => 1);
-vi.mock('../../services/calculationEvidence', async (orig) => ({
-  ...(await orig<typeof import('../../services/calculationEvidence')>()),
+vi.mock('../../services/calculationDrillService', async (orig) => ({
+  ...(await orig<typeof import('../../services/calculationDrillService')>()),
   recordCalculationFirstAnswer: (...args: unknown[]) => recordCalculationFirstAnswer(...(args as [])),
 }));
 

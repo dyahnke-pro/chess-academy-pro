@@ -5,7 +5,7 @@ vi.mock('./capabilityEvidence', () => ({
   recordCapabilityEvidence: (args: Record<string, unknown>) => recordCapabilityEvidence(args),
 }));
 
-import { isLegalMove, recordCalculationFirstAnswer } from './calculationEvidence';
+import { isLegalMove, recordCalculationFirstAnswer } from './calculationDrillService';
 import { MISTAKE_CP } from './engineConstants';
 
 const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';

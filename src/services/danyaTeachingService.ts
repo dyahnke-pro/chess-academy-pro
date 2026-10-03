@@ -34,6 +34,7 @@ import { logAppAudit } from './appAuditor';
 import { applyDerivedAnchors } from './noteAnchorOverrides';
 import { noteTeachesChess } from './sourceMeta.shared.mjs';
 import { openingReachesPosition } from './openingBranches';
+import { explainPuzzleConcept } from './puzzleConceptExplanation';
 
 export interface DanyaNote {
   id: string;
@@ -1283,7 +1284,17 @@ export function tacticNoteForPuzzleThemes(args: {
   seenIds?: Set<string>;
   /** The puzzle's board — a note may not assert a configuration it lacks. */
   fen?: string | null;
+  /** The puzzle's solution (UCI). When given, the theme note stays silent
+   *  wherever the board has a COMPUTED explanation: a pattern note is written
+   *  about some other game ("The rook captures with check…" under a Qd8+
+   *  puzzle — live walk 2026-10-03), and David: "Use computer narrations if
+   *  they are better". Decided here, once, not by each screen. */
+  solutionUci?: string[];
 }): { id: string; text: string } | null {
+  if (args.fen && args.solutionUci && args.solutionUci.length > 0) {
+    const computed = explainPuzzleConcept({ fen: args.fen, solutionUci: args.solutionUci, themes: args.themes });
+    if (computed !== null) return null;
+  }
   const types = Array.from(new Set(
     args.themes.map((t) => PUZZLE_THEME_TO_TACTIC[t]).filter((t): t is string => Boolean(t)),
   ));

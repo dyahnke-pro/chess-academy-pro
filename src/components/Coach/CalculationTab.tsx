@@ -41,6 +41,8 @@ import {
   getDrillPuzzleCount,
   skillAcceptsPuzzle,
   type CalculationSkill,
+  isLegalMove,
+  recordCalculationFirstAnswer,
 } from '../../services/calculationDrillService';
 import { countGameCalculationPuzzlesBySkill } from '../../services/gameCalculationPuzzleService';
 import type { EndgameLessonPosition } from '../../types/endgameLesson';
@@ -51,7 +53,6 @@ import { useAppStore } from '../../stores/appStore';
 import { WrongTryNote } from '../Puzzles/WrongTryNote';
 import { hintSquareStyles } from '../../utils/hintSquareStyles';
 import { useSolvedDrillConcept } from '../../hooks/useWrongTryRefutation';
-import { isLegalMove, recordCalculationFirstAnswer } from '../../services/calculationEvidence';
 import type { PieceDropHandlerArgs } from 'react-chessboard';
 
 const EMPTY_LINE: readonly string[] = [];

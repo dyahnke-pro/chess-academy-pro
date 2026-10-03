@@ -20,7 +20,6 @@ import { db } from '../../db/schema';
 import { logAppAudit } from '../../services/appAuditor';
 import { teachingSourceForBoard, generalizedTeaching, spokenBeatText, tacticNoteForPuzzleThemes } from '../../services/danyaTeachingService';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
-import { explainPuzzleConcept } from '../../services/puzzleConceptExplanation';
 
 type Phase = 'loading' | 'solving' | 'summary';
 
@@ -290,22 +289,15 @@ export function TacticDrillPage(): JSX.Element {
       // set now gets one. The note is geometry-free by construction, because
       // it is about a pattern and not about this board.
       //
-      // …but never beside the computed explanation. The theme note is about
-      // the PATTERN, written for some other board ("The rook captures with
-      // check…" under a Qd8+ puzzle — live walk 2026-10-03), and the board
-      // already teaches this one: PuzzleBoard shows the computed line and
-      // motif for THIS position. David: "Use computer narrations if they are
-      // better" — so the theme note only speaks where nothing was computed.
-      const computedHere = explainPuzzleConcept({
-        fen: puzzle.fen,
-        solutionUci: puzzle.moves.trim().split(/\s+/),
-        themes: puzzle.themes ?? [],
-      }) !== null;
-      if (!note && !computedHere) {
+      // …and never beside the computed explanation: the lookup itself stays
+      // silent when the board teaches this puzzle (it is given the solution),
+      // so a pattern note written for some other game cannot sit under it.
+      if (!note) {
         const themed = tacticNoteForPuzzleThemes({
           themes: puzzle.themes ?? [],
           seenIds: noteIdsSeenRef.current,
           fen: puzzle.fen,
+          solutionUci: puzzle.moves.trim().split(/\s+/),
         });
         if (themed) note = themed.text;
       }

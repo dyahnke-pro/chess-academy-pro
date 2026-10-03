@@ -81,4 +81,14 @@ describe('tactic notes by puzzle theme', () => {
     // A floor, not a target — it may only rise as the corpus grows.
     expect(pct).toBeGreaterThan(50);
   }, 300_000);
+
+  it('stays silent where the board has a computed explanation (live walk 2026-10-03)', () => {
+    // 0CCT1: Ne2+ Kf1 Nxc3 — the computer explains this fork itself, so a
+    // pattern note written for some other game must not sit under it.
+    const args = {
+      themes: ['crushing', 'fork', 'middlegame', 'short'],
+      fen: '7R/1p4r1/1kp1P3/1p4p1/1q3nBp/5N1P/1PQ2PP1/6K1 w - - 3 33',
+    };
+    expect(tacticNoteForPuzzleThemes({ ...args, solutionUci: ['c2c3', 'f4e2', 'g1f1', 'e2c3'] })).toBeNull();
+  });
 });
