@@ -288,11 +288,22 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       return s[v % s.length];
     }
     case 'buried-own-bishop': {
-      const s = [
-        `That buries your own bishop: with ${f.blocker} in the way, the bishop on ${f.bishop} has nowhere to go.`,
-        `Your bishop on ${f.bishop} is shut in behind ${f.blocker} — a piece that can't move is a piece you don't have.`,
-        `The bishop on ${f.bishop} loses its diagonal to ${f.blocker}; keep your own pieces breathing.`,
-      ];
+      // SAY THE COUNT THE DETECTOR COMPUTED (Learn walk oct3g, 16.Na3: "shut
+      // in … a piece that can't move" of a bishop that could still go to b2).
+      // The detector fires at one square or none; "nowhere to go" is only
+      // true at none.
+      const none = Number(f.squaresLeft ?? 0) === 0;
+      const s = none
+        ? [
+          `That buries your own bishop: with ${f.blocker} in the way, the bishop on ${f.bishop} has nowhere to go.`,
+          `Your bishop on ${f.bishop} is shut in behind ${f.blocker} — a piece that can't move is a piece you don't have.`,
+          `The bishop on ${f.bishop} loses its diagonal to ${f.blocker}; keep your own pieces breathing.`,
+        ]
+        : [
+          `That cramps your own bishop: with ${f.blocker} in the way, the bishop on ${f.bishop} is down to one square.`,
+          `Your bishop on ${f.bishop} loses its diagonal to ${f.blocker} — one square left is barely a piece.`,
+          `The bishop on ${f.bishop} loses its diagonal to ${f.blocker}; keep your own pieces breathing.`,
+        ];
       return s[v % s.length];
     }
     case 'premature-centre-break': {
@@ -569,7 +580,7 @@ function shortVerdict(a: PrincipleAttribution): string {
     case 'greedy-pawn-grab': return `Another pawn grab — ${f.punish} is the price.`;
     case 'early-edge-pawns': return `Another edge pawn while the centre waits.`;
     case 'knights-before-bishops': return `The bishop again before the knights — ${f.kick} kicks it.`;
-    case 'buried-own-bishop': return `Your bishop on ${f.bishop} is shut in again.`;
+    case 'buried-own-bishop': return Number(f.squaresLeft ?? 0) === 0 ? `Your bishop on ${f.bishop} is shut in again.` : `Your bishop on ${f.bishop} is cramped again.`;
     case 'premature-centre-break': return `Another early break on ${f.pawn}.`;
     case 'knight-to-the-rim': return `A knight on the rim again, on ${f.square}.`;
     case 'loose-piece': return `Loose piece again — the ${f.piece} on ${f.square} hangs.`;

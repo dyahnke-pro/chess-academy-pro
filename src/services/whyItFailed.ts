@@ -261,6 +261,11 @@ export function whyItFailed(args: {
           line: `That took the ${NAME[mv.captured]} on ${mv.to}, but the ${NAME[recap.type]} on ${recap.sq} takes back and you come out ${pts} down.`,
         };
       }
+      // "HANGING" MEANS THE PIECE GOES FOR AT MOST A PAWN (Learn walk oct3g,
+      // 23.Nh4: "your knight on h4 hanging to the bishop on f6" — g3 guards
+      // h4, and …Bxh4 gxh4 …Qxh4 nets a single pawn). A losing exchange that
+      // costs less is not the piece hanging; this lane stays quiet for it.
+      if (-netOnLanding < (VALUE[mv.piece] ?? 0) - 1) return null;
       return {
         kind: 'lost-the-piece',
         squares: [mv.to, recap.sq],

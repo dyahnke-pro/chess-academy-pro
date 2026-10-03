@@ -51,6 +51,12 @@
   5. **The fundamental verdict's flag reads the one-search cost** (`LiveFundamentalReads.costCp`, REQUIRED): it was the same before-minus-after subtraction.
   6. **No capture is read off a board where the other side is in check** (`positionReadingService.asIfToMove`, used by `legalSeeGainFor` / `signedLegalSeeFor`): walk oct3e, 10.Bb5+ — "your pawn on f7 … it falls unless you cover it". Handing the move to the checking side builds a board that cannot exist; Black could not take back on f7 in it. Same guard as `moveIntent.nullMoveFen`. It also makes the old "a king is hanging" bug impossible by construction.
   7. **A shallow fan is not one search** (`moveCost`, `CostFan.depth`): the opponent's move was costed off the 1.5 s `mid` read — "Their Kg2 is a touch inaccurate" (2.1 pawns), "Their Qxd5 is a touch inaccurate" (2.0). A fan short of the asked depth is re-scored with `searchmoves`.
+  8. **Walk oct3g (game 2 re-walk), five more, each failing on the old code:**
+     - A fork wins only if enough targets are winnable for WHOSE MOVE it is (`tacticsDetector.findForks`): defender to move needs two (8…Nxe5 "forks your queen and bishop — the other falls" with b3 guarding c4), forker to move needs one (KID 15…Ng3 takes the rook).
+     - The buried-bishop verdict says the square count the detector computed (`squaresLeft`): "a piece that can't move" of a bishop that could still go to b2.
+     - "Hanging" means the piece goes for at most a pawn (`whyItFailed` lost-the-piece): 23.Nh4 is guarded by g3; …Bxh4 gxh4 …Qxh4 nets a pawn.
+     - The plan's took/gave reads the ledger's capture lists (`dealOfLedger`; `dealOf`/`lostCounts` deleted): "let them win a rook" of a line that wins the queen for a bishop. This is the oct3d OPEN item, now proven on a recorded line.
+     - "Gives away real material" needs the reply line to net the mover a loss (`inaccuracyCall` blunder head): 29…Ke7 let a win slip and lost nothing.
   - Every graded Learn move now records its engine lines (`CoachTeachPage.backwardLook.line` diagnostic) so a walk can check a "would win" claim against the app's own line.
   - Harness: the hand driver waits for the board to show the live game before clicking (a slip-answer replay held the board two plies back for ~20 s).
   - Siblings of (3) not yet migrated: Play (`CoachGamePage` coachEvalIfBest − after), `useDiscussionPractice`, `liveFundamental` — each subtracts two reads. Review reads one deep per-ply analysis, which is the same search depth on both sides, so it is lower priority.

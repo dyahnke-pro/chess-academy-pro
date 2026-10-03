@@ -63,3 +63,73 @@ describe('no capture is read off a board where the other side is in check (walk 
     expect(signedLegalSeeFor('r1bqkbnr/pppp1ppp/2n5/6N1/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 0 5', 'g5', 'b')).toBeGreaterThan(0);
   });
 });
+
+describe('a cramped bishop is not "a piece that can\'t move" (walk oct3g, 16.Na3)', () => {
+  it('the verdict says the square count the detector computed', async () => {
+    const { attributeLiveFundamental } = await import('./liveFundamental');
+    const { renderFundamentalVerdict } = await import('./principleVoice');
+    const fenBefore = 'r2q3r/1b1p1kp1/p2bpnpp/1pp5/7N/1PP3P1/P2PQP1P/RNB2RK1 w - - 2 16';
+    const historySans = 'e4 c5 Bc4 e6 e5 Nc6 Qe2 a6 b3 Nd4 Qd3 h6 c3 Nc6 Qf3 Nxe5 Qe2 Bd6 Nf3 Ng6 g3 Nf6 O-O b5 Bd3 Bb7 Bxg6 fxg6 Nh4 Kf7 Na3'.split(' ');
+    const attrs = attributeLiveFundamental({ fenBefore, historySans, playedSan: 'Na3', bestSan: 'd3', replySan: null,
+      studentColor: 'white', costCp: 120, evalBeforeWhiteCp: -229, evalAfterWhiteCp: -291 });
+    const buried = attrs.find((a) => a.id === 'buried-own-bishop');
+    expect(buried, 'the detector should still name the cramped bishop').toBeTruthy();
+    expect(buried?.facts.squaresLeft).toBe(1);
+    for (let ply = 0; ply < 6; ply += 1) {
+      const said = renderFundamentalVerdict([buried!], { ply, seen: new Set(), replySan: null });
+      expect(said).not.toMatch(/can't move|nowhere to go/);
+    }
+  });
+});
+
+describe('a fork wins only when two targets are winnable (walk oct3g, 8…Nxe5)', () => {
+  it('Nxe5 hits the queen and the c4 bishop, but b3 guards c4 — no fork', async () => {
+    const { detectTactics } = await import('./tacticsDetector');
+    const r = detectTactics('r1bqkbnr/1p1p1pp1/p3p2p/2p1n3/2B5/1PP2Q2/P2P1PPP/RNB1K1NR w KQkq - 0 9');
+    const forks = r.tactics.filter((t) => t.type === 'fork' && t.involvedSquares[0] === 'e5');
+    expect(forks).toEqual([]);
+  });
+  it('NEGATIVE CONTROL: a knight on two undefended pieces is still a fork', async () => {
+    const { detectTactics } = await import('./tacticsDetector');
+    const r = detectTactics('7k/8/8/5b2/3N4/1r6/8/7K b - - 0 1');
+    const forks = r.tactics.filter((t) => t.type === 'fork' && t.involvedSquares[0] === 'd4');
+    expect(forks.length).toBeGreaterThan(0);
+  });
+});
+
+describe('"hanging" is a piece lost for at most a pawn (walk oct3g, 23.Nh4)', () => {
+  it('g3 guards h4: …Bxh4 gxh4 …Qxh4 nets a pawn, not the knight', async () => {
+    const { whyItFailed } = await import('./whyItFailed');
+    const r = whyItFailed({
+      fenBefore: 'r2q3r/1b1p1kp1/p3pb2/2p4p/1pP1n1p1/1P1Q1NP1/P1NP1P1P/1RB2RK1 w - - 0 23',
+      playedSan: 'Nh4', studentColor: 'white',
+      playedLineUci: ['e4g5', 'f2f3', 'g5h3', 'g1h1', 'f6h4', 'g3h4'],
+    });
+    expect(r?.line ?? '').not.toMatch(/hanging/);
+    expect(r?.missed ?? '').not.toMatch(/hanging/);
+  });
+});
+
+describe('what a plan took and gave is the ledger\'s list (walk oct3g, 30.Ng4)', () => {
+  it('the punishing line wins the queen for a bishop — not "a rook"', async () => {
+    const { punishmentOf } = await import('./inaccuracyCall');
+    // The app's own recorded reply line after 30.Ng4.
+    const R = 'e4g5 e2g2 b7g2 g1g2 g8g6 d2d4 g5h3 f1f6 g6g4 f6h6 d8g8 c2b4 h3f4 c1f4 g4f4 b4d3 f4f8'.split(' ');
+    const p = punishmentOf('r2q2r1/1b1pk3/p3pb2/2p5/1pP1n3/1P2N1pP/P1NPQ3/1RB2RK1 w - - 1 30', 'Ng4', R, 'white');
+    expect(p?.why ?? '').not.toMatch(/a rook/);
+    expect(p?.why ?? '').toMatch(/the queen/);
+  });
+});
+
+describe('"gives away real material" is a ledger fact (walk oct3g, 29…Ke7)', () => {
+  const F = 'r2q2r1/1b1p1k2/p3pb2/2p5/1pP1n3/1P2N1pP/P1NPQ3/1RB2RK1 b - - 0 29';
+  it('a blunder that only lets the win slip says the advantage, not material', async () => {
+    const { callInaccuracy } = await import('./inaccuracyCall');
+    const call = callInaccuracy({ priorMove: null, replySan: null, fenBefore: F, playedSan: 'Ke7', bestSan: 'Nf2',
+      bestLineUci: ['e4f2', 'e2h5', 'g8g6', 'c1b2', 'd8h8', 'h5h8', 'a8h8', 'f1f2'],
+      replyLineUci: ['d2d3', 'e4f2', 'e3f5', 'e7f7', 'e2h5', 'g8g6', 'h5h7'],
+      cpLoss: 444, side: 'coach', dictated: true, moverColor: 'black' });
+    expect(call?.said ?? '').toMatch(/blunder/);
+    expect(call?.said ?? '').not.toMatch(/real material/);
+  });
+});

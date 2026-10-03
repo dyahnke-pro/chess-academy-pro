@@ -144,12 +144,18 @@ function findForks(chess: Chess): TacticPattern[] {
         // Forking two DEFENDED pieces wins nothing (broken-map #11). Kept
         // conservative — the forker-hanging case is subtler (a piece can attack
         // the forker yet be capturable itself), so we only gate on winnability.
+        // WHOSE MOVE IT IS decides how many must be winnable (Learn walk oct3g,
+        // 8…Nxe5: "forks your queen on f3 and your bishop on c4 — only one can
+        // escape, the other falls" — White to move saves the queen and …Nxc4
+        // bxc4 is an even trade). With the DEFENDER to move they save one, so
+        // a second must still fall; with the FORKER to move one is enough —
+        // they take it now (KID fixture, 15…Ng3: the rook on f1 goes).
         const defColor: Color = piece.color === 'w' ? 'b' : 'w';
-        const winnable = targets.some((t) =>
+        const winnable = targets.filter((t) =>
           t.type === 'k' ||                                        // check forces a response
           PIECE_VALUE[t.type] > PIECE_VALUE[piece.type] ||          // favorable trade even if defended (N forks two Rs)
           chess.attackers(t.square, defColor).filter((d) => d !== t.square).length === 0); // undefended
-        if (!winnable) continue;
+        if (winnable.length < (chess.turn() === piece.color ? 1 : 2)) continue;
         // FORKER SAFETY (2026-09-12 deep-dive #C1): a fork the OPPONENT can meet
         // by simply capturing the forking piece isn't a real fork — they take
         // the forker instead of saving a target. This ONLY applies when it is

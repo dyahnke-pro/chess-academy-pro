@@ -72,15 +72,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `LineProof` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `proofCut` (function) — 23 call sites
+### `proofCut` (function) — 24 call sites
 - `src/services/coachFeatureService.ts:3633`
 - `src/services/gemCrushLines.ts:258`
 - `src/services/gemFinder.ts:243`
 - `src/services/inaccuracyCall.ts:271`
 - `src/services/inaccuracyCall.ts:329`
-- `src/services/inaccuracyCall.ts:831`
-- `src/services/inaccuracyCall.ts:922`
-- `src/services/inaccuracyCall.ts:973`
+- `src/services/inaccuracyCall.ts:640`
+- `src/services/inaccuracyCall.ts:855`
+- `src/services/inaccuracyCall.ts:946`
+- `src/services/inaccuracyCall.ts:997`
 - `src/services/lineCalc.ts:40`
 - `src/services/lineProof.test.ts:13`
 - `src/services/lineProof.test.ts:24`

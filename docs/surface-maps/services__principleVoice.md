@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**747 lines · 7 exports · 13 importers · 10 tests · 3 audits**
+**758 lines · 7 exports · 13 importers · 11 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -51,7 +51,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `FundamentalVerdictOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `renderFundamentalVerdict` (function) — 33 call sites
+### `renderFundamentalVerdict` (function) — 34 call sites
 - `src/services/coachFeatureService.ts:2486`
 - `src/services/fundLeadStems.test.ts:58`
 - `src/services/fundamentalHow.test.ts:47`
@@ -60,6 +60,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/fundamentalHow.test.ts:81`
 - `src/services/learnFundamentalNarration.ts:119`
 - `src/services/learnWalkBlumenfeld.test.ts:75`
+- `src/services/learnWalkOct3c.test.ts:79`
 - `src/services/misconceptionClassifier.ts:259`
 - `src/services/principleAttribution.section14.test.ts:181`
 - `src/services/principleAttribution.section14.test.ts:184`
@@ -107,6 +108,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/fundLeadStems.test.ts`
 - `src/services/fundamentalHow.test.ts`
 - `src/services/learnWalkBlumenfeld.test.ts`
+- `src/services/learnWalkOct3c.test.ts`
 - `src/services/principleAttribution.section14.test.ts`
 - `src/services/principleAttributionEndgame.test.ts`
 - `src/services/principleAttributionEvalPv.test.ts`

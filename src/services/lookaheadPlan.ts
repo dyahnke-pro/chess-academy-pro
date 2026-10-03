@@ -639,11 +639,11 @@ function planFor(
       ? proofCut(plies[0].fenBefore, plies.map((p) => p.san), color === 'white' ? 'w' : 'b', exchangePrior)
       : null;
     materialSwing = proof && !proof.mate && proof.ledger ? proof.ledger.netPawns : 0;
-    if (proof && proof.ledger && materialSwing >= 1) {
-      const end = plies[proof.plies - 1];
-      const base = exchangePrior?.fenBefore ?? plies[0].fenBefore;
-      if (end) materialDeal = dealOf(base, end.fenAfter, color);
-    }
+    // …and WHAT it took and gave are the ledger's own lists, never a second
+    // count of two boards (walk oct3g, 30.Ng4: the board diff came back empty
+    // and the clause fell to a value bucket — "let them win a rook" for a line
+    // that wins the queen for a bishop).
+    if (proof && proof.ledger && materialSwing >= 1) materialDeal = dealOfLedger(proof.ledger.studentWon, proof.ledger.opponentWon);
   }
 
   // WHAT NEVER MOVED. A plan is as much about what is left out as what is in
@@ -1443,19 +1443,6 @@ export function isCostClause(text: string): boolean {
   return /^(win|take|mate|checkmate|trap|pull the pawns)\b/.test(text.trim());
 }
 
-/** Pieces of each kind a side lost between two boards (minors counted as one kind). */
-function lostCounts(before: string, after: string, side: 'w' | 'b'): Record<string, number> {
-  const count = (fen: string): Record<string, number> => {
-    const out: Record<string, number> = { q: 0, r: 0, m: 0, p: 0 };
-    for (const c of new Chess(fen).board().flat()) {
-      if (!c || c.color !== side || c.type === 'k') continue;
-      out[c.type === 'n' || c.type === 'b' ? 'm' : c.type] += 1;
-    }
-    return out;
-  };
-  const a = count(before); const b = count(after);
-  return { q: Math.max(0, a.q - b.q), r: Math.max(0, a.r - b.r), m: Math.max(0, a.m - b.m), p: Math.max(0, a.p - b.p) };
-}
 const DEAL_ONE: Record<string, string> = { p: 'a pawn', m: 'a piece', r: 'a rook', q: 'the queen' };
 const DEAL_MANY: Record<string, string> = { p: 'pawns', m: 'pieces', r: 'rooks', q: 'queens' };
 const COUNT_WORD = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
@@ -1464,18 +1451,21 @@ function dealWords(n: Record<string, number>): string | null {
     .map((t) => (n[t] === 1 ? DEAL_ONE[t] : `${COUNT_WORD[n[t]] ?? n[t]} ${DEAL_MANY[t]}`));
   return words.length ? words.join(' and ') : null;
 }
-/** What `color` took and gave between two boards — "a piece for a pawn".
- *  Like-for-like cancels: a bishop and two pawns for a bishop is two pawns. */
-function dealOf(before: string, after: string, color: 'white' | 'black'): { took: string; gave: string | null } | undefined {
-  try {
-    const me: 'w' | 'b' = color === 'white' ? 'w' : 'b';
-    const took = lostCounts(before, after, me === 'w' ? 'b' : 'w');
-    const gave = lostCounts(before, after, me);
-    for (const t of ['q', 'r', 'm', 'p']) { const k = Math.min(took[t], gave[t]); took[t] -= k; gave[t] -= k; }
-    const t = dealWords(took);
-    if (!t) return undefined;
-    return { took: t, gave: dealWords(gave) };
-  } catch { return undefined; }
+/** What the side took and gave over a line, from the LEDGER's capture lists —
+ *  "a piece for a pawn". Like-for-like cancels: a bishop and two pawns for a
+ *  bishop is two pawns. */
+function dealOfLedger(won: readonly string[], lost: readonly string[]): { took: string; gave: string | null } | undefined {
+  const kind = (x: string): string => (x === 'n' || x === 'b' ? 'm' : x);
+  const tally = (xs: readonly string[]): Record<string, number> => {
+    const n: Record<string, number> = { q: 0, r: 0, m: 0, p: 0 };
+    for (const x of xs) if (x in n || x === 'n' || x === 'b') n[kind(x)] += 1;
+    return n;
+  };
+  const took = tally(won); const gave = tally(lost);
+  for (const t of ['q', 'r', 'm', 'p']) { const k = Math.min(took[t], gave[t]); took[t] -= k; gave[t] -= k; }
+  const t = dealWords(took);
+  if (!t) return undefined;
+  return { took: t, gave: dealWords(gave) };
 }
 
 /**

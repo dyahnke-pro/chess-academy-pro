@@ -99,8 +99,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/whyItFailed.ts:129`
 - `src/services/whyItFailed.ts:153`
 - `src/services/whyItFailed.ts:161`
-- `src/services/whyItFailed.ts:298`
-- `src/services/whyItFailed.ts:300`
+- `src/services/whyItFailed.ts:303`
+- `src/services/whyItFailed.ts:305`
 
 ### `legalSeeGain` (function) — 19 call sites
 - `src/services/computedTruth.fuzz.test.ts:91`
@@ -211,7 +211,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
 - `src/services/countMethod.ts:30`
 - `src/services/groundedAnswer.ts:6849`
-- `src/services/inaccuracyCall.ts:986`
+- `src/services/inaccuracyCall.ts:1010`
 - `src/services/learnWalkOct3c.test.ts:57`
 - `src/services/learnWalkOct3c.test.ts:63`
 - `src/services/principleAttribution.ts:280`
@@ -223,7 +223,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:2655`
 - `src/services/groundedAnswer.ts:2706`
 - `src/services/tacticVerification.ts:75`
-- `src/services/tacticsDetector.ts:162`
+- `src/services/tacticsDetector.ts:168`
 
 ### `seeSequence` (function) — 3 call sites
 - `src/services/positionReadingService.test.ts:595`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1607 lines · 26 exports · 15 importers · 10 tests · 0 audits**
+**1597 lines · 26 exports · 15 importers · 10 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -178,7 +178,7 @@
 - `src/services/inaccuracyCall.ts:393`
 - `src/services/inaccuracyCall.ts:400`
 - `src/services/inaccuracyCall.ts:414`
-- `src/services/inaccuracyCall.ts:845`
+- `src/services/inaccuracyCall.ts:869`
 - `src/services/learnWalkBlumenfeld.test.ts:181`
 - `src/services/learnWalkBlumenfeld.test.ts:182`
 - `src/services/learnWalkBlumenfeld.test.ts:183`
@@ -192,7 +192,7 @@
 - `src/services/concessionBeat.ts:450`
 - `src/services/inaccuracyCall.ts:279`
 - `src/services/inaccuracyCall.ts:340`
-- `src/services/inaccuracyCall.ts:843`
+- `src/services/inaccuracyCall.ts:867`
 - `src/services/lookaheadPlan.test.ts:234`
 - `src/services/lookaheadPlan.test.ts:239`
 - `src/services/lookaheadPlan.test.ts:246`

@@ -621,6 +621,26 @@ export function callInaccuracyDetailed(args: {
       ? whyBetter(args.fenBefore, args.bestLineUci, args.moverColor, args.playedSan, args.priorMove)
       : null;
   const cost = Math.round(Math.max(0, args.cpLoss));
+  // "GIVES AWAY REAL MATERIAL" IS A LEDGER FACT (walk oct3g, 29…Ke7: a blunder
+  // that let a win slip and lost nothing). The engine's reply line after the
+  // move must actually net the mover a loss; otherwise the cost is advantage.
+  const givesMaterial = (() => {
+    try {
+      const r = new Chess(args.fenBefore);
+      const sans: string[] = [];
+      const played = r.move(args.playedSan);
+      if (!played) return false;
+      sans.push(played.san);
+      for (const u of args.replyLineUci) {
+        let mv;
+        try { mv = r.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { break; }
+        if (!mv) break;
+        sans.push(mv.san);
+      }
+      const proof = proofCut(args.fenBefore, sans, args.moverColor === 'white' ? 'w' : 'b', args.priorMove);
+      return !!proof && !proof.mate && !!proof.ledger && proof.ledger.netPawns <= -2;
+    } catch { return false; }
+  })();
 
   // THE COACH OWNS ITS OWN MISTAKES, IN THE FIRST PERSON, AND HANDS THE STUDENT
   // THE PUNISHMENT. Naming the move here is correct and is NOT the honesty
@@ -647,7 +667,9 @@ export function callInaccuracyDetailed(args: {
     const head = quality === 'blunder'
       ? ((args.allowedMate ?? null) !== null
         ? `Their ${args.playedSan} is a blunder — it walks into mate.`
-        : `Their ${args.playedSan} is a blunder — it gives away real material.`)
+        : givesMaterial
+          ? `Their ${args.playedSan} is a blunder — it gives away real material.`
+          : `Their ${args.playedSan} is a blunder — it throws away ${costWords(cost)} of advantage.`)
       : quality === 'mistake'
         ? `Their ${args.playedSan} is a mistake — not what the position wanted.`
         : `Their ${args.playedSan} is a touch inaccurate.`;
@@ -669,7 +691,9 @@ export function callInaccuracyDetailed(args: {
       // no material (Damiano walk 2026-09-27, 42…Kf8 in a mating net).
       ? ((args.allowedMate ?? null) !== null
         ? `That was a blunder from me — ${args.playedSan} walks into mate.`
-        : `That was a blunder from me — ${args.playedSan} gives away real material.`)
+        : givesMaterial
+          ? `That was a blunder from me — ${args.playedSan} gives away real material.`
+          : `That was a blunder from me — ${args.playedSan} throws away ${costWords(cost)} of advantage.`)
       : quality === 'mistake'
         ? `That was a mistake from me. ${args.playedSan} is not what the position wanted.`
         : `A touch inaccurate from me — ${args.playedSan} is not quite right.`;

@@ -797,7 +797,7 @@ const DETECTORS: Detector[] = [
       if (beforeMob >= 2 && afterMob <= 1 && bestMob >= 2) {
         // The HOW must know WHAT blocked it (WO-STANDARD-01 D-5): the pawn
         // remedy on a king move was the prod tape.
-        return att('buried-own-bishop', 1, { squares: [b.square, last.to], moves: [], pvMoves: [] }, { bishop: b.square, blocker: last.to, blockerPiece: PIECE_WORD_OF[last.piece] ?? 'piece' });
+        return att('buried-own-bishop', 1, { squares: [b.square, last.to], moves: [], pvMoves: [] }, { bishop: b.square, blocker: last.to, blockerPiece: PIECE_WORD_OF[last.piece] ?? 'piece', squaresLeft: afterMob });
       }
     }
     return null;
