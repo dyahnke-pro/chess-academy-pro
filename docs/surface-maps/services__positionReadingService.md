@@ -116,7 +116,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:3243`
 - `src/services/groundedAnswer.ts:6812`
 - `src/services/inaccuracyCall.ts:311`
-- `src/services/inaccuracyCall.ts:788`
+- `src/services/inaccuracyCall.ts:798`
 - `src/services/mistakeNarration.ts:572`
 - `src/services/moveAllowed.ts:78`
 - `src/services/moveTiming.ts:27`
@@ -154,9 +154,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/latentFork.ts:149`
 - `src/services/latentFork.ts:220`
 - `src/services/moveFundamentals.ts:316`
-- `src/services/moveFundamentals.ts:1461`
+- `src/services/moveFundamentals.ts:1464`
 
-### `legalSeeGainFor` (function) — 42 call sites
+### `legalSeeGainFor` (function) — 43 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8020`
 - `src/components/Coach/CoachTeachPage.tsx:9613`
 - `src/services/arrowDoor.ts:161`
@@ -182,9 +182,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:7209`
 - `src/services/learnTurnDoor.test.ts:238`
 - `src/services/material.ts:46`
-- `src/services/material.ts:84`
-- `src/services/moveFundamentals.ts:875`
-- `src/services/moveFundamentals.ts:876`
+- `src/services/material.ts:66`
+- `src/services/material.ts:106`
+- `src/services/moveFundamentals.ts:878`
+- `src/services/moveFundamentals.ts:879`
 - `src/services/moveIntent.ts:404`
 - `src/services/moveOrder.ts:113`
 - `src/services/moveTiming.ts:51`
@@ -203,8 +204,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `signedLegalSeeFor` (function) — 11 call sites
 - `src/components/Coach/CoachTeachPage.tsx:831`
 - `src/components/Coach/CoachTeachPage.tsx:7901`
-- `src/components/Coach/CoachTeachPage.tsx:10367`
-- `src/components/Coach/CoachTeachPage.tsx:10424`
+- `src/components/Coach/CoachTeachPage.tsx:10368`
+- `src/components/Coach/CoachTeachPage.tsx:10425`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
@@ -286,7 +287,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `bishopHemmedByOwnPawns` (function) — 3 call sites
 - `src/services/positionReadingService.test.ts:902`
-- `src/services/principleAttribution.ts:1079`
+- `src/services/principleAttribution.ts:1085`
 - `src/services/reviewTeachingPoints.ts:202`
 
 ### `findPieceQuality` (function) — 29 call sites

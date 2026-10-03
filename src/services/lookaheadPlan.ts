@@ -590,7 +590,11 @@ function planFor(
     // PIECES only: a king walking over or a pawn run is not "swinging pieces
     // toward their king" (hand walk 2026-09-27, a king-and-pawn ending: "h6 was
     // the move, to swing pieces toward their king" with no pieces on the board).
-    if (enemyKing && /^[QRBN]/.test(ply.san) && chebyshev(to, enemyKing) <= KING_ZONE) {
+    // …and a capture taken straight back is a TRADE, not a piece arriving
+    // (walk oct3a: "Rc1 was the move — swing pieces toward their king" for a
+    // line whose Qxa6 and Bxc7 are each recaptured at once).
+    const tradedOff = ply.san.includes('x') && !!reply && reply.moverColor !== color && reply.uci.slice(2, 4) === to;
+    if (enemyKing && /^[QRBN]/.test(ply.san) && !tradedOff && chebyshev(to, enemyKing) <= KING_ZONE) {
       nearEnemyKing += 1;
       kingAttackSquares.push(to);
     }
@@ -894,7 +898,14 @@ export function describePlan(
   // knight fork that wins the queen; the king read scored 98, the queen 95).
   if (plan.nearEnemyKing >= 2) {
     const kingWeight = 50 + plan.nearEnemyKing * 12;
-    const capped = plan.materialSwing >= 3 ? Math.min(kingWeight, 34 + plan.materialSwing * 10) : kingWeight;
+    // …and below ANY material the line wins (walk oct3a: "Ne5 was the move —
+    // it would swing pieces toward their king" for Ne5 Qe7 Qb5 f6 Nxg6, which
+    // wins the g6 pawn; the king read is a count of landing squares, the pawn
+    // is the point).
+    // A real assault (four pieces) still leads a pawn; a two- or three-piece
+    // gesture does not.
+    const yields = plan.materialSwing >= 3 || (plan.materialSwing >= 1 && plan.nearEnemyKing < 4);
+    const capped = yields ? Math.min(kingWeight, 34 + plan.materialSwing * 10) : kingWeight;
     add(capped, `swing pieces toward ${theirKing}`, plan.kingAttackSquares);
   }
   // Shield pawns are worth more per pawn than a piece walking over: a pawn that

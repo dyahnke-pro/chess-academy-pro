@@ -646,7 +646,7 @@ export function candidateCompareRead(
       const text = rotateStem([
         `Prefer ${b} to ${q} — it forces the issue while the edge is there.`,
         `${b} before ${q}: the forcing move first, while it still works.`,
-        `${q} can wait — ${b} forces matters now.`,
+        `${q} can wait — first ${b}, which forces the issue.`,
       ], Number(fen.split(' ')[5] ?? '0') || 0);
       return { text, bestSan: bestMv.san, altSan: altMv.san };
     }

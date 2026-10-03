@@ -471,6 +471,15 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     }
     case 'poisoned-pawn': {
       // Taken on its landing square: the pawn was DEFENDED, nothing was hunted.
+      // Taken LATER, not on the reply (walk oct3a, 32…Nxc7: the rooks came off
+      // first) — said without "on the spot".
+      if (f.fled === 0 && f.immediate === 0) {
+        const l = [
+          `That pawn was covered: your ${f.piece} takes on ${f.square} and never gets out — it is lost a few moves later, far more than the pawn was worth.`,
+          `Count the guards before you grab: the ${f.piece} on ${f.square} is cut off there and falls a few moves later, and the pawn was never worth it.`,
+        ];
+        return l[v % l.length];
+      }
       if (f.fled === 0) {
         const d = [
           `That pawn was defended: your ${f.piece} takes on ${f.square} and is taken on the spot — it cost you far more than a pawn.`,
@@ -581,7 +590,7 @@ function shortVerdict(a: PrincipleAttribution): string {
     case 'passive-rook-endgame': return `The rook still passive — ${f.better} takes the seventh.`;
     case 'kept-bad-bishop': return `The bad bishop on ${f.bishop} still buried — ${f.better}.`;
     case 'overvalued-attack': return `The attack overvalued again — ${f.move} doesn't hold up.`;
-    case 'poisoned-pawn': return f.fled === 0 ? `Another guarded pawn grabbed — the ${f.piece} on ${f.square} is taken.` : `Another poisoned pawn — the ${f.piece} on ${f.square} is snared.`;
+    case 'poisoned-pawn': return f.fled === 0 ? `Another guarded pawn grabbed — the ${f.piece} on ${f.square} is lost.` : `Another poisoned pawn — the ${f.piece} on ${f.square} is snared.`;
     case 'capture-toward-centre': return `The recapture again — ${f.better} opens the ${f.file}-file.`;
     case 'botched-conversion': return `Rushing the win again — ${f.better} was calmer.`;
     case 'calculation-depth': return `Stopped calculating early again — their ${f.punish} was waiting deeper.`;

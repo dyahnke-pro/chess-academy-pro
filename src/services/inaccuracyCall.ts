@@ -481,6 +481,10 @@ export function callInaccuracyDetailed(args: {
   /** Their ACTUAL reply, SAN, or null when not played yet — so a punishment
    *  they did not play is "and they missed it", never a loss that happened. */
   replySan: string | null;
+  /** Their actual reply is one of the engine's own replies within a pawn of
+   *  the best — they did not miss the punishment, they took another road to
+   *  it. Null/absent when unknown (then a different reply is "missed"). */
+  replyKeptWin?: boolean | null;
   /** The move that produced `fenBefore` — see `PriorMove`. REQUIRED. */
   priorMove: PriorMove;
 }): InaccuracyVerdict {
@@ -725,8 +729,14 @@ export function callInaccuracyDetailed(args: {
   // did. The grade of a move is "imprecise"; the cost is advantage, not
   // material ("gave away" read as a piece handed over).
   const grade = quality === 'blunder' ? 'a blunder' : quality === 'mistake' ? 'a mistake' : cost >= MISTAKE_CP ? 'imprecise' : 'a little imprecise';
+  // "AND THEY MISSED IT" ONLY WHEN THEIR REPLY DID NOT KEEP THE WIN (walk
+  // oct3a, 28.h5: "it let them win a piece for a pawn, and they missed it" —
+  // they played …Rxc3, a different move that wins as well). The caller reads
+  // that off the engine's own replies to the move (`replyKeptWin`).
+  const missed = !!punishment?.first && args.replySan !== null
+    && bare(args.replySan) !== bare(punishment.first) && args.replyKeptWin !== true;
   const head = punishment
-    ? `${args.playedSan} was ${grade} — it let them ${punishment.why}${punishment.first && args.replySan !== null && bare(args.replySan) !== bare(punishment.first) ? ', and they missed it' : ''}.`
+    ? `${args.playedSan} was ${grade} — it let them ${punishment.why}${missed ? ', and they missed it' : ''}.`
     : (args.missedMate ?? null) !== null
       // A LOST MATE is the cost when nothing was taken (Damiano walk, 32.Rxc7).
       ? `${args.playedSan} was ${grade} — it let a forced mate slip.`
@@ -836,6 +846,14 @@ export function punishmentOf(
   // the cost clause above exists to name, and when it can't, the grade stands
   // alone.
   if (first && !/x|[+#]$/.test(first)) return null;
+  // …and TAKING BACK on the square the move captured on is the other half of a
+  // trade, not a way in (walk oct3a, 8…Bxc3+: "it let them in with bxc3" —
+  // the recapture was forced; the cost was the knight left on d4).
+  try {
+    const played = new Chess(fenBefore).move(playedSan);
+    const u = replyLineUci[0];
+    if (played.captured && u && u.slice(2, 4) === played.to) return null;
+  } catch { /* unreadable — the checks below still apply */ }
   // …and a capture is an entry only when THEIR LINE WINS something: "it let
   // them in with Bxf3" (Alekhine re-walk ply 49) named a bishop trade that
   // nets nothing over the line. Counted over the whole line, not the first

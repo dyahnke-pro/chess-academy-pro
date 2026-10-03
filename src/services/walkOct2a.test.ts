@@ -90,3 +90,80 @@ describe('Learn walk oct2a F7', () => {
     expect(r).toMatch(/ahead in development: two pieces out and castled, against one piece out/);
   });
 });
+
+import { replyKeptWinOf } from './backwardLook';
+import { callInaccuracyDetailed } from './inaccuracyCall';
+
+describe('Learn walk oct3a #18', () => {
+  const fenBefore = 'k1r5/pp3pp1/q1r1p1p1/b2p4/3P1B1P/Q1P3P1/PP1R1P2/K6R w - - 9 29';
+  const fenAfter = 'k1r5/pp3pp1/q1r1p1p1/b2p3P/3P1B2/Q1P3P1/PP1R1P2/K6R b - - 0 29';
+  // The engine's replies to 28.h5 (depth 18): …g5 +2.92, …Rxc3 +2.33.
+  const lines = [{ moves: ['g6g5'], evaluation: 292 }, { moves: ['c6c3'], evaluation: 233 }, { moves: ['g6h5'], evaluation: 143 }];
+  it('…Rxc3 is another road to the win, not a miss', () => {
+    expect(replyKeptWinOf(fenAfter, 'Rxc3', lines)).toBe(true);
+    expect(replyKeptWinOf(fenAfter, 'gxh5', lines)).toBe(false);
+    const v = callInaccuracyDetailed({
+      fenBefore, playedSan: 'h5', bestSan: 'Kb1', cpLoss: 290, evalBeforeMoverCp: 0, evalAfterMoverCp: -290,
+      side: 'student', moverColor: 'white', replyLineUci: ['g6g5', 'f4e5', 'f7f6', 'e5f6'], replySan: 'Rxc3',
+      replyKeptWin: true, priorMove: null,
+    } as unknown as Parameters<typeof callInaccuracyDetailed>[0]);
+    expect(JSON.stringify(v)).not.toMatch(/missed it/);
+  });
+});
+
+import { characterOf } from './positionCharacter';
+
+describe('Learn walk oct3a #33', () => {
+  it('after 9.bxc3 with …exd4 to come, Black is not "down material"', () => {
+    const fen = 'r1bqk2r/pppp1pp1/5n1p/4p3/3NP2B/2PP4/P1P1BPPP/R2QK2R b KQkq - 0 9';
+    expect(characterOf({ fen, studentColor: 'black', tacticLive: false, bestGapCp: 20 })).not.toBe('defence');
+  });
+});
+
+import { backwardLook } from './backwardLook';
+
+describe('Learn walk oct3a #40', () => {
+  it('a coach move that drops +5.75 to +4.25 is not "a mistake" — backwardLook passes the eval through', () => {
+    const fenBefore = 'r2qk2r/p2b1p1n/7p/1p1QP1p1/2PP4/3P2B1/P3BPPP/1R2K2R w Kkq - 0 18';
+    const after = new Chess(fenBefore); after.move('c5');
+    const look = backwardLook({ priorMove: null, replySan: null, fenBefore, fenAfter: after.fen(),
+      playedSan: 'c5', bestSan: 'e6', bestPvUci: ['e5e6', 'd7e6', 'd5b5'], cpLoss: 150,
+      moverEvalAfterCp: 425, studentColor: 'white', side: 'coach', dictated: true });
+    expect(look?.line ?? '').not.toMatch(/is a mistake/);
+  });
+});
+
+import { principleLine } from './moveFundamentals';
+
+describe('Learn walk oct3a #47', () => {
+  it('a queen on a half-open file is never told "a rook needs an open file"', () => {
+    const fen = '3qk2r/p1P2p1n/1r2b2p/1pQ1P1p1/3P4/3P2B1/P3BPPP/1R2K2R b Kk - 0 21';
+    const s = JSON.stringify(principleLine(fen, 'Qc8', 'black', new Set(), 0) ?? '');
+    expect(s).not.toMatch(/a rook needs/);
+  });
+});
+
+import { renderFundamentalVerdict } from './principleVoice';
+
+describe('Learn walk oct3a #57', () => {
+  it('a grabber taken after a trade is never "captured straight away / on the spot"', () => {
+    const attr = { id: 'poisoned-pawn', weight: 4, tag: 'poisoned-pawn', coOccurrence: [],
+      evidence: { squares: ['c7'], moves: [], pvMoves: [], counterfactualClean: true },
+      facts: { piece: 'knight', square: 'c7', fled: 0, immediate: 0 } };
+    for (let ply = 0; ply < 6; ply++) {
+      const s = renderFundamentalVerdict([attr] as unknown as Parameters<typeof renderFundamentalVerdict>[0], { ply, seen: new Set(), replySan: null } as unknown as Parameters<typeof renderFundamentalVerdict>[1]);
+      expect(s).not.toMatch(/straight away|on the spot|the moment it lands/);
+    }
+  });
+});
+
+describe('Learn walk oct3a #86', () => {
+  it('a pawn the engine does not take is not "won" by the knight', () => {
+    const fenBefore = '2r1k3/p2p1ppr/1q3n1p/5N2/1n2p3/6P1/3Q1P1P/R4RK1 b - - 1 25';
+    const after = new Chess(fenBefore); after.move('g6');
+    const look = backwardLook({ priorMove: null, replySan: 'Nd6+', fenBefore, fenAfter: after.fen(),
+      playedSan: 'g6', bestSan: 'Nd3', bestPvUci: [], replyPvUci: ['f5d6', 'e8d8', 'd6c8', 'd8c8'],
+      cpLoss: 120, moverEvalAfterCp: 190, studentColor: 'black' });
+    expect(look?.line ?? '').not.toMatch(/knight on f5 wins it/);
+  });
+});

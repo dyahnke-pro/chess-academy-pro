@@ -47,6 +47,28 @@ export function settledBalance(fen: string, lastMove: LastMove | null): number {
   return mover === 'w' ? raw + back : raw - back;
 }
 
+/**
+ * WHITE minus BLACK once the side to move cashes its BEST legal capture
+ * anywhere on the board (legal SEE, stand-pat). Needs no last move: a
+ * recapture still to come is just one of the captures the side to move has.
+ * Walk oct3a, 9.bxc3: "You are down material now" with …exd4 regaining the
+ * knight on d4 — not the square the last move captured on, so the last-move
+ * settle could not see it.
+ */
+export function quietBalance(fen: string): number {
+  const raw = materialBalance(fen);
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return raw; }
+  const mover = chess.turn();
+  let best = 0;
+  for (const row of chess.board()) for (const p of row) {
+    if (!p || p.color === mover || p.type === 'k') continue;
+    const g = legalSeeGainFor(fen, p.square, mover);
+    if (g > best) best = g;
+  }
+  return mover === 'w' ? raw + best : raw - best;
+}
+
 /** The settled lead for `color` — positive when `color` is ahead. */
 export function settledLeadFor(fen: string, color: Color, lastMove: LastMove | null): number {
   const b = settledBalance(fen, lastMove);

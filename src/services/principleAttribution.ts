@@ -417,16 +417,22 @@ function pvWinsMaterial(chess: Chess, pv: readonly string[] | undefined, mover: 
  *  when the line never takes it. 0 = taken on its landing square (the pawn was
  *  defended); ≥1 = hunted down (trapped). The voice says which — "gets trapped"
  *  of a bishop taken on the spot was false (1200 Sicilian walk, 17.Bxd4). */
-function grabberCaptured(after: Chess, startSq: Square, grabber: Color, pv: readonly string[] | undefined): number | null {
+function grabberCaptured(after: Chess, startSq: Square, grabber: Color, pv: readonly string[] | undefined): { fled: number; immediate: boolean } | null {
   if (!pv || pv.length === 0) return null;
   const c = new Chess(after.fen());
   let sq: string = startSq;
   let fled = 0;
+  let theirMoves = 0;
   for (const raw of pv.slice(0, 6)) {
     let m: Move;
     try { m = c.move(raw.replace(/[?!]+$/, '')); } catch { return null; }
     if (m.color === grabber) { if (m.from === sq) { sq = m.to; fled++; } } // the grabber fled
-    else if (m.to === sq) return fled;                                      // the opponent took it
+    else {
+      theirMoves++;
+      // IMMEDIATE only when their FIRST move takes it (walk oct3a, 32…Nxc7:
+      // "captured straight away" — Rxc8 Bxc8 came first, the knight fell after).
+      if (m.to === sq) return { fled, immediate: theirMoves === 1 };
+    }
   }
   return null;
 }
@@ -1128,10 +1134,11 @@ const DETECTORS: Detector[] = [
     const { last, opp } = c;
     if (last.captured !== 'p' || last.piece === 'p' || last.piece === 'k') return null;
     if (!pvWinsMaterial(c.after, c.pvP, opp)) return null;
-    const fled = grabberCaptured(c.after, last.to, last.color, c.pvP);
-    if (fled === null) return null;
+    const taken = grabberCaptured(c.after, last.to, last.color, c.pvP);
+    if (taken === null) return null;
+    const { fled, immediate } = taken;
     if (c.pvB && pvWinsMaterial(c.afterBest, c.pvB, opp)) return null;
-    return att('poisoned-pawn', 4, { squares: [last.to], moves: [], pvMoves: (c.pvP ?? []).slice(0, 4) }, { piece: PNAME[last.piece], square: last.to, fled });
+    return att('poisoned-pawn', 4, { squares: [last.to], moves: [], pvMoves: (c.pvP ?? []).slice(0, 4) }, { piece: PNAME[last.piece], square: last.to, fled, immediate: immediate ? 1 : 0 });
   },
   // 32. Recaptured the wrong way (eval-gated, David 2026-09-06: "capturing with
   // the B or G pawn was best because it opens a lane for the rook"). PATTERN: a

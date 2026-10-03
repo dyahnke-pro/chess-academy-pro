@@ -15,7 +15,7 @@
 // A switch is announced only once the new character has HELD for two reads:
 // one ply of a tactic flickering in and out of a line is not the position
 // changing, and a coach that announces every flicker is noise.
-import { materialBalance } from './pieceValues';
+import { quietBalance } from './material';
 
 export type Character = 'tactical' | 'positional' | 'conversion' | 'defence';
 
@@ -57,7 +57,9 @@ export function provenTacticLive(immediate: ReadonlyArray<{ wins?: 'live' | 'thr
 }
 
 export function characterOf(i: CharacterInputs): Character {
-  const bal = materialBalance(i.fen) * (i.studentColor === 'white' ? 1 : -1);
+  // QUIET, never raw (walk oct3a): a board read mid-exchange is not a
+  // conversion or a defence — the side to move cashes its best capture first.
+  const bal = quietBalance(i.fen) * (i.studentColor === 'white' ? 1 : -1);
   // A live tactic outranks the material count: being up a rook with your
   // queen hanging is a tactical position before it is a conversion.
   if (i.tacticLive || (i.bestGapCp !== null && i.bestGapCp >= SHARP_GAP_CP)) return 'tactical';

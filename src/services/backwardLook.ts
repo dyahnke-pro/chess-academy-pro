@@ -27,6 +27,7 @@
 //
 // G0 throughout: every branch is arithmetic or chess.js geometry over an engine
 // line. Nothing here asks a model anything.
+import { Chess } from 'chess.js';
 import { findConcession, findStudentDrawback, whatItAllowed } from './concessionBeat';
 import { callInaccuracy, callInaccuracyDetailed, type InaccuracyDecline, type PriorMove } from './inaccuracyCall';
 export { priorMoveLeadingTo } from './inaccuracyCall';
@@ -114,6 +115,8 @@ export function backwardLook(args: {
    *  `null` when not yet known: a piece they did not take is "they missed it",
    *  never "just takes it" (walk 900, 17…Bg1). */
   replySan: string | null;
+  /** Their reply kept the punishment's value (see `callInaccuracyDetailed`). */
+  replyKeptWin?: boolean | null;
   /** Centipawns the move cost, from the MOVER's own perspective. */
   cpLoss: number;
   /** The MOVER's colour — the student's on the default path, the coach's when
@@ -188,11 +191,17 @@ export function backwardLook(args: {
         cpLoss: args.cpLoss,
         missedMate: args.missedMate ?? null,
         allowedMate: args.allowedMate ?? null,
+        // ONE GRADE ON EVERY SURFACE: the coach's move is graded on the same
+        // win-chance bands as the student's (walk oct3a, 18.c5: "Their c5 is a
+        // mistake" for +5.1 → +4.3 — the eval was dropped on this path, so the
+        // raw centipawn ladder graded a decided position).
+        moverEvalAfterCp: args.moverEvalAfterCp ?? null,
         side: 'coach',
         ...(args.dictated ? { dictated: true } : {}),
         moverColor: mover,
         replyLineUci: args.replyPvUci ?? [],
         replySan: args.replySan ?? null,
+        replyKeptWin: args.replyKeptWin ?? null,
         priorMove: args.priorMove,
       });
       // THE REASON TRAVELS WITH THE REFUSAL. The caller logs why the coach said
@@ -251,7 +260,13 @@ export function backwardLook(args: {
       // hanging" — dxe5 dxe5 Qxd8 Rxd8 Nxe5 loses to …Nxe4, which the engine
       // sees and a swap count cannot. A material loss the engine does not
       // charge is not a loss.
-      if (f && args.cpLoss >= INACCURACY_CP) {
+      // A PIECE LEFT LOOSE IS LOST ONLY IF THEY TAKE IT (walk oct3a, 25…g6:
+      // "once it left, the knight on f5 wins it" — Nxh6 loses to …e3; the
+      // engine's reply line never touches h6). Same rule as the square lane
+      // below: the static swap must be a capture the engine's line makes.
+      const theirTakes = (args.replyPvUci ?? []).filter((_, i) => i % 2 === 0).slice(0, 3).map((u) => u.slice(2, 4));
+      const engineTakesIt = !f || f.kind !== 'abandoned-defender' || theirTakes.includes(f.squares[0] ?? '');
+      if (f && engineTakesIt && args.cpLoss >= INACCURACY_CP) {
         const reply = args.replySan ?? null;
         const tookIt = reply !== null && reply.replace(/[+#]+$/, '').includes(`x${f.squares[0]}`);
         attempt = f.missed && reply !== null && !tookIt ? f.missed : f.line;
@@ -324,6 +339,7 @@ export function backwardLook(args: {
             moverColor: args.studentColor,
             replyLineUci: args.replyPvUci ?? [],
             replySan: args.replySan ?? null,
+            replyKeptWin: args.replyKeptWin ?? null,
             priorMove: args.priorMove,
           });
           instead = call?.said ?? null;
@@ -367,6 +383,7 @@ export function backwardLook(args: {
         moverColor: args.studentColor,
         replyLineUci: args.replyPvUci ?? [],
         replySan: args.replySan ?? null,
+        replyKeptWin: args.replyKeptWin ?? null,
         priorMove: args.priorMove,
       });
       if (call) return { line: call.said, square: call.square, kind: 'mistake', ...(call.pattern ? { pattern: call.pattern } : {}), ...(call.lostSquare ? { lostSquare: call.lostSquare } : {}), ...(call.namesBetter ? { namesBetter: call.namesBetter } : {}), ...(call.line ? { punishLine: call.line } : {}) };
@@ -424,3 +441,23 @@ export function lookConcession(fenBefore: string, playedSan: string, cpLoss: num
   return cpLoss >= INACCURACY_CP ? describeConcessions(fenBefore, playedSan, true) : null;
 }
 
+
+/** Did their actual reply keep the punishment's value? True when the reply is
+ *  one of the engine's own replies at `fenAfter` within a pawn of its best —
+ *  another road to the same win, not a miss (walk oct3a, 28.h5 …Rxc3). Null
+ *  when the reply or the engine lines are unknown. */
+export function replyKeptWinOf(
+  fenAfter: string, replySan: string | null,
+  lines: ReadonlyArray<{ moves: readonly string[]; evaluation: number }> | undefined,
+): boolean | null {
+  if (!replySan || !lines || lines.length === 0) return null;
+  let uci: string;
+  try {
+    const m = new Chess(fenAfter).move(replySan);
+    uci = `${m.from}${m.to}${m.promotion ?? ''}`;
+  } catch { return null; }
+  const best = lines[0].evaluation;
+  const hit = lines.find((l) => l.moves[0] === uci);
+  if (!hit) return null;
+  return Math.abs(hit.evaluation - best) <= 100;
+}

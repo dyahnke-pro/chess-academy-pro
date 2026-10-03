@@ -622,6 +622,9 @@ export function computeMoveFundamentals(
         selfContained: `brings the ${name} to the ${openness} ${fileName}`,
         imperative: mv.piece === 'r' ? `take the ${openness} ${fileName}, where the rook belongs` : `take the ${openness} ${fileName} with the queen`,
         squares: [mv.to],
+        // The rule's reason is about a ROOK (walk oct3a: "Your Qc8 takes the
+        // half-open c-file — a rook needs an open file"); a queen carries none.
+        ...(mv.piece === 'q' ? { reason: null } : {}),
       });
     }
   }

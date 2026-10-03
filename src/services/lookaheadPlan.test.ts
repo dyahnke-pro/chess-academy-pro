@@ -315,6 +315,10 @@ describe('the sentence is ordered by the position, not by a fixed ladder', () =>
     expect(say({ nearEnemyKing: 4, materialSwing: 1 })).toMatch(/^You want to swing pieces toward their king/);
   });
 
+  it('leads with the pawn over a two-piece gesture at the king (walk oct3a, Ne5)', () => {
+    expect(say({ nearEnemyKing: 2, materialSwing: 1 })).toMatch(/^You want to win a pawn/);
+  });
+
   it('leads with a rook over a two-piece gesture at the king', () => {
     expect(say({ nearEnemyKing: 2, materialSwing: 5 })).toMatch(/^You want to win a rook/);
   });
@@ -1005,5 +1009,14 @@ describe('a recapture is the other half of a trade, never a win (David 2026-10-0
   });
   it('the board alone cannot tell — which is why the prior move is REQUIRED', () => {
     expect(planFromUci(FEN, PV, 'white', null)?.mine.text ?? '').toMatch(/win a pawn/);
+  });
+});
+
+describe('walk oct3a — a trade near the king is not a king attack', () => {
+  it('Rc1 b5 Rd1 Bc7 Qxa6 Rxa6 Bxc7 Rxc7: the recaptured Qxa6 / Bxc7 do not count as pieces arriving', () => {
+    const fen = 'k1r5/pp3pp1/q1r1p1p1/b2p4/3P1B1P/Q1P3P1/PP1R1P2/K6R w - - 9 29';
+    const plan = buildLookaheadPlan(line(plies(fen, ['Rc1', 'b5', 'Rdd1', 'Bc7', 'Qxa6', 'Rxa6', 'Bxc7', 'Rxc7'])), 'white', undefined, null);
+    expect(plan?.mine.nearEnemyKing ?? 0).toBeLessThan(2);
+    expect(plan?.mine.text ?? '').not.toMatch(/swing pieces toward/);
   });
 });

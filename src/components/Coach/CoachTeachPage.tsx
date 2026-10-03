@@ -194,7 +194,7 @@ import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead
 import { scaleGap, packageForRegister } from '../../services/hintRegister';
 import { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcState, planFromUci, tacticWord, seatedTacticLine } from '../../services/lookaheadPlan';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
-import { backwardLook, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo } from '../../services/backwardLook';
+import { backwardLook, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf } from '../../services/backwardLook';
 import { learnFundamentalVerdict } from '../../services/learnFundamentalNarration';
 import type { FundamentalId } from '../../services/principleAttribution';
 import { FUNDAMENTAL_LABEL } from '../../services/fundamentalsCatalog';
@@ -10185,6 +10185,7 @@ export function CoachTeachPage(): JSX.Element {
                       bestPvUci: preStudentRead.topLines?.[0]?.moves ?? [],
                       replyPvUci: mid.topLines?.[0]?.moves ?? [],
                       replySan: reply ?? null,
+                      replyKeptWin: replyKeptWinOf(move.fen, reply ?? null, mid.topLines),
                       cpLoss,
                       // STILL WINNING READS OFF THE POSITION AFTER THE MOVE,
                       // whatever the read BEFORE it was (hand walk 1690,

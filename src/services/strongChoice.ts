@@ -25,10 +25,17 @@ export function strongChoice(fenBefore: string, playedSan: string): { text: stri
   // "the choice is Bb5" after a sound Nc3 read as a correction (walk
   // 2026-09-30, game 2).
   const mine = entry.moves.find((m) => bare(m.san) === bare(playedSan));
+  // `best` is the best-SCORING frequent move, not always the most played —
+  // naming it "the most common" beside a move with more games was false
+  // (walk oct3a: exd5 13 of 24 vs "the most common is Bb3, 9 of 24").
+  const topGames = Math.max(...entry.moves.map((m) => m.games));
+  const bestLabel = best.games >= topGames ? 'the most common' : 'the best-scoring';
   const text = same
     ? `That is a strong player's choice here — ${stat}.`
     : mine && mine.games >= Math.max(HIS_PLAN_MIN_GAMES, best.games * 0.1)
-      ? `${playedSan} is a strong player's move here too — played in ${mine.games} of ${entry.total} games; the most common is ${best.san}, ${stat}.`
+      ? mine.games >= topGames
+        ? `${playedSan} is the most common move here — played in ${mine.games} of ${entry.total} games; the best-scoring is ${best.san}, ${stat}.`
+        : `${playedSan} is a strong player's move here too — played in ${mine.games} of ${entry.total} games; ${bestLabel} is ${best.san}, ${stat}.`
       : `A strong player's choice here is ${best.san} — ${stat}.`;
   return { text, san: best.san, same };
 }
