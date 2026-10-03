@@ -9,7 +9,7 @@ import { resolveRepRoute } from '../../services/repRouting';
 import { getMisconceptionTag } from '../../data/misconceptionTags';
 import { REP_PUZZLE_CAP } from '../../services/repCompletion';
 import { logAppAudit } from '../../services/appAuditor';
-import { buildSkillTimelines, parseGameDate, relativeDay, TIMELINE_WEEKS, type SkillTimeline } from '../../services/skillTimeline';
+import { buildSkillTimelines, currentStrength, parseGameDate, relativeDay, TIMELINE_WEEKS, type SkillTimeline } from '../../services/skillTimeline';
 
 /**
  * The HEAT MAP on Weaknesses → Overview (David 2026-10-01, redrawn
@@ -134,11 +134,21 @@ export function HeatMapPanel(): JSX.Element | null {
     return () => { cancelled = true; };
   }, [now]);
 
+  // WEAKEST → STRONGEST, left to right (David 2026-10-03), by how the skill
+  // reads over recent weeks. Never-asked skills go last: absent is not strong.
   const ordered = useMemo(() => {
     if (!tiles) return [];
-    const rank = { red: 0, green: 1, grey: 2 } as const;
-    return [...tiles].sort((a, b) => rank[a.state] - rank[b.state] || b.openCount - a.openCount || b.progress - a.progress);
-  }, [tiles]);
+    const strength = new Map(tiles.map((t) => {
+      const line = timelines.get(t.tag);
+      return [t.tag, line ? currentStrength(line) : null] as const;
+    }));
+    return [...tiles].sort((a, b) => {
+      const sa = strength.get(a.tag) ?? null;
+      const sb = strength.get(b.tag) ?? null;
+      if (sa === null || sb === null) return sa === null && sb === null ? 0 : sa === null ? 1 : -1;
+      return sa - sb || b.openCount - a.openCount;
+    });
+  }, [tiles, timelines]);
 
   // Paint: one pixel per (skill, week) on a small canvas, newest week on top,
   // each column scaled up with smoothing so the weeks fade into each other.
@@ -267,6 +277,10 @@ export function HeatMapPanel(): JSX.Element | null {
             </span>
           ))}
         </div>
+      </div>
+      <div className="mt-1 flex justify-between pl-[34px] text-[10px] uppercase tracking-wide text-theme-text-muted" aria-hidden="true">
+        <span>← weakest</span>
+        <span>strongest, then not tested →</span>
       </div>
       <div className="mt-1 flex items-center justify-center gap-1.5 text-[11px] text-theme-text-muted">
         worse

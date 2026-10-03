@@ -114,6 +114,25 @@ export function buildSkillTimelines(
   return tags.map((t) => byTag.get(t) as SkillTimeline);
 }
 
+/**
+ * How strong a skill reads NOW, 0 (weakest) … 1 (strongest), or null when it
+ * never came up. Recent weeks weigh more (each older week counts 0.85× the one
+ * after it), and weeks are weighted by how many times the skill was asked, so
+ * one lucky week cannot outvote a month of misses.
+ */
+export function currentStrength(line: SkillTimeline): number | null {
+  let w = 0;
+  let v = 0;
+  const last = line.weeks.length - 1;
+  line.weeks.forEach((c, i) => {
+    if (c.score === null) return;
+    const g = Math.pow(0.85, last - i) * (c.held + c.missed);
+    w += g;
+    v += g * c.score;
+  });
+  return w > 0 ? v / w : null;
+}
+
 /** "today" / "yesterday" / "5 days ago" / "3 weeks ago" / "Mar 4". */
 export function relativeDay(t: number, now: number): string {
   const days = Math.floor((now - t) / (24 * 60 * 60 * 1000));
