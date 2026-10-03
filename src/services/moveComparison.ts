@@ -26,6 +26,7 @@
 
 import { Chess } from 'chess.js';
 import type { Square, Color, PieceSymbol } from 'chess.js';
+import { settledNetForLine } from './exchangeLedger';
 
 /** One engine evaluation of a position — white-POV centipawns (+ = White
  *  better). A mate is folded into `cp` by the evaluate implementation. `pv` is
@@ -190,18 +191,14 @@ export async function compareTwoMoves(
   // cxd4 gives that back" read Bxf3's knight against cxd4's pawn one ply in,
   // with gxf3 taking the bishop straight back). Each move is replayed along its
   // own engine line, the same depth for both.
-  const settled = (fen: string, pv: readonly string[] | undefined): number => {
-    const c = new Chess(fen);
-    for (const uci of (pv ?? []).slice(0, 8)) {
-      try { if (!c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.length > 4 ? uci[4] : undefined })) break; } catch { break; }
-    }
-    return materialWhiteMinusBlack(c.fen());
-  };
-  // RELATIVE, never "ahead" (review walk 2026-10-01, ply 77: "Rxd4 stays 2
-  // pawns of material ahead" with White six points DOWN). The count compares
-  // the two lines; it says nothing about who leads the game.
+  // Each line from the position BEFORE the move — the move itself, then its
+  // engine line — read by the one ledger at the point its trades finish.
   const worseEval = better === 'A' ? eB : eA;
-  const matDiffPts = sign * settled(betterFen, betterEval.pv) - sign * settled(worseFen, worseEval.pv);
+  const lineOf = (san: string, after: string, pv: readonly string[] | undefined): string[] =>
+    [san, ...pvToSan(after, [...(pv ?? [])], Number.POSITIVE_INFINITY)];
+  const netBetter = settledNetForLine(fen, lineOf(base.sanBetter, betterFen, betterEval.pv), mover);
+  const netWorse = settledNetForLine(fen, lineOf(base.sanWorse, worseFen, worseEval.pv), mover);
+  const matDiffPts = netBetter !== null && netWorse !== null ? netBetter - netWorse : 0;
   if (matDiffPts >= 1 && matDiffPts * 100 >= explainFraction * gapCp) {
     const pts = matDiffPts >= 9 ? 'the queen' : matDiffPts >= 5 ? 'a rook' : matDiffPts >= 3 ? 'a piece' : `${matDiffPts} pawn${matDiffPts > 1 ? 's' : ''}`;
     return {

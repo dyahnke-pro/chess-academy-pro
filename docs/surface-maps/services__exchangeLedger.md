@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**400 lines · 11 exports · 19 importers · 4 tests · 0 audits**
+**423 lines · 12 exports · 20 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -23,6 +23,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/lineCalc.ts`
 - `src/services/lineProof.test.ts`
 - `src/services/lookaheadPlan.ts`
+- `src/services/moveComparison.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/pieceOptions.ts`
 - `src/services/playCommentary.ts`
@@ -63,6 +64,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts:29`
 - `src/services/exchangeLedger.test.ts:34`
 - `src/services/exchangeLedger.test.ts:238`
+
+### `settledNetForLine` (function) — 2 call sites
+- `src/services/moveComparison.ts:199`
+- `src/services/moveComparison.ts:200`
 
 ### `settledExchange` (function) — 3 call sites
 - `src/services/playCommentary.ts:971`

@@ -213,6 +213,29 @@ function finishedAt(sans: readonly string[], k: number, ledger: ExchangeLedger):
   return !(last !== undefined && /x/.test(next) && sq(next) === last);
 }
 
+/** THE MATERIAL A LINE SETTLES ON, from `seatWB`'s side, in pawns: the ledger
+ *  at the LAST point the line's trades are finished. Two lines compared by a
+ *  raw count at a fixed ply read a trade as a win whenever that ply landed on
+ *  the capture and the take-back came one move later (moveComparison counted
+ *  eight plies in and said "it comes out N better on material" — review walk
+ *  oct3b). 0 for a line with no capture; null when the line never finishes
+ *  one, so no material may be claimed from it. */
+export function settledNetForLine(
+  fenBefore: string,
+  sans: readonly string[],
+  seatWB: 'w' | 'b',
+): number | null {
+  if (sans.length === 0) return 0;
+  const w = walkLedger(fenBefore, sans, seatWB);
+  if (!w) return null;
+  const line = sans.slice(0, w.length);
+  for (let k = line.length; k >= 1; k -= 1) {
+    const ledger = w.at(k);
+    if (ledger && finishedAt(line, k, ledger)) return ledger.netPawns;
+  }
+  return null;
+}
+
 /**
  * The exchange a capture STARTS, read off the engine's line: the ledger at the
  * first point the trade is finished (no profitable take-back on the last

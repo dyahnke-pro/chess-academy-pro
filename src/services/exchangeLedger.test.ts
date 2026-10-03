@@ -3,6 +3,7 @@
 // defect came from (David's Alapin, 2026-09-16).
 import { describe, it, expect } from 'vitest';
 import { computeExchangeLedger, describeExchange, exchangeNetForLine } from './exchangeLedger';
+import { betterMoveReason } from './inaccuracyCall';
 
 // After 15.Nc7+ — Black (the student) to move, forked king and rook.
 const PLY29 = 'r3kb1r/ppNNpppp/2n5/8/3P4/8/PP2nPPP/R3K2R b KQkq - 1 15';
@@ -257,8 +258,7 @@ describe('a standing deep threat is said once (review walk 2026-10-01)', () => {
 
 describe('a promoted piece was a pawn (walk oct3b, 15.dxc6)', () => {
   const fen = 'r3k2r/pq2bppp/1p3n2/2pPQ3/8/2P3P1/PP3P1P/RNB1R1K1 w kq c6 0 15';
-  it('… bxa8=Q Rxa8 wins a rook and a bishop, not "a rook and a piece and a pawn"', async () => {
-    const { betterMoveReason } = await import('./inaccuracyCall');
+  it('… bxa8=Q Rxa8 wins a rook and a bishop, not "a rook and a piece and a pawn"', () => {
     const line = ['d5c6', 'e8g8', 'c6b7', 'e7c5', 'e5c5', 'b6c5', 'b7a8q', 'f8a8'];
     expect(betterMoveReason(fen, 'd6', 'dxc6', line, 'white', null)).not.toMatch(/a rook and a piece and a pawn/);
     const l = computeExchangeLedger(fen, ['dxc6', 'O-O', 'cxb7', 'Bc5', 'Qxc5', 'bxc5', 'bxa8=Q', 'Rxa8'], 'w');

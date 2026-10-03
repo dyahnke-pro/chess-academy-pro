@@ -117,3 +117,30 @@ describe('compareTwoMoves — material where the lines settle', () => {
     expect(cmp!.delta?.text ?? '').not.toMatch(/better on material/);
   });
 });
+
+describe('material is read where each line\'s trades finish (review walk oct3b)', () => {
+  // Ka1/Rd1 vs Ke7/Rd8. Kb1's line shuffles the kings, then Rxd8 on its eighth
+  // move and …Kxd8 on its ninth: an even trade. A count eight plies in said
+  // "it comes out a rook better on material".
+  const fen = '3r4/4k3/8/8/8/8/8/K2R4 w - - 0 1';
+  const evaluate: Evaluate = async (f) => {
+    const afterKb1 = new Chess(fen); afterKb1.move('Kb1');
+    return f === afterKb1.fen()
+      ? { cp: 500, pv: ['e7e8', 'b1a1', 'e8e7', 'a1b1', 'e7e8', 'b1a1', 'e8e7', 'd1d8', 'e7d8'] }
+      : { cp: 0, pv: ['e7e8', 'a2a1', 'e8e7', 'a1a2'] };
+  };
+  it('an even trade past ply eight is not "a rook better"', async () => {
+    const r = await compareTwoMoves(fen, 'Kb1', 'Ka2', evaluate);
+    expect(r?.delta?.kind).not.toBe('material');
+  });
+  it('POSITIVE CONTROL: a rook won and kept is still said', async () => {
+    const won: Evaluate = async (f) => {
+      const afterKb1 = new Chess(fen); afterKb1.move('Kb1');
+      return f === afterKb1.fen()
+        ? { cp: 500, pv: ['e7f7', 'd1d8', 'f7e7'] }
+        : { cp: 0, pv: ['e7e8', 'a2a1', 'e8e7', 'a1a2'] };
+    };
+    const r = await compareTwoMoves(fen, 'Kb1', 'Ka2', won);
+    expect(r?.delta?.text).toMatch(/a rook better on material than Ka2/);
+  });
+});

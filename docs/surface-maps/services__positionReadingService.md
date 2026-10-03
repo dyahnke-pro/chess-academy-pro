@@ -168,7 +168,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/deliberation.ts:368`
 - `src/services/deliberation.ts:369`
 - `src/services/exchangeLedger.ts:122`
-- `src/services/exchangeLedger.ts:312`
+- `src/services/exchangeLedger.ts:335`
 - `src/services/falseAlarm.ts:62`
 - `src/services/groundedAnswer.ts:299`
 - `src/services/groundedAnswer.ts:510`
