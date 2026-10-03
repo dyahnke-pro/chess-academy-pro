@@ -20,6 +20,7 @@ import { db } from '../../db/schema';
 import { logAppAudit } from '../../services/appAuditor';
 import { teachingSourceForBoard, generalizedTeaching, spokenBeatText, tacticNoteForPuzzleThemes } from '../../services/danyaTeachingService';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
+import { explainPuzzleConcept } from '../../services/puzzleConceptExplanation';
 
 type Phase = 'loading' | 'solving' | 'summary';
 
@@ -288,7 +289,19 @@ export function TacticDrillPage(): JSX.Element {
       // of notes about those patterns — measured, 83.5% of the shipped puzzle
       // set now gets one. The note is geometry-free by construction, because
       // it is about a pattern and not about this board.
-      if (!note) {
+      //
+      // …but never beside the computed explanation. The theme note is about
+      // the PATTERN, written for some other board ("The rook captures with
+      // check…" under a Qd8+ puzzle — live walk 2026-10-03), and the board
+      // already teaches this one: PuzzleBoard shows the computed line and
+      // motif for THIS position. David: "Use computer narrations if they are
+      // better" — so the theme note only speaks where nothing was computed.
+      const computedHere = explainPuzzleConcept({
+        fen: puzzle.fen,
+        solutionUci: puzzle.moves.trim().split(/\s+/),
+        themes: puzzle.themes ?? [],
+      }) !== null;
+      if (!note && !computedHere) {
         const themed = tacticNoteForPuzzleThemes({
           themes: puzzle.themes ?? [],
           seenIds: noteIdsSeenRef.current,
@@ -413,6 +426,7 @@ export function TacticDrillPage(): JSX.Element {
           <PuzzleBoard
             key={currentPuzzle.id}
             puzzle={currentPuzzle}
+            focusThemes={openingFilter ? undefined : lichessThemes}
             onComplete={handlePuzzleComplete}
             surface="drill"
             streak={streak}

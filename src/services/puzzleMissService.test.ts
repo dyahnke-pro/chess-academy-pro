@@ -1,6 +1,29 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { db } from '../db/schema';
-import { recordPuzzleMiss, PUZZLE_MISS_SEVERITY_CAP } from './puzzleMissService';
+import { recordPuzzleMiss, PUZZLE_MISS_SEVERITY_CAP, puzzleMisconceptionTag, logPuzzleMisconception } from './puzzleMissService';
+
+describe('a failed puzzle reaches the misconception bucket at once', () => {
+  beforeEach(async () => { await db.delete(); await db.open(); });
+
+  it('maps through the existing joins: tactic motif → missed-tactic, defensive → missed threat', () => {
+    expect(puzzleMisconceptionTag(['crushing', 'fork', 'middlegame'])).toBe('missed-tactic');
+    expect(puzzleMisconceptionTag(['defensiveMove', 'endgame'])).toBe('missed-opponents-threat');
+    expect(puzzleMisconceptionTag(['endgame', 'rookEndgame', 'crushing'])).toBeNull(); // no tag describes it — skip
+  });
+
+  it('logs a display row, source puzzle, never double-counting the spine', async () => {
+    const fen = '7R/1p4r1/1kp1P3/1p4p1/1q3nBp/2Q2N1P/1P3PP1/6K1 b - - 4 33';
+    expect(await logPuzzleMisconception({ puzzleId: '0CCT1', themes: ['fork', 'middlegame'], fen, bestSan: 'Ne2+' })).toBe(true);
+    const rows = await db.misconceptionTags.toArray();
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toMatchObject({ tag: 'missed-tactic', source: 'puzzle', fen, bestSan: 'Ne2+', counted: false });
+  });
+
+  it('skips a puzzle with no mapping', async () => {
+    expect(await logPuzzleMisconception({ puzzleId: 'x', themes: ['endgame'], fen: '8/8/8/8/8/8/8/K6k w - - 0 1', bestSan: null })).toBe(false);
+    expect(await db.misconceptionTags.count()).toBe(0);
+  });
+});
 import { aggregatePuzzleMisses, PUZZLE_MISS_OPEN_MS, getUnifiedWeaknessProfile } from './weaknessSpine';
 
 describe('puzzle misses — weaker evidence for the weakness spine', () => {

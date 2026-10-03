@@ -104,7 +104,71 @@ export const LICHESS_THEME_LABELS: Record<string, string> = {
   enPassant: 'En Passant',
   castling: 'Castling',
   advancedPawn: 'Advanced Pawn',
+  attackingF2F7: 'Attack on f2/f7',
+  rookEndgame: 'Rook Endgame',
+  pawnEndgame: 'Pawn Endgame',
+  bishopEndgame: 'Bishop Endgame',
+  knightEndgame: 'Knight Endgame',
+  queenEndgame: 'Queen Endgame',
+  queenRookEndgame: 'Queen and Rook Endgame',
+  bodenMate: "Boden's Mate",
+  pillsburysMate: "Pillsbury's Mate",
+  operaMate: 'Opera Mate',
+  epauletteMate: 'Epaulette Mate',
+  dovetailMate: 'Dovetail Mate',
+  cornerMate: 'Corner Mate',
+  swallowstailMate: "Swallow's Tail Mate",
+  killBoxMate: 'Kill Box Mate',
+  morphysMate: "Morphy's Mate",
+  blindSwineMate: 'Blind Swine Mate',
+  triangleMate: 'Triangle Mate',
+  vukovicMate: 'Vuković Mate',
+  doubleBishopMate: 'Double Bishop Mate',
+  balestraMate: 'Balestra Mate',
 };
+
+/** Tags that say how a puzzle is graded or sized, or which phase it sits in —
+ *  never WHAT it teaches. They do not name a heading or a row label. */
+export const NON_MOTIF_THEMES: ReadonlySet<string> = new Set([
+  'advantage', 'crushing', 'equality', 'defensiveMove', 'mate',
+  'opening', 'middlegame', 'endgame',
+  'short', 'long', 'veryLong', 'oneMove',
+  'master', 'masterVsMaster', 'superGM',
+]);
+
+/** The human labels of a puzzle's MOTIF tags, in the puzzle's own order —
+ *  what a row shows instead of raw DB tags ("advantage · defensiveMove ·
+ *  hangingPiece" → "Hanging Piece"). Tags with no label are dropped rather
+ *  than shown raw. */
+export function motifThemeLabels(themes: readonly string[]): string[] {
+  const out: string[] = [];
+  for (const t of themes) {
+    if (NON_MOTIF_THEMES.has(t)) continue;
+    const label = LICHESS_THEME_LABELS[t];
+    if (label && !out.includes(label)) out.push(label);
+  }
+  return out;
+}
+
+/**
+ * The heading for a puzzle served by a THEMED drill: the drilled theme the
+ * puzzle actually carries, so a "Discovered Attacks" card is headed
+ * "Discovered Attack" even when the puzzle also holds a fork (live walk
+ * 2026-10-03: Discovered Attacks → FORK, Zugzwang → PROMOTION, Endgame
+ * Technique → PIN). The tactical priority picks among several matches; a
+ * specific tag (Rook Endgame) beats a phase tag (Endgame). Null when the
+ * puzzle carries none of the focus themes.
+ */
+export function focusThemeLabel(themes: readonly string[], focus: readonly string[]): string | null {
+  const matches = themes.filter((t) => focus.includes(t));
+  if (matches.length === 0) return null;
+  const tactical = getPrimaryThemeLabel(matches);
+  if (tactical) return tactical;
+  const specific = matches.find((t) => !NON_MOTIF_THEMES.has(t) && LICHESS_THEME_LABELS[t]);
+  if (specific) return LICHESS_THEME_LABELS[specific];
+  const any = matches.find((t) => LICHESS_THEME_LABELS[t]);
+  return any ? LICHESS_THEME_LABELS[any] : null;
+}
 
 /**
  * Get the best tactic type from a Lichess puzzle's theme array.

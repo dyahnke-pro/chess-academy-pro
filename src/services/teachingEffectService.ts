@@ -31,7 +31,9 @@ export async function reportTeachingEffects(trigger: 'play-finished' | 'review-o
     games.push({ id: g.id, at });
     timeById.set(g.id, at);
   }
-  const rows: EffectRow[] = tagRows.map((r) => ({
+  // A failed PUZZLE is not a slip in a game: counting it per game would read
+  // a run of missed drills as the lesson failing to hold in play.
+  const rows: EffectRow[] = tagRows.filter((r) => r.source !== 'puzzle').map((r) => ({
     kind: r.fundamentalId ?? r.tag,
     source: r.source === 'discussion-practice' || r.source === 'game-review' ? r.source : 'auto-analysis',
     at: (r.sourceGameId ? timeById.get(r.sourceGameId) : undefined) ?? r.createdAt,

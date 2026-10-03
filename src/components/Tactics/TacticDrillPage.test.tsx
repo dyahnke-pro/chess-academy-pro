@@ -8,16 +8,17 @@ import { TacticDrillPage } from './TacticDrillPage';
 import type { PuzzleOutcome } from '../Puzzles/PuzzleBoard';
 import { buildPuzzleRecord, resetFactoryCounter } from '../../test/factories';
 
-const { getPuzzle, teachingSource } = vi.hoisted(() => ({
+const { getPuzzle, teachingSource, themedNote } = vi.hoisted(() => ({
   getPuzzle: vi.fn(),
   teachingSource: vi.fn(),
+  themedNote: vi.fn(),
 }));
 
 // The board is not under test — a stub that lets each scenario grade the
 // puzzle the way a student would finish it.
 vi.mock('../Puzzles/PuzzleBoard', () => ({
-  PuzzleBoard: ({ onComplete }: { onComplete: (o: PuzzleOutcome) => void }) => (
-    <div data-testid="stub-board">
+  PuzzleBoard: ({ onComplete, focusThemes }: { onComplete: (o: PuzzleOutcome) => void; focusThemes?: readonly string[] }) => (
+    <div data-testid="stub-board" data-focus={(focusThemes ?? []).join(',')}>
       <button
         data-testid="stub-solve"
         onClick={() => onComplete({ correct: true, usedHint: false, hadRetry: false, showedSolution: false, cleanMoves: 0, solveTimeMs: 5000 })}
@@ -43,6 +44,7 @@ vi.mock('../../services/puzzleService', async (orig) => ({
 vi.mock('../../services/danyaTeachingService', async (orig) => ({
   ...(await orig<typeof import('../../services/danyaTeachingService')>()),
   teachingSourceForBoard: teachingSource,
+  tacticNoteForPuzzleThemes: (...a: unknown[]) => themedNote(...a),
 }));
 
 function renderPage(): void {
@@ -235,5 +237,67 @@ describe('the adaptive rating rises with solves', () => {
     fireEvent.click(screen.getByTestId('stub-solve'));
     await act(async () => { await vi.advanceTimersByTimeAsync(500); });
     expect(screen.getByText(/^[+-]\d+$/), 'no rating delta shown after a solve').toBeInTheDocument();
+  });
+});
+
+// Live walk 2026-10-03: a queen-fork puzzle was followed by "The knight jumps
+// in, forking king and rook, and the rook falls next" — a theme note written
+// for another board. David: "Use computer narrations if they are better".
+describe('the computed explanation wins over a theme note', () => {
+  beforeEach(() => {
+    resetFactoryCounter();
+    vi.useFakeTimers();
+    teachingSource.mockReturnValue(null);
+    themedNote.mockReturnValue({ text: 'The knight jumps in, forking king and rook, and the rook falls next.', id: 't1' });
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.clearAllMocks();
+  });
+
+  it('no theme note under a puzzle the board already explains', async () => {
+    // A real puzzle (0CCT1, Ne2+ Kf1 Nxc3) — the computer explains it.
+    getPuzzle.mockImplementation(async () => buildPuzzleRecord({
+      id: '0CCT1', fen: '7R/1p4r1/1kp1P3/1p4p1/1q3nBp/5N1P/1PQ2PP1/6K1 w - - 3 33',
+      moves: 'c2c3 f4e2 g1f1 e2c3', themes: ['crushing', 'fork', 'middlegame', 'short'],
+    }));
+    renderPage();
+    await act(async () => { await vi.advanceTimersByTimeAsync(50); });
+    fireEvent.click(screen.getByTestId('stub-fail'));
+    await act(async () => { await vi.advanceTimersByTimeAsync(100); });
+    expect(screen.queryByTestId('post-solve-note')).toBeNull();
+    expect(themedNote).not.toHaveBeenCalled();
+  });
+
+  it('the theme note still fills in where nothing was computed', async () => {
+    getPuzzle.mockImplementation(async () => buildPuzzleRecord({ id: 'bad', fen: 'not a fen', moves: 'e2e4 e7e5' }));
+    renderPage();
+    await act(async () => { await vi.advanceTimersByTimeAsync(50); });
+    fireEvent.click(screen.getByTestId('stub-fail'));
+    await act(async () => { await vi.advanceTimersByTimeAsync(100); });
+    expect(screen.getByTestId('post-solve-note').textContent).toContain('The knight jumps in');
+  });
+});
+
+describe('a themed drill tells the board which theme it drills', () => {
+  beforeEach(() => {
+    resetFactoryCounter();
+    vi.useFakeTimers();
+    teachingSource.mockReturnValue(null);
+    getPuzzle.mockImplementation(async () => buildPuzzleRecord({ id: 'p-1' }));
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.clearAllMocks();
+  });
+
+  it('the Discovered Attacks card passes its Lichess themes as the focus', async () => {
+    render(
+      <MemoryRouter initialEntries={[{ pathname: '/tactics/drill', state: { filterThemes: ['discoveredAttack'], filterLabel: 'Discovered Attacks' } }]}>
+        <TacticDrillPage />
+      </MemoryRouter>,
+    );
+    await act(async () => { await vi.advanceTimersByTimeAsync(50); });
+    expect(screen.getByTestId('stub-board').getAttribute('data-focus')).toBe('discoveredAttack');
   });
 });

@@ -6,8 +6,17 @@
  *
  * It links the computers that already exist (the map's "have the computers
  * linked up"):
- *   • dnaLineNarrator  → the BOARD-TRUE mechanics of the solution ("Nf6,
- *     landing a fork, winning the queen") — computed from chess.js, no LLM.
+ *   • the solution line read off chess.js, in plain coach speech: the
+ *     student's moves, the opponent's replies ("they have to play Kf1") and
+ *     what the line nets ("and you win the queen"). It used to ride
+ *     dnaLineNarrator, whose per-ply Learn/Review decorations ("the king
+ *     trains on the knight on e2 — pressure they have to answer", "landing a
+ *     discovered attack" on the OPPONENT's reply) garbled every puzzle
+ *     explanation (live walk 2026-10-03); a puzzle needs the line, not a
+ *     commentary on each ply.
+ *   • conceptEngine → the computed motif INSTANCE + invariant ("Knight on e2
+ *     forks queen on c3 and king on g1 — a fork hits two targets at once"),
+ *     said once, right after the move that lands it.
  *   • chess-concepts.json (via chessConceptService.getConcept) → the general
  *     IDEA behind the pattern ("A fork attacks two targets at once, so whatever
  *     your opponent saves, the other falls") — our distilled public-domain
@@ -18,7 +27,8 @@
  * arrow on the student's key move, and the concept name/id for sourcing.
  */
 import { Chess } from 'chess.js';
-import { narrateDnaLine, dnaLineClauses, type DnaLinePly } from './dnaLineNarrator';
+import type { DnaLinePly } from './dnaLineNarrator';
+import { andList, countWord } from '../utils/andList';
 import { getConcept } from './chessConceptService';
 import { conceptForLine, tacticInvariant, type ComputedConcept } from './conceptEngine';
 
@@ -68,7 +78,7 @@ export interface PuzzleConceptExplanation {
    *  null when the solution classified as nothing. */
   computedId: string | null;
   computedSource: ComputedConcept['source'] | null;
-  /** Board-true mechanics of the solution line (dnaLineNarrator). */
+  /** The solution line in plain coach speech, without the motif sentence. */
   line: string;
   /** One-sentence general idea behind the pattern (from the concept passage). */
   idea: string | null;
@@ -82,6 +92,11 @@ export interface PuzzleConceptExplanation {
   clauses: string[];
   /** Index in the solution of the ply `clauses[0]` describes. */
   clausePlyStart: number;
+  /** Index in `clauses` whose sentence already carries `idea` (the motif is
+   *  said right after the move that lands it); null when `idea` closes the
+   *  explanation instead. A surface reading the clauses one by one speaks
+   *  `idea` separately only when this clause was not read. */
+  ideaClause: number | null;
 }
 
 /** First sentence of a passage, trimmed — the crisp idea, not the whole essay. */
@@ -156,8 +171,120 @@ export function conceptIdeaForThemes(
   return null;
 }
 
+/** Material class a capture counts in — a knight for a bishop is a trade, so
+ *  the two minors net against each other. */
+type MaterialClass = 'queen' | 'rook' | 'minor' | 'pawn';
+const CLASS_OF: Record<string, MaterialClass | null> = { q: 'queen', r: 'rook', b: 'minor', n: 'minor', p: 'pawn', k: null };
+const CLASS_VALUE: Record<MaterialClass, number> = { queen: 9, rook: 5, minor: 3, pawn: 1 };
+const CLASS_ORDER: readonly MaterialClass[] = ['queen', 'rook', 'minor', 'pawn'];
+const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/** "the queen" / "a rook" / "two pawns" — what the student won. */
+function gainPhrase(cls: MaterialClass, n: number): string {
+  const many = (one: string, plural: string): string => (n === 1 ? one : `${countWord(n)} ${plural}`);
+  switch (cls) {
+    case 'queen': return many('the queen', 'queens');
+    case 'rook': return many('a rook', 'rooks');
+    case 'minor': return many('a piece', 'pieces');
+    case 'pawn': return many('a pawn', 'pawns');
+  }
+}
+
+/** "your queen" / "a rook" — what the student gave for it. */
+function lossPhrase(cls: MaterialClass, n: number): string {
+  return cls === 'queen' && n === 1 ? 'your queen' : gainPhrase(cls, n);
+}
+
+/** One played ply of the solution, read off the board it was played on. */
+interface ReadPly {
+  san: string;
+  student: boolean;
+  /** Piece letter captured (chess.js), if any. */
+  captured: string | null;
+  promotion: string | null;
+  to: string;
+  /** The mover was in check before playing it. */
+  inCheck: boolean;
+  /** It was the mover's only legal move. */
+  only: boolean;
+}
+
+function readPlies(plies: readonly DnaLinePly[], studentColor: 'w' | 'b'): ReadPly[] | null {
+  const out: ReadPly[] = [];
+  try {
+    for (const p of plies) {
+      const c = new Chess(p.fenBefore);
+      const inCheck = c.inCheck();
+      const only = c.moves().length === 1;
+      const mv = c.move(p.san);
+      if (!mv) return null;
+      out.push({
+        san: mv.san, student: mv.color === studentColor, captured: mv.captured ?? null,
+        promotion: mv.promotion ?? null, to: mv.to, inCheck, only,
+      });
+    }
+  } catch {
+    return null;
+  }
+  return out;
+}
+
+/** What the line nets the student, counted over the plies themselves:
+ *  "the queen", "a rook", "the queen for a rook". Null when it wins no
+ *  material (a mate, a positional line, or an even trade). */
+function materialResult(plies: readonly ReadPly[]): string | null {
+  const net: Record<MaterialClass, number> = { queen: 0, rook: 0, minor: 0, pawn: 0 };
+  for (const p of plies) {
+    const cls = p.captured ? CLASS_OF[p.captured] : null;
+    if (!cls) continue;
+    net[cls] += p.student ? 1 : -1;
+  }
+  const value = CLASS_ORDER.reduce((s, k) => s + net[k] * CLASS_VALUE[k], 0);
+  if (value <= 0) return null;
+  const gains = CLASS_ORDER.filter((k) => net[k] > 0).map((k) => gainPhrase(k, net[k]));
+  const losses = CLASS_ORDER.filter((k) => net[k] < 0).map((k) => lossPhrase(k, -net[k]));
+  if (gains.length === 0) return null;
+  return losses.length > 0 ? `${andList(gains)} for ${andList(losses)}` : andList(gains);
+}
+
+/** A sentence from a clause: capitalised, terminated — never capitalising a
+ *  pawn move ("exd5 takes the knight", not "Exd5"). */
+function asSentence(clause: string): string {
+  const t = clause.trim();
+  if (!t) return '';
+  const lead = /^[a-h][1-8x]/.test(t) ? t : t.charAt(0).toUpperCase() + t.slice(1);
+  return /[.!?]$/.test(lead) ? lead : `${lead}.`;
+}
+
+/** The student's move, plainly: what it takes or promotes to, and on the last
+ *  move what the line won. No per-ply commentary — the motif sentence carries
+ *  the WHY, once. */
+function studentClause(p: ReadPly, opts: { first: boolean; last: boolean; result: string | null }): string {
+  if (p.san.endsWith('#')) return opts.first ? `${p.san} is checkmate` : `and ${p.san} is checkmate`;
+  const lead = opts.first ? p.san : `then ${p.san}`;
+  if (opts.last && opts.result) return `${lead}, and you win ${opts.result}`;
+  if (p.promotion) return p.promotion === 'q' ? `${lead} — the pawn queens` : `${lead} — the pawn becomes a ${PIECE_NAME[p.promotion] ?? 'piece'}`;
+  if (p.captured) return `${lead} takes the ${PIECE_NAME[p.captured] ?? 'piece'}`;
+  return lead;
+}
+
+/** The opponent's reply, plainly — their move, never credited with a motif
+ *  (the line's tactic is the student's). */
+function opponentClause(p: ReadPly, prevStudentTo: string | null): string {
+  const they = p.only ? 'they have to' : 'they';
+  if (p.captured) {
+    if (!p.inCheck && prevStudentTo === p.to) return `${they} take back with ${p.san}`;
+    return `${they} take your ${PIECE_NAME[p.captured] ?? 'piece'} with ${p.san}`;
+  }
+  if (p.only) return `they have to play ${p.san}`;
+  if (p.inCheck) return `they answer the check with ${p.san}`;
+  return `they answer ${p.san}`;
+}
+
 /** Shared composer: given the student's key plies + themes + the key move's
- *  arrow, build the concept explanation (board mechanics + general idea). */
+ *  arrow, build the concept explanation — the line in plain coach speech
+ *  (the student's moves, the opponent's forced replies, what it wins) with
+ *  the computed motif sentence placed right after the move that lands it. */
 function compose(
   keyPlies: DnaLinePly[],
   themes: string[],
@@ -166,15 +293,13 @@ function compose(
   /** The student's colour — the line alternates movers, so the opponent's
    *  replies are spoken as theirs ("they answer Kh2"), never as the student's. */
   studentColor: 'w' | 'b',
+  /** Index in the computed concept's `line` of keyPlies[0] (the puzzle's
+   *  setup move sits before it). */
+  lineOffset: number,
 ): PuzzleConceptExplanation | null {
   if (keyPlies.length === 0) return null;
-  const line = narrateDnaLine(keyPlies, { studentColor });
-  const sentence = (c: string): string => {
-    const t = c.trim();
-    return t.charAt(0).toUpperCase() + t.slice(1) + (/[.!?]$/.test(t) ? '' : '.');
-  };
-  // One per ply, '' where a ply says nothing — kept, so index = ply.
-  const clauses = dnaLineClauses(keyPlies, { studentColor }).map((c) => (c.trim() ? sentence(c) : ''));
+  const read = readPlies(keyPlies, studentColor);
+  if (!read) return null;
 
   // Tag-mapped book passage (kept for sourcing + as the fallback idea).
   let conceptId: string | null = null;
@@ -199,18 +324,43 @@ function compose(
   const conceptName = computed?.id === 'mate_threat' ? 'Checkmate' : (computed?.name ?? tagName);
   const idea = computed ? computedIdea(computed, true) : passageIdea;
 
-  const parts: string[] = [];
-  // Capitalise prose, never a pawn move: "H5, then f4" (calc hand walk
-  // 2026-10-01) — a SAN lead stays as written.
-  const sanLead = /^[a-h][1-8x]/.test(line);
-  if (line) parts.push((sanLead ? line : line.charAt(0).toUpperCase() + line.slice(1)) + (/[.!?]$/.test(line) ? '' : '.'));
-  if (idea) parts.push(idea);
+  const result = read[read.length - 1]?.san.endsWith('#') ? null : materialResult(read);
+  const lastStudent = read.map((p) => p.student).lastIndexOf(true);
+  let firstStudentSeen = false;
+  let prevStudentTo: string | null = null;
+  const plyLines = read.map((p, i): string => {
+    if (!p.student) {
+      const c = opponentClause(p, prevStudentTo);
+      prevStudentTo = null;
+      return asSentence(c);
+    }
+    const c = studentClause(p, { first: !firstStudentSeen, last: i === lastStudent, result });
+    firstStudentSeen = true;
+    prevStudentTo = p.to;
+    return asSentence(c);
+  });
+  // A line that ends on the opponent's move still says what it won.
+  const lastAt = read.length - 1;
+  if (result && lastStudent !== lastAt) plyLines[lastAt] = `${plyLines[lastAt]} ${asSentence(`you win ${result}`)}`;
+
+  // The WHY sits right after the move that lands it — the computed concept's
+  // own line says which ply that is. Otherwise (a book passage, a principle of
+  // the whole position) it closes the explanation.
+  const keyAt = computed?.line && computed.line.length > 0 ? computed.line.length - 1 - lineOffset : -1;
+  const ideaClause = idea && keyAt >= 0 && keyAt < read.length ? keyAt : null;
+  const clauses = read.map((_, i) => {
+    const base = plyLines[i] ?? '';
+    return i === ideaClause && idea ? `${base} ${idea}`.trim() : base;
+  });
+  const line = plyLines.filter(Boolean).join(' ');
+  const parts = clauses.filter(Boolean);
+  if (idea && ideaClause === null) parts.push(idea);
   const spoken = parts.join(' ').trim();
   if (!spoken) return null;
 
   return {
     conceptName, conceptId, computedId: computed?.id ?? null, computedSource: computed?.source ?? null,
-    line, idea, arrow, spoken, clauses, clausePlyStart: 0,
+    line, idea, arrow, spoken, clauses, clausePlyStart: 0, ideaClause,
   };
 }
 
@@ -264,7 +414,7 @@ export function explainPuzzleConcept(args: {
     : null;
 
   const computed = computedLead({ fen, uci: solutionUci, studentColor });
-  const out = compose(keyPlies.map((p) => ({ fenBefore: p.fenBefore, san: p.san })), themes, arrow, computed, studentColor);
+  const out = compose(keyPlies.map((p) => ({ fenBefore: p.fenBefore, san: p.san })), themes, arrow, computed, studentColor, idx);
   return out ? { ...out, clausePlyStart: idx } : null;
 }
 
@@ -301,5 +451,5 @@ export function explainDrillConcept(args: {
   } catch {
     return null;
   }
-  return compose(plies, themes, arrow, computedLead({ fen: setupFen, uci, studentColor }), studentColor);
+  return compose(plies, themes, arrow, computedLead({ fen: setupFen, uci, studentColor }), studentColor, 0);
 }

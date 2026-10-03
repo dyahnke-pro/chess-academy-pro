@@ -68,7 +68,7 @@ describe('explainPuzzleConcept (teach the concept behind the solution)', () => {
     expect(r!.spoken).not.toMatch(/is coming|unless/i);
     expect(r!.spoken).not.toMatch(/checkmate.*checkmate/i);
     // The opponent's reply is theirs, not the student's.
-    expect(r!.spoken).toMatch(/they answer Kh2/);
+    expect(r!.spoken).toMatch(/They answer the check with Kh2/);
   });
 
   it('is G0-safe: never throws on a bad FEN or empty solution', () => {
@@ -125,5 +125,70 @@ describe('explainPuzzleConcept (teach the concept behind the solution)', () => {
     expect(r).not.toBeNull();
     expect(r!.conceptId).toBe('mate-back-rank');
     expect(r!.conceptName).toMatch(/back-rank/i);
+  });
+});
+
+/** Real Lichess puzzles from src/data/puzzles.json whose post-solve
+ *  explanation the live walk (2026-10-03) heard garbled — "the king trains on
+ *  the knight on e2 — pressure they have to answer", a motif credited to the
+ *  OPPONENT's reply, a filler clause on every ply including after the win. */
+describe('puzzle explanation reads like a coach (live walk 2026-10-03)', () => {
+  const FILLER = /trains on|pressure they have to answer|highway|bears down|fighting for the center|steps toward safety|crossfire|marches up|stops hiding|landing a/i;
+  const explain = (fen: string, moves: string, themes: string[]): ReturnType<typeof explainPuzzleConcept> =>
+    explainPuzzleConcept({ fen, solutionUci: moves.split(' '), themes });
+
+  it('0CCT1 Ne2+ Kf1 Nxc3: the fork once, their reply plainly, the result', () => {
+    const r = explain('7R/1p4r1/1kp1P3/1p4p1/1q3nBp/5N1P/1PQ2PP1/6K1 w - - 3 33', 'c2c3 f4e2 g1f1 e2c3', ['crushing', 'fork', 'middlegame', 'short']);
+    expect(r).not.toBeNull();
+    expect(r!.spoken).not.toMatch(FILLER);
+    // The motif sentence is said exactly once, right after the move that lands it.
+    expect(r!.spoken.match(/forks queen on c3 and king on g1/g)).toHaveLength(1);
+    expect(r!.spoken.indexOf('forks')).toBeGreaterThan(r!.spoken.indexOf('Ne2+'));
+    expect(r!.spoken.indexOf('forks')).toBeLessThan(r!.spoken.indexOf('Kf1'));
+    expect(r!.spoken).toMatch(/They answer the check with Kf1\./);
+    expect(r!.spoken).toMatch(/Nxc3, and you win the queen\./);
+    expect(r!.ideaClause).toBe(0);
+    expect(r!.clauses[0]).toContain(r!.idea!);
+  });
+
+  it('a motif is never credited to the opponent\'s reply', () => {
+    // 08oXh: …Qd8+ Rxd8 Rxd8# — the old line said "Rxd8, they take the queen,
+    // landing a removal of the defender" about the opponent's capture.
+    const r = explain('2r3k1/5ppp/3Q4/p3n1P1/1p2PR1P/P1P1q3/1P6/1K1R4 b - - 2 27', 'e3f4 d6d8 c8d8 d1d8', ['backRankMate', 'endgame', 'mate', 'mateIn2', 'sacrifice', 'short']);
+    expect(r).not.toBeNull();
+    const opponentSentences = r!.clauses.filter((c) => /^They/.test(c));
+    expect(opponentSentences.length).toBeGreaterThan(0);
+    for (const s of opponentSentences) {
+      expect(s).not.toMatch(/landing|fork|pin|skewer|discovered|defender|attack/i);
+    }
+    expect(r!.spoken).toMatch(/They have to take your queen with Rxd8\./);
+    expect(r!.spoken).toMatch(/Rxd8# is checkmate\./);
+    expect(r!.spoken).toMatch(/Back-Rank Mate/);
+    expect(r!.spoken).not.toMatch(FILLER);
+  });
+
+  it('a recapture is "take back", and a multi-capture line nets out ("a rook")', () => {
+    const r = explain('r5k1/ppp1B1pp/6r1/b5N1/3nP3/2p5/P4PPP/RNR3K1 w - - 1 17', 'b1c3 a5c3 c1c3 d4e2 g1f1 e2c3', ['attraction', 'crushing', 'fork', 'long', 'middlegame']);
+    expect(r).not.toBeNull();
+    expect(r!.spoken).toMatch(/Bxc3 takes the knight\. They take back with Rxc3\. Then Ne2\+\./);
+    expect(r!.spoken).toMatch(/Nxc3, and you win a rook\.$/);
+    expect(r!.spoken).not.toMatch(FILLER);
+  });
+
+  it('no filler on a king walk (0JGVg Re1+ Kd3 … Rxd8)', () => {
+    const r = explain('8/8/4k2p/4p2P/p3K1P1/P2R1P2/8/1r6 w - - 2 57', 'd3d8 b1e1 e4d3 e1d1 d3c3 d1d8', ['crushing', 'endgame', 'long', 'rookEndgame', 'skewer']);
+    expect(r).not.toBeNull();
+    expect(r!.spoken).not.toMatch(FILLER);
+    expect(r!.spoken).toMatch(/They have to play Kd3\./);
+    expect(r!.spoken).toMatch(/Rxd8, and you win a rook\./);
+  });
+
+  it('every SAN it writes is the board\'s own notation', () => {
+    const fen = '7R/1p4r1/1kp1P3/1p4p1/1q3nBp/5N1P/1PQ2PP1/6K1 w - - 3 33';
+    const uci = ['c2c3', 'f4e2', 'g1f1', 'e2c3'];
+    const r = explain(fen, uci.join(' '), ['fork']);
+    const c = new Chess(fen);
+    const legal = uci.map((u) => c.move({ from: u.slice(0, 2), to: u.slice(2, 4) }).san);
+    for (const san of legal.slice(1)) expect(r!.line).toContain(san);
   });
 });

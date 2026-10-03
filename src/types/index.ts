@@ -1588,7 +1588,10 @@ export interface OpeningWeakSpot {
 export type MisconceptionSource =
   | 'discussion-practice'
   | 'game-review'
-  | 'auto-analysis';
+  | 'auto-analysis'
+  /** A Tactics puzzle that ended unsolved (PuzzleBoard). Not a game slip —
+   *  written `counted: false`, and never read as a slip per game. */
+  | 'puzzle';
 
 /** Adaptive-loop state per tagged instance. `open` = active weakness;
  *  `improving` = drilled successfully at least once; `mastered` =

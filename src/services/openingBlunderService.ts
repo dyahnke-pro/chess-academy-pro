@@ -108,10 +108,18 @@ export const OTHER_FAMILY = 'other';
 /** Human-readable label for a family slug — the DB's name when it has one. */
 export function familyLabel(family: string): string {
   if (family === OTHER_FAMILY) return 'Other openings';
-  const named = FAMILY_NAME_BY_SLUG.get(family);
+  // The puzzle slug keeps a hyphen the DB slug turns into '_' ("caro-kann_
+  // defense" vs "caro_kann_defense") — the lookup missed and the row read
+  // "Caro-kann defense" (live walk 2026-10-03). Normalise both the same way.
+  const named = FAMILY_NAME_BY_SLUG.get(family) ?? FAMILY_NAME_BY_SLUG.get(family.replace(/[^a-z0-9]+/g, '_'));
   if (named) return named;
-  const words = family.replace(/_/g, ' ');
-  return words.charAt(0).toUpperCase() + words.slice(1);
+  // Not in the DB under that name (Lichess says "Russian Game" where the DB
+  // says "Petrov's Defense"): title-case every word, hyphenated halves too.
+  return family
+    .split('_')
+    .filter(Boolean)
+    .map((w) => w.split('-').map((p) => p.charAt(0).toUpperCase() + p.slice(1)).join('-'))
+    .join(' ');
 }
 
 /** Side the puzzle's STUDENT plays — i.e., the side to move after the

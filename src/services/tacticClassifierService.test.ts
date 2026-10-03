@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { deriveMissedTacticsForGame } from './tacticClassifierService';
+import { deriveMissedTacticsForGame, focusThemeLabel, motifThemeLabels, getPrimaryThemeLabel } from './tacticClassifierService';
 import { buildGameRecord } from '../test/factories';
 import type { MoveAnnotation } from '../types';
 
@@ -44,5 +44,35 @@ describe('deriveMissedTacticsForGame — the eval unit is centipawns, once (D-17
     const wobble = annotations.map((a, i) => (i === 6 ? { ...a, evaluation: 160 } : a));
     const tactics = deriveMissedTacticsForGame(buildGameRecord({ ...game, annotations: wobble }), 'white');
     expect(tactics).toEqual([]);
+  });
+});
+
+// Live walk 2026-10-03: a drill opened from a theme card was headed by the
+// puzzle's FIRST classified tactic — Discovered Attacks → FORK, Zugzwang →
+// PROMOTION, Endgame Technique → PIN.
+describe('focusThemeLabel — a themed drill is headed by its own theme', () => {
+  it('names the drilled theme the puzzle carries, not the first tactic', () => {
+    const themes = ['discoveredAttack', 'fork', 'middlegame'];
+    expect(getPrimaryThemeLabel(themes)).toBe('Fork'); // the old heading
+    expect(focusThemeLabel(themes, ['discoveredAttack'])).toBe('Discovered Attack');
+    expect(focusThemeLabel(['advancedPawn', 'endgame', 'promotion', 'zugzwang'], ['zugzwang'])).toBe('Zugzwang');
+  });
+
+  it('a specific ending beats the phase tag on the Endgame Technique card', () => {
+    const card = ['endgame', 'rookEndgame', 'pawnEndgame', 'bishopEndgame', 'knightEndgame', 'queenEndgame'];
+    expect(focusThemeLabel(['endgame', 'pin', 'rookEndgame'], card)).toBe('Rook Endgame');
+    expect(focusThemeLabel(['endgame', 'pin'], card)).toBe('Endgame');
+  });
+
+  it('null when the puzzle carries none of the focus themes', () => {
+    expect(focusThemeLabel(['fork'], ['pin'])).toBeNull();
+  });
+});
+
+describe('motifThemeLabels — rows show motifs, never raw DB tags', () => {
+  it('drops grading/size/phase tags and labels the rest', () => {
+    expect(motifThemeLabels(['advantage', 'defensiveMove', 'hangingPiece', 'opening', 'short'])).toEqual(['Hanging Piece']);
+    expect(motifThemeLabels(['crushing', 'fork', 'master', 'attackingF2F7'])).toEqual(['Fork', 'Attack on f2/f7']);
+    expect(motifThemeLabels(['crushing'])).toEqual([]);
   });
 });
