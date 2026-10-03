@@ -23,6 +23,7 @@ import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGround
 import { getHisPlayDb } from './hisPlayLookup';
 import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
 import { refutedAlternative, candidatesForPosition, type RefutedAlternative } from './refutedAlternative';
+import { recordedMoveCost } from './moveCost';
 import { transferClause, transferMotifOf, recordMotif, withTransfer, type MotifLedger } from './motifLedger';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectOpening } from './openingDetectionService';
@@ -710,6 +711,8 @@ export interface ReviewMoveInput {
   fenAfter: string;
   /** Persisted engine lines (UCI) for a flagged ply — corroboration only. */
   pv?: { afterPlayed: string[]; afterBest: string[] };
+  /** One-search move cost (MoveAnnotation.costCp) — read through `recordedMoveCost`. */
+  costCp?: number;
 }
 
 // `parseSegmentsJson` + `buildPerMoveBlock` deleted in ship-3 — both
@@ -960,8 +963,8 @@ export function buildReviewCitations(
         ? [m.bestMove.slice(0, 2), m.bestMove.slice(2, 4)]
         : null;
 
-    const evalSwingCp =
-      m.preMoveEval !== null && m.evaluation !== null
+    const evalSwingCp = typeof m.costCp === 'number' ? m.costCp
+      : m.preMoveEval !== null && m.evaluation !== null
         ? Math.abs(m.preMoveEval - m.evaluation)
         : null;
 
@@ -1039,6 +1042,8 @@ function buildDeterministicNarration(params: {
   bestMoveSan: string | null;
   preMoveEval: number | null;
   evaluation: number | null;
+  /** One-search move cost (MoveAnnotation.costCp); null on older annotations. */
+  costCp: number | null;
   /** Board BEFORE the move + the move played + the mover's colour — so a
    *  strong/brilliant move can be explained by WHAT IT DID on the board
    *  (David 2026-07-10: no more "Strong, accurate move" filler). */
@@ -1048,7 +1053,7 @@ function buildDeterministicNarration(params: {
   /** The previous move's capture — a recapture is never a win (see describeMoveMerit). */
   prevCapture: { square: string | null; capturedValue: number } | null;
 }): string | null {
-  const { ply, isStudentMove, classification, bestMoveSan, preMoveEval, evaluation, fenBefore, playedSan, moverColor, prevCapture } = params;
+  const { ply, isStudentMove, classification, bestMoveSan, preMoveEval, evaluation, costCp, fenBefore, playedSan, moverColor, prevCapture } = params;
   if (classification === null || classification === 'book' || classification === 'good') {
     return null;
   }
@@ -1086,8 +1091,8 @@ function buildDeterministicNarration(params: {
   // conceded). Both evals are centipawns, white POV; the absolute
   // difference is the swing regardless of moving side because the
   // classification flags the bad direction.
-  const swingPawns =
-    preMoveEval !== null && evaluation !== null
+  const swingPawns = costCp !== null ? costCp / 100
+    : preMoveEval !== null && evaluation !== null
       ? Math.abs((preMoveEval - evaluation) / 100)
       : null;
   // A mate score is stored as a huge sentinel cp; dividing it by 100 printed
@@ -1713,9 +1718,11 @@ export function buildReviewSegments(
     // aspects of each move"). Supersedes the thinner first-builder-wins
     // plyFactsForMove/buildReviewMoveTeaching that stated only ONE aspect.
     const moveBriefing = (moverIsStudent: boolean): string | null => {
-      const swingCp = (m.evaluation != null && m.preMoveEval != null && studentColorWB !== null)
-        ? (studentColorWB === 'w' ? 1 : -1) * (m.evaluation - m.preMoveEval)
-        : null;
+      const swingCp = typeof m.costCp === 'number' && studentColorWB !== null
+        ? (moverIsStudent ? -m.costCp : m.costCp)
+        : (m.evaluation != null && m.preMoveEval != null && studentColorWB !== null)
+          ? (studentColorWB === 'w' ? 1 : -1) * (m.evaluation - m.preMoveEval)
+          : null;
       const critical = m.classification === 'inaccuracy' || m.classification === 'mistake'
         || m.classification === 'blunder' || m.classification === 'brilliant' || m.classification === 'great'
         || (swingCp != null && Math.abs(swingCp) >= 150);
@@ -1857,6 +1864,7 @@ export function buildReviewSegments(
         studentColorWB,
         evaluation: m.evaluation ?? null,
         preMoveEval: m.preMoveEval ?? null,
+        costCp: m.costCp ?? null,
         classification: m.classification ?? null,
         bestMoveSan,
         bestLineUci: m.bestMove ? [m.bestMove, ...(m.pv?.afterBest ?? [])] : [],
@@ -1882,12 +1890,13 @@ export function buildReviewSegments(
       // pieces off, counted; an outside passer as a decoy, once per game.
       if (moverColor === playerColor && studentColorWB && typeof m.preMoveEval === 'number' && typeof m.evaluation === 'number') {
         const sign = moverColor === 'white' ? 1 : -1;
-        const pe = pawnEndingTrade(fenPair.fenBefore, m.san, moves[i + 1]?.san ?? null, Math.max(0, (m.preMoveEval - m.evaluation) * sign), m.evaluation * sign);
+        const moveCost = recordedMoveCost(m, moverColor) ?? 0;
+        const pe = pawnEndingTrade(fenPair.fenBefore, m.san, moves[i + 1]?.san ?? null, moveCost, m.evaluation * sign);
         if (pe) facets.push(`[technique] ${pe.text}`);
         if (m.bestMove) {
           try {
             const bm = new Chess(fenPair.fenBefore).move({ from: m.bestMove.slice(0, 2), to: m.bestMove.slice(2, 4), promotion: m.bestMove[4] });
-            const st = spareTempoWasted(fenPair.fenBefore, m.san, bm?.san ?? null, Math.max(0, (m.preMoveEval - m.evaluation) * sign));
+            const st = spareTempoWasted(fenPair.fenBefore, m.san, bm?.san ?? null, moveCost);
             if (st) facets.push(`[technique] ${st}`);
           } catch { /* no best move to compare */ }
         }
@@ -1912,7 +1921,7 @@ export function buildReviewSegments(
           fenBefore: fenPair.fenBefore,
           san: m.san,
           history: sansForRun.slice(0, m.ply),
-          cpLoss: Math.max(0, (m.preMoveEval - m.evaluation) * sign),
+          cpLoss: recordedMoveCost(m, moverColor) ?? 0,
           bothCp,
           bestSan: bestMoveSan,
           bestLine: m.bestMove ? { rank: 1, evaluation: m.preMoveEval, moves: [m.bestMove, ...(m.pv?.afterBest ?? [])], mate: null } : undefined,
@@ -1968,7 +1977,7 @@ export function buildReviewSegments(
       // left the masters' book, judged by the engine's cost of it.
       if (moverColor !== playerColor && studentColorWB && typeof m.preMoveEval === 'number' && typeof m.evaluation === 'number') {
         const sign = moverColor === 'white' ? 1 : -1;
-        const oppLoss = (m.preMoveEval - m.evaluation) * sign;
+        const oppLoss = typeof m.costCp === 'number' ? m.costCp : (m.preMoveEval - m.evaluation) * sign;
         const verdict = theirOpeningVerdict(moves.slice(0, i + 1).map((x) => x.san), studentColorWB, oppLoss, false);
         if (verdict) facets.push(`[opening] ${verdict}`);
       }
@@ -2229,9 +2238,7 @@ export function buildReviewSegments(
       //    the moment to slow down" on the best move of the game.
       // White loses when the white-POV number FALLS, Black when it RISES; a
       // move that gained is a cost of 0, never a negative "loss".
-      const realCpLossCp: number | null = m.evaluation != null && m.preMoveEval != null
-        ? Math.max(0, moverColor === 'white' ? m.preMoveEval - m.evaluation : m.evaluation - m.preMoveEval)
-        : null;
+      const realCpLossCp: number | null = recordedMoveCost(m, moverColor);
       // ONE DOOR (David 2026-09-16: "I want one unified deciding computer").
       // Importance, this student's need, subsumption, the floor and the order
       // are a SINGLE call now — review does not compose them itself, so it
@@ -2470,6 +2477,7 @@ export function buildReviewSegments(
       bestMoveSan,
       preMoveEval: m.preMoveEval,
       evaluation: m.evaluation,
+      costCp: m.costCp ?? null,
       fenBefore: fenPair.fenBefore,
       playedSan: m.san,
       moverColor,

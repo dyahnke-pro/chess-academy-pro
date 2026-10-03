@@ -29,7 +29,7 @@
 
 ### `refutedAlternative` (function) — 8 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
-- `src/services/coachFeatureService.ts:3535`
+- `src/services/coachFeatureService.ts:3543`
 - `src/services/openingGenerator.ts:2162`
 - `src/services/refutedAlternative.test.ts:66`
 - `src/services/refutedAlternative.test.ts:92`
@@ -38,7 +38,7 @@
 - `src/services/refutedAlternative.test.ts:139`
 
 ### `candidatesForPosition` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3517`
+- `src/services/coachFeatureService.ts:3525`
 - `src/services/openingGenerator.ts:2159`
 - `src/services/refutedAlternative.test.ts:156`
 - `src/services/refutedAlternative.test.ts:158`

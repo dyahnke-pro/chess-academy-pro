@@ -27,7 +27,7 @@ const facetsAt = (ply: number, sans: string[], f: string[], player: 'white' | 'b
     seenFundamentals: new Set(), teaching,
     fenBefore: f[ply - 1], fenAfter: f[ply], san: sans[ply - 1], ply,
     moverColor: ply % 2 === 1 ? 'white' : 'black', playerColor: player, studentColorWB: player === 'white' ? 'w' : 'b',
-    evaluation, preMoveEval: 20, classification, bestMoveSan: null,
+    evaluation, preMoveEval: 20, costCp: null, classification, bestMoveSan: null,
     prevCap: { square: null, capturedValue: 0 }, allSans: sans, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
   });
 
@@ -65,7 +65,7 @@ describe('review — the four facts are facets, so they go through the door', ()
     const after = 'rnbqk2r/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 8';
     const at = (teaching: MoveTeachingContext): string[] => computeMoveFacets({
       seenFundamentals: new Set(), teaching, fenBefore: before, fenAfter: after, san: 'O-O', ply: 15,
-      moverColor: 'white', playerColor: 'white', studentColorWB: 'w', evaluation: 300, preMoveEval: 300,
+      moverColor: 'white', playerColor: 'white', studentColorWB: 'w', evaluation: 300, preMoveEval: 300, costCp: null,
       classification: 'good', bestMoveSan: null, prevCap: { square: null, capturedValue: 0 }, allSans: [], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
     });
     expect(at({ ...NO_TEACHING_CONTEXT, phaseTurn: 'middlegame' }).find((x) => x.startsWith('[stock]')))

@@ -34,6 +34,7 @@ import type { RefutedAlternative } from './refutedAlternative';
 import { MIN_ALTERNATIVE_SHARE } from './refutedAlternativeCore';
 import { principleLine, principleContrastLine } from './moveFundamentals';
 import { threatStoppedBy } from './opponentMovePurpose';
+import { recordedMoveCost } from './moveCost';
 import { trickSidestepped } from './forkTrick';
 import { isMateEval, MISTAKE_CP } from './engineConstants';
 import { computeBoardDelta } from './boardDelta';
@@ -135,6 +136,10 @@ export interface MoveFactContext {
   /** White-POV centipawn eval AFTER the move (the analysis pipeline's number). */
   evaluation: number | null;
   preMoveEval: number | null;
+  /** One-search move cost from the analysis (MoveAnnotation.costCp), or null
+   *  on an older annotation. REQUIRED so the spoken cost is never re-derived
+   *  from two separate reads when the one-search number exists. */
+  costCp: number | null;
   classification: string | null;
   bestMoveSan: string | null;
   /** The engine's line FROM the best move (UCI, the best move first). REQUIRED
@@ -413,7 +418,7 @@ export function computeMoveFacets(
   // 'blunder', and `[eval] mate` facets carry the rest.
   const swing = ctx.evaluation != null && ctx.preMoveEval != null
     && !isMateEval(ctx.evaluation) && !isMateEval(ctx.preMoveEval)
-    ? Math.abs(ctx.evaluation - ctx.preMoveEval)
+    ? recordedMoveCost({ costCp: ctx.costCp ?? undefined, preMoveEval: ctx.preMoveEval, evaluation: ctx.evaluation }, ctx.moverColor)
     : null;
   // SUPPRESS a NEGATIVE classification on the student's own move when that move is
   // part of the forced mating run the STUDENT delivers (David 2026-07-20 opera

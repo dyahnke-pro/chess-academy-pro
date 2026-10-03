@@ -647,6 +647,10 @@ export interface MoveAnnotation {
    *  the punishment after the played move and the continuation after the best
    *  move. Corroboration for the fundamentals attributor — never its gate. */
   pv?: { afterPlayed: string[]; afterBest: string[] };
+  /** What the move cost (centipawns, mover's seat, >= 0), the best and played
+   *  moves scored in ONE search. Set on flagged plies by the review analysis;
+   *  absent on older annotations, where readers fall back to the eval delta. */
+  costCp?: number;
 }
 
 export type GameSource = 'lichess' | 'chesscom' | 'master' | 'import' | 'coach';
@@ -1430,6 +1434,8 @@ export interface CoachGameMove {
   classification: MoveClassification | null;
   /** Persisted engine lines from the annotation (see MoveAnnotation.pv). */
   pv?: { afterPlayed: string[]; afterBest: string[] };
+  /** One-search move cost (see MoveAnnotation.costCp). */
+  costCp?: number;
   expanded: boolean;
   bestMove: string | null;
   bestMoveEval: number | null;

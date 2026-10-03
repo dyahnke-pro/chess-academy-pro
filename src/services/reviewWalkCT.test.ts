@@ -48,7 +48,7 @@ describe('"you can take back" only when taking back holds (15.Nxh7)', () => {
     const c = after(sans); const fenBefore = c.fen(); c.move(san);
     return computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore, fenAfter: c.fen(), san, ply: 29, moverColor: 'white', playerColor: 'black', studentColorWB: 'b',
-      evaluation: 0, preMoveEval: 0, classification: null, bestMoveSan: null,
+      evaluation: 0, preMoveEval: 0, costCp: null, classification: null, bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0 }, allSans: [], forcedRunStartPly: null, playedLineUci: line, bestLineUci: [], replyBestSan: null,
     }).filter((f) => f.startsWith('[trade]'));
   };
@@ -68,7 +68,7 @@ describe('the better move\'s reason is seated on the board it describes (1200 Si
     const c = after(sans); const fenBefore = c.fen(); c.move(san);
     return computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore, fenAfter: c.fen(), san, ply: 31, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
-      evaluation: -150, preMoveEval: 20, classification: 'mistake', bestMoveSan: best,
+      evaluation: -150, preMoveEval: 20, costCp: null, classification: 'mistake', bestMoveSan: best,
       prevCap: { square: null, capturedValue: 0 }, allSans: [], forcedRunStartPly: null, playedLineUci: [], bestLineUci: line, replyBestSan: null,
     }).filter((f) => f.startsWith('[quality]')).join(' ');
   };
@@ -85,7 +85,7 @@ describe('the trade summary is the engine line\'s exchange, never a static swap 
     const c = after(G); const fenBefore = c.fen(); c.move('Nxc4');
     return computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore, fenAfter: c.fen(), san: 'Nxc4', ply: 43, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
-      evaluation: -74, preMoveEval: -60, classification: null, bestMoveSan: null,
+      evaluation: -74, preMoveEval: -60, costCp: null, classification: null, bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0 }, allSans: [], forcedRunStartPly: null, playedLineUci: line, bestLineUci: [], replyBestSan: null,
     }).filter((f) => f.startsWith('[trade]')).join(' ');
   };

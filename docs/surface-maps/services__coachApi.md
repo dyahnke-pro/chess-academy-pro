@@ -274,17 +274,17 @@
 ### `voiceFacts` (function) — 35 call sites
 - `src/components/Coach/CoachGameReview.tsx:1658`
 - `src/components/Coach/CoachGameReview.tsx:1777`
-- `src/components/Coach/CoachGameReview.tsx:1965`
+- `src/components/Coach/CoachGameReview.tsx:1966`
 - `src/hooks/usePhaseNarration.ts:731`
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:260`
 - `src/services/coachChatText.ts:221`
-- `src/services/coachFeatureService.ts:173`
-- `src/services/coachFeatureService.ts:423`
-- `src/services/coachFeatureService.ts:558`
+- `src/services/coachFeatureService.ts:174`
+- `src/services/coachFeatureService.ts:424`
 - `src/services/coachFeatureService.ts:559`
-- `src/services/coachFeatureService.ts:4964`
-- `src/services/coachFeatureService.ts:5117`
+- `src/services/coachFeatureService.ts:560`
+- `src/services/coachFeatureService.ts:4972`
+- `src/services/coachFeatureService.ts:5125`
 - `src/services/coachLaneWiring.test.ts:144`
 - `src/services/coachMoveCommentary.ts:237`
 - `src/services/coachMoveCommentary.ts:294`

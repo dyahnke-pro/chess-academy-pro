@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5236 lines · 36 exports · 42 importers · 40 tests · 5 audits**
+**5244 lines · 36 exports · 42 importers · 40 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -83,7 +83,7 @@
 - `src/services/coachFeatureService.test.ts:257`
 - `src/services/coachFeatureService.test.ts:277`
 - `src/services/coachFeatureService.test.ts:289`
-- `src/services/gameAnalysisService.ts:2110`
+- `src/services/gameAnalysisService.ts:2165`
 
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -122,7 +122,7 @@
 - `src/services/coachFeatureService.test.ts:315`
 
 ### `segmentNamedArrows` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:3612`
+- `src/components/Coach/CoachGameReview.tsx:3613`
 - `src/services/namedMoveArrows.test.ts:54`
 - `src/services/namedMoveArrows.test.ts:58`
 
@@ -153,7 +153,7 @@
 - `src/services/coachFeatureService.test.ts:24`
 
 ### `buildReviewSegments` (function) — 63 call sites
-- `src/components/Coach/CoachGameReview.tsx:1885`
+- `src/components/Coach/CoachGameReview.tsx:1886`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
 - `src/services/coachFeatureService.causalChain.test.ts:50`
@@ -233,7 +233,7 @@
 - `src/services/mapConcurrent.test.ts:37`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4842`
+- `src/components/Coach/CoachGameReview.tsx:4843`
 - `src/services/coachFeatureService.test.ts:814`
 - `src/services/coachFeatureService.test.ts:817`
 - `src/services/coachFeatureService.test.ts:824`
@@ -316,7 +316,7 @@
 - `src/services/reviewDeepThreat.test.ts:114`
 - `src/services/reviewDeepThreat.test.ts:150`
 - `src/services/reviewFullGameNarration.harness.test.ts:157`
-- `src/services/reviewNarrationBuild.ts:83`
+- `src/services/reviewNarrationBuild.ts:84`
 - `src/services/reviewRealSweep.test.ts:187`
 - `src/services/reviewRefuted.test.ts:26`
 - `src/services/reviewRefuted.test.ts:33`

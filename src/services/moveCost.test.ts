@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { moveCostOneSearch, uciOfSan } from './moveCost';
+import { moveCostOneSearch, moveScoresOneSearch, recordedMoveCost, uciOfSan } from './moveCost';
 import type { MoveScorer } from './pvPlayback';
 
 const never: MoveScorer = { scoreMoves: () => { throw new Error('the fan held both moves — no second search'); } };
@@ -48,5 +48,27 @@ describe('a move\'s cost comes from one search (walk oct3c)', () => {
   it('uciOfSan', () => {
     expect(uciOfSan(FEN, 'Qd3')).toBe('e2d3');
     expect(uciOfSan(FEN, 'Qh8')).toBeNull();
+  });
+});
+
+describe('recordedMoveCost — one door for an analysed move\'s cost', () => {
+  it('prefers the one-search cost over the eval delta', () => {
+    expect(recordedMoveCost({ costCp: 56, preMoveEval: -170, evaluation: -300 }, 'white')).toBe(56);
+  });
+  it('falls back to the delta, from the mover\'s seat, never negative', () => {
+    expect(recordedMoveCost({ preMoveEval: -170, evaluation: -300 }, 'white')).toBe(130);
+    expect(recordedMoveCost({ preMoveEval: -170, evaluation: -300 }, 'black')).toBe(0);
+    expect(recordedMoveCost({ preMoveEval: null, evaluation: -300 }, 'white')).toBeNull();
+  });
+});
+
+describe('moveScoresOneSearch — the scores the grade reads', () => {
+  it('returns both White-POV scores from the same search', async () => {
+    const scorer = { scoreMoves: async () => [
+      { evaluation: -251, mate: null, moves: ['e2d1'] },
+      { evaluation: -307, mate: null, moves: ['e2d3'] },
+    ] };
+    const r = await moveScoresOneSearch({ fenBefore: 'r1bqkbnr/1p1p1ppp/p3p3/2p1P3/2Bn4/1P6/P1PPQPPP/RNB1K1NR w KQkq - 1 6', playedUci: 'e2d3', fan: { topLines: [{ evaluation: 0, mate: null, moves: ['e2d1'] }] }, scorer, depth: 18 });
+    expect(r).toEqual({ costCp: 56, bestWhiteCp: -251, playedWhiteCp: -307 });
   });
 });

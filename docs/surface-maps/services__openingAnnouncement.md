@@ -78,7 +78,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `theirOpeningVerdict` (function) — 7 call sites
 - `src/components/Coach/CoachTeachPage.tsx:10659`
-- `src/services/coachFeatureService.ts:1972`
+- `src/services/coachFeatureService.ts:1981`
 - `src/services/openingAnnouncement.test.ts:173`
 - `src/services/openingAnnouncement.test.ts:174`
 - `src/services/openingAnnouncement.test.ts:178`

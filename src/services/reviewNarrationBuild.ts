@@ -46,6 +46,7 @@ export function reviewMoveInputsFrom(moves: readonly CoachGameMove[]): ReviewMov
     bestMove: m.bestMove,
     fenAfter: m.fen,
     ...(m.pv ? { pv: m.pv } : {}),
+    ...(typeof m.costCp === 'number' ? { costCp: m.costCp } : {}),
   }));
 }
 

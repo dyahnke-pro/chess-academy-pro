@@ -37,7 +37,7 @@ describe('one reason for the better move, on every surface', () => {
       seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore: before, fenAfter: after, san: 'gxh5', ply: 43,
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
-      evaluation: 418, preMoveEval: 679, classification: 'mistake',
+      evaluation: 418, preMoveEval: 679, costCp: null, classification: 'mistake',
       bestMoveSan: 'Rxf8+', prevCap: { square: null, capturedValue: 0 },
       allSans: [...LINE, 'gxh5'], forcedRunStartPly: null,
       playedLineUci: [], bestLineUci: BEST_LINE, replyBestSan: null,

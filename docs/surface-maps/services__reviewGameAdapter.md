@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**183 lines · 5 exports · 2 importers · 0 tests · 1 audits**
+**184 lines · 5 exports · 2 importers · 0 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,8 +30,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `adaptGameRecordExplained` (function) — 4 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:89`
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:97`
-- `src/components/Coach/CoachReviewSessionPage.tsx:224`
-- `src/services/reviewNarrationBuild.ts:115`
+- `src/components/Coach/CoachReviewSessionPage.tsx:238`
+- `src/services/reviewNarrationBuild.ts:116`
 
 ### `adaptGameRecord` (function) — 3 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:39`

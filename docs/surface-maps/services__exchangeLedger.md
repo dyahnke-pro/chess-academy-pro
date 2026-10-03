@@ -66,14 +66,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `settledExchange` (function) — 3 call sites
 - `src/services/playCommentary.ts:971`
-- `src/services/reviewFullData.ts:327`
+- `src/services/reviewFullData.ts:332`
 - `src/services/reviewWalkOct2a.test.ts:15`
 
 ### `LineProof` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `proofCut` (function) — 24 call sites
-- `src/services/coachFeatureService.ts:3633`
+- `src/services/coachFeatureService.ts:3641`
 - `src/services/gemCrushLines.ts:258`
 - `src/services/gemFinder.ts:243`
 - `src/services/inaccuracyCall.ts:271`
@@ -99,7 +99,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/whyItFailed.ts:212`
 
 ### `describeProofResult` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3615`
+- `src/services/coachFeatureService.ts:3623`
 - `src/services/lineProof.test.ts:27`
 - `src/services/pieceOptions.ts:118`
 - `src/services/refutedAlternativeCore.ts:183`

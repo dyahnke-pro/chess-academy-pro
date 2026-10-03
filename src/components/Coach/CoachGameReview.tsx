@@ -1874,6 +1874,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           preMoveEval: isLast ? (before?.evaluation ?? null) : prevEval,
           bestMove: isLast ? bestUci : (gameMove?.bestMove ?? null),
           fenAfter: c.fen(),
+          ...(!isLast && typeof gameMove?.costCp === 'number' ? { costCp: gameMove.costCp } : {}),
         });
         prevEval = isLast ? (after?.evaluation ?? null) : (gameMove?.evaluation ?? null);
       }

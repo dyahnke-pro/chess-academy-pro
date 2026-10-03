@@ -51,7 +51,7 @@ export interface ReviewNarrationKeyInput {
 /** The narration is a function of exactly these inputs. */
 export function reviewNarrationCacheKey(input: ReviewNarrationKeyInput): string {
   const plies = input.moves.map((m) =>
-    [m.san, m.classification ?? '', m.evaluation ?? '', m.preMoveEval ?? '', m.bestMove ?? '', m.pv ? m.pv.afterPlayed.join('') + '/' + m.pv.afterBest.join('') : ''].join(':'),
+    [m.san, m.classification ?? '', m.evaluation ?? '', m.preMoveEval ?? '', m.bestMove ?? '', m.pv ? m.pv.afterPlayed.join('') + '/' + m.pv.afterBest.join('') : '', m.costCp ?? ''].join(':'),
   ).join('|');
   const meta = [
     REVIEW_NARRATION_REV, input.playerColor, input.openingName ?? '', input.result,

@@ -198,6 +198,7 @@ import {
 } from './engineConstants';
 import { capEval, winPctLost, bandForWinPctLost } from './accuracyService';
 import type { PvEngine, MoveScorer, ScoredMove } from './pvPlayback';
+import { moveScoresOneSearch, uciOfSan } from './moveCost';
 import { detectBrilliancy, verifySacrificeDeep, SAC_VERIFY_DEPTH } from './brilliancy';
 import { lookupPositionEvals, storePositionEvals, prunePositionEvalCache, type EvalToStore } from './positionEvalCache';
 
@@ -1872,15 +1873,32 @@ async function analyzeGamePositions(
   let deepWorker: DedicatedWorker | null = null;
   let deepWorkerTried = false;
   const deepBudgetMs = reviewBudget(positionBudgetMs ?? REVIEW_POSITION_BUDGET_MS);
-  const deepSearch = async (fen: string, depth: number): Promise<{ evaluation: number; bestMove: string; depth: number; pv: string[] }> => {
+  const ensureDeepWorker = async (): Promise<DedicatedWorker | null> => {
     if (!deepWorkerTried) {
       deepWorkerTried = true;
       try { deepWorker = (await acquirePool(1))[0] ?? null; } catch { deepWorker = null; }
       deepWorker?.newGame();
     }
-    if (deepWorker) return deepWorker.analyzePosition(fen, depth, deepBudgetMs);
+    return deepWorker;
+  };
+  const deepSearch = async (fen: string, depth: number): Promise<{ evaluation: number; bestMove: string; depth: number; pv: string[] }> => {
+    const w = await ensureDeepWorker();
+    if (w) return w.analyzePosition(fen, depth, deepBudgetMs);
     const a = await stockfishEngine.analyzeWithBudget(fen, depth, deepBudgetMs);
     return { evaluation: a.evaluation, bestMove: a.bestMove, depth: a.depth, pv: a.topLines?.[0]?.moves?.slice(0, 8) ?? [] };
+  };
+  // The played move and the best move scored in ONE search, on the same
+  // worker the verdict was settled on (White-POV scores, MoveScorer contract).
+  const deepScorer: MoveScorer = {
+    async scoreMoves(fen, ucis, depth) {
+      const w = await ensureDeepWorker();
+      if (w) {
+        const fan = await w.analyzeFan(fen, ucis.length, depth, deepBudgetMs, ucis);
+        return fan.map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: l.moves }));
+      }
+      const r = await stockfishEngine.analyzePosition(fen, depth, { searchmoves: ucis.join(' ') });
+      return r.topLines.map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: l.moves }));
+    },
   };
 
   const annotations: MoveAnnotation[] = [];
@@ -1935,6 +1953,8 @@ async function analyzeGamePositions(
       // succeeds for this mistake; otherwise we fall back to the shallow
       // pre-move eval (see annotation push below).
       let refinedBestMoveEval: number | null = null;
+      // What the move cost, from ONE search (see the pricing pass below).
+      let costCp: number | null = null;
 
       const moveIsBook = stillBook && isBookLine(moves.slice(0, moveIdx + 1));
       if (!moveIsBook) stillBook = false;
@@ -2009,6 +2029,40 @@ async function analyzeGamePositions(
               // Leave bestMove null + keep the shallow bestMoveEval below
             }
           }
+          // ONE SEARCH PRICES THE MOVE (review walk oct3b, game 2 ply 11: "Qd3
+          // … costing about 1.3 points — the stronger move was Qd1"; Qd1 and
+          // Qd3 scored in one search sit 0.55 apart). The verdict above came
+          // from a read of the position before the move minus a SEPARATE read
+          // of the position after it — two trees, two horizons. Once the best
+          // move is known, both moves are scored in the same search and the
+          // grade and the cost are read off that one tree. Learn has priced
+          // moves this way since walk oct3c (`moveScoresOneSearch`).
+          const flaggedNow = classification === 'inaccuracy' || classification === 'mistake' || classification === 'blunder';
+          const playedUci = flaggedNow && bestMove ? uciOfSan(fens[moveIdx], moves[moveIdx]) : null;
+          if (playedUci && bestMove) {
+            const one = await moveScoresOneSearch({
+              fenBefore: fens[moveIdx],
+              playedUci,
+              fan: { topLines: [{ evaluation: 0, mate: null, moves: [bestMove] }] },
+              scorer: deepScorer,
+              // The depth the verdict was settled at — never BEST_MOVE_DEPTH,
+              // which a phone cannot reach (it burns the whole budget). Two
+              // moves only, so it is a fraction of a full search.
+              depth: REVIEW_DEEP_DEPTH,
+            }).catch(() => null);
+            if (one) {
+              costCp = one.costCp;
+              refinedBestMoveEval = one.bestWhiteCp;
+              const regraded = classifyCpLoss(one.costCp, one.bestWhiteCp, one.playedWhiteCp, isWhiteMove, moves[moveIdx]?.includes('#'), fens[moveIdx], moves[moveIdx]);
+              if (regraded === 'inaccuracy' || regraded === 'mistake' || regraded === 'blunder') {
+                classification = regraded;
+              } else {
+                // Inside one search the move held: it was not a fault.
+                classification = 'good';
+                bestMove = null;
+              }
+            }
+          }
         }
       } else if (moveIsBook) {
         classification = 'book'; // theory move, evals unavailable — still not a mistake
@@ -2034,6 +2088,7 @@ async function analyzeGamePositions(
           : (evalBefore !== null ? evalBefore : null),
         classification,
         comment: null,
+        ...(costCp !== null ? { costCp } : {}),
         ...(flaggedHere && (pvAfterPlayed.length || pvAfterBest.length) ? { pv: { afterPlayed: pvAfterPlayed, afterBest: pvAfterBest } } : {}),
       });
     }
