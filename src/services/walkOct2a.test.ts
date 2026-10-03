@@ -33,7 +33,7 @@ describe('Learn walk oct2a', () => {
 
   it('F2: the abandoned pawn is not "won by the knight" when taking leaves their knight hanging', () => {
     const c = play(QGD);
-    const w = whyItFailed({ fenBefore: c.fen(), playedSan: 'Be7', studentColor: 'black' });
+    const w = whyItFailed({ fenBefore: c.fen(), playedSan: 'Be7', studentColor: 'black', playedLineUci: null });
     expect(w?.line ?? '').not.toMatch(/knight on f3 wins it/);
   });
 

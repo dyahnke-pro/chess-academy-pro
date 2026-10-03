@@ -252,6 +252,7 @@ export function backwardLook(args: {
         fenBefore: args.fenBefore,
         playedSan: args.playedSan,
         studentColor: args.studentColor,
+        playedLineUci: args.replyPvUci ?? null,
       });
       // …and only when the move COST something. `whyItFailed` counts a static
       // swap-off and says so itself: "the upstream caller only asks about moves
@@ -260,16 +261,21 @@ export function backwardLook(args: {
       // hanging" — dxe5 dxe5 Qxd8 Rxd8 Nxe5 loses to …Nxe4, which the engine
       // sees and a swap count cannot. A material loss the engine does not
       // charge is not a loss.
-      // A PIECE LEFT LOOSE IS LOST ONLY IF THEY TAKE IT (walk oct3a, 25…g6:
-      // "once it left, the knight on f5 wins it" — Nxh6 loses to …e3; the
-      // engine's reply line never touches h6). Same rule as the square lane
-      // below: the static swap must be a capture the engine's line makes.
-      const theirTakes = (args.replyPvUci ?? []).filter((_, i) => i % 2 === 0).slice(0, 3).map((u) => u.slice(2, 4));
-      const engineTakesIt = !f || f.kind !== 'abandoned-defender' || theirTakes.includes(f.squares[0] ?? '');
-      if (f && engineTakesIt && args.cpLoss >= INACCURACY_CP) {
+      // What the move loses is read off the engine's line inside
+      // `whyItFailed` itself (WO-OUTCOME-01) — no caller re-checks it.
+      if (f && args.cpLoss >= INACCURACY_CP) {
         const reply = args.replySan ?? null;
         const tookIt = reply !== null && reply.replace(/[+#]+$/, '').includes(`x${f.squares[0]}`);
-        attempt = f.missed && reply !== null && !tookIt ? f.missed : f.line;
+        // A reply that IS the engine line's first move is still on the line
+        // that takes it a move later (walk 900, 17…Bg1 Nxg4 — then Kxg1): not
+        // a miss.
+        const lineFirst = args.replyPvUci?.[0] ?? null;
+        let onLine = false;
+        try {
+          const m = lineFirst ? new Chess(args.fenAfter).move({ from: lineFirst.slice(0, 2), to: lineFirst.slice(2, 4), promotion: lineFirst[4] }) : null;
+          onLine = !!m && reply !== null && m.san === reply;
+        } catch { onLine = false; }
+        attempt = f.missed && reply !== null && !tookIt && !onLine ? f.missed : f.line;
         attemptSquare = f.squares[0] ?? '';
       }
     } catch { /* a lane that throws must not silence the rest */ }

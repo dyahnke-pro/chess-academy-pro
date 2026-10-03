@@ -35,6 +35,7 @@ import { deriveNextPlans } from './nextPlans';
 import { winPercent, bandForWinPctLost } from './accuracyService';
 import { MAX_PV_DEPTH_PLIES } from './ratingBands';
 import { developedMinorCount, homeMinorCount, isMinorAtHome, minorsAtHome } from './development';
+import { proofCut } from './exchangeLedger';
 
 export const FUNDAMENTAL_IDS = [
   // opening
@@ -401,14 +402,18 @@ function cheapestCapture(chess: Chess, sq: Square, color: Color): Move | null {
   caps.sort((a, b) => VAL[a.piece] - VAL[b.piece]);
   return caps[0] ?? null;
 }
+/** Does the line win `mover` at least two points, or mate THE OTHER side —
+ *  the ONE ledger rule (WO-OUTCOME-01), never a private material diff. */
 function pvWinsMaterial(chess: Chess, pv: readonly string[] | undefined, mover: Color): boolean {
   if (!pv || pv.length === 0) return false;
-  const c = new Chess(chess.fen());
-  const before = material(c, mover) - material(c, other(mover));
-  let n = 0;
-  for (const s of pv.slice(0, 6)) { try { if (!c.move(s)) break; n++; } catch { break; } }
-  if (n === 0) return false;
-  return (material(c, mover) - material(c, other(mover))) - before >= 2 || c.isCheckmate();
+  const proof = proofCut(chess.fen(), pv, mover);
+  if (!proof) return false;
+  if (proof.mate) {
+    const c = new Chess(chess.fen());
+    try { for (const s of pv.slice(0, proof.plies)) c.move(s); } catch { return false; }
+    return c.turn() !== mover;
+  }
+  return !!proof.ledger && proof.ledger.netPawns >= 2;
 }
 /** Replaying `pv` from `after` (opponent to move), does the `grabber`-owned piece
  *  that stands on `startSq` get CAPTURED by the opponent — following it as it
@@ -454,19 +459,19 @@ function centreBias(sq: string): number { return Math.abs(fileIdx(sq) - 3.5); }
 
 /** Material `opp` nets over `sans` played from `fen` with `opp` to move, or
  *  null when the line is not legal there. Captures only, in points. */
-function lineNetForSide(fen: string, sans: readonly string[], opp: Color): number | null {
+/** What `sans` wins for `opp` played from `fen` with `opp` to move — the ONE
+ *  ledger rule (WO-OUTCOME-01). Null when the line is not legal there (the
+ *  board changed under it); 0 when it proves nothing. */
+function lineNetForSide(fen: string, sans: readonly string[], opp: Color): { net: number; plies: number } | null {
   const parts = fen.split(' ');
   if (parts[1] !== opp) { parts[1] = opp; parts[3] = '-'; }
-  let b: Chess;
-  try { b = new Chess(parts.join(' ')); } catch { return null; }
-  let net = 0;
-  for (const san of sans) {
-    let m: Move | null = null;
-    try { m = b.move(san); } catch { return null; }
-    if (!m) return null;
-    if (m.captured) net += (m.color === opp ? 1 : -1) * VAL[m.captured];
-  }
-  return net;
+  const start = parts.join(' ');
+  try {
+    const b = new Chess(start);
+    for (const san of sans) if (!b.move(san)) return null;
+  } catch { return null; }
+  const proof = proofCut(start, sans, opp);
+  return proof && !proof.mate && proof.ledger ? { net: proof.ledger.netPawns, plies: proof.plies } : { net: 0, plies: 0 };
 }
 
 // ─── the attributor ─────────────────────────────────────────────────────────
@@ -571,27 +576,24 @@ function comboThreatIgnored(c: Ctx): ReturnType<typeof att> | null {
   const line = (c.pvP ?? []).slice(0, 6);
   if (line.length < 2) return null;
   const after = lineNetForSide(c.after.fen(), line, c.opp);
-  if (after === null || after < 2) return null;
+  if (after === null || after.net < 2) return null;
   const before = lineNetForSide(c.before.fen(), line, c.opp);
-  if (before === null || before < 2) return null;
+  if (before === null || before.net < 2) return null;
   const withBest = lineNetForSide(c.afterBest.fen(), line, c.opp);
-  if (withBest !== null && withBest >= 2) return null;
-  // What the line takes: the most valuable of the mover's pieces it captures.
+  if (withBest !== null && withBest.net >= 2) return null;
+  // The line is shown to the point the ledger proves it; the victim is the
+  // most valuable of the mover's pieces taken within that proof.
+  const shown = line.slice(0, after.plies);
   let victim: { type: PieceSymbol; square: string } | null = null;
-  let lastCapture = 0;
   try {
     const b = new Chess(c.after.fen());
-    line.forEach((san, i) => {
+    for (const san of shown) {
       const m = b.move(san);
-      if (m?.captured) {
-        lastCapture = i;
-        if (m.color === c.opp && (!victim || VAL[m.captured] > VAL[victim.type])) victim = { type: m.captured, square: m.to };
-      }
-    });
+      if (m?.captured && m.color === c.opp && (!victim || VAL[m.captured] > VAL[victim.type])) victim = { type: m.captured, square: m.to };
+    }
   } catch { return null; }
   const v = victim as { type: PieceSymbol; square: string } | null;
   if (!v) return null;
-  const shown = line.slice(0, lastCapture + 1);
   return att('ignored-threat', 3, {
     squares: [v.square], moves: [shown.join(' ')], pvMoves: pvHas(c.pvP, (s) => s === line[0]),
   }, { piece: PNAME[v.type], square: v.square, threat: line[0], line: shown.join(', '), better: c.best.san });

@@ -647,6 +647,15 @@ function missedPunish(a: PrincipleAttribution, replySan: string | null): string 
   const sq = a.facts.square;
   if (!cap || typeof sq !== 'string') return null;
   if (replySan.replace(/[+#]+$/, '').includes(`x${sq}`)) return null;
+  // The evidence is ONE capture for a plain hang and the WHOLE proving line for
+  // a combination (walk oct3b, 14…b5: "hanging to Qh3 e5 Bxh6 Bxh6 Qxh6 Qxg4"
+  // named a line as the piece that takes). A reply that IS the line's first
+  // move is still on it — no miss.
+  const line = cap.split(' ');
+  if (line.length > 1) {
+    if (replySan.replace(/[+#]+$/, '') === line[0].replace(/[+#]+$/, '')) return null;
+    return `That left your ${a.facts.piece} on ${sq} open to ${line.join(', ')} — they missed it this time.`;
+  }
   return `That left your ${a.facts.piece} on ${sq} hanging to ${cap} — they missed it this time.`;
 }
 

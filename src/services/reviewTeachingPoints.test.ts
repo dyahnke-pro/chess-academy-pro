@@ -135,13 +135,19 @@ describe('explainTemptingCapture (David 2026-07-21 — the Bg5/h4 "why not take"
     // (board-verified) — so "the line leaves the bishop alone" would be FALSE
     // teaching: the Q-for-B exchange happens anyway; ...e5 just picks the
     // cheapest version. The clause must say the trapped story.
-    const why = explainTemptingCapture(DAVID_FEN, 'e5');
+    // The engine's line: …e5 Bxf6 — the queen is lost.
+    const why = explainTemptingCapture(DAVID_FEN, 'e5', 'you', ['e5', 'Bxf6', 'e4', 'Bg5', 'exd3', 'cxd3']);
     expect(why).not.toBeNull();
     expect(why).toMatch(/queen on f6 is trapped/i);
     expect(why).toMatch(/attacked by the bishop on g5/i);
     expect(why).toMatch(/every escape square is covered/i);
     expect(why).toMatch(/cheapest way to let the queen go/i);
     expect(why).not.toMatch(/leaves it alone/i);
+  });
+
+  it('no line — the trapped story is not claimed, and the "leaves it alone" text stays silent too', async () => {
+    const { explainTemptingCapture } = await import('./reviewTeachingPoints');
+    expect(explainTemptingCapture(DAVID_FEN, 'e5', 'you', null)).toBeNull();
   });
 
   it('explains the even trade that rips open a file toward your own king', async () => {
@@ -152,7 +158,7 @@ describe('explainTemptingCapture (David 2026-07-21 — the Bg5/h4 "why not take"
     const fen = 'r5k1/ppp2ppp/3p1b2/4p1B1/3P3P/4P3/PPP2PP1/R3K2R b KQ - 0 12';
     const c = new (await import('chess.js')).Chess(fen);
     expect(c.moves()).toContain('Bxg5'); // the temptation is real
-    const why = explainTemptingCapture(fen, 'a6');
+    const why = explainTemptingCapture(fen, 'a6', 'you', null);
     expect(why).not.toBeNull();
     expect(why).toMatch(/h-file rips open/i);
     expect(why).toMatch(/straight at your king/i);
@@ -164,12 +170,12 @@ describe('explainTemptingCapture (David 2026-07-21 — the Bg5/h4 "why not take"
     // OFF the g-file — the first draft left Qg2 guarding g5 through the file and
     // the function correctly kept warning). Ignoring a free piece needs no clause.
     const fen = 'r1b1r1k1/1ppn1ppp/p2npq2/3p2B1/3P4/2PBPP2/P1PQN3/2KR3R b - - 0 13';
-    expect(explainTemptingCapture(fen, 'e5')).toBeNull();
+    expect(explainTemptingCapture(fen, 'e5', 'you', null)).toBeNull();
   });
 
   it('stays silent when the chosen move IS the capture', async () => {
     const { explainTemptingCapture } = await import('./reviewTeachingPoints');
-    expect(explainTemptingCapture(DAVID_FEN, 'Qxg5')).toBeNull();
+    expect(explainTemptingCapture(DAVID_FEN, 'Qxg5', 'you', null)).toBeNull();
   });
 });
 
@@ -234,7 +240,7 @@ describe('explainTemptingCapture — seat-correct speech (David 2026-07-21: "it 
   it("speaks the trapped story from the OPPONENT's seat ('they') — no 'your queen'", async () => {
     const { explainTemptingCapture } = await import('./reviewTeachingPoints');
     // David was WHITE; the trapped queen is BLACK's.
-    const why = explainTemptingCapture(DAVID_FEN, 'e5', 'they');
+    const why = explainTemptingCapture(DAVID_FEN, 'e5', 'they', ['e5', 'Bxf6', 'e4', 'Bg5', 'exd3', 'cxd3']);
     expect(why).not.toBeNull();
     expect(why).toMatch(/their queen on f6 is trapped/i);
     expect(why).not.toMatch(/your queen|your king/i);
@@ -242,7 +248,7 @@ describe('explainTemptingCapture — seat-correct speech (David 2026-07-21: "it 
 
   it('uses side names in neutral perspective (theory dives)', async () => {
     const { explainTemptingCapture } = await import('./reviewTeachingPoints');
-    const why = explainTemptingCapture(DAVID_FEN, 'e5', 'neutral');
+    const why = explainTemptingCapture(DAVID_FEN, 'e5', 'neutral', ['e5', 'Bxf6', 'e4', 'Bg5', 'exd3', 'cxd3']);
     expect(why).not.toBeNull();
     expect(why).toMatch(/Black's queen on f6 is trapped/i);
     expect(why).not.toMatch(/\byour\b/i);
@@ -255,7 +261,8 @@ describe('findTrappedPiece (David 2026-07-21 — "the trapped piece was the quee
 
   it("finds Black's trapped queen on f6 in David's game (every flight covered)", async () => {
     const { findTrappedPiece } = await import('./reviewTeachingPoints');
-    const t = findTrappedPiece(DAVID_FEN2, 'b');
+    // The engine's line: …Qg6 Nf4 Qxd3 cxd3 — the queen runs and is lost for a bishop.
+    const t = findTrappedPiece(DAVID_FEN2, 'b', ['f6g6', 'e2f4', 'g6d3', 'c2d3']);
     expect(t).not.toBeNull();
     expect(t!.square).toBe('f6');
     expect(t!.piece).toBe('queen');
@@ -266,8 +273,8 @@ describe('findTrappedPiece (David 2026-07-21 — "the trapped piece was the quee
   it('finds nothing in the starting position', async () => {
     const { findTrappedPiece } = await import('./reviewTeachingPoints');
     const { Chess } = await import('chess.js');
-    expect(findTrappedPiece(new Chess().fen(), 'w')).toBeNull();
-    expect(findTrappedPiece(new Chess().fen(), 'b')).toBeNull();
+    expect(findTrappedPiece(new Chess().fen(), 'w', [])).toBeNull();
+    expect(findTrappedPiece(new Chess().fen(), 'b', [])).toBeNull();
   });
 
   it('an attacked queen WITH a clean flight square is not trapped', async () => {
@@ -276,7 +283,15 @@ describe('findTrappedPiece (David 2026-07-21 — "the trapped piece was the quee
     const c = new Chess();
     for (const s of ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Qf6', 'Nc3']) c.move(s);
     // Black's early queen on f6 is loose play but has flights — never "trapped".
-    expect(findTrappedPiece(c.fen(), 'b')).toBeNull();
+    expect(findTrappedPiece(c.fen(), 'b', [])).toBeNull();
+  });
+
+  it('no engine line, no "trapped" claim — the outcome is what the line does (WO-OUTCOME-01)', async () => {
+    const { findTrappedPiece, trappedOnBoard } = await import('./reviewTeachingPoints');
+    expect(trappedOnBoard(DAVID_FEN2, 'b')?.square).toBe('f6');
+    expect(findTrappedPiece(DAVID_FEN2, 'b', null)).toBeNull();
+    // a line in which the queen survives proves nothing
+    expect(findTrappedPiece(DAVID_FEN2, 'b', ['e6e5', 'g5f6'].slice(0, 1))).toBeNull();
   });
 });
 

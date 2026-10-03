@@ -21,12 +21,12 @@
 import { seatPieceReferences } from '../utils/seatPieces';
 import { Chess, type Square } from 'chess.js';
 import { computePlyFacts } from './pvPlayback';
-import { settledLeadFor, lastMoveFromUci } from './material';
 import { describeStructure } from './boardStructure';
 import { detectTactics } from './tacticsDetector';
-import { PATTERN_SPEECH, patternAim } from './tacticVocabulary';
+import { PATTERN_SPEECH, patternAim, patternClaimsMaterial } from './tacticVocabulary';
 import type { PvLine, PvPly, PrevCaptureContext } from './pvPlayback';
 import { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcEvent, type ArcMove, type Seat } from './planArc';
+import { proofCut } from './exchangeLedger';
 // The PLAN ACROSS MOVES (planArc) — the memory this reader never had. Exposed
 // from here so a surface composes one plan module, not two.
 export { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcEvent, type ArcState, type ArcMove, type Seat, type Aim } from './planArc';
@@ -470,27 +470,14 @@ export function keySquaresOf(plies: readonly PvPly[]): KeySquare[] {
     .sort((a, b) => b.weight - a.weight || a.square.localeCompare(b.square));
 }
 
-/** Material for `color` minus the other side's, in points, off the board. */
-function sideBalance(fen: string, color: 'white' | 'black'): number {
-  const V: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
-  const me = color === 'white' ? 'w' : 'b';
-  let net = 0;
-  try {
-    for (const cell of new Chess(fen).board().flat()) {
-      if (cell) net += (cell.color === me ? 1 : -1) * (V[cell.type] ?? 0);
-    }
-  } catch { return 0; }
-  return net;
-}
-
 function planFor(
   plies: readonly PvPly[],
   color: 'white' | 'black',
-  /** The board before an exchange the line is FINISHING (the line opens by
-   *  taking back on the square the previous move captured on). Material is
-   *  counted from here, so a recapture is the other half of a trade, never a
-   *  win. Null when the line starts on a quiet board. */
-  exchangeStartFen: string | null,
+  /** The move that STARTED an exchange the line is finishing (the line opens
+   *  by taking back on the square it captured on). The ledger counts from
+   *  before it, so a recapture is the other half of a trade, never a win.
+   *  Null when the line starts on a quiet board. */
+  exchangePrior: { fenBefore: string; san: string } | null,
 ): SidePlan {
   const mine = plies.slice(0, PLAN_HORIZON).filter((p) => p.moverColor === color);
   const destinations = new Map<string, number>();
@@ -577,7 +564,17 @@ function planFor(
     // the pawn). A discovery in waiting lands only if the blocker survives.
     const reply = plies[plies.indexOf(ply) + 1];
     const blockerTaken = ply.facts.tacticLanded === 'discovery' && !!reply && reply.moverColor !== color && reply.uci.slice(2, 4) === to;
-    if (!tactic && ply.facts.tacticLanded && !blockerTaken) {
+    // …and a tactic is a plan only if the line goes on to WIN with it (walk
+    // oct3b, 20.d3: "the idea is to unleash a discovered attack" — Be3 hits
+    // the knight on b1 and …Nc3 simply steps away). Read by the one ledger.
+    const lineCollects = (): boolean => {
+      const rest = plies.slice(plies.indexOf(ply)).map((p) => p.san);
+      const proof = proofCut(ply.fenBefore, rest, color === 'white' ? 'w' : 'b');
+      if (!proof) return false;
+      if (proof.mate) return (plies[plies.indexOf(ply) + proof.plies - 1]?.moverColor ?? null) === color;
+      return !!proof.ledger && proof.ledger.netPawns > 0;
+    };
+    if (!tactic && ply.facts.tacticLanded && !blockerTaken && (!patternClaimsMaterial(ply.facts.tacticLanded) || lineCollects())) {
       tactic = ply.facts.tacticLanded;
       tacticSquare = to;
     }
@@ -624,42 +621,19 @@ function planFor(
     }
   }
 
-  // THE MATERIAL IS THE BOARD'S, AT A QUIET POINT — not a sum of per-capture
-  // exchange guesses. Each ply's gain is a static exchange that assumes a
-  // recapture; summing one side's captures double-counts the trade (McConnell
-  // walk 2026-09-27: O-O Bg4 Bg5 Qxg5 Bxf7+ Ke7 Nxg5 Bxd1 read "win a rook" —
-  // +1 for f7 and +9 for the queen, never the bishop and queen given back).
-  // The count is taken where the line is QUIET — the last ply the next move
-  // does not capture — so a horizon that ends mid-exchange claims nothing
-  // from the half it did not see.
+  // WHAT THE LINE WINS is the ONE ledger rule (WO-OUTCOME-01): its settled
+  // net at the listener's horizon, counted from before an exchange the line
+  // finishes (a recapture is the other half of a trade, never a win). The
+  // private quiet-point count this replaces disagreed with the ledger.
   {
-    const horizon = plies.slice(0, PLAN_HORIZON);
-    let quietAt = -1;
-    for (let i = 0; i < horizon.length; i++) {
-      const next = horizon[i + 1];
-      if (next ? !/x/.test(next.san) : !/x/.test(horizon[i].san)) quietAt = i;
-    }
-    // A RECAPTURE IS NOT A WIN (David 2026-10-02: "win a pawn" on a
-    // recapture). The line may open mid-exchange — their pawn took on d4 and
-    // the line starts cxd4 — so the baseline is the board before the
-    // exchange began, not the board the line was handed.
-    const base = exchangeStartFen ?? horizon[0]?.fenBefore;
-    materialSwing = quietAt >= 0 && horizon.length > 0 && base
-      ? sideBalance(horizon[quietAt].fenAfter, color) - sideBalance(base, color)
-      : 0;
-    // A WIN MUST STILL STAND WHERE THE LINE ENDS (walk 2026-10-02: "Rf7 would
-    // win a rook for a piece" — Rf7 Rxe6 Kxe6 Bc4+ d5 Bxd5+ Kxd5 Rxf7 gives
-    // it all back after the quiet point). The end is read with the last
-    // capture's exchange settled, so a line cut mid-recapture is not a loss.
-    const last = horizon.at(-1);
-    if (materialSwing > 0 && last && base) {
-      try {
-        const endSwing = settledLeadFor(last.fenAfter, color === 'white' ? 'w' : 'b', lastMoveFromUci(last.fenBefore, last.uci)) - sideBalance(base, color);
-        materialSwing = Math.min(materialSwing, endSwing);
-      } catch { /* unreadable end — keep the quiet read */ }
-    }
-    if (quietAt >= 0 && horizon.length > 0 && base && materialSwing >= 1) {
-      materialDeal = dealOf(base, horizon[quietAt].fenAfter, color);
+    const proof = plies.length > 0
+      ? proofCut(plies[0].fenBefore, plies.map((p) => p.san), color === 'white' ? 'w' : 'b', exchangePrior)
+      : null;
+    materialSwing = proof && !proof.mate && proof.ledger ? proof.ledger.netPawns : 0;
+    if (proof && proof.ledger && materialSwing >= 1) {
+      const end = plies[proof.plies - 1];
+      const base = exchangePrior?.fenBefore ?? plies[0].fenBefore;
+      if (end) materialDeal = dealOf(base, end.fenAfter, color);
     }
   }
 
@@ -727,8 +701,21 @@ function planFor(
     .sort((a, b) => b.path.length - a.path.length)[0] ?? null;
   // …and onto a square THEIR piece holds, the route ends in a capture, so it
   // is said as one ("getting the knight to a7" was taking the a7 pawn).
-  const maneuverDest = maneuverPick && rootFen ? routeDestination(rootFen, maneuverPick.path[maneuverPick.path.length - 1], color) : null;
-  const maneuver = maneuverPick && maneuverDest?.kind === 'takes' ? { ...maneuverPick, takes: maneuverDest.piece } : maneuverPick;
+  // What it takes is what the LINE's arriving move captures, never what stood
+  // there on the root board (walk oct3b, 21…Rac8: "walk the rook round to c1
+  // … and take the bishop there" — the bishop had gone to b4 by then).
+  const arrivalCapture = (path: readonly string[]): string | null => {
+    const dest = path[path.length - 1];
+    const from = path[path.length - 2];
+    const arrival = mine.find((p) => p.uci.slice(0, 2) === from && p.uci.slice(2, 4) === dest);
+    if (!arrival) return null;
+    try {
+      const mv = new Chess(arrival.fenBefore).move({ from, to: dest, promotion: arrival.uci[4] });
+      return mv?.captured ? PIECE_WORD[mv.captured] ?? 'piece' : null;
+    } catch { return null; }
+  };
+  const takenOnArrival = maneuverPick ? arrivalCapture(maneuverPick.path) : null;
+  const maneuver = maneuverPick && takenOnArrival ? { ...maneuverPick, takes: takenOnArrival } : maneuverPick;
 
   const headingFor = [...destinations.entries()]
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
@@ -1057,13 +1044,13 @@ export function buildLookaheadPlan(
   studentColor: 'white' | 'black',
   /** Clauses already spoken this game — see `describePlan`. */
   said: Set<string> | undefined,
-  /** See `planFor` — the board before the exchange the line finishes. */
-  exchangeStartFen: string | null,
+  /** See `planFor` — the move that started the exchange the line finishes. */
+  exchangePrior: { fenBefore: string; san: string } | null,
 ): LookaheadPlan | null {
   if (line.plies.length < 4) return null;
 
-  const white = planFor(line.plies, 'white', exchangeStartFen);
-  const black = planFor(line.plies, 'black', exchangeStartFen);
+  const white = planFor(line.plies, 'white', exchangePrior);
+  const black = planFor(line.plies, 'black', exchangePrior);
   const mine = studentColor === 'white' ? white : black;
   const theirs = studentColor === 'white' ? black : white;
   mine.text = describePlan(mine, 'mine', said);
@@ -1512,12 +1499,12 @@ export function planFromUci(
   // Carried so a recapture is recognised as one, exactly as the engine path
   // does — without it every exchange reads as two separate captures.
   let prevCap: PrevCaptureContext = { square: null, capturedValue: 0 };
-  let exchangeStartFen: string | null = null;
+  let exchangePrior: { fenBefore: string; san: string } | null = null;
   if (lastMove) {
     try {
       const lm = new Chess(lastMove.fenBefore).move(lastMove.san);
       if (lm?.captured && uciMoves[0]?.slice(2, 4) === lm.to) {
-        exchangeStartFen = lastMove.fenBefore;
+        exchangePrior = { fenBefore: lastMove.fenBefore, san: lastMove.san };
         prevCap = { square: lm.to, capturedValue: PIECE_POINTS[PIECE_WORD[lm.captured] ?? ''] ?? 0 };
       }
     } catch { /* an unreadable last move — count from the board as given */ }
@@ -1550,7 +1537,7 @@ export function planFromUci(
     { plies, rootEvalCp: 0, terminalEvalCp: null, delivers: true, closeAlternative: null },
     studentColor,
     said,
-    exchangeStartFen,
+    exchangePrior,
   );
 }
 

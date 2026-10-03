@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1531 lines · 12 exports · 43 importers · 30 tests · 1 audits**
+**1533 lines · 12 exports · 43 importers · 30 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -89,7 +89,7 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:132`
 
-### `attributePrinciples` (function) — 79 call sites
+### `attributePrinciples` (function) — 80 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
 - `src/services/claimTruth.manual.test.ts:10`
 - `src/services/claimTruth.manual.test.ts:12`
@@ -145,12 +145,13 @@
 - `src/services/principleAttributionEvalPv.test.ts:126`
 - `src/services/principleVoice.test.ts:9`
 - `src/services/principleVoice.test.ts:140`
-- `src/services/principleVoice.test.ts:149`
-- `src/services/principleVoice.test.ts:158`
+- `src/services/principleVoice.test.ts:153`
+- `src/services/principleVoice.test.ts:157`
+- `src/services/principleVoice.test.ts:161`
 - `src/services/replayFence.bowdler1000.test.ts:37`
 - `src/services/replayFence.modern1690.test.ts:32`
 - `src/services/replayFence.sicilian1200.test.ts:29`
-- `src/services/replayFence.sicilian1200.test.ts:48`
+- `src/services/replayFence.sicilian1200.test.ts:49`
 - `src/services/section14Coverage.measure.test.ts:77`
 - `src/services/section14Diagnosis.test.ts:21`
 - `src/services/section14Diagnosis.test.ts:25`

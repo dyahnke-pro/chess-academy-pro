@@ -10270,7 +10270,12 @@ export function CoachTeachPage(): JSX.Element {
                         if (answer && !heldRevealedHere) {
                           const text = slipAnswerText(fenBefore, slip.theirSan, studentBestSan ?? null, found ? 'found' : 'missed');
                           if (text && (found || look?.namesBetter !== studentBestSan)) {
-                            queueSpokenHint(fenAfterReply, text, 'slipAnswer', [answer.to], [found ? `slip-found:${move.san}` : `slip-answer:${studentBestSan}`], fenBefore, undefined, found ? undefined : [{ fen: fenBefore, sans: [studentBestSan as string] }]);
+                            // FOUND, the text IS this move's point — the same claim the
+                            // move-point lane makes, so it carries that key and the
+                            // ledger says it once (walk oct3b, 15…e5: "e5 prepares
+                            // e4 …" twice in one breath).
+                            const foundKeys = [`slip-found:${move.san}`, move.san.includes('x') ? `capture:${move.to}:${move.history.length}` : `point:${move.history.length}`];
+                            queueSpokenHint(fenAfterReply, text, 'slipAnswer', [answer.to], found ? foundKeys : [`slip-answer:${studentBestSan}`], fenBefore, undefined, found ? undefined : [{ fen: fenBefore, sans: [studentBestSan as string] }]);
                           }
                         }
                         captureEvent('learn_slip_answered', { surface: 'coach-teach', found });

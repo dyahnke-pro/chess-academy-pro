@@ -151,7 +151,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:9234`
 
 ### `temptingFromAnalysis` (function) — 6 call sites
-- `src/services/learnWalkBlumenfeld.test.ts:198`
+- `src/services/learnWalkBlumenfeld.test.ts:203`
 - `src/services/tacticalRead.recaptureTempting.test.ts:15`
 - `src/services/tacticalRead.recaptureTempting.test.ts:22`
 - `src/services/tacticalRead.test.ts:207`

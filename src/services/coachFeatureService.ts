@@ -993,6 +993,7 @@ export function buildReviewCitations(
       fenBefore,
       playedSan: m.san,
       studentColor: isWhiteMove ? 'white' : 'black',
+      playedLineUci: m.pv?.afterPlayed ?? null,
     });
 
     out.push({
@@ -2494,7 +2495,7 @@ export function buildReviewSegments(
         currentGameId, register: 'review', seenLabels: recurrenceLabelsSeen,
       });
       const pvEvidence = renderPvEvidence(fundamentals);
-      const failed = whyItFailed({ fenBefore: fenPair.fenBefore, playedSan: m.san, studentColor: moverColor });
+      const failed = whyItFailed({ fenBefore: fenPair.fenBefore, playedSan: m.san, studentColor: moverColor, playedLineUci: m.pv?.afterPlayed ?? null });
       const concession = describeConcessions(fenPair.fenBefore, m.san, true);
       const swingCp = m.preMoveEval != null && m.evaluation != null
         && Math.abs(m.preMoveEval) < 15000 && Math.abs(m.evaluation) < 15000
@@ -2525,7 +2526,7 @@ export function buildReviewSegments(
     {
       const isStudentMove = playerColor ? moverColor === playerColor : !m.isCoachMove;
       if (!fundamentalLed && narration && isStudentMove && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy')) {
-        const failed = whyItFailed({ fenBefore: fenPair.fenBefore, playedSan: m.san, studentColor: moverColor });
+        const failed = whyItFailed({ fenBefore: fenPair.fenBefore, playedSan: m.san, studentColor: moverColor, playedLineUci: m.pv?.afterPlayed ?? null });
         if (failed) narration = `${narration} ${failed.line}`;
       }
     }
@@ -3136,8 +3137,11 @@ export function buildReviewSegments(
     // own → the warning. Board-true (findTrappedPiece, conservative detector).
     if (narration === null && studentColorWB !== null) {
       const enemyOfStudent: 'w' | 'b' = studentColorWB === 'w' ? 'b' : 'w';
-      const theirsTrapped = findTrappedPiece(fenPair.fenAfter, enemyOfStudent);
-      const mineTrapped = theirsTrapped ? null : findTrappedPiece(fenPair.fenAfter, studentColorWB);
+      // …and only when the engine's line after the move really takes it
+      // (WO-OUTCOME-01: "that piece is coming off the board" is an outcome).
+      const line = m.pv?.afterPlayed ?? null;
+      const theirsTrapped = findTrappedPiece(fenPair.fenAfter, enemyOfStudent, line);
+      const mineTrapped = theirsTrapped ? null : findTrappedPiece(fenPair.fenAfter, studentColorWB, line);
       const hit = theirsTrapped ?? mineTrapped;
       if (hit && !trappedAnnounced.has(`${theirsTrapped ? 'e' : 's'}:${hit.square}`)) {
         trappedAnnounced.add(`${theirsTrapped ? 'e' : 's'}:${hit.square}`);
@@ -3603,12 +3607,11 @@ async function augmentWithProjections(
     // moves, then the result, no description per move ("Qxd4, Qxd4, and the
     // knight forks on c2, winning a piece"). It replaced a six-ply recital
     // with an adjective on every move, which ran 120–300 words a ply.
-    const sans = line.plies.map((p) => p.san);
     const proof = linePlies(line);
     if (proof.proof) {
       const net = proof.proof.ledger?.netPawns ?? 0;
       if (!proof.proof.mate && ((forSide === 'student' && net < 0) || (forSide === 'opponent' && net > 0))) return '';
-      const moves = andList(sans.slice(0, proof.plies));
+      const moves = andList(proof.proof.sans.slice(0, proof.plies));
       return proof.proof.mate ? `${moves} — and it's mate` : `${moves} — ${describeProofResult(proof.proof.ledger as NonNullable<typeof proof.proof.ledger>)}`;
     }
     // No material point settles: the line proves nothing a sentence can hold,

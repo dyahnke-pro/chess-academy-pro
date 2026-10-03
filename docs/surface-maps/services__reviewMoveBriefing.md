@@ -24,10 +24,10 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildReviewMoveBriefing` (function) — 17 call sites
-- `src/services/coachFeatureService.ts:1721`
+- `src/services/coachFeatureService.ts:1722`
 - `src/services/materialSites.test.ts:18`
-- `src/services/openingGenerator.ts:1690`
-- `src/services/openingGenerator.ts:2555`
+- `src/services/openingGenerator.ts:1691`
+- `src/services/openingGenerator.ts:2556`
 - `src/services/reviewMoveBriefing.test.ts:10`
 - `src/services/reviewMoveBriefing.test.ts:22`
 - `src/services/reviewMoveBriefing.test.ts:27`

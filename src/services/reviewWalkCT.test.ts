@@ -44,21 +44,21 @@ describe('"completes your development" is an opening fact', () => {
 import { computeMoveFacets, NO_TEACHING_CONTEXT } from './reviewFullData';
 
 describe('"you can take back" only when taking back holds (15.Nxh7)', () => {
-  const trade = (sans: string, san: string): string[] => {
+  const trade = (sans: string, san: string, line: string[]): string[] => {
     const c = after(sans); const fenBefore = c.fen(); c.move(san);
     return computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore, fenAfter: c.fen(), san, ply: 29, moverColor: 'white', playerColor: 'black', studentColorWB: 'b',
       evaluation: 0, preMoveEval: 0, classification: null, bestMoveSan: null,
-      prevCap: { square: null, capturedValue: 0 }, allSans: [], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: [], forcedRunStartPly: null, playedLineUci: line, bestLineUci: [], replyBestSan: null,
     }).filter((f) => f.startsWith('[trade]'));
   };
   it('Rxh7 loses the rook to Qxh7 — not offered as a take-back', () => {
-    const f = trade('e4 c5 Nf3 d6 Bb5+ Nd7 O-O Nf6 Re1 a6 Bd3 b5 c4 g5 Nxg5 Ne5 Be2 bxc4 Na3 Rg8 Nxc4 Nxc4 d4 Nb6 Bh5 Nxh5 Qxh5 Rg7', 'Nxh7');
+    const f = trade('e4 c5 Nf3 d6 Bb5+ Nd7 O-O Nf6 Re1 a6 Bd3 b5 c4 g5 Nxg5 Ne5 Be2 bxc4 Na3 Rg8 Nxc4 Nxc4 d4 Nb6 Bh5 Nxh5 Qxh5 Rg7', 'Nxh7', ['c8g4', 'h5h4', 'g7h7', 'h4h7']);
     expect(f.join(' ')).not.toMatch(/you can take back/);
     expect(f.join(' ')).toMatch(/taking back would cost you more than the pawn/);
   });
   it('NEGATIVE CONTROL: 16.dxc5 — an even recapture is still offered', () => {
-    const f = trade('e4 c5 Nf3 d6 Bb5+ Nd7 O-O Nf6 Re1 a6 Bd3 b5 c4 g5 Nxg5 Ne5 Be2 bxc4 Na3 Rg8 Nxc4 Nxc4 d4 Nb6 Bh5 Nxh5 Qxh5 Rg7 Nxh7 Qd7', 'dxc5').join(' ');
+    const f = trade('e4 c5 Nf3 d6 Bb5+ Nd7 O-O Nf6 Re1 a6 Bd3 b5 c4 g5 Nxg5 Ne5 Be2 bxc4 Na3 Rg8 Nxc4 Nxc4 d4 Nb6 Bh5 Nxh5 Qxh5 Rg7 Nxh7 Qd7', 'dxc5', ['d6c5', 'h7f8']).join(' ');
     expect(f).toMatch(/you can take back/);
   });
 });
@@ -76,5 +76,27 @@ describe('the better move\'s reason is seated on the board it describes (1200 Si
     const q = quality('e4 c5 Nf3 d6 c3 Nc6 d4 cxd4 cxd4 Bg4 Be2 Nf6 Nc3 Bxf3 Bxf3 e6 Qa4 Qd7 Be3 Be7 O-O O-O Rad1 Qc8 Qc2 a6 e5 dxe5 Be4 Nxe4', 'Nxe4', 'Qxe4', ['c2e4', 'e5d4', 'e3d4', 'c6d4']);
     expect(q).toMatch(/take their knight on e4/);
     expect(q).not.toMatch(/your knight on e4/);
+  });
+});
+
+describe('the trade summary is the engine line\'s exchange, never a static swap list (review oct3a ply 43)', () => {
+  const G = 'e4 c6 Bc4 d5 exd5 cxd5 Bb3 Nc6 d4 Bf5 c3 e6 h3 Bd6 Nf3 Nf6 Be3 Bc7 Nbd2 Qd6 Bc2 Bg6 Bxg6 hxg6 Qc2 O-O-O O-O-O Nd7 Nb3 Kb8 Kb1 Na5 Nxa5 Bxa5 Qb3 Nb6 Nd2 Qc6 Bf4+ Ka8 h4 Nc4';
+  const facets = (line: string[]): string => {
+    const c = after(G); const fenBefore = c.fen(); c.move('Nxc4');
+    return computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
+      fenBefore, fenAfter: c.fen(), san: 'Nxc4', ply: 43, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
+      evaluation: -74, preMoveEval: -60, classification: null, bestMoveSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: [], forcedRunStartPly: null, playedLineUci: line, bestLineUci: [], replyBestSan: null,
+    }).filter((f) => f.startsWith('[trade]')).join(' ');
+  };
+  it('Nxc4 dxc4 — a knight trade, no queen', () => {
+    const f = facets(['d5c4', 'b3a3', 'c6g2', 'f4e5']);
+    expect(f).not.toMatch(/queen/);
+    expect(f).toMatch(/a knight trade/);
+  });
+  it('no engine line — the capture only, no material claim', () => {
+    const f = facets([]);
+    expect(f.replace('[trade]', '')).not.toMatch(/trade|win|for their/);
+    expect(f).toMatch(/You take on c4 — that was their knight/);
   });
 });

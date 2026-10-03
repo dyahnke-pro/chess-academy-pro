@@ -1733,7 +1733,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // Seat-correct speech: the walked line's mover ALTERNATES every ply, so
       // "your queen" is right only on the student's plies (David 2026-07-21:
       // "You realize it was white in this game..?").
-      const tempt = explainTemptingCapture(ply.fenBefore, ply.san, ply.moverColor === playerColor ? 'you' : 'they');
+      const tempt = explainTemptingCapture(ply.fenBefore, ply.san, ply.moverColor === playerColor ? 'you' : 'they', line.plies.slice(i).map((p) => p.san));
       return { id: i, fact: [base, tempt].filter(Boolean).join(' ') };
     });
     // PACE ON REAL AUDIO (David 2026-07-19: "no per move why… quickly moves from

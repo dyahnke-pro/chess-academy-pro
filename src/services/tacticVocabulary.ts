@@ -105,20 +105,29 @@ export function tacticWord(type: string): string {
  * defender is overloaded, not landed. A `Record` over the union so a new
  * pattern fails to compile until it has all three.
  */
-export const PATTERN_SPEECH: Record<TacticPatternType, { word: string; aim: string; ing: string; aims: string }> = {
-  fork: { word: 'fork', aim: 'land a fork', ing: 'landing a fork', aims: 'lands a fork' },
-  pin: { word: 'pin', aim: 'set up a pin', ing: 'setting up a pin', aims: 'sets up a pin' },
-  skewer: { word: 'skewer', aim: 'land a skewer', ing: 'landing a skewer', aims: 'lands a skewer' },
-  discovery: { word: 'discovered attack', aim: 'unleash a discovered attack', ing: 'unleashing a discovered attack', aims: 'unleashes a discovered attack' },
-  double_check: { word: 'double check', aim: 'land a double check', ing: 'landing a double check', aims: 'lands a double check' },
-  back_rank: { word: 'back-rank threat', aim: 'hit the back rank', ing: 'hitting the back rank', aims: 'hits the back rank' },
-  removal_of_guard: { word: 'removal of the defender', aim: 'remove the defender', ing: 'removing the defender', aims: 'removes the defender' },
-  trapped_piece: { word: 'piece trap', aim: 'trap a piece', ing: 'trapping a piece', aims: 'traps a piece' },
-  mate_threat: { word: 'mating threat', aim: 'set up a mating threat', ing: 'setting up a mating threat', aims: 'sets up a mating threat' },
-  overload: { word: 'overloaded defender', aim: 'overload a defender', ing: 'overloading a defender', aims: 'overloads a defender' },
-  battery: { word: 'battery', aim: 'build a battery', ing: 'building a battery', aims: 'builds a battery' },
-  none: { word: '', aim: '', ing: '', aims: '' },
+// `wins`: the aim CLAIMS material ("land a fork") — a line may say it only if
+// it goes on to collect (WO-OUTCOME-01). A pin or a battery is a geometry the
+// line sets up; its word is true once the geometry exists.
+export const PATTERN_SPEECH: Record<TacticPatternType, { word: string; aim: string; ing: string; aims: string; wins: boolean }> = {
+  fork: { word: 'fork', aim: 'land a fork', ing: 'landing a fork', aims: 'lands a fork', wins: true },
+  pin: { word: 'pin', aim: 'set up a pin', ing: 'setting up a pin', aims: 'sets up a pin', wins: false },
+  skewer: { word: 'skewer', aim: 'land a skewer', ing: 'landing a skewer', aims: 'lands a skewer', wins: true },
+  discovery: { word: 'discovered attack', aim: 'unleash a discovered attack', ing: 'unleashing a discovered attack', aims: 'unleashes a discovered attack', wins: true },
+  double_check: { word: 'double check', aim: 'land a double check', ing: 'landing a double check', aims: 'lands a double check', wins: true },
+  back_rank: { word: 'back-rank threat', aim: 'hit the back rank', ing: 'hitting the back rank', aims: 'hits the back rank', wins: false },
+  removal_of_guard: { word: 'removal of the defender', aim: 'remove the defender', ing: 'removing the defender', aims: 'removes the defender', wins: true },
+  trapped_piece: { word: 'piece trap', aim: 'trap a piece', ing: 'trapping a piece', aims: 'traps a piece', wins: true },
+  mate_threat: { word: 'mating threat', aim: 'set up a mating threat', ing: 'setting up a mating threat', aims: 'sets up a mating threat', wins: false },
+  overload: { word: 'overloaded defender', aim: 'overload a defender', ing: 'overloading a defender', aims: 'overloads a defender', wins: true },
+  battery: { word: 'battery', aim: 'build a battery', ing: 'building a battery', aims: 'builds a battery', wins: false },
+  none: { word: '', aim: '', ing: '', aims: '', wins: false },
 };
+
+/** Does naming this pattern claim material won? Unknown strings: assume yes
+ *  (the strict reading — a claim the line must back). */
+export function patternClaimsMaterial(type: string): boolean {
+  return (PATTERN_SPEECH as Record<string, { wins: boolean }>)[type]?.wins ?? true;
+}
 
 /** The spoken noun for a detector pattern; unknown strings read as prose. */
 export function patternWord(type: string): string {

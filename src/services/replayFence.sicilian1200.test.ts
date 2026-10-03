@@ -29,7 +29,7 @@ describe('ply 37 — 19.Nxc5 is a recapture, not a failed sacrifice', () => {
     expect(attributePrinciples(input).map((a) => a.id)).not.toContain('overvalued-attack');
   });
   it('the knight that took back is not said to have "eyed" b7', () => {
-    const w = whyItFailed({ fenBefore: fenAt(36), playedSan: 'Nxc5', studentColor: 'white' });
+    const w = whyItFailed({ fenBefore: fenAt(36), playedSan: 'Nxc5', studentColor: 'white', playedLineUci: null });
     expect(w?.line ?? '').not.toMatch(/eyed/);
   });
 });
@@ -41,7 +41,8 @@ describe('ply 33 — 17.Bxd4: the bishop is taken on the spot, not trapped', () 
     classification: 'mistake',
     evalBefore: -308,
     evalAfterPlayed: -472,
-    pvAfterPlayed: ['Nxd4', 'Qd3', 'Rd8', 'Ng3', 'Qb8', 'Qe3'],
+    // Stockfish depth 18 — the line runs on until it settles (Black a bishop up).
+    pvAfterPlayed: ['Nxd4', 'Qd3', 'Rfd8', 'Kh1', 'Nf5', 'Qe2', 'Rxd1', 'Rxd1'],
     pvAfterBest: ['f6', 'Bd2', 'Qd7', 'Qb3', 'Kh8', 'f4'],
     replySan: 'e5',
   };
@@ -62,7 +63,7 @@ describe('ply 33 — 17.Bxd4: the bishop is taken on the spot, not trapped', () 
     expect(lines.join(' ')).toMatch(/trapped|hunted|chased|snared/);
   });
   it('the bishop that took is not said to have "eyed" g7', () => {
-    const w = whyItFailed({ fenBefore: fenAt(32), playedSan: 'Bxd4', studentColor: 'white' });
+    const w = whyItFailed({ fenBefore: fenAt(32), playedSan: 'Bxd4', studentColor: 'white', playedLineUci: null });
     expect(w?.line ?? '').not.toMatch(/eyed/);
   });
 });

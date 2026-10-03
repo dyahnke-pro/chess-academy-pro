@@ -18,13 +18,11 @@
  * G0/G3: every move is the explorer's (human) or the engine's, replayed through
  * chess.js; every word is composed from the board. The model decides nothing.
  */
-import { settledBalance, lastMoveOf } from './material';
 import { Chess } from 'chess.js';
 import { lookupAmateurPlay } from './amateurPlayLookup';
 import { lookupMasterPlay } from './masterPlayLookup';
 import { stockfishEngine } from './stockfishEngine';
 import { narrateContinuationMove } from './continuationMoveNarration';
-import { getMaterialAdvantage } from './boardUtils';
 import { db } from '../db/schema';
 import { logAppAudit } from './appAuditor';
 import type {
@@ -33,6 +31,7 @@ import type {
   WalkthroughTree,
   WalkthroughTreeNode,
 } from '../types/walkthroughTree';
+import { proofCut } from './exchangeLedger';
 
 // 🔒 GEM QUALITY BAR — a gem is a CLEAR MATERIAL WIN, not a soft edge (David
 // 2026-09-10, emphatic: "Gems need to be clear advantages! Ideally winning a
@@ -164,10 +163,6 @@ async function verifySlip(
   slipSan: string,
   studentIsWhite: boolean,
 ): Promise<BakedGemLine | null> {
-  const studentMaterial = (fen: string): number => {
-    const adv = getMaterialAdvantage(fen); // white-POV pawns
-    return studentIsWhite ? adv : -adv;
-  };
   // Baseline: how the student stands BEFORE the slip. If they're already
   // winning, there's no trap worth teaching here. Time-boxed (never depth-
   // bounded, which can run the worker long and starve the UI/voice).
@@ -179,7 +174,6 @@ async function verifySlip(
   }
   const E0 = studentIsWhite ? base.evaluation : -base.evaluation;
   if (E0 >= WEAPON_CP) return null;
-  const M0 = studentMaterial(baseFen);
 
   let board: Chess;
   try {
@@ -244,8 +238,10 @@ async function verifySlip(
   // quiet terminus, or it's a forced mate. An eval edge with no material behind
   // it is NOT a gem (David 2026-09-10: "ideally winning a piece or material").
   const isMate = deep.isMate;
-  const settledEnd = settledBalance(b2.fen(), lastMoveOf(b2));
-  const materialGain = (studentIsWhite ? settledEnd : -settledEnd) - M0;
+  // WHAT THE LINE WINS is the ONE ledger rule (WO-OUTCOME-01): the settled net
+  // of the slip and its punishment, from the board before the slip.
+  const proof = proofCut(baseFen, [slipSan, ...punishSeq], studentIsWhite ? 'w' : 'b');
+  const materialGain = proof && !proof.mate && proof.ledger ? proof.ledger.netPawns : 0;
   if (!isMate && materialGain < MATERIAL_GAIN_MIN) return null;
 
   const gemId = `found:${positionKey(baseFen)}:${cleanSan(slipSan)}`;

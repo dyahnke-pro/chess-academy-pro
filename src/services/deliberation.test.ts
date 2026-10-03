@@ -35,7 +35,7 @@ describe('buildDeliberation — the weighing from the fan', () => {
   it('renders the weighing as ordered board-true facts', () => {
     const d = buildDeliberation({ analysis, fenBefore: FEN, moverColor: 'w', opponentLastSan: null })!;
     const facts = deliberationFacts(d);
-    expect(facts).toMatch(/Nxe5\? That drops the knight on e5\./);
+    expect(facts).toMatch(/Nxe5\? Then Nxe5 — you come out behind on material, a pawn for a knight\./);
     // d3 sits inside the coin-flip band — weighing it is the banned filler.
     expect(facts).not.toMatch(/d3/);
     expect(facts).toMatch(/The move is O-O — it castles/);
@@ -56,7 +56,7 @@ describe('buildDeliberation — the weighing from the fan', () => {
   it('alternatives-only facts drop the conclusion AND the coin-flip, keep the real fork', () => {
     const d = buildDeliberation({ analysis, fenBefore: FEN, moverColor: 'w', opponentLastSan: null })!;
     const facts = deliberationAlternativesFacts(d);
-    expect(facts).toMatch(/Nxe5\? That drops the knight on e5\./); // the real fork speaks
+    expect(facts).toMatch(/Nxe5\? Then Nxe5 — you come out behind on material, a pawn for a knight\./); // the real fork speaks
     expect(facts).not.toMatch(/d3/); // the ~20cp coin-flip is filler — dropped, not weighed
     expect(facts).not.toMatch(/The move is/); // no conclusion — the taught move stands
   });

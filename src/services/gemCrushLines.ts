@@ -25,9 +25,9 @@
  * arrow squares via chess.js. Only surfaceable (weapon-tier + narrated) gems
  * qualify.
  */
-import { settledBalance, type LastMove } from './material';
+import { settledBalance } from './material';
 import type { WalkableLine, WalkPly } from '../types';
-import { computeExchangeLedger } from './exchangeLedger';
+import { computeExchangeLedger, proofCut } from './exchangeLedger';
 import { Chess } from 'chess.js';
 import {
   getPunishGemsForOpening,
@@ -252,24 +252,12 @@ function computePayoffUncached(
   punisher: 'w' | 'b',
   tier: 'confirmed' | 'positional',
 ): { payoff: string; winsMaterial: boolean } {
-  let mated = false;
-  let endMaterial = settledBalance(staticFen, null);
-  try {
-    const c = new Chess(staticFen);
-    c.move(inaccuracy);
-    let lastMv: LastMove | null = null;
-    for (const s of punishSeq) {
-      const m = c.move(s);
-      if (!m) break;
-      lastMv = { to: m.to, captured: m.captured ?? null };
-      if (m.san.includes('#')) mated = true;
-    }
-    if (c.isCheckmate()) mated = true;
-    endMaterial = settledBalance(c.fen(), lastMv);
-  } catch {
-    /* keep fallback */
-  }
-  const gain = punisher === 'w' ? endMaterial : -endMaterial;
+  // WHAT THE LINE WINS is the ONE ledger rule (WO-OUTCOME-01): the settled net
+  // where the playout ends, counted FROM THE START of the line — the absolute
+  // end balance this replaces forgot a position that was already unbalanced.
+  const proof = proofCut(staticFen, [inaccuracy, ...punishSeq], punisher);
+  const mated = !!proof?.mate;
+  const gain = proof && !proof.mate && proof.ledger ? proof.ledger.netPawns : 0;
   if (mated) return { payoff: 'with a mating attack', winsMaterial: false };
   if (gain >= 5) return { payoff: 'winning decisive material', winsMaterial: true };
   // Name what was actually won, off the capture ledger — never inferred from

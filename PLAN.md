@@ -13,6 +13,35 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🧾 WO-OUTCOME-01 — ONE COMPUTER FOR "WHAT DOES THIS LINE WIN" (David 2026-10-03: "You are not allowed to make a fix unless it's Root cause!!!")
+
+**Why.** The oct3a Review walk's false material lines ("your queen for their pawn", "it falls", "you can win the knight", "3 points behind") were patched lane by lane on 2026-10-03 with a NEW proof module (`claimProof`) — which duplicated `exchangeLedger`, the computer that already answers this. Reverted. The census (2026-10-03) found the real disease: **five line readers** answering "what does this engine line win" with different rules, and **~45 lanes** that claim a material OUTCOME from a static count while an engine line is often already in scope.
+
+| reader | rule today |
+|---|---|
+| `exchangeLedger.proofCut` | the WHOLE line's final settled net (no horizon on the net) |
+| `lineCalc.lineWins` | the FIRST settle that leaves the side ≥1 up (check carries on) |
+| `lookaheadPlan.materialSwing` | `sideBalance` at a quiet ply, capped by `settledLeadFor` |
+| `principleAttribution.lineNetForSide` / `pvWinsMaterial` | raw capture sums / material diff over 6 plies |
+| `gemFinder` / `gemCrushLines` | `settledBalance(end) − start` (gemCrushLines forgets the start) |
+
+**The one rule — two questions, never conflated.** (1) WHAT A LINE WINS = the settled net where the line ends (`proofCut`, the gem doctrine's quiet end): a pawn won and handed back inside the line was never won. (2) WHETHER IT CAN BE SPOKEN AS PROOF = the cut proof fits the listener's horizon (`MAX_PV_DEPTH_PLIES`), the check every heard proof already makes. A horizon on the NET was tried and measured wrong: 342 of 344 curated gem playouts run past 7 plies and would have lost their payoff.
+
+**Phases.**
+- **A — one line reader.** `exchangeLedger` implements the rule; `lineWins`, `materialSwing`'s capture count, `lineNetForSide`, `pvWinsMaterial`, the gem diffs all read it. Delete the copies.
+- **B — lanes with a line in scope** (reviewFullData facets, buildReviewSegments trapped + whyItFailed, danyaBehaviors, positionFacts must-defend, principleAttribution loose/ignored, moveOrder, moveReason, dnaLineNarrator) read the ledger over that line.
+- **C — lanes with no line** (chat hanging/threat answers, drill reasons, misconception, recapture choice, countMethod): either thread the engine line in, or say only the BOARD fact (attacked, undefended) — never the outcome. Per lane, decided in the table.
+- **D — gate.** An outcome sentence's text is produced only by the ledger's renderer; a lane that composes "wins/falls/takes it/come out" itself fails the build.
+
+**Status (2026-10-03):** Root fix 1 (refuted-alt cost from one search) `a63d42c51`.
+- **A done:** `lineWins`, `materialSwing`, `lineNetForSide`/`pvWinsMaterial`, gem payoff, gem gate, inaccuracy nets all read `proofCut`. Gate `oneLineReader.gate.test.ts`.
+- **The ledger itself, three corrections found on real lines:**
+  1. ONE "exchange finished" rule (`finishedAt`): inside a line the ENGINE decides (finished when its next move does not take back on the square); only where the line ends does the static count decide. The count alone stopped one ply early on even recaptures (…Bxc3+ Bxc3 Qxc3+) and ran on where the engine declined a take-back.
+  2. The line's result is its LAST finished point — an engine line is cut at a depth, often with a piece merely attacked (17.Bxd4 … Qe3).
+  3. PROMOTION: a captured promoted piece costs a pawn; a surviving one counts what it became (walk oct3b, 15.dxc6 … bxa8=Q Rxa8 read "a rook and a piece and a pawn").
+- **B in progress:** done — Review trade summary (`settledExchange`; `exchangeLosses` deleted), `whyItFailed` (line REQUIRED; backwardLook's caller patch deleted), `punishmentOf` + `whyBetter` capture reasons, trapped piece (`findTrappedPiece(fen, side, line)` REQUIRED; `trappedOnBoard` is the board fact, silence only), `explainTemptingCapture` (line REQUIRED), plan tactics must collect (`lineCollects`), maneuver "take the X there" read off the arriving move.
+- **Owed (B/C):** danyaBehaviors pressure, positionFacts must-defend, principleAttribution simple loose/ignored (`hangsBy`), moveOrder, moveReason, dnaLineNarrator, `studentMovePoint` ("wins the X — nothing takes it back" by SEE), `explainBestMoveGrounded` hung-material read, the HYPOTHETICAL captures ("taking there gives up your knight", "why not take" SEE) — prove with a `searchmoves` score or say the board fact.
+
 ## ⚖️ WO-MATERIAL-01 — ONE MATERIAL COMPUTER (David 2026-10-02: "You said that before. Check the root cause")
 
 **Root cause.** The oct2a walks found the same false line five times in one day —

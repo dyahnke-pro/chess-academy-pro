@@ -368,11 +368,11 @@ export async function buildOpeningTheoryLecture(
         // (mechanics) + the "why not just take?" refutation when a tempting
         // capture is being ignored (the Bg5/h4 register, David 2026-07-21).
         let prevFen = fromFen;
-        b.mainlineDive = line.map((p) => {
+        b.mainlineDive = line.map((p, i) => {
           const parts: string[] = [];
           const w = moveWhy(prevFen, p.san, opts.studentColor);
           if (w) parts.push(w);
-          const tempt = explainTemptingCapture(prevFen, p.san, 'neutral');
+          const tempt = explainTemptingCapture(prevFen, p.san, 'neutral', line.slice(i).map((q) => q.san));
           if (tempt) parts.push(tempt);
           prevFen = p.fenAfter;
           return { san: p.san, fenAfter: p.fenAfter, why: parts.length ? parts.join(' ') : null };
@@ -404,11 +404,11 @@ export async function buildOpeningTheoryLecture(
         // Step 0 is the alternative move itself.
         steps.push({ san: alt.san, fenAfter: afterAlt, why: moveWhy(c8Candidate.fenBefore, alt.san, opts.studentColor) });
         let prev = afterAlt;
-        for (const p of cont) {
+        for (const [i, p] of cont.entries()) {
           const parts: string[] = [];
           const w = moveWhy(prev, p.san, opts.studentColor);
           if (w) parts.push(w);
-          const tempt = explainTemptingCapture(prev, p.san, 'neutral');
+          const tempt = explainTemptingCapture(prev, p.san, 'neutral', cont.slice(i).map((q) => q.san));
           if (tempt) parts.push(tempt);
           steps.push({ san: p.san, fenAfter: p.fenAfter, why: parts.length ? parts.join(' ') : null });
           prev = p.fenAfter;

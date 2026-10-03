@@ -104,7 +104,7 @@ export async function refuteWrongTry(args: {
     }
   }
 
-  const geo = whyItFailed({ fenBefore: args.fenBefore, playedSan: args.wrongSan, studentColor: solver === 'w' ? 'white' : 'black' });
+  const geo = whyItFailed({ fenBefore: args.fenBefore, playedSan: args.wrongSan, studentColor: solver === 'w' ? 'white' : 'black', playedLineUci: line ?? null });
   if (geo) {
     return { kind: 'geometry', text: `${san}? ${geo.line}`, fenAfter, uci: [], arrows: [] };
   }

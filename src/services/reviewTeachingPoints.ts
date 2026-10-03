@@ -440,11 +440,25 @@ export function explainTemptingCapture(
    *  'you' → the student is the mover (second person);
    *  'they' → the opponent is the mover (the student watches their reasoning);
    *  'neutral' → side names from the fen (theory dives — no seat at all). */
-  perspective: 'you' | 'they' | 'neutral' = 'you',
+  perspective: 'you' | 'they' | 'neutral',
+  /** The line being walked from `fen`, SAN, starting with `chosenSan`, or
+   *  null. REQUIRED (WO-OUTCOME-01): "the line is picking the cheapest way to
+   *  let the queen go" is an outcome, said only when this line takes it. */
+  lineSans: readonly string[] | null,
 ): string | null {
   try {
     const c = new Chess(fen);
     const mover = c.turn();
+    const lineUci: string[] | null = lineSans ? [] : null;
+    if (lineSans && lineUci) {
+      const r = new Chess(fen);
+      for (const san of lineSans) {
+        let mv;
+        try { mv = r.move(san); } catch { break; }
+        if (!mv) break;
+        lineUci.push(`${mv.from}${mv.to}${mv.promotion ?? ''}`);
+      }
+    }
     const caps = c.moves({ verbose: true }).filter((m) => m.captured && PIECE_VAL[m.captured] >= 3);
     if (caps.length === 0) return null;
     // The most tempting = highest victim value; prefer the queen grabbing (the
@@ -473,11 +487,15 @@ export function explainTemptingCapture(
     // the line is just picking the cheapest version of losing the piece. Tell
     // the trapped-piece truth instead.
     if (t.piece === 'q' || t.piece === 'r') {
-      const trapped = findTrappedPiece(fen, mover);
+      // The trapped story is said only when the line really loses the piece;
+      // a trapped capturer the line cannot prove lost makes this explanation
+      // silent rather than false (WO-OUTCOME-01).
+      const trapped = findTrappedPiece(fen, mover, lineUci);
       if (trapped && trapped.square === t.from) {
         const trapPoss = perspective === 'you' ? 'your' : perspective === 'they' ? 'their' : `${mover === 'w' ? 'White' : 'Black'}'s`;
         return `The real story: ${trapPoss} ${trapped.piece} on ${trapped.square} is trapped — attacked by the ${trapped.attackerPiece} on ${trapped.attackerSquare}, and every escape square is covered. The line isn't declining the ${victimNoun}; it's picking the cheapest way to let the ${trapped.piece} go.`;
       }
+      if (trappedOnBoard(fen, mover)?.square === t.from) return null;
     }
     // Identify the cheapest recapturer for the prose ("the h-pawn takes back").
     const enemy: Color = mover === 'w' ? 'b' : 'w';
@@ -749,7 +767,41 @@ export function describeConcessions(fenBefore: string, san: string, moverIsStude
  * null. Minors are skipped (a trapped minor is usually just "wins a piece" —
  * the tactics layer covers it; R/Q traps are the story-level events).
  */
+/** Does the engine's line take the piece standing on `square`, following it
+ *  wherever it runs? "Trapped — coming off the board" is an OUTCOME, so it is
+ *  what the line does (WO-OUTCOME-01), never a mobility count alone. */
+export function lineTakesPiece(fen: string, square: string, lineUci: readonly string[]): boolean {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return false; }
+  const owner = c.get(square as Square)?.color;
+  if (!owner) return false;
+  let sq = square;
+  for (const u of lineUci) {
+    let mv;
+    try { mv = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { return false; }
+    if (!mv) return false;
+    if (mv.color === owner && mv.from === sq) sq = mv.to;
+    else if (mv.color !== owner && mv.to === sq && mv.captured) return true;
+  }
+  return false;
+}
+
 export function findTrappedPiece(
+  fen: string,
+  side: Color,
+  /** The engine's line from `fen`, UCI, or null. REQUIRED (WO-OUTCOME-01):
+   *  "trapped — it's coming off the board" is an outcome, so the piece is
+   *  named only when this line takes it. No line, no claim. */
+  lineUci: readonly string[] | null,
+): { square: string; piece: string; attackerSquare: string; attackerPiece: string } | null {
+  const t = trappedOnBoard(fen, side);
+  return t && lineUci && lineTakesPiece(fen, t.square, lineUci) ? t : null;
+}
+
+/** The board fact behind "trapped": a rook or queen attacked with no safe
+ *  square. Not an outcome — callers that cannot prove the capture use it only
+ *  to stay SILENT, never to say the piece is lost. */
+export function trappedOnBoard(
   fen: string,
   side: Color,
 ): { square: string; piece: string; attackerSquare: string; attackerPiece: string } | null {

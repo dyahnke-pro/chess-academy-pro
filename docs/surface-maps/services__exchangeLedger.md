@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**253 lines · 10 exports · 10 importers · 4 tests · 0 audits**
+**400 lines · 11 exports · 18 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,10 +18,18 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.horizon.test.ts`
 - `src/services/exchangeLedger.test.ts`
 - `src/services/gemCrushLines.ts`
+- `src/services/gemFinder.ts`
+- `src/services/inaccuracyCall.ts`
+- `src/services/lineCalc.ts`
 - `src/services/lineProof.test.ts`
+- `src/services/lookaheadPlan.ts`
+- `src/services/openingGenerator.ts`
 - `src/services/pieceOptions.ts`
+- `src/services/principleAttribution.ts`
 - `src/services/refutedAlternativeCore.ts`
+- `src/services/reviewFullData.ts`
 - `src/services/reviewWalkOct2a.test.ts`
+- `src/services/whyItFailed.ts`
 
 ## Exports and every call site
 
@@ -31,14 +39,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `ExchangeLedger` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeExchangeLedger` (function) — 7 call sites
+### `computeExchangeLedger` (function) — 10 call sites
 - `src/services/exchangeLedger.test.ts:12`
 - `src/services/exchangeLedger.test.ts:50`
 - `src/services/exchangeLedger.test.ts:51`
 - `src/services/exchangeLedger.test.ts:55`
 - `src/services/exchangeLedger.test.ts:241`
 - `src/services/exchangeLedger.test.ts:242`
-- `src/services/gemCrushLines.ts:279`
+- `src/services/exchangeLedger.test.ts:264`
+- `src/services/exchangeLedger.test.ts:269`
+- `src/services/exchangeLedger.test.ts:276`
+- `src/services/gemCrushLines.ts:267`
 
 ### `describeExchange` (function) — 4 call sites
 - `src/services/exchangeLedger.test.ts:18`
@@ -52,22 +63,39 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts:34`
 - `src/services/exchangeLedger.test.ts:238`
 
+### `settledExchange` (function) — 2 call sites
+- `src/services/reviewFullData.ts:327`
+- `src/services/reviewWalkOct2a.test.ts:15`
+
 ### `LineProof` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `proofCut` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:3630`
+### `proofCut` (function) — 22 call sites
+- `src/services/coachFeatureService.ts:3633`
+- `src/services/gemCrushLines.ts:258`
+- `src/services/gemFinder.ts:243`
+- `src/services/inaccuracyCall.ts:270`
+- `src/services/inaccuracyCall.ts:328`
+- `src/services/inaccuracyCall.ts:830`
+- `src/services/inaccuracyCall.ts:921`
+- `src/services/lineCalc.ts:40`
 - `src/services/lineProof.test.ts:13`
 - `src/services/lineProof.test.ts:24`
 - `src/services/lineProof.test.ts:32`
 - `src/services/lineProof.test.ts:37`
+- `src/services/lookaheadPlan.ts:572`
+- `src/services/lookaheadPlan.ts:630`
+- `src/services/openingGenerator.ts:3577`
 - `src/services/pieceOptions.ts:110`
+- `src/services/principleAttribution.ts:409`
+- `src/services/principleAttribution.ts:473`
 - `src/services/refutedAlternativeCore.ts:175`
-- `src/services/reviewWalkOct2a.test.ts:23`
-- `src/services/reviewWalkOct2a.test.ts:25`
+- `src/services/reviewWalkOct2a.test.ts:24`
+- `src/services/reviewWalkOct2a.test.ts:26`
+- `src/services/whyItFailed.ts:212`
 
 ### `describeProofResult` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3612`
+- `src/services/coachFeatureService.ts:3615`
 - `src/services/lineProof.test.ts:27`
 - `src/services/pieceOptions.ts:118`
 - `src/services/refutedAlternativeCore.ts:183`

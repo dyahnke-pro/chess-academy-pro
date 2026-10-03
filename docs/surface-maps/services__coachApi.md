@@ -151,9 +151,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getCoachStructuredResponse` (function) — 3 call sites
-- `src/services/openingGenerator.ts:3129`
-- `src/services/openingGenerator.ts:3267`
-- `src/services/openingGenerator.ts:3840`
+- `src/services/openingGenerator.ts:3130`
+- `src/services/openingGenerator.ts:3268`
+- `src/services/openingGenerator.ts:3830`
 
 ### `OpponentHypotheticalGrounding` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -228,7 +228,7 @@
 - `src/hooks/useLiveCoach.ts:312`
 - `src/hooks/usePhaseNarration.test.ts:68`
 - `src/hooks/usePhaseNarration.ts:744`
-- `src/services/coachMoveCommentary.ts:303`
+- `src/services/coachMoveCommentary.ts:304`
 - `src/services/groundedComputedOnly.test.ts:25`
 - `src/services/groundedMoveFeedback.test.ts:14`
 - `src/services/groundedMoveFeedback.test.ts:26`
@@ -283,18 +283,18 @@
 - `src/services/coachFeatureService.ts:423`
 - `src/services/coachFeatureService.ts:558`
 - `src/services/coachFeatureService.ts:559`
-- `src/services/coachFeatureService.ts:4961`
-- `src/services/coachFeatureService.ts:5114`
+- `src/services/coachFeatureService.ts:4964`
+- `src/services/coachFeatureService.ts:5117`
 - `src/services/coachLaneWiring.test.ts:144`
-- `src/services/coachMoveCommentary.ts:236`
-- `src/services/coachMoveCommentary.ts:293`
+- `src/services/coachMoveCommentary.ts:237`
+- `src/services/coachMoveCommentary.ts:294`
 - `src/services/contentGenerationService.ts:133`
 - `src/services/contentGenerationService.ts:168`
 - `src/services/contentGenerationService.ts:202`
 - `src/services/gameReviewService.ts:57`
 - `src/services/kidGameCoach.ts:223`
 - `src/services/mistakeNarrationVoice.ts:109`
-- `src/services/openingGenerator.ts:2363`
+- `src/services/openingGenerator.ts:2364`
 - `src/services/openingSectionNarrator.ts:84`
 - `src/services/speakComputed.ts:21`
 - `src/services/spokenLanguage.ts:191`
@@ -365,7 +365,7 @@
 - `src/services/coachApi.pieceOptions.test.ts:30`
 - `src/services/coachApi.whyReasoning.integration.test.ts:60`
 - `src/services/coachApi.whyReasoning.integration.test.ts:80`
-- `src/services/openingGenerator.ts:4065`
+- `src/services/openingGenerator.ts:4055`
 - `src/services/positionReadingGrader.test.ts:6`
 - `src/services/positionReadingGrader.ts:67`
 - `src/services/smartSearchService.ts:50`

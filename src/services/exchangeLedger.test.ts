@@ -254,3 +254,26 @@ describe('a standing deep threat is said once (review walk 2026-10-01)', () => {
     expect(src).toMatch(/if \(deepOppSaid\.has\(oppKey\)\) continue;/);
   });
 });
+
+describe('a promoted piece was a pawn (walk oct3b, 15.dxc6)', () => {
+  const fen = 'r3k2r/pq2bppp/1p3n2/2pPQ3/8/2P3P1/PP3P1P/RNB1R1K1 w kq c6 0 15';
+  it('… bxa8=Q Rxa8 wins a rook and a bishop, not "a rook and a piece and a pawn"', async () => {
+    const { betterMoveReason } = await import('./inaccuracyCall');
+    const line = ['d5c6', 'e8g8', 'c6b7', 'e7c5', 'e5c5', 'b6c5', 'b7a8q', 'f8a8'];
+    expect(betterMoveReason(fen, 'd6', 'dxc6', line, 'white', null)).not.toMatch(/a rook and a piece and a pawn/);
+    const l = computeExchangeLedger(fen, ['dxc6', 'O-O', 'cxb7', 'Bc5', 'Qxc5', 'bxc5', 'bxa8=Q', 'Rxa8'], 'w');
+    expect(l?.netPawns).toBe(8);
+    expect(l?.opponentWon).toEqual(['q', 'p']);
+  });
+  it('a promotion that survives counts what it became', () => {
+    const l = computeExchangeLedger('8/P7/8/8/8/8/8/k6K w - - 0 1', ['a8=Q'], 'w');
+    expect(l?.netPawns).toBe(8);
+  });
+});
+
+describe('a king on the last capture square ends the exchange (walk 900, …Kxg2 Qh2+)', () => {
+  it('the line settles where the king took', () => {
+    const l = computeExchangeLedger('k7/8/8/8/8/2q5/6p1/6K1 w - - 0 1', ['Kxg2', 'Qc2+'], 'w');
+    expect(l?.settled).toBe(true);
+  });
+});

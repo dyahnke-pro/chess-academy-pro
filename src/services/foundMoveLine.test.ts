@@ -10,8 +10,16 @@ describe('winningLine — the line that makes the found move work (pass-2 walk 2
     expect(w?.sans).toEqual(['…Nxd5', 'cxd5', '…Bxc3+', 'Bxc3', '…Qxc3+']);
     expect(w?.arrows).toHaveLength(5);
   });
-  it('a line that ends level or behind says nothing', () => {
-    expect(winningLine(fen, 'Nxd5', ['f6d5', 'c4d5', 'g7c3', 'b2c3'], 'b')).toBeNull();
+  it('a line that ends behind says nothing', () => {
+    // …Nxd5 cxd5 and the line stops: a knight for a pawn.
+    expect(winningLine(fen, 'Nxd5', ['f6d5', 'c4d5', 'h7h6'], 'b')).toBeNull();
+  });
+  it('a line cut one move short of a forced recapture is played out (WO-OUTCOME-01)', () => {
+    // The engine line stops at Bxc3; …Qxc3+ takes the bishop back and is forced
+    // material, so the claim is the pawn — shown to the move that wins it.
+    const w = winningLine(fen, 'Nxd5', ['f6d5', 'c4d5', 'g7c3', 'b2c3'], 'b');
+    expect(w?.what).toBe('a pawn');
+    expect(w?.sans).toEqual(['…Nxd5', 'cxd5', '…Bxc3+', 'Bxc3', '…Qxc3+']);
   });
   it('a different first move says nothing', () => {
     expect(winningLine(fen, 'Nb4', ['f6d5', 'c4d5', 'g7c3', 'b2c3', 'a5c3', 'e1e2'], 'b')).toBeNull();

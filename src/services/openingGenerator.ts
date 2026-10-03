@@ -81,6 +81,7 @@ import type {
   DrillLine,
   PunishLesson,
 } from '../types/walkthroughTree';
+import { proofCut } from './exchangeLedger';
 
 /** Render a Lichess-DB entry list as a numbered, prompt-friendly
  *  block. Each line: "  {N}. [ECO] Name :: PGN". */
@@ -3563,8 +3564,6 @@ export function computePunishFacts(
     } catch { /* detector optional */ }
     // 2. The punishing move's mechanics + the sequence's material arithmetic.
     const seq = new Chess(postInaccuracyFen);
-    let studentGain = 0;
-    let opponentGain = 0;
     const first = seq.move(punishment);
     if (first) {
       const mech: string[] = [];
@@ -3573,21 +3572,12 @@ export function computePunishFacts(
       else if (first.san.includes('+')) mech.push('gives check');
       if (mech.length === 0) mech.push('is a quiet move');
       lines.push(`the punishing move ${first.san} ${mech.join(' and ')}`);
-      if (first.captured) studentGain += PUNISH_PIECE_VALUE[first.captured] ?? 0;
-      let mover: 'student' | 'opponent' = 'opponent';
-      for (const f of followup) {
-        const m = (() => { try { return seq.move(f.san); } catch { return null; } })();
-        if (!m) break;
-        if (m.captured) {
-          if (mover === 'student') studentGain += PUNISH_PIECE_VALUE[m.captured] ?? 0;
-          else opponentGain += PUNISH_PIECE_VALUE[m.captured] ?? 0;
-        }
-        mover = mover === 'student' ? 'opponent' : 'student';
-      }
-      const last = followup.length > 0 ? followup[followup.length - 1].san : first.san;
-      if (last.includes('#')) lines.push('the sequence ends in checkmate');
-      else if (studentGain - opponentGain >= 2) {
-        lines.push(`over the full sequence the student comes out ${studentGain - opponentGain} points of material ahead`);
+      // What the sequence wins is the ONE ledger rule (WO-OUTCOME-01): its
+      // settled net where it ends — never a raw sum of captures.
+      const proof = proofCut(postInaccuracyFen, [first.san, ...followup.map((f) => f.san)], student);
+      if (proof?.mate) lines.push('the sequence ends in checkmate');
+      else if (proof?.ledger && proof.ledger.netPawns >= 2) {
+        lines.push(`over the full sequence the student comes out ${proof.ledger.netPawns} points of material ahead`);
       }
     }
     // 3. Why each distractor fails — computed, not guessed.

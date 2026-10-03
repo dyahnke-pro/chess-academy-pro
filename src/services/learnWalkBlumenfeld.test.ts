@@ -85,12 +85,17 @@ describe('F16/F23/F31 — a grade says what the move cost, and whether they took
       fenBefore: fenAt(29), playedSan: 'Qd7', bestSan: 'Rad8',
       bestLineUci: ['a8d8', 'd2f1', 'f6d7', 'a2a4', 'c7b8', 'f1g3'],
       cpLoss: 374, side: 'student', moverColor: 'black',
-      replyLineUci: ['b2f6', 'e7f6', 'd2e4', 'f6b2', 'c1c2', 'd7e7'],
+      // Stockfish depth 18 after …Qd7 (the old fixture stopped with Nxe4 still
+      // hanging to …dxe4, which proves nothing).
+      replyLineUci: ['b2f6', 'g7f6', 'd2e4', 'c5c4', 'b3c4', 'f8d8', 'e4g3', 'd5c4'],
       replySan: 'Nf1',
     });
     const said = v.call?.said ?? '';
-    expect(said).toMatch(/Qd7 was a blunder — it let them /);
-    expect(said).toMatch(/they missed it/);
+    // The grade still says what the move COST. On the real line Bxf6 takes the
+    // knight but …gxf6 takes the bishop back, so "it let them take your knight"
+    // (the old fixture's first-capture read) is not what the line keeps.
+    expect(said).toMatch(/Qd7 was a blunder — it (let them |cost about)/);
+    expect(said).not.toMatch(/take your knight/);
     expect(said).not.toMatch(/their king/);
   });
   it('with no reply line the grade names only the cost it can prove — the eval it gave away', async () => {

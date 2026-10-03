@@ -33,9 +33,9 @@ import { classifyMove, type MoveQuality } from './moveRating';
 import { MISTAKE_CP, BLUNDER_CP, costWords } from './engineConstants';
 export { costWords };
 import { MATERIAL_VALUE } from './pieceValues';
-import { legalSeeGain } from './positionReadingService';
 import { lineWins, mateLine } from './lineCalc';
 import { landedTacticFor } from './pvPlayback';
+import { proofCut } from './exchangeLedger';
 
 export interface InaccuracyCall {
   /** Straight from `moveRating.classifyMove` — never re-derived here. */
@@ -235,22 +235,15 @@ function survivesForcingCut(fenBefore: string, bestUci: readonly string[], mover
   const tactic = /\bland an? \w/.test(text);
   if (material === null && !tactic) return true;
   let cut = bestUci.length;
-  let net = 0;
-  let netAtCut = 0;
   let quiet = 0;
+  const sans: string[] = [];
   try {
     const b = new Chess(fenBefore);
-    const me = b.turn();
     let prev: { to: string; captured: boolean } | null = null;
-    // A line that takes back on the square their last move captured on is
-    // finishing that trade: their capture counts against the line.
     if (priorMove) {
       try {
         const lm = new Chess(priorMove.fenBefore).move(priorMove.san);
-        if (lm?.captured && bestUci[0]?.slice(2, 4) === lm.to) {
-          net -= MATERIAL_VALUE[lm.captured];
-          prev = { to: lm.to, captured: true };
-        }
+        if (lm?.captured && bestUci[0]?.slice(2, 4) === lm.to) prev = { to: lm.to, captured: true };
       } catch { /* unreadable — count from the board as given */ }
     }
     for (let i = 0; i < bestUci.length; i += 1) {
@@ -258,18 +251,27 @@ function survivesForcingCut(fenBefore: string, bestUci: readonly string[], mover
       const inCheck = b.inCheck();
       const m = b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
       if (!m) break;
+      sans.push(m.san);
       // A defender move is FORCED only when it answers a check or takes back
       // on the square just captured on; anything else is their choice, and
       // the time-boxed line may have chosen badly for them.
       const forced = inCheck || (!!m.captured && !!prev?.captured && m.to === prev.to);
       if (cut === bestUci.length && i % 2 === 1 && !forced) {
         quiet += 1;
-        if (quiet === 2) { cut = i; netAtCut = net; }
+        if (quiet === 2) cut = i;
       }
-      if (m.captured) net += (m.color === me ? 1 : -1) * MATERIAL_VALUE[m.captured];
       prev = { to: m.to, captured: !!m.captured };
     }
   } catch { return false; }
+  // What the line wins, whole and at the cut — the ONE ledger rule
+  // (WO-OUTCOME-01), counted from before a trade the line finishes.
+  const me: 'w' | 'b' = fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
+  const netOf = (k: number): number => {
+    const proof = proofCut(fenBefore, sans.slice(0, k), me, priorMove);
+    return proof && !proof.mate && proof.ledger ? proof.ledger.netPawns : 0;
+  };
+  const net = netOf(sans.length);
+  const netAtCut = netOf(cut);
   if (cut >= bestUci.length) return true;
   // Everything the line wins must already be won before the guessing starts.
   if (material !== null) return netAtCut > 0 && netAtCut >= net;
@@ -308,8 +310,26 @@ function whyBetter(
     // …or when it wins the piece OUTRIGHT: an undefended queen taken by a
     // queen is not an even trade (review walk 2065, 2026-09-26: Qxh5 took a
     // hanging queen and the line's net read called it "win a rook").
-    const winsOutright = first?.captured ? legalSeeGain(fenBefore, first.to) >= MATERIAL_VALUE[first.captured] : false;
-    if (first?.captured && NAME[first.captured] && (MATERIAL_VALUE[first.captured] > MATERIAL_VALUE[first.piece] || winsOutright)) {
+    // Both read off the LINE (WO-OUTCOME-01), never a static swap: the line's
+    // settled net must be a gain, and the piece is "taken" only when it is
+    // worth more than the taker or the line never takes back on that square.
+    let lineGains = false;
+    let lineTakesBack = false;
+    if (first?.captured && NAME[first.captured]) {
+      const r = new Chess(fenBefore);
+      const sans: string[] = [];
+      for (const uci of bestUci) {
+        let mv;
+        try { mv = r.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }); } catch { break; }
+        if (!mv) break;
+        sans.push(mv.san);
+        if (sans.length > 1 && mv.captured && mv.to === first.to && mv.color !== first.color) lineTakesBack = true;
+      }
+      const proof = proofCut(fenBefore, sans, first.color, priorMove);
+      lineGains = !!proof && (proof.mate || (!!proof.ledger && proof.ledger.netPawns > 0));
+    }
+    const winsOutright = lineGains && !lineTakesBack;
+    if (first?.captured && NAME[first.captured] && lineGains && (MATERIAL_VALUE[first.captured] > MATERIAL_VALUE[first.piece] || winsOutright)) {
       return { why: `take the ${NAME[first.captured]} on ${first.to}`, square: first.to, own: true };
     }
     // A recapture ("cxd4 was the move — it would win a pawn" one move after
@@ -795,17 +815,23 @@ export function punishmentOf(
     const u = replyLineUci[0];
     const m = b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
     const NAME: Record<string, string> = { q: 'queen', r: 'rook', b: 'bishop', n: 'knight' };
-    const outright = m?.captured ? legalSeeGain(fenAfter, m.to) >= MATERIAL_VALUE[m.captured] : false;
-    // A RECAPTURE IS THE OTHER HALF OF A TRADE, NOT A LOSS (Learn walk
-    // 2026-10-01, game 1 ply 68: "Rxe2+ was a mistake — it let them take your
-    // rook on e2" — the rook had just taken theirs there). Taking back on the
-    // square the played move captured on, for no more than it took, costs
-    // nothing; the cost lives further down the line.
-    const played = new Chess(fenBefore).move(playedSan);
-    const tradeBack = !!(m?.captured && played.captured && m.to === played.to
-      && MATERIAL_VALUE[m.captured] <= MATERIAL_VALUE[played.captured]);
-    if (m?.captured && NAME[m.captured] && !tradeBack && (MATERIAL_VALUE[m.captured] > MATERIAL_VALUE[m.piece] || outright)) {
-      return { why: `take your ${NAME[m.captured]} on ${m.to}`, first, lostSquare: m.to };
+    // WHAT THEY KEEP is what the line settles on, read by the one ledger
+    // (WO-OUTCOME-01) — never the first capture's static swap. A recapture
+    // of what the played move took nets out inside the ledger by itself.
+    if (m?.captured && NAME[m.captured]) {
+      const sans: string[] = [playedSan];
+      const r = new Chess(fenAfter);
+      for (const uci of replyLineUci) {
+        let mv;
+        try { mv = r.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }); } catch { break; }
+        if (!mv) break;
+        sans.push(mv.san);
+      }
+      const proof = proofCut(fenBefore, sans, moverColor === 'white' ? 'w' : 'b');
+      const lost = proof && !proof.mate && proof.ledger ? -proof.ledger.netPawns : 0;
+      if (lost >= MATERIAL_VALUE[m.captured]) {
+        return { why: `take your ${NAME[m.captured]} on ${m.to}`, first, lostSquare: m.to };
+      }
     }
   } catch { /* fall through to the plan read */ }
   // Otherwise THEIR half of the plan, seated from the student's side so its
@@ -872,19 +898,30 @@ export function punishmentOf(
  *  (them to move). -Infinity when the line cannot be played there — then the
  *  move is what made it possible. */
 function wonBefore(fenBefore: string, lineUci: readonly string[]): number {
+  const parts = fenBefore.split(' ');
+  parts[1] = parts[1] === 'w' ? 'b' : 'w'; parts[3] = '-';
+  return ledgerNet(parts.join(' '), lineUci) ?? -Infinity;
+}
+
+/** What a line nets for the side to move at `fen` — the ONE ledger rule
+ *  (WO-OUTCOME-01): the settled net where the line ends; a mate it delivers
+ *  outweighs any material. Null when the line is not legal there. */
+function ledgerNet(fen: string, lineUci: readonly string[]): number | null {
+  const sans: string[] = [];
+  let me: 'w' | 'b';
   try {
-    const parts = fenBefore.split(' ');
-    parts[1] = parts[1] === 'w' ? 'b' : 'w'; parts[3] = '-';
-    const c = new Chess(parts.join(' '));
-    const me = c.turn();
-    let net = 0;
+    const c = new Chess(fen);
+    me = c.turn();
     for (const u of lineUci) {
       const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
-      if (!m) return -Infinity;
-      if (m.captured) net += (m.color === me ? 1 : -1) * MATERIAL_VALUE[m.captured];
+      if (!m) return null;
+      sans.push(m.san);
     }
-    return net;
-  } catch { return -Infinity; }
+  } catch { return null; }
+  const proof = proofCut(fen, sans, me);
+  if (!proof) return 0;
+  if (proof.mate) return sans.length % 2 === 1 ? 100 : -100;
+  return proof.ledger ? proof.ledger.netPawns : 0;
 }
 
 /** Clearly better after the move (+1.5): a drop that leaves you here is a
@@ -892,18 +929,9 @@ function wonBefore(fenBefore: string, lineUci: readonly string[]): number {
 export const STILL_BETTER_CP = 150;
 
 
-/** Material the side to move nets over a line (captures only, in pawns). */
+/** Material the side to move nets over a line — the ledger's read. */
 function lineNetFor(fen: string, lineUci: readonly string[]): number {
-  try {
-    const c = new Chess(fen);
-    const me = c.turn();
-    let net = 0;
-    for (const u of lineUci) {
-      const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
-      if (m?.captured) net += (m.color === me ? 1 : -1) * MATERIAL_VALUE[m.captured];
-    }
-    return net;
-  } catch { return 0; }
+  return ledgerNet(fen, lineUci) ?? 0;
 }
 
 /** The verdict alone — the shape every existing caller already expects.

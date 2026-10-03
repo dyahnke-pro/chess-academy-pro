@@ -181,7 +181,7 @@ export function provenPrefix(fenBefore: string, sans: readonly string[], moverWB
   const against = proof.mate ? proof.plies % 2 === 0 : (proof.ledger?.netPawns ?? 0) < 0;
   if (!against) return { lineSans: [], proofResult: null };
   const proofResult = proof.mate ? "it's mate" : proof.ledger ? describeProofResult(proof.ledger) : null;
-  return { lineSans: proofResult ? sans.slice(0, proof.plies) : [], proofResult };
+  return { lineSans: proofResult ? proof.sans.slice(0, proof.plies) : [], proofResult };
 }
 
 /**

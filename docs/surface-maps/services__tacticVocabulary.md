@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**193 lines · 12 exports · 9 importers · 3 tests · 3 audits**
+**202 lines · 13 exports · 9 importers · 3 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -35,10 +35,10 @@
 - `src/services/computedVoiceAudit.report.test.ts:254`
 - `src/services/dnaLineNarrator.ts:131`
 - `src/services/dnaLineNarrator.ts:220`
-- `src/services/groundedAnswer.ts:5112`
-- `src/services/groundedAnswer.ts:5124`
-- `src/services/groundedAnswer.ts:5884`
-- `src/services/lookaheadPlan.ts:110`
+- `src/services/groundedAnswer.ts:5114`
+- `src/services/groundedAnswer.ts:5126`
+- `src/services/groundedAnswer.ts:5886`
+- `src/services/lookaheadPlan.ts:111`
 - `src/services/pvPlayback.test.ts:291`
 - `src/services/pvPlayback.test.ts:292`
 - `src/services/pvPlayback.test.ts:293`
@@ -47,26 +47,29 @@
 - `src/services/pvPlayback.test.ts:297`
 - `src/services/pvPlayback.test.ts:299`
 - `src/services/pvPlayback.test.ts:300`
-- `src/services/pvPlayback.ts:230`
-- `src/services/pvPlayback.ts:648`
-- `src/services/pvPlayback.ts:668`
-- `src/services/pvPlayback.ts:705`
-- `src/services/pvPlayback.ts:798`
-- `src/services/reviewMoveBriefing.ts:250`
+- `src/services/pvPlayback.ts:242`
+- `src/services/pvPlayback.ts:660`
+- `src/services/pvPlayback.ts:680`
+- `src/services/pvPlayback.ts:717`
+- `src/services/pvPlayback.ts:810`
+- `src/services/reviewMoveBriefing.ts:246`
 - `src/services/teachingSelector.ts:347`
 
 ### `PATTERN_SPEECH` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `patternClaimsMaterial` (function) — 1 call site
+- `src/services/lookaheadPlan.ts:577`
+
 ### `patternWord` (function) — 1 call site
-- `src/services/pvPlayback.ts:231`
+- `src/services/pvPlayback.ts:243`
 
 ### `patternAim` (function) — 5 call sites
-- `src/services/lookaheadPlan.ts:107`
-- `src/services/pvPlayback.ts:648`
-- `src/services/pvPlayback.ts:668`
-- `src/services/pvPlayback.ts:705`
-- `src/services/pvPlayback.ts:798`
+- `src/services/lookaheadPlan.ts:108`
+- `src/services/pvPlayback.ts:660`
+- `src/services/pvPlayback.ts:680`
+- `src/services/pvPlayback.ts:717`
+- `src/services/pvPlayback.ts:810`
 
 ### `TACTIC_TO_PATTERN` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

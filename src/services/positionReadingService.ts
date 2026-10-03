@@ -202,29 +202,6 @@ export function capturesWinMaterial(fen: string, square: Square, moverColor: Col
 }
 
 /**
- * The pieces each side loses when the exchange on `square` is played out from
- * `fen`: the side to move captures, the other takes back, and so on, each with
- * its least valuable piece and only while the capture does not lose material
- * (`legalSeeGainFor`). A trade summary read one capture deep calls Qxd4 Qxd4
- * Nxd4 "their queen for your pawn" (review walk 2026-10-02).
- */
-export function exchangeLosses(fen: string, square: Square): Record<Color, PieceSymbol[]> {
-  const lost: Record<Color, PieceSymbol[]> = { w: [], b: [] };
-  let chess: Chess;
-  try { chess = new Chess(fen); } catch { return lost; }
-  for (let guard = 0; guard < 8; guard += 1) {
-    if (legalSeeGainFor(chess.fen(), square, chess.turn()) < 0) break;
-    const caps = chess.moves({ verbose: true }).filter((m) => m.to === square && m.captured);
-    if (caps.length === 0) break;
-    caps.sort((a, b) => (PIECE_VALUE[a.piece] ?? 0) - (PIECE_VALUE[b.piece] ?? 0));
-    const mv = caps[0];
-    try { chess.move(mv); } catch { break; }
-    if (mv.captured) lost[mv.color === 'w' ? 'b' : 'w'].push(mv.captured);
-  }
-  return lost;
-}
-
-/**
  * The actual capture SEQUENCE (SAN) of the static exchange on `square` — each
  * side recaptures with its least-valuable attacker, in order. This is the
  * grounded line we PLAY OUT ON THE BOARD so the student SEES why a pawn is

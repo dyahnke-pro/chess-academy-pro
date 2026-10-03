@@ -4,10 +4,11 @@
 // up" — and every surface that names a win or a punishment reads the same
 // computer: an engine line, walked, stopped at its LAST capture (the exchanges
 // are over there, so what is left is what was won — never a peak the
-// recaptures hand back). A LEAF: chess.js only.
+// recaptures hand back). The outcome is the ONE ledger rule (exchangeLedger.proofCut).
 import { Chess } from 'chess.js';
 import type { ArrowClaim } from './arrowDoor';
-import { MATERIAL_VALUE } from './pieceValues';
+import { proofCut } from './exchangeLedger';
+import { MAX_PV_DEPTH_PLIES } from './ratingBands';
 
 const WORDS: Record<number, string> = { 1: 'a pawn', 2: 'two pawns', 3: 'a piece', 4: 'a piece and a pawn', 5: 'a rook', 6: 'a rook and a pawn', 9: 'the queen' };
 
@@ -24,14 +25,6 @@ export function lineWins(fen: string, lineUci: readonly string[], side: 'w' | 'b
   const bare = (s: string): string => s.replace(/[+#]$/, '');
   const c = new Chess(fen);
   const plies: LinePly[] = [];
-  // THE GAIN SETTLES at the first finished exchange that leaves `side` up:
-  // after a capture, when the next move takes nothing back (pass-3 walk
-  // 2026-10-01: "the last capture" of a 20-ply engine line read out as
-  // "…e6 dxe6+ …fxe6 b4 …Ke7 Nb3 … dxe4 fxe4" — material that deep in a PV is
-  // noise, and he walks three to six plies). A line whose first settled count
-  // is level or behind says nothing.
-  let net = 0; let settle = -1; let lastCap = -1;
-  const took: string[] = []; const gave: string[] = [];
   try {
     for (let i = 0; i < lineUci.length; i += 1) {
       const u = lineUci[i];
@@ -40,28 +33,35 @@ export function lineWins(fen: string, lineUci: readonly string[], side: 'w' | 'b
       if (!m) break;
       if (i === 0 && firstSan && bare(m.san) !== bare(firstSan)) return null;
       plies.push({ from: m.from, to: m.to, color: m.color, fen: before, san: m.san });
-      if (m.captured) { net += (m.color === side ? 1 : -1) * (MATERIAL_VALUE[m.captured] ?? 0); lastCap = i; (m.color === side ? took : gave).push(m.captured); }
-      // A SETTLE: something was taken, nobody is in check (a check forces the
-      // reply), and the next move takes nothing back.
-      const next = lineUci[i + 1];
-      const nextTakes = next ? !!c.get(next.slice(2, 4) as Parameters<Chess['get']>[0]) : false;
-      if (lastCap < 0 || nextTakes || c.inCheck()) continue;
-      if (net >= 1) { settle = lastCap; break; }
-      // Behind or level once the exchange is over: only a CHECK carries the
-      // line on (a sacrifice cashed by force, the Damiano's Qh5+); a quiet
-      // move here means the line proves nothing.
-      let nextChecks = false;
-      if (next) { try { const t = new Chess(c.fen()); t.move({ from: next.slice(0, 2), to: next.slice(2, 4), promotion: next[4] }); nextChecks = t.inCheck(); } catch { /* none */ } }
-      if (!nextChecks) return null;
     }
-  } catch { return null; }
+  } catch { /* the playable prefix is what we have */ }
+  // WHAT THE LINE WINS is the ONE ledger rule (WO-OUTCOME-01): the settled net
+  // where the line ends — never a private settle rule of this file.
+  const proof = proofCut(fen, plies.map((p) => p.san), side);
+  if (!proof || proof.mate || !proof.ledger || proof.ledger.netPawns < 1) return null;
+  // A SPOKEN proof has the listener's horizon — the same check every heard
+  // proof makes (exchangeLedger.proofForMover): a deep engine line's tail is
+  // never a reason anyone can follow.
+  if (proof.plies > MAX_PV_DEPTH_PLIES) return null;
   // Two plies by default (a line to SHOW); a refutation may settle on the
   // very first capture (`minPlies: 1` — puzzleTeaching: "Kd1? Rxa1+").
-  if (settle < (opts.minPlies ?? 2) - 1) return null;
-  const shown = plies.slice(0, settle + 1);
+  if (proof.plies < (opts.minPlies ?? 2)) return null;
+  // The proof may run one forced recapture past the engine line's end; those
+  // plies are played here so the line shown is the line the claim rests on.
+  const shown = plies.slice(0, proof.plies);
+  try {
+    const x = new Chess(shown.length ? plies[shown.length - 1].fen : fen);
+    if (shown.length) x.move(shown[shown.length - 1].san);
+    for (const san of proof.sans.slice(shown.length, proof.plies)) {
+      const before = x.fen();
+      const m = x.move(san);
+      shown.push({ from: m.from, to: m.to, color: m.color, fen: before, san: m.san });
+    }
+  } catch { return null; }
+  const net = proof.ledger.netPawns;
   return {
     net,
-    what: materialWords(took, gave, net),
+    what: materialWords(proof.ledger.studentWon, proof.ledger.opponentWon, net),
     sans: shown.map((p) => `${p.color === 'b' ? '…' : ''}${p.san}`),
     plies: shown,
   };

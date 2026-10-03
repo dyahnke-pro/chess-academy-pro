@@ -145,14 +145,17 @@ describe('a pawn trade is not a poisoned grab (Learn walk 2026-10-01, game 1 ply
 
 describe('an ignored threat can be a LINE, not only a hanging piece (A3, review walk 2026-10-01, game 3)', () => {
   const G3 = 'e4 e5 c3 Be7 d4 exd4 cxd4 Nf6 Nc3 Nc6 h3 d5 e5 Ne4 Bd3 Bb4 Bxe4 dxe4 Ne2 Be6 O-O Bc4 Be3 Bxc3 bxc3 O-O Re1 Bd5 Qc2 Na5 Nf4 c6 Qa4 Nc4 Rab1 b5 Qc2 a6 Nxd5 cxd5 Qe2 f5 exf6 Qxf6 Rf1 Qg6 Qg4 Qxg4 hxg4 Rf7 g5 Raf8 Kh2'.split(' ');
-  it('Kh2 with …Nxe3 fxe3 Rxf1 already on and Rfc1 stopping it attaches ignored-threat as a line', () => {
+  it('Kh2 with …Nxe3 fxe3 Rxf1: "already on" is said only when the ledger proves it on the board before (WO-OUTCOME-01)', () => {
+    // Before Kh2 the king on g1 retakes on f1, so THIS line wins nothing there
+    // — the old raw capture sum said it did. The engine's own threat before Kh2
+    // ran a different line (…Nxe3 g6 …Nxf1), which this detector never sees,
+    // so "their threat was already on" cannot be proven and is not said.
+    const a = attributePrinciples({ replySan: 'Nxe3', historySans: G3, bestSan: 'Rfc1', classification: 'blunder', pvAfterPlayed: ['Nxe3', 'fxe3', 'Rxf1', 'Rxf1', 'Rxf1'] });
+    expect(a.some((x) => x.id === 'ignored-threat' && x.facts.line)).toBe(false);
+  });
+  it('a threat line cut mid-exchange proves nothing (WO-OUTCOME-01)', () => {
     const a = attributePrinciples({ replySan: 'Nxe3', historySans: G3, bestSan: 'Rfc1', classification: 'blunder', pvAfterPlayed: ['Nxe3', 'fxe3', 'Rxf1'] });
-    const t = a.find((x) => x.id === 'ignored-threat');
-    expect(t?.facts.line).toBe('Nxe3, fxe3, Rxf1');
-    expect(t?.facts.square).toBe('f1');
-    const said = renderFundamentalVerdict([t!], { ply: 53, seen: new Set(), replySan: null });
-    expect(said).toMatch(/Nxe3, fxe3, Rxf1/);
-    expect(said).not.toMatch(/was hanging|already attacked/);
+    expect(a.some((x) => x.id === 'ignored-threat' && x.facts.line)).toBe(false);
   });
   it('a trade is not a threat: Be3 with …Bxc3 bxc3 attaches nothing of the kind', () => {
     const a = attributePrinciples({ replySan: 'Bxc3', historySans: G3.slice(0, 23), bestSan: 'Nxe4', classification: 'inaccuracy', pvAfterPlayed: ['Bxc3', 'bxc3'] });
@@ -169,5 +172,17 @@ describe('the king verdict claims only what the attributor proved (Learn walk 20
       const t = renderFundamentalVerdict([a], { ply, seen: new Set(), replySan: null });
       expect(t).not.toMatch(/already marching|and theirs is\b/);
     }
+  });
+});
+
+describe('a missed combination names its line, never a line as the piece that takes (walk oct3b, 14…b5)', () => {
+  const combo = { id: 'ignored-threat', facts: { piece: 'knight', square: 'h6' }, evidence: { squares: ['h6'], moves: ['Qh3 e5 Bxh6 Bxh6 Qxh6 Qxg4'], pvMoves: [] } } as never;
+  it('the reply left the line — a miss, said as the line', () => {
+    const t = renderFundamentalVerdict([combo], { replySan: 'g5', ply: 28, seen: new Set() });
+    expect(t).toMatch(/open to Qh3, e5, Bxh6, Bxh6, Qxh6, Qxg4 — they missed it/);
+    expect(t).not.toMatch(/hanging to Qh3/);
+  });
+  it('the reply IS the line\'s first move — no miss', () => {
+    expect(renderFundamentalVerdict([combo], { replySan: 'Qh3', ply: 28, seen: new Set() })).not.toMatch(/missed/);
   });
 });

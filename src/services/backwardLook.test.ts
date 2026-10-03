@@ -387,15 +387,25 @@ describe('a static swap count never overrules the engine (hand walk 2026-09-25)'
   });
 });
 
-describe('a hung piece they did not take is a miss (walk 900, 17…Bg1 Nxg4)', () => {
-  const c = new Chess();
-  for (const m of 'e4 c5 Nf3 d6 c3 Nf6 e5 dxe5 Nxe5 Nbd7 Nxd7 Bxd7 Bc4 Bc6 O-O e6 Na3 a6 Bb3 b5 Nc2 Bd6 c4 h5 d4 bxc4 Bxc4 Ng4 h3 Qc7 Ne3 Bh2+ Kh1'.split(' ')) c.move(m);
-  const fenBefore = c.fen();
-  c.move('Bg1');
-  const base = { fenBefore, fenAfter: c.fen(), playedSan: 'Bg1', bestSan: null, cpLoss: 250, studentColor: 'black' as const };
+describe('a hung piece is what the engine line takes (WO-OUTCOME-01)', () => {
+  // Walk 900, 17…Bg1: the static count called the bishop "hanging to the rook
+  // on f1". The engine's line is Nxg4 hxg4 Kxg1 — the KING takes it, a move
+  // after Nxg4, and Nxg4 is the line's own first move, so it is no miss.
+  it('17…Bg1 Nxg4: the king takes it on the engine\'s line — named, and not a miss', () => {
+    const c = new Chess();
+    for (const m of 'e4 c5 Nf3 d6 c3 Nf6 e5 dxe5 Nxe5 Nbd7 Nxd7 Bxd7 Bc4 Bc6 O-O e6 Na3 a6 Bb3 b5 Nc2 Bd6 c4 h5 d4 bxc4 Bxc4 Ng4 h3 Qc7 Ne3 Bh2+ Kh1'.split(' ')) c.move(m);
+    const fenBefore = c.fen(); c.move('Bg1');
+    const line = backwardLook({ priorMove: null, fenBefore, fenAfter: c.fen(), playedSan: 'Bg1', bestSan: null, cpLoss: 250, studentColor: 'black',
+      replySan: 'Nxg4', replyPvUci: ['e3g4', 'h5g4', 'h1g1', 'g4h3', 'd4d5', 'h3g2', 'g1g2', 'c7h2'] })?.line ?? '';
+    expect(line).toMatch(/bishop on g1 hanging — the king on h1 just takes it/);
+    expect(line).not.toMatch(/rook on f1|missed/);
+  });
+  const fenBefore = '4k3/8/8/8/8/2p5/8/3QK3 w - - 0 1';
+  const c = new Chess(fenBefore); c.move('Qd2');
+  const base = { fenBefore, fenAfter: c.fen(), playedSan: 'Qd2', bestSan: null, cpLoss: 800, studentColor: 'white' as const, replyPvUci: ['c3d2', 'e1d2'] };
   it('says they missed it when the reply went elsewhere', () => {
-    const line = backwardLook({ priorMove: null, ...base, replySan: 'Nxg4' })?.line ?? '';
-    expect(line).toMatch(/hanging to the rook on f1 — they missed it/);
+    const line = backwardLook({ priorMove: null, ...base, replySan: 'Ke7' })?.line ?? '';
+    expect(line).toMatch(/hanging to the pawn on c3 — they missed it/);
     expect(line).not.toMatch(/just takes it/);
   });
   it('keeps "just takes it" while the reply is unknown', () => {

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4375 lines · 38 exports · 18 importers · 16 tests · 10 audits**
+**4365 lines · 38 exports · 18 importers · 16 tests · 10 audits**
 
 ## Locked rules that govern this surface
 
@@ -87,7 +87,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:5815`
 - `src/components/Coach/CoachTeachPage.tsx:5889`
 - `src/components/Coach/CoachTeachPage.tsx:6646`
-- `src/components/Coach/CoachTeachPage.tsx:11101`
+- `src/components/Coach/CoachTeachPage.tsx:11108`
 - `src/services/lessonCacheKey.test.ts:58`
 - `src/services/lessonCacheKey.test.ts:63`
 - `src/services/lessonCacheKey.test.ts:72`
@@ -146,9 +146,9 @@
 - `src/services/openingGenerator.twoBeats.test.ts:46`
 - `src/services/openingGenerator.twoBeats.test.ts:47`
 - `src/services/openingGenerator.twoBeats.test.ts:54`
-- `src/services/puzzleConceptExplanation.ts:82`
-- `src/services/puzzleConceptExplanation.ts:146`
-- `src/services/puzzleConceptExplanation.ts:179`
+- `src/services/puzzleConceptExplanation.ts:88`
+- `src/services/puzzleConceptExplanation.ts:152`
+- `src/services/puzzleConceptExplanation.ts:191`
 
 ### `noteArrowSourceAt` (function) — 2 call sites
 - `src/services/noteSelectionDeterminism.test.ts:124`
@@ -242,7 +242,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:5770`
 - `src/components/Coach/CoachTeachPage.tsx:5883`
 - `src/components/Coach/CoachTeachPage.tsx:6641`
-- `src/components/Coach/CoachTeachPage.tsx:11095`
+- `src/components/Coach/CoachTeachPage.tsx:11102`
 - `src/services/openingGenerator.computedBeats.test.ts:59`
 - `src/services/openingGenerator.test.ts:933`
 - `src/services/openingGenerator.test.ts:936`

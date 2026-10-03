@@ -2,8 +2,7 @@
 // own positions. Each fails on the code that spoke it.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { exchangeLosses } from './positionReadingService';
-import { proofCut } from './exchangeLedger';
+import { proofCut, settledExchange } from './exchangeLedger';
 import { principleLine } from './moveFundamentals';
 import { computeMoveFundamentals } from './moveFundamentals';
 
@@ -12,8 +11,10 @@ const G1 = 'd4 d5 c4 e6 Nc3 Nf6 Nf3 c5 dxc5 Bxc5 Bg5 d4 Ne4 Be7 Nxf6+';
 
 describe('review walk oct2a', () => {
   it('a trade is summed over the whole exchange: Qxd4 Qxd4 Nxd4 costs Black the pawn and both queens go', () => {
-    const c = play(`${G1} Bxf6 Bxf6 Qxf6 Qxd4`);
-    expect(exchangeLosses(c.fen(), 'd4')).toEqual({ w: ['q'], b: ['q'] });
+    const c = play(`${G1} Bxf6 Bxf6 Qxf6`);
+    const l = settledExchange(c.fen(), ['Qxd4', 'Qxd4', 'Nxd4'], 'w', null);
+    expect(l?.studentWon).toEqual(['p', 'q']);
+    expect(l?.opponentWon).toEqual(['q']);
   });
 
   it('a recapture is not "you win a knight": gxf6 answers Nxf6+', () => {

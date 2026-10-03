@@ -434,10 +434,11 @@ describe('the recapture read yields to the engine', () => {
       fenBefore, fenAfter: c.fen(), san: 'Nxe5', ply: 63, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: -300, preMoveEval: 40, classification: 'blunder', bestMoveSan: 'Kf1',
       prevCap: { square: null, capturedValue: 0 }, allSans: ['Nxe5'], forcedRunStartPly: null,
-      playedLineUci: [], bestLineUci: [], replyBestSan: 'Rxe5' });
+      playedLineUci: ['d5e5', 'f3c3', 'e5e6', 'd1c1'], bestLineUci: [], replyBestSan: 'Rxe5' });
     const trade = facets.filter((f) => f.startsWith('[trade]')).join(' ');
     expect(trade).not.toMatch(/taking back would cost them more/);
     expect(trade).toMatch(/they can take back/);
+    expect(trade).toMatch(/your knight for their pawn/);
   });
 });
 

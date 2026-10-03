@@ -32,6 +32,7 @@
  * the ones that are real.
  */
 import { gambitFile } from './inaccuracyCall';
+import { proofCut } from './exchangeLedger';
 import { Chess, type Square, type Color, type Move } from 'chess.js';
 
 export interface WhyItFailed {
@@ -170,6 +171,13 @@ export function whyItFailed(args: {
   fenBefore: string;
   playedSan: string;
   studentColor: 'white' | 'black';
+  /** The engine's line AFTER the played move (UCI, their reply first), or
+   *  null when unknown. REQUIRED (WO-OUTCOME-01): "X just takes it", "you come
+   *  out N points down" and "once it left, Y wins it" are outcomes, and an
+   *  outcome is what the engine's line does, read by the one ledger — a swap
+   *  count said "the knight on f5 wins it" of a piece the engine never takes
+   *  (walk oct3a, 25…g6). No line, no outcome sentence. */
+  playedLineUci: readonly string[] | null;
 }): WhyItFailed | null {
   const me: Color = args.studentColor === 'white' ? 'w' : 'b';
   const them: Color = me === 'w' ? 'b' : 'w';
@@ -187,6 +195,32 @@ export function whyItFailed(args: {
   } catch {
     return null;
   }
+
+  // THE OUTCOME, FROM THE LINE: what the engine's line after the move wins
+  // from the student (the ledger's settled net), and which squares their side
+  // captures on within that proof.
+  const lineMoves: Move[] = [];
+  try {
+    const c = new Chess(after.fen());
+    for (const u of args.playedLineUci ?? []) {
+      const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+      if (!m) break;
+      lineMoves.push(m);
+    }
+  } catch { /* the line stops where it stops being legal */ }
+  const lineSans = lineMoves.map((m) => m.san);
+  const proof = lineSans.length > 0 ? proofCut(args.fenBefore, [args.playedSan, ...lineSans], me) : null;
+  const studentDown = proof && !proof.mate && proof.ledger && proof.ledger.netPawns < 0 ? -proof.ledger.netPawns : 0;
+  // Their captures inside the proof: square → the piece that takes there.
+  // (proof plies count the played move, so their moves are lineMoves[0, 2, …].)
+  const theirCaptures = new Map<string, { sq: Square; type: string }>();
+  if (studentDown > 0 && proof) {
+    for (let i = 0; i < proof.plies - 1; i += 2) {
+      const m = lineMoves[i];
+      if (m?.captured && !theirCaptures.has(m.to)) theirCaptures.set(m.to, { sq: m.from, type: m.piece });
+    }
+  }
+  const lineTakes = (sq: string): boolean => theirCaptures.has(sq);
 
   // The least-valuable enemy piece attacking `sq` — the one that leads a capture
   // there (and, when the point is "your piece falls", the one that takes it).
@@ -215,10 +249,10 @@ export function whyItFailed(args: {
   // "That left your pawn on a5 hanging"). The gambit wording names it instead.
   if (mv.piece === 'p' && gambitFile(args.fenBefore, args.playedSan, args.studentColor)) return null;
   const netOnLanding = captureNet(after, mv.to, mv.captured ?? null);
-  if (netOnLanding < 0) {
-    const recap = leastValuableAttackerOf(after, mv.to);
+  if (netOnLanding < 0 && lineTakes(mv.to)) {
+    const recap = theirCaptures.get(mv.to) ?? null;
     if (recap) {
-      const down = Math.abs(netOnLanding);
+      const down = studentDown;
       const pts = down === 1 ? '1 point' : `${down} points`;
       if (mv.captured) {
         return {
@@ -257,13 +291,14 @@ export function whyItFailed(args: {
   for (const row of after.board()) {
     for (const cell of row) {
       if (!cell || cell.color !== me || cell.type === 'k' || cell.square === mv.to) continue;
+      if (!lineTakes(cell.square)) continue;
       let defendedByMover = false;
       try { defendedByMover = before.attackers(cell.square, me).includes(mv.from); } catch { /* skip */ }
       if (!defendedByMover) continue;
       const gainNow = seeGain(after, cell.square);
       if (gainNow <= 0) continue; // opponent can't actually win it
       if (beforeTheirs && seeGain(beforeTheirs, cell.square) >= gainNow) continue;
-      const attacker = leastValuableAttackerOf(after, cell.square);
+      const attacker = theirCaptures.get(cell.square) ?? null;
       if (!attacker) continue;
       // THE WIN MUST BE CLEAN (walk 2026-10-02: "once it left, the knight on
       // f3 wins it" — Nxd4 leaves their own knight on e4 hanging to …Nxe4).

@@ -32,7 +32,7 @@ describe('held by a defender', () => {
     // code was right and the fixture was wrong; a losing trade is the shape
     // this lane is actually about.
     const fen = '4k3/8/2p5/3p4/8/8/4BK2/8 w - - 0 1';
-    const out = whyItFailed({ fenBefore: fen, playedSan: 'Bf3', studentColor: 'white' });
+    const out = whyItFailed({ fenBefore: fen, playedSan: 'Bf3', studentColor: 'white', playedLineUci: null });
     expect(out, 'said nothing about a guarded target').not.toBeNull();
     expect(out!.kind).toBe('held-by-defender');
     expect(out!.line).toContain('d5');
@@ -46,7 +46,7 @@ describe('held by a defender', () => {
 
   it('says nothing when the swap was never a real option (a queen for a pawn)', () => {
     const fen = before(['e4', 'e5', 'd3', 'Nc6']);
-    const out = whyItFailed({ fenBefore: fen, playedSan: 'Qh5', studentColor: 'white' });
+    const out = whyItFailed({ fenBefore: fen, playedSan: 'Qh5', studentColor: 'white', playedLineUci: null });
     if (out) expect(out.kind).not.toBe('held-by-defender');
   });
 
@@ -56,13 +56,13 @@ describe('held by a defender', () => {
     // on b6 holds it — taking there gives up your knight for the pawn"; his
     // next move was Nxd5 and it won.
     const fen = '2k4r/1r3ppp/Rn1q2b1/1Ppp4/6P1/3P3P/2P1NPB1/Q4RK1 w - - 3 22';
-    const out = whyItFailed({ fenBefore: fen, playedSan: 'Nc3', studentColor: 'white' });
+    const out = whyItFailed({ fenBefore: fen, playedSan: 'Nc3', studentColor: 'white', playedLineUci: null });
     if (out) expect(out.kind).not.toBe('held-by-defender');
   });
 
   it('a move that PINS its target was not "eyeing" it (Ra6 pinning Nb6 to the queen)', () => {
     const fen = '2k4r/R2r1ppp/1n1qpn2/1Pp4b/8/2NP2PP/2P1NPB1/3Q1RK1 w - - 1 18';
-    const out = whyItFailed({ fenBefore: fen, playedSan: 'Ra6', studentColor: 'white' });
+    const out = whyItFailed({ fenBefore: fen, playedSan: 'Ra6', studentColor: 'white', playedLineUci: null });
     if (out) expect(out.kind).not.toBe('held-by-defender');
   });
 
@@ -70,7 +70,7 @@ describe('held by a defender', () => {
     // A guarded target of the SAME value is a trade a student may well want.
     // Calling it a failed idea would be teaching them something untrue.
     const fen = before(['e4', 'e5', 'Nf3', 'Nc6', 'Nc3']);
-    const out = whyItFailed({ fenBefore: fen, playedSan: 'Nd4', studentColor: 'black' });
+    const out = whyItFailed({ fenBefore: fen, playedSan: 'Nd4', studentColor: 'black', playedLineUci: null });
     if (out) expect(out.kind).not.toBe('held-by-defender');
   });
 });
@@ -83,7 +83,7 @@ describe('answered by a tactic', () => {
     //
     // Built as a position rather than a game so the geometry is unambiguous.
     const fen = '4k3/8/8/7b/8/8/4K3/3R4 w - - 0 1';
-    const out = whyItFailed({ fenBefore: fen, playedSan: 'Rd5', studentColor: 'white' });
+    const out = whyItFailed({ fenBefore: fen, playedSan: 'Rd5', studentColor: 'white', playedLineUci: null });
     if (out) {
       expect(out.kind).toBe('answered-by-tactic');
       // Verify the claim: the named reply is legal, gives check, and really
@@ -105,7 +105,7 @@ describe('answered by a tactic', () => {
     // and changes nothing about the threat. Naming it would be a lie dressed
     // as geometry.
     const fen = '4k3/8/8/8/8/8/8/R3K2r w - - 0 1';
-    const out = whyItFailed({ fenBefore: fen, playedSan: 'Ra5', studentColor: 'white' });
+    const out = whyItFailed({ fenBefore: fen, playedSan: 'Ra5', studentColor: 'white', playedLineUci: null });
     if (out?.kind === 'answered-by-tactic') {
       const board = new Chess(fen);
       board.move('Bf3');
@@ -124,7 +124,7 @@ describe('lost the piece it moved', () => {
     // recaptures the pawn, but a queen for a pawn is a catastrophe — the swap-off
     // is why, not "d2 looks unsafe".
     const fen = '4k3/8/8/8/8/2p5/8/3QK3 w - - 0 1';
-    const out = whyItFailed({ fenBefore: fen, playedSan: 'Qd2', studentColor: 'white' });
+    const out = whyItFailed({ fenBefore: fen, playedSan: 'Qd2', studentColor: 'white', playedLineUci: ['c3d2', 'e1d2'] });
     expect(out, 'said nothing about hanging the queen').not.toBeNull();
     expect(out!.kind).toBe('lost-the-piece');
     expect(out!.line).toContain('d2');
@@ -141,7 +141,7 @@ describe('abandoned a defender', () => {
     // c4-d5 diagonal entirely (Bb3 would keep guarding d5 through the empty c4),
     // and the d8-rook collects — David's "removes a guard from another square".
     const fen = '3rk3/8/8/3P4/2B5/8/8/4K3 w - - 0 1';
-    const out = whyItFailed({ fenBefore: fen, playedSan: 'Ba6', studentColor: 'white' });
+    const out = whyItFailed({ fenBefore: fen, playedSan: 'Ba6', studentColor: 'white', playedLineUci: ['d8d5'] });
     expect(out, 'said nothing about abandoning the pawn').not.toBeNull();
     expect(out!.kind).toBe('abandoned-defender');
     expect(out!.line).toContain('d5');
@@ -158,19 +158,19 @@ describe('abandoned a defender', () => {
 describe('silence is the common answer', () => {
   it('says nothing about a quiet developing move', () => {
     const fen = before(['e4', 'e5']);
-    expect(whyItFailed({ fenBefore: fen, playedSan: 'Nf3', studentColor: 'white' })).toBeNull();
+    expect(whyItFailed({ fenBefore: fen, playedSan: 'Nf3', studentColor: 'white', playedLineUci: null })).toBeNull();
   });
 
   it('says nothing when the move hits nothing new', () => {
     const fen = before(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4']);
     // ...Bc5 attacks nothing of Black's opponent that it did not already.
-    const out = whyItFailed({ fenBefore: fen, playedSan: 'Bc5', studentColor: 'black' });
+    const out = whyItFailed({ fenBefore: fen, playedSan: 'Bc5', studentColor: 'black', playedLineUci: null });
     if (out) expect(out.squares.length).toBeGreaterThan(0);
   });
 
   it('never explains a move that is not the student\'s to make', () => {
     const fen = before(['e4']);
-    expect(whyItFailed({ fenBefore: fen, playedSan: 'e5', studentColor: 'white' })).toBeNull();
+    expect(whyItFailed({ fenBefore: fen, playedSan: 'e5', studentColor: 'white', playedLineUci: null })).toBeNull();
   });
 
   it('never throws, whatever it is handed', () => {
@@ -180,7 +180,7 @@ describe('silence is the common answer', () => {
       [before([]), 'Qh5'],       // illegal from the start position
       [before(['e4']), 'zzz'],
     ] as Array<[string, string]>) {
-      expect(() => whyItFailed({ fenBefore: fen, playedSan: san, studentColor: 'white' }))
+      expect(() => whyItFailed({ fenBefore: fen, playedSan: san, studentColor: 'white', playedLineUci: null }))
         .not.toThrow();
     }
   });
@@ -198,7 +198,7 @@ describe('every sentence it produces is true of the board', () => {
     for (const san of sans) {
       const fen = c.fen();
       const colour = c.turn() === 'w' ? 'white' : 'black';
-      const out = whyItFailed({ fenBefore: fen, playedSan: san, studentColor: colour });
+      const out = whyItFailed({ fenBefore: fen, playedSan: san, studentColor: colour, playedLineUci: null });
       if (out) {
         const board = new Chess(fen);
         board.move(san);
@@ -302,7 +302,17 @@ describe('the review actually carries the reason', () => {
 describe('abandoned defender — only when leaving caused it', () => {
   it('a queen a bishop already attacked is not "left unguarded" by the bishop that moved (walk 2026-09-30)', () => {
     const fen = '8/p1p2pk1/2pq3p/2b5/8/6B1/PPP2P1P/4K3 b - - 0 23';
-    const out = whyItFailed({ fenBefore: fen, playedSan: 'Bd4', studentColor: 'black' });
+    const out = whyItFailed({ fenBefore: fen, playedSan: 'Bd4', studentColor: 'black', playedLineUci: null });
     expect(out?.line ?? '').not.toMatch(/only thing guarding/);
+  });
+});
+
+describe('an outcome is what the engine line does (WO-OUTCOME-01)', () => {
+  it('no line — the hung queen is not claimed', () => {
+    expect(whyItFailed({ fenBefore: '4k3/8/8/8/8/2p5/8/3QK3 w - - 0 1', playedSan: 'Qd2', studentColor: 'white', playedLineUci: null })?.kind).not.toBe('lost-the-piece');
+  });
+  it('a line that never takes the loose pawn — no "wins it"', () => {
+    const out = whyItFailed({ fenBefore: '3rk3/8/8/3P4/2B5/8/8/4K3 w - - 0 1', playedSan: 'Ba6', studentColor: 'white', playedLineUci: ['e8e7', 'a6c4'] });
+    expect(out?.kind).not.toBe('abandoned-defender');
   });
 });

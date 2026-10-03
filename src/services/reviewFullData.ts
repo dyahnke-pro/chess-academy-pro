@@ -12,6 +12,7 @@
  * and the gaps are visible. Each facet is a labeled prose clause.
  */
 import { lastMoveFromSan } from './material';
+import { settledExchange } from './exchangeLedger';
 import { inFluxAfter } from './boardState';
 import { readTrade } from './tradeQuality';
 import { readTiming, timingClause } from './moveTiming';
@@ -22,7 +23,7 @@ import { getPunishGemById } from '../data/lessons/punishGems';
 import { Chess, type Color, type Square } from 'chess.js';
 import { landedTacticFor, plyFactsForMove } from './pvPlayback';
 import { definitionKey, tacticInvariant } from './conceptEngine';
-import { findMinorityAttack, findColorComplexWeakness, signedLegalSeeFor, exchangeLosses } from './positionReadingService';
+import { findMinorityAttack, findColorComplexWeakness, signedLegalSeeFor } from './positionReadingService';
 import { detectTactics } from './tacticsDetector';
 import { verifyForkOnBoard } from './tacticVerification';
 import { seatPieceReferences, detectNewThreat } from './groundedAnswer';
@@ -301,42 +302,43 @@ export function computeMoveFacets(
     try {
       const mv = new Chess(fenBefore).move(san);
       const NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
-      const mine = NOUN[mv.piece] ?? 'piece';
       const theirs = NOUN[mv.captured ?? ''] ?? 'piece';
       // THE WHOLE EXCHANGE, not its first pair (review walk 2026-10-02:
       // "They take on d4, and you can take back — their queen for your pawn"
       // of Qxd4 Qxd4 Nxd4, which is a queen trade that costs the pawn). When
       // this move retakes on the square the last move captured on, that pair
       // was already named there and cancels here.
-      const moverLost: string[] = [];
-      const otherLost: string[] = [mv.captured ?? 'p'];
+      // The exchange is read off the ENGINE'S line through the one ledger
+      // (WO-OUTCOME-01; review walk oct3a ply 43: a static swap list said
+      // "a knight trade, and your queen for their pawn" of Nxc4, where the
+      // engine retakes dxc4 and no queen is ever taken). No line, or a line
+      // that never finishes the trade → no material claim, only the capture.
+      const line: string[] = [san];
       try {
-        const prevSan = ply >= 2 ? ctx.allSans[ply - 2] : null;
-        if (prevSan && /x/.test(prevSan) && /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(prevSan)?.[1] === mv.to) {
-          const prev = new Chess();
-          for (const m of ctx.allSans.slice(0, ply - 1)) prev.move(m);
-          const took = prev.history({ verbose: true }).at(-1)?.captured;
-          if (took) moverLost.push(took);
+        const c = new Chess(fenAfter);
+        for (const u of ctx.playedLineUci) {
+          const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+          if (!m) break;
+          line.push(m.san);
         }
-      } catch { /* no history — read the exchange from this move on */ }
-      const cont = exchangeLosses(fenAfter, tradeSq as Square);
-      moverLost.push(...cont[mv.color]);
-      otherLost.push(...cont[mv.color === 'w' ? 'b' : 'w']);
+      } catch { /* the line stops where it stops being legal */ }
+      const studentWB: Color = isStudent ? mv.color : mv.color === 'w' ? 'b' : 'w';
+      const prior = ply >= 2 && ctx.teaching.prevFenBefore ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : null;
+      const ledger = line.length > 1 ? settledExchange(fenBefore, line, studentWB, prior) : null;
+      const studentLost: string[] = ledger ? [...ledger.opponentWon] : [];
+      const theirLost: string[] = ledger ? [...ledger.studentWon] : [];
       const traded: string[] = [];
-      for (let i = moverLost.length - 1; i >= 0; i -= 1) {
-        const j = otherLost.indexOf(moverLost[i]);
-        if (j >= 0) { traded.unshift(moverLost[i]); otherLost.splice(j, 1); moverLost.splice(i, 1); }
+      for (let i = studentLost.length - 1; i >= 0; i -= 1) {
+        const j = theirLost.indexOf(studentLost[i]);
+        if (j >= 0) { traded.unshift(studentLost[i]); theirLost.splice(j, 1); studentLost.splice(i, 1); }
       }
       const nouns = (xs: string[]): string => andList(xs.map((x) => NOUN[x] ?? 'piece'));
-      const studentLost = isStudent ? moverLost : otherLost;
-      const theirLost = isStudent ? otherLost : moverLost;
       const tradePart = traded.length ? `a ${nouns([...new Set(traded)])} trade` : null;
       const restPart = studentLost.length && theirLost.length
         ? `your ${nouns(studentLost)} for their ${nouns(theirLost)}`
         : theirLost.length ? `you win the ${nouns(theirLost)}`
           : studentLost.length ? `they win the ${nouns(studentLost)}` : null;
-      const what = tradePart && restPart ? `${tradePart}, and ${restPart}` : tradePart ?? restPart
-        ?? (mine === theirs ? `a ${mine} trade` : isStudent ? `your ${mine} for their ${theirs}` : `their ${mine} for your ${theirs}`);
+      const what = tradePart && restPart ? `${tradePart}, and ${restPart}` : tradePart ?? restPart;
       // "Can take back" only when taking back does not lose material (review
       // walk 2026-09-27: 15.Nxh7 — …Rxh7 loses the rook to Qxh7).
       const recapturer: Color = mv.color === 'w' ? 'b' : 'w';
@@ -349,9 +351,17 @@ export function computeMoveFacets(
         ? (ctx.preMoveEval - ctx.evaluation) * (ctx.moverColor === 'white' ? 1 : -1)
         : null;
       const engineSaysCostly = moverCost !== null && moverCost >= MISTAKE_CP;
-      const safe = engineSaysCostly || signedLegalSeeFor(fenAfter, tradeSq as Square, recapturer) >= 0;
+      // Whether they take back is what the engine's line does, when there is one.
+      const lineRetakes = line.length > 1
+        ? /x/.test(line[1]) && /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(line[1])?.[1] === tradeSq
+        : null;
+      const safe = engineSaysCostly || (lineRetakes ?? signedLegalSeeFor(fenAfter, tradeSq as Square, recapturer) >= 0);
       const lost = NOUN[mv.captured ?? ''] ?? 'piece';
-      const f = safe
+      const f = !what
+        ? isStudent
+          ? `[trade] You take on ${tradeSq} — that was their ${theirs}.`
+          : `[trade] They take on ${tradeSq} — that was your ${theirs}.`
+        : safe
         ? isStudent
           ? `[trade] You take on ${tradeSq}, and they can take back — ${what}.`
           : `[trade] They take on ${tradeSq}, and you can take back — ${what}.`
@@ -783,9 +793,9 @@ export function computeMoveFacets(
   // was the queen!!!"). Story-level event: a rook/queen with no safe square.
   if (studentColorWB) {
     const enemyWB: Color = studentColorWB === 'w' ? 'b' : 'w';
-    const trapTheirs = findTrappedPiece(fenAfter, enemyWB);
+    const trapTheirs = findTrappedPiece(fenAfter, enemyWB, ctx.playedLineUci);
     if (trapTheirs) { const f = `[trapped] Their ${trapTheirs.piece} on ${trapTheirs.square} is trapped — attacked by the ${trapTheirs.attackerPiece} on ${trapTheirs.attackerSquare}, and every escape square is covered; it's coming off the board.`; facets.push(f); recSquares(f, [trapTheirs.square, trapTheirs.attackerSquare]); recStakes(f, exchangeStakes(fenAfter, [trapTheirs.square])); }
-    const trapMine = findTrappedPiece(fenAfter, studentColorWB);
+    const trapMine = findTrappedPiece(fenAfter, studentColorWB, ctx.playedLineUci);
     if (trapMine) { const f = `[trapped] Careful — your ${trapMine.piece} on ${trapMine.square} is trapped: attacked by the ${trapMine.attackerPiece} on ${trapMine.attackerSquare} with no safe square. Look for the cheapest way out.`; facets.push(f); recSquares(f, [trapMine.square, trapMine.attackerSquare]); recStakes(f, exchangeStakes(fenAfter, [trapMine.square])); }
   }
 

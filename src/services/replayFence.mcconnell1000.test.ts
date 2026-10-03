@@ -23,8 +23,8 @@ describe('plies 27, 33 — the missed shot is THEIR move, and says so', () => {
   });
 });
 
-describe('ply 39 — "That let them win a pawn" names the move that does it', () => {
-  it('after 20.a4 the cost line names …bxc4', async () => {
+describe('ply 39 — after 20.a4 the line never settles the c4 pawn inside the plan horizon', () => {
+  it('the same line cut while c4 still hangs to dxc4 claims nothing (WO-OUTCOME-01)', async () => {
     const { whatItAllowed } = await import('./concessionBeat');
     const r = whatItAllowed({
       fenBefore: '2kn2nr/p4p2/b2pq1p1/1p2p2p/1PP1P2P/3P2N1/P4PP1/R2QK2R w KQ - 0 20',
@@ -32,6 +32,6 @@ describe('ply 39 — "That let them win a pawn" names the move that does it', ()
       opponentPv: ['b5c4', 'b4b5', 'a6b7', 'e1g1', 'g8f6', 'a4a5', 'e6d7', 'd1b1'],
       studentColor: 'white', cpLoss: 68, playedSan: 'a4',
     });
-    expect(r?.line).toMatch(/^That let them win a pawn, starting with bxc4\.$/);
+    expect(r?.line ?? '').not.toMatch(/win a pawn/);
   });
 });

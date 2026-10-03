@@ -226,7 +226,8 @@ async function getGroundedCommentary(
         // the in-between check). Pure chess.js geometry, no engine, no LLM
         // (whyItFailed self-gates: silent on a sound move). All geometry, spoken
         // to everyone (David 2026-08-28). voiceFacts still phrases it (G0).
-        const failed = whyItFailed({ fenBefore, playedSan: last.san, studentColor: moverColor });
+        // No engine line after the move here, so no outcome claim (WO-OUTCOME-01).
+        const failed = whyItFailed({ fenBefore, playedSan: last.san, studentColor: moverColor, playedLineUci: null });
         const enriched = failed ? `${facts} ${failed.line}` : facts;
         // BOARD narration is COMPUTED, spoken RAW — never an LLM call (David
         // 2026-09-07: "no llm call for board specific questions"; the DNA in the
