@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5247 lines · 36 exports · 42 importers · 40 tests · 5 audits**
+**5249 lines · 36 exports · 43 importers · 41 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -29,6 +29,7 @@
 - `src/services/coachFeatureService.learnLanes.test.ts`
 - `src/services/coachFeatureService.learnParity.test.ts`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts`
+- `src/services/coachFeatureService.oneCost.test.ts`
 - `src/services/coachFeatureService.planChange.test.ts`
 - `src/services/coachFeatureService.recurrence.test.ts`
 - `src/services/coachFeatureService.test.ts`
@@ -83,7 +84,7 @@
 - `src/services/coachFeatureService.test.ts:257`
 - `src/services/coachFeatureService.test.ts:277`
 - `src/services/coachFeatureService.test.ts:289`
-- `src/services/gameAnalysisService.ts:2165`
+- `src/services/gameAnalysisService.ts:2172`
 
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -152,7 +153,7 @@
 - `src/services/coachFeatureService.test.ts:15`
 - `src/services/coachFeatureService.test.ts:24`
 
-### `buildReviewSegments` (function) — 63 call sites
+### `buildReviewSegments` (function) — 65 call sites
 - `src/components/Coach/CoachGameReview.tsx:1886`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -169,6 +170,8 @@
 - `src/services/coachFeatureService.learnParity.test.ts:52`
 - `src/services/coachFeatureService.learnParity.test.ts:71`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:37`
+- `src/services/coachFeatureService.oneCost.test.ts:28`
+- `src/services/coachFeatureService.oneCost.test.ts:33`
 - `src/services/coachFeatureService.planChange.test.ts:14`
 - `src/services/coachFeatureService.recurrence.test.ts:37`
 - `src/services/coachFeatureService.recurrence.test.ts:46`
@@ -350,6 +353,7 @@
 - `src/services/coachFeatureService.learnLanes.test.ts`
 - `src/services/coachFeatureService.learnParity.test.ts`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts`
+- `src/services/coachFeatureService.oneCost.test.ts`
 - `src/services/coachFeatureService.planChange.test.ts`
 - `src/services/coachFeatureService.recurrence.test.ts`
 - `src/services/coachFeatureService.test.ts`

@@ -2505,9 +2505,11 @@ export function buildReviewSegments(
       const pvEvidence = renderPvEvidence(fundamentals);
       const failed = whyItFailed({ fenBefore: fenPair.fenBefore, playedSan: m.san, studentColor: moverColor, playedLineUci: m.pv?.afterPlayed ?? null });
       const concession = describeConcessions(fenPair.fenBefore, m.san, true);
+      // ONE cost reader: the one-search price when the review recorded it (the
+      // flag line says the same number), the eval delta only as its fallback.
       const swingCp = m.preMoveEval != null && m.evaluation != null
         && Math.abs(m.preMoveEval) < 15000 && Math.abs(m.evaluation) < 15000
-        ? Math.abs(m.preMoveEval - m.evaluation) : null;
+        ? recordedMoveCost(m, moverColor) : null;
       const cost = swingCp != null && swingCp >= 50
         ? `That cost about ${(swingCp / 100).toFixed(1)} points.`
         : null;

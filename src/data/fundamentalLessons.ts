@@ -35,6 +35,7 @@ export interface FundamentalLesson {
  */
 const FUNDAMENTAL_MATCH: ReadonlyArray<readonly [FundamentalId, RegExp]> = [
   ['poisoned-pawn', /\bpoison(?:ed|ous)?\s+pawn/],
+  ['blocked-own-retreat', /\bblock(?:ing|ed)?\s+(?:(?:my|your|its|the)\s+)?(?:own\s+)?(?:piece'?s?\s+)?(?:retreat|escape|way\s+(?:home|back))\b/],
   ['same-piece-twice', /\bsame\s+piece\s+twice\b|\bmov(?:e|ing)\s+(?:the\s+)?same\s+piece\b|\bpiece\s+twice\b/],
   ['early-queen-sortie', /\bearly\s+queen\b|\bqueen\b[\s\w]{0,18}\bearly\b|\bqueen\s+sortie\b|\bbring(?:ing)?\s+(?:the\s+|my\s+)?queen\s+out\b/],
   ['knights-before-bishops', /\bknights?\s+before\s+bishops?\b|\bbishops?\s+before\s+knights?\b/],
@@ -268,6 +269,11 @@ export const FUNDAMENTAL_LESSON: Record<FundamentalId, FundamentalLesson> = {
     facts:
       "The book lines exist because thousands of games tested them. When you leave them without a concrete reason, you usually spend a tempo on something the position does not need, or walk into an idea they already know. Leaving theory is fine when you can say what your new move gains — a target, a square, a trade. It is a mistake when you cannot.",
     sources: ['concept:pos-development', 'concept:pos-tempo'],
+  },
+  'blocked-own-retreat': {
+    facts:
+      "A piece is only as safe as its way home. Every square you put a piece on can also be the square another of your pieces needed to retreat to — or stand in the road it would travel back along. Take away a piece's last retreat and a single pawn move can trap it, because there is nowhere left to go. Before a piece lands, check what it blocks: if another piece of yours has only one way home, keep that road clear.",
+    sources: ['concept:tac-trap'],
   },
   'no-plan': {
     facts:

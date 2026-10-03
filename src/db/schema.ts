@@ -87,6 +87,11 @@ export interface PositionEvalRecord {
   depth: number;
   /** Engine best move (UCI) when a best-move search ran here; null otherwise. */
   bestMove: string | null;
+  /** The engine's line from here (UCI), when the search that scored it kept
+   *  one. Unindexed. A cache hit without it served an eval with no line, and
+   *  every line-based fundamental on a re-opened review declined for want of
+   *  its input (review walk oct3b, g2 ply 11: "punishing PV is 0 plies"). */
+  pv?: string[];
   /** Unix ms of the write — index for oldest-first pruning. */
   updatedAt: number;
 }

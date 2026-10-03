@@ -31,6 +31,8 @@ export interface CachedEval {
   evaluation: number;
   depth: number;
   bestMove: string | null;
+  /** The engine's line from this position (UCI), when one was stored. */
+  pv?: string[];
 }
 
 export interface EvalToStore {
@@ -38,6 +40,8 @@ export interface EvalToStore {
   evaluation: number;
   depth: number;
   bestMove?: string | null;
+  /** The line the search returned. Kept so a re-open restores it with the eval. */
+  pv?: readonly string[];
 }
 
 /** 4-field FEN: strips the halfmove + fullmove counters. */
@@ -60,7 +64,7 @@ export async function lookupPositionEvals(
     const rows = await db.positionEvals.bulkGet(keys);
     rows.forEach((row, i) => {
       if (!row || !Number.isFinite(row.evaluation) || row.depth < minDepth) return;
-      hits.set(i, { evaluation: row.evaluation, depth: row.depth, bestMove: row.bestMove });
+      hits.set(i, { evaluation: row.evaluation, depth: row.depth, bestMove: row.bestMove, ...(row.pv?.length ? { pv: [...row.pv] } : {}) });
     });
   } catch {
     // fail-open: no cache
@@ -79,7 +83,7 @@ export async function storePositionEvals(entries: readonly EvalToStore[]): Promi
     if (!Number.isFinite(e.evaluation) || !Number.isFinite(e.depth) || e.depth <= 0) continue;
     const key = evalCacheKey(e.fen);
     const prev = byKey.get(key);
-    if (!prev || e.depth > prev.depth || (e.depth === prev.depth && e.bestMove && !prev.bestMove)) {
+    if (!prev || e.depth > prev.depth || (e.depth === prev.depth && ((e.bestMove && !prev.bestMove) || (e.pv?.length && !prev.pv?.length)))) {
       byKey.set(key, { ...e, fen: key });
     }
   }
@@ -94,17 +98,23 @@ export async function storePositionEvals(entries: readonly EvalToStore[]): Promi
       if (!next) return;
       const prev = existing[i];
       const nextBest = next.bestMove ?? null;
+      const nextPv = next.pv?.length ? [...next.pv] : null;
       if (prev) {
         if (next.depth < prev.depth) return;
-        if (next.depth === prev.depth && (!nextBest || prev.bestMove)) return;
+        // An equal-depth write only ever ADDS what the row lacks.
+        const addsBest = !!nextBest && !prev.bestMove;
+        const addsPv = !!nextPv && !prev.pv?.length;
+        if (next.depth === prev.depth && !addsBest && !addsPv) return;
       }
+      const samePrev = prev && prev.depth === next.depth ? prev : null;
       writes.push({
         fen: key,
         evaluation: next.evaluation,
         depth: next.depth,
         // A deeper search without a best move invalidates the shallower one's;
         // an equal-depth write only ever ADDS a best move.
-        bestMove: nextBest ?? (prev && prev.depth === next.depth ? prev.bestMove : null),
+        bestMove: nextBest ?? (samePrev ? samePrev.bestMove : null),
+        ...((nextPv ?? samePrev?.pv) ? { pv: nextPv ?? samePrev?.pv } : {}),
         updatedAt: now,
       });
     });

@@ -78,6 +78,7 @@ export const FUNDAMENTAL_SECTION: Record<FundamentalId, FundamentalSectionId> = 
   'calculation-depth': 'tactics-threats',
   'left-book-early': 'opening-play',
   'no-plan': 'pawn-structure',
+  'blocked-own-retreat': 'tactics-threats',
 };
 
 /**
@@ -163,6 +164,8 @@ export const FUNDAMENTAL_PILLAR: Record<FundamentalId, FundamentalPillar | null>
   'calculation-depth': null,
   'left-book-early': 'development',
   'no-plan': null,
+  // a trap seen too late is threat-awareness, not one of the four pillars
+  'blocked-own-retreat': null,
 };
 
 /** The classical pillar this fundamental belongs to, or null where it genuinely
@@ -256,6 +259,7 @@ export const FUNDAMENTAL_LABEL: Record<FundamentalId, string> = {
   'calculation-depth': 'Stopping the calculation early',
   'left-book-early': 'Leaving theory early',
   'no-plan': 'Moving without a plan',
+  'blocked-own-retreat': 'Blocking your own retreat',
 };
 
 /** The one-line coaching device for a fundamental (its tag's principle), or the

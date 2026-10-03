@@ -57,6 +57,9 @@ export const FUNDAMENTAL_IDS = [
   // move with no board motif. Each is proven from evidence the app already
   // computes — the persisted PV, the bundled openings DB, the structure plans.
   'calculation-depth', 'left-book-early', 'no-plan',
+  // the move that takes its own piece's way home (review walk oct3b, game 2
+  // ply 11: Qd3 stood on the Bc4's only retreat, and …b5 trapped it)
+  'blocked-own-retreat',
 ] as const;
 export type FundamentalId = (typeof FUNDAMENTAL_IDS)[number];
 
@@ -98,6 +101,7 @@ export const FUNDAMENTAL_TAG: Record<FundamentalId, MisconceptionTagId> = {
   'calculation-depth': 'calculation-depth',
   'left-book-early': 'left-book-early',
   'no-plan': 'no-plan',
+  'blocked-own-retreat': 'missed-opponents-threat',
 };
 
 /** Rows whose "punishment" is a positional cost rather than a concrete move
@@ -526,7 +530,7 @@ interface Deferral {
  */
 const CALC_DEPTH_CLAIMANTS = [
   'loose-piece', 'ignored-threat', 'passive-when-forcing-existed',
-  'poisoned-pawn', 'overvalued-attack',
+  'poisoned-pawn', 'overvalued-attack', 'blocked-own-retreat',
 ] as const satisfies readonly FundamentalId[];
 
 type Detector = (c: Ctx) => Omit<PrincipleAttribution, 'tag' | 'coOccurrence'> | null;
@@ -597,6 +601,88 @@ function comboThreatIgnored(c: Ctx): ReturnType<typeof att> | null {
   return att('ignored-threat', 3, {
     squares: [v.square], moves: [shown.join(' ')], pvMoves: pvHas(c.pvP, (s) => s === line[0]),
   }, { piece: PNAME[v.type], square: v.square, threat: line[0], line: shown.join(', '), better: c.best.san });
+}
+
+/** The squares a piece of `sq` can go to that are SAFE: the opponent cannot
+ *  win material on the landing square, net of anything the move took. */
+function safeExits(board: Chess, sq: Square, opp: Color): string[] {
+  const out: string[] = [];
+  for (const m of board.moves({ square: sq, verbose: true })) {
+    const b = new Chess(board.fen());
+    if (!b.move(m.san)) continue;
+    const lost = signedLegalSeeFor(b.fen(), m.to, opp);
+    if (lost - (m.captured ? VAL[m.captured] : 0) <= 0) out.push(m.to);
+  }
+  return out;
+}
+
+/** BLOCKED OWN RETREAT (review walk oct3b, game 2 ply 11, 2026-10-03). The
+ *  played move stands on — or in the road to — the only safe square another of
+ *  the mover's pieces had, and the opponent's next move traps that piece. Qd3
+ *  in `e4 c5 Bc4 e6 e5 Nc6 Qe2 a6 b3 Nd4 Qd3`: b3 holds a pawn, a6 covers b5,
+ *  e6 covers d5, and the queen now sits on d3 — the bishop's way back to d3,
+ *  e2 and f1. …b5 hits it and it has nowhere to go. Nothing hung and nothing
+ *  was threatened yet, so no other fundamental could name the moment.
+ *
+ *  Every half is proved on the board, never inferred:
+ *    1. after their reply the piece can be won where it stands and has no safe
+ *       exit;
+ *    2. with ONLY the played piece put back, it has a safe exit it now lacks;
+ *    3. the engine line actually wins material, taking that piece;
+ *    4. with the best move instead, the same reply traps nothing. */
+function blockedOwnRetreat(c: Ctx): ReturnType<typeof att> | null {
+  const { last, mover, opp, pvP } = c;
+  if (!pvP?.length || last.captured || last.piece === 'k') return null;
+  const afterR = new Chess(c.after.fen());
+  let r: Move;
+  try { r = afterR.move(pvP[0]); } catch { return null; }
+  if (!r || r.captured) return null;
+  const line = pvP.slice(0, 8);
+  const won = lineNetForSide(c.after.fen(), line, opp);
+  if (won === null || won.net < 2) return null;
+  const shown = line.slice(0, won.plies);
+  for (const p of ['q', 'r', 'b', 'n'] as const) {
+    for (const x of pieces(afterR, mover, p)) {
+      if (x.square === last.to) continue;
+      if (signedLegalSeeFor(afterR.fen(), x.square, opp) <= 0) continue;
+      if (safeExits(afterR, x.square, opp).length > 0) continue;
+      const cf = new Chess(afterR.fen());
+      cf.remove(last.to);
+      cf.put({ type: last.piece, color: mover }, last.from);
+      const freed = safeExits(cf, x.square, opp);
+      if (freed.length === 0) continue;
+      // The line takes THIS piece, within what the ledger proved.
+      let taken = false;
+      try {
+        const b = new Chess(c.after.fen());
+        for (const san of shown) {
+          const m = b.move(san);
+          if (m.color === opp && m.captured && m.to === x.square) { taken = true; break; }
+        }
+      } catch { continue; }
+      if (!taken) continue;
+      // With the best move the same reply traps nothing.
+      const best = new Chess(c.afterBest.fen());
+      let bestTrapped = false;
+      try {
+        if (best.move(pvP[0])) {
+          const there = best.get(x.square);
+          bestTrapped = !!there && there.color === mover && there.type === p
+            && signedLegalSeeFor(best.fen(), x.square, opp) > 0
+            && safeExits(best, x.square, opp).length === 0;
+        }
+      } catch { /* the reply is not even legal after the best move */ }
+      if (bestTrapped) continue;
+      const retreat = freed.includes(last.to) ? last.to : freed[0];
+      return att('blocked-own-retreat', 3, {
+        squares: [x.square, last.to], moves: [r.san], pvMoves: shown,
+      }, {
+        piece: PNAME[p], square: x.square, blocker: PNAME[last.piece], blockerSq: last.to,
+        retreat, onIt: retreat === last.to ? 1 : 0, trap: r.san, line: shown.join(', '), better: c.best.san,
+      });
+    }
+  }
+  return null;
 }
 
 const DETECTORS: Detector[] = [
@@ -1182,6 +1268,8 @@ const DETECTORS: Detector[] = [
     const a = Math.max(-2000, ea);
     return att('botched-conversion', 2, { squares: [best.to], moves: [best.san], pvMoves: [] }, { drop: Math.round((b - a) / 100), better: best.san });
   },
+  // 35. Blocked own retreat — see `blockedOwnRetreat`.
+  (c) => blockedOwnRetreat(c),
   // ── SECTION 14 — the reasoning errors (WO-CLOSEOUT-01, 2026-09-20) ────────
   // 34. Calculation depth (eval/PV-gated). PATTERN: a QUIET move that the
   // persisted engine line punishes only DEEP — the opponent's first two replies

@@ -138,6 +138,9 @@ describe('the sweep carries its own engine line', () => {
       .not.toMatch(/punishing PV is 0 plies/);
 
     // NEGATIVE CONTROL — the same call on a run that dropped the line says so.
+    // From an EMPTY eval cache: the first run stored its lines there, and a
+    // re-analysis now gets them back with the evals (PositionEvalRecord.pv).
+    await db.positionEvals.clear();
     const anns2 = await annotate(false);
     const without: string[] = [];
     attributePrinciples({ replySan: null,

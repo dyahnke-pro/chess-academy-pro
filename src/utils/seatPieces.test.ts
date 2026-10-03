@@ -45,3 +45,16 @@ describe('"their own" / "your own" is already seated (corpus sweep 2026-10-02)',
       .toBe('That blocks your own knight on g1.');
   });
 });
+
+describe('a replaced demonstrative keeps its case', () => {
+  // Review walk oct3g, game 2 ply 11: the beat opened "your queen on d3 takes
+  // the bishop's retreat" — lowercase at the start of the spoken line.
+  const QD3 = 'r1bqkbnr/1p1p1ppp/p3p3/2p1P3/2Bn4/1P1Q4/P1PP1PPP/RNB1K1NR b KQkq - 2 6';
+  it('capitalises the possessive that replaces a sentence-opening "That"', () => {
+    expect(seatPieceReferences("That queen on d3 takes the bishop's retreat.", QD3, 'w'))
+      .toBe("Your queen on d3 takes the bishop's retreat.");
+  });
+  it('keeps a mid-sentence "that" lowercase', () => {
+    expect(seatPieceReferences('Watch that knight on d4.', QD3, 'w')).toBe('Watch their knight on d4.');
+  });
+});

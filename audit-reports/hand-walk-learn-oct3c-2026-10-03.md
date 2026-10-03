@@ -59,3 +59,32 @@ Found and fixed between the re-walks (each with a test that fails on the old cod
 
 Noted, not false: 30.Ng4 says "win the queen and a pawn for a piece" and then plays the line to
 "the queen for a bishop" — two cuts of the same ledger, both true at their own length.
+
+## Review walk on the same games (oct3b games, review-overhaul audit)
+
+Every sentence hand-checked against the board, node Stockfish, and the app's own
+recorded engine lines (the report now keeps each flagged ply's line and
+one-search cost, before and after the deep pass).
+
+False claims found across the review walks, each fixed where it is produced,
+each with a test that fails on the old code:
+
+| game/ply | said | truth | fix |
+|---|---|---|---|
+| g1/30 | "…O-O stops your Qxe7 fork" | Qxe7 Qxe7 dxe7 still won the bishop | a capturing fork is stopped only when the capture stops paying (`opponentMovePurpose`) |
+| g2/11 | "Qd3 … costing about 1.3" | one search: 0.55 | review prices flagged plies from ONE search (`moveScoresOneSearch`, `costCp`, `recordedMoveCost`) |
+| g3/24 | material counted 8 plies in | a trade cut mid-exchange | `moveComparison` reads each line's settled ledger (`settledNetForLine`) |
+| g1/15 | "f4 — the idea is to set up a pin" | Qe2 already pinned; Qe3 slid along the file | line tactics key on their victims (`computePlyFacts`) |
+| drill | Qxg2# named "Discovered attack" | a delivered mate | the mate leads the concept (`conceptForLine`) |
+| g2/16 | "ahead and simplifying — trade pieces" (…Nxe5) | a pawn grab | a trade must finish or offer an even exchange (`reviewConcepts`, prior move required) |
+| g2/28 | "two bishops against your single minor" | bishop + two knights | "while you have one" |
+| g2/49 | "they can take back — you win the pawn" | the line keeps the pawn | the engine line decides the take-back (`reviewFullData`) |
+| g2/39 | "overvalued: Qf3+ commits material" | a check offering nothing | an investment must offer a piece (`principleAttribution`) |
+
+Final build (`25b0c8602`): 263 sentences across the three games, **0 false**,
+1 undecided — g2/11 "costing about 1.4 points": the phone engine build (node-limited
+in the audit) scores Qd1 vs Qd3 at 1.0–1.4 across runs; full Stockfish in one
+search, depth 18–22, gives 0.47–0.64. Engine precision, not logic.
+
+Still open: when the deep pass re-grades a move into a mistake, its fundamentals
+are not re-attributed (g2/11 leads with the grade; the FUND ordering row).
