@@ -1532,13 +1532,13 @@ export async function analyzeGameOnWorker(
   for (let i = skipBook; i < fens.length; i++) {
     if (_abortAnalysis) return null;
     const hit = cached.get(i);
-    if (hit) { evals[i] = hit.evaluation; depthAt[i] = hit.depth; continue; }
+    if (hit) { evals[i] = hit.evaluation; depthAt[i] = hit.depth; if (hit.pv?.length) pvs[i] = hit.pv; continue; }
     const r = await search(i, BATCH_SHALLOW_DEPTH, BATCH_SHALLOW_BUDGET_MS);
     if (!r) continue;
     evals[i] = r.evaluation;
     pvs[i] = r.pv.length ? r.pv : (r.bestMove ? [r.bestMove] : []);
     depthAt[i] = r.depth;
-    if (Number.isFinite(r.depth) && r.depth > 0) toStore.push({ fen: fens[i], evaluation: r.evaluation, depth: r.depth });
+    if (Number.isFinite(r.depth) && r.depth > 0) toStore.push({ fen: fens[i], evaluation: r.evaluation, depth: r.depth, pv: pvs[i] });
   }
 
   // Stamped with the depth the sweep actually reached — which is BELOW
@@ -1668,7 +1668,7 @@ export async function analyzeGameOnWorker(
       // number available for the moves where it actually matters.
       annotations[moveIdx].bestMoveEval = result.evaluation;
       if (Number.isFinite(result.depth) && result.depth > 0) {
-        toStore.push({ fen: fens[moveIdx], evaluation: result.evaluation, depth: result.depth, bestMove: result.bestMove });
+        toStore.push({ fen: fens[moveIdx], evaluation: result.evaluation, depth: result.depth, bestMove: result.bestMove, pv: result.pv });
       }
     } catch {
       // Leave bestMove null + keep the shallow bestMoveEval
@@ -1799,6 +1799,10 @@ async function analyzeGamePositions(
     if (i < skipBook) return;
     evals[i] = hit.evaluation;
     depthAt[i] = hit.depth;
+    // The line comes back with the eval (it used to be dropped at this
+    // boundary, so a re-opened review had no punishing line on any ply the
+    // dive did not re-search — see PositionEvalRecord.pv).
+    if (hit.pv?.length) pvAt[i] = hit.pv;
     if (hit.depth >= REVIEW_DEEP_DEPTH) deep[i] = hit.evaluation;
   });
   const pendingIdx: number[] = [];
@@ -1822,7 +1826,7 @@ async function analyzeGamePositions(
       if (pv && pv.length) pvAt[i] = pv;
       if (e !== null && pooled.achievedDepth > 0) {
         depthAt[i] = pooled.achievedDepth;
-        toStore.push({ fen: fens[i], evaluation: e, depth: pooled.achievedDepth });
+        toStore.push({ fen: fens[i], evaluation: e, depth: pooled.achievedDepth, pv: pvAt[i] });
       }
     });
   } else {
@@ -1836,9 +1840,12 @@ async function analyzeGamePositions(
         // recovers a dead worker, so neither path can crawl or hang.
         const analysis: StockfishAnalysis = await stockfishEngine.analyzeWithBudget(fen, BATCH_SHALLOW_DEPTH, curveBudgetMs);
         evals[i] = analysis.evaluation;
+        // The fallback keeps its line too — the same floor the pool path lays.
+        const line = analysis.topLines?.[0]?.moves ?? [];
+        if (line.length) pvAt[i] = line;
         if (Number.isFinite(analysis.depth) && analysis.depth > 0) {
           depthAt[i] = analysis.depth;
-          toStore.push({ fen, evaluation: analysis.evaluation, depth: analysis.depth });
+          toStore.push({ fen, evaluation: analysis.evaluation, depth: analysis.depth, pv: line });
         }
       } catch {
         evals[i] = null;
@@ -1918,7 +1925,7 @@ async function analyzeGamePositions(
           searched++;
           if (Number.isFinite(a.depth) && a.depth > 0) {
             depthAt[i] = Math.max(depthAt[i], a.depth);
-            toStore.push({ fen: fens[i], evaluation: a.evaluation, depth: a.depth, bestMove: a.bestMove || null });
+            toStore.push({ fen: fens[i], evaluation: a.evaluation, depth: a.depth, bestMove: a.bestMove || null, pv: pvAt[i] });
           }
         } catch {
           // Keep the curve value for this ply — a lost deep search costs
@@ -2023,7 +2030,7 @@ async function analyzeGamePositions(
               refinedBestMoveEval = bestAnalysis.evaluation;
               if (!!bestAnalysis.bestMove && bestMove === null) classification = 'good';
               if (Number.isFinite(bestAnalysis.depth) && bestAnalysis.depth > 0) {
-                toStore.push({ fen: fens[moveIdx], evaluation: bestAnalysis.evaluation, depth: bestAnalysis.depth, bestMove: bestAnalysis.bestMove });
+                toStore.push({ fen: fens[moveIdx], evaluation: bestAnalysis.evaluation, depth: bestAnalysis.depth, bestMove: bestAnalysis.bestMove, pv: bestAnalysis.pv });
               }
             } catch {
               // Leave bestMove null + keep the shallow bestMoveEval below

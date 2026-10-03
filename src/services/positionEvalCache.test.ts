@@ -66,6 +66,18 @@ describe('positionEvalCache', () => {
     expect((await lookupPositionEvals([START], 16)).get(0)?.bestMove).toBe('d2d4');
   });
 
+  it('keeps the engine line with the eval, and an equal-depth write adds a missing one (review walk oct3b)', async () => {
+    await storePositionEvals([{ fen: START, evaluation: 20, depth: 16, pv: ['e2e4', 'e7e5'] }]);
+    expect((await lookupPositionEvals([START], 16)).get(0)?.pv).toEqual(['e2e4', 'e7e5']);
+    await storePositionEvals([{ fen: AFTER_E4, evaluation: 15, depth: 16 }]);
+    expect((await lookupPositionEvals([AFTER_E4], 16)).get(0)?.pv).toBeUndefined();
+    expect(await storePositionEvals([{ fen: AFTER_E4, evaluation: 15, depth: 16, pv: ['e7e5'] }])).toBe(1);
+    expect((await lookupPositionEvals([AFTER_E4], 16)).get(0)?.pv).toEqual(['e7e5']);
+    // …and an equal-depth best move does not wipe a stored line.
+    await storePositionEvals([{ fen: AFTER_E4, evaluation: 15, depth: 16, bestMove: 'e7e5' }]);
+    expect((await lookupPositionEvals([AFTER_E4], 16)).get(0)?.pv).toEqual(['e7e5']);
+  });
+
   it('drops non-finite / zero-depth junk instead of caching it', async () => {
     const n = await storePositionEvals([
       { fen: START, evaluation: Number.NaN, depth: 16 },

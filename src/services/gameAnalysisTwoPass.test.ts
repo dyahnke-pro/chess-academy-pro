@@ -56,6 +56,7 @@ import {
 } from './gameAnalysisService';
 import { MATE_EVAL_VALUE, INACCURACY_CP } from './engineConstants';
 import { buildGameRecord, buildEngineAnalysis } from '../test/factories';
+import { storePositionEvals } from './positionEvalCache';
 
 // 🔒 THE SWEEP IS A DRAFT; THE REVIEW IS THE ANALYSIS (David 2026-09-05:
 // "decrease the depth for the batch and dive deeper on key moments once a single
@@ -307,6 +308,17 @@ describe('the REVIEW deep-dives the key moments', () => {
     expect(anns![4].costCp).toBe(120);
     expect(anns![4].classification).not.toBe('blunder');
     pricing.drop = 320;
+  });
+
+  it('a review served from the eval cache keeps the punishing line (review walk oct3b, g2 ply 11)', async () => {
+    // Every position already scored at review depth WITH its line — the
+    // re-open case. The flagged ply's line after the played move must come
+    // back with the eval; it used to be dropped at the cache boundary, and
+    // every line-based fundamental declined ("punishing PV is 0 plies").
+    await storePositionEvals(FENS.map((fen, i) => ({ fen, evaluation: CURVE[i], depth: REVIEW_DEEP_DEPTH, bestMove: 'd2d4', pv: [`line${i}`] })));
+    await reviewFixture();
+    const anns = await analyzeSingleGame('g-review');
+    expect(anns![4].pv?.afterPlayed).toEqual(['line5']);
   });
 
   it('a completed review is NOT re-analysed on the next open', async () => {

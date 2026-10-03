@@ -19,6 +19,11 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { db } from '../db/schema';
 import { buildGameRecord } from '../test/factories';
+// Static, not `await import()` inside the test: loading this module graph
+// under ship-check load spent the test's own 15s budget (commit hook,
+// 2026-10-03) — a timing race in the TEST, not a slow pool.
+import { resolveWorkerUrl } from './stockfishEngine';
+import { analyzeAllGames } from './gameAnalysisService';
 
 // Capacitor reports native iOS — `isIosSafari()` treats getPlatform() as
 // authoritative and UA-independent, which is the whole reason the WKWebView's
@@ -64,7 +69,6 @@ afterEach(() => {
 
 describe('analysis worker pool — engine build on iOS', () => {
   it('the resolver pins iOS to the asm.js build', async () => {
-    const { resolveWorkerUrl } = await import('./stockfishEngine');
     const resolved = resolveWorkerUrl();
     expect(resolved.variant).toBe('asm');
     expect(resolved.url).toBe('/stockfish/stockfish-asm.js');
@@ -78,7 +82,6 @@ describe('analysis worker pool — engine build on iOS', () => {
       annotations: undefined,
     }));
 
-    const { analyzeAllGames } = await import('./gameAnalysisService');
     // Fire and DON'T await: the mock workers never signal ready, so the batch
     // will time out and fall back. We only need the URLs it asked for, which
     // are captured at construction.
