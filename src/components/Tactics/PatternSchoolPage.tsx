@@ -7,6 +7,7 @@ import { admitArrow } from '../../services/arrowDoor';
 import { detectTactics } from '../../services/tacticsDetector';
 import { PATTERN_REGISTRY, type TacticPatternLesson } from '../../data/patternRegistry';
 import { getPuzzlesByTheme } from '../../services/puzzleService';
+import { PATTERN_DRILL_DEPTH } from '../../services/puzzleDepth';
 import { captureEvent } from '../../services/analytics';
 
 /**
@@ -114,7 +115,9 @@ function PatternCard({ lesson }: { lesson: TacticPatternLesson }): JSX.Element {
 
   const startDrill = useCallback((): void => {
     captureEvent('pattern_school_drill_started', { pattern: lesson.id });
-    void navigate('/tactics/adaptive', { state: { forcedWeakThemes: lesson.puzzleThemes } });
+    void navigate('/tactics/adaptive', {
+      state: { forcedWeakThemes: lesson.puzzleThemes, depth: PATTERN_DRILL_DEPTH },
+    });
   }, [navigate, lesson.id, lesson.puzzleThemes]);
 
   return (

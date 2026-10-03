@@ -132,10 +132,35 @@ export function FindSquarePage(): JSX.Element {
       streakBefore: streak,
     });
 
+    const logRoundResult = (outcome: 'completed' | 'missed'): void => {
+      void logAppAudit({
+        kind: 'find-square-round-result',
+        category: 'subsystem',
+        source: 'FindSquarePage.handleSquareClick',
+        summary: outcome === 'completed'
+          ? `completed ${targets.length}/${targets.length} color=${color} streak=${streak + 1}`
+          : `missed ${currentTarget} (clicked ${clicked}) at ${targetIndex + 1}/${targets.length} color=${color}`,
+        details: JSON.stringify({
+          outcome,
+          color,
+          mode: sequenceMode ? 'sequence' : 'single',
+          targets,
+          found: outcome === 'completed' ? targets.length : targetIndex,
+          missedTarget: outcome === 'missed' ? currentTarget : null,
+          clicked: outcome === 'missed' ? clicked : null,
+          coordsShown,
+          voiceMode,
+          streakBefore: streak,
+          lastClickMs: durationMs,
+        }),
+      });
+    };
+
     if (correct) {
       // Last square in the sequence? Round complete → bump streak,
       // start a new round.
       if (targetIndex + 1 >= targets.length) {
+        logRoundResult('completed');
         reward({ kind: 'solved', square: clicked, step: targetIndex, seed: rewardSeed(targets.join(',')) });
         const nextStreak = streak + 1;
         setStreak(nextStreak);
@@ -154,6 +179,7 @@ export function FindSquarePage(): JSX.Element {
     } else {
       // Wrong → reset streak, restart round with sequence length
       // dropped back to 2 (or 1 in single mode).
+      logRoundResult('missed');
       reward({ kind: 'miss', square: clicked });
       setStreak(0);
       setTimeout(() => startNewRound(0), 700);

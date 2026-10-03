@@ -21,6 +21,8 @@ import {
   KID_DIFFICULTY_BRACKETS,
   THEME_MAP,
   PUZZLE_MODES,
+  PUZZLE_SELECTION_BANDS,
+  TACTICAL_THEMES,
 } from './puzzleService';
 import type { PuzzleRecord } from '../types';
 
@@ -554,6 +556,44 @@ describe('puzzleService', () => {
           expect(weakest[i]).not.toBe('fork');
         }
       }
+    });
+  });
+
+  describe('getDailyPuzzles — new puzzles stay at the student\'s level', () => {
+    it('an 800 is never served a 2600 weak-theme puzzle when 800-level puzzles exist', async () => {
+      const future = new Date();
+      future.setDate(future.getDate() + 30);
+      const futureStr = future.toISOString().split('T')[0];
+      const high = Array.from({ length: 30 }, (_, i) => makePuzzle({
+        id: `high-${i}`, rating: 2600, themes: [...TACTICAL_THEMES], srsDueDate: futureStr,
+      }));
+      const low = Array.from({ length: 30 }, (_, i) => makePuzzle({
+        id: `low-${i}`, rating: 780 + i, themes: [], srsDueDate: futureStr,
+      }));
+      await db.puzzles.bulkPut([...high, ...low]);
+
+      const daily = await getDailyPuzzles(800, 10);
+      expect(daily).toHaveLength(10);
+      for (const p of daily) expect(Math.abs(p.rating - 800)).toBeLessThanOrEqual(PUZZLE_SELECTION_BANDS[0]);
+    });
+
+    it('keeps SRS-due review puzzles whatever their rating', async () => {
+      const today = new Date().toISOString().split('T')[0];
+      await db.puzzles.bulkPut([
+        makePuzzle({ id: 'due-high', rating: 2400, srsDueDate: today, attempts: 1 }),
+        ...Array.from({ length: 20 }, (_, i) => makePuzzle({ id: `l-${i}`, rating: 800, themes: [], srsDueDate: '2999-01-01' })),
+      ]);
+      const daily = await getDailyPuzzles(800, 5);
+      expect(daily.map((p) => p.id)).toContain('due-high');
+    });
+
+    it('a filtered mode stays in band instead of falling back to the whole bank', async () => {
+      await db.puzzles.bulkPut([
+        ...Array.from({ length: 3 }, (_, i) => makePuzzle({ id: `eg-low-${i}`, rating: 820, themes: ['endgame'] })),
+        ...Array.from({ length: 20 }, (_, i) => makePuzzle({ id: `eg-high-${i}`, rating: 2700, themes: ['endgame'] })),
+      ]);
+      const puzzles = await getPuzzlesForMode('endgame', 800, 5);
+      expect(puzzles.map((p) => p.id).sort()).toEqual(['eg-low-0', 'eg-low-1', 'eg-low-2']);
     });
   });
 

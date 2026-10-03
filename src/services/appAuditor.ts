@@ -537,6 +537,11 @@ export type AuditKind =
   // round start with the target list — pair with downstream
   // findSquareAttempts rows in Dexie to reconstruct per-round timing.
   | 'find-square-round-start'
+  // One row per round RESULT — completed (every target found) or missed
+  // (the wrong square, with what was asked and what was clicked). Board
+  // vision has no misconception tag, so this is its honest record: the
+  // round-start row says what was asked, this one says how it went.
+  | 'find-square-round-result'
   // Diagnostic audits added to identify root causes for user-reported
   // bugs WITHOUT guessing the fix. Each one captures the inputs that
   // would otherwise require speculation. Once the audit log shows the

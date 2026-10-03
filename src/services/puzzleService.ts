@@ -483,6 +483,44 @@ export function applyTimeBonus(delta: number, solveTimeMs: number): number {
 }
 
 /**
+ * The widening ladder every rating-banded puzzle picker walks: try the
+ * narrowest half-width around the student's rating first and widen only when
+ * that band cannot fill the request. ONE ladder — the setup trainer and the
+ * daily set both read it, so "at your level" means the same thing everywhere.
+ */
+export const PUZZLE_SELECTION_BANDS: readonly number[] = [250, 500, 850, 1300];
+
+/**
+ * Collects up to `limit` unused puzzles nearest the student's rating, walking
+ * `PUZZLE_SELECTION_BANDS` from narrowest to widest. Each band's NEW rows are
+ * shuffled before they are taken, so a narrower band always fills first and a
+ * wider one is reached only when the narrower ran dry.
+ */
+export async function getPuzzlesNearRating(
+  userRating: number,
+  limit: number,
+  options: { excludeIds?: ReadonlySet<string>; predicate?: (p: PuzzleRecord) => boolean } = {},
+): Promise<PuzzleRecord[]> {
+  const r = safeRatingKey(userRating);
+  const taken = new Set<string>(options.excludeIds ?? []);
+  const out: PuzzleRecord[] = [];
+  for (const bandWidth of PUZZLE_SELECTION_BANDS) {
+    if (out.length >= limit) break;
+    const rows = await db.puzzles
+      .where('rating')
+      .between(Math.max(0, r - bandWidth), r + bandWidth, true, true)
+      .toArray();
+    const fresh = shuffle(rows.filter((p) => !taken.has(p.id) && (options.predicate?.(p) ?? true)));
+    for (const p of fresh) {
+      if (out.length >= limit) break;
+      out.push(p);
+      taken.add(p.id);
+    }
+  }
+  return out;
+}
+
+/**
  * Returns puzzles in the user's current rating band (+/- 200).
  */
 export async function getPuzzlesInRatingBand(
@@ -580,7 +618,13 @@ export async function getDailyPuzzles(
   const weakThemes = await getWeakestThemes(3);
   for (const theme of weakThemes) {
     if (result.length >= count) break;
-    const themePuzzles = await getPuzzlesByTheme(theme, themeTarget);
+    // NEW puzzles are drawn at the student's level: a weak theme is trained
+    // on a position they can solve, never on whatever rating the bank
+    // happened to store first (an 800 used to be served a 2616).
+    const themePuzzles = await getPuzzlesNearRating(userRating, themeTarget, {
+      excludeIds: usedIds,
+      predicate: (p) => p.themes.includes(theme),
+    });
     for (const p of themePuzzles) {
       if (result.length >= count) break;
       if (!usedIds.has(p.id)) {
@@ -592,7 +636,9 @@ export async function getDailyPuzzles(
 
   // 4. Fill remaining from rating band
   if (result.length < count) {
-    const bandPuzzles = await getPuzzlesInRatingBand(userRating, 200, count * 2);
+    const bandPuzzles = await getPuzzlesNearRating(userRating, count - result.length, {
+      excludeIds: usedIds,
+    });
     for (const p of bandPuzzles) {
       if (result.length >= count) break;
       if (!usedIds.has(p.id)) {
@@ -731,11 +777,9 @@ export async function getPuzzlesForMode(
   }
 
   if (config.puzzleFilter) {
-    const all = await db.puzzles.filter(config.puzzleFilter).toArray();
-    // Shuffle within a reasonable rating band for variety, then trim
-    const band = all.filter((p) => Math.abs(p.rating - userRating) <= 300);
-    const pool = band.length >= limit ? band : all;
-    return shuffle(pool).slice(0, limit);
+    // At the student's level first, widening only as far as the filtered
+    // pool needs — never a fall back to the whole bank at any rating.
+    return getPuzzlesNearRating(userRating, limit, { predicate: config.puzzleFilter });
   }
 
   return getDailyPuzzles(userRating, limit);
