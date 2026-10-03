@@ -552,3 +552,26 @@ describe('the spoken cost is the one-search cost (review walk oct3b, game 2 ply 
     expect(ctxFor(null)).toMatch(/costing about 1\.3 points/);
   });
 });
+
+describe('the engine line decides the take-back (review walk oct3b, g2 ply 49)', () => {
+  // 25.gxh4 cost 1.6; the engine line answers …Qc7, not …gxh4. The review said
+  // "You take on h4, and they can take back — you win the pawn".
+  const SANS = 'e4 c5 Bc4 e6 e5 Nc6 Qe2 a6 b3 Nd4 Qd3 h6 c3 Nc6 Qf3 Nxe5 Qe2 Bd6 Nf3 Ng6 g3 Nf6 O-O b5 Bd3 Bb7 Bxg6 fxg6 Nh4 Kf7 Na3 Ne4 c4 Be5 Rb1 b4 Nc2 h5 Qf3+ Bf6 Qd3 g5 Nf3 g4 Nh4 g5 Ng2 h4 gxh4'.split(' ');
+  const facet = (playedLineUci: string[]) => {
+    const fens = fensAfter(SANS);
+    return computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
+      fenBefore: fens[47], fenAfter: fens[48], san: 'gxh4', ply: 49,
+      moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
+      evaluation: -273, preMoveEval: -108, costCp: 165, classification: 'mistake', bestMoveSan: 'Nge3',
+      prevCap: { square: null, capturedValue: 0 }, allSans: SANS, forcedRunStartPly: null, playedLineUci, bestLineUci: [], replyBestSan: null,
+    }).find((f) => f.startsWith('[trade]')) ?? '';
+  };
+  it('a costly capture the line declines to take back is said as the capture, no more', () => {
+    const t = facet(['d8c7', 'f2f3', 'g4f3', 'd3f3']);
+    expect(t).not.toMatch(/they can take back — you win/);
+    expect(t).toMatch(/You take on h4/);
+  });
+  it('POSITIVE CONTROL: when the line takes back, it is a trade', () => {
+    expect(facet(['g5h4', 'g2e3', 'd8c7'])).toMatch(/they can take back — a pawn trade/);
+  });
+});

@@ -360,9 +360,17 @@ export function computeMoveFacets(
       const lineRetakes = line.length > 1
         ? /x/.test(line[1]) && /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(line[1])?.[1] === tradeSq
         : null;
-      const safe = engineSaysCostly || (lineRetakes ?? signedLegalSeeFor(fenAfter, tradeSq as Square, recapturer) >= 0);
+      // THE LINE'S OWN ANSWER DECIDES (review walk oct3b, g2 ply 49: 25.gxh4
+      // "and they can take back — you win the pawn": the move cost 1.6, so
+      // "can take back" was forced on, while the engine line plays …Qc7 and
+      // keeps the pawn off the board — one sentence, two contradicting
+      // halves). When the line declines the take-back of a capture that still
+      // cost its mover, neither "they can take back" nor "you win it" is the
+      // point: say the capture and stop.
+      const safe = lineRetakes ?? (engineSaysCostly || signedLegalSeeFor(fenAfter, tradeSq as Square, recapturer) >= 0);
+      const costlyGrab = lineRetakes === false && engineSaysCostly;
       const lost = NOUN[mv.captured ?? ''] ?? 'piece';
-      const f = !what
+      const f = !what || costlyGrab
         ? isStudent
           ? `[trade] You take on ${tradeSq} — that was their ${theirs}.`
           : `[trade] They take on ${tradeSq} — that was your ${theirs}.`
