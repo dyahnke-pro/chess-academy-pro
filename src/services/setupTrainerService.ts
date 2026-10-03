@@ -21,7 +21,7 @@
 import { Chess, type Square } from 'chess.js';
 import { verifyForkOnBoard } from './tacticVerification';
 import { db } from '../db/schema';
-import { calculateRatingDelta, shuffleArray } from './puzzleService';
+import { calculateRatingDelta, shuffleArray, PUZZLE_SELECTION_BANDS } from './puzzleService';
 import { createDefaultSrsFields } from './srsEngine';
 import type {
   PuzzleRecord,
@@ -265,8 +265,6 @@ export function createSetupSession(
   };
 }
 
-const SELECTION_BANDS = [250, 500, 850, 1300];
-
 /**
  * Pick the next setup puzzle near the session's adaptive target rating. Scans
  * the rating band (shuffled), filtered to setup-shape + tactical-motif +
@@ -275,7 +273,7 @@ const SELECTION_BANDS = [250, 500, 850, 1300];
 export async function pickSetupPuzzle(
   session: SetupAdaptiveSession,
 ): Promise<SetupTrainerItem | null> {
-  for (const bandWidth of SELECTION_BANDS) {
+  for (const bandWidth of PUZZLE_SELECTION_BANDS) {
     const min = Math.max(0, session.targetRating - bandWidth);
     const max = session.targetRating + bandWidth;
     const candidates = shuffleArray(

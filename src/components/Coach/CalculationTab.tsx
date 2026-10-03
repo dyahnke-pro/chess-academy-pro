@@ -39,7 +39,10 @@ import {
   getCalculationSkills,
   getCalculationSkillById,
   getDrillPuzzleCount,
+  skillAcceptsPuzzle,
   type CalculationSkill,
+  isLegalMove,
+  recordCalculationFirstAnswer,
 } from '../../services/calculationDrillService';
 import { countGameCalculationPuzzlesBySkill } from '../../services/gameCalculationPuzzleService';
 import type { EndgameLessonPosition } from '../../types/endgameLesson';
@@ -50,6 +53,7 @@ import { useAppStore } from '../../stores/appStore';
 import { WrongTryNote } from '../Puzzles/WrongTryNote';
 import { hintSquareStyles } from '../../utils/hintSquareStyles';
 import { useSolvedDrillConcept } from '../../hooks/useWrongTryRefutation';
+import type { PieceDropHandlerArgs } from 'react-chessboard';
 
 const EMPTY_LINE: readonly string[] = [];
 
@@ -242,6 +246,9 @@ function AdaptiveDrillScreen({ skill, onExit }: AdaptiveDrillScreenProps): JSX.E
     // Roughly every other puzzle prefers one of the student's own
     // games when the matched pool has an unplayed one.
     preferExtraEvery: 2,
+    // The skill's own gate (Find the Mate admits only lines that END in
+    // checkmate on the board) — the same one the picker counts with.
+    accept: (p) => skillAcceptsPuzzle(skill, p),
   });
 
   if (!adaptive.currentDrill) {
@@ -266,6 +273,7 @@ function AdaptiveDrillScreen({ skill, onExit }: AdaptiveDrillScreenProps): JSX.E
       skill={skill}
       drill={adaptive.currentDrill}
       drillRating={adaptive.currentDrillRating ?? 0}
+      drillThemes={adaptive.currentDrillThemes}
       sessionRating={adaptive.sessionRating}
       userRating={adaptive.userRating}
       solved={adaptive.solved}
@@ -281,6 +289,7 @@ interface AdaptivePuzzleRunnerProps {
   skill: CalculationSkill;
   drill: EndgameLessonPosition;
   drillRating: number;
+  drillThemes: readonly string[];
   sessionRating: number;
   userRating: number;
   solved: number;
@@ -294,6 +303,7 @@ function AdaptivePuzzleRunner({
   skill,
   drill,
   drillRating,
+  drillThemes,
   sessionRating,
   userRating,
   solved,
@@ -319,7 +329,54 @@ function AdaptivePuzzleRunner({
     fallbackDifficulty: 'hard',
     replyDelayMs: 450,
   });
-  const clickToMove = useClickToMove(playout);
+  // THE RECORD (capability parity with the puzzle board): the student's FIRST
+  // answer to the position this drill posed — held when the drill accepts it,
+  // broken when it does not. Later tries were coached and record nothing. The
+  // runner remounts per puzzle (see its `key`), so this resets per puzzle.
+  const answeredRef = useRef(false);
+  const recordFirstAnswer = useCallback(
+    (from: string, to: string, accepted: boolean, prompted: boolean): void => {
+      if (answeredRef.current) return;
+      // An illegal drop answers nothing; the first LEGAL try is the answer.
+      if (!isLegalMove(drill.fen, from, to)) return;
+      answeredRef.current = true;
+      void recordCalculationFirstAnswer({ fen: drill.fen, from, to, accepted, themes: drillThemes, prompted });
+    },
+    [drill.fen, drillThemes],
+  );
+  const onPieceDrop = playout.onPieceDrop;
+  const playMove = playout.playMove;
+  const hintRevealed = playout.hintRevealed;
+  const atStart = playout.fen === drill.fen && playout.phase === 'student-to-move';
+  const trackedPlayMove = useCallback(
+    (from: string, to: string): boolean => {
+      const accepted = playMove(from, to);
+      if (atStart) recordFirstAnswer(from, to, accepted, hintRevealed);
+      return accepted;
+    },
+    [playMove, atStart, recordFirstAnswer, hintRevealed],
+  );
+  const trackedPieceDrop = useCallback(
+    (args: PieceDropHandlerArgs): boolean => {
+      const accepted = onPieceDrop(args);
+      if (atStart && args.targetSquare) recordFirstAnswer(args.sourceSquare, args.targetSquare, accepted, hintRevealed);
+      return accepted;
+    },
+    [onPieceDrop, atStart, recordFirstAnswer, hintRevealed],
+  );
+  // Skip / Reveal before any answer: the board still posed the question, and
+  // the drill answered it FOR them — a prompted row, which counts as neither.
+  const revealAnswer = playout.reveal;
+  const hintMove = playout.hintMove;
+  const trackedReveal = useCallback((): void => {
+    if (hintMove) recordFirstAnswer(hintMove.from, hintMove.to, true, true);
+    revealAnswer();
+  }, [hintMove, recordFirstAnswer, revealAnswer]);
+  const trackedPlayout = useMemo(
+    () => ({ ...playout, playMove: trackedPlayMove, onPieceDrop: trackedPieceDrop }),
+    [playout, trackedPlayMove, trackedPieceDrop],
+  );
+  const clickToMove = useClickToMove(trackedPlayout);
   // SOLVED → TEACH THE CONCEPT (tactics map 2026-10-01: Calculation ended on
   // "Solved — played to the win." and nothing else). The same computed
   // explanation the puzzle board gives, for a student-to-move drill.
@@ -410,7 +467,7 @@ function AdaptivePuzzleRunner({
       fen={playout.fen}
       boardOrientation={studentSide}
       interactive={playout.phase === 'student-to-move'}
-      onPieceDrop={playout.onPieceDrop}
+      onPieceDrop={trackedPieceDrop}
       onSquareClick={clickToMove.onSquareClick}
       squareStyles={mergedSquareStyles}
     />
@@ -484,7 +541,7 @@ function AdaptivePuzzleRunner({
       </div>
       <div className="flex items-center justify-between gap-2">
         <button
-          onClick={playout.reveal}
+          onClick={trackedReveal}
           disabled={playout.isComplete}
           className="px-3 py-2 rounded-lg bg-theme-surface text-sm text-theme-text-muted hover:text-theme-text disabled:opacity-30"
           data-testid="calculation-skip"

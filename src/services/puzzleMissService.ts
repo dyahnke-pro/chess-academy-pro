@@ -18,6 +18,9 @@
 import { db } from '../db/schema';
 import { getTacticTypeFromThemes } from './tacticClassifierService';
 import type { TacticType } from '../types';
+import { logMisconception } from './misconceptionService';
+import { COMPUTER_ROLES } from './computerRoles';
+import type { MisconceptionTagId } from '../data/misconceptionTags';
 
 export interface PuzzleMissRecord {
   id: string;
@@ -61,5 +64,51 @@ export async function recordPuzzleMiss(args: {
     return true;
   } catch {
     return false; // never break the puzzle over telemetry
+  }
+}
+
+/**
+ * The misconception tag a FAILED puzzle files under — through the joins that
+ * already exist, never a new table: the puzzle's motif (`getTacticTypeFromThemes`,
+ * the same mapping `recordPuzzleMiss` stores) and the dual-use roles table,
+ * which already names the tag each computer's question is about. A defensive
+ * puzzle missed is the threat lane's tag; any tactical motif missed is the
+ * tactic lane's. Null (skip) when neither applies — a pure endgame or quiet
+ * puzzle has no tag that honestly describes it.
+ */
+export function puzzleMisconceptionTag(themes: readonly string[]): MisconceptionTagId | null {
+  if (themes.includes('defensiveMove')) return COMPUTER_ROLES.threat.tag;
+  if (getTacticTypeFromThemes([...themes])) return COMPUTER_ROLES.tactic.tag;
+  return null;
+}
+
+/**
+ * Log a failed puzzle to the misconception bucket the moment it fails (the
+ * way Game Review logs a fall-off) so it shows in the student's thinking
+ * errors at once. `counted: false`: the puzzle's weight in the weakness spine
+ * already comes from its `puzzleMisses` row at the weaker puzzle severity
+ * (David 2026-10-01, "as weaker evidence"); a counted row here would count the
+ * same miss twice at full game weight.
+ */
+export async function logPuzzleMisconception(args: {
+  puzzleId: string;
+  themes: string[];
+  fen: string;
+  bestSan: string | null;
+}): Promise<boolean> {
+  const tag = puzzleMisconceptionTag(args.themes);
+  if (!tag) return false;
+  try {
+    const rec = await logMisconception({
+      tag,
+      source: 'puzzle',
+      fen: args.fen,
+      bestSan: args.bestSan ?? undefined,
+      counted: false,
+      coachNote: `Puzzle ${args.puzzleId} unsolved (${args.themes.join(', ')})`,
+    });
+    return rec !== null;
+  } catch {
+    return false;
   }
 }

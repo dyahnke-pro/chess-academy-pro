@@ -28,6 +28,13 @@ export const LENGTH_RANGE: Record<PuzzleLength, { min: number; max: number }> = 
   veryLong: { min: 5, max: Infinity },
 };
 
+/** A PATTERN drill (Pattern Recognition → "Drill this pattern"): 1–3 moves to
+ *  find, so the named pattern IS the lesson rather than one step of a long
+ *  combination (live walk 2026-10-03: "Drill this pattern" on Fork opened a
+ *  six-mover). Rides the nav state as `depth`, the same window the Long tab
+ *  hands `getNextAdaptivePuzzle`. */
+export const PATTERN_DRILL_DEPTH: { min: number; max: number } = { min: 1, max: 3 };
+
 /** Below this puzzle rating a one-move puzzle is still fair — "one movers only
  *  for true beginners" (David). Above it, selection draws multi-move first. */
 export const ONE_MOVER_CEILING = 800;

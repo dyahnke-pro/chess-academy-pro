@@ -5,6 +5,8 @@ import {
   getCalculationSkillById,
   getDrillPuzzles,
   getDrillPuzzleCount,
+  skillAcceptsPuzzle,
+  solutionEndsInMate,
 } from './calculationDrillService';
 
 /** Calculation drill invariants:
@@ -120,5 +122,39 @@ describe('calculationDrillService', () => {
         expect(p.themes.includes('mateIn1')).toBe(false);
       }
     });
+  });
+});
+
+describe('Find the Mate — the line must END in checkmate, not just be tagged', () => {
+  const skill = getCalculationSkillById('find-the-mate');
+  // Mate-tagged but the line ends quietly (the live walk served one that
+  // ended "...Rxh2", winning the queen, with no mate on the board).
+  const taggedNotMate = {
+    id: 'fake-mate', fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+    moves: 'e2e4 e7e5 g1f3', themes: ['mateIn2'],
+  };
+  // Scholar's mate from the start position — a real mate ending.
+  const realMate = {
+    id: 'real-mate', fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+    moves: 'e2e4 e7e5 f1c4 b8c6 d1h5 g8f6 h5f7', themes: ['mateIn2'],
+  };
+
+  it('rejects a mate-tagged line that does not end in checkmate', () => {
+    expect(skill).not.toBeNull();
+    if (!skill) return;
+    expect(skillAcceptsPuzzle(skill, taggedNotMate)).toBe(false);
+    expect(skillAcceptsPuzzle(skill, realMate)).toBe(true);
+  });
+
+  it('every Find-the-Mate drill puzzle replays to checkmate', { timeout: 30000 }, () => {
+    const all = getDrillPuzzles('find-the-mate', { limit: 100000 });
+    expect(all.length).toBeGreaterThan(50);
+    for (const p of all) expect(solutionEndsInMate(p), p.id).toBe(true);
+  });
+
+  it('the mate gate does not touch non-mate skills', () => {
+    const quiet = getCalculationSkillById('quiet-move');
+    if (!quiet) throw new Error('quiet-move missing');
+    expect(skillAcceptsPuzzle(quiet, { ...taggedNotMate, themes: ['quietMove'] })).toBe(true);
   });
 });

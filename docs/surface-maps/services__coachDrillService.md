@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**744 lines · 22 exports · 5 importers · 3 tests · 1 audits**
+**773 lines · 23 exports · 5 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6129) — names `coachDrillService`
+- **The standard post-deploy ritual** (CLAUDE.md:6139) — names `coachDrillService`
 
 ## Who calls in
 
@@ -58,17 +58,17 @@
 - `src/services/coachDrillService.mistakes.test.ts:74`
 
 ### `mistakePuzzleToDrill` (function) — 5 call sites
-- `src/services/coachDrillService.mistakes.test.ts:252`
-- `src/services/coachDrillService.mistakes.test.ts:261`
-- `src/services/coachDrillService.mistakes.test.ts:268`
+- `src/services/coachDrillService.mistakes.test.ts:267`
+- `src/services/coachDrillService.mistakes.test.ts:276`
+- `src/services/coachDrillService.mistakes.test.ts:283`
 - `src/services/coachDrillService.test.ts:32`
 - `src/services/coachDrillService.test.ts:40`
 
 ### `hasImportedGames` (function) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2556`
-- `src/services/coachDrillService.mistakes.test.ts:230`
-- `src/services/coachDrillService.mistakes.test.ts:238`
-- `src/services/coachDrillService.mistakes.test.ts:246`
+- `src/services/coachDrillService.mistakes.test.ts:245`
+- `src/services/coachDrillService.mistakes.test.ts:253`
+- `src/services/coachDrillService.mistakes.test.ts:261`
 
 ### `WeaknessSummaryRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -84,11 +84,20 @@
 ### `WeaknessGroup` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `groupMistakesByWeakness` (function) — 4 call sites
+### `groupProgressLabel` (function) — 6 call sites
+- `src/components/Puzzles/MyMistakesPage.tsx:603`
+- `src/components/Puzzles/MyMistakesPage.tsx:658`
+- `src/services/coachDrillService.mistakes.test.ts:224`
+- `src/services/coachDrillService.mistakes.test.ts:225`
+- `src/services/coachDrillService.mistakes.test.ts:226`
+- `src/services/coachDrillService.mistakes.test.ts:227`
+
+### `groupMistakesByWeakness` (function) — 5 call sites
 - `src/components/Puzzles/MyMistakesPage.tsx:262`
 - `src/services/coachDrillService.mistakes.test.ts:200`
 - `src/services/coachDrillService.mistakes.test.ts:210`
-- `src/services/coachDrillService.mistakes.test.ts:216`
+- `src/services/coachDrillService.mistakes.test.ts:222`
+- `src/services/coachDrillService.mistakes.test.ts:231`
 
 ### `buildMistakeDrillQueue` (function) — 16 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2519`
@@ -128,7 +137,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:2678`
 
 ### `drillHintBeat` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:11548`
+- `src/components/Coach/CoachTeachPage.tsx:11584`
 
 ### `drillContinueBeat` (function) — 1 call site
 - `src/components/Coach/CoachTeachPage.tsx:2805`

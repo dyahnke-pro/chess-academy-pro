@@ -23,6 +23,7 @@ import type { WeaknessCategory } from '../types';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { developedMinorCount, totalMinorCount } from './development';
 import { isOutpost } from './outpost';
+import { MATERIAL_VALUE } from './pieceValues';
 
 /** Centipawn-free piece values for SEE + material reasoning (king ~ ∞). */
 const PIECE_VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
@@ -2131,11 +2132,14 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   // ─── CALCULATION bucket ───────────────────────────────────────────────────
   // 7) MATERIAL — always answerable from ground truth.
   if (facts?.material) {
+    // The student hears a sentence, not the coach-prompt fact (that one carries
+    // ALL-CAPS direction markers written for the model).
+    const read = materialRead(fen);
     out.push({
       id: 'material', type: 'material', bucket: 'calculation',
       prompt: 'Who is ahead in material, and by how much?',
-      answer: facts.material,
-      acceptTokens: materialTokens(facts.material),
+      answer: read?.answer ?? facts.material,
+      acceptTokens: read?.tokens ?? materialTokens(facts.material),
       negative: false,
     });
   }
@@ -2552,7 +2556,9 @@ export function readingHint(q: ReadingQuestion, tier: 1 | 2 | 3): string | null 
   }
   const sqs = q.answerSquares ?? [];
   if (tier === 2) {
-    if (q.negative) return "Don't force a move — the honest read here may be that there's nothing concrete.";
+    // A METHOD, never the verdict: "there may be nothing here" answered a
+    // yes/no question for the student (walk 2026-10-03).
+    if (q.negative) return 'Play each check and capture through to the end of the exchanges, then count what each side has left.';
     if (sqs.length > 0) return `It's on ${regionOf(sqs[0])}.`;
     return HINT_TIER1[q.type] ?? null;
   }
@@ -2566,6 +2572,61 @@ export function readingHint(q: ReadingQuestion, tier: 1 | 2 | 3): string | null 
     return `The move that starts it is a ${piece} move.`;
   }
   return null;
+}
+
+/** The material balance as the student reads it, from the board (kings
+ *  excluded, chess.js piece values), with the tokens that mark a right read —
+ *  the side that LEADS, never the side behind (the old tokens accepted
+ *  "black" when White was up, since the sentence named both). Null on an
+ *  unreadable FEN. */
+export function materialRead(fen: string): { answer: string; tokens: string[] } | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  // THE material table (pieceValues.ts) — never a private copy, so this drill
+  // and the chat's material lane can never count the same board differently.
+  let w = 0;
+  let b = 0;
+  for (const row of chess.board()) for (const p of row) {
+    if (!p) continue;
+    const v = MATERIAL_VALUE[p.type] ?? 0;
+    if (p.color === 'w') w += v; else b += v;
+  }
+  if (w === b) {
+    return { answer: `Material is even — ${w} points each.`, tokens: ['even', 'equal', 'level', 'same'] };
+  }
+  const side = w > b ? 'White' : 'Black';
+  const diff = Math.abs(w - b);
+  return {
+    answer: `${side} is ahead by ${diff} point${diff === 1 ? '' : 's'} (White ${w}, Black ${b}).`,
+    tokens: [side.toLowerCase()],
+  };
+}
+
+/** Words that show an answer is ABOUT the question asked, per question type.
+ *  Only types with one clear answer form are listed; the rest grade anything. */
+const ANSWER_SHAPE: Partial<Record<ReadingQuestionType, { matches: RegExp; expect: string }>> = {
+  material: {
+    matches: /\b(white|black|even|equal|level|same|nobody|neither|nothing|\d+|one|two|three|four|five|six|seven|eight|nine|ten|pawn|pawns|exchange|piece|up|down|ahead|behind)\b/,
+    expect: "Answer with who's ahead and by how much — e.g. \"White by 2\" or \"even\".",
+  },
+  'who-is-winning': {
+    matches: /\b(white|black|even|equal|level|drawn|draw|balanced|nobody|neither|winning|better|worse|\d+)\b/,
+    expect: "Answer with who's better and roughly by how much — e.g. \"White, clearly\" or \"about equal\".",
+  },
+};
+
+/**
+ * Is this answer even an answer TO THIS QUESTION? Returns null when it is
+ * (grade it), or the kind of answer expected when it is not — "Qa4+" or
+ * "the bishop pins the knight" to "who is ahead in material?" is not a wrong
+ * read, it is a different question, and it must not cost an attempt.
+ */
+export function readingAnswerShape(q: ReadingQuestion, userAnswer: string): string | null {
+  const shape = ANSWER_SHAPE[q.type];
+  if (!shape) return null;
+  const a = userAnswer.toLowerCase().replace(/[^a-z0-9\s]/g, ' ');
+  // A bare square ("g4") is not a number: \b does not split "g4".
+  return shape.matches.test(a) ? null : shape.expect;
 }
 
 /** Tokens that count as a correct material read ("even" / "white up …" / a number). */

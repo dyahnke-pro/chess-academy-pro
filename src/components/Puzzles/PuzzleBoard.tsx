@@ -23,9 +23,10 @@ import { recordCapabilityEvidence } from '../../services/capabilityEvidence';
 import { MISTAKE_CP } from '../../services/engineConstants';
 import type { MethodHabit } from '../../services/methodBeat';
 import { recordTacticOutcome } from '../../services/tacticAlertService';
-import { recordPuzzleMiss, type PuzzleMissRecord } from '../../services/puzzleMissService';
+import { recordPuzzleMiss, logPuzzleMisconception, type PuzzleMissRecord } from '../../services/puzzleMissService';
 import { usePuzzleMeter } from '../../hooks/usePuzzleMeter';
-import { getTacticTypeFromThemes, getPrimaryThemeLabel } from '../../services/tacticClassifierService';
+import { getTacticTypeFromThemes, getPrimaryThemeLabel, focusThemeLabel } from '../../services/tacticClassifierService';
+import { voiceFacts } from '../../services/coachApi';
 import { describeMoveGeometry } from '../../services/groundedAnswer';
 import { explainPuzzleConcept } from '../../services/puzzleConceptExplanation';
 import { useAppStore } from '../../stores/appStore';
@@ -79,6 +80,21 @@ interface PuzzleBoardProps {
   /** Which Tactics surface hosts the board — a missed puzzle is recorded
    *  under it (`recordPuzzleMiss`). REQUIRED so a new host has to answer. */
   surface: PuzzleMissRecord['surface'];
+  /** The Lichess themes the host drilled for ("Discovered Attacks" card →
+   *  ['discoveredAttack']). When the puzzle carries one, the heading names
+   *  THAT theme, not the puzzle's first classified tactic — a Discovered
+   *  Attacks drill was headed FORK (live walk 2026-10-03). */
+  focusThemes?: readonly string[];
+}
+
+/** Speak computed puzzle prose through the ONE chokepoint (G0). preferRaw:
+ *  the computed text is already the sentence, so no model rewrites it. */
+async function voiceComputed(text: string): Promise<string> {
+  try {
+    return (await voiceFacts(text, { preferRaw: true, intent: 'puzzle-concept' })) ?? text;
+  } catch {
+    return text;
+  }
 }
 
 function parseUciMoves(uci: string): { from: string; to: string; promotion?: string }[] {
@@ -99,6 +115,7 @@ export function PuzzleBoard({
   hintOnMiss = false,
   fitViewport = false,
   surface,
+  focusThemes,
 }: PuzzleBoardProps): JSX.Element {
   // The line's depth, counted (never a theme tag), and how far the student is.
   const totalMoves = useMemo(() => Math.max(1, solverMoves(puzzle)), [puzzle]);
@@ -231,7 +248,11 @@ export function PuzzleBoard({
 
   // Use Lichess curated themes for tactic type (more accurate than pattern matching)
   const tacticType = useMemo(() => getTacticTypeFromThemes(puzzle.themes), [puzzle.themes]);
-  const themeLabel = useMemo(() => getPrimaryThemeLabel(puzzle.themes), [puzzle.themes]);
+  const themeLabel = useMemo(
+    () => (focusThemes && focusThemes.length > 0 ? focusThemeLabel(puzzle.themes, focusThemes) : null)
+      ?? getPrimaryThemeLabel(puzzle.themes),
+    [puzzle.themes, focusThemes],
+  );
 
   // Proactive struggle detection — coach speaks up when player is stuck
   const handleStruggleCoach = useCallback((message: string, _tier: CoachingTier) => {
@@ -387,12 +408,21 @@ export function PuzzleBoard({
   // puzzle; falls back to the solve geometry when no concept explanation is
   // computable, and to silence when neither is (voice rule #5, no filler).
   // Verbosity-gated via voiceService.speak (speakInternal honours the setting).
+  // The computed text reaches the voice through the voiceFacts chokepoint
+  // (preferRaw — the prose is already computed, nothing is re-phrased).
+  const puzzleIdRef = useRef(puzzle.id);
+  puzzleIdRef.current = puzzle.id;
   useEffect(() => {
     if (!settings.voiceEnabled || !terminal || conceptSpokenRef.current === puzzle.id) return;
     conceptSpokenRef.current = puzzle.id;
     const line = conceptExplanation?.spoken
       ?? (state === 'correct' && solveGeometry ? `That ${solveGeometry}.` : null);
-    if (line) void voiceService.speak(line, { sentenceFirst: true });
+    if (!line) return;
+    const id = puzzle.id;
+    void voiceComputed(line).then((say) => {
+      if (puzzleIdRef.current !== id) return; // a newer puzzle owns the voice
+      void voiceService.speak(say, { sentenceFirst: true });
+    });
   }, [terminal, puzzle.id, state, settings.voiceEnabled, solveGeometry, conceptExplanation]);
 
   // Complete the puzzle with outcome metadata
@@ -422,6 +452,9 @@ export function PuzzleBoard({
           solveFen = c.fen();
         } catch { /* the setup FEN is the honest fallback */ }
         void recordPuzzleMiss({ puzzleId: puzzle.id, themes: puzzle.themes, fen: solveFen, rating: puzzle.rating, surface });
+        // …and into the misconception bucket the moment it fails, as Game
+        // Review logs a fall-off (display row; the spine weight is the miss).
+        void logPuzzleMisconception({ puzzleId: puzzle.id, themes: puzzle.themes, fen: solveFen, bestSan: solverFirstSan });
       }
     }
     onComplete({
@@ -432,7 +465,7 @@ export function PuzzleBoard({
       cleanMoves: cleanMovesRef.current,
       solveTimeMs: Date.now() - solveStartRef.current,
     });
-  }, [onComplete, tacticType, subtitle, puzzle.id, puzzle.fen, puzzle.themes, puzzle.rating, surface, meter]);
+  }, [onComplete, tacticType, subtitle, puzzle.id, puzzle.fen, puzzle.themes, puzzle.rating, surface, meter, solverFirstSan]);
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing' || disabled) return;
@@ -669,11 +702,20 @@ export function PuzzleBoard({
           exclude: [{ from: move.from, to: move.to }],
         }) : []);
         // Never faster than a readable move, never ahead of the voice.
-        await Promise.all([clause ? voiceService.speak(clause).catch(() => undefined) : null, sleep(600)]);
+        const say = clause ? await voiceComputed(clause) : '';
+        if (stale()) return;
+        await Promise.all([say ? voiceService.speak(say).catch(() => undefined) : null, sleep(600)]);
         if (clause) await sleep(250);
       }
       if (stale()) return;
-      if (speakAlong && ex.idea) await voiceService.speak(ex.idea).catch(() => undefined);
+      // The motif sentence rides the clause of the move that lands it; it is
+      // said on its own only when that clause was already played (the student
+      // found the key move before asking for the rest).
+      const ideaRead = ex !== null && ex.ideaClause !== null && ex.ideaClause + ex.clausePlyStart >= from;
+      if (speakAlong && ex.idea && !ideaRead) {
+        const idea = await voiceComputed(ex.idea);
+        if (!stale()) await voiceService.speak(idea).catch(() => undefined);
+      }
       if (stale()) return;
       setState('incorrect');
       completionTimerRef.current = setTimeout(() => {

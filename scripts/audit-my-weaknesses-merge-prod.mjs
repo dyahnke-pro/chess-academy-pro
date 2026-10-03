@@ -75,7 +75,7 @@ try {
   await tid('weakness-group-open').waitFor({ timeout: 10000 });
   const cards = await tid('puzzle-card').count();
   const header = await tid('weakness-group-open').innerText();
-  check('C a group lists exactly its own game positions', cards === 4 && /4 from your games/.test(header), `${cards} cards · ${header.replace(/\n/g, ' | ')}`);
+  check('C a group lists exactly its own game positions', cards === 4 && /(4 unsolved|of 4 solved|all mastered)/.test(header), `${cards} cards · ${header.replace(/\n/g, ' | ')}`);
 
   // D — Practice plays them on a board.
   await tid('weakness-group-practice').click();

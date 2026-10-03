@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**267 lines · 16 exports · 2 importers · 1 tests · 0 audits**
+**327 lines · 18 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,61 +14,95 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/components/Tactics/TacticCreatePage.tsx`
 - `src/components/Tactics/TacticSetupBoard.tsx`
+- `src/services/tacticNarrationService.test.ts`
 
 ## Exports and every call site
 
-### `describeMove` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `describeMove` (function) — 1 call site
+- `src/services/tacticNarrationService.test.ts:49`
 
 ### `isNotableMove` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `drillIntro` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `drillIntro` (function) — 1 call site
+- `src/services/tacticNarrationService.test.ts:40`
 
-### `drillTransition` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `drillTransition` (function) — 1 call site
+- `src/services/tacticNarrationService.test.ts:37`
 
-### `drillCorrect` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `drillCorrect` (function) — 1 call site
+- `src/services/tacticNarrationService.test.ts:37`
 
-### `drillIncorrect` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `drillIncorrect` (function) — 1 call site
+- `src/services/tacticNarrationService.test.ts:40`
 
-### `setupIntro` (function) — 1 call site
-- `src/components/Tactics/TacticSetupBoard.tsx:135`
+### `setupIntro` (function) — 4 call sites
+- `src/components/Tactics/TacticSetupBoard.tsx:220`
+- `src/services/tacticNarrationService.test.ts:37`
+- `src/services/tacticNarrationService.test.ts:70`
+- `src/services/tacticNarrationService.test.ts:77`
 
-### `setupPrepPlanted` (function) — 1 call site
-- `src/components/Tactics/TacticSetupBoard.tsx:205`
+### `setupHintIdea` (function) — 5 call sites
+- `src/components/Tactics/TacticSetupBoard.tsx:188`
+- `src/services/tacticNarrationService.test.ts:42`
+- `src/services/tacticNarrationService.test.ts:85`
+- `src/services/tacticNarrationService.test.ts:90`
+- `src/services/tacticNarrationService.test.ts:91`
 
-### `setupRevealComplete` (function) — 1 call site
-- `src/components/Tactics/TacticSetupBoard.tsx:167`
+### `setupHintPiece` (function) — 4 call sites
+- `src/components/Tactics/TacticSetupBoard.tsx:200`
+- `src/services/tacticNarrationService.test.ts:43`
+- `src/services/tacticNarrationService.test.ts:95`
+- `src/services/tacticNarrationService.test.ts:99`
 
-### `setupIncorrect` (function) — 1 call site
-- `src/components/Tactics/TacticSetupBoard.tsx:222`
+### `setupPrepPlanted` (function) — 2 call sites
+- `src/components/Tactics/TacticSetupBoard.tsx:310`
+- `src/services/tacticNarrationService.test.ts:41`
 
-### `createIntro` (function) — 1 call site
-- `src/components/Tactics/TacticCreatePage.tsx:164`
+### `setupRevealComplete` (function) — 3 call sites
+- `src/components/Tactics/TacticSetupBoard.tsx:252`
+- `src/components/Tactics/TacticSetupBoard.tsx:378`
+- `src/services/tacticNarrationService.test.ts:41`
 
-### `createReplayNarration` (function) — 1 call site
-- `src/components/Tactics/TacticCreatePage.tsx:132`
+### `setupIncorrect` (function) — 2 call sites
+- `src/components/Tactics/TacticSetupBoard.tsx:347`
+- `src/services/tacticNarrationService.test.ts:41`
 
-### `createTransition` (function) — 1 call site
-- `src/components/Tactics/TacticCreatePage.tsx:148`
+### `createIntro` (function) — 3 call sites
+- `src/components/Tactics/TacticCreatePage.tsx:165`
+- `src/services/tacticNarrationService.test.ts:44`
+- `src/services/tacticNarrationService.test.ts:60`
 
-### `createCorrect` (function) — 1 call site
-- `src/components/Tactics/TacticCreatePage.tsx:200`
+### `createReplayNarration` (function) — 2 call sites
+- `src/components/Tactics/TacticCreatePage.tsx:133`
+- `src/services/tacticNarrationService.test.ts:49`
 
-### `createIncorrect` (function) — 1 call site
-- `src/components/Tactics/TacticCreatePage.tsx:212`
+### `createTransition` (function) — 2 call sites
+- `src/components/Tactics/TacticCreatePage.tsx:149`
+- `src/services/tacticNarrationService.test.ts:37`
 
-### `createDepthIncrease` (function) — 1 call site
-- `src/components/Tactics/TacticCreatePage.tsx:201`
+### `createCorrect` (function) — 2 call sites
+- `src/components/Tactics/TacticCreatePage.tsx:220`
+- `src/services/tacticNarrationService.test.ts:45`
+
+### `createIncorrect` (function) — 3 call sites
+- `src/components/Tactics/TacticCreatePage.tsx:232`
+- `src/services/tacticNarrationService.test.ts:45`
+- `src/services/tacticNarrationService.test.ts:61`
+
+### `createDepthIncrease` (function) — 2 call sites
+- `src/components/Tactics/TacticCreatePage.tsx:221`
+- `src/services/tacticNarrationService.test.ts:46`
 
 ## Tests
 
 - `src/components/Tactics/TacticSetupBoard.test.tsx`
+- `src/services/tacticNarrationService.test.ts`
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._

@@ -25,12 +25,16 @@ import { db } from '../db/schema';
 import { useAppStore } from '../stores/appStore';
 import type { EndgameLesson, EndgameLessonPosition } from '../types/endgameLesson';
 
+const EMPTY_THEMES: readonly string[] = [];
+
 export interface AdaptiveEndgameSession {
   /** Current drill — null while loading, or when the theme pool
    *  has no remaining puzzles. */
   currentDrill: EndgameLessonPosition | null;
   /** Lichess rating of the current drill. */
   currentDrillRating: number | null;
+  /** Theme tags of the current drill (empty while none is loaded). */
+  currentDrillThemes: readonly string[];
   /** Live session target rating (drives next-puzzle selection). */
   sessionRating: number;
   /** Persistent user rating after the most recent attempt. */
@@ -67,6 +71,9 @@ interface UseAdaptiveEndgameOptions {
   /** Prefer a game-derived puzzle every Nth pick. Only meaningful
    *  when `extraPuzzles` is non-empty. */
   preferExtraEvery?: number;
+  /** Admission gate applied to every candidate the stream picks (see
+   *  `pickAdaptivePuzzle`'s `accept`). */
+  accept?: (p: RawPuzzle) => boolean;
 }
 
 export function useAdaptiveEndgameSession(
@@ -88,29 +95,45 @@ export function useAdaptiveEndgameSession(
   extraRef.current = options.extraPuzzles ?? [];
   const preferRef = useRef<number>(options.preferExtraEvery ?? 0);
   preferRef.current = options.preferExtraEvery ?? 0;
+  const acceptRef = useRef(options.accept);
+  acceptRef.current = options.accept;
   const pickOptions = (): Parameters<typeof pickAdaptivePuzzle>[1] => ({
     themes,
     extraPuzzles: extraRef.current,
     preferExtraEvery: preferRef.current,
+    accept: acceptRef.current,
   });
 
   const [state, setState] = useState<AdaptiveEndgameState>(() =>
     createAdaptiveEndgameState(initial),
   );
   const [currentRaw, setCurrentRaw] = useState(() =>
-    pickAdaptivePuzzle(createAdaptiveEndgameState(initial), { themes }),
+    pickAdaptivePuzzle(createAdaptiveEndgameState(initial), { themes, accept: options.accept }),
   );
+
+  // The seed is read at the moment a session STARTS (mount, lesson change,
+  // reset), never tracked live. `recordOutcome` persists the new
+  // `endgameRating` onto the active profile, which moves `initial`; when the
+  // reset effect depended on `initial`, every recorded outcome wiped the
+  // session it had just updated — the Calculation drill sat on "Puzzle #1 ·
+  // 0/0" forever, re-serving the stream from a fresh state (live walk
+  // 2026-10-03).
+  const seedRef = useRef(initial);
+  seedRef.current = initial;
+  const sessionLessonRef = useRef<string | undefined>(lesson?.id);
 
   // Reset everything when the lesson changes.
   useEffect(() => {
-    const fresh = createAdaptiveEndgameState(initial);
+    if (sessionLessonRef.current === lesson?.id) return;
+    sessionLessonRef.current = lesson?.id;
+    const fresh = createAdaptiveEndgameState(seedRef.current);
     setState(fresh);
     setCurrentRaw(pickAdaptivePuzzle(fresh, pickOptions()));
     // We intentionally exclude `themes` from the dep array — its
     // identity changes on every render via the `??` lookup. Lesson
     // id is the stable signal we care about.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lesson?.id, initial]);
+  }, [lesson?.id]);
 
   const currentDrill = useMemo<EndgameLessonPosition | null>(() => {
     if (!currentRaw) return null;
@@ -143,15 +166,16 @@ export function useAdaptiveEndgameSession(
   );
 
   const reset = useCallback(() => {
-    const fresh = createAdaptiveEndgameState(initial);
+    const fresh = createAdaptiveEndgameState(seedRef.current);
     setState(fresh);
     setCurrentRaw(pickAdaptivePuzzle(fresh, pickOptions()));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initial, lesson?.id]);
+  }, [lesson?.id]);
 
   return {
     currentDrill,
     currentDrillRating: currentRaw?.rating ?? null,
+    currentDrillThemes: currentRaw?.themes ?? EMPTY_THEMES,
     sessionRating: state.sessionRating,
     userRating: state.userRating,
     solved: state.solved,

@@ -248,6 +248,10 @@ export function pickAdaptivePuzzle(
      *  the modulo, so `2` → puzzles #2, #4, #6 … prefer a game puzzle
      *  when one is available). 0/undefined disables the preference. */
     preferExtraEvery?: number;
+    /** A surface's own admission gate, applied to EVERY candidate (static
+     *  and game-derived alike) after the theme filter — e.g. Find the Mate
+     *  admits only lines that end in checkmate on the board. */
+    accept?: (p: RawPuzzle) => boolean;
   } = {},
 ): RawPuzzle | null {
   const themes = options.themes ?? [];
@@ -273,14 +277,13 @@ export function pickAdaptivePuzzle(
       if (themeSet && !p.themes.some((t) => themeSet.has(t))) return false;
       return true;
     });
-    if (eligibleExtras.length > 0) {
-      eligibleExtras.sort(
-        (a, b) =>
-          Math.abs(a.rating - state.sessionRating) -
-          Math.abs(b.rating - state.sessionRating),
-      );
-      return eligibleExtras[0];
-    }
+    eligibleExtras.sort(
+      (a, b) =>
+        Math.abs(a.rating - state.sessionRating) -
+        Math.abs(b.rating - state.sessionRating),
+    );
+    const extra = firstAccepted(eligibleExtras, options.accept);
+    if (extra) return extra;
   }
 
   // Weakness-boost: every WEAKNESS_BOOST_INTERVAL puzzles, prefer
@@ -311,7 +314,8 @@ export function pickAdaptivePuzzle(
           Math.abs(a.rating - state.sessionRating) -
           Math.abs(b.rating - state.sessionRating),
       );
-      return weakHits[0];
+      const hit = firstAccepted(weakHits, options.accept);
+      if (hit) return hit;
     }
   }
 
@@ -328,7 +332,8 @@ export function pickAdaptivePuzzle(
       (a, b) =>
         Math.abs(a.rating - state.sessionRating) - Math.abs(b.rating - state.sessionRating),
     );
-    const pool = inBand.slice(0, Math.min(5, inBand.length));
+    const pool = takeAccepted(inBand, options.accept, 5);
+    if (pool.length === 0) continue;
     return pool[Math.floor(Math.random() * pool.length)];
   }
 
@@ -337,7 +342,31 @@ export function pickAdaptivePuzzle(
     (a, b) =>
       Math.abs(a.rating - state.sessionRating) - Math.abs(b.rating - state.sessionRating),
   );
-  return eligible[0];
+  return firstAccepted(eligible, options.accept);
+}
+
+/** The first `n` candidates, in the caller's order, that pass the surface's
+ *  admission gate. Applied lazily — a gate that replays a line (Find the
+ *  Mate) runs on the handful about to be served, never the whole pool. */
+function takeAccepted(
+  sorted: readonly RawPuzzle[],
+  accept: ((p: RawPuzzle) => boolean) | undefined,
+  n: number,
+): RawPuzzle[] {
+  const out: RawPuzzle[] = [];
+  for (const p of sorted) {
+    if (out.length >= n) break;
+    if (accept && !accept(p)) continue;
+    out.push(p);
+  }
+  return out;
+}
+
+function firstAccepted(
+  sorted: readonly RawPuzzle[],
+  accept: ((p: RawPuzzle) => boolean) | undefined,
+): RawPuzzle | null {
+  return takeAccepted(sorted, accept, 1)[0] ?? null;
 }
 
 /** Convert a Lichess puzzle into an `EndgameLessonPosition` so it

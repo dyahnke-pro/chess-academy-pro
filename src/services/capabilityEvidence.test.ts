@@ -9,7 +9,10 @@ import {
   HELD_FOR_PROVEN,
   PROVEN_MIN_GAMES,
   PROVEN_MIN_IMPORTANCE,
+  HEAT_MAP_REPEAT_WINDOW_MS,
+  resetHeatMapReportForTests,
 } from './capabilityEvidence';
+import { logAppAudit } from './appAuditor';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { MOVE_FUNDAMENTAL_TAG, leadingFundamentals } from './moveFundamentals';
 import { capabilityPliesFromAnnotations } from './autoAnalyzeGame';
@@ -330,5 +333,35 @@ describe('the green bar — a hard question, answered again next game', () => {
 
   it('GREY is never proven', () => {
     expect(capabilityProven(undefined)).toBe(false);
+  });
+});
+
+describe('the heat-map row — once per change, not once per read (walk 2026-10-03)', () => {
+  const heatRows = (): number => vi.mocked(logAppAudit).mock.calls
+    .filter((c) => (c[0] as { kind: string }).kind === 'capability-heat-map').length;
+
+  it('16 reads of an unchanged profile write ONE row; a change writes another; the window re-opens', async () => {
+    resetHeatMapReportForTests();
+    vi.mocked(logAppAudit).mockClear();
+    const nowSpy = vi.spyOn(Date, 'now');
+    let now = 1_000_000;
+    nowSpy.mockImplementation(() => now);
+    try {
+      await recordCapabilityEvidence({ fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white', cpLoss: 0, origin: 'play', prompted: false });
+      for (let i = 0; i < 16; i += 1) await getCapabilityProfile();
+      expect(heatRows()).toBe(1);
+
+      // New evidence changes the map — that is the signal, it always emits.
+      await recordCapabilityEvidence({ fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white', cpLoss: 0, origin: 'drill', prompted: false });
+      await getCapabilityProfile();
+      expect(heatRows()).toBe(2);
+
+      // Same map again after the window: still trendable over time.
+      now += HEAT_MAP_REPEAT_WINDOW_MS;
+      await getCapabilityProfile();
+      expect(heatRows()).toBe(3);
+    } finally {
+      nowSpy.mockRestore();
+    }
   });
 });

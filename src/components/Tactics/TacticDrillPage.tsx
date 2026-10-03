@@ -288,11 +288,16 @@ export function TacticDrillPage(): JSX.Element {
       // of notes about those patterns — measured, 83.5% of the shipped puzzle
       // set now gets one. The note is geometry-free by construction, because
       // it is about a pattern and not about this board.
+      //
+      // …and never beside the computed explanation: the lookup itself stays
+      // silent when the board teaches this puzzle (it is given the solution),
+      // so a pattern note written for some other game cannot sit under it.
       if (!note) {
         const themed = tacticNoteForPuzzleThemes({
           themes: puzzle.themes ?? [],
           seenIds: noteIdsSeenRef.current,
           fen: puzzle.fen,
+          solutionUci: puzzle.moves.trim().split(/\s+/),
         });
         if (themed) note = themed.text;
       }
@@ -413,6 +418,7 @@ export function TacticDrillPage(): JSX.Element {
           <PuzzleBoard
             key={currentPuzzle.id}
             puzzle={currentPuzzle}
+            focusThemes={openingFilter ? undefined : lichessThemes}
             onComplete={handlePuzzleComplete}
             surface="drill"
             streak={streak}

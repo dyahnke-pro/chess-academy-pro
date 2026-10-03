@@ -38,7 +38,8 @@ import {
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 import { WrongTryNote } from '../Puzzles/WrongTryNote';
 import { hintSquareStyles } from '../../utils/hintSquareStyles';
-import { useSolvedDrillConcept } from '../../hooks/useWrongTryRefutation';
+import { solvedDrillConcept } from '../../services/puzzleTeaching';
+import { motifThemeLabels } from '../../services/tacticClassifierService';
 import { db } from '../../db/schema';
 
 /** Difficulty band around the user's puzzle rating. Puzzles inside this
@@ -765,11 +766,8 @@ function FamilyDetailView({
                       m{p.fullmove}
                     </span>
                   </div>
-                  <p className="text-[11px] text-theme-text-muted truncate">
-                    {p.themes
-                      .filter((t) => !['opening', 'short', 'long', 'oneMove', 'master'].includes(t))
-                      .slice(0, 4)
-                      .join(' · ')}
+                  <p className="text-[11px] text-theme-text-muted truncate" data-testid={`opening-blunder-themes-${p.id}`}>
+                    {motifThemeLabels(p.themes).join(' · ')}
                   </p>
                 </div>
                 <ChevronRight size={16} className={`${palette.color} opacity-70 flex-shrink-0`} />
@@ -811,7 +809,12 @@ function PuzzleView({ puzzle, onExit, onResult, onNext }: PuzzleViewProps): JSX.
   // Solved → the concept behind the punishing line (it ended on "that's the
   // punishing line" and nothing else) — the same computed explanation the
   // puzzle board gives, for a student-to-move line.
-  const solvedConcept = useSolvedDrillConcept(true, startFen, solutionSan, puzzle.themes);
+  // Rendered as the PuzzleBoard's concept card (pattern name + the computed
+  // line), so a solved trap explains itself the same way a puzzle does.
+  const solvedConcept = useMemo(
+    () => solvedDrillConcept(startFen, solutionSan, puzzle.themes),
+    [startFen, solutionSan, puzzle.themes],
+  );
 
   // 'puzzle' = curated solution mode (default).
   // 'playing-out' = free-play vs Stockfish from the end of the
@@ -973,11 +976,8 @@ function PuzzleView({ puzzle, onExit, onResult, onNext }: PuzzleViewProps): JSX.
             </span>
             <h2 className="text-sm font-semibold truncate">rating {puzzle.rating}</h2>
           </div>
-          <p className="text-[11px] text-theme-text-muted truncate">
-            {puzzle.themes
-              .filter((t) => !['opening', 'short', 'long', 'oneMove', 'master'].includes(t))
-              .slice(0, 5)
-              .join(' · ')}
+          <p className="text-[11px] text-theme-text-muted truncate" data-testid="opening-blunder-puzzle-themes">
+            {motifThemeLabels(puzzle.themes).join(' · ')}
           </p>
         </div>
         <div className="w-[44px]" />
@@ -1010,9 +1010,17 @@ function PuzzleView({ puzzle, onExit, onResult, onNext }: PuzzleViewProps): JSX.
           </p>
         )}
         {playout.isComplete && mode === 'puzzle' && solvedConcept && (
-          <p className="text-xs text-theme-text leading-relaxed" data-testid="traps-solved-concept">
-            {solvedConcept}
-          </p>
+          <div
+            className="rounded-lg border border-theme-border bg-theme-surface/60 px-3 py-2 text-left"
+            data-testid="traps-solved-concept"
+          >
+            {solvedConcept.conceptName && (
+              <p className="text-xs font-semibold uppercase tracking-wide text-theme-accent mb-0.5">
+                {solvedConcept.conceptName}
+              </p>
+            )}
+            <p className="text-sm text-theme-text leading-relaxed">{solvedConcept.spoken}</p>
+          </div>
         )}
         {playout.isComplete && mode === 'playing-out' && (
           <p className="text-sm text-cyan-300">

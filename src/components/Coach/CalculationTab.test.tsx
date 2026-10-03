@@ -2,6 +2,12 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { CalculationTab } from './CalculationTab';
 
+const recordCalculationFirstAnswer = vi.fn(async () => 1);
+vi.mock('../../services/calculationDrillService', async (orig) => ({
+  ...(await orig<typeof import('../../services/calculationDrillService')>()),
+  recordCalculationFirstAnswer: (...args: unknown[]) => recordCalculationFirstAnswer(...(args as [])),
+}));
+
 // react-chessboard 5.x throws "Square width not found" under jsdom
 // because the underlying ResizeObserver returns 0×0. The picker tests
 // don't need a real board; mock it to a div so the drill view can
@@ -48,5 +54,15 @@ describe('CalculationTab', () => {
     fireEvent.click(screen.getByTestId('calculation-skill-find-the-mate'));
     // Rationale mentions "mate"
     expect(screen.getByText(/mate is the cleanest calculation/i)).toBeInTheDocument();
+  });
+
+  it('Skip / Reveal before any answer records a PROMPTED first answer (capability parity)', () => {
+    recordCalculationFirstAnswer.mockClear();
+    render(<CalculationTab onExit={() => undefined} />);
+    fireEvent.click(screen.getByTestId('calculation-skill-find-the-mate'));
+    fireEvent.click(screen.getByTestId('calculation-start-drill'));
+    fireEvent.click(screen.getByTestId('calculation-skip'));
+    expect(recordCalculationFirstAnswer).toHaveBeenCalledTimes(1);
+    expect(recordCalculationFirstAnswer).toHaveBeenCalledWith(expect.objectContaining({ accepted: true, prompted: true }));
   });
 });

@@ -4,6 +4,11 @@ import { PatternSchoolPage } from './PatternSchoolPage';
 import { PATTERN_REGISTRY } from '../../data/patternRegistry';
 
 vi.mock('../../services/analytics', () => ({ captureEvent: vi.fn() }));
+const navigateMock = vi.fn();
+vi.mock('react-router-dom', async (orig) => ({
+  ...(await orig<typeof import('react-router-dom')>()),
+  useNavigate: () => navigateMock,
+}));
 vi.mock('../../services/puzzleService', () => ({
   // One real Lichess-format puzzle: fen BEFORE the setup move; moves[0] is
   // the opponent's move that creates the tactic (here 1...e5 from the start
@@ -42,5 +47,16 @@ describe('PatternSchoolPage', () => {
     // The eye is led to the pattern: an arrow on the move that springs it.
     expect(board.getAttribute('data-arrows')).toBe('g1f3');
     expect(screen.getByTestId('pattern-drill-fork')).toBeInTheDocument();
+  });
+
+  it('"Drill this pattern" asks for SHORT puzzles (1-3 moves) so the pattern is the lesson', async () => {
+    navigateMock.mockClear();
+    render(<PatternSchoolPage />);
+    fireEvent.click(screen.getByTestId('pattern-toggle-fork'));
+    await waitFor(() => expect(screen.getByTestId('pattern-drill-fork')).toBeInTheDocument());
+    fireEvent.click(screen.getByTestId('pattern-drill-fork'));
+    expect(navigateMock).toHaveBeenCalledWith('/tactics/adaptive', {
+      state: expect.objectContaining({ depth: { min: 1, max: 3 } }),
+    });
   });
 });

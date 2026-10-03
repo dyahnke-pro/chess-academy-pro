@@ -78,6 +78,9 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
     repCap?: number;
     /** Start straight away at the student's level (an Up-next warm-up bite). */
     autoStart?: boolean;
+    /** Solver-move bounds sent by a caller (Pattern Recognition's "Drill this
+     *  pattern" sends 1–3 so the pattern, not a long line, is the lesson). */
+    depth?: { min: number; max: number };
   } | null;
   const forcedWeakThemes = navState?.forcedWeakThemes;
   // When the Training Plan deep-links a weakness rep here, the real
@@ -214,7 +217,7 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
     const puzzle = await getNextAdaptivePuzzle(sess, seenIdsRef.current, {
       targetOverride: target,
       preferMultiMove: true,
-      depth: lengthModeRef.current ? LENGTH_RANGE[lengthModeRef.current] : undefined,
+      depth: lengthModeRef.current ? LENGTH_RANGE[lengthModeRef.current] : navState?.depth,
     });
     if (!puzzle) {
       // No more puzzles available — end session
@@ -228,7 +231,7 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
     setCurrentPuzzle(puzzle);
     setReachDelta(null);
     setPhase('solving');
-  }, [showCue]);
+  }, [showCue, navState?.depth]);
 
   const handleSelectDifficulty = useCallback(async (difficulty: AdaptiveDifficulty): Promise<void> => {
     // Seed the session at the player's real puzzle rating (clamped into the

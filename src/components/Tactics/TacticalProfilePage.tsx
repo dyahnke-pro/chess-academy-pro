@@ -7,15 +7,7 @@ import { PageHelp } from '../Layout/PageHelp';
 import type { ThemeSkill } from '../../services/puzzleService';
 import { logAppAudit } from '../../services/appAuditor';
 import { getUnifiedWeaknessProfile, type UnifiedWeakness } from '../../services/weaknessSpine';
-
-// ─── Types ──────────────────────────────────────────────────────────────────
-
-interface ThemeCategoryStats {
-  name: string;
-  accuracy: number;
-  attempts: number;
-  themes: string[];
-}
+import { pickTrainingTarget, trainingTargetLabel, type ThemeCategoryStats } from '../../services/tacticalTrainingTarget';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -114,16 +106,12 @@ export function TacticalProfilePage(): JSX.Element {
 
   const totalAttempts = categories.reduce((sum, c) => sum + c.attempts, 0);
   const attempted = categories.filter((c) => c.attempts > 0);
-  const weakest = [...categories]
-    .filter((c) => c.attempts > 0)
-    .sort((a, b) => a.accuracy - b.accuracy);
-  const unattempted = categories.filter((c) => c.attempts === 0);
-
-  const weakestThemes = weakest.length > 0
-    ? weakest[0].themes
-    : unattempted.length > 0
-      ? unattempted[0].themes
-      : ['fork'];
+  // "Weakest" only on evidence (enough attempts, accuracy under the bar);
+  // otherwise the button says there is no weak motif yet and points at the
+  // least practised one.
+  const target = pickTrainingTarget(categories);
+  const targetLabel = trainingTargetLabel(target);
+  const weakestThemes = target.kind === 'none' ? ['fork'] : target.category.themes;
 
   const header = (
     <div className="flex items-center gap-3">
@@ -184,10 +172,10 @@ export function TacticalProfilePage(): JSX.Element {
         data-testid="begin-training-btn"
       >
         <Play size={18} />
-        Train Your Weakest
-        {weakest.length > 0 && (
+        {targetLabel.title}
+        {targetLabel.detail && (
           <span className="text-xs opacity-80">
-            — {weakest[0].name}
+            — {targetLabel.detail}
           </span>
         )}
       </button>

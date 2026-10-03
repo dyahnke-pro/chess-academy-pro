@@ -18,7 +18,11 @@
  * Per-skill puzzle counts confirmed at build time via the test
  * suite — every skill must have ≥50 puzzles to be useful.
  */
+import { Chess } from 'chess.js';
 import puzzlesData from '../data/puzzles.json';
+import { recordCapabilityEvidence } from './capabilityEvidence';
+import { cpFromThemes } from './puzzleMethod';
+import { MISTAKE_CP } from './engineConstants';
 
 interface RawPuzzle {
   id: string;
@@ -51,6 +55,10 @@ export interface CalculationSkill {
   /** Optional: themes to EXCLUDE. Used to keep mate-in-1 puzzles
    *  out of multi-move-mate drills, etc. */
   excludeThemes?: string[];
+  /** The drill PROMISES a mate: a puzzle qualifies only when its stored
+   *  solution, replayed with chess.js from its own FEN, ends in
+   *  checkmate. A tag is a claim; the board is the proof. */
+  endsInMate?: boolean;
 }
 
 const SKILLS: CalculationSkill[] = [
@@ -62,6 +70,7 @@ const SKILLS: CalculationSkill[] = [
       "Mate is the cleanest calculation training ground: every move is forced, every variation ends in mate or doesn't. Start at mate-in-2 (4 plies of calculation), graduate to 3, 4, and 5. Each rank up the ladder doubles the calculation tree — the same skill, more depth.",
     themes: ['mateIn2', 'mateIn3', 'mateIn4', 'mateIn5'],
     excludeThemes: ['mateIn1'],
+    endsInMate: true,
   },
   {
     id: 'quiet-move',
@@ -123,6 +132,58 @@ export function getCalculationSkillById(id: string): CalculationSkill | null {
   return SKILLS.find((s) => s.id === id) ?? null;
 }
 
+/** The minimal puzzle shape the skill gate reads — satisfied by the static
+ *  Lichess rows AND the student's game-derived puzzles. */
+export interface SkillGatePuzzle {
+  id: string;
+  fen: string;
+  moves: string;
+  themes: string[];
+}
+
+const mateEndingCache = new Map<string, boolean>();
+
+/** True when the puzzle's whole stored line (UCI, played from its own FEN —
+ *  the Lichess setup ply included) is legal and ends in checkmate. */
+export function solutionEndsInMate(p: SkillGatePuzzle): boolean {
+  const key = `${p.id}|${p.fen}|${p.moves}`;
+  const cached = mateEndingCache.get(key);
+  if (cached !== undefined) return cached;
+  let mate = false;
+  try {
+    const chess = new Chess(p.fen);
+    const ucis = p.moves.split(/\s+/).filter(Boolean);
+    for (const u of ucis) {
+      chess.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined });
+    }
+    mate = ucis.length > 0 && chess.isCheckmate();
+  } catch {
+    mate = false;
+  }
+  mateEndingCache.set(key, mate);
+  return mate;
+}
+
+/** Does this puzzle belong in this skill's drill? ONE gate for every source
+ *  the drill draws from (static pool, the student's games, the adaptive
+ *  stream): any-of theme match, no excluded theme, and — for a drill that
+ *  promises a mate — a solution that actually ends in checkmate. */
+export function skillAcceptsPuzzle(skill: CalculationSkill, p: SkillGatePuzzle): boolean {
+  if (!skillMatchesTags(skill, p)) return false;
+  if (skill.endsInMate && !solutionEndsInMate(p)) return false;
+  return true;
+}
+
+/** The cheap half of the gate (tags only). The board half replays a whole
+ *  line with chess.js — ~1ms a puzzle, so 2,653 mate puzzles cost seconds on
+ *  first touch — and is therefore applied LAZILY, to the puzzles actually
+ *  about to be served (`getDrillPuzzles`' kept slice, `pickAdaptivePuzzle`'s
+ *  chosen candidate), never to a whole pool up front. */
+export function skillMatchesTags(skill: CalculationSkill, p: Pick<SkillGatePuzzle, 'themes'>): boolean {
+  if (skill.excludeThemes && p.themes.some((t) => skill.excludeThemes?.includes(t))) return false;
+  return p.themes.some((t) => skill.themes.includes(t));
+}
+
 interface DrillOptions {
   /** How many puzzles to return. Defaults to 5 — enough for a
    *  short focused drill without grinding. */
@@ -160,13 +221,10 @@ export function getDrillPuzzles(
   const minPopularity = options.minPopularity ?? 50;
   const minPlays = options.minPlays ?? 80;
   const seed = options.seed ?? Date.now();
-  const themeSet = new Set(skill.themes);
-  const excludeSet = new Set(skill.excludeThemes ?? []);
   const matching = PUZZLES.filter((p) => {
     if (p.popularity < minPopularity) return false;
     if (p.nbPlays < minPlays) return false;
-    if (skill.excludeThemes && p.themes.some((t) => excludeSet.has(t))) return false;
-    return p.themes.some((t) => themeSet.has(t));
+    return skillMatchesTags(skill, p);
   });
   matching.sort((a, b) => {
     const bucketA = Math.floor(a.rating / 50);
@@ -177,13 +235,25 @@ export function getDrillPuzzles(
     const hb = mulberryHash(seed, b.id);
     return ha - hb;
   });
-  return matching.slice(0, limit);
+  // The board half of the gate, in served order, only until `limit` is met.
+  const out: RawPuzzle[] = [];
+  for (const p of matching) {
+    if (out.length >= limit) break;
+    if (skill.endsInMate && !solutionEndsInMate(p)) continue;
+    out.push(p);
+  }
+  return out;
 }
 
 /** Total puzzle count available for a skill — used by the picker
- *  to surface "X puzzles available" on the tile. */
+ *  to surface "X puzzles available" on the tile. Counted on the TAG half of
+ *  the gate so the picker never replays thousands of lines on mount; for the
+ *  static pool the two halves agree exactly (the calculation drill test
+ *  replays every Find-the-Mate puzzle to checkmate). */
 export function getDrillPuzzleCount(skillId: string): number {
-  return getDrillPuzzles(skillId, { limit: 100000, minPopularity: 50, minPlays: 80 }).length;
+  const skill = getCalculationSkillById(skillId);
+  if (!skill) return 0;
+  return PUZZLES.filter((p) => p.popularity >= 50 && p.nbPlays >= 80 && skillMatchesTags(skill, p)).length;
 }
 
 /** Fast deterministic hash for shuffle stability. Mulberry32-style
@@ -199,4 +269,68 @@ function mulberryHash(seed: number, id: string): number {
   t = Math.imul(t ^ (t >>> 15), t | 1);
   t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
   return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+}
+
+// ── FIRST-ANSWER EVIDENCE (moved from calculationEvidence.ts, 2026-10-03) ──
+/**
+ * calculationEvidence — the Calculation drill's half of the student model.
+ *
+ * The drill TAUGHT (it serves positions, refutes wrong tries, explains the
+ * concept) and recorded nothing, so a student could solve fifty forced mates
+ * and the heat map stayed grey. Capability parity with the puzzle board: the
+ * same computer (`recordCapabilityEvidence` — what the board POSED, and whether
+ * the first answer HELD) fed the same way PuzzleBoard feeds it.
+ *
+ * ONE row set per puzzle, on the student's FIRST answer, because that is the
+ * answer to the question the board posed; later tries were coached. A Lichess
+ * puzzle carries no cpLoss, so a wrong first answer is sized from its theme
+ * tags (`cpFromThemes`), exactly as the puzzle board sizes it.
+ */
+export interface CalculationAnswer {
+  /** The drill's start position — the student to move. */
+  fen: string;
+  /** The answer, as squares (drag or tap). */
+  from: string;
+  to: string;
+  /** Did the drill accept it as the solution move? */
+  accepted: boolean;
+  /** The served puzzle's theme tags — they size a wrong answer. */
+  themes: readonly string[];
+  /** A hint was revealed, or Skip/Reveal played the answer for them. */
+  prompted: boolean;
+}
+
+/** Is from→to a legal move on this board? An illegal drop is not an answer. */
+export function isLegalMove(fen: string, from: string, to: string): boolean {
+  try {
+    return new Chess(fen).moves({ verbose: true }).some((m) => m.from === from && m.to === to);
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Record the first answer. Returns the rows written (0 for an illegal or
+ * unreadable answer — an illegal drop is not an answer to anything).
+ */
+export async function recordCalculationFirstAnswer(answer: CalculationAnswer): Promise<number> {
+  let san: string;
+  let moverColor: 'white' | 'black';
+  try {
+    const chess = new Chess(answer.fen);
+    moverColor = chess.turn() === 'w' ? 'white' : 'black';
+    const piece = chess.get(answer.from as Parameters<Chess['get']>[0]);
+    const promotes = piece?.type === 'p' && (answer.to.endsWith('8') || answer.to.endsWith('1'));
+    san = chess.move({ from: answer.from, to: answer.to, promotion: promotes ? 'q' : undefined }).san;
+  } catch {
+    return 0;
+  }
+  return recordCapabilityEvidence({
+    fenBefore: answer.fen,
+    playedSan: san,
+    moverColor,
+    cpLoss: answer.accepted ? 0 : (cpFromThemes(answer.themes) ?? MISTAKE_CP),
+    origin: 'puzzle',
+    prompted: answer.prompted,
+  });
 }

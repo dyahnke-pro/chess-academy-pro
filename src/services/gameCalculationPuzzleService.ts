@@ -20,7 +20,7 @@
  * puzzles are written if a live refresh is needed.
  */
 import { getAllMistakePuzzles } from './mistakePuzzleService';
-import { getCalculationSkillById } from './calculationDrillService';
+import { getCalculationSkillById, skillAcceptsPuzzle } from './calculationDrillService';
 import { matchCalculationThemes } from './calculationSkillMatch';
 import { conceptHintForPuzzle } from './puzzleConceptHint';
 import type { RawPuzzle } from './adaptiveEndgameService';
@@ -139,13 +139,8 @@ export async function getGameCalculationPuzzlesForSkill(
 ): Promise<RawPuzzle[]> {
   const skill = getCalculationSkillById(skillId);
   if (!skill) return [];
-  const themeSet = new Set(skill.themes);
-  const excludeSet = new Set(skill.excludeThemes ?? []);
   const all = await buildGameCalculationPuzzles();
-  return all.filter((p) => {
-    if (skill.excludeThemes && p.themes.some((t) => excludeSet.has(t))) return false;
-    return p.themes.some((t) => themeSet.has(t));
-  });
+  return all.filter((p) => skillAcceptsPuzzle(skill, p));
 }
 
 /** How many game-derived puzzles match each of the given skills — for
