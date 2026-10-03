@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1625 lines · 12 exports · 44 importers · 31 tests · 1 audits**
+**1649 lines · 12 exports · 44 importers · 31 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -90,7 +90,7 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:132`
 
-### `attributePrinciples` (function) — 86 call sites
+### `attributePrinciples` (function) — 88 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
 - `src/services/blockedOwnRetreat.test.ts:23`
 - `src/services/blockedOwnRetreat.test.ts:32`
@@ -98,11 +98,13 @@
 - `src/services/blockedOwnRetreat.test.ts:46`
 - `src/services/claimTruth.manual.test.ts:10`
 - `src/services/claimTruth.manual.test.ts:12`
-- `src/services/claimTruth.manual.test.ts:106`
-- `src/services/claimTruth.manual.test.ts:114`
-- `src/services/claimTruth.manual.test.ts:172`
-- `src/services/claimTruth.manual.test.ts:177`
-- `src/services/claimTruth.manual.test.ts:185`
+- `src/services/claimTruth.manual.test.ts:18`
+- `src/services/claimTruth.manual.test.ts:22`
+- `src/services/claimTruth.manual.test.ts:116`
+- `src/services/claimTruth.manual.test.ts:124`
+- `src/services/claimTruth.manual.test.ts:182`
+- `src/services/claimTruth.manual.test.ts:187`
+- `src/services/claimTruth.manual.test.ts:195`
 - `src/services/coachFeatureService.ts:902`
 - `src/services/learnWalkBlumenfeld.test.ts:65`
 - `src/services/liveFundamental.ts:143`
@@ -132,14 +134,14 @@
 - `src/services/principleAttribution.test.ts:60`
 - `src/services/principleAttribution.test.ts:64`
 - `src/services/principleAttribution.test.ts:65`
-- `src/services/principleAttribution.test.ts:74`
-- `src/services/principleAttribution.test.ts:84`
-- `src/services/principleAttribution.test.ts:91`
-- `src/services/principleAttribution.test.ts:96`
-- `src/services/principleAttribution.test.ts:103`
-- `src/services/principleAttribution.test.ts:121`
-- `src/services/principleAttribution.test.ts:134`
-- `src/services/principleAttribution.test.ts:143`
+- `src/services/principleAttribution.test.ts:76`
+- `src/services/principleAttribution.test.ts:85`
+- `src/services/principleAttribution.test.ts:92`
+- `src/services/principleAttribution.test.ts:97`
+- `src/services/principleAttribution.test.ts:104`
+- `src/services/principleAttribution.test.ts:122`
+- `src/services/principleAttribution.test.ts:135`
+- `src/services/principleAttribution.test.ts:144`
 - `src/services/principleAttributionEndgame.test.ts:43`
 - `src/services/principleAttributionEndgame.test.ts:57`
 - `src/services/principleAttributionEvalPv.test.ts:73`

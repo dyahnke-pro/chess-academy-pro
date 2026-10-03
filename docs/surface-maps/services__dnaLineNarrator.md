@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**286 lines · 6 exports · 6 importers · 2 tests · 0 audits**
+**299 lines · 6 exports · 6 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6116) — names `dnaLineNarrator`
+- **The standard post-deploy ritual** (CLAUDE.md:6126) — names `dnaLineNarrator`
 
 ## Who calls in
 
@@ -44,7 +44,7 @@
 - `src/services/dnaLineNarrator.test.ts:102`
 - `src/services/dnaLineNarrator.test.ts:110`
 - `src/services/dnaLineNarrator.test.ts:111`
-- `src/services/openingGenerator.ts:2226`
+- `src/services/openingGenerator.ts:2227`
 - `src/services/teachingSelector.ts:201`
 
 ### `narrateDnaLine` (function) — 12 call sites
@@ -55,13 +55,15 @@
 - `src/services/dnaLineNarrator.test.ts:137`
 - `src/services/dnaLineNarrator.test.ts:140`
 - `src/services/dnaLineNarrator.test.ts:154`
-- `src/services/engineDeltaLines.ts:126`
-- `src/services/exchangeLedger.test.ts:67`
-- `src/services/exchangeLedger.test.ts:77`
-- `src/services/exchangeLedger.test.ts:87`
+- `src/services/engineDeltaLines.ts:127`
+- `src/services/exchangeLedger.test.ts:68`
+- `src/services/exchangeLedger.test.ts:78`
+- `src/services/exchangeLedger.test.ts:88`
 - `src/services/puzzleConceptExplanation.ts:171`
 
-### `dnaLineClauses` (function) — 1 call site
+### `dnaLineClauses` (function) — 3 call sites
+- `src/services/dnaLineNarrator.test.ts:174`
+- `src/services/dnaLineNarrator.test.ts:181`
 - `src/services/puzzleConceptExplanation.ts:177`
 
 ## Tests

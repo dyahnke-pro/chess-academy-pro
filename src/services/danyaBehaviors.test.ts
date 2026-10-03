@@ -191,18 +191,34 @@ describe('danyaBehaviors — knight-maneuver + x-ray fire on REAL cases, silent 
 })
 
 describe('the threatened piece is NAMED from the board — D-7 (WO-STANDARD-01, prod tape 2026-09-22)', () => {
-  it('"it would win your pawn on e4" — never "the piece on e4" about a pawn', () => {
+  it('names "your pawn on e4" — never "the piece on e4" about a pawn', () => {
     // Student White, pawn on e4 attacked by a black knight on f6 and undefended.
     const hits = detectBehaviors({ fen: '4k3/8/5n2/8/4P3/8/8/4K3 w - - 0 1', studentColor: 'white' });
     const proph = hits.find((h) => h.id === 'prophylaxis');
     expect(proph).toBeDefined();
-    expect(proph!.fact).toMatch(/win your pawn on e4/);
+    expect(proph!.fact).toBe("They're eyeing Nxe4 — your pawn on e4 has no defender.");
     expect(proph!.fact).not.toMatch(/the piece on/);
   });
   it('…and a knight is a knight (the existing f3 case)', () => {
     const hits = detectBehaviors({ fen: 'r3k3/8/8/8/6b1/5N2/8/4K3 w - - 0 1', studentColor: 'white' });
     const proph = hits.find((h) => h.id === 'prophylaxis');
-    expect(proph!.fact).toMatch(/win your knight on f3/);
+    expect(proph!.fact).toMatch(/your knight on f3/);
+  });
+});
+
+// WO-OUTCOME-01 C: this site has no engine line, so a static swap count may
+// state the BOARD fact (who attacks what, what is guarded, the counts) and
+// never the outcome ("would win", "can't be held", "it falls", "you win it").
+describe('standing reads say the board fact, never the outcome', () => {
+  const OUTCOME = /\bwould win\b|can't be held|\bit falls\b|\byou win it\b/;
+  const FENS = [
+    '4k3/8/5n2/8/4P3/8/8/4K3 w - - 0 1',
+    'r3k3/8/8/8/6b1/5N2/8/4K3 w - - 0 1',
+    '4k3/8/8/3n4/8/2N5/8/4K3 w - - 0 1',
+    '4k3/8/2p5/3p4/8/1B6/8/3RK3 w - - 0 1',
+  ];
+  it.each(FENS)('%s', (fen) => {
+    for (const h of detectBehaviors({ fen, studentColor: 'white' })) expect(h.fact).not.toMatch(OUTCOME);
   });
 });
 

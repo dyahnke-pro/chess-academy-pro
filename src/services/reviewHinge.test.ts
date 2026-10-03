@@ -36,7 +36,7 @@ describe('computeTurningPointHinge — retrospective, review register', () => {
     const FEN = 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5';
     const flat = (): Promise<string> => Promise.resolve(renderTable({ e5: { piece: 'N', value: 3.0 }, e1: { piece: 'K', value: 0 }, e8: { piece: 'k', value: 0 } }));
     const hinge = await computeTurningPointHinge({ fenBefore: FEN, studentColor: 'w', evalBoard: flat });
-    expect(hinge).toMatch(/threat to meet first|knight on e5 was hanging/);
+    expect(hinge).toBe("Here their pawn attacked your knight on e5, and nothing defended it.");
   });
 
   it('returns empty when nothing computes', async () => {

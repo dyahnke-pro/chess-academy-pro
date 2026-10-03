@@ -642,7 +642,7 @@ function buildMoveNarrations(fen: string, movesUci: string): string[] {
         // on the puzzle's first board only, and its cost belongs to the prompt.
         // Passed per step, every later beat said "your move let them play Bxe8"
         // about a board where Bxe8 is not even legal (walk 2026-10-01).
-        explainBestMoveGrounded(fenBefore, null, uciMoves[i], moverColor)
+        explainBestMoveGrounded(fenBefore, null, uciMoves[i], moverColor, null, null)
         ?? (geometry && !/^attacks\b/i.test(geometry.trim()) ? geometry : '')
         ?? '';
       const isFinal = playerIdx === playerMoveCount - 1;

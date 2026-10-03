@@ -7,10 +7,20 @@ import { pieceQualityLines } from './pieceValueRead';
 
 describe('an even trade is not a loose piece (items 133-135)', () => {
   it('Bxf6 (recaptured) is not flagged loose-piece; Nxg5?? still is', () => {
-    const trade = attributePrinciples({ replySan: null, historySans: ['e4', 'g6', 'd4', 'Bg7', 'Nc3', 'e6', 'h4', 'h5', 'Bg5', 'Bf6', 'Bxf6'], bestSan: 'Qd2', classification: 'inaccuracy' });
+    const trade = attributePrinciples({ replySan: null, historySans: ['e4', 'g6', 'd4', 'Bg7', 'Nc3', 'e6', 'h4', 'h5', 'Bg5', 'Bf6', 'Bxf6'], bestSan: 'Qd2', classification: 'inaccuracy', pvAfterPlayed: ['Nxf6', 'e5', 'Ng8', 'Qd2', 'd5', 'Nf3', 'b6', 'Ng5'] });
     expect(trade.map((a) => a.id)).not.toContain('loose-piece');
-    const hang = attributePrinciples({ replySan: null, historySans: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3', 'Bc5', 'Bg5', 'h6', 'Bh4', 'g5', 'Bg3', 'Nh5', 'Nxg5'], bestSan: 'Nc3', classification: 'blunder' });
-    expect(hang.map((a) => a.id)).toContain('loose-piece');
+    const hang = attributePrinciples({ replySan: null, historySans: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3', 'Bc5', 'Bg5', 'h6', 'Bh4', 'g5', 'Bg3', 'Nh5', 'Nxg5'], bestSan: 'Nc3', classification: 'blunder', pvAfterPlayed: ['hxg5','Nc3','d6','h4','g4','Nd5','a6','c3'] });
+    // With the engine's own line the grab is named for what it is — the g5
+    // pawn was guarded by h6, so it was poisoned, and that owns the hang.
+    expect(hang.map((a) => a.id)[0]).toBe('poisoned-pawn');
+  });
+  it('no engine line, no "it hangs" — a swap count alone proves nothing (WO-OUTCOME-01)', () => {
+    const noLine = attributePrinciples({ replySan: null, historySans: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3', 'Bc5', 'Bg5', 'h6', 'Bh4', 'g5', 'Bg3', 'Nh5', 'Nxg5'], bestSan: 'Nc3', classification: 'blunder' });
+    expect(noLine.map((a) => a.id)).not.toContain('loose-piece');
+  });
+  it('a line that never takes the piece proves no hang', () => {
+    const elsewhere = attributePrinciples({ replySan: null, historySans: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3', 'Bc5', 'Bg5', 'h6', 'Bh4', 'g5', 'Bg3', 'Nh5', 'Nxg5'], bestSan: 'Nc3', classification: 'blunder', pvAfterPlayed: ['d6'] });
+    expect(elsewhere.map((a) => a.id)).not.toContain('loose-piece');
   });
 });
 

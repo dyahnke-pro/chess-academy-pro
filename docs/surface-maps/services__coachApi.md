@@ -283,8 +283,8 @@
 - `src/services/coachFeatureService.ts:424`
 - `src/services/coachFeatureService.ts:559`
 - `src/services/coachFeatureService.ts:560`
-- `src/services/coachFeatureService.ts:4972`
-- `src/services/coachFeatureService.ts:5125`
+- `src/services/coachFeatureService.ts:4977`
+- `src/services/coachFeatureService.ts:5130`
 - `src/services/coachLaneWiring.test.ts:144`
 - `src/services/coachMoveCommentary.ts:237`
 - `src/services/coachMoveCommentary.ts:294`

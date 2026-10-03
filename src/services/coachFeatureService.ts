@@ -2513,7 +2513,7 @@ export function buildReviewSegments(
       const cost = swingCp != null && swingCp >= 50
         ? `That cost about ${(swingCp / 100).toFixed(1)} points.`
         : null;
-      const why = bestMoveSan ? explainBestMoveGrounded(fenPair.fenBefore, m.san, m.bestMove, moverColor) : null;
+      const why = bestMoveSan ? explainBestMoveGrounded(fenPair.fenBefore, m.san, m.bestMove, moverColor, null, m.pv ? { afterPlayed: m.pv.afterPlayed ?? null, afterBest: m.pv.afterBest ?? null } : null) : null;
       const better = bestMoveSan ? `The move was ${bestMoveSan}.${why ? ` ${why}` : ''}` : null;
       narration = [verdict, recurrence, pvEvidence, failed?.line ?? null, concession, cost, better]
         .filter((x): x is string => !!x && x.trim().length > 0)
@@ -2524,7 +2524,7 @@ export function buildReviewSegments(
     // student's flagged errors, only when there's a genuine distinct best
     // move, and only when a board fact is provable.
     if (!fundamentalLed && narration && bestMoveSan && !m.isCoachMove && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy' || m.classification === 'miss')) {
-      const why = explainBestMoveGrounded(fenPair.fenBefore, m.san, m.bestMove, moverColor);
+      const why = explainBestMoveGrounded(fenPair.fenBefore, m.san, m.bestMove, moverColor, null, m.pv ? { afterPlayed: m.pv.afterPlayed ?? null, afterBest: m.pv.afterBest ?? null } : null);
       if (why) narration = `${narration} ${why}`;
     }
     // WHY THE STUDENT'S OWN MOVE FAILED — the companion to "why the best move is

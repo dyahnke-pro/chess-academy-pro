@@ -1381,9 +1381,16 @@ function buildClauses(a: {
     ranked.push({
       kind: 'must-defend',
       rank: 75,
-      text: winning
-        ? `You're on top — don't let them punch back: they're threatening the ${PNAME[p.piece.toLowerCase()]} on ${p.square}, so shore that up before you press.`
-        : `They're threatening to win the ${PNAME[p.piece.toLowerCase()]} on ${p.square} — that has to be met first.`,
+      // THE BOARD FACT, NOT THE OUTCOME OR THE ORDER (WO-OUTCOME-01 C): the
+      // probe is a static swap count with no engine line, so it may name the
+      // attacker and the missing guard — never "they win it", and never "that
+      // has to be met first" (the best move sometimes ignores it).
+      text: (() => {
+        const hit = `${p.attacker ? `their ${PNAME[p.attacker]}` : 'they'} ${p.attacker ? 'attacks' : 'attack'} your ${PNAME[p.piece.toLowerCase()]} on ${p.square}${p.defenders === 0 ? ', and nothing defends it' : ''}`;
+        return winning
+          ? `You're on top — watch the counterpunch: ${hit}.`
+          : `${hit.charAt(0).toUpperCase()}${hit.slice(1)}.`;
+      })(),
       squares: [p.square],
       // The null-move probe's own net: taken on their next move.
       stakes: { points: mustDefend.net, plies: studentToMove ? 2 : 1 },

@@ -38,3 +38,29 @@ describe('gradePlayedMove — grade the played move from the paid-for fan', () =
     expect(gradePlayedMove({ fenBefore: FEN, playedUci: 'e1g1', fenAfter: FEN, analysisBefore: { bestMove: '', topLines: [] }, studentColor: 'w' })).toBeNull();
   });
 });
+
+// WO-OUTCOME-01 B: "that wins material" is what the capture NETS over its own
+// engine line, never the captured piece's value — a trade wins nothing.
+describe('gradePlayedMove — a capture is graded by what its line nets', () => {
+  it('Bxc6 dxc6 is a trade, not "that wins material"', () => {
+    // 1.e4 e5 2.Nf3 Nc6 3.Bb5 Nf6, White plays 4.Bxc6 — …dxc6 takes back.
+    const FEN = 'r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4';
+    const after = 'r1bqkb1r/pppp1ppp/2B2n2/4p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 4';
+    const g = gradePlayedMove({
+      fenBefore: FEN, playedUci: 'b5c6', fenAfter: after, studentColor: 'w',
+      analysisBefore: { bestMove: 'b5c6', topLines: [{ rank: 1, evaluation: 30, mate: null, moves: ['b5c6', 'd7c6', 'e1g1'] }, { rank: 2, evaluation: 20, mate: null, moves: ['e1g1'] }] },
+    })!;
+    expect(g.reason).not.toBe('wins-material');
+  });
+  it('a piece taken for nothing is "that wins material"', () => {
+    // White's queen takes an undefended knight on h5 that threatens nothing
+    // (positive control).
+    const FEN = '4k3/8/8/7n/8/8/8/3QK3 w - - 0 1';
+    const after = '4k3/8/8/7Q/8/8/8/4K3 b - - 0 1';
+    const g = gradePlayedMove({
+      fenBefore: FEN, playedUci: 'd1h5', fenAfter: after, studentColor: 'w',
+      analysisBefore: { bestMove: 'd1h5', topLines: [{ rank: 1, evaluation: 900, mate: null, moves: ['d1h5', 'e8e7'] }, { rank: 2, evaluation: 890, mate: null, moves: ['d1d2'] }] },
+    })!;
+    expect(g.reason).toBe('wins-material');
+  });
+});

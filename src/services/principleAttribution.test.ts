@@ -71,13 +71,14 @@ describe('attributePrinciples — the other fundamentals, on synthetic boards', 
   it('loose-piece: a knight that can be taken for free, where the best move hung nothing', () => {
     // 1.e4 e5 2.Nf3 Nc6 3.Bc4 Nf6 4.d3 Bc5 5.Bg5 h6 6.Bh4 g5 7.Bg3 Nh5 8.Nxg5?? — hxg5 wins the knight.
     const hist = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3', 'Bc5', 'Bg5', 'h6', 'Bh4', 'g5', 'Bg3', 'Nh5', 'Nxg5'];
-    const out = attributePrinciples({ replySan: null, historySans: hist, bestSan: 'Nc3', classification: 'blunder' });
-    const loose = out.find((a) => a.id === 'loose-piece');
-    expect(loose).toBeTruthy();
-    expect(loose!.evidence.squares).toEqual(['g5']);
-    expect(loose!.evidence.moves).toEqual(['hxg5']);
-    // The hang is the verdict — it outranks the pawn-grab pattern that co-occurs.
-    expect(out[0].id).toBe('loose-piece');
+    // The engine's own line after 8.Nxg5 (Stockfish 18, depth 16) — the loss is
+    // proved by the line, not read off a one-square swap count.
+    const out = attributePrinciples({ replySan: null, historySans: hist, bestSan: 'Nc3', classification: 'blunder', pvAfterPlayed: ['hxg5','Nc3','d6','h4','g4','Nd5','a6','c3'] });
+    // With the engine's line the knight's grab is a POISONED pawn (h6 guarded
+    // g5), and that owns the moment — it subsumes the loose piece.
+    expect(out[0].id).toBe('poisoned-pawn');
+    expect(out[0].evidence.squares).toContain('g5');
+    expect(out.map((a) => a.id)).not.toContain('loose-piece');
   });
 
   it('early-queen-sortie: 2.Qh5 is kicked by a developing knight for free', () => {
@@ -140,7 +141,7 @@ describe('the king walk is the lesson, not the bishop it happened to block (WO-S
 
 describe('a piece hung outright is a LOOSE PIECE, never an "overvalued attack" (walks 2+3, 2026-09-23)', () => {
   it('3...Bg4?? into Qxg4 is attributed as the hang it is', () => {
-    const out = attributePrinciples({ replySan: null, historySans: ['e4', 'c5', 'Bc4', 'd6', 'd4', 'Bg4'], bestSan: 'cxd4', classification: 'blunder' });
+    const out = attributePrinciples({ replySan: null, historySans: ['e4', 'c5', 'Bc4', 'd6', 'd4', 'Bg4'], bestSan: 'cxd4', classification: 'blunder', pvAfterPlayed: ['Qxg4', 'cxd4', 'c3', 'Nf6', 'Qe2', 'Nc6', 'Bb5', 'e5'] });
     const ids = out.map((a) => a.id);
     expect(ids).not.toContain('overvalued-attack');
     expect(ids).toContain('loose-piece');

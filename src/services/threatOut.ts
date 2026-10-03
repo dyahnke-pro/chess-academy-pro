@@ -26,7 +26,7 @@ export interface MustDefend {
   net: number;
   /** Every mover piece hanging to the opponent's next move, SEE-verified,
    *  highest value first. */
-  pieces: Array<{ square: string; piece: string; value: number }>;
+  pieces: Array<{ square: string; piece: string; value: number; attacker: string | null; defenders: number }>;
 }
 
 /** Flip the side-to-move (clear en-passant, which a flip invalidates). Returns
@@ -55,6 +55,19 @@ export function flipSideToMove(fen: string): string | null {
  * with the OPPONENT already to move, and "what does the student have to defend"
  * is still the honest question there). Empty (net 0) when nothing hangs.
  */
+/** The BOARD fact behind a must-defend (WO-OUTCOME-01 C): the cheapest piece
+ *  that can legally take, and how many of the subject's pieces guard the
+ *  square. A sentence with no engine line may say these, never what the
+ *  capture nets. */
+function boardFact(probeFen: string, square: Square, subject: 'w' | 'b'): { attacker: string | null; defenders: number } {
+  try {
+    const b = new Chess(probeFen);
+    const caps = b.moves({ verbose: true }).filter((m) => m.to === square && m.captured);
+    caps.sort((x, y) => (VALUE[x.piece] ?? 0) - (VALUE[y.piece] ?? 0));
+    return { attacker: caps[0]?.piece ?? null, defenders: b.attackers(square, subject).length };
+  } catch { return { attacker: null, defenders: 0 }; }
+}
+
 export function computeMustDefend(fen: string, subjectColor: 'w' | 'b'): MustDefend {
   let toMove: 'w' | 'b';
   try { toMove = new Chess(fen).turn(); } catch { return { net: 0, pieces: [] }; }
@@ -88,7 +101,7 @@ export function computeMustDefend(fen: string, subjectColor: 'w' | 'b'): MustDef
   // opponent actually wins, not the piece's full value.
   const mine = hanging
     .filter((h) => h.color === subjectColor && h.piece.toLowerCase() !== 'k')
-    .map((h) => ({ square: h.square, piece: h.piece, value: Math.min(VALUE[h.piece.toLowerCase()] ?? 0, legalSeeGain(probeFen, h.square as Square)) }))
+    .map((h) => ({ square: h.square, piece: h.piece, value: Math.min(VALUE[h.piece.toLowerCase()] ?? 0, legalSeeGain(probeFen, h.square as Square)), ...boardFact(probeFen, h.square as Square, subjectColor) }))
     .filter((h) => h.value > 0)
     .sort((a, b) => b.value - a.value);
   return { net: mine[0]?.value ?? 0, pieces: mine };

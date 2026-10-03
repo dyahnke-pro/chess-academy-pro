@@ -37,7 +37,7 @@ describe('explainBestMoveGrounded — GROUNDED best-move explanation (no LLM, ch
   it('explains a winning capture the player missed', () => {
     // White Rd1 can win the undefended black bishop on d4; the player instead
     // shuffled the king (Kf1). best = Rxd4 (d1d4).
-    const r = explainBestMoveGrounded('4k3/8/8/8/3b4/8/8/3RK3 w - - 0 1', 'Kf1', 'd1d4', 'white');
+    const r = explainBestMoveGrounded('4k3/8/8/8/3b4/8/8/3RK3 w - - 0 1', 'Kf1', 'd1d4', 'white', null, null);
     expect(r).toBe('It wins the bishop on d4.');
   });
 
@@ -45,7 +45,7 @@ describe('explainBestMoveGrounded — GROUNDED best-move explanation (no LLM, ch
     // White Bf1; the player played Bb5 (f1-b5 diagonal) — attacked by the a6
     // pawn, undefended. best = Ke2 (e1e2), a quiet move (no capture/check).
     // GROUNDED punishment: Black's cheapest attacker (the a6 pawn) takes it.
-    const r = explainBestMoveGrounded('4k3/8/p7/8/8/8/8/4KB2 w - - 0 1', 'Bb5', 'e1e2', 'white');
+    const r = explainBestMoveGrounded('4k3/8/p7/8/8/8/8/4KB2 w - - 0 1', 'Bb5', 'e1e2', 'white', null, null);
     expect(r).toBe('Your move let them play axb5, winning the bishop.');
   });
 
@@ -53,7 +53,7 @@ describe('explainBestMoveGrounded — GROUNDED best-move explanation (no LLM, ch
     // Black to move plays Qe5 (d6-e5), hanging the queen on the open e-file.
     // White's Rxe5+ takes it for free AND checks the black king on e8.
     // best = Kf8 (e8f8), a quiet king move (no capture/check) → no merit clause.
-    const r = explainBestMoveGrounded('4k3/8/3q4/8/8/8/8/4R1K1 b - - 0 1', 'Qe5', 'e8f8', 'black');
+    const r = explainBestMoveGrounded('4k3/8/3q4/8/8/8/8/4R1K1 b - - 0 1', 'Qe5', 'e8f8', 'black', null, null);
     expect(r).toBe('Your move let them play Rxe5+, winning the queen with check.');
   });
 
@@ -63,7 +63,7 @@ describe('explainBestMoveGrounded — GROUNDED best-move explanation (no LLM, ch
     // board geometry (the central squares it now eyes), never generic filler.
     // Fundamental-first (David 2026-09-06): the WHY leads with the fundamental
     // the move serves (development + center), not the mechanical "eyeing d4/e5".
-    const r = explainBestMoveGrounded('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'a3', 'g1f3', 'white');
+    const r = explainBestMoveGrounded('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'a3', 'g1f3', 'white', null, null);
     // Aligned to the shipped led-form (moveFundamentals `strategicWhyLed` — a
     // parallel session switched quietPurposePhrase to the verb-led clause so
     // "It castling gets…" reads right; the trade-off is the develop clause no
@@ -77,14 +77,14 @@ describe('explainBestMoveGrounded — GROUNDED best-move explanation (no LLM, ch
     // rook(5) > bishop(3), so it is NOT a win. The rich geometry would say
     // "attacks the queen on d4→d8" but that clause is EXCLUDED (the rook itself
     // hangs to that queen), so no merit clause; played move hangs nothing → null.
-    const r = explainBestMoveGrounded('3qk3/8/8/8/3b4/8/8/3RK3 w - - 0 1', 'Kf1', 'd1d4', 'white');
+    const r = explainBestMoveGrounded('3qk3/8/8/8/3b4/8/8/3RK3 w - - 0 1', 'Kf1', 'd1d4', 'white', null, null);
     expect(r).toBeNull();
   });
 
   it('names the RICH reason (fork) when the best move forks — engine-reasoning form', () => {
     // White Nb5; the player shuffled the king (Ke1-e2), best = Nc7+ forking the
     // e8-king and the a8-rook. The merit clause is the fork, not a bare capture.
-    const r = explainBestMoveGrounded('r3k3/8/8/1N6/8/8/8/4K3 w - - 0 1', 'Ke2', 'b5c7', 'white');
+    const r = explainBestMoveGrounded('r3k3/8/8/1N6/8/8/8/4K3 w - - 0 1', 'Ke2', 'b5c7', 'white', null, null);
     expect(r).toBe('It forks the king on e8 and the rook on a8.');
   });
 });

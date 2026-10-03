@@ -17,6 +17,7 @@ import { isSacrifice } from './factStakes';
 import { seatPieceReferences } from '../utils/seatPieces';
 import { deriveNextPlans, mobilityMap } from './nextPlans';
 import { Chess } from 'chess.js';
+import { proofCut } from './exchangeLedger';
 import { isRealPin } from './pinGeometry';
 import { tacticWord } from './tacticVocabulary';
 import { CENTRAL_SQUARES, keyTargetSquares, kingZoneAmong, kingZoneClause, POSITIONAL_TARGETS } from './keySquares';
@@ -1702,7 +1703,7 @@ export function assembleMoveEvalAnswer(opts: {
 
   // The GROUNDED reason it's strong — no LLM. (playedSan null: we're not
   // contrasting a played move here, just stating what the best move achieves.)
-  const why = explainBestMoveGrounded(fen, null, bestMoveUci, mover, opts.prevCapture ?? null);
+  const why = explainBestMoveGrounded(fen, null, bestMoveUci, mover, opts.prevCapture ?? null, null);
   const evalText = evalPhrase(opts.evalCp, opts.mateIn, mover, opts.studentColor ?? null);
 
   const theirMove = Boolean(opts.studentColor) && opts.studentColor !== mover;
@@ -1879,7 +1880,7 @@ export function assembleCandidateMoveAnswer(opts: {
   // unless it GIVES material: then "is it sound" is the question, and the
   // sacrifice verdict below answers it.
   if (bestSan && candNorm === bestSan && sacOfferEarly === null) {
-    const why = explainBestMoveGrounded(fen, null, opts.bestMoveUci, mover);
+    const why = explainBestMoveGrounded(fen, null, opts.bestMoveUci, mover, null, null);
     const parts = [`Yes — ${candNorm} is the best move here.`];
     if (why) parts.push(why);
     if (lineText) parts.push(lineText);
@@ -2252,7 +2253,7 @@ export function assembleAlternativesAnswer(opts: {
 
   const parts: string[] = [];
   // 1. The best move + the grounded WHY (fork/pin/mate/material/positional).
-  const why = explainBestMoveGrounded(fen, null, bestUci, mover);
+  const why = explainBestMoveGrounded(fen, null, bestUci, mover, null, null);
   parts.push(`The best move is ${bestSan}.`);
   if (why) parts.push(why);
 
@@ -2355,10 +2356,26 @@ export function explainBestMoveGrounded(
   /** The capture the previous move made, when the caller has the history —
    *  so taking back is said as taking back, not as winning (question walk
    *  2026-09-27: "dxe5 … wins the knight on e5" after Nxe5). */
-  prevCapture: { square: string; capturedValue: number } | null = null,
+  prevCapture: { square: string; capturedValue: number } | null,
+  /** The engine's lines, UCI — `afterPlayed` from the board after the played
+   *  move, `afterBest` from the board after the best move (as the review stores
+   *  them). REQUIRED, `null` where the caller has none (WO-OUTCOME-01 B): with a
+   *  line, "it wins the X" and "let them play X, winning the Y" are what the
+   *  ledger settles over it; without one they fall back to the board count. */
+  lines: { afterPlayed: readonly string[] | null; afterBest: readonly string[] | null } | null,
 ): string | null {
   if (!bestMoveUci || bestMoveUci.length < 4) return null;
   const mc: 'w' | 'b' = moverColor === 'white' ? 'w' : 'b';
+  const oc: 'w' | 'b' = mc === 'w' ? 'b' : 'w';
+  /** Replay UCI from `fen` into SAN; stops at the first illegal move. */
+  const sansOf = (fen: string, uci: readonly string[]): string[] => {
+    const out: string[] = [];
+    try {
+      const b = new Chess(fen);
+      for (const u of uci) { const m = b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); if (!m) break; out.push(m.san); }
+    } catch { /* shorter proves less */ }
+    return out;
+  };
 
   let bestClause: string | null = null;
   try {
@@ -2386,7 +2403,13 @@ export function explainBestMoveGrounded(
         const recapturable = c.attackers(to as never, captured.color).length > 0;
         const movedVal = REVIEW_PIECE_VALUE[mv.piece] ?? 0;
         const capVal = REVIEW_PIECE_VALUE[captured.type] ?? 0;
-        if (!recapturable || capVal > movedVal) {
+        const lineSays = lines?.afterBest
+          ? (() => {
+            const p = proofCut(fenBefore, [mv.san, ...sansOf(c.fen(), lines.afterBest ?? [])], mc);
+            return !!p && !p.mate && !!p.ledger && p.ledger.netPawns >= 2;
+          })()
+          : null;
+        if (lineSays ?? (!recapturable || capVal > movedVal)) {
           bestClause = `it wins the ${REVIEW_PIECE_NAME[captured.type]} on ${to}`;
         }
       }
@@ -2444,7 +2467,21 @@ export function explainBestMoveGrounded(
           // or a capture regaining at least the lost material). If one exists,
           // the capture is NOT a clean win — say nothing rather than a wrong
           // story (empty > invented); the eval swing + best move still speak.
-          const refuted = captureHasCounterTactic(c.fen(), worst.san, mc, worst.gain);
+          // With the engine's line in hand, the ledger decides: the line must
+          // take that piece and settle them ahead (WO-OUTCOME-01 B).
+          const proven = lines?.afterPlayed
+            ? (() => {
+              const sans = sansOf(c.fen(), lines.afterPlayed ?? []);
+              const p = sans.length ? proofCut(c.fen(), sans, oc) : null;
+              if (!p || p.mate || !p.ledger || p.ledger.netPawns < 1) return false;
+              try {
+                const b = new Chess(c.fen());
+                for (const san of p.sans.slice(0, p.plies)) { const m = b.move(san); if (m.color === oc && m.captured && m.to === worst?.square) return true; }
+              } catch { return false; }
+              return false;
+            })()
+            : null;
+          const refuted = proven === null ? captureHasCounterTactic(c.fen(), worst.san, mc, worst.gain) : !proven;
           if (!refuted) {
             let givesCheck = false;
             try { const after = new Chess(c.fen()); after.move(worst.san); givesCheck = after.inCheck(); } catch { /* keep false */ }
@@ -5741,7 +5778,7 @@ export function assembleRetrospectiveAnswer(r: RetrospectiveMoveLike): GroundedA
   }
 
   const noRead = r.quality === null;
-  const whyRaw = r.bestMoveUci ? explainBestMoveGrounded(r.fenBefore, r.playedSan, r.bestMoveUci, r.moverColor) : null;
+  const whyRaw = r.bestMoveUci ? explainBestMoveGrounded(r.fenBefore, r.playedSan, r.bestMoveUci, r.moverColor, null, null) : null;
   const why = whyRaw ? reseatText(whyRaw) : null;
   const better = bestSan
     ? ` The engine preferred ${bestSan}${why ? `: ${(/^[A-Z][a-z]+(?=[\s,])/.test(why) && !/^I\b/.test(why) ? why.charAt(0).toLowerCase() + why.slice(1) : why).replace(/[.!?]+$/, '')}` : ''}.`
@@ -5824,7 +5861,7 @@ export function assembleSlipNarration(input: {
 
   // The deep grounded reason (sync, chess.js only): the better move's point +
   // what the played move let the opponent do. Null on a genuinely quiet slip.
-  const reason = explainBestMoveGrounded(fenBefore, playedSan, bestMoveUci, moverColor);
+  const reason = explainBestMoveGrounded(fenBefore, playedSan, bestMoveUci, moverColor, null, null);
 
   let facts: string;
   if (betterSan && reason) {

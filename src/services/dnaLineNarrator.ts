@@ -74,6 +74,10 @@ export function dnaMoveClause(
    *  for the student's own moves; on the opponent's ply "their" means the
    *  student's own camp. Null keeps the pre-2026-09-15 behaviour (mover = you). */
   studentColor: 'w' | 'b' | null = null,
+  /** The rest of the SAME line takes back on this capture's square (WO-OUTCOME-01
+   *  B). A one-square swap count cannot see a retake two moves later, so a
+   *  capture the line itself undoes is never spoken as a win. */
+  retakenLater = false,
 ): { text: string; prev: PrevCaptureContext; tacticLanded: string | null; concept: string | null } {
   let mv: ReturnType<Chess['move']> | null = null;
   let fenAfter = '';
@@ -104,7 +108,8 @@ export function dnaMoveClause(
   // student White's Be3. Captures already say "they take"; every other
   // opponent ply is led with "they answer". Unseated callers are unchanged.
   const theirs = studentColor !== null && !moverIsStudent;
-  const saysTheyTake = theirs && !!mv.captured && facts.materialGained >= 1;
+  const wins = !!mv.captured && facts.materialGained >= 1 && !retakenLater;
+  const saysTheyTake = theirs && wins;
   const lead = theirs && !saysTheyTake ? `they answer ${mv.san}` : mv.san;
 
   // Mate ends the line — nothing else matters. The SAN's "#" IS the word: the
@@ -123,7 +128,7 @@ export function dnaMoveClause(
   // ALTERNATES, and "Kxd7, winning the knight … then Nxa8, winning the rook"
   // under a heading promising the student an advantage tells them they won the
   // rook that was just taken from them. One perspective law: you / they.
-  if (mv.captured && facts.materialGained >= 1) {
+  if (wins) {
     bits.push(studentColor === null
       ? `winning the ${facts.captured}`
       : moverIsStudent ? `you win the ${facts.captured}` : `they take the ${facts.captured}`);
@@ -269,8 +274,16 @@ export function dnaLineClauses(
   const parts: string[] = [];
   let taught = false;
   const spoken = new Set<string>();
-  for (const p of take) {
-    const { text, prev: np, tacticLanded, concept } = dnaMoveClause(p.fenBefore, p.san, prev, spoken, opts.studentColor ?? null);
+  // Which capture squares the line itself takes back on later: a later capture
+  // ON that square by the OTHER side (read off the whole line, not the take).
+  const moves = plies.map((p) => { try { return new Chess(p.fenBefore).move(p.san); } catch { return null; } });
+  const retakenLater = (i: number): boolean => {
+    const m = moves[i];
+    if (!m?.captured) return false;
+    return moves.slice(i + 1).some((x) => !!x && x.color !== m.color && x.captured !== undefined && x.to === m.to);
+  };
+  for (const [i, p] of take.entries()) {
+    const { text, prev: np, tacticLanded, concept } = dnaMoveClause(p.fenBefore, p.san, prev, spoken, opts.studentColor ?? null, retakenLater(i));
     prev = np;
     if (concept) spoken.add(concept);
     if (opts.teachInvariant && !taught && tacticLanded) {

@@ -108,7 +108,7 @@ describe.skipIf(!HAS_SF)('COMPUTER ACCURACY + QUALITY AUDIT (end of opening / mi
       const evalPawns = analysis.mateIn != null ? (analysis.mateIn > 0 ? 999 : -999) : analysis.evaluation / 100;
 
       const why = await computeWhyBestMove({ fen, studentColor, analysis, studentNeedContext: null });
-      const grounded = explainBestMoveGrounded(fen, null, analysis.bestMove, studentColor);
+      const grounded = explainBestMoveGrounded(fen, null, analysis.bestMove, studentColor, null, null);
       const pf = await computePositionFacts({ posture: 'walk', fen, moverColor: sc, studentColor: sc, analysis, evalBoard: sfEvalBoard });
       const briefing = clauseText(pf.clauses, []).join(' ');
       const pvSan = pvToSan(fen, analysis.topLines?.[0]?.moves ?? []);

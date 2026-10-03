@@ -144,6 +144,8 @@ describe('a hung piece they did not take is a miss, not free material (re-walk 1
   const BC4: LearnFundamentalInput = {
     currentGameId: 'live-now', replySan: null, fenBefore: c.fen(), historySans: ['e4', 'd5', 'Bc4'],
     playedSan: 'Bc4', bestSan: 'exd5', studentColor: 'white', costCp: null, evalBeforeWhiteCp: 30, evalAfterWhiteCp: -300,
+    // The engine's line after 2.Bc4 (Stockfish 18, depth 16).
+    playedPvUci: ['d5c4', 'b1a3', 'g8f6', 'd1e2', 'b8c6', 'a3c4', 'e7e5', 'g1f3'],
   };
   it('names the miss when their reply does not take', () => {
     const out = learnFundamentalVerdict({ ...BC4, replySan: 'Nf6' }, new Set());

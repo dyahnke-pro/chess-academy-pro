@@ -340,7 +340,24 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         // "make sure arrows are firing to illustrate the ideas being spoken").
         const eyed = theirMoveArrow(fen, intent.san, student);
         if (/#$/.test(intent.san)) return { fact: `They're threatening mate with ${intent.san.replace(/#$/, '')} — that comes first.`, squares: [intent.target], arrows: eyed };
-        return { fact: `They're eyeing ${intent.san} — it would win ${what}.`, squares: [intent.target], keys: [`win-${intent.target}`], arrows: eyed };
+        // THE BOARD FACT, NOT THE OUTCOME (WO-OUTCOME-01 C): no engine line is
+        // in hand at this site, and a static swap count is not a proof of what
+        // the capture nets. Say who attacks what, and whether it is guarded; the
+        // late package, which has the line, owns "they win it".
+        let guarded = true;
+        let attacker: string | null = null;
+        try {
+          const b = new Chess(fen);
+          guarded = b.attackers(intent.target, student).length > 0;
+          const p2 = fen.split(' '); p2[1] = student === 'w' ? 'b' : 'w'; p2[3] = '-';
+          const m = new Chess(p2.join(' ')).move(intent.san);
+          attacker = m ? PIECE_NAME[m.piece] : null;
+        } catch { return null; }
+        const fact = !guarded
+          ? `They're eyeing ${intent.san} — ${what} has no defender.`
+          : attacker ? `They're eyeing ${intent.san} — their ${attacker} attacks ${what}.` : null;
+        if (!fact) return null;
+        return { fact, squares: [intent.target], keys: [`win-${intent.target}`], arrows: eyed };
       }
       // NAME WHAT IT FORKS — "forking on e4" named the knight's landing
       // square as if it were the target (walk 2026-09-27, Carlsen–Aronian).
@@ -716,7 +733,10 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       const targets = pressuredTargets(fen, student);
       const winnable = targets.find((x) => x.verdict === 'winnable' && PIECE_VALUE_TABLE[x.piece] >= 3 && x.square !== opponentLastTo);
       if (winnable) {
-        return { fact: `You can win the ${PIECE_NAME[winnable.piece]} on ${winnable.square} — it can't be held.`, squares: [winnable.square] };
+        // THE COUNT, NOT THE OUTCOME (WO-OUTCOME-01 C): no line is in hand.
+        const t = (n: number): string => (n === 1 ? 'once' : n === 2 ? 'twice' : `${['three', 'four', 'five', 'six'][n - 3] ?? n} times`);
+        const guard = winnable.defenders === 0 ? 'and nothing defends it' : `and defended only ${t(winnable.defenders)}`;
+        return { fact: `Their ${PIECE_NAME[winnable.piece]} on ${winnable.square} is attacked ${t(winnable.attackers)} ${guard}.`, squares: [winnable.square] };
       }
       const tension = targets.find((x) => x.verdict === 'balanced-tension' && x.attackers >= 2);
       if (tension) {
@@ -724,7 +744,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         // against 2 defenders" — whose attackers, on whose piece?). The
         // target is theirs; the attackers are the student's.
         const times = (n: number): string => (n === 1 ? 'once' : n === 2 ? 'twice' : `${['three', 'four', 'five', 'six'][n - 3] ?? n} times`);
-        return { fact: `Their ${PIECE_NAME[tension.piece]} on ${tension.square} is attacked ${times(tension.attackers)} and defended ${times(tension.defenders)} — add one more attacker and it falls.`, squares: [tension.square] };
+        return { fact: `Their ${PIECE_NAME[tension.piece]} on ${tension.square} is attacked ${times(tension.attackers)} and defended ${times(tension.defenders)} — the count is level, so the next piece either side adds decides it.`, squares: [tension.square] };
       }
       return null;
     },
@@ -799,7 +819,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // CHECK, a piece case wins material (David 2026-08-23).
       const fact = xr.targetPiece === 'k'
         ? `Your ${PIECE_NAME[xr.sliderPiece]} on ${xr.slider} lines up on their king behind your piece on ${xr.blocker} — shift it and it's a discovered check.`
-        : `Your ${PIECE_NAME[xr.sliderPiece]} on ${xr.slider} x-rays their ${PIECE_NAME[xr.targetPiece]} on ${xr.target} behind your piece on ${xr.blocker} — shift the blocker and you win it.`;
+        : `Your ${PIECE_NAME[xr.sliderPiece]} on ${xr.slider} x-rays their ${PIECE_NAME[xr.targetPiece]} on ${xr.target} behind your piece on ${xr.blocker} — move that piece and the ${PIECE_NAME[xr.targetPiece]} is attacked.`;
       return { fact, squares: [xr.slider, xr.blocker, xr.target] };
     },
   },

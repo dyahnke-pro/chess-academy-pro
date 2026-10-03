@@ -22,7 +22,7 @@ describe('what is hanging reads the whole board', () => {
 describe('a recapture takes back, it does not win', async () => {
   const { explainBestMoveGrounded } = await import('./groundedAnswer');
   it('…dxe5 after 13.Nxe5', () => {
-    const why = explainBestMoveGrounded(FEN, null, 'd6e5', 'black', { square: 'e5', capturedValue: 3 }) ?? '';
+    const why = explainBestMoveGrounded(FEN, null, 'd6e5', 'black', { square: 'e5', capturedValue: 3 }, null) ?? '';
     expect(why).toMatch(/takes back the knight on e5/);
     expect(why).not.toMatch(/wins the knight/);
   });

@@ -36,7 +36,11 @@ export async function computeTurningPointHinge(input: {
     const md = computeMustDefend(fenBefore, studentColor);
     if (md.net >= 3 && md.pieces[0]) {
       const p = md.pieces[0];
-      return `There was a threat to meet first here — the ${PNAME[p.piece.toLowerCase()] ?? 'piece'} on ${p.square} was hanging.`;
+      // The board fact, not the outcome or the order (WO-OUTCOME-01 C): a
+      // static swap count with no line cannot say it "was hanging" or that it
+      // had to be met first.
+      const who = p.attacker ? `their ${PNAME[p.attacker] ?? 'piece'} attacked` : 'they attacked';
+      return `Here ${who} your ${PNAME[p.piece.toLowerCase()] ?? 'piece'} on ${p.square}${p.defenders === 0 ? ', and nothing defended it' : ''}.`;
     }
   } catch { /* ignore */ }
   return '';

@@ -21,7 +21,7 @@
 // Pure: the engine reads are handed in. Returns null rather than a vague line.
 import { Chess } from 'chess.js';
 import type { AnalysisLine } from '../types';
-import { legalSeeGainFor } from './positionReadingService';
+import { proofCut } from './exchangeLedger';
 import { MATERIAL_VALUE } from './pieceValues';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
@@ -109,8 +109,16 @@ export function moveOrder(
   let cost: string | null = null;
   if (mates) cost = 'and it would have been mate';
   else if (r.captured) {
-    const before = new Chess(yFen);
-    const net = legalSeeGainFor(before.fen(), r.to, opp);
+    // What R's LINE nets them, settled by the ledger (WO-OUTCOME-01 B) — the
+    // engine's line after Y is in hand, so a one-square swap count is not the
+    // proof. A line that gives the piece back never "dropped" it.
+    const sans: string[] = [];
+    try {
+      const w = new Chess(yFen);
+      for (const u of yFirst.moves ?? []) { const m = w.move(moveOf(u)); if (!m) break; sans.push(m.san); }
+    } catch { /* a shorter line proves less */ }
+    const proof = sans.length ? proofCut(yFen, sans, opp) : null;
+    const net = proof && !proof.mate && proof.ledger ? proof.ledger.netPawns : 0;
     const piece = NAME[r.captured] ?? 'piece';
     if (net >= (MATERIAL_VALUE[r.captured] ?? 0)) cost = `and the ${piece} on ${r.to} would simply have dropped`;
     else if (net > 0) cost = `and it would have cost material on ${r.to}`;

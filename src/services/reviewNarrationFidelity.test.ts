@@ -164,13 +164,13 @@ describe('explainBestMoveGrounded — SEE claims verified against counter-tactic
 
   it('suppresses the "wins the pawn" claim when the capture walks into a royal fork', async () => {
     const { explainBestMoveGrounded } = await import('./groundedAnswer');
-    const why = explainBestMoveGrounded(FEN_FORK, 'a6', 'b4c2', 'black');
+    const why = explainBestMoveGrounded(FEN_FORK, 'a6', 'b4c2', 'black', null, null);
     expect(why ?? '').not.toContain('dxe5');
   });
 
   it('still names a genuinely free capture when no counter-tactic exists', async () => {
     const { explainBestMoveGrounded } = await import('./groundedAnswer');
-    const why = explainBestMoveGrounded(FEN_FREE, 'a6', 'a7a5', 'black');
+    const why = explainBestMoveGrounded(FEN_FREE, 'a6', 'a7a5', 'black', null, null);
     expect(why ?? '').toContain('dxe5');
   });
 });

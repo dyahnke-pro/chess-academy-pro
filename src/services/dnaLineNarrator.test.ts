@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { dnaMoveClause, narrateDnaLine, firstTacticInvariant, landedTacticTeaching } from './dnaLineNarrator';
+import { dnaMoveClause, narrateDnaLine, firstTacticInvariant, landedTacticTeaching, dnaLineClauses } from './dnaLineNarrator';
 
 /** Position where Black's knight on d4 hangs — White's Qxd4 wins it clean. */
 const HANGING_KNIGHT = '4k3/8/8/8/3n4/8/8/3QK3 w - - 0 1';
@@ -160,5 +160,24 @@ describe('narrateDnaLine — a repeated concept is said once (prod audit 2026-09
     expect(hits.length, line).toBeLessThanOrEqual(1);
     expect(line).toContain('Qh5+');
     expect(line).toContain('Qa5+');
+  });
+});
+
+// WO-OUTCOME-01 B: a capture the SAME line takes back later is no win. The
+// one-square swap count saw a free pawn on e5; the line's …Qxe5 two moves on
+// takes the knight that took it.
+describe('a capture the line itself takes back is not "you win"', () => {
+  it('Nxe5 … Qxe5 never says "you win the pawn"', () => {
+    const start = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 2';
+    const c = new Chess(start);
+    const plies = ['Nxe5', 'Qe7', 'Bc4', 'Qxe5'].map((san) => { const fenBefore = c.fen(); c.move(san); return { fenBefore, san }; });
+    const clauses = dnaLineClauses(plies, { studentColor: 'w' });
+    expect(clauses[0]).not.toMatch(/win the pawn/);
+  });
+  it('a capture the line leaves standing still says it (positive control)', () => {
+    const start = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 2';
+    const c = new Chess(start);
+    const plies = ['Nxe5', 'd6', 'Nf3'].map((san) => { const fenBefore = c.fen(); c.move(san); return { fenBefore, san }; });
+    expect(dnaLineClauses(plies, { studentColor: 'w' })[0]).toMatch(/you win the pawn/);
   });
 });

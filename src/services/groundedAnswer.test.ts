@@ -1042,7 +1042,7 @@ describe('explainBestMoveGrounded — hanging is legal-capture + SEE grounded (n
     // White Pe5 is "attacked" by Black Nd7, but the knight is pinned to the
     // Black king on d8 by the white rook on d1 — it can't legally capture, so
     // e5 is NOT hanging. White plays a quiet a3; best move (a3) wins nothing.
-    const out = explainBestMoveGrounded('3k4/3n4/8/4P3/8/8/P7/3RK3 w - - 0 1', 'a3', 'a2a3', 'white');
+    const out = explainBestMoveGrounded('3k4/3n4/8/4P3/8/8/P7/3RK3 w - - 0 1', 'a3', 'a2a3', 'white', null, null);
     expect(out).toBeNull(); // never "left the pawn on e5 hanging"
   });
 
@@ -1051,7 +1051,7 @@ describe('explainBestMoveGrounded — hanging is legal-capture + SEE grounded (n
     // plays the quiet Ke2 (best move d4-d5 escapes); after Ke2, Black has the
     // legal, material-winning Nxd4. bestMoveUci must be non-null or the helper
     // short-circuits before the cost clause.
-    const out = explainBestMoveGrounded('4k3/8/2n5/8/3P4/8/8/4K3 w - - 0 1', 'Ke2', 'd4d5', 'white');
+    const out = explainBestMoveGrounded('4k3/8/2n5/8/3P4/8/8/4K3 w - - 0 1', 'Ke2', 'd4d5', 'white', null, null);
     expect(out).toContain('Nxd4'); // a real, legal, material-winning capture
     expect(out).toContain('winning the pawn');
   });

@@ -23,6 +23,7 @@ import { findHangingPieces } from './tacticClassifier';
 import { missedPlanClause } from './movePlan';
 import { moveCostOneSearch, uciOfSan, type CostFan } from './moveCost';
 import { SINGLETON_SCORER } from './refutedAlternative';
+import { proofCut } from './exchangeLedger';
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 
@@ -80,14 +81,48 @@ export function gradePlayedMove(input: {
   const gap12 = lines.length >= 2 && !secondStillWins ? bestEval - moverEval(lines[1]) : 0;
   const label = labelFor(cpLossCp, isBest);
 
-  // Board-only signals (synchronous).
-  const threatNetBefore = (() => { try { return computeMustDefend(fenBefore, studentColor).net; } catch { return 0; } })();
-  const hangAfter = hangingNetForMover(fenAfter, studentColor);
+  // THE PLAYED MOVE'S OWN LINE DECIDES WHAT IT WON OR LOST (WO-OUTCOME-01 B).
+  // The fan already carries the engine's line for the played move; the ledger
+  // settles it. A one-square swap count said "that wins material" of a knight
+  // taken straight back, and "that hung the X" of a piece the line never takes.
+  const playedSans: string[] = [];
+  try {
+    const r = new Chess(fenBefore);
+    for (const u of played.moves) {
+      const m = r.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+      if (!m) break;
+      playedSans.push(m.san);
+    }
+  } catch { /* a short line proves less, never more */ }
+  const proof = playedSans.length ? proofCut(fenBefore, playedSans, studentColor) : null;
+  const lineNet = proof && !proof.mate && proof.ledger ? proof.ledger.netPawns : null;
+  const opp = studentColor === 'w' ? 'b' : 'w';
+  const lineTakes = (sq: string): boolean => {
+    if (!proof) return false;
+    try {
+      const r = new Chess(fenBefore);
+      for (const san of proof.sans.slice(0, proof.plies)) {
+        const m = r.move(san);
+        if (m.color === opp && m.captured && m.to === sq) return true;
+      }
+    } catch { return false; }
+    return false;
+  };
+  const bad0 = label === 'mistake' || label === 'blunder';
+
+  // Board-only signals (synchronous). On a FAULT they are claims about what the
+  // move lost, so the line must prove them; on a good move the threat is only
+  // the fact that one stood ("that meets the threat").
+  const md = (() => { try { return computeMustDefend(fenBefore, studentColor); } catch { return { net: 0, pieces: [] }; } })();
+  const threatNetBefore = !bad0 ? md.net
+    : md.pieces[0] && lineNet !== null && lineNet <= -2 && lineTakes(md.pieces[0].square) ? md.net : 0;
+  let hangAfter = hangingNetForMover(fenAfter, studentColor);
   let capture = false, seeNow = 0, hung: { piece: string; square: string } | undefined;
   try {
     const c = new Chess(fenBefore);
     const mv = c.move({ from: playedUci.slice(0, 2), to: playedUci.slice(2, 4), promotion: playedUci[4] });
-    if (mv?.captured) { capture = true; seeNow = VAL[mv.captured] ?? 0; }
+    // What the capture NETS over its line, never the captured piece's value.
+    if (mv?.captured) { capture = true; seeNow = lineNet !== null ? Math.max(0, lineNet) : 0; }
   } catch { /* board read is a bonus */ }
   if (hangAfter >= 2) {
     try {
@@ -100,6 +135,8 @@ export function gradePlayedMove(input: {
         if (v > worst) { worst = v; hung = { piece: h.piece.toLowerCase(), square: h.square }; }
       }
     } catch { /* naming is a bonus */ }
+    // The line must take the named piece and leave the mover ≥2 down.
+    if (!hung || lineNet === null || lineNet > -2 || !lineTakes(hung.square)) { hangAfter = 0; hung = undefined; }
   }
 
   const reason = classifyMoveReason({

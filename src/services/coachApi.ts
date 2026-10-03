@@ -3405,7 +3405,7 @@ export async function explainPuzzleMoveGrounded(opts: {
     } catch { /* fall through to the single-move explanation */ }
   }
 
-  const facts = explainBestMoveGrounded(opts.fen, opts.playedSan, opts.bestMoveUci, moverColor);
+  const facts = explainBestMoveGrounded(opts.fen, opts.playedSan, opts.bestMoveUci, moverColor, null, null);
   if (facts) {
     const voiced = await voiceFacts(facts, {
       studentMessage: opts.studentMessage ?? `Why is ${opts.bestMoveSan} the best move here?`,
@@ -5559,7 +5559,7 @@ export async function getCoachChatResponse(
               const c = new Chess(rf.fenBefore);
               rfBestSan = c.move({ from: rf.bestMoveUci.slice(0, 2), to: rf.bestMoveUci.slice(2, 4), promotion: rf.bestMoveUci.length > 4 ? rf.bestMoveUci[4] : undefined })?.san ?? null;
             } catch { rfBestSan = null; }
-            const rfWhy = explainBestMoveGrounded(rf.fenBefore, rf.playedSan, rf.bestMoveUci, rfMover);
+            const rfWhy = explainBestMoveGrounded(rf.fenBefore, rf.playedSan, rf.bestMoveUci, rfMover, null, null);
             if (rfBestSan && rfWhy) {
               const rfFacts = `The engine preferred ${rfBestSan} over ${rf.playedSan} here. ${rfWhy}`;
               const voiced = await voice(rfFacts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true, mustPreserve: [rfBestSan] });

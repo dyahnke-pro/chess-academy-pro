@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**96 lines · 3 exports · 6 importers · 2 tests · 0 audits**
+**109 lines · 3 exports · 6 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -32,8 +32,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/threatOut.test.ts:10`
 
 ### `computeMustDefend` (function) — 11 call sites
-- `src/services/playedMoveGrade.ts:82`
-- `src/services/positionFacts.ts:438`
+- `src/services/playedMoveGrade.ts:116`
+- `src/services/positionFacts.ts:448`
 - `src/services/replayFence.modern1690.test.ts:160`
 - `src/services/replayFence.modern1690.test.ts:165`
 - `src/services/reviewHinge.ts:36`

@@ -127,7 +127,7 @@ describe('computePositionFacts — the composer', () => {
     const r = await computePositionFacts({ posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5', moverColor: 'w', studentColor: 'w', analysis: flat });
     expect(r.mustDefend.net).toBe(3);
     expect(r.importance.speak).toBe(true);
-    expect(r.clauses[0].text).toMatch(/threatening to win the knight on e5/);
+    expect(r.clauses[0].text).toMatch(/^Their pawn attacks your knight on e5/);
   });
 
   it('speaks the delayed-castling warning IN the opening when the king is stuck in the centre (§9)', async () => {
@@ -154,7 +154,7 @@ describe('computePositionFacts — the composer', () => {
     const r = await computePositionFacts({ posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5', moverColor: 'w', studentColor: 'w', analysis: winning });
     expect(r.mustDefend.net).toBe(3);
     const md = r.clauses.find((c) => c.kind === 'must-defend');
-    expect(md?.text).toMatch(/don't let them punch back/);
+    expect(md?.text).toMatch(/watch the counterpunch: their pawn attacks your knight on e5/);
     expect(md?.text).toMatch(/knight on e5/); // still board-true — names the real piece
   });
 
@@ -363,8 +363,8 @@ describe('clauseText', () => {
     const r = await computePositionFacts({ posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5', moverColor: 'w', studentColor: 'w', analysis: flat });
     const withMd = clauseText(r.clauses);
     const withoutMd = clauseText(r.clauses, ['must-defend']);
-    expect(withMd.some((t) => /threatening to win/.test(t))).toBe(true);
-    expect(withoutMd.some((t) => /threatening to win/.test(t))).toBe(false);
+    expect(withMd.some((t) => /attacks your knight on e5/.test(t))).toBe(true);
+    expect(withoutMd.some((t) => /attacks your knight on e5/.test(t))).toBe(false);
   });
 });
 

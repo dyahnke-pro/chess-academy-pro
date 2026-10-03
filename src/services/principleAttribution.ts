@@ -569,6 +569,28 @@ function att(id: FundamentalId, weight: number, evidence: Omit<PrincipleEvidence
   return { id, weight, evidence: { ...evidence, counterfactualClean: true }, facts };
 }
 
+/** THE LINE PROVES THE LOSS (WO-OUTCOME-01 B). "The knight on f6 hangs — Nxf6
+ *  wins it outright" is an outcome, and a swap count on one square is not a
+ *  proof of it. The engine's own line must take that piece, and the ledger
+ *  must settle the line ≥2 points up for the side taking. No line, no claim:
+ *  silence beats an unproven win. */
+function lineTakes(c: Ctx, sq: Square): boolean {
+  const line = c.pvP;
+  if (!line?.length) return false;
+  const won = lineNetForSide(c.after.fen(), line, c.opp);
+  if (won === null || won.net < 2) return false;
+  try {
+    const parts = c.after.fen().split(' ');
+    if (parts[1] !== c.opp) { parts[1] = c.opp; parts[3] = '-'; }
+    const b = new Chess(parts.join(' '));
+    for (const san of line.slice(0, won.plies)) {
+      const m = b.move(san);
+      if (m.color === c.opp && m.captured && m.to === sq) return true;
+    }
+  } catch { return false; }
+  return false;
+}
+
 /** IGNORED THREAT, AS A LINE (unify-the-coach A3, review walk 2026-10-01,
  *  game 3 ply 53: Kh2 with …Nxe3 fxe3 Rxf1 on the board). Nothing was simply
  *  hanging, so the one-move check saw nothing and every other fundamental
@@ -929,6 +951,7 @@ const DETECTORS: Detector[] = [
     const hangingBest = pieces(c.afterBest, mover).filter((p) => p.type !== 'k' && VAL[p.type] >= 3 && hangsBy(c.afterBest, p.square) >= 2);
     if (hangingBest.length >= hangingAfter.length) return null;
     const h = hangingAfter[0];
+    if (!lineTakes(c, h.square)) return null;
     const cap = cheapestCapture(c.after, h.square, c.opp);
     return att('loose-piece', 3, { squares: [h.square], moves: cap ? [cap.san] : [], pvMoves: pvHas(c.pvP, (s) => !!cap && s === cap.san) }, { piece: PNAME[h.type], square: h.square });
   },
@@ -943,6 +966,7 @@ const DETECTORS: Detector[] = [
     const fixedByBest = threatened.every((p) => !c.afterBest.get(p.square) || c.afterBest.get(p.square)?.color !== mover || hangsBy(c.afterBest, p.square) < 2);
     if (!fixedByBest) return null;
     const t = still[0];
+    if (!lineTakes(c, t.square)) return null;
     const cap = cheapestCapture(c.after, t.square, c.opp);
     return att('ignored-threat', 3, { squares: [t.square], moves: cap ? [cap.san] : [], pvMoves: pvHas(c.pvP, (s) => !!cap && s === cap.san) }, { piece: PNAME[t.type], square: t.square });
   },

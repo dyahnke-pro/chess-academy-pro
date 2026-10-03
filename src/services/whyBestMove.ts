@@ -72,7 +72,7 @@ export async function computeWhyBestMove(input: WhyBestMoveInput): Promise<strin
   // 1. The concrete point of the strongest move (the engine-reasoning form).
   //    Never a bare "The strongest move is X." — the why-chain floor guarantees
   //    a grounded reason so a "Why?" tap is never a dead answer.
-  const point = explainBestMoveGrounded(fen, null, uci, studentColor); // "it forks the king and rook" | null
+  const point = explainBestMoveGrounded(fen, null, uci, studentColor, null, null); // "it forks the king and rook" | null
   if (san) {
     const reason = point?.trim() || groundedMoveWhy([], fen, san, studentColor);
     // Strip a trailing period on the reason before adding our own — the grounded

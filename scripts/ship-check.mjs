@@ -346,6 +346,12 @@ const GATE_TESTS = [
   // proxy anywhere else, or adding an untagged primitive, makes ship-check RED.
   // Turns "what else are we missing?" into an enforced, closed question.
   'src/services/coachLlmChokepoint.gate.test.ts',
+  // 🔒 OUTCOME SENTENCES (WO-OUTCOME-01 D) — "it would win", "that hung the
+  // knight" come from the exchange ledger over the engine line. New outcome
+  // wording composed from a swap count makes ship-check RED; the baseline only
+  // shrinks. Pairs with the one-line-reader gate.
+  'src/test/outcomeSentences.gate.test.ts',
+  'src/test/oneLineReader.gate.test.ts',
   // 🔒 BUILT-BUT-UNWIRED GATE (David 2026-09-09) — every board-awareness
   // computer must reach the typed chat Q&A, not just automatic narration.
   // A new positionReadingService computer that no chat lane consumes (and
