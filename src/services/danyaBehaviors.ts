@@ -25,7 +25,7 @@
 import { castleRoute, castleAdvice } from './kingSafety';
 import { andList, fileList } from '../utils/andList';
 import { Chess } from 'chess.js';
-import { settledLeadFor, type LastMove } from './material';
+import { settledLeadFor, lastMoveFromHistory, type LastMove } from './material';
 import type { ArrowClaim } from './arrowDoor';
 import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
 import type { Color, PieceSymbol, Square } from 'chess.js';
@@ -115,6 +115,9 @@ export interface BehaviorContext {
   /** The move that produced `fen`, when known — material is read SETTLED, so
    *  a recapture still to come is not "down material" (WO-MATERIAL-01). */
   lastMove?: LastMove | null;
+  /** The game's SAN history ending on `fen`; the last move is read from it
+   *  when `lastMove` is not given. */
+  history?: readonly string[];
 }
 
 export interface BehaviorHit {
@@ -188,7 +191,7 @@ function normalize(ctx: BehaviorContext): NormalizedCtx | null {
     isEndgame: phase === 'endgame',
     studentLastTo: ctx.studentLastTo ?? null,
     opponentLastTo: ctx.opponentLastTo ?? null,
-    lastMove: ctx.lastMove ?? null,
+    lastMove: ctx.lastMove ?? lastMoveFromHistory(ctx.history, ctx.fen),
   };
 }
 
