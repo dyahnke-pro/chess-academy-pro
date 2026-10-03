@@ -421,7 +421,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     // THE LINES THE NARRATION READ, per flagged ply — a line claim ("it would
     // win the queen and a piece for a rook") can only be checked against the
     // line the app read it off, and depth-12 lines differ from any re-search.
-    const lines = flagged.map((a) => ({ ply: anns.indexOf(a) + 1, san: a.san, best: a.bestMove, afterBest: a.pv?.afterBest ?? [], afterPlayed: a.pv?.afterPlayed ?? [] }));
+    const lines = flagged.map((a) => ({ ply: anns.indexOf(a) + 1, san: a.san, best: a.bestMove, afterBest: a.pv?.afterBest ?? [], afterPlayed: a.pv?.afterPlayed ?? [], costCp: a.costCp ?? null, eval: a.evaluation, bestEval: a.bestMoveEval }));
     return { depth: g?.analysisDepth, fully: g?.fullyAnalyzed, rows, total: anns.length, nullEval, nullBest, flagged: flagged.length, flaggedWithPv, lines };
   }, GID).catch((e) => ({ error: String(e) }));
   log(`  [engine] depth=${annots.depth} fullyAnalyzed=${annots.fully}`);

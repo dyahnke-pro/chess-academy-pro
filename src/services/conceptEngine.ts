@@ -694,7 +694,10 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
       }
     }
     if (best && (best.tactic || best.isMate) && wants('tactic')) {
-      const type = best.tactic ?? 'mate_threat';
+      // A DELIVERED mate is the point of the line, whatever else the mating
+      // move also does (Qxg2# unveils the rook on c2 too — the drill was named
+      // "Discovered attack" for a checkmate). The mate leads.
+      const type = best.isMate ? 'mate_threat' : (best.tactic ?? 'mate_threat');
       const landingSquare = best.to;
       let pattern: TacticPattern | null = null;
       try {

@@ -69,11 +69,10 @@ describe('detectTacticType', () => {
   });
 
   it('detects pin on file (rook pins piece to king)', () => {
-    // White rook on a2 moves to a1, and from a1 pins black knight on a4 to black king on a8
-    // Position: black king a8, black knight a4, white rook a2, white king h1
-    const fen = 'k7/8/8/8/n7/8/R7/7K w - - 0 1';
-    // Ra2-a1 creates a pin on the a-file (rook on a1, knight on a4, king on a8)
-    const result = detectTacticType(fen, 'a2a1');
+    // White rook on b1 steps onto the a-file and pins the knight on a4 to the
+    // king on a8. (Ra2-a1 does NOT create it — a rook on a2 already pins.)
+    const fen = 'k7/8/8/8/n7/8/8/1R5K w - - 0 1';
+    const result = detectTacticType(fen, 'b1a1');
     expect(result).toBe('pin');
   });
 

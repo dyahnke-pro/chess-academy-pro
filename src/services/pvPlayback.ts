@@ -326,8 +326,19 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
   // move's own doing, not the opponent's standing threat). G0: board-true.
   let tacticLanded: string | null = null;
   try {
-    const sig = (t: { type: string; involvedSquares: string[] }): string =>
-      `${t.type}:${[...t.involvedSquares].sort().join(',')}`;
+    // Keyed on WHAT IS HIT, not where the maker stands (review walk oct3b, g1
+    // ply 15: Qe2 already pinned the e5 knight to the king; the line's Qe3
+    // slid along the same file and "the idea is to set up a pin" was spoken
+    // for a pin that was already there). A LINE tactic — a pin or a skewer —
+    // is its victims on one line, so it keys on `involvedSquares.slice(1)`:
+    // the slider moving along its own line creates nothing. Every other
+    // pattern keeps its maker in the key (a mate threat always targets the
+    // king; a new piece making it is a new threat).
+    const sig = (t: { type: string; involvedSquares: string[] }): string => {
+      const lineTactic = t.type === 'pin' || t.type === 'skewer';
+      const keyed = lineTactic ? t.involvedSquares.slice(1) : t.involvedSquares;
+      return `${t.type}:${[...keyed].sort().join(',')}`;
+    };
     const beforeSigs = new Set(detectTactics(fenBefore).tactics.filter((x) => x.type !== 'none').map(sig));
     // Only the MOVED piece can be the tactic's agent. A pin or skewer is made
     // by a SLIDER (bishop/rook/queen) — a knight/pawn/king move that merely

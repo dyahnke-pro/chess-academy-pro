@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**843 lines · 20 exports · 27 importers · 10 tests · 28 audits**
+**846 lines · 20 exports · 27 importers · 10 tests · 28 audits**
 
 ## Locked rules that govern this surface
 
@@ -46,7 +46,7 @@
 ### `Side` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `sideToMove` (function) — 9 call sites
+### `sideToMove` (function) — 10 call sites
 - `src/data/endgame-side-correctness.test.ts:27`
 - `src/data/endgame-side-correctness.test.ts:51`
 - `src/data/grounding/groundingLib.ts:56`
@@ -55,6 +55,7 @@
 - `src/services/conceptEngine.test.ts:13`
 - `src/services/groundedMoveWhy.ts:73`
 - `src/services/groundedMoveWhy.ts:99`
+- `src/services/material.ts:45`
 - `src/services/mistakeNarration.ts:380`
 
 ### `solvingSide` (function) — 2 call sites
@@ -84,7 +85,7 @@
 - `src/services/conceptEngine.test.ts:86`
 - `src/services/conceptEngine.test.ts:88`
 - `src/services/conceptEngine.test.ts:97`
-- `src/services/learnWalkBlumenfeld.test.ts:130`
+- `src/services/learnWalkBlumenfeld.test.ts:135`
 
 ### `renderMatchupConcept` (function) — 4 call sites
 - `src/services/conceptEngine.test.ts:71`
@@ -104,8 +105,8 @@
 - `src/services/endgameTechnique.test.ts:61`
 - `src/services/endgameTechnique.test.ts:74`
 - `src/services/endgameTechnique.test.ts:224`
-- `src/services/groundedAnswer.ts:3774`
-- `src/services/groundedAnswer.ts:6491`
+- `src/services/groundedAnswer.ts:3776`
+- `src/services/groundedAnswer.ts:6503`
 
 ### `ConceptForBoardOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -121,7 +122,7 @@
 - `src/services/conceptEngine.test.ts:206`
 - `src/services/conceptEngine.test.ts:224`
 - `src/services/liveTacticsContext.ts:116`
-- `src/services/positionFacts.ts:774`
+- `src/services/positionFacts.ts:785`
 
 ### `LineInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -135,7 +136,7 @@
 - `src/services/conceptEngine.test.ts:303`
 - `src/services/endgameDrillService.test.ts:163`
 - `src/services/missedTacticService.ts:787`
-- `src/services/puzzleConceptExplanation.ts:119`
+- `src/services/puzzleConceptExplanation.ts:125`
 - `src/services/puzzleConceptHint.ts:110`
 - `src/services/puzzleGenerator.ts:206`
 - `src/services/refutedAlternative.ts:112`
@@ -161,20 +162,20 @@
 ### `definitionKey` (function) — 8 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7482`
 - `src/components/Coach/CoachTeachPage.tsx:7486`
-- `src/services/learnWalkBlumenfeld.test.ts:133`
-- `src/services/positionFacts.ts:1064`
-- `src/services/positionFacts.ts:1067`
-- `src/services/positionFacts.ts:1453`
-- `src/services/reviewFullData.ts:494`
-- `src/services/reviewFullData.ts:497`
+- `src/services/learnWalkBlumenfeld.test.ts:138`
+- `src/services/positionFacts.ts:1079`
+- `src/services/positionFacts.ts:1082`
+- `src/services/positionFacts.ts:1468`
+- `src/services/reviewFullData.ts:544`
+- `src/services/reviewFullData.ts:547`
 
 ### `tacticInvariant` (function) — 9 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7483`
 - `src/services/dnaLineNarrator.ts:187`
 - `src/services/dnaLineNarrator.ts:218`
-- `src/services/dnaLineNarrator.ts:254`
-- `src/services/puzzleConceptExplanation.ts:108`
-- `src/services/reviewFullData.ts:493`
+- `src/services/dnaLineNarrator.ts:277`
+- `src/services/puzzleConceptExplanation.ts:114`
+- `src/services/reviewFullData.ts:543`
 - `src/services/tacticAlertService.ts:141`
 - `src/services/tacticTypeUnification.test.ts:199`
 - `src/test/auditConceptGameplayCues.test.ts:24`
@@ -223,16 +224,16 @@
 - `src/services/conceptEngine.test.ts:24`
 - `src/services/conceptEngine.test.ts:26`
 - `src/services/conceptEngine.test.ts:28`
+- `src/services/material.ts:43`
+- `src/services/material.ts:59`
 - `src/services/materialClaimValidator.test.ts:24`
 - `src/services/materialClaimValidator.test.ts:25`
 - `src/services/materialClaimValidator.ts:36`
 - `src/services/materialClaimValidator.ts:74`
-- `src/services/narratedContinuation.test.ts:15`
-- `src/services/narratedContinuation.test.ts:17`
-- `src/services/narratedContinuation.test.ts:19`
-- `src/services/narratedContinuation.ts:85`
+- `src/services/narratedContinuation.test.ts:16`
+- `src/services/narratedContinuation.test.ts:18`
+- `src/services/narratedContinuation.test.ts:20`
 - `src/services/pieceValues.ts:52`
-- `src/services/positionCharacter.ts:60`
 - `src/test/onePieceValueTable.test.ts:46`
 
 ## Tests

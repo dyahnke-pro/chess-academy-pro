@@ -76,8 +76,9 @@ describe('audit: fork', () => {
 // ── Pin ────────────────────────────────────────────────────────────────────
 describe('audit: pin', () => {
   it('detects rook pin on file (piece pinned to king)', () => {
-    // Ra2-a1 pins knight on a4 to king on a8
-    expect(detectTacticType('k7/8/8/8/n7/8/R7/7K w - - 0 1', 'a2a1')).toBe('pin');
+    // Rb1-a1 steps onto the file and pins the knight on a4 to the king on a8
+    // (Ra2-a1 would not: the rook on a2 already pins it).
+    expect(detectTacticType('k7/8/8/8/n7/8/8/1R5K w - - 0 1', 'b1a1')).toBe('pin');
   });
 
   it('does NOT detect pin when pieces on ray are same value', () => {

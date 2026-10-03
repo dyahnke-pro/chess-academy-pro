@@ -406,3 +406,17 @@ describe('an even trade is a removal of the defender only if the target still fa
     expect(landed('6k1/8/2p5/1q3b2/7N/1Q6/8/6K1 w - - 0 1', 'Qxb5')).toBe('removal_of_guard');
   });
 });
+
+describe('a pin already on the board does not "land" when its maker slides along the line (review walk oct3b, g1 ply 15)', () => {
+  const landed = (fen: string, san: string): string | null => {
+    const c = new Chess(fen);
+    const mv = c.move(san);
+    return computePlyFacts(fen, c.fen(), { captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion }).tacticLanded;
+  };
+  it('Qe2 already pins the e5 knight to e8; Qe3 lands nothing', () => {
+    expect(landed('4k3/8/8/4n3/8/8/4Q3/4K3 w - - 0 1', 'Qe3')).not.toBe('pin');
+  });
+  it('POSITIVE CONTROL: stepping onto the line creates the pin', () => {
+    expect(landed('4k3/8/8/4n3/8/8/3Q4/4K3 w - - 0 1', 'Qe2')).toBe('pin');
+  });
+});

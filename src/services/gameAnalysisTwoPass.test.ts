@@ -11,9 +11,21 @@ vi.mock('./openingDetectionService', async (importOriginal) => ({
 /** Singleton-engine calls the REVIEW makes (jsdom has no Worker, so the pool
  *  declines and the review takes the singleton path — the same code either way). */
 const singletonCalls: { fen: string; depth: number }[] = [];
+/** What the played move gives up when scored beside the best one (the pricing
+ *  pass). Defaults to the curve's own 320cp drop; one test narrows it. */
+const pricing = vi.hoisted(() => ({ drop: 320 }));
 vi.mock('./stockfishEngine', () => {
-  const answer = (fen: string, depth: number): Promise<unknown> => {
+  const answer = (fen: string, depth: number, opts?: { searchmoves?: string }): Promise<unknown> => {
     singletonCalls.push({ fen, depth });
+    // `searchmoves` scores exactly the listed moves in ONE search (the pricing
+    // pass): the best move holds the level, the played one drops 120cp.
+    if (opts?.searchmoves) {
+      const ucis = opts.searchmoves.split(' ');
+      return Promise.resolve({
+        evaluation: 20, bestMove: ucis[0], isMate: false, mateIn: null, depth, nodesPerSecond: 1,
+        topLines: ucis.map((u, i) => ({ rank: i + 1, evaluation: i === 0 ? 20 : 20 - pricing.drop, mate: null, moves: [u] })),
+      });
+    }
     return Promise.resolve({
       evaluation: CURVE[FENS.indexOf(fen)] ?? 0,
       bestMove: 'd2d4', isMate: false, mateIn: null, depth, topLines: [], nodesPerSecond: 1,
@@ -91,6 +103,7 @@ function scriptedWorker(calls: Call[], curve: readonly number[] = CURVE) {
 
 beforeEach(async () => {
   singletonCalls.length = 0;
+  pricing.drop = 320;
   await db.delete();
   await db.open();
 });
@@ -283,6 +296,17 @@ describe('the REVIEW deep-dives the key moments', () => {
     // …WITHOUT a BEST_MOVE_DEPTH search at that ply.
     const bestMoveSearches = singletonCalls.filter((c) => c.depth === BEST_MOVE_DEPTH);
     expect(bestMoveSearches, 'a second deep search ran at the flagged ply').toHaveLength(0);
+  });
+
+  it('prices the flagged ply from ONE search of both moves (review walk oct3b, g2 ply 11)', async () => {
+    // The curve says Bb5 dropped 320cp (two separate reads). Scored together
+    // with the best move, it gives up 120 — that is what is stored and graded.
+    pricing.drop = 120;
+    await reviewFixture();
+    const anns = await analyzeSingleGame('g-review');
+    expect(anns![4].costCp).toBe(120);
+    expect(anns![4].classification).not.toBe('blunder');
+    pricing.drop = 320;
   });
 
   it('a completed review is NOT re-analysed on the next open', async () => {
