@@ -18,7 +18,7 @@ import { AnalyzeGamesButton } from '../Games/AnalyzeGamesButton';
 import { gameNeedsAnalysis } from '../../services/gameAnalysisService';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
-import { groupMistakesByWeakness, mistakeWeaknessKey } from '../../services/coachDrillService';
+import { groupMistakesByWeakness, groupProgressLabel, mistakeWeaknessKey } from '../../services/coachDrillService';
 import { classifyEndgameType, endgameTablebaseReady } from '../../services/endgameProfileService';
 import type { MistakePuzzle, MistakeClassification, MistakePuzzleSourceMode, MistakePuzzleStatus, MistakeGamePhase } from '../../types';
 import { finishBite } from '../../services/activeBite';
@@ -600,7 +600,7 @@ export function MyMistakesPage(): JSX.Element {
           </button>
           <div className="flex items-baseline justify-between gap-2">
             <h2 className="text-base font-bold text-theme-text">{openGroup.label}</h2>
-            <span className="text-xs text-theme-text-muted">{openGroup.open} open · {openGroup.puzzles.length} from your games</span>
+            <span className="text-xs text-theme-text-muted" data-testid="weakness-group-progress">{groupProgressLabel(openGroup)} · from your games</span>
           </div>
           <div className="mt-2 flex flex-wrap gap-2">
             {openGroup.open > 0 && (
@@ -654,8 +654,8 @@ export function MyMistakesPage(): JSX.Element {
                 data-testid={`weakness-group-open-${g.key}`}
               >
                 <span className="truncate text-sm font-semibold text-theme-text">{g.label}</span>
-                <span className="text-xs text-theme-text-muted">
-                  {g.open > 0 ? `${g.open} open` : 'all fixed'} · {g.puzzles.length} from your games
+                <span className="text-xs text-theme-text-muted" data-testid={`weakness-group-progress-${g.key}`}>
+                  {groupProgressLabel(g)} · from your games
                 </span>
               </button>
               {g.open > 0 && (

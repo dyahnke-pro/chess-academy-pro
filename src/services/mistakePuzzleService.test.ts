@@ -541,6 +541,20 @@ describe('mistakePuzzleService', () => {
       expect(updated?.status).toBe('mastered');
     });
 
+    it('counts SOLVED per distinct row: a found-after-a-miss stays unsolved, a re-solve adds nothing (walk 2026-10-03)', async () => {
+      // The walk: five "correct" solves read "2 solved". The first was found
+      // only after three wrong tries (the board resolves it as NOT correct, so
+      // it is graded `again`), and the rest re-solved rows already solved.
+      for (const id of ['w1', 'w2', 'w3', 'w4']) await db.mistakePuzzles.add(buildMistakePuzzle({ id }));
+      await gradeMistakePuzzle('w1', 'again', false); // found after 3 misses
+      await gradeMistakePuzzle('w2', 'good', true);
+      await gradeMistakePuzzle('w3', 'good', true);
+      await gradeMistakePuzzle('w2', 'good', true); // re-solve: same row
+      await gradeMistakePuzzle('w3', 'good', true); // re-solve: same row
+      const stats = await getMistakePuzzleStats();
+      expect(stats).toMatchObject({ total: 4, unsolved: 2, solved: 2, mastered: 0 });
+    });
+
     it('does nothing for non-existent puzzle', async () => {
       await gradeMistakePuzzle('nonexistent', 'good', true);
       // Should not throw

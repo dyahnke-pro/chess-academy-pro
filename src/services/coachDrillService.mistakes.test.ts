@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-import { buildMistakeDrillQueue, drillKeyOf, mistakePuzzleToDrill, hasImportedGames, summarizeWeaknesses, groupMistakesByWeakness, mistakeWeaknessKey } from './coachDrillService';
+import { buildMistakeDrillQueue, drillKeyOf, mistakePuzzleToDrill, hasImportedGames, summarizeWeaknesses, groupMistakesByWeakness, groupProgressLabel, mistakeWeaknessKey } from './coachDrillService';
 import type { MistakePuzzle, GameRecord } from '../types';
 
 /** Build a valid-enough MistakePuzzle for the fields the drill code
@@ -210,6 +210,21 @@ describe('groupMistakesByWeakness — the merged My Weaknesses page', () => {
     const [g] = groupMistakesByWeakness([plain]);
     expect(g.key.startsWith('tactic:')).toBe(false);
     expect(g.puzzles).toEqual([plain]);
+  });
+
+  it('counts each DISTINCT row by its status, and the label agrees with the header vocabulary', () => {
+    const rows = [
+      mk({ id: 'a', fen: FORK_A.fen, moves: 'g1f3', tacticType: 'fork', status: 'solved' }),
+      mk({ id: 'b', fen: FORK_A.fen, moves: 'g1f3', tacticType: 'fork', status: 'solved' }),
+      mk({ id: 'c', fen: FORK_A.fen, moves: 'g1f3', tacticType: 'fork', status: 'unsolved' }),
+      mk({ id: 'd', fen: FORK_A.fen, moves: 'g1f3', tacticType: 'fork', status: 'unsolved' }),
+    ];
+    const [g] = groupMistakesByWeakness(rows);
+    expect(g).toMatchObject({ open: 4, unsolved: 2, solved: 2, mastered: 0 });
+    expect(groupProgressLabel(g)).toBe('2 of 4 solved');
+    expect(groupProgressLabel({ ...g, unsolved: 4, solved: 0 })).toBe('4 unsolved');
+    expect(groupProgressLabel({ ...g, unsolved: 0, solved: 1, mastered: 3 })).toBe('4 of 4 solved · 3 mastered');
+    expect(groupProgressLabel({ ...g, unsolved: 0, solved: 0, mastered: 4 })).toBe('all mastered');
   });
 
   it('a tactic group carries the puzzle-corpus themes for "More like this"', () => {

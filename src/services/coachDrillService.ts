@@ -496,8 +496,32 @@ export interface WeaknessGroup {
   themes: string[];
   /** In the order given (callers pass their own sort). */
   puzzles: MistakePuzzle[];
-  /** Not yet mastered — what the group still costs. */
+  /** Not yet mastered — what the group still costs, and what Practice serves
+   *  (SRS keeps a SOLVED card in rotation until it masters out). */
   open: number;
+  /** The same three statuses the page header counts, per group, so the group
+   *  row and the header can never disagree (walk 2026-10-03: the header said
+   *  "2 solved" while the group row said "4 open" over the same four rows). */
+  unsolved: number;
+  solved: number;
+  mastered: number;
+}
+
+/**
+ * The group row's honest progress line, in the header's own vocabulary.
+ * Counted per DISTINCT row (`MistakePuzzle.status`), never per solve: re-solving
+ * a position already marked solved adds nothing, and a position found only
+ * after a wrong try is graded `again` by `gradeMistakePuzzle` and stays
+ * unsolved — the first answer is the evidence. So five correct solves can
+ * honestly read "2 of 4 solved".
+ */
+export function groupProgressLabel(g: Pick<WeaknessGroup, 'unsolved' | 'solved' | 'mastered' | 'puzzles'>): string {
+  const total = g.puzzles.length;
+  if (total > 0 && g.mastered === total) return 'all mastered';
+  const done = g.solved + g.mastered;
+  if (done === 0) return `${g.unsolved} unsolved`;
+  const masteredPart = g.mastered > 0 ? ` · ${g.mastered} mastered` : '';
+  return `${done} of ${total} solved${masteredPart}`;
 }
 
 /** Group mistakes by the ONE spine bucket (`bucketForMistake`, the same key
@@ -509,9 +533,14 @@ export function groupMistakesByWeakness(mistakes: readonly MistakePuzzle[]): Wea
   for (const mp of mistakes) {
     const b = bucketForMistake(mp);
     const key = b.clusterId.replace(/^analysis:/, '');
-    const g = groups.get(key) ?? { key, label: b.label, themes: b.themes, puzzles: [], open: 0 };
+    const g = groups.get(key) ?? {
+      key, label: b.label, themes: b.themes, puzzles: [], open: 0, unsolved: 0, solved: 0, mastered: 0,
+    };
     g.puzzles.push(mp);
     if (mp.status !== 'mastered') g.open += 1;
+    if (mp.status === 'unsolved') g.unsolved += 1;
+    else if (mp.status === 'solved') g.solved += 1;
+    else g.mastered += 1;
     groups.set(key, g);
   }
   return [...groups.values()].sort(

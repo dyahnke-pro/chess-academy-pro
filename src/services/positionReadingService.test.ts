@@ -22,6 +22,8 @@ import { findMinorityAttack,
   findPawnGrabs,
   findForcingCandidates,
   readingHint,
+  readingAnswerShape,
+  materialRead,
   findOpenFiles,
   computeSpace,
   pressureCount,
@@ -283,8 +285,18 @@ describe('buildReadingQuestions', () => {
     const qs = buildReadingQuestions('4k3/8/8/8/8/8/8/4K3 w - - 0 1', emptyTactics());
     const mat = qs.find((q) => q.type === 'material');
     expect(mat).toBeDefined();
-    expect(mat?.answer).toBe('Material is even');
+    expect(mat?.answer).toBe('Material is even — 0 points each.');
     expect(mat?.acceptTokens).toContain('even');
+  });
+
+  it('the material answer is a student sentence — no ALL-CAPS model markers (walk 2026-10-03)', () => {
+    const even = materialRead('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+    expect(even?.answer).toBe('Material is even — 39 points each.');
+    expect(even?.answer).not.toMatch(/EVEN|UP|DOWN/);
+    // White up a knight: the token is the side that LEADS, never the side behind.
+    const up = materialRead('4k3/8/8/8/8/8/8/1N2K3 w - - 0 1');
+    expect(up?.answer).toBe('White is ahead by 3 points (White 3, Black 0).');
+    expect(up?.tokens).toEqual(['white']);
   });
 
   it('asks a mate question when mateInOne is set, with the move as an accept token', () => {
@@ -731,9 +743,32 @@ describe('readingHint — progressive GROUNDED hint ladder (David 2026-06-28, ap
     expect(h).not.toContain('d5');
   });
 
-  it('a negative question hints toward "nothing" at tier 2 instead of a square', () => {
+  it('a negative question hints at tier 2 with a METHOD that does not give the verdict away (walk 2026-10-03)', () => {
     const negQ = buildReadingQuestions('4k3/8/8/8/8/8/8/4K3 w - - 0 1', emptyTactics()).find((q) => q.type === 'hanging' && q.negative)!;
-    expect(readingHint(negQ, 2)?.toLowerCase()).toContain('nothing');
+    const h = readingHint(negQ, 2)!.toLowerCase();
+    expect(h).not.toMatch(/nothing|don't force|no piece|is not hanging/);
+    expect(h).toMatch(/capture|exchange/);
+  });
+});
+
+describe('readingAnswerShape — an answer to a different question costs nothing', () => {
+  const materialQ = buildReadingQuestions('4k3/8/8/8/8/8/8/4K3 w - - 0 1', emptyTactics()).find((q) => q.type === 'material')!;
+
+  it('the walk\'s unrecognised answers get told what kind of answer is expected', () => {
+    for (const a of ['the bishop on g4 pins the knight', 'Qa4+', 'e4']) {
+      expect(readingAnswerShape(materialQ, a), a).toMatch(/who's ahead and by how much/);
+    }
+  });
+
+  it('a real material answer, right or wrong, goes to the grader', () => {
+    for (const a of ['White by 2', 'even', 'black is up a pawn', 'nobody', '3']) {
+      expect(readingAnswerShape(materialQ, a), a).toBeNull();
+    }
+  });
+
+  it('question types with no single answer form are never blocked', () => {
+    const hang = buildReadingQuestions('4k3/8/5n2/3Q4/4P3/8/8/4K3 w - - 0 1', emptyTactics()).find((q) => q.type === 'hanging')!;
+    expect(readingAnswerShape(hang, 'Qa4+')).toBeNull();
   });
 })
 

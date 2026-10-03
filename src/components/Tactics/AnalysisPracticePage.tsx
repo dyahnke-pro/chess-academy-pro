@@ -15,6 +15,7 @@ import {
   findMistakePositions,
   buildReadingQuestions,
   readingHint,
+  readingAnswerShape,
   type ReadingQuestion,
   type ReadingGrade,
   type SampledPosition,
@@ -163,6 +164,10 @@ export function AnalysisPracticePage(): JSX.Element {
   const [grade, setGrade] = useState<ReadingGrade | null>(null);
   const [grading, setGrading] = useState(false);
   const [hintTier, setHintTier] = useState(0);            // 0 = none, 1-3
+  // What the LAST submit got back, when it did not end the question. Every
+  // submitted answer shows something (walk 2026-10-03: two answers the grader
+  // could not read produced nothing at all, then a third read "Not quite").
+  const [feedback, setFeedback] = useState<{ tone: 'shape' | 'partial' | 'wrong'; text: string } | null>(null);
   // Where the ladder STARTS, per student (David 2026-07-03: all training aids
   // adaptive). `hintStartTier` was written for exactly this ladder and never
   // wired, so every student at every rating began at tier 1 — the vaguest rung.
@@ -183,7 +188,7 @@ export function AnalysisPracticePage(): JSX.Element {
   const question = position?.questions[qIndex] ?? null;
 
   const resetForQuestion = useCallback(() => {
-    setGrade(null); setAnswer(''); setHintTier(0); setSelectedSquare(null); setDemoFen(null);
+    setGrade(null); setAnswer(''); setHintTier(0); setSelectedSquare(null); setDemoFen(null); setFeedback(null);
     attemptsRef.current = 0;
   }, []);
 
@@ -271,9 +276,18 @@ export function AnalysisPracticePage(): JSX.Element {
   // through here (the answer key already carries acceptTokens for each mode).
   const gradeAnswer = useCallback(async (text: string) => {
     if (!question || grading || grade || demoing || !text.trim()) return;
+    // An answer to a DIFFERENT question ("Qa4+" to "who is ahead in material?")
+    // is not a wrong read: say what kind of answer fits, cost no attempt.
+    const shape = readingAnswerShape(question, text);
+    if (shape) {
+      setFeedback({ tone: 'shape', text: shape });
+      setSelectedSquare(null);
+      return;
+    }
     setGrading(true);
     const g = await gradeReadingAnswer(question, text);
     setGrading(false);
+    setFeedback(null);
     askedRef.current += 1;
     void recordReadingResult(question.type, g.verdict === 'correct');
     captureEvent('analysis_practice_answer', { questionType: question.type, verdict: g.verdict, hintTier });
@@ -306,6 +320,11 @@ export function AnalysisPracticePage(): JSX.Element {
     } else {
       setHintTier(Math.max(startTier, attemptsRef.current));
       setAnswer(''); setSelectedSquare(null);          // keep going
+      const left = 3 - attemptsRef.current;
+      const tries = `${left} ${left === 1 ? 'try' : 'tries'} left`;
+      setFeedback(g.verdict === 'partial'
+        ? { tone: 'partial', text: `Close — name the exact square or idea. ${tries}.` }
+        : { tone: 'wrong', text: `Not quite — try again. ${tries}.` });
     }
   }, [question, grading, grade, demoing, hintTier, playDemo, next, startTier, position, qIndex]);
 
@@ -478,6 +497,15 @@ export function AnalysisPracticePage(): JSX.Element {
                       ))}
                     </ol>
                   </div>
+                )}
+                {feedback && (
+                  <p
+                    className={`mb-3 text-sm font-semibold ${feedback.tone === 'wrong' ? 'text-red-500' : feedback.tone === 'partial' ? 'text-amber-500' : 'text-theme-text-muted'}`}
+                    data-testid="analysis-practice-feedback"
+                    data-tone={feedback.tone}
+                  >
+                    {feedback.text}
+                  </p>
                 )}
                 <div className="flex gap-2">
                   <textarea

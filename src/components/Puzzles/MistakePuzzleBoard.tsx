@@ -27,6 +27,7 @@ import { detectTacticType } from '../../services/missedTacticService';
 import { usePuzzleMeter } from '../../hooks/usePuzzleMeter';
 import { getCoachingMessage, recordTacticOutcome, tacticTypeLabel } from '../../services/tacticAlertService';
 import { recordCapabilityEvidence } from '../../services/capabilityEvidence';
+import { logAppAudit } from '../../services/appAuditor';
 import type { CoachingTier } from '../../services/tacticAlertService';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MistakePuzzle, MistakeClassification } from '../../types';
@@ -190,12 +191,6 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   const [boardKey, setBoardKey] = useState(0);
   const hasMadeMistakeRef = useRef(false);
   const wrongAttemptsRef = useRef(0);
-  // Did the student tap [show me] on THIS puzzle? A move found after the answer
-  // was revealed is not evidence of unaided skill — it is `prompted` on the
-  // capability record, which the profile counts as neither held nor broken.
-  // A ref, not hintState.level: `resetHints()` zeroes the level on the very
-  // move that solves the puzzle, so by the solve moment the level is gone.
-  const showMeUsedRef = useRef(false);
   // TOLD BEFORE ANSWERING? Only that makes a row `prompted`. [show me] AFTER
   // a wrong first answer used to mark the row prompted too, which the profile
   // skips — so the failure the student had already made was erased from the
@@ -405,7 +400,6 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     setSubtitle('');
     hasMadeMistakeRef.current = false;
     wrongAttemptsRef.current = 0;
-    showMeUsedRef.current = false;
     answeredRef.current = false;
     toldBeforeAnswerRef.current = false;
     setWrongAttemptCount(0);
@@ -752,6 +746,31 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
 
     const isCorrect = move.from === expected.from && move.to === expected.to && (!expected.promotion || move.promotion === expected.promotion);
     answeredRef.current = true;
+
+    // Every move input, right or wrong, lands a `move-attempt` row — the SAME
+    // shape PuzzleBoard emits (capability parity: a game-mistake drill is a
+    // puzzle too, and it emitted nothing, so the per-move record and the
+    // hint-effectiveness join were blind on My Weaknesses). The board BEFORE
+    // the attempt: the ref already carries the student's move.
+    const fenBeforeAttempt = chessRef.current.history({ verbose: true }).at(-1)?.before ?? fen;
+    void logAppAudit({
+      kind: 'move-attempt',
+      category: 'subsystem',
+      source: 'MistakePuzzleBoard.handleMove',
+      summary: `${isCorrect ? '✓' : '✗'} ${move.san} (expected ${expected.from}${expected.to})`,
+      details: JSON.stringify({
+        surface: 'mistake-puzzle',
+        fen: fenBeforeAttempt,
+        attemptedSan: move.san,
+        correctSan: `${expected.from}${expected.to}${expected.promotion ?? ''}`,
+        isCorrect,
+        moveMethod: 'unknown',
+        timeFromPositionEnterMs: Math.round(elapsedStartRef.current != null ? performance.now() - elapsedStartRef.current : elapsedMs),
+        sourceId: puzzle.id,
+        tacticType,
+      }),
+      fen: fenBeforeAttempt,
+    });
 
     if (isCorrect) {
       playMoveSound(move.san);
@@ -1200,7 +1219,9 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
         <div className="flex flex-col items-start gap-2" data-testid="puzzle-hint-area">
           <ShowMeButton
             onShow={() => {
-              showMeUsedRef.current = true;
+              // Told before answering -> the solve is `prompted` (refs, not
+              // hintState.level: `resetHints()` zeroes the level on the very
+              // move that solves). Told after a miss -> the miss stands.
               if (!answeredRef.current) toldBeforeAnswerRef.current = true;
               // Skip the hint ladder — jump straight to tier 3 (best
               // move arrow + final answer). requestHint() bumps one

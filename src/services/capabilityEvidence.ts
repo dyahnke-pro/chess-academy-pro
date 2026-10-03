@@ -450,6 +450,17 @@ export async function getCapabilityProfile(): Promise<CapabilityProfile> {
  *  Emitted at the I/O DOOR, not inside `summariseEvidence`: that one is pure
  *  and is swept by the calibration test hundreds of times, which would turn a
  *  measurement into a write storm. */
+/** An unchanged heat map is reported once per window, not once per read
+ *  (walk 2026-10-03: one My Weaknesses visit read the profile 16 times and
+ *  wrote 16 identical rows). A CHANGED map always emits — that is the signal. */
+export const HEAT_MAP_REPEAT_WINDOW_MS = 5000;
+let lastHeatMap: { details: string; at: number } | null = null;
+
+/** Test seam: forget the last emitted map. */
+export function resetHeatMapReportForTests(): void {
+  lastHeatMap = null;
+}
+
 function reportHeatMap(profile: CapabilityProfile): void {
   if (profile.size === 0) return;      // nothing recorded — not a heat map yet
   let proven = 0;
@@ -472,20 +483,24 @@ function reportHeatMap(profile: CapabilityProfile): void {
     if (isProven && e.broken > 0) recovered += 1;
     if (!isProven && e.broken > 0) currentlyRed += 1;
   }
+  const details = JSON.stringify({
+    tags: profile.size,
+    proven,
+    red,
+    recovered,
+    currentlyRed,
+    bar: { minStreak: HELD_FOR_PROVEN, minGames: PROVEN_MIN_GAMES, minImportance: PROVEN_MIN_IMPORTANCE },
+    byTag: [...profile].map(([tag, e]) => ({ tag, held: e.held, broken: e.broken, heldStreak: e.heldStreak, streakGames: e.streakGames, proven: capabilityProven(e) })),
+  });
+  const now = Date.now();
+  if (lastHeatMap && lastHeatMap.details === details && now - lastHeatMap.at < HEAT_MAP_REPEAT_WINDOW_MS) return;
+  lastHeatMap = { details, at: now };
   void logAppAudit({
     kind: 'capability-heat-map',
     category: 'subsystem',
     source: 'capabilityEvidence.getCapabilityProfile',
     summary: `${profile.size} tags with evidence — ${proven} PROVEN (${recovered} RECOVERED after a break), ${currentlyRed} currently red`,
-    details: JSON.stringify({
-      tags: profile.size,
-      proven,
-      red,
-      recovered,
-      currentlyRed,
-      bar: { minStreak: HELD_FOR_PROVEN, minGames: PROVEN_MIN_GAMES, minImportance: PROVEN_MIN_IMPORTANCE },
-      byTag: [...profile].map(([tag, e]) => ({ tag, held: e.held, broken: e.broken, heldStreak: e.heldStreak, streakGames: e.streakGames, proven: capabilityProven(e) })),
-    }),
+    details,
   });
 }
 

@@ -128,6 +128,23 @@ describe('MyMistakesPage', () => {
     expect(screen.getByText('1 mastered')).toBeInTheDocument();
   });
 
+  it('a group row counts solved positions as solved, agreeing with the header (walk 2026-10-03)', async () => {
+    // Header said "2 solved" while the group row said "4 open" over the same
+    // rows — a solved position was counted as open.
+    setMockData([
+      buildMistakePuzzle({ id: 'f1', tacticType: 'fork', gamePhase: 'middlegame', status: 'solved' }),
+      buildMistakePuzzle({ id: 'f2', tacticType: 'fork', gamePhase: 'middlegame', status: 'solved' }),
+      buildMistakePuzzle({ id: 'f3', tacticType: 'fork', gamePhase: 'middlegame', status: 'unsolved' }),
+      buildMistakePuzzle({ id: 'f4', tacticType: 'fork', gamePhase: 'middlegame', status: 'unsolved' }),
+    ]);
+    render(<MyMistakesPage />);
+    await waitFor(() => expect(screen.getByTestId('weakness-groups')).toBeInTheDocument());
+    const row = screen.getByTestId('weakness-group-progress-tactic:fork');
+    expect(row).toHaveTextContent('2 of 4 solved');
+    expect(row).not.toHaveTextContent('4 open');
+    expect(screen.getByText('2 solved')).toBeInTheDocument();
+  });
+
   it('groups positions by weakness, worst first; opening a group lists exactly its positions', async () => {
     setMockData([
       buildMistakePuzzle({ id: 'f1', tacticType: 'fork', gamePhase: 'middlegame', moveNumber: 11 }),
@@ -150,7 +167,7 @@ describe('MyMistakesPage', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('puzzle-card')).toHaveLength(3);
     });
-    expect(screen.getByTestId('weakness-group-open')).toHaveTextContent('3 open');
+    expect(screen.getByTestId('weakness-group-open')).toHaveTextContent('3 unsolved');
     expect(screen.getByTestId('weakness-group-more')).toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId('weakness-group-back'));
