@@ -82,6 +82,8 @@ vi.mock('../../services/tacticNarrationService', () => ({
   setupPrepPlanted: (): string => 'Now calculate the tactic.',
   setupRevealComplete: (): string => 'Tactic revealed!',
   setupIncorrect: (): string => 'Not quite right.',
+  setupHintIdea: (): string => 'Look for the idea.',
+  setupHintPiece: (): string => 'Your knight moves.',
 }));
 
 vi.mock('../../services/tacticalProfileService', () => ({
@@ -104,7 +106,7 @@ describe('TacticSetupBoard', () => {
 
   it('renders the board with status message', () => {
     const puzzle = buildSetupPuzzle();
-    render(<TacticSetupBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<TacticSetupBoard puzzle={puzzle} sequence={0} onComplete={vi.fn()} />);
 
     expect(screen.getByTestId('setup-board')).toBeInTheDocument();
     expect(screen.getByText('Find the quiet setup move')).toBeInTheDocument();
@@ -112,7 +114,7 @@ describe('TacticSetupBoard', () => {
 
   it('shows hint button when showHints is enabled', () => {
     const puzzle = buildSetupPuzzle();
-    render(<TacticSetupBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<TacticSetupBoard puzzle={puzzle} sequence={0} onComplete={vi.fn()} />);
 
     expect(screen.getByTestId('setup-hint-area')).toBeInTheDocument();
     expect(screen.getByTestId('hint-button')).toBeInTheDocument();
@@ -122,57 +124,56 @@ describe('TacticSetupBoard', () => {
   it('hides hint button when showHints is disabled', () => {
     mockSettings.showHints = false;
     const puzzle = buildSetupPuzzle();
-    render(<TacticSetupBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<TacticSetupBoard puzzle={puzzle} sequence={0} onComplete={vi.fn()} />);
 
     expect(screen.queryByTestId('setup-hint-area')).not.toBeInTheDocument();
     expect(screen.queryByTestId('hint-button')).not.toBeInTheDocument();
   });
 
-  it('jumps straight to the full answer (tier 3) on the first tap', async () => {
-    // One-tap hint design (David 2026-05-26: "All hint sources I want to
-    // just show the answer on first press") — no incremental 0→1→2
-    // ladder; the first click jumps to Tier 3.
+  it('climbs the ladder one tier per tap — the answer only on the third (hand walk 2026-10-03)', async () => {
+    // The first tap used to hand over the whole move. The Setup Trainer's
+    // hint is graduated: idea → piece → move (TacticSetupBoard.ladder.test).
     const puzzle = buildSetupPuzzle();
-    render(<TacticSetupBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<TacticSetupBoard puzzle={puzzle} sequence={0} onComplete={vi.fn()} />);
 
     const hintButton = screen.getByTestId('hint-button');
     expect(hintButton).toHaveAttribute('data-level', '0');
 
-    fireEvent.click(hintButton);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '3');
-    });
+    fireEvent.click(screen.getByTestId('hint-button'));
+    expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '1');
+    fireEvent.click(screen.getByTestId('hint-button'));
+    expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '2');
+    fireEvent.click(screen.getByTestId('hint-button'));
+    expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '3');
   });
 
-  it('shows nudge text after the one-tap full-answer hint', async () => {
+  it('shows the computed answer nudge once the third tier resolves', async () => {
     const puzzle = buildSetupPuzzle();
-    render(<TacticSetupBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<TacticSetupBoard puzzle={puzzle} sequence={0} onComplete={vi.fn()} />);
 
-    const hintButton = screen.getByTestId('hint-button');
+    fireEvent.click(screen.getByTestId('hint-button'));
+    expect(screen.getByTestId('hint-nudge')).toHaveTextContent('Look for the idea.');
+    fireEvent.click(screen.getByTestId('hint-button'));
+    expect(screen.getByTestId('hint-nudge')).toHaveTextContent('Your knight moves.');
+    fireEvent.click(screen.getByTestId('hint-button'));
 
-    // One tap → Tier 3; the async brain call then populates the nudge.
-    fireEvent.click(hintButton);
+    // Tier 3 = the shared one-tap answer (engine-computed, no LLM).
     await waitFor(() => {
-      expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '3');
-    });
-
-    // Nudge text should appear once the brain call resolves.
-    await waitFor(() => {
-      expect(screen.getByTestId('hint-nudge')).toBeInTheDocument();
+      expect(screen.getByTestId('hint-nudge')).toHaveAttribute('data-tier', '3');
+      expect(screen.getByTestId('hint-nudge').textContent).not.toBe('Your knight moves.');
     });
   });
 
   it('speaks intro narration on mount', () => {
     const puzzle = buildSetupPuzzle();
-    render(<TacticSetupBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<TacticSetupBoard puzzle={puzzle} sequence={0} onComplete={vi.fn()} />);
 
     expect(mockSpeak).toHaveBeenCalledWith('Find the setup move.');
   });
 
   it('shows move indicator for player turn', () => {
     const puzzle = buildSetupPuzzle({ difficulty: 1 });
-    render(<TacticSetupBoard puzzle={puzzle} onComplete={vi.fn()} />);
+    render(<TacticSetupBoard puzzle={puzzle} sequence={0} onComplete={vi.fn()} />);
 
     expect(screen.getByText(/find the quiet move that sets up the/)).toBeInTheDocument();
   });
@@ -183,7 +184,7 @@ describe('TacticSetupBoard', () => {
   it('Show Solution plays the line out and completes as a miss', async () => {
     const puzzle = buildSetupPuzzle();
     const onComplete = vi.fn();
-    render(<TacticSetupBoard puzzle={puzzle} onComplete={onComplete} />);
+    render(<TacticSetupBoard puzzle={puzzle} sequence={0} onComplete={onComplete} />);
     fireEvent.click(screen.getByTestId('setup-show-solution'));
     await waitFor(() => expect(onComplete).toHaveBeenCalledWith(false), { timeout: 8000 });
     expect(onComplete).toHaveBeenCalledTimes(1);

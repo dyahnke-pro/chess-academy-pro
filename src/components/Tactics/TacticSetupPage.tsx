@@ -21,6 +21,11 @@ import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
 type Phase = 'select' | 'loading' | 'solving' | 'summary';
 
+/** WHY the summary is showing — each has its own honest message. Before this,
+ *  tapping End session with zero attempts printed "No setup positions found",
+ *  which only a null pick can truthfully say (hand walk 2026-10-03). */
+export type SummaryReason = 'none-found' | 'ended' | 'complete';
+
 const SESSION_LENGTH = 10;
 
 const DIFFICULTIES: Array<{ value: SetupPuzzleDifficulty; label: string; description: string }> = [
@@ -36,6 +41,7 @@ export function TacticSetupPage(): JSX.Element {
 
   const [phase, setPhase] = useState<Phase>('select');
   const [item, setItem] = useState<SetupTrainerItem | null>(null);
+  const [summaryReason, setSummaryReason] = useState<SummaryReason>('complete');
   const [displayRating, setDisplayRating] = useState<number>(activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING);
   const sessionRef = useRef<SetupAdaptiveSession | null>(null);
   const completedRef = useRef(false);
@@ -60,6 +66,7 @@ export function TacticSetupPage(): JSX.Element {
     const first = await pickSetupPuzzle(session);
     if (!first) {
       setItem(null);
+      setSummaryReason('none-found');
       setPhase('summary');
       return;
     }
@@ -94,12 +101,14 @@ export function TacticSetupPage(): JSX.Element {
     }
 
     if (nextSession.attempted >= SESSION_LENGTH) {
+      setSummaryReason('complete');
       setPhase('summary');
       return;
     }
 
     const next = await pickSetupPuzzle(nextSession);
     if (!next) {
+      setSummaryReason('none-found');
       setPhase('summary');
       return;
     }
@@ -112,7 +121,15 @@ export function TacticSetupPage(): JSX.Element {
   const attempted = session?.attempted ?? 0;
 
   return (
-    <div className="max-w-2xl mx-auto w-full p-4 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 flex flex-col gap-4 min-h-[80vh]">
+    // SCROLLS (hand walk 2026-10-03): the root used to be a fixed box with
+    // min-h-[80vh] inside an overflow-hidden main, so on a 390x664 phone the
+    // board pushed Show Solution / End session out of reach. Same scroller as
+    // the sibling Tactics pages; the max-w-2xl column is the inner wrapper.
+    <div
+      className="flex flex-col gap-4 p-4 flex-1 min-h-0 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6"
+      data-testid="setup-trainer-page"
+    >
+      <div className="max-w-2xl mx-auto w-full flex flex-col gap-4 flex-1">
       {/* Header */}
       <div className="flex items-center gap-3">
         <button onClick={() => void navigate('/tactics')} className="p-2 rounded-lg hover:opacity-80" data-testid="back-btn">
@@ -210,6 +227,7 @@ export function TacticSetupPage(): JSX.Element {
             {/* Board */}
             <TacticSetupBoard
               puzzle={item.puzzle}
+              sequence={attempted}
               onComplete={(correct) => void handleComplete(correct)}
             />
 
@@ -217,7 +235,7 @@ export function TacticSetupPage(): JSX.Element {
             <div className="flex justify-center gap-6 text-sm" style={{ color: 'var(--color-text-muted)' }}>
               <span style={{ color: 'var(--color-success)' }}>{solved} solved</span>
               <span style={{ color: 'var(--color-error)' }}>{attempted - solved} missed</span>
-              <button onClick={() => setPhase('summary')} className="underline opacity-70 hover:opacity-100" data-testid="end-session">
+              <button onClick={() => { setSummaryReason('ended'); setPhase('summary'); }} className="underline opacity-70 hover:opacity-100" data-testid="end-session">
                 End session
               </button>
             </div>
@@ -235,20 +253,30 @@ export function TacticSetupPage(): JSX.Element {
         >
           <Wrench size={40} style={{ color: 'var(--color-success)' }} />
           <div className="text-center">
-            <h2 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>Setup Training Complete</h2>
-            {attempted > 0 ? (
-              <p className="text-lg mt-2" style={{ color: 'var(--color-text-muted)' }}>
+            <h2 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
+              {summaryReason === 'ended' ? 'Session Ended' : 'Setup Training Complete'}
+            </h2>
+            {attempted > 0 && (
+              <p className="text-lg mt-2" style={{ color: 'var(--color-text-muted)' }} data-testid="summary-score">
                 {solved}/{attempted} setups calculated ({Math.round((solved / attempted) * 100)}%)
               </p>
-            ) : (
-              <p className="text-sm mt-2" style={{ color: 'var(--color-text-muted)' }}>
-                No setup positions found at that depth right now. Try another level.
+            )}
+            {summaryReason === 'none-found' && (
+              <p className="text-sm mt-2" style={{ color: 'var(--color-text-muted)' }} data-testid="summary-none-found">
+                {attempted > 0
+                  ? 'No more setup positions at that depth right now. Try another level.'
+                  : 'No setup positions found at that depth right now. Try another level.'}
+              </p>
+            )}
+            {summaryReason === 'ended' && attempted === 0 && (
+              <p className="text-sm mt-2" style={{ color: 'var(--color-text-muted)' }} data-testid="summary-ended">
+                Session ended before any setup was attempted.
               </p>
             )}
           </div>
           <div className="flex gap-3">
             <button
-              onClick={() => { sessionRef.current = null; setItem(null); setPhase('select'); }}
+              onClick={() => { sessionRef.current = null; setItem(null); setSummaryReason('complete'); setPhase('select'); }}
               className="px-6 py-3 rounded-xl font-semibold text-sm"
               style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
               data-testid="play-again"
@@ -265,6 +293,7 @@ export function TacticSetupPage(): JSX.Element {
           </div>
         </motion.div>
       )}
+      </div>
     </div>
   );
 }

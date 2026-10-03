@@ -11,8 +11,11 @@ import { useAppStore } from '../../stores/appStore';
 import type { MoveResult } from '../../hooks/useChessGame';
 import { tacticTypeLabel } from '../../services/tacticalProfileService';
 import { voiceService } from '../../services/voiceService';
-import { setupIntro, setupPrepPlanted, setupRevealComplete, setupIncorrect } from '../../services/tacticNarrationService';
+import { setupIntro, setupPrepPlanted, setupRevealComplete, setupIncorrect, setupHintIdea, setupHintPiece } from '../../services/tacticNarrationService';
 import { describeMoveGeometry } from '../../services/groundedAnswer';
+import { recordCapabilityEvidence } from '../../services/capabilityEvidence';
+import { MISTAKE_CP } from '../../services/engineConstants';
+import type { HintLevel } from '../../types';
 import { recordTacticOutcome } from '../../services/tacticAlertService';
 import { reward } from '../../services/rewardService';
 import { rewardSeed } from '../../services/rewardEvents';
@@ -24,8 +27,20 @@ type BoardState = 'thinking' | 'incorrect' | 'solved' | 'revealing';
 
 interface TacticSetupBoardProps {
   puzzle: SetupPuzzle;
+  /** This puzzle's place in the session (0, 1, 2…). Keys the intro's stem
+   *  rotation so two same-theme puzzles back to back never speak the identical
+   *  line (which the say-once ledger would swallow). Required: a new caller
+   *  must decide what is stable about the moment. */
+  sequence: number;
   onComplete: (correct: boolean) => void;
 }
+
+const PIECE_WORDS: Record<string, string> = {
+  p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
+};
+
+/** Tier-2 highlight on the square of the piece that moves. */
+const HINT_PIECE_HIGHLIGHT = 'rgba(255, 255, 0, 0.45)';
 
 function parseUciMove(uci: string): { from: string; to: string; promotion?: string } {
   return {
@@ -45,7 +60,7 @@ function parseUciMove(uci: string): { from: string; to: string; promotion?: stri
  * plays even indices, the opponent auto-plays odd indices. Lichess lines
  * always end on the solver's decisive move, so the student plays the last move.
  */
-export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps): JSX.Element {
+export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBoardProps): JSX.Element {
   const chessRef = useRef(new Chess(puzzle.setupFen));
   const [fen, setFen] = useState(puzzle.setupFen);
   const [boardState, setBoardState] = useState<BoardState>('thinking');
@@ -60,6 +75,18 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
 
   const [wrongAttemptCount, setWrongAttemptCount] = useState(0);
   const wrongAttemptsRef = useRef(0);
+
+  /** THE HINT LADDER (hand walk 2026-10-03: one tap handed over the move).
+   *  1 = the idea, 2 = the piece (its square lit), 3 = the move + arrow + why.
+   *  Per student move: resets when a correct move lands. */
+  const [hintTier, setHintTier] = useState<HintLevel>(0);
+  const [ladderText, setLadderText] = useState<string | null>(null);
+  const [ladderSquare, setLadderSquare] = useState<string | null>(null);
+  /** Any hint tier or Show Solution before the first answer → the answer is
+   *  PROMPTED (being told is not proving — capabilityEvidence.prompted). */
+  const promptedRef = useRef(false);
+  /** The first answer of this puzzle has been recorded (held or broken). */
+  const answeredRef = useRef(false);
 
   const line = useMemo(() => puzzle.solutionMoves.split(' ').filter(Boolean), [puzzle.solutionMoves]);
   const totalSolverMoves = Math.ceil(line.length / 2);
@@ -141,16 +168,59 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
     knownMove,
   });
 
+  const clearLadder = useCallback((): void => {
+    setHintTier(0);
+    setLadderText(null);
+    setLadderSquare(null);
+    resetHints();
+  }, [resetHints]);
+
+  // The graduated hint: idea → piece → move. Tiers 1-2 are computed here from
+  // the puzzle's tactic type and the board; tier 3 is the shared one-tap
+  // answer (move + arrow + grounded why) from useHintSystem. No LLM anywhere.
+  const handleHint = useCallback((): void => {
+    if (!knownMove || hintTier >= 3) return;
+    if (!answeredRef.current) promptedRef.current = true;
+    const next = (hintTier + 1) as HintLevel;
+    const isSetupMove = moveIndex === 0;
+    setHintTier(next);
+    if (next === 1) {
+      const text = setupHintIdea(puzzle.tacticType, isSetupMove);
+      setLadderText(text);
+      voiceService.stop();
+      void voiceService.speak(text);
+      return;
+    }
+    if (next === 2) {
+      let pieceName: string | null = null;
+      try {
+        const p = new Chess(fen).get(knownMove.from as Parameters<Chess['get']>[0]);
+        pieceName = p ? PIECE_WORDS[p.type] ?? null : null;
+      } catch { /* the highlight still points at the square */ }
+      const text = setupHintPiece(puzzle.tacticType, pieceName, isSetupMove);
+      setLadderText(text);
+      setLadderSquare(knownMove.from);
+      voiceService.stop();
+      void voiceService.speak(text);
+      return;
+    }
+    setLadderText(null);
+    setLadderSquare(null);
+    requestHint();
+  }, [knownMove, hintTier, moveIndex, puzzle.tacticType, fen, requestHint]);
+
   // Narrate intro on mount and reset hints/struggle
   useEffect(() => {
-    resetHints();
+    clearLadder();
     resetStruggle();
     wrongAttemptsRef.current = 0;
     setWrongAttemptCount(0);
-    const intro = setupIntro(puzzle.tacticType, puzzle.difficulty);
+    promptedRef.current = false;
+    answeredRef.current = false;
+    const intro = setupIntro(puzzle.tacticType, puzzle.difficulty, sequence);
     void voiceService.speak(intro);
     return () => { voiceService.stop(); };
-  }, [resetHints, resetStruggle]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [clearLadder, resetStruggle]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Auto-play opponent responses (odd indices in the line)
   useEffect(() => {
@@ -188,7 +258,7 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
     recordTacticOutcome({
       tacticType: puzzle.tacticType,
       found: true,
-      wasCoached: wrongAttemptsRef.current > 0,
+      wasCoached: wrongAttemptsRef.current > 0 || promptedRef.current,
       context: 'setup',
     });
     const counted = wrongAttemptsRef.current < MAX_WRONG_ATTEMPTS;
@@ -201,14 +271,28 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
     const expectedMove = line[moveIndex];
     if (!expectedMove) return;
     const expected = parseUciMove(expectedMove);
+    const fenBeforeAttempt = chessRef.current.fen();
 
-    if (move.from === expected.from && move.to === expected.to) {
+    // CLOSE THE RECORD — the same one call PuzzleBoard makes (2026-10-01):
+    // the FIRST answer of the puzzle feeds capabilityEvidence, which owns the
+    // board→tag mapping. A hint or Show Solution before it marks it prompted.
+    const firstAnswer = !answeredRef.current;
+    answeredRef.current = true;
+    const isCorrect = move.from === expected.from && move.to === expected.to;
+    if (firstAnswer && isCorrect) {
+      void recordCapabilityEvidence({
+        fenBefore: fenBeforeAttempt, playedSan: move.san, moverColor: orientation,
+        cpLoss: 0, origin: 'puzzle', prompted: promptedRef.current,
+      });
+    }
+
+    if (isCorrect) {
       try {
         chessRef.current.move({ from: move.from, to: move.to, promotion: move.promotion });
       } catch {
         chessRef.current.move({ from: expected.from, to: expected.to, promotion: expected.promotion });
       }
-      resetHints();
+      clearLadder();
       setFen(chessRef.current.fen());
       const wasFirstMove = moveIndex === 0;
       const nextIndex = moveIndex + 1;
@@ -246,9 +330,19 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
     // fallback when nothing is computed (a quiet wrong setup often loses
     // nothing — it just does not set the tactic up).
     const puzzleAtTry = puzzle.id;
-    const fenBefore = chessRef.current.fen();
+    const fenBefore = fenBeforeAttempt;
+    const promptedAtTry = promptedRef.current;
     void (async () => {
       const r = await refuteTry(fenBefore, move.san);
+      // A first answer that is genuinely wrong breaks the capability; one that
+      // keeps an edge (`not-best`) is not a failure and is not recorded — the
+      // same honesty gate PuzzleBoard applies to an also-good try.
+      if (firstAnswer && r?.kind !== 'not-best') {
+        void recordCapabilityEvidence({
+          fenBefore, playedSan: move.san, moverColor: orientation,
+          cpLoss: MISTAKE_CP, origin: 'puzzle', prompted: promptedAtTry,
+        });
+      }
       if (puzzleIdRef.current !== puzzleAtTry) return;
       const wrongMsg = r?.text ?? setupIncorrect();
       setMessage(wrongMsg);
@@ -264,7 +358,7 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
       clearWrongArrows();
       setBoardState('thinking');
     })();
-  }, [boardState, isPlayerTurn, moveIndex, line, puzzle.tacticType, puzzle.id, finishSolved, resetHints, refuteTry, clearWrongArrows]);
+  }, [boardState, isPlayerTurn, moveIndex, line, puzzle.tacticType, puzzle.id, finishSolved, clearLadder, refuteTry, clearWrongArrows, orientation]);
 
   // Show Solution: play the rest of the line on the board, then count it as
   // missed — the fail path this trainer lacked (a student who could not find
@@ -272,6 +366,9 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
   const handleShowSolution = useCallback((): void => {
     if (hasCompleted.current || boardState === 'solved') return;
     hasCompleted.current = true;
+    if (!answeredRef.current) promptedRef.current = true;
+    setLadderText(null);
+    setLadderSquare(null);
     voiceService.stop();
     clearWrongArrows();
     setBoardState('revealing');
@@ -332,6 +429,7 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
           onMove={handleMove}
           arrows={wrongTry.arrows.length > 0 ? wrongTry.arrows : hintState.arrows.length > 0 ? hintState.arrows : undefined}
           ghostMove={hintState.ghostMove}
+          annotationHighlights={ladderSquare ? [{ square: ladderSquare, color: HINT_PIECE_HIGHLIGHT }] : undefined}
         />
       </div>
 
@@ -339,13 +437,13 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
       {boardState === 'thinking' && isPlayerTurn && settings.showHints && (
         <div className="flex flex-col items-start gap-2" data-testid="setup-hint-area">
           <HintButton
-            currentLevel={hintState.level}
-            onRequestHint={requestHint}
+            currentLevel={hintTier}
+            onRequestHint={handleHint}
             disabled={hintState.isAnalyzing}
           />
-          {hintState.nudgeText && (
-            <p className="text-xs text-amber-500 max-w-sm" data-testid="hint-nudge">
-              {hintState.nudgeText}
+          {(hintTier >= 3 ? hintState.nudgeText : ladderText) && (
+            <p className="text-xs text-amber-500 max-w-sm" data-testid="hint-nudge" data-tier={hintTier}>
+              {hintTier >= 3 ? hintState.nudgeText : ladderText}
             </p>
           )}
         </div>
