@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**507 lines · 4 exports · 6 importers · 4 tests · 0 audits**
+**538 lines · 4 exports · 7 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,6 +18,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewWalk900.test.ts`
 - `src/services/reviewWalkCT.test.ts`
 - `src/services/reviewWalkOct1.test.ts`
+- `src/services/reviewWalkOct3b.test.ts`
 
 ## Exports and every call site
 
@@ -30,39 +31,42 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `SPACE_RULE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `detectConcept` (function) — 32 call sites
-- `src/services/coachFeatureService.ts:4574`
-- `src/services/reviewConcepts.test.ts:23`
-- `src/services/reviewConcepts.test.ts:26`
-- `src/services/reviewConcepts.test.ts:34`
-- `src/services/reviewConcepts.test.ts:40`
-- `src/services/reviewConcepts.test.ts:45`
+### `detectConcept` (function) — 35 call sites
+- `src/services/coachFeatureService.ts:4593`
+- `src/services/reviewConcepts.test.ts:24`
+- `src/services/reviewConcepts.test.ts:27`
+- `src/services/reviewConcepts.test.ts:35`
+- `src/services/reviewConcepts.test.ts:41`
 - `src/services/reviewConcepts.test.ts:46`
-- `src/services/reviewConcepts.test.ts:60`
-- `src/services/reviewConcepts.test.ts:67`
-- `src/services/reviewConcepts.test.ts:75`
-- `src/services/reviewConcepts.test.ts:83`
-- `src/services/reviewConcepts.test.ts:95`
-- `src/services/reviewConcepts.test.ts:102`
-- `src/services/reviewConcepts.test.ts:111`
-- `src/services/reviewConcepts.test.ts:120`
-- `src/services/reviewConcepts.test.ts:127`
-- `src/services/reviewConcepts.test.ts:134`
-- `src/services/reviewConcepts.test.ts:141`
-- `src/services/reviewConcepts.test.ts:149`
-- `src/services/reviewConcepts.test.ts:156`
-- `src/services/reviewConcepts.test.ts:162`
-- `src/services/reviewConcepts.test.ts:169`
-- `src/services/reviewConcepts.test.ts:180`
-- `src/services/reviewConcepts.test.ts:189`
-- `src/services/reviewConcepts.test.ts:198`
-- `src/services/reviewConcepts.test.ts:204`
-- `src/services/reviewConcepts.test.ts:210`
-- `src/services/reviewConcepts.test.ts:216`
+- `src/services/reviewConcepts.test.ts:47`
+- `src/services/reviewConcepts.test.ts:61`
+- `src/services/reviewConcepts.test.ts:68`
+- `src/services/reviewConcepts.test.ts:76`
+- `src/services/reviewConcepts.test.ts:84`
+- `src/services/reviewConcepts.test.ts:96`
+- `src/services/reviewConcepts.test.ts:103`
+- `src/services/reviewConcepts.test.ts:112`
+- `src/services/reviewConcepts.test.ts:121`
+- `src/services/reviewConcepts.test.ts:128`
+- `src/services/reviewConcepts.test.ts:135`
+- `src/services/reviewConcepts.test.ts:142`
+- `src/services/reviewConcepts.test.ts:150`
+- `src/services/reviewConcepts.test.ts:157`
+- `src/services/reviewConcepts.test.ts:163`
+- `src/services/reviewConcepts.test.ts:170`
+- `src/services/reviewConcepts.test.ts:181`
+- `src/services/reviewConcepts.test.ts:190`
+- `src/services/reviewConcepts.test.ts:199`
+- `src/services/reviewConcepts.test.ts:205`
+- `src/services/reviewConcepts.test.ts:211`
+- `src/services/reviewConcepts.test.ts:217`
 - `src/services/reviewWalk900.test.ts:25`
 - `src/services/reviewWalkCT.test.ts:14`
 - `src/services/reviewWalkCT.test.ts:20`
 - `src/services/reviewWalkOct1.test.ts:21`
+- `src/services/reviewWalkOct3b.test.ts:17`
+- `src/services/reviewWalkOct3b.test.ts:23`
+- `src/services/reviewWalkOct3b.test.ts:30`
 
 ## Tests
 
@@ -70,6 +74,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewWalk900.test.ts`
 - `src/services/reviewWalkCT.test.ts`
 - `src/services/reviewWalkOct1.test.ts`
+- `src/services/reviewWalkOct3b.test.ts`
 
 ## Audits that reach it
 

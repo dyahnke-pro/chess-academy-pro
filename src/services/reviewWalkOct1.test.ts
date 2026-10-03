@@ -18,7 +18,7 @@ describe('Review walk 2026-10-01', () => {
 
   it('a rook sliding down a file it already stood on did not "swing onto" it (ply 64 R8a3)', () => {
     expect(sans[63]).toBe('R8a3');
-    const beat = detectConcept({ fenBefore: fenAt(63), fenAfter: fenAt(64), san: 'R8a3', moverColor: 'b', evalBefore: -500, evalAfter: -500, studentColor: 'b' });
+    const beat = detectConcept({ fenBefore: fenAt(63), fenAfter: fenAt(64), san: 'R8a3', moverColor: 'b', evalBefore: -500, evalAfter: -500, studentColor: 'b', priorMove: null });
     expect(beat?.concept).not.toBe('rook-open-file');
   });
 

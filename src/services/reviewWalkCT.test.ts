@@ -11,13 +11,13 @@ describe('7.c4 hitting b5 does not "tear the centre open" at a king on e8', () =
   it('silent on the real move', () => {
     const c = after('e4 c5 Nf3 d6 Bb5+ Nd7 O-O Nf6 Re1 a6 Bd3 b5');
     const fenBefore = c.fen(); c.move('c4');
-    const beat = detectConcept({ fenBefore, fenAfter: c.fen(), san: 'c4', moverColor: 'w', evalBefore: 0, evalAfter: 0, studentColor: 'b' });
+    const beat = detectConcept({ fenBefore, fenAfter: c.fen(), san: 'c4', moverColor: 'w', evalBefore: 0, evalAfter: 0, studentColor: 'b', priorMove: null });
     expect(beat?.concept).not.toBe('open-lines-at-king');
   });
   it('NEGATIVE CONTROL: d4 hitting e5 with the king on e8 still speaks', () => {
     const c = after('e4 e5 Nf3 Nc6');
     const fenBefore = c.fen(); c.move('d4');
-    const beat = detectConcept({ fenBefore, fenAfter: c.fen(), san: 'd4', moverColor: 'w', evalBefore: 0, evalAfter: 0, studentColor: 'b' });
+    const beat = detectConcept({ fenBefore, fenAfter: c.fen(), san: 'd4', moverColor: 'w', evalBefore: 0, evalAfter: 0, studentColor: 'b', priorMove: null });
     expect(beat?.concept).toBe('open-lines-at-king');
   });
 });

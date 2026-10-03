@@ -4583,14 +4583,17 @@ function fillConceptBeats(segments: ReviewMoveSegment[], playerColor: 'white' | 
   const convertTaughtPly = segments.find((x) => x.convertTaught === true)?.ply ?? null;
   const studentColor: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
   const shown = new Map<string, number>();
+  const byPly = new Map(segments.map((x) => [x.ply, x]));
   for (const s of segments) {
     if (s.narration || s.evalBefore === null || s.evalAfter === null) continue;
     const moverColor: 'w' | 'b' = s.ply % 2 === 1 ? 'w' : 'b';
+    const prev = byPly.get(s.ply - 1);
     let beat: ReturnType<typeof detectConcept> = null;
     try {
       beat = detectConcept({
         fenBefore: s.fenBefore, fenAfter: s.fenAfter, san: s.san,
         moverColor, evalBefore: s.evalBefore, evalAfter: s.evalAfter, studentColor,
+        priorMove: prev ? { fenBefore: prev.fenBefore, san: prev.san } : null,
       });
     } catch { beat = null; }
     if (!beat) continue;

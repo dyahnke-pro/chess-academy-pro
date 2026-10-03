@@ -28,6 +28,8 @@ import type { ReviewConceptId } from './conceptVocabulary';
 import { totalMinorCount } from './development';
 import { centreDistance } from '../utils/centreDistance';
 import { isOutpost } from './outpost';
+import { settledExchange } from './exchangeLedger';
+import { legalSeeGain } from './positionReadingService';
 
 export interface ConceptCtx {
   fenBefore: string;
@@ -40,6 +42,10 @@ export interface ConceptCtx {
   evalAfter: number | null;
   /** The student's side (for "you" vs "your opponent" framing). */
   studentColor: 'w' | 'b';
+  /** The move that produced `fenBefore`, or null at the start. REQUIRED: a
+   *  recapture finishes a trade the previous move started, and without it a
+   *  pawn grab and a trade look the same (review walk oct3b, g2 ply 16). */
+  priorMove: { fenBefore: string; san: string } | null;
 }
 
 export interface ConceptBeat {
@@ -67,6 +73,25 @@ function moverPovCp(cp: number | null, moverColor: 'w' | 'b'): number | null {
 
 const MINE = (mover: 'w' | 'b', student: 'w' | 'b'): boolean => mover === student;
 
+const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+
+/** Is this capture a TRADE? Read by the one ledger, never by a piece count
+ *  (review walk oct3b, g2 ply 16: …Nxe5 took a loose pawn and hit the queen,
+ *  and the review said "Your opponent's ahead and simplifying — trade
+ *  pieces"). A trade either FINISHES an even exchange — the move takes back on
+ *  the square the previous move captured on, and the two halves net level —
+ *  or OFFERS one: it takes a piece of equal value and can be taken back
+ *  without losing on the exchange. */
+function isTrade(ctx: ConceptCtx): boolean {
+  let mv;
+  try { mv = new Chess(ctx.fenBefore).move(ctx.san); } catch { return false; }
+  if (!mv?.captured) return false;
+  const finished = ctx.priorMove ? settledExchange(ctx.fenBefore, [mv.san], ctx.moverColor, ctx.priorMove) : null;
+  if (finished?.isExchange && Math.abs(finished.netPawns) < 1) return true;
+  if (VAL[mv.captured] !== VAL[mv.piece]) return false;
+  try { return legalSeeGain(ctx.fenBefore, mv.to) === 0 && new Chess(ctx.fenAfter).isAttacked(mv.to, ctx.moverColor === 'w' ? 'b' : 'w'); } catch { return false; }
+}
+
 /**
  * SIMPLIFY WHEN AHEAD — the `6…dxc6` case. Fires when the mover is CLEARLY
  * ahead and makes an EVEN TRADE (a capture the eval treats as level, reducing
@@ -87,6 +112,7 @@ function detectSimplifyWhenAhead(ctx: ConceptCtx): ConceptBeat | null {
   if (Math.abs(after - before) > 90) return null;          // a consolidating trade, not a material swing
   if (pieceCount(ctx.fenAfter) !== pieceCount(ctx.fenBefore) - 1) return null; // exactly one piece left = a clean capture/trade
   if (!/x/.test(ctx.san)) return null;                     // it was a capture
+  if (!isTrade(ctx)) return null;                          // …and a TRADE, not a grab
   // The trigger requires the MOVER to be ahead. If that's the student, it's
   // their winning technique; if it's the opponent, it's the technique that was
   // beating the student (recognise it, don't help it along).
@@ -236,9 +262,14 @@ function detectTwoBishops(ctx: ConceptCtx): ConceptBeat | null {
   const after = moverPovCp(ctx.evalAfter, ctx.moverColor);
   if (before === null || after === null || Math.abs(after - before) > 110) return null;
   const mine = MINE(ctx.moverColor, ctx.studentColor);
+  // WHAT THE PAIR FACES, counted (review walk oct3b, g2 ply 28: "the two
+  // bishops against your single minor" with a bishop and two knights on the
+  // other side — the minors are EQUAL by the rule above, so "single" was never
+  // true). The imbalance is the bishops: two against one, or against none.
+  const theirs = enemyB === 1 ? 'one' : 'none';
   const text = mine
-    ? `That leaves you the two bishops against their single minor — in an open position the pair is a lasting edge, raking both diagonals from long range. Keep the position open for them.`
-    : `Your opponent's kept the two bishops against your single minor — a long-term edge in open positions. Closing the position, not opening it, is how you blunt them.`;
+    ? `That leaves you the two bishops while they have ${theirs} — in an open position the pair is a lasting edge, raking both diagonals from long range. Keep the position open for them.`
+    : `Your opponent has kept the two bishops while you have ${theirs} — a long-term edge in open positions. Closing the position, not opening it, is how you blunt them.`;
   return { concept: 'two-bishops', text, source: 'concept:pos-bishop-pair' };
 }
 

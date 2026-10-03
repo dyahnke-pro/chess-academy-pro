@@ -24,7 +24,7 @@ describe('review walk 900 — claims the board did not support', () => {
   it('no "two bishops against your single minor" when the other side has NO minor (Rxd1)', () => {
     const beat = detectConcept({
       fenBefore: fenAt(60), fenAfter: fenAt(61), san: 'Rxd1', moverColor: 'w',
-      evalBefore: -900, evalAfter: -900, studentColor: 'b',
+      evalBefore: -900, evalAfter: -900, studentColor: 'b', priorMove: null,
     });
     expect(beat?.concept).not.toBe('two-bishops');
   });

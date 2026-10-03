@@ -11,6 +11,7 @@ function ctx(fenBefore: string, san: string, opts: Partial<ConceptCtx>): Concept
     fenBefore, fenAfter: c.fen(), san: mv.san, moverColor: mv.color,
     evalBefore: opts.evalBefore ?? 0, evalAfter: opts.evalAfter ?? 0,
     studentColor: opts.studentColor ?? mv.color,
+    priorMove: opts.priorMove ?? null,
   };
 }
 
