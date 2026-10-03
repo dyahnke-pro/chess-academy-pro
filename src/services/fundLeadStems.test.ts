@@ -35,11 +35,11 @@ import type { PrincipleAttribution } from './principleAttribution';
 // and produced two FALSE misses. A fixture that cannot render the real sentence
 // cannot test whether the real sentence is recognised.
 const FACTS: Record<string, string | number> = {
-  better: 'Nf3', bishop: 'dark-squared bishop', blocker: 'Nd4', book: 'e5', cost: 2,
+  better: 'Nf3', bishop: 'dark-squared bishop', blocker: 'queen', blockerSq: 'd3', book: 'e5', cost: 2,
   depth: 5, drop: 3, file: 'd', homeMinors: 'two', kick: 'h6', kind: 'knight',
   king: 'e1', move: 'Qh5', opening: 'Caro-Kann', pawn: 'd4', pawns: 'c5 and e5',
   piece: 'knight', plan: 'seize the d-file', played: 'Nf6', punish: 'Bxf7+', nth: 3,
-  push: 'b5', reason: 'the centre is open', rook: 'Rd1', square: 'd5', target: 'f7',
+  push: 'b5', reason: 'the centre is open', retreat: 'd3', onIt: 1, rook: 'Rd1', square: 'd5', target: 'f7', trap: 'b5',
 };
 function fundRe(): RegExp {
   const src = readFileSync(join(process.cwd(), 'scripts/audit-review-overhaul-prod.mjs'), 'utf8');
