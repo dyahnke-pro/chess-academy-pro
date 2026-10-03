@@ -13,9 +13,9 @@
 
 ## Who calls in
 
-- `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/coachFeatureService.ts`
 - `src/services/openingGenerator.ts`
+- `src/services/playedMoveGrade.ts`
 - `src/services/refutedAlternative.test.ts`
 - `src/services/reviewFullData.ts`
 

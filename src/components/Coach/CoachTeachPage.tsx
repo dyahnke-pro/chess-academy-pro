@@ -266,7 +266,7 @@ import type { LiveState, TacticsLiveContext } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight, WalkableLine } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, mustKey, conceptInstanceKey, convertKey } from '../../services/positionFacts';
-import { gradePlayedMove } from '../../services/playedMoveGrade';
+import { gradePlayedMove, liveMoveCost, uciOfSan } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause, gapEchoedByVerdict } from '../../services/opponentGap';
 import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
@@ -285,8 +285,6 @@ import { legalSeeGainFor, namedPawnStructure, structureTransfer, signedLegalSeeF
 import { BehaviorScheduler, detectBehaviors } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
-import { moveCostOneSearch, uciOfSan } from '../../services/moveCost';
-import { SINGLETON_SCORER } from '../../services/refutedAlternative';
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingRating } from '../../services/coachGameEngine';
@@ -10134,7 +10132,7 @@ export function CoachTeachPage(): JSX.Element {
                     // against the best one in the same tree — never a read
                     // before minus a time-boxed read after.
                     const cpLoss = bothCp
-                      ? (await moveCostOneSearch({ fenBefore, playedUci: `${move.from}${move.to}${move.promotion ?? ''}`, fan: preStudentRead, scorer: SINGLETON_SCORER, depth: COACH_TURN_DEPTH }) ?? 0)
+                      ? (await liveMoveCost(fenBefore, `${move.from}${move.to}${move.promotion ?? ''}`, preStudentRead, COACH_TURN_DEPTH) ?? 0)
                       : 0;
                     const studentBestSan = uciSanAt(fenBefore, preStudentRead.bestMove);
                     // THE BOARD-LEVEL TEACHING of the student's move — recapture
@@ -10642,7 +10640,7 @@ export function CoachTeachPage(): JSX.Element {
                   // the coach chose it (a real slip is the verdict lane's).
                   try {
                     if (cm && mid && samePosition(cm.fenAfter, fenAfterReply) && !mid.isMate && !cm.afterIsMate) {
-                      const oppLoss = await moveCostOneSearch({ fenBefore: cm.fenBefore, playedUci: uciOfSan(cm.fenBefore, cm.playedSan) ?? '', fan: mid, scorer: SINGLETON_SCORER, depth: COACH_TURN_DEPTH }) ?? 0;
+                      const oppLoss = await liveMoveCost(cm.fenBefore, uciOfSan(cm.fenBefore, cm.playedSan) ?? '', mid, COACH_TURN_DEPTH) ?? 0;
                       const dictated = learnMemRef.current.lastReplyDictated !== null;
                       const verdict = theirOpeningVerdict([...move.history, cm.playedSan], playerColor === 'white' ? 'w' : 'b', oppLoss, !dictated);
                       if (verdict) {
@@ -10661,7 +10659,7 @@ export function CoachTeachPage(): JSX.Element {
                     // as a cost of a hundred thousand centipawns.
                     const bothCp = !mid.isMate && !cm.afterIsMate;
                     const cpLoss = bothCp
-                      ? (await moveCostOneSearch({ fenBefore: cm.fenBefore, playedUci: uciOfSan(cm.fenBefore, cm.playedSan) ?? '', fan: mid, scorer: SINGLETON_SCORER, depth: COACH_TURN_DEPTH }) ?? 0)
+                      ? (await liveMoveCost(cm.fenBefore, uciOfSan(cm.fenBefore, cm.playedSan) ?? '', mid, COACH_TURN_DEPTH) ?? 0)
                       : 0;
                     // THE SAME MODEL THE STUDENT'S MOVE GOES THROUGH, pointed at
                     // the coach's. It asks the identical question, so it runs the

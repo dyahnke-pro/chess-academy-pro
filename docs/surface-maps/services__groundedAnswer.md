@@ -1148,7 +1148,7 @@
 - `src/services/coachApi.ts:5906`
 
 ### `seatPieceReferences` (re-export) — 28 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7932`
+- `src/components/Coach/CoachTeachPage.tsx:7930`
 - `src/services/coachFeatureService.ts:5074`
 - `src/services/liveTacticsContext.ts:453`
 - `src/services/lookaheadPlan.ts:129`

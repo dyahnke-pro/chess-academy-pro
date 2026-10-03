@@ -21,6 +21,8 @@ import {
 import { computeMustDefend } from './threatOut';
 import { findHangingPieces } from './tacticClassifier';
 import { missedPlanClause } from './movePlan';
+import { moveCostOneSearch, uciOfSan, type CostFan } from './moveCost';
+import { SINGLETON_SCORER } from './refutedAlternative';
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 
@@ -124,3 +126,11 @@ export function gradePlayedMove(input: {
     weaknessTag: reasonWeaknessTag(reason),
   };
 }
+
+/** WHAT THE PLAYED MOVE COST, FROM ONE SEARCH — the live-board door to
+ *  `moveCostOneSearch` with the engine singleton as the scorer (walk oct3c:
+ *  a read before minus a separate read after misjudged costs by a pawn). */
+export function liveMoveCost(fenBefore: string, playedUci: string, fan: CostFan | null, depth: number): Promise<number | null> {
+  return moveCostOneSearch({ fenBefore, playedUci, fan, scorer: SINGLETON_SCORER, depth });
+}
+export { uciOfSan };
