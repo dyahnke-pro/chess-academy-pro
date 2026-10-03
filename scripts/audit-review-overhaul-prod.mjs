@@ -142,7 +142,8 @@ const GID = process.env.AUDIT_GID || `audit-review-overhaul-${Date.now()}`;
 let GAME = FIXTURE;          // replaced in main() before any use
 let PGN = FIXTURE.movetext;
 let SANS = [];
-let FUND_PLY = 12;           // chosen from the engine's own flags, per game
+let FUND_PLY = 12;
+let engineAfterDive = null; // every flagged ply after the deep dive (costCp, lines)           // chosen from the engine's own flags, per game
 let EXPLORE_PLY = 11;        // a student-to-move ply, derived below
 
 // Every line stamped: on 2026-09-20 two 'wedges' turned out to sit at 29:53 of
@@ -1221,14 +1222,22 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // finish, then read the fixture ply's grade + lead line — David's own
   // example: 6...Nb6 must be flagged and led by its fundamentals.
   await until(async () => !(await has(page, '[data-testid="review-deepening-pill"]')), 120000, 2000);
-  const annots2 = await page.evaluate(async (gid) => {
+  // The PROBE ply's own row (FUND_PLY, 1-indexed) — not a hard-coded move: on
+  // any game but the old fixture, "6...Nb6" printed a different ply's grade.
+  // Every flagged ply's one-search cost is kept too, so a spoken cost can be
+  // checked against the number the review read it from.
+  const annots2 = await page.evaluate(async ({ gid, ply }) => {
     const open = () => new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
     const db = await open();
     const g = await new Promise((res, rej) => { const t = db.transaction('games', 'readonly'); const rq = t.objectStore('games').get(gid); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); });
-    const a = (g?.annotations ?? []).find((x) => x.moveNumber === 6 && x.color === 'black');
-    return { depth: g?.analysisDepth, row: a ? `${a.classification} eval=${a.evaluation} bestEval=${a.bestMoveEval} best=${a.bestMove}` : 'none' };
-  }, GID).catch((e) => ({ error: String(e) }));
-  log(`  [engine after dive] depth=${annots2.depth} 6...Nb6 ${annots2.row}`);
+    const anns = g?.annotations ?? [];
+    const a = anns[ply - 1];
+    const lines = anns.map((x, i) => ({ ply: i + 1, san: x.san, cls: x.classification, best: x.bestMove, costCp: x.costCp ?? null, eval: x.evaluation, bestEval: x.bestMoveEval, afterBest: x.pv?.afterBest ?? [], afterPlayed: x.pv?.afterPlayed ?? [] }))
+      .filter((x) => /inaccuracy|mistake|blunder/i.test(String(x.cls ?? '')));
+    return { depth: g?.analysisDepth, row: a ? `${a.san} ${a.classification} eval=${a.evaluation} bestEval=${a.bestMoveEval} best=${a.bestMove} costCp=${a.costCp ?? 'none'}` : 'none', lines };
+  }, { gid: GID, ply: FUND_PLY }).catch((e) => ({ error: String(e) }));
+  engineAfterDive = annots2.lines ?? null;
+  log(`  [engine after dive] depth=${annots2.depth} ply ${FUND_PLY}: ${annots2.row}`);
   // DIAGNOSTIC (2026-09-06): two prod runs saw the renderer climb to 12 GB at
   // this exact step. Sample the JS heap through the reopened walk and profile
   // it; on a blow-up, stop and name the hot functions instead of hanging.
@@ -1656,7 +1665,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   try {
     const dir = `audit-reports/review-overhaul-${new Date().toISOString().replace(/[:.]/g, '-')}`;
     mkdirSync(dir, { recursive: true });
-    writeFileSync(`${dir}/report.json`, JSON.stringify({ base: BASE, gid: GID, verdict: wedged ? 'CONTAMINATED (instrument wedged)' : allPass ? 'MEETS STANDARD' : 'FAILS STANDARD', wedged: wedged ?? null, results, engine: annots, spoken: all.map((x) => x.text), plies: [...plyNarr.entries()].map(([ply, v]) => ({ ply, ...v })), streamBefore, streamAfter, coachDecisions: decisions, needScores: needAgg, needCoverage: (() => { const ev = listener.getCapturedEvents().filter((e) => e.kind === 'review-need-coverage').pop(); try { return ev ? JSON.parse(ev.details ?? '{}').rows ?? null : null; } catch { return null; } })(), errors: errs }, null, 2));
+    writeFileSync(`${dir}/report.json`, JSON.stringify({ base: BASE, gid: GID, verdict: wedged ? 'CONTAMINATED (instrument wedged)' : allPass ? 'MEETS STANDARD' : 'FAILS STANDARD', wedged: wedged ?? null, results, engine: annots, engineAfterDive, spoken: all.map((x) => x.text), plies: [...plyNarr.entries()].map(([ply, v]) => ({ ply, ...v })), streamBefore, streamAfter, coachDecisions: decisions, needScores: needAgg, needCoverage: (() => { const ev = listener.getCapturedEvents().filter((e) => e.kind === 'review-need-coverage').pop(); try { return ev ? JSON.parse(ev.details ?? '{}').rows ?? null : null; } catch { return null; } })(), errors: errs }, null, 2));
     log(`report: ${dir}/report.json`);
   } catch (e) { log(`(report not written: ${String(e).slice(0, 80)})`); }
   await listener.stop();
