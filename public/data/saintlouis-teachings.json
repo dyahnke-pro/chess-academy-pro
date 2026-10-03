@@ -1,0 +1,1111 @@
+{
+ "generatedAt": "2026-10-03T19:42:14.137Z",
+ "videosDistilled": 1,
+ "v2VideoIds": [
+  "zf9vaqXrYvM"
+ ],
+ "noteCount": 59,
+ "notes": [
+  {
+   "id": "sl-1l5qass1i6dies",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "opening",
+   "explains": "In the F3 Nimzo-Indian, after Black castles early, the knight on f6 often retreats to e8 instead of the more common h5. The move looks passive because White will play e4 and Black's pieces sit on the back rank, but it has a clear purpose: it prepares to challenge the center with c5 and to generate queenside pressure against the c4 pawn.",
+   "teaches": "Retreating a developed piece to its original square can be justified if it enables a concrete plan, such as undermining the opponent's center or attacking a weak pawn. Evaluate such moves by the plan they support, not by their appearance.",
+   "plans": "Black aims to play c5, followed by b6, Nc6, Na5, and Ba6 to pressure the c4 pawn and contest the dark squares in the center.",
+   "concepts": [
+    "nimzo-indian",
+    "prophylaxis",
+    "center-control",
+    "queenside-pressure"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 7.68
+  },
+  {
+   "id": "sl-1a9a96ge03xo0",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "opening",
+   "explains": "When Black plays c5 before developing the knight to c6, White should simply continue with e4, claiming space in the center. If Black then plays Nc6 without first playing d6, White can play e5, gaining a tempo and cramping Black's position. Therefore, d6 is a more accurate move order for Black.",
+   "teaches": "In the opening, move order matters: playing d6 before Nc6 prevents White from gaining space with e5. When your opponent offers a pawn break, consider whether you can meet it with a developing move that maintains flexibility.",
+   "plans": "White will develop with Bd3 and Ne2, while Black will continue with Nc6 and b6, preparing the standard queenside expansion.",
+   "concepts": [
+    "move-order",
+    "pawn-breaks",
+    "space-advantage"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 7.68
+  },
+  {
+   "id": "sl-dpfsg56r1na",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "After White develops with Bd3 and Ne2, Black proceeds with b6, but White can then play Bg5, creating immediate threats. In a calm continuation like Be3, Black would have time for Ba6 and Na5, winning the c4 pawn. With Bg5, White forces Black to address tactical concerns and may gain positional concessions.",
+   "teaches": "When your opponent is allowed to execute a slow plan, look for active moves that create threats and disrupt their coordination. A timely pin or attack can force concessions even if it doesn't win material immediately.",
+   "plans": "White intends to follow up with f4, preparing e5 to break through in the center. Black must find a way to meet this threat or risk being overrun.",
+   "concepts": [
+    "initiative",
+    "pinning",
+    "pawn-break",
+    "positional-concessions"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 7.68
+  },
+  {
+   "id": "sl-1c59jaimrs0go",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "If Black ignores the threat and plays Ba6, White can play f4, threatening e5. This threat is difficult to meet: if Black plays h6, White retreats the bishop; if Black captures on d4, White recaptures and still plays e5. Even if Black plays e5, White can castle and maintain pressure.",
+   "teaches": "When you have a strong central break, support it with a pawn move like f4 rather than rushing it. The threat of the break can be more powerful than the execution, as it ties down the opponent's pieces and limits their options.",
+   "plans": "White will continue with e5 at the right moment, opening lines and exploiting the active placement of the bishop on g5 and the rook on f1 after castling.",
+   "concepts": [
+    "pawn-lever",
+    "threat",
+    "central-break",
+    "piece-activity"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 7.68
+  },
+  {
+   "id": "sl-1vmuqr20uga3",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "opening",
+   "explains": "White wants to play e5 to challenge the center, but doing so immediately allows Black to capture twice on d4, leaving White without a central pawn. The correct approach is f4, which prepares e5 and creates a threat that is difficult to meet.",
+   "teaches": "Before pushing a central pawn, ensure it is adequately supported and that the resulting pawn structure will not be compromised. A pawn break is only effective if the follow-up does not leave you with a weak center.",
+   "plans": "After f4, White intends e5, supported by the f-pawn, to gain space and open lines against the black king.",
+   "concepts": [
+    "pawn-break",
+    "central-control",
+    "pawn-structure"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 316.32
+  },
+  {
+   "id": "sl-wf8f2lig5bs",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "opening",
+   "explains": "Black can respond to the threat of e5 with ...e5, which blocks the center but concedes a target on e5 and gives White a clear plan of attacking on the kingside. The move ...Ne8 is a prophylactic retreat to avoid the pin from Bg5, but it also makes concessions.",
+   "teaches": "Sometimes an awkward-looking retreat is better than allowing a pin that forces further weakening moves. Prophylactic moves can prevent future problems, even at the cost of temporary piece passivity.",
+   "plans": "Black will try to regroup and find counterplay on the queenside, but the blocked center and weakened pawns make this difficult.",
+   "concepts": [
+    "prophylaxis",
+    "pin-avoidance",
+    "pawn-structure"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 316.32
+  },
+  {
+   "id": "sl-13lsqum1y05h4a",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "White re-maneuvers the knight to g3 before castling, so that if Black plays ...Ba6, White can respond with Qe2 and hold the c4 pawn. This shows the importance of piece coordination before committing the king.",
+   "teaches": "Before castling, ensure that your pieces are placed to meet potential threats. A small knight retreat can free up other pieces to defend key pawns.",
+   "plans": "White will castle and then look to expand on the kingside with h4-h5, while Black struggles to find active play.",
+   "concepts": [
+    "piece-coordination",
+    "prophylaxis",
+    "pawn-defense"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 316.32
+  },
+  {
+   "id": "sl-5rjnv44qdtyy",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "Black's earlier concessions—pawn on d6, pawn on e5, pawn on h6—have left Black without any way to open lines on the queenside. The c-file cannot be opened, the e-file cannot be opened, and there is no knight outpost on e5. Black is reduced to passive defense on the kingside.",
+   "teaches": "Every pawn move creates permanent weaknesses. Concessions made to drive away an active piece can leave you without counterplay and force you into a purely defensive posture.",
+   "plans": "White will continue to build on the kingside, using the h-pawn and rook to attack, while Black can only react.",
+   "concepts": [
+    "pawn-weaknesses",
+    "lack-of-counterplay",
+    "kingside-attack"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 316.32
+  },
+  {
+   "id": "sl-18v779b1jcs667",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "White plays Nh5, sacrificing the h-pawn to open the h-file for the rook. The knight on h5 threatens g4-g5, breaking open the kingside, and also prevents Black's knight from going to f4. This is a typical attacking motif in blocked-center positions.",
+   "teaches": "In positions with a blocked center, an attack on the wing is often decisive. Sacrificing a pawn to open lines against the king is a common and powerful idea.",
+   "plans": "White will follow with g4 and g5, using the open h-file and the knight on h5 to create threats against the black king.",
+   "concepts": [
+    "pawn-sacrifice",
+    "open-file",
+    "kingside-attack",
+    "blocked-center"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 316.32
+  },
+  {
+   "id": "sl-aykdc0dyqa4o",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "A knight on h5 creates a dual threat: it prepares g4-g5 to blast open the kingside, and it prevents the opponent's knight from settling on f4. The pawn on h4 is a fair price for opening lines against the king.",
+   "teaches": "When attacking, a piece that both fuels a pawn storm and denies the opponent a key defensive square is often worth a pawn investment.",
+   "plans": "Follow up with g4 and g5 to crack open the king's position, using the rook on the h-file or the opened lines.",
+   "concepts": [
+    "kingside-attack",
+    "pawn-storm",
+    "piece-activity",
+    "sacrifice"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 614.44
+  },
+  {
+   "id": "sl-163g0yk1w2nzkg",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "After the knight captures on h4, g3 forces it back to g6, gaining time and pushing the attacker's pawns forward.",
+   "teaches": "Use pawn moves to gain tempo against enemy pieces and drive them to less active squares.",
+   "plans": "Continue with f4 to open the g-file and create mating threats.",
+   "concepts": [
+    "tempo",
+    "pawn-storm",
+    "kingside-attack"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 614.44
+  },
+  {
+   "id": "sl-4q9una1d6y5t2",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "Although f4 concedes the e5 square and allows black counterplay, it is the correct move because it opens the g-file and leads to a quick checkmate.",
+   "teaches": "When your attack is faster, it is worth granting the opponent a structural or square concession to open lines toward the king.",
+   "plans": "After exf4 and gxf4, bring the queen to e2 and continue with pieces to deliver mate.",
+   "concepts": [
+    "open-file",
+    "mating-attack",
+    "concession",
+    "initiative"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 614.44
+  },
+  {
+   "id": "sl-aykzeieb1hy0",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "concept",
+   "explains": "A piece sacrifice like Nxg7 also wins, but keeping all pieces on the board is more practical because it leaves a larger margin for error.",
+   "teaches": "When already winning, avoid unnecessary sacrifices; maintaining material reduces the risk of a comeback due to inaccuracies.",
+   "plans": "",
+   "concepts": [
+    "practical-chess",
+    "risk-management",
+    "material"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 614.44
+  },
+  {
+   "id": "sl-1g9718koj977i",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "opening",
+   "explains": "In the f3 Nimzo-Indian, black often plays an early c5 instead of the standard Ne8, but this allows white to develop with Bg5 and force concessions.",
+   "teaches": "Understanding why a move is less popular helps evaluate similar structures; early flank pawn moves can leave weaknesses that the opponent can exploit.",
+   "plans": "White can develop the bishop to g5 and pressure black's position, while black may try to improve with moves like h6.",
+   "concepts": [
+    "nimzo-indian",
+    "opening-choice",
+    "development"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 614.44
+  },
+  {
+   "id": "sl-tqjiejt8f5aj",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "opening",
+   "explains": "In the main line with Ne8, black aims to pile up on the e4 pawn with ...Ba6 and ...Na5, while white often plays the natural Nh3.",
+   "teaches": "Knowing the main line helps decide whether to follow it or choose a less common but potentially more promising alternative.",
+   "plans": "White can consider the unusual a4 to apply pressure, while black continues with ...Na5 and ...Qe2.",
+   "concepts": [
+    "main-line",
+    "pawn-pressure",
+    "alternative"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 614.44
+  },
+  {
+   "id": "sl-afndf119utrzd",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "opening",
+   "explains": "In the f3 Nimzo-Indian, White often expands with e5 to threaten Bxh7#, but Black can meet it with f6 and then pile up on c4 with ...d5. The c4-pawn becomes a long-term target and White's d4-pawn can become weak.",
+   "teaches": "When you push e5 to attack the king, make sure the resulting pawn structure does not leave your c4- and d4-pawns vulnerable to a queenside bind.",
+   "plans": "If the e5 thrust is met by f6, Black will follow with ...d5 and ...Rc8, increasing pressure on c4 and d4; White must find concrete play or risk a worse endgame.",
+   "concepts": [
+    "f3-nimzo",
+    "e5-thrust",
+    "pawn-sacrifice",
+    "queenside-pressure"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 913.8
+  },
+  {
+   "id": "sl-bjs7sglm2lpu",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "opening",
+   "explains": "A more measured approach for White is a4, preparing Ba3. The bishop on a3 can trap the rook on a8 because Black's pieces are awkwardly placed, and the threat is concrete enough that Black must respond accurately.",
+   "teaches": "A quiet-looking pawn move like a4 can carry a specific tactical idea: here it sets up Ba3 to trap the rook and forces Black to solve a problem.",
+   "plans": "White will follow with Ba3, forcing ...d6, then f4 to gain space and give the knight a home on f3; Black will likely continue with ...Nc6, ...Na5, ...c5, and ...Rc8.",
+   "concepts": [
+    "a4",
+    "ba3",
+    "rook-trap",
+    "prophylaxis"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 913.8
+  },
+  {
+   "id": "sl-dogg6o1p5pnng",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "After White plays f4, the point is not to threaten e5 but to take space and secure the f3 square for the knight. Black's main plan remains ...c5 and ...Rc8, pressuring c4.",
+   "teaches": "Space-gaining pawn moves can serve multiple purposes: they restrict the opponent and create a good square for a piece, even without an immediate threat.",
+   "plans": "White will develop with Nf3 and Qe2 to defend c4, while Black will continue with ...c5 and ...Rc8; the struggle revolves around the c4-pawn and central control.",
+   "concepts": [
+    "f4",
+    "space-gain",
+    "knight-f3",
+    "c5-break"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 913.8
+  },
+  {
+   "id": "sl-1bm2p08bnxv8k",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "opening",
+   "explains": "After White defends the c4-pawn with Qe2, Black's natural plan is ...c5, hitting the d4-pawn and opening the c-file. White will follow with Nf3, supported by the earlier f4 push.",
+   "teaches": "In these structures, Black's main source of counterplay is the c5 break, while White aims to complete development with Nf3 and castling.",
+   "plans": "Black continues with ...c5 and ...Rc8, pressuring d4; White develops the knight to f3 and prepares to castle.",
+   "concepts": [
+    "nimzo-indian",
+    "pawn-break",
+    "development",
+    "c-file-pressure"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 1204.64
+  },
+  {
+   "id": "sl-o2yj41kxgiml",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "White's e5 push is the key move, as it avoids a weak d4-pawn and instead leaves Black with a vulnerable a3-f8 diagonal. If Black tries to liquidate with ...cxd4 and ...Bxc4, the exchange sacrifice on c8 becomes necessary to avoid worse.",
+   "teaches": "When the center is about to open, the side with better development can steer the game toward the opponent's weaknesses; here, Black's dark squares become the target.",
+   "plans": "White should push e5, then castle and meet ...cxd4 with cxd4, keeping the d4-pawn protected and the c-file under control.",
+   "concepts": [
+    "pawn-structure",
+    "dark-squares",
+    "exchange-sacrifice",
+    "central-tension"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 1204.64
+  },
+  {
+   "id": "sl-1irzil9bpscuh",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "After ...cxd4 cxd4 and ...Bxc4, White should not recapture immediately; instead, Rac1 puts pressure on the c-file. If the bishop moves, exd6 follows with strong threats against the rook on c8.",
+   "teaches": "Rooks belong on open files; indirect pressure on a pinned or overloaded piece can be more effective than a direct recapture.",
+   "plans": "White doubles on the c-file and looks for exd6, while Black must find a way to save the rook or sacrifice it for sufficient compensation.",
+   "concepts": [
+    "open-file",
+    "pin",
+    "tactical-pressure",
+    "piece-activity"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 1204.64
+  },
+  {
+   "id": "sl-otqox319qyq7b",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "endgame",
+   "explains": "After the forced sequence, White emerges with an exchange for a pawn, but the resulting endgame is likely drawn with accurate defense. White can play many moves while Black must passively defend.",
+   "teaches": "An exchange is a tangible advantage, but if the opponent can consolidate and trade off the remaining pieces, the win may not be there; practical chances often favor the side with the material.",
+   "plans": "White should avoid queen trades and try to create a second weakness, while Black should aim to simplify and hold the draw.",
+   "concepts": [
+    "exchange-up",
+    "endgame-technique",
+    "defensive-resources",
+    "practical-chances"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 1204.64
+  },
+  {
+   "id": "sl-1pttdfcrhg1d8",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "opening",
+   "explains": "A well-timed a4 thrust is used to blunt the opponent's standard queenside expansion, making their prepared plan harder to execute.",
+   "teaches": "Against a familiar opening scheme, look for the pawn move that takes the sting out of the opponent's main plan rather than following the main line.",
+   "plans": "Meet the opponent's natural knight development and queenside play with a bishop on a3, provoking a weakening pawn advance.",
+   "concepts": [
+    "prophylaxis",
+    "queenside-space",
+    "plan-denial"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 1488.08
+  },
+  {
+   "id": "sl-1orpii11b90jqx",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "When the opponent grabs on d4, the resulting structure can allow a classic bishop sacrifice on h7, opening lines toward the king.",
+   "teaches": "Before allowing a central pawn capture, check whether it hands the opponent a direct attacking setup against your king.",
+   "plans": "If the capture is played, calculate the forcing attacking sequence; otherwise, play a quiet move that guards the key attacking square.",
+   "concepts": [
+    "greek-gift",
+    "king-attack",
+    "pawn-structure"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 1488.08
+  },
+  {
+   "id": "sl-1bn8i8ky2w2sy",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "endgame",
+   "explains": "An exchange sacrifice that leaves two knights against a bishop and rook often favors the side with the bishop, because the knights lack coordination and the extra pawns are not passed or advanced.",
+   "teaches": "Two knights are awkward in endgames; extra pawns only matter if they are passed or can advance, otherwise they become targets.",
+   "plans": "Steer toward the endgame with the bishop and rook, aiming to pick off the weak pawns.",
+   "concepts": [
+    "exchange-sacrifice",
+    "two-knights",
+    "weak-pawns",
+    "endgame-evaluation"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 1488.08
+  },
+  {
+   "id": "sl-114xhrdd04nz",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "Retreating the knight to g7 avoids the exchange sacrifice and clears a square for the rook, while also eyeing control of f5.",
+   "teaches": "A quiet knight retreat can solve two problems at once: it sidesteps unfavorable simplification and prepares a rook lift.",
+   "plans": "Keep pieces on the board and meet the opponent's central tension without allowing the exchange sacrifice.",
+   "concepts": [
+    "prophylaxis",
+    "rook-lift",
+    "piece-coordination"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 1488.08
+  },
+  {
+   "id": "sl-i2t5o8c0gozq",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "With the bishop committed to the queenside, a full-scale kingside attack is unrealistic; the position calls for a different approach.",
+   "teaches": "A kingside attack needs enough attacking pieces; if a key piece is tied down elsewhere, look for play in the center or on the other wing.",
+   "plans": "",
+   "concepts": [
+    "attacking-conditions",
+    "piece-placement",
+    "king-safety"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 1488.08
+  },
+  {
+   "id": "sl-1m35j3r1sllau7",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "The knight on g7 clears a path for the rook and eyes the f5 square, while the c-pawn has been removed from the c8-h3 diagonal. White's bishop on a3 is committed to the queenside, so a kingside attack is unrealistic; instead, White should consolidate with Rfd1.",
+   "teaches": "When your pieces are split and weaknesses exist, prioritize solid development over speculative attacks. A rook lift to the d-file can prepare to meet central breaks.",
+   "plans": "White should play Rfd1, then recapture on e5 with the pawn if Black captures, maintaining pressure on the diagonal.",
+   "concepts": [
+    "piece-coordination",
+    "prophylaxis",
+    "central-tension"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 1791.64
+  },
+  {
+   "id": "sl-1mlxftu1n0wtwo",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "If Black captures on e5, White should recapture with the pawn, keeping the d-file closed for now. Opening the d-file prematurely leaves White with a weak d4 pawn and a misplaced bishop on a3.",
+   "teaches": "Recapturing toward the center maintains tension and avoids creating long-term weaknesses. A bishop on a3 can become a liability if the center opens unfavorably.",
+   "plans": "After ...exd4, White should recapture with the pawn on e5, not open the d-file. If Black later plays ...cxd4, White can capture on d6.",
+   "concepts": [
+    "pawn-structure",
+    "weak-squares",
+    "piece-activity"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 1791.64
+  },
+  {
+   "id": "sl-1hht15grvmife",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "The move Rfd1 prepares to meet the ...d5 break with cxd5, and after ...Qxd5, White can play dxc5, giving up the d4 weakness to gain control of the d-file. If Black avoids the trade, White can capture on b6, turning the bishop on a3 into an active piece attacking weaknesses.",
+   "teaches": "A rook on d1 can be a multi-purpose tool: it supports central breaks and enables tactical operations on the d-file. Giving back a weak pawn to activate pieces is often worth it.",
+   "plans": "If Black plays ...d5, White responds cxd5, and after ...Qxd5, dxc5. If Black keeps the tension, White can play cxb6, followed by moves like Bxc5, targeting weaknesses.",
+   "concepts": [
+    "d-file-control",
+    "pawn-sacrifice",
+    "piece-activity",
+    "tactical-awareness"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 1791.64
+  },
+  {
+   "id": "sl-7pz20pecstqp",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "concept",
+   "explains": "Black's natural plans are neutralized by White's setup. Black must resort to unnatural moves like ...Qc7 or ...Qe7 to maintain tension, but White remains better prepared for any opening of the position.",
+   "teaches": "A well-constructed setup can leave the opponent without active plans, forcing them into passive or awkward moves. Flexibility in meeting central breaks is key.",
+   "plans": "White can open the position with exd6 and dxc5, leading to tactics involving Bxg6. The game remains complex but White retains the initiative.",
+   "concepts": [
+    "prophylaxis",
+    "initiative",
+    "positional-pressure"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 1791.64
+  },
+  {
+   "id": "sl-pg3nds1bmvog6",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "opening",
+   "explains": "White's setup with a4 and f3 is designed to meet any central break by Black. Whether Black plays ...d5 or ...cxd4, White is prepared, and if Black delays, White can open the position favorably with exd6 and dxc5.",
+   "teaches": "When you have a space advantage and better development, your opponent's central breaks often just open lines in your favor. Deny them a comfortable waiting game by being ready to open the position yourself.",
+   "plans": "If Black avoids central tension, strike with exd6 and dxc5 to expose weaknesses. If Black breaks, recapture to maintain pressure on the c5 pawn.",
+   "concepts": [
+    "space-advantage",
+    "central-break",
+    "pawn-tension",
+    "prophylaxis"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 2076.76
+  },
+  {
+   "id": "sl-1qyyyc29pn1x6",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "White's breakthrough d5! is a strong pawn sacrifice that opens lines and solidifies a clear advantage. It exploits Black's awkward piece placement and the pinned c5 pawn.",
+   "teaches": "A timely pawn break can transform a positional edge into a decisive one. Look for moments when a pawn advance forces favorable simplification or opens lines to the enemy king.",
+   "plans": "After ...Bxd5, follow up with moves like d6 to undermine the center and restrict Black's pieces.",
+   "concepts": [
+    "pawn-break",
+    "breakthrough",
+    "initiative",
+    "space"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 2076.76
+  },
+  {
+   "id": "sl-j4d6og2c2rug",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "Instead of the accurate d6, White played Qe3, allowing Black to win a pawn and erase White's advantage. The queen on e3 is misplaced and does not address the central tension.",
+   "teaches": "When you have a clear plan, avoid drifting moves that don't address the main issue. A single inaccuracy can squander a hard-earned advantage.",
+   "plans": "The correct plan was d6, forcing ...Bf3 and then Qxf3, after which White's pieces dominate and the knight on g7 remains entombed.",
+   "concepts": [
+    "inaccuracy",
+    "plan",
+    "piece-activity",
+    "advantage"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 2076.76
+  },
+  {
+   "id": "sl-f6ccza1xg4pla",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "concept",
+   "explains": "The knight on g7 is trapped between g7 and e8 with no squares, effectively out of the game. White can exploit this by opening lines and targeting the immobilized piece.",
+   "teaches": "A knight on the rim is dim, but a knight with no squares is a permanent liability. When you can confine an enemy piece, the rest of your pieces gain freedom.",
+   "plans": "Keep the knight imprisoned and use the extra space to improve other pieces and create threats elsewhere.",
+   "concepts": [
+    "trapped-piece",
+    "knight",
+    "space-advantage",
+    "restriction"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 2076.76
+  },
+  {
+   "id": "sl-vyqgwowkcqw0",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "opening",
+   "explains": "Playing Nc3 allows the Nimzo-Indian, but the f3 Nimzo is strong for White. It also keeps the option of the exchange QGD, which is not available after Nf3 because White lacks cxd5.",
+   "teaches": "Move-order choices in the opening are about the set of positions you are willing to play. Nc3 gives White more flexibility against the Queen's Gambit Declined.",
+   "plans": "If Black transposes to a QGD, White can choose the exchange variation with cxd5, a favorable option.",
+   "concepts": [
+    "move-order",
+    "nimzo-indian",
+    "qgd",
+    "transposition"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 2076.76
+  },
+  {
+   "id": "sl-1oivolc1qm8wte",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "opening",
+   "explains": "The choice between Nc3 and Nf3 in the Queen's Gambit Declined hinges on retaining the option of cxd5. After Nf3, White loses that capture because the c-pawn is pinned or the timing is wrong, so Black can transpose comfortably.",
+   "teaches": "When choosing between two developing moves, prefer the one that keeps key central pawn breaks available. The move that preserves flexibility is often the stronger practical choice.",
+   "plans": "If White wants to avoid the QGD, develop the knight to c3 first and keep cxd5 in reserve.",
+   "concepts": [
+    "queens-gambit-declined",
+    "pawn-breaks",
+    "move-order",
+    "central-tension"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 2390.24
+  },
+  {
+   "id": "sl-mmi7nvx46q2r",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "opening",
+   "explains": "After d4 Nf6 c4 e6 Nc3 Bb4 (the Nimzo-Indian), Black often follows with ...b6 and ...Ba6 to pressure the c4 pawn and challenge the center. White can respond with a4, activating the bishop on a3 and gaining space on the queenside.",
+   "teaches": "In the Nimzo-Indian, Black's ...Ba6 targets c4 and fights for the center. White's a4 and Ba3 are natural ways to clamp down on the queenside and keep the bishop active.",
+   "plans": "White continues with e4, f4, and Nf3 to build a broad center, while Black tries to chip away with ...c5 and ...d6.",
+   "concepts": [
+    "nimzo-indian",
+    "f3-variation",
+    "queenside-expansion",
+    "bishop-development"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 2390.24
+  },
+  {
+   "id": "sl-193gdtduszd7h",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "When Black plays slowly with ...Ng7 and ...g6, the position remains closed and Black lacks a clear plan. White can then open the center favorably with exd6 and dxc5, creating weaknesses in Black's camp.",
+   "teaches": "If your opponent avoids confrontation and has no active plan, seize the moment to open the position on your terms. A passive setup often cannot withstand a well-timed central break.",
+   "plans": "White should look to play exd6 and dxc5, fixing Black's pawns on light squares and increasing pressure on d6.",
+   "concepts": [
+    "central-break",
+    "passive-play",
+    "pawn-structure",
+    "initiative"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 2390.24
+  },
+  {
+   "id": "sl-uxm3pg1ffn0c0",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "After ...cxd4 and ...Bxc4, White plays Rc1, targeting the c-file. Black's only reasonable reply is ...Bd5, but even then White can win an exchange with d7 ideas. If Black instead plays ...Bxd3, White recaptures and Black's pieces become completely tied down.",
+   "teaches": "When you have a lead in development and control of an open file, forcing moves like Rc1 can leave the opponent with only one defensive resource. If that resource fails, the position collapses.",
+   "plans": "White should continue with Rxc8, exd6, and then pile up on the d6 pawn. Black's pieces have no squares, so White can slowly improve and convert the extra exchange or pawn.",
+   "concepts": [
+    "open-file",
+    "exchange-sacrifice",
+    "piece-activity",
+    "domination"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 2390.24
+  },
+  {
+   "id": "sl-meyf8b1r54far",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "concept",
+   "explains": "The ...Ne8 variation in the Nimzo-Indian often leaves the knight stranded on e8. Once White plays e5, the knight has no good squares and Black struggles to activate it. This piece coordination problem is a recurring downside of the setup.",
+   "teaches": "A knight on e8 is usually passive and hard to reroute, especially after e5. Avoid placing pieces on squares where they have no future; activity matters more than temporary safety.",
+   "plans": "White should keep the e5 pawn firmly in place and target the d6 pawn, while Black must find a way to bring the e8 knight into play, often a difficult task.",
+   "concepts": [
+    "knight-placement",
+    "passive-piece",
+    "pawn-chain",
+    "piece-coordination"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 2390.24
+  },
+  {
+   "id": "sl-cminrv5uc4i3",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "With a knight on e8 and a white pawn landing on e5, Black's knight is buried and has no route back into the game. White's pressure on d6 ties Black down, so the sacrificed c4 pawn is more than compensated by Black's total lack of activity.",
+   "teaches": "A knight on e8 can become a permanent problem once the e5 pawn fixes the centre; material is less important than the ability to activate pieces.",
+   "plans": "White should keep the bind, target d6 and the queenside pawns, and avoid rushing; Black must find some way to free the e8 knight or accept a passive defence.",
+   "concepts": [
+    "knight-on-e8",
+    "pawn-on-e5",
+    "passive-piece",
+    "pressure-on-d6"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 2678
+  },
+  {
+   "id": "sl-112r8uc19tlkry",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "After the queen goes to b5, defending a4, Black cannot take on b5 because the resulting piece play leaves everything hanging. Black instead retreats the queen to d8, which shows how desperate the position has become.",
+   "teaches": "When the opponent's pieces are tied down, offering a queen trade can be a strong way to keep the initiative; the side with the better position should not fear simplifications if they leave the opponent permanently passive.",
+   "plans": "White should look for a way to break through rather than allow the advantage to slip; the queen on b5 is a start but not the final blow.",
+   "concepts": [
+    "queen-trade",
+    "tied-down-pieces",
+    "initiative"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 2678
+  },
+  {
+   "id": "sl-ewkdqd27wzol",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "opening",
+   "explains": "Against the popular knight c6, White gets aggressive, objectively good positions, though not necessarily winning ones. The move c5 is a better try for Black, anticipating bishop a3 and meeting it with knight c6.",
+   "teaches": "A well-timed c5 can change the character of the position by blunting White's bishop a3 idea and giving Black a different structure; not every natural developing move is best.",
+   "plans": "White must find a new plan against c5, while Black aims to equalise by neutralising the bishop's diagonal and contesting the centre.",
+   "concepts": [
+    "knight-c6",
+    "c5-break",
+    "bishop-a3",
+    "opening-choice"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 2678
+  },
+  {
+   "id": "sl-13aeloep1aj3a",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "opening",
+   "explains": "Black's early c5 challenges White's plan of Bg5-a3 by preparing ...Nc6, and because Black has not committed a pawn to d6, the knight can later reroute to d6, avoiding the passive ...Ne8 and trapped rook on f8 seen in similar structures.",
+   "teaches": "When the opponent delays ...d6, the standard plan of Bg5-a3 may backfire because the knight can go to d6 instead of e8, solving the back-rank problems.",
+   "plans": "White should avoid committing the bishop to a3 and instead look for central play, such as f4, to challenge Black's setup.",
+   "concepts": [
+    "nimzo-indian",
+    "f3-variation",
+    "knight-rerouting",
+    "pawn-structure"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 2988.64
+  },
+  {
+   "id": "sl-ybbnzs16x0q9o",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "opening",
+   "explains": "If White plays slowly with Nf3 and Qe2, Black can open the position with ...d5, and White lacks the pressure on the a3-f8 diagonal that would normally make such central breaks uncomfortable for Black.",
+   "teaches": "Against a flexible setup, slow development allows the opponent to seize the initiative by opening the center on favorable terms.",
+   "plans": "White should act energetically in the center rather than allowing Black to dictate the pace.",
+   "concepts": [
+    "central-break",
+    "initiative",
+    "development"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 2988.64
+  },
+  {
+   "id": "sl-tkyjd11cvcjn5",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "opening",
+   "explains": "White can preemptively clarify the center with dxc5, forcing Black to decide whether to recapture or leave the pawn on c5. This disrupts Black's familiar plans and creates practical difficulties.",
+   "teaches": "Exchanging on c5 can be a strong practical choice, as it takes Black out of known territory and forces them to solve new problems over the board.",
+   "plans": "After dxc5, if Black recaptures with ...Nxa5, White can revert to Ba3, exploiting the opened diagonal; if Black leaves the pawn, White can capture it and follow with ...d6, Bb4, and Nf3, reaching a position where White has a slight pull due to Black's weak d6 pawn and pressure on the diagonal.",
+   "concepts": [
+    "pawn-exchange",
+    "practical-opening",
+    "diagonal-pressure",
+    "weak-pawn"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 2988.64
+  },
+  {
+   "id": "sl-1m8v92v15b88gn",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "After Black recaptures on c5, White can take the pawn on c4 and then retreat the bishop to b4. Black's d6 pawn becomes a lasting target, while White's c3 pawn is a minor concern; Black's queen-side pieces are active but do not fully compensate.",
+   "teaches": "When you can steer the game into a structure where your main plan (here, pressure on the d6 pawn) remains intact, that is often worth more than a temporary material or structural concession.",
+   "plans": "White should keep the bishop on b4 or similar diagonal, maintain pressure on d6, and develop the knight to f3. Black will try to generate queen-side play and contest the diagonal.",
+   "concepts": [
+    "pawn-structure",
+    "pressure",
+    "diagonal-control",
+    "practical-chess"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 3272.2
+  },
+  {
+   "id": "sl-1hgr9kjrfsx1n",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "concept",
+   "explains": "In practical play, repeatedly choosing a plan you understand deeply leads to better moves and more comfort. Steering the game into familiar territory is a skill that improves overall performance.",
+   "teaches": "Stick to plans you know well; the more you play a structure, the better you grasp its nuances, and the stronger your practical results become.",
+   "plans": "",
+   "concepts": [
+    "practical-chess",
+    "plan-consistency",
+    "opening-repertoire"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 3272.2
+  },
+  {
+   "id": "sl-j89lu71kkc8kn",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "If Black declines to recapture on c5, White can capture on b6, forcing ...d6 to save the rook, and then possibly take on a7. White ends up a pawn up with the same pressure on d6, at the cost of one or two tempi.",
+   "teaches": "When the opponent avoids a recapture, grabbing material and maintaining structural pressure can be strong, even if it costs time. The resulting position may be objectively balanced but practically difficult for the opponent to handle.",
+   "plans": "White can continue with natural development like Nf3, Qe2, or Nd4, keeping the extra pawn and the pressure on d6. Black will try to generate activity to compensate.",
+   "concepts": [
+    "material-gain",
+    "tempo",
+    "pawn-pressure",
+    "practical-chess"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 3272.2
+  },
+  {
+   "id": "sl-pvhxk5u2dj49",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "If Black plays ...e5, the structure shifts slightly. White should develop normally, and after ...dxc5 and castling, ...d6 is natural. White can then play f5, leading to a blocked position where Black's d6 pawn is a permanent weakness and White's c4 pawn is hard for Black to attack further.",
+   "teaches": "In blocked, maneuvering positions, permanent pawn weaknesses can be more significant than temporary ones. Human intuition may favor the side with the more easily attackable target, even if engines see equality.",
+   "plans": "White will likely develop the bishop to g5 and slowly pile up on d6. Black will try to defend and seek counterplay on the queen side.",
+   "concepts": [
+    "blocked-position",
+    "permanent-weakness",
+    "positional-maneuvering",
+    "pawn-structure"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 3272.2
+  },
+  {
+   "id": "sl-1ctxcku1knukwq",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "The position is highly blocked, so evaluation is subtle and engine assessments may diverge from human intuition. Play revolves around slow maneuvering rather than forcing lines, with Black's pawn on d6 a permanent weakness and the c4 pawn a lesser concern because it can only be attacked a limited number of times.",
+   "teaches": "In locked structures, identify fixed pawn weaknesses and count how many pieces can realistically attack them; a weakness that cannot be attacked by additional pieces is less serious than it appears.",
+   "plans": "White should maneuver patiently to increase pressure on d6 and prevent Black from adding attackers to c4; Black must defend carefully and seek counterplay on the queenside.",
+   "concepts": [
+    "blocked-structure",
+    "pawn-weakness",
+    "positional-maneuvering",
+    "piece-activity"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 3547.56
+  },
+  {
+   "id": "sl-1ct0jozgfuh77",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "After ...bxc5, Black locks the pawn structure and removes the threat of Ba3, which combined with a4 would open the a3-f8 diagonal. White should develop naturally with Nf3, and when Black plays ...Na5, White can deviate from a known game by defending the c4 pawn with Qe2 instead of castling and sacrificing it.",
+   "teaches": "When the opponent captures toward the center to close a diagonal, respond with natural development and solid pawn defense rather than speculative sacrifices.",
+   "plans": "White defends c4 with Qe2, then looks to pressure d6 and expand on the kingside; Black seeks to add attackers to c4 but may struggle to do so.",
+   "concepts": [
+    "pawn-structure",
+    "diagonal-control",
+    "development",
+    "prophylaxis"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 3547.56
+  },
+  {
+   "id": "sl-t1hfhngvj7tn",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "With the c4 pawn defended, Black cannot easily add another attacker. A knight sortie to d6 would be a mistake because e5 gains tempo and creates awkwardness, potentially enabling a Greek gift sacrifice on h7.",
+   "teaches": "Before placing a knight on an advanced outpost, check whether a pawn advance can kick it away and open lines against your king.",
+   "plans": "Black should avoid ...Nd6 and instead consider other plans such as ...e5 or ...f5 to challenge the center.",
+   "concepts": [
+    "outpost",
+    "pawn-advance",
+    "greek-gift",
+    "tactical-awareness"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 3547.56
+  },
+  {
+   "id": "sl-olvtjhqb7qot",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "middlegame",
+   "explains": "In the structure with ...f5 and e5, Black should take the opportunity to trade the c1 bishop before it becomes active on a3. After ...Qa5, White can play h4, initiating a long game with chances on both flanks.",
+   "teaches": "When a bishop is threatening to emerge on an active diagonal, consider trading it off to reduce the opponent's attacking potential.",
+   "plans": "Black will pressure down the b-file; White will expand with h5 and h6, aiming to create long-term weaknesses around the black king.",
+   "concepts": [
+    "piece-trade",
+    "kingside-expansion",
+    "pawn-advance",
+    "long-term-plan"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 3547.56
+  },
+  {
+   "id": "sl-7rftc71lahe3z",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "endgame",
+   "explains": "A white pawn on h6 is a lasting asset: it restricts the black king and can become a mating threat if a piece reaches the seventh rank after the d7 pawn moves. This is not a decisive advantage but forces Black to play with great care.",
+   "teaches": "Advanced pawns on the sixth rank can be more valuable in the endgame as a source of mating threats than as direct attackers in the middlegame.",
+   "plans": "White should keep the h6 pawn on the board and look to infiltrate with pieces to the seventh rank; Black must remain vigilant against back-rank and seventh-rank tactics.",
+   "concepts": [
+    "pawn-weakness",
+    "king-safety",
+    "seventh-rank",
+    "endgame-technique"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 3547.56
+  },
+  {
+   "id": "sl-11p28rotveg66",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "concept",
+   "explains": "Three key structures arise from the ...Nc5 line: after ...Na5, White is happy to open the diagonal with Ba3; after ...e5, White pressures the d6 pawn and expands on the kingside; after ...bxc5, White uses h4-h5-h6 to create a thorn in Black's position.",
+   "teaches": "Recognize recurring pawn structures and the typical plans associated with each, so you can navigate similar positions without relying on memorized moves.",
+   "plans": "In each structure, White aims to exploit pawn weaknesses and space; Black seeks counterplay on the queenside or through central breaks.",
+   "concepts": [
+    "pawn-structure",
+    "typical-plans",
+    "prophylaxis",
+    "kingside-expansion"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 3547.56
+  },
+  {
+   "id": "sl-u6i00xwklks1",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "opening",
+   "explains": "In this Nimzo-Indian setup, Black sometimes prefers the knight retreat to e8 over the alternative ...c5. The point is that White's bishop sortie to g5 can be met without committing to the loosening ...d6/...e5 pawn advance, which Black would rather avoid because it leaves awkward weaknesses.",
+   "teaches": "When a bishop pin or sortie can be answered by a quiet regrouping move, that is often better than pushing pawns and creating permanent holes. Choose the structure you want before reacting to the pin.",
+   "plans": "Keep the pawn structure flexible and meet the bishop's pressure with a modest knight retreat rather than a weakening pawn thrust.",
+   "concepts": [
+    "nimzo-indian",
+    "bishop-pin",
+    "pawn-structure",
+    "prophylaxis"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 3830.76
+  },
+  {
+   "id": "sl-15je7oa1igajem",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "opening",
+   "explains": "The main alternative in this line is the immediate ...c5, which leads to sharper, more forcing play than the restrained knight retreat. The choice between the two defines the character of the game.",
+   "teaches": "A single early decision can steer the whole opening toward either a solid, maneuver-based struggle or a sharp, tactical fight. Know which type of position suits you before choosing.",
+   "plans": "If you want complications, strike with ...c5; if you prefer a sound, less forcing game, keep the pawns back and regroup.",
+   "concepts": [
+    "opening-choice",
+    "sharp-vs-solid",
+    "pawn-break"
+   ],
+   "sources": [
+    "yt:zf9vaqXrYvM"
+   ],
+   "t": 3830.76
+  }
+ ]
+}
