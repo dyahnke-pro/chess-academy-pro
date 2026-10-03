@@ -128,3 +128,25 @@ describe('eval/PV fundamentals — Wave 3 detectors fire on real legal games', (
     }
   });
 });
+
+describe('a check that offers nothing invests nothing (review walk oct3b, g2 ply 39)', () => {
+  // 20.Qf3+ was called "The attack was overvalued: Qf3+ commits material" —
+  // a check with nothing en prise. Same shape, minimal real game: 3.Bb5+ puts
+  // nothing en prise; the line loses the bishop to …c6 and …cxb5 afterwards.
+  // That is a piece walked into a threat, not an investment.
+  const CHECK: AttributionInput = { replySan: null,
+    historySans: ['e4', 'e5', 'Nf3', 'd6', 'Bb5+'],
+    bestSan: 'd4',
+    classification: 'blunder',
+    pvAfterPlayed: ['c6', 'Qe2', 'cxb5'],
+    evalBefore: 30,
+    evalAfterPlayed: -300,
+  };
+  it('is not "the attack was overvalued"', () => {
+    expect(attributePrinciples(CHECK).map((x) => x.id)).not.toContain('overvalued-attack');
+  });
+  it('POSITIVE CONTROL: a capture that offers the piece still is one', () => {
+    const out = attributePrinciples(OVERVALUED).map((x) => x.id);
+    expect(out).toContain('overvalued-attack');
+  });
+});

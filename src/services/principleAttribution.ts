@@ -1116,8 +1116,12 @@ const DETECTORS: Detector[] = [
     // the material at stake was the knight left on c3, which the loose-piece
     // and ignored-threat rules name).
     if (last.captured && VAL[last.captured] >= VAL[last.piece]) return null;
+    // AN INVESTMENT IS SOMETHING OFFERED (review walk oct3b, g2 ply 39: 20.Qf3+
+    // "commits material" — a check that offered nothing; what the line won
+    // was the knight left on h4, which the loose-piece rules name). A forcing
+    // move that puts nothing en prise invests nothing.
     const offered = hangsBy(c.after, last.to) > 0;
-    if (!offered && !isForcing(last.san)) return null;       // an aggressive commitment
+    if (!offered) return null;
     // A piece that can simply be TAKEN on the square it landed on is not an
     // investment, it is a hang — the loose-piece rule names it (walks 2 and 3,
     // 2026-09-23: Bg4?? into Qxg4 and Ng5?? were both "overvalued the attack").
