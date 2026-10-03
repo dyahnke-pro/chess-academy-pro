@@ -12,7 +12,13 @@ import { Chess } from 'chess.js';
 import type { MoveScorer, ScoredMove } from './pvPlayback';
 import { alternativeCostCp } from './refutedAlternativeCore';
 
-export interface CostFan { topLines?: ReadonlyArray<{ evaluation: number; mate: number | null; moves: readonly string[] }> }
+export interface CostFan {
+  topLines?: ReadonlyArray<{ evaluation: number; mate: number | null; moves: readonly string[] }>;
+  /** How deep the fan's search went. A fan short of the asked depth (a
+   *  time-boxed read) is not trusted for a cost (walk oct3e: "Their Kg2 is a
+   *  touch inaccurate" off a 1.5 s read; one deep search: 2.1 pawns). */
+  depth?: number;
+}
 
 /** Centipawns the played move gives up against the best one, from the mover's
  *  seat, >= 0. Null when the cost cannot be read from one search, or when
@@ -31,7 +37,8 @@ export async function moveCostOneSearch(input: {
   if (!bestUci) return null;
   const mover: 'w' | 'b' = input.fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
   if (bestUci === input.playedUci) return 0;
-  const inFan = lines.find((l) => l.moves[0] === input.playedUci);
+  const deepEnough = (input.fan?.depth ?? 0) >= input.depth;
+  const inFan = deepEnough ? lines.find((l) => l.moves[0] === input.playedUci) : undefined;
   let scored: readonly ScoredMove[];
   if (inFan) {
     scored = lines.map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: [...l.moves] }));

@@ -5,10 +5,19 @@ import type { MoveScorer } from './pvPlayback';
 const never: MoveScorer = { scoreMoves: () => { throw new Error('the fan held both moves — no second search'); } };
 
 describe('a move\'s cost comes from one search (walk oct3c)', () => {
+  it('a shallow fan is not trusted: both moves are scored at the asked depth (walk oct3e)', async () => {
+    const asked: string[][] = [];
+    const scorer: MoveScorer = { async scoreMoves(_f, ucis) { asked.push([...ucis]); return [
+      { evaluation: -263, mate: null, moves: ['e2d1'] }, { evaluation: -470, mate: null, moves: ['e2d3'] }]; } };
+    const shallow = { depth: 9, topLines: [
+      { evaluation: -263, mate: null, moves: ['e2d1'] }, { evaluation: -303, mate: null, moves: ['e2d3'] }] };
+    expect(await moveCostOneSearch({ fenBefore: 'r1bqkbnr/1p1p1ppp/p3p3/2p1P3/2Bn4/1P6/P1PPQPPP/RNB1K1NR w KQkq - 1 6', playedUci: 'e2d3', fan: shallow, scorer, depth: 14 })).toBe(207);
+    expect(asked).toEqual([['e2d1', 'e2d3']]);
+  });
   // 6.Qd3: the fan scores Qd1 -263 and Qd3 -303 (White POV) — 40cp apart in one
   // tree, where a read before minus a time-boxed read after said "more than a pawn".
   const FEN = 'r1bqkbnr/1p1p1ppp/p3p3/2p1P3/2Bn4/1P6/P1PPQPPP/RNB1K1NR w KQkq - 1 6';
-  const fan = { topLines: [
+  const fan = { depth: 14, topLines: [
     { evaluation: -263, mate: null, moves: ['e2d1', 'd8g5'] },
     { evaluation: -303, mate: null, moves: ['e2d3', 'b7b5'] },
   ] };

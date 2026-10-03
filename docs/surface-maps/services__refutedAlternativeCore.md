@@ -73,7 +73,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/refutedAlternativeCore.test.ts:34`
 
 ### `alternativeCostCp` (function) — 2 call sites
-- `src/services/moveCost.ts:45`
+- `src/services/moveCost.ts:52`
 - `src/services/refutedAlternative.ts:99`
 
 ### `refutedFromFan` (function) — 2 call sites

@@ -160,10 +160,24 @@ export function landingIsSafe(fenAfterMove: string, square: Square): boolean {
  *  captures), so it neither invents a hang nor masks one. Returns net material
  *  the capturer wins (`0` = no profitable legal capture). */
 export function legalSeeGainFor(fen: string, square: Square, capturingColor: Color): number {
+  const asIf = asIfToMove(fen, capturingColor);
+  return asIf ? legalSeeGain(asIf, square) : 0;
+}
+
+/** `fen` with `color` to move — or NULL when that board cannot exist: handing
+ *  the move to a side whose opponent is IN CHECK leaves the checked king
+ *  capturable. A capture read there is fiction (Learn walk oct3e, 10.Bb5+:
+ *  "your pawn on f7 … it falls unless you cover it" — in the flipped board
+ *  Black, in check, could not legally take back on f7; in the real game Black
+ *  answers the check first and f7 is held twice). Same guard as
+ *  `moveIntent.nullMoveFen`. */
+export function asIfToMove(fen: string, color: Color): string | null {
   const parts = fen.split(' ');
-  parts[1] = capturingColor;
+  if (parts[1] === color) return fen;
+  try { if (new Chess(fen).inCheck()) return null; } catch { return null; }
+  parts[1] = color;
   parts[3] = '-'; // clear en-passant, which a flipped turn could make illegal
-  return legalSeeGain(parts.join(' '), square);
+  return parts.join(' ');
 }
 
 /** SIGNED pin/legality-aware SEE: what `capturingColor` NETS by initiating a
@@ -176,11 +190,10 @@ export function legalSeeGainFor(fen: string, square: Square, capturingColor: Col
  *  take); the recapture swap is the floored `seeCaptureValue`. `0` = no legal
  *  capturer OR an exactly-even trade. */
 export function signedLegalSeeFor(fen: string, square: Square, capturingColor: Color): number {
-  const parts = fen.split(' ');
-  parts[1] = capturingColor;
-  parts[3] = '-';
+  const asIf = asIfToMove(fen, capturingColor);
+  if (!asIf) return 0;
   let chess: Chess;
-  try { chess = new Chess(parts.join(' ')); } catch { return 0; }
+  try { chess = new Chess(asIf); } catch { return 0; }
   const victim = chess.get(square);
   if (!victim || victim.color === capturingColor) return 0;
   if (chess.attackers(square, capturingColor).length === 0) return 0; // cheap superset — no capturer

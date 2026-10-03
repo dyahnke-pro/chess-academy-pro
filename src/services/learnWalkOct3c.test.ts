@@ -46,3 +46,20 @@ describe('king cover is the one shield rule (walk oct3d, 11.Nxe5)', () => {
     expect(recaptureDamage(after, 'g4')).not.toBe('king-cover');
   });
 });
+
+describe('no capture is read off a board where the other side is in check (walk oct3e, 10.Bb5+)', () => {
+  // After 10.Bb5+, Black to move and in check. f7 is hit by Ne5 and Qf3 and
+  // held by the queen and the king; Black answers the check first.
+  const FEN = 'rnb1k2r/p3qpbp/1p2p1pn/1B1pN3/6P1/1P3Q2/P1PP1P1P/RNB1K2R b KQkq - 2 10';
+  it('the f7 pawn is not "winnable" for White on that board', async () => {
+    const { signedLegalSeeFor, legalSeeGainFor, asIfToMove } = await import('./positionReadingService');
+    expect(asIfToMove(FEN, 'w')).toBeNull();
+    expect(signedLegalSeeFor(FEN, 'f7', 'w')).toBe(0);
+    expect(legalSeeGainFor(FEN, 'f7', 'w')).toBe(0);
+  });
+  it('NEGATIVE CONTROL: no check — the flip stands and a real hang still reads', async () => {
+    const { signedLegalSeeFor } = await import('./positionReadingService');
+    // Black to move, not in check; the knight on g5 hangs to the queen.
+    expect(signedLegalSeeFor('r1bqkbnr/pppp1ppp/2n5/6N1/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 0 5', 'g5', 'b')).toBeGreaterThan(0);
+  });
+});

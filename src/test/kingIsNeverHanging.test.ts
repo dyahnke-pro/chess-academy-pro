@@ -31,27 +31,30 @@ import { findHangingPieces } from '../services/tacticClassifier';
 /** The measured board: White king on g1, in check from the f2 queen. */
 const KING_IN_CHECK = '4r1k1/3b1pB1/1b1p1Qn1/1p1P4/1p2P3/5NNP/5qP1/4R1K1 w - - 0 26';
 
+/** The same board with White's king stepped out of check to h1 — legal for
+ *  either side to capture on, so the SEE read stands. */
+const OUT_OF_CHECK = '4r1k1/3b1pB1/1b1p1Qn1/1p1P4/1p2P3/5NNP/5qP1/4R2K w - - 0 26';
+
 describe('findHangingBySee never reports a king', () => {
-  it('the board that found it — g1 is the king, and must not be listed', () => {
+  it('the board that found it — the side to move is in check, so the SEE read abstains (walk oct3e)', () => {
+    // The king was only ever "hanging" because the scan handed the move to the
+    // side giving check — a board that cannot exist. `asIfToMove` refuses it,
+    // which makes the king impossible to list rather than filtered out after.
     const hung = findHangingBySee(KING_IN_CHECK);
-    // NON-VACUOUS: the position genuinely has loose material, so an empty list
-    // would mean the detector broke rather than that the fix worked.
-    expect(hung.length, 'nothing detected — the scan is broken, not clean').toBeGreaterThan(0);
-    expect(hung.map((h) => h.piece), 'a king is never hanging — that is check').not.toContain('k');
+    expect(hung.map((h) => h.piece)).not.toContain('k');
     expect(hung.map((h) => h.square)).not.toContain('g1');
   });
 
-  it('still finds the real loose piece it always found', () => {
-    // g3 is the undefended knight — the thing the classifier flags too. The fix
-    // must remove ONLY the king, never a real hang.
-    expect(findHangingBySee(KING_IN_CHECK).map((h) => h.square)).toContain('g3');
+  it('still finds the real loose piece on a legal board', () => {
+    const hung = findHangingBySee(OUT_OF_CHECK);
+    expect(hung.length, 'nothing detected — the scan is broken, not clean').toBeGreaterThan(0);
+    expect(hung.map((h) => h.square)).toContain('g3');
+    expect(hung.map((h) => h.piece)).not.toContain('k');
   });
 
   it('agrees with its sibling on what is NOT a king', () => {
-    // The two detectors are a superset pair; after the fix, every square the
-    // classifier flags must still appear in the SEE list.
-    const classifier = findHangingPieces(new Chess(KING_IN_CHECK)).map((h) => h.square);
-    const see = new Set(findHangingBySee(KING_IN_CHECK).map((h) => h.square));
+    const classifier = findHangingPieces(new Chess(OUT_OF_CHECK)).map((h) => h.square);
+    const see = new Set(findHangingBySee(OUT_OF_CHECK).map((h) => h.square));
     for (const sq of classifier) expect(see, `${sq} lost from the SEE list`).toContain(sq);
   });
 });
