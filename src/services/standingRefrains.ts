@@ -179,6 +179,19 @@ export const STANDING_REFRAINS: StandingRefrain[] = [
     keyOf: (m) => m[1],
     refrain: (m) => `still ${m[1]} further developed`,
   },
+  {
+    id: 'their-development-lead-castled',
+    re: /they're ahead in development: ([^.;]+?, against [^.;]+?)(?=[.;]|$)/g,
+    keyOf: (m) => m[1],
+    refrain: () => 'still ahead in development for them',
+  },
+  {
+    id: 'my-development-lead-castled',
+    // The counted state is the instance; the callback holds while it does.
+    re: /you're ahead in development: ([^.;]+?, against [^.;]+?)(?=[.;]|$)/g,
+    keyOf: (m) => m[1],
+    refrain: () => 'still ahead in development',
+  },
   // MATERIAL and KING SAFETY (WO-TEACH-02 S4) — the count is the instance, the
   // same as the development lead: up a pawn and up a piece are different facts.
   // The edge is said in pieces (`materialEdgeWords`): "a bishop for two pawns".

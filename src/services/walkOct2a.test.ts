@@ -78,3 +78,15 @@ describe('Learn walk oct2a', () => {
     expect(atts.map((a) => a.id)).not.toContain('passive-king-endgame');
   });
 });
+
+import { assessPositionalEdge } from './reviewPositionalAssessment';
+
+describe('Learn walk oct2a F7', () => {
+  it('a castled king is not called a developed piece', () => {
+    // White: Bd2, Bf3, castled; Black: Nc6 — two pieces to one, plus castling.
+    const fen = 'r2qkb1r/ppp2ppp/2n1p3/3p4/3P4/4PB2/PPPB1PPP/R2Q1RK1 b kq - 1 9';
+    const r = assessPositionalEdge(fen, 'w', 120).reasons.join(' ');
+    expect(r).not.toMatch(/two pieces further developed/);
+    expect(r).toMatch(/ahead in development: two pieces out and castled, against one piece out/);
+  });
+});

@@ -21,7 +21,7 @@ import { Chess, type Color } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { MATERIAL_VALUE } from './pieceValues';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
-import { developmentScore } from './development';
+import { isMinorAtHome, developmentScore } from './development';
 
 export interface PositionalAssessment {
   /** Student-perspective verdict word from the eval, or null when unclear. */
@@ -251,8 +251,22 @@ function assetsFor(
   if (myPassed) reasons.push(`${your} passed pawn on ${myPassed} is a long-term trump`, `${holder}-passer-${myPassed[0]}`);
 
   // 6. A development lead (only meaningful in the opening/early middlegame).
+  // The score counts a CASTLED king as a step of development, so the lead is
+  // not always pieces (walk oct2a F7: "two pieces further developed" with two
+  // bishops out and castled against one knight). Say what was counted.
   const lead = developedCount(all, side) - developedCount(all, other);
-  if (lead >= 2) reasons.push(`${youre} ${lead === 2 ? 'two pieces' : `${lead} pieces`} further developed`);
+  if (lead >= 2) {
+    const out = (c: Color): number => all.filter((p) => p.color === c && (p.type === 'n' || p.type === 'b') && !isMinorAtHome(p.type, c, p.square)).length;
+    const castled = (c: Color): boolean => all.some((p) => p.color === c && p.type === 'k' && p.square[0] !== 'e');
+    const pieceLead = out(side) - out(other);
+    if (pieceLead === lead) {
+      reasons.push(`${youre} ${lead === 2 ? 'two pieces' : `${lead} pieces`} further developed`);
+    } else {
+      const word = (n: number): string => n === 0 ? 'no pieces' : n === 1 ? 'one piece' : `${COUNT_WORD[n] ?? n} pieces`;
+      const sideStr = (c: Color): string => `${word(out(c))} out${castled(c) ? ' and castled' : ''}`;
+      reasons.push(`${youre} ahead in development: ${sideStr(side)}, against ${sideStr(other)}`);
+    }
+  }
 
   return found;
 }

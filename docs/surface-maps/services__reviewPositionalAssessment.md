@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**321 lines · 6 exports · 10 importers · 8 tests · 0 audits**
+**335 lines · 6 exports · 11 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,6 +22,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewFullData.ts`
 - `src/services/reviewPositionalAssessment.test.ts`
 - `src/services/standingRefrains.test.ts`
+- `src/services/walkOct2a.test.ts`
 
 ## Exports and every call site
 
@@ -33,7 +34,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts:128`
 - `src/services/exchangeLedger.test.ts:130`
 
-### `assessPositionalEdge` (function) — 27 call sites
+### `assessPositionalEdge` (function) — 28 call sites
 - `src/services/coachFeatureService.ts:2996`
 - `src/services/exchangeLedger.test.ts:97`
 - `src/services/exchangeLedger.test.ts:98`
@@ -61,6 +62,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewPositionalAssessment.test.ts:79`
 - `src/services/standingRefrains.test.ts:80`
 - `src/services/standingRefrains.test.ts:110`
+- `src/services/walkOct2a.test.ts:88`
 
 ### `materialEdgeWords` (function) — 5 call sites
 - `src/services/groundedAnswer.ts:2147`
@@ -96,6 +98,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.bowdler1000.rewalk.test.ts`
 - `src/services/reviewPositionalAssessment.test.ts`
 - `src/services/standingRefrains.test.ts`
+- `src/services/walkOct2a.test.ts`
 
 ## Audits that reach it
 
