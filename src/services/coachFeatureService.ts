@@ -1149,7 +1149,7 @@ function buildDeterministicNarration(params: {
     // move keeps "king to safety, rook to the open centre" instead of falling to
     // "Accurate — you're winning" (audit 2026-07-20: O-O-O graded GREAT lost its
     // teaching). Only fall back to the eval line when there's no concrete note.
-    const concrete = buildReviewMoveTeaching(fenBefore, playedSan);
+    const concrete = buildReviewMoveTeaching(fenBefore, playedSan, true);
     if (concrete) return concrete;
     return studentEvalWord ? `Accurate — ${studentEvalWord}. Simple chess.` : null;
   }

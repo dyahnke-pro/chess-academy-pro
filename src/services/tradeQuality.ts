@@ -20,6 +20,7 @@
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { findPieceQuality, legalSeeGain, type PieceQualityNote } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
+import { settledLeadFor, type LastMove } from './material';
 
 const VAL: Readonly<Record<string, number>> = MATERIAL_VALUE;
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -37,14 +38,6 @@ export interface TradeRead {
   moverIsStudent: boolean;
 }
 
-function materialFor(chess: Chess, color: Color): number {
-  let own = 0; let theirs = 0;
-  for (const cell of chess.board().flat()) {
-    if (!cell) continue;
-    if (cell.color === color) own += VAL[cell.type]; else theirs += VAL[cell.type];
-  }
-  return own - theirs;
-}
 
 /** Squares next to `color`'s king that the piece on `sq` covers — counted
  *  only while the king is really under fire: the enemy queen is on and at
@@ -130,7 +123,11 @@ export function readTrade(
   /** The engine's cost of this move for its mover, in centipawns, when known.
    *  The verdict never contradicts the engine: "poor" needs a real cost (≥30),
    *  "good" needs the move to be sound (<100). Null = no read, board only. */
-  cpLoss: number | null = null,
+  cpLoss: number | null,
+  /** The move that LED to `fenBefore`. REQUIRED (oct3a review walk ply 16:
+   *  "you were still 3 points behind" with …exd4 taking the knight straight
+   *  back) — the count is the ONE settled balance, through this move. */
+  priorMove: LastMove | null,
 ): TradeRead | null {
   let before: Chess;
   try { before = new Chess(fenBefore); } catch { return null; }
@@ -191,7 +188,7 @@ export function readTrade(
   // Structure is the only thing they got (doubled / isolated / cover), and a
   // bent pawn does not outweigh a pawn more heading into a simpler position.
   // A trade that removes their BEST piece still stands on its own.
-  const edge0 = materialFor(board0, mover);
+  const edge0 = settledLeadFor(fenBefore, mover, priorMove);
   const STRUCTURAL = new Set(['doubles', 'isolates', 'cover']);
   if (edge0 <= -1 && good.length && !bad.length && good.every((g) => STRUCTURAL.has(g.key))) {
     // Say BOTH halves — the dent and the count — because that weighing is the

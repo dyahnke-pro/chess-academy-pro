@@ -32,7 +32,7 @@ describe('buildOpeningTheoryLecture — grounded masters tour (David 2026-07-20)
       const key = Object.keys(byPrefix).find((p) => fen.startsWith(p));
       return res(fen, key ? byPrefix[key] : []);
     };
-    const lec = await buildOpeningTheoryLecture(fens, sans, 'Sicilian Defense', { lookup });
+    const lec = await buildOpeningTheoryLecture(fens, sans, 'Sicilian Defense', { lookup, studentColor: undefined });
     expect(lec).not.toBeNull();
     expect(lec!.openingName).toBe('Sicilian Defense');
     expect(lec!.branches.length).toBeGreaterThanOrEqual(3);
@@ -61,7 +61,7 @@ describe('buildOpeningTheoryLecture — grounded masters tour (David 2026-07-20)
       if (fen.startsWith('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w')) return res(fen, [mv('Nf3', 800), mv('Bc4', 150)]);
       return res(fen, []); // everything after is off-book
     };
-    const lec = await buildOpeningTheoryLecture(fens, sans, "King's Pawn", { lookup });
+    const lec = await buildOpeningTheoryLecture(fens, sans, "King's Pawn", { lookup, studentColor: undefined });
     expect(lec).not.toBeNull();
     expect(lec!.departurePly).toBe(3); // 2.Qh5 (ply 3) left the book
     const dep = lec!.branches.find((b) => b.leftBook);
@@ -72,7 +72,7 @@ describe('buildOpeningTheoryLecture — grounded masters tour (David 2026-07-20)
   it('returns null when the DB is unavailable from the very first move', async () => {
     const { fens, sans } = chain(['a3', 'a6']);
     const lookup = async (fen: string): Promise<MasterPlayResult> => res(fen, []);
-    expect(await buildOpeningTheoryLecture(fens, sans, 'Anderssen', { lookup })).toBeNull();
+    expect(await buildOpeningTheoryLecture(fens, sans, 'Anderssen', { lookup, studentColor: undefined })).toBeNull();
   });
 });
 
@@ -140,7 +140,7 @@ describe('the variation DIVE (Danya plays out the line)', () => {
       if (fen.startsWith(afterNc6.split(' ').slice(0, 1).join(' '))) return res(fen, [mv('Bb5', 400), mv('Bc4', 300)]);
       return res(fen, []);
     };
-    const lec = await buildOpeningTheoryLecture(fens, sans, "King's Pawn", { lookup });
+    const lec = await buildOpeningTheoryLecture(fens, sans, "King's Pawn", { lookup, studentColor: undefined });
     const dep = lec!.branches.find((b) => b.leftBook);
     expect(dep).toBeTruthy();
     expect(dep!.mainlineDive.length).toBeGreaterThanOrEqual(2); // Nc6, Bb5…
@@ -162,7 +162,7 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
       if (fen.startsWith('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w')) return res(fen, [mv('Nf3', 800), mv('Bc4', 150)]);
       return res(fen, []);
     };
-    const lec = await buildOpeningTheoryLecture(fens, sans, "King's Pawn", { lookup });
+    const lec = await buildOpeningTheoryLecture(fens, sans, "King's Pawn", { lookup, studentColor: undefined });
     const beats = buildTheoryLectureBeats(lec!, ['fight for the centre and develop with tempo']);
     expect(beats[0].kind).toBe('intro');
     expect(beats[0].fact).toMatch(/King's Pawn/);
@@ -197,7 +197,7 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
       if (fen.startsWith('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w')) return res(fen, [mv('Nf3', 500, 0.56), mv('Bc4', 300, 0.5), mv('Nc3', 250, 0.48)]);
       return res(fen, []);
     };
-    const lec = await buildOpeningTheoryLecture(fens, sans, "King's Pawn", { lookup });
+    const lec = await buildOpeningTheoryLecture(fens, sans, "King's Pawn", { lookup, studentColor: undefined });
     const beats = buildTheoryLectureBeats(lec!, ['fight for the centre']);
     const mainBeats = beats.filter((b) => b.kind === 'mainline' || b.kind === 'departure');
     // At least one mainline beat explains the "why it's main" from the data.
@@ -218,7 +218,7 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
       }
       return res(fen, []);
     };
-    const lec = await buildOpeningTheoryLecture(fens, sans, "King's Pawn", { lookup });
+    const lec = await buildOpeningTheoryLecture(fens, sans, "King's Pawn", { lookup, studentColor: undefined });
     // Student is BLACK → the citation should prefer the Black-winning game.
     const beats = buildTheoryLectureBeats(lec!, ['fight for the centre'], 'black');
     const cites = beats.filter((b) => /position was reached in/i.test(b.fact));
@@ -244,7 +244,7 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
       const key = Object.keys(byPrefix).find((p) => fen.startsWith(p));
       return res(fen, key ? byPrefix[key] : []);
     };
-    const lec = await buildOpeningTheoryLecture(fens, sans, 'Open Game', { lookup });
+    const lec = await buildOpeningTheoryLecture(fens, sans, 'Open Game', { lookup, studentColor: undefined });
     // The after-e5 branch carries explore lines for its untaken sidelines.
     const withExplore = lec!.branches.find((b) => b.exploreLines.length > 0);
     expect(withExplore).toBeTruthy();
@@ -270,7 +270,7 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
       if (fen.startsWith('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w')) return res(fen, [mv('Nf3', 500), mv('Bc4', 300), mv('Nc3', 200)]);
       return res(fen, []);
     };
-    const lec = await buildOpeningTheoryLecture(fens, sans, "King's Pawn", { lookup });
+    const lec = await buildOpeningTheoryLecture(fens, sans, "King's Pawn", { lookup, studentColor: undefined });
     // Fake engine: at the after-e5 position (White to move) it returns Bc4 (f1c4).
     const engine = { analyzePosition: async (fen: string) => (fen.startsWith('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w') ? { bestMove: 'f1c4', evaluation: 30 } : { bestMove: 'g1f3', evaluation: 20 }) };
     await enrichLectureWithEngine(lec!, engine, { depth: 6, max: 3 });
@@ -303,7 +303,7 @@ describe('tabiya walk — sidelines get NARRATED dives + computed pros/cons (Dav
       'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b': [mv('d6', 400), mv('Nc6', 300)],
       'rnbqkbnr/pp2pppp/3p4/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w': [mv('d4', 350), mv('Bb5+', 100)],
     };
-    const lec = await buildOpeningTheoryLecture(fens, sans, 'Sicilian Defense', { lookup: mkLookup(byPrefix) });
+    const lec = await buildOpeningTheoryLecture(fens, sans, 'Sicilian Defense', { lookup: mkLookup(byPrefix), studentColor: undefined });
     expect(lec).not.toBeNull();
     const side = lec!.branches.find((b) => b.isSideline);
     expect(side).toBeDefined();
@@ -335,7 +335,7 @@ describe('the departure judged — cost and the punishing line (Danya reviews, 2
     return res(fen, []);
   };
   const departure = async (read: { cpLoss: number; replyLineUci: string[] }): Promise<string> => {
-    const lec = await buildOpeningTheoryLecture(fens, sans, 'Damiano Defense', { lookup, gameReads: [null, null, null, read] });
+    const lec = await buildOpeningTheoryLecture(fens, sans, 'Damiano Defense', { lookup, gameReads: [null, null, null, read], studentColor: undefined });
     return buildTheoryLectureBeats(lec!, [], 'white').find((b) => b.kind === 'departure')?.fact ?? '';
   };
   it('a departure that drops material plays the refutation to its last capture', async () => {
@@ -362,7 +362,7 @@ describe('a known trap on the walked line is named with its punishment', () => {
       if (i < 0 || i >= line.length) return res(fen, []);
       return res(fen, [mv(line[i], 550), mv(i === 6 ? 'f3' : 'a3', 450)]);
     };
-    const lec = await buildOpeningTheoryLecture(fens, sans, 'no-name', { lookup });
+    const lec = await buildOpeningTheoryLecture(fens, sans, 'no-name', { lookup, studentColor: undefined });
     const beats = buildTheoryLectureBeats(lec!, [], 'white');
     const hit = beats.find((b) => /A trap to know here/.test(b.fact));
     expect(hit?.fact).toMatch(/A trap to know here: the natural f3, which \d+% of club players choose, (loses|runs into)/);

@@ -276,7 +276,7 @@ export async function buildOpeningTheoryLecture(
   fens: string[],
   sans: string[],
   openingName: string,
-  opts: { lookup?: (fen: string) => Promise<MasterPlayResult>; gameReads?: ReadonlyArray<LectureGameRead | null> } = {},
+  opts: { lookup?: (fen: string) => Promise<MasterPlayResult>; gameReads?: ReadonlyArray<LectureGameRead | null>; studentColor: 'white' | 'black' | undefined },
 ): Promise<OpeningTheoryLecture | null> {
   if (fens.length < 2 || sans.length < 1) return null;
   const lookup =
@@ -370,7 +370,7 @@ export async function buildOpeningTheoryLecture(
         let prevFen = fromFen;
         b.mainlineDive = line.map((p) => {
           const parts: string[] = [];
-          const w = moveWhy(prevFen, p.san);
+          const w = moveWhy(prevFen, p.san, opts.studentColor);
           if (w) parts.push(w);
           const tempt = explainTemptingCapture(prevFen, p.san, 'neutral');
           if (tempt) parts.push(tempt);
@@ -402,11 +402,11 @@ export async function buildOpeningTheoryLecture(
         const cont = await walkBookLine(afterAlt, { maxPlies: 4, minGames: 5, lookup: opts.lookup });
         const steps: Array<{ san: string; fenAfter: string; why: string | null }> = [];
         // Step 0 is the alternative move itself.
-        steps.push({ san: alt.san, fenAfter: afterAlt, why: moveWhy(c8Candidate.fenBefore, alt.san) });
+        steps.push({ san: alt.san, fenAfter: afterAlt, why: moveWhy(c8Candidate.fenBefore, alt.san, opts.studentColor) });
         let prev = afterAlt;
         for (const p of cont) {
           const parts: string[] = [];
-          const w = moveWhy(prev, p.san);
+          const w = moveWhy(prev, p.san, opts.studentColor);
           if (w) parts.push(w);
           const tempt = explainTemptingCapture(prev, p.san, 'neutral');
           if (tempt) parts.push(tempt);
@@ -569,8 +569,11 @@ function modelGameClause(
  *  the move, then the reason) so callers append it as trailing prose, never as
  *  an "— it …" clause (buildReviewMoveTeaching sentences lead with a subject
  *  like "The knight …", which an "it" prefix would garble). */
-function moveWhy(fenBefore: string, san: string): string | null {
-  const raw = buildReviewMoveTeaching(fenBefore, san);
+function moveWhy(fenBefore: string, san: string, studentColor: 'white' | 'black' | undefined): string | null {
+  // THE SEAT IS PER MOVE (oct3a review walk): a book line alternates movers,
+  // so "their knight" is right on the student's plies only.
+  const moverIsStudent = studentColor ? (fenBefore.split(' ')[1] === 'w') === (studentColor === 'white') : true;
+  const raw = buildReviewMoveTeaching(fenBefore, san, moverIsStudent);
   if (!raw) return null;
   // Take just the first sentence — the theory beat wants a tight one-line
   // reason, not the full multi-sentence teaching paragraph.
@@ -662,7 +665,7 @@ export function buildTheoryLectureBeats(
   // keeps it; later identical sentences drop to silence.
   const seenWhy = new Set<string>();
   const freshWhy = (fenBefore: string, san: string): string => {
-    const w = moveWhy(fenBefore, san);
+    const w = moveWhy(fenBefore, san, studentColor);
     if (!w) return '';
     const k = w.toLowerCase();
     if (seenWhy.has(k)) return '';

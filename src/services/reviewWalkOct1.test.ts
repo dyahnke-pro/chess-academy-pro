@@ -68,7 +68,7 @@ describe('Review walk 2026-10-01 — a prepared kick is the point of h4', () => 
   const pre = (() => { const c = new Chess(); for (const m of 'e4 d5 exd5 Nf6 Bb5+ Bd7 Be2 Nxd5 d4 Nc6 c4 Nf6 d5 Ne5 Nf3 Ng6'.split(' ')) c.move(m); return c.fen(); })();
   it('h4 prepares h5 against the knight on g6', () => {
     expect(quietMovePoint(pre, 'h4')).toBe('Prepares h5, which would kick their knight off g6.');
-    expect(buildReviewMoveTeaching(pre, 'h4')).toMatch(/Prepares h5, which would kick their knight off g6/);
+    expect(buildReviewMoveTeaching(pre, 'h4', true)).toMatch(/Prepares h5, which would kick their knight off g6/);
   });
   it('not when the next square is covered by an enemy pawn', () => {
     // After …h6 the h5 square is not attacked by a pawn, but a black pawn on g6 would cover h5.

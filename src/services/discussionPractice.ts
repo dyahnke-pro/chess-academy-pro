@@ -166,7 +166,7 @@ export function buildSlipReveal(args: {
     // move's board-true mechanism from the same universal teacher the walk uses
     // (what it attacks / the file it opens / the square it fights for) — no
     // extra engine call, G0-grounded.
-    const mech = buildReviewMoveTeaching(args.fenBefore, args.bestSan);
+    const mech = buildReviewMoveTeaching(args.fenBefore, args.bestSan, true);
     parts.push(mech ? `The best move was ${args.bestSan}. ${mech}` : `The best move was ${args.bestSan}.`);
   } else if (!hang) {
     parts.push('There was better.');

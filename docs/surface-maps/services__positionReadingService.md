@@ -125,7 +125,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewQuestionPlan.ts:67`
 - `src/services/reviewTrapQuestion.ts:113`
 - `src/services/threatOut.ts:91`
-- `src/services/tradeQuality.ts:144`
+- `src/services/tradeQuality.ts:141`
 
 ### `legalSeeGainOn` (function) — 12 call sites
 - `src/services/coachFeatureService.ts:2651`
@@ -317,8 +317,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:55`
 - `src/services/positionalTruth.corpus.test.ts:81`
 - `src/services/positionalTruth.corpus.test.ts:86`
-- `src/services/tradeQuality.ts:149`
-- `src/services/tradeQuality.ts:274`
+- `src/services/tradeQuality.ts:146`
+- `src/services/tradeQuality.ts:271`
 - `src/services/walk3.test.ts:12`
 
 ### `findWeakSquares` (function) — 11 call sites
@@ -344,8 +344,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:97`
 - `src/services/positionalTruth.corpus.test.ts:102`
 - `src/services/replayFence.najdorf1500.test.ts:24`
-- `src/services/reviewFullData.ts:821`
-- `src/services/reviewFullData.ts:825`
+- `src/services/reviewFullData.ts:822`
+- `src/services/reviewFullData.ts:826`
 
 ### `MinorityAttack` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -360,8 +360,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.ts:366`
 - `src/services/positionalTruth.corpus.test.ts:110`
 - `src/services/positionalTruth.corpus.test.ts:115`
-- `src/services/reviewFullData.ts:817`
-- `src/services/reviewFullData.ts:819`
+- `src/services/reviewFullData.ts:818`
+- `src/services/reviewFullData.ts:820`
 
 ### `pieceScope` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

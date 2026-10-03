@@ -365,7 +365,8 @@ export function computeMoveFacets(
       const cost = ctx.preMoveEval != null && ctx.evaluation != null
         ? (ctx.preMoveEval - ctx.evaluation) * moverSign
         : null;
-      const judged = ctx.studentColorWB ? readTrade(fenBefore, san, ctx.studentColorWB, cost) : null;
+      const judged = ctx.studentColorWB ? readTrade(fenBefore, san, ctx.studentColorWB, cost,
+        ply >= 2 && ctx.teaching.prevFenBefore ? lastMoveFromSan(ctx.teaching.prevFenBefore, ctx.allSans[ply - 2]) : null) : null;
       if (judged) {
         const jf = `[trade] ${judged.text}`;
         facets.push(jf);

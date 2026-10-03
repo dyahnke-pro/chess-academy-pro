@@ -278,7 +278,7 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
   // 10. The positional idea — the quiet fallback so a purely developing move
   //     still teaches (buildReviewMoveTeaching never returns null).
   if (aspects.length === 0 || aspects.every((a) => a.weight < 40)) {
-    const concept = buildReviewMoveTeaching(fenBefore, san);
+    const concept = buildReviewMoveTeaching(fenBefore, san, moverIsStudent !== false);
     if (concept) aspects.push({ text: toClause(concept), weight: 25 });
   }
 

@@ -41,7 +41,7 @@ export function buildDrillWrongTeaching(
       drillFen.split(' ')[1] === 'b' ? 'black' : 'white';
     return (
       explainBestMoveGrounded(drillFen, tried, expectedUci, moverColor) ??
-      buildReviewMoveTeaching(drillFen, expected)
+      buildReviewMoveTeaching(drillFen, expected, true)
     );
   } catch {
     return null;
@@ -99,7 +99,7 @@ export function buildDrillBetterLine(
       san: mv.san,
       fen: chess.fen(),
       isStudent,
-      why: isStudent ? buildReviewMoveTeaching(fenBefore, mv.san) : null,
+      why: isStudent ? buildReviewMoveTeaching(fenBefore, mv.san, true) : null,
     });
   }
   return steps;

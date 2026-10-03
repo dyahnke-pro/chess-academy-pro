@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**927 lines · 13 exports · 3 importers · 1 tests · 0 audits**
+**930 lines · 13 exports · 3 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -42,7 +42,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.test.ts:95`
 
 ### `resolveCuratedOpeningIdeas` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:1347`
+- `src/services/coachFeatureService.ts:1348`
 - `src/services/reviewOpeningTheory.test.ts:104`
 - `src/services/reviewOpeningTheory.test.ts:105`
 - `src/services/reviewOpeningTheory.test.ts:108`

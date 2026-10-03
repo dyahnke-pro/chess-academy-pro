@@ -11,7 +11,7 @@ function beforeLast(sans: string[]): { fen: string; san: string } {
 
 describe('buildReviewMoveTeaching (grounded per-move review why)', () => {
   it('names the center on a central pawn push', () => {
-    const t = buildReviewMoveTeaching(new Chess().fen(), 'e4');
+    const t = buildReviewMoveTeaching(new Chess().fen(), 'e4', true);
     expect(t).toMatch(/center/i);
   });
 
@@ -23,7 +23,7 @@ describe('buildReviewMoveTeaching (grounded per-move review why)', () => {
     // 1.d4 d5 2.Nf3 Nf6 3.Bg5 (Nf6 pinned to the queen) 3...e6 4.e3 Be7 —
     // …Be7 interposes on e7 and unpins the f6-knight.
     const { fen, san } = beforeLast(['d4', 'd5', 'Nf3', 'Nf6', 'Bg5', 'e6', 'e3', 'Be7']);
-    const t = buildReviewMoveTeaching(fen, san);
+    const t = buildReviewMoveTeaching(fen, san, true);
     expect(t).toMatch(/unpins your knight on f6/i);
   });
 
@@ -38,7 +38,7 @@ describe('buildReviewMoveTeaching (grounded per-move review why)', () => {
     ];
     for (const sans of samples) {
       const { fen, san } = beforeLast(sans);
-      const t = buildReviewMoveTeaching(fen, san);
+      const t = buildReviewMoveTeaching(fen, san, true);
       if (t) expect(t).not.toMatch(/getting into the game/i);
     }
   });
@@ -47,7 +47,7 @@ describe('buildReviewMoveTeaching (grounded per-move review why)', () => {
     // 1.e4 e5 2.Nf3 d6 3.Bb5+ — a check. Seat-neutral "the king", no redundant
     // "check" word (the SAN carries it), no wrong-perspective "their king".
     const { fen, san } = beforeLast(['e4', 'e5', 'Nf3', 'd6', 'Bb5+']);
-    const t = buildReviewMoveTeaching(fen, san);
+    const t = buildReviewMoveTeaching(fen, san, true);
     expect(t).toMatch(/forces the king to react/i);
     expect(t).not.toMatch(/their king|you set the tempo/i);
     expect(t).not.toMatch(/\bcheck\b/i); // the SAN's "+" is the only check mention
@@ -55,7 +55,7 @@ describe('buildReviewMoveTeaching (grounded per-move review why)', () => {
 
   it('a flank pawn striking at the centre is a central fight, not a "cramp" (David 2026-09-14)', () => {
     // 1.e4 c5 — the Sicilian …c5 attacks d4: fighting for the centre from the flank.
-    const t = buildReviewMoveTeaching(beforeLast(['e4', 'c5']).fen, 'c5');
+    const t = buildReviewMoveTeaching(beforeLast(['e4', 'c5']).fen, 'c5', true);
     expect(t).toMatch(/fights for the center from the flank/i);
     expect(t).not.toMatch(/cramps|land.?grab/i);
   });
@@ -63,13 +63,13 @@ describe('buildReviewMoveTeaching (grounded per-move review why)', () => {
   it('a genuine space-gaining pawn advance (no centre strike) still cramps', () => {
     // 1.d4 d5 2.c4 e6 3.Nc3 Nf6 4.c5 — White's c4-c5 hits b6/d6, not the centre.
     const { fen, san } = beforeLast(['d4', 'd5', 'c4', 'e6', 'Nc3', 'Nf6', 'c5']);
-    const t = buildReviewMoveTeaching(fen, san);
+    const t = buildReviewMoveTeaching(fen, san, true);
     expect(t).toMatch(/gains space and cramps/i);
   });
 
   it('calls castling king safety — never restates "castles"', () => {
     const { fen, san } = beforeLast(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'O-O']);
-    const t = buildReviewMoveTeaching(fen, san);
+    const t = buildReviewMoveTeaching(fen, san, true);
     expect(t).toMatch(/king/i);
     expect(t).not.toMatch(/^castles/i);
   });
@@ -78,7 +78,7 @@ describe('buildReviewMoveTeaching (grounded per-move review why)', () => {
     // 1.e4 e5 2.Nf3 — the knight controls e5 (enemy pawn), NOT d4 (empty here,
     // included) but never a square held by White's own pawn.
     const { fen, san } = beforeLast(['e4', 'e5', 'Nf3']);
-    const t = buildReviewMoveTeaching(fen, san);
+    const t = buildReviewMoveTeaching(fen, san, true);
     expect(t).toMatch(/knight/i);
     expect(t).toMatch(/e5/); // the enemy pawn it hits
   });
@@ -89,7 +89,7 @@ describe('buildReviewMoveTeaching (grounded per-move review why)', () => {
     // (David 2026-07-25: TEACH TEACH TEACH — no silence, no generic filler), so
     // it says something concrete + board-true instead.
     const { fen, san } = beforeLast(['e4', 'd6', 'd4', 'g6', 'f4', 'e6', 'Be3']);
-    const t = buildReviewMoveTeaching(fen, san);
+    const t = buildReviewMoveTeaching(fen, san, true);
     expect(t).toBeTruthy();                             // never silent
     expect(t).not.toMatch(/rakes toward|bears down/i);  // no invented central claim
     expect(t).not.toMatch(/quiet development|comes into the game/i); // no generic tag
@@ -97,7 +97,7 @@ describe('buildReviewMoveTeaching (grounded per-move review why)', () => {
 
   it('teaches a quiet queen move concretely — never a generic filler tag (TEACH every move)', () => {
     const { fen, san } = beforeLast(['e4', 'd6', 'd4', 'g6', 'f4', 'e6', 'Be3', 'b6', 'c4', 'Bg7', 'Qd2']);
-    const t = buildReviewMoveTeaching(fen, san);
+    const t = buildReviewMoveTeaching(fen, san, true);
     expect(t).toBeTruthy();
     expect(t).not.toMatch(/quiet development|comes into the game/i);
   });
@@ -105,7 +105,7 @@ describe('buildReviewMoveTeaching (grounded per-move review why)', () => {
   it('names the created enemy weakness — a capture that isolates a pawn is a TARGET (§1)', () => {
     // White b6 captures a7 → Black is left with only b7, now isolated (no a/c
     // neighbor). The note must name the target, not just "opens a file".
-    const t = buildReviewMoveTeaching('4k3/pp6/1P6/8/8/8/8/4K3 w - - 0 1', 'bxa7');
+    const t = buildReviewMoveTeaching('4k3/pp6/1P6/8/8/8/8/4K3 w - - 0 1', 'bxa7', true);
     expect(t).toMatch(/isolated/i);
     expect(t).toMatch(/target/i);
   });
@@ -114,7 +114,7 @@ describe('buildReviewMoveTeaching (grounded per-move review why)', () => {
     // …exd6 leaves White with no e-pawn → e-file half-open.
     const line = ['e4', 'd6', 'd4', 'g6', 'f4', 'e6', 'Be3', 'b6', 'c4', 'Bg7', 'Qd2', 'Nf6', 'Bd3', 'Na6', 'Nf3', 'c6', 'O-O', 'Nc7', 'e5', 'Nd7', 'exd6'];
     const { fen, san } = beforeLast(line);
-    const t = buildReviewMoveTeaching(fen, san);
+    const t = buildReviewMoveTeaching(fen, san, true);
     expect(t).toMatch(/e-file/i);
   });
 });
@@ -162,14 +162,14 @@ describe('new grounded coverage — luft + king centralization (§2)', () => {
   it('names luft when a pawn beside the castled king makes air (h3)', () => {
     // White castled kingside (Kg1), plays h3 — a breathing hole.
     const fen = 'r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 7';
-    const t = buildReviewMoveTeaching(fen, 'h3');
+    const t = buildReviewMoveTeaching(fen, 'h3', true);
     expect(t).toMatch(/luft|breathing hole|back-rank/i);
   });
 
   it('does NOT call luft before the king has castled (Kh3-air is not luft on e1)', () => {
     // King still on e1; h3 is just a pawn move, not luft.
     const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
-    const t = buildReviewMoveTeaching(fen, 'h3');
+    const t = buildReviewMoveTeaching(fen, 'h3', true);
     expect(t == null || !/luft/i.test(t)).toBe(true);
   });
 
@@ -184,5 +184,12 @@ describe('new grounded coverage — luft + king centralization (§2)', () => {
     const fen = '3qk3/8/8/8/8/8/3Q4/4K3 w - - 0 1';
     const t = buildReviewConversionTeaching(fen, 'Ke2');
     expect(t == null || !/fighting piece/i.test(t)).toBe(true);
+  });
+});
+
+describe('the seat is required and read per move (oct3a review stronger line)', () => {
+  it("the opponent's …f6 kicks YOUR knight", () => {
+    const fen = '1k1r3r/pp3pp1/1n1qp1p1/b2pN3/3P4/1QP1B2P/PP3PP1/1K1R3R b - - 3 19';
+    expect(buildReviewMoveTeaching(fen, 'f6', false) ?? '').toMatch(/your knight/);
   });
 });

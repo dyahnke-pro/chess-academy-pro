@@ -317,9 +317,9 @@ export function buildReviewMoveTeaching(
   // straight into their position" to a student playing BLACK, i.e. it called the
   // student's own camp "theirs"). The clauses below are written from the MOVER's
   // seat, so when the mover is the opponent every "their" must flip to "your".
-  // Default true = the mover is the student, which is what every caller meant
-  // before this parameter existed.
-  moverIsStudent: boolean = true,
+  // REQUIRED (oct3a review walk: the stronger-line playback took the default
+  // and narrated the opponent's …f6 as "kicks their knight").
+  moverIsStudent: boolean,
 ): string | null {
   const chess = new Chess(fenBefore);
   let mv: Move;

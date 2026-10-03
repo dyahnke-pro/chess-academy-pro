@@ -1728,7 +1728,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // the live briefing + Learn speak, so the review is one voice with them.
     const lineInvariant = firstTacticInvariant(line.plies);
     const rawWhys = line.plies.map((ply, i) => {
-      let base = plyFactsString(ply) ?? renderPlyFactLine(ply) ?? buildReviewMoveTeaching(ply.fenBefore, ply.san) ?? '';
+      let base = plyFactsString(ply) ?? renderPlyFactLine(ply) ?? buildReviewMoveTeaching(ply.fenBefore, ply.san, ply.moverColor === playerColor) ?? '';
       if (lineInvariant && lineInvariant.index === i) base = `${base} ${lineInvariant.sentence}`.trim();
       // Seat-correct speech: the walked line's mover ALTERNATES every ply, so
       // "your queen" is right only on the student's plies (David 2026-07-21:
@@ -2768,7 +2768,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         const moverWhite = reviewFens[idx]?.split(' ')[1] !== 'b';
         return { cpLoss: Math.max(0, (m.preMoveEval - m.evaluation) * (moverWhite ? 1 : -1)), replyLineUci: m.pv?.afterPlayed ?? [] };
       });
-      void buildOpeningTheoryLecture(reviewFens, sans, openingName ?? 'this opening', { lookup: reviewTheoryLookup, gameReads })
+      void buildOpeningTheoryLecture(reviewFens, sans, openingName ?? 'this opening', { lookup: reviewTheoryLookup, gameReads, studentColor: playerColor })
         .then((lec) => {
           if (cancelled || !lec) return;
           // Phase 1: show the DB-built lecture immediately (button appears fast).

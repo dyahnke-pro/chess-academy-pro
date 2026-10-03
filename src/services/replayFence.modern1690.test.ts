@@ -42,8 +42,8 @@ describe('an even trade is not an overvalued attack (ply 21)', () => {
 describe('the engine\'s best capture is never "keep pieces on" (ply 57)', () => {
   it('29.Nxd7 (best by 2.6) — no "trades pieces while you\'re behind"', async () => {
     const { readTrade } = await import('./tradeQuality');
-    expect(readTrade(fenAt(56), 'Nxd7', 'w', 0)?.call).not.toBe('behind');
-    expect(readTrade(fenAt(56), 'Nxd7', 'w', null)?.call).not.toBe('behind');
+    expect(readTrade(fenAt(56), 'Nxd7', 'w', 0, null)?.call).not.toBe('behind');
+    expect(readTrade(fenAt(56), 'Nxd7', 'w', null, null)?.call).not.toBe('behind');
   });
 });
 

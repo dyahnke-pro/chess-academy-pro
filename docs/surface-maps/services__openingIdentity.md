@@ -57,7 +57,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingIdentity.test.ts:27`
 - `src/services/openingIdentity.test.ts:31`
 - `src/services/openingIdentity.test.ts:32`
-- `src/services/reviewOpeningTheory.ts:636`
+- `src/services/reviewOpeningTheory.ts:639`
 - `src/services/walkOct2a.test.ts:67`
 
 ## Tests

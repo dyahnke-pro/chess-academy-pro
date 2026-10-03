@@ -13,7 +13,7 @@
 //  • `computeCriticality` is the sharpness SCORE (from the same analysis);
 //    `computeImportance` is the speak/rank verdict. One analysis, both reads.
 //  • Perturbation (expensive) runs ONLY when importance says the moment matters.
-import { lastMoveFromSan } from './material';
+import { lastMoveFromSan, lastMoveFromHistory } from './material';
 import { readTrade, findTradeTarget } from './tradeQuality';
 import { conceptInstanceKey, forkThreatKey } from './conceptKey';
 import { layerStandings } from './teachingLayers';
@@ -81,6 +81,15 @@ export function gradedLoss(lm: Pick<LastMoveInput, 'cpLoss' | 'reads'>, studentC
   if (before === undefined || after === undefined) return null;
   const sign = studentColor === 'w' ? 1 : -1;
   return Math.max(0, (before - after) * sign);
+}
+
+/** The student's move as the one that led to `fen`, or null when it did not. */
+function priorLeadingTo(lm: { fenBefore: string; san: string }, fen: string): ReturnType<typeof lastMoveFromSan> {
+  try {
+    const c = new Chess(lm.fenBefore);
+    c.move(lm.san);
+    return c.fen().split(' ')[0] === fen.split(' ')[0] ? lastMoveFromSan(lm.fenBefore, lm.san) : null;
+  } catch { return null; }
 }
 
 export interface LastMoveInput {
@@ -882,11 +891,13 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   let tradeTargetKey: string | null = null;
   try {
     if (lm) {
-      const t = readTrade(lm.fenBefore, lm.san, studentColor, gradedLoss(lm, studentColor));
+      const t = readTrade(lm.fenBefore, lm.san, studentColor, gradedLoss(lm, studentColor),
+        lastMoveFromHistory(lm.historySans?.slice(0, -1), lm.fenBefore));
       if (t) tradeClauses.push({ kind: 'trade', rank: 36, text: t.text, squares: t.squares });
     }
     if (input.opponentLastMove) {
-      const t = readTrade(input.opponentLastMove.fenBefore, input.opponentLastMove.san, studentColor, null);
+      const t = readTrade(input.opponentLastMove.fenBefore, input.opponentLastMove.san, studentColor, null,
+        lm ? priorLeadingTo(lm, input.opponentLastMove.fenBefore) : null);
       if (t) tradeClauses.push({ kind: 'trade', rank: 36, text: t.text, squares: t.squares });
     }
     if (studentToMove) {

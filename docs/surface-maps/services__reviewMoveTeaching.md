@@ -30,22 +30,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `quietMovePoint` (function) — 6 call sites
-- `src/services/playCommentary.ts:999`
+- `src/services/playCommentary.ts:978`
 - `src/services/reviewMoveTeaching.unpin.test.ts:11`
 - `src/services/reviewMoveTeaching.unpin.test.ts:15`
 - `src/services/reviewWalkOct1.test.ts:70`
 - `src/services/reviewWalkOct1.test.ts:76`
 - `src/services/walkOct1Learn.test.ts:85`
 
-### `buildReviewMoveTeaching` (function) — 29 call sites
+### `buildReviewMoveTeaching` (function) — 30 call sites
 - `src/components/Coach/CoachGameReview.tsx:1731`
-- `src/services/coachFeatureService.ts:1151`
-- `src/services/coachFeatureService.ts:3254`
+- `src/services/coachFeatureService.ts:1152`
+- `src/services/coachFeatureService.ts:3255`
 - `src/services/discussionPractice.ts:169`
 - `src/services/dnaLineNarrator.ts:146`
 - `src/services/learnMoveTeaching.ts:44`
 - `src/services/learnMoveTeaching.ts:102`
-- `src/services/reviewMoveBriefing.ts:285`
+- `src/services/reviewMoveBriefing.ts:281`
 - `src/services/reviewMoveTeaching.test.ts:12`
 - `src/services/reviewMoveTeaching.test.ts:14`
 - `src/services/reviewMoveTeaching.test.ts:26`
@@ -61,16 +61,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewMoveTeaching.test.ts:117`
 - `src/services/reviewMoveTeaching.test.ts:165`
 - `src/services/reviewMoveTeaching.test.ts:172`
+- `src/services/reviewMoveTeaching.test.ts:193`
 - `src/services/reviewNarrationDefects.test.ts:15`
 - `src/services/reviewNarrationDefects.test.ts:19`
-- `src/services/reviewOpeningTheory.ts:573`
+- `src/services/reviewOpeningTheory.ts:576`
 - `src/services/reviewWalkOct1.test.ts:71`
 - `src/services/reviewWalkOct1.test.ts:83`
 - `src/services/reviewWalkOct1.test.ts:88`
 
 ### `nameEndgamePhase` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3165`
-- `src/services/reviewFullData.ts:1097`
+- `src/services/coachFeatureService.ts:3166`
+- `src/services/reviewFullData.ts:1132`
 - `src/services/reviewMoveTeaching.test.ts:141`
 - `src/services/reviewMoveTeaching.test.ts:143`
 - `src/services/reviewMoveTeaching.test.ts:148`
@@ -78,7 +79,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewMoveTeaching.test.ts:157`
 
 ### `buildReviewConversionTeaching` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3162`
+- `src/services/coachFeatureService.ts:3163`
 - `src/services/reviewMoveTeaching.test.ts:122`
 - `src/services/reviewMoveTeaching.test.ts:125`
 - `src/services/reviewMoveTeaching.test.ts:131`

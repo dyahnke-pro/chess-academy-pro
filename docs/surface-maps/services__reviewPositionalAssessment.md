@@ -44,7 +44,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseVerdict.test.ts:10`
 - `src/services/planPrescriptions.test.ts:84`
 - `src/services/planPrescriptions.test.ts:91`
-- `src/services/reviewFullData.ts:743`
+- `src/services/reviewFullData.ts:744`
 - `src/services/reviewPositionalAssessment.test.ts:4`
 - `src/services/reviewPositionalAssessment.test.ts:7`
 - `src/services/reviewPositionalAssessment.test.ts:8`
@@ -78,15 +78,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseVerdict.test.ts:18`
 - `src/services/phaseVerdict.test.ts:23`
 - `src/services/phaseVerdict.test.ts:28`
-- `src/services/positionFacts.ts:870`
-- `src/services/reviewFullData.ts:1068`
+- `src/services/positionFacts.ts:879`
+- `src/services/reviewFullData.ts:1069`
 - `src/services/reviewPositionalAssessment.test.ts:87`
 - `src/services/reviewPositionalAssessment.test.ts:92`
 
 ### `phaseVerdictKeys` (function) — 3 call sites
 - `src/services/learnWalkNimzo.test.ts:22`
 - `src/services/learnWalkNimzo.test.ts:31`
-- `src/services/positionFacts.ts:873`
+- `src/services/positionFacts.ts:882`
 
 ## Tests
 
