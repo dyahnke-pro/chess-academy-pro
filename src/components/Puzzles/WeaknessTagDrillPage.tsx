@@ -9,7 +9,8 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Brain, Trophy } from 'lucide-react';
+import { Brain, Trophy } from 'lucide-react';
+import { TacticsPageHeader } from '../Tactics/TacticsPageHeader';
 import { MistakePuzzleBoard } from './MistakePuzzleBoard';
 import { getMisconceptionDrillPuzzles, ensureSequenceSolution } from '../../services/mistakePuzzleService';
 import { recordTagDrillResult } from '../../services/misconceptionService';
@@ -134,9 +135,11 @@ export function WeaknessTagDrillPage(): JSX.Element {
   if (phase === 'empty') {
     return (
       <div className="p-4 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-xl mx-auto w-full space-y-4 flex-1 overflow-y-auto overscroll-contain min-h-0" data-testid="weakness-tag-drill-empty">
-        <button onClick={() => void navigate(-1)} className="flex items-center gap-1 text-sm text-theme-text-muted hover:text-theme-text">
-          <ArrowLeft size={16} /> Back
-        </button>
+        <TacticsPageHeader
+          title={label}
+          onBack={() => void navigate(-1)}
+          backLabel="Back"
+        />
         <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
           <div className="w-14 h-14 rounded-full bg-violet-500/15 flex items-center justify-center mb-4">
             <Brain size={26} className="text-violet-300" />
@@ -186,14 +189,16 @@ export function WeaknessTagDrillPage(): JSX.Element {
   const puzzle = puzzles[index];
   return (
     <div className="p-4 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-xl mx-auto w-full space-y-4 flex-1 overflow-y-auto overscroll-contain min-h-0" data-testid="weakness-tag-drill-solving">
-      <div className="flex items-center justify-between">
-        <button onClick={() => void navigate(-1)} className="flex items-center gap-1 text-sm text-theme-text-muted hover:text-theme-text">
-          <ArrowLeft size={16} /> Back
-        </button>
-        <span className="text-xs font-semibold text-theme-text-muted" data-testid="weakness-tag-drill-progress">
-          {label} · {index + 1} / {puzzles.length}
-        </span>
-      </div>
+      <TacticsPageHeader
+        title={label}
+        onBack={() => void navigate(-1)}
+        backLabel="Back"
+        right={
+          <span className="text-xs font-semibold text-theme-text-muted whitespace-nowrap" data-testid="weakness-tag-drill-progress">
+            {index + 1} / {puzzles.length}
+          </span>
+        }
+      />
       {preparingSequence ? (
         <div className="flex items-center justify-center py-16" data-testid="tag-drill-preparing-sequence">
           <p className="text-sm text-theme-text-muted">Building the sequence…</p>

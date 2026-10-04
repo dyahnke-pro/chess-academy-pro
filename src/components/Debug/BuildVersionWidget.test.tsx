@@ -16,4 +16,15 @@ describe('BuildVersionWidget', () => {
     render(<BuildVersionWidget />);
     expect(screen.getByLabelText(/Build version/i)).toBeInTheDocument();
   });
+
+  // Hand walk 2026-10-04 (B7): pinned at bottom-1 it sat on the "Tactics"
+  // label of the mobile bottom nav. On phones it rides above the nav; on
+  // desktop (no bottom nav) it keeps its corner.
+  it('sits above the mobile bottom nav and keeps its desktop corner', () => {
+    render(<BuildVersionWidget />);
+    const cls = screen.getByTestId('build-version-widget').className;
+    expect(cls).toContain('bottom-[calc(4.5rem+env(safe-area-inset-bottom,0px))]');
+    expect(cls).toContain('md:bottom-1');
+    expect(cls.split(/\s+/)).not.toContain('bottom-1');
+  });
 });

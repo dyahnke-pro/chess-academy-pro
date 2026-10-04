@@ -516,14 +516,14 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
               role="radio"
               aria-checked={lengthMode === m}
               onClick={() => { lengthModeRef.current = m; setLengthMode(m); }}
-              className={`rounded-full border-2 px-4 py-1.5 text-sm font-bold transition-colors ${
+              className={`whitespace-nowrap rounded-full border-2 px-4 py-1.5 text-sm font-bold transition-colors ${
                 lengthMode === m
                   ? 'border-cyan-300 bg-cyan-400/15 text-cyan-200 shadow-[0_0_14px_rgba(0,229,255,0.5)]'
                   : 'border-theme-border text-theme-text-muted hover:text-theme-text'
               }`}
               data-testid={`length-${m}`}
             >
-              {m === 'long' ? 'Long · 3–4 moves' : 'Very Long · 5+ moves'}
+              {m === 'long' ? '3–4 moves' : '5+ moves'}
             </button>
           ))}
         </div>

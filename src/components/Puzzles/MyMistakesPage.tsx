@@ -14,6 +14,7 @@ import { logAppAudit } from '../../services/appAuditor';
 import { getHomeGameIds } from '../../services/homeOpeningService';
 import { tacticTypeLabel } from '../../services/tacticAlertService';
 import { PageHelp } from '../Layout/PageHelp';
+import { TacticsPageHeader } from '../Tactics/TacticsPageHeader';
 import { AnalyzeGamesButton } from '../Games/AnalyzeGamesButton';
 import { gameNeedsAnalysis } from '../../services/gameAnalysisService';
 import { useAppStore } from '../../stores/appStore';
@@ -333,14 +334,12 @@ export function MyMistakesPage(): JSX.Element {
   if (activePuzzle) {
     return (
       <div className="p-4 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-xl mx-auto w-full space-y-4 flex-1 overflow-y-auto overscroll-contain min-h-0" data-testid="solving-mode">
-        <button
-          onClick={() => { setPracticeQueue([]); setActivePuzzle(null); }}
-          className="flex items-center gap-1 text-sm text-theme-text-muted hover:text-theme-text"
-          data-testid="back-to-list"
-        >
-          <ArrowLeft size={16} />
-          Back to list
-        </button>
+        <TacticsPageHeader
+          title="My Weaknesses"
+          onBack={() => { setPracticeQueue([]); setActivePuzzle(null); }}
+          backLabel="Back to list"
+          backTestId="back-to-list"
+        />
         {preparingSequence ? (
           <p className="py-16 text-center text-sm text-theme-text-muted" data-testid="preparing-sequence">
             Building the tactical sequence…
@@ -361,15 +360,12 @@ export function MyMistakesPage(): JSX.Element {
   return (
     <div className="flex flex-col flex-1 p-4 md:p-6 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 overflow-y-auto overscroll-contain min-h-0" data-testid="my-mistakes-page">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-4">
-        <button
-          onClick={() => void navigate('/tactics')}
-          className="p-2 rounded-lg hover:bg-theme-surface transition-colors"
-          aria-label="Back to puzzles"
-        >
-          <ArrowLeft size={18} className="text-theme-text" />
-        </button>
-        <h1 className="text-xl font-bold text-theme-text flex-1">My Weaknesses</h1>
+      <TacticsPageHeader
+        className="mb-4"
+        title="My Weaknesses"
+        onBack={() => void navigate('/tactics')}
+        backLabel="Back to puzzles"
+        right={<>
         {/* The ONE analysis pipeline (home openings first, capped package).
             "Re-analyze Games" was a second pipeline that deleted every
             puzzle and its progress before re-running all games serially —
@@ -385,12 +381,13 @@ export function MyMistakesPage(): JSX.Element {
             { label: 'Where it fits', body: 'Fix them here and the holes close everywhere — the coach, the heat map and your daily training all read the same record.' },
           ]}
         />
-      </div>
+        </>}
+      />
 
 
       {/* Stats bar */}
       {stats && stats.total > 0 && (
-        <div className="flex gap-4 text-sm mb-4" data-testid="stats-bar">
+        <div className="flex flex-wrap gap-x-3 gap-y-1 text-sm mb-4 [&>div]:whitespace-nowrap [&>div]:shrink-0" data-testid="stats-bar">
           <div className="flex items-center gap-1 text-theme-text-muted">
             <AlertTriangle size={14} />
             <span>{stats.total} total</span>
@@ -453,7 +450,7 @@ export function MyMistakesPage(): JSX.Element {
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search opponent, tactic (fork, skewer, …), or opening…"
+          placeholder="Search opponent, tactic, opening"
           className="w-full pl-9 pr-9 py-2 rounded-lg bg-theme-surface text-sm text-theme-text placeholder:text-theme-text-muted border border-theme-border focus:outline-none focus:border-theme-accent transition-colors"
           data-testid="mistakes-search-input"
           aria-label="Search puzzles by opponent, tactic, or opening"

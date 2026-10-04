@@ -12,7 +12,9 @@ import { PuzzleTimer } from './PuzzleTimer';
 import { PuzzleSessionStats } from './PuzzleSessionStats';
 import { useSolveTimer } from '../../hooks/useSolveTimer';
 import { voiceService } from '../../services/voiceService';
-import { ArrowLeft, Brain, SkipForward } from 'lucide-react';
+import { Brain, SkipForward } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { TacticsPageHeader } from '../Tactics/TacticsPageHeader';
 import { db } from '../../db/schema';
 import { logAppAudit } from '../../services/appAuditor';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
@@ -31,6 +33,7 @@ interface SessionState {
 }
 
 export function PuzzleTrainerPage(): JSX.Element {
+  const navigate = useNavigate();
   const activeProfile = useAppStore((s) => s.activeProfile);
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
   const [phase, setPhase] = useState<SessionPhase>('mode_select');
@@ -189,24 +192,18 @@ export function PuzzleTrainerPage(): JSX.Element {
   return (
     <div className="flex flex-col flex-1 p-4 md:p-6 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 overflow-y-auto" data-testid="puzzle-trainer">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-4">
-        {phase !== 'mode_select' && (
-          <button
-            onClick={handleBack}
-            className="p-2 rounded-lg hover:bg-theme-surface transition-colors"
-            aria-label="Back to modes"
-            data-testid="back-to-modes"
-          >
-            <ArrowLeft size={18} className="text-theme-text" />
-          </button>
-        )}
-        <div className="flex items-center gap-2">
-          <Brain size={24} className="text-theme-accent" />
-          <h1 className="text-xl font-bold text-theme-text">Puzzle Trainer</h1>
-        </div>
-        <div className="flex-1" />
-        <span className="text-sm text-theme-text-muted">Rating: {userRating}</span>
-      </div>
+      {/* The mode list had no way back to Tactics (hand walk 2026-10-04,
+          C8): from the list the arrow leaves for /tactics; inside a session
+          it returns to the list, as before. */}
+      <TacticsPageHeader
+        className="mb-4"
+        title="Puzzle Trainer"
+        icon={<Brain size={24} className="text-theme-accent" />}
+        onBack={phase === 'mode_select' ? () => void navigate('/tactics') : handleBack}
+        backLabel={phase === 'mode_select' ? 'Back to Tactics' : 'Back to modes'}
+        backTestId={phase === 'mode_select' ? 'back-btn' : 'back-to-modes'}
+        right={<span className="text-sm text-theme-text-muted whitespace-nowrap">Rating: {userRating}</span>}
+      />
 
       {/* Mode selection */}
       {phase === 'mode_select' && (

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Lightbulb, Play, SkipForward, Pause, ChevronLeft } from 'lucide-react';
+import { Lightbulb, Play, SkipForward, Pause, ChevronLeft } from 'lucide-react';
 import { Chess } from 'chess.js';
 import { ChessBoard } from '../Board/ChessBoard';
 import {
@@ -25,11 +25,15 @@ import {
 } from '../../services/tacticNarrationService';
 import { useAppStore } from '../../stores/appStore';
 import { MistakePuzzleBoard } from '../Puzzles/MistakePuzzleBoard';
+import { TacticsPageHeader } from './TacticsPageHeader';
 import type { TacticCreateItem, ReplayMove } from '../../services/tacticCreateService';
 import type { TacticType } from '../../types';
 import { db } from '../../db/schema';
 
-type Phase = 'loading' | 'replay' | 'solving' | 'feedback' | 'summary';
+// 'empty' = nothing to build from yet (no imported games with a tactic). It
+// used to fall into 'summary' and greet a first-time user with "Session
+// Complete" before anything was played (hand walk 2026-10-04, D13).
+type Phase = 'loading' | 'empty' | 'replay' | 'solving' | 'feedback' | 'summary';
 
 // Replay speed in ms per move — starts slow, accelerates as more context is shown
 const BASE_REPLAY_SPEED = 1000;
@@ -92,7 +96,7 @@ export function TacticCreatePage(): JSX.Element {
     setCurrentDepth(depth);
     const items = await buildTacticCreateQueue(10, filterTypes);
     if (items.length === 0) {
-      setPhase('summary');
+      setPhase('empty');
       return;
     }
     setQueue(items);
@@ -292,23 +296,19 @@ export function TacticCreatePage(): JSX.Element {
   return (
     <div className="max-w-2xl mx-auto w-full p-4 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 flex flex-col gap-4 flex-1 overflow-y-auto overscroll-contain min-h-0">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <button onClick={() => void navigate('/tactics')} className="p-2 rounded-lg hover:opacity-80" data-testid="back-btn">
-          <ArrowLeft size={20} style={{ color: 'var(--color-text)' }} />
-        </button>
-        <Lightbulb size={24} style={{ color: '#a78bfa' }} />
-        <div className="flex-1">
-          <h1 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>Create</h1>
-          <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-            Replay your game, then find the tactic
-          </p>
-        </div>
-        {filterTypes && filterTypes.length > 0 && (
+      <TacticsPageHeader
+        title="Create"
+        icon={<Lightbulb size={24} style={{ color: '#a78bfa' }} />}
+        onBack={() => void navigate('/tactics')}
+        right={filterTypes && filterTypes.length > 0 ? (
           <span className="text-xs px-2 py-1 rounded-full" style={{ background: 'color-mix(in srgb, #a78bfa 15%, transparent)', color: '#a78bfa' }}>
             {filterTypes.map((t) => tacticTypeLabel(t)).join(', ')}
           </span>
-        )}
-      </div>
+        ) : undefined}
+      />
+      <p className="text-xs -mt-2" style={{ color: 'var(--color-text-muted)' }}>
+        Replay your game, then find the tactic
+      </p>
 
       {/* Loading */}
       {phase === 'loading' && (
@@ -591,6 +591,39 @@ export function TacticCreatePage(): JSX.Element {
                 Context depth reset — rebuilding from shorter replays
               </p>
             )}
+          </div>
+        </motion.div>
+      )}
+
+      {/* Empty — no games to build from yet */}
+      {phase === 'empty' && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col items-center justify-center flex-1 gap-4 text-center"
+          data-testid="create-empty"
+        >
+          <Lightbulb size={40} style={{ color: '#a78bfa' }} />
+          <h2 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>No games to build from yet</h2>
+          <p className="text-sm max-w-xs" style={{ color: 'var(--color-text-muted)' }}>
+            Create replays a game you played and stops where a tactic was on the board. Import your games and the missed tactics show up here.
+          </p>
+          <div className="flex gap-3">
+            <button
+              onClick={() => void navigate('/games/import')}
+              className="px-5 py-2.5 rounded-xl font-semibold text-sm"
+              style={{ background: '#a78bfa', color: 'var(--color-bg)' }}
+              data-testid="create-empty-import"
+            >
+              Import Games
+            </button>
+            <button
+              onClick={() => void navigate('/tactics')}
+              className="px-5 py-2.5 rounded-xl font-semibold text-sm border"
+              style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+            >
+              Back to Tactics
+            </button>
           </div>
         </motion.div>
       )}
