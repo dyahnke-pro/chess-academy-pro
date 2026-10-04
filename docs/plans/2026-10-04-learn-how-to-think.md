@@ -213,6 +213,29 @@ celebrates via the reward layer).
 5. **Guess-proofing:** extra taps count as wrong; the number of answers is told
    only after the first try; a set number of misses moves on to Show.
 
+**C2. The lesson-answer record — the highest-trust data in the app (David 2026-10-04: "Absolutely collect this data. Its value and accuracy will be highest of all data collected.")**
+
+Every answer is stored, because a lesson answer is the most CONTROLLED evidence
+the app gets: the position, the question and the key are all known, so a wrong tap
+names the misconception directly (game slips are inferred from a move).
+
+Per question, one row (Dexie, through the existing writers where they fit):
+- step, sub-question, position source (own game id + ply / puzzle id), the key
+  set, every tap IN ORDER with right/wrong, extra taps, time to first tap and
+  between taps, help used (Show / "I don't know" / nudge / hint), spoken vs
+  tapped, the follow-up chain reached, and the misconception each wrong tap maps
+  to;
+- written as capability evidence (`origin: 'lesson'`, held/broken, `prompted`
+  when helped) on the existing tags, and wrong-tap misconceptions written to the
+  spine like game slips.
+
+**Lessons measure KNOW, games measure USE.** Both feed the same record; neither
+replaces the other. The GAP between them is the signal the coach acts on:
+"finds loose pieces in lessons, still hangs them in games" = the idea is known,
+the habit has not transferred → drill the habit in live Learn play (the step
+question asked at the real moment), not another lesson on the idea. The heat map
+can show both (known / used) once the data exists.
+
 **D. Making it stick.**
 6. **Mixed practice** once a tier is proven (the Steps Method's "mix" books): the
    student first decides WHICH step applies, as real games demand.
