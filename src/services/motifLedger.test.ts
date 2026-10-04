@@ -35,3 +35,21 @@ describe('only a tactic motif transfers (review walks 2026-09-27)', () => {
     expect(transferMotifOf('motif:pin@w:g5f6d8')).toEqual({ motif: 'pin@w', instance: 'g5f6d8' });
   });
 });
+
+// Clean-pass walk 2026-10-04, G1 (SI5q0VJz): the pin of 20.Qa4 was filed as move
+// 21 (the board after 20…f6 reads "21"), so 21.exf6+ said "you saw this idea on
+// move 21" about itself.
+describe('the student move number after the reply', () => {
+  it('is the move the student just played, both seats', async () => {
+    const { studentMoveAfterReply } = await import('./motifLedger');
+    // after 20.Bg5+ f6 — White's move 20
+    expect(studentMoveAfterReply('r6r/1n2k1pp/4pp2/n2p1bB1/Q7/P4N2/Bq3PPP/R4RK1 w - - 0 21')).toBe(20);
+    // after 20…Ke7 21.Bg5+ — Black's move 20
+    expect(studentMoveAfterReply('r6r/4k1pp/4pn2/n2p1bB1/Q7/P4N2/Bq3PPP/R4RK1 b - - 1 21')).toBe(20);
+  });
+  it('Learn files the motif under it', async () => {
+    const { readFileSync } = await import('node:fs');
+    const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
+    expect(src).toMatch(/const moveNo = studentMoveAfterReply\(args\.fenAfterReply\);/);
+  });
+});

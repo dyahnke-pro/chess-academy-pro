@@ -1980,7 +1980,7 @@ export function buildReviewSegments(
               causalArrows = admitArrows(lineArrows(fenPair.fenBefore, line ?? [], 'review.mateLine'), { fen: fenPair.fenBefore, studentColor: playerColor ?? moverColor }).arrows;
             }
           }
-          const won = !ml && line ? lineWins(fenPair.fenBefore, line, studentColorWB, m.san) : null;
+          const won = !ml && line ? lineWins(fenPair.fenBefore, line, studentColorWB, m.san, i > 0 ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null) : null;
           if (won) {
             const raw = `[tactic] That wins ${won.what}: ${won.sans.join(' ')}.`;
             facets.push(raw);

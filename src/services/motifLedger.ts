@@ -54,6 +54,15 @@ export function withTransfer(text: string, phrase: string): string {
   return `${text.slice(0, m.index)}${phrase}${text.slice(m.index)}`;
 }
 
+/** The student's own move number, read off the board AFTER the opponent's
+ *  reply — whose fullmove counter has already moved on to the next move
+ *  (clean-pass walk 2026-10-04, G1: the pin of 20.Qa4 was filed as "move
+ *  21", so 21.exf6+ said "you saw this idea on move 21" about itself). */
+export function studentMoveAfterReply(fenAfterReply: string): number {
+  const full = Number.parseInt(fenAfterReply.split(' ')[5] ?? '0', 10) || 0;
+  return Math.max(0, full - 1);
+}
+
 /** Record the first move (and instance) a motif was taught. Later calls keep
  *  the first. */
 export function recordMotif(motif: string, instance: string, moveNumber: number, ledger: MotifLedger): void {

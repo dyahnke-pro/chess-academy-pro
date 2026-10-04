@@ -29,7 +29,7 @@ import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
-import { transferClause, recordMotif, withTransfer } from '../../services/motifLedger';
+import { transferClause, recordMotif, withTransfer, studentMoveAfterReply } from '../../services/motifLedger';
 import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/learnTurnDoor';
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, intentRule, moveIntent, nullMoveFen } from '../../services/moveIntent';
@@ -7871,7 +7871,7 @@ export function CoachTeachPage(): JSX.Element {
           // "You saw this idea on move 3." spoke alone on prod), fires only for
           // a NEW instance, and is recorded only once the line survives the
           // repeat guards below — computed is not said.
-          const moveNo = Number.parseInt(args.fenAfterReply.split(' ')[5] ?? '0', 10) || 0;
+          const moveNo = studentMoveAfterReply(args.fenAfterReply);
           const instance = t.squares.join('');
           tacticLine = word
             // NAMED from the detector's own description (Learn names the
@@ -8980,7 +8980,7 @@ export function CoachTeachPage(): JSX.Element {
         // that kept the win here"). The found-move lane says it with the reason
         // the others fail and the line, so the grade stands down for it.
         const foundSpeaks = !!grade && (grade.reason === 'clear-best' || grade.reason === 'only-move') && (() => {
-          try { return !!foundMoveTeaching(fenBefore, move.san, preStudentRead?.topLines, playerColor === 'white' ? 'w' : 'b', move.to); } catch { return false; }
+          try { return !!foundMoveTeaching(fenBefore, move.san, preStudentRead?.topLines, playerColor === 'white' ? 'w' : 'b', move.to, move.history); } catch { return false; }
         })();
         const speakGrade = !!grade?.worthSpeaking && !!grade.clause && ((grade.reason !== 'clear-best' && grade.reason !== 'only-move') || !!goodPoint)
           && !(isRecapture && !grade.fault) && !foundSpeaks;
@@ -10444,7 +10444,7 @@ export function CoachTeachPage(): JSX.Element {
                       // played one of the only moves that held — say so, with why
                       // the others failed. The fact is the verdict; no praise word.
                       try {
-                        const found = foundMoveTeaching(fenBefore, move.san, preStudentRead?.topLines, playerColor === 'white' ? 'w' : 'b', move.to);
+                        const found = foundMoveTeaching(fenBefore, move.san, preStudentRead?.topLines, playerColor === 'white' ? 'w' : 'b', move.to, move.history);
                         if (found) {
                           queueSpokenHint(fenAfterReply, found.text, found.lane, found.squares, found.claims, fenBefore);
                           // DUAL-USE (P4): a found only-move is calculation proven — unless

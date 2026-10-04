@@ -93,7 +93,8 @@ export async function refuteWrongTry(args: {
         fenAfter, uci: [...uci], arrows: lineArrows(fenAfter, uci, 'puzzleTeaching.refute'),
       };
     }
-    const w = lineWins(fenAfter, line, them, undefined, { minPlies: 1 });
+    // Their line answers the student's move: a take-back on its square is a trade.
+    const w = lineWins(fenAfter, line, them, undefined, { fenBefore: args.fenBefore, san: args.wrongSan }, { minPlies: 1 });
     if (w) {
       const uci = line.slice(0, w.plies.length);
       return {

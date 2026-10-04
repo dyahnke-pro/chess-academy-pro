@@ -104,7 +104,7 @@ describe('Learn re-walk 2026-10-01', () => {
 
   it('a winning line names what changes hands, not "two pawns" for a piece', () => {
     // exd5 takes a knight, …cxd5 takes the pawn back: a knight for a pawn.
-    const w = lineWins('4k3/8/2p5/3n4/4P3/8/8/4K3 w - - 0 1', ['e4d5', 'c6d5', 'e1e2'], 'w');
+    const w = lineWins('4k3/8/2p5/3n4/4P3/8/8/4K3 w - - 0 1', ['e4d5', 'c6d5', 'e1e2'], 'w', undefined, null);
     expect(w?.what).toBe('a knight for a pawn');
   });
 });

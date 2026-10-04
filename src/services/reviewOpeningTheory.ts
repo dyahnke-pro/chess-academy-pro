@@ -259,7 +259,7 @@ function gameReadFor(
     try {
       const c = new Chess(fenBefore);
       c.move(san);
-      const w = lineWins(c.fen(), read.replyLineUci, mover === 'white' ? 'b' : 'w');
+      const w = lineWins(c.fen(), read.replyLineUci, mover === 'white' ? 'b' : 'w', undefined, { fenBefore, san });
       if (w) refutation = { sans: w.sans, what: w.what };
     } catch { /* no line — the cost stands alone */ }
   }
@@ -738,7 +738,7 @@ export function buildTheoryLectureBeats(
       const uci: string[] = [];
       const cc = new Chess(c.fen());
       for (const san of t.punish) { const m = cc.move(san); if (!m) break; uci.push(`${m.from}${m.to}${m.promotion ?? ''}`); }
-      const w = lineWins(c.fen(), uci, slip.color === 'w' ? 'b' : 'w');
+      const w = lineWins(c.fen(), uci, slip.color === 'w' ? 'b' : 'w', undefined, { fenBefore: fen, san: t.san });
       line = w ? ` loses ${w.what}: ${w.sans.join(' ')}` : ` runs into ${t.punish[0]}`;
     } catch { return ''; }
     return ` A trap to know here: the natural ${t.san}, which ${t.freqPct}% of club players choose,${line}.`;

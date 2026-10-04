@@ -145,7 +145,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
     const bare = (x: string): string => x.replace(/[+#]$/, '');
     if (i.bestSan && bare(i.bestSan) === bare(i.san) && i.bestLine?.moves?.length) {
       const ml = mateLine(i.fenBefore, i.bestLine.moves, me, i.san);
-      const w = ml ? null : winningLine(i.fenBefore, i.san, i.bestLine.moves, me);
+      const w = ml ? null : winningLine(i.fenBefore, i.san, i.bestLine.moves, me, priorFromHistory(i.history, i.fenBefore));
       if (ml) out.push({ lane: 'movePoint', text: ml.text, squares: [to, ...ml.taken], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_mate_line', props: { surface: 'coach-teach', quiet: ml.quiet } }, arrows: mateArrows(ml, me) });
       if (w) out.push({ lane: 'movePoint', text: `That wins ${w.what}: ${w.sans.join(' ')}.`, squares: [to], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_winning_line', props: { surface: 'coach-teach' } }, arrows: w.arrows });
     }
@@ -662,7 +662,7 @@ export function drilledTransferLine(
 
 /** THE VERDICT ON A FOUND MOVE (P2 #2): at a real decision moment on the board
  *  before the move, the student played one of the only moves that held. */
-export function foundMoveTeaching(fenBefore: string, san: string, preLines: readonly CriticalFanLine[] | undefined, student: 'w' | 'b', to: string): TeachingHint | null {
+export function foundMoveTeaching(fenBefore: string, san: string, preLines: readonly CriticalFanLine[] | undefined, student: 'w' | 'b', to: string, history: readonly string[]): TeachingHint | null {
   if (!preLines || preLines.length < 2) return null;
   const found = criticalMomentFound(readCriticalMoment({ topLines: preLines, moverColor: student, fen: fenBefore }), san);
   if (!found) return null;
@@ -671,7 +671,7 @@ export function foundMoveTeaching(fenBefore: string, san: string, preLines: read
   // follows WITH CHECK). When the found move is the engine's and its own line
   // wins material, the line is said to where the material lands, and drawn.
   const ml = mateLine(fenBefore, preLines[0]?.moves ?? [], student, san);
-  const won = ml ? null : winningLine(fenBefore, san, preLines[0]?.moves ?? [], student);
+  const won = ml ? null : winningLine(fenBefore, san, preLines[0]?.moves ?? [], student, priorFromHistory(history, fenBefore));
   const text = ml ? `${found} ${ml.text}` : won ? `${found} It wins ${won.what}: ${won.sans.join(' ')}.` : found;
   const arrows: ArrowClaim[] = ml ? mateArrows(ml, student) : won ? won.arrows : [];
   // A real decision moment (only one or two moves held) answered is calculation
@@ -686,8 +686,8 @@ function mateArrows(ml: MateLine, student: 'w' | 'b'): ArrowClaim[] {
 
 /** The engine line starting with the played move, when the student ends it up
  *  material — said to the last capture, drawn ply by ply (`lineCalc`). */
-export function winningLine(fen: string, san: string, lineUci: readonly string[], student: 'w' | 'b'): { what: string; sans: string[]; arrows: ArrowClaim[] } | null {
-  const w = lineWins(fen, lineUci, student, san);
+export function winningLine(fen: string, san: string, lineUci: readonly string[], student: 'w' | 'b', prior: { fenBefore: string; san: string } | null): { what: string; sans: string[]; arrows: ArrowClaim[] } | null {
+  const w = lineWins(fen, lineUci, student, san, prior);
   if (!w) return null;
   return { what: w.what, sans: w.sans, arrows: w.plies.map((p) => ({ from: p.from, to: p.to, role: p.color === student ? 'play' : 'theirs', fen: p.fen, source: 'learn.foundMove.line' })) };
 }
@@ -697,6 +697,21 @@ export function winningLine(fen: string, san: string, lineUci: readonly string[]
 // narration and Play's answers, so a question gets the same fact the lesson
 // would have said. TEXT ONLY: answering a question never writes evidence — the
 // move was already recorded when it was played.
+
+/** The opponent's move that led to `fenBefore`, read off `history` (which
+ *  ends with the student's move), or null when the history does not lead
+ *  there. A winning line that opens by taking back counts from before it. */
+export function priorFromHistory(history: readonly string[], fenBefore: string): { fenBefore: string; san: string } | null {
+  if (history.length < 2) return null;
+  const pre = replayTo(history, history.length - 2);
+  if (!pre) return null;
+  try {
+    const c = new Chess(pre);
+    if (!c.move(history[history.length - 2])) return null;
+    const key = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+    return key(c.fen()) === key(fenBefore) ? { fenBefore: pre, san: history[history.length - 2] } : null;
+  } catch { return null; }
+}
 
 function replayTo(history: readonly string[], ply: number): string | null {
   try { const c = new Chess(); for (const san of history.slice(0, ply)) c.move(san); return c.fen(); } catch { return null; }

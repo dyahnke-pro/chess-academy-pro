@@ -5,24 +5,24 @@ describe('winningLine — the line that makes the found move work (pass-2 walk 2
   // King's Indian, after 9.d5: 9…Nxd5 10.cxd5 Bxc3+ 11.Bxc3 Qxc3+ wins a pawn.
   const fen = 'r1b2rk1/pp2ppbp/2np1np1/q1pP4/2P5/1PNBPN2/PB3PPP/R2QK2R b KQ - 0 9';
   it('says the line to the last capture, with what it wins', () => {
-    const w = winningLine(fen, 'Nxd5', ['f6d5', 'c4d5', 'g7c3', 'b2c3', 'a5c3', 'e1e2'], 'b');
+    const w = winningLine(fen, 'Nxd5', ['f6d5', 'c4d5', 'g7c3', 'b2c3', 'a5c3', 'e1e2'], 'b', null);
     expect(w?.what).toBe('a pawn');
     expect(w?.sans).toEqual(['…Nxd5', 'cxd5', '…Bxc3+', 'Bxc3', '…Qxc3+']);
     expect(w?.arrows).toHaveLength(5);
   });
   it('a line that ends behind says nothing', () => {
     // …Nxd5 cxd5 and the line stops: a knight for a pawn.
-    expect(winningLine(fen, 'Nxd5', ['f6d5', 'c4d5', 'h7h6'], 'b')).toBeNull();
+    expect(winningLine(fen, 'Nxd5', ['f6d5', 'c4d5', 'h7h6'], 'b', null)).toBeNull();
   });
   it('a line cut one move short of a forced recapture is played out (WO-OUTCOME-01)', () => {
     // The engine line stops at Bxc3; …Qxc3+ takes the bishop back and is forced
     // material, so the claim is the pawn — shown to the move that wins it.
-    const w = winningLine(fen, 'Nxd5', ['f6d5', 'c4d5', 'g7c3', 'b2c3'], 'b');
+    const w = winningLine(fen, 'Nxd5', ['f6d5', 'c4d5', 'g7c3', 'b2c3'], 'b', null);
     expect(w?.what).toBe('a pawn');
     expect(w?.sans).toEqual(['…Nxd5', 'cxd5', '…Bxc3+', 'Bxc3', '…Qxc3+']);
   });
   it('a different first move says nothing', () => {
-    expect(winningLine(fen, 'Nb4', ['f6d5', 'c4d5', 'g7c3', 'b2c3', 'a5c3', 'e1e2'], 'b')).toBeNull();
+    expect(winningLine(fen, 'Nb4', ['f6d5', 'c4d5', 'g7c3', 'b2c3', 'a5c3', 'e1e2'], 'b', null)).toBeNull();
   });
 });
 

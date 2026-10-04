@@ -837,7 +837,7 @@ export function callInaccuracyDetailed(args: {
       const b = new Chess(args.fenBefore);
       b.move(args.playedSan);
       const opp = args.moverColor === 'white' ? 'b' : 'w';
-      const w = lineWins(b.fen(), args.replyLineUci, opp);
+      const w = lineWins(b.fen(), args.replyLineUci, opp, undefined, { fenBefore: args.fenBefore, san: args.playedSan });
       if (w) {
         lineTail = ` The line: ${w.sans.join(' ')} — they come out ${w.what} up.`;
         line = { fen: b.fen(), uci: args.replyLineUci.slice(0, w.plies.length) };

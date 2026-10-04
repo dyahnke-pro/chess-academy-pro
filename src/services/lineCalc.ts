@@ -20,7 +20,16 @@ export interface LineWin { net: number; what: string; sans: string[]; plies: Lin
  * is given the line must start with it. Null unless `side` ends the line up at
  * least a pawn, with at least two plies to show.
  */
-export function lineWins(fen: string, lineUci: readonly string[], side: 'w' | 'b', firstSan?: string, opts: { minPlies?: number } = {}): LineWin | null {
+export function lineWins(
+  fen: string, lineUci: readonly string[], side: 'w' | 'b', firstSan: string | undefined,
+  /** REQUIRED — the move that led to `fen`, or null on a quiet board. A line
+   *  that opens by taking back on that move's capture square is the other
+   *  half of a trade, counted from before it (clean-pass walk 2026-10-04, G2
+   *  31…Qxh4+: "That wins two knights" — the first knight had just taken a
+   *  bishop). */
+  prior: { fenBefore: string; san: string } | null,
+  opts: { minPlies?: number } = {},
+): LineWin | null {
   if (!lineUci.length) return null;
   const bare = (s: string): string => s.replace(/[+#]$/, '');
   const c = new Chess(fen);
@@ -37,7 +46,7 @@ export function lineWins(fen: string, lineUci: readonly string[], side: 'w' | 'b
   } catch { /* the playable prefix is what we have */ }
   // WHAT THE LINE WINS is the ONE ledger rule (WO-OUTCOME-01): the settled net
   // where the line ends — never a private settle rule of this file.
-  const proof = proofCut(fen, plies.map((p) => p.san), side);
+  const proof = proofCut(fen, plies.map((p) => p.san), side, prior);
   if (!proof || proof.mate || !proof.ledger || proof.ledger.netPawns < 1) return null;
   // A SPOKEN proof has the listener's horizon — the same check every heard
   // proof makes (exchangeLedger.proofForMover): a deep engine line's tail is
