@@ -791,7 +791,7 @@ export function customLessonPartLines(
   part: CustomLessonPart,
   index: number,
   total: number,
-  firstDrill: { setupFen: string; solutionSan: string[]; themes: string[] } | null,
+  firstDrill: { setupFen: string; solutionSan: string[]; themes?: string[] } | null,
 ): string[] {
   const transition = partTransition(part, index, total);
   const behavior = part.concept ? `${part.concept.behavior}.` : '';
