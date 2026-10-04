@@ -784,6 +784,13 @@ because every phase consumes them:
   end of a lesson (Up next bite, tier unlock + reward + audit) — the page talks to
   the hook only (composition gate: page 60/60, total 253/253).
 
+- **Owed (G8.5, P6 carry-over):** `stepForMethodClaim` / `METHOD_HABIT_STEP`
+  (the ThinkingStep vocabulary) have no production caller yet — they exist for
+  the carry-over, where Learn's live method lines name the step and file its
+  evidence. That is narration wiring, held while the narration-unification
+  session lands (David 2026-10-04: another session is unifying narration
+  pathways).
+
 ## Work list for the end of the build (David 2026-10-04: "Any questions I ask can be tacked on to the work list at the end")
 
 1. **More public-domain books for the library** — candidates to verify (public

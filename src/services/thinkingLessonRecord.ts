@@ -8,7 +8,7 @@
 // computed); games prove USE (David 2026-10-04 decision #2). A step's standing
 // — and so which tier is open — is read on KNOW.
 import type { Color } from 'chess.js';
-import { capabilityProven, getCapabilityProfile, type CapabilityProfile } from './capabilityEvidence';
+import { capabilityProven, type CapabilityProfile } from './capabilityEvidence';
 import { recordAnswer } from './answerRecord';
 import { wrongTapTag } from './wrongTapTag';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
@@ -47,9 +47,4 @@ export function standingFromProfile(profile: CapabilityProfile, tags: readonly M
   if (entries.every((e) => capabilityProven(e))) return 'green';
   if (entries.some((e) => e && e.broken > 0 && e.heldStreak === 0)) return 'red';
   return 'grey';
-}
-
-/** The lesson reads KNOW: what the student has shown they can find when asked. */
-export async function stepStanding(tags: readonly MisconceptionTagId[]): Promise<StepStanding> {
-  return standingFromProfile(await getCapabilityProfile('know'), tags);
 }
