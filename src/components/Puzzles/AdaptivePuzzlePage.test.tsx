@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '../../test/utils';
 import { AdaptivePuzzlePage } from './AdaptivePuzzlePage';
-import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
+import { DEFAULT_PUZZLE_RATING } from '../../services/studentPuzzleRating';
 import { STRETCH_SEED } from '../../services/reachRating';
 
 const mockPuzzle = {
@@ -124,16 +124,40 @@ describe('AdaptivePuzzlePage', () => {
     });
   });
 
-  it('shows the reach-ladder badge in the header (Level + seeded reach rating)', async () => {
-    // No persisted reachState and no profile ⇒ seed = DEFAULT_STUDENT_RATING +
-    // STRETCH_SEED — derived, so a change to the one default cannot strand it.
+  it('the header shows the STUDENT\'S rating, not the ladder target (D11 2026-10-04)', async () => {
+    // No profile ⇒ the puzzle cold start. The ladder seed (rating + stretch)
+    // was shown here as "Level 11 · 1700" — a target dressed as a level.
     render(<AdaptivePuzzlePage />);
     await waitFor(() => {
       const badge = screen.getByTestId('player-rating-value');
-      const seed = String(DEFAULT_STUDENT_RATING + STRETCH_SEED);
-      expect(badge).toHaveTextContent(seed);
-      expect(badge.textContent).toMatch(new RegExp(`Level \\d+ · ${seed}`));
+      expect(badge).toHaveTextContent(`Rating ${DEFAULT_PUZZLE_RATING}`);
+      expect(badge.textContent).not.toMatch(/Level/);
     });
+    // No session yet ⇒ no target in the header; the cards carry them.
+    expect(screen.queryByTestId('puzzle-target-value')).toBeNull();
+    expect(screen.getByTestId('difficulty-target-medium')).toHaveTextContent(`~${DEFAULT_PUZZLE_RATING + STRETCH_SEED}`);
+  });
+
+  it.each([
+    ['easy', -200],
+    ['medium', 0],
+    ['hard', 200],
+  ] as const)('%s serves around the target its card prints, and labels it a target', async (diff, offset) => {
+    const target = DEFAULT_PUZZLE_RATING + STRETCH_SEED + offset;
+    render(<AdaptivePuzzlePage />);
+    await waitFor(() => {
+      expect(screen.getByTestId(`difficulty-target-${diff}`)).toHaveTextContent(`~${target}`);
+    });
+    fireEvent.click(screen.getByTestId(`difficulty-${diff}`));
+    await waitFor(() => {
+      expect(mockGetNextAdaptivePuzzle).toHaveBeenCalled();
+    });
+    const opts = mockGetNextAdaptivePuzzle.mock.calls[0][2] as { targetOverride: number };
+    expect(opts.targetOverride).toBe(target);
+    await waitFor(() => {
+      expect(screen.getByTestId('puzzle-target-value')).toHaveTextContent(`Target ${target}`);
+    });
+    expect(screen.getByTestId('player-rating-value')).toHaveTextContent(`Rating ${DEFAULT_PUZZLE_RATING}`);
   });
 
   it('transitions to solving after selecting difficulty', async () => {

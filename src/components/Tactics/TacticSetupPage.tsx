@@ -18,7 +18,7 @@ import { TacticSetupBoard } from './TacticSetupBoard';
 import { TacticsPageHeader } from './TacticsPageHeader';
 import { logAppAudit } from '../../services/appAuditor';
 import type { SetupPuzzleDifficulty } from '../../types';
-import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
+import { studentPuzzleRating } from '../../services/studentPuzzleRating';
 
 type Phase = 'select' | 'loading' | 'solving' | 'summary';
 
@@ -43,7 +43,7 @@ export function TacticSetupPage(): JSX.Element {
   const [phase, setPhase] = useState<Phase>('select');
   const [item, setItem] = useState<SetupTrainerItem | null>(null);
   const [summaryReason, setSummaryReason] = useState<SummaryReason>('complete');
-  const [displayRating, setDisplayRating] = useState<number>(activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING);
+  const [displayRating, setDisplayRating] = useState<number>(studentPuzzleRating(activeProfile));
   const sessionRef = useRef<SetupAdaptiveSession | null>(null);
   const completedRef = useRef(false);
 
@@ -59,7 +59,7 @@ export function TacticSetupPage(): JSX.Element {
     // The corpus must be in Dexie before we can band-select.
     await seedPuzzles();
 
-    const baseRating = activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING;
+    const baseRating = studentPuzzleRating(activeProfile);
     const session = createSetupSession(d, baseRating);
     sessionRef.current = session;
     setDisplayRating(session.targetRating);
@@ -74,7 +74,7 @@ export function TacticSetupPage(): JSX.Element {
     completedRef.current = false;
     setItem(first);
     setPhase('solving');
-  }, [activeProfile?.puzzleRating]);
+  }, [activeProfile?.puzzleRating]);  // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleComplete = useCallback(async (correct: boolean): Promise<void> => {
     const session = sessionRef.current;
@@ -83,7 +83,7 @@ export function TacticSetupPage(): JSX.Element {
     if (completedRef.current) return; // guard double-fire
     completedRef.current = true;
 
-    const playerRating = activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING;
+    const playerRating = studentPuzzleRating(activeProfile);
     const { session: nextSession, newPlayerRating } = recordSetupResult(
       session,
       current.puzzle.id,

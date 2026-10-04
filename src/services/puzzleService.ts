@@ -97,55 +97,97 @@ export async function isPuzzleSeeded(): Promise<boolean> {
   return record?.value === 'true';
 }
 
+/** Rows written per transaction while seeding. One 19k-row transaction held
+ *  the `puzzles` AND `meta` stores for ~12 s on a cold open, so a Tactics page
+ *  that only needed its own pool — or just the seeded flag — queued behind the
+ *  whole bundled set (hand walk 2026-10-04, E14: Long 40 s, Master 24 s cold).
+ *  Chunked, any other transaction gets in between two chunks. */
+const SEED_CHUNK = 2000;
+
+function toRecord(p: RawPuzzle, source: PuzzleRecord['source'], today: string): PuzzleRecord {
+  const defaults = createDefaultSrsFields();
+  return {
+    id: p.id,
+    fen: p.fen,
+    moves: p.moves,
+    rating: p.rating,
+    themes: p.themes,
+    openingTags: p.openingTags,
+    popularity: p.popularity,
+    nbPlays: p.nbPlays,
+    movingPiece: p.movingPiece,
+    source,
+    srsInterval: defaults.interval,
+    srsEaseFactor: defaults.easeFactor,
+    srsRepetitions: defaults.repetitions,
+    srsDueDate: today,
+    srsLastReview: null,
+    userRating: 1200,
+    attempts: 0,
+    successes: 0,
+  };
+}
+
+/** Add the rows that are not already stored, a chunk per transaction. Each
+ *  chunk checks ITS OWN ids inside its transaction (never a snapshot of the
+ *  whole table taken up front), so two writers — StrictMode's double effect,
+ *  a second tab — can only ever skip a row, never add it twice. A row already
+ *  present (and possibly already attempted) is never overwritten. */
+async function addMissingInChunks(
+  records: readonly PuzzleRecord[],
+  opts: { background?: boolean } = {},
+): Promise<void> {
+  for (let i = 0; i < records.length; i += SEED_CHUNK) {
+    // A BACKGROUND seed (the bundled set, started at boot) steps aside
+    // between chunks for whatever a student is waiting on right now.
+    if (opts.background) await foregroundSettled();
+    const chunk = records.slice(i, i + SEED_CHUNK);
+    await db.transaction('rw', db.puzzles, async () => {
+      const existing = await db.puzzles.bulkGet(chunk.map((r) => r.id));
+      const missing = chunk.filter((_, j) => existing[j] === undefined);
+      if (missing.length > 0) await db.puzzles.bulkAdd(missing);
+    });
+  }
+}
+
+/** Puzzle work a student is waiting on right now (a pool their page needs,
+ *  the first puzzle being chosen). The boot-time seed of the bundled set
+ *  yields to it between chunks — the order of the work, not a timer. */
+const foreground = new Set<Promise<unknown>>();
+
+/** Mark puzzle work as foreground until it settles; returns it unchanged. */
+export function puzzleForeground<T>(work: Promise<T>): Promise<T> {
+  foreground.add(work);
+  void work.then(() => foreground.delete(work), () => foreground.delete(work));
+  return work;
+}
+
+async function foregroundSettled(): Promise<void> {
+  while (foreground.size > 0) await Promise.allSettled([...foreground]);
+}
+
+/** In-flight seeds, one per key — the same call twice shares one write. */
+const seedsInFlight = new Map<string, Promise<void>>();
+function singleFlight(key: string, run: () => Promise<void>): Promise<void> {
+  const running = seedsInFlight.get(key);
+  if (running) return running;
+  const p = run().finally(() => seedsInFlight.delete(key));
+  seedsInFlight.set(key, p);
+  return p;
+}
+
 export async function seedPuzzles(): Promise<void> {
   if (await isPuzzleSeeded()) return;
-
-  // StrictMode double-invokes the init effect in dev, and audit-stream
-  // caught both invocations racing on a 15000-row bulkAdd of identical
-  // ids (ConstraintError on every row). Serialize the check + write
-  // inside a 'rw' transaction so the second caller sees the seeded
-  // flag and exits before re-running the bulkAdd.
-  await db.transaction('rw', db.puzzles, db.meta, async () => {
+  return singleFlight(PUZZLE_SEED_KEY, async () => {
     if (await isPuzzleSeeded()) return;
-
-    const defaults = createDefaultSrsFields();
     const today = new Date().toISOString().split('T')[0];
-
-    const existingIds = new Set(await db.puzzles.toCollection().primaryKeys());
-
     // Combine the Lichess CC0 pool with the kid-mode sub-400 training
     // pool. Both carry the same shape; movingPiece and source are
     // pass-through fields used by the per-piece kid puzzle picker.
-    const lichessRaw = puzzleData as RawPuzzle[];
-    const trainingRaw = trainingPuzzleData as RawPuzzle[];
-    const combined: RawPuzzle[] = [...lichessRaw, ...trainingRaw];
-
-    const records: PuzzleRecord[] = combined
-      .filter((p) => !existingIds.has(p.id))
-      .map((p) => ({
-        id: p.id,
-        fen: p.fen,
-        moves: p.moves,
-        rating: p.rating,
-        themes: p.themes,
-        openingTags: p.openingTags,
-        popularity: p.popularity,
-        nbPlays: p.nbPlays,
-        movingPiece: p.movingPiece,
-        source: p.source ?? 'lichess',
-        srsInterval: defaults.interval,
-        srsEaseFactor: defaults.easeFactor,
-        srsRepetitions: defaults.repetitions,
-        srsDueDate: today,
-        srsLastReview: null,
-        userRating: 1200,
-        attempts: 0,
-        successes: 0,
-      }));
-
-    if (records.length > 0) {
-      await db.puzzles.bulkAdd(records);
-    }
+    const combined: RawPuzzle[] = [...(puzzleData as RawPuzzle[]), ...(trainingPuzzleData as RawPuzzle[])];
+    await addMissingInChunks(combined.map((p) => toRecord(p, p.source ?? 'lichess', today)), { background: true });
+    // The flag lands only after every chunk did — an interrupted seed resumes
+    // on the next open and skips what is already stored.
     await db.meta.put({ key: PUZZLE_SEED_KEY, value: 'true' });
   });
 }
@@ -174,10 +216,15 @@ export async function isMasterPoolSeeded(): Promise<boolean> {
  * Fetch a lazy pool (NOT bundled — keeps the JS bundle lean) into the shared
  * `puzzles` store, tagged with its `source`. Called only when the surface that
  * needs it opens, so a user who never touches it never pays the fetch.
- * Idempotent + StrictMode-safe like seedPuzzles. Returns the pool's size.
+ * Idempotent + single-flight like seedPuzzles.
+ *
+ * It used to RETURN the pool's size, counted by a full-table `filter` scan on
+ * every open — ~5 s on a cold device, and no caller ever read the number.
  */
-async function seedLazyPool(pool: LazyPool): Promise<number> {
-  if (!(await isPoolSeeded(pool))) {
+async function seedLazyPool(pool: LazyPool): Promise<void> {
+  if (await isPoolSeeded(pool)) return;
+  return puzzleForeground(singleFlight(pool.key, async () => {
+    if (await isPoolSeeded(pool)) return;
     // Web: same-origin fetch. Native: app bundle → web origin (the pool is
     // kept in the `puzzles` store below, so dataFile need not keep it too).
     const loaded = await loadDataJson(pool.url, { persist: false });
@@ -186,51 +233,22 @@ async function seedLazyPool(pool: LazyPool): Promise<number> {
     // Master Level permanently empty after one offline open.
     if (raw.length === 0) {
       console.warn(`[puzzleService] ${pool.source} pool unavailable — will retry next open`);
-      return db.puzzles.filter((p) => p.source === pool.source).count();
+      return;
     }
-
-    await db.transaction('rw', db.puzzles, db.meta, async () => {
-      if (await isPoolSeeded(pool)) return;
-      const defaults = createDefaultSrsFields();
-      const today = new Date().toISOString().split('T')[0];
-      const existingIds = new Set(await db.puzzles.toCollection().primaryKeys());
-      const records: PuzzleRecord[] = raw
-        .filter((p) => !existingIds.has(p.id))
-        .map((p) => ({
-          id: p.id,
-          fen: p.fen,
-          moves: p.moves,
-          rating: p.rating,
-          themes: p.themes,
-          openingTags: p.openingTags,
-          popularity: p.popularity,
-          nbPlays: p.nbPlays,
-          movingPiece: p.movingPiece,
-          source: pool.source,
-          srsInterval: defaults.interval,
-          srsEaseFactor: defaults.easeFactor,
-          srsRepetitions: defaults.repetitions,
-          srsDueDate: today,
-          srsLastReview: null,
-          userRating: 1200,
-          attempts: 0,
-          successes: 0,
-        }));
-      if (records.length > 0) await db.puzzles.bulkAdd(records);
-      await db.meta.put({ key: pool.key, value: 'true' });
-    });
-  }
-  return db.puzzles.filter((p) => p.source === pool.source).count();
+    const today = new Date().toISOString().split('T')[0];
+    await addMissingInChunks(raw.map((p) => toRecord(p, pool.source, today)));
+    await db.meta.put({ key: pool.key, value: 'true' });
+  }));
 }
 
 /** The elite (2400+) Master Level pool (David 2026-09-14). */
-export async function seedMasterPuzzles(): Promise<number> {
+export async function seedMasterPuzzles(): Promise<void> {
   return seedLazyPool(MASTER_POOL);
 }
 
 /** The long-calculation pool — 3+ solver moves across every rating band, for
  *  the Long tab and deep-run (David 2026-10-01). */
-export async function seedLongPuzzles(): Promise<number> {
+export async function seedLongPuzzles(): Promise<void> {
   return seedLazyPool(LONG_POOL);
 }
 
@@ -906,3 +924,4 @@ export async function getPuzzleStats(): Promise<PuzzleStats> {
     duePuzzles: dueCount,
   };
 }
+
