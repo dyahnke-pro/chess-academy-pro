@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**956 lines · 32 exports · 958 importers · 223 tests · 39 audits**
+**947 lines · 32 exports · 958 importers · 223 tests · 39 audits**
 
 ## Locked rules that govern this surface
 

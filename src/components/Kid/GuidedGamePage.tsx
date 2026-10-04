@@ -83,7 +83,6 @@ export function GuidedGamePage(): JSX.Element {
   const [chatInput, setChatInput] = useState('');
   const [chatBusy, setChatBusy] = useState(false);
 
-  const chatHistoryRef = useRef<{ role: 'user' | 'assistant'; content: string }[]>([]);
   const autoPlayTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const feedbackTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const chessRef = useRef(new Chess(game?.startFen ?? 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'));
@@ -182,8 +181,9 @@ export function GuidedGamePage(): JSX.Element {
     [kidSpeak],
   );
 
-  // "Ask the coach" — kid-mode Learn-with-Coach chat. Grounded by code-computed
-  // board facts + the scripted next move; kid-safe; safe canned fallback.
+  // "Ask the coach" — the kid question box. Every answer is COMPUTED on the
+  // live board (kidBoardAnswers) or by the shared concept spine, and only
+  // phrased kid-safe; the scripted next move is the hint's source of truth.
   const handleAskCoach = useCallback(
     async (question: string): Promise<void> => {
       const q = question.trim();
@@ -192,16 +192,15 @@ export function GuidedGamePage(): JSX.Element {
       setChatMessages((prev) => [...prev, { role: 'kid', text: q }]);
       setChatBusy(true);
       const nextMove = game?.moves[moveIndex + 1];
+      const kidToMove = nextMove && !nextMove.autoPlay ? nextMove : undefined;
       try {
         const answer = await answerKidGameQuestion({
           question: q,
           fen: boardFen,
-          expectedNextSan: nextMove && !nextMove.autoPlay ? nextMove.san : undefined,
-          gameTitle: game?.title ?? 'our game',
-          history: chatHistoryRef.current.slice(-6),
+          playerColor: game?.playerColor ?? 'w',
+          expectedNextSan: kidToMove?.san,
+          nextTeachingConcept: kidToMove?.teachingConcept,
         });
-        chatHistoryRef.current.push({ role: 'user', content: q });
-        chatHistoryRef.current.push({ role: 'assistant', content: answer });
         setChatMessages((prev) => [...prev, { role: 'coach', text: answer }]);
         kidSpeak(answer);
       } catch {
@@ -297,7 +296,6 @@ export function GuidedGamePage(): JSX.Element {
     setStarsEarned(0);
     setWrongAttempts(0);
     setChatMessages([]);
-    chatHistoryRef.current = [];
 
     // First move: opponent → dynamic commentary + auto-play; kid → dynamic
     // "what to play" instruction. Both kid-safe, grounded, authored fallback.
@@ -424,7 +422,6 @@ export function GuidedGamePage(): JSX.Element {
     setNarrationText('');
     setWrongAttempts(0);
     setChatMessages([]);
-    chatHistoryRef.current = [];
   }, [game]);
 
   if (!game) {

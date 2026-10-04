@@ -48,6 +48,7 @@ export function coachSurfaceToRoute(surface: string): string {
     case 'review':          return '/coach/review';
     case 'teach':           return '/coach/teach';
     case 'smart-search':    return '/';
+    case 'kid':             return '/kid/play-games';
     default:                return `/coach/${surface}`;
   }
 }
@@ -74,6 +75,9 @@ export function coachSurfaceForRoute(pathname: string): CoachSurface {
   if (p === '/coach/review' || p.startsWith('/coach/review/')) return 'review';
   if (p === '/coach/play' || p.startsWith('/coach/play/')) return 'game-chat';
   if (p === '/coach/chat' || p.startsWith('/coach/chat/')) return 'standalone-chat';
+  // Anything under /kid is the KID surface — never home chat, which would hand
+  // a child's question to the adult coach (kid non-negotiables #3 / #10).
+  if (p === '/kid' || p.startsWith('/kid/')) return 'kid';
   return 'home-chat';
 }
 

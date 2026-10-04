@@ -11,7 +11,8 @@
  *     kid-safe wrapper is the only sanctioned lane.
  *   • The LLM NEVER decides chess content (G0/kid #1/#17). The move played is
  *     the SCRIPTED san; the position facts are computed in code
- *     (`describeKidMove` via chess.js, `buildFedTacticsContext` board facts).
+ *     (`describeKidMove` via chess.js; the question box's answers in
+ *     `kidBoardAnswers`).
  *     The model only rephrases those computed facts into fresh kid prose.
  *   • Every output is sanitized (`sanitizeKidCoachText`) and falls back to the
  *     hand-authored static text on ANY anomaly (empty / no-key banner / SAN
@@ -21,8 +22,6 @@
  */
 import { Chess } from 'chess.js';
 import { getKidLlmResponse, voiceFacts } from './coachApi';
-import { buildFedTacticsContext, formatTacticsSubBlock } from './liveTacticsContext';
-import { groundCoachAnswerBoardClaims } from './boardClaimValidator';
 import { logAppAudit } from './appAuditor';
 import { buildQuestionGrounding } from '../coach/questionIntents';
 import { assembleConceptAnswer, assembleTeachingAnswer, assembleAppHelpAnswer } from './groundedAnswer';
@@ -31,6 +30,14 @@ import { getLessonScript } from '../data/lessons';
 import { getOpeningById } from './openingService';
 import { matchRouteByTopic } from './navigationRouter';
 import { APP_ROUTES_MANIFEST } from '../data/appRoutesManifest';
+import {
+  classifyKidBoardQuestion,
+  kidBoardLine,
+  kidHintFacts,
+  kidSafetyFacts,
+  kidWhereFacts,
+} from './kidBoardAnswers';
+import type { KidAnswerKind } from './kidBoardAnswers';
 
 /** Single-letter piece type → kid word. */
 function pieceWord(piece: string): string {
@@ -247,9 +254,7 @@ async function voiceKidFacts(facts: string, question: string): Promise<string | 
  * does the puzzles page do?" (app help). Adult-only families (weakness stats,
  * pro repertoires, settings mutations, records) are deliberately NOT surfaced
  * to a child. Returns null when no kid family fires so the caller falls back to
- * the live-board Q&A path. Every answer is grounded + sanitized; a hallucinated
- * board fact in kid mode is a P0 bug, so the caller still runs the board-claim
- * gate on the live-board path.
+ * the computed board kinds. Every answer is grounded + sanitized.
  */
 export async function getKidGroundedResponse(
   question: string,
@@ -319,96 +324,77 @@ export async function getKidGroundedResponse(
 export interface KidGameQuestionInput {
   /** The child's typed/spoken question. */
   question: string;
-  /** Current board FEN (for grounded board facts). */
+  /** Current board FEN (for computed board facts). */
   fen: string;
+  /** The side the child plays — every "your"/"their" in the answer is seated
+   *  from this. Required: the seat is part of what a claim means (CLAUDE.md
+   *  "THE SEAT IS PART OF THE SELECTION"). */
+  playerColor: 'w' | 'b';
   /** The scripted next move the child should play, if known (source of truth). */
   expectedNextSan?: string;
-  /** The game's title (for friendly context). */
-  gameTitle: string;
-  /** Prior chat turns for continuity. */
-  history: { role: 'user' | 'assistant'; content: string }[];
+  /** The scripted teaching concept for that next move, if any. */
+  nextTeachingConcept?: string;
 }
 
-const KID_QUESTION_FALLBACK =
-  "Great question! Keep looking at the board — what could each of your pieces do next?";
+export interface KidGameAnswer {
+  text: string;
+  kind: KidAnswerKind;
+}
+
+/** The computed facts for one board kind — plain kid prose, no notation. */
+function boardFactsFor(kind: Exclude<KidAnswerKind, 'concept'>, input: KidGameQuestionInput): string {
+  switch (kind) {
+    case 'is-it-safe': return kidSafetyFacts(input.question, input.fen, input.playerColor);
+    case 'where-can-it-go': return kidWhereFacts(input.question, input.fen, input.playerColor);
+    case 'hint': return kidHintFacts({
+      fen: input.fen,
+      kid: input.playerColor,
+      expectedNextSan: input.expectedNextSan,
+      teachingConcept: input.nextTeachingConcept,
+    });
+    case 'look-at-board': return kidBoardLine(input.fen, input.playerColor);
+  }
+}
 
 /**
- * "Ask the coach" — the kid-mode equivalent of Learn-with-Coach chat. The
- * answer is GROUNDED by code-computed board facts (hanging pieces / attack map
- * / mate-in-one via formatTacticsSubBlock) PLUS the scripted next move, so the
- * coach can answer "what should I do?" / "why?" without inventing chess. Always
- * kid-safe; falls back to a safe canned line on any anomaly.
+ * "Ask the coach" — the kid question box (GuidedGamePage), the ONLY kid
+ * question surface. G0, with no hole: the answer kind is chosen in code
+ * (`classifyKidBoardQuestion`, then the shared concept spine), the facts are
+ * computed by chess.js on the live board (`kidBoardAnswers`) or by the shared
+ * concept assemblers, and the model only PHRASES them kid-safe through
+ * `voiceFacts({kidSafe})`. Anything no kind covers gets the computed board line
+ * ("let's look at the board" + something true on it). There is no free LLM
+ * answer any more, so there is nothing for a claim-stripper to strip.
  */
-export async function answerKidGameQuestion(input: KidGameQuestionInput): Promise<string> {
-  // TIE-IN (David): a knowledge question ("what's a fork?", "how do you teach
-  // the Italian?", "what does the puzzles page do?") routes through the SAME
-  // shared grounding spine as the adult coach, voiced kid-safe. Only when no
-  // kid knowledge family fires do we fall to the live-board Q&A below — so a
-  // board question ("what should I do?") still gets the tuned board grounding.
-  try {
-    const grounded = await getKidGroundedResponse(input.question, input.fen);
-    // The grounded answer describes a CONCEPT / a DIFFERENT opening's position,
-    // not the live board — so it is NOT board-claim-gated (that gate is for the
-    // live-board path below). It is safe by construction: the facts are computed
-    // by the shared assemblers, voiceFacts adds no numbers, sanitize strips any
-    // SAN. Return it directly when a kid knowledge family fired.
-    if (grounded) return grounded;
-  } catch { /* fall through to live-board path */ }
-
-  let groundingBlock = '';
-  try {
-    const sideToMove: 'w' | 'b' = input.fen.split(' ')[1] === 'b' ? 'b' : 'w';
-    const tactics = await buildFedTacticsContext(
-      input.fen,
-      sideToMove,
-      1000,
-      null,
-      () => Promise.resolve(null),
-    );
-    // KIDS ARE EXCLUDED FROM THE CONCEPT ENGINE BY CONTRACT (kid non-negotiables
-    // + the computed-concept plan): the fed package now carries ranked
-    // `concepts` for every adult surface; the kid prompt must never see them.
-    // Strip before rendering so the block stays board-facts-only.
-    groundingBlock = formatTacticsSubBlock({ ...tactics, concepts: undefined }, input.fen);
-  } catch {
-    groundingBlock = '';
-  }
-  const nextMove = input.expectedNextSan ? describeKidMove(input.fen, input.expectedNextSan) : '';
-  const nextLine = nextMove
-    ? `\nThe move we're learning next is: ${nextMove}. If they ask what to play, gently point them toward THIS (describe the piece + square, never notation).`
-    : '';
-  const groundLine = groundingBlock
-    ? `\n\n[Board facts — GROUND TRUTH, the ONLY chess facts you may use; never invent a piece, square, capture, check, or mate not listed here]\n${groundingBlock}`
-    : '';
-  const systemAddition = `You are the friendly chess coach in a guided game ("${input.gameTitle}") for a child aged 5-10. Answer their question in 1-2 short, warm sentences. Describe pieces and squares in plain words; never use chess notation. Only use the board facts provided below — do not invent any move, capture, threat, or mate. Encourage curiosity.${nextLine}${groundLine}`;
-  try {
-    const reply = await getKidLlmResponse(
-      [...input.history, { role: 'user', content: input.question }],
-      systemAddition,
-      256,
-    );
-    const clean = sanitizeKidCoachText(reply, 300);
-    if (!clean) return KID_QUESTION_FALLBACK;
-    // CHESS-CLAIM GATE (David 2026-07-04, P0 kid non-negotiable): the language
-    // sanitizer above cleans WORDS, but it can't catch an INVENTED board fact —
-    // "your knight can take the queen on d5" when d5 is empty. Kid mode's
-    // supreme rule is "an LLM hallucinating chess content is a P0 bug", so run
-    // the same board-claim gate the coach surfaces use: strip any sentence
-    // whose piece/square/capture/mate claim is provably false on THIS position.
-    // The kid never hears a made-up move. If the gate empties the answer
-    // (every sentence was false), serve the safe canned line.
-    const gated = groundCoachAnswerBoardClaims(clean, input.fen);
-    if (gated.dropped.length > 0) {
-      void logAppAudit({
-        kind: 'claim-validator-trip',
-        category: 'subsystem',
-        source: 'kidGameCoach.answerKidGameQuestion.boardClaimGate',
-        summary: `kid Q&A stripped ${gated.dropped.length} board-false sentence(s)`,
-        details: JSON.stringify({ dropped: gated.dropped.slice(0, 3), fen: input.fen }),
-      });
+export async function answerKidGameQuestionWithKind(input: KidGameQuestionInput): Promise<KidGameAnswer> {
+  const boardKind = classifyKidBoardQuestion(input.question);
+  let kind: KidAnswerKind;
+  let text: string | null = null;
+  if (boardKind) {
+    kind = boardKind;
+  } else {
+    // CONCEPT — "what's a fork?" — the shared concept spine, voiced kid-safe.
+    try {
+      text = await getKidGroundedResponse(input.question, input.fen);
+    } catch {
+      text = null;
     }
-    return gated.text.trim() || KID_QUESTION_FALLBACK;
-  } catch {
-    return KID_QUESTION_FALLBACK;
+    kind = text ? 'concept' : 'look-at-board';
   }
+  if (!text) {
+    const facts = boardFactsFor(kind === 'concept' ? 'look-at-board' : kind, input);
+    text = (await voiceKidFacts(facts, input.question)) ?? sanitizeKidCoachText(facts, 600);
+  }
+  void logAppAudit({
+    kind: 'kid-question-answered',
+    category: 'subsystem',
+    source: 'kidGameCoach.answerKidGameQuestion',
+    summary: `kid question answered as ${kind}`,
+    details: JSON.stringify({ answerKind: kind, fen: input.fen, kid: input.playerColor }),
+  });
+  return { text, kind };
+}
+
+export async function answerKidGameQuestion(input: KidGameQuestionInput): Promise<string> {
+  return (await answerKidGameQuestionWithKind(input)).text;
 }

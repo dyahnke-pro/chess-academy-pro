@@ -45,6 +45,18 @@ export const SURFACE_CONTRACT: Record<CoachSurface, SurfaceContract> = {
   'standalone-chat': { register: 'present', withholds: 'none', speaks: 'on-request' },
   'smart-search': { register: 'present', withholds: 'none', speaks: 'on-request' },
   ping: { register: 'present', withholds: 'none', speaks: 'on-request' },
+  // KIDS (`/kid/*`, plan 2026-10-04 "Kids are unified too"). The guided game
+  // narrates every scripted move (that narration is not a question and stays
+  // out of the door), so it speaks always, present tense, withholding nothing.
+  // Its ONE question box (GuidedGamePage → answerKidGameQuestion) answers only
+  // the kid kinds — hint / where-can-it-go / is-it-safe / concept, else the
+  // computed board line (`KidAnswerKind`, kidBoardAnswers.ts) — every fact
+  // computed, phrased only through `voiceFacts({ kidSafe })`. WHAT THE DOOR
+  // NEEDS when it routes this row: an answer scope limited to those kinds,
+  // the kid phrasing seam (never the adult registers), no SAN, the kid's own
+  // memory (never ConversationState / weakness spine / coach state — kid
+  // non-negotiable 10, gated by src/test/kidIsolation.gate.test.ts).
+  kid: { register: 'present', withholds: 'none', speaks: 'always' },
 };
 
 /** Runtime list of every surface — kept in lockstep with the union by the
