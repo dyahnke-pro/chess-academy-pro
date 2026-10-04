@@ -10,8 +10,14 @@ vi.mock('../services/coachSessionRouter', () => ({
 vi.mock('./coachService', () => ({
   coachService: { ask: (...args: unknown[]) => ask(...args) },
 }));
+// The shadow read's default reader is the coachApi chokepoint; these tests
+// inject their own (setChatTurnReaderForTests), so the real one never runs.
+vi.mock('../services/coachApi', () => ({
+  readChatTurnStructured: vi.fn(async () => null),
+}));
 
-import { dispatchCoachTurn } from './dispatchCoachTurn';
+import { dispatchCoachTurn, setChatTurnReaderForTests, setServeParsedRoute, resetConversations, conversationFor } from './dispatchCoachTurn';
+import { onChatTurn, resetChatTurnListeners, type ChatTurnRow } from './chatTurnEvents';
 
 const INPUT = { surface: 'standalone-chat' as const, ask: 'x', liveState: { surface: 'standalone-chat' as const, fen: 'startpos' } };
 
@@ -61,5 +67,123 @@ describe('dispatchCoachTurn', () => {
     const ans = await dispatchCoachTurn(INPUT, {});
     expect(ans.text).toBe('brain');
     expect(ask).toHaveBeenCalledOnce();
+  });
+});
+
+// ─── THE ONE-CHAT READ, IN SHADOW (P0a 2026-10-04) ─────────────────────────
+
+const BOARD_FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5';
+const TURN = (ask: string, extra: Partial<{ origin: 'typed' | 'spoken' | 'canned-best-move'; surface: 'game-chat' | 'hint' }> = {}) => ({
+  surface: extra.surface ?? ('game-chat' as const),
+  ask,
+  ...(extra.origin ? { origin: extra.origin } : {}),
+  liveState: { surface: extra.surface ?? ('game-chat' as const), fen: BOARD_FEN, studentColor: 'white' as const },
+});
+const rows: ChatTurnRow[] = [];
+const waitForRow = async (n = 1): Promise<void> => {
+  for (let i = 0; i < 50 && rows.length < n; i++) await new Promise((r) => setTimeout(r, 5));
+};
+
+describe('dispatchCoachTurn — the shadow read', () => {
+  beforeEach(() => {
+    routeChatIntent.mockReset();
+    ask.mockReset();
+    rows.length = 0;
+    resetChatTurnListeners();
+    onChatTurn((r) => rows.push(r));
+    resetConversations();
+    setServeParsedRoute(false);
+    routeChatIntent.mockResolvedValue(null);
+    ask.mockResolvedValue({ text: 'brain', toolCallIds: [], dispatchedToolNames: [], provider: 'deepseek', servedIntent: 'best-move' });
+  });
+
+  it('a typed question emits ONE chat-turn row comparing the reading with today\'s lane and the served intent', async () => {
+    setChatTurnReaderForTests(async () => ({ kind: 'best-move', referents: [], seat: 'me', english: "what's my best move?" }));
+    const ans = await dispatchCoachTurn(TURN("what's my best move?"), {});
+    expect(ans.text).toBe('brain');
+    await waitForRow();
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toMatchObject({
+      surface: 'game-chat', askSource: 'typed', fastPathLane: 'best-move', servedIntent: 'best-move',
+      parsedKind: 'best-move', parseSource: 'llm', valid: true, agreed: true, answererLive: true, servedParsed: false,
+    });
+  });
+
+  it('a mic transcript is read too, and tagged spoken', async () => {
+    setChatTurnReaderForTests(async () => ({ kind: 'position-assessment', referents: [], seat: 'me', english: "who's winning?" }));
+    await dispatchCoachTurn(TURN("who's winning", { origin: 'spoken' }), {});
+    await waitForRow();
+    expect(rows[0].askSource).toBe('spoken');
+  });
+
+  it('a disagreement is recorded as such (today\'s routing still answers)', async () => {
+    setChatTurnReaderForTests(async () => ({ kind: 'compare-my-move', referents: [], seat: 'me', english: 'x' }));
+    const ans = await dispatchCoachTurn(TURN("what's my best move?"), {});
+    expect(ans.text).toBe('brain');
+    await waitForRow();
+    expect(rows[0].agreed).toBe(false);
+  });
+
+  it('NEVER waits on the read — a reader that hangs does not delay the answer', async () => {
+    setChatTurnReaderForTests(() => new Promise(() => { /* never */ }));
+    const started = Date.now();
+    const ans = await dispatchCoachTurn(TURN('how should I continue here then'), {});
+    expect(ans.text).toBe('brain');
+    expect(Date.now() - started).toBeLessThan(500);
+  });
+
+  it('a reader that throws is silent — the answer is served and no error escapes', async () => {
+    setChatTurnReaderForTests(async () => { throw new Error('provider down'); });
+    const ans = await dispatchCoachTurn(TURN('how should I continue here then'), {});
+    expect(ans.text).toBe('brain');
+    await waitForRow();
+    expect(rows[0]).toMatchObject({ parsedKind: null, parseSource: 'llm-failed', valid: null });
+  });
+
+  it('internal asks (hint taps) and canned buttons are never read', async () => {
+    const reader = vi.fn(async () => null);
+    setChatTurnReaderForTests(reader);
+    await dispatchCoachTurn(TURN('give me a hint', { surface: 'hint' }), {});
+    await dispatchCoachTurn(TURN("what's best", { origin: 'canned-best-move' }), {});
+    await new Promise((r) => setTimeout(r, 30));
+    expect(reader).not.toHaveBeenCalled();
+    expect(rows).toHaveLength(0);
+  });
+
+  it('a routed command is the fast-path lane "command"', async () => {
+    routeChatIntent.mockResolvedValue({ ackMessage: 'Taking you to Tactics.', path: '/tactics', intent: { kind: 'qa', raw: 'x' } });
+    setChatTurnReaderForTests(async () => ({ kind: 'command', referents: [], seat: 'none', english: 'take me to tactics' }));
+    await dispatchCoachTurn(TURN('take me to tactics'), {});
+    await waitForRow();
+    expect(rows[0]).toMatchObject({ fastPathLane: 'command', parsedKind: 'command', agreed: true });
+  });
+
+  it('a validated reading is remembered for the surface (the conversation memory)', async () => {
+    setChatTurnReaderForTests(async () => ({ kind: 'what-about-piece', referents: [{ type: 'piece', piece: 'knight', square: 'f3', seat: 'me' }], seat: 'me', english: 'what about my knight on f3?' }));
+    await dispatchCoachTurn(TURN('what about my knight on f3?'), {});
+    await waitForRow();
+    expect(conversationFor('game-chat').lastPiece).toEqual({ piece: 'n', square: 'f3', seat: 'me' });
+  });
+
+  it('FLAG OFF by default: the student\'s own words reach the brain', async () => {
+    setChatTurnReaderForTests(async () => ({ kind: 'best-move', referents: [], seat: 'me', english: 'x' }));
+    await dispatchCoachTurn(TURN('qual é o melhor lance?'), {});
+    expect(ask.mock.calls[0][0].ask).toBe('qual é o melhor lance?');
+  });
+
+  it('FLAG ON: a validated, live reading is SERVED as its canonical question', async () => {
+    setServeParsedRoute(true);
+    setChatTurnReaderForTests(async () => ({ kind: 'best-move', referents: [], seat: 'me', english: "what's my best move?" }));
+    await dispatchCoachTurn(TURN('qual é o melhor lance?'), {});
+    expect(ask.mock.calls[0][0].ask).toBe("what's my best move?");
+    await waitForRow();
+    expect(rows[0].servedParsed).toBe(true);
+  });
+
+  it('FLAG ON: a reading whose answerer is still pending is NOT served', async () => {
+    setServeParsedRoute(true);
+    setChatTurnReaderForTests(async () => ({ kind: 'is-piece-loose', referents: [], seat: 'them', english: 'which of their pieces are loose?' }));
+    await dispatchCoachTurn(TURN('which of their pieces are loose?'), {});
+    expect(ask.mock.calls[0][0].ask).toBe('which of their pieces are loose?');
   });
 });

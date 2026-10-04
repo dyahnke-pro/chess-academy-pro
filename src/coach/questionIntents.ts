@@ -2655,6 +2655,10 @@ const RETROSPECTIVE_RE = anyOf([
  *  string). */
 export function retrospectiveMoveRef(ask: string | undefined): RetrospectiveMoveRef | null {
   if (!ask) return null;
+  // "Why is that better than WHAT I PLAYED?" names the student's own move as
+  // the thing compared — the retrospective verdict on it IS the comparison
+  // (their move, its cost, the engine's better move and why).
+  if (isCompareMyMoveQuestion(ask)) return { kind: 'my-last' };
   if (!RETROSPECTIVE_RE.test(ask)) return null;
   const t = ask.toLowerCase();
   // Pointers first — "my last move" / "your move" / "that".
@@ -2675,6 +2679,27 @@ export function retrospectiveMoveRef(ask: string | undefined): RetrospectiveMove
   const san = extractCandidateSan(ask);
   if (san) return { kind: 'san', san };
   return null;
+}
+
+// ═══ COMPARE MY MOVE — "why is that better than what I played?" (hand walk
+// 2026-10-04 #11). ═══
+//
+// 🔒 "WHAT I PLAYED" IS A REFERENT, NOT FILLER. The walk asked exactly this
+// mid-drill and the why-best-move lane took it ("better" + "why"), answering
+// "The engine plays g5…" — a best-move read of the position with the student's
+// own move never mentioned. The comparison has two sides and the question
+// names the second one: the student's move. Only the first person counts — "what
+// you played" is the coach's move and stays with the retrospective pointer.
+const COMPARE_MY_MOVE_RE = anyOf([
+  String.raw`\b(?:better|stronger|worse|weaker|different)\s+(?:than|from)\s+(?:what\s+i\s+(?:just\s+)?(?:played|did|chose|picked|tried|went\s+for|moved)|my\s+(?:last\s+|own\s+)?(?:move|choice|try|attempt|answer|one)|mine|the\s+(?:move|one)\s+i\s+(?:just\s+)?(?:played|made|chose|picked|tried))\b`,
+  String.raw`\b(?:instead\s+of|over|compared\s+(?:to|with)|versus|vs\.?)\s+(?:what\s+i\s+(?:just\s+)?(?:played|did|chose|picked|tried)|my\s+(?:last\s+)?move|mine)\b`,
+  String.raw`\bwhat(?:'?s|\s+is|\s+was)\s+wrong\s+with\s+what\s+i\s+(?:just\s+)?(?:played|did|chose|tried)\b`,
+  String.raw`\bwhy\s+(?:is|was)n'?t\s+(?:what\s+i\s+(?:just\s+)?played|my\s+(?:last\s+)?move)\s+(?:good|best|right|correct|enough|the\s+best)\b`,
+]);
+
+export function isCompareMyMoveQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  return COMPARE_MY_MOVE_RE.test(ask);
 }
 
 export function isRetrospectiveMoveQuestion(ask: string | undefined): boolean {

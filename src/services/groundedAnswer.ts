@@ -97,6 +97,19 @@ function evalPhrase(evalCp: number | null | undefined, mateIn: number | null | u
   if (mag < 0.3) return 'the position is roughly balanced';
   // Eval voiced in POINTS, never "pawns" (David 2026-07-24: "if the eval is
   // called out then say up by three points, not three pawns").
+  //
+  // 🔒 THE SEAT LEADS (hand walk 2026-10-04 #12). With the seat known the
+  // sentence is about the STUDENT: "you're down about 2.7 points", never
+  // "They're winning (about 2.7 points)". In a drill "they" has no clear
+  // referent (the drill's other side? the coach?), and a student reading
+  // whose-side off a pronoun can read it backwards.
+  if (studentColor) {
+    const up = who === studentColor;
+    const amount = `${up ? 'up' : 'down'} about ${mag.toFixed(1)} points`;
+    if (mag < 1.0) return `you're ${amount} — ${up ? 'slightly better' : 'slightly worse'}`;
+    if (mag < 2.5) return `you're ${amount} — ${up ? 'clearly better' : 'clearly worse'}`;
+    return `you're ${amount} — ${up ? 'winning' : 'losing'}`;
+  }
   if (mag < 1.0) return `${seatWord(who)} slightly better (about ${mag.toFixed(1)} points)`;
   if (mag < 2.5) return `${seatWord(who)} clearly better (about ${mag.toFixed(1)} points)`;
   return `${seatWord(who)} winning (about ${mag.toFixed(1)} points)`;
