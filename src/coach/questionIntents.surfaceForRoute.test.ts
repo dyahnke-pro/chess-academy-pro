@@ -19,11 +19,13 @@ describe('coachSurfaceForRoute', () => {
     ['/coach/play', 'game-chat'],
     ['/coach/play?fen=x', 'game-chat'],
     ['/coach/chat', 'standalone-chat'],
+    ['/kid', 'kid'],
+    ['/kid/play-games/scholars-mate', 'kid'],
   ])('%s → %s', (path, surface) => {
     expect(coachSurfaceForRoute(path)).toBe(surface);
   });
 
-  it.each(['/', '/coach/home', '/openings/italian-game', '/tactics', '', '/coach/teacher'])(
+  it.each(['/', '/coach/home', '/openings/italian-game', '/tactics', '', '/coach/teacher', '/kidding'])(
     '%s is home chat — the drawer over anything else',
     (path) => { expect(coachSurfaceForRoute(path)).toBe('home-chat'); },
   );

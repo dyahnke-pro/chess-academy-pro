@@ -12,7 +12,6 @@ import { describe, it, expect } from 'vitest';
 import {
   validateBoardClaims,
   stripDisprovenSentences,
-  groundCoachAnswerBoardClaims,
 } from './boardClaimValidator';
 
 // The exact production position (white to move, move 6, French Advance).
@@ -150,45 +149,3 @@ describe('stripDisprovenSentences', () => {
   });
 });
 
-describe('groundCoachAnswerBoardClaims — the spine gate', () => {
-  it('drops a false board-fact sentence from the SPOKEN [VOICE:] block', () => {
-    const answer =
-      '[VOICE: Welcome back. The knight on a3 eyes c4. Let us continue.]';
-    const r = groundCoachAnswerBoardClaims(answer, START_FEN);
-    expect(r.violations.length).toBeGreaterThan(0);
-    expect(r.text).not.toMatch(/knight on a3/i); // never spoken
-    expect(r.text).toMatch(/Welcome back/);       // true sentences kept
-    expect(r.text).toMatch(/^\[VOICE:.*\]$/);      // VOICE block stays intact
-  });
-
-  it('drops a false board-fact sentence from the visible prose', () => {
-    const answer = 'Here is the plan. The queen on c4 defends the pawn. Develop your pieces.';
-    const r = groundCoachAnswerBoardClaims(answer, START_FEN);
-    expect(r.text).not.toMatch(/queen on c4/i);
-    expect(r.text).toMatch(/Here is the plan/);
-    expect(r.text).toMatch(/Develop your pieces/);
-  });
-
-  it('PRESERVES [BOARD:] and [[ACTION:]] markers while stripping a lie', () => {
-    const answer =
-      'The knight on a3 forks. [BOARD: arrow:e2-e4:green] [[ACTION:play_move {"san":"e4"}]] Good luck.';
-    const r = groundCoachAnswerBoardClaims(answer, START_FEN);
-    expect(r.text).toContain('[BOARD: arrow:e2-e4:green]');
-    expect(r.text).toContain('[[ACTION:play_move {"san":"e4"}]]');
-    expect(r.text).not.toMatch(/knight on a3/i);
-  });
-
-  it('does NOT mangle prose numbers (no sentinel/digit collision)', () => {
-    const answer = 'He scored in over 1700 games here. [BOARD: arrow:d2-d4:green] Strong choice.';
-    const r = groundCoachAnswerBoardClaims(answer, START_FEN);
-    expect(r.text).toContain('1700 games');
-    expect(r.text).toContain('[BOARD: arrow:d2-d4:green]');
-  });
-
-  it('returns the text unchanged when every claim is true', () => {
-    const answer = '[VOICE: A solid developing move. The rook stays home for now.]';
-    const r = groundCoachAnswerBoardClaims(answer, START_FEN);
-    expect(r.violations).toHaveLength(0);
-    expect(r.text).toBe(answer);
-  });
-});

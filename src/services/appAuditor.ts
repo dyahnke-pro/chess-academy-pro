@@ -761,6 +761,11 @@ export type AuditKind =
   //   chess claim. Details carry `kind` ('san' / 'numeric' / 'entity' /
   //   'comparative'), the claim text, the reason, and `retryNumber`.
   | 'claim-validator-trip'
+  // `kid-question-answered`: the kid "Ask the Coach" box answered a question.
+  //   Details carry `answerKind` (hint / where-can-it-go / is-it-safe /
+  //   concept / look-at-board) — every answer is computed, so this row says
+  //   WHICH computer answered (read by audit-kid-llm-hallucination.mjs).
+  | 'kid-question-answered'
   // `master-play-enforcement-fallback`: 2-retry budget exhausted; the
   //   coach served the stock "I can't verify which moves are sound"
   //   response. Last-line G3 protection.

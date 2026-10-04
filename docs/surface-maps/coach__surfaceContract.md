@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**64 lines · 8 exports · 5 importers · 2 tests · 0 audits**
+**76 lines · 8 exports · 5 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 LEARN NAMES THE MOVE — WITH ITS REASON (David 2026-09-24: "Rules can change. That was an old rule when we asked questions. We don't do that anymore.").** (CLAUDE.md:5107) — names `Withholding`
+- **🔒🔒 LEARN NAMES THE MOVE — WITH ITS REASON (David 2026-09-24: "Rules can change. That was an old rule when we asked questions. We don't do that anymore.").** (CLAUDE.md:5162) — names `Withholding`
 
 ## Who calls in
 
@@ -42,9 +42,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `registerFor` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:1458`
-- `src/hooks/usePhaseNarration.ts:536`
-- `src/services/openingGenerator.ts:2469`
+- `src/components/Coach/CoachGameReview.tsx:1474`
+- `src/hooks/usePhaseNarration.ts:549`
+- `src/services/openingGenerator.ts:2471`
 
 ## Tests
 
