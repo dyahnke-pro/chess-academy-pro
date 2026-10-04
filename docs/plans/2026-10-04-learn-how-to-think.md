@@ -166,6 +166,66 @@ Voice: computed facts phrased through `voiceFacts` (G0); stems ROTATED, never
 `Math.random`; you/they; no praise beyond "good" on a partial (the machine
 celebrates via the reward layer).
 
+## 🔒 REAL DIALOGUE — the coach ASKS and ANSWERS (David 2026-10-04: "This is a platform for q and a" … "THE COACH NEEDS TO BE ABLE TO ANSWER THEIR QUESTIONS!!")
+
+**A. The coach answers every question — a hard requirement, not a feature.**
+- Mid-lesson, the student can ask anything; the lesson pauses (Learn already
+  auto-pauses on chat), the coach answers, the lesson resumes.
+- Questions about the LESSON POSITION are answered from the lesson's own computed
+  facts (the answer key + the method facts behind it): "why is that a target?" →
+  the attackers vs defenders it was graded on; "what about my bishop?" → that
+  piece's safety and scope; "how many defenders?" → the count; "why not Nxe5?" →
+  the engine read + proof line; "what should I play?" → the step's best move with
+  its reason. Wider questions go through the full grounded chat pipeline
+  (`groundedAnswer` lanes / the ONE-CHAT parser when it lands).
+- **Never a refusal, never a stock "I can't verify that" inside a lesson.** If a
+  computer has no answer, the coach says what it CAN see on that board.
+- **Gate:** a lesson question matrix (like `audit-coach-all-questions-prod`),
+  driven by typing AND by voice, fails on any unanswered, off-topic or
+  board-false reply.
+
+**B. The microphone works — real spoken dialogue.**
+- Learn's chat input already has a mic (`voiceInputService` via `ChatInput`:
+  continuous listening, live transcript, barge-in that cuts the coach off). Verify
+  it end to end in a lesson, then extend it:
+  - a spoken QUESTION goes through A;
+  - a spoken ANSWER counts like taps: "the knight on c6", "c6 and e5", "the rook"
+    (when there is one) → squares, through one deterministic parser (no model
+    decides the square);
+  - the coach replies by voice and the lesson carries on.
+- Verified headless with an injected transcript; the real-device mic (iPhone
+  app, AVAudioSession patch) is flagged to David.
+
+**C. The coach's questions check understanding, not luck.**
+1. **Follow-up chains:** a right tap is followed by a question only an
+   understanding answers: "Good — the knight on c6. Tap every piece of yours
+   attacking it." → "Now tap its defenders." → "So who wins it?" The counting
+   method becomes visible, all by taps.
+2. **Ask before telling** (testing effect): red and green steps ask first and
+   teach only on a miss; grey steps keep Show first.
+3. **"I don't know"** is a button (and a phrase): honest data, counted as prompted,
+   then the coach shows the step.
+4. **Wrong taps diagnose the misconception.** WHICH wrong square says why: a
+   defended piece → doesn't count defenders; a pawn-guarded piece → ignores who
+   defends; their piece when asked about yours → skips own safety. Each pattern
+   maps to an existing tag and is recorded, so lessons feed the spine like game
+   mistakes do.
+5. **Guess-proofing:** extra taps count as wrong; the number of answers is told
+   only after the first try; a set number of misses moves on to Show.
+
+**D. Making it stick.**
+6. **Mixed practice** once a tier is proven (the Steps Method's "mix" books): the
+   student first decides WHICH step applies, as real games demand.
+7. **Transfer is the real score.** A skill is learned when the same mistake drops
+   in their own games, not only when lesson taps are right. Measure lesson skill
+   against that tag's game frequency before and after.
+8. **Session shape:** ~5–8 minutes; closes with what was proven, what is next, and
+   earned praise; resumes where it stopped.
+9. **Praise is allowed in lessons (David: "We need some praise")** — earned only (a
+   clean solve, a step turning green, a tier unlocking), never on every tap, stems
+   rotated so it keeps meaning something. "Let's drill it" and "Solved — nice"
+   stay as they are.
+
 ## A fair answer key (the core engineering decision)
 
 A tap answer is only fair when the answer set is crisp. A position is used for a
