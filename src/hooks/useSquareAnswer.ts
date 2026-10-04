@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { Square } from 'chess.js';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
-import type { AnswerDetail, AnswerHelp } from '../services/capabilityEvidence';
 import {
   applySquareHelp,
   applySquareShow,
@@ -15,6 +14,7 @@ import {
   type SquareAnswerState,
   type SquareAnswerStatus,
   type SquareSetGrade,
+  type AnswerDetail, type AnswerHelp,
 } from '../services/squareAnswerGrader';
 
 /**

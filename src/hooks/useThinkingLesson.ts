@@ -5,13 +5,12 @@
 // through the one door (services/thinkingLessonStart.ts).
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Square } from 'chess.js';
-import { ThinkingLessonSession, type LessonView } from '../services/thinkingLessonSession';
 import {
-  finishThinkingLesson, lessonInputs, planThinkingLesson, recordLessonAnswer, rememberLessonBoardNow,
+  ThinkingLessonSession, type LessonView, finishThinkingLesson, lessonInputs, planThinkingLesson, recordLessonAnswer, rememberLessonBoardNow,
   type LessonPositionCandidate, type LessonUsernames, type PlannedLesson, type StepKit,
 } from '../services/thinkingLessonStart';
 
-export type { StepKit, PlannedLesson };
+export type { StepKit, PlannedLesson, LessonView };
 
 export interface UseThinkingLessonDeps {
   say: (text: string) => Promise<void>;

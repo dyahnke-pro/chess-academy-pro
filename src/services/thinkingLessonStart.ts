@@ -24,6 +24,9 @@ import { reward } from './rewardService';
 import { logAppAudit } from './appAuditor';
 
 export type { StepKit, AnsweredQuestion, LessonStage, LessonUsernames, LessonPositionCandidate };
+export type { LessonView } from './thinkingLessonSession';
+// The session itself: a surface opens it through this door, never directly.
+export { ThinkingLessonSession } from './thinkingLessonSession';
 
 export interface PlannedLesson {
   kit: StepKit;

@@ -25,6 +25,7 @@
 import type { Square } from 'chess.js';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { AnswerDetail, AnswerHelp } from './capabilityEvidence';
+export type { AnswerDetail, AnswerHelp } from './capabilityEvidence';
 
 export type SquareAnswerMode = 'any' | 'all';
 

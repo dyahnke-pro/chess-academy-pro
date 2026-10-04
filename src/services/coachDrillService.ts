@@ -25,6 +25,12 @@
  */
 import { Chess } from 'chess.js';
 import { hintBeat, lineGainIdea, solvedLineBeat, wrongMoveReason } from './drillReasons';
+import { conceptPassageFor } from './weaknessConceptPassage';
+import { explainDrillConcept } from './puzzleConceptExplanation';
+import { lessonTeachLines, partTransition, type CustomLessonPart } from './customLessonPlan';
+
+// The drill door owns every drill line a surface speaks (one import for Learn).
+export { goodButWeakerBeat, wrongMoveReason } from './drillReasons';
 import { sayMoveClause } from './spokenMove';
 import { getHomeGameIds } from './homeOpeningService';
 import { isFixtureGame } from './fixtureGames';
@@ -772,4 +778,26 @@ export function drillHintBeat(fen: string, expectedSan: string): string | null {
 /** The opponent's reply inside a multi-move drill, then the prompt on. */
 export function drillContinueBeat(oppReplySan: string, fenBefore: string | null): string {
   return `${sayMoveClause(oppReplySan, fenBefore).replace(/^./, (c) => c.toUpperCase())} — keep going, find the next move.`;
+}
+
+/**
+ * The spoken teaching for one part of a custom lesson, one sentence pair per
+ * line, in order: the part's place in the lesson, the concept's behaviour, the
+ * idea the student's FIRST position turns on (the concept engine's invariant —
+ * the idea, never the move), and the corpus passage fetched by the concept's
+ * id (never a text search — walk 2026-10-04 defect 3; no passage → none read).
+ */
+export function customLessonPartLines(
+  part: CustomLessonPart,
+  index: number,
+  total: number,
+  firstDrill: { setupFen: string; solutionSan: string[]; themes: string[] } | null,
+): string[] {
+  const transition = partTransition(part, index, total);
+  const behavior = part.concept ? `${part.concept.behavior}.` : '';
+  const passage = conceptPassageFor(part.concept);
+  const invariant = firstDrill
+    ? explainDrillConcept({ setupFen: firstDrill.setupFen, solutionSan: firstDrill.solutionSan, themes: firstDrill.themes })?.idea ?? ''
+    : '';
+  return lessonTeachLines([transition, behavior, invariant, passage]);
 }

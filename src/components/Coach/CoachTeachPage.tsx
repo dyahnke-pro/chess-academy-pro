@@ -101,9 +101,7 @@ import {
   buildCustomLessonPlan,
   matchCustomLessonRequest,
   customLessonIntro,
-  partTransition,
   customLessonOutro,
-  lessonTeachLines,
   matchThinkingLessonRequest,
   THINKING_LESSON_CHIP,
   LESSON_GAME_CHIP,
@@ -111,7 +109,6 @@ import {
   type CustomLessonPlan,
   type CustomLessonPart,
 } from '../../services/customLessonPlan';
-import { conceptPassageFor } from '../../services/weaknessConceptPassage';
 import type {
   WalkthroughTree,
   WalkthroughTreeNode,
@@ -156,8 +153,8 @@ import {
   hasImportedGames,
   type CoachDrill,
   type DrillProgress,
-  drillContinueBeat, drillHintBeat, drillSolvedBeat, drillWrongMoveBeat } from '../../services/coachDrillService';
-import { goodButWeakerBeat, wrongMoveReason } from '../../services/drillReasons';
+  drillContinueBeat, drillHintBeat, drillSolvedBeat, drillWrongMoveBeat,
+  customLessonPartLines, goodButWeakerBeat, wrongMoveReason } from '../../services/coachDrillService';
 import { useThinkingLesson, type StepKit } from '../../hooks/useThinkingLesson';
 import { ThinkingLessonBoard } from './ThinkingLessonBoard';
 import { seedMasterPuzzles } from '../../services/puzzleService';
@@ -2674,15 +2671,9 @@ export function CoachTeachPage(): JSX.Element {
     if (!part) { return; }
     lesson.idx = idx;
 
-    // 1. Announce the part (multi-part only) + teach the idea. The teaching text
-    //    is the code-authored behavior line + a verbatim public-domain corpus
-    //    passage fetched by concept id (conceptPassageFor) — never LLM prose.
-    const transition = partTransition(part, idx, lesson.parts.length);
-    const behavior = part.concept ? `${part.concept.behavior}.` : '';
-    // The passage is fetched by the concept's corpus ID, never a text search:
-    // a search taught "missed hanging pieces" with the PIN passage (walk
-    // 2026-10-04 defect 3). No passage for this idea → none is read.
-    const passage = conceptPassageFor(part.concept);
+    // 1. Announce the part (multi-part only) + teach the idea — composed by the
+    //    drill door (behaviour line + the idea of the first position + the
+    //    corpus passage by concept id), never LLM prose.
     // 2. The student's OWN positions for this hole — built first, because the
     //    teaching names the CONCEPT the first position turns on (the concept
     //    engine's invariant: the idea, never the move), so "Part 1 of 3" teaches
@@ -2692,12 +2683,9 @@ export function CoachTeachPage(): JSX.Element {
     try {
       queue = await buildMistakeDrillQueue({ cementReps: 1, rating, motif: part.tag, exclude: solvedDrillKeysRef.current });
     } catch { queue = []; }
-    const firstDrill = queue[0]?.drills[0];
-    const invariant = firstDrill
-      ? explainDrillConcept({ setupFen: firstDrill.setupFen, solutionSan: firstDrill.solutionSan, themes: firstDrill.themes })?.idea ?? ''
-      : '';
+    const firstDrill = queue[0]?.drills[0] ?? null;
     // One line per sentence pair, queued in order (defects 4–6).
-    for (const line of lessonTeachLines([transition, behavior, invariant, passage])) void coachDrillSay(line);
+    for (const line of customLessonPartLines(part, idx, lesson.parts.length, firstDrill)) void coachDrillSay(line);
     captureEvent('custom_lesson_part_advanced', { surface: 'coach-teach', idx, tag: part.tag });
     if (queue.length > 0) {
       const progress: DrillProgress = { queue, themeIdx: 0, puzzleIdx: 0 };

@@ -37,6 +37,6 @@ describe('ThinkingLessonBoard', () => {
 
   it('"I don\'t know" is disabled while the coach is talking', () => {
     render(<ThinkingLessonBoard view={{ ...VIEW, asking: false }} onTap={vi.fn()} onDontKnow={vi.fn()} onStop={vi.fn()} />);
-    expect((screen.getByTestId('thinking-lesson-dont-know')).disabled).toBe(true);
+    expect(screen.getByTestId('thinking-lesson-dont-know')).toHaveProperty('disabled', true);
   });
 });
