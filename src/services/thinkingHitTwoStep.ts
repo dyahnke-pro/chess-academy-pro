@@ -15,11 +15,9 @@ import { PIECE_NAMES } from '../types/tacticTypes';
 import { moveIsTheFork } from './setupTrainerService';
 import type { FairKey } from './thinkingPositions';
 import type { StepKit } from './thinkingLessonSession';
-import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { andList } from '../utils/andList';
 import { rotateStem } from '../utils/rotateStem';
 
-export const HIT_TWO_STEP_TAGS: readonly MisconceptionTagId[] = ['missed-tactic'];
 
 const name = (t: PieceSymbol): string => PIECE_NAMES[t] ?? 'piece';
 

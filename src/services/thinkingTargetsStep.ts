@@ -18,7 +18,6 @@ import type { FairKey } from './thinkingPositions';
 import type { StepKit } from './thinkingLessonSession';
 import { rotateStem } from '../utils/rotateStem';
 import { findHangingBySee } from './positionReadingService';
-import type { MisconceptionTagId } from '../data/misconceptionTags';
 
 /** The one loose-piece computer, injected: squares of `color`'s undefended
  *  pieces (attacked or not). */
@@ -142,18 +141,3 @@ export function targetsKit(loose: LooseSquares): StepKit {
   };
 }
 
-/** The misconception tags step 5 trains (plan "Memory" table) — superseded by
- *  THINKING_STEPS when the one step vocabulary lands. */
-export const TARGETS_STEP_TAGS: readonly MisconceptionTagId[] = ['missed-tactic'];
-
-/** MERGE-TIME PLACEHOLDER: replaced by the app's one loose-piece computer. */
-export const looseSquaresOf: LooseSquares = (fen, color) => {
-  let c: Chess;
-  try { c = new Chess(fen); } catch { return []; }
-  const out: Square[] = [];
-  for (const row of c.board()) for (const cell of row) {
-    if (!cell || cell.color !== color || cell.type === 'k') continue;
-    if (c.attackers(cell.square, color).filter((s) => s !== cell.square).length === 0) out.push(cell.square);
-  }
-  return out;
-};

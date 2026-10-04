@@ -6,7 +6,7 @@
 // attack on that loose piece — so the trigger is proven to matter. Names the
 // trigger, never the move. A LEAF: chess.js only.
 import { Chess, type Color } from 'chess.js';
-import { MATERIAL_VALUE } from './pieceValues';
+import { findLoosePieces } from './loosePieces';
 
 const NAME: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen', p: 'pawn' };
 
@@ -17,9 +17,7 @@ export function looseTrigger(fen: string, bestSan: string | null): string | null
   try { c = new Chess(fen); } catch { return null; }
   const me: Color = c.turn();
   const foe: Color = me === 'w' ? 'b' : 'w';
-  const loose = c.board().flat()
-    .filter((p): p is NonNullable<typeof p> => !!p && p.color === foe && p.type !== 'k' && (MATERIAL_VALUE[p.type] ?? 0) >= 3)
-    .filter((p) => c.attackers(p.square, foe).length === 0);
+  const loose = findLoosePieces(c, foe).filter((p) => p.value >= 3);
   if (loose.length === 0) return null;
   let mv;
   try { mv = c.move(bestSan); } catch { return null; }

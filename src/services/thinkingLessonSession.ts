@@ -36,7 +36,7 @@ export interface StepKit {
   adapt?: (c: LessonPositionCandidate) => LessonPositionCandidate | null;
   /** Optional: the book's own words on this habit (verbatim public-domain
    *  passage, fetched by id) — read once, after the worked example. */
-  book?: () => string | null;
+  book?: () => Promise<string | null>;
 }
 
 export interface AnsweredQuestion {
@@ -154,7 +154,7 @@ export class ThinkingLessonSession {
         // student just watched (David 2026-10-04: "make use of the books").
         if (!this.bookRead) {
           this.bookRead = true;
-          const book = this.kit.book?.() ?? null;
+          const book = (await this.kit.book?.().catch(() => null)) ?? null;
           if (book) await this.deps.say(book);
         }
         emitThinkingLesson({

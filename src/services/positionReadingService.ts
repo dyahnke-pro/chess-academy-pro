@@ -1612,12 +1612,13 @@ export function computeSpace(fen: string): SpaceInfo {
 }
 
 /** The best squares for `attackerColor` to TARGET — the enemy's concrete
- *  weaknesses: loose pieces (SEE), structural weak pawns, and holes the attacker
- *  can occupy. Deterministic; the coach voices these, never invents a target. */
+ *  weaknesses: HANGING material (SEE — loses material to a capture now; not
+ *  the same as LOOSE = undefended, which is `findLoosePieces`), structural weak
+ *  pawns, and holes the attacker can occupy. Deterministic; the coach voices these, never invents a target. */
 export function findAttackTargets(fen: string, attackerColor: Color): Square[] {
   const enemy: Color = attackerColor === 'w' ? 'b' : 'w';
   const targets: Square[] = [];
-  // 1) Loose enemy material (value-aware).
+  // 1) Hanging enemy material (SEE, value-aware).
   for (const h of findHangingBySee(fen)) if (h.color === enemy) targets.push(h.square);
   // 2) Enemy structural weak pawns.
   const wp = findWeakPawns(fen, enemy);
@@ -2343,7 +2344,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
     out.push({
       id: 'target', type: 'target', bucket: 'positional',
       prompt: 'What should you target — where is your opponent weakest?',
-      answer: `Target ${targets.join(', ')} — ${targets.length > 1 ? 'these are' : 'this is'} the opponent's weakest point${targets.length > 1 ? 's' : ''} (loose material, weak pawns, or holes).`,
+      answer: `Target ${targets.join(', ')} — ${targets.length > 1 ? 'these are' : 'this is'} the opponent's weakest point${targets.length > 1 ? 's' : ''} (hanging material, weak pawns, or holes).`,
       acceptTokens: targets.map(sq),
       answerSquares: targets,
       negative: false,
@@ -2529,7 +2530,7 @@ const HINT_TIER1: Partial<Record<ReadingQuestionType, string>> = {
   'weak-square': 'Find a square no enemy pawn can ever challenge.',
   'strong-piece': 'Which of your pieces sees the most squares?',
   'weak-piece': 'Which of your pieces is doing the least — boxed in or offside?',
-  target: "Where is the opponent softest — loose material, a weak pawn, or a hole?",
+  target: "Where is the opponent softest — hanging material, a weak pawn, or a hole?",
   'weak-pawn': 'Scan your pawns — any with no friendly pawn on a neighboring file?',
   'pawn-break': "Which pawn push strikes the base of the opponent's chain?",
   'king-safety': 'Look at the shelter directly around your king.',

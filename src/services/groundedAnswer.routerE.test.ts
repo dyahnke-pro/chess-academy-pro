@@ -69,10 +69,10 @@ describe('assembleMethodAnswer — how to think here, NEVER the best move', () =
     expect(a).not.toBeNull();
     const f = a!.facts;
     expect(f).toMatch(/^Here's the routine for this position/);
-    expect(f).toMatch(/First, their idea/);
-    expect(f).toMatch(/Then the forcing moves/);
+    expect(f).toMatch(/Am I safe\? /);   // the step names come from THINKING_STEPS
+    expect(f).toMatch(/My forcing moves: /);
     expect(f).toMatch(/Nxe5/);            // a capture that genuinely exists here
-    expect(f).toMatch(/Then candidates/);
+    expect(f).toMatch(/Find the candidates: /);
     expect(f).not.toMatch(/\bd3\b/);      // the engine's move is withheld
     expect(f).not.toMatch(/best move/i);
     expect(a!.bestMoveSan).toBeNull();
@@ -81,6 +81,16 @@ describe('assembleMethodAnswer — how to think here, NEVER the best move', () =
     const a = assembleMethodAnswer({ fen: START, studentColor: 'white', engineBestSan: 'e4' });
     expect(a!.facts).toMatch(/no checks or captures/);
     expect(a!.facts).not.toMatch(/\be4\b/);
+  });
+  it('runs its steps in the ONE step order, and calls a piece that can be won "hanging", never "loose"', () => {
+    // After 1.e4 e5 2.Nf3, Black's e5 pawn can be won (no defender, Nf3 hits it).
+    const a = assembleMethodAnswer({ fen: 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2', studentColor: 'black', engineBestSan: 'Nc6' });
+    const f = a!.facts;
+    const at = (re: RegExp): number => f.search(re);
+    expect(at(/Am I safe\?/)).toBeLessThan(at(/My forcing moves:/));
+    expect(at(/My forcing moves:/)).toBeLessThan(at(/Find the candidates:/));
+    expect(f).toMatch(/Your pawn on e5 is hanging right now/);
+    expect(f).not.toMatch(/is loose right now/);
   });
   it('closes with the habit the moment earns', () => {
     const a = assembleMethodAnswer({ fen: ITALIAN, studentColor: 'white', engineBestSan: 'Nxe5' });

@@ -12,11 +12,9 @@ import { Chess, type PieceSymbol, type Square } from 'chess.js';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import type { FairKey } from './thinkingPositions';
 import type { StepKit } from './thinkingLessonSession';
-import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { findHangingBySee } from './positionReadingService';
 
-export const FORCING_STEP_TAGS: readonly MisconceptionTagId[] = ['missed-tactic'];
 
 const name = (t: PieceSymbol): string => PIECE_NAMES[t] ?? 'piece';
 

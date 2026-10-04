@@ -14,11 +14,9 @@ import { Chess, type PieceSymbol, type Square } from 'chess.js';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import type { FairKey } from './thinkingPositions';
 import type { StepKit } from './thinkingLessonSession';
-import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { safetyKey } from './thinkingSafetyStep';
 import { rotateStem } from '../utils/rotateStem';
 
-export const ANSWER_DANGER_STEP_TAGS: readonly MisconceptionTagId[] = ['hung-material', 'missed-opponents-threat'];
 
 const VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 const name = (t: PieceSymbol): string => PIECE_NAMES[t] ?? 'piece';

@@ -8,12 +8,10 @@
 import { Chess, type Square } from 'chess.js';
 import type { LessonPositionCandidate } from './thinkingPositions';
 import type { StepKit } from './thinkingLessonSession';
-import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { safetyKey, safetyReason, safetyShowLine, safetyWrongTapLine } from './thinkingSafetyStep';
 import { sayMoveClause } from './spokenMove';
 import { rotateStem } from '../utils/rotateStem';
 
-export const MOVE_SAFETY_STEP_TAGS: readonly MisconceptionTagId[] = ['hung-material'];
 
 /**
  * The board after the student's played move, from the side that just moved
@@ -36,8 +34,8 @@ export function afterPlayedMove(c: LessonPositionCandidate): LessonPositionCandi
       ...c,
       fen,
       lead: rotateStem([
-        `In this game you played ${sayMoveClause(c.playedSan)} here.`,
-        `From your game: you chose ${sayMoveClause(c.playedSan)}.`,
+        `In this game you played ${sayMoveClause(c.playedSan, c.fen)} here.`,
+        `From your game: you chose ${sayMoveClause(c.playedSan, c.fen)}.`,
       ], c.fen.length),
     };
   } catch {

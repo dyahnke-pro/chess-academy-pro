@@ -15,13 +15,10 @@ import { PIECE_NAMES } from '../types/tacticTypes';
 import { findHangingBySee } from './positionReadingService';
 import type { FairKey } from './thinkingPositions';
 import type { StepKit } from './thinkingLessonSession';
-import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { rotateStem } from '../utils/rotateStem';
 
 const name = (t: PieceSymbol): string => PIECE_NAMES[t] ?? 'piece';
 
-/** The misconception tags this step trains (plan "Memory" table). */
-export const SAFETY_STEP_TAGS: readonly MisconceptionTagId[] = ['hung-material', 'missed-opponents-threat'];
 
 export function safetyKey(fen: string): FairKey | null {
   let chess: Chess;

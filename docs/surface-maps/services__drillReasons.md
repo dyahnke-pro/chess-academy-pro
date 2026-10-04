@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**88 lines · 3 exports · 2 importers · 1 tests · 0 audits**
+**89 lines · 3 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,20 +18,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `wrongMoveReason` (function) — 5 call sites
-- `src/services/coachDrillService.ts:690`
+- `src/services/coachDrillService.ts:753`
 - `src/services/drillReasons.test.ts:11`
 - `src/services/drillReasons.test.ts:17`
 - `src/services/drillReasons.test.ts:23`
 - `src/services/drillReasons.test.ts:26`
 
 ### `solvedLineBeat` (function) — 4 call sites
-- `src/services/coachDrillService.ts:697`
+- `src/services/coachDrillService.ts:760`
 - `src/services/drillReasons.test.ts:32`
 - `src/services/drillReasons.test.ts:36`
 - `src/services/drillReasons.test.ts:37`
 
 ### `hintBeat` (function) — 6 call sites
-- `src/services/coachDrillService.ts:703`
+- `src/services/coachDrillService.ts:766`
 - `src/services/drillReasons.test.ts:44`
 - `src/services/drillReasons.test.ts:45`
 - `src/services/drillReasons.test.ts:46`

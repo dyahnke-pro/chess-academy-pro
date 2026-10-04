@@ -1,15 +1,15 @@
 import { describe, it, expect } from 'vitest';
-import { chooseThinkingStep, openTier, tierUnlocked, type BuiltStep } from './thinkingLessonPlan';
+import { chooseThinkingStep, openTier, tierUnlockLine, type BuiltStep } from './thinkingLessonPlan';
 import type { StepKit } from './thinkingLessonSession';
 import type { StepStanding } from './thinkingLesson';
 
 const kit = (step: string): (() => StepKit) => () => ({
   step, keyFor: () => null, showLine: () => '', prompt: () => '', wrongTapLine: () => '', reasonFor: () => null, intro: '',
 });
-const SAFE: BuiltStep = { order: 3, tier: 1, kit: kit('am-i-safe'), tags: ['hung-material'] };
-const TARGETS: BuiltStep = { order: 5, tier: 1, kit: kit('their-targets'), tags: ['missed-tactic'] };
-const FORCING: BuiltStep = { order: 6, tier: 2, kit: kit('forcing-moves'), tags: ['missed-tactic'] };
-const MOVE_SAFE: BuiltStep = { order: 10, tier: 1, kit: kit('is-my-move-safe'), tags: ['hung-material'] };
+const SAFE: BuiltStep = { step: 'am-i-safe', order: 3, tier: 1, kit: kit('am-i-safe'), tags: ['hung-material'] };
+const TARGETS: BuiltStep = { step: 'their-targets', order: 5, tier: 1, kit: kit('their-targets'), tags: ['missed-tactic'] };
+const FORCING: BuiltStep = { step: 'forcing-moves', order: 6, tier: 2, kit: kit('forcing-moves'), tags: ['missed-tactic'] };
+const MOVE_SAFE: BuiltStep = { step: 'is-my-move-safe', order: 10, tier: 1, kit: kit('is-my-move-safe'), tags: ['hung-material'] };
 const ALL = [FORCING, TARGETS, MOVE_SAFE, SAFE];
 const pick = (m: Record<string, StepStanding>) => chooseThinkingStep(ALL, (s) => m[s.kit().step] ?? 'grey');
 
@@ -43,14 +43,14 @@ describe('chooseThinkingStep', () => {
   });
 });
 
-describe('tierUnlocked', () => {
+describe('tierUnlockLine', () => {
   it('names what is next when a tier opens', () => {
-    expect(tierUnlocked(1, 2)).toMatchObject({ tier: 2, label: 'UNLOCKED · FORCE IT' });
-    expect(tierUnlocked(1, 2)?.line).toMatch(/You see the board/);
+    expect(tierUnlockLine(1, 2)).toMatchObject({ tier: 2, label: 'UNLOCKED · FORCE IT' });
+    expect(tierUnlockLine(1, 2)?.line).toMatch(/You see the board/);
   });
   it('is silent when nothing opened', () => {
-    expect(tierUnlocked(2, 2)).toBeNull();
-    expect(tierUnlocked(1, 1)).toBeNull();
+    expect(tierUnlockLine(2, 2)).toBeNull();
+    expect(tierUnlockLine(1, 1)).toBeNull();
   });
 });
 

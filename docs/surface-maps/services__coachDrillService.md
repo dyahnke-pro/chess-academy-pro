@@ -24,8 +24,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isDrillableAid` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2830`
-- `src/components/Coach/CoachTeachPage.tsx:4278`
+- `src/components/Coach/CoachTeachPage.tsx:2831`
+- `src/components/Coach/CoachTeachPage.tsx:4279`
 - `src/services/coachDrillService.test.ts:72`
 - `src/services/coachDrillService.test.ts:75`
 - `src/services/coachDrillService.test.ts:109`
@@ -35,8 +35,8 @@
 
 ### `pickCoachDrill` (function) — 10 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2725`
-- `src/components/Coach/CoachTeachPage.tsx:2841`
-- `src/components/Coach/CoachTeachPage.tsx:4294`
+- `src/components/Coach/CoachTeachPage.tsx:2842`
+- `src/components/Coach/CoachTeachPage.tsx:4295`
 - `src/services/coachDrillService.test.ts:12`
 - `src/services/coachDrillService.test.ts:52`
 - `src/services/coachDrillService.test.ts:60`
@@ -74,7 +74,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `mistakeWeaknessKey` (function) — 2 call sites
-- `src/components/Puzzles/MyMistakesPage.tsx:229`
+- `src/components/Puzzles/MyMistakesPage.tsx:230`
 - `src/services/coachDrillService.mistakes.test.ts:205`
 
 ### `summarizeWeaknesses` (function) — 2 call sites
@@ -85,15 +85,15 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `groupProgressLabel` (function) — 6 call sites
-- `src/components/Puzzles/MyMistakesPage.tsx:603`
-- `src/components/Puzzles/MyMistakesPage.tsx:658`
+- `src/components/Puzzles/MyMistakesPage.tsx:600`
+- `src/components/Puzzles/MyMistakesPage.tsx:655`
 - `src/services/coachDrillService.mistakes.test.ts:224`
 - `src/services/coachDrillService.mistakes.test.ts:225`
 - `src/services/coachDrillService.mistakes.test.ts:226`
 - `src/services/coachDrillService.mistakes.test.ts:227`
 
 ### `groupMistakesByWeakness` (function) — 5 call sites
-- `src/components/Puzzles/MyMistakesPage.tsx:262`
+- `src/components/Puzzles/MyMistakesPage.tsx:263`
 - `src/services/coachDrillService.mistakes.test.ts:200`
 - `src/services/coachDrillService.mistakes.test.ts:210`
 - `src/services/coachDrillService.mistakes.test.ts:222`
@@ -137,10 +137,10 @@
 - `src/components/Coach/CoachTeachPage.tsx:2678`
 
 ### `drillHintBeat` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:11584`
+- `src/components/Coach/CoachTeachPage.tsx:11604`
 
 ### `drillContinueBeat` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:2805`
+- `src/components/Coach/CoachTeachPage.tsx:2806`
 
 ## Tests
 

@@ -1,32 +1,45 @@
-// thinkingSteps.built — the "Learn how to think" steps that have a lesson kit
-// today, in method order. One list read by the page, the chooser and the
-// record, so a step's tags live in ONE place.
-//
-// MERGE NOTE: when the one step vocabulary (`ThinkingStep` / THINKING_STEPS)
-// lands, `order` and `tags` are read from it and this file only maps step →
-// kit.
+// thinkingSteps.built — which "Learn how to think" steps have a lesson kit.
+// Order, tier and tags are read from the ONE step table (`THINKING_STEPS`); this
+// file only maps a step to its kit, so a step's tags live in one place.
 import type { BuiltStep } from './thinkingLessonPlan';
-import { safetyKit, SAFETY_STEP_TAGS } from './thinkingSafetyStep';
-import { looseSquaresOf, TARGETS_STEP_TAGS, targetsKit } from './thinkingTargetsStep';
-import { moveSafetyKit, MOVE_SAFETY_STEP_TAGS } from './thinkingMoveSafetyStep';
-import { forcingKit, FORCING_STEP_TAGS } from './thinkingForcingStep';
-import { hitTwoKit, HIT_TWO_STEP_TAGS } from './thinkingHitTwoStep';
-import { theirMoveKit, THEIR_MOVE_STEP_TAGS } from './thinkingTheirMoveStep';
-import { answerDangerKit, ANSWER_DANGER_STEP_TAGS } from './thinkingAnswerDangerStep';
+import type { StepKit } from './thinkingLessonSession';
+import { THINKING_STEPS, type ThinkingStep } from './thinkingSteps';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
+import { findLoosePieces } from './loosePieces';
+import { safetyKit } from './thinkingSafetyStep';
+import { targetsKit, type LooseSquares } from './thinkingTargetsStep';
+import { moveSafetyKit } from './thinkingMoveSafetyStep';
+import { forcingKit } from './thinkingForcingStep';
+import { hitTwoKit } from './thinkingHitTwoStep';
+import { theirMoveKit } from './thinkingTheirMoveStep';
+import { answerDangerKit } from './thinkingAnswerDangerStep';
+import { bookTeachingFor } from './thinkingBookTeaching';
 
-export const BUILT_THINKING_STEPS: readonly BuiltStep[] = [
-  { order: 2, tier: 1, kit: theirMoveKit, tags: THEIR_MOVE_STEP_TAGS },
-  { order: 3, tier: 1, kit: safetyKit, tags: SAFETY_STEP_TAGS },
-  { order: 5, tier: 1, kit: () => targetsKit(looseSquaresOf), tags: TARGETS_STEP_TAGS },
-  { order: 4, tier: 2, kit: answerDangerKit, tags: ANSWER_DANGER_STEP_TAGS },
-  { order: 6, tier: 2, kit: forcingKit, tags: FORCING_STEP_TAGS },
-  { order: 7, tier: 3, kit: hitTwoKit, tags: HIT_TWO_STEP_TAGS },
-  { order: 10, tier: 1, kit: moveSafetyKit, tags: MOVE_SAFETY_STEP_TAGS },
-];
+/** The app's one loose-piece computer, in the shape the targets kit takes. */
+const looseSquares: LooseSquares = (fen, color) => findLoosePieces(fen, color).map((p) => p.square);
 
-/** The tags a step's answers are recorded under. Unknown step → none. */
+/** Steps that have a kit today. A step absent here is not served yet. */
+export const STEP_KITS: Partial<Record<ThinkingStep, () => StepKit>> = {
+  'their-move-changed': theirMoveKit,
+  'am-i-safe': safetyKit,
+  'answer-danger': answerDangerKit,
+  'their-targets': () => targetsKit(looseSquares),
+  'forcing-moves': forcingKit,
+  'hit-two': hitTwoKit,
+  'is-my-move-safe': moveSafetyKit,
+};
+
+export const BUILT_THINKING_STEPS: readonly BuiltStep[] = (Object.keys(STEP_KITS) as ThinkingStep[]).map((step) => ({
+  step,
+  order: THINKING_STEPS[step].order,
+  tier: THINKING_STEPS[step].tier,
+  tags: THINKING_STEPS[step].tags,
+  // The books' own words on the habit ride on every kit (silent when the
+  // books have no passage for the step).
+  kit: (): StepKit => ({ ...(STEP_KITS[step] as () => StepKit)(), book: () => bookTeachingFor(step) }),
+}));
+
+/** The tags a step's answers are recorded under (the one table). */
 export function tagsForThinkingStep(step: string): readonly MisconceptionTagId[] {
-  for (const s of BUILT_THINKING_STEPS) if (s.kit().step === step) return s.tags;
-  return [];
+  return step in THINKING_STEPS ? THINKING_STEPS[step as ThinkingStep].tags : [];
 }

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7328 lines · 162 exports · 73 importers · 46 tests · 8 audits**
+**7387 lines · 162 exports · 74 importers · 47 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -89,6 +89,7 @@
 - `src/services/reviewTeachingPoints.ts`
 - `src/services/tacticsContextIdentity.test.ts`
 - `src/services/whyBestMove.ts`
+- `src/services/zzprobe.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 
 ## Exports and every call site
@@ -111,7 +112,7 @@
 - `src/services/piecePurpose.test.ts:24`
 - `src/services/piecePurpose.test.ts:25`
 
-### `answerBoardQuestion` (function) — 11 call sites
+### `answerBoardQuestion` (function) — 12 call sites
 - `src/services/answerBoardQuestion.test.ts:26`
 - `src/services/answerBoardQuestion.test.ts:38`
 - `src/services/answerBoardQuestion.test.ts:52`
@@ -123,6 +124,7 @@
 - `src/services/coachApi.ts:5841`
 - `src/services/groundedAnswer.routerE.test.ts:134`
 - `src/services/pieceActivity.test.ts:32`
+- `src/services/zzprobe.test.ts:6`
 
 ### `assembleMaterialAnswer` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -1152,7 +1154,7 @@
 - `src/services/coachApi.ts:5906`
 
 ### `seatPieceReferences` (re-export) — 33 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7930`
+- `src/components/Coach/CoachTeachPage.tsx:7931`
 - `src/services/coachFeatureService.ts:4055`
 - `src/services/coachFeatureService.ts:4103`
 - `src/services/coachFeatureService.ts:5202`
@@ -1233,6 +1235,7 @@
 - `src/services/reviewNarrationFidelity.test.ts`
 - `src/services/searchDepth.test.ts`
 - `src/services/tacticsContextIdentity.test.ts`
+- `src/services/zzprobe.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 
 ## Audits that reach it

@@ -40,6 +40,9 @@ export interface BookDeparture {
   mover: 'w' | 'b';
   /** Masters' most-played move at the book position, when it has real mass. */
   mainSan: string | null;
+  /** The book position BEFORE the departing move (both `san` and `mainSan`
+   *  are played from it) — so the move can be said with its from-square. */
+  fen: string;
 }
 
 /** The first ply that left theory, or null while the game is still in book. */
@@ -61,6 +64,7 @@ export function bookDeparture(history: readonly string[]): BookDeparture | null 
         san: played.san,
         mover,
         mainSan: top && top.games >= MIN_BOOK_GAMES && top.san !== played.san ? top.san : null,
+        fen,
       };
     }
     if (isBookLine(history.slice(0, i + 1))) continue;

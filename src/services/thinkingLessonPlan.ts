@@ -14,8 +14,10 @@
 import type { StepKit } from './thinkingLessonSession';
 import type { StepStanding } from './thinkingLesson';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
+import { tierUnlocked as stepTierUnlocked, type ThinkingStep } from './thinkingSteps';
 
 export interface BuiltStep {
+  step: ThinkingStep;
   /** Position in the ten-step method (1 = assess … 10 = is my move safe). */
   order: number;
   /** Unlock tier (1 = see the board … 4 = think like a player). */
@@ -41,11 +43,19 @@ export function openTier(
    *  a tier shut — it is proven when boards exist, not before. */
   available: (s: BuiltStep) => boolean = () => true,
 ): number {
+  // ONE tier rule (`thinkingSteps.tierUnlocked`): a tier opens when every step
+  // of every lower tier is known. A step with no kit, or no board for this
+  // student, cannot be asked and so does not hold its tier shut.
+  const byStep = new Map(steps.map((s) => [s.step, s] as const));
+  const isKnown = (step: ThinkingStep): boolean => {
+    const b = byStep.get(step);
+    if (!b || !available(b)) return true;
+    return standingOf(b) === 'green';
+  };
   let open = 1;
-  for (let t = 1; t <= 3; t++) {
-    const inTier = steps.filter((s) => s.tier === t && available(s));
-    if (inTier.length === 0 || inTier.some((s) => standingOf(s) !== 'green')) break;
-    open = t + 1;
+  for (const t of [2, 3, 4] as const) {
+    if (!stepTierUnlocked(t, isKnown)) break;
+    open = t;
   }
   return open;
 }
@@ -78,7 +88,7 @@ export const TIER_NAME: Record<2 | 3 | 4, { name: string; next: string }> = {
 };
 
 /** The line and banner for a tier that just opened, or null when none did. */
-export function tierUnlocked(before: number, after: number): { tier: 2 | 3 | 4; line: string; label: string } | null {
+export function tierUnlockLine(before: number, after: number): { tier: 2 | 3 | 4; line: string; label: string } | null {
   if (after <= before || after < 2 || after > 4) return null;
   const tier = after as 2 | 3 | 4;
   return { tier, line: TIER_NAME[tier].next, label: `UNLOCKED · ${TIER_NAME[tier].name.toUpperCase()}` };

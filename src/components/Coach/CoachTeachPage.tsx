@@ -159,7 +159,7 @@ import { goodButWeakerBeat, wrongMoveReason } from '../../services/drillReasons'
 import { useThinkingLesson } from '../../hooks/useThinkingLesson';
 import { recordThinkingAnswer, standingFromProfile, stepStanding } from '../../services/thinkingLessonRecord';
 import { BUILT_THINKING_STEPS, tagsForThinkingStep } from '../../services/thinkingSteps.built';
-import { chooseThinkingStep, openTier, tierUnlocked, type BuiltStep } from '../../services/thinkingLessonPlan';
+import { chooseThinkingStep, openTier, tierUnlockLine, type BuiltStep } from '../../services/thinkingLessonPlan';
 import { loadLessonCandidates } from '../../services/thinkingLessonSource';
 import { getThinkingLessonMemory, seenFor } from '../../services/thinkingLessonMemory';
 import { pickFairPosition, type LessonPositionCandidate } from '../../services/thinkingPositions';
@@ -2488,7 +2488,7 @@ export function CoachTeachPage(): JSX.Element {
     // "Unlocking" rule 8); the machine celebrates, the voice stays plain.
     try {
       const after = await getCapabilityProfile();
-      const opened = tierUnlocked(choice.openTier, openTier(BUILT_THINKING_STEPS, (s) => standingFromProfile(after, s.tags), available));
+      const opened = tierUnlockLine(choice.openTier, openTier(BUILT_THINKING_STEPS, (s) => standingFromProfile(after, s.tags), available));
       if (opened) {
         reward({ kind: 'rankUp', label: opened.label, seed: opened.tier });
         void coachDrillSay(opened.line);
@@ -2762,7 +2762,7 @@ export function CoachTeachPage(): JSX.Element {
     // THE SEQUENCE, SPOKEN, WITH THE IDEA NAMED (A5): a drill called "missed
     // tactical sequences" shows the sequence. Computed (G0).
     const solvedConcept = explainDrillConcept({ setupFen: solved.drill.setupFen, solutionSan: solved.drill.solutionSan, themes: solved.drill.themes });
-    const solvedBeat = drillSolvedBeat(solved.drill.solutionSan, solvedConcept?.idea ?? null, solved.drill.setupFen);
+    const solvedBeat = drillSolvedBeat(solved.drill.setupFen, solved.drill.solutionSan, solvedConcept?.idea ?? null);
     if (!solved.progress) {
       activeDrillRef.current = null;
       // TEACH THE CONCEPT behind the solution (David 2026-09-14: "not just a
@@ -2908,6 +2908,7 @@ export function CoachTeachPage(): JSX.Element {
     const afterOppStep = step + 1;
     activeDrillRef.current = { ...cur, step };
     window.setTimeout(() => {
+      const fenBeforeReply = gameRef.current.fen;
       const r = handlePlayMove(oppReply);
       if (!r.ok) { activeDrillRef.current = null; return; }
       liveFenRef.current = gameRef.current.fen;
@@ -2916,7 +2917,7 @@ export function CoachTeachPage(): JSX.Element {
         completeDrill(cur);
       } else {
         activeDrillRef.current = { ...cur, step: afterOppStep };
-        coachDrillSay(drillContinueBeat(oppReply));
+        coachDrillSay(drillContinueBeat(oppReply, fenBeforeReply));
       }
     }, 650);
     return true;

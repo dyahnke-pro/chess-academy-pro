@@ -13,11 +13,9 @@ import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import type { FairKey, LessonPositionCandidate } from './thinkingPositions';
 import type { StepKit } from './thinkingLessonSession';
-import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { sayMoveClause } from './spokenMove';
 import { rotateStem } from '../utils/rotateStem';
 
-export const THEIR_MOVE_STEP_TAGS: readonly MisconceptionTagId[] = ['missed-opponents-threat'];
 
 const name = (t: PieceSymbol): string => PIECE_NAMES[t] ?? 'piece';
 
@@ -86,8 +84,8 @@ export function withTheirMove(c: LessonPositionCandidate): LessonPositionCandida
   return {
     ...c,
     lead: rotateStem([
-      `They just played ${sayMoveClause(c.prevSan)}.`,
-      `In your game they answered with ${sayMoveClause(c.prevSan)}.`,
+      `They just played ${sayMoveClause(c.prevSan, c.beforeFen)}.`,
+      `In your game they answered with ${sayMoveClause(c.prevSan, c.beforeFen)}.`,
     ], c.fen.length),
   };
 }

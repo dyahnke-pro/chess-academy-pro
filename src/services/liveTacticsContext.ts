@@ -43,7 +43,7 @@ import { stockfishEngine } from './stockfishEngine';
 import type { TacticPattern, UpcomingTactic, TacticPatternType } from '../types/tacticTypes';
 import { matchTacticPattern, type WeaknessSignal } from './weaknessSignal';
 import { conceptForBoard } from './conceptEngine';
-import { sayMoveNoun } from './spokenMove';
+import { sayLine } from './spokenMove';
 import { verifyForkOnBoard } from './tacticVerification';
 import { seatPieceReferences } from '../utils/seatPieces';
 
@@ -559,7 +559,7 @@ export function speakDeepestLookahead(
   // expansion of it spoke every move twice.
   // Walked to the horizon, which is where the tactic lands.
   const walk = pick.line.slice(0, SPOKEN_LOOKAHEAD_PLIES);
-  const spoken = walk.map(sayMoveNoun);
+  const spoken = sayLine(ctx.fen, walk, 'noun');
   const lineProse =
     spoken.length === 1
       ? spoken[0]

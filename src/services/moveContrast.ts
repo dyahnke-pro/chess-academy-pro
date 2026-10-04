@@ -10,6 +10,7 @@
 // Plan-layer teaching: the door orders it after safety and principle, and a
 // student who has proven the plan layer does not hear it.
 import { Chess, type Square } from 'chess.js';
+import { findLoosePieces } from './loosePieces';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 
@@ -34,19 +35,14 @@ function looseAfter(fenBefore: string, san: string): Map<string, string> | null 
   let mv;
   try { mv = c.move(san); } catch { return null; }
   if (!mv) return null;
-  const me = mv.color;
   const out = new Map<string, string>();
-  for (const row of c.board()) {
-    for (const cell of row) {
-      if (!cell || cell.color !== me || cell.type === 'k') continue;
-      if (c.attackers(cell.square, me).length > 0) continue;
-      // A loose PAWN is a lasting target. A loose PIECE is a difference only
-      // when they could hit it next move — a bishop at home on c1 that nothing
-      // can reach is no reason to prefer one move (review walk 2026-10-01:
-      // "h4 keeps your bishop on c1 defended, and Qb3 leaves it with no guard").
-      if (cell.type !== 'p' && !reachableNextMove(c, cell.square)) continue;
-      out.set(cell.square, cell.type);
-    }
+  for (const p of findLoosePieces(c, mv.color)) {
+    // A loose PAWN is a lasting target. A loose PIECE is a difference only
+    // when they could hit it next move — a bishop at home on c1 that nothing
+    // can reach is no reason to prefer one move (review walk 2026-10-01:
+    // "h4 keeps your bishop on c1 defended, and Qb3 leaves it with no guard").
+    if (p.type !== 'p' && !reachableNextMove(c, p.square)) continue;
+    out.set(p.square, p.type);
   }
   return out;
 }
