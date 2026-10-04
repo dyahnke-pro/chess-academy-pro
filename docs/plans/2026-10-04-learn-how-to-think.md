@@ -762,8 +762,15 @@ because every phase consumes them:
 - **Up next's thinking bite is live**: Learn finishes it (`finishBite('thinking')`).
 - **Merged:** P0b one engine strength, P0c-2 drill wording, P0c-3 (curriculum
   reopen-escalate, exhaustive bite kinds, Weaknesses walk defects 15–17), P0a
-  question parser in shadow (defects 11–12 live). Owed at merge: P0c-1
-  (`lesson` evidence origin, set grader, tap hook), kids surface.
+  question parser in shadow (defects 11–12 live), P0c-1 (set grader, tap
+  hook, KNOW/USE evidence, one recorder), kids (computed answers, isolation
+  gates; per-move praise replaced by what the move did).
+- **One tap-answer machine.** The lesson's question state is the shared
+  `squareAnswerGrader` state; held/prompted come from `answerEvidenceOutcome`.
+  Decision taken at merge: a NUDGE is not help (it gives the count, never the
+  square); a miss before any help is an honest, unprompted break. Lesson
+  answers record through `recordAnswer` (origin `lesson`, never a game id;
+  wrong taps file their misconception); standing and tiers read KNOW.
 
 ## Work list for the end of the build (David 2026-10-04: "Any questions I ask can be tacked on to the work list at the end")
 
