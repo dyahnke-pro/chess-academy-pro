@@ -175,6 +175,19 @@ describe('useReviewPlayback', () => {
     expect(result.current.narrationState).toBe('idle');
   });
 
+  it('a flagged ply with no fundamental states WHY when it is spoken (cached narration emits nothing at build)', async () => {
+    // Clean-pass review walk 2026-10-04, G2 ply 38: a narration built ahead of
+    // the walk and served from the cache never re-emitted its decline.
+    const narration = makeNarration({
+      segments: [makeSegment({ ply: 1, narration: 'That was an inaccuracy.', classification: 'inaccuracy', fundamentalDeclined: ['calculation-depth: the punishing line wins nothing on the ledger'] })],
+    });
+    const { result } = renderHook(() => useReviewPlayback({ narration }));
+    await waitFor(() => expect(speakRecords.length).toBe(1));
+    act(() => { result.current.goForward(); });
+    await waitFor(() => expect(speakRecords.length).toBe(2));
+    expect(auditCalls.some((c) => c.kind === 'coach-surface-migrated' && /ply 1: no fundamental — calculation-depth/.test(c.summary))).toBe(true);
+  });
+
   it('goBack decrements ply WITHOUT re-speaking the narration', async () => {
     const narration = makeNarration({
       segments: [

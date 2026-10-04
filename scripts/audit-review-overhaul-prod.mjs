@@ -814,13 +814,16 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // The app's own reason a flagged ply carried no fundamental (null = none).
   // Every ply a decline event arrived for — printed beside a FUNDLEAD red, so
   // "unexplained" says whether the event never fired or fired for other plies.
+  // The decline is stated when the narration is BUILT and again when the ply
+  // is SPOKEN — a cached narration only emits the second.
+  const DECLINE_SOURCES = new Set(['coachFeatureService.reviewFundamentalDeclined', 'useReviewPlayback.fundamentalDeclined']);
   const declinedPlies = () => [...new Set(events()
-    .filter((e) => String(e.source ?? '') === 'coachFeatureService.reviewFundamentalDeclined')
+    .filter((e) => DECLINE_SOURCES.has(String(e.source ?? '')))
     .map((e) => { try { return Number(JSON.parse(String(e.details ?? '{}')).ply); } catch { return NaN; } })
     .filter((n) => Number.isFinite(n)))].sort((a, b) => a - b);
   const declinedWhy = (ply) => {
     for (const e of events()) {
-      if (String(e.source ?? '') !== 'coachFeatureService.reviewFundamentalDeclined') continue;
+      if (!DECLINE_SOURCES.has(String(e.source ?? ''))) continue;
       let d = {};
       try { d = JSON.parse(String(e.details ?? '{}')); } catch { d = {}; }
       if (Number(d.ply) === ply && Array.isArray(d.why) && d.why.length > 0) return d.why[0];
@@ -1139,7 +1142,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // why. A blind diagnosis is the failure being reported here.
   {
     const declined = events()
-      .filter((e) => String(e.source ?? '') === 'coachFeatureService.reviewFundamentalDeclined')
+      .filter((e) => DECLINE_SOURCES.has(String(e.source ?? '')))
       .map((e) => {
         let d = {};
         try { d = JSON.parse(String(e.details ?? '{}')); } catch { d = {}; }

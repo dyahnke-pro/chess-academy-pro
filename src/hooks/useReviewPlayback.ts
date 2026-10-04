@@ -464,6 +464,16 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
       return;
     }
     setNarrationState('speaking');
+    const declined = segments.find((sg) => sg.ply === ply)?.fundamentalDeclined;
+    if (declined?.length) {
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'useReviewPlayback.fundamentalDeclined',
+        summary: `ply ${ply}: no fundamental — ${declined[0]}`,
+        details: JSON.stringify({ ply, why: declined }),
+      });
+    }
     void logAppAudit({
       kind: 'review-narration-spoken',
       category: 'subsystem',
@@ -487,7 +497,7 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
         scheduleAdvance(ply, holdAfter(ply, text, true), token);
       },
     );
-  }, [clearAdvanceTimer, holdAfter, scheduleAdvance]);
+  }, [clearAdvanceTimer, holdAfter, scheduleAdvance, segments]);
 
   // Speak the intro once the narration arrives. Subsequent ply changes
   // fire from the nav actions below — we don't re-speak on every ply

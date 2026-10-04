@@ -624,6 +624,9 @@ export interface ReviewMoveSegment {
    *  better-line pass can replace it with the reason read off its own, fresher
    *  line of the same ply (one ply, one line). */
   verdictReason?: string;
+  /** Why no fundamental attached to this flagged student ply — the attributor's
+   *  own reasons, stated when the ply is spoken (see buildReviewSegments). */
+  fundamentalDeclined?: string[];
   /** WO-TEACH-02 meter: a TEACHING fact spoke on this ply (the decider's own
    *  `teaches`). Undefined on plies no decision voiced — a fill that writes
    *  narration afterwards is, by definition, not the door teaching. */
@@ -3361,6 +3364,18 @@ export function buildReviewSegments(
     const before = new Set([...principleTaughtAt].filter(([, at]) => at < sg.ply).map(([id]) => id));
     const id = principleAlreadyTaught(sg.fenBefore, sg.san, sg.playerColor, before);
     if (id) sg.principleTaughtEarlier = id;
+  }
+  // WHY NO FUNDAMENTAL, CARRIED ON THE PLY (clean-pass review walk 2026-10-04,
+  // G2 ply 38): the decline was emitted only while the narration was BUILT,
+  // and a narration built ahead of the walk and served from the cache never
+  // re-emits it — the walk heard a flagged ply with no lesson and no reason.
+  // The reason rides the segment, and the playback states it when the ply is
+  // spoken.
+  for (const sg of segments) {
+    if (sg.playerColor !== playerColor || (sg.fundamentals?.length ?? 0) > 0) continue;
+    if (sg.classification !== 'inaccuracy' && sg.classification !== 'mistake' && sg.classification !== 'blunder') continue;
+    const why = attrByPly.get(sg.ply)?.why ?? [];
+    if (why.length > 0) sg.fundamentalDeclined = why;
   }
   return segments;
 }
