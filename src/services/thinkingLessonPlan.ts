@@ -4,6 +4,12 @@
 //
 //   • Tiers unlock by PROOF: a tier is open when every step of every lower tier
 //     is known (green). Rating never opens or closes one (David decision #3).
+//   • A step the student keeps failing IN THEIR GAMES comes first, worst first
+//     (the heat map's red tiles on the step's tags — the same reading Up next
+//     uses), even from a tier not yet open: a student losing pieces to forks
+//     does not wait for "forks" to unlock (David 2026-10-04). A step already
+//     proven in lessons is not pulled forward by games — knowing it is not the
+//     gap there, using it is, and the lesson game is the tool for that.
 //   • Within the open tiers, a RED step (their record shows it breaking) jumps
 //     the queue — lowest tier, then lowest method order, first.
 //   • Otherwise the lowest (tier, order) step not yet known (grey teaches).
@@ -15,6 +21,7 @@ import type { StepKit } from './thinkingLessonSession';
 import type { StepStanding } from './thinkingLesson';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { tierUnlocked as stepTierUnlocked, type ThinkingStep } from './thinkingSteps';
+import type { HeatTile } from './heatMap';
 
 export interface BuiltStep {
   step: ThinkingStep;
@@ -29,7 +36,7 @@ export interface BuiltStep {
 export interface StepChoice {
   step: BuiltStep;
   standing: StepStanding;
-  reason: 'red-first' | 'next-unknown' | 'review';
+  reason: 'game-weakness' | 'red-first' | 'next-unknown' | 'review';
   /** The highest tier open to this student. */
   openTier: number;
 }
@@ -67,10 +74,18 @@ export function chooseThinkingStep(
    *  that needs their own games has none on a fresh device). Unavailable steps
    *  are skipped, never served empty. Defaults to every step. */
   available: (s: BuiltStep) => boolean = () => true,
+  /** How badly the student's GAMES fail this step (0 = not red in games). */
+  gameWeight: (s: BuiltStep) => number = () => 0,
 ): StepChoice | null {
   if (steps.length === 0) return null;
   const ordered = [...steps].sort((a, b) => a.tier - b.tier || a.order - b.order);
   const tier = openTier(ordered, standingOf, available);
+  const fromGames = ordered
+    .filter((s) => available(s) && standingOf(s) !== 'green')
+    .map((s) => ({ s, w: gameWeight(s) }))
+    .filter((x) => x.w > 0)
+    .sort((a, b) => b.w - a.w || a.s.tier - b.s.tier || a.s.order - b.s.order);
+  if (fromGames.length > 0) return { step: fromGames[0].s, standing: 'red', reason: 'game-weakness', openTier: tier };
   const open = ordered.filter((s) => s.tier <= tier && available(s)).map((s) => ({ s, st: standingOf(s) }));
   if (open.length === 0) return null;
   const red = open.find((x) => x.st === 'red');
@@ -92,4 +107,14 @@ export function tierUnlockLine(before: number, after: number): { tier: 2 | 3 | 4
   if (after <= before || after < 2 || after > 4) return null;
   const tier = after as 2 | 3 | 4;
   return { tier, line: TIER_NAME[tier].next, label: `UNLOCKED · ${TIER_NAME[tier].name.toUpperCase()}` };
+}
+
+/** How badly the student's games fail a step: across the step's tags, the red
+ *  heat-map tiles' open holes plus fresh breaks. 0 when none is red. PURE. */
+export function gameWeightForTags(tiles: readonly HeatTile[], tags: readonly MisconceptionTagId[]): number {
+  let w = 0;
+  for (const t of tiles) {
+    if (t.state === 'red' && tags.includes(t.tag)) w += t.openCount + t.broken;
+  }
+  return w;
 }

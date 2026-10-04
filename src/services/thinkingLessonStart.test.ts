@@ -31,3 +31,24 @@ describe('enrichForLesson — an engine-keyed step', () => {
     expect(await enrichForLesson(k, boards, new Set())).toEqual(boards);
   });
 });
+
+describe('boards come from the student\'s own failures at the step', () => {
+  // Minimal spine rows: only the fields the ordering reads.
+  const hole = (tag: string | null, fens: string[]) =>
+    ({ capabilityTag: tag, positions: fens.map((fen) => ({ fen, from: {} })) }) as unknown as import('./weaknessSpine').UnifiedWeakness;
+
+  it('puts the boards of a weakness filed under the step\'s tags first — a reorder, never a filter', async () => {
+    const { boardsForStep } = await import('./thinkingLessonStart');
+    const pool: LessonPositionCandidate[] = [{ fen: A, origin: 'puzzle' }, { fen: B, origin: 'puzzle' }, { fen: C, origin: 'game' }];
+    const out = boardsForStep(pool, [hole('missed-tactic', [A]), hole('hung-material', [C, B])], ['hung-material']);
+    expect(out.map((c) => c.fen)).toEqual([C, B, A]);
+    expect(boardsForStep(pool, [], ['hung-material'])).toEqual(pool);
+  });
+
+  it('adds a weakness board the pool lacks, as a game board with the move they played', async () => {
+    const { withWeaknessBoards } = await import('./thinkingLessonStart');
+    const w = { capabilityTag: 'hung-material', positions: [{ fen: B, playedSan: 'Rb2', from: {} }, { fen: A, from: {} }] } as unknown as import('./weaknessSpine').UnifiedWeakness;
+    const out = withWeaknessBoards([{ fen: A, origin: 'puzzle' }], [w]);
+    expect(out).toEqual([{ fen: A, origin: 'puzzle' }, { fen: B, origin: 'game', playedSan: 'Rb2' }]);
+  });
+});

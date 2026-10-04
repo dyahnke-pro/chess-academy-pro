@@ -1,5 +1,6 @@
+import type { HeatTile } from './heatMap';
 import { describe, it, expect } from 'vitest';
-import { chooseThinkingStep, openTier, tierUnlockLine, type BuiltStep } from './thinkingLessonPlan';
+import { gameWeightForTags, chooseThinkingStep, openTier, tierUnlockLine, type BuiltStep } from './thinkingLessonPlan';
 import type { StepKit } from './thinkingLessonSession';
 import type { StepStanding } from './thinkingLesson';
 
@@ -61,5 +62,38 @@ describe('chooseThinkingStep — availability', () => {
   });
   it('nothing available, nothing chosen', () => {
     expect(chooseThinkingStep(ALL, () => 'grey', () => false)).toBeNull();
+  });
+});
+
+describe('chooseThinkingStep — the student\'s GAMES decide first', () => {
+  const weight = (w: Record<string, number>) => (s: BuiltStep): number => w[s.kit().step] ?? 0;
+
+  it('a step they keep failing in games is taught first, worst first, even out of tier order', () => {
+    const c = chooseThinkingStep(ALL, () => 'grey', () => true, weight({ 'forcing-moves': 3, 'am-i-safe': 7 }));
+    expect(c?.step.step).toBe('am-i-safe');
+    expect(c?.reason).toBe('game-weakness');
+    expect(c?.standing).toBe('red');
+    // A locked tier-2 step is taught when it is their worst hole.
+    expect(chooseThinkingStep(ALL, () => 'grey', () => true, weight({ 'forcing-moves': 9 }))?.step.step).toBe('forcing-moves');
+  });
+
+  it('a step proven in lessons is not pulled forward by games (knowing is not the gap there)', () => {
+    const c = chooseThinkingStep(ALL, (s) => (s.step === 'am-i-safe' ? 'green' : 'grey'), () => true, weight({ 'am-i-safe': 9 }));
+    expect(c?.reason).not.toBe('game-weakness');
+  });
+
+  it('with no game weakness the tier order stands', () => {
+    expect(chooseThinkingStep(ALL, () => 'grey', () => true, () => 0)?.reason).toBe('next-unknown');
+  });
+});
+
+describe('gameWeightForTags', () => {
+  const tile = (tag: string, state: 'red' | 'green' | 'grey', openCount: number, broken: number) =>
+    ({ tag, state, openCount, broken }) as unknown as HeatTile;
+
+  it('sums open holes and breaks on the step\'s RED tiles only', () => {
+    const tiles = [tile('hung-material', 'red', 2, 3), tile('missed-tactic', 'grey', 0, 1), tile('poisoned-pawn', 'red', 1, 0)];
+    expect(gameWeightForTags(tiles, ['hung-material', 'missed-tactic'])).toBe(5);
+    expect(gameWeightForTags(tiles, ['missed-tactic'])).toBe(0);
   });
 });

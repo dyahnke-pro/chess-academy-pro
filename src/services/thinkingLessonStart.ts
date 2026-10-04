@@ -13,8 +13,11 @@
 import type { LessonStage, StepStanding } from './thinkingLesson';
 import type { AnsweredQuestion, StepKit } from './thinkingLessonSession';
 import { getCapabilityProfile, type CapabilityProfile } from './capabilityEvidence';
-import { chooseThinkingStep, openTier, tierUnlockLine, type BuiltStep, type StepChoice } from './thinkingLessonPlan';
+import { chooseThinkingStep, gameWeightForTags, openTier, tierUnlockLine, type BuiltStep, type StepChoice } from './thinkingLessonPlan';
+import { heatMap, type HeatTile } from './heatMap';
+import { getUnifiedWeaknessProfile, type UnifiedWeakness } from './weaknessSpine';
 import { recordThinkingAnswer, standingFromProfile } from './thinkingLessonRecord';
+import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { BUILT_THINKING_STEPS, tagsForThinkingStep } from './thinkingSteps.built';
 import { loadLessonCandidates, type LessonUsernames } from './thinkingLessonSource';
 import { getThinkingLessonMemory, rememberLessonBoard, seenFor } from './thinkingLessonMemory';
@@ -45,11 +48,17 @@ async function knowProfile(): Promise<CapabilityProfile> {
  *  when no step has a fair board for them yet (a fresh device with no games
  *  and no puzzles near their rating). */
 export async function planThinkingLesson(opts: { usernames: LessonUsernames; rating: number }): Promise<PlannedLesson | null> {
-  const [profile, candidates, memory] = await Promise.all([
+  const [profile, useProfile, weaknesses, loaded, memory] = await Promise.all([
     knowProfile(),
+    getCapabilityProfile('use').catch((): CapabilityProfile => new Map()),
+    getUnifiedWeaknessProfile().catch((): UnifiedWeakness[] => []),
     loadLessonCandidates(opts).catch((): LessonPositionCandidate[] => []),
     getThinkingLessonMemory(),
   ]);
+  // What the student's GAMES say (the heat map Up next reads): which steps
+  // they keep failing, and the boards they failed them on.
+  const tiles: HeatTile[] = heatMap(useProfile, weaknesses);
+  const candidates = withWeaknessBoards(loaded, weaknesses);
   // Only steps this student has a FAIR board for can be served (a step that
   // needs their own games has none on a fresh device).
   const availability = new Map<BuiltStep, boolean>();
@@ -73,16 +82,69 @@ export async function planThinkingLesson(opts: { usernames: LessonUsernames; rat
   // of them enriches into a fair question it is ruled out and the choice is
   // made again.
   for (;;) {
-    const choice = chooseThinkingStep(BUILT_THINKING_STEPS, (s) => standingFromProfile(profile, s.tags), available);
+    const choice = chooseThinkingStep(
+      BUILT_THINKING_STEPS,
+      (s) => standingFromProfile(profile, s.tags),
+      available,
+      (s) => gameWeightForTags(tiles, s.tags),
+    );
     if (!choice) return null;
     const kit = choice.step.kit();
-    if (!kit.enrich) return { kit, reason: choice.reason, openTier: choice.openTier, candidates, available };
-    const enriched = await enrichForLesson(kit, candidates, seenFor(memory, kit.step));
+    // The student's own failures at THIS step first (the board they hung the
+    // knight on teaches "am I safe?" better than any puzzle).
+    const ordered = boardsForStep(candidates, weaknesses, choice.step.tags);
+    if (!kit.enrich) return { kit, reason: choice.reason, openTier: choice.openTier, candidates: ordered, available };
+    const enriched = await enrichForLesson(kit, ordered, seenFor(memory, kit.step));
     if (enriched.length > 0) {
       return { kit, reason: choice.reason, openTier: choice.openTier, candidates: enriched, available };
     }
     availability.set(choice.step, false);
   }
+}
+
+/** The weakness spine's own positions join the pool as game boards (the
+ *  board before the student's slip, with the move they played), so a step
+ *  can be taught on the exact position the student failed it on. */
+export function withWeaknessBoards(
+  candidates: readonly LessonPositionCandidate[],
+  weaknesses: readonly UnifiedWeakness[],
+): LessonPositionCandidate[] {
+  const out = [...candidates];
+  const have = new Set(out.map((c) => boardIdentity(c.fen)));
+  for (const w of weaknesses) {
+    for (const p of w.positions) {
+      const id = boardIdentity(p.fen);
+      if (have.has(id)) continue;
+      have.add(id);
+      out.push({ fen: p.fen, origin: 'game', ...(p.playedSan ? { playedSan: p.playedSan } : {}) });
+    }
+  }
+  return out;
+}
+
+/** Boards for a step: the positions of weaknesses filed under the step's tags
+ *  first (newest first, as the spine orders them), then everything else in
+ *  its own order. A reorder, never a filter — a step with no matching hole
+ *  still has the rest of the pool. PURE. */
+export function boardsForStep(
+  candidates: readonly LessonPositionCandidate[],
+  weaknesses: readonly UnifiedWeakness[],
+  tags: readonly MisconceptionTagId[],
+): LessonPositionCandidate[] {
+  const rank = new Map<string, number>();
+  let n = 0;
+  for (const w of weaknesses) {
+    if (!w.capabilityTag || !tags.includes(w.capabilityTag)) continue;
+    for (const p of w.positions) {
+      const id = boardIdentity(p.fen);
+      if (!rank.has(id)) rank.set(id, n++);
+    }
+  }
+  if (rank.size === 0) return [...candidates];
+  const first = candidates.filter((c) => rank.has(boardIdentity(c.fen)))
+    .sort((a, b) => (rank.get(boardIdentity(a.fen)) ?? 0) - (rank.get(boardIdentity(b.fen)) ?? 0));
+  const rest = candidates.filter((c) => !rank.has(boardIdentity(c.fen)));
+  return [...first, ...rest];
 }
 
 /** Boards a lesson asks on: one Show, two Guide, one Solo. Enrichment stops
