@@ -252,6 +252,9 @@ export type AuditKind =
   | 'learn-reason-source'
   // One held row written by a Learn teaching lane (capabilityEvidence.recordLaneEvidence).
   | 'lane-evidence'
+  // One ANSWER row (capabilityEvidence.recordAnswerEvidence): a lesson tap,
+  // an Analysis Practice read or the Review reading card — KNOW evidence.
+  | 'answer-evidence'
   | 'concept-srs-pulled'
   | 'review-voice-package'
   // How deep Stockfish searched and whether the answer SETTLED

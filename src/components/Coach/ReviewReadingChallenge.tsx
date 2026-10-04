@@ -8,7 +8,7 @@ import {
   type ReadingQuestionType,
 } from '../../services/positionReadingService';
 import { gradeReadingAnswer } from '../../services/positionReadingGrader';
-import { recordReadingResult } from '../../services/analysisPracticeStats';
+import { recordAnswer } from '../../services/answerRecord';
 
 interface ReviewReadingChallengeProps {
   /** The position to read — the segment's `fenBefore` (what the student faced
@@ -48,6 +48,7 @@ export function ReviewReadingChallenge({ fen, studentColor, rating, onGraded, on
   const [grade, setGrade] = useState<ReadingGrade | null>(null);
   const [grading, setGrading] = useState(false);
   const mounted = useRef(true);
+  const askedAtRef = useRef<number>(Date.now());
 
   useEffect(() => {
     mounted.current = true;
@@ -64,6 +65,7 @@ export function ReviewReadingChallenge({ fen, studentColor, rating, onGraded, on
     setQIdx(0);
     setAnswer('');
     setGrade(null);
+    askedAtRef.current = Date.now();
     void (async () => {
       try {
         const tactics = await buildFedTacticsContext(fen, studentColor, rating);
@@ -87,9 +89,25 @@ export function ReviewReadingChallenge({ fen, studentColor, rating, onGraded, on
     if (!mounted.current) return;
     setGrade(g);
     setGrading(false);
-    void recordReadingResult(question.type, g.verdict === 'correct');
-    onGraded?.(question.type, g.verdict === 'correct');
-  }, [question, answer, grade, grading, onGraded]);
+    // ONE recorder for every asking surface: the KNOW evidence row (this card
+    // wrote none), the tag's drill spacing. One read per question, no retry,
+    // so anything short of correct is a wrong read made before any help.
+    const solved = g.verdict === 'correct';
+    void recordAnswer({
+      questionTag: question.misconceptionTag ?? null,
+      fen,
+      origin: 'reading',
+      solved,
+      answer: {
+        taps: [], extras: [], wrongAttempts: solved ? 0 : 1,
+        ...(solved ? {} : { firstMissHelp: 'none' as const }),
+        msToFirst: Date.now() - askedAtRef.current, msBetween: [],
+        help: 'none', spoken: false, chainDepth: 0, wrongTags: [], typed: answer,
+        questionId: question.id, keySize: question.answerSquares?.length ?? 0, surface: 'review-reading',
+      },
+    });
+    onGraded?.(question.type, solved);
+  }, [question, answer, grade, grading, onGraded, fen]);
 
   const another = useCallback(() => {
     if (qIdx + 1 >= questions.length) return;

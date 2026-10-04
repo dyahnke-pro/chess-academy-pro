@@ -3429,7 +3429,7 @@ export function assembleMethodAnswer(opts: {
 
   // 2 — THE FORCING SCAN (only meaningful on the student's move).
   if (studentToMove) {
-    const forcing = findForcingCandidates(opts.fen, 64);
+    const forcing = findForcingCandidates(opts.fen);
     const checks = forcing.filter((f) => f.kind === 'check').map((f) => f.san);
     const caps = forcing.filter((f) => f.kind === 'capture').map((f) => f.san);
     if (checks.length === 0 && caps.length === 0) {

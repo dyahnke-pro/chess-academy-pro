@@ -21,16 +21,19 @@ import {
   type SampledPosition,
 } from '../../services/positionReadingService';
 import { gradeReadingAnswer } from '../../services/positionReadingGrader';
-import { recordReadingResult } from '../../services/analysisPracticeStats';
+import { recordAnswer } from '../../services/answerRecord';
+import { wrongTapTag } from '../../services/wrongTapTag';
+import type { AnswerHelp } from '../../services/capabilityEvidence';
+import { useSquareAnswer, type SquareAnswerSettled } from '../../hooks/useSquareAnswer';
 import { determinePlayerColor } from '../../services/mistakePuzzleService';
 import { captureEvent } from '../../services/analytics';
 import { logAppAudit } from '../../services/appAuditor';
 import { reward } from '../../services/rewardService';
 import { rewardSeed } from '../../services/rewardEvents';
 import { hintStartTier } from '../../services/skillScaling';
+import { MISSES_BEFORE_SHOW } from '../../services/squareAnswerGrader';
 import type { GameRecord } from '../../types';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
-import { recordTagDrillResult } from '../../services/misconceptionService';
 
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
 
@@ -181,6 +184,11 @@ export function AnalysisPracticePage(): JSX.Element {
   const askedRef = useRef(0);
   const correctRef = useRef(0);
   const attemptsRef = useRef(0);
+  // The TEXT path's record (typed answers, played moves, and squares on a
+  // question with no square key): the help already shown at the first wrong
+  // submit, so a miss made before any hint stays clean evidence.
+  const textFirstMissHelpRef = useRef<AnswerHelp | undefined>(undefined);
+  const textStartedRef = useRef<number>(Date.now());
   const advanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const usernamesRef = useRef(usernames);
   usernamesRef.current = usernames;
@@ -190,6 +198,8 @@ export function AnalysisPracticePage(): JSX.Element {
   const resetForQuestion = useCallback(() => {
     setGrade(null); setAnswer(''); setHintTier(0); setSelectedSquare(null); setDemoFen(null); setFeedback(null);
     attemptsRef.current = 0;
+    textFirstMissHelpRef.current = undefined;
+    textStartedRef.current = Date.now();
   }, []);
 
   const loadNext = useCallback(async (src: PositionSource) => {
@@ -289,14 +299,30 @@ export function AnalysisPracticePage(): JSX.Element {
     setGrading(false);
     setFeedback(null);
     askedRef.current += 1;
-    void recordReadingResult(question.type, g.verdict === 'correct');
-    captureEvent('analysis_practice_answer', { questionType: question.type, verdict: g.verdict, hintTier });
+    captureEvent('analysis_practice_answer', { questionType: question.type, verdict: g.verdict, hintTier, input: 'text' });
+    // DUAL-USE (tactics map 2026-10-01): every question carries the
+    // misconception it tests. The settled answer is recorded ONCE through the
+    // one recorder — the KNOW evidence row, plus the tag's drill spacing that
+    // used to be a separate call here beside a counter nobody read.
+    const recordText = (solved: boolean, help: AnswerHelp): void => {
+      if (!position) return;
+      void recordAnswer({
+        questionTag: question.misconceptionTag ?? null,
+        fen: position.fen,
+        origin: 'reading',
+        solved,
+        answer: {
+          taps: [], extras: [], wrongAttempts: attemptsRef.current,
+          ...(textFirstMissHelpRef.current !== undefined ? { firstMissHelp: textFirstMissHelpRef.current } : {}),
+          msToFirst: Date.now() - textStartedRef.current, msBetween: [],
+          help, spoken: false, chainDepth: 0, wrongTags: [], typed: text,
+          questionId: question.id, keySize: question.answerSquares?.length ?? 0, surface: 'analysis-practice',
+        },
+      });
+    };
     if (g.verdict === 'correct') {
       correctRef.current += 1;
-      // DUAL-USE (tactics map 2026-10-01): every question carries the
-      // misconception it tests, and the page used to drop it. A solve with no
-      // hint advances that tag's review; a hinted one does not count as held.
-      if (question.misconceptionTag && hintTier === 0 && attemptsRef.current === 0) void recordTagDrillResult(question.misconceptionTag, true);
+      recordText(true, hintTier > 0 ? 'hint' : 'none');
       reward({ kind: 'solved', square: selectedSquareFor(text), seed: rewardSeed(`${position?.fen ?? ''}#${qIndex}`) });
       setGrade(g);
       // SAY the read and SHOW the line, then move on once both have landed —
@@ -311,16 +337,17 @@ export function AnalysisPracticePage(): JSX.Element {
     }
     // Wrong / partial → progressive GROUNDED hint, let them retry.
     reward({ kind: 'miss', square: selectedSquareFor(text) });
+    if (textFirstMissHelpRef.current === undefined) textFirstMissHelpRef.current = hintTier > 0 ? 'hint' : 'none';
     attemptsRef.current += 1;
-    if (attemptsRef.current >= 3) {
-      if (question.misconceptionTag) void recordTagDrillResult(question.misconceptionTag, false);
+    if (attemptsRef.current >= MISSES_BEFORE_SHOW) {
+      recordText(false, 'show');
       setHintTier(3);
       setGrade(g);                                     // reveal answer + Next
       await playDemo(question.demoLine);
     } else {
       setHintTier(Math.max(startTier, attemptsRef.current));
       setAnswer(''); setSelectedSquare(null);          // keep going
-      const left = 3 - attemptsRef.current;
+      const left = MISSES_BEFORE_SHOW - attemptsRef.current;
       const tries = `${left} ${left === 1 ? 'try' : 'tries'} left`;
       setFeedback(g.verdict === 'partial'
         ? { tone: 'partial', text: `Close — name the exact square or idea. ${tries}.` }
@@ -328,11 +355,79 @@ export function AnalysisPracticePage(): JSX.Element {
     }
   }, [question, grading, grade, demoing, hintTier, playDemo, next, startTier, position, qIndex]);
 
+  // ── THE TAP PATH (P0c): a question with a computed square key is answered
+  // by tapping, graded by the deterministic set grader through the one tap
+  // hook — the tap no longer becomes a text string handed to an LLM grader.
+  const tapKey: Square[] | null = question?.answerSquares && question.answerSquares.length > 0 ? question.answerSquares : null;
+
+  const settleTap = useCallback(async (r: SquareAnswerSettled) => {
+    if (!question || !position) return;
+    askedRef.current += 1;
+    captureEvent('analysis_practice_answer', { questionType: question.type, verdict: r.solved ? 'correct' : 'wrong', hintTier, input: 'tap' });
+    void recordAnswer({
+      questionTag: question.misconceptionTag ?? null,
+      fen: position.fen,
+      origin: 'reading',
+      solved: r.solved,
+      answer: { ...r.detail, questionId: question.id, surface: 'analysis-practice' },
+    });
+    setFeedback(null);
+    if (r.solved) {
+      correctRef.current += 1;
+      const last = r.detail.taps[r.detail.taps.length - 1]?.square;
+      reward({ kind: 'solved', square: last, seed: rewardSeed(`${position.fen}#${qIndex}`) });
+      setGrade({ verdict: 'correct', correctAnswer: question.answer, note: '' });
+      await Promise.all([
+        playDemo(question.demoLine),
+        voiceService.speak(question.answer).catch(() => undefined),
+      ]);
+      advanceTimer.current = setTimeout(() => next(), 1200);
+      return;
+    }
+    setHintTier(3);
+    setGrade({ verdict: 'wrong', correctAnswer: question.answer, note: '' });
+    await playDemo(question.demoLine);
+  }, [question, position, hintTier, qIndex, playDemo, next]);
+
+  const squareAnswer = useSquareAnswer({
+    key: tapKey,
+    mode: question?.answerMode ?? 'any',
+    questionKey: `${position?.fen ?? ''}#${qIndex}`,
+    tagWrongTap: (sqr) => (question && position && tapKey
+      ? wrongTapTag({
+          fen: position.fen, key: tapKey, square: sqr,
+          questionTag: question.misconceptionTag ?? null,
+          studentColor: position.orientation === 'white' ? 'w' : 'b',
+        })
+      : null),
+    onWrongTap: (sqr, misses) => {
+      reward({ kind: 'miss', square: sqr });
+      if (misses >= MISSES_BEFORE_SHOW) return;
+      // The grounded hint ladder climbs on a miss, exactly as on the text path.
+      setHintTier(Math.max(startTier, misses));
+      squareAnswer.noteHelp('hint');
+      const left = MISSES_BEFORE_SHOW - misses;
+      setFeedback({ tone: 'wrong', text: `Not quite — try again. ${left} ${left === 1 ? 'try' : 'tries'} left.` });
+    },
+    onPartial: () => setFeedback(null),
+    onNudge: () => {
+      setFeedback({ tone: 'partial', text: 'Good — one more.' });
+      void voiceService.speak('Good — one more.').catch(() => undefined);
+    },
+    onSettled: (r) => { void settleTap(r); },
+  });
+
   const onSquareClick = useCallback((sqr: string) => {
     if (grade || demoing) return;
+    if (tapKey) {
+      squareAnswer.tap(sqr as Square);
+      return;
+    }
+    // No square key (material, who-is-winning, a move question): the clicked
+    // square is graded as text, as before.
     setSelectedSquare(sqr as Square);
     void gradeAnswer(sqr);
-  }, [grade, demoing, gradeAnswer]);
+  }, [grade, demoing, gradeAnswer, tapKey, squareAnswer]);
 
   const onPieceDrop = useCallback((from: string, to: string): boolean => {
     if (grade || demoing || !position) return false;
@@ -348,7 +443,8 @@ export function AnalysisPracticePage(): JSX.Element {
   const showHint = useCallback(() => {
     if (grade) return;
     setHintTier((t) => (t === 0 ? startTier : Math.min(t + 1, 3)));
-  }, [grade, startTier]);
+    squareAnswer.noteHelp('hint');
+  }, [grade, startTier, squareAnswer]);
 
   return (
     <div
@@ -431,8 +527,8 @@ export function AnalysisPracticePage(): JSX.Element {
       {phase === 'ready' && position && question && (() => {
         const toMove = position.orientation === 'white' ? 'White' : 'Black';
         // Highlight the clicked square (and, once answered, the grounded answer squares).
-        const squareStyles: Record<string, CSSProperties> = {};
-        if (selectedSquare) squareStyles[selectedSquare] = { background: 'rgba(99,102,241,0.45)' };
+        const squareStyles: Record<string, CSSProperties> = tapKey ? { ...squareAnswer.squareStyles } : {};
+        if (!tapKey && selectedSquare) squareStyles[selectedSquare] = { background: 'rgba(99,102,241,0.45)' };
         if (grade) for (const s of question.answerSquares ?? []) squareStyles[s] = { background: 'rgba(34,197,94,0.45)' };
         // Every hint revealed so far, in order — the student keeps hint 1 while
         // reading hint 2 (it used to be replaced, labelled "Hint 2" with hint 1

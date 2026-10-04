@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../db/schema';
-import { getCapabilityProfile } from '../../services/capabilityEvidence';
+import { getCapabilityProfile, isUseEvidence } from '../../services/capabilityEvidence';
 import { getUnifiedWeaknessProfile, type UnifiedWeakness } from '../../services/weaknessSpine';
 import { heatMap, newlyGreen, type HeatTile } from '../../services/heatMap';
 import { reward } from '../../services/rewardService';
@@ -103,7 +103,8 @@ export function HeatMapPanel(): JSX.Element | null {
         getUnifiedWeaknessProfile().catch((): UnifiedWeakness[] => []),
         db.meta.get(SEEN_KEY).catch(() => undefined),
         db.misconceptionTags.toArray().catch(() => []),
-        db.capabilityEvidence.toArray().catch(() => []),
+        // The timeline is the USE reading — a lesson tap is not a game week.
+        db.capabilityEvidence.toArray().then((rows) => rows.filter(isUseEvidence)).catch(() => []),
         db.games.toArray().catch(() => []),
       ]);
       if (cancelled) return;
