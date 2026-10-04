@@ -39,7 +39,50 @@ solved a puzzle.
 - **Worked-example effect**: novices learn faster by watching the steps, then having
   the support faded. Hence Show → Guide → Solo.
 
-## The method: seven steps, a fixed order (the habit IS the order)
+## The method, STRENGTHENED (2026-10-04, second pass): ten steps
+
+The seven steps below were strong on SEEING and missing four parts of thinking:
+assessment first, answering danger, comparing candidates (Kotov), calculating to
+the end. The full order:
+
+| # | Step | New | Computer (exists) |
+|---|---|---|---|
+| 1 | **Assess** — who's better, material, king safety → the MODE (attack / defend / improve) | ✓ | material + `kingSafetyRead` + engine eval; the plan thread's tactical↔positional switch (WO-COACH-TEACHER WO-2) |
+| 2 | What did their move change? | | (step 1 below) |
+| 3 | Am I safe? | | (step 2 below) |
+| 4 | **Answer the danger** — move it, defend it, block, or counter with something bigger | ✓ | the threat→answer computer (Naroditsky census), `threatAnswer` |
+| 5 | Their targets | | (step 3 below) |
+| 6 | My forcing moves | | (step 4 below) |
+| 7 | Hit two at once | | (step 5 below) |
+| 8 | **Candidates** — find 2–3, compare | ✓ | `deliberation` (candidate weighing), `tacticalRead` tempting pick |
+| 9 | **Calculate to the end** — where the line stops, who is ahead then | ✓ | `proofCut` (what a line wins), `computePvLine` |
+| 10 | Is my move safe? (blunder check) | | (step 7 below) |
+
+The old step 6 (no tactic? the plan) lives inside ASSESS: it is where step 1 sends
+a student when the mode is "improve".
+
+**It grows with the student (Steps-Method progression).** Ten steps swamp a
+beginner. Beginners learn the four that stop most lost games: what changed → am I
+safe → their targets → is my move safe. The rest unlock as those turn green on
+the heat map. The ORDER never changes; the student sees more of it as they prove
+each part.
+
+**Step 8 position rule — an obvious good move AND a subtler, better one (David).**
+A position is used for Candidates only when BOTH exist:
+- *Obvious good move:* forcing (check / capture) or the natural move, and genuinely
+  good (keeps or wins an edge; never a blunder).
+- *Subtle better move:* the engine best, clearly stronger than the obvious one
+  (mate where the obvious move isn't, or a large eval gap), ideally quiet or not
+  the first forcing move a student reaches for.
+
+The student taps a move (from-square, then to-square). On the obvious one: "Good —
+that wins a pawn. Before you play it: is there something stronger? What does it
+leave on the table?" Then they compare. Either way both lines play out with their
+proof. Extends `tacticalRead`'s "tempting but wrong" pick to "tempting but
+weaker"; the puzzle DB's `quietMove` theme is a fallback source.
+
+## The seven seeing steps in detail (numbering of the first pass)
+
 
 | # | Step | What it teaches you to look for | Tap questions (examples) | Computer (exists) |
 |---|---|---|---|---|
