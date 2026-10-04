@@ -34,6 +34,9 @@ export interface StepKit {
   /** Optional: turn a candidate into this step's board (e.g. play the move
    *  the student actually chose); null drops it. */
   adapt?: (c: LessonPositionCandidate) => LessonPositionCandidate | null;
+  /** Optional: the book's own words on this habit (verbatim public-domain
+   *  passage, fetched by id) — read once, after the worked example. */
+  book?: () => string | null;
 }
 
 export interface AnsweredQuestion {
@@ -89,6 +92,7 @@ export class ThinkingLessonSession {
   private stopped = false;
   private resolveQuestion: (() => void) | null = null;
   private results: AnsweredQuestion[] = [];
+  private bookRead = false;
 
   private readonly candidates: readonly LessonPositionCandidate[];
 
@@ -146,6 +150,13 @@ export class ThinkingLessonSession {
       if (stage === 'show') {
         this.publish({ shown: [...pos.key] });
         await this.deps.say(this.kit.showLine(pos.fen, pos.key, rot));
+        // The books on the same habit, once per lesson, after the example the
+        // student just watched (David 2026-10-04: "make use of the books").
+        if (!this.bookRead) {
+          this.bookRead = true;
+          const book = this.kit.book?.() ?? null;
+          if (book) await this.deps.say(book);
+        }
         emitThinkingLesson({
           step: this.kit.step, stage, origin: pos.origin, keySize: pos.key.length, foundCount: 0, wrongCount: 0,
           outcome: 'shown', help: 'none', msToFirst: null,
