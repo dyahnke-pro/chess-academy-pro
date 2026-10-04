@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1673 lines · 12 exports · 47 importers · 34 tests · 1 audits**
+**1681 lines · 12 exports · 47 importers · 34 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -93,7 +93,7 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:144`
 
-### `attributePrinciples` (function) — 92 call sites
+### `attributePrinciples` (function) — 93 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
 - `src/services/blockedOwnRetreat.test.ts:23`
 - `src/services/blockedOwnRetreat.test.ts:32`
@@ -108,7 +108,7 @@
 - `src/services/claimTruth.manual.test.ts:182`
 - `src/services/claimTruth.manual.test.ts:187`
 - `src/services/claimTruth.manual.test.ts:195`
-- `src/services/coachFeatureService.ts:902`
+- `src/services/coachFeatureService.ts:913`
 - `src/services/learnWalkBlumenfeld.test.ts:65`
 - `src/services/liveFundamental.ts:143`
 - `src/services/misconceptionClassifier.ts:244`
@@ -181,6 +181,7 @@
 - `src/services/sweepPassesEngineLines.test.ts:91`
 - `src/services/tradedActiveNamesTheirPiece.test.ts:13`
 - `src/services/tradedActiveNamesTheirPiece.test.ts:25`
+- `src/services/tradedActiveNamesTheirPiece.test.ts:34`
 - `src/services/walkOct1Learn.test.ts:94`
 - `src/services/walkOct2a.test.ts:77`
 - `src/services/yieldHonoured.test.ts:33`
@@ -190,10 +191,10 @@
 ### `pvUciToSan` (function) — 11 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
-- `src/services/autoAnalyzeGame.ts:395`
-- `src/services/autoAnalyzeGame.ts:398`
-- `src/services/coachFeatureService.ts:907`
-- `src/services/coachFeatureService.ts:909`
+- `src/services/autoAnalyzeGame.ts:399`
+- `src/services/autoAnalyzeGame.ts:402`
+- `src/services/coachFeatureService.ts:918`
+- `src/services/coachFeatureService.ts:920`
 - `src/services/discussionPractice.ts:353`
 - `src/services/discussionPractice.ts:361`
 - `src/services/liveFundamental.ts:133`
