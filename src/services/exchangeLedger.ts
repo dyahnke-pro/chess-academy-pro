@@ -2,8 +2,9 @@
 // David 2026-09-16: "Now is the time for it").
 //
 // The review speaks engine lines under headings like "Here's how you take
-// advantage: …". `narrateDnaLine` renders each capture as a subjectless
-// "winning the rook" — fine on a one-sided line, ambiguous the moment the line
+// advantage: …". The per-ply line renderer (deleted 2026-10-04) rendered each
+// capture as a subjectless "winning the rook" — fine on a one-sided line,
+// ambiguous the moment the line
 // ALTERNATES, because half those captures belong to the opponent. At ply 29 of
 // David's Alapin the spoken line reads "Kxd7, winning the knight … then Nxa8,
 // winning the rook" under a heading promising the student an advantage; the

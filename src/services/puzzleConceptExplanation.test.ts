@@ -192,3 +192,13 @@ describe('puzzle explanation reads like a coach (live walk 2026-10-03)', () => {
     for (const san of legal.slice(1)) expect(r!.line).toContain(san);
   });
 });
+
+describe('a take-back is only a take-back of a capture (2026-10-04)', () => {
+  it('a pawn pushed and then taken was won, not recaptured', () => {
+    const c = new Chess();
+    c.move('d4'); c.move('d5'); c.move('Nf3');
+    const r = explainDrillConcept({ setupFen: c.fen(), solutionSan: ['c5', 'dxc5'] });
+    expect(r!.spoken).toMatch(/They take your pawn with dxc5\./);
+    expect(r!.spoken).not.toMatch(/take back/);
+  });
+});

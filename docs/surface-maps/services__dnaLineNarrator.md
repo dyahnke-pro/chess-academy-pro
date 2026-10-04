@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**299 lines · 6 exports · 6 importers · 2 tests · 0 audits**
+**60 lines · 2 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,9 +12,7 @@
 
 ## Who calls in
 
-- `src/components/Coach/CoachGameReview.tsx`
 - `src/services/dnaLineNarrator.test.ts`
-- `src/services/engineDeltaLines.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/puzzleConceptExplanation.ts`
 - `src/services/teachingSelector.ts`
@@ -24,50 +22,17 @@
 ### `DnaLinePly` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `dnaMoveClause` (function) — 7 call sites
-- `src/services/dnaLineNarrator.test.ts:10`
-- `src/services/dnaLineNarrator.test.ts:20`
-- `src/services/dnaLineNarrator.test.ts:29`
-- `src/services/dnaLineNarrator.test.ts:35`
-- `src/services/dnaLineNarrator.test.ts:47`
-- `src/services/dnaLineNarrator.test.ts:54`
-- `src/services/dnaLineNarrator.test.ts:55`
-
-### `firstTacticInvariant` (function) — 4 call sites
-- `src/components/Coach/CoachGameReview.tsx:1646`
-- `src/components/Coach/CoachGameReview.tsx:1729`
-- `src/services/dnaLineNarrator.test.ts:120`
-- `src/services/dnaLineNarrator.test.ts:124`
-
 ### `landedTacticTeaching` (function) — 6 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
-- `src/services/dnaLineNarrator.test.ts:102`
-- `src/services/dnaLineNarrator.test.ts:110`
-- `src/services/dnaLineNarrator.test.ts:111`
+- `src/services/dnaLineNarrator.test.ts:11`
+- `src/services/dnaLineNarrator.test.ts:19`
+- `src/services/dnaLineNarrator.test.ts:20`
 - `src/services/openingGenerator.ts:2227`
 - `src/services/teachingSelector.ts:201`
-
-### `narrateDnaLine` (function) — 11 call sites
-- `src/services/dnaLineNarrator.test.ts:65`
-- `src/services/dnaLineNarrator.test.ts:78`
-- `src/services/dnaLineNarrator.test.ts:80`
-- `src/services/dnaLineNarrator.test.ts:89`
-- `src/services/dnaLineNarrator.test.ts:137`
-- `src/services/dnaLineNarrator.test.ts:140`
-- `src/services/dnaLineNarrator.test.ts:154`
-- `src/services/engineDeltaLines.ts:127`
-- `src/services/exchangeLedger.test.ts:68`
-- `src/services/exchangeLedger.test.ts:78`
-- `src/services/exchangeLedger.test.ts:88`
-
-### `dnaLineClauses` (function) — 2 call sites
-- `src/services/dnaLineNarrator.test.ts:174`
-- `src/services/dnaLineNarrator.test.ts:181`
 
 ## Tests
 
 - `src/services/dnaLineNarrator.test.ts`
-- `src/services/exchangeLedger.test.ts`
 
 ## Audits that reach it
 

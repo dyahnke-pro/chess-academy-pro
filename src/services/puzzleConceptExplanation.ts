@@ -281,6 +281,24 @@ function opponentClause(p: ReadPly, prevStudentTo: string | null): string {
   return `they answer ${p.san}`;
 }
 
+/**
+ * The opponent's reply inside a line played FOR the student, as one plain
+ * sentence — "They answer the check with Kf1.", "They have to take your queen
+ * with Rxd8.", "They take back with Rxc3." The ONE vocabulary every surface
+ * that plays a projected line out uses for the other side's moves: no motif is
+ * credited to the reply (the line's point is the student's) and no positional
+ * commentary rides it. `prevStudentTo` is the square the student's previous
+ * ply CAPTURED on (null otherwise), so a capture there reads as a take-back. Null when the move
+ * cannot be replayed from `fenBefore`.
+ */
+export function opponentReplySentence(fenBefore: string, san: string, prevStudentTo: string | null): string | null {
+  let mover: 'w' | 'b';
+  try { mover = new Chess(fenBefore).turn(); } catch { return null; }
+  const read = readPlies([{ fenBefore, san }], mover === 'w' ? 'b' : 'w');
+  if (!read || read.length === 0) return null;
+  return asSentence(opponentClause(read[0], prevStudentTo));
+}
+
 /** Shared composer: given the student's key plies + themes + the key move's
  *  arrow, build the concept explanation — the line in plain coach speech
  *  (the student's moves, the opponent's forced replies, what it wins) with
@@ -336,7 +354,9 @@ function compose(
     }
     const c = studentClause(p, { first: !firstStudentSeen, last: i === lastStudent, result });
     firstStudentSeen = true;
-    prevStudentTo = p.to;
+    // Only a CAPTURE can be taken back: a pawn pushed to c5 and taken there
+    // was won, not recaptured.
+    prevStudentTo = p.captured ? p.to : null;
     return asSentence(c);
   });
   // A line that ends on the opponent's move still says what it won.

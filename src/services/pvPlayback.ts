@@ -661,7 +661,7 @@ export async function computePvLine(
  * (R1: never the primary; voiceFactsBatch phrases the bundles). States only
  * computed facts; quiet plies (no facts) return null → no line spoken.
  */
-export function renderPlyFactLine(ply: PvPly): string | null {
+export function renderPlyFactLine(ply: Pick<PvPly, 'san' | 'facts'>): string | null {
   const f = ply.facts;
   const bits: string[] = [];
   if (f.isMate) return `${ply.san} — checkmate.`;
@@ -681,7 +681,7 @@ export function renderPlyFactLine(ply: PvPly): string | null {
 /** One ply's fact bundle as a compact facts string — the voiceFacts input
  *  for that ply's spoken line (per-ply calls, per-ply validation). Returns
  *  null for a quiet ply (no facts → no line — silence, not filler). */
-export function plyFactsString(ply: PvPly): string | null {
+export function plyFactsString(ply: Pick<PvPly, 'san' | 'facts'>): string | null {
   const f = ply.facts;
   const parts: string[] = [];
   if (f.captured) parts.push(`captures the ${f.captured}`);

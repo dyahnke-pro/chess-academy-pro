@@ -168,6 +168,18 @@ describe('MistakePuzzleBoard writes capability evidence at the solve', () => {
     }));
   });
 
+  it('[show me] then solving resolves as a MISS for spaced repetition (David 2026-10-04)', async () => {
+    const onResolved = vi.fn();
+    render(<MistakePuzzleBoard puzzle={buildMistakePuzzle()} onResolved={onResolved} onComplete={vi.fn()} skipReplayContext />);
+    await screen.findByTestId('mock-board');
+    await act(async () => { await sleep(150); });
+    const showMe = (await screen.findByTestId('puzzle-hint-area')).querySelector('button');
+    await act(async () => { showMe!.click(); });
+    await solveCleanly();
+    expect(onResolved).toHaveBeenCalledTimes(1);
+    expect(onResolved).toHaveBeenCalledWith(false, expect.any(Number));
+  });
+
   it('a data-corrupt puzzle (no moves) records NOTHING — the student never answered', async () => {
     const puzzle = buildMistakePuzzle({ moves: '' });
     render(<MistakePuzzleBoard puzzle={puzzle} onResolved={vi.fn()} onComplete={vi.fn()} skipReplayContext />);

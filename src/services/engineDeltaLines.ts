@@ -8,12 +8,12 @@
  * here runs …" — with arrows, without moving the pieces. Same locked mechanism:
  * arrows show the line, the board never moves.
  *
- * Two parts, both returning { arrows, say } like the gem aside:
+ * Each part returns { arrows, say } like the gem aside:
  *   - computeThreatDelta  — PURE (chess.js null-move scan via detectNewThreat):
  *     what the move just played now threatens. No engine, no async.
- *   - bestLineDeltaFromPv — takes an already-computed Stockfish PvLine (the
- *     caller owns the async engine call — Play reuses its live eval; Watch
- *     computes per node) and traces the best move as an arrow.
+ *   (`bestLineDeltaFromPv` — the best-line aside — is DELETED, 2026-10-04: it
+ *   had no caller, and it spoke its line through the per-ply renderer that
+ *   credited the opponent's replies with motifs.)
  *
  * G0/G3: every square is board-derived (chess.js / the engine PV); the voice
  * only phrases computed facts, never decides them. Present-tense, side-framed.
@@ -22,8 +22,6 @@ import { settledLeadFor, lastMoveOf } from './material';
 import { Chess, type Square } from 'chess.js';
 import { detectNewThreat } from './groundedAnswer';
 import { computePieceRoute } from './forwardTeaching';
-import { narrateDnaLine } from './dnaLineNarrator';
-import type { PvLine } from './pvPlayback';
 import type { NarrationArrow } from '../types/walkthroughTree';
 import type { AnalysisLine } from '../types';
 
@@ -99,38 +97,6 @@ export function computeRouteDelta(
     arrows: [{ from: route.from, to: route.target, color: 'green' }],
     say: `${route.why}. The knight is routing there over the next few moves.`,
     short: `Plan: knight to ${route.target}.`,
-  };
-}
-
-/**
- * The BEST-LINE delta — the engine's top move at this position, as an arrow +
- * the line named. Takes an already-computed `PvLine` (the caller owns the async
- * Stockfish call). Draws the first move (green); the board stays put, so it does
- * NOT fan out multi-ply arrows whose later origins are empty on the static board
- * — it shows the KEY move and names the short continuation, the way he traces
- * "the idea is …" with one arrow. Null when the PV is empty.
- */
-export function bestLineDeltaFromPv(pv: PvLine | null): DeltaAside | null {
-  if (!pv || pv.plies.length === 0) return null;
-  const first = pv.plies[0];
-  if (!first.uci || first.uci.length < 4) return null;
-  const from = first.uci.slice(0, 2);
-  const to = first.uci.slice(2, 4);
-  // Name the next up-to-3 plies so the "line" is heard even though only the key
-  // move is drawn (the board is static; later arrows would start on empty
-  // squares). In the DNA register — the SAME computed voice as the review's
-  // projection lines (David 2026-09-07: ALL narrations follow one pattern, run
-  // through the computer not the LLM) — so each move carries its board-true
-  // "why" instead of a bare SAN chain.
-  // teachInvariant: the first landed tactic in the line also carries its computed
-  // WHY (the concept), so Learn/Play's best-line delta teaches the idea it names.
-  const line = narrateDnaLine(pv.plies.slice(0, 3).map((p) => ({ fenBefore: p.fenBefore, san: p.san })), { teachInvariant: true });
-  const say = `The strongest line here runs ${line}.`;
-  const short = `Best: ${cleanSan(first.san)}.`;
-  return {
-    arrows: [{ from, to, color: 'green' }],
-    say,
-    short,
   };
 }
 

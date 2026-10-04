@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**463 lines · 13 exports · 25 importers · 5 tests · 0 audits**
+**464 lines · 13 exports · 27 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -32,6 +32,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/playCommentary.ts`
 - `src/services/playedMoveGrade.ts`
 - `src/services/principleAttribution.ts`
+- `src/services/projectedLineVoice.report.test.ts`
+- `src/services/projectedLineVoice.ts`
 - `src/services/refutedAlternativeCore.ts`
 - `src/services/reviewConcepts.ts`
 - `src/services/reviewFullData.ts`
@@ -51,11 +53,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts:51`
 - `src/services/exchangeLedger.test.ts:52`
 - `src/services/exchangeLedger.test.ts:56`
-- `src/services/exchangeLedger.test.ts:242`
-- `src/services/exchangeLedger.test.ts:243`
-- `src/services/exchangeLedger.test.ts:264`
-- `src/services/exchangeLedger.test.ts:269`
-- `src/services/exchangeLedger.test.ts:276`
+- `src/services/exchangeLedger.test.ts:211`
+- `src/services/exchangeLedger.test.ts:212`
+- `src/services/exchangeLedger.test.ts:233`
+- `src/services/exchangeLedger.test.ts:238`
+- `src/services/exchangeLedger.test.ts:245`
 - `src/services/gemCrushLines.ts:267`
 
 ### `describeExchange` (function) — 4 call sites
@@ -68,7 +70,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts:24`
 - `src/services/exchangeLedger.test.ts:30`
 - `src/services/exchangeLedger.test.ts:35`
-- `src/services/exchangeLedger.test.ts:239`
+- `src/services/exchangeLedger.test.ts:208`
 
 ### `settledNetForLine` (function) — 2 call sites
 - `src/services/moveComparison.ts:199`
@@ -83,7 +85,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `LineProof` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `proofCut` (function) — 30 call sites
+### `proofCut` (function) — 32 call sites
 - `src/services/coachFeatureService.ts:3643`
 - `src/services/gemCrushLines.ts:258`
 - `src/services/gemFinder.ts:243`
@@ -110,6 +112,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/playedMoveGrade.ts:97`
 - `src/services/principleAttribution.ts:413`
 - `src/services/principleAttribution.ts:477`
+- `src/services/projectedLineVoice.report.test.ts:108`
+- `src/services/projectedLineVoice.ts:67`
 - `src/services/refutedAlternativeCore.ts:175`
 - `src/services/reviewWalkOct2a.test.ts:24`
 - `src/services/reviewWalkOct2a.test.ts:26`
@@ -143,6 +147,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts`
 - `src/services/giftedMaterialIsNotWon.test.ts`
 - `src/services/lineProof.test.ts`
+- `src/services/projectedLineVoice.report.test.ts`
 - `src/services/reviewWalkOct2a.test.ts`
 
 ## Audits that reach it

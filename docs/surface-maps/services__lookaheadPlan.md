@@ -50,11 +50,10 @@
 - `src/services/replayFence.modern1690.test.ts:78`
 - `src/services/replayFence.modern1690.test.ts:80`
 
-### `tacticWord` (function) — 23 call sites
+### `tacticWord` (function) — 22 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7868`
 - `src/services/computedVoiceAudit.report.test.ts:254`
-- `src/services/dnaLineNarrator.ts:136`
-- `src/services/dnaLineNarrator.ts:225`
+- `src/services/dnaLineNarrator.ts:58`
 - `src/services/groundedAnswer.ts:5151`
 - `src/services/groundedAnswer.ts:5163`
 - `src/services/groundedAnswer.ts:5923`
