@@ -511,7 +511,7 @@ export function trapAheadTeaching(fen: string, student: 'w' | 'b'): TeachingHint
   const arrows: ArrowClaim[] = [];
   // NAME THE CAPTURE BY BOTH PIECES (walk 2026-09-30: "the knight taking on d4"
   // right after THEIR knight took on d4 read as their move). A trade says so.
-  let moveNoun = sayMoveNoun(t.san);
+  let moveNoun = sayMoveNoun(t.san, fen);
   try {
     const c = new Chess(fen);
     const slip = c.move(t.san);
@@ -634,7 +634,8 @@ export function openingBreakFor(fen: string, student: 'w' | 'b'): { san: string;
  *  played it; still there to play (legal now); or the position moved past it. */
 export function openingSummaryLine(brk: { san: string; square: string }, studentSans: readonly string[], fenNow: string): string | null {
   const bare = (x: string): string => x.replace(/[+#!?]+$/, '');
-  const say = sayMoveNoun(brk.san);
+  // The break was read at an earlier position, so no board: a pawn break needs none.
+  const say = sayMoveNoun(brk.san, null);
   if (studentSans.some((s) => bare(s) === bare(brk.san))) {
     return `The opening is over, and you got its break in — ${say}, the move this opening is played for.`;
   }

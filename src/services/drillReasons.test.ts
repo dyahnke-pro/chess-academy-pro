@@ -15,7 +15,7 @@ describe('wrongMoveReason — computed off the board the wrong move leaves', () 
     // Black queen on d8, White plays Qxd5?? where d5 is defended by the e6 pawn... simpler: a knight moved to a square attacked by a pawn.
     const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 2';
     const r = wrongMoveReason(fen, 'Ng5', 'Nc3'); // Ng5 is hit by …Qxg5
-    expect(r).toMatch(/leaves your knight on g5 loose/);
+    expect(r).toMatch(/leaves your knight on g5 hanging/);
     expect(r).toMatch(/keeps everything protected/);
   });
   it('is null when the board shows nothing concrete (the nudge stands alone, never a guess)', () => {
@@ -29,12 +29,16 @@ describe('wrongMoveReason — computed off the board the wrong move leaves', () 
 
 describe('solvedLineBeat — the sequence, spoken, with the idea', () => {
   it('spells the whole line and appends the idea', () => {
-    expect(solvedLineBeat(['Nxd5', 'Qxd5', 'Bxf7+'], 'The fork: one piece, two targets.'))
+    expect(solvedLineBeat(null, ['Nxd5', 'Qxd5', 'Bxf7+'], 'The fork: one piece, two targets.'))
       .toBe('That\'s it — the knight takes d5; then the queen takes d5, the bishop takes f7. The fork: one piece, two targets.');
   });
+  it('a piece SAN tells apart is said with its FROM square off the drill board (walk 2026-10-04, defect 8)', () => {
+    const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 3';
+    expect(solvedLineBeat(fen, ['Nce7'], null)).toBe('That\'s it — the knight from c6 to e7.');
+  });
   it('a one-move line and no idea still speaks the move — never "Good."', () => {
-    expect(solvedLineBeat(['O-O'], null)).toBe('That\'s it — castle short.');
-    expect(solvedLineBeat(['e4'], null)).not.toMatch(/^Good\./);
+    expect(solvedLineBeat(null, ['O-O'], null)).toBe('That\'s it — castle short.');
+    expect(solvedLineBeat(null, ['e4'], null)).not.toMatch(/^Good\./);
   });
 });
 

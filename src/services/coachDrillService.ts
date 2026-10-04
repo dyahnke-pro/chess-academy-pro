@@ -756,8 +756,8 @@ export function drillWrongMoveBeat(args: { fenBefore: string; wrongSan: string; 
 }
 
 /** The solved sequence spoken, with the idea named when one is known. */
-export function drillSolvedBeat(solutionSan: readonly string[], idea: string | null): string {
-  return solvedLineBeat(solutionSan, idea);
+export function drillSolvedBeat(setupFen: string | null, solutionSan: readonly string[], idea: string | null): string {
+  return solvedLineBeat(setupFen, solutionSan, idea);
 }
 
 /** The hint: names the piece, withholds the square. Null when the drill's
@@ -767,6 +767,6 @@ export function drillHintBeat(fen: string, expectedSan: string): string | null {
 }
 
 /** The opponent's reply inside a multi-move drill, then the prompt on. */
-export function drillContinueBeat(oppReplySan: string): string {
-  return `${sayMoveClause(oppReplySan).replace(/^./, (c) => c.toUpperCase())} — keep going, find the next move.`;
+export function drillContinueBeat(oppReplySan: string, fenBefore: string | null): string {
+  return `${sayMoveClause(oppReplySan, fenBefore).replace(/^./, (c) => c.toUpperCase())} — keep going, find the next move.`;
 }

@@ -14,7 +14,7 @@
 //     contract), so the arrow is no longer silent.
 import { Chess, type Square } from 'chess.js';
 import { findHangingBySee } from './positionReadingService';
-import { sayMoveClause } from './spokenMove';
+import { sayLine, sayMoveClause } from './spokenMove';
 
 const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -29,34 +29,35 @@ export function wrongMoveReason(fenBefore: string, wrongSan: string, expectedSan
     mover = after.turn();
     if (!after.move(wrongSan)) return null;
   } catch { return null; }
-  const you = sayMoveClause(wrongSan);
+  const you = sayMoveClause(wrongSan, fenBefore);
   // 1. Mate in one for the opponent.
   for (const reply of after.moves({ verbose: true })) {
     const probe = new Chess(after.fen());
     probe.move(reply.san);
-    if (probe.isCheckmate()) return `${cap(you)} walks into ${reply.san} — mate. ${sayMoveClause(expectedSan)} is the move to find.`;
+    if (probe.isCheckmate()) return `${cap(you)} walks into ${reply.san} — mate. ${sayMoveClause(expectedSan, fenBefore)} is the move to find.`;
   }
-  // 2. A piece of yours it leaves loose (value-aware, pin-aware).
+  // 2. A piece of yours it leaves HANGING (SEE: loses material — not the same
+  //    as loose = undefended, `findLoosePieces`; value-aware, pin-aware).
   const loose = findHangingBySee(after.fen()).filter((h) => h.color === mover && h.piece !== 'k').sort((a, b) => b.gain - a.gain)[0];
   if (loose) {
-    return `${cap(you)} leaves your ${PIECE_NAME[loose.piece]} on ${loose.square} loose — they take it for free. ${cap(sayMoveClause(expectedSan))} keeps everything protected and does more.`;
+    return `${cap(you)} leaves your ${PIECE_NAME[loose.piece]} on ${loose.square} hanging — they win material there. ${cap(sayMoveClause(expectedSan, fenBefore))} keeps everything protected and does more.`;
   }
   // 3. A capture that wins material outright for them (their best one-ply grab).
   const grab = after.moves({ verbose: true }).filter((m) => m.captured && m.captured !== 'k')
     .map((m) => ({ m, net: pieceValue(m.captured as string) - (isRecapturable(after.fen(), m.to) ? pieceValue(m.piece) : 0) }))
     .filter((x) => x.net >= 2).sort((a, b) => b.net - a.net)[0];
-  if (grab) return `${cap(you)} lets them play ${grab.m.san} and come out ahead. ${cap(sayMoveClause(expectedSan))} is the move to find.`;
+  if (grab) return `${cap(you)} lets them play ${grab.m.san} and come out ahead. ${cap(sayMoveClause(expectedSan, fenBefore))} is the move to find.`;
   return null;
 }
 
 /** The solved line, spoken, with the idea named when the caller has one:
  *  "That's it — knight takes d5; then queen takes d5, bishop takes f7 check.
  *  The fork: one piece, two targets." */
-export function solvedLineBeat(solutionSan: readonly string[], idea: string | null): string {
+export function solvedLineBeat(startFen: string | null, solutionSan: readonly string[], idea: string | null): string {
   if (solutionSan.length === 0) return idea ?? '';
-  const [first, ...rest] = solutionSan;
-  const opening = `That's it — ${sayMoveClause(first)}`;
-  const tail = rest.length > 0 ? `; then ${rest.map(sayMoveClause).join(', ')}.` : '.';
+  const [first, ...rest] = sayLine(startFen, solutionSan, 'clause');
+  const opening = `That's it — ${first}`;
+  const tail = rest.length > 0 ? `; then ${rest.join(', ')}.` : '.';
   return `${opening}${tail}${idea ? ` ${idea}` : ''}`.trim();
 }
 

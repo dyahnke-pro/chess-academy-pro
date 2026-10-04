@@ -2675,7 +2675,7 @@ export function CoachTeachPage(): JSX.Element {
     // THE SEQUENCE, SPOKEN, WITH THE IDEA NAMED (A5): a drill called "missed
     // tactical sequences" shows the sequence. Computed (G0).
     const solvedConcept = explainDrillConcept({ setupFen: solved.drill.setupFen, solutionSan: solved.drill.solutionSan, themes: solved.drill.themes });
-    const solvedBeat = drillSolvedBeat(solved.drill.solutionSan, solvedConcept?.idea ?? null);
+    const solvedBeat = drillSolvedBeat(solved.drill.setupFen, solved.drill.solutionSan, solvedConcept?.idea ?? null);
     if (!solved.progress) {
       activeDrillRef.current = null;
       // TEACH THE CONCEPT behind the solution (David 2026-09-14: "not just a
@@ -2794,6 +2794,7 @@ export function CoachTeachPage(): JSX.Element {
     const afterOppStep = step + 1;
     activeDrillRef.current = { ...cur, step };
     window.setTimeout(() => {
+      const fenBeforeReply = gameRef.current.fen;
       const r = handlePlayMove(oppReply);
       if (!r.ok) { activeDrillRef.current = null; return; }
       liveFenRef.current = gameRef.current.fen;
@@ -2802,7 +2803,7 @@ export function CoachTeachPage(): JSX.Element {
         completeDrill(cur);
       } else {
         activeDrillRef.current = { ...cur, step: afterOppStep };
-        coachDrillSay(drillContinueBeat(oppReply));
+        coachDrillSay(drillContinueBeat(oppReply, fenBeforeReply));
       }
     }, 650);
     return true;
