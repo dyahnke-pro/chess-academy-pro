@@ -36,6 +36,24 @@ built, name its other consumers; if it has none, ask why not (capability parity)
 
 A lesson-only version of any row is a defect, the same as an enum split.
 
+## 🔒 CONTEXT GATE BEFORE EVERY PHASE (David 2026-10-04: "New context gains before each new section of this build. It is a large and important build. Be precise.")
+
+No phase starts as code until its context is gained FRESH, at that moment (the
+code moves between phases; a map from last week is stale):
+1. **The four levels** (CLAUDE.md): Foundation → `PLAN.md` / `OUTLINE.md` state →
+   `node scripts/surface-map.mjs --changed` for every file the phase will touch →
+   read each of those files end to end, with line numbers.
+2. **An inventory written into this doc** under the phase: what EXISTS (file:line),
+   what is PARTIAL, what is MISSING. Only the missing is built; the partial is
+   extended; nothing that exists is rebuilt beside itself.
+3. **Every claim this plan makes about the code is re-checked** against that read.
+   A wrong claim is deleted, not annotated.
+4. **Blast radius named:** every importer and every surface the phase reaches, and
+   the audit that covers each.
+
+The 2026-10-04 baseline inventory (below, "Context inventory") is the starting
+point for P0; each phase refreshes it.
+
 ## Why it matters (Foundation)
 
 This is the coach teaching the PROCESS that every other computer feeds. Each step
