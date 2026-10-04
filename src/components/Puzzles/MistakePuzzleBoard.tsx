@@ -36,6 +36,7 @@ import { pliesFor, solveLengthOf } from '../../services/mistakeLineGrowth';
 import { reward } from '../../services/rewardService';
 import { rewardSeed } from '../../services/rewardEvents';
 import { PuzzleHeader } from './PuzzleHeader';
+import { useBoardFit } from '../../hooks/useBoardFit';
 
 type PuzzleState = 'loading' | 'replay' | 'playing' | 'correct' | 'incorrect' | 'freeplay';
 
@@ -162,6 +163,8 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   const meter = usePuzzleMeter();
   const consumedIdRef = useRef<string | null>(null);
   const [state, setState] = useState<PuzzleState>('loading');
+  // Board + [show me] fit above the bottom nav on a short phone (David 2026-10-04).
+  const { boardRef: fitRef, keepRef, boardStyle: fitStyle } = useBoardFit(state);
   const resolvedForRef = useRef<string | null>(null);
   const tryTokenRef = useRef(0);
   /** A wrong try's refutation is still being read. While it is, a coaching
@@ -1170,7 +1173,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       )}
 
       {/* Board */}
-      <div className="w-full md:max-w-[420px] mx-auto">
+      <div ref={fitRef} style={fitStyle} className="w-full md:max-w-[420px] mx-auto">
         <ChessBoard
           initialFen={fen}
           key={boardKey}
@@ -1222,7 +1225,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
           "turn the hint button into [show me]. have the coach give
           progressive hints automatically after each failed attempt." */}
       {state === 'playing' && settings.showHints && (
-        <div className="flex flex-col items-start gap-2" data-testid="puzzle-hint-area">
+        <div ref={keepRef} className="flex flex-col items-start gap-2" data-testid="puzzle-hint-area">
           <ShowMeButton
             onShow={() => {
               // Told before answering -> the solve is `prompted` (refs, not

@@ -12,7 +12,7 @@
 // Use this for new lesson screens. It does not change any existing screen — it
 // is opt-in at the call site.
 
-import { type ReactNode } from 'react';
+import { type CSSProperties, type ReactNode, type RefObject } from 'react';
 
 export interface ChessLessonLayoutProps {
   /** Top bar — back button, title, etc. Stays at the top of the viewport. */
@@ -27,6 +27,9 @@ export interface ChessLessonLayoutProps {
   controls: ReactNode;
   /** Optional content rendered below the controls (e.g. annotation card). */
   belowControls?: ReactNode;
+  /** Opt-in fit from `useBoardFit`: the board slot shrinks so the controls
+   *  stay above the bottom nav on a short phone. Omitted = unchanged. */
+  boardFit?: { ref: RefObject<HTMLDivElement | null>; style: CSSProperties | undefined };
   /** Whether to add bottom padding to clear the mobile bottom nav. Defaults to true. */
   reserveBottomNav?: boolean;
   /** Test id override. */
@@ -50,6 +53,7 @@ export function ChessLessonLayout({
   controls,
   belowControls,
   reserveBottomNav = true,
+  boardFit,
   'data-testid': testId = 'chess-lesson-layout',
 }: ChessLessonLayoutProps): JSX.Element {
   return (
@@ -89,6 +93,8 @@ export function ChessLessonLayout({
               short phones — the original intent), never clip. `shrink-0`
               stops a flex column from squeezing it. */}
           <div
+            ref={boardFit?.ref}
+            style={boardFit?.style}
             className="w-full self-center mx-auto shrink-0 aspect-square max-w-[min(100%,60vh)]"
             data-testid="chess-lesson-board"
           >

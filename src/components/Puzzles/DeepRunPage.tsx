@@ -242,7 +242,6 @@ export function DeepRunPage(): JSX.Element {
               onComplete={handleComplete}
               maxWrongAttempts={Number.POSITIVE_INFINITY}
               hintOnMiss
-              fitViewport
               surface="deep-run"
               disabled={phase !== 'running'}
               streak={run.solved}

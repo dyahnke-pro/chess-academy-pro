@@ -41,6 +41,7 @@ import { hintSquareStyles } from '../../utils/hintSquareStyles';
 import { solvedDrillConcept } from '../../services/puzzleTeaching';
 import { motifThemeLabels } from '../../services/tacticClassifierService';
 import { db } from '../../db/schema';
+import { useBoardFit } from '../../hooks/useBoardFit';
 
 /** Difficulty band around the user's puzzle rating. Puzzles inside this
  *  band surface first; the rest are still reachable below the fold. */
@@ -840,6 +841,9 @@ function PuzzleView({ puzzle, onExit, onResult, onNext }: PuzzleViewProps): JSX.
     // color as the student and let Stockfish play OUR pieces.
     studentSide,
   });
+  // Board + Reset / Hint / Next fit above the bottom nav on a short phone
+  // (David 2026-10-04).
+  const { boardRef: fitRef, keepRef, boardStyle: fitStyle } = useBoardFit(playout.phase);
   const clickToMove = useClickToMove(playout);
   // The Hint button used to do nothing visible: it revealed the move inside
   // the playout and the board never drew it (David's tactics map, 2026-10-01).
@@ -1072,7 +1076,7 @@ function PuzzleView({ puzzle, onExit, onResult, onNext }: PuzzleViewProps): JSX.
           Showing the opening · ply {walkthroughPly}/{walkthroughMoves?.length ?? 0}
         </p>
       )}
-      <div className="flex gap-2">
+      <div ref={keepRef} className="flex gap-2">
         <button
           onClick={() => playout.reset()}
           className="flex-1 px-3 py-2 rounded-lg bg-theme-surface text-sm text-theme-text hover:bg-theme-bg"
@@ -1111,5 +1115,5 @@ function PuzzleView({ puzzle, onExit, onResult, onNext }: PuzzleViewProps): JSX.
     </div>
   );
 
-  return <ChessLessonLayout header={header} board={board} controls={controls} />;
+  return <ChessLessonLayout header={header} board={board} controls={controls} boardFit={{ ref: fitRef, style: fitStyle }} />;
 }

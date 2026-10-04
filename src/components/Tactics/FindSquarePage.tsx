@@ -12,6 +12,7 @@ import {
 import { logAppAudit } from '../../services/appAuditor';
 import { reward } from '../../services/rewardService';
 import { rewardSeed } from '../../services/rewardEvents';
+import { useBoardFit } from '../../hooks/useBoardFit';
 
 /**
  * FindSquarePage — board-vision drill.
@@ -54,6 +55,7 @@ export function FindSquarePage(): JSX.Element {
 
   // ── Streak + best ────────────────────────────────────────────────
   const [streak, setStreak] = useState(0);
+  const { boardRef: fitRef, keepRef, boardStyle: fitStyle } = useBoardFit(null);
   const [bestStreak, setBestStreak] = useState(0);
   useEffect(() => {
     void getBestStreak().then(setBestStreak).catch(() => undefined);
@@ -289,8 +291,9 @@ export function FindSquarePage(): JSX.Element {
         </button>
       </div>
 
-      {/* Board */}
-      <div className="max-w-lg mx-auto w-full">
+      {/* Board — shrinks just enough that the streak row stays above the
+          bottom nav on a short phone (David 2026-10-04). */}
+      <div ref={fitRef} style={fitStyle} className="max-w-lg mx-auto w-full">
         <ConsistentChessboard
           fen={board}
           boardOrientation={orientation}
@@ -303,7 +306,7 @@ export function FindSquarePage(): JSX.Element {
       </div>
 
       {/* Streak + sequence-mode toggle */}
-      <div className="flex items-center gap-3 max-w-lg mx-auto w-full">
+      <div ref={keepRef} className="flex items-center gap-3 max-w-lg mx-auto w-full">
         <div
           className="flex-1 flex items-center gap-2 px-3 py-2 rounded-xl bg-theme-surface border border-theme-border"
           data-testid="find-square-streak"

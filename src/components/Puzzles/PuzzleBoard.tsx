@@ -38,6 +38,7 @@ import { solverMoves } from '../../services/puzzleDepth';
 import { reward } from '../../services/rewardService';
 import { rewardSeed } from '../../services/rewardEvents';
 import { PuzzleHeader } from './PuzzleHeader';
+import { useBoardFit } from '../../hooks/useBoardFit';
 
 type PuzzleState = 'loading' | 'playing' | 'correct' | 'incorrect';
 
@@ -74,9 +75,6 @@ interface PuzzleBoardProps {
    *  "Hints are given until top of ladder is reached. Then show solution
    *  button. But we give the user as many tries as they want"). */
   hintOnMiss?: boolean;
-  /** Size the board to the screen HEIGHT as well as its width, so a surface
-   *  with a score row above it never pushes the bottom rank off-screen. */
-  fitViewport?: boolean;
   /** Which Tactics surface hosts the board — a missed puzzle is recorded
    *  under it (`recordPuzzleMiss`). REQUIRED so a new host has to answer. */
   surface: PuzzleMissRecord['surface'];
@@ -113,7 +111,6 @@ export function PuzzleBoard({
   streak,
   headerExtra,
   hintOnMiss = false,
-  fitViewport = false,
   surface,
   focusThemes,
 }: PuzzleBoardProps): JSX.Element {
@@ -125,6 +122,9 @@ export function PuzzleBoard({
   const meter = usePuzzleMeter();
   const consumedIdRef = useRef<string | null>(null);
   const [state, setState] = useState<PuzzleState>('loading');
+  // The board shrinks just enough that Hint / Show solution sit above the
+  // bottom nav on a short phone (David 2026-10-04).
+  const { boardRef: fitRef, keepRef, boardStyle: fitStyle } = useBoardFit(state);
   const [moveIndex, setMoveIndex] = useState(0);
   const [lastMoveHighlight, setLastMoveHighlight] = useState<{ from: string; to: string } | null>(null);
   const [flashClass, setFlashClass] = useState<string>('');
@@ -738,7 +738,7 @@ export function PuzzleBoard({
           {themeLabel}
         </h2>
       )}
-      <div className={`w-full md:max-w-[420px] mx-auto rounded-lg overflow-hidden ${fitViewport ? 'max-w-[calc(100dvh-22rem)] min-w-[16rem]' : ''} ${flashClass}`} data-testid="board-wrapper">
+      <div ref={fitRef} style={fitStyle} className={`w-full md:max-w-[420px] mx-auto rounded-lg overflow-hidden ${flashClass}`} data-testid="board-wrapper">
         <ControlledChessBoard
           game={game}
           interactive={state === 'playing' && !disabled}
@@ -775,7 +775,7 @@ export function PuzzleBoard({
 
       {/* Hint + Show Solution controls */}
       {state === 'playing' && (
-        <div className="flex items-center gap-3" data-testid="puzzle-controls">
+        <div ref={keepRef} className="flex items-center gap-3" data-testid="puzzle-controls">
           {settings.showHints && (
             <div className="flex flex-col items-start gap-2" data-testid="puzzle-hint-area">
               <HintButton

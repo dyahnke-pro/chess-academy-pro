@@ -22,6 +22,7 @@ import { rewardSeed } from '../../services/rewardEvents';
 import type { CoachingTier } from '../../services/tacticAlertService';
 import type { SetupPuzzle } from '../../types';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
+import { useBoardFit } from '../../hooks/useBoardFit';
 
 type BoardState = 'thinking' | 'incorrect' | 'solved' | 'revealing';
 
@@ -64,6 +65,8 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
   const chessRef = useRef(new Chess(puzzle.setupFen));
   const [fen, setFen] = useState(puzzle.setupFen);
   const [boardState, setBoardState] = useState<BoardState>('thinking');
+  // Board + Hint / Show Solution fit above the bottom nav on a short phone (David 2026-10-04).
+  const { boardRef: fitRef, keepRef, boardStyle: fitStyle } = useBoardFit(boardState);
   const wrongTry = useWrongTryRefutation();
   const { refute: refuteTry, clearArrows: clearWrongArrows } = wrongTry;
   const puzzleIdRef = useRef(puzzle.id);
@@ -417,7 +420,7 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
       </motion.div>
 
       {/* Board */}
-      <div className="w-full md:max-w-[420px] mx-auto" data-testid="setup-board">
+      <div ref={fitRef} style={fitStyle} className="w-full md:max-w-[420px] mx-auto" data-testid="setup-board">
         <ChessBoard
           key={boardKey}
           initialFen={fen}
@@ -451,6 +454,7 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
 
       {(boardState === 'thinking' || boardState === 'incorrect') && (
         <button
+          ref={keepRef}
           onClick={handleShowSolution}
           className="self-center text-xs underline opacity-70 hover:opacity-100"
           style={{ color: 'var(--color-text-muted)' }}
