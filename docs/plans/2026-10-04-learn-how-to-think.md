@@ -104,8 +104,12 @@ SERVES. A tier unlocks by PROOF on the student's own record, never by rating
    the coach names what is next ("You see the board. Now: forcing moves.").
    Emitted as `thinking-tier-unlocked` with the proof that opened it (algo audit rule).
 
-**Answered (David 2026-10-04, "Yes"):** the "one more" pause is ~8 s; Show is
-skipped for a step already green; P1 builds step 5 (their targets) first.
+**Answered (David 2026-10-04):** the "one more" pause is ~8 s; P1 builds step 5
+(their targets) first. **Green steps are touched briefly, not skipped:** the coach
+says so from the record ("Your skill chart shows these green, so we'll review them
+briefly and move on if you show you've got them"), serves ONE Solo position per
+green step, and moves on if it is solved clean. A miss drops that step back to the
+full Show → Guide → Solo and counts as evidence on the heat map like any other.
 
 **Step 8 position rule — an obvious good move AND a subtler, better one (David).**
 A position is used for Candidates only when BOTH exist:
