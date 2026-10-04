@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5322 lines · 37 exports · 44 importers · 42 tests · 5 audits**
+**5340 lines · 38 exports · 44 importers · 42 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -335,6 +335,11 @@
 - `src/services/oneLinePerPly.test.ts:23`
 - `src/services/oneLinePerPly.test.ts:28`
 - `src/services/oneLinePerPly.test.ts:29`
+
+### `addVerdictReason` (function) — 3 call sites
+- `src/services/oneLinePerPly.test.ts:36`
+- `src/services/oneLinePerPly.test.ts:38`
+- `src/services/oneLinePerPly.test.ts:39`
 
 ### `detectBadHabits` (re-export) — 8 call sites
 - `src/components/Stats/StatsPage.tsx:65`

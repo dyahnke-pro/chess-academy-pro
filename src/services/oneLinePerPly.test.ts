@@ -29,3 +29,13 @@ describe('one ply, one line: the verdict reason follows the line the ply plays',
     expect(replaceVerdictReason('the stronger move was X.', 'it would win two pawns', 'it would win a pawn')).toBe('the stronger move was X.');
   });
 });
+
+describe('a bare verdict takes the fresh line\'s reason', () => {
+  it('adds the reason after "the stronger move was X" and nowhere else', async () => {
+    const { addVerdictReason } = await import('./coachFeatureService');
+    expect(addVerdictReason('You: that was a mistake — the stronger move was Be3. Next.', 'Be3', 'it would walk your bishop round to c5'))
+      .toBe('You: that was a mistake — the stronger move was Be3 — it would walk your bishop round to c5. Next.');
+    expect(addVerdictReason('the stronger move was Be3 — it would win a pawn.', 'Be3', 'x')).toBe('the stronger move was Be3 — it would win a pawn.');
+    expect(addVerdictReason('the stronger move was Be3.', 'Be3', null)).toBe('the stronger move was Be3.');
+  });
+});

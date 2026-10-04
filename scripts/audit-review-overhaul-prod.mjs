@@ -1017,7 +1017,10 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       // read against the board after …Bxf6). A clause in the sentence of the
       // alternative move is read where that move would have been played.
       const sentence = scan.slice(scan.lastIndexOf('.', m.index) + 1, m.index);
-      const alternative = /\b(?:stronger move was|was the move|would)\b/i.test(sentence);
+      // "Why X was better — it leaves you a passed pawn on c7 that cxb6 does
+      // not" is the alternative's board too (clean-pass walk 2026-10-04, G3
+      // ply 38 false red: c7 is empty only after the move PLAYED).
+      const alternative = /\b(?:stronger move was|was the move|would|was better)\b/i.test(sentence);
       const cell = (past || alternative ? posBefore : pos).get(m[2].toLowerCase());
       if (!cell || cell.type !== PIECE[m[1].toLowerCase()]) accFails.push(`ply ${n}: "${m[1]} on ${m[2]}" but board has ${cell ? cell.type : 'empty'}`);
     }

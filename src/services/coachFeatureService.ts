@@ -3900,7 +3900,7 @@ async function augmentWithProjections(
   const flaggedOpponent = segments
     .filter((s) => s.playerColor !== studentColorName
       && (s.classification === 'inaccuracy' || s.classification === 'mistake' || s.classification === 'blunder')
-      && !!s.bestMoveUci && !!s.bestMoveSan && !!s.verdictReason);
+      && !!s.bestMoveUci && !!s.bestMoveSan);
   const betterDone = deferred<Map<ReviewMoveSegment, { line: PvLine | null; why: string | null }>>();
   const confirmDone = deferred<Map<ReviewMoveSegment, PvLine | null>>();
   const badPieceDone = {
@@ -4006,7 +4006,7 @@ async function augmentWithProjections(
     if (whyBudget <= 0) break;
     const got = better.get(s);
     const line = got?.line ?? null;
-    if (line && line.plies.length >= 3 && s.verdictReason && s.narration) {
+    if (line && line.plies.length >= 3 && s.narration) {
       // ONE PLY, ONE LINE (clean-pass review walk 2026-10-04, G1 15.Ba2: "axb4
       // — it would win two pawns", read off the pre-dive line axb4 Ne7 Bxa4,
       // one sentence before "the line runs axb4, Qxb4, c3, Qb7 and Bxa4 — two
@@ -4014,7 +4014,10 @@ async function augmentWithProjections(
       const fresh = betterMoveReason(s.fenBefore, s.san, line.plies[0].san, line.plies.map((p) => p.uci), s.playerColor,
         priorMoveLeadingTo(segments[segments.indexOf(s) - 1] ? { fenBefore: segments[segments.indexOf(s) - 1].fenBefore, san: segments[segments.indexOf(s) - 1].san } : null, s.fenBefore),
         moverGaveUpMate(s.evalBefore, s.evalAfter, s.playerColor));
-      s.narration = replaceVerdictReason(s.narration, s.verdictReason, fresh ? seatPieceReferences(fresh, s.fenBefore, studentColorWB) : null);
+      const seatedFresh = fresh ? seatPieceReferences(fresh, s.fenBefore, studentColorWB) : null;
+      s.narration = s.verdictReason
+        ? replaceVerdictReason(s.narration, s.verdictReason, seatedFresh)
+        : addVerdictReason(s.narration, line.plies[0].san, seatedFresh);
     }
     if (line && line.plies.length >= 3) {
       const bestName = line.plies[0].san;
@@ -4054,13 +4057,15 @@ async function augmentWithProjections(
   }
   for (const s of flaggedOpponent) {
     const line = better.get(s)?.line ?? null;
-    if (!line || line.plies.length < 3 || !s.verdictReason || !s.narration) continue;
+    if (!line || line.plies.length < 3 || !s.narration) continue;
     const fresh = betterMoveReason(s.fenBefore, s.san, line.plies[0].san, line.plies.map((p) => p.uci), s.playerColor,
       priorMoveLeadingTo(segments[segments.indexOf(s) - 1] ? { fenBefore: segments[segments.indexOf(s) - 1].fenBefore, san: segments[segments.indexOf(s) - 1].san } : null, s.fenBefore),
       moverGaveUpMate(s.evalBefore, s.evalAfter, s.playerColor));
     // Their idea, said to the student — the same seating the verdict used.
     const seated = fresh ? seatPieceReferences(toStudentSeat(fresh), s.fenBefore, studentColorWB) : null;
-    s.narration = replaceVerdictReason(s.narration, s.verdictReason, seated);
+    s.narration = s.verdictReason
+      ? replaceVerdictReason(s.narration, s.verdictReason, seated)
+      : addVerdictReason(s.narration, line.plies[0].san, seated);
   }
   mark('better');
 
@@ -5318,4 +5323,17 @@ export function replaceVerdictReason(narration: string, oldReason: string, fresh
   const at = narration.indexOf(marker);
   if (at < 0 || freshReason === oldReason) return narration;
   return `${narration.slice(0, at)}${freshReason ? ` — ${freshReason}` : ''}${narration.slice(at + marker.length)}`;
+}
+
+/** Give a verdict that names the better move with NO reason ("the stronger move
+ *  was X.") the reason read off the fresh line of the same ply — the quick-sweep
+ *  line it would have used is not one a claim may rest on. */
+export function addVerdictReason(narration: string, bestSan: string, reason: string | null): string {
+  if (!reason) return narration;
+  const marker = `the stronger move was ${bestSan}`;
+  const at = narration.indexOf(marker);
+  if (at < 0) return narration;
+  const end = at + marker.length;
+  if (!/^[.;]/.test(narration.slice(end))) return narration;   // already carries a clause
+  return `${narration.slice(0, end)} — ${reason}${narration.slice(end)}`;
 }
