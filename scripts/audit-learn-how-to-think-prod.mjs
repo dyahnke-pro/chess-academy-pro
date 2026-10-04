@@ -14,6 +14,7 @@
  *   L7  the lesson emitted `thinking-lesson` rows with outcomes (algo audit)
  *   L8  "teach me the Caro-Kann" does NOT start the lesson
  *   L9  zero /api/tts requests (muted) and zero page errors
+ *   L10 ending a plain-board lesson offers "Play a game on this", which starts a game
  *
  * Run:
  *   AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY \
@@ -183,6 +184,24 @@ async function main() {
         await page.locator('[data-testid="thinking-lesson-dont-know"]').click({ force: true }).catch(() => {});
         await page.waitForTimeout(5000);
       }
+    }
+
+    // L10: end the lesson; a step answered on a plain board offers the lesson game.
+    const stepNow = await page.locator('[data-testid="thinking-lesson"]').getAttribute('data-step').catch(() => null);
+    await page.locator('[data-testid="thinking-lesson-stop"]').click({ force: true }).catch(() => {});
+    const chip = page.getByRole('button', { name: 'Play a game on this' });
+    const offered = await chip.first().waitFor({ state: 'visible', timeout: 15_000 }).then(() => true).catch(() => false);
+    if (/their-move-changed|is-my-move-safe|calculate/.test(stepNow ?? '')) {
+      record('L10. the lesson game', true, `n/a — step ${stepNow} needs a played move or a line, so no live-game version (offered=${offered})`);
+    } else {
+      let started = false;
+      if (offered) {
+        await chip.first().click({ force: true }).catch(() => {});
+        await page.waitForTimeout(4000);
+        started = (await page.locator('[data-testid="thinking-lesson"]').count()) === 0
+          && prose(listener).some((l) => /Your move\. A few times this game/i.test(l));
+      }
+      record('L10. ending the lesson offers "Play a game on this" and it starts a game', offered && started, `step=${stepNow} offered=${offered} started=${started}`);
     }
 
     await page.waitForTimeout(3000);

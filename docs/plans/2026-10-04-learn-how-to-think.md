@@ -750,6 +750,21 @@ because every phase consumes them:
   have no source in these books and stay silent. `chess-concepts.json` is not a
   source — its passages are rewritten prose.
 
+- Steps 4 (answer the danger), 6 alternates checks/captures, 9 (calculate: a
+  3–5 ply line from a CC0 puzzle, "where does it end?").
+- **The lesson game (P5).** `lessonSteer.ts` + `coachGameEngine.pickTeachingReply`:
+  from the engine's top 3 moves, within the student's strength window
+  (120/80/50/30 cp by rating), prefer one that leaves the student a fair
+  question for today's step; at most 4 per game; after the taught slip, before
+  the home steer. Learn offers "Play a game on this" when a plain-board lesson
+  ends; after a steered move lands the board asks the step's question once.
+  Steps that need a played move or a line (2, 9, 10) have no live-game version.
+- **Up next's thinking bite is live**: Learn finishes it (`finishBite('thinking')`).
+- **Merged:** P0b one engine strength, P0c-2 drill wording, P0c-3 (curriculum
+  reopen-escalate, exhaustive bite kinds, Weaknesses walk defects 15–17), P0a
+  question parser in shadow (defects 11–12 live). Owed at merge: P0c-1
+  (`lesson` evidence origin, set grader, tap hook), kids surface.
+
 ## Work list for the end of the build (David 2026-10-04: "Any questions I ask can be tacked on to the work list at the end")
 
 1. **More public-domain books for the library** — candidates to verify (public
