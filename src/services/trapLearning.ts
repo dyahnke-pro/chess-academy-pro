@@ -18,7 +18,7 @@
 // every meeting too. A LEAF: the decision is pure; the store is behind two
 // small functions.
 import { db } from '../db/schema';
-import { recordLaneEvidence } from './capabilityEvidence';
+import { isUseEvidence, recordLaneEvidence } from './capabilityEvidence';
 
 export const TRAP_TAG = 'missed-opponents-threat' as const;
 
@@ -82,7 +82,8 @@ export function warmTrapRecord(): Promise<void> {
   loading ??= (async () => {
     const map = new Map<string, TrapMeeting[]>();
     try {
-      const rows = await db.capabilityEvidence.where('tag').equals(TRAP_TAG).toArray();
+      // Trap meetings are moves in games (USE); a reading answer on the same tag is not one.
+      const rows = (await db.capabilityEvidence.where('tag').equals(TRAP_TAG).toArray()).filter(isUseEvidence);
       for (const r of rows) {
         const k = trapKey(r.fen);
         const list = map.get(k) ?? [];

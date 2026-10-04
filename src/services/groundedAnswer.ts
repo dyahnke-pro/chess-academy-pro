@@ -3503,7 +3503,7 @@ export function assembleMethodAnswer(opts: {
     // My forcing moves (only meaningful on the student's move).
     'forcing-moves': () => {
       if (!studentToMove) return `it's their move — while they think, list the checks and captures they'll have next, so nothing lands as a surprise.`;
-      const forcing = findForcingCandidates(opts.fen, 64);
+      const forcing = findForcingCandidates(opts.fen);
       const checks = forcing.filter((f) => f.kind === 'check').map((f) => f.san);
       const caps = forcing.filter((f) => f.kind === 'capture').map((f) => f.san);
       if (checks.length === 0 && caps.length === 0) return `there are no checks or captures on the board, so this is a quiet decision — nothing forces, so the plan decides.`;

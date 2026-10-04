@@ -1591,7 +1591,14 @@ export type MisconceptionSource =
   | 'auto-analysis'
   /** A Tactics puzzle that ended unsolved (PuzzleBoard). Not a game slip —
    *  written `counted: false`, and never read as a slip per game. */
-  | 'puzzle';
+  | 'puzzle'
+  /** A wrong TAP on a question the coach asked: a lesson step, or a reading
+   *  question (Analysis Practice, the Review reading card). The square the
+   *  student pointed at names the misconception (`wrongTapTag`). Never carries
+   *  a `sourceGameId` — it is not a game slip, and that field guards a game's
+   *  own sweep. */
+  | 'lesson'
+  | 'reading';
 
 /** Adaptive-loop state per tagged instance. `open` = active weakness;
  *  `improving` = drilled successfully at least once; `mastered` =
