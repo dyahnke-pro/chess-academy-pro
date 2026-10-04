@@ -765,9 +765,9 @@ export function PuzzleBoard({
           pushed Hint / Show solution under the bottom nav). The puzzle's own
           buttons on the left, Flip and Ask on the right; every label one line.
           After it resolves, the full read stays one tap away. */}
-      <div ref={keepRef} className="flex flex-wrap items-center gap-2">
+      <div ref={keepRef} className="flex flex-wrap items-center gap-1.5">
         {state === 'playing' && (
-          <div className="flex min-w-0 items-center gap-2" data-testid="puzzle-controls">
+          <div className="flex min-w-0 items-center gap-1.5" data-testid="puzzle-controls">
             {settings.showHints && (
               <div className="flex flex-col items-start gap-2" data-testid="puzzle-hint-area">
                 <HintButton
@@ -780,14 +780,14 @@ export function PuzzleBoard({
             <button
               onClick={handleTeach}
               disabled={teach.isNarrating}
-              className="flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 text-xs text-theme-text-muted hover:text-theme-text rounded-lg border border-theme-border hover:bg-theme-surface transition-colors disabled:opacity-50"
+              className="flex items-center gap-1.5 whitespace-nowrap px-2.5 py-1.5 text-xs text-theme-text-muted hover:text-theme-text rounded-lg border border-theme-border hover:bg-theme-surface transition-colors disabled:opacity-50"
               data-testid="teach-position-button"
             >
-              {teach.isNarrating ? 'Reading…' : 'Teach me'}
+              {teach.isNarrating ? 'Reading…' : 'Teach'}
             </button>
             <button
               onClick={handleShowSolution}
-              className={`flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 text-xs rounded-lg border transition-colors ${ladderTop ? 'animate-pulse border-amber-400/60 text-amber-200 bg-amber-500/10' : 'text-theme-text-muted hover:text-theme-text border-theme-border hover:bg-theme-surface'}`}
+              className={`flex items-center gap-1.5 whitespace-nowrap px-2.5 py-1.5 text-xs rounded-lg border transition-colors ${ladderTop ? 'animate-pulse border-amber-400/60 text-amber-200 bg-amber-500/10' : 'text-theme-text-muted hover:text-theme-text border-theme-border hover:bg-theme-surface'}`}
               data-testid="show-solution-button"
             >
               <Eye size={14} />
@@ -805,17 +805,17 @@ export function PuzzleBoard({
             {teach.isNarrating ? 'Reading the position…' : 'Teach me this position'}
           </button>
         )}
-        <div className="ml-auto flex shrink-0 items-center gap-1">
+        <div className="ml-auto flex shrink-0 items-center gap-1.5">
           <button
             onClick={game.flipBoard}
-            className="flex items-center justify-center rounded-md bg-theme-surface p-2 text-theme-text-muted hover:bg-theme-border hover:text-theme-text transition-colors"
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md bg-theme-surface text-theme-text-muted hover:bg-theme-border hover:text-theme-text transition-colors"
             title="Flip board"
             aria-label="Flip board"
             data-testid="flip-button"
           >
             <RotateCcw size={14} />
           </button>
-          <VoiceChatMic fen={game.position} turn={game.turn} playerColor={userColor} />
+          <VoiceChatMic fen={game.position} turn={game.turn} playerColor={userColor} compact />
         </div>
       </div>
       {state === 'playing' && hintState.nudgeText && (
