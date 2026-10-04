@@ -205,8 +205,8 @@ Phrasing varies endlessly, so the LLM READS the question and code ANSWERS it
 Status 2026-10-04: ONE-CHAT is approved and NOT built — only the translation seam
 uses the LLM today; questions route through ~55 regex detectors. The 2026-10-04
 walk shows the cost: "why is that move better than what I played?" matched the
-best-move regex and dropped "what I played". **The lesson build therefore builds
-the parser's lesson slice first** (or lands on ONE-CHAT if it ships first).
+best-move regex and dropped "what I played". **The parser is built ONCE for the whole app** (next
+section); lessons consume it.
 
 **B. The microphone works — real spoken dialogue.**
 - Learn's chat input already has a mic (`voiceInputService` via `ChatInput`:
@@ -393,6 +393,36 @@ Every piece below exists; the lesson consumes it.
 | **Arrow door** (WO-ARROW-01) + `narrationSegments` | Show-step highlights and arrows go through the one arrow door, lit as the sentence names them. |
 | **Beginner mode** — `isBeginnerMode`, `FirstRunStrength` | A beginner starts on steps 2–3 on quiet boards; difficulty only, never how much the coach says. |
 | **Voice** — `voiceFacts` (G0), verbosity (G5), muted audits (G1) | Every spoken line computed, rotated, you/they; Brief caps voice to 2 sentences, the screen keeps the full text. |
+
+## Prerequisite: ONE question route for the WHOLE app (David 2026-10-04: "building in the llm to all surfaces. Not just this one!!! UNIFIED!!")
+
+The ONE-CHAT parser is built ONCE and every surface gets it; lessons are one
+consumer, not the owner.
+
+- **The door already exists.** `dispatchCoachTurn` (`src/coach/dispatchCoachTurn.ts`)
+  is the single entry for: coach chat (`CoachChatPage`), the board mic
+  (`VoiceChatMic`, on every board that shows it), masterclass chat
+  (`MasterclassCoachChat`, Openings), Analyse (`CoachAnalysePage`),
+  Explain-position (`ExplainPositionSessionView`) and the in-game chat panel
+  (`GameChatPanel`, Play / Review). **Only Learn (`CoachTeachPage.handleSubmit`)
+  bypasses it.**
+- **The build:** the parser (LLM reads the phrasing into the closed, validated
+  ChatTurn schema; code answers) goes INSIDE `dispatchCoachTurn`; Learn is routed
+  through the same door. Then every surface — Learn, Play's chat and mic, Review,
+  Openings masterclass chat, Analyse, Explain-position, Tactics (a puzzle's "ask"),
+  the Dashboard search bar — reads questions the same way, with the same
+  referents, seat and memory (`ConversationState`).
+- **One schema, every surface's kinds in it.** Surfaces differ only in what the
+  answerers can see (their board, their game, their lesson), declared in the
+  surface table (`surfaceContract`), never in a second parser.
+- **Every spoken turn too.** The mic transcript goes through the same door on every
+  surface.
+- **Rollout as ONE-CHAT §5:** shadow on all surfaces at once (log fast-path vs
+  parser), switch on ≥95% measured accuracy on real + held-out questions; the
+  `audit-coach-all-questions-prod` matrix + the lesson question set run against
+  every surface.
+- **Kids (`/kid/*`) keep their own safe path** (`getKidLlmResponse`, kid rules)
+  unless David decides otherwise.
 
 ## Prerequisite: ONE engine strength (David 2026-10-04: "we need to unify the strength of the engines")
 
