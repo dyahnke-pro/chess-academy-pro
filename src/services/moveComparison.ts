@@ -210,9 +210,21 @@ export async function compareTwoMoves(
   // ── 2. PASSED PAWN — the controlled experiment. For each passed pawn the
   // better line has that the worse line does NOT, REMOVE it and re-evaluate. If
   // deleting it collapses most of the gap, that pawn is the proven cause.
-  const passersWorse = new Set(passedPawns(worseFen, mover));
-  for (const sq of passedPawns(betterFen, mover)) {
-    if (passersWorse.has(sq)) continue; // only a passer the better move CREATED
+  // Matched by FILE, not square: a passer the better move only PUSHED is the
+  // same pawn the worse move keeps (clean-pass review walk 2026-10-04, G3
+  // 20…Rad8: "c5 leaves you a passed pawn on c5 that Rad8 does not" — Rad8
+  // keeps it, passed, on c6).
+  const perFile = (sqs: readonly string[]): Map<string, number> => {
+    const m = new Map<string, number>();
+    for (const q of sqs) m.set(q[0], (m.get(q[0]) ?? 0) + 1);
+    return m;
+  };
+  const worseFiles = perFile(passedPawns(worseFen, mover));
+  const betterPassers = passedPawns(betterFen, mover);
+  const betterFiles = perFile(betterPassers);
+  for (const sq of betterPassers) {
+    // only a passer the better move CREATED: its file holds more passers
+    if ((betterFiles.get(sq[0]) ?? 0) <= (worseFiles.get(sq[0]) ?? 0)) continue;
     const abl = new Chess(betterFen);
     abl.remove(sq as Square);
     const eAbl = await evaluate(abl.fen());
@@ -226,7 +238,10 @@ export async function compareTwoMoves(
           // SAID OF THE BETTER MOVE'S BOARD, not the one on screen (review
           // walk 2026-10-04, G3 19…cxb6: "your passed pawn on c7 — take it
           // off the board" with c7 empty — the pawn exists only after axb6).
-          text: `it leaves you a passed pawn on ${sq} that ${base.sanWorse} does not — take that pawn off the board and the edge is gone`,
+          // The ablation proves the pawn is the DIFFERENCE between the two
+          // moves — never that the mover has an edge (G3 20…c5 at −1.9: "take
+          // that pawn off the board and the edge is gone").
+          text: `it leaves you a passed pawn on ${sq} that ${base.sanWorse} does not — take that pawn off the board and the difference between the two moves goes with it`,
           proof: 'ablation',
           ablation: { full: betterCpMover, ablated: moverAbl, worse: worseCpMover },
         },
