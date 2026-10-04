@@ -1,26 +1,29 @@
 // useThinkingLesson — the React side of "Learn how to think": owns one
 // ThinkingLessonSession, exposes its view, and forwards taps. All lesson logic
 // lives in the session (services/thinkingLessonSession.ts); this hook only
-// wires real voice, timers, the evidence writer and the position source.
+// wires real voice and timers; the plan, the boards and the record come
+// through the one door (services/thinkingLessonStart.ts).
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Square } from 'chess.js';
+import { ThinkingLessonSession, type LessonView } from '../services/thinkingLessonSession';
 import {
-  ThinkingLessonSession, type AnsweredQuestion, type LessonView, type StepKit,
-} from '../services/thinkingLessonSession';
-import type { StepStanding } from '../services/thinkingLesson';
-import { loadLessonCandidates, type LessonUsernames } from '../services/thinkingLessonSource';
-import { getThinkingLessonMemory, rememberLessonBoard, seenFor } from '../services/thinkingLessonMemory';
-import type { LessonPositionCandidate } from '../services/thinkingPositions';
+  finishThinkingLesson, lessonInputs, planThinkingLesson, recordLessonAnswer, rememberLessonBoardNow,
+  type LessonPositionCandidate, type LessonUsernames, type PlannedLesson, type StepKit,
+} from '../services/thinkingLessonStart';
+
+export type { StepKit, PlannedLesson };
 
 export interface UseThinkingLessonDeps {
   say: (text: string) => Promise<void>;
-  record: (answer: AnsweredQuestion) => Promise<void>;
-  standing: (step: string) => Promise<StepStanding>;
 }
 
 export interface UseThinkingLesson {
   view: LessonView;
+  /** Choose this student's step (null = no fair board yet). */
+  plan: (opts: { usernames: LessonUsernames; rating: number }) => Promise<PlannedLesson | null>;
   start: (kit: StepKit, opts: { usernames: LessonUsernames; rating: number; candidates?: readonly LessonPositionCandidate[] }) => Promise<void>;
+  /** A planned lesson ended: closes Up next's bite; returns the tier-unlock line, if one opened. */
+  finish: (plan: PlannedLesson, source: string) => Promise<string | null>;
   tap: (square: Square) => void;
   dontKnow: () => void;
   /** Hold the nudge while the student asks something else. */
@@ -50,15 +53,11 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
 
   const start = useCallback(async (kit: StepKit, opts: { usernames: LessonUsernames; rating: number; candidates?: readonly LessonPositionCandidate[] }): Promise<void> => {
     sessionRef.current?.stop();
-    const [candidates, memory, standing] = await Promise.all([
-      opts.candidates ? Promise.resolve(opts.candidates) : loadLessonCandidates(opts),
-      getThinkingLessonMemory(),
-      depsRef.current.standing(kit.step).catch((): StepStanding => 'grey'),
-    ]);
-    const session = new ThinkingLessonSession(kit, candidates, seenFor(memory, kit.step), {
+    const { candidates, seen, standing } = await lessonInputs(kit, opts);
+    const session = new ThinkingLessonSession(kit, candidates, seen, {
       say: (t) => depsRef.current.say(t),
-      record: (a) => depsRef.current.record(a),
-      remember: (step, fen) => rememberLessonBoard(step, fen, new Date().toISOString()),
+      record: recordLessonAnswer,
+      remember: rememberLessonBoardNow,
       now: () => Date.now(),
       setTimer: (fn, ms) => { const id = setTimeout(fn, ms); return () => clearTimeout(id); },
       onView: (v) => { if (sessionRef.current === session) setView(v); },
@@ -76,7 +75,7 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
     sessionRef.current?.stop();
     const session = new ThinkingLessonSession(kit, [{ fen, origin: 'game' }], new Set(), {
       say: (t) => depsRef.current.say(t),
-      record: (a) => depsRef.current.record(a),
+      record: recordLessonAnswer,
       remember: async () => { /* a live game board is not a lesson board */ },
       now: () => Date.now(),
       setTimer: (fn, ms) => { const id = setTimeout(fn, ms); return () => clearTimeout(id); },
@@ -87,5 +86,5 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
     if (sessionRef.current === session) sessionRef.current = null;
   }, []);
 
-  return { view, start, tap, dontKnow, hold, askOnce, stop };
+  return { view, plan: planThinkingLesson, start, finish: finishThinkingLesson, tap, dontKnow, hold, askOnce, stop };
 }

@@ -52,9 +52,9 @@ export const PICK_FINISH_LINE: Record<PickKind, { file: string; by: 'kind' | 'ke
   start: { file: 'src/services/activeBite.ts', by: 'key' },
   upload: null,
   learn: null,
-  // Learn reads `?lesson=think` and calls `finishBite('thinking')` when the
-  // lesson ends.
-  thinking: { file: 'src/components/Coach/CoachTeachPage.tsx', by: 'kind' },
+  // Learn reads `?lesson=think`; the lesson's one door calls
+  // `finishBite('thinking')` when the lesson ends.
+  thinking: { file: 'src/services/thinkingLessonStart.ts', by: 'kind' },
 };
 
 /** The "learn how to think" bite is live: Learn reads `?lesson=think` and

@@ -1,0 +1,120 @@
+// thinkingLessonStart — the ONE door between a surface and "Learn how to think".
+//
+// Everything a surface needs to run a lesson goes through here: which step this
+// student is taught (from their KNOW record, tiers open by proof, red first),
+// the boards it may be taught on, where an answer is recorded, and what happens
+// when a lesson ends (Up next's bite closes, a tier that opened is celebrated
+// and named). The page routes, speaks and renders; it decides none of this.
+//
+// Why one door: a surface that imports the planner, the source, the memory,
+// the recorder and the evidence store separately is a surface that can wire
+// them differently from the next one (the coach/third-coach divergence the
+// surface-composition gate measures).
+import type { LessonStage, StepStanding } from './thinkingLesson';
+import type { AnsweredQuestion, StepKit } from './thinkingLessonSession';
+import { getCapabilityProfile, type CapabilityProfile } from './capabilityEvidence';
+import { chooseThinkingStep, openTier, tierUnlockLine, type BuiltStep, type StepChoice } from './thinkingLessonPlan';
+import { recordThinkingAnswer, standingFromProfile } from './thinkingLessonRecord';
+import { BUILT_THINKING_STEPS, tagsForThinkingStep } from './thinkingSteps.built';
+import { loadLessonCandidates, type LessonUsernames } from './thinkingLessonSource';
+import { getThinkingLessonMemory, rememberLessonBoard, seenFor } from './thinkingLessonMemory';
+import { pickFairPosition, type LessonPositionCandidate } from './thinkingPositions';
+import { finishBite } from './activeBite';
+import { reward } from './rewardService';
+import { logAppAudit } from './appAuditor';
+
+export type { StepKit, AnsweredQuestion, LessonStage, LessonUsernames, LessonPositionCandidate };
+
+export interface PlannedLesson {
+  kit: StepKit;
+  reason: StepChoice['reason'];
+  /** The tier that was open when the lesson started (for the unlock check). */
+  openTier: number;
+  candidates: LessonPositionCandidate[];
+  available: (s: BuiltStep) => boolean;
+}
+
+async function knowProfile(): Promise<CapabilityProfile> {
+  try { return await getCapabilityProfile('know'); } catch { return new Map(); }
+}
+
+/** Which step to teach this student now, and the boards to teach it on. Null
+ *  when no step has a fair board for them yet (a fresh device with no games
+ *  and no puzzles near their rating). */
+export async function planThinkingLesson(opts: { usernames: LessonUsernames; rating: number }): Promise<PlannedLesson | null> {
+  const [profile, candidates, memory] = await Promise.all([
+    knowProfile(),
+    loadLessonCandidates(opts).catch((): LessonPositionCandidate[] => []),
+    getThinkingLessonMemory(),
+  ]);
+  // Only steps this student has a FAIR board for can be served (a step that
+  // needs their own games has none on a fresh device).
+  const availability = new Map<BuiltStep, boolean>();
+  const available = (s: BuiltStep): boolean => {
+    const hit = availability.get(s);
+    if (hit !== undefined) return hit;
+    const k = s.kit();
+    const adapt = k.adapt;
+    const pool = adapt ? candidates.map((c) => adapt(c)).filter((c): c is LessonPositionCandidate => !!c) : candidates;
+    const ok = pickFairPosition(pool, k.keyFor, seenFor(memory, k.step)) !== null;
+    availability.set(s, ok);
+    return ok;
+  };
+  const choice = chooseThinkingStep(BUILT_THINKING_STEPS, (s) => standingFromProfile(profile, s.tags), available);
+  if (!choice) return null;
+  return { kit: choice.step.kit(), reason: choice.reason, openTier: choice.openTier, candidates, available };
+}
+
+/** The boards and memory a session needs for one step. */
+export async function lessonInputs(kit: StepKit, opts: { usernames: LessonUsernames; rating: number; candidates?: readonly LessonPositionCandidate[] }): Promise<{
+  candidates: readonly LessonPositionCandidate[];
+  seen: ReadonlySet<string>;
+  standing: StepStanding;
+}> {
+  const [cands, memory, standing] = await Promise.all([
+    opts.candidates ? Promise.resolve(opts.candidates) : loadLessonCandidates(opts).catch((): LessonPositionCandidate[] => []),
+    getThinkingLessonMemory(),
+    lessonStepStanding(kit.step).catch((): StepStanding => 'grey'),
+  ]);
+  return { candidates: cands, seen: seenFor(memory, kit.step), standing };
+}
+
+/** Where every lesson answer goes (KNOW evidence on the step's tags). */
+export function recordLessonAnswer(answer: AnsweredQuestion): Promise<void> {
+  return recordThinkingAnswer(answer, tagsForThinkingStep(answer.step));
+}
+
+/** A step's standing on the KNOW reading. */
+export async function lessonStepStanding(step: string): Promise<StepStanding> {
+  return standingFromProfile(await knowProfile(), tagsForThinkingStep(step));
+}
+
+/** Remember a board the lesson used, so the next visit never repeats it. */
+export function rememberLessonBoardNow(step: string, fen: string): Promise<void> {
+  return rememberLessonBoard(step, fen, new Date().toISOString());
+}
+
+/**
+ * A lesson ended. Up next's thinking bite closes (a no-op when none is open);
+ * if the answers just written opened a tier, the reward fires, the audit row is
+ * written, and the line the coach should say is returned.
+ */
+export async function finishThinkingLesson(plan: PlannedLesson, source: string): Promise<string | null> {
+  void finishBite('thinking');
+  try {
+    const after = await knowProfile();
+    const opened = tierUnlockLine(plan.openTier, openTier(BUILT_THINKING_STEPS, (s) => standingFromProfile(after, s.tags), plan.available));
+    if (!opened) return null;
+    reward({ kind: 'rankUp', label: opened.label, seed: opened.tier });
+    void logAppAudit({
+      kind: 'thinking-tier-unlocked',
+      category: 'subsystem',
+      source,
+      summary: `tier ${opened.tier} opened after ${plan.kit.step}`,
+      details: JSON.stringify({ tier: opened.tier, fromTier: plan.openTier, step: plan.kit.step }),
+    });
+    return opened.line;
+  } catch {
+    return null;   // the lesson already ran; the unlock waits for next time
+  }
+}

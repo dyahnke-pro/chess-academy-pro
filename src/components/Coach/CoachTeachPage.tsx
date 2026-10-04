@@ -158,17 +158,7 @@ import {
   type DrillProgress,
   drillContinueBeat, drillHintBeat, drillSolvedBeat, drillWrongMoveBeat } from '../../services/coachDrillService';
 import { goodButWeakerBeat, wrongMoveReason } from '../../services/drillReasons';
-import { useThinkingLesson } from '../../hooks/useThinkingLesson';
-import { recordThinkingAnswer, standingFromProfile, stepStanding } from '../../services/thinkingLessonRecord';
-import { BUILT_THINKING_STEPS, tagsForThinkingStep } from '../../services/thinkingSteps.built';
-import { chooseThinkingStep, openTier, tierUnlockLine, type BuiltStep } from '../../services/thinkingLessonPlan';
-import { loadLessonCandidates } from '../../services/thinkingLessonSource';
-import { getThinkingLessonMemory, seenFor } from '../../services/thinkingLessonMemory';
-import { pickFairPosition, type LessonPositionCandidate } from '../../services/thinkingPositions';
-import type { StepKit } from '../../services/thinkingLessonSession';
-import { finishBite } from '../../services/activeBite';
-import { reward } from '../../services/rewardService';
-import { getCapabilityProfile } from '../../services/capabilityEvidence';
+import { useThinkingLesson, type StepKit } from '../../hooks/useThinkingLesson';
 import { ThinkingLessonBoard } from './ThinkingLessonBoard';
 import { seedMasterPuzzles } from '../../services/puzzleService';
 import { explainDrillConcept } from '../../services/puzzleConceptExplanation';
@@ -2458,70 +2448,30 @@ export function CoachTeachPage(): JSX.Element {
   const lessonGameRef = useRef<StepKit | null>(null);
   /** Set when the coach's reply was a lesson moment: ask once it lands. */
   const lessonMomentPendingRef = useRef(false);
-  const thinkingLesson = useThinkingLesson({
-    say: coachDrillSay,
-    record: (a) => recordThinkingAnswer(a, tagsForThinkingStep(a.step)),
-    standing: (step) => stepStanding(tagsForThinkingStep(step)),
-  });
+  const thinkingLesson = useThinkingLesson({ say: coachDrillSay });
   const startThinkingLesson = useCallback(async (): Promise<void> => {
     walkthrough.stop();
     voiceService.stop();
     activeDrillRef.current = null;
     customLessonRef.current = null;
     // WHICH step: from the student's own record (red first, then the earliest
-    // unknown step, then a review) — never a fixed lesson.
-    let profile: Awaited<ReturnType<typeof getCapabilityProfile>> = new Map();
-    try { profile = await getCapabilityProfile('know'); } catch { /* grey */ }
+    // unknown step, then a review) — never a fixed lesson. One door decides.
     const usernames = {
       chesscom: activeProfile?.preferences?.chessComUsername,
       lichess: activeProfile?.preferences?.lichessUsername,
     };
     const rating = activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
-    // Only steps this student has a FAIR board for can be served (a step that
-    // needs their own games has none on a fresh device).
-    const [candidates, memory] = await Promise.all([
-      loadLessonCandidates({ usernames, rating }).catch(() => []),
-      getThinkingLessonMemory(),
-    ]);
-    const availability = new Map<BuiltStep, boolean>();
-    const available = (s: BuiltStep): boolean => {
-      const hit = availability.get(s);
-      if (hit !== undefined) return hit;
-      const k = s.kit();
-      const adapt = k.adapt;
-      const pool = adapt ? candidates.map((c) => adapt(c)).filter((c): c is LessonPositionCandidate => !!c) : candidates;
-      const ok = pickFairPosition(pool, k.keyFor, seenFor(memory, k.step)) !== null;
-      availability.set(s, ok);
-      return ok;
-    };
-    const choice = chooseThinkingStep(BUILT_THINKING_STEPS, (s) => standingFromProfile(profile, s.tags), available);
-    if (!choice) {
+    const plan = await thinkingLesson.plan({ usernames, rating });
+    if (!plan) {
       void coachDrillSay('I could not find a clean board for a lesson yet — play or import a few games and the lessons build from them.');
       return;
     }
-    const kit = choice.step.kit();
-    captureEvent('thinking_lesson_started', { surface: 'coach-teach', step: kit.step, reason: choice.reason });
-    await thinkingLesson.start(kit, { usernames, rating, candidates });
-    // Up next's thinking bite closes here (a no-op when no bite is open).
-    void finishBite('thinking');
-    // A TIER OPENED? Read the record again: the lesson just wrote evidence. The
-    // unlock is a reward moment and the coach names what comes next (plan
-    // "Unlocking" rule 8); the machine celebrates, the voice stays plain.
-    try {
-      const after = await getCapabilityProfile('know');
-      const opened = tierUnlockLine(choice.openTier, openTier(BUILT_THINKING_STEPS, (s) => standingFromProfile(after, s.tags), available));
-      if (opened) {
-        reward({ kind: 'rankUp', label: opened.label, seed: opened.tier });
-        void coachDrillSay(opened.line);
-        void logAppAudit({
-          kind: 'thinking-tier-unlocked',
-          category: 'subsystem',
-          source: 'CoachTeachPage.startThinkingLesson',
-          summary: `tier ${opened.tier} opened after ${kit.step}`,
-          details: JSON.stringify({ tier: opened.tier, fromTier: choice.openTier, step: kit.step }),
-        });
-      }
-    } catch { /* the lesson already ran; the unlock waits for next time */ }
+    const kit = plan.kit;
+    captureEvent('thinking_lesson_started', { surface: 'coach-teach', step: kit.step, reason: plan.reason });
+    await thinkingLesson.start(kit, { usernames, rating, candidates: plan.candidates });
+    // A TIER OPENED? The machine celebrates; the voice names what comes next.
+    const opened = await thinkingLesson.finish(plan, 'CoachTeachPage.startThinkingLesson');
+    if (opened) void coachDrillSay(opened);
     // THE LESSON GAME (plan P5): a step answered on a plain board (no adapt —
     // a step that needs the played move or a line has no live-game reading)
     // can be practised in a real game straight after.
@@ -2937,8 +2887,8 @@ export function CoachTeachPage(): JSX.Element {
           if (wrongFen && bestFen) {
             try {
               const [w, b] = await Promise.all([
-                stockfishEngine.analyzeWithBudget(wrongFen, 12, 900),
-                stockfishEngine.analyzeWithBudget(bestFen, 12, 900),
+                stockfishEngine.analyzeWithBudget(wrongFen, COACH_TURN_DEPTH, 900),
+                stockfishEngine.analyzeWithBudget(bestFen, COACH_TURN_DEPTH, 900),
               ]);
               line = goodButWeakerBeat({ fenBefore, wrongSan: move.san, evalAfterWrong: w.evaluation, evalAfterBest: b.evaluation });
             } catch { line = null; }

@@ -68,7 +68,7 @@ export function safetyPrompt(rot: number): string {
   return rotateStem([
     'Tap every piece of yours they could win right now.',
     'Are you safe? Tap each of your pieces that is in danger.',
-    'Which of your pieces could they take for free? Tap them.',
+    'Which of your pieces could they win right now? Tap them.',
   ], rot);
 }
 
