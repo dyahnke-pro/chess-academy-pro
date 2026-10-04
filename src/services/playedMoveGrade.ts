@@ -24,6 +24,7 @@ import { missedPlanClause } from './movePlan';
 import { moveCostOneSearch, uciOfSan, type CostFan } from './moveCost';
 import { SINGLETON_SCORER } from './refutedAlternative';
 import { proofCut } from './exchangeLedger';
+import { gradeMove } from './accuracyService';
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 
@@ -38,13 +39,19 @@ export interface PlayedMoveGrade {
   weaknessTag: string | null;
 }
 
-/** cpLoss → label bands (mover POV cp cost). */
-function labelFor(cpLossCp: number, isBest: boolean): MoveLabel {
+/** The label, from the ONE grader (accuracyService.gradeMove): expected
+ *  points from both evals, one mate rule. A missed mate in eight with the
+ *  played move still +7 is no fault — it used to read as a 99,000cp blunder. */
+function labelFor(
+  best: { evaluation: number; mate: number | null },
+  played: { evaluation: number; mate: number | null },
+  sign: number,
+  isBest: boolean,
+): MoveLabel {
   if (isBest) return 'best';
-  if (cpLossCp >= 200) return 'blunder';
-  if (cpLossCp >= 100) return 'mistake';
-  if (cpLossCp >= 50) return 'inaccuracy';
-  return 'good';
+  const mateOf = (l: { mate: number | null }): number | null => (l.mate === null ? null : l.mate * sign);
+  const cpOf = (l: { evaluation: number; mate: number | null }): number | null => (l.mate === null ? l.evaluation * sign : null);
+  return gradeMove({ beforeCp: cpOf(best), afterCp: cpOf(played), mateBefore: mateOf(best), mateAfter: mateOf(played) }) ?? 'good';
 }
 
 /**
@@ -79,7 +86,7 @@ export function gradePlayedMove(input: {
   // both need the second move to give the win away.
   const secondStillWins = lines.length >= 2 && moverEval(lines[1]) >= 300 && bestEval >= 300;
   const gap12 = lines.length >= 2 && !secondStillWins ? bestEval - moverEval(lines[1]) : 0;
-  const label = labelFor(cpLossCp, isBest);
+  const label = labelFor(lines[0], played, sign, isBest);
 
   // THE PLAYED MOVE'S OWN LINE DECIDES WHAT IT WON OR LOST (WO-OUTCOME-01 B).
   // The fan already carries the engine's line for the played move; the ledger

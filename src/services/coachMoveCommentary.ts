@@ -32,6 +32,7 @@ import { groundedMoveFeedback, voiceFacts } from './coachApi';
 import { explainBestMoveGrounded, assembleMovePurpose } from './groundedAnswer';
 import { whyItFailed } from './whyItFailed';
 import { logAppAudit } from './appAuditor';
+import { gradeMove } from './accuracyService';
 import type { TacticsLiveContext, CoachPersonality, IntensityLevel } from '../coach/types';
 import type { ChatMessage, CoachVerbosity, MoveClassification } from '../types';
 
@@ -115,10 +116,8 @@ export function classifyEvalSwing(
   const swing = (evalAfter - evalBefore) * sign;
   if (swing >= 80) return 'excellent';
   if (swing >= 20) return 'good';
-  if (swing <= -300) return 'blunder';
-  if (swing <= -150) return 'mistake';
-  if (swing <= -60) return 'inaccuracy';
-  return 'book';
+  // A loss is graded by the ONE grader (accuracyService.gradeMove).
+  return gradeMove({ beforeCp: evalBefore * sign, afterCp: evalAfter * sign }) ?? 'book';
 }
 
 /**

@@ -15,7 +15,14 @@
 // the capture no longer nets material, or the fork's victims have left.
 import { Chess, type Square } from 'chess.js';
 import { detectNewThreat, type DetectedThreat } from './groundedAnswer';
-import { legalSeeGainOn } from './positionReadingService';
+import { captureRead } from './positionReadingService';
+
+/** The capture still wins ≥3 — or the board cannot say (a check), which is
+ *  never read as "stopped". */
+function stillWins(fen: string, landing: Square): boolean {
+  const r = captureRead(fen, landing, fen.split(' ')[1] as 'w' | 'b');
+  return r === null || r >= 3;
+}
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
 export interface StoppedThreat {
@@ -30,12 +37,12 @@ function stillWorks(t: DetectedThreat, afterReply: Chess): boolean {
   try { mv = sim.move(t.san); } catch { return false; }
   if (!mv) return false;
   if (t.kind === 'mate') return sim.isCheckmate();
-  if (t.kind === 'capture') return legalSeeGainOn(new Chess(afterReply.fen()), t.landing as Square) >= 3;
+  if (t.kind === 'capture') return stillWins(afterReply.fen(), t.landing as Square);
   // A FORK THAT CAPTURES is stopped only when the capture stops paying too
   // (review walk 2026-10-03, 15.d6 O-O: the king left e8, so "the victims
   // left" — but Qxe7 Qxe7 dxe7 still won the bishop, and "it stops your Qxe7
   // fork" told the student a live threat was gone). Same bar as a capture.
-  if (mv.captured && legalSeeGainOn(new Chess(afterReply.fen()), t.landing as Square) >= 3) return true;
+  if (mv.captured && stillWins(afterReply.fen(), t.landing as Square)) return true;
   // fork: every victim is still where the fork found it.
   return t.targetSquares.every((sq) => {
     const was = new Chess(afterReply.fen()).get(sq as Square);

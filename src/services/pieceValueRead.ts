@@ -23,6 +23,7 @@
 // number the engine will hand over.
 //
 // This lane REMOVES judgement rather than adding it.
+import { routeVia } from '../utils/routeWords';
 import { Chess, type Square } from 'chess.js';
 import { CAPTURE_VALUE } from './pieceValues';
 import { findPieceQuality } from './positionReadingService';
@@ -435,7 +436,7 @@ function betterSquare(fen: string | undefined, square: string): { text: string; 
   if (!route || route.route.length === 0) return null;
   const via = route.route.slice(0, -1);
   return {
-    text: `it wants ${route.target}${via.length ? `, via ${via.join(' and ')}` : ''}.`,
+    text: `it wants ${route.target}${routeVia(via)}.`,
     arrows: [{ from: square, to: route.route[0], role: 'play', source: 'pieceQuality.route' }],
   };
 }

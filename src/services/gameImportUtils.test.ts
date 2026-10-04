@@ -118,17 +118,14 @@ describe('gameImportUtils', () => {
       expect(result).toBeNull();
     });
 
-    it('classifyDrop: exactly 150cp is mistake boundary', () => {
+    it('a 150cp drop near level is graded by the one grader (no 150 floor)', () => {
       // Create a scenario where eval drop is exactly 150cp
       const pgn = `[Event "Test"]
 1. e4 {[%eval 0.0]} e5 {[%eval 0.0]} 2. Nf3 {[%eval 0.0]} Nc6 {[%eval 1.5]} 1-0`;
 
       const result = detectBlunders(pgn);
-      // Black's move (index 3): drop = curr.cp - prev.cp = 150 - 0 = 150
-      // 150 > 150 is false, so... the threshold is > 150, not >= 150
-      // Actually: drop = 150, and condition is drop > BLUNDER_THRESHOLD_CP (150)
-      // So 150 is NOT a blunder. Only > 150 is.
-      expect(result).toBeNull();
+      // Black's move: 0 → -1.5 for Black is ~14% of expected points.
+      expect(result?.[0]?.classification).toBe('mistake');
     });
 
     it('classifyDrop: 151cp is a mistake', () => {

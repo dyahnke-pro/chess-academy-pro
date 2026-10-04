@@ -12,7 +12,7 @@
 // (only run it where the score trips) per the cost architecture.
 import { Chess, type Square } from 'chess.js';
 import { parseEvalTable, strongestByDelta, type PieceValue } from './pieceValueRead';
-import { legalSeeGainFor } from './positionReadingService';
+import { standsSafe } from './positionReadingService';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -66,7 +66,7 @@ export async function computeLeansOn(
   // bishop on b7 and the coach said "keep that bishop in place" in the same
   // breath as "your bishop on b7 is attacked").
   const enemy = moverColor === 'w' ? 'b' : 'w';
-  const winnable = (sq: string): boolean => legalSeeGainFor(fen, sq as Square, enemy) > 0;
+  const winnable = (sq: string): boolean => !standsSafe(fen, sq as Square, enemy);
   if (winnable(star.square)) return null;
 
   let defenders: string[] = [];

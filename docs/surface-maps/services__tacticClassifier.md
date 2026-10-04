@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**819 lines · 3 exports · 16 importers · 6 tests · 0 audits**
+**818 lines · 3 exports · 16 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -39,7 +39,7 @@
 - `src/services/hangingIgnoresCheck.test.ts:11`
 - `src/services/liveTacticsContext.ts:378`
 - `src/services/moveReason.ts:133`
-- `src/services/playedMoveGrade.ts:132`
+- `src/services/playedMoveGrade.ts:139`
 - `src/services/searchDepth.ts:69`
 - `src/services/tacticsDetector.ts:820`
 - `src/services/threatCheck.ts:55`

@@ -1,5 +1,5 @@
 import type { CoachGameMove, GameAccuracy, MoveClassificationCounts } from '../types';
-import { INACCURACY_WIN_PCT, MISTAKE_WIN_PCT, BLUNDER_WIN_PCT, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP } from './engineConstants';
+import { INACCURACY_WIN_PCT, MISTAKE_WIN_PCT, BLUNDER_WIN_PCT, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP, SHORT_MATE_MOVES, MATE_HORIZON_CP } from './engineConstants';
 
 /** Threshold above which Stockfish encodes checkmate. */
 const MATE_THRESHOLD = 20000;
@@ -73,13 +73,70 @@ export function winPctLost(
  * `cpLoss` and `moverEvalAfterCp` are both from the MOVER's side.
  */
 export function moverFault(cpLoss: number, moverEvalAfterCp: number | null): LossBand | null {
-  if (moverEvalAfterCp !== null && Number.isFinite(moverEvalAfterCp)) {
-    return bandForWinPctLost(winPctLost(moverEvalAfterCp + cpLoss, moverEvalAfterCp, true));
-  }
+  return gradeMove({ cpLoss, afterCp: moverEvalAfterCp, beforeCp: moverEvalAfterCp === null ? null : moverEvalAfterCp + cpLoss });
+}
+
+/** The one centipawn ladder (50/100/300) — used only when the evals are not in
+ *  hand. Every grader that has only a cost reads this, never its own numbers. */
+export function cpBand(cpLoss: number): LossBand | null {
   if (cpLoss >= BLUNDER_CP) return 'blunder';
   if (cpLoss >= MISTAKE_CP) return 'mistake';
   if (cpLoss >= INACCURACY_CP) return 'inaccuracy';
   return null;
+}
+
+/** Everything a grader may know about one move, all from the MOVER's side.
+ *  Mates are counts, never centipawn encodings (±100000, ±30000 and ±10000 were
+ *  all in use and each graded a missed mate differently). */
+export interface MoveGradeInput {
+  /** Eval with the best move, mover POV, centipawns (null = mate or unknown). */
+  beforeCp: number | null;
+  /** Eval after the played move, mover POV, centipawns (null = mate or unknown). */
+  afterCp: number | null;
+  /** Cost in centipawns, for when the evals are not both known. */
+  cpLoss?: number | null;
+  /** Best line's mate count: + the mover mates in N, − the mover is mated in N. */
+  mateBefore?: number | null;
+  /** Played move's mate count, same sign convention. */
+  mateAfter?: number | null;
+}
+
+/** Centipawns at which a decided position stops counting more (capEval). */
+const CP_CEILING = 1500;
+const clampCp = (cp: number): number => Math.max(-CP_CEILING, Math.min(CP_CEILING, cp));
+
+/**
+ * THE ONE GRADER (narration unification step 3). Nine graders used to answer
+ * "was that a mistake" with their own thresholds and their own mate rules, so a
+ * single Learn move was a blunder in the live grade, silent in the callout and
+ * "good" in review (a missed mate in eight, still +7). Every grader is a thin
+ * wrapper of this one.
+ *
+ * - Walking into a mate is a blunder.
+ * - Missing a mate in ≤ SHORT_MATE_MOVES is a blunder; missing a longer one is
+ *   no fault while the move still wins (≥ MATE_HORIZON_CP), else it is graded
+ *   from a decided position.
+ * - Otherwise expected points (win% 5/10/20) when both evals are known, else
+ *   the centipawn ladder.
+ */
+export function gradeMove(m: MoveGradeInput): LossBand | null {
+  const mb = m.mateBefore ?? null;
+  const ma = m.mateAfter ?? null;
+  if (ma !== null && ma < 0) return mb !== null && mb < 0 ? null : 'blunder';
+  if (mb !== null && mb < 0) return null; // already lost to a mate; anything is no worse
+  if (mb !== null && mb > 0) {
+    if (ma !== null && ma > 0) return null; // still mating
+    if (mb <= SHORT_MATE_MOVES) return 'blunder';
+    if (m.afterCp !== null && m.afterCp >= MATE_HORIZON_CP) return null;
+    if (m.afterCp === null) return null;
+    return bandForWinPctLost(winPercent(CP_CEILING) - winPercent(clampCp(m.afterCp)));
+  }
+  if (ma !== null && ma > 0) return null; // found a mate
+  if (m.beforeCp !== null && m.afterCp !== null && Number.isFinite(m.beforeCp) && Number.isFinite(m.afterCp)) {
+    return bandForWinPctLost(winPercent(clampCp(m.beforeCp)) - winPercent(clampCp(m.afterCp)));
+  }
+  const cost = m.cpLoss ?? (m.beforeCp !== null && m.afterCp !== null ? m.beforeCp - m.afterCp : null);
+  return cost === null ? null : cpBand(cost);
 }
 
 export function bandForWinPctLost(lost: number): LossBand | null {

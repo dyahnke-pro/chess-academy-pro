@@ -62,7 +62,8 @@ describe('computeLastMoveRating', () => {
     expect(r!.wasBest).toBe(false);
     // cpLoss (White POV) = preStudent(50) - postStudent(-200) = 250 → mistake.
     expect(r!.cpLoss).toBe(250);
-    expect(r!.quality).toBe('mistake');
+    // Graded in expected points (the one grader): +0.5 → −2.0 is a blunder.
+    expect(r!.quality).toBe('blunder');
     expect(r!.betterSan).toBe('d4');
     expect(r!.betterFromTo).toEqual({ from: 'd2', to: 'd4' });
   });
@@ -79,7 +80,8 @@ describe('computeLastMoveRating', () => {
     // studentPOV: pre = -20, post = -120 → cpLoss = 100 → mistake on the shared
     // Stockfish bands (it read 'inaccuracy' under this file's old private set).
     expect(r!.cpLoss).toBe(100);
-    expect(r!.quality).toBe('mistake');
+    // Near level, 100cp is ~9% of expected points — an inaccuracy.
+    expect(r!.quality).toBe('inaccuracy');
     expect(r!.betterSan).toBe('c5');
   });
 

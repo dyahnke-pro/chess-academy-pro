@@ -195,6 +195,18 @@ export function captureRead(fen: string, square: Square, capturingColor: Color):
   return legalSeeGainFor(fen, square, capturingColor);
 }
 
+/** "Nothing wins it" as a STANDING fact — false when a check makes the read
+ *  hold for one move only. Every safe / holds / guarded claim reads this. */
+export function standsSafe(fen: string, square: Square, capturingColor: Color): boolean {
+  return captureRead(fen, square, capturingColor) === 0;
+}
+
+/** `signedLegalSeeFor` through the safety door: null when the read does not
+ *  stand (a check), so a zero is never mistaken for "can't be won back". */
+export function signedCaptureRead(fen: string, square: Square, capturingColor: Color): number | null {
+  return seeReadsStanding(fen, square, capturingColor) ? signedLegalSeeFor(fen, square, capturingColor) : null;
+}
+
 export function legalSeeGainFor(fen: string, square: Square, capturingColor: Color): number {
   const asIf = asIfToMove(fen, capturingColor);
   return asIf ? legalSeeGain(asIf, square) : 0;
@@ -567,7 +579,7 @@ export function findPieceQuality(fen: string): PieceQualityNote[] {
           }
           const enemyKing = chess.board().flat().find((c2) => c2 && c2.type === 'k' && c2.color === enemy);
           const kingOnBack = !!enemyKing && Number(enemyKing.square[1]) === backRank;
-          if ((enemyPawnOnRank || kingOnBack) && legalSeeGainFor(fen, square, enemy) <= 0) {
+          if ((enemyPawnOnRank || kingOnBack) && standsSafe(fen, square, enemy)) {
             notes.push({ square, piece: 'r', color, quality: 'good', kind: 'seventh-rank', reason: 'rook on the seventh rank' });
           }
         }

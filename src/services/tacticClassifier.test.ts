@@ -25,13 +25,13 @@ function hasTactic(
 describe('classifyPosition — move quality', () => {
   const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
-  it('classifies a blunder (eval swing < -200cp)', () => {
+  it('classifies a blunder (eval swing <= -300cp, the one ladder)', () => {
     const fenAfter = playMove(START_FEN, 'e4');
-    // evalBefore=0 from white's view, evalAfter=250 from black's view (opponent)
-    // swing = -250 - 0 = -250 → blunder
-    const result = classifyPosition(START_FEN, fenAfter, 'e4', 0, 250);
+    // evalBefore=0 from white's view, evalAfter=350 from black's view (opponent)
+    // swing = -350 → blunder (250 is a mistake on the shared 50/100/300 ladder)
+    const result = classifyPosition(START_FEN, fenAfter, 'e4', 0, 350);
     expect(result.moveQuality).toBe('blunder');
-    expect(result.evalSwing).toBe(-250);
+    expect(result.evalSwing).toBe(-350);
   });
 
   it('classifies a mistake (eval swing -200 to -100)', () => {

@@ -31,6 +31,7 @@ import {
   bishopPair, computeSpace, findPassedPawns, findForcingCandidates, findHangingBySee, minorRouteToSquare,
 } from './positionReadingService';
 import type { PressureCount } from './positionReadingService';
+import { gradeMove } from './accuracyService';
 import { readPosition } from './positionalRead';
 import { structurePlan } from './boardPlan';
 import { structureSignature } from './boardStructure';
@@ -288,6 +289,7 @@ export function assembleHangingAnswer(fen: string, ask: string | null | undefine
   // an owner is scoped to one side.
   const scanMine = !scanTheirs;
   const scanBoth = !scanTheirs && !/\b(my|mine|i|me)\b/.test(t);
+  let unread = false;
   const looseOf = (victimColor: 'w' | 'b'): Array<{ sq: Square; type: PieceSymbol; g: number }> => {
     const out: Array<{ sq: Square; type: PieceSymbol; g: number }> = [];
     for (const row of chess.board()) {
@@ -297,8 +299,10 @@ export function assembleHangingAnswer(fen: string, ask: string | null | undefine
         // not read as "hanging"; a pinned defender can't recapture, so a real hang
         // isn't masked. `seeGain` (geometric) got both wrong.
         const capturer: 'w' | 'b' = victimColor === 'w' ? 'b' : 'w';
-        let g = 0;
-        try { g = legalSeeGainFor(fen, cell.square, capturer); } catch { g = 0; }
+        let g: number | null = 0;
+        try { g = captureRead(fen, cell.square, capturer); } catch { g = 0; }
+        // A check on the board decides this one move only — never "defended".
+        if (g === null) { if (chess.attackers(cell.square, capturer).length > 0) unread = true; continue; }
         if (g > 0) out.push({ sq: cell.square, type: cell.type, g });
       }
     }
@@ -314,6 +318,9 @@ export function assembleHangingAnswer(fen: string, ask: string | null | undefine
   const mineLoose = scanMine ? looseOf(me) : [];
   const theirLoose = scanTheirs || scanBoth ? looseOf(them) : [];
   if (mineLoose.length === 0 && theirLoose.length === 0) {
+    if (unread) {
+      return { facts: `There's a check on the board — what can be won is read once the check is answered.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+    }
     return {
       facts: scanBoth
         ? `Nothing is hanging on either side right now.`
@@ -325,7 +332,7 @@ export function assembleHangingAnswer(fen: string, ask: string | null | undefine
   }
   const parts: string[] = [];
   if (mineLoose.length > 0) parts.push(say(mineLoose, true));
-  else if (scanBoth) parts.push('Nothing of yours is hanging.');
+  else if (scanBoth && !unread) parts.push('Nothing of yours is hanging.');
   if (theirLoose.length > 0) parts.push(scanTheirs && !scanBoth ? `Yes — ${say(theirLoose, false).charAt(0).toLowerCase()}${say(theirLoose, false).slice(1)}` : say(theirLoose, false));
   const facts = parts.join(' ');
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
@@ -1952,12 +1959,15 @@ export function assembleCandidateMoveAnswer(opts: {
       : `${candNorm} is a legal move here.`;
   } else if (cpLoss <= 30) {
     verdict = `${candNorm} is perfectly fine — essentially equal to the best move${bestSan ? ` ${bestSan}` : ''}.`;
-  } else if (cpLoss <= 90) {
-    verdict = `${candNorm} is playable, just slightly worse than ${bestSan ?? 'the best move'} — about ${pawns} of a point.`;
-  } else if (cpLoss <= 200) {
-    verdict = `${candNorm} is an inaccuracy — it gives up about ${pawns} of a point versus ${bestSan ?? 'the best move'}.`;
   } else {
-    verdict = `${candNorm} is a mistake — it loses about ${pawns} points; ${bestSan ?? 'the engine move'} is much better.`;
+    // The ONE grader names it (accuracyService.gradeMove): the word a chat
+    // answer uses is the word review and Learn use for the same cost.
+    const band = gradeMove({ beforeCp: opts.bestEvalCp as number, afterCp: opts.candidateEvalCp as number, cpLoss });
+    verdict = band === null
+      ? `${candNorm} is playable, just slightly worse than ${bestSan ?? 'the best move'} — about ${pawns} of a point.`
+      : band === 'inaccuracy'
+        ? `${candNorm} is an inaccuracy — it gives up about ${pawns} of a point versus ${bestSan ?? 'the best move'}.`
+        : `${candNorm} is a ${band} — it loses about ${pawns} points; ${bestSan ?? 'the engine move'} is much better.`;
   }
 
   const parts = [verdict];
@@ -2319,11 +2329,12 @@ export function assembleAlternativesAnswer(opts: {
       continue;
     }
     const pawns = (cpLoss / 100).toFixed(1);
+    const altBand = gradeMove({ beforeCp: bestEvalStm as number, afterCp: altEvalStm as number, cpLoss });
     if (cpLoss <= 30) {
       closeOnes.push(altSan);
-    } else if (cpLoss <= 90) {
+    } else if (altBand === null) {
       parts.push(`${altSan} is playable but slightly worse — about ${pawns} of a point${replyClause ? `; ${replyClause}` : ''}.`);
-    } else if (cpLoss <= 200) {
+    } else if (altBand !== 'blunder') {
       parts.push(`${altSan} concedes about ${pawns} points${replyClause ? ` — ${replyClause}` : ''}.`);
     } else {
       parts.push(`${altSan} is much worse — it gives up about ${pawns} points${replyClause ? `; ${replyClause}` : ''}.`);

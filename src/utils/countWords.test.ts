@@ -39,3 +39,25 @@ describe('boardEdgeWords — the one board namer', () => {
     expect(boardEdgeWords('4k3/8/8/3n4/8/8/8/4K3 w - - 0 1', 'b', 3)).toBe('a piece');
   });
 });
+
+describe('routeWords — the one route phraser', () => {
+  it('renders noun and verb forms from data, cut at first arrival', async () => {
+    const { routeNoun, routeVerb, routeWaypoints } = await import('./routeWords');
+    expect(routeWaypoints(['g8', 'f6', 'g4', 'f2', 'g4'])).toEqual(['f6']);
+    expect(routeNoun({ name: 'knight', path: ['b1', 'd2', 'f3', 'e5'] })).toBe('getting the knight to e5, by way of d2 and f3');
+    expect(routeNoun({ name: 'knight', path: ['c6', 'b4', 'a2'], takes: 'pawn' })).toBe('getting the knight to a2, by way of b4, to take the pawn there');
+    expect(routeVerb({ name: 'bishop', path: ['f4', 'e5', 'c7'] })).toBe('walk the bishop on f4 round to c7, by way of e5');
+  });
+
+  // GATE: no reader parses a route back out of its own sentence.
+  it('no service regex-parses route prose', () => {
+    const dir = join(__dirname, '../services');
+    const bad: string[] = [];
+    for (const f of readdirSync(dir)) {
+      if (!f.endsWith('.ts') || f.endsWith('.test.ts')) continue;
+      const src = readFileSync(join(dir, f), 'utf8');
+      if (/\/\^?(walk the |getting the \(|.*by way of)/.test(src.replace(/^\s*(\/\/|\*).*$/gm, ''))) bad.push(f);
+    }
+    expect(bad).toEqual([]);
+  });
+});

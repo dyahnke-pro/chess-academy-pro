@@ -26,7 +26,7 @@
 import { Chess, type Color, type Square, type Move, type PieceSymbol } from 'chess.js';
 import type { FundamentalId } from './principleAttribution';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
-import { legalSeeGainFor } from './positionReadingService';
+import { legalSeeGainFor, standsSafe } from './positionReadingService';
 import { developedMinorCount, homeMinorCount } from './development';
 
 /** Pin/legality-aware "is the piece on `square` winnable by its enemy?" — the
@@ -40,6 +40,14 @@ function winnableGain(chess: Chess, square: Square): number {
   const owner = chess.get(square)?.color;
   if (!owner) return 0;
   return legalSeeGainFor(chess.fen(), square, owner === 'w' ? 'b' : 'w');
+}
+
+/** Nothing wins the piece on `square`, as a STANDING fact (never a check
+ *  that blocks the capture for one move). */
+function safeOn(chess: Chess, square: Square): boolean {
+  const owner = chess.get(square)?.color;
+  if (!owner) return true;
+  return standsSafe(chess.fen(), square, owner === 'w' ? 'b' : 'w');
 }
 
 // ─── types ──────────────────────────────────────────────────────────────────
@@ -185,10 +193,10 @@ function targetWasSavable(prev: Chess, s: Square, enemy: Color, victimType: Piec
     const c = new Chess(prev.fen());
     try { if (!c.move({ from: m.from, to: m.to, promotion: m.promotion })) continue; } catch { continue; }
     // (a) the victim moved to safety
-    if (m.from === s && m.piece === victimType && winnableGain(c, m.to) <= 0) return true;
+    if (m.from === s && m.piece === victimType && safeOn(c, m.to)) return true;
     // (b) the victim stayed on s and is no longer winnable (defended / attacker gone)
     const p = c.get(s);
-    if (p && p.color === enemy && p.type === victimType && winnableGain(c, s) <= 0) return true;
+    if (p && p.color === enemy && p.type === victimType && safeOn(c, s)) return true;
   }
   return false;
 }
@@ -569,7 +577,7 @@ function buildRemovedDefenderChain(input: CausalChainInput): CausalChain | null 
   if (winnableGain(beforeR.chess, s) < 2) return null;   // capturing it wins material NOW
   // …and the capturer SITS SAFELY afterwards — else it's a trade in a flurry, not
   // a won piece (the single-square SEE win must survive the recapture).
-  if (winnableGain(afterR.chess, s) > 0) return null;
+  if (!safeOn(afterR.chess, s)) return null;
 
   // It was SAFE before the opponent's move: the SAME enemy piece stood on s and
   // was not winnable then. (Excludes recaptures — if the opponent had just
@@ -732,8 +740,8 @@ export function findAllowedChain(historySans: readonly string[], studentMovePly:
       if (m.san.replace(/[?!]+$/, '') === played) continue;   // the move they actually played
       const c = new Chess(posBefore.chess.fen());
       try { if (!c.move({ from: m.from, to: m.to, promotion: m.promotion })) continue; } catch { continue; }
-      if (winnableGain(c, m.to) > 0) continue;                     // don't suggest a move that hangs
-      if (winnableGain(c, targetSq) > 0) continue;                 // the target is still winnable → not an avoidance
+      if (!safeOn(c, m.to)) continue;                     // don't suggest a move that hangs
+      if (!safeOn(c, targetSq)) continue;                 // the target is still winnable → not an avoidance
       avoidance = m.san;
       break;
     }

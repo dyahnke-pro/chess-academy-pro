@@ -34,7 +34,7 @@
 import { Chess, type Color, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { inFluxAfter } from './boardState';
-import { legalSeeGainOn, bishopHemmedByOwnPawns } from './positionReadingService';
+import { legalSeeGainOn, bishopHemmedByOwnPawns, standsSafe } from './positionReadingService';
 import { captureHasCounterTactic, detectNewThreat, forkAlignmentClause, type DetectedThreat } from './groundedAnswer';
 import { cells, PIECE_NOUN, findWorstPlacedPiece, deriveNextPlans } from './nextPlans';
 // Re-exported: eight callers and tests import these from here (2026-09-19 leaf move).
@@ -132,7 +132,7 @@ export function pieceHasSafeEscape(chess: Chess, sq: Square, studentColorWB: Col
       after.move(m);
       // The student is to move on `after` already (the opponent just moved).
       if (after.turn() !== studentColorWB) continue;
-      if (legalSeeGainOn(after, m.to) <= 0) return true;
+      if (standsSafe(after.fen(), m.to, after.turn())) return true;
     } catch { /* an illegal probe is not an escape */ }
   }
   return false;

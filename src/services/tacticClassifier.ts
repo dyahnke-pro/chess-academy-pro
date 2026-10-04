@@ -8,6 +8,7 @@ import type {
 } from '../types/tacticTypes';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { isRealPin } from './pinGeometry';
+import { cpBand } from './accuracyService';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -141,10 +142,8 @@ function countAttackers(chess: Chess, square: Square, byColor: Color): number {
 function classifyMoveQuality(evalSwing: number): MoveQuality {
   if (evalSwing >= 200) return 'brilliant';
   if (evalSwing >= 100) return 'great';
-  if (evalSwing >= -50) return 'good';
-  if (evalSwing >= -100) return 'inaccuracy';
-  if (evalSwing >= -200) return 'mistake';
-  return 'blunder';
+  // A loss is graded on the ONE ladder (accuracyService.cpBand).
+  return cpBand(-evalSwing) ?? 'good';
 }
 
 // ─── Tactic Detectors ───────────────────────────────────────────────────────

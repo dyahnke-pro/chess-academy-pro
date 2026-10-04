@@ -417,7 +417,7 @@ function whyBetter(
   // (review walk 2026-10-01, ply 16: "Bf5 was the move — it would walk the
   // bishop round to a4, by way of f5 and c2", where the bishop's stop on c2
   // wins the pawn and the plan's own "win a pawn" clause was passed over).
-  const collected = lead0 && /^walk the /.test(lead0.text)
+  const collected = lead0?.route
     ? clauses.find((c) => !c.drift && isCostClause(c.text) && c.squares.length > 0 && c.squares.every((sq) => lead0.squares.includes(sq)))
     : undefined;
   const lead = collected ?? lead0;

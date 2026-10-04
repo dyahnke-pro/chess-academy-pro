@@ -1293,6 +1293,15 @@ const REVIEW_INTRO_VOICE_TIMEOUT_MS = 18000;
 // 20s sibling constant was deleted with the capped scope it belonged to; do not
 // reintroduce a second, tighter deadline as a back-door cap.
 const REVIEW_AUGMENT_TIMEOUT_MS_UNCAPPED = 75000;
+/** When each singleton-chain composer stops WAITING (ms from the start of the
+ *  projection passes) and reads what has landed. The chain runs one 7s search
+ *  at a time; on a long game it used to hold the deep-threat passes behind it
+ *  until the 75s cap fired, so every deep line vanished at once (narration
+ *  unification step 6). The deep passes read the POOL, so they need only the
+ *  wait bounded; the chain keeps working, and anything it finishes later is
+ *  simply not read. Not a cap on teaching: a better-line or confirmation that
+ *  has not landed by then would have been cut by the overall cap anyway. */
+const SINGLETON_STAGE_MS = { better: 35000, confirm: 45000 } as const;
 
 /** Reframe a seat-free `buildReviewMoveTeaching` sentence as the OPPONENT's, so
  *  Black's quiet developing moves get the SAME positional teaching the student's
@@ -3643,6 +3652,7 @@ async function augmentWithProjections(
   timings: Record<string, number> = {},
 ): Promise<void> {
   let passStart = Date.now();
+  const augStart = passStart;
   const mark = (pass: string): void => { timings[pass] = Date.now() - passStart; passStart = Date.now(); };
   // How many plies to spell a deep threat line — rating-scaled, capped at the
   // reliable window (Phase 2, David 2026-09-07: "spell the lines out for
@@ -3951,9 +3961,13 @@ async function augmentWithProjections(
       return bestPiece as { seg: ReviewMoveSegment; text: string; swing: number; color: 'w' | 'b'; pair: boolean; squares: string[] } | null;
     }),
   };
+  // The singleton chain fills these as it goes; a composer that reaches its
+  // stage deadline reads whatever has landed instead of waiting (see
+  // SINGLETON_STAGE_MS).
+  const better = new Map<ReviewMoveSegment, { line: PvLine | null; why: string | null }>();
+  const confirm = new Map<ReviewMoveSegment, PvLine | null>();
   void (async () => {
     // #4 the better line + the proven delta.
-    const better = new Map<ReviewMoveSegment, { line: PvLine | null; why: string | null }>();
     try {
       for (const s of flaggedStudent) {
         const line = await raceTimeout(
@@ -3987,7 +4001,6 @@ async function augmentWithProjections(
       }
     } finally { betterDone.resolve(better); }
     // #4b the engine's verdict on each static threat.
-    const confirm = new Map<ReviewMoveSegment, PvLine | null>();
     try {
       for (const s of segments) {
         if (!s.staticThreat) continue;
@@ -4039,7 +4052,7 @@ async function augmentWithProjections(
   // reason the better move beats the played one (engine-verified ablation), so
   // "Why X was better" LEADS with the proven why, not just the line. Searched on
   // the singleton chain above; composed here in the original order.
-  const better = await betterDone.promise;
+  await raceTimeout(betterDone.promise, Math.max(0, augStart + SINGLETON_STAGE_MS.better - Date.now()), better);
   for (const s of flaggedStudent) {
     if (whyBudget <= 0) break;
     const got = better.get(s);
@@ -4118,7 +4131,8 @@ async function augmentWithProjections(
   // through the same per-ply fact-computers. Truth from the engine,
   // mechanism from the statics — never a static story the engine disowns.
   let confirmBudget = Number.POSITIVE_INFINITY; // every threat confirmation (no ceiling)
-  const confirmed = await confirmDone.promise;
+  await raceTimeout(confirmDone.promise, Math.max(0, augStart + SINGLETON_STAGE_MS.confirm - Date.now()), confirm);
+  const confirmed = confirm;
   for (const s of segments) {
     if (confirmBudget <= 0) break;
     if (!s.staticThreat) continue;

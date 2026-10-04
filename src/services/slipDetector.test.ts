@@ -17,7 +17,9 @@ describe('detectSlip', () => {
     });
     expect(r.isSlip).toBe(true);
     expect(r.reason).toBe('left-book');
-    expect(r.severity).toBe('mistake');
+    // The ONE grader: with both evals in hand, 100cp near level is ~9% of
+    // expected points — an inaccuracy, as review calls it.
+    expect(r.severity).toBe('inaccuracy');
     expect(r.shouldCount).toBe(true);
   });
 

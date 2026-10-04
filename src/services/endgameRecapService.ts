@@ -19,7 +19,7 @@
  */
 import type { StudentMoveRecord } from '../hooks/useEndgamePlayout';
 import { stockfishEngine } from './stockfishEngine';
-import { winPercent, accuracyFromWinDelta } from './accuracyService';
+import { winPercent, accuracyFromWinDelta, bandForWinPctLost } from './accuracyService';
 import { rotateStem } from '../utils/rotateStem';
 
 /** Per-move analysis result — used internally and surfaced for tests. */
@@ -81,18 +81,9 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   ]);
 }
 
-/** Win-percent drop thresholds for classification. Match the
- *  thresholds used elsewhere (gameAnalysisService) so the same move
- *  classifies consistently across surfaces. */
-const BLUNDER_DROP = 20;
-const MISTAKE_DROP = 10;
-const INACCURACY_DROP = 5;
-
+/** The ONE band table (accuracyService.bandForWinPctLost), never a copy. */
 function classifyDrop(winDrop: number): RecapClassification {
-  if (winDrop >= BLUNDER_DROP) return 'blunder';
-  if (winDrop >= MISTAKE_DROP) return 'mistake';
-  if (winDrop >= INACCURACY_DROP) return 'inaccuracy';
-  return 'best';
+  return bandForWinPctLost(winDrop) ?? 'best';
 }
 
 function harmonicMean(values: number[]): number {

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { phraseFrom, type Aim } from './planArc';
 
 describe('phraseFrom — a route said from where the piece stands now', () => {
-  const aim = { id: 'route:r', kind: 'route', squares: ['e1', 'e2'], goal: 'e2', phrase: 'getting the rook to e2, by way of e1', from: 'f1' } as Aim;
+  const aim = { id: 'route:r', kind: 'route', squares: ['e1', 'e2'], goal: 'e2', phrase: 'getting the rook to e2, by way of e1', from: 'f1', route: { name: 'rook', path: ['f1', 'e1', 'e2'] } } as Aim;
   it('drops the square already reached (walk 2026-09-30, game 1)', () => {
     expect(phraseFrom(aim, 'e1')).toBe('getting the rook to e2');
   });

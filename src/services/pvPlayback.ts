@@ -23,7 +23,7 @@ import { stockfishEngine } from './stockfishEngine';
 import { detectTactics } from './tacticsDetector';
 import { classifyPosition } from './tacticClassifier';
 import { describeStructure } from './boardStructure';
-import { legalSeeGain, legalSeeGainFor } from './positionReadingService';
+import { legalSeeGainFor, captureRead } from './positionReadingService';
 import type { StockfishAnalysis } from '../types';
 import { MATERIAL_VALUE } from './pieceValues';
 import { patternWord, patternAim } from './tacticVocabulary';
@@ -426,7 +426,7 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
             // hits is a fact, not a tactic).
             const unguarded = t.involvedSquares[1] as Square;
             let captureNets = 0;
-            try { captureNets = pieceVal(mv.captured) - legalSeeGain(fenAfter, toSquare as Square); } catch { captureNets = 0; }
+            try { const r = captureRead(fenAfter, toSquare as Square, fenAfter.split(' ')[1] as 'w' | 'b'); captureNets = r === null ? 0 : pieceVal(mv.captured) - r; } catch { captureNets = 0; }
             // AN EVEN TRADE IS A REMOVAL ONLY IF THE TARGET STILL FALLS (walk
             // 6, R8: the queen trade Qxb5 cxb5 was voiced "landing a removal
             // of the defender" on BOTH moves). A retake nets against what was
@@ -473,7 +473,9 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
       // LEGAL recapture (from fenAfter, where they are to move). A sacrifice
       // nets negative, an even trade ~0, a hanging piece its value — and a
       // pinned recapturer no longer distorts the swap (2026-09-13 sweep).
-      try { materialGained = capturedVal - legalSeeGain(fenAfter, toSquare as Square); }
+      // Through the safety door: a check that stops the take-back for one move
+      // proves no gain (null → claim nothing).
+      try { const r = captureRead(fenAfter, toSquare as Square, fenAfter.split(' ')[1] as 'w' | 'b'); materialGained = r === null ? 0 : capturedVal - r; }
       catch { materialGained = 0; }
     }
   }
