@@ -33,3 +33,20 @@ describe('a passer the better move only pushes is not one it creates', () => {
     expect(r?.delta?.text ?? '').not.toMatch(/edge is gone/);
   });
 });
+
+// Clean-pass review walk 2026-10-04, G2 23…exd5: "it leaves you a passed pawn
+// on d5 that Nf2+ does not" — and the engine's answer is Nxd5. A pawn the reply
+// takes at once was never a passer.
+describe('a passer the reply takes at once is not a passer', () => {
+  it('exd5 vs Nf2+: Nxd5 removes it, so it is not the reason', async () => {
+    const fen = 'r4rk1/pp1b2pp/1q2p3/3PPp2/6nP/2N2Nb1/PPB1Q1P1/R4R1K b - - 2 23';
+    const evaluate: Evaluate = async (f) => {
+      const c = new Chess(f);
+      // Black's d5 pawn worth a lot on any board; White answers exd5 with Nxd5.
+      const cp = c.get('d5')?.color === 'b' ? -300 : -100;
+      return { cp, pv: c.get('d5')?.color === 'b' && c.turn() === 'w' ? ['c3d5'] : [] };
+    };
+    const r = await compareTwoMoves(fen, 'exd5', 'Nf2+', evaluate);
+    expect(r?.delta?.kind ?? null).not.toBe('passed-pawn');
+  });
+});

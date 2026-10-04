@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5255 lines · 36 exports · 43 importers · 41 tests · 5 audits**
+**5281 lines · 37 exports · 44 importers · 42 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -40,6 +40,7 @@
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/mapConcurrent.test.ts`
 - `src/services/namedMoveArrows.test.ts`
+- `src/services/oneLinePerPly.test.ts`
 - `src/services/reviewBetterLineWhy.test.ts`
 - `src/services/reviewCorpusNote.test.ts`
 - `src/services/reviewCorpusSweep.test.ts`
@@ -330,6 +331,11 @@
 - `src/services/reviewWalk900.test.ts:38`
 - `src/services/reviewWalk900.test.ts:43`
 
+### `replaceVerdictReason` (function) — 3 call sites
+- `src/services/oneLinePerPly.test.ts:23`
+- `src/services/oneLinePerPly.test.ts:28`
+- `src/services/oneLinePerPly.test.ts:29`
+
 ### `detectBadHabits` (re-export) — 8 call sites
 - `src/components/Stats/StatsPage.tsx:65`
 - `src/services/badHabitDetector.ts:21`
@@ -363,6 +369,7 @@
 - `src/services/mapConcurrent.test.ts`
 - `src/services/methodBeat.test.ts`
 - `src/services/namedMoveArrows.test.ts`
+- `src/services/oneLinePerPly.test.ts`
 - `src/services/planArc.test.ts`
 - `src/services/recapSeat.test.ts`
 - `src/services/reviewBetterLineWhy.test.ts`

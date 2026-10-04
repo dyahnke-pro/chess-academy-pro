@@ -245,6 +245,10 @@ export function computeMoveFacets(
    *  `motif:<tactic type>` (the transfer ledger, S6) and `rule:<principle id>`
    *  (each opening principle once, S2). Coupled here, never read off prose. */
   outIdentity?: Map<string, string>,
+  /** The reason the verdict gave for the better move, exactly as spoken, so a
+   *  later pass reading a fresher line of the SAME ply can replace it — one
+   *  ply, one line (clean-pass review walk 2026-10-04, G1 15.Ba2). */
+  outVerdictReason?: { text: string | null },
 ): string[] {
   const facets: string[] = [];
   // Record the KEY SQUARES a facet named, keyed by the facet text, so the
@@ -501,6 +505,7 @@ export function computeMoveFacets(
     const opponentMoved = ctx.studentColorWB !== null && (ctx.moverColor === 'white' ? 'w' : 'b') !== ctx.studentColorWB;
     const reason1 = reason0 && opponentMoved ? toStudentSeat(reason0) : reason0;
     const reason = reason1 && ctx.studentColorWB ? seatPieceReferences(reason1, fenBefore, ctx.studentColorWB) : reason1;
+    if (outVerdictReason) outVerdictReason.text = reason;
     // NAMED WITH ITS REASON, OR NOT NAMED (Learn's rule, 2026-09-24): with no
     // reason computed, the teaching is what the move LET THEM DO — Learn's own
     // reader over the line after it (review walk 2026-10-02, ply 85: "the

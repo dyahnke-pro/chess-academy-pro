@@ -225,6 +225,9 @@ export async function compareTwoMoves(
   for (const sq of betterPassers) {
     // only a passer the better move CREATED: its file holds more passers
     if ((betterFiles.get(sq[0]) ?? 0) <= (worseFiles.get(sq[0]) ?? 0)) continue;
+    // …and one that survives the reply: a pawn the engine's answer takes at
+    // once was never a passer (G2 23…exd5: "a passed pawn on d5" — Nxd5).
+    if (betterEval.pv?.[0]?.slice(2, 4) === sq) continue;
     const abl = new Chess(betterFen);
     abl.remove(sq as Square);
     const eAbl = await evaluate(abl.fen());

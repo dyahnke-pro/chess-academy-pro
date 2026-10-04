@@ -620,6 +620,10 @@ export interface ReviewMoveSegment {
   bestMoveSan: string | null;
   bestMoveUci: string | null;
   narration: string | null;
+  /** The reason the verdict gave for the better move, as spoken — so the
+   *  better-line pass can replace it with the reason read off its own, fresher
+   *  line of the same ply (one ply, one line). */
+  verdictReason?: string;
   /** WO-TEACH-02 meter: a TEACHING fact spoke on this ply (the decider's own
    *  `teaches`). Undefined on plies no decision voiced — a fill that writes
    *  narration afterwards is, by definition, not the door teaching. */
@@ -1847,6 +1851,7 @@ export function buildReviewSegments(
       // produced it; the door orders by it (factStakes.ts).
       const facetStakes = new Map<string, FactStakes>();
       const facetIdentity = new Map<string, string>();
+      const verdictReasonOut: { text: string | null } = { text: null };
       const facets = computeMoveFacets({
         fundamentals,
         seenFundamentals,
@@ -1874,7 +1879,7 @@ export function buildReviewSegments(
         prevCap,
         allSans: sansForRun,
         forcedRunStartPly: forcedRun ? forcedRun.startPly : null,
-      }, facetSquares, facetIncoming, facetStakes, facetIdentity);
+      }, facetSquares, facetIncoming, facetStakes, facetIdentity, verdictReasonOut);
       // THE CONVERSION METHOD (WO-LAYERS-01 step 5), on the student's move when
       // they are a piece or more up — the step the board is on, once per step
       // per game (the step only changes when the board does).
@@ -2453,6 +2458,7 @@ export function buildReviewSegments(
         ...(causalArrows && causalArrows.length ? { planArrows: causalArrows } : {}),
         ...(fundamentals.length ? { fundamentals } : {}),
         ...(segKeySquares.length ? { keySquares: segKeySquares } : {}),
+        ...(verdictReasonOut.text ? { verdictReason: verdictReasonOut.text } : {}),
       });
       try {
         const pc = new Chess(fenPair.fenBefore).move(m.san);
@@ -3969,6 +3975,16 @@ async function augmentWithProjections(
     if (whyBudget <= 0) break;
     const got = better.get(s);
     const line = got?.line ?? null;
+    if (line && line.plies.length >= 3 && s.verdictReason && s.narration) {
+      // ONE PLY, ONE LINE (clean-pass review walk 2026-10-04, G1 15.Ba2: "axb4
+      // — it would win two pawns", read off the pre-dive line axb4 Ne7 Bxa4,
+      // one sentence before "the line runs axb4, Qxb4, c3, Qb7 and Bxa4 — two
+      // pawns for a pawn"). The verdict's reason is re-read off THIS line.
+      const fresh = betterMoveReason(s.fenBefore, s.san, line.plies[0].san, line.plies.map((p) => p.uci), s.playerColor,
+        priorMoveLeadingTo(segments[segments.indexOf(s) - 1] ? { fenBefore: segments[segments.indexOf(s) - 1].fenBefore, san: segments[segments.indexOf(s) - 1].san } : null, s.fenBefore),
+        moverGaveUpMate(s.evalBefore, s.evalAfter, s.playerColor));
+      s.narration = replaceVerdictReason(s.narration, s.verdictReason, fresh ? seatPieceReferences(fresh, s.fenBefore, studentColorWB) : null);
+    }
     if (line && line.plies.length >= 3) {
       const bestName = line.plies[0].san;
       const why = got?.why ?? null;
@@ -5251,4 +5267,14 @@ export function moveMeetsThreat(fenBefore: string, san: string, threatSan: strin
   const stillLegal = after.moves({ verbose: true }).some((m) => m.from === threat.from && m.to === threat.to);
   if (!stillLegal) return true;                                        // the threat is gone
   return after.attackers(threat.to as Square, moved.color).includes(moved.to as Square);
+}
+
+/** Replace the verdict's reason for the better move ("— <old>") with one read
+ *  off a fresher line of the same ply, or drop it when that line proves none.
+ *  The narration is left alone when the old reason is not found as spoken. */
+export function replaceVerdictReason(narration: string, oldReason: string, freshReason: string | null): string {
+  const marker = ` — ${oldReason}`;
+  const at = narration.indexOf(marker);
+  if (at < 0 || freshReason === oldReason) return narration;
+  return `${narration.slice(0, at)}${freshReason ? ` — ${freshReason}` : ''}${narration.slice(at + marker.length)}`;
 }

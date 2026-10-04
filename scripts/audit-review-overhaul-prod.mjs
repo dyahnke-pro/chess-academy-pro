@@ -812,6 +812,12 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     await page.waitForTimeout(1000);
   }
   // The app's own reason a flagged ply carried no fundamental (null = none).
+  // Every ply a decline event arrived for — printed beside a FUNDLEAD red, so
+  // "unexplained" says whether the event never fired or fired for other plies.
+  const declinedPlies = () => [...new Set(events()
+    .filter((e) => String(e.source ?? '') === 'coachFeatureService.reviewFundamentalDeclined')
+    .map((e) => { try { return Number(JSON.parse(String(e.details ?? '{}')).ply); } catch { return NaN; } })
+    .filter((n) => Number.isFinite(n)))].sort((a, b) => a - b);
   const declinedWhy = (ply) => {
     for (const e of events()) {
       if (String(e.source ?? '') !== 'coachFeatureService.reviewFundamentalDeclined') continue;
@@ -1113,7 +1119,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     // all honest declines (clean-pass review walk 2026-10-04, G2).
     const unexplained = leads.filter(([p, v]) => !FUND_RE.test(v.lead) && !declinedWhy(Number(p)));
     await add('FUNDLEAD flagged-student-plies-lead-with-fundamentals', unexplained.length === 0,
-      `${withFund.length}/${leads.length} flagged student plies lead with a fundamental, ${leads.length - withFund.length - unexplained.length} declined with a named cause, ${unexplained.length} unexplained — ${leads.map(([p, v]) => `ply ${p} ${v.badge}: "${v.lead.slice(0, 60)}"`).join(' | ')}`);
+      `${withFund.length}/${leads.length} flagged student plies lead with a fundamental, ${leads.length - withFund.length - unexplained.length} declined with a named cause, ${unexplained.length} unexplained — ${leads.map(([p, v]) => `ply ${p} ${v.badge}: "${v.lead.slice(0, 60)}"`).join(' | ')} — declines received for plies [${declinedPlies().join(', ')}]`);
   }
 
   // ── FUNDWHY — THE ASSERT HALF OF THE DIAGNOSIS (2026-09-21) ─────────────
