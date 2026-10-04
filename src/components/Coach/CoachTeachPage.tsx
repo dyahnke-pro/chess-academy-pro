@@ -280,7 +280,8 @@ import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { useSettings } from '../../hooks/useSettings';
 import { getFavoriteOpenings, getOpeningById, searchOpenings } from '../../services/openingService';
 import type { OpeningRecord, OpeningVariation } from '../../types';
-import type { LiveState, TacticsLiveContext } from '../../coach/types';
+import type { LiveState, TacticsLiveContext, AskOrigin } from '../../coach/types';
+import { shadowReadTurn } from '../../coach/dispatchCoachTurn';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight, WalkableLine } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, mustKey, conceptInstanceKey, convertKey } from '../../services/positionFacts';
@@ -772,6 +773,8 @@ function syntheticOpeningFromSession(session: WalkthroughSession): OpeningRecord
  *  silently swallowed while a previous turn is in flight). */
 interface TeachSubmitOpts {
   kickoff?: boolean;
+  /** How the words arrived: a mic transcript is `spoken` (absent = typed). */
+  origin?: AskOrigin;
   /** Explicit post-move FEN override. Required when handleSubmit
    *  is called from a board onMove callback because React hasn't
    *  re-rendered yet — `gameRef.current` still holds the previous
@@ -1408,6 +1411,10 @@ export function CoachTeachPage(): JSX.Element {
      *  took the hint AND still misses is struggling, so the coach eases sooner. */
     hintUsed: boolean;
   } | null>(null);
+  // "WHAT I PLAYED" in a drill (hand walk 2026-10-04 #11). A wrong try is
+  // taken back, so it is on no tape — remembered here so "why is that better
+  // than what I played?" can compare it. Cleared with each new drill board.
+  const drillAttemptRef = useRef<{ fenBefore: string; san: string } | null>(null);
   // Custom lesson (P5, David 2026-09-08: "have it put together a custom lesson").
   // `customLessonPlanRef` holds the picker the coach offered on entry, so a
   // tapped chip / typed "build me a lesson" resolves to the right holes.
@@ -2566,6 +2573,7 @@ export function CoachTeachPage(): JSX.Element {
     setOpponentThinking(false);
     liveFenRef.current = drill.setupFen;
     activeDrillRef.current = { drill, step: 0, progress, graded: false, startedAt: Date.now(), wrongCount: 0, hintUsed: false };
+    drillAttemptRef.current = null;
     setArrows([]);
     setHighlights([]);
   }, [setOpponentThinking]);
@@ -2890,6 +2898,7 @@ export function CoachTeachPage(): JSX.Element {
       gradeDrillOnce(false);
       gameRef.current.undoMove();
       liveFenRef.current = gameRef.current.fen;
+      drillAttemptRef.current = { fenBefore: gameRef.current.fen, san: move.san };
       setArrows([]);
       setHighlights([]);
       // Behavioral frustration heuristic (Phase 6): escalate to a warmer,
@@ -3263,6 +3272,25 @@ export function CoachTeachPage(): JSX.Element {
     // Mark the session active so a late-firing kickoff greeting/opener
     // won't interrupt (see userInteractedRef).
     if (!opts?.kickoff) userInteractedRef.current = true;
+    // THE ONE-CHAT READ, in shadow (P0a, 2026-10-04): every turn the student
+    // typed or spoke is read into the closed form and compared with today's
+    // routing — logged, never served. Learn's own routers still answer.
+    if (!opts?.kickoff && opts?.coachReplyPlayed === undefined && !opts?.teachIntent) {
+      shadowReadTurn({
+        surface: 'teach',
+        ask: text,
+        origin: opts?.origin,
+        liveState: {
+          surface: 'teach',
+          fen: gameRef.current.fen,
+          moveHistory: gameRef.current.history,
+          studentColor: activeDrillRef.current?.drill.playerColor ?? playerColorRef.current,
+          ...(activeDrillRef.current && drillAttemptRef.current
+            ? { lastStudentAttempt: { ...drillAttemptRef.current, withholdBest: true } }
+            : {}),
+        },
+      });
+    }
 
     // Coach STOPS what it's doing the instant the student asks — the one
     // consistent rule across every playing surface (David 2026-09-07). The
@@ -6583,7 +6611,12 @@ export function CoachTeachPage(): JSX.Element {
       // the student's ply from the coach's reply and graded whatever was
       // played last. The retrospective lane resolves "my last move" / "your
       // move" and names whose move a ply was from this.
-      studentColor: playerColor,
+      studentColor: activeDrillRef.current?.drill.playerColor ?? playerColor,
+      // "What I played" mid-drill — the taken-back try (walk 2026-10-04 #11).
+      // The drill is still a question, so the better move is withheld.
+      ...(activeDrillRef.current && drillAttemptRef.current
+        ? { lastStudentAttempt: { ...drillAttemptRef.current, withholdBest: true } }
+        : {}),
       userJustDid: text,
       // Tell the brain explicitly whose turn it is. Without this the
       // LLM was confusing sides — emitting `play_move {"san":"e5"}`
@@ -12956,7 +12989,7 @@ export function CoachTeachPage(): JSX.Element {
         {/* Pinned input — first thing under the board. */}
         <div className="border-b border-theme-border">
           <ChatInput
-            onSend={(text) => {
+            onSend={(text, modality) => {
               // Spoken MOVE answer to an open guided find-the-move ("knight
               // to d5"). Parsed against chess.js's legal moves for the
               // challenge position (spokenMoveParser — never guesses). The
@@ -12964,7 +12997,7 @@ export function CoachTeachPage(): JSX.Element {
               // handleStudentMove's judge (confirm + play continues); a wrong
               // move gets the retry nudge; unparseable speech falls through
               // to a normal chat question.
-              void handleSubmit(text);
+              void handleSubmit(text, modality === 'voice' ? { origin: 'spoken' } : undefined);
             }}
             disabled={busy}
             placeholder={busy ? 'Coach is typing…' : 'Ask your coach…'}

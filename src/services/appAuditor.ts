@@ -31,6 +31,7 @@ import { onCoachDecision, onLearnTurn, onNeedScore, type CoachDecisionRow, type 
 import { onThinkingLesson } from './thinkingLessonEvents';
 import { onSearchDepth } from './searchDepthEvents';
 import { onOpponentMove } from './opponentMoveEvents';
+import { onChatTurn } from '../coach/chatTurnEvents';
 
 const APP_AUDIT_LOG_META_KEY = 'app-audit-log.v1';
 const APP_AUDIT_LOG_MAX_ENTRIES = 300;
@@ -271,6 +272,10 @@ export type AuditKind =
   // target it played at — so an audit can hold that every sparring opponent
   // read the same number (`opponentMoveEvents`).
   | 'coach-opponent-strength'
+  // One student turn READ by the ONE-CHAT parser in shadow (P0a, 2026-10-04):
+  // today's fast-path lane, the parsed kind, validation, agreement, latency.
+  // The switch to serve the reading is taken on these rows.
+  | 'chat-turn'
   // The NEED score's per-term breakdown, AGGREGATED. One row per ply would
   // be hundreds of Dexie writes per review (`computeNeed` runs over every
   // move), so the subscriber buffers and emits ONE distribution per burst —
@@ -1042,10 +1047,11 @@ export interface AuditEntry {
    *  `ask_text` / `answer_text`. */
   askText?: string;
   answerText?: string;
-  /** Who produced the ask text — `typed` | `hint` | `canned-best-move` |
-   *  `internal` (WO-STANDARD-01 H6). Forwarded as `ask_source` so the usage
+  /** Who produced the ask text — the ONE `AskSource` union (typed / spoken /
+   *  hint / canned-best-move / internal, WO-STANDARD-01 H6) — never a second
+   *  copy that drifts. Forwarded as `ask_source` so the usage
    *  recipe counts questions a person asked, never a button's sentence. */
-  askSource?: 'typed' | 'hint' | 'canned-best-move' | 'internal';
+  askSource?: import('../coach/types').AskSource;
   /** In-app feedback reply-to + rating (QuickFeedbackButton / FeedbackForm).
    *  The user OPTIONALLY typed their email asking for a reply. Before this was
    *  forwarded, the address lived ONLY in the ephemeral audit-stream (wiped on
@@ -2291,6 +2297,18 @@ onOpponentMove((row) => {
     category: 'subsystem',
     source: `engineStrength.${row.surface}`,
     summary: `${row.surface} (${row.purpose}) source=${row.source} student=${row.studentElo} ${row.difficulty} offset=${row.offset} target=${row.target ?? 'full'} engine=${row.engineElo ?? 'full'}`,
+    details: JSON.stringify(row),
+  });
+});
+
+// One row per student turn READ (ONE-CHAT shadow). Turns are few — one per
+// question a person typed or spoke — so each is logged as it lands.
+onChatTurn((row) => {
+  void logAppAudit({
+    kind: 'chat-turn',
+    category: 'subsystem',
+    source: 'dispatchCoachTurn.shadow',
+    summary: `${row.surface} ${row.askSource}: fast=${row.fastPathLane} parsed=${row.parsedKind ?? 'none'} (${row.parseSource}${row.valid === false ? `, invalid ${row.invalidReason}` : ''}) ${row.agreed === null ? '' : row.agreed ? 'AGREE' : 'DISAGREE'} in ${row.latencyMs}ms`,
     details: JSON.stringify(row),
   });
 });

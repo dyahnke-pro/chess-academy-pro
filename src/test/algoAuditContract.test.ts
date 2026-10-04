@@ -42,7 +42,8 @@ type AlgoEmissionKind =
   | 'deep-run-step'
   | 'learn-reward'
   | 'thinking-lesson'
-  | 'coach-opponent-strength';
+  | 'coach-opponent-strength'
+  | 'chat-turn';
 
 interface Contract {
   /** The audit that holds the contract. */
@@ -125,6 +126,11 @@ const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
     contractMarker: 'ONE ENGINE STRENGTH every sparring opponent reads the one number',
     emittedBy: 'src/services/engineStrength.ts (emitOpponentStrength, via getAdaptiveMove / getCoachMove / CoachGamePage.coachTurn)',
   },
+  'chat-turn': {
+    script: 'scripts/audit-coach-all-questions-prod.mjs',
+    contractMarker: 'CHAT TURN rows emitted for the asked turns',
+    emittedBy: 'src/coach/chatTurnEvents.ts (dispatchCoachTurn shadow read + Learn shadowReadTurn)',
+  },
   'learn-reward': {
     script: 'scripts/audit-concept-gameplay-prod.mjs',
     contractMarker: 'LEARN REWARD only skill earns a chime',
@@ -152,6 +158,15 @@ describe('every algo emission has an audit contract standing on it', () => {
       expect(src.includes(c.contractMarker), `${c.script} reads ${kind} but has no "${c.contractMarker}" row — the ASSERT half is missing`).toBe(true);
     });
   }
+
+  it('the chat-turn row and its contract read the same fields', () => {
+    const row = read('src/coach/chatTurnEvents.ts');
+    const audit = read('scripts/audit-coach-all-questions-prod.mjs');
+    for (const field of ['fastPathLane', 'parseSource', 'askSource', 'servedParsed', 'agreed', 'parsedKind', 'valid', 'latencyMs', 'servedIntent']) {
+      expect(row.includes(`${field}:`), `ChatTurnRow lost the ${field} field`).toBe(true);
+      expect(audit.includes(`.${field}`), `the routing audit no longer reads row.${field}`).toBe(true);
+    }
+  });
 
   it('the emitted row shape and the contract read the same fields', () => {
     // A contract that reads a field the row does not carry passes vacuously
