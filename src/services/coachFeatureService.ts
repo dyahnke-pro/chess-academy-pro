@@ -24,6 +24,7 @@ import { getHisPlayDb } from './hisPlayLookup';
 import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
 import { refutedAlternative, candidatesForPosition, type RefutedAlternative } from './refutedAlternative';
 import { recordedMoveCost } from './moveCost';
+import { findWorstPlacedPiece } from './nextPlans';
 import { transferClause, transferMotifOf, recordMotif, withTransfer, type MotifLedger } from './motifLedger';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectOpening } from './openingDetectionService';
@@ -3926,13 +3927,13 @@ async function augmentWithProjections(
   const confirmDone = deferred<Map<ReviewMoveSegment, PvLine | null>>();
   const badPieceDone = {
     promise: Promise.all(badPieceResults.map((d) => d.promise)).then((results) => {
-      let bestPiece: { seg: ReviewMoveSegment; text: string; swing: number; color: 'w' | 'b'; pair: boolean } | null = null;
+      let bestPiece: { seg: ReviewMoveSegment; text: string; swing: number; color: 'w' | 'b'; pair: boolean; squares: string[] } | null = null;
       results.forEach((res, i) => {
         if (res?.delta && (!bestPiece || res.delta.ablation.swingCp > bestPiece.swing)) {
-          bestPiece = { seg: badPieceCandidates[i].s, text: res.delta.text, swing: res.delta.ablation.swingCp, color: res.delta.color, pair: res.delta.squares.length > 1 };
+          bestPiece = { seg: badPieceCandidates[i].s, text: res.delta.text, swing: res.delta.ablation.swingCp, color: res.delta.color, pair: res.delta.squares.length > 1, squares: res.delta.squares };
         }
       });
-      return bestPiece as { seg: ReviewMoveSegment; text: string; swing: number; color: 'w' | 'b'; pair: boolean } | null;
+      return bestPiece as { seg: ReviewMoveSegment; text: string; swing: number; color: 'w' | 'b'; pair: boolean; squares: string[] } | null;
     }),
   };
   void (async () => {
@@ -4300,7 +4301,16 @@ async function augmentWithProjections(
     // Searched on the singleton chain above (same candidates, same ablation);
     // composed here.
     const best = await badPieceDone.promise;
-    if (best) {
+    // ONE FACT ONCE (clean-pass review walk 2026-10-04, G2 ply 23: "rescue
+    // your worst piece, your bishop on c8 …" then "Your bishop on c8 is doing
+    // nothing where it sits — improving it is the biggest gain"). When the
+    // ply's plan already names this piece — the one worst-piece finder, the
+    // same square — the bad-piece line adds nothing.
+    const planNamesIt = (b: NonNullable<typeof best>): boolean => {
+      if (!b.seg.fenAfter || !(b.seg.narration ?? '').includes('rescue your worst piece')) return false;
+      try { const w = findWorstPlacedPiece(new Chess(b.seg.fenAfter), b.color); return !!w && b.squares.includes(w.sq); } catch { return false; }
+    };
+    if (best && !planNamesIt(best)) {
       // Appended as its own sentence — capitalize the lead so the seat-stamped
       // possessive ("their"/"your") reads as a sentence start, not mid-clause.
       const text = phraseBadPiece(best.text, best.color, best.pair, studentColorWB);

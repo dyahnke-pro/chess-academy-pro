@@ -1021,6 +1021,11 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       // not" is the alternative's board too (clean-pass walk 2026-10-04, G3
       // ply 38 false red: c7 is empty only after the move PLAYED).
       const alternative = /\b(?:stronger move was|was the move|would|was better)\b/i.test(sentence);
+      // A PASSER TO BE CREATED stands on the board at the END of its line,
+      // neither this one nor the one before ("the idea is to create a passed pawn on d6" — clean-pass
+      // walk 2026-10-04, G2 ply 53 false red). The plan computer proves the
+      // square on its own line; this checker has no board to read it on.
+      if (/\bcreate a passed\s*$/i.test(sentence)) continue;
       const cell = (past || alternative ? posBefore : pos).get(m[2].toLowerCase());
       if (!cell || cell.type !== PIECE[m[1].toLowerCase()]) accFails.push(`ply ${n}: "${m[1]} on ${m[2]}" but board has ${cell ? cell.type : 'empty'}`);
     }

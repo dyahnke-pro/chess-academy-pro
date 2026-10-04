@@ -50,6 +50,12 @@ export function mateDistanceOf(evaluation: number | null | undefined): number | 
  *  up is graded like any other move, in expected points. */
 export const SHORT_MATE_MOVES = 3;
 
+/** A read at or above this, after a move that had a LONGER forced mate before
+ *  it, cannot tell a mate kept past the read's horizon from one let go (37.h3:
+ *  +7.46 read, mate in 14 on a deeper search). Such a move is not flagged — the
+ *  board has not proven a slip. Below it, the drop itself is the proof. */
+export const MATE_HORIZON_CP = 500;
+
 /** True when an evaluation represents a forced mate rather than a
  *  centipawn score. Use everywhere mate-vs-eval branching matters. */
 export function isMateEval(evaluation: number | null | undefined): boolean {

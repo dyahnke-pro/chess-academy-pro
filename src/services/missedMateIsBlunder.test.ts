@@ -56,8 +56,12 @@ describe('a mate score carries its distance', () => {
 });
 
 describe('only a short mate given up is a blunder by itself', () => {
-  it('37.h3: mate in 11 before, +7.46 read after → not a blunder', () => {
-    expect(classifyCpLoss(0, mateEvalFor(11), 746, true)).not.toBe('blunder');
+  it('37.h3: mate in 11 before, +7.46 read after → not flagged (the mate may sit past the read)', () => {
+    expect(classifyCpLoss(0, mateEvalFor(11), 746, true)).toBe('good');
+    expect(classifyCpLoss(0, -mateEvalFor(11), -746, false)).toBe('good');
+  });
+  it('a long mate dropped out of the decisive range is still a slip', () => {
+    expect(['mistake', 'blunder']).toContain(classifyCpLoss(0, mateEvalFor(11), 150, true));
   });
   it('41.Qxe5+: mate in 1 before, +7.8 after → blunder', () => {
     expect(classifyCpLoss(0, mateEvalFor(1), 779, true)).toBe('blunder');

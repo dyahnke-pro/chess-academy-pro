@@ -193,7 +193,7 @@ async function waitWhilePaused(): Promise<void> {
 // MATE_EVAL_THRESHOLD is now exported from engineConstants so all
 // subsystems share the same value. Local alias kept for readability.
 import {
-  MATE_EVAL_THRESHOLD, mateEvalFor, mateDistanceOf, SHORT_MATE_MOVES, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP,
+  MATE_EVAL_THRESHOLD, mateEvalFor, mateDistanceOf, SHORT_MATE_MOVES, MATE_HORIZON_CP, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP,
   BLUNDER_WIN_PCT, EXCELLENT_WIN_PCT,
 } from './engineConstants';
 import { capEval, winPctLost, bandForWinPctLost } from './accuracyService';
@@ -309,6 +309,10 @@ export function classifyCpLoss(
     // while Qb4+'s was 11); it is graded below, in expected points.
     const preDistance = mateDistanceOf(evalBefore);
     if (preMateForMover && !postMateForMover && preDistance !== null && preDistance <= SHORT_MATE_MOVES) return 'blunder';
+    // …and a longer one given up is a slip only once the read after leaves the
+    // decisive range: above it, the mate may simply sit past the horizon (the
+    // walk's re-run graded 37.h3 an INACCURACY off the same +7.46).
+    if (preMateForMover && !postMateForMover && evalAfterStudent !== null && evalAfterStudent >= MATE_HORIZON_CP) return 'good';
   }
   // Handle mate evals: the player's move leads to a forced mate.
   if (evalAfter !== undefined && evalAfter !== null && Math.abs(evalAfter) >= MATE_EVAL_THRESHOLD) {

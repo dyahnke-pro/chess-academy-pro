@@ -552,7 +552,18 @@ function planFor(
         if (!recapture && tradeSetUpByFirstMove(mine[0], to, color)) tradeIntended.push(taken);
       }
     }
-    if (ply.facts.outpostGained) outposts.push(ply.facts.outpostGained);
+    // AN OUTPOST ALREADY HELD IS NOT AN AIM (clean-pass review walk
+    // 2026-10-04, G3 24.Nh4 and 34.Kf3: "the idea is to park a piece on d6" —
+    // a knight already stood on d6; the lines only traded it and re-planted
+    // one, or stepped off and came back).
+    const startFen = plies[0]?.fenBefore;
+    const heldAtStart = (sq: string): boolean => {
+      try {
+        const pc = startFen ? new Chess(startFen).get(sq as never) as { type?: string; color?: string } | undefined : undefined;
+        return !!pc && pc.color === (color === 'white' ? 'w' : 'b') && pc.type !== 'p';
+      } catch { return false; }
+    };
+    if (ply.facts.outpostGained && !heldAtStart(ply.facts.outpostGained)) outposts.push(ply.facts.outpostGained);
     // VERIFY THE PAWN IS ACTUALLY THIS SIDE'S, ON THE BOARD, BEFORE CLAIMING
     // IT. `newPassedPawns` pools both colours into one untagged list, so
     // crediting the mover with everything it contains hands a side the
