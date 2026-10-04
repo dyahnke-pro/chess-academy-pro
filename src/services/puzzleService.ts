@@ -221,9 +221,12 @@ export async function isMasterPoolSeeded(): Promise<boolean> {
  * It used to RETURN the pool's size, counted by a full-table `filter` scan on
  * every open — ~5 s on a cold device, and no caller ever read the number.
  */
-async function seedLazyPool(pool: LazyPool): Promise<void> {
+async function seedLazyPool(pool: LazyPool, opts: { warm?: boolean } = {}): Promise<void> {
   if (await isPoolSeeded(pool)) return;
-  return puzzleForeground(singleFlight(pool.key, async () => {
+  // A warm-up (no student waiting) is not foreground work; the moment a page
+  // asks for the same pool it joins this write and marks it foreground.
+  const mark = opts.warm ? <T,>(w: Promise<T>): Promise<T> => w : puzzleForeground;
+  return mark(singleFlight(pool.key, async () => {
     if (await isPoolSeeded(pool)) return;
     // Web: same-origin fetch. Native: app bundle → web origin (the pool is
     // kept in the `puzzles` store below, so dataFile need not keep it too).
@@ -239,6 +242,21 @@ async function seedLazyPool(pool: LazyPool): Promise<void> {
     await addMissingInChunks(raw.map((p) => toRecord(p, pool.source, today)));
     await db.meta.put({ key: pool.key, value: 'true' });
   }));
+}
+
+/**
+ * Warm the Long and Master pools while the student is on the Tactics hub, AFTER
+ * the bundled set is in (David 2026-10-04: the first open of Master inside the
+ * app took ~16 s — the pool download plus its write). A student who taps
+ * Master or Long joins the same single-flight write instead of starting one.
+ * Only Tactics visitors pay the ~0.7 MB (gzipped); nobody else does.
+ */
+export function warmLazyPools(): void {
+  void (async () => {
+    await seedPuzzles();
+    await seedLazyPool(LONG_POOL, { warm: true });
+    await seedLazyPool(MASTER_POOL, { warm: true });
+  })().catch(() => undefined);
 }
 
 /** The elite (2400+) Master Level pool (David 2026-09-14). */

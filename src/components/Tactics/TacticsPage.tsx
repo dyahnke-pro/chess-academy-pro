@@ -5,7 +5,7 @@ import { useAppStore } from '../../stores/appStore';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PageHelp } from '../Layout/PageHelp';
 import { PuzzleQuickSettings } from './PuzzleQuickSettings';
-import { THEME_MAP } from '../../services/puzzleService';
+import { THEME_MAP, warmLazyPools } from '../../services/puzzleService';
 import { useSettings } from '../../hooks/useSettings';
 import { useCollapseOnScroll } from '../../hooks/useCollapseOnScroll';
 import { scaledShadow } from '../../utils/neonColors';
@@ -139,6 +139,9 @@ export function TacticsPage(): JSX.Element {
   // surface events to the entry path through /tactics. Mirrors the
   // F1 fix from PR #504 on /weaknesses where the whole tab was
   // observability-blind.
+  // Long / Master / Deep Run open at once instead of downloading on first tap.
+  useEffect(() => { warmLazyPools(); }, []);
+
   useEffect(() => {
     void logAppAudit({
       kind: 'tactics-surface-event',
