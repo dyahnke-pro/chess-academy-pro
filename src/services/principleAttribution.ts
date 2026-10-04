@@ -34,6 +34,7 @@ import { findContinuationsAtPly } from './openingDetectionService';
 import { deriveNextPlans } from './nextPlans';
 import { winPercent, bandForWinPctLost } from './accuracyService';
 import { MAX_PV_DEPTH_PLIES } from './ratingBands';
+import { BLUNDER_CP } from './engineConstants';
 import { developedMinorCount, homeMinorCount, isMinorAtHome, minorsAtHome } from './development';
 import { proofCut } from './exchangeLedger';
 
@@ -1060,6 +1061,10 @@ const DETECTORS: Detector[] = [
     // (then the miss is the win itself).
     if (c.pvP?.length && pvWinsMaterial(c.before, [last.san, ...c.pvP], mover)) return null;
     if (c.pvB?.length && pvWinsMaterial(c.before, [best.san, ...c.pvB], mover)) return null;
+    // …and with no lines at hand, the size of the swing says the same: trade
+    // quality is positional, so a blunder-sized loss (23.Bxf6+ against Rc7+,
+    // over six points) was something concrete, never the trade.
+    if (c.evalBefore !== undefined && c.evalAfterPlayed !== undefined && c.evalBefore - c.evalAfterPlayed >= BLUNDER_CP) return null;
     const bishopsB = pieces(c.before, mover, 'b').length; const bishopsA = pieces(c.after, mover, 'b').length;
     const oppBishops = pieces(c.after, opp, 'b').length;
     const gavePair = last.piece === 'b' && bishopsB === 2 && bishopsA < 2 && oppBishops === 2;

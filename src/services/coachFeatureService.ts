@@ -1948,7 +1948,13 @@ export function buildReviewSegments(
           fenBefore: fenPair.fenBefore,
           san: m.san,
           history: sansForRun.slice(0, m.ply),
-          cpLoss: recordedMoveCost(m, moverColor) ?? 0,
+          // ONE GRADE, ONE COST (clean-pass review walk 2026-10-04, G1 27.Rc8:
+          // graded GREAT, then "Blunder check … here the answer was your rook
+          // on c8" — the raw drop of two reads at +10, which the grade, in
+          // expected points, had already called no loss). A move the review
+          // does not grade as a fault cost nothing here either.
+          cpLoss: m.classification === 'inaccuracy' || m.classification === 'mistake' || m.classification === 'blunder'
+            ? recordedMoveCost(m, moverColor) ?? 0 : 0,
           bothCp,
           bestSan: bestMoveSan,
           bestLine: m.bestMove ? { rank: 1, evaluation: m.preMoveEval, moves: [m.bestMove, ...(m.pv?.afterBest ?? [])], mate: null } : undefined,

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1645 lines · 27 exports · 17 importers · 12 tests · 0 audits**
+**1650 lines · 27 exports · 18 importers · 13 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -25,6 +25,7 @@
 - `src/services/planArc.ts`
 - `src/services/planChooser.ts`
 - `src/services/reviewWalk900.test.ts`
+- `src/services/routeFirstArrival.test.ts`
 - `src/services/routeTargetMustStand.test.ts`
 - `src/services/seatedTacticLine.test.ts`
 - `src/services/walkOct1Learn.test.ts`
@@ -188,7 +189,7 @@
 - `src/services/learnWalkBlumenfeld.test.ts:183`
 - `src/services/learnWalkBlumenfeld.test.ts:184`
 
-### `planFromUci` (function) — 35 call sites
+### `planFromUci` (function) — 36 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9661`
 - `src/services/claimTruth.manual.test.ts:129`
 - `src/services/coachLaneWiring.test.ts:35`
@@ -221,13 +222,14 @@
 - `src/services/planArc.test.ts:27`
 - `src/services/planChooser.ts:39`
 - `src/services/planChooser.ts:40`
+- `src/services/routeFirstArrival.test.ts:13`
 - `src/services/routeTargetMustStand.test.ts:17`
 - `src/services/routeTargetMustStand.test.ts:27`
 - `src/services/walkOct1Learn.test.ts:69`
 
 ### `gameArcs` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:1402`
-- `src/services/learnBoardTeaching.ts:773`
+- `src/services/coachFeatureService.ts:1411`
+- `src/services/learnBoardTeaching.ts:788`
 - `src/services/walkOct1Learn.test.ts:115`
 
 ### `aimsOf` (re-export) — 8 call sites
@@ -237,10 +239,10 @@
 - `src/services/planArc.phraseFrom.test.ts:31`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.ts:52`
-- `src/services/planChooser.ts:48`
-- `src/services/planChooser.ts:49`
+- `src/services/planChooser.ts:50`
+- `src/services/planChooser.ts:51`
 
-### `aimWalkableNow` (re-export) — 18 call sites
+### `aimWalkableNow` (re-export) — 20 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9674`
 - `src/components/Coach/CoachTeachPage.tsx:9678`
 - `src/services/planArc.phraseFrom.test.ts:19`
@@ -257,8 +259,10 @@
 - `src/services/planArc.test.ts:261`
 - `src/services/planArc.test.ts:265`
 - `src/services/planArc.ts:420`
+- `src/services/planChoicePasserNow.test.ts:22`
+- `src/services/planChoicePasserNow.test.ts:23`
 - `src/services/planChooser.test.ts:54`
-- `src/services/planChooser.ts:47`
+- `src/services/planChooser.ts:49`
 
 ### `joinEmerges` (re-export) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9690`
@@ -307,6 +311,7 @@
 - `src/services/planArc.test.ts`
 - `src/services/replayFence.modern1690.test.ts`
 - `src/services/reviewWalk900.test.ts`
+- `src/services/routeFirstArrival.test.ts`
 - `src/services/routeTargetMustStand.test.ts`
 - `src/services/seatedTacticLine.test.ts`
 - `src/services/walkOct1Learn.test.ts`

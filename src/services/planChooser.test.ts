@@ -52,6 +52,6 @@ describe('Learn walk 2026-10-02, ply 22 — no "outpost" on a square a pawn hold
   it('h5 is no outpost on that board, and the chooser holds every outpost to the board', () => {
     const fen = 'r1bq1rk1/1p2nppp/3b1n2/pPpp2PP/P2P4/2P2P2/5K2/RNBQ1BNR b - - 0 12';
     expect(aimWalkableNow({ id: 'outpost:h5', kind: 'outpost', squares: ['h5'], goal: 'h5', phrase: 'the outpost on h5' } as never, fen, 'b')).toBe(false);
-    expect(readFileSync('src/services/planChooser.ts', 'utf8')).toMatch(/a\.kind !== 'outpost' \|\| aimWalkableNow\(a, fen, seat\)/);
+    expect(readFileSync('src/services/planChooser.ts', 'utf8')).toMatch(/a\.kind === 'route' \|\| aimWalkableNow\(a, fen, seat\)/);
   });
 });

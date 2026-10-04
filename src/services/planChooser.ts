@@ -39,12 +39,14 @@ export function planChoice(
   const p0 = planFromUci(fen, l0.moves, studentColor, lastMove);
   const p1 = planFromUci(fen, l1.moves, studentColor, lastMove);
   if (!p0 || !p1) return null;
-  // An OUTPOST is a fact about the board now — a square a pawn holds, or one
-  // their pawn can still hit, is none (Learn walk 2026-10-02: "the outpost on
-  // h5" with White's pawn on h5). Routes and files may need the line's own
-  // preparation (d3 before Nd2), so only outposts are held to the board.
+  // An OUTPOST, a PASSED PAWN and an ATTACK ON THE KING are facts about the
+  // board now — a square a pawn holds is no outpost (Learn walk 2026-10-02:
+  // "the outpost on h5" with White's pawn on h5), and a pawn with an enemy pawn
+  // in front on the next file is not "the passed pawn" (clean-pass walk
+  // mZ1GOTOw, 33…: f7 with White's e5 in front). Routes may need the line's
+  // own preparation (d3 before Nd2), so a route alone is not held to the board.
   const seat: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
-  const sayable = (a: ReturnType<typeof aimsOf>[number]): boolean => a.kind !== 'outpost' || aimWalkableNow(a, fen, seat);
+  const sayable = (a: ReturnType<typeof aimsOf>[number]): boolean => a.kind === 'route' || aimWalkableNow(a, fen, seat);
   const a0 = aimsOf(p0.mine, 'student').find(sayable);
   const a1 = aimsOf(p1.mine, 'student').find(sayable);
   if (!a0 || !a1 || a0.id === a1.id) return null;

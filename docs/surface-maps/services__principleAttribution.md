@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1681 lines · 12 exports · 47 importers · 34 tests · 1 audits**
+**1686 lines · 12 exports · 47 importers · 34 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -93,7 +93,7 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:144`
 
-### `attributePrinciples` (function) — 93 call sites
+### `attributePrinciples` (function) — 95 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
 - `src/services/blockedOwnRetreat.test.ts:23`
 - `src/services/blockedOwnRetreat.test.ts:32`
@@ -110,7 +110,7 @@
 - `src/services/claimTruth.manual.test.ts:195`
 - `src/services/coachFeatureService.ts:913`
 - `src/services/learnWalkBlumenfeld.test.ts:65`
-- `src/services/liveFundamental.ts:143`
+- `src/services/liveFundamental.ts:153`
 - `src/services/misconceptionClassifier.ts:244`
 - `src/services/principleAttribution.section14.test.ts:27`
 - `src/services/principleAttribution.section14.test.ts:37`
@@ -182,6 +182,8 @@
 - `src/services/tradedActiveNamesTheirPiece.test.ts:13`
 - `src/services/tradedActiveNamesTheirPiece.test.ts:25`
 - `src/services/tradedActiveNamesTheirPiece.test.ts:34`
+- `src/services/tradedActiveNamesTheirPiece.test.ts:46`
+- `src/services/tradedActiveNamesTheirPiece.test.ts:53`
 - `src/services/walkOct1Learn.test.ts:94`
 - `src/services/walkOct2a.test.ts:77`
 - `src/services/yieldHonoured.test.ts:33`
@@ -197,8 +199,8 @@
 - `src/services/coachFeatureService.ts:920`
 - `src/services/discussionPractice.ts:353`
 - `src/services/discussionPractice.ts:361`
-- `src/services/liveFundamental.ts:133`
-- `src/services/liveFundamental.ts:140`
+- `src/services/liveFundamental.ts:143`
+- `src/services/liveFundamental.ts:150`
 - `src/services/principleAttribution.test.ts:46`
 
 ## Tests

@@ -20,6 +20,7 @@
 import { Chess } from 'chess.js';
 import { attributePrinciples, pvUciToSan, type PrincipleAttribution } from './principleAttribution';
 import { MATE_EVAL_THRESHOLD } from './engineConstants';
+import { winPctLost, bandForWinPctLost } from './accuracyService';
 
 /** The raw reads around one student move, exactly as the surface holds them:
  *  WHITE-POV centipawns (a mate encoded as the sentinel), UCI lines. */
@@ -120,7 +121,16 @@ export function attributeLiveFundamental(input: LiveFundamentalReads): Principle
     : evalBeforeMover !== undefined && evalAfterMover !== undefined
       ? evalBeforeMover - evalAfterMover
       : 0;
-  const flagged = mateSwing || cpLoss >= LEARN_FUNDAMENTAL_CP_FLOOR;
+  // ONE GRADE ON EVERY SURFACE (clean-pass walk SI5q0VJz, 39.Qb8 — mate in
+  // six — was told "Qb4+ won material by force, and this doesn't force
+  // anything" off two reads of +8.6 and +7.7). When the move's eval pair is
+  // known it is graded the way Review grades it, in expected points: a wobble
+  // inside a decided position is not a cost. The floor stays for a missing pair.
+  const afterForGrade = input.costCp !== null && evalBeforeMover !== undefined ? evalBeforeMover - input.costCp : evalAfterMover;
+  const graded = evalBeforeMover !== undefined && afterForGrade !== undefined
+    ? bandForWinPctLost(winPctLost(evalBeforeMover, afterForGrade, true)) !== null
+    : cpLoss >= LEARN_FUNDAMENTAL_CP_FLOOR;
+  const flagged = mateSwing || graded;
   if (!flagged) return [];
 
   // Normalise the persisted lines to the attributor's contract (SAN, from the

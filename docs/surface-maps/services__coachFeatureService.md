@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5381 lines · 38 exports · 45 importers · 43 tests · 5 audits**
+**5387 lines · 38 exports · 46 importers · 44 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -37,6 +37,7 @@
 - `src/services/gameAnalysisService.ts`
 - `src/services/gameThemeClassifier.test.ts`
 - `src/services/gameThemeClassifier.ts`
+- `src/services/gradeGatesTeachingCost.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/mapConcurrent.test.ts`
 - `src/services/namedMoveArrows.test.ts`
@@ -155,7 +156,7 @@
 - `src/services/coachFeatureService.test.ts:15`
 - `src/services/coachFeatureService.test.ts:24`
 
-### `buildReviewSegments` (function) — 68 call sites
+### `buildReviewSegments` (function) — 70 call sites
 - `src/components/Coach/CoachGameReview.tsx:1882`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -205,6 +206,8 @@
 - `src/services/coachFeatureService.test.ts:854`
 - `src/services/coachFeatureService.test.ts:914`
 - `src/services/coachFeatureService.trade.test.ts:18`
+- `src/services/gradeGatesTeachingCost.test.ts:31`
+- `src/services/gradeGatesTeachingCost.test.ts:35`
 - `src/services/loopCloses.review.integration.test.ts:89`
 - `src/services/methodBeat.test.ts:70`
 - `src/services/oneCostPerMove.test.ts:34`
@@ -374,6 +377,7 @@
 - `src/services/coachFeatureService.test.ts`
 - `src/services/coachFeatureService.trade.test.ts`
 - `src/services/gameThemeClassifier.test.ts`
+- `src/services/gradeGatesTeachingCost.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/mapConcurrent.test.ts`
 - `src/services/methodBeat.test.ts`

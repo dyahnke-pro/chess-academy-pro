@@ -698,6 +698,11 @@ function planFor(
   // more striking idea than two.
   const rootFen = mine[0]?.fenBefore;
   const maneuverPick = [...journeys.values()]
+    // THE JOURNEY ENDS WHERE THE PIECE FIRST REACHES ITS LAST SQUARE (clean-pass
+    // walk mZ1GOTOw, 21.Rc1: "round to f5, by way of d4 and g7" — the knight
+    // reached f5, took on g7 and came back). Cut here, once, so every reader of
+    // the route (this clause and `planArc`'s aims) gets the same journey.
+    .map((j) => ({ ...j, path: j.path.slice(0, j.path.indexOf(j.path[j.path.length - 1]) + 1) }))
     .filter((j) => j.path.length >= 3)
     // A ROUTE MAY NOT NAME ITS OWN DESTINATION AS A WAYPOINT. From David's game
     // of 2026-08-11: "walk the queen round to c2, by way of c2 and b3" — and

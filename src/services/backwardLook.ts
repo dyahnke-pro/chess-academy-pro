@@ -34,6 +34,7 @@ export { priorMoveLeadingTo } from './inaccuracyCall';
 import { whyItFailed } from './whyItFailed';
 import { describeConcessions } from './reviewTeachingPoints';
 import { INACCURACY_CP, BLUNDER_CP } from './engineConstants';
+import { classifyMove } from './moveRating';
 import { logAppAudit } from './appAuditor';
 
 export interface BackwardLook {
@@ -244,7 +245,21 @@ export function backwardLook(args: {
   // the position is not a failed idea, whatever it happens to attack. Without
   // that, every developing move that eyes a guarded pawn would collect a
   // sentence explaining why it "fails".
-  if (!gained) {
+  // A DRAWBACK BELONGS TO A MOVE THE GRADE CALLS A FAULT (clean-pass walk
+  // SI5q0VJz: 27.Rc8 and 39.Qb8 — mate in six — each heard "your piece went a
+  // long way from your king" off a raw drop between two reads at +8). The one
+  // grader decides, in expected points when the eval after is known.
+  const quality = classifyMove({
+    wasBest: false,
+    cpLoss: args.cpLoss,
+    missedMate: args.missedMate ?? null,
+    allowedMate: args.allowedMate ?? null,
+    ...(typeof args.moverEvalAfterCp === 'number'
+      ? { evalBefore: args.moverEvalAfterCp + args.cpLoss, evalAfter: args.moverEvalAfterCp, isWhiteMove: true }
+      : {}),
+  });
+  const fault = quality === 'inaccuracy' || quality === 'mistake' || quality === 'blunder';
+  if (!gained && fault) {
     let attempt: string | null = null;
     let attemptSquare = '';
     try {

@@ -26,6 +26,7 @@
 import { Chess } from 'chess.js';
 import { criticalityThresholds } from './criticalityScan';
 import { proofAgainstMover } from './exchangeLedger';
+import { MATE_HORIZON_CP } from './engineConstants';
 
 /** A mate is scored flat, for BOTH sides, on purpose: three moves that all mate
  *  are three moves that all win, so nothing hinges and the coach stays silent.
@@ -199,7 +200,12 @@ export function readCriticalMoment(input: {
     if (floor === null) return bestCp - cp <= tolerance;
     return cp >= floor;
   };
-  const onBandEdge = floor !== null && cps.some((cp) => cp < floor && floor - cp <= BAND_EDGE_CP);
+  // THE MATE BAND'S EDGE IS THE SEARCH HORIZON (clean-pass walk SI5q0VJz ply
+  // 72: "Two moves keep the forced mate" with a third line at +11 — at depth 26
+  // five moves mate). A line still crushing has not been shown NOT to mate; the
+  // search stopped first. The same horizon decides when a long mate is graded.
+  const edgeWidth = bestStake === 'mate' ? MATE_CP - MATE_HORIZON_CP : BAND_EDGE_CP;
+  const onBandEdge = floor !== null && cps.some((cp) => cp < floor && floor - cp <= edgeWidth);
   const within = cps.filter(holds).length;
   const gapCp = cps.length >= 2 ? bestCp - cps[1] : 0;
 

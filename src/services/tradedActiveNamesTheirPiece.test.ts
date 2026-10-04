@@ -38,3 +38,22 @@ describe('a trade whose line wins is not the wrong side of one', () => {
     expect(attrs.some((x) => x.id === 'traded-active-for-passive')).toBe(false);
   });
 });
+
+// Walk 6: the review spoke the same line before its deep dive landed — no
+// engine lines yet, only the reads: best +10.94, played +4.74.
+describe('a blunder-sized swing is never blamed on trade quality', () => {
+  it('no lines, a six-point swing → no traded-active-for-passive', () => {
+    const attrs = attributePrinciples({
+      replySan: null, historySans: HIST, bestSan: 'Rc7+', classification: 'mistake',
+      evalBefore: 1094, evalAfterPlayed: 474,
+    });
+    expect(attrs.some((x) => x.id === 'traded-active-for-passive')).toBe(false);
+  });
+  it('…and a small one still names the trade (non-vacuous)', () => {
+    const attrs = attributePrinciples({
+      replySan: null, historySans: HIST, bestSan: 'Rc7+', classification: 'inaccuracy',
+      evalBefore: 300, evalAfterPlayed: 220,
+    });
+    expect(attrs.some((x) => x.id === 'traded-active-for-passive')).toBe(true);
+  });
+});
