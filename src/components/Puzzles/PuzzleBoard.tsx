@@ -765,7 +765,7 @@ export function PuzzleBoard({
           pushed Hint / Show solution under the bottom nav). The puzzle's own
           buttons on the left, Flip and Ask on the right; every label one line.
           After it resolves, the full read stays one tap away. */}
-      <div ref={keepRef} className="flex items-center gap-2">
+      <div ref={keepRef} className="flex flex-wrap items-center gap-2">
         {state === 'playing' && (
           <div className="flex min-w-0 items-center gap-2" data-testid="puzzle-controls">
             {settings.showHints && (
