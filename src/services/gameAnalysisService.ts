@@ -293,6 +293,18 @@ export function classifyCpLoss(
     if (!foundNewMate) return 'good';               // converting an already-decisive position
     return isBrilliant() ? 'brilliant' : 'great';   // found a mate: brilliant only if it's a sacrifice
   }
+  // A MISSED FORCED MATE IS A BLUNDER, on every surface (David 2026-10-04:
+  // "Keep it as a blunder in review"). Review graded 41.Qxe5+ — Qxd8# was on
+  // the board — as GOOD because +7.8 is still winning in expected points;
+  // Learn's `classifyMove` already called it a blunder. Same rule as
+  // `mateContext`: the mover had a forced mate before and does not after.
+  {
+    const preMateForMover = evalBefore !== undefined && evalBefore !== null
+      && Math.abs(evalBefore) >= MATE_EVAL_THRESHOLD && (isPlayerWhiteMove ? evalBefore > 0 : evalBefore < 0);
+    const postMateForMover = evalAfter !== undefined && evalAfter !== null
+      && Math.abs(evalAfter) >= MATE_EVAL_THRESHOLD && (isPlayerWhiteMove ? evalAfter > 0 : evalAfter < 0);
+    if (preMateForMover && !postMateForMover) return 'blunder';
+  }
   // Handle mate evals: the player's move leads to a forced mate.
   if (evalAfter !== undefined && evalAfter !== null && Math.abs(evalAfter) >= MATE_EVAL_THRESHOLD) {
     const goodForPlayer = isPlayerWhiteMove ? evalAfter > 0 : evalAfter < 0;
