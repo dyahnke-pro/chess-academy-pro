@@ -223,7 +223,10 @@ export async function compareTwoMoves(
         ...base,
         delta: {
           kind: 'passed-pawn',
-          text: `your passed pawn on ${sq} — take it off the board and the edge is gone`,
+          // SAID OF THE BETTER MOVE'S BOARD, not the one on screen (review
+          // walk 2026-10-04, G3 19…cxb6: "your passed pawn on c7 — take it
+          // off the board" with c7 empty — the pawn exists only after axb6).
+          text: `it leaves you a passed pawn on ${sq} that ${base.sanWorse} does not — take that pawn off the board and the edge is gone`,
           proof: 'ablation',
           ablation: { full: betterCpMover, ablated: moverAbl, worse: worseCpMover },
         },

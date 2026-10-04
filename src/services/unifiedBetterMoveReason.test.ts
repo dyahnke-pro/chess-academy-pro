@@ -21,7 +21,7 @@ describe('one reason for the better move, on every surface', () => {
   const reason = betterMoveReason(before, 'gxh5', 'Rxf8+', BEST_LINE, 'white', null);
 
   it('the shared computer gives the move-order reason', () => {
-    expect(reason).toBe("checks first: Rxf8+, Kxf8, and gxh5 would still have been there — you'd have had both");
+    expect(reason).toBe("checks first: Rxf8+, Kxf8, and gxh5 would still have been there — both moves, not one");
   });
 
   it('Learn speaks it', () => {

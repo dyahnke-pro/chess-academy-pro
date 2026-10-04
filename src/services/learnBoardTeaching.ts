@@ -510,9 +510,15 @@ export function trapAheadTeaching(fen: string, student: 'w' | 'b'): TeachingHint
     const slip = c.move(t.san);
     if (slip?.captured) {
       const P: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+      // WHICH ONE, when two of the same kind can take there (clean-pass walk
+      // 2026-10-03, G3 ply 10: "your pawn taking their bishop on c6" — both the
+      // b- and the d-pawn could).
+      const twins = new Chess(fen).moves({ verbose: true })
+        .filter((m) => m.to === slip.to && m.piece === slip.piece && m.from !== slip.from).length > 0;
+      const mover = !twins ? P[slip.piece] : slip.piece === 'p' ? `${slip.from[0]}-pawn` : `${P[slip.piece]} on ${slip.from}`;
       moveNoun = slip.captured === slip.piece
-        ? `trading ${P[slip.piece]}s on ${slip.to}`
-        : `your ${P[slip.piece]} taking their ${P[slip.captured]} on ${slip.to}`;
+        ? (twins ? `your ${mover} trading on ${slip.to}` : `trading ${P[slip.piece]}s on ${slip.to}`)
+        : `your ${mover} taking their ${P[slip.captured]} on ${slip.to}`;
     }
     if (slip) {
       arrows.push({ from: slip.from, to: slip.to, role: 'missed', fen, source: 'learn.trapAhead' });

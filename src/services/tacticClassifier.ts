@@ -525,6 +525,12 @@ function detectRemovalOfGuard(
 function enemyHasLegalCapture(chess: Chess, square: Square, enemyColor: Color): boolean | null {
   try {
     if (chess.turn() === enemyColor) {
+      // IN CHECK IS NOT PINNED (review walk 2026-10-04, 24…Kf8: "Newly
+      // undefended: your rook on a1" — it had been loose since Rc7+, but while
+      // Black was in check no capture of it was legal, so the board before
+      // read it as safe). A check is answered and then the piece falls; it
+      // does not tell us whether the attacker can ever take — undeterminable.
+      if (chess.inCheck()) return null;
       return chess.moves({ verbose: true }).some((m) => m.to === square && m.captured);
     }
     // Flip the side to move to the enemy so we can generate their legal moves.

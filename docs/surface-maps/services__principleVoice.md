@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**770 lines · 7 exports · 14 importers · 12 tests · 3 audits**
+**773 lines · 7 exports · 16 importers · 14 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/services/blockedOwnRetreat.test.ts`
 - `src/services/coachFeatureService.ts`
+- `src/services/forcingStemNoDecisive.test.ts`
 - `src/services/fundLeadStems.test.ts`
 - `src/services/fundamentalHow.test.ts`
 - `src/services/learnFundamentalNarration.ts`
@@ -25,12 +26,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.mcconnell1000.test.ts`
 - `src/services/replayFence.sicilian1200.test.ts`
 - `src/services/reviewFullData.ts`
+- `src/services/tradedActiveNamesTheirPiece.test.ts`
 - `src/services/walkOct2a.test.ts`
 
 ## Exports and every call site
 
 ### `isMethodSentence` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:4700`
+- `src/services/coachFeatureService.ts:4706`
 - `src/services/learnFundamentalNarration.ts:129`
 
 ### `fundamentalHow` (function) — 10 call sites
@@ -52,9 +54,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `FundamentalVerdictOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `renderFundamentalVerdict` (function) — 35 call sites
+### `renderFundamentalVerdict` (function) — 38 call sites
 - `src/services/blockedOwnRetreat.test.ts:32`
 - `src/services/coachFeatureService.ts:2494`
+- `src/services/forcingStemNoDecisive.test.ts:17`
+- `src/services/forcingStemNoDecisive.test.ts:22`
 - `src/services/fundLeadStems.test.ts:58`
 - `src/services/fundamentalHow.test.ts:47`
 - `src/services/fundamentalHow.test.ts:49`
@@ -87,6 +91,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.sicilian1200.test.ts:55`
 - `src/services/replayFence.sicilian1200.test.ts:62`
 - `src/services/reviewFullData.ts:566`
+- `src/services/tradedActiveNamesTheirPiece.test.ts:20`
 - `src/services/walkOct2a.test.ts:154`
 
 ### `renderPvEvidence` (function) — 3 call sites
@@ -95,7 +100,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleVoice.test.ts:40`
 
 ### `renderFundamentalsRecap` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:5168`
+- `src/services/coachFeatureService.ts:5174`
 - `src/services/principleVoice.test.ts:48`
 - `src/services/principleVoice.test.ts:53`
 - `src/services/principleVoice.test.ts:57`
@@ -108,6 +113,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Tests
 
 - `src/services/blockedOwnRetreat.test.ts`
+- `src/services/forcingStemNoDecisive.test.ts`
 - `src/services/fundLeadStems.test.ts`
 - `src/services/fundamentalHow.test.ts`
 - `src/services/learnWalkBlumenfeld.test.ts`
@@ -118,6 +124,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleVoice.test.ts`
 - `src/services/replayFence.mcconnell1000.test.ts`
 - `src/services/replayFence.sicilian1200.test.ts`
+- `src/services/tradedActiveNamesTheirPiece.test.ts`
 - `src/services/walkOct2a.test.ts`
 
 ## Audits that reach it

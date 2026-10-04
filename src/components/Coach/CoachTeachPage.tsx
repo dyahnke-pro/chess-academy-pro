@@ -1842,7 +1842,7 @@ export function CoachTeachPage(): JSX.Element {
   const pendingEngineMateRef = useRef<{ fen: string; movesToMate: number; firstUci: string | null } | null>(null);
   // The engine's read of the board after the coach's reply — the answer to a
   // threat the instant wave named waits on it (threatAnswer).
-  const studentBestReadRef = useRef<{ fen: string; bestUci: string | null; whiteCp: number | null } | null>(null);
+  const studentBestReadRef = useRef<{ fen: string; bestUci: string | null; whiteCp: number | null; analysis: StockfishAnalysis } | null>(null);
   /** Positional observations already spoken this game — see `buildPositionalRead`.
    *  Without it an uncastled king repeats the same sentence every ply until it
    *  castles, and the boundary repeat-guard turns each of those back into the
@@ -8774,6 +8774,14 @@ export function CoachTeachPage(): JSX.Element {
     // drone over the new position.
     if (opponentThinkingRef.current) return;
     voiceService.stop();
+    // THE BOARD MOVED, SO LAST TURN'S QUEUE IS STALE (clean-pass walk
+    // 2026-10-03, G1: the verdict on 23.Bxf6+ — "That trades your active
+    // bishop…" — was spoken after the student had already played 24.Rc7+, so
+    // "That" named the wrong move). Track A drops a chained line only when its
+    // generation changes, and the generation advanced on the coach's REPLY, so
+    // the window between the student's move and the reply let the previous
+    // turn's late package speak. A move retires it here, as a question does.
+    trackAGenRef.current += 1;
     // Pre-move FEN (before we overwrite liveFenRef below) — the slip faucet
     // needs the position the student moved FROM.
     const fenBefore = liveFenRef.current;
@@ -8849,9 +8857,17 @@ export function CoachTeachPage(): JSX.Element {
     // `grade` is block-scoped to the narration branch, and the capability guard
     // must NEVER read "ungraded" as "clean" — null stays null.
     let studentCpLoss: number | null = null;
-    const preStudentRead = latestEvalRef.current?.fen === fenBefore
-      ? latestEvalRef.current.analysis ?? null
+    // ONE READ PER POSITION (clean-pass walk 2026-10-03, G1 ply 61: "There's a
+    // forced mate here, starting with Qa7+" from the coach-turn probe, then
+    // "Qa7+ was cleaner — it would win the queen for a pawn" from the 5-second
+    // eval-bar read of the SAME board). The deeper coach-turn read the student
+    // was already told about judges their move; the eval bar's is the fallback.
+    const probeRead = studentBestReadRef.current && samePosition(studentBestReadRef.current.fen, fenBefore)
+      ? studentBestReadRef.current.analysis
       : null;
+    const preStudentRead = probeRead ?? (latestEvalRef.current?.fen === fenBefore
+      ? latestEvalRef.current.analysis ?? null
+      : null);
     // An open "why did you play that?" is closed by playing on — the coach
     // lets it go and the slip is captured silently for review/drills (David
     // 2026-07-11: never a stale card over a live board).
@@ -9127,7 +9143,7 @@ export function CoachTeachPage(): JSX.Element {
                 } catch { /* engine down → thin (chess.js-only) context below */ }
                 finally { try { stockfishEngine.setMultiPv(3); } catch { /* ignore */ } }
                 studentBestReadRef.current = studentBest
-                  ? { fen: probe.fen(), bestUci: studentBest.bestMove || null, whiteCp: studentBest.isMate ? null : studentBest.evaluation }
+                  ? { fen: probe.fen(), bestUci: studentBest.bestMove || null, whiteCp: studentBest.isMate ? null : studentBest.evaluation, analysis: studentBest }
                   : null;
                 // THREE WAYS TO MEET CHECK (WO-TEACH-GAPS P3) — before the student moves.
                 try {

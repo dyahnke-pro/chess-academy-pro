@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**423 lines · 12 exports · 20 importers · 4 tests · 0 audits**
+**463 lines · 13 exports · 25 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,16 +19,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts`
 - `src/services/gemCrushLines.ts`
 - `src/services/gemFinder.ts`
+- `src/services/giftedMaterialIsNotWon.test.ts`
+- `src/services/groundedAnswer.ts`
 - `src/services/inaccuracyCall.ts`
 - `src/services/lineCalc.ts`
 - `src/services/lineProof.test.ts`
 - `src/services/lookaheadPlan.ts`
 - `src/services/moveComparison.ts`
+- `src/services/moveOrder.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/pieceOptions.ts`
 - `src/services/playCommentary.ts`
+- `src/services/playedMoveGrade.ts`
 - `src/services/principleAttribution.ts`
 - `src/services/refutedAlternativeCore.ts`
+- `src/services/reviewConcepts.ts`
 - `src/services/reviewFullData.ts`
 - `src/services/reviewWalkOct2a.test.ts`
 - `src/services/whyItFailed.ts`
@@ -69,42 +74,54 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveComparison.ts:199`
 - `src/services/moveComparison.ts:200`
 
-### `settledExchange` (function) — 3 call sites
+### `settledExchange` (function) — 4 call sites
 - `src/services/playCommentary.ts:971`
+- `src/services/reviewConcepts.ts:90`
 - `src/services/reviewFullData.ts:332`
 - `src/services/reviewWalkOct2a.test.ts:15`
 
 ### `LineProof` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `proofCut` (function) — 24 call sites
-- `src/services/coachFeatureService.ts:3641`
+### `proofCut` (function) — 30 call sites
+- `src/services/coachFeatureService.ts:3643`
 - `src/services/gemCrushLines.ts:258`
 - `src/services/gemFinder.ts:243`
-- `src/services/inaccuracyCall.ts:271`
-- `src/services/inaccuracyCall.ts:329`
-- `src/services/inaccuracyCall.ts:640`
-- `src/services/inaccuracyCall.ts:855`
-- `src/services/inaccuracyCall.ts:946`
-- `src/services/inaccuracyCall.ts:997`
+- `src/services/giftedMaterialIsNotWon.test.ts:14`
+- `src/services/giftedMaterialIsNotWon.test.ts:30`
+- `src/services/groundedAnswer.ts:2408`
+- `src/services/groundedAnswer.ts:2475`
+- `src/services/inaccuracyCall.ts:274`
+- `src/services/inaccuracyCall.ts:332`
+- `src/services/inaccuracyCall.ts:641`
+- `src/services/inaccuracyCall.ts:856`
+- `src/services/inaccuracyCall.ts:947`
+- `src/services/inaccuracyCall.ts:998`
 - `src/services/lineCalc.ts:40`
 - `src/services/lineProof.test.ts:13`
 - `src/services/lineProof.test.ts:24`
 - `src/services/lineProof.test.ts:32`
 - `src/services/lineProof.test.ts:37`
-- `src/services/lookaheadPlan.ts:581`
-- `src/services/lookaheadPlan.ts:639`
+- `src/services/lookaheadPlan.ts:588`
+- `src/services/lookaheadPlan.ts:646`
+- `src/services/moveOrder.ts:120`
 - `src/services/openingGenerator.ts:3577`
 - `src/services/pieceOptions.ts:110`
-- `src/services/principleAttribution.ts:409`
-- `src/services/principleAttribution.ts:473`
+- `src/services/playedMoveGrade.ts:97`
+- `src/services/principleAttribution.ts:413`
+- `src/services/principleAttribution.ts:477`
 - `src/services/refutedAlternativeCore.ts:175`
 - `src/services/reviewWalkOct2a.test.ts:24`
 - `src/services/reviewWalkOct2a.test.ts:26`
 - `src/services/whyItFailed.ts:212`
 
+### `lineGiftIndex` (function) — 3 call sites
+- `src/services/giftedMaterialIsNotWon.test.ts:19`
+- `src/services/giftedMaterialIsNotWon.test.ts:25`
+- `src/services/giftedMaterialIsNotWon.test.ts:34`
+
 ### `describeProofResult` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3623`
+- `src/services/coachFeatureService.ts:3625`
 - `src/services/lineProof.test.ts:27`
 - `src/services/pieceOptions.ts:118`
 - `src/services/refutedAlternativeCore.ts:183`
@@ -124,6 +141,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/services/exchangeLedger.horizon.test.ts`
 - `src/services/exchangeLedger.test.ts`
+- `src/services/giftedMaterialIsNotWon.test.ts`
 - `src/services/lineProof.test.ts`
 - `src/services/reviewWalkOct2a.test.ts`
 

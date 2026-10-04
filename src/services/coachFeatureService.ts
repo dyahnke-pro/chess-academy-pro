@@ -3974,7 +3974,11 @@ async function augmentWithProjections(
       const proof = render(line, 'student');
       // The why, and the line only where it PROVES something. Neither → the
       // move's own verdict ("X keeps the edge") has already said it.
-      const parts = [why, proof ? `the line runs ${proof}` : null].filter((x): x is string => !!x);
+      // Each part is its own sentence, so each starts with a capital (review
+      // walk 2026-10-04, G2 19…Nf2: "…better on material than Nf2. the line
+      // runs Bxh4").
+      const parts = [why, proof ? `the line runs ${proof}` : null].filter((x): x is string => !!x)
+        .map((x, i) => (i === 0 ? x : `${x.charAt(0).toUpperCase()}${x.slice(1)}`));
       if (parts.length > 0) {
         s.narration = `${s.narration ?? ''} Why ${bestName} was better — ${parts.join('. ')}.`.trim();
         if (proof) attachLineArrows(s, line, 5); // the delta / better-line — David's named priority

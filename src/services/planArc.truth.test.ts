@@ -13,7 +13,7 @@ describe('planArc — true on the board', () => {
     expect(wrong.events.find((e) => e.kind === 'arrive')).toBeUndefined();
     // Control: the route's own knight, stepping from e2, arrives.
     const right = stepArc(announced(route), [route], { from: 'e2', to: 'e3', piece: 'n' }, fen, 'w', 'student');
-    expect(right.events.find((e) => e.kind === 'arrive')?.text).toMatch(/That was the plan/);
+    expect(right.events.find((e) => e.kind === 'arrive')?.text).toMatch(/That was (?:your|their) plan/);
   });
 
   it('a knight capture on c3 is not a step toward the c-file (items 171, 172)', () => {

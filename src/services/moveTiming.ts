@@ -21,13 +21,22 @@ export interface MoveTiming {
 
 /** The best material-winning capture for the side to move, or null. */
 function bestWin(c: Chess): { san: string; piece: string; square: string; gain: number } | null {
-  let best: { san: string; piece: string; square: string; gain: number } | null = null;
+  let best: { san: string; piece: string; square: string; gain: number; by: number } | null = null;
+  // The exchange the SEE counts starts with the CHEAPEST capturer, so that is
+  // the capture named (review walk 2026-10-04, 17.Bxb3: "a move earlier,
+  // their queen would have taken on b3" — the a-pawn takes there; c2 guards
+  // b3 against the queen).
+  const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
   for (const m of c.moves({ verbose: true })) {
     if (!m.captured || m.captured === 'k') continue;
     const gain = legalSeeGain(c.fen(), m.to);
-    if (gain >= 2 && (!best || gain > best.gain)) best = { san: m.san, piece: m.captured, square: m.to, gain };
+    if (gain < 2) continue;
+    const by = VAL[m.piece] ?? 100;
+    if (!best || gain > best.gain || (gain === best.gain && m.to === best.square && by < best.by)) {
+      best = { san: m.san, piece: m.captured, square: m.to, gain, by };
+    }
   }
-  return best;
+  return best ? { san: best.san, piece: best.piece, square: best.square, gain: best.gain } : null;
 }
 
 /**

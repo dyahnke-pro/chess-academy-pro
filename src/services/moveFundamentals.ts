@@ -601,6 +601,11 @@ export function computeMoveFundamentals(
         selfContained: `repositions the ${PIECE_NAME[mv.piece]} to take aim at ${hit}`,
         imperative: `take aim at the center, hitting ${hit}`,
         squares: [mv.to, ...eyes],
+        // The center's REASON is the pawn center's ("pieces behind a strong
+        // center reach either wing") — said of Qa4+ and Qg4+ (clean-pass walks
+        // 2026-10-03/04) it explained a queen check with a pawn-structure rule.
+        // A piece aiming at the center carries no borrowed reason.
+        reason: null,
       });
     }
   }

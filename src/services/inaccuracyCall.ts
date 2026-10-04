@@ -160,7 +160,10 @@ export function betterMoveFact(
 export function phraseBetterMove(f: BetterMoveFact): string {
   switch (f.kind) {
     case 'checks-first':
-      return `checks first: ${f.best}, ${f.reply ?? 'they answer'}, and ${f.played} would still have been there — you'd have had both`;
+      // SEAT-FREE: the same fact is said of the student's move and of the
+      // opponent's (review walk 2026-10-04, G3 15.bxa5 — their move — heard
+      // "you'd have had both").
+      return `checks first: ${f.best}, ${f.reply ?? 'the forced answer'}, and ${f.played} would still have been there — both moves, not one`;
     case 'line-wins':
       // A plan clause about another piece is the IDEA the move serves, never
       // something the move itself does (Blumenfeld re-walk: "Rad8 was the move —
@@ -375,20 +378,19 @@ function whyBetter(
   // touch the move's own squares, or it describes some other piece's journey.
   const firstFrom = bestUci[0].slice(0, 2);
   const firstTo = bestUci[0].slice(2, 4);
-  let movedName: string | null = null;
-  try { const mv = new Chess(fenBefore).move({ from: firstFrom, to: firstTo, promotion: bestUci[0][4] }); movedName = mv ? ({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as Record<string, string>)[mv.piece] ?? null : null; } catch { movedName = null; }
   // ANOTHER PIECE'S WALK IS THIS MOVE'S IDEA ONLY WHEN THE MOVE OPENS IT —
   // the route runs through the square the move vacated (Be3 clearing c1 for
   // the rook). Otherwise it is some other move's work (Learn walk 2026-10-02:
   // "Rh3 was their move, to walk the knight round to b4", "f6 — the idea is
   // to walk the queen round to e6", "Nf3 … walk the rook round to c3"), and it
   // is dropped as a candidate so the next real reason — or none — speaks.
-  const routeOf = (t: string): string | null => /\bwalk the (pawn|knight|bishop|rook|queen|king) round\b/.exec(t)?.[1] ?? null;
+  // A ROUTE belongs to the move only when it starts on the square the move
+  // leaves — read off the clause's own data, never parsed out of the sentence
+  // (the type alone could not tell two bishops apart: clean-pass walk G1,
+  // "Ba4+ … walk the bishop round to c5" was the f4 bishop's route).
+  const routeIsOwn = (c: { route?: { from: string } }): boolean | null => (c.route ? c.route.from === firstFrom : null);
   const clauses = (plan?.mine.spokenClauses.filter((c) => !sharedWin(c.text)) ?? [])
-    .filter((c) => {
-      const r = routeOf(c.text);
-      return r === null || movedName === null || r === movedName || c.squares.includes(firstFrom);
-    });
+    .filter((c) => routeIsOwn(c) !== false || c.squares.includes(firstFrom));
   if (plan && clauses.length === 0) return null;
   const lead0 = clauses.find((c) => !c.drift && (isCostClause(c.text) || c.squares.includes(firstFrom) || c.squares.includes(firstTo)))
     ?? clauses[0];
@@ -416,8 +418,7 @@ function whyBetter(
     // (review walk 2026-10-01, ply 37: "Be3 was the move — it would walk the
     // rook round to c4, by way of c1" — the rook's route passes c1, the square
     // the bishop LEFT, so the square test credited it to Be3).
-    const routed = routeOf(lead.text);
-    const otherPieceRoute = routed !== null && movedName !== null && routed !== movedName;
+    const otherPieceRoute = routeIsOwn(lead) === false;
     const own = !otherPieceRoute && (costIsOwn || lead.squares.includes(firstFrom) || lead.squares.includes(firstTo));
     if (!survivesForcingCut(fenBefore, bestUci, moverColor, lead.text, priorMove)) return null;
     return { why: lead.text, square: lead.squares[0] ?? '', own };

@@ -704,7 +704,7 @@ describe('the rest of what the line has to say', () => {
     const p = plan(['Nf3', 'e5', 'Nd4', 'd5', 'Nb5', 'a6']);
     expect(p?.white.maneuver?.path, 'the journey was not tracked').toEqual(['g1', 'f3', 'd4', 'b5']);
     expect(p?.white.maneuver?.piece).toBe('knight');
-    expect(p?.white.text).toContain('walk the knight round to b5');
+    expect(p?.white.text).toContain('walk the knight on g1 round to b5');
   });
 
   it('does not call a single move a reroute', () => {

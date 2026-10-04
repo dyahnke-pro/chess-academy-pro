@@ -350,6 +350,17 @@ export function proofCut(
   const full = walk.at(end);
   if (!full || !full.settled) return null;
   if (full.netPawns === 0) return null;
+  // MATERIAL THE LOSER GAVE AWAY IS NOT MATERIAL WON (clean-pass walk
+  // 2026-10-03, G1 ply 29: "Ba2 let them win a pawn — …Nge7 Be3 …Qb7 axb4
+  // …Qxb4 c4 …dxc4, they come out a pawn up". c4 was White's own pawn sac,
+  // followed by Qd6; the engine chose to give it). A unit the losing side
+  // walks from an unattacked square onto one where it is taken, by a quiet
+  // move later in the line, is a sacrifice — the line proves only what
+  // happened BEFORE it. The first move is exempt: it is the move being judged,
+  // and stepping into a capture is exactly what that move can cost.
+  const loser: 'w' | 'b' = full.netPawns > 0 ? (studentColorWB === 'w' ? 'b' : 'w') : studentColorWB;
+  const gift = lineGiftIndex(fenBefore, sans, loser);
+  if (gift > 0) return proofCut(fenBefore, sans.slice(0, gift), studentColorWB);
   // The PROOF is the shortest prefix that reaches that result where the count
   // ALSO agrees nothing can be taken back — so exd5 is proved through c4, the
   // move that holds the pawn, not stopped at exd5 (the engine merely did not
@@ -362,6 +373,35 @@ export function proofCut(
     engineCut ??= { plies: k, ledger };
   }
   return engineCut ? { ...engineCut, mate: false, sans: line } : { plies: end, mate: false, ledger: full, sans: line };
+}
+
+/** The index of the move where `giver` hands material over in this line, or
+ *  -1: a quiet move (after the first) from a square where the other side could
+ *  not win the unit, onto one where it could, which the other side then takes
+ *  at once and the giver does not take back. That is a sacrifice the engine
+ *  chose, not material the line forced. A trapped piece was already lost where
+ *  it stood; an exchange arrives by capturing; a pawn left behind later was
+ *  safe when it moved — none of those is a gift. */
+export function lineGiftIndex(fenBefore: string, sans: readonly string[], giver: 'w' | 'b'): number {
+  let c: Chess;
+  try { c = new Chess(fenBefore); } catch { return -1; }
+  const taker: 'w' | 'b' = giver === 'w' ? 'b' : 'w';
+  const moves = [];
+  for (const san of sans) {
+    try { const m = c.move(san); if (!m) break; moves.push(m); } catch { break; }
+  }
+  for (let i = 1; i + 1 < moves.length; i += 1) {
+    const m = moves[i];
+    if (m.color !== giver || m.captured || m.san.startsWith('O-O')) continue;
+    const take = moves[i + 1];
+    if (!take.captured || take.to !== m.to) continue;
+    const back = moves[i + 2];
+    if (back && back.captured && back.to === m.to) continue;
+    if (legalSeeGainFor(m.before, m.from, taker) > 0) continue;
+    if (legalSeeGainFor(m.after, m.to, taker) <= 0) continue;
+    return i;
+  }
+  return -1;
 }
 
 /** The result a proof line ends on, from the student's seat, in piece names:

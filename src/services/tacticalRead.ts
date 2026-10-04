@@ -643,9 +643,13 @@ export function candidateCompareRead(
       // moves running). Stable per ply, so resume-safe — never Math.random.
       const b = sayN(bestMv.san);
       const q = sayN(altMv.san);
+      // No "while the edge is there" / "while it still works": neither an edge
+      // nor a closing window is computed here — only that the forcing move
+      // reads 30–120cp better (clean-pass walk 2026-10-03, G2 ply 10: "while
+      // the edge is there" at a level position).
       const text = rotateStem([
-        `Prefer ${b} to ${q} — it forces the issue while the edge is there.`,
-        `${b} before ${q}: the forcing move first, while it still works.`,
+        `Prefer ${b} to ${q} — the forcing move comes first.`,
+        `${b} before ${q}: the forcing move first.`,
         `${q} can wait — first ${b}, which forces the issue.`,
       ], Number(fen.split(' ')[5] ?? '0') || 0);
       return { text, bestSan: bestMv.san, altSan: altMv.san };

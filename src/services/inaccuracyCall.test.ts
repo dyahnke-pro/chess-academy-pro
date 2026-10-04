@@ -455,7 +455,7 @@ describe('a route of another piece is the idea, not the move', () => {
     const fen = '2rq1rk1/p1p2pbp/1p2p1p1/3bP3/3P4/5N1P/PP3PP1/R1BQR1K1 w - - 0 19';
     const r = betterMoveReason(fen, 'Qd2', 'Be3', ['c1e3', 'd5b7', 'a1c1', 'd8d5', 'c1c4'], 'white', null) ?? '';
     expect(r).not.toMatch(/^it would walk the rook/);
-    expect(r).toMatch(/^the idea is to walk the rook round to c4/);
+    expect(r).toMatch(/^the idea is to walk the rook on a1 round to c4/);
   });
 });
 

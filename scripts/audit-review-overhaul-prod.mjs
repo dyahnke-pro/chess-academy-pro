@@ -811,6 +811,16 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       .click({ timeout: 1500 }).catch(() => undefined);
     await page.waitForTimeout(1000);
   }
+  // The app's own reason a flagged ply carried no fundamental (null = none).
+  const declinedWhy = (ply) => {
+    for (const e of events()) {
+      if (String(e.source ?? '') !== 'coachFeatureService.reviewFundamentalDeclined') continue;
+      let d = {};
+      try { d = JSON.parse(String(e.details ?? '{}')); } catch { d = {}; }
+      if (Number(d.ply) === ply && Array.isArray(d.why) && d.why.length > 0) return d.why[0];
+    }
+    return null;
+  };
   await resolveCards();
   await until(() => spoken().some((s) => RECAP_RE.test(s.text)), 60000, 1000);
   const recap = spoken().find((s) => RECAP_RE.test(s.text));
@@ -832,8 +842,16 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
         ? `nothing to aggregate — the ENGINE RECORD confirms 0 flagged student plies, so silence is the correct recap (end reached=${reachedEnd})`
         : `the engine record carries ${dbFlagged.n} flagged student ply(s) (${dbFlagged.at.join(', ')}) and the walk recorded NONE — the walk stopped seeing them (end reached=${reachedEnd})`);
   } else {
-    await add('RECAP fundamentals-aggregate', reachedEnd && !!recap, recap ? `"${recap.text.slice(0, 140)}"`
-      : `end reached=${reachedEnd}; ${flaggedLeads.size} flagged ply(s) but no aggregate line spoken`);
+    // An aggregate needs a fundamental to aggregate. When NO flagged ply led
+    // with one and the app NAMED why for every one (the attributor's own
+    // gates — reviewFundamentalDeclined), silence is the computed recap, not a
+    // dropped one (clean-pass review walk 2026-10-04, G2: three inaccuracies,
+    // each declined with a named calculation-depth reason).
+    const allDeclinedNamed = [...flaggedLeads.entries()].every(([p, v]) => !FUND_RE.test(v.lead) && declinedWhy(Number(p)));
+    await add('RECAP fundamentals-aggregate', reachedEnd && (!!recap || allDeclinedNamed), recap ? `"${recap.text.slice(0, 140)}"`
+      : allDeclinedNamed
+        ? `no flagged ply carried a fundamental and each decline is named by the app — nothing to aggregate (end reached=${reachedEnd})`
+        : `end reached=${reachedEnd}; ${flaggedLeads.size} flagged ply(s) but no aggregate line spoken`);
   }
 
   // THESIS (unified-coach N1): THE ONE SELECTOR's game-level thesis is STATED
@@ -1090,8 +1108,12 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
         ? 'n/a — the ENGINE RECORD confirms 0 flagged student plies in this game, so there is nothing to lead with (not a product result)'
         : `the engine record carries ${dbFlagged.n} flagged student ply(s) (${dbFlagged.at.join(', ')}) and the walk surfaced NONE — the walk stopped seeing them`);
   } else {
-    await add('FUNDLEAD flagged-student-plies-lead-with-fundamentals', withFund.length > 0,
-      `${withFund.length}/${leads.length} flagged student plies lead with a fundamental — ${leads.map(([p, v]) => `ply ${p} ${v.badge}: "${v.lead.slice(0, 60)}"`).join(' | ')}`);
+    // Every flagged ply either LEADS with a fundamental or the app NAMED why
+    // none attached — "at least one" punished a game whose flagged moves were
+    // all honest declines (clean-pass review walk 2026-10-04, G2).
+    const unexplained = leads.filter(([p, v]) => !FUND_RE.test(v.lead) && !declinedWhy(Number(p)));
+    await add('FUNDLEAD flagged-student-plies-lead-with-fundamentals', unexplained.length === 0,
+      `${withFund.length}/${leads.length} flagged student plies lead with a fundamental, ${leads.length - withFund.length - unexplained.length} declined with a named cause, ${unexplained.length} unexplained — ${leads.map(([p, v]) => `ply ${p} ${v.badge}: "${v.lead.slice(0, 60)}"`).join(' | ')}`);
   }
 
   // ── FUNDWHY — THE ASSERT HALF OF THE DIAGNOSIS (2026-09-21) ─────────────

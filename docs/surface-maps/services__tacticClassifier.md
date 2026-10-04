@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**813 lines · 3 exports · 15 importers · 5 tests · 0 audits**
+**819 lines · 3 exports · 16 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,6 +15,7 @@
 - `src/components/Coach/CoachGamePage.tsx`
 - `src/services/coachGameEngine.ts`
 - `src/services/deliberation.ts`
+- `src/services/hangingIgnoresCheck.test.ts`
 - `src/services/liveTacticsContext.ts`
 - `src/services/missedTacticService.ts`
 - `src/services/moveReason.ts`
@@ -30,23 +31,25 @@
 
 ## Exports and every call site
 
-### `findHangingPieces` (function) — 11 call sites
+### `findHangingPieces` (function) — 13 call sites
 - `src/data/patternRegistry.ts:113`
 - `src/services/coachGameEngine.ts:298`
 - `src/services/deliberation.ts:122`
+- `src/services/hangingIgnoresCheck.test.ts:10`
+- `src/services/hangingIgnoresCheck.test.ts:11`
 - `src/services/liveTacticsContext.ts:378`
 - `src/services/moveReason.ts:133`
-- `src/services/playedMoveGrade.ts:95`
+- `src/services/playedMoveGrade.ts:132`
 - `src/services/searchDepth.ts:69`
-- `src/services/tacticsDetector.ts:814`
+- `src/services/tacticsDetector.ts:820`
 - `src/services/threatCheck.ts:55`
-- `src/services/threatOut.ts:79`
-- `src/test/kingIsNeverHanging.test.ts:53`
+- `src/services/threatOut.ts:92`
+- `src/test/kingIsNeverHanging.test.ts:56`
 
 ### `classifyPosition` (function) — 30 call sites
 - `src/components/Coach/CoachGamePage.tsx:3347`
 - `src/services/missedTacticService.ts:755`
-- `src/services/pvPlayback.ts:384`
+- `src/services/pvPlayback.ts:407`
 - `src/services/tacticClassifier.test.ts:32`
 - `src/services/tacticClassifier.test.ts:40`
 - `src/services/tacticClassifier.test.ts:47`
@@ -84,6 +87,7 @@
 
 ## Tests
 
+- `src/services/hangingIgnoresCheck.test.ts`
 - `src/services/tacticClassifier.skewer.test.ts`
 - `src/services/tacticClassifier.test.ts`
 - `src/services/tacticClassifierService.fill.test.ts`

@@ -989,7 +989,7 @@ const DETECTORS: Detector[] = [
     }
     if (!wins && c.afterBest.isCheckmate()) wins = true;
     if (!wins) return null;
-    return att('passive-when-forcing-existed', 3, { squares: [best.to], moves: [best.san], pvMoves: pvHas(c.pvB, () => true, 2) }, { better: best.san });
+    return att('passive-when-forcing-existed', 3, { squares: [best.to], moves: [best.san], pvMoves: pvHas(c.pvB, () => true, 2) }, { better: best.san, gain: c.afterBest.isCheckmate() ? 'mate' : 'material' });
   },
   // 16. Weakened king shield — a shield pawn moved without need, and the
   // opponent has a sound check or a piece that can land next to the king.
@@ -1000,7 +1000,14 @@ const DETECTORS: Detector[] = [
     if (!k || kingOnHome(c.before, mover)) return null;
     if (Math.abs(fileIdx(last.from) - fileIdx(k)) > 1 || relRank(last.from, mover) > 3) return null;
     if (best.piece === 'p' && Math.abs(fileIdx(best.from) - fileIdx(k)) <= 1) return null;
-    const punish = legalMovesFor(c.after, opp).find((m) => m.san.includes('+') && landsSafely(c.after, m));
+    // THE CHECK THE PAWN MOVE OPENED, never one that was already there
+    // (review walk 2026-10-04, 37.h3: "this one opens a line, and Qa1+ uses
+    // it" — Qa1+ was on the board before h3, and h3 gave the king h2 against
+    // it). Compared against the board before the move, them to move; the
+    // best-move board cannot answer this, since there they may be in check.
+    const asIfBefore = withTurn(c.before, opp);
+    const already = new Set(asIfBefore ? asIfBefore.moves({ verbose: true }).filter((m) => m.san.includes('+') && landsSafely(asIfBefore, m)).map((m) => `${m.from}${m.to}`) : []);
+    const punish = legalMovesFor(c.after, opp).find((m) => m.san.includes('+') && landsSafely(c.after, m) && !already.has(`${m.from}${m.to}`));
     if (!punish) return null;
     if (legalMovesFor(c.afterBest, opp).some((m) => m.san === punish.san && landsSafely(c.afterBest, m))) return null;
     return att('weakened-king-shield', 2, { squares: [last.from, k], moves: [punish.san], pvMoves: pvHas(c.pvP, (s) => s === punish.san) }, { pawn: last.from, king: k, punish: punish.san });
@@ -1052,7 +1059,17 @@ const DETECTORS: Detector[] = [
     const theirMob = pieceMobility(c.before, last.to, opp);
     const activeForPassive = myMob >= theirMob + 4;
     if (!gavePair && !activeForPassive) return null;
-    return att('traded-active-for-passive', 1, { squares: [last.from, last.to], moves: [], pvMoves: [] }, { piece: PNAME[last.piece], kind: gavePair ? 'bishop pair' : 'activity' });
+    // A TRADE needs the take-back: with the engine line in hand, its first
+    // reply must capture on that square; without one, something must at least
+    // be able to (a piece nobody takes back is a piece won, not a trade).
+    const retakes = c.pvP?.length
+      ? (() => { try { const m = new Chess(c.after.fen()).move(c.pvP[0]); return !!m.captured && m.to === last.to; } catch { return false; } })()
+      : c.after.attackers(last.to, opp).length > 0;
+    if (!retakes) return null;
+    // `taken` names THEIR piece: the stem used to say "their passive one",
+    // which repeats the student's piece type ("your active bishop for their
+    // passive one" of a bishop that took a KNIGHT — clean-pass walk G1 ply 45).
+    return att('traded-active-for-passive', 1, { squares: [last.from, last.to], moves: [], pvMoves: [] }, { piece: PNAME[last.piece], taken: PNAME[last.captured], kind: gavePair ? 'bishop pair' : 'activity' });
   },
   // 20. Wrong trade for the material situation — ahead: trade pieces; behind:
   // keep pieces (trade pawns). The best move does the opposite of the played.
