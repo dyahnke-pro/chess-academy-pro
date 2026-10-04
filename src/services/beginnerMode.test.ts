@@ -21,7 +21,7 @@ describe('isBeginnerMode — what they said, until their games say otherwise', (
 });
 
 describe('Up next — the Start-here path leads for a beginner', () => {
-  const base: UpNextInput = { reps: [], latestGameSlip: null, grownPuzzle: null, freeOpeningOpen: false, coldStart: true, startSteps: [] };
+  const base: UpNextInput = { reps: [], latestGameSlip: null, grownPuzzle: null, freeOpeningOpen: false, coldStart: true, startSteps: [], thinking: null };
 
   it('the next undone step comes first, ahead of a cold-start Deep Run', () => {
     const r = rankUpNext({ ...base, startSteps: [...START_STEPS] });
