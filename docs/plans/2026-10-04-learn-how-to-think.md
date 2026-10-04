@@ -184,6 +184,30 @@ celebrates via the reward layer).
   driven by typing AND by voice, fails on any unanswered, off-topic or
   board-false reply.
 
+**A2. THE ROUTE OF EVERY QUESTION — the ONE-CHAT parser (approved by David 2026-09-29; confirmed for lessons 2026-10-04).**
+Phrasing varies endlessly, so the LLM READS the question and code ANSWERS it
+(`docs/plans/2026-09-29-ONE-CHAT.md`):
+- typed or spoken (mic transcript), every lesson question goes through the parser:
+  the LLM (`callDeepseekWithTool`, forced structured output) fills a CLOSED,
+  validated schema — the question kind, the referent (piece / square / move,
+  "what I played", "the other knight"), the seat — and never decides chess;
+- validation checks the referents against the board (the piece is there, the move
+  is legal); a reading that fails is not answered from guesswork: the coach asks a
+  one-line clarifying question;
+- the answer is computed by the lesson's own computers (A), then phrased through
+  `voiceFacts`;
+- lesson question kinds are ADDED to the ChatTurn schema, not a second parser:
+  why-is-it-a-target, count-attackers / defenders, what-about-<piece>,
+  compare-my-move (what I played vs the better move), what-did-their-move-change,
+  is-<piece>-loose, what-should-I-play, I-don't-know;
+- the fast regex path runs alongside (no added latency on a hit); shadow first,
+  switched on measured accuracy (≥95% on real questions + held-out phrasings).
+Status 2026-10-04: ONE-CHAT is approved and NOT built — only the translation seam
+uses the LLM today; questions route through ~55 regex detectors. The 2026-10-04
+walk shows the cost: "why is that move better than what I played?" matched the
+best-move regex and dropped "what I played". **The lesson build therefore builds
+the parser's lesson slice first** (or lands on ONE-CHAT if it ships first).
+
 **B. The microphone works — real spoken dialogue.**
 - Learn's chat input already has a mic (`voiceInputService` via `ChatInput`:
   continuous listening, live transcript, barge-in that cuts the coach off). Verify
