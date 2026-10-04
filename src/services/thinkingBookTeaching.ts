@@ -57,6 +57,6 @@ export function sourceStillThere(idea: BookIdea, book: LibraryBook | undefined):
 }
 
 /** The coach's teaching line for a step, or null when the books are silent. */
-export async function bookTeachingFor(step: ThinkingStep): Promise<string | null> {
-  return THINKING_BOOK[step]?.teach ?? null;
+export function bookTeachingFor(step: ThinkingStep): Promise<string | null> {
+  return Promise.resolve(THINKING_BOOK[step]?.teach ?? null);
 }

@@ -2488,7 +2488,8 @@ export function CoachTeachPage(): JSX.Element {
       const hit = availability.get(s);
       if (hit !== undefined) return hit;
       const k = s.kit();
-      const pool = k.adapt ? candidates.map((c) => k.adapt!(c)).filter((c): c is LessonPositionCandidate => !!c) : candidates;
+      const adapt = k.adapt;
+      const pool = adapt ? candidates.map((c) => adapt(c)).filter((c): c is LessonPositionCandidate => !!c) : candidates;
       const ok = pickFairPosition(pool, k.keyFor, seenFor(memory, k.step)) !== null;
       availability.set(s, ok);
       return ok;
@@ -2662,11 +2663,11 @@ export function CoachTeachPage(): JSX.Element {
     // weakness pattern (P-III.3 — "drill it" on a named weakness cluster).
     const queue = await buildMistakeDrillQueue({ cementReps: 1, rating: activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING, gameId, motif, exclude: solvedDrillKeysRef.current });
     if (queue.length === 0 && gameId) {
-      coachDrillSay("That game had no blunders or mistakes to drill — a clean one by the analysis.");
+      void coachDrillSay("That game had no blunders or mistakes to drill — a clean one by the analysis.");
       return true;
     }
     if (queue.length === 0 && motif) {
-      coachDrillSay("Nothing to drill in that pattern right now — you've cleared what I had saved for it.");
+      void coachDrillSay("Nothing to drill in that pattern right now — you've cleared what I had saved for it.");
       return true;
     }
     if (queue.length > 0) {
@@ -2698,7 +2699,7 @@ export function CoachTeachPage(): JSX.Element {
     //  - no uploaded games at all → fall back to a DB tactic (return false
     //    so the caller picks one).
     if (await hasImportedGames()) {
-      coachDrillSay(
+      void coachDrillSay(
         "You're all caught up — no mistakes are due to review today. The spaced-repetition tool will bring them back when it's time. Want a fresh tactic instead? Just say “drill tactics.”",
       );
       return true;
@@ -2770,7 +2771,7 @@ export function CoachTeachPage(): JSX.Element {
     const total = lesson.parts.length;
     customLessonRef.current = null;
     void syncCoachCurriculum();
-    coachDrillSay(customLessonOutro(total));
+    void coachDrillSay(customLessonOutro(total));
     captureEvent('custom_lesson_completed', { surface: 'coach-teach', parts: total });
   }, [runCustomLessonPart, coachDrillSay]);
   advanceCustomLessonRef.current = advanceCustomLesson;
@@ -2799,7 +2800,7 @@ export function CoachTeachPage(): JSX.Element {
     }
     customLessonRef.current = { parts, idx: 0 };
     captureEvent('custom_lesson_started', { surface: 'coach-teach', parts: parts.length, entry });
-    coachDrillSay(customLessonIntro(parts));
+    void coachDrillSay(customLessonIntro(parts));
     await runCustomLessonPart(0);
   }, [walkthrough, coachDrillSay, runCustomLessonPart, startThinkingLesson]);
 
@@ -2828,7 +2829,7 @@ export function CoachTeachPage(): JSX.Element {
         solutionSan: solved.drill.solutionSan,
         themes: solved.drill.themes,
       });
-      coachDrillSay(concept
+      void coachDrillSay(concept
         ? `${concept.spoken} Say “drill” again for another.`
         : 'Solved — nice. Say “drill” again for another.');
       return;
@@ -2840,7 +2841,7 @@ export function CoachTeachPage(): JSX.Element {
       // next part (teach + drill), or close the lesson. advanceCustomLesson owns
       // the arc sync + the closing beat, so return before the generic ending.
       if (customLessonRef.current) {
-        coachDrillSay(adv.completedLabel ? `${solvedBeat} That's ${adv.completedLabel} drilled shut for today.` : solvedBeat);
+        void coachDrillSay(adv.completedLabel ? `${solvedBeat} That's ${adv.completedLabel} drilled shut for today.` : solvedBeat);
         advanceCustomLessonRef.current?.();
         return;
       }
@@ -2865,16 +2866,16 @@ export function CoachTeachPage(): JSX.Element {
       const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
       const freshRep = theme ? pickCoachDrill(`puzzle:${theme}`, { rating }) : null;
       if (freshRep) {
-        coachDrillSay(`${shutMsg} Let's cement it with a fresh one.`);
+        void coachDrillSay(`${shutMsg} Let's cement it with a fresh one.`);
         startCoachDrill(freshRep);
       } else {
-        coachDrillSay(`${shutMsg} Keep solving them right over a few days and they'll test out for good.`);
+        void coachDrillSay(`${shutMsg} Keep solving them right over a few days and they'll test out for good.`);
       }
       return;
     }
     if (!adv.next) { activeDrillRef.current = null; return; }
     loadDrillOntoBoard(adv.next.drill, adv.next.progress);
-    coachDrillSay(
+    void coachDrillSay(
       adv.themeCompleted
         ? `${solvedBeat} ${adv.completedLabel} drilled shut for today. On to ${adv.nextLabel}. ${adv.next.drill.prompt}`
         : `${solvedBeat} ${adv.next.drill.prompt}`,
@@ -2972,7 +2973,7 @@ export function CoachTeachPage(): JSX.Element {
         completeDrill(cur);
       } else {
         activeDrillRef.current = { ...cur, step: afterOppStep };
-        coachDrillSay(drillContinueBeat(oppReply, fenBeforeReply));
+        void coachDrillSay(drillContinueBeat(oppReply, fenBeforeReply));
       }
     }, 650);
     return true;
@@ -11910,7 +11911,7 @@ export function CoachTeachPage(): JSX.Element {
       // to be silent. Computed from the drill's own solution.
       const cur = activeDrillRef.current;
       const beat = drillHintBeat(fen, cur.drill.solutionSan[cur.step] ?? '');
-      if (beat) coachDrillSay(beat);
+      if (beat) void coachDrillSay(beat);
     }
     setHintBusy(true);
     try {

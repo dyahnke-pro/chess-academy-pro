@@ -5,12 +5,12 @@ import type { ThinkingStep } from './thinkingSteps';
 
 describe('thinking lessons teach the books\' ideas, grounded by page id', () => {
   for (const [step, idea] of Object.entries(THINKING_BOOK)) {
-    it(`${step}: its source sentence is still on ${idea!.source.bookId} ${idea!.source.pageId}`, () => {
-      expect(sourceStillThere(idea!, getLibraryBook(idea!.source.bookId))).toBe(true);
+    it(`${step}: its source sentence is still on ${idea.source.bookId} ${idea.source.pageId}`, () => {
+      expect(sourceStillThere(idea, getLibraryBook(idea.source.bookId))).toBe(true);
     });
     it(`${step}: the coach says it in its own words, not as a quote`, () => {
-      expect(idea!.teach).not.toMatch(/[“"]/);
-      expect(idea!.teach).not.toMatch(/Lasker|Capablanca|Nimzowitsch/);
+      expect(idea.teach).not.toMatch(/[“"]/);
+      expect(idea.teach).not.toMatch(/Lasker|Capablanca|Nimzowitsch/);
     });
   }
 

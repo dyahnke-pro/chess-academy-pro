@@ -27,7 +27,7 @@ const OLD_COACH_TAG_HABIT: Record<MisconceptionTagId, MethodHabit | null> = {
 describe('re-keying COACH_TAG_HABIT through ThinkingStep changes no habit', () => {
   it('every misconception tag gets the same habit as before', () => {
     for (const t of MISCONCEPTION_TAGS) {
-      const id = t.id as MisconceptionTagId;
+      const id = t.id;
       expect(habitForTag(id), id).toBe(OLD_COACH_TAG_HABIT[id]);
       expect(habitForCluster(id), id).toBe(OLD_COACH_TAG_HABIT[id]);
     }

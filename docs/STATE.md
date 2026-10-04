@@ -12,14 +12,14 @@
 
 - **23** modules record a MISS.
 - **12** record a HOLD (`capabilityEvidence`).
-- **6** read the capability profile back.
+- **9** read the capability profile back.
 
 Green has a reader — the heat map can lower as well as raise.
 
 ## MODEL — is the student model fed the adaptive rating?
 
 - **3** files read `getPlayerRating` (the adaptive estimate).
-- **43** read `currentRating` off the store directly.
+- **42** read `currentRating` off the store directly.
 - **0** inline `?? 1200` fallbacks.
 
 The locked rule is that a surface does not PICK a rating; it reads the one
@@ -45,8 +45,8 @@ fact-computer count (which excludes infrastructure) lives in
 `surfaceComposition.scan.test.ts`, and duplicating its INFRA list here would be
 exactly the drifting-constant the rot rule bans.
 
-- **CoachTeachPage.tsx**: 103
-- **CoachGamePage.tsx**: 47
+- **CoachTeachPage.tsx**: 114
+- **CoachGamePage.tsx**: 48
 - **CoachGameReview.tsx**: 43
 
 Each surface composing its own producer is the tax on the ONE mechanism the app
