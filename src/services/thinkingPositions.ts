@@ -35,6 +35,9 @@ export interface LessonPositionCandidate {
   beforeFen?: string;
   /** A real solution line from this board, in SAN (puzzles). */
   line?: string[];
+  /** The engine's top moves on this board with what each costs the side to
+   *  move against the best (computed by a step's `enrich`, never authored). */
+  topMoves?: Array<{ san: string; cpLoss: number }>;
 }
 
 /** What a step computer says about one position. */

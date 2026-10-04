@@ -2472,7 +2472,7 @@ export function CoachTeachPage(): JSX.Element {
     // THE LESSON GAME (plan P5): a step answered on a plain board (no adapt —
     // a step that needs the played move or a line has no live-game reading)
     // can be practised in a real game straight after.
-    if (!kit.adapt) {
+    if (!kit.adapt && !kit.enrich) {
       lastLessonKitRef.current = kit;
       setCoachChoices([LESSON_GAME_CHIP]);
     }

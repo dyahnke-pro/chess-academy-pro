@@ -191,7 +191,7 @@ async function main() {
     await page.locator('[data-testid="thinking-lesson-stop"]').click({ force: true }).catch(() => {});
     const chip = page.getByRole('button', { name: 'Play a game on this' });
     const offered = await chip.first().waitFor({ state: 'visible', timeout: 15_000 }).then(() => true).catch(() => false);
-    if (/their-move-changed|is-my-move-safe|calculate/.test(stepNow ?? '')) {
+    if (/their-move-changed|is-my-move-safe|calculate|candidates/.test(stepNow ?? '')) {
       record('L10. the lesson game', true, `n/a — step ${stepNow} needs a played move or a line, so no live-game version (offered=${offered})`);
     } else {
       let started = false;

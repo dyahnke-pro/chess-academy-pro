@@ -34,6 +34,10 @@ export interface StepKit {
   /** Optional: turn a candidate into this step's board (e.g. play the move
    *  the student actually chose); null drops it. */
   adapt?: (c: LessonPositionCandidate) => LessonPositionCandidate | null;
+  /** Optional: a fact this step needs that only the engine can give (the top
+   *  moves for "candidates"), computed once per board before the lesson. A
+   *  board that cannot be enriched returns null and is dropped. */
+  enrich?: (c: LessonPositionCandidate) => Promise<LessonPositionCandidate | null>;
   /** Optional: the book's own words on this habit (verbatim public-domain
    *  passage, fetched by id) — read once, after the worked example. */
   book?: () => Promise<string | null>;

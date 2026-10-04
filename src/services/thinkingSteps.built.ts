@@ -15,6 +15,7 @@ import { theirMoveKit } from './thinkingTheirMoveStep';
 import { answerDangerKit } from './thinkingAnswerDangerStep';
 import { bookTeachingFor } from './thinkingBookTeaching';
 import { calculateKit } from './thinkingCalculateStep';
+import { candidatesKit } from './thinkingCandidatesStep';
 
 /** The app's one loose-piece computer, in the shape the targets kit takes. */
 const looseSquares: LooseSquares = (fen, color) => findLoosePieces(fen, color).map((p) => p.square);
@@ -27,6 +28,7 @@ export const STEP_KITS: Partial<Record<ThinkingStep, () => StepKit>> = {
   'their-targets': () => targetsKit(looseSquares),
   'forcing-moves': forcingKit,
   'hit-two': hitTwoKit,
+  candidates: candidatesKit,
   calculate: calculateKit,
   'is-my-move-safe': moveSafetyKit,
 };

@@ -18,7 +18,7 @@ import { recordThinkingAnswer, standingFromProfile } from './thinkingLessonRecor
 import { BUILT_THINKING_STEPS, tagsForThinkingStep } from './thinkingSteps.built';
 import { loadLessonCandidates, type LessonUsernames } from './thinkingLessonSource';
 import { getThinkingLessonMemory, rememberLessonBoard, seenFor } from './thinkingLessonMemory';
-import { pickFairPosition, type LessonPositionCandidate } from './thinkingPositions';
+import { boardIdentity, pickFairPosition, type LessonPositionCandidate } from './thinkingPositions';
 import { finishBite } from './activeBite';
 import { reward } from './rewardService';
 import { logAppAudit } from './appAuditor';
@@ -59,13 +59,51 @@ export async function planThinkingLesson(opts: { usernames: LessonUsernames; rat
     const k = s.kit();
     const adapt = k.adapt;
     const pool = adapt ? candidates.map((c) => adapt(c)).filter((c): c is LessonPositionCandidate => !!c) : candidates;
-    const ok = pickFairPosition(pool, k.keyFor, seenFor(memory, k.step)) !== null;
+    const seen = seenFor(memory, k.step);
+    // An engine-keyed step is judged after enrichment (below): here it only
+    // needs a board it has not used.
+    const ok = k.enrich
+      ? pool.some((c) => !seen.has(boardIdentity(c.fen)))
+      : pickFairPosition(pool, k.keyFor, seen) !== null;
     availability.set(s, ok);
     return ok;
   };
-  const choice = chooseThinkingStep(BUILT_THINKING_STEPS, (s) => standingFromProfile(profile, s.tags), available);
-  if (!choice) return null;
-  return { kit: choice.step.kit(), reason: choice.reason, openTier: choice.openTier, candidates, available };
+  // A step whose key needs the engine (`enrich`) cannot be judged available
+  // up front: it counts as available while it has boards to try, and if none
+  // of them enriches into a fair question it is ruled out and the choice is
+  // made again.
+  for (;;) {
+    const choice = chooseThinkingStep(BUILT_THINKING_STEPS, (s) => standingFromProfile(profile, s.tags), available);
+    if (!choice) return null;
+    const kit = choice.step.kit();
+    if (!kit.enrich) return { kit, reason: choice.reason, openTier: choice.openTier, candidates, available };
+    const enriched = await enrichForLesson(kit, candidates, seenFor(memory, kit.step));
+    if (enriched.length > 0) {
+      return { kit, reason: choice.reason, openTier: choice.openTier, candidates: enriched, available };
+    }
+    availability.set(choice.step, false);
+  }
+}
+
+/** Boards a lesson asks on: one Show, two Guide, one Solo. Enrichment stops
+ *  once it has that many fair boards (the size of the exercise, not a cap on
+ *  what the student hears). */
+const LESSON_BOARDS = 4;
+
+export async function enrichForLesson(
+  kit: StepKit,
+  candidates: readonly LessonPositionCandidate[],
+  seen: ReadonlySet<string>,
+): Promise<LessonPositionCandidate[]> {
+  if (!kit.enrich) return [...candidates];
+  const out: LessonPositionCandidate[] = [];
+  for (const c of candidates) {
+    if (out.length >= LESSON_BOARDS) break;
+    if (seen.has(boardIdentity(c.fen))) continue;   // already used for this step
+    const e = await kit.enrich(c);
+    if (e && kit.keyFor(e.fen, e)) out.push(e);
+  }
+  return out;
 }
 
 /** The boards and memory a session needs for one step. */
