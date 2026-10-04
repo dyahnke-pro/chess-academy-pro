@@ -67,6 +67,46 @@ safe → their targets → is my move safe. The rest unlock as those turn green 
 the heat map. The ORDER never changes; the student sees more of it as they prove
 each part.
 
+### Unlocking — the tiers and the rules
+
+The ten steps never change order. What grows is how many of them the lesson plan
+SERVES. A tier unlocks by PROOF on the student's own record, never by rating
+(Foundation: the rating decides strength, never how much the coach teaches).
+
+| Tier | Steps it adds | Why these first |
+|---|---|---|
+| **1 · See the board** | 2 what their move changed · 3 am I safe · 5 their targets · 10 is my move safe | The four habits that stop most lost games: blunders against you, and gifts you miss. |
+| **2 · Force it** | 4 answer the danger · 6 my forcing moves | Once you see, act: meet threats, list checks / captures / threats. |
+| **3 · Combine and calculate** | 7 hit two at once · 9 calculate to the end | Turning targets into a won line and checking where it stops. |
+| **4 · Think like a player** | 1 assess (and the plan, when the mode is "improve") · 8 candidates (obvious vs killer) | Choosing between good moves and knowing what kind of position it is. |
+
+**The rules:**
+1. **Unlock = every step of the current tier PROVEN.** Proven uses the ONE bar the
+   heat map already uses (`capabilityProven`: unprompted holds at real
+   importance), counted on the step's existing tags. No second bar.
+2. **Placement on the first visit.** A short Solo check, one position per tier-1
+   step. Steps the student solves cleanly are proven on the spot, so a strong
+   player clears tier 1 in minutes and is never held back. No record ≠ beginner:
+   grey teaches, but it does not lock out a player who shows they can.
+3. **Lessons serve the lowest unproven step first,** within the unlocked tiers,
+   led by the weakness spine (a red step from their games jumps the queue).
+4. **Proven steps come back as review** (spaced, rare) so they stay green.
+5. **Re-lock by evidence.** A proven step that goes red in the student's games
+   (curriculum demotion mastered → queued, `weaknessLifecycle` worsening) returns
+   to the front, escalated. Higher tiers stay open; the coach goes back to fix it.
+6. **Nothing is ever hidden on request.** A student who asks for a locked step
+   ("teach me to calculate") gets that lesson; tiers order the PLAN, they do not
+   gate the coach. The live coach and review use all ten steps whenever the board
+   calls for one.
+7. **Beginner mode** (`isBeginnerMode`) only picks quieter positions in tier 1. It
+   never shortens the plan or the teaching.
+8. **The unlock is a reward moment:** a tier opening fires the reward layer and
+   the coach names what is next ("You see the board. Now: forcing moves.").
+   Emitted as `thinking-tier-unlocked` with the proof that opened it (algo audit rule).
+
+**Answered (David 2026-10-04, "Yes"):** the "one more" pause is ~8 s; Show is
+skipped for a step already green; P1 builds step 5 (their targets) first.
+
 **Step 8 position rule — an obvious good move AND a subtler, better one (David).**
 A position is used for Candidates only when BOTH exist:
 - *Obvious good move:* forcing (check / capture) or the natural move, and genuinely
