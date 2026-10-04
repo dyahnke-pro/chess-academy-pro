@@ -58,7 +58,7 @@ import { voiceFacts } from './coachApi';
 // LLM call (those are deterministic via `buildReviewSegments`).
 import { logAppAudit } from './appAuditor';
 import { whyItFailed } from './whyItFailed';
-import { betterMoveReason, priorMoveLeadingTo } from './inaccuracyCall';
+import { betterMoveReason, priorMoveLeadingTo, toStudentSeat } from './inaccuracyCall';
 import { attributePrinciples, pvUciToSan, type PrincipleAttribution } from './principleAttribution';
 import { buildCausalChain, causalChainArrows, causalChainMistakeTags, findMissedChain, findAllowedChain } from './causalChain';
 import { renderCausalChain } from './causalChainVoice';
@@ -3882,6 +3882,10 @@ async function augmentWithProjections(
         x.evalBefore !== null && x.evalAfter !== null ? Math.abs(x.evalBefore - x.evalAfter) : 0;
       return swing(b) - swing(a);
     });
+  const flaggedOpponent = segments
+    .filter((s) => s.playerColor !== studentColorName
+      && (s.classification === 'inaccuracy' || s.classification === 'mistake' || s.classification === 'blunder')
+      && !!s.bestMoveUci && !!s.bestMoveSan && !!s.verdictReason);
   const betterDone = deferred<Map<ReviewMoveSegment, { line: PvLine | null; why: string | null }>>();
   const confirmDone = deferred<Map<ReviewMoveSegment, PvLine | null>>();
   const badPieceDone = {
@@ -3916,6 +3920,18 @@ async function augmentWithProjections(
           why = cmp && cmp.better === 'B' && cmp.delta && cmp.delta.kind !== 'none' ? cmp.delta.text : null;
         }
         better.set(s, { line, why });
+      }
+      // THE OPPONENT'S FLAGGED MOVES TOO (clean-pass review walk 2026-10-04,
+      // G2 30.Nh5 "Nd5 — it would win a pawn", G3 24.Nh4 "g3 — create a passed
+      // pawn on g7"): their verdict's reason was read off the pre-dive line as
+      // well. One ply, one line — re-read it off a fresh line of its own.
+      for (const s of flaggedOpponent) {
+        const line = await raceTimeout(
+          computePvLine(s.fenBefore, { firstUci: s.bestMoveUci as string, maxPlies: 6 }),
+          PROJ_TIMEOUT_MS,
+          null,
+        ).catch(() => null);
+        better.set(s, { line, why: null });
       }
     } finally { betterDone.resolve(better); }
     // #4b the engine's verdict on each static threat.
@@ -4020,6 +4036,16 @@ async function augmentWithProjections(
         s.narration = `${s.narration ?? ''} ${line.plies[0].san} first was the preventive move — it takes away their ${t}, and that is exactly the reply that punishes this.`.trim();
       }
     }
+  }
+  for (const s of flaggedOpponent) {
+    const line = better.get(s)?.line ?? null;
+    if (!line || line.plies.length < 3 || !s.verdictReason || !s.narration) continue;
+    const fresh = betterMoveReason(s.fenBefore, s.san, line.plies[0].san, line.plies.map((p) => p.uci), s.playerColor,
+      priorMoveLeadingTo(segments[segments.indexOf(s) - 1] ? { fenBefore: segments[segments.indexOf(s) - 1].fenBefore, san: segments[segments.indexOf(s) - 1].san } : null, s.fenBefore),
+      moverGaveUpMate(s.evalBefore, s.evalAfter, s.playerColor));
+    // Their idea, said to the student — the same seating the verdict used.
+    const seated = fresh ? seatPieceReferences(toStudentSeat(fresh), s.fenBefore, studentColorWB) : null;
+    s.narration = replaceVerdictReason(s.narration, s.verdictReason, seated);
   }
   mark('better');
 
