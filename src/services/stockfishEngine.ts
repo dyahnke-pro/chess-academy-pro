@@ -1606,6 +1606,13 @@ class StockfishEngine {
           if (!('Skill Level' in opts)) {
             this.send('setoption name Skill Level value 20');
           }
+          // The SAME normalization for the Elo cap (2026-10-04): the adaptive
+          // opponent's depth-search fallback now arms `UCI_LimitStrength`, and
+          // an option left armed on the singleton would cap every later
+          // full-strength analysis (eval bar, hints, punishment detector).
+          if (!('UCI_LimitStrength' in opts)) {
+            this.send('setoption name UCI_LimitStrength value false');
+          }
           for (const [key, value] of Object.entries(opts)) {
             // `searchmoves` is a GO argument, not an engine option: it limits
             // THIS search to the listed moves (MoveScorer).

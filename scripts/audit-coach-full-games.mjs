@@ -586,6 +586,12 @@ async function main() {
     }).catch(() => -1);
 
     const voiceEvents = entries.filter((e) => e.kind === 'coach-narration-spoken' || e.kind === 'voice-speak-invoked').length;
+    // ONE ENGINE STRENGTH (P0b, 2026-10-04): one structured row per opponent
+    // move (`engineStrength` → appAuditor), read off THIS game's window.
+    const opponentStrength = entries
+      .filter((e) => e.kind === 'coach-opponent-strength' && (e.timestamp ?? 0) >= gameStartTs)
+      .map((e) => { try { return JSON.parse(e.details ?? ''); } catch { return null; } })
+      .filter(Boolean);
     const gameErrors = pageErrors.slice(errsBefore);
     const gameConsole = consoleErrors.slice(consBefore).filter((t) => !isNoise(t));
 
@@ -594,6 +600,7 @@ async function main() {
       opening: openingName, review, coachGamesInDb: persisted,
       blunderInterceptions: blunderCards - blundersBefore,
       voiceEventsSoFar: voiceEvents,
+      opponentStrength,
       pageErrors: gameErrors, consoleErrors: gameConsole,
     };
     results.push(rec);
@@ -613,6 +620,22 @@ async function main() {
     for (const e of r.pageErrors ?? []) failures.push(`${r.tag}: pageerror: ${e}`);
     for (const e of r.consoleErrors ?? []) failures.push(`${r.tag}: console.error: ${e}`);
   }
+  // ── ONE ENGINE STRENGTH contract (algo audit, P0b 2026-10-04) ──────────
+  // Every sparring opponent reads THE SAME NUMBER: the student's live strength
+  // plus the one offset table (Easier −200 / Matched 0 / Harder +200) on the
+  // one floor (400). The rows must exist at all — a zero is a dead wire, not a
+  // pass — and Play must be declared `spar`, never full-strength.
+  const OFFSET = { easy: -200, medium: 0, hard: 200, auto: 0 };
+  const strengthRows = completed.flatMap((r) => r.opponentStrength ?? []);
+  const strengthBreaches = strengthRows.filter((row) =>
+    row.purpose === 'demo'
+      ? row.target !== null
+      : row.offset !== OFFSET[row.difficulty] || row.target !== Math.max(400, Math.round(row.studentElo + row.offset)));
+  const playNotSpar = strengthRows.filter((row) => row.surface === 'play' && row.purpose !== 'spar');
+  console.log(`[full-games] ONE ENGINE STRENGTH every sparring opponent reads the one number: ${strengthRows.length} rows, ${strengthBreaches.length} breaches, ${playNotSpar.length} play rows not spar`);
+  if (strengthRows.length === 0) failures.push('ONE ENGINE STRENGTH: no coach-opponent-strength rows — the opponent emission never fired');
+  if (strengthBreaches.length > 0) failures.push(`ONE ENGINE STRENGTH: ${strengthBreaches.length} row(s) off the one table, e.g. ${JSON.stringify(strengthBreaches[0])}`);
+  if (playNotSpar.length > 0) failures.push(`ONE ENGINE STRENGTH: Play declared ${playNotSpar[0].purpose}, not spar`);
   const openings = completed.map((r) => r.opening).filter(Boolean);
   const distinct = new Set(openings.map((o) => o.split(':')[0].trim()));
   if (distinct.size < completed.length) {

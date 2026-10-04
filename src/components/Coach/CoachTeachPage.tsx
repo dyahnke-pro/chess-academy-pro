@@ -288,6 +288,7 @@ import { COACH_TURN_DEPTH } from '../../services/engineConstants';
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingRating } from '../../services/coachGameEngine';
+import { opponentStrength } from '../../services/engineStrength';
 import { samePosition } from '../../utils/samePosition';
 import { splitThink, stripThink, THINK_MARK, THINK_PAUSE_MS } from '../../utils/thinkPause';
 import { withTimeout } from '../../coach/withTimeout';
@@ -7412,7 +7413,12 @@ export function CoachTeachPage(): JSX.Element {
       // 1300. Play has always used the rating the student actually SET; Learn
       // did not, so the same person faced two different opponents and the
       // stronger one was here. See `studentPlayingRating` for the whole of it.
-      const rating = getTargetStrength(studentPlayingRating(activeProfile), difficulty);
+      // ONE ENGINE STRENGTH (P0b, 2026-10-04): the LIVE estimate for this game
+      // (seeded from the adaptive rating, moved by the same graded moves
+      // `evaluatePlayerMove` records) + the one offset table — the number Play
+      // reads. It read the stored rating only, so Learn's opponent never moved.
+      const strength = opponentStrength('learn', discussion.liveRating(learnMemRef.current.gameId, studentPlayingRating(activeProfile)), difficulty);
+      const rating = strength.target ?? getTargetStrength(strength.studentElo, difficulty);
       // The student's OWN strength and the setting they chose, both — the
       // taught-slip matrix needs them apart, and `rating` has already folded
       // them together (a 1500 on easy and an 800 on medium land on the same
@@ -7421,8 +7427,9 @@ export function CoachTeachPage(): JSX.Element {
       const adaptive = await getAdaptiveMove(fen, rating, {
         // Same source: the slip matrix asks how strong the PLAYER is, so it
         // must not disagree with the strength the opponent is set to.
-        studentElo: studentPlayingRating(activeProfile),
+        studentElo: strength.studentElo,
         difficulty,
+        strength,
         // STEER INTO THE HOME OPENING (A7) — only when the student named NO
         // opening for this game; a line they asked for is theirs to play.
         ...(openingName ? {} : { steerHomeFor: playerColor }),
@@ -7435,7 +7442,7 @@ export function CoachTeachPage(): JSX.Element {
     // 3) Never freeze.
     const random = getRandomLegalMove(fen);
     return random ? uciToSan(random) : null;
-  }, [walkthrough.tree?.openingName, activeProfile?.puzzleRating, activeProfile?.currentRating, difficulty, playerColor]);
+  }, [walkthrough.tree?.openingName, activeProfile?.puzzleRating, activeProfile?.currentRating, difficulty, playerColor, discussion.liveRating]);
 
   // "Read this position" — the SAME on-demand affordance Play carries
   // (David 2026-06-15: "You didn't like the read this position button?").

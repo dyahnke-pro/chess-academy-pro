@@ -7,24 +7,22 @@
  * Difficulty is ELO-relative to the player's actual rating
  * (see `playerRatingService`):
  *
- *   - 'easy'    → target ELO = playerELO − 300 (comfortable practice)
+ *   - 'easy'    → target ELO = playerELO − 200 (comfortable practice)
  *   - 'medium'  → target ELO = playerELO     (realistic match)
- *   - 'hard'    → target ELO = playerELO + 300 (stretch game)
+ *   - 'hard'    → target ELO = playerELO + 200 (stretch game)
  *   - 'auto'    → same as 'medium'
+ *
+ * The offsets are THE ONE table in `engineStrength` (shared with puzzles and
+ * every other opponent).
  *
  * Target ELO is mapped onto Stockfish skill (0–20) + move time by
  * linear interpolation between anchor points, so a player at 1450 sees
  * a genuinely different setup than a player at 950.
- *
- * Opening seeding (since the agent coach can request specific
- * openings like "play the KIA against me"): when an opening PGN is
- * supplied, the play surface forces the engine to follow the
- * opening's main moves until the line runs out, then hands control
- * back to the engine for the rest of the game. See `nextSeededMove`.
  */
 import { Chess } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
 import { pickBookMove, bookMoveToSquares, isBookMoveLegal } from './coachBookMove';
+import { targetStrength, emitOpponentStrength, type OpponentStrength } from './engineStrength';
 import type { RequestedDifficulty } from '../types';
 
 export interface PlaySessionConfig {
@@ -108,13 +106,6 @@ export function configFromTargetElo(targetElo: number): PlaySessionConfig {
   };
 }
 
-const DIFFICULTY_OFFSET: Record<RequestedDifficulty, number> = {
-  easy: -300,
-  medium: 0,
-  hard: 300,
-  auto: 0,
-};
-
 const DIFFICULTY_NAME: Record<RequestedDifficulty, string> = {
   easy: 'Easy',
   medium: 'Medium',
@@ -124,19 +115,22 @@ const DIFFICULTY_NAME: Record<RequestedDifficulty, string> = {
 
 /**
  * Resolve the effective Stockfish config from a chosen difficulty and
- * the player's actual ELO. Target ELO is player rating plus the
- * difficulty offset (±300 for easy/hard, 0 for medium/auto).
+ * the player's ELO. The target is THE ONE formula (`engineStrength
+ * .targetStrength`): the student's rating plus the one offset table
+ * (Easier −200 / Matched 0 / Harder +200), on the one floor. This file used to
+ * carry its own ±300 table — "Hard" on Play was 100 points harder than "Hard"
+ * on Learn for the same student.
  *
  * @param difficulty chosen difficulty; defaults to 'auto' (= medium)
- * @param playerElo  the player's effective ELO from `getPlayerRating`
+ * @param playerElo  the student's strength — the live estimate where the
+ *                   surface has one, else the one adaptive rating
  */
 export function resolveConfig(
   difficulty: RequestedDifficulty | undefined,
   playerElo: number,
 ): PlaySessionConfig {
   const effective = difficulty ?? 'auto';
-  const offset = DIFFICULTY_OFFSET[effective];
-  const targetElo = Math.max(400, Math.round(playerElo + offset));
+  const targetElo = targetStrength(playerElo, effective);
   const base = configFromTargetElo(targetElo);
   return {
     ...base,
@@ -190,7 +184,20 @@ function fallbackLegalMove(fen: string): CoachMoveResult {
 export async function getCoachMove(
   fen: string,
   config: PlaySessionConfig,
+  /** Who asked and why — the ONE structured emission (`coach-opponent-strength`)
+   *  rides on it. Built by `engineStrength.opponentStrength` from the same
+   *  student strength + offset the config was resolved from. */
+  strength?: OpponentStrength,
 ): Promise<CoachMoveResult> {
+  const { move, source } = await chooseCoachMove(fen, config);
+  if (strength && move.uci) emitOpponentStrength(strength, source);
+  return move;
+}
+
+async function chooseCoachMove(
+  fen: string,
+  config: PlaySessionConfig,
+): Promise<{ move: CoachMoveResult; source: 'book' | 'stockfish' | 'fallback-legal' }> {
   await setSkill(config.skill);
 
   // Book moves apply below full strength. At skill 20 we want pure
@@ -201,10 +208,13 @@ export async function getCoachMove(
       const squares = bookMoveToSquares(book);
       if (squares) {
         return {
-          uci: book.uci,
-          from: squares.from,
-          to: squares.to,
-          promotion: squares.promotion,
+          move: {
+            uci: book.uci,
+            from: squares.from,
+            to: squares.to,
+            promotion: squares.promotion,
+          },
+          source: 'book',
         };
       }
     }
@@ -219,12 +229,12 @@ export async function getCoachMove(
   // limiter on the Play surface too.
   try {
     const uci = await stockfishEngine.getBestMove(fen, config.moveTimeMs, config.skill, config.targetElo);
-    if (!uci || uci.length < 4) return fallbackLegalMove(fen);
-    return parseUci(uci);
+    if (!uci || uci.length < 4) return { move: fallbackLegalMove(fen), source: 'fallback-legal' };
+    return { move: parseUci(uci), source: 'stockfish' };
   } catch {
     // Engine hung/died and getBestMove rejected (its watchdog forceRestarted the
     // worker). Never leave the opponent without a move — the board would freeze.
-    return fallbackLegalMove(fen);
+    return { move: fallbackLegalMove(fen), source: 'fallback-legal' };
   }
 }
 
@@ -256,65 +266,4 @@ export async function setSkill(skill: number): Promise<void> {
 /** Reset internal skill cache — tests only. */
 export function __resetSkillCacheForTests(): void {
   _currentSkill = null;
-}
-
-// ─── Opening seeding ────────────────────────────────────────────────────────
-
-/**
- * Compile an opening PGN move list into a sequence of {fen → SAN}
- * pairs. The play view consults this map BEFORE asking the engine
- * for a move; if the current FEN matches, the seeded SAN is played
- * instead. Falls through to engine play once the line is exhausted
- * or the user diverges.
- */
-export interface OpeningSeed {
-  /** The opening's display name (for logging / status). */
-  name: string;
-  /** Map of position FEN → next SAN move along the prepared line. */
-  byFen: Map<string, string>;
-}
-
-/**
- * Build an opening seed from a PGN move list (e.g. "Nf3 Nf6 g3 d5").
- * Returns null when the PGN is empty or fails to parse.
- */
-export function buildOpeningSeed(name: string, pgn: string): OpeningSeed | null {
-  const moves = pgn.trim().split(/\s+/).filter((tok) => tok.length > 0);
-  if (moves.length === 0) return null;
-
-  const game = new Chess();
-  const byFen = new Map<string, string>();
-
-  for (const san of moves) {
-    const fenBefore = game.fen();
-    let result;
-    try {
-      result = game.move(san);
-    } catch {
-      // Bad token — bail out, return what we have so far.
-      break;
-    }
-    byFen.set(stripClocks(fenBefore), result.san);
-  }
-
-  if (byFen.size === 0) return null;
-  return { name, byFen };
-}
-
-/**
- * Look up the next seeded move for a position, if the seed has one.
- * The FEN halfmove + fullmove counters are stripped so a played line
- * still matches the seeded line even when move counts diverge.
- */
-export function nextSeededMove(seed: OpeningSeed, fen: string): string | null {
-  const key = stripClocks(fen);
-  return seed.byFen.get(key) ?? null;
-}
-
-/** Strip the halfmove + fullmove counters from a FEN so positional
- *  identity matches across slight game-state divergences. */
-function stripClocks(fen: string): string {
-  const parts = fen.split(' ');
-  if (parts.length < 4) return fen;
-  return parts.slice(0, 4).join(' ');
 }

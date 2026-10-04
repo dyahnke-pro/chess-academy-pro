@@ -36,7 +36,16 @@ vi.mock('../services/discussionPractice', async (importActual) => {
   };
 });
 
+// The live estimator, wrapped so a test can assert the WIRE (the graded move
+// reached it) without hunting for a position whose posed importance clears the
+// proven bar — `liveStrength.test.ts` owns the arithmetic.
+vi.mock('../services/liveStrength', async (importActual) => {
+  const actual = await importActual<typeof import('../services/liveStrength')>();
+  return { ...actual, updateLiveStrength: vi.fn(actual.updateLiveStrength) };
+});
+
 import { useDiscussionPractice } from './useDiscussionPractice';
+import { updateLiveStrength } from '../services/liveStrength';
 import { recordMoveEvidence } from '../services/discussionPractice';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { voiceService } from '../services/voiceService';
@@ -337,5 +346,61 @@ describe('recordGradedMove — the door for an already-graded move', () => {
       });
     });
     expect(recordMoveEvidence).not.toHaveBeenCalled();
+  });
+});
+
+
+/**
+ * ONE ENGINE STRENGTH (P0b, 2026-10-04). The live estimate used to move only
+ * through `recordGradedMove`, which only Play calls — so Learn and the WLPP
+ * Play rung matched their opponent to a number that never moved. The graded
+ * move `evaluatePlayerMove` already computes now moves it too (no second
+ * analysis), keyed on the game, or on the surface's session when no game
+ * record exists.
+ */
+describe('evaluatePlayerMove moves the opponent\'s live strength', () => {
+  beforeEach(() => { vi.mocked(updateLiveStrength).mockClear(); });
+
+  it('advances the estimate for the game it belongs to (Learn)', async () => {
+    vi.mocked(updateLiveStrength).mockImplementationOnce((st) => ({ rating: st.rating + 60, evidence: st.evidence + 1 }));
+    setEvals(20, 20);
+    const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'learn', interruptive: false }));
+    expect(result.current.liveRating('learn-game-1', 900)).toBe(900);
+    await act(async () => {
+      await result.current.evaluatePlayerMove({
+        prompted: false, fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
+        playerColor: 'white', inBook: false, learned: false, gamePhase: 'opening',
+        studentRating: 900, sourceGameId: 'learn-game-1',
+      });
+    });
+    expect(updateLiveStrength).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(updateLiveStrength).mock.calls[0][1]).toMatchObject({ san: 'e4', moverColor: 'white', cpLoss: 0 });
+    expect(result.current.liveRating('learn-game-1', 900)).toBe(960);
+  });
+
+  it('keys on the surface session when there is no saved game (WLPP Play rung)', async () => {
+    vi.mocked(updateLiveStrength).mockImplementationOnce((st) => ({ rating: st.rating - 35, evidence: st.evidence + 1 }));
+    setEvals(20, -200);
+    const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'play' }));
+    await act(async () => {
+      await result.current.evaluatePlayerMove({
+        prompted: false, fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
+        playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
+        studentRating: 1200, liveSessionId: 'opening-play:1',
+      });
+    });
+    expect(result.current.liveRating('opening-play:1', 1200)).toBe(1165);
+  });
+
+  it('moves nothing with no game, no session or no seed to start from', async () => {
+    setEvals(20, 20);
+    const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'drill' }));
+    await act(async () => {
+      await result.current.evaluatePlayerMove({
+        prompted: false, fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
+        playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
+      });
+    });
+    expect(updateLiveStrength).not.toHaveBeenCalled();
   });
 });
