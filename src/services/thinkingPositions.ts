@@ -24,6 +24,15 @@ export interface LessonPositionCandidate {
   gameId?: string;
   ply?: number;
   puzzleId?: string;
+  /** A line spoken before the question, from the record ("You played the
+   *  bishop to f7 here."). Only steps that ask about a played move use it. */
+  lead?: string;
+  /** The move the student actually played from this board (own games). */
+  playedSan?: string;
+  /** The opponent's move that produced this board (own games). */
+  prevSan?: string;
+  /** The board before that move (own games). */
+  beforeFen?: string;
 }
 
 /** What a step computer says about one position. */
@@ -61,7 +70,7 @@ export function isFairKey(k: FairKey | null): k is FairKey {
  */
 export function pickFairPosition(
   candidates: readonly LessonPositionCandidate[],
-  keyFor: (fen: string) => FairKey | null,
+  keyFor: (fen: string, candidate?: LessonPositionCandidate) => FairKey | null,
   seen: ReadonlySet<string>,
 ): ChosenLessonPosition | null {
   const ordered = [
@@ -74,7 +83,7 @@ export function pickFairPosition(
     if (seen.has(id) || tried.has(id)) continue;
     tried.add(id);
     let k: FairKey | null = null;
-    try { k = keyFor(c.fen); } catch { k = null; }
+    try { k = keyFor(c.fen, c); } catch { k = null; }
     if (isFairKey(k)) return { ...c, key: [...new Set(k.key)] };
   }
   return null;

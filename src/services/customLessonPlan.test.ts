@@ -2,6 +2,9 @@ import { describe, it, expect } from 'vitest';
 import {
   buildCustomLessonPlan,
   matchCustomLessonRequest,
+  matchThinkingLessonRequest,
+  lessonTeachLines,
+  THINKING_LESSON_CHIP,
   customLessonIntro,
   partTransition,
   customLessonOutro,
@@ -188,5 +191,49 @@ describe('spoken beats (code-authored)', () => {
   it('outro pluralizes', () => {
     expect(customLessonOutro(1)).toContain('1 pattern worked');
     expect(customLessonOutro(3)).toContain('3 patterns worked');
+  });
+});
+
+describe('custom lesson — a lesson on a NAMED subject is not a weakness lesson (walk 2026-10-04)', () => {
+  it('"give me a lesson on the Caro-Kann" falls through to the opening routers', () => {
+    expect(matchCustomLessonRequest('give me a lesson on the Caro-Kann', null)).toBeNull();
+    expect(matchCustomLessonRequest('make a lesson about rook endgames', null)).toBeNull();
+  });
+  it('the general and weakness asks still match', () => {
+    expect(matchCustomLessonRequest('build me a lesson', null)).not.toBeNull();
+    expect(matchCustomLessonRequest('make a lesson on my weaknesses', null)).not.toBeNull();
+    expect(matchCustomLessonRequest('teach me my weaknesses', null)).not.toBeNull();
+  });
+});
+
+describe('matchThinkingLessonRequest — a bare "teach me"', () => {
+  it.each([
+    'teach me', 'Teach me.', 'teach me something', 'teach me chess', 'teach me how to think',
+    'can you teach me?', 'please teach me', 'coach, teach me', 'teach me to read the board',
+    'Learn how to think', THINKING_LESSON_CHIP,
+  ])('matches %s', (t) => { expect(matchThinkingLessonRequest(t)).toBe(true); });
+
+  it.each([
+    'teach me the Najdorf', 'teach me tactics', 'teach me my weaknesses', 'teach me something else',
+    'teach me something new', 'what should I learn next?', 'teach me the Caro-Kann please',
+    'teach me about pawn structure', 'teach me forks',
+  ])('does not match %s', (t) => { expect(matchThinkingLessonRequest(t)).toBe(false); });
+});
+
+describe('lessonTeachLines (walk 2026-10-04 defects 4 and 6)', () => {
+  it('capitalises each piece and closes it with a full stop', () => {
+    expect(lessonTeachLines(['Part 1 of 3: missed hanging pieces.', 'you leave pieces undefended — loose pieces drop off'])).toEqual([
+      'Part 1 of 3: missed hanging pieces.',
+      'You leave pieces undefended — loose pieces drop off.',
+    ]);
+  });
+  it('re-cuts a long passage into two-sentence lines without dropping a word', () => {
+    const passage = 'One. Two. Three. Four. Five.';
+    const lines = lessonTeachLines([passage]);
+    expect(lines).toEqual(['One. Two.', 'Three. Four.', 'Five.']);
+    expect(lines.join(' ')).toBe(passage);
+  });
+  it('skips empty pieces', () => {
+    expect(lessonTeachLines(['', '  ', 'x'])).toEqual(['X.']);
   });
 });

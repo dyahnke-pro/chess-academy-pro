@@ -103,10 +103,13 @@ import {
   customLessonIntro,
   partTransition,
   customLessonOutro,
+  lessonTeachLines,
+  matchThinkingLessonRequest,
+  THINKING_LESSON_CHIP,
   type CustomLessonPlan,
   type CustomLessonPart,
 } from '../../services/customLessonPlan';
-import { searchTheoryPassage } from '../../services/chessConceptService';
+import { conceptPassageFor } from '../../services/weaknessConceptPassage';
 import type {
   WalkthroughTree,
   WalkthroughTreeNode,
@@ -152,6 +155,17 @@ import {
   type CoachDrill,
   type DrillProgress,
   drillContinueBeat, drillHintBeat, drillSolvedBeat, drillWrongMoveBeat } from '../../services/coachDrillService';
+import { goodButWeakerBeat, wrongMoveReason } from '../../services/drillReasons';
+import { useThinkingLesson } from '../../hooks/useThinkingLesson';
+import { recordThinkingAnswer, standingFromProfile, stepStanding } from '../../services/thinkingLessonRecord';
+import { BUILT_THINKING_STEPS, tagsForThinkingStep } from '../../services/thinkingSteps.built';
+import { chooseThinkingStep, openTier, tierUnlocked, type BuiltStep } from '../../services/thinkingLessonPlan';
+import { loadLessonCandidates } from '../../services/thinkingLessonSource';
+import { getThinkingLessonMemory, seenFor } from '../../services/thinkingLessonMemory';
+import { pickFairPosition, type LessonPositionCandidate } from '../../services/thinkingPositions';
+import { reward } from '../../services/rewardService';
+import { getCapabilityProfile } from '../../services/capabilityEvidence';
+import { ThinkingLessonBoard } from './ThinkingLessonBoard';
 import { seedMasterPuzzles } from '../../services/puzzleService';
 import { explainDrillConcept } from '../../services/puzzleConceptExplanation';
 import { gradeMistakePuzzle, loadDrilledMotifs } from '../../services/mistakePuzzleService';
@@ -2404,15 +2418,90 @@ export function CoachTeachPage(): JSX.Element {
   // drill (G0). The puzzle + solution come from coachDrillService (the
   // Lichess DB + chess.js); the coach only voices the prompt/feedback.
 
-  /** Append a coach line to the chat + memory and speak it. */
-  const coachDrillSay = useCallback((text: string): void => {
-    const id = `drill-say-${Date.now()}`;
+  /** Append a coach line to the chat + memory and speak it. Lines QUEUE on the
+   *  page's one speech chain, so a drill announce never talks over the teaching
+   *  before it (walk 2026-10-04 defect 5: `tts-concurrent-speak`). Resolves
+   *  when this line has been spoken. */
+  const coachDrillSay = useCallback((text: string): Promise<void> => {
+    const id = uid('drill-say');
     setMessages((prev) => [...prev, { id, role: 'assistant', content: text, timestamp: Date.now() }]);
     useCoachMemoryStore.getState().appendConversationMessage({
       surface: 'chat-teach', role: 'coach', text, fen: gameRef.current.fen, trigger: null,
     });
-    void speakComputed(text, { forced: false, intent: 'learn' });
+    const spoken = speechChainRef.current
+      .then(() => speakComputed(text, { forced: false, intent: 'learn' }))
+      .catch(() => undefined);
+    speechChainRef.current = spoken;
+    return spoken;
   }, []);
+
+  // ─── "Learn how to think" (plan 2026-10-04) ──────────────────────────────
+  // The coach's lesson plan for a bare "teach me": a step of the thinking
+  // method taught on the student's own boards, answered by tapping squares.
+  // All logic lives in the session; the page routes, speaks and renders.
+  const thinkingLesson = useThinkingLesson({
+    say: coachDrillSay,
+    record: (a) => recordThinkingAnswer(a, tagsForThinkingStep(a.step)),
+    standing: (step) => stepStanding(tagsForThinkingStep(step)),
+  });
+  const startThinkingLesson = useCallback(async (): Promise<void> => {
+    walkthrough.stop();
+    voiceService.stop();
+    activeDrillRef.current = null;
+    customLessonRef.current = null;
+    // WHICH step: from the student's own record (red first, then the earliest
+    // unknown step, then a review) — never a fixed lesson.
+    let profile: Awaited<ReturnType<typeof getCapabilityProfile>> = new Map();
+    try { profile = await getCapabilityProfile(); } catch { /* grey */ }
+    const usernames = {
+      chesscom: activeProfile?.preferences?.chessComUsername,
+      lichess: activeProfile?.preferences?.lichessUsername,
+    };
+    const rating = activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
+    // Only steps this student has a FAIR board for can be served (a step that
+    // needs their own games has none on a fresh device).
+    const [candidates, memory] = await Promise.all([
+      loadLessonCandidates({ usernames, rating }).catch(() => []),
+      getThinkingLessonMemory(),
+    ]);
+    const availability = new Map<BuiltStep, boolean>();
+    const available = (s: BuiltStep): boolean => {
+      const hit = availability.get(s);
+      if (hit !== undefined) return hit;
+      const k = s.kit();
+      const pool = k.adapt ? candidates.map((c) => k.adapt!(c)).filter((c): c is LessonPositionCandidate => !!c) : candidates;
+      const ok = pickFairPosition(pool, k.keyFor, seenFor(memory, k.step)) !== null;
+      availability.set(s, ok);
+      return ok;
+    };
+    const choice = chooseThinkingStep(BUILT_THINKING_STEPS, (s) => standingFromProfile(profile, s.tags), available);
+    if (!choice) {
+      void coachDrillSay('I could not find a clean board for a lesson yet — play or import a few games and the lessons build from them.');
+      return;
+    }
+    const kit = choice.step.kit();
+    captureEvent('thinking_lesson_started', { surface: 'coach-teach', step: kit.step, reason: choice.reason });
+    await thinkingLesson.start(kit, { usernames, rating, candidates });
+    // A TIER OPENED? Read the record again: the lesson just wrote evidence. The
+    // unlock is a reward moment and the coach names what comes next (plan
+    // "Unlocking" rule 8); the machine celebrates, the voice stays plain.
+    try {
+      const after = await getCapabilityProfile();
+      const opened = tierUnlocked(choice.openTier, openTier(BUILT_THINKING_STEPS, (s) => standingFromProfile(after, s.tags), available));
+      if (opened) {
+        reward({ kind: 'rankUp', label: opened.label, seed: opened.tier });
+        void coachDrillSay(opened.line);
+        void logAppAudit({
+          kind: 'thinking-tier-unlocked',
+          category: 'subsystem',
+          source: 'CoachTeachPage.startThinkingLesson',
+          summary: `tier ${opened.tier} opened after ${kit.step}`,
+          details: JSON.stringify({ tier: opened.tier, fromTier: choice.openTier, step: kit.step }),
+        });
+      }
+    } catch { /* the lesson already ran; the unlock waits for next time */ }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeProfile, thinkingLesson.start]);
 
   /** Put a drill's position on the board (no announce) + arm the ref. */
   const loadDrillOntoBoard = useCallback((drill: CoachDrill, progress?: DrillProgress): void => {
@@ -2581,18 +2670,13 @@ export function CoachTeachPage(): JSX.Element {
 
     // 1. Announce the part (multi-part only) + teach the idea. The teaching text
     //    is the code-authored behavior line + a verbatim public-domain corpus
-    //    passage (searchTheoryPassage) — never LLM prose.
+    //    passage fetched by concept id (conceptPassageFor) — never LLM prose.
     const transition = partTransition(part, idx, lesson.parts.length);
     const behavior = part.concept ? `${part.concept.behavior}.` : '';
-    let passage = '';
-    if (part.concept) {
-      try {
-        const hit = searchTheoryPassage(part.concept.conceptQuery);
-        // The WHOLE passage (G4.5: a clip at 320 characters deleted the clause
-        // that made it a definition — "the defender can save only one").
-        if (hit) passage = hit.passage.text;
-      } catch { /* no passage — the behavior line still teaches the idea */ }
-    }
+    // The passage is fetched by the concept's corpus ID, never a text search:
+    // a search taught "missed hanging pieces" with the PIN passage (walk
+    // 2026-10-04 defect 3). No passage for this idea → none is read.
+    const passage = conceptPassageFor(part.concept);
     // 2. The student's OWN positions for this hole — built first, because the
     //    teaching names the CONCEPT the first position turns on (the concept
     //    engine's invariant: the idea, never the move), so "Part 1 of 3" teaches
@@ -2606,8 +2690,8 @@ export function CoachTeachPage(): JSX.Element {
     const invariant = firstDrill
       ? explainDrillConcept({ setupFen: firstDrill.setupFen, solutionSan: firstDrill.solutionSan, themes: firstDrill.themes })?.idea ?? ''
       : '';
-    const teachLine = [transition, behavior, invariant, passage].filter(Boolean).join(' ').trim();
-    if (teachLine) coachDrillSay(teachLine);
+    // One line per sentence pair, queued in order (defects 4–6).
+    for (const line of lessonTeachLines([transition, behavior, invariant, passage])) void coachDrillSay(line);
     captureEvent('custom_lesson_part_advanced', { surface: 'coach-teach', idx, tag: part.tag });
     if (queue.length > 0) {
       const progress: DrillProgress = { queue, themeIdx: 0, puzzleIdx: 0 };
@@ -2651,16 +2735,18 @@ export function CoachTeachPage(): JSX.Element {
     const wanted = new Set(tags);
     const parts = wanted.size > 0 ? plan.parts.filter((p) => wanted.has(p.tag)) : plan.parts;
     if (parts.length === 0) {
-      coachDrillSay(
-        "I don't have enough of your games mapped yet to build a custom lesson — play or import a few and I'll spot the patterns worth drilling. In the meantime, name an opening and I'll teach it.",
-      );
+      // NO RECORD YET IS NOT "NO LESSON" (plan 2026-10-04: grey means teach).
+      // A fresh student gets the method lesson, on real puzzles, instead of a
+      // dead end; the weakness lesson builds itself as games come in.
+      void coachDrillSay("I don't have your games mapped yet, so let's start with how strong players read the board — it pays off in every game.");
+      await startThinkingLesson();
       return;
     }
     customLessonRef.current = { parts, idx: 0 };
     captureEvent('custom_lesson_started', { surface: 'coach-teach', parts: parts.length, entry });
     coachDrillSay(customLessonIntro(parts));
     await runCustomLessonPart(0);
-  }, [walkthrough, coachDrillSay, runCustomLessonPart]);
+  }, [walkthrough, coachDrillSay, runCustomLessonPart, startThinkingLesson]);
 
   /** Called when the student SOLVES the current drill (whole line done).
    *  Single drill → offer another. Mistake-queue → advance to the next due
@@ -2675,7 +2761,7 @@ export function CoachTeachPage(): JSX.Element {
     // THE SEQUENCE, SPOKEN, WITH THE IDEA NAMED (A5): a drill called "missed
     // tactical sequences" shows the sequence. Computed (G0).
     const solvedConcept = explainDrillConcept({ setupFen: solved.drill.setupFen, solutionSan: solved.drill.solutionSan, themes: solved.drill.themes });
-    const solvedBeat = drillSolvedBeat(solved.drill.solutionSan, solvedConcept?.idea ?? null);
+    const solvedBeat = drillSolvedBeat(solved.drill.solutionSan, solvedConcept?.idea ?? null, solved.drill.setupFen);
     if (!solved.progress) {
       activeDrillRef.current = null;
       // TEACH THE CONCEPT behind the solution (David 2026-09-14: "not just a
@@ -2777,7 +2863,34 @@ export function CoachTeachPage(): JSX.Element {
           : cur.wrongCount === 2
             ? 'Still not it — no rush. Look for the most forcing move first: checks, captures, then threats.'
             : "That's not the strongest here — take another look and try again.";
-      coachDrillSay(drillWrongMoveBeat({ fenBefore: gameRef.current.fen, wrongSan: move.san, expectedSan: expected, nudge, keepNudge: easeUp }));
+      const fenBefore = gameRef.current.fen;
+      const plainBeat = drillWrongMoveBeat({ fenBefore, wrongSan: move.san, expectedSan: expected, nudge, keepNudge: easeUp });
+      // A MOVE WITH NO CONCRETE FAULT MAY STILL BE GOOD (walk 2026-10-04 defect
+      // 9: Nxc7+ was +1.8 against the drill's +3.5 and heard only "not the
+      // strongest"). Ask the engine about both boards; a good-but-weaker move
+      // is called good, with what it wins, and the student keeps looking.
+      if (!easeUp && !wrongMoveReason(fenBefore, move.san, expected)) {
+        const afterOf = (san: string): string | null => {
+          try { const c = new Chess(fenBefore); return c.move(san) ? c.fen() : null; } catch { return null; }
+        };
+        const wrongFen = afterOf(move.san);
+        const bestFen = afterOf(expected);
+        void (async () => {
+          let line: string | null = null;
+          if (wrongFen && bestFen) {
+            try {
+              const [w, b] = await Promise.all([
+                stockfishEngine.analyzeWithBudget(wrongFen, 12, 900),
+                stockfishEngine.analyzeWithBudget(bestFen, 12, 900),
+              ]);
+              line = goodButWeakerBeat({ fenBefore, wrongSan: move.san, evalAfterWrong: w.evaluation, evalAfterBest: b.evaluation });
+            } catch { line = null; }
+          }
+          if (activeDrillRef.current === cur || activeDrillRef.current?.drill === cur.drill) void coachDrillSay(line ?? plainBeat);
+        })();
+        return true;
+      }
+      void coachDrillSay(plainBeat);
       return true;
     }
     liveFenRef.current = move.fen;
@@ -2842,6 +2955,39 @@ export function CoachTeachPage(): JSX.Element {
       if (drill) startCoachDrill(drill);
     })();
   }, [searchParams, setSearchParams, activeProfile, startCoachDrill, startMistakeDrills, startMasterDrill]);
+
+  // Hand-off from the Coach hub's Custom Lesson tile (`?lesson=custom`) and
+  // Up next's thinking bite (`?lesson=think`). One lesson system, two doors:
+  //   think  → straight into "Learn how to think";
+  //   custom → the student with holes gets the lesson picker (their weakness
+  //            lesson, with "Learn how to think" beside it — the kickoff opener
+  //            already offers both); a student with no holes yet goes straight
+  //            into "Learn how to think", because grey means TEACH.
+  const lessonParamHandledRef = useRef(false);
+  useEffect(() => {
+    if (lessonParamHandledRef.current) return;
+    const which = searchParams.get('lesson');
+    if (which !== 'custom' && which !== 'think') return;
+    lessonParamHandledRef.current = true;
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.delete('lesson');
+      return next;
+    }, { replace: true });
+    const t = setTimeout(() => {
+      void (async () => {
+        if (which === 'custom') {
+          try {
+            const plan = buildCustomLessonPlan(await getCoachCurriculum(), await getUnifiedWeaknessProfile());
+            if (plan.parts.length > 0) return; // the opener shows the picker
+          } catch { /* no record — teach the method */ }
+        }
+        userInteractedRef.current = true;
+        await startThinkingLesson();
+      })();
+    }, 300);
+    return () => clearTimeout(t);
+  }, [searchParams, setSearchParams, startThinkingLesson]);
 
   // Hand-off from the Fundamentals scorecard: `/coach/teach?learnFundamental=<id>`
   // opens the per-fundamental teaching lesson ON THE SPOT in the classroom, with
@@ -4235,6 +4381,41 @@ export function CoachTeachPage(): JSX.Element {
       // opening resolution so "lesson on forks" isn't fuzzy-matched as an
       // opening name. Bare topics ("forks") do NOT match here (the matcher needs
       // "lesson"), so opening/stage routing below is untouched.
+      // ─── "Learn how to think" (plan 2026-10-04) ─────────────────────
+      // A bare, non-specific "teach me" (or the chip) starts the coach's
+      // lesson plan. The matcher takes the WHOLE message, so "teach me the
+      // Najdorf", "teach me tactics" and "teach me something else" never land
+      // here (they fell into TEACH_PATTERN's opening picker before).
+      // An ANSWER to the open lesson question, typed or spoken: plain squares
+      // ("c6 and e5") are taps; "I don't know" is honest data. This is the
+      // deterministic fast path the door's `answer` kind will own.
+      if (thinkingLesson.view.asking) {
+        if (/^\s*(?:i\s+do(?:n'?t| not)\s+know|no idea|not sure|i\s+give\s+up)\b/i.test(text)) {
+          setMessages((prev) => [...prev, { id: uid('think-answer'), role: 'user', content: text, timestamp: Date.now() }]);
+          thinkingLesson.dontKnow();
+          return;
+        }
+        const squares = text.toLowerCase().match(/\b[a-h][1-8]\b/g);
+        const rest = text.toLowerCase().replace(/\b[a-h][1-8]\b/g, '').replace(/\b(?:and|the|on|at|square|squares|is|are|it'?s|,|\.)\b|[,.!]/g, '').trim();
+        if (squares && squares.length > 0 && rest.length === 0) {
+          setMessages((prev) => [...prev, { id: uid('think-answer'), role: 'user', content: text, timestamp: Date.now() }]);
+          for (const sq of squares) thinkingLesson.tap(sq as Square);
+          return;
+        }
+        // Anything else is a QUESTION: hold the nudge and let the coach answer
+        // it through the normal route; the question stays open on the board.
+        thinkingLesson.hold();
+      }
+      if (matchThinkingLessonRequest(text)) {
+        const tlTurnId = freshTurnId('thinking-lesson');
+        setMessages((prev) => [...prev, { id: `${tlTurnId}-u`, role: 'user', content: text, timestamp: Date.now() }]);
+        useCoachMemoryStore.getState().appendConversationMessage({
+          surface: 'chat-teach', role: 'user', text,
+          fen: opts?.fenOverride ?? gameRef.current.fen, trigger: null,
+        });
+        await startThinkingLesson();
+        return;
+      }
       {
         const cl = matchCustomLessonRequest(text, customLessonPlanRef.current);
         if (cl) {
@@ -11219,6 +11400,26 @@ export function CoachTeachPage(): JSX.Element {
       // something of weakness and suggest a study session") — still opt-in (a
       // chip they tap), still grounded (routes to a computed vertical). Cheap
       // stored read; null-guarded so a fresh profile just shows the generic set.
+      // ONE OPENER (walk 2026-10-04 defect 1). The greeting is the FALLBACK:
+      // when the student's record yields a computed opener (picker, the
+      // coach's call, the session opener, cold start), that opener REPLACES
+      // the greeting — message and voice — instead of stacking after it. The
+      // greeting speaks only when nothing computed arrives within the window.
+      let greetingDecided = false;
+      let decideGreeting: (speak: boolean) => void = () => undefined;
+      const greetingGate = new Promise<boolean>((resolve) => {
+        decideGreeting = (speak: boolean): void => {
+          if (greetingDecided) return;
+          greetingDecided = true;
+          resolve(speak);
+        };
+      });
+      const replaceGreeting = (): void => {
+        decideGreeting(false);
+        setMessages((prev) => prev.filter((m) => m.id !== `${turnId}-c`));
+      };
+      if (rolodexOpening) decideGreeting(true);
+      else setTimeout(() => decideGreeting(true), 2500);
       if (!rolodexOpening) {
         const generic = pickSuggestedQuestions(greetingRotation, 3);
         // Show the generic set immediately, then asynchronously upgrade to a
@@ -11277,6 +11478,7 @@ export function CoachTeachPage(): JSX.Element {
               // A game in progress is not a cold start (D-11) — the rule lives
               // in `coldStartApplies`, not here.
               if (cold && coldStartApplies({ historyLength: gameRef.current.history.length, userInteracted: userInteractedRef.current })) {
+                replaceGreeting();
                 setMessages((prev) => [...prev, { id: uid('cold-start'), role: 'assistant', content: cold.line, timestamp: Date.now() }]);
                 setCoachChoices(cold.chips.slice(0, 3));
                 speechChainRef.current = speechChainRef.current
@@ -11329,23 +11531,24 @@ export function CoachTeachPage(): JSX.Element {
               const plan = buildCustomLessonPlan(await getCoachCurriculum(), unified);
               if (plan.parts.length > 0 && !userInteractedRef.current) {
                 customLessonPlanRef.current = plan;
-                // P7 — the persistent DOSSIER opens the session with "here's where
-                // you stand" (a computed win / what's improving / the top hole)
-                // BEFORE the picker. Memory that builds across sessions (David
-                // 2026-09-08). Silent when there isn't enough history.
-                try {
-                  const stand = dossierOpeningLine(await getStudentDossier());
-                  if (stand && !userInteractedRef.current) {
-                    const standLine = withTrend(stand);
-                    setMessages((prev) => [...prev, { id: uid('dossier-stand'), role: 'assistant', content: standLine, timestamp: Date.now() }]);
-                    speechChainRef.current = speechChainRef.current.then(() => speakComputed(standLine, { forced: true, intent: 'learn' })).catch(() => undefined);
-                  }
-                } catch { /* dossier is a bonus — the picker still opens */ }
-                const pickerLine = withTrend(plan.pickerLine);
-                setMessages((prev) => [...prev, { id: uid('lesson-picker'), role: 'assistant', content: pickerLine, timestamp: Date.now() }]);
-                setCoachChoices(capChips([...plan.pickerChips, ...generic]));
+                // ONE OPENER (walk 2026-10-04 defect 1: a greeting, a dossier
+                // line and the picker stacked, and the dossier named a different
+                // "top" hole than the picker). The dossier's "where you stand"
+                // leads, the picker follows in the SAME message, spoken once,
+                // and it REPLACES the generic greeting. The picker alone names
+                // the holes (one ranking).
+                let stand = '';
+                try { stand = dossierOpeningLine(await getStudentDossier(), { omitPressing: true }); } catch { stand = ''; }
+                if (userInteractedRef.current) return;
+                const openerLine = withTrend([stand, plan.pickerLine].filter(Boolean).join(' '));
+                replaceGreeting();
+                setMessages((prev) => [...prev, { id: uid('lesson-picker'), role: 'assistant', content: openerLine, timestamp: Date.now() }]);
+                // Chips match the words (defect 2): one per hole the picker
+                // named, the full-lesson chip, and "Learn how to think" — the
+                // generic suggestions only fill what is left.
+                setCoachChoices([...new Set([...plan.pickerChips, THINKING_LESSON_CHIP, ...generic])].slice(0, Math.max(3, plan.pickerChips.length + 1)));
                 speechChainRef.current = speechChainRef.current
-                  .then(() => speakComputed(pickerLine, { forced: true, intent: 'learn' }))
+                  .then(() => speakComputed(openerLine, { forced: true, intent: 'learn' }))
                   .catch(() => undefined);
                 captureEvent('custom_lesson_offered', { surface: 'coach-teach', holes: plan.parts.length });
                 return; // the picker is the opener — don't stack the older one
@@ -11373,6 +11576,7 @@ export function CoachTeachPage(): JSX.Element {
                 spokeCall = true;
                 const chip = call.prescription === 'weakness' ? leadChip : call.chip;
                 const callLine = withTrend(call.line);
+                replaceGreeting();
                 setMessages((prev) => [...prev, { id: uid('coachs-call'), role: 'assistant', content: callLine, timestamp: Date.now() }]);
                 setCoachChoices((prev) => capChips([chip, ...(prev ?? generic).filter((q) => q !== chip)]));
                 speechChainRef.current = speechChainRef.current
@@ -11396,13 +11600,15 @@ export function CoachTeachPage(): JSX.Element {
                 if (arc && arc.includes('then')) planLine = `${planLine} ${arc}`;
               } catch { /* the arc is a bonus */ }
               const openerLine = withTrend(planLine);
+              replaceGreeting();
               setMessages((prev) => [...prev, { id: uid('session-opener'), role: 'assistant', content: openerLine, timestamp: Date.now() }]);
               speechChainRef.current = speechChainRef.current
                 .then(() => speakComputed(openerLine, { forced: true, intent: 'learn' }))
                 .catch(() => undefined);
             }
           })
-          .catch(() => { /* weakness-profile read failed — generic chips stand */ });
+          .catch(() => { /* weakness-profile read failed — generic chips stand */ })
+          .finally(() => decideGreeting(true));
       }
       useCoachMemoryStore.getState().appendConversationMessage({
         surface: 'chat-teach',
@@ -11412,7 +11618,8 @@ export function CoachTeachPage(): JSX.Element {
         trigger: null,
       });
       voiceService.stop();
-      speechChainRef.current = Promise.resolve(speakComputed(welcomeLine, { forced: true, intent: 'learn' }))
+      speechChainRef.current = greetingGate
+        .then((speak) => (speak ? speakComputed(welcomeLine, { forced: true, intent: 'learn' }) : undefined))
         .catch(() => undefined);
     })();
 
@@ -12197,7 +12404,16 @@ export function CoachTeachPage(): JSX.Element {
               // mode does not take the controlled-mode chrome (flip / undo /
               // reset / eval bar / mic), and spreading them in only
               // type-checks by accident.
-              (lineWalkFen ?? reviewFen) ? (
+              thinkingLesson.view.active ? (
+                // "Learn how to think": the lesson owns the board while it
+                // runs — a static tap board, answers are squares.
+                <ThinkingLessonBoard
+                  view={thinkingLesson.view}
+                  onTap={thinkingLesson.tap}
+                  onDontKnow={thinkingLesson.dontKnow}
+                  onStop={thinkingLesson.stop}
+                />
+              ) : (lineWalkFen ?? reviewFen) ? (
                 <>
                 {/* Observable: a calculated line is on the board (audits wait on it). */}
                 {lineWalkFen && <span data-testid="line-walk-active" hidden />}

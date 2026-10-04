@@ -28,6 +28,7 @@
 import { db } from '../db/schema';
 import { mirrorAuditEvent } from './analytics';
 import { onCoachDecision, onLearnTurn, onNeedScore, type CoachDecisionRow, type LearnTurnRow, type NeedScoreRow } from './coachDecisionEvents';
+import { onThinkingLesson } from './thinkingLessonEvents';
 import { onSearchDepth } from './searchDepthEvents';
 
 const APP_AUDIT_LOG_META_KEY = 'app-audit-log.v1';
@@ -244,6 +245,11 @@ export type AuditKind =
   // One entry per burst of Learn door decisions (learnTurnDoor.decideTurn) —
   // offered / spoke / lead / held lanes, aggregated like coach-decision.
   | 'learn-turn-decision'
+  // One entry per "Learn how to think" question (thinkingLessonSession) —
+  // step, stage, key size, how it was answered, where the board came from.
+  | 'thinking-lesson'
+  // A "Learn how to think" tier opened (every step of the tier below proven).
+  | 'thinking-tier-unlocked'
   // THE ENGINE LINES A LEARN MISTAKE LINE WAS READ FROM (2026-10-01). A
   // reason like "d5 was their move, to win a piece" comes off the live,
   // time-boxed PV; a deeper read may refute it, and without the source line a
@@ -2249,6 +2255,18 @@ onLearnTurn((row) => {
     learnTurnFlush = setTimeout(flushLearnTurns, 1500);
     (learnTurnFlush as unknown as { unref?: () => void }).unref?.();
   }
+});
+
+// "Learn how to think" — one row per answered (or shown) lesson question.
+// Few per session, so each is logged as it lands.
+onThinkingLesson((row) => {
+  void logAppAudit({
+    kind: 'thinking-lesson',
+    category: 'subsystem',
+    source: 'thinkingLessonSession',
+    summary: `${row.step} ${row.stage}: ${row.outcome} (${row.foundCount}/${row.keySize}, ${row.wrongCount} wrong, help=${row.help}, ${row.origin})`,
+    details: JSON.stringify({ rows: [row] }),
+  });
 });
 
 // One row per settled-or-not search. Searches are few (one per question, one

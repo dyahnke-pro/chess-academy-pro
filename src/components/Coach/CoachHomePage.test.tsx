@@ -100,6 +100,14 @@ describe('CoachHomePage', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/coach/analyse');
   });
 
+  it('"Custom Lesson" opens Learn with Coach straight into a lesson (David 2026-10-04)', () => {
+    render(<CoachHomePage />);
+    const tile = screen.getByTestId('coach-action-custom-lesson');
+    expect(tile).toHaveTextContent('Custom Lesson');
+    fireEvent.click(tile);
+    expect(mockNavigate).toHaveBeenCalledWith('/coach/teach?lesson=custom');
+  });
+
   it('navigates to /coach/endgame when "Endgame" is clicked', () => {
     render(<CoachHomePage />);
     fireEvent.click(screen.getByTestId('coach-action-endgame'));

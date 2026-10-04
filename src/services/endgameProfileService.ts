@@ -60,6 +60,8 @@ export interface EndgameTypeInfo {
   label: string;
   /** The teachable concept/theme — corpus query for the WHY. */
   conceptQuery: string;
+  /** chess-concepts.json id that teaches exactly this ending, if the corpus has one. */
+  corpusConceptId?: string;
   /** The matching hand-authored lesson id (endgameLessonsService), or null when
    *  we have no lesson for the type yet (then the trainer uses the student's own
    *  position only). */
@@ -67,8 +69,8 @@ export interface EndgameTypeInfo {
 }
 
 const TYPE_INFO: Record<EndgameType, EndgameTypeInfo> = {
-  'king-pawn': { label: 'king-and-pawn endings', conceptQuery: 'king and pawn endgame opposition key squares', lessonId: 'opposition' },
-  'rook-pawn': { label: 'rook-and-pawn endings', conceptQuery: 'rook endgame Lucena building a bridge active rook', lessonId: 'lucena-position' },
+  'king-pawn': { label: 'king-and-pawn endings', conceptQuery: 'king and pawn endgame opposition key squares', corpusConceptId: 'end-opposition', lessonId: 'opposition' },
+  'rook-pawn': { label: 'rook-and-pawn endings', conceptQuery: 'rook endgame Lucena building a bridge active rook', corpusConceptId: 'end-lucena', lessonId: 'lucena-position' },
   rook: { label: 'rook endings', conceptQuery: 'rook endgame active rook cut off the king', lessonId: 'active-rook' },
   'minor-piece': { label: 'minor-piece endings', conceptQuery: 'bishop knight endgame opposite colored bishops', lessonId: 'opposite-color-bishops' },
   queen: { label: 'queen endings', conceptQuery: 'queen endgame checks perpetual defense', lessonId: 'queen-vs-rook-fortress' },
@@ -159,6 +161,8 @@ export interface EndgameTypeWeakness {
   type: EndgameType;
   label: string;
   conceptQuery: string;
+  /** chess-concepts.json id that teaches exactly this ending, if the corpus has one. */
+  corpusConceptId?: string;
   lessonId: string | null;
   /** How many of the student's endgame slips fall in this type. */
   count: number;
@@ -205,7 +209,7 @@ export async function getEndgameWeaknessProfile(): Promise<EndgameWeaknessProfil
   const all: EndgameTypeWeakness[] = [];
   for (const [type, g] of groups) {
     const info = endgameTypeInfo(type);
-    all.push({ type, label: info.label, conceptQuery: info.conceptQuery, lessonId: info.lessonId, count: g.count, worstCpLoss: g.worstCpLoss, ownFen: g.ownFen });
+    all.push({ type, label: info.label, conceptQuery: info.conceptQuery, corpusConceptId: info.corpusConceptId, lessonId: info.lessonId, count: g.count, worstCpLoss: g.worstCpLoss, ownFen: g.ownFen });
   }
   all.sort((a, b) => (b.count * b.worstCpLoss) - (a.count * a.worstCpLoss) || b.count - a.count);
   return { weakest: all[0] ?? null, all, sample: endgame.length };

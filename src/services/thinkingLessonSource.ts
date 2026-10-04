@@ -45,12 +45,20 @@ export async function loadLessonCandidates(opts: {
   rating: number;
 }): Promise<LessonPositionCandidate[]> {
   const out: LessonPositionCandidate[] = [];
-  const seen = new Set<string>();
+  const byId = new Map<string, LessonPositionCandidate>();
   const push = (c: LessonPositionCandidate): void => {
     const id = boardIdentity(c.fen);
-    if (seen.has(id)) return;
-    seen.add(id);
-    out.push(c);
+    const had = byId.get(id);
+    if (had) {
+      // The same board from a second source fills what the first lacked
+      // (a mistake puzzle has no previous move; the game replay does).
+      if (!had.prevSan && c.prevSan) { had.prevSan = c.prevSan; had.beforeFen = c.beforeFen; }
+      if (!had.playedSan && c.playedSan) had.playedSan = c.playedSan;
+      return;
+    }
+    const copy = { ...c };
+    byId.set(id, copy);
+    out.push(copy);
   };
 
   try {
@@ -58,7 +66,7 @@ export async function loadLessonCandidates(opts: {
     mistakes
       .slice()
       .sort((a, b) => (b.createdAt ?? '').localeCompare(a.createdAt ?? ''))
-      .forEach((m) => push({ fen: m.fen, origin: 'game', gameId: m.sourceGameId, ply: m.moveNumber }));
+      .forEach((m) => push({ fen: m.fen, origin: 'game', gameId: m.sourceGameId, ply: m.moveNumber, ...(m.playerMoveSan ? { playedSan: m.playerMoveSan } : {}) }));
   } catch { /* no mistake store yet */ }
 
   try {
@@ -77,7 +85,25 @@ export async function loadLessonCandidates(opts: {
         color,
         { count: Number.POSITIVE_INFINITY },
       );
-      for (const p of positions) push({ fen: p.fen, origin: 'game', gameId: game.id, ply: p.ply });
+      // Replay once: the move before each position and the board before it.
+      const fens: string[] = [];
+      let history: string[] = [];
+      try {
+        const g = new Chess();
+        g.loadPgn(game.pgn);
+        history = g.history();
+        const r = new Chess();
+        fens.push(r.fen());
+        for (const san of history) { r.move(san); fens.push(r.fen()); }
+      } catch { history = []; }
+      for (const p of positions) {
+        const prevSan = p.ply >= 2 ? history[p.ply - 2] : undefined;
+        const beforeFen = p.ply >= 2 ? fens[p.ply - 2] : undefined;
+        push({
+          fen: p.fen, origin: 'game', gameId: game.id, ply: p.ply, playedSan: p.playedNext,
+          ...(prevSan && beforeFen ? { prevSan, beforeFen } : {}),
+        });
+      }
     }
   } catch { /* no games */ }
 

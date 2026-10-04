@@ -24,7 +24,7 @@
  *   - `prompt`       — a concrete, code-authored challenge line.
  */
 import { Chess } from 'chess.js';
-import { hintBeat, solvedLineBeat, wrongMoveReason } from './drillReasons';
+import { hintBeat, lineGainIdea, solvedLineBeat, wrongMoveReason } from './drillReasons';
 import { sayMoveClause } from './spokenMove';
 import { getHomeGameIds } from './homeOpeningService';
 import { isFixtureGame } from './fixtureGames';
@@ -756,8 +756,11 @@ export function drillWrongMoveBeat(args: { fenBefore: string; wrongSan: string; 
 }
 
 /** The solved sequence spoken, with the idea named when one is known. */
-export function drillSolvedBeat(solutionSan: readonly string[], idea: string | null): string {
-  return solvedLineBeat(solutionSan, idea);
+export function drillSolvedBeat(solutionSan: readonly string[], idea: string | null, setupFen?: string): string {
+  // No named concept → say what the line wins instead of a bare move list
+  // (walk 2026-10-04 defect 10).
+  const point = idea ?? (setupFen ? lineGainIdea(setupFen, solutionSan) : null);
+  return solvedLineBeat(solutionSan, point);
 }
 
 /** The hint: names the piece, withholds the square. Null when the drill's

@@ -94,6 +94,7 @@ import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled }
 import { criticalMomentsAccuracy, streaks, timeControlPerformance, comebackWins, winShapeStats, colorProficiencyMismatch, personalRecords, tacticTransferGap, recordVsOpening, recordVsOpponent, phaseStrengthOverTime, activityHeatmap, tacticTypeBreadth, brilliantConcentration } from './analyticsService';
 import { getPuzzleStats } from './puzzleService';
 import { detectConceptsInText, getConcept, resolveOpeningIdFromName, searchTheoryPassage } from './chessConceptService';
+import { corpusHitFor } from './weaknessConceptPassage';
 import { getCachedAmateurPlay } from './amateurPlayCache';
 // claimValidator import removed — the grounded path no longer free-composes,
 // so there are no claims to validate (David 2026-07-09).
@@ -4483,7 +4484,7 @@ export async function getCoachChatResponse(
               if (wantsConcept && lc.sampleFloorMet && lc.mostPressing) {
                 const concept = conceptForCluster(lc.mostPressing.clusterId, lc.mostPressing.bucket);
                 if (concept) {
-                  const hit = searchTheoryPassage(concept.conceptQuery);
+                  const hit = corpusHitFor(concept.corpusConceptId);
                   const lesson = hit ? assembleTheoryAnswer({ conceptName: hit.conceptName, conceptId: hit.conceptId, passage: hit.passage }) : null;
                   facts = lesson
                     ? `${facts} The pattern underneath it: ${concept.behavior}. ${lesson.facts}`
@@ -6303,7 +6304,7 @@ export async function getCoachChatResponse(
             if (prof.weakest) {
               const w = prof.weakest;
               let facts = `Your weakest ending is ${w.label} — ${w.count} slip${w.count === 1 ? '' : 's'} there, the worst dropping about ${Math.round(w.worstCpLoss / 100)} point${Math.round(w.worstCpLoss / 100) === 1 ? '' : 's'}.`;
-              const hit = searchTheoryPassage(w.conceptQuery);
+              const hit = corpusHitFor(w.corpusConceptId);
               const lesson = hit ? assembleTheoryAnswer({ conceptName: hit.conceptName, conceptId: hit.conceptId, passage: hit.passage }) : null;
               if (lesson) facts += ` The idea to lock in: ${lesson.facts}`;
               // Offer the trainer — the student's OWN position when tablebase-

@@ -15,8 +15,10 @@
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import type { FairKey } from './thinkingPositions';
+import type { StepKit } from './thinkingLessonSession';
 import { rotateStem } from '../utils/rotateStem';
 import { findHangingBySee } from './positionReadingService';
+import type { MisconceptionTagId } from '../data/misconceptionTags';
 
 /** The one loose-piece computer, injected: squares of `color`'s undefended
  *  pieces (attacked or not). */
@@ -125,3 +127,33 @@ export function targetsWrongTapLine(fen: string, sq: Square): string {
   }
   return `Look again at that ${name(p.type)} — who guards it?`;
 }
+
+/** The step-5 kit for the lesson runner. The loose computer is injected (one
+ *  copy of it in the app). */
+export function targetsKit(loose: LooseSquares): StepKit {
+  return {
+    step: 'their-targets',
+    keyFor: (fen) => targetsKey(fen, loose),
+    showLine: targetsShowLine,
+    prompt: targetsPrompt,
+    wrongTapLine: targetsWrongTapLine,
+    reasonFor: targetReason,
+    intro: 'Today: finding their targets. Before you choose a move, look at each of their pieces and ask who guards it. A piece nobody guards, or one that loses the exchange, is a target. Watch first.',
+  };
+}
+
+/** The misconception tags step 5 trains (plan "Memory" table) — superseded by
+ *  THINKING_STEPS when the one step vocabulary lands. */
+export const TARGETS_STEP_TAGS: readonly MisconceptionTagId[] = ['missed-tactic'];
+
+/** MERGE-TIME PLACEHOLDER: replaced by the app's one loose-piece computer. */
+export const looseSquaresOf: LooseSquares = (fen, color) => {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return []; }
+  const out: Square[] = [];
+  for (const row of c.board()) for (const cell of row) {
+    if (!cell || cell.color !== color || cell.type === 'k') continue;
+    if (c.attackers(cell.square, color).filter((s) => s !== cell.square).length === 0) out.push(cell.square);
+  }
+  return out;
+};

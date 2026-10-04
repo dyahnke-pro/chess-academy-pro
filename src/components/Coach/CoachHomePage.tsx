@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Swords, BarChart3, Calendar, Search, GraduationCap, History, Info, X, Crown, Library, Mic , Medal, BookOpen } from 'lucide-react';
+import { Swords, BarChart3, Calendar, Search, GraduationCap, History, Info, X, Crown, Library, Mic , Medal, BookOpen, Brain } from 'lucide-react';
 import { useState } from 'react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PageHelp } from '../Layout/PageHelp';
@@ -177,6 +177,29 @@ export function CoachHomePage(): JSX.Element {
           gB={gB}
           gS={gS}
           testId="coach-action-review"
+          wide
+        />
+
+        {/* Custom Lesson (David 2026-10-04: "I do also want a custom lesson tab
+            in the coach tab" → one tile, both lessons). Opens Learn with Coach
+            straight into a lesson: the weakness lesson built from the
+            student's own games when they have holes, and "Learn how to think"
+            as the other choice — or straight into it on a fresh device. One
+            lesson system, one more door. */}
+        <PrimaryTile
+          icon={<Brain size={40} className="text-indigo-400" />}
+          label="Custom Lesson"
+          subtitle="A lesson built from your own games — your weak spots, or how to think and see the board."
+          info={
+            "Two lessons, both built for you:\n\n• Your weaknesses — the coach picks the patterns costing you the most, teaches the idea, then drills your real positions.\n• Learn how to think — the method strong players run every move (what did their move change, am I safe, where are their targets…), taught on your own boards. You answer by tapping squares.\n\nEvery lesson remembers what you have done and picks up where you left off."
+          }
+          rgb="129, 140, 248"
+          bgClass="bg-indigo-500/10"
+          textColorClass="text-indigo-400"
+          onClick={goTo('custom-lesson', '/coach/teach?lesson=custom')}
+          gB={gB}
+          gS={gS}
+          testId="coach-action-custom-lesson"
           wide
         />
 

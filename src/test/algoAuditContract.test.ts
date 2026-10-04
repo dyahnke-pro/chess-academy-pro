@@ -40,7 +40,8 @@ type AlgoEmissionKind =
   | 'review-voice-package'
   | 'puzzle-themes-targeted'
   | 'deep-run-step'
-  | 'learn-reward';
+  | 'learn-reward'
+  | 'thinking-lesson';
 
 interface Contract {
   /** The audit that holds the contract. */
@@ -122,6 +123,11 @@ const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
     script: 'scripts/audit-concept-gameplay-prod.mjs',
     contractMarker: 'LEARN REWARD only skill earns a chime',
     emittedBy: 'src/components/Coach/CoachTeachPage.tsx (handleStudentMove via learnRewardFor)',
+  },
+  'thinking-lesson': {
+    script: 'scripts/audit-learn-how-to-think-prod.mjs',
+    contractMarker: 'the lesson emitted thinking-lesson rows with outcomes',
+    emittedBy: 'src/services/thinkingLessonSession.ts (one row per question), forwarded by appAuditor',
   },
 };
 

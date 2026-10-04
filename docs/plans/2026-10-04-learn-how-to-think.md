@@ -706,6 +706,43 @@ because every phase consumes them:
    reading challenge, the Tactics queue and Setup Trainer, Up next / Home, chat;
    its own "Learn how to think" tab if David judges it strong enough.
 
+## Build log (2026-10-04, in progress)
+
+**Built on `main` (local, one push at the end per David):**
+- `thinkingLesson.ts` — the pure per-question tap state machine (found / complete
+  / wrong / reveal, the ~8 s "one more" nudge, "I don't know", the answer
+  summary with honest `prompted`).
+- `thinkingLessonSession.ts` — the runner: Show → Guide → Solo (Solo only for a
+  green step), wrong taps answered with the METHOD in Guide and silent in Solo,
+  reasons for every key square after each question, earned praise only on a
+  clean answer, one `thinking-lesson` row per question.
+- `thinkingPositions.ts` + `thinkingLessonSource.ts` — the fair-key picker (1–4
+  squares, no near miss, never a used board) over own-game boards first
+  (mistake puzzles, then analysed games with the opponent's previous move and
+  the board before it), then CC0 puzzles near the student's rating.
+- `thinkingLessonMemory.ts` — boards used per step + where the last lesson
+  stopped (the `meta` store, no migration).
+- `thinkingLessonPlan.ts` — which step: tiers open by proof, red first within
+  open tiers, then the earliest unknown, then review; steps with no fair board
+  for this student are skipped and do not hold a tier shut; the tier-unlock
+  line + reward (`thinking-tier-unlocked`).
+- Six steps with kits: 2 what their move changed (own games), 3 am I safe,
+  5 their targets, 6 forcing moves (checks), 7 hit two (the app's verified fork
+  check), 10 is my move safe (the student's real played move).
+- `thinkingLessonRecord.ts` — answers as capability evidence on the steps' tags
+  (origin `learn` until the evidence workstream adds `lesson`), standing read.
+- Learn wiring: bare "teach me" (whole-message matcher), typed answers
+  ("c6 and e5", "I don't know"), mid-lesson questions hold the nudge, the tap
+  board, `?lesson=custom|think`, the Coach hub **Custom Lesson** tile, a fresh
+  student's custom lesson becomes the thinking lesson instead of a dead end.
+- Audit: `scripts/audit-learn-how-to-think-prod.mjs` (step-aware), contract row
+  in `algoAuditContract.test.ts`.
+
+**Merge-time swaps owed:** `looseSquaresOf` → the one loose computer;
+`*_STEP_TAGS` → `THINKING_STEPS`; `recordLaneEvidence` origin `learn` → the
+widened evidence writer with `lesson` + answer detail; tap handling → the
+shared tap hook; typed-answer fast path → the door's `answer` kind.
+
 ## Decisions (David 2026-10-04)
 
 1. **Spoken questions and answers go through the parser** — yes (widens ONE-CHAT
@@ -721,5 +758,12 @@ because every phase consumes them:
    bar, which stays for the coach's register).
 4. Play's opponent steers quietly — yes.
 5. Kids are unified as a declared surface.
+6. **A "Custom Lesson" tile on the Coach hub** (David 2026-10-04: "I do also want
+   a custom lesson tab in the coach tab" → "one tile, both lessons"). It opens
+   Learn with Coach (`/coach/teach?lesson=custom`) straight into a lesson: the
+   weakness-lesson picker when the student has holes (with "Learn how to think"
+   beside it), and straight into "Learn how to think" when they have none (grey
+   teaches). Up next's thinking bite uses `?lesson=think`. One lesson system,
+   one more door — not a second page.
 
 No open questions.
