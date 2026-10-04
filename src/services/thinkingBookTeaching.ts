@@ -1,84 +1,62 @@
-// thinkingBookTeaching — the masters' own words on each habit of "Learn how to
-// think" (David 2026-10-04: "make use of the books we have … the relevant
-// teachings from them").
+// thinkingBookTeaching — what the classic books teach about each habit of
+// "Learn how to think", said in the coach's own words (David 2026-10-04: "We
+// don't need to be quoting the books, just making sure the coach can teach the
+// information").
 //
-// Every quote is VERBATIM from the public-domain books in the Coaches Library,
-// fetched by BOOK id + PAGE id + an exact sentence span — never by a text
-// search (walk 2026-10-04: a search taught hanging pieces with a pin passage).
-// The span is located by its first and last words inside that one page, so a
-// rebuilt book that moves a sentence fails the test instead of quoting the
-// wrong lines. A step with no passage that genuinely teaches it is SILENT:
-// forcing moves and answering the danger have none in these books, and a
-// stretched quote is worse than none.
+// Each line TRANSLATES an idea a public-domain book in the Coaches Library
+// teaches (the doctrine: the books own the IDEAS, the coach phrases them). The
+// source is recorded by book id + page id + the sentence the idea comes from,
+// and a test checks that sentence is still on that page — so the teaching
+// stays grounded in the book even though the book is not read aloud.
 //
-// `chess-concepts.json` is NOT used here: its passages are rewritten prose,
-// not the authors' words, so it may never be quoted as theirs.
+// A step the books do not teach is SILENT (forcing moves, answering the
+// danger): no stretched idea. `chess-concepts.json` is not a source here — its
+// passages are rewritten prose, not the books.
 import type { LibraryBook } from '../data/coachesLibrary';
 import type { ThinkingStep } from './thinkingSteps';
 
-export interface BookCite {
-  bookId: string;
-  pageId: string;
-  /** The span starts at the first occurrence of `from` on the page … */
-  from: string;
-  /** … and ends at the end of the first `to` after it (inclusive). */
-  to: string;
-  /** How the coach introduces it. */
-  intro: string;
+export interface BookIdea {
+  /** The coach's own words for the book's idea. Code-authored, never a model. */
+  teach: string;
+  /** Where the idea comes from (recorded, checked by test, not spoken). */
+  source: { bookId: string; pageId: string; anchor: string };
 }
 
-export const THINKING_BOOK: Partial<Record<ThinkingStep, BookCite>> = {
+export const THINKING_BOOK: Partial<Record<ThinkingStep, BookIdea>> = {
   'their-move-changed': {
-    bookId: 'edward-lasker-chess-strategy', pageId: 'cs-1',
-    from: 'After certain particular dispositions', to: 'second stage in his development.',
-    intro: 'Edward Lasker describes this step in Chess Strategy:',
+    teach: 'Every player gets better at this the same way: by learning to sense danger one or two moves before it lands. The habit is simply asking it every move.',
+    source: { bookId: 'edward-lasker-chess-strategy', pageId: 'cs-1', anchor: 'the beginner will develop the perception of threats' },
   },
   'am-i-safe': {
-    bookId: 'edward-lasker-chess-strategy', pageId: 'cs-1',
-    from: 'loss of material must be avoided', to: 'a prospective Queen.',
-    intro: 'Edward Lasker’s rule, from Chess Strategy:',
+    teach: 'Treat losing material as off-limits, even a single pawn — any pawn can become a queen.',
+    source: { bookId: 'edward-lasker-chess-strategy', pageId: 'cs-1', anchor: 'loss of material must be avoided' },
   },
   'their-targets': {
-    bookId: 'edward-lasker-chess-strategy', pageId: 'cs-1',
-    from: 'in any combination which includes a number of exchanges', to: 'must never be forgotten.',
-    intro: 'Edward Lasker, in Chess Strategy, on counting:',
+    teach: 'When pieces can trade on one square, just count: how many attack it, how many defend it — and never forget what each of them is worth.',
+    source: { bookId: 'edward-lasker-chess-strategy', pageId: 'cs-1', anchor: 'count the number of attacking and defending units' },
   },
   'hit-two': {
-    bookId: 'edward-lasker-chess-and-checkers', pageId: 'cc-28',
-    from: 'The advantage of attacking two men at once', to: 'can be saved.',
-    intro: 'As Edward Lasker puts it in Chess and Checkers:',
+    teach: 'Chasing one piece away usually achieves nothing. Hit two at once and they can save only one.',
+    source: { bookId: 'edward-lasker-chess-and-checkers', pageId: 'cc-28', anchor: 'The advantage of attacking two men at once' },
+  },
+  calculate: {
+    teach: 'Often you have to see many moves ahead to find the right line — and with care you can see every consequence with certainty.',
+    source: { bookId: 'edward-lasker-chess-strategy', pageId: 'cs-4', anchor: 'consider many moves ahead' },
   },
   'is-my-move-safe': {
-    bookId: 'capablanca-chess-fundamentals', pageId: 'cf-27',
-    from: 'No reason can be given', to: 'actually existed.',
-    intro: 'Capablanca, in Chess Fundamentals, on a game lost from a winning position:',
+    teach: 'Games are thrown away from winning positions by players who felt so safe they stopped looking for danger. Check every move, especially when you are ahead.',
+    source: { bookId: 'capablanca-chess-fundamentals', pageId: 'cf-27', anchor: 'did not consider the danger that actually existed' },
   },
 };
 
-/** The verbatim span for a citation, or null when the page or the anchors are
- *  gone (never a nearby guess). Pure: the book is passed in. */
-export function bookSpan(cite: BookCite, book: LibraryBook | undefined): string | null {
-  const page = book?.pages.find((p) => p.id === cite.pageId);
-  if (!page) return null;
-  const text = page.text.replace(/\s+/g, ' ');
-  const start = text.indexOf(cite.from);
-  if (start < 0) return null;
-  const endAt = text.indexOf(cite.to, start);
-  if (endAt < 0) return null;
-  const span = text.slice(start, endAt + cite.to.length).trim();
-  return span.charAt(0).toUpperCase() + span.slice(1);
+/** Whether the idea's source sentence is still on its page (test helper; a
+ *  rebuilt book that moves it fails the test rather than drifting). */
+export function sourceStillThere(idea: BookIdea, book: LibraryBook | undefined): boolean {
+  const page = book?.pages.find((p) => p.id === idea.source.pageId);
+  return !!page && page.text.replace(/\s+/g, ' ').includes(idea.source.anchor);
 }
 
-/** What the coach says for a step: the introduction and the quote. The
- *  library (~780 KB) is loaded on demand, never in the Learn bundle. */
+/** The coach's teaching line for a step, or null when the books are silent. */
 export async function bookTeachingFor(step: ThinkingStep): Promise<string | null> {
-  const cite = THINKING_BOOK[step];
-  if (!cite) return null;
-  try {
-    const { getLibraryBook } = await import('../data/coachesLibrary');
-    const span = bookSpan(cite, getLibraryBook(cite.bookId));
-    return span ? `${cite.intro} “${span}”` : null;
-  } catch {
-    return null;
-  }
+  return THINKING_BOOK[step]?.teach ?? null;
 }

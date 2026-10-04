@@ -738,8 +738,37 @@ because every phase consumes them:
 - Audit: `scripts/audit-learn-how-to-think-prod.mjs` (step-aware), contract row
   in `algoAuditContract.test.ts`.
 
-**Merge-time swaps owed:** `looseSquaresOf` → the one loose computer;
-`*_STEP_TAGS` → `THINKING_STEPS`; `recordLaneEvidence` origin `learn` → the
+- **The books (David 2026-10-04: "make use of the books we have" → "We don't
+  need to be quoting the books, just making sure the coach can teach the
+  information").** After the worked example, each step teaches the idea a
+  Coaches Library book teaches about that habit, in the coach's OWN words
+  (`thinkingBookTeaching.ts`), with the source recorded by book + page + the
+  sentence it comes from (a test fails if a rebuilt book moves it): perceiving
+  threats (step 2), never losing material (3), counting attackers and defenders
+  and their values (5), the double attack (7), seeing many moves ahead (9), the
+  game lost from a "safe" position (10). Forcing moves and answering the danger
+  have no source in these books and stay silent. `chess-concepts.json` is not a
+  source — its passages are rewritten prose.
+
+## Work list for the end of the build (David 2026-10-04: "Any questions I ask can be tacked on to the work list at the end")
+
+1. **More public-domain books for the library** — candidates to verify (public
+   domain in the US + a clean Gutenberg/archive text): Emanuel Lasker *Common
+   Sense in Chess* (1896), Capablanca *My Chess Career* (1920), James Mason *The
+   Art of Chess* (1895) and *Chess Strategy* (1913), Réti *Modern Ideas in Chess*
+   (1923), Steinitz *The Modern Chess Instructor* (1889), Emanuel Lasker
+   *Lasker's Manual of Chess* (1925 English edition; check status). Each is a
+   content job: confirm the text and rights, ingest into `src/data/library/`,
+   then map its ideas to the steps and concepts it covers — prime gaps: forcing
+   moves (checks first) and defence ("answer the danger"), which the current
+   books do not teach.
+
+**Merged:** P0b one engine strength; P0c-2 loose computer (`findLoosePieces`),
+board-aware move wording, the one `ThinkingStep` table (lesson steps now read
+order / tier / tags from it; the per-kit tag lists and the placeholder loose
+function are deleted).
+
+**Merge-time swaps still owed:** `recordLaneEvidence` origin `learn` → the
 widened evidence writer with `lesson` + answer detail; tap handling → the
 shared tap hook; typed-answer fast path → the door's `answer` kind.
 

@@ -33,6 +33,8 @@ export interface LessonPositionCandidate {
   prevSan?: string;
   /** The board before that move (own games). */
   beforeFen?: string;
+  /** A real solution line from this board, in SAN (puzzles). */
+  line?: string[];
 }
 
 /** What a step computer says about one position. */

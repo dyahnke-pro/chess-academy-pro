@@ -27,6 +27,23 @@ const GAME_POOL = 60;
 const PUZZLE_POOL = 300;
 const PUZZLE_BAND = 300;
 
+/** The puzzle's solution line in SAN from the student's board (after the
+ *  setup move), or [] when any move fails to apply. */
+export function puzzleLineSan(fen: string, movesUci: string): string[] {
+  const uci = movesUci.trim().split(/\s+/);
+  try {
+    const c = new Chess(fen);
+    const out: string[] = [];
+    uci.forEach((u, i) => {
+      const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+      if (i > 0) out.push(m.san);
+    });
+    return out;
+  } catch {
+    return [];
+  }
+}
+
 /** The board after the puzzle's setup move — the student's turn. */
 export function puzzleStartFen(fen: string, movesUci: string): string | null {
   const first = movesUci.trim().split(/\s+/)[0];
@@ -117,7 +134,8 @@ export async function loadLessonCandidates(opts: {
       .sort((a, b) => Math.abs(a.rating - opts.rating) - Math.abs(b.rating - opts.rating) || a.id.localeCompare(b.id))
       .forEach((p) => {
         const fen = puzzleStartFen(p.fen, p.moves);
-        if (fen) push({ fen, origin: 'puzzle', puzzleId: p.id });
+        const line = puzzleLineSan(p.fen, p.moves);
+        if (fen) push({ fen, origin: 'puzzle', puzzleId: p.id, ...(line.length > 0 ? { line } : {}) });
       });
   } catch { /* no puzzles seeded */ }
 
