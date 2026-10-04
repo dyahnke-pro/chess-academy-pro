@@ -54,6 +54,7 @@ import { WrongTryNote } from '../Puzzles/WrongTryNote';
 import { hintSquareStyles } from '../../utils/hintSquareStyles';
 import { useSolvedDrillConcept } from '../../hooks/useWrongTryRefutation';
 import type { PieceDropHandlerArgs } from 'react-chessboard';
+import { useBoardFit } from '../../hooks/useBoardFit';
 
 const EMPTY_LINE: readonly string[] = [];
 
@@ -377,6 +378,8 @@ function AdaptivePuzzleRunner({
     [playout, trackedPlayMove, trackedPieceDrop],
   );
   const clickToMove = useClickToMove(trackedPlayout);
+  // Board + Skip / Next fit above the bottom nav on a short phone (David 2026-10-04).
+  const { boardRef: fitRef, keepRef, boardStyle: fitStyle } = useBoardFit(playout.phase);
   // SOLVED → TEACH THE CONCEPT (tactics map 2026-10-01: Calculation ended on
   // "Solved — played to the win." and nothing else). The same computed
   // explanation the puzzle board gives, for a student-to-move drill.
@@ -539,7 +542,7 @@ function AdaptivePuzzleRunner({
           </div>
         )}
       </div>
-      <div className="flex items-center justify-between gap-2">
+      <div ref={keepRef} className="flex items-center justify-between gap-2">
         <button
           onClick={trackedReveal}
           disabled={playout.isComplete}
@@ -563,7 +566,7 @@ function AdaptivePuzzleRunner({
     </div>
   );
 
-  return <ChessLessonLayout header={header} board={board} controls={controls} />;
+  return <ChessLessonLayout header={header} board={board} controls={controls} boardFit={{ ref: fitRef, style: fitStyle }} />;
 }
 
 // ─── Summary ─────────────────────────────────────────────────────

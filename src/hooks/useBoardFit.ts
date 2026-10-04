@@ -92,9 +92,21 @@ export function useBoardFit(measureKey: unknown): {
     fit();
     const raf = requestAnimationFrame(fit);
     window.addEventListener('resize', fit);
+    // The page settles AFTER mount (fonts, the header row, a loading line
+    // that becomes the controls), so re-fit whenever anything around the
+    // board changes size. The formula is a fixed point — once the controls
+    // sit on the line, the next fit returns the same width and stops.
+    // Every ancestor from the board up to the scroll root grows when content
+    // above or below it does, so those are what is watched.
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(() => fit()) : null;
+    for (let el = boardRef.current?.parentElement ?? null; ro && el && el.tagName !== 'MAIN' && el !== document.body; el = el.parentElement) {
+      ro.observe(el);
+    }
+    if (ro && keepEl.current) ro.observe(keepEl.current);
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', fit);
+      ro?.disconnect();
     };
   }, [fit, measureKey]);
 
