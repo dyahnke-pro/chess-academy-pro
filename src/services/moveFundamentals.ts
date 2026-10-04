@@ -21,7 +21,7 @@ import { rotateStem } from '../utils/rotateStem';
 import { CENTRAL_SQUARES, CORE_CENTER, keyTargetSquares, kingZoneAmong, kingZoneClause, standingHoles } from './keySquares';
 import { andList } from '../utils/andList';
 import type { Square } from 'chess.js';
-import { landingIsSafe, legalSeeGainFor } from './positionReadingService';
+import { landingIsSafe, legalSeeGainFor, seeReadsStanding } from './positionReadingService';
 import { classifyPhase, isEndgameByMaterial } from './gamePhaseService';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { homeMinorCount, homeSquaresOf, isOnHomeSquare } from './development';
@@ -881,7 +881,7 @@ function openingIdeas(
   // nothing guarding it, went silent).
   if (isPiece && !mv.captured && !out.some((f) => f.id === 'keep-working')) {
     const won = legalSeeGainFor(fenBefore, mv.from, them);
-    if (won > 0 && legalSeeGainFor(after.fen(), mv.to, them) === 0) {
+    if (won > 0 && legalSeeGainFor(after.fen(), mv.to, them) === 0 && seeReadsStanding(after.fen(), mv.to, them)) {
       const hitters = before.attackers(mv.from, them)
         .flatMap((sq) => { const p = before.get(sq); return p ? [{ sq, p }] : []; })
         .sort((a, b) => (MATERIAL_VALUE[a.p.type] ?? 0) - (MATERIAL_VALUE[b.p.type] ?? 0));

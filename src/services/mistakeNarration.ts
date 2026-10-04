@@ -8,7 +8,7 @@ import type { MistakeClassification, MistakeGamePhase, MistakeNarration } from '
 import { sideToMove } from './conceptEngine';
 import { stemKeyOf } from '../utils/rotateStem';
 import { describeWhatMoveAllowed, punishmentOf } from './moveAllowed';
-import { legalSeeGain } from './positionReadingService';
+import { captureRead } from './positionReadingService';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -569,7 +569,9 @@ function keepsWhatWasDropped(fen: string, playedSan: string, replySan: string | 
     if (!best || best.captured) return null; // a capture answers differently
     const there = c.get(square as Parameters<Chess['get']>[0]);
     if (!there || there.color !== best.color) return null;
-    if (legalSeeGain(c.fen(), square as Parameters<Chess['get']>[0]) > 0) return null;
+    // Through the safety door: "protected" is a standing fact, never a check
+    // that stops the capture for one move.
+    if (captureRead(c.fen(), square as Parameters<Chess['get']>[0], c.turn()) !== 0) return null;
     return `${bestSan} keeps your ${piece} on ${square} protected.`;
   } catch {
     return null;

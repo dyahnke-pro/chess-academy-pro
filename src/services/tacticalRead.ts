@@ -17,6 +17,7 @@
  * unit-tested with hand-fed data — the engine wiring is a thin shell over them.
  */
 import { settledLineEnd } from './material';
+import { boardEdgeWords } from '../utils/countWords';
 import { rotateStem } from '../utils/rotateStem';
 import { Chess } from 'chess.js';
 import { computePvLine, computePlyFacts, type PvEngine, type PvLine, type PvPly } from './pvPlayback';
@@ -80,24 +81,17 @@ export function toStudentCp(whiteCp: number, studentColor: 'white' | 'black'): n
   return studentColor === 'white' ? whiteCp : -whiteCp;
 }
 
-/** Board-true material descriptor for a verdict, or null. `md` is the student's
- *  NET material in pawn units (getMaterialAdvantage scale: p1 n/b3 r5 q9), > 0 =
- *  student ahead. We only NAME material the board actually shows (G3): a +2.8
- *  positional edge with even material must NOT say "up a piece". Returns the
- *  smallest honest label the count supports. */
-function materialLabel(md: number | null | undefined): string | null {
-  if (md == null) return null;
-  if (md >= 8) return 'up a queen';
-  if (md >= 5) return 'up a rook';
-  if (md >= 3) return 'up a piece';
-  if (md >= 2) return 'up the exchange';
-  if (md >= 1) return 'up a pawn';
-  return null;
+/** Board-true material descriptor for a verdict, or null. A piece is named
+ *  only from the pieces on the line's end board (G3): a +2.8 positional edge
+ *  with even material says nothing, the exchange and a pawn is not "a piece". */
+function materialLabel(m: MaterialAtEnd | null | undefined): string | null {
+  if (m == null || m.pawns < 1) return null;
+  return `up ${boardEdgeWords(m.fen, m.side, m.pawns)}`;
 }
 
 /** Spoken verdict from the line. `mateForStudent` > 0 means the student mates.
- *  `materialDeltaPawns` (student POV, + = student ahead, getMaterialAdvantage
- *  scale) is the material the line's TERMINAL position actually shows — it is the
+ *  `material` (student POV, + = student ahead) is the material the line's
+ *  TERMINAL position actually shows — it is the
  *  ONLY thing that licenses a material claim. When it is null/undefined (no line
  *  in hand, e.g. an eval-only caller) the verdict frames by eval MAGNITUDE and
  *  never invents material (G3: `voiceFacts` can only subtract, so a false "up a
@@ -105,15 +99,16 @@ function materialLabel(md: number | null | undefined): string | null {
 export function summarizeVerdict(
   studentCp: number,
   mateForStudent: number | null,
-  materialDeltaPawns?: number | null,
+  material?: MaterialAtEnd | null,
 ): ReadVerdict {
+  const materialDeltaPawns = material?.pawns ?? null;
   if (mateForStudent != null && mateForStudent > 0) {
     const words = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
     const n = mateForStudent <= 8 ? words[mateForStudent] : String(mateForStudent);
     return { kind: 'mate', mateIn: mateForStudent, studentCp, text: `a forced mate in ${n}` };
   }
   const a = Math.abs(studentCp);
-  const mat = materialLabel(materialDeltaPawns);
+  const mat = materialLabel(material);
   // Material framing ONLY when the eval says winning AND the board backs the
   // count; otherwise a magnitude-only phrase that claims no material.
   if (studentCp >= 500) {
@@ -134,15 +129,21 @@ export function summarizeVerdict(
   return { kind: 'edge', mateIn: null, studentCp, text: 'slightly worse' };
 }
 
-/** Student-POV net material (getMaterialAdvantage scale) at the line's terminal
- *  position — the board-fact that licenses a material claim in the verdict. Null
- *  when no ply carries a resolvable fenAfter. */
-function terminalMaterialDelta(line: PvPly[], studentColor: 'white' | 'black'): number | null {
+/** The student's settled material at a line's end (points, + = ahead), with
+ *  the board that names it — the board-fact that licenses a material claim in
+ *  the verdict. Null when no ply carries a resolvable fenAfter. */
+export interface MaterialAtEnd { pawns: number; fen: string; side: 'w' | 'b' }
+
+function terminalMaterialDelta(line: PvPly[], studentColor: 'white' | 'black'): MaterialAtEnd | null {
   // SETTLED (WO-MATERIAL-01): a line cut mid-recapture is not a material win.
   const plies = line.filter((p) => p.fenAfter && p.fenAfter.length > 0);
   const whitePov = settledLineEnd(plies);
   if (whitePov === null) return null;
-  return studentColor === 'white' ? whitePov : -whitePov;
+  return {
+    pawns: studentColor === 'white' ? whitePov : -whitePov,
+    fen: plies[plies.length - 1].fenAfter,
+    side: studentColor === 'white' ? 'w' : 'b',
+  };
 }
 
 /** The decisive tactic in the line: the first ply whose move LANDS a tactic,

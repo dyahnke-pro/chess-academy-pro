@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**351 lines · 2 exports · 5 importers · 2 tests · 0 audits**
+**345 lines · 2 exports · 5 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -24,7 +24,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildReviewMoveBriefing` (function) — 17 call sites
-- `src/services/coachFeatureService.ts:1729`
+- `src/services/coachFeatureService.ts:1755`
 - `src/services/materialSites.test.ts:18`
 - `src/services/openingGenerator.ts:1691`
 - `src/services/openingGenerator.ts:2556`

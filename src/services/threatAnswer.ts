@@ -15,7 +15,7 @@
 // A LEAF: chess.js + the SEE helper; the caller hands in the engine's move.
 import { Chess, type Color, type Move, type Square } from 'chess.js';
 import type { ArrowClaim } from './arrowDoor';
-import { legalSeeGainFor } from './positionReadingService';
+import { captureRead, legalSeeGainFor } from './positionReadingService';
 import { THINK_MARK } from '../utils/thinkPause';
 
 export type ThreatAnswerKind = 'take' | 'step-out' | 'with-gain' | 'kick' | 'block' | 'guard' | 'wait';
@@ -100,7 +100,7 @@ export function threatAnswer(input: {
     const p = new Chess(fenAt).get(sq);
     return p ? NAME[p.type] : 'piece';
   };
-  const safeThere = legalSeeGainFor(after, m.to, foe) <= 0;
+  const safeThere = captureRead(after, m.to, foe) === 0;
   let kind: ThreatAnswerKind | null = null;
   let answer = '';
 

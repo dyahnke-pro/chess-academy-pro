@@ -16,6 +16,10 @@ describe('toStudentCp', () => {
   });
 });
 
+// Real end boards for the material the verdict may name.
+const PIECE_UP_B = { pawns: 3, fen: '4k3/8/8/3n4/8/8/8/4K3 w - - 0 1', side: 'b' as const };
+const mat = (fen: string, pawns: number, side: 'w' | 'b' = 'w') => ({ pawns, fen, side });
+
 describe('summarizeVerdict', () => {
   it('names a forced mate in words', () => {
     const v = summarizeVerdict(100000, 3);
@@ -30,16 +34,22 @@ describe('summarizeVerdict', () => {
   });
   it('does NOT claim material from a positional edge — even material stays magnitude-only (B#3/G3)', () => {
     // +2.8 eval but the board shows even material: never "up a piece".
-    const v = summarizeVerdict(280, null, 0);
+    const v = summarizeVerdict(280, null, mat('4k3/8/8/8/8/8/8/4K3 w - - 0 1', 0));
     expect(v.kind).toBe('winning');
     expect(v.text).toBe('a decisive advantage');
     expect(v.text).not.toMatch(/piece|pawn|exchange|rook|queen/);
   });
   it('claims material ONLY when the board backs the count', () => {
-    expect(summarizeVerdict(280, null, 3).text).toBe('a decisive edge — up a piece');
-    expect(summarizeVerdict(280, null, 2).text).toBe('a decisive edge — up the exchange');
-    expect(summarizeVerdict(180, null, 1).text).toBe('clearly better — up a pawn');
-    expect(summarizeVerdict(600, null, 5).text).toBe('a winning material advantage');
+    expect(summarizeVerdict(280, null, mat('4k3/8/8/8/8/8/8/3NK3 w - - 0 1', 3)).text).toBe('a decisive edge — up a piece');
+    expect(summarizeVerdict(280, null, mat('3bk3/8/8/8/8/8/8/R3K3 w - - 0 1', 2)).text).toBe('a decisive edge — up the exchange');
+    expect(summarizeVerdict(180, null, mat('4k3/8/8/8/8/8/P7/4K3 w - - 0 1', 1)).text).toBe('clearly better — up a pawn');
+    expect(summarizeVerdict(600, null, mat('4k3/8/8/8/8/8/8/R3K3 w - - 0 1', 5)).text).toBe('a winning material advantage');
+  });
+  it('names a piece from the BOARD, never from the point count', () => {
+    // The exchange and a pawn is 3 points — not "a piece".
+    expect(summarizeVerdict(280, null, mat('3bk3/8/8/8/8/8/P7/R3K3 w - - 0 1', 3)).text).toBe('a decisive edge — up the exchange and a pawn');
+    // Two knights for a pawn is 5 points — not "a rook".
+    expect(summarizeVerdict(400, null, mat('4k3/7p/8/8/8/8/8/1N1NK3 w - - 0 1', 5)).text).toBe('a decisive edge — up 5 points');
   });
   it('a bare eval (no line/material) never invents material', () => {
     // The eval-only path (e.g. lineOutcomeClause) frames by magnitude only.
@@ -171,7 +181,7 @@ describe('narrateTacticalRead (the computed voice)', () => {
       forkPly,
     ],
     // +439 eval AND the line wins a bishop (net +3, board-backed) → "up a piece".
-    verdict: summarizeVerdict(439, null, 3),
+    verdict: summarizeVerdict(439, null, PIECE_UP_B),
     keyTactic: pickKeyTactic([forkPly]),
     checkPlies: [0], closeAlternative: null,
   };
@@ -246,7 +256,7 @@ describe('tacticalReadFacts (facts for the voice model, not prose)', () => {
     const facts = tacticalReadFacts({
       fen: 'x', studentColor: 'black', bestMoveSan: 'Ng4+', bestMoveUci: 'e5g4',
       line,
-      verdict: summarizeVerdict(439, null, 3), // +439 AND wins a bishop → board-backed "up a piece"
+      verdict: summarizeVerdict(439, null, PIECE_UP_B), // +439 AND wins a bishop → board-backed "up a piece"
       keyTactic: pickKeyTactic(line),
       checkPlies: [0], closeAlternative: null,
       tempting: { san: 'Nxf3+', uci: 'e5f3', appeal: 'capture', evalDropCp: 616, refutation: [
@@ -512,7 +522,7 @@ describe('a spoken move never reads as a clause where a noun belongs', () => {
   const base = {
     fen: 'x', studentColor: 'black' as const, bestMoveSan: 'Ng4+', bestMoveUci: 'e5g4',
     line: [quietPly('Ng4+', 'black'), quietPly('Kh1', 'white')],
-    verdict: summarizeVerdict(439, null, 3),
+    verdict: summarizeVerdict(439, null, PIECE_UP_B),
     keyTactic: null, checkPlies: [0], closeAlternative: null, tempting: null,
   };
 

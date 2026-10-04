@@ -16,7 +16,7 @@
 // nothing.
 import { Chess, type Square } from 'chess.js';
 import { detectNewThreat } from './groundedAnswer';
-import { legalSeeGainFor } from './positionReadingService';
+import { legalSeeGainFor, seeReadsStanding } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
 
 export interface Bluff {
@@ -50,7 +50,7 @@ export function detectBluff(fenBefore: string, san: string, bestReplySan: string
   // A PIECE THAT CAN SIMPLY BE TAKEN IS NOT A BLUFF — it is a gift (hand walk
   // 2340, move 20: "their bishop on b3 has nothing defending it" and "it wins
   // nothing — no need to react" on one move). The other lane says take it.
-  if (legalSeeGainFor(after.fen(), mv.to, victim) > 0) return null;
+  if (legalSeeGainFor(after.fen(), mv.to, victim) > 0 || !seeReadsStanding(after.fen(), mv.to, victim)) return null;
   const targets: Bluff['targets'] = [];
   for (const row of after.board()) {
     for (const cell of row) {
