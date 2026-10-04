@@ -16,12 +16,14 @@ import { answerDangerKit } from './thinkingAnswerDangerStep';
 import { bookTeachingFor } from './thinkingBookTeaching';
 import { calculateKit } from './thinkingCalculateStep';
 import { candidatesKit } from './thinkingCandidatesStep';
+import { assessKit } from './thinkingAssessStep';
 
 /** The app's one loose-piece computer, in the shape the targets kit takes. */
 const looseSquares: LooseSquares = (fen, color) => findLoosePieces(fen, color).map((p) => p.square);
 
 /** Steps that have a kit today. A step absent here is not served yet. */
 export const STEP_KITS: Partial<Record<ThinkingStep, () => StepKit>> = {
+  assess: assessKit,
   'their-move-changed': theirMoveKit,
   'am-i-safe': safetyKit,
   'answer-danger': answerDangerKit,
