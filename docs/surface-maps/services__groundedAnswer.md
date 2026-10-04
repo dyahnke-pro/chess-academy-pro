@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7409 lines · 162 exports · 75 importers · 48 tests · 8 audits**
+**7423 lines · 162 exports · 75 importers · 49 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -146,7 +146,8 @@
 - `src/services/groundedAnswer.test.ts:1606`
 - `src/services/groundedAnswer.test.ts:1613`
 
-### `assemblePieceSafetyAnswer` (function) — 1 call site
+### `assemblePieceSafetyAnswer` (function) — 2 call sites
+- `src/services/checkIsNotAGuard.test.ts:54`
 - `src/services/computedVoiceGrounding.test.ts:85`
 
 ### `assembleThreatAnswer` (function) — 0 call sites
@@ -360,7 +361,7 @@
 - `src/services/groundedAnswer.test.ts:1045`
 - `src/services/groundedAnswer.test.ts:1054`
 - `src/services/learnMoveTeaching.ts:43`
-- `src/services/mistakeNarration.ts:645`
+- `src/services/mistakeNarration.ts:647`
 - `src/services/reviewNarrationFidelity.test.ts:167`
 - `src/services/reviewNarrationFidelity.test.ts:173`
 - `src/services/whyBestMove.ts:75`
@@ -385,7 +386,7 @@
 - `src/services/groundedMoveWhy.ts:79`
 - `src/services/guidedFindTheMove.ts:176`
 - `src/services/guidedFindTheMove.ts:212`
-- `src/services/mistakeNarration.ts:639`
+- `src/services/mistakeNarration.ts:641`
 - `src/services/moveAllowed.ts:56`
 - `src/services/reviewBoardAwareness.test.ts:16`
 - `src/services/reviewBoardAwareness.test.ts:25`
@@ -1104,7 +1105,7 @@
 - `src/services/learnMoveTeaching.ts:125`
 - `src/services/opponentMovePurpose.ts:57`
 - `src/services/reviewFullData.ts:778`
-- `src/services/reviewMoveBriefing.ts:233`
+- `src/services/reviewMoveBriefing.ts:227`
 - `src/services/reviewNarrationFidelity.test.ts:218`
 - `src/services/reviewNarrationFidelity.test.ts:227`
 - `src/services/reviewNarrationFidelity.test.ts:239`
@@ -1207,6 +1208,7 @@
 - `src/services/answerBoardQuestion.test.ts`
 - `src/services/attackAssessment.test.ts`
 - `src/services/captureThreatAnswerable.test.ts`
+- `src/services/checkIsNotAGuard.test.ts`
 - `src/services/coachApi.currentAsk.test.ts`
 - `src/services/coachFeatureService.test.ts`
 - `src/services/coachSideAwareness.test.ts`
