@@ -5,7 +5,6 @@ import { getCapabilityProfile } from '../../services/capabilityEvidence';
 import { getUnifiedWeaknessProfile, type UnifiedWeakness } from '../../services/weaknessSpine';
 import { heatMap, newlyGreen, type HeatTile } from '../../services/heatMap';
 import { reward } from '../../services/rewardService';
-import { resolveRepRoute } from '../../services/repRouting';
 import { getMisconceptionTag } from '../../data/misconceptionTags';
 import { REP_PUZZLE_CAP } from '../../services/repCompletion';
 import { logAppAudit } from '../../services/appAuditor';
@@ -75,6 +74,15 @@ function evidenceLine(t: HeatTile): string {
   }
   if (t.heldStreak > 0) return `Being tested: answered ${t.heldStreak} time${t.heldStreak === 1 ? '' : 's'} — prove it in more games to turn it green.`;
   return 'Not tested yet — the board has not asked you this.';
+}
+
+/** The hole whose positions come from the student's OWN games for this
+ *  skill, or null — Practice is offered only when one exists. */
+export function ownPositionsHole(
+  holes: readonly UnifiedWeakness[],
+  tag: string,
+): UnifiedWeakness | null {
+  return holes.find((h) => h.capabilityTag === tag && h.openCount > 0 && h.tag.startsWith('analysis:')) ?? null;
 }
 
 export function HeatMapPanel(): JSX.Element | null {
@@ -187,7 +195,11 @@ export function HeatMapPanel(): JSX.Element | null {
 
   const count = (s: HeatTile['state']): number => tiles.filter((t) => t.state === s).length;
   const selected = ordered.find((t) => t.tag === open) ?? null;
-  const selectedHole = selected ? holes.find((h) => h.capabilityTag === selected.tag && h.openCount > 0) ?? null : null;
+  // "Practice your positions" is offered only when there ARE positions from
+  // the student's own games behind this skill — an `analysis:` group on My
+  // Weaknesses (David 2026-10-04). Any other hole would route to generic
+  // puzzles, which is what Drill already is, so the label would overpromise.
+  const selectedHole = selected ? ownPositionsHole(holes, selected.tag) : null;
   const selectedThemes = selected ? getMisconceptionTag(selected.tag)?.drill.puzzleThemes ?? [] : [];
   const lastMistake = selected ? timelines.get(selected.tag)?.lastMistakeAt ?? null : null;
 
@@ -205,15 +217,7 @@ export function HeatMapPanel(): JSX.Element | null {
     // Your own game positions (David 2026-10-02): a hole the spine built from
     // your mistakes opens that group on My Weaknesses — the same bucket key, so
     // the group is exactly the positions this column counted.
-    if (hole.tag.startsWith('analysis:')) {
-      void navigate('/tactics/mistakes', { state: { weaknessKey: hole.tag.replace(/^analysis:/, '') } });
-      return;
-    }
-    const route = resolveRepRoute({
-      kind: 'weakness', key: `weakness:${hole.tag}:${hole.label}`, label: hole.label, subtitle: '',
-      tag: hole.tag, puzzleThemes: hole.puzzleThemes, fen: hole.fen,
-    });
-    void navigate(route.path, route.state ? { state: route.state } : undefined);
+    void navigate('/tactics/mistakes', { state: { weaknessKey: hole.tag.replace(/^analysis:/, '') } });
   };
 
   const drill = (t: HeatTile, themes: readonly string[]): void => {

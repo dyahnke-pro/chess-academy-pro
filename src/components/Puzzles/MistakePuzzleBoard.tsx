@@ -197,6 +197,11 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   // record (2026-10-01). The first answer is the evidence.
   const answeredRef = useRef(false);
   const toldBeforeAnswerRef = useRef(false);
+  // SHOWN THE ANSWER? [show me] reveals the move itself, so a solve after it
+  // is not a solve for spaced repetition or the solved count (David
+  // 2026-10-04: "Show me" then solving counts as a miss). Teach-me withholds
+  // the move, so it does not set this.
+  const answerShownRef = useRef(false);
   const chessRef = useRef(new Chess(puzzle.fen));
 
   // Free-tier meter: count this puzzle against the 20-bucket once when it
@@ -402,6 +407,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     wrongAttemptsRef.current = 0;
     answeredRef.current = false;
     toldBeforeAnswerRef.current = false;
+    answerShownRef.current = false;
     setWrongAttemptCount(0);
     setReplayIndex(-1);
 
@@ -805,7 +811,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       // celebration, no why, no Next button, no capability evidence).
       const finishSolved = (): void => {
         setState('correct');
-        resolve(!hasMadeMistakeRef.current, Math.round(elapsedMs));
+        resolve(!hasMadeMistakeRef.current && !answerShownRef.current, Math.round(elapsedMs));
         reward({ kind: 'solved', square: move.to, step: currentPlayerMove, seed: rewardSeed(puzzle.id) });
         // Record outcome for cross-session coaching
         recordTacticOutcome({
@@ -1223,6 +1229,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
               // hintState.level: `resetHints()` zeroes the level on the very
               // move that solves). Told after a miss -> the miss stands.
               if (!answeredRef.current) toldBeforeAnswerRef.current = true;
+              answerShownRef.current = true;
               // Skip the hint ladder — jump straight to tier 3 (best
               // move arrow + final answer). requestHint() bumps one
               // tier; three consecutive calls reach tier 3.
