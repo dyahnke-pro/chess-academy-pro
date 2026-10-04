@@ -13,6 +13,7 @@
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
 import { settledLeadFor, type LastMove } from './material';
+import { countWords } from '../utils/countWords';
 import { isSacrifice } from './factStakes';
 import { seatPieceReferences } from '../utils/seatPieces';
 import { deriveNextPlans, mobilityMap } from './nextPlans';
@@ -1904,7 +1905,7 @@ export function assembleCandidateMoveAnswer(opts: {
   const sacOffer = sacOfferEarly;
   if (sacOffer !== null) {
     const stmEval = typeof opts.candidateEvalCp === 'number' ? opts.candidateEvalCp : null;
-    const give = sacOffer >= 5 ? 'the exchange or more' : sacOffer >= 3 ? 'a piece' : 'a pawn';
+    const give = countWords(sacOffer);
     const after = evalPhrase(opts.candidateEvalCp, opts.candidateMateIn, mover, opts.studentColor);
     let verdict: string | null = null;
     if (typeof opts.candidateMateIn === 'number' && opts.candidateMateIn > 0) {
@@ -7304,7 +7305,7 @@ export function playedSacrificeVerdict(fenBefore: string, san: string, evalAfter
   // ordinary pawn push is never announced as a sacrifice unprompted.)
   const offer = sacrificeOffer(fenBefore, san, 1);
   if (offer === null || evalAfterMoverCp === null) return null;
-  const give = offer >= 5 ? 'the exchange or more' : offer >= 3 ? 'a piece' : 'a pawn';
+  const give = countWords(offer);
   // Judged by what the sacrifice COST against best play, not by the eval
   // alone: an opening that is already a touch worse for you does not make the
   // engine's own top move "speculative" (it said both, in one answer).

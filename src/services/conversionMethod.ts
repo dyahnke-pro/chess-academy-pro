@@ -156,7 +156,15 @@ function edgeWords(edge: number, c: Chess, student: 'w' | 'b'): string {
   // 2026-09-27: "you're a rook up" at +8 and +9 — a rook and a minor more).
   if (edge >= 8 && edge <= 10 && extra('q')) return 'a queen';
   if (edge >= 4 && edge <= 6 && extra('r')) return 'a rook';
-  if (edge >= 5) return `${Math.round(edge)} points`;
-  return 'a piece'; // readConversion never calls below CONVERSION_EDGE
+  // …and "a piece" only when a MINOR is the extra (clean-pass walk VRUh4Qgh,
+  // 25…Bxh4: two rooks and two bishops against a rook, a bishop and two
+  // knights is the exchange and a pawn, not a piece).
+  const diff = (t: string): number => count(student, t) - count(them, t);
+  const minors = diff('n') + diff('b');
+  const pawns = diff('p');
+  const pawnTail = pawns === 1 ? ' and a pawn' : pawns > 1 ? ` and ${pawns} pawns` : '';
+  if (diff('q') === 0 && diff('r') === 1 && minors === -1 && pawns >= 0) return `the exchange${pawnTail}`;
+  if (diff('q') === 0 && diff('r') === 0 && minors === 1 && pawns >= 0) return `a piece${pawnTail}`;
+  return `${Math.round(edge)} points`;
 }
 

@@ -11,6 +11,7 @@
 // Fetched lazily, never on the move path (the `openingPositions` pattern).
 // A LEAF: no imports beyond the move speller.
 import { sayMoveNoun } from './spokenMove';
+import { countWords } from '../utils/countWords';
 
 
 export interface IdentityFacts {
@@ -118,7 +119,7 @@ export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'se
   }
   if (f.gambit) {
     const n = f.gambit.down;
-    const amount = n === 1 ? 'a pawn' : n === 2 ? 'two pawns' : 'a piece';
+    const amount = countWords(n);
     out.push(`In the main line ${who(f.gambit.side)} ${v('stay')} ${amount} down for at least ${moves(f.gambit.forPlies)} moves, playing for time instead of material.`);
   }
   for (const a of f.aims) {

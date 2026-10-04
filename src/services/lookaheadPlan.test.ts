@@ -336,7 +336,7 @@ describe('the sentence is ordered by the position, not by a fixed ladder', () =>
   });
 
   it('leads with a rook over a two-piece gesture at the king', () => {
-    expect(say({ nearEnemyKing: 2, materialSwing: 5 })).toMatch(/^You want to win a rook/);
+    expect(say({ nearEnemyKing: 2, materialSwing: 5 })).toMatch(/^You want to win 5 points of material/);
   });
 
   it('weighs a passed pawn by how close it is to promoting', () => {
@@ -346,9 +346,11 @@ describe('the sentence is ordered by the position, not by a fixed ladder', () =>
     expect(far).not.toMatch(/^You want to create a passed pawn/);
   });
 
-  it('says a rook is a rook and a pawn is a pawn', () => {
-    expect(say({ materialSwing: 5 })).toContain('a rook');
-    expect(say({ materialSwing: 3 })).toContain('a piece');
+  it('a count names only what a count proves — a piece name comes from the deal', () => {
+    // 5 can be a rook or a knight and two pawns; 3 can be the exchange and a
+    // pawn (clean-pass walk VRUh4Qgh). Only `materialDeal` names pieces.
+    expect(say({ materialSwing: 5 })).toContain('5 points of material');
+    expect(say({ materialSwing: 3 })).toContain('3 points of material');
     expect(say({ materialSwing: 1 })).toContain('a pawn');
   });
 

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**148 lines · 8 exports · 6 importers · 2 tests · 0 audits**
+**149 lines · 8 exports · 6 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,7 +30,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingGenerator.ts:2484`
 
 ### `warmOpeningIdentity` (function) — 2 call sites
-- `src/services/learnBoardTeaching.ts:601`
+- `src/services/learnBoardTeaching.ts:614`
 - `src/services/reviewOpeningTheory.ts:248`
 
 ### `setOpeningIdentity` (function) — 1 call site
@@ -48,7 +48,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `openingIdentityLine` (function) — 13 call sites
 - `src/services/coachApi.ts:5472`
 - `src/services/coachApi.ts:5996`
-- `src/services/learnBoardTeaching.ts:602`
+- `src/services/learnBoardTeaching.ts:615`
 - `src/services/openingGenerator.ts:2485`
 - `src/services/openingIdentity.test.ts:18`
 - `src/services/openingIdentity.test.ts:20`

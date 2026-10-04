@@ -141,6 +141,6 @@ describe('material is read where each line\'s trades finish (review walk oct3b)'
         : { cp: 0, pv: ['e7e8', 'a2a1', 'e8e7', 'a1a2'] };
     };
     const r = await compareTwoMoves(fen, 'Kb1', 'Ka2', won);
-    expect(r?.delta?.text).toMatch(/a rook better on material than Ka2/);
+    expect(r?.delta?.text).toMatch(/5 points better on material than Ka2/);
   });
 });

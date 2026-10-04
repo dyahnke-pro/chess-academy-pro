@@ -10196,6 +10196,11 @@ export function CoachTeachPage(): JSX.Element {
                         if (line) queueSpokenHint(fenAfterReply, line, 'openingIdea', [brk.square], [`opening-summary:${brk.san}`]);
                       }
                     } catch { /* the summary is a bonus, never a blocker */ }
+                    // The student's eval AFTER the move, their side — one value for
+                    // every lane that grades it (`moverFault`).
+                    const studentEvalAfterCp = !mid.isMate
+                      ? mid.evaluation * sign
+                      : mid.mateIn !== null && mid.mateIn * sign > 0 ? 100_000 : null;
                     const look = backwardLook({
                       fenBefore,
                       fenAfter: move.fen,
@@ -10213,9 +10218,7 @@ export function CoachTeachPage(): JSX.Element {
                       // saw before it was the only reason `bothCp` was false —
                       // and was graded "a blunder"). A mate FOR the mover is
                       // winning; a mate against them is not.
-                      moverEvalAfterCp: !mid.isMate
-                        ? mid.evaluation * sign
-                        : mid.mateIn !== null && mid.mateIn * sign > 0 ? 100_000 : null,
+                      moverEvalAfterCp: studentEvalAfterCp,
                       studentColor: playerColor,
                       ...mateContext(preStudentRead, mid, playerColor),
                     });
@@ -10343,7 +10346,7 @@ export function CoachTeachPage(): JSX.Element {
                       // 2026-09-27): the lasting damage a flagged move left —
                       // king cover thinned, a passer granted, a new isolani.
                       // The same computer review speaks; it self-gates to null.
-                      const concession = lookConcession(fenBefore, move.san, cpLoss);
+                      const concession = lookConcession(fenBefore, move.san, cpLoss, studentEvalAfterCp);
                       // The opening lane already announced this departure and the
                       // usual move; the fundamental keeps only its HOW.
                       const bookSaid = fundamental?.id === 'left-book-early'

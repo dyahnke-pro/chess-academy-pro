@@ -20,7 +20,7 @@
 import { Chess } from 'chess.js';
 import { attributePrinciples, pvUciToSan, type PrincipleAttribution } from './principleAttribution';
 import { MATE_EVAL_THRESHOLD } from './engineConstants';
-import { winPctLost, bandForWinPctLost } from './accuracyService';
+import { moverFault } from './accuracyService';
 
 /** The raw reads around one student move, exactly as the surface holds them:
  *  WHITE-POV centipawns (a mate encoded as the sentinel), UCI lines. */
@@ -128,7 +128,7 @@ export function attributeLiveFundamental(input: LiveFundamentalReads): Principle
   // inside a decided position is not a cost. The floor stays for a missing pair.
   const afterForGrade = input.costCp !== null && evalBeforeMover !== undefined ? evalBeforeMover - input.costCp : evalAfterMover;
   const graded = evalBeforeMover !== undefined && afterForGrade !== undefined
-    ? bandForWinPctLost(winPctLost(evalBeforeMover, afterForGrade, true)) !== null
+    ? moverFault(evalBeforeMover - afterForGrade, afterForGrade) !== null
     : cpLoss >= LEARN_FUNDAMENTAL_CP_FLOOR;
   const flagged = mateSwing || graded;
   if (!flagged) return [];

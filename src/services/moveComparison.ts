@@ -25,6 +25,7 @@
 // it to stockfishEngine, tests pass a deterministic mock (G0).
 
 import { Chess } from 'chess.js';
+import { countWords } from '../utils/countWords';
 import type { Square, Color, PieceSymbol } from 'chess.js';
 import { settledNetForLine } from './exchangeLedger';
 
@@ -200,7 +201,7 @@ export async function compareTwoMoves(
   const netWorse = settledNetForLine(fen, lineOf(base.sanWorse, worseFen, worseEval.pv), mover);
   const matDiffPts = netBetter !== null && netWorse !== null ? netBetter - netWorse : 0;
   if (matDiffPts >= 1 && matDiffPts * 100 >= explainFraction * gapCp) {
-    const pts = matDiffPts >= 9 ? 'the queen' : matDiffPts >= 5 ? 'a rook' : matDiffPts >= 3 ? 'a piece' : `${matDiffPts} pawn${matDiffPts > 1 ? 's' : ''}`;
+    const pts = countWords(matDiffPts);
     return {
       ...base,
       delta: { kind: 'material', text: `it comes out ${pts} better on material than ${base.sanWorse}`, proof: 'material-count' },

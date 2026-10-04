@@ -19,6 +19,7 @@
 // Nothing is inferred about intentions: "heading for e5" means a piece of that
 // colour lands on e5 inside the line, not that the model believes it wants to.
 import { seatPieceReferences } from '../utils/seatPieces';
+import { countWords } from '../utils/countWords';
 import { Chess, type Square } from 'chess.js';
 import { computePlyFacts } from './pvPlayback';
 import { describeStructure } from './boardStructure';
@@ -973,7 +974,7 @@ export function describePlan(
   if (plan.materialSwing >= 1) {
     const what = plan.materialDeal
       ? `${plan.materialDeal.took}${plan.materialDeal.gave ? ` for ${plan.materialDeal.gave}` : ''}`
-      : plan.materialSwing >= 5 ? 'a rook' : plan.materialSwing >= 3 ? 'a piece' : 'a pawn';
+      : countWords(plan.materialSwing, { unit: true });
     add(35 + plan.materialSwing * 10, `win ${what}`, plan.materialSquares);
   }
   // A passed pawn matters more the closer it is to promoting — the one fact

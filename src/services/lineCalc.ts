@@ -6,11 +6,11 @@
 // are over there, so what is left is what was won — never a peak the
 // recaptures hand back). The outcome is the ONE ledger rule (exchangeLedger.proofCut).
 import { Chess } from 'chess.js';
+import { countWords } from '../utils/countWords';
 import type { ArrowClaim } from './arrowDoor';
 import { proofCut } from './exchangeLedger';
 import { MAX_PV_DEPTH_PLIES } from './ratingBands';
 
-const WORDS: Record<number, string> = { 1: 'a pawn', 2: 'two pawns', 3: 'a piece', 4: 'a piece and a pawn', 5: 'a rook', 6: 'a rook and a pawn', 9: 'the queen' };
 
 export interface LinePly { from: string; to: string; color: 'w' | 'b'; fen: string; san: string }
 export interface LineWin { net: number; what: string; sans: string[]; plies: LinePly[] }
@@ -182,7 +182,7 @@ function materialWords(took: readonly string[], gave: readonly string[], net: nu
     const parts = order.filter((t) => xs.includes(t)).map((t) => { const k = xs.filter((x) => x === t).length; return k === 1 ? ONE[t] : `${NUM[k] ?? k} ${MANY[t]}`; });
     return parts.length <= 1 ? parts.join('') : `${parts.slice(0, -1).join(', ')} and ${parts[parts.length - 1]}`;
   };
-  if (g.length === 0) return WORDS[net] ?? `${net} points of material`;
+  if (g.length === 0) return countWords(net, { unit: true });
   if (l.length === 0) return say(g);
   if (g.length === 1 && g[0] === 'r' && l.length === 1 && (l[0] === 'n' || l[0] === 'b')) return 'the exchange';
   return `${say(g)} for ${say(l)}`;

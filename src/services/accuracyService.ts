@@ -1,5 +1,5 @@
 import type { CoachGameMove, GameAccuracy, MoveClassificationCounts } from '../types';
-import { INACCURACY_WIN_PCT, MISTAKE_WIN_PCT, BLUNDER_WIN_PCT } from './engineConstants';
+import { INACCURACY_WIN_PCT, MISTAKE_WIN_PCT, BLUNDER_WIN_PCT, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP } from './engineConstants';
 
 /** Threshold above which Stockfish encodes checkmate. */
 const MATE_THRESHOLD = 20000;
@@ -63,6 +63,25 @@ export function winPctLost(
 }
 
 /** chess.com's band for a given win-percentage loss. null = not flagged. */
+/**
+ * IS THIS MOVE A FAULT — the one answer every lane that NAMES a mistake reads
+ * (clean-pass walks 11–12: 39.Qb8, mate in six, was told "this doesn't force
+ * anything", and 26.Rac1 at +8.0 → +6.7 heard "that let them win a piece",
+ * because each lane judged a raw centipawn drop on its own). In expected
+ * points when the mover's eval after the move is known — a wobble inside a
+ * decided position is no fault — else on the centipawn bands.
+ * `cpLoss` and `moverEvalAfterCp` are both from the MOVER's side.
+ */
+export function moverFault(cpLoss: number, moverEvalAfterCp: number | null): LossBand | null {
+  if (moverEvalAfterCp !== null && Number.isFinite(moverEvalAfterCp)) {
+    return bandForWinPctLost(winPctLost(moverEvalAfterCp + cpLoss, moverEvalAfterCp, true));
+  }
+  if (cpLoss >= BLUNDER_CP) return 'blunder';
+  if (cpLoss >= MISTAKE_CP) return 'mistake';
+  if (cpLoss >= INACCURACY_CP) return 'inaccuracy';
+  return null;
+}
+
 export function bandForWinPctLost(lost: number): LossBand | null {
   if (lost >= BLUNDER_WIN_PCT) return 'blunder';
   if (lost >= MISTAKE_WIN_PCT) return 'mistake';

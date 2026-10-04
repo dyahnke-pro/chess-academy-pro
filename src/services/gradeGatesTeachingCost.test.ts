@@ -11,7 +11,7 @@ import { buildReviewSegments, type ReviewMoveInput } from './coachFeatureService
 const g = new Chess(); g.loadPgn(readFileSync('src/services/__fixtures__/SI5q0VJz.pgn', 'utf8'));
 const SANS = g.history().slice(0, 55);
 
-function inputs(classification: ReviewMoveInput['classification']): ReviewMoveInput[] {
+function inputs(classification: ReviewMoveInput['classification'], pre = 1000, post = 700): ReviewMoveInput[] {
   const c = new Chess();
   return SANS.map((san, i) => {
     c.move(san);
@@ -19,7 +19,7 @@ function inputs(classification: ReviewMoveInput['classification']): ReviewMoveIn
     return {
       ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 1,
       classification: here ? classification : 'good',
-      preMoveEval: here ? 1000 : 0, evaluation: here ? 700 : 0,
+      preMoveEval: here ? pre : 0, evaluation: here ? post : 0,
       bestMove: null,
     } as unknown as ReviewMoveInput;
   });
@@ -32,7 +32,8 @@ describe('a move not graded as a fault costs nothing in the habit lanes', { time
     expect(segs[52].narration ?? '').not.toMatch(BLUNDER_CHECK);
   });
   it('the same move graded a mistake still gets it (non-vacuous)', () => {
-    const segs = buildReviewSegments(inputs('mistake'), 'white', null, true, 1600, [], undefined, 'g');
+    // A real mistake: +3 → level — the one grader agrees it is a fault.
+    const segs = buildReviewSegments(inputs('mistake', 300, 0), 'white', null, true, 1600, [], undefined, 'g');
     expect(segs[52].narration ?? '').toMatch(BLUNDER_CHECK);
   });
 });

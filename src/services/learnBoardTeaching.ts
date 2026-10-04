@@ -9,6 +9,7 @@
 //
 // Pure: the engine reads are handed in by the page.
 import { Chess } from 'chess.js';
+import { moverFault } from './accuracyService';
 import { lineWins, lineArrows, mateLine, type MateLine } from './lineCalc';
 /** A line as board arrows, ply by ply (one door for the page). */
 export { lineArrows as lineArrowClaims };
@@ -121,6 +122,12 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   const out: TeachingHint[] = [];
   let to = '';
   try { to = new Chess(i.fenBefore).move(i.san).to; } catch { return out; }
+  // THE COST A LANE MAY NAME AS A FAULT is the graded one (clean-pass walks
+  // 11–12: "Blunder check … your rook on c8" on 27.Rc8, +12 → +6.9). One
+  // grader for every lane that calls the move a mistake; a move it does not
+  // grade as a fault cost nothing here. The lanes that teach a CLEAN move keep
+  // reading the raw cost — "clean" is a narrower question.
+  const faultCp = moverFault(i.cpLoss, i.cpAfter) ? i.cpLoss : 0;
 
   // WHICH PIECE TAKES BACK, AND WHY — the better recapture named only when the
   // played one cost >= 50cp against it (a near-tie is taste).
@@ -128,7 +135,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
     const theirLast = i.history.length >= 2 ? i.history[i.history.length - 2] : null;
     const tookOn = theirLast ? /x([a-h][1-8])/.exec(theirLast)?.[1] ?? null : null;
     if (tookOn && to === tookOn && i.san.includes('x')) {
-      const bestRe = i.bestSan && new RegExp(`x${tookOn}`).test(i.bestSan) && i.cpLoss >= 50 ? i.bestSan : null;
+      const bestRe = i.bestSan && new RegExp(`x${tookOn}`).test(i.bestSan) && faultCp >= 50 ? i.bestSan : null;
       const rc = recaptureChoice(i.fenBefore, i.san, bestRe, i.reply);
       // The right recapture chosen (no better one named) answers the
       // capture-toward-centre question — held (P4 dual-use).
@@ -154,7 +161,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   // QUESTION THE KNEE-JERK (P3 method beat): the reflex recapture that cost.
   {
     const theirLast = i.history.length >= 2 ? i.history[i.history.length - 2] : null;
-    const kj = kneeJerk(theirLast, i.san, i.bestSan, i.cpLoss);
+    const kj = kneeJerk(theirLast, i.san, i.bestSan, faultCp);
     if (kj) out.push({ lane: 'kneeJerk', text: kj, squares: [to], claims: ['method:knee-jerk'], event: { name: 'coach_knee_jerk_taught', props: { surface: 'coach-teach' } }, arrows: [] });
   }
 
@@ -176,16 +183,16 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
 
   // THE SAFETY HABITS (P3 method beats) — earned only by what the board did.
   {
-    const bc = blunderCheck(i.fenBefore, i.san, i.reply, i.cpLoss);
+    const bc = blunderCheck(i.fenBefore, i.san, i.reply, faultCp);
     if (bc) out.push({ lane: 'blunderCheck', text: bc, squares: [], claims: ['method:blunder-check'], event: { name: 'coach_blunder_check_taught', props: { surface: 'coach-teach' } }, arrows: [] });
-    const ap = autopilotGuard(i.san, i.cpLoss, i.popularTopSan ?? null);
+    const ap = autopilotGuard(i.san, faultCp, i.popularTopSan ?? null);
     if (ap) out.push({ lane: 'autopilot', text: ap, squares: [to], claims: ['method:autopilot'], event: { name: 'coach_autopilot_taught', props: { surface: 'coach-teach' } }, arrows: [] });
     // THE PAWN ENDING (Naroditsky's endgame series): the move that takes the
     // last pieces off is counted first; and once only kings and pawns remain,
     // an outside passer is a decoy. Each once per game (claims).
-    const st = spareTempoWasted(i.fenBefore, i.san, i.bestSan, i.cpLoss);
+    const st = spareTempoWasted(i.fenBefore, i.san, i.bestSan, faultCp);
     if (st) out.push({ lane: 'pawnEnding', text: st, squares: [to], claims: ['method:spare-tempo'], event: { name: 'coach_spare_tempo_taught', props: { surface: 'coach-teach' } }, arrows: [] });
-    const pe = pawnEndingTrade(i.fenBefore, i.san, i.reply, i.cpLoss, i.cpAfter);
+    const pe = pawnEndingTrade(i.fenBefore, i.san, i.reply, faultCp, i.cpAfter);
     if (pe) out.push({ lane: 'pawnEnding', text: pe.text, squares: [to], claims: ['method:pawn-ending-trade'], event: { name: 'coach_pawn_ending_trade', props: { surface: 'coach-teach', verdict: pe.verdict } }, arrows: [] });
     try {
       const me: 'w' | 'b' = i.fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
@@ -193,14 +200,14 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
       const decoy = outsidePasserDecoy(c.fen(), me);
       if (decoy) out.push({ lane: 'pawnEnding', text: decoy.text, squares: decoy.squares, claims: [`decoy:${decoy.passer[0]}`], event: { name: 'coach_outside_passer_decoy', props: { surface: 'coach-teach' } }, arrows: [] });
     } catch { /* a bonus, never a blocker */ }
-    const kp = keepPressing(i.fenBefore, i.san, i.bestSan, i.cpLoss, i.cpAfter);
+    const kp = keepPressing(i.fenBefore, i.san, i.bestSan, faultCp, i.cpAfter);
     if (kp) out.push({ lane: 'keepPressing', text: kp, squares: [], claims: ['method:keep-pressing'], event: { name: 'coach_keep_pressing_taught', props: { surface: 'coach-teach' } }, arrows: [] });
   }
 
   // WAS THE TRADE A GOOD DEAL (P3, T3 #45) — a like-for-like trade the reply
   // completed, judged by the first reason the board supports.
   try {
-    const tj = tradeJudgement(i.fenBefore, i.san, i.reply, new Chess(i.fenBefore).turn(), i.cpLoss, i.evalBefore);
+    const tj = tradeJudgement(i.fenBefore, i.san, i.reply, new Chess(i.fenBefore).turn(), faultCp, i.evalBefore);
     if (tj) out.push({ lane: 'trade', text: tj.text, squares: tj.squares, claims: [`trade-${tj.reason}`, `capture:${to}:${i.history.length}`, ...(tj.reason === 'their-best' ? [`piece-quality:${to}`] : [])], event: { name: 'coach_trade_judged', props: { surface: 'coach-teach', reason: tj.reason } }, arrows: [],
       // A good trade the student chose is the 'bad-trade' question answered well.
       ...(tj.reason !== 'behind' && tj.reason !== 'gave-best' ? { evidence: { tag: 'bad-trade' as const, posedImportance: 60 } } : {}) });

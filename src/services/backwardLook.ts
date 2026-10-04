@@ -35,6 +35,7 @@ import { whyItFailed } from './whyItFailed';
 import { describeConcessions } from './reviewTeachingPoints';
 import { INACCURACY_CP, BLUNDER_CP } from './engineConstants';
 import { classifyMove } from './moveRating';
+import { moverFault } from './accuracyService';
 import { logAppAudit } from './appAuditor';
 
 export interface BackwardLook {
@@ -421,6 +422,9 @@ export function backwardLook(args: {
   // eight slips including a 648-centipawn blunder produced ZERO backward looks,
   // because dropping a piece concedes no outpost. The opponent's own best line
   // from here says what the move allowed, in moves they would really play.
+  // Only of a move the grade calls a fault (clean-pass walk SI5q0VJz, 26.Rac1:
+  // +8.0 → +6.7 heard "That let them win a piece, starting with h6").
+  if (!fault) return null;
   try {
     const allowed = whatItAllowed({
       fenBefore: args.fenBefore,
@@ -463,8 +467,13 @@ export function backwardLook(args: {
  * The look owns the move's cost, so its lasting damage lives here too. Null on
  * a move that was not flagged, and never mid-exchange (`describeConcessions`).
  */
-export function lookConcession(fenBefore: string, playedSan: string, cpLoss: number): string | null {
-  return cpLoss >= INACCURACY_CP ? describeConcessions(fenBefore, playedSan, true) : null;
+export function lookConcession(
+  fenBefore: string, playedSan: string, cpLoss: number,
+  /** The mover's eval after the move, their side — REQUIRED so the move is
+   *  graded by the one grader (`moverFault`), never a raw drop. */
+  moverEvalAfterCp: number | null,
+): string | null {
+  return moverFault(cpLoss, moverEvalAfterCp) ? describeConcessions(fenBefore, playedSan, true) : null;
 }
 
 

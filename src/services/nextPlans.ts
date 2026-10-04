@@ -300,8 +300,18 @@ export function deriveNextPlans(
     const pawnDiff = all.filter((c) => c.color === studentColorWB && c.type === 'p').length
       - all.filter((c) => c.color === enemy && c.type === 'p').length;
     const nonPawnDiff = nonPawn(studentColorWB) - nonPawn(enemy);
-    const surplus = nonPawnDiff >= 3 ? 'the extra piece'
-      : nonPawnDiff >= 2 ? 'the exchange'
+    // Named by WHICH pieces are extra, never by a point threshold (an extra
+    // rook is 5 points and is not "the extra piece").
+    const diff = (t: string): number => all.filter((c) => c.color === studentColorWB && c.type === t).length
+      - all.filter((c) => c.color === enemy && c.type === t).length;
+    const minors = diff('n') + diff('b');
+    const rooks = diff('r');
+    const queens = diff('q');
+    const surplus = queens === 0 && rooks === 0 && minors === 1 ? 'the extra piece'
+      : queens === 0 && rooks === 0 && minors > 1 ? 'the extra pieces'
+      : queens === 0 && rooks === 1 && minors === -1 ? 'the exchange'
+      : queens === 0 && rooks >= 1 && minors === 0 ? `the extra rook${rooks > 1 ? 's' : ''}`
+      : nonPawnDiff > 0 ? 'your extra material'
       : pawnDiff >= 1 ? `your extra pawn${pawnDiff > 1 ? 's' : ''}`
       : 'your material edge';
     plans.push(`the plan from here is to convert your extra material. Here's how: offer a trade of pieces at every chance but keep the pawns on, steer straight for an endgame where ${surplus} ${surplus.endsWith('s') ? 'are' : 'is'} decisive, and don't get greedy or complicate — simplicity is what wins a won game`);
