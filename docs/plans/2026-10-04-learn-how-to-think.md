@@ -394,6 +394,63 @@ Every piece below exists; the lesson consumes it.
 | **Beginner mode** — `isBeginnerMode`, `FirstRunStrength` | A beginner starts on steps 2–3 on quiet boards; difficulty only, never how much the coach says. |
 | **Voice** — `voiceFacts` (G0), verbosity (G5), muted audits (G1) | Every spoken line computed, rotated, you/they; Brief caps voice to 2 sentences, the screen keeps the full text. |
 
+## Prerequisite: ONE engine strength (David 2026-10-04: "we need to unify the strength of the engines")
+
+The lesson game steers moves "within your strength", so there must be ONE strength.
+Mapped 2026-10-04, today there are TWO systems that share no rating:
+- **A, Elo-capped** (`coachGameEngine`: `UCI_LimitStrength` + Skill Level + book
+  handling): Play with Coach, Learn free play (Easy / Medium / Hard chips), the
+  Openings Play rung (`targetStrength`).
+- **B, a Skill-Level dial** (`coachPlaySession.resolveConfig`, no Elo cap):
+  calculation, endgame lessons, the opening-trap and mistake play-outs, From Your
+  Games, Eval Lab, `/coach/session`. Each surface hard-codes "easy" / "hard", and
+  `useEndgamePlayout` defaults the player to a FIXED 1500.
+
+**The unification:**
+1. **One move door:** every engine opponent goes through `coachGameEngine`. System
+   B's dial is deleted, not left beside it.
+2. **One strength input:** the ONE adaptive estimate (`getPlayerRatingEstimate`),
+   adjusted live in-game by cpLoss against the POSITION (never the result) and
+   damped (Foundation: strength matched in real time from move one; one detector,
+   two consumers with capability evidence).
+3. **The app is algo-based: the opponent ADAPTS by default (David 2026-10-04).**
+   Every surface, play-outs included, plays at the student's measured strength.
+4. **Easy / Medium / Hard stay as a NUDGE, relative to that strength** — "if the
+   user wants to strengthen the coach a little or make it easier they can":
+   Easier = measured − ~200, Matched (default) = measured, Harder = measured +
+   ~200. The offset follows the student as they improve. ONE offset table shared
+   with the puzzle difficulty cards (`DIFFICULTY_OFFSET`, studentPuzzleRating.ts),
+   one vocabulary, `Record<Difficulty, number>`.
+5. **Every surface declares its opponent's purpose** in one exhaustive table (no
+   default): spar (Learn, Play, Openings), lesson (matched + steering toward
+   today's skill), play-out (adaptive, the student proving a won position).
+6. **One emission per engine move** (target strength, offset, purpose, surface),
+   with an audit contract that every opponent reads the same number.
+
+Built BEFORE the lesson game (P-strength), because steering needs the one strength.
+
+## The lesson game and unification (David 2026-10-04)
+
+- **Practice is on the same board, live**, right after a step is identified or
+  taught: no separate drill screen.
+- **Then a game focused on the day's lessons.** The coach chooses, among moves
+  inside the student's strength window, the one that creates a moment for today's
+  skill (leaves a piece of its own loose for "targets", makes a real threat for
+  "am I safe"); the step's own computer confirms the moment is real. 2–4 steered
+  moments per game, the rest natural; strength never drops to make room. At each
+  moment the coach asks the lesson's question; the answer is recorded.
+- **Last step: unification.** Lessons tie into every surface:
+  - Learn free play: the lesson's question at the real moment ("today's lesson:
+    what did that move stop guarding?"), ranked by the one door; narrations relate
+    previous lessons to the live game.
+  - Play with Coach: stays SILENT (locked 2026-09-23). Lessons tie in by the
+    record (skill used / missed), by review afterwards, and (David's call, open) a
+    quietly steered opponent.
+  - Review: missed moments asked as the lesson question.
+  - Tactics: lesson skills drive the puzzle queue and the Setup Trainer first miss.
+  - Dashboard: lessons in Up next and the Home suggestion; progress on the heat map.
+  - Chat: lesson questions answered anywhere.
+
 ## Wiring (from the code map)
 
 - **Routing.** A new branch in `CoachTeachPage.handleSubmit` AFTER the
