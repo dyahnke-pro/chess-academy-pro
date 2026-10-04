@@ -20,8 +20,22 @@ describe('material by count alone', () => {
     for (const f of readdirSync(dir)) {
       if (!f.endsWith('.ts') || f.endsWith('.test.ts')) continue;
       const src = readFileSync(join(dir, f), 'utf8');
-      if (/>=\s*\d+\s*\?\s*'(a piece|a rook|the queen|the exchange[^']*)'/.test(src)) bad.push(f);
+      if (/>=\s*\d+\s*(\?|\)\s*return)\s*'(up )?(a piece|a rook|a queen|the queen|the exchange[^']*)'/.test(src)) bad.push(f);
     }
     expect(bad).toEqual([]);
+  });
+});
+
+describe('boardEdgeWords — the one board namer', () => {
+  it('names a piece only when the board shows that piece', async () => {
+    const { boardEdgeWords } = await import('./countWords');
+    expect(boardEdgeWords('4k3/8/8/8/8/8/8/3NK3 w - - 0 1', 'w', 3)).toBe('a piece');
+    expect(boardEdgeWords('3bk3/8/8/8/8/8/P7/R3K3 w - - 0 1', 'w', 3)).toBe('the exchange and a pawn');
+    expect(boardEdgeWords('4k3/7p/8/8/8/8/8/1N1NK3 w - - 0 1', 'w', 5)).toBe('5 points');
+    expect(boardEdgeWords('r3k3/8/8/8/8/8/8/3QK3 w - - 0 1', 'w', 4)).toBe('4 points');
+    expect(boardEdgeWords('4k3/8/8/8/8/8/PPP5/4K3 w - - 0 1', 'w', 3)).toBe('three pawns');
+    // A settled lead the board does not show yet is said by count.
+    expect(boardEdgeWords('4k3/8/8/8/8/8/8/4K3 w - - 0 1', 'w', 3)).toBe('3 points');
+    expect(boardEdgeWords('4k3/8/8/3n4/8/8/8/4K3 w - - 0 1', 'b', 3)).toBe('a piece');
   });
 });

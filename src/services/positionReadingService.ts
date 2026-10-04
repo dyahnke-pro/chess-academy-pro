@@ -151,7 +151,12 @@ function seeCaptureValue(chess: Chess, square: Square, depth = 0): number {
  *  opponent (to move in `fenAfterMove`) has no profitable legal capture of it.
  *  The pin-aware replacement for `seeGain(c, to) <= 0`. */
 export function landingIsSafe(fenAfterMove: string, square: Square): boolean {
-  return legalSeeGain(fenAfterMove, square) <= 0;
+  // Through the safety door: a landing is "safe" only as a standing fact, never
+  // because the side to move is in check from somewhere else and cannot take
+  // on it this one move (a discovered check).
+  const turn = fenAfterMove.split(' ')[1] as Color;
+  const read = captureRead(fenAfterMove, square, turn);
+  return read !== null && read <= 0;
 }
 
 /** Pin/legality-aware SEE gain for `capturingColor` capturing on `square` in
@@ -160,6 +165,36 @@ export function landingIsSafe(fenAfterMove: string, square: Square): boolean {
  *  answers. A pinned attacker or defender is never counted (drives off legal
  *  captures), so it neither invents a hang nor masks one. Returns net material
  *  the capturer wins (`0` = no profitable legal capture). */
+/** IS THAT READ A STANDING FACT? `legalSeeGainFor` answers for THIS move. When
+ *  the capturing side is in check, every capture but the checker's is illegal
+ *  for one move only, so a zero there is "safe for now", never "guarded" or
+ *  "safe" (clean-pass walk 13, SI5q0VJz 31.Rc7+: "guards the knight on f3").
+ *  True when the side is not in check, or when the piece on `square` is the
+ *  one giving it (taking the checker is legal, so the read stands). Every
+ *  claim that a piece is safe or guarded reads this beside the gain. */
+export function seeReadsStanding(fen: string, square: Square, capturingColor: Color): boolean {
+  const asIf = asIfToMove(fen, capturingColor);
+  if (!asIf) return false;
+  try {
+    const c = new Chess(asIf);
+    if (!c.inCheck()) return true;
+    const kingSq = c.board().flat().find((x) => x && x.type === 'k' && x.color === capturingColor)?.square;
+    if (!kingSq) return false;
+    return c.attackers(kingSq, capturingColor === 'w' ? 'b' : 'w').includes(square);
+  } catch { return false; }
+}
+
+/** THE SAFETY DOOR — what `capturingColor` wins by taking on `square`, as a
+ *  STANDING fact, or NULL when the board cannot answer that (the capturer is in
+ *  check, or the side to move is, so the read holds for one move only). A
+ *  caller that says "safe / guarded / holds / nothing takes it back" needs
+ *  `=== 0`; a null is never a zero. `legalSeeGainFor` returns 0 in both cases,
+ *  which is how a check read as a guard (clean-pass walk 13, 31.Rc7+). */
+export function captureRead(fen: string, square: Square, capturingColor: Color): number | null {
+  if (!seeReadsStanding(fen, square, capturingColor)) return null;
+  return legalSeeGainFor(fen, square, capturingColor);
+}
+
 export function legalSeeGainFor(fen: string, square: Square, capturingColor: Color): number {
   const asIf = asIfToMove(fen, capturingColor);
   return asIf ? legalSeeGain(asIf, square) : 0;
@@ -287,7 +322,7 @@ export function minorRouteToSquare(
     if (m.captured) continue;
     let mid: Chess;
     try { mid = new Chess(start); mid.move({ from: m.from, to: m.to }); } catch { continue; }
-    if (legalSeeGainFor(mid.fen(), m.to, color === 'w' ? 'b' : 'w') > 0) continue;
+    if (legalSeeGainFor(mid.fen(), m.to, color === 'w' ? 'b' : 'w') > 0 || !seeReadsStanding(mid.fen(), m.to, color === 'w' ? 'b' : 'w')) continue;
     if (gen(forceTurn(mid.fen(), color)).some((m2) => m2.from === m.to && m2.to === target)) {
       return { piece: m.piece as 'n' | 'b', from: m.from, via: m.to };
     }

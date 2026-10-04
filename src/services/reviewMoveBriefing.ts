@@ -26,6 +26,7 @@
  */
 import { settledLeadFor, type LastMove } from './material';
 import { Chess } from 'chess.js';
+import { boardEdgeWords } from '../utils/countWords';
 import { computePlyFacts, tacticWord, type PrevCaptureContext } from './pvPlayback';
 import { detectNewThreat } from './groundedAnswer';
 import { detectTactics } from './tacticsDetector';
@@ -78,13 +79,6 @@ function newNamedTactic(fenBefore: string, fenAfter: string, toSquare: string | 
 function materialNet(fen: string, studentWB: 'w' | 'b', lastMove: LastMove | null): number {
   try { return settledLeadFor(fen, studentWB, lastMove); } catch { return 0; }
 }
-function materialWord(pts: number): string {
-  if (pts >= 8) return 'a queen';
-  if (pts >= 5) return 'a rook';
-  if (pts >= 3) return 'a piece';
-  if (pts === 2) return 'the exchange';
-  return 'a pawn';
-}
 /** Signed eval band (student POV): 0 balanced, ±1 touch, ±2 clear, ±3 decisive. */
 function evalBand(studentPovCp: number): number {
   const a = Math.abs(studentPovCp);
@@ -110,8 +104,8 @@ function evalWhy(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lastMo
   const s = describeStructure(fen);
   const cands: { text: string; mag: number; sign: number }[] = [];
   const net = materialNet(fen, studentWB, lastMove);
-  if (net >= 1) cands.push({ text: `you're up ${materialWord(net)}`, mag: net, sign: 1 });
-  else if (net <= -1) cands.push({ text: `you're down ${materialWord(-net)}`, mag: -net, sign: -1 });
+  if (net >= 1) cands.push({ text: `you're up ${boardEdgeWords(fen, studentWB, net)}`, mag: net, sign: 1 });
+  else if (net <= -1) cands.push({ text: `you're down ${boardEdgeWords(fen, oppWB, -net)}`, mag: -net, sign: -1 });
   if (s) {
     const kd = s.kings.shieldPawns[studentWB] - s.kings.shieldPawns[oppWB];
     if (kd >= 2) cands.push({ text: 'their king is the more exposed', mag: 1.8, sign: 1 });

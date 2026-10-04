@@ -18,7 +18,7 @@ import type { StockfishAnalysis } from '../types';
 import { findHangingPieces } from './tacticClassifier';
 import { proofAgainstMover, proofForMover } from './exchangeLedger';
 import { strategicWhyLed } from './moveFundamentals';
-import { legalSeeGainFor } from './positionReadingService';
+import { legalSeeGainFor, seeReadsStanding } from './positionReadingService';
 import { isPinnedPiece } from './nextPlans';
 import { andList, orList } from '../utils/andList';
 
@@ -372,6 +372,11 @@ export function threatAnswerWhy(fenBefore: string, san: string, mover: 'w' | 'b'
       if (m.captured && board0.attackers(c.square, opp).includes(m.to)) {
         return `takes the ${PNAME[m.captured]} that was hitting the ${PNAME[c.type]} on ${c.square}`;
       }
+      // A CHECK IS NOT A GUARD (clean-pass walk 13, SI5q0VJz 31.Rc7+: "guards
+      // the knight on f3"). In check, the capture is illegal for one move only
+      // — the piece hangs again after the king steps away. Safe-by-check is no
+      // reason to name.
+      if (!seeReadsStanding(after.fen(), c.square, opp)) continue;
       return `guards the ${PNAME[c.type]} on ${c.square}, which they were about to win`;
     }
     for (const c of mine) {

@@ -23,6 +23,7 @@ import { findHangingBySee, legalSeeGainFor } from './positionReadingService';
 import { homeMinorCount } from './development';
 import { MATERIAL_VALUE } from './pieceValues';
 import { countKingAttack } from './kingSafety';
+import { boardEdgeWords } from '../utils/countWords';
 
 export type ConversionStep = 'finish-development' | 'attack-king' | 'trade-pieces' | 'make-passer' | 'escort-passer' | 'cut-off-king';
 
@@ -103,7 +104,7 @@ export function readConversion(fen: string, student: 'w' | 'b'): ConversionRead 
   let text: string;
   if (homeMinorCount(c, student) >= 2 || (!castled && theirPieces >= 3)) {
     step = 'finish-development';
-    text = `You're ${edgeWords(edge, c, student)} up — before any plan, finish developing and get your king safe. Up material, the only way to lose is to get careless.`;
+    text = `You're ${boardEdgeWords(c.fen(), student, edge)} up — before any plan, finish developing and get your king safe. Up material, the only way to lose is to get careless.`;
   } else if (theirPieces === 0 && theirPawns === 0) {
     step = 'cut-off-king';
     const heavy = (['q', 'r'] as const).find((t) => c.board().some((row) => row.some((x) => x && x.color === student && x.type === t)));
@@ -115,13 +116,13 @@ export function readConversion(fen: string, student: 'w' | 'b'): ConversionRead 
     // their king is short of defenders: trading would let it off the hook.
     const k = countKingAttack(c, student);
     step = 'attack-king';
-    text = `You're ${edgeWords(edge, c, student)} up and their king is short of defenders — ${k?.attackers.size ?? 0} of your pieces on it against ${k?.defenders.size ?? 0}. Don't cash in with trades yet: the attack is the fastest win.`;
+    text = `You're ${boardEdgeWords(c.fen(), student, edge)} up and their king is short of defenders — ${k?.attackers.size ?? 0} of your pieces on it against ${k?.defenders.size ?? 0}. Don't cash in with trades yet: the attack is the fastest win.`;
   } else if (theirPieces >= 2) {
     step = 'trade-pieces';
-    text = `You're ${edgeWords(edge, c, student)} up — trade pieces, not pawns. Every piece that comes off makes your extra material count for more.`;
+    text = `You're ${boardEdgeWords(c.fen(), student, edge)} up — trade pieces, not pawns. Every piece that comes off makes your extra material count for more.`;
   } else if (!passer) {
     step = 'make-passer';
-    text = `You're ${edgeWords(edge, c, student)} up with few pieces left — now make a passed pawn. The extra material wins by making a new queen, not by hunting the king.`;
+    text = `You're ${boardEdgeWords(c.fen(), student, edge)} up with few pieces left — now make a passed pawn. The extra material wins by making a new queen, not by hunting the king.`;
   } else {
     step = 'escort-passer';
     // "and pieces" only when there are pieces — a pawn ending escorts with the
@@ -141,30 +142,4 @@ function kingOpen(c: Chess, student: 'w' | 'b'): boolean {
   return !!k && k.attackers.size >= 3 && k.attackers.size > k.defenders.size;
 }
 
-/** The edge in words — a PIECE name only when that piece is really the extra
- *  one on the board. "You're a queen up" with no queens on it (Damiano walk
- *  2026-09-27: rook+bishop+knight against a rook) named a piece nobody had. */
-function edgeWords(edge: number, c: Chess, student: 'w' | 'b'): string {
-  const count = (color: 'w' | 'b', t: string): number => {
-    let n = 0;
-    for (const row of c.board()) for (const x of row) if (x && x.color === color && x.type === t) n += 1;
-    return n;
-  };
-  const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
-  const extra = (t: string): boolean => count(student, t) > count(them, t);
-  // NAME A PIECE ONLY WHEN THE LEAD IS WORTH ABOUT THAT PIECE (claim check
-  // 2026-09-27: "you're a rook up" at +8 and +9 — a rook and a minor more).
-  if (edge >= 8 && edge <= 10 && extra('q')) return 'a queen';
-  if (edge >= 4 && edge <= 6 && extra('r')) return 'a rook';
-  // …and "a piece" only when a MINOR is the extra (clean-pass walk VRUh4Qgh,
-  // 25…Bxh4: two rooks and two bishops against a rook, a bishop and two
-  // knights is the exchange and a pawn, not a piece).
-  const diff = (t: string): number => count(student, t) - count(them, t);
-  const minors = diff('n') + diff('b');
-  const pawns = diff('p');
-  const pawnTail = pawns === 1 ? ' and a pawn' : pawns > 1 ? ` and ${pawns} pawns` : '';
-  if (diff('q') === 0 && diff('r') === 1 && minors === -1 && pawns >= 0) return `the exchange${pawnTail}`;
-  if (diff('q') === 0 && diff('r') === 0 && minors === 1 && pawns >= 0) return `a piece${pawnTail}`;
-  return `${Math.round(edge)} points`;
-}
 

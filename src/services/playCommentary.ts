@@ -23,7 +23,7 @@ import { packageForRegister, type HintPackage } from './hintRegister';
 import { CAPTURE_VALUE } from './pieceValues';
 import { quietMovePoint } from './reviewMoveTeaching';
 import { settledExchange } from './exchangeLedger';
-import { legalSeeGainFor } from './positionReadingService';
+import { captureRead } from './positionReadingService';
 import { seatBare } from '../utils/seatPieces';
 
 export type CommentaryKind =
@@ -981,8 +981,8 @@ export function studentMovePoint(
     // it, never the line's later gains (clean-pass walk 2026-10-04, G3 34…fxe5
     // and 35…Rxd6: Bxe5 took back safely — the king cannot with Re1 behind it
     // — and Bxd6 won the exchange back).
-    const safeTakeBack = legalSeeGainFor(after.fen(), mv.to, mv.color === 'w' ? 'b' : 'w') > 0;
-    if (net >= takenVal && !safeTakeBack) return `That wins the ${NAME[mv.captured] ?? 'piece'} on ${mv.to} — nothing takes it back safely.`;
+    const takeBack = captureRead(after.fen(), mv.to, mv.color === 'w' ? 'b' : 'w');
+    if (net >= takenVal && takeBack === 0) return `That wins the ${NAME[mv.captured] ?? 'piece'} on ${mv.to} — nothing takes it back safely.`;
     const exchange = mv.captured === 'r' && (mv.piece === 'n' || mv.piece === 'b');
     return exchange
       ? `That wins the exchange — your ${NAME[mv.piece]} for their rook on ${mv.to}.`

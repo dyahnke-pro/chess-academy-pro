@@ -24,7 +24,7 @@ import { tacticWord } from './tacticVocabulary';
 import { CENTRAL_SQUARES, keyTargetSquares, kingZoneAmong, kingZoneClause, POSITIONAL_TARGETS } from './keySquares';
 import type { Square, PieceSymbol, Move } from 'chess.js';
 import {
-  legalSeeGain, legalSeeGainOn, landingIsSafe, capturesWinMaterial, legalSeeGainFor, signedLegalSeeFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
+  legalSeeGain, legalSeeGainOn, landingIsSafe, capturesWinMaterial, legalSeeGainFor, seeReadsStanding, captureRead, signedLegalSeeFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
   strongestWeakestPiece, pressuredTargets, findAttackTargets, findPawnGrabs,
   namedPawnStructure, structureTransfer, findXrays, findKnightReroute, findRookLift, findFianchetto,
   findBlockade, kingActivation, oppositionRead, rookBehindPasser, bestMinorToKeep,
@@ -508,8 +508,11 @@ export function assemblePieceSafetyAnswer(fen: string, ask: string | null | unde
     .map((x) => `the ${REVIEW_PIECE_NAME[x.type]} on ${x.s}`);
   // Pin-aware (2026-09-12): "in trouble" only if THEY have a LEGAL profitable
   // capture — a pinned attacker that can't actually take must not read as a hang.
-  let g = 0;
-  try { g = legalSeeGainFor(fen, sq, them); } catch { g = 0; }
+  let g: number | null = 0;
+  try { g = captureRead(fen, sq, them); } catch { g = 0; }
+  if (g === null) {
+    return { facts: `Your ${name} on ${sq} is hit by ${named.join(' and ')} — there's a check on the board, so whether it can be taken is read once the check is answered.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+  }
   if (g > 0) {
     return { facts: `Your ${name} on ${sq} is in trouble — ${named.join(' and ')} ${attackers.length > 1 ? 'hit' : 'hits'} it and it drops about ${g} point${g === 1 ? '' : 's'}.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
   }
@@ -837,18 +840,24 @@ export function assembleSquareControlAnswer(
     };
   }
   // Static exchange with the student's piece on the square.
-  let oppGain = 0;
+  let oppGain: number | null = 0;
   try {
     const probe = new Chess(fen);
     if (!occupant) probe.put({ type: placedType, color: me }, q.square);
     else if (occupant.color !== me) { probe.remove(q.square); probe.put({ type: placedType, color: me }, q.square); }
     // Pin-aware (2026-09-12): material THEY win by a LEGAL capture on the square
     // (a pinned attacker no longer makes a safe square read as "NOT safe").
-    oppGain = legalSeeGainFor(probe.fen(), q.square, them);
+    oppGain = captureRead(probe.fen(), q.square, them);
   } catch { oppGain = 0; }
   const theirs = nameList(theirAtt);
   const mine = nameList(myAtt);
   const defPart = mine.length ? `you defend it with ${mine.join(' and ')}` : `you don't defend it`;
+  if (oppGain === null) {
+    return {
+      facts: `${q.square}: there's a check on the board, so whether a ${REVIEW_PIECE_NAME[placedType]} there can be taken is read once the check is answered.`,
+      bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
+    };
+  }
   if (oppGain > 0) {
     return {
       facts: `${q.square} is NOT safe — ${theirs.join(' and ')} ${theirAtt.length > 1 ? 'attack' : 'attacks'} it and ${defPart}, so a ${REVIEW_PIECE_NAME[placedType]} there drops about ${oppGain} point${oppGain === 1 ? '' : 's'}.`,
@@ -1100,7 +1109,7 @@ export function assemblePiecePlanAnswer(
       try { after.move(mv.san); } catch { continue; }
       const gained = squaresAttackedBy(after, mv.to, me).length;
       const pawnHit = after.attackers(mv.to, them).some((a) => after.get(a)?.type === 'p');
-      const loses = legalSeeGainFor(after.fen(), mv.to, them) > 0;
+      const loses = legalSeeGainFor(after.fen(), mv.to, them) > 0 || !seeReadsStanding(after.fen(), mv.to, them);
       const score = gained - (pawnHit ? 6 : 0) - (loses ? 8 : 0) + (mv.captured ? 3 : 0);
       if (!best || score > best.score) best = { to: mv.to, san: mv.san, score };
     }
@@ -7192,14 +7201,17 @@ export function assembleCaptureOnAnswer(opts: { fen: string; square: string; cap
   if (captures.length === 0) {
     return { facts: `No — nothing of ${opts.capturer === 'student' ? 'yours' : 'theirs'} can take on ${sq} right now.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
   }
-  let gain = 0;
-  try { gain = legalSeeGainFor(opts.fen, sq, side); } catch { gain = 0; }
+  let read: number | null = 0;
+  try { read = captureRead(opts.fen, sq, side); } catch { read = 0; }
+  const gain = read ?? 0;
   const sans = orList(captures.map((m) => m.san));
   const victim = `${opts.capturer === 'student' ? 'their' : 'your'} ${REVIEW_PIECE_NAME[target.type] ?? 'piece'} on ${sq}`;
   const notTheirTurn = new Chess(opts.fen).turn() !== side;
   const facts = gain > 0
     ? `Yes — ${sans} wins ${victim}, about ${gain} point${gain === 1 ? '' : 's'}${notTheirTurn && opts.capturer === 'opponent' ? ' if you leave it' : ''}.`
-    : `${Who} can take with ${sans}, but it doesn't win anything — ${victim} is defended well enough.`;
+    : read === null
+      ? `${Who} can take with ${sans} — with a check on the board, what it wins is decided after the check is answered.`
+      : `${Who} can take with ${sans}, but it doesn't win anything — ${victim} is defended well enough.`;
   const first = captures[0];
   return { facts, bestMoveSan: null, bestMoveFromTo: gain > 0 ? { from: first.from, to: first.to } : null, sources: ['board:chess.js'] };
 }
@@ -7243,8 +7255,10 @@ export function assemblePawnStrengthAnswer(opts: { fen: string; file: string; st
   const frontRank = rank + dir;
   const front = frontRank >= 1 && frontRank <= 8 ? board.get(`${f}${frontRank}` as Square) : undefined;
   const blockader = front && front.color !== me ? `${REVIEW_PIECE_NAME[front.type] ?? 'piece'} on ${f}${frontRank}` : null;
-  let loseable = 0;
-  try { loseable = legalSeeGainFor(opts.fen, sq, me === 'w' ? 'b' : 'w'); } catch { loseable = 0; }
+  // Through the safety door: "strong" needs a standing zero, never a check
+  // that stops the capture for one move.
+  let loseable: number | null = 0;
+  try { loseable = captureRead(opts.fen, sq, me === 'w' ? 'b' : 'w'); } catch { loseable = 0; }
   const parts: string[] = [];
   const squares = `${toGo} square${toGo === 1 ? '' : 's'} from queening`;
   const strong = passed && !blockader && loseable === 0 && (protectedBy.length > 0 || toGo <= 3);
@@ -7289,7 +7303,7 @@ export function assemblePawnStrengthAnswer(opts: { fen: string; file: string; st
   }
   if (protectedBy.length > 0) parts.push(`It's protected by your pawn on ${andList(protectedBy)}.`);
   else if (passed) parts.push(`No pawn protects it, so it needs a piece behind it.`);
-  if (loseable > 0) parts.push(`Careful — right now it can be won.`);
+  if (loseable !== null && loseable > 0) parts.push(`Careful — right now it can be won.`);
   return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
 }
 
