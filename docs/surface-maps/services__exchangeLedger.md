@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**464 lines · 13 exports · 27 importers · 6 tests · 0 audits**
+**478 lines · 13 exports · 27 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -85,20 +85,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `LineProof` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `proofCut` (function) — 32 call sites
+### `proofCut` (function) — 34 call sites
 - `src/services/coachFeatureService.ts:3643`
 - `src/services/gemCrushLines.ts:258`
 - `src/services/gemFinder.ts:243`
 - `src/services/giftedMaterialIsNotWon.test.ts:14`
 - `src/services/giftedMaterialIsNotWon.test.ts:30`
+- `src/services/giftedMaterialIsNotWon.test.ts:45`
+- `src/services/giftedMaterialIsNotWon.test.ts:56`
 - `src/services/groundedAnswer.ts:2408`
 - `src/services/groundedAnswer.ts:2475`
 - `src/services/inaccuracyCall.ts:274`
 - `src/services/inaccuracyCall.ts:332`
-- `src/services/inaccuracyCall.ts:641`
-- `src/services/inaccuracyCall.ts:856`
-- `src/services/inaccuracyCall.ts:947`
-- `src/services/inaccuracyCall.ts:998`
+- `src/services/inaccuracyCall.ts:644`
+- `src/services/inaccuracyCall.ts:867`
+- `src/services/inaccuracyCall.ts:958`
+- `src/services/inaccuracyCall.ts:1009`
 - `src/services/lineCalc.ts:40`
 - `src/services/lineProof.test.ts:13`
 - `src/services/lineProof.test.ts:24`
@@ -119,10 +121,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewWalkOct2a.test.ts:26`
 - `src/services/whyItFailed.ts:212`
 
-### `lineGiftIndex` (function) — 3 call sites
+### `lineGiftIndex` (function) — 4 call sites
 - `src/services/giftedMaterialIsNotWon.test.ts:19`
 - `src/services/giftedMaterialIsNotWon.test.ts:25`
 - `src/services/giftedMaterialIsNotWon.test.ts:34`
+- `src/services/giftedMaterialIsNotWon.test.ts:57`
 
 ### `describeProofResult` (function) — 4 call sites
 - `src/services/coachFeatureService.ts:3625`

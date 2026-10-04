@@ -485,6 +485,9 @@ export function callInaccuracyDetailed(args: {
    *  blunder regardless of the centipawns, and so must this. */
   missedMate?: number | null;
   allowedMate?: number | null;
+  /** The best move starts a forced mate for the mover (moves to mate), or
+   *  null/absent. Its reason is then the mate. */
+  bestMate?: number | null;
   /** The mover's eval after the move (their perspective): a real centipawn
    *  read, a large positive number when the mover now has a forced mate, and
    *  null/absent when unknown or when the mate is against them. */
@@ -653,6 +656,12 @@ export function callInaccuracyDetailed(args: {
   // −0.45). A slip that leaves them worse is a way back, not a prize.
   const theirSlipOffer = (moverAfter: number | null | undefined): string => {
     const studentAfter = typeof moverAfter === 'number' ? -moverAfter : null;
+    // A STUDENT WHO WAS CLEARLY BEHIND is handed a way back, whatever side of
+    // "level" a time-boxed read puts the result (clean-pass re-walk
+    // 2026-10-04, G3 12.b3: "That brings you level" from a 1.2s read; depth 18
+    // put it at −0.70 — the slip took them from −2.0 back into the game).
+    const studentBefore = studentAfter !== null ? studentAfter - Math.max(0, args.cpLoss) : null;
+    if (studentAfter !== null && studentAfter <= 0 && studentBefore !== null && studentBefore < -100) return ' That gives you a way back into the game — look for it.';
     if (studentAfter !== null && studentAfter < -50) return ' That gives you a way back into the game — look for it.';
     if (studentAfter !== null && studentAfter <= 50) return ' That brings you level — look for the move that does it.';
     // A SMALL EDGE IS NOT A PRIZE, and "take" promises a capture the board may
@@ -740,7 +749,9 @@ export function callInaccuracyDetailed(args: {
   // checks first, then what the line wins. A mate stop overrides it.
   const reason = stopsMate
     ? 'it would stop the mate'
-    : args.bestLineUci ? betterMoveReason(args.fenBefore, args.playedSan, args.bestSan, args.bestLineUci, args.moverColor, args.priorMove) : null;
+    : (args.bestMate ?? null) !== null
+      ? (args.bestMate === 1 ? 'it is mate' : `it starts a forced mate`)
+      : args.bestLineUci ? betterMoveReason(args.fenBefore, args.playedSan, args.bestSan, args.bestLineUci, args.moverColor, args.priorMove) : null;
   const after = args.moverEvalAfterCp;
   // …and CLEARLY BETTER is not a mistake either (pass-2 walk 2026-09-30: his
   // Bxc5 went +3.1 → +1.9 and was graded "a mistake" where he said "knocking

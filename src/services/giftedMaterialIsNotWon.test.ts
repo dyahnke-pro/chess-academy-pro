@@ -35,3 +35,25 @@ describe('material the loser gives away is not material won', () => {
       ['e4', 'e5', 'Nf3', 'Nf6', 'Nxe5', 'Nc6', 'Nxc6', 'dxc6'], 'b')).toBe(-1);
   });
 });
+
+// Clean-pass re-walk 2026-10-04, G1 26.Rac1: "That let them win a piece for
+// two pawns, starting with h6" — the reply line was …h6 Bxd5 exd5 Qxd5, White
+// giving its own bishop for two pawns at +6.7.
+describe('a losing capture by the side that ends behind is a gift', () => {
+  it('Rac1 h6 Bxd5 exd5 Qxd5 proves nothing against Rac1', () => {
+    const F = 'Q2n1k1r/2R3pp/4pq2/3p1b2/8/P4N2/B4PPP/R5K1 w - - 1 26';
+    const p = proofCut(F, ['Rac1', 'h6', 'Bxd5', 'exd5', 'Qxd5'], 'w');
+    expect(p?.ledger?.opponentWon ?? []).not.toContain('b');
+  });
+});
+
+// Positive control, clean-pass re-walk 2026-10-04, G3 27…Ne7: "That let them
+// win a piece for two pawns, starting with f5+" is TRUE — …Nxf5 answers the
+// check, it is not a gift.
+describe('a capture forced by check is no gift', () => {
+  it('Ne7 f5+ Nxf5 gxf5+ Kxf5 still proves the piece', () => {
+    const F = '3r4/p2r1pp1/1p2k2p/2p1Pn2/4NPP1/P7/1B5P/4RK2 b - - 0 27';
+    expect(proofCut(F, ['Ne7', 'f5+', 'Nxf5', 'gxf5+', 'Kxf5'], 'b')?.ledger?.opponentWon).toContain('n');
+    expect(lineGiftIndex(F, ['Ne7', 'f5+', 'Nxf5', 'gxf5+', 'Kxf5'], 'b')).toBe(-1);
+  });
+});

@@ -18,7 +18,7 @@
 // still calls that fork a mistake). Pure chess.js, no engine, no model (G0/G3).
 import { andList } from '../utils/andList';
 import { Chess, type Square } from 'chess.js';
-import { legalSeeGainFor } from './positionReadingService';
+import { legalSeeGain, legalSeeGainFor } from './positionReadingService';
 import { MAX_PV_DEPTH_PLIES } from './ratingBands';
 
 export type PieceLetter = 'p' | 'n' | 'b' | 'r' | 'q';
@@ -391,9 +391,23 @@ export function lineGiftIndex(fenBefore: string, sans: readonly string[], giver:
   for (const san of sans) {
     try { const m = c.move(san); if (!m) break; moves.push(m); } catch { break; }
   }
-  for (let i = 1; i + 1 < moves.length; i += 1) {
+  for (let i = 1; i < moves.length; i += 1) {
     const m = moves[i];
-    if (m.color !== giver || m.captured || m.san.startsWith('O-O')) continue;
+    if (m.color !== giver || m.san.startsWith('O-O')) continue;
+    // A LOSING CAPTURE is a gift too (clean-pass re-walk 2026-10-04, G1
+    // 26.Rac1: "That let them win a piece for two pawns, starting with h6" —
+    // the line was …h6 Bxd5 exd5 Qxd5, White's own bishop for two pawns at
+    // +6.7). Worth less than the exchange it starts costs the giver.
+    // Not when the capture answers a check (…Nxf5 after f5+ — forced), nor
+    // when the capturing piece was already lost where it stood (a desperado
+    // spends a piece that was gone anyway).
+    if (m.captured) {
+      const SEE_VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+      const forced = new Chess(m.before).inCheck() || legalSeeGainFor(m.before, m.from, taker) > 0;
+      if (!forced && (SEE_VAL[m.captured] ?? 0) - legalSeeGain(m.after, m.to) < 0) return i;
+      continue;
+    }
+    if (i + 1 >= moves.length) continue;
     const take = moves[i + 1];
     if (!take.captured || take.to !== m.to) continue;
     const back = moves[i + 2];
