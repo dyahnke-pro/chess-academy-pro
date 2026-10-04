@@ -52,16 +52,14 @@ export const PICK_FINISH_LINE: Record<PickKind, { file: string; by: 'kind' | 'ke
   start: { file: 'src/services/activeBite.ts', by: 'key' },
   upload: null,
   learn: null,
-  // OWED (learn-how-to-think P1): CoachTeachPage reads `?lesson=think` and calls
-  // `finishBite('thinking')` at the lesson's end. Until then the loader never
-  // supplies the signal (`THINKING_LESSON_LIVE`), so no unfinishable bite ships.
-  thinking: null,
+  // Learn reads `?lesson=think` and calls `finishBite('thinking')` when the
+  // lesson ends.
+  thinking: { file: 'src/components/Coach/CoachTeachPage.tsx', by: 'kind' },
 };
 
-/** The "learn how to think" lesson goes live in Up next only once its surface
- *  reads `?lesson=think` and finishes the bite (P1). The ranking below is built
- *  and tested now; the loader passes the signal only when this is true. */
-export const THINKING_LESSON_LIVE = false;
+/** The "learn how to think" bite is live: Learn reads `?lesson=think` and
+ *  finishes the bite (see PICK_FINISH_LINE). */
+export const THINKING_LESSON_LIVE = true;
 
 /** Where the student stands on the tier-1 thinking habits (see the board:
  *  what their move threatens, am I safe, their targets), read off the heat map

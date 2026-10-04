@@ -166,6 +166,7 @@ import { loadLessonCandidates } from '../../services/thinkingLessonSource';
 import { getThinkingLessonMemory, seenFor } from '../../services/thinkingLessonMemory';
 import { pickFairPosition, type LessonPositionCandidate } from '../../services/thinkingPositions';
 import type { StepKit } from '../../services/thinkingLessonSession';
+import { finishBite } from '../../services/activeBite';
 import { reward } from '../../services/rewardService';
 import { getCapabilityProfile } from '../../services/capabilityEvidence';
 import { ThinkingLessonBoard } from './ThinkingLessonBoard';
@@ -2493,6 +2494,8 @@ export function CoachTeachPage(): JSX.Element {
     const kit = choice.step.kit();
     captureEvent('thinking_lesson_started', { surface: 'coach-teach', step: kit.step, reason: choice.reason });
     await thinkingLesson.start(kit, { usernames, rating, candidates });
+    // Up next's thinking bite closes here (a no-op when no bite is open).
+    void finishBite('thinking');
     // A TIER OPENED? Read the record again: the lesson just wrote evidence. The
     // unlock is a reward moment and the coach names what comes next (plan
     // "Unlocking" rule 8); the machine celebrates, the voice stays plain.
