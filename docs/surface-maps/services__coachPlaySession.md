@@ -4,23 +4,23 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**321 lines · 10 exports · 8 importers · 4 tests · 3 audits**
+**270 lines · 7 exports · 8 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **Shared types / services** (CLAUDE.md:5187) — names `coachPlaySession`, `resolveConfig`
-- **Rules of thumb** (CLAUDE.md:5204) — names `coachPlaySession`
+- **Shared types / services** (CLAUDE.md:5327) — names `coachPlaySession`, `resolveConfig`
+- **Rules of thumb** (CLAUDE.md:5344) — names `coachPlaySession`
 
 ## Who calls in
 
 - `src/components/Coach/CoachGamePage.tsx`
-- `src/components/Coach/CoachPlaySessionView.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx`
 - `src/hooks/useEndgamePlayout.test.ts`
 - `src/hooks/useEndgamePlayout.ts`
 - `src/services/coachGameEngine.test.ts`
 - `src/services/coachGameEngine.ts`
 - `src/services/coachPlaySession.test.ts`
+- `src/services/engineStrength.test.ts`
 
 ## Exports and every call site
 
@@ -28,70 +28,56 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `configFromTargetElo` (function) — 18 call sites
-- `src/services/coachGameEngine.test.ts:39`
-- `src/services/coachGameEngine.test.ts:610`
-- `src/services/coachGameEngine.ts:78`
-- `src/services/coachGameEngine.ts:111`
+- `src/services/coachGameEngine.test.ts:41`
+- `src/services/coachGameEngine.test.ts:623`
+- `src/services/coachGameEngine.ts:80`
+- `src/services/coachGameEngine.ts:113`
+- `src/services/coachPlaySession.test.ts:12`
+- `src/services/coachPlaySession.test.ts:13`
 - `src/services/coachPlaySession.test.ts:14`
-- `src/services/coachPlaySession.test.ts:15`
-- `src/services/coachPlaySession.test.ts:16`
-- `src/services/coachPlaySession.test.ts:23`
-- `src/services/coachPlaySession.test.ts:24`
-- `src/services/coachPlaySession.test.ts:32`
+- `src/services/coachPlaySession.test.ts:21`
+- `src/services/coachPlaySession.test.ts:22`
+- `src/services/coachPlaySession.test.ts:30`
+- `src/services/coachPlaySession.test.ts:41`
+- `src/services/coachPlaySession.test.ts:42`
 - `src/services/coachPlaySession.test.ts:43`
-- `src/services/coachPlaySession.test.ts:44`
-- `src/services/coachPlaySession.test.ts:45`
-- `src/services/coachPlaySession.test.ts:197`
-- `src/services/coachPlaySession.test.ts:205`
-- `src/services/coachPlaySession.test.ts:212`
-- `src/services/coachPlaySession.test.ts:221`
-- `src/services/coachPlaySession.test.ts:222`
+- `src/services/coachPlaySession.test.ts:153`
+- `src/services/coachPlaySession.test.ts:161`
+- `src/services/coachPlaySession.test.ts:168`
+- `src/services/coachPlaySession.test.ts:177`
+- `src/services/coachPlaySession.test.ts:178`
 
-### `resolveConfig` (function) — 11 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:803`
-- `src/hooks/useEndgamePlayout.ts:377`
-- `src/services/coachPlaySession.test.ts:60`
-- `src/services/coachPlaySession.test.ts:67`
-- `src/services/coachPlaySession.test.ts:74`
-- `src/services/coachPlaySession.test.ts:81`
-- `src/services/coachPlaySession.test.ts:82`
-- `src/services/coachPlaySession.test.ts:88`
-- `src/services/coachPlaySession.test.ts:93`
-- `src/services/coachPlaySession.test.ts:94`
-- `src/services/coachPlaySession.test.ts:100`
+### `resolveConfig` (function) — 13 call sites
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:997`
+- `src/hooks/useEndgamePlayout.ts:389`
+- `src/services/coachPlaySession.test.ts:58`
+- `src/services/coachPlaySession.test.ts:65`
+- `src/services/coachPlaySession.test.ts:72`
+- `src/services/coachPlaySession.test.ts:79`
+- `src/services/coachPlaySession.test.ts:80`
+- `src/services/coachPlaySession.test.ts:86`
+- `src/services/coachPlaySession.test.ts:91`
+- `src/services/coachPlaySession.test.ts:92`
+- `src/services/coachPlaySession.test.ts:98`
+- `src/services/coachPlaySession.test.ts:201`
+- `src/services/engineStrength.test.ts:39`
 
 ### `CoachMoveResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getCoachMove` (function) — 5 call sites
-- `src/components/Coach/CoachPlaySessionView.tsx:179`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:803`
-- `src/hooks/useEndgamePlayout.ts:378`
-- `src/services/coachPlaySession.test.ts:114`
-- `src/services/coachPlaySession.test.ts:129`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:997`
+- `src/hooks/useEndgamePlayout.ts:390`
+- `src/services/coachPlaySession.test.ts:112`
+- `src/services/coachPlaySession.test.ts:127`
+- `src/services/coachPlaySession.test.ts:201`
 
-### `setSkill` (function) — 1 call site
-- `src/components/Coach/CoachPlaySessionView.tsx:79`
-
-### `__resetSkillCacheForTests` (function) — 1 call site
-- `src/services/coachPlaySession.test.ts:107`
-
-### `OpeningSeed` (interface) — 0 call sites
+### `setSkill` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildOpeningSeed` (function) — 5 call sites
-- `src/services/coachPlaySession.test.ts:141`
-- `src/services/coachPlaySession.test.ts:151`
-- `src/services/coachPlaySession.test.ts:169`
-- `src/services/coachPlaySession.test.ts:170`
-- `src/services/coachPlaySession.test.ts:174`
-
-### `nextSeededMove` (function) — 5 call sites
-- `src/services/coachPlaySession.test.ts:146`
-- `src/services/coachPlaySession.test.ts:158`
-- `src/services/coachPlaySession.test.ts:160`
-- `src/services/coachPlaySession.test.ts:163`
-- `src/services/coachPlaySession.test.ts:165`
+### `__resetSkillCacheForTests` (function) — 2 call sites
+- `src/services/coachPlaySession.test.ts:105`
+- `src/services/coachPlaySession.test.ts:192`
 
 ## Tests
 
@@ -99,6 +85,7 @@
 - `src/hooks/useEndgamePlayout.test.ts`
 - `src/services/coachGameEngine.test.ts`
 - `src/services/coachPlaySession.test.ts`
+- `src/services/engineStrength.test.ts`
 
 ## Audits that reach it
 
@@ -107,5 +94,3 @@ A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-coach-review-gaps.mjs`
-- `scripts/audit-money-loop.mjs`
-- `scripts/audit-named-traps.mjs`

@@ -3,8 +3,6 @@ import {
   configFromTargetElo,
   resolveConfig,
   getCoachMove,
-  buildOpeningSeed,
-  nextSeededMove,
   __resetSkillCacheForTests,
 } from './coachPlaySession';
 import { stockfishEngine } from './stockfishEngine';
@@ -56,11 +54,11 @@ describe('configFromTargetElo', () => {
 });
 
 describe('resolveConfig — ELO relative difficulty', () => {
-  it('easy subtracts ~300 ELO from the player', () => {
+  it('easy subtracts 200 ELO from the player (the one offset table)', () => {
     const easy = resolveConfig('easy', 1500);
-    expect(easy.targetElo).toBe(1200);
+    expect(easy.targetElo).toBe(1300);
     expect(easy.label).toContain('Easy');
-    expect(easy.label).toContain('1200');
+    expect(easy.label).toContain('1300');
   });
 
   it('medium matches the player', () => {
@@ -70,11 +68,11 @@ describe('resolveConfig — ELO relative difficulty', () => {
     expect(med.label).toContain('1500');
   });
 
-  it('hard adds ~300 ELO to the player', () => {
+  it('hard adds 200 ELO to the player (the one offset table)', () => {
     const hard = resolveConfig('hard', 1500);
-    expect(hard.targetElo).toBe(1800);
+    expect(hard.targetElo).toBe(1700);
     expect(hard.label).toContain('Hard');
-    expect(hard.label).toContain('1800');
+    expect(hard.label).toContain('1700');
   });
 
   it('auto acts as medium', () => {
@@ -136,48 +134,6 @@ describe('getCoachMove', () => {
   });
 });
 
-describe('buildOpeningSeed / nextSeededMove', () => {
-  it('compiles a PGN move list into a fen→san map', () => {
-    const seed = buildOpeningSeed("King's Indian Attack", 'Nf3 Nf6 g3 d5');
-    expect(seed).not.toBeNull();
-    expect(seed!.byFen.size).toBe(4);
-    // Starting position → Nf3
-    const startFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -';
-    const startMove = nextSeededMove(seed!, `${startFen} 0 1`);
-    expect(startMove).toBe('Nf3');
-  });
-
-  it('matches downstream positions and returns null when off-book', async () => {
-    const seed = buildOpeningSeed('Test', 'Nf3 Nf6 g3');
-    expect(seed).not.toBeNull();
-    // Walk the line via chess.js so the FEN we look up matches what
-    // the seed would have observed during compilation.
-    const { Chess } = await import('chess.js');
-    const game = new Chess();
-    game.move('Nf3');
-    expect(nextSeededMove(seed!, game.fen())).toBe('Nf6');
-    game.move('Nf6');
-    expect(nextSeededMove(seed!, game.fen())).toBe('g3');
-    game.move('g3');
-    // Past the end of the prepared line.
-    expect(nextSeededMove(seed!, game.fen())).toBeNull();
-    // Bogus FEN.
-    expect(nextSeededMove(seed!, 'unknown-fen')).toBeNull();
-  });
-
-  it('returns null on empty PGN', () => {
-    expect(buildOpeningSeed('Empty', '')).toBeNull();
-    expect(buildOpeningSeed('Whitespace', '   ')).toBeNull();
-  });
-
-  it('stops gracefully on bad PGN tokens', () => {
-    const seed = buildOpeningSeed('Bad', 'Nf3 garbage e4');
-    // Only the first valid move is recorded; the rest is dropped.
-    expect(seed!.byFen.size).toBe(1);
-  });
-});
-
-
 // SKILL LEVEL IS NOT ELO (David 2026-08-11: "Computer seemed to be playing a
 // lot of best moves").
 //
@@ -228,5 +184,24 @@ describe('the engine plays at the rating it was asked for', () => {
     const src = await import('node:fs').then((fs) => fs.readFileSync('src/services/coachGameEngine.ts', 'utf8'));
     expect(src).toMatch(/configFromTargetElo\(targetElo\)\.skill/);
     expect(src, 'the second ladder has grown back').not.toMatch(/targetElo < 1600\) return 14/);
+  });
+});
+
+describe('getCoachMove emits the opponent-strength row (P0b)', () => {
+  it('names the layer that played and the strength it played at', async () => {
+    __resetSkillCacheForTests();
+    vi.spyOn(stockfishEngine, 'initialize').mockResolvedValue(undefined);
+    vi.spyOn(stockfishEngine, 'getBestMove').mockResolvedValue('e7e8q');
+    const { onOpponentMove } = await import('./opponentMoveEvents');
+    const { opponentStrength } = await import('./engineStrength');
+    const rows: Array<{ surface: string; purpose: string; source: string; target: number | null }> = [];
+    const off = onOpponentMove((r) => rows.push(r));
+    try {
+      const strength = opponentStrength('endgame-playout', 1100, 'hard');
+      await getCoachMove('8/4P3/8/8/8/8/8/k6K w - - 0 1', resolveConfig('hard', 1100), strength);
+      expect(rows).toEqual([expect.objectContaining({ surface: 'endgame-playout', purpose: 'play-out', source: 'stockfish', target: 1300 })]);
+    } finally {
+      off();
+    }
   });
 });

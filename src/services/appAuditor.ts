@@ -30,6 +30,7 @@ import { mirrorAuditEvent } from './analytics';
 import { onCoachDecision, onLearnTurn, onNeedScore, type CoachDecisionRow, type LearnTurnRow, type NeedScoreRow } from './coachDecisionEvents';
 import { onThinkingLesson } from './thinkingLessonEvents';
 import { onSearchDepth } from './searchDepthEvents';
+import { onOpponentMove } from './opponentMoveEvents';
 
 const APP_AUDIT_LOG_META_KEY = 'app-audit-log.v1';
 const APP_AUDIT_LOG_MAX_ENTRIES = 300;
@@ -265,6 +266,11 @@ export type AuditKind =
   // row per search — so an audit can hold that verdicts were voiced off
   // settled searches and that sharp positions went deeper than quiet ones.
   | 'search-depth'
+  // ONE ENGINE STRENGTH (P0b, 2026-10-04): one row per opponent move — the
+  // surface, its declared purpose, the student strength, the offset and the
+  // target it played at — so an audit can hold that every sparring opponent
+  // read the same number (`opponentMoveEvents`).
+  | 'coach-opponent-strength'
   // The NEED score's per-term breakdown, AGGREGATED. One row per ply would
   // be hundreds of Dexie writes per review (`computeNeed` runs over every
   // move), so the subscriber buffers and emits ONE distribution per burst —
@@ -2266,6 +2272,18 @@ onThinkingLesson((row) => {
     source: 'thinkingLessonSession',
     summary: `${row.step} ${row.stage}: ${row.outcome} (${row.foundCount}/${row.keySize}, ${row.wrongCount} wrong, help=${row.help}, ${row.origin})`,
     details: JSON.stringify({ rows: [row] }),
+  });
+});
+
+// One row per opponent move. Moves are one per few seconds at most, so each
+// is logged as it lands — the same cadence as the free-text source lines.
+onOpponentMove((row) => {
+  void logAppAudit({
+    kind: 'coach-opponent-strength',
+    category: 'subsystem',
+    source: `engineStrength.${row.surface}`,
+    summary: `${row.surface} (${row.purpose}) source=${row.source} student=${row.studentElo} ${row.difficulty} offset=${row.offset} target=${row.target ?? 'full'} engine=${row.engineElo ?? 'full'}`,
+    details: JSON.stringify(row),
   });
 });
 

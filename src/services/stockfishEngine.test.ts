@@ -394,6 +394,24 @@ describe('StockfishEngine', () => {
       expect(mockWorker.postMessageCalls).not.toContain('setoption name Skill Level value 20');
     });
 
+    // The adaptive opponent's depth-search fallback arms UCI_LimitStrength
+    // (2026-10-04). A plain analysis right after must switch it OFF again, or
+    // the eval bar / hints would read a capped engine.
+    it('switches UCI_LimitStrength off when the caller did not ask for a cap', async () => {
+      const { stockfishEngine } = await getEngine();
+      await initEngine(stockfishEngine);
+
+      scheduleAnalysisResponse();
+      await stockfishEngine.analyzePosition(STARTING_FEN, 12, { 'Skill Level': 20, UCI_LimitStrength: 'true', UCI_Elo: 1500 });
+      expect(mockWorker.postMessageCalls).toContain('setoption name UCI_LimitStrength value true');
+      expect(mockWorker.postMessageCalls).toContain('setoption name UCI_Elo value 1500');
+
+      mockWorker.postMessageCalls.length = 0;
+      scheduleAnalysisResponse();
+      await stockfishEngine.analyzePosition('8/8/8/8/8/8/8/K6k w - - 0 1', 12);
+      expect(mockWorker.postMessageCalls).toContain('setoption name UCI_LimitStrength value false');
+    });
+
     // SEARCH_BUDGET_MS (2026-07-11 stall root-fix): slow single-threaded
     // variants get a movetime bound alongside depth (the search runs inside
     // the worker's event loop, so `stop` can never interrupt it — movetime is

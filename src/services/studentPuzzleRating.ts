@@ -21,6 +21,7 @@
  *
  * Pure: no Dexie, no store — same leaf discipline as `ratingBands`.
  */
+import { DIFFICULTY_OFFSET, type StrengthDifficulty } from './engineStrength';
 import { resolveReachState, FLOOR, CEILING, MASTER_FLOOR, MASTER_CEILING, type ReachState } from './reachRating';
 
 /** A new profile's puzzle rating before any solve (dbService). The puzzle
@@ -47,14 +48,12 @@ export function studentPuzzleRating(profile: PuzzleRatingProfile | null | undefi
 }
 
 /** How far each adaptive difficulty sits from the student's ladder target.
- *  Medium IS the ladder; Easy and Hard serve below / above it. A `Record` over
- *  the union, so a fourth difficulty fails to compile until it has an answer. */
-export type PuzzleDifficulty = 'easy' | 'medium' | 'hard';
-export const DIFFICULTY_OFFSET: Record<PuzzleDifficulty, number> = {
-  easy: -200,
-  medium: 0,
-  hard: 200,
-};
+ *  Medium IS the ladder; Easy and Hard serve below / above it. It is THE ONE
+ *  offset table (`engineStrength`) — the same Easier / Matched / Harder every
+ *  coach opponent reads, so "Hard" means one distance from the student
+ *  everywhere in the app. */
+export type PuzzleDifficulty = StrengthDifficulty;
+export { DIFFICULTY_OFFSET };
 
 export interface PuzzleTargetOptions {
   /** Master Level rides its own elite ladder. */

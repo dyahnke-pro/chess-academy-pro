@@ -21,6 +21,7 @@ import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { useAppStore } from '../../stores/appStore';
 import { useSettings } from '../../hooks/useSettings';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
+import { opponentStrength, studentPlayingRating } from '../../services/engineStrength';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { fetchCloudEval } from '../../services/lichessExplorerService';
 import { voiceService } from '../../services/voiceService';
@@ -39,7 +40,6 @@ import type { OpeningRecord, OpeningVariation, OpeningPlayResult, AnalysisLine, 
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MoveQuality } from '../Board/ChessBoard';
 import { GameChatPanel } from '../Coach/GameChatPanel';
-import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 import { admitArrow, admitArrows, namedMoveClaim, type ArrowClaim } from '../../services/arrowDoor';
 
 interface OpeningPlayModeProps {
@@ -54,7 +54,13 @@ type PlayPhase = 'pregame' | 'opening' | 'middlegame' | 'postgame';
 export function OpeningPlayMode({ opening, customLine, startFen, onExit }: OpeningPlayModeProps): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
   const { settings } = useSettings();
-  const playerRating = activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
+  // THE ONE playing-rating owner (`engineStrength.studentPlayingRating`) — the
+  // adaptive rating `calibrateStrength` writes at boot, never the puzzle Elo.
+  const playerRating = studentPlayingRating(activeProfile);
+  // One sparring session per board: the opponent's LIVE strength is keyed on
+  // it. Not a game id — this game is never saved as a record, and a fabricated
+  // id would leak into the capability evidence. Re-keyed on "play again".
+  const liveSessionRef = useRef(`opening-play:${Date.now()}`);
   // THE STUDENT MODEL (Phase 1) — loaded once per session, re-ranks the computed
   // "Why?" briefing toward the holes this student keeps falling in. Inert until
   // loaded (empty ref). Held in a ref so it never re-renders the play board.
@@ -689,9 +695,14 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
         try {
           // Student strength + chosen difficulty, kept apart: the taught-slip
           // matrix needs both and `targetStrength` has already merged them.
-          const adaptive = await getAdaptiveMove(game.fen, targetStrength, {
-            studentElo: activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING,
+          // ONE ENGINE STRENGTH (P0b): the live estimate for this session +
+          // the one offset table — the number Play and Learn read. The slip
+          // matrix's `studentElo` read `puzzleRating` (the tactics Elo) here.
+          const strength = opponentStrength('opening-play', discussion.liveRating(liveSessionRef.current, playerRating), difficulty);
+          const adaptive = await getAdaptiveMove(game.fen, strength.target ?? targetStrength, {
+            studentElo: strength.studentElo,
             difficulty,
+            strength,
           });
           if (isCancelled()) return;
           const { move, source } = adaptive;
@@ -710,7 +721,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
               kind: 'opening-play-opponent-move',
               category: 'subsystem',
               source: 'OpeningPlayMode.makeComputerMove',
-              summary: `source=${source} move=${result.from}${result.to} openingId=${opening.id} targetElo=${targetStrength}`,
+              summary: `source=${source} move=${result.from}${result.to} openingId=${opening.id} targetElo=${strength.target ?? targetStrength}`,
               fen: r.fen,
             });
           }
@@ -751,7 +762,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
       clearTimeout(timer);
       isComputerThinking.current = false;
     };
-  }, [game.turn, game.fen, game.isGameOver, playPhase, playerColor, targetStrength, openingMoves, openingPhaseLength, game]);
+  }, [game.turn, game.fen, game.isGameOver, playPhase, playerColor, targetStrength, openingMoves, openingPhaseLength, game, difficulty, playerRating, discussion.liveRating]);
 
   // ─── Handle player move ──────────────────────────────────────────────────
   const handlePlayerMove = useCallback((moveResult: MoveResult): void => {
@@ -786,6 +797,8 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
       openingId: opening.id,
       openingName: displayName,
       studentRating: playerRating,
+      // The opponent's live strength moves on this move (no saved game here).
+      liveSessionId: liveSessionRef.current,
       // Attribute the fundamental so a live slip feeds the per-fundamental
       // scorecard + drill queue, not just the coarse tag (David 2026-09-07).
       historySans: moveResult.history,
@@ -916,6 +929,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
               onClick={() => {
                 game.resetGame();
                 moveCountRef.current = 0;
+                liveSessionRef.current = `opening-play:${Date.now()}`;
                 setCorrectMovesPlayed(0);
                 setFirstDeviation(null);
                 deviatedRef.current = false;

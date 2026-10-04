@@ -21,6 +21,7 @@
 //     faster than DOWN, so a strong player mis-rated low recovers quickly and
 //     one blunder never sinks anyone 300 points.
 import { capabilitiesPosed, movePlayedCleanly, PROVEN_MIN_IMPORTANCE } from './capabilityEvidence';
+import { STRENGTH_FLOOR } from './engineStrength';
 
 export interface LiveStrength {
   rating: number;
@@ -28,7 +29,9 @@ export interface LiveStrength {
   evidence: number;
 }
 
-export const LIVE_MIN = 400;
+/** The ONE floor (`engineStrength`): the estimate never goes below a rating
+ *  the opponent's target can express. */
+export const LIVE_MIN = STRENGTH_FLOOR;
 export const LIVE_MAX = 2800;
 /** Largest single-move step. Damped: one move never swings the opponent. */
 export const STEP_UP = 60;

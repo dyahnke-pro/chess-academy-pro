@@ -123,6 +123,7 @@ import { stockfishEngine } from '../../services/stockfishEngine';
 import { limitStrengthElo } from '../../services/engineConstants';
 import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { resolveConfig as resolvePlayConfig } from '../../services/coachPlaySession';
+import { opponentStrength, emitOpponentStrength } from '../../services/engineStrength';
 import { detectOpening, getOpeningMoves, resolveOpeningEntry } from '../../services/openingDetectionService';
 import { stripSanAnnotations } from '../../data/openingWalkthroughs/validate';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
@@ -2413,6 +2414,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         // calibrated to the student's rating. Both run in <250ms.
         // The full LLM spine still acts as a fallback if the fast
         // path fails to produce a legal move.
+        // ONE ENGINE STRENGTH (P0b, 2026-10-04): the live estimate + the one
+        // offset table, resolved ONCE per turn, and the same object rides
+        // every layer below so each emits the number it actually played at.
+        const turnStrength = opponentStrength('play', discussion.liveRating(gameState.gameId, playerRating), difficulty);
         if (intendedOpeningName) {
           try {
             const bookMoves = getOpeningMoves(intendedOpeningName);
@@ -2421,6 +2426,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               const probe = new Chess(game.fen);
               if (probe.move(next)) {
                 brainPickSan = next;
+                emitOpponentStrength(turnStrength, 'opening-line');
                 void logAppAudit({
                   kind: 'coach-move-fastpath',
                   category: 'subsystem',
@@ -2459,17 +2465,19 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             // ONE DOOR: the taught slip, then the home-opening steer (A7),
             // in the engine's own order — `pickTeachingReply` — so this page
             // and `getAdaptiveMove` can never disagree about precedence.
-            const liveElo = discussion.liveRating(gameState.gameId, playerRating);
             const teaching = await pickTeachingReply(
               game.fen,
-              getTargetStrength(liveElo, difficulty),
-              { studentElo: liveElo, difficulty, steerHomeFor: playerColor },
+              turnStrength.target ?? getTargetStrength(turnStrength.studentElo, difficulty),
+              { studentElo: turnStrength.studentElo, difficulty, steerHomeFor: playerColor },
               'CoachGamePage.coachTurn',
             );
             if (teaching) {
               const probe = new Chess(game.fen);
               const played = probe.move(teaching.san);
-              if (played) brainPickSan = played.san;
+              if (played) {
+                brainPickSan = played.san;
+                emitOpponentStrength(turnStrength, teaching.source);
+              }
             }
           } catch {
             /* a missed teaching moment is never worth a broken move */
@@ -2477,7 +2485,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         }
         if (!brainPickSan) {
           try {
-            const config = resolvePlayConfig(difficulty, discussion.liveRating(gameState.gameId, playerRating));
+            const config = resolvePlayConfig(difficulty, turnStrength.studentElo);
             const uciResult = await withTimeout(
               stockfishEngine.getBestMove(game.fen, config.moveTimeMs, config.skill, config.targetElo),
               Math.max(2_000, config.moveTimeMs + 1_000),
@@ -2492,6 +2500,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               });
               if (result) {
                 brainPickSan = result.san;
+                emitOpponentStrength(turnStrength, 'stockfish-best');
                 void logAppAudit({
                   kind: 'coach-move-fastpath',
                   category: 'subsystem',
@@ -2504,7 +2513,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                   // not an Elo". Play is where most games happen and its
                   // opponent strength was unobservable in the log; that is how
                   // the dead wire survived.
-                  summary: `stockfish: ${result.san} at elo ${limitStrengthElo(config.targetElo)} (requested ${targetStrength}, live ${discussion.liveRating(gameState.gameId, playerRating)}, UCI_LimitStrength, ${config.moveTimeMs}ms)`,
+                  summary: `stockfish: ${result.san} at elo ${limitStrengthElo(config.targetElo)} (requested ${config.targetElo}, live ${turnStrength.studentElo}, UCI_LimitStrength, ${config.moveTimeMs}ms)`,
                   fen: game.fen,
                 });
               }
@@ -2521,7 +2530,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         if (!brainPickSan) {
           try {
             const adaptive = await withTimeout(
-              getAdaptiveMove(game.fen, getTargetStrength(discussion.liveRating(gameState.gameId, playerRating), difficulty)),
+              getAdaptiveMove(game.fen, turnStrength.target ?? getTargetStrength(turnStrength.studentElo, difficulty), { strength: turnStrength }),
               8_000,
               'coach-move-adaptive-fallback',
             );
@@ -2541,7 +2550,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                 kind: 'coach-move-fastpath',
                 category: 'subsystem',
                 source: 'CoachGamePage.coachTurn.adaptiveFallback',
-                summary: `getAdaptiveMove: ${adaptive.value.move} → ${adaptiveSan ?? 'unconvertible'} (source=${adaptive.value.source}, strength ${targetStrength})`,
+                summary: `getAdaptiveMove: ${adaptive.value.move} → ${adaptiveSan ?? 'unconvertible'} (source=${adaptive.value.source}, strength ${turnStrength.target ?? 'full'})`,
                 fen: game.fen,
               });
             }
