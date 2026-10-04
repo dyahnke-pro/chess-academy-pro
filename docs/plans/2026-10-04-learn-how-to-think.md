@@ -772,6 +772,18 @@ because every phase consumes them:
   answers record through `recordAnswer` (origin `lesson`, never a game id;
   wrong taps file their misconception); standing and tiers read KNOW.
 
+- **All ten steps have a lesson (2026-10-04).** Step 1 ASSESS asks whose king is
+  in more danger (the one `kingSafetyRead`; only when exactly one king is exposed
+  and a queen still faces it; the Show beat counts material first). Step 8
+  CANDIDATES keys the engine's top moves within half a pawn of the best, by where
+  each lands (fair only with ≥2 good moves, nothing in the 0.5–1.0 grey band,
+  distinct squares); the planner enriches boards with the engine first
+  (`StepKit.enrich`) and rules the step out if none enrich into a fair question.
+  Neither step enters the lesson game (no live-game key).
+- **One door for the lesson (`thinkingLessonStart`).** Plan, boards, record, the
+  end of a lesson (Up next bite, tier unlock + reward + audit) — the page talks to
+  the hook only (composition gate: page 60/60, total 253/253).
+
 ## Work list for the end of the build (David 2026-10-04: "Any questions I ask can be tacked on to the work list at the end")
 
 1. **More public-domain books for the library** — candidates to verify (public
