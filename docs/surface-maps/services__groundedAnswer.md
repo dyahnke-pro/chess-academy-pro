@@ -983,8 +983,8 @@
 - `src/services/groundedAnswer.routerE.test.ts:216`
 
 ### `assembleSlipNarration` (function) — 4 call sites
-- `src/components/Coach/CoachGamePage.tsx:3850`
-- `src/components/Coach/CoachGamePage.tsx:4008`
+- `src/components/Coach/CoachGamePage.tsx:3849`
+- `src/components/Coach/CoachGamePage.tsx:4007`
 - `src/services/groundedAnswer.test.ts:725`
 - `src/services/groundedAnswer.test.ts:740`
 
@@ -1166,7 +1166,7 @@
 - `src/services/coachApi.ts:6015`
 
 ### `seatPieceReferences` (re-export) — 33 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8209`
+- `src/components/Coach/CoachTeachPage.tsx:8147`
 - `src/services/coachFeatureService.ts:4055`
 - `src/services/coachFeatureService.ts:4103`
 - `src/services/coachFeatureService.ts:5202`

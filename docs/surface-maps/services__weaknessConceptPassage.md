@@ -12,8 +12,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
-- `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/coachApi.ts`
+- `src/services/coachDrillService.ts`
 - `src/services/weaknessConceptPassage.test.ts`
 
 ## Exports and every call site
@@ -26,7 +26,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/weaknessConceptPassage.test.ts:26`
 
 ### `conceptPassageFor` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2735`
+- `src/services/coachDrillService.ts:798`
 - `src/services/weaknessConceptPassage.test.ts:15`
 - `src/services/weaknessConceptPassage.test.ts:21`
 
