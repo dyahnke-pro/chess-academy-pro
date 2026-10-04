@@ -19,7 +19,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `wrongMoveReason` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2928`
+- `src/components/Coach/CoachTeachPage.tsx:2929`
 - `src/services/coachDrillService.ts:753`
 - `src/services/drillReasons.test.ts:11`
 - `src/services/drillReasons.test.ts:19`
@@ -27,7 +27,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/drillReasons.test.ts:29`
 
 ### `goodButWeakerBeat` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2942`
+- `src/components/Coach/CoachTeachPage.tsx:2943`
 - `src/services/drillReasons.test.ts:65`
 - `src/services/drillReasons.test.ts:71`
 - `src/services/drillReasons.test.ts:72`

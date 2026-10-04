@@ -26,7 +26,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/weaknessConceptPassage.test.ts:26`
 
 ### `conceptPassageFor` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2734`
+- `src/components/Coach/CoachTeachPage.tsx:2735`
 - `src/services/weaknessConceptPassage.test.ts:15`
 - `src/services/weaknessConceptPassage.test.ts:21`
 
