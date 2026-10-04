@@ -248,10 +248,24 @@ chosen by data.
 
 ## How it ties into everything already built
 
-This is not a new feature beside the coach. It is **unified-coach Phase 5, the
-custom coaching session** (`docs/plans/2026-09-08-unified-coach.md` §Phase 5:
-"teach me something / what should I learn? → the student's top weaknesses →
-a session built from REAL positions from their own games"), taught as a METHOD.
+🔴 **CORRECTED 2026-10-04.** An earlier version of this section said this plan
+"is" unified-coach Phase 5. Phase 5 was BUILT on 2026-09-08 as the **custom
+lesson** (`customLessonPlan.ts` + `CoachTeachPage.startCustomLesson`): the Learn
+opener names the student's top holes as chips; "build me a lesson" / "teach me my
+weaknesses" also start it; each ~3-part lesson TEACHES the idea (corpus prose)
+then DRILLS the student's own flubbed positions by move, and syncs the curriculum.
+
+**This plan EXTENDS that lesson; it does not build a second lesson system:**
+- the part's "teach the idea" becomes the METHOD lesson (Show → Guide → Solo, tap
+  answers, the ten steps);
+- "drill your own positions" stays, as Solo + carry-over;
+- a bare "teach me" joins `matchCustomLessonRequest` (today it falls into
+  `TEACH_PATTERN` and the opening picker), and the opener gains a "Learn how to
+  think" chip;
+- lesson parts are still chosen by the same spine + curriculum, now arranged by
+  step and tier.
+Before building: play the existing custom lesson on prod to see what works today.
+
 Every piece below exists; the lesson consumes it.
 
 | System (exists) | Tie |
