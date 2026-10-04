@@ -109,11 +109,24 @@ Never invented (G3). Every position passes the fair-key filter above.
 - **Per sub-skill record** through the existing writer `recordLaneEvidence`
   (capabilityEvidence.ts:397) with explicit tags (held / broken, `prompted` when
   helped). Every tap counts.
-- **New tags**, one per sub-skill (e.g. `reads-move-change`,
-  `spots-own-loose`, `spots-their-targets`, `lists-forcing-moves`,
-  `spots-double-hit`, `reads-weaknesses`, `blunder-checks`) in `MISCONCEPTION_TAGS`
-  (misconceptionTags.ts:45), answered in `TAG_LAYER` and `COACH_TAG_HABIT` (the
-  type system forces it), so they appear on the heat map automatically.
+- **NO new tags: the existing vocabulary.** Each step trains the SAME misconception
+  tags the game analysis already files slips under, so a lesson and a diagnosis
+  are one fact (dual-use; inventing parallel tags would reopen the
+  `discovery` vs `discovered_attack` rot). The map, held as a
+  `Record<ThinkingStep, readonly MisconceptionTagId[]>`:
+
+  | Step | Existing tags it trains |
+  |---|---|
+  | 1 what their move changed | `missed-opponents-threat` |
+  | 2 am I safe | `hung-material`, `missed-opponents-threat`, `weakened-king-safety` |
+  | 3 their targets | `missed-tactic`, `greedy-pawn-grab` (a "target" that isn't one) |
+  | 4 forcing moves | `missed-tactic` |
+  | 5 hit two at once | `missed-tactic` (the motif via `tacticVocabulary`) |
+  | 6 the plan | `no-plan`, `misplaced-piece`, `created-pawn-weakness`, `mistimed-pawn-break`, `neglected-development` |
+  | 7 is my move safe | `hung-material`, `missed-opponents-threat` |
+
+  A new tag is added ONLY if a sub-skill has no home here, and then once, in
+  `MISCONCEPTION_TAGS`, answered in `TAG_LAYER` / `COACH_TAG_HABIT`.
 - **Seen positions** are stored per student and never repeated.
 - **Choosing the next lesson** is from the record:
   red → re-teach; grey → teach fresh; green → an occasional review to keep it
@@ -146,6 +159,33 @@ Cold start (no record): everything is grey, so it teaches the steps in order fro
 step 1, on real puzzles. Every lesson writes back, so the second visit is already
 chosen by data.
 
+## How it ties into everything already built
+
+This is not a new feature beside the coach. It is **unified-coach Phase 5, the
+custom coaching session** (`docs/plans/2026-09-08-unified-coach.md` §Phase 5:
+"teach me something / what should I learn? → the student's top weaknesses →
+a session built from REAL positions from their own games"), taught as a METHOD.
+Every piece below exists; the lesson consumes it.
+
+| System (exists) | Tie |
+|---|---|
+| **Question engine** — `positionReadingService.buildReadingQuestions` (20 types, each with `answerSquares`, `misconceptionTag`, `demoLine`, `readingHint`) + `positionReadingGrader.gradeReadingAnswer` | The lesson's tap questions ARE reading questions. Extend this engine (multi-square answer sets, the step-1 "what changed" and step-7 "is it safe" types), never a second question builder. Analysis Practice and the lesson then share one engine. |
+| **Curriculum + memory** — `coachCurriculumService` (`buildCurriculum`, `reconcileCurriculum`, `nextCurriculumItem`, mastered→queued demotion when a hole recurs) + `weaknessLifecycle` (persistent / worsening) | The lesson PLAN is the curriculum. "Every visit different, remembers progress" is this record plus capability evidence. A step marked mastered that recurs in a game comes back escalated (unified-coach P6). No new ledger. |
+| **Weakness spine** — `getUnifiedWeaknessProfile` (with `positions` from the student's games) | Picks the leading step and the boards it is taught on. |
+| **Capability evidence + heat map** — `recordLaneEvidence`, `capabilityProven`, `heatMap` | Every tap is held/broken evidence on the existing tags; the heat map shows lesson progress with no new tile. |
+| **Fundamentals** — the 33 named fundamentals, `/coach/fundamentals` | Step 6 teaches the pillars a student keeps breaking; a fundamental going green is the same event in both places. |
+| **The one door** — `coachDecider.decide`, `factStakes`, need score | Ranks items within each step; the importance gate lets a critical step take the lesson. |
+| **methodBeat** (the habit line in live play) | The live coach names the lesson STEP: "Before you move: what did their last move change?" Live play and lessons teach the same seven-step habit in the same words. |
+| **Learn free play** — the turn door (`composeLearnTurn` / one decision) | Carry-over: when the student's own game hits a lesson skill at a real moment, the coach asks the same tap question there (Learn only, never Play — Play volunteers nothing). |
+| **Review** — find-the-shot and turning-point cards | Carry-over in review: the missed moment is asked as the lesson question ("tap what Nf5 stopped guarding"). |
+| **Tactics** — Setup Trainer's first-miss board read, Pattern Recognition (identify / recognize / prevent), My Weaknesses | The Setup Trainer's first wrong try runs lesson steps 3 and 5 on that board; Pattern Recognition's "identify" is step 5 per motif; My Weaknesses positions are lesson boards. |
+| **Chat** — the planned BoardQuery chat (WO-COACH-TEACHER WO-3 / ONE-CHAT) | "What are my targets here?" in chat answers from the same step-3 computer. |
+| **Up next + Home suggestion** — `upNextPicker`, `homeSuggestion` | A thinking lesson is a bite; when it is the most important thing the record says, it is offered. |
+| **Reward layer** — `rewardService`, `learnReward`, the green tile | A step proven green fires the same green tile; the coach's voice stays dry. |
+| **Arrow door** (WO-ARROW-01) + `narrationSegments` | Show-step highlights and arrows go through the one arrow door, lit as the sentence names them. |
+| **Beginner mode** — `isBeginnerMode`, `FirstRunStrength` | A beginner starts on steps 2–3 on quiet boards; difficulty only, never how much the coach says. |
+| **Voice** — `voiceFacts` (G0), verbosity (G5), muted audits (G1) | Every spoken line computed, rotated, you/they; Brief caps voice to 2 sentences, the screen keeps the full text. |
+
 ## Wiring (from the code map)
 
 - **Routing.** A new branch in `CoachTeachPage.handleSubmit` AFTER the
@@ -163,9 +203,11 @@ chosen by data.
   (onSquareClick 331, styles 434-436).
 - **Lesson state.** Its own ref, modelled on `activeDrillRef` (1370) /
   `loadDrillOntoBoard` (2418).
-- **Logic out of the 15k-line page.** A pure `thinkingLesson.ts` (pick position →
-  build sub-question + key → grade a tap set → next step) and a hook
-  `useThinkingLesson`. CoachTeachPage only routes and renders.
+- **Logic out of the 15k-line page.** A pure `thinkingLesson.ts` (choose the step
+  from the curriculum + spine → pick a position that passes the fair-key filter →
+  take the reading question from `buildReadingQuestions` → grade a tap SET with
+  `gradeReadingAnswer` → next step) and a hook `useThinkingLesson`.
+  CoachTeachPage only routes and renders.
 - **Audit (algo rule).** One emission per decision (`thinking-lesson-step`: step,
   sub-question, key size, taps, outcome, source) through the one door, a contract
   row in `algoAuditContract.test.ts`, and a prod audit
