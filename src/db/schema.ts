@@ -171,6 +171,13 @@ export interface CurriculumItem {
   addedAt: number;
   /** Unix ms it closed (status === 'mastered'). */
   masteredAt?: number;
+  /** How many times this step was mastered and then REOPENED by new evidence
+   *  (open again in the weakness spine). Absent = never reopened. */
+  reopenCount?: number;
+  /** True while a reopened step is back on the arc: it ranks ahead of the
+   *  ordinary queue (and takes the active slot when its lifecycle trend is
+   *  worsening). Cleared when the step is mastered again. */
+  escalated?: boolean;
 }
 
 /** The persistent, single-row curriculum arc (Phase 7, David 2026-08-26): the
