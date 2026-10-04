@@ -34,10 +34,10 @@ describe('warmLazyPools — Long and Master ready before the tap', { timeout: 60
 
   it('a tap during the warm-up joins the same write instead of starting a second', async () => {
     warmLazyPools();
-    await vi.waitFor(() => { expect(loadDataJson.mock.calls.some(([u]) => String(u).includes('long'))).toBe(true); }, { timeout: 50000 });
+    await vi.waitFor(() => { expect(loadDataJson.mock.calls.some(([u]) => u.includes('long'))).toBe(true); }, { timeout: 50000 });
     await seedMasterPuzzles();
     await vi.waitFor(async () => { expect(await isMasterPoolSeeded()).toBe(true); }, { timeout: 50000 });
-    const masterFetches = loadDataJson.mock.calls.filter(([u]) => String(u).includes('master')).length;
+    const masterFetches = loadDataJson.mock.calls.filter(([u]) => u.includes('master')).length;
     expect(masterFetches).toBe(1);
   });
 });
