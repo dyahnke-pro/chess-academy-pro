@@ -35,12 +35,12 @@ import {
   type OpeningBlunderPuzzle,
   type OpeningBlunderFamily,
 } from '../../services/openingBlunderService';
-import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 import { WrongTryNote } from '../Puzzles/WrongTryNote';
 import { hintSquareStyles } from '../../utils/hintSquareStyles';
 import { solvedDrillConcept } from '../../services/puzzleTeaching';
 import { motifThemeLabels } from '../../services/tacticClassifierService';
 import { db } from '../../db/schema';
+import { studentPuzzleRating } from '../../services/studentPuzzleRating';
 
 /** Difficulty band around the user's puzzle rating. Puzzles inside this
  *  band surface first; the rest are still reachable below the fold. */
@@ -281,7 +281,7 @@ function applyPhaseFilter(
 export function OpeningBlundersPage(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
-  const userRating = activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING;
+  const userRating = studentPuzzleRating(activeProfile);
 
   // Mount audit — closes the F1 coverage gap on the 12th tactics
   // surface (/tactics/opening-traps). Mirrors the pattern wired

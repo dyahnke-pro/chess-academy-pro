@@ -15,7 +15,7 @@ import { voiceService } from '../../services/voiceService';
 import { ArrowLeft, Brain, SkipForward } from 'lucide-react';
 import { db } from '../../db/schema';
 import { logAppAudit } from '../../services/appAuditor';
-import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
+import { studentPuzzleRating } from '../../services/studentPuzzleRating';
 
 type SessionPhase = 'mode_select' | 'solving' | 'grading' | 'complete';
 
@@ -50,7 +50,7 @@ export function PuzzleTrainerPage(): JSX.Element {
   const [timerKey, setTimerKey] = useState(0);
   const { elapsed, reset: resetTimer } = useSolveTimer();
 
-  const userRating = activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING;
+  const userRating = studentPuzzleRating(activeProfile);
 
   // Load stats on mount
   useEffect(() => {

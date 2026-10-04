@@ -3,6 +3,7 @@ import { createDefaultSrsFields } from './srsEngine';
 import { DEFAULT_THEME_ID } from './themeService';
 import { OPENING_ID_ALIASES } from './openingService';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
+import { DEFAULT_PUZZLE_RATING } from './studentPuzzleRating';
 import type { UserProfile, PuzzleRecord, OpeningRecord, SessionRecord, FlashcardRecord } from '../types';
 
 // ─── Profile ──────────────────────────────────────────────────────────────────
@@ -26,7 +27,7 @@ export async function getOrCreateMainProfile(): Promise<UserProfile> {
     // owns that ladder and moves it on solving, and it is a different skill
     // from playing strength (the reason the two fields exist).
     currentRating: DEFAULT_STUDENT_RATING,
-    puzzleRating: 800,
+    puzzleRating: DEFAULT_PUZZLE_RATING,
     strengthCalibrated: false,
     xp: 0,
     level: 1,

@@ -4,6 +4,10 @@ import { DIFFICULTY_LABELS } from '../../services/adaptivePuzzleService';
 
 interface DifficultySelectorProps {
   onSelect: (difficulty: AdaptiveDifficulty) => void;
+  /** The rating each card actually serves around, computed for THIS student
+   *  (puzzleTarget + DIFFICULTY_OFFSET). Required: a card that prints a
+   *  number must print the one selection uses. */
+  targets: Record<AdaptiveDifficulty, number>;
 }
 
 const ICONS: Record<AdaptiveDifficulty, React.ComponentType<{ size?: number; className?: string }>> = {
@@ -32,7 +36,7 @@ const COLORS: Record<AdaptiveDifficulty, { bg: string; border: string; icon: str
 
 const DIFFICULTIES: AdaptiveDifficulty[] = ['easy', 'medium', 'hard'];
 
-export function DifficultySelector({ onSelect }: DifficultySelectorProps): JSX.Element {
+export function DifficultySelector({ onSelect, targets }: DifficultySelectorProps): JSX.Element {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4" data-testid="difficulty-selector">
       {DIFFICULTIES.map((diff) => {
@@ -45,13 +49,13 @@ export function DifficultySelector({ onSelect }: DifficultySelectorProps): JSX.E
             key={diff}
             onClick={() => onSelect(diff)}
             className={`flex flex-col items-center gap-3 p-6 rounded-xl border-2 ${colors.border} ${colors.bg} bg-theme-surface transition-all`}
-            aria-label={`${info.label} difficulty: ${info.description}`}
+            aria-label={`${info.label} difficulty: ${info.relation}, about ${targets[diff]}. ${info.description}`}
             data-testid={`difficulty-${diff}`}
           >
             <Icon size={32} className={colors.icon} />
             <div className="text-center">
               <h3 className="text-lg font-bold text-theme-text">{info.label}</h3>
-              <p className="text-xs text-theme-text-muted mt-1">{info.ratingRange} rating</p>
+              <p className="text-xs text-theme-text-muted mt-1" data-testid={`difficulty-target-${diff}`}>{info.relation} · ~{targets[diff]}</p>
               <p className="text-xs text-theme-text-muted mt-2">{info.description}</p>
             </div>
           </button>

@@ -1,12 +1,15 @@
 import { db } from '../db/schema';
-import { getWeakestThemes } from './puzzleService';
+import { getWeakestThemes, puzzleForeground } from './puzzleService';
 import { safeRatingKey } from '../utils/ratingKey';
 import type { PuzzleRecord } from '../types';
 import { solverMoves, ONE_MOVER_CEILING } from './puzzleDepth';
+import type { PuzzleDifficulty } from './studentPuzzleRating';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
-export type AdaptiveDifficulty = 'easy' | 'medium' | 'hard';
+/** One vocabulary: the difficulty the cards offer IS the one the target
+ *  offset table (`DIFFICULTY_OFFSET`) is keyed on. */
+export type AdaptiveDifficulty = PuzzleDifficulty;
 
 export interface AdaptiveSessionState {
   difficulty: AdaptiveDifficulty;
@@ -84,21 +87,25 @@ export const ADAPTIVE_CONFIGS: Record<AdaptiveDifficulty, AdaptiveConfig> = {
   },
 };
 
-export const DIFFICULTY_LABELS: Record<AdaptiveDifficulty, { label: string; description: string; ratingRange: string }> = {
+/** What each card SAYS. The number on the card is computed per student
+ *  (`puzzleTarget` + `DIFFICULTY_OFFSET`) — the fixed "~1000 / ~1500 / 2000+"
+ *  bands this replaced were never consulted by selection, so Medium "~1500"
+ *  served a 997 to a new student (hand walk 2026-10-04, D11). */
+export const DIFFICULTY_LABELS: Record<AdaptiveDifficulty, { label: string; description: string; relation: string }> = {
   easy: {
     label: 'Easy',
-    description: 'Beginner-friendly tactics and simple combinations',
-    ratingRange: '~1000',
+    description: 'Clean reps below your training level',
+    relation: 'A step easier',
   },
   medium: {
     label: 'Medium',
-    description: 'Intermediate tactics requiring deeper calculation',
-    ratingRange: '~1500',
+    description: 'Your training level — it climbs as you solve',
+    relation: 'Your training level',
   },
   hard: {
     label: 'Hard',
-    description: 'Advanced tactics and complex multi-move combinations',
-    ratingRange: '2000+',
+    description: 'A real fight above your training level',
+    relation: 'A step harder',
   },
 };
 
@@ -246,10 +253,19 @@ export interface NextPuzzleOptions {
  * Fetch the next puzzle for the adaptive session.
  * Considers session rating, seen puzzles, and optional weakness targeting.
  */
-export async function getNextAdaptivePuzzle(
+export function getNextAdaptivePuzzle(
   session: AdaptiveSessionState,
   seenIds: Set<string>,
   opts: NextPuzzleOptions = {},
+): Promise<PuzzleRecord | null> {
+  // A student is waiting on this: the boot-time seed steps aside for it.
+  return puzzleForeground(selectNextAdaptivePuzzle(session, seenIds, opts));
+}
+
+async function selectNextAdaptivePuzzle(
+  session: AdaptiveSessionState,
+  seenIds: Set<string>,
+  opts: NextPuzzleOptions,
 ): Promise<PuzzleRecord | null> {
   const config = ADAPTIVE_CONFIGS[session.difficulty];
   const targetRating = opts.targetOverride ?? session.sessionRating;
