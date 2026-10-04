@@ -502,10 +502,10 @@ consumer, not the owner.
 - Rollout as ONE-CHAT §5: shadow on all surfaces at once, switched on at ≥95%
   measured accuracy; `audit-coach-all-questions-prod` + the lesson question set
   run against every surface.
-- ⚠️ **NEEDS DAVID: the approved ONE-CHAT spec (FINAL §1) scopes the parser to
-  TYPED turns only.** This plan widens it to mic transcripts and spoken answers.
-  Recommendation: widen (a spoken question is the same words). Not written in as
-  decided until he says so.
+- **Spoken turns too (David 2026-10-04: yes).** This WIDENS the approved ONE-CHAT
+  spec (FINAL §1 scoped the parser to typed turns): mic transcripts and spoken
+  answers go through the same parser on every surface. ONE-CHAT §1 is updated to
+  match.
 - **Kids (`/kid/*`) are unified too (David 2026-10-04), as a DECLARED SURFACE.**
   There is exactly ONE kid question box: `GuidedGamePage` (free-text ask + Why? /
   What now? / Help!) → `answerKidGameQuestion` (kidGameCoach.ts:342), which tries
@@ -670,21 +670,20 @@ because every phase consumes them:
    reading challenge, the Tactics queue and Setup Trainer, Up next / Home, chat;
    its own "Learn how to think" tab if David judges it strong enough.
 
-## Open questions for David
+## Decisions (David 2026-10-04)
 
-1. **Spoken questions and answers through the parser?** The approved ONE-CHAT spec
-   covers typed turns only. Recommendation: widen it.
-2. **How lesson answers count toward GREEN.** Today a lesson answer cannot turn a
-   tag green: `capabilityProven` skips prompted rows, counts only
-   `posedImportance ≥ 80`, and needs held rows from 2+ DISTINCT `sourceGameId`s, so
-   puzzle-sourced lessons never count. The tier unlock rides that bar.
-   Recommendation: keep ONE bar but split the evidence by origin — lessons prove
-   KNOW, games prove USE (already in this plan, C2); a step unlocks on KNOW, the
-   heat map shows both, and the coach drills the habit where KNOW is green and USE
-   is not. Never a second "proven" constant.
-3. **Tier bar.** `teachingLayers` turns a layer green at 2 proven tags; this plan
-   said "every step of the tier proven". Recommendation: every step, since a step
-   is the unit being taught.
+1. **Spoken questions and answers go through the parser** — yes (widens ONE-CHAT
+   FINAL §1).
+2. **Green: ONE bar, evidence split by origin.** Lessons prove KNOW, games prove
+   USE. A step unlocks on KNOW; the heat map shows both; where KNOW is green and
+   USE is not, the coach drills the habit in live play. `capabilityProven` stays
+   the one bar, applied per origin — never a second "proven" constant. (Today it
+   skips prompted rows, counts only `posedImportance ≥ 80` and needs 2+ distinct
+   `sourceGameId`s; the KNOW reading defines its own source key — distinct
+   positions — inside the same function.)
+3. **A tier unlocks when EVERY step in it is proven** (not `teachingLayers`' 2-tag
+   bar, which stays for the coach's register).
+4. Play's opponent steers quietly — yes.
+5. Kids are unified as a declared surface.
 
-Answered 2026-10-04: Play's opponent steers quietly (yes); kids are unified as a
-declared surface.
+No open questions.
