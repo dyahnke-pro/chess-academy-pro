@@ -21,14 +21,15 @@ describe('thinkingLesson — taps', () => {
     const b = applyTap(q, 'e5', 2500);
     expect(b.outcome).toEqual({ kind: 'complete', square: 'e5' });
     const s = summariseAnswer(b.state);
-    expect(s).toMatchObject({ held: true, prompted: false, help: 'none', msToFirst: 500, msBetween: [1000], foundCount: 2, keySize: 2 });
+    expect(s).toMatchObject({ held: true, solved: true, prompted: false, help: 'none', msToFirst: 500, foundCount: 2, keySize: 2 });
+    expect(s.detail.msBetween).toEqual([1000]);
   });
 
   it('a repeat tap on a found square is ignored, not counted', () => {
     const q = applyTap(newQuestion(['c6', 'e5'], 0), 'c6', 1).state;
     const r = applyTap(q, 'c6', 2);
     expect(r.outcome.kind).toBe('ignored');
-    expect(r.state.taps).toEqual(['c6']);
+    expect(r.state.taps.map((t) => t.square)).toEqual(['c6']);
   });
 
   it('a wrong tap is not held, and the third shows the rest', () => {
@@ -41,8 +42,10 @@ describe('thinkingLesson — taps', () => {
     const last = applyTap(q, 'a3', 9);
     expect(last.outcome).toEqual({ kind: 'reveal', square: 'a3', missing: ['c6'] });
     const s = summariseAnswer(last.state);
+    // Missed before any help: an honest, unprompted break (the ONE outcome rule).
     expect(s.held).toBe(false);
-    expect(s.prompted).toBe(true);
+    expect(s.prompted).toBe(false);
+    expect(s.help).toBe('show');
     expect(s.extras).toEqual(['a1', 'a2', 'a3']);
   });
 
@@ -76,13 +79,14 @@ describe('thinkingLesson — silence', () => {
     expect(s.prompted).toBe(true);
   });
 
-  it('a nudge then finishing counts as prompted, not held', () => {
+  it('a nudge is not help: finishing after "one more" still holds', () => {
     let q = applyTap(newQuestion(['c6', 'e5'], 0), 'c6', 1).state;
     q = applySilence(q).state;
     q = applyTap(q, 'e5', 2).state;
     const s = summariseAnswer(q);
     expect(s.foundCount).toBe(2);
-    expect(s.held).toBe(false);
+    expect(s.held).toBe(true);
+    expect(s.prompted).toBe(false);
     expect(s.help).toBe('nudge');
   });
 });

@@ -16,8 +16,16 @@
 //     answer (the step computer supplies that line);
 //   - after a set number of wrong taps, or a second silence, the coach shows the
 //     rest and the answer counts as helped (prompted).
+// The tap-answer state and the outcome rule are the SHARED ones
+// (`squareAnswerGrader`, `answerEvidenceOutcome`) — this module adds only the
+// lesson's flow (second silence shows, the spoken lines).
 import type { Square } from 'chess.js';
 import { rotateStem } from '../utils/rotateStem';
+import {
+  MISSES_BEFORE_SHOW, PARTIAL_NUDGE_MS, applySquareShow, applySquareSilence, applySquareTap,
+  newSquareAnswer, squareAnswerDetail, type SquareAnswerState,
+} from './squareAnswerGrader';
+import { answerEvidenceOutcome, type AnswerDetail, type AnswerHelp } from './capabilityEvidence';
 
 /** How a step is taught, from the student's own standing on it. */
 export type LessonStage = 'show' | 'guide' | 'solo';
@@ -31,42 +39,30 @@ export function stagesFor(standing: StepStanding): readonly LessonStage[] {
   return standing === 'green' ? ['solo'] : ['show', 'guide', 'solo'];
 }
 
-/** Wrong taps allowed before the coach shows the rest. */
-export const MAX_WRONG_TAPS = 3;
+/** Wrong taps allowed before the coach shows the rest — the ONE number every
+ *  tap question uses (`squareAnswerGrader`). */
+export const MAX_WRONG_TAPS = MISSES_BEFORE_SHOW;
 
 /** The silence (ms) after a partial answer before "good — one more". */
-export const NUDGE_AFTER_MS = 8000;
+export const NUDGE_AFTER_MS = PARTIAL_NUDGE_MS;
 
-export type HelpUsed = 'none' | 'nudge' | 'show' | 'dont-know';
+/** The help a question took — the shared vocabulary (`AnswerHelp`). */
+export type HelpUsed = AnswerHelp;
 
-export interface QuestionState {
-  /** The computed answer set (every square must be found). */
-  readonly key: readonly Square[];
-  /** Key squares found, in tap order. */
-  readonly found: readonly Square[];
-  /** Every tap, in order (right and wrong). */
-  readonly taps: readonly Square[];
-  /** Wrong taps, in order. */
-  readonly wrong: readonly Square[];
+/** A lesson question: the ONE tap-answer state (`squareAnswerGrader`, every
+ *  key square must be found) plus how many silence nudges it has had — the
+ *  lesson shows the rest on the second silence. */
+export interface QuestionState extends SquareAnswerState {
   readonly nudges: number;
-  readonly help: HelpUsed;
-  readonly startedAt: number;
-  readonly tapTimes: readonly number[];
-  readonly done: boolean;
 }
 
 export function newQuestion(key: readonly Square[], now: number): QuestionState {
-  return {
-    key: [...new Set(key)],
-    found: [],
-    taps: [],
-    wrong: [],
-    nudges: 0,
-    help: 'none',
-    startedAt: now,
-    tapTimes: [],
-    done: false,
-  };
+  return { ...newSquareAnswer(key, 'all', now), nudges: 0 };
+}
+
+/** Whether the question is settled (answered or shown). */
+export function questionDone(q: QuestionState): boolean {
+  return q.status !== 'answering';
 }
 
 export type TapOutcome =
@@ -81,35 +77,23 @@ export type TapOutcome =
   /** Too many wrong taps — show the rest. */
   | { kind: 'reveal'; square: Square; missing: readonly Square[] };
 
-const remainingOf = (s: QuestionState): Square[] => s.key.filter((k) => !s.found.includes(k));
+const remainingOf = (s: QuestionState): Square[] => s.key.filter((k) => !s.hits.includes(k));
 
-/** Apply one tap. Pure: returns the next state and what happened. */
+/** Apply one tap through the shared grader. Pure. */
 export function applyTap(
   state: QuestionState,
   square: Square,
   now: number,
 ): { state: QuestionState; outcome: TapOutcome } {
-  if (state.done || state.found.includes(square)) {
-    return { state, outcome: { kind: 'ignored', square } };
+  const r = applySquareTap(state, square, now, { maxMisses: MAX_WRONG_TAPS });
+  const next: QuestionState = { ...r.state, nudges: state.nudges };
+  switch (r.outcome) {
+    case 'ignored': return { state, outcome: { kind: 'ignored', square } };
+    case 'found': return { state: next, outcome: { kind: 'found', square, remaining: next.key.length - next.hits.length } };
+    case 'complete': return { state: next, outcome: { kind: 'complete', square } };
+    case 'wrong': return { state: next, outcome: { kind: 'wrong', square, wrongCount: next.extras.length } };
+    case 'reveal': return { state: next, outcome: { kind: 'reveal', square, missing: remainingOf(next) } };
   }
-  const taps = [...state.taps, square];
-  const tapTimes = [...state.tapTimes, now];
-  if (state.key.includes(square)) {
-    const found = [...state.found, square];
-    const next: QuestionState = { ...state, taps, tapTimes, found };
-    const remaining = state.key.length - found.length;
-    if (remaining === 0) return { state: { ...next, done: true }, outcome: { kind: 'complete', square } };
-    return { state: next, outcome: { kind: 'found', square, remaining } };
-  }
-  const wrong = [...state.wrong, square];
-  const next: QuestionState = { ...state, taps, tapTimes, wrong };
-  if (wrong.length >= MAX_WRONG_TAPS) {
-    return {
-      state: { ...next, done: true, help: 'show' },
-      outcome: { kind: 'reveal', square, missing: remainingOf(next) },
-    };
-  }
-  return { state: next, outcome: { kind: 'wrong', square, wrongCount: wrong.length } };
 }
 
 export type SilenceOutcome =
@@ -120,54 +104,55 @@ export type SilenceOutcome =
   | { kind: 'reveal'; missing: readonly Square[] };
 
 /** The nudge timer fired. Only a PARTIAL answer is nudged — silence before any
- *  right tap is the student still looking, and the coach waits. */
+ *  right tap is the student still looking, and the coach waits. A nudge is not
+ *  help (it says how many, never where); the second silence shows the rest. */
 export function applySilence(state: QuestionState): { state: QuestionState; outcome: SilenceOutcome } {
-  if (state.done || state.found.length === 0) return { state, outcome: { kind: 'none' } };
+  if (questionDone(state) || state.hits.length === 0) return { state, outcome: { kind: 'none' } };
   const missing = remainingOf(state);
   if (state.nudges === 0) {
-    return {
-      state: { ...state, nudges: 1, help: state.help === 'none' ? 'nudge' : state.help },
-      outcome: { kind: 'nudge', remaining: missing.length },
-    };
+    const { state: nudged } = applySquareSilence(state);
+    return { state: { ...nudged, nudges: 1 }, outcome: { kind: 'nudge', remaining: missing.length } };
   }
-  return { state: { ...state, done: true, help: 'show' }, outcome: { kind: 'reveal', missing } };
+  return { state: { ...applySquareShow(state, 'show'), nudges: state.nudges }, outcome: { kind: 'reveal', missing } };
 }
 
 /** The student said "I don't know" (button or phrase): honest data, counted as
  *  helped, and the coach shows the step. */
 export function applyDontKnow(state: QuestionState): { state: QuestionState; missing: readonly Square[] } {
-  return { state: { ...state, done: true, help: 'dont-know' }, missing: remainingOf(state) };
+  return { state: { ...applySquareShow(state, 'dont-know'), nudges: state.nudges }, missing: remainingOf(state) };
 }
 
-/** The answer record: one row per question, the shape the evidence writer
- *  takes. `held` only when every key square was found with no help; `prompted`
- *  whenever the coach helped (a nudge, a reveal, "I don't know"). */
+/** The answer record for one question: the shared `AnswerDetail` (what
+ *  `recordAnswer` writes) plus the lesson's own reading of it. `held` and
+ *  `prompted` come from the ONE outcome rule (`answerEvidenceOutcome`). */
 export interface AnswerSummary {
+  detail: AnswerDetail;
+  solved: boolean;
   held: boolean;
   prompted: boolean;
   help: HelpUsed;
   taps: Square[];
   extras: Square[];
   msToFirst: number | null;
-  msBetween: number[];
   keySize: number;
   foundCount: number;
 }
 
 export function summariseAnswer(state: QuestionState): AnswerSummary {
-  const complete = state.found.length === state.key.length;
-  const msToFirst = state.tapTimes.length > 0 ? state.tapTimes[0] - state.startedAt : null;
-  const msBetween = state.tapTimes.slice(1).map((t, i) => t - state.tapTimes[i]);
+  const detail = squareAnswerDetail(state);
+  const solved = state.status === 'right';
+  const { outcome, prompted } = answerEvidenceOutcome({ solved, answer: detail });
   return {
-    held: complete && state.help === 'none' && state.wrong.length === 0,
-    prompted: state.help !== 'none',
+    detail,
+    solved,
+    held: outcome === 'held' && !prompted,
+    prompted,
     help: state.help,
-    taps: [...state.taps],
-    extras: [...state.wrong],
-    msToFirst,
-    msBetween,
+    taps: state.taps.map((t) => t.square),
+    extras: [...state.extras],
+    msToFirst: detail.msToFirst,
     keySize: state.key.length,
-    foundCount: state.found.length,
+    foundCount: state.hits.length,
   };
 }
 

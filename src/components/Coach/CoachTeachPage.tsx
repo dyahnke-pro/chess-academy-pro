@@ -2471,7 +2471,7 @@ export function CoachTeachPage(): JSX.Element {
     // WHICH step: from the student's own record (red first, then the earliest
     // unknown step, then a review) — never a fixed lesson.
     let profile: Awaited<ReturnType<typeof getCapabilityProfile>> = new Map();
-    try { profile = await getCapabilityProfile(); } catch { /* grey */ }
+    try { profile = await getCapabilityProfile('know'); } catch { /* grey */ }
     const usernames = {
       chesscom: activeProfile?.preferences?.chessComUsername,
       lichess: activeProfile?.preferences?.lichessUsername,
@@ -2507,7 +2507,7 @@ export function CoachTeachPage(): JSX.Element {
     // unlock is a reward moment and the coach names what comes next (plan
     // "Unlocking" rule 8); the machine celebrates, the voice stays plain.
     try {
-      const after = await getCapabilityProfile();
+      const after = await getCapabilityProfile('know');
       const opened = tierUnlockLine(choice.openTier, openTier(BUILT_THINKING_STEPS, (s) => standingFromProfile(after, s.tags), available));
       if (opened) {
         reward({ kind: 'rankUp', label: opened.label, seed: opened.tier });

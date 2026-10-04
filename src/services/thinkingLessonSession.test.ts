@@ -85,7 +85,7 @@ describe('ThinkingLessonSession — step 5 end to end', () => {
     expect(answers.map((a) => a.stage)).toEqual(['guide', 'guide', 'solo']);
     expect(answers.map((a) => a.summary.held)).toEqual([false, true, true]);
     expect(h.records).toHaveLength(3);
-    expect(rows.map((r) => r.outcome)).toEqual(['shown', 'helped', 'held', 'held']);
+    expect(rows.map((r) => r.outcome)).toEqual(['shown', 'broken', 'held', 'held']);
     expect(h.said.some((l) => /count who guards each|Finding targets is counting/.test(l))).toBe(true);
     expect(h.said[h.said.length - 1]).toMatch(/2 of 3 found clean/);
     // Four different boards were used.

@@ -17,8 +17,8 @@ export interface ThinkingLessonRow {
   wrongCount: number;
   /** 'held' = found everything unhelped; 'helped'; 'shown' (a Show beat, no
    *  question asked). */
-  outcome: 'held' | 'helped' | 'shown';
-  help: 'none' | 'nudge' | 'show' | 'dont-know';
+  outcome: 'held' | 'broken' | 'helped' | 'shown';
+  help: 'none' | 'nudge' | 'hint' | 'show' | 'dont-know';
   msToFirst: number | null;
 }
 

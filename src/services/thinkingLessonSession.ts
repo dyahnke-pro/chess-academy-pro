@@ -10,7 +10,7 @@
 // step is adding a kit — the runner does not change.
 import type { Square } from 'chess.js';
 import {
-  applyDontKnow, applySilence, applyTap, completeLine, foundLine, newQuestion,
+  applyDontKnow, applySilence, applyTap, questionDone, completeLine, foundLine, newQuestion,
   NUDGE_AFTER_MS, nudgeLine, stagesFor, summariseAnswer,
   type AnswerSummary, type LessonStage, type QuestionState, type StepStanding,
 } from './thinkingLesson';
@@ -195,7 +195,7 @@ export class ThinkingLessonSession {
   }
 
   private async silence(): Promise<void> {
-    if (!this.q || this.q.done) return;
+    if (!this.q || questionDone(this.q)) return;
     const { state, outcome } = applySilence(this.q);
     this.q = state;
     if (outcome.kind === 'nudge') {
@@ -208,7 +208,7 @@ export class ThinkingLessonSession {
 
   /** A tap from the board. Ignored when no question is open. */
   async tap(square: Square): Promise<void> {
-    if (!this.q || this.q.done || !this.position || !this.stage) return;
+    if (!this.q || questionDone(this.q) || !this.position || !this.stage) return;
     const fen = this.position.fen;
     const { state, outcome } = applyTap(this.q, square, this.deps.now());
     this.q = state;
@@ -216,21 +216,21 @@ export class ThinkingLessonSession {
       case 'ignored':
         return;
       case 'found':
-        this.publish({ found: [...state.found] });
-        await this.deps.say(foundLine(outcome.remaining, state.found.length - 1));
+        this.publish({ found: [...state.hits] });
+        await this.deps.say(foundLine(outcome.remaining, state.hits.length - 1));
         this.armNudge();
         return;
       case 'complete':
-        this.publish({ found: [...state.found] });
+        this.publish({ found: [...state.hits] });
         await this.close([]);
         return;
       case 'wrong':
-        this.publish({ wrong: [...state.wrong] });
+        this.publish({ wrong: [...state.extras] });
         // Solo is graded silently; Guide teaches on a miss.
         if (this.stage === 'guide') await this.deps.say(this.kit.wrongTapLine(fen, square));
         return;
       case 'reveal':
-        this.publish({ wrong: [...state.wrong] });
+        this.publish({ wrong: [...state.extras] });
         await this.close([...outcome.missing]);
         return;
     }
@@ -238,7 +238,7 @@ export class ThinkingLessonSession {
 
   /** "I don't know" — honest data; the coach shows the rest. */
   async dontKnow(): Promise<void> {
-    if (!this.q || this.q.done) return;
+    if (!this.q || questionDone(this.q)) return;
     const { state, missing } = applyDontKnow(this.q);
     this.q = state;
     await this.close([...missing]);
@@ -251,14 +251,13 @@ export class ThinkingLessonSession {
     const pos = this.position;
     const stage = this.stage;
     if (!q || !pos || !stage) return;
-    this.q = { ...q, done: true };
     this.publish({ asking: false, shown: missing });
-    const summary = summariseAnswer(this.q);
+    const summary = summariseAnswer(q);
     const answer: AnsweredQuestion = { step: this.kit.step, stage, position: pos, summary };
     this.results.push(answer);
     emitThinkingLesson({
       step: this.kit.step, stage, origin: pos.origin, keySize: summary.keySize, foundCount: summary.foundCount,
-      wrongCount: summary.extras.length, outcome: summary.held ? 'held' : 'helped', help: summary.help, msToFirst: summary.msToFirst,
+      wrongCount: summary.extras.length, outcome: summary.held ? 'held' : summary.prompted ? 'helped' : 'broken', help: summary.help, msToFirst: summary.msToFirst,
     });
     try { await this.deps.record(answer); } catch { /* the lesson never stalls on a write */ }
     const praise = completeLine(summary, hashKey(pos.fen));
