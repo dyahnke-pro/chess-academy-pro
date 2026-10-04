@@ -638,6 +638,39 @@ already share their anchors (`coachGameEngine` delegates to
   (`audit-learn-how-to-think-prod.mjs`) that plays a lesson by tapping and asks it
   questions by typing and by voice.
 
+## Defects from the 2026-10-04 hand walk → where each is fixed
+
+Walked live on prod, muted, on Knight_mare_01's real games
+(`audit-reports/hand-walk-custom-lesson-2026-10-04.md`). The thinking lesson is
+built ON the custom lesson, so every one of these is fixed in the phase that
+touches it — none is carried into the new build. Each fix lands with a test on
+the exact walk position that fails before and passes after; the phase is not done
+until a re-walk of the same flow comes back clean.
+
+| # | What the walk showed | Root cause | Fixed in |
+|---|---|---|---|
+| 1 | Three openers stacked and disagreeing (the picker's hole order, "the pattern still costing you most is missed tactical sequences", then a generic greeting) | three producers speak on Learn open, each ranking separately | P1 — ONE opener, from the one ranking door; the others removed (G8.5) |
+| 2 | Picker names three holes, offers a chip for one | chip list and spoken list built separately | P1 — chips and words from the same list |
+| 3 | Part "missed hanging pieces" read a passage about PINS | `searchTheoryPassage` picks prose by text match, not by concept | P1 — the part's teaching comes from the step table (`ThinkingStep` → computer + concept id), never a free text search |
+| 4 | ~100-word passage read as one block | no sentence-grained reveal on this path | P1 — `narrationSegments`, one sentence at a time with its squares lit |
+| 5 | "Now let's drill it" spoke over the passage (`tts-concurrent-speak`) | the drill line fires without awaiting the passage's voice promise | P1 — every lesson line awaits the previous voice promise (voice-gated, no timers) |
+| 6 | "missed hanging pieces. you leave pieces…" lower-case after a full stop | label spliced into a sentence raw | P1 — sentence assembly capitalises at the joint; test on the label set |
+| 7 | First wrong try handed over the answer | the drill's miss line reads the solution | P1 — Guide on a miss names the METHOD step, never the answer; the answer only after the set number of misses (Show) |
+| 8 | "The c-file knight to e7" (should be "the knight from c6") | the move-to-words helper names a piece by its file letter | P0c — fixed in the shared move-wording helper, swept for every caller |
+| 9 | Nxc7+ (+1.8, good) answered "not the strongest here" with no reason (best Nxe7 +3.5) | the drill grades best-or-wrong with no "good but weaker" verdict | P1 — a good move is called good, with what it wins, then "there's stronger"; the step-8 obvious-vs-killer rule reuses it |
+| 10 | Solve line a bare move list ("the queen takes g7; then … the knight to h6") | solve line voices the PV, not the idea | P1 — the solve names the idea and the target (the loose queen) with the line as proof |
+| 11 | "why is that move better than what I played?" answered as a generic best move, ignoring "what I played" | regex lane captured "better move", dropped the comparison | P0a — the parser's `compare-my-move` kind, with "what I played" as a referent |
+| 12 | "They're winning (about 2.7)" — whose side? (student is Black) | eval phrased without the seat | P0a — the answerer states the eval from the student's seat ("you're down about 2.7") |
+| 13 | "which of their pieces are loose?" → "Nothing of theirs is hanging" while Qb4 had no defender | chat has only a hanging computer; loose ≠ hanging | P0c — the one loose computer, wired into chat's answer and the lesson key |
+| 14 | ✅ "what is my opponent threatening?" → true | — | kept; in the lesson question set as a regression check |
+| 15 | Weaknesses: "Analyze 50 of 937 games" ran a batch of 184 | the button's count and the batch picker disagree | P0c — the label reads the batch the picker will actually run |
+| 16 | Weaknesses header stuck at "5 of 937 analysed" mid-batch | header reads once, not on progress | P0c — header subscribes to the batch progress |
+| 17 | First "Analyze" tap stalled at 5 games with no error; a second tap ran | unknown — not diagnosed on the walk | P0c — reproduce first (a muted probe on a fresh import), then fix at the cause; never a retry-to-hide |
+
+Items 15–17 are outside the lesson surface but block it: lessons are taught on
+the student's ANALYSED games, so analysis that silently stalls or misreports
+starves the lesson of positions.
+
 ## Phases
 
 Each phase opens with the CONTEXT GATE (top of this doc). Prerequisites first,
@@ -646,7 +679,8 @@ because every phase consumes them:
 0a. **P0a: the ONE question route.** Parser + `ConversationState` inside
     `dispatchCoachTurn`; every bypassing surface moved onto the door (Learn,
     Review chat, My Mistakes, Dashboard mic, Play's and Analyse's internal asks);
-    the answer-scope field on `surfaceContract`; the kid row + the two kid gates.
+    the answer-scope field on `surfaceContract`; the kid row + the two kid gates;
+    walk defects 11, 12.
     Shadow first, switched on at ≥95%. App-wide.
 0b. **P0b: ONE engine strength.** `liveRating` on every sparring surface, one
     offset table, the purpose table, the two `puzzleRating` reads fixed, the
@@ -655,11 +689,13 @@ because every phase consumes them:
     moved on); the widened evidence row (Analysis Practice and Review reading start
     writing it; the two parallel counters folded in); the one loose computer
     (extracted from the two private copies); the two G4.5 caps removed; the
-    `reconcileCurriculum` demotion bug fixed; the `ThinkingStep` vocabulary.
+    `reconcileCurriculum` demotion bug fixed; the `ThinkingStep` vocabulary;
+    walk defects 8, 13, 15–17.
 1. **P1: step 5 (their targets) end to end**, as a custom-lesson part, including
    the no-record path so a fresh user gets a lesson: fair key, Show / Guide /
    Solo, nudge, record + heat map, seen positions, own games then puzzles,
-   questions answered through the door. Hand walk on prod.
+   questions answered through the door; walk defects 1–7, 9, 10. Re-walk the same
+   flow on prod.
 2. **P2: steps 3 and 2** (am I safe, what their move changed).
 3. **P3: steps 4, 6, 7** (answer the danger, forcing moves, hit two).
 4. **P4: steps 1, 8, 9, 10** (assess, candidates, calculate, is my move safe) +
