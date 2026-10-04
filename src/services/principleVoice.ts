@@ -362,7 +362,10 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       const s = [
         `Checks, captures, threats — there was a forcing move here: ${f.better} wins by force, and this quiet move lets it go.`,
         `A forcing win was on the board — ${f.better} — and a quiet move walked past it.`,
-        `Always run the forcing moves first: ${f.better} was decisive, and this doesn't force anything.`,
+        // "Decisive" claimed a result the detector never measures — it proves a
+        // forced material win, nothing more (clean-pass walk 2026-10-03, ply 29:
+        // "axb4 was decisive" at +1.76).
+        `Always run the forcing moves first: ${f.better} ${f.gain === 'mate' ? 'was mate' : 'won material by force'}, and this doesn't force anything.`,
       ];
       return s[v % s.length];
     }
@@ -392,7 +395,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     }
     case 'traded-active-for-passive': {
       const s = [
-        `That trades your active ${f.piece} for their passive one${f.kind === 'bishop pair' ? ' and hands over the bishop pair' : ''} — the wrong side of the exchange.`,
+        `That trades your active ${f.piece} for their passive ${f.taken ?? f.piece}${f.kind === 'bishop pair' ? ' and hands over the bishop pair' : ''} — the wrong side of the exchange.`,
         `Trade your worst piece for their best, not the reverse: your ${f.piece} was doing more than the piece it took.`,
         `An exchange that improves them: ${f.kind === 'bishop pair' ? 'they keep both bishops and you don\'t' : `your ${f.piece} was the better piece`}.`,
       ];

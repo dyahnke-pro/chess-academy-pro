@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**538 lines · 4 exports · 7 importers · 5 tests · 0 audits**
+**564 lines · 4 exports · 8 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,6 +19,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewWalkCT.test.ts`
 - `src/services/reviewWalkOct1.test.ts`
 - `src/services/reviewWalkOct3b.test.ts`
+- `src/services/seventhRankFromBoard.test.ts`
 
 ## Exports and every call site
 
@@ -31,8 +32,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `SPACE_RULE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `detectConcept` (function) — 35 call sites
-- `src/services/coachFeatureService.ts:4593`
+### `detectConcept` (function) — 37 call sites
+- `src/services/coachFeatureService.ts:4599`
 - `src/services/reviewConcepts.test.ts:24`
 - `src/services/reviewConcepts.test.ts:27`
 - `src/services/reviewConcepts.test.ts:35`
@@ -67,6 +68,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewWalkOct3b.test.ts:17`
 - `src/services/reviewWalkOct3b.test.ts:23`
 - `src/services/reviewWalkOct3b.test.ts:30`
+- `src/services/seventhRankFromBoard.test.ts:12`
+- `src/services/seventhRankFromBoard.test.ts:18`
 
 ## Tests
 
@@ -75,6 +78,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewWalkCT.test.ts`
 - `src/services/reviewWalkOct1.test.ts`
 - `src/services/reviewWalkOct3b.test.ts`
+- `src/services/seventhRankFromBoard.test.ts`
 
 ## Audits that reach it
 

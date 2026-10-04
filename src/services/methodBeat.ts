@@ -142,7 +142,9 @@ export function methodBeatFor(s: MethodSignals, plyForVariety = 0): string | nul
   if (habitIsOwed(need, 'forcing-scan') && s.bestSan && /^[^O]*[x+#]/.test(s.bestSan) && s.cpLossCp !== null && s.cpLossCp >= forcingBar) {
     return claim('forcing-scan', pick([
       'The move you wanted was a forcing one, so start there: list the checks and the captures before anything quiet.',
-      'When something is available it is usually forcing — run the checks and captures first, then look at quiet moves.',
+      // Was "When something is available it is usually forcing" — a sentence
+      // with no subject a student could act on (review walk 2026-10-04, G2).
+      'The move that works is usually a forcing one — run the checks and captures first, then look at quiet moves.',
       'Habit for positions like this: every check, every capture, in order, before you consider a quiet move.',
     ], plyForVariety));
   }

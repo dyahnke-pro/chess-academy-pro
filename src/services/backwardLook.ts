@@ -128,6 +128,8 @@ export function backwardLook(args: {
    *  six-figure centipawn swing would otherwise be reported as a "cost" of
    *  100,000. */
   missedMate?: number | null;
+  /** The best move's own forced mate for the mover (see `mateContext`). */
+  bestMate?: number | null;
   allowedMate?: number | null;
   /** The mover's eval AFTER the move, mover's perspective, when it is a real
    *  centipawn read — lets the verdict say "still wins, but X was cleaner"
@@ -190,6 +192,7 @@ export function backwardLook(args: {
         bestLineUci: args.bestPvUci,
         cpLoss: args.cpLoss,
         missedMate: args.missedMate ?? null,
+        bestMate: args.bestMate ?? null,
         allowedMate: args.allowedMate ?? null,
         // ONE GRADE ON EVERY SURFACE: the coach's move is graded on the same
         // win-chance bands as the student's (walk oct3a, 18.c5: "Their c5 is a
@@ -339,6 +342,7 @@ export function backwardLook(args: {
             bestLineUci: args.bestPvUci,
             cpLoss: args.cpLoss,
             missedMate: args.missedMate ?? null,
+        bestMate: args.bestMate ?? null,
             allowedMate: args.allowedMate ?? null,
             moverEvalAfterCp: args.moverEvalAfterCp ?? null,
             side: 'student',
@@ -383,6 +387,7 @@ export function backwardLook(args: {
         bestLineUci: args.bestPvUci,
         cpLoss: args.cpLoss,
         missedMate: args.missedMate ?? null,
+        bestMate: args.bestMate ?? null,
         allowedMate: args.allowedMate ?? null,
         moverEvalAfterCp: args.moverEvalAfterCp ?? null,
         side: 'student',

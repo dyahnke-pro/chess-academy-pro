@@ -65,7 +65,10 @@ describe('planArc on a real game', () => {
   it('an announced route keeps its name until it lands', () => {
     const rookWalk = white.filter((e) => e.id === 'route:r').map((e) => e.text);
     expect(rookWalk.length).toBeGreaterThan(2);
-    expect(rookWalk.every((t) => /getting the rook to c8/.test(t))).toBe(true);
+    // The rook walks c1–c5–c8 and takes the bishop on a8 (…Ba8 was move 22,
+    // Rxa8 lands). The route to c8 it used to name was read off a c8 that their
+    // rook still held, and came out as "to c8, by way of c8 and a8".
+    expect(rookWalk.every((t) => /getting the rook to a8, .*to take the bishop there/.test(t))).toBe(true);
   });
 
   it('pawn pushes step toward the passer, and promotion is its arrival', () => {
@@ -132,7 +135,7 @@ describe('the arc reaches the review narration', () => {
     const c = new Chess();
     const inputs = GAME.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 0, classification: 'good', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as Input; });
     const segs = buildReviewSegments(inputs, 'black', 'Blumenfeld Countergambit', true, 1500);
-    const arcs = segs.filter((s) => /That was the plan|plan is taking shape|what (they are after|you are building)|given up on/.test(s.narration ?? ''));
+    const arcs = segs.filter((s) => /That was (?:your|their) plan|plan is taking shape|what (they are after|you are building)|given up on/.test(s.narration ?? ''));
     expect(arcs.length).toBeGreaterThan(0);
     expect(segs.some((s) => /There it is — their knight on g3/.test(s.narration ?? ''))).toBe(true);
   }, 120000);

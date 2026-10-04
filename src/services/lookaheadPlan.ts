@@ -85,6 +85,13 @@ export function routeDestination(fen: string, dest: string, color: 'white' | 'bl
   } catch { return { kind: 'empty' }; }
 }
 
+/** WHICH PIECE a reroute clause is about, as data: its kind and the square it
+ *  starts the line on. A reader decides whether the route belongs to the move
+ *  it is explaining by comparing `from` with that move's own from-square — never
+ *  by parsing the sentence (clean-pass walk 2026-10-03: two bishops, one route,
+ *  and "the bishop" named the wrong one). */
+export interface ClauseRoute { piece: string; from: string }
+
 export function waypointsOf(path: readonly string[]): string[] {
   if (path.length < 3) return [];
   const start = path[0];
@@ -273,7 +280,7 @@ export interface SidePlan {
    *  writing. */
   /** `drift` marks the fallback "bring pieces to X and Y" — where the pieces
    *  end up, not why a move is good. A reason-seeking caller skips it. */
-  spokenClauses: Array<{ text: string; squares: string[]; drift?: true }>;
+  spokenClauses: Array<{ text: string; squares: string[]; drift?: true; route?: ClauseRoute }>;
 }
 
 /** What is TRUE OF THE BOARD RIGHT NOW, as opposed to what the line does next.
@@ -724,7 +731,23 @@ function planFor(
     } catch { return null; }
   };
   const takenOnArrival = maneuverPick ? arrivalCapture(maneuverPick.path) : null;
-  const maneuver = maneuverPick && takenOnArrival ? { ...maneuverPick, takes: takenOnArrival } : maneuverPick;
+  // …and the capture must be the one the CURRENT board shows (clean-pass walk
+  // 2026-10-03, G2 ply 30: "getting the bishop to e2, by way of a6, to take
+  // the knight there" — e2 held White's queen; a knight only arrived there
+  // later in the line). When what stands on the destination now is not what
+  // the line takes there, the target moves under the plan: it is not a route
+  // anyone can follow from this board, so it is not said.
+  const rootOccupant = maneuverPick && rootFen ? (() => {
+    try { return new Chess(rootFen).get(maneuverPick.path[maneuverPick.path.length - 1] as Square) ?? null; } catch { return null; }
+  })() : null;
+  const theirsNow = rootOccupant && rootOccupant.color !== (color === 'white' ? 'w' : 'b') ? PIECE_WORD[rootOccupant.type] ?? 'piece' : null;
+  const targetShifts = theirsNow !== null && theirsNow !== takenOnArrival;
+  // …and a capture of a piece that is NOT there yet is said as one that
+  // arrives (review walk 2026-10-04, G2 16.Bb1: "walk the bishop round to d5,
+  // by way of c4 and take the knight there" — d5 was empty; their knight
+  // reached it later in the line).
+  const takes = takenOnArrival && theirsNow === null ? `${takenOnArrival} that lands` : takenOnArrival;
+  const maneuver = !maneuverPick || targetShifts ? null : takes ? { ...maneuverPick, takes } : maneuverPick;
 
   const headingFor = [...destinations.entries()]
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
@@ -843,9 +866,9 @@ export function describePlan(
   // what the sentence describes even when the words name no square — "bring
   // pieces at your king" is a warning with nowhere to look until the marks
   // arrive. Squares are the plan's own computed ones; nothing is inferred.
-  const clauses: Array<{ weight: number; text: string; squares: string[] }> = [];
-  const add = (weight: number, text: string, squares: string[] = []): void => {
-    clauses.push({ weight, text, squares });
+  const clauses: Array<{ weight: number; text: string; squares: string[]; route?: ClauseRoute }> = [];
+  const add = (weight: number, text: string, squares: string[] = [], route?: ClauseRoute): void => {
+    clauses.push({ weight, text, squares, ...(route ? { route } : {}) });
   };
 
   // A tactic that actually lands is the single most concrete thing the line
@@ -874,8 +897,12 @@ export function describePlan(
     // clause says nothing rather than saying something false.
     if (via.length > 0) {
       const dest = path[path.length - 1];
-      const takes = plan.maneuver.takes ? ` and take the ${plan.maneuver.takes} there` : '';
-      add(80, `walk the ${piece} round to ${dest}, by way of ${via.join(' and ')}${takes}`, [path[0], ...via, dest]);
+      const takes = plan.maneuver.takes ? `, and take the ${plan.maneuver.takes} there` : '';
+      // NAMED BY ITS SQUARE (clean-pass walk 2026-10-03, G1 18.Ba4+ and G3
+      // 13…Bf5): "the idea is to walk the bishop round to c5, by way of e3"
+      // was the OTHER bishop's route — the f4 bishop, in the line — and "the
+      // bishop" reads as the one that just moved. The square says which.
+      add(80, `walk the ${piece} on ${path[0]} round to ${dest}, by way of ${via.join(' and ')}${takes}`, [path[0], ...via, dest], { piece, from: path[0] });
     }
   }
   // CHECKS ON THE WAY. Low weight on purpose — it is texture, not a plan — but
@@ -1005,7 +1032,7 @@ export function describePlan(
   const chosen = fresh;
   const shown = chosen.map((c) => c.text);
   if (shown.length === 0) return '';
-  plan.spokenClauses = chosen.filter((c) => c.squares.length > 0).map((c) => ({ text: c.text, squares: c.squares }));
+  plan.spokenClauses = chosen.filter((c) => c.squares.length > 0).map((c) => ({ text: c.text, squares: c.squares, ...(c.route ? { route: c.route } : {}) }));
   for (const t of shown) said?.add(t);
   const list = shown.length === 1
     ? shown[0]

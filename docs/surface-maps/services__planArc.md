@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**555 lines · 12 exports · 6 importers · 4 tests · 1 audits**
+**561 lines · 12 exports · 7 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,6 +18,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planArc.truth.test.ts`
 - `src/services/planChooser.test.ts`
 - `src/services/planChooser.ts`
+- `src/services/routeEndsAtFirstArrival.test.ts`
 
 ## Exports and every call site
 
@@ -31,18 +32,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `aimsOf` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9656`
-- `src/components/Coach/CoachTeachPage.tsx:9660`
-- `src/services/lookaheadPlan.ts:1562`
+- `src/components/Coach/CoachTeachPage.tsx:9674`
+- `src/components/Coach/CoachTeachPage.tsx:9678`
+- `src/services/lookaheadPlan.ts:1612`
 - `src/services/planArc.phraseFrom.test.ts:30`
 - `src/services/planArc.phraseFrom.test.ts:31`
 - `src/services/planArc.test.ts:29`
 - `src/services/planChooser.ts:48`
 - `src/services/planChooser.ts:49`
 
-### `phraseFrom` (function) — 2 call sites
+### `phraseFrom` (function) — 3 call sites
 - `src/services/planArc.phraseFrom.test.ts:7`
 - `src/services/planArc.phraseFrom.test.ts:10`
+- `src/services/routeEndsAtFirstArrival.test.ts:10`
 
 ### `ArcState` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -57,26 +59,26 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `stepArc` (function) — 25 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9656`
-- `src/components/Coach/CoachTeachPage.tsx:9660`
-- `src/services/lookaheadPlan.ts:1563`
+- `src/components/Coach/CoachTeachPage.tsx:9674`
+- `src/components/Coach/CoachTeachPage.tsx:9678`
+- `src/services/lookaheadPlan.ts:1613`
 - `src/services/planArc.test.ts:29`
-- `src/services/planArc.test.ts:94`
-- `src/services/planArc.test.ts:96`
-- `src/services/planArc.test.ts:104`
-- `src/services/planArc.test.ts:105`
-- `src/services/planArc.test.ts:106`
+- `src/services/planArc.test.ts:97`
+- `src/services/planArc.test.ts:99`
+- `src/services/planArc.test.ts:107`
 - `src/services/planArc.test.ts:108`
-- `src/services/planArc.test.ts:110`
-- `src/services/planArc.test.ts:114`
-- `src/services/planArc.test.ts:115`
+- `src/services/planArc.test.ts:109`
+- `src/services/planArc.test.ts:111`
+- `src/services/planArc.test.ts:113`
 - `src/services/planArc.test.ts:117`
-- `src/services/planArc.test.ts:121`
-- `src/services/planArc.test.ts:146`
-- `src/services/planArc.test.ts:167`
-- `src/services/planArc.test.ts:168`
-- `src/services/planArc.test.ts:173`
-- `src/services/planArc.test.ts:174`
+- `src/services/planArc.test.ts:118`
+- `src/services/planArc.test.ts:120`
+- `src/services/planArc.test.ts:124`
+- `src/services/planArc.test.ts:149`
+- `src/services/planArc.test.ts:170`
+- `src/services/planArc.test.ts:171`
+- `src/services/planArc.test.ts:176`
+- `src/services/planArc.test.ts:177`
 - `src/services/planArc.truth.test.ts:12`
 - `src/services/planArc.truth.test.ts:15`
 - `src/services/planArc.truth.test.ts:22`
@@ -84,29 +86,29 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planArc.truth.test.ts:36`
 
 ### `aimWalkableNow` (function) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9656`
-- `src/components/Coach/CoachTeachPage.tsx:9660`
-- `src/services/lookaheadPlan.ts:1562`
+- `src/components/Coach/CoachTeachPage.tsx:9674`
+- `src/components/Coach/CoachTeachPage.tsx:9678`
+- `src/services/lookaheadPlan.ts:1612`
 - `src/services/planArc.phraseFrom.test.ts:19`
 - `src/services/planArc.phraseFrom.test.ts:22`
-- `src/services/planArc.test.ts:201`
-- `src/services/planArc.test.ts:203`
-- `src/services/planArc.test.ts:211`
-- `src/services/planArc.test.ts:221`
-- `src/services/planArc.test.ts:227`
-- `src/services/planArc.test.ts:232`
-- `src/services/planArc.test.ts:239`
-- `src/services/planArc.test.ts:244`
-- `src/services/planArc.test.ts:253`
-- `src/services/planArc.test.ts:258`
-- `src/services/planArc.test.ts:262`
+- `src/services/planArc.test.ts:204`
+- `src/services/planArc.test.ts:206`
+- `src/services/planArc.test.ts:214`
+- `src/services/planArc.test.ts:224`
+- `src/services/planArc.test.ts:230`
+- `src/services/planArc.test.ts:235`
+- `src/services/planArc.test.ts:242`
+- `src/services/planArc.test.ts:247`
+- `src/services/planArc.test.ts:256`
+- `src/services/planArc.test.ts:261`
+- `src/services/planArc.test.ts:265`
 - `src/services/planChooser.test.ts:54`
 - `src/services/planChooser.ts:47`
 
 ### `joinEmerges` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9672`
-- `src/services/planArc.test.ts:269`
-- `src/services/planArc.test.ts:276`
+- `src/components/Coach/CoachTeachPage.tsx:9690`
+- `src/services/planArc.test.ts:272`
+- `src/services/planArc.test.ts:279`
 
 ## Tests
 
@@ -114,6 +116,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planArc.test.ts`
 - `src/services/planArc.truth.test.ts`
 - `src/services/planChooser.test.ts`
+- `src/services/routeEndsAtFirstArrival.test.ts`
 
 ## Audits that reach it
 

@@ -65,10 +65,10 @@ function check(v: Violation[], game: string, ply: number, surface: string, text:
     if (/\b(White|Black)(?:'s)?\s+(?:has|have|is|plays|played|hits|can|will|threatens|wins|takes|defends|king|queen|rook|bishop|knight|pawns?)\b/.test(s)) push('A colour subject', s);
     if (/(?:^|[—:;]\s*)(?:Knight|Bishop|Rook|Queen|Pawn|King) on [a-h][1-8]/.test(s)) push('B unseated piece', s);
     if (/\b(?:we|our|us)\b/i.test(s)) push('F we/our/us', s);
-    if (board.inFlux && /\b(?:a|an|the) (?:piece|pawn|rook|queen|exchange|knight|bishop) up\b|\bNewly undefended\b|\bup \d+ points? of material\b/i.test(s)) push('C standing claim in flux', s);
+    if (board.inFlux && /\b(?:a|an|the) (?:piece|pawn|rook|queen|exchange|knight|bishop) up\b|\bNewly undefended\b|\bNow hanging\b|\bup \d+ points? of material\b/i.test(s)) push('C standing claim in flux', s);
     if (board.mateOnBoard && /\bplan\b/i.test(s)) push('D plan beside mate', s);
   }
-  const loose = /Newly undefended: (?:your|their) \w+ on ([a-h][1-8])/.exec(t);
+  const loose = /(?:Newly undefended|Now hanging): (?:your|their) \w+ on ([a-h][1-8])/.exec(t);
   if (loose && new RegExp(`(?:attacks|leaves) (?:your|their) \\w+ on ${loose[1]}`).test(t)) push('G one piece, two loose claims', t.slice(0, 160));
   const seen = new Set<string>();
   for (const s of sentences(t)) {

@@ -88,7 +88,14 @@ export function mastersPlanRead(fen: string, movesAt: MovesAt): MastersPlanRead 
   const pieces: Record<'w' | 'b', Map<string, { weight: number; piece: string; from: string; to: string; san: string }>> = { w: new Map(), b: new Map() };
   const castles: Record<'w' | 'b', Record<'short' | 'long', number>> = { w: { short: 0, long: 0 }, b: { short: 0, long: 0 } };
   const seen = new Set<string>();
-  const walk = (at: string, weight: number, depth: number, found: Set<string>, lastCaptureOn: string | null, lastTo: string | null): void => {
+  // THE PIECE IS NAMED WHERE IT STANDS NOW (clean-pass walk 2026-10-03, G3
+  // ply 8: "your knight on d6 usually goes to f5" with the knight still on e4
+  // — d6 was where it stood two master moves later). A placement counts only
+  // for a piece still on its ROOT square: no move on the path has left or
+  // landed on that square.
+  let rootBoard: Chess | null = null;
+  try { rootBoard = new Chess(fen); } catch { rootBoard = null; }
+  const walk = (at: string, weight: number, depth: number, found: Set<string>, lastCaptureOn: string | null, lastTo: string | null, touched: ReadonlySet<string> = new Set()): void => {
     if (depth >= DEPTH) return;
     const moves = movesAt(at);
     const total = moves?.reduce((n, m) => n + m.games, 0) ?? 0;
@@ -134,7 +141,9 @@ export function mastersPlanRead(fen: string, movesAt: MovesAt): MastersPlanRead 
       // goes to f3" is development, not a plan.
       else if (m.piece !== 'p' && m.piece !== 'k' && !m.captured && depth >= 2
         && ('qr'.includes(m.piece) || (m.color === 'w' ? Number(m.to[1]) >= 4 : Number(m.to[1]) <= 5))
-        && !found.has(`${m.color}:piece:${m.from}`)) {
+        && !found.has(`${m.color}:piece:${m.from}`)
+        && !touched.has(m.from)
+        && rootBoard?.get(m.from)?.type === m.piece && rootBoard?.get(m.from)?.color === m.color) {
         const id = `${m.color}:piece:${m.from}`;
         const pid = `${m.from}${m.to}`;
         const cur = pieces[m.color].get(pid) ?? { weight: 0, piece: m.piece, from: m.from, to: m.to, san: m.san };
@@ -142,7 +151,7 @@ export function mastersPlanRead(fen: string, movesAt: MovesAt): MastersPlanRead 
         pieces[m.color].set(pid, cur);
         next = new Set(next); next.add(id);
       }
-      walk(c.fen(), w, depth + 1, next, m.captured ? m.to : null, m.to);
+      walk(c.fen(), w, depth + 1, next, m.captured ? m.to : null, m.to, new Set([...touched, m.from, m.to]));
     }
   };
   walk(fen, 1, 0, new Set(), null, null);

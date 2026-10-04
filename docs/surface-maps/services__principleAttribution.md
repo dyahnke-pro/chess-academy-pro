@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1649 lines · 12 exports · 44 importers · 31 tests · 1 audits**
+**1666 lines · 12 exports · 47 importers · 34 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -25,6 +25,7 @@
 - `src/services/coachApi.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/discussionPractice.ts`
+- `src/services/forcingStemNoDecisive.test.ts`
 - `src/services/fundLeadStems.test.ts`
 - `src/services/fundamentalHow.test.ts`
 - `src/services/fundamentalReachesDecider.test.ts`
@@ -49,8 +50,10 @@
 - `src/services/reviewFullData.ts`
 - `src/services/section14Coverage.measure.test.ts`
 - `src/services/section14Diagnosis.test.ts`
+- `src/services/shieldCheckWasOpened.test.ts`
 - `src/services/sweepCarriesPv.test.ts`
 - `src/services/sweepPassesEngineLines.test.ts`
+- `src/services/tradedActiveNamesTheirPiece.test.ts`
 - `src/services/walkOct1Learn.test.ts`
 - `src/services/walkOct2a.test.ts`
 - `src/services/weaknessSpine.fundamentals.test.ts`
@@ -90,7 +93,7 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:132`
 
-### `attributePrinciples` (function) — 88 call sites
+### `attributePrinciples` (function) — 91 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
 - `src/services/blockedOwnRetreat.test.ts:23`
 - `src/services/blockedOwnRetreat.test.ts:32`
@@ -171,9 +174,12 @@
 - `src/services/section14Diagnosis.test.ts:63`
 - `src/services/section14Diagnosis.test.ts:102`
 - `src/services/section14Diagnosis.test.ts:103`
+- `src/services/shieldCheckWasOpened.test.ts:11`
 - `src/services/sweepCarriesPv.test.ts:129`
 - `src/services/sweepCarriesPv.test.ts:146`
 - `src/services/sweepPassesEngineLines.test.ts:91`
+- `src/services/tradedActiveNamesTheirPiece.test.ts:13`
+- `src/services/tradedActiveNamesTheirPiece.test.ts:25`
 - `src/services/walkOct1Learn.test.ts:94`
 - `src/services/walkOct2a.test.ts:77`
 - `src/services/yieldHonoured.test.ts:33`
@@ -200,6 +206,7 @@
 - `src/services/attributionNeverBlind.test.ts`
 - `src/services/blockedOwnRetreat.test.ts`
 - `src/services/claimTruth.manual.test.ts`
+- `src/services/forcingStemNoDecisive.test.ts`
 - `src/services/fundLeadStems.test.ts`
 - `src/services/fundamentalHow.test.ts`
 - `src/services/fundamentalReachesDecider.test.ts`
@@ -220,8 +227,10 @@
 - `src/services/reviewFullData.test.ts`
 - `src/services/section14Coverage.measure.test.ts`
 - `src/services/section14Diagnosis.test.ts`
+- `src/services/shieldCheckWasOpened.test.ts`
 - `src/services/sweepCarriesPv.test.ts`
 - `src/services/sweepPassesEngineLines.test.ts`
+- `src/services/tradedActiveNamesTheirPiece.test.ts`
 - `src/services/walkOct1Learn.test.ts`
 - `src/services/walkOct2a.test.ts`
 - `src/services/weaknessSpine.fundamentals.test.ts`

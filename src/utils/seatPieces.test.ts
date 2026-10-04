@@ -58,3 +58,13 @@ describe('a replaced demonstrative keeps its case', () => {
     expect(seatPieceReferences('Watch that knight on d4.', QD3, 'w')).toBe('Watch their knight on d4.');
   });
 });
+
+// Review walk 2026-10-04, G3 (lichess mZ1GOTOw) 15.bxa5: "their pawn structure
+// splinters — a new their isolated pawn on a5".
+describe('a determiner a word or two back heads the phrase', () => {
+  it('"a new isolated pawn on a5" gets no possessive stamped inside it', () => {
+    const fen = 'r2k3r/ppp1npp1/2p4p/P3P3/2b1N3/P4N2/5PPP/R1B2RK1 b - - 0 15';
+    const out = seatPieceReferences('their pawn structure splinters — a new isolated pawn on a5', fen, 'b');
+    expect(out).not.toMatch(/a new their/);
+  });
+});

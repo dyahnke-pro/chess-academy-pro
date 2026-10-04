@@ -27,6 +27,7 @@ import { Chess, type Square, type PieceSymbol } from 'chess.js';
 import type { ReviewConceptId } from './conceptVocabulary';
 import { totalMinorCount } from './development';
 import { centreDistance } from '../utils/centreDistance';
+import { andList } from '../utils/andList';
 import { isOutpost } from './outpost';
 import { settledExchange } from './exchangeLedger';
 import { legalSeeGain } from './positionReadingService';
@@ -359,9 +360,34 @@ function detectRookActivation(ctx: ConceptCtx): ConceptBeat | null {
   const mine = MINE(ctx.moverColor, ctx.studentColor);
   const seventh = ctx.moverColor === 'w' ? 7 : 2;
   if (rank === seventh) {
+    // EACH CLAUSE FROM THE BOARD (review walk 2026-10-04, 33.Rc7+: "pins their
+    // king to the back rank" with the king ON the seventh, beside the rook).
+    // The pawns it rakes are the defender's pawns on that rank it actually
+    // sees along it; the king is held to the back rank only when it stands
+    // there; "pigs" are two rooks.
+    const board = new Chess(ctx.fenAfter);
+    const them = ctx.moverColor === 'w' ? 'b' : 'w';
+    const rankSquares = (dir: number): string[] => {
+      const out: string[] = [];
+      for (let f = file + dir; f >= 0 && f < 8; f += dir) {
+        const sq = `${String.fromCharCode(97 + f)}${rank}`;
+        const pc = board.get(sq as Square);
+        if (pc) { if (pc.color === them && pc.type === 'p') out.push(sq); break; }
+      }
+      return out;
+    };
+    const raked = [...rankSquares(-1), ...rankSquares(1)];
+    const backRank = ctx.moverColor === 'w' ? 8 : 1;
+    const kingSq = board.findPiece({ type: 'k', color: them })[0];
+    const kingHeld = !!kingSq && parseInt(kingSq[1], 10) === backRank;
+    const pigs = board.findPiece({ type: 'r', color: ctx.moverColor }).filter((sq) => parseInt(sq[1], 10) === rank).length >= 2;
+    const clauses: string[] = [];
+    if (raked.length) clauses.push(mine ? `rakes their ${raked.length > 1 ? 'pawns' : 'pawn'} on ${andList(raked)} from the side` : `hits your ${raked.length > 1 ? 'pawns' : 'pawn'} on ${andList(raked)} from the side`);
+    if (kingHeld) clauses.push(mine ? 'keeps their king shut on the back rank' : 'keeps your king shut on the back rank');
+    if (!clauses.length) return null;
     const text = mine
-      ? `Your rook reaches the 7th rank — the pigs on the seventh. It rakes their pawns from behind and pins their king to the back rank.`
-      : `Your opponent's rook lands on your 2nd rank, raking the pawns from behind. Challenge it or block the file before a second rook joins it.`;
+      ? `Your rook reaches the 7th rank${pigs ? ' — the pigs on the seventh' : ''}: it ${andList(clauses)}.`
+      : `Your opponent's rook lands on your 2nd rank: it ${andList(clauses)}. Challenge it or block the file before a second rook joins it.`;
     return { concept: 'rook-seventh', text, source: 'concept:end-rook-7th' };
   }
   // Open file only counts if the rook actually just took it (moved onto it).

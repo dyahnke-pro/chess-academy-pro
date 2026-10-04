@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5249 lines · 36 exports · 43 importers · 41 tests · 5 audits**
+**5253 lines · 36 exports · 43 importers · 41 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -93,7 +93,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `generateNarrativeSummary` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:539`
+- `src/components/Coach/CoachGameReview.tsx:538`
 - `src/services/recapSeat.test.ts:17`
 
 ### `recapSecondPerson` (function) — 9 call sites
@@ -123,7 +123,7 @@
 - `src/services/coachFeatureService.test.ts:315`
 
 ### `segmentNamedArrows` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:3613`
+- `src/components/Coach/CoachGameReview.tsx:3611`
 - `src/services/namedMoveArrows.test.ts:54`
 - `src/services/namedMoveArrows.test.ts:58`
 
@@ -140,7 +140,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildReviewCitations` (function) — 8 call sites
-- `src/components/Coach/CoachGameReview.tsx:599`
+- `src/components/Coach/CoachGameReview.tsx:598`
 - `src/services/coachFeatureService.test.ts:744`
 - `src/services/coachFeatureService.test.ts:752`
 - `src/services/coachFeatureService.test.ts:784`
@@ -154,7 +154,7 @@
 - `src/services/coachFeatureService.test.ts:24`
 
 ### `buildReviewSegments` (function) — 65 call sites
-- `src/components/Coach/CoachGameReview.tsx:1886`
+- `src/components/Coach/CoachGameReview.tsx:1882`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
 - `src/services/coachFeatureService.causalChain.test.ts:50`
@@ -205,7 +205,7 @@
 - `src/services/coachFeatureService.trade.test.ts:18`
 - `src/services/loopCloses.review.integration.test.ts:89`
 - `src/services/methodBeat.test.ts:70`
-- `src/services/planArc.test.ts:134`
+- `src/services/planArc.test.ts:137`
 - `src/services/reviewCorpusNote.test.ts:40`
 - `src/services/reviewForesight.test.ts:52`
 - `src/services/reviewNeedGate.test.ts:30`
@@ -236,7 +236,7 @@
 - `src/services/mapConcurrent.test.ts:37`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4843`
+- `src/components/Coach/CoachGameReview.tsx:4841`
 - `src/services/coachFeatureService.test.ts:814`
 - `src/services/coachFeatureService.test.ts:817`
 - `src/services/coachFeatureService.test.ts:824`
@@ -307,7 +307,7 @@
 - `src/services/reviewWalk1500.test.ts:17`
 
 ### `openingNameForKey` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:236`
+- `src/components/Coach/CoachGameReview.tsx:235`
 
 ### `generateReviewNarration` (function) — 14 call sites
 - `src/services/reviewBetterLineWhy.test.ts:58`

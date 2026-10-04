@@ -16,12 +16,18 @@ export function mateContext(
   post: { isMate: boolean; mateIn: number | null } | null | undefined,
   moverColor: 'white' | 'black',
   wasBest = false,
-): { missedMate: number | null; allowedMate: number | null } {
+): { missedMate: number | null; allowedMate: number | null; bestMate: number | null } {
   const sign = moverColor === 'white' ? 1 : -1;
   const preMate = pre?.isMate && pre.mateIn !== null ? pre.mateIn * sign : null;
   const postMate = post?.isMate && post.mateIn !== null ? post.mateIn * sign : null;
   const stillMating = postMate !== null && postMate > 0;
   const missedMate = preMate !== null && preMate > 0 && !wasBest && !stillMating ? Math.abs(preMate) : null;
   const allowedMate = postMate !== null && postMate < 0 ? Math.abs(postMate) : null;
-  return { missedMate, allowedMate };
+  // The best move's own forced mate, when the board had one for the mover —
+  // the reason a better move is better is then the mate, never a line read
+  // cut short of it (clean-pass re-walk 2026-10-04, G1 31.Qxe4+: "Rc7+ was
+  // cleaner — it would swing pieces toward their king" two moves after
+  // "There's a forced mate here, starting with Rc7+").
+  const bestMate = preMate !== null && preMate > 0 && !wasBest ? Math.abs(preMate) : null;
+  return { missedMate, allowedMate, bestMate };
 }

@@ -455,7 +455,7 @@ describe('a route of another piece is the idea, not the move', () => {
     const fen = '2rq1rk1/p1p2pbp/1p2p1p1/3bP3/3P4/5N1P/PP3PP1/R1BQR1K1 w - - 0 19';
     const r = betterMoveReason(fen, 'Qd2', 'Be3', ['c1e3', 'd5b7', 'a1c1', 'd8d5', 'c1c4'], 'white', null) ?? '';
     expect(r).not.toMatch(/^it would walk the rook/);
-    expect(r).toMatch(/^the idea is to walk the rook round to c4/);
+    expect(r).toMatch(/^the idea is to walk the rook on a1 round to c4/);
   });
 });
 
@@ -519,9 +519,12 @@ describe('their slip is offered as what it really is (Learn walk 2026-10-02, 6.h
   // is still −0.45 after it — level-ish, not a prize to "go and take".
   const fen = 'r1bqk2r/ppppbppp/2n2n2/8/3PP3/2N5/PP3PPP/R1BQKBNR w KQkq - 3 6';
   const base = { priorMove: null, replyLineUci: [], replySan: null, fenBefore: fen, playedSan: 'h3', bestSan: 'd5', cpLoss: 160, side: 'coach' as const, moverColor: 'white' as const, dictated: true };
-  it('still a little worse → level, not "go and take it"', () => {
+  // Still a little worse after coming back from −2: a way back into the game —
+  // "level" is a band edge a time-boxed read flips on (clean-pass re-walk
+  // 2026-10-04, G3 12.b3: "brings you level" at a depth-18 −0.70).
+  it('still a little worse after being clearly behind → a way back, not "go and take it"', () => {
     const said = callInaccuracy({ ...base, moverEvalAfterCp: 45 })?.said ?? '';
-    expect(said).toMatch(/brings you level/);
+    expect(said).toMatch(/way back into the game/);
     expect(said).not.toMatch(/go and take it/);
   });
   it('clearly worse → a way back', () => {

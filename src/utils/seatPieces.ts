@@ -83,6 +83,11 @@ export function seatPieceReferences(
           const capD = (lead ?? '').charAt(0) === 'T';
           return `${capD ? cap(ownerD) : ownerD} ${adj ?? ''}${piece} on ${sq}`;
         }
+        // A DETERMINER A WORD OR TWO BACK already heads this noun phrase ("a
+        // new isolated pawn on a5" came out "a new their isolated pawn", review
+        // walk 2026-10-04): an adjective the lead does not know sits between
+        // them. A possessive cannot follow a determiner; leave the phrase.
+        if (!lead && /\b(a|an|the|this|that|these|those|your|their|its|one)\s+(?:[\w-]+\s+){1,2}$/i.test(all.slice(0, offset))) return whole;
         const cell = board.get(sq as Square);
         if (!cell || cell.type !== WANT[piece.toLowerCase()]) return whole;
         const owner = cell.color === studentColorWB ? 'your' : 'their';

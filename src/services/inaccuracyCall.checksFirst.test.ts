@@ -19,7 +19,7 @@ describe('checks first — the move order is the reason', () => {
       fenBefore: fen(), playedSan: 'gxh5', bestSan: 'Rxf8+', bestLineUci: BEST_LINE,
       cpLoss: 261, moverEvalAfterCp: 418, side: 'student', moverColor: 'white',
     } as never)?.said ?? '';
-    expect(said).toBe("gxh5 still wins, but Rxf8+ was cleaner — checks first: Rxf8+, Kxf8, and gxh5 would still have been there — you'd have had both.");
+    expect(said).toBe("gxh5 still wins, but Rxf8+ was cleaner — checks first: Rxf8+, Kxf8, and gxh5 would still have been there — both moves, not one.");
   });
   it('negative controls: not a check, or the capture does not come back', () => {
     // The best move is not a check.
@@ -28,5 +28,15 @@ describe('checks first — the move order is the reason', () => {
     expect(checksFirst(fen(), 'gxh5', 'Rxf8+', ['d8f8', 'g8f8', 'e1g3', 'g7g6'])).toBeNull();
     // The line does not start with the best move — nothing is proved.
     expect(checksFirst(fen(), 'gxh5', 'Rxf8+', ['g4h5', 'g8f8'])).toBeNull();
+  });
+});
+
+// Review walk 2026-10-04, G3 15.bxa5 — the OPPONENT's move — heard "you'd have
+// had both". The checks-first reason is said in no one's seat.
+describe('checks-first names no seat', () => {
+  it('never "you\'d have had both"', async () => {
+    const { phraseBetterMove } = await import('./inaccuracyCall');
+    const t = phraseBetterMove({ kind: 'checks-first', best: 'Rd1+', reply: 'Kc8', played: 'bxa5' });
+    expect(t).not.toMatch(/\byou\b|\bthey\b/);
   });
 });

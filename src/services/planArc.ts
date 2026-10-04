@@ -98,7 +98,11 @@ export function aimsOf(side: SidePlan, seat: Seat): Aim[] {
  *  on the way are the how. */
 function routePhrase(name: string, path: readonly string[], takes?: string): string {
   const dest = path[path.length - 1];
-  const via = path.slice(1, -1);
+  // THE ROUTE ENDS WHERE IT FIRST ARRIVES (review walk 2026-10-04, G2 18…Ng4:
+  // "getting the knight to g4, by way of f6, g4 and f2" — the knight reached
+  // g4, went to f2 and came back). Waypoints are the squares before the first
+  // arrival, each once, never the start.
+  const via = [...new Set(path.slice(1, path.indexOf(dest)))].filter((sq) => sq !== path[0]);
   const tail = via.length === 0 ? '' : via.length === 1 ? `, by way of ${via[0]}` : `, by way of ${via.slice(0, -1).join(', ')} and ${via[via.length - 1]}`;
   // A destination their piece stands on is a CAPTURE (Learn walk 2026-10-01:
   // "getting the knight to a7" was winning the a7 pawn).
@@ -303,8 +307,10 @@ export function stepArc(
           // re-owned downstream into "your new your queen" (review sweep,
           // Capablanca–Marshall b8=Q+).
           text: e.aim.kind === 'passer'
-            ? `There it is — ${whose} pawn has queened on ${moved.to}. That was the plan: ${e.aim.phrase}.`
-            : `There it is — ${whose} ${reached.what}. That was the plan: ${e.aim.phrase}.`,
+            // WHOSE plan, in the sentence itself (review walk 2026-10-04, G2:
+            // "That was the plan: the outpost on g4." spoken on its own).
+            ? `There it is — ${whose} pawn has queened on ${moved.to}. That was ${whose} plan: ${e.aim.phrase}.`
+            : `There it is — ${whose} ${reached.what}. That was ${whose} plan: ${e.aim.phrase}.`,
         });
         done.add(id);
         continue; // done — the aim leaves the arc for the rest of the game

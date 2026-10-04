@@ -301,7 +301,11 @@ describe('the couplings that make the wiring safe', () => {
     // on the new position, so the read of the board the student moved FROM has
     // to be taken in the move handler itself — and FEN-guarded, so a read of
     // any other board goes silent instead of being misattributed.
-    expect(TEACH).toMatch(/const preStudentRead = latestEvalRef\.current\?\.fen === fenBefore/);
+    // ONE READ PER POSITION (2026-10-04): the coach-turn probe of the same
+    // board comes first, the eval bar's read is the fallback — both guarded
+    // on the position the student moved FROM.
+    expect(TEACH).toMatch(/samePosition\(studentBestReadRef\.current\.fen, fenBefore\)/);
+    expect(TEACH).toMatch(/const preStudentRead = probeRead \?\? \(latestEvalRef\.current\?\.fen === fenBefore/);
   });
 
   it('one model computes the backward look, so the two callers cannot drift', () => {

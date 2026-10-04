@@ -733,11 +733,26 @@ export function computeMoveFacets(
         && 'nbr'.includes(h.piece.toLowerCase())
         && exchangeStakes(fenAfter, [h.square]) !== null
         && !attackedByMover(h.square));
-      if (fresh.length > 0) {
-        const desc = fresh.map((h) => `${pieceWord(h.piece)} on ${h.square}`).join(', ');
-        const f = `[loose] Newly undefended: ${seat(desc)}.`;
-        facets.push(f); recSquares(f, fresh.map((h) => h.square));
-        recStakes(f, exchangeStakes(fenAfter, fresh.map((h) => h.square)));
+      // UNDEFENDED is a claim about a DEFENDER LOST: only a piece that stood
+      // on the same square defended before this move. A piece that never had
+      // one and is newly hit is "hanging" (review walk 2026-10-04, G3 37…Kc7:
+      // "Newly undefended: their rook on d1" — nothing had ever defended it;
+      // the king step opened the d-file onto it).
+      const hadDefender = (sq: string, piece: string, color: 'w' | 'b'): boolean => {
+        try {
+          const b = new Chess(fenBefore);
+          const at = b.get(sq as Square);
+          return !!at && at.type === piece.toLowerCase() && at.color === color && b.attackers(sq as Square, color).length > 0;
+        } catch { return false; }
+      };
+      const lostDefender = fresh.filter((h) => hadDefender(h.square, h.piece, h.color));
+      const newlyHit = fresh.filter((h) => !hadDefender(h.square, h.piece, h.color));
+      for (const [group, label] of [[lostDefender, 'Newly undefended'], [newlyHit, 'Now hanging']] as const) {
+        if (group.length === 0) continue;
+        const desc = group.map((h) => `${pieceWord(h.piece)} on ${h.square}`).join(', ');
+        const f = `[loose] ${label}: ${seat(desc)}.`;
+        facets.push(f); recSquares(f, group.map((h) => h.square));
+        recStakes(f, exchangeStakes(fenAfter, group.map((h) => h.square)));
       }
     }
   } catch { /* ignore */ }
@@ -1217,7 +1232,8 @@ export function computeThroughLine(fensAfter: string[], studentColorWB: Color | 
     outpost: 'the story of this game was your outpost — a piece planted on a square no pawn could ever challenge, quietly dominating from the middle of the board',
     'king-hunt': 'the through-line of this game was their king caught in the centre — once it was stuck there with the files opening, the whole game became a hunt',
     passer: 'the story of this game was your passed pawn — a long-term trump that hung over the whole middlegame and had to be watched every move',
-    bishops: 'the through-line of this game was the bishop pair — two bishops raking the board, and in an open position that pair is worth more than it looks',
+    // Counted for the STUDENT's pair only (myB >= 2), so it says so.
+    bishops: 'the through-line of this game was your bishop pair — your two bishops raking the board, and in an open position that pair is worth more than it looks',
     material: 'the through-line of this game was your material edge — once ahead, the job was to simplify and convert, and keeping it clean is the whole skill',
   };
   const p = PHRASING[theme];
