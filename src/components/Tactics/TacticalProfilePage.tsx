@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, RefreshCw, Play, Eye, ChevronRight } from 'lucide-react';
+import { RefreshCw, Play, Eye, ChevronRight } from 'lucide-react';
 import { getThemeSkills, THEME_MAP } from '../../services/puzzleService';
 import { PageHelp } from '../Layout/PageHelp';
+import { TacticsPageHeader } from './TacticsPageHeader';
 import type { ThemeSkill } from '../../services/puzzleService';
 import { logAppAudit } from '../../services/appAuditor';
 import { getUnifiedWeaknessProfile, type UnifiedWeakness } from '../../services/weaknessSpine';
@@ -114,12 +115,12 @@ export function TacticalProfilePage(): JSX.Element {
   const weakestThemes = target.kind === 'none' ? ['fork'] : target.category.themes;
 
   const header = (
-    <div className="flex items-center gap-3">
-      <button onClick={() => void navigate('/tactics')} className="p-2 rounded-lg hover:opacity-80" data-testid="back-btn">
-        <ArrowLeft size={20} style={{ color: 'var(--color-text)' }} />
-      </button>
-      <Eye size={24} style={{ color: 'var(--color-accent)' }} />
-      <h1 className="text-xl font-bold flex-1" style={{ color: 'var(--color-text)' }}>Tactical Profile</h1>
+    <TacticsPageHeader
+      title="Tactical Profile"
+      icon={<Eye size={24} style={{ color: 'var(--color-accent)' }} />}
+      onBack={() => void navigate('/tactics')}
+      right={
+      <>
       <button
         onClick={() => void handleRefresh()}
         disabled={refreshing || loading}
@@ -138,13 +139,15 @@ export function TacticalProfilePage(): JSX.Element {
           { label: 'Where it fits', body: 'This is the map; Daily Training, Setup Trainer, and your Weaknesses are how you close the gaps it finds.' },
         ]}
       />
-    </div>
+      </>
+      }
+    />
   );
 
   if (loading) {
     return (
       <div
-        className="max-w-2xl mx-auto w-full p-6 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 flex flex-col gap-5 flex-1 overflow-y-auto min-h-0"
+        className="max-w-2xl mx-auto w-full p-4 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 flex flex-col gap-5 flex-1 overflow-y-auto min-h-0"
         data-testid="tactical-profile-page"
       >
         {header}
@@ -157,7 +160,7 @@ export function TacticalProfilePage(): JSX.Element {
 
   return (
     <motion.div
-      className="max-w-2xl mx-auto w-full p-6 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 flex flex-col gap-5 flex-1 overflow-y-auto min-h-0"
+      className="max-w-2xl mx-auto w-full p-4 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 flex flex-col gap-5 flex-1 overflow-y-auto min-h-0"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       data-testid="tactical-profile-page"

@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, ChevronDown, ChevronUp, Eye, EyeOff,
+  ChevronDown, ChevronUp, Eye, EyeOff,
   Trophy, Volume2, VolumeX,
 } from 'lucide-react';
 import { ConsistentChessboard, type PiecePositionMap } from '../Chessboard/ConsistentChessboard';
+import { TacticsPageHeader } from './TacticsPageHeader';
 import { voiceService } from '../../services/voiceService';
 import {
   drawRandomSquare, recordAttempt, sequenceLengthForStreak, getBestStreak,
@@ -203,18 +204,13 @@ export function FindSquarePage(): JSX.Element {
       className="flex flex-col gap-4 p-4 flex-1 min-h-0 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6"
       data-testid="find-square-page"
     >
-      <div className="flex items-center gap-2 max-w-lg mx-auto w-full">
-        <button
-          onClick={() => { void navigate('/tactics'); }}
-          aria-label="Back to tactics"
-          className="p-2 rounded-lg hover:bg-theme-border/50 transition-colors"
-          data-testid="find-square-back"
-        >
-          <ArrowLeft size={20} />
-        </button>
-        <h1 className="text-xl font-bold flex-1 text-center">Find the Square</h1>
-        <div className="w-9" />
-      </div>
+      <TacticsPageHeader
+        className="max-w-lg mx-auto"
+        title="Find the Square"
+        onBack={() => { void navigate('/tactics'); }}
+        backLabel="Back to tactics"
+        backTestId="find-square-back"
+      />
 
       {/* Color picker — tap the pawn icon to swap. The pawn shown is
           the one the student plays. */}

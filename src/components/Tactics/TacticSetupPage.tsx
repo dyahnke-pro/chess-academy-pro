@@ -2,7 +2,7 @@ import { PageHelp } from '../Layout/PageHelp';
 import { useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Wrench, ChevronRight, TrendingUp } from 'lucide-react';
+import { Wrench, ChevronRight, TrendingUp } from 'lucide-react';
 import {
   createSetupSession,
   pickSetupPuzzle,
@@ -15,6 +15,7 @@ import { tacticTypeLabel, tacticTypeIcon } from '../../services/tacticalProfileS
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { TacticSetupBoard } from './TacticSetupBoard';
+import { TacticsPageHeader } from './TacticsPageHeader';
 import { logAppAudit } from '../../services/appAuditor';
 import type { SetupPuzzleDifficulty } from '../../types';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
@@ -131,13 +132,11 @@ export function TacticSetupPage(): JSX.Element {
     >
       <div className="max-w-2xl mx-auto w-full flex flex-col gap-4 flex-1">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <button onClick={() => void navigate('/tactics')} className="p-2 rounded-lg hover:opacity-80" data-testid="back-btn">
-          <ArrowLeft size={20} style={{ color: 'var(--color-text)' }} />
-        </button>
-        <Wrench size={24} style={{ color: 'var(--color-success)' }} />
-        <h1 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>Setup Trainer</h1>
-        <div className="ml-auto">
+      <TacticsPageHeader
+        title="Setup Trainer"
+        icon={<Wrench size={24} style={{ color: 'var(--color-success)' }} />}
+        onBack={() => void navigate('/tactics')}
+        right={
           <PageHelp
             helpId="tactics-setup"
             title="How the Setup Trainer works"
@@ -148,8 +147,8 @@ export function TacticSetupPage(): JSX.Element {
               { label: 'Where it fits', body: 'A deeper skill than spot-the-motif drilling: the move-before-the-move, calculated to the finish, is what wins real games.' },
             ]}
           />
-        </div>
-      </div>
+        }
+      />
 
       {/* Difficulty Select */}
       {phase === 'select' && (

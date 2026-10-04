@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Swords, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { Swords, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import {
   getPuzzleForThemeAtRating,
   getPuzzleForOpeningAtRating,
@@ -14,6 +14,7 @@ import { getPuzzleIdsByOpening } from '../../services/puzzlesByOpening';
 import { resolveReachState } from '../../services/reachRating';
 import { useAppStore } from '../../stores/appStore';
 import { PuzzleBoard } from '../Puzzles/PuzzleBoard';
+import { TacticsPageHeader } from './TacticsPageHeader';
 import type { PuzzleOutcome } from '../Puzzles/PuzzleBoard';
 import type { PuzzleRecord } from '../../types';
 import { db } from '../../db/schema';
@@ -365,16 +366,14 @@ export function TacticDrillPage(): JSX.Element {
       data-testid="tactic-drill-page"
     >
       {/* Header */}
-      <div className="flex items-center gap-3 p-4">
-        <button onClick={() => void navigate('/tactics')} className="p-2 rounded-lg hover:opacity-80" data-testid="back-btn">
-          <ArrowLeft size={20} style={{ color: 'var(--color-text)' }} />
-        </button>
-        <Swords size={22} style={{ color: 'var(--color-warning)' }} />
-        <h1 className="text-lg font-bold flex-1" style={{ color: 'var(--color-text)' }}>
-          {openingFilter
-            ? `Drill: ${openingResolution?.source === 'family' && openingResolution.family ? openingResolution.family : openingFilter}`
-            : `Drill: ${themeLabel}`}
-        </h1>
+      <TacticsPageHeader
+        className="p-4"
+        title={openingFilter
+          ? `Drill: ${openingResolution?.source === 'family' && openingResolution.family ? openingResolution.family : openingFilter}`
+          : `Drill: ${themeLabel}`}
+        icon={<Swords size={22} style={{ color: 'var(--color-warning)' }} />}
+        onBack={() => void navigate('/tactics')}
+        right={<>
         {openingFilter && (
           <button
             type="button"
@@ -403,7 +402,8 @@ export function TacticDrillPage(): JSX.Element {
             )}
           </div>
         )}
-      </div>
+        </>}
+      />
 
       {/* Loading */}
       {phase === 'loading' && (
