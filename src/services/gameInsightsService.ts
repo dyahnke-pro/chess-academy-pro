@@ -166,6 +166,25 @@ export function openingChoosingColor(name: string | null): 'white' | 'black' | n
 // never hidden behind a stale snapshot.
 let playerGamesInFlight: Promise<AnnotatedGame[]> | null = null;
 
+/** THE ONE "still waiting for analysis" predicate the header count and the
+ *  Overview card share — the batch's own filter (`depthUpgrade: false`). */
+function awaitsAnalysis(game: GameRecord): boolean {
+  return gameNeedsAnalysis(game, { depthUpgrade: false });
+}
+
+/**
+ * The header's "N of M analysed" pair, WITHOUT the whole overview (walk
+ * 2026-10-04 #16: the header read once and sat at "5 of 937" while the batch
+ * passed 13). Cheap — one read of the player's games and a flag check per game
+ * — so the page re-reads it on every batch progress tick.
+ */
+export async function getAnalysisCounts(): Promise<{ totalGames: number; analyzedGameCount: number; gamesNeedingAnalysis: number }> {
+  const playerGames = await getPlayerGames();
+  let gamesNeedingAnalysis = 0;
+  for (const { game } of playerGames) if (awaitsAnalysis(game)) gamesNeedingAnalysis++;
+  return { totalGames: playerGames.length, analyzedGameCount: playerGames.length - gamesNeedingAnalysis, gamesNeedingAnalysis };
+}
+
 function getPlayerGames(): Promise<AnnotatedGame[]> {
   if (!playerGamesInFlight) {
     playerGamesInFlight = readPlayerGames().finally(() => { playerGamesInFlight = null; });
@@ -480,7 +499,7 @@ export async function getOverviewInsights(): Promise<OverviewInsights> {
   let analyzedGameCount = 0;
   let gamesNeedingAnalysis = 0;
   for (const { game, playerColor } of playerGames) {
-    if (gameNeedsAnalysis(game, { depthUpgrade: false })) {
+    if (awaitsAnalysis(game)) {
       gamesNeedingAnalysis++;
       continue;
     }

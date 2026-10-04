@@ -377,6 +377,14 @@ export type AuditKind =
   | 'analysis-pool-warmed'
   | 'analysis-game-done'
   | 'analysis-sweep-summary'
+  /** Batch-analysis failure modes that used to end a run silently (walk
+   *  2026-10-04 #17): a game that threw and was skipped, a wedged worker lost
+   *  from the pool, the pool emptied mid-package (rest run sequentially), and
+   *  a whole run rejecting. */
+  | 'analysis-game-failed'
+  | 'analysis-worker-lost'
+  | 'analysis-pool-exhausted'
+  | 'analysis-run-failed'
   | 'analysis-review-done'
   // Stockfish analysis stalled — the `go` command was sent but no
   // bestmove came back within the watchdog window. The dominant
