@@ -185,7 +185,7 @@ describe('useReviewPlayback', () => {
     await waitFor(() => expect(speakRecords.length).toBe(1));
     act(() => { result.current.goForward(); });
     await waitFor(() => expect(speakRecords.length).toBe(2));
-    expect(auditCalls.some((c) => c.kind === 'coach-surface-migrated' && /ply 1: no fundamental — calculation-depth/.test(c.summary))).toBe(true);
+    await waitFor(() => expect(auditCalls.some((c) => c.kind === 'coach-surface-migrated' && /ply 1: no fundamental — calculation-depth/.test(c.summary))).toBe(true));
   });
 
   it('goBack decrements ply WITHOUT re-speaking the narration', async () => {
