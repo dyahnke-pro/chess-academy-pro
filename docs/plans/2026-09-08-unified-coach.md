@@ -261,6 +261,7 @@ The captured DESIGN INTENT for when we revisit (from real use):
 - Revisit after David has used the custom lessons; let real use pick the shape.
 
 ### Phase 5 — CUSTOM COACHING SESSION (the capstone)
+> 2026-10-04: **Learn how to think** (`docs/plans/2026-10-04-learn-how-to-think.md`) EXTENDS the built custom lesson below: its "teach the idea" becomes a ten-step method taught by tap answers (Show → Guide → Solo); same curriculum, spine and tags.
 - Entry points: "teach me something" / "what should I learn?" → aggregate the
   student's top weaknesses (spine + book-departures + repeated holes) via
   `coachCurriculumService` → generate a WLPP-shaped session built from REAL
