@@ -895,7 +895,7 @@ describe('StockfishEngine', () => {
       expect(analysis.mateIn).toBe(-2);
     });
 
-    it('sets evaluation to 30000 for positive mate score', async () => {
+    it('encodes a positive mate as 30000 minus its distance', async () => {
       const { stockfishEngine } = await getEngine();
       await initEngine(stockfishEngine);
 
@@ -906,10 +906,10 @@ describe('StockfishEngine', () => {
 
       const analysis = await stockfishEngine.analyzePosition(STARTING_FEN);
 
-      expect(analysis.evaluation).toBe(30000);
+      expect(analysis.evaluation).toBe(30000 - 5); // the mate's distance rides in the eval
     });
 
-    it('sets evaluation to -30000 for negative mate score', async () => {
+    it('encodes a negative mate as -(30000 minus its distance)', async () => {
       const { stockfishEngine } = await getEngine();
       await initEngine(stockfishEngine);
 
@@ -920,7 +920,7 @@ describe('StockfishEngine', () => {
 
       const analysis = await stockfishEngine.analyzePosition(STARTING_FEN);
 
-      expect(analysis.evaluation).toBe(-30000);
+      expect(analysis.evaluation).toBe(-(30000 - 3));
     });
 
     it('sets isMate to false for centipawn scores', async () => {

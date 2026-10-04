@@ -920,7 +920,15 @@ function attributeGameFundamentals(
         // poisoned pawn, botched conversion). Absent on games analysed before
         // the fix.
         evalBefore: typeof m.preMoveEval === 'number' ? (moverColor === 'white' ? m.preMoveEval : -m.preMoveEval) : undefined,
-        evalAfterPlayed: typeof m.evaluation === 'number' ? (moverColor === 'white' ? m.evaluation : -m.evaluation) : undefined,
+        // ONE MOVE, ONE COST (clean-pass review walk 2026-10-04, G2 27…Rfe8:
+        // "throws away about 2 points of your edge" beside the verdict's
+        // "costing about 1.0 points"). The after-eval is the before-eval less
+        // the move's recorded cost, so every figure the ply speaks is that cost.
+        evalAfterPlayed: (() => {
+          const cost = recordedMoveCost(m, moverColor);
+          if (typeof m.preMoveEval === 'number' && cost !== null) return (moverColor === 'white' ? m.preMoveEval : -m.preMoveEval) - cost;
+          return typeof m.evaluation === 'number' ? (moverColor === 'white' ? m.evaluation : -m.evaluation) : undefined;
+        })(),
       }, why);
     } catch { fundamentals = []; }
     out.set(m.ply, { fundamentals, why });
@@ -3659,11 +3667,24 @@ async function augmentWithProjections(
   // counted from before the capture it answers (`proofCut`'s `prior`).
   const priorByFen = new Map<string, { fenBefore: string; san: string }>();
   for (const seg of segments) if (seg.fenAfter && seg.fenBefore) priorByFen.set(seg.fenAfter.split(' ').slice(0, 4).join(' '), { fenBefore: seg.fenBefore, san: seg.san });
+  // A PUNISHMENT is what the MOVE cost, so its tally counts from before the
+  // move (clean-pass review walk 2026-10-04, G1 41.Qxe5+: "Here's how it gets
+  // punished: Kxd7, Qxg7+, Kd6, Qxh8 and Kxd5 — you come out behind on
+  // material, a rook and a pawn for a rook and a bishop" — Qxe5+ had just taken
+  // the queen). Same rule as `punishmentOf`'s cost; the voice and the arrows
+  // both read it here.
+  const punishedMove = new WeakMap<PvLine, { fenBefore: string; san: string }>();
   const linePlies = (line: PvLine): { plies: number; proof: LineProof | null } => {
     const start = line.plies[0]?.fenBefore;
-    const proof = start
-      ? proofCut(start, line.plies.map((p) => p.san), studentColorWB, priorByFen.get(start.split(' ').slice(0, 4).join(' ')) ?? null)
-      : null;
+    const sans = line.plies.map((p) => p.san);
+    const played = punishedMove.get(line);
+    let proof: LineProof | null = null;
+    if (played) {
+      const p = proofCut(played.fenBefore, [played.san, ...sans], studentColorWB);
+      proof = p ? { ...p, plies: Math.max(1, p.plies - 1), sans: p.sans.slice(1) } : null;
+    } else if (start) {
+      proof = proofCut(start, sans, studentColorWB, priorByFen.get(start.split(' ').slice(0, 4).join(' ')) ?? null);
+    }
     return { plies: proof ? proof.plies : Math.min(1, line.plies.length), proof };
   };
   // David 2026-07-24: "we NEED arrows showing the lines the coach mentions. The
@@ -3975,6 +3996,7 @@ async function augmentWithProjections(
         const firstTo = line?.plies[0]?.san.match(/x([a-h][1-8])/)?.[1] ?? null;
         opensWithRecapture = !!played.captured && firstTo === played.to;
       } catch { opensWithRecapture = false; }
+      if (line) punishedMove.set(line, { fenBefore: s.fenBefore, san: s.san });
       const proof = line && line.delivers && line.plies.length >= 2 && !opensWithRecapture ? render(line, isStudentSlip ? 'opponent' : 'student') : '';
       if (line && proof) {
         const frame = isStudentSlip

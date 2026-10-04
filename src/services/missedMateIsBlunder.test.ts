@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { classifyCpLoss, mateKeptDeeper } from './gameAnalysisService';
+import { mateEvalFor, mateDistanceOf } from './engineConstants';
+import { mateContext } from '../utils/mateContext';
 
 // Review walk 2026-10-04, G1 (lichess SI5q0VJz) 41.Qxe5+: Qxd8# was mate in one,
 // the move left White +7.8 and Review graded it GOOD while Learn called it a
@@ -36,5 +38,33 @@ describe('a mate the move keeps past the horizon is not given up', () => {
     const search = async () => { called = true; return { evaluation: MATE_FOR_WHITE }; };
     expect(await mateKeptDeeper(after, 900, 500, true, search)).toBe(false);
     expect(called).toBe(false);
+  });
+});
+
+// Clean-pass review walk 2026-10-04, G1 37.h3 (3n1k1r/2R3pp/5q2/1Q1B4/8/P4N2/
+// 5PPP/6K1 w): Qb4+ mates in 11 (SF 18 d20), h3 still mates in 14 (d22), but
+// the read after h3 showed +7.46 and review called h3 a BLUNDER — "it starts a
+// forced mate". Only a SHORT mate's absence after the move is proof it was lost.
+describe('a mate score carries its distance', () => {
+  it('round-trips, signed', () => {
+    expect(mateDistanceOf(mateEvalFor(11))).toBe(11);
+    expect(mateEvalFor(-3)).toBeLessThan(0);
+    expect(mateDistanceOf(mateEvalFor(-3))).toBe(3);
+    expect(mateEvalFor(1)).toBeGreaterThan(mateEvalFor(5));
+    expect(mateDistanceOf(746)).toBeNull();
+  });
+});
+
+describe('only a short mate given up is a blunder by itself', () => {
+  it('37.h3: mate in 11 before, +7.46 read after → not a blunder', () => {
+    expect(classifyCpLoss(0, mateEvalFor(11), 746, true)).not.toBe('blunder');
+  });
+  it('41.Qxe5+: mate in 1 before, +7.8 after → blunder', () => {
+    expect(classifyCpLoss(0, mateEvalFor(1), 779, true)).toBe('blunder');
+  });
+  it('Learn: a long mate is not "missed" off one read; a short one is', () => {
+    expect(mateContext({ isMate: true, mateIn: 11 }, { isMate: false, mateIn: null }, 'white').missedMate).toBeNull();
+    expect(mateContext({ isMate: true, mateIn: 2 }, { isMate: false, mateIn: null }, 'white').missedMate).toBe(2);
+    expect(mateContext({ isMate: true, mateIn: -2 }, { isMate: false, mateIn: null }, 'black').missedMate).toBe(2);
   });
 });

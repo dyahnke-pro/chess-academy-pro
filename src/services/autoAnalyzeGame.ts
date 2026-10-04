@@ -376,8 +376,12 @@ export async function autoAnalyzeGameMisconceptions(
       // under it: measured 0 of 154 flagged moves across 47 real amateur games
       // before this line, with the detector sitting there the whole time. Same
       // POV flip and mate-sentinel skip as evalBefore, so the two are one unit.
+      // ONE MOVE, ONE COST: with a recorded one-search cost, the after-eval is
+      // the before-eval less that cost (the review verdict's own figure).
       ...(ann.evaluation != null && !isMateEval(ann.evaluation)
-        ? { evalAfterPlayed: Math.round(ann.evaluation * (ann.color === 'white' ? 1 : -1)) }
+        ? { evalAfterPlayed: typeof ann.costCp === 'number' && ann.bestMoveEval != null && !isMateEval(ann.bestMoveEval)
+          ? Math.round(ann.bestMoveEval * (ann.color === 'white' ? 1 : -1)) - ann.costCp
+          : Math.round(ann.evaluation * (ann.color === 'white' ? 1 : -1)) }
         : {}),
       // AND THE ENGINE LINES (2026-09-20) — the same defect as the two blocks
       // above, one field over, and it is what the section-14 reading actually
@@ -557,6 +561,8 @@ async function reattributePending(
  *  mate-encoded sentinel, where subtracting produces a number in the tens of
  *  thousands that is not a cost. Callers fall back explicitly. */
 function measuredCpLoss(ann: MoveAnnotation): number | null {
+  // The one-search cost the review verdict speaks, when the analysis settled it.
+  if (typeof ann.costCp === 'number') return ann.costCp;
   const after = ann.evaluation;
   const best = ann.bestMoveEval;
   if (after === null || best === null || best === undefined) return null;

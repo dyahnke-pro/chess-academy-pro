@@ -586,7 +586,12 @@ function planFor(
     // the knight on b1 and …Nc3 simply steps away). Read by the one ledger.
     const lineCollects = (): boolean => {
       const rest = plies.slice(plies.indexOf(ply)).map((p) => p.san);
-      const proof = proofCut(ply.fenBefore, rest, color === 'white' ? 'w' : 'b');
+      // …counted from before the trade it completes (clean-pass review walk
+      // 2026-10-04, G3 31.Nc4: "a4 — the idea is to unleash a discovered
+      // attack" over a4 g5 h3 f6 Kg2 fxe5 Bxe5: the bishop only takes back the
+      // pawn, and the battery on the e-file wins nothing).
+      const prev = plies[plies.indexOf(ply) - 1];
+      const proof = proofCut(ply.fenBefore, rest, color === 'white' ? 'w' : 'b', prev ? { fenBefore: prev.fenBefore, san: prev.san } : null);
       if (!proof) return false;
       if (proof.mate) return (plies[plies.indexOf(ply) + proof.plies - 1]?.moverColor ?? null) === color;
       return !!proof.ledger && proof.ledger.netPawns > 0;

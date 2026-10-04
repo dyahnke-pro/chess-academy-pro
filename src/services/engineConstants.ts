@@ -24,6 +24,32 @@ export const MATE_EVAL_VALUE = 30000;
  *  mate in the line. */
 export const MATE_EVAL_THRESHOLD = 20000;
 
+/** The mate score for a UCI `score mate <n>`, from the same side as `n`:
+ *  ±(MATE_EVAL_VALUE − |n|), so the DISTANCE rides inside the one number every
+ *  annotation already stores (a shorter mate scores higher, as it should).
+ *  `n = 0` (side to move is mated) keeps the bare sentinel. */
+export function mateEvalFor(n: number): number {
+  const sign = n > 0 ? 1 : -1;
+  return sign * (MATE_EVAL_VALUE - Math.min(Math.abs(n), MATE_EVAL_VALUE - MATE_EVAL_THRESHOLD));
+}
+
+/** How many moves the forced mate in `evaluation` is, or null when the eval is
+ *  not a mate or carries no distance (the bare sentinel — a stored eval from
+ *  before the distance was encoded). */
+export function mateDistanceOf(evaluation: number | null | undefined): number | null {
+  if (!isMateEval(evaluation)) return null;
+  const n = MATE_EVAL_VALUE - Math.abs(evaluation as number);
+  return n > 0 ? n : null;
+}
+
+/** The longest mate a "you gave up the mate" verdict may stand on by itself.
+ *  A search of any depth sees a mate this short, so a read after the move that
+ *  shows none is the truth; a longer one can sit past the horizon of the read
+ *  after the move (clean-pass review walk 2026-10-04, G1 37.h3: graded a
+ *  BLUNDER for missing Qb4+'s mate in 11 — h3 mates in 14). A longer mate given
+ *  up is graded like any other move, in expected points. */
+export const SHORT_MATE_MOVES = 3;
+
 /** True when an evaluation represents a forced mate rather than a
  *  centipawn score. Use everywhere mate-vs-eval branching matters. */
 export function isMateEval(evaluation: number | null | undefined): boolean {

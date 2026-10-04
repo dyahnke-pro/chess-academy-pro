@@ -1,7 +1,7 @@
 import { Capacitor } from '@capacitor/core';
 import { StockfishNative } from 'capacitor-stockfish-native';
 import type { StockfishAnalysis, AnalysisLine } from '../types';
-import { MATE_EVAL_VALUE, limitStrengthElo } from './engineConstants';
+import { mateEvalFor, limitStrengthElo } from './engineConstants';
 import { stockfishCache } from './stockfishCache';
 import { logAppAudit } from './appAuditor';
 
@@ -2120,7 +2120,7 @@ class StockfishEngine {
 
         const line: AnalysisLine = {
           rank,
-          evaluation: scoreType === 'cp' ? scoreValue : (scoreValue > 0 ? MATE_EVAL_VALUE : -MATE_EVAL_VALUE),
+          evaluation: scoreType === 'cp' ? scoreValue : mateEvalFor(scoreValue),
           moves,
           mate: scoreType === 'mate' ? scoreValue : null,
           wdl: wdlMatch

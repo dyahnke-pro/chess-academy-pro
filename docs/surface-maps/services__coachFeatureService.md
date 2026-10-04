@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5340 lines · 38 exports · 44 importers · 42 tests · 5 audits**
+**5362 lines · 38 exports · 45 importers · 43 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -40,6 +40,7 @@
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/mapConcurrent.test.ts`
 - `src/services/namedMoveArrows.test.ts`
+- `src/services/oneCostPerMove.test.ts`
 - `src/services/oneLinePerPly.test.ts`
 - `src/services/reviewBetterLineWhy.test.ts`
 - `src/services/reviewCorpusNote.test.ts`
@@ -85,7 +86,7 @@
 - `src/services/coachFeatureService.test.ts:257`
 - `src/services/coachFeatureService.test.ts:277`
 - `src/services/coachFeatureService.test.ts:289`
-- `src/services/gameAnalysisService.ts:2221`
+- `src/services/gameAnalysisService.ts:2226`
 
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -154,7 +155,7 @@
 - `src/services/coachFeatureService.test.ts:15`
 - `src/services/coachFeatureService.test.ts:24`
 
-### `buildReviewSegments` (function) — 65 call sites
+### `buildReviewSegments` (function) — 67 call sites
 - `src/components/Coach/CoachGameReview.tsx:1882`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -206,6 +207,8 @@
 - `src/services/coachFeatureService.trade.test.ts:18`
 - `src/services/loopCloses.review.integration.test.ts:89`
 - `src/services/methodBeat.test.ts:70`
+- `src/services/oneCostPerMove.test.ts:33`
+- `src/services/oneCostPerMove.test.ts:37`
 - `src/services/planArc.test.ts:137`
 - `src/services/reviewCorpusNote.test.ts:40`
 - `src/services/reviewForesight.test.ts:52`
@@ -374,6 +377,7 @@
 - `src/services/mapConcurrent.test.ts`
 - `src/services/methodBeat.test.ts`
 - `src/services/namedMoveArrows.test.ts`
+- `src/services/oneCostPerMove.test.ts`
 - `src/services/oneLinePerPly.test.ts`
 - `src/services/planArc.test.ts`
 - `src/services/recapSeat.test.ts`

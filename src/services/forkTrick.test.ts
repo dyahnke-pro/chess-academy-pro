@@ -64,3 +64,13 @@ describe('forkTrick reaches both surfaces', () => {
     expect(facets.join(' ')).toMatch(/\[stopped\] .*their fork trick/);
   }, 30_000);
 });
+
+// Clean-pass review walk 2026-10-04, G3 (lichess mZ1GOTOw) 23.Re1. Before it,
+// Black's "trick" Nxe5 Nxe5 Kd5 hits two knights the king on e6 and the rook on
+// d8 already attacked — no fork — and Stockfish has it +2.6 for White.
+describe('a fork attacks pieces that were not already attacked', () => {
+  const BEFORE_RE1 = '3r3r/p4pp1/1p1Nk1np/2p1P3/8/P4N2/1B3PPP/2R2K2 w - - 2 23';
+  it('Re1 is not credited with sidestepping a trick that never existed', () => {
+    expect(trickSidestepped(BEFORE_RE1, 'Re1', 'w', 'your')).toBeNull();
+  });
+});

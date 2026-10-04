@@ -55,6 +55,13 @@ function forkAfter(board: Chess, by: 'w' | 'b', owed: number): Omit<ForkTrick, '
         if (!cell || cell.color !== foe) continue;
         if (!sim.attackers(cell.square, by).includes(mv.to)) continue;
         if (cell.type === 'k') { hitsKing = true; continue; }
+        // A FORK ATTACKS WHAT WAS NOT ATTACKED (clean-pass review walk
+        // 2026-10-04, G3 23.Re1: "sidesteps your fork trick: Nxe5, Nxe5, Kd5
+        // would hit their two knights" — the king on e6 and the rook on d8
+        // already hit both, so Kd5 forks nothing, and the line loses to Re1 and
+        // Nc4). A piece already under attack is simply taken; that is a
+        // different story, never this one.
+        if (board.attackers(cell.square, by).length > 0) continue;
         if (VALUE[cell.type] > forkerValue) hit.push({ square: cell.square, piece: cell.type });
       }
     }

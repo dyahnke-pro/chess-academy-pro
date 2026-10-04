@@ -193,7 +193,7 @@ async function waitWhilePaused(): Promise<void> {
 // MATE_EVAL_THRESHOLD is now exported from engineConstants so all
 // subsystems share the same value. Local alias kept for readability.
 import {
-  MATE_EVAL_THRESHOLD, MATE_EVAL_VALUE, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP,
+  MATE_EVAL_THRESHOLD, mateEvalFor, mateDistanceOf, SHORT_MATE_MOVES, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP,
   BLUNDER_WIN_PCT, EXCELLENT_WIN_PCT,
 } from './engineConstants';
 import { capEval, winPctLost, bandForWinPctLost } from './accuracyService';
@@ -303,7 +303,12 @@ export function classifyCpLoss(
       && Math.abs(evalBefore) >= MATE_EVAL_THRESHOLD && (isPlayerWhiteMove ? evalBefore > 0 : evalBefore < 0);
     const postMateForMover = evalAfter !== undefined && evalAfter !== null
       && Math.abs(evalAfter) >= MATE_EVAL_THRESHOLD && (isPlayerWhiteMove ? evalAfter > 0 : evalAfter < 0);
-    if (preMateForMover && !postMateForMover) return 'blunder';
+    // Only a SHORT mate given up is the blunder by itself — a search of any
+    // depth sees it, so the read after the move showing none is the truth. A
+    // longer mate can sit past that read's horizon (37.h3 kept a mate in 14
+    // while Qb4+'s was 11); it is graded below, in expected points.
+    const preDistance = mateDistanceOf(evalBefore);
+    if (preMateForMover && !postMateForMover && preDistance !== null && preDistance <= SHORT_MATE_MOVES) return 'blunder';
   }
   // Handle mate evals: the player's move leads to a forced mate.
   if (evalAfter !== undefined && evalAfter !== null && Math.abs(evalAfter) >= MATE_EVAL_THRESHOLD) {
@@ -466,7 +471,7 @@ class DedicatedWorker {
             const scoreType = scoreMatch[1];
             const scoreValue = parseInt(scoreMatch[2]);
             lastEval = scoreType === 'mate'
-              ? (scoreValue > 0 ? MATE_EVAL_VALUE : -MATE_EVAL_VALUE)
+              ? mateEvalFor(scoreValue)
               : scoreValue;
           }
           const pvMatch = / pv (.+)$/.exec(data);
@@ -929,8 +934,8 @@ export async function acquirePvEngines(
         bestMove: r.bestMove,
         evaluation: r.evaluation,
         isMate: mate,
-        // The pool worker reports mate as ±MATE_EVAL_VALUE and does not carry
-        // the distance; null is honest here — never a fabricated mateIn.
+        // The pool worker carries the mate's distance inside the eval
+        // (`mateDistanceOf`), not a signed mateIn; null is honest here.
         mateIn: null,
         depth: r.depth,
         topLines: [{ rank: 1, evaluation: r.evaluation, moves: r.pv, mate: null }],

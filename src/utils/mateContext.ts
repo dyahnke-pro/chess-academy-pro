@@ -1,5 +1,6 @@
-// mateContext — a leaf (no imports), so a surface can read whose mate it is
-// without importing a fact computer.
+// mateContext — a leaf (imports only the leaf constants), so a surface can read
+// whose mate it is without importing a fact computer.
+import { SHORT_MATE_MOVES } from '../services/engineConstants';
 
 /** WHOSE MATE IT IS — the one derivation every mover-grading path uses.
  *
@@ -21,7 +22,11 @@ export function mateContext(
   const preMate = pre?.isMate && pre.mateIn !== null ? pre.mateIn * sign : null;
   const postMate = post?.isMate && post.mateIn !== null ? post.mateIn * sign : null;
   const stillMating = postMate !== null && postMate > 0;
-  const missedMate = preMate !== null && preMate > 0 && !wasBest && !stillMating ? Math.abs(preMate) : null;
+  // MISSED only when the mate given up was SHORT: a longer one can sit past the
+  // horizon of the read after the move (clean-pass walk 2026-10-04, 37.h3 kept
+  // a mate in 14 while the best move's was 11), so its absence there proves
+  // nothing. Same rule as the review's `classifyCpLoss`.
+  const missedMate = preMate !== null && preMate > 0 && preMate <= SHORT_MATE_MOVES && !wasBest && !stillMating ? preMate : null;
   const allowedMate = postMate !== null && postMate < 0 ? Math.abs(postMate) : null;
   // The best move's own forced mate, when the board had one for the mover —
   // the reason a better move is better is then the mate, never a line read

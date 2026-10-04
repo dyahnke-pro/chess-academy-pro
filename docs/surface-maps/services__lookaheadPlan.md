@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1629 lines · 27 exports · 17 importers · 12 tests · 0 audits**
+**1634 lines · 27 exports · 17 importers · 12 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -226,7 +226,7 @@
 - `src/services/walkOct1Learn.test.ts:69`
 
 ### `gameArcs` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:1386`
+- `src/services/coachFeatureService.ts:1401`
 - `src/services/learnBoardTeaching.ts:773`
 - `src/services/walkOct1Learn.test.ts:115`
 

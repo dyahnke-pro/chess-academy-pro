@@ -173,7 +173,7 @@ describe('mateContext — whose mate it is (hand walk 2026-09-24)', () => {
     // White (the student) mates before AND after Qa7+ in Naroditsky's game —
     // the coach called it "a blunder … Qa4 would stop the mate".
     const out = mateContext({ isMate: true, mateIn: 6 }, { isMate: true, mateIn: 5 }, 'white');
-    expect(out).toEqual({ missedMate: null, allowedMate: null });
+    expect(out).toMatchObject({ missedMate: null, allowedMate: null });
   });
   it('the opponent\'s mate after the move is ALLOWED; the student\'s lost mate is MISSED', () => {
     expect(mateContext(null, { isMate: true, mateIn: -2 }, 'white').allowedMate).toBe(2);
@@ -181,7 +181,7 @@ describe('mateContext — whose mate it is (hand walk 2026-09-24)', () => {
   });
   it('the sign is read from the MOVER\'s side (Black mating is negative)', () => {
     expect(mateContext({ isMate: true, mateIn: -3 }, { isMate: true, mateIn: -2 }, 'black'))
-      .toEqual({ missedMate: null, allowedMate: null });
+      .toMatchObject({ missedMate: null, allowedMate: null });
     expect(mateContext(null, { isMate: true, mateIn: 2 }, 'black').allowedMate).toBe(2);
   });
 });
