@@ -251,7 +251,7 @@ export async function explainEvalByPieceQuality(
             color,
             squares: [one.sq],
             pieces: [one.type],
-            text: `the ${PIECE_WORD[one.type]} on ${one.sq} is doing nothing where it sits — improving it is the biggest gain on the board`,
+            text: `the ${PIECE_WORD[one.type]} on ${one.sq} is doing nothing where it sits`,
             proof: 'ablation',
             ablation: { before: beforeOwn, after: afterOwn, swingCp: swing },
           };
@@ -274,7 +274,7 @@ export async function explainEvalByPieceQuality(
                   color,
                   squares: [one.sq, two.sq],
                   pieces: [one.type, two.type],
-                  text: `the ${PIECE_WORD[one.type]} on ${one.sq} and the ${PIECE_WORD[two.type]} on ${two.sq} are both passive — improving them is the biggest gain on the board`,
+                  text: `the ${PIECE_WORD[one.type]} on ${one.sq} and the ${PIECE_WORD[two.type]} on ${two.sq} are both passive`,
                   proof: 'ablation',
                   ablation: { before: beforeOwn, after: afterOwn2, swingCp: swing2 },
                 };
@@ -287,6 +287,20 @@ export async function explainEvalByPieceQuality(
   }
 
   return { evalCp, favored, delta: winner };
+}
+
+/**
+ * The ablation proves improving the piece swings the eval toward its OWNER, so
+ * it is advice only for the student's own piece; of the opponent's it is the
+ * thing to keep shut in (clean-pass walk 2026-10-04, G1 #45: "their knight and
+ * bishop are both passive — improving them is the biggest gain on the board",
+ * said to the student).
+ */
+export function phraseBadPiece(fact: string, owner: Color, pair: boolean, student: Color): string {
+  const it = pair ? 'them' : 'it';
+  return owner === student
+    ? `${fact} — improving ${it} is the biggest gain on the board`
+    : `${fact} — keep ${it} shut in: freeing ${it} is their biggest gain on the board`;
 }
 
 export const __test = { pieceMobility, worstPieces, relocateToBest, enemyPawnAttacks };

@@ -6,13 +6,13 @@ describe('a recapture is not the idea (walk oct3c, 4.Qe2)', () => {
   const FEN = 'r1bqkbnr/pp1p1ppp/2n1p3/2p1P3/2B5/8/PPPP1PPP/RNBQK1NR w KQkq - 1 4';
   it('Nf3 …Qc7 O-O …Nxe5 Nxe5: Black started that trade — not "trade off the knight"', () => {
     const r = betterMoveReason(FEN, 'Qe2', 'Nf3',
-      ['g1f3', 'd8c7', 'e1g1', 'c6e5', 'f3e5', 'c7e5', 'f1e1', 'e5f4'], 'white', null);
+      ['g1f3', 'd8c7', 'e1g1', 'c6e5', 'f3e5', 'c7e5', 'f1e1', 'e5f4'], 'white', null, false);
     expect(r ?? '').not.toMatch(/trade off/);
   });
   it('the mover opening the exchange still reads as its trade (positive control)', () => {
     // Bxc6 takes first on c6: that trade is White's own.
     const r = betterMoveReason('r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 4', 'O-O', 'Bxc6',
-      ['b5c6', 'd7c6', 'e1g1', 'f7f6', 'd2d4', 'e5d4', 'f3d4', 'c6c5'], 'white', null);
+      ['b5c6', 'd7c6', 'e1g1', 'f7f6', 'd2d4', 'e5d4', 'f3d4', 'c6c5'], 'white', null, false);
     expect(r ?? '').toMatch(/trade off|take the knight/);
   });
 });

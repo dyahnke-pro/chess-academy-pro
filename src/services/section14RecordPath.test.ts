@@ -49,10 +49,12 @@ async function rowFor(game: GameRecord): Promise<{ fundamentalId: string | null 
 describe('section 14 on the record path — calculation-depth', () => {
   // The Italian: after ...Qd7 White plays the quiet Nd4?! (best Ng5); the
   // punishment Rb8 → Nb5 → Bxf2+ lands on the THIRD ply — only a line shows it.
+  // The line runs on to …axb5 so the ledger can PROVE the blow wins (knight
+  // and pawn for the bishop) — a blow that only trades is no lapse.
   const PGN = '1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. d3 Bc5 5. c3 d6 6. O-O O-O 7. Re1 a6 8. Bb3 Ba7 9. h3 h6 10. Nbd2 Re8 11. Nf1 Be6 12. Bxe6 Rxe6 13. Ng3 Qd7 14. Nd4 Rb8';
   const nd4 = (pv: boolean): MoveAnnotation => ({
     moveNumber: 14, color: 'white', san: 'Nd4', evaluation: -140, bestMove: 'f3g5', bestMoveEval: 20, classification: 'mistake', comment: null,
-    ...(pv ? { pv: { afterPlayed: ['a8b8', 'd4b5', 'a7f2'], afterBest: [] } } : {}),
+    ...(pv ? { pv: { afterPlayed: ['a8b8', 'd4b5', 'a7f2', 'g1f2', 'a6b5'], afterBest: [] } } : {}),
   });
 
   it('LANDS when the annotation carries the punishing line', async () => {

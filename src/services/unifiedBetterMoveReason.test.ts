@@ -18,7 +18,7 @@ const board = (): { before: string; after: string } => {
 
 describe('one reason for the better move, on every surface', () => {
   const { before, after } = board();
-  const reason = betterMoveReason(before, 'gxh5', 'Rxf8+', BEST_LINE, 'white', null);
+  const reason = betterMoveReason(before, 'gxh5', 'Rxf8+', BEST_LINE, 'white', null, false);
 
   it('the shared computer gives the move-order reason', () => {
     expect(reason).toBe("checks first: Rxf8+, Kxf8, and gxh5 would still have been there — both moves, not one");

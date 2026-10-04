@@ -453,7 +453,7 @@ describe('a route of another piece is the idea, not the move', () => {
   it('Be3 does not "walk the rook"', async () => {
     const { betterMoveReason } = await import('./inaccuracyCall');
     const fen = '2rq1rk1/p1p2pbp/1p2p1p1/3bP3/3P4/5N1P/PP3PP1/R1BQR1K1 w - - 0 19';
-    const r = betterMoveReason(fen, 'Qd2', 'Be3', ['c1e3', 'd5b7', 'a1c1', 'd8d5', 'c1c4'], 'white', null) ?? '';
+    const r = betterMoveReason(fen, 'Qd2', 'Be3', ['c1e3', 'd5b7', 'a1c1', 'd8d5', 'c1c4'], 'white', null, false) ?? '';
     expect(r).not.toMatch(/^it would walk the rook/);
     expect(r).toMatch(/^the idea is to walk the rook on a1 round to c4/);
   });
@@ -466,7 +466,7 @@ describe('a route that collects material says the material', () => {
   it('Bf5 would win a pawn', async () => {
     const { betterMoveReason } = await import('./inaccuracyCall');
     const fen = 'r1bqk2r/ppp1nppp/2n5/8/3PQ3/5N2/PPP1PPPP/R3KB1R b KQkq - 0 8';
-    expect(betterMoveReason(fen, 'O-O', 'Bf5', ['c8f5', 'e4f4', 'f5c2', 'a1c1', 'c2a4'], 'black', null)).toBe('it would win a pawn');
+    expect(betterMoveReason(fen, 'O-O', 'Bf5', ['c8f5', 'e4f4', 'f5c2', 'a1c1', 'c2a4'], 'black', null, false)).toBe('it would win a pawn');
   });
 });
 
@@ -545,19 +545,19 @@ describe('their slip is offered as what it really is (Learn walk 2026-10-02, 6.h
 describe('the reason is this move\'s own (Learn walk 2026-10-02, board-checked)', () => {
   it('ply 32: a knight fork that wins the queen says so, not "swing pieces toward their king"', () => {
     expect(betterMoveReason('r1b2rk1/1p3ppp/3b1q2/pP3n1P/P1Bp1P2/8/5K2/RNBQ2NR b - - 0 16', 'Bc5', 'Ne3',
-      ['f5e3', 'g1f3', 'e3d1', 'h1d1', 'c8g4', 'c1d2', 'g4f3', 'f2f3', 'f8c8'], 'black', null))
+      ['f5e3', 'g1f3', 'e3d1', 'h1d1', 'c8g4', 'c1d2', 'g4f3', 'f2f3', 'f8c8'], 'black', null, false))
       .toBe('it would win the queen for a piece');
   });
   it('ply 30: Nf3 is not credited with a rook\'s walk', () => {
     expect(betterMoveReason('r1b2rk1/1p3ppp/3b1q2/pP3n1P/P1pp1P2/8/5K2/RNBQ1BNR w - - 0 16', 'Bxc4', 'Nf3',
-      ['g1f3', 'd4d3', 'a1a2', 'd6c5', 'f2g2', 'b7b6', 'h1h3', 'f5e3', 'c1e3', 'c8h3'], 'white', null) ?? '').not.toMatch(/walk the rook/);
+      ['g1f3', 'd4d3', 'a1a2', 'd6c5', 'f2g2', 'b7b6', 'h1h3', 'f5e3', 'c1e3', 'c8h3'], 'white', null, false) ?? '').not.toMatch(/walk the rook/);
   });
   it('ply 28: f6 is not credited with the queen\'s walk', () => {
     expect(betterMoveReason('r2q1rk1/ppp2ppp/2n5/4P3/2bPp3/2P1B2P/P3NPP1/R2QR1K1 b - - 2 14', 'Bd5', 'f6',
-      ['f7f6', 'e5f6', 'd8f6', 'd1b1', 'c6e7', 'e2g3', 'c4d5', 'c3c4', 'd5c4', 'b1b7'], 'black', null) ?? '').not.toMatch(/walk the queen/);
+      ['f7f6', 'e5f6', 'd8f6', 'd1b1', 'c6e7', 'e2g3', 'c4d5', 'c3c4', 'd5c4', 'b1b7'], 'black', null, false) ?? '').not.toMatch(/walk the queen/);
   });
   it('ply 50: a queen trade is not "swing pieces toward your king"', () => {
     expect(betterMoveReason('r4rk1/7p/p4qp1/2pPQp2/NpP5/1P5P/P5P1/5RK1 w - - 1 26', 'Qf4', 'Qxf6',
-      ['e5f6', 'f8f6', 'a4c5', 'a8e8', 'c5d3', 'g8f7', 'd3b4', 'e8e4', 'b4c6', 'f7e8'], 'white', null) ?? '').not.toMatch(/swing pieces/);
+      ['e5f6', 'f8f6', 'a4c5', 'a8e8', 'c5d3', 'g8f7', 'd3b4', 'e8e4', 'b4c6', 'f7e8'], 'white', null, false) ?? '').not.toMatch(/swing pieces/);
   });
 });

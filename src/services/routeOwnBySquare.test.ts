@@ -16,7 +16,7 @@ const uci = (() => {
 
 describe('a route is the move\'s own only from its own square', () => {
   it('Ba4+ is not given the f4 bishop\'s route', () => {
-    const r = betterMoveReason(FEN, 'Ba2', 'Ba4+', uci, 'white', null) ?? '';
+    const r = betterMoveReason(FEN, 'Ba2', 'Ba4+', uci, 'white', null, false) ?? '';
     expect(r).not.toMatch(/walk the bishop round to c5/);
     expect(r).not.toMatch(/walk the bishop on f4/);
   });

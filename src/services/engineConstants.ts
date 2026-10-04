@@ -174,3 +174,15 @@ export function costWords(cp: number): string {
   if (p < 5) return 'about a piece';
   return 'more than a piece';
 }
+
+/** Did the mover have a forced mate (white-POV engine evals, mate sentinels)
+ *  BEFORE the move and no longer have one AFTER it? The one read every batch
+ *  surface uses to say "the better move mated" (clean-pass walk 2026-10-04). */
+export function moverGaveUpMate(
+  preEval: number | null | undefined, postEval: number | null | undefined, moverColor: 'white' | 'black',
+): boolean {
+  if (preEval == null || !isMateEval(preEval)) return false;
+  const sign = moverColor === 'white' ? 1 : -1;
+  if (preEval * sign <= 0) return false;
+  return !(postEval != null && isMateEval(postEval) && postEval * sign > 0);
+}

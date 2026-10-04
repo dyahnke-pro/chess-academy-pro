@@ -500,6 +500,7 @@ function planFor(
   let tacticSquare: string | null = null;
   let mates = false;
   let nearEnemyKing = 0;
+  const kingPieces = new Set<string>();
   const kingAttackSquares: string[] = [];
   const materialSquares: string[] = [];
   const tradeSquares: string[] = [];
@@ -607,8 +608,12 @@ function planFor(
     // (walk oct3a: "Rc1 was the move — swing pieces toward their king" for a
     // line whose Qxa6 and Bxc7 are each recaptured at once).
     const tradedOff = ply.san.includes('x') && !!reply && reply.moverColor !== color && reply.uci.slice(2, 4) === to;
+    // …and it counts PIECES, not landings (clean-pass review walk 2026-10-04,
+    // G2 35.Rxf5: "Qxf5 — it would swing pieces toward your king" for Qxf5
+    // Qxf5 Rxf5 Be4 Rf7 — the queens come off and ONE rook lands twice).
+    const pieceId = journeys.get(to)?.path[0] ?? from;
     if (enemyKing && /^[QRBN]/.test(ply.san) && !tradedOff && chebyshev(to, enemyKing) <= KING_ZONE) {
-      nearEnemyKing += 1;
+      if (!kingPieces.has(pieceId)) { kingPieces.add(pieceId); nearEnemyKing += 1; }
       kingAttackSquares.push(to);
     }
   }

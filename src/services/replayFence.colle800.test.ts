@@ -10,7 +10,7 @@ describe('ply 27 — cxd4 after …cxd4 is taking the pawn, not "winning" it', (
     const r = betterMoveReason('r1bqrnk1/4bppp/p1n1p3/1p1pP2N/3p4/2PB1N2/PP3PPP/R1BQR1K1 w - - 0 14', 'Ng5', 'cxd4',
       ['c3d4', 'c8b7', 'c1d2', 'a8c8', 'd1e2', 'c6a5', 'h2h4', 'a5c4'], 'white',
       // …cxd4, the capture cxd4 takes back: the line finishes a trade.
-      { fenBefore: 'r1bqrnk1/4bppp/p1n1p3/1pppP2N/3P4/2PB1N2/PP3PPP/R1BQR1K1 b - - 0 13', san: 'cxd4' }) ?? '';
+      { fenBefore: 'r1bqrnk1/4bppp/p1n1p3/1pppP2N/3P4/2PB1N2/PP3PPP/R1BQR1K1 b - - 0 13', san: 'cxd4' }, false) ?? '';
     expect(r).not.toMatch(/win a pawn/);
   });
 });

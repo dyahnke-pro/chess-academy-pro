@@ -29,7 +29,7 @@ function nd4(withPv: boolean): MoveAnnotation {
   return {
     moveNumber: 14, color: 'white', san: 'Nd4', evaluation: -140, bestMove: 'f3g5', bestMoveEval: 20,
     classification: 'mistake', comment: null,
-    ...(withPv ? { pv: { afterPlayed: ['a8b8', 'd4b5', 'a7f2'], afterBest: [] } } : {}),
+    ...(withPv ? { pv: { afterPlayed: ['a8b8', 'd4b5', 'a7f2', 'g1f2', 'a6b5'], afterBest: [] } } : {}),
   };
 }
 

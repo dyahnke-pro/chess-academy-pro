@@ -36,7 +36,7 @@ import { principleLine, principleContrastLine } from './moveFundamentals';
 import { threatStoppedBy } from './opponentMovePurpose';
 import { recordedMoveCost } from './moveCost';
 import { trickSidestepped } from './forkTrick';
-import { isMateEval, MISTAKE_CP } from './engineConstants';
+import { isMateEval, MISTAKE_CP, moverGaveUpMate } from './engineConstants';
 import { computeBoardDelta } from './boardDelta';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
 import { explainMatingSacMechanism } from './reviewForcedSequence';
@@ -492,7 +492,8 @@ export function computeMoveFacets(
     // (1200 review walk 2026-09-27). A seated reference is left alone later.
     const reason0 = bestSan && fellShort
       ? betterMoveReason(fenBefore, san, bestSan, ctx.bestLineUci, ctx.moverColor,
-        priorMoveLeadingTo(ply >= 2 && ctx.teaching.prevFenBefore ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : null, fenBefore))
+        priorMoveLeadingTo(ply >= 2 && ctx.teaching.prevFenBefore ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : null, fenBefore),
+        moverGaveUpMate(ctx.preMoveEval, ctx.evaluation, ctx.moverColor))
       : null;
     // The opponent's better move is THEIR idea, said to the student: "toward
     // their king" in the mover's voice is "toward your king" (review walk

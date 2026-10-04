@@ -16,21 +16,35 @@ import { FUNDAMENTAL_LESSON } from '../data/fundamentalLessons';
 // The review's Alapin fixture — 6...Nb6 (ply 12) is Black's flagged move.
 const ALAPIN = ['e4', 'c5', 'c3', 'Nf6', 'e5', 'Nd5', 'd4', 'cxd4', 'cxd4', 'Nc6', 'Nc3', 'Nb6'];
 
+const DEEP7 = ['h3', 'g6', 'a3', 'Nb4', 'd5', 'a6', 'axb4'];   // the knight falls at ply 7
+
 describe('section 14 — calculation-depth (PV-gated)', () => {
   const base = { historySans: ALAPIN, bestSan: 'e6', classification: 'mistake', evalBefore: 30, evalAfterPlayed: -150 };
-  it('fires when the punishment lands DEEP in the engine line (two quiet replies, then the blow)', () => {
-    const attrs = attributePrinciples({ replySan: null, ...base, pvAfterPlayed: ['Nf3', 'd6', 'Bg5', 'Qd7', 'Bxf6'] });
+  // Every PV here is LEGAL and its blow WINS on the one ledger (clean-pass walk
+  // 2026-10-04: the old fixtures played Bxf6 onto an empty f6, and a blow that
+  // only trades — "Rhc8, Nd4, Rxc1+" — is no lapse).
+  it('fires when the punishment lands DEEP in the engine line (quiet replies, then the blow)', () => {
+    const attrs = attributePrinciples({ replySan: null, ...base, pvAfterPlayed: DEEP7 });
     const hit = attrs.find((a) => a.id === 'calculation-depth');
     expect(hit, JSON.stringify(attrs.map((a) => a.id))).toBeTruthy();
-    expect(hit?.facts.punish).toBe('Bxf6');
-    expect(hit?.facts.depth).toBe(5);
+    expect(hit?.facts.punish).toBe('axb4');
+    expect(hit?.facts.depth).toBe(7);
     expect(hit?.tag).toBe('calculation-depth');
   });
   it('the blow is THEIR move — a capture of the student\'s own inside the line is not it (walk 700, 16…a6)', () => {
     // Student's (Black) own capture sits at ply 4 (odd = theirs); their only
     // forcing move comes later at ply 5.
-    const attrs = attributePrinciples({ replySan: null, ...base, pvAfterPlayed: ['Nf3', 'd6', 'Bg5', 'Qxd4', 'Bxf6'] });
-    expect(attrs.find((a) => a.id === 'calculation-depth')?.facts.punish).toBe('Bxf6');
+    const attrs = attributePrinciples({ replySan: null, ...base, pvAfterPlayed: ['e6', 'Rb8', 'Qf3', 'Nxd4', 'Qxf7#'] });
+    expect(attrs.find((a) => a.id === 'calculation-depth')?.facts.punish).toBe('Qxf7#');
+  });
+
+  it('negative control: a blow that only TRADES is no lapse (review walk 2026-10-04, G1 #43)', () => {
+    // The real game: after 22.Rfc1 the stored line ran Rhc8 Nd4 Rxc1+ — a rook
+    // trade, since the g5-bishop guards c1. Nothing is won, so nothing "lands".
+    const G1 = ['e4','c6','Nf3','d5','e5','Bf5','d4','e6','Nc3','c5','Bf4','Nc6','dxc5','Bxc5','Bb5','a6','Ba4','b5','Bb3','b4','Na4','Bb6','Nxb6','Qxb6','O-O','a5','a3','a4','Ba2','b3','cxb3','axb3','Bxb3','Na5','Ba2','Qxb2','Qa4+','Ke7','Bg5+','f6','exf6+','Nxf6','Rfc1'];
+    const trade = ['Rhc8', 'Nd4', 'Rxc1+', 'Rxc1'];
+    const attrs = attributePrinciples({ replySan: null, historySans: G1, bestSan: 'Qf4', classification: 'mistake', evalBefore: 236, evalAfterPlayed: 53, pvAfterPlayed: trade });
+    expect(attrs.find((a) => a.id === 'calculation-depth')).toBeUndefined();
   });
 
   it('negative control: an IMMEDIATE punishment is not a depth error', () => {
@@ -46,7 +60,7 @@ describe('section 14 — calculation-depth (PV-gated)', () => {
   // student was told "that was an inaccuracy costing about 0.7 points" and
   // never told what recurred. These two tests pin both halves of the fix, so
   // neither the band nor the currency can quietly come back.
-  const PV = ['Nf3', 'd6', 'Bg5', 'Qd7', 'Bxf6'];   // punishment lands at ply 5
+  const PV = DEEP7;
   it('the measured 99cp ply that the 150 floor silenced now attributes', () => {
     // ply 62 of the real game: 30 → -69, a 99cp cost near equality. That is
     // ~9 win% — comfortably an inaccuracy — and the PATTERN (quiet move,
@@ -68,16 +82,14 @@ describe('section 14 — calculation-depth (PV-gated)', () => {
   // 7th move" — ply 13. A blow past the coach's own horizon is not a
   // calculation lapse anyone could be held to.
   it('negative control: a blow past the 7-ply horizon is not a depth error', () => {
-    // The blow is Bxg6, a capture: exd6 here is a pawn swap (…exd6 takes back),
-    // and a pawn swap is not a blow at any depth (Learn walk 2026-10-02).
-    const deep = ['Nf3', 'd6', 'Bd3', 'g6', 'O-O', 'Bg7', 'h3', 'O-O', 'Bxg6'];   // lands at ply 9
+    const deep = ['g3', 'g6', 'h3', 'h5', 'a3', 'Nb4', 'd5', 'a6', 'axb4'];   // lands at ply 9
     expect(attributePrinciples({ replySan: null, ...base, pvAfterPlayed: deep }).find((a) => a.id === 'calculation-depth')).toBeUndefined();
     // …and ply 7 still counts.
-    const edge = ['Nf3', 'd6', 'Bd3', 'g6', 'O-O', 'Bg7', 'Bxg6'];
+    const edge = DEEP7;
     expect(attributePrinciples({ replySan: null, ...base, pvAfterPlayed: edge }).find((a) => a.id === 'calculation-depth')?.facts.depth).toBe(7);
   });
   it('negative control: no real cost → silent; no PV → silent (live path)', () => {
-    expect(attributePrinciples({ replySan: null, ...base, evalAfterPlayed: 0, pvAfterPlayed: ['Nf3', 'd6', 'Bg5', 'Qd7', 'Bxf6'] }).find((a) => a.id === 'calculation-depth')).toBeUndefined();
+    expect(attributePrinciples({ replySan: null, ...base, evalAfterPlayed: 0, pvAfterPlayed: DEEP7 }).find((a) => a.id === 'calculation-depth')).toBeUndefined();
     expect(attributePrinciples({ replySan: null, ...base }).find((a) => a.id === 'calculation-depth')).toBeUndefined();
   });
 });

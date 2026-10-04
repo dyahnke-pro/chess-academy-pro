@@ -408,7 +408,7 @@ function cheapestCapture(chess: Chess, sq: Square, color: Color): Move | null {
 }
 /** Does the line win `mover` at least two points, or mate THE OTHER side —
  *  the ONE ledger rule (WO-OUTCOME-01), never a private material diff. */
-function pvWinsMaterial(chess: Chess, pv: readonly string[] | undefined, mover: Color): boolean {
+function pvWinsMaterial(chess: Chess, pv: readonly string[] | undefined, mover: Color, minNet = 2): boolean {
   if (!pv || pv.length === 0) return false;
   const proof = proofCut(chess.fen(), pv, mover);
   if (!proof) return false;
@@ -417,7 +417,7 @@ function pvWinsMaterial(chess: Chess, pv: readonly string[] | undefined, mover: 
     try { for (const s of pv.slice(0, proof.plies)) c.move(s); } catch { return false; }
     return c.turn() !== mover;
   }
-  return !!proof.ledger && proof.ledger.netPawns >= 2;
+  return !!proof.ledger && proof.ledger.netPawns >= minNet;
 }
 /** Replaying `pv` from `after` (opponent to move), does the `grabber`-owned piece
  *  that stands on `startSq` get CAPTURED by the opponent — following it as it
@@ -1420,6 +1420,13 @@ const DETECTORS: Detector[] = [
     // horizon; that loss is positional, and another fundamental owns it.
     if (firstForcing + 1 > MAX_PV_DEPTH_PLIES) {
       return no(c, 'calculation-depth', `the punishment ${pvP[firstForcing]} lands at ply ${firstForcing + 1}, past the ${MAX_PV_DEPTH_PLIES}-ply horizon`);
+    }
+    // THE BLOW MUST WIN SOMETHING (clean-pass review walk 2026-10-04, G1 #43:
+    // "after Rhc8 hitting your rook, Nd4, Rxc1+ arrives" — Rxc1+ Rxc1 is a
+    // plain rook trade, the g5-bishop guards c1). A check or capture that only
+    // trades proves no lapse; the one ledger decides (WO-OUTCOME-01).
+    if (!pvWinsMaterial(c.after, pvP, c.opp, 1)) {
+      return no(c, 'calculation-depth', `the punishing line ${pvP.join(' ')} wins nothing on the ledger`);
     }
     return att('calculation-depth', 2, { squares: [last.to], moves: [pvP[firstForcing]], pvMoves: pvP.slice(0, firstForcing + 1) },
       // THE PATH TRAVELS WITH THE BLOW (Blumenfeld walk F21: "breaks on Nxh5"

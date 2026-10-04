@@ -14,7 +14,7 @@ import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhas
 import { plyFactsClause, computePvLine, pvDepthForRating, type PvLine, type PvEngine } from './pvPlayback';
 import { andList } from '../utils/andList';
 import { buildReviewMoveBriefing } from './reviewMoveBriefing';
-import { explainEvalByPieceQuality, lowestMinorMobility, type PieceQualityResult } from './pieceQuality';
+import { explainEvalByPieceQuality, lowestMinorMobility, phraseBadPiece, type PieceQualityResult } from './pieceQuality';
 import { compareTwoMoves, type Evaluate } from './moveComparison';
 import { detectConcept } from './reviewConcepts';
 // (removed spokenTacticNote / generalizedTeaching — review no longer voices a
@@ -74,7 +74,7 @@ import { theirOpeningVerdict } from './openingAnnouncement';
 import { departureRecordSentence, openingRecordClause } from './openingRecordBeat';
 import { ecoOfKey, openingEntryForKey, openingFamily, openingKeyFromSans } from './openingKey';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
-import { describeEvalCp, isMateEval } from './engineConstants';
+import { describeEvalCp, isMateEval, moverGaveUpMate } from './engineConstants';
 import { isMinorAtHome } from './development';
 import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
 import { studentMoveTeaching, namedMoveArrows } from './learnBoardTeaching';
@@ -977,7 +977,8 @@ export function buildReviewCitations(
     // when the engine line cannot name one.
     const shared = suggestedSan && m.bestMove
       ? betterMoveReason(fenBefore, m.san, suggestedSan, [m.bestMove, ...(m.pv?.afterBest ?? [])], isWhiteMove ? 'white' : 'black',
-        priorMoveLeadingTo(i > 0 ? { fenBefore: chain[i - 1].fenBefore, san: moves[i - 1].san } : null, fenBefore))
+        priorMoveLeadingTo(i > 0 ? { fenBefore: chain[i - 1].fenBefore, san: moves[i - 1].san } : null, fenBefore),
+        moverGaveUpMate(m.preMoveEval, m.evaluation, isWhiteMove ? 'white' : 'black'))
       : null;
     const whyBetter = shared
       ? `${suggestedSan} was better — ${shared}.`
@@ -3879,13 +3880,13 @@ async function augmentWithProjections(
   const confirmDone = deferred<Map<ReviewMoveSegment, PvLine | null>>();
   const badPieceDone = {
     promise: Promise.all(badPieceResults.map((d) => d.promise)).then((results) => {
-      let bestPiece: { seg: ReviewMoveSegment; text: string; swing: number } | null = null;
+      let bestPiece: { seg: ReviewMoveSegment; text: string; swing: number; color: 'w' | 'b'; pair: boolean } | null = null;
       results.forEach((res, i) => {
         if (res?.delta && (!bestPiece || res.delta.ablation.swingCp > bestPiece.swing)) {
-          bestPiece = { seg: badPieceCandidates[i].s, text: res.delta.text, swing: res.delta.ablation.swingCp };
+          bestPiece = { seg: badPieceCandidates[i].s, text: res.delta.text, swing: res.delta.ablation.swingCp, color: res.delta.color, pair: res.delta.squares.length > 1 };
         }
       });
-      return bestPiece as { seg: ReviewMoveSegment; text: string; swing: number } | null;
+      return bestPiece as { seg: ReviewMoveSegment; text: string; swing: number; color: 'w' | 'b'; pair: boolean } | null;
     }),
   };
   void (async () => {
@@ -4218,7 +4219,8 @@ async function augmentWithProjections(
     if (best) {
       // Appended as its own sentence — capitalize the lead so the seat-stamped
       // possessive ("their"/"your") reads as a sentence start, not mid-clause.
-      const obs = best.text.charAt(0).toUpperCase() + best.text.slice(1);
+      const text = phraseBadPiece(best.text, best.color, best.pair, studentColorWB);
+      const obs = text.charAt(0).toUpperCase() + text.slice(1);
       best.seg.narration = `${best.seg.narration ?? ''} ${obs}.`.trim();
     }
   }

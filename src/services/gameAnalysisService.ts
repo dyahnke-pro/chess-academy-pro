@@ -1222,6 +1222,27 @@ const REVIEW_MAX_DEEP_PLIES = 24;
  *  the ANALYSIS_DEPTH stamp it already claims. Still below BEST_MOVE_DEPTH
  *  (18): the review is not the drill-solution search. */
 const REVIEW_DEEP_DEPTH = 16;
+/** Depth a "you gave up the mate" verdict is confirmed at — a longer mate the
+ *  played move keeps sits past the review's own horizon. */
+const MATE_CONFIRM_DEPTH = 24;
+/** A White-POV engine eval that is a forced mate for the mover. */
+function moverHadMate(whiteEval: number | null | undefined, moverIsWhite: boolean): boolean {
+  return whiteEval != null && Math.abs(whiteEval) >= MATE_EVAL_THRESHOLD && (moverIsWhite ? whiteEval > 0 : whiteEval < 0);
+}
+/** True when a "gave up the mate" reading is a HORIZON artifact: the mover had
+ *  a mate before, the read after showed none, and a deeper search of the
+ *  position after the move finds the mover still mating. */
+export async function mateKeptDeeper(
+  fenAfter: string,
+  whiteEvalBefore: number | null | undefined,
+  whiteEvalAfter: number | null | undefined,
+  moverIsWhite: boolean,
+  search: (fen: string, depth: number) => Promise<{ evaluation: number }>,
+): Promise<boolean> {
+  if (!moverHadMate(whiteEvalBefore, moverIsWhite) || moverHadMate(whiteEvalAfter, moverIsWhite)) return false;
+  const deep = await search(fenAfter, MATE_CONFIRM_DEPTH).catch(() => null);
+  return !!deep && moverHadMate(deep.evaluation, moverIsWhite);
+}
 
 /** Smallest cpLoss the SWEEP will call a slip.
  *
@@ -2081,6 +2102,18 @@ async function analyzeGamePositions(
                 bestMove = null;
               }
             }
+          }
+          // A MATE GIVEN UP IS CONFIRMED, NEVER READ OFF A HORIZON (clean-pass
+          // review walk 2026-10-04, G1 36.Qb5+: graded a BLUNDER for missing
+          // Qe4+'s mate in 8 — and Qb5+ mates in 10, a mate the depth-16 read
+          // after the move simply did not reach). Only a move that really lets
+          // the mate go is the blunder (David: "Keep it as a blunder in
+          // review"); so before saying so, search the position after it deeper.
+          if (classification === 'blunder' && fens[moveIdx + 1]
+            && await mateKeptDeeper(fens[moveIdx + 1], refinedBestMoveEval ?? evalBefore, evalAfter, isWhiteMove, deepSearch)) {
+            classification = 'good';
+            bestMove = null;
+            costCp = null;
           }
         }
       } else if (moveIsBook) {

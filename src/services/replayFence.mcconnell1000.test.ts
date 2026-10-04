@@ -10,7 +10,7 @@ describe('ply 11 — a line that trades queens is not "win a rook"', () => {
   // 6.O-O Bg4 7.Bg5 Qxg5 8.Bxf7+ Ke7 9.Nxg5 Bxd1 — each side takes a queen.
   const FEN = 'rnb1k1nr/pp3ppp/2pp1q2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 0 6';
   it('O-O\'s reason is not a won rook', () => {
-    const r = betterMoveReason(FEN, 'Bb5', 'O-O', ['e1g1', 'c8g4', 'c1g5', 'f6g5', 'c4f7', 'e8e7', 'f3g5', 'g4d1'], 'white', null) ?? '';
+    const r = betterMoveReason(FEN, 'Bb5', 'O-O', ['e1g1', 'c8g4', 'c1g5', 'f6g5', 'c4f7', 'e8e7', 'f3g5', 'g4d1'], 'white', null, false) ?? '';
     expect(r).not.toMatch(/win a (rook|piece)/);
   });
   // NEGATIVE CONTROL lives in lookaheadPlan.test (a real won pawn still reads materialSwing > 0).

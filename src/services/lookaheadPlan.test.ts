@@ -241,10 +241,16 @@ describe('the read sees the whole line, not just where pieces land', () => {
   });
 
   it('counts pieces converging on the enemy king', () => {
-    // Scholar's shape: queen and bishop both arrive next to the black king.
+    // Queen and knight both arrive near the black king — two PIECES.
     // "They are coming for you" as arithmetic rather than atmosphere.
-    const plan = planFromUci(START, uci(['e2e4', 'e7e5', 'f1c4', 'b8c6', 'd1h5', 'g8f6', 'h5f7', 'e8f7']), 'white', null);
+    const plan = planFromUci(START, uci(['e2e4', 'e7e5', 'd1h5', 'b8c6', 'g1f3', 'a7a6', 'f3g5', 'a6a5']), 'white', null);
     expect(plan?.white.nearEnemyKing).toBeGreaterThanOrEqual(2);
+  });
+  it('one piece landing twice is one piece (clean-pass review walk 2026-10-04)', () => {
+    // The old Scholar's fixture: only the QUEEN comes near (Qh5, then Qxf7+,
+    // taken by Kxf7) — it used to count as two pieces converging.
+    const plan = planFromUci(START, uci(['e2e4', 'e7e5', 'f1c4', 'b8c6', 'd1h5', 'g8f6', 'h5f7', 'e8f7']), 'white', null);
+    expect(plan?.white.nearEnemyKing ?? 0).toBeLessThan(2);
   });
 
   it('fills every field the engine path computes, not a subset', () => {

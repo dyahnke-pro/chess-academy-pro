@@ -172,11 +172,30 @@ export function phraseBetterMove(f: BetterMoveFact): string {
   }
 }
 
-/** Convenience: the fact, computed and worded — or null. */
+/** The reason a mating move is better: the mate itself — read off the board,
+ *  never a line cut short of it. */
+export function mateReason(fenBefore: string, bestSan: string): string {
+  try {
+    const c = new Chess(fenBefore);
+    if (c.move(bestSan) && c.isCheckmate()) return 'it is mate';
+  } catch { /* fall through */ }
+  return 'it starts a forced mate';
+}
+
+/** Convenience: the fact, computed and worded — or null.
+ *
+ *  `bestMates` is REQUIRED: whether the engine had a forced mate for the mover
+ *  that the played move gave up. Then the reason IS the mate (clean-pass walk
+ *  2026-10-04, review G1 31.Qxe4+: "the stronger move was Rc7+ — it would swing
+ *  pieces toward their king"; 36.Qb5+: "Qe4+ — it would win the queen for a
+ *  piece" — both forced mates, which Learn had said). Required so no surface
+ *  can read the line and forget the mate. */
 export function betterMoveReason(
   fenBefore: string, playedSan: string, bestSan: string, bestLineUci: readonly string[], moverColor: 'white' | 'black',
   priorMove: PriorMove,
+  bestMates: boolean,
 ): string | null {
+  if (bestMates) return mateReason(fenBefore, bestSan);
   const f = betterMoveFact(fenBefore, playedSan, bestSan, bestLineUci, moverColor, priorMove);
   return f ? phraseBetterMove(f) : null;
 }
@@ -685,7 +704,13 @@ export function callInaccuracyDetailed(args: {
         : `Their ${args.playedSan} is a touch inaccurate.`;
     // The plan reason is read in the MOVER's voice ("their king" = the
     // student's); said to the student it is "your king" (walk 2026-10-01).
-    const should = better ? ` ${args.bestSan} was their move, to ${toStudentSeat(better.why)}.` : '';
+    // …and a plan the move only SERVES is the idea, not the move's own work —
+    // the same `own` rule the student half speaks (clean-pass walk 3,
+    // 2026-10-04, G3 31.Nc4: "a4 was their move, to swing pieces toward your
+    // king" — a pawn push swings nothing).
+    const should = better ? (better.own
+      ? ` ${args.bestSan} was their move, to ${toStudentSeat(better.why)}.`
+      : ` ${args.bestSan} was their move — the idea is to ${toStudentSeat(better.why)}.`) : '';
     const stillHanging = missedCaptureStillOn(args.fenBefore, args.playedSan, args.bestSan, args.bestLineUci ?? null, args.priorMove);
     const punish = quality === 'inaccuracy'
       ? ''
@@ -709,7 +734,9 @@ export function callInaccuracyDetailed(args: {
         : `A touch inaccurate from me — ${args.playedSan} is not quite right.`;
     // NAMED WITH ITS REASON, OR NOT NAMED (the Learn rule, 2026-09-24): a move
     // with no computed reason is an order, not teaching.
-    const should = better ? ` ${args.bestSan} was the move, to ${toStudentSeat(better.why)}.` : '';
+    const should = better ? (better.own
+      ? ` ${args.bestSan} was the move, to ${toStudentSeat(better.why)}.`
+      : ` ${args.bestSan} was the move — the idea is to ${toStudentSeat(better.why)}.`) : '';
     // WHICH KIND OF SLIP, read off the board (walk 6, L4). The coach's move can
     // cost by GIVING something (the student now has a capture to find) or by
     // MISSING a capture of the student's piece — and then that piece is still
@@ -750,8 +777,8 @@ export function callInaccuracyDetailed(args: {
   const reason = stopsMate
     ? 'it would stop the mate'
     : (args.bestMate ?? null) !== null
-      ? (args.bestMate === 1 ? 'it is mate' : `it starts a forced mate`)
-      : args.bestLineUci ? betterMoveReason(args.fenBefore, args.playedSan, args.bestSan, args.bestLineUci, args.moverColor, args.priorMove) : null;
+      ? mateReason(args.fenBefore, args.bestSan)
+      : args.bestLineUci ? betterMoveReason(args.fenBefore, args.playedSan, args.bestSan, args.bestLineUci, args.moverColor, args.priorMove, false) : null;
   const after = args.moverEvalAfterCp;
   // …and CLEARLY BETTER is not a mistake either (pass-2 walk 2026-09-30: his
   // Bxc5 went +3.1 → +1.9 and was graded "a mistake" where he said "knocking
@@ -832,6 +859,30 @@ export function callInaccuracyDetailed(args: {
 /** What the played move let the OTHER side do: their best line after it, read
  *  by `whyBetter` (the capture it wins, else the plan's leading clause), plus
  *  that line's first move as SAN so the caller can say whether it was played. */
+/** A material cost clause ("win a piece for a pawn") is only what the move LET
+ *  THEM do when the mover comes out behind over the WHOLE exchange — the played
+ *  move's own capture included (clean-pass review walk 2026-10-04, G1 41.Qxe5+:
+ *  "it let them win a piece for a pawn" — Qxe5+ took their QUEEN, Kxd7 took a
+ *  rook back). Mate and non-material clauses pass through. */
+function moverLostOverLine(
+  fenBefore: string, playedSan: string, fenAfter: string, replyLineUci: readonly string[],
+  moverColor: 'white' | 'black', clause: string,
+): boolean {
+  if (winClauseValue(clause) === null) return true;
+  const sans: string[] = [playedSan];
+  try {
+    const r = new Chess(fenAfter);
+    for (const uci of replyLineUci) {
+      const mv = r.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] });
+      if (!mv) break;
+      sans.push(mv.san);
+    }
+  } catch { /* the prefix read so far stands */ }
+  const proof = proofCut(fenBefore, sans, moverColor === 'white' ? 'w' : 'b');
+  if (!proof || proof.mate || !proof.ledger) return false;
+  return proof.ledger.netPawns < 0;
+}
+
 export function punishmentOf(
   fenBefore: string, playedSan: string, replyLineUci: readonly string[], moverColor: 'white' | 'black',
 ): { why: string; first: string | null; lostSquare?: string } | null {
@@ -878,7 +929,7 @@ export function punishmentOf(
   // cost three pawns; then the punishing move itself is the honest answer.
   const plan = planFromUci(fenAfter, replyLineUci, moverColor, { fenBefore, san: playedSan });
   const lead = plan?.theirs.spokenClauses[0];
-  if (lead?.text && !lead.drift && isCostClause(lead.text)) {
+  if (lead?.text && !lead.drift && isCostClause(lead.text) && moverLostOverLine(fenBefore, playedSan, fenAfter, replyLineUci, moverColor, lead.text)) {
     // The square their line opens by taking on — so a caller that already
     // said "that left your pawn on b5 hanging" can tell it is the same loss
     // (Learn walk 2026-10-01, Benoni ply 26: the loss told twice in a row).
