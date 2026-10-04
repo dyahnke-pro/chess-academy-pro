@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2597 lines · 29 exports · 21 importers · 23 tests · 3 audits**
+**3021 lines · 35 exports · 32 importers · 32 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **G4.6 THE REVIEW-PREP LAG IS SERIALIZED ENGINE CALLS, NOT THE TIMEOUT (David 2026-09-16: "we need to fix that seven second lag").** (CLAUDE.md:1089) — names `acquirePvEngines`, `gameAnalysisService`
-- **The standard post-deploy ritual** (CLAUDE.md:5865) — names `analyzeGameOnWorker`, `gameAnalysisService`, `scanCriticalMoments`
+- **G4.6 THE REVIEW-PREP LAG IS SERIALIZED ENGINE CALLS, NOT THE TIMEOUT (David 2026-09-16: "we need to fix that seven second lag").** (CLAUDE.md:1162) — names `acquirePvEngines`, `gameAnalysisService`
+- **The standard post-deploy ritual** (CLAUDE.md:6115) — names `analyzeGameOnWorker`, `gameAnalysisService`, `scanCriticalMoments`
 
 ## Who calls in
 
@@ -18,22 +18,33 @@
 - `src/components/Coach/CoachReviewSessionPage.tsx`
 - `src/components/Games/AnalyzeGamesButton.tsx`
 - `src/components/Insights/GameInsightsPage.tsx`
+- `src/components/Puzzles/MyMistakesPage.tsx`
 - `src/components/ui/AppLayout.tsx`
+- `src/services/analysisBatchLabel.test.ts`
+- `src/services/analysisBatchOrder.test.ts`
 - `src/services/analysisPoolIosEngine.test.ts`
 - `src/services/analysisTelemetry.test.ts`
 - `src/services/chesscomService.ts`
 - `src/services/deltaConsistency.test.ts`
 - `src/services/engineLifecycle.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
+- `src/services/gameAnalysisService.deepAgrees.test.ts`
+- `src/services/gameAnalysisService.drain.test.ts`
+- `src/services/gameAnalysisService.poolEngine.test.ts`
 - `src/services/gameAnalysisService.records.test.ts`
 - `src/services/gameAnalysisService.test.ts`
 - `src/services/gameAnalysisService.wedge.test.ts`
 - `src/services/gameAnalysisTwoPass.test.ts`
 - `src/services/gameInsightsService.ts`
 - `src/services/gameReviewService.ts`
+- `src/services/homeOpeningPlan.ts`
 - `src/services/lichessService.ts`
 - `src/services/loopCloses.review.integration.test.ts`
+- `src/services/missedMateIsBlunder.test.ts`
 - `src/services/moveClassification.chesscom.test.ts`
+- `src/services/prepareReview.test.ts`
+- `src/services/reviewRealSweep.test.ts`
+- `src/services/sweepCarriesPv.test.ts`
 
 ## Exports and every call site
 
@@ -47,17 +58,24 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `cancelBackgroundAnalysis` (function) — 1 call site
-- `src/components/ui/AppLayout.tsx:244`
+- `src/components/ui/AppLayout.tsx:247`
 
 ### `pauseBatchAnalysis` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:276`
+- `src/components/Coach/CoachGameReview.tsx:330`
 
 ### `resumeBatchAnalysis` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:278`
+- `src/components/Coach/CoachGameReview.tsx:332`
 
-### `classifyCpLoss` (function) — 10 call sites
-- `src/components/Coach/CoachGameReview.tsx:1800`
-- `src/services/deltaConsistency.test.ts:16`
+### `classifyCpLoss` (function) — 18 call sites
+- `src/components/Coach/CoachGameReview.tsx:1844`
+- `src/services/deltaConsistency.test.ts:33`
+- `src/services/missedMateIsBlunder.test.ts:13`
+- `src/services/missedMateIsBlunder.test.ts:16`
+- `src/services/missedMateIsBlunder.test.ts:19`
+- `src/services/missedMateIsBlunder.test.ts:60`
+- `src/services/missedMateIsBlunder.test.ts:61`
+- `src/services/missedMateIsBlunder.test.ts:64`
+- `src/services/missedMateIsBlunder.test.ts:67`
 - `src/services/moveClassification.chesscom.test.ts:30`
 - `src/services/moveClassification.chesscom.test.ts:83`
 - `src/services/moveClassification.chesscom.test.ts:85`
@@ -66,17 +84,19 @@
 - `src/services/moveClassification.chesscom.test.ts:101`
 - `src/services/moveClassification.chesscom.test.ts:102`
 - `src/services/reviewFullGameNarration.harness.test.ts:144`
+- `src/services/reviewRealSweep.test.ts:136`
 
-### `replayPgnToFens` (function) — 6 call sites
+### `replayPgnToFens` (function) — 7 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:47`
-- `src/services/autoAnalyzeGame.ts:209`
-- `src/services/mistakePuzzleService.ts:246`
-- `src/services/mistakePuzzleService.ts:317`
-- `src/services/tacticClassifierService.ts:193`
-- `src/services/tacticClassifierService.ts:437`
+- `src/services/autoAnalyzeGame.ts:319`
+- `src/services/mistakePuzzleService.ts:309`
+- `src/services/mistakePuzzleService.ts:382`
+- `src/services/tacticClassifierService.ts:271`
+- `src/services/tacticClassifierService.ts:356`
+- `src/services/tacticClassifierService.ts:632`
 
 ### `warmAnalysisPool` (function) — 7 call sites
-- `src/App.tsx:449`
+- `src/App.tsx:482`
 - `src/services/gameAnalysisPool.test.ts:283`
 - `src/services/gameAnalysisPool.test.ts:287`
 - `src/services/gameAnalysisPool.test.ts:315`
@@ -88,20 +108,30 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `acquirePvEngines` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:3049`
-- `src/services/coachFeatureService.ts:3088`
+- `src/services/coachFeatureService.ts:3577`
+- `src/services/coachFeatureService.ts:3892`
 - `src/services/gameAnalysisService.unload.test.ts:38`
 
 ### `scanCriticalMoments` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:796`
+- `src/components/Coach/CoachGameReview.tsx:854`
 
 ### `recordPromptedFind` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:1490`
+- `src/components/Coach/CoachGameReview.tsx:1526`
 
 ### `destroyAllAnalysisWorkers` (function) — 3 call sites
 - `src/services/engineLifecycle.ts:36`
 - `src/services/gameAnalysisService.unload.test.ts:41`
-- `src/services/gameAnalysisService.unload.test.ts:53`
+- `src/services/gameAnalysisService.unload.test.ts:56`
+
+### `regradeAgainstMate` (function) — 3 call sites
+- `src/services/missedMateIsBlunder.test.ts:87`
+- `src/services/missedMateIsBlunder.test.ts:91`
+- `src/services/missedMateIsBlunder.test.ts:92`
+
+### `mateKeptDeeper` (function) — 3 call sites
+- `src/services/missedMateIsBlunder.test.ts:30`
+- `src/services/missedMateIsBlunder.test.ts:34`
+- `src/services/missedMateIsBlunder.test.ts:39`
 
 ### `TWO_PASS_SWING_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -110,42 +140,46 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `selectCriticalPlies` (function) — 11 call sites
-- `src/services/gameAnalysisTwoPass.test.ts:115`
-- `src/services/gameAnalysisTwoPass.test.ts:125`
-- `src/services/gameAnalysisTwoPass.test.ts:126`
-- `src/services/gameAnalysisTwoPass.test.ts:127`
-- `src/services/gameAnalysisTwoPass.test.ts:131`
-- `src/services/gameAnalysisTwoPass.test.ts:135`
-- `src/services/gameAnalysisTwoPass.test.ts:136`
-- `src/services/gameAnalysisTwoPass.test.ts:144`
+- `src/services/gameAnalysisTwoPass.test.ts:129`
+- `src/services/gameAnalysisTwoPass.test.ts:139`
+- `src/services/gameAnalysisTwoPass.test.ts:140`
+- `src/services/gameAnalysisTwoPass.test.ts:141`
 - `src/services/gameAnalysisTwoPass.test.ts:145`
-- `src/services/gameAnalysisTwoPass.test.ts:156`
+- `src/services/gameAnalysisTwoPass.test.ts:149`
+- `src/services/gameAnalysisTwoPass.test.ts:150`
 - `src/services/gameAnalysisTwoPass.test.ts:158`
+- `src/services/gameAnalysisTwoPass.test.ts:159`
+- `src/services/gameAnalysisTwoPass.test.ts:170`
+- `src/services/gameAnalysisTwoPass.test.ts:172`
 
 ### `GameAnalysisStats` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `WorkerWedgedError` (class) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `WorkerWedgedError` (class) — 2 call sites
+- `src/services/gameAnalysisService.drain.test.ts:42`
+- `src/services/gameAnalysisService.drain.test.ts:55`
 
-### `analyzeGameOnWorker` (function) — 17 call sites
+### `analyzeGameOnWorker` (function) — 20 call sites
 - `src/services/analysisTelemetry.test.ts:69`
 - `src/services/analysisTelemetry.test.ts:82`
 - `src/services/analysisTelemetry.test.ts:83`
 - `src/services/analysisTelemetry.test.ts:91`
 - `src/services/fundamentalsPipeline.realGame.test.ts:109`
-- `src/services/fundamentalsPipeline.realGame.test.ts:306`
+- `src/services/fundamentalsPipeline.realGame.test.ts:370`
+- `src/services/gameAnalysisService.deepAgrees.test.ts:40`
+- `src/services/gameAnalysisService.deepAgrees.test.ts:46`
 - `src/services/gameAnalysisService.wedge.test.ts:36`
 - `src/services/gameAnalysisService.wedge.test.ts:44`
 - `src/services/gameAnalysisService.wedge.test.ts:53`
 - `src/services/gameAnalysisService.wedge.test.ts:59`
-- `src/services/gameAnalysisTwoPass.test.ts:106`
-- `src/services/gameAnalysisTwoPass.test.ts:165`
-- `src/services/gameAnalysisTwoPass.test.ts:182`
-- `src/services/gameAnalysisTwoPass.test.ts:197`
-- `src/services/gameAnalysisTwoPass.test.ts:204`
+- `src/services/gameAnalysisTwoPass.test.ts:120`
+- `src/services/gameAnalysisTwoPass.test.ts:179`
+- `src/services/gameAnalysisTwoPass.test.ts:196`
 - `src/services/gameAnalysisTwoPass.test.ts:211`
-- `src/services/gameAnalysisTwoPass.test.ts:216`
+- `src/services/gameAnalysisTwoPass.test.ts:218`
+- `src/services/gameAnalysisTwoPass.test.ts:225`
+- `src/services/gameAnalysisTwoPass.test.ts:230`
+- `src/services/sweepCarriesPv.test.ts:85`
 
 ### `generateInsightsForGame` (function) — 5 call sites
 - `src/services/gameAnalysisService.records.test.ts:52`
@@ -154,50 +188,70 @@
 - `src/services/gameAnalysisService.records.test.ts:83`
 - `src/services/loopCloses.review.integration.test.ts:68`
 
-### `analyzeSingleGame` (function) — 11 call sites
-- `src/components/Coach/CoachReviewSessionPage.nonBlocking.test.tsx:23`
-- `src/components/Coach/CoachReviewSessionPage.tsx:255`
-- `src/components/Coach/CoachReviewSessionPage.tsx:295`
+### `analyzeSingleGame` (function) — 13 call sites
+- `src/components/Coach/CoachReviewSessionPage.nonBlocking.test.tsx:35`
+- `src/components/Coach/CoachReviewSessionPage.tsx:135`
+- `src/components/Coach/CoachReviewSessionPage.tsx:182`
 - `src/services/analysisDeterminism.pool.test.ts:139`
 - `src/services/gameAnalysisService.records.test.ts:90`
-- `src/services/gameAnalysisTwoPass.test.ts:230`
-- `src/services/gameAnalysisTwoPass.test.ts:267`
-- `src/services/gameAnalysisTwoPass.test.ts:279`
-- `src/services/gameAnalysisTwoPass.test.ts:290`
-- `src/services/gameAnalysisTwoPass.test.ts:297`
+- `src/services/gameAnalysisTwoPass.test.ts:244`
+- `src/services/gameAnalysisTwoPass.test.ts:281`
+- `src/services/gameAnalysisTwoPass.test.ts:293`
+- `src/services/gameAnalysisTwoPass.test.ts:307`
+- `src/services/gameAnalysisTwoPass.test.ts:320`
+- `src/services/gameAnalysisTwoPass.test.ts:326`
+- `src/services/gameAnalysisTwoPass.test.ts:333`
 - `src/services/gameReviewService.ts:30`
 
-### `gameNeedsAnalysis` (function) — 11 call sites
+### `gameNeedsAnalysis` (function) — 12 call sites
 - `scripts/audit-analysis-pool-engine-prod.mjs:225`
-- `src/components/Coach/CoachReviewSessionPage.tsx:284`
-- `src/components/Coach/CoachReviewSessionPage.tsx:287`
-- `src/components/Coach/CoachReviewSessionPage.tsx:302`
-- `src/components/Games/AnalyzeGamesButton.tsx:67`
+- `src/components/Coach/CoachReviewSessionPage.tsx:171`
+- `src/components/Coach/CoachReviewSessionPage.tsx:174`
+- `src/components/Coach/CoachReviewSessionPage.tsx:189`
+- `src/components/Puzzles/MyMistakesPage.tsx:167`
 - `src/services/gameAnalysisService.test.ts:112`
 - `src/services/gameAnalysisService.test.ts:113`
 - `src/services/gameAnalysisService.test.ts:185`
 - `src/services/gameAnalysisService.test.ts:203`
-- `src/services/gameInsightsService.ts:252`
-- `src/services/gameInsightsService.ts:349`
+- `src/services/gameInsightsService.ts:172`
+- `src/services/gameInsightsService.ts:426`
+- `src/services/homeOpeningPlan.ts:75`
 
-### `countGamesNeedingAnalysis` (function) — 6 call sites
-- `src/App.tsx:449`
+### `countGamesNeedingAnalysis` (function) — 7 call sites
+- `src/App.tsx:482`
 - `src/services/gameAnalysisService.test.ts:72`
 - `src/services/gameAnalysisService.test.ts:93`
 - `src/services/gameAnalysisService.test.ts:108`
 - `src/services/gameAnalysisService.test.ts:122`
-- `src/services/gameAnalysisService.test.ts:293`
+- `src/services/gameAnalysisService.test.ts:283`
+- `src/services/gameAnalysisService.test.ts:314`
 
 ### `analyzeRecentGames` (function) — 3 call sites
-- `src/services/gameAnalysisService.test.ts:300`
-- `src/services/gameAnalysisService.test.ts:318`
-- `src/services/gameAnalysisService.test.ts:336`
+- `src/services/gameAnalysisService.test.ts:321`
+- `src/services/gameAnalysisService.test.ts:339`
+- `src/services/gameAnalysisService.test.ts:357`
 
 ### `ANALYSIS_PACKAGE_SIZE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `analyzeAllGames` (function) — 9 call sites
-- `src/services/gameAnalysisService.poolEngine.test.ts:85`
+### `pickAnalysisBatch` (function) — 2 call sites
+- `src/services/analysisBatchOrder.test.ts:23`
+- `src/services/analysisBatchOrder.test.ts:28`
+
+### `planAnalysisBatch` (function) — 3 call sites
+- `src/components/Games/AnalyzeGamesButton.tsx:68`
+- `src/services/analysisBatchLabel.test.ts:30`
+- `src/services/analysisBatchLabel.test.ts:45`
+
+### `analyzeLabel` (function) — 5 call sites
+- `src/components/Games/AnalyzeGamesButton.tsx:105`
+- `src/services/analysisBatchLabel.test.ts:35`
+- `src/services/analysisBatchLabel.test.ts:39`
+- `src/services/analysisBatchLabel.test.ts:40`
+- `src/services/analysisBatchLabel.test.ts:41`
+
+### `analyzeAllGames` (function) — 10 call sites
+- `src/services/gameAnalysisService.poolEngine.test.ts:88`
 - `src/services/gameAnalysisService.test.ts:129`
 - `src/services/gameAnalysisService.test.ts:150`
 - `src/services/gameAnalysisService.test.ts:178`
@@ -205,13 +259,19 @@
 - `src/services/gameAnalysisService.test.ts:217`
 - `src/services/gameAnalysisService.test.ts:237`
 - `src/services/gameAnalysisService.test.ts:263`
-- `src/services/gameAnalysisService.test.ts:289`
+- `src/services/gameAnalysisService.test.ts:281`
+- `src/services/gameAnalysisService.test.ts:310`
+
+### `prepareReview` (function) — 3 call sites
+- `scripts/audit-review-reopen-probe.mjs:142`
+- `src/services/autoAnalyzeGame.ts:302`
+- `src/services/prepareReview.test.ts:18`
 
 ### `runBackgroundAnalysis` (function) — 4 call sites
-- `src/components/Games/AnalyzeGamesButton.tsx:85`
-- `src/components/Insights/GameInsightsPage.tsx:144`
-- `src/services/chesscomService.ts:203`
-- `src/services/lichessService.ts:158`
+- `src/components/Games/AnalyzeGamesButton.tsx:88`
+- `src/components/Insights/GameInsightsPage.tsx:176`
+- `src/services/chesscomService.ts:212`
+- `src/services/lichessService.ts:168`
 
 ### `__testables` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -222,6 +282,8 @@
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts`
 - `src/components/Coach/CoachTeachPage.drillOrientation.test.tsx`
 - `src/components/Coach/CoachTeachPage.test.tsx`
+- `src/services/analysisBatchLabel.test.ts`
+- `src/services/analysisBatchOrder.test.ts`
 - `src/services/analysisDeterminism.pool.test.ts`
 - `src/services/analysisPoolIosEngine.test.ts`
 - `src/services/analysisTelemetry.test.ts`
@@ -230,6 +292,8 @@
 - `src/services/engineLifecycle.test.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/gameAnalysisPool.test.ts`
+- `src/services/gameAnalysisService.deepAgrees.test.ts`
+- `src/services/gameAnalysisService.drain.test.ts`
 - `src/services/gameAnalysisService.poolEngine.test.ts`
 - `src/services/gameAnalysisService.records.test.ts`
 - `src/services/gameAnalysisService.test.ts`
@@ -237,10 +301,15 @@
 - `src/services/gameAnalysisService.wedge.test.ts`
 - `src/services/gameAnalysisTwoPass.test.ts`
 - `src/services/gameReviewService.test.ts`
+- `src/services/homeOpeningPlan.test.ts`
 - `src/services/lichessService.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`
+- `src/services/missedMateIsBlunder.test.ts`
 - `src/services/moveClassification.chesscom.test.ts`
+- `src/services/prepareReview.test.ts`
 - `src/services/reviewFullGameNarration.harness.test.ts`
+- `src/services/reviewRealSweep.test.ts`
+- `src/services/sweepCarriesPv.test.ts`
 
 ## Audits that reach it
 
@@ -251,3 +320,4 @@ appear here — check the post-deploy matrix in CLAUDE.md for those._
 - `scripts/audit-analysis-pool-engine-prod.mjs`
 - `scripts/audit-review-comprehensive.mjs`
 - `scripts/audit-review-overhaul-prod.mjs`
+- `scripts/audit-review-reopen-probe.mjs`

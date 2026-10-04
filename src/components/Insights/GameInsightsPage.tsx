@@ -9,6 +9,7 @@ import {
   getOpeningInsights,
   getMistakeInsights,
   getTacticInsights,
+  getAnalysisCounts,
 } from '../../services/gameInsightsService';
 import { runBackgroundAnalysis } from '../../services/gameAnalysisService';
 import { backfillClassifiedTactics } from '../../services/tacticClassifierService';
@@ -120,6 +121,22 @@ export function GameInsightsPage(): JSX.Element {
       .catch(() => { /* best-effort: the tab still renders from the cache */ });
     return () => { cancelled = true; };
   }, []);
+
+  // LIVE header (walk 2026-10-04 #16): every batch progress tick re-reads the
+  // analysed count (cheap) and folds it into the overview, so the header and
+  // the Overview's "not analysed" card move together as games land, instead
+  // of sitting on the value read at open until the whole batch ends.
+  useEffect(() => {
+    if (!bgAnalysisRunning) return;
+    let cancelled = false;
+    void getAnalysisCounts()
+      .then((c) => {
+        if (cancelled) return;
+        setOverview((o) => (o ? { ...o, analyzedGameCount: c.analyzedGameCount, gamesNeedingAnalysis: c.gamesNeedingAnalysis } : o));
+      })
+      .catch(() => { /* the next tick or the end-of-run reload refreshes it */ });
+    return () => { cancelled = true; };
+  }, [bgAnalysisRunning, bgAnalysisProgress]);
 
   // When the global background analysis finishes, reload insights so the
   // freshly-populated classifications feed into the accuracy stats.

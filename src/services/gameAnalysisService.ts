@@ -2506,6 +2506,99 @@ export async function pickAnalysisBatch<T extends GameRecord>(
   };
 }
 
+type WorkedGame = NonNullable<Awaited<ReturnType<typeof analyzeGameOnWorker>>>;
+
+/** What `drainGameQueue` needs from its caller — injected so the queue's
+ *  failure handling is provable without real Workers (jsdom has none). */
+interface DrainDeps<W> {
+  shouldStop: () => boolean;
+  waitWhilePaused: () => Promise<void>;
+  respawn: (slot: number) => Promise<W>;
+  analyze: (game: GameRecord, worker: W) => Promise<WorkedGame | null>;
+  onGameStart: (game: GameRecord, completed: number) => void;
+  onGameDone: (game: GameRecord, worked: WorkedGame, ms: number) => Promise<void>;
+  onGameFailed: (game: GameRecord, err: unknown) => void;
+  onWorkerLost: (game: GameRecord, respawned: boolean) => void;
+}
+
+/**
+ * Run a package of games across a worker pool: each worker takes the next game
+ * off ONE queue. A wedged worker is recycled (its game is left unanalysed so
+ * the next sweep retries it); a worker whose respawn fails leaves the pool.
+ * A game that throws anything else is reported and skipped — it never ends the
+ * batch. Returns where the queue stopped: `nextIdx < games.length` with no stop
+ * requested means every worker was lost, and the caller finishes the rest.
+ */
+async function drainGameQueue<W extends { destroy: () => void }>(
+  games: readonly GameRecord[],
+  workers: readonly W[],
+  live: Set<W>,
+  deps: DrainDeps<W>,
+): Promise<{ nextIdx: number; completed: number; failed: number }> {
+  let nextIdx = 0;
+  let completed = 0;
+  let failed = 0;
+  const run = async (initial: W): Promise<void> => {
+    let worker = initial;
+    while (nextIdx < games.length && !deps.shouldStop()) {
+      await deps.waitWhilePaused();
+      if (deps.shouldStop()) break;
+      const idx = nextIdx++;
+      const game = games[idx];
+      deps.onGameStart(game, completed);
+      const startedAt = Date.now();
+      try {
+        const worked = await deps.analyze(game, worker);
+        if (worked && worked.annotations.length > 0) await deps.onGameDone(game, worked, Date.now() - startedAt);
+      } catch (e) {
+        if (e instanceof WorkerWedgedError) {
+          live.delete(worker);
+          try { worker.destroy(); } catch { /* already dead */ }
+          let respawned = false;
+          try {
+            worker = await deps.respawn(nextIdx);
+            live.add(worker);
+            respawned = true;
+          } catch { /* dropped — the others carry the queue */ }
+          deps.onWorkerLost(game, respawned);
+          completed++;
+          if (!respawned) return;
+          continue;
+        }
+        failed++;
+        deps.onGameFailed(game, e);
+      }
+      completed++;
+    }
+  };
+  await Promise.all(workers.map((w) => run(w)));
+  return { nextIdx, completed, failed };
+}
+
+/**
+ * THE NEXT TAP, PLANNED (walk 2026-10-04 #15: "Analyze 50 of 937 games" started
+ * a batch of 184). The button's label must read the batch the picker will
+ * actually run — the home-opening games are not bound by the package cap (A2),
+ * so the cap alone is not the batch. Same candidate filter and same picker as
+ * `analyzeAllGames`, so the label and the run cannot disagree.
+ */
+export async function planAnalysisBatch(): Promise<{ waiting: number; batch: number; homeCount: number }> {
+  const waiting = await db.games
+    .filter((g) => gameNeedsAnalysis(g, { depthUpgrade: false }))
+    .toArray();
+  if (waiting.length === 0) return { waiting: 0, batch: 0, homeCount: 0 };
+  const picked = await pickAnalysisBatch(waiting, ANALYSIS_PACKAGE_SIZE);
+  return { waiting: waiting.length, batch: picked.batch.length, homeCount: picked.homeCount };
+}
+
+/** The Analyze button's idle label, from the planned batch and the total
+ *  waiting (PURE): "Analyze 184 of 937 games" when one tap will not clear
+ *  everything, else "Analyze 12 games". */
+export function analyzeLabel(verb: string, batch: number, waiting: number): string {
+  if (batch > 0 && batch < waiting) return `${verb} ${batch} of ${waiting} games`;
+  return `${verb} ${waiting} game${waiting === 1 ? '' : 's'}`.trim();
+}
+
 export async function analyzeAllGames(
   onProgress?: (progress: BatchAnalysisProgress) => void,
 ): Promise<number> {
@@ -2569,8 +2662,21 @@ export async function analyzeAllGames(
 
   let analyzed = 0;
   let completed = 0;
+  let failed = 0;
+  let poolExhausted = false;
   const sweepStartedAt = Date.now();
   const analyzedGameIds: string[] = [];
+  // A game that THROWS is skipped and named, never allowed to end the batch:
+  // one rejection used to reject the whole Promise.all, the run "ended" with
+  // a console line, and the other workers kept looping on a released pool.
+  const reportGameFailed = (gameId: string, err: unknown, path: 'pool' | 'sequential'): void => {
+    void logAppAudit({
+      kind: 'analysis-game-failed',
+      category: 'subsystem',
+      source: 'gameAnalysisService.analyzeAllGames',
+      summary: `game ${gameId} failed on the ${path} path and was skipped: ${err instanceof Error ? err.message : String(err)}`,
+    });
+  };
 
   // Per-game insight generation — runs INLINE as each game finishes analysis,
   // NOT batched at the very end. On a library with many games the end-of-run
@@ -2587,85 +2693,13 @@ export async function analyzeAllGames(
   // below — the review's `analyzeSingleGame` calls the same function now.
 
   try {
-    if (workers.length > 0) {
-      // Parallel: each worker grabs the next game from the queue
-      let nextGameIdx = 0;
-
-      const processNextGame = async (initialWorker: DedicatedWorker): Promise<void> => {
-        let worker = initialWorker;
-        while (nextGameIdx < games.length && !_abortAnalysis) {
-          await waitWhilePaused(); // a review's single-game analysis owns the CPU
-          if (_abortAnalysis) break;
-          const idx = nextGameIdx++;
-          const game = games[idx];
-
-          onProgress?.({
-            currentGame: completed + 1,
-            totalGames: games.length,
-            currentGameName: `${game.white} vs ${game.black}`,
-            phase: 'analyzing',
-          });
-
-          let worked: { annotations: MoveAnnotation[]; achievedDepth: number; stats: GameAnalysisStats } | null = null;
-          const gameStartedAt = Date.now();
-          try {
-            worked = await analyzeGameOnWorker(game, worker);
-          } catch (e) {
-            if (e instanceof WorkerWedgedError) {
-              // Dead worker → respawn a fresh one so it stops poisoning every
-              // subsequent game with full-timeout waits. Leave THIS game
-              // un-analyzed (not stamped fullyAnalyzed) so the next sweep retries
-              // it; advance the counter so the batch keeps moving (the "stuck at
-              // 1/629" fix). If respawn fails, drop this worker from the pool —
-              // the other workers carry the batch.
-              console.warn(`[GameAnalysis] worker wedged on ${game.id}; recycling`);
-              live.delete(worker);
-              try { worker.destroy(); } catch { /* already dead */ }
-              try {
-                worker = await spawnDedicatedWorker(nextGameIdx);
-                live.add(worker);
-              } catch {
-                completed++;
-                break;
-              }
-              completed++;
-              continue;
-            }
-            throw e;
-          }
-          if (worked && worked.annotations.length > 0) {
-            // Stamp what the search REACHED, not what it was asked for — the
-            // same correction the review path got. A game analysed shallow on
-            // a slow engine must stay re-analysable.
-            await db.games.update(game.id, {
-              annotations: worked.annotations, fullyAnalyzed: true, analysisDepth: worked.achievedDepth,
-            });
-            analyzedGameIds.push(game.id);
-            analyzed++;
-            // MEASURE the sweep (see GameAnalysisStats). One line per game, so
-            // throughput, cache effectiveness and reached depth are all readable
-            // straight off the audit stream instead of inferred from side effects.
-            const st = worked.stats;
-            void logAppAudit({
-              kind: 'analysis-game-done',
-              category: 'subsystem',
-              source: 'gameAnalysisService.analyzeAllGames',
-              summary: `game ${analyzed}/${games.length} in ${Date.now() - gameStartedAt}ms — ${st.plies} plies (${st.searched} searched, ${st.fromCache} cached, ${st.skippedBook} book), ${st.refined} refined, depth=${worked.achievedDepth}`,
-            });
-            // Generate this game's mistakes NOW — don't wait for the whole
-            // batch to finish (it often never does on a big library).
-            await generateInsightsForGame(game.id, game.source, worked.annotations);
-          }
-          completed++;
-        }
-      };
-
-      await Promise.all(workers.map((w) => processNextGame(w)));
-    } else {
-      // Fallback: single engine, sequential
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- mutated by visibilitychange handler
-      for (let i = 0; i < games.length && !_abortAnalysis; i++) {
+    // ONE sequential tail, shared by "the pool never spawned" and "the pool
+    // spawned and every worker was then lost" — the remainder of the package
+    // is still analysed, never silently dropped.
+    const runSequential = async (from: number): Promise<void> => {
+      for (let i = from; i < games.length && !_abortAnalysis; i++) {
         await waitWhilePaused(); // a review's single-game analysis owns the CPU
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- mutated by visibilitychange handler
         if (_abortAnalysis) break;
         const game = games[i];
         onProgress?.({
@@ -2674,17 +2708,90 @@ export async function analyzeAllGames(
           currentGameName: `${game.white} vs ${game.black}`,
           phase: 'analyzing',
         });
+        try {
+          const result = await analyzeGamePositions(game, undefined, BATCH_SHALLOW_BUDGET_MS);
+          if (result && result.annotations.length > 0) {
+            await db.games.update(game.id, {
+              annotations: result.annotations, fullyAnalyzed: true, analysisDepth: result.achievedDepth,
+            });
+            analyzedGameIds.push(game.id);
+            analyzed++;
+            await generateInsightsForGame(game.id, game.source, result.annotations);
+          }
+        } catch (err) {
+          failed++;
+          reportGameFailed(game.id, err, 'sequential');
+        }
+        completed++;
+      }
+    };
 
-        const result = await analyzeGamePositions(game, undefined, BATCH_SHALLOW_BUDGET_MS);
-        if (result && result.annotations.length > 0) {
+    if (workers.length > 0) {
+      const drained = await drainGameQueue(games, workers, live, {
+        shouldStop: () => _abortAnalysis,
+        waitWhilePaused,
+        respawn: (slot) => spawnDedicatedWorker(slot),
+        analyze: (game, worker) => analyzeGameOnWorker(game, worker),
+        onGameStart: (game, done) => onProgress?.({
+          currentGame: done + 1,
+          totalGames: games.length,
+          currentGameName: `${game.white} vs ${game.black}`,
+          phase: 'analyzing',
+        }),
+        onGameDone: async (game, worked, ms) => {
+          // Stamp what the search REACHED, not what it was asked for — the
+          // same correction the review path got. A game analysed shallow on
+          // a slow engine must stay re-analysable.
           await db.games.update(game.id, {
-            annotations: result.annotations, fullyAnalyzed: true, analysisDepth: result.achievedDepth,
+            annotations: worked.annotations, fullyAnalyzed: true, analysisDepth: worked.achievedDepth,
           });
           analyzedGameIds.push(game.id);
           analyzed++;
-          await generateInsightsForGame(game.id, game.source, result.annotations);
-        }
+          // MEASURE the sweep (see GameAnalysisStats). One line per game.
+          const st = worked.stats;
+          void logAppAudit({
+            kind: 'analysis-game-done',
+            category: 'subsystem',
+            source: 'gameAnalysisService.analyzeAllGames',
+            summary: `game ${analyzed}/${games.length} in ${ms}ms — ${st.plies} plies (${st.searched} searched, ${st.fromCache} cached, ${st.skippedBook} book), ${st.refined} refined, depth=${worked.achievedDepth}`,
+          });
+          // Generate this game's mistakes NOW — don't wait for the whole
+          // batch to finish (it often never does on a big library).
+          await generateInsightsForGame(game.id, game.source, worked.annotations);
+        },
+        onGameFailed: (game, err) => reportGameFailed(game.id, err, 'pool'),
+        onWorkerLost: (game, respawned) => {
+          void logAppAudit({
+            kind: 'analysis-worker-lost',
+            category: 'subsystem',
+            source: 'gameAnalysisService.analyzeAllGames',
+            summary: `worker wedged on ${game.id} — ${respawned ? 'recycled' : 'respawn FAILED, worker dropped'}; ${live.size} live`,
+          });
+        },
+      });
+      completed += drained.completed;
+      failed += drained.failed;
+      // 🔒 THE SILENT PARTIAL END (walk 2026-10-04 #17: "the first Analyze tap
+      // stalled at 5 games with no error; a second tap ran"). When a wedged
+      // worker's respawn fails it leaves the pool; when the LAST one left, the
+      // batch used to resolve as "finished" with the rest of the package never
+      // started — the button re-enabled and only a second tap moved on. The
+      // remainder now runs on the singleton, the same degrade the pool takes
+      // when it cannot spawn at all.
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- mutated by visibilitychange handler
+      if (drained.nextIdx < games.length && !_abortAnalysis) {
+        poolExhausted = true;
+        void logAppAudit({
+          kind: 'analysis-pool-exhausted',
+          category: 'subsystem',
+          source: 'gameAnalysisService.analyzeAllGames',
+          summary: `every pool worker was lost after ${drained.nextIdx}/${games.length} games — continuing the rest on the sequential singleton`,
+        });
+        await runSequential(drained.nextIdx);
       }
+    } else {
+      // Fallback: single engine, sequential
+      await runSequential(0);
     }
   } finally {
     document.removeEventListener('visibilitychange', handleVisibilityChange);
@@ -2698,9 +2805,12 @@ export async function analyzeAllGames(
       kind: 'analysis-sweep-summary',
       category: 'subsystem',
       source: 'gameAnalysisService.analyzeAllGames',
-      summary: `${stopped ? 'STOPPED' : 'finished'} after ${analyzed}/${games.length} games in ${(sweepMs / 1000).toFixed(1)}s`
+      summary: `${stopped ? 'STOPPED' : completed < games.length ? 'ENDED SHORT' : 'finished'} after ${analyzed}/${games.length} games in ${(sweepMs / 1000).toFixed(1)}s`
         + (analyzed > 0 ? ` — ${(sweepMs / analyzed / 1000).toFixed(1)}s/game` : '')
-        + ` (${workers.length} workers, ${WORKER_POOL_SIZE} configured)`,
+        + ` (${workers.length} workers, ${WORKER_POOL_SIZE} configured)`
+        + (failed > 0 ? `, ${failed} failed` : '')
+        + (poolExhausted ? ', pool exhausted → sequential' : ''),
+      details: JSON.stringify({ analyzed, completed, failed, batch: games.length, stopped, poolExhausted }),
     });
   }
 
@@ -2860,6 +2970,14 @@ export function runBackgroundAnalysis(): void {
   })
     .catch((err: unknown) => {
       console.warn('[GameAnalysis] Background analysis failed:', err);
+      // Never console-only: a run that dies here ends with the button
+      // re-enabled and nothing on screen (walk 2026-10-04 #17).
+      void logAppAudit({
+        kind: 'analysis-run-failed',
+        category: 'subsystem',
+        source: 'gameAnalysisService.runBackgroundAnalysis',
+        summary: `background analysis run failed: ${err instanceof Error ? err.message : String(err)}`,
+      });
     })
     .finally(() => {
       _backgroundRunning = false;
@@ -2897,7 +3015,7 @@ export function runBackgroundAnalysis(): void {
  *  against the position it belongs to — is exactly what needs a gate.
  *  See `gameAnalysisPool.test.ts`. */
 export const __testables = {
-  evaluateFensPooled, POOL_SPAWN_TIMEOUT_MS, ASM_POOL_SPAWN_TIMEOUT_MS, WORKER_POOL_SIZE, resolveWorkerPoolSize,
+  evaluateFensPooled, drainGameQueue, POOL_SPAWN_TIMEOUT_MS, ASM_POOL_SPAWN_TIMEOUT_MS, WORKER_POOL_SIZE, resolveWorkerPoolSize,
   resetAnalysisPool, WARM_PING_TIMEOUT_MS, BATCH_SHALLOW_DEPTH, BATCH_SHALLOW_BUDGET_MS, BATCH_POSITION_BUDGET_MS,
   REVIEW_DEEP_DEPTH, REVIEW_POSITION_BUDGET_MS, BATCH_GRADE_FLOOR_CP, REVIEW_MAX_DEEP_PLIES,
 };

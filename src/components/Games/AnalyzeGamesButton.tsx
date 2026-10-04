@@ -25,8 +25,7 @@
  */
 import { useEffect, useState } from 'react';
 import { Sparkles } from 'lucide-react';
-import { db } from '../../db/schema';
-import { ANALYSIS_PACKAGE_SIZE, gameNeedsAnalysis, runBackgroundAnalysis } from '../../services/gameAnalysisService';
+import { analyzeLabel, planAnalysisBatch, runBackgroundAnalysis } from '../../services/gameAnalysisService';
 import { useAppStore } from '../../stores/appStore';
 import { logAppAudit } from '../../services/appAuditor';
 
@@ -53,21 +52,25 @@ export function AnalyzeGamesButton({
   const bgRunning = useAppStore((s) => s.backgroundAnalysisRunning);
   const bgProgress = useAppStore((s) => s.backgroundAnalysisProgress);
   const [unanalyzedCount, setUnanalyzedCount] = useState<number | null>(null);
+  const [batchSize, setBatchSize] = useState<number>(0);
 
-  // Refresh the unanalyzed count on mount + whenever a background
-  // run finishes (so the button can drop to "All games analyzed"
-  // without a manual refresh). Cheap — single Dexie scan, runs in
-  // milliseconds.
+  // Refresh on mount + whenever a background run finishes (so the button can
+  // drop to "All games analyzed" without a manual refresh). The label reads
+  // the batch the picker will ACTUALLY run (`planAnalysisBatch` — the same
+  // filter and the same home-openings-first picker as the run), never the
+  // package cap: the cap does not bind the home-opening games, so "Analyze 50
+  // of 937" started a batch of 184 (walk 2026-10-04 #15). The count also used
+  // to include depth-stale analysed games the batch never takes.
   useEffect(() => {
     let cancelled = false;
     async function refresh(): Promise<void> {
       try {
-        const games = await db.games.toArray();
+        const plan = await planAnalysisBatch();
         if (cancelled) return;
-        const needing = games.filter((g) => !g.isMasterGame && gameNeedsAnalysis(g)).length;
-        setUnanalyzedCount(needing);
+        setUnanalyzedCount(plan.waiting);
+        setBatchSize(plan.batch);
       } catch {
-        if (!cancelled) setUnanalyzedCount(0);
+        if (!cancelled) { setUnanalyzedCount(0); setBatchSize(0); }
       }
     }
     void refresh();
@@ -94,14 +97,12 @@ export function AnalyzeGamesButton({
     return null;
   }
 
-  // Idle label. Analysis runs in packages of ANALYSIS_PACKAGE_SIZE and stops,
-  // so when more than one package is waiting, say "Analyze 50 of 831 games" —
-  // the user learns each tap clears the next 50 and can watch the total fall.
+  // Idle label. Analysis runs in packages and stops, so when the next tap will
+  // not clear everything, say "Analyze 184 of 937 games" — the size of THIS
+  // tap's batch, so the student can watch the total fall by exactly that.
   const count = unanalyzedCount ?? 0;
   const verb = label ?? 'Analyze';
-  const idleText = count > ANALYSIS_PACKAGE_SIZE
-    ? `${verb} ${ANALYSIS_PACKAGE_SIZE} of ${count} games`
-    : `${verb} ${count} game${count === 1 ? '' : 's'}`.trim();
+  const idleText = analyzeLabel(verb, batchSize, count);
 
   const buttonText = isAnalyzing
     ? bgProgress

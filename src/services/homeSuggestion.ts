@@ -29,7 +29,7 @@ import { isFixtureGame } from './fixtureGames';
 import { useAppStore } from '../stores/appStore';
 import { logAppAudit } from './appAuditor';
 import { loadUpNext, type UpNextState } from './upNextLoader';
-import type { UpNextPick } from './upNextPicker';
+import type { UpNextPick, PickKind, ThinkingSignal } from './upNextPicker';
 
 export type SuggestionFamily = 'start' | 'upload' | 'tactics' | 'learn' | 'openings';
 
@@ -63,8 +63,28 @@ const LEARN_PICK: UpNextPick = {
   reason: 'Play a game and your coach talks you through it, and speaks up where you tend to slip.',
 };
 
-const TACTICS_IMPORTANCE: Partial<Record<UpNextPick['kind'], number>> = {
+/** How important a Tactics-hub bite is, by kind. EXHAUSTIVE over `PickKind`
+ *  (it used to be a `Partial`, so a new kind silently scored 50): a new kind
+ *  fails to compile until it is answered. Kinds that never live on a
+ *  `tactics:*` hub are filtered out by hub before this is read; they carry 0
+ *  so the table is total, never a guess. */
+const TACTICS_IMPORTANCE: Record<PickKind, number> = {
   'game-slip': 85, grown: 75, weakness: 70, 'deep-run': 55, 'warm-up': 50, long: 50,
+  // — not Tactics-hub kinds (ranked by their own family below) —
+  opening: 0, 'free-opening': 0, start: 0, upload: 0, learn: 0, thinking: 0,
+};
+
+/** The Learn family's floor: a game the coach talks the student through. */
+const LEARN_IMPORTANCE = 60;
+
+/** "Learn how to think" ranks off the student's own heat map on the tier-1
+ *  habits (computed, never rolled): a RED habit is a hole behind lost games —
+ *  above a puzzle weakness, below last game's slip; GREY means teach it, so it
+ *  edges past a plain coached game; GREEN is proven and is never offered (the
+ *  picker emits nothing), so it has no row here. */
+const THINKING_IMPORTANCE: Record<Exclude<ThinkingSignal['state'], 'green'>, number> = {
+  red: 78,
+  grey: LEARN_IMPORTANCE + 2,
 };
 /** A line due for review outranks a new one; both below a fresh game slip. */
 const OPENINGS_IMPORTANCE = (p: UpNextPick): number =>
@@ -79,10 +99,17 @@ export function rankFamilies(i: SuggestionInput): FamilyCandidate[] {
     out.push({ family: 'upload', importance: i.ownGames === 0 ? 90 : 40, pick: UPLOAD_PICK(i.ownGames === 0) });
   }
   const tactics = i.state.ranked.find((p) => p.hub.startsWith('tactics:') && !i.state.done.has(p.key));
-  if (tactics) out.push({ family: 'tactics', importance: TACTICS_IMPORTANCE[tactics.kind] ?? 50, pick: tactics });
+  if (tactics) out.push({ family: 'tactics', importance: TACTICS_IMPORTANCE[tactics.kind], pick: tactics });
   const opening = i.state.ranked.find((p) => p.hub === 'openings' && !i.state.done.has(p.key));
   if (opening) out.push({ family: 'openings', importance: OPENINGS_IMPORTANCE(opening), pick: opening });
-  out.push({ family: 'learn', importance: 60, pick: LEARN_PICK });
+  // The Learn family offers ONE thing: the thinking lesson when the record
+  // ranks it above a plain coached game, else the coached game.
+  const thinking = i.state.ranked.find((p) => p.kind === 'thinking' && !i.state.done.has(p.key));
+  const t = i.state.thinking;
+  const thinkingImportance = thinking && t && t.state !== 'green' ? THINKING_IMPORTANCE[t.state] : null;
+  out.push(thinking && thinkingImportance !== null && thinkingImportance > LEARN_IMPORTANCE
+    ? { family: 'learn', importance: thinkingImportance, pick: thinking }
+    : { family: 'learn', importance: LEARN_IMPORTANCE, pick: LEARN_PICK });
   return out.sort((a, b) => b.importance - a.importance);
 }
 
