@@ -1231,6 +1231,23 @@ const REVIEW_MAX_DEEP_PLIES = 24;
  *  the ANALYSIS_DEPTH stamp it already claims. Still below BEST_MOVE_DEPTH
  *  (18): the review is not the drill-solution search. */
 const REVIEW_DEEP_DEPTH = 16;
+/** The grade of a move once the position before it is known to be a forced
+ *  MATE for the mover (clean-pass review walk 2026-10-04, G1 29.Bxd5: graded
+ *  an INACCURACY off a +12.49 read of the position before, while the refined
+ *  read was mate in 11 and the move left +6.58 — a long mate the read after
+ *  cannot see past). Null when the refined read is not the mover's mate. */
+export function regradeAgainstMate(
+  refinedBestWhiteEval: number | null | undefined,
+  whiteEvalAfter: number | null | undefined,
+  moverIsWhite: boolean,
+  fenBefore?: string | null,
+  san?: string | null,
+): MoveClassification | null {
+  if (!moverHadMate(refinedBestWhiteEval, moverIsWhite) || whiteEvalAfter == null) return null;
+  const cost = Math.max(0, (moverIsWhite ? 1 : -1) * (capEval(refinedBestWhiteEval as number) - capEval(whiteEvalAfter)));
+  return classifyCpLoss(cost, refinedBestWhiteEval, whiteEvalAfter, moverIsWhite, san?.includes('#'), fenBefore ?? null, san ?? null);
+}
+
 /** Depth a "you gave up the mate" verdict is confirmed at — a longer mate the
  *  played move keeps sits past the review's own horizon. */
 const MATE_CONFIRM_DEPTH = 24;
@@ -2110,6 +2127,12 @@ async function analyzeGamePositions(
                 classification = 'good';
                 bestMove = null;
               }
+            } else {
+              // No one-search price (it declines mate lines): when the refined
+              // read of the position before is a MATE, grade against that, not
+              // against the shallow centipawn read it replaced.
+              const regraded = regradeAgainstMate(refinedBestMoveEval, evalAfter, isWhiteMove, fens[moveIdx], moves[moveIdx]);
+              if (regraded === 'good') { classification = 'good'; bestMove = null; } else if (regraded) classification = regraded;
             }
           }
           // A MATE GIVEN UP IS CONFIRMED, NEVER READ OFF A HORIZON (clean-pass

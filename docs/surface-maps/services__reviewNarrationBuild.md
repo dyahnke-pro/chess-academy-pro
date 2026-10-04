@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**146 lines · 6 exports · 4 importers · 3 tests · 0 audits**
+**147 lines · 6 exports · 4 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -45,7 +45,7 @@
 
 ### `prebuildReviewNarration` (function) — 2 call sites
 - `src/components/Coach/CoachReviewSessionPage.tsx:157`
-- `src/services/gameAnalysisService.ts:2735`
+- `src/services/gameAnalysisService.ts:2767`
 
 ## Tests
 

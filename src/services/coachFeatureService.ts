@@ -721,6 +721,9 @@ export interface ReviewMoveInput {
   pv?: { afterPlayed: string[]; afterBest: string[]; /** The depth the lines were searched to (the shallower end); absent on older records. */ depth?: number };
   /** One-search move cost (MoveAnnotation.costCp) — read through `recordedMoveCost`. */
   costCp?: number;
+  /** The best move's eval FROM THE SAME SEARCH as `costCp` (MoveAnnotation.
+   *  bestMoveEval) — the pair a cost is measured against. */
+  bestMoveEval?: number;
 }
 
 // `parseSegmentsJson` + `buildPerMoveBlock` deleted in ship-3 — both
@@ -920,15 +923,21 @@ function attributeGameFundamentals(
         // white-POV) — powers the eval/PV-gated detectors (overvalued attack,
         // poisoned pawn, botched conversion). Absent on games analysed before
         // the fix.
-        evalBefore: typeof m.preMoveEval === 'number' ? (moverColor === 'white' ? m.preMoveEval : -m.preMoveEval) : undefined,
-        // ONE MOVE, ONE COST (clean-pass review walk 2026-10-04, G2 27…Rfe8:
-        // "throws away about 2 points of your edge" beside the verdict's
-        // "costing about 1.0 points"). The after-eval is the before-eval less
-        // the move's recorded cost, so every figure the ply speaks is that cost.
-        evalAfterPlayed: (() => {
-          const cost = recordedMoveCost(m, moverColor);
-          if (typeof m.preMoveEval === 'number' && cost !== null) return (moverColor === 'white' ? m.preMoveEval : -m.preMoveEval) - cost;
-          return typeof m.evaluation === 'number' ? (moverColor === 'white' ? m.evaluation : -m.evaluation) : undefined;
+        // ONE MOVE, ONE COST, ONE SEARCH (clean-pass review walk 2026-10-04:
+        // G2 27…Rfe8 "throws away about 2 points" beside "costing about 1.0",
+        // and G1 29.Bxd5 "throws away a winning position" at +6.58 — the
+        // shallow read before minus a cost from another search). With a
+        // one-search cost, both sides come from that search: its best eval,
+        // and that less the cost. Otherwise the two reads the ply has.
+        ...(() => {
+          const sign = moverColor === 'white' ? 1 : -1;
+          if (typeof m.costCp === 'number' && typeof m.bestMoveEval === 'number' && !isMateEval(m.bestMoveEval)) {
+            return { evalBefore: m.bestMoveEval * sign, evalAfterPlayed: m.bestMoveEval * sign - m.costCp };
+          }
+          return {
+            evalBefore: typeof m.preMoveEval === 'number' ? m.preMoveEval * sign : undefined,
+            evalAfterPlayed: typeof m.evaluation === 'number' ? m.evaluation * sign : undefined,
+          };
         })(),
       }, why);
     } catch { fundamentals = []; }

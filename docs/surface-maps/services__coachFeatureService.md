@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5372 lines · 38 exports · 45 importers · 43 tests · 5 audits**
+**5381 lines · 38 exports · 45 importers · 43 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -86,7 +86,7 @@
 - `src/services/coachFeatureService.test.ts:257`
 - `src/services/coachFeatureService.test.ts:277`
 - `src/services/coachFeatureService.test.ts:289`
-- `src/services/gameAnalysisService.ts:2230`
+- `src/services/gameAnalysisService.ts:2253`
 
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -155,7 +155,7 @@
 - `src/services/coachFeatureService.test.ts:15`
 - `src/services/coachFeatureService.test.ts:24`
 
-### `buildReviewSegments` (function) — 67 call sites
+### `buildReviewSegments` (function) — 68 call sites
 - `src/components/Coach/CoachGameReview.tsx:1882`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -207,8 +207,9 @@
 - `src/services/coachFeatureService.trade.test.ts:18`
 - `src/services/loopCloses.review.integration.test.ts:89`
 - `src/services/methodBeat.test.ts:70`
-- `src/services/oneCostPerMove.test.ts:33`
-- `src/services/oneCostPerMove.test.ts:37`
+- `src/services/oneCostPerMove.test.ts:34`
+- `src/services/oneCostPerMove.test.ts:38`
+- `src/services/oneCostPerMove.test.ts:47`
 - `src/services/planArc.test.ts:137`
 - `src/services/reviewCorpusNote.test.ts:40`
 - `src/services/reviewForesight.test.ts:52`
@@ -323,7 +324,7 @@
 - `src/services/reviewDeepThreat.test.ts:114`
 - `src/services/reviewDeepThreat.test.ts:150`
 - `src/services/reviewFullGameNarration.harness.test.ts:157`
-- `src/services/reviewNarrationBuild.ts:88`
+- `src/services/reviewNarrationBuild.ts:89`
 - `src/services/reviewRealSweep.test.ts:187`
 - `src/services/reviewRefuted.test.ts:26`
 - `src/services/reviewRefuted.test.ts:33`

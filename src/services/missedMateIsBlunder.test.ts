@@ -72,3 +72,23 @@ describe('only a short mate given up is a blunder by itself', () => {
     expect(mateContext({ isMate: true, mateIn: -2 }, { isMate: false, mateIn: null }, 'black').missedMate).toBe(2);
   });
 });
+
+// Clean-pass review walk 2026-10-04, G1 29.Bxd5: graded an INACCURACY off the
+// shallow read of the position before (+12.49), while the deeper read was mate in
+// 11 (Qxd5) and the move left +6.58 — and the one-search price declines mate
+// lines, so nothing re-graded it.
+describe('a move is graded against the refined mate before it', () => {
+  it('the defect: against the shallow +12.49, Bxd5 reads as a slip', async () => {
+    const { classifyCpLoss: grade } = await import('./gameAnalysisService');
+    expect(grade(591, 1249, 658, true)).toBe('inaccuracy');
+  });
+  it('against mate in 11 it keeps the decisive range → not flagged', async () => {
+    const { regradeAgainstMate } = await import('./gameAnalysisService');
+    expect(regradeAgainstMate(mateEvalFor(11), 658, true)).toBe('good');
+  });
+  it('a short mate given up is still the blunder; no mate before → no say', async () => {
+    const { regradeAgainstMate } = await import('./gameAnalysisService');
+    expect(regradeAgainstMate(mateEvalFor(2), 658, true)).toBe('blunder');
+    expect(regradeAgainstMate(1249, 658, true)).toBeNull();
+  });
+});

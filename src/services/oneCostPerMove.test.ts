@@ -9,7 +9,7 @@ import { buildReviewSegments, type ReviewMoveInput } from './coachFeatureService
 // one-search cost; the fundamental subtracted two evals from different searches.
 const PGN = readFileSync('src/services/__fixtures__/VRUh4Qgh.pgn', 'utf8');
 
-function inputs(costCp: number | null): ReviewMoveInput[] {
+function inputs(costCp: number | null, bestMoveEval?: number): ReviewMoveInput[] {
   const g = new Chess(); g.loadPgn(PGN);
   const sans = g.history().slice(0, 54);
   const c = new Chess();
@@ -23,6 +23,7 @@ function inputs(costCp: number | null): ReviewMoveInput[] {
       classification: here ? 'inaccuracy' : 'good',
       preMoveEval: here ? -300 : 0, evaluation: here ? -80 : 0,
       ...(here && costCp !== null ? { costCp } : {}),
+      ...(here && bestMoveEval !== undefined ? { bestMoveEval } : {}),
       bestMove: here ? 'g8h8' : null,
     } as unknown as ReviewMoveInput;
   });
@@ -34,9 +35,16 @@ describe('one move, one cost', { timeout: 120_000 }, () => {
     expect(segs[53].narration ?? '').toMatch(/about 2 points of your edge/);
   });
   it('with the recorded cost (1.0) the move left +2.0 — no "rushed the win", one figure only', () => {
-    const segs = buildReviewSegments(inputs(100), 'black', null, true, 1800, [], undefined, 'g');
+    const segs = buildReviewSegments(inputs(100, -300), 'black', null, true, 1800, [], undefined, 'g');
     const text = segs[53].narration ?? '';
     expect(text).not.toMatch(/of your edge/);
     expect(text).toMatch(/costing about 1\.0 points/);
+  });
+  it('a cost is never subtracted from a read of another search', () => {
+    // Shallow read before: Black +3.0. The one search: best +6.0, this move
+    // 2.5 below it (+3.5 — still winning). Old feed: 3.0 − 2.5 = +0.5 → "rushed".
+    const mixed = inputs(250, -600).map((x, i) => (i === 53 ? { ...x, preMoveEval: -300 } : x));
+    const segs = buildReviewSegments(mixed, 'black', null, true, 1800, [], undefined, 'g');
+    expect(segs[53].narration ?? '').not.toMatch(/of your edge|winning position/);
   });
 });

@@ -51,6 +51,7 @@ export function reviewMoveInputsFrom(moves: readonly CoachGameMove[]): ReviewMov
     // deep lines (clean-pass walk 2026-10-04). Older records carry no depth.
     ...(m.pv && (m.pv.depth ?? TRUSTED_LINE_DEPTH) >= TRUSTED_LINE_DEPTH ? { pv: m.pv } : {}),
     ...(typeof m.costCp === 'number' ? { costCp: m.costCp } : {}),
+    ...(typeof m.bestMoveEval === 'number' ? { bestMoveEval: m.bestMoveEval } : {}),
   }));
 }
 
