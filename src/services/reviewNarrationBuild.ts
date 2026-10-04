@@ -17,6 +17,7 @@ import { useAppStore } from '../stores/appStore';
 import { resolvePlayerColor } from './playerIdentity';
 import { adaptGameRecordExplained } from './reviewGameAdapter';
 import { resolveCoachNarration } from '../utils/coachNarration';
+import { TRUSTED_LINE_DEPTH } from './engineConstants';
 import { generateReviewNarration, type ReviewMoveInput, type ReviewNarration } from './coachFeatureService';
 import { getCachedReviewNarration, storeReviewNarration, reviewNarrationCacheKey } from './reviewNarrationCache';
 import { logAppAudit } from './appAuditor';
@@ -45,7 +46,10 @@ export function reviewMoveInputsFrom(moves: readonly CoachGameMove[]): ReviewMov
     preMoveEval: m.preMoveEval,
     bestMove: m.bestMove,
     fenAfter: m.fen,
-    ...(m.pv ? { pv: m.pv } : {}),
+    // A line from the quick sweep is not one a claim may rest on: the review
+    // narrates before its deep dive lands, and the deepen rebuilds with the
+    // deep lines (clean-pass walk 2026-10-04). Older records carry no depth.
+    ...(m.pv && (m.pv.depth ?? TRUSTED_LINE_DEPTH) >= TRUSTED_LINE_DEPTH ? { pv: m.pv } : {}),
     ...(typeof m.costCp === 'number' ? { costCp: m.costCp } : {}),
   }));
 }

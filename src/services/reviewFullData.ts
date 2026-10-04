@@ -51,7 +51,7 @@ import { renderFundamentalVerdict } from './principleVoice';
 import { betterMoveReason, priorMoveLeadingTo, punishmentOf, toStudentSeat } from './inaccuracyCall';
 import { andList } from '../utils/andList';
 import { stemKeyOf } from '../utils/rotateStem';
-import { developedMinorCount, minorsAtHome } from './development';
+import { minorsAtHome } from './development';
 import { slipAnswerText, studentMovePoint } from './playCommentary';
 import { theirMoveCost } from './theirMoveCost';
 
@@ -91,6 +91,9 @@ function openCentralFiles(chess: Chess): number {
 /** `seat` is required: the reason is spoken to the student about THEIR break or
  *  about the opponent's, and the review walk of 2026-09-26 told a student their
  *  OPPONENT's …dxe5 opened the centre "before you're ready". */
+/** Past this move a central break is judged on the position, not on
+ *  development — the opening is over. */
+const OPENING_BREAK_MAX_MOVE = 15;
 export function prematureBreakWhy(fenBefore: string, san: string, seat: 'student' | 'opponent'): string | null {
   try {
     const before = new Chess(fenBefore);
@@ -106,7 +109,12 @@ export function prematureBreakWhy(fenBefore: string, san: string, seat: 'student
     if ((mv.to[0] !== 'd' && mv.to[0] !== 'e') || (destRank !== 4 && destRank !== 5)) return null;
     // Also honour a genuine immediate file-open, but don't require it.
     void openCentralFiles;
-    const behindDev = developedMinorCount(before, mover) < developedMinorCount(before, enemy);
+    // DEVELOPMENT IS AN OPENING FACT, counted by pieces still AT HOME (clean-
+    // pass review walk 2026-10-04, G1 29…e5: "a central break still behind in
+    // development" — Black simply had fewer minors left after the trades). A
+    // side with fewer pieces is not behind in development.
+    if (before.moveNumber() > OPENING_BREAK_MAX_MOVE) return null;
+    const behindDev = minorsAtHome(before, mover).length > minorsAtHome(before, enemy).length;
     const kingLag = !kingCastled(before, mover) && kingCastled(before, enemy);
     if (!behindDev && !kingLag) return null;                     // the lag must be real
     // Name the CONCRETE lag Danya names ("he doesn't have his bishop out"),

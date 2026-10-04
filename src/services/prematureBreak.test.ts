@@ -34,3 +34,12 @@ describe('prematureBreakWhy — the grounded "why it\'s a mistake" (David 2026-0
     expect(prematureBreakWhy(at('e4 e5 Nf3 Nc6 Bc4 Bc5'), 'Ng5', 'student')).toBeNull();
   });
 });
+
+// Clean-pass review walk 2026-10-04, G1 29…e4: "a central break still behind
+// in development — premature" — Black had simply fewer minors left after the
+// trades, at move 29. Development is an opening fact, counted at home.
+describe('prematureBreakWhy is an opening read', () => {
+  it('says nothing at move 29 where a side just has fewer pieces', () => {
+    expect(prematureBreakWhy('Q1Rnk2r/6pp/5q2/3Bp3/8/P4N2/5PPP/6K1 b - - 0 29', 'e4', 'opponent')).toBeNull();
+  });
+});

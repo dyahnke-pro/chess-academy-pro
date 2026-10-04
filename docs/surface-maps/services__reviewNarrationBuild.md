@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**142 lines · 6 exports · 3 importers · 2 tests · 0 audits**
+**146 lines · 6 exports · 4 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,17 +15,19 @@
 - `src/components/Coach/CoachGameReview.tsx`
 - `src/components/Coach/CoachReviewSessionPage.tsx`
 - `src/services/reviewNarrationBuild.test.ts`
+- `src/services/shallowLinesNotNarrated.test.ts`
 
 ## Exports and every call site
 
 ### `isReviewUncapped` (function) — 4 call sites
-- `src/components/Coach/CoachGameReview.tsx:617`
-- `src/components/Coach/CoachGameReview.tsx:1294`
-- `src/components/Coach/CoachGameReview.tsx:1751`
-- `src/components/Coach/CoachGameReview.tsx:2519`
+- `src/components/Coach/CoachGameReview.tsx:616`
+- `src/components/Coach/CoachGameReview.tsx:1293`
+- `src/components/Coach/CoachGameReview.tsx:1747`
+- `src/components/Coach/CoachGameReview.tsx:2517`
 
-### `reviewMoveInputsFrom` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:593`
+### `reviewMoveInputsFrom` (function) — 2 call sites
+- `src/components/Coach/CoachGameReview.tsx:592`
+- `src/services/shallowLinesNotNarrated.test.ts:17`
 
 ### `ReviewNarrationRequest` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -34,7 +36,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getOrBuildReviewNarration` (function) — 6 call sites
-- `src/components/Coach/CoachGameReview.tsx:625`
+- `src/components/Coach/CoachGameReview.tsx:624`
 - `src/services/reviewNarrationBuild.test.ts:38`
 - `src/services/reviewNarrationBuild.test.ts:45`
 - `src/services/reviewNarrationBuild.test.ts:47`
@@ -43,12 +45,13 @@
 
 ### `prebuildReviewNarration` (function) — 2 call sites
 - `src/components/Coach/CoachReviewSessionPage.tsx:157`
-- `src/services/gameAnalysisService.ts:2679`
+- `src/services/gameAnalysisService.ts:2735`
 
 ## Tests
 
 - `src/services/prepareReview.test.ts`
 - `src/services/reviewNarrationBuild.test.ts`
+- `src/services/shallowLinesNotNarrated.test.ts`
 
 ## Audits that reach it
 

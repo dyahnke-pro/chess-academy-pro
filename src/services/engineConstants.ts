@@ -186,3 +186,10 @@ export function moverGaveUpMate(
   if (preEval * sign <= 0) return false;
   return !(postEval != null && isMateEval(postEval) && postEval * sign > 0);
 }
+
+/** The shallowest search an engine LINE may come from before a narration rests
+ *  a claim on it (what a line wins, where a plan leads, the blow it delivers):
+ *  deeper than the review's quick sweep (`BATCH_SHALLOW_DEPTH` = 12). The deep
+ *  dive aims at 16 and, time-budgeted on a phone, may stop short of it — any
+ *  re-search past the sweep counts. */
+export const TRUSTED_LINE_DEPTH = 13;

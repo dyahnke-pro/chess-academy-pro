@@ -85,7 +85,7 @@
 - `src/services/coachFeatureService.test.ts:257`
 - `src/services/coachFeatureService.test.ts:277`
 - `src/services/coachFeatureService.test.ts:289`
-- `src/services/gameAnalysisService.ts:2217`
+- `src/services/gameAnalysisService.ts:2221`
 
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -320,7 +320,7 @@
 - `src/services/reviewDeepThreat.test.ts:114`
 - `src/services/reviewDeepThreat.test.ts:150`
 - `src/services/reviewFullGameNarration.harness.test.ts:157`
-- `src/services/reviewNarrationBuild.ts:84`
+- `src/services/reviewNarrationBuild.ts:88`
 - `src/services/reviewRealSweep.test.ts:187`
 - `src/services/reviewRefuted.test.ts:26`
 - `src/services/reviewRefuted.test.ts:33`

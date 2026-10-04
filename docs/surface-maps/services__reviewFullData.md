@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1344 lines · 9 exports · 10 importers · 11 tests · 0 audits**
+**1352 lines · 9 exports · 10 importers · 11 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -25,12 +25,13 @@
 
 ## Exports and every call site
 
-### `prematureBreakWhy` (function) — 6 call sites
+### `prematureBreakWhy` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:1073`
 - `src/services/prematureBreak.test.ts:15`
 - `src/services/prematureBreak.test.ts:25`
 - `src/services/prematureBreak.test.ts:30`
 - `src/services/prematureBreak.test.ts:34`
+- `src/services/prematureBreak.test.ts:43`
 - `src/services/reviewWalk2065.test.ts:33`
 
 ### `MoveFactContext` (interface) — 0 call sites

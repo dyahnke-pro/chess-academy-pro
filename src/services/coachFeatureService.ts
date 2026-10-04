@@ -714,7 +714,7 @@ export interface ReviewMoveInput {
   bestMove: string | null;
   fenAfter: string;
   /** Persisted engine lines (UCI) for a flagged ply — corroboration only. */
-  pv?: { afterPlayed: string[]; afterBest: string[] };
+  pv?: { afterPlayed: string[]; afterBest: string[]; /** The depth the lines were searched to (the shallower end); absent on older records. */ depth?: number };
   /** One-search move cost (MoveAnnotation.costCp) — read through `recordedMoveCost`. */
   costCp?: number;
 }

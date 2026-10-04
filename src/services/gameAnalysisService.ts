@@ -1667,7 +1667,7 @@ export async function analyzeGameOnWorker(
       // the same way with `bestMoveEqualsUci`).
       ...((classification === 'inaccuracy' || classification === 'mistake' || classification === 'blunder')
         && (pvs[moveIdx + 1]?.length ?? 0) > 0
-        ? { pv: { afterPlayed: pvs[moveIdx + 1], afterBest: [] as string[] } }
+        ? { pv: { afterPlayed: pvs[moveIdx + 1], afterBest: [] as string[], depth: depthAt[moveIdx + 1] ?? 0 } }
         : {}),
     });
   }
@@ -2141,7 +2141,11 @@ async function analyzeGamePositions(
         classification,
         comment: null,
         ...(costCp !== null ? { costCp } : {}),
-        ...(flaggedHere && (pvAfterPlayed.length || pvAfterBest.length) ? { pv: { afterPlayed: pvAfterPlayed, afterBest: pvAfterBest } } : {}),
+        // The DEPTH rides with the lines: the review narrates before its deep
+        // dive lands, and a depth-12 line is not one a claim may rest on (clean-
+        // pass walk 2026-10-04: "axb4 — it would win two pawns" off axb4 Ne7
+        // Bxa4, where Black simply takes back on b4).
+        ...(flaggedHere && (pvAfterPlayed.length || pvAfterBest.length) ? { pv: { afterPlayed: pvAfterPlayed, afterBest: pvAfterBest, depth: Math.min(depthAt[moveIdx] ?? 0, depthAt[moveIdx + 1] ?? 0) } } : {}),
       });
     }
   } finally {
