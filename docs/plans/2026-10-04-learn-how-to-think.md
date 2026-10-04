@@ -449,8 +449,22 @@ consumer, not the owner.
   parser), switch on ≥95% measured accuracy on real + held-out questions; the
   `audit-coach-all-questions-prod` matrix + the lesson question set run against
   every surface.
-- **Kids (`/kid/*`) keep their own safe path** (`getKidLlmResponse`, kid rules)
-  unless David decides otherwise.
+- **Kids (`/kid/*`) are unified too (David 2026-10-04), as a DECLARED SURFACE,
+  not a merged one.** Same door, same parser, same board computers. The kid
+  contract is declared once in the surface table, so it is enforced in one place
+  instead of trusted to a separate path:
+  - phrasing goes through the kid seam (`getKidLlmResponse`: no personality, the
+    kid-safety prompt, Ruth default voice); the adult phrasing path is
+    unreachable from the kid surface;
+  - no SAN in kid replies, praise only on milestones (kid rules 5–6);
+  - **kid memory is its own** — the kid surface never reads or writes the coach's
+    `ConversationState`, weakness spine or curriculum (kid rule 10);
+  - kid answerers are limited to what kid surfaces need (hints, "where can this
+    piece go", "is it safe"); every other kind returns a kid-safe "let's look at
+    the board" line, never an adult answer;
+  - the kid hallucination audit (`audit-kid-llm-hallucination.mjs`) runs against
+    the door, and a gate fails if a kid route can reach adult phrasing or coach
+    state.
 
 ## Prerequisite: ONE engine strength (David 2026-10-04: "we need to unify the strength of the engines")
 
@@ -502,8 +516,9 @@ Built BEFORE the lesson game (P-strength), because steering needs the one streng
     what did that move stop guarding?"), ranked by the one door; narrations relate
     previous lessons to the live game.
   - Play with Coach: stays SILENT (locked 2026-09-23). Lessons tie in by the
-    record (skill used / missed), by review afterwards, and (David's call, open) a
-    quietly steered opponent.
+    record (skill used / missed), by review afterwards, and a quietly steered
+    opponent (David 2026-10-04: yes) — purpose `lesson` on the one engine, inside
+    the strength window, never a word spoken.
   - Review: missed moments asked as the lesson question.
   - Tactics: lesson skills drive the puzzle queue and the Setup Trainer first miss.
   - Dashboard: lessons in Up next and the Home suggestion; progress on the heat map.
@@ -573,6 +588,5 @@ Prerequisites first, because every phase consumes them:
 
 ## Open questions for David
 
-1. Play's opponent: may it quietly steer toward lesson moments? (Play still says
-   nothing.)
-2. Kids (`/kid/*`): keep their own safe question path? (Plan assumes yes.)
+None open. Answered 2026-10-04: Play's opponent steers quietly (yes); kids are
+unified as a declared surface (above).
