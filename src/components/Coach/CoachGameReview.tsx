@@ -33,10 +33,9 @@ import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { buildGuidedFindChallenge, buildHoldChallenge, judgeGuidedFindAttempt, GUIDED_FIND_MIN_EVAL_CP, type GuidedFindChallenge } from '../../services/guidedFindTheMove';
 import { buildTrapQuestion, judgeTrapAnswer, type TrapQuestion, type TrapChoiceId } from '../../services/reviewTrapQuestion';
 import { selectReviewQuestions, type ReviewQuestionMoment } from '../../services/reviewQuestionPlan';
-import { computePvLine, renderPlyFactLine, plyFactsString, type PvLine } from '../../services/pvPlayback';
-import { buildReviewMoveTeaching } from '../../services/reviewMoveTeaching';
-import { firstTacticInvariant } from '../../services/dnaLineNarrator';
-import { explainTemptingCapture } from '../../services/reviewTeachingPoints';
+import { computePvLine, type PvLine } from '../../services/pvPlayback';
+import { projectedLineVoice } from '../../services/projectedLineVoice';
+import { opponentReplySentence } from '../../services/puzzleConceptExplanation';
 import { judgeSequenceAttempt, moverPlies, type SequenceVerdict } from '../../services/sequenceChallenge';
 import { resolveReachState, reachAskDepth } from '../../services/reachRating';
 import { voiceFacts } from '../../services/coachApi';
@@ -1642,14 +1641,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       pvPrefetchRef.current.set(ply, line);
       if (!line) return;
       // Prefetch the spoken lines too (per-ply voiceFacts; quiet plies stay
-      // null → silent). Fire-and-forget — playback falls back per ply.
-      const lineInvariant = firstTacticInvariant(line.plies);
-      void Promise.all(line.plies.map(async (p, idx) => {
-        let facts = plyFactsString(p);
+      // null → silent). Fire-and-forget — playback falls back per ply. The
+      // line is read AS A LINE (`projectedLineVoice`): the student's moves
+      // carry their facts and the line's motif once, the replies are stated
+      // plainly, and nothing is said past the line's point.
+      const computed = projectedLineVoice(line.plies, playerColor, { teachQuiet: false, explainTemptation: false });
+      void Promise.all(line.plies.map(async (_p, idx) => {
+        const facts = computed[idx];
         if (!facts) return null;
-        // The first landed tactic carries its computed WHY (one voice with the
-        // live briefing / Learn — David 2026-09-14).
-        if (lineInvariant && lineInvariant.index === idx) facts = `${facts} ${lineInvariant.sentence}`;
         try {
           // The `warm` flag FORCED the phrasing model even under preferRaw — the
           // last model call left on the review walk. Cut for the same reason as
@@ -1665,7 +1664,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         }
       });
     });
-  }, []);
+  }, [playerColor]);
 
   // The resume TAIL after the faucet (+ better-line playout) finishes: an armed
   // device quiz, else the rewind offer, else advance. Extracted so both the
@@ -1726,16 +1725,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // THE CONCEPT RIDES THE LINE (David 2026-09-14): the first ply that lands a
     // tactic also teaches WHY that pattern works — the same computed invariant
     // the live briefing + Learn speak, so the review is one voice with them.
-    const lineInvariant = firstTacticInvariant(line.plies);
-    const rawWhys = line.plies.map((ply, i) => {
-      let base = plyFactsString(ply) ?? renderPlyFactLine(ply) ?? buildReviewMoveTeaching(ply.fenBefore, ply.san, ply.moverColor === playerColor) ?? '';
-      if (lineInvariant && lineInvariant.index === i) base = `${base} ${lineInvariant.sentence}`.trim();
-      // Seat-correct speech: the walked line's mover ALTERNATES every ply, so
-      // "your queen" is right only on the student's plies (David 2026-07-21:
-      // "You realize it was white in this game..?").
-      const tempt = explainTemptingCapture(ply.fenBefore, ply.san, ply.moverColor === playerColor ? 'you' : 'they', line.plies.slice(i).map((p) => p.san));
-      return { id: i, fact: [base, tempt].filter(Boolean).join(' ') };
-    });
+    // READ AS A LINE (`projectedLineVoice`, 2026-10-04): the student's moves
+    // carry their why, the opponent's replies are stated plainly ("They answer
+    // the check with Kf1."), and nothing is said past the line's point — the
+    // old per-ply describer credited replies with motifs and kept narrating
+    // "trains on the pawn" after the queen was already won.
+    const rawWhys = projectedLineVoice(line.plies, playerColor, { teachQuiet: true, explainTemptation: true })
+      .map((fact, i) => ({ id: i, fact: fact ?? '' }));
     // PACE ON REAL AUDIO (David 2026-07-19: "no per move why… quickly moves from
     // move to move then states the verdict"). The bug: the flagged ply's own
     // narration is a ~5s clip still PLAYING when the playout starts, and
@@ -1802,7 +1798,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setWalkExplorationSan(null);
     setWalkExplorationArrows(null);
     onDone();
-  }, [playMoveSound]);
+  }, [playMoveSound, playerColor]);
 
   /**
    * Narrate a move the student EXPLORED on the board (David 2026-09-05:
@@ -2216,7 +2212,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       setWalkExplorationFen(ply.fenAfter);
       setWalkExplorationSan(ply.san);
       playMoveSound(ply.san);
-      const spoken = state.voice[i] ?? renderPlyFactLine(ply);
+      const spoken = state.voice[i] ?? projectedLineVoice(line.plies, playerColor, { teachQuiet: false, explainTemptation: false })[i];
       if (spoken) {
         try { await reviewSay(spoken); } catch { /* voice off */ }
         if (seqRunTokenRef.current !== token || !walkMountedRef.current) return;
@@ -2248,7 +2244,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setWalkExplorationFen(null);
     setWalkExplorationSan(null);
     if (!maybeOfferRewind(questionPlyRef.current ?? undefined)) walkPlayback.goForward();
-  }, [maybeOfferRewind, walkPlayback, playMoveSound]);
+  }, [maybeOfferRewind, walkPlayback, playMoveSound, playerColor]);
 
   /** Called when a shot resolves (found or hint). Starts the sequence ask
    *  when the prefetched PV delivers and is deep enough; false = caller
@@ -2286,7 +2282,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         setWalkExplorationSan(line.plies[1].san);
         playMoveSound(line.plies[1].san);
       }
-      const ask = `${line.plies[1] ? `He answers ${line.plies[1].san}. ` : ''}Can you see the follow-up? Play your next move.`;
+      // The reply in the one plain vocabulary — "they", never a gendered pronoun.
+      const reply = line.plies[1] ? opponentReplySentence(line.plies[1].fenBefore, line.plies[1].san, null) : null;
+      const ask = `${reply ? `${reply} ` : ''}Can you see the follow-up? Play your next move.`;
       try { await reviewSay(ask); } catch { /* voice off */ }
     })();
     return true;

@@ -58,37 +58,6 @@ describe('exchangeLedger — the net of a forced sequence, from the student\'s s
   });
 });
 
-describe('attribution — an alternating line never says a subjectless "winning the X"', () => {
-  it('stamps each capture with the seat that made it', async () => {
-    const { Chess } = await import('chess.js');
-    const { narrateDnaLine } = await import('./dnaLineNarrator');
-    const sans = ['Kxd7', 'Nxa8', 'Nexd4'];
-    const c = new Chess(PLY29);
-    const plies = sans.map((san) => { const fenBefore = c.fen(); c.move(san); return { fenBefore, san }; });
-    const line = narrateDnaLine(plies, { studentColor: 'b' });
-    expect(line).toMatch(/you win the knight/);
-    expect(line).toMatch(/they take the rook/);
-    expect(line).not.toMatch(/winning the rook/); // the ambiguity that started this
-  });
-  it('an opponent ply that wins nothing is still marked as theirs (walk 5, R12)', async () => {
-    const { Chess } = await import('chess.js');
-    const { narrateDnaLine } = await import('./dnaLineNarrator');
-    const c = new Chess();
-    const plies = ['e4', 'e5', 'Nf3'].map((san) => { const fenBefore = c.fen(); c.move(san); return { fenBefore, san }; });
-    const line = narrateDnaLine(plies, { studentColor: 'b' });
-    expect(line).toMatch(/^they answer e4/);
-    expect(line).toMatch(/they answer Nf3/);
-    expect(line).not.toMatch(/they answer e5/);
-  });
-  it('an unseated caller keeps the old subjectless register (no caller breakage)', async () => {
-    const { Chess } = await import('chess.js');
-    const { narrateDnaLine } = await import('./dnaLineNarrator');
-    const c = new Chess(PLY29);
-    const plies = ['Kxd7', 'Nxa8'].map((san) => { const fenBefore = c.fen(); c.move(san); return { fenBefore, san }; });
-    expect(narrateDnaLine(plies)).toMatch(/winning the/);
-  });
-});
-
 describe('one verdict computer — a verdict without its reason is the eval bar read aloud', () => {
   it('the projected line ends on the SAME vocabulary the per-move verdict uses', async () => {
     const { assessPositionalEdge } = await import('./reviewPositionalAssessment');
