@@ -7,6 +7,7 @@ import { KidChessboard } from '../Chessboard/KidChessboard';
 import { StarDisplay } from './StarDisplay';
 import { voiceService } from '../../services/voiceService';
 import { GUIDED_GAMES } from '../../data/guidedGames';
+import { kidMoveEffect } from '../../services/kidBoardAnswers';
 import {
   generateKidMoveNarration,
   generateKidMoveInstruction,
@@ -52,14 +53,6 @@ const WRONG_MOVE_DISPLAY_MS = 3600;
 const MILESTONE_VOICE = 'You earned a star!';
 // Visual-only celebration banner (no voice). Variety prevents
 // the flash text from going stale across a 20-move walkthrough.
-const CELEBRATION_TEXT = [
-  'Great move!',
-  'Perfect!',
-  'You got it!',
-  'Excellent!',
-  'Well done!',
-];
-
 export function GuidedGamePage(): JSX.Element {
   const { gameId } = useParams<{ gameId: string }>();
   const navigate = useNavigate();
@@ -322,8 +315,8 @@ export function GuidedGamePage(): JSX.Element {
     if (isCorrect) {
       // Correct move!
       setFeedback('correct');
-      const celebration = CELEBRATION_TEXT[Math.floor(Math.random() * CELEBRATION_TEXT.length)];
-      setCelebrationText(celebration);
+      // Kid rule 5: no per-move praise — show what the move DID.
+      setCelebrationText(kidMoveEffect(fenBefore, playerSan) ?? '');
       setWrongAttempts(0);
 
       // Update board state

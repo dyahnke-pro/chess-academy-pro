@@ -143,3 +143,13 @@ describe('every kid answer is board-true and kid-safe across every shipped guide
     expect(checked).toBeGreaterThan(50);
   });
 });
+
+describe('kidMoveEffect', () => {
+  it('says what the move did, never praise', async () => {
+    const { kidMoveEffect } = await import('./kidBoardAnswers');
+    expect(kidMoveEffect('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'Nf3')).toBe('Your knight is on f3 now.');
+    expect(kidMoveEffect('rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2', 'exd5')).toBe('Your pawn took their pawn on d5.');
+    expect(kidMoveEffect('rnbqkbnr/pppp1ppp/8/4p3/6P1/5P2/PPPPP2P/RNBQKBNR b KQkq - 0 2', 'Qh4#')).toMatch(/^Checkmate/);
+    expect(kidMoveEffect('8/8/8/8/8/8/8/8 w - - 0 1', 'Nf3')).toBeNull();
+  });
+});

@@ -336,3 +336,22 @@ export function kidBoardLine(fen: string, kid: Color, withOpener = true): string
     ? `${opener}${attacked.join(' ')}`
     : `${opener}None of your pieces is under attack right now.`;
 }
+
+/**
+ * What the kid's move DID, in words (kid rule 5: no per-move praise — restate
+ * the move's effect). Computed from the board; null when the move is not legal
+ * here. PURE.
+ */
+export function kidMoveEffect(fenBefore: string, san: string): string | null {
+  let m;
+  try { m = new Chess(fenBefore).move(san); } catch { return null; }
+  if (!m) return null;
+  const piece = PIECE_WORD[m.piece];
+  const after = new Chess(m.after);
+  if (after.isCheckmate()) return 'Checkmate — their king has nowhere to go.';
+  const took = m.captured ? `took their ${PIECE_WORD[m.captured]}` : '';
+  if (m.isKingsideCastle() || m.isQueensideCastle()) return 'Your king is tucked away safely.';
+  if (m.promotion) return `Your pawn became a ${PIECE_WORD[m.promotion]}!`;
+  const base = took ? `Your ${piece} ${took} on ${m.to}.` : `Your ${piece} is on ${m.to} now.`;
+  return after.inCheck() ? `${base} Check!` : base;
+}
