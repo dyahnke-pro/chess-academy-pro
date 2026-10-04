@@ -30,8 +30,8 @@
 ### `configFromTargetElo` (function) — 18 call sites
 - `src/services/coachGameEngine.test.ts:41`
 - `src/services/coachGameEngine.test.ts:623`
-- `src/services/coachGameEngine.ts:80`
-- `src/services/coachGameEngine.ts:113`
+- `src/services/coachGameEngine.ts:82`
+- `src/services/coachGameEngine.ts:115`
 - `src/services/coachPlaySession.test.ts:12`
 - `src/services/coachPlaySession.test.ts:13`
 - `src/services/coachPlaySession.test.ts:14`

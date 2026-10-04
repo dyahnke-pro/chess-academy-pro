@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**89 lines · 3 exports · 2 importers · 1 tests · 0 audits**
+**171 lines · 5 exports · 3 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,31 +12,46 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/coachDrillService.ts`
 - `src/services/drillReasons.test.ts`
 
 ## Exports and every call site
 
-### `wrongMoveReason` (function) — 5 call sites
+### `wrongMoveReason` (function) — 6 call sites
+- `src/components/Coach/CoachTeachPage.tsx:2928`
 - `src/services/coachDrillService.ts:753`
 - `src/services/drillReasons.test.ts:11`
-- `src/services/drillReasons.test.ts:17`
-- `src/services/drillReasons.test.ts:23`
+- `src/services/drillReasons.test.ts:19`
 - `src/services/drillReasons.test.ts:26`
+- `src/services/drillReasons.test.ts:29`
 
-### `solvedLineBeat` (function) — 4 call sites
-- `src/services/coachDrillService.ts:760`
-- `src/services/drillReasons.test.ts:32`
-- `src/services/drillReasons.test.ts:36`
-- `src/services/drillReasons.test.ts:37`
+### `goodButWeakerBeat` (function) — 5 call sites
+- `src/components/Coach/CoachTeachPage.tsx:2942`
+- `src/services/drillReasons.test.ts:65`
+- `src/services/drillReasons.test.ts:71`
+- `src/services/drillReasons.test.ts:72`
+- `src/services/drillReasons.test.ts:76`
+
+### `solvedLineBeat` (function) — 5 call sites
+- `src/services/coachDrillService.ts:763`
+- `src/services/drillReasons.test.ts:35`
+- `src/services/drillReasons.test.ts:40`
+- `src/services/drillReasons.test.ts:43`
+- `src/services/drillReasons.test.ts:44`
 
 ### `hintBeat` (function) — 6 call sites
-- `src/services/coachDrillService.ts:766`
-- `src/services/drillReasons.test.ts:44`
-- `src/services/drillReasons.test.ts:45`
-- `src/services/drillReasons.test.ts:46`
-- `src/services/drillReasons.test.ts:49`
-- `src/services/drillReasons.test.ts:50`
+- `src/services/coachDrillService.ts:769`
+- `src/services/drillReasons.test.ts:51`
+- `src/services/drillReasons.test.ts:52`
+- `src/services/drillReasons.test.ts:53`
+- `src/services/drillReasons.test.ts:56`
+- `src/services/drillReasons.test.ts:57`
+
+### `lineGainIdea` (function) — 3 call sites
+- `src/services/coachDrillService.ts:762`
+- `src/services/drillReasons.test.ts:84`
+- `src/services/drillReasons.test.ts:87`
 
 ## Tests
 

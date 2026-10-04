@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**947 lines · 32 exports · 958 importers · 223 tests · 39 audits**
+**957 lines · 32 exports · 961 importers · 225 tests · 39 audits**
 
 ## Locked rules that govern this surface
 
@@ -269,6 +269,7 @@
 - `src/components/Stats/StatsPage.test.tsx`
 - `src/components/Stats/StatsPage.tsx`
 - `src/components/Tactics/AnalysisPracticePage.feedback.test.tsx`
+- `src/components/Tactics/AnalysisPracticePage.tap.test.tsx`
 - `src/components/Tactics/AnalysisPracticePage.test.tsx`
 - `src/components/Tactics/AnalysisPracticePage.tsx`
 - `src/components/Tactics/TacticCreatePage.tsx`
@@ -747,6 +748,7 @@
 - `src/services/fromYourGamesService.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
+- `src/services/gameAnalysisService.drain.test.ts`
 - `src/services/gameAnalysisService.records.test.ts`
 - `src/services/gameAnalysisService.test.ts`
 - `src/services/gameAnalysisService.ts`
@@ -964,6 +966,7 @@
 - `src/services/weaknessSpine.ts`
 - `src/services/whyBestMove.test.ts`
 - `src/services/whyBestMove.ts`
+- `src/services/wrongTapTag.ts`
 - `src/services/wrongTryRefutation.test.ts`
 - `src/services/wrongTryRefutation.ts`
 - `src/stores/appStore.ts`
@@ -1151,6 +1154,7 @@
 - `src/components/Settings/OnboardingPage.test.tsx`
 - `src/components/Stats/StatsPage.test.tsx`
 - `src/components/Tactics/AnalysisPracticePage.feedback.test.tsx`
+- `src/components/Tactics/AnalysisPracticePage.tap.test.tsx`
 - `src/components/Tactics/AnalysisPracticePage.test.tsx`
 - `src/components/Tactics/TacticsPage.test.tsx`
 - `src/data/commonMistakeNarration.test.ts`
@@ -1207,6 +1211,7 @@
 - `src/services/fromYourGamesService.test.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
+- `src/services/gameAnalysisService.drain.test.ts`
 - `src/services/gameAnalysisService.records.test.ts`
 - `src/services/gameAnalysisService.test.ts`
 - `src/services/gameInsightsService.statsCache.test.ts`

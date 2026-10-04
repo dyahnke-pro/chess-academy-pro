@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**204 lines · 7 exports · 3 importers · 1 tests · 0 audits**
+**204 lines · 7 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -51,18 +51,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `nextCurriculumItem` (function) — 1 call site
 - `src/services/coachCurriculumService.test.ts:138`
 
-### `getCoachCurriculum` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2647`
-- `src/components/Coach/CoachTeachPage.tsx:11329`
-- `src/components/Coach/CoachTeachPage.tsx:11395`
+### `getCoachCurriculum` (function) — 5 call sites
+- `src/components/Coach/CoachTeachPage.tsx:2786`
+- `src/components/Coach/CoachTeachPage.tsx:3038`
+- `src/components/Coach/CoachTeachPage.tsx:11633`
+- `src/components/Coach/CoachTeachPage.tsx:11701`
 - `src/services/studentDossier.ts:156`
 
 ### `syncCoachCurriculum` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2633`
-- `src/components/Coach/CoachTeachPage.tsx:2709`
+- `src/components/Coach/CoachTeachPage.tsx:2772`
+- `src/components/Coach/CoachTeachPage.tsx:2850`
 
 ### `curriculumArcLine` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11395`
+- `src/components/Coach/CoachTeachPage.tsx:11701`
 - `src/services/coachCurriculumService.test.ts:133`
 - `src/services/coachCurriculumService.test.ts:137`
 - `src/services/coachCurriculumService.test.ts:141`
@@ -70,6 +71,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Tests
 
 - `src/services/coachCurriculumService.test.ts`
+- `src/test/kidIsolation.gate.test.ts`
 
 ## Audits that reach it
 

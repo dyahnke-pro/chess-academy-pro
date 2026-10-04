@@ -62,7 +62,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `settleChatTurnRead` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `dispatchCoachTurn` (function) — 25 call sites
+### `dispatchCoachTurn` (function) — 26 call sites
 - `src/coach/dispatchCoachTurn.test.ts:33`
 - `src/coach/dispatchCoachTurn.test.ts:43`
 - `src/coach/dispatchCoachTurn.test.ts:52`
@@ -88,9 +88,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/GameChatPanel.tsx:1348`
 - `src/components/Coach/GameChatPanel.tsx:1557`
 - `src/components/Openings/MasterclassCoachChat.tsx:81`
+- `src/test/kidIsolation.gate.test.ts:131`
 
 ### `shadowReadTurn` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3085`
+- `src/components/Coach/CoachTeachPage.tsx:3279`
 
 ## Tests
 

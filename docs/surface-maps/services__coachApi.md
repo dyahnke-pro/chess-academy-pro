@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7044 lines · 42 exports · 54 importers · 59 tests · 19 audits**
+**7045 lines · 42 exports · 55 importers · 60 tests · 20 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,7 +19,7 @@
 - **Do NOT** (CLAUDE.md:5277) — names `coachApi`
 - **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6019) — names `voiceFacts`
 - **The standard post-deploy ritual** (CLAUDE.md:6161) — names `coachApi`, `voiceFacts`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6176) — names `coachApi`, `translateToEnglish`, `voiceFacts`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6178) — names `coachApi`, `translateToEnglish`, `voiceFacts`
 
 ## Who calls in
 
@@ -77,6 +77,7 @@
 - `src/services/speakComputed.ts`
 - `src/services/voiceFacts.perspective.test.ts`
 - `src/services/voiceFactsFidelity.test.ts`
+- `src/test/kidIsolation.gate.test.ts`
 
 ## Exports and every call site
 
@@ -248,7 +249,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:571`
-- `src/components/Coach/CoachTeachPage.tsx:3394`
+- `src/components/Coach/CoachTeachPage.tsx:3588`
 - `src/services/coachSessionRouter.ts:117`
 - `src/services/coachSettingsAction.ts:242`
 
@@ -286,7 +287,7 @@
 - `src/services/coachApi.speakableFacts.test.ts:52`
 - `src/services/coachApi.speakableFacts.test.ts:53`
 
-### `voiceFacts` (function) — 37 call sites
+### `voiceFacts` (function) — 38 call sites
 - `src/components/Coach/CoachGameReview.tsx:1657`
 - `src/components/Coach/CoachGameReview.tsx:1773`
 - `src/components/Coach/CoachGameReview.tsx:1962`
@@ -309,7 +310,7 @@
 - `src/services/contentGenerationService.ts:168`
 - `src/services/contentGenerationService.ts:202`
 - `src/services/gameReviewService.ts:57`
-- `src/services/kidGameCoach.ts:223`
+- `src/services/kidGameCoach.ts:230`
 - `src/services/mistakeNarrationVoice.ts:109`
 - `src/services/openingGenerator.ts:2364`
 - `src/services/openingSectionNarrator.ts:84`
@@ -324,6 +325,7 @@
 - `src/services/voiceFacts.perspective.test.ts:103`
 - `src/services/voiceFactsFidelity.test.ts:74`
 - `src/services/voiceFactsFidelity.test.ts:79`
+- `src/test/kidIsolation.gate.test.ts:36`
 
 ### `voiceReviewLines` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -351,8 +353,8 @@
 - `src/services/voiceFactsFidelity.test.ts:65`
 
 ### `explainPuzzleMoveGrounded` (function) — 2 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:639`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:730`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:640`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:731`
 
 ### `currentAskFromContent` (function) — 4 call sites
 - `src/services/coachApi.currentAsk.test.ts:31`
@@ -360,7 +362,7 @@
 - `src/services/coachApi.currentAsk.test.ts:51`
 - `src/services/coachApi.currentAsk.test.ts:56`
 
-### `getCoachChatResponse` (function) — 25 call sites
+### `getCoachChatResponse` (function) — 26 call sites
 - `scripts/audit-coach-master-integration.mjs:327`
 - `scripts/audit-coach-master-integration.mjs:360`
 - `scripts/audit-coach-master-integration.mjs:436`
@@ -386,14 +388,14 @@
 - `src/services/positionReadingGrader.test.ts:6`
 - `src/services/positionReadingGrader.ts:67`
 - `src/services/smartSearchService.ts:50`
+- `src/test/kidIsolation.gate.test.ts:142`
 
-### `getKidLlmResponse` (function) — 6 call sites
+### `getKidLlmResponse` (function) — 5 call sites
 - `scripts/audit-coach-master-integration.mjs:410`
 - `src/services/coachApi.master-integration.test.ts:361`
-- `src/services/kidGameCoach.ts:140`
-- `src/services/kidGameCoach.ts:176`
-- `src/services/kidGameCoach.ts:207`
-- `src/services/kidGameCoach.ts:385`
+- `src/services/kidGameCoach.ts:147`
+- `src/services/kidGameCoach.ts:183`
+- `src/services/kidGameCoach.ts:214`
 
 ## Tests
 
@@ -456,6 +458,7 @@
 - `src/services/voiceFacts.perspective.test.ts`
 - `src/services/voiceFactsFidelity.test.ts`
 - `src/services/walkthroughResolver.test.ts`
+- `src/test/kidIsolation.gate.test.ts`
 
 ## Audits that reach it
 
@@ -475,6 +478,7 @@ appear here — check the post-deploy matrix in CLAUDE.md for those._
 - `scripts/audit-coach-training-recommendation.mjs`
 - `scripts/audit-coach-weakness-adversarial.mjs`
 - `scripts/audit-counter-repertoire.mjs`
+- `scripts/audit-kid-llm-hallucination.mjs`
 - `scripts/audit-kid-static.mjs`
 - `scripts/audit-learn-comprehensive.mjs`
 - `scripts/audit-lib/coach-question-matrix.mjs`
