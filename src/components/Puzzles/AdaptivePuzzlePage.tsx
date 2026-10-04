@@ -19,13 +19,17 @@ import type {
   AdaptiveSessionSummary as SummaryData,
 } from '../../services/adaptivePuzzleService';
 import {
-  resolveReachState,
   recordReachResult,
   nextTarget,
-  reachTier,
   type ReachState,
   type ReachOutcome,
 } from '../../services/reachRating';
+import {
+  studentPuzzleRating,
+  puzzleLadder,
+  clampTarget,
+  DIFFICULTY_OFFSET,
+} from '../../services/studentPuzzleRating';
 import { reachCueFor, spikeIncomingCue, type ReachCue } from '../../services/reachCue';
 import type { PuzzleRecord } from '../../types';
 import type { PuzzleOutcome } from './PuzzleBoard';
@@ -37,26 +41,21 @@ import { AdaptiveSessionPanel } from './AdaptiveSessionPanel';
 import { AdaptiveSessionSummary } from './AdaptiveSessionSummary';
 import { db } from '../../db/schema';
 import { recordPositiveMoment } from '../../services/reviewPromptService';
-import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 import { finishBite } from '../../services/activeBite';
 
 type Phase = 'select' | 'loading' | 'solving' | 'checkpoint' | 'rep-complete' | 'summary';
 
 const CHECKPOINT_INTERVAL = 10;
 
-/** WO-TACTICS-ADAPTIVE-01: Rating adjustments per outcome. */
-const RATING_DELTA_CLEAN = 20;
-const RATING_DELTA_ASSISTED = 5;
-const RATING_DELTA_FAILED = -20;
-
 /** "+12" / "-8" / "0". */
 function signed(n: number): string {
   return n > 0 ? `+${n}` : `${n}`;
 }
 
-/** The summary measures the ONE puzzle rating (the reach ladder), not the
- *  session's internal selection rating. */
-function withReach(summary: SummaryData, history: readonly number[]): SummaryData {
+/** The summary measures the STUDENT'S puzzle rating across the session — the
+ *  same number the header, Stats and every other Tactics page show — never the
+ *  session's internal selection rating or the ladder's target. */
+function withRating(summary: SummaryData, history: readonly number[]): SummaryData {
   if (history.length === 0) return summary;
   return { ...summary, startRating: history[0], endRating: history[history.length - 1], ratingHistory: [...history] };
 }
@@ -115,10 +114,12 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
   const [currentPuzzle, setCurrentPuzzle] = useState<PuzzleRecord | null>(null);
   const [summary, setSummary] = useState<SummaryData | null>(null);
   const [stats, setStats] = useState<PuzzleStats | null>(null);
-  const [playerRating, setPlayerRating] = useState<number>(activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING);
+  // THE student's puzzle rating — one reader (studentPuzzleRating), the same
+  // number Classic, Opening Traps, Stats and the coach show.
+  const [playerRating, setPlayerRating] = useState<number>(studentPuzzleRating(activeProfile));
   const seenIdsRef = useRef<Set<string>>(new Set());
 
-  const userRating = activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING;
+  const userRating = studentPuzzleRating(activeProfile);
 
   // ── Adaptive Reach Ladder (docs/plans/2026-09-14-adaptive-reach-ladder.md) ──
   // ONE persisted difficulty controller drives selection + the felt cues. The
@@ -129,19 +130,21 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
   const spikeServedRef = useRef(false);
   const cueRotateRef = useRef(0);
   // Master Level rides its OWN persisted ladder (masterReachState) in the elite
-  // band, so a bad day at 2600 never craters the normal tactics number.
-  const persistedReach = master
-    ? activeProfile?.preferences?.masterReachState
-    : activeProfile?.preferences?.reachState;
-  const [reachRating, setReachRating] = useState<number>(
-    persistedReach?.rating
-      ?? (activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING) + (master ? 0 : 200),
-  );
-  const [reachDelta, setReachDelta] = useState<number | null>(null);
-  /** The ONE puzzle rating (the reach ladder) across this session — the panel,
-   *  the checkpoint and the summary all measure it, so the tab shows one number
-   *  that moves, not a second "session rating" scored from the difficulty's
-   *  fixed start (hand walk 2026-10-01, RT1: five ratings on one tab). */
+  // band, so a bad day at 2600 never craters the normal tactics number. The
+  // ladder is the TARGET difficulty, resolved the same way before and after the
+  // session starts — Master used to read "1500" while loading, then "2400".
+  const [reachRating, setReachRating] = useState<number>(() => puzzleLadder(activeProfile, { master }).rating);
+  /** The chosen difficulty's offset from the ladder (Easy below, Hard above).
+   *  Only an offset-0 session (Medium, the pooled tabs) moves the persisted
+   *  ladder: Easy/Hard serve away from it on purpose, and letting their
+   *  results steer it would drag the shared number by the offset. */
+  const offsetRef = useRef(0);
+  const [offset, setOffset] = useState(0);
+  /** Change in the student's rating on the last puzzle (header bump). */
+  const [ratingDelta, setRatingDelta] = useState<number | null>(null);
+  /** The student's puzzle rating across this session — the panel, the
+   *  checkpoint and the summary all measure it, so the tab shows one number
+   *  that moves (RT1 2026-10-01, D11 2026-10-04). */
   const [reachHistory, setReachHistory] = useState<number[]>([]);
   const [cue, setCue] = useState<ReachCue | null>(null);
   const [masterReady, setMasterReady] = useState<boolean>(!pooled);
@@ -154,8 +157,14 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
 
   // Keep playerRating synced with profile
   useEffect(() => {
-    setPlayerRating(activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING);
-  }, [activeProfile?.puzzleRating]);
+    setPlayerRating(studentPuzzleRating(activeProfile));
+  }, [activeProfile?.puzzleRating]);  // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Before a session, the target shown is the ladder resolved from the loaded
+  // profile — the store hydrates after first render on a cold open.
+  useEffect(() => {
+    if (!reachRef.current) setReachRating(puzzleLadder(activeProfile, { master }).rating);
+  }, [activeProfile, master]);
 
   /** Persist the reach ladder to profile.preferences (non-indexed — no schema
    *  bump), mirroring the puzzleRating write pattern. Master mode writes its
@@ -163,7 +172,7 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
   const persistReach = useCallback((next: ReachState): void => {
     reachRef.current = next;
     setReachRating(next.rating);
-    setReachHistory((h) => [...h, next.rating]);
+    if (offsetRef.current !== 0) return; // Easy/Hard: in-session only
     if (activeProfile) {
       const preferences = {
         ...activeProfile.preferences,
@@ -208,9 +217,11 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
     // The reach controller decides the target difficulty + whether this is a
     // boss spike; selection favors multi-move sequences (David 2026-09-14).
     const reach = reachRef.current;
-    const { target, isSpike } = reach
+    const ladder = reach
       ? nextTarget(reach, { master })
       : { target: sess.sessionRating, isSpike: false };
+    const isSpike = ladder.isSpike;
+    const target = clampTarget(ladder.target + offsetRef.current, master);
     spikeServedRef.current = isSpike;
     if (isSpike) showCue(spikeIncomingCue(cueRotateRef.current++));
 
@@ -222,16 +233,16 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
     if (!puzzle) {
       // No more puzzles available — end session
       voiceService.stop();
-      setSummary(withReach(getAdaptiveSessionSummary(sess), reachHistoryRef.current));
+      setSummary(withRating(getAdaptiveSessionSummary(sess), reachHistoryRef.current));
       setPhase('summary');
       return;
     }
     voiceService.stop();
     seenIdsRef.current.add(puzzle.id);
     setCurrentPuzzle(puzzle);
-    setReachDelta(null);
+    setRatingDelta(null);
     setPhase('solving');
-  }, [showCue, navState?.depth]);
+  }, [showCue, navState?.depth, master]);
 
   const handleSelectDifficulty = useCallback(async (difficulty: AdaptiveDifficulty): Promise<void> => {
     // Seed the session at the player's real puzzle rating (clamped into the
@@ -240,20 +251,21 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
     const newSession = createAdaptiveSession(difficulty, forcedWeakThemes, userRating);
     setSession(newSession);
     seenIdsRef.current = new Set();
+    // The pooled tabs ARE their ladder; on the select screen the card's
+    // offset applies (the number printed on the card is what it serves).
+    const sessionOffset = pooled ? 0 : DIFFICULTY_OFFSET[difficulty];
+    offsetRef.current = sessionOffset;
+    setOffset(sessionOffset);
     // Resume the persisted reach ladder, or seed it first-time from the
     // player's puzzleRating + STRETCH_SEED. Never re-inflate on resume.
-    const reach = resolveReachState(
-      master ? activeProfile?.preferences?.masterReachState : activeProfile?.preferences?.reachState,
-      userRating,
-      { master },
-    );
+    const reach = puzzleLadder(activeProfile, { master });
     reachRef.current = reach;
     setReachRating(reach.rating);
-    setReachHistory([reach.rating]);
-    setReachDelta(null);
+    setReachHistory([playerRating]);
+    setRatingDelta(null);
     setPhase('loading');
     await fetchNextPuzzle(newSession);
-  }, [fetchNextPuzzle, forcedWeakThemes, activeProfile, userRating, master]);
+  }, [fetchNextPuzzle, forcedWeakThemes, activeProfile, userRating, playerRating, master, pooled]);
 
   // Auto-start with medium difficulty when forcedWeakThemes are provided (from Lichess Dashboard)
   useEffect(() => {
@@ -284,22 +296,13 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
   const handlePuzzleComplete = useCallback(async (outcome: PuzzleOutcome): Promise<void> => {
     if (!session || !currentPuzzle) return;
 
-    // Determine WO-specified rating delta
-    let delta: number;
     let askedForReview = false;
-    if (outcome.correct && !outcome.usedHint && !outcome.hadRetry && !outcome.showedSolution) {
-      // Clean solve: no hints, 1st try
-      delta = RATING_DELTA_CLEAN;
+    const clean = outcome.correct && !outcome.usedHint && !outcome.hadRetry && !outcome.showedSolution;
+    if (clean) {
       // A clean solve is a genuine "win" — feed the review-prompt gate. When
       // THIS solve opens the prompt, the board holds below so the ask lands
       // on the solved position, never over the next puzzle (David 2026-10-02).
       askedForReview = await recordPositiveMoment('puzzle-clean-solve').catch(() => false);
-    } else if (outcome.correct) {
-      // Correct but used hint or had retry
-      delta = RATING_DELTA_ASSISTED;
-    } else {
-      // Failed (2 wrong attempts or showed solution)
-      delta = RATING_DELTA_FAILED;
     }
 
     // Update adaptive session state (theme tracking, streak, weakness boost,
@@ -323,27 +326,28 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
         master,
       });
       persistReach(r.state);
-      setReachDelta(r.delta);
       updatedSession.sessionRating = r.state.rating; // panel + selection = reach
       for (const ev of r.events) showCue(reachCueFor(ev, cueRotateRef.current++));
     }
     setSession(updatedSession);
 
-    // Keep the classic persistent puzzleRating updating in the background for
-    // calibration continuity (P5 folds the two systems fully).
-    const newRating = Math.max(100, playerRating + delta);
-    setPlayerRating(newRating);
-
-    // Record attempt in DB (auto-grade: correct='good', incorrect='again')
-    await recordAttempt(
+    // The student's puzzle rating moves by the SAME rule as every other
+    // Tactics page (recordAttempt's K=32 Elo against the puzzle's own rating),
+    // which is what keeps an Easy session below the ladder honest: beating an
+    // easy puzzle earns little. An assisted solve holds, like the ladder.
+    const attempt = await recordAttempt(
       currentPuzzle.id,
       outcome.correct,
-      userRating,
+      playerRating,
       outcome.correct ? 'good' : 'again',
     );
+    const held = outcome.correct && !clean;
+    const newRating = !attempt || held ? playerRating : Math.max(100, attempt.newUserRating);
+    setPlayerRating(newRating);
+    setRatingDelta(newRating - playerRating);
+    setReachHistory((h) => [...h, newRating]);
 
-    // Update profile rating with the WO delta
-    if (activeProfile) {
+    if (activeProfile && newRating !== playerRating) {
       const updatedProfile = { ...activeProfile, puzzleRating: newRating };
       setActiveProfile(updatedProfile);
       void db.profiles.update(activeProfile.id, { puzzleRating: newRating });
@@ -405,7 +409,7 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
 
     // Fetch next puzzle
     await fetchNextPuzzle(updatedSession);
-  }, [session, currentPuzzle, playerRating, userRating, activeProfile, setActiveProfile, fetchNextPuzzle, repKey, repCap, misconceptionTag, master]);
+  }, [session, currentPuzzle, playerRating, activeProfile, setActiveProfile, fetchNextPuzzle, repKey, repCap, misconceptionTag, master, persistReach, showCue]);
 
   /** Master concept-review Continue → run the deferred checkpoint-or-fetch. */
   const handleContinueAfterConcept = useCallback(async (): Promise<void> => {
@@ -432,7 +436,7 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
 
   const handleEndSession = useCallback((): void => {
     if (!session) return;
-    setSummary(withReach(getAdaptiveSessionSummary(session), reachHistoryRef.current));
+    setSummary(withRating(getAdaptiveSessionSummary(session), reachHistoryRef.current));
     setPhase('summary');
     void getPuzzleStats().then(setStats);
   }, [session]);
@@ -442,8 +446,11 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
     setSession(null);
     setCurrentPuzzle(null);
     setSummary(null);
-    setReachDelta(null);
+    setRatingDelta(null);
     setCue(null);
+    reachRef.current = null;
+    offsetRef.current = 0;
+    setOffset(0);
     seenIdsRef.current = new Set();
     void getPuzzleStats().then(setStats);
   }, []);
@@ -473,17 +480,25 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
           <h1 className="text-xl font-bold text-theme-text">{master ? 'Master Level' : length ? 'Long Puzzles' : 'Puzzles'}</h1>
         </div>
         <div className="flex-1" />
-        {/* Reach-ladder badge: Level + reach rating with animated delta */}
-        <div className="flex items-center gap-2" data-testid="player-rating-header">
-          <span className={`text-sm font-semibold text-theme-text ${reachDelta !== null ? 'rating-bump' : ''}`} data-testid="player-rating-value">
-            Level {reachTier(reachRating)} · {reachRating}
-          </span>
-          {reachDelta !== null && reachDelta !== 0 && (
-            <span
-              className={`text-xs font-bold ${reachDelta > 0 ? 'text-green-400' : 'text-red-400'}`}
-              data-testid="rating-delta"
-            >
-              {reachDelta > 0 ? '+' : ''}{reachDelta}
+        {/* The student's rating (one source) and — once there is one — the
+            target this page serves around, labelled as a target. */}
+        <div className="flex flex-col items-end leading-tight" data-testid="player-rating-header">
+          <div className="flex items-center gap-2">
+            <span className={`text-sm font-semibold text-theme-text ${ratingDelta ? 'rating-bump' : ''}`} data-testid="player-rating-value">
+              Rating {playerRating}
+            </span>
+            {ratingDelta !== null && ratingDelta !== 0 && (
+              <span
+                className={`text-xs font-bold ${ratingDelta > 0 ? 'text-green-400' : 'text-red-400'}`}
+                data-testid="rating-delta"
+              >
+                {ratingDelta > 0 ? '+' : ''}{ratingDelta}
+              </span>
+            )}
+          </div>
+          {(pooled || phase !== 'select') && (
+            <span className="text-xs text-theme-text-muted" data-testid="puzzle-target-value">
+              {master ? 'Master target' : 'Target'} {clampTarget(reachRating + offset, master)}
             </span>
           )}
         </div>
@@ -516,14 +531,14 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
               role="radio"
               aria-checked={lengthMode === m}
               onClick={() => { lengthModeRef.current = m; setLengthMode(m); }}
-              className={`rounded-full border-2 px-4 py-1.5 text-sm font-bold transition-colors ${
+              className={`whitespace-nowrap rounded-full border-2 px-4 py-1.5 text-sm font-bold transition-colors ${
                 lengthMode === m
                   ? 'border-cyan-300 bg-cyan-400/15 text-cyan-200 shadow-[0_0_14px_rgba(0,229,255,0.5)]'
                   : 'border-theme-border text-theme-text-muted hover:text-theme-text'
               }`}
               data-testid={`length-${m}`}
             >
-              {m === 'long' ? 'Long · 3–4 moves' : 'Very Long · 5+ moves'}
+              {m === 'long' ? '3–4 moves' : '5+ moves'}
             </button>
           ))}
         </div>
@@ -556,7 +571,14 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
               )}
             </div>
           )}
-          <DifficultySelector onSelect={(d) => void handleSelectDifficulty(d)} />
+          <DifficultySelector
+            onSelect={(d) => void handleSelectDifficulty(d)}
+            targets={{
+              easy: clampTarget(reachRating + DIFFICULTY_OFFSET.easy),
+              medium: clampTarget(reachRating + DIFFICULTY_OFFSET.medium),
+              hard: clampTarget(reachRating + DIFFICULTY_OFFSET.hard),
+            }}
+          />
           <div className="flex justify-center gap-6">
             <Link
               to="/tactics/classic"
@@ -641,9 +663,9 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
             </p>
             <p className="text-sm mt-2">
               Puzzle rating:{' '}
-              <span className="font-bold text-theme-text">{reachRating}</span>
+              <span className="font-bold text-theme-text" data-testid="checkpoint-rating">{playerRating}</span>
               {reachHistory.length > 1 && (
-                <span className="text-theme-text-muted">{' '}({signed(reachRating - reachHistory[0])} this session)</span>
+                <span className="text-theme-text-muted">{' '}({signed(playerRating - reachHistory[0])} this session)</span>
               )}
             </p>
           </div>

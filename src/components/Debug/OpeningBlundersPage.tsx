@@ -35,12 +35,15 @@ import {
   type OpeningBlunderPuzzle,
   type OpeningBlunderFamily,
 } from '../../services/openingBlunderService';
-import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 import { WrongTryNote } from '../Puzzles/WrongTryNote';
 import { hintSquareStyles } from '../../utils/hintSquareStyles';
 import { solvedDrillConcept } from '../../services/puzzleTeaching';
 import { motifThemeLabels } from '../../services/tacticClassifierService';
+import { chipFor } from './openingTrapChip';
+import { TacticsPageHeader } from '../Tactics/TacticsPageHeader';
 import { db } from '../../db/schema';
+import { useBoardFit } from '../../hooks/useBoardFit';
+import { studentPuzzleRating } from '../../services/studentPuzzleRating';
 
 /** Difficulty band around the user's puzzle rating. Puzzles inside this
  *  band surface first; the rest are still reachable below the fold. */
@@ -111,72 +114,6 @@ function paletteFor(family: string): FamilyPalette {
     if (p.match.test(family)) return p;
   }
   return FALLBACK_PALETTE;
-}
-
-// ─── Puzzle-type chip palette ────────────────────────────────────────────────
-
-const CHIP_STYLE: Array<{ match: (themes: string[]) => boolean; label: (themes: string[]) => string; bg: string; border: string; text: string }> = [
-  {
-    match: (t) => t.includes('mate'),
-    label: (t) => {
-      const n = t.find((x) => /^mateIn\d$/.test(x))?.replace('mateIn', '#');
-      return n ? `MATE ${n}` : 'MATE';
-    },
-    bg: 'bg-red-500/15',
-    border: 'border-red-500/40',
-    text: 'text-red-400',
-  },
-  {
-    match: (t) => t.includes('crushing'),
-    label: () => 'CRUSHING',
-    bg: 'bg-orange-500/15',
-    border: 'border-orange-500/40',
-    text: 'text-orange-400',
-  },
-  {
-    match: (t) => t.includes('fork'),
-    label: () => 'FORK',
-    bg: 'bg-cyan-500/15',
-    border: 'border-cyan-500/40',
-    text: 'text-cyan-400',
-  },
-  {
-    match: (t) => t.includes('pin') || t.includes('skewer'),
-    label: (t) => (t.includes('pin') ? 'PIN' : 'SKEWER'),
-    bg: 'bg-sky-500/15',
-    border: 'border-sky-500/40',
-    text: 'text-sky-400',
-  },
-  {
-    match: (t) => t.includes('hangingPiece'),
-    label: () => 'HANGING',
-    bg: 'bg-emerald-500/15',
-    border: 'border-emerald-500/40',
-    text: 'text-emerald-400',
-  },
-  {
-    match: (t) => t.includes('attackingF2F7'),
-    label: () => 'F2/F7',
-    bg: 'bg-rose-500/15',
-    border: 'border-rose-500/40',
-    text: 'text-rose-400',
-  },
-  {
-    match: (t) => t.includes('deflection') || t.includes('attraction'),
-    label: (t) => (t.includes('deflection') ? 'DEFLECTION' : 'ATTRACTION'),
-    bg: 'bg-purple-500/15',
-    border: 'border-purple-500/40',
-    text: 'text-purple-400',
-  },
-];
-
-function chipFor(themes: string[]): { label: string; bg: string; border: string; text: string } {
-  for (const s of CHIP_STYLE) {
-    if (s.match(themes)) {
-      return { label: s.label(themes), bg: s.bg, border: s.border, text: s.text };
-    }
-  }
-  return { label: 'TACTIC', bg: 'bg-amber-500/15', border: 'border-amber-500/40', text: 'text-amber-400' };
 }
 
 // ─── Neon border helpers (lifted from TacticsPage to keep the look) ──────────
@@ -281,7 +218,7 @@ function applyPhaseFilter(
 export function OpeningBlundersPage(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
-  const userRating = activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING;
+  const userRating = studentPuzzleRating(activeProfile);
 
   // Mount audit — closes the F1 coverage gap on the 12th tactics
   // surface (/tactics/opening-traps). Mirrors the pattern wired
@@ -483,6 +420,7 @@ function FamilyPickerView({
   const gB = settings.glowBrightness;
   const gS = gB / 100;
   const phaseStripRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   return (
     <div
@@ -490,7 +428,13 @@ function FamilyPickerView({
       style={{ color: 'var(--color-text)' }}
       data-testid="opening-blunders-page"
     >
-      <h1 className="text-xl font-bold text-center mt-2">Opening Traps</h1>
+      <TacticsPageHeader
+        className="max-w-lg mx-auto"
+        title="Opening Traps"
+        icon={<Flame size={22} className="text-rose-400" />}
+        onBack={() => void navigate('/tactics')}
+        backTestId="opening-traps-back"
+      />
       <p className="text-[11px] text-theme-text-muted text-center -mt-2">
         {total} {PHASE_LABEL[phaseFilter].toLowerCase()} traps · grouped by opening
       </p>
@@ -509,7 +453,7 @@ function FamilyPickerView({
             <button
               key={p}
               onClick={() => onPhaseFilterChange(p)}
-              className="flex-1 px-2 py-1.5 rounded-md text-[11px] font-medium transition-colors text-center"
+              className="flex-1 min-w-0 px-1 py-1.5 rounded-md text-[11px] font-medium transition-colors text-center whitespace-nowrap"
               style={{
                 background: phaseFilter === p ? 'var(--color-surface)' : 'transparent',
                 color: phaseFilter === p ? 'var(--color-text)' : 'var(--color-text-muted)',
@@ -650,21 +594,16 @@ function FamilyDetailView({
       className="flex flex-col gap-4 p-4 flex-1 min-h-0 overflow-y-auto pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6"
       style={{ color: 'var(--color-text)' }}
     >
-      <div className="flex items-center gap-2 -my-1">
-        <button
-          onClick={onBack}
-          className="p-2 rounded-lg hover:bg-theme-surface min-w-[44px] min-h-[44px] flex items-center justify-center"
-          aria-label="Back to openings"
-        >
-          <ArrowLeft size={18} />
-        </button>
-        <div className="flex-1 min-w-0 text-center pr-[44px]">
-          <h1 className={`text-lg font-bold ${palette.color}`}>{family.label}</h1>
-          <p className="text-[11px] text-theme-text-muted">
-            {family.white.length + family.black.length} traps · {inBandCount} at your rating
-          </p>
-        </div>
-      </div>
+      <TacticsPageHeader
+        className="max-w-lg mx-auto"
+        title={family.label}
+        onBack={onBack}
+        backLabel="Back to openings"
+        backTestId="opening-family-back"
+      />
+      <p className="text-[11px] text-theme-text-muted text-center -mt-2">
+        {family.white.length + family.black.length} traps · {inBandCount} at your rating
+      </p>
 
       {/* Rating + session counters */}
       <div className="flex items-center justify-center gap-2 max-w-lg mx-auto w-full">
@@ -756,11 +695,14 @@ function FamilyDetailView({
               >
                 <div className="flex flex-col gap-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span
-                      className={`inline-block px-1.5 py-0.5 rounded border ${chip.bg} ${chip.border} ${chip.text} text-[9px] font-mono font-semibold tracking-wider`}
-                    >
-                      {chip.label}
-                    </span>
+                    {chip && (
+                      <span
+                        className={`inline-block px-1.5 py-0.5 rounded border ${chip.bg} ${chip.border} ${chip.text} text-[9px] font-mono font-semibold tracking-wider uppercase`}
+                        data-testid="opening-blunder-chip"
+                      >
+                        {chip.label}
+                      </span>
+                    )}
                     <span className="text-[11px] text-theme-text-muted font-mono">{p.rating}</span>
                     <span className="text-[10px] text-theme-text-muted font-mono opacity-70">
                       m{p.fullmove}
@@ -840,6 +782,9 @@ function PuzzleView({ puzzle, onExit, onResult, onNext }: PuzzleViewProps): JSX.
     // color as the student and let Stockfish play OUR pieces.
     studentSide,
   });
+  // Board + Reset / Hint / Next fit above the bottom nav on a short phone
+  // (David 2026-10-04).
+  const { boardRef: fitRef, keepRef, boardStyle: fitStyle } = useBoardFit(playout.phase);
   const clickToMove = useClickToMove(playout);
   // The Hint button used to do nothing visible: it revealed the move inside
   // the playout and the board never drew it (David's tactics map, 2026-10-01).
@@ -969,11 +914,14 @@ function PuzzleView({ puzzle, onExit, onResult, onNext }: PuzzleViewProps): JSX.
         </button>
         <div className="flex-1 min-w-0 text-center">
           <div className="flex items-center justify-center gap-2">
-            <span
-              className={`inline-block px-1.5 py-0.5 rounded border ${chip.bg} ${chip.border} ${chip.text} text-[9px] font-mono font-semibold tracking-wider`}
-            >
-              {chip.label}
-            </span>
+            {chip && (
+              <span
+                className={`inline-block px-1.5 py-0.5 rounded border ${chip.bg} ${chip.border} ${chip.text} text-[9px] font-mono font-semibold tracking-wider uppercase`}
+                data-testid="opening-blunder-chip"
+              >
+                {chip.label}
+              </span>
+            )}
             <h2 className="text-sm font-semibold truncate">rating {puzzle.rating}</h2>
           </div>
           <p className="text-[11px] text-theme-text-muted truncate" data-testid="opening-blunder-puzzle-themes">
@@ -1072,7 +1020,7 @@ function PuzzleView({ puzzle, onExit, onResult, onNext }: PuzzleViewProps): JSX.
           Showing the opening · ply {walkthroughPly}/{walkthroughMoves?.length ?? 0}
         </p>
       )}
-      <div className="flex gap-2">
+      <div ref={keepRef} className="flex gap-2">
         <button
           onClick={() => playout.reset()}
           className="flex-1 px-3 py-2 rounded-lg bg-theme-surface text-sm text-theme-text hover:bg-theme-bg"
@@ -1111,5 +1059,5 @@ function PuzzleView({ puzzle, onExit, onResult, onNext }: PuzzleViewProps): JSX.
     </div>
   );
 
-  return <ChessLessonLayout header={header} board={board} controls={controls} />;
+  return <ChessLessonLayout header={header} board={board} controls={controls} boardFit={{ ref: fitRef, style: fitStyle }} />;
 }

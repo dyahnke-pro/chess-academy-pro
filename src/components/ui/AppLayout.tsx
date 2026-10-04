@@ -485,6 +485,7 @@ export function AppLayout(): JSX.Element {
 
       {/* Mobile bottom nav */}
       <nav
+        data-bottom-nav
         className="md:hidden fixed bottom-0 left-0 right-0 flex justify-around border-t py-2 pb-safe z-30"
         style={{
           background: 'color-mix(in srgb, var(--color-bg-secondary) 92%, transparent)',

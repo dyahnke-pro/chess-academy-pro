@@ -22,6 +22,7 @@ import { rewardSeed } from '../../services/rewardEvents';
 import type { CoachingTier } from '../../services/tacticAlertService';
 import type { SetupPuzzle } from '../../types';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
+import { useBoardFit } from '../../hooks/useBoardFit';
 
 type BoardState = 'thinking' | 'incorrect' | 'solved' | 'revealing';
 
@@ -64,6 +65,8 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
   const chessRef = useRef(new Chess(puzzle.setupFen));
   const [fen, setFen] = useState(puzzle.setupFen);
   const [boardState, setBoardState] = useState<BoardState>('thinking');
+  // Board + Hint / Show Solution fit above the bottom nav on a short phone (David 2026-10-04).
+  const { boardRef: fitRef, keepRef, boardStyle: fitStyle } = useBoardFit(boardState);
   const wrongTry = useWrongTryRefutation();
   const { refute: refuteTry, clearArrows: clearWrongArrows } = wrongTry;
   const puzzleIdRef = useRef(puzzle.id);
@@ -417,7 +420,7 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
       </motion.div>
 
       {/* Board */}
-      <div className="w-full md:max-w-[420px] mx-auto" data-testid="setup-board">
+      <div ref={fitRef} style={fitStyle} className="w-full md:max-w-[420px] mx-auto" data-testid="setup-board">
         <ChessBoard
           key={boardKey}
           initialFen={fen}
@@ -433,31 +436,33 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
         />
       </div>
 
-      {/* Hint controls */}
-      {boardState === 'thinking' && isPlayerTurn && settings.showHints && (
-        <div className="flex flex-col items-start gap-2" data-testid="setup-hint-area">
-          <HintButton
-            currentLevel={hintTier}
-            onRequestHint={handleHint}
-            disabled={hintState.isAnalyzing}
-          />
-          {(hintTier >= 3 ? hintState.nudgeText : ladderText) && (
-            <p className="text-xs text-amber-500 max-w-sm" data-testid="hint-nudge" data-tier={hintTier}>
-              {hintTier >= 3 ? hintState.nudgeText : ladderText}
-            </p>
-          )}
+      {/* Hint and Show Solution share ONE row so both sit above the bottom
+          nav on a short phone (David 2026-10-04); the ladder text goes below. */}
+      {(boardState === 'thinking' || boardState === 'incorrect') && (
+        <div ref={keepRef} className="flex flex-wrap items-center justify-between gap-2">
+          {boardState === 'thinking' && isPlayerTurn && settings.showHints ? (
+            <div className="flex flex-col items-start gap-2" data-testid="setup-hint-area">
+              <HintButton
+                currentLevel={hintTier}
+                onRequestHint={handleHint}
+                disabled={hintState.isAnalyzing}
+              />
+            </div>
+          ) : <span />}
+          <button
+            onClick={handleShowSolution}
+            className="text-xs underline opacity-70 hover:opacity-100"
+            style={{ color: 'var(--color-text-muted)' }}
+            data-testid="setup-show-solution"
+          >
+            Show Solution
+          </button>
         </div>
       )}
-
-      {(boardState === 'thinking' || boardState === 'incorrect') && (
-        <button
-          onClick={handleShowSolution}
-          className="self-center text-xs underline opacity-70 hover:opacity-100"
-          style={{ color: 'var(--color-text-muted)' }}
-          data-testid="setup-show-solution"
-        >
-          Show Solution
-        </button>
+      {boardState === 'thinking' && isPlayerTurn && settings.showHints && (hintTier >= 3 ? hintState.nudgeText : ladderText) && (
+        <p className="text-xs text-amber-500 max-w-sm" data-testid="hint-nudge" data-tier={hintTier}>
+          {hintTier >= 3 ? hintState.nudgeText : ladderText}
+        </p>
       )}
 
       {/* Move indicator */}

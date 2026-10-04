@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Flame } from 'lucide-react';
+import { Flame } from 'lucide-react';
+import { TacticsPageHeader } from '../Tactics/TacticsPageHeader';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { seedPuzzles, seedLongPuzzles, recordAttempt } from '../../services/puzzleService';
@@ -13,12 +14,12 @@ import {
 import { reward } from '../../services/rewardService';
 import { logAppAudit } from '../../services/appAuditor';
 import { voiceService } from '../../services/voiceService';
-import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 import type { PuzzleRecord } from '../../types';
 import { PuzzleBoard, type PuzzleOutcome } from './PuzzleBoard';
 import { RollingNumber } from '../ui/RollingNumber';
 import { finishBite } from '../../services/activeBite';
 import { DEEP_RUN_BITE } from '../../services/upNextPicker';
+import { studentPuzzleRating } from '../../services/studentPuzzleRating';
 
 /**
  * Deep Run — "How many moves deep can you accumulate!!! That's the one!!!"
@@ -39,7 +40,7 @@ async function readBest(): Promise<number> {
 export function DeepRunPage(): JSX.Element {
   const navigate = useNavigate();
   const activeProfile = useAppStore((s) => s.activeProfile);
-  const rating = activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING;
+  const rating = studentPuzzleRating(activeProfile);
   const [phase, setPhase] = useState<Phase>('intro');
   const [best, setBest] = useState(0);
   const [run, setRun] = useState<DeepRunState | null>(null);
@@ -199,18 +200,12 @@ export function DeepRunPage(): JSX.Element {
 
   return (
     <div className="flex flex-col flex-1 gap-4 p-4 md:p-6 pb-[calc(10rem+env(safe-area-inset-bottom,0px))] md:pb-24 overflow-y-auto" data-testid="deep-run-page">
-      <div className="flex items-center gap-3">
-        <button
-          onClick={() => { void navigate('/tactics'); }}
-          className="p-2 rounded-lg hover:bg-theme-surface transition-colors"
-          aria-label="Back to Tactics"
-          data-testid="back-button"
-        >
-          <ArrowLeft size={18} className="text-theme-text" />
-        </button>
-        <Flame size={24} className="text-fuchsia-400 drop-shadow-[0_0_8px_rgba(255,61,242,0.8)]" />
-        <h1 className="text-xl font-black uppercase tracking-wide text-fuchsia-200">Deep Run</h1>
-      </div>
+      <TacticsPageHeader
+        title="Deep Run"
+        icon={<Flame size={24} className="text-fuchsia-400" />}
+        onBack={() => { void navigate('/tactics'); }}
+        backTestId="back-button"
+      />
 
       {phase === 'intro' && (
         <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center gap-5 text-center" data-testid="deep-run-intro">
@@ -242,7 +237,6 @@ export function DeepRunPage(): JSX.Element {
               onComplete={handleComplete}
               maxWrongAttempts={Number.POSITIVE_INFINITY}
               hintOnMiss
-              fitViewport
               surface="deep-run"
               disabled={phase !== 'running'}
               streak={run.solved}

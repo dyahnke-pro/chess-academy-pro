@@ -66,7 +66,7 @@ export function BuildVersionWidget(): JSX.Element | null {
     <button
       type="button"
       onClick={() => void handleCopy()}
-      className={`fixed bottom-1 right-1 z-50 select-none rounded px-1.5 py-0.5 font-mono text-[9px] leading-tight backdrop-blur-sm transition-opacity ${
+      className={`fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:bottom-1 right-1 z-50 select-none rounded px-1.5 py-0.5 font-mono text-[9px] leading-tight backdrop-blur-sm transition-opacity ${
         swUpdate
           ? 'bg-amber-500/20 text-amber-300 opacity-100 hover:bg-amber-500/30'
           : 'bg-black/30 text-white/40 opacity-50 hover:opacity-100 hover:bg-black/50'

@@ -11,7 +11,8 @@ import { useChessGame } from '../../hooks/useChessGame';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useStruggleDetection } from '../../hooks/useStruggleDetection';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
-import { Eye } from 'lucide-react';
+import { Eye, RotateCcw } from 'lucide-react';
+import { VoiceChatMic } from '../Board/VoiceChatMic';
 import type { MoveResult } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { voiceService } from '../../services/voiceService';
@@ -38,6 +39,7 @@ import { solverMoves } from '../../services/puzzleDepth';
 import { reward } from '../../services/rewardService';
 import { rewardSeed } from '../../services/rewardEvents';
 import { PuzzleHeader } from './PuzzleHeader';
+import { useBoardFit } from '../../hooks/useBoardFit';
 
 type PuzzleState = 'loading' | 'playing' | 'correct' | 'incorrect';
 
@@ -74,9 +76,6 @@ interface PuzzleBoardProps {
    *  "Hints are given until top of ladder is reached. Then show solution
    *  button. But we give the user as many tries as they want"). */
   hintOnMiss?: boolean;
-  /** Size the board to the screen HEIGHT as well as its width, so a surface
-   *  with a score row above it never pushes the bottom rank off-screen. */
-  fitViewport?: boolean;
   /** Which Tactics surface hosts the board — a missed puzzle is recorded
    *  under it (`recordPuzzleMiss`). REQUIRED so a new host has to answer. */
   surface: PuzzleMissRecord['surface'];
@@ -113,7 +112,6 @@ export function PuzzleBoard({
   streak,
   headerExtra,
   hintOnMiss = false,
-  fitViewport = false,
   surface,
   focusThemes,
 }: PuzzleBoardProps): JSX.Element {
@@ -125,6 +123,9 @@ export function PuzzleBoard({
   const meter = usePuzzleMeter();
   const consumedIdRef = useRef<string | null>(null);
   const [state, setState] = useState<PuzzleState>('loading');
+  // The board shrinks just enough that Hint / Show solution sit above the
+  // bottom nav on a short phone (David 2026-10-04).
+  const { boardRef: fitRef, keepRef, boardStyle: fitStyle } = useBoardFit(state);
   const [moveIndex, setMoveIndex] = useState(0);
   const [lastMoveHighlight, setLastMoveHighlight] = useState<{ from: string; to: string } | null>(null);
   const [flashClass, setFlashClass] = useState<string>('');
@@ -738,11 +739,12 @@ export function PuzzleBoard({
           {themeLabel}
         </h2>
       )}
-      <div className={`w-full md:max-w-[420px] mx-auto rounded-lg overflow-hidden ${fitViewport ? 'max-w-[calc(100dvh-22rem)] min-w-[16rem]' : ''} ${flashClass}`} data-testid="board-wrapper">
+      <div ref={fitRef} style={fitStyle} className={`w-full md:max-w-[420px] mx-auto rounded-lg overflow-hidden ${flashClass}`} data-testid="board-wrapper">
         <ControlledChessBoard
           game={game}
           interactive={state === 'playing' && !disabled}
-          showFlipButton
+          showFlipButton={false}
+          showVoiceMic={false}
           showUndoButton={false}
           showResetButton={false}
           onMove={handleChessBoardMove}
@@ -759,54 +761,67 @@ export function PuzzleBoard({
         </p>
       )}
 
-      {/* After it resolves, the full read stays one tap away */}
-      {terminal && (
-        <div className="flex justify-end">
+      {/* ONE control row (David 2026-10-04: on a short phone the old two rows
+          pushed Hint / Show solution under the bottom nav). The puzzle's own
+          buttons on the left, Flip and Ask on the right; every label one line.
+          After it resolves, the full read stays one tap away. */}
+      <div ref={keepRef} className="flex flex-wrap items-center gap-1.5">
+        {state === 'playing' && (
+          <div className="flex min-w-0 items-center gap-1.5" data-testid="puzzle-controls">
+            {settings.showHints && (
+              <div className="flex flex-col items-start gap-2" data-testid="puzzle-hint-area">
+                <HintButton
+                  currentLevel={hintState.level}
+                  onRequestHint={handleRequestHint}
+                  disabled={hintState.isAnalyzing}
+                />
+              </div>
+            )}
+            <button
+              onClick={handleTeach}
+              disabled={teach.isNarrating}
+              className="flex items-center gap-1.5 whitespace-nowrap px-2.5 py-1.5 text-xs text-theme-text-muted hover:text-theme-text rounded-lg border border-theme-border hover:bg-theme-surface transition-colors disabled:opacity-50"
+              data-testid="teach-position-button"
+            >
+              {teach.isNarrating ? 'Reading…' : 'Teach'}
+            </button>
+            <button
+              onClick={handleShowSolution}
+              className={`flex items-center gap-1.5 whitespace-nowrap px-2.5 py-1.5 text-xs rounded-lg border transition-colors ${ladderTop ? 'animate-pulse border-amber-400/60 text-amber-200 bg-amber-500/10' : 'text-theme-text-muted hover:text-theme-text border-theme-border hover:bg-theme-surface'}`}
+              data-testid="show-solution-button"
+            >
+              <Eye size={14} />
+              Solution
+            </button>
+          </div>
+        )}
+        {terminal && (
           <button
             onClick={handleTeach}
             disabled={teach.isNarrating}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-theme-text-muted hover:text-theme-text rounded-lg border border-theme-border hover:bg-theme-surface transition-colors disabled:opacity-50"
+            className="flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 text-xs text-theme-text-muted hover:text-theme-text rounded-lg border border-theme-border hover:bg-theme-surface transition-colors disabled:opacity-50"
             data-testid="teach-position-button"
           >
             {teach.isNarrating ? 'Reading the position…' : 'Teach me this position'}
           </button>
-        </div>
-      )}
-
-      {/* Hint + Show Solution controls */}
-      {state === 'playing' && (
-        <div className="flex items-center gap-3" data-testid="puzzle-controls">
-          {settings.showHints && (
-            <div className="flex flex-col items-start gap-2" data-testid="puzzle-hint-area">
-              <HintButton
-                currentLevel={hintState.level}
-                onRequestHint={handleRequestHint}
-                disabled={hintState.isAnalyzing}
-              />
-              {hintState.nudgeText && (
-                <p className="text-xs text-amber-500 max-w-sm" data-testid="hint-nudge">
-                  {hintState.nudgeText}
-                </p>
-              )}
-            </div>
-          )}
+        )}
+        <div className="ml-auto flex shrink-0 items-center gap-1.5">
           <button
-            onClick={handleTeach}
-            disabled={teach.isNarrating}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-theme-text-muted hover:text-theme-text rounded-lg border border-theme-border hover:bg-theme-surface transition-colors disabled:opacity-50"
-            data-testid="teach-position-button"
+            onClick={game.flipBoard}
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md bg-theme-surface text-theme-text-muted hover:bg-theme-border hover:text-theme-text transition-colors"
+            title="Flip board"
+            aria-label="Flip board"
+            data-testid="flip-button"
           >
-            {teach.isNarrating ? 'Reading the position…' : 'Teach me this position'}
+            <RotateCcw size={14} />
           </button>
-          <button
-            onClick={handleShowSolution}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg border transition-colors ${ladderTop ? 'animate-pulse border-amber-400/60 text-amber-200 bg-amber-500/10' : 'text-theme-text-muted hover:text-theme-text border-theme-border hover:bg-theme-surface'}`}
-            data-testid="show-solution-button"
-          >
-            <Eye size={14} />
-            Show Solution
-          </button>
+          <VoiceChatMic fen={game.position} turn={game.turn} playerColor={userColor} compact />
         </div>
+      </div>
+      {state === 'playing' && hintState.nudgeText && (
+        <p className="text-xs text-amber-500" data-testid="hint-nudge">
+          {hintState.nudgeText}
+        </p>
       )}
 
       {/* Status message — only show for correct (incorrect uses flash-only feedback) */}

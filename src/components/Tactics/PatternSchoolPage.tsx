@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ChevronDown, ChevronUp, Eye, Shield, Crosshair, Swords } from 'lucide-react';
+import { ChevronDown, ChevronUp, Eye, Shield, Crosshair, Swords } from 'lucide-react';
+import { TacticsPageHeader } from './TacticsPageHeader';
 import { Chess } from 'chess.js';
 import { ConsistentChessboard, type BoardArrow } from '../Chessboard/ConsistentChessboard';
 import { admitArrow } from '../../services/arrowDoor';
@@ -189,21 +190,13 @@ export function PatternSchoolPage(): JSX.Element {
   return (
     <div className="flex flex-col gap-4 p-4 flex-1 min-h-0 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6" data-testid="pattern-school-page">
       <div className="max-w-lg mx-auto w-full flex flex-col gap-4">
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => void navigate('/tactics')}
-            className="p-2 rounded-lg border border-theme-border"
-            aria-label="Back to tactics"
-            data-testid="pattern-school-back"
-          >
-            <ArrowLeft size={18} className="text-theme-text" />
-          </button>
-          <div className="flex items-center gap-2">
-            <Swords size={22} className="text-indigo-400" />
-            <h1 className="text-xl font-bold text-theme-text">Pattern Recognition</h1>
-          </div>
-        </div>
+        <TacticsPageHeader
+          title="Pattern Recognition"
+          icon={<Swords size={22} className="text-indigo-400" />}
+          onBack={() => void navigate('/tactics')}
+          backLabel="Back to tactics"
+          backTestId="pattern-school-back"
+        />
         <p className="text-sm text-theme-text-muted leading-relaxed">
           Every pattern here is one the coach computes on your boards, live. Learn each three ways:
           identify it when it lands, recognize the geometry one move early, and prevent it — or turn it

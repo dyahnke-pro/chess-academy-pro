@@ -24,6 +24,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowLeft,
+  Calculator,
   Check,
   ChevronRight,
   Lightbulb,
@@ -33,6 +34,7 @@ import {
 import type { CSSProperties } from 'react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
+import { TacticsPageHeader } from '../Tactics/TacticsPageHeader';
 import { useEndgamePlayout } from '../../hooks/useEndgamePlayout';
 import { useClickToMove } from '../../hooks/useClickToMove';
 import {
@@ -54,6 +56,7 @@ import { WrongTryNote } from '../Puzzles/WrongTryNote';
 import { hintSquareStyles } from '../../utils/hintSquareStyles';
 import { useSolvedDrillConcept } from '../../hooks/useWrongTryRefutation';
 import type { PieceDropHandlerArgs } from 'react-chessboard';
+import { useBoardFit } from '../../hooks/useBoardFit';
 
 const EMPTY_LINE: readonly string[] = [];
 
@@ -115,7 +118,7 @@ interface SkillPickerProps {
   onBack: () => void;
 }
 
-function SkillPicker({ onPick, onBack: _onBack }: SkillPickerProps): JSX.Element {
+function SkillPicker({ onPick, onBack }: SkillPickerProps): JSX.Element {
   const skills = useMemo(() => getCalculationSkills(), []);
   const [gameCounts, setGameCounts] = useState<Record<string, number>>({});
   useEffect(() => {
@@ -133,12 +136,17 @@ function SkillPicker({ onPick, onBack: _onBack }: SkillPickerProps): JSX.Element
   }, [skills]);
   return (
     <div className="flex flex-col gap-4 p-4 flex-1 min-h-0 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-lg mx-auto w-full">
-      <div className="text-center">
-        <h2 className="text-base font-semibold text-theme-text">Calculation</h2>
-        <p className="text-xs text-theme-text-muted mt-1">
-          Six drills built on Lichess puzzle theme tags. Pick a skill to train.
-        </p>
-      </div>
+      {/* The picker had no way back to Tactics — its onBack was wired and
+          never rendered (hand walk 2026-10-04, C8). */}
+      <TacticsPageHeader
+        title="Calculation"
+        icon={<Calculator size={22} className="text-blue-400" />}
+        onBack={onBack}
+        backTestId="calculation-back"
+      />
+      <p className="text-xs text-theme-text-muted -mt-2">
+        Six drills built on Lichess puzzle theme tags. Pick a skill to train.
+      </p>
       <div className="grid grid-cols-1 gap-2">
         {skills.map((skill, idx) => {
           const count = getDrillPuzzleCount(skill.id);
@@ -196,17 +204,7 @@ interface RationaleScreenProps {
 function RationaleScreen({ skill, onStart, onBack }: RationaleScreenProps): JSX.Element {
   return (
     <div className="flex flex-col gap-4 p-4 flex-1 min-h-0 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-lg mx-auto w-full">
-      <div className="flex items-center justify-between">
-        <button
-          onClick={onBack}
-          className="p-2 rounded-lg hover:bg-theme-surface min-w-[44px] min-h-[44px] flex items-center justify-center"
-          aria-label="Back to skills"
-        >
-          <ArrowLeft size={20} className="text-theme-text" />
-        </button>
-        <h2 className="text-base font-semibold text-theme-text">{skill.name}</h2>
-        <div className="w-[44px]" />
-      </div>
+      <TacticsPageHeader title={skill.name} onBack={onBack} backLabel="Back to skills" />
       <div className="rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-4 flex flex-col gap-3">
         <div className="flex items-center gap-2">
           <Lightbulb size={16} className="text-amber-400" />
@@ -377,6 +375,8 @@ function AdaptivePuzzleRunner({
     [playout, trackedPlayMove, trackedPieceDrop],
   );
   const clickToMove = useClickToMove(trackedPlayout);
+  // Board + Skip / Next fit above the bottom nav on a short phone (David 2026-10-04).
+  const { boardRef: fitRef, keepRef, boardStyle: fitStyle } = useBoardFit(playout.phase);
   // SOLVED → TEACH THE CONCEPT (tactics map 2026-10-01: Calculation ended on
   // "Solved — played to the win." and nothing else). The same computed
   // explanation the puzzle board gives, for a student-to-move drill.
@@ -539,7 +539,7 @@ function AdaptivePuzzleRunner({
           </div>
         )}
       </div>
-      <div className="flex items-center justify-between gap-2">
+      <div ref={keepRef} className="flex items-center justify-between gap-2">
         <button
           onClick={trackedReveal}
           disabled={playout.isComplete}
@@ -563,7 +563,7 @@ function AdaptivePuzzleRunner({
     </div>
   );
 
-  return <ChessLessonLayout header={header} board={board} controls={controls} />;
+  return <ChessLessonLayout header={header} board={board} controls={controls} boardFit={{ ref: fitRef, style: fitStyle }} />;
 }
 
 // ─── Summary ─────────────────────────────────────────────────────

@@ -36,6 +36,7 @@ import { pliesFor, solveLengthOf } from '../../services/mistakeLineGrowth';
 import { reward } from '../../services/rewardService';
 import { rewardSeed } from '../../services/rewardEvents';
 import { PuzzleHeader } from './PuzzleHeader';
+import { useBoardFit } from '../../hooks/useBoardFit';
 
 type PuzzleState = 'loading' | 'replay' | 'playing' | 'correct' | 'incorrect' | 'freeplay';
 
@@ -162,6 +163,8 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   const meter = usePuzzleMeter();
   const consumedIdRef = useRef<string | null>(null);
   const [state, setState] = useState<PuzzleState>('loading');
+  // Board + [show me] fit above the bottom nav on a short phone (David 2026-10-04).
+  const { boardRef: fitRef, keepRef, boardStyle: fitStyle } = useBoardFit(state);
   const resolvedForRef = useRef<string | null>(null);
   const tryTokenRef = useRef(0);
   /** A wrong try's refutation is still being read. While it is, a coaching
@@ -1170,7 +1173,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       )}
 
       {/* Board */}
-      <div className="w-full md:max-w-[420px] mx-auto">
+      <div ref={fitRef} style={fitStyle} className="w-full md:max-w-[420px] mx-auto">
         <ChessBoard
           initialFen={fen}
           key={boardKey}
@@ -1199,9 +1202,31 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
         </div>
       )}
 
-      {/* Teach me this position — on demand, never forced */}
+      {/* ONE row: [show me] beside Teach me, so both sit above the bottom nav
+          on a short phone (David 2026-10-04). */}
       {(state === 'playing' || state === 'correct') && (
-        <div className="flex justify-end">
+        <div ref={keepRef} className="flex flex-wrap items-center justify-between gap-2">
+          {state === 'playing' && settings.showHints && (
+            <div className="flex flex-col items-start gap-2" data-testid="puzzle-hint-area">
+              <ShowMeButton
+                onShow={() => {
+                  // Told before answering -> the solve is `prompted` (refs, not
+                  // hintState.level: `resetHints()` zeroes the level on the very
+                  // move that solves). Told after a miss -> the miss stands.
+                  if (!answeredRef.current) toldBeforeAnswerRef.current = true;
+                  answerShownRef.current = true;
+                  // Skip the hint ladder — jump straight to tier 3 (best
+                  // move arrow + final answer). requestHint() bumps one
+                  // tier; three consecutive calls reach tier 3.
+                  if (hintState.level < 1) requestHint();
+                  if (hintState.level < 2) requestHint();
+                  if (hintState.level < 3) requestHint();
+                }}
+                disabled={hintState.isAnalyzing}
+                revealed={hintState.level >= 3}
+              />
+            </div>
+          )}
           <button
             onClick={handleTeach}
             disabled={teach.isNarrating}
@@ -1209,43 +1234,15 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
             data-testid="teach-position-button"
           >
             <HelpCircle size={14} />
-            <span>{teach.isNarrating ? 'Reading the position…' : 'Teach me this position'}</span>
+            <span className="whitespace-nowrap">{teach.isNarrating ? 'Reading…' : 'Teach me'}</span>
           </button>
         </div>
       )}
 
-      {/* Show Me button — instant reveal of the best move (arrow on
-          board + voice). Progressive hints fire AUTOMATICALLY after
-          each wrong attempt (handleMove → concept on 1st, piece on
-          2nd, square on 3rd+); the button is the "I give up, just
-          show me" escape hatch. David's directive 2026-05-19:
-          "turn the hint button into [show me]. have the coach give
-          progressive hints automatically after each failed attempt." */}
-      {state === 'playing' && settings.showHints && (
-        <div className="flex flex-col items-start gap-2" data-testid="puzzle-hint-area">
-          <ShowMeButton
-            onShow={() => {
-              // Told before answering -> the solve is `prompted` (refs, not
-              // hintState.level: `resetHints()` zeroes the level on the very
-              // move that solves). Told after a miss -> the miss stands.
-              if (!answeredRef.current) toldBeforeAnswerRef.current = true;
-              answerShownRef.current = true;
-              // Skip the hint ladder — jump straight to tier 3 (best
-              // move arrow + final answer). requestHint() bumps one
-              // tier; three consecutive calls reach tier 3.
-              if (hintState.level < 1) requestHint();
-              if (hintState.level < 2) requestHint();
-              if (hintState.level < 3) requestHint();
-            }}
-            disabled={hintState.isAnalyzing}
-            revealed={hintState.level >= 3}
-          />
-          {hintState.nudgeText && (
-            <p className="text-xs text-amber-500 max-w-sm" data-testid="hint-nudge">
-              {hintState.nudgeText}
-            </p>
-          )}
-        </div>
+      {state === 'playing' && hintState.nudgeText && (
+        <p className="text-xs text-amber-500 max-w-sm" data-testid="hint-nudge">
+          {hintState.nudgeText}
+        </p>
       )}
 
       {/* Status feedback */}

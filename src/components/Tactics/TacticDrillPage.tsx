@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Swords, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { Swords, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import {
   getPuzzleForThemeAtRating,
   getPuzzleForOpeningAtRating,
@@ -11,15 +11,15 @@ import {
   recordAttempt,
 } from '../../services/puzzleService';
 import { getPuzzleIdsByOpening } from '../../services/puzzlesByOpening';
-import { resolveReachState } from '../../services/reachRating';
 import { useAppStore } from '../../stores/appStore';
 import { PuzzleBoard } from '../Puzzles/PuzzleBoard';
+import { TacticsPageHeader } from './TacticsPageHeader';
 import type { PuzzleOutcome } from '../Puzzles/PuzzleBoard';
 import type { PuzzleRecord } from '../../types';
 import { db } from '../../db/schema';
 import { logAppAudit } from '../../services/appAuditor';
 import { teachingSourceForBoard, generalizedTeaching, spokenBeatText, tacticNoteForPuzzleThemes } from '../../services/danyaTeachingService';
-import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
+import { studentPuzzleRating, puzzleTarget } from '../../services/studentPuzzleRating';
 
 type Phase = 'loading' | 'solving' | 'summary';
 
@@ -83,10 +83,7 @@ export function TacticDrillPage(): JSX.Element {
   // the drill keeps its own bounded 10-puzzle ramp, but STARTS at the student's
   // reach, unifying the starting difficulty across every tactics surface.
   const [sessionRating, setSessionRating] = useState(
-    () => resolveReachState(
-      activeProfile?.preferences?.reachState,
-      activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING,
-    ).rating,
+    () => puzzleTarget(activeProfile),
   );
   const [ratingDelta, setRatingDelta] = useState<number | null>(null);
 
@@ -140,10 +137,7 @@ export function TacticDrillPage(): JSX.Element {
   /** Start or restart a drill session. */
   const startSession = useCallback(async (): Promise<void> => {
     setPhase('loading');
-    const startRating = resolveReachState(
-      activeProfile?.preferences?.reachState,
-      activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING,
-    ).rating;
+    const startRating = puzzleTarget(activeProfile);
     setSessionRating(startRating);
     seenIdsRef.current = new Set();
     completedRef.current = new Set();
@@ -231,7 +225,7 @@ export function TacticDrillPage(): JSX.Element {
 
     // Apply Elo with time bonus to the player's persistent puzzle rating
     const eloDelta = calculateRatingDelta(
-      activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING,
+      studentPuzzleRating(activeProfile),
       puzzle.rating,
       outcome.correct,
     );
@@ -241,7 +235,7 @@ export function TacticDrillPage(): JSX.Element {
     setRatingDelta(adjustedDelta);
 
     if (activeProfile) {
-      const newPuzzleRating = Math.max(100, (activeProfile.puzzleRating ?? DEFAULT_STUDENT_RATING) + adjustedDelta);
+      const newPuzzleRating = Math.max(100, studentPuzzleRating(activeProfile) + adjustedDelta);
       const updated = { ...activeProfile, puzzleRating: newPuzzleRating };
       setActiveProfile(updated);
       void db.profiles.update(activeProfile.id, { puzzleRating: newPuzzleRating });
@@ -249,7 +243,7 @@ export function TacticDrillPage(): JSX.Element {
 
     // Saved like every other puzzle surface, so My Profile's theme skills see
     // themed and Random Mix drills too (they never did — only the rating moved).
-    void recordAttempt(puzzle.id, outcome.correct, activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING, outcome.correct ? 'good' : 'again').catch(() => null);
+    void recordAttempt(puzzle.id, outcome.correct, studentPuzzleRating(activeProfile), outcome.correct ? 'good' : 'again').catch(() => null);
 
     resultsRef.current.push({
       puzzleRating: puzzle.rating,
@@ -365,16 +359,14 @@ export function TacticDrillPage(): JSX.Element {
       data-testid="tactic-drill-page"
     >
       {/* Header */}
-      <div className="flex items-center gap-3 p-4">
-        <button onClick={() => void navigate('/tactics')} className="p-2 rounded-lg hover:opacity-80" data-testid="back-btn">
-          <ArrowLeft size={20} style={{ color: 'var(--color-text)' }} />
-        </button>
-        <Swords size={22} style={{ color: 'var(--color-warning)' }} />
-        <h1 className="text-lg font-bold flex-1" style={{ color: 'var(--color-text)' }}>
-          {openingFilter
-            ? `Drill: ${openingResolution?.source === 'family' && openingResolution.family ? openingResolution.family : openingFilter}`
-            : `Drill: ${themeLabel}`}
-        </h1>
+      <TacticsPageHeader
+        className="p-4"
+        title={openingFilter
+          ? `Drill: ${openingResolution?.source === 'family' && openingResolution.family ? openingResolution.family : openingFilter}`
+          : `Drill: ${themeLabel}`}
+        icon={<Swords size={22} style={{ color: 'var(--color-warning)' }} />}
+        onBack={() => void navigate('/tactics')}
+        right={<>
         {openingFilter && (
           <button
             type="button"
@@ -393,17 +385,23 @@ export function TacticDrillPage(): JSX.Element {
         )}
         {phase === 'solving' && (
           <div className="flex items-center gap-2">
-            <span className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>
-              Target: {sessionRating}
+            {/* The student's rating (the one reader) with its change, then the
+                drill's target — two numbers, each named for what it is. */}
+            <span className="text-xs font-medium text-theme-text" data-testid="drill-player-rating">
+              Rating {studentPuzzleRating(activeProfile)}
             </span>
             {ratingDelta !== null && (
               <span className={`text-xs font-bold ${ratingDelta >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                 {ratingDelta >= 0 ? '+' : ''}{ratingDelta}
               </span>
             )}
+            <span className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }} data-testid="drill-target">
+              Target: {sessionRating}
+            </span>
           </div>
         )}
-      </div>
+        </>}
+      />
 
       {/* Loading */}
       {phase === 'loading' && (

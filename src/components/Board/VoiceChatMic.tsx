@@ -88,6 +88,8 @@ interface VoiceChatMicProps {
   getMoveCount?: () => number;
   /** Optional: live FEN getter for the same audit. */
   getCurrentFen?: () => string;
+  /** Icon-only button (same 44px tap target) for a tight control row. */
+  compact?: boolean;
 }
 
 const VOICE_ENGINE_DEPTH = 10;
@@ -180,7 +182,7 @@ function ackFor(intent: RoutedCommand): string {
   }
 }
 
-export function VoiceChatMic({ fen, turn, playerColor = 'white', onOpeningRequest, engineSnapshot, lastMoveContext, onListeningChange, onArrows, getMoveCount, getCurrentFen }: VoiceChatMicProps): JSX.Element {
+export function VoiceChatMic({ fen, turn, playerColor = 'white', onOpeningRequest, engineSnapshot, lastMoveContext, onListeningChange, onArrows, getMoveCount, getCurrentFen, compact = false }: VoiceChatMicProps): JSX.Element {
   const navigate = useNavigate();
   const [listening, setListening] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -779,7 +781,7 @@ export function VoiceChatMic({ fen, turn, playerColor = 'white', onOpeningReques
         // min-h/w 44px = WCAG AA tap target minimum. Previously
         // px-3 py-1.5 rendered around 30x30px which is below iOS HIG
         // and WCAG AA 44x44.
-        className={`flex items-center gap-1.5 min-h-[44px] min-w-[44px] px-4 py-2.5 rounded-md text-sm transition-colors ${
+        className={`flex items-center justify-center gap-1.5 min-h-[44px] min-w-[44px] ${compact ? 'px-2' : 'px-4'} py-2.5 rounded-md text-sm transition-colors ${
           listening
             ? 'bg-red-500/15 text-red-500 border border-red-500'
             : 'bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text'
@@ -803,7 +805,7 @@ export function VoiceChatMic({ fen, turn, playerColor = 'white', onOpeningReques
         data-testid="voice-chat-mic-btn"
       >
         {listening ? <MicOff size={14} /> : <Mic size={14} />}
-        <span>{listening ? 'Stop' : 'Ask'}</span>
+        {!compact && <span>{listening ? 'Stop' : 'Ask'}</span>}
       </motion.button>
     </div>
   );

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Loader2, Target, TrendingUp, AlertCircle, ExternalLink } from 'lucide-react';
+import { Loader2, Target, TrendingUp, AlertCircle, ExternalLink } from 'lucide-react';
+import { TacticsPageHeader } from '../Tactics/TacticsPageHeader';
 import { useAppStore } from '../../stores/appStore';
 import { decryptApiKey } from '../../services/cryptoService';
 import {
@@ -72,18 +73,8 @@ export function LichessDashboardPage(): JSX.Element {
 
   if (!hasToken) {
     return (
-      <div className="flex flex-col gap-6 p-6 flex-1 min-h-0 overflow-y-auto pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6" data-testid="lichess-dashboard-no-token">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => void navigate('/tactics')}
-            className="p-2 rounded-lg hover:bg-theme-surface transition-colors"
-            aria-label="Back to Tactics"
-            data-testid="back-btn"
-          >
-            <ArrowLeft size={18} className="text-theme-text" />
-          </button>
-          <h1 className="text-xl font-bold text-theme-text">Lichess Dashboard</h1>
-        </div>
+      <div className="flex flex-col gap-6 p-4 flex-1 min-h-0 overflow-y-auto pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6" data-testid="lichess-dashboard-no-token">
+        <TacticsPageHeader title="Lichess Dashboard" onBack={() => void navigate('/tactics')} />
         <div className="flex flex-col items-center gap-4 py-12 text-center">
           <AlertCircle size={40} className="text-theme-text-muted" />
           <div>
@@ -137,19 +128,12 @@ export function LichessDashboardPage(): JSX.Element {
     : [];
 
   return (
-    <div className="flex flex-col gap-6 p-6 flex-1 min-h-0 overflow-y-auto pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6" data-testid="lichess-dashboard-page">
+    <div className="flex flex-col gap-6 p-4 flex-1 min-h-0 overflow-y-auto pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6" data-testid="lichess-dashboard-page">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <button
-          onClick={() => void navigate('/tactics')}
-          className="p-2 rounded-lg hover:bg-theme-surface transition-colors"
-          aria-label="Back to Tactics"
-          data-testid="back-btn"
-        >
-          <ArrowLeft size={18} className="text-theme-text" />
-        </button>
-        <h1 className="text-xl font-bold text-theme-text">Lichess Dashboard</h1>
-        <div className="flex-1" />
+      <TacticsPageHeader
+        title="Lichess Dashboard"
+        onBack={() => void navigate('/tactics')}
+        right={<>
         {/* Days selector */}
         <select
           value={days}
@@ -162,7 +146,8 @@ export function LichessDashboardPage(): JSX.Element {
             <option key={d} value={d}>Last {d}d</option>
           ))}
         </select>
-      </div>
+        </>}
+      />
 
       {loading && (
         <div className="flex items-center justify-center py-12" data-testid="dashboard-loading">
