@@ -16,6 +16,26 @@ Status: **PLAN, awaiting David's go.** Nothing built yet.
 - May grow into its own Learn tab, **"Learn how to think"**, once it is strong
   enough.
 
+## 🔒 THE UNIFICATION RULE — governs every section below (David 2026-10-04: "Make sure the rest of the plan follows this unification strategy")
+
+Nothing in this plan is built FOR the lesson. Every piece is built ONCE, as the
+app's piece, and the lesson is one consumer among several. Before any piece is
+built, name its other consumers; if it has none, ask why not (capability parity).
+
+| Piece | The ONE copy | Every consumer |
+|---|---|---|
+| Reading a question or a spoken answer | the ONE-CHAT parser inside `dispatchCoachTurn` | Learn, lesson, Play chat + mic, Review, Openings chat, Analyse, Explain-position, Tactics, Dashboard search |
+| Answering about a board | the board computers behind that door (no lesson-only answerer) | the same list: "why is that a target?" works in Review chat as well as in a lesson |
+| Tapping squares as an answer | one tap-answer hook + one grader (`gradeReadingAnswer`), replacing the private copies in `AnalysisPracticePage` and `FindSquarePage` | lesson, Analysis Practice, Find the Square, Review cards, Setup Trainer first miss |
+| Reading what a wrong answer means | one wrong-answer → misconception-tag computer | lesson taps, Review cards, Tactics misses, game slips |
+| Recording an answer | one evidence row (`capabilityEvidence`, widened with taps, timing, help used, spoken/tapped) | every surface that asks the student anything |
+| Ranking | `coachDecider.decide` | already one |
+| The opponent | `coachGameEngine`, one strength, one offset table | Learn, Play, Openings, play-outs, the lesson game |
+| Rewards | `rewardService` | Tactics, Learn, lessons |
+| Choosing what to teach next | the curriculum + weakness spine + Up next | lessons, Up next, Home, Tactics queue |
+
+A lesson-only version of any row is a defect, the same as an enum split.
+
 ## Why it matters (Foundation)
 
 This is the coach teaching the PROCESS that every other computer feeds. Each step
@@ -142,7 +162,7 @@ weaker"; the puzzle DB's `quietMove` theme is a fallback source.
 ranked by the one door, `coachDecider.decide` (coachDecider.ts:290) → `factValue`
 (reviewFacetRank.ts:339) = `stakeValue` (material × 0.8^plies-until-it-lands,
 factStakes.ts:53) or `TIE_ORDER`, plus the student's own hole (raise-only). The
-ORDER of the seven steps stays fixed: it is the habit being taught. One exception:
+ORDER of the ten steps stays fixed: it is the habit being taught. One exception:
 a step that is critical in this position (their move threatens mate) takes the
 lesson there (importance gates, as in live play). A sub-question whose items are
 all below the floor is not asked in that position.
@@ -171,13 +191,15 @@ celebrates via the reward layer).
 **A. The coach answers every question — a hard requirement, not a feature.**
 - Mid-lesson, the student can ask anything; the lesson pauses (Learn already
   auto-pauses on chat), the coach answers, the lesson resumes.
-- Questions about the LESSON POSITION are answered from the lesson's own computed
-  facts (the answer key + the method facts behind it): "why is that a target?" →
+- Every question, in a lesson or anywhere else, enters through the ONE door
+  (`dispatchCoachTurn`, below). Questions about the lesson position are answered
+  by the SAME board computers every surface uses, with the lesson's answer key
+  handed in as context — never a lesson-only answerer: "why is that a target?" →
   the attackers vs defenders it was graded on; "what about my bishop?" → that
   piece's safety and scope; "how many defenders?" → the count; "why not Nxe5?" →
   the engine read + proof line; "what should I play?" → the step's best move with
-  its reason. Wider questions go through the full grounded chat pipeline
-  (`groundedAnswer` lanes / the ONE-CHAT parser when it lands).
+  its reason. These kinds then work on every surface that has a board (Review,
+  Play chat, Analyse, Tactics), because they live in the door, not the lesson.
 - **Never a refusal, never a stock "I can't verify that" inside a lesson.** If a
   computer has no answer, the coach says what it CAN see on that board.
 - **Gate:** a lesson question matrix (like `audit-coach-all-questions-prod`),
@@ -209,13 +231,16 @@ best-move regex and dropped "what I played". **The parser is built ONCE for the 
 section); lessons consume it.
 
 **B. The microphone works — real spoken dialogue.**
-- Learn's chat input already has a mic (`voiceInputService` via `ChatInput`:
-  continuous listening, live transcript, barge-in that cuts the coach off). Verify
-  it end to end in a lesson, then extend it:
-  - a spoken QUESTION goes through A;
-  - a spoken ANSWER counts like taps: "the knight on c6", "c6 and e5", "the rook"
-    (when there is one) → squares, through one deterministic parser (no model
-    decides the square);
+- Two mics exist today: Learn's (`voiceInputService` via `ChatInput`:
+  continuous listening, live transcript, barge-in) and `VoiceChatMic` on the
+  other boards. Both send their transcript to the ONE door, so speech is read the
+  same way on every surface. Verify end to end in a lesson, then extend it:
+  - a spoken QUESTION is a question like any other;
+  - a spoken ANSWER is a ChatTurn kind (`answer`, with referents): "the knight on
+    c6", "c6 and e5", "the rook" (when there is one). A fast deterministic path
+    reads plain square names; the parser resolves the rest; code validates every
+    referent against the board, so no model decides a square. The same `answer`
+    kind serves every surface that asks a tap question (Review cards, Tactics);
   - the coach replies by voice and the lesson carries on.
 - Verified headless with an injected transcript; the real-device mic (iPhone
   app, AVAudioSession patch) is flagged to David.
@@ -233,7 +258,8 @@ section); lessons consume it.
    defended piece → doesn't count defenders; a pawn-guarded piece → ignores who
    defends; their piece when asked about yours → skips own safety. Each pattern
    maps to an existing tag and is recorded, so lessons feed the spine like game
-   mistakes do.
+   mistakes do. The diagnosis is ONE computer (wrong answer → tag), shared with
+   Review cards and Tactics misses.
 5. **Guess-proofing:** extra taps count as wrong; the number of answers is told
    only after the first try; a set number of misses moves on to Show.
 
@@ -243,7 +269,9 @@ Every answer is stored, because a lesson answer is the most CONTROLLED evidence
 the app gets: the position, the question and the key are all known, so a wrong tap
 names the misconception directly (game slips are inferred from a move).
 
-Per question, one row (Dexie, through the existing writers where they fit):
+Per question, one row — the ONE evidence shape every asking surface writes
+(Review cards, Setup Trainer, Tactics, lessons), widened once, never a lesson
+table beside it (capability parity):
 - step, sub-question, position source (own game id + ply / puzzle id), the key
   set, every tap IN ORDER with right/wrong, extra taps, time to first tap and
   between taps, help used (Show / "I don't know" / nudge / hint), spoken vs
@@ -383,7 +411,7 @@ Every piece below exists; the lesson consumes it.
 | **Capability evidence + heat map** — `recordLaneEvidence`, `capabilityProven`, `heatMap` | Every tap is held/broken evidence on the existing tags; the heat map shows lesson progress with no new tile. |
 | **Fundamentals** — the 33 named fundamentals, `/coach/fundamentals` | Step 6 teaches the pillars a student keeps breaking; a fundamental going green is the same event in both places. |
 | **The one door** — `coachDecider.decide`, `factStakes`, need score | Ranks items within each step; the importance gate lets a critical step take the lesson. |
-| **methodBeat** (the habit line in live play) | The live coach names the lesson STEP: "Before you move: what did their last move change?" Live play and lessons teach the same seven-step habit in the same words. |
+| **methodBeat** (the habit line in live play) | The live coach names the lesson STEP: "Before you move: what did their last move change?" Live play and lessons teach the same ten-step habit in the same words, from one step table. |
 | **Learn free play** — the turn door (`composeLearnTurn` / one decision) | Carry-over: when the student's own game hits a lesson skill at a real moment, the coach asks the same tap question there (Learn only, never Play — Play volunteers nothing). |
 | **Review** — find-the-shot and turning-point cards | Carry-over in review: the missed moment is asked as the lesson question ("tap what Nf5 stopped guarding"). |
 | **Tactics** — Setup Trainer's first-miss board read, Pattern Recognition (identify / recognize / prevent), My Weaknesses | The Setup Trainer's first wrong try runs lesson steps 3 and 5 on that board; Pattern Recognition's "identify" is step 5 per motif; My Weaknesses positions are lesson boards. |
@@ -483,46 +511,68 @@ Built BEFORE the lesson game (P-strength), because steering needs the one streng
 
 ## Wiring (from the code map)
 
-- **Routing.** A new branch in `CoachTeachPage.handleSubmit` AFTER the
-  training-aid block (4263, so "teach me tactics" keeps drilling) and the
-  middlegame-plan block (ends 4473), BEFORE `TEACH_PATTERN` (4485). A tight
-  whole-message pattern: "teach me", "teach me something", "teach me chess",
-  "teach me (how) to think". Must NOT catch "teach me something else / new"
-  (walkthrough control), "what should I learn next?" (tested recommendation route),
-  "teach me tactics", "teach me my weaknesses", or any opening name. Today these
-  phrases fall into `TEACH_PATTERN` and reach a bogus opening picker or the brain.
-  This fixes that bug too.
-- **Tap input.** Learn has no square-answer mode today. Add a lesson branch that
-  swaps in the STATIC board (as `reviewFen` / `lineWalkFen` already do, ~12200)
-  with `onSquareClick` + `squareStyles`. Template: `AnalysisPracticePage`
-  (onSquareClick 331, styles 434-436).
-- **Lesson state.** Its own ref, modelled on `activeDrillRef` (1370) /
-  `loadDrillOntoBoard` (2418).
+- **Routing — through the ONE door.** Learn's `handleSubmit` is routed through
+  `dispatchCoachTurn` (prerequisite above). "Start a thinking lesson" is a ChatTurn
+  kind; `matchCustomLessonRequest` extends to it as that kind's fast path (bare
+  "teach me", "teach me something", "teach me chess", "teach me (how) to think").
+  It must NOT catch "teach me something else / new" (walkthrough control), "what
+  should I learn next?" (recommendation), "teach me tactics" (training aid),
+  "teach me my weaknesses" (custom lesson) or any opening name. Today these
+  phrases fall into `TEACH_PATTERN` and reach a bogus opening picker; this fixes
+  that bug too. Until Learn is on the door, the fast path sits in the same place
+  in `handleSubmit` (after the training-aid block, before `TEACH_PATTERN`) and
+  moves with it.
+- **Tap input — one shared hook.** `AnalysisPracticePage` (onSquareClick 331,
+  styles 434-436) and `FindSquarePage` each own a private tap-answer mode. Lift
+  them into ONE hook (taps → square set → `gradeReadingAnswer`, right/wrong
+  styling, the "one more" nudge), move both pages onto it, then use it in the
+  lesson (static board, as `reviewFen` / `lineWalkFen` already swap, ~12200) and
+  later in Review cards and the Setup Trainer.
+- **Lesson state — the custom lesson's, extended.** The thinking lesson is a part
+  type of the existing custom lesson (`customLessonPlan.ts`,
+  `startCustomLesson` / `runCustomLessonPart`), not a new ref beside
+  `activeDrillRef`.
 - **Logic out of the 15k-line page.** A pure `thinkingLesson.ts` (choose the step
   from the curriculum + spine → pick a position that passes the fair-key filter →
-  take the reading question from `buildReadingQuestions` → grade a tap SET with
-  `gradeReadingAnswer` → next step) and a hook `useThinkingLesson`.
-  CoachTeachPage only routes and renders.
+  take the reading question from `buildReadingQuestions` → grade with the shared
+  grader → next step) and a hook `useThinkingLesson`. CoachTeachPage only routes
+  and renders.
+- **One step table.** `Record<ThinkingStep, …>` (name, tags, computer, tier) is
+  the single source read by the lesson, `methodBeat`, the carry-over questions and
+  the heat map.
 - **Audit (algo rule).** One emission per decision (`thinking-lesson-step`: step,
   sub-question, key size, taps, outcome, source) through the one door, a contract
   row in `algoAuditContract.test.ts`, and a prod audit
-  (`audit-learn-how-to-think-prod.mjs`) that plays a lesson by tapping.
+  (`audit-learn-how-to-think-prod.mjs`) that plays a lesson by tapping and asks it
+  questions by typing and by voice.
 
 ## Phases
 
-1. **P1: one step end to end (step 3, targets).** Route, tap board, fair key from
-   `findHangingBySee`, Show/Guide/Solo, nudge, record + heat map, memory of seen
-   positions, own-games-then-puzzles. Hand walk on prod.
-2. **P2: steps 2 and 1** (safety, what their move changed).
-3. **P3: steps 4–5** (forcing moves, hit two at once).
-4. **P4: steps 6–7** (plans, is my move safe) + carry-over into Learn games and
-   Review.
-5. **P5: its own tab** "Learn how to think", if David judges it strong enough.
+Prerequisites first, because every phase consumes them:
+
+0a. **P0a: the ONE question route.** Parser inside `dispatchCoachTurn`, Learn
+    routed through it, mic transcripts on every surface through it, shadow first,
+    switched on at ≥95%. App-wide.
+0b. **P0b: ONE engine strength.** System B deleted, adaptive default, the shared
+    Easier / Matched / Harder offsets, the purpose table. App-wide.
+0c. **P0c: the shared tap-answer hook + the widened evidence row**, with Analysis
+    Practice and Find the Square moved onto the hook.
+1. **P1: step 5 (their targets) end to end**, as a custom-lesson part: fair key
+   (with a loose-piece computer distinct from "hanging", also fixing chat's
+   "nothing hanging" answer), Show / Guide / Solo, nudge, record + heat map, seen
+   positions, own games then puzzles, questions answered through the door. Hand
+   walk on prod.
+2. **P2: steps 3 and 2** (am I safe, what their move changed).
+3. **P3: steps 4, 6, 7** (answer the danger, forcing moves, hit two).
+4. **P4: steps 1, 8, 9, 10** (assess, candidates, calculate, is my move safe) +
+   tiers and unlocking.
+5. **P5: the lesson game** (purpose `lesson` on the one engine).
+6. **P6: unification** — carry-over into Learn free play and Review, Tactics queue
+   and Setup Trainer, Up next / Home, chat; its own "Learn how to think" tab if
+   David judges it strong enough.
 
 ## Open questions for David
 
-1. The ~8 s "one more" pause: right length?
-2. Should Show be skipped for a student whose record is already green on that
-   step (straight to Solo)?
-3. P1 first step: targets (my pick, the most teachable on a quiet board), or what
-   their move changed?
+1. Play's opponent: may it quietly steer toward lesson moments? (Play still says
+   nothing.)
+2. Kids (`/kid/*`): keep their own safe question path? (Plan assumes yes.)
