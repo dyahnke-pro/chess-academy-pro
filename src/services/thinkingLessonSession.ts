@@ -127,11 +127,18 @@ export class ThinkingLessonSession {
 
   /** Run the whole lesson. Resolves when it ends (finished, out of boards, or
    *  stopped). Returns the answers. */
-  async run(standing: StepStanding): Promise<readonly AnsweredQuestion[]> {
-    const stages = stagesFor(standing);
-    this.plan = stages.flatMap((s) => Array.from({ length: PER_STAGE[s] }, () => s));
+  async run(
+    standing: StepStanding,
+    /** `once`: ONE guided question on the given board, no intro or close — the
+     *  lesson game asking its question at a moment it set up. */
+    opts: { once?: boolean } = {},
+  ): Promise<readonly AnsweredQuestion[]> {
+    const stages: readonly LessonStage[] = opts.once ? ['guide'] : stagesFor(standing);
+    this.plan = opts.once ? ['guide'] : stages.flatMap((s) => Array.from({ length: PER_STAGE[s] }, () => s));
     this.publish({ active: true, step: this.kit.step, total: this.plan.length, index: 0 });
-    if (standing === 'green') {
+    if (opts.once) {
+      // No intro: the game is the context.
+    } else if (standing === 'green') {
       await this.deps.say(`Your skill chart shows this one green, so one quick check — if you've got it, we move on.`);
     } else {
       await this.deps.say(this.kit.intro);
@@ -140,7 +147,7 @@ export class ThinkingLessonSession {
       const stage = this.plan[this.cursor];
       const pos = this.nextPosition();
       if (!pos) {
-        if (this.cursor === 0) await this.deps.say('I could not find a clean board for this one yet — play or import a few games and it will build from them.');
+        if (this.cursor === 0 && !opts.once) await this.deps.say('I could not find a clean board for this one yet — play or import a few games and it will build from them.');
         break;
       }
       this.stage = stage;
@@ -163,14 +170,14 @@ export class ThinkingLessonSession {
         });
         continue;
       }
-      await this.ask(pos, stage, rot);
+      await this.ask(pos, rot);
     }
-    if (!this.stopped) await this.finish();
+    if (!this.stopped && !opts.once) await this.finish();
     this.publish({ ...IDLE });
     return this.results;
   }
 
-  private ask(pos: ChosenLessonPosition, stage: LessonStage, rot: number): Promise<void> {
+  private ask(pos: ChosenLessonPosition, rot: number): Promise<void> {
     return new Promise<void>((resolve) => {
       this.resolveQuestion = resolve;
       const question = [pos.lead, this.kit.prompt(rot)].filter(Boolean).join(' ');

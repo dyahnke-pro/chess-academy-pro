@@ -25,6 +25,8 @@ export interface UseThinkingLesson {
   dontKnow: () => void;
   /** Hold the nudge while the student asks something else. */
   hold: () => void;
+  /** The lesson game: ask the step's question once, on this live board. */
+  askOnce: (kit: StepKit, fen: string) => Promise<void>;
   stop: () => void;
 }
 
@@ -70,5 +72,20 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
   const dontKnow = useCallback((): void => { void sessionRef.current?.dontKnow(); }, []);
   const hold = useCallback((): void => { sessionRef.current?.hold(); }, []);
 
-  return { view, start, tap, dontKnow, hold, stop };
+  const askOnce = useCallback(async (kit: StepKit, fen: string): Promise<void> => {
+    sessionRef.current?.stop();
+    const session = new ThinkingLessonSession(kit, [{ fen, origin: 'game' }], new Set(), {
+      say: (t) => depsRef.current.say(t),
+      record: (a) => depsRef.current.record(a),
+      remember: async () => { /* a live game board is not a lesson board */ },
+      now: () => Date.now(),
+      setTimer: (fn, ms) => { const id = setTimeout(fn, ms); return () => clearTimeout(id); },
+      onView: (v) => { if (sessionRef.current === session) setView(v); },
+    });
+    sessionRef.current = session;
+    await session.run('grey', { once: true });
+    if (sessionRef.current === session) sessionRef.current = null;
+  }, []);
+
+  return { view, start, tap, dontKnow, hold, askOnce, stop };
 }

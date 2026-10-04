@@ -237,3 +237,13 @@ describe('lessonTeachLines (walk 2026-10-04 defects 4 and 6)', () => {
     expect(lessonTeachLines(['', '  ', 'x'])).toEqual(['X.']);
   });
 });
+
+describe('matchLessonGameRequest', () => {
+  it('matches the chip and plain phrasings only', async () => {
+    const { matchLessonGameRequest, LESSON_GAME_CHIP } = await import('./customLessonPlan');
+    expect(matchLessonGameRequest(LESSON_GAME_CHIP)).toBe(true);
+    expect(matchLessonGameRequest("let's play a game on this!")).toBe(true);
+    expect(matchLessonGameRequest('play a game')).toBe(false);
+    expect(matchLessonGameRequest('play the Najdorf')).toBe(false);
+  });
+});

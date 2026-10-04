@@ -98,7 +98,7 @@ export async function loadLessonCandidates(opts: {
       if (!color) continue;
       const positions = findMistakePositions(
         game.pgn,
-        (game.annotations ?? []).map((a) => ({ moveNumber: a.moveNumber, color: a.color, classification: a.classification })),
+        (game.annotations ?? []).map((a) => ({ moveNumber: a.moveNumber, color: a.color, classification: a.classification ?? undefined })),
         color,
         { count: Number.POSITIVE_INFINITY },
       );
@@ -117,7 +117,7 @@ export async function loadLessonCandidates(opts: {
         const prevSan = p.ply >= 2 ? history[p.ply - 2] : undefined;
         const beforeFen = p.ply >= 2 ? fens[p.ply - 2] : undefined;
         push({
-          fen: p.fen, origin: 'game', gameId: game.id, ply: p.ply, playedSan: p.playedNext,
+          fen: p.fen, origin: 'game', gameId: game.id, ply: p.ply, playedSan: p.playedNext ?? undefined,
           ...(prevSan && beforeFen ? { prevSan, beforeFen } : {}),
         });
       }

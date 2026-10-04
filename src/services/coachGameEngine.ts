@@ -13,6 +13,8 @@ import { teachableSlipAt } from './gemCrushLines';
 // the dependency is one-way.
 import { configFromTargetElo } from './coachPlaySession';
 import { logAppAudit } from './appAuditor';
+import { candidatesFromLines, LESSON_MOMENTS_PER_GAME, pickLessonMoment, steerWindowCp } from './lessonSteer';
+import type { FairKey } from './thinkingPositions';
 import type { StockfishAnalysis, CoachDifficulty } from '../types';
 import { explorerBandFor } from './ratingBands';
 import { targetStrength, emitOpponentStrength, type OpponentStrength } from './engineStrength';
@@ -484,7 +486,7 @@ export async function pickTaughtSlip(
   }
 }
 
-export type TeachingReplySource = 'taught-slip' | 'home-steer';
+export type TeachingReplySource = 'taught-slip' | 'home-steer' | 'lesson-steer';
 
 /**
  * Warm the teaching-reply layers for a seat before its first move (Play mount).
@@ -511,14 +513,50 @@ export function prewarmTeachingReplies(studentColor: 'white' | 'black', trigger 
  * trie; the layers below run exactly as before. Opt-in per surface
  * (`steerHomeFor`): a locked taught line is never steered off it.
  */
+/** The day's step for the lesson game: its id (for the audit) and the step
+ *  computer that says whether a board poses its question. */
+export interface LessonSteerOpt {
+  step: string;
+  keyFor: (fen: string) => FairKey | null;
+}
+
+/** Steered moments used in the current game (re-armed on a new game). */
+let lessonMomentsUsed = 0;
+
 export async function pickTeachingReply(
   fen: string,
   targetElo: number,
-  opts: { studentElo?: number; difficulty?: CoachDifficulty | 'auto'; steerHomeFor?: 'white' | 'black' } | undefined,
+  opts: { studentElo?: number; difficulty?: CoachDifficulty | 'auto'; steerHomeFor?: 'white' | 'black'; lessonSteer?: LessonSteerOpt } | undefined,
   source: string,
 ): Promise<{ uci: string; san: string; source: TeachingReplySource } | null> {
+  if (Number(fen.split(' ')[5] ?? '1') <= 2) lessonMomentsUsed = 0; // a new game re-arms the budget
   const taught = await pickTaughtSlip(fen, targetElo, opts, source);
   if (taught) return { uci: taught.uci, san: taught.san, source: 'taught-slip' };
+  // THE LESSON GAME (plan 2026-10-04): after a "Learn how to think" lesson the
+  // coach quietly hands the student a few real moments for that day's step —
+  // a move from its own top lines, inside the strength window, never weaker.
+  if (opts?.lessonSteer && lessonMomentsUsed < LESSON_MOMENTS_PER_GAME) {
+    try {
+      const analysis = await withBudget(stockfishEngine.analyzePosition(fen, 10), BAND_BUDGET_MS);
+      if (analysis) {
+        const cands = candidatesFromLines(fen, analysis.topLines);
+        const pick = pickLessonMoment(fen, cands, opts.lessonSteer.keyFor, steerWindowCp(opts.studentElo ?? targetElo));
+        if (pick) {
+          lessonMomentsUsed += 1;
+          const c = new Chess(fen);
+          const m = c.move(pick.san);
+          void logAppAudit({
+            kind: 'coach-opponent-move-source',
+            category: 'subsystem',
+            source,
+            summary: `source=lesson-steer step=${opts.lessonSteer.step} san=${m.san} cpLoss=${pick.cpLoss} moment=${lessonMomentsUsed}/${LESSON_MOMENTS_PER_GAME}`,
+            fen,
+          });
+          return { uci: `${m.from}${m.to}${m.promotion ?? ''}`, san: m.san, source: 'lesson-steer' };
+        }
+      }
+    } catch { /* a missed steer is never worth a stalled move */ }
+  }
   if (opts?.steerHomeFor) {
     try {
       // The COLD build (once per colour per session) gets a longer ceiling than
@@ -562,13 +600,15 @@ export interface AdaptiveMoveOpts {
    *  the student holds. Absent = no steer (a locked taught line must never be
    *  steered off). */
   steerHomeFor?: 'white' | 'black';
+  /** The lesson game: steer a few moves toward moments for today's step. */
+  lessonSteer?: LessonSteerOpt;
   /** Who asked and why (`engineStrength.opponentStrength`). When present, the
    *  ONE structured emission (`coach-opponent-strength`) is made here, once,
    *  with the layer that actually produced the move. */
   strength?: OpponentStrength;
 }
 
-export type AdaptiveMoveSource = 'masters' | 'lichess-games' | 'amateur-band' | 'taught-slip' | 'home-steer' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random';
+export type AdaptiveMoveSource = 'masters' | 'lichess-games' | 'amateur-band' | 'taught-slip' | 'home-steer' | 'lesson-steer' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random';
 
 export interface AdaptiveMoveResult {
   move: string;

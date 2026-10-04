@@ -63,7 +63,7 @@ export function calculatePrompt(rot: number): string {
   ], rot);
 }
 
-export function calculateShowLine(fen: string, key: readonly Square[], rot: number): string {
+export function calculateShowLine(_fen: string, key: readonly Square[], rot: number): string {
   const open = rotateStem([
     'Calculating means playing the moves in your head and keeping the picture straight to the end — where does it stop, and who is ahead then?',
     'A line is only worth something if you can see where it stops. Follow every move in your head, then look at the last position.',

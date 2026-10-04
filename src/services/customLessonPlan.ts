@@ -212,6 +212,16 @@ export function matchThinkingLessonRequest(text: string): boolean {
   return THINKING_LESSON_RE.test(t);
 }
 
+/** The chip offered when a thinking lesson ends: a game where the coach
+ *  quietly hands the student moments to use what they just practised. */
+export const LESSON_GAME_CHIP = 'Play a game on this';
+
+/** Whether `text` asks for the lesson game. PURE. */
+export function matchLessonGameRequest(text: string): boolean {
+  const t = (text ?? '').trim().replace(/[.!?]+$/, '').toLowerCase();
+  return t === LESSON_GAME_CHIP.toLowerCase() || /^(?:let'?s )?play a game on (?:this|that|it)$/.test(t);
+}
+
 /** The spoken intro when a custom lesson starts. Code-authored (G0). */
 export function customLessonIntro(parts: readonly CustomLessonPart[]): string {
   const n = parts.length;

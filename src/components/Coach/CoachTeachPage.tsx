@@ -106,6 +106,8 @@ import {
   lessonTeachLines,
   matchThinkingLessonRequest,
   THINKING_LESSON_CHIP,
+  LESSON_GAME_CHIP,
+  matchLessonGameRequest,
   type CustomLessonPlan,
   type CustomLessonPart,
 } from '../../services/customLessonPlan';
@@ -163,6 +165,7 @@ import { chooseThinkingStep, openTier, tierUnlockLine, type BuiltStep } from '..
 import { loadLessonCandidates } from '../../services/thinkingLessonSource';
 import { getThinkingLessonMemory, seenFor } from '../../services/thinkingLessonMemory';
 import { pickFairPosition, type LessonPositionCandidate } from '../../services/thinkingPositions';
+import type { StepKit } from '../../services/thinkingLessonSession';
 import { reward } from '../../services/rewardService';
 import { getCapabilityProfile } from '../../services/capabilityEvidence';
 import { ThinkingLessonBoard } from './ThinkingLessonBoard';
@@ -2177,6 +2180,7 @@ export function CoachTeachPage(): JSX.Element {
     // not yet migrated into it (learnMemory.test.ts holds that count as a
     // shrink-only ceiling) — the list is the debt, not the design.
     resetPerGameMemory();
+    lessonGameRef.current = null;
     gameRef.current.setOrientation(studentSide);
     setPlayerColor(studentSide);
     liveFenRef.current = gameRef.current.fen;
@@ -2440,6 +2444,12 @@ export function CoachTeachPage(): JSX.Element {
   // The coach's lesson plan for a bare "teach me": a step of the thinking
   // method taught on the student's own boards, answered by tapping squares.
   // All logic lives in the session; the page routes, speaks and renders.
+  /** The kit of the last thinking lesson — what "Play a game on this" practises. */
+  const lastLessonKitRef = useRef<StepKit | null>(null);
+  /** The step the current game is steering toward, or null for a plain game. */
+  const lessonGameRef = useRef<StepKit | null>(null);
+  /** Set when the coach's reply was a lesson moment: ask once it lands. */
+  const lessonMomentPendingRef = useRef(false);
   const thinkingLesson = useThinkingLesson({
     say: coachDrillSay,
     record: (a) => recordThinkingAnswer(a, tagsForThinkingStep(a.step)),
@@ -2501,8 +2511,41 @@ export function CoachTeachPage(): JSX.Element {
         });
       }
     } catch { /* the lesson already ran; the unlock waits for next time */ }
+    // THE LESSON GAME (plan P5): a step answered on a plain board (no adapt —
+    // a step that needs the played move or a line has no live-game reading)
+    // can be practised in a real game straight after.
+    if (!kit.adapt) {
+      lastLessonKitRef.current = kit;
+      setCoachChoices([LESSON_GAME_CHIP]);
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeProfile, thinkingLesson.start]);
+
+  /** Start a game where the coach's own top moves, inside the strength window,
+   *  hand the student a few moments for the step just taught. The steer is
+   *  silent; the question comes after the coach's move lands. */
+  const startLessonGame = useCallback((): void => {
+    const kit = lastLessonKitRef.current;
+    if (!kit) return;
+    thinkingLesson.stop();
+    walkthrough.stop();
+    voiceService.stop();
+    activeDrillRef.current = null;
+    customLessonRef.current = null;
+    gameRef.current.resetGame();
+    resetPerGameMemory();
+    gameRef.current.setOrientation('white');
+    setPlayerColor('white');
+    liveFenRef.current = gameRef.current.fen;
+    setArrows([]);
+    setHighlights([]);
+    chainArrowsRef.current = [];
+    lessonGameRef.current = kit;
+    lessonMomentPendingRef.current = false;
+    captureEvent('thinking_lesson_game_started', { surface: 'coach-teach', step: kit.step });
+    void coachDrillSay('Your move. A few times this game the board will ask the same question — answer it before you move.');
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resetPerGameMemory, thinkingLesson.stop]);
 
   /** Put a drill's position on the board (no announce) + arm the ref. */
   const loadDrillOntoBoard = useCallback((drill: CoachDrill, progress?: DrillProgress): void => {
@@ -4407,6 +4450,12 @@ export function CoachTeachPage(): JSX.Element {
         // Anything else is a QUESTION: hold the nudge and let the coach answer
         // it through the normal route; the question stays open on the board.
         thinkingLesson.hold();
+      }
+      if (lastLessonKitRef.current && matchLessonGameRequest(text)) {
+        setMessages((prev) => [...prev, { id: uid('lesson-game'), role: 'user', content: text, timestamp: Date.now() }]);
+        setCoachChoices([]);
+        startLessonGame();
+        return;
       }
       if (matchThinkingLessonRequest(text)) {
         const tlTurnId = freshTurnId('thinking-lesson');
@@ -7615,7 +7664,11 @@ export function CoachTeachPage(): JSX.Element {
         // STEER INTO THE HOME OPENING (A7) — only when the student named NO
         // opening for this game; a line they asked for is theirs to play.
         ...(openingName ? {} : { steerHomeFor: playerColor }),
+        // THE LESSON GAME: prefer a top move that hands the student a moment
+        // for today's step — never outside the strength window.
+        ...(lessonGameRef.current ? { lessonSteer: { step: lessonGameRef.current.step, keyFor: (f: string) => lessonGameRef.current?.keyFor(f) ?? null } } : {}),
       });
+      if (adaptive.source === 'lesson-steer') lessonMomentPendingRef.current = true;
       if (adaptive.move) {
         const san = uciToSan(adaptive.move);
         if (san) return san;
@@ -9988,6 +10041,11 @@ export function CoachTeachPage(): JSX.Element {
           // above have been computing underneath it the whole time.
           await padDone;
           const played = handlePlayMove(reply);
+          if (lessonMomentPendingRef.current) {
+            lessonMomentPendingRef.current = false;
+            const kit = lessonGameRef.current;
+            if (kit && played.ok) void thinkingLesson.askOnce(kit, liveFenRef.current);
+          }
           // 🔒 PUBLISH THE TURN. Play emits `coach-turn-checkpoint` with the
           // committed SAN and the resulting FEN; Learn never did, so a Learn
           // game left no record of what the coach actually played.
