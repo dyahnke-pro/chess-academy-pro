@@ -26,3 +26,15 @@ describe('traded-active-for-passive names the piece it took', () => {
     expect(attrs.some((x) => x.id === 'traded-active-for-passive')).toBe(false);
   });
 });
+
+// Clean-pass walk 2026-10-04 (walk 5): the same 23.Bxf6+ said "the wrong side of
+// the exchange" — Bxf6+ Qxf6 Rc7+ Kf8 Qxa8+ deflects the queen and wins the rook.
+describe('a trade whose line wins is not the wrong side of one', () => {
+  it('the played line wins the rook → no traded-active-for-passive', () => {
+    const attrs = attributePrinciples({
+      replySan: null, historySans: HIST, bestSan: 'Rc7+', classification: 'inaccuracy',
+      pvAfterPlayed: ['Qxf6', 'Rc7+', 'Kf8', 'Qxa8+'],
+    });
+    expect(attrs.some((x) => x.id === 'traded-active-for-passive')).toBe(false);
+  });
+});

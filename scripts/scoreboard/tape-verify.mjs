@@ -414,7 +414,9 @@ function checkSentence(s, ctx) {
       const san = m[2];
       if (hypo && (stripSan(hypo[1]) === san || stripSan(hypo[2]) === san)) continue;
       if (lineSans.has(san)) continue;
-      const ok = [ctx.fenBefore, ctx.fenMid, ctx.fenAfter].some((fen) => [me, them].some((t) => { const b = board(withTurn(fen, t)); if (!b) return false; try { b.move(san); return true; } catch { return false; } }));
+      // A verdict on the student's PREVIOUS move ("Bxf6+ still wins") is heard
+      // after the reply, two plies on — its move is legal on the board before it.
+      const ok = [ctx.g.plies[ctx.i - 2]?.fen, ctx.fenBefore, ctx.fenMid, ctx.fenAfter].filter(Boolean).some((fen) => [me, them].some((t) => { const b = board(withTurn(fen, t)); if (!b) return false; try { b.move(san); return true; } catch { return false; } }));
       if (!ok) res.push([false, `${san} is not a legal move on these boards`]);
     }
   } else {

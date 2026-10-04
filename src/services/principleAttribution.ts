@@ -1052,6 +1052,14 @@ const DETECTORS: Detector[] = [
     if (!last.captured || last.piece === 'p' || last.piece === 'k' || last.captured === 'p') return null;
     if (VAL[last.piece] !== VAL[last.captured]) return null;
     if (best.captured && best.to === last.to) return null;
+    // A TRADE THAT WINS IS NOT THE WRONG SIDE OF ONE (clean-pass walk
+    // 2026-10-04, G1 23.Bxf6+: "trades your active bishop for their passive
+    // knight — the wrong side of the exchange"; Bxf6+ Qxf6 Rc7+ Kf8 Qxa8+
+    // deflects the queen and wins the rook). Trade quality is never the cause
+    // when the played line wins material — nor when the best move's line does
+    // (then the miss is the win itself).
+    if (c.pvP?.length && pvWinsMaterial(c.before, [last.san, ...c.pvP], mover)) return null;
+    if (c.pvB?.length && pvWinsMaterial(c.before, [best.san, ...c.pvB], mover)) return null;
     const bishopsB = pieces(c.before, mover, 'b').length; const bishopsA = pieces(c.after, mover, 'b').length;
     const oppBishops = pieces(c.after, opp, 'b').length;
     const gavePair = last.piece === 'b' && bishopsB === 2 && bishopsA < 2 && oppBishops === 2;
