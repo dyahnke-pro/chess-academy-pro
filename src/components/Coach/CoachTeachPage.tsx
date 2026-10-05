@@ -155,8 +155,7 @@ import {
   type CoachDrill,
   type DrillProgress,
   drillHintBeat,
-  customLessonPartLines, goodButWeakerBeat, judgeAlternative, wrongMoveReason } from '../../services/coachDrillService';
-import { lastMoveFromPgn, moveMissed, positionAsk } from '../../services/moveInsight';
+  customLessonPartLines, goodButWeakerBeat, judgeAlternative, lastMoveFromPgn, moveMissed, positionAsk, wrongMoveReason } from '../../services/coachDrillService';
 import { bookChipForClaims } from '../../data/bookChips';
 import { useThinkingLesson, type StepKit } from '../../hooks/useThinkingLesson';
 import { ThinkingLessonBoard } from './ThinkingLessonBoard';

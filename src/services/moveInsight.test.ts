@@ -3,7 +3,7 @@
 // checked the king???").
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { doubleAttack, lastMoveAlong, lastMoveFromPgn, mechanismContrast, moveMissed, positionAsk, theirMoveChanged, walkableLine } from './moveInsight';
+import { autopilotRecapture, doubleAttack, lastMoveAlong, lastMoveFromPgn, mechanismContrast, moveMissed, positionAsk, theirMoveChanged, walkableLine } from './moveInsight';
 
 // White: Ka1, Re2, Ng5. Black: Kh8, Qd8. Two checks — Nf7+ (forks king and
 // queen) and Rh2+ (only checks).
@@ -119,5 +119,27 @@ describe('moveMissed — your own move\u2019s drawback (catalogue §35)', () => 
     // The queen on d1 is the only guard of e2; Qa4 walks away and Rxe2 follows.
     const m = moveMissed('4r1k1/8/8/8/8/8/4P3/3Q2K1 w - - 0 1', 'Qa4', ['e8e2']);
     expect(m?.text).toBe('The queen to a4 leaves your pawn on e2 with no guard, and the rook takes e2.');
+  });
+});
+
+describe('theirMoveChanged — what they want (catalogue §2)', () => {
+  it('names the concrete threat their move just made', () => {
+    const t = theirMoveChanged('r5k1/5ppp/8/8/8/8/R4PPP/6K1 b - - 0 1', 'Re8', 'w');
+    expect(t?.text).toMatch(/^The rook to e8 threatens the rook to e1/);
+    expect(t?.text).toMatch(/mate/);
+  });
+});
+
+describe('autopilotRecapture — the in-between move (catalogue §9)', () => {
+  it('flags the straight recapture when a check comes first', () => {
+    // Black just took on d4 with the knight; White's Qxd4 is autopilot — Bb5+ first.
+    const lastBefore = 'r1bqkbnr/pppp1ppp/2n5/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3';
+    const fen = new Chess(lastBefore); fen.move('exd4');
+    expect(autopilotRecapture(fen.fen(), 'Nxd4', 'Bb5', { fenBefore: lastBefore, san: 'exd4' })).toBeNull(); // Bb5 is quiet — nothing to flag
+    expect(autopilotRecapture(fen.fen(), 'Nxd4', 'Qxd4', { fenBefore: lastBefore, san: 'exd4' })).toBeNull(); // both recapture
+    const lb2 = 'rnbqkbnr/pppp1ppp/8/4p3/2BPP3/5N2/PPP2PPP/RNBQK2R b KQkq - 0 3';
+    const f2 = new Chess(lb2); f2.move('exd4');
+    expect(autopilotRecapture(f2.fen(), 'Nxd4', 'Bxf7+', { fenBefore: lb2, san: 'exd4' }))
+      .toBe('Taking straight back is the autopilot move — there is a check to play first, and the recapture can wait.');
   });
 });

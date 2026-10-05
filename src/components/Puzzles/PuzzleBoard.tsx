@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef, useMemo, type ReactNode } fro
 import { useLineWalk } from '../../hooks/useLineWalk';
 import { WalkLineButton } from '../Board/WalkLineButton';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
-import { lastMoveAlong, positionAsk } from '../../services/moveInsight';
+import { autopilotRecapture, lastMoveAlong, positionAsk } from '../../services/moveInsight';
 import { spokenLineArrows } from '../../services/arrowEngine';
 import type { BoardArrow } from '../Chessboard/ConsistentChessboard';
 import { captureEvent } from '../../services/analytics';
@@ -645,7 +645,10 @@ export function PuzzleBoard({
         // something? more pieces in the attack?") — the idea, never the move.
         // Their last move along the puzzle's own line leads (catalogue §1).
         const lastMove = moveIndex > 0 ? lastMoveAlong(puzzle.fen, allMoves.slice(0, moveIndex)) ?? undefined : undefined;
-        const ask = read?.kind === 'also-good' ? null : positionAsk(fenBeforeAttempt, { bestSan: expectedSan, lastMove }).text;
+        const ask = read?.kind === 'also-good' ? null : [
+          autopilotRecapture(fenBeforeAttempt, move.san, expectedSan, lastMove),
+          positionAsk(fenBeforeAttempt, { bestSan: expectedSan, lastMove }).text,
+        ].filter(Boolean).join(' ');
         const line = hintOnMiss && read && read.kind !== 'also-good'
           ? composeWrongTryLine(read.text, ask, held, hint)
           : composeWrongTryLine(read?.text ?? hint, ask, held);

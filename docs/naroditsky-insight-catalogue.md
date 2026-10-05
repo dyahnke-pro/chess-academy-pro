@@ -21,7 +21,7 @@ pawn left weak, a plan of ours now blocked.
   last defender"); squares a moved piece stopped covering; our engine-best move
   before vs after (a plan that now fails, with the reason from moveMissed).
 
-### 2. What they want — prophylaxis 🟠 (material threats only today)
+### 2. What they want — prophylaxis 🟠 (concrete threat of their last move leads `theirMoveChanged` via `detectNewThreat`; positional "what they want" still 🔴)
 - G1: "you don't want the rook reaching f6, so Ne3 with tempo"; "h3 first — if the
   bishop ever comes to h5, g4 is in your pocket"; "Rf4 so the rook can't come to
   f6 and f2"; "snuffing out counterplay".
@@ -67,7 +67,7 @@ pawn left weak, a plan of ours now blocked.
   patiently"; "totally winning; it's just one pawn".
 - Compute: eval + WDL + how forcing the position is → press / be patient / convert.
 
-### 9. The in-between move 🔴
+### 9. The in-between move 🟠 (`autopilotRecapture` on Tactics; compare paths still to wire)
 - G2: "you don't take the queen — the intermediate move Bxf7+, then the queens come
   off on d1".
 - Compute: an obvious recapture vs a forcing move first (check/capture/threat) whose

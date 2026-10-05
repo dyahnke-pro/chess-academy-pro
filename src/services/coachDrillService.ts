@@ -31,6 +31,9 @@ import { lessonTeachLines, partTransition, type CustomLessonPart } from './custo
 
 // The drill door owns every drill line a surface speaks (one import for Learn).
 export { goodButWeakerBeat, judgeAlternative, wrongMoveReason } from './drillReasons';
+// The insight computer, through the drill door (one more computer on the Learn
+// page would cross its composition ceiling — surfaceComposition.scan).
+export { lastMoveFromPgn, moveMissed, positionAsk } from './moveInsight';
 import { getHomeGameIds } from './homeOpeningService';
 import { isFixtureGame } from './fixtureGames';
 import puzzlesData from '../data/puzzles.json';

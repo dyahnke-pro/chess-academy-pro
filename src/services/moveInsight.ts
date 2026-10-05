@@ -34,6 +34,7 @@ import { findHangingBySee, findKnightReroute, findWeakPawns } from './positionRe
 import { findWorstPlacedPiece } from './nextPlans';
 import { detectLatentDanger, latentDangerClause } from './latentDanger';
 import { findTrappedPiece } from './reviewTeachingPoints';
+import { detectNewThreat } from './groundedAnswer';
 
 export type PositionMode = 'defend' | 'press' | 'reinforce' | 'improve';
 
@@ -443,6 +444,12 @@ export function theirMoveChanged(fenBefore: string, san: string, studentColor: '
   if (!r || r.move.color === studentColor) return null;
   const parts: string[] = [];
   const squares: string[] = [];
+  // WHAT THEY WANT (catalogue §2): the concrete threat their move just made —
+  // a fork, a mate, a winning capture — leads, because it must be answered.
+  try {
+    const threat = detectNewThreat(fenBefore, r.board.fen(), r.move.color);
+    if (threat) parts.push(`${cap(sayMoveClause(r.move.san, fenBefore))} threatens ${sayMoveClause(threat.san, r.board.fen())} — ${threat.detail}.`);
+  } catch { /* no threat read */ }
   const weak = weakenedBy(fenBefore, san);
   const theirs = weak.filter((w) => w.color !== studentColor);
   const ours = weak.filter((w) => w.color === studentColor);
@@ -493,4 +500,28 @@ export function lastMoveFromPgn(pgn: string): { fenBefore: string; san: string }
     const m = h[h.length - 1];
     return m ? { fenBefore: m.before, san: m.san } : null;
   } catch { return null; }
+}
+
+/**
+ * THE AUTOPILOT RECAPTURE (catalogue §9 + "Turn Off The Autopilot"): they just
+ * captured, the student took straight back, and the right move was something
+ * forcing first — the in-between move. Null when the try was not a recapture or
+ * the best move is not forcing.
+ */
+export function autopilotRecapture(
+  fenBefore: string,
+  trySan: string,
+  bestSan: string | undefined,
+  lastMove: { fenBefore: string; san: string } | undefined,
+): string | null {
+  if (!bestSan || !lastMove) return null;
+  const last = play(lastMove.fenBefore, lastMove.san);
+  const tried = play(fenBefore, trySan);
+  const best = play(fenBefore, bestSan);
+  if (!last?.move.captured || !tried?.move.captured || !best) return null;
+  if (tried.move.to !== last.move.to) return null;
+  const forcing = best.move.san.includes('+') || best.move.san.includes('#') || (!!best.move.captured && best.move.to !== last.move.to);
+  if (!forcing) return null;
+  const kind = best.move.san.includes('#') ? 'a mate' : best.move.san.includes('+') ? 'a check' : 'a capture';
+  return `Taking straight back is the autopilot move — there is ${kind} to play first, and the recapture can wait.`;
 }
