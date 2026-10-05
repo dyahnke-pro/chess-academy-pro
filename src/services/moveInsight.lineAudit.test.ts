@@ -14,7 +14,7 @@ function engine() {
   const p = spawn('node', ['/home/user/wt-upnext/node_modules/stockfish/bin/stockfish-18-lite-single.js']);
   let buf = ''; let pv: string[] = []; let cp: number | null = null; let mate: number | null = null; let res: ((v: { pv: string[]; cp: number | null; mate: number | null }) => void) | null = null;
   p.stdout.on('data', (d) => {
-    buf += d; let i;
+    buf += String(d); let i;
     while ((i = buf.indexOf('\n')) >= 0) {
       const l = buf.slice(0, i); buf = buf.slice(i + 1);
       const m = l.match(/ pv (.+)$/); if (m && / multipv 1 | depth /.test(l)) { pv = m[1].trim().split(' '); const c = l.match(/score cp (-?\d+)/); const mt = l.match(/score mate (-?\d+)/); cp = c ? +c[1] : null; mate = mt ? +mt[1] : null; }
