@@ -19,6 +19,9 @@ const NOT_PER_GAME: Record<string, string> = {
   taughtGemIdsRef: 'trap-menu scope, keyed by opening — not per game',
   // One engine read of ONE board, matched by FEN before use — per turn.
   studentBestReadRef: 'per-turn engine read, keyed by its FEN — not per game',
+  // The step of the last thinking LESSON — what "Play a game on this" practises
+  // next; it must outlive a game, not reset with one.
+  lastLessonKitRef: 'the last lesson\'s step, offered across games — not per game',
 };
 
 function censusOrphans(): string[] {

@@ -10020,6 +10020,10 @@ export function CoachTeachPage(): JSX.Element {
             lessonMomentPendingRef.current = false;
             const kit = lessonGameRef.current;
             if (kit && played.ok) void thinkingLesson.askOnce(kit, liveFenRef.current);
+          } else if (played.ok && !lessonGameRef.current) {
+            // CARRY-OVER: a habit this student keeps failing in games, asked
+            // on their own board when it poses the question (once per game).
+            void thinkingLesson.carryOver(liveFenRef.current);
           }
           // 🔒 PUBLISH THE TURN. Play emits `coach-turn-checkpoint` with the
           // committed SAN and the resulting FEN; Learn never did, so a Learn

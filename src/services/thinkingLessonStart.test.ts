@@ -129,3 +129,26 @@ describe('firstFairKit — one question on another surface\'s board', () => {
     expect(firstFairKit(steps, '4k3/8/8/8/8/8/8/4K3 w - - 0 1')).toBeNull();
   });
 });
+
+describe('carry-over — the lesson question at a real moment in Learn', () => {
+  const HUNG = '4k3/1p6/2N5/8/8/8/8/4K3 w - - 0 1';
+  const tile = (tag: string, state: 'red' | 'green' | 'grey', openCount = 2) =>
+    ({ tag, state, openCount, broken: 0, label: tag }) as unknown as import('./heatMap').HeatTile;
+
+  it('orders the steps by how often the student fails them in games', async () => {
+    const { carryOverSteps } = await import('./thinkingLessonStart');
+    const steps = carryOverSteps([tile('hung-material', 'red', 5), tile('missed-tactic', 'red', 1), tile('no-plan', 'green')]);
+    expect(steps[0]).toBe('am-i-safe');
+    expect(steps).toContain('forcing-moves');
+    expect(steps).not.toContain('assess');
+    expect(carryOverSteps([])).toEqual([]);
+  });
+
+  it('asks the first working step that poses a fair question, never one already asked or engine-keyed', async () => {
+    const { carryOverKitFor } = await import('./thinkingLessonStart');
+    expect(carryOverKitFor(['am-i-safe'], HUNG, new Set())?.step).toBe('am-i-safe');
+    expect(carryOverKitFor(['am-i-safe'], HUNG, new Set(['am-i-safe']))).toBeNull();
+    expect(carryOverKitFor(['candidates'], HUNG, new Set())).toBeNull();
+    expect(carryOverKitFor(['am-i-safe'], '4k3/8/8/8/8/8/8/4K3 w - - 0 1', new Set())).toBeNull();
+  });
+});

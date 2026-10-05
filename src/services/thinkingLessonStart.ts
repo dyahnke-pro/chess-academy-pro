@@ -337,3 +337,47 @@ export function beginnerAllows(beginner: boolean, standingOf: (s: BuiltStep) => 
 function menOnBoard(fen: string): number {
   return (fen.split(' ')[0].match(/[prnbqk]/gi) ?? []).length;
 }
+
+// ── CARRY-OVER: the lesson's question at a real moment in Learn free play ────
+//
+// Plan "Learn free play" + "Lessons measure KNOW, games measure USE": when the
+// student's own game reaches a board where a step they keep failing IN GAMES
+// poses its question, the coach asks that step's tap question there, once.
+// Learn only (Play volunteers nothing). The steps are the ones whose tags are
+// red in the student's games, worst first (the same weight the lesson chooser
+// uses); a step is asked at most once per game ("don't over use it").
+
+/** The steps this student keeps failing in games, worst first. PURE. */
+export function carryOverSteps(tiles: readonly HeatTile[]): string[] {
+  return BUILT_THINKING_STEPS
+    .map((s) => ({ step: s.step, w: gameWeightForTags(tiles, s.tags), order: s.order }))
+    .filter((x) => x.w > 0)
+    .sort((a, b) => b.w - a.w || a.order - b.order)
+    .map((x) => x.step);
+}
+
+/** The first working step that poses a fair question on this board and has
+ *  not been asked this game, or null. Steps that replay a move or need the
+ *  engine are never asked live. PURE. */
+export function carryOverKitFor(steps: readonly string[], fen: string, asked: ReadonlySet<string>): StepKit | null {
+  for (const step of steps) {
+    if (asked.has(step)) continue;
+    const kit = kitForStep(step);
+    if (!kit || kit.adapt || kit.enrich) continue;
+    if (isFairKey(kit.keyFor(fen))) return kit;
+  }
+  return null;
+}
+
+/** Read the student's game record once per game: the steps to carry over. */
+export async function loadCarryOverSteps(): Promise<string[]> {
+  try {
+    const [useProfile, weaknesses] = await Promise.all([
+      getCapabilityProfile('use').catch((): CapabilityProfile => new Map()),
+      getUnifiedWeaknessProfile().catch((): UnifiedWeakness[] => []),
+    ]);
+    return carryOverSteps(heatMap(useProfile, weaknesses));
+  } catch {
+    return [];
+  }
+}
