@@ -2716,7 +2716,7 @@ export function CoachTeachPage(): JSX.Element {
 
   /** Build a custom lesson over `tags` (all offered holes, or one) and start it.
    *  Empty state: when nothing drillable/teachable maps, say so — never invent. */
-  const startCustomLesson = useCallback(async (tags: string[], entry: 'chip' | 'typed'): Promise<void> => {
+  const startCustomLesson = useCallback(async (tags: string[], entry: 'chip' | 'typed' | 'hub'): Promise<void> => {
     walkthrough.stop();
     voiceService.stop();
     let profile: Awaited<ReturnType<typeof getUnifiedWeaknessProfile>> = [];
@@ -2955,9 +2955,8 @@ export function CoachTeachPage(): JSX.Element {
   // Hand-off from the Coach hub's Custom Lesson tile (`?lesson=custom`) and
   // Up next's thinking bite (`?lesson=think`). One lesson system, two doors:
   //   think  → straight into "Learn how to think";
-  //   custom → the student with holes gets the lesson picker (their weakness
-  //            lesson, with "Learn how to think" beside it — the kickoff opener
-  //            already offers both); a student with no holes yet goes straight
+  //   custom → the whole weakness lesson built from their own games starts
+  //            at once — no picker; a student with no holes yet goes straight
   //            into "Learn how to think", because grey means TEACH.
   const lessonParamHandledRef = useRef(false);
   useEffect(() => {
@@ -2965,6 +2964,9 @@ export function CoachTeachPage(): JSX.Element {
     const which = searchParams.get('lesson');
     if (which !== 'custom' && which !== 'think') return;
     lessonParamHandledRef.current = true;
+    // The student already chose a lesson by tapping the tile — the kickoff
+    // opener (greeting, picker) must not run over it.
+    userInteractedRef.current = true;
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
       next.delete('lesson');
@@ -2972,18 +2974,20 @@ export function CoachTeachPage(): JSX.Element {
     }, { replace: true });
     const t = setTimeout(() => {
       void (async () => {
+        // custom → the lesson plan built from their own games starts at once
+        // (David 2026-10-05: "Custom lesson should already have a lesson plan.
+        // When I enter it asks what I want to work on. This is wrong.").
+        // startCustomLesson falls back to "Learn how to think" when there is
+        // no record yet, because grey means TEACH.
         if (which === 'custom') {
-          try {
-            const plan = buildCustomLessonPlan(await getCoachCurriculum(), await getUnifiedWeaknessProfile());
-            if (plan.parts.length > 0) return; // the opener shows the picker
-          } catch { /* no record — teach the method */ }
+          await startCustomLesson([], 'hub');
+          return;
         }
-        userInteractedRef.current = true;
         await startThinkingLesson();
       })();
     }, 300);
     return () => clearTimeout(t);
-  }, [searchParams, setSearchParams, startThinkingLesson]);
+  }, [searchParams, setSearchParams, startThinkingLesson, startCustomLesson]);
 
   // Hand-off from the Fundamentals scorecard: `/coach/teach?learnFundamental=<id>`
   // opens the per-fundamental teaching lesson ON THE SPOT in the classroom, with
