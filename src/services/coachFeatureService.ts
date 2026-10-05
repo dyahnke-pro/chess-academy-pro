@@ -1,4 +1,3 @@
-import { notYet, opponentHabits } from './thinkAloud';
 import { lastMoveFromSan } from './material';
 import { Chess } from 'chess.js';
 import { gameArcs, type ArcEvent } from './lookaheadPlan';
@@ -4088,15 +4087,6 @@ async function augmentWithProjections(
         whyBudget -= 1;
       }
     }
-    // NOT YET — FIRST THIS (his "I didn't take on h4 right away; Be5 first").
-    // The student took; the engine wanted a forcing move first, and the same
-    // capture was still there after it.
-    if (line && line.plies.length >= 3 && s.narration) {
-      const ny = notYet(s.fenBefore, { san: line.plies[0].san, pv: line.plies.map((p) => p.uci), cp: 0 });
-      if (ny && ny.capture.replace(/[+#]/g, '') === s.san.replace(/[+#]/g, '')) {
-        s.narration = `${s.narration} ${ny.text}`.trim();
-      }
-    }
     // MISSED PREVENTION (WO-LAYERS-01 step 6 — "h3 takes g4 away before the
     // pin"). Three engine reads must agree before it is said: the opponent's
     // free move at the board before the slip (their threat), their reply to
@@ -5307,11 +5297,7 @@ export async function generateReviewNarration(params: {
   const studentSegs = segments.filter((s) => s.playerColor === playerColor);
   const flaggedCount = studentSegs.filter((s) => s.classification === 'inaccuracy' || s.classification === 'mistake' || s.classification === 'blunder' || s.classification === 'miss').length;
   const recap = renderFundamentalsRecap(studentSegs.map((s) => s.fundamentals ?? []), flaggedCount);
-  // WHAT THEY KEPT DOING (his post-game: "this is what happens when you
-  // violate opening principles") — read off the whole game.
-  const habit = opponentHabits(segments.map((sg) => sg.san), playerColor === 'white' ? 'b' : 'w')[0]?.text.replace(/^They keep/, 'They kept').replace(/ — that /, ' — their ').replace(/ has moved /, ' moved ').replace(/You punish that by developing everything else\.$/, 'That is the habit to punish: develop everything else.') ?? null;
-  const closingCore = recap ? (throughLine ? `${recap} ${throughLine}` : recap) : throughLine;
-  const closing = habit ? (closingCore ? `${closingCore} ${habit}` : habit) : closingCore;
+  const closing = recap ? (throughLine ? `${recap} ${throughLine}` : recap) : throughLine;
 
   // Intro: use the phrased response if non-empty and not the ⚠️ error
   // placeholder; else the grounded default. Collected LAST — it was started

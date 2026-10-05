@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { Chess } from 'chess.js';
 import { computePositionFacts } from './positionFacts';
 
 // THE SPEED-RUN DEPTH THROUGH THE ONE DOOR (David 2026-10-05: "Should be from
@@ -17,10 +18,24 @@ const history = 'e4 e5 Nf3 Nc6 Bb5 Nd4 Nxd4 exd4 O-O Bc5 d3 Qh4 Nd2 c6 Bc4 d6 Nf
 const run = (namesBestMove: boolean) => computePositionFacts({ posture: 'walk', fen: FEN, moverColor: 'w', studentColor: 'w', analysis, history, namesBestMove } as never);
 
 describe('depth facts come out of the door', () => {
-  it('a surface that names the move gets the line, with the line attached for arrows', async () => {
+  it('a material line is the ledger\'s to say — no duplicate line fact, even where the move is named', async () => {
     const r = await run(true);
-    const line = r.clauses.find((c) => c.kind === 'line');
-    expect(line?.text).toMatch(/bishop to b4, check/i);
-    expect(line?.lines?.[0]?.sans[0]).toBe('Bb4+');
+    expect(r.clauses.some((c) => c.kind === 'line')).toBe(false);
+  });
+});
+
+describe('a speed-run read comes out of the door', () => {
+  it('keep the tension (1.e4 e5 2.Nf3 d5 — exd5 is there, the engine develops)', async () => {
+    const c = new Chess();
+    for (const m of 'e4 e5 Nf3 d5'.split(' ')) c.move(m);
+    const a = {
+      bestMove: 'b1c3', evaluation: 60, isMate: false, mateIn: null, depth: 16, nodesPerSecond: 0,
+      topLines: [
+        { rank: 1, evaluation: 60, mate: null, moves: ['b1c3', 'd5e4'] },
+        { rank: 2, evaluation: -10, mate: null, moves: ['e4d5', 'd8d5'] },
+      ],
+    };
+    const r = await computePositionFacts({ posture: 'walk', fen: c.fen(), moverColor: 'w', studentColor: 'w', analysis: a, history: c.history() } as never);
+    expect(r.clauses.map((x) => x.text).join(' ')).toMatch(/Keep the tension/);
   });
 });

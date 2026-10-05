@@ -250,6 +250,7 @@ export const CLAUSE_ROLE: Record<ClauseKind, FacetRole> = {
   'their-habit': 'teach',
   'stop-flaw': 'teach',
   'hole-access': 'teach',
+  'speedrun-read': 'teach',
   'student-leans': 'describe',
   'opponent-leans': 'describe',
 };
@@ -286,7 +287,7 @@ export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   principle: 'principle', technique: 'principle', king: 'principle', opening: 'principle', endgame: 'principle',
   rule: 'principle',
   does: 'principle', point: 'plan', 'their-cost': 'plan', 'opp-dev': 'principle', fundamental: 'principle', convert: 'principle',
-  status: 'principle', 'their-habit': 'principle', 'hole-access': 'plan',
+  status: 'principle', 'their-habit': 'principle', 'hole-access': 'plan', 'speedrun-read': 'plan',
   // PLAN — structure, targets, the plan and the long read.
   'plan-now': 'plan', contrast: 'plan', timing: 'plan', 'plan-race': 'plan', 'plan-arc': 'plan', 'plan-opening': 'plan', 'plan-middlegame': 'plan',
   'plan-line': 'plan', consequence: 'plan', structure: 'plan', passer: 'plan', rook7: 'plan',
@@ -329,6 +330,7 @@ const CLAUSE_TIE: Record<ClauseKind, number> = {
   'their-habit': FACET_RANK['opp-dev'],
   'stop-flaw': FACET_RANK['opp-target'],
   'hole-access': FACET_RANK.structure,
+  'speedrun-read': FACET_RANK['plan-now'],
 };
 export const TIE_ORDER: Record<FactKind, number> = { ...FACET_RANK, ...CLAUSE_TIE };
 

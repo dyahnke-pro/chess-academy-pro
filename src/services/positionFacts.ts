@@ -310,7 +310,7 @@ export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'latent-c
   // THE SPEED-RUN DEPTH (David 2026-10-05: "Should be from one place") — the
   // one producer `thinkAloud.depthClauses`, ranked by the one door like
   // every other fact.
-  | 'not-yet' | 'line' | 'their-habit' | 'stop-flaw' | 'hole-access';
+  | 'not-yet' | 'line' | 'their-habit' | 'stop-flaw' | 'hole-access' | 'speedrun-read';
 
 /** STATUS bands from the student's POV (cp). The general's opening read. */
 type StatusBand = 'lost' | 'worse' | 'level' | 'better' | 'winning';
@@ -1006,7 +1006,8 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     // "Why?" names the move anyway; elsewhere a held move stays held.
     nameMove: !!input.namesBestMove || (!heldVerdict && !!moveAdvice?.speak),
     ...(input.lastMove ? { lastStudentMove: { fenBefore: input.lastMove.fenBefore, san: input.lastMove.san } } : {}),
-  }).map((d) => ({ kind: d.kind, rank: d.kind === 'not-yet' ? 90 : d.kind === 'stop-flaw' ? 70 : d.kind === 'line' ? 60 : d.kind === 'hole-access' ? 50 : 40, text: d.text, ...(d.squares ? { squares: d.squares } : {}), ...(d.lines ? { lines: d.lines } : {}) }));
+    ...(input.opponentLastMove ? { lastOpponentMove: input.opponentLastMove } : {}),
+  }).map((d) => ({ kind: d.kind, rank: d.kind === 'not-yet' ? 90 : d.kind === 'stop-flaw' ? 70 : d.kind === 'line' ? 60 : d.kind === 'hole-access' ? 50 : d.kind === 'speedrun-read' ? 45 : 40, text: d.text, ...(d.squares ? { squares: d.squares } : {}), ...(d.lines ? { lines: d.lines } : {}) }));
   const composed = [...composedBase, ...depth];
   const needVerdict = studentIsMoving && input.studentNeedContext
     ? computeNeed({

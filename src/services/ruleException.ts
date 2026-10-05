@@ -23,6 +23,7 @@ import { Chess, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
 import { shelterSquares } from './kingSafety';
 import { CAPTURE_VALUE } from './pieceValues';
+import { homeMinorCount } from './development';
 
 export interface RuleException {
   rule: 'twice' | 'shield-pawn' | 'early-queen';
@@ -31,14 +32,6 @@ export interface RuleException {
 }
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
-const MINOR_HOME: Record<'w' | 'b', readonly string[]> = { w: ['b1', 'g1', 'c1', 'f1'], b: ['b8', 'g8', 'c8', 'f8'] };
-
-function minorsAtHome(c: Chess, color: 'w' | 'b'): number {
-  return MINOR_HOME[color].filter((sq) => {
-    const p = c.get(sq as Square);
-    return !!p && p.color === color && (p.type === 'n' || p.type === 'b');
-  }).length;
-}
 
 /** The enemy piece the moved piece now goes after: worth more than the mover,
  *  or won outright by exchange count. */
@@ -105,8 +98,8 @@ export function ruleException(fenBefore: string, san: string, historySans: reado
     const sameBoard = g.fen().split(' ')[0] === fenBefore.split(' ')[0];
     // A piece under attack that steps away is not wasting a tempo — it had to.
     const wasHit = before.attackers(mv.from, them).length > 0;
-    if (movedBefore && sameBoard && !wasHit && minorsAtHome(before, me) >= 1) {
-      const lead = minorsAtHome(before, them) - minorsAtHome(before, me);
+    if (movedBefore && sameBoard && !wasHit && homeMinorCount(before, me) >= 1) {
+      const lead = homeMinorCount(before, them) - homeMinorCount(before, me);
       const why = hitWords ?? (lead >= 2 ? 'your lead in development buys you the time' : null);
       if (why) {
         return { rule: 'twice', text: `${played} moves the same piece twice — usually a waste of time in the opening, but here ${why}.`, squares };
@@ -128,7 +121,7 @@ export function ruleException(fenBefore: string, san: string, historySans: reado
   }
 
   // The queen out early.
-  if (mv.piece === 'q' && fullmove <= 10 && minorsAtHome(before, me) >= 2 && hit && hitWords) {
+  if (mv.piece === 'q' && fullmove <= 10 && homeMinorCount(before, me) >= 2 && hit && hitWords) {
     return { rule: 'early-queen', text: `An early queen move usually just gets kicked around — but ${played} earns it: ${hitWords}.`, squares };
   }
   return null;

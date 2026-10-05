@@ -633,3 +633,52 @@ what stays · act before they consolidate
 ### Not built — game 1 full narration (GwJ8yk2hsT8)
 flexible moves first · keep a square vacant for the knight · queen as the glue ·
 right idea, wrong moment
+
+## BUILD QUEUE — RECONCILED 2026-10-05 (after reading the census)
+
+🔴 **Read `docs/plans/2026-09-27-naroditsky-teaching-census.md` and
+`src/services/computerRoles.ts` BEFORE building any insight** (David: "Make sure
+to regain context before each build. Need to make sure another calculator cannot
+be used for the same function"). The census (430 games, 11,435 lines) and
+WO-TEACH-GAPS already built most of his teaching as Learn lanes; post-move
+student teaching goes through `learnBoardTeaching.studentMoveTeaching` (Learn,
+review AND chat), pre-move facts through `positionFacts` → `decide()`.
+
+**Removed as duplicates of existing computers:** `notYet`-in-review → `kneeJerk`;
+`tradeWhileDown` → `tradeJudgement`; "trade pieces when up" → `conversionMethod`;
+`pawnEnding` → `conversionMethod` + `principleVoice`; my loose-piece scan →
+`loosePieces.findLoosePieces`; same-piece-moved → `tempoCount`; early queen →
+`ruleException`; investment → `reviewSacrifice.sacrificeCompensation`; material
+line wording → the exchange ledger (`deliberation` played-out line); fork/skewer
+detection → `tacticsDetector`; phase change → `phaseTransitionDetector`/`principleVoice`;
+sole defender → `tacticsDetector` overload; colour complex → `positionReadingService`;
+"won a piece but it comes back" → `forkTrick`/recapture/trade judgement; minor home
+squares → `development.ts` (also fixed in `tempoCount` + `ruleException`, red on main).
+
+**Census items already built (not to rebuild):** move order (#1), king attack (#2),
+prevents/two jobs (#4/#6 `moveIntent`), their move's cost (#5), don't panic /
+knee-jerk (#7), recapture choice (#8), choice when ahead (#9), rule→exception
+(#10), fails a job (#11), count it (#12), endgame technique (#13), push or hold
+(#14), wishlist (#15), tempo, timing, plan race, latent danger, opening idea.
+
+**Built 2026-10-05, new (one producer `thinkAloud.depthClauses` → `positionFacts`
+→ `decide()`, both ways via `positionPosed`/`moveMissed`):** obvious stop flaw,
+hole access (inaccessibility), pawn-ending transformation, not yet (pre-move),
+their undeveloped minors, keep the tension, which side to castle, ugly-but-right,
+provoke the commitment, any move is fine, threat stronger than execution, piece
+held only by a tactic, secure the loose piece first, mutual pins, overprotection,
+position opened (reads `boardDelta`), awkward block; positionAsk: pawn hook,
+castling by hand, file that will open, cheapest defender, retreat square, heavy
+piece tied down, up the exchange, two hit at once, diagonal contest; deliberation:
+multi-job move-why (guard + x-ray/skewer), queen trade throws away space/attack.
+
+**Still owed (need a deeper engine search than a static read can honestly give):**
+#22 finish what you started · #27 a move good in every branch · #31 take the sting
+out (beyond `moveIntent` prevents) · skip the middleman · play it anyway · retreat
+that keeps your break · right piece for the hole · useful waiting move · best-case
+plan test · rejected move works later · force a concession · flexible moves first · keep a square vacant for the knight · queen
+as the glue. (Right idea / wrong moment = `moveOrder`; act before they consolidate = `moveTiming`.)
+
+**Pre-existing red on main, not this work:** `noDeadTestidWaits` (audit
+`audit-coach-full-games.mjs` waits on `review-turning-point-done`),
+`nativeBundleStrip` (`openingIdentity.ts`, `openingPositions.ts` fetch /data/ directly).

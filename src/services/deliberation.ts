@@ -229,7 +229,7 @@ function shortfallText(c: Candidate): string {
     return `${c.san}? ${c.proof[0].toUpperCase()}${c.proof.slice(1)}.`;
   }
   if (c.shortfall === 'trades-queens') {
-    return `${c.san}? That trades the queens — with more space or an attack going, you want them on; every piece that comes off shrinks the edge.`;
+    return `${c.san}? ${c.san} trades the queens — with more space or an attack going, you want them on; every piece that comes off shrinks the edge.`;
   }
   if (c.shortfall === 'drops-material' && c.drops) {
     return `${c.san}? That drops the ${PNAME[c.drops.piece] ?? 'piece'} on ${c.drops.square}.`;

@@ -214,7 +214,7 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
     expect(TEACH_CODE).toMatch(/keptLines\(hintPkg,/);
     // Their move's purpose leads over a board description (hand walk 2026-09-30, …g6).
     expect(TEACH_CODE).toMatch(/c\.kind === 'stopped' \? 'theirPurpose' as const/);
-    expect(TEACH_CODE).toMatch(/setLineWalkFen\(showFen\)/);
+    expect(TEACH_CODE).toMatch(/lineWalk\.hold\(showFen,/);
   });
 });
 

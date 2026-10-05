@@ -27,8 +27,9 @@ describe('think aloud — the speed-run depth', () => {
     expect(r?.text).toMatch(/Not yet — first .* with check/);
   });
   it('their habit: the same knight moved three times', () => {
-    const h = opponentHabits(['e4', 'Nf6', 'Nc3', 'Nd5', 'Nf3', 'Nb4', 'd4'], 'b');
-    expect(h[0]?.text).toMatch(/same piece — that knight has moved three times/);
+    // the piece-moved-again count is THE tempo computer's (tempoCount)
+    const h = opponentHabits(['e4', 'Nf6', 'Nc3', 'Nd5', 'Nf3', 'Nb4'], 'b');
+    expect(h[0]?.kind).toBe('tempo');
   });
 });
 
@@ -37,7 +38,9 @@ describe('the one producer', () => {
   const topLines = [{ moves: ['e7e8', 'h8h7', 'e8e7', 'h7g6', 'e7a7'], evaluation: 500, mate: null }];
   it('names the line and "not yet" only where the move may be named', () => {
     const named = depthClauses({ fen, history: [], topLines, studentColor: 'w', nameMove: true }).map((d) => d.kind);
-    expect(named).toEqual(expect.arrayContaining(['not-yet', 'line']));
+    // the line wins material, so the LEDGER says it (deliberation), not a 'line' fact
+    expect(named).toContain('not-yet');
+    expect(named).not.toContain('line');
     const held = depthClauses({ fen, history: [], topLines, studentColor: 'w', nameMove: false }).map((d) => d.kind);
     expect(held).not.toContain('line');
     expect(held).not.toContain('not-yet');
@@ -78,11 +81,3 @@ describe('several jobs at once, in the door\'s own move-why (catalogue §3; game
   });
 });
 
-describe('count what you invested (game 1)', () => {
-  it('a pawn given for two checks at their king is an investment, not "a pawn down"', () => {
-    // g6 gives a pawn to rip open the shelter; two checks follow.
-    const out = lineAchieves('6k1/5ppp/8/6P1/8/8/5PPP/3Q2K1 w - - 0 1', ['g6', 'hxg6', 'Qd8+', 'Kh7', 'Qh4+', 'Kg8'], 'w');
-    expect(out.kind).toBe('investment');
-    expect(out.text).toMatch(/invested only a pawn/);
-  });
-});

@@ -32,6 +32,12 @@ import { countWords } from '../utils/countWords';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { theirMoveCost } from './theirMoveCost';
 import { openingWindowOpen } from './moveFundamentals';
+import { readConversion } from './conversionMethod';
+import { minorsAtHome } from './development';
+import { tradeJudgement } from './tradeJudgement';
+import { detectTactics } from './tacticsDetector';
+import { castleSide, heldByTactic, keepTension } from './speedRunReads';
+import { findLoosePieces } from './loosePieces';
 import { noPawnCanChallenge } from './outpost';
 import { findHangingBySee, findKnightReroute, findWeakPawns } from './positionReadingService';
 import { findWorstPlacedPiece } from './nextPlans';
@@ -75,26 +81,20 @@ function play(fen: string, san: string): { board: Chess; move: Move } | null {
  * than the attacker, or anything undefended. Null below two targets.
  */
 export function doubleAttack(fenBefore: string, san: string): DoubleAttack | null {
+  // THE fork detector decides (`tacticsDetector`, its winnability gate
+  // included) — this only reads the fork the moved piece makes.
   const r = play(fenBefore, san);
   if (!r) return null;
   const { board, move } = r;
-  const them = board.turn();
-  const mine = move.color;
-  const myValue = CAPTURE_VALUE[move.piece] ?? 0;
-  const targets: DoubleAttack['targets'] = [];
-  for (const row of board.board()) {
-    for (const cell of row) {
-      if (!cell || cell.color !== them) continue;
-      let hit = false;
-      try { hit = board.attackers(cell.square, mine).includes(move.to); } catch { hit = false; }
-      if (!hit) continue;
-      const value = CAPTURE_VALUE[cell.type] ?? 0;
-      const defended = (() => { try { return board.isAttacked(cell.square, them); } catch { return true; } })();
-      if (cell.type === 'k' || value > myValue || !defended) {
-        targets.push({ square: cell.square, piece: cell.type, phrase: cell.type === 'k' ? 'the king' : `the ${name(cell.type)} on ${cell.square}` });
-      }
-    }
-  }
+  let fork: { involvedSquares: string[] } | undefined;
+  try {
+    fork = detectTactics(board.fen()).tactics.find((t) => t.type === 'fork' && t.beneficiary === move.color && t.involvedSquares[0] === move.to);
+  } catch { fork = undefined; }
+  if (!fork) return null;
+  const targets: DoubleAttack['targets'] = fork.involvedSquares.slice(1).flatMap((sq) => {
+    const p = board.get(sq as Square);
+    return p ? [{ square: sq, piece: p.type, phrase: p.type === 'k' ? 'the king' : `the ${name(p.type)} on ${sq}` }] : [];
+  });
   if (targets.length < 2) return null;
   targets.sort((a, b) => (CAPTURE_VALUE[b.piece] ?? 0) - (CAPTURE_VALUE[a.piece] ?? 0));
   return { from: move.to, targets };
@@ -277,8 +277,6 @@ function positionAskCore(fen: string, opts: { bestSan?: string }): PositionAsk {
   // badly, the whole game stands badly"), from the app's own computers.
   const parts: string[] = [];
   const sq: string[] = [];
-  const pe = pawnEnding(fen, me);
-  if (pe) { parts.push(pe.text); sq.push(...pe.squares); }
   const mat = materialPlan(fen, me);
   if (mat) parts.push(mat.text);
   const loosePieces = looseOwnPieces(fen, me);
@@ -316,9 +314,7 @@ function positionAskCore(fen: string, opts: { bestSan?: string }): PositionAsk {
   }
   return {
     mode: 'improve',
-    text: pe
-      ? parts.join(' ')
-      : parts.length > 0
+    text: parts.length > 0
       ? `No piece is loose and no attack is ready. ${parts.join(' ')}`
       : 'No piece is loose and no attack is ready — find your worst-placed piece and give it a better job.',
     squares: sq,
@@ -424,9 +420,11 @@ export function moveMissed(fenBefore: string, san: string, replyPv: readonly str
     })();
     if (hit) return { text: `${you}? Then ${sayMoveClause(reply.move.san, r.board.fen())} comes with tempo, hitting your ${name(hit.type)} on ${hit.square}.`, line, tag: 'tempo-handed' };
   }
-  // TRADING WHILE DOWN (catalogue A11): every like-for-like trade helps them.
-  if (tradeWhileDown(fenBefore, r.move.san, replies[0])) {
-    return { text: `${you} trades pieces while you are behind — every trade brings them closer to a won endgame. Keep pieces on.`, line, tag: 'bad-trade' };
+  // A BAD TRADE — THE trade computer judges it (`tradeJudgement`, census
+  // "trade judgement"); never a second copy here.
+  const tj = replies[0] ? tradeJudgement(fenBefore, r.move.san, replies[0], me, 100) : null;
+  if (tj && (tj.reason === 'behind' || tj.reason === 'gave-best')) {
+    return { text: tj.text, line, tag: 'bad-trade' };
   }
   // AN EMPTY THREAT (catalogue B4): it hits a piece, the piece steps away.
   const empty = emptyThreat(fenBefore, r.move.san, replies[0]);
@@ -753,6 +751,9 @@ export function positionPosed(
     if (noRetreat(fen, me)) add('misplaced-piece', 65);
     if ((materialPlan(fen, me)?.diff ?? 0) <= -3) add('bad-trade', 70);
     if (heavyTiedDown(fen, me)) add('passive-rook', 60);
+    if (keepTension(fen, me, opts.bestSan ?? null)) add('mistimed-pawn-break', 60);
+    if (castleSide(fen, me)) add('weakened-king-safety', 60);
+    if (heldByTactic(fen, me)) add('hung-material', 60);
   } catch { /* an unreadable board posed nothing */ }
   return out;
 }
@@ -932,24 +933,15 @@ function material(board: Chess, c: 'w' | 'b'): number {
  * double attack collects, so they are named before anything lands on them.
  */
 export function looseOwnPieces(fen: string, me: 'w' | 'b'): Array<{ square: string; piece: string }> {
-  let board: Chess;
-  try { board = new Chess(fen); } catch { return []; }
-  const out: Array<{ square: string; piece: string }> = [];
+  // THE loose-piece computer decides what is loose; this adds only "they can
+  // hit it next move" — a rook asleep on its home square is not a teaching point.
   const them = me === 'w' ? 'b' : 'w';
-  // Only the loose pieces they can actually hit next move — a rook asleep on
-  // its home square is not a teaching point.
   let theirMoves: Move[] = [];
-  try { theirMoves = new Chess([fen.split(' ')[0], them, '-', '-', '0', '1'].join(' ')).moves({ verbose: true }); } catch { return out; }
-  for (const row of board.board()) for (const cell of row) {
-    if (!cell || cell.color !== me || cell.type === 'k' || cell.type === 'p' || cell.type === 'q') continue;
-    if (guards(board, cell.square, me).length > 0) continue;
-    const hittable = theirMoves.some((m) => {
-      const b = new Chess(m.before); b.move(m.san);
-      try { return b.attackers(cell.square, them).length > 0; } catch { return false; }
-    });
-    if (hittable) out.push({ square: cell.square, piece: cell.type });
-  }
-  return out;
+  try { theirMoves = new Chess([fen.split(' ')[0], them, '-', '-', '0', '1'].join(' ')).moves({ verbose: true }); } catch { return []; }
+  return findLoosePieces(fen, me)
+    .filter((l) => l.type !== 'p' && l.type !== 'q')
+    .filter((l) => theirMoves.some((m) => { try { const b = new Chess(m.before); b.move(m.san); return b.attackers(l.square, them).length > 0; } catch { return false; } }))
+    .map((l) => ({ square: l.square, piece: l.type }));
 }
 
 /**
@@ -1009,20 +1001,13 @@ export function materialPlan(fen: string, me: 'w' | 'b'): { diff: number; text: 
   if (count(me, 'r') > count(them, 'r') && minors(them) > minors(me) && diff >= 1 && diff <= 4) {
     return { diff, text: 'You are up the exchange — rooks need open files: open lines, double them, and aim for the seventh rank.' };
   }
-  if (diff >= 3) return { diff, text: `You are ${countWords(diff)} up — trade pieces, not pawns, and the endgame wins itself.` };
+  // Ahead: THE conversion method speaks (`readConversion` — trade, attack or
+  // make a passer); never a second copy of it here.
+  if (diff >= 3) { const conv = readConversion(fen, me); return conv ? { diff, text: conv.text } : null; }
   if (diff <= -3) return { diff, text: `You are ${countWords(-diff)} down — keep pieces on and make it messy; every trade helps them.` };
   return null;
 }
 
-/** A capture that trades like for like while you are behind (catalogue A11). */
-export function tradeWhileDown(fenBefore: string, san: string, replySan: string | undefined): boolean {
-  const r = play(fenBefore, san);
-  if (!r || !r.move.captured || r.move.captured === 'p' || !replySan) return false;
-  const plan = materialPlan(fenBefore, r.move.color);
-  if (!plan || plan.diff > -3) return false;
-  const reply = play(r.board.fen(), replySan);
-  return !!reply && reply.move.to === r.move.to && (CAPTURE_VALUE[r.move.captured] ?? 0) === (CAPTURE_VALUE[r.move.piece] ?? 0);
-}
 
 /**
  * A HEAVY PIECE TIED TO A GUARD (catalogue C3 — "queens and rooks make bad
@@ -1045,13 +1030,8 @@ export function heavyTiedDown(fen: string, me: 'w' | 'b'): { defender: string; p
 }
 
 function homeMinors(board: Chess, c: 'w' | 'b'): Array<{ square: string; type: string }> {
-  const r = c === 'w' ? '1' : '8';
-  const out: Array<{ square: string; type: string }> = [];
-  for (const [f, t] of [['b', 'n'], ['g', 'n'], ['c', 'b'], ['f', 'b']] as const) {
-    const p = board.get(`${f}${r}` as Square);
-    if (p && p.color === c && p.type === t) out.push({ square: `${f}${r}`, type: t });
-  }
-  return out;
+  // THE development reading (`development.minorsAtHome`) — never a second copy.
+  return minorsAtHome(board, c).map((m) => ({ square: m.square, type: m.type }));
 }
 
 /**
@@ -1060,44 +1040,18 @@ function homeMinors(board: Chess, c: 'w' | 'b'): Array<{ square: string; type: s
  * the first piece standing behind the king on that line is worth taking.
  */
 export function skewer(fenBefore: string, san: string): { behind: string; piece: string } | null {
+  // THE skewer detector decides (`tacticsDetector`); this reads the one the
+  // moved piece makes.
   const r = play(fenBefore, san);
-  if (!r || !r.move.san.includes('+') || !'brq'.includes(r.move.piece)) return null;
-  const king = ownKing(r.board, r.board.turn());
-  if (!king) return null;
-  const df = Math.sign(king.charCodeAt(0) - r.move.to.charCodeAt(0));
-  const dr = Math.sign(Number(king[1]) - Number(r.move.to[1]));
-  let f = king.charCodeAt(0) + df; let rk = Number(king[1]) + dr;
-  while (f >= 97 && f <= 104 && rk >= 1 && rk <= 8) {
-    const sq = `${String.fromCharCode(f)}${rk}` as Square;
-    const p = r.board.get(sq);
-    if (p) return p.color === r.board.turn() && p.type !== 'p' ? { behind: sq, piece: p.type } : null;
-    f += df; rk += dr;
-  }
-  return null;
+  if (!r) return null;
+  try {
+    const sk = detectTactics(r.board.fen()).tactics.find((t) => t.type === 'skewer' && t.beneficiary === r.move.color && t.involvedSquares[0] === r.move.to);
+    const behind = sk?.involvedSquares[2];
+    const p = behind ? r.board.get(behind as Square) : null;
+    return behind && p ? { behind, piece: p.type } : null;
+  } catch { return null; }
 }
 
-/**
- * THE PAWN ENDING (game 2, moves 38-51 — the king marches, the passed pawn
- * runs, "the red carpet is rolled out"): only kings and pawns left.
- */
-export function pawnEnding(fen: string, me: 'w' | 'b'): { text: string; squares: string[] } | null {
-  let board: Chess;
-  try { board = new Chess(fen); } catch { return null; }
-  const cells = board.board().flat().filter((x): x is NonNullable<typeof x> => !!x);
-  if (cells.some((x) => x.type !== 'k' && x.type !== 'p')) return null;
-  const them = me === 'w' ? 'b' : 'w';
-  const passed = cells.filter((x) => x.type === 'p' && x.color === me && !cells.some((y) => y.type === 'p' && y.color === them
-    && Math.abs(y.square.charCodeAt(0) - x.square.charCodeAt(0)) <= 1
-    && (me === 'w' ? Number(y.square[1]) > Number(x.square[1]) : Number(y.square[1]) < Number(x.square[1]))));
-  const king = ownKing(board, me);
-  if (!king) return null;
-  return {
-    text: passed.length > 0
-      ? `Pawn ending — your king is the strongest piece now. March it forward and escort your passed pawn on ${passed[0].square}.`
-      : 'Pawn ending — your king is the strongest piece now. March it toward their pawns.',
-    squares: [king, ...(passed[0] ? [passed[0].square] : [])],
-  };
-}
 
 // ── INACCESSIBILITY (game 2 full transcript) ─────────────────────────────────
 

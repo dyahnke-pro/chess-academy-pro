@@ -14,6 +14,9 @@ import { settledNetForLine } from './exchangeLedger';
 import { sayMoveClause } from './spokenMove';
 import { countWords } from '../utils/countWords';
 import { walkableLine, pvSans, hookCreated, holeAccess } from './moveInsight';
+import { tempoCount } from './tempoCount';
+import { homeMinorCount } from './development';
+import { speedRunReads } from './speedRunReads';
 
 const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 const NUM = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
@@ -55,7 +58,7 @@ function shield(board: Chess, c: 'w' | 'b'): number {
 export interface LineOutcome {
   /** What the line achieves, as a clause ("the h-file opens", "you come out a knight up"). */
   text: string;
-  kind: 'mate' | 'material' | 'file' | 'king' | 'promotion' | 'pawn-ending' | 'investment' | 'none';
+  kind: 'mate' | 'material' | 'file' | 'king' | 'promotion' | 'pawn-ending' | 'none';
 }
 
 /**
@@ -83,16 +86,9 @@ export function lineAchieves(startFen: string, sans: readonly string[], me: 'w' 
   }
   const net = settledNetForLine(startFen, sans, me);
   if (net !== null && net >= 1) return { text: `you come out ${countWords(net)} up`, kind: 'material' };
-  if (net !== null && net <= -1) {
-    // COUNT WHAT YOU INVESTED (game 1: "we've sacrificed the exchange but won a
-    // pawn — one point. Even if the attack backfires the game goes on; don't
-    // panic if it doesn't mate in two"). A small investment for their king.
-    const checks = (() => { const c = new Chess(startFen); let n = 0; for (const x of sans) { try { const m = c.move(x); if (m.color === me && m.san.includes('+')) n += 1; } catch { break; } } return n; })();
-    if (net >= -2 && (checks >= 2 || shield(end, them) < shield(start, them))) {
-      return { text: `you have invested only ${countWords(-net)} for an attack on their king — even if it stalls, the game goes on, so don't panic`, kind: 'investment' };
-    }
-    return { text: `you come out ${countWords(-net)} down`, kind: 'material' };
-  }
+  // A sacrifice's compensation is `reviewSacrifice.sacrificeCompensation`'s to
+  // say — not a second copy here.
+  if (net !== null && net <= -1) return { text: `you come out ${countWords(-net)} down`, kind: 'material' };
   const theirKing = kingSq(end, them);
   if (theirKing) {
     const kf = theirKing.charCodeAt(0);
@@ -170,43 +166,28 @@ export function notYet(fen: string, best: Candidate): { text: string; capture: s
   return null;
 }
 
-export interface Habit { kind: 'same-piece' | 'undeveloped' | 'early-queen'; text: string }
+export interface Habit { kind: 'tempo' | 'undeveloped'; text: string }
 
 /**
  * WHAT THEY KEEP DOING (his "he keeps moving the same piece in the opening —
- * you punish that by obeying the principles yourself"): read from the game so
- * far, never from one position.
+ * you punish that by obeying the principles yourself"). The piece-moved-again
+ * count is THE tempo computer (`tempoCount`, census P2 #7) — never a second
+ * copy here; the queen out early is `ruleException`'s. This adds only the
+ * development count: their minors still at home deep into the opening.
  */
 export function opponentHabits(sans: readonly string[], opp: 'w' | 'b'): Habit[] {
-  const c = new Chess();
-  const moved = new Map<string, number>();   // piece's current square → times moved
   const out: Habit[] = [];
-  let earlyQueen = false;
-  for (const [i, s] of sans.entries()) {
-    let m;
-    try { m = c.move(s); } catch { break; }
-    if (m.color !== opp || i >= 24) continue;
-    if (m.piece === 'p' || m.piece === 'k' || m.san.startsWith('O-O')) continue;
-    const n = (moved.get(m.from) ?? 0) + 1;
-    moved.delete(m.from);
-    moved.set(m.to, n);
-    if (m.piece === 'q' && i < 10) earlyQueen = true;
-  }
-  const busiest = [...moved.entries()].sort((a, b) => b[1] - a[1])[0];
-  if (busiest && busiest[1] >= 3) {
-    const p = c.get(busiest[0] as Square);
-    if (p && p.color === opp) out.push({ kind: 'same-piece', text: `They keep moving the same piece — that ${p.type === 'n' ? 'knight' : p.type === 'b' ? 'bishop' : p.type === 'r' ? 'rook' : 'queen'} has moved ${num(busiest[1])} times. You punish that by developing everything else.` });
-  }
-  const r = opp === 'w' ? '1' : '8';
-  const home = ['b', 'g', 'c', 'f'].filter((f) => { const p = c.get(`${f}${r}` as Square); return p && p.color === opp && (p.type === 'n' || p.type === 'b'); });
-  const plies = Math.min(sans.length, 24);
-  if (plies >= 16 && home.length >= 2) out.push({ kind: 'undeveloped', text: `They still have ${num(home.length)} minor pieces at home — the more they wait, the more you attack.` });
-  if (earlyQueen) out.push({ kind: 'early-queen', text: 'Their queen came out early — every developing move that hits it gains you a tempo.' });
+  const t = tempoCount(sans, opp === 'w' ? 'b' : 'w');
+  if (t) out.push({ kind: 'tempo', text: t.text });
+  const c = new Chess();
+  for (const s of sans.slice(0, 24)) { try { c.move(s); } catch { break; } }
+  const home = homeMinorCount(c, opp);
+  if (Math.min(sans.length, 24) >= 16 && home >= 2) out.push({ kind: 'undeveloped', text: `They still have ${num(home)} minor pieces at home — the more they wait, the more you attack.` });
   return out;
 }
 
 export interface DepthClause {
-  kind: 'not-yet' | 'line' | 'their-habit' | 'stop-flaw' | 'hole-access';
+  kind: 'not-yet' | 'line' | 'their-habit' | 'stop-flaw' | 'hole-access' | 'speedrun-read';
   text: string;
   /** The line the clause says, from the board it starts on (arrows). */
   lines?: Array<{ fen: string; sans: string[] }>;
@@ -229,6 +210,8 @@ export function depthClauses(args: {
   nameMove: boolean;
   /** The student's own last move — what it gave up. */
   lastStudentMove?: { fenBefore: string; san: string };
+  /** The opponent's last move — what it opened. */
+  lastOpponentMove?: { fenBefore: string; san: string };
 }): DepthClause[] {
   const out: DepthClause[] = [];
   try {
@@ -247,7 +230,13 @@ export function depthClauses(args: {
       // (game 2, 10.Ng5 — the engine prefers h3), the human preference is not a fact.
       if (flaw && flaw.stopSan !== engineBest) out.push({ kind: 'stop-flaw', text: flaw.text });
     }
+    // His habits of thought that name no move: keep the tension, which side to
+    // castle, "any move is fine". The ones that name the engine's move (the
+    // ugly move, the provoked commitment) wait for nameMove below.
+    const reads = toMove === args.studentColor ? speedRunReads({ fen: args.fen, me: args.studentColor, lines: args.topLines, ...(args.lastOpponentMove ? { lastMove: args.lastOpponentMove } : {}) }) : [];
+    for (const r of reads.filter((x) => !x.namesMove)) out.push({ kind: 'speedrun-read', text: r.text, ...(r.squares ? { squares: r.squares } : {}) });
     if (!args.nameMove || toMove !== args.studentColor) return out;
+    for (const r of reads.filter((x) => x.namesMove)) out.push({ kind: 'speedrun-read', text: r.text, ...(r.squares ? { squares: r.squares } : {}) });
     const top = args.topLines[0];
     const uci = top?.moves?.[0];
     if (!top || !uci) return out;
@@ -257,7 +246,12 @@ export function depthClauses(args: {
     const ny = notYet(args.fen, best);
     if (ny) out.push({ kind: 'not-yet', text: ny.text });
     const sans = pvSans(args.fen, [...best.pv], 6);
-    const said = sayLine(args.fen, sans, args.studentColor);
+    // Material and mate are THE ledger's to say (`deliberation`'s played-out
+    // line, `proofForMover`): the line fact speaks only the outcomes the ledger
+    // has no words for — a file opening, the king's cover, a pawn ending, an
+    // investment, a pawn queening.
+    const outcome = lineAchieves(args.fen, sans.slice(0, 4), args.studentColor);
+    const said = outcome.kind !== 'material' && outcome.kind !== 'mate' && outcome.kind !== 'none' ? sayLine(args.fen, sans, args.studentColor) : null;
     if (said) {
       out.push({
         kind: 'line',

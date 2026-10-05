@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2816 lines · 87 exports · 78 importers · 25 tests · 2 audits**
+**2816 lines · 87 exports · 79 importers · 25 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -74,6 +74,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewTrapQuestion.ts`
 - `src/services/ruleException.ts`
 - `src/services/safetyHabits.ts`
+- `src/services/speedRunReads.ts`
 - `src/services/tacticAlertService.ts`
 - `src/services/tacticVerification.ts`
 - `src/services/tacticsDetector.ts`
@@ -132,7 +133,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tradeQuality.ts:146`
 
 ### `legalSeeGainOn` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:2706`
+- `src/services/coachFeatureService.ts:2705`
 - `src/services/groundedAnswer.ts:7019`
 - `src/services/moveIntent.ts:292`
 - `src/services/moveIntent.ts:304`
@@ -165,7 +166,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/checkIsNotAGuard.test.ts:26`
 - `src/services/checkIsNotAGuard.test.ts:27`
 - `src/services/checkIsNotAGuard.test.ts:28`
-- `src/services/deliberation.ts:444`
+- `src/services/deliberation.ts:447`
 - `src/services/groundedAnswer.ts:1195`
 - `src/services/moveFundamentals.ts:917`
 
@@ -200,7 +201,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleAttribution.ts:301`
 - `src/services/principleAttribution.ts:648`
 
-### `legalSeeGainFor` (function) — 38 call sites
+### `legalSeeGainFor` (function) — 40 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8291`
 - `src/components/Coach/CoachTeachPage.tsx:9901`
 - `src/services/arrowDoor.ts:161`
@@ -210,9 +211,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/checkIsNotAGuard.test.ts:39`
 - `src/services/computedMaterialTruth.corpus.test.ts:120`
 - `src/services/computedMaterialTruth.corpus.test.ts:145`
-- `src/services/deliberation.ts:43`
-- `src/services/deliberation.ts:433`
-- `src/services/deliberation.ts:434`
+- `src/services/deliberation.ts:44`
+- `src/services/deliberation.ts:436`
+- `src/services/deliberation.ts:437`
 - `src/services/exchangeLedger.ts:123`
 - `src/services/exchangeLedger.ts:353`
 - `src/services/exchangeLedger.ts:423`
@@ -234,8 +235,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/nextPlans.ts:47`
 - `src/services/pvPlayback.ts:203`
 - `src/services/pvPlayback.ts:207`
-- `src/services/ruleException.ts:53`
+- `src/services/ruleException.ts:46`
 - `src/services/safetyHabits.ts:38`
+- `src/services/speedRunReads.ts:135`
+- `src/services/speedRunReads.ts:153`
 - `src/services/tacticAlertService.ts:334`
 - `src/services/tacticVerification.ts:101`
 - `src/services/threatAnswer.ts:154`
@@ -637,7 +640,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:200`
 
 ### `computeTerritory` (function) — 1 call site
-- `src/services/deliberation.ts:498`
+- `src/services/deliberation.ts:501`
 
 ### `findAttackTargets` (function) — 3 call sites
 - `src/services/groundedAnswer.ts:6538`

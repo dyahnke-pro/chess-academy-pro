@@ -10,6 +10,7 @@
 //
 // A LEAF: chess.js over the game's own SAN history.
 import { Chess, type Square } from 'chess.js';
+import { homeSquaresOf } from './development';
 
 export interface TempoCount {
   text: string;
@@ -26,7 +27,6 @@ export const TEMPO_OPENING_PLIES = 24;
 const NAME: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 const ORDINAL = ['', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth'];
 const WORD = ['no', 'one', 'two', 'three', 'four'];
-const MINOR_HOME: Record<'w' | 'b', readonly string[]> = { w: ['b1', 'g1', 'c1', 'f1'], b: ['b8', 'g8', 'c8', 'f8'] };
 
 /** `history` = every SAN of the game, ending with THEIR reply. */
 export function tempoCount(history: readonly string[], student: 'w' | 'b'): TempoCount | null {
@@ -59,7 +59,8 @@ export function tempoCount(history: readonly string[], student: 'w' | 'b'): Temp
   if (!last || last.color !== them || !(last.piece in NAME) || last.captured) return null;
   const n = moved.get(last.id) ?? 0;
   if (n < 3) return null;
-  const minorsOut = (side: 'w' | 'b'): number => MINOR_HOME[side].filter((home) => {
+  // THE development reading's home squares (`homeSquaresOf`) — never a copy here.
+  const minorsOut = (side: 'w' | 'b'): number => [...homeSquaresOf('n', side), ...homeSquaresOf('b', side)].filter((home) => {
     for (const [sq, id] of idAt) if (id === home && sq !== home) return true;
     return false;
   }).length;

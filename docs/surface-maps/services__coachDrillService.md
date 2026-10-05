@@ -186,8 +186,8 @@
 - `src/services/moveInsight.test.ts:214`
 - `src/services/moveInsight.test.ts:250`
 - `src/services/moveInsight.test.ts:253`
-- `src/services/moveInsight.test.ts:302`
-- `src/services/moveInsight.ts:370`
+- `src/services/moveInsight.test.ts:296`
+- `src/services/moveInsight.ts:368`
 
 ### `positionAsk` (re-export) — 24 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2870`
@@ -207,10 +207,10 @@
 - `src/services/moveInsight.test.ts:164`
 - `src/services/moveInsight.test.ts:169`
 - `src/services/moveInsight.test.ts:189`
-- `src/services/moveInsight.test.ts:282`
-- `src/services/moveInsight.test.ts:288`
-- `src/services/moveInsight.test.ts:309`
-- `src/services/moveInsight.test.ts:312`
+- `src/services/moveInsight.test.ts:277`
+- `src/services/moveInsight.test.ts:283`
+- `src/services/moveInsight.test.ts:303`
+- `src/services/moveInsight.test.ts:306`
 - `src/services/moveInsight.ts:130`
 - `src/services/thinkingAssessStep.ts:81`
 - `src/services/whyBestMove.ts:93`
