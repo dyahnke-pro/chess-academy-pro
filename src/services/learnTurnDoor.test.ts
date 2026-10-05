@@ -114,22 +114,23 @@ describe('WO-1b — one lead per turn', () => {
     expect(d.pkg.spoken).not.toContain('f1');
   });
 
-  it('SAFETY FLOOR — a threat speaks even when something else leads', () => {
+  it('DANGER FIRST — a threat leads the turn, and the gem still speaks after it (David 2026-10-05)', () => {
     const d = decideTurn([
       { lane: 'gem', text: C6, fen: FEN, squares: ['c6'] },
       { lane: 'threat', text: F1, fen: FEN, squares: ['f1', 'c4'] },
     ]);
-    expect(d.lead?.lane).toBe('gem');
-    expect(d.spoke).toContain('threat');
+    expect(d.lead?.lane).toBe('threat');
+    expect(d.spoke).toEqual(expect.arrayContaining(['threat', 'gem']));
+    expect(d.pkg.spoken.indexOf('f1')).toBeLessThan(d.pkg.spoken.indexOf('c6'));
   });
 
-  it('the late wave leads only by outranking the instant lead; safety still rides', () => {
+  it('the late wave: danger leads it; a description that adds nothing is still quiet', () => {
     const prior = { lane: 'gem' as const, squares: ['a1'] };
     const d = decideTurn([
       { lane: 'pieceQuality', text: F3, fen: FEN, squares: ['f3', 'e5'] },
       { lane: 'threat', text: F1, fen: FEN, squares: ['f1', 'c4'] },
     ], undefined, undefined, prior);
-    expect(d.lead).toBeNull();
+    expect(d.lead?.lane).toBe('threat');
     expect(d.held).toEqual(['pieceQuality']);
     expect(d.spoke).toEqual(['threat']);
     // …and a higher-ranked late fact does lead.
@@ -208,7 +209,7 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
   it('Learn hands every line-speaking producer\'s lines to the queue, and draws on-screen and earlier boards apart', () => {
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), registerNow, 'register', undefined, undefined, undefined, undefined, pendingRegisterLines\)/);
     expect(TEACH_CODE).toMatch(/pendingRegisterLines = \[\{ fen: probe\.fen\(\), sans: \[compareRead\.bestSan\] \}/);
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, undefined, c\.claim \? \[c\.claim\] : undefined, undefined, undefined, c\.lines\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, c\.squares, c\.claim \? \[c\.claim\] : undefined, undefined, undefined, c\.lines, c\.stakes\)/);
     expect(TEACH_CODE).toMatch(/fundamental\?\.lines\)/);
     expect(TEACH_CODE).toMatch(/'fundamental', \[\], [^,]*\? \['convert-method'\] : undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines\)/);
     expect(TEACH_CODE).toMatch(/keptLines\(hintPkg,/);
@@ -320,10 +321,10 @@ describe('beginner mode — the fundamental behind a slip always rides (David 20
     { lane: 'fundamental', text: FUND, fen: FEN, squares: ['g1'] },
   ];
 
-  it('held for everyone else when it shares no square with the lead', () => {
+  it('speaks for everyone now — a teaching fact is never held behind the lead (David 2026-10-05)', () => {
     const d = decideTurn(facts());
-    expect(d.held).toContain('fundamental');
-    expect(d.pkg.spoken).not.toContain('same piece twice');
+    expect(d.spoke).toContain('fundamental');
+    expect(d.pkg.spoken).toContain('same piece twice');
   });
 
   it('spoken for a beginner, without changing what leads', () => {
@@ -331,5 +332,28 @@ describe('beginner mode — the fundamental behind a slip always rides (David 20
     expect(d.spoke).toContain('fundamental');
     expect(d.lead?.lane).toBe('mistake');
     expect(d.pkg.spoken).toContain('same piece twice');
+  });
+});
+
+describe('ONE ORDER, NO HOLD (David 2026-10-05)', () => {
+  const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
+  it('a staked fact leads over a higher-lane unstaked one, and both speak', () => {
+    const d = decideTurn([
+      { lane: 'planArc', text: 'Their plan is the queenside push.', fen: FEN, squares: ['b5'] },
+      { lane: 'positionFacts', text: 'Their knight on c6 is the glue — it alone holds e5.', fen: FEN, squares: ['c6', 'e5'], stakes: { points: 3, plies: 1 } },
+    ]);
+    expect(d.lead?.lane).toBe('positionFacts');
+    expect(d.spoke).toEqual(expect.arrayContaining(['positionFacts', 'planArc']));
+  });
+  it('five teaching facts on one move: all five speak', () => {
+    const d = decideTurn([
+      { lane: 'moveIntent', text: 'Your move stops Bb4.', fen: FEN, squares: ['b4'] },
+      { lane: 'planArc', text: 'Their plan is the queenside push.', fen: FEN, squares: ['b5'] },
+      { lane: 'openingIdea', text: 'Masters break with d5 here.', fen: FEN, squares: ['d5'] },
+      { lane: 'gap', text: 'Their move left f7 undefended.', fen: FEN, squares: ['f7'] },
+      { lane: 'positionFacts', text: 'Keep the tension on e5.', fen: FEN, squares: ['e5'], stakes: { points: 0.4, plies: 0 } },
+    ]);
+    expect(d.spoke).toHaveLength(5);
+    expect(d.held).toEqual([]);
   });
 });

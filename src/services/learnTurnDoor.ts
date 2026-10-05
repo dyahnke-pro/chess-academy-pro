@@ -27,6 +27,7 @@ import { emitLearnTurn } from './coachDecisionEvents';
 import { COMPUTER_ROLES } from './computerRoles';
 import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type VoiceFactKind, type VoicePackage } from './voicePackage';
 
+import { stakeValue, type FactStakes } from './factStakes';
 export { buildVoicePackage, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys } from './voicePackage';
 export type { SpokenLine, DrawnLine } from './voicePackage';
 export type { VoicePackage, VoiceFactKind } from './voicePackage';
@@ -271,7 +272,13 @@ export interface LaneFact {
   /** The claims this line makes, so a claim already said is dropped (the
    *  claim ledger, `voicePackage`). */
   claims?: readonly string[];
+  /** What rides on it (`factStakes`) — the door orders by this first. */
+  stakes?: FactStakes;
 }
+
+/** DANGER speaks first, whatever else is on the board (David 2026-10-05:
+ *  "threat first"): an insight before "your knight is attacked" is backwards. */
+export const DANGER_LANES: ReadonlySet<LearnLane> = new Set<LearnLane>(['threat', 'threatAnswer']);
 
 export interface TurnDecision {
   pkg: VoicePackage;
@@ -345,52 +352,69 @@ export function decideTurn(
     .map((k) => ({ fact: k, lane: laneOf(k) }))
     .filter((x): x is { fact: VoiceFact; lane: LearnLane } => x.lane !== undefined);
 
-  // THE LEAD — the highest-ranked survivor; offer order breaks ties.
+  // ONE ORDER, NO HOLD (David 2026-10-05: "If there are 5 important facts or a
+  // plan that comes from the move then the user needs to hear it"). The door
+  // no longer picks one thought and holds the rest: every survivor of the
+  // package speaks. What decides the SEQUENCE is computed, not a lane table:
+  //   1. danger first (the threat, and what to do about it);
+  //   2. then the fact with the most at stake (`factStakes.stakeValue`);
+  //   3. then the rest in his turn grammar (the DNA beat), stakes first
+  //      inside a beat, the lane table only as the tie-break for facts that
+  //      carry no stakes.
+  const stakeOf = (lane: LearnLane, text: string): number => {
+    const f = open.find((o) => o.lane === lane && (o.text === text || o.text.includes(text)));
+    const st = f ? facts.find((x) => x.lane === lane && x.text.trim() && (x.text === f.text || fadeWhenGreen(x.lane, x.text, green ?? null) === f.text))?.stakes : undefined;
+    return stakeValue(st) ?? 0;
+  };
+  const value = (x: { fact: VoiceFact; lane: LearnLane }): number => stakeOf(x.lane, x.fact.text) || LEARN_LANES[x.lane].lead;
   let top: { fact: VoiceFact; lane: LearnLane } | null = null;
-  for (const x of survivors) if (!top || LEARN_LANES[x.lane].lead > LEARN_LANES[top.lane].lead) top = x;
-  const ownLead = top && (!priorLead || LEARN_LANES[top.lane].lead > LEARN_LANES[priorLead.lane].lead) ? top : null;
+  for (const x of survivors) {
+    if (!top) { top = x; continue; }
+    const xd = DANGER_LANES.has(x.lane); const td = DANGER_LANES.has(top.lane);
+    if (xd !== td) { if (xd) top = x; continue; }
+    if (value(x) > value(top)) top = x;
+  }
+  const priorValue = priorLead ? LEARN_LANES[priorLead.lane].lead : -1;
+  const ownLead = top && (!priorLead || DANGER_LANES.has(top.lane) || value(top) > priorValue) ? top : null;
   const anchor = ownLead ? (ownLead.fact.squares ?? []) : (priorLead?.squares ?? []);
-  const shares = (sq: readonly string[] | undefined): boolean => (sq ?? []).some((q) => anchor.includes(q));
 
   const keep: VoiceFact[] = [];
   const spoke: LearnLane[] = [];
   const held: LearnLane[] = [];
   for (const x of survivors) {
-    // A DESCRIPTION whose squares all sit inside the lead's says nothing the
-    // lead did not: it names the same piece again (hand walk 2026-09-30, Ruy
-    // 9…Bg4: the pin warning, then "their bishop on g4 is the piece doing the
-    // most work"). Support must ADD a square, or come from a lane that teaches.
-    const restates = LEARN_LANES[x.lane].lead <= DESCRIPTION_LEAD
-      && (x.fact.squares ?? []).length > 0 && (x.fact.squares ?? []).every((q) => anchor.includes(q));
-    const speak = x === ownLead || LEARN_LANES[x.lane].always === true || (beginner && BEGINNER_ALWAYS.has(x.lane)) || (shares(x.fact.squares) && !restates);
-    if (speak) {
+    // A DESCRIPTION — nothing at stake, from a lane that describes the board
+    // (or an unstaked board-read riding position facts) — speaks only as
+    // SUPPORT: it must touch the lead's squares AND add one of its own. "Your
+    // queen on d3 takes aim at the center" beside "g6 stops the mate" is the
+    // board described where he explains the move (hand walks 2026-09-30).
+    // Everything staked or teaching speaks, however many there are.
+    const describes = x !== ownLead && stakeOf(x.lane, x.fact.text) === 0
+      && (LEARN_LANES[x.lane].lead <= DESCRIPTION_LEAD || x.lane === 'positionFacts');
+    const sq = x.fact.squares ?? [];
+    const restates = describes && !(sq.some((q) => anchor.includes(q)) && sq.some((q) => !anchor.includes(q)));
+    if (!restates) {
       keep.push(x.fact);
       if (!spoke.includes(x.lane)) spoke.push(x.lane);
     } else if (!held.includes(x.lane)) held.push(x.lane);
   }
-  // THE DNA SHAPE (docs/DNA-outline.md: affirm → but → refute → the point →
-  // verdict), read for a live turn: the opening's name first, then the
-  // student's move (what it does, then its cost, then the line that proves
-  // it), their reply, the idea on the board, and what matters BEFORE the next
-  // move last. The lead still decides WHAT speaks; the beat decides the order,
-  // and the lead opens its own beat.
+  const laneFor = (f: VoiceFact): LearnLane | undefined => survivors.find((x) => x.fact === f)?.lane;
   const beatOf = (f: VoiceFact): number => {
-    const lane = survivors.find((x) => x.fact === f)?.lane;
+    const lane = laneFor(f);
     return lane ? BEAT_ORDER[DNA_BEAT[lane]] : BEAT_ORDER.point;
   };
-  const rank = (f: VoiceFact): number => {
-    const lane = survivors.find((x) => x.fact === f)?.lane;
-    return lane ? LEARN_LANES[lane].lead : 0;
+  const tier = (f: VoiceFact): number => {
+    const lane = laneFor(f);
+    if (lane && DANGER_LANES.has(lane)) return 0;
+    return ownLead && f === ownLead.fact ? 1 : 2;
   };
-  keep.sort((a, b) => beatOf(a) - beatOf(b)
-    || (ownLead && a === ownLead.fact ? -1 : ownLead && b === ownLead.fact ? 1 : 0)
-    || rank(b) - rank(a));
+  const worth = (f: VoiceFact): number => { const lane = laneFor(f); return lane ? value({ fact: f, lane }) : 0; };
+  keep.sort((a, b) => tier(a) - tier(b) || beatOf(a) - beatOf(b) || worth(b) - worth(a));
   const pkg: VoicePackage = {
     spoken: joinSpoken(keep),
     kept: keep,
     dropped: [
       ...verified.dropped,
-      ...survivors.filter((x) => !keep.includes(x.fact)).map((x) => ({ fact: x.fact, reason: 'held — not the lead and shares nothing with it' })),
+      ...survivors.filter((x) => !keep.includes(x.fact)).map((x) => ({ fact: x.fact, reason: 'a description that adds nothing to the lead' })),
     ],
   };
   const lead = ownLead ? { lane: ownLead.lane, squares: ownLead.fact.squares ?? [] } : null;
