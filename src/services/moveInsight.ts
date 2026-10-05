@@ -1137,10 +1137,11 @@ export function holeAccess(fenBefore: string, san: string): { hole: string; move
       if (noPawnCanChallenge(before, hole, them) || !noPawnCanChallenge(after, hole, them)) continue;
       const reach = knightReach(after.fen(), hole, them);
       const said = sayMoveClause(m.san, fenBefore);
-      if (!reach) return { hole, moves: null, from: null, text: `${cap(said)} gives up ${hole} for good — but no knight of theirs can get there, so it costs you nothing.` };
+      // No knight of theirs at all: the hole is no story (replay, game 2 endgame).
+      if (!reach) return null;
       return reach.moves >= 4
-        ? { hole, moves: reach.moves, from: reach.from, text: `${cap(said)} leaves ${hole} weak, but their knight needs ${num(reach.moves)} moves to get there — an eternity, so don't worry about it.` }
-        : { hole, moves: reach.moves, from: reach.from, text: `${cap(said)} leaves ${hole} weak, and their knight on ${reach.from} gets there in ${num(reach.moves)} — that square is theirs now.` };
+        ? { hole, moves: reach.moves, from: reach.from, text: `After ${said}, ${hole} is weak for good, but their knight needs ${num(reach.moves)} moves to get there — an eternity, so don't worry about it.` }
+        : { hole, moves: reach.moves, from: reach.from, text: `After ${said}, ${hole} is weak for good, and their knight on ${reach.from} gets there in ${num(reach.moves)} — that square is theirs now.` };
     }
   }
   return null;

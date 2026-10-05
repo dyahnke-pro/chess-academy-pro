@@ -8,7 +8,8 @@ import { spawn } from 'node:child_process';
 import { writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { moveMissed, positionAsk, theirMoveChanged } from './moveInsight';
-import { thinkAloud, type Candidate } from './thinkAloud';
+import { depthClauses } from './thinkAloud';
+import { moveWhy } from './deliberation';
 
 function engine() {
   const p = spawn('node', ['/home/user/wt-upnext/node_modules/stockfish/bin/stockfish-18-lite-single.js']);
@@ -36,6 +37,8 @@ it.skipIf(!process.env.REPLAY_LINE)('replay a speed-run game through the coach',
   const c = new Chess();
   const out: string[] = [];
   let prev: { fenBefore: string; san: string } | undefined;
+  let fenTwoBack: string | undefined;
+  let fenOneBack: string | undefined;
   for (let i = 0; i < sans.length; i += 1) {
     const fen = c.fen();
     const mover = c.turn();
@@ -48,14 +51,13 @@ it.skipIf(!process.env.REPLAY_LINE)('replay a speed-run game through the coach',
     if (mover === student) {
       const ask = positionAsk(fen, { bestSan, lastMove: prev });
       if (ask.text) lines.push(`ASK[${ask.mode}] ${ask.text}`);
-      const toCand = (v: { pv: string[]; cp: number | null; mate: number | null } | null): Candidate | null => {
-        if (!v || !v.pv[0]) return null;
-        try { const san = new Chess(fen).move({ from: v.pv[0].slice(0, 2), to: v.pv[0].slice(2, 4), promotion: v.pv[0][4] }).san; return { san, pv: v.pv, cp: score(v) }; } catch { return null; }
-      };
-      const cands = [toCand(before), toCand(before.second)].filter((x): x is Candidate => !!x);
-      const critical = cands.length === 2 && Math.abs(cands[0].cp - cands[1].cp) >= 80 && Math.abs(cands[0].cp) < 500;
-      const ta = thinkAloud({ fen, history: sans.slice(0, i), lastMove: prev, candidates: cands, critical });
-      if (ta.text) lines.push(`THINK${critical ? '*' : ''}(${ta.words}w, ${ta.lines.length} arrowed line) ${ta.text}`);
+      // THE DOOR'S PIECES: the best move's why (deliberation) + the depth facts.
+      const pv = before.pv;
+      const why = bestSan ? moveWhy(fen, bestSan, student, null) : null;
+      const critical = !!before.second && Math.abs(score(before) - score(before.second)) >= 80 && Math.abs(score(before)) < 500;
+      const depth = depthClauses({ fen, history: sans.slice(0, i), topLines: [{ moves: pv, evaluation: score(before) * (student === 'w' ? 1 : -1), mate: null }], studentColor: student, nameMove: critical, ...(i >= 2 ? { lastStudentMove: { fenBefore: fenTwoBack ?? fen, san: sans[i - 2] } } : {}) });
+      const said = [why ? `The move is ${bestSan} — it ${why}.` : '', ...depth.map((d) => d.text)].filter(Boolean).join(' ');
+      if (said) lines.push(`THINK${critical ? '*' : ''}(${said.split(/\s+/).length}w) ${said}`);
       const after = await e.go(c.fen());
       const loss = score(before) + score(after);   // both from the mover's view: before (mover) vs after (opponent)
       // A decided position (mate or ±5 either side) is not a slip worth naming.
@@ -70,6 +72,8 @@ it.skipIf(!process.env.REPLAY_LINE)('replay a speed-run game through the coach',
     }
     out.push(`${ply}${lines.length ? `\n  ${lines.join('\n  ')}` : ''}`);
     prev = { fenBefore: fen, san: mv.san };
+    fenTwoBack = fenOneBack;
+    fenOneBack = fen;
   }
   e.quit();
   writeFileSync(process.env.REPLAY_OUT ?? '/tmp/replay.txt', out.join('\n'));

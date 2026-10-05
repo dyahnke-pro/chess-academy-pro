@@ -13,7 +13,7 @@
 // invented — the deliberation is SPOKEN, not manufactured.
 //
 // Doc: docs/plans/2026-08-26-coach-my-weakness-focus-lens.md §4.0.
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 import type { StockfishAnalysis } from '../types';
 import { findHangingPieces } from './tacticClassifier';
 import { proofAgainstMover, proofForMover } from './exchangeLedger';
@@ -322,12 +322,70 @@ export function deliberationAlternativesFacts(d: Deliberation): string {
  *  d5"). The ONE reason computer behind "The move is X" — shared so every lane
  *  that names a move gives the same reason. Null when nothing is computable. */
 export function moveWhy(fenBefore: string, san: string, mover: 'w' | 'b', opponentLastSan: string | null): string | null {
-  return materialWhy(fenBefore, san, mover, opponentLastSan)
+  const first = materialWhy(fenBefore, san, mover, opponentLastSan)
     ?? threatAnswerWhy(fenBefore, san, mover)
-    ?? threatMadeWhy(fenBefore, san, mover)
-    ?? strategicWhyLed(fenBefore, san, mover === 'w' ? 'white' : 'black')
-    ?? checkWhy(fenBefore, san);
+    ?? threatMadeWhy(fenBefore, san, mover);
+  if (first) return first;
+  // SEVERAL JOBS AT ONCE (catalogue §3; game 1, Bf4: "it develops the bishop,
+  // protects the pawn and sets up a potential x-ray"): the fundamental, plus
+  // the guard it adds and the x-ray it lines up.
+  const strategic = strategicWhyLed(fenBefore, san, mover === 'w' ? 'white' : 'black');
+  const extras = extraJobs(fenBefore, san);
+  if (strategic && extras.length > 0) return `${strategic}; it also ${andList(extras)}`;
+  if (extras.length > 0) return andList(extras);
+  return strategic ?? checkWhy(fenBefore, san);
 }
+
+/**
+ * The jobs a move does that the fundamentals computer does not name (game 1,
+ * Bf4): it adds a guard to one of your attacked pieces that was short of
+ * guards, and it lines up THROUGH one piece at their queen, rook or king.
+ */
+export function extraJobs(fen: string, san: string): string[] {
+  const out: string[] = [];
+  let before: Chess; let after: Chess;
+  try { before = new Chess(fen); after = new Chess(fen); } catch { return out; }
+  let m;
+  try { m = after.move(san); } catch { return out; }
+  if (!m) return out;
+  const me = m.color; const them = me === 'w' ? 'b' : 'w';
+  for (const cell of after.board().flat()) {
+    if (!cell || cell.color !== me || cell.square === m.to || cell.type === 'k') continue;
+    try {
+      const hits = after.attackers(cell.square, them).length;
+      const was = before.attackers(cell.square, me).length;
+      const now = after.attackers(cell.square, me).length;
+      if (hits > was && now > was && after.attackers(cell.square, me).includes(m.to)) {
+        out.push(`protects your ${cell.type === 'p' ? 'pawn' : PIECE_WORD[cell.type]} on ${cell.square}`);
+        break;
+      }
+    } catch { /* skip */ }
+  }
+  if ('bqr'.includes(m.piece)) {
+    const dirs = m.piece === 'b' ? [[1, 1], [1, -1], [-1, 1], [-1, -1]] : m.piece === 'r' ? [[1, 0], [-1, 0], [0, 1], [0, -1]] : [[1, 1], [1, -1], [-1, 1], [-1, -1], [1, 0], [-1, 0], [0, 1], [0, -1]];
+    for (const [dx, dy] of dirs) {
+      let x = m.to.charCodeAt(0) + dx; let y = Number(m.to[1]) + dy; let between = 0; let front = '';
+      while (x >= 97 && x <= 104 && y >= 1 && y <= 8) {
+        const p = after.get(`${String.fromCharCode(x)}${y}` as Square);
+        if (p) {
+          if (between === 0) { between = 1; front = p.color === them && p.type === 'k' ? 'king' : ''; }
+          else {
+            const at = `${String.fromCharCode(x)}${y}`;
+            // Through THEIR king, it is a skewer (game 2, 20.Bb4+).
+            if (p.color === them && front === 'king' && p.type !== 'p') out.push(`checks the king with their ${PIECE_WORD[p.type]} on ${at} standing behind it`);
+            else if (p.color === them && (p.type === 'q' || p.type === 'r' || p.type === 'k')) out.push(`lines up an x-ray at their ${PIECE_WORD[p.type]} on ${at}`);
+            break;
+          }
+        }
+        x += dx; y += dy;
+      }
+    }
+  }
+  return out;
+}
+const PIECE_WORD: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+
 
 /** The plain fact of a check, when nothing richer is computed — in an ending
  *  the centre reason no longer stands in for it (Rh5+ "takes aim at the

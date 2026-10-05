@@ -403,7 +403,7 @@ export function planChangedText(text: string): string {
   return `The plan changes here: ${text.charAt(0).toLowerCase()}${text.slice(1)}`;
 }
 
-const SAY_ONCE_KINDS: ReadonlySet<ClauseKind> = new Set<ClauseKind>([
+const SAY_ONCE_KINDS: ReadonlySet<ClauseKind> = new Set<ClauseKind>(['their-habit', 'hole-access', 
   'structure-plan', 'latent-danger', 'student-leans', 'opponent-leans',
 ]);
 

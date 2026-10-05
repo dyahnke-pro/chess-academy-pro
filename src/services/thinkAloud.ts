@@ -13,12 +13,9 @@ import { CAPTURE_VALUE } from './pieceValues';
 import { settledNetForLine } from './exchangeLedger';
 import { sayMoveClause } from './spokenMove';
 import { countWords } from '../utils/countWords';
-import { andList } from '../utils/andList';
-import { leadingFundamentals } from './moveFundamentals';
-import { doubleAttack, skewer, positionAsk, walkableLine, pvSans, hookCreated, holeAccess } from './moveInsight';
+import { walkableLine, pvSans, hookCreated, holeAccess } from './moveInsight';
 
 const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
-const side = (c: 'w' | 'b'): 'white' | 'black' => (c === 'w' ? 'white' : 'black');
 const NUM = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
 const num = (n: number): string => NUM[n] ?? String(n);
 
@@ -132,48 +129,6 @@ export function sayLine(startFen: string, sans: readonly string[], me: 'w' | 'b'
 
 export interface Candidate { san: string; pv: readonly string[]; /** Mover's-seat centipawns. */ cp: number }
 
-/** Why a candidate is played, from the board: its tactic, what its line
- *  achieves, else its fundamental. Null when nothing true can be said. */
-export function candidateReason(fen: string, c: Candidate, me: 'w' | 'b'): string | null {
-  const da = doubleAttack(fen, c.san);
-  if (da) return `it hits ${andList(da.targets.map((t) => t.phrase))} at once`;
-  const sk = skewer(fen, c.san);
-  if (sk) return 'it checks with something standing behind the king';
-  // What the MOVE does leads; a line's outcome speaks only when it lands
-  // close (replay, game 2: 1.e4 was given "the e-file opens" from six plies on).
-  const sans = pvSans(fen, [...c.pv], 6);
-  const near = lineAchieves(fen, sans.slice(0, 3).length ? sans.slice(0, 3) : [c.san], me);
-  if (near.kind === 'mate' || near.kind === 'promotion' || near.kind === 'pawn-ending' || (near.kind === 'material' && !near.text.endsWith('down'))) return near.text;
-  const f = leadingFundamentals(fen, c.san, side(me))[0];
-  if (f) return f.led;
-  const far = lineAchieves(fen, sans.length ? sans : [c.san], me);
-  return far.kind !== 'none' && !(far.kind === 'material' && far.text.endsWith('down')) ? far.text : null;
-}
-
-/**
- * ON ONE HAND / ON THE OTHER (his "let's think, this is an instructive
- * moment"): the top two moves, each with its own reason, and the choice made
- * by the engine's number — said as the reason that decides, never as a score.
- */
-export function weighTwo(fen: string, a: Candidate, b: Candidate): { text: string; chosen: string } | null {
-  let me: 'w' | 'b';
-  try { me = new Chess(fen).turn(); } catch { return null; }
-  if (a.san === b.san) return null;
-  const ra = candidateReason(fen, a, me);
-  const rb = candidateReason(fen, b, me);
-  if (!ra || !rb || ra === rb) return null;
-  const [best, other, rBest] = a.cp >= b.cp ? [a, b, ra] : [b, a, rb];
-  const rOther = best === a ? rb : ra;
-  const close = Math.abs(a.cp - b.cp) < 30;
-  const say = (x: Candidate): string => sayMoveClause(x.san, fen);
-  return {
-    chosen: best.san,
-    text: close
-      ? `Two good moves here. ${cap(say(other))} — ${rOther}. Or ${say(best)} — ${rBest}. Either keeps you on track.`
-      : `On one hand, ${say(other)} — ${rOther}. On the other, ${say(best)} — ${rBest}, and that is the stronger idea.`,
-  };
-}
-
 /**
  * NOT YET — FIRST THIS (his "I didn't take on h4 right away; Be5 first,
  * hitting the rook, and only then did I take"): a capture is on the board,
@@ -241,73 +196,6 @@ export function opponentHabits(sans: readonly string[], opp: 'w' | 'b'): Habit[]
   return out;
 }
 
-export interface ThinkAloud { text: string; lines: WalkableLine[]; words: number; /** The two-move weighing spoke (it names the choice). */ weighed: boolean }
-
-/** The engine's top lines (white-POV evals) as candidates in the mover's seat. */
-export function candidatesFromLines(fen: string, lines: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>): Candidate[] {
-  let mover: 'w' | 'b';
-  try { mover = new Chess(fen).turn(); } catch { return []; }
-  const out: Candidate[] = [];
-  for (const l of lines) {
-    const uci = l.moves?.[0];
-    if (!uci || uci.length < 4) continue;
-    let san: string;
-    try { san = new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }).san; } catch { continue; }
-    const white = l.mate != null ? (l.mate > 0 ? 10000 : -10000) : l.evaluation;
-    out.push({ san, pv: l.moves ?? [], cp: mover === 'w' ? white : -white });
-  }
-  return out;
-}
-
-/**
- * THE COMPOSER — his order, his volume. `critical` (the ranking computer's
- * verdict) decides how deep: a routine move gets what changed plus one idea
- * with its reason (~30 words); a decision gets the weighing, the line and the
- * "not yet" (~100). Nothing is said that a computer did not produce.
- */
-export function thinkAloud(args: {
-  fen: string;
-  history: readonly string[];
-  lastMove?: { fenBefore: string; san: string };
-  candidates: readonly Candidate[];
-  critical: boolean;
-  /** The surface already spoke the position read (positionAsk) — skip it. */
-  skipRead?: boolean;
-}): ThinkAloud {
-  const parts: string[] = [];
-  const lines: WalkableLine[] = [];
-  let me: 'w' | 'b';
-  try { me = new Chess(args.fen).turn(); } catch { return { text: '', lines: [], words: 0, weighed: false }; }
-  let weighed = false;
-  // WHAT CHANGED + WHAT I STILL OWE (his "what haven't I done yet?"): the
-  // position read leads, the one computer for both.
-  const ask = positionAsk(args.fen, { bestSan: args.candidates[0]?.san, lastMove: args.lastMove });
-  // The hint register ("start with the captures", "keep pressing") points at an
-  // answer this composer is about to NAME — drop it, keep the reading.
-  const read = args.skipRead ? '' : ask.text.split(/(?<=[.!?])\s+/).filter((x) => !/^(Start with|Look for|Keep pressing|You have the initiative here)/.test(x)).join(' ');
-  if (read) parts.push(read);
-  const habit = opponentHabits(args.history, me === 'w' ? 'b' : 'w')[0];
-  if (habit && args.critical) parts.push(habit.text);
-  const [a, b] = args.candidates;
-  if (a) {
-    if (args.critical && b) {
-      const w = weighTwo(args.fen, a, b);
-      if (w) { parts.push(w.text); weighed = true; }
-    } else {
-      const why = candidateReason(args.fen, a, me);
-      if (why) parts.push(`The idea: ${why}.`);
-    }
-    if (args.critical) {
-      const ny = notYet(args.fen, a);
-      if (ny) parts.push(ny.text);
-      const said = sayLine(args.fen, pvSans(args.fen, [...a.pv], 6), me);
-      if (said) { parts.push(said.text); lines.push(said.line); }
-    }
-  }
-  const text = parts.join(' ');
-  return { text, lines, words: text.split(/\s+/).filter(Boolean).length, weighed };
-}
-
 export interface DepthClause {
   kind: 'not-yet' | 'line' | 'their-habit' | 'stop-flaw' | 'hole-access';
   text: string;
@@ -342,13 +230,21 @@ export function depthClauses(args: {
       if (h) out.push({ kind: 'hole-access', text: h.text, squares: [h.hole, ...(h.from ? [h.from] : [])] });
     }
     const toMove = new Chess(args.fen).turn();
+    const topUci = args.topLines[0]?.moves?.[0];
+    const engineBest = (() => { try { return topUci ? new Chess(args.fen).move({ from: topUci.slice(0, 2), to: topUci.slice(2, 4), promotion: topUci[4] }).san : null; } catch { return null; } })();
     if (toMove === args.studentColor) {
       const flaw = obviousStopFlaw(args.fen, args.studentColor);
-      if (flaw) out.push({ kind: 'stop-flaw', text: flaw.text });
+      // Never argue with the engine: when the "obvious stop" IS its best move
+      // (game 2, 10.Ng5 — the engine prefers h3), the human preference is not a fact.
+      if (flaw && flaw.stopSan !== engineBest) out.push({ kind: 'stop-flaw', text: flaw.text });
     }
     if (!args.nameMove || toMove !== args.studentColor) return out;
-    const best = candidatesFromLines(args.fen, args.topLines)[0];
-    if (!best) return out;
+    const top = args.topLines[0];
+    const uci = top?.moves?.[0];
+    if (!top || !uci) return out;
+    let bestSan: string;
+    try { bestSan = new Chess(args.fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }).san; } catch { return out; }
+    const best: Candidate = { san: bestSan, pv: top.moves, cp: top.evaluation };
     const ny = notYet(args.fen, best);
     if (ny) out.push({ kind: 'not-yet', text: ny.text });
     const sans = pvSans(args.fen, [...best.pv], 6);

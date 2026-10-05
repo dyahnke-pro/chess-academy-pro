@@ -177,7 +177,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:2869`
 - `src/services/groundedAnswer.ts:7270`
 - `src/services/moveInsight.lineAudit.test.ts:45`
-- `src/services/moveInsight.replay.test.ts:64`
+- `src/services/moveInsight.replay.test.ts:66`
 - `src/services/moveInsight.test.ts:35`
 - `src/services/moveInsight.test.ts:43`
 - `src/services/moveInsight.test.ts:121`
@@ -189,7 +189,7 @@
 - `src/services/moveInsight.test.ts:302`
 - `src/services/moveInsight.ts:350`
 
-### `positionAsk` (re-export) — 23 call sites
+### `positionAsk` (re-export) — 22 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2870`
 - `src/components/Coach/CoachTeachPage.tsx:11915`
 - `src/components/Coach/CoachTeachPage.tsx:11941`
@@ -197,7 +197,7 @@
 - `src/components/Puzzles/PuzzleBoard.tsx:653`
 - `src/components/Tactics/TacticSetupBoard.tsx:225`
 - `src/components/Tactics/TacticSetupBoard.tsx:396`
-- `src/services/moveInsight.replay.test.ts:49`
+- `src/services/moveInsight.replay.test.ts:52`
 - `src/services/moveInsight.test.ts:51`
 - `src/services/moveInsight.test.ts:56`
 - `src/services/moveInsight.test.ts:62`
@@ -210,7 +210,6 @@
 - `src/services/moveInsight.test.ts:282`
 - `src/services/moveInsight.test.ts:288`
 - `src/services/moveInsight.ts:130`
-- `src/services/thinkAloud.ts:284`
 - `src/services/thinkingAssessStep.ts:81`
 - `src/services/whyBestMove.ts:93`
 
