@@ -15,6 +15,8 @@ import { lineWins, lineArrows, mateLine, type MateLine } from './lineCalc';
 export { lineArrows as lineArrowClaims };
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { recordLaneEvidence } from './capabilityEvidence';
+import { stepForMethodClaim, THINKING_STEPS } from './thinkingSteps';
+import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import type { AnalysisLine } from '../types';
 import type { LearnLane } from './learnTurnDoor';
 import type { ArrowClaim } from './arrowDoor';
@@ -114,6 +116,19 @@ export interface StudentMoveInput {
   /** The engine's eval AFTER the student's move, centipawns, student POV; null
    *  when either read is a mate. */
   cpAfter: number | null;
+}
+
+/** ONE VOCABULARY (plan "methodBeat — the live coach names the lesson STEP"):
+ *  a method line ends by naming the thinking step it is, in the step's own
+ *  words, so live play and the lessons teach the same habit by the same name.
+ *  Keyed on the line's claim (`method:<id>` → `stepForMethodClaim`), never on
+ *  its prose. Rotated on the move, never rolled. */
+function namedStep(h: TeachingHint): TeachingHint {
+  const step = h.claims.map((c) => stepForMethodClaim(c)).find((x) => x !== null);
+  if (!step) return h;
+  const name = THINKING_STEPS[step].name;
+  const tail = rotateStem([`That is the “${name}” habit.`, `Habit: “${name}”`], stemKeyOf(h.text));
+  return { ...h, text: `${h.text.trim().replace(/[.!]?$/, '.')} ${tail}` };
 }
 
 /** Everything the student's move teaches on the board, in no particular order —
@@ -306,7 +321,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
       }
     } catch { /* a bonus, never a blocker */ }
   }
-  return out;
+  return out.map(namedStep);
 }
 
 /** What THEIR move cost them, for the student to use — "…e6 opens a square your

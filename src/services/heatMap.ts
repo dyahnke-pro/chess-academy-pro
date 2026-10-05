@@ -88,3 +88,20 @@ export function heatMap(profile: CapabilityProfile, holes: readonly OpenHole[]):
 export function newlyGreen(tiles: readonly HeatTile[], before: ReadonlySet<string>): HeatTile[] {
   return tiles.filter((t) => t.state === 'green' && !before.has(t.tag));
 }
+
+/** THE OTHER HALF OF A TILE (plan "the heat map shows both: known / used").
+ *  A tile is read off the student's GAMES; this line says what the LESSONS
+ *  say about the same skill, from the KNOW reading's own tile. When lessons
+ *  prove it and games do not, that gap is named — it is the signal the coach
+ *  acts on (drill the habit in play, not another lesson). Null when there is
+ *  no lesson tile for the tag. */
+export function knowLine(know: HeatTile | undefined, use: HeatTile): string | null {
+  if (!know) return null;
+  if (know.state === 'green') {
+    return use.state === 'green'
+      ? 'In lessons: proven — and your games show it too.'
+      : 'In lessons: proven. In your games it has not shown yet — that is a habit to drill in play.';
+  }
+  if (know.held + know.broken === 0) return 'In lessons: not asked yet.';
+  return `In lessons: ${know.held} right, ${know.broken} missed.`;
+}

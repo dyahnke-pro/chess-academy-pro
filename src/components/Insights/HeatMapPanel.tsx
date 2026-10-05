@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { db } from '../../db/schema';
 import { getCapabilityProfile, isUseEvidence } from '../../services/capabilityEvidence';
 import { getUnifiedWeaknessProfile, type UnifiedWeakness } from '../../services/weaknessSpine';
-import { heatMap, newlyGreen, type HeatTile } from '../../services/heatMap';
+import { heatMap, knowLine, newlyGreen, type HeatTile } from '../../services/heatMap';
 import { reward } from '../../services/rewardService';
 import { getMisconceptionTag } from '../../data/misconceptionTags';
 import { REP_PUZZLE_CAP } from '../../services/repCompletion';
@@ -94,11 +94,12 @@ export function HeatMapPanel(): JSX.Element | null {
   const [fresh, setFresh] = useState<Set<string>>(new Set());
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [now] = useState(() => Date.now());
+  const [know, setKnow] = useState<Map<string, HeatTile>>(() => new Map());
 
   useEffect(() => {
     let cancelled = false;
     void (async () => {
-      const [profile, weaknesses, seen, slips, evidence, games] = await Promise.all([
+      const [profile, weaknesses, seen, slips, evidence, games, knowProfile] = await Promise.all([
         getCapabilityProfile().catch(() => new Map()),
         getUnifiedWeaknessProfile().catch((): UnifiedWeakness[] => []),
         db.meta.get(SEEN_KEY).catch(() => undefined),
@@ -106,6 +107,8 @@ export function HeatMapPanel(): JSX.Element | null {
         // The timeline is the USE reading — a lesson tap is not a game week.
         db.capabilityEvidence.toArray().then((rows) => rows.filter(isUseEvidence)).catch(() => []),
         db.games.toArray().catch(() => []),
+        // The KNOW reading (lesson answers) — the other half of each tile.
+        getCapabilityProfile('know').catch(() => new Map()),
       ]);
       if (cancelled) return;
       const t = heatMap(profile, weaknesses);
@@ -116,6 +119,7 @@ export function HeatMapPanel(): JSX.Element | null {
       }
       const lines = buildSkillTimelines(t.map((x) => x.tag), slips, evidence, gameDates, now);
       setTiles(t);
+      setKnow(new Map(heatMap(knowProfile, []).map((k) => [k.tag, k])));
       setTimelines(new Map(lines.map((l) => [l.tag, l])));
       setHoles(weaknesses);
       let before = new Set<string>();
@@ -301,6 +305,9 @@ export function HeatMapPanel(): JSX.Element | null {
             <span className={`text-[11px] ${STATE_LABEL[selected.state].cls}`}>● {STATE_LABEL[selected.state].text}</span>
           </div>
           <p className="mt-0.5 text-xs text-theme-text-muted">{evidenceLine(selected)}</p>
+          {knowLine(know.get(selected.tag), selected) && (
+            <p className="mt-0.5 text-xs text-theme-text-muted" data-testid="heat-tile-know">{knowLine(know.get(selected.tag), selected)}</p>
+          )}
           <p className="mt-0.5 text-xs text-theme-text-muted" data-testid="heat-tile-last-mistake">
             {lastMistake !== null ? `Last mistake: ${relativeDay(lastMistake, now)}.` : 'No mistake on record.'}
           </p>

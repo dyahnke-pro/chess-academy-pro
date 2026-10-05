@@ -50,3 +50,16 @@ describe('heatMap', () => {
     expect(newlyGreen(tiles, new Set(['hung-material']))).toEqual([]);
   });
 });
+
+describe('knowLine — the lesson half of a tile', () => {
+  const tile = (state: 'red' | 'green' | 'grey', held = 0, broken = 0) =>
+    ({ tag: 'hung-material', label: 'x', state, openCount: 0, held, broken, heldStreak: 0, streakGames: 0, progress: 0 }) as const;
+  it('names the gap when lessons prove it and games do not', async () => {
+    const { knowLine } = await import('./heatMap');
+    expect(knowLine(tile('green', 5), tile('red'))).toMatch(/In lessons: proven\. In your games it has not shown yet/);
+    expect(knowLine(tile('green', 5), tile('green'))).toBe('In lessons: proven — and your games show it too.');
+    expect(knowLine(tile('grey'), tile('red'))).toBe('In lessons: not asked yet.');
+    expect(knowLine(tile('red', 2, 1), tile('red'))).toBe('In lessons: 2 right, 1 missed.');
+    expect(knowLine(undefined, tile('red'))).toBeNull();
+  });
+});
