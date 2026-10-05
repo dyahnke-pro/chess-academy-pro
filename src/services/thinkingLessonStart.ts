@@ -237,3 +237,10 @@ export async function lessonStepForCard(tiles: readonly HeatTile[]): Promise<Ste
     (s) => gameWeightForTags(tiles, s.tags),
   );
 }
+
+/** One step's kit, for a surface that asks a single lesson question on its own
+ *  board (the Setup Trainer's first miss). Null for a step with no kit. */
+export function kitForStep(step: string): StepKit | null {
+  const b = BUILT_THINKING_STEPS.find((s) => s.step === step);
+  return b ? b.kit() : null;
+}

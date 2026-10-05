@@ -23,6 +23,8 @@ import type { CoachingTier } from '../../services/tacticAlertService';
 import type { SetupPuzzle } from '../../types';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 import { useBoardFit } from '../../hooks/useBoardFit';
+import { useThinkingLesson } from '../../hooks/useThinkingLesson';
+import { ThinkingLessonBoard } from '../Coach/ThinkingLessonBoard';
 
 type BoardState = 'thinking' | 'incorrect' | 'solved' | 'revealing';
 
@@ -61,6 +63,12 @@ function parseUciMove(uci: string): { from: string; to: string; promotion?: stri
  * plays even indices, the opponent auto-plays odd indices. Lichess lines
  * always end on the solver's decisive move, so the student plays the last move.
  */
+/** The lesson question a first miss asks on the puzzle's board (plan "Tactics":
+ *  the Setup Trainer's first wrong try runs a lesson step on that board). A
+ *  setup move exists to make a target hittable, so the question is "their
+ *  targets" — skipped when the board has no fair answer. */
+const FIRST_MISS_STEP = 'their-targets';
+
 export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBoardProps): JSX.Element {
   const chessRef = useRef(new Chess(puzzle.setupFen));
   const [fen, setFen] = useState(puzzle.setupFen);
@@ -68,6 +76,12 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
   // Board + Hint / Show Solution fit above the bottom nav on a short phone (David 2026-10-04).
   const { boardRef: fitRef, keepRef, boardStyle: fitStyle } = useBoardFit(boardState);
   const wrongTry = useWrongTryRefutation();
+  // The lesson's own runner, for ONE question on this board after the first miss.
+  const reading = useThinkingLesson({ say: (t) => voiceService.speak(t).then(() => undefined).catch(() => undefined) });
+  const readingAskedRef = useRef<string | null>(null);
+  const { askOnce: readAskOnce, kitFor: readKitFor, stop: readStop } = reading;
+  // A new puzzle never inherits the last one's question.
+  useEffect(() => () => { readStop(); }, [puzzle.id, readStop]);
   const { refute: refuteTry, clearArrows: clearWrongArrows } = wrongTry;
   const puzzleIdRef = useRef(puzzle.id);
   puzzleIdRef.current = puzzle.id;
@@ -359,9 +373,17 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
       setFen(chessRef.current.fen());
       setBoardKey((k) => k + 1);
       clearWrongArrows();
+      // FIRST MISS → one lesson question on this board, then the retry. Once
+      // per puzzle; silent when the board has no fair answer.
+      if (wrongAttemptsRef.current === 1 && readingAskedRef.current !== puzzleAtTry) {
+        readingAskedRef.current = puzzleAtTry;
+        const kit = readKitFor(FIRST_MISS_STEP);
+        if (kit) await readAskOnce(kit, chessRef.current.fen());
+        if (puzzleIdRef.current !== puzzleAtTry || hasCompleted.current) return;
+      }
       setBoardState('thinking');
     })();
-  }, [boardState, isPlayerTurn, moveIndex, line, puzzle.tacticType, puzzle.id, finishSolved, clearLadder, refuteTry, clearWrongArrows, orientation]);
+  }, [boardState, isPlayerTurn, moveIndex, line, puzzle.tacticType, puzzle.id, finishSolved, clearLadder, refuteTry, clearWrongArrows, orientation, readKitFor, readAskOnce]);
 
   // Show Solution: play the rest of the line on the board, then count it as
   // missed — the fail path this trainer lacked (a student who could not find
@@ -369,6 +391,7 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
   const handleShowSolution = useCallback((): void => {
     if (hasCompleted.current || boardState === 'solved') return;
     hasCompleted.current = true;
+    readStop();
     if (!answeredRef.current) promptedRef.current = true;
     setLadderText(null);
     setLadderSquare(null);
@@ -396,7 +419,7 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
     };
     setMessage('Here is the line');
     step();
-  }, [boardState, moveIndex, line, puzzle.tacticType, payoffGeometry, onComplete, clearWrongArrows]);
+  }, [boardState, moveIndex, line, puzzle.tacticType, payoffGeometry, onComplete, clearWrongArrows, readStop]);
 
   const statusColor = boardState === 'solved'
     ? 'var(--color-success)'
@@ -420,7 +443,12 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
       </motion.div>
 
       {/* Board */}
-      <div ref={fitRef} style={fitStyle} className="w-full md:max-w-[420px] mx-auto" data-testid="setup-board">
+      {reading.view.active && (
+        <div className="w-full md:max-w-[420px] mx-auto" data-testid="setup-first-miss-read">
+          <ThinkingLessonBoard view={reading.view} onTap={reading.tap} onDontKnow={reading.dontKnow} onStop={reading.stop} />
+        </div>
+      )}
+      <div ref={fitRef} style={fitStyle} className={`w-full md:max-w-[420px] mx-auto ${reading.view.active ? 'hidden' : ''}`} data-testid="setup-board">
         <ChessBoard
           key={boardKey}
           initialFen={fen}
