@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Square } from 'chess.js';
 import {
-  ThinkingLessonSession, IDLE_LESSON_VIEW, type LessonView, finishThinkingLesson, kitForStep, lessonInputs, planThinkingLesson, recordLessonAnswer, recordLessonChoice, rememberLessonBoardNow, saveLessonProgress, slipStepsForGame, firstFairKit, motifKit, type MotifBoard, carryOverKitFor, loadCarryOverSteps,
+  ThinkingLessonSession, IDLE_LESSON_VIEW, type LessonView, finishThinkingLesson, kitForStep, lessonInputs, planThinkingLesson, recordLessonAnswer, recordLessonChoice, rememberLessonBoardNow, saveLessonProgress, slipStepsForGame, firstFairKit, motifKit, type MotifBoard, carryOverKitFor, loadCarryOverSteps, noLessonLine,
   type LessonPositionCandidate, type LessonUsernames, type PlannedLesson, type StepKit,
 } from '../services/thinkingLessonStart';
 
@@ -47,6 +47,8 @@ export interface UseThinkingLesson {
   carryOver: (fen: string) => Promise<boolean>;
   /** A new game: the carry-over re-reads the record and may ask each step again. */
   newGame: () => void;
+  /** What to say when `plan` finds no lesson (the habit gap, or no board yet). */
+  noLessonLine: () => Promise<string>;
   /** The step "Play a game on this" practises — kept here, across games,
    *  so the page holds no per-lesson ref of its own. */
   practiseKit: () => StepKit | null;
@@ -150,5 +152,5 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
   const finish = useCallback((plan: PlannedLesson, source: string): Promise<string | null> =>
     finishThinkingLesson(plan, source, { stopped: stoppedRef.current }), []);
 
-  return { view, plan: planThinkingLesson, start, finish, kitFor: kitForStep, firstFairKit, motifKit, tap, choose, dontKnow, hold, askOnce, slipSteps: slipStepsForGame, carryOver, newGame, practiseKit, setPractiseKit, stop };
+  return { view, plan: planThinkingLesson, start, finish, kitFor: kitForStep, firstFairKit, motifKit, tap, choose, dontKnow, hold, askOnce, slipSteps: slipStepsForGame, carryOver, newGame, noLessonLine, practiseKit, setPractiseKit, stop };
 }

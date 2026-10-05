@@ -72,17 +72,23 @@ export interface ThinkingSignal {
   skill: string;
   /** The step the lesson will teach (`THINKING_STEPS[…].name`). */
   step: string;
+  /** A step the student KNOWS in lessons that their games still miss
+   *  (`thinkingTransfer` 'known-not-used'), already phrased — or null. */
+  gap?: string | null;
 }
 
 export const THINKING_LESSON_PATH = '/coach/teach?lesson=think';
 
 function thinkingPick(t: ThinkingSignal): UpNextPick {
+  const base = t.state === 'red'
+    ? `${t.skill} keeps costing you. Today's lesson is the habit that catches it: ${t.step.replace(/\?$/, '').toLowerCase()}.`
+    : 'Learn the habit strong players run every move: what their move changed, whether you are safe, where their targets are.';
   return {
     kind: 'thinking', key: 'up:thinking', hub: 'coach', path: THINKING_LESSON_PATH, bite: 'one lesson',
     label: 'Learn how to think',
-    reason: t.state === 'red'
-      ? `${t.skill} keeps costing you. Today's lesson is the habit that catches it: ${t.step.replace(/\?$/, '').toLowerCase()}.`
-      : 'Learn the habit strong players run every move: what their move changed, whether you are safe, where their targets are.',
+    // The gap leads when there is one: the record's newest news is that an
+    // idea they know has not reached their games.
+    reason: t.gap ? `${t.gap} ${base}` : base,
     state: { repKey: 'up:thinking' },
   };
 }

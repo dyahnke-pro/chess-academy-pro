@@ -83,6 +83,16 @@ describe('the thinking lesson bite (learn-how-to-think)', () => {
     expect(r.map((p) => p.kind).slice(0, 3)).toEqual(['deep-run', 'thinking', 'warm-up']);
   });
 
+  it('a known-not-used gap leads the card\'s reason, and the pick is unchanged otherwise', () => {
+    const gap = 'In lessons you find their loose pieces; in your games you still walk past them.';
+    const r = rankUpNext({ ...base, thinking: { state: 'grey', skill: 'x', step: 'Am I safe?', gap } });
+    const t = r.find((p) => p.kind === 'thinking')!;
+    expect(t.reason.startsWith(gap)).toBe(true);
+    expect(t.path).toBe(THINKING_LESSON_PATH);
+    const plain = rankUpNext({ ...base, thinking: { state: 'grey', skill: 'x', step: 'Am I safe?' } }).find((p) => p.kind === 'thinking')!;
+    expect(t.reason.endsWith(plain.reason)).toBe(true);
+  });
+
   it('GREEN (proven) is not offered', () => {
     expect(rankUpNext({ ...base, thinking: { state: 'green', skill: 'x', step: 'x' } }).some((p) => p.kind === 'thinking')).toBe(false);
   });

@@ -209,3 +209,12 @@ describe('the close, the choice record and the resume (plan D6 + D8)', () => {
     expect(k.enrich).toBeUndefined();
   });
 });
+
+describe('noLessonLine — why there is no lesson', () => {
+  it('a fresh record has no habit gap: the no-board line', async () => {
+    const { db } = await import('../db/schema');
+    await db.delete(); await db.open();
+    const { noLessonLine } = await import('./thinkingLessonStart');
+    expect(await noLessonLine()).toMatch(/^I could not find a clean board/);
+  });
+});

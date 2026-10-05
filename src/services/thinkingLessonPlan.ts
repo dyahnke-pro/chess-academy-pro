@@ -18,6 +18,8 @@
 //     asked on a plain board, the lesson is a MIXED round (plan D6 — the
 //     student first decides WHICH step a board asks, as real games demand);
 //     with fewer, the first comes back as a quick review (one Solo board).
+//     Never a step that is known but not yet used in games (`thinkingTransfer`):
+//     that habit is drilled in live play, not re-taught as a lesson.
 //
 // The method ORDER never changes; only which step is served. PURE.
 import type { StepKit } from './thinkingLessonSession';
@@ -92,6 +94,10 @@ export function chooseThinkingStep(
   available: (s: BuiltStep) => boolean = () => true,
   /** How badly the student's GAMES fail this step (0 = not red in games). */
   gameWeight: (s: BuiltStep) => number = () => 0,
+  /** A step KNOWN in lessons whose games still slip (`thinkingTransfer`
+   *  'known-not-used'): the idea is known, the habit is not, so it is never
+   *  served again as a lesson — live play drills it. Defaults to none. */
+  habitPending: (s: BuiltStep) => boolean = () => false,
 ): StepChoice | null {
   if (steps.length === 0) return null;
   const ordered = [...steps].sort((a, b) => a.tier - b.tier || a.order - b.order);
@@ -109,10 +115,14 @@ export function chooseThinkingStep(
   const unknown = open.find((x) => x.st !== 'green');
   if (unknown) return { step: unknown.s, standing: unknown.st, reason: 'next-unknown', openTier: tier };
   // Everything due is proven: mix the proven steps when there are two to
-  // choose between, else review the first.
-  const mix = open.map((x) => x.s).filter(mixable);
+  // choose between, else review the first — never a step known in lessons
+  // that the games still miss (plan "Lessons measure KNOW, games measure
+  // USE": re-teaching a known idea is the wrong tool; live play drills it).
+  const settled = open.filter((x) => !habitPending(x.s));
+  const mix = settled.map((x) => x.s).filter(mixable);
   if (mix.length >= 2) return { step: mix[0], standing: 'green', reason: 'mixed', openTier: tier, mix };
-  return { step: open[0].s, standing: 'green', reason: 'review', openTier: tier };
+  if (settled.length === 0) return null;
+  return { step: settled[0].s, standing: 'green', reason: 'review', openTier: tier };
 }
 
 /** What each tier is called when it opens (plan "Unlocking"). */

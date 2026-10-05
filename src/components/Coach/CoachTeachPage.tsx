@@ -2458,7 +2458,7 @@ export function CoachTeachPage(): JSX.Element {
     const rating = activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
     const plan = await thinkingLesson.plan({ usernames, rating, beginner: isBeginnerMode(activeProfile) });
     if (!plan) {
-      void coachDrillSay('I could not find a clean board for a lesson yet — play or import a few games and the lessons build from them.');
+      void thinkingLesson.noLessonLine().then((line) => coachDrillSay(line));
       return;
     }
     const kit = plan.kit;
