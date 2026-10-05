@@ -672,12 +672,25 @@ castling by hand, file that will open, cheapest defender, retreat square, heavy
 piece tied down, up the exchange, two hit at once, diagonal contest; deliberation:
 multi-job move-why (guard + x-ray/skewer), queen trade throws away space/attack.
 
-**Still owed (need a deeper engine search than a static read can honestly give):**
-#22 finish what you started · #27 a move good in every branch · #31 take the sting
-out (beyond `moveIntent` prevents) · skip the middleman · play it anyway · retreat
-that keeps your break · right piece for the hole · useful waiting move · best-case
-plan test · rejected move works later · force a concession · flexible moves first · keep a square vacant for the knight · queen
-as the glue. (Right idea / wrong moment = `moveOrder`; act before they consolidate = `moveTiming`.)
+**Batch 3 built (speedRunReads):** play it anyway (the best line allows their
+check/capture and holds), skip the middleman (`findPawnBreaks`), useful waiting
+move (on top of `anyMoveFine`), keep a square vacant for the knight
+(`computePieceRoute`), right piece for the hole (`isOutpost` + `knightReach`).
+Recorded both ways via `positionPosed` (mistimed-pawn-break, misplaced-piece).
+
+**Batch 4 built — the rest of the owed list (speedRunReads), every one off the
+engine's own lines + SEE:** #22 finish what you started (`findPawnBreaks` on the
+student's previous move) · #27 good in every branch (no reply wins anything after
+the best move; one does after the next-best) · #31 take the sting out (attacked
+piece neither moved nor guarded, yet no longer winnable) · retreat that keeps your
+break · best-case plan test (the slow line, best play, ends ≤ level) · rejected move
+works later (a worse move now reappears in the main line) · force a concession
+(their best reply costs castling or makes a new weak pawn — `findWeakPawns`) ·
+flexible moves first · queen as the glue. Recorded both ways: take the sting →
+missed-opponents-threat, queen glue → hung-material, retreat-break →
+mistimed-pawn-break.
+
+**Nothing on the owed list remains.** (Right idea / wrong moment = `moveOrder`; act before they consolidate = `moveTiming`.)
 
 **Pre-existing red on main, not this work:** `noDeadTestidWaits` (audit
 `audit-coach-full-games.mjs` waits on `review-turning-point-done`),

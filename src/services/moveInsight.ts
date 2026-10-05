@@ -36,7 +36,7 @@ import { readConversion } from './conversionMethod';
 import { minorsAtHome } from './development';
 import { tradeJudgement } from './tradeJudgement';
 import { detectTactics } from './tacticsDetector';
-import { castleSide, heldByTactic, keepTension } from './speedRunReads';
+import { castleSide, heldByTactic, keepTension, skipMiddleman, rightPieceForHole, keepSquareForKnight, takeTheSting, queenGlue, retreatKeepsBreak } from './speedRunReads';
 import { findLoosePieces } from './loosePieces';
 import { noPawnCanChallenge } from './outpost';
 import { findHangingBySee, findKnightReroute, findWeakPawns } from './positionReadingService';
@@ -754,6 +754,11 @@ export function positionPosed(
     if (keepTension(fen, me, opts.bestSan ?? null)) add('mistimed-pawn-break', 60);
     if (castleSide(fen, me)) add('weakened-king-safety', 60);
     if (heldByTactic(fen, me)) add('hung-material', 60);
+    if (skipMiddleman(fen, opts.bestSan ?? null)) add('mistimed-pawn-break', 60);
+    if (rightPieceForHole(fen, me) || keepSquareForKnight(fen, me, opts.bestSan ?? null)) add('misplaced-piece', 60);
+    if (takeTheSting(fen, me, opts.bestSan ?? null)) add('missed-opponents-threat', 80);
+    if (queenGlue(fen, me)) add('hung-material', 60);
+    if (retreatKeepsBreak(fen, me, opts.bestSan ?? null)) add('mistimed-pawn-break', 60);
   } catch { /* an unreadable board posed nothing */ }
   return out;
 }

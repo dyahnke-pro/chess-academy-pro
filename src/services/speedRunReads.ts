@@ -14,6 +14,9 @@ import { isPinnedPiece } from './nextPlans';
 import { isOutpost } from './outpost';
 import { findLoosePieces } from './loosePieces';
 import { computeBoardDelta } from './boardDelta';
+import { findPawnBreaks, findWeakPawns } from './positionReadingService';
+import { computePieceRoute } from './forwardTeaching';
+import { knightReach } from './moveInsight';
 
 const name = (p: string): string => PIECE_NAMES[p] ?? 'piece';
 const play = (fen: string, san: string): { board: Chess; move: ReturnType<Chess['move']> } | null => {
@@ -240,11 +243,272 @@ export function awkwardBlock(fen: string, lines: Lines): Read | null {
   return { namesMove: true, text: `The check forces them to block with the ${name(r.move.piece)} on ${r.move.to}, and there it is stuck — the point of the check is the awkward square it drives that piece to.`, squares: [r.move.to] };
 }
 
+// ── batch 3 (checked first: breaks → findPawnBreaks; knight routes →
+// computePieceRoute; knight distance → moveInsight.knightReach; outposts → isOutpost) ──
+
+/** PLAY IT ANYWAY: the engine's move allows their check or capture — the scary
+ *  reply — and the line still holds for you. */
+export function playAnyway(fen: string, lines: Lines): Read | null {
+  const l = lines[0];
+  if (!l || l.moves.length < 2) return null;
+  const bestSan = sanOf(fen, l.moves[0]);
+  const a = bestSan ? play(fen, bestSan) : null;
+  if (!a || !bestSan) return null;
+  const replySan = sanOf(a.board.fen(), l.moves[1]);
+  if (!replySan || !/[+x]/.test(replySan)) return null;
+  if (seatCp(fen, l) < 0) return null;
+  const what = replySan.includes('+') ? 'a check' : 'a capture';
+  return { namesMove: true, text: `${sayMoveClause(bestSan, fen).replace(/^./, (c) => c.toUpperCase())} allows ${what} — ${sayMoveClause(replySan, a.board.fen())} — and you play it anyway: look one move past the scary reply and nothing follows for them.` };
+}
+
+/** SKIP THE MIDDLEMAN: the break is there and the engine plays it now rather
+ *  than preparing it — every preparing move is a tempo they get too. */
+export function skipMiddleman(fen: string, bestSan: string | null): Read | null {
+  if (!bestSan || /x/.test(bestSan)) return null;
+  const r = play(fen, bestSan);
+  if (!r || r.move.piece !== 'p') return null;
+  if (!findPawnBreaks(fen).includes(r.move.to)) return null;
+  return { namesMove: true, text: `The break is ready now — ${sayMoveClause(bestSan, fen)}. No need to prepare it first; every preparing move is a move they get to use too.`, squares: [r.move.to] };
+}
+
+/** THE USEFUL WAITING MOVE: no move matters much, and the engine's is a small
+ *  rook-pawn step — air for the king while they have to commit first. */
+export function usefulWaiting(fen: string, lines: Lines): Read | null {
+  if (!anyMoveFine(fen, lines)) return null;
+  const bestSan = sanOf(fen, lines[0]?.moves?.[0]);
+  if (!bestSan || !/^[abgh][36]$/.test(bestSan)) return null;
+  return { namesMove: true, text: `Nothing has to happen yet — ${bestSan} is a useful waiting move: it costs nothing, gives your king air, and makes them commit first.`, squares: [bestSan] };
+}
+
+/** KEEP A SQUARE VACANT FOR THE KNIGHT: your knight's route to its outpost
+ *  runs through a square another piece of yours could block. */
+export function keepSquareForKnight(fen: string, me: 'w' | 'b', bestSan: string | null): Read | null {
+  let b: Chess;
+  try { b = new Chess(fen); } catch { return null; }
+  if (b.turn() !== me) return null;
+  const bestTo = bestSan ? play(fen, bestSan)?.move.to : undefined;
+  for (const cell of b.board().flat()) {
+    if (!cell || cell.color !== me || cell.type !== 'n') continue;
+    const route = computePieceRoute(fen, cell.square);
+    if (!route || route.route.length < 2) continue;
+    const via = route.route[0];
+    if (b.get(via) || bestTo === via) continue;
+    const blocker = b.moves({ verbose: true }).find((m) => m.to === via && m.piece !== 'n');
+    if (!blocker) continue;
+    return { text: `Keep ${via} empty — your knight on ${cell.square} goes ${[cell.square, ...route.route].join('–')}, and ${via} is the first step.`, squares: [via, route.target] };
+  }
+  return null;
+}
+
+/** THE RIGHT PIECE FOR THE HOLE: your bishop sits on an outpost a knight of
+ *  yours could reach — the hole belongs to the knight, which no bishop of
+ *  theirs can trade off for free and no pawn can chase. */
+export function rightPieceForHole(fen: string, me: 'w' | 'b'): Read | null {
+  let b: Chess;
+  try { b = new Chess(fen); } catch { return null; }
+  for (const cell of b.board().flat()) {
+    if (!cell || cell.color !== me || cell.type !== 'b') continue;
+    if (!isOutpost(b, cell.square, me, true)) continue;
+    const k = knightReach(fen, cell.square, me);
+    if (!k || k.moves > 3) continue;
+    return { text: `The hole on ${cell.square} is held by your bishop, but it belongs to a knight — your knight on ${k.from} gets there in ${k.moves}; a knight on an outpost hits both colours and can only be traded for a piece.`, squares: [cell.square, k.from] };
+  }
+  return null;
+}
+
+// ── batch 4 — the rest of the owed list, every one from the engine's own lines
+// (checked first: concessions AFTER a played move → concessionBeat, which
+// compares two moves of one side, so a forced reply is new; threats → SEE). ──
+
+const flipTurn = (fen: string): string => { const f = fen.split(' '); f[1] = f[1] === 'w' ? 'b' : 'w'; f[3] = '-'; return f.join(' '); };
+const cap = (t: string): string => t.replace(/^./, (c) => c.toUpperCase());
+/** Does any reply win something of `me` after `fenAfter` (them to move)? */
+const leavesSomething = (fenAfter: string, me: 'w' | 'b'): string | null => {
+  let b: Chess;
+  try { b = new Chess(fenAfter); } catch { return null; }
+  const them = me === 'w' ? 'b' : 'w';
+  for (const cell of b.board().flat()) {
+    if (!cell || cell.color !== me || cell.type === 'k') continue;
+    if (b.attackers(cell.square, them).length && legalSeeGainFor(fenAfter, cell.square, them) > 0) return cell.square;
+  }
+  return null;
+};
+
+/** #22 FINISH WHAT YOU STARTED: your last move started a pawn break and the
+ *  engine's move carries it on with a pawn — don't stop halfway. */
+export function finishStarted(lastOwn: { fenBefore: string; san: string } | undefined, fen: string, bestSan: string | null): Read | null {
+  if (!lastOwn || !bestSan) return null;
+  const last = play(lastOwn.fenBefore, lastOwn.san);
+  if (!last || last.move.piece !== 'p' || last.move.captured) return null;
+  if (!findPawnBreaks(lastOwn.fenBefore).includes(last.move.to)) return null;
+  const best = play(fen, bestSan);
+  if (!best || best.move.piece !== 'p') return null;
+  if (Math.abs(best.move.from.charCodeAt(0) - last.move.to.charCodeAt(0)) > 1) return null;
+  return { namesMove: true, text: `You started something with ${last.move.san} — finish it: ${sayMoveClause(bestSan, fen)} keeps the break going instead of letting them settle.`, squares: [last.move.to, best.move.to] };
+}
+
+/** #27 A MOVE GOOD IN EVERY BRANCH: after the engine's move no reply of theirs
+ *  wins anything of yours; after the next-best, one does. */
+export function goodInEveryBranch(fen: string, me: 'w' | 'b', lines: Lines): Read | null {
+  if (lines.length < 2) return null;
+  const a = sanOf(fen, lines[0].moves[0]); const b2 = sanOf(fen, lines[1].moves[0]);
+  const pa = a ? play(fen, a) : null; const pb = b2 ? play(fen, b2) : null;
+  if (!pa || !pb || !a || !b2 || pa.move.color !== me) return null;
+  if (leavesSomething(pa.board.fen(), me)) return null;
+  const loose = leavesSomething(pb.board.fen(), me);
+  if (!loose) return null;
+  return { namesMove: true, text: `${cap(sayMoveClause(a, fen))} works whatever they answer — nothing of yours can be taken after it. ${b2} leaves the piece on ${loose} to be collected.`, squares: [loose] };
+}
+
+/** #31 TAKE THE STING OUT: a piece of yours can be won, and the engine neither
+ *  moves it nor adds a guard — its move makes taking it stop working. */
+export function takeTheSting(fen: string, me: 'w' | 'b', bestSan: string | null): Read | null {
+  if (!bestSan) return null;
+  let b: Chess;
+  try { b = new Chess(fen); } catch { return null; }
+  if (b.turn() !== me) return null;
+  const them = me === 'w' ? 'b' : 'w';
+  const best = play(fen, bestSan);
+  if (!best || best.move.captured) return null;
+  for (const cell of b.board().flat()) {
+    if (!cell || cell.color !== me || cell.type === 'k' || cell.type === 'p') continue;
+    if (!b.attackers(cell.square, them).length || legalSeeGainFor(fen, cell.square, them) <= 0) continue;
+    if (best.move.from === cell.square) continue;
+    if (best.board.attackers(cell.square, me).length > b.attackers(cell.square, me).length) continue;
+    if (legalSeeGainFor(best.board.fen(), cell.square, them) > 0) continue;
+    return { namesMove: true, text: `Your ${name(cell.type)} on ${cell.square} is attacked, but ${sayMoveClause(bestSan, fen)} neither moves it nor guards it — it takes the sting out, so taking it no longer works for them.`, squares: [cell.square] };
+  }
+  return null;
+}
+
+/** THE RETREAT THAT KEEPS YOUR BREAK: the engine's retreat steps off the square
+ *  in front of your own pawn, and the break is on again. */
+export function retreatKeepsBreak(fen: string, me: 'w' | 'b', bestSan: string | null): Read | null {
+  const r = bestSan ? play(fen, bestSan) : null;
+  if (!r || r.move.piece === 'p' || r.move.piece === 'k' || r.move.captured) return null;
+  const back = me === 'w' ? Number(r.move.to[1]) < Number(r.move.from[1]) : Number(r.move.to[1]) > Number(r.move.from[1]);
+  if (!back) return null;
+  const behind = `${r.move.from[0]}${Number(r.move.from[1]) + (me === 'w' ? -1 : 1)}` as Square;
+  const pawn = r.board.get(behind);
+  if (!pawn || pawn.type !== 'p' || pawn.color !== me) return null;
+  if (!findPawnBreaks(flipTurn(r.board.fen())).includes(r.move.from)) return null;
+  return { namesMove: true, text: `${cap(sayMoveClause(bestSan as string, fen))} is a retreat with a point — it clears ${r.move.from} so your pawn on ${behind} can break there.`, squares: [behind, r.move.from] };
+}
+
+/** THE BEST-CASE PLAN TEST: the slower plan, played out with best play from
+ *  both sides, still leaves you with less than the engine's move. */
+export function bestCasePlan(fen: string, lines: Lines): Read | null {
+  if (lines.length < 2) return null;
+  const quiet = (l: Lines[number]): boolean => {
+    let b: Chess;
+    try { b = new Chess(fen); } catch { return false; }
+    let ours = 0;
+    for (let i = 0; i < l.moves.length && i < 8; i += 1) {
+      const u = l.moves[i];
+      let m;
+      try { m = b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { return false; }
+      if (i % 2 === 0) { if (m.captured || m.san.includes('+')) return false; ours += 1; }
+    }
+    return ours >= 3;
+  };
+  const [one, two] = lines;
+  if (!quiet(two)) return null;
+  const gap = seatCp(fen, one) - seatCp(fen, two);
+  if (gap < criticalityThresholds().notable || seatCp(fen, two) > 50) return null;
+  const a = sanOf(fen, one.moves[0]); const b2 = sanOf(fen, two.moves[0]);
+  if (!a || !b2) return null;
+  return { namesMove: true, text: `Test the slow plan with ${b2} by its best case: even when everything goes right for you, you end up no better than level. ${a} gets more.` };
+}
+
+/** THE REJECTED MOVE THAT WORKS LATER: a move that is worse now turns up later
+ *  in the engine's own line — after the preparation it works. */
+export function rejectedMoveLater(fen: string, lines: Lines): Read | null {
+  if (lines.length < 2) return null;
+  const main = lines[0].moves;
+  for (const l of lines.slice(1)) {
+    if (seatCp(fen, lines[0]) - seatCp(fen, l) < criticalityThresholds().notable) continue;
+    const u = l.moves[0];
+    const at = main.findIndex((m, i) => i > 0 && i % 2 === 0 && m === u);
+    if (at < 0) continue;
+    const san = sanOf(fen, u); const first = sanOf(fen, main[0]);
+    if (!san || !first) continue;
+    return { namesMove: true, text: `${san} doesn't work yet — but it does after ${first}: it comes back ${at / 2} move${at === 2 ? '' : 's'} later in the line. A rejected move is not a dead move; prepare it.` };
+  }
+  return null;
+}
+
+/** FORCE A CONCESSION: their best answer to the engine's move costs them
+ *  something nameable — castling, or a new weak pawn. */
+export function forceConcession(fen: string, lines: Lines): Read | null {
+  const l = lines[0];
+  const bestSan = sanOf(fen, l?.moves?.[0]);
+  if (!l || !bestSan || l.moves.length < 2) return null;
+  const a = play(fen, bestSan);
+  if (!a) return null;
+  const replySan = sanOf(a.board.fen(), l.moves[1]);
+  const r = replySan ? play(a.board.fen(), replySan) : null;
+  if (!r || !replySan) return null;
+  const them = r.move.color;
+  const rights = (f: string): string => f.split(' ')[2];
+  const theirs = (f: string): string => rights(f).replace(them === 'w' ? /[kq]/g : /[KQ]/g, '').replace('-', '');
+  if (r.move.piece === 'k' && !replySan.startsWith('O-O') && theirs(a.board.fen()) && !theirs(r.board.fen())) {
+    return { namesMove: true, text: `${cap(sayMoveClause(bestSan, fen))} forces a concession — their best answer is ${replySan}, and their king loses the right to castle.`, squares: [r.move.to] };
+  }
+  const weak = (f: string): Set<string> => { const w = findWeakPawns(f, them); return new Set([...w.isolated, ...w.doubled, ...w.backward]); };
+  const before = weak(a.board.fen());
+  const fresh = [...weak(r.board.fen())].find((s2) => !before.has(s2));
+  if (!fresh) return null;
+  return { namesMove: true, text: `${cap(sayMoveClause(bestSan, fen))} forces a concession — their best answer is ${replySan}, and it leaves their pawn on ${fresh} weak.`, squares: [fresh] };
+}
+
+/** FLEXIBLE MOVES FIRST: a piece move and a pawn move are about equal — play
+ *  the piece; the pawn can come later, and it can never come back. */
+export function flexibleFirst(fen: string, lines: Lines): Read | null {
+  if (lines.length < 2) return null;
+  const a = sanOf(fen, lines[0].moves[0]);
+  const pa = a ? play(fen, a) : null;
+  if (!pa || !a || pa.move.piece === 'p' || pa.move.captured || a.includes('+')) return null;
+  for (const l of lines.slice(1)) {
+    if (seatCp(fen, lines[0]) - seatCp(fen, l) >= criticalityThresholds().notable) continue;
+    const s2 = sanOf(fen, l.moves[0]);
+    const p2 = s2 ? play(fen, s2) : null;
+    if (!p2 || !s2 || p2.move.piece !== 'p' || p2.move.captured) continue;
+    return { namesMove: true, text: `${a} and ${s2} are about equal — make the flexible move first. ${a} keeps your options; the pawn move can always come later, but it can never go back.` };
+  }
+  return null;
+}
+
+/** THE QUEEN AS THE GLUE: your queen is the only guard of two attacked pieces
+ *  — move or trade it and both come loose. */
+export function queenGlue(fen: string, me: 'w' | 'b'): Read | null {
+  let b: Chess;
+  try { b = new Chess(fen); } catch { return null; }
+  const them = me === 'w' ? 'b' : 'w';
+  const q = b.board().flat().find((c) => c && c.type === 'q' && c.color === me);
+  if (!q) return null;
+  const held = b.board().flat().filter((c) => {
+    if (!c || c.color !== me || c.type === 'k' || c.type === 'q') return false;
+    const g = b.attackers(c.square, me);
+    return g.length === 1 && g[0] === q.square && b.attackers(c.square, them).length > 0;
+  }).map((c) => c!.square);
+  if (held.length < 2) return null;
+  return { text: `Your queen on ${q.square} is the glue — it alone holds ${held[0]} and ${held[1]}. Move it or trade it and both come loose.`, squares: [q.square, ...held] };
+}
+
 /** Every read for the side to move, in his order of thought. */
-export function speedRunReads(args: { fen: string; me: 'w' | 'b'; lines: Lines; lastMove?: { fenBefore: string; san: string } }): Read[] {
+export function speedRunReads(args: { fen: string; me: 'w' | 'b'; lines: Lines; lastMove?: { fenBefore: string; san: string }; lastOwnMove?: { fenBefore: string; san: string } }): Read[] {
   const bestSan = sanOf(args.fen, args.lines[0]?.moves?.[0]);
   return [
     positionOpened(args.lastMove, args.me, bestSan),
+    queenGlue(args.fen, args.me),
+    takeTheSting(args.fen, args.me, bestSan),
+    finishStarted(args.lastOwnMove, args.fen, bestSan),
+    goodInEveryBranch(args.fen, args.me, args.lines),
+    forceConcession(args.fen, args.lines),
+    rejectedMoveLater(args.fen, args.lines),
+    bestCasePlan(args.fen, args.lines),
+    retreatKeepsBreak(args.fen, args.me, bestSan),
+    flexibleFirst(args.fen, args.lines),
     threatStronger(args.fen, args.me, args.lines),
     secureFirst(args.fen, args.me, args.lines),
     heldByTactic(args.fen, args.me),
@@ -255,6 +519,10 @@ export function speedRunReads(args: { fen: string; me: 'w' | 'b'; lines: Lines; 
     uglyButRight(args.fen, bestSan),
     provokes(args.fen, args.lines),
     awkwardBlock(args.fen, args.lines),
-    anyMoveFine(args.fen, args.lines),
+    skipMiddleman(args.fen, bestSan),
+    playAnyway(args.fen, args.lines),
+    keepSquareForKnight(args.fen, args.me, bestSan),
+    rightPieceForHole(args.fen, args.me),
+    usefulWaiting(args.fen, args.lines) ?? anyMoveFine(args.fen, args.lines),
   ].filter((r): r is Read => !!r);
 }

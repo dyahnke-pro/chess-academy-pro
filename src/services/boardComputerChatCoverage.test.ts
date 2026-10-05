@@ -38,6 +38,9 @@ function exportedFns(src: string): string[] {
 // narration renderers, and computers already reached THROUGH another chat lane.
 // Adding a name here is a deliberate, reviewed exception; keep it justified.
 const NOT_A_CHAT_LANE = new Set<string>([
+  // an INPUT to deliberation's "trading queens throws away your space" read —
+  // it reaches chat through that sentence, not as a fact of its own
+  'computeTerritory',
   // the SAFETY DOOR's thin forms — `captureRead` (which the chat path reads)
   // through a boolean / a signed swap; they state no fact of their own
   'standsSafe',

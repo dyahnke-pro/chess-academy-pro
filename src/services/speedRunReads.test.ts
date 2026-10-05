@@ -3,6 +3,9 @@ import { Chess } from 'chess.js';
 import {
   keepTension, anyMoveFine, uglyButRight, castleSide, provokes, threatStronger, heldByTactic,
   secureFirst, mutualPins, overprotect, positionOpened, awkwardBlock, speedRunReads,
+  playAnyway, skipMiddleman, usefulWaiting, keepSquareForKnight, rightPieceForHole,
+  finishStarted, goodInEveryBranch, takeTheSting, retreatKeepsBreak, bestCasePlan, rejectedMoveLater,
+  forceConcession, flexibleFirst, queenGlue,
 } from './speedRunReads';
 
 const fenAt = (sans: string): string => { const c = new Chess(); for (const m of sans.split(' ')) c.move(m); return c.fen(); };
@@ -73,6 +76,77 @@ describe('his habits of thought, computed (each checked against the existing com
     const fen = 'rnbqkbnr/ppp1pppp/8/8/8/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1';
     expect(awkwardBlock(fen, [line(['f1b5', 'c8d7'], 30)])?.text).toMatch(/stuck/);
     expect(awkwardBlock(fen, [line(['g1f3', 'g8f6'], 30)])).toBeNull();
+  });
+  it('play it anyway: Bc4 allows …Nxe4 and the line still holds', () => {
+    const fen = fenAt('e4 e5 Nf3 Nf6');
+    expect(playAnyway(fen, [line(['f1c4', 'f6e4'], 40)])?.text).toMatch(/allows a capture .* play it anyway/);
+    expect(playAnyway(fen, [line(['f1c4', 'f6e4'], -80)])).toBeNull();
+    expect(playAnyway(fen, [line(['f1c4', 'f8c5'], 40)])).toBeNull();
+  });
+  it('skip the middleman: c4 hits d5 now (and survives the exchange) — no need to prepare it', () => {
+    const fen = fenAt('d4 d5 Nf3 Nf6 e3 e6 Bd3 c5');
+    expect(skipMiddleman(fen, 'c4')?.text).toMatch(/break is ready now/);
+    expect(skipMiddleman(fen, 'O-O')).toBeNull();
+  });
+  it('the useful waiting move: nothing matters much and the engine plays h3', () => {
+    const fen = fenAt('e4 e5 Nf3 Nc6');
+    expect(usefulWaiting(fen, [line(['h2h3'], 30), line(['f1c4'], 25), line(['f1b5'], 20)])?.text).toMatch(/useful waiting move/);
+    expect(usefulWaiting(fen, [line(['f1c4'], 30), line(['h2h3'], 25), line(['f1b5'], 20)])).toBeNull();
+  });
+  it('keep a square vacant: the knight on b1 goes through c3, and the c-pawn could block it', () => {
+    const fen = '4k3/8/8/2p1p3/3pP3/3P4/2P5/1NB1K3 w - - 0 1';
+    expect(keepSquareForKnight(fen, 'w', 'Ke2')?.text).toMatch(/Keep c3 empty — your knight on b1 goes b1–c3–d5/);
+    expect(keepSquareForKnight(fen, 'w', 'c3')).toBeNull();
+  });
+  it('the right piece for the hole: the bishop on d5 sits where the knight belongs', () => {
+    const fen = '4k3/8/3p4/3B4/4P3/8/8/4KN2 w - - 0 1';
+    expect(rightPieceForHole(fen, 'w')?.text).toMatch(/belongs to a knight/);
+    expect(rightPieceForHole('4k3/8/3p4/3B4/4P3/8/8/4K3 w - - 0 1', 'w')).toBeNull();
+  });
+  it('finish what you started: c4 began the break, cxd5 carries it on', () => {
+    const before = fenAt('d4 d5 Nf3 Nf6 e3 e6 Bd3 c5');
+    const fen = fenAt('d4 d5 Nf3 Nf6 e3 e6 Bd3 c5 c4 Nc6');
+    expect(finishStarted({ fenBefore: before, san: 'c4' }, fen, 'cxd5')?.text).toMatch(/finish it/);
+    expect(finishStarted({ fenBefore: before, san: 'c4' }, fen, 'O-O')).toBeNull();
+  });
+  it('good in every branch: Ke2 leaves nothing to take, Ne4 drops the knight to …dxe4', () => {
+    const fen = '4k3/8/8/3p4/8/2N5/8/4K3 w - - 0 1';
+    expect(goodInEveryBranch(fen, 'w', [line(['e1e2'], 0), line(['c3e4'], -300)])?.text).toMatch(/works whatever they answer.*e4/);
+    expect(goodInEveryBranch(fen, 'w', [line(['e1e2'], 0), line(['e1d2'], 0)])).toBeNull();
+  });
+  it('take the sting out: Ne5 blocks the rook — the bishop is neither moved nor guarded', () => {
+    const fen = '4r1k1/8/8/8/4B3/5N2/8/6K1 w - - 0 1';
+    expect(takeTheSting(fen, 'w', 'Ne5')?.text).toMatch(/takes the sting out/);
+    expect(takeTheSting(fen, 'w', 'Bd3')).toBeNull();
+  });
+  it('the retreat that keeps your break: Nf3 clears d4 for the d-pawn', () => {
+    const fen = '4k3/8/8/2p5/3N4/3PP3/8/4K3 w - - 0 1';
+    expect(retreatKeepsBreak(fen, 'w', 'Nf3')?.text).toMatch(/clears d4 so your pawn on d3/);
+    expect(retreatKeepsBreak(fen, 'w', 'Nb5')).toBeNull();
+  });
+  it('the best-case plan test: the slow a3–b3–c3 plan ends level at best', () => {
+    const fen = fenAt('e4 e5');
+    expect(bestCasePlan(fen, [line(['g1f3'], 200), line(['a2a3', 'a7a6', 'b2b3', 'b7b6', 'c2c3'], 0)])?.text).toMatch(/best case/);
+    expect(bestCasePlan(fen, [line(['g1f3'], 200), line(['d2d4', 'e5d4'], 0)])).toBeNull();
+  });
+  it('the rejected move works later: Bc4 now is worse, and it comes in the main line after Nf3', () => {
+    const fen = fenAt('e4 e5');
+    expect(rejectedMoveLater(fen, [line(['g1f3', 'b8c6', 'f1c4'], 50), line(['f1c4'], -100)])?.text).toMatch(/Bc4 doesn't work yet — but it does after Nf3/);
+    expect(rejectedMoveLater(fen, [line(['g1f3', 'b8c6', 'f1b5'], 50), line(['f1c4'], -100)])).toBeNull();
+  });
+  it('force a concession: Bb5+ Ke7 costs them castling', () => {
+    const fen = 'rnbqkbnr/pp3ppp/8/2ppp3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1';
+    expect(forceConcession(fen, [line(['f1b5', 'e8e7'], 50)])?.text).toMatch(/loses the right to castle/);
+    expect(forceConcession(fen, [line(['f1b5', 'c8d7'], 50)])).toBeNull();
+  });
+  it('flexible moves first: Nf3 and d4 are equal — the knight first', () => {
+    const fen = fenAt('e4 e5');
+    expect(flexibleFirst(fen, [line(['g1f3'], 30), line(['d2d4'], 20)])?.text).toMatch(/flexible move first/);
+    expect(flexibleFirst(fen, [line(['d2d4'], 30), line(['g1f3'], 20)])).toBeNull();
+  });
+  it('the queen as the glue: the d2 queen alone holds c3 and e3', () => {
+    expect(queenGlue('4k3/8/8/8/1b4n1/2N1B3/3Q4/4K3 w - - 0 1', 'w')?.text).toMatch(/queen on d2 is the glue/);
+    expect(queenGlue('4k3/8/8/8/1b4n1/2N1B3/1P1Q4/4K3 w - - 0 1', 'w')).toBeNull();
   });
   it('the reads list never throws on any opening position (smoke over a real game)', () => {
     const c = new Chess();

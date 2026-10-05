@@ -82,7 +82,7 @@ export function lineAchieves(startFen: string, sans: readonly string[], me: 'w' 
   const piecesOf = (b: Chess): number => b.board().flat().filter((x) => x && x.type !== 'k' && x.type !== 'p').length;
   const pawnsOf = (b: Chess, c: 'w' | 'b'): number => b.board().flat().filter((x) => x && x.type === 'p' && x.color === c).length;
   if (piecesOf(start) > 0 && piecesOf(end) === 0 && pawnsOf(end, me) > pawnsOf(end, them)) {
-    return { text: `it becomes a pawn ending with you ${pawnsOf(end, me) - pawnsOf(end, them) === 1 ? 'a pawn' : `${num(pawnsOf(end, me) - pawnsOf(end, them))} pawns`} up — the advantage changes shape and stays yours`, kind: 'pawn-ending' };
+    return { text: `it becomes a pawn ending and ${pawnsOf(end, me) - pawnsOf(end, them) === 1 ? 'an extra pawn' : `${num(pawnsOf(end, me) - pawnsOf(end, them))} extra pawns`} for you — the advantage changes shape and stays yours`, kind: 'pawn-ending' };
   }
   const net = settledNetForLine(startFen, sans, me);
   if (net !== null && net >= 1) return { text: `you come out ${countWords(net)} up`, kind: 'material' };
@@ -202,6 +202,19 @@ export interface DepthClause {
  * achieves. `nameMove: false` (a held verdict, a withheld puzzle answer)
  * returns the habit alone.
  */
+/** The side to move's own previous move, read off the history — only when
+ *  replaying it reproduces this board (a history from another start is never
+ *  guessed at). */
+function ownLastMove(history: readonly string[], fen: string): { fenBefore: string; san: string } | null {
+  if (history.length < 2) return null;
+  try {
+    const c = new Chess();
+    let before = '';
+    history.forEach((m, i) => { if (i === history.length - 2) before = c.fen(); c.move(m); });
+    return c.fen().split(' ')[0] === fen.split(' ')[0] ? { fenBefore: before, san: history[history.length - 2] } : null;
+  } catch { return null; }
+}
+
 export function depthClauses(args: {
   fen: string;
   history: readonly string[];
@@ -233,7 +246,7 @@ export function depthClauses(args: {
     // His habits of thought that name no move: keep the tension, which side to
     // castle, "any move is fine". The ones that name the engine's move (the
     // ugly move, the provoked commitment) wait for nameMove below.
-    const reads = toMove === args.studentColor ? speedRunReads({ fen: args.fen, me: args.studentColor, lines: args.topLines, ...(args.lastOpponentMove ? { lastMove: args.lastOpponentMove } : {}) }) : [];
+    const reads = toMove === args.studentColor ? speedRunReads({ fen: args.fen, me: args.studentColor, lines: args.topLines, ...(args.lastOpponentMove ? { lastMove: args.lastOpponentMove } : {}), ...((): { lastOwnMove?: { fenBefore: string; san: string } } => { const o = ownLastMove(args.history, args.fen); return o ? { lastOwnMove: o } : {}; })() }) : [];
     for (const r of reads.filter((x) => !x.namesMove)) out.push({ kind: 'speedrun-read', text: r.text, ...(r.squares ? { squares: r.squares } : {}) });
     if (!args.nameMove || toMove !== args.studentColor) return out;
     for (const r of reads.filter((x) => x.namesMove)) out.push({ kind: 'speedrun-read', text: r.text, ...(r.squares ? { squares: r.squares } : {}) });
