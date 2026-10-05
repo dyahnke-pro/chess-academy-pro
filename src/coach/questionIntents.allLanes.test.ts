@@ -78,3 +78,12 @@ describe('teach-surface hijack guards (source pins)', () => {
     expect(TEACH).toContain('isTeachingMethodQuestion(workingInput)');
   });
 });
+
+describe('step 5 in chat — "what are my targets here?"', () => {
+  it('reaches the attack-targets topic', async () => {
+    const { positionalTopic } = await import('./questionIntents');
+    expect(positionalTopic('what are my targets here?')).toBe('targets');
+    expect(positionalTopic('where are their targets')).toBe('targets');
+    expect(positionalTopic('any targets?')).toBe('targets');
+  });
+});

@@ -3023,8 +3023,9 @@ export function positionalTopic(ask: string | undefined): PositionalTopic | null
   if (/\bx-?rays?\b|\bpin\s+through\b|\blined?\s+up\s+(?:on|against|through)\b/.test(a)) return 'xray';
   // PRESSURE — "what's under pressure / what am I pressuring".
   if (/\bunder\s+pressure\b|\bwhat\s+(?:am\s+i|do\s+i)\s+pressur\w*\b|\bpressur\w+\s+(?:pieces?|targets?)\b|\bwhat'?s\s+being\s+attacked\b/.test(a)) return 'pressure';
-  // ATTACK TARGETS — "what should I attack / target / go after".
-  if (/\bwhat\s+(?:should|do)\s+i\s+(?:attack|target|go\s+after|aim\s+at)\b|\battack\s+targets?\b|\bweak(?:est)?\s+points?\b|\bcan\s+i\s+grab\s+a\s+(?:free\s+)?pawn\b/.test(a)) return 'targets';
+  // ATTACK TARGETS — "what should I attack / target / go after", and the
+  // lesson's step 5 asked in chat: "what are my targets here?".
+  if (/\bwhat\s+(?:should|do)\s+i\s+(?:attack|target|go\s+after|aim\s+at)\b|\battack\s+targets?\b|\b(?:my|their|any)\s+targets?\b|\bweak(?:est)?\s+points?\b|\bcan\s+i\s+grab\s+a\s+(?:free\s+)?pawn\b/.test(a)) return 'targets';
   // NAMED PAWN STRUCTURE — "what pawn structure is this".
   if (/\bwhat\s+(?:pawn\s+)?structure\s+is\s+this\b|\bpawn\s+structure\s+(?:name|called)\b|\bwhat'?s\s+the\s+structure\b/.test(a)) return 'structure-name';
   // MANEUVER — "where should my knight/rook/bishop go / reroute".

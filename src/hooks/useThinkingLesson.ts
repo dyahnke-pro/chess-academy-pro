@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Square } from 'chess.js';
 import {
-  ThinkingLessonSession, type LessonView, finishThinkingLesson, kitForStep, lessonInputs, planThinkingLesson, recordLessonAnswer, rememberLessonBoardNow, slipStepsForGame,
+  ThinkingLessonSession, type LessonView, finishThinkingLesson, kitForStep, lessonInputs, planThinkingLesson, recordLessonAnswer, rememberLessonBoardNow, slipStepsForGame, firstFairKit, motifKit, type MotifBoard,
   type LessonPositionCandidate, type LessonUsernames, type PlannedLesson, type StepKit,
 } from '../services/thinkingLessonStart';
 
@@ -19,7 +19,7 @@ export interface UseThinkingLessonDeps {
 export interface UseThinkingLesson {
   view: LessonView;
   /** Choose this student's step (null = no fair board yet). */
-  plan: (opts: { usernames: LessonUsernames; rating: number }) => Promise<PlannedLesson | null>;
+  plan: (opts: { usernames: LessonUsernames; rating: number; beginner?: boolean }) => Promise<PlannedLesson | null>;
   start: (kit: StepKit, opts: { usernames: LessonUsernames; rating: number; candidates?: readonly LessonPositionCandidate[] }) => Promise<void>;
   /** A planned lesson ended: closes Up next's bite; returns the tier-unlock line, if one opened. */
   finish: (plan: PlannedLesson, source: string) => Promise<string | null>;
@@ -29,6 +29,10 @@ export interface UseThinkingLesson {
   hold: () => void;
   /** A step's kit, to ask its question once on another surface's board. */
   kitFor: (step: string) => StepKit | null;
+  /** The first of these steps with a fair question on this board. */
+  firstFairKit: (steps: readonly string[], fen: string) => StepKit | null;
+  /** Step 5 asked about one pattern on its own board (Pattern Recognition). */
+  motifKit: (board: MotifBoard) => StepKit;
   /** The lesson game: ask the step's question once, on this live board. */
   askOnce: (kit: StepKit, fen: string) => Promise<void>;
   /** Review: the step to ask at each slip of a game, from its recorded tags. */
@@ -52,7 +56,10 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
     setView(IDLE);
   }, []);
 
-  useEffect(() => () => { sessionRef.current?.stop(); }, []);
+  // Unmount: stop the session AND drop it, so a view update still in flight
+  // (a spoken line resolving, a nudge timer) finds no session and never sets
+  // state on a component that is gone.
+  useEffect(() => () => { sessionRef.current?.stop(); sessionRef.current = null; }, []);
 
   const start = useCallback(async (kit: StepKit, opts: { usernames: LessonUsernames; rating: number; candidates?: readonly LessonPositionCandidate[] }): Promise<void> => {
     sessionRef.current?.stop();
@@ -89,5 +96,5 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
     if (sessionRef.current === session) sessionRef.current = null;
   }, []);
 
-  return { view, plan: planThinkingLesson, start, finish: finishThinkingLesson, kitFor: kitForStep, tap, dontKnow, hold, askOnce, slipSteps: slipStepsForGame, stop };
+  return { view, plan: planThinkingLesson, start, finish: finishThinkingLesson, kitFor: kitForStep, firstFairKit, motifKit, tap, dontKnow, hold, askOnce, slipSteps: slipStepsForGame, stop };
 }

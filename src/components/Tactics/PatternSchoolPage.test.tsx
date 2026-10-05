@@ -59,4 +59,19 @@ describe('PatternSchoolPage', () => {
       state: expect.objectContaining({ depth: { min: 1, max: 3 } }),
     });
   });
+
+  it('IDENTIFY is a question first: no arrow until they find it or ask to be shown', async () => {
+    const { getPuzzlesByTheme } = await import('../../services/puzzleService');
+    // After ...h6, Nc7+ forks the king on e8 and the rook on a8.
+    vi.mocked(getPuzzlesByTheme).mockResolvedValueOnce([
+      { id: 'p2', fen: 'r3k3/7p/8/1N6/8/8/8/4K3 b - - 0 1', moves: 'h7h6 b5c7', rating: 1200, themes: ['fork'], openingTags: null, popularity: 90, nbPlays: 100 },
+    ] as Awaited<ReturnType<typeof getPuzzlesByTheme>>);
+    render(<PatternSchoolPage />);
+    fireEvent.click(screen.getByTestId('pattern-toggle-fork'));
+    await waitFor(() => expect(screen.getByTestId('pattern-find-it-fork')).toBeInTheDocument());
+    expect(screen.getByTestId('mock-board').getAttribute('data-arrows')).toBe('');
+    fireEvent.click(screen.getByTestId('pattern-show-it-fork'));
+    expect(screen.getByTestId('mock-board').getAttribute('data-arrows')).toBe('b5c7');
+    expect(screen.queryByTestId('pattern-find-it-fork')).toBeNull();
+  });
 });

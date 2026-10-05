@@ -95,7 +95,7 @@ async function loadThinkingSignal(weaknesses: Parameters<typeof heatMap>[1]): Pr
   if (!THINKING_LESSON_LIVE) return null;
   const profile = await getCapabilityProfile().catch(() => new Map());
   const tiles = heatMap(profile, weaknesses);
-  return thinkingSignalFrom(await lessonStepForCard(tiles).catch(() => null), tiles);
+  return thinkingSignalFrom(await lessonStepForCard(tiles, isBeginnerMode(useAppStore.getState().activeProfile)).catch(() => null), tiles);
 }
 
 export async function loadUpNextInput(): Promise<UpNextInput> {

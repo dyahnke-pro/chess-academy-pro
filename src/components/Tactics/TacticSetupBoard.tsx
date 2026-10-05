@@ -64,10 +64,11 @@ function parseUciMove(uci: string): { from: string; to: string; promotion?: stri
  * always end on the solver's decisive move, so the student plays the last move.
  */
 /** The lesson question a first miss asks on the puzzle's board (plan "Tactics":
- *  the Setup Trainer's first wrong try runs a lesson step on that board). A
- *  setup move exists to make a target hittable, so the question is "their
- *  targets" — skipped when the board has no fair answer. */
-const FIRST_MISS_STEP = 'their-targets';
+ *  the Setup Trainer's first wrong try runs lesson steps 3 and 5 on that
+ *  board). Safety first: "am I safe?" when something of yours hangs there,
+ *  otherwise "their targets" (a setup move exists to make a target hittable).
+ *  ONE question per miss; skipped when neither has a fair answer. */
+const FIRST_MISS_STEPS = ['am-i-safe', 'their-targets'] as const;
 
 export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBoardProps): JSX.Element {
   const chessRef = useRef(new Chess(puzzle.setupFen));
@@ -79,9 +80,13 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
   // The lesson's own runner, for ONE question on this board after the first miss.
   const reading = useThinkingLesson({ say: (t) => voiceService.speak(t).then(() => undefined).catch(() => undefined) });
   const readingAskedRef = useRef<string | null>(null);
-  const { askOnce: readAskOnce, kitFor: readKitFor, stop: readStop } = reading;
+  const { askOnce: readAskOnce, firstFairKit: readFairKit, stop: readStop } = reading;
   // A new puzzle never inherits the last one's question.
   useEffect(() => () => { readStop(); }, [puzzle.id, readStop]);
+  // The question is awaited inside the wrong-try handler: nothing after it may
+  // touch state once the board is gone.
+  const aliveRef = useRef(true);
+  useEffect(() => () => { aliveRef.current = false; }, []);
   const { refute: refuteTry, clearArrows: clearWrongArrows } = wrongTry;
   const puzzleIdRef = useRef(puzzle.id);
   puzzleIdRef.current = puzzle.id;
@@ -377,13 +382,13 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
       // per puzzle; silent when the board has no fair answer.
       if (wrongAttemptsRef.current === 1 && readingAskedRef.current !== puzzleAtTry) {
         readingAskedRef.current = puzzleAtTry;
-        const kit = readKitFor(FIRST_MISS_STEP);
+        const kit = readFairKit(FIRST_MISS_STEPS, chessRef.current.fen());
         if (kit) await readAskOnce(kit, chessRef.current.fen());
-        if (puzzleIdRef.current !== puzzleAtTry || hasCompleted.current) return;
+        if (!aliveRef.current || puzzleIdRef.current !== puzzleAtTry || hasCompleted.current) return;
       }
       setBoardState('thinking');
     })();
-  }, [boardState, isPlayerTurn, moveIndex, line, puzzle.tacticType, puzzle.id, finishSolved, clearLadder, refuteTry, clearWrongArrows, orientation, readKitFor, readAskOnce]);
+  }, [boardState, isPlayerTurn, moveIndex, line, puzzle.tacticType, puzzle.id, finishSolved, clearLadder, refuteTry, clearWrongArrows, orientation, readFairKit, readAskOnce]);
 
   // Show Solution: play the rest of the line on the board, then count it as
   // missed — the fail path this trainer lacked (a student who could not find

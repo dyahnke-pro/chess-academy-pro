@@ -33,6 +33,8 @@ export type { StepKit, AnsweredQuestion, LessonStage, LessonUsernames, LessonPos
 export type { LessonView } from './thinkingLessonSession';
 // The session itself: a surface opens it through this door, never directly.
 export { ThinkingLessonSession } from './thinkingLessonSession';
+// Pattern Recognition asks step 5 about one motif on its example board.
+export { motifKit, type MotifBoard } from './thinkingMotifStep';
 
 export interface PlannedLesson {
   kit: StepKit;
@@ -50,7 +52,7 @@ async function knowProfile(): Promise<CapabilityProfile> {
 /** Which step to teach this student now, and the boards to teach it on. Null
  *  when no step has a fair board for them yet (a fresh device with no games
  *  and no puzzles near their rating). */
-export async function planThinkingLesson(opts: { usernames: LessonUsernames; rating: number }): Promise<PlannedLesson | null> {
+export async function planThinkingLesson(opts: { usernames: LessonUsernames; rating: number; beginner?: boolean }): Promise<PlannedLesson | null> {
   const [profile, useProfile, weaknesses, loaded, memory] = await Promise.all([
     knowProfile(),
     getCapabilityProfile('use').catch((): CapabilityProfile => new Map()),
@@ -65,7 +67,9 @@ export async function planThinkingLesson(opts: { usernames: LessonUsernames; rat
   // Only steps this student has a FAIR board for can be served (a step that
   // needs their own games has none on a fresh device).
   const availability = new Map<BuiltStep, boolean>();
+  const beginnerOk = beginnerAllows(!!opts.beginner, (s) => standingFromProfile(profile, s.tags));
   const available = (s: BuiltStep): boolean => {
+    if (!beginnerOk(s)) return false;
     const hit = availability.get(s);
     if (hit !== undefined) return hit;
     const k = s.kit();
@@ -95,7 +99,7 @@ export async function planThinkingLesson(opts: { usernames: LessonUsernames; rat
     const kit = choice.step.kit();
     // The student's own failures at THIS step first (the board they hung the
     // knight on teaches "am I safe?" better than any puzzle).
-    const ordered = boardsForStep(candidates, weaknesses, choice.step.tags);
+    const ordered = boardsForStep(candidates, weaknesses, choice.step.tags, !!opts.beginner);
     if (!kit.enrich) return { kit, reason: choice.reason, openTier: choice.openTier, candidates: ordered, available };
     const enriched = await enrichForLesson(kit, ordered, seenFor(memory, kit.step));
     if (enriched.length > 0) {
@@ -133,7 +137,12 @@ export function boardsForStep(
   candidates: readonly LessonPositionCandidate[],
   weaknesses: readonly UnifiedWeakness[],
   tags: readonly MisconceptionTagId[],
+  quiet = false,
 ): LessonPositionCandidate[] {
+  // A beginner sees QUIET boards first (fewest pieces): difficulty only, never
+  // how much the coach says. Their own failures still lead.
+  const byQuiet = (list: LessonPositionCandidate[]): LessonPositionCandidate[] =>
+    (quiet ? [...list].sort((a, b) => menOnBoard(a.fen) - menOnBoard(b.fen)) : list);
   const rank = new Map<string, number>();
   let n = 0;
   for (const w of weaknesses) {
@@ -143,11 +152,11 @@ export function boardsForStep(
       if (!rank.has(id)) rank.set(id, n++);
     }
   }
-  if (rank.size === 0) return [...candidates];
+  if (rank.size === 0) return byQuiet([...candidates]);
   const first = candidates.filter((c) => rank.has(boardIdentity(c.fen)))
     .sort((a, b) => (rank.get(boardIdentity(a.fen)) ?? 0) - (rank.get(boardIdentity(b.fen)) ?? 0));
   const rest = candidates.filter((c) => !rank.has(boardIdentity(c.fen)));
-  return [...first, ...rest];
+  return [...first, ...byQuiet(rest)];
 }
 
 /** Boards a lesson asks on: one Show, two Guide, one Solo. Enrichment stops
@@ -231,12 +240,13 @@ export async function finishThinkingLesson(plan: PlannedLesson, source: string):
  * lesson uses, so the card and the lesson can never disagree. Every step
  * counts as available (the card does not load boards).
  */
-export async function lessonStepForCard(tiles: readonly HeatTile[]): Promise<StepChoice | null> {
+export async function lessonStepForCard(tiles: readonly HeatTile[], beginner = false): Promise<StepChoice | null> {
   const profile = await knowProfile();
+  const standingOf = (s: BuiltStep): StepStanding => standingFromProfile(profile, s.tags);
   return chooseThinkingStep(
     BUILT_THINKING_STEPS,
-    (s) => standingFromProfile(profile, s.tags),
-    () => true,
+    standingOf,
+    beginnerAllows(beginner, standingOf),
     (s) => gameWeightForTags(tiles, s.tags),
   );
 }
@@ -297,4 +307,33 @@ export async function slipStepsForGame(gameId: string, boards: readonly { ply: n
   } catch {
     return new Map();
   }
+}
+
+/** The first of these steps that poses a fair question on this board (routine
+ *  order as given), or null. For a surface asking ONE question on its own
+ *  board: the Setup Trainer's first miss asks "am I safe?" when something of
+ *  yours hangs there, else "their targets". */
+export function firstFairKit(steps: readonly string[], fen: string): StepKit | null {
+  for (const step of steps) {
+    const kit = kitForStep(step);
+    if (kit && !kit.enrich && isFairKey(kit.keyFor(fen))) return kit;
+  }
+  return null;
+}
+
+/** The steps a beginner starts on (plan "Beginner mode": steps 2–3). */
+export const BEGINNER_STEPS: readonly string[] = ['their-move-changed', 'am-i-safe'];
+
+/** A beginner is taught only the beginner steps until BOTH are green; then the
+ *  routine opens as for anyone. Everyone else: every step. PURE. */
+export function beginnerAllows(beginner: boolean, standingOf: (s: BuiltStep) => StepStanding): (s: BuiltStep) => boolean {
+  if (!beginner) return () => true;
+  const firsts = BUILT_THINKING_STEPS.filter((s) => BEGINNER_STEPS.includes(s.step));
+  if (firsts.length > 0 && firsts.every((s) => standingOf(s) === 'green')) return () => true;
+  return (s) => BEGINNER_STEPS.includes(s.step);
+}
+
+/** Pieces and pawns on the board (both sides). */
+function menOnBoard(fen: string): number {
+  return (fen.split(' ')[0].match(/[prnbqk]/gi) ?? []).length;
 }

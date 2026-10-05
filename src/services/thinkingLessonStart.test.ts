@@ -89,3 +89,43 @@ describe('slipStepsForBoards — the review asks the step its slip was filed und
     expect(slipStepsForBoards([{ tag: 'hung-material', fen: OTHER }], [{ ply: 3, fen: OTHER }]).size).toBe(0);
   });
 });
+
+describe('beginners start on steps 2–3, on quiet boards', () => {
+  it('a beginner is held to "what changed" and "am I safe" until both are green', async () => {
+    const { beginnerAllows } = await import('./thinkingLessonStart');
+    const { BUILT_THINKING_STEPS } = await import('./thinkingSteps.built');
+    const allowed = (pred: (s: (typeof BUILT_THINKING_STEPS)[number]) => boolean): string[] =>
+      BUILT_THINKING_STEPS.filter(pred).map((s) => s.step).sort();
+    expect(allowed(beginnerAllows(true, () => 'grey'))).toEqual(['am-i-safe', 'their-move-changed']);
+    // One green is not enough.
+    expect(allowed(beginnerAllows(true, (s) => (s.step === 'am-i-safe' ? 'green' : 'grey')))).toHaveLength(2);
+    // Both green → the routine opens.
+    expect(allowed(beginnerAllows(true, () => 'green'))).toHaveLength(BUILT_THINKING_STEPS.length);
+    // Not a beginner → every step, whatever the record.
+    expect(allowed(beginnerAllows(false, () => 'grey'))).toHaveLength(BUILT_THINKING_STEPS.length);
+  });
+
+  it('quiet orders the rest by fewest men, and own failures still lead', async () => {
+    const { boardsForStep } = await import('./thinkingLessonStart');
+    const BUSY = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+    const QUIET = '4k3/8/8/8/8/8/8/R3K3 w - - 0 1';
+    const MID = 'r3k3/pp6/8/8/8/8/PP6/R3K3 w - - 0 1';
+    const cands = [BUSY, QUIET, MID].map((fen) => ({ fen, origin: 'puzzle' as const }));
+    expect(boardsForStep(cands, [], ['hung-material'], true).map((c) => c.fen)).toEqual([QUIET, MID, BUSY]);
+    expect(boardsForStep(cands, [], ['hung-material'], false).map((c) => c.fen)).toEqual([BUSY, QUIET, MID]);
+    const weak = [{ capabilityTag: 'hung-material', positions: [{ fen: BUSY }] }] as unknown as Parameters<typeof boardsForStep>[1];
+    expect(boardsForStep(cands, weak, ['hung-material'], true).map((c) => c.fen)).toEqual([BUSY, QUIET, MID]);
+  });
+});
+
+describe('firstFairKit — one question on another surface\'s board', () => {
+  const HUNG = '4k3/1p6/2N5/8/8/8/8/4K3 w - - 0 1';
+  const LOOSE_KNIGHT = '4k3/8/2n5/8/8/8/8/4K3 w - - 0 1';
+  it('safety first when something of yours hangs, else their targets, else nothing', async () => {
+    const { firstFairKit } = await import('./thinkingLessonStart');
+    const steps = ['am-i-safe', 'their-targets'];
+    expect(firstFairKit(steps, HUNG)?.step).toBe('am-i-safe');
+    expect(firstFairKit(steps, LOOSE_KNIGHT)?.step).toBe('their-targets');
+    expect(firstFairKit(steps, '4k3/8/8/8/8/8/8/4K3 w - - 0 1')).toBeNull();
+  });
+});

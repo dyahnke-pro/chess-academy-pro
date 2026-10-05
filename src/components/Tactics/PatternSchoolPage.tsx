@@ -10,6 +10,10 @@ import { PATTERN_REGISTRY, type TacticPatternLesson } from '../../data/patternRe
 import { getPuzzlesByTheme } from '../../services/puzzleService';
 import { PATTERN_DRILL_DEPTH } from '../../services/puzzleDepth';
 import { captureEvent } from '../../services/analytics';
+import { useThinkingLesson } from '../../hooks/useThinkingLesson';
+import { voiceService } from '../../services/voiceService';
+import { ThinkingLessonBoard } from '../Coach/ThinkingLessonBoard';
+import type { Square } from 'chess.js';
 
 /**
  * PATTERN SCHOOL — /tactics/patterns (David 2026-07-22: "pattern recognition
@@ -23,7 +27,8 @@ import { captureEvent } from '../../services/analytics';
  * the adaptive trainer scoped to the pattern's themes.
  *
  * PostHog events: pattern_school_viewed {}, pattern_school_pattern_opened
- * { pattern }, pattern_school_drill_started { pattern }.
+ * { pattern }, pattern_school_identify_asked { pattern },
+ * pattern_school_drill_started { pattern }.
  */
 
 interface ExampleBoard {
@@ -34,6 +39,8 @@ interface ExampleBoard {
    *  (hand walk 2026-10-01, PS2). */
   arrows: BoardArrow[];
   targets: string[];
+  /** The move that springs the pattern (SAN), when the puzzle names one. */
+  san: string | null;
 }
 
 const TARGET_SQUARE = { background: 'rgba(250, 204, 21, 0.45)' };
@@ -51,13 +58,13 @@ function exampleFromPuzzle(fen: string, movesUci: string): ExampleBoard | null {
     const live = c.fen();
     const orientation = c.turn() === 'w' ? 'white' : 'black';
     const second = movesUci.trim().split(/\s+/)[1];
-    if (!second || second.length < 4) return { fen: live, orientation, arrows: [], targets: [] };
+    if (!second || second.length < 4) return { fen: live, orientation, arrows: [], targets: [], san: null };
     const from = second.slice(0, 2);
     const to = second.slice(2, 4);
     // The tactic the pattern move lands: the detector's own pattern whose agent
     // stands on the arrival square; its other squares are what it hits.
     const after = new Chess(live);
-    after.move({ from, to, promotion: second.length > 4 ? second.slice(4) : undefined });
+    const sprung = after.move({ from, to, promotion: second.length > 4 ? second.slice(4) : undefined });
     const landed = detectTactics(after.fen()).tactics.find((t) => t.involvedSquares[0] === to);
     return {
       fen: live,
@@ -69,6 +76,7 @@ function exampleFromPuzzle(fen: string, movesUci: string): ExampleBoard | null {
         return a ? [a] : [];
       })(),
       targets: landed ? landed.involvedSquares.slice(1) : [],
+      san: sprung?.san ?? null,
     };
   } catch {
     return null;
@@ -83,6 +91,19 @@ function PatternCard({ lesson }: { lesson: TacticPatternLesson }): JSX.Element {
   // One fetch per card lifetime — a state-dep here would re-run the effect on
   // the 'loading' transition and its cleanup would cancel the in-flight fetch.
   const fetchStartedRef = useRef(false);
+  // IDENTIFY as a question (plan "Tactics": step 5 per motif): the student
+  // taps what the pattern hits before the arrow and highlights give it away.
+  const reading = useThinkingLesson({ say: (t) => voiceService.speak(t).then(() => undefined).catch(() => undefined) });
+  const { askOnce: readAskOnce, motifKit: readMotifKit, stop: readStop } = reading;
+  const [revealed, setRevealed] = useState(false);
+  useEffect(() => () => { readStop(); }, [readStop]);
+  const askable = !!example && !!example.san && example.targets.length >= 1 && example.targets.length <= 4;
+  const findIt = useCallback((): void => {
+    if (!example || !example.san) return;
+    captureEvent('pattern_school_identify_asked', { pattern: lesson.id });
+    const kit = readMotifKit({ fen: example.fen, motif: lesson.name, san: example.san, targets: example.targets as Square[] });
+    void readAskOnce(kit, example.fen).then(() => setRevealed(true));
+  }, [example, lesson.id, lesson.name, readMotifKit, readAskOnce]);
 
   useEffect(() => {
     if (!open || fetchStartedRef.current) return;
@@ -152,18 +173,47 @@ function PatternCard({ lesson }: { lesson: TacticPatternLesson }): JSX.Element {
           {exampleState === 'loading' && (
             <p className="text-xs text-theme-text-muted" data-testid={`pattern-example-loading-${lesson.id}`}>Loading a real example…</p>
           )}
-          {exampleState === 'ready' && example && (
+          {exampleState === 'ready' && example && reading.view.active && (
+            <div className="max-w-[320px] mx-auto w-full" data-testid={`pattern-identify-${lesson.id}`}>
+              <ThinkingLessonBoard view={reading.view} onTap={reading.tap} onDontKnow={reading.dontKnow} onStop={reading.stop} />
+            </div>
+          )}
+          {exampleState === 'ready' && example && !reading.view.active && (
             <div data-testid={`pattern-example-board-${lesson.id}`}>
-              <p className="text-xs text-theme-text-muted mb-1.5">A real position — the arrow springs the pattern; yellow marks what it hits. {example.orientation === 'white' ? 'White' : 'Black'} to move.</p>
+              {askable && !revealed ? (
+                <p className="text-xs text-theme-text-muted mb-1.5">A real position with a {lesson.name.toLowerCase()} in it. {example.orientation === 'white' ? 'White' : 'Black'} to move — can you see it?</p>
+              ) : (
+                <p className="text-xs text-theme-text-muted mb-1.5">A real position — the arrow springs the pattern; yellow marks what it hits. {example.orientation === 'white' ? 'White' : 'Black'} to move.</p>
+              )}
               <div className="max-w-[320px] mx-auto">
                 <ConsistentChessboard
                   fen={example.fen}
                   boardOrientation={example.orientation}
                   interactive={false}
-                  arrows={example.arrows}
-                  squareStyles={Object.fromEntries(example.targets.map((sq) => [sq, TARGET_SQUARE]))}
+                  arrows={askable && !revealed ? [] : example.arrows}
+                  squareStyles={askable && !revealed ? {} : Object.fromEntries(example.targets.map((sq) => [sq, TARGET_SQUARE]))}
                 />
               </div>
+              {askable && !revealed && (
+                <div className="flex gap-2 mt-2">
+                  <button
+                    type="button"
+                    onClick={findIt}
+                    className="flex-1 py-2 rounded-xl border-2 border-indigo-500/50 bg-indigo-500/20 font-semibold text-sm text-theme-text"
+                    data-testid={`pattern-find-it-${lesson.id}`}
+                  >
+                    Find it yourself
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setRevealed(true)}
+                    className="px-3 py-2 rounded-xl text-sm text-theme-text-muted"
+                    data-testid={`pattern-show-it-${lesson.id}`}
+                  >
+                    Show me
+                  </button>
+                </div>
+              )}
             </div>
           )}
           <button
