@@ -113,3 +113,11 @@ describe('lastMoveAlong / lastMoveFromPgn', () => {
     expect(lastMoveFromPgn('1. e4 Nf6')?.san).toBe('Nf6');
   });
 });
+
+describe('moveMissed — your own move\u2019s drawback (catalogue §35)', () => {
+  it('a move that leaves a piece unguarded, and the reply that takes it', () => {
+    // The queen on d1 is the only guard of e2; Qa4 walks away and Rxe2 follows.
+    const m = moveMissed('4r1k1/8/8/8/8/8/4P3/3Q2K1 w - - 0 1', 'Qa4', ['e8e2']);
+    expect(m?.text).toBe('The queen to a4 leaves your pawn on e2 with no guard, and the rook takes e2.');
+  });
+});

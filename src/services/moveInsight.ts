@@ -24,13 +24,16 @@ import type { WalkableLine, WalkPly } from '../types';
 import { CAPTURE_VALUE } from './pieceValues';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { computeMustDefend } from './threatOut';
-import { findHangingBySee } from './positionReadingService';
 import { countKingAttack } from './kingSafety';
 import { settledNetForLine } from './exchangeLedger';
 import { sayMoveClause } from './spokenMove';
 import { andList } from '../utils/andList';
 import { countWords } from '../utils/countWords';
 import { theirMoveCost } from './theirMoveCost';
+import { findHangingBySee, findKnightReroute, findWeakPawns } from './positionReadingService';
+import { findWorstPlacedPiece } from './nextPlans';
+import { detectLatentDanger, latentDangerClause } from './latentDanger';
+import { findTrappedPiece } from './reviewTeachingPoints';
 
 export type PositionMode = 'defend' | 'press' | 'reinforce' | 'improve';
 
@@ -115,7 +118,18 @@ function directionFor(fen: string, bestSan: string | undefined): string | null {
  * that hits two things" — and is never named.
  */
 export function positionAsk(fen: string, opts: { bestSan?: string; lastMove?: { fenBefore: string; san: string } } = {}): PositionAsk {
-  const base = positionAskCore(fen, opts);
+  const core = positionAskCore(fen, opts);
+  // AN ALIGNMENT TO WATCH (catalogue §10 — "their king and rook are on the same
+  // diagonal, always be alert to that"): the student's own pin or skewer in
+  // waiting, from the latent-danger computer.
+  const base = (() => {
+    try {
+      const me = new Chess(fen).turn();
+      const d = detectLatentDanger(fen, me, { latentOnly: true });
+      if (!d || core.mode === 'press') return core;
+      return { ...core, text: [core.text, cap(latentDangerClause(d).replace(/\.?$/, '.'))].filter(Boolean).join(' '), squares: [...core.squares, d.frontSquare, d.backSquare] };
+    } catch { return core; }
+  })();
   // WHAT THEIR LAST MOVE CHANGED leads (catalogue §1 — "when a move is made, I
   // consider its drawbacks"): the reading he does before anything else.
   if (!opts.lastMove) return base;
@@ -187,10 +201,34 @@ function positionAskCore(fen: string, opts: { bestSan?: string }): PositionAsk {
     };
   }
 
+  // IMPROVE — the quiet position, said the way he says it: the target to aim
+  // at (catalogue §5) and the piece that stands worst (§6, "if one piece stands
+  // badly, the whole game stands badly"), from the app's own computers.
+  const parts: string[] = [];
+  const sq: string[] = [];
+  const weak = findWeakPawns(fen, them);
+  const target = [...weak.isolated, ...weak.backward].find((t) => fileOpenFor(board, t[0], me));
+  if (target) {
+    parts.push(`Their pawn on ${target} is a target on a file your rooks can use.`);
+    sq.push(target);
+  }
+  const reroute = findKnightReroute(fen, me);
+  if (reroute) {
+    parts.push(`Your knight on ${reroute.from} wants ${reroute.to}${reroute.via ? `, by way of ${reroute.via}` : ''}.`);
+    sq.push(reroute.from, reroute.to);
+  } else {
+    const worst = findWorstPlacedPiece(board, me);
+    if (worst) {
+      parts.push(`Your ${name(worst.type)} on ${worst.sq} is your worst-placed piece — give it a better job.`);
+      sq.push(worst.sq);
+    }
+  }
   return {
     mode: 'improve',
-    text: 'No piece is loose and no attack is ready — find your worst-placed piece and give it a better job.',
-    squares: [],
+    text: parts.length > 0
+      ? `No piece is loose and no attack is ready. ${parts.join(' ')}`
+      : 'No piece is loose and no attack is ready — find your worst-placed piece and give it a better job.',
+    squares: sq,
   };
 }
 
@@ -245,6 +283,23 @@ export function moveMissed(fenBefore: string, san: string, replyPv: readonly str
   const you = cap(sayMoveClause(r.move.san, fenBefore));
   const reply = replies[0] ? play(r.board.fen(), replies[0]) : null;
   const net = settledNetForLine(fenBefore, [r.move.san, ...replies], me);
+  // THE PAWN-GRAB SAFETY CHECK (catalogue §33): the piece that just captured
+  // can be trapped along the engine's reply line.
+  if (r.move.captured) {
+    const trapped = findTrappedPiece(r.board.fen(), me, replyPv ?? null);
+    if (trapped && trapped.square === r.move.to) {
+      return { text: `${you} grabs material, but the ${name(trapped.piece)} on ${trapped.square} has no way out — they trap it.`, line };
+    }
+  }
+  // YOUR OWN MOVE'S DRAWBACK (catalogue §35 — "Qd6 steps off the diagonal,
+  // dropping the guard on e7"): what your move left unguarded, when the reply
+  // goes after exactly that.
+  const ownWeak = weakenedBy(fenBefore, r.move.san).filter((w) => w.color === me);
+  const replyHits = !!reply && reply.move.to === ownWeak[0]?.square;
+  if (ownWeak.length > 0 && replyHits) {
+    const w = ownWeak[0];
+    return { text: `${you} leaves your ${name(w.piece)} on ${w.square} ${w.after === 0 ? 'with no guard' : 'short of guards'}, and ${sayMoveClause(reply.move.san, r.board.fen())}.`, line };
+  }
 
   if (net !== null && net <= -1) {
     const lost = countWords(-net);

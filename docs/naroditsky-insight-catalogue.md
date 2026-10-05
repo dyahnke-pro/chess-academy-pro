@@ -45,13 +45,13 @@ pawn left weak, a plan of ours now blocked.
   play) vs the best, through compareTwoMoves + a named mechanism (outpost given,
   pin allowed, reply that hits).
 
-### 5. The long-term target, then the plan 🔴
+### 5. The long-term target, then the plan 🟠 (weak pawn on an open file → positionAsk improve, `findWeakPawns`)
 - G1: "b7 is a long-term weakness with the file open" → later "back to the old plan
   of hitting b7"; double rooks on the e-file against e6; rook to the seventh.
 - Compute: weak pawns (backward/isolated/undefended) on a half-open file for us;
   squares of entry (7th rank); keep the target across moves (planMemory).
 
-### 6. Reroute with a destination 🟠 (findWorstPlacedPiece)
+### 6. Reroute with a destination ✅ (positionAsk improve: `findKnightReroute` / `findWorstPlacedPiece`)
 - G1: "Nd2, aiming for c4 and a5"; "Bf2, building pressure on e6".
 - Compute: a piece's path (2-3 moves) to a square that hits the target / an outpost.
 
@@ -73,7 +73,7 @@ pawn left weak, a plan of ours now blocked.
 - Compute: an obvious recapture vs a forcing move first (check/capture/threat) whose
   line nets more — compareTwoMoves on (recapture, best) when best is forcing.
 
-### 10. An alignment to watch 🟠 (pins/skewers detected only once they exist)
+### 10. An alignment to watch 🟠 (positionAsk appends `detectLatentDanger` for the student's side; theirs still 🔴)
 - G2: "their king and rook are on the same diagonal — always be alert to that" →
   Bb4+ wins the exchange.
 - Compute: enemy king/queen/rook sharing a line (file/rank/diagonal) with a square
@@ -295,6 +295,67 @@ pawn left weak, a plan of ours now blocked.
 - Lure a piece away: "Be2 luring the knight off d2 so you check on c1 and win the
   queen" (29).
 
+### 33. The pawn-grab safety check ✅ (moveMissed: `findTrappedPiece` on the capturing piece along the reply)
+- G12: "the key question before ever taking like this — can the queen be trapped?
+  List the queen's escapes, and ask whether any one move takes them all away."
+- Compute: after a queen capture, the queen's safe squares; does any opponent reply
+  leave it none (trapped-piece probe one ply deep)?
+
+### 34. A piece tied to a duty (overload) 🟠 (overload detector exists?)
+- G12: "that knight is tied to defending White's own queen, so the moment it moves,
+  the queen falls"; G1: "Nc4 — both eye a5 and guard e5" (the duty that stops Na5).
+- Compute: a piece that is the sole defender of something bigger; its moves that
+  would drop it — name the duty before suggesting the move.
+
+### 35. Your own move's drawback ✅ (moveMissed: `weakenedBy` on the student's move when the reply takes exactly that)
+- G12: "Qd6 steps off the a3-e7 diagonal, dropping the guard on e7, and Ne7+ forks
+  king and knight"; "d6 cuts the queen's defence of e7 — so d6 has to wait".
+- Compute: weakenedBy on the student's candidate/played move → "your move leaves e7
+  with no guard" — the wrong-move explanation, before the engine line.
+
+### Also seen in G12–G14
+- Pin-aware defending: "f2 is now pinned, so it no longer guards the knight" — the
+  defender count must drop pinned defenders (refines 1).
+- Reflexes: "whenever White keeps a bishop on e3, keep one eye on it" (Ng4 hits it);
+  "Kb1 — a move you should automatically consider any time you castle long" (25).
+- Calculate one step further: "after Nxe7+ Kh7 you hit two things at once" (9, 21).
+- Don't drown in the sea of winning moves — "the real target is the queen on h6;
+  what's in the way? your own bishop — move it usefully" (29).
+- After exchanges, update your picture of the board — a common moment to blunder (8).
+- Diagnose what blocks consolidation: "you'd love d6, but it drops e7 — so it has
+  to wait"; "the real disease is White's two strong pieces on d5 and g5" (5, 21).
+- Recapture with the pawn to anchor the attack: "gxf3 — the pawn jams their
+  position and becomes an anchor point for mating ideas" (19).
+- Multi-job: "f3 — preparing g4, and controlling e4 against both knights" (3);
+  "Black's central control isn't necessarily good — d5 is a target" (5).
+- Opposite castling: "identify the short-term threats and how each move affects the
+  long-term tactical patterns" (2, 27).
+- Collinear move — interpose on the line between two pieces staring at each other (31).
+- Play simple when up material; don't trade automatically — a minor piece may be
+  winnable (13).
+
+## From his chess.com articles (see docs/naroditsky-articles.md)
+- Greek Gift: the sacrifice works through the queen + knight tandem; its four
+  camouflages — it looks impossible, the knight/queen route is non-standard, the
+  defence looks sufficient, it transforms into a different attack (30, 25).
+- How to Avoid Blunders: before every move — double attacks and pins (DAP), recheck
+  the main line, then hidden 2–3-move mates against your own king (2, 35).
+- The Tactical Detector: loose pieces drop off; track transformations — what just
+  became defended or undefended, new alignments, king safety shifts (1, 10).
+- The Positional Threat: what they would do with a second move in a row — a trade of
+  a key piece or an induced weakness; defend it or counter with something forcing
+  (2, 17, 7).
+- Turn Off The Autopilot: the "forced" recapture and the natural move — ask whether
+  it is truly forced (9, 4).
+- How To Ignore A Threat And Win: weigh the threat's true size against a faster,
+  more forcing counter-threat (26, 32).
+- The Art Of Maneuvering: improve the worst piece, pressure a weakness, bring
+  reserves to an attack — "if one piece stands badly, the whole game stands badly" (6).
+- Weak Squares? Who Cares?: a weak square matters only if a piece can reach it in
+  time and it can't be challenged; worth conceding for activity or time (24, 19).
+- Punishing The Pawn Grabber: develop and keep central pressure; an unjustified grab
+  gives chances "in due course"; don't trust the grabber (33, 16).
+
 ## Games read
 | # | video | game | notes |
 |---|---|---|---|
@@ -309,3 +370,6 @@ pawn left weak, a plan of ours now blocked.
 | 9 | EPS51oKRgpU DYI 5-min blitz | White wins (Nxg5 tactic, queenside squeeze) | 64 |
 | 10 | cmJbc_BzTp8 Master Class, f6 vs Danish | Black wins (positional, c4 square, mate) | 64 |
 | 11 | 3nyxVHwDCTY DYI, KID vs fianchetto | Black wins (queenside play, f2 attack) | 61 |
+| 12 | qhHtJcXkkfg Sensei, Accelerated Dragon | Black wins (Qxb2 grab, Bf3 anchor, Nxf2+) | 58 |
+| 13 | 4_Ev1a1_2Mg Elephant Gambit | White wins (queen won) | 57 |
+| 14 | _X7t6o3o6JM Jobava London vs g6 | White wins (Nxd5 discovery, Nxe7+) | 56 |
