@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**153 lines · 8 exports · 4 importers · 1 tests · 2 audits**
+**153 lines · 8 exports · 5 importers · 1 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,6 +16,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pinPressure.test.ts`
 - `src/services/positionFacts.ts`
 - `src/services/principleAttribution.ts`
+- `src/services/thinkingTargetsStep.ts`
 
 ## Exports and every call site
 
@@ -28,16 +29,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `PIN_PRESSURE_PRINCIPLE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `findPinPressure` (function) — 9 call sites
+### `findPinPressure` (function) — 10 call sites
 - `src/services/moveFundamentals.ts:352`
 - `src/services/pinPressure.test.ts:12`
 - `src/services/pinPressure.test.ts:21`
 - `src/services/pinPressure.test.ts:33`
 - `src/services/positionFacts.ts:1613`
-- `src/services/principleAttribution.ts:731`
-- `src/services/principleAttribution.ts:740`
-- `src/services/principleAttribution.ts:765`
+- `src/services/principleAttribution.ts:734`
+- `src/services/principleAttribution.ts:743`
 - `src/services/principleAttribution.ts:768`
+- `src/services/principleAttribution.ts:771`
+- `src/services/thinkingTargetsStep.ts:141`
 
 ### `isPinPressureMove` (function) — 2 call sites
 - `src/services/pinPressure.test.ts:26`
@@ -56,15 +58,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `scripts/pro-repertoire/build-all-naroditsky-plans.mjs:294`
 - `src/services/positionFacts.ts:1614`
 - `src/services/positionFacts.ts:1621`
-- `src/services/tacticClassifier.ts:40`
-- `src/services/tacticClassifier.ts:192`
-- `src/services/tacticClassifier.ts:194`
-- `src/services/tacticClassifier.ts:247`
-- `src/services/tacticClassifier.ts:304`
-- `src/services/tacticClassifier.ts:353`
-- `src/services/tacticClassifier.ts:397`
-- `src/services/tacticClassifier.ts:450`
-- `src/services/tacticClassifier.ts:503`
+- `src/services/tacticClassifier.ts:41`
+- `src/services/tacticClassifier.ts:191`
+- `src/services/tacticClassifier.ts:193`
+- `src/services/tacticClassifier.ts:246`
+- `src/services/tacticClassifier.ts:303`
+- `src/services/tacticClassifier.ts:352`
+- `src/services/tacticClassifier.ts:396`
+- `src/services/tacticClassifier.ts:449`
+- `src/services/tacticClassifier.ts:502`
 
 ## Tests
 

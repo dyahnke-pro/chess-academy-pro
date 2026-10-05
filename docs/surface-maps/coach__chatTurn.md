@@ -4,15 +4,20 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**579 lines · 24 exports · 4 importers · 2 tests · 3 audits**
+**588 lines · 24 exports · 8 importers · 5 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
 - **🧒 Kids section — non-negotiables** (CLAUDE.md:3394) — names `BoardContext`
+- **The standard post-deploy ritual** (CLAUDE.md:6163) — names `chatTurn`
 
 ## Who calls in
 
 - `src/coach/chatTurn.test.ts`
+- `src/coach/chatTurnAnswers.test.ts`
+- `src/coach/chatTurnAnswers.ts`
+- `src/coach/chatTurnEval.test.ts`
+- `src/coach/chatTurnEval.ts`
 - `src/coach/chatTurnParser.test.ts`
 - `src/coach/chatTurnParser.ts`
 - `src/coach/dispatchCoachTurn.ts`
@@ -25,13 +30,14 @@
 ### `FastPathLane` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `fastPathLane` (function) — 6 call sites
+### `fastPathLane` (function) — 7 call sites
 - `src/coach/chatTurn.test.ts:62`
 - `src/coach/chatTurn.test.ts:71`
 - `src/coach/chatTurn.test.ts:74`
 - `src/coach/chatTurn.test.ts:81`
-- `src/coach/dispatchCoachTurn.ts:173`
-- `src/coach/dispatchCoachTurn.ts:221`
+- `src/coach/dispatchCoachTurn.ts:168`
+- `src/coach/dispatchCoachTurn.ts:186`
+- `src/coach/dispatchCoachTurn.ts:234`
 
 ### `NEW_KINDS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -106,20 +112,23 @@
 
 ### `nextConversationState` (function) — 2 call sites
 - `src/coach/chatTurn.test.ts:136`
-- `src/coach/dispatchCoachTurn.ts:123`
+- `src/coach/dispatchCoachTurn.ts:124`
 
 ### `canonicalAsk` (function) — 2 call sites
 - `src/coach/chatTurn.test.ts:60`
-- `src/coach/dispatchCoachTurn.ts:160`
+- `src/coach/dispatchCoachTurn.ts:173`
 
 ### `kindAgreesWithLane` (function) — 3 call sites
 - `src/coach/chatTurn.test.ts:77`
 - `src/coach/chatTurn.test.ts:78`
-- `src/coach/dispatchCoachTurn.ts:136`
+- `src/coach/dispatchCoachTurn.ts:137`
 
 ## Tests
 
 - `src/coach/chatTurn.test.ts`
+- `src/coach/chatTurnAnswers.test.ts`
+- `src/coach/chatTurnEval.live.test.ts`
+- `src/coach/chatTurnEval.test.ts`
 - `src/coach/chatTurnParser.test.ts`
 
 ## Audits that reach it

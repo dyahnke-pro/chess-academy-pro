@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1689 lines · 12 exports · 47 importers · 34 tests · 1 audits**
+**1766 lines · 12 exports · 48 importers · 35 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6166) — names `FundamentalId`
+- **The standard post-deploy ritual** (CLAUDE.md:6168) — names `FundamentalId`
 
 ## Who calls in
 
@@ -39,6 +39,7 @@
 - `src/services/learnFundamentalNarration.ts`
 - `src/services/liveFundamental.ts`
 - `src/services/misconceptionClassifier.ts`
+- `src/services/principleAttribution.pinPressure.test.ts`
 - `src/services/principleAttribution.section14.test.ts`
 - `src/services/principleAttribution.test.ts`
 - `src/services/principleAttributionEndgame.test.ts`
@@ -63,7 +64,7 @@
 ## Exports and every call site
 
 ### `FUNDAMENTAL_IDS` (const) — 1 call site
-- `src/services/fundamentalsCatalog.ts:177`
+- `src/services/fundamentalsCatalog.ts:182`
 
 ### `FundamentalId` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -93,7 +94,7 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:144`
 
-### `attributePrinciples` (function) — 95 call sites
+### `attributePrinciples` (function) — 101 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
 - `src/services/blockedOwnRetreat.test.ts:23`
 - `src/services/blockedOwnRetreat.test.ts:32`
@@ -112,6 +113,12 @@
 - `src/services/learnWalkBlumenfeld.test.ts:65`
 - `src/services/liveFundamental.ts:153`
 - `src/services/misconceptionClassifier.ts:244`
+- `src/services/principleAttribution.pinPressure.test.ts:14`
+- `src/services/principleAttribution.pinPressure.test.ts:33`
+- `src/services/principleAttribution.pinPressure.test.ts:40`
+- `src/services/principleAttribution.pinPressure.test.ts:51`
+- `src/services/principleAttribution.pinPressure.test.ts:65`
+- `src/services/principleAttribution.pinPressure.test.ts:73`
 - `src/services/principleAttribution.section14.test.ts:27`
 - `src/services/principleAttribution.section14.test.ts:37`
 - `src/services/principleAttribution.section14.test.ts:46`
@@ -220,6 +227,7 @@
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/learnFundamentalNarration.test.ts`
 - `src/services/learnWalkBlumenfeld.test.ts`
+- `src/services/principleAttribution.pinPressure.test.ts`
 - `src/services/principleAttribution.section14.test.ts`
 - `src/services/principleAttribution.test.ts`
 - `src/services/principleAttributionEndgame.test.ts`

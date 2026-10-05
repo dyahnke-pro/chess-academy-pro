@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**337 lines · 11 exports · 24 importers · 15 tests · 4 audits**
+**343 lines · 12 exports · 27 importers · 15 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6155) — names `misconceptionService`
+- **The standard post-deploy ritual** (CLAUDE.md:6167) — names `misconceptionService`
 
 ## Who calls in
 
@@ -17,7 +17,7 @@
 - `src/components/Insights/MisconceptionsTab.tsx`
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx`
 - `src/components/Puzzles/WeaknessTagDrillPage.tsx`
-- `src/components/Tactics/AnalysisPracticePage.tsx`
+- `src/services/answerRecord.ts`
 - `src/services/bucketPipelineAudit.test.ts`
 - `src/services/bucketPipelineAudit.ts`
 - `src/services/coachApi.ts`
@@ -31,11 +31,14 @@
 - `src/services/misconceptionCallbacks.test.ts`
 - `src/services/misconceptionDrill.test.ts`
 - `src/services/misconceptionService.test.ts`
+- `src/services/puzzleMissService.ts`
+- `src/services/thinkingLessonStart.ts`
 - `src/services/trainingPlanSelector.test.ts`
 - `src/services/weaknessAnalyzer.ts`
 - `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/weaknessSpine.test.ts`
 - `src/services/weaknessSpine.ts`
+- `src/services/wrongTapTag.ts`
 
 ## Exports and every call site
 
@@ -51,8 +54,8 @@
 ### `LogMisconceptionInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `logMisconception` (function) — 54 call sites
-- `src/components/Coach/CoachGameReview.tsx:2329`
+### `logMisconception` (function) — 56 call sites
+- `src/components/Coach/CoachGameReview.tsx:2356`
 - `src/components/Coach/FundamentalsPage.test.tsx:92`
 - `src/components/Coach/FundamentalsPage.test.tsx:129`
 - `src/components/Coach/FundamentalsPage.test.tsx:130`
@@ -98,6 +101,7 @@
 - `src/services/misconceptionService.test.ts:139`
 - `src/services/misconceptionService.test.ts:160`
 - `src/services/misconceptionService.test.ts:168`
+- `src/services/puzzleMissService.ts:102`
 - `src/services/weaknessSpine.fundamentals.test.ts:45`
 - `src/services/weaknessSpine.fundamentals.test.ts:60`
 - `src/services/weaknessSpine.fundamentals.test.ts:73`
@@ -106,6 +110,7 @@
 - `src/services/weaknessSpine.fundamentals.test.ts:115`
 - `src/services/weaknessSpine.test.ts:278`
 - `src/services/weaknessSpine.test.ts:328`
+- `src/services/wrongTapTag.ts:86`
 
 ### `getAllMisconceptions` (function) — 7 call sites
 - `src/services/misconceptionService.test.ts:32`
@@ -115,6 +120,9 @@
 - `src/services/misconceptionService.test.ts:131`
 - `src/services/misconceptionService.test.ts:142`
 - `src/services/misconceptionService.test.ts:146`
+
+### `getMisconceptionsForGame` (function) — 1 call site
+- `src/services/thinkingLessonStart.ts:479`
 
 ### `hasMisconceptionsForGame` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -129,8 +137,8 @@
 - `src/components/Insights/MisconceptionsTab.tsx:77`
 - `src/components/Insights/MisconceptionsTab.tsx:87`
 - `src/services/bucketPipelineAudit.ts:157`
-- `src/services/coachApi.ts:1843`
-- `src/services/coachApi.ts:4578`
+- `src/services/coachApi.ts:1904`
+- `src/services/coachApi.ts:4688`
 - `src/services/fixtureGames.test.tsx:113`
 - `src/services/fixtureGames.test.tsx:122`
 - `src/services/fundamentalsPipeline.realGame.test.ts:226`
@@ -145,11 +153,11 @@
 - `src/services/weaknessSpine.ts:917`
 
 ### `recordTagDrillResult` (function) — 10 call sites
-- `src/components/Puzzles/AdaptivePuzzlePage.tsx:278`
-- `src/components/Puzzles/AdaptivePuzzlePage.tsx:368`
-- `src/components/Puzzles/WeaknessTagDrillPage.tsx:64`
-- `src/components/Tactics/AnalysisPracticePage.tsx:285`
-- `src/components/Tactics/AnalysisPracticePage.tsx:302`
+- `src/components/Puzzles/AdaptivePuzzlePage.tsx:293`
+- `src/components/Puzzles/AdaptivePuzzlePage.tsx:375`
+- `src/components/Puzzles/WeaknessTagDrillPage.tsx:65`
+- `src/services/answerRecord.ts:52`
+- `src/services/answerRecord.ts:53`
 - `src/services/misconceptionService.test.ts:107`
 - `src/services/misconceptionService.test.ts:124`
 - `src/services/misconceptionService.test.ts:130`

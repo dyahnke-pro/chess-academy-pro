@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**226 lines · 11 exports · 8 importers · 3 tests · 2 audits**
+**239 lines · 11 exports · 8 importers · 3 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,15 +26,18 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `DispatchCoachTurnOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setServeParsedRoute` (function) — 3 call sites
+### `setServeParsedRoute` (function) — 6 call sites
 - `src/coach/dispatchCoachTurn.test.ts:95`
 - `src/coach/dispatchCoachTurn.test.ts:175`
 - `src/coach/dispatchCoachTurn.test.ts:184`
+- `src/coach/dispatchCoachTurn.test.ts:206`
+- `src/coach/dispatchCoachTurn.test.ts:208`
+- `src/coach/dispatchCoachTurn.test.ts:216`
 
 ### `isServeParsedRouteOn` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setChatTurnReaderForTests` (function) — 11 call sites
+### `setChatTurnReaderForTests` (function) — 12 call sites
 - `src/coach/dispatchCoachTurn.test.ts:101`
 - `src/coach/dispatchCoachTurn.test.ts:113`
 - `src/coach/dispatchCoachTurn.test.ts:120`
@@ -45,10 +48,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/dispatchCoachTurn.test.ts:162`
 - `src/coach/dispatchCoachTurn.test.ts:169`
 - `src/coach/dispatchCoachTurn.test.ts:176`
-- `src/coach/dispatchCoachTurn.test.ts:185`
+- `src/coach/dispatchCoachTurn.test.ts:186`
+- `src/coach/dispatchCoachTurn.test.ts:202`
 
-### `resetConversations` (function) — 1 call site
+### `resetConversations` (function) — 2 call sites
 - `src/coach/dispatchCoachTurn.test.ts:94`
+- `src/coach/dispatchCoachTurn.test.ts:199`
 
 ### `conversationFor` (function) — 1 call site
 - `src/coach/dispatchCoachTurn.test.ts:165`
@@ -62,7 +67,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `settleChatTurnRead` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `dispatchCoachTurn` (function) — 26 call sites
+### `dispatchCoachTurn` (function) — 28 call sites
 - `src/coach/dispatchCoachTurn.test.ts:33`
 - `src/coach/dispatchCoachTurn.test.ts:43`
 - `src/coach/dispatchCoachTurn.test.ts:52`
@@ -79,7 +84,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/dispatchCoachTurn.test.ts:163`
 - `src/coach/dispatchCoachTurn.test.ts:170`
 - `src/coach/dispatchCoachTurn.test.ts:177`
-- `src/coach/dispatchCoachTurn.test.ts:186`
+- `src/coach/dispatchCoachTurn.test.ts:187`
+- `src/coach/dispatchCoachTurn.test.ts:207`
+- `src/coach/dispatchCoachTurn.test.ts:217`
 - `src/components/Board/VoiceChatMic.tsx:484`
 - `src/components/Coach/CoachAnalysePage.tsx:232`
 - `src/components/Coach/CoachChatPage.tsx:284`
@@ -91,7 +98,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/kidIsolation.gate.test.ts:131`
 
 ### `shadowReadTurn` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3218`
+- `src/components/Coach/CoachTeachPage.tsx:3217`
 
 ## Tests
 
