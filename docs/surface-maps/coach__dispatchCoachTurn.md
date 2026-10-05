@@ -98,7 +98,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/kidIsolation.gate.test.ts:131`
 
 ### `shadowReadTurn` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3217`
+- `src/components/Coach/CoachTeachPage.tsx:3218`
 
 ## Tests
 
