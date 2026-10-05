@@ -14,6 +14,7 @@ import { isPinnedPiece } from './nextPlans';
 import { isOutpost } from './outpost';
 import { findLoosePieces } from './loosePieces';
 import { computeBoardDelta } from './boardDelta';
+import { costStakes, piecePoints, type FactStakes } from './factStakes';
 import { findPawnBreaks, findWeakPawns } from './positionReadingService';
 import { computePieceRoute } from './forwardTeaching';
 import { knightReach } from './moveInsight';
@@ -27,12 +28,16 @@ const sanOf = (fen: string, uci: string | undefined): string | null => {
   try { return new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }).san; } catch { return null; }
 };
 
-export interface Read { text: string; squares?: string[]; /** It names the engine's move — speaks only where the move may be named. */ namesMove?: boolean }
+export interface Read { text: string; squares?: string[]; /** It names the engine's move — speaks only where the move may be named. */ namesMove?: boolean; /** What rides on it (factStakes) — the ranker orders by this. */ stakes?: FactStakes }
 type Lines = ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>;
 const seatCp = (fen: string, l: { evaluation: number; mate: number | null }): number => {
   const white = l.mate != null ? (l.mate > 0 ? 100000 : -100000) : l.evaluation;
   return fen.split(' ')[1] === 'w' ? white : -white;
 };
+
+/** The cost of NOT playing line one: centipawns between it and line two. */
+const choiceGap = (fen: string, lines: Lines): number | null => (lines.length >= 2 ? seatCp(fen, lines[0]) - seatCp(fen, lines[1]) : null);
+const pieceStakes = (type: string, plies: number): FactStakes | undefined => (piecePoints(type) > 0 ? { points: piecePoints(type), plies } : undefined);
 
 /** #23 WHO RELEASES THE TENSION: you can capture into the tension, the engine
  *  does not — keep it, and let them be the one to release. */
@@ -139,7 +144,8 @@ export function threatStronger(fen: string, me: 'w' | 'b', lines: Lines): Read |
   if (!grab) return null;
   const grabLine = lines.find((l) => sanOf(fen, l.moves[0]) === grab.san);
   if (grabLine && seatCp(fen, best) - seatCp(fen, grabLine) < criticalityThresholds().notable) return null;
-  return { text: `You could take on ${grab.to} right now, but the threat is stronger than carrying it out — the material will keep, so keep it hanging over them and improve first.`, squares: [grab.to] };
+  const gap = grabLine ? seatCp(fen, best) - seatCp(fen, grabLine) : null;
+  return { stakes: costStakes(gap) ?? { points: legalSeeGainFor(fen, grab.to, me), plies: 1 }, text: `You could take on ${grab.to} right now, but the threat is stronger than carrying it out — the material will keep, so keep it hanging over them and improve first.`, squares: [grab.to] };
 }
 
 /** A9 A PIECE HELD ONLY BY A TACTIC ("the loose b1 bishop survives tactically —
@@ -154,7 +160,7 @@ export function heldByTactic(fen: string, me: 'w' | 'b'): Read | null {
     const hits = b.attackers(cell.square, them).length;
     if (hits === 0 || hits <= b.attackers(cell.square, me).length) continue;
     if (legalSeeGainFor(fen, cell.square, them) > 0) continue;
-    return { text: `Your ${name(cell.type)} on ${cell.square} is outnumbered but safe only because of a tactic — check it again after every move, because the moment the tactic disappears, so does its protection.`, squares: [cell.square] };
+    return { stakes: pieceStakes(cell.type, 1), text: `Your ${name(cell.type)} on ${cell.square} is outnumbered but safe only because of a tactic — check it again after every move, because the moment the tactic disappears, so does its protection.`, squares: [cell.square] };
   }
   return null;
 }
@@ -171,7 +177,7 @@ export function secureFirst(fen: string, me: 'w' | 'b', lines: Lines): Read | nu
   if (!loose) return null;
   const after = play(fen, bestSan);
   if (!after || after.board.attackers(loose.square, me).length === 0 && after.move.from !== loose.square) return null;
-  return { text: `There is something to collect, but your ${name(loose.type)} on ${loose.square} is loose and under fire — secure it first; the capture will still be there.`, squares: [loose.square] };
+  return { stakes: pieceStakes(loose.type, 1), text: `There is something to collect, but your ${name(loose.type)} on ${loose.square} is loose and under fire — secure it first; the capture will still be there.`, squares: [loose.square] };
 }
 
 /** B10 MUTUAL PINS: a piece of yours and a piece of theirs are both pinned to
@@ -185,7 +191,8 @@ export function mutualPins(fen: string): Read | null {
   };
   const w = pinned('w'); const bl = pinned('b');
   if (!w || !bl) return null;
-  return { text: `Both sides are pinned — your piece and theirs (${w} and ${bl}). Whoever breaks free first wins the fight; kicking the pinner with a pawn costs pawn cover, so weigh it.`, squares: [w, bl] };
+  const pts = Math.min(piecePoints(b.get(w as Square)?.type ?? ''), piecePoints(b.get(bl as Square)?.type ?? ''));
+  return { stakes: pts > 0 ? { points: pts, plies: 2 } : undefined, text: `Both sides are pinned — your piece and theirs (${w} and ${bl}). Whoever breaks free first wins the fight; kicking the pinner with a pawn costs pawn cover, so weigh it.`, squares: [w, bl] };
 }
 
 /** D1 OVERPROTECTION: your best piece sits on an outpost with a single guard —
@@ -197,7 +204,7 @@ export function overprotect(fen: string, me: 'w' | 'b'): Read | null {
     if (!cell || cell.color !== me || (cell.type !== 'n' && cell.type !== 'b')) continue;
     if (!isOutpost(b, cell.square, me, true)) continue;
     if (b.attackers(cell.square, me).length !== 1) continue;
-    return { text: `Your ${name(cell.type)} on ${cell.square} is your best piece — overprotect it: a second guard means it can never be won or traded off cheaply, and it frees your other pieces.`, squares: [cell.square] };
+    return { stakes: pieceStakes(cell.type, 3), text: `Your ${name(cell.type)} on ${cell.square} is your best piece — overprotect it: a second guard means it can never be won or traded off cheaply, and it frees your other pieces.`, squares: [cell.square] };
   }
   return null;
 }
@@ -357,7 +364,7 @@ export function goodInEveryBranch(fen: string, me: 'w' | 'b', lines: Lines): Rea
   if (leavesSomething(pa.board.fen(), me)) return null;
   const loose = leavesSomething(pb.board.fen(), me);
   if (!loose) return null;
-  return { namesMove: true, text: `${cap(sayMoveClause(a, fen))} works whatever they answer — nothing of yours can be taken after it. ${b2} leaves the piece on ${loose} to be collected.`, squares: [loose] };
+  return { stakes: costStakes(choiceGap(fen, lines)) ?? pieceStakes(pb.board.get(loose as Square)?.type ?? '', 1), namesMove: true, text: `${cap(sayMoveClause(a, fen))} works whatever they answer — nothing of yours can be taken after it. ${b2} leaves the piece on ${loose} to be collected.`, squares: [loose] };
 }
 
 /** #31 TAKE THE STING OUT: a piece of yours can be won, and the engine neither
@@ -376,7 +383,7 @@ export function takeTheSting(fen: string, me: 'w' | 'b', bestSan: string | null)
     if (best.move.from === cell.square) continue;
     if (best.board.attackers(cell.square, me).length > b.attackers(cell.square, me).length) continue;
     if (legalSeeGainFor(best.board.fen(), cell.square, them) > 0) continue;
-    return { namesMove: true, text: `Your ${name(cell.type)} on ${cell.square} is attacked, but ${sayMoveClause(bestSan, fen)} neither moves it nor guards it — it takes the sting out, so taking it no longer works for them.`, squares: [cell.square] };
+    return { stakes: { points: legalSeeGainFor(fen, cell.square, them), plies: 1 }, namesMove: true, text: `Your ${name(cell.type)} on ${cell.square} is attacked, but ${sayMoveClause(bestSan, fen)} neither moves it nor guards it — it takes the sting out, so taking it no longer works for them.`, squares: [cell.square] };
   }
   return null;
 }
@@ -417,7 +424,7 @@ export function bestCasePlan(fen: string, lines: Lines): Read | null {
   if (gap < criticalityThresholds().notable || seatCp(fen, two) > 50) return null;
   const a = sanOf(fen, one.moves[0]); const b2 = sanOf(fen, two.moves[0]);
   if (!a || !b2) return null;
-  return { namesMove: true, text: `Test the slow plan with ${b2} by its best case: even when everything goes right for you, you end up no better than level. ${a} gets more.` };
+  return { stakes: costStakes(gap) ?? undefined, namesMove: true, text: `Test the slow plan with ${b2} by its best case: even when everything goes right for you, you end up no better than level. ${a} gets more.` };
 }
 
 /** THE REJECTED MOVE THAT WORKS LATER: a move that is worse now turns up later
@@ -432,7 +439,7 @@ export function rejectedMoveLater(fen: string, lines: Lines): Read | null {
     if (at < 0) continue;
     const san = sanOf(fen, u); const first = sanOf(fen, main[0]);
     if (!san || !first) continue;
-    return { namesMove: true, text: `${san} doesn't work yet — but it does after ${first}: it comes back ${at / 2} move${at === 2 ? '' : 's'} later in the line. A rejected move is not a dead move; prepare it.` };
+    return { stakes: costStakes(seatCp(fen, lines[0]) - seatCp(fen, l)) ?? undefined, namesMove: true, text: `${san} doesn't work yet — but it does after ${first}: it comes back ${at / 2} move${at === 2 ? '' : 's'} later in the line. A rejected move is not a dead move; prepare it.` };
   }
   return null;
 }
@@ -493,7 +500,8 @@ export function queenGlue(fen: string, me: 'w' | 'b'): Read | null {
     if (g.length === 1 && g[0] === q.square && b.attackers(c.square, them).length > 0) held.push(c.square);
   }
   if (held.length < 2) return null;
-  return { text: `Your queen on ${q.square} is the glue — it alone holds ${held[0]} and ${held[1]}. Move it or trade it and both come loose.`, squares: [q.square, ...held] };
+  const most = Math.max(...held.map((h) => piecePoints(b.get(h as Square)?.type ?? '')));
+  return { stakes: most > 0 ? { points: most, plies: 2 } : undefined, text: `Your queen on ${q.square} is the glue — it alone holds ${held[0]} and ${held[1]}. Move it or trade it and both come loose.`, squares: [q.square, ...held] };
 }
 
 /** Every read for the side to move, in his order of thought. */
@@ -525,5 +533,14 @@ export function speedRunReads(args: { fen: string; me: 'w' | 'b'; lines: Lines; 
     keepSquareForKnight(args.fen, args.me, bestSan),
     rightPieceForHole(args.fen, args.me),
     usefulWaiting(args.fen, args.lines) ?? anyMoveFine(args.fen, args.lines),
-  ].filter((r): r is Read => !!r);
+  ].filter((r): r is Read => !!r).map((r) => {
+    if (r.stakes && r.stakes.points > 0) return r;
+    // No stake of its own: the read carries the weight of the decision it
+    // speaks to — what playing the next-best move instead costs (the same
+    // centipawn gap the one criticality read measures). A quiet position
+    // honestly carries almost nothing.
+    const fallback = costStakes(choiceGap(args.fen, args.lines));
+    const { stakes: _drop, ...rest } = r;
+    return fallback ? { ...rest, stakes: fallback } : rest;
+  });
 }

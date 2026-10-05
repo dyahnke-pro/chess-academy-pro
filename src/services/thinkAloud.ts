@@ -16,6 +16,7 @@ import { countWords } from '../utils/countWords';
 import { walkableLine, pvSans, hookCreated, holeAccess } from './moveInsight';
 import { tempoCount } from './tempoCount';
 import { homeMinorCount } from './development';
+import type { FactStakes } from './factStakes';
 import { speedRunReads } from './speedRunReads';
 
 const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
@@ -192,6 +193,8 @@ export interface DepthClause {
   /** The line the clause says, from the board it starts on (arrows). */
   lines?: Array<{ fen: string; sans: string[] }>;
   squares?: string[];
+  /** What rides on it — handed to the ranker (factStakes). */
+  stakes?: FactStakes;
 }
 
 /**
@@ -247,9 +250,9 @@ export function depthClauses(args: {
     // castle, "any move is fine". The ones that name the engine's move (the
     // ugly move, the provoked commitment) wait for nameMove below.
     const reads = toMove === args.studentColor ? speedRunReads({ fen: args.fen, me: args.studentColor, lines: args.topLines, ...(args.lastOpponentMove ? { lastMove: args.lastOpponentMove } : {}), ...((): { lastOwnMove?: { fenBefore: string; san: string } } => { const o = ownLastMove(args.history, args.fen); return o ? { lastOwnMove: o } : {}; })() }) : [];
-    for (const r of reads.filter((x) => !x.namesMove)) out.push({ kind: 'speedrun-read', text: r.text, ...(r.squares ? { squares: r.squares } : {}) });
+    for (const r of reads.filter((x) => !x.namesMove)) out.push({ kind: 'speedrun-read', text: r.text, ...(r.squares ? { squares: r.squares } : {}), ...(r.stakes ? { stakes: r.stakes } : {}) });
     if (!args.nameMove || toMove !== args.studentColor) return out;
-    for (const r of reads.filter((x) => x.namesMove)) out.push({ kind: 'speedrun-read', text: r.text, ...(r.squares ? { squares: r.squares } : {}) });
+    for (const r of reads.filter((x) => x.namesMove)) out.push({ kind: 'speedrun-read', text: r.text, ...(r.squares ? { squares: r.squares } : {}), ...(r.stakes ? { stakes: r.stakes } : {}) });
     const top = args.topLines[0];
     const uci = top?.moves?.[0];
     if (!top || !uci) return out;

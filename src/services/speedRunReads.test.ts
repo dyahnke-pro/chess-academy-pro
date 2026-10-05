@@ -148,6 +148,15 @@ describe('his habits of thought, computed (each checked against the existing com
     expect(queenGlue('4k3/8/8/8/1b4n1/2N1B3/3Q4/4K3 w - - 0 1', 'w')?.text).toMatch(/queen on d2 is the glue/);
     expect(queenGlue('4k3/8/8/8/1b4n1/2N1B3/1P1Q4/4K3 w - - 0 1', 'w')).toBeNull();
   });
+  it('every read the list returns carries a stake for the ranker', () => {
+    const glue = speedRunReads({ fen: '4k3/8/8/8/1b4n1/2N1B3/3Q4/4K3 w - - 0 1', me: 'w', lines: [] });
+    expect(glue.find((r) => /glue/.test(r.text))?.stakes).toEqual({ points: 3, plies: 2 });
+    const quiet = speedRunReads({ fen: fenAt('e4 e5'), me: 'w', lines: [line(['g1f3'], 30), line(['d2d4'], 20)] });
+    expect(quiet.length).toBeGreaterThan(0);
+    for (const r of quiet) expect(r.stakes?.points).toBeGreaterThan(0);
+    const sting = takeTheSting('4r1k1/8/8/8/4B3/5N2/8/6K1 w - - 0 1', 'w', 'Ne5');
+    expect(sting?.stakes).toEqual({ points: 3, plies: 1 });
+  });
   it('the reads list never throws on any opening position (smoke over a real game)', () => {
     const c = new Chess();
     for (const m of 'e4 e5 Nf3 Nc6 Bb5 Nd4 Nxd4 exd4 O-O Bc5 d3 Qh4 Nd2 c6 Bc4 d6 Nf3 Qh5'.split(' ')) {
