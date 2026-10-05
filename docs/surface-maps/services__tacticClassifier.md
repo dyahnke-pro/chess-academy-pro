@@ -33,7 +33,7 @@
 
 ### `findHangingPieces` (function) — 13 call sites
 - `src/data/patternRegistry.ts:113`
-- `src/services/coachGameEngine.ts:298`
+- `src/services/coachGameEngine.ts:301`
 - `src/services/deliberation.ts:122`
 - `src/services/hangingIgnoresCheck.test.ts:10`
 - `src/services/hangingIgnoresCheck.test.ts:11`
@@ -47,7 +47,7 @@
 - `src/test/kingIsNeverHanging.test.ts:56`
 
 ### `classifyPosition` (function) — 30 call sites
-- `src/components/Coach/CoachGamePage.tsx:3347`
+- `src/components/Coach/CoachGamePage.tsx:3355`
 - `src/services/missedTacticService.ts:755`
 - `src/services/pvPlayback.ts:407`
 - `src/services/tacticClassifier.test.ts:32`
@@ -79,7 +79,7 @@
 - `src/services/tacticClassifier.test.ts:334`
 
 ### `scanUpcomingTactics` (function) — 5 call sites
-- `src/components/Coach/CoachGamePage.tsx:2884`
+- `src/components/Coach/CoachGamePage.tsx:2892`
 - `src/services/liveTacticsContext.ts:92`
 - `src/services/tacticClassifier.skewer.test.ts:13`
 - `src/services/tacticClassifier.skewer.test.ts:15`

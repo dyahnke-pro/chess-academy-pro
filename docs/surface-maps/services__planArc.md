@@ -32,8 +32,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `aimsOf` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9674`
-- `src/components/Coach/CoachTeachPage.tsx:9678`
+- `src/components/Coach/CoachTeachPage.tsx:9891`
+- `src/components/Coach/CoachTeachPage.tsx:9895`
 - `src/services/lookaheadPlan.ts:1629`
 - `src/services/planArc.phraseFrom.test.ts:30`
 - `src/services/planArc.phraseFrom.test.ts:31`
@@ -59,8 +59,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `stepArc` (function) — 25 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9674`
-- `src/components/Coach/CoachTeachPage.tsx:9678`
+- `src/components/Coach/CoachTeachPage.tsx:9891`
+- `src/components/Coach/CoachTeachPage.tsx:9895`
 - `src/services/lookaheadPlan.ts:1630`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.test.ts:97`
@@ -86,8 +86,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planArc.truth.test.ts:36`
 
 ### `aimWalkableNow` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9674`
-- `src/components/Coach/CoachTeachPage.tsx:9678`
+- `src/components/Coach/CoachTeachPage.tsx:9891`
+- `src/components/Coach/CoachTeachPage.tsx:9895`
 - `src/services/lookaheadPlan.ts:1629`
 - `src/services/planArc.phraseFrom.test.ts:19`
 - `src/services/planArc.phraseFrom.test.ts:22`
@@ -108,7 +108,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planChooser.ts:49`
 
 ### `joinEmerges` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9690`
+- `src/components/Coach/CoachTeachPage.tsx:9907`
 - `src/services/planArc.test.ts:272`
 - `src/services/planArc.test.ts:279`
 

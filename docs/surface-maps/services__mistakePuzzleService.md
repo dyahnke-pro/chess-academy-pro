@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1562 lines · 28 exports · 29 importers · 16 tests · 4 audits**
+**1562 lines · 28 exports · 30 importers · 16 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -41,6 +41,7 @@
 - `src/services/mistakePuzzleService.test.ts`
 - `src/services/puzzleService.ts`
 - `src/services/ratingBands.test.ts`
+- `src/services/thinkingLessonSource.ts`
 
 ## Exports and every call site
 
@@ -95,14 +96,14 @@
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:7431`
-- `src/components/Coach/CoachTeachPage.tsx:7437`
+- `src/components/Coach/CoachTeachPage.tsx:7648`
+- `src/components/Coach/CoachTeachPage.tsx:7654`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
 - `src/hooks/useAcceptableMoves.ts:88`
-- `src/hooks/useDiscussionPractice.ts:265`
-- `src/hooks/useDiscussionPractice.ts:390`
+- `src/hooks/useDiscussionPractice.ts:271`
+- `src/hooks/useDiscussionPractice.ts:425`
 - `src/services/autoAnalyzeGame.ts:337`
 - `src/services/computerAccuracy.audit.test.ts:107`
 - `src/services/deliberation.ts:98`
@@ -145,9 +146,10 @@
 - `src/services/tacticClassifierService.ts:356`
 - `src/services/tacticClassifierService.ts:632`
 
-### `determinePlayerColor` (function) — 3 call sites
-- `src/components/Tactics/AnalysisPracticePage.tsx:114`
+### `determinePlayerColor` (function) — 4 call sites
+- `src/components/Tactics/AnalysisPracticePage.tsx:117`
 - `src/services/autoAnalyzeGame.ts:317`
+- `src/services/thinkingLessonSource.ts:97`
 - `src/test/seatResolversReadDeclaredSeat.test.ts:15`
 
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
@@ -187,7 +189,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `rerenderMistakeNarration` (function) — 1 call site
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:447`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:448`
 
 ### `lineToUci` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -241,7 +243,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `gradeMistakePuzzle` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2447`
+- `src/components/Coach/CoachTeachPage.tsx:2539`
 - `src/components/Puzzles/MyMistakesPage.tsx:289`
 - `src/components/Tactics/TacticCreatePage.tsx:199`
 - `src/services/conceptSchedule.test.ts:41`
@@ -260,7 +262,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `loadDrilledMotifs` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:1791`
+- `src/components/Coach/CoachTeachPage.tsx:1804`
 - `src/services/conceptSchedule.test.ts:58`
 
 ### `deleteMistakePuzzle` (function) — 2 call sites
@@ -272,7 +274,7 @@
 
 ### `getMistakePuzzleStats` (function) — 5 call sites
 - `src/components/Puzzles/MyMistakesPage.tsx:178`
-- `src/services/gameInsightsService.ts:818`
+- `src/services/gameInsightsService.ts:837`
 - `src/services/mistakePuzzleService.test.ts:554`
 - `src/services/mistakePuzzleService.test.ts:585`
 - `src/services/mistakePuzzleService.test.ts:598`

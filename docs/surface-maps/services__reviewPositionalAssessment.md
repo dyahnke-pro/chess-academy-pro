@@ -65,8 +65,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/walkOct2a.test.ts:88`
 
 ### `materialEdgeWords` (function) — 5 call sites
-- `src/services/groundedAnswer.ts:2168`
-- `src/services/groundedAnswer.ts:2169`
+- `src/services/groundedAnswer.ts:2241`
+- `src/services/groundedAnswer.ts:2242`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:30`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:33`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:36`

@@ -101,8 +101,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/giftedMaterialIsNotWon.test.ts:30`
 - `src/services/giftedMaterialIsNotWon.test.ts:45`
 - `src/services/giftedMaterialIsNotWon.test.ts:56`
-- `src/services/groundedAnswer.ts:2429`
-- `src/services/groundedAnswer.ts:2496`
+- `src/services/groundedAnswer.ts:2502`
+- `src/services/groundedAnswer.ts:2569`
 - `src/services/inaccuracyCall.ts:293`
 - `src/services/inaccuracyCall.ts:351`
 - `src/services/inaccuracyCall.ts:663`
