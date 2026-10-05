@@ -21,6 +21,11 @@ describe('pile-on-pin — the move that puts pressure on the pinned piece', () =
     expect(MOVE_FUNDAMENTAL_TAG['pile-on-pin']).toBe('missed-tactic');
   });
 
+  it('reaches the student model: playing it POSES the missed-tactic question', async () => {
+    const { capabilitiesPosed } = await import('./capabilityEvidence');
+    expect(capabilitiesPosed(PILE_ON, 'e5', 'white').map((c) => c.tag)).toContain('missed-tactic');
+  });
+
   it('is taught as a rule with its reason, once a game', () => {
     const p = principleToTeach(PILE_ON, 'e5', 'white', new Set());
     expect(p?.id).toBe('pile-on-pin');
