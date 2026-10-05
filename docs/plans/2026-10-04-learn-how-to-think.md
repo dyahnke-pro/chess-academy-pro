@@ -791,6 +791,23 @@ because every phase consumes them:
   session lands (David 2026-10-04: another session is unifying narration
   pathways).
 
+- **The student's games choose the step and the boards (2026-10-05, David:
+  "algo the questions … through weaknesses").** A step the student keeps
+  failing in games — red heat-map tiles on its tags, weighted by open holes +
+  breaks — is taught first, worst first, even from a locked tier; a step proven
+  in lessons is not pulled forward. Boards from weaknesses filed under the
+  step's tags go first, and the spine's own positions join the pool.
+- **Up next asks the same chooser** (`lessonStepForCard`): the card goes red
+  exactly when the lesson will teach a red step, names the skill and the step.
+- **Setup Trainer first miss** asks one "their targets" question on that board
+  (the lesson's own runner), then the retry.
+- **PP on the PP (David 2026-10-05: "put pressure on the pinned piece … a
+  principle, state it when it's relevant … wire it both ways").** One computer,
+  `pinPressure` (both seats). Step 5 asks the pinned-piece form on a board
+  where piling on wins; misses recorded both ways (fundamentals), the good move
+  named (move fundamental), the pin concept carries the principle / warning,
+  chat lesson.
+
 ## Work list for the end of the build (David 2026-10-04: "Any questions I ask can be tacked on to the work list at the end")
 
 1. **More public-domain books for the library** — candidates to verify (public
