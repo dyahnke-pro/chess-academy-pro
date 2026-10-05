@@ -55,7 +55,7 @@ function shield(board: Chess, c: 'w' | 'b'): number {
 export interface LineOutcome {
   /** What the line achieves, as a clause ("the h-file opens", "you come out a knight up"). */
   text: string;
-  kind: 'mate' | 'material' | 'file' | 'king' | 'promotion' | 'pawn-ending' | 'none';
+  kind: 'mate' | 'material' | 'file' | 'king' | 'promotion' | 'pawn-ending' | 'investment' | 'none';
 }
 
 /**
@@ -83,7 +83,16 @@ export function lineAchieves(startFen: string, sans: readonly string[], me: 'w' 
   }
   const net = settledNetForLine(startFen, sans, me);
   if (net !== null && net >= 1) return { text: `you come out ${countWords(net)} up`, kind: 'material' };
-  if (net !== null && net <= -1) return { text: `you come out ${countWords(-net)} down`, kind: 'material' };
+  if (net !== null && net <= -1) {
+    // COUNT WHAT YOU INVESTED (game 1: "we've sacrificed the exchange but won a
+    // pawn — one point. Even if the attack backfires the game goes on; don't
+    // panic if it doesn't mate in two"). A small investment for their king.
+    const checks = (() => { const c = new Chess(startFen); let n = 0; for (const x of sans) { try { const m = c.move(x); if (m.color === me && m.san.includes('+')) n += 1; } catch { break; } } return n; })();
+    if (net >= -2 && (checks >= 2 || shield(end, them) < shield(start, them))) {
+      return { text: `you have invested only ${countWords(-net)} for an attack on their king — even if it stalls, the game goes on, so don't panic`, kind: 'investment' };
+    }
+    return { text: `you come out ${countWords(-net)} down`, kind: 'material' };
+  }
   const theirKing = kingSq(end, them);
   if (theirKing) {
     const kf = theirKing.charCodeAt(0);

@@ -77,3 +77,12 @@ describe('several jobs at once, in the door\'s own move-why (catalogue §3; game
     expect(why).toMatch(/x-ray at their queen on c7/);
   });
 });
+
+describe('count what you invested (game 1)', () => {
+  it('a pawn given for two checks at their king is an investment, not "a pawn down"', () => {
+    // g6 gives a pawn to rip open the shelter; two checks follow.
+    const out = lineAchieves('6k1/5ppp/8/6P1/8/8/5PPP/3Q2K1 w - - 0 1', ['g6', 'hxg6', 'Qd8+', 'Kh7', 'Qh4+', 'Kg8'], 'w');
+    expect(out.kind).toBe('investment');
+    expect(out.text).toMatch(/invested only a pawn/);
+  });
+});

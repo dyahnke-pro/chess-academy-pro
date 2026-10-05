@@ -3,7 +3,7 @@
 // checked the king???").
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { autopilotRecapture, doubleAttack, escapeSquareFirst, greekGift, positionPosed, lastMoveAlong, lastMoveFromPgn, mechanismContrast, moveMissed, positionAsk, theirMoveChanged, walkableLine, pawnHook, hookCreated, castleByHand, fileToOpen, pawnCanGuard, emptyThreat, looseOwnPieces, noRetreat, materialPlan, tradeWhileDown, heavyTiedDown, skewer, pawnEnding,
+import { autopilotRecapture, doubleAttack, escapeSquareFirst, greekGift, positionPosed, lastMoveAlong, lastMoveFromPgn, mechanismContrast, moveMissed, positionAsk, theirMoveChanged, walkableLine, pawnHook, hookCreated, castleByHand, fileToOpen, pawnCanGuard, emptyThreat, looseOwnPieces, noRetreat, materialPlan, tradeWhileDown, heavyTiedDown, skewer, pawnEnding, diagonalContest,
 } from './moveInsight';
 
 // White: Ka1, Re2, Ng5. Black: Kh8, Qd8. Two checks — Nf7+ (forks king and
@@ -310,5 +310,13 @@ describe("you can't save everything at once (game 1)", () => {
     expect(t).toMatch(/Two things of yours are hit at once/);
     // …but when the forker can be taken, that is the answer, not "choose" (non-vacuous).
     expect(positionAsk('4k3/8/8/8/3n4/1B3N2/8/6K1 w - - 0 1', {}).text).not.toMatch(/hit at once/);
+  });
+});
+
+describe('the bishop that contests your diagonal (game 1)', () => {
+  it('your b3 bishop aims at g8; their f5 bishop can come to c4 and block it', () => {
+    const r = diagonalContest('r4rk1/pp2pp1p/6p1/5b2/8/1B6/PP3PPP/R4RK1 w - - 0 1', 'w');
+    expect(r).toMatchObject({ mine: 'b3', theirs: 'f5' });
+    expect(r?.text).toMatch(/contest that diagonal/);
   });
 });

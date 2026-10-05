@@ -591,3 +591,45 @@ Compute: their best reply covers our target square. Our forcing move now is ≥ 
 **D7. A hole only matters if you can reach it.** ✅ = C7. Inaccessibility: the hole is harmless when no piece of ours can reach it in a few moves.
 
 **D8. When lost, change the character of the game.** ✅ = B8/A11. (Desperado defense.)
+
+## BUILD QUEUE — saved 2026-10-05 (David: "Make sure this list is saved")
+
+Rule (David 2026-10-05): build ALL calculators first, then test them together in
+one pass. Every calculator goes through the ONE producer (`thinkAloud.depthClauses`)
+and the ONE door (`positionFacts` → `coachDecider.decide`), and records BOTH ways
+(teaching + `capabilityEvidence` diagnosis). Save usage: one session, no agent fan-out.
+
+### Built (teaches + records)
+what their move changed · what the position asks · what your move missed · escape
+square first · Greek gift · double attack · skewer · pawn hook · empty threat ·
+castling by hand · file that will open · cheapest defender · loose pieces · retreat
+square before the chase · material decides trades · heavy piece tied down · up the
+exchange · multi-job move (develops + guards + x-ray) · not yet, first this · the
+line + what it achieves (arrowed) · their habit · obvious stop flaw (h3 hook) · hole
+access (inaccessibility) · pawn-ending transformation · investment for an attack ·
+queen trade throws away space/attack · two hit at once · diagonal contest (written,
+untested).
+
+### Not built — catalogue 🔴
+12 phase changes the rules · 13 technique when ahead · 16 what they wrongly believe ·
+17 idea behind their odd move · 18 do it while you can (move order) · 19 accept a cost
+for a permanent gain · 22 finish what you started · 23 who releases the tension ·
+24 colour complexes / blockades · 27 a move good in every branch · 29 finishing an
+attack · 31 take the sting out · 32 don't move the attacked piece on reflex · 38 the
+position opened — hit the gas · 39 the threat is stronger than the execution
+
+### Not built — catalogue 🟠 (partly there, finish)
+2, 4, 5, 8, 9, 10, 11, 14, 15, 20, 21, 25, 26, 28, 30, 34
+
+### Not built — full speed-run read (A/B/C/D)
+skip the middleman · provoke the commitment · play it anyway · open/lock the centre ·
+retreat that keeps your break · piece held only by a tactic · right piece for the
+hole · "any move is fine" · useful waiting move · best-case plan test · force an
+awkward square · mutual pins · rejected move works later · recapture choice · secure
+the loose piece before collecting · force a concession · which side to castle ·
+overprotection · ugly-but-correct move · trade their best defender · judge a trade by
+what stays · act before they consolidate
+
+### Not built — game 1 full narration (GwJ8yk2hsT8)
+flexible moves first · keep a square vacant for the knight · queen as the glue ·
+right idea, wrong moment

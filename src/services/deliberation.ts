@@ -20,6 +20,7 @@ import { proofAgainstMover, proofForMover } from './exchangeLedger';
 import { strategicWhyLed } from './moveFundamentals';
 import { computeTerritory, legalSeeGainFor, seeReadsStanding } from './positionReadingService';
 import { isPinnedPiece } from './nextPlans';
+import { countKingAttack } from './kingSafety';
 import { andList, orList } from '../utils/andList';
 
 const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
@@ -188,7 +189,9 @@ export function buildDeliberation(input: {
     // THE QUEEN TRADE THAT THROWS AWAY SPACE (game 1: "we have more space, and
     // the effect of a space advantage is greatly diminished if the queens are
     // off — fewer pieces to attack with"). Only where the engine agrees it is worse.
-    const tradesQueens = !drop && deltaCp >= MEANINGFUL_DELTA_CP && moreSpace(fenBefore, moverColor) && queensOffWithin(fenBefore, l.moves, 5);
+    // …and the same when you are ATTACKING (game 1: "there's zero reason to
+    // trade queens here — you have a huge attack").
+    const tradesQueens = !drop && deltaCp >= MEANINGFUL_DELTA_CP && (moreSpace(fenBefore, moverColor) || attacking(fenBefore, moverColor)) && queensOffWithin(fenBefore, l.moves, 5);
     const shortfall: Shortfall = drop ? 'drops-material' : tradesQueens ? 'trades-queens' : deltaCp >= CLEARLY_WORSE_CP ? 'clearly-worse' : 'less-precise';
     const proof = proofAgainstMover(fenBefore, l.moves, moverColor);
     alternatives.push({
@@ -226,7 +229,7 @@ function shortfallText(c: Candidate): string {
     return `${c.san}? ${c.proof[0].toUpperCase()}${c.proof.slice(1)}.`;
   }
   if (c.shortfall === 'trades-queens') {
-    return `${c.san}? That trades the queens — with more space you want them on; every piece that comes off shrinks the edge.`;
+    return `${c.san}? That trades the queens — with more space or an attack going, you want them on; every piece that comes off shrinks the edge.`;
   }
   if (c.shortfall === 'drops-material' && c.drops) {
     return `${c.san}? That drops the ${PNAME[c.drops.piece] ?? 'piece'} on ${c.drops.square}.`;
@@ -506,5 +509,13 @@ function queensOffWithin(fen: string, uci: readonly string[], plies: number): bo
     const c = new Chess(fen);
     for (const u of uci.slice(0, plies)) c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
     return !c.board().flat().some((x) => x && x.type === 'q');
+  } catch { return false; }
+}
+
+/** The mover has more pieces bearing on the enemy king than defend it (`countKingAttack`). */
+function attacking(fen: string, mover: 'w' | 'b'): boolean {
+  try {
+    const a = countKingAttack(new Chess(fen), mover);
+    return !!a && a.attackers.size >= 2 && a.attackers.size > a.defenders.size;
   } catch { return false; }
 }

@@ -293,6 +293,8 @@ function positionAskCore(fen: string, opts: { bestSan?: string }): PositionAsk {
   const byHand = castleByHand(fen, me);
   if (byHand) { parts.push(byHand.text); sq.push(...byHand.squares); }
   if (hookNow) { parts.push(hookNow.text); sq.push(hookNow.hook, hookNow.pawn); }
+  const contest = diagonalContest(fen, me);
+  if (contest) { parts.push(contest.text); sq.push(contest.mine, contest.theirs, contest.block); }
   const opening = fileToOpen(fen, me);
   if (opening) { parts.push(opening.text); sq.push(opening.rook); }
   const weak = findWeakPawns(fen, them);
@@ -1167,3 +1169,43 @@ export function holeAccess(fenBefore: string, san: string): { hole: string; move
   return null;
 }
 
+
+/**
+ * THE PIECE THAT CONTESTS YOUR DIAGONAL (game 1: "we need to take a tempo to
+ * eliminate the light-squared bishop so that our bishop remains uncontested on
+ * this diagonal"): your bishop's line runs at their king, and their bishop of
+ * the same colour can step onto that line in one move and block or trade it.
+ */
+export function diagonalContest(fen: string, me: 'w' | 'b'): { mine: string; theirs: string; block: string; text: string } | null {
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return null; }
+  const them = me === 'w' ? 'b' : 'w';
+  const king = ownKing(board, them);
+  if (!king) return null;
+  const kf = king.charCodeAt(0); const kr = Number(king[1]);
+  let theirTurn: Chess;
+  try { theirTurn = new Chess([fen.split(' ')[0], them, '-', '-', '0', '1'].join(' ')); } catch { return null; }
+  for (const cell of board.board().flat()) {
+    if (!cell || cell.color !== me || cell.type !== 'b') continue;
+    for (const [dx, dy] of [[1, 1], [1, -1], [-1, 1], [-1, -1]]) {
+      const ray: string[] = [];
+      let x = cell.square.charCodeAt(0) + dx; let y = Number(cell.square[1]) + dy; let aimed = false;
+      while (x >= 97 && x <= 104 && y >= 1 && y <= 8) {
+        const sq = `${String.fromCharCode(x)}${y}`;
+        if (Math.abs(x - kf) <= 1 && Math.abs(y - kr) <= 1) { aimed = true; break; }
+        if (board.get(sq as Square)) break;
+        ray.push(sq);
+        x += dx; y += dy;
+      }
+      if (!aimed || ray.length < 2) continue;
+      const block = theirTurn.moves({ verbose: true }).find((m) => m.piece === 'b' && ray.includes(m.to) && !m.captured);
+      if (block) {
+        return {
+          mine: cell.square, theirs: block.from, block: block.to,
+          text: `Your bishop on ${cell.square} is aimed at their king, but their bishop on ${block.from} can step to ${block.to} and contest that diagonal — trading it off keeps the line yours.`,
+        };
+      }
+    }
+  }
+  return null;
+}
