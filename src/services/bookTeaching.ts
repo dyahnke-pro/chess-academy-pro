@@ -66,7 +66,7 @@ export function parseBookRequest(ask: string): BookRequest | null {
   const text = ask.trim();
   if (!text) return null;
   let bookIds: string[] | null = null;
-  let srcSpan: [number, number] | null = null;
+  let srcSpan: [number, number] = [0, 0];
   for (const s of SOURCES) {
     const m = s.re.exec(text);
     if (m) { bookIds = s.ids; srcSpan = [m.index, m.index + m[0].length]; break; }
@@ -79,7 +79,7 @@ export function parseBookRequest(ask: string): BookRequest | null {
   }
   // A teaching verb or framing must be present: "Lasker" alone is not a request.
   if (!/\b(?:say|says|said|teach|teaches|write|writes|wrote|think|thinks|explain|recommend|according\s+to|read|chapter|passage|section|from|out\s+of|handle|treat)\b/i.test(text)) return null;
-  const withoutSource = (text.slice(0, srcSpan![0]) + ' ' + text.slice(srcSpan![1])).replace(/[?.!,;:"“”]/g, ' ');
+  const withoutSource = (text.slice(0, srcSpan[0]) + ' ' + text.slice(srcSpan[1])).replace(/[?.!,;:"“”]/g, ' ');
   const about = /\b(?:about|on|regarding|concerning)\s+(.+?)\s*$/i.exec(withoutSource);
   const raw = (about ? about[1] : withoutSource).replace(FRAME, ' ').replace(/\s+/g, ' ').trim();
   if (raw && NOT_A_TOPIC.test(raw) && bookIds.length === 0) return null;
@@ -126,7 +126,7 @@ function notationShare(body: string): number {
  *  nor numbers ("‘.", "7]", "tbat"-style breaks show up as stray marks). */
 function garbleShare(body: string): number {
   const toks = body.split(/\s+/);
-  const bad = toks.filter((t) => /[\[\]{}|\\]|^[‘’'.]+$|[a-z][A-Z]{2,}|\d[a-z]{2,}/.test(t)).length;
+  const bad = toks.filter((t) => /[[\]{}|\\]|^[‘’'.]+$|[a-z][A-Z]{2,}|\d[a-z]{2,}/.test(t)).length;
   return toks.length === 0 ? 1 : bad / toks.length;
 }
 
