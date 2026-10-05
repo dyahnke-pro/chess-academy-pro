@@ -3,7 +3,7 @@
 // checked the king???").
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { autopilotRecapture, doubleAttack, escapeSquareFirst, greekGift, lastMoveAlong, lastMoveFromPgn, mechanismContrast, moveMissed, positionAsk, theirMoveChanged, walkableLine } from './moveInsight';
+import { autopilotRecapture, doubleAttack, escapeSquareFirst, greekGift, positionPosed, lastMoveAlong, lastMoveFromPgn, mechanismContrast, moveMissed, positionAsk, theirMoveChanged, walkableLine } from './moveInsight';
 
 // White: Ka1, Re2, Ng5. Black: Kh8, Qd8. Two checks — Nf7+ (forks king and
 // queen) and Rh2+ (only checks).
@@ -196,5 +196,20 @@ describe('moveMissed — handing them a tempo (catalogue §37)', () => {
   it('...Nc6 lets d5 come with tempo', () => {
     const fen = 'rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2';
     expect(moveMissed(fen, 'Nc6', ['d4d5'])?.text).toBe('The knight to c6? Then the pawn to d5 comes with tempo, hitting your knight on c6.');
+  });
+});
+
+describe('positionPosed — the diagnosis half (both ways)', () => {
+  it('the escape-square position poses missed-tactic', () => {
+    expect(positionPosed('7k/p5p1/7p/8/8/8/8/4RBK1 w - - 0 1', { bestSan: 'Bd3' }).map((p) => p.tag)).toEqual(['missed-tactic']);
+  });
+  it('their threatening last move poses missed-opponents-threat', () => {
+    const before = 'r5k1/5ppp/8/8/8/8/R4PPP/6K1 b - - 0 1';
+    const c = new Chess(before); c.move('Re8');
+    expect(positionPosed(c.fen(), { lastMove: { fenBefore: before, san: 'Re8' } }).map((p) => p.tag)).toContain('missed-opponents-threat');
+  });
+  it('every miss carries the tag it is evidence of', () => {
+    expect(moveMissed('rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2', 'Nc6', ['d4d5'])?.tag).toBe('tempo-handed');
+    expect(moveMissed('4r1k1/8/8/8/8/8/4P3/3Q2K1 w - - 0 1', 'Qa4', ['e8e2'])?.tag).toBe('hung-material');
   });
 });

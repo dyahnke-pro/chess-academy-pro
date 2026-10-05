@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef, useMemo, type ReactNode } fro
 import { useLineWalk } from '../../hooks/useLineWalk';
 import { WalkLineButton } from '../Board/WalkLineButton';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
-import { autopilotRecapture, lastMoveAlong, positionAsk } from '../../services/moveInsight';
+import { autopilotRecapture, lastMoveAlong, positionAsk, positionPosed } from '../../services/moveInsight';
 import { spokenLineArrows } from '../../services/arrowEngine';
 import type { BoardArrow } from '../Chessboard/ConsistentChessboard';
 import { captureEvent } from '../../services/analytics';
@@ -538,6 +538,8 @@ export function PuzzleBoard({
       void recordCapabilityEvidence({
         fenBefore: fenBeforeAttempt, playedSan: move.san, moverColor: userColor,
         cpLoss: 0, origin: 'puzzle', prompted: hintUsedRef.current,
+        // Both ways: what the insight computer says this position asked.
+        alsoPosed: positionPosed(fenBeforeAttempt, { bestSan: move.san, lastMove: moveIndex > 0 ? lastMoveAlong(puzzle.fen, allMoves.slice(0, moveIndex)) ?? undefined : undefined }),
       });
     }
 
@@ -632,6 +634,7 @@ export function PuzzleBoard({
           void recordCapabilityEvidence({
             fenBefore: fenBeforeAttempt, playedSan: move.san, moverColor: userColor,
             cpLoss: cpFromThemes(puzzle.themes) ?? MISTAKE_CP, origin: 'puzzle', prompted: hintUsedRef.current,
+            alsoPosed: positionPosed(fenBeforeAttempt, { bestSan: expectedSan, lastMove: moveIndex > 0 ? lastMoveAlong(puzzle.fen, allMoves.slice(0, moveIndex)) ?? undefined : undefined }),
           });
         }
         if (tryToken !== tryTokenRef.current) return;

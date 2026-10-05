@@ -155,7 +155,7 @@ import {
   type CoachDrill,
   type DrillProgress,
   drillHintBeat,
-  customLessonPartLines, goodButWeakerBeat, judgeAlternative, lastMoveFromPgn, moveMissed, positionAsk, wrongMoveReason } from '../../services/coachDrillService';
+  customLessonPartLines, goodButWeakerBeat, judgeAlternative, lastMoveFromPgn, moveMissed, positionAsk, recordDrillEvidence, wrongMoveReason } from '../../services/coachDrillService';
 import { bookChipForClaims } from '../../data/bookChips';
 import { useThinkingLesson, type StepKit } from '../../hooks/useThinkingLesson';
 import { ThinkingLessonBoard } from './ThinkingLessonBoard';
@@ -2868,6 +2868,14 @@ export function CoachTeachPage(): JSX.Element {
         // move stays hidden; its line rides as a Walk button.
         const missed = evals ? moveMissed(fenBefore, move.san, evals.wrongPv) : null;
         const ask = positionAsk(fenBefore, { bestSan: expected });
+        // BOTH WAYS: the first answer records what the position asked — held
+        // when the move works as well as the key, broken otherwise.
+        if (!cur.graded) {
+          recordDrillEvidence({
+            fenBefore, playedSan: move.san, moverColor: fenBefore.split(' ')[1] === 'b' ? 'black' : 'white',
+            clean: verdict === 'accept', bestSan: expected, missTag: missed?.tag ?? null, prompted: cur.hintUsed,
+          });
+        }
         if (verdict === 'accept') {
           // It wins as well as the key: play it and close the drill as solved.
           const r = handlePlayMove(move.san);
@@ -2902,6 +2910,14 @@ export function CoachTeachPage(): JSX.Element {
         void coachDrillSay(line, { lines: missed?.line ? [missed.line] : undefined });
       })();
       return true;
+    }
+    // BOTH WAYS: the first answer that finds the key records it held.
+    if (!cur.graded) {
+      const fenB = liveFenRef.current;
+      recordDrillEvidence({
+        fenBefore: fenB, playedSan: move.san, moverColor: fenB.split(' ')[1] === 'b' ? 'black' : 'white',
+        clean: true, bestSan: expected, prompted: cur.hintUsed,
+      });
     }
     liveFenRef.current = move.fen;
     cur.wrongCount = 0; // correct move → the frustration streak resets

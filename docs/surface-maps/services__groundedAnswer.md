@@ -1093,7 +1093,7 @@
 ### `DetectedThreat` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `detectNewThreat` (function) — 19 call sites
+### `detectNewThreat` (function) — 20 call sites
 - `src/data/patternRegistry.ts:43`
 - `src/data/patternRegistry.ts:123`
 - `src/services/bluffDetector.ts:73`
@@ -1104,7 +1104,8 @@
 - `src/services/falseAlarm.ts:52`
 - `src/services/falseAlarm.ts:60`
 - `src/services/learnMoveTeaching.ts:125`
-- `src/services/moveInsight.ts:489`
+- `src/services/moveInsight.ts:493`
+- `src/services/moveInsight.ts:657`
 - `src/services/opponentMovePurpose.ts:64`
 - `src/services/reviewFullData.ts:778`
 - `src/services/reviewMoveBriefing.ts:227`
@@ -1168,7 +1169,7 @@
 - `src/services/coachApi.ts:6020`
 
 ### `seatPieceReferences` (re-export) — 33 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8185`
+- `src/components/Coach/CoachTeachPage.tsx:8201`
 - `src/services/coachFeatureService.ts:4068`
 - `src/services/coachFeatureService.ts:4116`
 - `src/services/coachFeatureService.ts:5216`

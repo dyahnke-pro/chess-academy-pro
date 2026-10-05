@@ -11,7 +11,7 @@
 ## SENSE — does the loop record what happens to the student?
 
 - **23** modules record a MISS.
-- **12** record a HOLD (`capabilityEvidence`).
+- **13** record a HOLD (`capabilityEvidence`).
 - **8** read the capability profile back.
 
 Green has a reader — the heat map can lower as well as raise.

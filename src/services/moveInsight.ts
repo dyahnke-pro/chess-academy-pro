@@ -29,6 +29,7 @@ import { settledNetForLine } from './exchangeLedger';
 import { sayMoveClause } from './spokenMove';
 import { andList } from '../utils/andList';
 import { countWords } from '../utils/countWords';
+import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { theirMoveCost } from './theirMoveCost';
 import { findHangingBySee, findKnightReroute, findWeakPawns } from './positionReadingService';
 import { findWorstPlacedPiece } from './nextPlans';
@@ -287,6 +288,8 @@ export function walkableLine(startFen: string, sans: readonly string[], label: s
 
 export interface MoveMissed {
   text: string;
+  /** The weakness this miss is evidence of — the diagnosis half (both ways). */
+  tag: MisconceptionTagId;
   /** The student's move and the engine's answer to it, for arrows + Walk. */
   line: WalkableLine | null;
 }
@@ -314,7 +317,7 @@ export function moveMissed(fenBefore: string, san: string, replyPv: readonly str
   if (r.move.captured) {
     const trapped = findTrappedPiece(r.board.fen(), me, replyPv ?? null);
     if (trapped && trapped.square === r.move.to) {
-      return { text: `${you} grabs material, but the ${name(trapped.piece)} on ${trapped.square} has no way out — they trap it.`, line };
+      return { text: `${you} grabs material, but the ${name(trapped.piece)} on ${trapped.square} has no way out — they trap it.`, line, tag: 'greedy-pawn-grab' };
     }
   }
   // YOUR OWN MOVE'S DRAWBACK (catalogue §35 — "Qd6 steps off the diagonal,
@@ -324,7 +327,7 @@ export function moveMissed(fenBefore: string, san: string, replyPv: readonly str
   const replyHits = !!reply && reply.move.to === ownWeak[0]?.square;
   if (ownWeak.length > 0 && replyHits) {
     const w = ownWeak[0];
-    return { text: `${you} leaves your ${name(w.piece)} on ${w.square} ${w.after === 0 ? 'with no guard' : 'short of guards'}, and ${sayMoveClause(reply.move.san, r.board.fen())}.`, line };
+    return { text: `${you} leaves your ${name(w.piece)} on ${w.square} ${w.after === 0 ? 'with no guard' : 'short of guards'}, and ${sayMoveClause(reply.move.san, r.board.fen())}.`, line, tag: 'hung-material' };
   }
 
   if (net !== null && net <= -1) {
@@ -336,6 +339,7 @@ export function moveMissed(fenBefore: string, san: string, replyPv: readonly str
         ? `${you}? Then ${sayMoveClause(reply.move.san, r.board.fen())}${reply.move.san.includes('+') ? ', check' : ''}, and by the end of the line you come out ${lost} down.`
         : `${you} gives away ${lost}.`,
       line,
+      tag: 'hung-material',
     };
   }
   // DON'T HAND THEM A TEMPO (catalogue §37 — "Nc6 now lets d5 with tempo"):
@@ -348,13 +352,13 @@ export function moveMissed(fenBefore: string, san: string, replyPv: readonly str
       }
       return null;
     })();
-    if (hit) return { text: `${you}? Then ${sayMoveClause(reply.move.san, r.board.fen())} comes with tempo, hitting your ${name(hit.type)} on ${hit.square}.`, line };
+    if (hit) return { text: `${you}? Then ${sayMoveClause(reply.move.san, r.board.fen())} comes with tempo, hitting your ${name(hit.type)} on ${hit.square}.`, line, tag: 'tempo-handed' };
   }
   if (r.move.san.includes('+') && reply && reply.move.piece === 'k') {
-    return { text: `${you} checks, but the king steps to ${reply.move.to} and nothing follows.`, line };
+    return { text: `${you} checks, but the king steps to ${reply.move.to} and nothing follows.`, line, tag: 'missed-tactic' };
   }
   if (r.move.captured && reply?.move.captured && reply.move.to === r.move.to && (net ?? 0) <= 0) {
-    return { text: `${you} takes, but they take back and you have gained nothing.`, line };
+    return { text: `${you} takes, but they take back and you have gained nothing.`, line, tag: 'missed-tactic' };
   }
   return null;
 }
@@ -631,4 +635,28 @@ export function escapeSquareFirst(fen: string, bestSan: string | undefined): { h
     };
   }
   return null;
+}
+
+
+/**
+ * WHAT THIS POSITION POSED — the diagnosis half of the insight computer (both
+ * ways). The same reads that TEACH (their threat, the escape square, the Greek
+ * gift, the autopilot recapture) name the capability the board asked for, so
+ * the evidence recorder can mark it held or broken. Importance is the posed
+ * question's weight on the heat map's scale.
+ */
+export function positionPosed(
+  fen: string,
+  opts: { bestSan?: string; lastMove?: { fenBefore: string; san: string } },
+): Array<{ tag: MisconceptionTagId; posedImportance: number }> {
+  const out: Array<{ tag: MisconceptionTagId; posedImportance: number }> = [];
+  const add = (tag: MisconceptionTagId, w: number): void => { if (!out.some((o) => o.tag === tag)) out.push({ tag, posedImportance: w }); };
+  try {
+    if (opts.lastMove) {
+      const r = play(opts.lastMove.fenBefore, opts.lastMove.san);
+      if (r && detectNewThreat(opts.lastMove.fenBefore, r.board.fen(), r.move.color)) add('missed-opponents-threat', 90);
+    }
+    if (escapeSquareFirst(fen, opts.bestSan) || greekGift(fen, opts.bestSan) || doubleAttack(fen, opts.bestSan ?? '')) add('missed-tactic', 85);
+  } catch { /* an unreadable board posed nothing */ }
+  return out;
 }

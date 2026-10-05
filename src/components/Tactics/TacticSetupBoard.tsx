@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { positionAsk, pvSans, walkableLine } from '../../services/moveInsight';
+import { positionAsk, positionPosed, pvSans, walkableLine } from '../../services/moveInsight';
 import { useLineWalk } from '../../hooks/useLineWalk';
 import { WalkLineButton } from '../Board/WalkLineButton';
 import { Chess } from 'chess.js';
@@ -324,6 +324,7 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
       void recordCapabilityEvidence({
         fenBefore: fenBeforeAttempt, playedSan: move.san, moverColor: orientation,
         cpLoss: 0, origin: 'puzzle', prompted: promptedRef.current,
+        alsoPosed: positionPosed(fenBeforeAttempt, { bestSan: move.san }),
       });
     }
 
@@ -382,6 +383,7 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
         void recordCapabilityEvidence({
           fenBefore, playedSan: move.san, moverColor: orientation,
           cpLoss: MISTAKE_CP, origin: 'puzzle', prompted: promptedAtTry,
+          alsoPosed: positionPosed(fenBefore, { bestSan: (() => { try { return new Chess(fenBefore).move({ from: expected.from, to: expected.to, promotion: 'q' })?.san; } catch { return undefined; } })() }),
         });
       }
       if (puzzleIdRef.current !== puzzleAtTry) return;

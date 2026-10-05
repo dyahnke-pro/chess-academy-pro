@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useLineWalk } from '../../hooks/useLineWalk';
 import { WalkLineButton } from '../Board/WalkLineButton';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
-import { positionAsk } from '../../services/moveInsight';
+import { positionAsk, positionPosed } from '../../services/moveInsight';
 import { spokenLineArrows } from '../../services/arrowEngine';
 import type { BoardArrow } from '../Chessboard/ConsistentChessboard';
 import { Chess } from 'chess.js';
@@ -857,6 +857,8 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
           origin: 'drill',
           prompted: toldBeforeAnswerRef.current,
           sourceGameId: puzzle.sourceGameId || undefined,
+          // Both ways: what the insight computer says this position asked.
+          alsoPosed: positionPosed(puzzle.fen, { bestSan: puzzle.bestMoveSan }),
         });
         // Auto-speak the GROUNDED "why this was the best move" after the
         // celebration sound — the teaching moment David 2026-09-12 wanted taken:

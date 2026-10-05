@@ -472,11 +472,19 @@ export async function recordCapabilityEvidence(args: {
   /** See `CapabilityEvidenceRecord.prompted` — required, never inferred. */
   prompted: boolean;
   sourceGameId?: string;
+  /** What the INSIGHT computer says this position posed (moveInsight —
+   *  their threat, the escape square, a named pattern, the drawback the
+   *  played move walked into). Both directions: held when the move was clean,
+   *  broken when it was not — one vocabulary for teaching and diagnosis. */
+  alsoPosed?: ReadonlyArray<{ tag: MisconceptionTagId; posedImportance: number }>;
 }): Promise<number> {
   try {
     // ASKED, regardless of how it went — the outcome is decided once, below,
     // so the two directions can never disagree about what the board posed.
     const posed = capabilitiesPosed(args.fenBefore, args.playedSan, args.moverColor);
+    for (const extra of args.alsoPosed ?? []) {
+      if (!posed.some((p) => p.tag === extra.tag)) posed.push({ tag: extra.tag, posedImportance: extra.posedImportance });
+    }
     if (posed.length === 0) return 0;
     const outcome: CapabilityOutcome = movePlayedCleanly(args.cpLoss) ? 'held' : 'broken';
     const shown = posed;

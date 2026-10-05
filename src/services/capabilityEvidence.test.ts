@@ -133,6 +133,20 @@ describe('the record FIRES — a wire that does not fire is not a wire', () => {
     expect([...profile.values()].every((e) => e.held === 0 && e.broken === 0)).toBe(true);
   });
 
+  it('alsoPosed (the insight computer) files rows in BOTH directions', async () => {
+    const posed = [{ tag: 'tempo-handed' as MisconceptionTagId, posedImportance: 80 }];
+    await recordCapabilityEvidence({
+      fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white',
+      cpLoss: 0, origin: 'drill', prompted: false, alsoPosed: posed,
+    });
+    await recordCapabilityEvidence({
+      fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white',
+      cpLoss: 300, origin: 'drill', prompted: false, alsoPosed: posed,
+    });
+    const rows = (await db.capabilityEvidence.toArray()).filter((r) => r.tag === 'tempo-handed');
+    expect(rows.map((r) => r.outcome).sort()).toEqual(['broken', 'held']);
+  });
+
   it('never throws into the caller, whatever it is handed', async () => {
     await expect(recordCapabilityEvidence({
       fenBefore: 'not a fen', playedSan: '??', moverColor: 'white',

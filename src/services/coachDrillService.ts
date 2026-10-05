@@ -23,6 +23,9 @@
  *                      even indices; the coach auto-plays the odd ones.
  *   - `prompt`       — a concrete, code-authored challenge line.
  */
+import { positionPosed } from './moveInsight';
+import { recordCapabilityEvidence } from './capabilityEvidence';
+import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { Chess } from 'chess.js';
 import { hintBeat } from './drillReasons';
 import { conceptPassageFor } from './weaknessConceptPassage';
@@ -34,6 +37,22 @@ export { goodButWeakerBeat, judgeAlternative, wrongMoveReason } from './drillRea
 // The insight computer, through the drill door (one more computer on the Learn
 // page would cross its composition ceiling — surfaceComposition.scan).
 export { lastMoveFromPgn, moveMissed, positionAsk } from './moveInsight';
+
+/** BOTH WAYS for the Learn drills: the same insight reads that teach the drill
+ *  record whether the student held or broke what the position asked. First
+ *  answer only (the caller gates it), like every other evidence door. */
+export function recordDrillEvidence(args: {
+  fenBefore: string; playedSan: string; moverColor: 'white' | 'black';
+  clean: boolean; bestSan: string; missTag?: MisconceptionTagId | null; prompted: boolean;
+}): void {
+  const posed = positionPosed(args.fenBefore, { bestSan: args.bestSan });
+  if (args.missTag && !posed.some((p) => p.tag === args.missTag)) posed.push({ tag: args.missTag, posedImportance: 80 });
+  void recordCapabilityEvidence({
+    fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: args.moverColor,
+    cpLoss: args.clean ? 0 : MISTAKE_CP_DRILL, origin: 'drill', prompted: args.prompted, alsoPosed: posed,
+  });
+}
+const MISTAKE_CP_DRILL = 150;
 import { getHomeGameIds } from './homeOpeningService';
 import { isFixtureGame } from './fixtureGames';
 import puzzlesData from '../data/puzzles.json';
