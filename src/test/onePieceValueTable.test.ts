@@ -43,7 +43,7 @@ function walk(dir: string, out: string[] = []): string[] {
   return out;
 }
 
-const CEILING = 48; // 53 measured, minus pvPlayback, tacticVerification, reviewQuestionPlan; conceptEngine / narratedContinuation / materialClaimValidator folded into materialBalance (2026-09-29)
+const CEILING = 46; // 2026-10-05: three lesson-step copies (exchange chain, safety, targets) folded into CAPTURE_VALUE. 53 measured, minus pvPlayback, tacticVerification, reviewQuestionPlan; conceptEngine / narratedContinuation / materialClaimValidator folded into materialBalance (2026-09-29)
 
 describe('piece-value tables converge on one home', () => {
   it('the home exists and names BOTH semantics', () => {

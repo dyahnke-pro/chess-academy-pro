@@ -24,6 +24,7 @@ import { PIECE_NAMES } from '../types/tacticTypes';
 import { asIfToMove, captureRead } from './positionReadingService';
 import { rotateStem } from '../utils/rotateStem';
 import { andList } from '../utils/andList';
+import { CAPTURE_VALUE } from './pieceValues';
 
 /** One link of a follow-up chain: a tap question with its own computed key. */
 export interface FollowUp {
@@ -49,7 +50,6 @@ export type ChainSeat = 'theirs' | 'mine';
 /** The largest key a tap question may ask for (a fair question). */
 const MAX_FAIR_KEY = 4;
 
-const VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 const other = (c: Color): Color => (c === 'w' ? 'b' : 'w');
 const name = (t: PieceSymbol): string => PIECE_NAMES[t] ?? 'piece';
 
@@ -164,8 +164,8 @@ export function exchangeChain(fen: string, sq: Square, seat: ChainSeat, rot = 0)
 
   // The verdict, from the pin-aware SEE.
   const loose = defenders.length === 0;
-  const cheapest = attackers.length > 0 ? Math.min(...attackers.map((s) => VALUE[chess.get(s)?.type ?? 'k'])) : null;
-  const firstTakers = loose ? attackers : attackers.filter((s) => VALUE[chess.get(s)?.type ?? 'k'] === cheapest);
+  const cheapest = attackers.length > 0 ? Math.min(...attackers.map((s) => CAPTURE_VALUE[chess.get(s)?.type ?? 'k'])) : null;
+  const firstTakers = loose ? attackers : attackers.filter((s) => CAPTURE_VALUE[chess.get(s)?.type ?? 'k'] === cheapest);
   const takerType = firstTakers.length > 0 ? chess.get(firstTakers[0])?.type : undefined;
   const verdict = gain > 0 && takerType
     ? (seat === 'theirs'

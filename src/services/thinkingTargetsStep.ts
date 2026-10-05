@@ -21,6 +21,7 @@ import { findHangingBySee } from './positionReadingService';
 import { findPinPressure, PIN_PRESSURE_PRINCIPLE, type PinPressure } from './pinPressure';
 import { sayMoveClause } from './spokenMove';
 import { exchangeChain } from './thinkingExchangeChain';
+import { CAPTURE_VALUE } from './pieceValues';
 
 /** The one loose-piece computer, injected: squares of `color`'s undefended
  *  pieces (attacked or not). */
@@ -83,14 +84,13 @@ export function targetReason(fen: string, sq: Square): string | null {
   const cheapest = chess.attackers(sq, other(p.color))
     .map((s) => chess.get(s)?.type)
     .filter((t): t is PieceSymbol => !!t)
-    .sort((a, b) => VALUE[a] - VALUE[b])[0];
-  if (cheapest && VALUE[cheapest] < VALUE[p.type]) {
+    .sort((a, b) => CAPTURE_VALUE[a] - CAPTURE_VALUE[b])[0];
+  if (cheapest && CAPTURE_VALUE[cheapest] < CAPTURE_VALUE[p.type]) {
     return `The ${name(p.type)} on ${sq} is guarded, but your ${name(cheapest)} attacks it — a cheaper piece wins it even with the guard.`;
   }
   return `The ${name(p.type)} on ${sq} is attacked ${attackers} time${attackers === 1 ? '' : 's'} and guarded only ${defenders === 1 ? 'once' : `${defenders} times`}.`;
 }
 
-const VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 
 /** The worked example (Show): the method, then every target with its reason. */
 export function targetsShowLine(fen: string, key: readonly Square[], rot: number): string {

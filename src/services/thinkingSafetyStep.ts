@@ -17,6 +17,7 @@ import type { FairKey } from './thinkingPositions';
 import type { StepKit } from './thinkingLessonSession';
 import { rotateStem } from '../utils/rotateStem';
 import { exchangeChain } from './thinkingExchangeChain';
+import { CAPTURE_VALUE } from './pieceValues';
 
 const name = (t: PieceSymbol): string => PIECE_NAMES[t] ?? 'piece';
 
@@ -48,13 +49,12 @@ export function safetyReason(fen: string, sq: Square): string | null {
   if (defenders.length === 0) {
     return `Your ${name(p.type)} on ${sq} is attacked and nothing guards it.`;
   }
-  if (by && VALUE[by.type] < VALUE[p.type]) {
+  if (by && CAPTURE_VALUE[by.type] < CAPTURE_VALUE[p.type]) {
     return `Your ${name(p.type)} on ${sq} is guarded, but their ${name(by.type)} attacks it — the cheaper piece wins it anyway.`;
   }
   return `Your ${name(p.type)} on ${sq} is attacked ${attackers.length} times and guarded only ${defenders.length === 1 ? 'once' : `${defenders.length} times`}.`;
 }
 
-const VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 
 export function safetyShowLine(fen: string, key: readonly Square[], rot: number): string {
   const open = rotateStem([
