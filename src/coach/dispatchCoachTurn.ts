@@ -56,9 +56,11 @@ export interface DispatchCoachTurnOptions extends CoachServiceOptions {
 const conversations = new Map<CoachSurface, ConversationState>();
 
 /** RUNTIME switch (ONE-CHAT FINAL step 5: a runtime flag, never a build flag —
- *  an OTA dispatch ships whatever `main` holds). Default OFF: the reading is
- *  logged, today's routing answers. */
-let serveParsedRoute = false;
+ *  an OTA dispatch ships whatever `main` holds). ON since 2026-10-05 (David:
+ *  "Switch it on"), after the held-out eval read 107/107: a validated reading
+ *  serves its canonical route or its computed answer; a failed, slow or
+ *  invalid read still falls back to today's routing. */
+let serveParsedRoute = true;
 export function setServeParsedRoute(on: boolean): void { serveParsedRoute = on; }
 export function isServeParsedRouteOn(): boolean { return serveParsedRoute; }
 
