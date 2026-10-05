@@ -84,7 +84,11 @@ describe('PuzzleBoard — one spoken line per miss', () => {
     expect(voiceService.speakWhenIdle).not.toHaveBeenCalled();
     await act(async () => { resolveRead({ kind: 'refuted', text: 'Qe3? Then Qxe2.', replySan: 'Qxe2', replyFrom: 'd8', replyTo: 'e2' }); });
     await waitFor(() => expect(voiceService.speak).toHaveBeenCalledTimes(1));
-    expect(voiceService.speak).toHaveBeenCalledWith('Qe3? Then Qxe2. This was the moment to slow down.');
+    // One line: the refutation first, what the position asks (moveInsight) in
+    // the middle, the method beat last — none of them cut.
+    const spoken = vi.mocked(voiceService.speak).mock.calls[0][0] as string;
+    expect(spoken.startsWith('Qe3? Then Qxe2.')).toBe(true);
+    expect(spoken.endsWith('This was the moment to slow down.')).toBe(true);
   });
 
   it('with no miss pending, a struggle line waits for the voice to be free — never cuts, never drops', async () => {
