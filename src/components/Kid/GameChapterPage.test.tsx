@@ -359,9 +359,11 @@ describe('GameChapterPage', () => {
     // With only 1 lesson, clicking Next should go to puzzle phase
     fireEvent.click(screen.getByTestId('chapter-next-btn'));
 
+    // The puzzle step loads its position asynchronously; under a loaded test
+    // run that takes longer than waitFor's 1 s default (it raced in ship-check).
     await waitFor(() => {
       expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
-    });
+    }, { timeout: 8000 });
   });
 
   it('puzzle phase shows puzzle counter and chat panel', async () => {
@@ -441,9 +443,11 @@ describe('GameChapterPage', () => {
 
     fireEvent.click(screen.getByTestId('chapter-next-btn'));
 
+    // The puzzle step loads its position asynchronously; under a loaded test
+    // run that takes longer than waitFor's 1 s default (it raced in ship-check).
     await waitFor(() => {
       expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
-    });
+    }, { timeout: 8000 });
 
     fireEvent.click(screen.getByTestId('mock-move-btn'));
 
@@ -469,9 +473,11 @@ describe('GameChapterPage', () => {
 
     fireEvent.click(screen.getByTestId('chapter-next-btn'));
 
+    // The puzzle step loads its position asynchronously; under a loaded test
+    // run that takes longer than waitFor's 1 s default (it raced in ship-check).
     await waitFor(() => {
       expect(screen.getByTestId('chapter-puzzle')).toBeInTheDocument();
-    });
+    }, { timeout: 8000 });
 
     fireEvent.click(screen.getByTestId('mock-wrong-move-btn'));
 
