@@ -494,6 +494,7 @@ export function useDiscussionPractice(
         // teach. The surface knows what it said; it answers.
         prompted: args.prompted,
         sourceGameId: args.sourceGameId,
+        bestSan,
       });
 
       // The same graded move moves the opponent's live strength (above). Book

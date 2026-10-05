@@ -190,7 +190,8 @@ function positionAskCore(fen: string, opts: { bestSan?: string }): PositionAsk {
         squares: [must.square],
       };
     }
-    return { mode: 'defend', text: `${hit} — deal with that first.`, squares: [must.square] };
+    const cheap = must.piece !== 'p' ? pawnCanGuard(fen, must.square) : null;
+    return { mode: 'defend', text: `${hit} — deal with that first.${cheap ? ' A pawn can guard it — the cheapest defender there is.' : ''}`, squares: [must.square] };
   }
 
   const loose = findHangingBySee(fen).filter((h) => h.color === them && h.piece !== 'k').sort((a, b) => b.gain - a.gain)[0];
@@ -216,11 +217,12 @@ function positionAskCore(fen: string, opts: { bestSan?: string }): PositionAsk {
     return { mode: 'press', text: direction, squares: [] };
   }
 
+  const hookNow = pawnHook(fen, me);
   if (attack && attackers >= 1 && attackers <= defenders) {
     return {
       mode: 'reinforce',
-      text: `You have ${num(attackers)} ${attackers === 1 ? 'piece' : 'pieces'} near their king and they have ${num(defenders)} defending — bring one more before you strike.`,
-      squares: [attack.king],
+      text: `You have ${num(attackers)} ${attackers === 1 ? 'piece' : 'pieces'} near their king and they have ${num(defenders)} defending — bring one more before you strike.${hookNow ? ` ${hookNow.text}` : ''}`,
+      squares: hookNow ? [attack.king, hookNow.hook] : [attack.king],
     };
   }
 
@@ -229,6 +231,22 @@ function positionAskCore(fen: string, opts: { bestSan?: string }): PositionAsk {
   // badly, the whole game stands badly"), from the app's own computers.
   const parts: string[] = [];
   const sq: string[] = [];
+  const mat = materialPlan(fen, me);
+  if (mat) parts.push(mat.text);
+  const loosePieces = looseOwnPieces(fen, me);
+  if (loosePieces.length > 0) {
+    parts.push(`Your ${andList(loosePieces.map((l) => `${name(l.piece)} on ${l.square}`))} ${loosePieces.length === 1 ? 'has' : 'have'} no guard — loose pieces are what a double attack collects.`);
+    sq.push(...loosePieces.map((l) => l.square));
+  }
+  const chased = noRetreat(fen, me);
+  if (chased) { parts.push(`If they push a pawn to ${chased.push}, your ${name(chased.piece)} on ${chased.square} has nowhere to go — give it a retreat square first.`); sq.push(chased.square, chased.push); }
+  const tied = heavyTiedDown(fen, me);
+  if (tied) { parts.push(`Your ${name(tied.piece)} on ${tied.defender} is the only guard on your ${name(tied.guardedPiece)} on ${tied.guarded} — a heavy piece makes a poor defender; free it.`); sq.push(tied.defender, tied.guarded); }
+  const byHand = castleByHand(fen, me);
+  if (byHand) { parts.push(byHand.text); sq.push(...byHand.squares); }
+  if (hookNow) { parts.push(hookNow.text); sq.push(hookNow.hook, hookNow.pawn); }
+  const opening = fileToOpen(fen, me);
+  if (opening) { parts.push(opening.text); sq.push(opening.rook); }
   const weak = findWeakPawns(fen, them);
   const target = [...weak.isolated, ...weak.backward].find((t) => fileOpenFor(board, t[0], me));
   if (target) {
@@ -354,7 +372,21 @@ export function moveMissed(fenBefore: string, san: string, replyPv: readonly str
     })();
     if (hit) return { text: `${you}? Then ${sayMoveClause(reply.move.san, r.board.fen())} comes with tempo, hitting your ${name(hit.type)} on ${hit.square}.`, line, tag: 'tempo-handed' };
   }
-  if (r.move.san.includes('+') && reply && reply.move.piece === 'k') {
+  // TRADING WHILE DOWN (catalogue A11): every like-for-like trade helps them.
+  if (tradeWhileDown(fenBefore, r.move.san, replies[0])) {
+    return { text: `${you} trades pieces while you are behind — every trade brings them closer to a won endgame. Keep pieces on.`, line, tag: 'bad-trade' };
+  }
+  // AN EMPTY THREAT (catalogue B4): it hits a piece, the piece steps away.
+  const empty = emptyThreat(fenBefore, r.move.san, replies[0]);
+  if (empty && (net ?? 0) <= 0) {
+    return { text: `${you} hits their ${name(empty.piece)} on ${empty.target}, but it simply steps to ${empty.to} and the threat has done nothing.`, line, tag: 'overvalued-attack' };
+  }
+  // A HOOK FOR THEIR PAWNS (catalogue A6/B1): the push in front of your king.
+  const hooked = hookCreated(fenBefore, r.move.san);
+  if (hooked) {
+    return { text: `${you} gives their pawn on ${hooked.pawn} a hook to latch onto in front of your king — it can pry a file open there.`, line, tag: 'weakened-king-safety' };
+  }
+    if (r.move.san.includes('+') && reply && reply.move.piece === 'k') {
     return { text: `${you} checks, but the king steps to ${reply.move.to} and nothing follows.`, line, tag: 'missed-tactic' };
   }
   if (r.move.captured && reply?.move.captured && reply.move.to === r.move.to && (net ?? 0) <= 0) {
@@ -657,6 +689,275 @@ export function positionPosed(
       if (r && detectNewThreat(opts.lastMove.fenBefore, r.board.fen(), r.move.color)) add('missed-opponents-threat', 90);
     }
     if (escapeSquareFirst(fen, opts.bestSan) || greekGift(fen, opts.bestSan) || doubleAttack(fen, opts.bestSan ?? '')) add('missed-tactic', 85);
+    const me = new Chess(fen).turn();
+    if (castleByHand(fen, me)) add('king-stuck-center', 70);
+    if (fileToOpen(fen, me)) add('passive-rook', 60);
+    if (noRetreat(fen, me)) add('misplaced-piece', 65);
+    if ((materialPlan(fen, me)?.diff ?? 0) <= -3) add('bad-trade', 70);
+    if (heavyTiedDown(fen, me)) add('passive-rook', 60);
   } catch { /* an unreadable board posed nothing */ }
   return out;
+}
+
+// ── THE FULL SPEED-RUN READ (catalogue A/B/C) ────────────────────────────────
+
+const FILES = 'abcdefgh';
+const ownKing = (board: Chess, c: 'w' | 'b'): Square | null => {
+  for (const row of board.board()) for (const cell of row) if (cell && cell.type === 'k' && cell.color === c) return cell.square;
+  return null;
+};
+
+/**
+ * THE PAWN HOOK (catalogue A6/B1 — "…g6 creates a hook, so h5 opens the
+ * h-file"): a pawn of `them` pushed one square in front of its castled king,
+ * which a pawn of `me` can reach and capture within two pushes, prying a file
+ * open at the king. Only when `me`'s own king is not on that wing — storming
+ * the pawns in front of your own king is a different story.
+ */
+export function pawnHook(fen: string, me: 'w' | 'b'): { hook: string; pawn: string; contact: string; text: string } | null {
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return null; }
+  const them = me === 'w' ? 'b' : 'w';
+  const king = ownKing(board, them);
+  if (!king) return null;
+  const homeRank = them === 'w' ? 1 : 8;
+  if (Number(king[1]) !== homeRank) return null;
+  const kFile = FILES.indexOf(king[0]);
+  const wing = kFile >= 5 ? [5, 6, 7] : kFile <= 2 ? [0, 1, 2] : null;
+  if (!wing) return null;
+  const mine = ownKing(board, me);
+  if (mine && wing.includes(FILES.indexOf(mine[0]))) return null;
+  const hookRank = them === 'w' ? 3 : 6;
+  const dir = me === 'w' ? 1 : -1;
+  for (const f of wing) {
+    const hookSq = `${FILES[f]}${hookRank}` as Square;
+    const hp = board.get(hookSq);
+    if (!hp || hp.type !== 'p' || hp.color !== them) continue;
+    const contactRank = hookRank - dir;   // the square that attacks the hook
+    for (const af of [f - 1, f + 1]) {
+      if (af < 0 || af > 7) continue;
+      const contact = `${FILES[af]}${contactRank}`;
+      // our pawn on that file, up to two pushes short of the contact square, path clear
+      for (let steps = 1; steps <= 2; steps += 1) {
+        const from = `${FILES[af]}${contactRank - dir * steps}` as Square;
+        const p = board.get(from);
+        if (!p) continue;
+        if (p.type !== 'p' || p.color !== me) break;
+        let clear = true;
+        for (let s = 1; s <= steps; s += 1) if (board.get(`${FILES[af]}${contactRank - dir * steps + dir * s}` as Square)) clear = false;
+        if (!clear) break;
+        return {
+          hook: hookSq, pawn: from, contact,
+          text: `Their pawn on ${hookSq} is a hook — your pawn on ${from} can march to ${contact} and pry a file open in front of their king.`,
+        };
+      }
+    }
+  }
+  return null;
+}
+
+/** The hook `san` just handed the opponent in front of the mover's own king. */
+export function hookCreated(fenBefore: string, san: string): { hook: string; pawn: string } | null {
+  const r = play(fenBefore, san);
+  if (!r || r.move.piece !== 'p') return null;
+  const them = r.move.color === 'w' ? 'b' : 'w';
+  if (pawnHook(fenBefore, them)) return null;
+  const after = pawnHook(r.board.fen(), them);
+  return after && after.hook === r.move.to ? { hook: after.hook, pawn: after.pawn } : null;
+}
+
+/**
+ * CASTLING BY HAND (catalogue B2 — "…Kf7, …Re8, …Kg8"): the king has lost the
+ * right to castle and still stands in the centre of its back rank with queens
+ * on — walk it to the g-file shelter, a rook across behind it.
+ */
+export function castleByHand(fen: string, me: 'w' | 'b'): { text: string; squares: string[] } | null {
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return null; }
+  const rights = board.getCastlingRights(me);
+  if (rights.k || rights.q) return null;
+  const king = ownKing(board, me);
+  const home = me === 'w' ? 1 : 8;
+  if (!king || Number(king[1]) !== home || !'def'.includes(king[0])) return null;
+  const queens = board.board().flat().filter((c) => c && c.type === 'q').length;
+  if (queens === 0) return null;
+  const pawnRank = me === 'w' ? 2 : 7;
+  const shelter = ['g', 'h'].every((f) => {
+    const p = board.get(`${f}${pawnRank}` as Square);
+    return p && p.type === 'p' && p.color === me;
+  });
+  if (!shelter) return null;
+  const g = `g${home}`;
+  return {
+    text: `Your king has lost the right to castle — walk it to ${g} by hand, a step at a time, with a rook coming across behind it.`,
+    squares: [king, g],
+  };
+}
+
+/**
+ * PUT THE ROOK ON THE FILE THAT WILL OPEN (catalogue B11 — "if …e6 trades off,
+ * the rook is already there"): your pawn is in contact with theirs, so the
+ * capture takes your pawn off its file and opens it — and no rook of yours is
+ * on that file yet, though one can reach it in a move along its rank.
+ */
+export function fileToOpen(fen: string, me: 'w' | 'b'): { file: string; rook: string; text: string } | null {
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return null; }
+  for (const m of board.moves({ verbose: true })) {
+    if (m.piece !== 'p' || !m.captured || m.captured !== 'p') continue;
+    const file = m.from[0];
+    let others = 0;
+    for (let r = 1; r <= 8; r += 1) { const p = board.get(`${file}${r}` as Square); if (p && p.type === 'p' && p.color === me && `${file}${r}` !== m.from) others += 1; }
+    if (others > 0) continue;
+    if (heavyOnFile(board, file, me)) continue;
+    // a rook that slides onto the file in one move
+    const rookMove = board.moves({ verbose: true }).find((x) => x.piece === 'r' && x.to[0] === file && x.from[1] === x.to[1] && !x.captured);
+    if (!rookMove) continue;
+    return { file, rook: rookMove.from, text: `The pawns on ${m.from} and ${m.to} are in contact — once they trade, the ${file}-file opens. Put a rook on it first.` };
+  }
+  return null;
+}
+
+/** THE CHEAPEST DEFENDER (catalogue A3/C2 — "defend with a pawn before tying
+ *  down a piece"): a pawn move that adds a guard to `square`. */
+export function pawnCanGuard(fen: string, square: string): string | null {
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return null; }
+  const me = board.turn();
+  const before = guards(board, square as Square, me).length;
+  for (const m of board.moves({ verbose: true })) {
+    if (m.piece !== 'p' || m.captured || m.from === square) continue;
+    const r = play(fen, m.san);
+    if (!r) continue;
+    try { if (r.board.isAttacked(m.to, r.move.color === 'w' ? 'b' : 'w') && !guards(r.board, m.to, me).length) continue; } catch { continue; }
+    if (guards(r.board, square as Square, me).length > before) return m.to;
+  }
+  return null;
+}
+
+/**
+ * AN EMPTY THREAT (catalogue B4/A1 — "a threat needs a purpose beyond itself";
+ * "one-move-itis"): the move attacks a piece of theirs, the reply simply moves
+ * that piece away, and the line comes out no better for you.
+ */
+export function emptyThreat(fenBefore: string, san: string, replySan: string | undefined): { target: string; piece: string; to: string } | null {
+  const r = play(fenBefore, san);
+  if (!r || r.move.captured || r.move.san.includes('+') || !replySan) return null;
+  const them = r.move.color === 'w' ? 'b' : 'w';
+  let target: { sq: Square; type: string } | null = null;
+  for (const row of r.board.board()) for (const cell of row) {
+    if (!cell || cell.color !== them || cell.type === 'p' || cell.type === 'k') continue;
+    try {
+      const hitNow = r.board.attackers(cell.square, r.move.color).includes(r.move.to);
+      const hitBefore = new Chess(fenBefore).attackers(cell.square, r.move.color).length > 0;
+      if (hitNow && !hitBefore) target = { sq: cell.square, type: cell.type };
+    } catch { /* skip */ }
+  }
+  if (!target) return null;
+  const reply = play(r.board.fen(), replySan);
+  if (!reply || reply.move.from !== target.sq || reply.move.captured) return null;
+  return { target: target.sq, piece: target.type, to: reply.move.to };
+}
+
+/** Material for `c` in pawns (king excluded). */
+function material(board: Chess, c: 'w' | 'b'): number {
+  let n = 0;
+  for (const row of board.board()) for (const cell of row) if (cell && cell.color === c && cell.type !== 'k') n += CAPTURE_VALUE[cell.type] ?? 0;
+  return n;
+}
+
+/**
+ * GRADE EVERY PIECE'S SAFETY (catalogue B7 — "a piece is safe only when a pawn
+ * guards it"): your pieces with no guard at all. Loose pieces are what a
+ * double attack collects, so they are named before anything lands on them.
+ */
+export function looseOwnPieces(fen: string, me: 'w' | 'b'): Array<{ square: string; piece: string }> {
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return []; }
+  const out: Array<{ square: string; piece: string }> = [];
+  for (const row of board.board()) for (const cell of row) {
+    if (!cell || cell.color !== me || cell.type === 'k' || cell.type === 'p' || cell.type === 'q') continue;
+    if (guards(board, cell.square, me).length === 0) out.push({ square: cell.square, piece: cell.type });
+  }
+  return out;
+}
+
+/**
+ * GIVE YOUR PIECE A RETREAT SQUARE BEFORE IT IS CHASED (catalogue B6, the
+ * mirror of §36 — "a bolt-hole on h7 makes a later Nh4 harmless"): one pawn
+ * push of theirs would hit this piece, and from there it has no safe square.
+ */
+export function noRetreat(fen: string, me: 'w' | 'b'): { square: string; piece: string; push: string } | null {
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return null; }
+  const them = me === 'w' ? 'b' : 'w';
+  const parts = fen.split(' ');
+  const theirTurn = [parts[0], them, '-', '-', '0', '1'].join(' ');
+  let tb: Chess;
+  try { tb = new Chess(theirTurn); } catch { return null; }
+  for (const m of tb.moves({ verbose: true })) {
+    if (m.piece !== 'p' || m.captured) continue;
+    const after = new Chess(theirTurn); after.move(m.san);
+    if (after.isAttacked(m.to, me) && !guards(after, m.to, them).length) continue;   // the push just hangs
+    for (const row of after.board()) for (const cell of row) {
+      if (!cell || cell.color !== me || cell.type === 'p' || cell.type === 'k') continue;
+      if (!after.attackers(cell.square, them).includes(m.to)) continue;
+      if (board.attackers(cell.square, them).length > 0) continue;   // already hit — a different story
+      let mine: Chess;
+      try { mine = new Chess([after.fen().split(' ')[0], me, '-', '-', '0', '1'].join(' ')); } catch { continue; }
+      const val = CAPTURE_VALUE[cell.type] ?? 0;
+      const safe = mine.moves({ square: cell.square, verbose: true }).some((x) => {
+        if (x.captured) return true;
+        const b2 = new Chess(mine.fen()); b2.move(x.san);
+        const hitters = b2.attackers(x.to, them);
+        return hitters.length === 0 || (guards(b2, x.to, me).length > 0 && hitters.every((h) => (CAPTURE_VALUE[b2.get(h)?.type ?? 'q'] ?? 9) >= val));
+      });
+      if (!safe) return { square: cell.square, piece: cell.type, push: m.to };
+    }
+  }
+  return null;
+}
+
+/**
+ * WHAT THE MATERIAL SAYS ABOUT TRADES (catalogue type 7 + A11/B8 — "down a
+ * piece, keep pieces on"; "when lost, complicate"): ahead by a piece or more,
+ * trade pieces; behind, keep them on and make it messy.
+ */
+export function materialPlan(fen: string, me: 'w' | 'b'): { diff: number; text: string } | null {
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return null; }
+  const diff = material(board, me) - material(board, me === 'w' ? 'b' : 'w');
+  if (diff >= 3) return { diff, text: `You are ${countWords(diff)} up — trade pieces, not pawns, and the endgame wins itself.` };
+  if (diff <= -3) return { diff, text: `You are ${countWords(-diff)} down — keep pieces on and make it messy; every trade helps them.` };
+  return null;
+}
+
+/** A capture that trades like for like while you are behind (catalogue A11). */
+export function tradeWhileDown(fenBefore: string, san: string, replySan: string | undefined): boolean {
+  const r = play(fenBefore, san);
+  if (!r || !r.move.captured || r.move.captured === 'p' || !replySan) return false;
+  const plan = materialPlan(fenBefore, r.move.color);
+  if (!plan || plan.diff > -3) return false;
+  const reply = play(r.board.fen(), replySan);
+  return !!reply && reply.move.to === r.move.to && (CAPTURE_VALUE[r.move.captured] ?? 0) === (CAPTURE_VALUE[r.move.piece] ?? 0);
+}
+
+/**
+ * A HEAVY PIECE TIED TO A GUARD (catalogue C3 — "queens and rooks make bad
+ * defenders"): your queen or rook is the only thing keeping an attacked piece
+ * of yours alive.
+ */
+export function heavyTiedDown(fen: string, me: 'w' | 'b'): { defender: string; piece: string; guarded: string; guardedPiece: string } | null {
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return null; }
+  const them = me === 'w' ? 'b' : 'w';
+  for (const row of board.board()) for (const cell of row) {
+    if (!cell || cell.color !== me || cell.type === 'k' || cell.type === 'q') continue;
+    if (board.attackers(cell.square, them).length === 0) continue;
+    const g = guards(board, cell.square, me);
+    if (g.length !== 1) continue;
+    const d = board.get(g[0]);
+    if (d && (d.type === 'q' || d.type === 'r')) return { defender: g[0], piece: d.type, guarded: cell.square, guardedPiece: cell.type };
+  }
+  return null;
 }

@@ -463,13 +463,13 @@ saying a queen's worth or more as a floor.
 Not built yet (🔴) unless marked. A6 and B1 (pawn hook) are one type; C10 duplicates A7; B6 mirrors 36; B5 mirrors 26.
 
 ### A
-**A1. An attack is not a plan.** 8urm 8...Qg5: hitting the queen pays only if the threat achieves something. 1PI3 10.Bxf4: not Rxf4 — it hits the queen but leaves the rook badly placed.
+**A1. An attack is not a plan.** ✅ (moveMissed `emptyThreat` → overvalued-attack) 8urm 8...Qg5: hitting the queen pays only if the threat achieves something. 1PI3 10.Bxf4: not Rxf4 — it hits the queen but leaves the rook badly placed.
 Compute: when a move attacks a piece, compare our attacker's pieceQuality/eval after the target's best retreat against the quiet best move.
 
 **A2. Skip the middleman.** dowe 11.e5: no Rf1 first; e5 works right away.
 Compute: the plan move is already engine-best (or within a few cp) compared with prep-then-move.
 
-**A3. The least valuable piece for the job.** SDIQ 23.Nc7: reach e8 with the knight, not the queen. 38Qz 32...f6: defend with a pawn before tying down a piece.
+**A3. The least valuable piece for the job.** ✅ partly (positionAsk defend: `pawnCanGuard`) SDIQ 23.Nc7: reach e8 with the knight, not the queen. 38Qz 32...f6: defend with a pawn before tying down a piece.
 Compute: among moves that reach the same square or give the same defence, rank by piece value and by what each one leaves undefended.
 
 **A4. Provoke the commitment.** 6si_ 6.Be2 provokes ...c4, which releases the pressure on d4. cKeN 11.a4 invites ...b4, a lasting target. r7W4 12.a6 fixes ...b6 before their pawns fix yours.
@@ -478,7 +478,7 @@ Compute: the engine's expected reply is a pawn advance. Diff the structure after
 **A5. They stopped it — play it anyway?** 7f2s 12...f4: White seems to cover f4, but after exf4 gxf4 the knight must lose a tempo.
 Compute: our planned push lands on a square the opponent just covered, and the engine still rates it best. Name the reply that makes the cover fail.
 
-**A6. The pawn hook.** Gti0 15...g6 creates a hook, so h5 opens the h-file. 8wVt 7.Be3 induces ...h6 as a hook for the storm.
+**A6. The pawn hook.** ✅ (`pawnHook` teaches; `hookCreated` → weakened-king-safety) Gti0 15...g6 creates a hook, so h5 opens the h-file. 8wVt 7.Be3 induces ...h6 as a hook for the storm.
 Compute: an enemy pawn advanced in front of its castled king that one of our pawns can contact; the lever opens a file.
 
 **A7. Open or lock the centre to suit the wing attack.** 24yO 9...e4 and 8wVt 8.d5 close the centre to free the wing attack. Gti0 9...c5 keeps it open, since ...d5 would free their queenside attack.
@@ -502,12 +502,12 @@ Compute: when the gap between the top engine moves is tiny, say "any is fine" (t
 
 ### B
 
-**B1. The pawn hook.** A pawn pushed one square in front of your castled king gives their pawns something to latch onto and open a file.
+**B1. The pawn hook.** ✅ (= A6) A pawn pushed one square in front of your castled king gives their pawns something to latch onto and open a file.
 - Najdorf 8...Be7: unpin with the bishop, not ...h6, because h6 is a hook for White's g-pawn.
 - Scotch 8...h6: Black made a hook, so castle long and storm with g4–g5.
 - Compute: a pawn on rank 3 in front of the king (h6/g6/h3/g3) that an enemy pawn can reach and capture within ≤2 pushes, and the capture opens a file at the king.
 
-**B2. Castling by hand.** The king lost its right to castle, so walk it to safety: Kf7, a rook to f8/e8, then Kg8.
+**B2. Castling by hand.** ✅ (`castleByHand`; posed king-stuck-center) The king lost its right to castle, so walk it to safety: Kf7, a rook to f8/e8, then Kg8.
 - Scotch Gambit 10...h6: the plan is ...Kf7, ...Re8 and ...Kg8, but ...Kf7 right now fails to Ng5, so h6 comes first.
 - Compute: castling rights gone and the king on the e/f-file. Search short king+rook routes to a g-file shelter, Stockfish-checked.
 
@@ -516,7 +516,7 @@ Compute: when the gap between the top engine moves is tiny, say "any is fine" (t
 - Scandinavian 11.d3: don't reveal your hand. b4 cannot be stopped, so play it later when it comes with tempo (12.b4).
 - Compute: several engine top moves sit within ~20cp, and one of them is a king tuck or a quiet move with no pawn commitment, and the plan move stays available.
 
-**B4. An empty threat.** An attack whose target just steps away gains nothing.
+**B4. An empty threat.** ✅ (= A1) An attack whose target just steps away gains nothing.
 - Moist lesson 16.Bf4: a threat needs a purpose beyond itself.
 - London 10.h3: ...Nh4 is "one-move-itis".
 - Compute: after our attacking move, their best reply moves the piece to a square that is no worse (same mobility or eval). Our eval is also no better than with a quiet developing move.
@@ -548,7 +548,7 @@ Compute: when the gap between the top engine moves is tiny, say "any is fine" (t
 - Ruy for beginners 10...h6 and 11...g5: borrow their idea, kick the pinner, and pay with loosened king pawns.
 - Compute: both sides have a piece pinned to the queen. Weigh pin-breaking pawn moves against king-shelter cost.
 
-**B11. Put the rook on the file that will open.**
+**B11. Put the rook on the file that will open.** ✅ (`fileToOpen`; posed passive-rook)
 - QG 16.Rad1: if ...e6 trades the pawns off, the rook is already stacked behind the queen.
 - 1870 14.Re1 before f4.
 - Compute: a file closed only by pawn tension that resolves in the PV. Compare rook placements by eval.
@@ -557,7 +557,7 @@ Compute: when the gap between the top engine moves is tiny, say "any is fine" (t
 ### C
 
 **C1. A move that fails now can work later.** Recheck rejected candidates each move.
-**C2. Defend with the cheapest piece.** The pawn or minor first.
+**C2. Defend with the cheapest piece.** ✅ (= A3) The pawn or minor first.
 **C3. Queens and rooks make bad defenders.** A heavy piece tied to a guard is wasted.
 **C4. Choose the recapture.** Compare what each recapturing piece leaves behind.
 **C5. Secure the loose piece before you collect.** Take only once your own loose piece is guarded.
@@ -567,3 +567,27 @@ Compute: when the gap between the top engine moves is tiny, say "any is fine" (t
 **C9. Pin quality.** A pin to the king versus the queen, and whether it can be broken cheaply.
 **C10. Close the centre before a wing attack.** Duplicates A7.
 **C11. Trade one advantage for another.** Give back material to keep the initiative, and the reverse.
+
+## Article sweep 2 (2026-10-05) — overprotection, positional threat, desperado, hardest move, never trust, weak squares, equal positions, maneuvering
+
+Checked against existing computers first; only the new ones are listed.
+
+**D1. Overprotect your strong point.** 🔴 Nothing in the app. Add defenders to a key square, an outpost piece or a chain base before it is attacked; a well-guarded point frees your other pieces and stops their counterplay.
+Compute: our piece on an outpost or a central pawn with guards ≤ the attackers they can bring in two moves; a quiet move adding a guard is near engine-best.
+
+**D2. The ugly move that is correct ("the hardest move to make").** 🔴 Nothing in the app. The engine's best gives up the fianchetto bishop, doubles our own pawns or undevelops, and it is still the move.
+Compute: bestSan breaks a principle (doubles our pawns, trades the fianchetto bishop, retreats to the back rank) and beats the "pretty" alternative by ≥ 50cp. Say it looks wrong, then say why it is right.
+
+**D3. Trade off their best defender.** 🟠 Partly built (remove-the-defender exists for tactics; not yet for positional trades). A trade of the one piece covering their weak squares or king leaves the rest as spectators.
+Compute: their piece that is the only guard of ≥ 2 holes or key squares, and a move of ours offers a trade for it.
+
+**D4. Judge a trade by what stays on the board (Tarrasch).** 🟠 Partly built (16 files mention it). After the trade, compare the pieces left: good bishop against bad, knight against a weak square.
+
+**D5. Act before they consolidate.** 🟠 Partly built. Their piece is one move from covering the weakness, so the window closes next move.
+Compute: their best reply covers our target square. Our forcing move now is ≥ 50cp better than the quiet one.
+
+**D6. Never trust their move.** ✅ = type 1 (`theirMoveChanged`). Check every opponent move for what it left hanging, whoever played it.
+
+**D7. A hole only matters if you can reach it.** ✅ = C7. Inaccessibility: the hole is harmless when no piece of ours can reach it in a few moves.
+
+**D8. When lost, change the character of the game.** ✅ = B8/A11. (Desperado defense.)

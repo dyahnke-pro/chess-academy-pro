@@ -3,7 +3,8 @@
 // checked the king???").
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { autopilotRecapture, doubleAttack, escapeSquareFirst, greekGift, positionPosed, lastMoveAlong, lastMoveFromPgn, mechanismContrast, moveMissed, positionAsk, theirMoveChanged, walkableLine } from './moveInsight';
+import { autopilotRecapture, doubleAttack, escapeSquareFirst, greekGift, positionPosed, lastMoveAlong, lastMoveFromPgn, mechanismContrast, moveMissed, positionAsk, theirMoveChanged, walkableLine, pawnHook, hookCreated, castleByHand, fileToOpen, pawnCanGuard, emptyThreat,
+} from './moveInsight';
 
 // White: Ka1, Re2, Ng5. Black: Kh8, Qd8. Two checks — Nf7+ (forks king and
 // queen) and Rh2+ (only checks).
@@ -211,5 +212,44 @@ describe('positionPosed — the diagnosis half (both ways)', () => {
   it('every miss carries the tag it is evidence of', () => {
     expect(moveMissed('rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2', 'Nc6', ['d4d5'])?.tag).toBe('tempo-handed');
     expect(moveMissed('4r1k1/8/8/8/8/8/4P3/3Q2K1 w - - 0 1', 'Qa4', ['e8e2'])?.tag).toBe('hung-material');
+  });
+});
+
+describe('the full speed-run read — new computers, both ways', () => {
+  it('pawn hook: their h6 pawn, your g-pawn two pushes from g5', () => {
+    const h = pawnHook('6k1/5pp1/7p/8/8/6P1/8/2K5 w - - 0 1', 'w');
+    expect(h).toMatchObject({ hook: 'h6', pawn: 'g3', contact: 'g5' });
+  });
+  it('no hook talk when your own king lives on that wing', () => {
+    expect(pawnHook('6k1/5pp1/7p/8/8/6P1/8/6K1 w - - 0 1', 'w')).toBeNull();
+  });
+  it('…h6 that hands them a hook is caught, and tagged', () => {
+    expect(hookCreated('6k1/5ppp/8/8/8/6P1/8/2K5 b - - 0 1', 'h6')).toMatchObject({ hook: 'h6', pawn: 'g3' });
+  });
+  it('castling by hand: rights gone, king in the centre, queens on', () => {
+    const fen = 'r1bqk2r/ppp2ppp/8/8/8/8/PPP2PPP/R1BQK2R b - - 0 1';
+    expect(castleByHand(fen, 'b')?.text).toMatch(/walk it to g8/);
+    expect(positionPosed(fen, {}).map((p) => p.tag)).toContain('king-stuck-center');
+    expect(castleByHand('r1bqk2r/ppp2ppp/8/8/8/8/PPP2PPP/R1BQK2R b kq - 0 1', 'b')).toBeNull();
+  });
+  it('the file that will open: d4×e5 clears the d-file, the rook slides over', () => {
+    const fen = '4k3/8/8/4p3/3P4/8/8/R3K3 w - - 0 1';
+    expect(fileToOpen(fen, 'w')).toMatchObject({ file: 'd', rook: 'a1' });
+    expect(positionPosed(fen, {}).map((p) => p.tag)).toContain('passive-rook');
+  });
+  it('the cheapest defender: b3 guards the c4 bishop', () => {
+    expect(pawnCanGuard('4k3/8/8/8/2B5/8/1P6/4K3 w - - 0 1', 'c4')).toBe('b3');
+  });
+  it('an empty threat: Rd1 hits the queen, it steps to a5', () => {
+    expect(emptyThreat('3qk3/8/8/8/8/8/8/R3K3 w - - 0 1', 'Rd1', 'Qa5')).toMatchObject({ target: 'd8', piece: 'q', to: 'a5' });
+  });
+});
+
+describe('the new misses carry their tags (diagnosis direction)', () => {
+  it('an empty threat files overvalued-attack', () => {
+    expect(moveMissed('3qk3/8/8/8/8/8/8/R3K3 w - - 0 1', 'Rd1', ['d8a5'])?.tag).toBe('overvalued-attack');
+  });
+  it('a hook in front of your own king files weakened-king-safety', () => {
+    expect(moveMissed('6k1/5ppp/8/8/8/6P1/8/2K5 b - - 0 1', 'h6', ['g3g4'])?.tag).toBe('weakened-king-safety');
   });
 });

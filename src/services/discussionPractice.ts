@@ -23,6 +23,7 @@ import { addMistakePuzzleFromCapture, provenanceForGameId } from './mistakePuzzl
 import { pvUciToSan } from './principleAttribution';
 import type { MisconceptionSource, MisconceptionTagRecord } from '../types';
 import { recordCapabilityEvidence, type CapabilityEvidenceRecord } from './capabilityEvidence';
+import { positionPosed } from './moveInsight';
 
 /** Decide whether a played move warrants the "why?" prompt. Thin
  *  re-export so callers import one module. */
@@ -389,6 +390,11 @@ export async function recordMoveEvidence(args: {
   origin: CapabilityOrigin;
   prompted: boolean;
   sourceGameId?: string;
+  /** The engine's best move here, when the surface has it — lets the insight
+   *  computer say what the position POSED (escape square, Greek gift, double
+   *  attack), so a live Learn/Play move records it both ways. */
+  bestSan?: string;
 }): Promise<number> {
-  return recordCapabilityEvidence(args);
+  const { bestSan, ...rest } = args;
+  return recordCapabilityEvidence({ ...rest, alsoPosed: positionPosed(args.fenBefore, { bestSan }) });
 }

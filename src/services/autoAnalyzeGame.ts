@@ -27,7 +27,8 @@ import { classifyPhase } from './gamePhaseService';
 import { pvUciToSan } from './principleAttribution';
 import { isMateEval } from './engineConstants';
 import { isFixtureGame } from './fixtureGames';
-import { isMisconceptionTagId } from '../data/misconceptionTags';
+import { isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
+import { positionPosed } from './moveInsight';
 import type { GameRecord, MisconceptionTagRecord, MistakePuzzle, MoveAnnotation } from '../types';
 
 export interface BlunderForAnalysis {
@@ -60,6 +61,9 @@ export interface CapabilityPly {
   /** The coach announced the moment before this move (Learn's critical-moment
    *  statement), so a find here is not unaided evidence. Default false. */
   prompted?: boolean;
+  /** What the insight computer says this position posed (their threat, the
+   *  escape square, a named pattern) — recorded both ways with the ply. */
+  alsoPosed?: Array<{ tag: MisconceptionTagId; posedImportance: number }>;
 }
 
 export interface AutoAnalyzeOptions {
@@ -187,6 +191,7 @@ export async function autoAnalyzeBlunders(
         // alone. EXCEPT where Learn announced the moment first (T3, 2026-09-20):
         // the game record carries those plies, and a find there is prompted.
         prompted: ply.prompted ?? false,
+        alsoPosed: ply.alsoPosed,
         ...(opts.sourceGameId ? { sourceGameId: opts.sourceGameId } : {}),
       });
     }
@@ -272,6 +277,8 @@ export function capabilityPliesFromAnnotations(
 ): CapabilityPly[] {
   const prompted = new Set(promptedPlies);
   const out: CapabilityPly[] = [];
+  const sanAt = new Map<number, string>();
+  for (const a of annotations) sanAt.set((a.moveNumber - 1) * 2 + (a.color === 'black' ? 1 : 0), a.san);
   for (const ann of annotations) {
     if (ann.color !== playerColor) continue;
     if (ann.classification === 'blunder' || ann.classification === 'mistake') continue;
@@ -282,6 +289,12 @@ export function capabilityPliesFromAnnotations(
       playedSan: ann.san,
       cpLoss: measuredCpLoss(ann),
       prompted: prompted.has(fenIndex + 1),
+      alsoPosed: positionPosed(fens[fenIndex], {
+        bestSan: ann.bestMove ? uciToSan(fens[fenIndex], ann.bestMove) || undefined : undefined,
+        lastMove: fenIndex > 0 && sanAt.has(fenIndex - 1)
+          ? { fenBefore: fens[fenIndex - 1], san: sanAt.get(fenIndex - 1) as string }
+          : undefined,
+      }),
     });
   }
   return out;

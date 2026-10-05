@@ -6,6 +6,8 @@ Index: https://www.chess.com/article/view/naroditsky-chess-articles-videos-comme
 
 ## Pulled (ideas recorded in the catalogue)
 - The Greek Gift Sacrifice Lives On! — /article/view/the-greek-gift-sacrifice-lives-on
+- Overprotection, Decoded; The Positional Threat; Desperado Defense; The Hardest Move To Make; Never Trust Your Opponent!; Weak Squares? Who Cares?; How to Win Equal Positions; The Art Of Maneuvering (sweep 2, catalogue D1–D8)
+- How To Play A Counterblow — URL 404s, find the real slug
 
 ## Priority to pull next (map to insight types)
 - How to Avoid Blunders, Part 1 / Part 2 — how-to-avoid-blunders-part-1 / -part-2
