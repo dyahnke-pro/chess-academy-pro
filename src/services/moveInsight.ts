@@ -31,6 +31,7 @@ import { andList } from '../utils/andList';
 import { countWords } from '../utils/countWords';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { theirMoveCost } from './theirMoveCost';
+import { openingWindowOpen } from './moveFundamentals';
 import { findHangingBySee, findKnightReroute, findWeakPawns } from './positionReadingService';
 import { findWorstPlacedPiece } from './nextPlans';
 import { detectLatentDanger, latentDangerClause } from './latentDanger';
@@ -108,6 +109,7 @@ function directionFor(fen: string, bestSan: string | undefined): string | null {
   if (gg) return gg.hint;
   const esc = escapeSquareFirst(fen, bestSan);
   if (esc) return esc.hint;
+  if (skewer(fen, bestSan)) return 'Look for a check that lines up with something standing behind the king.';
   if (doubleAttack(fen, bestSan)) {
     return r.move.san.includes('+')
       ? 'Look for a check that does more than check — one move that hits two things at once.'
@@ -190,7 +192,10 @@ function positionAskCore(fen: string, opts: { bestSan?: string }): PositionAsk {
         squares: [must.square],
       };
     }
-    const cheap = must.piece !== 'p' ? pawnCanGuard(fen, must.square) : null;
+    // A guard only helps when nothing cheaper than the piece is hitting it —
+    // against a pawn attack a defender changes nothing (replay, game 2 8.Bc4).
+    const cheaperHits = (() => { try { return board.attackers(must.square as Square, them).some((a) => (CAPTURE_VALUE[board.get(a)?.type ?? 'k'] ?? 99) < (CAPTURE_VALUE[must.piece] ?? 0)); } catch { return true; } })();
+    const cheap = must.piece !== 'p' && !cheaperHits ? pawnCanGuard(fen, must.square) : null;
     return { mode: 'defend', text: `${hit} — deal with that first.${cheap ? ' A pawn can guard it — the cheapest defender there is.' : ''}`, squares: [must.square] };
   }
 
@@ -218,7 +223,27 @@ function positionAskCore(fen: string, opts: { bestSan?: string }): PositionAsk {
   }
 
   const hookNow = pawnHook(fen, me);
-  if (attack && attackers >= 1 && attackers <= defenders) {
+  // STILL IN THE OPENING (replay, game 2: "complete your development and
+  // castle"): the opening's question comes before any attack talk.
+  const mover = me === 'w' ? 'white' : 'black';
+  if (openingWindowOpen(fen, mover)) {
+    const home = homeMinors(board, me);
+    const canStillCastle = board.getCastlingRights(me).k || board.getCastlingRights(me).q;
+    const bits: string[] = [];
+    if (home.length > 0) bits.push(`your ${andList(home.map((h) => `${name(h.type)} on ${h.square}`))} ${home.length === 1 ? 'is' : 'are'} still at home`);
+    if (canStillCastle) bits.push('your king has not castled yet');
+    if (bits.length > 0) {
+      const queensOn = board.board().flat().some((x) => x && x.type === 'q');
+      return {
+        mode: 'improve',
+        text: queensOn
+          ? `You are still in the opening — ${andList(bits)}. Finish developing before anything else.`
+          : `The queens are off, but ${andList(bits)} — develop it now; there is no attack to fear.`,
+        squares: home.map((h) => h.square),
+      };
+    }
+  }
+  if (attack && attackers >= 2 && attackers <= defenders) {
     return {
       mode: 'reinforce',
       text: `You have ${num(attackers)} ${attackers === 1 ? 'piece' : 'pieces'} near their king and they have ${num(defenders)} defending — bring one more before you strike.${hookNow ? ` ${hookNow.text}` : ''}`,
@@ -231,6 +256,8 @@ function positionAskCore(fen: string, opts: { bestSan?: string }): PositionAsk {
   // badly, the whole game stands badly"), from the app's own computers.
   const parts: string[] = [];
   const sq: string[] = [];
+  const pe = pawnEnding(fen, me);
+  if (pe) { parts.push(pe.text); sq.push(...pe.squares); }
   const mat = materialPlan(fen, me);
   if (mat) parts.push(mat.text);
   const loosePieces = looseOwnPieces(fen, me);
@@ -266,7 +293,9 @@ function positionAskCore(fen: string, opts: { bestSan?: string }): PositionAsk {
   }
   return {
     mode: 'improve',
-    text: parts.length > 0
+    text: pe
+      ? parts.join(' ')
+      : parts.length > 0
       ? `No piece is loose and no attack is ready. ${parts.join(' ')}`
       : 'No piece is loose and no attack is ready — find your worst-placed piece and give it a better job.',
     squares: sq,
@@ -688,7 +717,7 @@ export function positionPosed(
       const r = play(opts.lastMove.fenBefore, opts.lastMove.san);
       if (r && detectNewThreat(opts.lastMove.fenBefore, r.board.fen(), r.move.color)) add('missed-opponents-threat', 90);
     }
-    if (escapeSquareFirst(fen, opts.bestSan) || greekGift(fen, opts.bestSan) || doubleAttack(fen, opts.bestSan ?? '')) add('missed-tactic', 85);
+    if (escapeSquareFirst(fen, opts.bestSan) || greekGift(fen, opts.bestSan) || doubleAttack(fen, opts.bestSan ?? '') || (opts.bestSan && skewer(fen, opts.bestSan))) add('missed-tactic', 85);
     const me = new Chess(fen).turn();
     if (castleByHand(fen, me)) add('king-stuck-center', 70);
     if (fileToOpen(fen, me)) add('passive-rook', 60);
@@ -937,6 +966,10 @@ export function materialPlan(fen: string, me: 'w' | 'b'): { diff: number; text: 
   let board: Chess;
   try { board = new Chess(fen); } catch { return null; }
   const diff = material(board, me) - material(board, me === 'w' ? 'b' : 'w');
+  // Trade talk needs pieces to trade (replay, game 2: a king-and-pawn ending
+  // was told to "trade pieces, not pawns").
+  const pieces = (c: 'w' | 'b'): number => board.board().flat().filter((x) => x && x.color === c && x.type !== 'k' && x.type !== 'p').length;
+  if (pieces('w') === 0 || pieces('b') === 0) return null;
   if (diff >= 3) return { diff, text: `You are ${countWords(diff)} up — trade pieces, not pawns, and the endgame wins itself.` };
   if (diff <= -3) return { diff, text: `You are ${countWords(-diff)} down — keep pieces on and make it messy; every trade helps them.` };
   return null;
@@ -970,4 +1003,59 @@ export function heavyTiedDown(fen: string, me: 'w' | 'b'): { defender: string; p
     if (d && (d.type === 'q' || d.type === 'r')) return { defender: g[0], piece: d.type, guarded: cell.square, guardedPiece: cell.type };
   }
   return null;
+}
+
+function homeMinors(board: Chess, c: 'w' | 'b'): Array<{ square: string; type: string }> {
+  const r = c === 'w' ? '1' : '8';
+  const out: Array<{ square: string; type: string }> = [];
+  for (const [f, t] of [['b', 'n'], ['g', 'n'], ['c', 'b'], ['f', 'b']] as const) {
+    const p = board.get(`${f}${r}` as Square);
+    if (p && p.color === c && p.type === t) out.push({ square: `${f}${r}`, type: t });
+  }
+  return out;
+}
+
+/**
+ * THE SKEWER (game 2, 20.Bb4+ — "their king and rook are on the same
+ * diagonal, always be alert to that"): the move checks with a line piece, and
+ * the first piece standing behind the king on that line is worth taking.
+ */
+export function skewer(fenBefore: string, san: string): { behind: string; piece: string } | null {
+  const r = play(fenBefore, san);
+  if (!r || !r.move.san.includes('+') || !'brq'.includes(r.move.piece)) return null;
+  const king = ownKing(r.board, r.board.turn());
+  if (!king) return null;
+  const df = Math.sign(king.charCodeAt(0) - r.move.to.charCodeAt(0));
+  const dr = Math.sign(Number(king[1]) - Number(r.move.to[1]));
+  let f = king.charCodeAt(0) + df; let rk = Number(king[1]) + dr;
+  while (f >= 97 && f <= 104 && rk >= 1 && rk <= 8) {
+    const sq = `${String.fromCharCode(f)}${rk}` as Square;
+    const p = r.board.get(sq);
+    if (p) return p.color === r.board.turn() && p.type !== 'p' ? { behind: sq, piece: p.type } : null;
+    f += df; rk += dr;
+  }
+  return null;
+}
+
+/**
+ * THE PAWN ENDING (game 2, moves 38-51 — the king marches, the passed pawn
+ * runs, "the red carpet is rolled out"): only kings and pawns left.
+ */
+export function pawnEnding(fen: string, me: 'w' | 'b'): { text: string; squares: string[] } | null {
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return null; }
+  const cells = board.board().flat().filter((x): x is NonNullable<typeof x> => !!x);
+  if (cells.some((x) => x.type !== 'k' && x.type !== 'p')) return null;
+  const them = me === 'w' ? 'b' : 'w';
+  const passed = cells.filter((x) => x.type === 'p' && x.color === me && !cells.some((y) => y.type === 'p' && y.color === them
+    && Math.abs(y.square.charCodeAt(0) - x.square.charCodeAt(0)) <= 1
+    && (me === 'w' ? Number(y.square[1]) > Number(x.square[1]) : Number(y.square[1]) < Number(x.square[1]))));
+  const king = ownKing(board, me);
+  if (!king) return null;
+  return {
+    text: passed.length > 0
+      ? `Pawn ending — your king is the strongest piece now. March it forward and escort your passed pawn on ${passed[0].square}.`
+      : 'Pawn ending — your king is the strongest piece now. March it toward their pawns.',
+    squares: [king, ...(passed[0] ? [passed[0].square] : [])],
+  };
 }

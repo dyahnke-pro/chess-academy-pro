@@ -3,7 +3,7 @@
 // checked the king???").
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { autopilotRecapture, doubleAttack, escapeSquareFirst, greekGift, positionPosed, lastMoveAlong, lastMoveFromPgn, mechanismContrast, moveMissed, positionAsk, theirMoveChanged, walkableLine, pawnHook, hookCreated, castleByHand, fileToOpen, pawnCanGuard, emptyThreat, looseOwnPieces, noRetreat, materialPlan, tradeWhileDown, heavyTiedDown,
+import { autopilotRecapture, doubleAttack, escapeSquareFirst, greekGift, positionPosed, lastMoveAlong, lastMoveFromPgn, mechanismContrast, moveMissed, positionAsk, theirMoveChanged, walkableLine, pawnHook, hookCreated, castleByHand, fileToOpen, pawnCanGuard, emptyThreat, looseOwnPieces, noRetreat, materialPlan, tradeWhileDown, heavyTiedDown, skewer, pawnEnding,
 } from './moveInsight';
 
 // White: Ka1, Re2, Ng5. Black: Kh8, Qd8. Two checks — Nf7+ (forks king and
@@ -265,7 +265,7 @@ describe('sweep 3 — loose pieces, retreat squares, material, heavy defenders',
     expect(noRetreat('4k3/6p1/7p/8/7B/8/8/4K3 w - - 0 1', 'w')).toBeNull();
   });
   it('a piece down: keep pieces on', () => {
-    expect(materialPlan('4k3/8/8/8/8/8/8/2B1K1N1 b - - 0 1', 'b')?.text).toMatch(/down — keep pieces on/);
+    expect(materialPlan('4k1n1/8/8/8/8/8/8/2B1K1N1 b - - 0 1', 'b')?.text).toMatch(/down — keep pieces on/);
   });
   it('a like-for-like trade while behind files bad-trade', () => {
     // Black is a rook down and swaps knights
@@ -274,5 +274,25 @@ describe('sweep 3 — loose pieces, retreat squares, material, heavy defenders',
   });
   it('a rook as the only guard of an attacked knight', () => {
     expect(heavyTiedDown('4k3/8/8/6b1/8/8/8/R1N1K3 w - - 0 1', 'w')).toMatchObject({ defender: 'a1', guarded: 'c1' });
+  });
+});
+
+describe('replay fixes (game 2, Bird Defence)', () => {
+  it('the opening asks for development, naming the pieces still at home', () => {
+    const t = positionAsk('r1bqkbnr/pppp1ppp/8/1B6/3pP3/8/PPPP1PPP/RNBQK2R w KQkq - 0 5', {}).text;
+    expect(t).toMatch(/still at home|still in the opening/);
+  });
+  it('a guard does not help against a pawn attack', () => {
+    // 8.Bc4 position: …c6 hits the b5 bishop; no "a pawn can guard it"
+    const fen = 'r1b1k1nr/pp1p1ppp/2p5/1Bb5/3pP2q/3P4/PPPN1PPP/R1BQ1RK1 w kq - 0 8';
+    expect(positionAsk(fen, {}).text).not.toMatch(/cheapest defender/);
+  });
+  it('the skewer: Bb4+ with the rook behind the king', () => {
+    expect(skewer('5r2/4k3/8/4p3/8/8/3B4/4K3 w - - 0 1', 'Bb4+')).toMatchObject({ behind: 'f8', piece: 'r' });
+  });
+  it('a pawn ending speaks king + passed pawn, no trade talk', () => {
+    const fen = '8/8/4k3/4P3/4K3/8/8/8 w - - 0 1';
+    expect(pawnEnding(fen, 'w')?.text).toMatch(/passed pawn on e5/);
+    expect(materialPlan('8/8/4k3/4P3/4K3/8/8/8 w - - 0 1', 'w')).toBeNull();
   });
 });
