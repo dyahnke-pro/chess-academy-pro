@@ -33,3 +33,16 @@ describe('pinPressure — put pressure on the pinned piece', () => {
     expect(findPinPressure(black)).toEqual([]);
   });
 });
+
+describe('pinPressure — against the student', () => {
+  it('reads the opponent\'s pile-on threat on the student\'s pinned piece (either seat, one computer)', async () => {
+    const { findPinPressure: f, pinPressureThreat } = await import('./pinPressure');
+    // Black to move on the pile-on board: White holds the pin, so the threat
+    // against Black's knight is e5 — the same answer read from Black's seat.
+    const blackToMove = PILE_ON.replace(' w KQkq', ' b KQkq');
+    const threat = f(blackToMove, 'w');
+    expect(threat[0]?.pinned).toBe('f6');
+    expect(threat[0]?.moves[0].san).toBe('e5');
+    expect(pinPressureThreat(PILE_ON)[0]?.pinned).toBe('f6');
+  });
+});

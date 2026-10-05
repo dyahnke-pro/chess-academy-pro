@@ -64,10 +64,31 @@ function winsOnCapture(fen: string, sq: Square, color: Color): boolean {
   return capturesWinMaterial(parts.join(' '), sq, color);
 }
 
-/** Every pin the side to move holds where piling on wins the piece; [] when none. */
-export function findPinPressure(fen: string): PinPressure[] {
+/** The board with `color` to move (a null move when it is not their turn). */
+function withMover(fen: string, color: Color): string {
+  const parts = fen.split(' ');
+  if (parts[1] === color) return fen;
+  parts[1] = color;
+  parts[3] = '-';
+  return parts.join(' ');
+}
+
+/**
+ * Every pin `holder` has where piling on wins the piece; [] when none.
+ *
+ * BOTH WAYS (David 2026-10-05: "for and against the opponent"): with `holder`
+ * the student it is the opportunity ("pile on the pinned knight"); with
+ * `holder` the opponent it is the threat against the student's pinned piece
+ * ("they can pile on with e5 — break the pin or add a defender"). One
+ * computer, one answer, read from either seat. Defaults to the side to move.
+ */
+export function findPinPressure(fen: string, holder?: Color): PinPressure[] {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return []; }
+  if (holder && chess.turn() !== holder) {
+    try { chess = new Chess(withMover(fen, holder)); } catch { return []; }
+    fen = chess.fen();
+  }
   const me = chess.turn();
   const them: Color = me === 'w' ? 'b' : 'w';
   const pins = detectTactics(fen).tactics.filter((t) => t.type === 'pin' && t.beneficiary === me);
@@ -108,6 +129,23 @@ export function findPinPressure(fen: string): PinPressure[] {
 export function isPinPressureMove(fen: string, from: string, to: string): boolean {
   return findPinPressure(fen).some((p) => p.moves.some((m) => m.from === from && m.to === to));
 }
+
+/**
+ * AGAINST the student: after the student's move (`fenAfter`, opponent to
+ * move), can the opponent pile on a pin and win the student's piece? The
+ * threat the student walked into, or failed to meet. [] when none.
+ */
+export function pinPressureThreat(fenAfter: string): PinPressure[] {
+  let mover: Color;
+  try { mover = new Chess(fenAfter).turn(); } catch { return []; }
+  return findPinPressure(fenAfter, mover);
+}
+
+/** The principle, said AGAINST the student (rotated by the caller). */
+export const PIN_PRESSURE_WARNING = [
+  'Your pinned piece is a target — they can attack it again and it cannot run.',
+  'A pinned piece is stuck: if they pile on, break the pin or add a defender first.',
+] as const;
 
 export function pieceName(t: PieceSymbol): string {
   return PIECE_NAMES[t] ?? 'piece';
