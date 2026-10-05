@@ -457,3 +457,113 @@ Stockfish to depth 12, every moveMissed claim checked against the full line.
 12/45 claims were wrong when the line was cut at 5 plies (material counted before the
 line settled; checks unsaid) → 0/46 after reading the whole line, naming checks, and
 saying a queen's worth or more as a floor.
+
+## Full collection read — reader agents A (videos 26–80), B (80–160), C (160–end)
+
+Not built yet (🔴) unless marked. A6 and B1 (pawn hook) are one type; C10 duplicates A7; B6 mirrors 36; B5 mirrors 26.
+
+### A
+**A1. An attack is not a plan.** 8urm 8...Qg5: hitting the queen pays only if the threat achieves something. 1PI3 10.Bxf4: not Rxf4 — it hits the queen but leaves the rook badly placed.
+Compute: when a move attacks a piece, compare our attacker's pieceQuality/eval after the target's best retreat against the quiet best move.
+
+**A2. Skip the middleman.** dowe 11.e5: no Rf1 first; e5 works right away.
+Compute: the plan move is already engine-best (or within a few cp) compared with prep-then-move.
+
+**A3. The least valuable piece for the job.** SDIQ 23.Nc7: reach e8 with the knight, not the queen. 38Qz 32...f6: defend with a pawn before tying down a piece.
+Compute: among moves that reach the same square or give the same defence, rank by piece value and by what each one leaves undefended.
+
+**A4. Provoke the commitment.** 6si_ 6.Be2 provokes ...c4, which releases the pressure on d4. cKeN 11.a4 invites ...b4, a lasting target. r7W4 12.a6 fixes ...b6 before their pawns fix yours.
+Compute: the engine's expected reply is a pawn advance. Diff the structure afterwards: pressure relieved, a new fixed pawn, a new hole.
+
+**A5. They stopped it — play it anyway?** 7f2s 12...f4: White seems to cover f4, but after exf4 gxf4 the knight must lose a tempo.
+Compute: our planned push lands on a square the opponent just covered, and the engine still rates it best. Name the reply that makes the cover fail.
+
+**A6. The pawn hook.** Gti0 15...g6 creates a hook, so h5 opens the h-file. 8wVt 7.Be3 induces ...h6 as a hook for the storm.
+Compute: an enemy pawn advanced in front of its castled king that one of our pawns can contact; the lever opens a file.
+
+**A7. Open or lock the centre to suit the wing attack.** 24yO 9...e4 and 8wVt 8.d5 close the centre to free the wing attack. Gti0 9...c5 keeps it open, since ...d5 would free their queenside attack.
+Compute: from the castling sides and the central tension, compare the eval of the locking push against keeping the tension.
+
+**A8. The retreat square that keeps your break.** RehH 9...Be7, not Ba5: from a5 the bishop gets hemmed in by b4 and ...c5 dies.
+Compute: for each retreat square, test whether the pawn chase gains a tempo and whether our break stays playable.
+
+**A9. A piece held only by a tactic.** u1ZS 10.Bd3/11.Bd2: the loose b1 bishop survives tactically, so recheck it every move.
+Compute: a piece with more attackers than defenders whose capture fails tactically; flag it when the opponent's move removes that tactic.
+
+**A10. The right piece for the hole.** gyOx 15.Bxe4: give back the bishop and keep the knight for d6 (a bishop there "bites on granite"). 9JUl: a knight on d4 controls eight squares.
+Compute: for each hole, which of our pieces can reach it and how mobile each would be there. Prefer trades that keep the best occupant.
+
+**A11. Behind in material: unbalance.** Gti0 4...Bg4: down a piece, castle on the opposite side and keep pieces on.
+Compute: with a material deficit, prefer asymmetric plans (type 13 inverted).
+
+**A12. Spend thinking time where it matters.** Nd2N 17...Qxd5: the knight recapture was fine too, so spend 10 seconds. 1671 12...Nc6: "know which decisions matter."
+Compute: when the gap between the top engine moves is tiny, say "any is fine" (the inverse of the slow-down beat, using criticalityScan's gap).
+
+
+### B
+
+**B1. The pawn hook.** A pawn pushed one square in front of your castled king gives their pawns something to latch onto and open a file.
+- Najdorf 8...Be7: unpin with the bishop, not ...h6, because h6 is a hook for White's g-pawn.
+- Scotch 8...h6: Black made a hook, so castle long and storm with g4–g5.
+- Compute: a pawn on rank 3 in front of the king (h6/g6/h3/g3) that an enemy pawn can reach and capture within ≤2 pushes, and the capture opens a file at the king.
+
+**B2. Castling by hand.** The king lost its right to castle, so walk it to safety: Kf7, a rook to f8/e8, then Kg8.
+- Scotch Gambit 10...h6: the plan is ...Kf7, ...Re8 and ...Kg8, but ...Kf7 right now fails to Ng5, so h6 comes first.
+- Compute: castling rights gone and the king on the e/f-file. Search short king+rook routes to a g-file shelter, Stockfish-checked.
+
+**B3. The useful waiting move: let them commit first.**
+- 2260 15.Kb1: "chess procrastination".
+- Scandinavian 11.d3: don't reveal your hand. b4 cannot be stopped, so play it later when it comes with tempo (12.b4).
+- Compute: several engine top moves sit within ~20cp, and one of them is a king tuck or a quiet move with no pawn commitment, and the plan move stays available.
+
+**B4. An empty threat.** An attack whose target just steps away gains nothing.
+- Moist lesson 16.Bf4: a threat needs a purpose beyond itself.
+- London 10.h3: ...Nh4 is "one-move-itis".
+- Compute: after our attacking move, their best reply moves the piece to a square that is no worse (same mobility or eval). Our eval is also no better than with a quiet developing move.
+
+**B5. The best-case test for a plan.** Even if the plan fully succeeds, does it achieve anything?
+- Fantasy Caro 12...O-O-O: even if a4–a5–a6 all worked, ...b5 answers it and three tempi are wasted.
+- Compute: play our plan moves while the opponent passes (null moves). If the final eval barely moves, the plan is empty. (Mirror of 26.)
+
+**B6. Give your own piece a retreat square before it is chased** (the mirror of 36).
+- Morra as Black 5...h6: a bolt-hole on h7 makes a later Nh4 harmless.
+- KID 13...Nb8: ...Na5 would run into b4, so the knight goes the long way round.
+- Compute: our piece can be attacked next move by a knight or pawn and has no safe square. Find a move that creates one.
+
+**B7. Grade every piece's safety.** A piece is safe only when a pawn guards it. One defender means it can be hit. A queen always counts as loose.
+- 1920 23...Bc6, not ...Bb5: c6 is pawn-guarded.
+- 2260 26...Ra7: the h7-knight is guarded only by a rook, so hit that rook.
+- Compute: for each piece, count defenders and note the defender type (pawn/piece/none). Flag loose or singly defended ones.
+
+**B8. When lost, complicate.**
+- Alapin piece-sac game 11.fxg7: the recovery technique is to complicate and sow doubt.
+- Compute: eval below the lost threshold. Prefer near-equal moves that leave the opponent the biggest only-move gap (criticalityScan).
+
+**B9. Force a piece onto an awkward square.**
+- Scandinavian 3.Bb5+: provoking ...Bd7 cuts Black's queen off from d5.
+- London 5...d6: deliberately keeps White's knight stuck on c3, where it clogs their setup.
+- Compute: after a check or attack forces a block or retreat, measure the drop in that piece's mobility, or the line it now cuts between their own pieces.
+
+**B10. Mutual pins: who breaks free first.**
+- Ruy for beginners 10...h6 and 11...g5: borrow their idea, kick the pinner, and pay with loosened king pawns.
+- Compute: both sides have a piece pinned to the queen. Weigh pin-breaking pawn moves against king-shelter cost.
+
+**B11. Put the rook on the file that will open.**
+- QG 16.Rad1: if ...e6 trades the pawns off, the rook is already stacked behind the queen.
+- 1870 14.Re1 before f4.
+- Compute: a file closed only by pawn tension that resolves in the PV. Compare rook placements by eval.
+
+
+### C
+
+**C1. A move that fails now can work later.** Recheck rejected candidates each move.
+**C2. Defend with the cheapest piece.** The pawn or minor first.
+**C3. Queens and rooks make bad defenders.** A heavy piece tied to a guard is wasted.
+**C4. Choose the recapture.** Compare what each recapturing piece leaves behind.
+**C5. Secure the loose piece before you collect.** Take only once your own loose piece is guarded.
+**C6. Force a concession.** Ask a question whose every answer costs them something.
+**C7. A weakness only counts if you can use it.** It must be reachable and attackable.
+**C8. Which side to castle.** Weigh the pawn shelter against the opponent's open files and lever pawns.
+**C9. Pin quality.** A pin to the king versus the queen, and whether it can be broken cheaply.
+**C10. Close the centre before a wing attack.** Duplicates A7.
+**C11. Trade one advantage for another.** Give back material to keep the initiative, and the reverse.
