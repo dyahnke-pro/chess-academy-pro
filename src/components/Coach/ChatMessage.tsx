@@ -82,6 +82,8 @@ function ActionButton({ action, onClick }: {
     weakness_drill: 'Drill my weaknesses',
     endgame_training: 'Train endgames',
     endgame_trainer: 'Play this ending',
+    // The coach quoted a book (bookTeaching): open the reader at that page.
+    read_book: 'Read it in the library',
     review_games: 'Review my games',
     // Recommend-a-focused-game: the coach set a trainingFocus (the point of the
     // game) and offers to play one now (David 2026-08-27).
@@ -197,6 +199,12 @@ export function ChatMessage({ message, isStreaming, onPickChoice, onWalkLine }: 
           void navigate(`/coach/endgame-trainer/${encodeURIComponent(action.id)}`);
         }
         break;
+      case 'read_book': {
+        // id = "<bookId>@<page>" — the page the coach just quoted.
+        const [book, page] = action.id.split('@');
+        void navigate(`/coach/library?book=${encodeURIComponent(book)}&page=${Number(page) || 0}`);
+        break;
+      }
       case 'review_games':
         void navigate('/coach/review');
         break;

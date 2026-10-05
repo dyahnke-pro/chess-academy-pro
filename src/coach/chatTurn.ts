@@ -159,7 +159,7 @@ export function fastPathLane(ask: string, opts: { fen?: string; routedCommand?: 
 export const NEW_KINDS = [
   'compare-my-move', 'why-is-it-a-target', 'count-attackers', 'count-defenders',
   'what-about-piece', 'is-piece-loose', 'what-did-their-move-change',
-  'what-should-i-play', 'i-dont-know', 'answer', 'start-thinking-lesson',
+  'what-should-i-play', 'i-dont-know', 'answer', 'start-thinking-lesson', 'book-teaching',
 ] as const;
 export type NewKind = typeof NEW_KINDS[number];
 
@@ -331,6 +331,10 @@ export const CHAT_KINDS: Record<ChatKind, KindSpec> = {
   'is-piece-loose': direct('is a piece loose / undefended (or which pieces are)'),
   // Outside a lesson (which has its own "I don't know"), not knowing is a
   // request for help: the hint lane.
+  // Answered before every lane on the student's own words (coachService →
+  // bookTeaching), so no canonical rewrite: "what do the books say" in
+  // today's fast path means BOOK MOVES (opening theory), not the library.
+  'book-teaching': { gloss: 'asks what a chess author or book teaches ("what does Lasker say about defence", "teach me the blockade from My System", "what do the books say about passed pawns")', lane: 'none', answerer: 'live', canonical: null },
   'i-dont-know': { gloss: 'the student says they do not know the answer', lane: 'hint', answerer: 'live', canonical: fixed('give me a hint') },
   answer: pending('the student ANSWERS the coach\'s question by naming squares or pieces ("c6 and e5", "the knight on c6")'),
   'start-thinking-lesson': pending('asks to be taught how to think / a general lesson ("teach me", "teach me to think")'),

@@ -11,7 +11,7 @@
  * validated facts. The voice only READS; it never writes.
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Chess } from 'chess.js';
 import {
   ArrowLeft, BookOpen, Play, Pause, ChevronLeft, ChevronRight,
@@ -474,7 +474,15 @@ function LibraryBookReader({ book, onBack, initialPage = 0 }: { book: LibraryBoo
 // ── The shelf ────────────────────────────────────────────────────────────────
 export function CoachesLibraryPage(): JSX.Element {
   const navigate = useNavigate();
-  const [open, setOpen] = useState<{ id: string; page: number } | null>(null);
+  // A deep link (`?book=<id>&page=<n>`) opens a book at a page — how the coach
+  // hands a student the passage it just taught from.
+  const [params] = useSearchParams();
+  const [open, setOpen] = useState<{ id: string; page: number } | null>(() => {
+    const id = params.get('book');
+    if (!id || !getLibraryBook(id)) return null;
+    const page = Number(params.get('page'));
+    return { id, page: Number.isInteger(page) && page >= 0 ? page : 0 };
+  });
   const [query, setQuery] = useState('');
   const openBook = open ? getLibraryBook(open.id) : undefined;
   const results = useMemo(() => searchLibrary(query), [query]);

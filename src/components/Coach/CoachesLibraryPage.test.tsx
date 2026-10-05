@@ -65,3 +65,28 @@ describe('CoachesLibraryPage follow-along scroll', () => {
     expect(lastArgs).toMatchObject({ block: 'start' });
   });
 });
+
+describe('CoachesLibraryPage deep link (the coach hands over a quoted page)', () => {
+  it('?book=&page= opens that book at that page', async () => {
+    const { render: rtlRender } = await import('@testing-library/react');
+    const { MemoryRouter } = await import('react-router-dom');
+    rtlRender(
+      <MemoryRouter initialEntries={['/coach/library?book=capablanca-chess-fundamentals&page=3']}>
+        <CoachesLibraryPage />
+      </MemoryRouter>,
+    );
+    // Page 3 is the Example 11 page — it carries a living board.
+    expect(await screen.findByTestId('library-living-board')).toBeTruthy();
+  });
+
+  it('an unknown book falls back to the shelf', async () => {
+    const { render: rtlRender } = await import('@testing-library/react');
+    const { MemoryRouter } = await import('react-router-dom');
+    rtlRender(
+      <MemoryRouter initialEntries={['/coach/library?book=no-such-book&page=2']}>
+        <CoachesLibraryPage />
+      </MemoryRouter>,
+    );
+    expect(await screen.findByTestId('coaches-library-page')).toBeTruthy();
+  });
+});

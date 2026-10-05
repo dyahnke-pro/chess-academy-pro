@@ -112,6 +112,12 @@ export const CHAT_TURN_EVAL_CASES: readonly ChatTurnEvalCase[] = [
   { text: 'is my rook loose', expect: ['is-piece-loose', 'tactics'], probe: 'referent' },
   { text: 'teach me how to think', expect: ['start-thinking-lesson'], probe: 'plain' },
 
+  // ── the books ──
+  { text: 'what does capablanca say about rook endings', expect: ['book-teaching'], probe: 'referent' },
+  { text: 'teach me the blockade from my system', expect: ['book-teaching'], probe: 'referent' },
+  { text: 'what do the old books say about the centre', expect: ['book-teaching'], probe: 'indirect' },
+  { text: 'que dice lasker sobre la defensa', expect: ['book-teaching'], probe: 'language' },
+
   // ── commands + conversation ──
   { text: 'take that move back', expect: ['command'], probe: 'plain' },
   { text: 'turn the voice off', expect: ['command'], probe: 'plain' },

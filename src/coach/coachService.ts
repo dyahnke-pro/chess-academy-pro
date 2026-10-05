@@ -26,6 +26,7 @@
  *
  * See `docs/COACH-BRAIN-00.md` for the architecture this implements.
  */
+import { teachFromBooks } from '../services/bookTeaching';
 import { Chess } from 'chess.js';
 import { findTradeMove, type ComparedMove } from '../services/groundedAnswer';
 import { logAppAudit } from '../services/appAuditor';
@@ -569,6 +570,27 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     const askLang = detectStudentLanguage(studentWords);
     if (askLang.nonEnglish) {
       input = { ...input, ask: await translateToEnglish(input.ask) };
+    }
+
+    // TEACH FROM THE BOOKS (David 2026-10-05: "Make sure coach can teach from the
+    // books if someone asks it to"). "What does Lasker say about defence?" is
+    // answered with the book's own passage, quoted and cited, and the reader
+    // offered at that page — computed (bookTeaching), never paraphrased by the
+    // model. Read AFTER translation, so the request works in any language;
+    // the passage itself stays in the book's own words. Only what a person
+    // asked; composed prompts never reach it.
+    if (!INTERNAL_ASK_SURFACES.has(input.liveState.surface)) {
+      const book = await teachFromBooks(input.ask).catch(() => null);
+      if (book) {
+        return {
+          text: book.text,
+          toolCallIds: [],
+          dispatchedToolNames: [],
+          provider: options.providerOverride?.name ?? 'deepseek',
+          servedIntent: 'book-teaching',
+          ...(book.offer ? { actionOffer: [book.offer] } : {}),
+        };
+      }
     }
     // THE COACH REPLIES IN THE LANGUAGE THE STUDENT USED (David 2026-09-11:
     // "the app should speak and write in whatever language the user types or
