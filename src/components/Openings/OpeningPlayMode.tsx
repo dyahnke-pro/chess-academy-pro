@@ -141,7 +141,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
     const fen = game.fen;
     try {
       const analysis = await stockfishEngine.analyzePosition(fen, 16, undefined, 'brain');
-      const why = await computeWhyBestMove({ fen, studentColor: playerColor, analysis, rating: playerRating, studentWeaknesses: weaknessSignalsRef.current, studentNeedContext: studentNeedRef.current });
+      const why = await computeWhyBestMove({ fen, studentColor: playerColor, analysis, rating: playerRating, pgn: game.pgn, studentWeaknesses: weaknessSignalsRef.current, studentNeedContext: studentNeedRef.current });
       // Lead the eye to the move we NAME but don't play out (G6).
       const uci = analysis.bestMove;
       if (why && uci && uci.length >= 4) {

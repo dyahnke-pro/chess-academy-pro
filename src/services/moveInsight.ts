@@ -30,6 +30,7 @@ import { settledNetForLine } from './exchangeLedger';
 import { sayMoveClause } from './spokenMove';
 import { andList } from '../utils/andList';
 import { countWords } from '../utils/countWords';
+import { theirMoveCost } from './theirMoveCost';
 
 export type PositionMode = 'defend' | 'press' | 'reinforce' | 'improve';
 
@@ -113,7 +114,19 @@ function directionFor(fen: string, bestSan: string | undefined): string | null {
  * drill's move) only steers the DIRECTION — "start with the checks", "one move
  * that hits two things" — and is never named.
  */
-export function positionAsk(fen: string, opts: { bestSan?: string } = {}): PositionAsk {
+export function positionAsk(fen: string, opts: { bestSan?: string; lastMove?: { fenBefore: string; san: string } } = {}): PositionAsk {
+  const base = positionAskCore(fen, opts);
+  // WHAT THEIR LAST MOVE CHANGED leads (catalogue §1 — "when a move is made, I
+  // consider its drawbacks"): the reading he does before anything else.
+  if (!opts.lastMove) return base;
+  let me: 'w' | 'b';
+  try { me = new Chess(fen).turn(); } catch { return base; }
+  const changed = theirMoveChanged(opts.lastMove.fenBefore, opts.lastMove.san, me);
+  if (!changed) return base;
+  return { mode: base.mode, text: [changed.text, base.text].filter(Boolean).join(' '), squares: [...changed.squares, ...base.squares] };
+}
+
+function positionAskCore(fen: string, opts: { bestSan?: string }): PositionAsk {
   let board: Chess;
   try { board = new Chess(fen); } catch { return { mode: 'improve', text: '', squares: [] }; }
   const me = board.turn();
@@ -176,7 +189,7 @@ export function positionAsk(fen: string, opts: { bestSan?: string } = {}): Posit
 
   return {
     mode: 'improve',
-    text: 'Nothing is hanging and no attack is ready — find your worst-placed piece and give it a better job.',
+    text: 'No piece is loose and no attack is ready — find your worst-placed piece and give it a better job.',
     squares: [],
   };
 }
@@ -267,4 +280,162 @@ export function mechanismContrast(fenBefore: string, betterSan: string, worseSan
   const betterSaid = `${cap(sayMoveClause(b.move.san, fenBefore))} hits ${andList(better.targets.map((t) => t.phrase))} at once`;
   const worseHits = w.move.san.includes('+') ? 'only checks' : 'hits only one thing';
   return `${betterSaid}; ${sayMoveClause(w.move.san, fenBefore)} ${worseHits}.`;
+}
+
+// ── TYPE 1 — WHAT THEIR MOVE CHANGED (Naroditsky catalogue §1) ───────────────
+// "fxe5 — but now b7 loses its last defender"; "Rhf8 leaves e6 weak"; "Nc6 — and
+// the rook stops covering e6"; "Nxe5+ — the king must leave d7, weakening e6".
+// The reading he does on EVERY opponent move ("when a move is made, I consider
+// its drawbacks"), computed: every piece whose defenders drop to none, whatever
+// the cause — the defender moved away, a line got blocked, a defender was taken,
+// the king stepped off. Plus the holes / shut bishops / structure the move cost
+// (`theirMoveCost`, the one computer for those).
+
+export interface Weakened {
+  square: string;
+  piece: string;
+  color: 'w' | 'b';
+  /** Defenders before and after the move (the king counts — it guards too). */
+  before: number;
+  after: number;
+  /** The other side's attackers on it after the move. */
+  attackers: number;
+  /** The square that guards it now, when exactly one is left. */
+  lastGuard: string | null;
+}
+
+function guards(board: Chess, sq: Square, color: 'w' | 'b'): Square[] {
+  try { return board.attackers(sq, color); } catch { return []; }
+}
+
+/** No pawn of `color` on this file — the file is open to that side's rooks. */
+function fileOpenFor(board: Chess, file: string, color: 'w' | 'b'): boolean {
+  for (let r = 1; r <= 8; r += 1) {
+    const p = board.get(`${file}${r}` as Square);
+    if (p && p.type === 'p' && p.color === color) return false;
+  }
+  return true;
+}
+
+/** A rook or queen of `color` on this file. */
+function heavyOnFile(board: Chess, file: string, color: 'w' | 'b'): boolean {
+  for (let r = 1; r <= 8; r += 1) {
+    const p = board.get(`${file}${r}` as Square);
+    if (p && p.color === color && (p.type === 'r' || p.type === 'q')) return true;
+  }
+  return false;
+}
+
+/**
+ * Every piece (never a king, never the piece that just moved) whose defenders
+ * DROPPED with `san` and that is now a target: no defender left, fewer
+ * defenders than attackers, or one defender left on a file open to the other
+ * side's rooks (measured on G1, Nxe5+ Kd8: e6 went from two guards to the rook
+ * on f6 alone, on the e-file White's rooks stand on — "weakening e6").
+ */
+export function weakenedBy(fenBefore: string, san: string): Weakened[] {
+  const r = play(fenBefore, san);
+  if (!r) return [];
+  let before: Chess;
+  try { before = new Chess(fenBefore); } catch { return []; }
+  const out: Weakened[] = [];
+  for (const row of r.board.board()) {
+    for (const cell of row) {
+      if (!cell || cell.type === 'k' || cell.square === r.move.to) continue;
+      const was = before.get(cell.square);
+      if (!was || was.type !== cell.type || was.color !== cell.color) continue;
+      const enemy: 'w' | 'b' = cell.color === 'w' ? 'b' : 'w';
+      const b = guards(before, cell.square, cell.color).length;
+      const nowGuards = guards(r.board, cell.square, cell.color);
+      const a = nowGuards.length;
+      if (a >= b) continue;
+      const att = guards(r.board, cell.square, enemy).length;
+      // A TARGET, not a footnote: under fire now, or on a file the other side's
+      // rook or queen already stands on (open to it). "f7 has no defender" with
+      // nothing able to reach it is not insight.
+      const pressed = att > 0 || (fileOpenFor(r.board, cell.square[0], enemy) && heavyOnFile(r.board, cell.square[0], enemy));
+      if (!pressed) continue;
+      const target = a === 0 || a < att || a === 1;
+      if (!target) continue;
+      out.push({ square: cell.square, piece: cell.type, color: cell.color, before: b, after: a, attackers: att, lastGuard: a === 1 ? nowGuards[0] : null });
+    }
+  }
+  out.sort((x, y) => (y.attackers - y.after) - (x.attackers - x.after) || (CAPTURE_VALUE[y.piece] ?? 0) - (CAPTURE_VALUE[x.piece] ?? 0));
+  return out;
+}
+
+function weakenedPhrase(board: Chess, w: Weakened, whose: 'their' | 'your'): string {
+  const it = `${whose} ${name(w.piece)} on ${w.square}`;
+  if (w.after === 0) return `${it} has no defender${w.attackers > 0 ? ' and is already attacked' : ''}`;
+  if (w.after < w.attackers) return `${it} is attacked more times than it is defended`;
+  const g = w.lastGuard ? board.get(w.lastGuard as Square) : null;
+  return `now only the ${g ? name(g.type) : 'piece'} on ${w.lastGuard} guards ${it}`;
+}
+
+export interface MoveChanged {
+  text: string;
+  squares: string[];
+}
+
+/**
+ * What THEIR last move changed, from the student's seat: their pieces left with
+ * no defender (a target), ours left with none (a worry), and the lasting costs
+ * `theirMoveCost` reads (holes, a bishop shut in, structure). Null when the move
+ * changed nothing a student can use.
+ */
+export function theirMoveChanged(fenBefore: string, san: string, studentColor: 'w' | 'b'): MoveChanged | null {
+  const r = play(fenBefore, san);
+  if (!r || r.move.color === studentColor) return null;
+  const parts: string[] = [];
+  const squares: string[] = [];
+  const weak = weakenedBy(fenBefore, san);
+  const theirs = weak.filter((w) => w.color !== studentColor);
+  const ours = weak.filter((w) => w.color === studentColor);
+  const said = cap(sayMoveClause(r.move.san, fenBefore));
+  if (theirs.length > 0) {
+    parts.push(`${said}, and ${weakenedPhrase(r.board, theirs[0], 'their')}.`);
+    squares.push(theirs[0].square);
+  }
+  if (ours.length > 0) {
+    parts.push(`${parts.length > 0 ? 'Careful — ' : `${said}, and `}${weakenedPhrase(r.board, ours[0], 'your')}.`);
+    squares.push(ours[0].square);
+  }
+  if (parts.length === 0) {
+    const cost = theirMoveCost(fenBefore, san, studentColor);
+    if (cost) { parts.push(cap(cost.text.replace(/\.?$/, '.'))); squares.push(...cost.squares); }
+  }
+  return parts.length > 0 ? { text: parts.join(' '), squares } : null;
+}
+
+/** The last move played along `moves` (UCI or SAN) from `startFen`, with the
+ *  board it was played from — so a surface can say what that move changed. */
+export function lastMoveAlong(startFen: string, moves: ReadonlyArray<string | { from: string; to: string; promotion?: string }>): { fenBefore: string; san: string } | null {
+  if (moves.length === 0) return null;
+  let c: Chess;
+  try { c = new Chess(startFen); } catch { return null; }
+  let last: { fenBefore: string; san: string } | null = null;
+  for (const m of moves) {
+    const fenBefore = c.fen();
+    let mv: Move | null = null;
+    try {
+      mv = typeof m === 'string'
+        ? (/^[a-h][1-8][a-h][1-8][qrbn]?$/.test(m) ? c.move({ from: m.slice(0, 2), to: m.slice(2, 4), promotion: m[4] }) : c.move(m))
+        : c.move({ from: m.from, to: m.to, promotion: m.promotion });
+    } catch { mv = null; }
+    if (!mv) return null;
+    last = { fenBefore, san: mv.san };
+  }
+  return last;
+}
+
+/** The last move of a game PGN with the board it was played from. */
+export function lastMoveFromPgn(pgn: string): { fenBefore: string; san: string } | null {
+  if (!pgn.trim()) return null;
+  try {
+    const c = new Chess();
+    c.loadPgn(pgn);
+    const h = c.history({ verbose: true });
+    const m = h[h.length - 1];
+    return m ? { fenBefore: m.before, san: m.san } : null;
+  } catch { return null; }
 }

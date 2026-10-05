@@ -156,7 +156,7 @@ import {
   type DrillProgress,
   drillHintBeat,
   customLessonPartLines, goodButWeakerBeat, judgeAlternative, wrongMoveReason } from '../../services/coachDrillService';
-import { moveMissed, positionAsk } from '../../services/moveInsight';
+import { lastMoveFromPgn, moveMissed, positionAsk } from '../../services/moveInsight';
 import { bookChipForClaims } from '../../data/bookChips';
 import { useThinkingLesson, type StepKit } from '../../hooks/useThinkingLesson';
 import { ThinkingLessonBoard } from './ThinkingLessonBoard';
@@ -1564,6 +1564,11 @@ export function CoachTeachPage(): JSX.Element {
   // moves; eval-bar / engine-lines toggles drive the board overlays.
   const { settings, updateSetting } = useSettings();
   const [playerColor, setPlayerColor] = useState<'white' | 'black'>('white');
+  /** A CALCULATED LINE ON THE BOARD — the one shared walker (useLineWalk). */
+  const lineWalk = useLineWalk(playerColor, 'teach.lineWalk');
+  const { walkFen: lineWalkFen, walkArrows: lineWalkArrows, tokenRef: lineWalkTokenRef,
+    setWalkFen: setLineWalkFen, setWalkArrows: setLineWalkArrows, arrowsOf: lineArrowsOf,
+    clear: clearLineWalk, walk: walkLine } = lineWalk;
   // Read by the stable queue callback (named-move arrows need the seat).
   const playerColorRef = useRef(playerColor);
   playerColorRef.current = playerColor;
@@ -1674,10 +1679,6 @@ export function CoachTeachPage(): JSX.Element {
    *  each option's line drawn as its sentence plays; the Walk button steps a
    *  line move by move. Both render through the STATIC board, so a line is
    *  never played into the real game, and both return to the live position. */
-  const lineWalk = useLineWalk(playerColor, 'teach.lineWalk');
-  const { walkFen: lineWalkFen, walkArrows: lineWalkArrows, tokenRef: lineWalkTokenRef,
-    setWalkFen: setLineWalkFen, setWalkArrows: setLineWalkArrows, arrowsOf: lineArrowsOf,
-    clear: clearLineWalk, walk: walkLine } = lineWalk;
   /** Any new move ends a line on the board — the game is the ground truth. */
   useEffect(() => { clearLineWalk(); }, [game.history.length, clearLineWalk]);
 
@@ -11915,7 +11916,14 @@ export function CoachTeachPage(): JSX.Element {
         if (!activeDrillRef.current) {
           let bestSan: string | undefined;
           try { bestSan = new Chess(fen).move({ from, to, promotion: uci[4] ?? 'q' })?.san; } catch { bestSan = undefined; }
-          const idea = positionAsk(fen, { bestSan }).text;
+          // Their last move leads, when the board in front of the student is
+          // the game's own position (catalogue §1).
+          const last = lastMoveFromPgn(gameRef.current.pgn);
+          const leadsHere = (() => {
+            if (!last) return false;
+            try { const c = new Chess(last.fenBefore); c.move(last.san); return c.fen().split(' ')[0] === fen.split(' ')[0]; } catch { return false; }
+          })();
+          const idea = positionAsk(fen, { bestSan, lastMove: leadsHere && last ? last : undefined }).text;
           if (idea) void coachDrillSay(idea);
         }
       }

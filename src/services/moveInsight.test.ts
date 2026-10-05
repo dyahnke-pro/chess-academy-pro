@@ -2,7 +2,8 @@
 // "Why was the knight to one square better than the other when they both
 // checked the king???").
 import { describe, it, expect } from 'vitest';
-import { doubleAttack, mechanismContrast, moveMissed, positionAsk, walkableLine } from './moveInsight';
+import { Chess } from 'chess.js';
+import { doubleAttack, lastMoveAlong, lastMoveFromPgn, mechanismContrast, moveMissed, positionAsk, theirMoveChanged, walkableLine } from './moveInsight';
 
 // White: Ka1, Re2, Ng5. Black: Kh8, Qd8. Two checks — Nf7+ (forks king and
 // queen) and Rh2+ (only checks).
@@ -74,5 +75,41 @@ describe('walkableLine — arrows + Walk for any spoken line', () => {
   it('stops at the first illegal move', () => {
     const l = walkableLine(TWO_CHECKS, ['Nf7+', 'Kg8', 'Nxd8', 'Zz9'], 'Nf7+');
     expect(l?.plies.map((p) => p.san)).toEqual(['Nf7+', 'Kg8', 'Nxd8']);
+  });
+});
+
+// Naroditsky catalogue §1, measured on his Four Pawns Alekhine (vc-1rcEbI44WqE).
+const G1 = 'e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3 Bf5 Nc3 Qd7 Nf3 Bg4 Be2 O-O-O c5 Nd5 Nxd5 Qxd5 Kf2 e6 h3 Bf5 Qa4 Qe4 Qa3 Qc2 b4 Be7 b5 Nb8 Qxa7 Bd3 Rhe1 Bxb5 Rab1 Qa4 Qxa4 Bxa4 Nd2 f6 Nc4 Bc6 Bf3 fxe5 Nxe5 Rhf8 Kg3 Bxf3 Nxf3 Nc6 Bf2 Rf6 Re4 Rd5 Rbe1 Kd7 Kh2 h6 Bg3 g5 Be5 Nxe5 Nxe5+ Kd8 Ng4 Rg6 Rf1 h5 Ne3 Rd7 Rb1 Kc8 Nc4 g4 Ne5 g3+ Kg1 Rf6 Nxd7 Kxd7'.split(' ');
+const g1Before = (ply: number): string => { const c = new Chess(); for (let i = 0; i < ply; i += 1) c.move(G1[i]); return c.fen(); };
+
+describe('theirMoveChanged — what their move changed (catalogue §1)', () => {
+  it('35...Kd8 — "the king must leave d7, weakening e6"', () => {
+    expect(theirMoveChanged(g1Before(69), 'Kd8', 'w')?.text)
+      .toBe('The king to d8, and now only the rook on f6 guards their pawn on e6.');
+  });
+  it('18...Nb8 — "so you can simply grab the a7-pawn"', () => {
+    expect(theirMoveChanged(g1Before(35), 'Nb8', 'w')?.text).toMatch(/their pawn on a7 has no defender and is already attacked/);
+  });
+  it('43...Kxd7 — b7, the long-term weakness, is hanging', () => {
+    expect(theirMoveChanged(g1Before(85), 'Kxd7', 'w')?.text).toMatch(/their pawn on b7 has no defender and is already attacked/);
+  });
+  it('a pawn no one can reach is not insight: 10...O-O-O says nothing about f7', () => {
+    expect(theirMoveChanged(g1Before(19), 'O-O-O', 'w')?.text ?? '').not.toMatch(/f7/);
+  });
+  it('never reads the student’s own move as theirs', () => {
+    expect(theirMoveChanged(g1Before(68), 'Nxe5+', 'w')).toBeNull();
+  });
+  it('positionAsk leads with it when given the last move', () => {
+    const fen = g1Before(70);
+    const a = positionAsk(fen, { lastMove: { fenBefore: g1Before(69), san: 'Kd8' } });
+    expect(a.text.startsWith('The king to d8, and now only the rook on f6 guards their pawn on e6.')).toBe(true);
+  });
+});
+
+describe('lastMoveAlong / lastMoveFromPgn', () => {
+  it('rebuilds the last move and the board it was played from', () => {
+    const start = new Chess().fen();
+    expect(lastMoveAlong(start, ['e2e4', 'e7e5'])).toEqual({ fenBefore: g1Before(1), san: 'e5' });
+    expect(lastMoveFromPgn('1. e4 Nf6')?.san).toBe('Nf6');
   });
 });

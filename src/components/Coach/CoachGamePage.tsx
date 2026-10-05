@@ -4542,7 +4542,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     const fen = game.fen;
     try {
       const analysis = await stockfishEngine.analyzePosition(fen, 16, undefined, 'brain');
-      const why = await computeWhyBestMove({ fen, studentColor: playerColor, analysis, rating: playerRating, studentWeaknesses: weaknessSignalsRef.current, studentNeedContext: studentNeedRef.current });
+      const why = await computeWhyBestMove({ fen, studentColor: playerColor, analysis, rating: playerRating, pgn: game.pgn, studentWeaknesses: weaknessSignalsRef.current, studentNeedContext: studentNeedRef.current });
       const answer = why || 'No single best move stands out here — the position is roughly balanced.';
       gameChatRef.current?.injectAssistantMessage(answer);
       void voiceService.speakReadAloud(answer);

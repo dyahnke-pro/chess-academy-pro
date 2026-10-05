@@ -364,7 +364,7 @@
 - `src/services/mistakeNarration.ts:647`
 - `src/services/reviewNarrationFidelity.test.ts:167`
 - `src/services/reviewNarrationFidelity.test.ts:173`
-- `src/services/whyBestMove.ts:84`
+- `src/services/whyBestMove.ts:91`
 
 ### `captureHasCounterTactic` (function) — 1 call site
 - `src/services/reviewTeachingPoints.ts:101`
@@ -1166,7 +1166,7 @@
 - `src/services/coachApi.ts:6020`
 
 ### `seatPieceReferences` (re-export) — 33 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8185`
+- `src/components/Coach/CoachTeachPage.tsx:8186`
 - `src/services/coachFeatureService.ts:4068`
 - `src/services/coachFeatureService.ts:4116`
 - `src/services/coachFeatureService.ts:5216`

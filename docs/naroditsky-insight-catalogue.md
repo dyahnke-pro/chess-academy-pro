@@ -11,7 +11,7 @@ Status per type: ✅ computed + spoken · 🟠 partial · 🔴 missing.
 
 ## Types
 
-### 1. What their move changed 🔴
+### 1. What their move changed ✅ (`moveInsight.weakenedBy` + `theirMoveChanged`, leads `positionAsk`; plan-blocked half still 🔴)
 The consequence of the opponent's last move: a defender removed, a square or
 pawn left weak, a plan of ours now blocked.
 - G1 (Alekhine 4 Pawns): "fxe5 — but now b7 loses its last defender"; "Rhf8 leaves
@@ -262,6 +262,39 @@ pawn left weak, a plan of ours now blocked.
 - Ignore what doesn't matter: "g4 does nothing against your real plan of b5" (26).
 - "When in doubt, default to reasonable moves" (8).
 
+### 31. Take the sting out (instead of stopping it) 🔴
+- G10: "instead of physically stopping the knight to b5, take the sting out of it —
+  move one of these pieces so Nb5 isn't a fork, preferably without ruining the
+  placement of the pieces; Be7 would worsen the bishop, Bc5 would not".
+- Compute: their threat (2) → the moves that defuse it, ranked by what they do to
+  our own piece quality (pieceQuality before/after).
+
+### 32. Don't move the attacked piece on reflex 🔴
+- G10: "a lot of people have the instinct of moving the knight, but my instinct is
+  to first check whether I can play Rh5 anyway — and I can, mate is unstoppable".
+- Compute: a piece of ours is attacked → does our strongest move ignore it (counter-
+  threat, mate, bigger capture)? compareTwoMoves(save the piece, best).
+
+### Also seen in G9–G11
+- Every opponent move has a drawback — "I saw this tactic by evaluating the drawback
+  of Black's previous move"; "when a move like that is made I consider its
+  drawbacks: what squares does it no longer control?" (1 — the most explicit
+  statement of the type).
+- No confrontation → incremental gains, don't get over-excited (a4 grabbing space,
+  making b7 backward) (8).
+- Keep the piece that cramps them: "you do not want to remove this knight — it
+  would give Black breathing room"; "no rush, Black is paralysed" (7, 13).
+- Circumstances changed: "I said you don't want to part with your bishop — that was
+  then, this is now" → trade it when it ruins their structure (19).
+- Trade their strongest piece for yours when you have more good pieces (7).
+- The worst-case-scenario test: "even if you allowed them to do everything they
+  wanted, could they attack this pawn?" (26).
+- A safety move vs a needed move; offer a queen trade actively (8, 7).
+- Undermine a pawn chain: a5 against b4 — "a lose-lose spot for them" (5).
+- Premature push: "d5 — the cart before the horse" (4).
+- Lure a piece away: "Be2 luring the knight off d2 so you check on c1 and win the
+  queen" (29).
+
 ## Games read
 | # | video | game | notes |
 |---|---|---|---|
@@ -273,3 +306,6 @@ pawn left weak, a plan of ours now blocked.
 | 6 | C2unZJEz01o Barry Attack vs KID | Black wins (attack, material) | 65 |
 | 7 | UVJ75kdDdt8 Sensei, Delayed Alapin | Black wins (Bh2+ Bg1 attack) | 65 |
 | 8 | 0ipLPOAN_m8 DYI, KID fianchetto | Black wins in 40 (queenside, mate) | 64 |
+| 9 | EPS51oKRgpU DYI 5-min blitz | White wins (Nxg5 tactic, queenside squeeze) | 64 |
+| 10 | cmJbc_BzTp8 Master Class, f6 vs Danish | Black wins (positional, c4 square, mate) | 64 |
+| 11 | 3nyxVHwDCTY DYI, KID vs fianchetto | Black wins (queenside play, f2 attack) | 61 |

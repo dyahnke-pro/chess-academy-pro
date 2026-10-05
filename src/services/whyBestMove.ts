@@ -10,7 +10,7 @@
 //   2. computePositionFacts — the position briefing (who's winning, the plan,
 //      what must be defended, the real fork in the road) in the house register.
 // The result is spoken directly (preferRaw) — the purest G0, and instant.
-import { positionAsk } from './moveInsight';
+import { lastMoveFromPgn, positionAsk } from './moveInsight';
 import { Chess } from 'chess.js';
 import type { StockfishAnalysis } from '../types';
 import { explainBestMoveGrounded } from './groundedAnswer';
@@ -27,6 +27,8 @@ export interface WhyBestMoveInput {
   /** The warm eval-bar read for this FEN (bestMove + topLines + eval). */
   analysis: Pick<StockfishAnalysis, 'topLines' | 'evaluation' | 'isMate' | 'mateIn' | 'seldepth' | 'depth' | 'wdl' | 'bestMove'>;
   rating?: number;
+  /** The game's PGN, so "Why?" can say what their last move changed first. */
+  pgn?: string;
   /** Prior ply's eval (White POV) for the STATUS band-change line, if known. */
   prevEvalCpWhitePov?: number;
   /** The student model — re-ranks the briefing toward the holes THIS student
@@ -74,7 +76,12 @@ export async function computeWhyBestMove(input: WhyBestMoveInput): Promise<strin
   //     something? more pieces in the attack?") — said for the side to move
   //     when that is the student; the one insight computer.
   if (san && fen.split(' ')[1] === sc) {
-    const ask = positionAsk(fen, { bestSan: san }).text;
+    const last = input.pgn ? lastMoveFromPgn(input.pgn) : null;
+    const leadsHere = (() => {
+      if (!last) return false;
+      try { const c = new Chess(last.fenBefore); c.move(last.san); return c.fen().split(' ')[0] === fen.split(' ')[0]; } catch { return false; }
+    })();
+    const ask = positionAsk(fen, { bestSan: san, lastMove: leadsHere && last ? last : undefined }).text;
     if (ask) parts.push(ask);
   }
 

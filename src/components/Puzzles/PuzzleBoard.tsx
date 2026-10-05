@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef, useMemo, type ReactNode } fro
 import { useLineWalk } from '../../hooks/useLineWalk';
 import { WalkLineButton } from '../Board/WalkLineButton';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
-import { positionAsk } from '../../services/moveInsight';
+import { lastMoveAlong, positionAsk } from '../../services/moveInsight';
 import { spokenLineArrows } from '../../services/arrowEngine';
 import type { BoardArrow } from '../Chessboard/ConsistentChessboard';
 import { captureEvent } from '../../services/analytics';
@@ -643,7 +643,9 @@ export function PuzzleBoard({
         // try is quietly fine), then the method.
         // WHAT THE POSITION ASKS (David 2026-10-05: "keep pressing? defend
         // something? more pieces in the attack?") — the idea, never the move.
-        const ask = read?.kind === 'also-good' ? null : positionAsk(fenBeforeAttempt, { bestSan: expectedSan }).text;
+        // Their last move along the puzzle's own line leads (catalogue §1).
+        const lastMove = moveIndex > 0 ? lastMoveAlong(puzzle.fen, allMoves.slice(0, moveIndex)) ?? undefined : undefined;
+        const ask = read?.kind === 'also-good' ? null : positionAsk(fenBeforeAttempt, { bestSan: expectedSan, lastMove }).text;
         const line = hintOnMiss && read && read.kind !== 'also-good'
           ? composeWrongTryLine(read.text, ask, held, hint)
           : composeWrongTryLine(read?.text ?? hint, ask, held);

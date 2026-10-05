@@ -18,14 +18,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `wrongMoveReason` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2899`
+- `src/components/Coach/CoachTeachPage.tsx:2900`
 - `src/services/drillReasons.test.ts:11`
 - `src/services/drillReasons.test.ts:19`
 - `src/services/drillReasons.test.ts:26`
 - `src/services/drillReasons.test.ts:29`
 
 ### `goodButWeakerBeat` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2897`
+- `src/components/Coach/CoachTeachPage.tsx:2898`
 - `src/services/drillReasons.test.ts:50`
 - `src/services/drillReasons.test.ts:56`
 - `src/services/drillReasons.test.ts:57`
@@ -35,7 +35,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `judgeAlternative` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2864`
+- `src/components/Coach/CoachTeachPage.tsx:2865`
 - `src/services/drillReasons.test.ts:72`
 - `src/services/drillReasons.test.ts:73`
 - `src/services/drillReasons.test.ts:76`
