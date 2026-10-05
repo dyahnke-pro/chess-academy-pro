@@ -179,13 +179,14 @@
 - `src/services/moveInsight.test.ts:198`
 - `src/services/moveInsight.ts:299`
 
-### `positionAsk` (re-export) — 18 call sites
+### `positionAsk` (re-export) — 19 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2870`
 - `src/components/Coach/CoachTeachPage.tsx:11899`
 - `src/components/Coach/CoachTeachPage.tsx:11925`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:965`
 - `src/components/Puzzles/PuzzleBoard.tsx:650`
-- `src/components/Tactics/TacticSetupBoard.tsx:385`
+- `src/components/Tactics/TacticSetupBoard.tsx:225`
+- `src/components/Tactics/TacticSetupBoard.tsx:394`
 - `src/services/moveInsight.test.ts:50`
 - `src/services/moveInsight.test.ts:55`
 - `src/services/moveInsight.test.ts:61`

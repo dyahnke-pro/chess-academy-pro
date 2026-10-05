@@ -22,6 +22,7 @@
  * rendering paths keep working without modification. `ghostMove` is
  * always null going forward; Tier 3 uses an arrow instead.
  */
+import { escapeSquareFirst, greekGift } from '../services/moveInsight';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { Chess } from 'chess.js';
 import { stockfishEngine } from '../services/stockfishEngine';
@@ -366,7 +367,11 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
           // move on this FEN is classified by the same concept walker the
           // briefing/Learn/Review speak; the tags are the fallback.
           const concept = conceptIdeaForThemes(puzzleThemes ?? [], { fen, uci: [best.bestMoveUci], studentToMove: true });
-          const tier3Text = concept ? `${answerText} ${concept.idea}` : answerText;
+          // THE NAMED IDEA (Naroditsky catalogue §30/§36): the answer is revealed
+          // here, so the full reason goes with it — the escape square taken away
+          // first, the Greek gift. One computer, every surface that hints.
+          const named = escapeSquareFirst(fen, best.bestMoveSan)?.text ?? greekGift(fen, best.bestMoveSan)?.text ?? null;
+          const tier3Text = [answerText, named, concept?.idea].filter(Boolean).join(' ');
 
           // Record the tap directly (BRAIN-05b moved this into the brain's tool;
           // Tier 3 no longer calls the brain, so record it here — same escalate-

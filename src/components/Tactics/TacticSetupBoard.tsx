@@ -217,7 +217,16 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
     const isSetupMove = moveIndex === 0;
     setHintTier(next);
     if (next === 1) {
-      const text = setupHintIdea(puzzle.tacticType, isSetupMove);
+      // A named idea in the position (the escape square, a pattern) leads the
+      // first rung — the idea, never the move (moveInsight.positionAsk).
+      const named = (() => {
+        try {
+          const san = new Chess(fen).move({ from: knownMove.from, to: knownMove.to, promotion: 'q' })?.san;
+          const a = positionAsk(fen, { bestSan: san });
+          return a.mode === 'press' && !/^No piece is loose/.test(a.text) ? a.text : null;
+        } catch { return null; }
+      })();
+      const text = [named, setupHintIdea(puzzle.tacticType, isSetupMove)].filter(Boolean).join(' ');
       setLadderText(text);
       voiceService.stop();
       void voiceService.speak(text);
