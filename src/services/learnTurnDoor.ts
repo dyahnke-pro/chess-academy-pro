@@ -31,6 +31,7 @@ import { stakeValue, type FactStakes } from './factStakes';
 export { buildVoicePackage, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys } from './voicePackage';
 export type { SpokenLine, DrawnLine } from './voicePackage';
 export type { VoicePackage, VoiceFactKind } from './voicePackage';
+export type { FactStakes } from './factStakes';
 
 export type LearnLane =
   // ── the instant wave, spoken with the coach's reply ──
@@ -388,7 +389,7 @@ export function decideTurn(
     // queen on d3 takes aim at the center" beside "g6 stops the mate" is the
     // board described where he explains the move (hand walks 2026-09-30).
     // Everything staked or teaching speaks, however many there are.
-    const describes = x !== ownLead && stakeOf(x.lane, x.fact.text) === 0
+    const describes = x !== ownLead && stakeOf(x.lane, x.fact.text) === 0 && !(beginner && BEGINNER_ALWAYS.has(x.lane))
       && (LEARN_LANES[x.lane].lead <= DESCRIPTION_LEAD || x.lane === 'positionFacts');
     const sq = x.fact.squares ?? [];
     const restates = describes && !(sq.some((q) => anchor.includes(q)) && sq.some((q) => !anchor.includes(q)));

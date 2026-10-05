@@ -20,7 +20,9 @@ describe('the DNA outline at the door', () => {
     expect(pkg.spoken).not.toMatch(/Great move|Tap/);
   });
 
-  it('the beat order: what the move does, then its cost, then what matters now — whatever leads', () => {
+  // DANGER FIRST (David 2026-10-05): the threat now opens the turn; the rest
+  // keep the DNA beat — what the move does, then its cost.
+  it('the beat order: danger first, then what the move does, then its cost', () => {
     const d = decideTurn([
       { lane: 'threat', text: 'Their knight on c6 hits the pawn on e5.', fen: FEN, squares: ['c6', 'e5'] },
       { lane: 'mistake', text: 'The knight on f3 left the pawn on e5 short of a defender.', fen: FEN, squares: ['f3', 'e5'] },
@@ -28,7 +30,7 @@ describe('the DNA outline at the door', () => {
     ]);
     const s = d.pkg.spoken;
     expect(s.indexOf('attacks the pawn')).toBeLessThan(s.indexOf('short of a defender'));
-    expect(s.indexOf('short of a defender')).toBeLessThan(s.indexOf('Their knight on c6'));
+    expect(s.indexOf('Their knight on c6')).toBeLessThan(s.indexOf('attacks the pawn'));
   });
 });
 
