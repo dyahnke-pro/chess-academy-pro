@@ -19,9 +19,12 @@ import { getUnifiedWeaknessProfile, type UnifiedWeakness } from './weaknessSpine
 import { recordThinkingAnswer, standingFromProfile } from './thinkingLessonRecord';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { BUILT_THINKING_STEPS, tagsForThinkingStep } from './thinkingSteps.built';
+import { TAG_STEP } from './thinkingSteps';
+import { getMisconceptionsForGame } from './misconceptionService';
+import type { MisconceptionTagRecord } from '../types';
 import { loadLessonCandidates, type LessonUsernames } from './thinkingLessonSource';
 import { getThinkingLessonMemory, rememberLessonBoard, seenFor } from './thinkingLessonMemory';
-import { boardIdentity, pickFairPosition, type LessonPositionCandidate } from './thinkingPositions';
+import { boardIdentity, isFairKey, pickFairPosition, type LessonPositionCandidate } from './thinkingPositions';
 import { finishBite } from './activeBite';
 import { reward } from './rewardService';
 import { logAppAudit } from './appAuditor';
@@ -243,4 +246,55 @@ export async function lessonStepForCard(tiles: readonly HeatTile[]): Promise<Ste
 export function kitForStep(step: string): StepKit | null {
   const b = BUILT_THINKING_STEPS.find((s) => s.step === step);
   return b ? b.kit() : null;
+}
+
+/**
+ * THE REVIEW'S QUESTION AT A SLIP. Game analysis already filed each slip under
+ * a tag at its board; the tag names the step whose habit would have caught it
+ * (`TAG_STEP`, the one join). So the review asks THAT step's question on the
+ * board before the move — "am I safe?" where they hung a piece, "where are
+ * their targets?" where they missed a loose one.
+ *
+ * Silent (no entry) when the game has no tag at that board, no step trains the
+ * tag (a fundamentals hole), no step that does has a kit, the step needs the engine to
+ * key it (`enrich` — too slow to stop a walk on), or the board poses no fair
+ * question for it. PURE over the rows.
+ */
+export function slipStepsForBoards(
+  rows: readonly Pick<MisconceptionTagRecord, 'tag' | 'fen'>[],
+  boards: readonly { ply: number; fen: string }[],
+): Map<number, string> {
+  const tagAt = new Map<string, string>();
+  for (const r of rows) {
+    const id = boardIdentity(r.fen);
+    if (!tagAt.has(id)) tagAt.set(id, r.tag);
+  }
+  const out = new Map<number, string>();
+  for (const b of boards) {
+    const tag = tagAt.get(boardIdentity(b.fen));
+    if (!tag || !Object.prototype.hasOwnProperty.call(TAG_STEP, tag)) continue;
+    const t = tag as MisconceptionTagId;
+    // The tag's LEAD step first, then every other step that trains the tag, in
+    // routine order: the first one with a fair question on this board asks it
+    // (a piece their move hung is "is my move safe?", not "am I safe?").
+    const lead = TAG_STEP[t];
+    const trainers = BUILT_THINKING_STEPS.filter((s) => s.tags.includes(t)).sort((x, y) => x.order - y.order).map((s) => s.step);
+    for (const step of lead ? [lead, ...trainers.filter((s) => s !== lead)] : trainers) {
+      const kit = kitForStep(step);
+      if (!kit || kit.enrich || !isFairKey(kit.keyFor(b.fen))) continue;
+      out.set(b.ply, step);
+      break;
+    }
+  }
+  return out;
+}
+
+/** `slipStepsForBoards` over one game's recorded slips. */
+export async function slipStepsForGame(gameId: string, boards: readonly { ply: number; fen: string }[]): Promise<Map<number, string>> {
+  if (boards.length === 0) return new Map();
+  try {
+    return slipStepsForBoards(await getMisconceptionsForGame(gameId), boards);
+  } catch {
+    return new Map();
+  }
 }

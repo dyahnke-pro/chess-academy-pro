@@ -21,7 +21,8 @@ import { GameReviewWeaknessCapture } from './GameReviewWeaknessCapture';
 import { KeyMomentNav } from './KeyMomentNav';
 import { ChatInput } from './ChatInput';
 import { ChatMessage } from './ChatMessage';
-import { ReviewReadingChallenge } from './ReviewReadingChallenge';
+import { ThinkingLessonBoard } from './ThinkingLessonBoard';
+import { useThinkingLesson } from '../../hooks/useThinkingLesson';
 import { useReviewBlunderCapture } from '../../hooks/useReviewBlunderCapture';
 import { useWeaknessSignals } from '../../hooks/useWeaknessSignals';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
@@ -871,12 +872,32 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     return () => ac.abort();
   }, [walkNarration, playerColor, playerRating, questionPlan, props.gameId]);
 
-  const [readingGate, setReadingGate] = useState<{ ply: number; fen: string } | null>(null);
+  // THE LESSON QUESTION AT A SLIP (plan P6, "Review"): where game analysis
+  // filed this slip under a tag, the walk stops on the board before the move
+  // and asks the step whose habit would have caught it — the lesson's own
+  // runner, tap board and recorder. Replaces the typed reading gate, which
+  // nothing had opened since the why-picker was stripped.
+  const reading = useThinkingLesson({ say: (t) => reviewSay(t).catch(() => undefined) });
+  const { askOnce: readAskOnce, kitFor: readKitFor, stop: readStop, slipSteps: loadSlipSteps } = reading;
+  const readingActiveRef = useRef(false);
+  readingActiveRef.current = reading.view.active;
+  const [slipSteps, setSlipSteps] = useState<Map<number, string>>(() => new Map());
   const quizzedPliesRef = useRef<Set<number>>(new Set());
   useEffect(() => {
     quizzedPliesRef.current = new Set();
-    setReadingGate(null);
-  }, [props.gameId]);
+    readStop();
+  }, [props.gameId, readStop]);
+  useEffect(() => {
+    const gid = props.gameId;
+    if (!gid || !walkNarration) { setSlipSteps(new Map()); return; }
+    const boards = [...questionPlan.values()]
+      .filter((m) => m.kind === 'why')
+      .map((m) => ({ ply: m.ply, fen: walkNarration.segments.find((sg) => sg.ply === m.ply)?.fenBefore ?? '' }))
+      .filter((b) => b.fen);
+    let live = true;
+    void loadSlipSteps(gid, boards).then((m) => { if (live) setSlipSteps(m); });
+    return () => { live = false; };
+  }, [props.gameId, walkNarration, questionPlan, loadSlipSteps]);
 
   // The "why'd you play that?" faucet — post-game review now responds like
   // Learn-with-Coach (David 2026-07-06). Landing on one of the student's own
@@ -1044,10 +1065,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   }, [props.gameId]);
 
   const handleWalkForward = useCallback((): ForwardOutcome => {
-    // Unreachable today: `setReadingGate` is only ever called with null. Kept
-    // because a guard that can fire must DECLARE what it does to the walk
-    // rather than look like an advance.
-    if (readingGate) return { advanced: false, stop: 'reading-gate' };
+    // A lesson question is open on the slip's board: the walk waits for it.
+    if (readingActiveRef.current) return { advanced: false, stop: 'reading-gate' };
     // A forward tap always supersedes an in-flight spoken-line (delta) playout —
     // whether it advances the ply or opens a card. Bumping the token aborts the
     // async loop; the auto-clear effect tears its overlay down.
@@ -1236,6 +1255,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           void reviewSay(`Hold on — right here you had something. ${shot.question}`).catch(() => undefined);
           return { advanced: false, stop: 'find-the-shot' };
         }
+        // THE LESSON QUESTION: game analysis filed this slip under a tag whose
+        // step poses a fair question on this board → ask it, then walk on.
+        const slipStep = slipSteps.get(nextPly);
+        const slipKit = planned.kind === 'why' && slipStep ? readKitFor(slipStep) : null;
+        if (slipKit) {
+          captureEvent('review_lesson_question_asked', { step: slipStep, ply: nextPly });
+          void readAskOnce(slipKit, seg.fenBefore).then(() => { walkPlayback.goForward(); });
+          return { advanced: false, stop: 'reading-gate' };
+        }
         // WHY-PICKER STRIPPED (David 2026-08-28: "strip out why questions, make
         // walk best line a button"). Post-game review no longer interrupts a
         // plain mistake with the "why'd you play that?" faucet, and no longer
@@ -1249,7 +1277,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     }
     walkPlayback.goForward();
     return { advanced: true };
-  }, [readingGate, faucetPhase, resetFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, trapQ, criticalMoment, criticalCard, rewindOffer, questionPlan, moves, moverIsStudent]);
+  }, [slipSteps, readKitFor, readAskOnce, faucetPhase, resetFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, trapQ, criticalMoment, criticalCard, rewindOffer, questionPlan, moves, moverIsStudent]);
   handleWalkForwardRef.current = handleWalkForward;
   /** A user's forward tap / key: pauses auto-play (only Play restarts it),
    *  then steps through the same card ladder. */
@@ -2395,11 +2423,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       })();
     })();
   }, [walkNarration, openingName, props.gameId, runSequencePlayback, maybeOfferRewind, walkPlayback, playMoveSound]);
-
-  const resolveReadingGate = useCallback((): void => {
-    setReadingGate((g) => { if (g) quizzedPliesRef.current.add(g.ply); return null; });
-    walkPlayback.goForward();
-  }, [walkPlayback]);
 
   // Move sound on every walk advance — Polly + voice narration is
   // great pedagogy but the silent piece transition makes it hard to
@@ -3829,7 +3852,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   Narration is PINNED above the scroll middle, so a full-width
                   board no longer hides the coach's why (the old 2026-06-27/07-10
                   complaint the vh cap was solving). */}
-              <div className="w-full max-w-[68vh] mx-auto md:max-w-[420px] relative" data-testid="review-walk-board">
+              {reading.view.active && (
+                <div className="w-full max-w-[68vh] mx-auto md:max-w-[420px]" data-testid="review-slip-question">
+                  <ThinkingLessonBoard view={reading.view} onTap={reading.tap} onDontKnow={reading.dontKnow} onStop={reading.stop} />
+                </div>
+              )}
+              <div className={`w-full max-w-[68vh] mx-auto md:max-w-[420px] relative ${reading.view.active ? 'hidden' : ''}`} data-testid="review-walk-board">
                 <ChessBoard
                   // Re-key on exploration toggle so the underlying chess
                   // instance resets cleanly when the user enters or
@@ -4277,18 +4305,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               column scrolls it into reach (no collapse-to-zero). Desktop: the
               internal flex-1 scroller as before. */}
           <div ref={scrollMiddleRef} className="flex-none md:flex-1 md:min-h-0 md:overflow-y-auto" data-testid="review-scroll-middle">
-            {/* Surface A: reading gate — paused before the student's next
-                mistake, asks them to read the (clean) position before the move
-                is revealed. The board already shows readingGate.fen. */}
-            {readingGate && (
-              <ReviewReadingChallenge
-                key={readingGate.ply}
-                fen={readingGate.fen}
-                studentColor={studentColorWB}
-                rating={playerRating ?? DEFAULT_STUDENT_RATING}
-                onProceed={resolveReadingGate}
-              />
-            )}
             {/* The "why'd you play that?" faucet — post-game review responds
                 like Learn-with-Coach: picker → narrated grounded reveal →
                 weakness bucket. Skipping or dismissing resumes the walk. */}

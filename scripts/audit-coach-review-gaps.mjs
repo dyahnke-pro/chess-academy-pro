@@ -317,19 +317,20 @@ async function main() {
       // Step forward; the gate must appear before passing the blunder (3.Qxe5+ = ply 5).
       let gate = false;
       for (let i = 0; i < 8 && !gate; i += 1) {
-        gate = await page.locator('[data-testid="review-reading-challenge"]').isVisible().catch(() => false);
+        gate = await page.locator('[data-testid="review-slip-question"]').isVisible().catch(() => false);
         if (gate) break;
         await page.locator('[data-testid="review-forward-btn"]').click({ force: true }).catch(() => undefined);
         await page.waitForTimeout(800);
       }
-      if (!gate) gate = await page.locator('[data-testid="review-reading-challenge"]').isVisible().catch(() => false);
+      if (!gate) gate = await page.locator('[data-testid="review-slip-question"]').isVisible().catch(() => false);
       if (!gate) { mark('gap6-reading-gate', { reached: true, pass: false, detail: 'reading gate never appeared while walking a student blunder with the setting ON' }); return; }
 
-      const promptUp = await page.locator('[data-testid="review-reading-prompt"]').waitFor({ timeout: 30_000 }).then(() => true).catch(() => false);
-      const inputUp = await page.locator('[data-testid="review-reading-input"]').isVisible().catch(() => false);
+      // The gate is the lesson's tap question on the slip's board (2026-10-05).
+      const promptUp = await page.locator('[data-testid="thinking-lesson-prompt"]').waitFor({ timeout: 30_000 }).then(() => true).catch(() => false);
+      const boardUp = await page.locator('[data-testid="thinking-lesson"]').isVisible().catch(() => false);
       mark('gap6-reading-gate', {
-        reached: true, pass: promptUp && inputUp,
-        detail: promptUp && inputUp ? 'gate paused before the mistake with a reading question + input (move not yet revealed)' : `gate appeared but prompt/input missing (prompt=${promptUp} input=${inputUp})`,
+        reached: true, pass: promptUp && boardUp,
+        detail: promptUp && boardUp ? 'walk paused before the mistake with the lesson question on its board' : `gate appeared but prompt/board missing (prompt=${promptUp} board=${boardUp})`,
       });
     }
 

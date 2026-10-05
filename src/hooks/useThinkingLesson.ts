@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Square } from 'chess.js';
 import {
-  ThinkingLessonSession, type LessonView, finishThinkingLesson, kitForStep, lessonInputs, planThinkingLesson, recordLessonAnswer, rememberLessonBoardNow,
+  ThinkingLessonSession, type LessonView, finishThinkingLesson, kitForStep, lessonInputs, planThinkingLesson, recordLessonAnswer, rememberLessonBoardNow, slipStepsForGame,
   type LessonPositionCandidate, type LessonUsernames, type PlannedLesson, type StepKit,
 } from '../services/thinkingLessonStart';
 
@@ -31,6 +31,8 @@ export interface UseThinkingLesson {
   kitFor: (step: string) => StepKit | null;
   /** The lesson game: ask the step's question once, on this live board. */
   askOnce: (kit: StepKit, fen: string) => Promise<void>;
+  /** Review: the step to ask at each slip of a game, from its recorded tags. */
+  slipSteps: (gameId: string, boards: readonly { ply: number; fen: string }[]) => Promise<Map<number, string>>;
   stop: () => void;
 }
 
@@ -87,5 +89,5 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
     if (sessionRef.current === session) sessionRef.current = null;
   }, []);
 
-  return { view, plan: planThinkingLesson, start, finish: finishThinkingLesson, kitFor: kitForStep, tap, dontKnow, hold, askOnce, stop };
+  return { view, plan: planThinkingLesson, start, finish: finishThinkingLesson, kitFor: kitForStep, tap, dontKnow, hold, askOnce, slipSteps: slipStepsForGame, stop };
 }

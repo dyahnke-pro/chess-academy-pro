@@ -77,19 +77,19 @@ describe('the thinking lesson in the Learn family (learn-how-to-think)', () => {
   });
 
   it('a RED tier-1 habit makes the lesson the Learn family, above a puzzle weakness, below a fresh slip', () => {
-    const r = rankFamilies(withThinking({ state: 'red', skill: 'Hung material' }, [
+    const r = rankFamilies(withThinking({ state: 'red', skill: 'Hung material', step: 'Am I safe?' }, [
       think, pick('weakness', 'tactics:my mistakes'),
     ]));
     expect(r[0].family).toBe('learn');
     expect(r[0].pick.kind).toBe('thinking');
-    const slip = rankFamilies(withThinking({ state: 'red', skill: 'Hung material' }, [
+    const slip = rankFamilies(withThinking({ state: 'red', skill: 'Hung material', step: 'Am I safe?' }, [
       think, pick('game-slip', 'tactics:my mistakes'),
     ]));
     expect(slip[0].family).toBe('tactics');
   });
 
   it('GREY (never proven) still teaches: the lesson edges past a plain coached game', () => {
-    const r = rankFamilies(withThinking({ state: 'grey', skill: 'Hung material' }));
+    const r = rankFamilies(withThinking({ state: 'grey', skill: 'Hung material', step: 'Am I safe?' }));
     const learn = r.find((c) => c.family === 'learn')!;
     expect(learn.pick.kind).toBe('thinking');
     expect(learn.importance).toBeGreaterThan(60);
@@ -102,7 +102,7 @@ describe('the thinking lesson in the Learn family (learn-how-to-think)', () => {
   });
 
   it('a finished thinking bite falls back to the coached game', () => {
-    const r = rankFamilies({ state: state([think], ['up:thinking'], { state: 'red', skill: 'x' }), ownGames: 5, accountLinked: true });
+    const r = rankFamilies({ state: state([think], ['up:thinking'], { state: 'red', skill: 'x', step: 'Am I safe?' }), ownGames: 5, accountLinked: true });
     expect(r.find((c) => c.family === 'learn')!.pick.kind).toBe('learn');
   });
 

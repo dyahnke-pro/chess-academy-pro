@@ -264,23 +264,20 @@ async function main() {
         await page.locator(sel('coach-game-review-walk')).waitFor({ timeout: 15000 }).catch(() => undefined);
         let gate = false;
         for (let i = 0; i < 8 && !gate; i += 1) {
-          gate = await page.locator(sel('review-reading-challenge')).isVisible().catch(() => false);
+          gate = await page.locator(sel('review-slip-question')).isVisible().catch(() => false);
           if (gate) break;
           await page.locator(sel('review-forward-btn')).click({ timeout: 4000, force: true }).catch(() => undefined);
           await page.waitForTimeout(800);
         }
         cover('review-gate-appears', gate, gate ? 'gate paused before the student blunder' : 'gate never appeared');
         if (gate) {
-          // Adversarial: answer with gibberish, then Reveal (or Skip).
-          inFlightInput = '(gate gibberish)';
-          await page.locator(sel('review-reading-input')).fill('uhh something somewhere').catch(() => undefined);
-          await page.locator(sel('review-reading-submit')).click({ timeout: 4000, force: true }).catch(() => undefined);
-          const gv = await page.locator(sel('review-reading-verdict')).waitFor({ timeout: 45000 }).then(() => true).catch(() => false);
-          if (!gv) breaks.push({ class: 'silent-hang', input: '(gate gibberish)', detail: 'gate graded nothing in 45s' });
-          const proceed = page.locator('[data-testid="review-reading-reveal"], [data-testid="review-reading-skip"]').first();
-          await proceed.click({ timeout: 5000, force: true }).catch(() => undefined);
-          await page.waitForTimeout(1000);
-          cover('gate-proceed', !(await page.locator(sel('review-reading-challenge')).isVisible().catch(() => true)) || true, 'gate resolved (revealed/skipped)');
+          // The gate is now the lesson's tap question on the slip's board
+          // (2026-10-05): answer "I don't know", let it show, and the walk resumes.
+          inFlightInput = '(gate dont-know)';
+          await page.locator(sel('thinking-lesson-dont-know')).click({ timeout: 5000, force: true }).catch(() => undefined);
+          const gone = await page.locator(sel('review-slip-question')).waitFor({ state: 'hidden', timeout: 45000 }).then(() => true).catch(() => false);
+          if (!gone) breaks.push({ class: 'silent-hang', input: '(gate dont-know)', detail: 'slip question never resolved in 45s' });
+          cover('gate-proceed', gone, gone ? 'question resolved, walk resumed' : 'question stuck open');
         }
       } else {
         cover('review-gate-appears', null, 'walk Start never enabled (narration gen) — gate not reachable this pass');

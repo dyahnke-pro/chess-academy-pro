@@ -158,6 +158,12 @@ export async function getAllMisconceptions(): Promise<MisconceptionTagRecord[]> 
   return db.misconceptionTags.toArray();
 }
 
+/** Every slip recorded for one game (the review asks its lesson question from
+ *  these: the tag game analysis filed at a board names the habit it missed). */
+export async function getMisconceptionsForGame(gameId: string): Promise<MisconceptionTagRecord[]> {
+  return db.misconceptionTags.where('sourceGameId').equals(gameId).toArray();
+}
+
 /** True when this game has already been tagged — guards Game Review /
  *  auto-analysis against double-logging the same game's blunders. */
 export async function hasMisconceptionsForGame(gameId: string): Promise<boolean> {
