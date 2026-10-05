@@ -124,8 +124,7 @@ import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { readCriticalMoment, criticalMomentStatement, type CriticalMomentRead } from './criticalMoment';
 import { costStakes, exchangeStakes, forkPoints, lineTacticPoints, type FactStakes } from './factStakes';
 import { nextMoveAdvice, type MoveAdviceVerdict } from './nextMoveAdvice';
-import { candidatesFromLines, notYet, sayLine } from './thinkAloud';
-import { pvSans } from './moveInsight';
+import { depthClauses } from './thinkAloud';
 import { classifyPhase } from './gamePhaseService';
 import { looseTrigger } from './looseTrigger';
 
@@ -209,6 +208,10 @@ export interface PositionFactsInput {
    *  (WO-LAYERS-01 step 4 — looks aggressive, wins nothing). Absent = the
    *  surface has no such move; nothing is guessed. */
   opponentLastMove?: { fenBefore: string; san: string };
+  /** The game's moves so far (SAN), for what the opponent keeps doing. */
+  history?: readonly string[];
+  /** The surface names the best move anyway ("Why?") — its line may speak. */
+  namesBestMove?: boolean;
   /** WO-TEACH-02 S2 — the opening principles this game has ALREADY taught
    *  (carried by the surface, committed from `principleSpoken`), so each is
    *  taught once. Absent = the surface does not track them, and no principle
@@ -303,7 +306,11 @@ export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'latent-c
   // name on both sides, so FACT_ROLE / FACT_LAYER / TIE_ORDER answer once.
   | 'refuted' | 'rule' | 'stopped' | 'stock'
   // How good a trade is (`tradeQuality`) — the same name review's facet uses.
-  | 'trade';
+  | 'trade'
+  // THE SPEED-RUN DEPTH (David 2026-10-05: "Should be from one place") — the
+  // one producer `thinkAloud.depthClauses`, ranked by the one door like
+  // every other fact.
+  | 'not-yet' | 'line' | 'their-habit';
 
 /** STATUS bands from the student's POV (cp). The general's opening read. */
 type StatusBand = 'lost' | 'worse' | 'level' | 'better' | 'winning';
@@ -988,23 +995,18 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // line is its echo (hand walk 2340: said back to back).
   const verdictSpeaks = !!deliberation?.bestWhy && adviceDropped.some((c) => c.kind === 'deliberation' && / The move is /.test(` ${c.text}`));
   const composedBase = verdictSpeaks ? adviceDropped.filter((c) => c.kind !== 'fundamental') : adviceDropped;
-  // THE SPEED-RUN DEPTH (David 2026-10-05: "All surfaces get this"): where the
-  // verdict NAMES the move, it gains his "not yet, first this" and the line in
-  // words, ending on what it achieves. Never where the move is held.
-  const depthTail = (() => {
-    if (!verdictSpeaks || heldVerdict) return '';
-    try {
-      const best = candidatesFromLines(fen, input.analysis?.topLines ?? [])[0];
-      if (!best) return '';
-      const me: 'w' | 'b' = fen.split(' ')[1] === 'b' ? 'b' : 'w';
-      const ny = notYet(fen, best);
-      const said = sayLine(fen, pvSans(fen, [...best.pv], 6), me);
-      return [ny?.text, said?.text].filter(Boolean).join(' ');
-    } catch { return ''; }
-  })();
-  const composed = depthTail
-    ? composedBase.map((c) => (c.kind === 'deliberation' ? { ...c, text: `${c.text} ${depthTail}` } : c))
-    : composedBase;
+  // THE SPEED-RUN DEPTH — from the one producer, as facts the door ranks. The
+  // line names the move, so it speaks only where the move is earned or the
+  // surface names it anyway, and never where the move is held back.
+  const depth: ClauseItem[] = depthClauses({
+    fen,
+    history: input.history ?? [],
+    topLines: input.analysis?.topLines ?? [],
+    studentColor: studentSeat === 'white' ? 'w' : 'b',
+    // "Why?" names the move anyway; elsewhere a held move stays held.
+    nameMove: !!input.namesBestMove || (!heldVerdict && !!moveAdvice?.speak),
+  }).map((d) => ({ kind: d.kind, rank: d.kind === 'not-yet' ? 90 : d.kind === 'line' ? 60 : 40, text: d.text, ...(d.squares ? { squares: d.squares } : {}), ...(d.lines ? { lines: d.lines } : {}) }));
+  const composed = [...composedBase, ...depth];
   const needVerdict = studentIsMoving && input.studentNeedContext
     ? computeNeed({
       ply: plyNumber,

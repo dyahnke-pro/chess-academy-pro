@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { lineAchieves, sayLine, weighTwo, notYet, opponentHabits, thinkAloud } from './thinkAloud';
+import { lineAchieves, sayLine, weighTwo, notYet, opponentHabits, thinkAloud, depthClauses } from './thinkAloud';
 
 describe('think aloud — the speed-run depth', () => {
   it('a line ends on what it achieves: hxg5 fxg5 opens the h-file toward their king', () => {
@@ -39,5 +39,17 @@ describe('think aloud — the speed-run depth', () => {
     const deep = thinkAloud({ fen, history: [], candidates: c, critical: true });
     expect(deep.words).toBeGreaterThan(quiet.words);
     expect(deep.lines.length).toBeGreaterThan(0);
+  });
+});
+
+describe('the one producer', () => {
+  const fen = '7k/p3R3/8/8/8/8/8/6K1 w - - 0 1';
+  const topLines = [{ moves: ['e7e8', 'h8h7', 'e8e7', 'h7g6', 'e7a7'], evaluation: 500, mate: null }];
+  it('names the line and "not yet" only where the move may be named', () => {
+    const named = depthClauses({ fen, history: [], topLines, studentColor: 'w', nameMove: true }).map((d) => d.kind);
+    expect(named).toEqual(expect.arrayContaining(['not-yet', 'line']));
+    const held = depthClauses({ fen, history: [], topLines, studentColor: 'w', nameMove: false }).map((d) => d.kind);
+    expect(held).not.toContain('line');
+    expect(held).not.toContain('not-yet');
   });
 });

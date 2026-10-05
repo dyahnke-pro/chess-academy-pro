@@ -10,7 +10,7 @@
 //   2. computePositionFacts — the position briefing (who's winning, the plan,
 //      what must be defended, the real fork in the road) in the house register.
 // The result is spoken directly (preferRaw) — the purest G0, and instant.
-import { lastMoveFromPgn, positionAsk } from './moveInsight';
+import { lastMoveFromPgn, positionAsk, walkableLine } from './moveInsight';
 import { Chess } from 'chess.js';
 import type { StockfishAnalysis } from '../types';
 import { explainBestMoveGrounded } from './groundedAnswer';
@@ -19,7 +19,6 @@ import { positionTeachingWhy, groundedMoveWhy } from './groundedMoveWhy';
 import type { WeaknessSignal } from './weaknessSignal';
 import type { StudentNeedContext } from './needScore';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
-import { candidatesFromLines, thinkAloud } from './thinkAloud';
 import type { BoardArrow, WalkableLine } from '../types';
 import { admitArrows, lineClaims } from './arrowDoor';
 
@@ -69,7 +68,7 @@ export async function computeWhyBestMove(input: WhyBestMoveInput): Promise<strin
  *  (David 2026-10-05: "When we speak lines we also draw arrows!"). */
 export async function computeWhyBestMoveDetail(input: WhyBestMoveInput): Promise<{ text: string; lines: WalkableLine[]; arrows: BoardArrow[] }> {
   const { fen, studentColor, analysis } = input;
-  let spokenLines: WalkableLine[] = [];
+  const spokenLines: WalkableLine[] = [];
   const sc: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
   const uci: string | null = analysis.bestMove && analysis.bestMove.length >= 4 ? analysis.bestMove : null;
   const san = bestSan(fen, uci);
@@ -98,20 +97,12 @@ export async function computeWhyBestMoveDetail(input: WhyBestMoveInput): Promise
   // 1. The concrete point of the strongest move (the engine-reasoning form).
   //    Never a bare "The strongest move is X." — the why-chain floor guarantees
   //    a grounded reason so a "Why?" tap is never a dead answer.
-  // 1a. THE SPEED-RUN DEPTH (David 2026-10-05: "We mirror the speed runs";
-  //     "All surfaces get this"). A "Why?" tap is the student asking, so it is
-  //     always the decision register: on one hand / on the other, not yet,
-  //     the line with their reply in words, arrowed ply by ply.
   const history = (() => {
     if (!input.pgn) return [] as string[];
     try { const c = new Chess(); c.loadPgn(input.pgn); return c.history(); } catch { return [] as string[]; }
   })();
-  const ta = san && fen.split(' ')[1] === sc
-    ? thinkAloud({ fen, history, candidates: candidatesFromLines(fen, analysis.topLines ?? []), critical: true, skipRead: true })
-    : null;
-  if (ta) spokenLines = ta.lines;
   const point = explainBestMoveGrounded(fen, null, uci, studentColor, null, null); // "it forks the king and rook" | null
-  if (san && !ta?.weighed) {
+  if (san) {
     const reason = point?.trim() || groundedMoveWhy([], fen, san, studentColor);
     // Strip a trailing period on the reason before adding our own — the grounded
     // computers sometimes return a full sentence ("It wins the rook on e7."),
@@ -119,8 +110,6 @@ export async function computeWhyBestMoveDetail(input: WhyBestMoveInput): Promise
     const cleaned = (reason ?? '').replace(/\s*\.\s*$/, '');
     parts.push(`The strongest move is ${san} — ${cleaned}.`);
   }
-  // The weighing (which names the choice itself), "not yet", and the line.
-  if (ta?.text) parts.push(ta.text);
 
   // 2. The position briefing — the plan + what's at stake + the real fork in the
   //    road (why the natural alternatives fall short). Exclude the interface-y /
@@ -139,7 +128,15 @@ export async function computeWhyBestMoveDetail(input: WhyBestMoveInput): Promise
       ...(input.prevEvalCpWhitePov != null ? { prevEvalCpWhitePov: input.prevEvalCpWhitePov } : {}),
       ...(input.studentWeaknesses ? { studentWeaknesses: input.studentWeaknesses } : {}),
       studentNeedContext: input.studentNeedContext,
+      // The speed-run depth comes from the one producer through the door:
+      // "Why?" names the best move anyway, so its line may speak.
+      history,
+      namesBestMove: true,
     });
+    for (const c of pf.clauses) for (const l of c.lines ?? []) {
+      const w = walkableLine(l.fen, l.sans, l.sans[0] ?? '');
+      if (w) spokenLines.push(w);
+    }
     const briefing = clauseText(pf.clauses, ['key-moment', 'convert']);
     for (const line of briefing) if (line && !parts.some((p) => p.includes(line))) parts.push(line);
   } catch { /* engine/board facts unavailable — the best-move point still stands */ }

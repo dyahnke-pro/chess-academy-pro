@@ -171,7 +171,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:11936`
 - `src/services/moveInsight.test.ts:114`
 - `src/services/moveInsight.ts:598`
-- `src/services/whyBestMove.ts:89`
+- `src/services/whyBestMove.ts:88`
 
 ### `moveMissed` (re-export) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2869`
@@ -211,7 +211,7 @@
 - `src/services/moveInsight.ts:129`
 - `src/services/thinkAloud.ts:276`
 - `src/services/thinkingAssessStep.ts:81`
-- `src/services/whyBestMove.ts:94`
+- `src/services/whyBestMove.ts:93`
 
 ## Tests
 

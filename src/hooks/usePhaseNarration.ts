@@ -652,6 +652,8 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             })(),
             studentNeedContext: studentNeedRef.current,
             alreadySaid: standingRef.current.said,
+            // What they keep doing — the game so far (the speed-run depth).
+            history: sansOfPgn(argsRef.current.getPgn() ?? ''),
             // WO-TEACH-02 S4 — this board IS the turn of the game, so the
             // composer takes stock: who's better, and why.
             phaseTurn: event.kind === 'opening-to-middlegame' ? 'middlegame' : 'endgame',

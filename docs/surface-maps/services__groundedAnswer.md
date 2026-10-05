@@ -365,7 +365,7 @@
 - `src/services/mistakeNarration.ts:647`
 - `src/services/reviewNarrationFidelity.test.ts:167`
 - `src/services/reviewNarrationFidelity.test.ts:173`
-- `src/services/whyBestMove.ts:113`
+- `src/services/whyBestMove.ts:104`
 
 ### `captureHasCounterTactic` (function) — 1 call site
 - `src/services/reviewTeachingPoints.ts:101`

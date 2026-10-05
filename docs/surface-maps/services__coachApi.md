@@ -240,7 +240,7 @@
 - `src/hooks/useLiveCoach.test.tsx:13`
 - `src/hooks/useLiveCoach.ts:312`
 - `src/hooks/usePhaseNarration.test.ts:68`
-- `src/hooks/usePhaseNarration.ts:744`
+- `src/hooks/usePhaseNarration.ts:746`
 - `src/services/coachMoveCommentary.ts:303`
 - `src/services/groundedComputedOnly.test.ts:25`
 - `src/services/groundedMoveFeedback.test.ts:14`
@@ -293,7 +293,7 @@
 - `src/components/Coach/CoachGameReview.tsx:1990`
 - `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx:102`
 - `src/components/Puzzles/PuzzleBoard.tsx:97`
-- `src/hooks/usePhaseNarration.ts:731`
+- `src/hooks/usePhaseNarration.ts:733`
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:260`
 - `src/services/coachChatText.ts:221`

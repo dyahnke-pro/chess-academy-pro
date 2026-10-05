@@ -299,3 +299,50 @@ export function thinkAloud(args: {
   const text = parts.join(' ');
   return { text, lines, words: text.split(/\s+/).filter(Boolean).length, weighed };
 }
+
+export interface DepthClause {
+  kind: 'not-yet' | 'line' | 'their-habit';
+  text: string;
+  /** The line the clause says, from the board it starts on (arrows). */
+  lines?: Array<{ fen: string; sans: string[] }>;
+  squares?: string[];
+}
+
+/**
+ * THE ONE PRODUCER (David 2026-10-05: "Should be from one place"). Every
+ * surface gets the speed-run depth from here, as typed facts the one deciding
+ * door ranks: what they keep doing, and — only where the surface may NAME the
+ * move — "not yet, first this" and the line in words, ending on what it
+ * achieves. `nameMove: false` (a held verdict, a withheld puzzle answer)
+ * returns the habit alone.
+ */
+export function depthClauses(args: {
+  fen: string;
+  history: readonly string[];
+  topLines: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>;
+  studentColor: 'w' | 'b';
+  nameMove: boolean;
+}): DepthClause[] {
+  const out: DepthClause[] = [];
+  try {
+    const habit = opponentHabits(args.history, args.studentColor === 'w' ? 'b' : 'w')[0];
+    if (habit) out.push({ kind: 'their-habit', text: habit.text });
+    const toMove = new Chess(args.fen).turn();
+    if (!args.nameMove || toMove !== args.studentColor) return out;
+    const best = candidatesFromLines(args.fen, args.topLines)[0];
+    if (!best) return out;
+    const ny = notYet(args.fen, best);
+    if (ny) out.push({ kind: 'not-yet', text: ny.text });
+    const sans = pvSans(args.fen, [...best.pv], 6);
+    const said = sayLine(args.fen, sans, args.studentColor);
+    if (said) {
+      out.push({
+        kind: 'line',
+        text: said.text,
+        lines: [{ fen: args.fen, sans: said.line.plies.map((p) => p.san) }],
+        squares: said.line.plies.flatMap((p) => [p.uci.slice(0, 2), p.uci.slice(2, 4)]),
+      });
+    }
+  } catch { /* depth is a bonus, never a blocker */ }
+  return out;
+}

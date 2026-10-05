@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1686 lines · 15 exports · 21 importers · 20 tests · 3 audits**
+**1688 lines · 15 exports · 22 importers · 21 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -28,6 +28,7 @@
 - `src/services/loopCloses.test.ts`
 - `src/services/positionFacts.afterLine.test.ts`
 - `src/services/positionFacts.convertOnce.test.ts`
+- `src/services/positionFacts.depth.test.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/positionFacts.moveWhy.test.ts`
 - `src/services/positionFacts.pinPressure.test.ts`
@@ -81,7 +82,7 @@
 
 ### `clauseText` (function) — 11 call sites
 - `src/hooks/useLiveCoach.ts:295`
-- `src/hooks/usePhaseNarration.ts:660`
+- `src/hooks/usePhaseNarration.ts:662`
 - `src/services/computerAccuracy.audit.test.ts:113`
 - `src/services/positionFacts.test.ts:254`
 - `src/services/positionFacts.test.ts:255`
@@ -89,10 +90,10 @@
 - `src/services/positionFacts.test.ts:306`
 - `src/services/positionFacts.test.ts:364`
 - `src/services/positionFacts.test.ts:365`
-- `src/services/positionReadComposer.ts:151`
-- `src/services/whyBestMove.ts:143`
+- `src/services/positionReadComposer.ts:150`
+- `src/services/whyBestMove.ts:140`
 
-### `computePositionFacts` (function) — 82 call sites
+### `computePositionFacts` (function) — 83 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9680`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
@@ -111,6 +112,7 @@
 - `src/services/liveNeedWire.test.ts:31`
 - `src/services/loopCloses.test.ts:112`
 - `src/services/positionFacts.convertOnce.test.ts:16`
+- `src/services/positionFacts.depth.test.ts:17`
 - `src/services/positionFacts.liveFundamental.test.ts:52`
 - `src/services/positionFacts.moveWhy.test.ts:21`
 - `src/services/positionFacts.pinPressure.test.ts:17`
@@ -162,9 +164,9 @@
 - `src/services/positionFacts.weakness.test.ts:48`
 - `src/services/positionFacts.weakness.test.ts:62`
 - `src/services/positionFacts.weakness.test.ts:63`
-- `src/services/positionReadComposer.ts:132`
+- `src/services/positionReadComposer.ts:130`
 - `src/services/whyBestMove.needWire.test.ts:10`
-- `src/services/whyBestMove.ts:129`
+- `src/services/whyBestMove.ts:118`
 - `src/test/computedOrderWired.test.ts:32`
 - `src/test/everySurfaceSpeaks.test.ts:117`
 - `src/test/teach02Wired.test.ts:84`
@@ -213,6 +215,7 @@
 - `src/services/loopCloses.test.ts`
 - `src/services/positionFacts.afterLine.test.ts`
 - `src/services/positionFacts.convertOnce.test.ts`
+- `src/services/positionFacts.depth.test.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/positionFacts.moveWhy.test.ts`
 - `src/services/positionFacts.pinPressure.test.ts`
