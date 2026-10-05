@@ -65,8 +65,11 @@ export interface QuestionState extends SquareAnswerState {
   readonly nudges: number;
 }
 
-export function newQuestion(key: readonly Square[], now: number): QuestionState {
-  return { ...newSquareAnswer(key, 'all', now), nudges: 0 };
+/** `mode` defaults to `all` (find every key square); a follow-up link whose
+ *  every key square is a full answer ("tap the piece that takes first") asks
+ *  `any`. */
+export function newQuestion(key: readonly Square[], now: number, mode: 'all' | 'any' = 'all'): QuestionState {
+  return { ...newSquareAnswer(key, mode, now), nudges: 0 };
 }
 
 /** Whether the question is settled (answered or shown). */

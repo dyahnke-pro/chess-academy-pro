@@ -20,6 +20,7 @@ import { rotateStem } from '../utils/rotateStem';
 import { findHangingBySee } from './positionReadingService';
 import { findPinPressure, PIN_PRESSURE_PRINCIPLE, type PinPressure } from './pinPressure';
 import { sayMoveClause } from './spokenMove';
+import { exchangeChain } from './thinkingExchangeChain';
 
 /** The one loose-piece computer, injected: squares of `color`'s undefended
  *  pieces (attacked or not). */
@@ -197,6 +198,10 @@ export function targetsKit(loose: LooseSquares): StepKit {
     },
     wrongTapLine: (fen, sq) => (pinFormFor(fen) ? pinPressureWrongTapLine(fen, sq) : targetsWrongTapLine(fen, sq)),
     reasonFor: (fen, sq) => (pinFormFor(fen) ? pinPressureReason(fen, sq) : targetReason(fen, sq)),
+    // C1: a right answer is followed by the count itself — attackers,
+    // defenders, who takes first. The pinned-piece form asks about squares,
+    // not a piece, so it has no exchange to count.
+    followUps: (fen, sq, rot) => (pinFormFor(fen) ? [] : exchangeChain(fen, sq, 'theirs', rot)),
     intro: 'Today: finding their targets. Before you choose a move, look at each of their pieces and ask who guards it. A piece nobody guards, or one that loses the exchange, is a target. Watch first.',
   };
 }

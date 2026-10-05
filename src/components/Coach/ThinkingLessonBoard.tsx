@@ -16,6 +16,7 @@ export interface ThinkingLessonBoardProps {
 const FOUND: CSSProperties = { background: 'rgba(34,197,94,0.55)' };
 const WRONG: CSSProperties = { background: 'rgba(239,68,68,0.5)' };
 const SHOWN: CSSProperties = { background: 'rgba(250,204,21,0.55)' };
+const FOCUS: CSSProperties = { background: 'rgba(59,130,246,0.45)' };
 
 const STAGE_LABEL: Record<NonNullable<LessonView['stage']>, string> = {
   show: 'Watch',
@@ -25,6 +26,8 @@ const STAGE_LABEL: Record<NonNullable<LessonView['stage']>, string> = {
 
 export function lessonSquareStyles(view: LessonView): Record<string, CSSProperties> {
   const styles: Record<string, CSSProperties> = {};
+  // The piece a follow-up chain asks about, under everything else.
+  for (const s of view.focus) styles[s] = FOCUS;
   for (const s of view.shown) styles[s] = SHOWN;
   for (const s of view.wrong) styles[s] = WRONG;
   for (const s of view.found) styles[s] = FOUND;

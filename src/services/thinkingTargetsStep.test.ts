@@ -82,7 +82,16 @@ describe('step 5 — the pinned-piece form (PP on the PP)', () => {
     expect(kit.showLine(PIN, k?.key ?? [], 0)).toMatch(/pinned/);
     // A wrong tap never names the answer.
     expect(kit.wrongTapLine(PIN, 'a3')).not.toMatch(/e5/);
+    // The pin form's key is a set of squares, not a piece: no exchange chain.
+    expect(kit.followUps?.(PIN, 'e5', 0)).toEqual([]);
   }, 20_000);   // detectTactics per legal move: slow on a loaded machine
+
+  it('an ordinary target is followed by its exchange count (C1)', async () => {
+    const { targetsKit } = await import('./thinkingTargetsStep');
+    const kit = targetsKit(() => []);
+    const links = kit.followUps?.('2k5/1p6/2n5/3P4/1N6/8/8/6K1 w - - 0 1', 'c6', 0) ?? [];
+    expect(links.map((l) => l.id)).toEqual(['attackers', 'defenders', 'takes-first']);
+  });
 
   it('an ordinary board keeps the ordinary targets question', async () => {
     const { targetsKit } = await import('./thinkingTargetsStep');
