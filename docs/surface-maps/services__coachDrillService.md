@@ -169,23 +169,26 @@
 
 ### `lastMoveFromPgn` (re-export) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:11936`
-- `src/services/moveInsight.test.ts:113`
-- `src/services/moveInsight.ts:537`
-- `src/services/whyBestMove.ts:79`
+- `src/services/moveInsight.test.ts:114`
+- `src/services/moveInsight.ts:598`
+- `src/services/whyBestMove.ts:89`
 
-### `moveMissed` (re-export) — 10 call sites
+### `moveMissed` (re-export) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2869`
 - `src/services/groundedAnswer.ts:7270`
 - `src/services/moveInsight.lineAudit.test.ts:45`
-- `src/services/moveInsight.test.ts:34`
-- `src/services/moveInsight.test.ts:42`
-- `src/services/moveInsight.test.ts:120`
-- `src/services/moveInsight.test.ts:198`
-- `src/services/moveInsight.test.ts:212`
+- `src/services/moveInsight.replay.test.ts:64`
+- `src/services/moveInsight.test.ts:35`
+- `src/services/moveInsight.test.ts:43`
+- `src/services/moveInsight.test.ts:121`
+- `src/services/moveInsight.test.ts:199`
 - `src/services/moveInsight.test.ts:213`
-- `src/services/moveInsight.ts:302`
+- `src/services/moveInsight.test.ts:214`
+- `src/services/moveInsight.test.ts:250`
+- `src/services/moveInsight.test.ts:253`
+- `src/services/moveInsight.ts:349`
 
-### `positionAsk` (re-export) — 19 call sites
+### `positionAsk` (re-export) — 23 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2870`
 - `src/components/Coach/CoachTeachPage.tsx:11915`
 - `src/components/Coach/CoachTeachPage.tsx:11941`
@@ -193,18 +196,22 @@
 - `src/components/Puzzles/PuzzleBoard.tsx:653`
 - `src/components/Tactics/TacticSetupBoard.tsx:225`
 - `src/components/Tactics/TacticSetupBoard.tsx:396`
-- `src/services/moveInsight.test.ts:50`
-- `src/services/moveInsight.test.ts:55`
-- `src/services/moveInsight.test.ts:61`
-- `src/services/moveInsight.test.ts:67`
-- `src/services/moveInsight.test.ts:70`
-- `src/services/moveInsight.test.ts:104`
-- `src/services/moveInsight.test.ts:163`
-- `src/services/moveInsight.test.ts:168`
-- `src/services/moveInsight.test.ts:188`
-- `src/services/moveInsight.ts:127`
+- `src/services/moveInsight.replay.test.ts:49`
+- `src/services/moveInsight.test.ts:51`
+- `src/services/moveInsight.test.ts:56`
+- `src/services/moveInsight.test.ts:62`
+- `src/services/moveInsight.test.ts:68`
+- `src/services/moveInsight.test.ts:71`
+- `src/services/moveInsight.test.ts:105`
+- `src/services/moveInsight.test.ts:164`
+- `src/services/moveInsight.test.ts:169`
+- `src/services/moveInsight.test.ts:189`
+- `src/services/moveInsight.test.ts:282`
+- `src/services/moveInsight.test.ts:288`
+- `src/services/moveInsight.ts:129`
+- `src/services/thinkAloud.ts:276`
 - `src/services/thinkingAssessStep.ts:81`
-- `src/services/whyBestMove.ts:84`
+- `src/services/whyBestMove.ts:94`
 
 ## Tests
 

@@ -139,7 +139,7 @@ import { autoAnalyzeGameMisconceptions } from '../../services/autoAnalyzeGame';
 import { computeWeaknessProfile } from '../../services/weaknessAnalyzer';
 import { reconstructMovesFromGame } from '../../services/gameReconstructionService';
 import { voiceService, resolvePollyVoice, CLOUD_VOICES } from '../../services/voiceService';
-import { computeWhyBestMove } from '../../services/whyBestMove';
+import { computeWhyBestMoveDetail } from '../../services/whyBestMove';
 import type {
   CoachGameState, CoachGameMove, KeyMoment, DetectedOpening,
   CoachDifficulty,
@@ -4542,8 +4542,11 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     const fen = game.fen;
     try {
       const analysis = await stockfishEngine.analyzePosition(fen, 16, undefined, 'brain');
-      const why = await computeWhyBestMove({ fen, studentColor: playerColor, analysis, rating: playerRating, pgn: game.pgn, studentWeaknesses: weaknessSignalsRef.current, studentNeedContext: studentNeedRef.current });
+      const detail = await computeWhyBestMoveDetail({ fen, studentColor: playerColor, analysis, rating: playerRating, pgn: game.pgn, studentWeaknesses: weaknessSignalsRef.current, studentNeedContext: studentNeedRef.current });
+      const why = detail.text;
       const answer = why || 'No single best move stands out here — the position is roughly balanced.';
+      // The line it speaks, arrowed ply by ply (cleared on the next move).
+      if (detail.arrows.length > 0) setAnnotationArrows(detail.arrows);
       gameChatRef.current?.injectAssistantMessage(answer);
       void voiceService.speakReadAloud(answer);
     } catch {

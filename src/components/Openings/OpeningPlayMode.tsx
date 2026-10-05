@@ -25,7 +25,7 @@ import { opponentStrength, studentPlayingRating } from '../../services/engineStr
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { fetchCloudEval } from '../../services/lichessExplorerService';
 import { voiceService } from '../../services/voiceService';
-import { computeWhyBestMove } from '../../services/whyBestMove';
+import { computeWhyBestMoveDetail } from '../../services/whyBestMove';
 import { loadWeaknessSignals } from '../../services/weaknessSignalLoader';
 import type { WeaknessSignal } from '../../services/weaknessSignal';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
@@ -141,10 +141,13 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
     const fen = game.fen;
     try {
       const analysis = await stockfishEngine.analyzePosition(fen, 16, undefined, 'brain');
-      const why = await computeWhyBestMove({ fen, studentColor: playerColor, analysis, rating: playerRating, pgn: game.pgn, studentWeaknesses: weaknessSignalsRef.current, studentNeedContext: studentNeedRef.current });
-      // Lead the eye to the move we NAME but don't play out (G6).
+      const detail = await computeWhyBestMoveDetail({ fen, studentColor: playerColor, analysis, rating: playerRating, pgn: game.pgn, studentWeaknesses: weaknessSignalsRef.current, studentNeedContext: studentNeedRef.current });
+      const why = detail.text;
+      // Lead the eye along the line it speaks, every ply (G6); else the move it names.
       const uci = analysis.bestMove;
-      if (why && uci && uci.length >= 4) {
+      if (why && detail.arrows.length > 0) {
+        setChatArrows(detail.arrows);
+      } else if (why && uci && uci.length >= 4) {
         const best = admitArrow({ from: uci.slice(0, 2), to: uci.slice(2, 4), role: 'play', vouchedBy: 'engine', source: 'openingPlay.why' }, { fen, studentColor: playerColor });
         setChatArrows(best ? [best] : []);
       }

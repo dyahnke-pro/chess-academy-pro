@@ -1,4 +1,6 @@
 import { Chess } from 'chess.js';
+import { candidatesFromLines, notYet, opponentHabits, sayLine } from './thinkAloud';
+import { pvSans } from './moveInsight';
 // positionReadComposer — THE READ OF A POSITION, composed in ONE place
 // (WO-STANDARD-01, 2026-09-22). `usePositionNarration` used to compose this
 // itself from six computers — the note, the phase, the position facts, the
@@ -181,7 +183,26 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
   //    "you're threatening to win my bishop" to the student whose bishop it was.
   const lookaheadLine = tactics ? speakDeepestLookahead(tactics, READ_SEAT, studentCC, i.studentWeaknesses) : null;
 
-  return [noteLine, phaseLine, positionFactsBlock, ...readLines, lookaheadLine ?? '']
+  // 6. THE SPEED-RUN DEPTH (David 2026-10-05: "All surfaces get this"):
+  //    what they keep doing, and — at a deciding moment, when no answer is
+  //    withheld — "not yet, first this" and the line in words.
+  const depth: string[] = [];
+  try {
+    const opp: 'w' | 'b' = studentCC === 'w' ? 'b' : 'w';
+    const habit = opponentHabits(sans, opp)[0];
+    if (habit) depth.push(habit.text);
+    if (decidingMoment && !marks && i.fen.split(' ')[1] === studentCC && i.analysis?.topLines?.length) {
+      const best = candidatesFromLines(i.fen, i.analysis.topLines)[0];
+      if (best) {
+        const ny = notYet(i.fen, best);
+        if (ny) depth.push(ny.text);
+        const said = sayLine(i.fen, pvSans(i.fen, [...best.pv], 6), studentCC);
+        if (said && !`${positionFactsBlock} ${lookaheadLine ?? ''}`.includes(said.text.slice(0, 20))) depth.push(said.text);
+      }
+    }
+  } catch { /* depth is a bonus, never a blocker */ }
+
+  return [noteLine, phaseLine, positionFactsBlock, ...readLines, lookaheadLine ?? '', ...depth]
     .map((t) => t.trim())
     .filter(Boolean)
     .filter((t) => !reveals(t, marks))

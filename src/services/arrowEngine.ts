@@ -28,7 +28,8 @@
  * file has no hard dep on the engine singleton and stays unit-testable.
  */
 import { Chess, type Move, type Square } from 'chess.js';
-import { admitArrow, arrowColorName } from './arrowDoor';
+import { ARROW_COLOR, admitArrow, admitArrows, arrowColorName, type ArrowClaim } from './arrowDoor';
+import type { BoardArrow } from '../types';
 
 export type FromTo = { from: string; to: string };
 export type ArrowColor = 'green' | 'blue' | 'yellow' | 'red';
@@ -492,8 +493,9 @@ export function keySquareHighlightMarker(squares: readonly string[]): string {
 }
 
 /** Board colours for a spoken puzzle line's arrows. */
-export const LINE_ARROW_GOOD = 'rgba(34, 197, 94, 0.85)';
-export const LINE_ARROW_THREAT = 'rgba(239, 68, 68, 0.85)';
+/** The door's own colours — a spoken line is drawn by the one arrow door. */
+export const LINE_ARROW_GOOD = ARROW_COLOR.mine;
+export const LINE_ARROW_THREAT = ARROW_COLOR.theirs;
 
 /**
  * EVERY MOVE A PUZZLE SAYS, ON THE BOARD (David 2026-10-02: "Make sure all
@@ -514,14 +516,17 @@ export function spokenLineArrows(
   text: string,
   fen: string,
   opts: { studentColor: 'w' | 'b'; studentMovesAreBad?: boolean; exclude?: readonly FromTo[] },
-): Array<{ startSquare: string; endSquare: string; color: string }> {
+): BoardArrow[] {
   const sans = lineMoveSans(text);
   if (sans.length === 0) return [];
   const skip = new Set((opts.exclude ?? []).map((e) => `${e.from}-${e.to}`));
-  const out: Array<{ startSquare: string; endSquare: string; color: string }> = [];
+  // Each ply as a `line` claim on the board BEFORE it — the one arrow door
+  // colours it by whose piece it is (green yours, red theirs).
+  const claims: ArrowClaim[] = [];
   let running: Chess;
   try { running = new Chess(fen); } catch { return []; }
   for (const san of sans) {
+    const before = running.fen();
     let mv: ReturnType<Chess['move']> | null = null;
     const mover = running.turn();
     try { mv = running.move(san, { strict: false }); } catch { mv = null; }
@@ -529,14 +534,10 @@ export function spokenLineArrows(
     const key = `${mv.from}-${mv.to}`;
     if (skip.has(key)) continue;
     skip.add(key);
-    if (mover === opts.studentColor) {
-      if (opts.studentMovesAreBad) continue;
-      out.push({ startSquare: mv.from, endSquare: mv.to, color: LINE_ARROW_GOOD });
-    } else {
-      out.push({ startSquare: mv.from, endSquare: mv.to, color: LINE_ARROW_THREAT });
-    }
+    if (mover === opts.studentColor && opts.studentMovesAreBad) continue;
+    claims.push({ from: mv.from, to: mv.to, role: 'line', fen: before, source: 'arrowEngine.spokenLine' });
   }
-  return out;
+  return admitArrows(claims, { fen, studentColor: opts.studentColor === 'w' ? 'white' : 'black' }).arrows;
 }
 
 /** Words after which a bare coordinate is a pawn MOVE, not a square. */

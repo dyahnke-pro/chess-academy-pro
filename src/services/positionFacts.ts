@@ -124,6 +124,8 @@ import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { readCriticalMoment, criticalMomentStatement, type CriticalMomentRead } from './criticalMoment';
 import { costStakes, exchangeStakes, forkPoints, lineTacticPoints, type FactStakes } from './factStakes';
 import { nextMoveAdvice, type MoveAdviceVerdict } from './nextMoveAdvice';
+import { candidatesFromLines, notYet, sayLine } from './thinkAloud';
+import { pvSans } from './moveInsight';
 import { classifyPhase } from './gamePhaseService';
 import { looseTrigger } from './looseTrigger';
 
@@ -985,7 +987,24 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // are the same computer on the same move. Where the verdict speaks, the plan
   // line is its echo (hand walk 2340: said back to back).
   const verdictSpeaks = !!deliberation?.bestWhy && adviceDropped.some((c) => c.kind === 'deliberation' && / The move is /.test(` ${c.text}`));
-  const composed = verdictSpeaks ? adviceDropped.filter((c) => c.kind !== 'fundamental') : adviceDropped;
+  const composedBase = verdictSpeaks ? adviceDropped.filter((c) => c.kind !== 'fundamental') : adviceDropped;
+  // THE SPEED-RUN DEPTH (David 2026-10-05: "All surfaces get this"): where the
+  // verdict NAMES the move, it gains his "not yet, first this" and the line in
+  // words, ending on what it achieves. Never where the move is held.
+  const depthTail = (() => {
+    if (!verdictSpeaks || heldVerdict) return '';
+    try {
+      const best = candidatesFromLines(fen, input.analysis?.topLines ?? [])[0];
+      if (!best) return '';
+      const me: 'w' | 'b' = fen.split(' ')[1] === 'b' ? 'b' : 'w';
+      const ny = notYet(fen, best);
+      const said = sayLine(fen, pvSans(fen, [...best.pv], 6), me);
+      return [ny?.text, said?.text].filter(Boolean).join(' ');
+    } catch { return ''; }
+  })();
+  const composed = depthTail
+    ? composedBase.map((c) => (c.kind === 'deliberation' ? { ...c, text: `${c.text} ${depthTail}` } : c))
+    : composedBase;
   const needVerdict = studentIsMoving && input.studentNeedContext
     ? computeNeed({
       ply: plyNumber,

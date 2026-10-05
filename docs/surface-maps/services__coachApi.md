@@ -297,12 +297,12 @@
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:260`
 - `src/services/coachChatText.ts:221`
-- `src/services/coachFeatureService.ts:175`
-- `src/services/coachFeatureService.ts:425`
-- `src/services/coachFeatureService.ts:560`
+- `src/services/coachFeatureService.ts:176`
+- `src/services/coachFeatureService.ts:426`
 - `src/services/coachFeatureService.ts:561`
-- `src/services/coachFeatureService.ts:5106`
-- `src/services/coachFeatureService.ts:5259`
+- `src/services/coachFeatureService.ts:562`
+- `src/services/coachFeatureService.ts:5116`
+- `src/services/coachFeatureService.ts:5269`
 - `src/services/coachLaneWiring.test.ts:144`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`

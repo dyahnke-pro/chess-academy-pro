@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1667 lines · 15 exports · 21 importers · 20 tests · 3 audits**
+**1686 lines · 15 exports · 21 importers · 20 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -89,11 +89,11 @@
 - `src/services/positionFacts.test.ts:306`
 - `src/services/positionFacts.test.ts:364`
 - `src/services/positionFacts.test.ts:365`
-- `src/services/positionReadComposer.ts:149`
-- `src/services/whyBestMove.ts:103`
+- `src/services/positionReadComposer.ts:151`
+- `src/services/whyBestMove.ts:143`
 
 ### `computePositionFacts` (function) — 82 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9626`
+- `src/components/Coach/CoachTeachPage.tsx:9680`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:635`
@@ -162,9 +162,9 @@
 - `src/services/positionFacts.weakness.test.ts:48`
 - `src/services/positionFacts.weakness.test.ts:62`
 - `src/services/positionFacts.weakness.test.ts:63`
-- `src/services/positionReadComposer.ts:130`
+- `src/services/positionReadComposer.ts:132`
 - `src/services/whyBestMove.needWire.test.ts:10`
-- `src/services/whyBestMove.ts:89`
+- `src/services/whyBestMove.ts:129`
 - `src/test/computedOrderWired.test.ts:32`
 - `src/test/everySurfaceSpeaks.test.ts:117`
 - `src/test/teach02Wired.test.ts:84`
@@ -177,10 +177,10 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8295`
+- `src/components/Coach/CoachTeachPage.tsx:8349`
 
 ### `convertKey` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9852`
+- `src/components/Coach/CoachTeachPage.tsx:9906`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 
 ### `afterLine` (function) — 5 call sites
@@ -191,7 +191,7 @@
 - `src/services/positionFacts.afterLine.test.ts:25`
 
 ### `conceptInstanceKey` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8276`
+- `src/components/Coach/CoachTeachPage.tsx:8330`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.ts:9`

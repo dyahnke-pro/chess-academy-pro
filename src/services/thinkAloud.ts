@@ -233,7 +233,23 @@ export function opponentHabits(sans: readonly string[], opp: 'w' | 'b'): Habit[]
   return out;
 }
 
-export interface ThinkAloud { text: string; lines: WalkableLine[]; words: number }
+export interface ThinkAloud { text: string; lines: WalkableLine[]; words: number; /** The two-move weighing spoke (it names the choice). */ weighed: boolean }
+
+/** The engine's top lines (white-POV evals) as candidates in the mover's seat. */
+export function candidatesFromLines(fen: string, lines: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>): Candidate[] {
+  let mover: 'w' | 'b';
+  try { mover = new Chess(fen).turn(); } catch { return []; }
+  const out: Candidate[] = [];
+  for (const l of lines) {
+    const uci = l.moves?.[0];
+    if (!uci || uci.length < 4) continue;
+    let san: string;
+    try { san = new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }).san; } catch { continue; }
+    const white = l.mate != null ? (l.mate > 0 ? 10000 : -10000) : l.evaluation;
+    out.push({ san, pv: l.moves ?? [], cp: mover === 'w' ? white : -white });
+  }
+  return out;
+}
 
 /**
  * THE COMPOSER — his order, his volume. `critical` (the ranking computer's
@@ -247,17 +263,20 @@ export function thinkAloud(args: {
   lastMove?: { fenBefore: string; san: string };
   candidates: readonly Candidate[];
   critical: boolean;
+  /** The surface already spoke the position read (positionAsk) — skip it. */
+  skipRead?: boolean;
 }): ThinkAloud {
   const parts: string[] = [];
   const lines: WalkableLine[] = [];
   let me: 'w' | 'b';
-  try { me = new Chess(args.fen).turn(); } catch { return { text: '', lines: [], words: 0 }; }
+  try { me = new Chess(args.fen).turn(); } catch { return { text: '', lines: [], words: 0, weighed: false }; }
+  let weighed = false;
   // WHAT CHANGED + WHAT I STILL OWE (his "what haven't I done yet?"): the
   // position read leads, the one computer for both.
   const ask = positionAsk(args.fen, { bestSan: args.candidates[0]?.san, lastMove: args.lastMove });
   // The hint register ("start with the captures", "keep pressing") points at an
   // answer this composer is about to NAME — drop it, keep the reading.
-  const read = ask.text.split(/(?<=[.!?])\s+/).filter((x) => !/^(Start with|Look for|Keep pressing|You have the initiative here)/.test(x)).join(' ');
+  const read = args.skipRead ? '' : ask.text.split(/(?<=[.!?])\s+/).filter((x) => !/^(Start with|Look for|Keep pressing|You have the initiative here)/.test(x)).join(' ');
   if (read) parts.push(read);
   const habit = opponentHabits(args.history, me === 'w' ? 'b' : 'w')[0];
   if (habit && args.critical) parts.push(habit.text);
@@ -265,7 +284,7 @@ export function thinkAloud(args: {
   if (a) {
     if (args.critical && b) {
       const w = weighTwo(args.fen, a, b);
-      if (w) parts.push(w.text);
+      if (w) { parts.push(w.text); weighed = true; }
     } else {
       const why = candidateReason(args.fen, a, me);
       if (why) parts.push(`The idea: ${why}.`);
@@ -278,5 +297,5 @@ export function thinkAloud(args: {
     }
   }
   const text = parts.join(' ');
-  return { text, lines, words: text.split(/\s+/).filter(Boolean).length };
+  return { text, lines, words: text.split(/\s+/).filter(Boolean).length, weighed };
 }
