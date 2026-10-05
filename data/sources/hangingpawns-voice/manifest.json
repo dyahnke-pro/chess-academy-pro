@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-28T17:21:53.981Z",
+  "updatedAt": "2026-10-05T17:49:08.209Z",
   "videos": [
     {
       "id": "UQlQjco7Mc8",
@@ -2744,6 +2744,11 @@
     {
       "id": "jKYqqsmO-7U",
       "title": "The Chekover Sicilian (Qxd4)",
+      "playlist": "complete-chess-openings"
+    },
+    {
+      "id": "XI9_mUSzAF4",
+      "title": "The Moscow Variation of the Sicilian (3.Bb5+)",
       "playlist": "complete-chess-openings"
     }
   ]
