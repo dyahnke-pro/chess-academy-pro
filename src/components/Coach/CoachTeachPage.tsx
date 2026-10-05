@@ -155,6 +155,7 @@ import {
   type DrillProgress,
   drillContinueBeat, drillHintBeat, drillSolvedBeat, drillWrongMoveBeat,
   customLessonPartLines, goodButWeakerBeat, wrongMoveReason } from '../../services/coachDrillService';
+import { bookChipForClaims } from '../../data/bookChips';
 import { useThinkingLesson, type StepKit } from '../../hooks/useThinkingLesson';
 import { ThinkingLessonBoard } from './ThinkingLessonBoard';
 import { seedMasterPuzzles } from '../../services/puzzleService';
@@ -10064,6 +10065,8 @@ export function CoachTeachPage(): JSX.Element {
             // student is never left in silence.
             const fenAfterReply = liveFenRef.current;
             let instantSpokenText = '';
+            /** The claims of what this turn SPOKE — the book chip reads them. */
+            const spokenClaims: string[] = [];
             let instantLead: TurnDecision['lead'] = null;
             let trackAStarted = false;
             // GENERATION TOKEN — the fix for the lost-line collision (David
@@ -10176,6 +10179,7 @@ export function CoachTeachPage(): JSX.Element {
                 });
                 if (instant.pkg.spoken) {
                   lines.push(instant.pkg.spoken);
+                  for (const f of instant.pkg.kept) spokenClaims.push(...(f.claims ?? []));
                   // Feed what was actually SPOKEN into the per-game novelty set so
                   // no later turn (or the late package below) repeats it.
                   for (const k of spokenSentenceKeys(instant.pkg)) learnMemRef.current.spokenKeys.add(k);
@@ -11248,11 +11252,14 @@ export function CoachTeachPage(): JSX.Element {
             // real answer. What ended is the coach answering a question nobody
             // asked, on every single move.
             if (instantSpokenText.trim()) {
+              // A quiet chip to the book behind a computed fact (never spoken).
+              const chip = bookChipForClaims(spokenClaims);
               setMessages((prev) => [...prev, {
                 id: uid('move-note'),
                 role: 'assistant',
                 content: instantSpokenText.trim(),
                 timestamp: Date.now(),
+                ...(chip ? { metadata: { actions: [chip] } } : {}),
               }]);
             }
             return;

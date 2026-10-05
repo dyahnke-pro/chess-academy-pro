@@ -1406,7 +1406,8 @@ export interface ChatMessage {
    *  walkable on the board with a button (WO-DANYA-01 C). */
   lines?: WalkableLine[];
   metadata?: {
-    actions?: { type: string; id: string }[];
+    /** `label` overrides the type's chip words (a book chip names its book). */
+    actions?: { type: string; id: string; label?: string }[];
     annotations?: BoardAnnotationCommand[];
   };
 }

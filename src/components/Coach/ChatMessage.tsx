@@ -65,7 +65,7 @@ interface ChatMessageProps {
 }
 
 function ActionButton({ action, onClick }: {
-  action: { type: string; id: string };
+  action: { type: string; id: string; label?: string };
   onClick: () => void;
 }): JSX.Element {
   const labels: Record<string, string> = {
@@ -98,7 +98,7 @@ function ActionButton({ action, onClick }: {
       className="mt-2 px-3 py-1.5 text-xs font-medium rounded-lg border border-theme-accent text-theme-accent hover:bg-theme-accent/10 transition-colors"
       data-testid={`action-${action.type}`}
     >
-      {labels[action.type] ?? action.type} →
+      {action.label ?? labels[action.type] ?? action.type} →
     </button>
   );
 }
@@ -128,7 +128,7 @@ export function ChatMessage({ message, isStreaming, onPickChoice, onWalkLine }: 
   // for memory + context snapshot purposes.
   const isVoiceAssistant = !isUser && message.modality === 'voice';
 
-  const handleAction = (action: { type: string; id: string }): void => {
+  const handleAction = (action: { type: string; id: string; label?: string }): void => {
     switch (action.type) {
       case 'drill_opening':
         // With a concrete opening id → its detail page; with no id (the coach

@@ -161,3 +161,14 @@ describe('ChatMessage — inline "did you mean" choice chips (David 2026-07-18)'
     expect(screen.queryByTestId('message-choice-chips')).not.toBeInTheDocument();
   });
 });
+
+describe('ChatMessage — the book chip', () => {
+  it('shows the book\'s own label and opens the reader at that page', () => {
+    navigateMock.mockClear();
+    renderMessage(baseMessage({ metadata: { actions: [{ type: 'read_book', id: 'nimzowitsch-my-system@33', label: 'Nimzowitsch on the pinned piece' }] } }));
+    const chip = screen.getByTestId('action-read_book');
+    expect(chip.textContent).toContain('Nimzowitsch on the pinned piece');
+    fireEvent.click(chip);
+    expect(navigateMock).toHaveBeenCalledWith('/coach/library?book=nimzowitsch-my-system&page=33');
+  });
+});
