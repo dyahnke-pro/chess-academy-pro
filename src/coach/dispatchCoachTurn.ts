@@ -165,10 +165,8 @@ export async function dispatchCoachTurn(
       const text = directAnswer(turn, input.liveState.fen, conversationFor(input.liveState.surface), studentWB);
       if (text) {
         servedParsed = true;
-        if (read) {
-          void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: turn.kind, servedParsed })
-            .catch(() => { /* telemetry never breaks a turn */ });
-        }
+        void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: turn.kind, servedParsed })
+          .catch(() => { /* telemetry never breaks a turn */ });
         return { text, toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent: turn.kind };
       }
     }
