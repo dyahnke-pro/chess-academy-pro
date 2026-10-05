@@ -105,6 +105,8 @@ function directionFor(fen: string, bestSan: string | undefined): string | null {
   // A named attacking pattern is the idea itself (his articles): say it.
   const gg = greekGift(fen, bestSan);
   if (gg) return gg.hint;
+  const esc = escapeSquareFirst(fen, bestSan);
+  if (esc) return esc.hint;
   if (doubleAttack(fen, bestSan)) {
     return r.move.san.includes('+')
       ? 'Look for a check that does more than check — one move that hits two things at once.'
@@ -206,6 +208,11 @@ function positionAskCore(fen: string, opts: { bestSan?: string }): PositionAsk {
       text: `${lead} Keep pressing. ${direction ?? 'Start with the forcing moves — checks, captures, threats.'}`,
       squares: loose ? [loose.square] : [],
     };
+  }
+
+  // A quiet best move with a named idea (the escape square, a pattern) leads.
+  if (direction) {
+    return { mode: 'press', text: direction, squares: [] };
   }
 
   if (attack && attackers >= 1 && attackers <= defenders) {
@@ -330,6 +337,18 @@ export function moveMissed(fenBefore: string, san: string, replyPv: readonly str
         : `${you} gives away ${lost}.`,
       line,
     };
+  }
+  // DON'T HAND THEM A TEMPO (catalogue §37 — "Nc6 now lets d5 with tempo"):
+  // the engine's reply is a pawn push that hits one of your pieces.
+  if (reply && reply.move.piece === 'p' && !reply.move.captured) {
+    const hit = (() => {
+      for (const row of reply.board.board()) for (const cell of row) {
+        if (!cell || cell.color !== me || cell.type === 'p' || cell.type === 'k') continue;
+        try { if (reply.board.attackers(cell.square, reply.move.color).includes(reply.move.to)) return cell; } catch { /* skip */ }
+      }
+      return null;
+    })();
+    if (hit) return { text: `${you}? Then ${sayMoveClause(reply.move.san, r.board.fen())} comes with tempo, hitting your ${name(hit.type)} on ${hit.square}.`, line };
   }
   if (r.move.san.includes('+') && reply && reply.move.piece === 'k') {
     return { text: `${you} checks, but the king steps to ${reply.move.to} and nothing follows.`, line };
@@ -579,4 +598,37 @@ export function greekGift(fen: string, bestSan: string | undefined): { text: str
     hint: 'This is a Greek-gift position — a bishop sacrifice against the castled king, with the knight and queen following it in.',
     squares: [target, jump, knights[0], queen.square],
   };
+}
+
+/**
+ * TAKE AWAY THE ESCAPE SQUARE FIRST (catalogue §36 — "this would be mate but for
+ * the escape square, so can I take it first?"). `bestSan` is quiet; after it, a
+ * check we have becomes mate; before it, the same check lets the king out — and
+ * the quiet move covers that flight square. Null otherwise.
+ */
+export function escapeSquareFirst(fen: string, bestSan: string | undefined): { hint: string; text: string; squares: string[] } | null {
+  if (!bestSan) return null;
+  const b = play(fen, bestSan);
+  if (!b || b.move.captured || b.move.san.includes('+') || b.move.san.includes('#')) return null;
+  const me = b.move.color;
+  // After the quiet move, give them a pass and look for our mate in one.
+  const passed = (() => { const parts = b.board.fen().split(' '); parts[1] = me; parts[3] = '-'; try { return new Chess(parts.join(' ')); } catch { return null; } })();
+  if (!passed) return null;
+  for (const m of passed.moves({ verbose: true })) {
+    const probe = new Chess(passed.fen());
+    probe.move(m.san);
+    if (!probe.isCheckmate()) continue;
+    // The same move before the quiet one: a check the king walks out of.
+    const now = play(fen, m.san);
+    if (!now || !now.move.san.includes('+') || now.board.isCheckmate()) continue;
+    const kingMoves = now.board.moves({ verbose: true }).filter((x) => x.piece === 'k').map((x) => x.to);
+    const covered = kingMoves.filter((sq) => { try { return b.board.attackers(sq, me).length > 0; } catch { return false; } });
+    if (covered.length === 0) continue;
+    return {
+      hint: 'There is a check that is almost mate — the king has one way out. Find the quiet move that takes it away first.',
+      text: `${cap(sayMoveClause(m.san, fen))} would be check, but the king escapes to ${covered[0]}. ${cap(sayMoveClause(b.move.san, fen))} takes ${covered[0]} away first — then that check is mate.`,
+      squares: [covered[0]],
+    };
+  }
+  return null;
 }

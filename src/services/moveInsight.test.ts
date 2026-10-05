@@ -3,7 +3,7 @@
 // checked the king???").
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { autopilotRecapture, doubleAttack, greekGift, lastMoveAlong, lastMoveFromPgn, mechanismContrast, moveMissed, positionAsk, theirMoveChanged, walkableLine } from './moveInsight';
+import { autopilotRecapture, doubleAttack, escapeSquareFirst, greekGift, lastMoveAlong, lastMoveFromPgn, mechanismContrast, moveMissed, positionAsk, theirMoveChanged, walkableLine } from './moveInsight';
 
 // White: Ka1, Re2, Ng5. Black: Kh8, Qd8. Two checks — Nf7+ (forks king and
 // queen) and Rh2+ (only checks).
@@ -172,5 +172,29 @@ describe('greekGift hint withholds the square', () => {
   it('hint names the pattern only', () => {
     const g = greekGift('r1bq1rk1/pppnbppp/4p3/3pP3/3P4/3B1N2/PPP2PPP/R1BQK2R w KQ - 0 8', 'Bxh7+');
     expect(g?.hint).not.toMatch(/h7|g5/);
+  });
+});
+
+describe('escapeSquareFirst — take the escape square away first (catalogue §36)', () => {
+  // Re8+ is check but the king escapes to h7; Bd3 covers h7 first, then Re8 is mate.
+  const FEN = '7k/p5p1/7p/8/8/8/8/4RBK1 w - - 0 1';
+  it('explains the quiet move', () => {
+    expect(escapeSquareFirst(FEN, 'Bd3')?.text)
+      .toBe('The rook to e8 would be check, but the king escapes to h7. The bishop to d3 takes h7 away first — then that check is mate.');
+  });
+  it('the hint withholds the move and the square', () => {
+    const h = escapeSquareFirst(FEN, 'Bd3')?.hint ?? '';
+    expect(h).not.toMatch(/h7|d3|e8/);
+    expect(positionAsk(FEN, { bestSan: 'Bd3' }).text).toContain(h);
+  });
+  it('not for a forcing best move', () => {
+    expect(escapeSquareFirst(FEN, 'Re8+')).toBeNull();
+  });
+});
+
+describe('moveMissed — handing them a tempo (catalogue §37)', () => {
+  it('...Nc6 lets d5 come with tempo', () => {
+    const fen = 'rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2';
+    expect(moveMissed(fen, 'Nc6', ['d4d5'])?.text).toBe('The knight to c6? Then the pawn to d5 comes with tempo, hitting your knight on c6.');
   });
 });

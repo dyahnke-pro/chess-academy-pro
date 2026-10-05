@@ -334,7 +334,7 @@ pawn left weak, a plan of ours now blocked.
 - Play simple when up material; don't trade automatically — a minor piece may be
   winnable (13).
 
-### 36. Take away the escape square first 🔴
+### 36. Take away the escape square first ✅ (`moveInsight.escapeSquareFirst`; hint withholds move + square, leads positionAsk)
 - G18: "this would be mate but for the escape square — so can I take it first? If
   your opponent isn't threatening anything, the answer is often yes" (Qc3); "that's
   how you find quiet moves".
@@ -355,7 +355,7 @@ pawn left weak, a plan of ours now blocked.
 - A retreat that leaves a piece to its fate: "the wrong knight dropped back and the
   g7-bishop was left to its fate" (35).
 
-### 37. Don't hand them a tempo 🔴
+### 37. Don't hand them a tempo ✅ (moveMissed: the engine's reply is a pawn push hitting your piece)
 - G22: "a knight to c6 right now would let White push d5 with tempo, so you reserve it
   and start with Qa5".
 - Compute: after our candidate, their pawn push that attacks one of our pieces and

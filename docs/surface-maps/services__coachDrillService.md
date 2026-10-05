@@ -166,19 +166,20 @@
 ### `lastMoveFromPgn` (re-export) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:11920`
 - `src/services/moveInsight.test.ts:113`
-- `src/services/moveInsight.ts:514`
+- `src/services/moveInsight.ts:533`
 - `src/services/whyBestMove.ts:79`
 
-### `moveMissed` (re-export) — 7 call sites
+### `moveMissed` (re-export) — 8 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2869`
 - `src/services/groundedAnswer.ts:7270`
 - `src/services/moveInsight.lineAudit.test.ts:45`
 - `src/services/moveInsight.test.ts:34`
 - `src/services/moveInsight.test.ts:42`
 - `src/services/moveInsight.test.ts:120`
-- `src/services/moveInsight.ts:292`
+- `src/services/moveInsight.test.ts:198`
+- `src/services/moveInsight.ts:299`
 
-### `positionAsk` (re-export) — 17 call sites
+### `positionAsk` (re-export) — 18 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2870`
 - `src/components/Coach/CoachTeachPage.tsx:11899`
 - `src/components/Coach/CoachTeachPage.tsx:11925`
@@ -193,7 +194,8 @@
 - `src/services/moveInsight.test.ts:104`
 - `src/services/moveInsight.test.ts:163`
 - `src/services/moveInsight.test.ts:168`
-- `src/services/moveInsight.ts:124`
+- `src/services/moveInsight.test.ts:188`
+- `src/services/moveInsight.ts:126`
 - `src/services/thinkingAssessStep.ts:81`
 - `src/services/whyBestMove.ts:84`
 
