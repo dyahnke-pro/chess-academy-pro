@@ -13,14 +13,19 @@
 //   • Within the open tiers, a RED step (their record shows it breaking) jumps
 //     the queue — lowest tier, then lowest method order, first.
 //   • Otherwise the lowest (tier, order) step not yet known (grey teaches).
-//   • When every built step is green, the first comes back as a quick review
-//     (the session serves one Solo board for a green step).
+//   • When every step the student can be served in the open tiers is green,
+//     nothing red or grey is due: if two or more of those proven steps can be
+//     asked on a plain board, the lesson is a MIXED round (plan D6 — the
+//     student first decides WHICH step a board asks, as real games demand);
+//     with fewer, the first comes back as a quick review (one Solo board).
 //
 // The method ORDER never changes; only which step is served. PURE.
 import type { StepKit } from './thinkingLessonSession';
 import type { StepStanding } from './thinkingLesson';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
-import { tierUnlocked as stepTierUnlocked, type ThinkingStep } from './thinkingSteps';
+import { THINKING_STEPS, tierUnlocked as stepTierUnlocked, type ThinkingStep } from './thinkingSteps';
+import { rotateStem } from '../utils/rotateStem';
+import { andList } from '../utils/andList';
 import type { HeatTile } from './heatMap';
 
 export interface BuiltStep {
@@ -36,9 +41,20 @@ export interface BuiltStep {
 export interface StepChoice {
   step: BuiltStep;
   standing: StepStanding;
-  reason: 'game-weakness' | 'red-first' | 'next-unknown' | 'review';
+  reason: 'game-weakness' | 'red-first' | 'next-unknown' | 'review' | 'mixed';
   /** The highest tier open to this student. */
   openTier: number;
+  /** A mixed round: the proven steps whose boards are mixed (≥2, routine
+   *  order). `step` is the first of them. Absent for a single-step lesson. */
+  mix?: BuiltStep[];
+}
+
+/** A step can join a mixed round when its question is asked on the board as
+ *  it stands: no played move to replay (`adapt` — its lead line would name the
+ *  step) and no engine call per board (`enrich`). */
+export function mixable(s: BuiltStep): boolean {
+  const k = s.kit();
+  return !k.adapt && !k.enrich;
 }
 
 /** The highest open tier: tier 1 always; tier n+1 once every built step of
@@ -92,6 +108,10 @@ export function chooseThinkingStep(
   if (red) return { step: red.s, standing: 'red', reason: 'red-first', openTier: tier };
   const unknown = open.find((x) => x.st !== 'green');
   if (unknown) return { step: unknown.s, standing: unknown.st, reason: 'next-unknown', openTier: tier };
+  // Everything due is proven: mix the proven steps when there are two to
+  // choose between, else review the first.
+  const mix = open.map((x) => x.s).filter(mixable);
+  if (mix.length >= 2) return { step: mix[0], standing: 'green', reason: 'mixed', openTier: tier, mix };
   return { step: open[0].s, standing: 'green', reason: 'review', openTier: tier };
 }
 
@@ -117,4 +137,41 @@ export function gameWeightForTags(tiles: readonly HeatTile[], tags: readonly Mis
     if (t.state === 'red' && tags.includes(t.tag)) w += t.openCount + t.broken;
   }
   return w;
+}
+
+// ─── The close (plan D8) ───────────────────────────────────────────────────
+
+const STEP_GREEN_PRAISE = ['Earned.', 'Proven on the board, not guessed.', 'Locked in.'];
+const TIER_PRAISE = ['A new tier — earned.', 'That opens a new tier. Well found.'];
+
+const quotedStep = (step: string): string =>
+  `"${step in THINKING_STEPS ? THINKING_STEPS[step as ThinkingStep].name : step}"`;
+
+/**
+ * What a lesson closes with: what was PROVEN (steps that turned green on this
+ * lesson's answers), a tier that opened, and what is NEXT (the step the chooser
+ * would pick now). Praise only where it was earned — a step turning green or a
+ * tier opening — with stems rotated on `key`, never rolled. Null when there is
+ * nothing to say. PURE.
+ */
+export function lessonCloseLine(c: {
+  /** The step just taught (`mixed` for a mixed round). */
+  step: string;
+  proven: readonly string[];
+  tierLine: string | null;
+  next: StepChoice | null;
+  key: number;
+}): string | null {
+  const parts: string[] = [];
+  if (c.proven.length > 0) {
+    const names = andList(c.proven.map(quotedStep));
+    parts.push(`${names} ${c.proven.length === 1 ? 'is' : 'are'} green on your skill chart now. ${rotateStem(STEP_GREEN_PRAISE, c.key)}`);
+  }
+  if (c.tierLine) parts.push(`${rotateStem(TIER_PRAISE, c.key)} ${c.tierLine}`);
+  if (c.next) {
+    if (c.next.reason === 'mixed') parts.push('Next time: a mixed round — you decide which question each board asks.');
+    else if (c.next.step.step === c.step) parts.push(`Next time: ${quotedStep(c.step)} again.`);
+    else parts.push(`Next up: ${quotedStep(c.next.step.step)}.`);
+  }
+  return parts.length > 0 ? parts.join(' ') : null;
 }

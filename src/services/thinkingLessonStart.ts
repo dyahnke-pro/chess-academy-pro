@@ -11,9 +11,9 @@
 // them differently from the next one (the coach/third-coach divergence the
 // surface-composition gate measures).
 import type { LessonStage, StepStanding } from './thinkingLesson';
-import type { AnsweredQuestion, StepKit } from './thinkingLessonSession';
+import type { AnsweredQuestion, LessonProgress, StepKit } from './thinkingLessonSession';
 import { getCapabilityProfile, type CapabilityProfile } from './capabilityEvidence';
-import { chooseThinkingStep, gameWeightForTags, openTier, tierUnlockLine, type BuiltStep, type StepChoice } from './thinkingLessonPlan';
+import { chooseThinkingStep, gameWeightForTags, lessonCloseLine, openTier, tierUnlockLine, type BuiltStep, type StepChoice } from './thinkingLessonPlan';
 import { heatMap, type HeatTile } from './heatMap';
 import { getUnifiedWeaknessProfile, type UnifiedWeakness } from './weaknessSpine';
 import { recordThinkingAnswer, standingFromProfile } from './thinkingLessonRecord';
@@ -23,16 +23,18 @@ import { TAG_STEP } from './thinkingSteps';
 import { getMisconceptionsForGame } from './misconceptionService';
 import type { MisconceptionTagRecord } from '../types';
 import { loadLessonCandidates, type LessonUsernames } from './thinkingLessonSource';
-import { getThinkingLessonMemory, rememberLessonBoard, seenFor } from './thinkingLessonMemory';
+import { getThinkingLessonMemory, rememberLessonBoard, resumeFor, saveLessonResume, seenFor, type LessonResume } from './thinkingLessonMemory';
+import { MIXED_INTRO, MIXED_STEP, choiceAnswerDetail, mixedBoards, type StepChoiceAnswer } from './thinkingMixedRound';
+import { recordAnswer } from './answerRecord';
 import { boardIdentity, isFairKey, pickFairPosition, type LessonPositionCandidate } from './thinkingPositions';
 import { finishBite } from './activeBite';
 import { reward } from './rewardService';
 import { logAppAudit } from './appAuditor';
 
-export type { StepKit, AnsweredQuestion, LessonStage, LessonUsernames, LessonPositionCandidate };
+export type { StepKit, AnsweredQuestion, LessonStage, LessonUsernames, LessonPositionCandidate, LessonProgress, StepChoiceAnswer, LessonResume };
 export type { LessonView } from './thinkingLessonSession';
 // The session itself: a surface opens it through this door, never directly.
-export { ThinkingLessonSession } from './thinkingLessonSession';
+export { ThinkingLessonSession, IDLE_LESSON_VIEW } from './thinkingLessonSession';
 // Pattern Recognition asks step 5 about one motif on its example board.
 export { motifKit, type MotifBoard } from './thinkingMotifStep';
 
@@ -43,6 +45,30 @@ export interface PlannedLesson {
   openTier: number;
   candidates: LessonPositionCandidate[];
   available: (s: BuiltStep) => boolean;
+  /** A MIXED round (plan D6): the proven steps' kits. `kit` is then the
+   *  round's own (`mixedRoundKit`, step `mixed`). */
+  mix?: StepKit[];
+  /** Every built step's standing when the lesson was planned — the close
+   *  names what turned green against it. */
+  standingBefore: ReadonlyMap<string, StepStanding>;
+  /** How badly the student's games fail a step (the chooser's game term),
+   *  so the close names the same next step the chooser would pick. */
+  gameWeight: (s: BuiltStep) => number;
+}
+
+/** The kit a mixed round runs under: its step id, its intro. Each board's
+ *  question comes from the step the student's choice is graded under, so this
+ *  kit itself keys nothing. */
+export function mixedRoundKit(): StepKit {
+  return {
+    step: MIXED_STEP,
+    keyFor: () => null,
+    showLine: () => '',
+    prompt: () => '',
+    wrongTapLine: () => '',
+    reasonFor: () => null,
+    intro: MIXED_INTRO,
+  };
 }
 
 async function knowProfile(): Promise<CapabilityProfile> {
@@ -88,22 +114,31 @@ export async function planThinkingLesson(opts: { usernames: LessonUsernames; rat
   // up front: it counts as available while it has boards to try, and if none
   // of them enriches into a fair question it is ruled out and the choice is
   // made again.
+  const standingOf = (s: BuiltStep): StepStanding => standingFromProfile(profile, s.tags);
+  const gameWeight = (s: BuiltStep): number => gameWeightForTags(tiles, s.tags);
+  const standingBefore = new Map(BUILT_THINKING_STEPS.map((s) => [s.step, standingOf(s)] as const));
+  const common = { available, standingBefore, gameWeight };
   for (;;) {
-    const choice = chooseThinkingStep(
-      BUILT_THINKING_STEPS,
-      (s) => standingFromProfile(profile, s.tags),
-      available,
-      (s) => gameWeightForTags(tiles, s.tags),
-    );
+    const choice = chooseThinkingStep(BUILT_THINKING_STEPS, standingOf, available, gameWeight);
     if (!choice) return null;
+    // A MIXED round needs two boards that each ask a proven step's question;
+    // short of that, the first proven step comes back as a review.
+    if (choice.reason === 'mixed' && choice.mix) {
+      const kits = choice.mix.map((s) => s.kit());
+      const pool = boardsForStep(candidates, weaknesses, choice.mix.flatMap((s) => s.tags), !!opts.beginner);
+      if (mixedBoards(kits, pool, seenFor(memory, MIXED_STEP)).length >= 2) {
+        return { kit: mixedRoundKit(), reason: 'mixed', openTier: choice.openTier, candidates: pool, mix: kits, ...common };
+      }
+    }
+    const reason: StepChoice['reason'] = choice.reason === 'mixed' ? 'review' : choice.reason;
     const kit = choice.step.kit();
     // The student's own failures at THIS step first (the board they hung the
     // knight on teaches "am I safe?" better than any puzzle).
     const ordered = boardsForStep(candidates, weaknesses, choice.step.tags, !!opts.beginner);
-    if (!kit.enrich) return { kit, reason: choice.reason, openTier: choice.openTier, candidates: ordered, available };
+    if (!kit.enrich) return { kit, reason, openTier: choice.openTier, candidates: ordered, ...common };
     const enriched = await enrichForLesson(kit, ordered, seenFor(memory, kit.step));
     if (enriched.length > 0) {
-      return { kit, reason: choice.reason, openTier: choice.openTier, candidates: enriched, available };
+      return { kit, reason, openTier: choice.openTier, candidates: enriched, ...common };
     }
     availability.set(choice.step, false);
   }
@@ -185,13 +220,30 @@ export async function lessonInputs(kit: StepKit, opts: { usernames: LessonUserna
   candidates: readonly LessonPositionCandidate[];
   seen: ReadonlySet<string>;
   standing: StepStanding;
+  /** Where this step's last lesson stopped, if it did not finish (plan D8). */
+  resume: LessonResume | null;
 }> {
   const [cands, memory, standing] = await Promise.all([
     opts.candidates ? Promise.resolve(opts.candidates) : loadLessonCandidates(opts).catch((): LessonPositionCandidate[] => []),
     getThinkingLessonMemory(),
     lessonStepStanding(kit.step).catch((): StepStanding => 'grey'),
   ]);
-  return { candidates: cands, seen: seenFor(memory, kit.step), standing };
+  return { candidates: cands, seen: seenFor(memory, kit.step), standing, resume: resumeFor(memory, kit.step) };
+}
+
+/** Where a running lesson is (null: it ran to its end), so a stopped lesson
+ *  resumes at the board it was on. */
+export function saveLessonProgress(p: LessonProgress | null): Promise<void> {
+  return saveLessonResume(p, new Date().toISOString());
+}
+
+/** A mixed round's step choice, recorded through the one answer recorder on
+ *  the tags of the step the board was graded under: the right pick when the
+ *  student chose one that applies, else the step it does ask. */
+export async function recordLessonChoice(choice: StepChoiceAnswer): Promise<void> {
+  for (const tag of tagsForThinkingStep(choice.graded)) {
+    await recordAnswer({ questionTag: tag, fen: choice.fen, origin: 'lesson', solved: choice.right, answer: choiceAnswerDetail(choice) });
+  }
 }
 
 /** Where every lesson answer goes (KNOW evidence on the step's tags). */
@@ -210,27 +262,47 @@ export function rememberLessonBoardNow(step: string, fen: string): Promise<void>
 }
 
 /**
- * A lesson ended. Up next's thinking bite closes (a no-op when none is open);
- * if the answers just written opened a tier, the reward fires, the audit row is
- * written, and the line the coach should say is returned.
+ * A lesson ended (plan D8). Up next's thinking bite closes (a no-op when none
+ * is open), and the CLOSE is computed from the record the answers just wrote:
+ * which steps turned green, whether a tier opened (the reward fires and the
+ * audit row is written), and the step the chooser would pick next. Returns the
+ * line the coach should say — praise only where it was earned.
  */
-export async function finishThinkingLesson(plan: PlannedLesson, source: string): Promise<string | null> {
+export async function finishThinkingLesson(
+  plan: PlannedLesson,
+  source: string,
+  /** `stopped`: the student ended it part-way — it resumes there next time,
+   *  so the close names what was proven and no "next". */
+  opts: { stopped?: boolean } = {},
+): Promise<string | null> {
   void finishBite('thinking');
   try {
     const after = await knowProfile();
-    const opened = tierUnlockLine(plan.openTier, openTier(BUILT_THINKING_STEPS, (s) => standingFromProfile(after, s.tags), plan.available));
-    if (!opened) return null;
-    reward({ kind: 'rankUp', label: opened.label, seed: opened.tier });
-    void logAppAudit({
-      kind: 'thinking-tier-unlocked',
-      category: 'subsystem',
-      source,
-      summary: `tier ${opened.tier} opened after ${plan.kit.step}`,
-      details: JSON.stringify({ tier: opened.tier, fromTier: plan.openTier, step: plan.kit.step }),
+    const standingAfter = (s: BuiltStep): StepStanding => standingFromProfile(after, s.tags);
+    const opened = tierUnlockLine(plan.openTier, openTier(BUILT_THINKING_STEPS, standingAfter, plan.available));
+    if (opened) {
+      reward({ kind: 'rankUp', label: opened.label, seed: opened.tier });
+      void logAppAudit({
+        kind: 'thinking-tier-unlocked',
+        category: 'subsystem',
+        source,
+        summary: `tier ${opened.tier} opened after ${plan.kit.step}`,
+        details: JSON.stringify({ tier: opened.tier, fromTier: plan.openTier, step: plan.kit.step }),
+      });
+    }
+    const proven = BUILT_THINKING_STEPS
+      .filter((s) => plan.standingBefore.get(s.step) !== 'green' && standingAfter(s) === 'green')
+      .map((s) => s.step);
+    const next = opts.stopped ? null : chooseThinkingStep(BUILT_THINKING_STEPS, standingAfter, plan.available, plan.gameWeight);
+    return lessonCloseLine({
+      step: plan.kit.step,
+      proven,
+      tierLine: opened?.line ?? null,
+      next,
+      key: plan.openTier + proven.length,
     });
-    return opened.line;
   } catch {
-    return null;   // the lesson already ran; the unlock waits for next time
+    return null;   // the lesson already ran; the close waits for next time
   }
 }
 

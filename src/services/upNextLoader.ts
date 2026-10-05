@@ -88,6 +88,8 @@ export function thinkingSignalFrom(choice: StepChoice | null, tiles: readonly He
   }
   if (choice.reason === 'red-first') return { state: 'red', skill: step, step };
   if (choice.reason === 'review') return { state: 'green', skill: step, step };
+  // A mixed round of proven steps: green, and the card says it is a mix.
+  if (choice.reason === 'mixed') return { state: 'green', skill: 'Mixed practice', step: 'Which question does the board ask?' };
   return { state: 'grey', skill: step, step };
 }
 

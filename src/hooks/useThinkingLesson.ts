@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Square } from 'chess.js';
 import {
-  ThinkingLessonSession, type LessonView, finishThinkingLesson, kitForStep, lessonInputs, planThinkingLesson, recordLessonAnswer, rememberLessonBoardNow, slipStepsForGame, firstFairKit, motifKit, type MotifBoard,
+  ThinkingLessonSession, IDLE_LESSON_VIEW, type LessonView, finishThinkingLesson, kitForStep, lessonInputs, planThinkingLesson, recordLessonAnswer, recordLessonChoice, rememberLessonBoardNow, saveLessonProgress, slipStepsForGame, firstFairKit, motifKit, type MotifBoard,
   type LessonPositionCandidate, type LessonUsernames, type PlannedLesson, type StepKit,
 } from '../services/thinkingLessonStart';
 
@@ -20,10 +20,15 @@ export interface UseThinkingLesson {
   view: LessonView;
   /** Choose this student's step (null = no fair board yet). */
   plan: (opts: { usernames: LessonUsernames; rating: number; beginner?: boolean }) => Promise<PlannedLesson | null>;
-  start: (kit: StepKit, opts: { usernames: LessonUsernames; rating: number; candidates?: readonly LessonPositionCandidate[] }) => Promise<void>;
-  /** A planned lesson ended: closes Up next's bite; returns the tier-unlock line, if one opened. */
+  /** Run a lesson. Pass the `plan` it came from so a MIXED round runs as one;
+   *  a lesson stopped part-way resumes at the board it was on. */
+  start: (kit: StepKit, opts: { usernames: LessonUsernames; rating: number; candidates?: readonly LessonPositionCandidate[]; plan?: PlannedLesson }) => Promise<void>;
+  /** A planned lesson ended: closes Up next's bite; returns the close line —
+   *  what was proven, a tier that opened, what is next. */
   finish: (plan: PlannedLesson, source: string) => Promise<string | null>;
   tap: (square: Square) => void;
+  /** A mixed round: the student chose which step a board asks. */
+  choose: (step: string) => void;
   dontKnow: () => void;
   /** Hold the nudge while the student asks something else. */
   hold: () => void;
@@ -40,13 +45,14 @@ export interface UseThinkingLesson {
   stop: () => void;
 }
 
-const IDLE: LessonView = {
-  active: false, step: null, stage: null, fen: null, found: [], wrong: [], shown: [], asking: false, prompt: null, index: 0, total: 0,
-};
+const IDLE: LessonView = IDLE_LESSON_VIEW;
 
 export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesson {
   const [view, setView] = useState<LessonView>(IDLE);
   const sessionRef = useRef<ThinkingLessonSession | null>(null);
+  /** Whether the last lesson was stopped before its end: its close names no
+   *  "next" — the same lesson resumes where it stopped. */
+  const stoppedRef = useRef(false);
   const depsRef = useRef(deps);
   depsRef.current = deps;
 
@@ -61,24 +67,30 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
   // state on a component that is gone.
   useEffect(() => () => { sessionRef.current?.stop(); sessionRef.current = null; }, []);
 
-  const start = useCallback(async (kit: StepKit, opts: { usernames: LessonUsernames; rating: number; candidates?: readonly LessonPositionCandidate[] }): Promise<void> => {
+  const start = useCallback(async (kit: StepKit, opts: { usernames: LessonUsernames; rating: number; candidates?: readonly LessonPositionCandidate[]; plan?: PlannedLesson }): Promise<void> => {
     sessionRef.current?.stop();
-    const { candidates, seen, standing } = await lessonInputs(kit, opts);
+    const { candidates, seen, standing, resume } = await lessonInputs(kit, opts);
+    const mix = opts.plan?.kit === kit ? opts.plan.mix ?? null : null;
     const session = new ThinkingLessonSession(kit, candidates, seen, {
       say: (t) => depsRef.current.say(t),
       record: recordLessonAnswer,
+      recordChoice: recordLessonChoice,
       remember: rememberLessonBoardNow,
+      progress: saveLessonProgress,
       now: () => Date.now(),
       setTimer: (fn, ms) => { const id = setTimeout(fn, ms); return () => clearTimeout(id); },
       onView: (v) => { if (sessionRef.current === session) setView(v); },
-    });
+    }, mix);
     sessionRef.current = session;
-    await session.run(standing);
+    stoppedRef.current = false;
+    await session.run(standing, { resume });
+    stoppedRef.current = session.wasStopped;
     if (sessionRef.current === session) sessionRef.current = null;
   }, []);
 
   const tap = useCallback((square: Square): void => { void sessionRef.current?.tap(square); }, []);
   const dontKnow = useCallback((): void => { void sessionRef.current?.dontKnow(); }, []);
+  const choose = useCallback((step: string): void => { sessionRef.current?.choose(step); }, []);
   const hold = useCallback((): void => { sessionRef.current?.hold(); }, []);
 
   const askOnce = useCallback(async (kit: StepKit, fen: string): Promise<void> => {
@@ -96,5 +108,8 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
     if (sessionRef.current === session) sessionRef.current = null;
   }, []);
 
-  return { view, plan: planThinkingLesson, start, finish: finishThinkingLesson, kitFor: kitForStep, firstFairKit, motifKit, tap, dontKnow, hold, askOnce, slipSteps: slipStepsForGame, stop };
+  const finish = useCallback((plan: PlannedLesson, source: string): Promise<string | null> =>
+    finishThinkingLesson(plan, source, { stopped: stoppedRef.current }), []);
+
+  return { view, plan: planThinkingLesson, start, finish, kitFor: kitForStep, firstFairKit, motifKit, tap, choose, dontKnow, hold, askOnce, slipSteps: slipStepsForGame, stop };
 }
