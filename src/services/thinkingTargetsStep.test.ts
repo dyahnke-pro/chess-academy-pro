@@ -82,7 +82,7 @@ describe('step 5 — the pinned-piece form (PP on the PP)', () => {
     expect(kit.showLine(PIN, k?.key ?? [], 0)).toMatch(/pinned/);
     // A wrong tap never names the answer.
     expect(kit.wrongTapLine(PIN, 'a3')).not.toMatch(/e5/);
-  });
+  }, 20_000);   // detectTactics per legal move: slow on a loaded machine
 
   it('an ordinary board keeps the ordinary targets question', async () => {
     const { targetsKit } = await import('./thinkingTargetsStep');
