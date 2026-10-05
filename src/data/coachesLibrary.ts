@@ -20,6 +20,9 @@ import mySystemData from './library/my-system.json';
 import chessAndCheckersData from './library/chess-and-checkers.json';
 import chessFundamentalsData from './library/chess-fundamentals.json';
 import chessStrategyData from './library/chess-strategy.json';
+import commonSenseData from './library/common-sense-in-chess.json';
+import artOfChessData from './library/art-of-chess.json';
+import modernChessInstructorData from './library/modern-chess-instructor.json';
 
 export interface BookCitation {
   /** Publisher, place, year of the edition we reproduce (or "our work"). */
@@ -186,6 +189,38 @@ const EDWARD_LASKER_CHESS_AND_CHECKERS: LibraryBook = {
   pages: chessAndCheckersData.pages as LibraryPage[],
 };
 
+// ── Three more classics, from their Internet Archive scans ──────────────────
+// Ingested by scripts/build-library-archive-books.mjs: the book's own words
+// from the OCR text, de-hyphenated, unambiguous single-word misreads repaired,
+// and any sentence still garbled or carrying move notation DROPPED rather
+// than guessed at. All three were published before 1930.
+function archiveBook(
+  data: { id: string; bookTitle: string; author: string; citation: unknown; pages: unknown },
+  shelfNote: string,
+): LibraryBook {
+  return {
+    id: data.id,
+    bookTitle: data.bookTitle,
+    author: data.author,
+    citation: data.citation as BookCitation,
+    shelfNote,
+    pages: data.pages as LibraryPage[],
+  };
+}
+
+const EMANUEL_LASKER_COMMON_SENSE = archiveBook(
+  commonSenseData,
+  'Twelve lectures from 1895 — development, attack, defence and the ending, from common sense.',
+);
+const MASON_ART_OF_CHESS = archiveBook(
+  artOfChessData,
+  'Endings, combination and the opening — and the questions to ask yourself every move.',
+);
+const STEINITZ_MODERN_CHESS_INSTRUCTOR = archiveBook(
+  modernChessInstructorData,
+  'The first world champion on the game and its principles (Part I, the essay chapters).',
+);
+
 // ── Our book — the house book, at the foot of the shelf (under the classics) ──
 // "The Philosophy of A General" is our OWN authored doctrine (not a master's
 // text), so unlike the public-domain classics we may write its words — and we
@@ -215,6 +250,9 @@ export const COACHES_LIBRARY: ReadonlyArray<LibraryBook> = [
   NIMZOWITSCH_MY_SYSTEM,
   EDWARD_LASKER_CHESS_AND_CHECKERS,
   EDWARD_LASKER_CHESS_STRATEGY,
+  EMANUEL_LASKER_COMMON_SENSE,
+  MASON_ART_OF_CHESS,
+  STEINITZ_MODERN_CHESS_INSTRUCTOR,
   HOUSE_BOOK,
 ];
 
