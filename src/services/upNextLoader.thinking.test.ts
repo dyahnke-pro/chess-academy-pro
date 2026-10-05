@@ -28,6 +28,7 @@ describe('thinkingSignalFrom', () => {
     expect(thinkingSignalFrom(choice('red-first', SAFE), [])?.state).toBe('red');
     expect(thinkingSignalFrom(choice('next-unknown', SAFE), [])?.state).toBe('grey');
     expect(thinkingSignalFrom(choice('review', SAFE), [])?.state).toBe('green');
+    expect(thinkingSignalFrom(choice('mixed', SAFE), [])).toMatchObject({ state: 'green', skill: 'Mixed practice' });
   });
 
   it('null when the chooser has no step', () => {

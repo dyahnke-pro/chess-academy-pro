@@ -810,6 +810,22 @@ because every phase consumes them:
   named (move fundamental), the pin concept carries the principle / warning,
   chat lesson.
 
+- **D6 mixed practice + D8 session shape (2026-10-05).** When every step the
+  student can be served in the open tiers is green (nothing red or grey due),
+  the chooser serves a MIXED round (`StepChoice.reason: 'mixed'`) of the proven
+  plain-board steps (no `adapt`, no `enrich` — a replayed move's lead line would
+  name the step), when two or more exist and the pool has two boards for them;
+  else the old one-board review. Each board first asks WHICH step applies
+  (chips), graded by which step's kit has a fair key there (several → any is
+  right), recorded through `recordAnswer` on the graded step's tags, then that
+  step's tap question (`thinkingMixedRound.ts`, the session's `mix`). The close
+  is computed in the door (`lessonCloseLine`): steps that turned green this
+  lesson, a tier that opened (both praised, stems rotated), and the step the
+  chooser picks next — none on a stopped lesson. A stopped lesson resumes at the
+  board it stopped on with the same stage plan (`thinkingLessonMemory.resume`,
+  meta store, no Dexie bump). The session's own close no longer claims "that
+  habit is yours now" off one clean lesson — proof is the record's call.
+
 ## Work list for the end of the build (David 2026-10-04: "Any questions I ask can be tacked on to the work list at the end")
 
 1. ✅ (2026-10-05: Lasker *Common Sense in Chess*, Mason *The Art of Chess*, Steinitz *The Modern Chess Instructor* added — archive.org NOT_IN_COPYRIGHT, pre-1930; forcing-moves, answer-danger and assess now have a book passage. Skipped: Capablanca *My Chess Career* and Réti *Modern Ideas* (only post-1930 borrow-only scans), Mason *Chess Strategy* (no scan), Lasker's *Manual* (edition unverifiable — worth a second look).) **More public-domain books for the library** — candidates to verify (public

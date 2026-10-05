@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { Chess, type Color, type Square } from 'chess.js';
-import { ThinkingLessonSession, type AnsweredQuestion, type LessonView, type SessionDeps } from './thinkingLessonSession';
+import { ThinkingLessonSession, type AnsweredQuestion, type LessonProgress, type LessonView, type SessionDeps } from './thinkingLessonSession';
 import { targetsKit, type LooseSquares } from './thinkingTargetsStep';
 import { onThinkingLesson, resetThinkingLessonListeners, type ThinkingLessonRow } from './thinkingLessonEvents';
 import type { LessonPositionCandidate } from './thinkingPositions';
@@ -206,5 +206,50 @@ describe('ThinkingLessonSession — follow-up chains (plan C1)', () => {
     const answers = await done;
     expect(answers[0].summary.detail.chainDepth).toBe(0);
     expect(h.views.some((x) => x.focus.length > 0)).toBe(false);
+  });
+});
+
+describe('ThinkingLessonSession — resumes where it stopped (plan D8)', () => {
+  it('reports its place at every board; a stopped lesson leaves it, a finished one clears it', async () => {
+    const h = harness();
+    const progress: (LessonProgress | null)[] = [];
+    h.deps.progress = async (p) => { progress.push(p); };
+    const s = new ThinkingLessonSession(targetsKit(loose), cands, new Set(), h.deps);
+    const done = s.run('grey');
+    await waitAsking(h);
+    s.stop();
+    await done;
+    expect(progress.map((p) => p?.cursor)).toEqual([0, 1]);
+    expect(progress[1]).toEqual({ step: 'their-targets', stages: ['show', 'guide', 'guide', 'solo'], cursor: 1 });
+    expect(s.wasStopped).toBe(true);
+  });
+
+  it('the next start continues at the stored board with the stored plan, no intro', async () => {
+    const h = harness();
+    const progress: (LessonProgress | null)[] = [];
+    h.deps.progress = async (p) => { progress.push(p); };
+    const s = new ThinkingLessonSession(targetsKit(loose), cands, new Set(), h.deps);
+    const done = s.run('grey', { resume: { stages: ['show', 'guide', 'guide', 'solo'], cursor: 2 } });
+    let v = await waitAsking(h);
+    expect(h.said[0]).toMatch(/board 3 of 4/);
+    expect(h.said.some((l) => l === targetsKit(loose).intro)).toBe(false);
+    expect(v).toMatchObject({ stage: 'guide', index: 3, total: 4 });
+    for (const sq of targetsKit(loose).keyFor(v.fen!)!.key) await s.tap(sq);
+    v = await waitAsking(h);
+    expect(v.stage).toBe('solo');
+    for (const sq of targetsKit(loose).keyFor(v.fen!)!.key) await s.tap(sq);
+    expect((await done).map((a) => a.stage)).toEqual(['guide', 'solo']);
+    expect(progress[progress.length - 1]).toBeNull();
+    expect(h.said[h.said.length - 1]).toMatch(/every one found clean/);
+  });
+
+  it('a resume at the first board, or past the end, starts fresh', async () => {
+    const h = harness();
+    const s = new ThinkingLessonSession(targetsKit(loose), cands, new Set(), h.deps);
+    const done = s.run('green', { resume: { stages: ['solo'], cursor: 5 } });
+    await waitAsking(h);
+    expect(h.said[0]).toMatch(/skill chart shows this one green/);
+    s.stop();
+    await done;
   });
 });

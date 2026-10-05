@@ -11,6 +11,9 @@ export interface ThinkingLessonBoardProps {
   onTap: (square: Square) => void;
   onDontKnow: () => void;
   onStop: () => void;
+  /** A mixed round: the student picked which step a board asks. A surface that
+   *  never runs a mixed round may omit it (the chips then never show). */
+  onChoose?: (step: string) => void;
 }
 
 const FOUND: CSSProperties = { background: 'rgba(34,197,94,0.55)' };
@@ -34,7 +37,7 @@ export function lessonSquareStyles(view: LessonView): Record<string, CSSProperti
   return styles;
 }
 
-export function ThinkingLessonBoard({ view, onTap, onDontKnow, onStop }: ThinkingLessonBoardProps): JSX.Element | null {
+export function ThinkingLessonBoard({ view, onTap, onDontKnow, onStop, onChoose }: ThinkingLessonBoardProps): JSX.Element | null {
   if (!view.active || !view.fen) return null;
   const orientation = view.fen.split(' ')[1] === 'b' ? 'black' : 'white';
   return (
@@ -50,14 +53,30 @@ export function ThinkingLessonBoard({ view, onTap, onDontKnow, onStop }: Thinkin
         squareStyles={lessonSquareStyles(view)}
         onSquareClick={(a) => { if (view.asking) onTap(a.square as Square); }}
       />
-      {view.prompt && view.asking && (
+      {view.prompt && (view.asking || view.choosing) && (
         <p className="text-sm text-center font-semibold" data-testid="thinking-lesson-prompt">{view.prompt}</p>
+      )}
+      {view.choosing && onChoose && view.choices.length > 0 && (
+        // A mixed round: first decide WHICH question this board asks.
+        <div className="flex flex-wrap justify-center gap-2" data-testid="thinking-lesson-choices">
+          {view.choices.map((c) => (
+            <button
+              key={c.step}
+              type="button"
+              onClick={() => onChoose(c.step)}
+              className="px-3 py-2 rounded-xl border-2 border-sky-500/30 bg-sky-500/10 text-sky-300 text-sm font-semibold"
+              data-testid={`thinking-lesson-choice-${c.step}`}
+            >
+              {c.label}
+            </button>
+          ))}
+        </div>
       )}
       <div className="flex gap-2">
         <button
           type="button"
           onClick={onDontKnow}
-          disabled={!view.asking}
+          disabled={!view.asking && !view.choosing}
           className="flex-1 py-2 rounded-xl border-2 border-amber-500/30 bg-amber-500/10 text-amber-400 text-sm font-semibold disabled:opacity-40"
           data-testid="thinking-lesson-dont-know"
         >

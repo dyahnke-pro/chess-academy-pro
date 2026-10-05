@@ -2463,14 +2463,15 @@ export function CoachTeachPage(): JSX.Element {
     }
     const kit = plan.kit;
     captureEvent('thinking_lesson_started', { surface: 'coach-teach', step: kit.step, reason: plan.reason });
-    await thinkingLesson.start(kit, { usernames, rating, candidates: plan.candidates });
-    // A TIER OPENED? The machine celebrates; the voice names what comes next.
-    const opened = await thinkingLesson.finish(plan, 'CoachTeachPage.startThinkingLesson');
-    if (opened) void coachDrillSay(opened);
+    await thinkingLesson.start(kit, { usernames, rating, candidates: plan.candidates, plan });
+    // THE CLOSE: what was proven, a tier that opened, what is next (the door
+    // computes it from the record; the machine celebrates a tier).
+    const close = await thinkingLesson.finish(plan, 'CoachTeachPage.startThinkingLesson');
+    if (close) void coachDrillSay(close);
     // THE LESSON GAME (plan P5): a step answered on a plain board (no adapt —
     // a step that needs the played move or a line has no live-game reading)
     // can be practised in a real game straight after.
-    if (!kit.adapt && !kit.enrich) {
+    if (!kit.adapt && !kit.enrich && !plan.mix) {
       thinkingLesson.setPractiseKit(kit);
       setCoachChoices([LESSON_GAME_CHIP]);
     }
@@ -12457,6 +12458,7 @@ export function CoachTeachPage(): JSX.Element {
                   onTap={thinkingLesson.tap}
                   onDontKnow={thinkingLesson.dontKnow}
                   onStop={thinkingLesson.stop}
+                  onChoose={thinkingLesson.choose}
                 />
               ) : (lineWalkFen ?? reviewFen) ? (
                 <>

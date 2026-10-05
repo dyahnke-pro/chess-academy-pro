@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { enrichForLesson } from './thinkingLessonStart';
 import { boardIdentity, type LessonPositionCandidate } from './thinkingPositions';
 import type { StepKit } from './thinkingLessonSession';
@@ -150,5 +150,62 @@ describe('carry-over — the lesson question at a real moment in Learn', () => {
     expect(carryOverKitFor(['am-i-safe'], HUNG, new Set(['am-i-safe']))).toBeNull();
     expect(carryOverKitFor(['candidates'], HUNG, new Set())).toBeNull();
     expect(carryOverKitFor(['am-i-safe'], '4k3/8/8/8/8/8/8/4K3 w - - 0 1', new Set())).toBeNull();
+  });
+});
+
+describe('the close, the choice record and the resume (plan D6 + D8)', () => {
+  const FEN = '4k3/1p6/2N5/8/8/8/8/4K3 w - - 0 1';
+  beforeEach(async () => {
+    const { db } = await import('../db/schema');
+    await db.delete();
+    await db.open();
+  });
+
+  it('a step choice is recorded on the graded step\'s tags — held when right, broken when wrong', async () => {
+    const { recordLessonChoice } = await import('./thinkingLessonStart');
+    const { db } = await import('../db/schema');
+    const { tagsForThinkingStep } = await import('./thinkingSteps.built');
+    await recordLessonChoice({ fen: FEN, chosen: 'am-i-safe', applicable: ['am-i-safe'], graded: 'am-i-safe', right: true, msToFirst: 500 });
+    let rows = await db.capabilityEvidence.toArray();
+    expect(rows.map((r) => r.tag).sort()).toEqual([...tagsForThinkingStep('am-i-safe')].sort());
+    expect(rows.every((r) => r.outcome === 'held' && r.origin === 'lesson')).toBe(true);
+    await db.capabilityEvidence.clear();
+    await recordLessonChoice({ fen: FEN, chosen: 'hit-two', applicable: ['their-targets'], graded: 'their-targets', right: false, msToFirst: 500 });
+    rows = await db.capabilityEvidence.toArray();
+    expect(rows.map((r) => r.tag).sort()).toEqual([...tagsForThinkingStep('their-targets')].sort());
+    expect(rows.every((r) => r.outcome === 'broken')).toBe(true);
+  });
+
+  it('the close names the next step the chooser would pick; a stopped lesson names no next', async () => {
+    const { finishThinkingLesson, kitForStep } = await import('./thinkingLessonStart');
+    const kit = kitForStep('their-move-changed');
+    if (!kit) throw new Error('no kit');
+    const plan = {
+      kit, reason: 'next-unknown' as const, openTier: 1, candidates: [], available: () => true,
+      standingBefore: new Map(), gameWeight: () => 0,
+    };
+    expect(await finishThinkingLesson(plan, 'test')).toBe('Next time: "What did their move change?" again.');
+    expect(await finishThinkingLesson(plan, 'test', { stopped: true })).toBeNull();
+  });
+
+  it('progress saved through the door comes back as the resume for that step only', async () => {
+    const { saveLessonProgress, lessonInputs, kitForStep } = await import('./thinkingLessonStart');
+    await saveLessonProgress({ step: 'am-i-safe', stages: ['show', 'guide', 'guide', 'solo'], cursor: 2 });
+    const safeKit = kitForStep('am-i-safe');
+    const targetsKit = kitForStep('their-targets');
+    if (!safeKit || !targetsKit) throw new Error('no kit');
+    const safe = await lessonInputs(safeKit, { usernames: {}, rating: 1200, candidates: [] });
+    expect(safe.resume).toMatchObject({ step: 'am-i-safe', cursor: 2 });
+    const other = await lessonInputs(targetsKit, { usernames: {}, rating: 1200, candidates: [] });
+    expect(other.resume).toBeNull();
+  });
+
+  it('the mixed round runs under its own kit, which keys nothing itself', async () => {
+    const { mixedRoundKit } = await import('./thinkingLessonStart');
+    const k = mixedRoundKit();
+    expect(k.step).toBe('mixed');
+    expect(k.keyFor(FEN)).toBeNull();
+    expect(k.adapt).toBeUndefined();
+    expect(k.enrich).toBeUndefined();
   });
 });

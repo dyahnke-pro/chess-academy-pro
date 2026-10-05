@@ -6,7 +6,7 @@ import type { LessonView } from '../../services/thinkingLessonSession';
 const VIEW: LessonView = {
   active: true, step: 'their-targets', stage: 'guide', fen: '4k3/8/2n5/8/8/8/8/4K3 w - - 0 1',
   found: ['c6'], wrong: ['a1'], shown: ['e5'], focus: [], asking: true, prompt: 'Tap every piece of theirs you could win.',
-  index: 2, total: 4,
+  index: 2, total: 4, choices: [], choosing: false,
 };
 
 describe('ThinkingLessonBoard', () => {
@@ -44,5 +44,29 @@ describe('ThinkingLessonBoard', () => {
   it('"I don\'t know" is disabled while the coach is talking', () => {
     render(<ThinkingLessonBoard view={{ ...VIEW, asking: false }} onTap={vi.fn()} onDontKnow={vi.fn()} onStop={vi.fn()} />);
     expect(screen.getByTestId('thinking-lesson-dont-know')).toHaveProperty('disabled', true);
+  });
+
+  it('a mixed round shows the step chips while it asks which question the board asks, and forwards the pick', () => {
+    const onChoose = vi.fn();
+    const mixed: LessonView = {
+      ...VIEW, step: 'mixed', stage: 'solo', asking: false, choosing: true, prompt: 'Which question does this board ask?',
+      found: [], wrong: [], shown: [],
+      choices: [{ step: 'am-i-safe', label: 'Am I safe?' }, { step: 'their-targets', label: 'Where are their targets?' }],
+    };
+    render(<ThinkingLessonBoard view={mixed} onTap={vi.fn()} onDontKnow={vi.fn()} onStop={vi.fn()} onChoose={onChoose} />);
+    expect(screen.getByTestId('thinking-lesson-prompt').textContent).toMatch(/Which question/);
+    expect(screen.getByTestId('thinking-lesson-choice-am-i-safe').textContent).toBe('Am I safe?');
+    fireEvent.click(screen.getByTestId('thinking-lesson-choice-their-targets'));
+    expect(onChoose).toHaveBeenCalledWith('their-targets');
+    // "I don't know" is live at a step choice too.
+    expect(screen.getByTestId('thinking-lesson-dont-know')).toHaveProperty('disabled', false);
+  });
+
+  it('no chips outside a step choice, or on a surface without onChoose', () => {
+    const chips = [{ step: 'am-i-safe', label: 'Am I safe?' }];
+    const { rerender } = render(<ThinkingLessonBoard view={{ ...VIEW, choices: chips }} onTap={vi.fn()} onDontKnow={vi.fn()} onStop={vi.fn()} onChoose={vi.fn()} />);
+    expect(screen.queryByTestId('thinking-lesson-choices')).toBeNull();
+    rerender(<ThinkingLessonBoard view={{ ...VIEW, choices: chips, choosing: true, asking: false }} onTap={vi.fn()} onDontKnow={vi.fn()} onStop={vi.fn()} />);
+    expect(screen.queryByTestId('thinking-lesson-choices')).toBeNull();
   });
 });
