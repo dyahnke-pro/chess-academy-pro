@@ -15,6 +15,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { looksLikeQuestionNotAnOpeningName as isQuestion, looksLikeConversationalReply as isReply } from './questionIntents';
+import openingsData from '../data/openings-lichess.json';
 
 describe('bare-name guard — questions must not be routed as opening names', () => {
   it('rejects the exact prod input that burned a generation', () => {
@@ -115,5 +116,18 @@ describe('bare-name guard — a "yes"/"no" reply is not an opening name (David 2
     expect(isReply('')).toBe(false);
     expect(isReply(undefined)).toBe(false);
     expect(isReply('   ')).toBe(false);
+  });
+});
+
+describe('a sentence spoken to the coach is never an opening name (drill session 2026-10-05)', () => {
+  it('flags talk that burned a generation', () => {
+    for (const t of ['Say those moves again', 'It’s not letting me take b5', 'I need arrows', 'Too fast', 'Play it again', 'my knight']) {
+      expect(isQuestion(t)).toBe(true);
+    }
+  });
+  it('never flags a real opening name', () => {
+    const names = (openingsData as { name: string }[]).map((o) => o.name);
+    expect(names.length).toBeGreaterThan(3000);
+    expect(names.filter((n) => isQuestion(n))).toEqual([]);
   });
 });

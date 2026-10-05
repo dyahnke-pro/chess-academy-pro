@@ -24,14 +24,13 @@
  *   - `prompt`       — a concrete, code-authored challenge line.
  */
 import { Chess } from 'chess.js';
-import { hintBeat, lineGainIdea, solvedLineBeat, wrongMoveReason } from './drillReasons';
+import { hintBeat, wrongMoveReason } from './drillReasons';
 import { conceptPassageFor } from './weaknessConceptPassage';
 import { explainDrillConcept } from './puzzleConceptExplanation';
 import { lessonTeachLines, partTransition, type CustomLessonPart } from './customLessonPlan';
 
 // The drill door owns every drill line a surface speaks (one import for Learn).
-export { goodButWeakerBeat, wrongMoveReason } from './drillReasons';
-import { sayMoveClause } from './spokenMove';
+export { goodButWeakerBeat, judgeAlternative, wrongMoveReason } from './drillReasons';
 import { getHomeGameIds } from './homeOpeningService';
 import { isFixtureGame } from './fixtureGames';
 import puzzlesData from '../data/puzzles.json';
@@ -761,23 +760,10 @@ export function drillWrongMoveBeat(args: { fenBefore: string; wrongSan: string; 
   return args.keepNudge ? `${reason} ${args.nudge}` : reason;
 }
 
-/** The solved sequence spoken, with the idea named when one is known. */
-export function drillSolvedBeat(setupFen: string | null, solutionSan: readonly string[], idea: string | null): string {
-  // No named concept → say what the line wins instead of a bare move list
-  // (walk 2026-10-04 defect 10).
-  const point = idea ?? (setupFen ? lineGainIdea(setupFen, solutionSan) : null);
-  return solvedLineBeat(setupFen, solutionSan, point);
-}
-
 /** The hint: names the piece, withholds the square. Null when the drill's
  *  own solution gives nothing to name. */
 export function drillHintBeat(fen: string, expectedSan: string): string | null {
   return hintBeat(fen, expectedSan);
-}
-
-/** The opponent's reply inside a multi-move drill, then the prompt on. */
-export function drillContinueBeat(oppReplySan: string, fenBefore: string | null): string {
-  return `${sayMoveClause(oppReplySan, fenBefore).replace(/^./, (c) => c.toUpperCase())} — keep going, find the next move.`;
 }
 
 /**

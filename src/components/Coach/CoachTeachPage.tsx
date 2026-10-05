@@ -153,8 +153,8 @@ import {
   hasImportedGames,
   type CoachDrill,
   type DrillProgress,
-  drillContinueBeat, drillHintBeat, drillSolvedBeat, drillWrongMoveBeat,
-  customLessonPartLines, goodButWeakerBeat, wrongMoveReason } from '../../services/coachDrillService';
+  drillHintBeat, drillWrongMoveBeat,
+  customLessonPartLines, goodButWeakerBeat, judgeAlternative } from '../../services/coachDrillService';
 import { bookChipForClaims } from '../../data/bookChips';
 import { useThinkingLesson, type StepKit } from '../../hooks/useThinkingLesson';
 import { ThinkingLessonBoard } from './ThinkingLessonBoard';
@@ -1399,6 +1399,13 @@ export function CoachTeachPage(): JSX.Element {
      *  took the hint AND still misses is struggling, so the coach eases sooner. */
     hintUsed: boolean;
   } | null>(null);
+  // Mirrors whether a drill is on the board so the Next control can render
+  // (the ref alone never re-renders). Every write goes through setActiveDrill.
+  const [drillOnBoard, setDrillOnBoard] = useState(false);
+  const setActiveDrill = useCallback((next: typeof activeDrillRef.current): void => {
+    activeDrillRef.current = next;
+    setDrillOnBoard(next !== null);
+  }, []);
   // "WHAT I PLAYED" in a drill (hand walk 2026-10-04 #11). A wrong try is
   // taken back, so it is on no tape — remembered here so "why is that better
   // than what I played?" can compare it. Cleared with each new drill board.
@@ -2304,7 +2311,7 @@ export function CoachTeachPage(): JSX.Element {
       gameRef.current.setOrientation(cur.drill.playerColor);
       setPlayerColor(cur.drill.playerColor);
       liveFenRef.current = cur.drill.setupFen;
-      activeDrillRef.current = { ...cur, step: 0, graded: false, wrongCount: 0, hintUsed: false };
+      setActiveDrill({ ...cur, step: 0, graded: false, wrongCount: 0, hintUsed: false });
       setArrows([]);
       setHighlights([]);
       return { ok: true };
@@ -2448,7 +2455,7 @@ export function CoachTeachPage(): JSX.Element {
   const startThinkingLesson = useCallback(async (): Promise<void> => {
     walkthrough.stop();
     voiceService.stop();
-    activeDrillRef.current = null;
+    setActiveDrill(null);
     customLessonRef.current = null;
     // WHICH step: from the student's own record (red first, then the earliest
     // unknown step, then a review) — never a fixed lesson. One door decides.
@@ -2488,7 +2495,7 @@ export function CoachTeachPage(): JSX.Element {
     thinkingLesson.stop();
     walkthrough.stop();
     voiceService.stop();
-    activeDrillRef.current = null;
+    setActiveDrill(null);
     customLessonRef.current = null;
     gameRef.current.resetGame();
     resetPerGameMemory();
@@ -2520,7 +2527,7 @@ export function CoachTeachPage(): JSX.Element {
     setPlayerColor(drill.playerColor);
     setOpponentThinking(false);
     liveFenRef.current = drill.setupFen;
-    activeDrillRef.current = { drill, step: 0, progress, graded: false, startedAt: Date.now(), wrongCount: 0, hintUsed: false };
+    setActiveDrill({ drill, step: 0, progress, graded: false, startedAt: Date.now(), wrongCount: 0, hintUsed: false });
     drillAttemptRef.current = null;
     setArrows([]);
     setHighlights([]);
@@ -2542,9 +2549,15 @@ export function CoachTeachPage(): JSX.Element {
   /** Set a real drill up on the board and announce the challenge. When
    *  `progress` is passed the drill is part of the adaptive mistake queue;
    *  `lead` prefixes the announce (e.g. "Starting with your Forks."). */
-  const startCoachDrill = useCallback((drill: CoachDrill, progress?: DrillProgress, lead?: string): void => {
-    walkthrough.stop();
-    voiceService.stop();
+  const startCoachDrill = useCallback((drill: CoachDrill, progress?: DrillProgress, lead?: string, opts?: { queued?: boolean }): void => {
+    // `queued`: a lesson already queued its own lines (the custom lesson's
+    // "Part 1 of 3" + teaching) — the drill joins the end of that speech
+    // instead of cutting it off (David's session 2026-10-05: "Now let's drill
+    // it" was spoken before "Part 1 of 3").
+    if (!opts?.queued) {
+      walkthrough.stop();
+      voiceService.stop();
+    }
     loadDrillOntoBoard(drill, progress);
     // THE FRAMING BEAT (David 2026-08-13: "Add the framing beat") — one
     // hand-written teaching line naming WHAT this drill sharpens and what to
@@ -2564,20 +2577,15 @@ export function CoachTeachPage(): JSX.Element {
     const frameKey = Object.keys(FRAMING).find((k) => drill.aid.includes(k) || drill.label.toLowerCase().includes(k));
     const framing = frameKey ? `${FRAMING[frameKey]} ` : '';
     const intro = `${lead ? `${lead} ` : ''}${framing}${drill.prompt} Play your move on the board.`;
-    setMessages((prev) => [...prev, {
-      id: uid('drill-intro'), role: 'assistant', content: intro, timestamp: Date.now(),
-    }]);
-    useCoachMemoryStore.getState().appendConversationMessage({
-      surface: 'chat-teach', role: 'coach', text: intro, fen: drill.setupFen, trigger: null,
-    });
     void logAppAudit({
       kind: 'coach-surface-migrated',
       category: 'subsystem',
       source: 'CoachTeachPage.startCoachDrill',
       summary: `in-place drill ${drill.aid} puzzle=${drill.puzzleId} r=${drill.rating} queue=${progress ? `${progress.themeIdx}.${progress.puzzleIdx}` : 'single'}`,
     });
-    void speakComputed(intro, { forced: false, intent: 'learn' });
-  }, [walkthrough, loadDrillOntoBoard]);
+    // Through the one speech queue, so it is never spoken out of order.
+    void coachDrillSay(intro);
+  }, [walkthrough, loadDrillOntoBoard, coachDrillSay]);
   // Fill the ref the quiz hand reads (declared above the hands registration).
   useEffect(() => { startCoachDrillRef.current = startCoachDrill; }, [startCoachDrill]);
 
@@ -2689,7 +2697,7 @@ export function CoachTeachPage(): JSX.Element {
     captureEvent('custom_lesson_part_advanced', { surface: 'coach-teach', idx, tag: part.tag });
     if (queue.length > 0) {
       const progress: DrillProgress = { queue, themeIdx: 0, puzzleIdx: 0 };
-      startCoachDrill(queue[0].drills[0], progress, "Now let's drill it on your own positions.");
+      startCoachDrill(queue[0].drills[0], progress, "Now let's drill it on your own positions.", { queued: true });
       return;
     }
     // Teach-only part (no stored positions for this pattern) — move on.
@@ -2749,15 +2757,15 @@ export function CoachTeachPage(): JSX.Element {
   /** Positions solved this session — never re-served (A5). */
   const solvedDrillKeysRef = useRef<Set<string>>(new Set());
 
-  const completeDrill = useCallback((solved: { drill: CoachDrill; step: number; progress?: DrillProgress }): void => {
-    // NEVER RE-SERVE A POSITION JUST SOLVED (A5): the next queue build excludes it.
-    solvedDrillKeysRef.current.add(drillKeyOf(solved.drill.setupFen, solved.drill.solutionSan[0] ?? ''));
-    // THE SEQUENCE, SPOKEN, WITH THE IDEA NAMED (A5): a drill called "missed
-    // tactical sequences" shows the sequence. Computed (G0).
-    const solvedConcept = explainDrillConcept({ setupFen: solved.drill.setupFen, solutionSan: solved.drill.solutionSan, themes: solved.drill.themes });
-    const solvedBeat = drillSolvedBeat(solved.drill.setupFen, solved.drill.solutionSan, solvedConcept?.idea ?? null);
+  const completeDrill = useCallback((solved: { drill: CoachDrill; step: number; progress?: DrillProgress }, opts?: { skipped?: boolean }): void => {
+    // NEVER RE-SERVE A POSITION JUST SOLVED (A5): the next queue build excludes
+    // it. A SKIPPED one stays in play — it comes back later.
+    if (!opts?.skipped) solvedDrillKeysRef.current.add(drillKeyOf(solved.drill.setupFen, solved.drill.solutionSan[0] ?? ''));
+    // No closing line on a queued solve (David 2026-10-05: "the final
+    // narrations speak when the next puzzle is already loaded … remove the
+    // final narrations"). The next puzzle's prompt carries on.
     if (!solved.progress) {
-      activeDrillRef.current = null;
+      setActiveDrill(null);
       // TEACH THE CONCEPT behind the solution (David 2026-09-14: "not just a
       // hint with an arrow, but an explanation of the concepts to understand the
       // solution"). Computed (G0): board mechanics + the general idea. Falls
@@ -2774,12 +2782,12 @@ export function CoachTeachPage(): JSX.Element {
     }
     const adv = advanceMistakeDrill(solved.progress);
     if (adv.done) {
-      activeDrillRef.current = null;
+      setActiveDrill(null);
       // Custom lesson (P5): this part's drill queue is exhausted → advance to the
       // next part (teach + drill), or close the lesson. advanceCustomLesson owns
       // the arc sync + the closing beat, so return before the generic ending.
       if (customLessonRef.current) {
-        void coachDrillSay(adv.completedLabel ? `${solvedBeat} That's ${adv.completedLabel} drilled shut for today.` : solvedBeat);
+        if (adv.completedLabel) void coachDrillSay(`That's ${adv.completedLabel} drilled shut for today.`);
         advanceCustomLessonRef.current?.();
         return;
       }
@@ -2790,9 +2798,9 @@ export function CoachTeachPage(): JSX.Element {
       // "Drilled shut" — the loop's closing bookend (David 2026-08-26 slogan:
       // LEARN · PLAY · IDENTIFY WEAKNESSES · DRILL THEM SHUT). "For today"
       // because SRS brings the reps back until they genuinely test out.
-      const shutMsg = `${solvedBeat} ${adv.completedLabel
+      const shutMsg = adv.completedLabel
         ? `That's ${adv.completedLabel} drilled shut for today — and every weakness due.`
-        : "That's every mistake due today, drilled shut."}`;
+        : "That's every mistake due today, drilled shut.";
       // FRESH REPS (Phase 3): the queue is finished, so cement the top pattern
       // with ONE fresh tactical rep from puzzles.json — the tested pickCoachDrill
       // path (no SRS surgery) — so you drill the PATTERN, not just your own
@@ -2805,20 +2813,37 @@ export function CoachTeachPage(): JSX.Element {
       const freshRep = theme ? pickCoachDrill(`puzzle:${theme}`, { rating }) : null;
       if (freshRep) {
         void coachDrillSay(`${shutMsg} Let's cement it with a fresh one.`);
-        startCoachDrill(freshRep);
+        startCoachDrill(freshRep, undefined, undefined, { queued: true });
       } else {
         void coachDrillSay(`${shutMsg} Keep solving them right over a few days and they'll test out for good.`);
       }
       return;
     }
-    if (!adv.next) { activeDrillRef.current = null; return; }
+    if (!adv.next) { setActiveDrill(null); return; }
     loadDrillOntoBoard(adv.next.drill, adv.next.progress);
     void coachDrillSay(
       adv.themeCompleted
-        ? `${solvedBeat} ${adv.completedLabel} drilled shut for today. On to ${adv.nextLabel}. ${adv.next.drill.prompt}`
-        : `${solvedBeat} ${adv.next.drill.prompt}`,
+        ? `${adv.completedLabel} drilled shut for today. On to ${adv.nextLabel}. ${adv.next.drill.prompt}`
+        : adv.next.drill.prompt,
     );
   }, [coachDrillSay, loadDrillOntoBoard]);
+
+  /** NEXT (David 2026-10-05: "there is also no next button"). Moves past the
+   *  drill on the board without solving it: graded 'again', so SRS brings it
+   *  back, and the queue goes on as after a solve. */
+  const skipDrill = useCallback((): void => {
+    const cur = activeDrillRef.current;
+    if (!cur) return;
+    voiceService.stop();
+    setArrows([]);
+    setHighlights([]);
+    gradeDrillOnce(false);
+    captureEvent('drill_skipped', { surface: 'coach-teach', step: cur.step, in_lesson: !!customLessonRef.current });
+    if (!cur.progress) { setActiveDrill(null); return; }
+    completeDrill(cur, { skipped: true });
+  }, [completeDrill, gradeDrillOnce, setActiveDrill]);
+  const skipDrillRef = useRef(skipDrill);
+  skipDrillRef.current = skipDrill;
 
   /** Validate a student board move against the active drill's solution.
    *  Returns true when the move was consumed by a drill (so the normal
@@ -2832,60 +2857,71 @@ export function CoachTeachPage(): JSX.Element {
     const expected = cur.drill.solutionSan[cur.step];
     const correct = move.san === expected || strip(move.san) === strip(expected);
     if (!correct) {
-      // Wrong → SRS-grade 'again' (first outcome only; resets the rep
-      // streak so this mistake comes back sooner), undo, hint, retry.
-      gradeDrillOnce(false);
+      // Off the answer key. Take the move back first, then let the ENGINE judge
+      // it against the key (David's session 2026-10-05: axb5 at +14.9 was
+      // refused three times as "leaves your pawn on b5 hanging" — a one-ply
+      // read the engine contradicted). As good as the key → the drill takes
+      // it. Only an engine-confirmed loss is called one; the board-read reason
+      // is spoken then, and only then.
       gameRef.current.undoMove();
       liveFenRef.current = gameRef.current.fen;
-      drillAttemptRef.current = { fenBefore: gameRef.current.fen, san: move.san };
+      const fenBefore = gameRef.current.fen;
+      drillAttemptRef.current = { fenBefore, san: move.san };
       setArrows([]);
       setHighlights([]);
-      // Behavioral frustration heuristic (Phase 6): escalate to a warmer,
-      // easing register as wrong tries pile up, instead of repeating one line
-      // while the student grinds. First → try again; second → a concrete,
-      // no-rush nudge; third+ → ease up and offer the way out (no shame).
-      cur.wrongCount += 1;
-      // A student who already leaned on Hint AND is still missing is more
-      // frustrated → reach the "ease up + offer the way out" register sooner.
-      const easeUp = cur.wrongCount >= 3 || (cur.hintUsed && cur.wrongCount >= 2);
-      // THE REASON IT FAILS (A5, David 2026-09-22): read off the board the
-      // wrong move leaves — a piece it drops, a mate or a winning capture it
-      // walks into. Computed; null when the board shows nothing concrete, and
-      // then the nudge stands alone rather than a guessed reason.
-      const nudge =
-        easeUp
-          ? "This one's a stubborn rep — happens to everyone. Tap Hint to see the idea, or say “next” to move on and we'll bring it back later."
-          : cur.wrongCount === 2
-            ? 'Still not it — no rush. Look for the most forcing move first: checks, captures, then threats.'
-            : "That's not the strongest here — take another look and try again.";
-      const fenBefore = gameRef.current.fen;
-      const plainBeat = drillWrongMoveBeat({ fenBefore, wrongSan: move.san, expectedSan: expected, nudge, keepNudge: easeUp });
-      // A MOVE WITH NO CONCRETE FAULT MAY STILL BE GOOD (walk 2026-10-04 defect
-      // 9: Nxc7+ was +1.8 against the drill's +3.5 and heard only "not the
-      // strongest"). Ask the engine about both boards; a good-but-weaker move
-      // is called good, with what it wins, and the student keeps looking.
-      if (!easeUp && !wrongMoveReason(fenBefore, move.san, expected)) {
-        const afterOf = (san: string): string | null => {
-          try { const c = new Chess(fenBefore); return c.move(san) ? c.fen() : null; } catch { return null; }
-        };
-        const wrongFen = afterOf(move.san);
-        const bestFen = afterOf(expected);
-        void (async () => {
-          let line: string | null = null;
-          if (wrongFen && bestFen) {
-            try {
-              const [w, b] = await Promise.all([
-                stockfishEngine.analyzeWithBudget(wrongFen, COACH_TURN_DEPTH, 900),
-                stockfishEngine.analyzeWithBudget(bestFen, COACH_TURN_DEPTH, 900),
-              ]);
-              line = goodButWeakerBeat({ fenBefore, wrongSan: move.san, evalAfterWrong: w.evaluation, evalAfterBest: b.evaluation });
-            } catch { line = null; }
-          }
-          if (activeDrillRef.current === cur || activeDrillRef.current?.drill === cur.drill) void coachDrillSay(line ?? plainBeat);
-        })();
-        return true;
-      }
-      void coachDrillSay(plainBeat);
+      const afterOf = (san: string): string | null => {
+        try { const c = new Chess(fenBefore); return c.move(san) ? c.fen() : null; } catch { return null; }
+      };
+      const wrongFen = afterOf(move.san);
+      const bestFen = afterOf(expected);
+      const stillThisDrill = (): boolean => activeDrillRef.current === cur || activeDrillRef.current?.drill === cur.drill;
+      void (async () => {
+        let evals: { wrong: number; best: number } | null = null;
+        if (wrongFen && bestFen) {
+          try {
+            const [w, b] = await Promise.all([
+              stockfishEngine.analyzeWithBudget(wrongFen, COACH_TURN_DEPTH, 900),
+              stockfishEngine.analyzeWithBudget(bestFen, COACH_TURN_DEPTH, 900),
+            ]);
+            evals = { wrong: w.evaluation, best: b.evaluation };
+          } catch { evals = null; }
+        }
+        if (!stillThisDrill()) return;
+        const verdict = evals ? judgeAlternative({ fenBefore, evalAfterWrong: evals.wrong, evalAfterBest: evals.best }) : null;
+        if (verdict === 'accept') {
+          // It wins as well as the key: play it and close the drill as solved.
+          const r = handlePlayMove(move.san);
+          if (!r.ok) return;
+          liveFenRef.current = gameRef.current.fen;
+          gradeDrillOnce(true);
+          completeDrill(cur);
+          return;
+        }
+        // Wrong → SRS-grade 'again' (first outcome only; resets the rep streak
+        // so this mistake comes back sooner), and the student tries again.
+        gradeDrillOnce(false);
+        // Escalate the register as wrong tries pile up instead of repeating one
+        // line; a student who already leaned on Hint reaches it sooner.
+        cur.wrongCount += 1;
+        const easeUp = cur.wrongCount >= 3 || (cur.hintUsed && cur.wrongCount >= 2);
+        const nudge =
+          easeUp
+            ? "This one's stubborn — it happens to everyone. Ask for a hint, or say “next” and we'll bring it back later."
+            : cur.wrongCount === 2
+              ? 'Still not it — no rush. Look for the most forcing move first: checks, captures, then threats.'
+              : "That's not the strongest here — take another look and try again.";
+        let line: string;
+        if (verdict === 'good-but-weaker' && evals && !easeUp) {
+          line = goodButWeakerBeat({ fenBefore, wrongSan: move.san, evalAfterWrong: evals.wrong, evalAfterBest: evals.best }) ?? nudge;
+        } else if (verdict === 'loses' || verdict === null) {
+          // The engine says it throws material away (or the engine is down and
+          // the board read is all there is): say WHY, read off the board.
+          line = drillWrongMoveBeat({ fenBefore, wrongSan: move.san, expectedSan: expected, nudge, keepNudge: easeUp });
+        } else {
+          line = nudge;
+        }
+        void coachDrillSay(line);
+      })();
       return true;
     }
     liveFenRef.current = move.fen;
@@ -2900,18 +2936,18 @@ export function CoachTeachPage(): JSX.Element {
     // Auto-play the opponent's reply, then hand the move back.
     const oppReply = cur.drill.solutionSan[step];
     const afterOppStep = step + 1;
-    activeDrillRef.current = { ...cur, step };
+    setActiveDrill({ ...cur, step });
     window.setTimeout(() => {
-      const fenBeforeReply = gameRef.current.fen;
       const r = handlePlayMove(oppReply);
-      if (!r.ok) { activeDrillRef.current = null; return; }
+      if (!r.ok) { setActiveDrill(null); return; }
       liveFenRef.current = gameRef.current.fen;
       if (afterOppStep >= cur.drill.solutionSan.length) {
         gradeDrillOnce(true);
         completeDrill(cur);
       } else {
-        activeDrillRef.current = { ...cur, step: afterOppStep };
-        void coachDrillSay(drillContinueBeat(oppReply, fenBeforeReply));
+        // No line here (David 2026-10-05): "keep going, find the next move"
+        // after every reply restated the board. The move just landed is the cue.
+        setActiveDrill({ ...cur, step: afterOppStep });
       }
     }, 650);
     return true;
@@ -2959,6 +2995,16 @@ export function CoachTeachPage(): JSX.Element {
   //            at once — no picker; a student with no holes yet goes straight
   //            into "Learn how to think", because grey means TEACH.
   const lessonParamHandledRef = useRef(false);
+  // The start runs through refs, and its timer is cleared ONLY on unmount:
+  // stripping `?lesson=` changes `searchParams`, which re-runs this effect —
+  // a cleanup there cancelled the start every time, so neither tile ever
+  // started its lesson (David's device, 2026-10-05).
+  const lessonParamStartRef = useRef({ startThinkingLesson, startCustomLesson });
+  lessonParamStartRef.current = { startThinkingLesson, startCustomLesson };
+  const lessonParamTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => {
+    if (lessonParamTimerRef.current) clearTimeout(lessonParamTimerRef.current);
+  }, []);
   useEffect(() => {
     if (lessonParamHandledRef.current) return;
     const which = searchParams.get('lesson');
@@ -2972,7 +3018,9 @@ export function CoachTeachPage(): JSX.Element {
       next.delete('lesson');
       return next;
     }, { replace: true });
-    const t = setTimeout(() => {
+    lessonParamTimerRef.current = setTimeout(() => {
+      lessonParamTimerRef.current = null;
+      const { startThinkingLesson: startThinking, startCustomLesson: startCustom } = lessonParamStartRef.current;
       void (async () => {
         // custom → the lesson plan built from their own games starts at once
         // (David 2026-10-05: "Custom lesson should already have a lesson plan.
@@ -2980,14 +3028,13 @@ export function CoachTeachPage(): JSX.Element {
         // startCustomLesson falls back to "Learn how to think" when there is
         // no record yet, because grey means TEACH.
         if (which === 'custom') {
-          await startCustomLesson([], 'hub');
+          await startCustom([], 'hub');
           return;
         }
-        await startThinkingLesson();
+        await startThinking();
       })();
     }, 300);
-    return () => clearTimeout(t);
-  }, [searchParams, setSearchParams, startThinkingLesson, startCustomLesson]);
+  }, [searchParams, setSearchParams]);
 
   // Hand-off from the Fundamentals scorecard: `/coach/teach?learnFundamental=<id>`
   // opens the per-fundamental teaching lesson ON THE SPOT in the classroom, with
@@ -3182,6 +3229,11 @@ export function CoachTeachPage(): JSX.Element {
     opts?: TeachSubmitOpts,
   ): Promise<void> => {
     if (!text.trim()) return;
+    // A drill on the board + "next" / "skip" → the Next control, never chat.
+    if (activeDrillRef.current && /^\s*(?:next(?: one| puzzle| position)?|skip(?: it| this(?: one)?)?)\s*[.!]?\s*$/i.test(text)) {
+      skipDrillRef.current();
+      return;
+    }
     if (busy) {
       // NEWEST-MOVE-WINS (David 2026-08-07: "not narrating one move behind
       // the user"). An engine-driven move narration must never be silently
@@ -5015,7 +5067,10 @@ export function CoachTeachPage(): JSX.Element {
         // <opening>?" picker. With an active walkthrough these are
         // already handled by the control-intent block up top; this
         // guard covers the idle case (David 2026-06-12).
-        !isWalkthroughControlPhrase(workingInput)
+        !isWalkthroughControlPhrase(workingInput) &&
+        // A drill on the board makes every turn about THAT board, never a
+        // request for a new opening (drill session 2026-10-05).
+        !activeDrillRef.current
       ) {
         // Bare-name routing: "The Vienna", "Pirc defense", "Italian".
         // Production audit (build 7e4f52b) caught "Pirc defense"
@@ -12780,6 +12835,17 @@ export function CoachTeachPage(): JSX.Element {
               )}
               <span>{hintBusy ? 'Thinking…' : heldMoveFen ? 'Show me' : 'Hint'}</span>
             </button>
+            {drillOnBoard && (
+              <button
+                onClick={() => skipDrillRef.current()}
+                className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-sky-500/30 text-sm font-medium text-sky-400 hover:text-sky-300 hover:bg-sky-500/10 transition-all duration-200"
+                data-testid="teach-drill-next-btn"
+                aria-label="Next position — skip this one; it comes back later"
+              >
+                <ChevronRight size={16} />
+                <span>Next</span>
+              </button>
+            )}
             <button
               onClick={handleReadPosition}
               className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-emerald-500/30 text-sm font-medium text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 transition-all duration-200"

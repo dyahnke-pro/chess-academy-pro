@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**171 lines · 5 exports · 2 importers · 1 tests · 0 audits**
+**156 lines · 5 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,40 +17,40 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `wrongMoveReason` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2867`
-- `src/services/coachDrillService.ts:759`
+### `wrongMoveReason` (function) — 5 call sites
+- `src/services/coachDrillService.ts:758`
 - `src/services/drillReasons.test.ts:11`
 - `src/services/drillReasons.test.ts:19`
 - `src/services/drillReasons.test.ts:26`
 - `src/services/drillReasons.test.ts:29`
 
 ### `goodButWeakerBeat` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2881`
-- `src/services/drillReasons.test.ts:65`
-- `src/services/drillReasons.test.ts:71`
-- `src/services/drillReasons.test.ts:72`
-- `src/services/drillReasons.test.ts:76`
-
-### `solvedLineBeat` (function) — 5 call sites
-- `src/services/coachDrillService.ts:769`
-- `src/services/drillReasons.test.ts:35`
-- `src/services/drillReasons.test.ts:40`
-- `src/services/drillReasons.test.ts:43`
-- `src/services/drillReasons.test.ts:44`
-
-### `hintBeat` (function) — 6 call sites
-- `src/services/coachDrillService.ts:775`
-- `src/services/drillReasons.test.ts:51`
-- `src/services/drillReasons.test.ts:52`
-- `src/services/drillReasons.test.ts:53`
+- `src/components/Coach/CoachTeachPage.tsx:2915`
+- `src/services/drillReasons.test.ts:50`
 - `src/services/drillReasons.test.ts:56`
 - `src/services/drillReasons.test.ts:57`
+- `src/services/drillReasons.test.ts:61`
 
-### `lineGainIdea` (function) — 3 call sites
-- `src/services/coachDrillService.ts:768`
+### `AlternativeVerdict` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `judgeAlternative` (function) — 8 call sites
+- `src/components/Coach/CoachTeachPage.tsx:2890`
+- `src/services/drillReasons.test.ts:72`
+- `src/services/drillReasons.test.ts:73`
+- `src/services/drillReasons.test.ts:76`
+- `src/services/drillReasons.test.ts:77`
+- `src/services/drillReasons.test.ts:80`
+- `src/services/drillReasons.test.ts:83`
 - `src/services/drillReasons.test.ts:84`
-- `src/services/drillReasons.test.ts:87`
+
+### `hintBeat` (function) — 6 call sites
+- `src/services/coachDrillService.ts:766`
+- `src/services/drillReasons.test.ts:36`
+- `src/services/drillReasons.test.ts:37`
+- `src/services/drillReasons.test.ts:38`
+- `src/services/drillReasons.test.ts:41`
+- `src/services/drillReasons.test.ts:42`
 
 ## Tests
 

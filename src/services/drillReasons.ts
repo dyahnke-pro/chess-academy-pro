@@ -8,13 +8,14 @@
 //   • wrongMoveReason — WHY the student's move fails, read off the position it
 //     leaves: a piece it leaves loose (SEE), a mate or a winning capture it
 //     walks into (a one-ply scan), else the drill's own concept hint.
-//   • solvedLineBeat — the SEQUENCE spoken as a line with the idea named:
-//     "Nxd5 — then queen takes d5, bishop takes f7 check … That's the fork."
+//   • judgeAlternative — a move off the answer key is judged by the ENGINE:
+//     as good → accepted; only an engine-confirmed loss is called one.
 //   • hintBeat — the hint SAYS the piece, withholds the square (the honesty
 //     contract), so the arrow is no longer silent.
 import { Chess, type Square } from 'chess.js';
 import { findHangingBySee } from './positionReadingService';
-import { sayLine, sayMoveClause } from './spokenMove';
+import { sayMoveClause } from './spokenMove';
+import { MATE_EVAL_THRESHOLD } from './engineConstants';
 
 const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -92,15 +93,38 @@ export function goodButWeakerBeat(args: {
   return `${cap(sayMoveClause(args.wrongSan, args.fenBefore))} is a good move${wins}. There is something stronger here, though: before you settle, look for a move that does even more.`;
 }
 
-/** The solved line, spoken, with the idea named when the caller has one:
- *  "That's it — knight takes d5; then queen takes d5, bishop takes f7 check.
- *  The fork: one piece, two targets." */
-export function solvedLineBeat(startFen: string | null, solutionSan: readonly string[], idea: string | null): string {
-  if (solutionSan.length === 0) return idea ?? '';
-  const [first, ...rest] = sayLine(startFen, solutionSan, 'clause');
-  const opening = `That's it — ${first}`;
-  const tail = rest.length > 0 ? `; then ${rest.join(', ')}.` : '.';
-  return `${opening}${tail}${idea ? ` ${idea}` : ''}`.trim();
+/** Within this many centipawns of the drill's move, a different move is just
+ *  as good — the drill must take it. */
+const EQUAL_CP = 50;
+/** Both moves win clearly (student's view) … */
+const BOTH_WIN_CP = 300;
+/** … and the other move keeps at least this share of the key move's edge. */
+const BOTH_WIN_SHARE = 0.75;
+/** A "your piece hangs / they win material" reason is spoken only when the
+ *  engine agrees the move throws away at least this much. */
+const LOSES_CP = 150;
+
+export type AlternativeVerdict = 'accept' | 'good-but-weaker' | 'loses' | 'weaker';
+
+/**
+ * How a move that is not the drill's answer key actually stands, from the
+ * engine's evals of both boards (white's view). A drill's key is ONE winning
+ * line, not the only one — David's session, 2026-10-05: the drill refused
+ * axb5 three times as "leaves your pawn on b5 hanging" while the engine had it
+ * at +14.9. The one-ply SEE read cannot see a recapture-and-win; the engine
+ * decides, and only a move the engine says LOSES may be called a loss.
+ */
+export function judgeAlternative(args: { fenBefore: string; evalAfterWrong: number; evalAfterBest: number }): AlternativeVerdict {
+  let mover: 'w' | 'b' = 'w';
+  try { mover = new Chess(args.fenBefore).turn(); } catch { /* white's view */ }
+  const pov = (e: number): number => (mover === 'w' ? e : -e);
+  const wrong = pov(args.evalAfterWrong);
+  const best = pov(args.evalAfterBest);
+  if (wrong >= best - EQUAL_CP) return 'accept';
+  if (wrong >= BOTH_WIN_CP && best < MATE_EVAL_THRESHOLD && wrong >= best * BOTH_WIN_SHARE) return 'accept';
+  if (wrong >= STILL_GOOD_CP) return 'good-but-weaker';
+  if (best - wrong >= LOSES_CP) return 'loses';
+  return 'weaker';
 }
 
 /** The hint names the PIECE and withholds the square (the honesty contract:
@@ -129,42 +153,3 @@ function isRecapturable(fen: string, sq: Square): boolean {
   } catch { return false; }
 }
 
-const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
-
-/**
- * The IDEA behind a solved line when no concept is named (walk 2026-10-04
- * defect 10: the solve was a bare move list). Replays the line and says what
- * it wins, naming the biggest piece taken and whether it was loose before the
- * line started. Null when the line wins no material (a mate or a positional
- * line has its own words elsewhere).
- */
-export function lineGainIdea(fen: string, solutionSan: readonly string[]): string | null {
-  let c: Chess;
-  try { c = new Chess(fen); } catch { return null; }
-  const me = c.turn();
-  const start = new Chess(fen);
-  let net = 0;
-  let prize: { piece: string; square: Square } | null = null;
-  for (const san of solutionSan) {
-    let m;
-    try { m = c.move(san); } catch { return null; }
-    if (!m) return null;
-    if (m.captured) {
-      const v = VALUE[m.captured] ?? 0;
-      if (m.color === me) {
-        net += v;
-        if (!prize || v > (VALUE[prize.piece] ?? 0)) prize = { piece: m.captured, square: m.to };
-      } else {
-        net -= v;
-      }
-    }
-  }
-  if (c.isCheckmate()) return null;
-  if (net <= 0 || !prize) return null;
-  const them = me === 'w' ? 'b' : 'w';
-  const wasLoose = start.get(prize.square)?.color === them && start.attackers(prize.square, them).length === 0;
-  const what = `the ${PIECE_NAME[prize.piece]}${prize.square ? ` on ${prize.square}` : ''}`;
-  return wasLoose
-    ? `The point: ${what} had no defender, so it was a target from the start — and the line wins it.`
-    : `The point: the line wins ${what}${net > (VALUE[prize.piece] ?? 0) ? ' and more' : ''}.`;
-}

@@ -2,7 +2,7 @@
 // the reason it fails, the solve plays the sequence and names the idea, the
 // hint says the piece and withholds the square.
 import { describe, it, expect } from 'vitest';
-import { goodButWeakerBeat, hintBeat, lineGainIdea, solvedLineBeat, wrongMoveReason } from './drillReasons';
+import { goodButWeakerBeat, hintBeat, judgeAlternative, wrongMoveReason } from './drillReasons';
 
 describe('wrongMoveReason — computed off the board the wrong move leaves', () => {
   it('a move that walks into mate in one says so', () => {
@@ -27,21 +27,6 @@ describe('wrongMoveReason — computed off the board the wrong move leaves', () 
   });
   it('is null on an unparseable move', () => {
     expect(wrongMoveReason('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'Qh9', 'e4')).toBeNull();
-  });
-});
-
-describe('solvedLineBeat — the sequence, spoken, with the idea', () => {
-  it('spells the whole line and appends the idea', () => {
-    expect(solvedLineBeat(null, ['Nxd5', 'Qxd5', 'Bxf7+'], 'The fork: one piece, two targets.'))
-      .toBe('That\'s it — the knight takes d5; then the queen takes d5, the bishop takes f7. The fork: one piece, two targets.');
-  });
-  it('a piece SAN tells apart is said with its FROM square off the drill board (walk 2026-10-04, defect 8)', () => {
-    const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 3';
-    expect(solvedLineBeat(fen, ['Nce7'], null)).toBe('That\'s it — the knight from c6 to e7.');
-  });
-  it('a one-move line and no idea still speaks the move — never "Good."', () => {
-    expect(solvedLineBeat(null, ['O-O'], null)).toBe('That\'s it — castle short.');
-    expect(solvedLineBeat(null, ['e4'], null)).not.toMatch(/^Good\./);
   });
 });
 
@@ -77,13 +62,25 @@ describe('goodButWeakerBeat — a good move is called good (walk 2026-10-04 defe
   });
 });
 
-describe('lineGainIdea — the point of a solved line (walk 2026-10-04 defect 10)', () => {
-  it('names a loose target the line wins', () => {
-    // Black queen on b4 has no defender; White's bishop takes it.
-    const fen = '4k3/8/8/8/1q6/8/3B4/4K3 w - - 0 1';
-    expect(lineGainIdea(fen, ['Bxb4'])).toMatch(/queen on b4 had no defender/);
+describe('judgeAlternative — the engine decides, never the answer key alone', () => {
+  // White to move; evals are white's view.
+  const W = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1';
+  // Black to move: a black student's +3 is -300 from white's view.
+  const B = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
+
+  it('accepts a move as good as the key (David 2026-10-05: axb5 at +14.9 was refused)', () => {
+    expect(judgeAlternative({ fenBefore: W, evalAfterWrong: 1490, evalAfterBest: 1500 })).toBe('accept');
+    expect(judgeAlternative({ fenBefore: W, evalAfterWrong: 1200, evalAfterBest: 1500 })).toBe('accept');
   });
-  it('is null when the line wins nothing', () => {
-    expect(lineGainIdea('4k3/8/8/8/8/8/8/4K2R w - - 0 1', ['Rh7'])).toBeNull();
+  it('reads from the mover’s side', () => {
+    expect(judgeAlternative({ fenBefore: B, evalAfterWrong: -800, evalAfterBest: -820 })).toBe('accept');
+    expect(judgeAlternative({ fenBefore: B, evalAfterWrong: 300, evalAfterBest: -300 })).toBe('loses');
+  });
+  it('a forced mate in the key is not matched by a merely winning move', () => {
+    expect(judgeAlternative({ fenBefore: W, evalAfterWrong: 1490, evalAfterBest: 30000 })).toBe('good-but-weaker');
+  });
+  it('only a move the engine says throws material away is a loss', () => {
+    expect(judgeAlternative({ fenBefore: W, evalAfterWrong: -200, evalAfterBest: 300 })).toBe('loses');
+    expect(judgeAlternative({ fenBefore: W, evalAfterWrong: 0, evalAfterBest: 90 })).toBe('weaker');
   });
 });

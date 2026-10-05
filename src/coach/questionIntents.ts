@@ -3320,12 +3320,21 @@ const QUESTION_OPENER_RE =
 const COACH_COMMAND_RE =
   /^\s*(?:hint|hints|help|undo|take\s*back|takeback|resign|restart|stop|pause|resume|continue|next|skip|again|repeat|why|yes|no|ok|okay|sure|nope|yep|thanks|thank\s+you|hi|hello|hey)\s*$/i;
 
+/** A SENTENCE SPOKEN TO THE COACH, not a name (David's drill session
+ *  2026-10-05: "Say those moves again" and "It's not letting me take b5" were
+ *  each taken as an opening name and burned a fresh generation). No Lichess
+ *  opening begins with a pronoun, an imperative or a negation, so a leading
+ *  one marks the input as talk. Word-bounded: "Italian" is not "it". */
+const SENTENCE_OPENER_RE =
+  /^\s*(?:i|i'?m|i'?ve|i'?ll|i'?d|me|my|you|your|it|it'?s|its|that|that'?s|this|there|they|we|let|let'?s|say|repeat|play|try|take|go|slow|speed|stop|don'?t|can'?t|cannot|won'?t|isn'?t|not|too|please|again|ok|okay)\b/i;
+
 export function looksLikeQuestionNotAnOpeningName(input: string | undefined): boolean {
   if (!input) return false;
-  const t = input.trim();
+  const t = input.trim().replace(/[\u2018\u2019]/g, "'");
   if (!t) return false;
   if (/[?.!]$/.test(t)) return true;
   if (COACH_COMMAND_RE.test(t)) return true;
+  if (SENTENCE_OPENER_RE.test(t)) return true;
   return QUESTION_OPENER_RE.test(t);
 }
 
