@@ -39,6 +39,7 @@ import {
 } from './chatTurn';
 import { parseChatTurn, type ParseResult, type Reader } from './chatTurnParser';
 import { emitChatTurn } from './chatTurnEvents';
+import { directAnswer } from './chatTurnAnswers';
 
 export interface DispatchCoachTurnOptions extends CoachServiceOptions {
   /** The prior assistant message — lets the action router catch the
@@ -135,7 +136,7 @@ export async function settleChatTurnRead(opts: {
     agreed: turn && opts.fastPathLane !== 'none'
       ? kindAgreesWithLane(turn.kind, opts.fastPathLane)
       : null,
-    answererLive: turn ? CHAT_KINDS[turn.kind].answerer === 'live' : null,
+    answererLive: turn ? CHAT_KINDS[turn.kind].answerer !== 'pending' : null,
     servedParsed: opts.servedParsed,
     latencyMs: result?.latencyMs ?? 0,
     askPreview: input.ask.slice(0, 80),
@@ -157,7 +158,21 @@ export async function dispatchCoachTurn(
     // FLAG ON: wait for the reading and, when it validated and its kind has a
     // live answerer, serve the canonical question that routes to it.
     const r = await read;
-    const canonical = r?.validation?.ok ? canonicalAsk(r.validation.turn) : null;
+    // A kind with no lane today answers with its own computed sentence.
+    const turn = r?.validation?.ok ? r.validation.turn : null;
+    if (turn && CHAT_KINDS[turn.kind].answerer === 'direct' && input.liveState.fen) {
+      const studentWB = input.liveState.studentColor === 'black' ? 'b' : input.liveState.studentColor === 'white' ? 'w' : (input.liveState.fen.split(' ')[1] === 'b' ? 'b' : 'w');
+      const text = directAnswer(turn, input.liveState.fen, conversationFor(input.liveState.surface), studentWB);
+      if (text) {
+        servedParsed = true;
+        if (read) {
+          void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: turn.kind, servedParsed })
+            .catch(() => { /* telemetry never breaks a turn */ });
+        }
+        return { text, toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent: turn.kind };
+      }
+    }
+    const canonical = turn ? canonicalAsk(turn) : null;
     if (canonical) {
       effectiveInput = { ...input, ask: canonical };
       servedParsed = true;

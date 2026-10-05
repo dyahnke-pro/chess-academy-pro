@@ -209,9 +209,11 @@ export interface KindSpec {
   /** The lane that answers it today ('none' = nothing yet). */
   lane: FastPathLane;
   /** 'live' — an answerer exists and this kind can be SERVED from the parse
-   *  (behind the flag). 'pending' — read and logged only; its answerer is a
+   *  (behind the flag). 'direct' — no lane today; answered by its own
+   *  computed sentence (`chatTurnAnswers.directAnswer`) behind the same flag.
+   *  'pending' — read and logged only; its answerer is a
    *  later phase (P0c loose computer, P1 lesson). */
-  answerer: 'live' | 'pending';
+  answerer: 'live' | 'direct' | 'pending';
   /** The deterministic question that routes to `lane` — how a parsed turn is
    *  served without a second router: the fast path answers this exact text.
    *  Null when the kind is not servable this way (commands, small talk). */
@@ -227,11 +229,12 @@ const topicOr = (t: ResolvedChatTurn, fmt: (x: string) => string, fallback: stri
   (t.topic ? fmt(t.topic) : fallback);
 const fixed = (q: string) => (): string => q;
 const pending = (gloss: string, lane: FastPathLane = 'none'): KindSpec => ({ gloss, lane, answerer: 'pending', canonical: null });
+const direct = (gloss: string): KindSpec => ({ gloss, lane: 'none', answerer: 'direct', canonical: null });
 
 export const CHAT_KINDS: Record<ChatKind, KindSpec> = {
   // ── commands + conversation (answered by the action router / the thread) ──
-  command: { gloss: 'a command to DO something: change a setting, go to a page, start a game, lesson, drill or review, take back a move', lane: 'command', answerer: 'live', canonical: null },
-  stop: { gloss: 'tells the coach to stop or be quiet', lane: 'stop', answerer: 'live', canonical: fixed('stop') },
+  command: { gloss: 'a command to DO something: change a setting (turn voice on/off, change verbosity), go to a page, start a game, lesson, drill or review, take back a move', lane: 'command', answerer: 'live', canonical: null },
+  stop: { gloss: 'tells the coach to stop talking right now or be quiet (not a settings change)', lane: 'stop', answerer: 'live', canonical: fixed('stop') },
   'conversational-reply': { gloss: 'a bare yes / no reply to what the coach just offered', lane: 'conversational-reply', answerer: 'live', canonical: null },
   chat: { gloss: 'small talk with no chess question (hello, thanks)', lane: 'none', answerer: 'live', canonical: null },
   unclear: { gloss: 'you cannot tell what is being asked', lane: 'none', answerer: 'pending', canonical: null },
@@ -282,7 +285,7 @@ export const CHAT_KINDS: Record<ChatKind, KindSpec> = {
   misconceptions: { gloss: 'which thinking errors I keep making', lane: 'misconceptions', answerer: 'live', canonical: null },
   'tactics-profile': { gloss: 'how good my tactics are', lane: 'tactics-profile', answerer: 'live', canonical: fixed('how are my tactics?') },
   'phase-profile': { gloss: 'which game phase I am weakest in', lane: 'phase-profile', answerer: 'live', canonical: fixed('which phase am I weakest in?') },
-  'counter-repertoire': { gloss: 'what should I play against a named opening', lane: 'counter-repertoire', answerer: 'live',
+  'counter-repertoire': { gloss: 'what should I PLAY against a named opening (a recommendation, not my past results)', lane: 'counter-repertoire', answerer: 'live',
     canonical: (t) => topicOr(t, (x) => `what should I play against the ${x}?`, null) },
   'repertoire-gap': { gloss: 'gaps in my repertoire', lane: 'repertoire-gap', answerer: 'live', canonical: fixed('where are the gaps in my repertoire?') },
   accuracy: { gloss: 'my accuracy', lane: 'accuracy', answerer: 'live', canonical: fixed("what's my accuracy?") },
@@ -293,7 +296,7 @@ export const CHAT_KINDS: Record<ChatKind, KindSpec> = {
   converting: { gloss: 'how well I convert winning positions', lane: 'converting', answerer: 'live', canonical: fixed('how good am I at converting winning positions?') },
   color: { gloss: 'am I better as White or Black', lane: 'color', answerer: 'live', canonical: fixed('am I better as White or Black?') },
   records: { gloss: 'my best win / records', lane: 'records', answerer: 'live', canonical: fixed("what's my best win?") },
-  'record-vs': { gloss: 'my record against a named opening or opponent', lane: 'record-vs', answerer: 'live',
+  'record-vs': { gloss: 'my results / how I score against a named opening or opponent (my past games, not what to play)', lane: 'record-vs', answerer: 'live',
     canonical: (t) => topicOr(t, (x) => `how do I score against the ${x}?`, null) },
   'puzzle-stats': { gloss: 'my puzzle rating / puzzle numbers', lane: 'puzzle-stats', answerer: 'live', canonical: fixed("what's my puzzle rating?") },
   'transfer-gap': { gloss: 'do my puzzle skills transfer to games', lane: 'transfer-gap', answerer: 'live', canonical: fixed('do my puzzle skills carry over to my games?') },
@@ -321,12 +324,14 @@ export const CHAT_KINDS: Record<ChatKind, KindSpec> = {
     canonical: fixed('why is that better than what I played?') },
   'what-did-their-move-change': { gloss: 'what did the opponent\'s last move change / threaten', lane: 'opponent-move', answerer: 'live', canonical: fixed('why did they play that?') },
   'what-should-i-play': { gloss: 'what should I play here (the move, with its reason)', lane: 'best-move', answerer: 'live', canonical: fixed("what's my best move?") },
-  'why-is-it-a-target': pending('why is a piece or square a target'),
-  'count-attackers': pending('how many pieces attack a piece or square'),
-  'count-defenders': pending('how many pieces defend a piece or square'),
-  'what-about-piece': pending('"what about my bishop?" — a named piece\'s safety and scope'),
-  'is-piece-loose': pending('is a piece loose / undefended (or which pieces are)'),
-  'i-dont-know': pending('the student says they do not know the answer'),
+  'why-is-it-a-target': direct('why is a piece or square a target'),
+  'count-attackers': direct('how many pieces attack a piece or square'),
+  'count-defenders': direct('how many pieces defend a piece or square'),
+  'what-about-piece': direct('"what about my bishop?" — a named piece\'s safety and scope'),
+  'is-piece-loose': direct('is a piece loose / undefended (or which pieces are)'),
+  // Outside a lesson (which has its own "I don't know"), not knowing is a
+  // request for help: the hint lane.
+  'i-dont-know': { gloss: 'the student says they do not know the answer', lane: 'hint', answerer: 'live', canonical: fixed('give me a hint') },
   answer: pending('the student ANSWERS the coach\'s question by naming squares or pieces ("c6 and e5", "the knight on c6")'),
   'start-thinking-lesson': pending('asks to be taught how to think / a general lesson ("teach me", "teach me to think")'),
 };

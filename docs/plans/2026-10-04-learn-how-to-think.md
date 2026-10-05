@@ -248,6 +248,7 @@ Phrasing varies endlessly, so the LLM READS the question and code ANSWERS it
   is-<piece>-loose, what-should-I-play, I-don't-know;
 - the fast regex path runs alongside (no added latency on a hit); shadow first,
   switched on measured accuracy (≥95% on real questions + held-out phrasings).
+**Held-out half of the switch, MEASURED 2026-10-05:** `chatTurnEval` (scorer + 103 held-out phrasings: typos, Spanish/French/German/Portuguese, indirect asks, referents, follow-ups) run live against the app's own reader request: 101/103 (98.1%) first run; the two misses were gloss confusions ("how do I score against X" → counter-repertoire; "turn the voice off" → stop), the glosses were sharpened, then 103/103 twice. Caveat: the two fixes were tuned on this set, so the shadow's REAL-question agreement after the push is the half that decides the flag (`setServeParsedRoute`, still OFF).
 Status 2026-10-04: ONE-CHAT is approved and NOT built — only the translation seam
 uses the LLM today; questions route through ~55 regex detectors. The 2026-10-04
 walk shows the cost: "why is that move better than what I played?" matched the
