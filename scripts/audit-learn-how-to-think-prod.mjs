@@ -209,7 +209,10 @@ async function main() {
     await page.waitForTimeout(3000);
     const rows = listener.getCapturedEvents().filter((e) => e.kind === 'thinking-lesson');
     const parsed = rows.flatMap((e) => { try { return JSON.parse(e.details ?? '{}').rows ?? [JSON.parse(e.details ?? '{}')]; } catch { return []; } });
-    record('L7. the lesson emitted thinking-lesson rows with outcomes', parsed.length > 0 && parsed.every((r) => r.step && r.outcome), `${parsed.length} rows: ${parsed.map((r) => `${r.stage}:${r.outcome}`).join(', ')}`);
+    // chainDepth (plan C1): on every row, 0 on a Show beat, never above the
+    // chain's three links (attackers → defenders → who takes first).
+    const chainOk = parsed.every((r) => Number.isInteger(r.chainDepth) && r.chainDepth >= 0 && r.chainDepth <= 3 && (r.outcome !== 'shown' || r.chainDepth === 0));
+    record('L7. the lesson emitted thinking-lesson rows with outcomes', parsed.length > 0 && parsed.every((r) => r.step && r.outcome) && chainOk, `${parsed.length} rows: ${parsed.map((r) => `${r.stage}:${r.outcome}:c${r.chainDepth}`).join(', ')}`);
     // L11: THINKING TRANSFER (algo audit) — the planner read KNOW against USE.
     const transferRows = listener.getCapturedEvents().filter((e) => e.kind === 'thinking-transfer')
       .flatMap((e) => { try { return [JSON.parse(e.details ?? '{}')]; } catch { return []; } });

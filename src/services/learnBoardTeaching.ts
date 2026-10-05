@@ -123,7 +123,7 @@ export interface StudentMoveInput {
  *  words, so live play and the lessons teach the same habit by the same name.
  *  Keyed on the line's claim (`method:<id>` → `stepForMethodClaim`), never on
  *  its prose. Rotated on the move, never rolled. */
-function namedStep(h: TeachingHint): TeachingHint {
+export function namedStep(h: TeachingHint): TeachingHint {
   const step = h.claims.map((c) => stepForMethodClaim(c)).find((x) => x !== null);
   if (!step) return h;
   const name = THINKING_STEPS[step].name;

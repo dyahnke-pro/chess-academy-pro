@@ -20,6 +20,9 @@ export interface ThinkingLessonRow {
   outcome: 'held' | 'broken' | 'helped' | 'shown';
   help: 'none' | 'nudge' | 'hint' | 'show' | 'dont-know';
   msToFirst: number | null;
+  /** Follow-up links answered clean, in a row from the first (plan C1);
+   *  0 for a Show beat or no chain. */
+  chainDepth: number;
 }
 
 type Listener = (row: ThinkingLessonRow) => void;

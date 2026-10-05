@@ -259,7 +259,7 @@ export class ThinkingLessonSession {
         }
         emitThinkingLesson({
           step: this.kit.step, stage, origin: pos.origin, keySize: pos.key.length, foundCount: 0, wrongCount: 0,
-          outcome: 'shown', help: 'none', msToFirst: null,
+          outcome: 'shown', help: 'none', msToFirst: null, chainDepth: 0,
         });
         continue;
       }
@@ -486,6 +486,7 @@ export class ThinkingLessonSession {
     emitThinkingLesson({
       step: this.kit.step, stage, origin: pos.origin, keySize: summary.keySize, foundCount: summary.foundCount,
       wrongCount: summary.extras.length, outcome: summary.held ? 'held' : summary.prompted ? 'helped' : 'broken', help: summary.help, msToFirst: summary.msToFirst,
+      chainDepth: summary.detail.chainDepth,
     });
     try { await this.deps.record(answer); } catch { /* the lesson never stalls on a write */ }
   }
