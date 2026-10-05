@@ -206,7 +206,7 @@ pawn left weak, a plan of ours now blocked.
   the board after each candidate pawn move); name the pattern ("h-pawn against a
   knight on g6").
 
-### 26. How serious is their threat, really 🔴
+### 26. How serious is their threat, really 🟠 (positionAsk: best move leaves the attacked piece → "not the real issue")
 - G5: "the pin isn't scary at all"; G1: "the bishop to d3 — less of a problem than
   it looks"; G4: "I don't see what the bishop threatens, so you continue the plan".
 - Compute: their apparent threat (pin, attack on a piece) vs the engine's eval if we
@@ -241,7 +241,7 @@ pawn left weak, a plan of ours now blocked.
 - Compute: pieces not bearing on the king zone; the forcing line that wins material
   vs the one that mates; a check that drives the king onto a forking square.
 
-### 30. Make the tactic work 🔴
+### 30. Make the tactic work 🟠 (Greek gift recognized: `moveInsight.greekGift`, hint withholds the square)
 - G7: "the Greek gift Bxh2+, Kxh2, Ng4+ doesn't work yet, because the queen on d1
   covers g4 — h5 anchors g4, preparing both the sacrifice and Ng4".
 - Compute: a known pattern that fails by one defender/one square → the preparatory
@@ -373,3 +373,10 @@ pawn left weak, a plan of ours now blocked.
 | 12 | qhHtJcXkkfg Sensei, Accelerated Dragon | Black wins (Qxb2 grab, Bf3 anchor, Nxf2+) | 58 |
 | 13 | 4_Ev1a1_2Mg Elephant Gambit | White wins (queen won) | 57 |
 | 14 | _X7t6o3o6JM Jobava London vs g6 | White wins (Nxd5 discovery, Nxe7+) | 56 |
+
+## Line audit (David 2026-10-05: "is the narration accurate to the longer line?")
+`moveInsight.lineAudit.test.ts` (LINE_AUDIT=1): real puzzles, natural wrong tries,
+Stockfish to depth 12, every moveMissed claim checked against the full line.
+12/45 claims were wrong when the line was cut at 5 plies (material counted before the
+line settled; checks unsaid) → 0/46 after reading the whole line, naming checks, and
+saying a queen's worth or more as a floor.

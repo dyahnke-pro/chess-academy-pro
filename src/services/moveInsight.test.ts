@@ -3,7 +3,7 @@
 // checked the king???").
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { autopilotRecapture, doubleAttack, lastMoveAlong, lastMoveFromPgn, mechanismContrast, moveMissed, positionAsk, theirMoveChanged, walkableLine } from './moveInsight';
+import { autopilotRecapture, doubleAttack, greekGift, lastMoveAlong, lastMoveFromPgn, mechanismContrast, moveMissed, positionAsk, theirMoveChanged, walkableLine } from './moveInsight';
 
 // White: Ka1, Re2, Ng5. Black: Kh8, Qd8. Two checks — Nf7+ (forks king and
 // queen) and Rh2+ (only checks).
@@ -40,7 +40,7 @@ describe('moveMissed — what the student’s move actually does', () => {
     // a queen move onto a square the rook covers: Qd5?? Rxd5.
     const fen = '3rk3/8/8/8/8/8/8/3QK3 w - - 0 1';
     const m = moveMissed(fen, 'Qd5', ['d8d5']);
-    expect(m?.text).toMatch(/^The queen to d5\? Then the rook takes d5, and you come out 9 points down\.$/);
+    expect(m?.text).toBe("The queen to d5? Then the rook takes d5, and by the end of the line you come out more than a queen's worth down.");
   });
 });
 
@@ -141,5 +141,36 @@ describe('autopilotRecapture — the in-between move (catalogue §9)', () => {
     const f2 = new Chess(lb2); f2.move('exd4');
     expect(autopilotRecapture(f2.fen(), 'Nxd4', 'Bxf7+', { fenBefore: lb2, san: 'exd4' }))
       .toBe('Taking straight back is the autopilot move — there is a check to play first, and the recapture can wait.');
+  });
+});
+
+describe('greekGift — his article, read off the board', () => {
+  // Classic French-style setup: Bd3, Nf3, e5, Black castled with no knight on f6.
+  const FEN = 'r1bq1rk1/pppnbppp/4p3/3pP3/3P4/3B1N2/PPP2PPP/R1BQK2R w KQ - 0 8';
+  it('names the pattern when the best move is the sacrifice', () => {
+    expect(greekGift(FEN, 'Bxh7+')?.text).toMatch(/^This is the Greek gift: the bishop gives itself on h7 with check, the knight jumps in on g5/);
+  });
+  it('says nothing for another best move', () => {
+    expect(greekGift(FEN, 'O-O')).toBeNull();
+  });
+});
+
+describe('positionAsk — is the threat real? (his "How To Ignore A Threat And Win")', () => {
+  // The rook on a8 hits the a2-pawn; when the best move is quiet and leaves it, the
+  // coach says the threat is not the issue.
+  const FEN = 'r3k3/8/8/8/8/8/P7/4K2R w K - 0 1';
+  it('a quiet best move that leaves the attacked piece → not the real issue', () => {
+    const a = positionAsk(FEN, { bestSan: 'Kd2' });
+    expect(a.mode).toBe('improve');
+    expect(a.text).toMatch(/pawn on a2, but that is not the real issue here/);
+  });
+  it('a best move that defends it → defend', () => {
+    expect(positionAsk(FEN, { bestSan: 'a3' }).mode).toBe('defend');
+  });
+});
+describe('greekGift hint withholds the square', () => {
+  it('hint names the pattern only', () => {
+    const g = greekGift('r1bq1rk1/pppnbppp/4p3/3pP3/3P4/3B1N2/PPP2PPP/R1BQK2R w KQ - 0 8', 'Bxh7+');
+    expect(g?.hint).not.toMatch(/h7|g5/);
   });
 });

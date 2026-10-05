@@ -102,6 +102,9 @@ function directionFor(fen: string, bestSan: string | undefined): string | null {
   if (!bestSan) return null;
   const r = play(fen, bestSan);
   if (!r) return null;
+  // A named attacking pattern is the idea itself (his articles): say it.
+  const gg = greekGift(fen, bestSan);
+  if (gg) return gg.hint;
   if (doubleAttack(fen, bestSan)) {
     return r.move.san.includes('+')
       ? 'Look for a check that does more than check — one move that hits two things at once.'
@@ -166,6 +169,17 @@ function positionAskCore(fen: string, opts: { bestSan?: string }): PositionAsk {
     const attackerPiece = attackerSq ? board.get(attackerSq) : null;
     const by = attackerSq && attackerPiece ? `their ${name(attackerPiece.type)} on ${attackerSq}` : 'they';
     const hit = `${cap(by)} ${by === 'they' ? 'are hitting' : 'is hitting'} your ${name(must.piece)} on ${must.square}`;
+    // IS THE THREAT REAL? (his "How To Ignore A Threat And Win"): the best move
+    // leaves the attacked piece where it stands with no new guard and is not
+    // forcing — the threat is not the issue here.
+    if (best && !bestForcing && best.move.from !== must.square
+      && guards(best.board, must.square as Square, me).length <= guards(board, must.square as Square, me).length) {
+      return {
+        mode: 'improve',
+        text: `${hit}, but that is not the real issue here — you can leave it and play the move the position needs.`,
+        squares: [must.square],
+      };
+    }
     if (bestForcing) {
       return {
         mode: 'press',
@@ -279,7 +293,11 @@ export function moveMissed(fenBefore: string, san: string, replyPv: readonly str
   const r = play(fenBefore, san);
   if (!r) return null;
   const me = r.move.color;
-  const replies = pvSans(r.board.fen(), replyPv, 5);
+  // THE WHOLE ENGINE LINE (David 2026-10-05: "is the narration accurate to the
+  // longer line?" — measured: reading five plies said "4 points down" where the
+  // line settles at 5, "two pawns" where it settles at one). The claim is read
+  // where the line ends, not where it was cut.
+  const replies = pvSans(r.board.fen(), replyPv, 16);
   const line = walkableLine(fenBefore, [r.move.san, ...replies], r.move.san);
   const you = cap(sayMoveClause(r.move.san, fenBefore));
   const reply = replies[0] ? play(r.board.fen(), replies[0]) : null;
@@ -303,10 +321,12 @@ export function moveMissed(fenBefore: string, san: string, replyPv: readonly str
   }
 
   if (net !== null && net <= -1) {
-    const lost = countWords(-net);
+    // A queen's worth or more is said as a floor that stays true however deep
+    // the line runs (audit: 11 points at ply 8, 14 by the end of a mating line).
+    const lost = -net >= 9 ? 'more than a queen\'s worth' : countWords(-net);
     return {
       text: reply
-        ? `${you}? Then ${sayMoveClause(reply.move.san, r.board.fen())}, and you come out ${lost} down.`
+        ? `${you}? Then ${sayMoveClause(reply.move.san, r.board.fen())}${reply.move.san.includes('+') ? ', check' : ''}, and by the end of the line you come out ${lost} down.`
         : `${you} gives away ${lost}.`,
       line,
     };
@@ -524,4 +544,39 @@ export function autopilotRecapture(
   if (!forcing) return null;
   const kind = best.move.san.includes('#') ? 'a mate' : best.move.san.includes('+') ? 'a check' : 'a capture';
   return `Taking straight back is the autopilot move — there is ${kind} to play first, and the recapture can wait.`;
+}
+
+/**
+ * THE GREEK GIFT (his chess.com article "The Greek Gift Sacrifice Lives On!"):
+ * a bishop sacrifice on h7 (h2) with check against the castled king, so the
+ * queen and knight — "the strongest tandem in chess" — come in after it. Board
+ * read of the pattern's parts, only when `bestSan` IS the sacrifice (the engine
+ * decides it works; this names WHY). His camouflages are the teaching: the
+ * knight need not come from f3 — any square that reaches g5 (g4) in one jump.
+ */
+export function greekGift(fen: string, bestSan: string | undefined): { text: string; hint: string; squares: string[] } | null {
+  if (!bestSan) return null;
+  const r = play(fen, bestSan);
+  if (!r || r.move.piece !== 'b' || !r.move.captured || !r.move.san.includes('+')) return null;
+  const white = r.move.color === 'w';
+  const target = white ? 'h7' : 'h2';
+  const jump = white ? 'g5' : 'g4';
+  if (r.move.to !== target) return null;
+  let before: Chess;
+  try { before = new Chess(fen); } catch { return null; }
+  const me = r.move.color;
+  const knights: string[] = [];
+  for (const row of before.board()) for (const cell of row) {
+    if (cell && cell.type === 'n' && cell.color === me && before.moves({ square: cell.square, verbose: true }).some((m) => m.to === jump)) knights.push(cell.square);
+  }
+  if (knights.length === 0) return null;
+  const queen = before.board().flat().find((c) => c && c.type === 'q' && c.color === me);
+  if (!queen) return null;
+  const route = knights[0] === (white ? 'f3' : 'f6') ? '' : ` — and the knight comes from ${knights[0]}, not the usual square, which is exactly how this pattern hides`;
+  return {
+    text: `This is the Greek gift: the bishop gives itself on ${target} with check, the knight jumps in on ${jump}, and the queen joins down the h-file — the queen and knight together against a king with no defenders left around it${route}.`,
+    // The hint names the pattern and withholds the square (the idea, not the answer).
+    hint: 'This is a Greek-gift position — a bishop sacrifice against the castled king, with the knight and queen following it in.',
+    squares: [target, jump, knights[0], queen.square],
+  };
 }

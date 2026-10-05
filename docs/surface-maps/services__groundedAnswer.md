@@ -1104,7 +1104,7 @@
 - `src/services/falseAlarm.ts:52`
 - `src/services/falseAlarm.ts:60`
 - `src/services/learnMoveTeaching.ts:125`
-- `src/services/moveInsight.ts:450`
+- `src/services/moveInsight.ts:470`
 - `src/services/opponentMovePurpose.ts:64`
 - `src/services/reviewFullData.ts:778`
 - `src/services/reviewMoveBriefing.ts:227`
