@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2774 lines · 84 exports · 74 importers · 25 tests · 2 audits**
+**2774 lines · 84 exports · 75 importers · 25 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -76,6 +76,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticVerification.ts`
 - `src/services/tacticsDetector.ts`
 - `src/services/theirMoveCost.ts`
+- `src/services/thinkingAssessStep.ts`
 - `src/services/thinkingForcingStep.ts`
 - `src/services/thinkingLessonSource.ts`
 - `src/services/thinkingSafetyStep.ts`
@@ -636,7 +637,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `KingSafetyNote` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `kingSafetyRead` (function) — 8 call sites
+### `kingSafetyRead` (function) — 10 call sites
 - `src/services/danyaBehaviors.ts:271`
 - `src/services/danyaBehaviors.ts:289`
 - `src/services/danyaBehaviors.ts:839`
@@ -645,16 +646,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:527`
 - `src/services/positionReadingService.test.ts:533`
 - `src/services/positionalRead.ts:188`
+- `src/services/thinkingAssessStep.ts:26`
+- `src/services/thinkingAssessStep.ts:27`
 
 ### `MaterialCount` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `countMaterial` (function) — 5 call sites
+### `countMaterial` (function) — 6 call sites
 - `src/services/gamePhaseService.test.ts:9`
 - `src/services/gamePhaseService.test.ts:15`
 - `src/services/gamePhaseService.test.ts:21`
 - `src/services/gamePhaseService.ts:31`
 - `src/services/groundedAnswer.ts:6315`
+- `src/services/thinkingAssessStep.ts:63`
 
 ### `centralPieceCount` (function) — 1 call site
 - `src/services/groundedAnswer.ts:6378`
