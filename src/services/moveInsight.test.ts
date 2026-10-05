@@ -287,7 +287,7 @@ describe('replay fixes (game 2, Bird Defence)', () => {
   });
   it('a pawn ending: no trade talk (the conversion method speaks it)', () => {
     const fen = '8/8/4k3/4P3/4K3/8/8/8 w - - 0 1';
-    expect(materialPlan('8/8/4k3/4P3/4K3/8/8/8 w - - 0 1', 'w')).toBeNull();
+    expect(materialPlan(fen, 'w')).toBeNull();
   });
 });
 

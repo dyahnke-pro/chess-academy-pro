@@ -201,7 +201,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleAttribution.ts:301`
 - `src/services/principleAttribution.ts:648`
 
-### `legalSeeGainFor` (function) — 40 call sites
+### `legalSeeGainFor` (function) — 43 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8291`
 - `src/components/Coach/CoachTeachPage.tsx:9901`
 - `src/services/arrowDoor.ts:161`
@@ -237,8 +237,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pvPlayback.ts:207`
 - `src/services/ruleException.ts:46`
 - `src/services/safetyHabits.ts:38`
-- `src/services/speedRunReads.ts:135`
-- `src/services/speedRunReads.ts:153`
+- `src/services/speedRunReads.ts:138`
+- `src/services/speedRunReads.ts:156`
+- `src/services/speedRunReads.ts:332`
+- `src/services/speedRunReads.ts:375`
+- `src/services/speedRunReads.ts:378`
 - `src/services/tacticAlertService.ts:334`
 - `src/services/tacticVerification.ts:101`
 - `src/services/threatAnswer.ts:154`
@@ -312,7 +315,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/kingIsNeverHanging.test.ts:49`
 - `src/test/kingIsNeverHanging.test.ts:57`
 
-### `findPawnBreaks` (function) — 11 call sites
+### `findPawnBreaks` (function) — 14 call sites
 - `src/services/danyaBehaviors.ts:666`
 - `src/services/groundedAnswer.ts:465`
 - `src/services/groundedAnswer.ts:499`
@@ -324,6 +327,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:951`
 - `src/services/positionReadingService.test.ts:953`
 - `src/services/positionalRead.ts:349`
+- `src/services/speedRunReads.ts:270`
+- `src/services/speedRunReads.ts:343`
+- `src/services/speedRunReads.ts:394`
 
 ### `PieceQualityNote` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -510,7 +516,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.ts:286`
 - `src/services/positionalRead.ts:292`
 
-### `findWeakPawns` (function) — 18 call sites
+### `findWeakPawns` (function) — 19 call sites
 - `src/services/concessionBeat.ts:233`
 - `src/services/concessionBeat.ts:234`
 - `src/services/concessionBeat.ts:238`
@@ -529,6 +535,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:960`
 - `src/services/positionReadingService.test.ts:967`
 - `src/services/positionalRead.ts:312`
+- `src/services/speedRunReads.ts:457`
 
 ### `PressureVerdict` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

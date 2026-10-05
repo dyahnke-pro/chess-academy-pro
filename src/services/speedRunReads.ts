@@ -486,11 +486,12 @@ export function queenGlue(fen: string, me: 'w' | 'b'): Read | null {
   const them = me === 'w' ? 'b' : 'w';
   const q = b.board().flat().find((c) => c && c.type === 'q' && c.color === me);
   if (!q) return null;
-  const held = b.board().flat().filter((c) => {
-    if (!c || c.color !== me || c.type === 'k' || c.type === 'q') return false;
+  const held: string[] = [];
+  for (const c of b.board().flat()) {
+    if (!c || c.color !== me || c.type === 'k' || c.type === 'q') continue;
     const g = b.attackers(c.square, me);
-    return g.length === 1 && g[0] === q.square && b.attackers(c.square, them).length > 0;
-  }).map((c) => c!.square);
+    if (g.length === 1 && g[0] === q.square && b.attackers(c.square, them).length > 0) held.push(c.square);
+  }
   if (held.length < 2) return null;
   return { text: `Your queen on ${q.square} is the glue — it alone holds ${held[0]} and ${held[1]}. Move it or trade it and both come loose.`, squares: [q.square, ...held] };
 }
