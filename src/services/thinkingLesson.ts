@@ -33,10 +33,19 @@ export type LessonStage = 'show' | 'guide' | 'solo';
 /** The heat-map state of a step, read from the record (KNOW reading). */
 export type StepStanding = 'red' | 'grey' | 'green';
 
-/** Show → Guide → Solo for a step that is not yet known; a green step gets one
- *  Solo position as a quick review (David 2026-10-04: "touch on it quickly"). */
+/** How a step is taught from where the student stands (plan C2, "ask before
+ *  telling" — the testing effect):
+ *  - GREY (never asked): Show → Guide → Solo; nothing to retrieve yet, so the
+ *    worked example comes first.
+ *  - RED (asked and missed before): Guide → Solo; they have SEEN it, so they
+ *    are asked first and taught on a miss (the grader shows the rest with its
+ *    reasons once the misses run out).
+ *  - GREEN: one Solo position as a quick review (David 2026-10-04: "touch on
+ *    it quickly"). */
 export function stagesFor(standing: StepStanding): readonly LessonStage[] {
-  return standing === 'green' ? ['solo'] : ['show', 'guide', 'solo'];
+  if (standing === 'green') return ['solo'];
+  if (standing === 'red') return ['guide', 'solo'];
+  return ['show', 'guide', 'solo'];
 }
 
 /** Wrong taps allowed before the coach shows the rest — the ONE number every

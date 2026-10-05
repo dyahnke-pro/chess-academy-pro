@@ -7,7 +7,7 @@ import {
 describe('thinkingLesson — stages', () => {
   it('teaches a red or grey step in full and only reviews a green one', () => {
     expect(stagesFor('grey')).toEqual(['show', 'guide', 'solo']);
-    expect(stagesFor('red')).toEqual(['show', 'guide', 'solo']);
+    expect(stagesFor('red')).toEqual(['guide', 'solo']);   // asked first, taught on a miss
     expect(stagesFor('green')).toEqual(['solo']);
   });
 });
