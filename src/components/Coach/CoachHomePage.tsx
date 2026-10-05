@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Swords, BarChart3, Calendar, Search, GraduationCap, History, Info, X, Crown, Library, Mic , Medal, BookOpen, Brain } from 'lucide-react';
+import { Swords, BarChart3, Calendar, Search, GraduationCap, History, Info, X, Crown, Library, Mic , Medal, BookOpen, Brain, Lightbulb } from 'lucide-react';
 import { useState } from 'react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PageHelp } from '../Layout/PageHelp';
@@ -189,7 +189,7 @@ export function CoachHomePage(): JSX.Element {
         <PrimaryTile
           icon={<Brain size={40} className="text-indigo-400" />}
           label="Custom Lesson"
-          subtitle="A lesson built from your own games — your weak spots, or how to think and see the board."
+          subtitle="A lesson built from your own games — the patterns costing you the most, taught and drilled on your real positions."
           info={
             "Two lessons, both built for you:\n\n• Your weaknesses — the coach picks the patterns costing you the most, teaches the idea, then drills your real positions.\n• Learn how to think — the method strong players run every move (what did their move change, am I safe, where are their targets…), taught on your own boards. You answer by tapping squares.\n\nEvery lesson remembers what you have done and picks up where you left off."
           }
@@ -200,6 +200,26 @@ export function CoachHomePage(): JSX.Element {
           gB={gB}
           gS={gS}
           testId="coach-action-custom-lesson"
+          wide
+        />
+
+        {/* How to Think (David 2026-10-05: "You didn't make a tab for this yet
+            in coach tab"). Its own door into the same lesson system — straight
+            into "Learn how to think" (`?lesson=think`), no picker. */}
+        <PrimaryTile
+          icon={<Lightbulb size={40} className="text-amber-400" />}
+          label="How to Think"
+          subtitle="The questions strong players ask every move — learned one at a time, on your own boards."
+          info={
+            "The method strong players run every move, one question at a time: what did their move change, am I safe, where are their targets, what is my plan.\n\nEach question is taught on real boards — your own games when you have them — and you answer by tapping squares. The coach remembers which questions you have proven and moves on to the next."
+          }
+          rgb="251, 191, 36"
+          bgClass="bg-amber-500/10"
+          textColorClass="text-amber-400"
+          onClick={goTo('how-to-think', '/coach/teach?lesson=think')}
+          gB={gB}
+          gS={gS}
+          testId="coach-action-how-to-think"
           wide
         />
 

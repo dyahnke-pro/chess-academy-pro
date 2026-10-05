@@ -108,6 +108,14 @@ describe('CoachHomePage', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/coach/teach?lesson=custom');
   });
 
+  it('"How to Think" opens Learn with Coach straight into the thinking lesson', () => {
+    render(<CoachHomePage />);
+    const tile = screen.getByTestId('coach-action-how-to-think');
+    expect(tile).toHaveTextContent('How to Think');
+    fireEvent.click(tile);
+    expect(mockNavigate).toHaveBeenCalledWith('/coach/teach?lesson=think');
+  });
+
   it('navigates to /coach/endgame when "Endgame" is clicked', () => {
     render(<CoachHomePage />);
     fireEvent.click(screen.getByTestId('coach-action-endgame'));
