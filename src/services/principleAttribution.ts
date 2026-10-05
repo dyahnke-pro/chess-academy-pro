@@ -37,6 +37,7 @@ import { MAX_PV_DEPTH_PLIES } from './ratingBands';
 import { BLUNDER_CP } from './engineConstants';
 import { developedMinorCount, homeMinorCount, isMinorAtHome, minorsAtHome } from './development';
 import { proofCut } from './exchangeLedger';
+import { findPinPressure } from './pinPressure';
 
 export const FUNDAMENTAL_IDS = [
   // opening
@@ -61,6 +62,11 @@ export const FUNDAMENTAL_IDS = [
   // the move that takes its own piece's way home (review walk oct3b, game 2
   // ply 11: Qd3 stood on the Bc4's only retreat, and …b5 trapped it)
   'blocked-own-retreat',
+  // PP on the PP — put pressure on the pinned piece (David 2026-10-05). One
+  // computer (`pinPressure`), read from both seats: the student skipped the
+  // pile-on that won their opponent's pinned piece, or let the opponent pile on
+  // theirs.
+  'missed-pin-pressure', 'ignored-pin-pressure',
 ] as const;
 export type FundamentalId = (typeof FUNDAMENTAL_IDS)[number];
 
@@ -103,6 +109,8 @@ export const FUNDAMENTAL_TAG: Record<FundamentalId, MisconceptionTagId> = {
   'left-book-early': 'left-book-early',
   'no-plan': 'no-plan',
   'blocked-own-retreat': 'missed-opponents-threat',
+  'missed-pin-pressure': 'missed-tactic',
+  'ignored-pin-pressure': 'missed-opponents-threat',
 };
 
 /** Rows whose "punishment" is a positional cost rather than a concrete move
@@ -532,6 +540,7 @@ interface Deferral {
 const CALC_DEPTH_CLAIMANTS = [
   'loose-piece', 'ignored-threat', 'passive-when-forcing-existed',
   'poisoned-pawn', 'overvalued-attack', 'blocked-own-retreat',
+  'missed-pin-pressure', 'ignored-pin-pressure',
 ] as const satisfies readonly FundamentalId[];
 
 type Detector = (c: Ctx) => Omit<PrincipleAttribution, 'tag' | 'coOccurrence'> | null;
@@ -706,6 +715,67 @@ function blockedOwnRetreat(c: Ctx): ReturnType<typeof att> | null {
     }
   }
   return null;
+}
+
+/** MISSED PIN PRESSURE — "PP on the PP" FOR the student (David 2026-10-05).
+ *  The student held a pin, a second attacker on the pinned piece won it, and
+ *  they played something else. Proved on the board:
+ *    1. PATTERN — `findPinPressure(before, mover)` names the pile-on, and the
+ *       engine's best move IS one of those moves (by COORDINATES, never SAN);
+ *    2. PUNISHMENT — the chance goes: after their reply the pile-on on that
+ *       piece is no longer there (when the reply is known);
+ *    3. COUNTERFACTUAL — the best line wins material (when the engine line is
+ *       persisted; the computer already proved the pinned piece falls). */
+function missedPinPressure(c: Ctx): ReturnType<typeof att> | null {
+  const { best, last, mover } = c;
+  const chances = findPinPressure(c.before.fen(), mover);
+  const hit = chances.find((p) => p.moves.some((m) => m.from === best.from && m.to === best.to));
+  if (!hit) return null;
+  if (last.to === hit.pinned) return null;
+  if (chances.some((p) => p.moves.some((m) => m.from === last.from && m.to === last.to))) return null;
+  if (c.pvB?.length && !pvWinsMaterial(c.before, [best.san, ...c.pvB], mover)) return null;
+  const replySan = c.reply?.san ?? c.pvP?.[0];
+  if (replySan) {
+    const ar = applied(c.after, replySan);
+    if (ar && findPinPressure(ar.fen(), mover).some((p) => p.pinned === hit.pinned)) return null;
+  }
+  const pinner = c.before.get(hit.pinner);
+  const behind = c.before.get(hit.behind);
+  if (!pinner || !behind) return null;
+  return att('missed-pin-pressure', 3, {
+    squares: [hit.pinned, hit.pinner, best.to], moves: [best.san], pvMoves: pvHas(c.pvB, () => true, 2),
+  }, {
+    better: best.san, piece: PNAME[hit.pinnedPiece], square: hit.pinned,
+    pinner: PNAME[pinner.type], pinnerSq: hit.pinner, behind: PNAME[behind.type], behindSq: hit.behind,
+    byPawn: best.piece === 'p' ? 1 : 0,
+  });
+}
+
+/** IGNORED PIN PRESSURE — "PP on the PP" AGAINST the student. After the
+ *  played move the opponent holds a pin on one of the student's pieces and can
+ *  pile on and win it:
+ *    1. PATTERN — `findPinPressure(after, opp)` names the pile-on, and their
+ *       reply (played, or the engine's first reply) IS one of those moves;
+ *    2. PUNISHMENT — the computer proved the extra attacker wins the piece;
+ *    3. COUNTERFACTUAL — after the best move the same piece is not piled on. */
+function ignoredPinPressure(c: Ctx): ReturnType<typeof att> | null {
+  const { opp } = c;
+  const reply = c.reply ?? (c.pvP?.[0] ? tryMove(c.after, c.pvP[0]) : null);
+  if (!reply) return null;
+  const threats = findPinPressure(c.after.fen(), opp);
+  const hit = threats.find((p) => p.moves.some((m) => m.from === reply.from && m.to === reply.to));
+  if (!hit) return null;
+  if (findPinPressure(c.afterBest.fen(), opp).some((p) => p.pinned === hit.pinned)) return null;
+  const pinner = c.after.get(hit.pinner);
+  const behind = c.after.get(hit.behind);
+  if (!pinner || !behind) return null;
+  return att('ignored-pin-pressure', 3, {
+    squares: [hit.pinned, hit.pinner, reply.to], moves: [reply.san], pvMoves: pvHas(c.pvP, (s) => s === reply.san, 1),
+  }, {
+    pile: reply.san, played: c.reply ? 1 : 0, better: c.best.san,
+    piece: PNAME[hit.pinnedPiece], square: hit.pinned,
+    pinner: PNAME[pinner.type], pinnerSq: hit.pinner, behind: PNAME[behind.type], behindSq: hit.behind,
+  });
 }
 
 const DETECTORS: Detector[] = [
@@ -992,6 +1062,9 @@ const DETECTORS: Detector[] = [
     if (!wins) return null;
     return att('passive-when-forcing-existed', 3, { squares: [best.to], moves: [best.san], pvMoves: pvHas(c.pvB, () => true, 2) }, { better: best.san, gain: c.afterBest.isCheckmate() ? 'mate' : 'material' });
   },
+  // 15b/15c. PP on the PP — the pinned piece, from both seats (see above).
+  missedPinPressure,
+  ignoredPinPressure,
   // 16. Weakened king shield — a shield pawn moved without need, and the
   // opponent has a sound check or a piece that can land next to the king.
   (c) => {
@@ -1603,6 +1676,10 @@ export function attributePrinciples(
   // the piece it hung — the eval/PV finding tells the fuller story.
   if (ids.has('poisoned-pawn')) { subsumed.add('greedy-pawn-grab'); subsumed.add('loose-piece'); }
   if (ids.has('overvalued-attack')) subsumed.add('loose-piece');
+  // The pile-on IS the forcing win the student walked past, and the pinned
+  // piece they lose IS the loose piece / the threat they ignored — one story.
+  if (ids.has('missed-pin-pressure')) subsumed.add('passive-when-forcing-existed');
+  if (ids.has('ignored-pin-pressure')) { subsumed.add('loose-piece'); subsumed.add('ignored-threat'); }
   // Section 14: an immediate, move-verified punishment IS the story; the
   // reasoning error behind it is the second telling. Depth needs the blow to be
   // deep, so anything that names an immediate blow subsumes it; no-plan yields

@@ -35,6 +35,10 @@ export interface FundamentalLesson {
  */
 const FUNDAMENTAL_MATCH: ReadonlyArray<readonly [FundamentalId, RegExp]> = [
   ['poisoned-pawn', /\bpoison(?:ed|ous)?\s+pawn/],
+  // "PP on the PP" — put pressure on the pinned piece (David 2026-10-05).
+  // Before the generic pin/threat entries so the named principle wins.
+  ['missed-pin-pressure', /\bpp\s+on\s+the\s+pp\b|\b(?:put(?:ting)?\s+)?pressure\s+on\s+(?:the\s+|a\s+)?pinned\s+pieces?\b|\bpressur(?:e|ing)\s+(?:the\s+|a\s+)?pinned\b|\bpil(?:e|ing)\s+on\s+(?:the\s+|a\s+)?(?:pin|pinned)\b|\battack(?:ing)?\s+(?:the\s+|a\s+)?pinned\s+pieces?\b/],
+  ['ignored-pin-pressure', /\b(?:my|your)\s+pinned\s+pieces?\b|\b(?:break(?:ing)?|unpin(?:ning)?)\s+(?:the\s+|a\s+)?pin\b/],
   ['blocked-own-retreat', /\bblock(?:ing|ed)?\s+(?:(?:my|your|its|the)\s+)?(?:own\s+)?(?:piece'?s?\s+)?(?:retreat|escape|way\s+(?:home|back))\b/],
   ['same-piece-twice', /\bsame\s+piece\s+twice\b|\bmov(?:e|ing)\s+(?:the\s+)?same\s+piece\b|\bpiece\s+twice\b/],
   ['early-queen-sortie', /\bearly\s+queen\b|\bqueen\b[\s\w]{0,18}\bearly\b|\bqueen\s+sortie\b|\bbring(?:ing)?\s+(?:the\s+|my\s+)?queen\s+out\b/],
@@ -274,6 +278,16 @@ export const FUNDAMENTAL_LESSON: Record<FundamentalId, FundamentalLesson> = {
     facts:
       "A piece is only as safe as its way home. Every square you put a piece on can also be the square another of your pieces needed to retreat to — or stand in the road it would travel back along. Take away a piece's last retreat and a single pawn move can trap it, because there is nowhere left to go. Before a piece lands, check what it blocks: if another piece of yours has only one way home, keep that road clear.",
     sources: ['concept:tac-trap'],
+  },
+  'missed-pin-pressure': {
+    facts:
+      "PP on the PP: put pressure on the pinned piece. A pinned piece cannot step away — moving it would expose the bigger piece behind it — so it is a sitting target. When you hold a pin, ask at once what ELSE can attack that piece: a second attacker, best of all a pawn, usually wins it outright, because the defender cannot simply run. Before you play a quiet move, look for the pile-on.",
+    sources: ['concept:tac-pin'],
+  },
+  'ignored-pin-pressure': {
+    facts:
+      "When one of your pieces is pinned, it cannot run — so your opponent's best plan is to attack it again. Count who can add an attacker on their next move, especially a pawn. If they can, deal with the pin before they pile on: move the piece standing behind it, put something in between, or add a defender. Leaving a pinned piece alone and hoping is how pieces are lost.",
+    sources: ['concept:tac-pin'],
   },
   'no-plan': {
     facts:
