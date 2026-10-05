@@ -29,6 +29,7 @@ import { centreDistance } from '../utils/centreDistance';
 import { isOutpost, noPawnCanChallenge } from './outpost';
 import { MATERIAL_VALUE } from './pieceValues';
 import { SPACE_RULE } from './reviewConcepts';
+import { findPinPressure } from './pinPressure';
 
 export type MoveFundamentalId =
   | 'king-safety'
@@ -64,7 +65,11 @@ export type MoveFundamentalId =
   /** The queen steps off a file it shares with the enemy queen, only pawns
    *  between — so when that file opens the queens stay on (his 11.Qe1: "not
    *  e5 immediately, which would allow the queen trade"). */
-  | 'queen-off-file';
+  | 'queen-off-file'
+  /** PP on the PP (David 2026-10-05): the move attacks a piece already pinned
+   *  — it cannot step away, so the extra attacker wins it. The positive half
+   *  of `missed-pin-pressure`; one computer (`pinPressure`) for both. */
+  | 'pile-on-pin';
 
 /** Which review facet family each fundamental RESTATES, when it does — the
  *  join that lets the door see two lanes saying one thing (review walk 2065,
@@ -93,6 +98,7 @@ export const FUNDAMENTAL_CLAIM_FAMILY: Record<MoveFundamentalId, string | null> 
   'development-complete': null,
   'rook-behind-pawn': null,
   'queen-off-file': null,
+  'pile-on-pin': null,
 };
 
 export interface MoveFundamental {
@@ -178,6 +184,9 @@ export const MOVE_FUNDAMENTAL_TAG: Record<MoveFundamentalId, MisconceptionTagId 
   // Preparing the break is the inverse of mistiming it.
   'prepare-break': 'mistimed-pawn-break',
   'development-complete': 'neglected-development',
+  // Piling on a pinned piece is the very move whose absence files
+  // `missed-pin-pressure` under missed-tactic — held evidence for that hole.
+  'pile-on-pin': 'missed-tactic',
   'rook-behind-pawn': 'passive-rook',
   // Opening the file with the queens facing hands them the trade — the break
   // came too early.
@@ -333,6 +342,30 @@ export function computeMoveFundamentals(
     });
   }
 
+  // ── PILE ON THE PIN — "PP on the PP" (David 2026-10-05). The move adds an
+  //    attacker to a piece the mover already pins, and the computer proved the
+  //    pile-on wins it (`findPinPressure`, matched by COORDINATES). It leads the
+  //    tempo read below: a pinned piece is not "kicked off" its square — it
+  //    cannot leave.
+  const pile = (() => {
+    try {
+      return findPinPressure(fenBefore, mover).find((p) => p.moves.some((m) => m.from === mv.from && m.to === mv.to)) ?? null;
+    } catch { return null; }
+  })();
+  if (pile) {
+    const name = PIECE_NAME[pile.pinnedPiece] ?? 'piece';
+    const behind = PIECE_NAME[after.get(pile.behind)?.type ?? ''] ?? 'piece';
+    out.push({
+      id: 'pile-on-pin',
+      weight: 90,
+      led: `piles on their pinned ${name} on ${pile.pinned} — pinned to the ${behind}, it can't run`,
+      selfContained: `attacks their ${name} on ${pile.pinned} again while it is pinned to the ${behind}, so it can't step away`,
+      imperative: `put pressure on the pinned ${name} on ${pile.pinned} — it can't run`,
+      squares: [mv.to, pile.pinned, pile.pinner],
+      forcing: true,
+    });
+  }
+
   // ── TEMPO — a pawn that kicks an enemy piece (hand walk 2026-09-24: 9.f4
   //    against …Ne5 was read as "stake out the center and grab space"; his
   //    reason was "chasing the knight away"). The kicked piece must be worth
@@ -352,7 +385,7 @@ export function computeMoveFundamentals(
       if (!c || c.color === mover || !(c.type in VALUE)) continue;
       if (!hit || VALUE[c.type] > VALUE[hit.type]) hit = { sq, type: c.type };
     }
-    if (hit) {
+    if (hit && hit.sq !== pile?.pinned) {
       const name = PIECE_NAME[hit.type] ?? 'piece';
       out.push({
         id: 'tempo',
@@ -1169,6 +1202,7 @@ const PRINCIPLE_REASON: Record<MoveFundamental['id'], string | null> = {
   'development-complete': null,
   'rook-behind-pawn': null,
   'queen-off-file': null,
+  'pile-on-pin': 'a pinned piece cannot step away, so a second attacker usually wins it',
   'king-activity': null,
   promotion: null,
   'passed-pawn': null,
@@ -1205,6 +1239,7 @@ const REASON_NAMES_SIDES: Record<MoveFundamental['id'], boolean> = {
   'development-complete': false,
   'rook-behind-pawn': false,
   'queen-off-file': false,
+  'pile-on-pin': false,
   'king-activity': false,
   promotion: false,
   'passed-pawn': false,
@@ -1267,6 +1302,8 @@ const REPEAT_TEACHES: Record<MoveFundamental['id'], boolean> = {
   'development-complete': true,
   'rook-behind-pawn': true,
   'queen-off-file': true,
+  // A pile-on is a consequence the opponent must answer — it teaches each time.
+  'pile-on-pin': true,
   'king-activity': false,
   promotion: false,
   'passed-pawn': false,
@@ -1301,6 +1338,9 @@ const IS_OPENING_PRINCIPLE: Record<MoveFundamental['id'], boolean> = {
   'development-complete': true,
   'rook-behind-pawn': true,
   'queen-off-file': true,
+  // PP on the PP is a rule taught by name (the Bg5 pin and e4-e5 is an opening
+  // staple), said once a game like the rest.
+  'pile-on-pin': true,
 };
 
 /** The first opening principle this move follows that has not been taught

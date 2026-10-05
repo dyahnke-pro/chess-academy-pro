@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**773 lines · 7 exports · 16 importers · 14 tests · 3 audits**
+**801 lines · 7 exports · 17 importers · 15 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,6 +19,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/fundamentalHow.test.ts`
 - `src/services/learnFundamentalNarration.ts`
 - `src/services/misconceptionClassifier.ts`
+- `src/services/principleAttribution.pinPressure.test.ts`
 - `src/services/principleAttribution.section14.test.ts`
 - `src/services/principleAttributionEndgame.test.ts`
 - `src/services/principleAttributionEvalPv.test.ts`
@@ -32,7 +33,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `isMethodSentence` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:4706`
+- `src/services/coachFeatureService.ts:4817`
 - `src/services/learnFundamentalNarration.ts:129`
 
 ### `fundamentalHow` (function) — 10 call sites
@@ -45,7 +46,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/fundamentalHow.test.ts:71`
 - `src/services/fundamentalHow.test.ts:76`
 - `src/services/fundamentalHow.test.ts:77`
-- `src/services/principleAttribution.section14.test.ts:178`
+- `src/services/principleAttribution.section14.test.ts:190`
 
 ### `verdictCanDropBetter` (function) — 2 call sites
 - `src/services/learnFundamentalNarration.ts:111`
@@ -54,9 +55,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `FundamentalVerdictOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `renderFundamentalVerdict` (function) — 38 call sites
+### `renderFundamentalVerdict` (function) — 40 call sites
 - `src/services/blockedOwnRetreat.test.ts:32`
-- `src/services/coachFeatureService.ts:2494`
+- `src/services/coachFeatureService.ts:2528`
 - `src/services/forcingStemNoDecisive.test.ts:17`
 - `src/services/forcingStemNoDecisive.test.ts:22`
 - `src/services/fundLeadStems.test.ts:58`
@@ -68,8 +69,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnWalkBlumenfeld.test.ts:75`
 - `src/services/learnWalkOct3c.test.ts:79`
 - `src/services/misconceptionClassifier.ts:259`
-- `src/services/principleAttribution.section14.test.ts:181`
-- `src/services/principleAttribution.section14.test.ts:184`
+- `src/services/principleAttribution.pinPressure.test.ts:24`
+- `src/services/principleAttribution.pinPressure.test.ts:59`
+- `src/services/principleAttribution.section14.test.ts:193`
+- `src/services/principleAttribution.section14.test.ts:196`
 - `src/services/principleAttributionEndgame.test.ts:49`
 - `src/services/principleAttributionEvalPv.test.ts:77`
 - `src/services/principleAttributionEvalPv.test.ts:90`
@@ -90,17 +93,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.mcconnell1000.test.ts:21`
 - `src/services/replayFence.sicilian1200.test.ts:55`
 - `src/services/replayFence.sicilian1200.test.ts:62`
-- `src/services/reviewFullData.ts:566`
+- `src/services/reviewFullData.ts:580`
 - `src/services/tradedActiveNamesTheirPiece.test.ts:20`
 - `src/services/walkOct2a.test.ts:154`
 
 ### `renderPvEvidence` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2505`
+- `src/services/coachFeatureService.ts:2539`
 - `src/services/principleVoice.test.ts:38`
 - `src/services/principleVoice.test.ts:40`
 
 ### `renderFundamentalsRecap` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:5174`
+- `src/services/coachFeatureService.ts:5285`
 - `src/services/principleVoice.test.ts:48`
 - `src/services/principleVoice.test.ts:53`
 - `src/services/principleVoice.test.ts:57`
@@ -118,6 +121,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/fundamentalHow.test.ts`
 - `src/services/learnWalkBlumenfeld.test.ts`
 - `src/services/learnWalkOct3c.test.ts`
+- `src/services/principleAttribution.pinPressure.test.ts`
 - `src/services/principleAttribution.section14.test.ts`
 - `src/services/principleAttributionEndgame.test.ts`
 - `src/services/principleAttributionEvalPv.test.ts`

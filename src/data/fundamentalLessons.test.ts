@@ -74,6 +74,11 @@ describe('resolveTaughtFundamental — naming a specific fundamental in a teachi
     ['when should I castle', 'king-left-in-centre'],
     ['teach me active rooks in the endgame', 'passive-rook-endgame'],
     ['why are doubled pawns bad', 'created-pawn-weakness'],
+    // PP on the PP (David 2026-10-05)
+    ['what is pp on the pp', 'missed-pin-pressure'],
+    ['teach me to put pressure on the pinned piece', 'missed-pin-pressure'],
+    ['how do I pile on the pin', 'missed-pin-pressure'],
+    ['what do I do when my pinned piece gets attacked', 'ignored-pin-pressure'],
   ];
   it.each(cases)('resolves "%s" → %s', (ask, id) => {
     expect(resolveTaughtFundamental(ask)).toBe(id);

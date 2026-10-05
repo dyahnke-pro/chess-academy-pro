@@ -147,7 +147,7 @@ export function learnFundamentalVerdict(
 }
 
 /** The lines a fundamental's verdict names, each from the board it starts on.
- *  Only the two verdicts that name moves carry any; `full` is false for a
+ *  Only the verdicts that name moves carry any; `full` is false for a
  *  repeat within the game, whose short stem no longer walks the path. */
 export function fundamentalLines(
   a: { id: FundamentalId; facts: Record<string, string | number>; evidence: { pvMoves?: readonly string[] } },
@@ -157,6 +157,15 @@ export function fundamentalLines(
 ): Array<{ fen: string; sans: readonly string[] }> {
   if (a.id === 'passive-when-forcing-existed' && typeof a.facts.better === 'string') {
     return [{ fen: fenBefore, sans: [a.facts.better] }];
+  }
+  // PP on the PP: the pile-on is a named move, so it gets its arrow — the
+  // student's own on the board before, theirs on the board after.
+  if (a.id === 'missed-pin-pressure' && typeof a.facts.better === 'string' && a.facts.better) {
+    return [{ fen: fenBefore, sans: [a.facts.better] }];
+  }
+  if (a.id === 'ignored-pin-pressure' && typeof a.facts.pile === 'string') {
+    const after = fenAfterSan(fenBefore, playedSan);
+    return after ? [{ fen: after, sans: [a.facts.pile] }] : [];
   }
   if (a.id === 'calculation-depth' && full && (a.evidence.pvMoves ?? []).length > 0) {
     const after = fenAfterSan(fenBefore, playedSan);

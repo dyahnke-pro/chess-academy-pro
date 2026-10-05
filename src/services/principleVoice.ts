@@ -82,6 +82,10 @@ const FUNDAMENTAL_HOW: Record<FundamentalId, string> = {
     'End every move with a sweep: what of mine is undefended right now? Loose pieces are what make their tactics work — defend a loose piece or move it before it becomes their idea.',
   'ignored-threat':
     'Their move first, always. Before you look for your own idea, answer what their last move threatens — if it threatens something, that is the move you have to meet.',
+  'missed-pin-pressure':
+    'The moment you pin a piece, ask what else can attack it. A pinned piece cannot step away, so a second attacker — best of all a pawn — usually wins it. Look for the pile-on before any quiet move.',
+  'ignored-pin-pressure':
+    'When one of your pieces is pinned, count who can attack it next. If they can add an attacker, deal with the pin first — move what stands behind it, put a piece in between, or add a defender — before they pile on.',
   'passive-when-forcing-existed':
     'Scan forcing moves first, in order: every check, every capture, every threat. Only when none of them works do you look at quiet moves — that order is what finds shots.',
   'poisoned-pawn':
@@ -184,6 +188,10 @@ const VERDICT_WITHOUT_BETTER: Partial<Record<FundamentalId, (f: Facts) => string
   'kept-bad-bishop': (f) => `Your worst piece is the bishop on ${f.bishop}, boxed in by pawns on its colour.`,
   'capture-toward-centre': (f) => `Taking toward the centre is the usual rule, but here the other capture was better — it opens the ${f.file}-file for your rook.`,
   'no-plan': (f) => `A move without a purpose: the board wanted you to ${f.plan}, and ${f.played} works on something else entirely.`,
+  'missed-pin-pressure': (f) => `A pinned piece can't run, so attack it again: the ${f.piece} on ${f.square} was pinned to the ${f.behind} on ${f.behindSq}, and this move let it off.`,
+  'ignored-pin-pressure': (f) => (Number(f.played) === 1
+    ? `Your ${f.piece} on ${f.square} is pinned to the ${f.behind} on ${f.behindSq}, and they piled on with ${f.pile} — a pinned piece can't run.`
+    : `Your ${f.piece} on ${f.square} is pinned to the ${f.behind} on ${f.behindSq}, and ${f.pile} piles on it — a pinned piece can't run.`),
   'ignored-threat': (f) => `Their threat first: ${f.threat} was already on — ${f.line}, and the ${f.piece} on ${f.square} goes — and this move doesn't stop it.`,
 };
 
@@ -329,6 +337,22 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       const s = [
         `Your ${f.blocker} now stands ${road} — and ${f.trap} hits the ${f.piece} on ${f.square} with nowhere left to go.`,
         `That ${f.blocker} on ${f.blockerSq} takes the ${f.piece}'s retreat: after ${f.trap} the ${f.piece} on ${f.square} is trapped.`,
+      ];
+      return s[v % s.length];
+    }
+    case 'missed-pin-pressure': {
+      const s = [
+        `Put pressure on the pinned piece: your ${f.pinner} on ${f.pinnerSq} pins the ${f.piece} on ${f.square} to the ${f.behind}, and ${f.better} attacks it again — it can't run.`,
+        `The ${f.piece} on ${f.square} was pinned and stuck — ${f.better} piles on and wins it, and this move lets it off.`,
+        `A pinned piece can't run, so attack it again: ${f.better} hits the ${f.piece} on ${f.square}, and this move lets the chance go.`,
+      ];
+      return s[v % s.length];
+    }
+    case 'ignored-pin-pressure': {
+      const hit = Number(f.played) === 1 ? `they piled on with ${f.pile}` : `${f.pile} piles on it`;
+      const s = [
+        `Your ${f.piece} on ${f.square} is pinned to the ${f.behind} on ${f.behindSq}, and ${hit} — a pinned piece can't run${f.better ? `; ${f.better} kept it safe` : ''}.`,
+        `A pinned piece is a target: the ${f.piece} on ${f.square} can't move off the pin, and ${hit}${f.better ? ` — after ${f.better} it would have held` : ''}.`,
       ];
       return s[v % s.length];
     }
@@ -597,6 +621,8 @@ function shortVerdict(a: PrincipleAttribution): string {
     case 'premature-centre-break': return `Another early break on ${f.pawn}.`;
     case 'knight-to-the-rim': return `A knight on the rim again, on ${f.square}.`;
     case 'blocked-own-retreat': return `A retreat blocked again — ${f.trap} traps the ${f.piece} on ${f.square}.`;
+    case 'missed-pin-pressure': return `Another pinned piece left alone — ${f.better} piles on the ${f.piece} on ${f.square}.`;
+    case 'ignored-pin-pressure': return `Your pinned ${f.piece} on ${f.square} again — ${f.pile} piles on it.`;
     case 'loose-piece': return `Loose piece again — the ${f.piece} on ${f.square} hangs.`;
     case 'ignored-threat': return f.line ? `Their threat again — ${f.threat} was still on, and the ${f.piece} on ${f.square} with it.` : `Their threat again — the ${f.piece} on ${f.square} was still hanging.`;
     case 'passive-when-forcing-existed': return `You missed a forcing move again: ${f.better}.`;
@@ -730,6 +756,8 @@ const RECAP_NOUN: Record<FundamentalId, string> = {
   'left-book-early': 'left the book early',
   'no-plan': 'played without a plan',
   'blocked-own-retreat': 'blocked your own piece\'s retreat',
+  'missed-pin-pressure': 'let a pinned piece off the hook',
+  'ignored-pin-pressure': 'let them pile on your pinned piece',
 };
 
 /**
