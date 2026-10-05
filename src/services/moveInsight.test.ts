@@ -296,3 +296,9 @@ describe('replay fixes (game 2, Bird Defence)', () => {
     expect(materialPlan('8/8/4k3/4P3/4K3/8/8/8 w - - 0 1', 'w')).toBeNull();
   });
 });
+
+describe('the hole read, diagnosis direction', () => {
+  it('a pawn move that hands their knight a square in two files created-pawn-weakness', () => {
+    expect(moveMissed('4k1n1/8/8/8/8/8/5P2/4K3 w - - 0 1', 'f4', ['g8f6'])?.tag).toBe('created-pawn-weakness');
+  });
+});

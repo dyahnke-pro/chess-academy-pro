@@ -15,7 +15,7 @@ import { sayMoveClause } from './spokenMove';
 import { countWords } from '../utils/countWords';
 import { andList } from '../utils/andList';
 import { leadingFundamentals } from './moveFundamentals';
-import { doubleAttack, skewer, positionAsk, walkableLine, pvSans } from './moveInsight';
+import { doubleAttack, skewer, positionAsk, walkableLine, pvSans, hookCreated, holeAccess } from './moveInsight';
 
 const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 const side = (c: 'w' | 'b'): 'white' | 'black' => (c === 'w' ? 'white' : 'black');
@@ -58,7 +58,7 @@ function shield(board: Chess, c: 'w' | 'b'): number {
 export interface LineOutcome {
   /** What the line achieves, as a clause ("the h-file opens", "you come out a knight up"). */
   text: string;
-  kind: 'mate' | 'material' | 'file' | 'king' | 'promotion' | 'none';
+  kind: 'mate' | 'material' | 'file' | 'king' | 'promotion' | 'pawn-ending' | 'none';
 }
 
 /**
@@ -76,6 +76,14 @@ export function lineAchieves(startFen: string, sans: readonly string[], me: 'w' 
   const them = me === 'w' ? 'b' : 'w';
   if (end.isCheckmate() && end.turn() === them) return { text: 'it is mate', kind: 'mate' };
   if (promoted) return { text: 'your pawn queens', kind: 'promotion' };
+  // TRANSFORMING THE ADVANTAGE (game 2, 36.Rxc7+ — "we sacrifice back our
+  // exchange in order to get a pawn endgame"): the line ends with only kings
+  // and pawns, from a board that had pieces, and you have the extra pawn.
+  const piecesOf = (b: Chess): number => b.board().flat().filter((x) => x && x.type !== 'k' && x.type !== 'p').length;
+  const pawnsOf = (b: Chess, c: 'w' | 'b'): number => b.board().flat().filter((x) => x && x.type === 'p' && x.color === c).length;
+  if (piecesOf(start) > 0 && piecesOf(end) === 0 && pawnsOf(end, me) > pawnsOf(end, them)) {
+    return { text: `it becomes a pawn ending with you ${pawnsOf(end, me) - pawnsOf(end, them) === 1 ? 'a pawn' : `${num(pawnsOf(end, me) - pawnsOf(end, them))} pawns`} up — the advantage changes shape and stays yours`, kind: 'pawn-ending' };
+  }
   const net = settledNetForLine(startFen, sans, me);
   if (net !== null && net >= 1) return { text: `you come out ${countWords(net)} up`, kind: 'material' };
   if (net !== null && net <= -1) return { text: `you come out ${countWords(-net)} down`, kind: 'material' };
@@ -135,7 +143,7 @@ export function candidateReason(fen: string, c: Candidate, me: 'w' | 'b'): strin
   // close (replay, game 2: 1.e4 was given "the e-file opens" from six plies on).
   const sans = pvSans(fen, [...c.pv], 6);
   const near = lineAchieves(fen, sans.slice(0, 3).length ? sans.slice(0, 3) : [c.san], me);
-  if (near.kind === 'mate' || near.kind === 'promotion' || (near.kind === 'material' && !near.text.endsWith('down'))) return near.text;
+  if (near.kind === 'mate' || near.kind === 'promotion' || near.kind === 'pawn-ending' || (near.kind === 'material' && !near.text.endsWith('down'))) return near.text;
   const f = leadingFundamentals(fen, c.san, side(me))[0];
   if (f) return f.led;
   const far = lineAchieves(fen, sans.length ? sans : [c.san], me);
@@ -301,7 +309,7 @@ export function thinkAloud(args: {
 }
 
 export interface DepthClause {
-  kind: 'not-yet' | 'line' | 'their-habit';
+  kind: 'not-yet' | 'line' | 'their-habit' | 'stop-flaw' | 'hole-access';
   text: string;
   /** The line the clause says, from the board it starts on (arrows). */
   lines?: Array<{ fen: string; sans: string[] }>;
@@ -322,12 +330,22 @@ export function depthClauses(args: {
   topLines: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>;
   studentColor: 'w' | 'b';
   nameMove: boolean;
+  /** The student's own last move — what it gave up. */
+  lastStudentMove?: { fenBefore: string; san: string };
 }): DepthClause[] {
   const out: DepthClause[] = [];
   try {
     const habit = opponentHabits(args.history, args.studentColor === 'w' ? 'b' : 'w')[0];
     if (habit) out.push({ kind: 'their-habit', text: habit.text });
+    if (args.lastStudentMove) {
+      const h = holeAccess(args.lastStudentMove.fenBefore, args.lastStudentMove.san);
+      if (h) out.push({ kind: 'hole-access', text: h.text, squares: [h.hole, ...(h.from ? [h.from] : [])] });
+    }
     const toMove = new Chess(args.fen).turn();
+    if (toMove === args.studentColor) {
+      const flaw = obviousStopFlaw(args.fen, args.studentColor);
+      if (flaw) out.push({ kind: 'stop-flaw', text: flaw.text });
+    }
     if (!args.nameMove || toMove !== args.studentColor) return out;
     const best = candidatesFromLines(args.fen, args.topLines)[0];
     if (!best) return out;
@@ -345,4 +363,54 @@ export function depthClauses(args: {
     }
   } catch { /* depth is a bonus, never a blocker */ }
   return out;
+}
+
+// ── THE REST OF HIS GAME-2 READ (full transcript, 2026-10-05) ────────────────
+
+/**
+ * THE OBVIOUS STOP THAT DOESN'T WORK (his "what does Black want? …Bg4, a nasty
+ * pin. The obvious move is h3 — why don't I want it? h3 creates a hook"):
+ * their bishop can land on a square that pins your knight to your queen or
+ * king; the pawn move that takes that square away hands them a hook.
+ */
+export function obviousStopFlaw(fen: string, me: 'w' | 'b'): { threatSan: string; stopSan: string; text: string } | null {
+  const them = me === 'w' ? 'b' : 'w';
+  let theirTurn: Chess;
+  try { theirTurn = new Chess([fen.split(' ')[0], them, '-', '-', '0', '1'].join(' ')); } catch { return null; }
+  for (const t of theirTurn.moves({ verbose: true })) {
+    if (t.piece !== 'b' || t.captured) continue;
+    const b = new Chess(theirTurn.fen()); b.move(t.san);
+    // A pin: your knight on the bishop's diagonal with your queen or king behind it.
+    const pinned = (() => {
+      for (const [dx, dy] of [[1, 1], [1, -1], [-1, 1], [-1, -1]]) {
+        let x = t.to.charCodeAt(0) + dx; let y = Number(t.to[1]) + dy; let front: { type: string; color: string } | null = null;
+        while (x >= 97 && x <= 104 && y >= 1 && y <= 8) {
+          const p = b.get(`${String.fromCharCode(x)}${y}` as Square);
+          if (p) {
+            if (!front) { if (p.color !== me || p.type !== 'n') break; front = p; }
+            else return p.color === me && (p.type === 'q' || p.type === 'k');
+          }
+          x += dx; y += dy;
+        }
+      }
+      return false;
+    })();
+    if (!pinned) continue;
+    // The obvious stop: a pawn of yours that covers that square.
+    let mine: Chess;
+    try { mine = new Chess([fen.split(' ')[0], me, '-', '-', '0', '1'].join(' ')); } catch { return null; }
+    for (const s of mine.moves({ verbose: true })) {
+      if (s.piece !== 'p' || s.captured) continue;
+      const c2 = new Chess(mine.fen()); c2.move(s.san);
+      if (!c2.attackers(t.to, me).includes(s.to)) continue;
+      const hook = hookCreated(mine.fen(), s.san);
+      if (!hook) continue;
+      return {
+        threatSan: t.san,
+        stopSan: s.san,
+        text: `They want ${sayMoveClause(t.san, theirTurn.fen())}, pinning your knight. The obvious stop is ${sayMoveClause(s.san, mine.fen())}, but that pawn becomes a hook for their pawn on ${hook.pawn} — find another way.`,
+      };
+    }
+  }
+  return null;
 }

@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { lineAchieves, sayLine, weighTwo, notYet, opponentHabits, thinkAloud, depthClauses } from './thinkAloud';
+import { Chess } from 'chess.js';
+import { lineAchieves, sayLine, weighTwo, notYet, opponentHabits, thinkAloud, depthClauses, obviousStopFlaw } from './thinkAloud';
+import { materialPlan, holeAccess } from './moveInsight';
 
 describe('think aloud — the speed-run depth', () => {
   it('a line ends on what it achieves: hxg5 fxg5 opens the h-file toward their king', () => {
@@ -51,5 +53,29 @@ describe('the one producer', () => {
     const held = depthClauses({ fen, history: [], topLines, studentColor: 'w', nameMove: false }).map((d) => d.kind);
     expect(held).not.toContain('line');
     expect(held).not.toContain('not-yet');
+  });
+});
+
+describe('his game-2 read, computed (full transcript)', () => {
+  const fenAt = (sans: string): string => { const c = new Chess(); for (const m of sans.split(' ')) c.move(m); return c.fen(); };
+  it('"what does Black want? …Bg4. The obvious move is h3 — but h3 creates a hook"', () => {
+    const fen = fenAt('e4 e5 Nf3 Nc6 Bb5 Nd4 Nxd4 exd4 O-O Bc5 d3 Qh4 Nd2 c6 Bc4 d6 Nf3 Qh5');
+    const f = obviousStopFlaw(fen, 'w');
+    expect(f?.threatSan).toBe('Bg4');
+    expect(f?.stopSan).toBe('h3');
+    expect(f?.text).toMatch(/hook/);
+  });
+  it('inaccessibility: a weak square their knight cannot reach soon is no worry', () => {
+    const far = holeAccess('4k3/8/8/8/8/8/5P2/4K3 w - - 0 1', 'f4');
+    const near = holeAccess('4k1n1/8/8/8/8/8/5P2/4K3 w - - 0 1', 'f4');
+    expect(far?.text).toMatch(/no knight of theirs can get there/);
+    expect(near?.text).toMatch(/gets there in two/);
+  });
+  it('transforming the advantage: the line ends in a pawn ending you are winning', () => {
+    const out = lineAchieves('8/2b4R/2k5/4P3/8/6K1/5P2/8 w - - 0 1', ['Rxc7+', 'Kxc7'], 'w');
+    expect(out.kind).toBe('pawn-ending');
+  });
+  it('up the exchange: rooks need open files', () => {
+    expect(materialPlan('2b1k3/5ppp/8/8/8/8/5PPP/R3K3 w - - 0 1', 'w')?.text).toMatch(/up the exchange/);
   });
 });

@@ -32,6 +32,7 @@ import { countWords } from '../utils/countWords';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { theirMoveCost } from './theirMoveCost';
 import { openingWindowOpen } from './moveFundamentals';
+import { noPawnCanChallenge } from './outpost';
 import { findHangingBySee, findKnightReroute, findWeakPawns } from './positionReadingService';
 import { findWorstPlacedPiece } from './nextPlans';
 import { detectLatentDanger, latentDangerClause } from './latentDanger';
@@ -410,6 +411,12 @@ export function moveMissed(fenBefore: string, san: string, replyPv: readonly str
   if (empty && (net ?? 0) <= 0) {
     return { text: `${you} hits their ${name(empty.piece)} on ${empty.target}, but it simply steps to ${empty.to} and the threat has done nothing.`, line, tag: 'overvalued-attack' };
   }
+  // A HOLE THEY CAN REACH (game 2, inaccessibility — the other direction): the
+  // pawn move gave up a square their knight gets to in a move or two.
+  const holed = holeAccess(fenBefore, r.move.san);
+  if (holed && holed.moves !== null && holed.moves <= 2) {
+    return { text: holed.text, line, tag: 'created-pawn-weakness' };
+  }
   // A HOOK FOR THEIR PAWNS (catalogue A6/B1): the push in front of your king.
   const hooked = hookCreated(fenBefore, r.move.san);
   if (hooked) {
@@ -739,7 +746,8 @@ const ownKing = (board: Chess, c: 'w' | 'b'): Square | null => {
 /**
  * THE PAWN HOOK (catalogue A6/B1 — "…g6 creates a hook, so h5 opens the
  * h-file"): a pawn of `them` pushed one square in front of its castled king,
- * which a pawn of `me` can reach and capture within two pushes, prying a file
+ * which a pawn of `me` can reach and capture within two moves (three squares
+ * from its home rank, thanks to the double step), prying a file
  * open at the king. Only when `me`'s own king is not on that wing — storming
  * the pawns in front of your own king is a different story.
  */
@@ -766,12 +774,13 @@ export function pawnHook(fen: string, me: 'w' | 'b'): { hook: string; pawn: stri
     for (const af of [f - 1, f + 1]) {
       if (af < 0 || af > 7) continue;
       const contact = `${FILES[af]}${contactRank}`;
-      // our pawn on that file, up to two pushes short of the contact square, path clear
-      for (let steps = 1; steps <= 2; steps += 1) {
+      // our pawn on that file, up to two moves short of the contact square, path clear
+      for (let steps = 1; steps <= 3; steps += 1) {
         const from = `${FILES[af]}${contactRank - dir * steps}` as Square;
         const p = board.get(from);
         if (!p) continue;
         if (p.type !== 'p' || p.color !== me) break;
+        if (steps === 3 && Number(from[1]) !== (me === 'w' ? 2 : 7)) break;   // three squares is two moves only from home
         let clear = true;
         for (let s = 1; s <= steps; s += 1) if (board.get(`${FILES[af]}${contactRank - dir * steps + dir * s}` as Square)) clear = false;
         if (!clear) break;
@@ -970,6 +979,14 @@ export function materialPlan(fen: string, me: 'w' | 'b'): { diff: number; text: 
   // was told to "trade pieces, not pawns").
   const pieces = (c: 'w' | 'b'): number => board.board().flat().filter((x) => x && x.color === c && x.type !== 'k' && x.type !== 'p').length;
   if (pieces('w') === 0 || pieces('b') === 0) return null;
+  // UP THE EXCHANGE (game 2: "when you're up the exchange, the rooks need open
+  // lines — bring everything in, double the rooks, infiltrate the seventh").
+  const count = (c: 'w' | 'b', t: string): number => board.board().flat().filter((x) => x && x.color === c && x.type === t).length;
+  const them = me === 'w' ? 'b' : 'w';
+  const minors = (c: 'w' | 'b'): number => count(c, 'n') + count(c, 'b');
+  if (count(me, 'r') > count(them, 'r') && minors(them) > minors(me) && diff >= 1 && diff <= 4) {
+    return { diff, text: 'You are up the exchange — rooks need open files: open lines, double them, and aim for the seventh rank.' };
+  }
   if (diff >= 3) return { diff, text: `You are ${countWords(diff)} up — trade pieces, not pawns, and the endgame wins itself.` };
   if (diff <= -3) return { diff, text: `You are ${countWords(-diff)} down — keep pieces on and make it messy; every trade helps them.` };
   return null;
@@ -1059,3 +1076,73 @@ export function pawnEnding(fen: string, me: 'w' | 'b'): { text: string; squares:
     squares: [king, ...(passed[0] ? [passed[0].square] : [])],
   };
 }
+
+// ── INACCESSIBILITY (game 2 full transcript) ─────────────────────────────────
+
+const KNIGHT_JUMPS = [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]];
+
+/** Fewest knight moves from any knight of `c` to `target`, through squares not
+ *  held by `c`'s own pieces. Null when no knight of `c` can get there. */
+export function knightReach(fen: string, target: string, c: 'w' | 'b'): { from: string; moves: number } | null {
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return null; }
+  const sq = (f: number, r: number): string => `${String.fromCharCode(97 + f)}${r + 1}`;
+  let best: { from: string; moves: number } | null = null;
+  for (const cell of board.board().flat()) {
+    if (!cell || cell.type !== 'n' || cell.color !== c) continue;
+    const seen = new Set<string>([cell.square]);
+    let frontier = [cell.square as string];
+    for (let d = 1; d <= 8 && frontier.length; d += 1) {
+      const next: string[] = [];
+      for (const s0 of frontier) for (const [df, dr] of KNIGHT_JUMPS) {
+        const f = s0.charCodeAt(0) - 97 + df; const r = Number(s0[1]) - 1 + dr;
+        if (f < 0 || f > 7 || r < 0 || r > 7) continue;
+        const s1 = sq(f, r);
+        if (seen.has(s1)) continue;
+        seen.add(s1);
+        if (s1 === target) { if (!best || d < best.moves) best = { from: cell.square, moves: d }; next.length = 0; frontier = []; break; }
+        const occ = board.get(s1 as Square);
+        if (occ && occ.color === c) continue;
+        next.push(s1);
+      }
+      if (frontier.length === 0) break;
+      frontier = next;
+    }
+  }
+  return best;
+}
+
+/**
+ * INACCESSIBILITY (his "the square is weak, but his knight needs eight moves to
+ * get there — an eternity"): the pawn move just played leaves a square no
+ * pawn of yours can ever cover again. Whether it matters is how fast their
+ * knight gets there.
+ */
+export function holeAccess(fenBefore: string, san: string): { hole: string; moves: number | null; from: string | null; text: string } | null {
+  let before: Chess; let after: Chess;
+  try { before = new Chess(fenBefore); after = new Chess(fenBefore); } catch { return null; }
+  let m;
+  try { m = after.move(san); } catch { return null; }
+  if (!m || m.piece !== 'p') return null;
+  const me = m.color; const them = me === 'w' ? 'b' : 'w';
+  const f = m.from.charCodeAt(0);
+  for (const df of [-1, 1]) {
+    const ff = f + df;
+    if (ff < 97 || ff > 104) continue;
+    for (const rel of [4, 5]) {
+      const rank = them === 'w' ? rel : 9 - rel;
+      const hole = `${String.fromCharCode(ff)}${rank}`;
+      if (after.get(hole as Square)) continue;
+      // It was coverable by your pawns before, and is not now.
+      if (noPawnCanChallenge(before, hole, them) || !noPawnCanChallenge(after, hole, them)) continue;
+      const reach = knightReach(after.fen(), hole, them);
+      const said = sayMoveClause(m.san, fenBefore);
+      if (!reach) return { hole, moves: null, from: null, text: `${cap(said)} gives up ${hole} for good — but no knight of theirs can get there, so it costs you nothing.` };
+      return reach.moves >= 4
+        ? { hole, moves: reach.moves, from: reach.from, text: `${cap(said)} leaves ${hole} weak, but their knight needs ${num(reach.moves)} moves to get there — an eternity, so don't worry about it.` }
+        : { hole, moves: reach.moves, from: reach.from, text: `${cap(said)} leaves ${hole} weak, and their knight on ${reach.from} gets there in ${num(reach.moves)} — that square is theirs now.` };
+    }
+  }
+  return null;
+}
+

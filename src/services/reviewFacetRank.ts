@@ -248,6 +248,8 @@ export const CLAUSE_ROLE: Record<ClauseKind, FacetRole> = {
   'not-yet': 'teach',
   line: 'teach',
   'their-habit': 'teach',
+  'stop-flaw': 'teach',
+  'hole-access': 'teach',
   'student-leans': 'describe',
   'opponent-leans': 'describe',
 };
@@ -279,12 +281,12 @@ export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   royal: 'safety', sac: 'safety', 'sac-why': 'safety', method: 'safety',
   'must-defend': 'safety', 'latent-danger': 'safety', 'latent-chance': 'safety',
   'key-moment': 'safety', deliberation: 'safety', concept: 'safety',
-  'not-yet': 'safety', line: 'safety',
+  'not-yet': 'safety', line: 'safety', 'stop-flaw': 'safety',
   // PRINCIPLE — development, the king, the opening, converting.
   principle: 'principle', technique: 'principle', king: 'principle', opening: 'principle', endgame: 'principle',
   rule: 'principle',
   does: 'principle', point: 'plan', 'their-cost': 'plan', 'opp-dev': 'principle', fundamental: 'principle', convert: 'principle',
-  status: 'principle', 'their-habit': 'principle',
+  status: 'principle', 'their-habit': 'principle', 'hole-access': 'plan',
   // PLAN — structure, targets, the plan and the long read.
   'plan-now': 'plan', contrast: 'plan', timing: 'plan', 'plan-race': 'plan', 'plan-arc': 'plan', 'plan-opening': 'plan', 'plan-middlegame': 'plan',
   'plan-line': 'plan', consequence: 'plan', structure: 'plan', passer: 'plan', rook7: 'plan',
@@ -325,6 +327,8 @@ const CLAUSE_TIE: Record<ClauseKind, number> = {
   'not-yet': FACET_RANK.forced,
   line: FACET_RANK['plan-line'],
   'their-habit': FACET_RANK['opp-dev'],
+  'stop-flaw': FACET_RANK['opp-target'],
+  'hole-access': FACET_RANK.structure,
 };
 export const TIE_ORDER: Record<FactKind, number> = { ...FACET_RANK, ...CLAUSE_TIE };
 
