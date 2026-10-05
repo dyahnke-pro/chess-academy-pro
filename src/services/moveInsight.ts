@@ -386,7 +386,7 @@ export function moveMissed(fenBefore: string, san: string, replyPv: readonly str
   if (hooked) {
     return { text: `${you} gives their pawn on ${hooked.pawn} a hook to latch onto in front of your king — it can pry a file open there.`, line, tag: 'weakened-king-safety' };
   }
-    if (r.move.san.includes('+') && reply && reply.move.piece === 'k') {
+  if (r.move.san.includes('+') && reply && reply.move.piece === 'k') {
     return { text: `${you} checks, but the king steps to ${reply.move.to} and nothing follows.`, line, tag: 'missed-tactic' };
   }
   if (r.move.captured && reply?.move.captured && reply.move.to === r.move.to && (net ?? 0) <= 0) {
@@ -875,9 +875,19 @@ export function looseOwnPieces(fen: string, me: 'w' | 'b'): Array<{ square: stri
   let board: Chess;
   try { board = new Chess(fen); } catch { return []; }
   const out: Array<{ square: string; piece: string }> = [];
+  const them = me === 'w' ? 'b' : 'w';
+  // Only the loose pieces they can actually hit next move — a rook asleep on
+  // its home square is not a teaching point.
+  let theirMoves: Move[] = [];
+  try { theirMoves = new Chess([fen.split(' ')[0], them, '-', '-', '0', '1'].join(' ')).moves({ verbose: true }); } catch { return out; }
   for (const row of board.board()) for (const cell of row) {
     if (!cell || cell.color !== me || cell.type === 'k' || cell.type === 'p' || cell.type === 'q') continue;
-    if (guards(board, cell.square, me).length === 0) out.push({ square: cell.square, piece: cell.type });
+    if (guards(board, cell.square, me).length > 0) continue;
+    const hittable = theirMoves.some((m) => {
+      const b = new Chess(m.before); b.move(m.san);
+      try { return b.attackers(cell.square, them).length > 0; } catch { return false; }
+    });
+    if (hittable) out.push({ square: cell.square, piece: cell.type });
   }
   return out;
 }
@@ -907,8 +917,8 @@ export function noRetreat(fen: string, me: 'w' | 'b'): { square: string; piece: 
       try { mine = new Chess([after.fen().split(' ')[0], me, '-', '-', '0', '1'].join(' ')); } catch { continue; }
       const val = CAPTURE_VALUE[cell.type] ?? 0;
       const safe = mine.moves({ square: cell.square, verbose: true }).some((x) => {
-        if (x.captured) return true;
         const b2 = new Chess(mine.fen()); b2.move(x.san);
+        if (x.captured && (CAPTURE_VALUE[x.captured] ?? 0) >= val) return true;
         const hitters = b2.attackers(x.to, them);
         return hitters.length === 0 || (guards(b2, x.to, me).length > 0 && hitters.every((h) => (CAPTURE_VALUE[b2.get(h)?.type ?? 'q'] ?? 9) >= val));
       });

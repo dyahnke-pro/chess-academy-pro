@@ -3,7 +3,7 @@
 // checked the king???").
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { autopilotRecapture, doubleAttack, escapeSquareFirst, greekGift, positionPosed, lastMoveAlong, lastMoveFromPgn, mechanismContrast, moveMissed, positionAsk, theirMoveChanged, walkableLine, pawnHook, hookCreated, castleByHand, fileToOpen, pawnCanGuard, emptyThreat,
+import { autopilotRecapture, doubleAttack, escapeSquareFirst, greekGift, positionPosed, lastMoveAlong, lastMoveFromPgn, mechanismContrast, moveMissed, positionAsk, theirMoveChanged, walkableLine, pawnHook, hookCreated, castleByHand, fileToOpen, pawnCanGuard, emptyThreat, looseOwnPieces, noRetreat, materialPlan, tradeWhileDown, heavyTiedDown,
 } from './moveInsight';
 
 // White: Ka1, Re2, Ng5. Black: Kh8, Qd8. Two checks — Nf7+ (forks king and
@@ -251,5 +251,28 @@ describe('the new misses carry their tags (diagnosis direction)', () => {
   });
   it('a hook in front of your own king files weakened-king-safety', () => {
     expect(moveMissed('6k1/5ppp/8/8/8/6P1/8/2K5 b - - 0 1', 'h6', ['g3g4'])?.tag).toBe('weakened-king-safety');
+  });
+});
+
+describe('sweep 3 — loose pieces, retreat squares, material, heavy defenders', () => {
+  it('names an unguarded knight', () => {
+    expect(looseOwnPieces('4k3/8/8/8/8/2N5/8/4K3 w - - 0 1', 'w')).toEqual([]);   // nothing can reach it
+    expect(looseOwnPieces('4k3/8/8/8/1r6/2N5/8/4K3 w - - 0 1', 'w')).toEqual([{ square: 'c3', piece: 'n' }]);
+  });
+  it('a bishop on h4 with …g5 coming and no way out', () => {
+    // Bh4 behind its own g3 pawn: …g5 hits it, and g5 is guarded by h6
+    expect(noRetreat('4k3/6p1/7p/8/7B/6P1/8/4K3 w - - 0 1', 'w')).toMatchObject({ square: 'h4', push: 'g5' });
+    expect(noRetreat('4k3/6p1/7p/8/7B/8/8/4K3 w - - 0 1', 'w')).toBeNull();
+  });
+  it('a piece down: keep pieces on', () => {
+    expect(materialPlan('4k3/8/8/8/8/8/8/2B1K1N1 b - - 0 1', 'b')?.text).toMatch(/down — keep pieces on/);
+  });
+  it('a like-for-like trade while behind files bad-trade', () => {
+    // Black is a rook down and swaps knights
+    expect(tradeWhileDown('4k3/8/8/3n4/8/2N5/8/R3K3 b - - 0 1', 'Nxc3', 'bxc3')).toBe(false);
+    expect(tradeWhileDown('4k3/8/8/3n4/8/2N5/1P6/R3K3 b - - 0 1', 'Nxc3', 'bxc3')).toBe(true);
+  });
+  it('a rook as the only guard of an attacked knight', () => {
+    expect(heavyTiedDown('4k3/8/8/6b1/8/8/8/R1N1K3 w - - 0 1', 'w')).toMatchObject({ defender: 'a1', guarded: 'c1' });
   });
 });
