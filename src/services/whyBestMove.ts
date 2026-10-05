@@ -10,6 +10,7 @@
 //   2. computePositionFacts — the position briefing (who's winning, the plan,
 //      what must be defended, the real fork in the road) in the house register.
 // The result is spoken directly (preferRaw) — the purest G0, and instant.
+import { positionAsk } from './moveInsight';
 import { Chess } from 'chess.js';
 import type { StockfishAnalysis } from '../types';
 import { explainBestMoveGrounded } from './groundedAnswer';
@@ -68,6 +69,14 @@ export async function computeWhyBestMove(input: WhyBestMoveInput): Promise<strin
   //    Play may speak it. Exact-position, board-verified, or nothing.
   const teaching = positionTeachingWhy(fen);
   if (teaching) parts.push(teaching);
+
+  // 0b. WHAT THE POSITION ASKS (David 2026-10-05: "keep pressing? defend
+  //     something? more pieces in the attack?") — said for the side to move
+  //     when that is the student; the one insight computer.
+  if (san && fen.split(' ')[1] === sc) {
+    const ask = positionAsk(fen, { bestSan: san }).text;
+    if (ask) parts.push(ask);
+  }
 
   // 1. The concrete point of the strongest move (the engine-reasoning form).
   //    Never a bare "The strongest move is X." — the why-chain floor guarantees

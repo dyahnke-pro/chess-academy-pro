@@ -5807,6 +5807,11 @@ export async function getCoachChatResponse(
           if (answer) {
             const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true });
             if (voiced) {
+              // Both lines go to the board (drawn + walked) when the answer has them.
+              if (answer.lines && answer.lines.length > 0) {
+                lastCoachLines = answer.lines;
+                return voiced;
+              }
               return answer.bestMoveFromTo
                 ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
                 : voiced;

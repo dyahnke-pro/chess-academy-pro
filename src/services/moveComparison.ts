@@ -28,6 +28,7 @@ import { Chess } from 'chess.js';
 import { countWords } from '../utils/countWords';
 import type { Square, Color, PieceSymbol } from 'chess.js';
 import { settledNetForLine } from './exchangeLedger';
+import { mechanismContrast } from './moveInsight';
 
 /** One engine evaluation of a position — white-POV centipawns (+ = White
  *  better). A mate is folded into `cp` by the evaluate implementation. `pv` is
@@ -202,9 +203,14 @@ export async function compareTwoMoves(
   const matDiffPts = netBetter !== null && netWorse !== null ? netBetter - netWorse : 0;
   if (matDiffPts >= 1 && matDiffPts * 100 >= explainFraction * gapCp) {
     const pts = countWords(matDiffPts);
+    // THE MECHANISM, when there is one (David 2026-10-05: "Why was the knight to
+    // one square better than the other when they both checked the king???") —
+    // the material is the proof; the double attack is the reason.
+    const how = mechanismContrast(fen, base.sanBetter, base.sanWorse);
+    const howClause = how ? `${how.charAt(0).toLowerCase()}${how.slice(1).replace(/\.$/, '')} — ` : '';
     return {
       ...base,
-      delta: { kind: 'material', text: `it comes out ${pts} better on material than ${base.sanWorse}`, proof: 'material-count' },
+      delta: { kind: 'material', text: `${howClause}it comes out ${pts} better on material than ${base.sanWorse}`, proof: 'material-count' },
     };
   }
 

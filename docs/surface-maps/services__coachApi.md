@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7045 lines · 42 exports · 55 importers · 60 tests · 20 audits**
+**7050 lines · 42 exports · 55 importers · 60 tests · 20 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,7 +19,7 @@
 - **Do NOT** (CLAUDE.md:5277) — names `coachApi`
 - **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6019) — names `voiceFacts`
 - **The standard post-deploy ritual** (CLAUDE.md:6161) — names `coachApi`, `voiceFacts`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6178) — names `coachApi`, `translateToEnglish`, `voiceFacts`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6180) — names `coachApi`, `translateToEnglish`, `voiceFacts`
 
 ## Who calls in
 
@@ -118,13 +118,13 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `consumeCoachLines` (function) — 4 call sites
-- `src/coach/coachService.ts:1883`
+- `src/coach/coachService.ts:1905`
 - `src/services/coachApi.pieceOptions.test.ts:42`
 - `src/services/coachApi.pieceOptions.test.ts:44`
 - `src/services/coachApi.pieceOptions.test.ts:49`
 
 ### `consumeServedIntent` (function) — 1 call site
-- `src/coach/coachService.ts:1887`
+- `src/coach/coachService.ts:1909`
 
 ### `answerAttemptComparison` (function) — 4 call sites
 - `src/services/coachApi.attemptComparison.test.ts:30`
@@ -133,10 +133,10 @@
 - `src/services/coachApi.attemptComparison.test.ts:63`
 
 ### `consumeCoachActionOffer` (function) — 1 call site
-- `src/coach/coachService.ts:1877`
+- `src/coach/coachService.ts:1899`
 
 ### `consumeCoachKeySquares` (function) — 6 call sites
-- `src/coach/coachService.ts:1892`
+- `src/coach/coachService.ts:1914`
 - `src/services/coachApi.keySquares.test.ts:10`
 - `src/services/coachApi.keySquares.test.ts:12`
 - `src/services/coachApi.keySquares.test.ts:15`
@@ -241,15 +241,15 @@
 - `src/hooks/useLiveCoach.ts:312`
 - `src/hooks/usePhaseNarration.test.ts:68`
 - `src/hooks/usePhaseNarration.ts:744`
-- `src/services/coachMoveCommentary.ts:304`
+- `src/services/coachMoveCommentary.ts:303`
 - `src/services/groundedComputedOnly.test.ts:25`
 - `src/services/groundedMoveFeedback.test.ts:14`
 - `src/services/groundedMoveFeedback.test.ts:26`
 - `src/services/groundedMoveFeedback.test.ts:45`
 
 ### `translateToEnglish` (function) — 4 call sites
-- `src/coach/coachService.ts:571`
-- `src/components/Coach/CoachTeachPage.tsx:3527`
+- `src/coach/coachService.ts:572`
+- `src/components/Coach/CoachTeachPage.tsx:3562`
 - `src/services/coachSessionRouter.ts:117`
 - `src/services/coachSettingsAction.ts:242`
 
@@ -288,11 +288,11 @@
 - `src/services/coachApi.speakableFacts.test.ts:53`
 
 ### `voiceFacts` (function) — 38 call sites
-- `src/components/Coach/CoachGameReview.tsx:1657`
-- `src/components/Coach/CoachGameReview.tsx:1773`
-- `src/components/Coach/CoachGameReview.tsx:1962`
+- `src/components/Coach/CoachGameReview.tsx:1685`
+- `src/components/Coach/CoachGameReview.tsx:1801`
+- `src/components/Coach/CoachGameReview.tsx:1990`
 - `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx:102`
-- `src/components/Puzzles/PuzzleBoard.tsx:93`
+- `src/components/Puzzles/PuzzleBoard.tsx:97`
 - `src/hooks/usePhaseNarration.ts:731`
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:260`
@@ -301,11 +301,11 @@
 - `src/services/coachFeatureService.ts:425`
 - `src/services/coachFeatureService.ts:560`
 - `src/services/coachFeatureService.ts:561`
-- `src/services/coachFeatureService.ts:5092`
-- `src/services/coachFeatureService.ts:5245`
+- `src/services/coachFeatureService.ts:5106`
+- `src/services/coachFeatureService.ts:5259`
 - `src/services/coachLaneWiring.test.ts:144`
-- `src/services/coachMoveCommentary.ts:237`
-- `src/services/coachMoveCommentary.ts:294`
+- `src/services/coachMoveCommentary.ts:236`
+- `src/services/coachMoveCommentary.ts:293`
 - `src/services/contentGenerationService.ts:133`
 - `src/services/contentGenerationService.ts:168`
 - `src/services/contentGenerationService.ts:202`
@@ -353,8 +353,8 @@
 - `src/services/voiceFactsFidelity.test.ts:65`
 
 ### `explainPuzzleMoveGrounded` (function) — 2 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:640`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:731`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:649`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:740`
 
 ### `currentAskFromContent` (function) — 4 call sites
 - `src/services/coachApi.currentAsk.test.ts:31`

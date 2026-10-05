@@ -21,6 +21,9 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ---
 
+## 000d. WO-INSIGHT-01 — the coach's insight, every section (David 2026-10-05: "This app is missing insight")
+- ✅ A `moveInsight` computer: positionAsk (defend / press / reinforce / improve, never names the move), moveMissed, doubleAttack, mechanismContrast, walkableLine · ✅ B wired: Learn drills (wrong move + hint), Learn Hint, chat compare (both lines), review (compareTwoMoves mechanism), Tactics + My Mistakes + Setup Trainer wrong tries, How to Think assess verdict, Play Why · ✅ C Walk button on every spoken line (`useLineWalk` + `WalkLineButton`, Learn moved onto it) · ✅ D drills: engine judges off-key moves (`judgeAlternative`), no closing line, Next button, typed next/skip, speech queue order · ✅ E hub tiles start their lesson (cancelled timer) · 🟠 David's hand walk on device · 🟡 more mechanisms (pin, discovered attack, overload) in `mechanismContrast`
+
 ## 000c. WO-OUTCOME-01 — one computer for "what does this line win" (2026-10-03)
 - ✅ A one line reader (`proofCut`) · ✅ B lanes with a line read the ledger (playedMoveGrade, loose/ignored, dnaLineNarrator, moveOrder, explainBestMoveGrounded) · ✅ C no-line lanes say the board fact (danyaBehaviors, must-defend, reviewHinge) · ✅ D gate `outcomeSentences.gate` (baseline 31 files / 65 lines, shrink-only) · 🟠 baseline backlog: chat null-line callers, drill reasons · 🔴 clean-pass walk (Learn + Review, 3 fresh games) running
 

@@ -1,4 +1,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { positionAsk, pvSans, walkableLine } from '../../services/moveInsight';
+import { useLineWalk } from '../../hooks/useLineWalk';
+import { WalkLineButton } from '../Board/WalkLineButton';
 import { Chess } from 'chess.js';
 import { ChessBoard } from '../Board/ChessBoard';
 import { HintButton } from '../Coach/HintButton';
@@ -20,7 +23,8 @@ import { recordTacticOutcome } from '../../services/tacticAlertService';
 import { reward } from '../../services/rewardService';
 import { rewardSeed } from '../../services/rewardEvents';
 import type { CoachingTier } from '../../services/tacticAlertService';
-import type { SetupPuzzle } from '../../types';
+import type { SetupPuzzle, WalkableLine } from '../../types';
+import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 import { useBoardFit } from '../../hooks/useBoardFit';
 import { useThinkingLesson } from '../../hooks/useThinkingLesson';
@@ -119,6 +123,12 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
   const isPlayerTurn = moveIndex % 2 === 0; // student plays even indices
 
   const orientation = puzzle.playerColor === 'black' ? 'black' : 'white';
+  // The last wrong try's line, walkable (David 2026-10-05: "Button tap to
+  // play out any lines the user wants").
+  const [walkable, setWalkable] = useState<WalkableLine | null>(null);
+  const lineWalk = useLineWalk(orientation);
+  const clearWalk = lineWalk.clear;
+  useEffect(() => { setWalkable(null); clearWalk(); }, [puzzle.id, clearWalk]);
 
   // GROUNDED payoff geometry (David 2026-06-28): replay the line to compute
   // what the FINAL (decisive) move actually does on the board — "forks the
@@ -366,8 +376,19 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
         });
       }
       if (puzzleIdRef.current !== puzzleAtTry) return;
-      const wrongMsg = r?.text ?? setupIncorrect();
+      // WHAT THE POSITION ASKS, when it asks something concrete (defend /
+      // press) — a setup move is often quiet, and "improve a piece" would
+      // talk past the tactic this trainer is building toward.
+      const ask = (() => {
+        try {
+          const bestSan = new Chess(fenBefore).move({ from: expected.from, to: expected.to, promotion: expected.promotion ?? 'q' })?.san;
+          const a = positionAsk(fenBefore, { bestSan });
+          return a.mode === 'defend' || a.mode === 'press' ? a.text : null;
+        } catch { return null; }
+      })();
+      const wrongMsg = [r?.text ?? setupIncorrect(), ask].filter((x): x is string => !!x).join(' ');
       setMessage(wrongMsg);
+      setWalkable(r && r.uci.length > 0 ? walkableLine(fenBefore, [move.san, ...pvSans(r.fenAfter, r.uci, 4)], move.san) : null);
       const shownAt = Date.now();
       await voiceService.speak(wrongMsg).catch(() => undefined);
       const left = Math.max(0, (r ? 1800 + wrongMsg.length * 35 : 1500) - (Date.now() - shownAt));
@@ -454,6 +475,15 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
         </div>
       )}
       <div ref={fitRef} style={fitStyle} className={`w-full md:max-w-[420px] mx-auto ${reading.view.active ? 'hidden' : ''}`} data-testid="setup-board">
+        {lineWalk.walkFen ? (
+          <ConsistentChessboard
+            fen={lineWalk.walkFen}
+            arrows={lineWalk.walkArrows}
+            interactive={false}
+            boardOrientation={orientation}
+            showLastMoveHighlight
+          />
+        ) : (
         <ChessBoard
           key={boardKey}
           initialFen={fen}
@@ -467,7 +497,11 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
           ghostMove={hintState.ghostMove}
           annotationHighlights={ladderSquare ? [{ square: ladderSquare, color: HINT_PIECE_HIGHLIGHT }] : undefined}
         />
+        )}
       </div>
+      {walkable && (boardState === 'thinking' || boardState === 'incorrect') && (
+        <div className="px-1"><WalkLineButton line={walkable} onWalk={lineWalk.walk} testId="setup-walk-line-btn" /></div>
+      )}
 
       {/* Hint and Show Solution share ONE row so both sit above the bottom
           nav on a short phone (David 2026-10-04); the ladder text goes below. */}

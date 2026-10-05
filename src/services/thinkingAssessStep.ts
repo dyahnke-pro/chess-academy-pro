@@ -14,6 +14,7 @@ import type { StepKit } from './thinkingLessonSession';
 import { countMaterial, kingSafetyRead, type KingSafetyNote } from './positionReadingService';
 import { rotateStem } from '../utils/rotateStem';
 import { andList } from '../utils/andList';
+import { positionAsk } from './moveInsight';
 
 function hasQueen(fen: string, color: Color): boolean {
   try {
@@ -74,7 +75,11 @@ export function assessShowLine(fen: string, key: readonly Square[], rot: number)
     'Every decision starts with an assessment — material first, then the kings. The weaker king decides who should be attacking.',
   ], rot);
   const reason = key[0] ? assessReason(fen, key[0]) : null;
-  return [open, materialLine(fen), reason ?? ''].filter(Boolean).join(' ');
+  // THE VERDICT the assessment exists for — defend, press, bring one more,
+  // improve — computed by the one insight computer (David 2026-10-05: How to
+  // Think "needs to incorporate the insight build").
+  const verdict = positionAsk(fen).text;
+  return [open, materialLine(fen), reason ?? '', verdict].filter(Boolean).join(' ');
 }
 
 export function assessKit(): StepKit {

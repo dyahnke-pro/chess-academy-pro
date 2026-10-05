@@ -24,7 +24,7 @@
  *   - `prompt`       — a concrete, code-authored challenge line.
  */
 import { Chess } from 'chess.js';
-import { hintBeat, wrongMoveReason } from './drillReasons';
+import { hintBeat } from './drillReasons';
 import { conceptPassageFor } from './weaknessConceptPassage';
 import { explainDrillConcept } from './puzzleConceptExplanation';
 import { lessonTeachLines, partTransition, type CustomLessonPart } from './customLessonPlan';
@@ -750,15 +750,6 @@ function hash(seed: number, id: string): number {
 //    to compose these from three computers; the drill service is the drill's
 //    composer, so the reason, the solved sequence, the hint and the
 //    keep-going line are assembled once, here, and the page only speaks them.
-
-/** What the wrong move costs, read off the board, joined to the nudge the
- *  page chose. The reason is null when the board shows nothing concrete, and
- *  then the nudge stands alone — never a guessed reason. */
-export function drillWrongMoveBeat(args: { fenBefore: string; wrongSan: string; expectedSan: string; nudge: string; keepNudge: boolean }): string {
-  const reason = wrongMoveReason(args.fenBefore, args.wrongSan, args.expectedSan);
-  if (!reason) return args.nudge;
-  return args.keepNudge ? `${reason} ${args.nudge}` : reason;
-}
 
 /** The hint: names the piece, withholds the square. Null when the drill's
  *  own solution gives nothing to name. */

@@ -9,6 +9,7 @@
  * / reset_board markers parsed from its response. Same room, different
  * actions.
  */
+import { useLineWalk } from '../../hooks/useLineWalk';
 import { characterOf, provenTacticLive, sharpGap, stepCharacter, EMPTY_CHARACTER, SHARP_GAP_CP, type CharacterState } from '../../services/positionCharacter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStandingFactMemory, fullmoveOf } from '../../services/standingFactMemory';
@@ -153,8 +154,9 @@ import {
   hasImportedGames,
   type CoachDrill,
   type DrillProgress,
-  drillHintBeat, drillWrongMoveBeat,
-  customLessonPartLines, goodButWeakerBeat, judgeAlternative } from '../../services/coachDrillService';
+  drillHintBeat,
+  customLessonPartLines, goodButWeakerBeat, judgeAlternative, wrongMoveReason } from '../../services/coachDrillService';
+import { moveMissed, positionAsk } from '../../services/moveInsight';
 import { bookChipForClaims } from '../../data/bookChips';
 import { useThinkingLesson, type StepKit } from '../../hooks/useThinkingLesson';
 import { ThinkingLessonBoard } from './ThinkingLessonBoard';
@@ -1672,41 +1674,10 @@ export function CoachTeachPage(): JSX.Element {
    *  each option's line drawn as its sentence plays; the Walk button steps a
    *  line move by move. Both render through the STATIC board, so a line is
    *  never played into the real game, and both return to the live position. */
-  const [lineWalkFen, setLineWalkFen] = useState<string | null>(null);
-  const [lineWalkArrows, setLineWalkArrows] = useState<BoardArrow[]>([]);
-  const lineWalkTokenRef = useRef(0);
-  // Each ply through the door on the board BEFORE it; the door colours by
-  // whose move it is (yours green, theirs red).
-  const lineArrowsOf = useCallback((line: WalkableLine): BoardArrow[] => {
-    return admitArrows(
-      lineClaims(line.startFen, line.plies, 'teach.lineWalk'),
-      { fen: line.startFen, studentColor: playerColor },
-    ).arrows;
-  }, [playerColor]);
-  const clearLineWalk = useCallback((): void => {
-    lineWalkTokenRef.current += 1;
-    setLineWalkFen(null);
-    setLineWalkArrows([]);
-  }, []);
-  const walkLine = useCallback((line: WalkableLine): void => {
-    const token = ++lineWalkTokenRef.current;
-    void (async () => {
-      setLineWalkFen(line.startFen);
-      setLineWalkArrows([]);
-      await new Promise((r) => window.setTimeout(r, 600));
-      const plyArrows = lineArrowsOf(line);
-      for (let i = 0; i < line.plies.length; i += 1) {
-        const ply = line.plies[i];
-        if (lineWalkTokenRef.current !== token) return;
-        setLineWalkFen(ply.fenAfter);
-        const hop = plyArrows.find((a) => a.startSquare === ply.uci.slice(0, 2) && a.endSquare === ply.uci.slice(2, 4));
-        setLineWalkArrows(hop ? [hop] : []);
-        await new Promise((r) => window.setTimeout(r, 1000));
-      }
-      await new Promise((r) => window.setTimeout(r, 900));
-      if (lineWalkTokenRef.current === token) { setLineWalkFen(null); setLineWalkArrows([]); }
-    })();
-  }, [lineArrowsOf]);
+  const lineWalk = useLineWalk(playerColor, 'teach.lineWalk');
+  const { walkFen: lineWalkFen, walkArrows: lineWalkArrows, tokenRef: lineWalkTokenRef,
+    setWalkFen: setLineWalkFen, setWalkArrows: setLineWalkArrows, arrowsOf: lineArrowsOf,
+    clear: clearLineWalk, walk: walkLine } = lineWalk;
   /** Any new move ends a line on the board — the game is the ground truth. */
   useEffect(() => { clearLineWalk(); }, [game.history.length, clearLineWalk]);
 
@@ -2430,9 +2401,12 @@ export function CoachTeachPage(): JSX.Element {
    *  page's one speech chain, so a drill announce never talks over the teaching
    *  before it (walk 2026-10-04 defect 5: `tts-concurrent-speak`). Resolves
    *  when this line has been spoken. */
-  const coachDrillSay = useCallback((text: string): Promise<void> => {
+  const coachDrillSay = useCallback((text: string, opts?: { lines?: WalkableLine[] }): Promise<void> => {
     const id = uid('drill-say');
-    setMessages((prev) => [...prev, { id, role: 'assistant', content: text, timestamp: Date.now() }]);
+    // `lines`: every line the text speaks rides as a Walk button (David
+    // 2026-10-05: "Button tap to play out any lines the user wants").
+    const lines = opts?.lines && opts.lines.length > 0 ? opts.lines : undefined;
+    setMessages((prev) => [...prev, { id, role: 'assistant', content: text, timestamp: Date.now(), ...(lines ? { lines } : {}) }]);
     useCoachMemoryStore.getState().appendConversationMessage({
       surface: 'chat-teach', role: 'coach', text, fen: gameRef.current.fen, trigger: null,
     });
@@ -2876,18 +2850,24 @@ export function CoachTeachPage(): JSX.Element {
       const bestFen = afterOf(expected);
       const stillThisDrill = (): boolean => activeDrillRef.current === cur || activeDrillRef.current?.drill === cur.drill;
       void (async () => {
-        let evals: { wrong: number; best: number } | null = null;
+        let evals: { wrong: number; best: number; wrongPv?: string[] } | null = null;
         if (wrongFen && bestFen) {
           try {
             const [w, b] = await Promise.all([
               stockfishEngine.analyzeWithBudget(wrongFen, COACH_TURN_DEPTH, 900),
               stockfishEngine.analyzeWithBudget(bestFen, COACH_TURN_DEPTH, 900),
             ]);
-            evals = { wrong: w.evaluation, best: b.evaluation };
+            evals = { wrong: w.evaluation, best: b.evaluation, wrongPv: w.topLines?.[0]?.moves };
           } catch { evals = null; }
         }
         if (!stillThisDrill()) return;
         const verdict = evals ? judgeAlternative({ fenBefore, evalAfterWrong: evals.wrong, evalAfterBest: evals.best }) : null;
+        // THE INSIGHT (David 2026-10-05: "the idea, not the answer"): what the
+        // student's move actually does along the engine's reply, and what this
+        // position asks — defend, press, bring one more, improve. The answer
+        // move stays hidden; its line rides as a Walk button.
+        const missed = evals ? moveMissed(fenBefore, move.san, evals.wrongPv) : null;
+        const ask = positionAsk(fenBefore, { bestSan: expected });
         if (verdict === 'accept') {
           // It wins as well as the key: play it and close the drill as solved.
           const r = handlePlayMove(move.san);
@@ -2910,17 +2890,16 @@ export function CoachTeachPage(): JSX.Element {
             : cur.wrongCount === 2
               ? 'Still not it — no rush. Look for the most forcing move first: checks, captures, then threats.'
               : "That's not the strongest here — take another look and try again.";
-        let line: string;
-        if (verdict === 'good-but-weaker' && evals && !easeUp) {
-          line = goodButWeakerBeat({ fenBefore, wrongSan: move.san, evalAfterWrong: evals.wrong, evalAfterBest: evals.best }) ?? nudge;
-        } else if (verdict === 'loses' || verdict === null) {
-          // The engine says it throws material away (or the engine is down and
-          // the board read is all there is): say WHY, read off the board.
-          line = drillWrongMoveBeat({ fenBefore, wrongSan: move.san, expectedSan: expected, nudge, keepNudge: easeUp });
-        } else {
-          line = nudge;
-        }
-        void coachDrillSay(line);
+        // What the move did: a good-but-weaker move is called good; otherwise
+        // the engine's reply line, else the board read (engine down).
+        const did =
+          verdict === 'good-but-weaker' && evals
+            ? goodButWeakerBeat({ fenBefore, wrongSan: move.san, evalAfterWrong: evals.wrong, evalAfterBest: evals.best }, { withTail: false })
+            : missed?.text
+              ?? (verdict === 'loses' || verdict === null ? wrongMoveReason(fenBefore, move.san, expected) : null);
+        const parts = [did, ask.text, easeUp ? nudge : null].filter((x): x is string => !!x);
+        const line = parts.length > 0 ? parts.join(' ') : nudge;
+        void coachDrillSay(line, { lines: missed?.line ? [missed.line] : undefined });
       })();
       return true;
     }
@@ -11230,13 +11209,7 @@ export function CoachTeachPage(): JSX.Element {
                     if (earlier.length > 0 && liveFenRef.current === fenAfterReply) {
                       const showFen = earlier[0].fen;
                       const drawn = uniqueArrows(earlier.filter((l) => samePlacement(l.fen, showFen)).flatMap(throughDoor));
-                      const token = ++lineWalkTokenRef.current;
-                      setLineWalkFen(showFen);
-                      setLineWalkArrows(drawn);
-                      const holdMs = Math.max(hintPkg.spoken.length * 55, 2500) + 1500;
-                      window.setTimeout(() => {
-                        if (lineWalkTokenRef.current === token) { setLineWalkFen(null); setLineWalkArrows([]); }
-                      }, holdMs);
+                      lineWalk.hold(showFen, drawn, Math.max(hintPkg.spoken.length * 55, 2500) + 1500);
                     }
                     void logAppAudit({
                       kind: 'coach-narration-spoken',
@@ -11919,8 +11892,13 @@ export function CoachTeachPage(): JSX.Element {
       // THE HINT SAYS THE PIECE AND WITHHOLDS THE SQUARE (A5): the arrow used
       // to be silent. Computed from the drill's own solution.
       const cur = activeDrillRef.current;
-      const beat = drillHintBeat(fen, cur.drill.solutionSan[cur.step] ?? '');
-      if (beat) void coachDrillSay(beat);
+      const expectedNow = cur.drill.solutionSan[cur.step] ?? '';
+      const beat = drillHintBeat(fen, expectedNow);
+      // What the position asks comes first, then the piece (David 2026-10-05:
+      // "I need an explanation of the position with the main ideas").
+      const ask = positionAsk(fen, { bestSan: expectedNow });
+      const hintText = [ask.text, beat].filter((x): x is string => !!x).join(' ');
+      if (hintText) void coachDrillSay(hintText);
     }
     setHintBusy(true);
     try {
@@ -11932,6 +11910,14 @@ export function CoachTeachPage(): JSX.Element {
         const hint = admitArrow({ from, to, role: 'play', vouchedBy: 'engine', source: 'teach.hint' }, { fen, studentColor: playerColor });
         setArrows(hint ? [hint] : []);
         setHighlights([{ square: from, color: '#eab308' }]);
+        // THE IDEA BEHIND THE ARROW (David 2026-10-05: "I need an explanation
+        // of the position with the main ideas") — a drill hint already spoke.
+        if (!activeDrillRef.current) {
+          let bestSan: string | undefined;
+          try { bestSan = new Chess(fen).move({ from, to, promotion: uci[4] ?? 'q' })?.san; } catch { bestSan = undefined; }
+          const idea = positionAsk(fen, { bestSan }).text;
+          if (idea) void coachDrillSay(idea);
+        }
       }
     } catch {
       /* engine unavailable — no hint rather than a guess */

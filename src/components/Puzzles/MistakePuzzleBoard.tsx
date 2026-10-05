@@ -1,4 +1,8 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useLineWalk } from '../../hooks/useLineWalk';
+import { WalkLineButton } from '../Board/WalkLineButton';
+import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { positionAsk } from '../../services/moveInsight';
 import { spokenLineArrows } from '../../services/arrowEngine';
 import type { BoardArrow } from '../Chessboard/ConsistentChessboard';
 import { Chess } from 'chess.js';
@@ -31,7 +35,7 @@ import { recordCapabilityEvidence } from '../../services/capabilityEvidence';
 import { logAppAudit } from '../../services/appAuditor';
 import type { CoachingTier } from '../../services/tacticAlertService';
 import type { MoveResult } from '../../hooks/useChessGame';
-import type { MistakePuzzle, MistakeClassification } from '../../types';
+import type { MistakePuzzle, MistakeClassification, WalkableLine } from '../../types';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 import { pliesFor, solveLengthOf } from '../../services/mistakeLineGrowth';
 import { reward } from '../../services/rewardService';
@@ -318,7 +322,12 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   /** Arrows for the moves the current spoken line names (`spokenLineArrows`):
    *  their reply red, your mistake none, your good follow-up green. */
   const [lineArrows, setLineArrows] = useState<BoardArrow[]>([]);
-  useEffect(() => { setLineArrows([]); }, [puzzle.id]);
+  // The last wrong try's line, walkable (David 2026-10-05: "Button tap to
+  // play out any lines the user wants").
+  const [walkable, setWalkable] = useState<WalkableLine | null>(null);
+  const lineWalk = useLineWalk(puzzle.playerColor);
+  const clearWalk = lineWalk.clear;
+  useEffect(() => { setLineArrows([]); setWalkable(null); clearWalk(); }, [puzzle.id, clearWalk]);
   const continuedForRef = useRef<string | null>(null);
   // THE SOLVE'S VOICE OWNS THE MOMENT (David 2026-10-02: "Auto advance needs to
   // not cut off narrations … Instant after last word can sound like cut off").
@@ -749,6 +758,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing') return;
     setLineArrows([]); // the last line's moves belong to the last position
+    setWalkable(null);
 
     const allMoves = movesRef.current;
     if (moveIndex >= allMoves.length) return;
@@ -920,18 +930,10 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       let hint = '';
 
       if (attempts === 1) {
-        if (narrationRef.current.conceptHint) {
-          hint = narrationRef.current.conceptHint;
-        } else {
-          // Classification-aware nudge when no concept hint exists
-          const classificationHints: Record<string, string> = {
-            blunder: 'You gave away material here — find the move that wins it back.',
-            mistake: 'This move weakened your position — look for the stronger alternative.',
-            inaccuracy: 'There was a more precise move available.',
-            miss: 'You missed an opportunity — look for a forcing move.',
-          };
-          hint = classificationHints[puzzle.classification] ?? 'Look for the most forcing move.';
-        }
+        // The concept hint when the puzzle has one; otherwise what the
+        // position asks (below) carries the first rung — the canned
+        // per-classification line said the same thing every time.
+        if (narrationRef.current.conceptHint) hint = narrationRef.current.conceptHint;
       } else if (attempts === 2) {
         // Piece hint — tell them which piece to look at
         const pieceName = getPieceNameOnSquare(chessRef.current, expectedMove.from);
@@ -956,8 +958,14 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
         const held = heldCoachRef.current;
         heldCoachRef.current = null;
         // ONE line per miss: why the try fails, the method, then the rung.
-        const line = composeWrongTryLine(read?.text ?? null, held, hint);
+        // WHAT THE POSITION ASKS (David 2026-10-05) — the idea, never the move.
+        const expectedSan = (() => {
+          try { return new Chess(prevFen).move({ from: expectedMove.from, to: expectedMove.to, promotion: expectedMove.promotion ?? 'q' })?.san; } catch { return undefined; }
+        })();
+        const ask = positionAsk(prevFen, { bestSan: expectedSan }).text;
+        const line = composeWrongTryLine(read?.text ?? null, ask, held, hint);
         setSubtitle(line);
+        setWalkable(read?.kind === 'refuted' ? read.line ?? null : null);
         setLineArrows(spokenLineArrows(line, prevFen, { studentColor: puzzle.playerColor === 'white' ? 'w' : 'b', studentMovesAreBad: true }));
         voiceService.stop();
         void voiceService.speak(line);
@@ -1179,6 +1187,15 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
 
       {/* Board */}
       <div ref={fitRef} style={fitStyle} className="w-full md:max-w-[420px] mx-auto">
+        {lineWalk.walkFen ? (
+          <ConsistentChessboard
+            fen={lineWalk.walkFen}
+            arrows={lineWalk.walkArrows}
+            interactive={false}
+            boardOrientation={puzzle.playerColor}
+            showLastMoveHighlight
+          />
+        ) : (
         <ChessBoard
           initialFen={fen}
           key={boardKey}
@@ -1192,7 +1209,11 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
           arrows={hintState.arrows.length > 0 ? hintState.arrows : lineArrows.length > 0 ? lineArrows : undefined}
           ghostMove={hintState.ghostMove}
         />
+        )}
       </div>
+      {walkable && state === 'playing' && (
+        <div className="px-1"><WalkLineButton line={walkable} onWalk={lineWalk.walk} testId="mistake-walk-line-btn" /></div>
+      )}
 
       {/* Keep-playing status (R4) */}
       {state === 'freeplay' && (

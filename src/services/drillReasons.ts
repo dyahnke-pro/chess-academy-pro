@@ -75,7 +75,7 @@ export function goodButWeakerBeat(args: {
   wrongSan: string;
   evalAfterWrong: number;
   evalAfterBest: number;
-}): string | null {
+}, opts: { withTail?: boolean } = {}): string | null {
   let mover: 'w' | 'b';
   let captured: string | undefined;
   try {
@@ -90,7 +90,12 @@ export function goodButWeakerBeat(args: {
   const best = pov(args.evalAfterBest);
   if (wrong < STILL_GOOD_CP || best - wrong < STRONGER_BY_CP) return null;
   const wins = captured && captured !== 'k' ? ` — it wins the ${PIECE_NAME[captured]}` : ' — it keeps your edge';
-  return `${cap(sayMoveClause(args.wrongSan, args.fenBefore))} is a good move${wins}. There is something stronger here, though: before you settle, look for a move that does even more.`;
+  const head = `${cap(sayMoveClause(args.wrongSan, args.fenBefore))} is a good move${wins}.`;
+  // withTail false: the caller follows with the position's own direction
+  // (moveInsight.positionAsk), which says WHERE to look.
+  return opts.withTail === false
+    ? `${head} There is something stronger here, though.`
+    : `${head} There is something stronger here, though: before you settle, look for a move that does even more.`;
 }
 
 /** Within this many centipawns of the drill's move, a different move is just

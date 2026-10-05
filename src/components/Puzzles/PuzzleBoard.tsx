@@ -1,4 +1,8 @@
 import { useState, useEffect, useCallback, useRef, useMemo, type ReactNode } from 'react';
+import { useLineWalk } from '../../hooks/useLineWalk';
+import { WalkLineButton } from '../Board/WalkLineButton';
+import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { positionAsk } from '../../services/moveInsight';
 import { spokenLineArrows } from '../../services/arrowEngine';
 import type { BoardArrow } from '../Chessboard/ConsistentChessboard';
 import { captureEvent } from '../../services/analytics';
@@ -33,7 +37,7 @@ import { explainPuzzleConcept } from '../../services/puzzleConceptExplanation';
 import { useAppStore } from '../../stores/appStore';
 import { logAppAudit } from '../../services/appAuditor';
 import type { CoachingTier } from '../../services/tacticAlertService';
-import type { PuzzleRecord } from '../../types';
+import type { PuzzleRecord, WalkableLine } from '../../types';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 import { solverMoves } from '../../services/puzzleDepth';
 import { reward } from '../../services/rewardService';
@@ -161,6 +165,9 @@ export function PuzzleBoard({
   const conceptSpokenRef = useRef<string | null>(null);
   /** Arrows for the moves the current spoken line names (`spokenLineArrows`). */
   const [lineArrows, setLineArrows] = useState<BoardArrow[]>([]);
+  // The last wrong try's line, walkable (David 2026-10-05: "Button tap to
+  // play out any lines the user wants"). Cleared with the arrows.
+  const [walkable, setWalkable] = useState<WalkableLine | null>(null);
   const tryTokenRef = useRef(0);
   /** A wrong try's refutation is still being read. While it is, a coaching
    *  line the SAME miss triggered (the struggle coach's method beat) waits and
@@ -204,6 +211,7 @@ export function PuzzleBoard({
   // Determine which color the user plays (opposite of who moves first in the FEN)
   const fenTurn = puzzle.fen.split(' ')[1];
   const userColor: 'white' | 'black' = fenTurn === 'w' ? 'black' : 'white';
+  const lineWalk = useLineWalk(userColor);
 
   // GROUNDED solve geometry (David 2026-06-28): replay the puzzle to compute
   // what the FINAL (solving) move actually does — "forks the king and rook",
@@ -357,6 +365,7 @@ export function PuzzleBoard({
     setMissedPip(false);
     setLastMoveHighlight(null);
     setLineArrows([]);
+    setWalkable(null);
     setFlashClass('');
     hasMadeMistakeRef.current = false;
     wrongAttemptsRef.current = 0;
@@ -471,6 +480,8 @@ export function PuzzleBoard({
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing' || disabled) return;
     setLineArrows([]); // the last line's moves belong to the last position
+    setWalkable(null);
+    lineWalk.clear();
 
     const allMoves = movesRef.current;
     if (moveIndex >= allMoves.length) return;
@@ -602,6 +613,9 @@ export function PuzzleBoard({
       // refutation is quiet. A token drops a late engine read once a newer
       // try or a new puzzle has arrived.
       const tryToken = ++tryTokenRef.current;
+      const expectedSan = (() => {
+        try { return new Chess(fenBeforeAttempt).move({ from: expected.from, to: expected.to, promotion: expected.promotion })?.san; } catch { return undefined; }
+      })();
       const hint = getWrongMoveHint(
         hintOnMiss ? moveWrongRef.current : wrongAttemptsRef.current,
         puzzle.themes,
@@ -627,10 +641,14 @@ export function PuzzleBoard({
         // ONE line per miss. On the ladder: why the try fails, the method,
         // then the next rung. Off it: the refutation (or the rung when the
         // try is quietly fine), then the method.
+        // WHAT THE POSITION ASKS (David 2026-10-05: "keep pressing? defend
+        // something? more pieces in the attack?") — the idea, never the move.
+        const ask = read?.kind === 'also-good' ? null : positionAsk(fenBeforeAttempt, { bestSan: expectedSan }).text;
         const line = hintOnMiss && read && read.kind !== 'also-good'
-          ? composeWrongTryLine(read.text, held, hint)
-          : composeWrongTryLine(read?.text ?? hint, held, null);
+          ? composeWrongTryLine(read.text, ask, held, hint)
+          : composeWrongTryLine(read?.text ?? hint, ask, held);
         setSubtitle(line);
+        setWalkable(read?.kind === 'refuted' ? read.line ?? null : null);
         // Every move the line names, on the board: their punishing reply red,
         // your try none (it was just taken back).
         setLineArrows(spokenLineArrows(line, fenBeforeAttempt, {
@@ -740,6 +758,15 @@ export function PuzzleBoard({
         </h2>
       )}
       <div ref={fitRef} style={fitStyle} className={`w-full md:max-w-[420px] mx-auto rounded-lg overflow-hidden ${flashClass}`} data-testid="board-wrapper">
+        {lineWalk.walkFen ? (
+          <ConsistentChessboard
+            fen={lineWalk.walkFen}
+            arrows={lineWalk.walkArrows}
+            interactive={false}
+            boardOrientation={userColor}
+            showLastMoveHighlight
+          />
+        ) : (
         <ControlledChessBoard
           game={game}
           interactive={state === 'playing' && !disabled}
@@ -752,6 +779,7 @@ export function PuzzleBoard({
           arrows={hintState.arrows.length > 0 ? hintState.arrows : lineArrows.length > 0 ? lineArrows : undefined}
           ghostMove={hintState.ghostMove}
         />
+        )}
       </div>
 
       {/* Coaching subtitle from struggle detection */}
@@ -759,6 +787,9 @@ export function PuzzleBoard({
         <p className="text-sm text-amber-400 px-1" data-testid="coaching-subtitle">
           {subtitle}
         </p>
+      )}
+      {walkable && state === 'playing' && (
+        <div className="px-1"><WalkLineButton line={walkable} onWalk={lineWalk.walk} testId="puzzle-walk-line-btn" /></div>
       )}
 
       {/* ONE control row (David 2026-10-04: on a short phone the old two rows

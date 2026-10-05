@@ -12,6 +12,7 @@
  * Pure + side-effect-free so it's trivially testable and can't regress the
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
+import { mechanismContrast, moveMissed, pvSans, walkableLine } from './moveInsight';
 import { settledLeadFor, type LastMove } from './material';
 import { countWords } from '../utils/countWords';
 import { isSacrifice } from './factStakes';
@@ -80,6 +81,8 @@ export interface GroundedAnswer {
    *  computed observation's own `squares`, NEVER scraped from the prose (G0).
    *  Optional: only the on-demand position read populates it. */
   keySquares?: readonly string[];
+  /** Lines the answer speaks, drawn as arrows and walked by a button. */
+  lines?: import('../types').WalkableLine[];
 }
 
 /** Convert a centipawn eval (side-to-move POV) into a grounded phrase. Never
@@ -7257,12 +7260,33 @@ export function assembleCompareMovesAnswer(opts: { fen: string; a: ComparedMove;
   const why = refutation(worse);
   const pawns = gap >= 10000 ? null : (gap / 100).toFixed(1);
   const parts = [`${better.san} is better.`];
+  // THE MECHANISM (David 2026-10-05: "Why was the knight to one square better
+  // than the other when they both checked the king???") — one piece hitting
+  // two things, against a move that hits one. Read off the board.
+  const how = mechanismContrast(opts.fen, better.san, worse.san);
+  if (how) parts.push(how);
+  else {
+    // The worse move's own story along its line — a check the king walks out of.
+    const missed = moveMissed(opts.fen, worse.san, worse.lineUci);
+    if (missed && /checks, but the king steps/.test(missed.text)) parts.push(missed.text);
+  }
   parts.push(why
     ? `${worse.san}? Then ${why}${pawns ? ` — about ${pawns} points worse` : ''}.`
     : `${worse.san} is about ${pawns ?? 'a lot'} points worse.`);
   let fromTo: { from: string; to: string } | null = null;
   try { const mv = new Chess(opts.fen).move(better.san); fromTo = { from: mv.from, to: mv.to }; } catch { /* keep null */ }
-  return { facts: parts.join(' '), bestMoveSan: better.san, bestMoveFromTo: fromTo, sources: ['engine:stockfish', 'board:chess.js'] };
+  // BOTH LINES as arrows + Walk buttons (David: "arrows only" to compare;
+  // "button tap to play out any lines the user wants").
+  const lineOf = (m: ComparedMove): import('../types').WalkableLine | null => {
+    try {
+      const c = new Chess(opts.fen);
+      const first = c.move(m.san);
+      if (!first) return null;
+      return walkableLine(opts.fen, [first.san, ...pvSans(c.fen(), m.lineUci, 4)], first.san);
+    } catch { return null; }
+  };
+  const lines = [lineOf(better), lineOf(worse)].filter((l): l is import('../types').WalkableLine => l !== null);
+  return { facts: parts.join(' '), bestMoveSan: better.san, bestMoveFromTo: fromTo, sources: ['engine:stockfish', 'board:chess.js'], ...(lines.length > 0 ? { lines } : {}) };
 }
 
 /**
