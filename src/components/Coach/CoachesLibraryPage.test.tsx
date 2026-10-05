@@ -90,3 +90,15 @@ describe('CoachesLibraryPage deep link (the coach hands over a quoted page)', ()
     expect(await screen.findByTestId('coaches-library-page')).toBeTruthy();
   });
 });
+
+describe('CoachesLibraryPage chapter questions on the book diagram', () => {
+  it('offers "Find the book\'s move" and the thinking question, and enters find mode', async () => {
+    await openBoardPage();
+    const find = await screen.findByTestId('living-board-find-move');
+    expect(screen.getByTestId('living-board-test-me')).toBeTruthy();
+    fireEvent.click(find);
+    expect(screen.getByText(/What does the book play here\?/)).toBeTruthy();
+    // In find mode the board no longer gives the move away.
+    expect(screen.queryByTestId('living-board-find-move')).toBeNull();
+  });
+});

@@ -20,6 +20,10 @@ import {
 import { ConsistentChessboard, type BoardArrow } from '../Chessboard/ConsistentChessboard';
 import { useProseReader, type ProseUnit } from '../../hooks/useProseReader';
 import { admitArrow } from '../../services/arrowDoor';
+import { useThinkingLesson } from '../../hooks/useThinkingLesson';
+import { ThinkingLessonBoard } from './ThinkingLessonBoard';
+import { voiceService } from '../../services/voiceService';
+import { bookMoveAnswer, bookMoveFound, bookMoveHint, gradeBookMove } from '../../services/bookMoveQuestion';
 import {
   COACHES_LIBRARY, getLibraryBook, searchLibrary,
   type LibraryBook, type LibraryPage, type LivingBoard,
@@ -143,9 +147,62 @@ function chaptersOf(book: LibraryBook): Chapter[] {
 }
 
 // ── The live board that replaces a drawn diagram ────────────────────────────
+/** The lesson questions a book diagram can pose, in the order a chapter of
+ *  combinations wants them: the double attack, the forcing moves, then their
+ *  targets and your own safety. */
+const CHAPTER_STEPS = ['hit-two', 'forcing-moves', 'their-targets', 'am-i-safe'] as const;
+
 function LivingBoardView({ board }: { board: LivingBoard }): JSX.Element {
   // index = how many of the book's moves have been played. 0 = the diagram.
   const [index, setIndex] = useState(0);
+  // THE CHAPTER LESSON (David 2026-10-05: "teach lessons based off of
+  // chapters"): read the page, see the book's own position, then answer the
+  // thinking question that position poses — computed on it, asked and recorded
+  // by the lesson's own runner — before the book's line is played.
+  const reading = useThinkingLesson({ say: (t) => voiceService.speak(t).then(() => undefined).catch(() => undefined) });
+  const { firstFairKit: readFairKit, askOnce: readAskOnce, stop: readStop } = reading;
+  const questionKit = useMemo(() => readFairKit(CHAPTER_STEPS, board.fen), [readFairKit, board.fen]);
+  const [tested, setTested] = useState(false);
+  useEffect(() => { setTested(false); return () => { readStop(); }; }, [board.fen, readStop]);
+  // "WHAT DOES THE BOOK PLAY HERE?" — the chapter's own question: find the
+  // first move of the book's line on the book's diagram.
+  const answer = useMemo(() => bookMoveAnswer(board.fen, board.moves), [board.fen, board.moves]);
+  const [finding, setFinding] = useState(false);
+  const [picked, setPicked] = useState<string | null>(null);
+  const [misses, setMisses] = useState(0);
+  const [findLine, setFindLine] = useState<string | null>(null);
+  useEffect(() => { setFinding(false); setPicked(null); setMisses(0); setFindLine(null); }, [board.fen]);
+  const tryMove = useCallback((from: string, to: string): boolean => {
+    if (!answer) return false;
+    const g = gradeBookMove(board.fen, answer, from, to);
+    setPicked(null);
+    if (g === 'illegal') { setFindLine('That piece cannot go there.'); return false; }
+    if (g === 'right') {
+      const line = bookMoveFound(answer, misses);
+      setFindLine(line);
+      void voiceService.speak(line).catch(() => undefined);
+      setFinding(false);
+      setIndex(1);   // the book's line resumes from its first move
+      return true;
+    }
+    const n = misses + 1;
+    setMisses(n);
+    const hint = bookMoveHint(answer, n);
+    setFindLine(hint);
+    void voiceService.speak(hint).catch(() => undefined);
+    if (n >= 3) { setFinding(false); setIndex(1); }
+    return false;
+  }, [answer, board.fen, misses]);
+  const onSquare = useCallback((sq: string): void => {
+    if (!finding) return;
+    if (picked && picked !== sq) { tryMove(picked, sq); return; }
+    setPicked(sq === picked ? null : sq);
+  }, [finding, picked, tryMove]);
+  const testMe = useCallback((): void => {
+    if (!questionKit) return;
+    setIndex(0);
+    void readAskOnce(questionKit, board.fen).then(() => setTested(true));
+  }, [questionKit, readAskOnce, board.fen]);
 
   // Replay the line up to `index`; derive the FEN + the last-move arrow.
   const { fen, arrows } = useMemo(() => {
@@ -162,19 +219,34 @@ function LivingBoardView({ board }: { board: LivingBoard }): JSX.Element {
   const atStart = index === 0;
   const atEnd = index >= board.moves.length;
 
+  if (reading.view.active) {
+    return (
+      <div className="my-3 rounded-lg border border-amber-400/30 bg-theme-bg/40 p-3" data-testid="library-chapter-question">
+        <div className="max-w-[20rem] mx-auto">
+          <ThinkingLessonBoard view={reading.view} onTap={reading.tap} onDontKnow={reading.dontKnow} onStop={reading.stop} />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="my-3 rounded-lg border border-amber-400/30 bg-theme-bg/40 p-3" data-testid="library-living-board">
       <div className="max-w-[20rem] mx-auto">
         <ConsistentChessboard
           fen={fen}
           boardOrientation={board.orientation}
-          arrows={arrows}
+          arrows={finding ? [] : arrows}
           animationDurationInMs={400}
+          interactive={finding}
+          onPieceDrop={({ sourceSquare, targetSquare }) => (targetSquare ? tryMove(sourceSquare, targetSquare) : false)}
+          onSquareClick={({ square }) => onSquare(square)}
+          squareStyles={picked ? { [picked]: { background: 'rgba(129,140,248,0.45)' } } : {}}
         />
       </div>
       <p className="text-center text-[11px] text-amber-300/80 italic mt-2">
-        {atEnd ? 'The line, played out.' : board.caption}
+        {finding ? 'What does the book play here? Make the move.' : atEnd ? 'The line, played out.' : board.caption}
       </p>
+      {findLine && <p className="text-center text-xs text-theme-text mt-1" data-testid="living-board-find-line">{findLine}</p>}
       <div className="flex items-center justify-center gap-4 mt-1.5">
         <button
           type="button"
@@ -207,6 +279,30 @@ function LivingBoardView({ board }: { board: LivingBoard }): JSX.Element {
           <SkipForward size={16} /> Play move
         </button>
       </div>
+      {answer && atStart && !finding && misses === 0 && !findLine && (
+        <div className="flex justify-center mt-2">
+          <button
+            type="button"
+            onClick={() => { setFinding(true); setFindLine(null); }}
+            className="px-3 py-1.5 rounded-lg bg-amber-500/15 border border-amber-400/40 text-amber-300 text-xs font-semibold hover:bg-amber-500/25 transition-colors"
+            data-testid="living-board-find-move"
+          >
+            Find the book's move
+          </button>
+        </div>
+      )}
+      {questionKit && atStart && !tested && !finding && (
+        <div className="flex justify-center mt-2">
+          <button
+            type="button"
+            onClick={testMe}
+            className="px-3 py-1.5 rounded-lg bg-indigo-500/15 border border-indigo-400/40 text-indigo-300 text-xs font-semibold hover:bg-indigo-500/25 transition-colors"
+            data-testid="living-board-test-me"
+          >
+            Test yourself on this position
+          </button>
+        </div>
+      )}
     </div>
   );
 }
