@@ -37,7 +37,7 @@ function listOf(chess: Chess, squares: readonly Square[]): string {
 const capFirst = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 const count = (n: number): string => ['None', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight'][n] ?? String(n);
 
-export function answerIsLoose(chess: Chess, sq: Square | null, student: Color): string {
+export function answerIsLoose(chess: Chess, sq: Square | null, student: Color, seat: 'me' | 'them' | null = null): string {
   if (sq) {
     const p = chess.get(sq);
     if (!p) return `There is no piece on ${sq}.`;
@@ -47,9 +47,12 @@ export function answerIsLoose(chess: Chess, sq: Square | null, student: Color): 
       ? `${capFirst(owned(chess, sq, student))} is loose and attacked by the ${listOf(chess, loose.attackers)}.`
       : `${capFirst(owned(chess, sq, student))} is loose — nothing guards it, though nothing attacks it yet.`;
   }
-  const mine = findLoosePieces(chess, student).filter((l) => l.type !== 'k');
-  if (mine.length === 0) return 'Nothing of yours is loose.';
-  return `Loose: your ${andList(mine.map((l) => `${name(l.type)} on ${l.square}`))}.`;
+  // No piece named: the side the turn asked about ("their pieces"), else yours.
+  const side: Color = seat === 'them' ? (student === 'w' ? 'b' : 'w') : student;
+  const whose = side === student ? 'your' : 'their';
+  const list = findLoosePieces(chess, side).filter((l) => l.type !== 'k');
+  if (list.length === 0) return `Nothing of ${whose === 'your' ? 'yours' : 'theirs'} is loose.`;
+  return `Loose: ${whose} ${andList(list.map((l) => `${name(l.type)} on ${l.square}`))}.`;
 }
 
 /** Attackers come from the side that does NOT own the target; defenders from
@@ -108,7 +111,7 @@ export function directAnswer(turn: ResolvedChatTurn, fen: string, memory: Conver
   try { chess = new Chess(fen); } catch { return null; }
   const sq = target(turn, memory);
   switch (turn.kind) {
-    case 'is-piece-loose': return answerIsLoose(chess, sq, student);
+    case 'is-piece-loose': return answerIsLoose(chess, sq, student, turn.seat);
     case 'count-attackers': return answerCount(chess, sq, student, 'attackers');
     case 'count-defenders': return answerCount(chess, sq, student, 'defenders');
     case 'why-is-it-a-target': return answerWhyTarget(chess, sq, student);

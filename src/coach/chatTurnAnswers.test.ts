@@ -21,6 +21,9 @@ describe('chat answers for the lesson\'s board questions (computed)', () => {
     expect(answerIsLoose(new Chess(RUY), 'c6', 'b')).toBe('Your knight on c6 is guarded.');
     expect(answerIsLoose(new Chess(LOOSE), 'c6', 'w')).toBe('Their knight on c6 is loose and attacked by the bishop on b5.');
     expect(answerIsLoose(new Chess(LOOSE), null, 'b')).toMatch(/^Loose: your knight on c6/);
+    // "which of THEIR pieces are loose?" lists theirs, not yours.
+    expect(answerIsLoose(new Chess(LOOSE), null, 'w', 'them')).toMatch(/^Loose: their knight on c6/);
+    expect(answerIsLoose(new Chess(LOOSE), null, 'w', 'me')).toMatch(/^(Loose: your|Nothing of yours)/);
   });
 
   it('counts attackers from the other side and defenders from its own', () => {

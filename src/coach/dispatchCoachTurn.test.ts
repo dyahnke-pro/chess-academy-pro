@@ -182,8 +182,41 @@ describe('dispatchCoachTurn — the shadow read', () => {
 
   it('FLAG ON: a reading whose answerer is still pending is NOT served', async () => {
     setServeParsedRoute(true);
-    setChatTurnReaderForTests(async () => ({ kind: 'is-piece-loose', referents: [], seat: 'them', english: 'which of their pieces are loose?' }));
-    await dispatchCoachTurn(TURN('which of their pieces are loose?'), {});
-    expect(ask.mock.calls[0][0].ask).toBe('which of their pieces are loose?');
+    // `answer` (a square answer outside a lesson) has no answerer yet.
+    setChatTurnReaderForTests(async () => ({ kind: 'answer', referents: [{ type: 'square', square: 'e5' }], seat: 'none', english: 'e5' }));
+    await dispatchCoachTurn(TURN('the pawn on e5 i think'), {});
+    expect(ask.mock.calls[0][0].ask).toBe('the pawn on e5 i think');
+  });
+});
+
+describe('dispatchCoachTurn — a direct kind is answered by its computed sentence', () => {
+  beforeEach(() => {
+    routeChatIntent.mockReset();
+    ask.mockReset();
+    rows.length = 0;
+    resetChatTurnListeners();
+    onChatTurn((r) => rows.push(r));
+    resetConversations();
+    routeChatIntent.mockResolvedValue(null);
+    ask.mockResolvedValue({ text: 'brain', toolCallIds: [], dispatchedToolNames: [], provider: 'deepseek', servedIntent: 'tactics' });
+    setChatTurnReaderForTests(async () => ({ kind: 'count-defenders', referents: [{ type: 'square', square: 'c6' }], seat: 'them', english: 'how many defend c6' }));
+  });
+
+  it('flag ON: the count comes from the board, the brain is never asked', async () => {
+    setServeParsedRoute(true);
+    const ans = await dispatchCoachTurn(TURN('how many defend c6'), {});
+    setServeParsedRoute(false);
+    expect(ans.text).toBe('Two defend their knight on c6: their pawn on b7 and pawn on d7.');
+    expect(ask).not.toHaveBeenCalled();
+    await waitForRow();
+    expect(rows[0]).toMatchObject({ parsedKind: 'count-defenders', servedParsed: true, servedIntent: 'count-defenders', answererLive: true });
+  });
+
+  it('flag OFF: today\'s routing answers and the reading is only logged', async () => {
+    setServeParsedRoute(false);
+    const ans = await dispatchCoachTurn(TURN('how many defend c6'), {});
+    expect(ans.text).toBe('brain');
+    await waitForRow();
+    expect(rows[0].servedParsed).toBe(false);
   });
 });
