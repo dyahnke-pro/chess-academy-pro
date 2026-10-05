@@ -334,6 +334,82 @@ pawn left weak, a plan of ours now blocked.
 - Play simple when up material; don't trade automatically — a minor piece may be
   winnable (13).
 
+### 36. Take away the escape square first 🔴
+- G18: "this would be mate but for the escape square — so can I take it first? If
+  your opponent isn't threatening anything, the answer is often yes" (Qc3); "that's
+  how you find quiet moves".
+- Compute: a check that fails only because the king has one flight square → a quiet
+  move covering that square, engine-confirmed, when the opponent has no threat (2).
+
+### Also seen in G15–G18
+- Trade off the defender of their centre: "Bg4 — Black would love to trade the f3
+  knight, the natural defender of White's centre" (7).
+- Weak pawns on the wing they castle away from usually don't matter — except when you
+  hold the centre and they're undeveloped: "you don't have forever; act now" (19, 18).
+- Don't release the clamp: "do you want this exchange? No — you want d5 to keep
+  clamping" (23).
+- Restriction: "c3 is incredibly effective at restricting the bishop — keep it in your
+  pocket" (20).
+- Defensive driving: "the moment a rook landed on b2 I noted the mate threats on f2"
+  (2, 21).
+- A retreat that leaves a piece to its fate: "the wrong knight dropped back and the
+  g7-bishop was left to its fate" (35).
+
+### 37. Don't hand them a tempo 🔴
+- G22: "a knight to c6 right now would let White push d5 with tempo, so you reserve it
+  and start with Qa5".
+- Compute: after our candidate, their pawn push that attacks one of our pieces and
+  gains a move (the piece must move) — prefer the order that denies it.
+
+### Also seen in G19–G22
+- A pawn move's permanent cost: "e5 weakens the d5-square and the long diagonal" (1).
+- Recapture to keep castling / avoid the queen trade: "bxc6, not dxc6" (7, 19).
+- King-side pawns forward aren't automatically fatal: "pushing pawns in front of your
+  king doesn't automatically get you mated" (26).
+- Prophylaxis against restriction: "White wants c3 to bury your bishop, so seize the
+  centre first with Bd4"; "f4 only pushes a pawn onto a dark square" (2, 24).
+- The right pawn break depends on their setup: "Nc3 changes my thinking — c5 is
+  stronger than e5 here"; "the blunder happened because you chose the right break"
+  (11).
+- Choose the capture version of a move you're making anyway: "since you're moving the
+  knight anyway, grab the pawn" (3).
+- Whole-board awareness: "Qd2 would drop the rook on a1" (35).
+- Don't stop at one pawn while their position collapses; don't give back material by
+  reflexive trading (13).
+- Open a file for a rook to convert; prepare the push so it doesn't hand over a
+  square (11, 18).
+
+### 38. The position opened — hit the gas 🔴
+- G24: "the centre is now fully open, so you shift from luxurious positional play to
+  hunting tactics — you've invested a pawn, so you must hit the gas"; "only a couple
+  of moves stand between them and consolidating, so you accelerate".
+- Compute: open files/diagonals jump (structure change) + our development lead /
+  material invested → say "now it's tactics, before they consolidate".
+
+### 39. The threat is stronger than the execution 🔴
+- G25: "don't just grab on f3 and e5 — keeping them tortured by the weak pawn beats
+  winning it and releasing the pressure".
+- Compute: a pawn we can win whose capture trades off our best piece or frees theirs
+  vs keeping the pressure — compareTwoMoves(capture, keep) + the piece-quality delta.
+
+### Also seen in G23–G26
+- "Compare your checks: two similar-looking checks rarely do the same job" — his own
+  words for mechanismContrast (✅ built).
+- Closed centre: two broad plans — blast the centre or play a wing; hit the chain at
+  its base; keep your own chain base propped (11, 5).
+- Small development details decide smoothness: "Be3 before castling, so it can drop
+  to f2 when the knight lands on f5" (18).
+- A hole is not an invitation to jump now: "g5 is an outpost, but Ng5 lets them trade
+  and fill it — later it's a transit square" (24, 6).
+- Start with a move you know is good (18); trade your good bishop to shatter their
+  structure "while you still can" (19).
+- An exposed king forces the defenders onto vulnerable squares — go after them (29).
+- Pieces with no squares get trapped — rooks too, by minor pieces (25).
+- Imbalances: two minors vs a rook usually favour the rook, unless the minors are very
+  active (8); don't walk the king backwards in an endgame (15).
+- Intermediate moves can be positional — improve a piece before you take (9).
+- "The queen is the supporting actress" — don't rush her out (20).
+
 ## From his chess.com articles (see docs/naroditsky-articles.md)
 - Greek Gift: the sacrifice works through the queen + knight tandem; its four
   camouflages — it looks impossible, the knight/queen route is non-standard, the
@@ -373,6 +449,7 @@ pawn left weak, a plan of ours now blocked.
 | 12 | qhHtJcXkkfg Sensei, Accelerated Dragon | Black wins (Qxb2 grab, Bf3 anchor, Nxf2+) | 58 |
 | 13 | 4_Ev1a1_2Mg Elephant Gambit | White wins (queen won) | 57 |
 | 14 | _X7t6o3o6JM Jobava London vs g6 | White wins (Nxd5 discovery, Nxe7+) | 56 |
+| 15–26 | _zT8aWZh2x0, mIzJ3LYZvKw, CQFSXmfxMV8, JwmxAagJ7bQ, pXBR9CxK3lQ, 3XUh57mV8a8, VeHyQWutHPQ, QVw89_6fh2Y, Zko_JUK06vM, Jt5bST3j-Cw, br2ThhGdJXU, 1zfJ7ABoh8k | insight notes only (filtered) | ~620 |
 
 ## Line audit (David 2026-10-05: "is the narration accurate to the longer line?")
 `moveInsight.lineAudit.test.ts` (LINE_AUDIT=1): real puzzles, natural wrong tries,
