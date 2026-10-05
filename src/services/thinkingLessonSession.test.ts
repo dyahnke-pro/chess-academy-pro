@@ -139,3 +139,72 @@ describe('ThinkingLessonSession — step 5 end to end', () => {
     expect(h.views[h.views.length - 1].active).toBe(false);
   });
 });
+
+describe('ThinkingLessonSession — follow-up chains (plan C1)', () => {
+  // Black knight c6 guarded by b7, hit by the d5 pawn and the b4 knight.
+  const GUARDED = '2k5/1p6/2n5/3P4/1N6/8/8/6K1 w - - 0 1'; // b7 guarded by the c8 king, so the key is clean
+  const one: LessonPositionCandidate[] = [{ fen: GUARDED, origin: 'puzzle', puzzleId: 'p-chain' }];
+
+  it('a right answer is followed by attackers → defenders → who takes first, then ONE record with the depth reached', async () => {
+    const h = harness();
+    const s = new ThinkingLessonSession(targetsKit(loose), one, new Set(), h.deps);
+    const done = s.run('green');
+    let v = await waitAsking(h);
+    expect(v.fen).toBe(GUARDED);
+    await s.tap('c6');
+
+    v = await waitAsking(h);
+    expect(v.focus).toEqual(['c6']);
+    expect(v.prompt).toMatch(/attack/);
+    await s.tap('d5');
+    await s.tap('b4');
+
+    v = await waitAsking(h);
+    expect(v.prompt).toMatch(/defend/);
+    await s.tap('b7');
+
+    v = await waitAsking(h);
+    expect(v.prompt).toMatch(/take|wins/);
+    await s.tap('d5');
+
+    const answers = await done;
+    expect(answers).toHaveLength(1);
+    expect(h.records).toHaveLength(1);
+    expect(h.records[0].summary.detail.chainDepth).toBe(3);
+    // The count is not given away before the chain asks for it…
+    expect(h.said.some((l) => /guarded, but your pawn attacks it/.test(l))).toBe(false);
+    // …and the computed exchange result closes it.
+    expect(h.said.some((l) => /take with the pawn first.*3 points up/.test(l))).toBe(true);
+  });
+
+  it('a missed link is shown and the chain goes on; depth counts only the clean links from the first', async () => {
+    const h = harness();
+    const s = new ThinkingLessonSession(targetsKit(loose), one, new Set(), h.deps);
+    const done = s.run('red');
+    await waitAsking(h);
+    await s.tap('c6');
+    await waitAsking(h);
+    await s.tap('g1');
+    expect(h.said[h.said.length - 1]).toMatch(/cannot reach c6/);
+    await s.dontKnow();
+    await waitAsking(h);
+    await s.tap('b7');
+    await waitAsking(h);
+    await s.tap('d5');
+    const answers = await done;
+    expect(h.said.some((l) => /The attackers: your (pawn|knight)/.test(l))).toBe(true);
+    expect(answers[0].summary.detail.chainDepth).toBe(0);
+    expect(answers[0].summary.held).toBe(true);
+  });
+
+  it('no chain after a root answer that was shown', async () => {
+    const h = harness();
+    const s = new ThinkingLessonSession(targetsKit(loose), one, new Set(), h.deps);
+    const done = s.run('green');
+    await waitAsking(h);
+    await s.dontKnow();
+    const answers = await done;
+    expect(answers[0].summary.detail.chainDepth).toBe(0);
+    expect(h.views.some((x) => x.focus.length > 0)).toBe(false);
+  });
+});

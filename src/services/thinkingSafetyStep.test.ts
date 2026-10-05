@@ -43,4 +43,9 @@ describe('step "am I safe?" — words', () => {
     expect(safetyKit().step).toBe('am-i-safe');
     expect(safetyKit().keyFor(LOOSE_BISHOP)?.key).toEqual(['c4']);
   });
+  it('a right answer is followed by the count (C1): their attackers, your defenders, who takes first', () => {
+    const links = safetyKit().followUps?.(KNIGHT_IN_DANGER, 'e5', 0) ?? [];
+    expect(links.map((l) => [l.id, l.key])).toEqual([['attackers', ['d6']], ['defenders', ['d4']], ['takes-first', ['d6']]]);
+    expect(links[2].after).toMatch(/they take with the pawn first and come out 2 points ahead/);
+  });
 });

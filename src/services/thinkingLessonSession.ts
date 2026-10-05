@@ -16,7 +16,9 @@ import {
 } from './thinkingLesson';
 import { boardIdentity, pickFairPosition, type ChosenLessonPosition, type FairKey, type LessonPositionCandidate } from './thinkingPositions';
 import { emitThinkingLesson } from './thinkingLessonEvents';
-import { stemKeyOf as hashKey } from '../utils/rotateStem';
+import { rotateStem, stemKeyOf as hashKey } from '../utils/rotateStem';
+import type { FollowUp } from './thinkingExchangeChain';
+export type { FollowUp } from './thinkingExchangeChain';
 
 /** Everything step-specific. */
 export interface StepKit {
@@ -43,6 +45,11 @@ export interface StepKit {
   /** Optional: the book's own words on this habit (verbatim public-domain
    *  passage, fetched by id) — read once, after the worked example. */
   book?: () => Promise<string | null>;
+  /** Optional (plan C1, follow-up chains): after a RIGHT answer on a Guide or
+   *  Solo board, the questions only understanding answers about one key
+   *  square ("tap its attackers" -> "its defenders" -> "who takes first").
+   *  Each link carries its own computed key; an empty list means no chain. */
+  followUps?: (fen: string, sq: Square, rot: number) => FollowUp[];
 }
 
 export interface AnsweredQuestion {
@@ -71,6 +78,8 @@ export interface LessonView {
   found: Square[];
   wrong: Square[];
   shown: Square[];
+  /** The piece a follow-up chain is about (painted so the eye stays on it). */
+  focus: Square[];
   /** Whether taps are being accepted right now. */
   asking: boolean;
   prompt: string | null;
@@ -83,7 +92,7 @@ export interface LessonView {
 const PER_STAGE: Record<LessonStage, number> = { show: 1, guide: 2, solo: 1 };
 
 const IDLE: LessonView = {
-  active: false, step: null, stage: null, fen: null, found: [], wrong: [], shown: [], asking: false, prompt: null, index: 0, total: 0,
+  active: false, step: null, stage: null, fen: null, found: [], wrong: [], shown: [], focus: [], asking: false, prompt: null, index: 0, total: 0,
 };
 
 export class ThinkingLessonSession {
@@ -99,6 +108,10 @@ export class ThinkingLessonSession {
   private resolveQuestion: (() => void) | null = null;
   private results: AnsweredQuestion[] = [];
   private bookRead = false;
+  /** The follow-up link being asked (null: the root question). */
+  private link: FollowUp | null = null;
+  /** What the last close settled (root or link) — read by the run loop. */
+  private settled: { summary: AnswerSummary; missing: Square[] } | null = null;
 
   private readonly candidates: readonly LessonPositionCandidate[];
 
@@ -159,7 +172,7 @@ export class ThinkingLessonSession {
       this.stage = stage;
       this.position = pos;
       const rot = hashKey(pos.fen);
-      this.publish({ stage, fen: pos.fen, found: [], wrong: [], shown: [], asking: false, prompt: null, index: this.cursor + 1 });
+      this.publish({ stage, fen: pos.fen, found: [], wrong: [], shown: [], focus: [], asking: false, prompt: null, index: this.cursor + 1 });
       if (stage === 'show') {
         this.publish({ shown: [...pos.key] });
         await this.deps.say(this.kit.showLine(pos.fen, pos.key, rot));
@@ -177,6 +190,7 @@ export class ThinkingLessonSession {
         continue;
       }
       await this.ask(pos, rot);
+      await this.settle(pos, stage);
     }
     if (!this.stopped && !opts.once) await this.finish();
     this.publish({ ...IDLE });
@@ -233,7 +247,7 @@ export class ThinkingLessonSession {
       case 'wrong':
         this.publish({ wrong: [...state.extras] });
         // Solo is graded silently; Guide teaches on a miss.
-        if (this.stage === 'guide') await this.deps.say(this.kit.wrongTapLine(fen, square));
+        if (this.stage === 'guide') await this.deps.say(this.link ? this.link.wrongTapLine(square) : this.kit.wrongTapLine(fen, square));
         return;
       case 'reveal':
         this.publish({ wrong: [...state.extras] });
@@ -250,31 +264,108 @@ export class ThinkingLessonSession {
     await this.close([...missing]);
   }
 
-  private async close(missing: Square[]): Promise<void> {
+  /** A question (root or link) closed: paint it, hand the result to the run
+   *  loop, and let it go on. Never awaits speech, so a tap returns at once. */
+  private close(missing: Square[]): Promise<void> {
     this.cancelTimer?.();
     this.cancelTimer = null;
     const q = this.q;
-    const pos = this.position;
-    const stage = this.stage;
-    if (!q || !pos || !stage) return;
+    if (!q) return Promise.resolve();
     this.publish({ asking: false, shown: missing });
-    const summary = summariseAnswer(q);
-    const answer: AnsweredQuestion = { step: this.kit.step, stage, position: pos, summary };
+    this.settled = { summary: summariseAnswer(q), missing };
+    const done = this.resolveQuestion;
+    this.resolveQuestion = null;
+    done?.();
+    return Promise.resolve();
+  }
+
+  /**
+   * After the root question closed: the follow-up chain (when the answer was
+   * right and the kit has one), then the ONE record, the audit row and the
+   * reasons.
+   *
+   * ONE RECORD PER ROOT QUESTION, carrying `chainDepth` — never a record per
+   * link. The links are scaffolding inside the same question about the same
+   * habit (the step's tags); a row per link would count one board's evidence
+   * two to four times on the same tag and let a long chain outweigh a short
+   * one. `chainDepth` is how far the student went on their own: the links
+   * answered right, unhelped, in a row from the first (0 = no chain, or the
+   * first link missed). One evidence shape (`AnswerDetail`), every surface.
+   */
+  private async settle(pos: ChosenLessonPosition, stage: LessonStage): Promise<void> {
+    const root = this.settled;
+    this.settled = null;
+    if (!root) return;
+    const rot = hashKey(pos.fen);
+    const { summary, missing } = root;
+
+    // The chain is asked about the first piece the student FOUND that has one.
+    let chainSq: Square | null = null;
+    let links: FollowUp[] = [];
+    if (summary.solved && stage !== 'show' && this.kit.followUps && !this.stopped) {
+      for (const sq of summary.taps) {
+        if (!pos.key.includes(sq)) continue;
+        const l = this.kit.followUps(pos.fen, sq, rot);
+        if (l.length > 0) { chainSq = sq; links = l; break; }
+      }
+    }
+
+    const praise = completeLine(summary, rot);
+    // The chain square's reason is the very count the chain is about to ask
+    // for, so it is not said up front — the computed result closes the chain.
+    const reasons = (missing.length > 0 ? missing : pos.key)
+      .filter((sq) => sq !== chainSq)
+      .map((sq) => this.kit.reasonFor(pos.fen, sq))
+      .filter((r): r is string => !!r);
+    const words = [praise, ...reasons].filter(Boolean).join(' ');
+    if (words) await this.deps.say(words);
+
+    let depth = 0;
+    let unbroken = true;
+    for (const [i, link] of links.entries()) {
+      if (this.stopped || !chainSq) break;
+      const res = await this.askLink(link, chainSq);
+      if (!res) break;
+      const clean = res.summary.held;
+      if (unbroken && clean) depth += 1; else unbroken = false;
+      const close = [
+        clean ? rotateStem(['Right.', 'Yes.', 'That’s it.'], rot + i) : (res.summary.solved ? null : link.shownLine),
+        link.after,
+      ].filter(Boolean).join(' ');
+      if (!this.stopped) await this.deps.say(close);
+    }
+    this.link = null;
+    if (chainSq && !this.stopped) this.publish({ focus: [] });
+
+    const answer: AnsweredQuestion = {
+      step: this.kit.step, stage, position: pos,
+      summary: { ...summary, detail: { ...summary.detail, chainDepth: depth } },
+    };
     this.results.push(answer);
     emitThinkingLesson({
       step: this.kit.step, stage, origin: pos.origin, keySize: summary.keySize, foundCount: summary.foundCount,
       wrongCount: summary.extras.length, outcome: summary.held ? 'held' : summary.prompted ? 'helped' : 'broken', help: summary.help, msToFirst: summary.msToFirst,
     });
     try { await this.deps.record(answer); } catch { /* the lesson never stalls on a write */ }
-    const praise = completeLine(summary, hashKey(pos.fen));
-    const reasons = (missing.length > 0 ? missing : pos.key)
-      .map((sq) => this.kit.reasonFor(pos.fen, sq))
-      .filter((r): r is string => !!r);
-    const words = [praise, ...reasons].filter(Boolean).join(' ');
-    if (words) await this.deps.say(words);
-    const done = this.resolveQuestion;
-    this.resolveQuestion = null;
-    done?.();
+  }
+
+  /** Ask one follow-up link on the same board; resolves with what it settled,
+   *  or null when the lesson stopped. */
+  private askLink(link: FollowUp, focus: Square): Promise<{ summary: AnswerSummary; missing: Square[] } | null> {
+    this.link = link;
+    return new Promise((resolve) => {
+      this.resolveQuestion = () => {
+        const r = this.settled;
+        this.settled = null;
+        resolve(r);
+      };
+      this.publish({ found: [], wrong: [], shown: [], focus: [focus], asking: false, prompt: null });
+      void this.deps.say(link.prompt).then(() => {
+        if (this.stopped) return;
+        this.q = newQuestion(link.key, this.deps.now(), link.mode);
+        this.publish({ asking: true, prompt: link.prompt });
+      });
+    });
   }
 
   private async finish(): Promise<void> {

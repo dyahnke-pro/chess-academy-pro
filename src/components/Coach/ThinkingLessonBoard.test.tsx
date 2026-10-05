@@ -5,7 +5,7 @@ import type { LessonView } from '../../services/thinkingLessonSession';
 
 const VIEW: LessonView = {
   active: true, step: 'their-targets', stage: 'guide', fen: '4k3/8/2n5/8/8/8/8/4K3 w - - 0 1',
-  found: ['c6'], wrong: ['a1'], shown: ['e5'], asking: true, prompt: 'Tap every piece of theirs you could win.',
+  found: ['c6'], wrong: ['a1'], shown: ['e5'], focus: [], asking: true, prompt: 'Tap every piece of theirs you could win.',
   index: 2, total: 4,
 };
 
@@ -15,6 +15,12 @@ describe('ThinkingLessonBoard', () => {
     expect(String(s.c6.background)).toMatch(/34,197,94/);
     expect(String(s.a1.background)).toMatch(/239,68,68/);
     expect(String(s.e5.background)).toMatch(/250,204,21/);
+  });
+
+  it('paints the follow-up chain\'s piece blue, under found/wrong/shown', () => {
+    const s = lessonSquareStyles({ ...VIEW, focus: ['d4', 'c6'] });
+    expect(String(s.d4.background)).toMatch(/59,130,246/);
+    expect(String(s.c6.background)).toMatch(/34,197,94/);
   });
 
   it('renders the stage, progress and prompt, and wires the buttons', () => {

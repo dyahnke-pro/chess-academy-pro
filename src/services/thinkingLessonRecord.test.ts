@@ -37,6 +37,14 @@ describe('thinkingLessonRecord', () => {
     expect(changed).toBeGreaterThanOrEqual(2);
   });
 
+  it('the follow-up chain depth rides on the ONE evidence row (no row per link)', async () => {
+    const a = answer(true);
+    await recordThinkingAnswer({ ...a, summary: { ...a.summary, detail: { ...a.summary.detail, chainDepth: 2 } } }, ['missed-tactic']);
+    const rows = await db.capabilityEvidence.toArray();
+    expect(rows).toHaveLength(1);
+    expect(rows[0].answer?.chainDepth).toBe(2);
+  });
+
   it('a Show beat is not an answer and records nothing', async () => {
     await recordThinkingAnswer(answer(true, false, 'show'), ['missed-tactic']);
     expect(await db.capabilityEvidence.count()).toBe(0);

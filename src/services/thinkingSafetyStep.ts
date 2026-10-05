@@ -16,6 +16,7 @@ import { findHangingBySee } from './positionReadingService';
 import type { FairKey } from './thinkingPositions';
 import type { StepKit } from './thinkingLessonSession';
 import { rotateStem } from '../utils/rotateStem';
+import { exchangeChain } from './thinkingExchangeChain';
 
 const name = (t: PieceSymbol): string => PIECE_NAMES[t] ?? 'piece';
 
@@ -95,6 +96,9 @@ export function safetyKit(): StepKit {
     prompt: safetyPrompt,
     wrongTapLine: safetyWrongTapLine,
     reasonFor: safetyReason,
+    // C1: a right answer is followed by the count itself — their attackers,
+    // your defenders, who they take with first.
+    followUps: (fen, sq, rot) => exchangeChain(fen, sq, 'mine', rot),
     intro: 'Today: am I safe? Strong players check their own pieces before they look for anything else. Every piece: who attacks it, who guards it. Watch first.',
   };
 }

@@ -41,7 +41,7 @@ export interface UseThinkingLesson {
 }
 
 const IDLE: LessonView = {
-  active: false, step: null, stage: null, fen: null, found: [], wrong: [], shown: [], asking: false, prompt: null, index: 0, total: 0,
+  active: false, step: null, stage: null, fen: null, found: [], wrong: [], shown: [], focus: [], asking: false, prompt: null, index: 0, total: 0,
 };
 
 export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesson {
