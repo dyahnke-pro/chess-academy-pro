@@ -2439,8 +2439,6 @@ export function CoachTeachPage(): JSX.Element {
   // The coach's lesson plan for a bare "teach me": a step of the thinking
   // method taught on the student's own boards, answered by tapping squares.
   // All logic lives in the session; the page routes, speaks and renders.
-  /** The kit of the last thinking lesson — what "Play a game on this" practises. */
-  const lastLessonKitRef = useRef<StepKit | null>(null);
   /** The step the current game is steering toward, or null for a plain game. */
   const lessonGameRef = useRef<StepKit | null>(null);
   /** Set when the coach's reply was a lesson moment: ask once it lands. */
@@ -2473,7 +2471,7 @@ export function CoachTeachPage(): JSX.Element {
     // a step that needs the played move or a line has no live-game reading)
     // can be practised in a real game straight after.
     if (!kit.adapt && !kit.enrich) {
-      lastLessonKitRef.current = kit;
+      thinkingLesson.setPractiseKit(kit);
       setCoachChoices([LESSON_GAME_CHIP]);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -2483,7 +2481,7 @@ export function CoachTeachPage(): JSX.Element {
    *  hand the student a few moments for the step just taught. The steer is
    *  silent; the question comes after the coach's move lands. */
   const startLessonGame = useCallback((): void => {
-    const kit = lastLessonKitRef.current;
+    const kit = thinkingLesson.practiseKit();
     if (!kit) return;
     thinkingLesson.stop();
     walkthrough.stop();
@@ -4421,7 +4419,7 @@ export function CoachTeachPage(): JSX.Element {
         // it through the normal route; the question stays open on the board.
         thinkingLesson.hold();
       }
-      if (lastLessonKitRef.current && matchLessonGameRequest(text)) {
+      if (thinkingLesson.practiseKit() && matchLessonGameRequest(text)) {
         setMessages((prev) => [...prev, { id: uid('lesson-game'), role: 'user', content: text, timestamp: Date.now() }]);
         setCoachChoices([]);
         startLessonGame();

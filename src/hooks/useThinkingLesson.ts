@@ -42,6 +42,10 @@ export interface UseThinkingLesson {
   carryOver: (fen: string) => Promise<boolean>;
   /** A new game: the carry-over re-reads the record and may ask each step again. */
   newGame: () => void;
+  /** The step "Play a game on this" practises — kept here, across games,
+   *  so the page holds no per-lesson ref of its own. */
+  practiseKit: () => StepKit | null;
+  setPractiseKit: (kit: StepKit | null) => void;
   stop: () => void;
 }
 
@@ -127,5 +131,9 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
     return true;
   }, [askOnce, newGame]);
 
-  return { view, plan: planThinkingLesson, start, finish: finishThinkingLesson, kitFor: kitForStep, firstFairKit, motifKit, tap, dontKnow, hold, askOnce, slipSteps: slipStepsForGame, carryOver, newGame, stop };
+  const practiseRef = useRef<StepKit | null>(null);
+  const practiseKit = useCallback((): StepKit | null => practiseRef.current, []);
+  const setPractiseKit = useCallback((kit: StepKit | null): void => { practiseRef.current = kit; }, []);
+
+  return { view, plan: planThinkingLesson, start, finish: finishThinkingLesson, kitFor: kitForStep, firstFairKit, motifKit, tap, dontKnow, hold, askOnce, slipSteps: slipStepsForGame, carryOver, newGame, practiseKit, setPractiseKit, stop };
 }
