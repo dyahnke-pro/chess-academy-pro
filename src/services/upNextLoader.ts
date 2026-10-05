@@ -20,8 +20,9 @@ import {
 } from './upNextPicker';
 import { getCapabilityProfile } from './capabilityEvidence';
 import { heatMap, type HeatTile } from './heatMap';
-import { habitForCluster } from './coachDecider';
-import type { MethodHabit } from './methodBeat';
+import { lessonStepForCard } from './thinkingLessonStart';
+import type { StepChoice } from './thinkingLessonPlan';
+import { THINKING_STEPS } from './thinkingSteps';
 import { isBeginnerMode } from './ratingBands';
 import { START_FUNDAMENTALS_KEY } from './activeBite';
 import { useAppStore } from '../stores/appStore';
@@ -71,40 +72,30 @@ export async function loadStartSteps(): Promise<StartStep[]> {
   return START_STEPS.filter((s) => !done[s]);
 }
 
-/** Which method habits are TIER 1 of the thinking lesson ("see the board":
- *  what their move threatens / am I safe / is my move safe → `opponent-threat`;
- *  their targets → `forcing-scan`). A `Record` so a new habit must answer.
- *  The tag → habit join is the one that exists (`habitForCluster`, over the
- *  exhaustive `COACH_TAG_HABIT`) — never a second tag table. When the
- *  `ThinkingStep` vocabulary lands (learn-how-to-think P0c) this re-keys
- *  through it. */
-const TIER_ONE_HABIT: Record<MethodHabit, boolean> = {
-  'opponent-threat': true,
-  'forcing-scan': true,
-  'slow-down': false,
-  candidates: false,
-};
-
-/** The tier-1 standing off the heat map (PURE): red if any tier-1 skill is
- *  red (led by the most open slips), else grey if any is unproven, else green.
- *  Null when no tile maps to tier 1 (nothing to read). */
-export function thinkingSignalFromHeatMap(tiles: readonly HeatTile[]): ThinkingSignal | null {
-  const tier = tiles.filter((t) => {
-    const h = habitForCluster(t.tag);
-    return h !== null && TIER_ONE_HABIT[h];
-  });
-  if (tier.length === 0) return null;
-  const red = tier.filter((t) => t.state === 'red').sort((a, b) => b.openCount - a.openCount);
-  if (red.length > 0) return { state: 'red', skill: red[0].label };
-  const grey = tier.find((t) => t.state === 'grey');
-  if (grey) return { state: 'grey', skill: grey.label };
-  return { state: 'green', skill: tier[0].label };
+/** The card's standing, read off the step the lesson WOULD teach (PURE).
+ *  RED when the lesson is about to teach a step the student keeps failing (in
+ *  games, led by the tile with the most open slips; or in lessons), GREY when
+ *  it would teach an unproven step (grey means teach it), GREEN when every step
+ *  is proven and it would only review. Null when the chooser has no step. */
+export function thinkingSignalFrom(choice: StepChoice | null, tiles: readonly HeatTile[]): ThinkingSignal | null {
+  if (!choice) return null;
+  const step = THINKING_STEPS[choice.step.step].name;
+  if (choice.reason === 'game-weakness') {
+    const worst = tiles
+      .filter((t) => t.state === 'red' && choice.step.tags.includes(t.tag))
+      .sort((a, b) => b.openCount + b.broken - (a.openCount + a.broken))[0];
+    return { state: 'red', skill: worst?.label ?? step, step };
+  }
+  if (choice.reason === 'red-first') return { state: 'red', skill: step, step };
+  if (choice.reason === 'review') return { state: 'green', skill: step, step };
+  return { state: 'grey', skill: step, step };
 }
 
 async function loadThinkingSignal(weaknesses: Parameters<typeof heatMap>[1]): Promise<ThinkingSignal | null> {
   if (!THINKING_LESSON_LIVE) return null;
   const profile = await getCapabilityProfile().catch(() => new Map());
-  return thinkingSignalFromHeatMap(heatMap(profile, weaknesses));
+  const tiles = heatMap(profile, weaknesses);
+  return thinkingSignalFrom(await lessonStepForCard(tiles).catch(() => null), tiles);
 }
 
 export async function loadUpNextInput(): Promise<UpNextInput> {

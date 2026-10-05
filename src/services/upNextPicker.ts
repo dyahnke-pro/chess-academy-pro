@@ -67,8 +67,11 @@ export const THINKING_LESSON_LIVE = true;
  *  (grey means TEACH IT — a fresh install is all grey); GREEN = all proven. */
 export interface ThinkingSignal {
   state: 'red' | 'grey' | 'green';
-  /** The leading tier-1 skill's label (the red one with the most open slips). */
+  /** What keeps costing them (the red tile with the most open slips), or the
+   *  step's own name when the record names no tile. */
   skill: string;
+  /** The step the lesson will teach (`THINKING_STEPS[…].name`). */
+  step: string;
 }
 
 export const THINKING_LESSON_PATH = '/coach/teach?lesson=think';
@@ -78,7 +81,7 @@ function thinkingPick(t: ThinkingSignal): UpNextPick {
     kind: 'thinking', key: 'up:thinking', hub: 'coach', path: THINKING_LESSON_PATH, bite: 'one lesson',
     label: 'Learn how to think',
     reason: t.state === 'red'
-      ? `${t.skill} keeps costing you. Learn the habit that catches it: what their move changed, whether you are safe, where their targets are.`
+      ? `${t.skill} keeps costing you. Today's lesson is the habit that catches it: ${t.step.replace(/\?$/, '').toLowerCase()}.`
       : 'Learn the habit strong players run every move: what their move changed, whether you are safe, where their targets are.',
     state: { repKey: 'up:thinking' },
   };

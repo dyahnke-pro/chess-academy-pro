@@ -221,3 +221,19 @@ export async function finishThinkingLesson(plan: PlannedLesson, source: string):
     return null;   // the lesson already ran; the unlock waits for next time
   }
 }
+
+/**
+ * The step the lesson WOULD teach, for a card that only shows it (Up next):
+ * the same chooser, the same KNOW standing and the same game weighting the
+ * lesson uses, so the card and the lesson can never disagree. Every step
+ * counts as available (the card does not load boards).
+ */
+export async function lessonStepForCard(tiles: readonly HeatTile[]): Promise<StepChoice | null> {
+  const profile = await knowProfile();
+  return chooseThinkingStep(
+    BUILT_THINKING_STEPS,
+    (s) => standingFromProfile(profile, s.tags),
+    () => true,
+    (s) => gameWeightForTags(tiles, s.tags),
+  );
+}

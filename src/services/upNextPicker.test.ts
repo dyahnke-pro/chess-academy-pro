@@ -65,13 +65,13 @@ describe('the thinking lesson bite (learn-how-to-think)', () => {
   it('adding the lesson never reorders anything else', () => {
     for (const i of inputs) {
       const before = rankUpNext(i).map((p) => p.key);
-      expect(withoutThinking(rankUpNext({ ...i, thinking: { state: 'red', skill: 'Hung material' } }))).toEqual(before);
-      expect(withoutThinking(rankUpNext({ ...i, thinking: { state: 'grey', skill: 'Hung material' } }))).toEqual(before);
+      expect(withoutThinking(rankUpNext({ ...i, thinking: { state: 'red', skill: 'Hung material', step: 'Am I safe?' } }))).toEqual(before);
+      expect(withoutThinking(rankUpNext({ ...i, thinking: { state: 'grey', skill: 'Hung material', step: 'Am I safe?' } }))).toEqual(before);
     }
   });
 
   it('RED lands right after the slip, ahead of the puzzle weakness', () => {
-    const r = rankUpNext({ ...base, reps: [weak], latestGameSlip: { puzzleId: 'p1', opponent: null, cpLoss: 300 }, thinking: { state: 'red', skill: 'Hung material' } });
+    const r = rankUpNext({ ...base, reps: [weak], latestGameSlip: { puzzleId: 'p1', opponent: null, cpLoss: 300 }, thinking: { state: 'red', skill: 'Hung material', step: 'Am I safe?' } });
     expect(r.map((p) => p.kind).slice(0, 3)).toEqual(['game-slip', 'thinking', 'weakness']);
     expect(r[1].reason).toContain('Hung material');
     expect(r[1].path).toBe(THINKING_LESSON_PATH);
@@ -79,12 +79,12 @@ describe('the thinking lesson bite (learn-how-to-think)', () => {
   });
 
   it('GREY (a fresh install) is taught: on a first visit it is in the ring of three', () => {
-    const r = rankUpNext({ ...base, coldStart: true, thinking: { state: 'grey', skill: 'x' } });
+    const r = rankUpNext({ ...base, coldStart: true, thinking: { state: 'grey', skill: 'x', step: 'x' } });
     expect(r.map((p) => p.kind).slice(0, 3)).toEqual(['deep-run', 'thinking', 'warm-up']);
   });
 
   it('GREEN (proven) is not offered', () => {
-    expect(rankUpNext({ ...base, thinking: { state: 'green', skill: 'x' } }).some((p) => p.kind === 'thinking')).toBe(false);
+    expect(rankUpNext({ ...base, thinking: { state: 'green', skill: 'x', step: 'x' } }).some((p) => p.kind === 'thinking')).toBe(false);
   });
 
   it('every kind with a finish line really finishes there; a live kind must have one', () => {
