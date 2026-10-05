@@ -24,7 +24,9 @@ export interface StepKit {
   keyFor: (fen: string, candidate?: LessonPositionCandidate) => FairKey | null;
   /** The worked example: the method, then every key square's reason. */
   showLine: (fen: string, key: readonly Square[], rot: number) => string;
-  prompt: (rot: number) => string;
+  /** The question. Gets the board so a step can ask a board-specific form
+   *  (step 5 asks about a pinned piece when piling on wins it). */
+  prompt: (rot: number, fen?: string) => string;
   /** What rules a wrong tap out — the method, never the answer. */
   wrongTapLine: (fen: string, sq: Square) => string;
   /** After a question closes: why each key square is in the key. */
@@ -184,11 +186,11 @@ export class ThinkingLessonSession {
   private ask(pos: ChosenLessonPosition, rot: number): Promise<void> {
     return new Promise<void>((resolve) => {
       this.resolveQuestion = resolve;
-      const question = [pos.lead, this.kit.prompt(rot)].filter(Boolean).join(' ');
+      const question = [pos.lead, this.kit.prompt(rot, pos.fen)].filter(Boolean).join(' ');
       void this.deps.say(question).then(() => {
         if (this.stopped) { resolve(); return; }
         this.q = newQuestion(pos.key, this.deps.now());
-        this.publish({ asking: true, prompt: this.kit.prompt(rot) });
+        this.publish({ asking: true, prompt: this.kit.prompt(rot, pos.fen) });
       });
     });
   }

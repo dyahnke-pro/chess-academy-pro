@@ -67,3 +67,27 @@ describe('step 5 — words', () => {
     expect(targetsWrongTapLine(LOOSE_KNIGHT, 'a4')).toMatch(/empty square/);
   });
 });
+
+describe('step 5 — the pinned-piece form (PP on the PP)', () => {
+  // Bg5 pins the f6-knight to the queen; e4-e5 piles on with a pawn.
+  const PIN = 'rnbqkb1r/ppp2ppp/4pn2/3p2B1/3PP3/2N5/PPP2PPP/R2QKBNR w KQkq - 0 5';
+
+  it('asks where to attack the pinned piece again, keyed by the pile-on squares', async () => {
+    const { targetsKit } = await import('./thinkingTargetsStep');
+    const kit = targetsKit(() => []);
+    const k = kit.keyFor(PIN);
+    expect(k?.key).toContain('e5');
+    expect(kit.prompt(0, PIN)).toMatch(/knight on f6 is pinned/);
+    expect(kit.reasonFor(PIN, 'e5')).toMatch(/attacks the pinned knight again with a pawn/);
+    expect(kit.showLine(PIN, k?.key ?? [], 0)).toMatch(/pinned/);
+    // A wrong tap never names the answer.
+    expect(kit.wrongTapLine(PIN, 'a3')).not.toMatch(/e5/);
+  });
+
+  it('an ordinary board keeps the ordinary targets question', async () => {
+    const { targetsKit } = await import('./thinkingTargetsStep');
+    const kit = targetsKit(() => []);
+    expect(kit.prompt(0, '4k3/8/8/8/8/8/8/4K3 w - - 0 1')).not.toMatch(/pinned/);
+    expect(kit.prompt(0)).not.toMatch(/pinned/);
+  });
+});

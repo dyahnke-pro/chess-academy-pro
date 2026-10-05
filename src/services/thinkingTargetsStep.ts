@@ -18,6 +18,8 @@ import type { FairKey } from './thinkingPositions';
 import type { StepKit } from './thinkingLessonSession';
 import { rotateStem } from '../utils/rotateStem';
 import { findHangingBySee } from './positionReadingService';
+import { findPinPressure, PIN_PRESSURE_PRINCIPLE, type PinPressure } from './pinPressure';
+import { sayMoveClause } from './spokenMove';
 
 /** The one loose-piece computer, injected: squares of `color`'s undefended
  *  pieces (attacked or not). */
@@ -127,16 +129,74 @@ export function targetsWrongTapLine(fen: string, sq: Square): string {
   return `Look again at that ${name(p.type)} — who guards it?`;
 }
 
+// ── THE PINNED-PIECE FORM (David 2026-10-05: "PP on the PP" folds into step 5).
+// A pinned piece is a target that cannot run. On a board where the student
+// holds a pin and piling on WINS it (the one `pinPressure` computer), step 5
+// asks the sharper question: where can you attack it again? Every other board
+// keeps the ordinary targets question.
+
+/** The pin this board's question is about, or null for an ordinary board. */
+export function pinFormFor(fen: string): PinPressure | null {
+  const p = findPinPressure(fen)[0];
+  if (!p) return null;
+  const squares = new Set(p.moves.map((m) => m.to));
+  return squares.size >= 1 && squares.size <= 4 ? p : null;
+}
+
+export function pinPressureKey(fen: string): FairKey | null {
+  const p = pinFormFor(fen);
+  return p ? { key: [...new Set(p.moves.map((m) => m.to))], nearMiss: [] } : null;
+}
+
+function pinnedLabel(fen: string, p: PinPressure): string {
+  let behind = '';
+  try { const b = new Chess(fen).get(p.behind); if (b) behind = ` to the ${name(b.type)} on ${p.behind}`; } catch { /* name only the pin */ }
+  return `their ${name(p.pinnedPiece)} on ${p.pinned}, pinned${behind}`;
+}
+
+export function pinPressurePrompt(rot: number, p: PinPressure): string {
+  return rotateStem([
+    `Their ${name(p.pinnedPiece)} on ${p.pinned} is pinned. Tap every square where you can attack it again and win it.`,
+    `The ${name(p.pinnedPiece)} on ${p.pinned} cannot run. Where can you pile on? Tap each square.`,
+  ], rot);
+}
+
+export function pinPressureReason(fen: string, sq: Square): string | null {
+  const p = pinFormFor(fen);
+  const m = p?.moves.find((x) => x.to === sq);
+  if (!p || !m) return null;
+  const said = sayMoveClause(m.san, fen);
+  return `${said.charAt(0).toUpperCase()}${said.slice(1)} attacks the pinned ${name(p.pinnedPiece)} again${m.byPawn ? ' with a pawn' : ''} — it cannot step away.`;
+}
+
+export function pinPressureShowLine(fen: string, key: readonly Square[], rot: number): string {
+  const p = pinFormFor(fen);
+  if (!p) return targetsShowLine(fen, key, rot);
+  const reasons = key.map((sq) => pinPressureReason(fen, sq)).filter((r): r is string => !!r);
+  return [rotateStem([...PIN_PRESSURE_PRINCIPLE], rot), `Here: ${pinnedLabel(fen, p)}.`, ...reasons].join(' ');
+}
+
+export function pinPressureWrongTapLine(fen: string, sq: Square): string {
+  const p = pinFormFor(fen);
+  if (!p) return targetsWrongTapLine(fen, sq);
+  return `Nothing of yours can go to ${sq} and attack the pinned ${name(p.pinnedPiece)} safely — look for the piece that can hit it again.`;
+}
+
 /** The step-5 kit for the lesson runner. The loose computer is injected (one
  *  copy of it in the app). */
 export function targetsKit(loose: LooseSquares): StepKit {
   return {
     step: 'their-targets',
-    keyFor: (fen) => targetsKey(fen, loose),
-    showLine: targetsShowLine,
-    prompt: targetsPrompt,
-    wrongTapLine: targetsWrongTapLine,
-    reasonFor: targetReason,
+    // A board with a winning pile-on asks the pinned-piece form; any other
+    // board asks the ordinary targets question.
+    keyFor: (fen) => pinPressureKey(fen) ?? targetsKey(fen, loose),
+    showLine: (fen, key, rot) => (pinFormFor(fen) ? pinPressureShowLine(fen, key, rot) : targetsShowLine(fen, key, rot)),
+    prompt: (rot, fen) => {
+      const p = fen ? pinFormFor(fen) : null;
+      return p ? pinPressurePrompt(rot, p) : targetsPrompt(rot);
+    },
+    wrongTapLine: (fen, sq) => (pinFormFor(fen) ? pinPressureWrongTapLine(fen, sq) : targetsWrongTapLine(fen, sq)),
+    reasonFor: (fen, sq) => (pinFormFor(fen) ? pinPressureReason(fen, sq) : targetReason(fen, sq)),
     intro: 'Today: finding their targets. Before you choose a move, look at each of their pieces and ask who guards it. A piece nobody guards, or one that loses the exchange, is a target. Watch first.',
   };
 }
