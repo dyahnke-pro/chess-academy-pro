@@ -10,13 +10,17 @@ describe('thinking lessons teach the books\' ideas, grounded by page id', () => 
     });
     it(`${step}: the coach says it in its own words, not as a quote`, () => {
       expect(idea.teach).not.toMatch(/[“"]/);
-      expect(idea.teach).not.toMatch(/Lasker|Capablanca|Nimzowitsch/);
+      expect(idea.teach).not.toMatch(/Lasker|Capablanca|Nimzowitsch|Mason|Steinitz/);
     });
   }
 
   it('a step the books do not teach stays silent', async () => {
-    expect(await bookTeachingFor('forcing-moves' as ThinkingStep)).toBeNull();
-    expect(await bookTeachingFor('answer-danger' as ThinkingStep)).toBeNull();
+    expect(await bookTeachingFor('candidates' as ThinkingStep)).toBeNull();
+  });
+
+  it('the two habits the first four books left silent are now taught', async () => {
+    expect(await bookTeachingFor('forcing-moves')).toMatch(/forc/);
+    expect(await bookTeachingFor('answer-danger')).toMatch(/stop it/);
   });
 
   it('a moved source sentence is caught', () => {
