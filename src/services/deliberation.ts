@@ -18,7 +18,7 @@ import type { StockfishAnalysis } from '../types';
 import { findHangingPieces } from './tacticClassifier';
 import { proofAgainstMover, proofForMover } from './exchangeLedger';
 import { strategicWhyLed } from './moveFundamentals';
-import { legalSeeGainFor, seeReadsStanding } from './positionReadingService';
+import { computeTerritory, legalSeeGainFor, seeReadsStanding } from './positionReadingService';
 import { isPinnedPiece } from './nextPlans';
 import { andList, orList } from '../utils/andList';
 
@@ -62,7 +62,7 @@ const CLEARLY_WORSE_CP = 150;
  *  nothing past the band weighs to '' (silence, which the voice rules allow). */
 const MEANINGFUL_DELTA_CP = 40;
 
-export type Shortfall = 'drops-material' | 'clearly-worse' | 'less-precise';
+export type Shortfall = 'drops-material' | 'clearly-worse' | 'less-precise' | 'trades-queens';
 
 export interface Candidate {
   san: string;
@@ -185,7 +185,11 @@ export function buildDeliberation(input: {
     // piece left en prise only counts when the eval says it costs.
     const loose = dropsAfter(fenBefore, l.moves[0], moverColor);
     const drop = loose && Math.max(0, bestEval - moverEval(l)) >= CLEARLY_WORSE_CP ? loose : null;
-    const shortfall: Shortfall = drop ? 'drops-material' : deltaCp >= CLEARLY_WORSE_CP ? 'clearly-worse' : 'less-precise';
+    // THE QUEEN TRADE THAT THROWS AWAY SPACE (game 1: "we have more space, and
+    // the effect of a space advantage is greatly diminished if the queens are
+    // off — fewer pieces to attack with"). Only where the engine agrees it is worse.
+    const tradesQueens = !drop && deltaCp >= MEANINGFUL_DELTA_CP && moreSpace(fenBefore, moverColor) && queensOffWithin(fenBefore, l.moves, 5);
+    const shortfall: Shortfall = drop ? 'drops-material' : tradesQueens ? 'trades-queens' : deltaCp >= CLEARLY_WORSE_CP ? 'clearly-worse' : 'less-precise';
     const proof = proofAgainstMover(fenBefore, l.moves, moverColor);
     alternatives.push({
       san, evalCp, deltaCp, shortfall,
@@ -220,6 +224,9 @@ function shortfallText(c: Candidate): string {
     const rest = c.proof.replace(new RegExp(`^${esc}(?:, | and )`), '');
     if (rest !== c.proof) return `${c.san}? Then ${rest}.`;
     return `${c.san}? ${c.proof[0].toUpperCase()}${c.proof.slice(1)}.`;
+  }
+  if (c.shortfall === 'trades-queens') {
+    return `${c.san}? That trades the queens — with more space you want them on; every piece that comes off shrinks the edge.`;
   }
   if (c.shortfall === 'drops-material' && c.drops) {
     return `${c.san}? That drops the ${PNAME[c.drops.piece] ?? 'piece'} on ${c.drops.square}.`;
@@ -266,7 +273,7 @@ export function deliberationFacts(d: Deliberation): string {
 /** The alternatives ruled out WITH a reason — the line that proves it or the
  *  piece it drops. The weighing speaks only these. */
 function reasonedAlternatives(d: Deliberation): Candidate[] {
-  return meaningfulAlternatives(d).filter((a) => !!a.proof || (a.shortfall === 'drops-material' && !!a.drops));
+  return meaningfulAlternatives(d).filter((a) => !!a.proof || (a.shortfall === 'drops-material' && !!a.drops) || a.shortfall === 'trades-queens');
 }
 
 /**
@@ -483,4 +490,21 @@ export function heldVerdictText(v: HeldVerdict, when: 'now' | 'found' | 'missed'
   if (when === 'found') return `That was the move here — it ${v.why}.`;
   if (when === 'missed') return `The move here was ${v.san} — it ${v.why}.${line}`;
   return `The move is ${v.san} — it ${v.why}.${line}`;
+}
+
+/** The mover's pawns have claimed more room behind them (`computeTerritory`). */
+function moreSpace(fen: string, mover: 'w' | 'b'): boolean {
+  try {
+    const sp = computeTerritory(fen);
+    return mover === 'w' ? sp.white >= sp.black + 2 : sp.black >= sp.white + 2;
+  } catch { return false; }
+}
+
+/** Both queens are gone within `plies` of the line. */
+function queensOffWithin(fen: string, uci: readonly string[], plies: number): boolean {
+  try {
+    const c = new Chess(fen);
+    for (const u of uci.slice(0, plies)) c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+    return !c.board().flat().some((x) => x && x.type === 'q');
+  } catch { return false; }
 }

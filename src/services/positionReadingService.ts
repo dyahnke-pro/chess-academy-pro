@@ -1660,6 +1660,36 @@ export function computeSpace(fen: string): SpaceInfo {
   return { white: controlled.w.size, black: controlled.b.size };
 }
 
+/** TERRITORY — the space a side's pawn chain has claimed behind it: squares on
+ *  the c–f files, from its second rank up to its most advanced pawn on that
+ *  file, that no enemy pawn attacks (the engine's own space term). Where
+ *  `computeSpace` counts squares a pawn HITS in the contested band — symmetric
+ *  for d4/e5 against d6/g6 — this counts the room BEHIND the pawns, which is
+ *  what "we have more space" means (speed run, game 1). */
+export function computeTerritory(fen: string): SpaceInfo {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return { white: 0, black: 0 }; }
+  const out: SpaceInfo = { white: 0, black: 0 };
+  for (const color of ['w', 'b'] as const) {
+    const enemy: Color = color === 'w' ? 'b' : 'w';
+    for (const f of ['c', 'd', 'e', 'f']) {
+      let front = 0;   // relative rank of the most advanced own pawn on the file
+      for (let r = 1; r <= 8; r += 1) {
+        const p = chess.get(`${f}${r}` as Square);
+        if (p && p.type === 'p' && p.color === color) front = Math.max(front, color === 'w' ? r : 9 - r);
+      }
+      for (let rel = 2; rel < front; rel += 1) {
+        const sq = `${f}${color === 'w' ? rel : 9 - rel}` as Square;
+        const occ = chess.get(sq);
+        if (occ && occ.type === 'p') continue;
+        if (chess.attackers(sq, enemy).some((a) => chess.get(a)?.type === 'p')) continue;
+        if (color === 'w') out.white += 1; else out.black += 1;
+      }
+    }
+  }
+  return out;
+}
+
 /** The best squares for `attackerColor` to TARGET — the enemy's concrete
  *  weaknesses: HANGING material (SEE — loses material to a capture now; not
  *  the same as LOOSE = undefended, which is `findLoosePieces`), structural weak

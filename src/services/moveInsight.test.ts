@@ -302,3 +302,13 @@ describe('the hole read, diagnosis direction', () => {
     expect(moveMissed('4k1n1/8/8/8/8/8/5P2/4K3 w - - 0 1', 'f4', ['g8f6'])?.tag).toBe('created-pawn-weakness');
   });
 });
+
+describe("you can't save everything at once (game 1)", () => {
+  it('two pieces hit at once: say so, and say choose', () => {
+    // The knight on d4 hits the bishop on b5 and the rook on f3; nothing takes it.
+    const t = positionAsk('7k/8/8/1B6/3n4/5R2/8/K7 w - - 0 1', {}).text;
+    expect(t).toMatch(/Two things of yours are hit at once/);
+    // …but when the forker can be taken, that is the answer, not "choose" (non-vacuous).
+    expect(positionAsk('4k3/8/8/8/3n4/1B3N2/8/6K1 w - - 0 1', {}).text).not.toMatch(/hit at once/);
+  });
+});

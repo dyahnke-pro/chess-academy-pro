@@ -163,7 +163,8 @@ function positionAskCore(fen: string, opts: { bestSan?: string }): PositionAsk {
     return { mode: 'defend', text: 'You are in check — the king comes first.', squares: [] };
   }
 
-  const must = computeMustDefend(fen, me).pieces[0];
+  const allMust = computeMustDefend(fen, me).pieces;
+  const must = allMust[0];
   if (must) {
     // The cheapest piece of theirs hitting it — the one that takes first.
     const attackerSq = (() => {
@@ -197,6 +198,25 @@ function positionAskCore(fen: string, opts: { bestSan?: string }): PositionAsk {
     // against a pawn attack a defender changes nothing (replay, game 2 8.Bc4).
     const cheaperHits = (() => { try { return board.attackers(must.square as Square, them).some((a) => (CAPTURE_VALUE[board.get(a)?.type ?? 'k'] ?? 99) < (CAPTURE_VALUE[must.piece] ?? 0)); } catch { return true; } })();
     const cheap = must.piece !== 'p' && !cheaperHits ? pawnCanGuard(fen, must.square) : null;
+    // YOU CAN'T SAVE EVERYTHING AT ONCE (game 1: "black has all these threats
+    // … we won't be able to save everything"): two or more of your pieces hit
+    // at once — choose what to give up.
+    // …unless one capture answers both: take the piece doing the hitting.
+    const forker = (() => {
+      try {
+        const a = board.attackers(allMust[0].square as Square, them);
+        const b2 = allMust[1] ? board.attackers(allMust[1].square as Square, them) : [];
+        return a.find((x) => b2.includes(x)) ?? null;
+      } catch { return null; }
+    })();
+    const forkerTakeable = !!forker && (() => { try { return board.attackers(forker, me).length > 0; } catch { return false; } })();
+    if (allMust.length >= 2 && !forkerTakeable) {
+      return {
+        mode: 'defend',
+        text: `Two things of yours are hit at once — your ${name(allMust[0].piece)} on ${allMust[0].square} and your ${name(allMust[1].piece)} on ${allMust[1].square}. You can't save everything; decide what to give up, and make them pay for it.`,
+        squares: [allMust[0].square, allMust[1].square],
+      };
+    }
     return { mode: 'defend', text: `${hit} — deal with that first.${cheap ? ' A pawn can guard it — the cheapest defender there is.' : ''}`, squares: [must.square] };
   }
 
