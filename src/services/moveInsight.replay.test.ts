@@ -8,21 +8,22 @@ import { spawn } from 'node:child_process';
 import { writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { moveMissed, positionAsk, theirMoveChanged } from './moveInsight';
+import { thinkAloud, type Candidate } from './thinkAloud';
 
 function engine() {
   const p = spawn('node', ['/home/user/wt-upnext/node_modules/stockfish/bin/stockfish-18-lite-single.js']);
-  let buf = ''; let pv: string[] = []; let cp: number | null = null; let mate: number | null = null; let res: ((v: { pv: string[]; cp: number | null; mate: number | null }) => void) | null = null;
+  let buf = ''; let pv: string[] = []; let cp: number | null = null; let mate: number | null = null; let second: { pv: string[]; cp: number | null; mate: number | null } | null = null; let res: ((v: { pv: string[]; cp: number | null; mate: number | null; second: { pv: string[]; cp: number | null; mate: number | null } | null }) => void) | null = null;
   p.stdout.on('data', (d) => {
     buf += String(d); let i;
     while ((i = buf.indexOf('\n')) >= 0) {
       const l = buf.slice(0, i); buf = buf.slice(i + 1);
-      const m = l.match(/ pv (.+)$/); if (m) { pv = m[1].trim().split(' '); const c = l.match(/score cp (-?\d+)/); const mt = l.match(/score mate (-?\d+)/); cp = c ? +c[1] : null; mate = mt ? +mt[1] : null; }
-      if (/^bestmove/.test(l) && res) { const r = res; res = null; r({ pv, cp, mate }); }
+      const m = l.match(/ pv (.+)$/); if (m) { const c = l.match(/score cp (-?\d+)/); const mt = l.match(/score mate (-?\d+)/); const v = { pv: m[1].trim().split(' '), cp: c ? +c[1] : null, mate: mt ? +mt[1] : null }; if (/ multipv 2 /.test(l)) second = v; else { pv = v.pv; cp = v.cp; mate = v.mate; } }
+      if (/^bestmove/.test(l) && res) { const r = res; res = null; r({ pv, cp, mate, second }); }
     }
   });
-  p.stdin.write('uci\nisready\n');
+  p.stdin.write('uci\nsetoption name MultiPV value 2\nisready\n');
   return {
-    go: (fen: string) => new Promise<{ pv: string[]; cp: number | null; mate: number | null }>((r) => { pv = []; cp = null; mate = null; res = r; p.stdin.write(`position fen ${fen}\ngo depth 12\n`); }),
+    go: (fen: string) => new Promise<{ pv: string[]; cp: number | null; mate: number | null; second: { pv: string[]; cp: number | null; mate: number | null } | null }>((r) => { pv = []; cp = null; mate = null; second = null; res = r; p.stdin.write(`position fen ${fen}\ngo depth 12\n`); }),
     quit: () => p.kill(),
   };
 }
@@ -47,6 +48,14 @@ it.skipIf(!process.env.REPLAY_LINE)('replay a speed-run game through the coach',
     if (mover === student) {
       const ask = positionAsk(fen, { bestSan, lastMove: prev });
       if (ask.text) lines.push(`ASK[${ask.mode}] ${ask.text}`);
+      const toCand = (v: { pv: string[]; cp: number | null; mate: number | null } | null): Candidate | null => {
+        if (!v || !v.pv[0]) return null;
+        try { const san = new Chess(fen).move({ from: v.pv[0].slice(0, 2), to: v.pv[0].slice(2, 4), promotion: v.pv[0][4] }).san; return { san, pv: v.pv, cp: score(v) }; } catch { return null; }
+      };
+      const cands = [toCand(before), toCand(before.second)].filter((x): x is Candidate => !!x);
+      const critical = cands.length === 2 && Math.abs(cands[0].cp - cands[1].cp) >= 80 && Math.abs(cands[0].cp) < 500;
+      const ta = thinkAloud({ fen, history: sans.slice(0, i), lastMove: prev, candidates: cands, critical });
+      if (ta.text) lines.push(`THINK${critical ? '*' : ''}(${ta.words}w, ${ta.lines.length} arrowed line) ${ta.text}`);
       const after = await e.go(c.fen());
       const loss = score(before) + score(after);   // both from the mover's view: before (mover) vs after (opponent)
       // A decided position (mate or ±5 either side) is not a slip worth naming.
