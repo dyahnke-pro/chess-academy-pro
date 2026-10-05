@@ -86,7 +86,7 @@ describe('PuzzleBoard — one spoken line per miss', () => {
     await waitFor(() => expect(voiceService.speak).toHaveBeenCalledTimes(1));
     // One line: the refutation first, what the position asks (moveInsight) in
     // the middle, the method beat last — none of them cut.
-    const spoken = vi.mocked(voiceService.speak).mock.calls[0][0] as string;
+    const spoken = vi.mocked(voiceService.speak).mock.calls[0][0];
     expect(spoken.startsWith('Qe3? Then Qxe2.')).toBe(true);
     expect(spoken.endsWith('This was the moment to slow down.')).toBe(true);
   });
