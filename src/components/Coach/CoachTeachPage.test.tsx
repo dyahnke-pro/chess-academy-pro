@@ -130,16 +130,23 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
     fireEvent.submit(input.closest('form')!);
   }
 
-  it('speaks a rotating greeting on mount via speakForced (no LLM call) + shows suggested-question chips', async () => {
+  it('speaks ONE opener on mount via speakForced (no LLM call) + shows suggested-question chips', async () => {
     vi.mocked(coachService.ask).mockResolvedValue({ text: '', toolCallIds: [], dispatchedToolNames: [], provider: 'anthropic' });
     render(<CoachTeachPage />);
 
-    // The greeting is now one of the rotating set (David 2026-07-04), not the
-    // static "welcome to my classroom" line.
+    // ONE OPENER (walk 2026-10-04 defect 1): a computed opener (the cold-start
+    // guidance on a fresh device, the coach's call, the session opener)
+    // REPLACES the rotating greeting; the greeting speaks only when nothing
+    // computed arrives in its window. Either way the student hears one opener,
+    // never a greeting followed by a second opening line.
     await waitFor(() => {
-      const spoken = mockSpeakForced.mock.calls.map((c) => c[0] as string);
-      expect(spoken.some((s) => COACH_GREETINGS.includes(s))).toBe(true);
+      expect(mockSpeakForced.mock.calls.length).toBeGreaterThan(0);
     }, { timeout: 4000 });
+    await new Promise((r) => setTimeout(r, 3000));
+    const spoken = mockSpeakForced.mock.calls.map((c) => c[0] as string);
+    const greetings = spoken.filter((s) => COACH_GREETINGS.includes(s));
+    expect(greetings.length).toBeLessThanOrEqual(1);
+    if (greetings.length === 1) expect(spoken.filter((s) => !COACH_GREETINGS.includes(s))).toEqual([]);
 
     // Suggested-question pickers render so the student sees what they can ask.
     await waitFor(() => {
