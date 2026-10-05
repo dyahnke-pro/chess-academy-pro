@@ -29,6 +29,7 @@ import { db } from '../db/schema';
 import { mirrorAuditEvent } from './analytics';
 import { onCoachDecision, onLearnTurn, onNeedScore, type CoachDecisionRow, type LearnTurnRow, type NeedScoreRow } from './coachDecisionEvents';
 import { onThinkingLesson } from './thinkingLessonEvents';
+import { onThinkingTransfer } from './thinkingTransferEvents';
 import { onSearchDepth } from './searchDepthEvents';
 import { onOpponentMove } from './opponentMoveEvents';
 import { onChatTurn } from '../coach/chatTurnEvents';
@@ -252,6 +253,10 @@ export type AuditKind =
   | 'thinking-lesson'
   // A "Learn how to think" tier opened (every step of the tier below proven).
   | 'thinking-tier-unlocked'
+  // The transfer reading (thinkingLessonStart.loadThinkingTransfer): per
+  // thinking step, did a step KNOWN in lessons reach the student's GAMES —
+  // counts per class plus each step's before/after slip windows.
+  | 'thinking-transfer'
   // THE ENGINE LINES A LEARN MISTAKE LINE WAS READ FROM (2026-10-01). A
   // reason like "d5 was their move, to win a piece" comes off the live,
   // time-boxed PV; a deeper read may refute it, and without the source line a
@@ -2294,6 +2299,19 @@ onThinkingLesson((row) => {
     source: 'thinkingLessonSession',
     summary: `${row.step} ${row.stage}: ${row.outcome} (${row.foundCount}/${row.keySize}, ${row.wrongCount} wrong, help=${row.help}, ${row.origin})`,
     details: JSON.stringify({ rows: [row] }),
+  });
+});
+
+// The transfer reading — did a step the student KNOWS reach their GAMES? One
+// row per changed reading (the reader dedupes repeats), as a distribution.
+onThinkingTransfer((row) => {
+  const c = row.counts;
+  void logAppAudit({
+    kind: 'thinking-transfer',
+    category: 'subsystem',
+    source: 'thinkingLessonStart.loadThinkingTransfer',
+    summary: `transfer over ${row.games} analysed games: ${c.transferred} transferred, ${c['known-not-used']} known-not-used, ${c.unmeasured} unmeasured, ${c['not-known']} not-known, ${c.grey} grey`,
+    details: JSON.stringify(row),
   });
 });
 

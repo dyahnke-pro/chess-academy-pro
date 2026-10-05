@@ -28,6 +28,13 @@ import { boardIdentity, isFairKey, pickFairPosition, type LessonPositionCandidat
 import { finishBite } from './activeBite';
 import { reward } from './rewardService';
 import { logAppAudit } from './appAuditor';
+import { db } from '../db/schema';
+import { isFixtureDerived, isFixtureGame } from './fixtureGames';
+import {
+  thinkingTransfer, transferCounts, transferGapLine, worstGap,
+  type StepTransfer, type TransferGame, type TransferSlip,
+} from './thinkingTransfer';
+import { emitThinkingTransfer } from './thinkingTransferEvents';
 
 export type { StepKit, AnsweredQuestion, LessonStage, LessonUsernames, LessonPositionCandidate };
 export type { LessonView } from './thinkingLessonSession';
@@ -53,13 +60,15 @@ async function knowProfile(): Promise<CapabilityProfile> {
  *  when no step has a fair board for them yet (a fresh device with no games
  *  and no puzzles near their rating). */
 export async function planThinkingLesson(opts: { usernames: LessonUsernames; rating: number; beginner?: boolean }): Promise<PlannedLesson | null> {
-  const [profile, useProfile, weaknesses, loaded, memory] = await Promise.all([
+  const [profile, useProfile, weaknesses, loaded, memory, transfer] = await Promise.all([
     knowProfile(),
     getCapabilityProfile('use').catch((): CapabilityProfile => new Map()),
     getUnifiedWeaknessProfile().catch((): UnifiedWeakness[] => []),
     loadLessonCandidates(opts).catch((): LessonPositionCandidate[] => []),
     getThinkingLessonMemory(),
+    loadThinkingTransfer(),
   ]);
+  const pending = habitPendingFrom(transfer);
   // What the student's GAMES say (the heat map Up next reads): which steps
   // they keep failing, and the boards they failed them on.
   const tiles: HeatTile[] = heatMap(useProfile, weaknesses);
@@ -94,6 +103,7 @@ export async function planThinkingLesson(opts: { usernames: LessonUsernames; rat
       (s) => standingFromProfile(profile, s.tags),
       available,
       (s) => gameWeightForTags(tiles, s.tags),
+      pending,
     );
     if (!choice) return null;
     const kit = choice.step.kit();
@@ -219,7 +229,12 @@ export async function finishThinkingLesson(plan: PlannedLesson, source: string):
   try {
     const after = await knowProfile();
     const opened = tierUnlockLine(plan.openTier, openTier(BUILT_THINKING_STEPS, (s) => standingFromProfile(after, s.tags), plan.available));
-    if (!opened) return null;
+    // No tier opened: if a step they KNOW has not reached their games, the
+    // close names that gap (the lesson game that follows is where it is drilled).
+    if (!opened) {
+      const gap = worstGap(await loadThinkingTransfer());
+      return gap ? transferGapLine(gap) : null;
+    }
     reward({ kind: 'rankUp', label: opened.label, seed: opened.tier });
     void logAppAudit({
       kind: 'thinking-tier-unlocked',
@@ -240,15 +255,98 @@ export async function finishThinkingLesson(plan: PlannedLesson, source: string):
  * lesson uses, so the card and the lesson can never disagree. Every step
  * counts as available (the card does not load boards).
  */
-export async function lessonStepForCard(tiles: readonly HeatTile[], beginner = false): Promise<StepChoice | null> {
-  const profile = await knowProfile();
+export async function lessonStepForCard(
+  tiles: readonly HeatTile[],
+  beginner = false,
+  transfer?: readonly StepTransfer[],
+): Promise<StepChoice | null> {
+  const [profile, read] = await Promise.all([knowProfile(), transfer ? Promise.resolve(transfer) : loadThinkingTransfer()]);
   const standingOf = (s: BuiltStep): StepStanding => standingFromProfile(profile, s.tags);
   return chooseThinkingStep(
     BUILT_THINKING_STEPS,
     standingOf,
     beginnerAllows(beginner, standingOf),
     (s) => gameWeightForTags(tiles, s.tags),
+    habitPendingFrom(read),
   );
+}
+
+/** A known step whose games still slip is not served as a lesson. PURE. */
+export function habitPendingFrom(transfer: readonly StepTransfer[]): (s: BuiltStep) => boolean {
+  const pending = new Set(transfer.filter((t) => t.cls === 'known-not-used').map((t) => t.step));
+  return (s) => pending.has(s.step);
+}
+
+/** An unchanged reading is reported once per window, not once per read (the
+ *  card, the planner and the close each read it) — the heat map's rule. */
+export const TRANSFER_REPEAT_WINDOW_MS = 5000;
+let lastTransfer: { details: string; at: number } | null = null;
+
+/** Test seam: forget the last emitted reading. */
+export function resetTransferReportForTests(): void {
+  lastTransfer = null;
+}
+
+/**
+ * THE TRANSFER READING, from the record (the I/O door around the pure
+ * `thinkingTransfer`): every capability row, every slip game analysis filed in
+ * the student's own (non-demo) games, and when each of those games was PLAYED.
+ * The games read over are the ANALYSED ones — a game is in the denominator
+ * only when analysis wrote something about it (a slip or a capability row), so
+ * an unanalysed import never reads as a clean game. Emits the distribution.
+ */
+export async function loadThinkingTransfer(): Promise<StepTransfer[]> {
+  try {
+    const [evidence, slipRows, games] = await Promise.all([
+      db.capabilityEvidence.toArray(),
+      db.misconceptionTags.toArray(),
+      db.games.toArray(),
+    ]);
+    const analysed = new Set<string>();
+    const slips: TransferSlip[] = [];
+    for (const r of slipRows) {
+      if (!r.sourceGameId || isFixtureDerived(r) || r.counted === false) continue;
+      analysed.add(r.sourceGameId);
+      slips.push({ tag: r.tag, gameId: r.sourceGameId });
+    }
+    for (const r of evidence) if (r.sourceGameId) analysed.add(r.sourceGameId);
+    const played: TransferGame[] = [];
+    for (const g of games) {
+      if (g.isMasterGame || isFixtureGame(g) || !analysed.has(g.id)) continue;
+      const at = gamePlayedAt(g.date);
+      if (at !== null) played.push({ id: g.id, playedAt: at });
+    }
+    const out = thinkingTransfer({ evidence, games: played, slips });
+    reportTransfer(out, played.length);
+    return out;
+  } catch {
+    return [];   // no store yet: nothing is known, nothing transferred
+  }
+}
+
+/** A game's date as ms: PGN "2024.05.01" or an ISO string. Null when it is not
+ *  a date — such a game is left out rather than placed on the wrong side. */
+export function gamePlayedAt(date: string | null | undefined): number | null {
+  if (!date) return null;
+  const t = Date.parse(date.trim().replace(/^(\d{4})\.(\d{2})\.(\d{2})/, '$1-$2-$3'));
+  return Number.isFinite(t) ? t : null;
+}
+
+function reportTransfer(all: readonly StepTransfer[], games: number): void {
+  const row = {
+    counts: transferCounts(all),
+    games,
+    steps: all.map((t) => ({
+      step: t.step, cls: t.cls, greenAt: t.greenAt,
+      beforeGames: t.before.games, beforeSlips: t.before.slips,
+      afterGames: t.after.games, afterSlips: t.after.slips, useProven: t.useProven,
+    })),
+  };
+  const details = JSON.stringify(row);
+  const now = Date.now();
+  if (lastTransfer && lastTransfer.details === details && now - lastTransfer.at < TRANSFER_REPEAT_WINDOW_MS) return;
+  lastTransfer = { details, at: now };
+  emitThinkingTransfer(row);
 }
 
 /** One step's kit, for a surface that asks a single lesson question on its own

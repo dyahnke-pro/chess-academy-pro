@@ -14,7 +14,9 @@
 //     the queue — lowest tier, then lowest method order, first.
 //   • Otherwise the lowest (tier, order) step not yet known (grey teaches).
 //   • When every built step is green, the first comes back as a quick review
-//     (the session serves one Solo board for a green step).
+//     (the session serves one Solo board for a green step) — never a step that
+//     is known but not yet used in games (`thinkingTransfer`): that habit is
+//     drilled in live play, not re-taught as a lesson.
 //
 // The method ORDER never changes; only which step is served. PURE.
 import type { StepKit } from './thinkingLessonSession';
@@ -76,6 +78,10 @@ export function chooseThinkingStep(
   available: (s: BuiltStep) => boolean = () => true,
   /** How badly the student's GAMES fail this step (0 = not red in games). */
   gameWeight: (s: BuiltStep) => number = () => 0,
+  /** A step KNOWN in lessons whose games still slip (`thinkingTransfer`
+   *  'known-not-used'): the idea is known, the habit is not, so it is never
+   *  served again as a lesson — live play drills it. Defaults to none. */
+  habitPending: (s: BuiltStep) => boolean = () => false,
 ): StepChoice | null {
   if (steps.length === 0) return null;
   const ordered = [...steps].sort((a, b) => a.tier - b.tier || a.order - b.order);
@@ -92,7 +98,12 @@ export function chooseThinkingStep(
   if (red) return { step: red.s, standing: 'red', reason: 'red-first', openTier: tier };
   const unknown = open.find((x) => x.st !== 'green');
   if (unknown) return { step: unknown.s, standing: unknown.st, reason: 'next-unknown', openTier: tier };
-  return { step: open[0].s, standing: 'green', reason: 'review', openTier: tier };
+  // Everything open is known: a quick review — of a step whose habit has also
+  // reached the board. Re-teaching a known idea the games still miss is the
+  // wrong tool (plan "Lessons measure KNOW, games measure USE").
+  const review = open.find((x) => !habitPending(x.s));
+  if (!review) return null;
+  return { step: review.s, standing: 'green', reason: 'review', openTier: tier };
 }
 
 /** What each tier is called when it opens (plan "Unlocking"). */

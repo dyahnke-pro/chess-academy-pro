@@ -20,7 +20,8 @@ import {
 } from './upNextPicker';
 import { getCapabilityProfile } from './capabilityEvidence';
 import { heatMap, type HeatTile } from './heatMap';
-import { lessonStepForCard } from './thinkingLessonStart';
+import { lessonStepForCard, loadThinkingTransfer } from './thinkingLessonStart';
+import { transferGapLine, worstGap } from './thinkingTransfer';
 import type { StepChoice } from './thinkingLessonPlan';
 import { THINKING_STEPS } from './thinkingSteps';
 import { isBeginnerMode } from './ratingBands';
@@ -77,25 +78,32 @@ export async function loadStartSteps(): Promise<StartStep[]> {
  *  games, led by the tile with the most open slips; or in lessons), GREY when
  *  it would teach an unproven step (grey means teach it), GREEN when every step
  *  is proven and it would only review. Null when the chooser has no step. */
-export function thinkingSignalFrom(choice: StepChoice | null, tiles: readonly HeatTile[]): ThinkingSignal | null {
+export function thinkingSignalFrom(choice: StepChoice | null, tiles: readonly HeatTile[], gap: string | null = null): ThinkingSignal | null {
   if (!choice) return null;
   const step = THINKING_STEPS[choice.step.step].name;
+  const withGap = (sig: ThinkingSignal): ThinkingSignal => (gap ? { ...sig, gap } : sig);
   if (choice.reason === 'game-weakness') {
     const worst = tiles
       .filter((t) => t.state === 'red' && choice.step.tags.includes(t.tag))
       .sort((a, b) => b.openCount + b.broken - (a.openCount + a.broken))[0];
-    return { state: 'red', skill: worst?.label ?? step, step };
+    return withGap({ state: 'red', skill: worst?.label ?? step, step });
   }
-  if (choice.reason === 'red-first') return { state: 'red', skill: step, step };
-  if (choice.reason === 'review') return { state: 'green', skill: step, step };
-  return { state: 'grey', skill: step, step };
+  if (choice.reason === 'red-first') return withGap({ state: 'red', skill: step, step });
+  if (choice.reason === 'review') return withGap({ state: 'green', skill: step, step });
+  return withGap({ state: 'grey', skill: step, step });
 }
 
 async function loadThinkingSignal(weaknesses: Parameters<typeof heatMap>[1]): Promise<ThinkingSignal | null> {
   if (!THINKING_LESSON_LIVE) return null;
   const profile = await getCapabilityProfile().catch(() => new Map());
   const tiles = heatMap(profile, weaknesses);
-  return thinkingSignalFrom(await lessonStepForCard(tiles, isBeginnerMode(useAppStore.getState().activeProfile)).catch(() => null), tiles);
+  const transfer = await loadThinkingTransfer();
+  const gap = worstGap(transfer);
+  return thinkingSignalFrom(
+    await lessonStepForCard(tiles, isBeginnerMode(useAppStore.getState().activeProfile), transfer).catch(() => null),
+    tiles,
+    gap ? transferGapLine(gap) : null,
+  );
 }
 
 export async function loadUpNextInput(): Promise<UpNextInput> {

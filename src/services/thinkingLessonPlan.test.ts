@@ -39,6 +39,18 @@ describe('chooseThinkingStep', () => {
     const all = { 'am-i-safe': 'green', 'their-targets': 'green', 'is-my-move-safe': 'green', 'forcing-moves': 'green' } as const;
     expect(pick(all)).toMatchObject({ reason: 'review', standing: 'green' });
   });
+  it('a step known in lessons but not used in games is never re-taught as a review', () => {
+    const all = { 'am-i-safe': 'green', 'their-targets': 'green', 'is-my-move-safe': 'green', 'forcing-moves': 'green' } as const;
+    const standing = (s: BuiltStep): StepStanding => all[s.kit().step as keyof typeof all];
+    const c = chooseThinkingStep(ALL, standing, () => true, () => 0, (s) => s.step === 'am-i-safe');
+    expect(c).toMatchObject({ reason: 'review' });
+    expect(c?.step.step).not.toBe('am-i-safe');
+    // Every known step still slipping in games: no lesson is the right tool.
+    expect(chooseThinkingStep(ALL, standing, () => true, () => 0, () => true)).toBeNull();
+  });
+  it('the habit gate touches only known steps: a grey step is still taught', () => {
+    expect(chooseThinkingStep(ALL, () => 'grey', () => true, () => 0, () => true)?.step.step).toBe('am-i-safe');
+  });
   it('nothing built, nothing chosen', () => {
     expect(chooseThinkingStep([], () => 'grey')).toBeNull();
   });

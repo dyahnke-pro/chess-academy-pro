@@ -15,6 +15,8 @@
  *   L8  "teach me the Caro-Kann" does NOT start the lesson
  *   L9  zero /api/tts requests (muted) and zero page errors
  *   L10 ending a plain-board lesson offers "Play a game on this", which starts a game
+ *   L11 the transfer reading emitted `thinking-transfer` rows: every step classed,
+ *       the counts add up, and a step known-not-used was never taught as a lesson
  *
  * Run:
  *   AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY \
@@ -208,6 +210,20 @@ async function main() {
     const rows = listener.getCapturedEvents().filter((e) => e.kind === 'thinking-lesson');
     const parsed = rows.flatMap((e) => { try { return JSON.parse(e.details ?? '{}').rows ?? [JSON.parse(e.details ?? '{}')]; } catch { return []; } });
     record('L7. the lesson emitted thinking-lesson rows with outcomes', parsed.length > 0 && parsed.every((r) => r.step && r.outcome), `${parsed.length} rows: ${parsed.map((r) => `${r.stage}:${r.outcome}`).join(', ')}`);
+    // L11: THINKING TRANSFER (algo audit) — the planner read KNOW against USE.
+    const transferRows = listener.getCapturedEvents().filter((e) => e.kind === 'thinking-transfer')
+      .flatMap((e) => { try { return [JSON.parse(e.details ?? '{}')]; } catch { return []; } });
+    const CLASSES = ['transferred', 'known-not-used', 'unmeasured', 'not-known', 'grey'];
+    const lastT = transferRows[transferRows.length - 1];
+    const classed = !!lastT && Array.isArray(lastT.steps) && lastT.steps.length === 10
+      && lastT.steps.every((s) => CLASSES.includes(s.cls))
+      && CLASSES.reduce((n, c) => n + (lastT.counts?.[c] ?? 0), 0) === lastT.steps.length;
+    const pendingSteps = new Set((lastT?.steps ?? []).filter((s) => s.cls === 'known-not-used').map((s) => s.step));
+    const taught = new Set(parsed.map((r) => r.step));
+    const neverRetaught = [...taught].every((s) => !pendingSteps.has(s));
+    record('L11. THINKING TRANSFER reading emitted, every step classed, known-not-used never re-taught',
+      transferRows.length > 0 && classed && neverRetaught,
+      lastT ? `${transferRows.length} rows; games=${lastT.games} counts=${JSON.stringify(lastT.counts)}; taught=${[...taught].join(',')}; pending=${[...pendingSteps].join(',') || 'none'}` : 'no thinking-transfer row');
     record('L9a. zero /api/tts requests (muted)', tts === 0, `${tts} requests`);
     record('L9b. zero page errors', pageErrors.length === 0, pageErrors.slice(0, 2).join(' | '));
   } finally {

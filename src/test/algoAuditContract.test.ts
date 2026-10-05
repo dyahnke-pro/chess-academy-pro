@@ -42,6 +42,7 @@ type AlgoEmissionKind =
   | 'deep-run-step'
   | 'learn-reward'
   | 'thinking-lesson'
+  | 'thinking-transfer'
   | 'coach-opponent-strength'
   | 'chat-turn';
 
@@ -135,6 +136,11 @@ const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
     script: 'scripts/audit-concept-gameplay-prod.mjs',
     contractMarker: 'LEARN REWARD only skill earns a chime',
     emittedBy: 'src/components/Coach/CoachTeachPage.tsx (handleStudentMove via learnRewardFor)',
+  },
+  'thinking-transfer': {
+    script: 'scripts/audit-learn-how-to-think-prod.mjs',
+    contractMarker: 'THINKING TRANSFER reading emitted',
+    emittedBy: 'src/services/thinkingTransferEvents.ts (thinkingLessonStart.loadThinkingTransfer), forwarded by appAuditor',
   },
   'thinking-lesson': {
     script: 'scripts/audit-learn-how-to-think-prod.mjs',

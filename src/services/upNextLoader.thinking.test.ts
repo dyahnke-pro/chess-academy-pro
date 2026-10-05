@@ -30,6 +30,11 @@ describe('thinkingSignalFrom', () => {
     expect(thinkingSignalFrom(choice('review', SAFE), [])?.state).toBe('green');
   });
 
+  it('carries the known-not-used gap line when the transfer reading has one', () => {
+    const gap = 'Lessons say you spot your loose pieces. Your games say you still leave them hanging.';
+    expect(thinkingSignalFrom(choice('next-unknown', SAFE), [], gap)).toEqual({ state: 'grey', skill: 'Am I safe?', step: 'Am I safe?', gap });
+  });
+
   it('null when the chooser has no step', () => {
     expect(thinkingSignalFrom(null, [tile('hung-material', 'red', 3)])).toBeNull();
   });
