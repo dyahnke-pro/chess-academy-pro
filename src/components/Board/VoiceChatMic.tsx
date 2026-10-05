@@ -485,6 +485,9 @@ export function VoiceChatMic({ fen, turn, playerColor = 'white', onOpeningReques
       {
         surface: 'game-chat',
         ask: text,
+        // A mic transcript is the student's own words — read by the ONE-CHAT
+        // parser like a typed question (David 2026-10-04).
+        origin: 'spoken',
         liveState: {
           surface: 'game-chat',
           fen: getCurrentFen?.() ?? fen,

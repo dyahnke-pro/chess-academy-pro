@@ -265,6 +265,27 @@ describe('gameAnalysisService', () => {
       expect(mockAnalyzePosition).not.toHaveBeenCalled();
     });
 
+    it('one game that throws is skipped — it does not end the batch (walk 2026-10-04 #17)', async () => {
+      // The old loop let a single rejection end the whole run silently: the
+      // button re-enabled with the package unfinished and no error on screen.
+      for (let i = 0; i < 4; i++) {
+        await db.games.add(buildGameRecord({ id: `t-${i}`, pgn: '1. e4 e5 1/2-1/2', annotations: null, isMasterGame: false }));
+      }
+      mockAnalyzePosition.mockResolvedValue(mockAnalysis(25, 'e2e4'));
+      const realUpdate = db.games.update.bind(db.games);
+      const spy = vi.spyOn(db.games, 'update').mockImplementation(((id: string, changes: object) => {
+        if (id === 't-1') return Promise.reject(new Error('QuotaExceededError'));
+        return realUpdate(id, changes);
+      }) as typeof db.games.update);
+      try {
+        const analyzed = await analyzeAllGames();
+        expect(analyzed).toBe(3);
+        expect(await countGamesNeedingAnalysis()).toBe(1); // only the failed one waits
+      } finally {
+        spy.mockRestore();
+      }
+    });
+
     it('analyzes at most one package (ANALYSIS_PACKAGE_SIZE) then stops, newest-first', async () => {
       // David 2026-09-05: a full library never finished in one run. A batch
       // caps at ANALYSIS_PACKAGE_SIZE newest games and stops; the rest are left

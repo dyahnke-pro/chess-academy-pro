@@ -452,6 +452,15 @@ const APPEAL_AFFIRM: Record<string, string> = {
   natural: 'play the natural move',
 };
 
+/** A move renderer: the SAN and the position it is played from (null = none). */
+type SayAt = (san: string, fen: string | null) => string;
+
+/** The position after `san` from `fen`, or null when either is missing or illegal. */
+function fenAfter(fen: string | null, san: string): string | null {
+  if (!fen) return null;
+  try { const c = new Chess(fen); c.move(san); return c.fen(); } catch { return null; }
+}
+
 /** The destination square written in a SAN, or null. */
 function sanTo(san: string): string | null {
   const m = san.replace(/[+#!?]+$/, '').replace(/=[QRBN]$/, '').match(/([a-h][1-8])$/);
@@ -462,17 +471,19 @@ function sanTo(san: string): string | null {
  *  its square and the reply names its mover: "You'd love to grab it with the
  *  knight taking on e4 — but the knight takes e4" (hand walk 2000) left the
  *  student asking whose knight took what. */
-function temptingTurn(san: string, appeal: string, replySan: string | null, say: (s: string) => string, sayN: (s: string) => string): string {
+function temptingTurn(fen: string | null, san: string, appeal: string, replySan: string | null, say: SayAt, sayN: SayAt): string {
   const to = sanTo(san);
+  // The reply is played from the position AFTER the tempting move.
+  const replyFen = fenAfter(fen, san);
   // A capture already says its square ("the knight taking on e4") — the old
   // "grab it" named nothing.
-  const lead = appeal === 'capture' ? `You’d love to play ${sayN(san)}` : `You’d love to ${APPEAL_AFFIRM[appeal] ?? 'play it'} with ${sayN(san)}`;
+  const lead = appeal === 'capture' ? `You’d love to play ${sayN(san, fen)}` : `You’d love to ${APPEAL_AFFIRM[appeal] ?? 'play it'} with ${sayN(san, fen)}`;
   const takesBack = replySan !== null && to !== null && replySan.includes('x') && sanTo(replySan) === to;
   const refutation = replySan === null
     ? ' — but it doesn’t hold'
     : takesBack
       ? ' — but they take back and it falls apart'
-      : ` — but they answer ${say(replySan)} and it falls apart`;
+      : ` — but they answer ${say(replySan, replyFen)} and it falls apart`;
   return `${lead}${refutation}.`;
 }
 
@@ -486,21 +497,21 @@ function temptingTurn(san: string, appeal: string, replySan: string | null, say:
  * point, and the verdict last. `spoken` spells moves for TTS; the caller picks.
  */
 export function narrateTacticalRead(read: TacticalRead, opts: { spoken?: boolean } = {}): string {
-  const say = (san: string): string => (opts.spoken ? sayMoveClause(san) : san);
+  const say: SayAt = (san, fen) => (opts.spoken ? sayMoveClause(san, fen) : san);
   // NOUN slot — subject, or object of a preposition. See `sayMoveNoun`.
-  const sayN = (san: string): string => (opts.spoken ? sayMoveNoun(san) : san);
+  const sayN: SayAt = (san, fen) => (opts.spoken ? sayMoveNoun(san, fen) : san);
   const parts: string[] = [];
 
   // BUT-TURN — affirm the seductive move, then refute it with the computed line.
   if (read.tempting) {
     const ref = read.tempting.refutation;
     const reply = ref.length > 1 ? ref[1] : (ref.length > 0 ? ref[0] : undefined);
-    parts.push(temptingTurn(read.tempting.san, read.tempting.appeal, reply?.san ?? null, say, sayN));
+    parts.push(temptingTurn(read.fen, read.tempting.san, read.tempting.appeal, reply?.san ?? null, say, sayN));
   }
 
   // THE MOVE + the forcing line to the tactic.
   const toTactic = read.keyTactic ? read.keyTactic.atPly : Math.min(read.line.length - 1, 2);
-  const lineSans = read.line.slice(0, toTactic + 1).map((p) => say(p.san));
+  const lineSans = read.line.slice(0, toTactic + 1).map((p) => say(p.san, p.fenBefore));
   if (lineSans.length > 0) {
     parts.push(read.tempting
       ? `Instead, ${lineSans.join(', ')}.`
@@ -528,12 +539,12 @@ export function narrateTacticalRead(read: TacticalRead, opts: { spoken?: boolean
  */
 export function temptingTurnClause(read: TacticalRead, opts: { spoken?: boolean } = {}): string | null {
   if (!read.tempting) return null;
-  const say = (san: string): string => (opts.spoken ? sayMoveClause(san) : san);
+  const say: SayAt = (san, fen) => (opts.spoken ? sayMoveClause(san, fen) : san);
   // NOUN slot — subject, or object of a preposition. See `sayMoveNoun`.
-  const sayN = (san: string): string => (opts.spoken ? sayMoveNoun(san) : san);
+  const sayN: SayAt = (san, fen) => (opts.spoken ? sayMoveNoun(san, fen) : san);
   const ref = read.tempting.refutation;
   const reply = ref.length > 1 ? ref[1] : (ref.length > 0 ? ref[0] : undefined);
-  return temptingTurn(read.tempting.san, read.tempting.appeal, reply?.san ?? null, say, sayN);
+  return temptingTurn(read.fen, read.tempting.san, read.tempting.appeal, reply?.san ?? null, say, sayN);
 }
 
 /**
@@ -545,17 +556,17 @@ export function uncertaintyClause(read: TacticalRead, opts: { spoken?: boolean; 
   if (!read.closeAlternative) return null;
   // Every move slot in this clause is a NOUN slot, so the clause renderer is
   // genuinely unused here — which is the whole finding.
-  const sayN = (san: string): string => (opts.spoken ? sayMoveNoun(san) : san);
+  const sayN: SayAt = (san, fen) => (opts.spoken ? sayMoveNoun(san, fen) : san);
   // STEMS ROTATE ON A STABLE KEY (WO-STANDARD-01 D-8: "It's genuinely close —
   // X is about as good, so don't agonise" fired four times in seven moves).
   // The caller passes the ply; the same ply always gets the same stem
   // (resume-safe, testable — never Math.random).
-  const alt = sayN(read.closeAlternative.san);
+  const alt = sayN(read.closeAlternative.san, read.fen);
   // EVERY STEM NAMES BOTH MOVES (fresh-game walk 2026-09-27: "nothing to lose
   // sleep over — the king to c7 does the same job" — the same job as what? The
   // best move was never said beside it). The register only speaks where naming
   // the move is earned, so naming it here leaks nothing.
-  const best = sayN(read.bestMoveSan);
+  const best = sayN(read.bestMoveSan, read.fen);
   const stems = [
     `It’s genuinely close — ${alt} is about as good as ${best}, so don’t agonise.`,
     `${alt.charAt(0).toUpperCase()}${alt.slice(1)} is a fine alternative to ${best} here; the two are within a whisker.`,
@@ -601,7 +612,7 @@ export function candidateCompareRead(
   if (topLines.length < 2) return null;
   // Comparison clauses put BOTH moves in noun slots ("X over Y", "X reads
   // better than Y"), so there is no clause slot in this function at all.
-  const sayN = (san: string): string => (opts.spoken ? sayMoveNoun(san) : san);
+  const sayN: SayAt = (san, fen) => (opts.spoken ? sayMoveNoun(san, fen) : san);
   const bestUci = topLines[0]?.moves?.[0];
   if (!bestUci || bestUci.length < 4) return null;
   const bestCp = toStudentCp(topLines[0].evaluation, studentColor);
@@ -628,7 +639,7 @@ export function candidateCompareRead(
       const atkBest = board.attackers(bestMv.to, enemy).length;
       const atkAlt = board.attackers(altMv.to, enemy).length;
       if (atkAlt > atkBest) {
-        return { text: `Prefer ${sayN(bestMv.san)} to ${sayN(altMv.san)} — the square is safer, less exposed to attack.`, bestSan: bestMv.san, altSan: altMv.san };
+        return { text: `Prefer ${sayN(bestMv.san, fen)} to ${sayN(altMv.san, fen)} — the square is safer, less exposed to attack.`, bestSan: bestMv.san, altSan: altMv.san };
       }
       // No grounded reason for the square → say nothing (Learn walk 2026-09-23:
       // "keeps more of the edge" fired on three consecutive plies as filler).
@@ -642,8 +653,8 @@ export function candidateCompareRead(
       if (bestMv.captured && opts.recaptureOn && bestMv.to === opts.recaptureOn) return null;
       // ROTATED on the move number (hand walk 2026-09-24: the same stem three
       // moves running). Stable per ply, so resume-safe — never Math.random.
-      const b = sayN(bestMv.san);
-      const q = sayN(altMv.san);
+      const b = sayN(bestMv.san, fen);
+      const q = sayN(altMv.san, fen);
       // No "while the edge is there" / "while it still works": neither an edge
       // nor a closing window is computed here — only that the forcing move
       // reads 30–120cp better (clean-pass walk 2026-10-03, G2 ply 10: "while
@@ -720,13 +731,14 @@ export function temptingFromAnalysis(
 
 /** The affirm→but→refute sentence for a tempting move, in the Danya register. */
 export function speakTemptingTurn(
-  t: { san: string; appeal: string; replySan: string | null },
+  /** `fen` = the position the tempting move is played from, when known. */
+  t: { san: string; appeal: string; replySan: string | null; fen?: string | null },
   opts: { spoken?: boolean } = {},
 ): string {
-  const say = (san: string): string => (opts.spoken ? sayMoveClause(san) : san);
+  const say: SayAt = (san, fen) => (opts.spoken ? sayMoveClause(san, fen) : san);
   // NOUN slot — subject, or object of a preposition. See `sayMoveNoun`.
-  const sayN = (san: string): string => (opts.spoken ? sayMoveNoun(san) : san);
-  return temptingTurn(t.san, t.appeal, t.replySan, say, sayN);
+  const sayN: SayAt = (san, fen) => (opts.spoken ? sayMoveNoun(san, fen) : san);
+  return temptingTurn(t.fen ?? null, t.san, t.appeal, t.replySan, say, sayN);
 }
 
 // ── THE FACT PACKAGE FOR THE VOICE MODEL ─────────────────────────────────────

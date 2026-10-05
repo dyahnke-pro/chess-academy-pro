@@ -148,6 +148,7 @@ export interface CustomLessonMatch {
 
 const GENERAL_LESSON_RE =
   /\b(?:build|make|create|put together|give me|design|plan)\b[^.?!]*\b(?:lesson|study session|study plan|curriculum)\b/i;
+const NAMED_SUBJECT_RE = /\blesson (?:on|about|for|in)\s+(?!my\b|me\b|what\b)/i;
 const WEAKNESS_LESSON_RE =
   /\b(?:custom lesson|lesson (?:on|for|about) my (?:weakness|weaknesses|holes|game|mistakes)|teach me my weaknesses)\b/i;
 
@@ -184,10 +185,41 @@ export function matchCustomLessonRequest(
   }
 
   // General "build me a lesson" / "custom lesson on my weaknesses" → all holes.
-  if (GENERAL_LESSON_RE.test(lc) || WEAKNESS_LESSON_RE.test(lc)) {
+  // A lesson ON A NAMED SUBJECT ("give me a lesson on the Caro-Kann") is not a
+  // weakness lesson — it belongs to the opening / topic routers below (walk
+  // 2026-10-04: GENERAL_LESSON_RE swallowed it).
+  if (WEAKNESS_LESSON_RE.test(lc) || (GENERAL_LESSON_RE.test(lc) && !NAMED_SUBJECT_RE.test(lc))) {
     return { tags: allTags, entry: 'typed' };
   }
   return null;
+}
+
+/** The opener chip that starts "Learn how to think". */
+export const THINKING_LESSON_CHIP = 'Learn how to think';
+
+// A bare, non-specific "teach me" (David 2026-10-04: "any non specific teach
+// command") — the WHOLE message, so "teach me the Najdorf", "teach me tactics",
+// "teach me my weaknesses" and "teach me something else" (walkthrough control)
+// never match.
+const THINKING_LESSON_RE =
+  /^(?:(?:hey |ok |okay )?coach[,]?\s+)?(?:(?:can|could|would|will) you\s+|please\s+)?(?:teach me|show me how to think|help me (?:learn|think))(?:\s+(?:something|anything|chess|how to think(?: in chess)?|to think|how to see the board|how to read the board|to read the board))?(?:\s+please)?[\s.!?]*$/i;
+
+/** Whether `text` asks for the coach's thinking lesson plan. PURE. */
+export function matchThinkingLessonRequest(text: string): boolean {
+  const t = (text ?? '').trim();
+  if (t.toLowerCase() === THINKING_LESSON_CHIP.toLowerCase()) return true;
+  if (/^learn how to think[.!?]*$/i.test(t)) return true;
+  return THINKING_LESSON_RE.test(t);
+}
+
+/** The chip offered when a thinking lesson ends: a game where the coach
+ *  quietly hands the student moments to use what they just practised. */
+export const LESSON_GAME_CHIP = 'Play a game on this';
+
+/** Whether `text` asks for the lesson game. PURE. */
+export function matchLessonGameRequest(text: string): boolean {
+  const t = (text ?? '').trim().replace(/[.!?]+$/, '').toLowerCase();
+  return t === LESSON_GAME_CHIP.toLowerCase() || /^(?:let'?s )?play a game on (?:this|that|it)$/.test(t);
 }
 
 /** The spoken intro when a custom lesson starts. Code-authored (G0). */
@@ -210,4 +242,31 @@ export function partTransition(part: CustomLessonPart, index: number, total: num
 export function customLessonOutro(parts: number): string {
   const p = `${parts} pattern${parts === 1 ? '' : 's'}`;
   return `That's your custom lesson done — ${p} worked, all from your own games. I'll bring the reps back over the next few days so they test out for good.`;
+}
+
+/** Sentences per spoken line when a long passage is split. */
+const SENTENCES_PER_LINE = 2;
+
+/**
+ * The teach beat as SPEAKABLE LINES (walk 2026-10-04): each piece starts with a
+ * capital (defect 6: "missed hanging pieces. you leave pieces…"), ends with a
+ * full stop, and a long passage is split into two-sentence lines instead of one
+ * ~100-word block (defect 4). Nothing is dropped (G4.5) — only re-cut. PURE.
+ */
+export function lessonTeachLines(pieces: readonly string[]): string[] {
+  const out: string[] = [];
+  for (const raw of pieces) {
+    const t = (raw ?? '').trim();
+    if (!t) continue;
+    const sentences = t
+      .split(/(?<=[.!?])\s+(?=[A-Za-z0-9"'(])/)
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+      .map((s) => (/[.!?…]$/.test(s) ? s : `${s}.`));
+    for (let i = 0; i < sentences.length; i += SENTENCES_PER_LINE) {
+      out.push(sentences.slice(i, i + SENTENCES_PER_LINE).join(' '));
+    }
+  }
+  return out;
 }

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen, waitFor, fireEvent } from '../../test/utils';
+import { render, screen, waitFor, fireEvent, act } from '../../test/utils';
 import { GameInsightsPage } from './GameInsightsPage';
 import type { OverviewInsights, OpeningInsights, MistakeInsights, TacticInsights, MoveClassificationCounts } from '../../types';
 
@@ -25,12 +25,14 @@ const mockGetOverviewInsights = vi.fn<() => Promise<OverviewInsights>>();
 const mockGetOpeningInsights = vi.fn<() => Promise<OpeningInsights>>();
 const mockGetMistakeInsights = vi.fn<() => Promise<MistakeInsights>>();
 const mockGetTacticInsights = vi.fn<() => Promise<TacticInsights>>();
+const mockGetAnalysisCounts = vi.fn<() => Promise<{ totalGames: number; analyzedGameCount: number; gamesNeedingAnalysis: number }>>();
 
 vi.mock('../../services/gameInsightsService', () => ({
   getOverviewInsights: (): unknown => mockGetOverviewInsights(),
   getOpeningInsights: (): unknown => mockGetOpeningInsights(),
   getMistakeInsights: (): unknown => mockGetMistakeInsights(),
   getTacticInsights: (): unknown => mockGetTacticInsights(),
+  getAnalysisCounts: (): unknown => mockGetAnalysisCounts(),
 }));
 
 // ─── Mock data ──────────────���───────────────────────────────────────────────
@@ -237,5 +239,19 @@ describe('GameInsightsPage', () => {
     await waitFor(() => {
       expect(screen.getByTestId('overview-tab')).toBeInTheDocument();
     });
+  });
+
+  it('the "N of M analysed" header moves as the batch runs (walk 2026-10-04 #16)', async () => {
+    mockGetOverviewInsights.mockResolvedValue({ ...mockOverview, totalGames: 937, analyzedGameCount: 5, gamesNeedingAnalysis: 932 });
+    const { useAppStore } = await import('../../stores/appStore');
+    render(<GameInsightsPage />);
+    await waitFor(() => { expect(screen.getByTestId('insights-analysed-count')).toHaveTextContent('5 of 937'); });
+    mockGetAnalysisCounts.mockResolvedValue({ totalGames: 937, analyzedGameCount: 13, gamesNeedingAnalysis: 924 });
+    act(() => { useAppStore.getState().setBackgroundAnalysis(true, '9/184 — a vs b'); });
+    await waitFor(() => { expect(screen.getByTestId('insights-analysed-count')).toHaveTextContent('13 of 937'); });
+    mockGetAnalysisCounts.mockResolvedValue({ totalGames: 937, analyzedGameCount: 14, gamesNeedingAnalysis: 923 });
+    act(() => { useAppStore.getState().setBackgroundAnalysis(true, '10/184 — c vs d'); });
+    await waitFor(() => { expect(screen.getByTestId('insights-analysed-count')).toHaveTextContent('14 of 937'); });
+    act(() => { useAppStore.getState().setBackgroundAnalysis(false, null); });
   });
 });

@@ -176,9 +176,11 @@ const INFRA = new Set([
   // prefix and names the game when it cannot. Neither judges a piece, an
   // eval or a tactic — proven by REPLAY_HELPERS below.
   'lastMoveOfLine', 'gamePgnReplay',
-  // PHRASER — a SAN rendered as prose ("the queen takes d5"), the zero-import
-  // twin of `spokenSquares` above. It decides nothing about the board; it
-  // says a move the board already decided. Proven by PHRASERS below.
+  // REPLAY HELPER — a SAN rendered as prose ("your knight on c3 takes d5").
+  // It was a zero-import PHRASER until 2026-10-04, when it began replaying the
+  // move on its board so a piece is named from the square it stands on (two
+  // rooks are never spoken alike). chess.js is its only import and it judges
+  // nothing about the position — proven by REPLAY_HELPERS below.
   'spokenMove',
   // CACHE — the cross-user Supabase mirror of generated lesson trees. The
   // gate's own definition lists caches as legitimate for a surface to touch
@@ -190,9 +192,9 @@ const INFRA = new Set([
 /** Record helpers: zero imports, no chess vocabulary in code. */
 const PURE_RECORD_HELPERS = ['fixtureGames', 'studentResult'];
 /** Replay helpers: chess.js is the only import; no JUDGEMENT vocabulary. */
-const REPLAY_HELPERS = ['lastMoveOfLine', 'gamePgnReplay'];
+const REPLAY_HELPERS = ['lastMoveOfLine', 'gamePgnReplay', 'spokenMove'];
 /** Phrasers: zero imports. */
-const PHRASERS = ['spokenMove', 'spokenSquares'];
+const PHRASERS = ['spokenSquares'];
 /** The vocabulary of a chess JUDGEMENT proper — what a replay helper must
  *  never reason about (it may name pieces: it moves them). */
 const JUDGEMENT_WORDS = /\b(?:tactic|eval|centipawn|material|threat|attack|blunder|checkmate|hang|fork|pin\b|skewer|sacrific)\w*/i;

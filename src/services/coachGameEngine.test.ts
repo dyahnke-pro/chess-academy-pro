@@ -24,6 +24,7 @@ import { readFileSync } from 'node:fs';
 import { stockfishEngine } from './stockfishEngine';
 import type { StockfishAnalysis } from '../types';
 import { configFromTargetElo } from './coachPlaySession';
+import { limitStrengthElo } from './engineConstants';
 
 /** The rating→skill answer from its ONE owner.
  *
@@ -134,12 +135,12 @@ describe('coachGameEngine', () => {
 
     it('uses depth 10 for < 1000 ELO', async () => {
       await getAdaptiveMove('startfen', 900);
-      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 10, { 'Skill Level': skillFor(900) });
+      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 10, { 'Skill Level': 20, UCI_LimitStrength: 'true', UCI_Elo: limitStrengthElo(900) });
     });
 
     it('uses depth 12 for 1000-1199 ELO', async () => {
       await getAdaptiveMove('startfen', 1100);
-      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 12, { 'Skill Level': skillFor(1100) });
+      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 12, { 'Skill Level': 20, UCI_LimitStrength: 'true', UCI_Elo: limitStrengthElo(1100) });
     });
 
     it('uses depth 14 for 1200-1499 ELO', async () => {
@@ -165,17 +166,27 @@ describe('coachGameEngine', () => {
       expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 10, expect.any(Object));
     });
 
-    it('a weak opponent is weakened as far as the scale goes', async () => {
+    // THE DEPTH-SEARCH FALLBACK CARRIES THE ELO CAP (2026-10-04). It used to
+    // pass Skill Level only — the one opponent search on a different scale
+    // from every other move of the same game.
+    it('a weak opponent is capped as far as the engine scale goes', async () => {
       await getAdaptiveMove('startfen', 700);
-      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), expect.any(Number), { 'Skill Level': skillFor(700) });
-      // Skill 0 still plays around 1320, so this is the floor, not a choice.
-      expect(skillFor(700)).toBe(0);
+      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), expect.any(Number), { 'Skill Level': 20, UCI_LimitStrength: 'true', UCI_Elo: limitStrengthElo(700) });
+      // UCI_Elo bottoms out at 1320, so this is the floor, not a choice.
+      expect(limitStrengthElo(700)).toBe(1320);
     });
 
     it('a strong opponent is genuinely stronger than a weak one', async () => {
       await getAdaptiveMove('startfen', 2100);
-      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), expect.any(Number), { 'Skill Level': skillFor(2100) });
-      expect(skillFor(2100)).toBeGreaterThan(skillFor(1200));
+      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), expect.any(Number), { 'Skill Level': 20, UCI_LimitStrength: 'true', UCI_Elo: limitStrengthElo(2100) });
+      expect(limitStrengthElo(2100)).toBeGreaterThan(limitStrengthElo(1200));
+    });
+
+    it('never runs the fallback search uncapped (Skill Level alone is not an Elo)', async () => {
+      await getAdaptiveMove('startfen', 1500);
+      const opts = analyzePositionMock.mock.calls.at(-1)?.[2] as Record<string, unknown>;
+      expect(opts.UCI_LimitStrength).toBe('true');
+      expect(opts.UCI_Elo).toBe(1500);
     });
   });
 
@@ -184,20 +195,20 @@ describe('coachGameEngine', () => {
       expect(getTargetStrength(1420)).toBe(1420);
     });
 
-    it('floors at 600', () => {
-      expect(getTargetStrength(500)).toBe(600);
+    it('floors at the ONE floor (400)', () => {
+      expect(getTargetStrength(300)).toBe(400);
     });
 
     it('returns player rating + 200 for hard', () => {
       expect(getTargetStrength(1400, 'hard')).toBe(1600);
     });
 
-    it('returns player rating - 300 for easy', () => {
-      expect(getTargetStrength(1400, 'easy')).toBe(1100);
+    it('returns player rating - 200 for easy (the one offset table)', () => {
+      expect(getTargetStrength(1400, 'easy')).toBe(1200);
     });
 
-    it('returns 600 for low easy rating (at the floor)', () => {
-      expect(getTargetStrength(800, 'easy')).toBe(600);
+    it('returns the floor for a low easy rating', () => {
+      expect(getTargetStrength(500, 'easy')).toBe(400);
     });
   });
 
@@ -621,5 +632,31 @@ describe('the opponent is matched against the rating the student SET', () => {
     }
     expect(read('src/components/Coach/CoachTeachPage.tsx'), 'Learn is matching the opponent to a puzzle rating again')
       .not.toContain('getTargetStrength(activeProfile?.puzzleRating');
+  });
+});
+
+// ONE ENGINE STRENGTH (P0b, 2026-10-04): the opponent's strength is emitted as
+// ONE structured row per move, with the layer that actually played it.
+describe('getAdaptiveMove emits the opponent-strength row', () => {
+  it('once per move, with its source, when the surface declared its strength', async () => {
+    const { onOpponentMove } = await import('./opponentMoveEvents');
+    const { opponentStrength } = await import('./engineStrength');
+    const rows: Array<{ surface: string; source: string; target: number | null }> = [];
+    const off = onOpponentMove((r) => rows.push(r));
+    try {
+      analyzePositionMock.mockResolvedValue(mockAnalysis);
+      getBestMoveMock.mockResolvedValue('e2e4');
+      pickBookMoveMock.mockResolvedValue(null);
+      const strength = opponentStrength('learn', 1200, 'hard');
+      await getAdaptiveMove('r3k2r/pp2bppp/2n5/3pP3/2pP2Q1/5N2/P1P1B1PP/q3BK1R b kq - 1 15', strength.target ?? 0, { strength });
+      expect(rows).toHaveLength(1);
+      expect(rows[0]).toMatchObject({ surface: 'learn', target: 1400 });
+      expect(typeof rows[0].source).toBe('string');
+      // No strength declared → no row (the caller owns the declaration).
+      await getAdaptiveMove('r3k2r/pp2bppp/2n5/3pP3/2pP2Q1/5N2/P1P1B1PP/q3BK1R b kq - 1 15', 1400);
+      expect(rows).toHaveLength(1);
+    } finally {
+      off();
+    }
   });
 });

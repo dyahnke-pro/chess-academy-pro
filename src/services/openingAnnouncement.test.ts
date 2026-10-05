@@ -8,7 +8,7 @@ import { Chess } from 'chess.js';
 // Prod Learn tape 2026-09-24: four announcements in ten plies, each the
 // detector refining its guess. One on first identification, one where the
 // game leaves book — and "left book" means left what masters PLAY.
-const dep = (ply: number, san: string, mover: 'w' | 'b', mainSan: string | null) => ({ ply, san, mover, mainSan });
+const dep = (ply: number, san: string, mover: 'w' | 'b', mainSan: string | null) => ({ ply, san, mover, mainSan, fen: '' });
 
 describe('openingAnnouncement — name it once, then once more where theory ends', () => {
   it('names the first identification', () => {
@@ -69,7 +69,7 @@ describe('bookDeparture reads theory from the MASTERS DB (hand walk 2026-09-24)'
   });
   it('a move masters rarely play is the departure, with its mover and the usual move', () => {
     __setLocalDbForTests(mastersFor(history, { 7: [{ san: 'Nf6', games: 900 }, { san: 'Be7', games: 3 }] }));
-    expect(bookDeparture(history)).toEqual({ ply: 8, san: 'Be7', mover: 'b', mainSan: 'Nf6' });
+    expect(bookDeparture(history)).toEqual({ ply: 8, san: 'Be7', mover: 'b', mainSan: 'Nf6', fen: expect.any(String) });
   });
 });
 
@@ -95,7 +95,7 @@ describe('bookDeparture reads the LIVE explorer answers from the cache', () => {
   it('finds the departure with no local file loaded', () => {
     __setLocalDbForTests(null);
     history.forEach((san, i) => masterPlayCache.set(fens[i], live(fens[i], i === 7 ? [{ san: 'Nf6', games: 900 }] : [{ san, games: 500 }])));
-    expect(bookDeparture(history)).toEqual({ ply: 8, san: 'Be7', mover: 'b', mainSan: 'Nf6' });
+    expect(bookDeparture(history)).toEqual({ ply: 8, san: 'Be7', mover: 'b', mainSan: 'Nf6', fen: expect.any(String) });
   });
 
   it('a position not looked up yet claims nothing (unknown ≠ out of book)', () => {
@@ -127,7 +127,7 @@ describe('a departure is news only when it just happened (run C walk 2026-09-30)
     vi.resetModules();
     vi.doMock('./bookDeparture', async (orig) => ({
       ...(await orig<typeof import('./bookDeparture')>()),
-      bookDeparture: () => ({ ply: 6, san: 'h5', mover: 'b', mainSan: null }),
+      bookDeparture: () => ({ ply: 6, san: 'h5', mover: 'b', mainSan: null, fen: '' }),
     }));
     const { openingAnnouncementForGame } = await import('./openingAnnouncement');
     const det = { name: 'Indian Defense: Knights Variation, East Indian' } as never;
@@ -143,7 +143,7 @@ describe('studentJustLeftBook (run D walk 2026-09-30: the departure said twice)'
     vi.resetModules();
     vi.doMock('./bookDeparture', async (orig) => ({
       ...(await orig<typeof import('./bookDeparture')>()),
-      bookDeparture: () => ({ ply: 6, san: 'Bc5', mover: 'b', mainSan: 'Nc6' }),
+      bookDeparture: () => ({ ply: 6, san: 'Bc5', mover: 'b', mainSan: 'Nc6', fen: '' }),
     }));
     const { studentJustLeftBook } = await import('./openingAnnouncement');
     const h = ['e4', 'e5', 'Nf3', 'Nf6', 'Nc3', 'Bc5'];

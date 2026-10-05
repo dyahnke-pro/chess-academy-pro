@@ -26,6 +26,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 import type { PieceDropHandlerArgs } from 'react-chessboard';
 import { getCoachMove, resolveConfig } from '../services/coachPlaySession';
+import { opponentStrength, studentPlayingRating } from '../services/engineStrength';
+import { useAppStore } from '../stores/appStore';
 import { reward } from '../services/rewardService';
 import type { RequestedDifficulty } from '../types';
 import { useWrongTryRefutation } from './useWrongTryRefutation';
@@ -52,14 +54,12 @@ export interface EndgamePlayoutOptions {
    *  playout marks `complete` as soon as the curated line ends.
    *  Default false. */
   stockfishFallback?: boolean;
-  /** Difficulty for the Stockfish opponent during fallback. Only
-   *  used when stockfishFallback === true. Defaults to 'easy' so
-   *  the student is rewarded for finding the right idea without
-   *  needing engine-perfect technique. */
+  /** The play-out's deliberate offset from the student, on THE ONE
+   *  offset table (`engineStrength`). Only used when stockfishFallback
+   *  === true. Defaults to 'easy'. The opponent's strength is the
+   *  student's own playing rating plus this offset — never a fixed number
+   *  (every play-out used to face ~1800 off a hard-coded 1500). */
   fallbackDifficulty?: RequestedDifficulty;
-  /** Player ELO used by resolveConfig for the fallback engine.
-   *  Defaults to 1500. */
-  fallbackPlayerElo?: number;
   /** How many extra plies of student play to require in the
    *  fallback. After this many student moves, the playout is
    *  marked complete (won the holding test). Default 8 — enough
@@ -218,7 +218,6 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
     bestMove,
     stockfishFallback: stockfishFallbackOption = false,
     fallbackDifficulty = 'easy',
-    fallbackPlayerElo = 1500,
     fallbackPliesToPlay = 4,
     extendToObviousWin = false,
     replyDelayMs = 450,
@@ -383,8 +382,12 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
     }
     setPhase('opponent-replying');
     try {
-      const config = resolveConfig(fallbackDifficulty, fallbackPlayerElo);
-      const move = await getCoachMove(chessRef.current.fen(), config);
+      // ONE ENGINE STRENGTH (P0b): the student's playing rating + the
+      // play-out's offset, resolved through the one table, and the move is
+      // emitted with its purpose so the audit sees the same number.
+      const strength = opponentStrength('endgame-playout', studentPlayingRating(useAppStore.getState().activeProfile), fallbackDifficulty);
+      const config = resolveConfig(fallbackDifficulty, strength.studentElo);
+      const move = await getCoachMove(chessRef.current.fen(), config, strength);
       chessRef.current.move({ from: move.from, to: move.to, promotion: move.promotion });
       setFen(chessRef.current.fen());
     } catch {
@@ -413,7 +416,6 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
     replyDelayMs,
     stockfishFallback,
     fallbackDifficulty,
-    fallbackPlayerElo,
     fallbackPliesPlayed,
     fallbackPliesToPlay,
     extendToObviousWin,

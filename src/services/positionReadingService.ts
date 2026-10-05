@@ -15,7 +15,9 @@
  * cheaper attacker wins the exchange (David's 2026-06-27 catch: "attacked-and-
  * undefended is *sufficient*, not *necessary* — it's not an iff").
  */
-import { fileList } from '../utils/andList';
+import { andList, fileList } from '../utils/andList';
+import type { MisconceptionTagId } from '../data/misconceptionTags';
+import type { SquareAnswerMode } from './squareAnswerGrader';
 import { Chess } from 'chess.js';
 import type { Square, Color, PieceSymbol } from 'chess.js';
 import type { TacticsLiveContext } from '../coach/types';
@@ -1659,12 +1661,13 @@ export function computeSpace(fen: string): SpaceInfo {
 }
 
 /** The best squares for `attackerColor` to TARGET — the enemy's concrete
- *  weaknesses: loose pieces (SEE), structural weak pawns, and holes the attacker
- *  can occupy. Deterministic; the coach voices these, never invents a target. */
+ *  weaknesses: HANGING material (SEE — loses material to a capture now; not
+ *  the same as LOOSE = undefended, which is `findLoosePieces`), structural weak
+ *  pawns, and holes the attacker can occupy. Deterministic; the coach voices these, never invents a target. */
 export function findAttackTargets(fen: string, attackerColor: Color): Square[] {
   const enemy: Color = attackerColor === 'w' ? 'b' : 'w';
   const targets: Square[] = [];
-  // 1) Loose enemy material (value-aware).
+  // 1) Hanging enemy material (SEE, value-aware).
   for (const h of findHangingBySee(fen)) if (h.color === enemy) targets.push(h.square);
   // 2) Enemy structural weak pawns.
   const wp = findWeakPawns(fen, enemy);
@@ -1673,7 +1676,9 @@ export function findAttackTargets(fen: string, attackerColor: Color): Square[] {
   const holes = findWeakSquares(fen);
   targets.push(...(enemy === 'w' ? holes.white : holes.black));
   // Dedupe, preserve priority order.
-  return [...new Set(targets)].slice(0, 5);
+  // Every target, in priority order — no cap (G4.5): the fifth weakness is
+  // still a weakness, and both readers render the list with `andList`.
+  return [...new Set(targets)];
 }
 
 export interface PawnGrabNote {
@@ -1991,8 +1996,13 @@ export interface ReadingQuestion {
   bucket: WeaknessCategory;
   /** The specific MISCONCEPTION_TAG id this question trains (the granular ~17
    *  buckets the app collects per game), so practice lines up 1:1 with the
-   *  weakness data. Optional — a few questions are general (material/who-wins). */
-  misconceptionTag?: string;
+   *  weakness data. Optional — a few questions are general (material/who-wins).
+   *  Typed to the closed vocabulary so a producer cannot invent a tag. */
+  misconceptionTag?: MisconceptionTagId;
+  /** How a TAPPED answer is graded against `answerSquares` (the set grader):
+   *  `any` = one key square is a full read; `all` = find them all. Required so
+   *  every producer decides. Typed answers still take the text path. */
+  answerMode: SquareAnswerMode;
   /** The prompt shown to the student. */
   prompt: string;
   /** The canonical correct answer, shown when the student is wrong. */
@@ -2081,9 +2091,9 @@ export interface ForcingCandidate {
  * the moves a trained player enumerates FIRST, before calculating any single
  * line ("candidates-first / checks-captures-threats"). Deterministic chess.js —
  * the answer key for "name your candidate forcing moves". Checks before captures
- * (the CCT order), most-forcing first; capped so the list stays teachable.
+ * (the CCT order). Uncapped (G4.5, 2026-10-04).
  */
-export function findForcingCandidates(fen: string, cap = 8): ForcingCandidate[] {
+export function findForcingCandidates(fen: string): ForcingCandidate[] {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return []; }
   const checks: ForcingCandidate[] = [];
@@ -2097,7 +2107,9 @@ export function findForcingCandidates(fen: string, cap = 8): ForcingCandidate[] 
   // forcing) — dedupe by SAN so it isn't listed twice.
   const seen = new Set(checks.map((c) => c.san));
   const uniqueCaptures = captures.filter((c) => !seen.has(c.san));
-  return [...checks, ...uniqueCaptures].slice(0, cap);
+  // Every one (G4.5): the candidate list IS the method — a ninth capture cut
+  // off is exactly the one the student had to look at.
+  return [...checks, ...uniqueCaptures];
 }
 
 export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, opts: ReadingQuestionOpts = {}): ReadingQuestion[] {
@@ -2111,6 +2123,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   // 1) MATE-IN-ONE — highest priority when present.
   if (facts?.mateInOne) {
     out.push({
+      answerMode: 'any',
       id: 'mate', type: 'mate', bucket: 'tactics',
       prompt: `${sideToMove === 'white' ? 'White' : 'Black'} to move — is there a forced mate in one? If so, what is it?`,
       answer: `Yes — ${facts.mateInOne} is mate.`,
@@ -2124,6 +2137,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   if (tactics.immediate.length > 0) {
     const t = tactics.immediate[0];
     out.push({
+      answerMode: 'any',
       id: 'tactic', type: 'tactic', bucket: 'tactics', misconceptionTag: 'missed-tactic',
       prompt: 'Is there a tactic in this position? What is it?',
       answer: t.description,
@@ -2133,6 +2147,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
     });
   } else {
     out.push({
+      answerMode: 'any',
       id: 'tactic', type: 'tactic', bucket: 'tactics',
       prompt: 'Is there a tactic for the side to move here?',
       answer: 'No concrete tactic — this is a quiet position; play on general principles.',
@@ -2144,6 +2159,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   if (tactics.threats.length > 0) {
     const th = tactics.threats[0];
     out.push({
+      answerMode: 'any',
       id: 'threat', type: 'threat', bucket: 'tactics', misconceptionTag: 'missed-opponents-threat',
       prompt: "What is your opponent threatening?",
       answer: th.spoken ?? `${th.description} (after ${th.line.join(' ')})`,
@@ -2152,23 +2168,27 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
     });
   }
 
-  // 4) HANGING (SEE-based) — value-aware, the proper answer key.
+  // 4) HANGING (SEE-based) — value-aware, the proper answer key. EVERY
+  // hanging piece, both sides, biggest gain first (it used to ask about
+  // `hanging[0]` and call a tap on the second loose piece wrong). The student
+  // finds them ALL: one found is a partial read, the set grader says so.
   const hanging = findHangingBySee(fen);
   if (hanging.length > 0) {
-    const h = hanging[0];
-    const where = h.color === me ? 'one of YOUR pieces' : "one of your OPPONENT's pieces";
+    const named = hanging.map((h) => `the ${PIECE_NAME[h.piece]} on ${h.square} (${h.color === me ? 'yours' : 'theirs'}, about ${h.gain} point${h.gain === 1 ? '' : 's'})`);
     out.push({
+      answerMode: 'all',
       id: 'hanging', type: 'hanging', bucket: 'tactics', misconceptionTag: 'hung-material',
-      prompt: 'Is any piece hanging — can material be won by force here?',
-      answer: `Yes — the ${PIECE_NAME[h.piece]} on ${h.square} (${where}) is hanging; capturing wins about ${h.gain} point${h.gain === 1 ? '' : 's'}.`,
-      acceptTokens: [sq(h.square), PIECE_NAME[h.piece], 'hanging', 'yes'],
-      answerSquares: [h.square],
-      // Play the win out on the board (the capture sequence) — show, don't just tell.
-      demoLine: seeSequence(fen, h.square),
+      prompt: 'Which pieces are hanging — where can material be won by force? Find every one.',
+      answer: `${hanging.length > 1 ? 'These are' : 'This is'} hanging: ${andList(named)}.`,
+      acceptTokens: [...new Set(hanging.flatMap((h) => [sq(h.square), PIECE_NAME[h.piece]]))].concat(['hanging', 'yes']),
+      answerSquares: hanging.map((h) => h.square),
+      // Play the biggest win out on the board (the capture sequence) — show, don't just tell.
+      demoLine: seeSequence(fen, hanging[0].square),
       negative: false,
     });
   } else {
     out.push({
+      answerMode: 'any',
       id: 'hanging', type: 'hanging', bucket: 'tactics',
       prompt: 'Is any piece hanging right now?',
       answer: 'No — every attacked piece is adequately defended (nothing wins material by force).',
@@ -2183,6 +2203,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
     // ALL-CAPS direction markers written for the model).
     const read = materialRead(fen);
     out.push({
+      answerMode: 'any',
       id: 'material', type: 'material', bucket: 'calculation',
       prompt: 'Who is ahead in material, and by how much?',
       answer: read?.answer ?? facts.material,
@@ -2196,6 +2217,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   const verdict = evalToVerdict(opts.evalCp, opts.mateIn, sideToMove);
   if (verdict) {
     out.push({
+      answerMode: 'any',
       id: 'who-is-winning', type: 'who-is-winning', bucket: 'calculation',
       prompt: 'Who is winning here, and roughly by how much?',
       answer: verdict.answer,
@@ -2210,6 +2232,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
     let firstTo: Square | null = null;
     try { const c = new Chess(fen); const mv = c.move(pv[0]); if (mv) firstTo = mv.to; } catch { firstTo = null; }
     out.push({
+      answerMode: 'any',
       id: 'plan', type: 'plan', bucket: opts.isEndgame ? 'endgame' : 'positional', misconceptionTag: 'no-plan',
       prompt: opts.isEndgame ? "What's the winning plan in this endgame?" : "What's the best plan / continuation here?",
       answer: `The engine's plan starts ${pv.join(' ')}.`,
@@ -2249,9 +2272,10 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
       if (candidates.length > 0) {
         const candTokens = [...new Set(candidates.flatMap((c) => [sq(c.to), c.san.toLowerCase()]))];
         out.push({
+          answerMode: 'any',
           id: 'calc-candidates', type: 'plan', bucket: 'calculation', misconceptionTag: 'missed-tactic',
           prompt: 'Calculation, step 1 — candidates first. Before you calculate anything, name a forcing candidate move: a check or a capture worth looking at.',
-          answer: `Your forcing candidates: ${candidates.map((c) => c.san).join(', ')}. The one that works starts ${first}.`,
+          answer: `Your forcing candidates: ${andList(candidates.map((c) => c.san))}. The one that works starts ${first}.`,
           acceptTokens: candTokens,
           answerSquares: candidates.map((c) => c.to),
           answerMoves: candidates.map((c) => c.san),
@@ -2264,6 +2288,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
       // line plays out on the board (demoLine) — including the opponent's best
       // replies, so the student SEES the defense held.
       out.push({
+        answerMode: 'any',
         id: 'calculation', type: 'plan', bucket: 'calculation', misconceptionTag: 'missed-tactic',
         prompt: `Calculation, step 2 — calculate it out. Starting with ${first}, read the forcing line to its end. What is the LAST move of the combination?`,
         answer: `The line is ${calcSeq.join(' ')} — it ends with ${last}.`,
@@ -2282,6 +2307,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
       const endVerdict = evalToVerdict(opts.evalCp, opts.mateIn, sideToMove);
       if (endVerdict) {
         out.push({
+          answerMode: 'any',
           id: 'calc-evaluate', type: 'who-is-winning', bucket: 'calculation',
           prompt: `Calculation, step 3 — evaluate the endpoint. After ${last}, the smoke clears. Who is better, and by roughly how much?`,
           answer: `${endVerdict.answer} That's the payoff of the line — calculation ends in a JUDGEMENT, not just a move.`,
@@ -2298,6 +2324,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   const breaks = findPawnBreaks(fen);
   if (breaks.length > 0) {
     out.push({
+      answerMode: 'any',
       id: 'pawn-break', type: 'pawn-break', bucket: 'positional', misconceptionTag: 'mistimed-pawn-break',
       prompt: 'What pawn break is available to challenge the structure?',
       answer: `The break${breaks.length > 1 ? 's' : ''} ${breaks.map((b) => `…${b}`).join(' and ')} challenge${breaks.length > 1 ? '' : 's'} the opponent's pawns.`,
@@ -2313,6 +2340,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
     const note = quality[0];
     const side = note.color === me ? 'your' : "your opponent's";
     out.push({
+      answerMode: 'any',
       id: 'piece', type: 'piece', bucket: 'positional',
       prompt: 'Is there a notably good or bad piece on the board? Which one?',
       answer: `${side[0].toUpperCase()}${side.slice(1)} ${PIECE_NAME[note.piece]} on ${note.square} is a ${note.reason}.`,
@@ -2324,6 +2352,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
     const outpost = quality.find((q) => q.kind === 'outpost' && q.color === me);
     if (outpost) {
       out.push({
+        answerMode: 'any',
         id: 'outpost', type: 'outpost', bucket: 'positional',
         prompt: 'Do you have a knight outpost? Which square?',
         answer: `Yes — your knight on ${outpost.square} sits on a protected outpost no enemy pawn can challenge.`,
@@ -2340,6 +2369,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   const oppHoles = me === 'w' ? weak.black : weak.white;
   if (myHoles.length > 0) {
     out.push({
+      answerMode: 'any',
       id: 'weak-square-own', type: 'weak-square', bucket: 'positional',
       prompt: 'Where are the weak squares in YOUR position? (squares your pawns can no longer guard)',
       answer: `Your weak square${myHoles.length > 1 ? 's' : ''}: ${myHoles.join(', ')} — no pawn of yours can defend ${myHoles.length > 1 ? 'them' : 'it'}.`,
@@ -2350,6 +2380,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   }
   if (oppHoles.length > 0) {
     out.push({
+      answerMode: 'any',
       id: 'weak-square-opp', type: 'weak-square', bucket: 'positional',
       prompt: "Where are your OPPONENT's weak squares — the holes you can occupy?",
       answer: `Your opponent's weak square${oppHoles.length > 1 ? 's' : ''}: ${oppHoles.join(', ')} — land a piece there.`,
@@ -2364,6 +2395,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   if (activity.strongest) {
     const s = activity.strongest;
     out.push({
+      answerMode: 'any',
       id: 'strong-piece', type: 'strong-piece', bucket: 'positional',
       prompt: 'Which of your pieces is the strongest (most active) right now?',
       answer: `Your ${PIECE_NAME[s.piece]} on ${s.square} is your most active piece — it covers ${s.scope} squares.`,
@@ -2375,6 +2407,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   if (activity.weakest && (!activity.strongest || activity.weakest.square !== activity.strongest.square)) {
     const w = activity.weakest;
     out.push({
+      answerMode: 'any',
       id: 'weak-piece', type: 'weak-piece', bucket: 'positional', misconceptionTag: 'misplaced-piece',
       prompt: 'Which of your pieces is the weakest (most passive) — the one to improve?',
       answer: `Your ${PIECE_NAME[w.piece]} on ${w.square} is your least active piece — it only covers ${w.scope} squares; reroute it.`,
@@ -2388,9 +2421,10 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   const targets = findAttackTargets(fen, me);
   if (targets.length > 0) {
     out.push({
+      answerMode: 'any',
       id: 'target', type: 'target', bucket: 'positional',
       prompt: 'What should you target — where is your opponent weakest?',
-      answer: `Target ${targets.join(', ')} — ${targets.length > 1 ? 'these are' : 'this is'} the opponent's weakest point${targets.length > 1 ? 's' : ''} (loose material, weak pawns, or holes).`,
+      answer: `Target ${targets.join(', ')} — ${targets.length > 1 ? 'these are' : 'this is'} the opponent's weakest point${targets.length > 1 ? 's' : ''} (hanging material, weak pawns, or holes).`,
       acceptTokens: targets.map(sq),
       answerSquares: targets,
       negative: false,
@@ -2402,6 +2436,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   const weakPawnSquares = [...new Set([...wp.isolated, ...wp.doubled, ...wp.backward])];
   if (weakPawnSquares.length > 0) {
     out.push({
+      answerMode: 'any',
       id: 'weak-pawn', type: 'weak-pawn', bucket: 'positional', misconceptionTag: 'created-pawn-weakness',
       prompt: 'Do you have any weak pawns? Where are they?',
       answer: `Weak pawn${weakPawnSquares.length > 1 ? 's' : ''}: ${weakPawnSquares.join(', ')}${wp.isolated.length ? ` (isolated: ${wp.isolated.join(', ')})` : ''}${wp.doubled.length ? ` (doubled: ${wp.doubled.join(', ')})` : ''}${wp.backward.length ? ` (backward: ${wp.backward.join(', ')})` : ''}.`,
@@ -2417,6 +2452,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   const theirSpace = me === 'w' ? space.black : space.white;
   if (mySpace !== theirSpace) {
     out.push({
+      answerMode: 'any',
       id: 'space', type: 'space', bucket: 'positional',
       prompt: 'Who has more space, and by how much?',
       answer: mySpace > theirSpace
@@ -2432,6 +2468,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   const myOpen = [...files.open, ...(me === 'w' ? files.whiteSemiOpen : files.blackSemiOpen)];
   if (myOpen.length > 0) {
     out.push({
+      answerMode: 'any',
       id: 'open-file', type: 'open-file', bucket: 'positional',
       prompt: 'Which file(s) should your rooks be heading for?',
       answer: `The ${listOfFiles(myOpen)}-file${myOpen.length > 1 ? 's are' : ' is'} open for your rooks.`,
@@ -2448,12 +2485,14 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   } catch { /* ignore */ }
   if (bishops.w >= 2 && bishops.b < 2) {
     out.push({
+      answerMode: 'any',
       id: 'bishop-pair', type: 'bishop-pair', bucket: 'positional',
       prompt: 'Who has the bishop pair?', answer: 'White has the bishop pair.',
       acceptTokens: ['white'], negative: false,
     });
   } else if (bishops.b >= 2 && bishops.w < 2) {
     out.push({
+      answerMode: 'any',
       id: 'bishop-pair', type: 'bishop-pair', bucket: 'positional',
       prompt: 'Who has the bishop pair?', answer: 'Black has the bishop pair.',
       acceptTokens: ['black'], negative: false,
@@ -2469,6 +2508,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
         ? `${fileList(ks.openFilesNearKing)} ${ks.openFilesNearKing.length > 1 ? 'are' : 'is'} open toward your king`
         : 'your king has lost its pawn shield';
     out.push({
+      answerMode: 'any',
       id: 'king-safety', type: 'king-safety', bucket: ks.inCenter ? 'openings' : 'positional',
       misconceptionTag: ks.inCenter ? 'king-stuck-center' : 'weakened-king-safety',
       prompt: 'Is your king safe? If not, what is the problem?',
@@ -2491,6 +2531,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
     let firstTo: Square | null = null;
     try { const c = new Chess(fen); const mv = c.move(poisoned.capture); if (mv) firstTo = mv.to; } catch { firstTo = null; }
     out.push({
+      answerMode: 'any',
       id: 'counting-recapture', type: 'target', bucket: 'calculation',
       prompt: `Calculate it out: is the pawn on ${poisoned.square} actually safe to take?`,
       answer: `No — ${poisoned.capture} loses material: count the recapture (the exchange nets ${poisoned.see} for you).`,
@@ -2509,6 +2550,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   const safeGrab = grabs.find((x) => x.safe);
   if (safeGrab && opts.pvSan && opts.pvSan.length > 0 && opts.pvSan[0] !== safeGrab.capture) {
     out.push({
+      answerMode: 'any',
       id: 'greedy-grab', type: 'target', bucket: 'calculation', misconceptionTag: 'greedy-pawn-grab',
       prompt: `The pawn on ${safeGrab.square} can be safely taken — but should you? Is grabbing it greedy here?`,
       answer: `Yes — grabbing on ${safeGrab.square} is greedy: you win the pawn but the engine prefers ${opts.pvSan[0]}; taking neglects the position.`,
@@ -2523,6 +2565,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   if (devMe && devMe.totalMinors > 0 && devMe.developedMinors < devMe.totalMinors) {
     const undev = devMe.totalMinors - devMe.developedMinors;
     out.push({
+      answerMode: 'any',
       id: 'development', type: 'development', bucket: 'openings',
       misconceptionTag: 'neglected-development',
       prompt: 'Are all your pieces developed? How many minor pieces are still at home?',
@@ -2576,7 +2619,7 @@ const HINT_TIER1: Partial<Record<ReadingQuestionType, string>> = {
   'weak-square': 'Find a square no enemy pawn can ever challenge.',
   'strong-piece': 'Which of your pieces sees the most squares?',
   'weak-piece': 'Which of your pieces is doing the least — boxed in or offside?',
-  target: "Where is the opponent softest — loose material, a weak pawn, or a hole?",
+  target: "Where is the opponent softest — hanging material, a weak pawn, or a hole?",
   'weak-pawn': 'Scan your pawns — any with no friendly pawn on a neighboring file?',
   'pawn-break': "Which pawn push strikes the base of the opponent's chain?",
   'king-safety': 'Look at the shelter directly around your king.',

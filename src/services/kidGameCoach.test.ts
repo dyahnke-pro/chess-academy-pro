@@ -6,9 +6,9 @@ import {
   generateKidMoveInstruction,
   generateKidWrongMoveHint,
   answerKidGameQuestion,
+  answerKidGameQuestionWithKind,
 } from './kidGameCoach';
 import * as coachApi from './coachApi';
-import * as liveTactics from './liveTacticsContext';
 
 const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 // Position after 1.e4 e5 2.Bc4 Nc6 (White to move, the Scholar's-Mate setup).
@@ -169,84 +169,56 @@ describe('generateKidWrongMoveHint', () => {
   });
 });
 
-describe('answerKidGameQuestion', () => {
+describe('answerKidGameQuestion — every answer computed, no free LLM (G0)', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
-    // Avoid the engine in node test env — board facts compute sync from the FEN.
-    vi.spyOn(liveTactics, 'buildFedTacticsContext').mockResolvedValue({
-      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-      immediate: [], hanging: [], threats: [], opportunities: [], lookaheadDepth: 2,
-      boardFacts: undefined,
-    });
+    // The phrasing seam is a pass-through here so the COMPUTED facts are what
+    // is asserted (and no test ever reaches a live provider).
+    vi.spyOn(coachApi, 'voiceFacts').mockImplementation((facts: string) => Promise.resolve(facts));
   });
 
-  it('returns a sanitized kid-safe answer', async () => {
-    vi.spyOn(coachApi, 'getKidLlmResponse').mockResolvedValue('Your knight guards the center — keep developing your pieces!');
-    const out = await answerKidGameQuestion({
-      question: 'what should I do?', fen: SCHOLAR, expectedNextSan: 'Qf3',
-      gameTitle: "The Scholar's Surprise", history: [],
+  it('NEVER asks the model to write the answer — the old free-LLM fallback is gone', async () => {
+    const llm = vi.spyOn(coachApi, 'getKidLlmResponse').mockResolvedValue('The black queen on d5 is hanging, grab it!');
+    for (const question of ['what should I do?', 'how am I doing?', 'hi!', 'why?', 'is my queen safe', 'where can my horse go']) {
+      const out = await answerKidGameQuestion({ question, fen: SCHOLAR, playerColor: 'w', expectedNextSan: 'Qf3' });
+      expect(out).not.toMatch(/d5/);
+    }
+    expect(llm).not.toHaveBeenCalled();
+  }, 30_000);
+
+  it('a hint names the scripted move spelled out, never notation', async () => {
+    const r = await answerKidGameQuestionWithKind({
+      question: 'What should I do next?', fen: SCHOLAR, playerColor: 'w', expectedNextSan: 'Qf3', nextTeachingConcept: 'attacking a weakness',
     });
-    expect(out).toContain('knight');
+    expect(r.kind).toBe('hint');
+    expect(r.text).toMatch(/queen from d1 to f3/);
+    expect(r.text).toMatch(/their pawn on f7/);
+    expect(r.text).not.toMatch(/Qf3/);
+  });
+
+  it('is-it-safe answers from the board', async () => {
+    const r = await answerKidGameQuestionWithKind({ question: 'is my bishop safe?', fen: SCHOLAR, playerColor: 'w' });
+    expect(r.kind).toBe('is-it-safe');
+    expect(r.text).toBe('Your bishop on c4 is safe right now — nothing is attacking it. Your bishop on c1 is safe right now — nothing is attacking it.');
+  });
+
+  it('a concept question goes to the shared concept spine', async () => {
+    const r = await answerKidGameQuestionWithKind({ question: 'what is a fork?', fen: SCHOLAR, playerColor: 'w' });
+    expect(r.kind).toBe('concept');
+    expect(r.text.toLowerCase()).toMatch(/fork|two|attack/);
+  }, 30_000);
+
+  it('anything else gets the computed board line — true, no praise', async () => {
+    const r = await answerKidGameQuestionWithKind({ question: 'how am I doing?', fen: SCHOLAR, playerColor: 'w' });
+    expect(r.kind).toBe('look-at-board');
+    expect(r.text).toBe("Let's look at the board together. None of your pieces is under attack right now.");
+    expect(r.text).not.toMatch(/great question/i);
+  });
+
+  it('sanitizes a phrasing-model SAN leak back to the computed facts', async () => {
+    vi.spyOn(coachApi, 'voiceFacts').mockResolvedValue('Qf3');
+    const out = await answerKidGameQuestion({ question: 'what now?', fen: SCHOLAR, playerColor: 'w', expectedNextSan: 'Qf3' });
     expect(out).not.toMatch(/Qf3/);
-  });
-
-  it('falls back to a safe canned line on failure', async () => {
-    vi.spyOn(coachApi, 'getKidLlmResponse').mockRejectedValue(new Error('down'));
-    const out = await answerKidGameQuestion({
-      question: 'why?', fen: SCHOLAR, gameTitle: 'Game', history: [],
-    });
-    expect(out.length).toBeGreaterThan(0);
-    expect(out).not.toMatch(/⚠️/);
-  });
-
-  it('strips a SAN leak from the answer', async () => {
-    vi.spyOn(coachApi, 'getKidLlmResponse').mockResolvedValue('Play Qf3 next, it is strong.');
-    const out = await answerKidGameQuestion({
-      question: 'what now?', fen: SCHOLAR, gameTitle: 'Game', history: [],
-    });
-    expect(out).not.toMatch(/Qf3/);
-  });
-
-  it('strips an INVENTED board fact — a kid never hears a hallucinated piece (P0)', async () => {
-    // SCHOLAR has an empty d5. The LLM hallucinates a queen there; the board-
-    // claim gate must strip it so the child is never told a made-up move.
-    vi.spyOn(coachApi, 'getKidLlmResponse').mockResolvedValue(
-      'The black queen on d5 is hanging, so grab it!',
-    );
-    const out = await answerKidGameQuestion({
-      question: 'what should I do?', fen: SCHOLAR, gameTitle: 'Game', history: [],
-    });
-    expect(out).not.toMatch(/d5/i);
-    expect(out).not.toMatch(/queen on d5/i);
-    // The only sentence was false → gate empties it → safe canned fallback.
-    expect(out.length).toBeGreaterThan(0);
-  });
-
-  it('keeps a TRUE board fact through the gate', async () => {
-    // Black knight really is on c6 in SCHOLAR — a true claim must survive.
-    vi.spyOn(coachApi, 'getKidLlmResponse').mockResolvedValue(
-      'Your knight on c6 is guarding the center nicely!',
-    );
-    const out = await answerKidGameQuestion({
-      question: 'how am I doing?', fen: SCHOLAR, gameTitle: 'Game', history: [],
-    });
-    expect(out).toMatch(/knight/i);
-  });
-});
-
-describe('kid coach — computed CONCEPTS never reach the kid prompt (contract)', () => {
-  it('formatTacticsSubBlock output for the kid path carries no CONCEPTS block', async () => {
-    const { formatTacticsSubBlock } = await import('./liveTacticsContext');
-    // Simulate what kidGameCoach does: the fed package MAY carry concepts (every
-    // adult surface gets them); the kid path must strip them before rendering.
-    const withConcepts = {
-      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-      immediate: [], hanging: [], threats: [], opportunities: [], lookaheadDepth: 2,
-      concepts: [{ id: 'fork', name: 'Fork', source: 'tactic' as const, squares: ['d5'], full: 'x', short: 'y', importance: 0.9 }],
-    };
-    const adult = formatTacticsSubBlock(withConcepts, withConcepts.fen);
-    const kid = formatTacticsSubBlock({ ...withConcepts, concepts: undefined }, withConcepts.fen);
-    expect(adult).toMatch(/CONCEPTS/);
-    expect(kid).not.toMatch(/CONCEPTS/);
+    expect(out).toMatch(/queen from d1 to f3/);
   });
 });

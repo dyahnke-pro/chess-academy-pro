@@ -38,6 +38,7 @@ import { STAKED_FLOOR } from './factStakes';
 import type { FactStakes } from './factStakes';
 import { methodBeatFor, type MethodSignals, type HabitNeed, type HabitStanding, type MethodHabit } from './methodBeat';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
+import { habitForTag, TAG_STEP } from './thinkingSteps';
 import type { WeaknessSignal } from './weaknessSignal';
 import { emitCoachDecision } from './coachDecisionEvents';
 import type { MoveAdviceVerdict } from './nextMoveAdvice';
@@ -465,60 +466,31 @@ function standingOf(w: WeaknessSignal): HabitStanding {
  *  know which one it is holding. */
 export function habitForCluster(clusterId: string): MethodHabit | null {
   for (const [re, habit] of ANALYSIS_HABIT) if (re.test(clusterId)) return habit;
-  return COACH_TAG_HABIT[clusterId as MisconceptionTagId] ?? null;
+  return coachTagHabit(clusterId);
 }
 
-/** THE COACH-SIDE TAG → HABIT MAP, EXHAUSTIVE OVER THE CLOSED SET.
+/** THE COACH-SIDE TAG → HABIT JOIN, EXHAUSTIVE OVER THE CLOSED SET.
  *
  *  There are TWO weakness vocabularies feeding `clusterId`: the generated
- *  `analysis:*` family (open — `analysis:tactic:${tacticType}`) and this closed
- *  set of 26 misconception tags, mapped straight through by
- *  `weaknessSignal.ts:63` (`clusterId: w.tag`).
+ *  `analysis:*` family (open — `analysis:tactic:${tacticType}`) and the closed
+ *  set of misconception tags, mapped straight through by `weaknessSignal.ts`
+ *  (`clusterId: w.tag`).
  *
  *  A regex join across both silently missed the two tags that matter most for
  *  the threat habit, on a string NEAR-miss: `missed-opponents-threat` does not
  *  contain "missed-threat", and `hung-material` does not contain "hanging"
  *  (found 2026-09-16). That is the "two enums that mean the same thing and
- *  never reconcile" rot — it fails silently and every test stays green. A
- *  `Record` over `MisconceptionTagId` makes it IMPOSSIBLE to reopen: a 27th tag
- *  fails to compile until someone decides its habit.
+ *  never reconcile" rot. The closed set is now joined through the ONE method
+ *  vocabulary (2026-10-04): `TAG_STEP` (a `Record` over `MisconceptionTagId`,
+ *  so a new tag fails to compile until someone decides its step) and
+ *  `STEP_METHOD_HABIT` — tag → thinking step → habit. No second tag table.
  *
  *  `null` means "real weakness, but not a THINKING habit" — a positional
  *  principle (king safety, pawn structure, a passive rook) is taught by the
  *  fundamentals layer, not by a method beat. Empty beats generic. */
-const COACH_TAG_HABIT: Record<MisconceptionTagId, MethodHabit | null> = {
-  // — the opponent's move is the thing you did not look at —
-  'missed-opponents-threat': 'opponent-threat',
-  'hung-material': 'opponent-threat',
-  'greedy-pawn-grab': 'opponent-threat',
-  'poisoned-pawn': 'opponent-threat',
-  // — the shot that was there was forcing —
-  'missed-tactic': 'forcing-scan',
-  // — you picked before you compared —
-  'calculation-depth': 'candidates',
-  'overvalued-attack': 'candidates',
-  'bad-trade': 'candidates',
-  'bad-trade-material': 'candidates',
-  'no-plan': 'candidates',
-  // — the moment deserved more clock than you gave it —
-  'botched-conversion': 'slow-down',
-  'mistimed-pawn-break': 'slow-down',
-  // — real holes, taught by the fundamentals layer rather than a habit —
-  'left-book-early': null,
-  'neglected-development': null,
-  'king-stuck-center': null,
-  'tempo-handed': null,
-  'space-conceded': null,
-  'weakened-king-safety': null,
-  'created-pawn-weakness': null,
-  'misplaced-piece': null,
-  'overextended-pawn': null,
-  'capture-toward-centre': null,
-  'passive-king-endgame': null,
-  'passed-pawn-neglected': null,
-  'passive-rook': null,
-  other: null,
-};
+function coachTagHabit(clusterId: string): MethodHabit | null {
+  return Object.prototype.hasOwnProperty.call(TAG_STEP, clusterId) ? habitForTag(clusterId as MisconceptionTagId) : null;
+}
 
 /** The GENERATED `analysis:*` family is open (`analysis:tactic:${type}`), so it
  *  matches by prefix — but only on prefixes that are actually emitted by

@@ -50,6 +50,8 @@ import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { FundamentalId } from './principleAttribution';
 import { FUNDAMENTAL_LESSON } from '../data/fundamentalLessons';
 import { andList, orList, fileList } from '../utils/andList';
+import { findLoosePieces, type LoosePiece } from './loosePieces';
+import { THINKING_STEPS, THINKING_STEP_ORDER, type ThinkingStep } from './thinkingSteps';
 import { isUndevelopedInOpening } from '../utils/undeveloped';
 import { pieceIsOn } from './tacticsContextIdentity';
 import { clearsVolumeFloor } from './openingVolumeFloor';
@@ -98,6 +100,19 @@ function evalPhrase(evalCp: number | null | undefined, mateIn: number | null | u
   if (mag < 0.3) return 'the position is roughly balanced';
   // Eval voiced in POINTS, never "pawns" (David 2026-07-24: "if the eval is
   // called out then say up by three points, not three pawns").
+  //
+  // 🔒 THE SEAT LEADS (hand walk 2026-10-04 #12). With the seat known the
+  // sentence is about the STUDENT: "you're down about 2.7 points", never
+  // "They're winning (about 2.7 points)". In a drill "they" has no clear
+  // referent (the drill's other side? the coach?), and a student reading
+  // whose-side off a pronoun can read it backwards.
+  if (studentColor) {
+    const up = who === studentColor;
+    const amount = `${up ? 'up' : 'down'} about ${mag.toFixed(1)} points`;
+    if (mag < 1.0) return `you're ${amount} — ${up ? 'slightly better' : 'slightly worse'}`;
+    if (mag < 2.5) return `you're ${amount} — ${up ? 'clearly better' : 'clearly worse'}`;
+    return `you're ${amount} — ${up ? 'winning' : 'losing'}`;
+  }
   if (mag < 1.0) return `${seatWord(who)} slightly better (about ${mag.toFixed(1)} points)`;
   if (mag < 2.5) return `${seatWord(who)} clearly better (about ${mag.toFixed(1)} points)`;
   return `${seatWord(who)} winning (about ${mag.toFixed(1)} points)`;
@@ -317,6 +332,14 @@ export function assembleHangingAnswer(fen: string, ask: string | null | undefine
   };
   const mineLoose = scanMine ? looseOf(me) : [];
   const theirLoose = scanTheirs || scanBoth ? looseOf(them) : [];
+  // "LOOSE" IS ITS OWN QUESTION (walk 2026-10-04, defect 13): "which of their
+  // pieces are loose?" was answered "Nothing of theirs is hanging" while their
+  // queen on b4 had no defender. Loose = no defender, attacked or not; hanging
+  // = loses material now. A loose ask is answered from the one loose computer,
+  // and what is hanging is still said, separately.
+  if (/\b(loose|undefended|unprotected|unguarded|no\s+defenders?)\b/.test(t)) {
+    return assembleLooseAnswer(fen, me, scanMine, scanTheirs || scanBoth, mineLoose, theirLoose, say);
+  }
   if (mineLoose.length === 0 && theirLoose.length === 0) {
     if (unread) {
       return { facts: `There's a check on the board — what can be won is read once the check is answered.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
@@ -336,6 +359,56 @@ export function assembleHangingAnswer(fen: string, ask: string | null | undefine
   if (theirLoose.length > 0) parts.push(scanTheirs && !scanBoth ? `Yes — ${say(theirLoose, false).charAt(0).toLowerCase()}${say(theirLoose, false).slice(1)}` : say(theirLoose, false));
   const facts = parts.join(' ');
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+}
+
+/** The LOOSE half of the hanging/loose lane: every undefended piece on the
+ *  scanned side(s) from `findLoosePieces`, with the SEE-hanging ones said in
+ *  their own sentence (a loose piece is a target; a hanging one is material
+ *  now). Pawns are named only when they hang — "pieces" in the ask. */
+function assembleLooseAnswer(
+  fen: string,
+  me: 'w' | 'b',
+  scanMine: boolean,
+  scanTheirs: boolean,
+  mineHanging: Array<{ sq: Square; type: PieceSymbol; g: number }>,
+  theirHanging: Array<{ sq: Square; type: PieceSymbol; g: number }>,
+  sayHanging: (list: Array<{ sq: Square; type: PieceSymbol; g: number }>, mine: boolean) => string,
+): GroundedAnswer {
+  const loose = findLoosePieces(fen);
+  const side = (mine: boolean, hanging: Array<{ sq: Square; type: PieceSymbol; g: number }>): string[] => {
+    const owner = mine ? 'your' : 'their';
+    const color = mine ? me : (me === 'w' ? 'b' : 'w');
+    const hung = new Set(hanging.map((h) => h.sq));
+    // Most valuable first, board order within a value (findLoosePieces is board order).
+    const rest = loose
+      .filter((p) => p.color === color && p.type !== 'p' && !hung.has(p.square))
+      .sort((a, b) => b.value - a.value);
+    const out: string[] = [];
+    if (hanging.length > 0) out.push(sayHanging(hanging, mine));
+    if (rest.length > 0) {
+      const named = (l: LoosePiece[]): string => andList(l.map((p) => `${REVIEW_PIECE_NAME[p.type]} on ${p.square}`));
+      const quiet = rest.filter((p) => !p.attacked);
+      const hit = rest.filter((p) => p.attacked);
+      if (quiet.length > 0) {
+        const many = quiet.length > 1;
+        out.push(`${cap(owner)} ${named(quiet)} ${many ? 'are' : 'is'} loose — nothing defends ${many ? 'them' : 'it'}, though nothing attacks ${many ? 'them' : 'it'} yet.`);
+      }
+      if (hit.length > 0) {
+        const many = hit.length > 1;
+        out.push(`${cap(owner)} ${named(hit)} ${many ? 'are' : 'is'} loose and attacked — nothing defends ${many ? 'them' : 'it'}.`);
+      }
+    }
+    if (hanging.length === 0 && rest.length === 0) {
+      out.push(mine ? 'None of your pieces is loose — each has a defender.' : 'None of their pieces is loose — each has a defender.');
+    } else if (hanging.length === 0) {
+      out.push(mine ? 'Nothing of yours is hanging right now.' : 'Nothing of theirs is hanging right now.');
+    }
+    return out;
+  };
+  const parts: string[] = [];
+  if (scanMine) parts.push(...side(true, mineHanging));
+  if (scanTheirs) parts.push(...side(false, theirHanging));
+  return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
 }
 
 // ── BOARD PLAN — "what's my plan here?" / "what's their plan?" ────────────────
@@ -3412,10 +3485,11 @@ export function assemblePlanAnswer(opts: {
  * assembleMethodAnswer — HOW TO THINK in this position, computed, and NEVER the
  * best move. The student asked for the routine, so the answer is the routine
  * run on THIS board, every clause a computed fact (G0/G3):
- *   1. THEIR IDEA — is anything of yours loose right now (`findHangingBySee`)?
- *   2. THE FORCING SCAN — the checks and captures that actually exist here
+ *   1. AM I SAFE? — is anything of yours hanging right now (`findHangingBySee`)?
+ *   2. MY FORCING MOVES — the checks and captures that actually exist here
  *      (`findForcingCandidates`), listed in CCT order as a scan, not an answer;
  *   3. CANDIDATES — the levers to compare (a pawn break, the worst piece);
+ *   (which steps, their order and their names come from `THINKING_STEPS`)
  *   4. THE HABIT — the one `methodBeat` earns for this moment, closing the
  *      answer the way it closes a review beat (G4.5.16).
  * `engineBestSan` steers ONLY the habit choice (is the move that is there a
@@ -3437,49 +3511,56 @@ export function assembleMethodAnswer(opts: {
   try { chess = new Chess(opts.fen); } catch { return null; }
   const me: 'w' | 'b' = opts.studentColor === 'white' ? 'w' : 'b';
   const studentToMove = chess.turn() === me;
-  const steps: string[] = [];
-
-  // 1 — THEIR IDEA.
-  const loose = findHangingBySee(opts.fen).filter((h) => h.color === me);
-  if (loose.length > 0) {
-    steps.push(`First, their idea: ${andList(loose.map((h) => `your ${REVIEW_PIECE_NAME[h.piece]} on ${h.square}`))} ${loose.length > 1 ? 'are' : 'is'} loose right now — that has to be answered before anything else.`);
-  } else {
-    steps.push(`First, their idea: nothing of yours is hanging right now, so their last move was about position, not material — ask what it prepares.`);
-  }
-
-  // 2 — THE FORCING SCAN (only meaningful on the student's move).
-  if (studentToMove) {
-    const forcing = findForcingCandidates(opts.fen, 64);
-    const checks = forcing.filter((f) => f.kind === 'check').map((f) => f.san);
-    const caps = forcing.filter((f) => f.kind === 'capture').map((f) => f.san);
-    if (checks.length === 0 && caps.length === 0) {
-      steps.push(`Then the forcing moves: there are no checks or captures on the board, so this is a quiet decision — nothing forces, so the plan decides.`);
-    } else {
+  // THE ROUTINE IS THE ONE STEP VOCABULARY (2026-10-04): which steps this
+  // answer runs, in what order and under what name, comes from
+  // `THINKING_STEPS` — never a private list of section headings.
+  const hanging = findHangingBySee(opts.fen).filter((h) => h.color === me);
+  const RUN: Partial<Record<ThinkingStep, () => string>> = {
+    // Am I safe? — what of mine can be won right now (SEE).
+    'am-i-safe': () => (hanging.length > 0
+      ? `${andList(hanging.map((h) => `your ${REVIEW_PIECE_NAME[h.piece]} on ${h.square}`))} ${hanging.length > 1 ? 'are' : 'is'} hanging right now — that has to be answered before anything else.`
+      : `nothing of yours can be won right now, so their last move was about position, not material — ask what it prepares.`),
+    // My forcing moves (only meaningful on the student's move).
+    'forcing-moves': () => {
+      if (!studentToMove) return `it's their move — while they think, list the checks and captures they'll have next, so nothing lands as a surprise.`;
+      const forcing = findForcingCandidates(opts.fen);
+      const checks = forcing.filter((f) => f.kind === 'check').map((f) => f.san);
+      const caps = forcing.filter((f) => f.kind === 'capture').map((f) => f.san);
+      if (checks.length === 0 && caps.length === 0) return `there are no checks or captures on the board, so this is a quiet decision — nothing forces, so the plan decides.`;
       const bits: string[] = [];
       if (checks.length) bits.push(`checks ${andList(checks)}`);
       if (caps.length) bits.push(`captures ${andList(caps)}`);
-      steps.push(`Then the forcing moves, in order: ${bits.join('; ')}. Look at each of those before any quiet move.`);
-    }
-  } else {
-    steps.push(`It's their move — while they think, list the checks and captures they'll have next, so nothing lands as a surprise.`);
+      return `${bits.join('; ')}. Look at each of those, in that order, before any quiet move.`;
+    },
+    // Candidates: the levers to compare.
+    candidates: () => {
+      const levers: string[] = [];
+      if (studentToMove) {
+        let breaks: string[] = [];
+        try { breaks = findPawnBreaks(opts.fen); } catch { breaks = []; }
+        if (breaks.length) levers.push(`the pawn break${breaks.length > 1 ? 's' : ''} ${orList(breaks)}`);
+      }
+      const sw = strongestWeakestPiece(opts.fen, me);
+      const homeRank = me === 'w' ? '1' : '8';
+      const pastOpening = (Number.parseInt(opts.fen.split(' ')[5] ?? '1', 10) || 1) >= 10;
+      if (sw.weakest && (pastOpening || sw.weakest.square[1] !== homeRank)) {
+        levers.push(`improving your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square}`);
+      }
+      return levers.length > 0
+        ? `name two or three and compare them — ${andList(levers)} ${levers.length > 1 ? 'are' : 'is'} where to start.`
+        : `name two or three before you calculate any one of them.`;
+    },
+  };
+  const steps: string[] = [];
+  for (const step of THINKING_STEP_ORDER) {
+    const run = RUN[step];
+    if (!run) continue;
+    const name = THINKING_STEPS[step].name;
+    const body = run();
+    // "Am I safe? Nothing of yours…" — a question name is answered; a label
+    // name is followed by a colon ("My forcing moves: in order…").
+    steps.push(name.endsWith('?') ? `${name} ${body.charAt(0).toUpperCase()}${body.slice(1)}` : `${name}: ${body}`);
   }
-
-  // 3 — CANDIDATES: the levers to compare.
-  const levers: string[] = [];
-  if (studentToMove) {
-    let breaks: string[] = [];
-    try { breaks = findPawnBreaks(opts.fen); } catch { breaks = []; }
-    if (breaks.length) levers.push(`the pawn break${breaks.length > 1 ? 's' : ''} ${orList(breaks)}`);
-  }
-  const sw = strongestWeakestPiece(opts.fen, me);
-  const homeRank = me === 'w' ? '1' : '8';
-  const pastOpening = (Number.parseInt(opts.fen.split(' ')[5] ?? '1', 10) || 1) >= 10;
-  if (sw.weakest && (pastOpening || sw.weakest.square[1] !== homeRank)) {
-    levers.push(`improving your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square}`);
-  }
-  steps.push(levers.length > 0
-    ? `Then candidates: name two or three and compare them — ${andList(levers)} ${levers.length > 1 ? 'are' : 'is'} where to start.`
-    : `Then candidates: name two or three before you calculate any one of them.`);
 
   // 4 — THE HABIT this moment earns (the same computer the live briefing uses).
   // `realChoice: false` — step 3 above IS the candidate-discipline beat, so the
@@ -3487,7 +3568,7 @@ export function assembleMethodAnswer(opts: {
   // 2026-09-23: the routine said "name two or three" twice in one answer).
   const habit = liveMethodBeatFor({
     bestSan: opts.engineBestSan,
-    threatStanding: loose.length > 0,
+    threatStanding: hanging.length > 0,
     isStudentMove: true,
     realChoice: false,
     tier: 'critical',

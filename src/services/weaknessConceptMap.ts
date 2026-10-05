@@ -21,15 +21,20 @@ export interface WeaknessConcept {
   conceptQuery: string;
   /** Display name of the concept/theme. */
   conceptName: string;
+  /** The chess-concepts.json id whose passage teaches EXACTLY this idea. Absent
+   *  when the corpus has no passage for it — then no passage is read (walk
+   *  2026-10-04: a free-text search for "hanging pieces" returned the PIN
+   *  passage; empty beats the wrong concept). */
+  corpusConceptId?: string;
 }
 
 // Tactic-motif clusters (analysis:tactic:<TacticType>).
 const TACTIC_CONCEPTS: Record<string, WeaknessConcept> = {
-  fork: { behavior: 'you overlook forks — one piece hitting two targets at once', conceptQuery: 'fork knight attacks two pieces double attack', conceptName: 'the fork / double attack' },
-  pin: { behavior: 'you miss pins — a piece stuck in front of a more valuable one', conceptQuery: 'pin pinned piece cannot move king behind', conceptName: 'the pin' },
+  fork: { behavior: 'you overlook forks — one piece hitting two targets at once', conceptQuery: 'fork knight attacks two pieces double attack', conceptName: 'the fork / double attack', corpusConceptId: 'tac-fork' },
+  pin: { behavior: 'you miss pins — a piece stuck in front of a more valuable one', conceptQuery: 'pin pinned piece cannot move king behind', conceptName: 'the pin', corpusConceptId: 'tac-pin' },
   skewer: { behavior: 'you miss skewers — a valuable piece forced to move off a lesser one', conceptQuery: 'skewer attack valuable piece behind', conceptName: 'the skewer' },
   hanging_piece: { behavior: 'you leave pieces undefended — loose pieces drop off', conceptQuery: 'undefended piece protection hanging attack', conceptName: 'protecting loose pieces' },
-  discovered_attack: { behavior: 'you miss discovered attacks — moving one piece unveils another', conceptQuery: 'discovered attack unveil piece behind', conceptName: 'the discovered attack' },
+  discovered_attack: { behavior: 'you miss discovered attacks — moving one piece unveils another', conceptQuery: 'discovered attack unveil piece behind', conceptName: 'the discovered attack', corpusConceptId: 'tac-discovered' },
   back_rank: { behavior: 'you overlook back-rank weaknesses — your king boxed in by its own pawns', conceptQuery: 'back rank weakness king trapped luft', conceptName: 'back-rank safety' },
   deflection: { behavior: 'you miss deflections — driving a defender off its post', conceptQuery: 'deflection remove defender', conceptName: 'the deflection' },
   overloaded_piece: { behavior: 'you overload defenders — asking one piece to guard too much', conceptQuery: 'overloaded piece defender too many duties', conceptName: 'the overloaded defender' },

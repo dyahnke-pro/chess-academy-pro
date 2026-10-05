@@ -111,6 +111,12 @@ export interface EvaluatePlayerMoveArgs {
    *  scorecard + drill queue, not just the coarse tag. Absent → the cheap
    *  board-heuristic classification stands, unchanged. */
   historySans?: string[];
+  /** THE SPARRING SESSION this move belongs to, for the opponent's LIVE
+   *  strength (one detector, two consumers). Defaults to `sourceGameId`. A
+   *  surface whose game is not a saved record (the WLPP Play rung) passes its
+   *  own session key here instead of fabricating a game id. With neither, or
+   *  with no `studentRating` to seed from, the live estimate is not moved. */
+  liveSessionId?: string;
 }
 
 export interface RaiseSlipPromptArgs {
@@ -340,6 +346,35 @@ export function useDiscussionPractice(
     setGoodMove(null);
   }, []);
 
+  // THE OPPONENT'S LIVE STRENGTH (WO-LAYERS-01 step 8; P0b "one engine
+  // strength", 2026-10-04). One estimator, per sparring session, moved by the
+  // graded moves this hook already sees. It used to move only through
+  // `recordGradedMove` — which only Play calls — so Learn and the WLPP Play rung
+  // matched their opponent to a number that never moved. `evaluatePlayerMove`
+  // now advances it too, off the cpLoss it computes anyway (never a second
+  // analysis), so every sparring surface reads the same live number.
+  const liveRef = useRef<{ gameId: string; s: LiveStrength } | null>(null);
+  const liveFor = useCallback((gameId: string, seed: number): { gameId: string; s: LiveStrength } => {
+    if (!liveRef.current || liveRef.current.gameId !== gameId) {
+      liveRef.current = { gameId, s: startLiveStrength(seed) };
+      // Gem hits feed the strength; build their index now, in chunks, so it is
+      // warm well before the first gem position of the game.
+      warmGemIndexes();
+    }
+    return liveRef.current;
+  }, []);
+  const liveRating = useCallback((gameId: string, seed: number): number => liveFor(gameId, seed).s.rating, [liveFor]);
+  const advanceLive = useCallback((
+    gameId: string,
+    seed: number,
+    move: { fenBefore: string; playedSan: string; moverColor: 'white' | 'black'; cpLoss: number | null },
+  ): void => {
+    const live = liveFor(gameId, seed);
+    let gem: GemMoveSignal | null = null;
+    try { gem = gemMoveSignal(move.fenBefore, move.playedSan); } catch { gem = null; }
+    live.s = updateLiveStrength(live.s, { fenBefore: move.fenBefore, san: move.playedSan, moverColor: move.moverColor, cpLoss: move.cpLoss, gem });
+  }, [liveFor]);
+
   const evaluatePlayerMove = useCallback(
     async (args: EvaluatePlayerMoveArgs): Promise<void> => {
       // Runs when RECORDING is on, even with interruption off — the capture
@@ -460,6 +495,16 @@ export function useDiscussionPractice(
         prompted: args.prompted,
         sourceGameId: args.sourceGameId,
       });
+
+      // The same graded move moves the opponent's live strength (above). Book
+      // moves count exactly as in Play: `updateLiveStrength` reads only moves
+      // where the board posed a real question, so a prepared line moves nothing.
+      const liveKey = args.liveSessionId ?? args.sourceGameId;
+      if (liveKey && typeof args.studentRating === 'number') {
+        advanceLive(liveKey, args.studentRating, {
+          fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: args.playerColor, cpLoss,
+        });
+      }
 
       if (slip.isSlip && bestSan) {
         void captureMisconception({
@@ -586,7 +631,7 @@ export function useDiscussionPractice(
       });
       setPhase('asking');
     },
-    [active, opts.surface],
+    [active, opts.surface, advanceLive],
   );
 
   const submitReason = useCallback(async (reason: string): Promise<void> => {
@@ -788,24 +833,9 @@ export function useDiscussionPractice(
   // Records off a grade the surface already has — no analysis, no second
   // classifier. Gated on `recording` exactly like the capture inside
   // `evaluatePlayerMove`, so a surface that opts out of recording stays inert.
-  const liveRef = useRef<{ gameId: string; s: LiveStrength } | null>(null);
-  const liveFor = useCallback((gameId: string, seed: number): { gameId: string; s: LiveStrength } => {
-    if (!liveRef.current || liveRef.current.gameId !== gameId) {
-      liveRef.current = { gameId, s: startLiveStrength(seed) };
-      // Gem hits feed the strength; build their index now, in chunks, so it is
-      // warm well before the first gem position of the game.
-      warmGemIndexes();
-    }
-    return liveRef.current;
-  }, []);
-  const liveRating = useCallback((gameId: string, seed: number): number => liveFor(gameId, seed).s.rating, [liveFor]);
-
   const recordGradedMove = useCallback((args: GradedMoveArgs): void => {
     // The opponent's strength moves on every graded move, recorded or not.
-    const live = liveFor(args.sourceGameId, args.seedRating);
-    let gem: GemMoveSignal | null = null;
-    try { gem = gemMoveSignal(args.fenBefore, args.playedSan); } catch { gem = null; }
-    live.s = updateLiveStrength(live.s, { fenBefore: args.fenBefore, san: args.playedSan, moverColor: args.moverColor, cpLoss: args.cpLoss, gem });
+    advanceLive(args.sourceGameId, args.seedRating, args);
     if (!recording) return;
     if (args.cpLoss === null) return;   // unknown is not clean
     void recordMoveEvidence({
@@ -820,7 +850,7 @@ export function useDiscussionPractice(
       prompted: false,
       sourceGameId: args.sourceGameId,
     });
-  }, [recording, opts.capabilityOrigin, liveFor]);
+  }, [recording, opts.capabilityOrigin, advanceLive]);
 
   return {
     liveRating,

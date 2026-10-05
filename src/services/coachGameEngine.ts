@@ -13,8 +13,11 @@ import { teachableSlipAt } from './gemCrushLines';
 // the dependency is one-way.
 import { configFromTargetElo } from './coachPlaySession';
 import { logAppAudit } from './appAuditor';
+import { candidatesFromLines, LESSON_MOMENTS_PER_GAME, pickLessonMoment, steerWindowCp } from './lessonSteer';
+import type { FairKey } from './thinkingPositions';
 import type { StockfishAnalysis, CoachDifficulty } from '../types';
-import { explorerBandFor, DEFAULT_STUDENT_RATING } from './ratingBands';
+import { explorerBandFor } from './ratingBands';
+import { targetStrength, emitOpponentStrength, type OpponentStrength } from './engineStrength';
 
 // Budget for the skill-limited opponent search before falling back to a
 // movetime best-move. 8s (was 5s) gives the slower single-threaded iOS engine
@@ -483,7 +486,7 @@ export async function pickTaughtSlip(
   }
 }
 
-export type TeachingReplySource = 'taught-slip' | 'home-steer';
+export type TeachingReplySource = 'taught-slip' | 'home-steer' | 'lesson-steer';
 
 /**
  * Warm the teaching-reply layers for a seat before its first move (Play mount).
@@ -510,14 +513,50 @@ export function prewarmTeachingReplies(studentColor: 'white' | 'black', trigger 
  * trie; the layers below run exactly as before. Opt-in per surface
  * (`steerHomeFor`): a locked taught line is never steered off it.
  */
+/** The day's step for the lesson game: its id (for the audit) and the step
+ *  computer that says whether a board poses its question. */
+export interface LessonSteerOpt {
+  step: string;
+  keyFor: (fen: string) => FairKey | null;
+}
+
+/** Steered moments used in the current game (re-armed on a new game). */
+let lessonMomentsUsed = 0;
+
 export async function pickTeachingReply(
   fen: string,
   targetElo: number,
-  opts: { studentElo?: number; difficulty?: CoachDifficulty | 'auto'; steerHomeFor?: 'white' | 'black' } | undefined,
+  opts: { studentElo?: number; difficulty?: CoachDifficulty | 'auto'; steerHomeFor?: 'white' | 'black'; lessonSteer?: LessonSteerOpt } | undefined,
   source: string,
 ): Promise<{ uci: string; san: string; source: TeachingReplySource } | null> {
+  if (Number(fen.split(' ')[5] ?? '1') <= 2) lessonMomentsUsed = 0; // a new game re-arms the budget
   const taught = await pickTaughtSlip(fen, targetElo, opts, source);
   if (taught) return { uci: taught.uci, san: taught.san, source: 'taught-slip' };
+  // THE LESSON GAME (plan 2026-10-04): after a "Learn how to think" lesson the
+  // coach quietly hands the student a few real moments for that day's step —
+  // a move from its own top lines, inside the strength window, never weaker.
+  if (opts?.lessonSteer && lessonMomentsUsed < LESSON_MOMENTS_PER_GAME) {
+    try {
+      const analysis = await withBudget(stockfishEngine.analyzePosition(fen, 10), BAND_BUDGET_MS);
+      if (analysis) {
+        const cands = candidatesFromLines(fen, analysis.topLines);
+        const pick = pickLessonMoment(fen, cands, opts.lessonSteer.keyFor, steerWindowCp(opts.studentElo ?? targetElo));
+        if (pick) {
+          lessonMomentsUsed += 1;
+          const c = new Chess(fen);
+          const m = c.move(pick.san);
+          void logAppAudit({
+            kind: 'coach-opponent-move-source',
+            category: 'subsystem',
+            source,
+            summary: `source=lesson-steer step=${opts.lessonSteer.step} san=${m.san} cpLoss=${pick.cpLoss} moment=${lessonMomentsUsed}/${LESSON_MOMENTS_PER_GAME}`,
+            fen,
+          });
+          return { uci: `${m.from}${m.to}${m.promotion ?? ''}`, san: m.san, source: 'lesson-steer' };
+        }
+      }
+    } catch { /* a missed steer is never worth a stalled move */ }
+  }
   if (opts?.steerHomeFor) {
     try {
       // The COLD build (once per colour per session) gets a longer ceiling than
@@ -550,16 +589,48 @@ export async function pickTeachingReply(
   return null;
 }
 
+/** WHO the student is and WHAT they asked for. Both are needed for the slip
+ *  matrix; `targetElo` alone has already folded them together and cannot tell
+ *  a 1500 on easy from an 800 on medium. Absent, no slip is offered, which is
+ *  the safe way round for a feature that hands the student a won position. */
+export interface AdaptiveMoveOpts {
+  studentElo?: number;
+  difficulty?: CoachDifficulty | 'auto';
+  /** Steer into the student's HOME opening (A7): the surface says which colour
+   *  the student holds. Absent = no steer (a locked taught line must never be
+   *  steered off). */
+  steerHomeFor?: 'white' | 'black';
+  /** The lesson game: steer a few moves toward moments for today's step. */
+  lessonSteer?: LessonSteerOpt;
+  /** Who asked and why (`engineStrength.opponentStrength`). When present, the
+   *  ONE structured emission (`coach-opponent-strength`) is made here, once,
+   *  with the layer that actually produced the move. */
+  strength?: OpponentStrength;
+}
+
+export type AdaptiveMoveSource = 'masters' | 'lichess-games' | 'amateur-band' | 'taught-slip' | 'home-steer' | 'lesson-steer' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random';
+
+export interface AdaptiveMoveResult {
+  move: string;
+  analysis: StockfishAnalysis;
+  source: AdaptiveMoveSource;
+}
+
 export async function getAdaptiveMove(
   fen: string,
   targetElo: number,
-  /** WHO the student is and WHAT they asked for. Both are needed for the slip
-   *  matrix; `targetElo` alone has already folded them together and cannot tell
-   *  a 1500 on easy from an 800 on medium. Optional so every existing caller
-   *  still compiles — and absent, no slip is offered, which is the safe way
-   *  round for a feature that hands the student a won position. */
-  opts?: { studentElo?: number; difficulty?: CoachDifficulty | 'auto'; /** Steer into the student's HOME opening (A7): the surface says which colour the student holds. Absent = no steer (a locked taught line must never be steered off). */ steerHomeFor?: 'white' | 'black' },
-): Promise<{ move: string; analysis: StockfishAnalysis; source: 'masters' | 'lichess-games' | 'amateur-band' | 'taught-slip' | 'home-steer' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random' }> {
+  opts?: AdaptiveMoveOpts,
+): Promise<AdaptiveMoveResult> {
+  const result = await chooseAdaptiveMove(fen, targetElo, opts);
+  if (opts?.strength && result.move) emitOpponentStrength(opts.strength, result.source);
+  return result;
+}
+
+async function chooseAdaptiveMove(
+  fen: string,
+  targetElo: number,
+  opts: AdaptiveMoveOpts | undefined,
+): Promise<AdaptiveMoveResult> {
   // Single-threaded Stockfish (iOS / any context without SharedArrayBuffer +
   // cross-origin isolation) is ~5-10x slower than the threaded build, so a
   // depth 14-16 search blows the COACH_MOVE_TIMEOUT_MS budget → timeout →
@@ -895,7 +966,16 @@ export async function getAdaptiveMove(
   let analysis: StockfishAnalysis;
   try {
     analysis = await Promise.race([
-      stockfishEngine.analyzePosition(fen, depth, { 'Skill Level': skillLevel }),
+      // THE ELO CAP HERE TOO (2026-10-04). This was the one opponent search
+      // that passed only `Skill Level` — not an Elo — so a move recovered
+      // through it played to a different scale than every other move of the
+      // same game. Same pair `getBestMove` sends: the cap armed, Skill Level
+      // at 20 so the engine is not weakened twice.
+      stockfishEngine.analyzePosition(fen, depth, {
+        'Skill Level': 20,
+        UCI_LimitStrength: 'true',
+        UCI_Elo: limitStrengthElo(targetElo),
+      }),
       makeTimeoutPromise(COACH_MOVE_TIMEOUT_MS),
     ]);
   } catch (error) {
@@ -1022,59 +1102,22 @@ export async function getAdaptiveMove(
     kind: 'coach-opponent-move-source',
     category: 'subsystem',
     source: 'coachGameEngine.getAdaptiveMove',
-    summary: `source=stockfish-best move=${analysis.bestMove} eval=${analysis.evaluation}cp skill=${skillLevel} elo=${targetElo}`,
+    summary: `source=stockfish-best move=${analysis.bestMove} eval=${analysis.evaluation}cp elo=${limitStrengthElo(targetElo)} (requested ${targetElo}, UCI_LimitStrength, depth-search fallback)`,
     fen,
   });
   return { move: analysis.bestMove, analysis, source: 'stockfish-best' };
 }
 
-/**
- * How strong the student is AS A PLAYER — the number the opponent is matched
- * against.
- *
- * 🔒 ONE OWNER, BECAUSE THE TWO SURFACES READ DIFFERENT FIELDS AND ONE OF THEM
- * WAS NOT A PLAYING RATING AT ALL (David 2026-08-11: "My elo is 1300 does that
- * transfer over? Where did you get 1729 from?").
- *
- * It did not transfer. `currentRating` is what the student SETS — onboarding,
- * Settings, the strength-calibration bubble all write it. `puzzleRating` is
- * something else entirely: the app's own tactics-puzzle Elo, seeded at 1200 and
- * drifting upward as they solve puzzles. Nobody sets it; it is earned, and it
- * runs high, because solving a tactic with unlimited time is not the same skill
- * as playing a game.
- *
- * Play read `currentRating`. Learn read `puzzleRating`. So the same student had
- * two different opponents in the same app, and the surface he was playing on
- * was aiming ~430 points above the rating he had entered — his 1300 set against
- * a 1729 puzzle rating. That is the whole of "the computer seemed to be playing
- * a lot of best moves", before any question of how skill maps to Elo.
- *
- * Puzzle rating is still exactly right for PICKING PUZZLES and for sizing the
- * tactics look-ahead, and those callers are untouched. It is wrong only as an
- * answer to "how well does this person play chess", which is the one question
- * this function exists to answer.
- */
-export function studentPlayingRating(
-  profile: { currentRating?: number | null; puzzleRating?: number | null } | null | undefined,
-): number {
-  const set = profile?.currentRating;
-  if (typeof set === 'number' && Number.isFinite(set) && set > 0) return set;
-  // No rating entered yet: the puzzle rating is a poor proxy but a better one
-  // than a constant, and a fresh profile has them equal anyway.
-  const puzzles = profile?.puzzleRating;
-  if (typeof puzzles === 'number' && Number.isFinite(puzzles) && puzzles > 0) return puzzles;
-  // THE ONE DEFAULT (the app serves beginners — David 2026-09-23). A second
-  // literal here put every new Play student against a 1200 bot.
-  return DEFAULT_STUDENT_RATING;
-}
+// How strong the student is AS A PLAYER — ONE owner, now in the leaf
+// `engineStrength` (it moved so the play-out hook and the puzzle board can read
+// it without importing this engine). Re-exported so existing importers keep
+// one name.
+export { studentPlayingRating, opponentStrength, emitOpponentStrength } from './engineStrength';
 
-/** ELO offset per difficulty level relative to the player rating. */
-const DIFFICULTY_OFFSET: Record<CoachDifficulty, number> = {
-  easy: -300,
-  medium: 0,
-  hard: 200,
-};
-
+/** The opponent's target rating: THE ONE formula (`engineStrength
+ *  .targetStrength`) over the one offset table. This file used to keep its own
+ *  −300 / +200 table with a 600 floor, beside Play's ±300 / 400 and puzzles'
+ *  ±200 — three answers to one question. */
 export function getTargetStrength(playerRating: number, difficulty: CoachDifficulty = 'medium'): number {
-  return Math.max(600, playerRating + DIFFICULTY_OFFSET[difficulty]);
+  return targetStrength(playerRating, difficulty);
 }

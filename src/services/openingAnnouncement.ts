@@ -92,7 +92,7 @@ export function openingAnnouncement(
   }
   const who = departure.mover === studentColor ? 'You' : 'They';
   const main = departure.mainSan
-    ? `; the usual move there was ${sayMoveNoun(departure.mainSan)}`
+    ? `; the usual move there was ${sayMoveNoun(departure.mainSan, departure.fen)}`
     : '';
   // THE LINE IS THE ONE ALREADY NAMED unless the move-order name sharpens it
   // (Learn walk 2026-10-01: "transposed into the King's Indian Defense" and
@@ -103,7 +103,7 @@ export function openingAnnouncement(
   const spokenIsVariation = spokenName.includes(':');
   const line = det.name.startsWith(spokenName) || !spokenIsVariation ? det.name : spokenName;
   const lineTail = line === spokenName ? '' : ` The line was the ${spoken(line)}.`;
-  return `${who} left the book with ${sayMoveNoun(departure.san)}${main}.${lineTail}`;
+  return `${who} left the book with ${sayMoveNoun(departure.san, departure.fen)}${main}.${lineTail}`;
 }
 
 /** The same announcement read straight off the game's move history — the
@@ -173,7 +173,7 @@ export function theirOpeningVerdict(
   const dep = bookDeparture(history);
   if (!dep || dep.ply !== history.length || dep.mover === studentColor || !dep.mainSan) return null;
   if (cpLoss < SIDELINE_FAIR_CP) return null;
-  const main = sayMoveNoun(dep.mainSan);
+  const main = sayMoveNoun(dep.mainSan, dep.fen);
   if (cpLoss >= SIDELINE_DUBIOUS_CP) return `That is a dubious choice — ${main} is the move here, and this one costs them ${costWords(cpLoss)}.`;
   return `It is a weaker choice than ${main} — it costs them ${costWords(cpLoss)}.`;
 }

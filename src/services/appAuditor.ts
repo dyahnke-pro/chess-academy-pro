@@ -28,7 +28,10 @@
 import { db } from '../db/schema';
 import { mirrorAuditEvent } from './analytics';
 import { onCoachDecision, onLearnTurn, onNeedScore, type CoachDecisionRow, type LearnTurnRow, type NeedScoreRow } from './coachDecisionEvents';
+import { onThinkingLesson } from './thinkingLessonEvents';
 import { onSearchDepth } from './searchDepthEvents';
+import { onOpponentMove } from './opponentMoveEvents';
+import { onChatTurn } from '../coach/chatTurnEvents';
 
 const APP_AUDIT_LOG_META_KEY = 'app-audit-log.v1';
 const APP_AUDIT_LOG_MAX_ENTRIES = 300;
@@ -244,6 +247,11 @@ export type AuditKind =
   // One entry per burst of Learn door decisions (learnTurnDoor.decideTurn) —
   // offered / spoke / lead / held lanes, aggregated like coach-decision.
   | 'learn-turn-decision'
+  // One entry per "Learn how to think" question (thinkingLessonSession) —
+  // step, stage, key size, how it was answered, where the board came from.
+  | 'thinking-lesson'
+  // A "Learn how to think" tier opened (every step of the tier below proven).
+  | 'thinking-tier-unlocked'
   // THE ENGINE LINES A LEARN MISTAKE LINE WAS READ FROM (2026-10-01). A
   // reason like "d5 was their move, to win a piece" comes off the live,
   // time-boxed PV; a deeper read may refute it, and without the source line a
@@ -252,6 +260,9 @@ export type AuditKind =
   | 'learn-reason-source'
   // One held row written by a Learn teaching lane (capabilityEvidence.recordLaneEvidence).
   | 'lane-evidence'
+  // One ANSWER row (capabilityEvidence.recordAnswerEvidence): a lesson tap,
+  // an Analysis Practice read or the Review reading card — KNOW evidence.
+  | 'answer-evidence'
   | 'concept-srs-pulled'
   | 'review-voice-package'
   // How deep Stockfish searched and whether the answer SETTLED
@@ -259,6 +270,15 @@ export type AuditKind =
   // row per search — so an audit can hold that verdicts were voiced off
   // settled searches and that sharp positions went deeper than quiet ones.
   | 'search-depth'
+  // ONE ENGINE STRENGTH (P0b, 2026-10-04): one row per opponent move — the
+  // surface, its declared purpose, the student strength, the offset and the
+  // target it played at — so an audit can hold that every sparring opponent
+  // read the same number (`opponentMoveEvents`).
+  | 'coach-opponent-strength'
+  // One student turn READ by the ONE-CHAT parser in shadow (P0a, 2026-10-04):
+  // today's fast-path lane, the parsed kind, validation, agreement, latency.
+  // The switch to serve the reading is taken on these rows.
+  | 'chat-turn'
   // The NEED score's per-term breakdown, AGGREGATED. One row per ply would
   // be hundreds of Dexie writes per review (`computeNeed` runs over every
   // move), so the subscriber buffers and emits ONE distribution per burst —
@@ -377,6 +397,14 @@ export type AuditKind =
   | 'analysis-pool-warmed'
   | 'analysis-game-done'
   | 'analysis-sweep-summary'
+  /** Batch-analysis failure modes that used to end a run silently (walk
+   *  2026-10-04 #17): a game that threw and was skipped, a wedged worker lost
+   *  from the pool, the pool emptied mid-package (rest run sequentially), and
+   *  a whole run rejecting. */
+  | 'analysis-game-failed'
+  | 'analysis-worker-lost'
+  | 'analysis-pool-exhausted'
+  | 'analysis-run-failed'
   | 'analysis-review-done'
   // Stockfish analysis stalled — the `go` command was sent but no
   // bestmove came back within the watchdog window. The dominant
@@ -761,6 +789,11 @@ export type AuditKind =
   //   chess claim. Details carry `kind` ('san' / 'numeric' / 'entity' /
   //   'comparative'), the claim text, the reason, and `retryNumber`.
   | 'claim-validator-trip'
+  // `kid-question-answered`: the kid "Ask the Coach" box answered a question.
+  //   Details carry `answerKind` (hint / where-can-it-go / is-it-safe /
+  //   concept / look-at-board) — every answer is computed, so this row says
+  //   WHICH computer answered (read by audit-kid-llm-hallucination.mjs).
+  | 'kid-question-answered'
   // `master-play-enforcement-fallback`: 2-retry budget exhausted; the
   //   coach served the stock "I can't verify which moves are sound"
   //   response. Last-line G3 protection.
@@ -1022,10 +1055,11 @@ export interface AuditEntry {
    *  `ask_text` / `answer_text`. */
   askText?: string;
   answerText?: string;
-  /** Who produced the ask text — `typed` | `hint` | `canned-best-move` |
-   *  `internal` (WO-STANDARD-01 H6). Forwarded as `ask_source` so the usage
+  /** Who produced the ask text — the ONE `AskSource` union (typed / spoken /
+   *  hint / canned-best-move / internal, WO-STANDARD-01 H6) — never a second
+   *  copy that drifts. Forwarded as `ask_source` so the usage
    *  recipe counts questions a person asked, never a button's sentence. */
-  askSource?: 'typed' | 'hint' | 'canned-best-move' | 'internal';
+  askSource?: import('../coach/types').AskSource;
   /** In-app feedback reply-to + rating (QuickFeedbackButton / FeedbackForm).
    *  The user OPTIONALLY typed their email asking for a reply. Before this was
    *  forwarded, the address lived ONLY in the ephemeral audit-stream (wiped on
@@ -2249,6 +2283,42 @@ onLearnTurn((row) => {
     learnTurnFlush = setTimeout(flushLearnTurns, 1500);
     (learnTurnFlush as unknown as { unref?: () => void }).unref?.();
   }
+});
+
+// "Learn how to think" — one row per answered (or shown) lesson question.
+// Few per session, so each is logged as it lands.
+onThinkingLesson((row) => {
+  void logAppAudit({
+    kind: 'thinking-lesson',
+    category: 'subsystem',
+    source: 'thinkingLessonSession',
+    summary: `${row.step} ${row.stage}: ${row.outcome} (${row.foundCount}/${row.keySize}, ${row.wrongCount} wrong, help=${row.help}, ${row.origin})`,
+    details: JSON.stringify({ rows: [row] }),
+  });
+});
+
+// One row per opponent move. Moves are one per few seconds at most, so each
+// is logged as it lands — the same cadence as the free-text source lines.
+onOpponentMove((row) => {
+  void logAppAudit({
+    kind: 'coach-opponent-strength',
+    category: 'subsystem',
+    source: `engineStrength.${row.surface}`,
+    summary: `${row.surface} (${row.purpose}) source=${row.source} student=${row.studentElo} ${row.difficulty} offset=${row.offset} target=${row.target ?? 'full'} engine=${row.engineElo ?? 'full'}`,
+    details: JSON.stringify(row),
+  });
+});
+
+// One row per student turn READ (ONE-CHAT shadow). Turns are few — one per
+// question a person typed or spoke — so each is logged as it lands.
+onChatTurn((row) => {
+  void logAppAudit({
+    kind: 'chat-turn',
+    category: 'subsystem',
+    source: 'dispatchCoachTurn.shadow',
+    summary: `${row.surface} ${row.askSource}: fast=${row.fastPathLane} parsed=${row.parsedKind ?? 'none'} (${row.parseSource}${row.valid === false ? `, invalid ${row.invalidReason}` : ''}) ${row.agreed === null ? '' : row.agreed ? 'AGREE' : 'DISAGREE'} in ${row.latencyMs}ms`,
+    details: JSON.stringify(row),
+  });
 });
 
 // One row per settled-or-not search. Searches are few (one per question, one

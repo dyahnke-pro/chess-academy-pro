@@ -64,6 +64,78 @@ const POSED_IMPORTANCE_MIN = 45;
 
 export type CapabilityOutcome = 'held' | 'broken';
 
+/** Every surface that writes a row. A new member fails to compile until
+ *  `EVIDENCE_READING` below says whether it proves KNOW or USE. */
+export type EvidenceOrigin = 'play' | 'review' | 'learn' | 'drill' | 'puzzle' | 'lesson' | 'reading';
+
+/**
+ * KNOW vs USE (David 2026-10-04, decision #2: "Lessons prove KNOW, games prove
+ * USE"). A lesson tap or a reading question is the most CONTROLLED evidence the
+ * app gets — position, question and key all known — but it says the student
+ * KNOWS the idea, not that they USE it at the board. The two are read through
+ * the SAME bar (`capabilityProven`), on disjoint rows, so a capability can be
+ * known and not yet used — the gap the coach acts on — and the heat map's USE
+ * reading is unchanged by lesson data.
+ *
+ * Exhaustive over the origin union: a new origin fails to compile until
+ * someone decides which half it proves.
+ */
+export type EvidenceReading = 'know' | 'use';
+export const EVIDENCE_READING = {
+  play: 'use',
+  review: 'use',
+  learn: 'use',
+  drill: 'use',
+  puzzle: 'use',
+  lesson: 'know',
+  reading: 'know',
+} as const satisfies Record<EvidenceOrigin, EvidenceReading>;
+
+/** True for a row the USE reading (the heat map, need, the ranker) counts.
+ *  Readers of RAW rows (the skill timeline, trap meetings) filter with this so
+ *  a lesson tap never reads as a game. */
+export function isUseEvidence(r: Pick<CapabilityEvidenceRecord, 'origin'>): boolean {
+  return EVIDENCE_READING[r.origin] === 'use';
+}
+
+/** Who helped before the answer landed, weakest first. `nudge` ("one more")
+ *  reveals neither a square nor the count, so it does not make a row
+ *  prompted; `hint`, `show` and `dont-know` do. */
+export type AnswerHelp = 'none' | 'nudge' | 'hint' | 'show' | 'dont-know';
+
+/** What a student's ANSWER looked like — the widened row (Learn how to think
+ *  C2: "the highest-trust data in the app"). Unindexed, so no Dexie bump. */
+export interface AnswerDetail {
+  /** Every tap in order, with whether it was in the key. */
+  taps: Array<{ square: string; right: boolean }>;
+  /** Taps outside the key, in order (guess-proofing: each one is wrong). */
+  extras: string[];
+  /** Wrong answers before it settled: wrong taps, or wrong typed submits. */
+  wrongAttempts: number;
+  /** The help already given when the FIRST wrong answer landed. A miss made
+   *  before any hint is clean evidence the student did not know — the hint
+   *  that followed it does not turn that failure into "they were told". */
+  firstMissHelp?: AnswerHelp;
+  /** ms from the question appearing to the first tap/answer; null = none. */
+  msToFirst: number | null;
+  /** ms between consecutive taps. */
+  msBetween: number[];
+  help: AnswerHelp;
+  /** Answered by voice rather than by tap/typing. */
+  spoken: boolean;
+  /** How far down a follow-up chain this question sat (0 = the first ask). */
+  chainDepth: number;
+  /** The misconception each wrong tap mapped to (`wrongTapTag`), deduped. */
+  wrongTags: MisconceptionTagId[];
+  /** Free text when the answer was typed rather than tapped. */
+  typed?: string;
+  /** Which question on the surface (`ReadingQuestion.id`) and its key size. */
+  questionId?: string;
+  keySize?: number;
+  /** The surface that asked, for the audit (`analysis-practice`, `review-reading`, …). */
+  surface?: string;
+}
+
 export interface CapabilityEvidenceRecord {
   id: string;
   /** The capability, named in the app's closed vocabulary. */
@@ -80,8 +152,11 @@ export interface CapabilityEvidenceRecord {
    *  `puzzle` = a GENERIC position (Lichess puzzle), not one from the
    *  student's own games. It carries no `sourceGameId`, so it counts toward a
    *  held streak but never toward the distinct-GAMES bar: generic puzzles can
-   *  support a capability and can break one, but can never prove it alone. */
-  origin: 'play' | 'review' | 'learn' | 'drill' | 'puzzle';
+   *  support a capability and can break one, but can never prove it alone.
+   *  `lesson` / `reading` = an ANSWER to a question the coach put on a board
+   *  (a lesson tap, Analysis Practice, the Review reading card). Those are
+   *  KNOW evidence and are read apart from the rest (`EVIDENCE_READING`). */
+  origin: EvidenceOrigin;
   /**
    * WAS THE STUDENT TOLD? REQUIRED, so a new writer has to answer.
    *
@@ -99,6 +174,8 @@ export interface CapabilityEvidenceRecord {
    */
   prompted: boolean;
   sourceGameId?: string;
+  /** Present on an ANSWER row (a KNOW origin): how the student answered. */
+  answer?: AnswerDetail;
 }
 
 /**
@@ -158,8 +235,11 @@ export interface CapabilityProfileEntry {
    *  stopped by the first `broken`). Prompted rows are skipped entirely, so
    *  being TOLD the answer neither proves nor breaks anything. */
   heldStreak: number;
-  /** Distinct `sourceGameId`s inside that streak. Rows with no game id count
-   *  toward the streak but not toward this — honest rather than invented. */
+  /** Distinct SOURCES inside that streak. USE: `sourceGameId`s — rows with no
+   *  game id count toward the streak but not toward this, honest rather than
+   *  invented. KNOW: distinct POSITIONS (`positionSourceKey`), because a lesson
+   *  is not a game; the claim green makes is "did it again on a different
+   *  board", which two positions evidence the way two games do. */
   streakGames: number;
 }
 
@@ -208,12 +288,19 @@ export function summariseEvidence(
    *  zero flips at every floor — an instrument that cannot vary its variable
    *  is green for free. Production callers pass nothing. */
   bar: { minImportance?: number } = {},
+  /** Which half of the record to read (decision #2). Defaults to USE — every
+   *  existing consumer (heat map, need, ranker) — so lesson answers never
+   *  change what a game proved. */
+  reading: EvidenceReading = 'use',
 ): CapabilityProfile {
   const minImportance = bar.minImportance ?? PROVEN_MIN_IMPORTANCE;
   const profile: CapabilityProfile = new Map();
   const rows = [...all].sort((a, b) => a.recordedAt - b.recordedAt);
   const history = new Map<MisconceptionTagId, CapabilityEvidenceRecord[]>();
   for (const r of rows) {
+    // A row whose origin is not in the table (a future build's row read by an
+    // older one) is read as USE — the reading every row was before the split.
+    if (((EVIDENCE_READING as Partial<Record<string, EvidenceReading>>)[r.origin] ?? 'use') !== reading) continue;
     if (r.prompted) continue;
     if (!isMisconceptionTagId(r.tag)) continue;
     const e = profile.get(r.tag) ?? { held: 0, broken: 0, heldStreak: 0, streakGames: 0 };
@@ -234,7 +321,8 @@ export function summariseEvidence(
       // walking, so a quiet game neither proves nor un-proves anything.
       if ((h[i].posedImportance ?? 0) < minImportance) continue;
       streak += 1;
-      if (h[i].sourceGameId) games.add(h[i].sourceGameId as string);
+      const source = reading === 'know' ? positionSourceKey(h[i].fen) : h[i].sourceGameId;
+      if (source) games.add(source);
     }
     e.heldStreak = streak;
     e.streakGames = games.size;
@@ -242,6 +330,41 @@ export function summariseEvidence(
   return profile;
 }
 export type CapabilityProfile = Map<MisconceptionTagId, CapabilityProfileEntry>;
+
+/** The KNOW reading's source key: the position, without the move counters, so
+ *  the same board reached twice is one source. Null on an empty FEN. */
+export function positionSourceKey(fen: string): string | null {
+  const key = fen.trim().split(/\s+/).slice(0, 4).join(' ');
+  return key.length > 0 ? key : null;
+}
+
+/** KNOW and USE for one capability, both through `capabilityProven`. */
+export interface CapabilityStanding {
+  know: boolean;
+  use: boolean;
+}
+
+/** Pure: the standing of every tag that has any evidence, from raw rows. */
+export function standingFromEvidence(all: CapabilityEvidenceRecord[]): Map<MisconceptionTagId, CapabilityStanding> {
+  const know = summariseEvidence(all, {}, 'know');
+  const use = summariseEvidence(all, {}, 'use');
+  const out = new Map<MisconceptionTagId, CapabilityStanding>();
+  for (const tag of new Set([...know.keys(), ...use.keys()])) {
+    out.set(tag, { know: capabilityProven(know.get(tag)), use: capabilityProven(use.get(tag)) });
+  }
+  return out;
+}
+
+/** Is this capability KNOWN (lessons/reading) and USED (games)? GREY on both
+ *  when nothing was ever asked — absent is never proven. */
+export async function capabilityStanding(tag: MisconceptionTagId): Promise<CapabilityStanding> {
+  try {
+    const rows = await db.capabilityEvidence.where('tag').equals(tag).toArray();
+    return standingFromEvidence(rows).get(tag) ?? { know: false, use: false };
+  } catch {
+    return { know: false, use: false };
+  }
+}
 
 function newId(): string {
   return `cap_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
@@ -410,6 +533,10 @@ export async function recordLaneEvidence(args: {
       posedImportance: args.posedImportance, recordedAt: Date.now(), origin: args.origin, prompted: args.prompted,
       ...(args.sourceGameId ? { sourceGameId: args.sourceGameId } : {}),
     });
+    // Green/red can move on a lane row exactly as on any other: every reader
+    // of the student model refreshes now (it did not — a lane held row waited
+    // out the 5-minute caches, and `useProvenWatcher` never saw it cross).
+    emitWeaknessModelChanged();
     void logAppAudit({
       kind: 'lane-evidence',
       category: 'subsystem',
@@ -424,14 +551,100 @@ export async function recordLaneEvidence(args: {
   }
 }
 
+/** How live a question is when the coach ASKED it on a board: the board posed
+ *  it by construction (the key was computed before the student was asked), so
+ *  it clears the green bar the way a sharp game moment does. */
+export const ASKED_IMPORTANCE = 100;
+
+/** The origins an ANSWER row may carry — the KNOW half, by the table. */
+export type AnswerOrigin = { [O in EvidenceOrigin]: (typeof EVIDENCE_READING)[O] extends 'know' ? O : never }[EvidenceOrigin];
+
+/** Help that gives the answer away (a hint, the Show, "I don't know"). A
+ *  "one more" nudge names neither a square nor the count, so it does not. */
+export function helpPrompts(h: AnswerHelp | undefined): boolean {
+  return h === 'hint' || h === 'show' || h === 'dont-know';
+}
+
+/**
+ * Was this answer a clean read? One rule, so every asking surface grades
+ * evidence the same way:
+ *  • a wrong answer given BEFORE any real help → `broken`, unprompted — the
+ *    student committed to a wrong read on their own, whatever came after;
+ *  • otherwise `held` only when it was solved with no wrong answer, and the
+ *    row is prompted when real help was given (a prompted row counts as
+ *    neither — "I don't know" included, per the plan).
+ */
+export function answerEvidenceOutcome(a: {
+  solved: boolean;
+  answer: Pick<AnswerDetail, 'help' | 'wrongAttempts' | 'firstMissHelp'>;
+}): { outcome: CapabilityOutcome; prompted: boolean } {
+  if (a.answer.wrongAttempts > 0 && !helpPrompts(a.answer.firstMissHelp ?? 'none')) {
+    return { outcome: 'broken', prompted: false };
+  }
+  return {
+    outcome: a.solved && a.answer.wrongAttempts === 0 ? 'held' : 'broken',
+    prompted: helpPrompts(a.answer.help),
+  };
+}
+
+/**
+ * ONE row for an ANSWER to a question the coach asked (lesson tap, Analysis
+ * Practice, the Review reading card). The KNOW half of decision #2; read apart
+ * from games by `EVIDENCE_READING`.
+ *
+ * NEVER carries `sourceGameId`, even when the position came from the
+ * student's game: that field is the USE reading's game key AND
+ * `autoAnalyzeGame`'s "this game already recorded its positive half" guard, so
+ * a reading answer stamped with it would silently stop the game's real
+ * evidence from ever being written. The KNOW source is the position.
+ */
+export async function recordAnswerEvidence(args: {
+  tag: MisconceptionTagId;
+  outcome: CapabilityOutcome;
+  fen: string;
+  origin: AnswerOrigin;
+  prompted: boolean;
+  answer: AnswerDetail;
+  posedImportance?: number;
+}): Promise<boolean> {
+  try {
+    const playedSan = args.answer.typed?.trim()
+      || args.answer.taps.map((t) => t.square).join(' ');
+    await db.capabilityEvidence.add({
+      id: newId(), tag: args.tag, outcome: args.outcome, fen: args.fen, playedSan,
+      posedImportance: args.posedImportance ?? ASKED_IMPORTANCE, recordedAt: Date.now(),
+      origin: args.origin, prompted: args.prompted, answer: args.answer,
+    });
+    emitWeaknessModelChanged();
+    void logAppAudit({
+      kind: 'answer-evidence',
+      category: 'subsystem',
+      source: 'capabilityEvidence.recordAnswerEvidence',
+      summary: `${args.outcome} [${args.tag}] from ${args.origin}${args.answer.surface ? `/${args.answer.surface}` : ''}${args.prompted ? ' (prompted)' : ''} — ${args.answer.taps.length} tap(s), ${args.answer.extras.length} extra, help ${args.answer.help}`,
+      details: JSON.stringify({
+        origin: args.origin, outcome: args.outcome, tag: args.tag, prompted: args.prompted,
+        surface: args.answer.surface ?? null, help: args.answer.help, taps: args.answer.taps.length,
+        extras: args.answer.extras.length, keySize: args.answer.keySize ?? null,
+        wrongTags: args.answer.wrongTags, spoken: args.answer.spoken, chainDepth: args.answer.chainDepth,
+      }),
+      fen: args.fen,
+    });
+    return true;
+  } catch {
+    return false;   // never break the caller's turn over telemetry
+  }
+}
+
 /**
  * The capability profile. ABSENT means UNKNOWN — the caller must not read a
  * missing tag as either mastery or a hole (absent ≠ silent).
  */
-export async function getCapabilityProfile(): Promise<CapabilityProfile> {
+export async function getCapabilityProfile(reading: EvidenceReading = 'use'): Promise<CapabilityProfile> {
   try {
-    const profile = summariseEvidence(await db.capabilityEvidence.toArray());
-    reportHeatMap(profile);
+    const profile = summariseEvidence(await db.capabilityEvidence.toArray(), {}, reading);
+    // The heat map's emission is the USE reading's — the bar it reports is
+    // the one the ranker acts on.
+    if (reading === 'use') reportHeatMap(profile);
     return profile;
   } catch {
     return new Map();   // no store yet — an empty profile is the honest answer

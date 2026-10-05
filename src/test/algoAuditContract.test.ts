@@ -40,7 +40,10 @@ type AlgoEmissionKind =
   | 'review-voice-package'
   | 'puzzle-themes-targeted'
   | 'deep-run-step'
-  | 'learn-reward';
+  | 'learn-reward'
+  | 'thinking-lesson'
+  | 'coach-opponent-strength'
+  | 'chat-turn';
 
 interface Contract {
   /** The audit that holds the contract. */
@@ -118,10 +121,25 @@ const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
     contractMarker: 'DEEP RUN depth climbs',
     emittedBy: 'src/components/Puzzles/DeepRunPage.tsx (fetchFor, from the pure deepRun computer)',
   },
+  'coach-opponent-strength': {
+    script: 'scripts/audit-coach-full-games.mjs',
+    contractMarker: 'ONE ENGINE STRENGTH every sparring opponent reads the one number',
+    emittedBy: 'src/services/engineStrength.ts (emitOpponentStrength, via getAdaptiveMove / getCoachMove / CoachGamePage.coachTurn)',
+  },
+  'chat-turn': {
+    script: 'scripts/audit-coach-all-questions-prod.mjs',
+    contractMarker: 'CHAT TURN rows emitted for the asked turns',
+    emittedBy: 'src/coach/chatTurnEvents.ts (dispatchCoachTurn shadow read + Learn shadowReadTurn)',
+  },
   'learn-reward': {
     script: 'scripts/audit-concept-gameplay-prod.mjs',
     contractMarker: 'LEARN REWARD only skill earns a chime',
     emittedBy: 'src/components/Coach/CoachTeachPage.tsx (handleStudentMove via learnRewardFor)',
+  },
+  'thinking-lesson': {
+    script: 'scripts/audit-learn-how-to-think-prod.mjs',
+    contractMarker: 'the lesson emitted thinking-lesson rows with outcomes',
+    emittedBy: 'src/services/thinkingLessonSession.ts (one row per question), forwarded by appAuditor',
   },
 };
 
@@ -141,6 +159,15 @@ describe('every algo emission has an audit contract standing on it', () => {
     });
   }
 
+  it('the chat-turn row and its contract read the same fields', () => {
+    const row = read('src/coach/chatTurnEvents.ts');
+    const audit = read('scripts/audit-coach-all-questions-prod.mjs');
+    for (const field of ['fastPathLane', 'parseSource', 'askSource', 'servedParsed', 'agreed', 'parsedKind', 'valid', 'latencyMs', 'servedIntent']) {
+      expect(row.includes(`${field}:`), `ChatTurnRow lost the ${field} field`).toBe(true);
+      expect(audit.includes(`.${field}`), `the routing audit no longer reads row.${field}`).toBe(true);
+    }
+  });
+
   it('the emitted row shape and the contract read the same fields', () => {
     // A contract that reads a field the row does not carry passes vacuously
     // forever (undefined !== 'importance' is quietly true). Pin the join.
@@ -153,6 +180,15 @@ describe('every algo emission has an audit contract standing on it', () => {
         learn.includes(`.${field}`) || review.includes(`.${field}`),
         `no audit reads row.${field} — an emitted field nobody asserts on is decoration`,
       ).toBe(true);
+    }
+  });
+
+  it('the opponent-strength row and its contract read the same fields', () => {
+    const row = read('src/services/opponentMoveEvents.ts');
+    const audit = read('scripts/audit-coach-full-games.mjs');
+    for (const field of ['surface', 'purpose', 'studentElo', 'difficulty', 'offset', 'target']) {
+      expect(row.includes(`${field}:`), `OpponentMoveRow lost the ${field} field`).toBe(true);
+      expect(audit.includes(`.${field}`), `no audit reads row.${field}`).toBe(true);
     }
   });
 });

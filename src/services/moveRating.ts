@@ -264,7 +264,20 @@ export async function computeMoveRatingAt(moveHistory: readonly string[], plyInd
   } catch {
     return null; // history doesn't replay from the start (custom FEN game, etc.)
   }
-  const preFen = chess.fen();
+  return computeMoveRatingFromFen(chess.fen(), playedSan);
+}
+
+/** Rate `playedSan` played from `preFen` against the engine's best there.
+ *
+ *  The same computer as `computeMoveRatingAt`, keyed by POSITION instead of by
+ *  a ply of a game from the standard start. A drill starts from a FEN and a
+ *  wrong try is taken back, so "what I played" is a move that is on no tape —
+ *  the comparison the student asked for ("why is that better than what I
+ *  played?", hand walk 2026-10-04 #11) still needs this rating. Null on any
+ *  failure (illegal move, bad FEN, engine down). */
+export async function computeMoveRatingFromFen(preFen: string, playedSan: string): Promise<MoveRating | null> {
+  let chess: Chess;
+  try { chess = new Chess(preFen); } catch { return null; }
   const studentColor: 'white' | 'black' = chess.turn() === 'w' ? 'white' : 'black';
 
   // Apply the played move to get the resulting position + its UCI.

@@ -326,7 +326,7 @@ describe('buildReadingQuestions', () => {
 
 describe('gradeReadingAnswerDeterministic', () => {
   const hangingQ = {
-    id: 'hanging', type: 'hanging' as const, bucket: 'tactics' as const,
+    answerMode: 'any' as const, id: 'hanging', type: 'hanging' as const, bucket: 'tactics' as const,
     prompt: 'Is anything hanging?', answer: 'Yes — the queen on d5 is hanging.',
     acceptTokens: ['d5', 'queen', 'hanging', 'yes'], negative: false,
   };
@@ -991,5 +991,32 @@ describe('structureTransfer — a known structure reached from another opening',
     expect(structureTransfer('You hold the isolated queen’s pawn', 'Sicilian Defense: Alapin Variation')).toMatch(/Tarrasch Defense/);
     expect(structureTransfer('You have the hanging pawns', 'Queen\'s Gambit Declined')).toBeNull();
     expect(structureTransfer('Closed centre', null)).toBeNull();
+  });
+});
+
+describe('P0c (2026-10-04) — every hanging piece, no caps', () => {
+  // Four pieces hang here: the d5 queen and a1 rook (White's), the a8 rook and
+  // b7 pawn (Black's). The old builder asked about `hanging[0]` only.
+  const BUSY = 'r3k3/1p6/5n2/3Q4/4P3/8/8/R3K3 w - - 0 1';
+
+  it('the hanging question keys EVERY hanging piece and asks for all of them', () => {
+    const hang = buildReadingQuestions(BUSY, emptyTactics()).find((q) => q.type === 'hanging')!;
+    expect(hang.answerMode).toBe('all');
+    expect(hang.answerSquares).toEqual(['d5', 'a8', 'a1', 'b7']);
+    expect(hang.answer).toMatch(/d5.*a8.*a1.*b7/);
+    expect(hang.misconceptionTag).toBe('hung-material');
+  });
+
+  it('every other question is answered with any one key square', () => {
+    const qs = buildReadingQuestions(BUSY, emptyTactics(), { pvSan: ['Qxa8+'] });
+    for (const q of qs.filter((x) => x.type !== 'hanging')) expect(q.answerMode, q.id).toBe('any');
+  });
+
+  it('findAttackTargets is uncapped (G4.5) — the sixth target is still a target', () => {
+    expect(findAttackTargets(BUSY, 'w').length).toBeGreaterThan(5);
+  });
+
+  it('findForcingCandidates is uncapped (G4.5) — every check and capture', () => {
+    expect(findForcingCandidates(BUSY).length).toBeGreaterThan(8);
   });
 });

@@ -62,7 +62,7 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
 }
 import { lookupMasterPlay } from './masterPlayLookup';
 import { isEndgameByMaterial } from './gamePhaseService';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleOpponentHypotheticalAnswer, assembleTradeAnswer, assembleEndgameOutlookAnswer, boardWeaknessNow, assembleCompareMovesAnswer, assembleCaptureOnAnswer, assemblePawnStrengthAnswer, playedSacrificeVerdict, lastCaptureOf, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, explainNotationSymbol, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFundamentalLessonAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleLastMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleEndgameRuleAnswer, endgameRuleDemoFen, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer, type WeakFundamental, type PositionalTopic as PositionalTopicType } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleOpponentHypotheticalAnswer, assembleTradeAnswer, assembleEndgameOutlookAnswer, boardWeaknessNow, assembleCompareMovesAnswer, assembleCaptureOnAnswer, assemblePawnStrengthAnswer, playedSacrificeVerdict, lastCaptureOf, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, explainNotationSymbol, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFundamentalLessonAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleLastMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleEndgameRuleAnswer, endgameRuleDemoFen, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer, type WeakFundamental, type PositionalTopic as PositionalTopicType, type GroundedAnswer } from './groundedAnswer';
 import { getFundamentalCounts, FUNDAMENTAL_LABEL, fundamentalDevice } from './fundamentalsCatalog';
 import type { FundamentalId } from './principleAttribution';
 import { matchRouteByTopic } from './navigationRouter';
@@ -87,13 +87,14 @@ import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningI
 import { matchOpponentOpening } from './counterRepertoireService';
 import { getMisconceptionProfile } from './misconceptionService';
 import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleLastGameMistakeAnswer, assembleRecentGamesMistakeAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleTrendAnswer, assembleTimeTroubleAnswer, assembleLastGameAnswer, assembleRetrospectiveAnswer, assembleMethodAnswer, assembleHintAnswer, hintUnavailableReason, assemblePiecePlanAnswer } from './groundedAnswer';
-import { computeLastMoveRating, computeMoveRatingAt, lastPlyOf } from './moveRating';
+import { computeLastMoveRating, computeMoveRatingAt, computeMoveRatingFromFen, lastPlyOf } from './moveRating';
 import { homeOpeningRow, rankOpeningsByVolume } from './openingVolumeFloor';
 import { getHomeOpenings } from './homeOpeningService';
 import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled } from './srsOpeningService';
 import { criticalMomentsAccuracy, streaks, timeControlPerformance, comebackWins, winShapeStats, colorProficiencyMismatch, personalRecords, tacticTransferGap, recordVsOpening, recordVsOpponent, phaseStrengthOverTime, activityHeatmap, tacticTypeBreadth, brilliantConcentration } from './analyticsService';
 import { getPuzzleStats } from './puzzleService';
 import { detectConceptsInText, getConcept, resolveOpeningIdFromName, searchTheoryPassage } from './chessConceptService';
+import { corpusHitFor } from './weaknessConceptPassage';
 import { getCachedAmateurPlay } from './amateurPlayCache';
 // claimValidator import removed — the grounded path no longer free-composes,
 // so there are no claims to validate (David 2026-07-09).
@@ -712,6 +713,62 @@ export function consumeCoachLines(): WalkableLine[] | null {
   const l = lastCoachLines;
   lastCoachLines = null;
   return l;
+}
+
+/** The `intent` of the last grounded lane that VOICED an answer this turn —
+ *  same set→read-in-one-tick scratch as `lastCoachActionOffer`, reset at the
+ *  top of every `getCoachChatResponse`. It is what today's routing actually
+ *  served, so the ONE-CHAT shadow can compare its reading against the truth
+ *  rather than against a guess at the dispatch order. */
+let lastServedIntent: string | null = null;
+export function consumeServedIntent(): string | null {
+  const i = lastServedIntent;
+  lastServedIntent = null;
+  return i;
+}
+
+/**
+ * "Why is that better than what I played?" when what they played was a TRY the
+ * board took back (hand walk 2026-10-04 #11). The answer is the comparison:
+ * their move, what it does, what it cost against the engine's best here, and
+ * — unless the position is still an unsolved question — the better move with
+ * its reason. The same retrospective computer every on-tape move uses
+ * (`assembleRetrospectiveAnswer`), fed a FEN-keyed rating instead of a ply.
+ * Null when the engine cannot rate the move (the caller falls through).
+ */
+export async function answerAttemptComparison(
+  attempt: { fenBefore: string; san: string; withholdBest: boolean },
+): Promise<GroundedAnswer | null> {
+  const rating = await computeMoveRatingFromFen(attempt.fenBefore, attempt.san);
+  if (!rating) return null;
+  const fullmove = Number(attempt.fenBefore.split(' ')[5]);
+  const better = rating.betterFromTo ? `${rating.betterFromTo.from}${rating.betterFromTo.to}` : null;
+  let playedUci: string | null = null;
+  try {
+    const mv = new Chess(attempt.fenBefore).move(attempt.san);
+    playedUci = mv ? `${mv.from}${mv.to}${mv.promotion ?? ''}` : null;
+  } catch { playedUci = null; }
+  // Withholding: an unsolved drill is a question the student is still
+  // answering, so the better move is not named — only what theirs cost.
+  const bestMoveUci = rating.wasBest ? playedUci : attempt.withholdBest ? null : better;
+  const answer = assembleRetrospectiveAnswer({
+    playedSan: rating.playedSan,
+    fenBefore: attempt.fenBefore,
+    moveNumber: Number.isFinite(fullmove) && fullmove > 0 ? fullmove : 1,
+    moverColor: rating.studentColor,
+    mover: 'student',
+    bestMoveUci,
+    cpLoss: rating.cpLoss,
+    quality: rating.quality,
+    missedMate: rating.missedMate,
+    allowedMate: rating.allowedMate,
+  });
+  if (attempt.withholdBest && !rating.wasBest) {
+    answer.facts = `${answer.facts} There's a stronger move here — find it, and I'll put the two side by side.`;
+    answer.bestMoveSan = null;
+    answer.bestMoveFromTo = null;
+  }
+  return answer;
 }
 
 export function consumeCoachActionOffer(): CoachActionOffer[] | null {
@@ -1375,6 +1432,9 @@ export interface MasterGroundingOptions {
    *  which used to grade the opponent's reply instead. */
   retrospectiveMoveQuestion?: boolean;
   retrospectiveMoveRef?: RetrospectiveMoveRef;
+  /** See `LiveState.lastStudentAttempt` — "what I played" when it is on no
+   *  tape (a drill's taken-back wrong try). */
+  lastStudentAttempt?: { fenBefore: string; san: string; withholdBest: boolean };
   /** The game's stored per-ply engine read, parallel to `moveHistory` (review
    *  threads it). See `LiveState.moveAnnotations`. */
   moveAnnotations?: ReadonlyArray<{ san: string; fenBefore: string; bestMoveUci: string | null; classification: string | null; isCoachMove: boolean }>;
@@ -2678,6 +2738,37 @@ export async function translateToEnglish(text: string, providerConfig?: Provider
   } catch { return text; }
 }
 
+/** THE ONE-CHAT READ (docs/plans/2026-09-29-ONE-CHAT.md FINAL §5): the model
+ *  fills ONE closed form describing what the student said — never an answer,
+ *  never a move to play. Forced structured output (`callDeepseekWithTool`,
+ *  flash, no thinking); the caller validates every field against the board.
+ *  Null when no provider is configured or the call fails — a failed reading is
+ *  silent, it never costs the student their answer. */
+export async function readChatTurnStructured(opts: {
+  system: string;
+  user: string;
+  toolName: string;
+  description: string;
+  schema: Record<string, unknown>;
+  maxTokens: number;
+}): Promise<unknown> {
+  const cfg = await getProviderConfig();
+  if (!cfg) return null;
+  try {
+    return await callDeepseekWithTool(
+      cfg.apiKey,
+      DEEPSEEK_MODEL_MAP.move_commentary,
+      opts.system,
+      [{ role: 'user', content: opts.user }],
+      opts.maxTokens,
+      'chat_turn_read',
+      opts.toolName,
+      opts.description,
+      opts.schema,
+    );
+  } catch { return null; }
+}
+
 /** Which warm voice a call gets, by intent (docs/naroditsky-voice-register.md).
  *  'review' = the post-game tape-review register (narrative arc, counterfactual
  *  beat, verdicts in real numbers) for whole-game reviews and review-adjacent
@@ -3517,8 +3608,11 @@ export async function getCoachChatResponse(
   // Every `voiceFacts` call in this function goes through here, so the turn's
   // language cannot be forgotten at one of a hundred call sites. An explicit
   // `targetLanguage` on a single call still wins (it is spread after).
-  const voice: typeof voiceFacts = (facts, o) =>
-    voiceFacts(facts, { targetLanguage: studentLanguage, ...o });
+  const voice: typeof voiceFacts = (facts, o) => {
+    if (o?.intent) lastServedIntent = o.intent;
+    return voiceFacts(facts, { targetLanguage: studentLanguage, ...o });
+  };
+  lastServedIntent = null;
   // Clear any action offer from a prior turn — only a grounded block
   // that fires THIS turn re-populates it (else the surface shows no
   // follow-up chip). See `consumeCoachActionOffer`.
@@ -3967,6 +4061,21 @@ export async function getCoachChatResponse(
             const history = grounding.moveHistory ?? [];
             const ref = grounding.retrospectiveMoveRef;
             const seat: 'white' | 'black' | null = grounding.studentColor ?? null;
+            // "WHAT I PLAYED" WHEN IT IS ON NO TAPE (hand walk 2026-10-04 #11).
+            // A drill takes a wrong try back, so the board sits at the try's
+            // pre-move position and the move is in no history. The surface
+            // hands it over; it answers the student's-move pointer only while
+            // the board is still that position.
+            const attempt = grounding.lastStudentAttempt;
+            if (ref.kind === 'my-last' && attempt && grounding.currentFen
+              && attempt.fenBefore.split(' ').slice(0, 2).join(' ') === grounding.currentFen.split(' ').slice(0, 2).join(' ')) {
+              const answer = await answerAttemptComparison(attempt);
+              if (answer) {
+                const mustPreserve = [attempt.san, answer.bestMoveSan].filter((x): x is string => !!x);
+                const voicedAttempt = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'move-rating', preferRaw: true, mustPreserve });
+                return voicedAttempt ?? answer.facts;
+              }
+            }
             if (history.length === 0) {
               const msg = "There's no game on the board yet to look back on — play or load one and ask me about a move in it.";
               const voicedNoGame = await voice(msg, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'move-rating', preferRaw: true });
@@ -4483,7 +4592,7 @@ export async function getCoachChatResponse(
               if (wantsConcept && lc.sampleFloorMet && lc.mostPressing) {
                 const concept = conceptForCluster(lc.mostPressing.clusterId, lc.mostPressing.bucket);
                 if (concept) {
-                  const hit = searchTheoryPassage(concept.conceptQuery);
+                  const hit = corpusHitFor(concept.corpusConceptId);
                   const lesson = hit ? assembleTheoryAnswer({ conceptName: hit.conceptName, conceptId: hit.conceptId, passage: hit.passage }) : null;
                   facts = lesson
                     ? `${facts} The pattern underneath it: ${concept.behavior}. ${lesson.facts}`
@@ -6303,7 +6412,7 @@ export async function getCoachChatResponse(
             if (prof.weakest) {
               const w = prof.weakest;
               let facts = `Your weakest ending is ${w.label} — ${w.count} slip${w.count === 1 ? '' : 's'} there, the worst dropping about ${Math.round(w.worstCpLoss / 100)} point${Math.round(w.worstCpLoss / 100) === 1 ? '' : 's'}.`;
-              const hit = searchTheoryPassage(w.conceptQuery);
+              const hit = corpusHitFor(w.corpusConceptId);
               const lesson = hit ? assembleTheoryAnswer({ conceptName: hit.conceptName, conceptId: hit.conceptId, passage: hit.passage }) : null;
               if (lesson) facts += ` The idea to lock in: ${lesson.facts}`;
               // Offer the trainer — the student's OWN position when tablebase-

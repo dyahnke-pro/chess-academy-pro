@@ -101,7 +101,7 @@ export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'se
 
   const p = f.provokes;
   if (p) {
-    const reply = sayMoveNoun(p.reply);
+    const reply = sayMoveNoun(p.reply, null);
     const on = p.reply.replace(/[+#]/g, '').slice(-2);
     if (p.kind === 'pawn-hits' && p.piece && p.square) {
       const target = `${whose(f.side)} ${PIECE[p.piece] ?? 'piece'} on ${p.square}`;

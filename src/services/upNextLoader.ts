@@ -14,7 +14,14 @@ import { isFixtureGame, isFixtureGameId } from './fixtureGames';
 import { loadFreeTier, hasFreeOpeningRoom } from './freeTierService';
 import { isPaywallGateEnabled, useEntitlementStore } from '../stores/entitlementStore';
 import { solveLengthOf } from './mistakeLineGrowth';
-import { rankUpNext, currentPick, START_STEPS, type UpNextPick, type UpNextInput, type StartStep } from './upNextPicker';
+import {
+  rankUpNext, currentPick, START_STEPS, THINKING_LESSON_LIVE,
+  type UpNextPick, type UpNextInput, type StartStep, type ThinkingSignal,
+} from './upNextPicker';
+import { getCapabilityProfile } from './capabilityEvidence';
+import { heatMap, type HeatTile } from './heatMap';
+import { habitForCluster } from './coachDecider';
+import type { MethodHabit } from './methodBeat';
 import { isBeginnerMode } from './ratingBands';
 import { START_FUNDAMENTALS_KEY } from './activeBite';
 import { useAppStore } from '../stores/appStore';
@@ -28,6 +35,8 @@ export interface UpNextState {
   current: UpNextPick | null;
   /** Every candidate, best first — what a hub reads its own section's pick from. */
   ranked: UpNextPick[];
+  /** The tier-1 thinking-habit standing the ranking used (null = not offered). */
+  thinking: ThinkingSignal | null;
 }
 
 const ringKey = (d: Date): string => `today_ring_${dayKey(d)}`;
@@ -62,6 +71,42 @@ export async function loadStartSteps(): Promise<StartStep[]> {
   return START_STEPS.filter((s) => !done[s]);
 }
 
+/** Which method habits are TIER 1 of the thinking lesson ("see the board":
+ *  what their move threatens / am I safe / is my move safe → `opponent-threat`;
+ *  their targets → `forcing-scan`). A `Record` so a new habit must answer.
+ *  The tag → habit join is the one that exists (`habitForCluster`, over the
+ *  exhaustive `COACH_TAG_HABIT`) — never a second tag table. When the
+ *  `ThinkingStep` vocabulary lands (learn-how-to-think P0c) this re-keys
+ *  through it. */
+const TIER_ONE_HABIT: Record<MethodHabit, boolean> = {
+  'opponent-threat': true,
+  'forcing-scan': true,
+  'slow-down': false,
+  candidates: false,
+};
+
+/** The tier-1 standing off the heat map (PURE): red if any tier-1 skill is
+ *  red (led by the most open slips), else grey if any is unproven, else green.
+ *  Null when no tile maps to tier 1 (nothing to read). */
+export function thinkingSignalFromHeatMap(tiles: readonly HeatTile[]): ThinkingSignal | null {
+  const tier = tiles.filter((t) => {
+    const h = habitForCluster(t.tag);
+    return h !== null && TIER_ONE_HABIT[h];
+  });
+  if (tier.length === 0) return null;
+  const red = tier.filter((t) => t.state === 'red').sort((a, b) => b.openCount - a.openCount);
+  if (red.length > 0) return { state: 'red', skill: red[0].label };
+  const grey = tier.find((t) => t.state === 'grey');
+  if (grey) return { state: 'grey', skill: grey.label };
+  return { state: 'green', skill: tier[0].label };
+}
+
+async function loadThinkingSignal(weaknesses: Parameters<typeof heatMap>[1]): Promise<ThinkingSignal | null> {
+  if (!THINKING_LESSON_LIVE) return null;
+  const profile = await getCapabilityProfile().catch(() => new Map());
+  return thinkingSignalFromHeatMap(heatMap(profile, weaknesses));
+}
+
 export async function loadUpNextInput(): Promise<UpNextInput> {
   const [weaknesses, srsDue, newLines, mistakes, ownGames, freeTier, startSteps] = await Promise.all([
     getUnifiedWeaknessProfile().catch(() => []),
@@ -92,6 +137,7 @@ export async function loadUpNextInput(): Promise<UpNextInput> {
     freeOpeningOpen: freeUserOnPaywall() && hasFreeOpeningRoom(freeTier),
     coldStart: ownGames === 0 && own.length === 0,
     startSteps,
+    thinking: await loadThinkingSignal(weaknesses).catch(() => null),
   };
 }
 
@@ -140,6 +186,7 @@ async function loadUpNextFresh(now: Date): Promise<UpNextState> {
         hasSlip: !!input.latestGameSlip,
         hasGrown: !!input.grownPuzzle,
         freeOpeningOpen: input.freeOpeningOpen,
+        thinking: input.thinking?.state ?? null,
       }),
     });
   }
@@ -148,7 +195,7 @@ async function loadUpNextFresh(now: Date): Promise<UpNextState> {
   // question); then the ring; once it is closed, whatever the record says next.
   const start = input.startSteps.length > 0 ? ranked.find((p) => p.kind === 'start' && !done.has(p.key)) : undefined;
   const current = start ?? currentPick(ring, done) ?? currentPick(ranked, done);
-  return { ring, done, current, ranked };
+  return { ring, done, current, ranked, thinking: input.thinking };
 }
 
 /** Up next may have changed (a bite finished): the one signal a surface needs

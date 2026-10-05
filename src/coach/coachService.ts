@@ -43,7 +43,7 @@ import { loadMiddlegamePlanForLive } from './sources/middlegamePlan';
 import { loadModelGamesForLive } from './sources/modelGames';
 import { loadPlayerGamesForLive, resolvePlayerIdFromAsk } from './sources/playerGames';
 import { loadProGameReferenceData } from '../services/proGameReferenceData';
-import { consumeCoachActionOffer, consumeCoachKeySquares, consumeCoachLines, translateToEnglish } from '../services/coachApi';
+import { consumeCoachActionOffer, consumeCoachKeySquares, consumeCoachLines, consumeServedIntent, translateToEnglish } from '../services/coachApi';
 import type { CoachActionOffer } from '../services/coachApi';
 import { chosenOrTypedLanguageName, detectStudentLanguage } from '../services/spokenLanguage';
 import { deepseekProvider } from './providers/deepseek';
@@ -1141,6 +1141,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
   // held to the end and attached to the returned CoachAnswer.
   let actionOffer: CoachActionOffer[] | null = null;
   let calculatedLines: import('../types').WalkableLine[] | null = null;
+  let servedIntent: string | null = null;
   // Key squares the grounded read NAMED this turn (typed, from
   // `answer.keySquares`). Captured beside the action offer; re-appended as
   // the highlight marker AFTER the arrow pass strips every marker, so the
@@ -1783,6 +1784,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             retrospectiveMoveQuestion: retrospectiveEngage,
             retrospectiveMoveRef: retrospectiveRefEngage ?? undefined,
             moveAnnotations: input.liveState.moveAnnotations,
+            lastStudentAttempt: input.liveState.lastStudentAttempt,
             methodQuestion: methodQuestionEngage,
             // "set up calculation training" — direct request to start a mode.
             trainingRequestKind: trainingRequestEngage ?? undefined,
@@ -1881,6 +1883,10 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
       const linesThisTrip = consumeCoachLines();
       if (linesThisTrip) calculatedLines = linesThisTrip;
     } catch { /* lines are additive UX — never break the answer */ }
+    try {
+      const servedThisTrip = consumeServedIntent();
+      if (servedThisTrip) servedIntent = servedThisTrip;
+    } catch { /* telemetry only — never break the answer */ }
     let keySquaresThisTrip: string[] | null = null;
     try {
       keySquaresThisTrip = consumeCoachKeySquares();
@@ -2367,6 +2373,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     provider: provider.name,
     ...(actionOffer && actionOffer.length > 0 ? { actionOffer } : {}),
     ...(calculatedLines && calculatedLines.length > 0 ? { lines: calculatedLines } : {}),
+    ...(servedIntent ? { servedIntent } : {}),
   };
 }
 

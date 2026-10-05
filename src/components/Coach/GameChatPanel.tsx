@@ -1610,7 +1610,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             input, older messages scroll DOWN. Same shape used on
             /coach/teach so both surfaces feel like one room. */}
         <ChatInput
-          onSend={(text) => void handleSend(text)}
+          onSend={(text, modality) => void handleSend(text, modality === 'voice' ? { origin: 'spoken' } : undefined)}
           disabled={isStreaming}
           coachChoices={coachChoices}
           onPickCoachChoice={onPickCoachChoice}

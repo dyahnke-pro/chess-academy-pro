@@ -1,6 +1,6 @@
 /** Tests for the multi-ply endgame playout runner. */
 import { renderHook, act, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 vi.mock('../services/coachPlaySession', () => ({
   resolveConfig: vi.fn(() => ({ skill: 8, moveTimeMs: 500, label: 'Easy' })),
@@ -10,8 +10,10 @@ vi.mock('../services/coachPlaySession', () => ({
 vi.mock('../services/rewardService', () => ({ reward: vi.fn() }));
 
 import { useEndgamePlayout } from './useEndgamePlayout';
+import { useAppStore } from '../stores/appStore';
+import { buildUserProfile } from '../test/factories';
 import { reward } from '../services/rewardService';
-import { getCoachMove } from '../services/coachPlaySession';
+import { getCoachMove, resolveConfig } from '../services/coachPlaySession';
 import type { PieceDropHandlerArgs } from 'react-chessboard';
 
 const drop = (sourceSquare: string, targetSquare: string): PieceDropHandlerArgs =>
@@ -379,6 +381,37 @@ describe('useEndgamePlayout', () => {
       await waitFor(() => {
         expect(getCoachMove).toHaveBeenCalled();
       });
+    });
+  });
+
+  // ONE ENGINE STRENGTH (P0b, 2026-10-04): every play-out used to face a
+  // fixed ~1800 (a hard-coded 1500 + 'hard'). The opponent is now the
+  // student's own playing rating + the play-out's offset on the one table.
+  describe('the play-out opponent reads the one strength', () => {
+    afterEach(() => { useAppStore.setState({ activeProfile: null }); });
+
+    it("matches the student's playing rating, not a fixed 1500", async () => {
+      useAppStore.setState({ activeProfile: buildUserProfile({ currentRating: 1100, puzzleRating: 1900 }) });
+      vi.mocked(getCoachMove).mockResolvedValueOnce({ uci: 'f5e5', from: 'f5', to: 'e5' });
+      const { result } = renderHook(() =>
+        useEndgamePlayout({
+          startFen: KP_FEN,
+          solution: ['a5'],
+          stockfishFallback: true,
+          fallbackDifficulty: 'hard',
+          fallbackPliesToPlay: 2,
+          replyDelayMs: 0,
+        }),
+      );
+      act(() => {
+        result.current.onPieceDrop(drop('a4', 'a5'));
+      });
+      await waitFor(() => {
+        expect(getCoachMove).toHaveBeenCalled();
+      });
+      expect(resolveConfig).toHaveBeenLastCalledWith('hard', 1100);
+      const strength = vi.mocked(getCoachMove).mock.calls.at(-1)?.[2];
+      expect(strength).toMatchObject({ surface: 'endgame-playout', purpose: 'play-out', studentElo: 1100, offset: 200, target: 1300 });
     });
   });
 

@@ -97,7 +97,8 @@ export type CoachSurface =
   | 'phase-narration'
   | 'review'
   | 'teach'
-  | 'ping';
+  | 'ping'
+  | 'kid';
 
 export interface LiveState {
   surface: CoachSurface;
@@ -152,6 +153,12 @@ export interface LiveState {
     }[];
   };
   moveHistory?: string[];
+  /** A move the student TRIED that is on no tape — a drill's wrong try, which
+   *  the drill takes back (hand walk 2026-10-04 #11). "Why is that better than
+   *  what I played?" resolves "what I played" to this when the board is back
+   *  at `fenBefore`. `withholdBest`: the position is still a question the
+   *  student is answering (an unsolved drill), so the better move is not named. */
+  lastStudentAttempt?: { fenBefore: string; san: string; withholdBest: boolean };
   /** THE GAME'S STORED PER-PLY ANALYSIS, parallel to `moveHistory` (review
    *  threads it; a live board has none). The RETROSPECTIVE lane ("why was Ke2
    *  bad?", PLAN §E1) reads the referenced ply's stored engine read from here
@@ -909,7 +916,7 @@ export interface Provider {
  *  they are DISTINGUISHED. A surface that composes its own prompt
  *  (`INTERNAL_ASK_SURFACES`) is classified by surface; a button that sends a
  *  canned sentence THROUGH the chat declares `origin`. Absent = typed. */
-export type AskOrigin = 'typed' | 'canned-best-move';
+export type AskOrigin = 'typed' | 'spoken' | 'canned-best-move';
 export type AskSource = AskOrigin | 'hint' | 'internal';
 
 export interface CoachAskInput {
@@ -942,4 +949,8 @@ export interface CoachAnswer {
   /** Lines the grounded answer calculated — the surface draws them as arrows
    *  while it speaks and walks them on a button (WO-DANYA-01 C). */
   lines?: import('../types').WalkableLine[];
+  /** The grounded lane that VOICED this answer (the `intent` its facts went
+   *  through `voiceFacts` with), or absent when no grounded lane spoke. The
+   *  ONE-CHAT shadow compares the parsed reading against it. */
+  servedIntent?: string;
 }

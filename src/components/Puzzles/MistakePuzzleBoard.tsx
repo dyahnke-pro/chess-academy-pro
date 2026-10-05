@@ -17,6 +17,7 @@ import { explainPuzzleMoveGrounded } from '../../services/coachApi';
 import { coachService } from '../../coach/coachService';
 import type { LiveState } from '../../coach/types';
 import { getCoachMove, resolveConfig } from '../../services/coachPlaySession';
+import { opponentStrength, studentPlayingRating } from '../../services/engineStrength';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { getPieceNameOnSquare } from '../../utils/puzzleHints';
@@ -977,6 +978,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   // student play the position out; the computer answers each move. Reuses the
   // coach play loop (getCoachMove / resolveConfig) at a rating-matched strength.
   const [freeplayThinking, setFreeplayThinking] = useState(false);
+  const coachDifficulty = useAppStore((st) => st.coachDifficulty);
   const startFreeplay = useCallback((): void => {
     try { chessRef.current.load(fen); } catch { /* stays at current */ }
     setLastMoveHighlight(null);
@@ -988,8 +990,11 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     if (chessRef.current.isGameOver()) return;
     setFreeplayThinking(true);
     try {
-      const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
-      const reply = await getCoachMove(chessRef.current.fen(), resolveConfig('medium', rating));
+      // ONE ENGINE STRENGTH (P0b): the student's PLAYING rating (never the
+      // puzzle Elo, a different skill that runs high) + the one offset table
+      // at the student's own chosen difficulty.
+      const strength = opponentStrength('mistake-puzzle-freeplay', studentPlayingRating(activeProfile), coachDifficulty);
+      const reply = await getCoachMove(chessRef.current.fen(), resolveConfig(coachDifficulty, strength.studentElo), strength);
       if (reply?.from && reply.to) {
         try {
           const m = chessRef.current.move({ from: reply.from, to: reply.to, promotion: reply.promotion });
@@ -1002,7 +1007,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     } catch { /* engine unavailable — the student can keep moving */ } finally {
       setFreeplayThinking(false);
     }
-  }, [activeProfile, playMoveSound]);
+  }, [activeProfile, playMoveSound, coachDifficulty]);
 
   const handleChessBoardMove = useCallback((moveResult: MoveResult): void => {
     // Apply the move to our chess ref but do NOT call setFen() here —

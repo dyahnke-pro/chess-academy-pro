@@ -207,7 +207,10 @@ export async function getStudentDossier(now: number = Date.now()): Promise<Stude
  * lead on (newly cleared > a strength), what's improving, then the one pattern
  * still costing the most.
  */
-export function dossierOpeningLine(d: StudentDossier | null): string {
+export function dossierOpeningLine(
+  d: StudentDossier | null,
+  opts: { omitPressing?: boolean } = {},
+): string {
   if (!d || !d.sampleFloorMet) return '';
   const parts: string[] = [];
   if (d.newlyCleared.length > 0) {
@@ -221,7 +224,10 @@ export function dossierOpeningLine(d: StudentDossier | null): string {
   if (d.improving.length > 0) {
     parts.push(`${cap(d.improving[0].label)} is trending the right way.`);
   }
-  if (d.mostPressingLabel) {
+  // When the lesson picker follows, IT names the holes — naming a different
+  // "top" one here contradicted it (walk 2026-10-04: three openers, two
+  // rankings). One opener, one ranking.
+  if (d.mostPressingLabel && !opts.omitPressing) {
     parts.push(`The pattern still costing you the most is ${d.mostPressingLabel.toLowerCase()}.`);
   }
   return parts.join(' ').trim();

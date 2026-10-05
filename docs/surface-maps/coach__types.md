@@ -4,22 +4,22 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**946 lines · 32 exports · 934 importers · 209 tests · 39 audits**
+**957 lines · 32 exports · 961 importers · 225 tests · 39 audits**
 
 ## Locked rules that govern this surface
 
 - **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:457) — names `types`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3069) — names `Provider`, `ProviderName`, `types`
-- **TypeScript** (CLAUDE.md:3526) — names `types`
-- **React** (CLAUDE.md:3536) — names `types`
-- **File Organization** (CLAUDE.md:3547) — names `types`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4035) — names `types`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4074) — names `CoachSurface`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4534) — names `types`
-- **Naming** (CLAUDE.md:5139) — names `CoachPersonality`
-- **Testing Best Practices** (CLAUDE.md:5184) — names `Provider`
-- **Shared types / services** (CLAUDE.md:5251) — names `types`
-- **The standard post-deploy ritual** (CLAUDE.md:6030) — names `TacticsLiveContext`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3121) — names `Provider`, `ProviderName`, `types`
+- **TypeScript** (CLAUDE.md:3578) — names `types`
+- **React** (CLAUDE.md:3588) — names `types`
+- **File Organization** (CLAUDE.md:3599) — names `types`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4090) — names `types`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4129) — names `CoachSurface`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4589) — names `types`
+- **Naming** (CLAUDE.md:5194) — names `CoachPersonality`
+- **Testing Best Practices** (CLAUDE.md:5239) — names `Provider`
+- **Shared types / services** (CLAUDE.md:5306) — names `types`
+- **The standard post-deploy ritual** (CLAUDE.md:6129) — names `TacticsLiveContext`
 
 ## Who calls in
 
@@ -120,6 +120,7 @@
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Coach/DifficultyToggle.tsx`
 - `src/components/Coach/EndgameLessonTab.tsx`
+- `src/components/Coach/EndgameTablebaseTrainer.tsx`
 - `src/components/Coach/EvalGraph.tsx`
 - `src/components/Coach/ExplainPositionSessionView.tsx`
 - `src/components/Coach/GameChatPanel.test.tsx`
@@ -149,7 +150,6 @@
 - `src/components/Coach/TrainingPlanRolodexPage.tsx`
 - `src/components/Coach/classificationStyles.ts`
 - `src/components/Dashboard/DashboardPage.test.tsx`
-- `src/components/Dashboard/ReviewLastGameCard.tsx`
 - `src/components/Flashcards/FlashcardStudyPage.tsx`
 - `src/components/Games/GameCard.tsx`
 - `src/components/Games/GameDatabasePage.test.tsx`
@@ -248,23 +248,28 @@
 - `src/components/Play/OpeningChallenge.tsx`
 - `src/components/Play/OpeningSpeedrun.tsx`
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx`
+- `src/components/Puzzles/DeepRunPage.tsx`
 - `src/components/Puzzles/LichessDashboardPage.test.tsx`
 - `src/components/Puzzles/LichessDashboardPage.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx`
 - `src/components/Puzzles/MyMistakesPage.test.tsx`
 - `src/components/Puzzles/MyMistakesPage.tsx`
+- `src/components/Puzzles/PuzzleBoard.deepRun.test.tsx`
+- `src/components/Puzzles/PuzzleBoard.evidence.test.tsx`
+- `src/components/Puzzles/PuzzleBoard.oneLinePerMiss.test.tsx`
+- `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.tsx`
 - `src/components/Puzzles/PuzzleTrainerPage.tsx`
 - `src/components/Puzzles/SrsGradeButtons.tsx`
 - `src/components/Puzzles/WeaknessTagDrillPage.tsx`
-- `src/components/Puzzles/WeaknessThemesPage.test.tsx`
-- `src/components/Puzzles/WeaknessThemesPage.tsx`
 - `src/components/Search/SmartSearchBar.tsx`
 - `src/components/Settings/OnboardingPage.test.tsx`
 - `src/components/Settings/SettingsPage.tsx`
 - `src/components/Stats/StatsPage.test.tsx`
 - `src/components/Stats/StatsPage.tsx`
+- `src/components/Tactics/AnalysisPracticePage.feedback.test.tsx`
+- `src/components/Tactics/AnalysisPracticePage.tap.test.tsx`
 - `src/components/Tactics/AnalysisPracticePage.test.tsx`
 - `src/components/Tactics/AnalysisPracticePage.tsx`
 - `src/components/Tactics/TacticCreatePage.tsx`
@@ -648,19 +653,19 @@
 - `src/hooks/useStruggleDetection.ts`
 - `src/hooks/useStudentNeed.test.tsx`
 - `src/hooks/useStudentNeed.ts`
+- `src/hooks/useWrongTryRefutation.ts`
 - `src/services/accuracyService.test.ts`
 - `src/services/accuracyService.ts`
 - `src/services/adaptivePuzzleService.test.ts`
 - `src/services/adaptivePuzzleService.ts`
 - `src/services/analyticsService.ts`
 - `src/services/annotationService.ts`
+- `src/services/arrowDoor.ts`
 - `src/services/autoAnalyzeGame.livePv.test.ts`
 - `src/services/autoAnalyzeGame.ts`
 - `src/services/autoAnalyzeGameMisconceptions.test.ts`
 - `src/services/autoImportScheduler.ts`
 - `src/services/badHabitDetector.ts`
-- `src/services/bestReplyRanking.test.ts`
-- `src/services/bestReplyRanking.ts`
 - `src/services/boardAnnotationService.ts`
 - `src/services/boardUtils.ts`
 - `src/services/bookDeparturePrecompute.ts`
@@ -669,6 +674,7 @@
 - `src/services/bucketPipelineAudit.ts`
 - `src/services/calculationSkillMatch.ts`
 - `src/services/chesscomService.ts`
+- `src/services/claimChecker.measure.test.ts`
 - `src/services/classroomOpener.ts`
 - `src/services/coachActionDispatcher.ts`
 - `src/services/coachAgent.ts`
@@ -712,13 +718,14 @@
 - `src/services/coachsCall.ts`
 - `src/services/computerAccuracy.audit.test.ts`
 - `src/services/conceptEngine.ts`
+- `src/services/conceptSchedule.test.ts`
+- `src/services/conceptSchedule.ts`
 - `src/services/contentGenerationService.ts`
 - `src/services/continuityGuard.ts`
 - `src/services/conversionDetector.test.ts`
 - `src/services/conversionDetector.ts`
 - `src/services/courseTrainer.ts`
 - `src/services/criticality.ts`
-- `src/services/curatedBeatSource.ts`
 - `src/services/dataLoader.ts`
 - `src/services/dbService.ts`
 - `src/services/deliberation.ts`
@@ -730,10 +737,10 @@
 - `src/services/engineDeltaLines.ts`
 - `src/services/enginePlanContext.test.ts`
 - `src/services/enginePlanContext.ts`
-- `src/services/engineReadNarration.test.ts`
-- `src/services/engineReadNarration.ts`
 - `src/services/explorerTeachLine.test.ts`
 - `src/services/explorerTeachLine.ts`
+- `src/services/falseAlarm.test.ts`
+- `src/services/falseAlarm.ts`
 - `src/services/findSquareService.ts`
 - `src/services/fixtureGames.test.tsx`
 - `src/services/flashcardService.ts`
@@ -741,6 +748,7 @@
 - `src/services/fromYourGamesService.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
+- `src/services/gameAnalysisService.drain.test.ts`
 - `src/services/gameAnalysisService.records.test.ts`
 - `src/services/gameAnalysisService.test.ts`
 - `src/services/gameAnalysisService.ts`
@@ -748,6 +756,7 @@
 - `src/services/gameContextService.ts`
 - `src/services/gameFilterService.ts`
 - `src/services/gameImportUtils.ts`
+- `src/services/gameInsightsService.statsCache.test.ts`
 - `src/services/gameInsightsService.test.ts`
 - `src/services/gameInsightsService.ts`
 - `src/services/gameNarrationBuilder.test.ts`
@@ -775,7 +784,7 @@
 - `src/services/kidPuzzleService.test.ts`
 - `src/services/kidPuzzleService.ts`
 - `src/services/kidRatingService.ts`
-- `src/services/laneReachability.test.ts`
+- `src/services/learnBoardTeaching.ts`
 - `src/services/learnGameRecord.ts`
 - `src/services/lichessExplorerService.ts`
 - `src/services/lichessPuzzleService.test.ts`
@@ -810,6 +819,12 @@
 - `src/services/mistakePuzzleService.test.ts`
 - `src/services/mistakePuzzleService.ts`
 - `src/services/modelGameService.ts`
+- `src/services/moveIntent.measure.test.ts`
+- `src/services/moveIntent.takesAway.test.ts`
+- `src/services/moveIntent.test.ts`
+- `src/services/moveIntent.ts`
+- `src/services/moveOrder.test.ts`
+- `src/services/moveOrder.ts`
 - `src/services/moveRating.ts`
 - `src/services/narratedContinuation.ts`
 - `src/services/narrationI18n.test.ts`
@@ -817,6 +832,7 @@
 - `src/services/needScore.ts`
 - `src/services/nextMoveAdvice.ts`
 - `src/services/oneOpeningKey.test.ts`
+- `src/services/openingAnnouncement.ts`
 - `src/services/openingCourse.ts`
 - `src/services/openingDetectionService.ts`
 - `src/services/openingKey.ts`
@@ -824,6 +840,7 @@
 - `src/services/openingKeyBackfill.ts`
 - `src/services/openingNarrationService.test.ts`
 - `src/services/openingNarrationService.ts`
+- `src/services/openingPositions.ts`
 - `src/services/openingService.ts`
 - `src/services/openingTrapDetector.test.ts`
 - `src/services/openingTrapDetector.ts`
@@ -837,12 +854,12 @@
 - `src/services/pieceOptions.ts`
 - `src/services/pieceRaceService.ts`
 - `src/services/pieceSweepService.ts`
-- `src/services/planMarks.ts`
 - `src/services/playedMoveGrade.ts`
 - `src/services/playerIdentity.ts`
 - `src/services/playerRatingService.ts`
 - `src/services/positionFacts.ts`
 - `src/services/positionReadComposer.ts`
+- `src/services/positionReadComposer.withhold.test.ts`
 - `src/services/positionReadingService.test.ts`
 - `src/services/positionReadingService.ts`
 - `src/services/positionTrapScan.test.ts`
@@ -855,10 +872,13 @@
 - `src/services/proOpeningForks.test.ts`
 - `src/services/proRepertoireService.ts`
 - `src/services/promptedFind.wire.test.ts`
+- `src/services/puzzleDepth.ts`
 - `src/services/puzzleGenerator.test.ts`
 - `src/services/puzzleGenerator.ts`
+- `src/services/puzzleMissService.ts`
 - `src/services/puzzleService.test.ts`
 - `src/services/puzzleService.ts`
+- `src/services/puzzleTeaching.ts`
 - `src/services/puzzlesFamilyFallbackNotify.ts`
 - `src/services/pvPlayback.test.ts`
 - `src/services/pvPlayback.ts`
@@ -866,7 +886,9 @@
 - `src/services/refutedAlternative.test.ts`
 - `src/services/reviewGameAdapter.ts`
 - `src/services/reviewNarrationBuild.ts`
+- `src/services/reviewOpponentCommentary.ts`
 - `src/services/reviewSampleGames.ts`
+- `src/services/reviewStrategicOrientation.ts`
 - `src/services/searchDepth.test.ts`
 - `src/services/searchDepth.ts`
 - `src/services/section14RecordPath.test.ts`
@@ -874,10 +896,10 @@
 - `src/services/sessionGenerator.ts`
 - `src/services/setupTrainerService.test.ts`
 - `src/services/setupTrainerService.ts`
+- `src/services/shallowLinesNotNarrated.test.ts`
 - `src/services/shareableInsightsService.test.ts`
 - `src/services/shareableInsightsService.ts`
 - `src/services/smartSearchService.ts`
-- `src/services/socraticNudgeService.ts`
 - `src/services/srsEngine.ts`
 - `src/services/srsOpeningService.test.ts`
 - `src/services/srsOpeningService.ts`
@@ -898,10 +920,12 @@
 - `src/services/tacticAlertService.ts`
 - `src/services/tacticClaimValidator.test.ts`
 - `src/services/tacticClaimValidator.ts`
+- `src/services/tacticClassifierService.fill.test.ts`
 - `src/services/tacticClassifierService.test.ts`
 - `src/services/tacticClassifierService.ts`
 - `src/services/tacticCreateService.ts`
 - `src/services/tacticDrillService.ts`
+- `src/services/tacticNarrationService.test.ts`
 - `src/services/tacticNarrationService.ts`
 - `src/services/tacticTypeBackfill.test.ts`
 - `src/services/tacticTypeBackfill.ts`
@@ -914,6 +938,7 @@
 - `src/services/tacticsContextIdentity.test.ts`
 - `src/services/tacticsContextIdentity.ts`
 - `src/services/tacticsDetector.ts`
+- `src/services/teachingEffectService.test.ts`
 - `src/services/teachingSelector.ts`
 - `src/services/themeService.test.ts`
 - `src/services/themeService.ts`
@@ -941,6 +966,9 @@
 - `src/services/weaknessSpine.ts`
 - `src/services/whyBestMove.test.ts`
 - `src/services/whyBestMove.ts`
+- `src/services/wrongTapTag.ts`
+- `src/services/wrongTryRefutation.test.ts`
+- `src/services/wrongTryRefutation.ts`
 - `src/stores/appStore.ts`
 - `src/stores/coachSessionStore.test.ts`
 - `src/stores/coachSessionStore.ts`
@@ -949,7 +977,6 @@
 - `src/test/benchmarks/stockfish.perf.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 - `src/test/factories.ts`
-- `src/utils/arrowGrounding.test.ts`
 - `src/utils/arrowGrounding.ts`
 - `src/utils/coachNarration.ts`
 - `src/utils/commonMistakeLine.test.ts`
@@ -1119,10 +1146,15 @@
 - `src/components/Openings/WalkthroughMode.test.tsx`
 - `src/components/Puzzles/LichessDashboardPage.test.tsx`
 - `src/components/Puzzles/MyMistakesPage.test.tsx`
+- `src/components/Puzzles/PuzzleBoard.deepRun.test.tsx`
+- `src/components/Puzzles/PuzzleBoard.evidence.test.tsx`
+- `src/components/Puzzles/PuzzleBoard.oneLinePerMiss.test.tsx`
+- `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.test.tsx`
-- `src/components/Puzzles/WeaknessThemesPage.test.tsx`
 - `src/components/Settings/OnboardingPage.test.tsx`
 - `src/components/Stats/StatsPage.test.tsx`
+- `src/components/Tactics/AnalysisPracticePage.feedback.test.tsx`
+- `src/components/Tactics/AnalysisPracticePage.tap.test.tsx`
 - `src/components/Tactics/AnalysisPracticePage.test.tsx`
 - `src/components/Tactics/TacticsPage.test.tsx`
 - `src/data/commonMistakeNarration.test.ts`
@@ -1148,8 +1180,8 @@
 - `src/services/adaptivePuzzleService.test.ts`
 - `src/services/autoAnalyzeGame.livePv.test.ts`
 - `src/services/autoAnalyzeGameMisconceptions.test.ts`
-- `src/services/bestReplyRanking.test.ts`
 - `src/services/bucketPipelineAudit.test.ts`
+- `src/services/claimChecker.measure.test.ts`
 - `src/services/coachAnswerGates.test.ts`
 - `src/services/coachBookMove.test.ts`
 - `src/services/coachChatService.test.ts`
@@ -1167,19 +1199,22 @@
 - `src/services/coachTrainingService.test.ts`
 - `src/services/computerAccuracy.audit.test.ts`
 - `src/services/conceptEngine.test.ts`
+- `src/services/conceptSchedule.test.ts`
 - `src/services/conversionDetector.test.ts`
 - `src/services/drillVocabulary.test.ts`
 - `src/services/endgameProfileService.test.ts`
 - `src/services/engineDeltaLines.test.ts`
 - `src/services/enginePlanContext.test.ts`
-- `src/services/engineReadNarration.test.ts`
 - `src/services/explorerTeachLine.test.ts`
+- `src/services/falseAlarm.test.ts`
 - `src/services/fixtureGames.test.tsx`
 - `src/services/fromYourGamesService.test.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
+- `src/services/gameAnalysisService.drain.test.ts`
 - `src/services/gameAnalysisService.records.test.ts`
 - `src/services/gameAnalysisService.test.ts`
+- `src/services/gameInsightsService.statsCache.test.ts`
 - `src/services/gameInsightsService.test.ts`
 - `src/services/gameNarrationBuilder.test.ts`
 - `src/services/gamePhaseService.test.ts`
@@ -1193,7 +1228,6 @@
 - `src/services/homeOpeningSteer.test.ts`
 - `src/services/journeyService.test.ts`
 - `src/services/kidPuzzleService.test.ts`
-- `src/services/laneReachability.test.ts`
 - `src/services/lichessPuzzleService.test.ts`
 - `src/services/liveTacticsContext.playable.test.ts`
 - `src/services/liveTacticsContext.test.ts`
@@ -1208,6 +1242,10 @@
 - `src/services/mistakeNarration.test.ts`
 - `src/services/mistakeProvenance.test.ts`
 - `src/services/mistakePuzzleService.test.ts`
+- `src/services/moveIntent.measure.test.ts`
+- `src/services/moveIntent.takesAway.test.ts`
+- `src/services/moveIntent.test.ts`
+- `src/services/moveOrder.test.ts`
 - `src/services/narrationI18n.test.ts`
 - `src/services/oneOpeningKey.test.ts`
 - `src/services/openingKeyBackfill.test.ts`
@@ -1218,6 +1256,7 @@
 - `src/services/pieceOptions.test.ts`
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
+- `src/services/positionReadComposer.withhold.test.ts`
 - `src/services/positionReadingService.test.ts`
 - `src/services/positionTrapScan.test.ts`
 - `src/services/principleQuiz.test.ts`
@@ -1233,6 +1272,7 @@
 - `src/services/section14RecordPath.test.ts`
 - `src/services/sessionGenerator.test.ts`
 - `src/services/setupTrainerService.test.ts`
+- `src/services/shallowLinesNotNarrated.test.ts`
 - `src/services/shareableInsightsService.test.ts`
 - `src/services/srsOpeningService.test.ts`
 - `src/services/stockfishCache.test.ts`
@@ -1242,12 +1282,15 @@
 - `src/services/syncService.test.ts`
 - `src/services/tacticAlertService.test.ts`
 - `src/services/tacticClaimValidator.test.ts`
+- `src/services/tacticClassifierService.fill.test.ts`
 - `src/services/tacticClassifierService.test.ts`
+- `src/services/tacticNarrationService.test.ts`
 - `src/services/tacticTypeBackfill.test.ts`
 - `src/services/tacticTypeUnification.test.ts`
 - `src/services/tacticVocabulary.test.ts`
 - `src/services/tacticalRead.test.ts`
 - `src/services/tacticsContextIdentity.test.ts`
+- `src/services/teachingEffectService.test.ts`
 - `src/services/themeService.test.ts`
 - `src/services/tiltSignal.test.ts`
 - `src/services/timeTroubleDetector.test.ts`
@@ -1260,11 +1303,11 @@
 - `src/services/weaknessSignalLoader.green.test.ts`
 - `src/services/weaknessSpine.test.ts`
 - `src/services/whyBestMove.test.ts`
+- `src/services/wrongTryRefutation.test.ts`
 - `src/stores/coachSessionStore.test.ts`
 - `src/test/benchmarks/dexie.perf.test.ts`
 - `src/test/benchmarks/stockfish.perf.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
-- `src/utils/arrowGrounding.test.ts`
 - `src/utils/commonMistakeLine.test.ts`
 - `src/utils/wlppLadder.test.ts`
 

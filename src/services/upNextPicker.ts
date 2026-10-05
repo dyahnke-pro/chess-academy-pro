@@ -14,6 +14,8 @@
  *   a mistake puzzle grew     → that one puzzle at its new length
  *   an opening due / new      → one line of it
  *   free opening unclaimed    → pick it (paywall builds, free users only)
+ *   a tier-1 thinking habit   → the "learn how to think" lesson (red: after
+ *     red or grey               the slip; grey: before the warm-ups)
  *
  * Every reason is built from the record (G0) — the coach only voices it.
  * The first RING_SIZE picks of the day are today's ring; they are frozen for
@@ -22,7 +24,65 @@
 import type { RepCandidate } from './trainingPlanSelector';
 import { resolveRepRoute } from './repRouting';
 
-export type PickKind = 'deep-run' | 'game-slip' | 'weakness' | 'grown' | 'opening' | 'free-opening' | 'warm-up' | 'long' | 'start' | 'upload' | 'learn';
+/** Every kind of bite, ONE list. The type is derived from it, and the tables
+ *  below are `Record`s over it, so a new kind fails to compile until someone
+ *  answers where it finishes and how important it is (homeSuggestion). */
+export const PICK_KINDS = [
+  'deep-run', 'game-slip', 'weakness', 'grown', 'opening', 'free-opening',
+  'warm-up', 'long', 'start', 'upload', 'learn', 'thinking',
+] as const;
+export type PickKind = typeof PICK_KINDS[number];
+
+/** WHERE EACH KIND OF BITE ENDS — the surface whose natural finish line calls
+ *  `activeBite.finishBite` (by kind) or `finishBiteByKey` (by key). `null` =
+ *  no bite: a Home-only suggestion that never enters the ring (`upload`,
+ *  `learn`), or a kind whose finish line is not wired yet. A pick with a null
+ *  finish line in the ring would never close — `THINKING_LESSON_LIVE` may only
+ *  turn on once `thinking` has a surface here (gated in the test, which also
+ *  proves every named surface really calls `finishBite` with its kind). */
+export const PICK_FINISH_LINE: Record<PickKind, { file: string; by: 'kind' | 'key' } | null> = {
+  'deep-run': { file: 'src/components/Puzzles/DeepRunPage.tsx', by: 'kind' },
+  'game-slip': { file: 'src/components/Puzzles/MyMistakesPage.tsx', by: 'kind' },
+  grown: { file: 'src/components/Puzzles/MyMistakesPage.tsx', by: 'kind' },
+  weakness: { file: 'src/components/Puzzles/AdaptivePuzzlePage.tsx', by: 'kind' },
+  'warm-up': { file: 'src/components/Puzzles/AdaptivePuzzlePage.tsx', by: 'kind' },
+  long: { file: 'src/components/Puzzles/AdaptivePuzzlePage.tsx', by: 'kind' },
+  opening: { file: 'src/services/openingService.ts', by: 'kind' },
+  'free-opening': { file: 'src/components/Openings/OpeningDetailPage.tsx', by: 'kind' },
+  start: { file: 'src/services/activeBite.ts', by: 'key' },
+  upload: null,
+  learn: null,
+  // Learn reads `?lesson=think`; the lesson's one door calls
+  // `finishBite('thinking')` when the lesson ends.
+  thinking: { file: 'src/services/thinkingLessonStart.ts', by: 'kind' },
+};
+
+/** The "learn how to think" bite is live: Learn reads `?lesson=think` and
+ *  finishes the bite (see PICK_FINISH_LINE). */
+export const THINKING_LESSON_LIVE = true;
+
+/** Where the student stands on the tier-1 thinking habits (see the board:
+ *  what their move threatens, am I safe, their targets), read off the heat map
+ *  by the loader. RED = a tier-1 skill is an open hole; GREY = never proven
+ *  (grey means TEACH IT — a fresh install is all grey); GREEN = all proven. */
+export interface ThinkingSignal {
+  state: 'red' | 'grey' | 'green';
+  /** The leading tier-1 skill's label (the red one with the most open slips). */
+  skill: string;
+}
+
+export const THINKING_LESSON_PATH = '/coach/teach?lesson=think';
+
+function thinkingPick(t: ThinkingSignal): UpNextPick {
+  return {
+    kind: 'thinking', key: 'up:thinking', hub: 'coach', path: THINKING_LESSON_PATH, bite: 'one lesson',
+    label: 'Learn how to think',
+    reason: t.state === 'red'
+      ? `${t.skill} keeps costing you. Learn the habit that catches it: what their move changed, whether you are safe, where their targets are.`
+      : 'Learn the habit strong players run every move: what their move changed, whether you are safe, where their targets are.',
+    state: { repKey: 'up:thinking' },
+  };
+}
 
 /** Which hub row a pick lives under — the row that pulses in place. */
 export type PickHub = 'tactics:deep-run' | 'tactics:my mistakes' | 'tactics:daily' | 'tactics:long' | 'openings' | 'coach' | 'weaknesses' | 'home';
@@ -55,6 +115,9 @@ export interface UpNextInput {
   /** Beginner mode's Start-here steps not yet done, in order (empty when the
    *  student is not in beginner mode or has finished them). */
   startSteps: readonly StartStep[];
+  /** The tier-1 thinking habits' standing, or null when the lesson is not
+   *  offered (not live yet, or no read). */
+  thinking: ThinkingSignal | null;
 }
 
 /** THE START-HERE PATH (David 2026-10-02: "cater to new players. Explain
@@ -148,6 +211,9 @@ export function rankUpNext(i: UpNextInput): UpNextPick[] {
       hub: 'tactics:my mistakes',
     });
   }
+  // A RED tier-1 habit is the hole behind most lost games: the lesson that
+  // teaches the habit comes right after the slip it would have caught.
+  if (i.thinking?.state === 'red') out.push(thinkingPick(i.thinking));
   // Only weaknesses with a PUZZLE drill make a bite: that is the surface that
   // can say "done" after two. A board-vision or time-trouble rep stays on the
   // Training Plan, where its own surface finishes it.
@@ -178,6 +244,9 @@ export function rankUpNext(i: UpNextInput): UpNextPick[] {
     if (r.kind === 'new') out.push(openingPick(r));
   }
   if (!i.coldStart) out.push(deepRun());
+  // GREY = never proven = teach it (an unrated player gets the full lesson),
+  // ahead of the always-available warm-ups. GREEN is proven: not offered.
+  if (i.thinking?.state === 'grey') out.push(thinkingPick(i.thinking));
   // Always-available bites, so a first visit still gets a full ring of three.
   out.push(
     {

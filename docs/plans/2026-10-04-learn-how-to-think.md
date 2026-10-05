@@ -706,6 +706,113 @@ because every phase consumes them:
    reading challenge, the Tactics queue and Setup Trainer, Up next / Home, chat;
    its own "Learn how to think" tab if David judges it strong enough.
 
+## Build log (2026-10-04, in progress)
+
+**Built on `main` (local, one push at the end per David):**
+- `thinkingLesson.ts` — the pure per-question tap state machine (found / complete
+  / wrong / reveal, the ~8 s "one more" nudge, "I don't know", the answer
+  summary with honest `prompted`).
+- `thinkingLessonSession.ts` — the runner: Show → Guide → Solo (Solo only for a
+  green step), wrong taps answered with the METHOD in Guide and silent in Solo,
+  reasons for every key square after each question, earned praise only on a
+  clean answer, one `thinking-lesson` row per question.
+- `thinkingPositions.ts` + `thinkingLessonSource.ts` — the fair-key picker (1–4
+  squares, no near miss, never a used board) over own-game boards first
+  (mistake puzzles, then analysed games with the opponent's previous move and
+  the board before it), then CC0 puzzles near the student's rating.
+- `thinkingLessonMemory.ts` — boards used per step + where the last lesson
+  stopped (the `meta` store, no migration).
+- `thinkingLessonPlan.ts` — which step: tiers open by proof, red first within
+  open tiers, then the earliest unknown, then review; steps with no fair board
+  for this student are skipped and do not hold a tier shut; the tier-unlock
+  line + reward (`thinking-tier-unlocked`).
+- Six steps with kits: 2 what their move changed (own games), 3 am I safe,
+  5 their targets, 6 forcing moves (checks), 7 hit two (the app's verified fork
+  check), 10 is my move safe (the student's real played move).
+- `thinkingLessonRecord.ts` — answers as capability evidence on the steps' tags
+  (origin `learn` until the evidence workstream adds `lesson`), standing read.
+- Learn wiring: bare "teach me" (whole-message matcher), typed answers
+  ("c6 and e5", "I don't know"), mid-lesson questions hold the nudge, the tap
+  board, `?lesson=custom|think`, the Coach hub **Custom Lesson** tile, a fresh
+  student's custom lesson becomes the thinking lesson instead of a dead end.
+- Audit: `scripts/audit-learn-how-to-think-prod.mjs` (step-aware), contract row
+  in `algoAuditContract.test.ts`.
+
+- **The books (David 2026-10-04: "make use of the books we have" → "We don't
+  need to be quoting the books, just making sure the coach can teach the
+  information").** After the worked example, each step teaches the idea a
+  Coaches Library book teaches about that habit, in the coach's OWN words
+  (`thinkingBookTeaching.ts`), with the source recorded by book + page + the
+  sentence it comes from (a test fails if a rebuilt book moves it): perceiving
+  threats (step 2), never losing material (3), counting attackers and defenders
+  and their values (5), the double attack (7), seeing many moves ahead (9), the
+  game lost from a "safe" position (10). Forcing moves and answering the danger
+  have no source in these books and stay silent. `chess-concepts.json` is not a
+  source — its passages are rewritten prose.
+
+- Steps 4 (answer the danger), 6 alternates checks/captures, 9 (calculate: a
+  3–5 ply line from a CC0 puzzle, "where does it end?").
+- **The lesson game (P5).** `lessonSteer.ts` + `coachGameEngine.pickTeachingReply`:
+  from the engine's top 3 moves, within the student's strength window
+  (120/80/50/30 cp by rating), prefer one that leaves the student a fair
+  question for today's step; at most 4 per game; after the taught slip, before
+  the home steer. Learn offers "Play a game on this" when a plain-board lesson
+  ends; after a steered move lands the board asks the step's question once.
+  Steps that need a played move or a line (2, 9, 10) have no live-game version.
+- **Up next's thinking bite is live**: Learn finishes it (`finishBite('thinking')`).
+- **Merged:** P0b one engine strength, P0c-2 drill wording, P0c-3 (curriculum
+  reopen-escalate, exhaustive bite kinds, Weaknesses walk defects 15–17), P0a
+  question parser in shadow (defects 11–12 live), P0c-1 (set grader, tap
+  hook, KNOW/USE evidence, one recorder), kids (computed answers, isolation
+  gates; per-move praise replaced by what the move did).
+- **One tap-answer machine.** The lesson's question state is the shared
+  `squareAnswerGrader` state; held/prompted come from `answerEvidenceOutcome`.
+  Decision taken at merge: a NUDGE is not help (it gives the count, never the
+  square); a miss before any help is an honest, unprompted break. Lesson
+  answers record through `recordAnswer` (origin `lesson`, never a game id;
+  wrong taps file their misconception); standing and tiers read KNOW.
+
+- **All ten steps have a lesson (2026-10-04).** Step 1 ASSESS asks whose king is
+  in more danger (the one `kingSafetyRead`; only when exactly one king is exposed
+  and a queen still faces it; the Show beat counts material first). Step 8
+  CANDIDATES keys the engine's top moves within half a pawn of the best, by where
+  each lands (fair only with ≥2 good moves, nothing in the 0.5–1.0 grey band,
+  distinct squares); the planner enriches boards with the engine first
+  (`StepKit.enrich`) and rules the step out if none enrich into a fair question.
+  Neither step enters the lesson game (no live-game key).
+- **One door for the lesson (`thinkingLessonStart`).** Plan, boards, record, the
+  end of a lesson (Up next bite, tier unlock + reward + audit) — the page talks to
+  the hook only (composition gate: page 60/60, total 253/253).
+
+- **Owed (G8.5, P6 carry-over):** `stepForMethodClaim` / `METHOD_HABIT_STEP`
+  (the ThinkingStep vocabulary) have no production caller yet — they exist for
+  the carry-over, where Learn's live method lines name the step and file its
+  evidence. That is narration wiring, held while the narration-unification
+  session lands (David 2026-10-04: another session is unifying narration
+  pathways).
+
+## Work list for the end of the build (David 2026-10-04: "Any questions I ask can be tacked on to the work list at the end")
+
+1. **More public-domain books for the library** — candidates to verify (public
+   domain in the US + a clean Gutenberg/archive text): Emanuel Lasker *Common
+   Sense in Chess* (1896), Capablanca *My Chess Career* (1920), James Mason *The
+   Art of Chess* (1895) and *Chess Strategy* (1913), Réti *Modern Ideas in Chess*
+   (1923), Steinitz *The Modern Chess Instructor* (1889), Emanuel Lasker
+   *Lasker's Manual of Chess* (1925 English edition; check status). Each is a
+   content job: confirm the text and rights, ingest into `src/data/library/`,
+   then map its ideas to the steps and concepts it covers — prime gaps: forcing
+   moves (checks first) and defence ("answer the danger"), which the current
+   books do not teach.
+
+**Merged:** P0b one engine strength; P0c-2 loose computer (`findLoosePieces`),
+board-aware move wording, the one `ThinkingStep` table (lesson steps now read
+order / tier / tags from it; the per-kit tag lists and the placeholder loose
+function are deleted).
+
+**Merge-time swaps still owed:** `recordLaneEvidence` origin `learn` → the
+widened evidence writer with `lesson` + answer detail; tap handling → the
+shared tap hook; typed-answer fast path → the door's `answer` kind.
+
 ## Decisions (David 2026-10-04)
 
 1. **Spoken questions and answers go through the parser** — yes (widens ONE-CHAT
@@ -721,5 +828,12 @@ because every phase consumes them:
    bar, which stays for the coach's register).
 4. Play's opponent steers quietly — yes.
 5. Kids are unified as a declared surface.
+6. **A "Custom Lesson" tile on the Coach hub** (David 2026-10-04: "I do also want
+   a custom lesson tab in the coach tab" → "one tile, both lessons"). It opens
+   Learn with Coach (`/coach/teach?lesson=custom`) straight into a lesson: the
+   weakness-lesson picker when the student has holes (with "Learn how to think"
+   beside it), and straight into "Learn how to think" when they have none (grey
+   teaches). Up next's thinking bite uses `?lesson=think`. One lesson system,
+   one more door — not a second page.
 
 No open questions.

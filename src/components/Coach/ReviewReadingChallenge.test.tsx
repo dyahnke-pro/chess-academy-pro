@@ -30,9 +30,9 @@ vi.mock('../../services/positionReadingGrader', () => ({
   gradeReadingAnswer: (...a: unknown[]) => gradeReadingAnswer(...a),
 }));
 
-const recordReadingResult = vi.fn(async (..._a: unknown[]) => undefined);
-vi.mock('../../services/analysisPracticeStats', () => ({
-  recordReadingResult: (...a: unknown[]) => recordReadingResult(...a),
+const recordAnswer = vi.fn(async (..._a: unknown[]) => ({ outcome: 'broken', prompted: false, evidence: false, wrongTagsWritten: [] }));
+vi.mock('../../services/answerRecord', () => ({
+  recordAnswer: (...a: unknown[]) => recordAnswer(...a),
 }));
 
 import { ReviewReadingChallenge } from './ReviewReadingChallenge';
@@ -45,11 +45,11 @@ const FEN = '4k3/8/5N2/3q4/8/8/8/4K3 w - - 0 1';
 beforeEach(() => {
   buildFedTacticsContext.mockClear();
   gradeReadingAnswer.mockClear();
-  recordReadingResult.mockClear();
+  recordAnswer.mockClear();
 });
 
 describe('ReviewReadingChallenge', () => {
-  it('builds a question, grades a typed read, shows the answer on a miss, and records the stat', async () => {
+  it('builds a question, grades a typed read, shows the answer on a miss, and records the answer', async () => {
     const onGraded = vi.fn();
     render(<ReviewReadingChallenge fen={FEN} studentColor="w" rating={1500} onGraded={onGraded} />);
 
@@ -61,7 +61,12 @@ describe('ReviewReadingChallenge', () => {
 
     await waitFor(() => expect(screen.getByTestId('review-reading-verdict')).toBeInTheDocument());
     expect(screen.getByTestId('review-reading-answer')).toHaveTextContent(/d5|queen/i);
-    expect(recordReadingResult).toHaveBeenCalledTimes(1);
+    // ONE recorder (P0c): the card writes the KNOW evidence row through
+    // `recordAnswer`, a wrong read made before any help.
+    expect(recordAnswer).toHaveBeenCalledTimes(1);
+    const rec = recordAnswer.mock.calls[0][0] as { origin: string; solved: boolean; fen: string; answer: { surface: string; help: string; wrongAttempts: number; typed: string } };
+    expect(rec).toMatchObject({ origin: 'reading', solved: false, fen: FEN });
+    expect(rec.answer).toMatchObject({ surface: 'review-reading', help: 'none', wrongAttempts: 1, typed: 'nothing, looks fine' });
     expect(onGraded).toHaveBeenCalledTimes(1);
   });
 

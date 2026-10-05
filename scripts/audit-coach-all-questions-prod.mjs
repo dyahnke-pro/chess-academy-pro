@@ -23,6 +23,7 @@ import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { enableAuditCapture } from './audit-lib/enable-audit-capture.mjs';
 import { QUESTION_MATRIX, allPhrasings } from './audit-lib/coach-question-matrix.mjs';
 import { loadFixtureIntoIDB } from './audit-lib/fixture-loader.mjs';
 import { seedProfileGames } from './audit-lib/seed-profile-games.mjs';
@@ -185,7 +186,24 @@ const ctx = await browser.newContext(sandboxContextOptions());
 await ctx.addInitScript(muteTtsForAudit);
 await ctx.addInitScript(autoDismissCalibration);
 await ctx.addInitScript((id) => { try { localStorage.setItem('auditRunId', id); } catch {} }, RUN_ID);
+// THE ONE-CHAT SHADOW (P0a, 2026-10-04): every typed turn is also READ by the
+// parser and logged as a 'chat-turn' row. Capture the app's audit events
+// locally (fulfilled here — nothing reaches prod or Redis) so the contract
+// below can hold the rows.
+await ctx.addInitScript(enableAuditCapture);
 const page = await ctx.newPage();
+const appEvents = [];
+await page.route('**/api/audit-stream**', async (route) => {
+  const req = route.request();
+  if (req.method() === 'POST') {
+    try {
+      const parsed = JSON.parse(req.postData() || '');
+      for (const e of (Array.isArray(parsed) ? parsed : parsed.events || [parsed])) appEvents.push(e);
+    } catch { /* not JSON — ignore */ }
+  }
+  await route.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' });
+});
+let sentAsks = 0;
 const pageErrors = [];
 page.on('pageerror', (e) => { pageErrors.push(String(e).slice(0, 160)); });
 
@@ -355,6 +373,7 @@ for (const [section, ids] of SECTIONS) {
     }
     const { reply, sent } = asked;
     if (!sent) { record(id, false, `chat input never usable${asked.err ? ` (${asked.err})` : ''}`); continue; }
+    sentAsks += 1;
     const urlAfter = page.url();
     if (URL_PROOF[id]) {
       // Post-state contract: the ask must MOVE the app.
@@ -397,6 +416,41 @@ if (emptyStateAnswers.length) {
   console.log('    On-contract for a device with no games — but those lanes did NOT');
   console.log('    exercise the sentence a real user reads. Seeding is above; if it');
   console.log('    reported FAILED, fix that before reading anything into these rows.');
+}
+
+// ── THE CHAT-TURN CONTRACT (ONE-CHAT shadow, algo-audit rule) ──────────────
+// Emitting is half the build; this is the other half. The reader runs in
+// SHADOW, so agreement is REPORTED (it is the number the switch is taken on),
+// not gated. What IS gated: the rows exist for the turns asked, each names its
+// fast-path lane and how it was read, and nothing was served from the reading
+// while the flag is off.
+CURRENT_ASK = '(chat-turn contract)';
+if (!browserDead) await page.waitForTimeout(8000).catch(() => {});
+const chatTurnRows = appEvents
+  .filter((e) => e?.kind === 'chat-turn')
+  .map((e) => { try { return JSON.parse(e.details ?? '{}'); } catch { return null; } })
+  .filter(Boolean);
+record('CHAT TURN rows emitted for the asked turns',
+  sentAsks > 0 && chatTurnRows.length >= Math.floor(sentAsks * 0.8),
+  `${chatTurnRows.length} row(s) for ${sentAsks} sent ask(s)`);
+record('CHAT TURN every row names its lane and read',
+  chatTurnRows.length > 0 && chatTurnRows.every((r) => typeof r.fastPathLane === 'string' && typeof r.parseSource === 'string' && (r.askSource === 'typed' || r.askSource === 'spoken')),
+  `${chatTurnRows.filter((r) => typeof r.fastPathLane !== 'string').length} row(s) missing a lane`);
+record('CHAT TURN shadow serves nothing (flag off)',
+  chatTurnRows.every((r) => r.servedParsed === false),
+  `${chatTurnRows.filter((r) => r.servedParsed).length} row(s) served from the reading`);
+{
+  const compared = chatTurnRows.filter((r) => r.agreed !== null);
+  const agreed = compared.filter((r) => r.agreed === true).length;
+  const read = chatTurnRows.filter((r) => r.parsedKind !== null).length;
+  const valid = chatTurnRows.filter((r) => r.valid === true).length;
+  const lat = chatTurnRows.map((r) => r.latencyMs).filter((n) => typeof n === 'number').sort((a, b) => a - b);
+  const p90 = lat.length ? lat[Math.min(lat.length - 1, Math.floor(lat.length * 0.9))] : null;
+  console.log(`\n── chat-turn shadow ──`);
+  console.log(`   read ${read}/${chatTurnRows.length}, valid ${valid}, agreement ${compared.length ? `${agreed}/${compared.length} (${Math.round((100 * agreed) / compared.length)}%)` : 'n/a'}, p90 ${p90 ?? 'n/a'}ms`);
+  for (const r of compared.filter((x) => x.agreed === false)) {
+    console.log(`   DISAGREE fast=${r.fastPathLane} parsed=${r.parsedKind} served=${r.servedIntent ?? '-'} "${r.askPreview}"`);
+  }
 }
 
 const passed = results.filter((r) => r.pass).length;

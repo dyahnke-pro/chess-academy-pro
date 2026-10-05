@@ -60,6 +60,66 @@ describe('reconcileCurriculum', () => {
     expect(again.items.find((i) => i.tag === 'fork')!.status).toBe('mastered');
   });
 
+  // The 2026-10-04 defect: a mastered tag was dropped for good — the fresh-top-up
+  // filter excluded mastered tags, so a hole that came back in the student's
+  // games could never re-enter the arc, contradicting the function's own doc.
+  function masteredFork(): ReturnType<typeof reconcileCurriculum> {
+    return reconcileCurriculum(
+      buildCurriculum([w('fork', 5, 80), w('pin', 3, 60), w('skewer', 2, 40)], NOW),
+      [w('fork', 0, 80), w('pin', 3, 60), w('skewer', 2, 40)],
+      NOW + 1,
+    );
+  }
+
+  it('a mastered step that REOPENS comes back escalated, at the front of the queue', () => {
+    const start = masteredFork();
+    expect(activeCurriculumItem(start)!.tag).toBe('pin');
+    // fork has new open instances; it ranks LAST in the spine, yet jumps the queue.
+    const next = reconcileCurriculum(
+      start,
+      [w('pin', 3, 60), w('skewer', 2, 40), w('fork', 1, 30)],
+      NOW + 2,
+    );
+    expect(next.items.map((i) => `${i.tag}:${i.status}`)).toEqual([
+      'pin:active', 'fork:queued', 'skewer:queued',
+    ]);
+    const fork = next.items.find((i) => i.tag === 'fork')!;
+    expect(fork.escalated).toBe(true);
+    expect(fork.reopenCount).toBe(1);
+    // No duplicate: it left the mastered history.
+    expect(next.items.filter((i) => i.tag === 'fork')).toHaveLength(1);
+  });
+
+  it('a reopened step the lifecycle reads as WORSENING takes the active slot', () => {
+    const next = reconcileCurriculum(
+      masteredFork(),
+      [w('pin', 3, 60), w('skewer', 2, 40), w('fork', 1, 30)],
+      NOW + 2,
+      3,
+      new Set(['fork']),
+    );
+    expect(activeCurriculumItem(next)!.tag).toBe('fork');
+    expect(next.items.map((i) => i.tag).slice(0, 3)).toEqual(['fork', 'pin', 'skewer']);
+  });
+
+  it('an escalated step stays ahead of plain steps, and counts every reopen', () => {
+    const reopened = reconcileCurriculum(
+      masteredFork(),
+      [w('pin', 3, 60), w('skewer', 2, 40), w('fork', 1, 30)],
+      NOW + 2,
+    );
+    // Still open on the next sync: keeps its escalated place behind the active.
+    const steady = reconcileCurriculum(reopened, [w('pin', 3, 60), w('skewer', 2, 40), w('fork', 1, 30)], NOW + 3);
+    expect(steady.items.map((i) => i.tag).slice(0, 3)).toEqual(['pin', 'fork', 'skewer']);
+    // Shut again, then reopen again → reopenCount 2.
+    const shut = reconcileCurriculum(steady, [w('pin', 3, 60), w('skewer', 2, 40), w('fork', 0, 30)], NOW + 4);
+    const forkShut = shut.items.find((i) => i.tag === 'fork')!;
+    expect(forkShut.status).toBe('mastered');
+    expect(forkShut.escalated).toBe(false);
+    const again = reconcileCurriculum(shut, [w('pin', 3, 60), w('skewer', 2, 40), w('fork', 2, 30)], NOW + 5);
+    expect(again.items.find((i) => i.tag === 'fork')!.reopenCount).toBe(2);
+  });
+
   it('tops up queued steps from newly-surfaced weaknesses', () => {
     const start = buildCurriculum([w('fork', 5, 80)], NOW);
     const next = reconcileCurriculum(start, [w('fork', 5, 80), w('pin', 4, 70)], NOW + 1);
