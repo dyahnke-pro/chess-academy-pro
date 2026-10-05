@@ -22,14 +22,15 @@ import { detectBluff, bluffClause, type Bluff } from './bluffDetector';
 import { readConversion } from './conversionMethod';
 import type { StockfishAnalysis } from '../types';
 import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRead } from './criticality';
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 import { strategicWhyImperative, strategicClaims, principleLine, principleContrastLine, isForcedReply } from './moveFundamentals';
 import { isBookLine } from './openingDetectionService';
 import { refutedFromFan, candidatesFromAmateur, type FanLine, type RefutedAlternative } from './refutedAlternativeCore';
 import { threatStoppedBy } from './opponentMovePurpose';
 import { trickSidestepped } from './forkTrick';
 import { phaseVerdictLine, phaseVerdictKeys } from './reviewPositionalAssessment';
-import { stemKeyOf } from '../utils/rotateStem';
+import { stemKeyOf, rotateStem } from '../utils/rotateStem';
+import { findPinPressure, PIN_PRESSURE_PRINCIPLE, PIN_PRESSURE_WARNING, pieceName, type PinPressure } from './pinPressure';
 import { type ImportanceVerdict, type ImportanceSignals } from './narrationImportance';
 import { judgeMoment, decide, type SurfacePosture } from './coachDecider';
 import { isMateEval } from './engineConstants';
@@ -780,7 +781,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // `fundamental`, it IS the teaching idea). Positional leads are excluded here:
   // `fundamental` / `structure-plan` already carry them — no walk-over. Never
   // fails the briefing.
-  let concept: { id: string; source: string; full: string; short?: string; instance?: string; squares: readonly string[]; boardFen?: string; line?: string[] } | null = null;
+  let concept: { id: string; source: string; full: string; short?: string; instance?: string; squares: readonly string[]; boardFen?: string; line?: string[]; pinMove?: { fen: string; san: string } } | null = null;
   try {
     const lead = conceptForBoard(fen, { analysis, studentSide: studentColor === 'w' ? 'white' : 'black', rating, max: 1 })[0];
     // The board the concept is ABOUT travels with it — a concept found on the
@@ -796,6 +797,16 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     const fluxBy = studentToMove ? input.opponentLastMove : input.lastMove;
     const inFlux = !!fluxBy && !!inFluxAfter(fluxBy.fenBefore, fluxBy.san);
     if (lead && lead.source !== 'positional' && !lead.bare && !(inFlux && lead.source !== 'tactic')) concept = { id: lead.id, source: lead.source, full: lead.full, short: lead.short, squares: lead.squares, boardFen: lead.boardFen, line: lead.line };
+    // PP ON THE PP (David 2026-10-05) — the pin concept carries its principle
+    // where it is RELEVANT: a pin on THIS board whose holder can pile on and
+    // win the pinned piece (`findPinPressure`, both seats). Only when no other
+    // concept led, or the lead was itself a pin; a pin with nothing to pile on
+    // keeps today's clause exactly. Never on a board in flux — a pending
+    // recapture changes what the pile-on wins.
+    if (!inFlux && (!concept || (concept.source === 'tactic' && concept.id === 'pin'))) {
+      const pp = pinPressureConcept(fen, studentColor);
+      if (pp) concept = pp;
+    }
   } catch { concept = null; }
 
   // THE METHOD BEAT — the same computer the review path uses, in its live
@@ -1270,7 +1281,7 @@ function buildClauses(a: {
   /** The lead COMPUTED CONCEPT of the position (conceptEngine, from the same
    *  analysis) — the teachable idea, joined to the briefing as a ranked fact.
    *  Null when nothing teachable / positional-only (no walk-over). */
-  concept: { id: string; source: string; full: string; short?: string; instance?: string; squares: readonly string[]; boardFen?: string; line?: string[] } | null;
+  concept: { id: string; source: string; full: string; short?: string; instance?: string; squares: readonly string[]; boardFen?: string; line?: string[]; pinMove?: { fen: string; san: string } } | null;
   /** The habit to run in this position, present tense. Null when none earned. */
   methodBeat: string | null;
 }): ClauseItem[] {
@@ -1447,6 +1458,32 @@ function buildClauses(a: {
   // down" — one idea, and the switch could not see it had been said).
   else if (conversion) ranked.push({ kind: 'convert', rank: 36, text: conversion.text, claim: conversion.step === 'escort-passer' && conversion.passer ? `passer-${conversion.passer}` : convertKey(conversion.step) });
   else if (importance.tier === 'convert') ranked.push({ kind: 'convert', rank: 20, text: `This is technique now — convert it cleanly, no heroics.` });
+  const pushConcept = (): void => {
+    if (!concept || (concept.source === 'tactic' && a.alreadySaid?.has(conceptInstanceKey(concept.id, concept.squares)))) return;
+    const rank = concept.source === 'tactic' ? 70 : 39;
+    ranked.push({
+      // SEATED — the detector's instance names bare pieces (hand walk
+      // 2026-09-24: "Bishop on h5 pins knight on e2 against queen on d1").
+      // The definition is taught once a game (`definitionKey`); after that the
+      // board fact speaks alone.
+      kind: 'concept', rank, text: concept.pinMove ? concept.full : concept.source === 'tactic' ? afterLine(concept.line, concept.boardFen, a.fen, studentSeat === 'white' ? 'w' : 'b', seatBare(concept.instance && a.alreadySaid?.has(definitionKey(concept.id)) ? `${concept.instance}.` : concept.full, concept.boardFen ?? a.fen, studentSeat === 'white' ? 'w' : 'b')) : (concept.source === 'technique' && a.alreadySaid?.has(definitionKey(concept.id)) && concept.short ? concept.short : concept.full),
+      conceptId: concept.source === 'tactic' ? concept.id : undefined,
+      // `ComputedConcept.squares` is the engine's own lead-the-eye set (agent
+      // first, then targets) — exactly the geometry the sentence names.
+      squares: concept.squares,
+      // What the idea wins on its own targets (agent first, then targets).
+      stakes: concept.source === 'tactic' ? (exchangeStakes(a.fen, concept.squares.slice(1)) ?? undefined) : undefined,
+      claim: concept.source === 'tactic' ? conceptInstanceKey(concept.id, concept.squares) : undefined,
+      // The line `afterLine` names is the one drawn — only when it named one.
+      // A pile-on names its move, so the move is drawn (G6).
+      lines: concept.pinMove ? [{ fen: concept.pinMove.fen, sans: [concept.pinMove.san] }] : concept.source === 'tactic' && concept.line && concept.line.length > 0 && concept.boardFen && !samePlacementFen(concept.boardFen, a.fen) ? [{ fen: a.fen, sans: concept.line }] : undefined,
+    });
+  };
+
+  // PP on the PP wins material, so — like a hanging piece — it speaks in the
+  // opening too (the Bg5 pin and e4-e5 is an opening staple). Every other
+  // concept still waits for the middlegame, below.
+  if (concept?.pinMove) pushConcept();
   if (openingPhase) return ranked;
 
   // THE COMPUTED CONCEPT — the teachable idea of this position, from the SAME
@@ -1465,25 +1502,7 @@ function buildClauses(a: {
   // THE SAME IDEA ON THE SAME SQUARES is not news on the next move (Blumenfeld
   // walk F26: "After Qe6, your queen on e6 and your rook on d6 form a battery…"
   // on two moves running). A tactic concept is keyed by type + squares.
-  if (concept && !(concept.source === 'tactic' && a.alreadySaid?.has(conceptInstanceKey(concept.id, concept.squares)))) {
-    const rank = concept.source === 'tactic' ? 70 : 39;
-    ranked.push({
-      // SEATED — the detector's instance names bare pieces (hand walk
-      // 2026-09-24: "Bishop on h5 pins knight on e2 against queen on d1").
-      // The definition is taught once a game (`definitionKey`); after that the
-      // board fact speaks alone.
-      kind: 'concept', rank, text: concept.source === 'tactic' ? afterLine(concept.line, concept.boardFen, a.fen, studentSeat === 'white' ? 'w' : 'b', seatBare(concept.instance && a.alreadySaid?.has(definitionKey(concept.id)) ? `${concept.instance}.` : concept.full, concept.boardFen ?? a.fen, studentSeat === 'white' ? 'w' : 'b')) : (concept.source === 'technique' && a.alreadySaid?.has(definitionKey(concept.id)) && concept.short ? concept.short : concept.full),
-      conceptId: concept.source === 'tactic' ? concept.id : undefined,
-      // `ComputedConcept.squares` is the engine's own lead-the-eye set (agent
-      // first, then targets) — exactly the geometry the sentence names.
-      squares: concept.squares,
-      // What the idea wins on its own targets (agent first, then targets).
-      stakes: concept.source === 'tactic' ? (exchangeStakes(a.fen, concept.squares.slice(1)) ?? undefined) : undefined,
-      claim: concept.source === 'tactic' ? conceptInstanceKey(concept.id, concept.squares) : undefined,
-      // The line `afterLine` names is the one drawn — only when it named one.
-      lines: concept.source === 'tactic' && concept.line && concept.line.length > 0 && concept.boardFen && !samePlacementFen(concept.boardFen, a.fen) ? [{ fen: a.fen, sans: concept.line }] : undefined,
-    });
-  }
+  if (!concept?.pinMove) pushConcept();
 
   // Decision leverage — framed by whose move it is.
   //
@@ -1577,6 +1596,42 @@ function buildClauses(a: {
   if (a.methodBeat) ranked.push({ kind: 'method', rank: 10, text: a.methodBeat });
 
   return ranked.sort((a2, b2) => b2.rank - a2.rank);
+}
+
+/**
+ * PP ON THE PP — the pin concept with its principle, read from THIS board for
+ * both seats (David 2026-10-05: "state it when it's relevant"). The student
+ * holds the pin → the principle, the move and why it works; the opponent holds
+ * it → the warning, their move and the student's way out. Null when neither
+ * side can pile on and win (a pin alone is not this principle). Pieces are
+ * named from their squares; the stem rotates on the board, never at random.
+ */
+function pinPressureConcept(fen: string, student: 'w' | 'b'): NonNullable<Parameters<typeof buildClauses>[0]['concept']> | null {
+  const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return null; }
+  const pick = (holder: 'w' | 'b'): PinPressure | null => findPinPressure(fen, holder)[0] ?? null;
+  const name = (sq: string): string => pieceName(board.get(sq as Square)?.type ?? 'p');
+  const key = stemKeyOf(fen.split(' ')[0]);
+  const mine = pick(student);
+  const theirs = mine ? null : pick(them);
+  const pp = mine ?? theirs;
+  if (!pp) return null;
+  const move = pp.moves[0];
+  const piece = pieceName(pp.pinnedPiece);
+  const full = mine
+    ? `Your ${name(pp.pinner)} on ${pp.pinner} pins their ${piece} on ${pp.pinned} to their ${name(pp.behind)} on ${pp.behind}. ${rotateStem(PIN_PRESSURE_PRINCIPLE, key)} ${move.san} adds ${move.byPawn ? 'a pawn' : 'a second attacker'} on the ${piece}, and it can't step away.`
+    : (() => {
+        const stem = move.byPawn ? PIN_PRESSURE_WARNING[0] : rotateStem(PIN_PRESSURE_WARNING, key);
+        const way = stem === PIN_PRESSURE_WARNING[0] ? (move.byPawn ? ' Break the pin before it lands.' : ' Break the pin or add a defender before it lands.') : '';
+        return `Their ${name(pp.pinner)} on ${pp.pinner} pins your ${piece} on ${pp.pinned} to your ${name(pp.behind)} on ${pp.behind}. ${stem} ${move.san} is the pile-on.${way}`;
+      })();
+  return {
+    id: 'pin', source: 'tactic', full, short: full,
+    squares: [pp.pinner, pp.pinned, pp.behind],
+    boardFen: fen,
+    pinMove: { fen: pp.side === board.turn() ? fen : sideToMoveFlipped(fen), san: move.san },
+  };
 }
 
 /** A concept that lives on a FUTURE board is said with the moves that reach
