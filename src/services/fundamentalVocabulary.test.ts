@@ -65,8 +65,13 @@ describe('the fundamentals vocabularies reconcile', () => {
     // `mistimed-pawn-break`, `development-complete` → `neglected-development`,
     // `rook-behind-pawn` → `passive-rook` — each the same habit from the other
     // side.
+    //
+    // 19 → 20 on 2026-10-05: `pile-on-pin` (PP on the PP — e5 against the
+    // f6-knight Bg5 pins). It files under `missed-tactic`, the tag its negative
+    // twin `missed-pin-pressure` files under: playing the pile-on is held
+    // evidence for the very hole that skipping it records.
     const mapped = Object.keys(MOVE_FUNDAMENTAL_TAG).length;
-    expect(mapped).toBe(19);
+    expect(mapped).toBe(20);
   });
 
   it('THE STRUCTURE CROSSES THE BOUNDARY — ids reach a caller, not just prose', () => {

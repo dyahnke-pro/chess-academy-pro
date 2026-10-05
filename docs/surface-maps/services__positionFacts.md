@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1612 lines · 15 exports · 20 importers · 19 tests · 3 audits**
+**1667 lines · 15 exports · 21 importers · 20 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,6 +30,7 @@
 - `src/services/positionFacts.convertOnce.test.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/positionFacts.moveWhy.test.ts`
+- `src/services/positionFacts.pinPressure.test.ts`
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
 - `src/services/positionReadComposer.ts`
@@ -91,8 +92,8 @@
 - `src/services/positionReadComposer.ts:149`
 - `src/services/whyBestMove.ts:103`
 
-### `computePositionFacts` (function) — 81 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9393`
+### `computePositionFacts` (function) — 82 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9626`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:635`
@@ -112,6 +113,7 @@
 - `src/services/positionFacts.convertOnce.test.ts:16`
 - `src/services/positionFacts.liveFundamental.test.ts:52`
 - `src/services/positionFacts.moveWhy.test.ts:21`
+- `src/services/positionFacts.pinPressure.test.ts:17`
 - `src/services/positionFacts.test.ts:24`
 - `src/services/positionFacts.test.ts:37`
 - `src/services/positionFacts.test.ts:52`
@@ -175,10 +177,10 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8078`
+- `src/components/Coach/CoachTeachPage.tsx:8295`
 
 ### `convertKey` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9619`
+- `src/components/Coach/CoachTeachPage.tsx:9852`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 
 ### `afterLine` (function) — 5 call sites
@@ -189,7 +191,7 @@
 - `src/services/positionFacts.afterLine.test.ts:25`
 
 ### `conceptInstanceKey` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8059`
+- `src/components/Coach/CoachTeachPage.tsx:8276`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.ts:9`
@@ -213,6 +215,7 @@
 - `src/services/positionFacts.convertOnce.test.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/positionFacts.moveWhy.test.ts`
+- `src/services/positionFacts.pinPressure.test.ts`
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
 - `src/services/whyBestMove.needWire.test.ts`
