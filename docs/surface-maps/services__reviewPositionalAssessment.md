@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**335 lines · 6 exports · 11 importers · 9 tests · 0 audits**
+**330 lines · 6 exports · 11 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,21 +30,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `verdictBand` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:1085`
-- `src/services/exchangeLedger.test.ts:129`
-- `src/services/exchangeLedger.test.ts:131`
+- `src/services/coachFeatureService.ts:1111`
+- `src/services/exchangeLedger.test.ts:98`
+- `src/services/exchangeLedger.test.ts:100`
 
 ### `assessPositionalEdge` (function) — 28 call sites
-- `src/services/coachFeatureService.ts:3005`
+- `src/services/coachFeatureService.ts:3050`
+- `src/services/exchangeLedger.test.ts:67`
+- `src/services/exchangeLedger.test.ts:68`
+- `src/services/exchangeLedger.test.ts:75`
 - `src/services/exchangeLedger.test.ts:98`
-- `src/services/exchangeLedger.test.ts:99`
-- `src/services/exchangeLedger.test.ts:106`
-- `src/services/exchangeLedger.test.ts:129`
 - `src/services/materialSites.test.ts:72`
 - `src/services/phaseVerdict.test.ts:10`
 - `src/services/planPrescriptions.test.ts:84`
 - `src/services/planPrescriptions.test.ts:91`
-- `src/services/reviewFullData.ts:759`
+- `src/services/reviewFullData.ts:796`
 - `src/services/reviewPositionalAssessment.test.ts:4`
 - `src/services/reviewPositionalAssessment.test.ts:7`
 - `src/services/reviewPositionalAssessment.test.ts:8`
@@ -65,8 +65,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/walkOct2a.test.ts:88`
 
 ### `materialEdgeWords` (function) — 5 call sites
-- `src/services/groundedAnswer.ts:2147`
-- `src/services/groundedAnswer.ts:2148`
+- `src/services/groundedAnswer.ts:2241`
+- `src/services/groundedAnswer.ts:2242`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:30`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:33`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:36`
@@ -79,7 +79,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseVerdict.test.ts:23`
 - `src/services/phaseVerdict.test.ts:28`
 - `src/services/positionFacts.ts:880`
-- `src/services/reviewFullData.ts:1084`
+- `src/services/reviewFullData.ts:1121`
 - `src/services/reviewPositionalAssessment.test.ts:87`
 - `src/services/reviewPositionalAssessment.test.ts:92`
 

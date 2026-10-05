@@ -13,8 +13,8 @@
 import { mateContext } from '../utils/mateContext';
 import { Chess } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
-import { isMateEval, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP, EXCELLENT_WIN_PCT } from './engineConstants';
-import { winPctLost, bandForWinPctLost } from './accuracyService';
+import { isMateEval, EXCELLENT_WIN_PCT } from './engineConstants';
+import { winPctLost, bandForWinPctLost, gradeMove, cpBand } from './accuracyService';
 import { detectBrilliancy, describeBrilliancy, type Brilliancy } from './brilliancy';
 import type { MoveClassification } from '../types';
 
@@ -65,8 +65,23 @@ export function classifyMove(r: {
   evalBefore?: number | null;
   evalAfter?: number | null;
   isWhiteMove?: boolean;
+  /** Mover-POV mate counts either side of the move (+ mover mates), when the
+   *  engine read was a mate — the ONE grader's mate rule decides then. */
+  mateBefore?: number | null;
+  mateAfter?: number | null;
 }): MoveQuality {
   if (r.allowedMate !== null || r.missedMate !== null) return 'blunder';
+  if (r.mateBefore != null || r.mateAfter != null) {
+    const sign = r.isWhiteMove === false ? -1 : 1;
+    const band = gradeMove({
+      beforeCp: r.mateBefore != null || r.evalBefore == null ? null : r.evalBefore * sign,
+      afterCp: r.mateAfter != null || r.evalAfter == null ? null : r.evalAfter * sign,
+      mateBefore: r.mateBefore ?? null,
+      mateAfter: r.mateAfter ?? null,
+      cpLoss: r.cpLoss,
+    });
+    return band ?? (r.wasBest ? 'best' : 'excellent');
+  }
 
   // 🔒 MATCH CHESS.COM WHERE WE CAN (David 2026-09-20). The centipawn ladder
   // below is a rung short of the truth: it cannot tell 300cp given back at
@@ -92,10 +107,7 @@ export function classifyMove(r: {
   // it does NOT make the coach chattier: what is worth SPEAKING about is a
   // separate decision and lives in `callInaccuracy`'s floor.
   if (r.wasBest || r.cpLoss < 20) return 'best';
-  if (r.cpLoss < INACCURACY_CP) return 'excellent';
-  if (r.cpLoss < MISTAKE_CP) return 'inaccuracy';
-  if (r.cpLoss < BLUNDER_CP) return 'mistake';
-  return 'blunder';
+  return cpBand(r.cpLoss) ?? 'excellent';
 }
 
 /**
@@ -337,7 +349,12 @@ export async function computeMoveRatingFromFen(preFen: string, playedSan: string
     studentColor,
     wasBest,
     cpLoss,
-    quality: classifyMove({ wasBest, cpLoss, missedMate, allowedMate }),
+    quality: classifyMove({
+      wasBest, cpLoss, missedMate, allowedMate,
+      evalBefore: pre.evaluation, evalAfter: post.evaluation, isWhiteMove: studentColor === 'white',
+      mateBefore: pre.isMate && pre.mateIn !== null ? pre.mateIn * sign : null,
+      mateAfter: post.isMate && post.mateIn !== null ? post.mateIn * sign : null,
+    }),
     betterSan,
     betterFromTo,
     missedMate,

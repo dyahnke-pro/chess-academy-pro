@@ -22,6 +22,7 @@
  * here; the vibe concepts (initiative, counterplay, coordination, conversion,
  * flexibility) have none and are deliberately absent (empty > invented).
  */
+import { routeVia } from '../utils/routeWords';
 import { castleRoute, castleAdvice } from './kingSafety';
 import { andList, fileList } from '../utils/andList';
 import { Chess } from 'chess.js';
@@ -238,7 +239,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         // or say nothing about rerouting — "a better square" teaches nothing.
         const route = wishRoute(fen, bad.square);
         if (route) {
-          return { fact: `Your ${PIECE_NAME[bad.piece]} on ${bad.square} is a ${bad.reason} — it wants ${route.target}${route.via ? `, via ${route.via}` : ''}: ${route.why}.`, squares: [bad.square, ...(route.via ? [route.via] : []), route.target] };
+          return { fact: `Your ${PIECE_NAME[bad.piece]} on ${bad.square} is a ${bad.reason} — it wants ${route.target}${routeVia(route.via ? [route.via] : [])}: ${route.why}.`, squares: [bad.square, ...(route.via ? [route.via] : []), route.target] };
         }
         // No route, no line: "a better square" teaches nothing (census #15).
         return null;
@@ -248,7 +249,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       if (weakest && (weakest.piece === 'n' || weakest.piece === 'b') && weakest.scope <= 1) {
         const route = wishRoute(fen, weakest.square);
         if (route) {
-          return { fact: `Your ${PIECE_NAME[weakest.piece]} on ${weakest.square} is doing nothing — it wants ${route.target}${route.via ? `, via ${route.via}` : ''}: ${route.why}.`, squares: [weakest.square, ...(route.via ? [route.via] : []), route.target] };
+          return { fact: `Your ${PIECE_NAME[weakest.piece]} on ${weakest.square} is doing nothing — it wants ${route.target}${routeVia(route.via ? [route.via] : [])}: ${route.why}.`, squares: [weakest.square, ...(route.via ? [route.via] : []), route.target] };
         }
         return { fact: `Your ${PIECE_NAME[weakest.piece]} on ${weakest.square} is doing nothing — find it a better square.`, squares: [weakest.square] };
       }
@@ -789,7 +790,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       const route = hole ? minorRouteToSquare(fen, hole, student) : null;
       if (hole && route) {
         const who = `your ${PIECE_NAME[route.piece]} on ${route.from}`;
-        const how = route.via ? `${who} gets there via ${route.via}` : `${who} can go straight there`;
+        const how = route.via ? `${who} gets there${routeVia([route.via])}` : `${who} can go straight there`;
         return { fact: `${hole} is a hole in their camp: ${how}, and no pawn can ever kick it out.`, squares: [route.from, ...(route.via ? [route.via] : []), hole] };
       }
       return null;
@@ -802,7 +803,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       if (Number(fen.split(' ')[5] ?? '0') < 10) return null; // a middlegame idea
       const rr = findKnightReroute(fen, student);
       if (rr) {
-        const path = rr.via ? `, by way of ${rr.via},` : '';
+        const path = rr.via ? `${routeVia([rr.via])},` : '';
         return { fact: `Route the knight from ${rr.from} to ${rr.to}${path} — a square no pawn can ever chase it from.`, squares: [rr.from, rr.to] };
       }
       return null;

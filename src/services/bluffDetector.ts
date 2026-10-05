@@ -16,7 +16,7 @@
 // nothing.
 import { Chess, type Square } from 'chess.js';
 import { detectNewThreat } from './groundedAnswer';
-import { legalSeeGainFor, seeReadsStanding } from './positionReadingService';
+import { legalSeeGainFor, seeReadsStanding, standsSafe } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
 
 export interface Bluff {
@@ -60,7 +60,7 @@ export function detectBluff(fenBefore: string, san: string, bestReplySan: string
       if (!hitsNow) continue;
       // Can the mover win it? Then it is a threat, not a bluff — PAWNS
       // INCLUDED (walk 2340, move 22: "Rd3 wins nothing" while it won c3).
-      if (legalSeeGainFor(after.fen(), sq, mover) > 0) return null;
+      if (!standsSafe(after.fen(), sq, mover)) return null;
       // A PIN IS NOT A BLUFF (walk 2340, moves 7 and 10: "Bb4 wins nothing —
       // no need to react" beside "watch out — it pins your knight"). A slider
       // with the victim's king or a bigger piece behind its target binds it.

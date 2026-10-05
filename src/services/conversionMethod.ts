@@ -19,7 +19,7 @@
 // engine; the eval gate belongs to the caller that already holds one.
 import { Chess, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
-import { findHangingBySee, legalSeeGainFor } from './positionReadingService';
+import { findHangingBySee, captureRead } from './positionReadingService';
 import { homeMinorCount } from './development';
 import { MATERIAL_VALUE } from './pieceValues';
 import { countKingAttack } from './kingSafety';
@@ -67,7 +67,8 @@ export function readConversion(fen: string, student: 'w' | 'b'): ConversionRead 
     for (const m of c.moves({ square: sq as Square, verbose: true })) {
       try {
         c.move(m);
-        const net = (m.captured ? MATERIAL_VALUE[m.captured] ?? 0 : 0) - legalSeeGainFor(c.fen(), m.to, c.turn());
+        const lost = captureRead(c.fen(), m.to, c.turn());
+        const net = lost === null ? -1 : (m.captured ? MATERIAL_VALUE[m.captured] ?? 0 : 0) - lost;
         const gives = c.inCheck();
         c.undo();
         if (net >= 0) { ok = true; if (gives) check = true; }

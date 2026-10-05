@@ -287,7 +287,7 @@ import { admitArrow, admitArrows, lineClaims, narrationArrowsThroughDoor, withAd
 // ONE depth for the whole turn — the hint lane and the lane that grades the
 // student must not read the same board at different depths. See the constant.
 import { tacticalReadFromLines, temptingTurnClause, uncertaintyClause, candidateCompareRead } from '../../services/tacticalRead';
-import { legalSeeGainFor, namedPawnStructure, structureTransfer, signedLegalSeeFor } from '../../services/positionReadingService';
+import { legalSeeGainFor, namedPawnStructure, structureTransfer, signedLegalSeeFor, signedCaptureRead } from '../../services/positionReadingService';
 import { BehaviorScheduler, detectBehaviors } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
@@ -10628,7 +10628,8 @@ export function CoachTeachPage(): JSX.Element {
                           // or the piece can be won straight back.
                           if (move.san.includes('x')) return null;
                           const me: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
-                          if (signedLegalSeeFor(fenAfterReply, move.to, me) > 0) return null;
+                          const wonBack = signedCaptureRead(fenAfterReply, move.to, me);
+                          if (wonBack === null || wonBack > 0) return null;
                           const pawnFiles = (fen: string): Set<string> => new Set(new Chess(fen).board().flat()
                             .filter((c) => c && c.type === 'p' && c.color === me).map((c) => (c as { square: string }).square[0]));
                           const before = pawnFiles(fenBefore); const after = pawnFiles(fenAfterReply);
@@ -10685,7 +10686,8 @@ export function CoachTeachPage(): JSX.Element {
                       // A capture whose piece their reply can now win is not a
                       // point worth naming.
                       const oppWB: 'w' | 'b' = playerColor === 'white' ? 'b' : 'w';
-                      const nowLoose = move.san.includes('x') && signedLegalSeeFor(fenAfterReply, move.to as Square, oppWB) > 0;
+                      const takeBackRead = move.san.includes('x') ? signedCaptureRead(fenAfterReply, move.to as Square, oppWB) : 0;
+                      const nowLoose = takeBackRead === null || takeBackRead > 0;
                       // ONE FILE, ONE SAYING (hand walk 2026-09-27, Rad8: "your
                       // rook on d8 owns the open d-file", then "Rad8 takes the
                       // open d-file"). A rook or queen move's point is about its

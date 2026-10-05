@@ -5,14 +5,17 @@
 // move (or drop eval once out of book), the coach engages. Shared by the
 // live faucet (Discussion Practice) and the review faucets.
 
-/** Centipawn-loss thresholds (mover's perspective). Aligned with the
- *  game-import blunder scan (BLUNDER_THRESHOLD_CP = 150). */
 import { coreRatingTier } from './ratingBands';
+import { INACCURACY_CP, MISTAKE_CP, BLUNDER_CP } from './engineConstants';
+import { gradeMove } from './accuracyService';
 
+/** Centipawn-loss thresholds (mover's perspective) — the ONE ladder every
+ *  grader shares (accuracyService.cpBand); the slip bar used to call 200 a
+ *  blunder while review needed 300. */
 export const SLIP_CP = {
-  inaccuracy: 50,
-  mistake: 100,
-  blunder: 200,
+  inaccuracy: INACCURACY_CP,
+  mistake: MISTAKE_CP,
+  blunder: BLUNDER_CP,
 } as const;
 
 export type SlipSeverity = 'inaccuracy' | 'mistake' | 'blunder';
@@ -58,11 +61,8 @@ export interface SlipResult {
   shouldCount: boolean;
 }
 
-function severityFor(cpLoss: number): SlipSeverity | null {
-  if (cpLoss >= SLIP_CP.blunder) return 'blunder';
-  if (cpLoss >= SLIP_CP.mistake) return 'mistake';
-  if (cpLoss >= SLIP_CP.inaccuracy) return 'inaccuracy';
-  return null;
+function severityFor(cpLoss: number, beforeCp: number | null = null, afterCp: number | null = null): SlipSeverity | null {
+  return gradeMove({ beforeCp, afterCp, cpLoss });
 }
 
 /** Rating-adaptive interjection bar (David 2026-06-04, re-confirmed 2026-07-10:
@@ -125,7 +125,7 @@ export function detectSlip(input: SlipInput): SlipResult {
     input.evalBeforeCp !== undefined && input.evalAfterCp !== undefined
       ? input.evalBeforeCp - input.evalAfterCp
       : 0;
-  const severity = severityFor(cpLoss);
+  const severity = severityFor(cpLoss, input.evalBeforeCp ?? null, input.evalAfterCp ?? null);
   if (!severity) return none;
 
   // Off-book is implied either by leaving theory this move (inBook but

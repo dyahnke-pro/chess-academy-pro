@@ -22,6 +22,7 @@ import { describeStructure } from './boardStructure';
 import { MATERIAL_VALUE } from './pieceValues';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { isMinorAtHome, developmentScore } from './development';
+import { netPieceWords } from './exchangeLedger';
 
 export interface PositionalAssessment {
   /** Student-perspective verdict word from the eval, or null when unclear. */
@@ -120,29 +121,23 @@ export function assessPositionalEdge(
   };
 }
 
-const EDGE_NAME: Record<string, [string, string]> = {
-  q: ['a queen', 'queens'], r: ['a rook', 'rooks'], b: ['a bishop', 'bishops'], n: ['a knight', 'knights'], p: ['a pawn', 'pawns'],
-};
 const COUNT_WORD = ['', 'a', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
 
 /** The material edge in pieces: "a pawn", "a bishop for two pawns", "a rook
  *  for a knight and a pawn". Pure count by type — the side's extras, then what
  *  the other side holds in return. */
 export function materialEdgeWords(all: ReadonlyArray<{ type: string; color: Color }>, side: Color, other: Color): string {
-  const n = (c: Color, t: string): number => all.filter((p) => p.color === c && p.type === t).length;
-  const list = (from: Color, to: Color): string[] => ['q', 'r', 'b', 'n', 'p'].flatMap((t) => {
-    const d = n(from, t) - n(to, t);
-    if (d <= 0) return [];
-    const [one, many] = EDGE_NAME[t];
-    return [d === 1 ? one : `${COUNT_WORD[d] ?? d} ${many}`];
+  // One namer for "what is extra" (exchangeLedger.netPieceWords): the
+  // pieces each side has more of, like for like cancelled.
+  const surplus = (from: Color, to: Color): string[] => ['q', 'r', 'b', 'n', 'p'].flatMap((t) => {
+    const d = all.filter((p) => p.color === from && p.type === t).length - all.filter((p) => p.color === to && p.type === t).length;
+    return d > 0 ? Array<string>(d).fill(t) : [];
   });
-  const join = (xs: string[]): string => (xs.length <= 1 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
-  const mine = list(side, other);
-  const theirs = list(other, side);
-  if (mine.length === 0) return 'material';
+  const mine = surplus(side, other);
+  const theirs = surplus(other, side);
   // A lone extra minor is "a piece" — the idiom every strong player uses.
-  if (theirs.length === 0 && (mine[0] === 'a bishop' || mine[0] === 'a knight') && mine.length === 1) return 'a piece';
-  return theirs.length === 0 ? join(mine) : `${join(mine)} for ${join(theirs)}`;
+  if (theirs.length === 0 && mine.length === 1 && (mine[0] === 'b' || mine[0] === 'n')) return 'a piece';
+  return netPieceWords(mine, theirs) ?? 'material';
 }
 
 /**

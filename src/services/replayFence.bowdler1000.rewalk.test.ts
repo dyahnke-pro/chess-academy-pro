@@ -32,8 +32,8 @@ describe('ply 16 — the material edge is said in pieces', async () => {
   it('a plain extra pawn is still a pawn', () => {
     expect(materialEdgeWords(pieces('4k3/pp6/8/8/8/8/PPP5/4K3 w - - 0 1'), 'w', 'b')).toBe('a pawn');
   });
-  it('the exchange reads as a rook for a knight', () => {
-    expect(materialEdgeWords(pieces('4k3/pp1n4/8/8/8/8/PP6/R3K3 w - - 0 1'), 'w', 'b')).toBe('a rook for a knight');
+  it('a rook for a knight reads as the exchange (the one ledger namer)', () => {
+    expect(materialEdgeWords(pieces('4k3/pp1n4/8/8/8/8/PP6/R3K3 w - - 0 1'), 'w', 'b')).toBe('the exchange');
   });
 });
 

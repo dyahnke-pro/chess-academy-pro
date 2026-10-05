@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**317 lines · 4 exports · 4 importers · 1 tests · 0 audits**
+**316 lines · 4 exports · 3 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,7 +14,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/coach/tools/cerebellum/stockfishClassifyMove.ts`
 - `src/components/Coach/CoachGamePage.tsx`
-- `src/components/Coach/CoachPlaySessionView.tsx`
 - `src/services/coachMoveCommentary.test.ts`
 
 ## Exports and every call site
@@ -35,9 +34,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachMoveCommentary.test.ts:31`
 - `src/services/coachMoveCommentary.test.ts:35`
 
-### `generateMoveCommentary` (function) — 9 call sites
-- `src/components/Coach/CoachGamePage.tsx:3645`
-- `src/components/Coach/CoachPlaySessionView.tsx:118`
+### `generateMoveCommentary` (function) — 8 call sites
+- `src/components/Coach/CoachGamePage.tsx:3653`
 - `src/services/coachMoveCommentary.test.ts:56`
 - `src/services/coachMoveCommentary.test.ts:71`
 - `src/services/coachMoveCommentary.test.ts:87`

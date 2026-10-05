@@ -27,7 +27,7 @@
  */
 import { lineWithReasons } from './lineReasons';
 import { Chess, type Color, type Square, type Move, type PieceSymbol } from 'chess.js';
-import { signedLegalSeeFor, bishopHemmedByOwnPawns } from './positionReadingService';
+import { signedLegalSeeFor, bishopHemmedByOwnPawns, signedCaptureRead } from './positionReadingService';
 import { settledLeadFor } from './material';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { findContinuationsAtPly } from './openingDetectionService';
@@ -296,7 +296,10 @@ function hangsBy(chess: Chess, sq: Square): number {
  *  on its square (nobody wins material by taking it)? */
 function landsSafely(chess: Chess, m: Move): boolean {
   const c = appliedVerbose(chess, m);
-  return !!c && hangsBy(c, m.to) <= 0;
+  const p = c?.get(m.to);
+  if (!c || !p) return false;
+  const r = signedCaptureRead(c.fen(), m.to, other(p.color));
+  return r !== null && r <= 0;
 }
 /** After `attacker`'s move `m`, the enemy pieces (non-pawn, ≥3pts) it newly attacks
  *  that must respond — the attacker cannot be taken for free (a real tempo). */
@@ -642,8 +645,8 @@ function safeExits(board: Chess, sq: Square, opp: Color): string[] {
   for (const m of board.moves({ square: sq, verbose: true })) {
     const b = new Chess(board.fen());
     if (!b.move(m.san)) continue;
-    const lost = signedLegalSeeFor(b.fen(), m.to, opp);
-    if (lost - (m.captured ? VAL[m.captured] : 0) <= 0) out.push(m.to);
+    const lost = signedCaptureRead(b.fen(), m.to, opp);
+    if (lost !== null && lost - (m.captured ? VAL[m.captured] : 0) <= 0) out.push(m.to);
   }
   return out;
 }

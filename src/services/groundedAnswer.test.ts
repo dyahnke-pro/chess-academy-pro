@@ -1266,9 +1266,9 @@ describe('assembleCandidateMoveAnswer — evaluate the NAMED move', () => {
     expect(a?.facts).not.toMatch(/best move is a3/i);
   });
 
-  it('grades a large cp-loss as a mistake and names the better move', () => {
+  it('grades a large cp-loss on the one grader and names the better move', () => {
     const a = assembleCandidateMoveAnswer({ studentColor: null, candidateLineUci: [], candidateSettled: null, fen: START, candidateSan: 'a3', bestMoveUci: 'e2e4', bestEvalCp: 30, candidateEvalCp: -300 });
-    expect(a?.facts).toMatch(/mistake/i);
+    expect(a?.facts).toMatch(/blunder/i);
     expect(a?.facts).toMatch(/\be4\b/);
   });
 

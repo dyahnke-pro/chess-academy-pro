@@ -165,6 +165,23 @@ function nameSide(pieces: readonly PieceLetter[]): string {
 }
 
 /**
+ * THE ONE LEDGER NAMER (narration unification step 4): what changed hands,
+ * like-for-like trades cancelled, said in pieces — "a knight", "the exchange",
+ * "a bishop for two pawns". Null when nothing is left after the cancelling
+ * (an even trade) or only `gave` is left (nothing was won). Board-counted
+ * leads use `boardEdgeWords`; a ledger is named here, never by a point total.
+ */
+export function netPieceWords(took: readonly string[], gave: readonly string[]): string | null {
+  const g = [...took] as PieceLetter[]; const l = [...gave] as PieceLetter[];
+  for (let i = g.length - 1; i >= 0; i -= 1) { const j = l.indexOf(g[i]); if (j >= 0) { g.splice(i, 1); l.splice(j, 1); } }
+  if (g.length === 0) return null;
+  if (l.length === 0) return nameSide(g);
+  const minor = (x: PieceLetter): boolean => x === 'n' || x === 'b';
+  if (g.length === 1 && g[0] === 'r' && l.length === 1 && minor(l[0])) return 'the exchange';
+  return `${nameSide(g)} for ${nameSide(l)}`;
+}
+
+/**
  * The net of the sequence, from the student's seat — or NULL when saying it
  * would only restate what the line already showed (Narration Voice Rule 3):
  *  - nothing was captured;

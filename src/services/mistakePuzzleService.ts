@@ -23,8 +23,8 @@ import { isFixtureGame } from './fixtureGames';
 import { playedAtMs, type WeaknessProvenance } from './weaknessSpine';
 import { capEval } from './accuracyService';
 import { verifySacrificeDeep, SAC_VERIFY_DEPTH } from './brilliancy';
-import { MISTAKE_CP, BLUNDER_CP, isMateEval } from './engineConstants';
-import { winPctLost, bandForWinPctLost } from './accuracyService';
+import { BLUNDER_CP, isMateEval } from './engineConstants';
+import { winPctLost, bandForWinPctLost, cpBand } from './accuracyService';
 import type {
   MistakePuzzle,
   MistakeClassification,
@@ -153,9 +153,7 @@ const PROMPT_TEXT: Record<MistakeClassification, string> = {
 // constant rot the fix-on-sight rule exists for, and it is the same shape as
 // the `discovery`/`discovered_attack` enum split.
 function classifyByCentipawnsFallback(cpLoss: number): MistakeClassification {
-  if (cpLoss >= BLUNDER_CP) return 'blunder';
-  if (cpLoss >= MISTAKE_CP) return 'mistake';
-  return 'inaccuracy';
+  return cpBand(cpLoss) ?? 'inaccuracy';
 }
 
 /** `GameSource` → the puzzle's source mode. Null ONLY for `'master'` — a

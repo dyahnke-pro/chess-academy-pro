@@ -17,7 +17,7 @@ import { ruleForPurpose } from './moveFundamentals';
 import { Chess, type Square } from 'chess.js';
 import type { AnalysisLine } from '../types';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
-import { legalSeeGainFor, legalSeeGainOn } from './positionReadingService';
+import { legalSeeGainFor, legalSeeGainOn, standsSafe } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
 
 export interface IntentReads {
@@ -514,7 +514,7 @@ function safeLanding(fen: string, m: { from: string; to: string; promotion?: str
     const c = new Chess(fen);
     const mv = c.move({ from: m.from, to: m.to, promotion: m.promotion });
     if (!mv) return false;
-    return legalSeeGainOn(c, mv.to) <= 0;
+    return standsSafe(c.fen(), mv.to, c.turn());
   } catch { return false; }
 }
 

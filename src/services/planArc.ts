@@ -26,6 +26,7 @@ import { Chess, type Square } from 'chess.js';
 // already composes), so a runtime import back would be a cycle.
 import type { SidePlan } from './lookaheadPlan';
 import { CAPTURE_VALUE } from './pieceValues';
+import { routeNoun, type RouteSpec } from '../utils/routeWords';
 
 export type AimKind = 'king-attack' | 'outpost' | 'file' | 'passer' | 'route' | 'shield';
 
@@ -41,6 +42,8 @@ export interface Aim {
   phrase: string;
   /** Route only: the square the piece starts from. */
   from?: string;
+  /** Route only: the journey as data — re-phrased from it, never parsed from `phrase`. */
+  route?: RouteSpec;
 }
 
 export type Seat = 'student' | 'opponent';
@@ -88,40 +91,21 @@ export function aimsOf(side: SidePlan, seat: Seat): Aim[] {
     const name = PIECE[piece] ?? word;
     // Keyed by the PIECE: a knight heading for g3 that then heads on to h5 is
     // one journey, not a dropped plan and a new one (first real game read).
-    out.push({ id: `route:${piece}`, kind: 'route', squares: side.maneuver.path.slice(1), goal: dest, phrase: routePhrase(name, side.maneuver.path, side.maneuver.takes), from: side.maneuver.path[0] });
+    const route = { name, path: side.maneuver.path, ...(side.maneuver.takes ? { takes: side.maneuver.takes } : {}) };
+    out.push({ id: `route:${piece}`, kind: 'route', squares: side.maneuver.path.slice(1), goal: dest, phrase: routeNoun(route), from: side.maneuver.path[0], route });
   }
   return out;
 }
 
-/** DESTINATION FIRST, then the path (census: piece maneuvers — his "the knight
- *  wants e5, by way of d2 and f3"): where it is going is the idea; the squares
- *  on the way are the how. */
-function routePhrase(name: string, path: readonly string[], takes?: string): string {
-  const dest = path[path.length - 1];
-  // THE ROUTE ENDS WHERE IT FIRST ARRIVES (review walk 2026-10-04, G2 18…Ng4:
-  // "getting the knight to g4, by way of f6, g4 and f2" — the knight reached
-  // g4, went to f2 and came back). Waypoints are the squares before the first
-  // arrival, each once, never the start.
-  const via = [...new Set(path.slice(1, path.indexOf(dest)))].filter((sq) => sq !== path[0]);
-  const tail = via.length === 0 ? '' : via.length === 1 ? `, by way of ${via[0]}` : `, by way of ${via.slice(0, -1).join(', ')} and ${via[via.length - 1]}`;
-  // A destination their piece stands on is a CAPTURE (Learn walk 2026-10-01:
-  // "getting the knight to a7" was winning the a7 pawn).
-  // Said without naming the piece on the square, so the arrival line ("That
-  // was the plan: …") stays true once the pawn is gone.
-  if (takes) return `getting the ${name} to ${dest}${tail}, to take the ${takes} there`;
-  return `getting the ${name} to ${dest}${tail}`;
-}
 
 /** A route aim, re-phrased from where the piece stands NOW: the squares
  *  already reached drop out of "by way of" (walk 2026-09-30, game 1: "getting
  *  the rook to e2, by way of e1" with the rook already on e1). */
 export function phraseFrom(aim: Aim, at: string): string {
-  if (aim.kind !== 'route') return aim.phrase;
+  if (aim.kind !== 'route' || !aim.route) return aim.phrase;
   const i = aim.squares.indexOf(at);
-  const takes = /, to take the (.+?) there$/.exec(aim.phrase)?.[1];
-  const name = /^getting the (.+?) to /.exec(aim.phrase)?.[1];
-  if (i < 0 || !name) return aim.phrase;
-  return routePhrase(name, [at, ...aim.squares.slice(i + 1)], takes);
+  if (i < 0) return aim.phrase;
+  return routeNoun({ ...aim.route, path: [at, ...aim.squares.slice(i + 1)] });
 }
 
 interface ArcEntry {

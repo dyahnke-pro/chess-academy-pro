@@ -28,6 +28,7 @@ import { PATTERN_SPEECH, patternAim, patternClaimsMaterial } from './tacticVocab
 import type { PvLine, PvPly, PrevCaptureContext } from './pvPlayback';
 import { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcEvent, type ArcMove, type Seat } from './planArc';
 import { proofCut } from './exchangeLedger';
+import { routeVerb, routeWaypoints } from '../utils/routeWords';
 // The PLAN ACROSS MOVES (planArc) — the memory this reader never had. Exposed
 // from here so a surface composes one plan module, not two.
 export { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcEvent, type ArcState, type ArcMove, type Seat, type Aim } from './planArc';
@@ -94,17 +95,7 @@ export function routeDestination(fen: string, dest: string, color: 'white' | 'bl
 export interface ClauseRoute { piece: string; from: string }
 
 export function waypointsOf(path: readonly string[]): string[] {
-  if (path.length < 3) return [];
-  const start = path[0];
-  const end = path[path.length - 1];
-  const seen = new Set<string>();
-  const out: string[] = [];
-  for (const sq of path.slice(1, -1)) {
-    if (sq === start || sq === end || seen.has(sq)) continue;
-    seen.add(sq);
-    out.push(sq);
-  }
-  return out;
+  return routeWaypoints(path, { cutAtFirstArrival: false });
 }
 
 /** Speakable name for a tactic, or null when it has none — an unknown tactic
@@ -924,12 +915,11 @@ export function describePlan(
     // clause says nothing rather than saying something false.
     if (via.length > 0) {
       const dest = path[path.length - 1];
-      const takes = plan.maneuver.takes ? `, and take the ${plan.maneuver.takes} there` : '';
       // NAMED BY ITS SQUARE (clean-pass walk 2026-10-03, G1 18.Ba4+ and G3
       // 13…Bf5): "the idea is to walk the bishop round to c5, by way of e3"
       // was the OTHER bishop's route — the f4 bishop, in the line — and "the
       // bishop" reads as the one that just moved. The square says which.
-      add(80, `walk the ${piece} on ${path[0]} round to ${dest}, by way of ${via.join(' and ')}${takes}`, [path[0], ...via, dest], { piece, from: path[0] });
+      add(80, routeVerb({ name: piece, path, ...(plan.maneuver.takes ? { takes: plan.maneuver.takes } : {}) }), [path[0], ...via, dest], { piece, from: path[0] });
     }
   }
   // CHECKS ON THE WAY. Low weight on purpose — it is texture, not a plan — but

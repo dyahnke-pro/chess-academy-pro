@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5387 lines · 38 exports · 46 importers · 44 tests · 5 audits**
+**5401 lines · 38 exports · 46 importers · 44 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -207,7 +207,7 @@
 - `src/services/coachFeatureService.test.ts:914`
 - `src/services/coachFeatureService.trade.test.ts:18`
 - `src/services/gradeGatesTeachingCost.test.ts:31`
-- `src/services/gradeGatesTeachingCost.test.ts:35`
+- `src/services/gradeGatesTeachingCost.test.ts:36`
 - `src/services/loopCloses.review.integration.test.ts:89`
 - `src/services/methodBeat.test.ts:70`
 - `src/services/oneCostPerMove.test.ts:34`
@@ -299,8 +299,8 @@
 - `src/services/reviewNarrationFidelity.test.ts:118`
 
 ### `pendingRecapture` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7571`
-- `src/components/Coach/CoachTeachPage.tsx:7660`
+- `src/components/Coach/CoachTeachPage.tsx:7788`
+- `src/components/Coach/CoachTeachPage.tsx:7877`
 - `src/services/coachFeatureService.test.ts:929`
 - `src/services/coachFeatureService.test.ts:930`
 - `src/utils/justCaptured.test.ts:20`
@@ -351,7 +351,7 @@
 ### `detectBadHabits` (re-export) — 8 call sites
 - `src/components/Stats/StatsPage.tsx:65`
 - `src/services/badHabitDetector.ts:21`
-- `src/services/coachApi.ts:5078`
+- `src/services/coachApi.ts:5187`
 - `src/services/coachFeatureService.test.ts:126`
 - `src/services/coachFeatureService.test.ts:147`
 - `src/services/coachFeatureService.test.ts:166`

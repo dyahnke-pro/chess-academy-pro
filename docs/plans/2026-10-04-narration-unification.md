@@ -21,15 +21,28 @@ Every number below is a count from the code, not a guess.
    because `legalSeeGainFor` also returns 0 when it cannot put the capturer on move
    at all (a silent "safe").
 
-### Status
-- Step 1 DONE (worktree): `boardEdgeWords(fen, side, edge)` in `utils/countWords.ts`
-  is the one board namer; `conversionMethod`, `reviewMoveBriefing.evalWhy` and
-  `tacticalRead.summarizeVerdict` (now takes the line's end board) use it. Gate
-  widened to the `if (...) return 'a piece'` form.
-- Step 2 IN PROGRESS: `captureRead(fen, sq, capturer)` = the door (null = not a
-  standing read). `landingIsSafe` goes through it. Migrated: mistakeNarration
-  keepsWhatWasDropped, groundedAnswer piece-safety / square-safety / capture-on /
-  passer-strong, playCommentary "nothing takes it back", threatAnswer safeThere.
+### Status — ALL SIX STEPS DONE (2026-10-04, one push)
+1. **Board namer** — `utils/countWords.boardEdgeWords`; conversionMethod, reviewMoveBriefing, tacticalRead.
+2. **Safety door** — `captureRead` / `standsSafe` / `signedCaptureRead` (null = not a standing read);
+   `landingIsSafe` through it. Migrated every risky site the census found (27): chat piece/square
+   safety, capture-on, hanging scan, passer strength, "nothing takes it back", threatAnswer,
+   mistakeNarration, seventh-rank rook, perturbation, bluff, principleAttribution landsSafely/safeExits,
+   moveIntent, reviewTeachingPoints escape, causalChain ×5, pvPlayback ×2, opponentMovePurpose,
+   conversionMethod rescue, CoachTeachPage gambit + nowLoose. Left on the raw read ON PURPOSE, each
+   because it licenses no safety claim and the door cost true teaching: causalChain "already hanging
+   before" (licenses "their move caused it") and exchangeLedger `settled` (a line ending on a check
+   is not unsettled; the door dropped "Bxd8 takes the queen").
+3. **One grader** — `accuracyService.gradeMove` (one mate rule) + `cpBand` (50/100/300). Wrappers:
+   moverFault, playedMoveGrade (long missed mate no longer a 99,000cp blunder), slipDetector (blunder
+   200→300), detectBlunders (150 floor → full bands), tacticClassifier, coachMoveCommentary,
+   endgameRecap, mistakePuzzle fallback, classifyMove (+ "was that good?" now grades on evals + mates),
+   chat candidate verdicts. Gate: `oneGrader.test.ts`.
+4. **Ledger namer** — `exchangeLedger.netPieceWords`; lineCalc, materialEdgeWords. Refrain regex
+   accepts "the exchange" and "N points".
+5. **Route phraser** — `utils/routeWords` (noun/verb/via, cut at first arrival); planArc, lookaheadPlan,
+   danyaBehaviors ×4, pieceValueRead; the two prose-parsing regexes deleted (route data on the aim).
+6. **Deep threats** — singleton-chain waits bounded (`SINGLETON_STAGE_MS`), so the deep passes are
+   never starved by the 75s cap. Gate: `deepThreatBudget.test.ts`.
 
 ## Unification (no wording should change except where noted)
 

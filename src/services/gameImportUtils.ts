@@ -1,7 +1,7 @@
 import { Chess } from 'chess.js';
 import type { MoveAnnotation, MoveClassification } from '../types';
 import { isBookLine } from './openingDetectionService';
-import { winPctLost, bandForWinPctLost } from './accuracyService';
+import { winPctLost, bandForWinPctLost, gradeMove } from './accuracyService';
 
 /**
  * Extract SAN moves from a PGN string, stripping move numbers and annotations.
@@ -28,7 +28,6 @@ function extractMovesFromPgn(pgn: string): string[] {
 
 // ─── Blunder Detection ──────────────────────────────────────────────────────
 
-const BLUNDER_THRESHOLD_CP = 150;
 
 /**
  * Parse eval annotations from PGN comments and detect blunders.
@@ -55,12 +54,15 @@ export function detectBlunders(pgn: string): MoveAnnotation[] | null {
       ? prev.cp - curr.cp  // White's move made eval drop (bad for White)
       : curr.cp - prev.cp; // Black's move made eval rise (bad for Black)
 
-    if (drop > BLUNDER_THRESHOLD_CP) {
+    // The ONE grader (accuracyService.gradeMove): expected points from both
+    // evals. The import scan used to flag only drops over 150cp, with no
+    // inaccuracy band and no notion of a decided position.
+    const sign = isWhiteMove ? 1 : -1;
+    const classification = gradeMove({ beforeCp: prev.cp * sign, afterCp: curr.cp * sign, cpLoss: drop });
+    if (classification) {
       const moveNumber = Math.floor(i / 2) + 1;
       const color: 'white' | 'black' = isWhiteMove ? 'white' : 'black';
       const san = moves[i] ?? '?';
-
-      const classification = classifyDrop(drop);
 
       annotations.push({
         moveNumber,
@@ -147,12 +149,6 @@ export function annotationsFromEvalComments(pgn: string): MoveAnnotation[] | nul
     });
   }
   return annotations;
-}
-
-function classifyDrop(dropCp: number): MoveClassification {
-  if (dropCp >= 300) return 'blunder';
-  if (dropCp >= 150) return 'mistake';
-  return 'inaccuracy';
 }
 
 interface EvalEntry {
