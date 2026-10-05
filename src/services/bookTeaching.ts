@@ -27,6 +27,8 @@ export interface BookRequest {
   bookIds: string[];
   /** What they want taught; null = "teach me from <book>" with no topic. */
   topic: string | null;
+  /** "Chapter 13" / "lecture IX" — a numbered chapter, as said. */
+  chapter?: string;
 }
 
 export interface BookPassage {
@@ -82,6 +84,8 @@ export function parseBookRequest(ask: string): BookRequest | null {
   const withoutSource = (text.slice(0, srcSpan[0]) + ' ' + text.slice(srcSpan[1])).replace(/[?.!,;:"“”]/g, ' ');
   const about = /\b(?:about|on|regarding|concerning)\s+(.+?)\s*$/i.exec(withoutSource);
   const raw = (about ? about[1] : withoutSource).replace(FRAME, ' ').replace(/\s+/g, ' ').trim();
+  const chapter = /\b(?:chapter|lecture|section)\s+(\d{1,3}|[ivxlc]{1,7})\b/i.exec(text)?.[1]?.toLowerCase();
+  if (chapter) return { bookIds, topic: null, chapter };
   if (raw && NOT_A_TOPIC.test(raw) && bookIds.length === 0) return null;
   return { bookIds, topic: raw.length >= 3 ? raw.toLowerCase() : null };
 }
@@ -167,6 +171,36 @@ export function findPassage(books: readonly TeachableBook[], topic: string): Boo
   return best ? (best as { p: BookPassage }).p : null;
 }
 
+const ROMAN: Record<string, number> = { i: 1, v: 5, x: 10, l: 50, c: 100 };
+function romanToInt(r: string): number | null {
+  let n = 0;
+  for (let i = 0; i < r.length; i++) {
+    const a = ROMAN[r[i]]; const b = ROMAN[r[i + 1]] ?? 0;
+    if (!a) return null;
+    n += a < b ? -a : a;
+  }
+  return n;
+}
+
+/** The page a numbered chapter starts on: a heading "13. THE OPPOSITION",
+ *  "CHAPTER III", "Lecture 9", "Chapter VII · Section 2". Arabic and roman
+ *  forms both read; the FIRST page with that number wins. */
+export function findChapterPage(book: TeachableBook, ref: string): number | null {
+  const n = /^\d+$/.test(ref) ? Number(ref) : romanToInt(ref);
+  if (!n) return null;
+  const forms = new Set([String(n)]);
+  const roman = Object.entries({ m: 1000, cm: 900, d: 500, cd: 400, c: 100, xc: 90, l: 50, xl: 40, x: 10, ix: 9, v: 5, iv: 4, i: 1 })
+    .reduce((acc, [sym, val]) => { while (acc.left >= val) { acc.out += sym; acc.left -= val; } return acc; }, { out: '', left: n }).out;
+  forms.add(roman);
+  for (let i = 0; i < book.pages.length; i++) {
+    const h = (book.pages[i].heading ?? '').toLowerCase();
+    for (const f of forms) {
+      if (new RegExp(`^${f}\\.\\s|\\b(?:chapter|lecture|lectures|section)\\s+${f}\\b`).test(h)) return i;
+    }
+  }
+  return null;
+}
+
 /** The book's opening teaching (no topic named): its first substantive paragraph. */
 export function openingPassage(book: TeachableBook): BookPassage | null {
   for (let i = 0; i < book.pages.length; i++) {
@@ -193,6 +227,17 @@ const offerFor = (p: BookPassage): BookAnswer['offer'] => ({ type: 'read_book', 
 export function answerFromBooks(req: BookRequest, library: readonly TeachableBook[]): BookAnswer {
   const named = req.bookIds.length > 0 ? library.filter((b) => req.bookIds.includes(b.id)) : library.filter((b) => !b.house);
   const whose = req.bookIds.length > 0 ? named.map((b) => `*${b.bookTitle}*`).join(' or ') : 'the books';
+  if (req.chapter) {
+    for (const book of named) {
+      const page = findChapterPage(book, req.chapter);
+      if (page === null) continue;
+      const p = openingPassage({ ...book, pages: book.pages.slice(page) });
+      if (!p) continue;
+      const at = { ...p, pageIndex: p.pageIndex + page };
+      return { text: `${cite(at)}:\n\n“${at.paragraph}”\n\nThe chapter is open in the library — where its diagram is a live board, find the book's move there.`, path: readerPath(at), offer: offerFor(at) };
+    }
+    return { text: `I couldn't find chapter ${req.chapter.toUpperCase()} in ${whose}.`, path: null, offer: null };
+  }
   if (!req.topic) {
     const p = named.length > 0 ? openingPassage(named[0]) : null;
     if (!p) return { text: `I couldn't find ${whose} in the library.`, path: null, offer: null };

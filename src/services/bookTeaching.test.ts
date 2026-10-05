@@ -64,3 +64,22 @@ describe('teaching from the real library', () => {
     expect(a.path).toMatch(/book=emanuel-lasker-common-sense-in-chess&page=\d+/);
   });
 });
+
+describe('chapters by number — the reader opens there', () => {
+  it('reads "chapter 13 of Chess Fundamentals" and "lecture IX from Lasker"', async () => {
+    const { parseBookRequest, answerFromBooks } = await import('./bookTeaching');
+    const r = parseBookRequest('teach me chapter 13 of Chess Fundamentals');
+    expect(r).toMatchObject({ bookIds: ['capablanca-chess-fundamentals'], chapter: '13' });
+    const a = answerFromBooks(r!, LIB);
+    expect(a.text).toMatch(/13\. THE OPPOSITION/);
+    expect(a.path).toMatch(/book=capablanca-chess-fundamentals&page=\d+/);
+    const l = answerFromBooks(parseBookRequest('read me lecture IX from Lasker')!, LIB);
+    expect(l.text).toMatch(/Lecture 9/);
+  });
+
+  it('a chapter the book does not have is said plainly', async () => {
+    const { answerFromBooks } = await import('./bookTeaching');
+    expect(answerFromBooks({ bookIds: ['steinitz-modern-chess-instructor'], topic: null, chapter: '40' }, LIB).text)
+      .toBe("I couldn't find chapter 40 in *The Modern Chess Instructor*.");
+  });
+});
