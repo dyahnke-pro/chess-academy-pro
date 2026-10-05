@@ -823,6 +823,8 @@ because every phase consumes them:
    moves (checks first) and defence ("answer the danger"), which the current
    books do not teach.
 
+2. **The coach teaches from the books when asked (David 2026-10-05: "Make sure coach can teach from the books if someone asks it to")** — "teach me from Lasker", "what does Capablanca say about rook endings", "read me the chapter on the centre": find the passage in the library (all books, the new three included) and teach from it — the book's own words, then the computed point on a board where it applies. Built at the end of this build, before the push.
+
 **Merged:** P0b one engine strength; P0c-2 loose computer (`findLoosePieces`),
 board-aware move wording, the one `ThinkingStep` table (lesson steps now read
 order / tier / tags from it; the per-kit tag lists and the placeholder loose
