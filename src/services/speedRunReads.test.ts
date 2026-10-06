@@ -165,6 +165,19 @@ describe('his habits of thought, computed (each checked against the existing com
     expect(r?.idea).not.toMatch(/Bg5|Nc3|c3/);
     expect(anyMoveFine(fenAt('e4 e5'), [line(['g1f3'], 30), line(['b1c3'], 25), line(['f1c4'], 20)])).toBeNull();
   });
+  it('each idea names the piece, never the square it goes to (the guided-find rule)', () => {
+    const fc = forceConcession('rnbqkbnr/pp3ppp/8/2ppp3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1', [line(['f1b5', 'e8e7'], 50)]);
+    expect(fc?.idea).toMatch(/Your bishop has a forcing move/);
+    expect(fc?.idea).not.toMatch(/b5|Bb5/);
+    const pa = playAnyway(fenAt('e4 e5 Nf3 Nf6'), [line(['f1c4', 'f6e4'], 40)]);
+    expect(pa?.idea).toMatch(/strongest bishop move/);
+    expect(pa?.idea).not.toMatch(/c4/);
+    const ff = flexibleFirst(fenAt('e4 e5'), [line(['g1f3'], 30), line(['d2d4'], 20)]);
+    expect(ff?.idea).toMatch(/a knight move keeps your options/);
+    expect(ff?.idea).not.toMatch(/f3|d4/);
+    const castle = flexibleFirst('r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4', [line(['e1g1'], 30), line(['d2d3'], 20)]);
+    expect(castle?.idea).toMatch(/castling keeps your options/);
+  });
   it('the reads list never throws on any opening position (smoke over a real game)', () => {
     const c = new Chess();
     for (const m of 'e4 e5 Nf3 Nc6 Bb5 Nd4 Nxd4 exd4 O-O Bc5 d3 Qh4 Nd2 c6 Bc4 d6 Nf3 Qh5'.split(' ')) {
