@@ -19,9 +19,9 @@ describe('his habits of thought, computed (each checked against the existing com
     expect(keepTension(fen, 'w', 'exd5')).toBeNull();
   });
   it('any move is fine: three moves inside an inaccuracy of each other', () => {
-    const fen = fenAt('e4 e5');
-    expect(anyMoveFine(fen, [line(['g1f3'], 30), line(['b1c3'], 25), line(['f1c4'], 20)])?.text).toMatch(/Several moves are equally good/);
-    expect(anyMoveFine(fen, [line(['g1f3'], 120), line(['b1c3'], 25), line(['f1c4'], 20)])).toBeNull();
+    const fen = 'r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQ1RK1 w - - 0 8';
+    expect(anyMoveFine(fen, [line(['c1g5'], 30), line(['b1c3'], 25), line(['c2c3'], 20)])?.text).toMatch(/Several moves are equally good/);
+    expect(anyMoveFine(fen, [line(['c1g5'], 120), line(['b1c3'], 25), line(['c2c3'], 20)])).toBeNull();
   });
   it('the ugly move that is correct: the engine doubles your own pawns', () => {
     // bxc3 doubles the c-pawns (c3 and c2)
@@ -82,6 +82,8 @@ describe('his habits of thought, computed (each checked against the existing com
     expect(playAnyway(fen, [line(['f1c4', 'f6e4'], 40)])?.text).toMatch(/allows a capture .* play it anyway/);
     expect(playAnyway(fen, [line(['f1c4', 'f6e4'], -80)])).toBeNull();
     expect(playAnyway(fen, [line(['f1c4', 'f8c5'], 40)])).toBeNull();
+    // a plain recapture is not scary: Nxe5 Nxe5 trades evenly
+    expect(playAnyway(fenAt('e4 e5 Nf3 Nc6 d4 Nxd4'), [line(['f3d4', 'e5d4'], 40)])).toBeNull();
   });
   it('skip the middleman: c4 hits d5 now (and survives the exchange) — no need to prepare it', () => {
     const fen = fenAt('d4 d5 Nf3 Nf6 e3 e6 Bd3 c5');
@@ -89,9 +91,9 @@ describe('his habits of thought, computed (each checked against the existing com
     expect(skipMiddleman(fen, 'O-O')).toBeNull();
   });
   it('the useful waiting move: nothing matters much and the engine plays h3', () => {
-    const fen = fenAt('e4 e5 Nf3 Nc6');
-    expect(usefulWaiting(fen, [line(['h2h3'], 30), line(['f1c4'], 25), line(['f1b5'], 20)])?.text).toMatch(/useful waiting move/);
-    expect(usefulWaiting(fen, [line(['f1c4'], 30), line(['h2h3'], 25), line(['f1b5'], 20)])).toBeNull();
+    const fen = 'r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQ1RK1 w - - 0 8';
+    expect(usefulWaiting(fen, [line(['h2h3'], 30), line(['b1c3'], 25), line(['c2c3'], 20)])?.text).toMatch(/useful waiting move/);
+    expect(usefulWaiting(fen, [line(['b1c3'], 30), line(['h2h3'], 25), line(['c2c3'], 20)])).toBeNull();
   });
   it('keep a square vacant: the knight on b1 goes through c3, and the c-pawn could block it', () => {
     const fen = '4k3/8/8/2p1p3/3pP3/3P4/2P5/1NB1K3 w - - 0 1';
@@ -156,6 +158,12 @@ describe('his habits of thought, computed (each checked against the existing com
     for (const r of quiet) expect(r.stakes?.points).toBeGreaterThan(0);
     const sting = takeTheSting('4r1k1/8/8/8/4B3/5N2/8/6K1 w - - 0 1', 'w', 'Ne5');
     expect(sting?.stakes).toEqual({ points: 3, plies: 1 });
+  });
+  it('a move-naming read carries its idea, spoken where the move is held', () => {
+    const r = anyMoveFine('r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQ1RK1 w - - 0 8', [line(['c1g5'], 30), line(['b1c3'], 25), line(['c2c3'], 20)]);
+    expect(r?.idea).toMatch(/No move here is a big decision/);
+    expect(r?.idea).not.toMatch(/Bg5|Nc3|c3/);
+    expect(anyMoveFine(fenAt('e4 e5'), [line(['g1f3'], 30), line(['b1c3'], 25), line(['f1c4'], 20)])).toBeNull();
   });
   it('the reads list never throws on any opening position (smoke over a real game)', () => {
     const c = new Chess();

@@ -195,6 +195,8 @@ export interface DepthClause {
   squares?: string[];
   /** What rides on it — handed to the ranker (factStakes). */
   stakes?: FactStakes;
+  /** A once-per-game claim. */
+  claim?: string;
 }
 
 /**
@@ -250,9 +252,15 @@ export function depthClauses(args: {
     // castle, "any move is fine". The ones that name the engine's move (the
     // ugly move, the provoked commitment) wait for nameMove below.
     const reads = toMove === args.studentColor ? speedRunReads({ fen: args.fen, me: args.studentColor, lines: args.topLines, ...(args.lastOpponentMove ? { lastMove: args.lastOpponentMove } : {}), ...((): { lastOwnMove?: { fenBefore: string; san: string } } => { const o = ownLastMove(args.history, args.fen); return o ? { lastOwnMove: o } : {}; })() }) : [];
-    for (const r of reads.filter((x) => !x.namesMove)) out.push({ kind: 'speedrun-read', text: r.text, ...(r.squares ? { squares: r.squares } : {}), ...(r.stakes ? { stakes: r.stakes } : {}) });
-    if (!args.nameMove || toMove !== args.studentColor) return out;
-    for (const r of reads.filter((x) => x.namesMove)) out.push({ kind: 'speedrun-read', text: r.text, ...(r.squares ? { squares: r.squares } : {}), ...(r.stakes ? { stakes: r.stakes } : {}) });
+    const push = (r: (typeof reads)[number], text: string): void => { out.push({ kind: 'speedrun-read', text, ...(r.squares && text === r.text ? { squares: r.squares } : {}), ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.claim ? { claim: r.claim } : {}) }); };
+    for (const r of reads.filter((x) => !x.namesMove)) push(r, r.text);
+    // A read that names the move speaks it only where the move is earned;
+    // elsewhere it speaks its IDEA — the habit of thought without the answer.
+    if (!args.nameMove || toMove !== args.studentColor) {
+      for (const r of reads.filter((x) => x.namesMove && x.idea)) push(r, r.idea as string);
+      return out;
+    }
+    for (const r of reads.filter((x) => x.namesMove)) push(r, r.text);
     const top = args.topLines[0];
     const uci = top?.moves?.[0];
     if (!top || !uci) return out;

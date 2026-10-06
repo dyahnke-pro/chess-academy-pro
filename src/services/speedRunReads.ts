@@ -28,7 +28,7 @@ const sanOf = (fen: string, uci: string | undefined): string | null => {
   try { return new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }).san; } catch { return null; }
 };
 
-export interface Read { text: string; squares?: string[]; /** It names the engine's move — speaks only where the move may be named. */ namesMove?: boolean; /** What rides on it (factStakes) — the ranker orders by this. */ stakes?: FactStakes }
+export interface Read { text: string; squares?: string[]; /** It names the engine's move — speaks only where the move may be named. */ namesMove?: boolean; /** What rides on it (factStakes) — the ranker orders by this. */ stakes?: FactStakes; /** The IDEA without the move — spoken when the move is held back (named only where earned). */ idea?: string; /** A once-per-game claim (the voice package drops a repeat). */ claim?: string }
 type Lines = ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>;
 const seatCp = (fen: string, l: { evaluation: number; mate: number | null }): number => {
   const white = l.mate != null ? (l.mate > 0 ? 100000 : -100000) : l.evaluation;
@@ -59,14 +59,15 @@ export function keepTension(fen: string, me: 'w' | 'b', bestSan: string | null):
 /** "ANY MOVE IS FINE" (A12, his "know which decisions matter — spend ten
  *  seconds"): the top three moves sit within a hair of each other. */
 export function anyMoveFine(fen: string, lines: Lines): Read | null {
-  if (lines.length < 3) return null;
+  // Out of the opening only: "several moves are equal" on move one is true and teaches nothing.
+  if (lines.length < 3 || Number(fen.split(' ')[5] ?? 1) < 8) return null;
   const cps = lines.slice(0, 3).map((l) => seatCp(fen, l));
   // The SAME bar the one criticality read uses (`criticalityThresholds`): all
   // three inside an inaccuracy of each other is "no real decision here".
   if (Math.max(...cps) - Math.min(...cps) >= criticalityThresholds().notable || Math.abs(cps[0]) > 300) return null;
   const sans = lines.slice(0, 3).map((l) => sanOf(fen, l.moves[0])).filter((x): x is string => !!x);
   if (sans.length < 3) return null;
-  return { namesMove: true, text: `Several moves are equally good here — ${sans[0]}, ${sans[1]} or ${sans[2]}. Not every move is a big decision; save your time for the ones that are.` };
+  return { idea: 'No move here is a big decision — several are about equally good, so save your time for the moves that are.', claim: 'srr:any-move-fine', namesMove: true, text: `Several moves are equally good here — ${sans[0]}, ${sans[1]} or ${sans[2]}. Not every move is a big decision; save your time for the ones that are.` };
 }
 
 /** D2 THE UGLY MOVE THAT IS CORRECT ("the hardest move to make"): the engine's
@@ -92,7 +93,7 @@ export function uglyButRight(fen: string, bestSan: string | null): Read | null {
   const doublesOwn = doubled(r.board) > doubled(before);
   if (!retreatHome && !doublesOwn) return null;
   const why = doublesOwn ? 'it doubles your own pawns' : `it walks your ${name(r.move.piece)} back home`;
-  return { namesMove: true, text: `${sayMoveClause(r.move.san, fen).replace(/^./, (c) => c.toUpperCase())} looks ugly — ${why} — but it is the move. Don't reject a move for how it looks; check it.` };
+  return { idea: "The best move here looks ugly — don't reject a move for how it looks; check it.", namesMove: true, text: `${sayMoveClause(r.move.san, fen).replace(/^./, (c) => c.toUpperCase())} looks ugly — ${why} — but it is the move. Don't reject a move for how it looks; check it.` };
 }
 
 /** C8 WHICH SIDE TO CASTLE: both ways are legal and one wing's pawn cover is
@@ -126,7 +127,7 @@ export function provokes(fen: string, lines: Lines): Read | null {
   if (!reply || reply.move.piece !== 'p' || reply.move.captured) return null;
   const rel = reply.move.color === 'w' ? Number(reply.move.to[1]) : 9 - Number(reply.move.to[1]);
   if (rel < 5) return null;
-  return { namesMove: true, text: `${sayMoveClause(best, fen).replace(/^./, (c) => c.toUpperCase())} invites ${sayMoveClause(reply.move.san, after.board.fen())} — once that pawn commits to ${reply.move.to}, it is fixed and becomes something to aim at.`, squares: [reply.move.to] };
+  return { idea: 'Look for a move that makes them commit a pawn — a committed pawn is fixed, and becomes something to aim at.', namesMove: true, text: `${sayMoveClause(best, fen).replace(/^./, (c) => c.toUpperCase())} invites ${sayMoveClause(reply.move.san, after.board.fen())} — once that pawn commits to ${reply.move.to}, it is fixed and becomes something to aim at.`, squares: [reply.move.to] };
 }
 
 // ── batch 2 (each checked against the existing computers first) ─────────────
@@ -247,7 +248,7 @@ export function awkwardBlock(fen: string, lines: Lines): Read | null {
     freeMoves = b.moves({ square: r.move.to }).length;
   } catch { return null; }
   if (freeMoves > 2) return null;
-  return { namesMove: true, text: `The check forces them to block with the ${name(r.move.piece)} on ${r.move.to}, and there it is stuck — the point of the check is the awkward square it drives that piece to.`, squares: [r.move.to] };
+  return { idea: 'There is a check that drives one of their pieces to an awkward square — the point of a check can be the square it forces.', namesMove: true, text: `The check forces them to block with the ${name(r.move.piece)} on ${r.move.to}, and there it is stuck — the point of the check is the awkward square it drives that piece to.`, squares: [r.move.to] };
 }
 
 // ── batch 3 (checked first: breaks → findPawnBreaks; knight routes →
@@ -264,8 +265,16 @@ export function playAnyway(fen: string, lines: Lines): Read | null {
   const replySan = sanOf(a.board.fen(), l.moves[1]);
   if (!replySan || !/[+x]/.test(replySan)) return null;
   if (seatCp(fen, l) < 0) return null;
+  // SCARY means it looks like it wins something: a check, or a capture that
+  // nets them material on the count. A plain recapture is not scary.
+  if (!replySan.includes('+')) {
+    const rp = play(a.board.fen(), replySan);
+    if (!rp || legalSeeGainFor(a.board.fen(), rp.move.to, rp.move.color) <= 0) return null;
+    // Taking back what your move took is a trade, not a scare.
+    if (a.move.captured && piecePoints(a.move.captured) >= piecePoints(rp.move.captured ?? '')) return null;
+  }
   const what = replySan.includes('+') ? 'a check' : 'a capture';
-  return { namesMove: true, text: `${sayMoveClause(bestSan, fen).replace(/^./, (c) => c.toUpperCase())} allows ${what} — ${sayMoveClause(replySan, a.board.fen())} — and you play it anyway: look one move past the scary reply and nothing follows for them.` };
+  return { idea: 'The strongest move here allows a scary-looking reply — look one move past it before you reject it.', namesMove: true, text: `${sayMoveClause(bestSan, fen).replace(/^./, (c) => c.toUpperCase())} allows ${what} — ${sayMoveClause(replySan, a.board.fen())} — and you play it anyway: look one move past the scary reply and nothing follows for them.` };
 }
 
 /** SKIP THE MIDDLEMAN: the break is there and the engine plays it now rather
@@ -275,7 +284,7 @@ export function skipMiddleman(fen: string, bestSan: string | null): Read | null 
   const r = play(fen, bestSan);
   if (!r || r.move.piece !== 'p') return null;
   if (!findPawnBreaks(fen).includes(r.move.to)) return null;
-  return { namesMove: true, text: `The break is ready now — ${sayMoveClause(bestSan, fen)}. No need to prepare it first; every preparing move is a move they get to use too.`, squares: [r.move.to] };
+  return { idea: 'Your pawn break is ready now — no need to prepare it; every preparing move is a move they get too.', namesMove: true, text: `The break is ready now — ${sayMoveClause(bestSan, fen)}. No need to prepare it first; every preparing move is a move they get to use too.`, squares: [r.move.to] };
 }
 
 /** THE USEFUL WAITING MOVE: no move matters much, and the engine's is a small
@@ -284,7 +293,7 @@ export function usefulWaiting(fen: string, lines: Lines): Read | null {
   if (!anyMoveFine(fen, lines)) return null;
   const bestSan = sanOf(fen, lines[0]?.moves?.[0]);
   if (!bestSan || !/^[abgh][36]$/.test(bestSan)) return null;
-  return { namesMove: true, text: `Nothing has to happen yet — ${bestSan} is a useful waiting move: it costs nothing, gives your king air, and makes them commit first.`, squares: [bestSan] };
+  return { idea: 'Nothing has to happen yet — a useful waiting move is enough, and it makes them commit first.', claim: 'srr:waiting', namesMove: true, text: `Nothing has to happen yet — ${bestSan} is a useful waiting move: it costs nothing, gives your king air, and makes them commit first.`, squares: [bestSan] };
 }
 
 /** KEEP A SQUARE VACANT FOR THE KNIGHT: your knight's route to its outpost
@@ -351,7 +360,7 @@ export function finishStarted(lastOwn: { fenBefore: string; san: string } | unde
   const best = play(fen, bestSan);
   if (!best || best.move.piece !== 'p') return null;
   if (Math.abs(best.move.from.charCodeAt(0) - last.move.to.charCodeAt(0)) > 1) return null;
-  return { namesMove: true, text: `You started something with ${last.move.san} — finish it: ${sayMoveClause(bestSan, fen)} keeps the break going instead of letting them settle.`, squares: [last.move.to, best.move.to] };
+  return { idea: 'You started a pawn break last move — finish it before they settle.', namesMove: true, text: `You started something with ${last.move.san} — finish it: ${sayMoveClause(bestSan, fen)} keeps the break going instead of letting them settle.`, squares: [last.move.to, best.move.to] };
 }
 
 /** #27 A MOVE GOOD IN EVERY BRANCH: after the engine's move no reply of theirs
@@ -364,7 +373,7 @@ export function goodInEveryBranch(fen: string, me: 'w' | 'b', lines: Lines): Rea
   if (leavesSomething(pa.board.fen(), me)) return null;
   const loose = leavesSomething(pb.board.fen(), me);
   if (!loose) return null;
-  return { stakes: costStakes(choiceGap(fen, lines)) ?? pieceStakes(pb.board.get(loose as Square)?.type ?? '', 1), namesMove: true, text: `${cap(sayMoveClause(a, fen))} works whatever they answer — nothing of yours can be taken after it. ${b2} leaves the piece on ${loose} to be collected.`, squares: [loose] };
+  return { stakes: costStakes(choiceGap(fen, lines)) ?? pieceStakes(pb.board.get(loose as Square)?.type ?? '', 1), idea: 'Look for the move that works whatever they answer — the obvious one leaves something of yours to be taken.', namesMove: true, text: `${cap(sayMoveClause(a, fen))} works whatever they answer — nothing of yours can be taken after it. ${b2} leaves the piece on ${loose} to be collected.`, squares: [loose] };
 }
 
 /** #31 TAKE THE STING OUT: a piece of yours can be won, and the engine neither
@@ -383,7 +392,7 @@ export function takeTheSting(fen: string, me: 'w' | 'b', bestSan: string | null)
     if (best.move.from === cell.square) continue;
     if (best.board.attackers(cell.square, me).length > b.attackers(cell.square, me).length) continue;
     if (legalSeeGainFor(best.board.fen(), cell.square, them) > 0) continue;
-    return { stakes: { points: legalSeeGainFor(fen, cell.square, them), plies: 1 }, namesMove: true, text: `Your ${name(cell.type)} on ${cell.square} is attacked, but ${sayMoveClause(bestSan, fen)} neither moves it nor guards it — it takes the sting out, so taking it no longer works for them.`, squares: [cell.square] };
+    return { stakes: { points: legalSeeGainFor(fen, cell.square, them), plies: 1 }, idea: `Your ${name(cell.type)} on ${cell.square} is attacked — but you don't have to move it or guard it; look for the move that makes taking it fail.`, namesMove: true, text: `Your ${name(cell.type)} on ${cell.square} is attacked, but ${sayMoveClause(bestSan, fen)} neither moves it nor guards it — it takes the sting out, so taking it no longer works for them.`, squares: [cell.square] };
   }
   return null;
 }
@@ -399,7 +408,7 @@ export function retreatKeepsBreak(fen: string, me: 'w' | 'b', bestSan: string | 
   const pawn = r.board.get(behind);
   if (!pawn || pawn.type !== 'p' || pawn.color !== me) return null;
   if (!findPawnBreaks(flipTurn(r.board.fen())).includes(r.move.from)) return null;
-  return { namesMove: true, text: `${cap(sayMoveClause(bestSan as string, fen))} is a retreat with a point — it clears ${r.move.from} so your pawn on ${behind} can break there.`, squares: [behind, r.move.from] };
+  return { idea: 'A retreat here can clear the way for your pawn break — not every step back is passive.', namesMove: true, text: `${cap(sayMoveClause(bestSan as string, fen))} is a retreat with a point — it clears ${r.move.from} so your pawn on ${behind} can break there.`, squares: [behind, r.move.from] };
 }
 
 /** THE BEST-CASE PLAN TEST: the slower plan, played out with best play from
@@ -424,7 +433,7 @@ export function bestCasePlan(fen: string, lines: Lines): Read | null {
   if (gap < criticalityThresholds().notable || seatCp(fen, two) > 50) return null;
   const a = sanOf(fen, one.moves[0]); const b2 = sanOf(fen, two.moves[0]);
   if (!a || !b2) return null;
-  return { stakes: costStakes(gap) ?? undefined, namesMove: true, text: `Test the slow plan with ${b2} by its best case: even when everything goes right for you, you end up no better than level. ${a} gets more.` };
+  return { stakes: costStakes(gap) ?? undefined, idea: 'Test the slow plan by its best case: even if everything goes right, it only gets you level — something sharper is there.', namesMove: true, text: `Test the slow plan with ${b2} by its best case: even when everything goes right for you, you end up no better than level. ${a} gets more.` };
 }
 
 /** THE REJECTED MOVE THAT WORKS LATER: a move that is worse now turns up later
@@ -439,7 +448,7 @@ export function rejectedMoveLater(fen: string, lines: Lines): Read | null {
     if (at < 0) continue;
     const san = sanOf(fen, u); const first = sanOf(fen, main[0]);
     if (!san || !first) continue;
-    return { stakes: costStakes(seatCp(fen, lines[0]) - seatCp(fen, l)) ?? undefined, namesMove: true, text: `${san} doesn't work yet — but it does after ${first}: it comes back ${at / 2} move${at === 2 ? '' : 's'} later in the line. A rejected move is not a dead move; prepare it.` };
+    return { stakes: costStakes(seatCp(fen, lines[0]) - seatCp(fen, l)) ?? undefined, idea: "The move you want doesn't work yet — prepare it first; a rejected move is not a dead move.", namesMove: true, text: `${san} doesn't work yet — but it does after ${first}: it comes back ${at / 2} move${at === 2 ? '' : 's'} later in the line. A rejected move is not a dead move; prepare it.` };
   }
   return null;
 }
@@ -459,13 +468,13 @@ export function forceConcession(fen: string, lines: Lines): Read | null {
   const rights = (f: string): string => f.split(' ')[2];
   const theirs = (f: string): string => rights(f).replace(them === 'w' ? /[kq]/g : /[KQ]/g, '').replace('-', '');
   if (r.move.piece === 'k' && !replySan.startsWith('O-O') && theirs(a.board.fen()) && !theirs(r.board.fen())) {
-    return { namesMove: true, text: `${cap(sayMoveClause(bestSan, fen))} forces a concession — their best answer is ${replySan}, and their king loses the right to castle.`, squares: [r.move.to] };
+    return { idea: 'There is a forcing move here that costs them something — check the forcing moves first.', namesMove: true, text: `${cap(sayMoveClause(bestSan, fen))} forces a concession — their best answer is ${replySan}, and their king loses the right to castle.`, squares: [r.move.to] };
   }
   const weak = (f: string): Set<string> => { const w = findWeakPawns(f, them); return new Set([...w.isolated, ...w.doubled, ...w.backward]); };
   const before = weak(a.board.fen());
   const fresh = [...weak(r.board.fen())].find((s2) => !before.has(s2));
   if (!fresh) return null;
-  return { namesMove: true, text: `${cap(sayMoveClause(bestSan, fen))} forces a concession — their best answer is ${replySan}, and it leaves their pawn on ${fresh} weak.`, squares: [fresh] };
+  return { idea: 'There is a forcing move here that costs them something — check the forcing moves first.', namesMove: true, text: `${cap(sayMoveClause(bestSan, fen))} forces a concession — their best answer is ${replySan}, and it leaves their pawn on ${fresh} weak.`, squares: [fresh] };
 }
 
 /** FLEXIBLE MOVES FIRST: a piece move and a pawn move are about equal — play
@@ -480,7 +489,7 @@ export function flexibleFirst(fen: string, lines: Lines): Read | null {
     const s2 = sanOf(fen, l.moves[0]);
     const p2 = s2 ? play(fen, s2) : null;
     if (!p2 || !s2 || p2.move.piece !== 'p' || p2.move.captured) continue;
-    return { namesMove: true, text: `${a} and ${s2} are about equal — make the flexible move first. ${a} keeps your options; the pawn move can always come later, but it can never go back.` };
+    return { idea: "Make the flexible move first — a piece move keeps your options; a pawn move can always come later, but it can never go back.", claim: 'srr:flexible-first', namesMove: true, text: `${a} and ${s2} are about equal — make the flexible move first. ${a} keeps your options; the pawn move can always come later, but it can never go back.` };
   }
   return null;
 }
