@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**507 lines · 11 exports · 14 importers · 10 tests · 19 audits**
+**511 lines · 11 exports · 13 importers · 10 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -46,7 +46,6 @@
 - `src/services/puzzleMethod.ts`
 - `src/services/teachingLayers.test.ts`
 - `src/services/thinkingSteps.test.ts`
-- `src/services/upNextLoader.ts`
 - `src/test/latentForkOpensTheDoor.test.ts`
 - `src/test/preGateSeesTheStudent.test.ts`
 
@@ -71,7 +70,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `judgeMoment` (function) — 12 call sites
-- `src/services/positionFacts.ts:691`
+- `src/services/positionFacts.ts:705`
 - `src/test/latentForkOpensTheDoor.test.ts:47`
 - `src/test/latentForkOpensTheDoor.test.ts:51`
 - `src/test/latentForkOpensTheDoor.test.ts:55`
@@ -87,7 +86,7 @@
 ### `CoachDecision` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `decide` (function) — 71 call sites
+### `decide` (function) — 72 call sites
 - `scripts/triage-traps.mjs:36`
 - `scripts/triage-traps.mjs:48`
 - `src/components/Legal/AiConsentModal.tsx:89`
@@ -131,6 +130,7 @@
 - `src/services/coachDecider.test.ts:117`
 - `src/services/coachDecider.test.ts:167`
 - `src/services/coachDecider.test.ts:173`
+- `src/services/coachDecider.test.ts:183`
 - `src/services/coachDecisionEmits.test.ts:47`
 - `src/services/coachDecisionEmits.test.ts:54`
 - `src/services/coachDecisionEmits.test.ts:64`
@@ -140,13 +140,13 @@
 - `src/services/coachDecisionEmits.test.ts:96`
 - `src/services/coachDecisionEmits.test.ts:105`
 - `src/services/coachFeatureService.cpLossSign.test.ts:57`
-- `src/services/coachFeatureService.ts:2280`
+- `src/services/coachFeatureService.ts:2298`
 - `src/services/factStakes.test.ts:70`
 - `src/services/liveNeedGate.test.ts:52`
 - `src/services/liveNeedGate.test.ts:58`
 - `src/services/liveNeedGate.test.ts:67`
 - `src/services/liveNeedGate.test.ts:79`
-- `src/services/positionFacts.ts:1008`
+- `src/services/positionFacts.ts:1038`
 - `src/services/puzzleMethod.ts:41`
 - `src/services/supportedFacts.test.ts:79`
 - `src/services/supportedFacts.test.ts:89`
@@ -161,7 +161,7 @@
 - `src/services/teachingLayers.test.ts:105`
 
 ### `habitNeedFrom` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:1658`
+- `src/services/coachFeatureService.ts:1671`
 - `src/services/habitJoin.test.ts:63`
 - `src/services/habitJoin.test.ts:66`
 - `src/services/habitJoin.test.ts:69`
@@ -171,9 +171,9 @@
 - `src/services/habitJoin.test.ts:92`
 - `src/services/habitJoin.test.ts:99`
 - `src/services/habitJoin.test.ts:100`
-- `src/services/positionFacts.ts:913`
+- `src/services/positionFacts.ts:937`
 
-### `habitForCluster` (function) — 17 call sites
+### `habitForCluster` (function) — 16 call sites
 - `src/services/habitJoin.test.ts:17`
 - `src/services/habitJoin.test.ts:20`
 - `src/services/habitJoin.test.ts:23`
@@ -190,7 +190,6 @@
 - `src/services/thinkingSteps.test.ts:38`
 - `src/services/thinkingSteps.test.ts:39`
 - `src/services/thinkingSteps.test.ts:40`
-- `src/services/upNextLoader.ts:93`
 
 ## Tests
 
