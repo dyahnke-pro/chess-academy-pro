@@ -1251,6 +1251,18 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   const showStarts = events().filter((e) => e.kind === 'review-show-me-started').length;
   await add('SHOW never-auto-played', showStarts === (showBtn ? 1 : 0), `${showStarts} show-me start(s) — must equal the one tap`);
 
+  // THE TURNING-POINT ROWS read only the first walk, so they land BEFORE the
+  // reopen — a reopen wedge (#21) must not swallow them (prod 2026-10-06).
+  const leaks = turningLeaks.filter(Boolean);
+  await add('TURNING the-answer-is-never-said-before-the-ask', leaks.length === 0, `${turningLeaks.length} checked${leaks.length ? ` — ${leaks[0].ans} was said before asking: "${leaks[0].said.slice(0, 120)}"` : ''}`);
+  await add('TURNING at-most-three-per-game', turningQs.length <= 3, `${turningQs.length} asked${turningQs[0] ? `; e.g. "${turningQs[0]}"` : ''}`);
+  const whyless = turningReveals.filter((r) => !/^The move was \S+ — it /.test(r));
+  await add('TURNING every-reveal-names-the-move-and-why', whyless.length === 0, `${turningReveals.length} reveals${whyless.length ? ` — ${whyless.length} without a why, e.g. "${whyless[0]}"` : turningReveals[0] ? `; e.g. "${turningReveals[0]}"` : ''}`);
+  // REASON, NOT STATS (David 2026-10-06) — no line of the first walk carries a number.
+  {
+    const statLines = linesWithStats(spoken().map((x) => x.text));
+    await add('VOICE no-statistic-spoken', statLines.length === 0, `${statLines.length} line(s)${statLines.length ? ` — ${statLines[0].slice(0, 120)}` : ''}`);
+  }
   // ── REOPEN (A) — instant, no re-analysis ────────────────────────────────
   // Let the background dive finish BEFORE leaving (a human reads the recap
   // while the pill spins); reopening mid-dive would only measure the dive.
@@ -1711,16 +1723,6 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   }
   // THE TURNING POINTS — the biggest few, asked on the board; every reveal
   // carries the move AND its why (David: "We need to have the why!").
-  const leaks = turningLeaks.filter(Boolean);
-  await add('TURNING the-answer-is-never-said-before-the-ask', leaks.length === 0, `${turningLeaks.length} checked${leaks.length ? ` — ${leaks[0].ans} was said before asking: "${leaks[0].said.slice(0, 120)}"` : ''}`);
-  await add('TURNING at-most-three-per-game', turningQs.length <= 3, `${turningQs.length} asked${turningQs[0] ? `; e.g. "${turningQs[0]}"` : ''}`);
-  const whyless = turningReveals.filter((r) => !/^The move was \S+ — it /.test(r));
-  await add('TURNING every-reveal-names-the-move-and-why', whyless.length === 0, `${turningReveals.length} reveals${whyless.length ? ` — ${whyless.length} without a why, e.g. "${whyless[0]}"` : turningReveals[0] ? `; e.g. "${turningReveals[0]}"` : ''}`);
-  // REASON, NOT STATS (David 2026-10-06) — no spoken line carries a number.
-  {
-    const statLines = linesWithStats(all.map((x) => x.text));
-    await add('VOICE no-statistic-spoken', statLines.length === 0, `${statLines.length} line(s)${statLines.length ? ` — ${statLines[0].slice(0, 120)}` : ''}`);
-  }
   // The app's own verdict per flagged ply — a game that asks nothing must say
   // WHY (small swing / decided / no eval), or the zero above is a silent wire.
   const planRow = listener.getCapturedEvents().filter((e) => e.kind === 'review-turning-plan').pop();
