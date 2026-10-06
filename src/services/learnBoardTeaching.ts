@@ -185,7 +185,10 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   warmStrongChoice();
   {
     const sc = strongChoice(i.fenBefore, i.san);
-    if (sc) out.push({ lane: 'strongChoice', text: sc.text, squares: [], claims: [`strong-choice:${i.history.length}`], event: { name: 'coach_strong_choice_named', props: { surface: 'coach-teach', same: sc.same } }, arrows: [] });
+    if (sc) out.push({ lane: 'strongChoice', text: sc.text, squares: [], // A bare affirmation ("that is a strong player's choice") teaches once a
+      // game; naming a DIFFERENT strong move teaches every time (David
+      // 2026-10-06: every narration must teach — not laborious to hear).
+      claims: [sc.same ? 'strong-choice:affirm' : `strong-choice:${i.history.length}`], event: { name: 'coach_strong_choice_named', props: { surface: 'coach-teach', same: sc.same } }, arrows: [] });
   }
 
   // THE OPEN FILE, TAKEN (planRace file collision, live — P3): both sides

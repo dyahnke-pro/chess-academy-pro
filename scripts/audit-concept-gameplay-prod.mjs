@@ -79,11 +79,15 @@ const ASK_TYPO = process.env.AUDIT_CONCEPT_ASK_TYPO ?? 'lets play the scandinavi
  *  takes over, which is where the middlegame concepts live. */
 const STUDENT_LINE = ['d5', 'Qxd5', 'Qa5', 'Nf6', 'Bg4', 'Nc6', 'O-O-O', 'e6'];
 /** Plies the STUDENT pushes. Long enough to leave book and reach real play. */
-const MAX_STUDENT_PLIES = Number(process.env.AUDIT_CONCEPT_PLIES ?? 14);
+const MAX_STUDENT_PLIES = Number(process.env.AUDIT_CONCEPT_PLIES ?? 24);
 /** Keep playing after the concept is voiced — for measuring what only a
  *  LONGER game can show (the live-commentary path needs a warm engine
  *  cache). Off by default so the standing audit stays fast. */
-const PLAY_ON = process.env.AUDIT_CONCEPT_PLAY_ON === '1';
+// PLAY ON BY DEFAULT (David 2026-10-06: "lengthen the capture"): stopping at
+// the first concept left ~5 plies of tape, too short to judge whether Learn is
+// wordy or whether every line teaches. Set AUDIT_CONCEPT_PLAY_ON=0 for the
+// short run.
+const PLAY_ON = process.env.AUDIT_CONCEPT_PLAY_ON !== '0';
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const OUT_DIR = `audit-reports/concept-gameplay-${stamp}`;
 const BOOT_TIMEOUT_MS = 45_000;
@@ -503,6 +507,16 @@ async function main() {
     const all = spokenLines(listener);
     record('F1. vacuity guard: ≥3 spoken lines across the run', all.length >= 3, `${all.length}`);
     record('F2. the run stayed MUTED (zero /api/tts requests)', ttsRequests === 0, `${ttsRequests} tts requests`);
+    // ── V: IS IT WORTH LISTENING TO (David 2026-10-06: "must not be laborious") ──
+    // The full tape, printed, so the prose is read every run — the row count
+    // is the harness, the prose is the product.
+    const tape = spokenProse(listener);
+    console.log('\n[tape] the full narration, in order:');
+    for (const t of tape) console.log(`  (${t.split(/\s+/).length}w) ${t}`);
+    const words = tape.reduce((n, t) => n + t.split(/\s+/).length, 0);
+    const studentMoves = Math.max(1, Math.ceil((a?.moves?.length ?? 0) / 2));
+    record('V1. no line is said twice word for word (repetition is laborious)', new Set(tape).size === tape.length, `${tape.length} lines, ${tape.length - new Set(tape).size} repeats`);
+    record('V2. words per student move REPORTED (his speed runs: ~35–50)', true, `${words} words over ${studentMoves} student moves = ${Math.round(words / studentMoves)}/move; longest line ${Math.max(0, ...tape.map((t) => t.split(/\s+/).length))}w`);
     // ── G: THE DECIDING COMPUTER IS OBSERVABLE (the ASSERT half) ───────────
     // Emitting is half of the algo-audit rule; a contract on the rows is the
     // other half, or the emission is decoration. These rows are the WEIGHTING
