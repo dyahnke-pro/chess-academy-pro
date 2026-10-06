@@ -40,7 +40,7 @@ import type { QuietFact } from './factSelector';
 import { criticalityThresholds, type Severity } from './criticalityScan';
 import { computeMustDefend, type MustDefend } from './threatOut';
 import { computeLeansOn, type LeansOn, type EvalBoardFn } from './perturbation';
-import { buildDeliberation, deliberationFacts, deliberationWeighing, deliberationVerdict, type Deliberation, type HeldVerdict } from './deliberation';
+import { buildDeliberation, deliberationFacts, type Deliberation } from './deliberation';
 import { detectLatentFork, latentForkClause, type LatentFork } from './latentFork';
 import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDangerClause, type LatentDanger, type TradeDanger } from './latentDanger';
 import { detectKingExposure, kingExposureClause, detectCentralKingDanger, centralKingDangerClause, type KingExposure, type CentralKingDanger } from './kingSafety';
@@ -296,10 +296,6 @@ export interface PositionFactsResult {
    *  the opponent's ply. Surfaces gate their own move-choice lines on it (the
    *  but-turn / hedge / compare), so there is one decision, not one per lane. */
   moveAdvice: MoveAdviceVerdict | null;
-  /** The move held back at a deciding moment, with its reason — the surface
-   *  reveals it after the student has answered on the board (or on "show me").
-   *  Null whenever the move was named, not earned, or has no computed reason. */
-  heldVerdict: HeldVerdict | null;
 }
 
 export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'latent-chance' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'fundamental' | 'structure-plan' | 'convert' | 'concept' | 'method' | 'bluff'
@@ -982,21 +978,13 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       motifHole: needFor.hole,
     })
     : null;
-  // QUESTION FIRST AT A DECIDING MOMENT (David 2026-10-02: "The safe version
-  // holds the move only at deciding moments, and the student's next move on
-  // the board is the answer, so nothing blocks play"). The bad moves are still
-  // ruled out loud; the move that holds is HELD and handed back to the surface,
-  // which reveals it once the student has played. Only the board's own fork in
-  // the road holds — a move earned by the student's record is named as before.
-  const heldVerdict: HeldVerdict | null = moveAdvice?.speak && moveAdvice.reason === 'deciding' && deliberation
-    ? deliberationVerdict(deliberation)
-    : null;
-  const heldWeighing = heldVerdict && deliberation ? deliberationWeighing(deliberation) : '';
+  // THE MOVE IS NAMED, NEVER HELD (David 2026-10-06: "Name it"). A deciding
+  // moment used to hold the move back until the student had played (the
+  // 2026-10-02 question-first form); it is said now, with its reason, like
+  // every turn where the move is earned.
   const adviceDropped = moveAdvice && !moveAdvice.speak
     ? composedAll.filter((c) => c.kind !== 'deliberation')
-    : heldVerdict
-      ? composedAll.flatMap((c) => (c.kind !== 'deliberation' ? [c] : heldWeighing ? [{ ...c, text: heldWeighing }] : []))
-      : composedAll;
+    : composedAll;
   // ONE FACT ONCE: the verdict ("The move is Nf3 — it takes aim at the
   // center…") and the fundamental ("The plan here: take aim at the center…")
   // are the same computer on the same move. Where the verdict speaks, the plan
@@ -1011,8 +999,8 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     history: input.history ?? [],
     topLines: input.analysis?.topLines ?? [],
     studentColor: studentSeat === 'white' ? 'w' : 'b',
-    // "Why?" names the move anyway; elsewhere a held move stays held.
-    nameMove: !!input.namesBestMove || (!heldVerdict && !!moveAdvice?.speak),
+    // "Why?" names the move anyway; elsewhere the move speaks where it is earned.
+    nameMove: !!input.namesBestMove || !!moveAdvice?.speak,
     ...(input.lastMove ? { lastStudentMove: { fenBefore: input.lastMove.fenBefore, san: input.lastMove.san } } : {}),
     ...(input.opponentLastMove ? { lastOpponentMove: input.opponentLastMove } : {}),
   }).map((d) => ({ kind: d.kind, rank: d.kind === 'not-yet' ? 90 : d.kind === 'stop-flaw' ? 70 : d.kind === 'line' ? 60 : d.kind === 'hole-access' ? 50 : d.kind === 'speedrun-read' ? 45 : 40, text: d.text, ...(d.squares ? { squares: d.squares } : {}), ...(d.lines ? { lines: d.lines } : {}), ...(d.stakes ? { stakes: d.stakes } : {}), ...(d.claim ? { claim: d.claim } : {}), ...(d.promise ? { promise: d.promise } : {}) }));
@@ -1126,7 +1114,6 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     // Only a principle the door actually SPOKE is committed as taught.
     principleSpoken: ruleHere && clauses.some((c) => c.kind === 'rule') ? ruleHere.id : null,
     moveAdvice,
-    heldVerdict,
   };
 }
 

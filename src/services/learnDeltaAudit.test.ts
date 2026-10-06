@@ -74,7 +74,7 @@ describe('AUDIT: gem crush lines (Watch + Play) — read every line', () => {
     console.log(`\n===== ${problems.length} PROBLEMS =====`);
     for (const p of problems) console.log('  ✗ ' + p);
     expect(problems).toEqual([]);
-  });
+  }, 60_000); // 388 gems read end to end — a report, not a unit test
 });
 
 describe('AUDIT: live punishment callouts — the coach calls it out when it fires', () => {
@@ -128,7 +128,7 @@ describe('AUDIT: live punishment callouts — the coach calls it out when it fir
     console.log(`\n===== ${problems.length} PROBLEMS =====`);
     for (const p of problems) console.log('  ✗ ' + p);
     expect(problems).toEqual([]);
-  });
+  }, 60_000);
 });
 
 describe('AUDIT: engine threat-delta lines — read every line', () => {

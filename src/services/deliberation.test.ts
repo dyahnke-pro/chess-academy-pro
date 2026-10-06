@@ -221,12 +221,3 @@ describe('weighing the candidates (P2 #4)', () => {
   });
 });
 
-describe('heldVerdictText — the held answer always carries its reason', async () => {
-  const { heldVerdictText } = await import('./deliberation');
-  const v = { san: 'Nf5', why: 'eyes d4', line: null };
-  it('now / found / missed', () => {
-    expect(heldVerdictText(v, 'now')).toBe('The move is Nf5 — it eyes d4.');
-    expect(heldVerdictText(v, 'found')).toBe('That was the move here — it eyes d4.');
-    expect(heldVerdictText(v, 'missed')).toBe('The move here was Nf5 — it eyes d4.');
-  });
-});

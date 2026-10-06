@@ -60,10 +60,6 @@ export interface LearnMemory {
    *  board — then it is resolved (found / missed) with narration, arrows and a
    *  Walk button. Never shown before the move (honesty contract). */
   gemPending: import('./gemCrushLines').LivePunishment | null;
-  /** The move held back at a deciding moment (David 2026-10-02), the board it
-   *  belongs to, and whether "Show me" already said it — resolved when the
-   *  student moves from that board, exactly like `gemPending`. */
-  heldMove: (import('./deliberation').HeldVerdict & { fen: string; shown: boolean }) | null;
   /** The board the opponent's slip left the student, after the coach said
    *  "look for it" — and the slip itself (SAN), so a capture back on its
    *  square reads as a recapture. Resolved when the student moves from it:
@@ -245,7 +241,6 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
     gemSeen: null,
     gemFen: null,
     gemPending: null,
-    heldMove: null,
     slipAnswer: null,
     lastReplyDictated: null,
     lastComputed: '',
@@ -279,7 +274,6 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
       mem.gemSeen = null;
       mem.gemFen = null;
       mem.gemPending = null;
-      mem.heldMove = null;
       mem.slipAnswer = null;
       mem.lastReplyDictated = null;
       mem.lastComputed = '';

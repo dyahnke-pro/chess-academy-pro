@@ -279,26 +279,6 @@ function reasonedAlternatives(d: Deliberation): Candidate[] {
   return meaningfulAlternatives(d).filter((a) => !!a.proof || (a.shortfall === 'drops-material' && !!a.drops) || a.shortfall === 'trades-queens');
 }
 
-/**
- * THE WEIGHING WITH THE ANSWER HELD BACK (David 2026-10-02: "hold the move only
- * at deciding moments, and the student's next move on the board is the answer").
- * The bad moves are ruled out loud — that is the thinking — and the move that
- * holds is kept for after the student has answered on the board. Empty when
- * there is nothing reasoned to rule out.
- */
-export function deliberationWeighing(d: Deliberation): string {
-  if (!d.isRealChoice) return '';
-  return reasonedAlternatives(d).map(shortfallText).join(' ');
-}
-
-/** The held answer — the move and the reason it is the move, or null when no
- *  reason is computed (a bare "the move is X" is an order, not teaching). */
-export interface HeldVerdict { san: string; why: string; line: string | null }
-export function deliberationVerdict(d: Deliberation): HeldVerdict | null {
-  if (!d.isRealChoice || !d.bestWhy) return null;
-  return { san: d.best.san, why: d.bestWhy, line: d.bestLine ?? null };
-}
-
 /** The alternatives that are a real fork in the road — they drop material or
  *  sit a meaningful gap below the best. Coin-flip moves (inside
  *  `MEANINGFUL_DELTA_CP`) are dropped: on a quiet opening spine every reasonable
@@ -481,18 +461,6 @@ export function threatMadeWhy(fenBefore: string, san: string, mover: 'w' | 'b'):
   } catch {
     return null;
   }
-}
-
-/**
- * The held answer in words. `now` — the student tapped "show me" before
- * moving; `found` — they played it; `missed` — they played something else and
- * nothing before this named the move. The reason always rides with the move.
- */
-export function heldVerdictText(v: HeldVerdict, when: 'now' | 'found' | 'missed'): string {
-  const line = v.line ? ` ${v.line[0].toUpperCase()}${v.line.slice(1)}.` : '';
-  if (when === 'found') return `That was the move here — it ${v.why}.`;
-  if (when === 'missed') return `The move here was ${v.san} — it ${v.why}.${line}`;
-  return `The move is ${v.san} — it ${v.why}.${line}`;
 }
 
 /** The mover's pawns have claimed more room behind them (`computeTerritory`). */

@@ -402,33 +402,33 @@ describe('the verdict and its plan echo are one fact (hand walk 2340)', () => {
     expect(kinds).not.toContain('fundamental');
   });
 
-  it('where the verdict is held back, the plan still teaches the idea', async () => {
+  it('where the move is not earned, the plan still teaches the idea', async () => {
     const r = await computePositionFacts({ posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [] });
     expect(r.clauses.map((c) => c.kind)).toEqual(expect.arrayContaining(['fundamental']));
     expect(r.clauses.some((c) => c.kind === 'deliberation')).toBe(false);
   });
 });
 
-describe('at a deciding moment the move is HELD for the student to answer (David 2026-10-02)', () => {
+describe('at a deciding moment the move is NAMED with its reason (David 2026-10-06: "Name it")', () => {
   const line = (rank: number, evaluation: number, uci: string) => ({ rank, evaluation, moves: [uci], mate: null });
   const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 3 14';
   // One move holds; every other loses heavily — the board's own fork in the road.
   const deciding = { evaluation: 30, bestMove: 'e1g1', depth: 16, topLines: [line(1, 30, 'e1g1'), line(2, -400, 'f3e5'), line(3, -420, 'd2d3')] } as never;
 
-  it('rules the bad moves out, keeps "The move is" back, and hands the answer to the surface', async () => {
+  it('says "The move is O-O — …" before the student plays, never holds it back', async () => {
     const r = await computePositionFacts({ posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis: deciding, teachingBeat: true });
     expect(r.moveAdvice?.reason).toBe('deciding');
-    expect(r.heldVerdict?.san).toBe('O-O');
-    expect(r.heldVerdict?.why.length).toBeGreaterThan(3);
-    expect(r.clauses.some((c) => / The move is /.test(` ${c.text}`))).toBe(false);
+    const verdict = r.clauses.find((c) => / The move is O-O — /.test(` ${c.text}`));
+    expect(verdict).toBeTruthy();
+    expect('heldVerdict' in r).toBe(false);
   });
 
-  it('a move earned by the student\'s RECORD is still named, not held', async () => {
+  it('a move earned by the student\'s RECORD is named too', async () => {
     const hole = [{ clusterId: 'analysis:phase:middlegame', bucket: 'middlegame', label: 'x', openCount: 2, severity: 50, puzzleThemes: [], total: 3 }] as never;
     const quiet = { evaluation: 30, bestMove: 'e1g1', depth: 16, topLines: [line(1, 30, 'e1g1'), line(2, -250, 'f3e5'), line(3, 10, 'd2d3')] } as never;
     const r = await computePositionFacts({ posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis: quiet, teachingBeat: true, studentWeaknesses: hole });
     expect(r.moveAdvice?.reason).toBe('phase-record');
-    expect(r.heldVerdict).toBeNull();
+    expect(r.clauses.some((c) => / The move is /.test(` ${c.text}`))).toBe(true);
   });
 });
 
