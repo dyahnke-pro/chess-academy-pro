@@ -55,6 +55,8 @@ describe('his habits of thought, computed (each checked against the existing com
     const fen = '2q1k3/p7/8/8/2B5/8/8/R3K3 w - - 0 1';
     expect(secureFirst(fen, 'w', [line(['c4b3'], 50)])?.text).toMatch(/secure it first/);
     expect(secureFirst(fen, 'w', [line(['a1a7'], 50)])).toBeNull();
+    // Scandinavian 3.Nc3: the queen is hit, but every capture on offer loses — nothing to collect
+    expect(secureFirst('rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3', 'b', [line(['d5a5'], 0)])).toBeNull();
   });
   it('mutual pins', () => {
     // Bb5 pins the d7 knight to e8; …Bb4 pins the d2 knight to e1

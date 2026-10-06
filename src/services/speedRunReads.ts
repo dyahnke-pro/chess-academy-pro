@@ -173,7 +173,8 @@ export function secureFirst(fen: string, me: 'w' | 'b', lines: Lines): Read | nu
   if (!bestSan || /x/.test(bestSan)) return null;
   let b: Chess;
   try { b = new Chess(fen); } catch { return null; }
-  if (b.turn() !== me || !b.moves({ verbose: true }).some((m) => m.captured)) return null;
+  // Something to COLLECT: a capture that actually wins material, not any capture.
+  if (b.turn() !== me || !b.moves({ verbose: true }).some((m) => m.captured && legalSeeGainFor(fen, m.to, me) > 0)) return null;
   const loose = findLoosePieces(fen, me).find((l) => l.attacked && l.type !== 'p');
   if (!loose) return null;
   const after = play(fen, bestSan);
