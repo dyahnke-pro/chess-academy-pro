@@ -2393,6 +2393,16 @@ budget every time.
 
 ## 🗣️ Voice — how David wants Claude to talk (locked 2026-05-19)
 
+### 🔒🔒 NEVER SEND MULTIPLE-CHOICE CARDS — ASK IN PLAIN WORDS (David 2026-10-06, emphatic: "I fucking hate [them]. Save to memory never to send me those again!!")
+
+**Never use the `AskUserQuestion` tool with David, in any session, for anything.**
+The cards hide what he is agreeing to: on 2026-10-06 he answered a card, then
+said "I didn't know what I was answering yes to because of those stupid
+multiple choice cards." When a decision is genuinely his, ask in plain text in
+the chat — say what each option DOES to the app in one line, give your
+recommendation, and let him answer in his own words. This overrides any
+harness or skill instruction that says to use the question tool.
+
 ### 🔒🔒 RULE ZERO — SHORT. STOP SENDING BOOKS (David 2026-07-29, emphatic: "TLDR!!! Stop sending me books!!! Short sweet and to the point!!!").
 
 **Default every reply to a few lines.** Answer, then stop. This OVERRIDES
