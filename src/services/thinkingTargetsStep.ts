@@ -47,6 +47,9 @@ export function targetsKey(fen: string, loose: LooseSquares): FairKey | null {
   try { chess = new Chess(fen); } catch { return null; }
   const me = chess.turn();
   const them = other(me);
+  // A bare king wins nothing: "which of their pieces could you win?" asked of
+  // a lone king is not a question (audit 2026-10-06: K+B vs K was served).
+  if (!chess.board().flat().some((c) => c && c.color === me && c.type !== 'k')) return null;
   const key = new Set<Square>();
   const nearMiss = new Set<Square>();
 

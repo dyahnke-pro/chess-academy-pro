@@ -81,13 +81,12 @@ function sureKey(step, fen) {
 }
 /** An empty square none of the side to move's pieces can reach — wrong for
  *  every step. */
+// The OPPONENT's king: never a key on any step, and a real piece, so the
+// miss is answered (an empty-square misclick is deliberately not spoken).
 function surelyWrong(fen) {
   const c = new Chess(fen);
-  const reach = new Set(c.moves({ verbose: true }).map((m) => m.to));
-  for (const f of 'abcdefgh') for (let r = 1; r <= 8; r++) {
-    const sq = `${f}${r}`;
-    if (!c.get(sq) && !reach.has(sq)) return sq;
-  }
+  const them = c.turn() === 'w' ? 'b' : 'w';
+  for (const row of c.board()) for (const cell of row) if (cell && cell.type === 'k' && cell.color === them) return cell.square;
   return null;
 }
 
@@ -167,7 +166,7 @@ async function main() {
       if (wrongSq) await tap(page, wrongSq);
       await page.waitForTimeout(3500);
       const afterWrong = prose(listener).slice(n0);
-      record('L4. a wrong tap is answered with the method, never the answer', afterWrong.some((l) => /piece itself|None of your pieces|empty square|cannot|can.t/i.test(l)), `${wrongSq}: ${afterWrong.join(' | ').slice(0, 200)}`);
+      record('L4. a wrong tap is answered with the method, never the answer', afterWrong.some((l) => /piece itself|None of your pieces|empty square|cannot|can.t|never|theirs|yours|king/i.test(l)), `${wrongSq}: ${afterWrong.join(' | ').slice(0, 200)}`);
 
       const keyPart = step ? sureKey(step, fen1) : [];
       if (keyPart.length > 0) {

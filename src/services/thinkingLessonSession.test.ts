@@ -17,11 +17,11 @@ const loose: LooseSquares = (fen: string, color: Color) => {
 
 // Four distinct boards, each with one or two loose black pieces.
 const BOARDS = [
-  '4k3/8/2n5/8/8/8/8/4K3 w - - 0 1',
-  '4k3/8/8/3b4/8/8/8/4K3 w - - 0 1',
-  '4k3/8/1r6/8/8/6n1/8/4K3 w - - 0 1',
-  '4k3/8/8/8/8/2q5/8/4K3 w - - 0 1',
-  '4k3/8/8/8/5b2/8/8/4K3 w - - 0 1',
+  '4k3/8/2n5/8/8/8/P7/4K3 w - - 0 1',
+  '4k3/8/8/3b4/8/8/P7/4K3 w - - 0 1',
+  '4k3/8/1r6/8/8/6n1/P7/4K3 w - - 0 1',
+  '4k3/8/8/8/8/2q5/P7/4K3 w - - 0 1',
+  '4k3/8/8/8/5b2/8/P7/4K3 w - - 0 1',
 ];
 const cands: LessonPositionCandidate[] = BOARDS.map((fen, i) => ({ fen, origin: 'game', gameId: `g${i}` }));
 

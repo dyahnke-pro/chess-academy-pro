@@ -13,10 +13,10 @@ const loose: LooseSquares = (fen: string, color: Color) => {
   return out;
 };
 
-const LOOSE_KNIGHT = '4k3/8/2n5/8/8/8/8/4K3 w - - 0 1';
-const LOOSE_PAWN = '4k3/7p/2n5/8/8/8/8/4K3 w - - 0 1';
+const LOOSE_KNIGHT = '4k3/8/2n5/8/8/8/8/R3K3 w - - 0 1';
+const LOOSE_PAWN = '4k3/7p/2n5/8/8/8/8/R3K3 w - - 0 1';
 const QUEEN_LOSES_EXCHANGE = '4k3/8/4p3/3q4/8/2N5/8/4K3 w - - 0 1';
-const ALL_GUARDED = '4k3/3p4/2n5/8/8/8/8/4K3 w - - 0 1';
+const ALL_GUARDED = '4k3/3p4/2n5/8/8/8/8/R3K3 w - - 0 1';
 
 describe('step 5 — their targets: the key', () => {
   it('a loose piece is a target', () => {
@@ -109,5 +109,11 @@ describe('targetsWrongTapLine — a miss teaches the count', () => {
   });
   it('says plainly when nothing attacks the piece', () => {
     expect(targetsWrongTapLine('4k3/8/8/n7/8/8/8/4K2R w - - 0 1', 'a5')).toBe('Nothing of yours attacks that knight yet.');
+  });
+});
+
+describe('targetsKey — a bare king is never asked for targets', () => {
+  it('returns null when the side to move has only its king', () => {
+    expect(targetsKey('8/5B2/1K6/4k3/8/8/8/8 b - - 0 1', () => ['f7'] as Square[])).toBeNull();
   });
 });

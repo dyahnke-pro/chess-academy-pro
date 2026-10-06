@@ -120,7 +120,7 @@ describe('beginners start on steps 2–3, on quiet boards', () => {
 
 describe('firstFairKit — one question on another surface\'s board', () => {
   const HUNG = '4k3/1p6/2N5/8/8/8/8/4K3 w - - 0 1';
-  const LOOSE_KNIGHT = '4k3/8/2n5/8/8/8/8/4K3 w - - 0 1';
+  const LOOSE_KNIGHT = '4k3/8/2n5/8/8/8/P7/4K3 w - - 0 1';
   it('safety first when something of yours hangs, else their targets, else nothing', async () => {
     const { firstFairKit } = await import('./thinkingLessonStart');
     const steps = ['am-i-safe', 'their-targets'];
