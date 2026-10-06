@@ -287,6 +287,32 @@ export function stripMoveNumbers(text: string): string {
   return text.replace(/(?<![\w.])\d{1,3}\s?(?:\.\.\.|…|\.)\s?(?=(?:[NBRQK][a-h1-8x]|O-O|[a-h][1-8x]))/g, (m) => (/(?:\.\.\.|…)/.test(m) ? '…' : ''));
 }
 
+/**
+ * A sentence CONDITIONAL on a move ("Na7+? That drops the knight on a7.", "If
+ * you play Rxd6, …", "After Bxf7+, …") describes the board AFTER that move, so
+ * it is graded there — graded on the current board it reads false and the
+ * weighing at a deciding moment was silently cut (scale replay 2026-10-06).
+ * Only an explicitly conditional sentence, and the ones after it in the same
+ * fact, get the after-board: a present-tense claim still grades on `fen`.
+ */
+const CONDITION = /^(?:If you play |If they play |After |If )?((?:[NBRQK][a-h]?[1-8]?x?[a-h][1-8]|[a-h](?:x[a-h])?[1-8](?:=[NBRQ])?|O-O(?:-O)?)[+#]?)(?:\?|,|\s|$)/;
+function gradeConditional(raw: string, fen: string, tag: string): string {
+  const sentences = raw.split(/(?<=[.!?])\s+/);
+  let board: string | null = null;
+  const out: string[] = [];
+  for (const s0 of sentences) {
+    const m = s0.match(CONDITION);
+    if (m) {
+      try { const c = new Chess(fen); if (c.move(m[1])) board = c.fen(); } catch { /* not a move from here */ }
+    }
+    const here = gradeNarrationText(s0, fen, tag)?.trim() ?? '';
+    if (here.length >= s0.trim().length) { out.push(s0); continue; }
+    const after = board ? gradeNarrationText(s0, board, tag)?.trim() ?? '' : '';
+    out.push(after.length > here.length ? after : here);
+  }
+  return out.filter(Boolean).join(' ').trim();
+}
+
 function verify(fact: VoiceFact): { text: string } | { reason: string } {
   const raw = stripMoveNumbers(fact.text.trim());
   if (!raw) return { reason: 'empty' };
@@ -296,6 +322,10 @@ function verify(fact: VoiceFact): { text: string } | { reason: string } {
 
   // Square-anchored claims: "the knight on f6" when f6 is empty.
   let graded = gradeNarrationText(raw, fact.fen, `voicePackage.${fact.kind}`)?.trim();
+  if ((graded ?? '') !== raw) {
+    const cond = gradeConditional(raw, fact.fen, `voicePackage.${fact.kind}`);
+    if (cond.length > (graded ?? '').length) graded = cond;
+  }
   if (fact.altFen && (graded ?? '') !== raw) {
     const alt = gradeNarrationText(raw, fact.altFen, `voicePackage.${fact.kind}`)?.trim();
     if ((alt ?? '').length > (graded ?? '').length) graded = alt;

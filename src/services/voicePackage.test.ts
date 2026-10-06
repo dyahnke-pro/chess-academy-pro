@@ -550,3 +550,13 @@ describe('review door fixes (2026-09-30)', () => {
     expect(buildVoicePackage([{ kind: 'computed', text, fen: after, altFen: FEN0 }]).spoken).toBe(text);
   });
 });
+
+describe('a sentence conditional on a move is graded on the board after it (scale replay 2026-10-06)', () => {
+  const fen = '2kr1b1r/1p1q1ppp/1nn5/pN2N3/P1p5/2P4P/1PBP1PP1/R1BbR1K1 w - - 0 16';
+  it('"Na7+? That drops the knight on a7." survives — it is true after Na7+', () => {
+    expect(buildVoicePackage([{ kind: 'computed', text: 'Na7+? That drops the knight on a7.', fen }]).spoken).toBe('Na7+? That drops the knight on a7.');
+  });
+  it('a present-tense claim about the same square is still dropped', () => {
+    expect(buildVoicePackage([{ kind: 'computed', text: 'Your knight on a7 is strong.', fen }]).spoken).toBe('');
+  });
+});
