@@ -10457,7 +10457,9 @@ export function CoachTeachPage(): JSX.Element {
                       evalBefore: tradeTable,
                       popularTopSan: getCachedAmateurPlay(fenBefore)?.moves[0]?.san ?? null,
                     })) {
-                      queueSpokenHint(fenAfterReply, h.text, h.lane, h.squares, h.claims, undefined, h.arrows);
+                      // Graded on the board the hint describes — right after the student's move
+                      // (replay 2026-10-06: 6 of 239 true lines dropped on the reply's board).
+                      queueSpokenHint(fenAfterReply, h.text, h.lane, h.squares, h.claims, move.fen, h.arrows);
                       if (h.event) captureEvent(h.event.name, h.event.props);
                       // DUAL-USE (P4): the lane that teaches it also records it.
                       recordTeachingEvidence(h, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
