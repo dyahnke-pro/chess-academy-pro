@@ -253,3 +253,20 @@ describe('ThinkingLessonSession — resumes where it stopped (plan D8)', () => {
     await done;
   });
 });
+
+describe('ThinkingLessonSession — refills a dry pool once (fresh install, audit 2026-10-06)', () => {
+  it('a lesson that runs out of boards reads the pool again and moves on', async () => {
+    const h = harness();
+    let refills = 0;
+    h.deps.refill = async () => { refills += 1; return cands.slice(1); };
+    const s = new ThinkingLessonSession(targetsKit(loose), cands.slice(0, 1), new Set(), h.deps);
+    const done = s.run('grey');
+    const v1 = await waitAsking(h);
+    for (const sq of targetsKit(loose).keyFor(v1.fen!)!.key) await s.tap(sq);
+    const v2 = await waitAsking(h);
+    expect(v2.fen).not.toBe(v1.fen);
+    expect(refills).toBe(1);
+    s.stop();
+    await done;
+  });
+});

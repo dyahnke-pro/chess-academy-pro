@@ -228,6 +228,12 @@ export async function enrichForLesson(
   return out;
 }
 
+/** The pool read again when a lesson runs dry mid-way: by then the boot
+ *  puzzle seed has had time, and the refill waits for it longer. */
+export function refillLessonCandidates(opts: { usernames: LessonUsernames; rating: number }): Promise<LessonPositionCandidate[]> {
+  return loadLessonCandidates({ ...opts, seedWaitMs: 45_000 }).catch((): LessonPositionCandidate[] => []);
+}
+
 /** The boards and memory a session needs for one step. */
 export async function lessonInputs(kit: StepKit, opts: { usernames: LessonUsernames; rating: number; candidates?: readonly LessonPositionCandidate[] }): Promise<{
   candidates: readonly LessonPositionCandidate[];

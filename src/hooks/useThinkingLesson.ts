@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Square } from 'chess.js';
 import {
-  ThinkingLessonSession, IDLE_LESSON_VIEW, type LessonView, finishThinkingLesson, kitForStep, lessonInputs, planThinkingLesson, recordLessonAnswer, recordLessonChoice, rememberLessonBoardNow, saveLessonProgress, slipStepsForGame, firstFairKit, motifKit, type MotifBoard, carryOverKitFor, loadCarryOverSteps, noLessonLine,
+  ThinkingLessonSession, IDLE_LESSON_VIEW, type LessonView, finishThinkingLesson, kitForStep, lessonInputs, refillLessonCandidates, planThinkingLesson, recordLessonAnswer, recordLessonChoice, rememberLessonBoardNow, saveLessonProgress, slipStepsForGame, firstFairKit, motifKit, type MotifBoard, carryOverKitFor, loadCarryOverSteps, noLessonLine,
   type LessonPositionCandidate, type LessonUsernames, type PlannedLesson, type StepKit,
 } from '../services/thinkingLessonStart';
 
@@ -88,6 +88,7 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
       recordChoice: recordLessonChoice,
       remember: rememberLessonBoardNow,
       progress: saveLessonProgress,
+      ...(opts.candidates || mix ? {} : { refill: () => refillLessonCandidates(opts) }),
       now: () => Date.now(),
       setTimer: (fn, ms) => { const id = setTimeout(fn, ms); return () => clearTimeout(id); },
       onView: (v) => { if (sessionRef.current === session) setView(v); },

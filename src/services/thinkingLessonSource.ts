@@ -65,6 +65,8 @@ export function puzzleStartFen(fen: string, movesUci: string): string | null {
 export async function loadLessonCandidates(opts: {
   usernames: LessonUsernames;
   rating: number;
+  /** How long to wait for a puzzle seed in flight (default SEED_WAIT_MS). */
+  seedWaitMs?: number;
 }): Promise<LessonPositionCandidate[]> {
   const out: LessonPositionCandidate[] = [];
   const byId = new Map<string, LessonPositionCandidate>();
@@ -130,7 +132,7 @@ export async function loadLessonCandidates(opts: {
   } catch { /* no games */ }
 
   try {
-    await Promise.race([puzzleSeedSettled(), new Promise<void>((r) => setTimeout(r, SEED_WAIT_MS))]);
+    await Promise.race([puzzleSeedSettled(), new Promise<void>((r) => setTimeout(r, opts.seedWaitMs ?? SEED_WAIT_MS))]);
     const puzzles = await db.puzzles
       .where('rating')
       .between(opts.rating - PUZZLE_BAND, opts.rating + PUZZLE_BAND, true, true)

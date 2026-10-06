@@ -80,6 +80,10 @@ export interface SessionDeps {
    *  its end. A stopped lesson leaves its last position, so the next start of
    *  the same step resumes there (plan D8). */
   progress?: (p: LessonProgress | null) => Promise<void>;
+  /** Optional: read the board pool again. Called ONCE, when the pool runs
+   *  dry mid-lesson — on a fresh install the puzzle store is still seeding
+   *  when the lesson starts (audit 2026-10-06: two boards, then the end). */
+  refill?: () => Promise<readonly LessonPositionCandidate[]>;
 }
 
 /** A running lesson's place: its stage plan and the board it is on. */
@@ -159,7 +163,8 @@ export class ThinkingLessonSession {
   private choosingSince: number | null = null;
   private resolveChoice: ((step: string | null) => void) | null = null;
 
-  private readonly candidates: readonly LessonPositionCandidate[];
+  private candidates: readonly LessonPositionCandidate[];
+  private refilled = false;
 
   constructor(
     private readonly baseKit: StepKit,
@@ -237,7 +242,14 @@ export class ThinkingLessonSession {
         await this.runMixedBoard(board);
         continue;
       }
-      const pos = this.nextPosition();
+      let pos = this.nextPosition();
+      if (!pos && this.deps.refill && !this.refilled) {
+        this.refilled = true;
+        const more = await this.deps.refill().catch((): readonly LessonPositionCandidate[] => []);
+        const adapt = this.baseKit.adapt;
+        this.candidates = adapt ? more.map((c) => adapt(c)).filter((c): c is LessonPositionCandidate => !!c) : more;
+        if (!this.stopped) pos = this.nextPosition();
+      }
       if (!pos) {
         ranOut = true;
         if (this.cursor === 0 && !opts.once) await this.deps.say('I could not find a clean board for this one yet — play or import a few games and it will build from them.');
