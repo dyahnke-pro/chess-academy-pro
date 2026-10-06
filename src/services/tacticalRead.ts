@@ -16,6 +16,7 @@
  * PURE assemblers (verdict, key-tactic pick, tempting pick) are exported and
  * unit-tested with hand-fed data — the engine wiring is a thin shell over them.
  */
+import { preparationOf } from './speedRunReads';
 import { andList } from '../utils/andList';
 import { settledLineEnd } from './material';
 import { boardEdgeWords } from '../utils/countWords';
@@ -508,6 +509,13 @@ export function narrateTacticalRead(read: TacticalRead, opts: { spoken?: boolean
     const ref = read.tempting.refutation;
     const reply = ref.length > 1 ? ref[1] : (ref.length > 0 ? ref[0] : undefined);
     parts.push(temptingTurn(read.fen, read.tempting.san, read.tempting.appeal, reply?.san ?? null, say, sayN));
+    // NOT DEAD, ONLY EARLY (David 2026-10-06: "does it find a way to play
+    // Qc3? Like removing the key defender?"). When the engine's own line plays
+    // the tempting capture later, say what the moves before it change.
+    const tUci = read.tempting.uci;
+    const later = read.line.findIndex((p, i) => i > 0 && i % 2 === 0 && p.uci === tUci);
+    const prep = later > 0 ? preparationOf(read.fen, read.tempting.san, read.line.slice(0, later).map((p) => p.uci)) : null;
+    if (prep) parts.push(`Not yet, though — ${prep}, and then it works.`);
   }
 
   // THE MOVE + the forcing line to the tactic.

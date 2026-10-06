@@ -618,3 +618,26 @@ describe('the hedge never reassures in a lost position (g9 walk 2026-09-27)', ()
     expect(lost?.closeAlternative ?? null).toBeNull();
   });
 });
+
+describe('the but-turn says how a tempting capture is made to work (David 2026-10-06: "does it find a way to play Qxc3?")', () => {
+  const RUY = 'r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4';
+  const plies = (ucis: string[]): never[] => {
+    const c = new Chess(RUY);
+    return ucis.map((u) => {
+      const fenBefore = c.fen();
+      const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4) });
+      return { san: m.san, uci: u, moverColor: m.color === 'w' ? 'white' : 'black', fenBefore, fenAfter: c.fen(), facts: {} } as never;
+    });
+  };
+  const read = (line: string[]) => ({
+    fen: RUY, studentColor: 'w' as const, bestMoveSan: 'Bxc6', bestMoveUci: 'b5c6', line: plies(line),
+    verdict: { kind: 'edge', mateIn: null, studentCp: 60, text: 'a pleasant edge' }, keyTactic: null, checkPlies: [], closeAlternative: null,
+    tempting: { san: 'Nxe5', uci: 'f3e5', appeal: 'capture', evalDropCp: 120, refutation: [] },
+  }) as never;
+  it('the engine plays the capture after taking the defender → it says so', () => {
+    expect(narrateTacticalRead(read(['b5c6', 'd7c6', 'f3e5']))).toMatch(/Not yet, though — take away a defender of e5 first, and then it works\./);
+  });
+  it('NEGATIVE CONTROL: the capture never comes back → nothing about preparing it', () => {
+    expect(narrateTacticalRead(read(['b5c6', 'd7c6', 'e1g1']))).not.toMatch(/Not yet, though/);
+  });
+});

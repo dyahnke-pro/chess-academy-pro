@@ -6,6 +6,7 @@ import {
   playAnyway, skipMiddleman, usefulWaiting, keepSquareForKnight, rightPieceForHole,
   finishStarted, goodInEveryBranch, takeTheSting, retreatKeepsBreak, bestCasePlan, rejectedMoveLater,
   forceConcession, flexibleFirst, queenGlue,
+  preparationOf,
 } from './speedRunReads';
 
 const fenAt = (sans: string): string => { const c = new Chess(); for (const m of sans.split(' ')) c.move(m); return c.fen(); };
@@ -215,5 +216,17 @@ describe('the reads go quiet on strategy while a piece hangs (relevance)', () =>
     const fen = '4k3/8/8/3p4/1b6/2N5/8/4KB2 w - - 0 1';
     const reads = speedRunReads({ fen, me: 'w', lines: [{ moves: ['f1c4'], evaluation: 200, mate: null }, { moves: ['c3d5'], evaluation: 100, mate: null }] });
     expect(reads.some((r) => /threat is stronger|cash in|isn't going anywhere/.test(r.text))).toBe(false);
+  });
+});
+
+describe('preparationOf — the held "doesn\'t work yet" says what the preparation does (Learn tape 2026-10-06)', () => {
+  // Ruy Lopez after 3…a6: Nxe5 drops the knight to …Nxe5, but after Bxc6 dxc6
+  // the e5-pawn has lost its defender.
+  const RUY = 'r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4';
+  it('names a removed defender', () => {
+    expect(preparationOf(RUY, 'Nxe5', ['b5c6', 'd7c6'])).toBe('take away a defender of e5 first');
+  });
+  it('NEGATIVE CONTROL: nothing changed about the square → nothing to say', () => {
+    expect(preparationOf(RUY, 'Nxe5', ['d2d3', 'd7d6'])).toBeNull();
   });
 });

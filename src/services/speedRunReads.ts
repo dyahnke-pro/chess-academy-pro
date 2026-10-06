@@ -455,6 +455,32 @@ export function bestCasePlan(fen: string, lines: Lines): Read | null {
   return { stakes: costStakes(gap) ?? undefined, idea: `Test the slow plan with ${b2} by its best case: even if everything goes right, it only gets you level — something sharper is there.`, namesMove: true, text: `Test the slow plan with ${b2} by its best case: even when everything goes right for you, you end up no better than level. ${a} gets more.` };
 }
 
+/** What the moves before a capture change about its target square, from the
+ *  capturing side's seat: a defender removed, or an attacker added. Null when
+ *  neither — then there is nothing honest to say about the preparation. */
+const sanTo = (san: string): string | null => san.replace(/[+#!?]+$/, '').replace(/=[QRBN]$/, '').match(/([a-h][1-8])$/)?.[1] ?? null;
+
+export function preparationOf(fen: string, captureSan: string, before: readonly string[]): string | null {
+  const to = captureSan.includes('x') ? sanTo(captureSan) : null;
+  if (!to || before.length === 0) return null;
+  try {
+    const now = new Chess(fen);
+    const me = now.turn(); const them = me === 'w' ? 'b' : 'w';
+    const occupant = now.get(to as Square);
+    if (!occupant || occupant.color !== them) return null;
+    const later = new Chess(fen);
+    for (const u of before) later.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+    if (later.turn() !== me) return null;
+    const still = later.get(to as Square);
+    if (!still || still.color !== them || still.type !== occupant.type) return null;
+    const defNow = now.attackers(to as Square, them).length; const defLater = later.attackers(to as Square, them).length;
+    const attNow = now.attackers(to as Square, me).length; const attLater = later.attackers(to as Square, me).length;
+    if (defLater < defNow) return `take away a defender of ${to} first`;
+    if (attLater > attNow) return `bring one more attacker onto ${to} first`;
+    return null;
+  } catch { return null; }
+}
+
 /** THE REJECTED MOVE THAT WORKS LATER: a move that is worse now turns up later
  *  in the engine's own line — after the preparation it works. */
 export function rejectedMoveLater(fen: string, lines: Lines): Read | null {
@@ -471,7 +497,12 @@ export function rejectedMoveLater(fen: string, lines: Lines): Read | null {
     // random quiet move "doesn't work yet" teaches nothing (prod tape: h5,
     // Kb8, Rd6 each "rejected", five turns running).
     if (!/[x+]/.test(san)) continue;
-    return { stakes: costStakes(seatCp(fen, lines[0]) - seatCp(fen, l)) ?? undefined, claim: `srr:rejected:${san}`, idea: `${san} doesn't work yet — prepare it first; a rejected move is not a dead move.`, namesMove: true, text: `${san} doesn't work yet — but it does after ${first}: it comes back ${at / 2} move${at === 2 ? '' : 's'} later in the line. A rejected move is not a dead move; prepare it.` };
+    // THE HELD FORM SAYS WHAT THE PREPARATION DOES, never just "prepare it"
+    // (Learn tape 2026-10-06: advice with nothing in it). Read off the board
+    // before and after the engine's moves up to the capture; nothing nameable
+    // changed → the held form says nothing.
+    const prep = preparationOf(fen, san, main.slice(0, at));
+    return { stakes: costStakes(seatCp(fen, lines[0]) - seatCp(fen, l)) ?? undefined, claim: `srr:rejected:${san}`, ...(prep ? { idea: `${san} doesn't work yet — ${prep}, and then it does.` } : {}), namesMove: true, text: `${san} doesn't work yet — but it does after ${first}: it comes back ${at / 2} move${at === 2 ? '' : 's'} later in the line. A rejected move is not a dead move; prepare it.` };
   }
   return null;
 }
