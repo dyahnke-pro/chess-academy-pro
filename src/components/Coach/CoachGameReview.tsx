@@ -697,20 +697,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // an auto tick. handleWalkForward is declared below the hook — a ref bridges
   // the order.
   const handleWalkForwardRef = useRef<(source?: 'manual' | 'auto') => ForwardOutcome>(() => ({ advanced: true }));
-  // A TURNING POINT'S REVEAL IS THAT PLY'S TEACHING. Once it is spoken the
-  // walk steps onto the move without its own line, which named the same move
-  // and reason a second later (KID review 2026-10-06, ply 30: "there was a
-  // forcing move here: Nxf1" straight after "The move was Nxf1 — …").
-  const [turningRevealedPlies, setTurningRevealedPlies] = useState<ReadonlySet<number>>(() => new Set());
-  const playbackNarration = useMemo(() => {
-    if (!walkNarration || turningRevealedPlies.size === 0) return walkNarration;
-    return {
-      ...walkNarration,
-      segments: walkNarration.segments.map((sg) => (turningRevealedPlies.has(sg.ply) ? { ...sg, narration: null } : sg)),
-    };
-  }, [walkNarration, turningRevealedPlies]);
   const walkPlayback = useReviewPlayback({
-    narration: playbackNarration,
+    narration: walkNarration,
     totalPlies: moves.length,
     onAutoAdvance: () => handleWalkForwardRef.current('auto'),
     // ship-5: scope hint callouts to this specific game.
@@ -901,7 +889,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   useEffect(() => {
     quizzedPliesRef.current = new Set();
     setTurningActive(null);
-    setTurningRevealedPlies(new Set());
   }, [props.gameId]);
 
   // The "why'd you play that?" faucet — post-game review now responds like
@@ -997,7 +984,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setTurningActive(null);
     setShotReveal(text);
     setTurningRevealText(text);
-    setTurningRevealedPlies((cur) => new Set(cur).add(tp.ply));
     captureEvent('review_turning_point_result', { ply: tp.ply, found, cause: tp.cause?.id ?? null, cause_count: tp.causeCount });
     void reviewSay(text, found ? { prosodySpike: true } : undefined).catch(() => undefined).then(() => {
       setShotReveal((cur) => (cur === text ? null : cur));
