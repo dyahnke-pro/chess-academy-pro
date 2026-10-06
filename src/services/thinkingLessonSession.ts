@@ -517,7 +517,7 @@ export class ThinkingLessonSession {
         resolve(r);
       };
       this.publish({ found: [], wrong: [], shown: [], focus: [focus], asking: false, prompt: null });
-      void this.deps.say(link.prompt).then(() => {
+      void this.deps.say(spokenWithoutTaps(link.prompt, true)).then(() => {
         if (this.stopped) return;
         this.q = newQuestion(link.key, this.deps.now(), link.mode);
         this.publish({ asking: true, prompt: link.prompt });

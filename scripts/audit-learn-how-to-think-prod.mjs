@@ -173,13 +173,23 @@ async function main() {
         await tap(page, keyPart[0]);
         await page.waitForTimeout(12_000);
         const afterRight = prose(listener).slice(n0);
-        record('L5. a right tap is accepted (found / one more / all of them)', afterRight.some((l) => /Yes\.|That.s one|Right|one more|more to find|all of them|Got them all|clean/i.test(l)), afterRight.slice(-2).join(' | ').slice(0, 200));
+        record('L5. a right tap is accepted (found / one more / all of them)', afterRight.some((l) => /Yes\.|That.s one|Right|one more|more to find|all of them|Got them all|clean|^Look at (your|their)/i.test(l)), afterRight.slice(-2).join(' | ').slice(0, 200));
       } else {
         record('L5. a right tap is accepted', true, `n/a — step ${step}: the audit has no sure key square on this board (not a product failure)`);
       }
       const still = await page.locator('[data-testid="thinking-lesson"]').getAttribute('data-asking').catch(() => null);
       if (still === '1') await page.locator('[data-testid="thinking-lesson-dont-know"]').click({ force: true }).catch(() => {});
-      const fen2 = await waitAsking(page, 60_000);
+      // A right answer is followed by a CHAIN of questions on the SAME board
+      // ("tap its attackers" → "who takes first"): answer each with "I don't
+      // know" until the lesson asks on a new board (or 90s pass).
+      let fen2 = null;
+      for (const until = Date.now() + 90_000; Date.now() < until;) {
+        const f = await waitAsking(page, Math.max(1000, until - Date.now()));
+        if (!f) break;
+        if (f !== fen1) { fen2 = f; break; }
+        await page.locator('[data-testid="thinking-lesson-dont-know"]').click({ force: true }).catch(() => {});
+        await page.waitForTimeout(1500);
+      }
       const refills = listener.getCapturedEvents().filter((e) => e.kind === 'thinking-lesson-refill').map((e) => e.summary);
       record('L6. the lesson moves on to the next board', !!fen2 && fen2 !== fen1, `${fen2 ?? 'stalled'}${refills.length ? ` · ${refills.join(' | ')}` : ' · no refill row'}`);
       if (fen2) {

@@ -270,3 +270,27 @@ describe('ThinkingLessonSession — refills a dry pool once (fresh install, audi
     await done;
   });
 });
+
+describe('ThinkingLessonSession — the follow-up chain is asked without naming the interface', () => {
+  it('a chain link speaks "Find…", never "Tap…" (audit 2026-10-06)', async () => {
+    const { safetyKit } = await import('./thinkingSafetyStep');
+    const fen = '3r2k1/ppr2p1p/4p1pB/4P3/2P5/1K6/P4P1P/3R4 w - - 0 26';
+    const h = harness();
+    const kit = safetyKit();
+    const s = new ThinkingLessonSession(kit, [{ fen, origin: 'game', gameId: 'chain' }], new Set(), h.deps);
+    const done = s.run('red');
+    const v = await waitAsking(h);
+    for (const sq of kit.keyFor(fen)!.key) await s.tap(sq);
+    // The chain asks its links; say "I don't know" to each until it closes.
+    for (let i = 0; i < 6; i++) {
+      await flush();
+      const last = h.views[h.views.length - 1];
+      if (last?.asking) await s.dontKnow();
+    }
+    s.stop();
+    await done;
+    expect(v.fen).toBe(fen);
+    expect(h.said.some((l) => /attacking it|takes first/.test(l))).toBe(true);
+    for (const l of h.said) expect(l).not.toMatch(/\bTap\b/);
+  });
+});
