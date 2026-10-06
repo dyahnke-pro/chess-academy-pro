@@ -172,7 +172,13 @@ export interface FactBundle {
 
 /** What the student should have DONE differently in their head. Optional: a
  *  surface that cannot supply these simply gets no method beat. */
-export type MethodContext = Omit<MethodSignals, 'tier'> & { ply?: number };
+export type MethodContext = Omit<MethodSignals, 'tier' | 'coveredHabits'> & {
+  ply?: number;
+  /** A fact the caller handed in that teaches a habit (keyed by the exact fact
+   *  string — identity, never a read of its prose). When that fact speaks, the
+   *  habit's method line stays quiet. */
+  habitByFact?: ReadonlyMap<string, MethodHabit>;
+};
 
 /** Step 1 of the door, on its own.
  *
@@ -391,8 +397,10 @@ export function decide(
     // The habit bar is the STUDENT'S OWN RECORD, not a flat number. `habitNeed`
     // passed by the caller wins; otherwise it is derived here from the weakness
     // spine, so every surface gets the same answer from the same door.
+    const coveredHabits = new Set<MethodHabit>();
+    for (const [fact, habit] of method.habitByFact ?? []) if (spoken.includes(fact)) coveredHabits.add(habit);
     const beat = methodBeatFor(
-      { ...method, tier: importance.tier, habitNeed: method.habitNeed ?? habitNeedFrom(student.weaknesses) },
+      { ...method, tier: importance.tier, habitNeed: method.habitNeed ?? habitNeedFrom(student.weaknesses), coveredHabits },
       method.ply ?? 0,
     );
     if (beat) { spoken.push(`[method] ${beat}`); methodSpoke = true; }

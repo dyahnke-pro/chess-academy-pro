@@ -14,6 +14,14 @@ describe('methodBeat — how to think, earned by a computed signal', () => {
     expect(t).toMatch(/checks and (the )?captures|forcing/i);
   });
 
+  it('stays quiet when the leading fundamental already taught the forcing scan (KID review 2026-10-06)', () => {
+    const said = new Set<import('./methodBeat').MethodHabit>();
+    expect(methodBeatFor({ ...base, bestSan: 'Nxf1', cpLossCp: 150, coveredHabits: new Set(['forcing-scan']), saidHabits: said })).toBeNull();
+    expect(said.has('forcing-scan')).toBe(true);
+    // NEGATIVE CONTROL: not covered → it teaches.
+    expect(methodBeatFor({ ...base, bestSan: 'Nxf1', cpLossCp: 150 })).toMatch(/checks and (the )?captures|forcing/i);
+  });
+
   it('does NOT teach the forcing scan for a quiet best move', () => {
     expect(methodBeatFor({ ...base, bestSan: 'Nf3', cpLossCp: 150 })).toBeNull();
   });

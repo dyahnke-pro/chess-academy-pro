@@ -33,6 +33,8 @@ export interface PlayedMoveGrade {
   /** The spoken grade (named, not centipawns) — '' when not worth speaking. */
   clause: string;
   cpLossCp: number;
+  /** The graded band (`gradeMove`), the input to the stored verdict. */
+  label: MoveLabel;
   worthSpeaking: boolean;
   fault: boolean;
   /** Weakness-spine tag for a fault (auto-log to My Mistakes), else null. */
@@ -165,6 +167,7 @@ export function gradePlayedMove(input: {
     reason,
     clause,
     cpLossCp,
+    label,
     worthSpeaking,
     fault: isFaultReason(reason),
     weaknessTag: reasonWeaknessTag(reason),

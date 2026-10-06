@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5410 lines · 38 exports · 46 importers · 44 tests · 5 audits**
+**5430 lines · 39 exports · 47 importers · 45 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -23,6 +23,7 @@
 - `src/components/Stats/StatsPage.tsx`
 - `src/hooks/useReviewPlayback.test.ts`
 - `src/hooks/useReviewPlayback.ts`
+- `src/services/advantageWasMissed.test.ts`
 - `src/services/coachFeatureService.causalChain.test.ts`
 - `src/services/coachFeatureService.cpLossSign.test.ts`
 - `src/services/coachFeatureService.introResult.test.ts`
@@ -64,6 +65,12 @@
 
 ## Exports and every call site
 
+### `advantageWasMissed` (function) — 4 call sites
+- `src/services/advantageWasMissed.test.ts:8`
+- `src/services/advantageWasMissed.test.ts:11`
+- `src/services/advantageWasMissed.test.ts:14`
+- `src/services/advantageWasMissed.test.ts:15`
+
 ### `updateBadHabits` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
@@ -87,7 +94,7 @@
 - `src/services/coachFeatureService.test.ts:257`
 - `src/services/coachFeatureService.test.ts:277`
 - `src/services/coachFeatureService.test.ts:289`
-- `src/services/gameAnalysisService.ts:2253`
+- `src/services/gameAnalysisService.ts:2292`
 
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -209,7 +216,7 @@
 - `src/services/gradeGatesTeachingCost.test.ts:31`
 - `src/services/gradeGatesTeachingCost.test.ts:36`
 - `src/services/loopCloses.review.integration.test.ts:89`
-- `src/services/methodBeat.test.ts:70`
+- `src/services/methodBeat.test.ts:78`
 - `src/services/oneCostPerMove.test.ts:34`
 - `src/services/oneCostPerMove.test.ts:38`
 - `src/services/oneCostPerMove.test.ts:47`
@@ -365,6 +372,7 @@
 - `src/components/Coach/ReviewCitationPreviews.test.tsx`
 - `src/components/Stats/StatsPage.test.tsx`
 - `src/hooks/useReviewPlayback.test.ts`
+- `src/services/advantageWasMissed.test.ts`
 - `src/services/coachFeatureService.causalChain.test.ts`
 - `src/services/coachFeatureService.cpLossSign.test.ts`
 - `src/services/coachFeatureService.introResult.test.ts`

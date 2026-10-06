@@ -250,7 +250,7 @@ import { PlayerInfoBar } from './PlayerInfoBar';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { coachService, isProgressQuestion, isImprovementTrendQuestion, isConceptQuestion, isFundamentalsQuestion, isFamousGameQuestion, isOpeningProfileQuestion, isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion, isOpeningTrapsQuestion, isReviewDueQuestion, isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion, isRepertoireGapQuestion, isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion, isColorQuestion, isRecordsQuestion, isRecordVsQuestion, isMoveRatingQuestion, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion } from '../../coach/coachService';
 import { logAppAudit, mintTurnId, setCurrentTurnId } from '../../services/appAuditor';
-import { buildLearnGameRecord, type LearnLiveGrade } from '../../services/learnGameRecord';
+import { buildLearnGameRecord, rememberHeardVerdict, type LearnLiveGrade } from '../../services/learnGameRecord';
 import { uciMoveToSan } from '../../utils/uciToSan';
 import { resolveCoachNarration } from '../../utils/coachNarration';
 import { recoverCoachMoveFromText } from '../../utils/recoverCoachMove';
@@ -9215,6 +9215,10 @@ export function CoachTeachPage(): JSX.Element {
             cpLossCp: grade.cpLossCp,
             pv: { afterPlayed: [], afterBest },
           });
+          // ONE VERDICT PER MOVE (David 2026-10-06): what the student heard
+          // here is what review will say — the first grade is stored and read.
+          // A fault the band called fine was still heard as a fault.
+          rememberHeardVerdict({ fenBefore, san: move.san, fault: grade.fault, label: grade.label, cpLossCp: grade.cpLossCp, bestUci: preStudentRead.bestMove || null, depth: preStudentRead.depth ?? null });
         }
         // A GOOD MOVE IS GRADED WITH ITS REASON (WO-2, 2026-09-29): his
         // verdicts on good moves always say why. The move's computed point

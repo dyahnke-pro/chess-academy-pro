@@ -456,16 +456,28 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // for the reveal (the move, its why, and the cause) and records both.
   const turningQs = [];
   const turningReveals = [];
+  const turningLeaks = [];
   const resolveCards = async () => {
     if (await has(page, '[data-testid="review-turning-question"]')) {
       const q = await txt(page, '[data-testid="review-turning-question"]');
       turningQs.push(q);
+      // What the coach said just before asking — checked against the answer
+      // once the reveal names it (never hand over the move before the ask).
+      const beforeAsk = spoken().slice(-4).map((x) => x.text);
       log(`  [turning] ask: ${q}`);
       await page.locator('[data-testid="review-forward-btn"]').first().click({ timeout: 2000, force: true }).catch(() => undefined);
       const shown = await until(async () => has(page, '[data-testid="review-turning-reveal"]'), 8000, 300);
       const r = shown ? await txt(page, '[data-testid="review-turning-reveal"]') : '';
       turningReveals.push(r);
       log(`  [turning] reveal: ${r || '(none within 8s)'}`);
+      const ans = /^(?:The move was|That's it:) (\S+?)(?: —|\.|$)/.exec(r)?.[1] ?? null;
+      if (ans) {
+        const sq = (/([a-h][1-8])/.exec(ans.replace(/=.*$/, '').slice(-3)) ?? [])[1];
+        const PIECE = { N: 'knight', B: 'bishop', R: 'rook', Q: 'queen', K: 'king' };
+        const pn = PIECE[ans[0]];
+        const said = beforeAsk.find((t) => t.includes(ans) || (pn && sq && new RegExp(`${pn} (takes|to) ${sq}`, 'i').test(t)));
+        turningLeaks.push(said ? { ans, said } : null);
+      }
       // Let the (muted, text-proportional) reveal finish before walking on.
       await page.waitForTimeout(Math.min(12000, 400 + r.split(/\s+/).length * 150));
     }
@@ -1699,6 +1711,8 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   }
   // THE TURNING POINTS — the biggest few, asked on the board; every reveal
   // carries the move AND its why (David: "We need to have the why!").
+  const leaks = turningLeaks.filter(Boolean);
+  await add('TURNING the-answer-is-never-said-before-the-ask', leaks.length === 0, `${turningLeaks.length} checked${leaks.length ? ` — ${leaks[0].ans} was said before asking: "${leaks[0].said.slice(0, 120)}"` : ''}`);
   await add('TURNING at-most-three-per-game', turningQs.length <= 3, `${turningQs.length} asked${turningQs[0] ? `; e.g. "${turningQs[0]}"` : ''}`);
   const whyless = turningReveals.filter((r) => !/^The move was \S+ — it /.test(r));
   await add('TURNING every-reveal-names-the-move-and-why', whyless.length === 0, `${turningReveals.length} reveals${whyless.length ? ` — ${whyless.length} without a why, e.g. "${whyless[0]}"` : turningReveals[0] ? `; e.g. "${turningReveals[0]}"` : ''}`);

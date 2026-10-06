@@ -1,3 +1,4 @@
+import { applyVerdict, getVerdicts, saveVerdict, toVerdictLabel, verdictKey } from './moveVerdictStore';
 import { Capacitor } from '@capacitor/core';
 import { reviewBudget, deterministicAnalysisForAudit, DETERMINISTIC_FAN_NODES, DETERMINISTIC_FAN_WATCHDOG_MS } from './analysisDeterminism';
 import { Chess } from 'chess.js';
@@ -246,6 +247,8 @@ function bestMoveEqualsPlayed(
 // Exported so the offline narration harness (reviewFullGameNarration.harness
 // .test.ts) classifies each ply with the SAME thresholds production uses —
 // keeps the dial-in output faithful, never a re-implemented approximation.
+const isFaultClass = (c: MoveClassification): boolean => c === 'inaccuracy' || c === 'mistake' || c === 'blunder';
+
 export function classifyCpLoss(
   cpLoss: number,
   evalBefore?: number | null,
@@ -1568,6 +1571,9 @@ export async function analyzeGameOnWorker(
   // ── EVAL CACHE: a position this device already scored is not re-searched. A
   // cached DEEP eval satisfies both passes at once. (positionEvalCache.ts)
   const cached = await lookupPositionEvals(fens, BATCH_SHALLOW_DEPTH);
+  // ONE VERDICT PER MOVE: a move Learn (or an earlier review) already graded
+  // keeps that grade — see moveVerdictStore.
+  const storedVerdicts = await getVerdicts(moves.map((m, i) => verdictKey(fens[i], m)));
   const toStore: EvalToStore[] = [];
 
   // ── THE SWEEP'S ONE PASS. Shallow, every non-book ply, then done. There is
@@ -1736,6 +1742,18 @@ export async function analyzeGameOnWorker(
 
   if (toStore.length > 0) await storePositionEvals(toStore);
 
+  // ONE VERDICT PER MOVE — applied LAST, after the best-move refinement above
+  // (which downgrades a move the deeper search also plays): a move already
+  // graded keeps its grade; its stored best move fills in where none was found.
+  annotations.forEach((a, i) => {
+    const sv = storedVerdicts.get(verdictKey(fens[i], moves[i]));
+    if (!sv) return;
+    const next = applyVerdict(a.classification, sv, a.classification === 'book');
+    if (next === a.classification) return;
+    a.classification = next;
+    if (isFaultClass(next)) { if (!a.bestMove && sv.bestUci) a.bestMove = sv.bestUci; } else a.bestMove = null;
+  });
+
   return {
     annotations,
     achievedDepth: Number.isFinite(achievedDepth) ? Math.min(achievedDepth, ANALYSIS_DEPTH) : 0,
@@ -1854,6 +1872,8 @@ async function analyzeGamePositions(
   // ── CURVE PASS (cache-first). A position the sweep already scored costs
   // nothing here, which is why the review of a swept game starts near-instantly.
   const cached = await lookupPositionEvals(fens, BATCH_SHALLOW_DEPTH);
+  const storedVerdicts = await getVerdicts(moves.map((m, i) => verdictKey(fens[i], m)));
+  const verdictsToSave: Parameters<typeof saveVerdict>[0][] = [];
   cached.forEach((hit, i) => {
     if (i < skipBook) return;
     evals[i] = hit.evaluation;
@@ -2152,6 +2172,24 @@ async function analyzeGamePositions(
         classification = 'book'; // theory move, evals unavailable — still not a mistake
       }
 
+      // ONE VERDICT PER MOVE (David 2026-10-06): a stored grade decides; its
+      // best move and cost fill in where this search found none. A move nobody
+      // graded yet is stored now, so the next open says the same thing.
+      {
+        const sv = storedVerdicts.get(verdictKey(fens[moveIdx], moves[moveIdx]));
+        if (sv) {
+          const next = applyVerdict(classification, sv, moveIsBook);
+          if (next !== classification) {
+            if (isFaultClass(next)) {
+              if (!bestMove && sv.bestUci) bestMove = sv.bestUci;
+              if (sv.cpLoss !== null) costCp = sv.cpLoss;
+            } else { bestMove = null; costCp = null; }
+            classification = next;
+          }
+        } else if (classification !== 'book' && evalBefore !== null && evalAfter !== null) {
+          verdictsToSave.push({ fenBefore: fens[moveIdx], san: moves[moveIdx], label: toVerdictLabel(classification), cpLoss: costCp, bestUci: bestMove, depth: depthAt[moveIdx] || null, source: 'review' });
+        }
+      }
       // Persist the engine lines at a flagged ply: the punishment after the
       // played move (the dive at fens[moveIdx+1]) and the continuation after the
       // best move (the dive at fens[moveIdx], minus its first move).
@@ -2185,6 +2223,7 @@ async function analyzeGamePositions(
   }
 
   if (toStore.length > 0) await storePositionEvals(toStore);
+  for (const v of verdictsToSave) await saveVerdict(v);
 
   return {
     annotations,

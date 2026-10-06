@@ -49,11 +49,22 @@ export interface MethodSignals {
    *  which is the right place for it: a bar tuned to suppress repetition
    *  suppresses teaching too. Mutated by the caller across the walk. */
   saidHabits?: Set<MethodHabit>;
+  /** Habits a fact SPOKEN on this ply already teaches (the leading fundamental
+   *  "Checks, captures, threats — …" IS the forcing scan). Said once, never
+   *  twice in one breath (KID review tape 2026-10-06). Counted as said. */
+  coveredHabits?: ReadonlySet<MethodHabit>;
 }
 
 /** The habit classes the method layer teaches. Named so the say-once ledger and
  *  the need lookup share one vocabulary and cannot drift. */
 export type MethodHabit = 'opponent-threat' | 'forcing-scan' | 'slow-down' | 'candidates';
+
+/** The fundamentals that ARE a habit's lesson — when one leads a ply, its
+ *  habit's method line would say the same thing again. */
+export const FUNDAMENTAL_HABIT: Readonly<Record<string, MethodHabit>> = {
+  'passive-when-forcing-existed': 'forcing-scan',
+  'ignored-threat': 'opponent-threat',
+};
 
 /** WHERE THIS STUDENT STANDS ON A HABIT, from their own record (David
  *  2026-09-16: "If the user finds the correct move more often than not maybe it
@@ -111,6 +122,7 @@ export function methodBeatFor(s: MethodSignals, plyForVariety = 0): string | nul
   const said = s.saidHabits;
   const need = s.habitNeed ?? {};
   const claim = (h: MethodHabit, text: string): string | null => {
+    if (s.coveredHabits?.has(h)) { said?.add(h); return null; }
     if (said?.has(h)) return null;
     said?.add(h);
     return text;

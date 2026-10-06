@@ -40,7 +40,7 @@ import { renderStructureAtoms } from './structureProse';
 import { decide, habitNeedFrom } from './coachDecider';
 import { boardStateAfter } from './boardState';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
-import { habitIsOwed, type MethodHabit } from './methodBeat';
+import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
 import { recurrenceFor, recurrenceLine } from './misconceptionCallbacks';
 import { noteSlip } from './learnBoardTeaching';
 import { fundamentalRecurrenceLine } from './fundamentalRecurrence';
@@ -117,6 +117,16 @@ const REVIEW_TAG_FOR_LANE: Record<StudentMoveLane, FacetTag | null> = {
   fileRace: null,
   strongChoice: null,
 };
+
+
+/** The student's next move was NOT the first move of the line that punishes
+ *  the opponent's slip — so naming that line would hand over the move they
+ *  had to find. Unknown on either side → not missed (nothing to hold). */
+export function advantageWasMissed(nextSan: string | null, lineFirstSan: string | null): boolean {
+  if (!nextSan || !lineFirstSan) return false;
+  const bare = (x: string): string => x.replace(/[+#!?]+$/, '');
+  return bare(nextSan) !== bare(lineFirstSan);
+}
 
 export { detectBadHabits };
 
@@ -2372,6 +2382,10 @@ export function buildReviewSegments(
           // A SCRATCH copy (B4): the beat claims its habit here, and the
           // claim reaches the game ledger only if the ply actually speaks.
           saidHabits: habitScratch,
+          // The leading fundamental that already IS a habit's lesson.
+          habitByFact: new Map(kept
+            .filter((f) => f.startsWith('[principle] '))
+            .flatMap((f) => fundamentals.flatMap((fd) => (fd.id in FUNDAMENTAL_HABIT ? [[f, FUNDAMENTAL_HABIT[fd.id]] as const] : [])))),
         },
       );
       // SILENCE IS A COMPUTED VERDICT, so it has to be explainable — emit what
@@ -4035,7 +4049,13 @@ async function augmentWithProjections(
         opensWithRecapture = !!played.captured && firstTo === played.to;
       } catch { opensWithRecapture = false; }
       if (line) punishedMove.set(line, { fenBefore: s.fenBefore, san: s.san });
-      const proof = line && line.delivers && line.plies.length >= 2 && !opensWithRecapture ? render(line, isStudentSlip ? 'opponent' : 'student') : '';
+      // NEVER HAND OVER A MOVE THE STUDENT HAD TO FIND NEXT (KID review
+      // 2026-10-06: their Kg1 was answered by "Here's how you take advantage:
+      // knight takes f1" — the move the student then missed, and the very move
+      // the turning-point question asked a second later). Named only when the
+      // student actually played it; otherwise their own next move teaches it.
+      const studentMissedIt = !isStudentSlip && advantageWasMissed(segments.find((x) => x.ply === s.ply + 1)?.san ?? null, line?.plies[0]?.san ?? null);
+      const proof = line && line.delivers && line.plies.length >= 2 && !opensWithRecapture && !studentMissedIt ? render(line, isStudentSlip ? 'opponent' : 'student') : '';
       if (line && proof) {
         const frame = isStudentSlip
           ? `Here's how it gets punished from here: ${proof}.`

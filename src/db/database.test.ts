@@ -15,7 +15,7 @@ describe('Database Schema', () => {
   });
 
   it('has the correct schema version', () => {
-    expect(db.verno).toBe(38);
+    expect(db.verno).toBe(39);
   });
 
   it('has the dataFiles store (v37 — large data files kept after one download)', () => {

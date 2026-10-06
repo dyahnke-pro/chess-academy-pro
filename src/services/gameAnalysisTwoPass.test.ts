@@ -57,6 +57,7 @@ import {
 import { MATE_EVAL_VALUE, INACCURACY_CP } from './engineConstants';
 import { buildGameRecord, buildEngineAnalysis } from '../test/factories';
 import { storePositionEvals } from './positionEvalCache';
+import { getVerdicts, saveVerdict, verdictKey } from './moveVerdictStore';
 
 // 🔒 THE SWEEP IS A DRAFT; THE REVIEW IS THE ANALYSIS (David 2026-09-05:
 // "decrease the depth for the batch and dive deeper on key moments once a single
@@ -252,6 +253,24 @@ describe('the REVIEW deep-dives the key moments', () => {
     expect(dive).toEqual(expect.arrayContaining([4, 5]));
     expect(dive.length).toBeLessThan(FENS.length);
     expect(anns![4].classification).toBe('blunder');
+  });
+
+  // ONE VERDICT PER MOVE (David 2026-10-06): the review stores its grade, and
+  // a grade already stored (Learn's, live) decides the review's.
+  it('stores the grade it settles, so the next open says the same', async () => {
+    await reviewFixture();
+    await analyzeSingleGame('g-review');
+    const key = verdictKey(FENS[4], 'Bb5');
+    const v = (await getVerdicts([key])).get(key);
+    expect(v?.label).toBe('blunder');
+    expect(v?.source).toBe('review');
+  });
+  it('a grade Learn already gave decides the review\'s — Bb5 heard as fine stays fine', async () => {
+    await reviewFixture();
+    await saveVerdict({ fenBefore: FENS[4], san: 'Bb5', label: 'fine', cpLoss: 0, bestUci: 'f1b5', depth: 14, source: 'learn' });
+    const anns = await analyzeSingleGame('g-review');
+    expect(anns![4].classification).toBe('good');
+    expect(anns![4].bestMove).toBeNull();
   });
 
   it('re-searches at a depth the engine can actually REACH, so a quiet position stops early', () => {

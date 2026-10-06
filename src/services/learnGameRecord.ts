@@ -23,6 +23,7 @@ import { winPctLost, bandForWinPctLost } from './accuracyService';
 import { LIVE_ANALYSIS_DEPTH } from './coachGameAnnotations';
 import type { GameRecord, GameResult, MoveAnnotation, MoveClassification } from '../types';
 import { openingKeyFromSans } from './openingKey';
+import { saveVerdict, toVerdictLabel } from './moveVerdictStore';
 
 /** What Learn knows about one STUDENT ply it graded live: the engine's read of
  *  the position before the move (best move + its eval, White POV) and what the
@@ -160,4 +161,16 @@ export function buildLearnGameRecord(input: LearnGameInput): GameRecord | null {
     openingId: openingKeyFromSans(input.sans),
     promptedPlies: [...input.promptedPlies],
   };
+}
+
+/** ONE VERDICT PER MOVE (David 2026-10-06): store the grade the student HEARD
+ *  for a move, so review says the same thing. A fault the band called fine was
+ *  still heard as a fault. */
+export function rememberHeardVerdict(v: {
+  fenBefore: string; san: string; fault: boolean; label: string;
+  cpLossCp: number; bestUci: string | null; depth: number | null;
+}): void {
+  const band = toVerdictLabel(v.label as MoveClassification);
+  const heard = !v.fault ? 'fine' : band === 'fine' ? 'inaccuracy' : band;
+  void saveVerdict({ fenBefore: v.fenBefore, san: v.san, label: heard, cpLoss: v.cpLossCp, bestUci: v.bestUci, depth: v.depth, source: 'learn' });
 }

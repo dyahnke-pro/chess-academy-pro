@@ -28,6 +28,7 @@ import type { WalkthroughTree } from '../types/walkthroughTree';
 import type { MasterPlayResult } from '../services/masterPlayTypes';
 import type { CapabilityEvidenceRecord } from '../services/capabilityEvidence';
 import type { PuzzleMissRecord } from '../services/puzzleMissService';
+import type { MoveVerdictRecord } from '../services/moveVerdictStore';
 import type { DataFileRecord } from '../services/dataFile';
 
 /** A cached LLM-generated opening walkthrough tree. Once an opening
@@ -221,6 +222,7 @@ class ChessAcademyDB extends Dexie {
   capabilityEvidence!: EntityTable<CapabilityEvidenceRecord, 'id'>;
   dataFiles!: EntityTable<DataFileRecord, 'path'>;
   puzzleMisses!: EntityTable<PuzzleMissRecord, 'id'>;
+  moveVerdicts!: EntityTable<MoveVerdictRecord, 'key'>;
 
   constructor() {
     super('ChessAcademyDB');
@@ -992,6 +994,13 @@ class ChessAcademyDB extends Dexie {
     // store, no migration — existing installs start with no rows, which is
     // the truth (nothing recorded them before).
     this.version(38).stores({ puzzleMisses: 'id, tacticType, recordedAt, puzzleId' });
+
+    // v39 — ONE VERDICT PER MOVE (David 2026-10-06: "the same strength engine
+    // for learn play and review so they stop contradicting each other"). The
+    // first surface to grade a move stores it; the others read it. Additive
+    // store, no migration — a move graded before this build is graded once
+    // more, then never again.
+    this.version(39).stores({ moveVerdicts: 'key, recordedAt' });
   }
 }
 
