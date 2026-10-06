@@ -36,7 +36,7 @@ describe('studentMoveTeaching — a winning move says its line (David 2026-09-30
       reply: null, cpAfter: null,
     });
     const line = hints.find((h) => h.lane === 'movePoint' && /wins a pawn/.test(h.text));
-    expect(line?.text).toBe('That wins a pawn: …Nxd5 cxd5 …Bxc3+ Bxc3 …Qxc3+.');
+    expect(line?.text).toBe('That wins a pawn: …Nxd5, cxd5, …Bxc3+, Bxc3 and …Qxc3+.');
     expect(line?.arrows).toHaveLength(5);
   });
 });
@@ -49,7 +49,7 @@ describe('the mate, played out — found and missed (David 2026-09-30: "take the
     const { studentMoveTeaching } = await import('./learnBoardTeaching');
     const hints = studentMoveTeaching({ fenBefore: fen, san: 'Bh6', history: ['Bh6'], cpLoss: 0, bothCp: false, bestSan: 'Bh6', bestLine: line, reply: null, cpAfter: null });
     const h = hints.find((x) => x.lane === 'movePoint');
-    expect(h?.text).toBe('No check yet — the quiet Bh6 comes first: it takes g7 from their king, and Re8 is mate. Bh6 …a6 Re8#.');
+    expect(h?.text).toBe('No check yet — the quiet Bh6 comes first: it takes g7 from their king, and Re8 is mate. Bh6, …a6 and Re8#.');
     expect(h?.arrows).toHaveLength(3);
   });
   it('the quiet mate missed is played out in the verdict', async () => {
