@@ -27,7 +27,7 @@ import { emitLearnTurn } from './coachDecisionEvents';
 import { COMPUTER_ROLES } from './computerRoles';
 import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type VoiceFactKind, type VoicePackage } from './voicePackage';
 
-import { stakeValue, type FactStakes } from './factStakes';
+import { stakeValue, STAKED_FLOOR, type FactStakes } from './factStakes';
 export { buildVoicePackage, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys } from './voicePackage';
 export type { SpokenLine, DrawnLine } from './voicePackage';
 export type { VoicePackage, VoiceFactKind } from './voicePackage';
@@ -403,7 +403,18 @@ export function decideTurn(
       // beat: their plan, the structure), which keeps until the board calms.
       && (LEARN_LANES[x.lane].always !== true || DNA_BEAT[x.lane] === 'point') && !(beginner && BEGINNER_ALWAYS.has(x.lane))
       && !sq.some((q) => anchor.includes(q)) && value(x) < value(ownLead);
-    if (!restates && !offTopic) {
+    // IMPORTANT IS COMPUTED, NOT COUNTED (David 2026-10-06: "if there are 5
+    // important facts … the user needs to hear it" AND "it must not be
+    // laborious"). With no hold at all a turn ran 80–95 words a move (prod,
+    // 25-move game) against his 35–50. A fact that neither supports the lead
+    // (shares a square) nor must ride speaks when it is IMPORTANT: at least a
+    // pawn at stake (`factStakes`, discounted by distance). Five such facts,
+    // five sentences; a pile of small asides waits.
+    const important = stakeOf(x.lane, x.fact.text) >= STAKED_FLOOR + 100;
+    const aside = !!ownLead && x !== ownLead && !DANGER_LANES.has(x.lane)
+      && LEARN_LANES[x.lane].always !== true && !(beginner && BEGINNER_ALWAYS.has(x.lane))
+      && !sq.some((q) => anchor.includes(q)) && !important;
+    if (!restates && !offTopic && !aside) {
       keep.push(x.fact);
       if (!spoke.includes(x.lane)) spoke.push(x.lane);
     } else if (!held.includes(x.lane)) held.push(x.lane);

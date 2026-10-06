@@ -321,10 +321,10 @@ describe('beginner mode — the fundamental behind a slip always rides (David 20
     { lane: 'fundamental', text: FUND, fen: FEN, squares: ['g1'] },
   ];
 
-  it('speaks for everyone now — a teaching fact is never held behind the lead (David 2026-10-05)', () => {
+  it('an unrelated, unstaked aside waits for everyone else (2026-10-06: important is computed)', () => {
     const d = decideTurn(facts());
-    expect(d.spoke).toContain('fundamental');
-    expect(d.pkg.spoken).toContain('same piece twice');
+    expect(d.held).toContain('fundamental');
+    expect(d.pkg.spoken).not.toContain('same piece twice');
   });
 
   it('spoken for a beginner, without changing what leads', () => {
@@ -345,16 +345,26 @@ describe('ONE ORDER, NO HOLD (David 2026-10-05)', () => {
     expect(d.lead?.lane).toBe('positionFacts');
     expect(d.spoke).toEqual(expect.arrayContaining(['positionFacts', 'planArc']));
   });
-  it('five teaching facts on one move: all five speak', () => {
+  it('five IMPORTANT facts on one move (a pawn or more at stake each): all five speak', () => {
+    const st = { points: 1.5, plies: 0 };
     const d = decideTurn([
-      { lane: 'moveIntent', text: 'Your move stops Bb4.', fen: FEN, squares: ['b4'] },
-      { lane: 'planArc', text: 'Their plan is the queenside push.', fen: FEN, squares: ['b5'] },
-      { lane: 'openingIdea', text: 'Masters break with d5 here.', fen: FEN, squares: ['d5'] },
-      { lane: 'gap', text: 'Their move left f7 undefended.', fen: FEN, squares: ['f7'] },
-      { lane: 'positionFacts', text: 'Keep the tension on e5.', fen: FEN, squares: ['e5'], stakes: { points: 0.4, plies: 0 } },
+      { lane: 'moveIntent', text: 'Your move stops Bb4.', fen: FEN, squares: ['b4'], stakes: st },
+      { lane: 'planArc', text: 'Their plan is the queenside push.', fen: FEN, squares: ['b5'], stakes: st },
+      { lane: 'openingIdea', text: 'Masters break with d5 here.', fen: FEN, squares: ['d5'], stakes: st },
+      { lane: 'gap', text: 'Their move left f7 undefended.', fen: FEN, squares: ['f7'], stakes: st },
+      { lane: 'positionFacts', text: 'Keep the tension on e5.', fen: FEN, squares: ['e5'], stakes: st },
     ]);
     expect(d.spoke).toHaveLength(5);
-    expect(d.held).toEqual([]);
+  });
+  it('five small asides: the lead and what must ride speak, the rest waits (not laborious)', () => {
+    const d = decideTurn([
+      { lane: 'moveIntent', text: 'Your move stops Bb4.', fen: FEN, squares: ['b4'] },
+      { lane: 'openingIdea', text: 'Masters break with d5 here.', fen: FEN, squares: ['d5'] },
+      { lane: 'gap', text: 'Their move left f7 undefended.', fen: FEN, squares: ['f7'] },
+      { lane: 'positionFacts', text: 'Keep the tension on e5.', fen: FEN, squares: ['e5'], stakes: { points: 0.3, plies: 0 } },
+    ]);
+    expect(d.spoke.length).toBeLessThan(4);
+    expect(d.held.length).toBeGreaterThan(0);
   });
 });
 
