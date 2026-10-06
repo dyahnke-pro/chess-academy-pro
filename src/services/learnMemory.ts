@@ -190,6 +190,14 @@ export interface LearnMemory {
    * and the game they happened in join without a lookup.
    */
   readonly gameId: string;
+  /** THE STUDENT'S SLIPS THIS GAME, by fundamental id — so the coach can say
+   *  "that's the second time this game" (David 2026-10-06: a coach reacts to
+   *  the student, it does not narrate each move in isolation). */
+  slipsThisGame: Map<string, number>;
+  /** IDEAS THE COACH SAID THIS GAME, with the move that pays them off — the
+   *  thread across moves: when the board pays an idea off, the coach closes
+   *  the loop instead of moving on as if it had never spoken. */
+  promises: Map<string, { key: string; piece: string; square: string; takes?: boolean; say: string; ply: number }>;
 }
 
 /** `teach-` prefixed to match the id shape the saved Learn `GameRecord` has
@@ -245,6 +253,8 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
     detectedOpeningName: null,
     queuedOpeningName: null,
     identityQueued: null,
+    slipsThisGame: new Map<string, number>(),
+    promises: new Map<string, { key: string; piece: string; square: string; takes?: boolean; say: string; ply: number }>(),
     observe(plies: number): boolean {
       const forgot = plies < lastPlies;
       if (forgot) mem.newGame();
@@ -252,6 +262,8 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
       return forgot;
     },
     newGame(): void {
+      mem.slipsThisGame.clear();
+      mem.promises.clear();
       saidExplainers.clear();
       structureSaid.clear();
       pieceQualitySaid.clear();

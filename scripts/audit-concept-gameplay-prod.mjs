@@ -162,7 +162,11 @@ function spokenProse(listener) {
     // read (2026-09-19). The utterance is what voiceService spoke — the muted
     // path emits the same event with the same text, so this stays honest under
     // muteTtsForAudit.
-    .filter((e) => e.kind === 'coach-narration-spoken' && e.narrationText && String(e.source ?? '').startsWith('voiceService.'))
+    // `voiceService.speakPackage` logs its own event and THEN voices the line,
+    // which logs again — one utterance, two events (the phase line, 2026-10-06:
+    // read as the same 42-word sentence said twice). Its `.repeat` row is a
+    // suppression, not speech. Keep only the voicing.
+    .filter((e) => e.kind === 'coach-narration-spoken' && e.narrationText && String(e.source ?? '').startsWith('voiceService.') && !String(e.source).startsWith('voiceService.speakPackage'))
     .map((e) => String(e.narrationText));
 }
 
@@ -480,7 +484,10 @@ async function main() {
         console.log(`[piece-latency] ${Date.now() - askedAt}ms`);
         const walks = await last.locator('[data-testid^="message-walk-line-"]').count();
         console.log(`[piece] ask="${ask}" walks=${walks} → ${text.slice(0, 260)}`);
-        if (walks > 0) { answered = { ask, text, walks, last }; break; }
+        // PIN the button now: `last` is a lazy "newest bubble" locator, and in a
+        // long game newer bubbles land after the answer — the click then hit a
+        // bubble with no Walk button (H3 false-failed once the game played on).
+        if (walks > 0) { answered = { ask, text, walks, last, walk0: await last.locator('[data-testid="message-walk-line-0"]').elementHandle().catch(() => null) }; break; }
       }
       for (const e of listener.getCapturedEvents().filter((x) => x.source === 'coachService.pieceOptions')) console.log(`[piece-stage] ${e.summary}`);
       record('H1. a "couldn\'t they just move X?" ask is answered by the COMPUTER (job → squares → refutation → verdict)', !!answered && /\b(Where can|So (yes|no)|So [A-Z][a-z]?[a-h1-8x+]* was about as good|comes down to the best square|square that holds|gives up its guard|is attacked|holds?\.)\b/.test(answered.text), answered ? answered.text.slice(0, 200) : 'no ask produced walkable lines');
@@ -491,7 +498,8 @@ async function main() {
         const active = page.locator('[data-testid="line-walk-active"]');
         for (let t = Date.now(); Date.now() - t < 45_000 && (await active.count()) > 0;) await page.waitForTimeout(500);
         const live = await readPlacement(page);
-        await answered.last.locator('[data-testid="message-walk-line-0"]').click({ force: true }).catch(() => {});
+        if (answered.walk0) await answered.walk0.click({ force: true }).catch(() => {});
+        else await answered.last.locator('[data-testid="message-walk-line-0"]').click({ force: true }).catch(() => {});
         let moved = false;
         for (let t = Date.now(); Date.now() - t < 8000 && !moved;) { await page.waitForTimeout(300); moved = (await active.count()) > 0; }
         let back = false;
@@ -515,7 +523,11 @@ async function main() {
     for (const t of tape) console.log(`  (${t.split(/\s+/).length}w) ${t}`);
     const words = tape.reduce((n, t) => n + t.split(/\s+/).length, 0);
     const studentMoves = Math.max(1, Math.ceil((a?.moves?.length ?? 0) / 2));
-    record('V1. no line is said twice word for word (repetition is laborious)', new Set(tape).size === tape.length, `${tape.length} lines, ${tape.length - new Set(tape).size} repeats`);
+    // PER GAME: the run plays a second game (the misspelled ask) that replays
+    // the same opening — its greeting and first lines are a new game, not a repeat.
+    const games = []; for (const t of tape) { if (/^You're (Black|White) — /.test(t) || games.length === 0) games.push([]); games[games.length - 1].push(t); }
+    const repeats = games.flatMap((g) => g.filter((t, i) => g.indexOf(t) !== i));
+    record('V1. no line is said twice word for word within a game (repetition is laborious)', repeats.length === 0, `${tape.length} lines over ${games.length} game(s), ${repeats.length} repeats${repeats.length ? ` — ${repeats[0].slice(0, 90)}` : ''}`);
     record('V2. words per student move REPORTED (his speed runs: ~35–50)', true, `${words} words over ${studentMoves} student moves = ${Math.round(words / studentMoves)}/move; longest line ${Math.max(0, ...tape.map((t) => t.split(/\s+/).length))}w`);
     // ── G: THE DECIDING COMPUTER IS OBSERVABLE (the ASSERT half) ───────────
     // Emitting is half of the algo-audit rule; a contract on the rows is the

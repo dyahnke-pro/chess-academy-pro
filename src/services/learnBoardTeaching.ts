@@ -861,3 +861,54 @@ export function kingCourseTeaching(fen: string, student: 'w' | 'b'): TeachingHin
   if (!kc) return null;
   return { lane: 'pawnEnding', text: kc.text, squares: [kc.target], claims: ['king-course'], event: { name: 'coach_king_course', props: { surface: 'coach-teach' } }, arrows: [] };
 }
+
+// ─── THE THREAD ACROSS MOVES + THE STUDENT'S SLIPS (David 2026-10-06) ──────
+// The data lives in `learnMemory` (pure memory); what counts as paying an idea
+// off is a board question, so it is answered here.
+import type { LearnMemory } from './learnMemory';
+
+/** An idea the coach voiced, with the student move that would pay it off and
+ *  the line that closes the loop — computed when the idea is said (G0). */
+export interface GamePromise {
+  /** Identity: one promise per key per game. */
+  key: string;
+  /** The piece the paying move moves ('p', 'n', …, 'k' for castling). */
+  piece: string;
+  /** Where it lands. */
+  square: string;
+  /** The paying move must take something there. */
+  takes?: boolean;
+  /** The closing line, spoken when the student pays it off. */
+  say: string;
+}
+
+/** How long a promise stays open, in plies. Past it the moment has moved on. */
+const PROMISE_PLIES = 16;
+
+/** Note a slip and return its this-game prefix ('' the first time). */
+export function noteSlip(mem: Pick<LearnMemory, 'slipsThisGame'>, id: string): string {
+  const n = (mem.slipsThisGame.get(id) ?? 0) + 1;
+  mem.slipsThisGame.set(id, n);
+  if (n === 2) return "That's the second time this game. ";
+  if (n === 3) return 'Third time this game — this is the habit to fix. ';
+  return n > 3 ? 'Again. ' : '';
+}
+
+/** Remember an idea the coach just said (once per key). */
+export function notePromise(mem: Pick<LearnMemory, 'promises'>, p: GamePromise, ply: number): void {
+  if (mem.promises.has(p.key)) return;
+  mem.promises.set(p.key, { ...p, ply });
+}
+
+/** The student's move pays an open promise off → its closing line, and the
+ *  promise is spent. Stale promises are dropped on the way. */
+/** `mv` is the student's move, parsed by the caller (this module stays pure memory). */
+export function payoffFor(mem: Pick<LearnMemory, 'promises'>, mv: { piece: string; to: string; captured?: string; san: string } | null, ply: number): { say: string; square: string; key: string } | null {
+  for (const [k, q] of mem.promises) if (ply - q.ply > PROMISE_PLIES) mem.promises.delete(k);
+  if (!mv) return null;
+  const castleSquare = mv.san.startsWith('O-O') ? mv.to : null;
+  const hit = [...mem.promises.values()].find((q) => (q.piece === mv.piece || (q.piece === 'k' && castleSquare)) && q.square === (castleSquare ?? mv.to) && (!q.takes || !!mv.captured));
+  if (!hit) return null;
+  mem.promises.delete(hit.key);
+  return { say: hit.say, square: hit.square, key: hit.key };
+}

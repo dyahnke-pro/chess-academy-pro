@@ -35,7 +35,7 @@ import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePacka
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, intentRule, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { announcesTheMove, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
+import { notePromise, payoffFor, noteSlip, announcesTheMove, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -9762,6 +9762,8 @@ export function CoachTeachPage(): JSX.Element {
                       // stating the same fact later reads it as heard (Bowdler
                       // walk 2026-09-27: the c7 fork warned at plies 18 and 24).
                       if (c.claim) standingRef.current.remember(c.claim);
+                      // THE THREAD: an idea said now is remembered with the move that pays it off.
+                      if (c.promise) notePromise(learnMemRef.current, c.promise, probe.history().length);
                       // Their move's purpose rides its own lane, above the
                       // board descriptions it used to lose to on offer order.
                       const lane = c.kind === 'stopped' ? 'theirPurpose' as const : 'positionFacts' as const;
@@ -10450,6 +10452,12 @@ export function CoachTeachPage(): JSX.Element {
                     const tradeTable = tradeTo && reply && reply.replace(/^…/, '').includes(`x${tradeTo}`)
                       ? await stockfishEngine.evalBoard(fenBefore).then((raw) => (raw ? parseEvalTable(raw) : undefined)).catch(() => undefined)
                       : undefined;
+                    // THE THREAD ACROSS MOVES (David 2026-10-06): the student's move
+                    // pays off an idea the coach said earlier — close the loop.
+                    {
+                      const pay = payoffFor(learnMemRef.current, ((): { piece: string; to: string; captured?: string; san: string } | null => { try { return new Chess(fenBefore).move(move.san); } catch { return null; } })(), move.history.length);
+                      if (pay) queueSpokenHint(fenAfterReply, pay.say, 'movePoint', [pay.square], [`payoff:${pay.key}`], move.fen);
+                    }
                     for (const h of studentMoveTeaching({
                       fenBefore, san: move.san, history: move.history, cpLoss, bothCp,
                       bestSan: studentBestSan, bestLine: preStudentRead.topLines?.[0], reply: reply ?? null,
@@ -10642,7 +10650,7 @@ export function CoachTeachPage(): JSX.Element {
                       const bookSaid = fundamental?.id === 'left-book-early'
                         && studentJustLeftBook(move.history, playerColor === 'white' ? 'w' : 'b');
                       const line = `${fundamental
-                        ? `${lossInGrade ? '' : bookSaid ? fundamental.howOnly : fundamental.verdict}${fundamental.recurrence ? ` ${fundamental.recurrence}` : ''}${evidence ? ` ${evidence}` : ''}`.trim()
+                        ? `${lossInGrade ? '' : noteSlip(learnMemRef.current, fundamental.id)}${lossInGrade ? '' : bookSaid ? fundamental.howOnly : fundamental.verdict}${fundamental.recurrence ? ` ${fundamental.recurrence}` : ''}${evidence ? ` ${evidence}` : ''}`.trim()
                         : `${look.line}${takeDefinition(look.pattern)}`}${concession ? ` ${concession}` : ''}`;
                       // "That let them win the pawn on d4" and "they're eyeing
                       // Nxd4 — it would win your pawn on d4" are one claim (run
@@ -10671,7 +10679,7 @@ export function CoachTeachPage(): JSX.Element {
                       // its own; the fundamental IS the teaching here.
                       const bookSaidAlone = fundamental.id === 'left-book-early'
                         && studentJustLeftBook(move.history, playerColor === 'white' ? 'w' : 'b');
-                      queueSpokenHint(fenAfterReply, bookSaidAlone ? fundamental.howOnly : fundamental.verdict, 'fundamental', [], fundamental.id === 'botched-conversion' ? ['convert-method'] : undefined, move.fen, undefined, bookSaidAlone ? undefined : fundamental.lines);
+                      queueSpokenHint(fenAfterReply, `${noteSlip(learnMemRef.current, fundamental.id)}${bookSaidAlone ? fundamental.howOnly : fundamental.verdict}`, 'fundamental', [], fundamental.id === 'botched-conversion' ? ['convert-method'] : undefined, move.fen, undefined, bookSaidAlone ? undefined : fundamental.lines);
                       captureEvent('coach_fundamental_named', {
                         surface: 'coach-teach', fundamental: fundamental.id, cp_loss: Math.round(cpLoss),
                       });

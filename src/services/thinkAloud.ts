@@ -17,6 +17,7 @@ import { walkableLine, pvSans, hookCreated, holeAccess } from './moveInsight';
 import { tempoCount } from './tempoCount';
 import { homeMinorCount } from './development';
 import type { FactStakes } from './factStakes';
+import type { GamePromise } from './learnBoardTeaching';
 import { speedRunReads } from './speedRunReads';
 
 const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
@@ -197,6 +198,8 @@ export interface DepthClause {
   stakes?: FactStakes;
   /** A once-per-game claim. */
   claim?: string;
+  /** What pays the idea off later (the thread across moves). */
+  promise?: GamePromise;
 }
 
 /**
@@ -252,7 +255,7 @@ export function depthClauses(args: {
     // castle, "any move is fine". The ones that name the engine's move (the
     // ugly move, the provoked commitment) wait for nameMove below.
     const reads = toMove === args.studentColor ? speedRunReads({ fen: args.fen, me: args.studentColor, lines: args.topLines, ...(args.lastOpponentMove ? { lastMove: args.lastOpponentMove } : {}), ...((): { lastOwnMove?: { fenBefore: string; san: string } } => { const o = ownLastMove(args.history, args.fen); return o ? { lastOwnMove: o } : {}; })() }) : [];
-    const push = (r: (typeof reads)[number], text: string): void => { out.push({ kind: 'speedrun-read', text, ...(r.squares && text === r.text ? { squares: r.squares } : {}), ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.claim ? { claim: r.claim } : {}) }); };
+    const push = (r: (typeof reads)[number], text: string): void => { out.push({ kind: 'speedrun-read', text, ...(r.squares && text === r.text ? { squares: r.squares } : {}), ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.claim ? { claim: r.claim } : {}), ...(r.promise ? { promise: r.promise } : {}) }); };
     for (const r of reads.filter((x) => !x.namesMove)) push(r, r.text);
     // A read that names the move speaks it only where the move is earned;
     // elsewhere it speaks its IDEA — the habit of thought without the answer.

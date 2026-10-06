@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1703 lines · 15 exports · 23 importers · 22 tests · 3 audits**
+**1706 lines · 15 exports · 23 importers · 22 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -185,7 +185,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:8352`
 
 ### `convertKey` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9911`
+- `src/components/Coach/CoachTeachPage.tsx:9913`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 
 ### `afterLine` (function) — 5 call sites

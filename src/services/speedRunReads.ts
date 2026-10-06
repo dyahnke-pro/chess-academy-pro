@@ -18,6 +18,7 @@ import { costStakes, piecePoints, type FactStakes } from './factStakes';
 import { findPawnBreaks, findWeakPawns } from './positionReadingService';
 import { computePieceRoute } from './forwardTeaching';
 import { knightReach } from './moveInsight';
+import type { GamePromise } from './learnBoardTeaching';
 
 const name = (p: string): string => PIECE_NAMES[p] ?? 'piece';
 /** PHRASING ROTATES, NEVER ROLLS (CLAUDE.md §THE FOUNDATION): keyed on the
@@ -31,7 +32,7 @@ const sanOf = (fen: string, uci: string | undefined): string | null => {
   try { return new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }).san; } catch { return null; }
 };
 
-export interface Read { text: string; squares?: string[]; /** It names the engine's move — speaks only where the move may be named. */ namesMove?: boolean; /** What rides on it (factStakes) — the ranker orders by this. */ stakes?: FactStakes; /** The IDEA without the move — spoken when the move is held back (named only where earned). */ idea?: string; /** A once-per-game claim (the voice package drops a repeat). */ claim?: string }
+export interface Read { text: string; squares?: string[]; /** It names the engine's move — speaks only where the move may be named. */ namesMove?: boolean; /** What rides on it (factStakes) — the ranker orders by this. */ stakes?: FactStakes; /** The IDEA without the move — spoken when the move is held back (named only where earned). */ idea?: string; /** A once-per-game claim (the voice package drops a repeat). */ claim?: string; /** What would pay this idea off, and the line that closes the loop (the thread across moves). */ promise?: GamePromise }
 type Lines = ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>;
 const seatCp = (fen: string, l: { evaluation: number; mate: number | null }): number => {
   const white = l.mate != null ? (l.mate > 0 ? 100000 : -100000) : l.evaluation;
@@ -114,7 +115,7 @@ export function castleSide(fen: string, me: 'w' | 'b'): Read | null {
   const short = cover(['f', 'g', 'h']); const long = cover(['a', 'b', 'c']);
   if (short === long) return null;
   const side = short > long ? 'short' : 'long';
-  return { text: rot(fen, `If you castle, castle ${side}: the pawns on that wing are still at home (${Math.max(short, long)} of 3), the other wing has already been loosened.`, `Castle ${side} when you castle — that wing's pawns are intact (${Math.max(short, long)} of 3); the other side is already loosened.`) };
+  return { promise: { key: 'castle', piece: 'k', square: `${side === 'short' ? 'g' : 'c'}${me === 'w' ? '1' : '8'}`, say: `Castled ${side} — onto the wing whose pawns are still at home.` }, text: rot(fen, `If you castle, castle ${side}: the pawns on that wing are still at home (${Math.max(short, long)} of 3), the other wing has already been loosened.`, `Castle ${side} when you castle — that wing's pawns are intact (${Math.max(short, long)} of 3); the other side is already loosened.`) };
 }
 
 /** A4 PROVOKE THE COMMITMENT ("Be2 provokes …c4, which releases the pressure"):
@@ -151,7 +152,7 @@ export function threatStronger(fen: string, me: 'w' | 'b', lines: Lines): Read |
   const grabLine = lines.find((l) => sanOf(fen, l.moves[0]) === grab.san);
   if (grabLine && seatCp(fen, best) - seatCp(fen, grabLine) < criticalityThresholds().notable) return null;
   const gap = grabLine ? seatCp(fen, best) - seatCp(fen, grabLine) : null;
-  return { stakes: costStakes(gap) ?? { points: legalSeeGainFor(fen, grab.to, me), plies: 1 }, text: rot(fen, `You could take on ${grab.to} right now, but the threat is stronger than carrying it out — the material will keep, so keep it hanging over them and improve first.`, `The capture on ${grab.to} isn't going anywhere — leave it hanging over them and make the useful move first; the threat is the stronger weapon.`, `Don't cash in on ${grab.to} yet — while the capture hangs over them they are tied up; improve, and take it when it suits you.`), squares: [grab.to] };
+  return { promise: { key: `grab:${grab.to}`, piece: grab.piece, square: grab.to, takes: true, say: `Now you collect on ${grab.to} — the threat did its work first.` }, stakes: costStakes(gap) ?? { points: legalSeeGainFor(fen, grab.to, me), plies: 1 }, text: rot(fen, `You could take on ${grab.to} right now, but the threat is stronger than carrying it out — the material will keep, so keep it hanging over them and improve first.`, `The capture on ${grab.to} isn't going anywhere — leave it hanging over them and make the useful move first; the threat is the stronger weapon.`, `Don't cash in on ${grab.to} yet — while the capture hangs over them they are tied up; improve, and take it when it suits you.`), squares: [grab.to] };
 }
 
 /** A9 A PIECE HELD ONLY BY A TACTIC ("the loose b1 bishop survives tactically —
@@ -296,7 +297,8 @@ export function skipMiddleman(fen: string, bestSan: string | null): Read | null 
   if (!findPawnBreaks(fen).includes(r.move.to)) return null;
   const hit = [-1, 1].map((d) => `${String.fromCharCode(r.move.to.charCodeAt(0) + d)}${Number(r.move.to[1]) + (r.move.color === 'w' ? 1 : -1)}`)
     .find((q) => { const p = r.board.get(q as Square); return p && p.type === 'p' && p.color !== r.move.color; });
-  return { idea: `Your ${r.move.from[0]}-pawn break${hit ? ` against their pawn on ${hit}` : ''} is ready now — no need to prepare it; every preparing move is a move they get too.`, namesMove: true, text: `The break is ready now — ${sayMoveClause(bestSan, fen)}. No need to prepare it first; every preparing move is a move they get to use too.`, squares: [r.move.to] };
+  const promise: GamePromise = { key: `break:${r.move.to}`, piece: 'p', square: r.move.to, say: `There's the ${r.move.from[0]}-pawn break we talked about${hit ? ` — it hits their pawn on ${hit}` : ''}.` };
+  return { promise, idea: `Your ${r.move.from[0]}-pawn break${hit ? ` against their pawn on ${hit}` : ''} is ready now — no need to prepare it; every preparing move is a move they get too.`, namesMove: true, text: `The break is ready now — ${sayMoveClause(bestSan, fen)}. No need to prepare it first; every preparing move is a move they get to use too.`, squares: [r.move.to] };
 }
 
 /** THE USEFUL WAITING MOVE: no move matters much, and the engine's is a small
@@ -323,7 +325,7 @@ export function keepSquareForKnight(fen: string, me: 'w' | 'b', bestSan: string 
     if (b.get(via) || bestTo === via) continue;
     const blocker = b.moves({ verbose: true }).find((m) => m.to === via && m.piece !== 'n');
     if (!blocker) continue;
-    return { text: rot(fen, `Keep ${via} empty — your knight on ${cell.square} goes ${[cell.square, ...route.route].join('–')}, and ${via} is the first step.`, `Don't park a piece on ${via} — it's the first stop for your knight on ${cell.square} on the way to ${route.target}.`), squares: [via, route.target] };
+    return { promise: { key: `route:${route.target}`, piece: 'n', square: route.target, say: `The knight reaches ${route.target} — that's why ${via} had to stay empty.` }, text: rot(fen, `Keep ${via} empty — your knight on ${cell.square} goes ${[cell.square, ...route.route].join('–')}, and ${via} is the first step.`, `Don't park a piece on ${via} — it's the first stop for your knight on ${cell.square} on the way to ${route.target}.`), squares: [via, route.target] };
   }
   return null;
 }
@@ -339,7 +341,7 @@ export function rightPieceForHole(fen: string, me: 'w' | 'b'): Read | null {
     if (!isOutpost(b, cell.square, me, true)) continue;
     const k = knightReach(fen, cell.square, me);
     if (!k || k.moves > 3) continue;
-    return { text: `The hole on ${cell.square} is held by your bishop, but it belongs to a knight — your knight on ${k.from} gets there in ${k.moves}; a knight on an outpost hits both colours and can only be traded for a piece.`, squares: [cell.square, k.from] };
+    return { promise: { key: `hole:${cell.square}`, piece: 'n', square: cell.square, say: `Now the knight sits on ${cell.square} — the right piece for the hole.` }, text: `The hole on ${cell.square} is held by your bishop, but it belongs to a knight — your knight on ${k.from} gets there in ${k.moves}; a knight on an outpost hits both colours and can only be traded for a piece.`, squares: [cell.square, k.from] };
   }
   return null;
 }
@@ -422,7 +424,7 @@ export function retreatKeepsBreak(fen: string, me: 'w' | 'b', bestSan: string | 
   const pawn = r.board.get(behind);
   if (!pawn || pawn.type !== 'p' || pawn.color !== me) return null;
   if (!findPawnBreaks(flipTurn(r.board.fen())).includes(r.move.from)) return null;
-  return { idea: `Stepping your ${name(r.move.piece)} back clears the way for your ${behind[0]}-pawn to break — not every step back is passive.`, namesMove: true, text: `${cap(sayMoveClause(bestSan as string, fen))} is a retreat with a point — it clears ${r.move.from} so your pawn on ${behind} can break there.`, squares: [behind, r.move.from] };
+  return { promise: { key: `break:${r.move.from}`, piece: 'p', square: r.move.from, say: `And there's the ${behind[0]}-pawn break the retreat made room for.` }, idea: `Stepping your ${name(r.move.piece)} back clears the way for your ${behind[0]}-pawn to break — not every step back is passive.`, namesMove: true, text: `${cap(sayMoveClause(bestSan as string, fen))} is a retreat with a point — it clears ${r.move.from} so your pawn on ${behind} can break there.`, squares: [behind, r.move.from] };
 }
 
 /** THE BEST-CASE PLAN TEST: the slower plan, played out with best play from
@@ -517,7 +519,7 @@ export function flexibleFirst(fen: string, lines: Lines): Read | null {
     const s2 = sanOf(fen, l.moves[0]);
     const p2 = s2 ? play(fen, s2) : null;
     if (!p2 || !s2 || p2.move.piece !== 'p' || p2.move.captured) continue;
-    return { idea: rot(fen, `Make the flexible move first — ${what} keeps your options; ${s2} can always come later, but a pawn can never go back.`, `Keep your options open — ${what} first; ${s2} will still be there, and a pawn move can't be taken back.`, `Commit the pawn last — ${what} now, ${s2} later if you still want it.`), claim: 'srr:flexible-first', namesMove: true, text: `${a} and ${s2} are about equal — make the flexible move first. ${a} keeps your options; the pawn move can always come later, but it can never go back.` };
+    return { promise: { key: `flex:${p2.move.to}`, piece: 'p', square: p2.move.to, say: `And now ${s2} — after the pieces, the way it should be.` }, idea: rot(fen, `Make the flexible move first — ${what} keeps your options; ${s2} can always come later, but a pawn can never go back.`, `Keep your options open — ${what} first; ${s2} will still be there, and a pawn move can't be taken back.`, `Commit the pawn last — ${what} now, ${s2} later if you still want it.`), claim: 'srr:flexible-first', namesMove: true, text: `${a} and ${s2} are about equal — make the flexible move first. ${a} keeps your options; the pawn move can always come later, but it can never go back.` };
   }
   return null;
 }

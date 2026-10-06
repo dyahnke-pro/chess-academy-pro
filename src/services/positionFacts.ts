@@ -23,6 +23,7 @@ import { readConversion } from './conversionMethod';
 import type { StockfishAnalysis } from '../types';
 import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRead } from './criticality';
 import { Chess, type Square } from 'chess.js';
+import type { GamePromise } from './learnBoardTeaching';
 import { strategicWhyImperative, strategicClaims, principleLine, principleContrastLine, isForcedReply } from './moveFundamentals';
 import { isBookLine } from './openingDetectionService';
 import { refutedFromFan, candidatesFromAmateur, type FanLine, type RefutedAlternative } from './refutedAlternativeCore';
@@ -380,6 +381,8 @@ export interface ClauseItem {
    *  the reply's board "challenge their pawn on e4" reads false once e4 has
    *  taken (prod audit 2026-10-06). The voice grades it here instead. */
   gradeFen?: string;
+  /** An idea's payoff, for the surface's thread across moves (`learnMemory.notePromise`). */
+  promise?: GamePromise;
   /** The lines the clause SAYS, each from the board it starts on — a concept
    *  on a future board is said with the line that reaches it ("If you play
    *  Qd2, …", "After Qd2, Nf6, …"); "g6 has a point: it stops the mate with
@@ -1012,7 +1015,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     nameMove: !!input.namesBestMove || (!heldVerdict && !!moveAdvice?.speak),
     ...(input.lastMove ? { lastStudentMove: { fenBefore: input.lastMove.fenBefore, san: input.lastMove.san } } : {}),
     ...(input.opponentLastMove ? { lastOpponentMove: input.opponentLastMove } : {}),
-  }).map((d) => ({ kind: d.kind, rank: d.kind === 'not-yet' ? 90 : d.kind === 'stop-flaw' ? 70 : d.kind === 'line' ? 60 : d.kind === 'hole-access' ? 50 : d.kind === 'speedrun-read' ? 45 : 40, text: d.text, ...(d.squares ? { squares: d.squares } : {}), ...(d.lines ? { lines: d.lines } : {}), ...(d.stakes ? { stakes: d.stakes } : {}), ...(d.claim ? { claim: d.claim } : {}) }));
+  }).map((d) => ({ kind: d.kind, rank: d.kind === 'not-yet' ? 90 : d.kind === 'stop-flaw' ? 70 : d.kind === 'line' ? 60 : d.kind === 'hole-access' ? 50 : d.kind === 'speedrun-read' ? 45 : 40, text: d.text, ...(d.squares ? { squares: d.squares } : {}), ...(d.lines ? { lines: d.lines } : {}), ...(d.stakes ? { stakes: d.stakes } : {}), ...(d.claim ? { claim: d.claim } : {}), ...(d.promise ? { promise: d.promise } : {}) }));
   const composed = [...composedBase, ...depth];
   const needVerdict = studentIsMoving && input.studentNeedContext
     ? computeNeed({

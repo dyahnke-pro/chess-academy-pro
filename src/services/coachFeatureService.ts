@@ -42,6 +42,7 @@ import { boardStateAfter } from './boardState';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { habitIsOwed, type MethodHabit } from './methodBeat';
 import { recurrenceFor, recurrenceLine } from './misconceptionCallbacks';
+import { noteSlip } from './learnBoardTeaching';
 import { fundamentalRecurrenceLine } from './fundamentalRecurrence';
 import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
@@ -1481,6 +1482,9 @@ export function buildReviewSegments(
   const motifFirstMove: MotifLedger = new Map();
   /** S2: opening principles SPOKEN this game — committed after the door. */
   const principlesTaught = new Set<string>();
+  // The student's slips THIS game, by fundamental — "that's the second time
+  // this game" (David 2026-10-06; Learn keeps the same tally, `noteSlip`).
+  const reviewSlips = { slipsThisGame: new Map<string, number>() };
   /** The ply each principle was first spoken — read by the coverage marker. */
   const principleTaughtAt = new Map<string, number>();
   // THE ONE DOOR, REVIEW SIDE (David 2026-09-30: "Review yes, Play no"). Every
@@ -2049,6 +2053,11 @@ export function buildReviewSegments(
           const i = facets.findIndex((f) => f.startsWith('[principle] '));
           if (i >= 0) facets[i] = `${facets[i]} ${recur}`;
           else facets.push(`[principle] ${recur}`);
+        }
+        if (isStudentForAttr) {
+          const again = noteSlip(reviewSlips, fundamentals[0].id);
+          const i = facets.findIndex((f) => f.startsWith('[principle] '));
+          if (again && i >= 0) facets[i] = `[principle] ${again}${facets[i].slice('[principle] '.length)}`;
         }
       }
       // ── NO CORPUS NOTE IN REVIEW (David 2026-09-23) ─────────────────────
