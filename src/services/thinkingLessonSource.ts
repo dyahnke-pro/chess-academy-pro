@@ -133,11 +133,16 @@ export async function loadLessonCandidates(opts: {
 
   try {
     await Promise.race([puzzleSeedSettled(), new Promise<void>((r) => setTimeout(r, opts.seedWaitMs ?? SEED_WAIT_MS))]);
-    const puzzles = await db.puzzles
-      .where('rating')
-      .between(opts.rating - PUZZLE_BAND, opts.rating + PUZZLE_BAND, true, true)
-      .limit(PUZZLE_POOL)
-      .toArray();
+    // The NEAREST puzzles on each side of the rating. A plain band query with
+    // a limit returns the band's BOTTOM (the index walks upward), so a
+    // 400-rated student got the 300 lowest-rated boards — piece-movement
+    // drills with a bare king — and the lesson ran dry (audit 2026-10-06).
+    const half = Math.ceil(PUZZLE_POOL / 2);
+    const [below, above] = await Promise.all([
+      db.puzzles.where('rating').between(opts.rating - PUZZLE_BAND, opts.rating, true, false).reverse().limit(half).toArray(),
+      db.puzzles.where('rating').between(opts.rating, opts.rating + PUZZLE_BAND, true, true).limit(half).toArray(),
+    ]);
+    const puzzles = [...below, ...above];
     puzzles
       .sort((a, b) => Math.abs(a.rating - opts.rating) - Math.abs(b.rating - opts.rating) || a.id.localeCompare(b.id))
       .forEach((p) => {
