@@ -44,7 +44,8 @@ type AlgoEmissionKind =
   | 'thinking-lesson'
   | 'thinking-transfer'
   | 'coach-opponent-strength'
-  | 'chat-turn';
+  | 'chat-turn'
+  | 'review-turning-plan';
 
 interface Contract {
   /** The audit that holds the contract. */
@@ -57,6 +58,11 @@ interface Contract {
 }
 
 const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
+  'review-turning-plan': {
+    script: 'scripts/audit-review-overhaul-prod.mjs',
+    contractMarker: 'TURNING plan-row-names-every-verdict',
+    emittedBy: 'src/components/Coach/CoachGameReview.tsx (questionPlan → selectTurningPoints trace)',
+  },
   'learn-turn-decision': {
     script: 'scripts/audit-concept-gameplay-prod.mjs',
     contractMarker: 'the LEARN door EMITTED',

@@ -30,7 +30,7 @@ import { getPhaseBreakdown, phaseScopedReviewSummary, isPhaseFocus } from '../..
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { buildHoldChallenge, judgeGuidedFindAttempt, type GuidedFindChallenge } from '../../services/guidedFindTheMove';
-import { selectTurningPoints, turningReveal, type TurningPoint } from '../../services/turningPoints';
+import { selectTurningPoints, turningReveal, type TurningPoint, type TurningTrace } from '../../services/turningPoints';
 import { TRUSTED_LINE_DEPTH } from '../../services/engineConstants';
 import { computePvLine, type PvLine } from '../../services/pvPlayback';
 import { projectedLineVoice } from '../../services/projectedLineVoice';
@@ -697,8 +697,20 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // an auto tick. handleWalkForward is declared below the hook — a ref bridges
   // the order.
   const handleWalkForwardRef = useRef<(source?: 'manual' | 'auto') => ForwardOutcome>(() => ({ advanced: true }));
+  // A TURNING POINT'S REVEAL IS THAT PLY'S TEACHING. Once it is spoken the
+  // walk steps onto the move without its own line, which named the same move
+  // and reason a second later (KID review 2026-10-06, ply 30: "there was a
+  // forcing move here: Nxf1" straight after "The move was Nxf1 — …").
+  const [turningRevealedPlies, setTurningRevealedPlies] = useState<ReadonlySet<number>>(() => new Set());
+  const playbackNarration = useMemo(() => {
+    if (!walkNarration || turningRevealedPlies.size === 0) return walkNarration;
+    return {
+      ...walkNarration,
+      segments: walkNarration.segments.map((sg) => (turningRevealedPlies.has(sg.ply) ? { ...sg, narration: null } : sg)),
+    };
+  }, [walkNarration, turningRevealedPlies]);
   const walkPlayback = useReviewPlayback({
-    narration: walkNarration,
+    narration: playbackNarration,
     totalPlies: moves.length,
     onAutoAdvance: () => handleWalkForwardRef.current('auto'),
     // ship-5: scope hint callouts to this specific game.
@@ -777,9 +789,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // stop: find the move on the board, one try, then the move, its why, what the
   // played move allowed and the cause, counted across the game. Replaces the
   // find-the-shot / trap / slip-lesson stops (one kind of question, not three).
-  const questionPlan = useMemo<Map<number, TurningPoint>>(() => {
-    if (!walkNarration || !playerColor) return new Map();
-    return selectTurningPoints(walkNarration.segments.map((sg) => {
+  const { plan: questionPlan, trace: turningTrace } = useMemo<{ plan: Map<number, TurningPoint>; trace: TurningTrace[] }>(() => {
+    const trace: TurningTrace[] = [];
+    if (!walkNarration || !playerColor) return { plan: new Map(), trace };
+    const plan = selectTurningPoints(walkNarration.segments.map((sg) => {
       const pv = moves[sg.ply - 1]?.pv;
       const trusted = !!pv && (pv.depth ?? TRUSTED_LINE_DEPTH) >= TRUSTED_LINE_DEPTH;
       return {
@@ -787,8 +800,20 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         isCoachMove: moves[sg.ply - 1]?.isCoachMove,
         ...(trusted ? { bestLineUci: pv.afterBest, replyLineUci: pv.afterPlayed } : {}),
       };
-    }), playerColor);
+    }), playerColor, undefined, trace);
+    return { plan, trace };
   }, [walkNarration, playerColor, moves]);
+  // Every flagged student ply and why it was or was not asked — so a game that
+  // asks nothing reads as a computed verdict, never as a silent wire.
+  useEffect(() => {
+    if (!walkNarration || !playerColor) return;
+    void logAppAudit({
+      kind: 'review-turning-plan',
+      category: 'subsystem',
+      source: 'CoachGameReview.questionPlan',
+      summary: `asked=${questionPlan.size} considered=${turningTrace.length} ${turningTrace.map((t) => `${t.ply}:${t.skip ?? 'ask'}${t.before !== undefined ? `(${t.before}->${t.after})` : ''}`).join(' ')}`,
+    });
+  }, [questionPlan, turningTrace, walkNarration, playerColor]);
   /** The turning point a question is open on (null otherwise). */
   const [turningActive, setTurningActive] = useState<TurningPoint | null>(null);
   /** The reveal text a turning point produced (shown as a plain line, no buttons). */
@@ -876,6 +901,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   useEffect(() => {
     quizzedPliesRef.current = new Set();
     setTurningActive(null);
+    setTurningRevealedPlies(new Set());
   }, [props.gameId]);
 
   // The "why'd you play that?" faucet — post-game review now responds like
@@ -971,6 +997,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setTurningActive(null);
     setShotReveal(text);
     setTurningRevealText(text);
+    setTurningRevealedPlies((cur) => new Set(cur).add(tp.ply));
     captureEvent('review_turning_point_result', { ply: tp.ply, found, cause: tp.cause?.id ?? null, cause_count: tp.causeCount });
     void reviewSay(text, found ? { prosodySpike: true } : undefined).catch(() => undefined).then(() => {
       setShotReveal((cur) => (cur === text ? null : cur));

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { causeLine, selectTurningPoints, turningReveal, winChance, type TurningSegmentLike } from './turningPoints';
+import { causeLine, selectTurningPoints, turningReveal, winChance, type TurningSegmentLike, type TurningTrace } from './turningPoints';
 
 // KID game (walkGames fixture, 2026-09-25), move 15: Black played Qh4 when Nxf1
 // took a loose rook. Evals white-POV.
@@ -20,6 +20,16 @@ describe('turningPoints — the biggest few, the cause counted across the game',
     const tps = selectTurningPoints(segs, 'black');
     expect([...tps.keys()].sort()).toEqual([10, 14]);
     expect(winChance(0)).toBeCloseTo(50, 5);
+  });
+
+  it('asks a classified mistake even when the swing is small, ranks by swing, and records why it skipped the rest', () => {
+    // Prod KID review 2026-10-06 at depth 12: Qh4 over Nxf1, -199 → -90 (58 → 67 for black).
+    const kid = seg({ evalBefore: -199, evalAfter: -90, bestMoveUci: 'g3f1', bestMoveSan: 'Nxf1' });
+    const sameSwingInaccuracy = { ...kid, ply: 40, classification: 'inaccuracy' as const };
+    const trace: TurningTrace[] = [];
+    const tps = selectTurningPoints([kid, sameSwingInaccuracy], 'black', 3, trace);
+    expect([...tps.keys()]).toEqual([30]);
+    expect(trace.map((t) => [t.ply, t.skip])).toEqual([[30, null], [40, 'small-swing']]);
   });
 
   it('says the cause again in plain words, counted, with the drill where one exists', () => {

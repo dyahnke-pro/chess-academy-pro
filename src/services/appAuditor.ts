@@ -381,6 +381,7 @@ export type AuditKind =
   // from "still loading" so a "review never showed walk UI"
   // report has a concrete reason.
   | 'review-walk-skipped'
+  | 'review-turning-plan'
   // Biweekly chess.com / lichess auto-import scheduler.
   | 'auto-import-completed'
   | 'auto-import-failed'

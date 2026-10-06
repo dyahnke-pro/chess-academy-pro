@@ -63,6 +63,15 @@ export interface TurningCause {
   piece: PieceSymbol | null;
 }
 
+/** Why each flagged student ply was or was not asked — the audit row's body. */
+export interface TurningTrace {
+  ply: number;
+  /** Winning chance (0–100) before and after the move, the student's side. */
+  before?: number;
+  after?: number;
+  skip: 'no-eval-or-best' | 'small-swing' | 'decided' | null;
+}
+
 export interface TurningPoint {
   ply: number;
   fenBefore: string;
@@ -203,6 +212,7 @@ export function selectTurningPoints(
   segments: ReadonlyArray<TurningSegmentLike>,
   playerColor: 'white' | 'black',
   asked: number = TURNING_POINTS_ASKED,
+  trace?: TurningTrace[],
 ): Map<number, TurningPoint> {
   const sign = playerColor === 'white' ? 1 : -1;
   const ordered = [...segments].sort((a, b) => a.ply - b.ply);
@@ -216,13 +226,24 @@ export function selectTurningPoints(
     const cause = turningCause(seg, next);
     const causeCount = cause ? (tally.get(cause.id) ?? 0) + 1 : 0;
     if (cause) tally.set(cause.id, causeCount);
-    if (seg.evalBefore == null || seg.evalAfter == null || !seg.bestMoveSan || !seg.bestMoveUci || seg.bestMoveSan === seg.san) continue;
+    if (seg.evalBefore == null || seg.evalAfter == null || !seg.bestMoveSan || !seg.bestMoveUci || seg.bestMoveSan === seg.san) {
+      trace?.push({ ply: seg.ply, skip: 'no-eval-or-best' });
+      continue;
+    }
     const before = winChance(seg.evalBefore * sign);
     const after = winChance(seg.evalAfter * sign);
     const swing = before - after;
-    if (swing < TURNING_MIN_SWING) continue;
+    const at = { ply: seg.ply, before: Math.round(before), after: Math.round(after) };
+    // The classifier's own word decides eligibility: a mistake or a blunder is
+    // a moment worth asking about (KID audit 2026-10-06: Qh4 over Nxf1, a free
+    // rook, scored 148cp and moved the winning chance 58→67 — nine points, and a
+    // bare swing bar silenced the one question the game was about). The swing
+    // RANKS; it gates only an inaccuracy.
+    const costly = seg.classification === 'mistake' || seg.classification === 'blunder';
+    if (swing <= 0 || (!costly && swing < TURNING_MIN_SWING)) { trace?.push({ ...at, skip: 'small-swing' }); continue; }
     // Decided either side of the move: still clearly winning, or lost before it.
-    if (after >= DECIDED_CHANCE || before <= 100 - DECIDED_CHANCE) continue;
+    if (after >= DECIDED_CHANCE || before <= 100 - DECIDED_CHANCE) { trace?.push({ ...at, skip: 'decided' }); continue; }
+    trace?.push({ ...at, skip: null });
     const mover: 'w' | 'b' = seg.fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
     const prev = ordered[i - 1];
     const opponentLast = prev && prev.ply === seg.ply - 1 ? prev.san : null;
