@@ -1452,7 +1452,14 @@ class StockfishEngine {
     // engine read. David's 2026-08-07 game log: 9 duplicate pairs / 43 misses.
     // A shared search that FAILS is not inherited — the joiner falls through
     // and runs its own.
-    if (!options) {
+    //
+    // 🔒 A QUESTION'S READ NEVER JOINS. The in-flight entry for this position
+    // may be a background read PARKED on the very hold the question owns, so
+    // joining it waits for the question to finish — a deadlock broken only by
+    // the caller's 12s race. Audit 2026-10-06: the first "couldn't they just
+    // move their queen?" after a game timed out at 14s while the next one, on
+    // a position nothing else had queued, answered in 366ms.
+    if (!options && !bypassQuestionHold) {
       const shared = stockfishCache.inflight(fen, depth);
       if (shared) {
         try {
