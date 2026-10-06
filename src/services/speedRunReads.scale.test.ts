@@ -1,6 +1,6 @@
 // THE SCALE REPLAY (opt-in: SCALE=1, spawns an engine): his real games, every
 // student-to-move position through the real position-facts door and the voice's
-// board check. Fails if any speed-run read is rejected as untrue on the board.
+// board check. Fails if ANY sentence is rejected as untrue on the board.
 import { it, expect } from 'vitest';
 import { spawn } from 'node:child_process';
 import { readFileSync } from 'node:fs';
@@ -9,7 +9,7 @@ import { computePositionFacts } from './positionFacts';
 import { buildVoicePackage } from './voicePackage';
 it.skipIf(!process.env.SCALE)('every speed-run read survives the board check across his games', async () => {
   const all = JSON.parse(readFileSync('public/data/pro-game-references.json', 'utf8')) as Array<{ playerId: string; studentSide: string; pgn: string }>;
-  const games = all.filter((g) => g.playerId === 'naroditsky').filter((_, i) => i % 25 === 0).slice(0, Number(process.env.N ?? 20));
+  const games = all.filter((g) => g.playerId === 'naroditsky').filter((_, i) => i % Number(process.env.STEP ?? 25) === 0).slice(0, Number(process.env.N ?? 20));
   const sf = spawn('node', ['/home/user/wt-upnext/node_modules/stockfish/bin/stockfish-18-lite-single.js']);
   let buf = ''; sf.stdout.on('data', (d: Buffer) => { buf += d.toString(); });
   const send = (c: string) => sf.stdin.write(c + '\n');
@@ -38,7 +38,7 @@ it.skipIf(!process.env.SCALE)('every speed-run read survives the board check acr
           for (const cl of pf?.clauses ?? []) {
             kinds[cl.kind] = (kinds[cl.kind] ?? 0) + 1;
             words += cl.text.split(/\s+/).length;
-            const pkg = buildVoicePackage([{ kind: 'computed', text: cl.text, fen: c.fen(), squares: cl.squares }]);
+            const pkg = buildVoicePackage([{ kind: 'computed', text: cl.text, fen: cl.gradeFen ?? c.fen(), squares: cl.squares, ...(cl.lines ? { lines: cl.lines } : {}) }]);
             if (!pkg.kept.length || pkg.spoken.length < cl.text.length * 0.6) { const k = `${cl.kind} | ${cl.text.slice(0, 110)} | ${c.fen()}`; drops[k] = (drops[k] ?? 0) + 1; }
           }
         }
@@ -49,5 +49,5 @@ it.skipIf(!process.env.SCALE)('every speed-run read survives the board check acr
   sf.kill();
   console.log('POS', positions, 'words/pos', Math.round(words / positions), 'KINDS', JSON.stringify(kinds));
   for (const [k, n] of Object.entries(drops)) console.log('DROP', n, k);
-  expect(Object.keys(drops).filter((k) => k.startsWith('speedrun-read'))).toEqual([]);
-}, 1800000);
+  expect(Object.keys(drops)).toEqual([]);
+}, 7200000);

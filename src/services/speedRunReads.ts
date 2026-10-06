@@ -254,7 +254,7 @@ export function awkwardBlock(fen: string, lines: Lines): Read | null {
     freeMoves = b.moves({ square: r.move.to }).length;
   } catch { return null; }
   if (freeMoves > 2) return null;
-  return { idea: `Your ${name(a.move.piece)} has a check that drives their ${name(r.move.piece)} to an awkward square — the point of a check can be the square it forces.`, namesMove: true, text: `The check forces them to block with the ${name(r.move.piece)} on ${r.move.to}, and there it is stuck — the point of the check is the awkward square it drives that piece to.`, squares: [r.move.to] };
+  return { idea: `Your ${name(a.move.piece)} has a check that drives their ${name(r.move.piece)} to an awkward square — the point of a check can be the square it forces.`, namesMove: true, text: `The check forces them to block with the ${name(r.move.piece)}, and there it is stuck — the point of the check is the awkward square it drives that piece to.`, squares: [r.move.to] };
 }
 
 // ── batch 3 (checked first: breaks → findPawnBreaks; knight routes →

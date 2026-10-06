@@ -560,3 +560,12 @@ describe('a sentence conditional on a move is graded on the board after it (scal
     expect(buildVoicePackage([{ kind: 'computed', text: 'Your knight on a7 is strong.', fen }]).spoken).toBe('');
   });
 });
+
+describe('a fact said with a line is graded along that line too (scale replay 2026-10-06)', () => {
+  it('a claim true after the line speaks when the line is attached', () => {
+    const fen = '2kr1b1r/1p1q1ppp/1nn5/pN2N3/P1p5/2P4P/1PBP1PP1/R1BbR1K1 w - - 0 16';
+    const text = 'Your knight on a7 gives check.';
+    expect(buildVoicePackage([{ kind: 'computed', text, fen }]).spoken).toBe('');
+    expect(buildVoicePackage([{ kind: 'computed', text, fen, lines: [{ fen, sans: ['Na7+'] }] }]).spoken).toBe(text);
+  });
+});

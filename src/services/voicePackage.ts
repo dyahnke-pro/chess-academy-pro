@@ -326,6 +326,23 @@ function verify(fact: VoiceFact): { text: string } | { reason: string } {
     const cond = gradeConditional(raw, fact.fen, `voicePackage.${fact.kind}`);
     if (cond.length > (graded ?? '').length) graded = cond;
   }
+  // A fact said WITH a line ("If you play Qd2, …", a concept on the board the
+  // line reaches) may be true on a board of that line rather than now — the
+  // line is part of the sentence the student hears. Graded there too.
+  if ((graded ?? '') !== raw && fact.lines?.length) {
+    for (const ln of fact.lines) {
+      try {
+        const c = new Chess(ln.fen);
+        for (const san of ln.sans) {
+          if (!c.move(san)) break;
+          const g = gradeNarrationText(raw, c.fen(), `voicePackage.${fact.kind}`)?.trim() ?? '';
+          if (g.length > (graded ?? '').length) graded = g;
+          if (graded === raw) break;
+        }
+      } catch { /* a line that does not replay grades nothing */ }
+      if (graded === raw) break;
+    }
+  }
   if (fact.altFen && (graded ?? '') !== raw) {
     const alt = gradeNarrationText(raw, fact.altFen, `voicePackage.${fact.kind}`)?.trim();
     if ((alt ?? '').length > (graded ?? '').length) graded = alt;

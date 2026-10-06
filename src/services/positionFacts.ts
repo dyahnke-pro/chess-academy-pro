@@ -1345,6 +1345,10 @@ function buildClauses(a: {
   if (tradeDanger) {
     ranked.push({
       kind: 'latent-danger', rank: 82, text: tradeDangerClause(tradeDanger),
+      // Said about the board AFTER the capture ("before you trade on e4: that
+      // lines your bishop on e4 up…") — graded there, or it reads false now
+      // (scale replay: the most-dropped line across 3,752 positions).
+      ...((): { gradeFen?: string } => { try { const c = new Chess(a.fen); return c.move({ from: tradeDanger.tradeFrom, to: tradeDanger.tradeTo, promotion: 'q' }) ? { gradeFen: c.fen() } : {}; } catch { return {}; } })(),
       // The alignment AND the capture that creates it — that whole geometry is
       // the claim, so a must-defend about the same pieces is the same claim.
       squares: [tradeDanger.enemySquare, tradeDanger.frontSquare, tradeDanger.backSquare, tradeDanger.tradeFrom, tradeDanger.tradeTo],
@@ -1494,7 +1498,11 @@ function buildClauses(a: {
       // 2026-09-24: "Bishop on h5 pins knight on e2 against queen on d1").
       // The definition is taught once a game (`definitionKey`); after that the
       // board fact speaks alone.
-      kind: 'concept', rank, text: concept.pinMove ? concept.full : concept.source === 'tactic' ? afterLine(concept.line, concept.boardFen, a.fen, studentSeat === 'white' ? 'w' : 'b', seatBare(concept.instance && a.alreadySaid?.has(definitionKey(concept.id)) ? `${concept.instance}.` : concept.full, concept.boardFen ?? a.fen, studentSeat === 'white' ? 'w' : 'b')) : (concept.source === 'technique' && a.alreadySaid?.has(definitionKey(concept.id)) && concept.short ? concept.short : concept.full),
+      kind: 'concept', rank, text: concept.pinMove ? concept.full : concept.source === 'tactic' ? afterLine(concept.line, concept.boardFen, a.fen, studentSeat === 'white' ? 'w' : 'b', seatBare(concept.instance && a.alreadySaid?.has(definitionKey(concept.id)) ? `${concept.instance}.` : concept.full, concept.boardFen ?? a.fen, studentSeat === 'white' ? 'w' : 'b')) : (concept.source === 'technique' && concept.boardFen && concept.line?.length && concept.boardFen.split(' ')[0] !== a.fen.split(' ')[0]
+        // A technique read off a FUTURE board is said with the line that reaches
+        // it, like a tactic — never as if the rook already stood there.
+        ? afterLine(concept.line, concept.boardFen, a.fen, studentSeat === 'white' ? 'w' : 'b', concept.full)
+        : concept.source === 'technique' && a.alreadySaid?.has(definitionKey(concept.id)) && concept.short ? concept.short : concept.full),
       conceptId: concept.source === 'tactic' ? concept.id : undefined,
       // `ComputedConcept.squares` is the engine's own lead-the-eye set (agent
       // first, then targets) — exactly the geometry the sentence names.
@@ -1504,7 +1512,7 @@ function buildClauses(a: {
       claim: concept.source === 'tactic' ? conceptInstanceKey(concept.id, concept.squares) : undefined,
       // The line `afterLine` names is the one drawn — only when it named one.
       // A pile-on names its move, so the move is drawn (G6).
-      lines: concept.pinMove ? [{ fen: concept.pinMove.fen, sans: [concept.pinMove.san] }] : concept.source === 'tactic' && concept.line && concept.line.length > 0 && concept.boardFen && !samePlacementFen(concept.boardFen, a.fen) ? [{ fen: a.fen, sans: concept.line }] : undefined,
+      lines: concept.pinMove ? [{ fen: concept.pinMove.fen, sans: [concept.pinMove.san] }] : (concept.source === 'tactic' || concept.source === 'technique') && concept.line && concept.line.length > 0 && concept.boardFen && !samePlacementFen(concept.boardFen, a.fen) ? [{ fen: a.fen, sans: concept.line }] : undefined,
     });
   };
 

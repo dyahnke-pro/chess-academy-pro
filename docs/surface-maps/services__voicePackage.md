@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**648 lines · 13 exports · 12 importers · 8 tests · 2 audits**
+**665 lines · 13 exports · 13 importers · 9 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,6 +22,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/laneReachability.test.ts`
 - `src/services/learnTurnDoor.ts`
 - `src/services/replayFence.najdorf1500.test.ts`
+- `src/services/ruleGradeFen.test.ts`
 - `src/services/speedRunReads.scale.test.ts`
 - `src/services/voicePackage.test.ts`
 
@@ -58,7 +59,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/dnaDoor.test.ts:9`
 - `src/services/dnaDoor.test.ts:10`
 
-### `buildVoicePackage` (function) — 76 call sites
+### `buildVoicePackage` (function) — 80 call sites
 - `src/components/Coach/CoachGameReview.tsx:2012`
 - `src/components/Coach/CoachGameReview.tsx:2051`
 - `src/components/Coach/CoachGameReview.tsx:2060`
@@ -79,6 +80,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/laneReachability.test.ts:136`
 - `src/services/learnTurnDoor.ts:348`
 - `src/services/replayFence.najdorf1500.test.ts:50`
+- `src/services/ruleGradeFen.test.ts:9`
+- `src/services/ruleGradeFen.test.ts:12`
 - `src/services/speedRunReads.scale.test.ts:41`
 - `src/services/voicePackage.test.ts:19`
 - `src/services/voicePackage.test.ts:32`
@@ -135,6 +138,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:550`
 - `src/services/voicePackage.test.ts:557`
 - `src/services/voicePackage.test.ts:560`
+- `src/services/voicePackage.test.ts:568`
+- `src/services/voicePackage.test.ts:569`
 
 ### `spokenSentenceKeys` (function) — 9 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7820`
@@ -175,6 +180,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/dnaDoor.test.ts`
 - `src/services/laneReachability.test.ts`
 - `src/services/replayFence.najdorf1500.test.ts`
+- `src/services/ruleGradeFen.test.ts`
 - `src/services/speedRunReads.scale.test.ts`
 - `src/services/voicePackage.test.ts`
 
