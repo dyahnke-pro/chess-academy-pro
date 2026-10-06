@@ -253,6 +253,7 @@ export type AuditKind =
   | 'thinking-lesson'
   // A "Learn how to think" tier opened (every step of the tier below proven).
   | 'thinking-tier-unlocked'
+  | 'thinking-lesson-refill'
   // The transfer reading (thinkingLessonStart.loadThinkingTransfer): per
   // thinking step, did a step KNOWN in lessons reach the student's GAMES —
   // counts per class plus each step's before/after slip windows.

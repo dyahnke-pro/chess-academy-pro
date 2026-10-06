@@ -230,8 +230,17 @@ export async function enrichForLesson(
 
 /** The pool read again when a lesson runs dry mid-way: by then the boot
  *  puzzle seed has had time, and the refill waits for it longer. */
-export function refillLessonCandidates(opts: { usernames: LessonUsernames; rating: number }): Promise<LessonPositionCandidate[]> {
-  return loadLessonCandidates({ ...opts, seedWaitMs: 45_000 }).catch((): LessonPositionCandidate[] => []);
+export async function refillLessonCandidates(opts: { usernames: LessonUsernames; rating: number }): Promise<LessonPositionCandidate[]> {
+  const startedAt = Date.now();
+  const out = await loadLessonCandidates({ ...opts, seedWaitMs: 45_000 }).catch((): LessonPositionCandidate[] => []);
+  // Observable: a lesson that ran dry, and what the refill found.
+  void logAppAudit({
+    kind: 'thinking-lesson-refill',
+    category: 'subsystem',
+    source: 'thinkingLessonStart.refill',
+    summary: `refill rating=${opts.rating} boards=${out.length} games=${out.filter((c) => c.origin === 'game').length} ms=${Date.now() - startedAt}`,
+  });
+  return out;
 }
 
 /** The boards and memory a session needs for one step. */

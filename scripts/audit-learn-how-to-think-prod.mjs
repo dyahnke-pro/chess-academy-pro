@@ -180,7 +180,8 @@ async function main() {
       const still = await page.locator('[data-testid="thinking-lesson"]').getAttribute('data-asking').catch(() => null);
       if (still === '1') await page.locator('[data-testid="thinking-lesson-dont-know"]').click({ force: true }).catch(() => {});
       const fen2 = await waitAsking(page, 60_000);
-      record('L6. the lesson moves on to the next board', !!fen2 && fen2 !== fen1, fen2 ?? 'stalled');
+      const refills = listener.getCapturedEvents().filter((e) => e.kind === 'thinking-lesson-refill').map((e) => e.summary);
+      record('L6. the lesson moves on to the next board', !!fen2 && fen2 !== fen1, `${fen2 ?? 'stalled'}${refills.length ? ` · ${refills.join(' | ')}` : ' · no refill row'}`);
       if (fen2) {
         await page.locator('[data-testid="thinking-lesson-dont-know"]').click({ force: true }).catch(() => {});
         await page.waitForTimeout(5000);
