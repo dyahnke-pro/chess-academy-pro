@@ -34,15 +34,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolveOpeningIdeas` (function) — 6 call sites
-- `src/components/Coach/CoachGameReview.tsx:2774`
-- `src/components/Coach/CoachGameReview.tsx:2779`
+- `src/components/Coach/CoachGameReview.tsx:2797`
+- `src/components/Coach/CoachGameReview.tsx:2802`
 - `src/services/reviewOpeningTheory.test.ts:81`
 - `src/services/reviewOpeningTheory.test.ts:88`
 - `src/services/reviewOpeningTheory.test.ts:94`
 - `src/services/reviewOpeningTheory.test.ts:95`
 
 ### `resolveCuratedOpeningIdeas` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:1371`
+- `src/services/coachFeatureService.ts:1390`
 - `src/services/reviewOpeningTheory.test.ts:104`
 - `src/services/reviewOpeningTheory.test.ts:105`
 - `src/services/reviewOpeningTheory.test.ts:108`
@@ -50,10 +50,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.test.ts:121`
 
 ### `warmLectureSources` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:2762`
+- `src/components/Coach/CoachGameReview.tsx:2785`
 
 ### `buildOpeningTheoryLecture` (function) — 13 call sites
-- `src/components/Coach/CoachGameReview.tsx:2770`
+- `src/components/Coach/CoachGameReview.tsx:2793`
 - `src/services/reviewOpeningTheory.test.ts:35`
 - `src/services/reviewOpeningTheory.test.ts:64`
 - `src/services/reviewOpeningTheory.test.ts:75`
@@ -62,33 +62,33 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.test.ts:200`
 - `src/services/reviewOpeningTheory.test.ts:221`
 - `src/services/reviewOpeningTheory.test.ts:247`
-- `src/services/reviewOpeningTheory.test.ts:273`
-- `src/services/reviewOpeningTheory.test.ts:306`
-- `src/services/reviewOpeningTheory.test.ts:338`
-- `src/services/reviewOpeningTheory.test.ts:365`
+- `src/services/reviewOpeningTheory.test.ts:274`
+- `src/services/reviewOpeningTheory.test.ts:307`
+- `src/services/reviewOpeningTheory.test.ts:339`
+- `src/services/reviewOpeningTheory.test.ts:366`
 
 ### `TheoryEngine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `enrichLectureWithEngine` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:2778`
-- `src/services/reviewOpeningTheory.test.ts:276`
+- `src/components/Coach/CoachGameReview.tsx:2801`
+- `src/services/reviewOpeningTheory.test.ts:277`
 
 ### `TheoryLectureBeat` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildTheoryLectureBeats` (function) — 11 call sites
-- `src/components/Coach/CoachGameReview.tsx:2774`
-- `src/components/Coach/CoachGameReview.tsx:2779`
+- `src/components/Coach/CoachGameReview.tsx:2797`
+- `src/components/Coach/CoachGameReview.tsx:2802`
 - `src/services/reviewOpeningTheory.test.ts:149`
 - `src/services/reviewOpeningTheory.test.ts:166`
 - `src/services/reviewOpeningTheory.test.ts:201`
 - `src/services/reviewOpeningTheory.test.ts:223`
 - `src/services/reviewOpeningTheory.test.ts:255`
-- `src/services/reviewOpeningTheory.test.ts:279`
-- `src/services/reviewOpeningTheory.test.ts:316`
-- `src/services/reviewOpeningTheory.test.ts:339`
-- `src/services/reviewOpeningTheory.test.ts:366`
+- `src/services/reviewOpeningTheory.test.ts:280`
+- `src/services/reviewOpeningTheory.test.ts:317`
+- `src/services/reviewOpeningTheory.test.ts:340`
+- `src/services/reviewOpeningTheory.test.ts:367`
 
 ## Tests
 
