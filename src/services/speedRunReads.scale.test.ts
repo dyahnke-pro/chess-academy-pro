@@ -11,7 +11,7 @@ it.skipIf(!process.env.SCALE)('every speed-run read survives the board check acr
   const all = JSON.parse(readFileSync('public/data/pro-game-references.json', 'utf8')) as Array<{ playerId: string; studentSide: string; pgn: string }>;
   const games = all.filter((g) => g.playerId === 'naroditsky').filter((_, i) => i % 25 === 0).slice(0, Number(process.env.N ?? 20));
   const sf = spawn('node', ['/home/user/wt-upnext/node_modules/stockfish/bin/stockfish-18-lite-single.js']);
-  let buf = ''; sf.stdout.on('data', (d) => { buf += d.toString(); });
+  let buf = ''; sf.stdout.on('data', (d: Buffer) => { buf += d.toString(); });
   const send = (c: string) => sf.stdin.write(c + '\n');
   send('uci'); send('setoption name MultiPV value 3'); send('isready');
   const analyse = (fen: string) => new Promise<Array<{ rank: number; moves: string[]; evaluation: number; mate: number | null }>>((res) => {
