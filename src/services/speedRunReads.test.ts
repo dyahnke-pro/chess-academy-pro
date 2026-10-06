@@ -207,3 +207,12 @@ describe('his habits of thought, computed (each checked against the existing com
     }
   });
 });
+
+describe('the reads go quiet on strategy while a piece hangs (relevance)', () => {
+  it('a hanging knight: no slow-plan or threat-is-stronger read, only safety', () => {
+    // their bishop on b4 hits your undefended knight on c3; a pawn grab on d5 is also there
+    const fen = '4k3/8/8/3p4/1b6/2N5/8/4KB2 w - - 0 1';
+    const reads = speedRunReads({ fen, me: 'w', lines: [{ moves: ['f1c4'], evaluation: 200, mate: null }, { moves: ['c3d5'], evaluation: 100, mate: null }] });
+    expect(reads.some((r) => /threat is stronger|cash in|isn't going anywhere/.test(r.text))).toBe(false);
+  });
+});

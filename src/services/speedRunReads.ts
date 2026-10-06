@@ -16,6 +16,7 @@ import { findLoosePieces } from './loosePieces';
 import { computeBoardDelta } from './boardDelta';
 import { costStakes, piecePoints, type FactStakes } from './factStakes';
 import { findPawnBreaks, findWeakPawns } from './positionReadingService';
+import { computeMustDefend } from './threatOut';
 import { computePieceRoute } from './forwardTeaching';
 import { knightReach } from './moveInsight';
 import type { GamePromise } from './learnBoardTeaching';
@@ -546,6 +547,20 @@ export function queenGlue(fen: string, me: 'w' | 'b'): Read | null {
 /** Every read for the side to move, in his order of thought. */
 export function speedRunReads(args: { fen: string; me: 'w' | 'b'; lines: Lines; lastMove?: { fenBefore: string; san: string }; lastOwnMove?: { fenBefore: string; san: string } }): Read[] {
   const bestSan = sanOf(args.fen, args.lines[0]?.moves?.[0]);
+  // RELEVANCE (David 2026-10-06: "make sure all narrations are relevant"): with
+  // a piece of the student's hanging, a quiet-move habit is noise — "leave the
+  // capture hanging over them" beside "your queen on a5 is hanging" (prod tape,
+  // a 171-word turn). Only the reads about SAFETY speak until the board calms.
+  let onFire = false;
+  try { onFire = computeMustDefend(args.fen, args.me).net >= 3; } catch { /* calm */ }
+  if (onFire) {
+    return [
+      secureFirst(args.fen, args.me, args.lines),
+      takeTheSting(args.fen, args.me, bestSan),
+      queenGlue(args.fen, args.me),
+      heldByTactic(args.fen, args.me),
+    ].filter((r): r is Read => !!r);
+  }
   return [
     positionOpened(args.lastMove, args.me, bestSan),
     queenGlue(args.fen, args.me),

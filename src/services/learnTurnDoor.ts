@@ -393,7 +393,17 @@ export function decideTurn(
       && (LEARN_LANES[x.lane].lead <= DESCRIPTION_LEAD || x.lane === 'positionFacts');
     const sq = x.fact.squares ?? [];
     const restates = describes && !(sq.some((q) => anchor.includes(q)) && sq.some((q) => !anchor.includes(q)));
-    if (!restates) {
+    // A DANGER TURN STAYS ON THE DANGER (prod tape 2026-10-06: a hanging queen
+    // and, in the same breath, a slow-plan test and "leave the capture hanging
+    // over them" — 171 words). While a threat leads, another fact speaks if it
+    // touches the danger's squares, is bigger news by stake, or must ride;
+    // the rest waits for a calm board. Relevance, not a count.
+    const offTopic = !!ownLead && DANGER_LANES.has(ownLead.lane) && x !== ownLead && !DANGER_LANES.has(x.lane)
+      // A must-ride lane still rides — unless it is a board IDEA (the point
+      // beat: their plan, the structure), which keeps until the board calms.
+      && (LEARN_LANES[x.lane].always !== true || DNA_BEAT[x.lane] === 'point') && !(beginner && BEGINNER_ALWAYS.has(x.lane))
+      && !sq.some((q) => anchor.includes(q)) && value(x) < value(ownLead);
+    if (!restates && !offTopic) {
       keep.push(x.fact);
       if (!spoke.includes(x.lane)) spoke.push(x.lane);
     } else if (!held.includes(x.lane)) held.push(x.lane);

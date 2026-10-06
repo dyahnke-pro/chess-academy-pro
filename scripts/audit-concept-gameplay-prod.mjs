@@ -88,6 +88,8 @@ const MAX_STUDENT_PLIES = Number(process.env.AUDIT_CONCEPT_PLIES ?? 24);
 // wordy or whether every line teaches. Set AUDIT_CONCEPT_PLAY_ON=0 for the
 // short run.
 const PLAY_ON = process.env.AUDIT_CONCEPT_PLAY_ON !== '0';
+let carryOverAsked = 0;
+let carryOverCleared = 0;
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const OUT_DIR = `audit-reports/concept-gameplay-${stamp}`;
 const BOOT_TIMEOUT_MS = 45_000;
@@ -358,6 +360,22 @@ async function askAndPlay(page, listener, ask, label) {
   const moves = [];
   let onBook = true;
   for (let ply = 0; ply < MAX_STUDENT_PLIES && !chess.isGameOver(); ply += 1) {
+    // THE CARRY-OVER QUESTION (thinkingLesson.carryOver): a habit this student
+    // keeps failing is asked on their own board and the board waits for the
+    // answer. Answer it like a stuck student — "I don't know" — and play on;
+    // an audit that kept clicking moves read it as a coach that never replied.
+    const asking = page.locator('[data-testid="thinking-lesson"]');
+    if (await asking.count()) {
+      carryOverAsked += 1;
+      await page.locator('[data-testid="thinking-lesson-dont-know"]').first().click({ force: true }).catch(() => {});
+      // After "I don't know" the coach shows the answer and speaks the reasons
+      // before handing the board back — real (muted) speech time, so 60s.
+      for (let t = Date.now(); Date.now() - t < 60_000 && (await asking.count()) > 0;) {
+        await page.waitForTimeout(800);
+        await page.locator('[data-testid="thinking-lesson-dont-know"]').first().click({ force: true, timeout: 1000 }).catch(() => {});
+      }
+      carryOverCleared += (await asking.count()) === 0 ? 1 : 0;
+    }
     let legal = null;
     if (onBook && ply < STUDENT_LINE.length) {
       const m = chess.moves({ verbose: true }).find((v) => v.san === STUDENT_LINE[ply]);
@@ -515,6 +533,7 @@ async function main() {
     const all = spokenLines(listener);
     record('F1. vacuity guard: ≥3 spoken lines across the run', all.length >= 3, `${all.length}`);
     record('F2. the run stayed MUTED (zero /api/tts requests)', ttsRequests === 0, `${ttsRequests} tts requests`);
+    record('K. a carry-over question (when asked) is answerable and the game plays on', carryOverCleared === carryOverAsked, `asked=${carryOverAsked} cleared=${carryOverCleared}`);
     // ── V: IS IT WORTH LISTENING TO (David 2026-10-06: "must not be laborious") ──
     // The full tape, printed, so the prose is read every run — the row count
     // is the harness, the prose is the product.
@@ -620,7 +639,10 @@ async function main() {
       );
       // B9 (2026-09-22): a door-closed row files every fact under its own gate
       // (`quietBy.importance` / `quietBy.need`), never under the floor's name.
-      const misfiled = silent.filter((d) => (d.quietCount ?? 0) > 0 && (d.quietBy?.[d.reason] ?? 0) !== d.quietCount);
+      // The `board` gate names its two mechanisms (`in-flux`, `beside-mate` —
+      // coachDecider) rather than itself: more precise, same gate.
+      const filedUnder = (d) => d.reason === 'board' ? (d.quietBy?.['in-flux'] ?? 0) + (d.quietBy?.['beside-mate'] ?? 0) + (d.quietBy?.board ?? 0) : (d.quietBy?.[d.reason] ?? 0);
+      const misfiled = silent.filter((d) => (d.quietCount ?? 0) > 0 && filedUnder(d) !== d.quietCount);
       record(
         'G2b. every door-closed row files its facts under the gate that closed it',
         misfiled.length === 0,

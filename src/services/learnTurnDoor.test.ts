@@ -357,3 +357,16 @@ describe('ONE ORDER, NO HOLD (David 2026-10-05)', () => {
     expect(d.held).toEqual([]);
   });
 });
+
+describe('a danger turn stays on the danger (prod tape 2026-10-06)', () => {
+  const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
+  it('an off-topic plan waits; a fact on the danger squares speaks', () => {
+    const d = decideTurn([
+      { lane: 'threat', text: 'Careful — your queen on d1 is attacked.', fen: FEN, squares: ['d1', 'g4'] },
+      { lane: 'planArc', text: 'Their plan is the queenside push.', fen: FEN, squares: ['b5'] },
+      { lane: 'moveIntent', text: 'Your move guards g4.', fen: FEN, squares: ['g4'] },
+    ]);
+    expect(d.spoke).toEqual(expect.arrayContaining(['threat', 'moveIntent']));
+    expect(d.pkg.spoken).not.toContain('queenside push');
+  });
+});
