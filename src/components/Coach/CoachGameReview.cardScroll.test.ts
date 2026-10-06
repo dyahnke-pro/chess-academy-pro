@@ -34,9 +34,11 @@ function renderedIds(): Set<string> {
 describe('review card scroll-into-view selectors', () => {
   it('lists at least the blocking cards', () => {
     const ids = scrollSelectorIds();
-    // 10 since the cameo card (two selectors) was removed, 2026-10-02.
-    expect(ids.length).toBeGreaterThanOrEqual(10);
+    // 9 since the trap and sequence cards gave way to the turning-point
+    // question + reveal, 2026-10-06.
+    expect(ids.length).toBeGreaterThanOrEqual(9);
     expect(ids).toContain('review-find-shot-card');
+    expect(ids).toContain('review-turning-question');
   });
 
   it('every selector matches a testid the component renders', () => {

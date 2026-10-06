@@ -2605,7 +2605,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         [
           '[data-testid="review-find-shot-card"]',
           '[data-testid="review-find-shot-reveal"]',
-                              '[data-testid="review-theory-ask"]',
+          '[data-testid="review-turning-question"]',
+          '[data-testid="review-turning-reveal"]',
+          '[data-testid="review-theory-ask"]',
           '[data-testid="review-theory-playback"]',
           '[data-testid="review-principle-quiz"]',
           '[data-testid="review-rewind-card"]',
@@ -2636,7 +2638,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // card follows another, `anyCardOpen` never transitions, so the second card
     // (the find-shot prompt) opened below the fold as a border-sliver (David
     // 2026-07-21, IMG_4581: "that thin purple line below the board").
-  }, [anyCardOpen, shotState, shotReveal, criticalCard, criticalReveal, rewindOffer, theoryState, principleQuizState, faucetPhase]);
+  }, [anyCardOpen, shotState, shotReveal, turningRevealText, criticalCard, criticalReveal, rewindOffer, theoryState, principleQuizState, faucetPhase]);
 
   // ship-4: `currentMove` removed — only the deleted analysis-phase
   // board read it. Walk render uses `walkPlayback.currentSegment` and
