@@ -1,0 +1,34 @@
+import { describe, it, expect } from 'vitest';
+import { dangerLevel, openThreatLine } from './liveTacticsContext';
+
+describe('the danger level, computed and spoken first (David 2026-10-06)', () => {
+  it('a hanging knight the warning names: a piece is at stake', () => {
+    // their bishop on b4 hits your undefended knight on c3
+    const fen = '4k3/8/8/8/1b6/2N5/8/4K3 w - - 0 1';
+    expect(dangerLevel(fen, 'w', ['b4', 'c3'])).toBe('piece');
+    expect(openThreatLine('Watch out — their bishop on b4 hits your knight on c3.', fen, 'w', ['b4', 'c3'], 0)).toBe('Danger — a whole piece is at stake. Their bishop on b4 hits your knight on c3.');
+  });
+  it('a mate threat decides the game', () => {
+    // back rank: their rook can mate on e1 if you pass
+    const fen = '4r1k1/8/8/8/8/8/5PPP/6K1 w - - 0 1';
+    expect(dangerLevel(fen, 'w', ['e8', 'e1'])).toBe('decisive');
+  });
+  it('nothing lost by force: not urgent yet', () => {
+    const fen = '4k3/8/8/8/8/2N5/8/4K3 w - - 0 1';
+    expect(dangerLevel(fen, 'w', ['c3'])).toBe('not-yet');
+    expect(openThreatLine('Watch out — if they play Bb4, the knight is pinned.', fen, 'w', ['c3'], 0)).toBe('Not urgent yet, but see it coming — if they play Bb4, the knight is pinned.');
+  });
+  it('a DIFFERENT piece hangs: no level, so it is never pinned to the wrong threat', () => {
+    // the warning names c3, but the hanging piece is the bishop on f3
+    const fen = '4k3/8/8/7q/8/2N2B2/8/4K3 w - - 0 1';
+    expect(dangerLevel(fen, 'w', ['c3'])).toBeNull();
+    expect(openThreatLine('Watch out — something about c3.', fen, 'w', ['c3'], 0)).toBe('Watch out — something about c3.');
+  });
+  it('rotates on the ply, never random', () => {
+    const fen = '4k3/8/8/8/1b6/2N5/8/4K3 w - - 0 1';
+    const a = openThreatLine('Watch out — x.', fen, 'w', ['c3'], 0);
+    const b = openThreatLine('Watch out — x.', fen, 'w', ['c3'], 1);
+    expect(a).not.toBe(b);
+    expect(openThreatLine('Watch out — x.', fen, 'w', ['c3'], 2)).toBe(a);
+  });
+});

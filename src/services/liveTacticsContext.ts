@@ -46,6 +46,7 @@ import { conceptForBoard } from './conceptEngine';
 import { sayLine } from './spokenMove';
 import { verifyForkOnBoard } from './tacticVerification';
 import { seatPieceReferences } from '../utils/seatPieces';
+import { computeMustDefend, flipSideToMove } from './threatOut';
 
 /**
  * Build the `TacticsLiveContext` block for the brain envelope.
@@ -755,4 +756,45 @@ export function formatTacticsSubBlock(
     `    TEACHING SHAPE (the coach's spine — apply to every tactic/threat you teach from this block): (1) IDENTIFY — name the pattern and its squares, from this block only; (2) RECOGNIZE — teach the geometry that made it possible so the student can spot it a move early (the two targets a knight's-hop from one square; the loose piece inviting tactics; the king's flight-square count; the overloaded defender) — using ONLY pieces/squares listed in the facts above; (3) PREVENT — the concrete defense or exploiting move, ONLY when a grounded block supplies it (a listed threat line, the engine plan, the stored best move). If no grounded defense exists in the context, teach the recognition and stop — never invent the answer.`,
   );
   return lines.join('\n');
+}
+
+
+// ─── THE DANGER LEVEL, SPOKEN (David 2026-10-06: "danger levels") ───────────
+// He says how dangerous a threat is before he says what it is: "this is
+// serious", "not a real threat yet". The level is COMPUTED from what the
+// student loses by force if they ignore it (`computeMustDefend`, the same
+// net the importance model reads) — and only when the piece at risk is one
+// the warning itself names, so a level is never pinned to the wrong threat.
+export type DangerLevel = 'decisive' | 'piece' | 'pawn' | 'not-yet';
+
+export const DANGER_OPENERS: Record<DangerLevel, readonly string[]> = {
+  decisive: ['This one decides the game — ', 'Drop everything — '],
+  piece: ['Danger — a whole piece is at stake. ', 'Watch out — this costs a piece if you ignore it. '],
+  pawn: ['Watch out — a pawn is at stake. ', 'Careful — this costs a pawn if you ignore it. '],
+  'not-yet': ['Not urgent yet, but see it coming — ', 'No rush yet — '],
+};
+
+/** The level of a threat against `student` on `fen` (their move just played,
+ *  student to move), for the warning that names `squares`. Null when the
+ *  level would describe a different piece than the warning does. */
+export function dangerLevel(fen: string, student: 'w' | 'b', squares: readonly string[]): DangerLevel | null {
+  try {
+    const them = flipSideToMove(fen);
+    if (them && new Chess(them).moves().some((m) => m.endsWith('#'))) return 'decisive';
+    const md = computeMustDefend(fen, student);
+    const named = md.pieces.find((p) => squares.includes(p.square));
+    if (!named) return md.net > 0 ? null : 'not-yet';
+    return named.value >= 5 ? 'decisive' : named.value >= 3 ? 'piece' : 'pawn';
+  } catch { return null; }
+}
+
+/** The opening words of a threat line, rotated on the ply (resume-safe, never
+ *  random). "Watch out — " is replaced by the computed level. */
+export function openThreatLine(line: string, fen: string, student: 'w' | 'b', squares: readonly string[], ply: number): string {
+  const level = dangerLevel(fen, student, squares);
+  if (!level || !line.startsWith('Watch out — ')) return line;
+  const stems = DANGER_OPENERS[level];
+  const body = line.slice('Watch out — '.length);
+  const opener = stems[ply % stems.length];
+  return opener.endsWith('. ') ? `${opener}${body.charAt(0).toUpperCase()}${body.slice(1)}` : `${opener}${body}`;
 }

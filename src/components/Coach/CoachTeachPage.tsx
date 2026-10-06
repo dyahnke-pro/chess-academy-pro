@@ -277,7 +277,7 @@ import { computePositionFacts, mustKey, conceptInstanceKey, convertKey } from '.
 import { gradePlayedMove, liveMoveCost, uciOfSan } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause, gapEchoedByVerdict } from '../../services/opponentGap';
-import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
+import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext, openThreatLine } from '../../services/liveTacticsContext';
 import { buildCausalChain, causalChainHighlights } from '../../services/causalChain';
 import { renderCausalChain } from '../../services/causalChainVoice';
 import { seatPieceReferences } from '../../services/groundedAnswer';
@@ -8199,6 +8199,8 @@ export function CoachTeachPage(): JSX.Element {
         // pins bishop on c3 against queen on a5"); whose each piece is, is the
         // board's fact and the whole point of a warning.
         threatLine = `Watch out — ${seatPieceReferences(`${t.description.charAt(0).toLowerCase()}${t.description.slice(1)}`, args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b')}.${conceptTail(t.type)}`;
+        // THE DANGER LEVEL, computed (`openThreatLine`): how much it costs if ignored, said first.
+        threatLine = openThreatLine(threatLine, args.fenAfterReply, studentCC, threatSquares, Number(args.fenAfterReply.split(' ')[5] ?? 0));
         // SAY WHOSE, WHEN BOTH ARE THE SAME SHAPE. David's transcript, 02:50:
         // "Watch out — queen on a5 pins knight on c3 against king on e1.
         //  There's a real pin here for you — look for it."
@@ -8243,6 +8245,7 @@ export function CoachTeachPage(): JSX.Element {
           threatKey = `soon:${up.type}:${theirs ?? ''}`;
           threatSquares = (up.description.match(/\b[a-h][1-8]\b/g) ?? []).slice(0, 4);
           threatLine = `Watch out — ${up.spoken}.`;
+          threatLine = openThreatLine(threatLine, args.fenAfterReply, studentCC, threatSquares, Number(args.fenAfterReply.split(' ')[5] ?? 0));
         }
       } else if (!(myHanging.length > 0 && (AV[myHanging[0].piece] ?? 0) >= 3) && kingPawnThreat()) {
         // threatLine set above
