@@ -17,6 +17,8 @@ describe('his habits of thought, computed (each checked against the existing com
     // the student could take on d5; the engine prefers a quiet move
     expect(keepTension(fen, 'w', 'Nc3')?.text).toMatch(/Keep the tension/);
     expect(keepTension(fen, 'w', 'exd5')).toBeNull();
+    // en passant is not tension
+    expect(keepTension('3r1rk1/1pp3pp/p7/4Pp1n/5P2/2N5/PP4PP/2R2R1K w - f6 0 20', 'w', 'Rcd1')).toBeNull();
   });
   it('any move is fine: three moves inside an inaccuracy of each other', () => {
     const fen = 'r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQ1RK1 w - - 0 8';
@@ -53,7 +55,7 @@ describe('his habits of thought, computed (each checked against the existing com
   it('secure the loose piece before collecting', () => {
     // Rxa7 is there, but the bishop on c4 is loose and hit by the queen on c8; the engine retreats it first
     const fen = '2q1k3/p7/8/8/2B5/8/8/R3K3 w - - 0 1';
-    expect(secureFirst(fen, 'w', [line(['c4b3'], 50)])?.text).toMatch(/secure it first/);
+    expect(secureFirst(fen, 'w', [line(['c4b3'], 50)])?.text).toMatch(/loose and under fire — (secure it first|tidy that up|safety first)/);
     expect(secureFirst(fen, 'w', [line(['a1a7'], 50)])).toBeNull();
     // Scandinavian 3.Nc3: the queen is hit, but every capture on offer loses — nothing to collect
     expect(secureFirst('rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3', 'b', [line(['d5a5'], 0)])).toBeNull();
@@ -164,7 +166,7 @@ describe('his habits of thought, computed (each checked against the existing com
   });
   it('a move-naming read carries its idea, spoken where the move is held', () => {
     const r = anyMoveFine('r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQ1RK1 w - - 0 8', [line(['c1g5'], 30), line(['b1c3'], 25), line(['c2c3'], 20)]);
-    expect(r?.idea).toMatch(/No move here is a big decision/);
+    expect(r?.idea).toMatch(/big decision|not a critical moment|Nothing hinges/);
     expect(r?.idea).not.toMatch(/Bg5|Nc3|c3/);
     expect(anyMoveFine(fenAt('e4 e5'), [line(['g1f3'], 30), line(['b1c3'], 25), line(['f1c4'], 20)])).toBeNull();
   });
@@ -176,11 +178,11 @@ describe('his habits of thought, computed (each checked against the existing com
     expect(pa?.idea).toMatch(/strongest bishop move lets them take your pawn on e4/);
     expect(pa?.idea).not.toMatch(/c4/);
     const ff = flexibleFirst(fenAt('e4 e5'), [line(['g1f3'], 30), line(['d2d4'], 20)]);
-    expect(ff?.idea).toMatch(/a knight move keeps your options/);
+    expect(ff?.idea).toMatch(/a knight move/);
     expect(ff?.idea).not.toMatch(/f3/);
-    expect(ff?.idea).toMatch(/d4 can always come later/);
+    expect(ff?.idea).toMatch(/d4/);
     const castle = flexibleFirst('r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4', [line(['e1g1'], 30), line(['d2d3'], 20)]);
-    expect(castle?.idea).toMatch(/castling keeps your options/);
+    expect(castle?.idea).toMatch(/castling/);
   });
   it('scale-replay defects stay fixed (20 of his games)', () => {
     // play it anyway: the knight lands where they take it — never name that square
@@ -190,6 +192,12 @@ describe('his habits of thought, computed (each checked against the existing com
     expect(forceConcession('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1', [line(['c7c5', 'g1f3'], 30)])).toBeNull();
     // 1…d5 2.exd5 doubles the d-pawns — and …Qxd5 takes one back: no concession
     expect(forceConcession('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1', [line(['d7d5', 'e4d5', 'd8d5'], 30)])).toBeNull();
+  });
+  it('phrasing rotates on the move number, never at random', () => {
+    const at = (n: number) => `r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQ1RK1 w - - 0 ${n}`;
+    const L = [line(['c1g5'], 30), line(['b1c3'], 25), line(['c2c3'], 20)];
+    expect(anyMoveFine(at(9), L)?.idea).toBe(anyMoveFine(at(9), L)?.idea);
+    expect(anyMoveFine(at(9), L)?.idea).not.toBe(anyMoveFine(at(10), L)?.idea);
   });
   it('the reads list never throws on any opening position (smoke over a real game)', () => {
     const c = new Chess();

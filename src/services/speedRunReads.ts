@@ -20,6 +20,9 @@ import { computePieceRoute } from './forwardTeaching';
 import { knightReach } from './moveInsight';
 
 const name = (p: string): string => PIECE_NAMES[p] ?? 'piece';
+/** PHRASING ROTATES, NEVER ROLLS (CLAUDE.md §THE FOUNDATION): keyed on the
+ *  move number, so a replay says the same thing and a game does not. */
+const rot = (fen: string, ...forms: string[]): string => forms[Number(fen.split(' ')[5] ?? 1) % forms.length];
 const play = (fen: string, san: string): { board: Chess; move: ReturnType<Chess['move']> } | null => {
   try { const board = new Chess(fen); const move = board.move(san); return move ? { board, move } : null; } catch { return null; }
 };
@@ -46,12 +49,14 @@ export function keepTension(fen: string, me: 'w' | 'b', bestSan: string | null):
   let b: Chess;
   try { b = new Chess(fen); } catch { return null; }
   if (b.turn() !== me) return null;
-  const tension = b.moves({ verbose: true }).find((m) => m.piece === 'p' && m.captured === 'p');
+  // En passant is not tension: it lands on an empty square ("their pawn on g6"
+  // with the pawn on g5 — scale replay 2026-10-06).
+  const tension = b.moves({ verbose: true }).find((m) => m.piece === 'p' && m.captured === 'p' && !m.flags.includes('e'));
   if (!tension || bestSan.replace(/[+#]/g, '') === tension.san.replace(/[+#]/g, '')) return null;
   const best = play(fen, bestSan);
   if (!best || best.move.captured) return null;
   return {
-    text: `Keep the tension between your pawn on ${tension.from} and theirs on ${tension.to} — whoever takes first releases it, and right now that helps them, not you.`,
+    text: rot(fen, `Keep the tension between your pawn on ${tension.from} and theirs on ${tension.to} — whoever takes first releases it, and right now that helps them, not you.`, `Don't take on ${tension.to} yet — your pawn on ${tension.from} and theirs stare at each other, and releasing that tension helps them.`, `Leave the pawns on ${tension.from} and ${tension.to} where they are — the side that captures first gives the other the freer game here.`),
     squares: [tension.from, tension.to],
   };
 }
@@ -67,7 +72,7 @@ export function anyMoveFine(fen: string, lines: Lines): Read | null {
   if (Math.max(...cps) - Math.min(...cps) >= criticalityThresholds().notable || Math.abs(cps[0]) > 300) return null;
   const sans = lines.slice(0, 3).map((l) => sanOf(fen, l.moves[0])).filter((x): x is string => !!x);
   if (sans.length < 3) return null;
-  return { idea: 'No move here is a big decision — several are about equally good, so save your time for the moves that are.', claim: 'srr:any-move-fine', namesMove: true, text: `Several moves are equally good here — ${sans[0]}, ${sans[1]} or ${sans[2]}. Not every move is a big decision; save your time for the ones that are.` };
+  return { idea: rot(fen, 'No move here is a big decision — several are about equally good, so save your time for the moves that are.', 'This is not a critical moment — a few moves do the same job; bank the time for when it matters.', 'Nothing hinges on this one — pick a sensible move and keep your clock for the hard decisions.'), claim: 'srr:any-move-fine', namesMove: true, text: `Several moves are equally good here — ${sans[0]}, ${sans[1]} or ${sans[2]}. Not every move is a big decision; save your time for the ones that are.` };
 }
 
 /** D2 THE UGLY MOVE THAT IS CORRECT ("the hardest move to make"): the engine's
@@ -93,7 +98,7 @@ export function uglyButRight(fen: string, bestSan: string | null): Read | null {
   const doublesOwn = doubled(r.board) > doubled(before);
   if (!retreatHome && !doublesOwn) return null;
   const why = doublesOwn ? 'it doubles your own pawns' : `it walks your ${name(r.move.piece)} back home`;
-  return { idea: `The best move here is an ugly ${name(r.move.piece)} move — ${why} — don't reject a move for how it looks; check it.`, namesMove: true, text: `${sayMoveClause(r.move.san, fen).replace(/^./, (c) => c.toUpperCase())} looks ugly — ${why} — but it is the move. Don't reject a move for how it looks; check it.` };
+  return { idea: `The best move here is an ugly ${name(r.move.piece)} move — ${why} — ${rot(fen, "don't reject a move for how it looks; check it.", 'ugly is not the same as bad — calculate it before you dismiss it.', 'the move that looks wrong is sometimes the only one; look before you discard it.')}`, namesMove: true, text: `${sayMoveClause(r.move.san, fen).replace(/^./, (c) => c.toUpperCase())} looks ugly — ${why} — but it is the move. Don't reject a move for how it looks; check it.` };
 }
 
 /** C8 WHICH SIDE TO CASTLE: both ways are legal and one wing's pawn cover is
@@ -179,7 +184,7 @@ export function secureFirst(fen: string, me: 'w' | 'b', lines: Lines): Read | nu
   if (!loose) return null;
   const after = play(fen, bestSan);
   if (!after || after.board.attackers(loose.square, me).length === 0 && after.move.from !== loose.square) return null;
-  return { stakes: pieceStakes(loose.type, 1), text: `There is something to collect, but your ${name(loose.type)} on ${loose.square} is loose and under fire — secure it first; the capture will still be there.`, squares: [loose.square] };
+  return { stakes: pieceStakes(loose.type, 1), text: `There is something to collect, but your ${name(loose.type)} on ${loose.square} is loose and under fire — ${rot(fen, 'secure it first; the capture will still be there.', 'tidy that up before you go collecting.', 'safety first — the material is not going anywhere.')}`, squares: [loose.square] };
 }
 
 /** B10 MUTUAL PINS: a piece of yours and a piece of theirs are both pinned to
@@ -279,7 +284,7 @@ export function playAnyway(fen: string, lines: Lines): Read | null {
   const hits = replySan.includes('+') ? 'lets them check your king'
     : rTo?.captured && rTo.to === a.move.to ? `offers the ${name(rTo.captured)}` // naming the square would give the move away
       : rTo?.captured ? `lets them take your ${name(rTo.captured)} on ${rTo.to}` : 'allows a scary-looking reply';
-  return { idea: `Your strongest ${name(a.move.piece)} move ${hits} — look one move past it: nothing follows for them.`, namesMove: true, text: `${sayMoveClause(bestSan, fen).replace(/^./, (c) => c.toUpperCase())} allows ${what} — ${sayMoveClause(replySan, a.board.fen())} — and you play it anyway: look one move past the scary reply and nothing follows for them.` };
+  return { idea: `Your strongest ${name(a.move.piece)} move ${hits} — ${rot(fen, 'look one move past it: nothing follows for them.', 'check what happens next — the scare is empty.', 'follow it one more move and the danger disappears.')}`, namesMove: true, text: `${sayMoveClause(bestSan, fen).replace(/^./, (c) => c.toUpperCase())} allows ${what} — ${sayMoveClause(replySan, a.board.fen())} — and you play it anyway: look one move past the scary reply and nothing follows for them.` };
 }
 
 /** SKIP THE MIDDLEMAN: the break is there and the engine plays it now rather
@@ -477,7 +482,7 @@ export function forceConcession(fen: string, lines: Lines): Read | null {
   const rights = (f: string): string => f.split(' ')[2];
   const theirs = (f: string): string => rights(f).replace(them === 'w' ? /[kq]/g : /[KQ]/g, '').replace('-', '');
   if (r.move.piece === 'k' && !replySan.startsWith('O-O') && theirs(a.board.fen()) && !theirs(r.board.fen())) {
-    return { idea: `Your ${name(a.move.piece)} has a forcing move that costs their king the right to castle — find it.`, namesMove: true, text: `${cap(sayMoveClause(bestSan, fen))} forces a concession — their best answer is ${replySan}, and their king loses the right to castle.`, squares: [r.move.to] };
+    return { idea: `Your ${name(a.move.piece)} has a forcing move that costs their king the right to castle — ${rot(fen, 'find it.', 'look at the checks first.', 'can you see it?')}`, namesMove: true, text: `${cap(sayMoveClause(bestSan, fen))} forces a concession — their best answer is ${replySan}, and their king loses the right to castle.`, squares: [r.move.to] };
   }
   // Only a STRUCTURAL weakness the reply itself made: an isolated or doubled
   // pawn of theirs that stands there, after a reply that moved or took a pawn.
@@ -496,7 +501,7 @@ export function forceConcession(fen: string, lines: Lines): Read | null {
   // the pawn before the reply moved it.
   const pawnFile = (r.move.to === fresh && r.move.piece === 'p' ? r.move.from : fresh)[0];
   if (!fresh) return null;
-  return { idea: `Your ${name(a.move.piece)} has a forcing move that leaves their ${pawnFile}-pawn weak for good — find it.`, namesMove: true, text: `${cap(sayMoveClause(bestSan, fen))} forces a concession — their best answer is ${replySan}, and it leaves their ${pawnFile}-pawn weak for good.`, squares: [fresh] };
+  return { idea: `Your ${name(a.move.piece)} has a forcing move that leaves their ${pawnFile}-pawn weak for good — ${rot(fen, 'find it.', 'look at the forcing moves first.', 'can you see it?')}`, namesMove: true, text: `${cap(sayMoveClause(bestSan, fen))} forces a concession — their best answer is ${replySan}, and it leaves their ${pawnFile}-pawn weak for good.`, squares: [fresh] };
 }
 
 /** FLEXIBLE MOVES FIRST: a piece move and a pawn move are about equal — play
@@ -512,7 +517,7 @@ export function flexibleFirst(fen: string, lines: Lines): Read | null {
     const s2 = sanOf(fen, l.moves[0]);
     const p2 = s2 ? play(fen, s2) : null;
     if (!p2 || !s2 || p2.move.piece !== 'p' || p2.move.captured) continue;
-    return { idea: `Make the flexible move first — ${what} keeps your options; ${s2} can always come later, but a pawn can never go back.`, claim: 'srr:flexible-first', namesMove: true, text: `${a} and ${s2} are about equal — make the flexible move first. ${a} keeps your options; the pawn move can always come later, but it can never go back.` };
+    return { idea: rot(fen, `Make the flexible move first — ${what} keeps your options; ${s2} can always come later, but a pawn can never go back.`, `Keep your options open — ${what} first; ${s2} will still be there, and a pawn move can't be taken back.`, `Commit the pawn last — ${what} now, ${s2} later if you still want it.`), claim: 'srr:flexible-first', namesMove: true, text: `${a} and ${s2} are about equal — make the flexible move first. ${a} keeps your options; the pawn move can always come later, but it can never go back.` };
   }
   return null;
 }
