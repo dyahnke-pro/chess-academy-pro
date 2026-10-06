@@ -88,6 +88,7 @@ describe('his habits of thought, computed (each checked against the existing com
   it('skip the middleman: c4 hits d5 now (and survives the exchange) — no need to prepare it', () => {
     const fen = fenAt('d4 d5 Nf3 Nf6 e3 e6 Bd3 c5');
     expect(skipMiddleman(fen, 'c4')?.text).toMatch(/break is ready now/);
+    expect(skipMiddleman(fen, 'c4')?.idea).toMatch(/c-pawn break against their pawn on d5/);
     expect(skipMiddleman(fen, 'O-O')).toBeNull();
   });
   it('the useful waiting move: nothing matters much and the engine plays h3', () => {
@@ -167,14 +168,15 @@ describe('his habits of thought, computed (each checked against the existing com
   });
   it('each idea names the piece, never the square it goes to (the guided-find rule)', () => {
     const fc = forceConcession('rnbqkbnr/pp3ppp/8/2ppp3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1', [line(['f1b5', 'e8e7'], 50)]);
-    expect(fc?.idea).toMatch(/Your bishop has a forcing move/);
+    expect(fc?.idea).toMatch(/Your bishop has a forcing move that costs their king the right to castle/);
     expect(fc?.idea).not.toMatch(/b5|Bb5/);
     const pa = playAnyway(fenAt('e4 e5 Nf3 Nf6'), [line(['f1c4', 'f6e4'], 40)]);
-    expect(pa?.idea).toMatch(/strongest bishop move/);
+    expect(pa?.idea).toMatch(/strongest bishop move lets them take your pawn on e4/);
     expect(pa?.idea).not.toMatch(/c4/);
     const ff = flexibleFirst(fenAt('e4 e5'), [line(['g1f3'], 30), line(['d2d4'], 20)]);
     expect(ff?.idea).toMatch(/a knight move keeps your options/);
-    expect(ff?.idea).not.toMatch(/f3|d4/);
+    expect(ff?.idea).not.toMatch(/f3/);
+    expect(ff?.idea).toMatch(/d4 can always come later/);
     const castle = flexibleFirst('r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4', [line(['e1g1'], 30), line(['d2d3'], 20)]);
     expect(castle?.idea).toMatch(/castling keeps your options/);
   });
