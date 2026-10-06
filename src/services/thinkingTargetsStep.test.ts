@@ -100,3 +100,14 @@ describe('step 5 — the pinned-piece form (PP on the PP)', () => {
     expect(kit.prompt(0)).not.toMatch(/pinned/);
   });
 });
+
+describe('targetsWrongTapLine — a miss teaches the count', () => {
+  it('names the first capture and the recapture when taking costs more than it wins', () => {
+    // White to move: rooks on d2 and h5 hit the black knight on d5 (two hits, one guard), but a pawn on e6 guards it.
+    const fen = '4k3/8/4p3/3n3R/8/8/3R4/4K3 w - - 0 1';
+    expect(targetsWrongTapLine(fen, 'd5')).toMatch(/^Your cheapest way in is the rook on (d2|h5), and their pawn on e6 takes back — you give more than the knight is worth\.$/);
+  });
+  it('says plainly when nothing attacks the piece', () => {
+    expect(targetsWrongTapLine('4k3/8/8/n7/8/8/8/4K2R w - - 0 1', 'a5')).toBe('Nothing of yours attacks that knight yet.');
+  });
+});

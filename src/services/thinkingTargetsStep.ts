@@ -127,7 +127,19 @@ export function targetsWrongTapLine(fen: string, sq: Square): string {
   if (defenders > 0 && attackers <= defenders) {
     return `Count the guards: that ${name(p.type)} has ${defenders} defender${defenders === 1 ? '' : 's'}${attackers > 0 ? ` and only ${attackers} attacker${attackers === 1 ? '' : 's'}` : ''}.`;
   }
-  return `Look again at that ${name(p.type)} — who guards it?`;
+  if (attackers === 0) return `Nothing of yours attacks that ${name(p.type)} yet.`;
+  // More hits than guards, and still not won: the first capture costs more than
+  // the piece is worth, because a cheaper piece of theirs takes back.
+  const cheapest = (sqs: Square[]): Square | undefined =>
+    [...sqs].sort((a, b) => CAPTURE_VALUE[chess.get(a)?.type ?? 'q'] - CAPTURE_VALUE[chess.get(b)?.type ?? 'q'])[0];
+  const first = cheapest(chess.attackers(sq, me));
+  const back = cheapest(chess.attackers(sq, p.color).filter((s) => s !== sq));
+  const firstP = first ? chess.get(first) : undefined;
+  const backP = back ? chess.get(back) : undefined;
+  if (firstP && backP && CAPTURE_VALUE[firstP.type] > CAPTURE_VALUE[p.type]) {
+    return `Your cheapest way in is the ${name(firstP.type)} on ${first}, and their ${name(backP.type)} on ${back} takes back — you give more than the ${name(p.type)} is worth.`;
+  }
+  return `Look again at that ${name(p.type)} — count who guards it.`;
 }
 
 // ── THE PINNED-PIECE FORM (David 2026-10-05: "PP on the PP" folds into step 5).
