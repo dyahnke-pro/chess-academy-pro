@@ -903,7 +903,7 @@ export function buildTheoryLectureBeats(
       moveNumber: c8.moveNumber,
       moverColor: c8.moverColor,
       kind: 'mainline',
-      fact: `We didn't cover everything, of course — the other main tries here are ${list}. Tap one below if you want to see it played out, or move on.`,
+      fact: `That isn't the only way to play it — the other main tries here are ${list}.`,
       explore: c8.exploreLines,
     });
   }

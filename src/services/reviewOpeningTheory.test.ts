@@ -255,7 +255,8 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
     const beats = buildTheoryLectureBeats(lec!, ['fight for the centre'], 'white');
     const offer = beats.find((b) => (b.explore?.length ?? 0) > 0);
     expect(offer).toBeTruthy();
-    expect(offer!.fact).toMatch(/Tap one below/i);
+    expect(offer!.fact).toMatch(/other main tries here are/i);
+    expect(offer!.fact).not.toMatch(/\btap\b|\bwe\b/i);
     expect(offer!.dive).toBeUndefined(); // not auto-played
     expect(offer!.explore![0].steps[0].san).toBe('Bc4'); // the alt move rides in the chip's line
   });

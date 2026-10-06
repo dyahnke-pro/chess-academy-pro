@@ -11,8 +11,8 @@ afterEach(() => __resetHisPlayDbForTests());
 describe('strongChoice — his games, depersonalized', () => {
   it('confirms the student played the strong choice, and names it when not', () => {
     __setHisPlayDbForTests({ [positionFen(fen)]: { total: 30, moves: [{ san: 'd4', games: 24, w: 14, d: 6, l: 4 }, { san: 'Nc3', games: 6, w: 2, d: 2, l: 2 }] } });
-    expect(strongChoice(fen, 'd4')?.text).toBe("That is a strong player's choice here — played in 24 of 30 games from this position, scoring 71%.");
-    expect(strongChoice(fen, 'Nf3')?.text).toBe("A strong player's choice here is d4 — played in 24 of 30 games from this position, scoring 71%.");
+    expect(strongChoice(fen, 'd4')?.text).toBe("That's the strong players' choice here — it stakes out the center and grabs space; 24 of 30 strong games go this way.");
+    expect(strongChoice(fen, 'Nf3')?.text).toBe("A strong player's choice here is d4 — it stakes out the center and grabs space; 24 of 30 strong games go this way.");
   });
   it('never calls the best-scoring move "the most common" when the student\'s move has more games (walk oct3a)', () => {
     __setHisPlayDbForTests({ [positionFen(fen)]: { total: 24, moves: [{ san: 'd4', games: 13, w: 4, d: 3, l: 6 }, { san: 'Nc3', games: 9, w: 5, d: 1, l: 3 }, { san: 'c4', games: 2, w: 1, d: 0, l: 1 }] } });

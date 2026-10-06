@@ -32,3 +32,14 @@ describe('the danger level, computed and spoken first (David 2026-10-06)', () =>
     expect(openThreatLine('Watch out — x.', fen, 'w', ['c3'], 2)).toBe(a);
   });
 });
+
+describe('openThreatLine — "Careful —" takes the computed level too', () => {
+  it('opens a hanging queen with the level, never "not yet"', () => {
+    // Black queen on d5 attacked by the c3 knight, nothing guarding it.
+    const fen = 'rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3';
+    const out = openThreatLine("Careful — your queen on d5 is attacked and nothing's defending it.", fen, 'b', ['d5'], 3);
+    expect(out).not.toMatch(/^Careful/);
+    expect(out).not.toMatch(/Not urgent|No rush/);
+    expect(out).toMatch(/queen on d5 is attacked/);
+  });
+});

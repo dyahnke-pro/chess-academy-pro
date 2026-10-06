@@ -15,7 +15,7 @@
 import type { Square } from 'chess.js';
 import {
   applyDontKnow, applySilence, applyTap, questionDone, completeLine, foundLine, newQuestion,
-  NUDGE_AFTER_MS, nudgeLine, stagesFor, summariseAnswer,
+  NUDGE_AFTER_MS, nudgeLine, spokenWithoutTaps, stagesFor, summariseAnswer,
   type AnswerSummary, type LessonStage, type QuestionState, type StepStanding,
 } from './thinkingLesson';
 import { boardIdentity, pickFairPosition, type ChosenLessonPosition, type FairKey, type LessonPositionCandidate } from './thinkingPositions';
@@ -339,7 +339,7 @@ export class ThinkingLessonSession {
   private ask(pos: ChosenLessonPosition, rot: number): Promise<void> {
     return new Promise<void>((resolve) => {
       this.resolveQuestion = resolve;
-      const question = [pos.lead, this.kit.prompt(rot, pos.fen)].filter(Boolean).join(' ');
+      const question = [pos.lead, spokenWithoutTaps(this.kit.prompt(rot, pos.fen), true)].filter(Boolean).join(' ');
       void this.deps.say(question).then(() => {
         if (this.stopped) { resolve(); return; }
         this.q = newQuestion(pos.key, this.deps.now());
@@ -386,7 +386,10 @@ export class ThinkingLessonSession {
       case 'wrong':
         this.publish({ wrong: [...state.extras] });
         // Solo is graded silently; Guide teaches on a miss.
-        if (this.stage === 'guide') await this.deps.say(this.link ? this.link.wrongTapLine(square) : this.kit.wrongTapLine(fen, square));
+        if (this.stage === 'guide') {
+          const miss = spokenWithoutTaps(this.link ? this.link.wrongTapLine(square) : this.kit.wrongTapLine(fen, square), false);
+          if (miss) await this.deps.say(miss);
+        }
         return;
       case 'reveal':
         this.publish({ wrong: [...state.extras] });

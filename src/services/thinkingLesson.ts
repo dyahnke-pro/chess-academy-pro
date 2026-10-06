@@ -193,3 +193,17 @@ export function nudgeLine(remaining: number, key: number): string {
 export function completeLine(summary: AnswerSummary, key: number): string | null {
   return summary.held ? rotateStem(COMPLETE, key) : null;
 }
+
+/** What the VOICE says of a question or a miss: the interface stays on screen
+ *  (Narration Voice Rule 2 — the voice knows the position, not the buttons).
+ *  "Tap every X" is asked as "Find every X"; a bare "Tap them." / "Tap the
+ *  piece itself, not an empty square." says nothing. */
+export function spokenWithoutTaps(text: string, asQuestion: boolean): string {
+  const sentences = text.match(/[^.?!]+[.?!]+/g) ?? [text];
+  return sentences
+    .map((s) => s.trim())
+    .filter((s) => !/^Tap (it|them|that piece)\.$/.test(s))
+    .map((s) => (/^Tap /.test(s) ? (asQuestion && !/not an empty square|^Tap a piece/.test(s) ? s.replace(/^Tap /, 'Find ') : '') : s))
+    .filter(Boolean)
+    .join(' ');
+}

@@ -8262,6 +8262,7 @@ export function CoachTeachPage(): JSX.Element {
         threatKey = `hang:${worst.piece}${worst.square}`;
         threatSquares = [worst.square];
         threatLine = `Careful — your ${NAME[worst.piece] ?? 'piece'} on ${worst.square} is attacked and nothing's defending it.`;
+            threatLine = openThreatLine(threatLine, args.fenAfterReply, studentCC, threatSquares, Number(args.fenAfterReply.split(' ')[5] ?? 0));
         const flip = args.fenAfterReply.split(' ');
         flip[1] = studentCC === 'w' ? 'b' : 'w';
         flip[3] = '-';
@@ -8302,6 +8303,7 @@ export function CoachTeachPage(): JSX.Element {
             // follows ("It can wait — Bh2+ comes first", walk 2026-09-30). The
             // threat answer says what to do, from the engine.
             threatLine = `Careful — their ${NAME[hit.by] ?? 'piece'} on ${hit.bySq} hits your ${NAME[hit.piece] ?? 'piece'} on ${hit.sq}.`;
+            threatLine = openThreatLine(threatLine, args.fenAfterReply, studentCC, threatSquares, Number(args.fenAfterReply.split(' ')[5] ?? 0));
             alertArrow = admitArrow({ from: hit.bySq, to: hit.sq, role: 'threat', source: 'teach.hitAlert' }, { fen: args.fenAfterReply, studentColor: studentCC === 'w' ? 'white' : 'black' });
           }
         } catch { /* the warning is a bonus */ }

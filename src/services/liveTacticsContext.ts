@@ -789,12 +789,15 @@ export function dangerLevel(fen: string, student: 'w' | 'b', squares: readonly s
 }
 
 /** The opening words of a threat line, rotated on the ply (resume-safe, never
- *  random). "Watch out — " is replaced by the computed level. */
+ *  random). "Watch out — " / "Careful — " is replaced by the computed level. */
 export function openThreatLine(line: string, fen: string, student: 'w' | 'b', squares: readonly string[], ply: number): string {
+  const prefix = ['Watch out — ', 'Careful — '].find((p) => line.startsWith(p));
+  if (!prefix) return line;
   const level = dangerLevel(fen, student, squares);
-  if (!level || !line.startsWith('Watch out — ')) return line;
+  // "Careful —" warns of a piece already hit; "not yet" would contradict it.
+  if (!level || (prefix === 'Careful — ' && level === 'not-yet')) return line;
   const stems = DANGER_OPENERS[level];
-  const body = line.slice('Watch out — '.length);
+  const body = line.slice(prefix.length);
   const opener = stems[ply % stems.length];
   return opener.endsWith('. ') ? `${opener}${body.charAt(0).toUpperCase()}${body.slice(1)}` : `${opener}${body}`;
 }

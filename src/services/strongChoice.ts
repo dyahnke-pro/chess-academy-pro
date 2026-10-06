@@ -8,6 +8,7 @@
 // hands over the next move (the move-advice rule). Grounded (G3): the move, the
 // counts and the score are the DB's.
 import { bestPlanMove, getHisPlayDb, HIS_PLAN_MIN_GAMES, lookupHisPlaySync } from './hisPlayLookup';
+import { moveWhy } from './deliberation';
 
 /** Start loading the DB (fire and forget); lookups are silent until it lands. */
 export function warmStrongChoice(): void { void getHisPlayDb(); }
@@ -30,12 +31,19 @@ export function strongChoice(fenBefore: string, playedSan: string): { text: stri
   // (walk oct3a: exd5 13 of 24 vs "the most common is Bb3, 9 of 24").
   const topGames = Math.max(...entry.moves.map((m) => m.games));
   const bestLabel = best.games >= topGames ? 'the most common' : 'the best-scoring';
+  // THE REASON, NOT JUST THE STATISTIC (David 2026-10-06: "statistics where a
+  // reason should be" — a database talking, not a coach). The move-why
+  // computer says what the strong move DOES; the count stays, short.
+  const mover = fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
+  let why: string | null = null;
+  try { why = moveWhy(fenBefore, best.san, mover, null); } catch { why = null; }
+  const count = `${best.games} of ${entry.total} strong games go this way`;
   const text = same
-    ? `That is a strong player's choice here — ${stat}.`
+    ? (why ? `That's the strong players' choice here — it ${why}; ${count}.` : `That is a strong player's choice here — ${stat}.`)
     : mine && mine.games >= Math.max(HIS_PLAN_MIN_GAMES, best.games * 0.1)
       ? mine.games >= topGames
         ? `${playedSan} is the most common move here — played in ${mine.games} of ${entry.total} games; the best-scoring is ${best.san}, ${stat}.`
         : `${playedSan} is a strong player's move here too — played in ${mine.games} of ${entry.total} games; ${bestLabel} is ${best.san}, ${stat}.`
-      : `A strong player's choice here is ${best.san} — ${stat}.`;
+      : why ? `A strong player's choice here is ${best.san} — it ${why}; ${count}.` : `A strong player's choice here is ${best.san} — ${stat}.`;
   return { text, san: best.san, same };
 }
