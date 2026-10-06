@@ -114,3 +114,12 @@ describe('positive transfer — a drilled motif found at the board', () => {
     expect(drilledTransferLine(FEN, 'b5c7', 'b5c7', new Map())).toBeNull();     // nothing drilled
   });
 });
+
+describe('studentMoveIsPrompted — a move the coach NAMED is never proof (2026-10-06)', () => {
+  it('the move advice speaking marks the coming move prompted', async () => {
+    const { studentMoveIsPrompted } = await import('./learnBoardTeaching');
+    expect(studentMoveIsPrompted(['deliberation'], true)).toBe(true);
+    expect(studentMoveIsPrompted(['key-moment'], false)).toBe(true);
+    expect(studentMoveIsPrompted(['fundamental'], false)).toBe(false);
+  });
+});

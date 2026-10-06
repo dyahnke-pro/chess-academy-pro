@@ -912,3 +912,13 @@ export function payoffFor(mem: Pick<LearnMemory, 'promises'>, mv: { piece: strin
   mem.promises.delete(hit.key);
   return { say: hit.say, square: hit.square, key: hit.key };
 }
+
+/** Was the student's coming move TOLD? The key-moment line poses the question,
+ *  and every lane that names the move ("The move is X", the compare, the
+ *  priority-first, the speed-run reads) speaks only where the move advice
+ *  speaks. A move played after either is prompted, never proof the student
+ *  found it alone (David 2026-10-06: the move is named at a deciding moment, so
+ *  playing it must not turn the heat map green). */
+export function studentMoveIsPrompted(clauseKinds: readonly string[], moveAdviceSpeaks: boolean): boolean {
+  return moveAdviceSpeaks || clauseKinds.includes('key-moment');
+}

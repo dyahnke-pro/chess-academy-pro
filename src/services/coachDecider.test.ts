@@ -175,3 +175,14 @@ describe('a row closed as unsupported files every quiet fact under that gate (B9
     expect(d.quiet.some((q) => q.why === 'subsumed')).toBe(true);
   });
 });
+
+describe('a row closed because everything was already said names THAT gate (G2b, prod 2026-10-06)', () => {
+  it('reason is said-already, and every quiet fact is filed under it', () => {
+    const only = '[tactic] Your bishop on g4 pins their bishop on e2 against their queen on d1.';
+    const b = { board: CALM_BOARD, facts: [only], squares: new Map([[only, ['g4', 'e2', 'd1']]]), alreadySaid: new Set([only]) };
+    const d = decide(blunder, student, b, 'interrupt');
+    expect(d.speak).toBe(false);
+    expect(d.reason).toBe('said-already');
+    expect(d.quiet.every((q) => q.why === 'said-already')).toBe(true);
+  });
+});

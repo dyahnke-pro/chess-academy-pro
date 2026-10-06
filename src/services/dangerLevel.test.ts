@@ -43,3 +43,23 @@ describe('openThreatLine — "Careful —" takes the computed level too', () => 
     expect(out).toMatch(/queen on d5 is attacked/);
   });
 });
+
+describe('a loud alarm is said with full weight once a game, then "Again —" (tape 2026-10-06)', () => {
+  it('the second hanging queen opens with "Again —"', async () => {
+    const { isLoudAlarm } = await import('./liveTacticsContext');
+    const fen = 'rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3';
+    const line = "Careful — your queen on d5 is attacked and nothing's defending it.";
+    const first = openThreatLine(line, fen, 'b', ['d5'], 3, 0);
+    expect(isLoudAlarm(first)).toBe(true);
+    expect(first).not.toMatch(/^Again/);
+    const again = openThreatLine(line, fen, 'b', ['d5'], 3, 1);
+    expect(again).toBe("Again — your queen on d5 is attacked and nothing's defending it.");
+    expect(isLoudAlarm(again)).toBe(true);
+  });
+  it('a pawn-level warning is never "Again"', () => {
+    // White to move; the black knight on d4 is hanging to nothing: use a pawn hit.
+    const fen = '4k3/8/8/8/3p4/4P3/8/4K3 b - - 0 1';
+    const out = openThreatLine('Watch out — their pawn on e3 hits your pawn on d4.', fen, 'b', ['d4'], 1, 5);
+    expect(out).not.toMatch(/^Again/);
+  });
+});

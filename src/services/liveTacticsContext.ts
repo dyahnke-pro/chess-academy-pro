@@ -788,15 +788,23 @@ export function dangerLevel(fen: string, student: 'w' | 'b', squares: readonly s
   } catch { return null; }
 }
 
+/** Whether a threat line was opened at a LOUD level (a piece or the game at
+ *  stake) — the alarms a game counts so the repeat says "Again —". */
+export function isLoudAlarm(line: string): boolean {
+  return [...DANGER_OPENERS.decisive, ...DANGER_OPENERS.piece, 'Again — '].some((o) => line.startsWith(o));
+}
+
 /** The opening words of a threat line, rotated on the ply (resume-safe, never
  *  random). "Watch out — " / "Careful — " is replaced by the computed level. */
-export function openThreatLine(line: string, fen: string, student: 'w' | 'b', squares: readonly string[], ply: number): string {
+export function openThreatLine(line: string, fen: string, student: 'w' | 'b', squares: readonly string[], ply: number, loudSaid = 0): string {
   const prefix = ['Watch out — ', 'Careful — '].find((p) => line.startsWith(p));
   if (!prefix) return line;
   const level = dangerLevel(fen, student, squares);
   // "Careful —" warns of a piece already hit; "not yet" would contradict it.
   if (!level || (prefix === 'Careful — ' && level === 'not-yet')) return line;
-  const stems = DANGER_OPENERS[level];
+  // A LOUD alarm said once already this game: the repeat says "Again —".
+  const loud = level === 'decisive' || level === 'piece';
+  const stems = loud && loudSaid > 0 ? ['Again — '] : DANGER_OPENERS[level];
   const body = line.slice(prefix.length);
   const opener = stems[ply % stems.length];
   return opener.endsWith('. ') ? `${opener}${body.charAt(0).toUpperCase()}${body.slice(1)}` : `${opener}${body}`;

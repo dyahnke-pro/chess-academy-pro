@@ -84,6 +84,10 @@ export interface LearnMemory {
    *  reset forgets them like everything else. */
   lastTacticKey: string;
   lastThreatKey: string;
+  /** Loud alarms (a piece or the game at stake) said this game: the first is
+   *  said with full weight, later ones as "Again —", so the alarm keeps its
+   *  meaning (live tape 2026-10-06: seven "Drop everything" in one game). */
+  readonly loudAlarms: Set<string>;
   readonly spokenTacticLines: Set<string>;
   readonly spokenThreatLines: Set<string>;
   /** Threat answers said this game — rotates their question stem by
@@ -222,6 +226,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
   const motifFirstMove = new Map<string, { move: number; instance: string }>();
   const spokenTacticLines = new Set<string>();
   const spokenThreatLines = new Set<string>();
+  const loudAlarms = new Set<string>();
   const questionsAnswered = new Set<string>();
   let lastPlies = 0;
   const mem: LearnMemory = {
@@ -235,6 +240,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
     motifFirstMove,
     lastTacticKey: '',
     lastThreatKey: '',
+    loudAlarms,
     questionsAnswered,
     spokenTacticLines,
     spokenThreatLines,
@@ -270,6 +276,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
       spokenThreatLines.clear();
       mem.lastTacticKey = '';
       mem.lastThreatKey = '';
+      loudAlarms.clear();
       questionsAnswered.clear();
       mem.gemSeen = null;
       mem.gemFen = null;

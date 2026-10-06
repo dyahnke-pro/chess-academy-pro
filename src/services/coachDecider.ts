@@ -211,7 +211,7 @@ export interface CoachDecision {
    *  nothing was dropped, so it must not read as `unsupported` (walk 6, D1). */
   /** `board`: every fact was one the board forbids here (`boardState`) — a
    *  recapture pending or a mate on the board. */
-  reason: 'importance' | 'need' | 'unsupported' | 'empty' | 'proven' | 'board' | 'spoken';
+  reason: 'importance' | 'need' | 'unsupported' | 'said-already' | 'empty' | 'proven' | 'board' | 'spoken';
   tier: ImportanceTier;
   /** Moment-level weight, for ordering moments against each other. */
   rank: number;
@@ -402,9 +402,13 @@ export function decide(
   // reporting `speak: true` over an empty list.
   if (spoken.length === 0) {
     const boardQuiet = provenQuiet.filter((q) => q.why === 'in-flux' || q.why === 'beside-mate').length;
+    // Every live fact already heard this game: the row closed on SAY-ONCE,
+    // not for want of a teaching point (G2b, prod 2026-10-06).
+    const allSaid = selection.quiet.length > 0 && selection.quiet.every((q) => q.why === 'said-already');
     const reason = bundle.facts.length === 0 ? 'empty'
       : live.length === 0 ? (boardQuiet === provenQuiet.length ? 'board' : 'proven')
-        : 'unsupported';
+        : allSaid ? 'said-already'
+          : 'unsupported';
     // THE GATE THAT CLOSED THE ROW NAMES EVERY FACT ON IT (B9). A fact that
     // lost a subsumption to a description — which then had no teaching point
     // to support it — was silenced by SUPPORT, not by the collapse: nothing
