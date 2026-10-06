@@ -51,7 +51,7 @@ export function keepTension(fen: string, me: 'w' | 'b', bestSan: string | null):
   if (b.turn() !== me) return null;
   // En passant is not tension: it lands on an empty square ("their pawn on g6"
   // with the pawn on g5 — scale replay 2026-10-06).
-  const tension = b.moves({ verbose: true }).find((m) => m.piece === 'p' && m.captured === 'p' && !m.flags.includes('e'));
+  const tension = b.moves({ verbose: true }).find((m) => m.piece === 'p' && m.captured === 'p' && !m.isEnPassant());
   if (!tension || bestSan.replace(/[+#]/g, '') === tension.san.replace(/[+#]/g, '')) return null;
   const best = play(fen, bestSan);
   if (!best || best.move.captured) return null;
