@@ -136,10 +136,11 @@ describe('his habits of thought, computed (each checked against the existing com
     expect(bestCasePlan(fen, [line(['g1f3'], 200), line(['a2a3', 'a7a6', 'b2b3', 'b7b6', 'c2c3'], 0)])?.text).toMatch(/best case/);
     expect(bestCasePlan(fen, [line(['g1f3'], 200), line(['d2d4', 'e5d4'], 0)])).toBeNull();
   });
-  it('the rejected move works later: Bc4 now is worse, and it comes in the main line after Nf3', () => {
-    const fen = fenAt('e4 e5');
-    expect(rejectedMoveLater(fen, [line(['g1f3', 'b8c6', 'f1c4'], 50), line(['f1c4'], -100)])?.text).toMatch(/Bc4 doesn't work yet — but it does after Nf3/);
-    expect(rejectedMoveLater(fen, [line(['g1f3', 'b8c6', 'f1b5'], 50), line(['f1c4'], -100)])).toBeNull();
+  it('the rejected move works later: exd5 now is worse, and it comes back in the main line after Nc3', () => {
+    const fen = fenAt('e4 d5');
+    expect(rejectedMoveLater(fen, [line(['b1c3', 'g8f6', 'e4d5'], 50), line(['e4d5'], -100)])?.text).toMatch(/exd5 doesn't work yet — but it does after Nc3/);
+    // a quiet move is not a temptation: silent
+    expect(rejectedMoveLater(fenAt('e4 e5'), [line(['g1f3', 'b8c6', 'f1c4'], 50), line(['f1c4'], -100)])).toBeNull();
   });
   it('force a concession: Bb5+ Ke7 costs them castling', () => {
     const fen = 'rnbqkbnr/pp3ppp/8/2ppp3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1';

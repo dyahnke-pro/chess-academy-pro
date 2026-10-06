@@ -465,7 +465,11 @@ export function rejectedMoveLater(fen: string, lines: Lines): Read | null {
     if (at < 0) continue;
     const san = sanOf(fen, u); const first = sanOf(fen, main[0]);
     if (!san || !first) continue;
-    return { stakes: costStakes(seatCp(fen, lines[0]) - seatCp(fen, l)) ?? undefined, idea: `${san} doesn't work yet — prepare it first; a rejected move is not a dead move.`, namesMove: true, text: `${san} doesn't work yet — but it does after ${first}: it comes back ${at / 2} move${at === 2 ? '' : 's'} later in the line. A rejected move is not a dead move; prepare it.` };
+    // Only a move the student would be TEMPTED by — a capture or a check. A
+    // random quiet move "doesn't work yet" teaches nothing (prod tape: h5,
+    // Kb8, Rd6 each "rejected", five turns running).
+    if (!/[x+]/.test(san)) continue;
+    return { stakes: costStakes(seatCp(fen, lines[0]) - seatCp(fen, l)) ?? undefined, claim: `srr:rejected:${san}`, idea: `${san} doesn't work yet — prepare it first; a rejected move is not a dead move.`, namesMove: true, text: `${san} doesn't work yet — but it does after ${first}: it comes back ${at / 2} move${at === 2 ? '' : 's'} later in the line. A rejected move is not a dead move; prepare it.` };
   }
   return null;
 }
@@ -587,7 +591,17 @@ export function speedRunReads(args: { fen: string; me: 'w' | 'b'; lines: Lines; 
     keepSquareForKnight(args.fen, args.me, bestSan),
     rightPieceForHole(args.fen, args.me),
     usefulWaiting(args.fen, args.lines) ?? anyMoveFine(args.fen, args.lines),
-  ].filter((r): r is Read => !!r).map((r) => {
+  ].filter((r): r is Read => !!r).filter((r) => {
+    // RELEVANCE (prod tape 2026-10-06, 80 words a move): a read with no stake
+    // of its own speaks only where the decision matters — the gap between the
+    // engine's top two moves clears the bar the one criticality read uses. The
+    // reads whose POINT is that nothing hinges on it (any move is fine, the
+    // waiting move, flexible first) are exempt, and say once a game anyway.
+    if (r.stakes && r.stakes.points > 0) return true;
+    if (r.claim && /^srr:(any-move-fine|waiting|flexible-first)$/.test(r.claim)) return true;
+    const gap = choiceGap(args.fen, args.lines);
+    return gap !== null && gap >= criticalityThresholds().notable;
+  }).map((r) => {
     if (r.stakes && r.stakes.points > 0) return r;
     // No stake of its own: the read carries the weight of the decision it
     // speaks to — what playing the next-best move instead costs (the same
