@@ -1966,7 +1966,7 @@ export function assembleCandidateMoveAnswer(opts: {
       if (c.isCheckmate()) break;
     }
   } catch { /* an unreadable line is no line */ }
-  const lineText = lineSan.length > 0 ? `The line: ${[candNorm, ...lineSan].join(' ')}.` : null;
+  const lineText = lineSan.length > 0 ? `The line: ${andList([candNorm, ...lineSan])}.` : null;
   const sacOfferEarly = sacrificeOffer(fen, candNorm);
 
   // Candidate IS the engine's best move → affirm it (with the grounded why) —
@@ -2129,7 +2129,7 @@ export function assembleOpponentHypotheticalAnswer(opts: {
       if (c.isCheckmate()) break;
     }
   } catch { /* an unreadable line is no line */ }
-  if (bestSan) parts.push(`Your best answer is ${bestSan}${lineSan.length > 1 ? `: ${lineSan.join(' ')}` : ''}.`);
+  if (bestSan) parts.push(`Your best answer is ${bestSan}${lineSan.length > 1 ? `: ${andList(lineSan)}` : ''}.`);
   // NO ENGINE READ, NO DANGLING HEAD (question walk 2026-09-27: "If they get d5
   // in:" and nothing after it). Say what is missing instead.
   if (parts.length === 1 && !/[.!?]$/.test(parts[0])) {

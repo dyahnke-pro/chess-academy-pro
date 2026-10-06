@@ -5,6 +5,7 @@
 // computer: an engine line, walked, stopped at its LAST capture (the exchanges
 // are over there, so what is left is what was won — never a peak the
 // recaptures hand back). The outcome is the ONE ledger rule (exchangeLedger.proofCut).
+import { andList } from '../utils/andList';
 import { Chess } from 'chess.js';
 import { countWords } from '../utils/countWords';
 import type { ArrowClaim } from './arrowDoor';
@@ -161,10 +162,10 @@ export function mateLine(fen: string, lineUci: readonly string[], side: 'w' | 'b
   const mateSan = sans[sans.length - 1].replace(/[+#]$/, '');
   const list = (xs: string[]): string => xs.length <= 1 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`;
   const text = quiet && taken.length
-    ? `No check yet — the quiet ${sans[0]} comes first: it takes ${list(taken)} from their king, and ${mateSan} is mate. ${sans.join(' ')}.`
+    ? `No check yet — the quiet ${sans[0]} comes first: it takes ${list(taken)} from their king, and ${mateSan} is mate. ${andList(sans)}.`
     : quiet
-      ? `No check yet — the quiet ${sans[0]} comes first, and ${mateSan} is mate. ${sans.join(' ')}.`
-      : `It is a forced mate: ${sans.join(' ')}.`;
+      ? `No check yet — the quiet ${sans[0]} comes first, and ${mateSan} is mate. ${andList(sans)}.`
+      : `It is a forced mate: ${andList(sans)}.`;
   return { sans, plies, quiet, taken, text };
 }
 

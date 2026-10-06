@@ -16,6 +16,7 @@
  * PURE assemblers (verdict, key-tactic pick, tempting pick) are exported and
  * unit-tested with hand-fed data — the engine wiring is a thin shell over them.
  */
+import { andList } from '../utils/andList';
 import { settledLineEnd } from './material';
 import { boardEdgeWords } from '../utils/countWords';
 import { rotateStem } from '../utils/rotateStem';
@@ -775,7 +776,7 @@ export function tacticalReadFacts(read: TacticalRead, opts: { inGame?: boolean }
   }
   const toTactic = read.keyTactic ? read.keyTactic.atPly : Math.min(read.line.length - 1, 2);
   const lineSans = read.line.slice(0, toTactic + 1).map((p) => p.san);
-  if (lineSans.length > 0) parts.push(`${ig ? 'The line goes' : 'The correct line is'} ${lineSans.join(' ')}.`);
+  if (lineSans.length > 0) parts.push(`${ig ? 'The line goes' : 'The correct line is'} ${andList(lineSans)}.`);
   const kt = read.keyTactic;
   if (kt && kt.squares.length > 0) {
     parts.push(kt.description.endsWith('.') ? kt.description : `${kt.description}.`);

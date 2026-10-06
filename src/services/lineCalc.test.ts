@@ -9,7 +9,7 @@ describe('mateLine — the mate played out, and the quiet move before it', () =>
     const m = mateLine(fen, ['c1h6', 'a7a6', 'e1e8'], 'w', 'Bh6');
     expect(m?.quiet).toBe(true);
     expect(m?.taken).toEqual(['g7']);
-    expect(m?.text).toBe('No check yet — the quiet Bh6 comes first: it takes g7 from their king, and Re8 is mate. Bh6 …a6 Re8#.');
+    expect(m?.text).toBe('No check yet — the quiet Bh6 comes first: it takes g7 from their king, and Re8 is mate. Bh6, …a6 and Re8#.');
   });
   it('a line that does not mate says nothing', () => {
     expect(mateLine(fen, ['c1h6', 'a7a6', 'e1e7'], 'w')).toBeNull();

@@ -18,6 +18,7 @@
  * surface can pass its own engine handle. A LEAF beside lineCalc: no Dexie,
  * no voice.
  */
+import { andList } from '../utils/andList';
 import { Chess } from 'chess.js';
 import { lineWins, mateLine, lineArrows } from './lineCalc';
 import { whyItFailed } from './whyItFailed';
@@ -89,7 +90,7 @@ export async function refuteWrongTry(args: {
       const uci = line.slice(0, ml.plies.length);
       return {
         kind: 'mate',
-        text: `${san}? Then ${ml.sans.join(' ')} — they mate you.`,
+        text: `${san}? Then ${andList(ml.sans)} — they mate you.`,
         fenAfter, uci: [...uci], arrows: lineArrows(fenAfter, uci, 'puzzleTeaching.refute'),
       };
     }
@@ -99,7 +100,7 @@ export async function refuteWrongTry(args: {
       const uci = line.slice(0, w.plies.length);
       return {
         kind: 'material',
-        text: `${san}? Then ${w.sans.join(' ')} — they come out ${w.what} up.`,
+        text: `${san}? Then ${andList(w.sans)} — they come out ${w.what} up.`,
         fenAfter, uci: [...uci], arrows: lineArrows(fenAfter, uci, 'puzzleTeaching.refute'),
       };
     }

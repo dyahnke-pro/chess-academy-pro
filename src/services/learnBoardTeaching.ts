@@ -8,6 +8,7 @@
 // makes; the page queues them into the Learn door, which ranks them.
 //
 // Pure: the engine reads are handed in by the page.
+import { andList } from '../utils/andList';
 import { Chess } from 'chess.js';
 import { moverFault } from './accuracyService';
 import { lineWins, lineArrows, mateLine, type MateLine } from './lineCalc';
@@ -169,7 +170,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
       const ml = mateLine(i.fenBefore, i.bestLine.moves, me, i.san);
       const w = ml ? null : winningLine(i.fenBefore, i.san, i.bestLine.moves, me, priorFromHistory(i.history, i.fenBefore));
       if (ml) out.push({ lane: 'movePoint', text: ml.text, squares: [to, ...ml.taken], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_mate_line', props: { surface: 'coach-teach', quiet: ml.quiet } }, arrows: mateArrows(ml, me) });
-      if (w) out.push({ lane: 'movePoint', text: `That wins ${w.what}: ${w.sans.join(' ')}.`, squares: [to], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_winning_line', props: { surface: 'coach-teach' } }, arrows: w.arrows });
+      if (w) out.push({ lane: 'movePoint', text: `That wins ${w.what}: ${andList(w.sans)}.`, squares: [to], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_winning_line', props: { surface: 'coach-teach' } }, arrows: w.arrows });
     }
   } catch { /* a bonus, never a blocker */ }
 
@@ -698,7 +699,7 @@ export function foundMoveTeaching(fenBefore: string, san: string, preLines: read
   // wins material, the line is said to where the material lands, and drawn.
   const ml = mateLine(fenBefore, preLines[0]?.moves ?? [], student, san);
   const won = ml ? null : winningLine(fenBefore, san, preLines[0]?.moves ?? [], student, priorFromHistory(history, fenBefore));
-  const text = ml ? `${found} ${ml.text}` : won ? `${found} It wins ${won.what}: ${won.sans.join(' ')}.` : found;
+  const text = ml ? `${found} ${ml.text}` : won ? `${found} It wins ${won.what}: ${andList(won.sans)}.` : found;
   const arrows: ArrowClaim[] = ml ? mateArrows(ml, student) : won ? won.arrows : [];
   // A real decision moment (only one or two moves held) answered is calculation
   // proven — importance 90, above the green bar, because the board posed it.

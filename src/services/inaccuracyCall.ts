@@ -27,6 +27,7 @@
 // G0 throughout: severity is arithmetic, the better move comes from the engine,
 // and the reason comes from replaying the engine's own line. Nothing here asks a
 // model what it thinks.
+import { andList } from '../utils/andList';
 import { Chess, type Square } from 'chess.js';
 import { planFromUci, isCostClause } from './lookaheadPlan';
 import { classifyMove, type MoveQuality } from './moveRating';
@@ -839,7 +840,7 @@ export function callInaccuracyDetailed(args: {
       const opp = args.moverColor === 'white' ? 'b' : 'w';
       const w = lineWins(b.fen(), args.replyLineUci, opp, undefined, { fenBefore: args.fenBefore, san: args.playedSan });
       if (w) {
-        lineTail = ` The line: ${w.sans.join(' ')} — they come out ${w.what} up.`;
+        lineTail = ` The line: ${andList(w.sans)} — they come out ${w.what} up.`;
         line = { fen: b.fen(), uci: args.replyLineUci.slice(0, w.plies.length) };
       }
     } catch { /* no line — the grade stands */ }

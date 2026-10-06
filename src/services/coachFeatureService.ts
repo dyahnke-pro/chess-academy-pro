@@ -2020,7 +2020,7 @@ export function buildReviewSegments(
           }
           const won = !ml && line ? lineWins(fenPair.fenBefore, line, studentColorWB, m.san, i > 0 ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null) : null;
           if (won) {
-            const raw = `[tactic] That wins ${won.what}: ${won.sans.join(' ')}.`;
+            const raw = `[tactic] That wins ${won.what}: ${andList(won.sans)}.`;
             facets.push(raw);
             facetStakes.set(raw, { points: won.net, plies: 0 });
             if (!causalArrows || causalArrows.length === 0) {

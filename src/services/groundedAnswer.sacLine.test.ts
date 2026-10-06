@@ -15,7 +15,7 @@ describe('a sacrifice that is the best move gets the soundness verdict and the l
   it('says sound, says mate, plays the line out', () => {
     const a = assembleCandidateMoveAnswer({ studentColor: null, ...base, candidateLineUci: ['g4d1', 'd6d1'] });
     expect(a?.facts).toMatch(/sound sacrifice — it forces mate in 2/);
-    expect(a?.facts).toMatch(/The line: d1=Q\+ Bxd1 Rxd1#/);
+    expect(a?.facts).toMatch(/The line: d1=Q\+, Bxd1 and Rxd1#/);
     expect(a?.facts).not.toMatch(/is the best move here/);
   });
 

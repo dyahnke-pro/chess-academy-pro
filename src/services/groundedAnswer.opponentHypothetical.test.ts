@@ -41,7 +41,7 @@ describe('what if THEY play d5 — the opponent hypothetical lane', () => {
     expect(f).toMatch(/^If they get d5 in/);
     expect(f).toMatch(/you're up about [0-9.]+ points — clearly better/);
     expect(f).toMatch(/only help you/);
-    expect(f).toMatch(/Your best answer is exd5: exd5 exd5 Nxd5/);
+    expect(f).toMatch(/Your best answer is exd5: exd5, exd5,? (and )?Nxd5/);
     expect(f).not.toMatch(/\bd5 is (?:perfectly fine|playable|an inaccuracy|a mistake)/);
     expect(a?.bestMoveFromTo).toEqual({ from: 'e4', to: 'd5' });
   });
