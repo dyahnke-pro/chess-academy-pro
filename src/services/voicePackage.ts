@@ -585,7 +585,9 @@ export function spokenSentenceKeys(pkg: { kept: VoiceFact[] }): string[] {
  *  spoken — the property that was missing when the log and the voice diverged. */
 export function describeVoicePackage(pkg: VoicePackage): string {
   const kinds = pkg.kept.map((f) => f.kind).join('+') || 'silent';
-  const why = pkg.dropped.map((d) => `${d.fact.kind}:${d.reason}`).join(', ');
+  // A board-graded drop names its sentence: "no sentence survived" with no text
+  // left a live drop impossible to trace (prod audit 2026-10-06).
+  const why = pkg.dropped.map((d) => `${d.fact.kind}:${d.reason}${/board grading|board lacks/.test(d.reason) ? ` «${d.fact.text.slice(0, 120)}»` : ''}`).join(', ');
   return why ? `${kinds} (dropped ${why})` : kinds;
 }
 
