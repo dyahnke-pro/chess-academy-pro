@@ -88,7 +88,7 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
       recordChoice: recordLessonChoice,
       remember: rememberLessonBoardNow,
       progress: saveLessonProgress,
-      ...(opts.candidates || mix ? {} : { refill: () => refillLessonCandidates(opts) }),
+      ...(mix ? {} : { refill: () => refillLessonCandidates(opts) }),
       now: () => Date.now(),
       setTimer: (fn, ms) => { const id = setTimeout(fn, ms); return () => clearTimeout(id); },
       onView: (v) => { if (sessionRef.current === session) setView(v); },
