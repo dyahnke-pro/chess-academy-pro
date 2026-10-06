@@ -192,6 +192,13 @@ export async function seedPuzzles(): Promise<void> {
   });
 }
 
+/** Resolves when a puzzle seed already IN FLIGHT finishes (or at once when
+ *  none is). Starts nothing: a reader that must not see a half-seeded store
+ *  (the thinking lesson's board pool) waits for the boot seed, never runs one. */
+export function puzzleSeedSettled(): Promise<void> {
+  return seedsInFlight.get(PUZZLE_SEED_KEY)?.catch(() => undefined) ?? Promise.resolve();
+}
+
 // ─── Master Level pool (lazy — David 2026-09-14) ────────────────────────────
 
 const MASTER_SEED_KEY = 'master_puzzles_seeded_v1';

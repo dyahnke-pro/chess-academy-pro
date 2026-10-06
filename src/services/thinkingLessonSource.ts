@@ -18,6 +18,11 @@ import { db } from '../db/schema';
 import { findMistakePositions } from './positionReadingService';
 import { determinePlayerColor } from './mistakePuzzleService';
 import { boardIdentity, type LessonPositionCandidate } from './thinkingPositions';
+import { puzzleSeedSettled } from './puzzleService';
+
+/** The longest a lesson waits for the boot puzzle seed before reading what is
+ *  there (a fresh device asked within seconds of install got 2 boards). */
+const SEED_WAIT_MS = 10_000;
 
 export interface LessonUsernames { chesscom?: string; lichess?: string }
 
@@ -125,6 +130,7 @@ export async function loadLessonCandidates(opts: {
   } catch { /* no games */ }
 
   try {
+    await Promise.race([puzzleSeedSettled(), new Promise<void>((r) => setTimeout(r, SEED_WAIT_MS))]);
     const puzzles = await db.puzzles
       .where('rating')
       .between(opts.rating - PUZZLE_BAND, opts.rating + PUZZLE_BAND, true, true)
