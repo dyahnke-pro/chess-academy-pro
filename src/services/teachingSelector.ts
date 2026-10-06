@@ -26,6 +26,7 @@
 // can gate on it TOGETHER with need — gating on the thread alone would silence
 // every ply off the thread today, which is the July "there is no coach
 // narration" failure the CLAUDE.md standard forbids reopening.
+import { costWords } from './engineConstants';
 import { Chess, type Color } from 'chess.js';
 import type { CoachSurface } from '../coach/types';
 import { computeNeed, coldStudent, type StudentNeedContext, type NeedVerdict } from './needScore';
@@ -354,7 +355,7 @@ export function renderThesis(t: Thesis, register: ThesisRegister): string {
       // means anything there; the honest statement is that the game was decided.
       const swing = t.swingPawns === null ? ''
         : t.swingPawns > 15 ? ' — that move decided the game'
-          : ` — about ${t.swingPawns.toFixed(1)} points`;
+          : ` — it cost ${costWords(t.swingPawns * 100)}`;
       return register === 'retrospective'
         ? `The game turned at ${label}${swing}${word ? `; a ${word} landed there` : ''}.`
         : `This turns at ${label}${swing}${word ? ` — the ${word} lands there` : ''}.`;

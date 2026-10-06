@@ -26,11 +26,11 @@ function inputs(costCp?: number): ReviewMoveInput[] {
 describe('review — one cost reader on the fundamental-led beat', () => {
   it('speaks the one-search cost when the review recorded it', () => {
     const text = buildReviewSegments(inputs(70), 'black', null, false, 1400, [], undefined, 'g')[11].narration ?? '';
-    expect(text).toMatch(/That cost about 0\.7 points\./);
-    expect(text).not.toMatch(/1\.1 points/);
+    expect(text).toMatch(/That cost about half a pawn\./);
+    expect(text).not.toMatch(/about a pawn/);
   });
   it('falls back to the eval delta when no one-search cost was recorded', () => {
     const text = buildReviewSegments(inputs(), 'black', null, false, 1400, [], undefined, 'g')[11].narration ?? '';
-    expect(text).toMatch(/That cost about 1\.1 points\./);
+    expect(text).toMatch(/That cost about a pawn\./);
   });
 });

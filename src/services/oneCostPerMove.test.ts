@@ -32,13 +32,13 @@ function inputs(costCp: number | null, bestMoveEval?: number): ReviewMoveInput[]
 describe('one move, one cost', { timeout: 120_000 }, () => {
   it('the defect is real: read off the two evals, it says "about 2 points"', () => {
     const segs = buildReviewSegments(inputs(null), 'black', null, true, 1800, [], undefined, 'g');
-    expect(segs[53].narration ?? '').toMatch(/about 2 points of your edge/);
+    expect(segs[53].narration ?? '').toMatch(/about two pawns of your edge/);
   });
   it('with the recorded cost (1.0) the move left +2.0 — no "rushed the win", one figure only', () => {
     const segs = buildReviewSegments(inputs(100, -300), 'black', null, true, 1800, [], undefined, 'g');
     const text = segs[53].narration ?? '';
     expect(text).not.toMatch(/of your edge/);
-    expect(text).toMatch(/costing about 1\.0 points/);
+    expect(text).toMatch(/costing about a pawn/);
   });
   it('a cost is never subtracted from a read of another search', () => {
     // Shallow read before: Black +3.0. The one search: best +6.0, this move

@@ -76,7 +76,7 @@ import { theirOpeningVerdict } from './openingAnnouncement';
 import { departureRecordSentence, openingRecordClause } from './openingRecordBeat';
 import { ecoOfKey, openingEntryForKey, openingFamily, openingKeyFromSans } from './openingKey';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
-import { describeEvalCp, isMateEval, moverGaveUpMate } from './engineConstants';
+import { costWords, describeEvalCp, isMateEval, moverGaveUpMate } from './engineConstants';
 import { isMinorAtHome } from './development';
 import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
 import { studentMoveTeaching, namedMoveArrows } from './learnBoardTeaching';
@@ -1135,7 +1135,7 @@ function buildDeterministicNarration(params: {
     swingIsDecisive
       ? ' A game-deciding swing.'
       : swingPawns !== null && swingPawns >= 0.1
-        ? ` Drops about ${swingPawns.toFixed(1)} points.`
+        ? ` That drops ${costWords(swingPawns * 100)}.`
         : '';
 
   // WHY a strong move was strong — the concrete thing it DID on the board,
@@ -2563,7 +2563,7 @@ export function buildReviewSegments(
         && Math.abs(m.preMoveEval) < 15000 && Math.abs(m.evaluation) < 15000
         ? recordedMoveCost(m, moverColor) : null;
       const cost = swingCp != null && swingCp >= 50
-        ? `That cost about ${(swingCp / 100).toFixed(1)} points.`
+        ? `That cost ${costWords(swingCp)}.`
         : null;
       const why = bestMoveSan ? explainBestMoveGrounded(fenPair.fenBefore, m.san, m.bestMove, moverColor, null, m.pv ? { afterPlayed: m.pv.afterPlayed ?? null, afterBest: m.pv.afterBest ?? null } : null) : null;
       const better = bestMoveSan ? `The move was ${bestMoveSan}.${why ? ` ${why}` : ''}` : null;

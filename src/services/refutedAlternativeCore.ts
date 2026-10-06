@@ -11,6 +11,7 @@ import { criticalityThresholds } from './criticalityScan';
 import { proofCut, describeProofResult } from './exchangeLedger';
 import { andList } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { costWords } from './engineConstants';
 
 function stripGlyphs(s: string): string { return s.replace(/[+#!?]+$/, ''); }
 
@@ -91,7 +92,6 @@ export function pickAlternative(taughtSan: string, candidates: readonly Alternat
   return [...alts].sort((a, b) => b.games - a.games)[0];
 }
 
-function pawns(cp: number): string { return (cp / 100).toFixed(1); }
 
 /** The DNA-register sentence over the computed facts. Pure; exported for the
  *  review, which supplies its own cost + line from the stored analysis. */
@@ -108,19 +108,22 @@ export function renderRefutedAlternative(
   // as what it is: the amateur band is "players at your level", the masters
   // database is "masters".
   const who = f.source === 'amateur' ? 'players at your level' : 'masters';
-  const lead = f.pct === null
+  // THE SHARE IN WORDS, NEVER A NUMBER (David 2026-10-06: "statistics where a
+  // reason should be" — the 10-06 tape still said "More than half of players at
+  // your level play Nxg4 here (71%)"). "Most" only at a real majority.
+  const lead = f.pct !== null && f.pct >= 50
     ? rotateStem([
-      `${f.alt} is a common choice here (${f.games} games)`,
-      `Plenty of games go ${f.alt} here (${f.games} of them)`,
+      `Most ${who} play ${f.alt} here`,
+      `${f.alt} is what most ${who} reach for here`,
     ], stemKey)
-    : f.pct >= 50
+    : f.pct !== null && f.pct >= 25
       ? rotateStem([
-        `Most ${who} play ${f.alt} here (${f.pct}%)`,
-        `More than half of ${who} play ${f.alt} here (${f.pct}%)`,
+        `A lot of ${who} play ${f.alt} here`,
+        `${f.alt} is a popular choice among ${who} here`,
       ], stemKey)
       : rotateStem([
-        `${f.pct}% of ${who} play ${f.alt} here`,
-        `${f.alt} is what ${f.pct}% of ${who} reach for here`,
+        `${f.alt} is a common try here`,
+        `Plenty of games go ${f.alt} here`,
       ], stemKey);
   // THE LINE AS PROOF (WO-LAYERS-01): the moves are spoken only as far as the
   // point they prove, then the result — never a recital of a line that proves
@@ -138,10 +141,10 @@ export function renderRefutedAlternative(
   // "holds the balance" was the old close, and it is only true of a level
   // position — the claim here is the COST, so the close names the cost.
   const cost = rotateStem([
-    `it costs about ${pawns(f.costCp)} points — nothing forcing, just a worse position`,
-    `it gives away about ${pawns(f.costCp)} points — no tactic, just a worse position`,
+    `it costs you ${costWords(f.costCp)} — nothing forcing, just a worse position`,
+    `it gives away ${costWords(f.costCp)} — no tactic, just a worse position`,
   ], stemKey);
-  const close = rotateStem([`${taughtSan} doesn't pay that.`, `${taughtSan} keeps those points.`, `${taughtSan} avoids that cost.`], stemKey);
+  const close = rotateStem([`${taughtSan} doesn't pay that.`, `${taughtSan} keeps that.`, `${taughtSan} avoids that cost.`], stemKey);
   return `${lead}, and ${cost}. ${close}`;
 }
 

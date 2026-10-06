@@ -31,7 +31,7 @@ import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { buildHoldChallenge, judgeGuidedFindAttempt, type GuidedFindChallenge } from '../../services/guidedFindTheMove';
 import { selectTurningPoints, turningReveal, type TurningPoint, type TurningTrace } from '../../services/turningPoints';
-import { TRUSTED_LINE_DEPTH } from '../../services/engineConstants';
+import { costWords, TRUSTED_LINE_DEPTH } from '../../services/engineConstants';
 import { computePvLine, type PvLine } from '../../services/pvPlayback';
 import { projectedLineVoice } from '../../services/projectedLineVoice';
 import { voiceFacts } from '../../services/coachApi';
@@ -1361,7 +1361,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const shotCostLine = useCallback((s: { playedSan: string; costPawns: number | null }): string => {
     if (!s.playedSan) return ''; // rewind hold-challenges have no single "game move" to cite
     return s.costPawns !== null && s.costPawns >= 0.5
-      ? ` In the game you played ${s.playedSan} — that cost about ${s.costPawns.toFixed(1)} points.`
+      ? ` In the game you played ${s.playedSan} — that cost ${costWords(s.costPawns * 100)}.`
       : ` In the game you played ${s.playedSan}.`;
   }, []);
 
@@ -1688,7 +1688,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const povCp = (moverIsWhite ? 1 : -1) * (line.terminalEvalCp ?? line.rootEvalCp);
     const closing = line.plies[line.plies.length - 1].facts.isMate
       ? 'That line goes all the way to mate.'
-      : `That line is about ${(Math.abs(povCp) / 100).toFixed(1)} points better.`;
+      // The terminal eval, in words — it is where the line LEAVES the mover,
+      // not a difference, so it never says "better by".
+      : povCp >= 0
+        ? `That line comes out ahead by ${costWords(povCp)}.`
+        : `That line still comes out behind, by ${costWords(-povCp)}.`;
     await speakPaced(closing);
     setWalkExplorationFen(null);
     setWalkExplorationSan(null);

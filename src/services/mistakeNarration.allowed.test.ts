@@ -15,7 +15,7 @@ describe('the mistake card leads with what the move allowed', () => {
 
   it('R2b3: names the punishment, then the cost — not a description of the board', () => {
     const n = generateMistakeNarration(r2b3);
-    expect(n.intro).toMatch(/^R2b3 lets them play Qxd6, winning your pawn on d6\. That cost around 2\.0 points\./);
+    expect(n.intro).toMatch(/^R2b3 lets them play Qxd6, winning your pawn on d6\. That cost (about|more than) [a-z ]+\./);
   });
 
   it('the solve closes the loop: Qc5 keeps the pawn the intro said was lost', () => {

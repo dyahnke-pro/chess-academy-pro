@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**303 lines · 14 exports · 5 importers · 3 tests · 1 audits**
+**304 lines · 14 exports · 5 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,8 +30,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `minSwingPawns` (function) — 2 call sites
-- `src/services/reviewTurningPoint.test.ts:69`
-- `src/services/reviewTurningPoint.test.ts:103`
+- `src/services/reviewTurningPoint.test.ts:70`
+- `src/services/reviewTurningPoint.test.ts:104`
 
 ### `TURNING_POINT_MIN_CANDIDATES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -40,7 +40,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `moveLabel` (function) — 1 call site
-- `src/services/teachingSelector.ts:236`
+- `src/services/teachingSelector.ts:237`
 
 ### `spokenMoveLabel` (function) — 6 call sites
 - `src/services/reviewRegister.test.ts:14`
@@ -48,28 +48,28 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewRegister.test.ts:18`
 - `src/services/reviewRegister.test.ts:21`
 - `src/services/reviewRegister.test.ts:25`
-- `src/services/teachingSelector.ts:349`
+- `src/services/teachingSelector.ts:350`
 
 ### `turningPointCandidates` (function) — 5 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
-- `src/services/reviewTurningPoint.test.ts:147`
-- `src/services/reviewTurningPoint.test.ts:211`
+- `src/services/reviewTurningPoint.test.ts:148`
+- `src/services/reviewTurningPoint.test.ts:212`
 - `src/services/teachingSelector.test.ts:55`
-- `src/services/teachingSelector.ts:207`
+- `src/services/teachingSelector.ts:208`
 
 ### `buildTurningPointQuestion` (function) — 13 call sites
-- `src/components/Coach/CoachGameReview.tsx:1466`
+- `src/components/Coach/CoachGameReview.tsx:1468`
 - `src/services/reviewTurningPoint.test.ts:40`
-- `src/services/reviewTurningPoint.test.ts:56`
-- `src/services/reviewTurningPoint.test.ts:63`
+- `src/services/reviewTurningPoint.test.ts:57`
 - `src/services/reviewTurningPoint.test.ts:64`
-- `src/services/reviewTurningPoint.test.ts:74`
-- `src/services/reviewTurningPoint.test.ts:84`
-- `src/services/reviewTurningPoint.test.ts:92`
-- `src/services/reviewTurningPoint.test.ts:105`
-- `src/services/reviewTurningPoint.test.ts:115`
-- `src/services/reviewTurningPoint.test.ts:125`
-- `src/services/reviewTurningPoint.test.ts:215`
+- `src/services/reviewTurningPoint.test.ts:65`
+- `src/services/reviewTurningPoint.test.ts:75`
+- `src/services/reviewTurningPoint.test.ts:85`
+- `src/services/reviewTurningPoint.test.ts:93`
+- `src/services/reviewTurningPoint.test.ts:106`
+- `src/services/reviewTurningPoint.test.ts:116`
+- `src/services/reviewTurningPoint.test.ts:126`
+- `src/services/reviewTurningPoint.test.ts:216`
 - `src/services/teachingSelector.test.ts:58`
 
 ### `CriticalMomentRegister` (type) — 0 call sites
@@ -79,29 +79,29 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildCriticalMomentQuestion` (function) — 17 call sites
-- `src/components/Coach/CoachGameReview.tsx:859`
-- `src/services/reviewTurningPoint.test.ts:148`
-- `src/services/reviewTurningPoint.test.ts:156`
-- `src/services/reviewTurningPoint.test.ts:162`
-- `src/services/reviewTurningPoint.test.ts:171`
-- `src/services/reviewTurningPoint.test.ts:180`
-- `src/services/reviewTurningPoint.test.ts:183`
-- `src/services/reviewTurningPoint.test.ts:187`
-- `src/services/reviewTurningPoint.test.ts:192`
+- `src/components/Coach/CoachGameReview.tsx:883`
+- `src/services/reviewTurningPoint.test.ts:149`
+- `src/services/reviewTurningPoint.test.ts:157`
+- `src/services/reviewTurningPoint.test.ts:163`
+- `src/services/reviewTurningPoint.test.ts:172`
+- `src/services/reviewTurningPoint.test.ts:181`
+- `src/services/reviewTurningPoint.test.ts:184`
+- `src/services/reviewTurningPoint.test.ts:188`
 - `src/services/reviewTurningPoint.test.ts:193`
 - `src/services/reviewTurningPoint.test.ts:194`
-- `src/services/reviewTurningPoint.test.ts:198`
-- `src/services/reviewTurningPoint.test.ts:242`
-- `src/services/reviewTurningPoint.test.ts:249`
-- `src/services/reviewTurningPoint.test.ts:259`
-- `src/services/reviewTurningPoint.test.ts:266`
-- `src/services/reviewTurningPoint.test.ts:275`
+- `src/services/reviewTurningPoint.test.ts:195`
+- `src/services/reviewTurningPoint.test.ts:199`
+- `src/services/reviewTurningPoint.test.ts:243`
+- `src/services/reviewTurningPoint.test.ts:250`
+- `src/services/reviewTurningPoint.test.ts:260`
+- `src/services/reviewTurningPoint.test.ts:267`
+- `src/services/reviewTurningPoint.test.ts:276`
 
 ### `judgeCriticalMomentPick` (function) — 4 call sites
-- `src/components/Coach/CoachGameReview.tsx:1520`
-- `src/services/reviewTurningPoint.test.ts:199`
+- `src/components/Coach/CoachGameReview.tsx:1522`
 - `src/services/reviewTurningPoint.test.ts:200`
-- `src/services/reviewTurningPoint.test.ts:254`
+- `src/services/reviewTurningPoint.test.ts:201`
+- `src/services/reviewTurningPoint.test.ts:255`
 
 ## Tests
 

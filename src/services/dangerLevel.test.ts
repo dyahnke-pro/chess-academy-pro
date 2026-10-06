@@ -44,17 +44,17 @@ describe('openThreatLine — "Careful —" takes the computed level too', () => 
   });
 });
 
-describe('a loud alarm is said with full weight once a game, then "Again —" (tape 2026-10-06)', () => {
-  it('the second hanging queen opens with "Again —"', async () => {
+describe('a loud alarm is said with full weight once a game, then plainly — never "Again —" (tape 2026-10-06)', () => {
+  it('after the first loud alarm, the next keeps its plain warning', async () => {
     const { isLoudAlarm } = await import('./liveTacticsContext');
     const fen = 'rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3';
     const line = "Careful — your queen on d5 is attacked and nothing's defending it.";
     const first = openThreatLine(line, fen, 'b', ['d5'], 3, 0);
     expect(isLoudAlarm(first)).toBe(true);
     expect(first).not.toMatch(/^Again/);
-    const again = openThreatLine(line, fen, 'b', ['d5'], 3, 1);
-    expect(again).toBe("Again — your queen on d5 is attacked and nothing's defending it.");
-    expect(isLoudAlarm(again)).toBe(true);
+    const later = openThreatLine(line, fen, 'b', ['d5'], 3, 1);
+    expect(later).toBe(line);
+    expect(later).not.toMatch(/^Again/);
   });
   it('a pawn-level warning is never "Again"', () => {
     // White to move; the black knight on d4 is hanging to nothing: use a pawn hit.

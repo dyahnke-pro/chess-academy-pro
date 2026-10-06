@@ -15,6 +15,7 @@
  * A fundamental that already spoke in full earlier in the game is repeated in
  * a short stem — the walk accumulates, it does not nag (G.4).
  */
+import { costWords } from './engineConstants';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 
 const ORD = ['', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth'];
@@ -554,7 +555,8 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     case 'botched-conversion': {
       // Eval is spoken in POINTS, never "pawns" (David 2026-07-24). A big drop
       // (thrown mate / a rout) names no exact figure — "a winning position".
-      const lost = Number(f.drop) >= 6 ? 'a winning position' : `about ${f.drop} point${Number(f.drop) === 1 ? '' : 's'} of your edge`;
+      // …and in words, never a number (David 2026-10-06: reason, not stats).
+      const lost = Number(f.drop) >= 6 ? 'a winning position' : `${costWords(Number(f.drop) * 100)} of your edge`;
       const s = [
         // An empty `better` means the line beside this verdict already names
         // the move (Learn's grade: "h5 was the move — …") — one fact once.

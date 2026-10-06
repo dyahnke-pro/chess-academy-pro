@@ -16,7 +16,7 @@ describe('the plan chooser (census #52)', () => {
   });
   it('a clear gap names the stronger plan and what the other costs', () => {
     expect(planChoice(FEN, [{ moves: A, evaluation: 130 }, { moves: B, evaluation: 20 }], 'white', null)?.text)
-      .toMatch(/the stronger is getting the knight to f1, by way of d2; getting the bishop to h4, by way of g5 falls about 1\.1 pawns short\.$/);
+      .toMatch(/the stronger is getting the knight to f1, by way of d2; getting the bishop to h4, by way of g5 falls short by about a pawn\.$/);
   });
   it('silent in the grey zone, on a mate, or with one line (negative controls)', () => {
     expect(planChoice(FEN, [{ moves: A, evaluation: 80 }, { moves: B, evaluation: 20 }], 'white', null)).toBeNull();

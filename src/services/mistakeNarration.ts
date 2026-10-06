@@ -9,6 +9,7 @@ import { sideToMove } from './conceptEngine';
 import { stemKeyOf } from '../utils/rotateStem';
 import { describeWhatMoveAllowed, punishmentOf } from './moveAllowed';
 import { captureRead } from './positionReadingService';
+import { costWords } from './engineConstants';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -51,10 +52,8 @@ function pick<T>(arr: T[], key: string): T {
 }
 
 function cpToText(cp: number): string {
-  const pawns = (cp / 100).toFixed(1);
-  if (cp >= 300) return `about ${pawns} points — a serious swing`;
-  if (cp >= 150) return `around ${pawns} points`;
-  return `roughly ${pawns} points`;
+  // In words, never "about 1.4 points" (David 2026-10-06: reason, not stats).
+  return cp >= 300 ? `${costWords(cp)} — a serious swing` : costWords(cp);
 }
 
 function timeAgoText(dateStr: string): string {

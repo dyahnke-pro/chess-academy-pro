@@ -545,11 +545,11 @@ describe('the spoken cost is the one-search cost (review walk oct3b, game 2 ply 
     }).find((f) => f.startsWith('[quality]')) ?? '';
   };
   it('speaks the one-search cost when the analysis stored it', () => {
-    expect(ctxFor(56)).toMatch(/costing about 0\.6 points/);
-    expect(ctxFor(56)).not.toMatch(/1\.3 points/);
+    expect(ctxFor(56)).toMatch(/costing about half a pawn/);
+    expect(ctxFor(56)).not.toMatch(/more than a pawn/);
   });
   it('an annotation older than costCp still reads its eval delta', () => {
-    expect(ctxFor(null)).toMatch(/costing about 1\.3 points/);
+    expect(ctxFor(null)).toMatch(/costing more than a pawn/);
   });
 });
 

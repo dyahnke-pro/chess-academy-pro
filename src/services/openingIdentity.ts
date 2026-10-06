@@ -12,6 +12,7 @@
 // A LEAF: no imports beyond the move speller.
 import { sayMoveNoun } from './spokenMove';
 import { countWords } from '../utils/countWords';
+import { shareAdverb } from '../utils/shareWords';
 
 
 export interface IdentityFacts {
@@ -106,14 +107,14 @@ export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'se
     if (p.kind === 'pawn-hits' && p.piece && p.square) {
       const target = `${whose(f.side)} ${PIECE[p.piece] ?? 'piece'} on ${p.square}`;
       out.push(p.provoked
-        ? `It is built to provoke: in ${p.share}% of master games ${who(other)} ${v('answer')} with ${reply}, a centre pawn thrown forward at ${target}.`
-        : `The usual answer, in ${p.share}% of master games, is ${reply}, putting the question to ${target}.`);
+        ? `It is built to provoke: ${who(other)} ${shareAdverb(p.share)} ${v('answer')} with ${reply}, a centre pawn thrown forward at ${target}.`
+        : `The usual answer is ${reply}, putting the question to ${target}.`);
       squares.push(p.square);
     } else if (p.kind === 'invites-trade') {
-      out.push(`It challenges the centre at once: in ${p.share}% of master games ${who(other)} ${v('take')} on ${on}, and the pawn is taken back.`);
+      out.push(`It challenges the centre at once: ${who(other)} ${shareAdverb(p.share)} ${v('take')} on ${on}, and the pawn is taken back.`);
       squares.push(on);
     } else if (p.kind === 'takes-offered-pawn') {
-      out.push(`It offers a pawn, and in ${p.share}% of master games ${who(other)} ${v('take')} it on ${on}.`);
+      out.push(`It offers a pawn, and ${who(other)} ${shareAdverb(p.share)} ${v('take')} it on ${on}.`);
       squares.push(on);
     }
   }
@@ -135,7 +136,7 @@ export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'se
     }
   }
   if (f.theoryPlies >= 12 && f.forcing >= 30) {
-    out.push(`It is sharp and theory-heavy: the master line stays common for ${moves(f.theoryPlies)} moves, and ${f.forcing}% of them are captures or checks.`);
+    out.push(`It is sharp and theory-heavy: the master line stays common for ${moves(f.theoryPlies)} moves, and ${f.forcing >= 50 ? 'most' : 'a lot'} of them are captures or checks.`);
   } else if (f.theoryPlies >= 14 && f.forcing <= 10) {
     out.push(`It is a quiet opening: ${moves(f.theoryPlies)} moves of master theory with almost no captures, so understanding the plans matters more than memory.`);
   }

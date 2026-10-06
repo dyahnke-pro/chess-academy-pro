@@ -61,7 +61,7 @@ describe('teachingSelector — the ONE game-level read (unified-coach N1)', () =
     // The +900 → +650 blowout never "turned" (contested gate).
     expect(pkg.moments.map((m) => m.ply)).not.toContain(19);
     expect(pkg.moments.map((m) => m.ply)).toEqual(expect.arrayContaining([8, 13]));
-    expect(renderThesis(pkg.thesis, 'retrospective')).toMatch(/^The game turned at .* points/);
+    expect(renderThesis(pkg.thesis, 'retrospective')).toMatch(/^The game turned at .* — it cost /);
   });
 
   // B10: a landed tactic is a moment on a BAR — a hole this student keeps
@@ -156,6 +156,6 @@ describe('the thesis never states a mate score as a point count', () => {
     expect(t).toMatch(/decided the game/);
   });
   it('an ordinary swing still says its size', () => {
-    expect(renderThesis({ kind: 'turned', ply: 20, label: '10.Nd5', swingPawns: 2.4, tactic: null, plan: null, chainRoot: null }, 'retrospective')).toMatch(/about 2\.4 points/);
+    expect(renderThesis({ kind: 'turned', ply: 20, label: '10.Nd5', swingPawns: 2.4, tactic: null, plan: null, chainRoot: null }, 'retrospective')).toMatch(/— it cost about two pawns/);
   });
 });

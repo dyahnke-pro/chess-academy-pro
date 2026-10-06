@@ -426,7 +426,7 @@ describe('coachFeatureService', () => {
       expect(blunderSeg.narration).not.toMatch(/Qh5/);
       // Should include the swing magnitude in POINTS (David 2026-07-24: eval
       // voiced as points, never pawns).
-      expect(blunderSeg.narration).toMatch(/3\.[0-9] points/);
+      expect(blunderSeg.narration).toMatch(/about a piece/);
     });
 
     it('frames opponent mistakes from the student perspective', () => {

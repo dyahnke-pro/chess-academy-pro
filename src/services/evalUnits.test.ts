@@ -14,7 +14,9 @@ import { join } from 'node:path';
 const DIR = join(process.cwd(), 'src/services');
 const PIECE_PAWN_FILES = new Set(['structureProse.ts']);
 // `${...} pawns` — a template value followed by the unit word.
-const UNIT_PAWNS = /\}\s+pawns\b/;
+// A count of real pawns ("3 of your 5 pawns stand on its colour") is the
+// piece; the unit is a number with a decimal or a verdict word after it.
+const UNIT_PAWNS = /toFixed\(\d\)\}\s+pawns\b|\}\s+pawns\s+(short|up|down|ahead|behind|better|worse)\b/;
 
 describe('eval units', () => {
   const files = readdirSync(DIR).filter(
@@ -36,8 +38,10 @@ describe('eval units', () => {
     expect(offenders, `say "points", not "pawns":\n${offenders.join('\n')}`).toEqual([]);
   });
 
-  it('the piece sense is still allowed where it belongs', () => {
-    const src = readFileSync(join(DIR, 'structureProse.ts'), 'utf8');
-    expect(UNIT_PAWNS.test(src)).toBe(true);
+  it('NEGATIVE CONTROL: catches the unit, leaves the piece alone', () => {
+    expect(UNIT_PAWNS.test('falls about ${(gap / 100).toFixed(1)} pawns short')).toBe(true);
+    expect(UNIT_PAWNS.test('you are ${n} pawns up')).toBe(true);
+    expect(UNIT_PAWNS.test('${same} of your ${mine.length} pawns stand on its colour')).toBe(false);
+    expect(UNIT_PAWNS.test(readFileSync(join(DIR, 'structureProse.ts'), 'utf8'))).toBe(false);
   });
 });

@@ -31,6 +31,7 @@
  * Run (prod): AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY \
  *   AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app node scripts/audit-review-overhaul-prod.mjs
  */
+import { linesWithStats } from './audit-lib/spoken-stats.mjs';
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { sampleRenderers, playwrightRenderers } from './audit-lib/os-sample.mjs';
@@ -1701,6 +1702,11 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   await add('TURNING at-most-three-per-game', turningQs.length <= 3, `${turningQs.length} asked${turningQs[0] ? `; e.g. "${turningQs[0]}"` : ''}`);
   const whyless = turningReveals.filter((r) => !/^The move was \S+ — it /.test(r));
   await add('TURNING every-reveal-names-the-move-and-why', whyless.length === 0, `${turningReveals.length} reveals${whyless.length ? ` — ${whyless.length} without a why, e.g. "${whyless[0]}"` : turningReveals[0] ? `; e.g. "${turningReveals[0]}"` : ''}`);
+  // REASON, NOT STATS (David 2026-10-06) — no spoken line carries a number.
+  {
+    const statLines = linesWithStats(all.map((x) => x.text));
+    await add('VOICE no-statistic-spoken', statLines.length === 0, `${statLines.length} line(s)${statLines.length ? ` — ${statLines[0].slice(0, 120)}` : ''}`);
+  }
   // The app's own verdict per flagged ply — a game that asks nothing must say
   // WHY (small swing / decided / no eval), or the zero above is a silent wire.
   const planRow = listener.getCapturedEvents().filter((e) => e.kind === 'review-turning-plan').pop();

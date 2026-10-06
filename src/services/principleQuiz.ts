@@ -9,6 +9,7 @@
  * (mover-POV, computed); the reveal states only those numbers. No LLM
  * decides anything here.
  */
+import { costWords } from './engineConstants';
 import { Chess } from 'chess.js';
 import type { StockfishAnalysis } from '../types';
 import { principleFor } from '../data/principles';
@@ -180,6 +181,5 @@ export function quizVerdictLine(quiz: PrincipleQuiz, pickedSan: string): string 
   if (picked.deltaCp >= 10_000) {
     return `${picked.san} fails the device — it throws away a forced mate. The move that passes is ${quiz.correctSan}.`;
   }
-  const pawns = (picked.deltaCp / 100).toFixed(1);
-  return `${picked.san} fails the device — it gives up about ${pawns} points. The move that passes is ${quiz.correctSan}.`;
+  return `${picked.san} fails the device — it gives up ${costWords(picked.deltaCp)}. The move that passes is ${quiz.correctSan}.`;
 }

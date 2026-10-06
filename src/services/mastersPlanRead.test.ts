@@ -21,8 +21,8 @@ describe('mastersPlanRead — the break master games go for', () => {
     const r = mastersPlanRead(fenOf('e4 e6 d4 d5 e5'), at);
     expect(r?.black?.san).toBe('c5');
     expect(r!.black!.share).toBeCloseTo(0.9, 2);
-    expect(mastersPlanLine(r, 'b')?.text).toBe('The plan in this structure: your break is …c5 — masters from here play it in about 90% of games.');
-    expect(mastersPlanLine(r, 'w')?.text).toBe('The plan in this structure: their break is …c5 (90%).');
+    expect(mastersPlanLine(r, 'b')?.text).toBe('The plan in this structure: your break is …c5 — masters from here almost always play it.');
+    expect(mastersPlanLine(r, 'w')?.text).toBe('The plan in this structure: their break is …c5.');
   });
 
   it('taking the pawn that just arrived answers their break — it is not a break (walk 2026-09-30)', () => {

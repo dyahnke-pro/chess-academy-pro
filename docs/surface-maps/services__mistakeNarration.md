@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**702 lines · 3 exports · 6 importers · 5 tests · 0 audits**
+**701 lines · 3 exports · 6 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -37,32 +37,32 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakeNarration.test.ts:28`
 - `src/services/mistakeNarration.test.ts:38`
 - `src/services/mistakeNarration.test.ts:45`
-- `src/services/mistakeNarration.test.ts:50`
-- `src/services/mistakeNarration.test.ts:55`
-- `src/services/mistakeNarration.test.ts:62`
-- `src/services/mistakeNarration.test.ts:72`
-- `src/services/mistakeNarration.test.ts:81`
-- `src/services/mistakeNarration.test.ts:86`
-- `src/services/mistakeNarration.test.ts:92`
-- `src/services/mistakeNarration.test.ts:97`
-- `src/services/mistakeNarration.test.ts:103`
-- `src/services/mistakeNarration.test.ts:108`
-- `src/services/mistakeNarration.test.ts:114`
-- `src/services/mistakeNarration.test.ts:119`
-- `src/services/mistakeNarration.test.ts:127`
-- `src/services/mistakeNarration.test.ts:135`
-- `src/services/mistakeNarration.test.ts:143`
-- `src/services/mistakeNarration.test.ts:153`
-- `src/services/mistakeNarration.test.ts:182`
-- `src/services/mistakeNarration.test.ts:260`
-- `src/services/mistakeNarration.test.ts:271`
-- `src/services/mistakeNarration.test.ts:287`
-- `src/services/mistakeNarration.test.ts:301`
+- `src/services/mistakeNarration.test.ts:51`
+- `src/services/mistakeNarration.test.ts:56`
+- `src/services/mistakeNarration.test.ts:63`
+- `src/services/mistakeNarration.test.ts:73`
+- `src/services/mistakeNarration.test.ts:82`
+- `src/services/mistakeNarration.test.ts:87`
+- `src/services/mistakeNarration.test.ts:93`
+- `src/services/mistakeNarration.test.ts:98`
+- `src/services/mistakeNarration.test.ts:104`
+- `src/services/mistakeNarration.test.ts:109`
+- `src/services/mistakeNarration.test.ts:115`
+- `src/services/mistakeNarration.test.ts:120`
+- `src/services/mistakeNarration.test.ts:128`
+- `src/services/mistakeNarration.test.ts:136`
+- `src/services/mistakeNarration.test.ts:144`
+- `src/services/mistakeNarration.test.ts:154`
+- `src/services/mistakeNarration.test.ts:183`
+- `src/services/mistakeNarration.test.ts:261`
+- `src/services/mistakeNarration.test.ts:272`
+- `src/services/mistakeNarration.test.ts:288`
 - `src/services/mistakeNarration.test.ts:302`
-- `src/services/mistakePuzzleService.ts:628`
-- `src/services/mistakePuzzleService.ts:945`
-- `src/services/mistakePuzzleService.ts:1093`
-- `src/services/mistakePuzzleService.ts:1238`
+- `src/services/mistakeNarration.test.ts:303`
+- `src/services/mistakePuzzleService.ts:626`
+- `src/services/mistakePuzzleService.ts:943`
+- `src/services/mistakePuzzleService.ts:1091`
+- `src/services/mistakePuzzleService.ts:1236`
 - `src/services/reviewWalkOct1.test.ts:41`
 
 ## Tests

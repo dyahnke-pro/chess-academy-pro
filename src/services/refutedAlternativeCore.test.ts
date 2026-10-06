@@ -24,7 +24,7 @@ describe('refuted alternative — the proof is against the mover', () => {
     expect(r).not.toBeNull();
     expect(r?.text).not.toMatch(/loses material/);
     expect(r?.text).not.toMatch(/you win a bishop/);
-    expect(r?.text).toMatch(/costs about|gives away about/);
+    expect(r?.text).toMatch(/costs you |gives away /);
   });
 
   it('a line that really loses material still proves it', () => {

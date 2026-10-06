@@ -11,12 +11,14 @@ afterEach(() => __resetHisPlayDbForTests());
 describe('strongChoice — his games, depersonalized', () => {
   it('confirms the student played the strong choice, and names it when not', () => {
     __setHisPlayDbForTests({ [positionFen(fen)]: { total: 30, moves: [{ san: 'd4', games: 24, w: 14, d: 6, l: 4 }, { san: 'Nc3', games: 6, w: 2, d: 2, l: 2 }] } });
-    expect(strongChoice(fen, 'd4')?.text).toBe("That's the strong players' choice here — it stakes out the center and grabs space; 24 of 30 strong games go this way.");
-    expect(strongChoice(fen, 'Nf3')?.text).toBe("A strong player's choice here is d4 — it stakes out the center and grabs space; 24 of 30 strong games go this way.");
+    expect(strongChoice(fen, 'd4')?.text).toBe("That's what strong players play here — it stakes out the center and grabs space.");
+    expect(strongChoice(fen, 'Nf3')?.text).toBe('Strong players play d4 here — it stakes out the center and grabs space.');
   });
-  it('never calls the best-scoring move "the most common" when the student\'s move has more games (walk oct3a)', () => {
+  it('gives the reason and never a count or a percentage (David 2026-10-06: reason, not stats)', () => {
     __setHisPlayDbForTests({ [positionFen(fen)]: { total: 24, moves: [{ san: 'd4', games: 13, w: 4, d: 3, l: 6 }, { san: 'Nc3', games: 9, w: 5, d: 1, l: 3 }, { san: 'c4', games: 2, w: 1, d: 0, l: 1 }] } });
-    expect(strongChoice(fen, 'd4')?.text).toBe("d4 is the most common move here — played in 13 of 24 games; the best-scoring is Nc3, played in 9 of 24 games from this position, scoring 61%.");
+    const t = strongChoice(fen, 'd4')?.text ?? '';
+    expect(t).toMatch(/^d4 is a strong player's move here too, but Nc3 scores better — it /);
+    expect(t.replace(/[a-h][1-8]/g, '')).not.toMatch(/\d/);
   });
   it('never names a person', () => {
     __setHisPlayDbForTests({ [positionFen(fen)]: { total: 30, moves: [{ san: 'd4', games: 24, w: 14, d: 6, l: 4 }] } });

@@ -16,10 +16,10 @@ describe('openingIdentity', () => {
 
   it('Alekhine: provokes the pawn at the knight, from the student\'s seat', () => {
     const asBlack = openingIdentityLine('Alekhine Defense', 'b', 'seat');
-    expect(asBlack?.text).toMatch(/they answer with the pawn to e5, a centre pawn thrown forward at your knight on f6/);
+    expect(asBlack?.text).toMatch(/they (almost always|usually|often|sometimes) answer with the pawn to e5, a centre pawn thrown forward at your knight on f6/);
     const asWhite = openingIdentityLine('Alekhine Defense', 'w', 'seat');
-    expect(asWhite?.text).toMatch(/you answer with the pawn to e5, a centre pawn thrown forward at their knight on f6/);
-    expect(openingIdentityLine('Alekhine Defense', 'w', 'demo')?.text).toMatch(/White answers with/);
+    expect(asWhite?.text).toMatch(/you (almost always|usually|often|sometimes) answer with the pawn to e5, a centre pawn thrown forward at their knight on f6/);
+    expect(openingIdentityLine('Alekhine Defense', 'w', 'demo')?.text).toMatch(/White (almost always|usually|often|sometimes) answers with/);
   });
 
   it('a gambit that lasts is said with its length; an ordinary opening is not a gambit', () => {

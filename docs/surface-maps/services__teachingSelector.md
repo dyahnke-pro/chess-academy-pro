@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**442 lines · 17 exports · 7 importers · 2 tests · 4 audits**
+**443 lines · 17 exports · 7 importers · 2 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
 - **STEP 11 — Add model games (multi-game per variation)** (CLAUDE.md:2055) — names `Moment`
-- **⏰ Standing notes** (CLAUDE.md:2586) — names `Thesis`
-- **The standard post-deploy ritual** (CLAUDE.md:6115) — names `Moment`
+- **⏰ Standing notes** (CLAUDE.md:2596) — names `Thesis`
+- **The standard post-deploy ritual** (CLAUDE.md:6125) — names `Moment`
 
 ## Who calls in
 
@@ -58,10 +58,10 @@
 
 ### `selectTeaching` (function) — 14 call sites
 - `src/hooks/usePhaseNarration.ts:545`
-- `src/services/coachFeatureService.ts:1414`
+- `src/services/coachFeatureService.ts:1457`
 - `src/services/needCoverage.report.test.ts:60`
-- `src/services/openingGenerator.ts:523`
-- `src/services/openingGenerator.ts:2468`
+- `src/services/openingGenerator.ts:524`
+- `src/services/openingGenerator.ts:2469`
 - `src/services/teachingSelector.test.ts:39`
 - `src/services/teachingSelector.test.ts:51`
 - `src/services/teachingSelector.test.ts:82`
@@ -77,9 +77,9 @@
 
 ### `renderThesis` (function) — 10 call sites
 - `src/coach/surfaceContract.scan.test.ts:50`
-- `src/components/Coach/CoachGameReview.tsx:1475`
+- `src/components/Coach/CoachGameReview.tsx:1477`
 - `src/hooks/usePhaseNarration.ts:549`
-- `src/services/openingGenerator.ts:2470`
+- `src/services/openingGenerator.ts:2471`
 - `src/services/teachingSelector.test.ts:45`
 - `src/services/teachingSelector.test.ts:46`
 - `src/services/teachingSelector.test.ts:64`
@@ -90,7 +90,7 @@
 ### `pliesFromSans` (function) — 6 call sites
 - `src/hooks/usePhaseNarration.ts:545`
 - `src/services/needCoverage.report.test.ts:59`
-- `src/services/openingGenerator.ts:521`
+- `src/services/openingGenerator.ts:522`
 - `src/services/teachingSelector.test.ts:113`
 - `src/services/teachingSelector.test.ts:114`
 - `src/services/teachingSelector.test.ts:117`
@@ -99,14 +99,14 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `selectTeachingForSegments` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:1473`
+- `src/components/Coach/CoachGameReview.tsx:1475`
 
 ### `TreeTeaching` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `summarizeTeaching` (function) — 3 call sites
-- `src/services/openingGenerator.ts:523`
-- `src/services/openingGenerator.ts:2469`
+- `src/services/openingGenerator.ts:524`
+- `src/services/openingGenerator.ts:2470`
 - `src/services/teachingSelector.test.ts:118`
 
 ## Tests

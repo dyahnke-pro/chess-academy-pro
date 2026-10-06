@@ -72,7 +72,7 @@ describe('refutedAlternative', () => {
     expect(r!.concept).not.toBeNull();
     // The CLAIM is fixed — the share, the source, the move, the proven line;
     // only the wrapper rotates (on the board, via stemKeyOf).
-    expect(r!.text).toMatch(/38% of masters/);
+    expect(r!.text).toMatch(/A lot of masters play Nf6 here|Nf6 is a popular choice among masters here/);
     expect(r!.text).toMatch(/Nf6/);
     expect(r!.text).toMatch(/Nf6 and Qxf7# — it's mate/);
   });
@@ -109,7 +109,7 @@ describe('refutedAlternative', () => {
     const r = await refutedAlternative({ fenBefore: FEN, taughtSan: 'g6', candidates: cands, studentColor: 'black', engine });
     expect(r).not.toBeNull();
     expect(r!.concept).toBeNull();
-    expect(r!.text).toMatch(/about 1\.0 points/);
+    expect(r!.text).toMatch(/about a pawn/);
     expect(r!.text).not.toMatch(/fork|pin|mate/i);
   });
 
@@ -141,13 +141,13 @@ describe('refutedAlternative', () => {
 
   it('renderRefutedAlternative is a template over the facts (pure)', () => {
     const t = renderRefutedAlternative({ alt: 'Nf6', games: 300, pct: 38, costCp: 900, line: null, concept: { id: 'mate', name: 'Checkmate', full: 'The queen lands on f7 with the bishop covering it — mate.', short: 'mate' }, lineSans: ['Nf6', 'Qxf7#'], proofResult: "it's mate" }, 'g6', 0);
-    expect(t).toBe("38% of masters play Nf6 here, and it walks into a checkmate: Nf6 and Qxf7# — it's mate. The queen lands on f7 with the bishop covering it — mate. g6 keeps that off the board.");
+    expect(t).toBe("A lot of masters play Nf6 here, and it walks into a checkmate: Nf6 and Qxf7# — it's mate. The queen lands on f7 with the bishop covering it — mate. g6 keeps that off the board.");
   });
 
   it('a line that proves nothing is not recited (the line as proof)', () => {
     const t = renderRefutedAlternative({ alt: 'a6', games: 40, pct: 12, costCp: 150, line: null, concept: null, lineSans: [], proofResult: null }, 'Nf3', 0);
     expect(t).not.toMatch(/line runs/);
-    expect(t).toMatch(/costs about 1\.5 points/);
+    expect(t).toMatch(/costs you more than a pawn/);
   });
 
   it('players at the student\'s level come first; masters are the fallback', async () => {
@@ -158,7 +158,7 @@ describe('refutedAlternative', () => {
     const c = candidatesForPosition(FEN, MASTERS);
     expect(c[0]).toEqual({ san: 'Nf6', games: 60, pct: 60, source: 'amateur' });
     const t = renderRefutedAlternative({ alt: 'Nf6', games: 60, pct: 60, costCp: 150, line: null, concept: null, lineSans: [], source: 'amateur' }, 'g6', 0);
-    expect(t).toMatch(/^Most players at your level play Nf6 here \(60%\)/);
+    expect(t).toMatch(/^Most players at your level play Nf6 here/);
     __clearAmateurPlayCache();
   });
 
@@ -166,7 +166,7 @@ describe('refutedAlternative', () => {
     // 1% alternative → no alternative at all (the prod "Most people … (1%)").
     expect(pickAlternative('e6', [{ san: 'e6', games: 990, pct: 99 }, { san: 'Bg6', games: 10, pct: 1 }])).toBeNull();
     const t = renderRefutedAlternative({ alt: 'Nf6', games: 30, pct: 30, costCp: 150, line: null, concept: null, lineSans: [], source: 'amateur' }, 'g6', 0);
-    expect(t).toMatch(/^30% of players at your level play Nf6 here/);
+    expect(t).toMatch(/^A lot of players at your level play Nf6 here/);
     expect(t).not.toMatch(/^Most/);
   });
 
@@ -176,8 +176,9 @@ describe('refutedAlternative', () => {
     const texts = new Set([0, 1, 2, 3, 4, 5].map((k) => renderRefutedAlternative(f, 'g6', k)));
     expect(texts.size).toBeGreaterThan(1);
     for (const t of texts) {
-      expect(t).toMatch(/30% of players at your level/);
-      expect(t).toMatch(/1\.5 points/);
+      expect(t).toMatch(/players at your level/);
+      expect(t).toMatch(/more than a pawn/);
+      expect(t.replace(/[a-h][1-8]/g, '')).not.toMatch(/\d/);
       expect(t).not.toMatch(/^Most/);
     }
   });

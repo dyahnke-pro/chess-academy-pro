@@ -12,6 +12,7 @@
 // master move with a game count, G3), and it names nothing it cannot count.
 import { Chess } from 'chess.js';
 import type { LocalDbMove } from './masterPlayLookup';
+import { shareAdverb } from '../utils/shareWords';
 
 export type MovesAt = (fen: string) => readonly LocalDbMove[] | null;
 
@@ -184,21 +185,20 @@ export function mastersPlanLine(read: MastersPlanRead | null, student: 'w' | 'b'
   const theirs = student === 'w' ? read.black : read.white;
   const myPiece = student === 'w' ? read.whitePiece : read.blackPiece;
   const myCastle = student === 'w' ? read.whiteCastle : read.blackCastle;
-  const pct = (share: number): string => `${Math.round(share * 100)}%`;
   const dot = (san: string, side: 'w' | 'b'): string => `${side === 'b' ? '…' : ''}${san}`;
   const NAME: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
   const parts: string[] = [];
   const squares: string[] = [];
   const arrows: Array<{ from: string; to: string }> = [];
   if (mine) {
-    parts.push(`your break is ${dot(mine.san, student)} — masters from here play it in about ${pct(mine.share)} of games`);
+    parts.push(`your break is ${dot(mine.san, student)} — masters from here ${shareAdverb(Math.round(mine.share * 100))} play it`);
     squares.push(mine.square); arrows.push({ from: mine.from, to: mine.square });
   } else if (myPiece) {
-    parts.push(`your ${NAME[myPiece.piece] ?? 'piece'} on ${myPiece.from} usually goes to ${myPiece.to} (${dot(myPiece.san, student)}, about ${pct(myPiece.share)} of master games)${myCastle ? `, and you castle ${myCastle.side}` : ''}`);
+    parts.push(`your ${NAME[myPiece.piece] ?? 'piece'} on ${myPiece.from} usually goes to ${myPiece.to} (${dot(myPiece.san, student)})${myCastle ? `, and you castle ${myCastle.side}` : ''}`);
     squares.push(myPiece.to); arrows.push({ from: myPiece.from, to: myPiece.to });
   }
   if (theirs) {
-    parts.push(`${parts.length ? 'theirs is' : 'their break is'} ${dot(theirs.san, them)} (${pct(theirs.share)})`);
+    parts.push(`${parts.length ? 'theirs is' : 'their break is'} ${dot(theirs.san, them)}`);
     squares.push(theirs.square); arrows.push({ from: theirs.from, to: theirs.square });
   }
   if (!parts.length) return null;

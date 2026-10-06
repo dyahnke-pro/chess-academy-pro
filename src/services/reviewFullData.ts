@@ -36,7 +36,8 @@ import { principleLine, principleContrastLine } from './moveFundamentals';
 import { threatStoppedBy } from './opponentMovePurpose';
 import { recordedMoveCost } from './moveCost';
 import { trickSidestepped } from './forkTrick';
-import { isMateEval, MISTAKE_CP, moverGaveUpMate } from './engineConstants';
+import { costWords, isMateEval, MISTAKE_CP, moverGaveUpMate } from './engineConstants';
+import { shareAdverb } from '../utils/shareWords';
 import { computeBoardDelta } from './boardDelta';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
 import { explainMatingSacMechanism } from './reviewForcedSequence';
@@ -472,7 +473,7 @@ export function computeMoveFacets(
     // A cost that rounds to 0.0 contradicts its own grade ("a mistake,
     // costing about 0.0 points" — corpus sweep 2026-10-02): the grade is in
     // win chances, so the number goes and the label stands.
-    const swingBit = swing != null && swing >= 5 && costsPoints && pointsAgree ? `, costing about ${(swing / 100).toFixed(1)} points` : '';
+    const swingBit = swing != null && swing >= 5 && costsPoints && pointsAgree ? `, costing ${costWords(swing)}` : '';
     // WHY it's a mistake, when we can prove it (a premature central break). Danya
     // leads with the positional reason, THEN names the better move — so does this.
     const whyBad = (ctx.classification === 'mistake' || ctx.classification === 'blunder' || ctx.classification === 'inaccuracy')
@@ -997,11 +998,10 @@ export function computeMoveFacets(
           // here in 2% of games" — gems are mined from 2% up, so the share
           // decides the wording; the claim (the slip, its refutation) does not.
           const pct = gem && gem.freqPct > 0 ? Math.round(gem.freqPct) : null;
+          // In words, never the share (David 2026-10-06: reason, not stats).
           const lead = pct !== null && pct >= MIN_ALTERNATIVE_SHARE
-            ? `${pct}% of players at your level play ${crush.inaccuracy} here`
-            : pct !== null
-              ? `The trap here is ${crush.inaccuracy} (${pct}% of games at your level)`
-              : `The trap here is ${crush.inaccuracy}`;
+            ? `Players at your level ${shareAdverb(pct)} play ${crush.inaccuracy} here`
+            : `The trap here is ${crush.inaccuracy}`;
           const rf = `[refuted] ${lead} — it loses to ${crush.punish}, ${crush.payoff}.`;
           facets.push(rf);
           // SAID ONCE PER GAME by the alternative itself (review tape

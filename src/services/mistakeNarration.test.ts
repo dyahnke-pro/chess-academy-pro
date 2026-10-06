@@ -41,9 +41,10 @@ describe('generateMistakeNarration', () => {
     // so the player can try to find it themselves
   });
 
-  it('intro contains centipawn loss as pawns', () => {
+  it('intro states the cost in words, never a number', () => {
     const result = generateMistakeNarration(buildParams({ cpLoss: 250 }));
-    expect(result.intro).toContain('2.5');
+    expect(result.intro).toContain('about two pawns');
+    expect(result.intro).not.toMatch(/\d\.\d/);
   });
 
   it.each(classifications)('generates narration for classification: %s', (classification) => {

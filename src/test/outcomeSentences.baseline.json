@@ -8,7 +8,6 @@
   "src/services/boardPlan.ts": 1,
   "src/services/causalChainVoice.ts": 1,
   "src/services/coachApi.ts": 2,
-  "src/services/coachFeatureService.ts": 1,
   "src/services/coachPrompts.ts": 4,
   "src/services/deliberation.ts": 1,
   "src/services/gemCrushLines.ts": 1,

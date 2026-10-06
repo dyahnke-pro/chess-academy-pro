@@ -3,6 +3,7 @@
 // plans that hold equally ("pick the one you understand"), or one clearly
 // stronger than the other, with what the weaker one costs. Both plans are read
 // off lines the engine already computed (MultiPV) — no extra search.
+import { costWords } from './engineConstants';
 import { Chess } from 'chess.js';
 import { planFromUci } from './lookaheadPlan';
 import { aimWalkableNow, aimsOf } from './planArc';
@@ -62,7 +63,7 @@ export function planChoice(
     return { key, text: `Two plans hold here — ${a0.phrase}, or ${a1.phrase}. They come out level, so choose the one you understand and play it with purpose.` };
   }
   if (gap >= 80) {
-    return { key, text: `Of the two plans on offer, the stronger is ${a0.phrase}; ${a1.phrase} falls about ${(gap / 100).toFixed(1)} pawns short.` };
+    return { key, text: `Of the two plans on offer, the stronger is ${a0.phrase}; ${a1.phrase} falls short by ${costWords(gap)}.` };
   }
   return null;
 }

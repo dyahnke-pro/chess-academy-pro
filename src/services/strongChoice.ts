@@ -20,30 +20,24 @@ export function strongChoice(fenBefore: string, playedSan: string): { text: stri
   if (!best) return null;
   const bare = (s: string): string => s.replace(/[+#!?]+$/, '');
   const same = bare(best.san) === bare(playedSan);
-  const score = Math.round(((best.w + best.d / 2) / Math.max(1, best.games)) * 100);
-  const stat = `played in ${best.games} of ${entry.total} games from this position, scoring ${score}%`;
   // The student's own move, when strong players play it too, is said FIRST —
   // "the choice is Bb5" after a sound Nc3 read as a correction (walk
   // 2026-09-30, game 2).
   const mine = entry.moves.find((m) => bare(m.san) === bare(playedSan));
-  // `best` is the best-SCORING frequent move, not always the most played —
-  // naming it "the most common" beside a move with more games was false
-  // (walk oct3a: exd5 13 of 24 vs "the most common is Bb3, 9 of 24").
-  const topGames = Math.max(...entry.moves.map((m) => m.games));
-  const bestLabel = best.games >= topGames ? 'the most common' : 'the best-scoring';
   // THE REASON, NOT JUST THE STATISTIC (David 2026-10-06: "statistics where a
   // reason should be" — a database talking, not a coach). The move-why
-  // computer says what the strong move DOES; the count stays, short.
+  // computer says what the strong move DOES.
   const mover = fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
   let why: string | null = null;
   try { why = moveWhy(fenBefore, best.san, mover, null); } catch { why = null; }
-  const count = `${best.games} of ${entry.total} strong games go this way`;
+  // NO COUNTS AT ALL (David 2026-10-06, after the 10-06 tape still said "363
+  // of 1012 strong games go this way": a coach gives the reason; a database
+  // gives the count). No reason computed → the line is not said.
+  if (!why) return null;
   const text = same
-    ? (why ? `That's the strong players' choice here — it ${why}; ${count}.` : `That is a strong player's choice here — ${stat}.`)
+    ? `That's what strong players play here — it ${why}.`
     : mine && mine.games >= Math.max(HIS_PLAN_MIN_GAMES, best.games * 0.1)
-      ? mine.games >= topGames
-        ? `${playedSan} is the most common move here — played in ${mine.games} of ${entry.total} games; the best-scoring is ${best.san}, ${stat}.`
-        : `${playedSan} is a strong player's move here too — played in ${mine.games} of ${entry.total} games; ${bestLabel} is ${best.san}, ${stat}.`
-      : why ? `A strong player's choice here is ${best.san} — it ${why}; ${count}.` : `A strong player's choice here is ${best.san} — ${stat}.`;
+      ? `${playedSan} is a strong player's move here too, but ${best.san} scores better — it ${why}.`
+      : `Strong players play ${best.san} here — it ${why}.`;
   return { text, san: best.san, same };
 }

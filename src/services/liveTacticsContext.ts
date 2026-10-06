@@ -802,9 +802,13 @@ export function openThreatLine(line: string, fen: string, student: 'w' | 'b', sq
   const level = dangerLevel(fen, student, squares);
   // "Careful —" warns of a piece already hit; "not yet" would contradict it.
   if (!level || (prefix === 'Careful — ' && level === 'not-yet')) return line;
-  // A LOUD alarm said once already this game: the repeat says "Again —".
+  // THE LOUD OPENER IS SPENT ONCE A GAME. After it, a loud alarm keeps its
+  // plain "Watch out —". Never "Again —": the caller never repeats a threat it
+  // already spoke, so every "Again" named a DIFFERENT danger (Learn tape
+  // 2026-10-06: three per game, each about a new piece).
   const loud = level === 'decisive' || level === 'piece';
-  const stems = loud && loudSaid > 0 ? ['Again — '] : DANGER_OPENERS[level];
+  if (loud && loudSaid > 0) return line;
+  const stems = DANGER_OPENERS[level];
   const body = line.slice(prefix.length);
   const opener = stems[ply % stems.length];
   return opener.endsWith('. ') ? `${opener}${body.charAt(0).toUpperCase()}${body.slice(1)}` : `${opener}${body}`;

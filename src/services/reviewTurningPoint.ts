@@ -12,6 +12,7 @@
 // won game (+8→−2) did. A flat 1.0-pawn threshold caught the first as loudly
 // as the second, and treated every rating the same.
 
+import { costWords } from './engineConstants';
 import { criticalityThresholds } from './criticalityScan';
 
 /** A position is decided when |eval| clears this (white-POV cp). */
@@ -149,7 +150,7 @@ export function buildTurningPointQuestion(
     answer,
     reveal:
       `The turning point was ${answer.label} — the game's biggest single swing, ` +
-      `about ${answer.swingPawns.toFixed(1)} points.`,
+      `${costWords(answer.swingPawns * 100)}.`,
   };
 }
 
