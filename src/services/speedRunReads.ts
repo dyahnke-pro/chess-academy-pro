@@ -114,7 +114,7 @@ export function castleSide(fen: string, me: 'w' | 'b'): Read | null {
   const short = cover(['f', 'g', 'h']); const long = cover(['a', 'b', 'c']);
   if (short === long) return null;
   const side = short > long ? 'short' : 'long';
-  return { text: `If you castle, castle ${side}: the pawns on that wing are still at home (${Math.max(short, long)} of 3), the other wing has already been loosened.` };
+  return { text: rot(fen, `If you castle, castle ${side}: the pawns on that wing are still at home (${Math.max(short, long)} of 3), the other wing has already been loosened.`, `Castle ${side} when you castle — that wing's pawns are intact (${Math.max(short, long)} of 3); the other side is already loosened.`) };
 }
 
 /** A4 PROVOKE THE COMMITMENT ("Be2 provokes …c4, which releases the pressure"):
@@ -151,7 +151,7 @@ export function threatStronger(fen: string, me: 'w' | 'b', lines: Lines): Read |
   const grabLine = lines.find((l) => sanOf(fen, l.moves[0]) === grab.san);
   if (grabLine && seatCp(fen, best) - seatCp(fen, grabLine) < criticalityThresholds().notable) return null;
   const gap = grabLine ? seatCp(fen, best) - seatCp(fen, grabLine) : null;
-  return { stakes: costStakes(gap) ?? { points: legalSeeGainFor(fen, grab.to, me), plies: 1 }, text: `You could take on ${grab.to} right now, but the threat is stronger than carrying it out — the material will keep, so keep it hanging over them and improve first.`, squares: [grab.to] };
+  return { stakes: costStakes(gap) ?? { points: legalSeeGainFor(fen, grab.to, me), plies: 1 }, text: rot(fen, `You could take on ${grab.to} right now, but the threat is stronger than carrying it out — the material will keep, so keep it hanging over them and improve first.`, `The capture on ${grab.to} isn't going anywhere — leave it hanging over them and make the useful move first; the threat is the stronger weapon.`, `Don't cash in on ${grab.to} yet — while the capture hangs over them they are tied up; improve, and take it when it suits you.`), squares: [grab.to] };
 }
 
 /** A9 A PIECE HELD ONLY BY A TACTIC ("the loose b1 bishop survives tactically —
@@ -166,7 +166,7 @@ export function heldByTactic(fen: string, me: 'w' | 'b'): Read | null {
     const hits = b.attackers(cell.square, them).length;
     if (hits === 0 || hits <= b.attackers(cell.square, me).length) continue;
     if (legalSeeGainFor(fen, cell.square, them) > 0) continue;
-    return { stakes: pieceStakes(cell.type, 1), text: `Your ${name(cell.type)} on ${cell.square} is outnumbered but safe only because of a tactic — check it again after every move, because the moment the tactic disappears, so does its protection.`, squares: [cell.square] };
+    return { stakes: pieceStakes(cell.type, 1), text: rot(fen, `Your ${name(cell.type)} on ${cell.square} is outnumbered but safe only because of a tactic — check it again after every move, because the moment the tactic disappears, so does its protection.`, `Your ${name(cell.type)} on ${cell.square} survives on a tactic, not on its guards — recheck it every move; one change and it simply hangs.`, `Count again on ${cell.square}: more of theirs hit your ${name(cell.type)} than yours guard it, and only a tactic holds it — keep checking.`), squares: [cell.square] };
   }
   return null;
 }
@@ -211,7 +211,7 @@ export function overprotect(fen: string, me: 'w' | 'b'): Read | null {
     if (!cell || cell.color !== me || (cell.type !== 'n' && cell.type !== 'b')) continue;
     if (!isOutpost(b, cell.square, me, true)) continue;
     if (b.attackers(cell.square, me).length !== 1) continue;
-    return { stakes: pieceStakes(cell.type, 3), text: `Your ${name(cell.type)} on ${cell.square} is your best piece — overprotect it: a second guard means it can never be won or traded off cheaply, and it frees your other pieces.`, squares: [cell.square] };
+    return { stakes: pieceStakes(cell.type, 3), text: rot(fen, `Your ${name(cell.type)} on ${cell.square} is your best piece — overprotect it: a second guard means it can never be won or traded off cheaply, and it frees your other pieces.`, `Give your ${name(cell.type)} on ${cell.square} a second guard — it is your best piece, and one defender is one capture away from losing it.`), squares: [cell.square] };
   }
   return null;
 }
@@ -323,7 +323,7 @@ export function keepSquareForKnight(fen: string, me: 'w' | 'b', bestSan: string 
     if (b.get(via) || bestTo === via) continue;
     const blocker = b.moves({ verbose: true }).find((m) => m.to === via && m.piece !== 'n');
     if (!blocker) continue;
-    return { text: `Keep ${via} empty — your knight on ${cell.square} goes ${[cell.square, ...route.route].join('–')}, and ${via} is the first step.`, squares: [via, route.target] };
+    return { text: rot(fen, `Keep ${via} empty — your knight on ${cell.square} goes ${[cell.square, ...route.route].join('–')}, and ${via} is the first step.`, `Don't park a piece on ${via} — it's the first stop for your knight on ${cell.square} on the way to ${route.target}.`), squares: [via, route.target] };
   }
   return null;
 }

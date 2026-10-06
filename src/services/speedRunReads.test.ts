@@ -32,7 +32,7 @@ describe('his habits of thought, computed (each checked against the existing com
     expect(uglyButRight(fen, 'Kd1')).toBeNull();
   });
   it('which side to castle: the intact wing', () => {
-    expect(castleSide('r3k2r/pppppppp/8/8/8/8/P4PPP/R3K2R w KQkq - 0 1', 'w')?.text).toMatch(/castle short/);
+    expect(castleSide('r3k2r/pppppppp/8/8/8/8/P4PPP/R3K2R w KQkq - 0 1', 'w')?.text).toMatch(/[Cc]astle short/);
     expect(castleSide('r3k2r/pppppppp/8/8/8/8/PPP2PPP/R3K2R w KQkq - 0 1', 'w')).toBeNull();
   });
   it('provoke the commitment: the reply is a pawn advance into your half', () => {
@@ -43,12 +43,12 @@ describe('his habits of thought, computed (each checked against the existing com
   it('the threat is stronger than the execution', () => {
     // Nxd5 wins a pawn now, but the engine prefers Bc4 by a margin
     const fen = '4k3/8/8/3p4/8/2N5/8/4KB2 w - - 0 1';
-    expect(threatStronger(fen, 'w', [line(['f1c4'], 200), line(['c3d5'], 100)])?.text).toMatch(/threat is stronger than carrying it out/);
+    expect(threatStronger(fen, 'w', [line(['f1c4'], 200), line(['c3d5'], 100)])?.text).toMatch(/threat is stronger|threat is the stronger|Don't cash in/);
     expect(threatStronger(fen, 'w', [line(['c3d5'], 200)])).toBeNull();
   });
   it('a piece held only by a tactic: outnumbered, yet taking it loses', () => {
     // the knight on e5 is hit by the rook on a5 and the queen on e7, guarded once by d4 — and Rxe5 dxe5 loses for them
-    expect(heldByTactic('6k1/4q3/8/r3N3/3P4/8/8/6K1 w - - 0 1', 'w')?.text).toMatch(/safe only because of a tactic/);
+    expect(heldByTactic('6k1/4q3/8/r3N3/3P4/8/8/6K1 w - - 0 1', 'w')?.text).toMatch(/safe only because of a tactic|survives on a tactic|only a tactic holds it/);
     // one attacker, one defender: not outnumbered
     expect(heldByTactic('6k1/4q3/8/4N3/3P4/8/8/6K1 w - - 0 1', 'w')).toBeNull();
   });
@@ -68,7 +68,7 @@ describe('his habits of thought, computed (each checked against the existing com
   });
   it('overprotection: the outpost knight with a single guard', () => {
     const fen = '4k3/8/8/4N3/3P4/8/8/4K3 w - - 0 1';
-    expect(overprotect(fen, 'w')?.text).toMatch(/overprotect it/);
+    expect(overprotect(fen, 'w')?.text).toMatch(/overprotect it|second guard/);
   });
   it('the position opened: their knight steps off your bishop\'s diagonal, and you have a capture', () => {
     // …Nf5 opens the a1 bishop onto their queen on f6
@@ -102,7 +102,7 @@ describe('his habits of thought, computed (each checked against the existing com
   });
   it('keep a square vacant: the knight on b1 goes through c3, and the c-pawn could block it', () => {
     const fen = '4k3/8/8/2p1p3/3pP3/3P4/2P5/1NB1K3 w - - 0 1';
-    expect(keepSquareForKnight(fen, 'w', 'Ke2')?.text).toMatch(/Keep c3 empty — your knight on b1 goes b1–c3–d5/);
+    expect(keepSquareForKnight(fen, 'w', 'Ke2')?.text).toMatch(/Keep c3 empty — your knight on b1 goes b1–c3–d5|Don't park a piece on c3 — it's the first stop for your knight on b1 on the way to d5/);
     expect(keepSquareForKnight(fen, 'w', 'c3')).toBeNull();
   });
   it('the right piece for the hole: the bishop on d5 sits where the knight belongs', () => {
