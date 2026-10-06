@@ -276,7 +276,9 @@ export function playAnyway(fen: string, lines: Lines): Read | null {
   }
   const what = replySan.includes('+') ? 'a check' : 'a capture';
   const rTo = play(a.board.fen(), replySan)?.move;
-  const hits = replySan.includes('+') ? 'lets them check your king' : rTo?.captured ? `lets them take your ${name(rTo.captured)} on ${rTo.to}` : 'allows a scary-looking reply';
+  const hits = replySan.includes('+') ? 'lets them check your king'
+    : rTo?.captured && rTo.to === a.move.to ? `offers the ${name(rTo.captured)}` // naming the square would give the move away
+      : rTo?.captured ? `lets them take your ${name(rTo.captured)} on ${rTo.to}` : 'allows a scary-looking reply';
   return { idea: `Your strongest ${name(a.move.piece)} move ${hits} — look one move past it: nothing follows for them.`, namesMove: true, text: `${sayMoveClause(bestSan, fen).replace(/^./, (c) => c.toUpperCase())} allows ${what} — ${sayMoveClause(replySan, a.board.fen())} — and you play it anyway: look one move past the scary reply and nothing follows for them.` };
 }
 
@@ -477,11 +479,24 @@ export function forceConcession(fen: string, lines: Lines): Read | null {
   if (r.move.piece === 'k' && !replySan.startsWith('O-O') && theirs(a.board.fen()) && !theirs(r.board.fen())) {
     return { idea: `Your ${name(a.move.piece)} has a forcing move that costs their king the right to castle — find it.`, namesMove: true, text: `${cap(sayMoveClause(bestSan, fen))} forces a concession — their best answer is ${replySan}, and their king loses the right to castle.`, squares: [r.move.to] };
   }
-  const weak = (f: string): Set<string> => { const w = findWeakPawns(f, them); return new Set([...w.isolated, ...w.doubled, ...w.backward]); };
+  // Only a STRUCTURAL weakness the reply itself made: an isolated or doubled
+  // pawn of theirs that stands there, after a reply that moved or took a pawn.
+  if (r.move.piece !== 'p' && r.move.captured !== 'p') return null;
+  const weak = (f: string): Set<string> => { const w = findWeakPawns(f, them); return new Set([...w.isolated, ...w.doubled]); };
   const before = weak(a.board.fen());
-  const fresh = [...weak(r.board.fen())].find((s2) => !before.has(s2));
+  const fresh = [...weak(r.board.fen())].find((s2) => !before.has(s2) && r.board.get(s2 as Square)?.type === 'p' && r.board.get(s2 as Square)?.color === them);
   if (!fresh) return null;
-  return { idea: `Your ${name(a.move.piece)} has a forcing move that leaves their pawn on ${fresh} weak — find it.`, namesMove: true, text: `${cap(sayMoveClause(bestSan, fen))} forces a concession — their best answer is ${replySan}, and it leaves their pawn on ${fresh} weak.`, squares: [fresh] };
+  // A concession LASTS: at the end of the engine's line the pawn is still
+  // there and still weak (1…d5 2.exd5 doubles the d-pawns, and …Qxd5 takes
+  // one straight back — nothing was conceded).
+  const end = new Chess(r.board.fen());
+  for (const u of l.moves.slice(2, 6)) { try { end.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { break; } }
+  if (end.get(fresh as Square)?.type !== 'p' || end.get(fresh as Square)?.color !== them || !weak(end.fen()).has(fresh)) return null;
+  // Name the pawn as it stands NOW (the board the student sees): the file of
+  // the pawn before the reply moved it.
+  const pawnFile = (r.move.to === fresh && r.move.piece === 'p' ? r.move.from : fresh)[0];
+  if (!fresh) return null;
+  return { idea: `Your ${name(a.move.piece)} has a forcing move that leaves their ${pawnFile}-pawn weak for good — find it.`, namesMove: true, text: `${cap(sayMoveClause(bestSan, fen))} forces a concession — their best answer is ${replySan}, and it leaves their ${pawnFile}-pawn weak for good.`, squares: [fresh] };
 }
 
 /** FLEXIBLE MOVES FIRST: a piece move and a pawn move are about equal — play

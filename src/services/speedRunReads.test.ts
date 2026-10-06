@@ -182,6 +182,15 @@ describe('his habits of thought, computed (each checked against the existing com
     const castle = flexibleFirst('r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4', [line(['e1g1'], 30), line(['d2d3'], 20)]);
     expect(castle?.idea).toMatch(/castling keeps your options/);
   });
+  it('scale-replay defects stay fixed (20 of his games)', () => {
+    // play it anyway: the knight lands where they take it — never name that square
+    const pa = playAnyway('r3rbk1/p4ppp/P1q1p3/1p1n2B1/4N3/2P3Q1/1P3PPP/R3R1K1 w - - 2 23', [line(['e4f6', 'g7f6'], 300)]);
+    if (pa) expect(pa.idea).not.toMatch(/f6/);
+    // forcing concession: no "weak pawn on d5" on move one
+    expect(forceConcession('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1', [line(['c7c5', 'g1f3'], 30)])).toBeNull();
+    // 1…d5 2.exd5 doubles the d-pawns — and …Qxd5 takes one back: no concession
+    expect(forceConcession('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1', [line(['d7d5', 'e4d5', 'd8d5'], 30)])).toBeNull();
+  });
   it('the reads list never throws on any opening position (smoke over a real game)', () => {
     const c = new Chess();
     for (const m of 'e4 e5 Nf3 Nc6 Bb5 Nd4 Nxd4 exd4 O-O Bc5 d3 Qh4 Nd2 c6 Bc4 d6 Nf3 Qh5'.split(' ')) {
