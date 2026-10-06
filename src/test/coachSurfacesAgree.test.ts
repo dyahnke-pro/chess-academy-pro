@@ -21,7 +21,8 @@
 
 import { describe, it, expect } from 'vitest';
 import { plyFactsForMove, landedTacticFor } from '../services/pvPlayback';
-import { buildGuidedFindChallenge } from '../services/guidedFindTheMove';
+import { Chess } from 'chess.js';
+import { turningCause, turningQuestion } from '../services/turningPoints';
 
 /** Real positions, both measured the day this was written. */
 const BOARDS = [
@@ -42,8 +43,13 @@ describe('review and Learn agree about what a fork is', () => {
     it(b.name, () => {
       // REVIEW — the narrated clause.
       const review = /lands a fork/i.test(plyFactsForMove(b.before, b.san) ?? '');
-      // LEARN — the student-visible question, through the public builder.
-      const question = buildGuidedFindChallenge(b.before, b.uci)?.question ?? '';
+      // THE QUESTION the student is asked at a turning point (review), built
+      // from the cause the best move carries, against a played move that
+      // lands nothing.
+      const mover = b.before.split(' ')[1] === 'w' ? 'white' as const : 'black' as const;
+      const other = new Chess(b.before).moves().find((m) => m !== b.san && landedTacticFor(b.before, m) === null) ?? '';
+      const cause = turningCause({ ply: 1, san: other, fenBefore: b.before, classification: 'mistake', evalBefore: 0, evalAfter: 0, bestMoveUci: b.uci, bestMoveSan: b.san, playerColor: mover }, null);
+      const question = turningQuestion(cause);
       const learn = /fork/i.test(question);
       // …and the shared judgement both are supposed to read.
       const shared = landedTacticFor(b.before, b.san) === 'fork';

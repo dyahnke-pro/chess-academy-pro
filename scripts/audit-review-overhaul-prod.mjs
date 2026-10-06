@@ -449,7 +449,25 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // THE TURNING-POINT CARD IS GONE (David 2026-10-01: "I don't want that card.
   // It's stupid"). The review now STATES the turning point once at the end of
   // the walk; there is nothing for the driver to answer.
+  // THE TURNING-POINT QUESTION (David 2026-10-06): no card, no buttons — the
+  // answer is a move on the board, one try. The driver answers the way a
+  // student who does not know answers: forward ("I don't know"), then it waits
+  // for the reveal (the move, its why, and the cause) and records both.
+  const turningQs = [];
+  const turningReveals = [];
   const resolveCards = async () => {
+    if (await has(page, '[data-testid="review-turning-question"]')) {
+      const q = await txt(page, '[data-testid="review-turning-question"]');
+      turningQs.push(q);
+      log(`  [turning] ask: ${q}`);
+      await page.locator('[data-testid="review-forward-btn"]').first().click({ timeout: 2000, force: true }).catch(() => undefined);
+      const shown = await until(async () => has(page, '[data-testid="review-turning-reveal"]'), 8000, 300);
+      const r = shown ? await txt(page, '[data-testid="review-turning-reveal"]') : '';
+      turningReveals.push(r);
+      log(`  [turning] reveal: ${r || '(none within 8s)'}`);
+      // Let the (muted, text-proportional) reveal finish before walking on.
+      await page.waitForTimeout(Math.min(12000, 400 + r.split(/\s+/).length * 150));
+    }
     for (const [c, sel] of [
       ['discussion-reason-picker', '[data-testid="discussion-reason-option"]'],
       // 🔴 FIVE BLOCKING OVERLAYS THIS TABLE DID NOT KNOW ABOUT (added
@@ -479,8 +497,6 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       ['review-theory-playback', '[data-testid="review-theory-stop"]'],
       ['review-find-shot-card', '[data-testid="review-find-shot-skip"]'],
       ['review-theory-ask', '[data-testid="review-theory-skip"]'],
-      ['review-trap-card', '[data-testid="review-trap-pick-leave"]'],
-      ['review-trap-reveal', '[data-testid="review-trap-done"]'],
       // THE CRITICAL-MOMENT CARD — its chips are named after the SAN they
       // offer (`review-critical-pick-Nf3`), because the choices are the
       // engine's own lines from that position, not a fixed choice set. A
@@ -504,8 +520,6 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       // below with a wait, not in this table.
       // ['review-turning-point-reveal', '[data-testid="review-turning-point-done"]'],
       ['review-blunder-capture', '[data-testid="review-capture-skip"]'],
-      ['review-sequence-ask', '[data-testid="review-sequence-skip"]'],
-      ['review-sequence-playback', '[data-testid="review-sequence-skip"]'],
     ]) {
       if (await has(page, `[data-testid="${c}"]`) && await has(page, sel)) {
         // Every card the audit answers is LOGGED — a run that left the review
@@ -1682,6 +1696,11 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     await add('DECIDER weighting-non-degenerate', spoke.length > 0,
       `spoke=${spoke.length} silent=${silent.length} rows-with-quieted-facts=${decisions.filter((d) => d.quietCount > 0).length} method-beats=${decisions.filter((d) => d.method).length}`);
   }
+  // THE TURNING POINTS — the biggest few, asked on the board; every reveal
+  // carries the move AND its why (David: "We need to have the why!").
+  await add('TURNING at-most-three-per-game', turningQs.length <= 3, `${turningQs.length} asked${turningQs[0] ? `; e.g. "${turningQs[0]}"` : ''}`);
+  const whyless = turningReveals.filter((r) => !/^The move was \S+ — it /.test(r));
+  await add('TURNING every-reveal-names-the-move-and-why', whyless.length === 0, `${turningReveals.length} reveals${whyless.length ? ` — ${whyless.length} without a why, e.g. "${whyless[0]}"` : turningReveals[0] ? `; e.g. "${turningReveals[0]}"` : ''}`);
   const voiced = listener.getCapturedEvents().filter((e) => e.kind === 'coach-narration-spoken');
   const unmuted = voiced.filter((e) => !/voice=audit-muted/.test(String(e.summary ?? '')));
   await add('MUTE audit-ran-silent', unmuted.length === 0 && ttsRequests === 0, `${voiced.length} spoken lines, ${unmuted.length} unmuted, ${ttsRequests} /api/tts requests`);

@@ -10,7 +10,6 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { buildDeliberation } from './deliberation';
 import { tacticalReadFromLines, uncertaintyClause } from './tacticalRead';
-import { buildGuidedFindChallenge } from './guidedFindTheMove';
 import { callInaccuracy, callInaccuracyDetailed } from './inaccuracyCall';
 import { backwardLook, lastCoachVerdictDecline } from './backwardLook';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -43,7 +42,6 @@ describe('L1 — nothing advises a finished game', () => {
       moverColor: 'b', opponentLastSan: null,
     })).toBeNull();
     expect(tacticalReadFromLines(MATE_FEN, [{ moves: ['h1e1'], evaluation: 900 }], 'black')).toBeNull();
-    expect(buildGuidedFindChallenge(MATE_FEN, 'h1e1')).toBeNull();
   });
 
   it('the lanes that DID speak carry no FEN, so only the queue can hold the guard', async () => {

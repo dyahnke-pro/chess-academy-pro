@@ -15,16 +15,11 @@
 
 import { Chess } from 'chess.js';
 import { describeMoveGeometry } from './groundedAnswer';
-import { landedTacticFor } from './pvPlayback';
 
 const PIECE_NAME: Record<string, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
 };
 
-/** Student is clearly better and should be pressing (mover-POV centipawns). */
-export const GUIDED_FIND_MIN_EVAL_CP = 150;
-/** Don't quiz in near-forced positions — a "find it" needs real choice. */
-export const GUIDED_FIND_MIN_LEGAL_MOVES = 8;
 
 export interface GuidedFindChallenge {
   /** Square-free question — names the piece + the goal, never the square. */
@@ -78,123 +73,6 @@ function probeBest(fen: string, bestUci: string): ProbedBest | null {
   } catch {
     return null;
   }
-}
-
-/** The tactic THIS move lands, if any ('fork' | 'pin' | 'skewer' | …).
- *
- * 🔴 THIS USED TO BE A LOCAL COPY AND IT DISAGREED WITH THE REST OF THE COACH
- * (2026-09-21). It read `detectTactics(fenAfter)` and kept any tactic whose
- * `involvedSquares` merely CONTAINED the moved piece's destination. Measured on
- * one real position (Qf4+ in `6k1/5p2/5B1Q/1p1P1q2/4r3/1p6/6PK/6R1 b`):
- *
- *     this copy -> "fork"          computePlyFacts -> no fork
- *
- * so Learn asked "Your queen can land a fork here — what's the square?" and
- * sent the student hunting a fork that wins NOTHING (the forked queen just
- * plays Qxf4), while review stayed correctly silent on the same board.
- *
- * Its own comment was right about one guard and blind to four others. The
- * participation test it describes — "MUST involve the moved piece's destination
- * square … otherwise a PRE-EXISTING tactic (often the OPPONENT's) gets
- * attributed to the student's move" — is KEPT and strengthened by the shared
- * path, which additionally requires the moved piece to be the tactic's AGENT,
- * the targets to be WINNABLE, a pin to be landed by a SLIDER, and the tactic to
- * be NEW rather than already on the board.
- *
- * One coach, one judgement: `landedTacticFor` reads `computePlyFacts`, the
- * single source, so this surface can no longer drift from review.
- */
-function landedTactic(fenBefore: string, san: string): string | null {
-  return landedTacticFor(fenBefore, san);
-}
-
-
-/**
- * Gate: is THIS a moment worth turning into a question? Deterministic —
- * the student is clearly winning/pressing, the position has real choice, and
- * the engine's move is NOTABLE (mate / capture / check / lands a tactic).
- * Quiet "improve a piece" moves don't quiz in v1 — a question needs a payoff
- * the student can feel when they find it.
- */
-export function shouldOfferGuidedFind(opts: {
-  fen: string;
-  bestUci: string | undefined;
-  /** Engine eval of `fen` from the STUDENT's perspective, centipawns. */
-  evalCpStudentPov: number | null;
-}): boolean {
-  if (typeof opts.evalCpStudentPov !== 'number' || opts.evalCpStudentPov < GUIDED_FIND_MIN_EVAL_CP) return false;
-  if (!opts.bestUci) return false;
-  const probed = probeBest(opts.fen, opts.bestUci);
-  if (!probed) return false;
-  try {
-    if (new Chess(opts.fen).moves().length < GUIDED_FIND_MIN_LEGAL_MOVES) return false;
-  } catch {
-    return false;
-  }
-  return probed.isMate || probed.isCapture || probed.isCheck || landedTactic(opts.fen, probed.san) !== null;
-}
-
-/**
- * Build the challenge. The question names the PIECE + GOAL and withholds the
- * square (the doctrine's three rules). Returns null when the move can't be
- * probed — empty > generic > invented.
- */
-export function buildGuidedFindChallenge(fen: string, bestUci: string): GuidedFindChallenge | null {
-  const p = probeBest(fen, bestUci);
-  if (!p) return null;
-
-  const tactic = landedTactic(fen, p.san);
-  let question: string;
-  if (p.isMate) {
-    question = `You have a checkmate on the board — your ${p.pieceName} delivers it. Where?`;
-  } else if (tactic === 'fork') {
-    question = `Your ${p.pieceName} can land a fork here. What's the square?`;
-  } else if (p.isCapture && p.isCheck) {
-    question = `Your ${p.pieceName} has a capture that comes with check. Find it.`;
-  } else if (p.isCapture) {
-    // "material to be won" overclaims — the engine's best capture in a winning
-    // position is often an equal trade or a clearance, not a material grab
-    // (board-awareness sweep, 2026-07-22). Name the capture, not a windfall.
-    question = `Your ${p.pieceName} has a capture here. Where does it strike?`;
-  } else if (p.isCheck) {
-    question = `Your ${p.pieceName} has a forcing check. Find the square.`;
-  } else if (tactic) {
-    question = `Your ${p.pieceName} can land a ${tactic}. What's the square?`;
-  } else {
-    // No notable feature (not mate/capture/check/tactic) — there is no honest
-    // "find the shot" question to pose, so DON'T. Callers that skip
-    // shouldOfferGuidedFind must not get a fabricated prompt ("can land a
-    // null"). empty > generic > invented (G0). Falls through to the why-picker.
-    return null;
-  }
-
-  // The reveal names the move + WHY (computed geometry) — only ever shown on
-  // Hint or after the student has committed an attempt.
-  let why: string | null = null;
-  try {
-    const mover: 'white' | 'black' = fen.split(' ')[1] === 'b' ? 'black' : 'white';
-    why = describeMoveGeometry(fen, p.san, mover);
-  } catch { /* geometry is a bonus */ }
-  const hint = `The move is ${p.san}${why ? ` — it ${why}` : ''}.`;
-  // Escalating ladder: piece → from-square → the move. Each rung leaks a little
-  // more, only when the student taps Hint (Danya's staged hints).
-  const hintLadder = [
-    `It's a ${p.pieceName} move.`,
-    `The ${p.pieceName} you want comes from ${p.from}.`,
-    hint,
-  ];
-
-  return {
-    question,
-    answerSan: p.san,
-    from: p.from,
-    to: p.to,
-    fen,
-    hint,
-    hintLadder,
-    confirm: `There it is — ${p.san}.`,
-    retry: 'Not quite — take another look. Same piece, better square.',
-  };
 }
 
 /**

@@ -5,8 +5,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { describeMoveGeometry, assembleMovePurpose, seatPieceReferences } from './groundedAnswer';
-import { buildTrapQuestion } from './reviewTrapQuestion';
-import { buildGuidedFindChallenge } from './guidedFindTheMove';
 
 describe('describeMoveGeometry — a "fork" must win something (F15)', () => {
   it('does not call hitting two DEFENDED pawns a fork', () => {
@@ -42,27 +40,6 @@ describe('assembleMovePurpose — a wing pawn is not a centre move (F1)', () => 
   });
 });
 
-describe('buildTrapQuestion — a piece defended only by a PINNED piece is not poisoned (TQ-1)', () => {
-  it('does not flag a free capture as a trap when the defender is pinned', () => {
-    // Black knight on d5 "defends" a black pawn... construct a pinned-defender
-    // trap: white to move can take a black piece whose only defender is pinned
-    // to the black king, so the recapture is illegal and the grab is FREE.
-    // Black bishop c6 is defended only by the d7-pawn? Keep it simple: black
-    // knight e6 defended only by a bishop on f7 that is pinned to the king on g8
-    // by a white rook on f1. White Rxf7 is not the case; use a knight grab:
-    // White knight on d4 takes e6 knight; e6 defended by f7 bishop pinned by Rf1.
-    const fen = '6k1/5b2/4n3/8/3N4/8/8/5R1K w - - 0 1';
-    const q = buildTrapQuestion({ fen, studentColor: 'white', playedSan: 'Nxe6' });
-    // The f7 bishop is pinned to g8 by Rf1, so it can't recapture on e6 — Nxe6
-    // wins the knight clean. It must NOT be presented as a poisoned trap.
-    if (q) {
-      expect(q.targetSquare).not.toBe('e6');
-    } else {
-      expect(q).toBeNull();
-    }
-  });
-});
-
 describe('seatPieceReferences — no double possessive on an adjective-carrying phrase (preview line-read)', () => {
   // c2 white passed pawn, a7 black weak pawn, e4 a bare white pawn.
   const fen = '4k3/p7/8/8/4P3/8/2P5/4K3 w - - 0 1';
@@ -83,20 +60,6 @@ describe('seatPieceReferences — no double possessive on an adjective-carrying 
     const out = seatPieceReferences('Bxb5+ creates a passed pawn on c2', fen, 'w');
     expect(out).not.toMatch(/a your passed pawn/);
     expect(out).toMatch(/a passed pawn on c2/);
-  });
-});
-
-describe('buildGuidedFindChallenge — a pre-existing OPPONENT tactic is not the student move (GF-1)', () => {
-  it('does not brand a plain best move a "fork" because the opponent has one', () => {
-    // White best move is a quiet Kg1 (say); meanwhile a BLACK knight on d3 forks
-    // white pieces. The challenge must not tell the student "your king can land
-    // a fork". Construct: white to move, a benign move exists, black Nd3 forks
-    // the white king region — but the student's move is not a fork.
-    const fen = 'r3k2r/8/8/8/8/3n4/8/R3K2R w KQkq - 0 1';
-    // Best = O-O-O say; use a UCI for a rook move that lands no tactic.
-    const ch = buildGuidedFindChallenge(fen, 'a1a4');
-    // Ra4 lands no fork of its own; the black Nd3 fork must not be attributed.
-    if (ch) expect(ch.question).not.toMatch(/land a fork/i);
   });
 });
 

@@ -340,6 +340,14 @@ async function main() {
     let noProgress = 0;
     for (let i = 0; i < maxSteps; i++) {
       // Diagnostic cards take priority — they block/own the flow while open.
+      // THE TURNING POINT (2026-10-06): answered by a move, one try; forward
+      // is "I don't know" — the reveal (move + why + cause) is then spoken.
+      if (await visible('review-turning-question')) {
+        review.cards.turning = (review.cards.turning ?? 0) + 1;
+        await page.locator('[data-testid="review-forward-btn"]').first().click({ timeout: 2000 }).catch(() => {});
+        await page.waitForTimeout(1500);
+        continue;
+      }
       if (await visible('review-find-shot-card')) {
         review.cards.findShot++;
         await page.locator('[data-testid="review-find-shot-hint"]').click({ timeout: 2000 }).catch(() => {});

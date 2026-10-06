@@ -24,7 +24,7 @@ const BASE = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.ap
 const SECRET = process.env.AUDIT_STREAM_SECRET ?? '';
 const PASSES_REQUIRED = Number(process.env.AUDIT_PASSES ?? 3);
 const MAX_PASSES = Number(process.env.AUDIT_MAX_PASSES ?? 6);
-const SCRIPTS = ['audit-review-sequence.mjs', 'audit-review-theory.mjs'];
+const SCRIPTS = ['audit-review-theory.mjs'];
 
 async function streamCount() {
   if (!SECRET || !BASE.startsWith('https://chess-academy-pro')) return null;
