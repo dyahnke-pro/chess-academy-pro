@@ -207,6 +207,30 @@ export function costWords(cp: number): string {
   return 'more than a piece';
 }
 
+/** THE ONE GRADE-AND-COST TABLE (unity U2, 52-error walk: "an inaccuracy,
+ *  costing about two pawns"; "cost you far more than a pawn" called
+ *  "imprecise"). The grade is read off winning chance, the cost off pawns, and
+ *  in a decided position they part ways. The WORD is the stored grade (one
+ *  verdict per move); the pawn cost is spoken beside it only when it falls in
+ *  that grade's own band, so the two can never contradict each other. */
+export type SpokenGradeLabel = 'inaccuracy' | 'mistake' | 'blunder';
+export const GRADE_WORD: Record<SpokenGradeLabel, string> = {
+  inaccuracy: 'imprecise',
+  mistake: 'a mistake',
+  blunder: 'a blunder',
+};
+const GRADE_CEILING_CP: Record<SpokenGradeLabel, number> = {
+  inaccuracy: MISTAKE_CP,
+  mistake: BLUNDER_CP,
+  blunder: Infinity,
+};
+/** Does a cost of `costCp` belong beside this grade? Below `INACCURACY_CP / 10`
+ *  it rounds to nothing and contradicts any grade. */
+export function costFitsGrade(label: SpokenGradeLabel, costCp: number | null | undefined): boolean {
+  if (costCp == null || !Number.isFinite(costCp) || costCp < 5) return false;
+  return costCp < GRADE_CEILING_CP[label];
+}
+
 /** Did the mover have a forced mate (white-POV engine evals, mate sentinels)
  *  BEFORE the move and no longer have one AFTER it? The one read every batch
  *  surface uses to say "the better move mated" (clean-pass walk 2026-10-04). */

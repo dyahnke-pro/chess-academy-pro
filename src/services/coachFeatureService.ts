@@ -4098,6 +4098,9 @@ async function augmentWithProjections(
       s.narration = s.verdictReason
         ? replaceVerdictReason(s.narration, s.verdictReason, seatedFresh)
         : addVerdictReason(s.narration, line.plies[0].san, seatedFresh);
+      // The stored reason is the one now SPOKEN — every other reader of this
+      // ply's "why" (the turning-point reveal) reads it, never re-derives (U3).
+      if (seatedFresh) s.verdictReason = seatedFresh;
     }
     if (line && line.plies.length >= 3) {
       const bestName = line.plies[0].san;
@@ -4146,6 +4149,7 @@ async function augmentWithProjections(
     s.narration = s.verdictReason
       ? replaceVerdictReason(s.narration, s.verdictReason, seated)
       : addVerdictReason(s.narration, line.plies[0].san, seated);
+    if (seated) s.verdictReason = seated;
   }
   mark('better');
 

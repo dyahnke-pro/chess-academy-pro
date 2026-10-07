@@ -51,3 +51,12 @@ describe('turningPoints — the biggest few, the cause counted across the game',
     expect(tps.size).toBe(0);
   });
 });
+
+describe('one reason per move (unity U3, 52-error walk #20: the reveal and the verdict gave Bf5 two different reasons a line apart)', () => {
+  it('the reveal says the reason the ply\'s own verdict already computed, never a second one', () => {
+    const verdictReason = 'it would take your loose rook on f1';
+    const tp = selectTurningPoints([seg({ bestMoveSan: 'Nxf1', bestMoveUci: 'd7f1', verdictReason })], 'black').get(30);
+    expect(tp?.why).toBe(verdictReason);
+    expect(turningReveal(tp!, false)).toContain(`The move was Nxf1 — ${verdictReason}.`);
+  });
+});

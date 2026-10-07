@@ -504,14 +504,17 @@ describe('a win the defender could dodge is not a reason (Learn walk 2026-10-01,
   });
 });
 
-describe('the inaccuracy word follows the cost it states (Learn walk 2026-10-01, Rc8)', () => {
-  it('a two-pawn drop graded an inaccuracy is "imprecise", never "a little imprecise" — and never "loose"', () => {
+describe('the grade and the cost never contradict (Learn walk 2026-10-01, Rc8; unity U2)', () => {
+  it('a two-pawn drop graded an inaccuracy is "imprecise", and the two pawns are not said beside it', () => {
     const call = callInaccuracy({ priorMove: null,
       replyLineUci: [], replySan: null, side: 'student', moverColor: 'black', cpLoss: 210, moverEvalAfterCp: -800,
       fenBefore: '3r4/2R4p/p1rP2p1/2Pk1p2/NP6/7P/P5P1/6K1 b - - 2 36', playedSan: 'Rc8', bestSan: 'Rcxd6',
     });
     expect(call?.quality).toBe('inaccuracy');
-    expect(call?.said).toBe('Rc8 was imprecise — it cost about two pawns of advantage.');
+    // The grade is winning chance (−8: already lost); two pawns is a mistake's
+    // cost, so it is not said beside "imprecise" (`costFitsGrade`).
+    expect(call?.said).toBe('Rc8 was imprecise.');
+    expect(call?.said).not.toMatch(/loose|a little imprecise|pawn/);
   });
 });
 

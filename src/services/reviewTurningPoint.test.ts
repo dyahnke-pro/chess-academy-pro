@@ -1,9 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
-  buildTurningPointQuestion,
   minSwingPawns,
   turningPointCandidates,
-  CANDIDATE_SHARE_OF_ANSWER,
   buildCriticalMomentQuestion,
   judgeCriticalMomentPick,
   type TurningPointSegmentLike,
@@ -27,74 +25,6 @@ function seg(o: Partial<TurningPointSegmentLike> & { ply: number }): TurningPoin
   };
 }
 
-describe('buildTurningPointQuestion', () => {
-  it('computes candidates from mover-POV cost and names the biggest swing as the answer', () => {
-    const segments = [
-      // White mistake at ply 9 costing 1.5 pawns.
-      seg({ ply: 9, san: 'Qe2', playerColor: 'white', evalBefore: 100, evalAfter: -50, classification: 'mistake' }),
-      // Black blunder at ply 18 costing 4.0 pawns (black POV: -30 → +370 for White).
-      seg({ ply: 18, san: 'Rd8', playerColor: 'black', evalBefore: -30, evalAfter: 370, classification: 'blunder' }),
-      // Quiet move — not a candidate.
-      seg({ ply: 20, san: 'Kg2', playerColor: 'black', evalBefore: 370, evalAfter: 360 }),
-    ];
-    const q = buildTurningPointQuestion(segments);
-    expect(q).not.toBeNull();
-    expect(q!.answer.ply).toBe(18);
-    expect(q!.answer.label).toBe('9… Rd8');
-    expect(q!.answer.swingPawns).toBeCloseTo(4.0);
-    // Candidates in game order, both costed moments present.
-    expect(q!.candidates.map((c) => c.ply)).toEqual([9, 18]);
-    expect(q!.reveal).toContain('9… Rd8');
-    expect(q!.reveal).toContain('about a piece');
-    expect(q!.reveal).not.toMatch(/\d\.\d/);
-  });
-
-  it('carries each candidate fenBefore so the card can preview the board (David 2026-07-19)', () => {
-    const segments = [
-      seg({ ply: 9, san: 'Qe2', playerColor: 'white', evalBefore: 100, evalAfter: -50, fenBefore: 'FEN-AT-9' }),
-      seg({ ply: 18, san: 'Rd8', playerColor: 'black', evalBefore: -30, evalAfter: 370, fenBefore: 'FEN-AT-18' }),
-    ];
-    const q = buildTurningPointQuestion(segments);
-    expect(q!.candidates.find((c) => c.ply === 9)?.fenBefore).toBe('FEN-AT-9');
-    expect(q!.candidates.find((c) => c.ply === 18)?.fenBefore).toBe('FEN-AT-18');
-  });
-
-  it('returns null with fewer than two costed moments (a one-blunder game answers itself)', () => {
-    const one = [seg({ ply: 18, san: 'Rd8', playerColor: 'black', evalBefore: -30, evalAfter: 370 })];
-    expect(buildTurningPointQuestion(one)).toBeNull();
-    expect(buildTurningPointQuestion([])).toBeNull();
-  });
-
-  it('ignores sub-threshold swings and null evals', () => {
-    const segments = [
-      seg({ ply: 5, evalBefore: 50, evalAfter: 50 - (minSwingPawns() * 100 - 10), playerColor: 'white' }),
-      seg({ ply: 7, evalBefore: null, evalAfter: -300, playerColor: 'white' }),
-      seg({ ply: 9, evalBefore: 0, evalAfter: -200, playerColor: 'white' }),
-    ];
-    // Only ply 9 clears the bar → below the 2-candidate minimum → null.
-    expect(buildTurningPointQuestion(segments)).toBeNull();
-  });
-
-  // B10 (2026-09-22): the chips are a BAR relative to the answer, never a
-  // count. Negative control: restore `bySwing.slice(0, 4)` → the six-chip
-  // assertion fails.
-  it('admits every candidate within a quarter of the biggest swing, in game order — and sweeps the tail', () => {
-    const segments = [1, 2, 3, 4, 5].map((i) =>
-      seg({ ply: i * 2 - 1, san: `Q${i}`, playerColor: 'white', evalBefore: 0, evalAfter: -100 * i }),
-    );
-    const q = buildTurningPointQuestion(segments)!;
-    // answer 5.0 pawns → bar 1.25: the 1.0-pawn ply 1 is swept, the rest stay.
-    expect(q.candidates.map((c) => c.ply)).toEqual([3, 5, 7, 9]);
-    expect(q.answer.ply).toBe(9);
-    // Six real turning moments → six chips. A count of four would have hidden two.
-    const six = [1, 2, 3, 4, 5, 6].map((i) =>
-      seg({ ply: i * 2 - 1, san: `Q${i}`, playerColor: 'white', evalBefore: 0, evalAfter: -200 - 10 * i }),
-    );
-    expect(buildTurningPointQuestion(six)!.candidates).toHaveLength(6);
-    expect(CANDIDATE_SHARE_OF_ANSWER).toBeLessThan(1);
-  });
-});
-
 describe('the importance model — band-free + contested (B6, 2026-09-22)', () => {
   it('a 1.2-pawn pair turns the game for every student — the bar takes no rating', () => {
     const segs = [
@@ -103,7 +33,7 @@ describe('the importance model — band-free + contested (B6, 2026-09-22)', () =
     ];
     expect(minSwingPawns()).toBeCloseTo(1.0);
     expect(minSwingPawns.length).toBe(0);
-    expect(buildTurningPointQuestion(segs)).not.toBeNull(); // both clear 1.0
+    expect(turningPointCandidates(segs).map((c) => c.ply)).toEqual([9, 15]); // both clear 1.0
   });
 
   it('contested gate: a blowout that stays a blowout is NOT a turning point', () => {
@@ -113,9 +43,8 @@ describe('the importance model — band-free + contested (B6, 2026-09-22)', () =
       seg({ ply: 11, playerColor: 'white', evalBefore: 300, evalAfter: -50 }),  // 3.5p, real
       seg({ ply: 15, playerColor: 'black', evalBefore: -40, evalAfter: 260 }),  // 3.0p, real
     ];
-    const q = buildTurningPointQuestion(segs)!;
-    expect(q.candidates.map((c) => c.ply)).toEqual([11, 15]); // ply 7 excluded
-    expect(q.answer.ply).toBe(11);
+    const c = turningPointCandidates(segs);
+    expect(c.map((x) => x.ply)).toEqual([11, 15]); // ply 7 excluded, biggest first
   });
 
   it('throwing a won game IS a turning point (decided → contested is kept)', () => {
@@ -123,9 +52,7 @@ describe('the importance model — band-free + contested (B6, 2026-09-22)', () =
       seg({ ply: 9, playerColor: 'white', evalBefore: 800, evalAfter: -200 }), // threw the win
       seg({ ply: 13, playerColor: 'white', evalBefore: -50, evalAfter: -350 }),
     ];
-    const q = buildTurningPointQuestion(segs);
-    expect(q).not.toBeNull();
-    expect(q!.candidates.map((c) => c.ply)).toContain(9);
+    expect(turningPointCandidates(segs).map((c) => c.ply)).toContain(9);
   });
 });
 
@@ -213,7 +140,6 @@ describe('the critical moment, asked — review’s second register', () => {
     expect(got.map((c) => c.ply)).toEqual([31, 9]);   // biggest swing first
     expect(got[0].swingPawns).toBeCloseTo(3.1, 5);
     expect(got[1].swingPawns).toBeCloseTo(3.0, 5);
-    expect(buildTurningPointQuestion(segments)?.answer.ply).toBe(31);
   });
 });
 

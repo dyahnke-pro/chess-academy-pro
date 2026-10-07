@@ -76,6 +76,10 @@ export interface SelectorInput {
   /** THE STUDENT (N2). When given, every student ply gets a computed need
    *  verdict (`needByPly`); absent = a cold student (the rating prior teaches). */
   student?: StudentNeedContext;
+  /** THE GAME'S TURN, when the caller already computed it (`gameTurn`, unity
+   *  U1). The moment at this ply leads, so the thesis names the same move the
+   *  review asked about — never a second answer to "where did it turn?". */
+  turnPly?: number;
 }
 
 export interface Moment {
@@ -236,6 +240,21 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
     if (!landedTacticIsMoment(t, signals)) continue;
     moments.push({ ply: p.ply, label: moveLabel(toSegment(p)), kind: 'landed-tactic', swingPawns: null, tactic: t, fenBefore: p.fenBefore, san: p.san });
     seen.add(p.ply);
+  }
+
+  // 3b. ONE TURNING POINT (unity U1): the caller's computed turn leads.
+  if (input.turnPly !== undefined) {
+    const at = moments.findIndex((m) => m.ply === input.turnPly);
+    if (at > 0) moments.unshift(...moments.splice(at, 1));
+    else if (at < 0) {
+      const p = byPly.get(input.turnPly);
+      if (p) {
+        const seg = toSegment(p);
+        const sign = p.playerColor === 'white' ? 1 : -1;
+        const cost = seg.evalBefore != null && seg.evalAfter != null ? ((seg.evalBefore - seg.evalAfter) * sign) / 100 : null;
+        moments.unshift({ ply: p.ply, label: moveLabel(seg), kind: 'swing', swingPawns: cost !== null && cost > 0 ? cost : null, tactic: landedByPly.get(p.ply) ?? null, fenBefore: p.fenBefore, san: p.san });
+      }
+    }
   }
 
   // 4. The chain through the top moment (root cause → tactic), when one exists.
@@ -413,10 +432,11 @@ export function selectTeachingForSegments(
   rating: number | undefined,
   surface: CoachSurface,
   student?: StudentNeedContext,
+  turnPly?: number,
 ): TeachingPackage {
   return selectTeaching({
     plies: segments.map((s) => ({ ply: s.ply, san: s.san, fenBefore: s.fenBefore, fenAfter: s.fenAfter, playerColor: s.playerColor, evalBefore: s.evalBefore, evalAfter: s.evalAfter, classification: s.classification })),
-    studentColor, rating, kind: 'game', surface, student,
+    studentColor, rating, kind: 'game', surface, student, turnPly,
   });
 }
 

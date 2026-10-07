@@ -14,6 +14,7 @@
  * The spoken lines are curated templates carrying computed numbers.
  */
 import { describeStructure } from './boardStructure';
+import { costWords } from './engineConstants';
 import type { ReviewMoveSegment } from './coachFeatureService';
 
 export type GameTheme =
@@ -41,12 +42,15 @@ const RUNNER_UP_MARGIN = 0.1;
 
 type Candidate = GameThemeResult;
 
-const pawns = (cp: number): string => (Math.abs(cp) / 100).toFixed(1);
 const moveOf = (ply: number): number => Math.ceil(ply / 2);
 
 export function classifyGameTheme(
   segments: ReadonlyArray<ReviewMoveSegment>,
   playerColor: 'white' | 'black',
+  /** THE GAME'S TURN (`gameTurn`, unity U1). A theme that names the move that
+   *  decided the game names THIS one, or is not said — one answer to "where
+   *  did it turn?", never a second. */
+  turnPly?: number,
 ): GameThemeResult | null {
   if (segments.length < 10) return null; // too short for a thread
 
@@ -73,14 +77,15 @@ export function classifyGameTheme(
 
   // ── squandered-advantage: winning, then handed back by the player ──
   if (max.cp >= 250 && final.cp <= 50) {
-    const slip = playerErrors.find((s) => s.ply > max.ply);
+    const after = playerErrors.filter((s) => s.ply > max.ply);
+    const slip = turnPly === undefined ? after[0] : after.find((s) => s.ply === turnPly);
     if (slip) {
       candidates.push({
         theme: 'squandered-advantage',
         peakPly: slip.ply,
         confidence: Math.min(1, 0.7 + (max.cp - 250) / 1000),
-        line: `This is the thread of the game — you were ${pawns(max.cp)} points up by move ${moveOf(max.ply)}, and ${slip.san} handed it back.`,
-        reprise: `the ${pawns(max.cp)}-pawn advantage that slipped away`,
+        line: `This is the thread of the game — you were ${costWords(max.cp)} up by move ${moveOf(max.ply)}, and ${slip.san} handed it back.`,
+        reprise: 'the advantage that slipped away',
       });
     }
   }
@@ -93,7 +98,7 @@ export function classifyGameTheme(
         theme: 'comeback',
         peakPly: gift.ply,
         confidence: Math.min(1, 0.7 + (-min.cp - 250) / 1000),
-        line: `This is the thread of the game — ${pawns(min.cp)} points down at move ${moveOf(min.ply)}, and you took it all back after ${gift.san}.`,
+        line: `This is the thread of the game — ${costWords(-min.cp)} down at move ${moveOf(min.ply)}, and you took it all back after ${gift.san}.`,
         reprise: 'the comeback from a lost position',
       });
     }
@@ -107,7 +112,8 @@ export function classifyGameTheme(
     const before = [...evals].reverse().find((e) => e.ply < slipPly);
     return before !== undefined && Math.abs(before.cp) < 150;
   };
-  if (allErrors.length === 1 && Math.abs(final.cp) >= 150 && preSlipBalanced(allErrors[0].ply)) {
+  if (allErrors.length === 1 && Math.abs(final.cp) >= 150 && preSlipBalanced(allErrors[0].ply)
+    && (turnPly === undefined || allErrors[0].ply === turnPly)) {
     const slip = allErrors[0];
     candidates.push({
       theme: 'one-slip',

@@ -175,6 +175,22 @@ describe('useReviewPlayback', () => {
     expect(result.current.narrationState).toBe('idle');
   });
 
+  it('a ply a turning-point reveal already taught is not spoken again (unity U3, walk #20/#30)', async () => {
+    const narration = makeNarration({
+      segments: [makeSegment({ ply: 1, narration: 'That was a blunder — the stronger move was Bf5 — a second reason.' }), makeSegment({ ply: 2, narration: 'Move two.' })],
+    });
+    const taught = new Set<number>();
+    const { result } = renderHook(() => useReviewPlayback({ narration, taughtPlies: taught }));
+    await waitFor(() => expect(speakRecords.length).toBe(1)); // intro
+    taught.add(1); // the reveal for ply 1 has just been said
+    act(() => { result.current.goForward(); });
+    expect(result.current.currentPly).toBe(1);
+    expect(speakRecords.length).toBe(1);
+    expect(result.current.currentText).toBeNull();
+    act(() => { result.current.goForward(); });
+    await waitFor(() => expect(speakRecords.at(-1)?.text).toBe('Move two.'));
+  });
+
   it('a flagged ply with no fundamental states WHY when it is spoken (cached narration emits nothing at build)', async () => {
     // Clean-pass review walk 2026-10-04, G2 ply 38: a narration built ahead of
     // the walk and served from the cache never re-emitted its decline.

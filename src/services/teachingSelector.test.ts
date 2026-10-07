@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { selectTeaching, renderThesis, pliesFromSans, summarizeTeaching, landedTacticIsMoment, type SelectorPly } from './teachingSelector';
-import { buildTurningPointQuestion, turningPointCandidates } from './reviewTurningPoint';
+import { turningPointCandidates } from './reviewTurningPoint';
 
 function pliesFrom(sans: readonly string[], evals?: readonly (number | null)[]): SelectorPly[] {
   const c = new Chess();
@@ -54,10 +54,8 @@ describe('teachingSelector — the ONE game-level read (unified-coach N1)', () =
     // admitted is a moment; a count could not know what it was deleting.
     const q0 = turningPointCandidates(plies.map((p) => ({ ...p, moveNumber: Math.ceil(p.ply / 2), evalBefore: p.evalBefore ?? null, evalAfter: p.evalAfter ?? null, classification: null })));
     for (const c of q0) expect(pkg.moments.map((m) => m.ply), `swing at ply ${c.ply} must be a moment`).toContain(c.ply);
-    // Same candidates the review card asks about — computed once, shared.
-    const q = buildTurningPointQuestion(plies.map((p) => ({ ...p, moveNumber: Math.ceil(p.ply / 2), evalBefore: p.evalBefore ?? null, evalAfter: p.evalAfter ?? null, classification: null })));
-    expect(q).not.toBeNull();
-    expect(pkg.thesis.ply).toBe(q!.answer.ply);
+    // With no turn handed in, the biggest swing leads.
+    expect(pkg.thesis.ply).toBe(q0[0].ply);
     // The +900 → +650 blowout never "turned" (contested gate).
     expect(pkg.moments.map((m) => m.ply)).not.toContain(19);
     expect(pkg.moments.map((m) => m.ply)).toEqual(expect.arrayContaining([8, 13]));

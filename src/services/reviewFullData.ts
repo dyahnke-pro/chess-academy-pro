@@ -36,7 +36,7 @@ import { principleLine, principleContrastLine } from './moveFundamentals';
 import { threatStoppedBy } from './opponentMovePurpose';
 import { recordedMoveCost } from './moveCost';
 import { trickSidestepped } from './forkTrick';
-import { costWords, isMateEval, MISTAKE_CP, moverGaveUpMate } from './engineConstants';
+import { costWords, isMateEval, MISTAKE_CP, moverGaveUpMate, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
 import { shareAdverb } from '../utils/shareWords';
 import { computeBoardDelta } from './boardDelta';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
@@ -469,11 +469,9 @@ export function computeMoveFacets(
     // The grade is in win chances; the points are centipawns. In a decided
     // position they part ways — "an inaccuracy, costing about 9.2 points"
     // (amateur review walk 2026-09-27). The label stands; the number goes.
-    const pointsAgree = swing != null && (ctx.classification === 'blunder' || swing < 300);
-    // A cost that rounds to 0.0 contradicts its own grade ("a mistake,
-    // costing about 0.0 points" — corpus sweep 2026-10-02): the grade is in
-    // win chances, so the number goes and the label stands.
-    const swingBit = swing != null && swing >= 5 && costsPoints && pointsAgree ? `, costing ${costWords(swing)}` : '';
+    // A cost that rounds to nothing contradicts its own grade too. ONE TABLE
+    // decides both (unity U2, `costFitsGrade`) — Learn reads the same one.
+    const swingBit = costsPoints && costFitsGrade(ctx.classification as SpokenGradeLabel, swing) ? `, costing ${costWords(swing as number)}` : '';
     // WHY it's a mistake, when we can prove it (a premature central break). Danya
     // leads with the positional reason, THEN names the better move — so does this.
     const whyBad = (ctx.classification === 'mistake' || ctx.classification === 'blunder' || ctx.classification === 'inaccuracy')

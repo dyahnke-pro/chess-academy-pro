@@ -43,6 +43,12 @@ export interface UseReviewPlaybackArgs {
    *  stop (find-the-shot, trap, turning point) still fires. When omitted the
    *  hook steps the ply itself. */
   onAutoAdvance?: () => ForwardOutcome;
+  /** PLIES ALREADY TAUGHT BY A CARD (unity U3). A turning point's reveal says
+   *  the move, its one reason, what the played move allowed and the cause;
+   *  the ply's own narration would say the same move again with a second
+   *  reason (52-error walk #20, #30). A ply in this set advances silently.
+   *  Mutable and read at speak time, so adding to it needs no re-render. */
+  taughtPlies?: ReadonlySet<number>;
 }
 
 /**
@@ -168,7 +174,9 @@ const AUTO_READING_WPM = 180;
 const AUTO_READING_MIN_MS = 1500;
 
 export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybackResult {
-  const { narration, totalPlies, gameId, onPlyChange, initialPly, onAutoAdvance } = args;
+  const { narration, totalPlies, gameId, onPlyChange, initialPly, onAutoAdvance, taughtPlies } = args;
+  const taughtRef = useRef(taughtPlies);
+  taughtRef.current = taughtPlies;
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   /** Live mirror of isAutoPlaying for the speak-resolution callback. */
   const autoRef = useRef(false);
@@ -305,6 +313,7 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     if (!narration) return null;
     if (currentPly === 0) return narration.intro;
     if (currentPly > lastPly && narration.closing) return narration.closing;
+    if (taughtRef.current?.has(currentPly)) return null;
     const baseText = currentSegment?.narration ?? null;
     // WO-HINT-REDESIGN-01: prepend a deterministic hint callout when
     // the current ply had a hint request. v1 uses a template; the
@@ -574,7 +583,7 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
       text = narration?.closing ?? null;
     } else {
       const seg = segments.find((s) => s.ply === bounded);
-      text = seg?.narration ?? null;
+      text = taughtRef.current?.has(bounded) ? null : seg?.narration ?? null;
     }
     speakCurrent(bounded, text);
   }, [lastPly, narration, onPlyChange, segments, speakCurrent]);

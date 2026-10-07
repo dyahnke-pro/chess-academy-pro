@@ -48,6 +48,9 @@ export interface TurningSegmentLike {
   bestLineUci?: readonly string[];
   /** Their best line after the PLAYED move (UCI) — what the move allowed. */
   replyLineUci?: readonly string[];
+  /** The reason the ply's own verdict gives for the better move, as spoken.
+   *  ONE REASON PER MOVE (unity U3): the reveal says this one when it exists. */
+  verdictReason?: string;
 }
 
 export type TurningCauseKind = 'missed-free' | 'missed' | 'walked-into' | 'hung';
@@ -251,8 +254,8 @@ export function selectTurningPoints(
     // THE WHY, from the computers every coach surface speaks: what the best
     // line wins (`betterMoveReason`, read off the line), else the move's own
     // job (`moveWhy`).
-    let why: string | null = null;
-    try {
+    let why: string | null = seg.verdictReason ?? null;
+    if (!why) try {
       const prior = prev && prev.ply === seg.ply - 1 ? { fenBefore: prev.fenBefore, san: prev.san } : null;
       why = seg.bestLineUci && seg.bestLineUci.length > 0
         ? betterMoveReason(seg.fenBefore, seg.san, seg.bestMoveSan, seg.bestLineUci, moverColor, prior, false)
@@ -272,4 +275,64 @@ export function selectTurningPoints(
   }
   const chosen = all.sort((a, b) => b.swing - a.swing || a.ply - b.ply).slice(0, Math.max(0, asked));
   return new Map(chosen.map((t) => [t.ply, t]));
+}
+
+/** THE GAME'S TURN — the one answer to "where did the game turn?" (unity U1). */
+export interface GameTurn {
+  ply: number;
+  san: string;
+  /** The move's cost to its mover, in pawns (null without evals). */
+  swingPawns: number | null;
+  /** 'asked': the student's biggest turning point, the one the review asked
+   *  about. 'swing': no question was asked, so the biggest contested swing
+   *  either side played. */
+  source: 'asked' | 'swing';
+}
+
+/** The segment fields `gameTurn` reads. */
+export interface GameTurnSegment {
+  ply: number;
+  san: string;
+  evalBefore?: number | null;
+  evalAfter?: number | null;
+  playerColor: 'white' | 'black';
+}
+
+/**
+ * THE ONE TURNING POINT OF A GAME (unity U1, the 52-error walk: three "this is
+ * where the game turned" questions on the student's moves, then a closing line
+ * naming a different move — the opponent's — because a second computer ranked
+ * by raw pawn swing over both sides).
+ *
+ * When the review asked turning-point questions, the game turned at the
+ * biggest of THOSE: the closing, the thesis and the theme all name it. Only a
+ * game that asked nothing falls back to the biggest contested swing, measured
+ * the same way — winning chance lost by the mover, decided games excluded.
+ */
+export function gameTurn(
+  plan: ReadonlyMap<number, TurningPoint>,
+  segments: ReadonlyArray<GameTurnSegment>,
+): GameTurn | null {
+  const pawnCost = (s: GameTurnSegment): number | null => {
+    if (s.evalBefore == null || s.evalAfter == null) return null;
+    const cost = (s.evalBefore - s.evalAfter) * (s.playerColor === 'white' ? 1 : -1);
+    return cost > 0 ? cost / 100 : null;
+  };
+  const asked = [...plan.values()].sort((a, b) => b.swing - a.swing || a.ply - b.ply)[0];
+  if (asked) {
+    const seg = segments.find((s) => s.ply === asked.ply);
+    return { ply: asked.ply, san: asked.playedSan, swingPawns: seg ? pawnCost(seg) : null, source: 'asked' };
+  }
+  let best: { seg: (typeof segments)[number]; swing: number } | null = null;
+  for (const s of segments) {
+    if (s.evalBefore == null || s.evalAfter == null) continue;
+    const sign = s.playerColor === 'white' ? 1 : -1;
+    const before = winChance(s.evalBefore * sign);
+    const after = winChance(s.evalAfter * sign);
+    const swing = before - after;
+    if (swing < TURNING_MIN_SWING) continue;
+    if (after >= DECIDED_CHANCE || before <= 100 - DECIDED_CHANCE) continue;
+    if (!best || swing > best.swing) best = { seg: s, swing };
+  }
+  return best ? { ply: best.seg.ply, san: best.seg.san, swingPawns: pawnCost(best.seg), source: 'swing' } : null;
 }

@@ -30,7 +30,7 @@ import { getPhaseBreakdown, phaseScopedReviewSummary, isPhaseFocus } from '../..
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { buildHoldChallenge, judgeGuidedFindAttempt, type GuidedFindChallenge } from '../../services/guidedFindTheMove';
-import { selectTurningPoints, turningReveal, type TurningPoint, type TurningTrace } from '../../services/turningPoints';
+import { selectTurningPoints, gameTurn, turningReveal, type TurningPoint, type TurningTrace } from '../../services/turningPoints';
 import { costWords, TRUSTED_LINE_DEPTH } from '../../services/engineConstants';
 import { computePvLine, type PvLine } from '../../services/pvPlayback';
 import { projectedLineVoice } from '../../services/projectedLineVoice';
@@ -40,7 +40,7 @@ import { findTheoryDeparture, walkBookLine, type TheoryDeparture, type BookLineP
 import { pauseBatchAnalysis, resumeBatchAnalysis, classifyCpLoss, scanCriticalMoments, recordPromptedFind } from '../../services/gameAnalysisService';
 import { classifyGameTheme, type GameThemeResult } from '../../services/gameThemeClassifier';
 import { findRewindTarget, type RewindTarget } from '../../services/blunderRewind';
-import { buildTurningPointQuestion, buildCriticalMomentQuestion, judgeCriticalMomentPick, type CriticalMomentQuestion } from '../../services/reviewTurningPoint';
+import { buildCriticalMomentQuestion, judgeCriticalMomentPick, type CriticalMomentQuestion } from '../../services/reviewTurningPoint';
 import { computeTurningPointHinge } from '../../services/reviewHinge';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 import { selectTeachingForSegments, renderThesis } from '../../services/teachingSelector';
@@ -698,8 +698,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // an auto tick. handleWalkForward is declared below the hook — a ref bridges
   // the order.
   const handleWalkForwardRef = useRef<(source?: 'manual' | 'auto') => ForwardOutcome>(() => ({ advanced: true }));
+  /** Plies a turning-point reveal already taught (unity U3) — their own
+   *  narration is not spoken again. Cleared per game below. */
+  const taughtPliesRef = useRef<Set<number>>(new Set());
   const walkPlayback = useReviewPlayback({
     narration: walkNarration,
+    taughtPlies: taughtPliesRef.current,
     totalPlies: moves.length,
     onAutoAdvance: () => handleWalkForwardRef.current('auto'),
     // ship-5: scope hint callouts to this specific game.
@@ -981,6 +985,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
    *  walk on by itself when auto-play is running. No buttons. */
   const revealTurning = useCallback((tp: TurningPoint, found: boolean): void => {
     const text = turningReveal(tp, found);
+    // The reveal IS this ply's teaching: its narration would name the same
+    // move again with a second reason (unity U3).
+    taughtPliesRef.current.add(tp.ply);
     setShotState(null);
     setTurningActive(null);
     setShotReveal(text);
@@ -1452,27 +1459,23 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (!walkNarration || moves.length === 0) return;
     if (walkPlayback.currentPly !== moves.length) return;
     turningAskedRef.current = true; // once per game
-    const q = buildTurningPointQuestion(walkNarration.segments);
-    if (!q) return; // clean game / single obvious moment — nothing to say
-    // THE ONE SELECTOR reads the whole game (unified-coach N1). Its thesis is
-    // spoken when it names the same biggest-swing moment; otherwise the
-    // computed reveal for that moment is.
+    // THE ONE TURNING POINT (unity U1): the biggest of the moments the review
+    // ASKED about, else the biggest contested swing — never a second ranking.
+    const turn = gameTurn(questionPlan, walkNarration.segments);
+    if (!turn) return; // clean game — nothing turned, nothing to say
+    const turnSeg = walkNarration.segments.find((sg) => sg.ply === turn.ply);
     let thesis = '';
     try {
-      const pkg = selectTeachingForSegments(walkNarration.segments, playerColor, playerRating ?? undefined, 'review');
-      if (pkg.thesis.kind === 'turned' && pkg.thesis.ply === q.answer.ply) {
-        thesis = renderThesis(pkg.thesis, registerFor('review'));
-      }
+      const pkg = selectTeachingForSegments(walkNarration.segments, playerColor, playerRating ?? undefined, 'review', undefined, turn.ply);
+      if (pkg.thesis.ply === turn.ply) thesis = renderThesis(pkg.thesis, registerFor('review'));
       void logAppAudit({
         kind: 'coach-surface-migrated',
         category: 'subsystem',
         source: 'CoachGameReview.teachingSelector',
-        // `turn=` is the biggest-swing ply. The thesis is spoken only when
-        // kind==='turned' AND its ply equals that one, so the audit can tell a
-        // deliberate fallback to the plain reveal from a broken wire.
-        summary: `selector read the game: thesis=${pkg.thesis.kind}@${pkg.thesis.ply ?? '-'} turn=${q.answer.ply} moments=[${pkg.moments.map((m) => m.ply).join(',')}] thread=[${[...pkg.onThread].join(',')}]`,
+        summary: `selector read the game: thesis=${pkg.thesis.kind}@${pkg.thesis.ply ?? '-'} turn=${turn.ply}(${turn.source}) moments=[${pkg.moments.map((m) => m.ply).join(',')}] thread=[${[...pkg.onThread].join(',')}]`,
       });
     } catch { thesis = ''; }
+    if (!thesis) return; // the selector could not read the turn — silence over a guess
     // Phase 5: the theme's reprise closes the line — but only when it was
     // actually NAMED during the walk (never introduced cold here).
     const reprise = themeSpokenRef.current && themeRef.current
@@ -1481,23 +1484,23 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const token = turningTokenRef.current;
     const speak = (hinge: string): void => {
       if (token !== turningTokenRef.current) return;
-      const text = `${thesis || q.reveal}${hinge ? ` ${hinge}` : ''}${reprise}`;
+      const text = `${thesis}${hinge ? ` ${hinge}` : ''}${reprise}`;
       setTurningSummary(text);
-      captureEvent('review_turning_point_stated', { answer_ply: q.answer.ply, hinged: !!hinge });
+      captureEvent('review_turning_point_stated', { answer_ply: turn.ply, hinged: !!hinge });
       void reviewSay(text).catch(() => undefined);
     };
     // "What it hinged on", in the retrospective register — computed before the
     // line is said, bounded so a slow engine never holds the summary back.
-    if (!q.answer.fenBefore) { speak(''); return; }
+    if (!turnSeg?.fenBefore) { speak(''); return; }
     let done = false;
     const timer = window.setTimeout(() => { if (!done) { done = true; speak(''); } }, 4000);
     void computeTurningPointHinge({
-      fenBefore: q.answer.fenBefore,
+      fenBefore: turnSeg.fenBefore,
       studentColor: playerColor === 'white' ? 'w' : 'b',
       evalBoard: (f) => stockfishEngine.evalBoard(f),
     }).then((h) => { if (!done) { done = true; window.clearTimeout(timer); speak(h); } })
       .catch(() => { if (!done) { done = true; window.clearTimeout(timer); speak(''); } });
-  }, [walkPlayback.currentPly, walkNarration, moves.length]);
+  }, [walkPlayback.currentPly, walkNarration, moves.length, questionPlan]);
 
   /** They committed an answer at the critical moment. Grade it against the
    *  moves that actually held, then RECORD IT GREY — see `recordPromptedFind`:
@@ -2573,11 +2576,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   useEffect(() => {
     themeRef.current = null;
     themeSpokenRef.current = false;
+    taughtPliesRef.current.clear();
   }, [props.gameId]);
 
   useEffect(() => {
     if (themeRef.current || !walkNarration || walkNarration.segments.length === 0) return;
-    themeRef.current = classifyGameTheme(walkNarration.segments, playerColor);
+    themeRef.current = classifyGameTheme(walkNarration.segments, playerColor, gameTurn(questionPlan, walkNarration.segments)?.ply);
     if (themeRef.current) {
       captureEvent('review_theme_classified', {
         theme: themeRef.current.theme,
@@ -2593,7 +2597,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         ? `theme: ${themeRef.current.theme} @ peak ply ${themeRef.current.peakPly} (conf ${themeRef.current.confidence.toFixed(2)})`
         : 'theme: none (below floor or ambiguous)',
     });
-  }, [walkNarration, playerColor]);
+  }, [walkNarration, playerColor, questionPlan]);
 
   useEffect(() => {
     if (themeSpokenRef.current) return;

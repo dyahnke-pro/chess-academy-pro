@@ -31,7 +31,7 @@ import { andList } from '../utils/andList';
 import { Chess, type Square } from 'chess.js';
 import { planFromUci, isCostClause } from './lookaheadPlan';
 import { classifyMove, type MoveQuality } from './moveRating';
-import { MISTAKE_CP, BLUNDER_CP, costWords } from './engineConstants';
+import { MISTAKE_CP, BLUNDER_CP, costWords, GRADE_WORD, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
 export { costWords };
 import { MATERIAL_VALUE } from './pieceValues';
 import { lineWins, mateLine } from './lineCalc';
@@ -781,7 +781,10 @@ export function callInaccuracyDetailed(args: {
   // "Nc6 was loose" (Learn walk 2026-10-02) claimed a piece hung where none
   // did. The grade of a move is "imprecise"; the cost is advantage, not
   // material ("gave away" read as a piece handed over).
-  const grade = quality === 'blunder' ? 'a blunder' : quality === 'mistake' ? 'a mistake' : cost >= MISTAKE_CP ? 'imprecise' : 'a little imprecise';
+  // Guarded by WORTH_SAYING above: only the three spoken grades reach here.
+  const label = quality as SpokenGradeLabel;
+  const grade = GRADE_WORD[label];
+  const costSaid = costFitsGrade(label, cost);
   // "AND THEY MISSED IT" ONLY WHEN THEIR REPLY DID NOT KEEP THE WIN (walk
   // oct3a, 28.h5: "it let them win a piece for a pawn, and they missed it" —
   // they played …Rxc3, a different move that wins as well). The caller reads
@@ -796,7 +799,7 @@ export function callInaccuracyDetailed(args: {
       // NEVER A BARE GRADE (run B walk 2026-09-30: "Nf5 was a mistake." and
       // nothing else). With no punishment and no better-move reason, the one
       // computed fact left is what it cost.
-      : `${args.playedSan} was ${grade}${should ? '' : ` — it cost ${costWords(cost)}${costWords(cost) === 'a little' ? '' : ' of advantage'}`}.`;
+      : `${args.playedSan} was ${grade}${should || !costSaid ? '' : ` — it cost ${costWords(cost)}${costWords(cost) === 'a little' ? '' : ' of advantage'}`}.`;
   // THE PUNISHING LINE, PLAYED OUT (David 2026-09-30: "teach more line
   // calculations"): to where their material lands, with what it wins.
   let lineTail = '';
