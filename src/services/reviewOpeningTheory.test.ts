@@ -174,10 +174,12 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
     expect(dep!.fact).toMatch(/Nf3/);
     expect(dep!.showUci).toBe('g1f3'); // the mainline move is playable on the board
     // DISTINCTIVE branch beats (departure / sideline / genuine-choice mainline)
-    // carry a real percentage (grounded). The obvious opening moves fold into a
-    // "standard theory" fast-forward beat that is PROSE (no stats) — Danya
-    // rattles the well-known moves without lecturing each (G2, David 2026-07-23).
-    expect(dep!.fact).toMatch(/\d+%/);
+    // say how firmly masters back the main move — in WORDS, never a percentage
+    // (V8, 2026-10-07). The obvious opening moves fold into a "standard theory"
+    // fast-forward beat — Danya rattles the well-known moves without lecturing
+    // each (G2, David 2026-07-23).
+    expect(dep!.fact).toMatch(/masters (almost always|usually) play it|the most common choice/);
+    expect(dep!.fact).not.toMatch(/\d+%|percent/i);
     expect(beats.some((b) => /standard theory|standard move/i.test(b.fact))).toBe(true);
     // the lecture ends on the PLAN (Danya always lands on the middlegame idea).
     const outro = beats.find((b) => b.kind === 'outro');
@@ -318,11 +320,14 @@ describe('tabiya walk — sidelines get NARRATED dives + computed pros/cons (Dav
     const sideBeat = beats.find((b) => b.kind === 'sideline');
     expect(sideBeat).toBeDefined();
     expect(sideBeat!.dive?.length).toBeGreaterThanOrEqual(2);
-    // Computed comparison, not flavor: the score numbers appear in the fact.
-    expect(sideBeat!.fact).toMatch(/scores|score about the same/i);
+    // Computed comparison, not flavor — said in words (V8), never as numbers.
+    expect(sideBeat!.fact).toMatch(/scores better than your line|scores a touch BETTER|score about the same/i);
+    expect(sideBeat!.fact).not.toMatch(/\d+%|percent/i);
     expect(sideBeat!.fact).not.toMatch(/presses a touch harder/);
     // The walk is announced so the student knows the main line is being SHOWN.
     expect(sideBeat!.fact).toMatch(/walk down/i);
+    // V8 — no beat of the lecture speaks a percentage, a game count or a tally.
+    for (const b of beats) expect(b.fact).not.toMatch(/\d+%|\bpercent\b|\d[\d,]*\s+(?:master\s+)?games|\d+\s+captures/i);
   });
 });
 

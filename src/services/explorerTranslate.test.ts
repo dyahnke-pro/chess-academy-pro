@@ -5,6 +5,7 @@ import {
   describeSampleSize,
   translateMasterMove,
   describeTopMasterMove,
+  scoreWords,
 } from './explorerTranslate';
 import type { MasterPlayMove, MasterPlayResult } from './masterPlayTypes';
 
@@ -91,5 +92,12 @@ describe('describeTopMasterMove', () => {
     const t = describeTopMasterMove(res, 'white');
     expect(t?.san).toBe('a4');
     expect(t?.popularity).toBe('the main move');
+  });
+});
+
+describe('scoreWords', () => {
+  it('is the one set of score edges, and translateScore reads it', () => {
+    expect([0.6, 0.55, 0.5, 0.45, 0.4].map(scoreWords)).toEqual(['scores very well', 'scores well', 'is roughly equal', 'scores a little worse', 'scores poorly']);
+    expect(translateScore(move({ white: 55, draws: 10, black: 35 }), 'white')).toBe(scoreWords(0.6));
   });
 });

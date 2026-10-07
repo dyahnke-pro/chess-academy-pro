@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**932 lines · 13 exports · 3 importers · 1 tests · 0 audits**
+**929 lines · 13 exports · 3 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -34,8 +34,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolveOpeningIdeas` (function) — 6 call sites
-- `src/components/Coach/CoachGameReview.tsx:2458`
-- `src/components/Coach/CoachGameReview.tsx:2463`
+- `src/components/Coach/CoachGameReview.tsx:2459`
+- `src/components/Coach/CoachGameReview.tsx:2464`
 - `src/services/reviewOpeningTheory.test.ts:81`
 - `src/services/reviewOpeningTheory.test.ts:88`
 - `src/services/reviewOpeningTheory.test.ts:94`
@@ -50,45 +50,45 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.test.ts:121`
 
 ### `warmLectureSources` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:2446`
+- `src/components/Coach/CoachGameReview.tsx:2447`
 
 ### `buildOpeningTheoryLecture` (function) — 13 call sites
-- `src/components/Coach/CoachGameReview.tsx:2454`
+- `src/components/Coach/CoachGameReview.tsx:2455`
 - `src/services/reviewOpeningTheory.test.ts:35`
 - `src/services/reviewOpeningTheory.test.ts:64`
 - `src/services/reviewOpeningTheory.test.ts:75`
 - `src/services/reviewOpeningTheory.test.ts:143`
 - `src/services/reviewOpeningTheory.test.ts:165`
-- `src/services/reviewOpeningTheory.test.ts:200`
-- `src/services/reviewOpeningTheory.test.ts:221`
-- `src/services/reviewOpeningTheory.test.ts:247`
-- `src/services/reviewOpeningTheory.test.ts:274`
-- `src/services/reviewOpeningTheory.test.ts:307`
-- `src/services/reviewOpeningTheory.test.ts:339`
-- `src/services/reviewOpeningTheory.test.ts:368`
+- `src/services/reviewOpeningTheory.test.ts:202`
+- `src/services/reviewOpeningTheory.test.ts:223`
+- `src/services/reviewOpeningTheory.test.ts:249`
+- `src/services/reviewOpeningTheory.test.ts:276`
+- `src/services/reviewOpeningTheory.test.ts:309`
+- `src/services/reviewOpeningTheory.test.ts:344`
+- `src/services/reviewOpeningTheory.test.ts:373`
 
 ### `TheoryEngine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `enrichLectureWithEngine` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:2462`
-- `src/services/reviewOpeningTheory.test.ts:277`
+- `src/components/Coach/CoachGameReview.tsx:2463`
+- `src/services/reviewOpeningTheory.test.ts:279`
 
 ### `TheoryLectureBeat` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildTheoryLectureBeats` (function) — 11 call sites
-- `src/components/Coach/CoachGameReview.tsx:2458`
-- `src/components/Coach/CoachGameReview.tsx:2463`
+- `src/components/Coach/CoachGameReview.tsx:2459`
+- `src/components/Coach/CoachGameReview.tsx:2464`
 - `src/services/reviewOpeningTheory.test.ts:149`
 - `src/services/reviewOpeningTheory.test.ts:166`
-- `src/services/reviewOpeningTheory.test.ts:201`
-- `src/services/reviewOpeningTheory.test.ts:223`
-- `src/services/reviewOpeningTheory.test.ts:255`
-- `src/services/reviewOpeningTheory.test.ts:280`
-- `src/services/reviewOpeningTheory.test.ts:317`
-- `src/services/reviewOpeningTheory.test.ts:340`
-- `src/services/reviewOpeningTheory.test.ts:369`
+- `src/services/reviewOpeningTheory.test.ts:203`
+- `src/services/reviewOpeningTheory.test.ts:225`
+- `src/services/reviewOpeningTheory.test.ts:257`
+- `src/services/reviewOpeningTheory.test.ts:282`
+- `src/services/reviewOpeningTheory.test.ts:319`
+- `src/services/reviewOpeningTheory.test.ts:345`
+- `src/services/reviewOpeningTheory.test.ts:374`
 
 ## Tests
 

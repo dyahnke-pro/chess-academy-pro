@@ -9,3 +9,11 @@ export function shareAdverb(pct: number): string {
   if (pct >= 25) return 'often';
   return 'sometimes';
 }
+
+/** The MOST-played move, said by how firmly masters agree on it. A leader at 30%
+ *  is not played "sometimes" — it heads a split field — so below "usually" the
+ *  words say that instead. Shared by every surface that names the book move. */
+export function topMoveShare(pct: number): string {
+  if (pct >= 45) return `masters ${shareAdverb(pct)} play it`;
+  return 'the most common choice, though masters are split here';
+}

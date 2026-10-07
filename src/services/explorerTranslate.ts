@@ -27,7 +27,12 @@ export function translateScore(move: MasterPlayMove, perspective: Perspective): 
   const total = move.white + move.draws + move.black;
   if (total <= 0) return 'untested';
   const moverWins = perspective === 'white' ? move.white : move.black;
-  const score = (moverWins + move.draws / 2) / total;
+  return scoreWords((moverWins + move.draws / 2) / total);
+}
+
+/** A mover's score (0..1: wins + half the draws) in words — the ONE set of
+ *  edges every surface reads (Discussion Practice, the Review lecture). */
+export function scoreWords(score: number): string {
   if (score >= 0.58) return 'scores very well';
   if (score >= 0.53) return 'scores well';
   if (score > 0.47) return 'is roughly equal';

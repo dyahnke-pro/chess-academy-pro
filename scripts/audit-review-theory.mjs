@@ -268,7 +268,9 @@ const run = async () => {
     const spoken = voiceLines(voice);
     console.log('\n   VOICE (' + spoken.length + ' lines):', JSON.stringify(spoken.slice(0, 24)));
     check('listener: theory ask was SPOKEN without leaking the answer', spoken.some((l) => /Book ended here/.test(l)));
-    check('listener: the stats line spoke masters practice', spoken.some((l) => /Masters play/.test(l)));
+    check('listener: the stats line spoke masters practice', spoken.some((l) => /The book move here is/.test(l)));
+    // V8 (2026-10-07): masters practice is said in words — no percentage, no game count.
+    check('listener: no theory line speaks a percentage or a game count', !spoken.some((l) => /\d+\s*%|\bpercent\b|\d[\d,]*\s+(?:master\s+)?games/i.test(l)));
     await voice.stop();
   }
 

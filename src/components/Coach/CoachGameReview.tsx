@@ -48,6 +48,7 @@ import { registerFor } from '../../coach/surfaceContract';
 import { buildOpeningTheoryLecture, buildTheoryLectureBeats, resolveOpeningIdeas, enrichLectureWithEngine, warmLectureSources, type TheoryLectureBeat, type ExploreLine } from '../../services/reviewOpeningTheory';
 import { reviewTheoryLookup } from '../../services/reviewOpeningsSource';
 import { sanToSpeech } from '../../utils/sanToSpeech';
+import { shareAdverb, topMoveShare } from '../../utils/shareWords';
 import { captureEvent } from '../../services/analytics';
 import { reward } from '../../services/rewardService';
 import { detectMissedTactics } from '../../services/missedTacticService';
@@ -2468,14 +2469,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     return () => { cancelled = true; window.clearTimeout(t); };
   }, [reviewFens, moves, openingName]);
 
-  /** The computed stats line — masters share + your-level share. */
+  /** The computed book line — how firmly masters back the main move, and what
+   *  players at your level pick — said in words, never as numbers (V8). */
   const theoryStatsLine = useCallback((dep: TheoryDeparture): string => {
-    const pct = Math.round(dep.mainMove.pct * 100);
-    let line = `Masters play ${dep.mainMove.san} here — ${pct} percent of ${dep.totalGames} games.`;
+    let line = `The book move here is ${dep.mainMove.san} — ${topMoveShare(dep.mainMove.pct * 100)}.`;
     if (dep.yourLevel && dep.yourLevel.san !== dep.mainMove.san) {
-      line += ` At your level ${dep.yourLevel.san} is the popular pick, ${Math.round(dep.yourLevel.pct * 100)} percent.`;
+      line += ` At your level, players ${shareAdverb(dep.yourLevel.pct * 100)} pick ${dep.yourLevel.san} instead.`;
     } else if (dep.yourLevel) {
-      line += ` Your level agrees — ${Math.round(dep.yourLevel.pct * 100)} percent play it too.`;
+      line += ' Players at your level pick it too.';
     }
     return line;
   }, []);

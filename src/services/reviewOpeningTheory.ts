@@ -12,7 +12,8 @@
 // narration layer (reviewOpeningTheoryNarration) turns this into the spoken
 // lecture; the LLM only phrases these computed facts.
 
-import { shareAdverb } from '../utils/shareWords';
+import { shareAdverb, topMoveShare } from '../utils/shareWords';
+import { describeSampleSize, scoreWords } from './explorerTranslate';
 import { andList } from '../utils/andList';
 import { Chess } from 'chess.js';
 import type { MasterPlayResult, MasterPlayMove, MasterPlayTopGame } from './masterPlayTypes';
@@ -221,13 +222,12 @@ function toTheoryMove(m: MasterPlayMove, total: number, mover: 'white' | 'black'
   };
 }
 
-/** ", scoring 62%" when the result split exists, else "" (popularity-only). */
-/** The score is EXPECTED POINTS for the SIDE that plays the move (win=1, draw=½)
- *  — so a bare "scoring 46%" reads as mediocre when it actually means "White
- *  scores a shade under even here" (David 2026-07-23: "what does scoring 46%
- *  mean?"). Name the side, anchor it to 50% (even), and when the move is the
- *  OPPONENT's and they score under even, say plainly it's comfortable for the
- *  student — the number is good news from their side. */
+/** How the side that plays the move fares from here, in WORDS (V8 — no
+ *  percentages in speech; the edges are explorerTranslate.scoreWords, the one
+ *  set every surface reads). The score is EXPECTED POINTS for that side (win=1,
+ *  draw=½), anchored to even (David 2026-07-23: "what does scoring 46% mean?"),
+ *  and when it is the OPPONENT's move and they score under even, it says plainly
+ *  that is comfortable for the student. "" when there is no result split. */
 function scoreClause(
   m: TheoryMove,
   moverColor: 'white' | 'black',
@@ -235,12 +235,8 @@ function scoreClause(
 ): string {
   if (m.scoreForMover == null) return '';
   const side = moverColor === 'white' ? 'White' : 'Black';
-  // Bucket on the DISPLAYED (rounded) percent so "50%, a shade under even" can't
-  // happen — the words always agree with the number the student hears.
-  const rp = Math.round(m.scoreForMover * 100);
-  const vsEven = rp >= 54 ? 'a healthy plus' : rp >= 48 ? 'right around even' : 'a shade below even';
-  const benefit = studentColor && moverColor !== studentColor && rp <= 47 ? ' — comfortable for you' : '';
-  return `, and ${side} scores ${rp}% here, ${vsEven}${benefit}`;
+  const benefit = studentColor && moverColor !== studentColor && m.scoreForMover <= 0.47 ? ' — comfortable for you' : '';
+  return `, and from here it ${scoreWords(m.scoreForMover)} for ${side}${benefit}`;
 }
 
 /** Warm what the lecture's beats read synchronously (the gem index for the
@@ -471,7 +467,8 @@ export async function enrichLectureWithEngine(
 // ─── NARRATION BEATS ────────────────────────────────────────────────────────
 // The lecture, turned into a sequence of playable beats: at each branch the
 // board shows the MAINLINE move (the arrow / played move) while the coach voices
-// the grounded theory — mainline %, sidelines, and where the game deviated. Each
+// the grounded theory — how firmly masters back the mainline, the sidelines, and
+// where the game deviated, all in words (V8). Each
 // `fact` is only computed numbers (G0); the house voice phrases them at runtime.
 
 export interface TheoryLectureBeat {
@@ -517,18 +514,18 @@ function lineCompareClause(
   const lineWord = poss === 'your' ? 'your line' : "your opponent's line";
   const sideWord = poss === 'your' ? 'your sideline' : "your opponent's sideline";
   // Score comparison ONLY when the result split exists; otherwise degrade to a
-  // popularity comparison (real data) — never a fabricated "0% vs 0%".
+  // popularity comparison (real data). Said in words, never as numbers (V8).
   if (mainline.scoreForMover != null && played.scoreForMover != null) {
     const diff = mainline.scoreForMover - played.scoreForMover;
     if (diff >= 0.03) {
-      parts.push(`In master play the main line scores ${pct(mainline.scoreForMover)} to ${lineWord}'s ${pct(played.scoreForMover)} — that's its pro; ${lineWord}'s pro is that opponents prepare for it less.`);
+      parts.push(`In master play the main line scores better than ${lineWord} — that's its pro; ${lineWord}'s pro is that opponents prepare for it less.`);
     } else if (diff <= -0.03) {
-      parts.push(`Interestingly, ${sideWord} actually scores a touch BETTER in master play (${pct(played.scoreForMover)} to ${pct(mainline.scoreForMover)}) — it's less common, not worse.`);
+      parts.push(`Interestingly, ${sideWord} actually scores a touch BETTER in master play — it's less common, not worse.`);
     } else {
-      parts.push(`The two score about the same in master play (${pct(mainline.scoreForMover)} vs ${pct(played.scoreForMover)}) — the choice is a matter of style.`);
+      parts.push('The two score about the same in master play — the choice is a matter of style.');
     }
   } else {
-    parts.push(`The main line is the more travelled road (${pct(mainline.pct)} of games vs ${pct(played.pct)}); ${lineWord}'s upside is surprise — opponents prepare for it less.`);
+    parts.push(`The main line is the more travelled road; ${lineWord}'s upside is surprise — opponents prepare for it less.`);
   }
   // "Forcing" is measured on the MAINLINE dive only — we never dove the
   // sideline, so a comparative "sharper of the two" / "both are quiet" claim
@@ -536,13 +533,9 @@ function lineCompareClause(
   // only about the mainline, which is what we actually computed.
   const forcing = dive.filter((d) => d.san.includes('x') || d.san.includes('+') || d.san.includes('#')).length;
   if (forcing >= 2) {
-    parts.push(`The main line runs sharp — ${forcing} captures or checks inside the next few moves.`);
+    parts.push('The main line runs sharp — captures and checks come within the next few moves.');
   }
   return parts.length ? ` ${parts.join(' ')}` : '';
-}
-
-function pct(x: number): string {
-  return `${Math.round(x * 100)}%`;
 }
 
 /** A model-game citation — Danya's "Carlsen had this against Yangyi." Prefers a
@@ -595,12 +588,16 @@ function uciFor(fen: string, san: string): string | null {
   }
 }
 
+/** The alternatives, named — how often in words for a lone one (V8). */
 function sidelineClause(sidelines: TheoryMove[]): string {
   const named = sidelines.filter((s) => s.games > 0);
   if (named.length === 0) return '';
-  if (named.length === 1) return ` The main alternative is ${named[0].san} (${pct(named[0].pct)}).`;
-  return ` The other main tries are ${named[0].san} (${pct(named[0].pct)}) and ${named[1].san} (${pct(named[1].pct)}).`;
+  // An alternative is never "usually" played — the main line out-plays it.
+  const adverb = shareAdverb(named[0].pct * 100);
+  if (named.length === 1) return ` The main alternative is ${named[0].san}, which masters ${adverb === 'sometimes' ? 'sometimes' : 'often'} play.`;
+  return ` The other main tries are ${andList(named.map((s) => s.san))}.`;
 }
+
 
 /** WHY the main line is the main line — grounded in the DATA (§3 gap). The main
  *  move is always the most-PLAYED (that's how it's picked); the extra insight is
@@ -647,7 +644,7 @@ export function buildTheoryLectureBeats(
     moveNumber: first.moveNumber,
     moverColor: first.moverColor,
     kind: 'intro',
-    fact: `Let's dig into the theory. The ${lecture.openingName} rests on ${lecture.startGames.toLocaleString()} master games.${ideaClause}`,
+    fact: `Let's dig into the theory. The ${lecture.openingName} rests on ${describeSampleSize(lecture.startGames)}.${ideaClause}`,
   });
 
   // Only announce a variation NAME when it's new (Danya re-names at each branch,
@@ -845,7 +842,7 @@ export function buildTheoryLectureBeats(
         kind: 'departure',
         // Danya's departure shape: name where book is, what it is, then the
         // anti-sideline recipe ("when in doubt, keep developing").
-        fact: `Here's where the game steps out of book. The main road for ${side} is ${b.mainline.san}${mainlineNameClause(b.mainlineName)} — ${pct(b.mainline.pct)} of master games${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence}${costClause(b)}${trapClause(b.fenBefore)}${sidelineClause(b.sidelines)}${b.mainlineDive.length >= 2 ? ' Let me show you how it runs from here.' : ' Past this point you\'re on your own — keep developing and fight for the centre.'}`,
+        fact: `Here's where the game steps out of book. The main road for ${side} is ${b.mainline.san}${mainlineNameClause(b.mainlineName)} — ${topMoveShare(b.mainline.pct * 100)}${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence}${costClause(b)}${trapClause(b.fenBefore)}${sidelineClause(b.sidelines)}${b.mainlineDive.length >= 2 ? ' Let me show you how it runs from here.' : ' Past this point you\'re on your own — keep developing and fight for the centre.'}`,
         diveFromFen: b.diveFromFen ?? undefined,
         dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
       });
@@ -861,7 +858,7 @@ export function buildTheoryLectureBeats(
         // "the main line presses a touch harder" was flavor, not data. And when a
         // dive exists, the beat WALKS the main line so the student SEES the moves
         // being compared (David 2026-07-21: "what was the main line? Show me").
-        fact: `The main line here is ${b.mainline.san} — ${pct(b.mainline.pct)} of games${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence} This game went ${b.played.san} instead (${pct(b.played.pct)}), a known sideline.${costClause(b)}${lineCompareClause(b.mainline, b.played, b.mainlineDive, studentColor && b.moverColor !== studentColor ? "your opponent's" : 'your')}${engineClause(b)}${modelClause(b)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ` Let me walk down ${b.mainline.san} so you can compare.` : ''}`,
+        fact: `The main line here is ${b.mainline.san} — ${topMoveShare(b.mainline.pct * 100)}${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence} This game went ${b.played.san} instead, ${b.played.pct < 0.05 ? 'a rare' : 'a known'} sideline.${costClause(b)}${lineCompareClause(b.mainline, b.played, b.mainlineDive, studentColor && b.moverColor !== studentColor ? "your opponent's" : 'your')}${engineClause(b)}${modelClause(b)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ` Let me walk down ${b.mainline.san} so you can compare.` : ''}`,
         diveFromFen: b.diveFromFen ?? undefined,
         dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
       });
@@ -873,7 +870,7 @@ export function buildTheoryLectureBeats(
         moveNumber: b.moveNumber,
         moverColor: b.moverColor,
         kind: 'mainline',
-        fact: `${b.mainline.san} is ${side}'s main line here — ${pct(b.mainline.pct)} of master games${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence}${trapClause(b.fenBefore)}${oncePhrase(whyMainClause(b.mainline, b.sidelines))}${engineClause(b)}${sidelineClause(b.sidelines)}${modelClause(b)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ' Let me show you where it leads.' : ''}`,
+        fact: `${b.mainline.san} is ${side}'s main line here — ${topMoveShare(b.mainline.pct * 100)}${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence}${trapClause(b.fenBefore)}${oncePhrase(whyMainClause(b.mainline, b.sidelines))}${engineClause(b)}${sidelineClause(b.sidelines)}${modelClause(b)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ' Let me show you where it leads.' : ''}`,
         diveFromFen: b.diveFromFen ?? undefined,
         dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
       });
@@ -897,7 +894,7 @@ export function buildTheoryLectureBeats(
     // the student taps "Explore a6" to see it played out, or skips (David
     // 2026-07-23: don't force more theory on someone who doesn't want it). The
     // playable lines ride in `explore`, rendered as chips, not auto-marched.
-    const list = c8.exploreLines.map((e) => `${e.san} (${pct(e.pct)})`).join(' and ');
+    const list = andList(c8.exploreLines.map((e) => e.san));
     beats.push({
       fenBefore: c8.fenBefore,
       showUci: uciFor(c8.fenBefore, c8.exploreLines[0].san),
