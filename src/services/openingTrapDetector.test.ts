@@ -96,7 +96,7 @@ describe('detectTrapInPosition', () => {
     expect(trap!.trapMove).toBe('Nxe4');
   });
 
-  it('formatTrapForPrompt cites the numbers and the refutation', () => {
+  it('formatTrapForPrompt says how often and how much in words, with the refutation (V8)', () => {
     const text = formatTrapForPrompt({
       trapMove: 'Bxf2+',
       gamesPlayed: 12345,
@@ -106,8 +106,9 @@ describe('detectTrapInPosition', () => {
     });
     expect(text).toContain('TRAP AVAILABLE');
     expect(text).toContain('Bxf2+');
-    expect(text).toContain('12,345');
-    expect(text).toContain('-3.5 points');
+    expect(text).toContain('reach for all the time');
+    expect(text).toContain('loses about a piece');
     expect(text).toContain('Kxf2');
+    expect(text.replace(/Bxf2\+|Kxf2/g, '')).not.toMatch(/\d/);
   });
 });

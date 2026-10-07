@@ -60,7 +60,9 @@ describe('buildEndgameRecap', () => {
     expect(r!.counts.blunder).toBe(0);
     expect(r!.worstMove).toBeNull();
     // Narration should be a clean-conversion stem.
-    expect(r!.narration).toMatch(/Clean|Held|percent/);
+    expect(r!.narration).toMatch(/Clean|Held|right idea/);
+    // V8 — the accuracy stays on the card; the voice says it in words.
+    expect(r!.narration).not.toMatch(/percent|%|\d/);
   });
 
   it('flags a blunder when the win-percent drop exceeds the threshold', async () => {
@@ -74,6 +76,8 @@ describe('buildEndgameRecap', () => {
     expect(r!.moves[0].classification).toBe('blunder');
     expect(r!.worstMove).not.toBeNull();
     expect(r!.narration).toMatch(/blunder/);
+    expect(r!.narration).toContain(r!.worstMove!.san);
+    expect(r!.narration).not.toMatch(/percent|%|on move \d/);
   });
 
   it('inverts win-percent for a black-side student', async () => {

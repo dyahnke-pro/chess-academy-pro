@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1050 lines · 9 exports · 5 importers · 3 tests · 7 audits**
+**1051 lines · 9 exports · 5 importers · 3 tests · 7 audits**
 
 ## Locked rules that govern this surface
 
-- **G6. Arrows on every step-by-step coach move. No asking.** (CLAUDE.md:1185) — names `envelope`
-- **STEP 11.5 — 🚨 Build + commit the GAME REFERENCES (NON-NEGOTIABLE — David 2026-06-01)** (CLAUDE.md:1969) — names `envelope`
-- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:3582) — names `envelope`
-- **The standard post-deploy ritual** (CLAUDE.md:5691) — names `envelope`
+- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1306) — names `envelope`
+- **STEP 11.5 — 🚨 Build + commit the GAME REFERENCES (NON-NEGOTIABLE — David 2026-06-01)** (CLAUDE.md:2128) — names `envelope`
+- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:3824) — names `envelope`
+- **The standard post-deploy ritual** (CLAUDE.md:6196) — names `envelope`
 
 ## Who calls in
 
@@ -53,7 +53,7 @@
 - `src/coach/__tests__/envelope.test.ts:434`
 - `src/coach/__tests__/envelope.test.ts:467`
 - `src/coach/__tests__/ping.integration.test.ts:124`
-- `src/coach/coachService.ts:961`
+- `src/coach/coachService.ts:990`
 
 ### `formatAnnotationContextSubBlock` (function) — 1 call site
 - `src/services/narrationGrounding.ts:130`
@@ -100,6 +100,10 @@
 - `src/coach/providers/deepseek.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-coach-chat.mjs`
 - `scripts/audit-coach-full-game.mjs`

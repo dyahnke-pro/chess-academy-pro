@@ -1,10 +1,14 @@
 import type { CourseSubline } from './openingCourse';
+import { shareAdverb } from '../utils/shareWords';
+import { scoreWords } from './explorerTranslate';
 
 // Stage-1 of the why pipeline (David 2026-06-15): the engine/data COMPUTE the
 // grounded why-facts; a human authors the narration FROM them later. v1 is the
 // FREQUENCY fact (eval + concept layer to come). It also encodes the SELECTIVE
-// rule — surface the %/count only when it adds value (a dominant try or a rare-
+// rule — voice the frequency only when it adds value (a dominant try or a rare-
 // but-real one), never on every move (robotic). A `text` of '' = say nothing.
+// The voice says it in WORDS, never a percentage or a game count (RULEBOOK V8);
+// the numbers stay on the structured fact for the cards that show them.
 
 export type FrequencyTier = 'dominant' | 'common' | 'minor' | 'rare';
 
@@ -49,9 +53,9 @@ export function frequencyWhyFact(pct: number, games: number, seed = 0): WhyFact 
   const tier = frequencyTier(pct);
   let text = '';
   if (tier === 'dominant') {
-    text = `${DOMINANT_STEMS[seed % DOMINANT_STEMS.length]} — about ${pct}% of master games.`;
+    text = `${DOMINANT_STEMS[seed % DOMINANT_STEMS.length]} — masters ${shareAdverb(pct)} play it.`;
   } else if (tier === 'rare') {
-    text = `${RARE_STEMS[seed % RARE_STEMS.length]} — only about ${pct}% — but worth knowing.`;
+    text = `${RARE_STEMS[seed % RARE_STEMS.length]} — masters rarely play it, but it's worth knowing.`;
   }
   return { text, pct, games, tier };
 }
@@ -81,14 +85,14 @@ export function proSublineFact(s: CourseSubline): { text: string; fix?: string }
   if (s.dubious && s.engineBest) {
     // Practical line the pro rode + the honest engine caveat + the sound fix.
     return {
-      text: `${faced}. This practical line scored ${score}% in real games — dangerous at human speed — but the engine prefers ${s.engineBest} as the objectively soundest reply.`,
+      text: `${faced}. This practical line ${scoreWords(score / 100)} in real games — dangerous at human speed — but the engine prefers ${s.engineBest} as the objectively soundest reply.`,
       fix: s.engineBest,
     };
   }
   // Sound line: speak only when notable (a move you'll mostly face, or a strong
   // practical result), else stay silent so the caption isn't robotic.
   if (tier === 'dominant' || score >= 60) {
-    return { text: `${faced}. ${score}% in practice across ${games} game${games === 1 ? '' : 's'}.` };
+    return { text: `${faced}. In real games it ${scoreWords(score / 100)}.` };
   }
   return { text: '' };
 }

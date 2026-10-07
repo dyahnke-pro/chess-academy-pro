@@ -684,16 +684,17 @@ function Summary({
 
   // Phase 2: Eval Lab outro narration. Previously the result card
   // appeared silently (David's audit: "no outro narration"). The
-  // short spoken line concretely names the score + grade so the
-  // user gets audible closure without staring at numbers.
+  // short spoken line names the tally + grade so the user gets
+  // audible closure; the percentage stays on the card, never in the
+  // voice (RULEBOOK V8 — no percentages in speech).
   // Narration text is memoized on the values so React StrictMode's
   // double-effect doesn't double-speak.
   const outroText = useMemo<string>(
     () =>
       total === 0
         ? ''
-        : `${perfect} of ${total}. ${percent} percent perfect. ${grade}.`,
-    [perfect, total, percent, grade],
+        : `${perfect === total ? 'Every one' : `${perfect} of ${total}`} perfect. ${grade}.`,
+    [perfect, total, grade],
   );
   useNarration({ text: outroText });
 

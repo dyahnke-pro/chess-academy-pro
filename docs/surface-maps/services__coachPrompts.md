@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1232 lines · 28 exports · 9 importers · 5 tests · 1 audits**
+**1233 lines · 28 exports · 9 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1180) — names `coachPrompts`
-- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:3701) — names `coachPrompts`
+- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1257) — names `coachPrompts`
+- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:3824) — names `coachPrompts`
 
 ## Who calls in
 
@@ -26,7 +26,7 @@
 ## Exports and every call site
 
 ### `getVerbosityInstruction` (function) — 7 call sites
-- `src/services/coachApi.ts:864`
+- `src/services/coachApi.ts:929`
 - `src/services/coachPrompts.verbosity.test.ts:23`
 - `src/services/coachPrompts.verbosity.test.ts:24`
 - `src/services/coachPrompts.verbosity.test.ts:26`

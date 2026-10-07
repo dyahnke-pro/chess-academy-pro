@@ -14,6 +14,7 @@
  * blunder if they're the one on move.
  */
 import type { LichessExplorerResult, LichessExplorerMove } from '../types';
+import { costWords } from './engineConstants';
 
 /** Minimum Lichess-wide game count for a move to count as "popular".
  *  Below this, the move is too obscure to be a trap trigger — nobody
@@ -117,9 +118,17 @@ export function detectTrapInPosition(input: DetectTrapInput): TrapSignal | null 
  * commentary can cite directly. Keeps the numbers (game count + cp
  * loss) so the LLM can be specific rather than hand-wave.
  */
+/** How often real players reach for the move, in words (RULEBOOK V8 — the
+ *  count picks the words and is never spoken). */
+function playedWords(games: number): string {
+  if (games >= 10000) return 'all the time';
+  if (games >= 1000) return 'very often';
+  if (games >= 100) return 'often';
+  return 'now and then';
+}
+
 export function formatTrapForPrompt(trap: TrapSignal): string {
-  const pawns = (trap.evalCpForMover / 100).toFixed(1);
   const severity = trap.severity === 'severe' ? 'SEVERE TRAP' : 'TRAP';
   const refutation = trap.refutationSan ? ` — refute with ${trap.refutationSan}` : '';
-  return `[${severity} AVAILABLE] The natural-looking move ${trap.trapMove} has been played ${trap.gamesPlayed.toLocaleString()} times on Lichess, but it's losing by ${pawns} points${refutation}. Real players walk into it — tell the student what to watch for.`;
+  return `[${severity} AVAILABLE] The natural-looking move ${trap.trapMove} is one real players on Lichess reach for ${playedWords(trap.gamesPlayed)}, but it loses ${costWords(Math.abs(trap.evalCpForMover))}${refutation}. Real players walk into it — tell the student what to watch for, in words: no counts, no numbers.`;
 }

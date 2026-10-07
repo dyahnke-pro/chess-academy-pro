@@ -93,7 +93,22 @@ function harmonicMean(values: number[]): number {
   return values.length / reciprocalSum;
 }
 
-/** Render a short, concrete narration from the aggregated stats.
+/** The run's accuracy in words — the number stays on the card, never in the
+ *  voice (RULEBOOK V8: no percentages in speech). */
+function accuracyWords(acc: number): string {
+  if (acc >= 90) return 'near-perfect technique';
+  if (acc >= 75) return 'solid technique';
+  if (acc >= 50) return 'shaky technique in places';
+  return 'a rough run';
+}
+
+const ARTICLE: Record<Exclude<RecapClassification, 'best'>, string> = {
+  inaccuracy: 'an inaccuracy',
+  mistake: 'a mistake',
+  blunder: 'a blunder',
+};
+
+/** Render a short, concrete narration from the aggregated stats, in words.
  *  Rotates stem variants based on the worst-move classification so a
  *  multi-puzzle session doesn't speak the same opener every time. */
 function buildNarration(args: {
@@ -109,22 +124,24 @@ function buildNarration(args: {
   // Perfect or near-perfect run.
   if (!worstMove || worstMove.classification === 'best') {
     const stems = [
-      `Clean conversion. ${n} ${n === 1 ? 'move' : 'moves'} at ${acc} percent.`,
-      `Held the technique. ${acc} percent across ${n} ${n === 1 ? 'move' : 'moves'}.`,
-      `${acc} percent. Every move on the right idea.`,
+      'Clean conversion — every move on the right idea.',
+      'Held the technique all the way through.',
+      'Every move on the right idea.',
     ];
     // ROTATED ON THE RUN'S OWN LENGTH + accuracy — stable for a given result,
     // so replaying the same recap says the same thing.
     return rotateStem(stems, n + acc);
   }
 
-  const tag = worstMove.classification;
   const idx = moves.indexOf(worstMove) + 1;
-  const tagWord = tag === 'inaccuracy' ? 'inaccuracy' : tag;
+  const words = accuracyWords(acc);
+  const lead = `${words.charAt(0).toUpperCase()}${words.slice(1)}`;
+  const which = ARTICLE[worstMove.classification];
+  const san = worstMove.san;
   const stems = [
-    `${acc} percent. One ${tagWord} on move ${idx}.`,
-    `${acc} percent across ${n} ${n === 1 ? 'move' : 'moves'} — the ${tagWord} on move ${idx} was the costliest.`,
-    `Move ${idx} was a ${tagWord}. ${acc} percent overall.`,
+    `${lead}. The costliest move was ${san}, ${which}.`,
+    `${lead} — ${san} was the ${worstMove.classification} that cost the most.`,
+    `${san} was the costliest move, ${which}. Overall, ${words}.`,
   ];
   // Keyed on WHICH move was worst: the same run always recaps the same way,
   // and two different runs almost never collide.
