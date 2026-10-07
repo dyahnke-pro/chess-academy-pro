@@ -1263,6 +1263,12 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     const statLines = linesWithStats(spoken().map((x) => x.text));
     await add('VOICE no-statistic-spoken', statLines.length === 0, `${statLines.length} line(s)${statLines.length ? ` — ${statLines[0].slice(0, 120)}` : ''}`);
   }
+  // AUDIT_TAPE_OUT=<file>: save the first walk's narration before the reopen
+  // (which can wedge on #21) — for reading the tape, not a contract.
+  if (process.env.AUDIT_TAPE_OUT) {
+    writeFileSync(process.env.AUDIT_TAPE_OUT, spoken().map((x) => x.text).join('\n'));
+    log(`  [tape] first walk saved to ${process.env.AUDIT_TAPE_OUT}`);
+  }
   // ── REOPEN (A) — instant, no re-analysis ────────────────────────────────
   // Let the background dive finish BEFORE leaving (a human reads the recap
   // while the pill spins); reopening mid-dive would only measure the dive.

@@ -13,3 +13,7 @@
    live. Credit the game or move only (Rulebook F0d) — never "he teaches".
    Sources on hand: the explorer proxy (topGames per position), the masters
    DB (opening aggregates only), pro-game-references.json.
+   MUST FEEL NATURAL (David): a reference is seasoning, not a template. Rare,
+   only where the real game makes the teaching land harder (the same idea
+   working, or the same mistake punished), chosen by the one decider like any
+   other fact, said once — never "here's what the masters do" on every move.
