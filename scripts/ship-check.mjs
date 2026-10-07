@@ -470,6 +470,8 @@ const GATE_TESTS = [
   'src/test/latentForkOpensTheDoor.test.ts',  // T5 — a two-move fork must be able to open the door on interrupt
   'src/test/coachSurfacesAgree.test.ts',      // one coach, one answer — review and Learn must not diverge on the same board
   'src/test/onePieceValueTable.test.ts',      // 53 private piece-value tables, two semantics, no home — shrink-only
+  'src/test/proofStatedCeiling.test.ts',      // conclusions said with no proof (NO_PROOF.stated) — shrink-only, closes at zero
+  'src/services/boardComputers.test.ts',      // the one board-computer registry: every surface answered, every "wired" claim has a caller
   'src/test/assetsNeverFallBackToHtml.test.ts', // guards vercel.json's assets/ exclusion — without it a stale chunk returns 200 text/html, the iPhone "Unexpected token '<'" class
   'src/test/walkthroughPerspective.test.ts',    // the pronoun ban at ZERO on three surfaces the JSON + beat arms both miss (WalkthroughTree prose, curated narrations, code templates)
   'src/test/seatReattribution.test.ts',         // the SEAT predicate — three cuts, two silently inert, and it guards a LOCKED seat rule

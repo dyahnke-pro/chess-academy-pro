@@ -9,7 +9,7 @@
 //
 // Pure: the engine reads are handed in by the page.
 import { CAPTURE_VALUE } from './pieceValues';
-import { NO_PROOF, type FactProof } from './proof';
+import { lineProof, NO_PROOF, type FactProof } from './proof';
 import { shareAdverb } from '../utils/shareWords';
 import { andList } from '../utils/andList';
 import { countWords } from '../utils/countWords';
@@ -176,8 +176,8 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
     if (i.bestSan && bare(i.bestSan) === bare(i.san) && i.bestLine?.moves?.length) {
       const ml = mateLine(i.fenBefore, i.bestLine.moves, me, i.san);
       const w = ml ? null : winningLine(i.fenBefore, i.san, i.bestLine.moves, me, priorFromHistory(i.history, i.fenBefore));
-      if (ml) out.push({ lane: 'movePoint', proof: NO_PROOF.stated, text: ml.text, squares: [to, ...ml.taken], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_mate_line', props: { surface: 'coach-teach', quiet: ml.quiet } }, arrows: mateArrows(ml, me) });
-      if (w) out.push({ lane: 'movePoint', proof: NO_PROOF.stated, text: `That wins ${w.what}: ${andList(w.sans)}.`, squares: [to], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_winning_line', props: { surface: 'coach-teach' } }, arrows: w.arrows });
+      if (ml) out.push({ lane: 'movePoint', proof: lineProof({ fen: i.fenBefore, sans: ml.sans }) ?? NO_PROOF.stated, text: ml.text, squares: [to, ...ml.taken], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_mate_line', props: { surface: 'coach-teach', quiet: ml.quiet } }, arrows: mateArrows(ml, me) });
+      if (w) out.push({ lane: 'movePoint', proof: lineProof({ fen: i.fenBefore, sans: w.sans }) ?? NO_PROOF.stated, text: `That wins ${w.what}: ${andList(w.sans)}.`, squares: [to], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_winning_line', props: { surface: 'coach-teach' } }, arrows: w.arrows });
     }
   } catch { /* a bonus, never a blocker */ }
 
@@ -185,7 +185,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   {
     const theirLast = i.history.length >= 2 ? i.history[i.history.length - 2] : null;
     const kj = kneeJerk(theirLast, i.san, i.bestSan, faultCp);
-    if (kj) out.push({ lane: 'kneeJerk', proof: NO_PROOF.stated, text: kj, squares: [to], claims: ['method:knee-jerk'], event: { name: 'coach_knee_jerk_taught', props: { surface: 'coach-teach' } }, arrows: [] });
+    if (kj) out.push({ lane: 'kneeJerk', proof: NO_PROOF.method, text: kj, squares: [to], claims: ['method:knee-jerk'], event: { name: 'coach_knee_jerk_taught', props: { surface: 'coach-teach' } }, arrows: [] });
   }
 
   // A STRONG PLAYER'S CHOICE HERE — from the games DB, depersonalized, said
@@ -193,7 +193,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   warmStrongChoice();
   {
     const sc = strongChoice(i.fenBefore, i.san);
-    if (sc) out.push({ lane: 'strongChoice', proof: NO_PROOF.stated, text: sc.text, squares: [], // A bare affirmation ("that is a strong player's choice") teaches once a
+    if (sc) out.push({ lane: 'strongChoice', proof: NO_PROOF.description, text: sc.text, squares: [], // A bare affirmation ("that is a strong player's choice") teaches once a
       // game; naming a DIFFERENT strong move teaches every time (David
       // 2026-10-06: every narration must teach — not laborious to hear).
       claims: [sc.same ? 'strong-choice:affirm' : `strong-choice:${i.history.length}`], event: { name: 'coach_strong_choice_named', props: { surface: 'coach-teach', same: sc.same } }, arrows: [] });
@@ -210,14 +210,14 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   // THE SAFETY HABITS (P3 method beats) — earned only by what the board did.
   {
     const bc = blunderCheck(i.fenBefore, i.san, i.reply, faultCp);
-    if (bc) out.push({ lane: 'blunderCheck', proof: NO_PROOF.stated, text: bc, squares: [], claims: ['method:blunder-check'], event: { name: 'coach_blunder_check_taught', props: { surface: 'coach-teach' } }, arrows: [] });
+    if (bc) out.push({ lane: 'blunderCheck', proof: NO_PROOF.method, text: bc, squares: [], claims: ['method:blunder-check'], event: { name: 'coach_blunder_check_taught', props: { surface: 'coach-teach' } }, arrows: [] });
     const ap = autopilotGuard(i.san, faultCp, i.popularTopSan ?? null);
     if (ap) out.push({ lane: 'autopilot', proof: NO_PROOF.method, text: ap, squares: [to], claims: ['method:autopilot'], event: { name: 'coach_autopilot_taught', props: { surface: 'coach-teach' } }, arrows: [] });
     // THE PAWN ENDING (Naroditsky's endgame series): the move that takes the
     // last pieces off is counted first; and once only kings and pawns remain,
     // an outside passer is a decoy. Each once per game (claims).
     const st = spareTempoWasted(i.fenBefore, i.san, i.bestSan, faultCp);
-    if (st) out.push({ lane: 'pawnEnding', proof: NO_PROOF.stated, text: st, squares: [to], claims: ['method:spare-tempo'], event: { name: 'coach_spare_tempo_taught', props: { surface: 'coach-teach' } }, arrows: [] });
+    if (st) out.push({ lane: 'pawnEnding', proof: NO_PROOF.method, text: st, squares: [to], claims: ['method:spare-tempo'], event: { name: 'coach_spare_tempo_taught', props: { surface: 'coach-teach' } }, arrows: [] });
     const pe = pawnEndingTrade(i.fenBefore, i.san, i.reply, faultCp, i.cpAfter);
     if (pe) out.push({ lane: 'pawnEnding', proof: NO_PROOF.stated, text: pe.text, squares: [to], claims: ['method:pawn-ending-trade'], event: { name: 'coach_pawn_ending_trade', props: { surface: 'coach-teach', verdict: pe.verdict } }, arrows: [] });
     try {
@@ -345,7 +345,7 @@ export function theirMoveTeaching(fenBefore: string, san: string, student: 'w' |
     ? [{ from: cost.squares[1], to: cost.squares[2] ?? cost.squares[0], role: 'play', source: 'learn.theirMoveCost' }]
     : [];
   return {
-    lane: 'theirMoveCost', proof: NO_PROOF.stated, text: cost.text, squares: cost.squares, claims: [`cost-${cost.kind}-${cost.squares[0]}`],
+    lane: 'theirMoveCost', proof: NO_PROOF.description, text: cost.text, squares: cost.squares, claims: [`cost-${cost.kind}-${cost.squares[0]}`],
     event: { name: 'coach_their_move_cost_named', props: { surface: 'coach-teach', kind: cost.kind } },
     arrows,
   };
@@ -357,7 +357,8 @@ export function tempoTeaching(history: readonly string[], student: 'w' | 'b'): T
   const t = tempoCount(history, student);
   if (!t) return null;
   return {
-    lane: 'tempo', proof: NO_PROOF.stated, text: t.text, squares: t.squares, claims: [`tempo-count:${t.pieceId}`],
+    // The count IS the proof — read off the game's own moves (exact).
+    lane: 'tempo', proof: { kind: 'count', exact: true, short: `${t.moves} moves with one piece`, full: `that piece has now moved ${t.moves} times`, squares: t.squares }, text: t.text, squares: t.squares, claims: [`tempo-count:${t.pieceId}`],
     event: { name: 'coach_tempo_counted', props: { surface: 'coach-teach', moves: t.moves } },
     arrows: [],
   };
@@ -418,7 +419,7 @@ export function countMethodTeaching(fen: string, student: 'w' | 'b'): TeachingHi
   const m = countMethod(fen, student);
   if (!m) return null;
   return {
-    lane: 'countMethod', proof: NO_PROOF.stated, text: m.text, squares: [m.square], claims: ['count-method'],
+    lane: 'countMethod', proof: NO_PROOF.method, text: m.text, squares: [m.square], claims: ['count-method'],
     event: { name: 'coach_count_method_taught', props: { surface: 'coach-teach' } },
     arrows: [],
   };
@@ -767,7 +768,7 @@ export function foundMoveTeaching(fenBefore: string, san: string, preLines: read
   const arrows: ArrowClaim[] = ml ? mateArrows(ml, student) : won ? won.arrows : [];
   // A real decision moment (only one or two moves held) answered is calculation
   // proven — importance 90, above the green bar, because the board posed it.
-  return { lane: 'foundMove', proof: NO_PROOF.stated, text, squares: [to], claims: [`found-${san}`, ...(won || ml ? [`wins-line:${fenBefore.split(' ').slice(0, 2).join(' ')}`] : [])], event: { name: 'coach_found_move_named', props: { surface: 'coach-teach' } }, arrows, evidence: { tag: 'calculation-depth', posedImportance: 90 } };
+  return { lane: 'foundMove', proof: (ml ? lineProof({ fen: fenBefore, sans: ml.sans }) : won ? lineProof({ fen: fenBefore, sans: won.sans }) : null) ?? NO_PROOF.description, text, squares: [to], claims: [`found-${san}`, ...(won || ml ? [`wins-line:${fenBefore.split(' ').slice(0, 2).join(' ')}`] : [])], event: { name: 'coach_found_move_named', props: { surface: 'coach-teach' } }, arrows, evidence: { tag: 'calculation-depth', posedImportance: 90 } };
 }
 
 /** A mate line as board arrows, ply by ply, seated. */
