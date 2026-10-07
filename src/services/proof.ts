@@ -73,3 +73,21 @@ export function lineProofFromUci(fen: string, uci: readonly string[]): Proof | n
   } catch { /* the line ends where it stops being legal */ }
   return lineProof({ fen, sans });
 }
+
+/** WHY A SPOKEN FACT HAS NO SEPARATE PROOF — answered at every producer, so a
+ *  bare conclusion cannot compile (David 2026-10-07: "Root cause").
+ *   name        — a name from the DB (an opening, a structure); nothing to prove
+ *   description — what is on the board, with its squares marked
+ *   method      — a habit or rule to apply, not a claim about this board
+ *   stated      — the sentence itself states its evidence (a count, the square,
+ *                 the move and what it does) — Why has nothing more to add
+ *   withheld    — the answer is a question's, revealed after the student tries */
+export type NoProofReason = 'name' | 'description' | 'method' | 'stated' | 'withheld';
+export interface NoProof { none: NoProofReason }
+export type FactProof = Proof | NoProof;
+export const NO_PROOF: Record<NoProofReason, NoProof> = {
+  name: { none: 'name' }, description: { none: 'description' }, method: { none: 'method' }, stated: { none: 'stated' }, withheld: { none: 'withheld' },
+};
+export function isProof(p: FactProof | null | undefined): p is Proof {
+  return !!p && !('none' in p);
+}

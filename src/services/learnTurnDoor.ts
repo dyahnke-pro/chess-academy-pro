@@ -23,6 +23,7 @@
  * Slice 1 (this file): route + record, behaviour-preserving. Ordering and dedupe are still
  * `buildVoicePackage`'s. Picking ONE lead per turn is the next slice.
  */
+import type { FactProof } from './proof';
 import { emitLearnTurn } from './coachDecisionEvents';
 import { COMPUTER_ROLES } from './computerRoles';
 import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type VoiceFactKind, type VoicePackage } from './voicePackage';
@@ -279,6 +280,9 @@ export interface LaneFact {
   claims?: readonly string[];
   /** What rides on it (`factStakes`) — the door orders by this first. */
   stakes?: FactStakes;
+  /** ITS PROOF, OR WHY IT NEEDS NONE — REQUIRED (root cause, David
+   *  2026-10-07): a producer that cannot answer this cannot speak. */
+  proof: FactProof;
 }
 
 /** DANGER speaks first, whatever else is on the board (David 2026-10-05:
@@ -347,7 +351,7 @@ export function decideTurn(
     offered.push(f.lane);
     const text = fadeWhenGreen(f.lane, f.text, green ?? null);
     if (text !== f.text && !faded.includes(f.lane)) faded.push(f.lane);
-    open.push({ lane: f.lane, kind: f.kind ?? LEARN_LANES[f.lane].kind, text, fen: f.fen, squares: f.squares, claims: f.claims, lines: f.lines });
+    open.push({ lane: f.lane, kind: f.kind ?? LEARN_LANES[f.lane].kind, text, fen: f.fen, squares: f.squares, claims: f.claims, lines: f.lines, proof: f.proof });
   }
   const verified = buildVoicePackage(open.map(({ kind, text, fen, squares, claims, lines }) => ({ kind, text, fen, squares, claims, lines })), alreadySaid, priorKeys);
   // Which lane each surviving fact came from (the package may trim the text).
@@ -384,6 +388,11 @@ export function decideTurn(
       if (a === b || subsumed.has(b)) continue;
       if (!sameClaim({ sq: a.fact.squares ?? [], family: null }, { sq: b.fact.squares ?? [], family: null })) continue;
       const ad = DANGER_LANES.has(a.lane); const bd = DANGER_LANES.has(b.lane);
+      // A MOVE'S VERDICT IS ITS OWN CLAIM: its cost ("it left e5 short of a
+      // defender") shares squares with what the move does ("it attacks e5")
+      // and is not the same claim. One geometry read from two seats (a pin
+      // and the discovery behind it) still collapses; danger still subsumes.
+      if (!ad && !bd && (DNA_BEAT[a.lane] === 'but') !== (DNA_BEAT[b.lane] === 'but')) continue;
       const loser = ad !== bd ? (ad ? b : a) : value(b) > value(a) ? a : b;
       subsumed.add(loser);
       if (loser === a) break;

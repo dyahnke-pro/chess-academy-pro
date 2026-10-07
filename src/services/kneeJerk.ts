@@ -18,5 +18,6 @@ export function kneeJerk(theirLast: string | null, playedSan: string, bestSan: s
   if (!sq) return null;
   const took = new RegExp(`x${sq}`);
   if (!took.test(playedSan) || took.test(bestSan)) return null;
-  return 'Taking back was the reflex — but a recapture can usually wait a move. Before every recapture, ask whether something stronger comes first.';
+  // The proof is the stronger move itself (proof rule): say which.
+  return `Taking back was the reflex — but a recapture can usually wait a move, and here ${bestSan} came first. Before every recapture, ask whether something stronger comes first.`;
 }

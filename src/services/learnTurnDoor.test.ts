@@ -1,3 +1,4 @@
+import { NO_PROOF } from './proof';
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { decideTurn, LEARN_LANES, type LearnLane } from './learnTurnDoor';
@@ -18,13 +19,13 @@ describe('learnTurnDoor — the lane table decides, not a kind whitelist', () =>
     // True on FEN (the board grader refuses a false claim — a knight "on c3"
     // there is refused, which is the package doing its job).
     const text = 'Your knight on f3 attacks the pawn on e5.';
-    const d = decideTurn([{ lane: 'pieceQuality', text, fen: FEN, squares: ['f3', 'e5'] }]);
+    const d = decideTurn([{ lane: 'pieceQuality', proof: NO_PROOF.stated, text, fen: FEN, squares: ['f3', 'e5'] }]);
     expect(d.pkg.spoken.length).toBeGreaterThan(0);
     expect(d.spoke).toEqual(['pieceQuality']);
   });
 
   it('the plan arc speaks (behind the walkability check)', () => {
-    const d = decideTurn([{ lane: 'planArc', text: "Their plan is taking shape: the knight's walk to e5.", fen: FEN, squares: ['e5'] }]);
+    const d = decideTurn([{ lane: 'planArc', proof: NO_PROOF.stated, text: "Their plan is taking shape: the knight's walk to e5.", fen: FEN, squares: ['e5'] }]);
     expect(d.spoke).toEqual(['planArc']);
   });
 
@@ -34,7 +35,7 @@ describe('learnTurnDoor — the lane table decides, not a kind whitelist', () =>
   });
 
   it('a producer-decided kind rides through (the backward look)', () => {
-    const d = decideTurn([{ lane: 'coachMistake', text: 'I slipped there — that knight move left f7 loose.', fen: FEN }]);
+    const d = decideTurn([{ lane: 'coachMistake', proof: NO_PROOF.stated, text: 'I slipped there — that knight move left f7 loose.', fen: FEN }]);
     expect(d.pkg.kept[0]?.kind).toBe('coachMistake');
   });
 });
@@ -95,8 +96,8 @@ describe('WO-1b — one lead per turn', () => {
 
   it('the highest-ranked survivor leads and OPENS the utterance', () => {
     const d = decideTurn([
-      { lane: 'pieceQuality', text: F3, fen: FEN, squares: ['f3', 'e5'] },
-      { lane: 'register', text: C6, fen: FEN, squares: ['c6', 'e5'] },
+      { lane: 'pieceQuality', proof: NO_PROOF.stated, text: F3, fen: FEN, squares: ['f3', 'e5'] },
+      { lane: 'register', proof: NO_PROOF.stated, text: C6, fen: FEN, squares: ['c6', 'e5'] },
     ]);
     expect(d.lead?.lane).toBe('register');
     expect(d.pkg.spoken.startsWith('Their knight on c6')).toBe(true);
@@ -104,9 +105,9 @@ describe('WO-1b — one lead per turn', () => {
 
   it('a fact that shares a square with the lead supports it; one that shares nothing is held', () => {
     const d = decideTurn([
-      { lane: 'register', text: C6, fen: FEN, squares: ['c6', 'e5'] },
-      { lane: 'pieceQuality', text: F3, fen: FEN, squares: ['f3', 'e5'] },
-      { lane: 'behavior', text: F1, fen: FEN, squares: ['f1', 'c4'] },
+      { lane: 'register', proof: NO_PROOF.stated, text: C6, fen: FEN, squares: ['c6', 'e5'] },
+      { lane: 'pieceQuality', proof: NO_PROOF.stated, text: F3, fen: FEN, squares: ['f3', 'e5'] },
+      { lane: 'behavior', proof: NO_PROOF.stated, text: F1, fen: FEN, squares: ['f1', 'c4'] },
     ]);
     expect(d.spoke).toEqual(expect.arrayContaining(['register', 'pieceQuality']));
     // Negative control: the unrelated description is held, not spoken.
@@ -116,8 +117,8 @@ describe('WO-1b — one lead per turn', () => {
 
   it('DANGER FIRST — a threat leads the turn, and the gem still speaks after it (David 2026-10-05)', () => {
     const d = decideTurn([
-      { lane: 'gem', text: C6, fen: FEN, squares: ['c6'] },
-      { lane: 'threat', text: F1, fen: FEN, squares: ['f1', 'c4'] },
+      { lane: 'gem', proof: NO_PROOF.stated, text: C6, fen: FEN, squares: ['c6'] },
+      { lane: 'threat', proof: NO_PROOF.stated, text: F1, fen: FEN, squares: ['f1', 'c4'] },
     ]);
     expect(d.lead?.lane).toBe('threat');
     expect(d.spoke).toEqual(expect.arrayContaining(['threat', 'gem']));
@@ -127,15 +128,15 @@ describe('WO-1b — one lead per turn', () => {
   it('the late wave: danger leads it; a description that adds nothing is still quiet', () => {
     const prior = { lane: 'gem' as const, squares: ['a1'] };
     const d = decideTurn([
-      { lane: 'pieceQuality', text: F3, fen: FEN, squares: ['f3', 'e5'] },
-      { lane: 'threat', text: F1, fen: FEN, squares: ['f1', 'c4'] },
+      { lane: 'pieceQuality', proof: NO_PROOF.stated, text: F3, fen: FEN, squares: ['f3', 'e5'] },
+      { lane: 'threat', proof: NO_PROOF.stated, text: F1, fen: FEN, squares: ['f1', 'c4'] },
     ], undefined, undefined, prior);
     expect(d.lead?.lane).toBe('threat');
     expect(d.held).toEqual(['pieceQuality']);
     expect(d.spoke).toEqual(['threat']);
     // …and a higher-ranked late fact does lead.
     const lower = { lane: 'pieceQuality' as const, squares: ['a1'] };
-    const d2 = decideTurn([{ lane: 'register', text: C6, fen: FEN, squares: ['c6'] }], undefined, undefined, lower);
+    const d2 = decideTurn([{ lane: 'register', proof: NO_PROOF.stated, text: C6, fen: FEN, squares: ['c6'] }], undefined, undefined, lower);
     expect(d2.lead?.lane).toBe('register');
   });
 
@@ -184,7 +185,7 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
   it('the kept fact carries its line through the door, and it replays into arrows', async () => {
     const { keptLines } = await import('./learnTurnDoor');
     const text = "You'd love to grab the pawn with Nxe5 — but they answer Nxe5 and the knight is gone.";
-    const d = decideTurn([{ lane: 'register', text, fen: FEN, lines: [{ fen: FEN, sans: ['Nxe5', 'Nxe5'] }] }]);
+    const d = decideTurn([{ lane: 'register', proof: NO_PROOF.stated, text, fen: FEN, lines: [{ fen: FEN, sans: ['Nxe5', 'Nxe5'] }] }]);
     expect(d.spoke).toEqual(['register']);
     const drawn = keptLines(d.pkg, 'w');
     expect(drawn[0].arrows.map((a) => `${a.from}${a.to}:${a.side}`)).toEqual(['f3e5:student', 'c6e5:opponent']);
@@ -203,15 +204,15 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
   });
   it('a fact that lost a sentence to the novelty set loses its lines with it', () => {
     const text = "You'd love to grab the pawn with Nxe5 — but they answer Nxe5 and the knight is gone. Your knight on f3 attacks the pawn on e5.";
-    const d = decideTurn([{ lane: 'register', text, fen: FEN, lines: [{ fen: FEN, sans: ['Nxe5', 'Nxe5'] }] }], 'Your knight on f3 attacks the pawn on e5.');
+    const d = decideTurn([{ lane: 'register', proof: NO_PROOF.stated, text, fen: FEN, lines: [{ fen: FEN, sans: ['Nxe5', 'Nxe5'] }] }], 'Your knight on f3 attacks the pawn on e5.');
     expect(d.pkg.kept[0]?.lines).toBeUndefined();
   });
   it('Learn hands every line-speaking producer\'s lines to the queue, and draws on-screen and earlier boards apart', () => {
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), registerNow, 'register', undefined, undefined, undefined, undefined, pendingRegisterLines\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), registerNow, 'register', .*?, undefined, undefined, undefined, undefined, pendingRegisterLines\)/);
     expect(TEACH_CODE).toMatch(/pendingRegisterLines = \[\{ fen: probe\.fen\(\), sans: \[compareRead\.bestSan\] \}/);
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, c\.squares, c\.claim \? \[c\.claim\] : undefined, c\.gradeFen, undefined, c\.lines, c\.stakes\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, .*?, c\.squares, c\.claim \? \[c\.claim\] : undefined, c\.gradeFen, undefined, c\.lines, c\.stakes\)/);
     expect(TEACH_CODE).toMatch(/fundamental\?\.lines\)/);
-    expect(TEACH_CODE).toMatch(/'fundamental', \[\], [^,]*\? \['convert-method'\] : undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines\)/);
+    expect(TEACH_CODE).toMatch(/'fundamental', NO_PROOF\.stated, \[\], [^,]*\? \['convert-method'\] : undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines\)/);
     expect(TEACH_CODE).toMatch(/keptLines\(hintPkg,/);
     // Their move's purpose leads over a board description (hand walk 2026-09-30, …g6).
     expect(TEACH_CODE).toMatch(/c\.kind === 'stopped' \? 'theirPurpose' as const/);
@@ -224,8 +225,8 @@ describe("their move's purpose leads over a description (hand walk 2026-09-30)",
     // The Ruy position after 20.Qd3 g6, student White to move.
     const fen = 'r2q1rk1/5p1p/p2p1bp1/1p1P4/8/3Q4/PPB2PPP/R1B1R1K1 w - - 0 21';
     const d = decideTurn([
-      { lane: 'positionFacts', text: 'Your queen on d3 takes aim at the center, hitting d4 and e4.', fen, squares: ['d3', 'd4', 'e4'] },
-      { lane: 'theirPurpose', text: 'g6 has a point: it stops the mate with Qxh7.', fen, squares: ['h7'] },
+      { lane: 'positionFacts', proof: NO_PROOF.stated, text: 'Your queen on d3 takes aim at the center, hitting d4 and e4.', fen, squares: ['d3', 'd4', 'e4'] },
+      { lane: 'theirPurpose', proof: NO_PROOF.stated, text: 'g6 has a point: it stops the mate with Qxh7.', fen, squares: ['h7'] },
     ]);
     expect(d.lead?.lane).toBe('theirPurpose');
     expect(d.spoke).toEqual(['theirPurpose']);
@@ -245,16 +246,16 @@ describe('a description restating the lead\'s piece is held (hand walk 2026-09-3
   const RUY = 'r2qk2r/2p1bppp/p1np1n2/1p2p3/4P1b1/1BPP1N2/PP3PPP/RNBQR1K1 w kq - 1 9';
   it('the pin speaks; "their bishop on g4 is their best piece" is held', () => {
     const d = decideTurn([
-      { lane: 'threat', text: 'Watch out — their bishop on g4 pins your knight on f3 against your queen on d1.', fen: RUY, squares: ['g4', 'f3', 'd1'] },
-      { lane: 'pieceQuality', text: 'Their bishop on g4 is the piece doing the most work for them — trading it off takes the sting out of the position.', fen: RUY, squares: ['g4'] },
+      { lane: 'threat', proof: NO_PROOF.stated, text: 'Watch out — their bishop on g4 pins your knight on f3 against your queen on d1.', fen: RUY, squares: ['g4', 'f3', 'd1'] },
+      { lane: 'pieceQuality', proof: NO_PROOF.stated, text: 'Their bishop on g4 is the piece doing the most work for them — trading it off takes the sting out of the position.', fen: RUY, squares: ['g4'] },
     ]);
     expect(d.spoke).toEqual(['threat']);
     expect(d.held).toEqual(['pieceQuality']);
   });
   it('a description that ADDS a square still rides as support', () => {
     const d = decideTurn([
-      { lane: 'threat', text: 'Watch out — their bishop on g4 pins your knight on f3 against your queen on d1.', fen: RUY, squares: ['g4', 'f3', 'd1'] },
-      { lane: 'positional', text: 'Your bishop on b3 bears down on f7, with your knight on f3 ready to join it.', fen: RUY, squares: ['f3', 'b3', 'f7'] },
+      { lane: 'threat', proof: NO_PROOF.stated, text: 'Watch out — their bishop on g4 pins your knight on f3 against your queen on d1.', fen: RUY, squares: ['g4', 'f3', 'd1'] },
+      { lane: 'positional', proof: NO_PROOF.stated, text: 'Your bishop on b3 bears down on f7, with your knight on f3 ready to join it.', fen: RUY, squares: ['f3', 'b3', 'f7'] },
     ]);
     expect(d.spoke).toContain('positional');
   });
@@ -294,9 +295,9 @@ describe('the fade — short phrasing when the skill is green (David 2026-09-30)
     expect(fadeWhenGreen('blunderCheck', TWO, new Set(['hung-material']))).toBe(TWO);
   });
   it('the door records the fade on its row', () => {
-    const d = decideTurn([{ lane: 'trade', text: TWO, fen: FEN }], undefined, undefined, null, new Set(['bad-trade']));
+    const d = decideTurn([{ lane: 'trade', proof: NO_PROOF.stated, text: TWO, fen: FEN }], undefined, undefined, null, new Set(['bad-trade']));
     expect(d.faded).toEqual(['trade']);
-    const cold = decideTurn([{ lane: 'trade', text: TWO, fen: FEN }], undefined, undefined, null, null);
+    const cold = decideTurn([{ lane: 'trade', proof: NO_PROOF.stated, text: TWO, fen: FEN }], undefined, undefined, null, null);
     expect(cold.faded).toEqual([]);
   });
 });
@@ -305,8 +306,8 @@ describe('the verdict on the student\'s own move is never held (Learn walk 2026-
   it('a back-rank threat leads and the blunder grade still speaks', () => {
     const fen = '4r2k/pp1R2pp/5r2/2P5/1P4P1/7P/3KR3/8 b - - 0 34';
     const d = decideTurn([
-      { lane: 'threat', text: 'Watch out — your king on h8 has no escape square and the back rank can be invaded from e2.', fen, squares: ['h8', 'e2'] },
-      { lane: 'mistake', text: 'Rf6 was a blunder — it let them win the pawn on e2. Rc8 was the move.', fen, squares: ['f6', 'c8'] },
+      { lane: 'threat', proof: NO_PROOF.stated, text: 'Watch out — your king on h8 has no escape square and the back rank can be invaded from e2.', fen, squares: ['h8', 'e2'] },
+      { lane: 'mistake', proof: NO_PROOF.stated, text: 'Rf6 was a blunder — it let them win the pawn on e2. Rc8 was the move.', fen, squares: ['f6', 'c8'] },
     ]);
     expect(d.spoke).toContain('threat');
     expect(d.spoke).toContain('mistake');
@@ -317,8 +318,8 @@ describe('beginner mode — the fundamental behind a slip always rides (David 20
   const LEAD = 'Their knight on c6 defends the pawn on e5.';
   const FUND = 'You moved the same piece twice — develop a new one first.';
   const facts = (): Parameters<typeof decideTurn>[0] => [
-    { lane: 'mistake', text: LEAD, fen: FEN, squares: ['c6', 'e5'] },
-    { lane: 'fundamental', text: FUND, fen: FEN, squares: ['g1'] },
+    { lane: 'mistake', proof: NO_PROOF.stated, text: LEAD, fen: FEN, squares: ['c6', 'e5'] },
+    { lane: 'fundamental', proof: NO_PROOF.stated, text: FUND, fen: FEN, squares: ['g1'] },
   ];
 
   it('an unrelated, unstaked aside waits for everyone else (2026-10-06: important is computed)', () => {
@@ -339,8 +340,8 @@ describe('ONE ORDER, NO HOLD (David 2026-10-05)', () => {
   const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
   it('a staked fact leads over a higher-lane unstaked one, and both speak', () => {
     const d = decideTurn([
-      { lane: 'planArc', text: 'Their plan is the queenside push.', fen: FEN, squares: ['b5'] },
-      { lane: 'positionFacts', text: 'Their knight on c6 is the glue — it alone holds e5.', fen: FEN, squares: ['c6', 'e5'], stakes: { points: 3, plies: 1 } },
+      { lane: 'planArc', proof: NO_PROOF.stated, text: 'Their plan is the queenside push.', fen: FEN, squares: ['b5'] },
+      { lane: 'positionFacts', proof: NO_PROOF.stated, text: 'Their knight on c6 is the glue — it alone holds e5.', fen: FEN, squares: ['c6', 'e5'], stakes: { points: 3, plies: 1 } },
     ]);
     expect(d.lead?.lane).toBe('positionFacts');
     expect(d.spoke).toEqual(expect.arrayContaining(['positionFacts', 'planArc']));
@@ -348,20 +349,20 @@ describe('ONE ORDER, NO HOLD (David 2026-10-05)', () => {
   it('five IMPORTANT facts on one move (a pawn or more at stake each): all five speak', () => {
     const st = { points: 1.5, plies: 0 };
     const d = decideTurn([
-      { lane: 'moveIntent', text: 'Your move stops Bb4.', fen: FEN, squares: ['b4'], stakes: st },
-      { lane: 'planArc', text: 'Their plan is the queenside push.', fen: FEN, squares: ['b5'], stakes: st },
-      { lane: 'openingIdea', text: 'Masters break with d5 here.', fen: FEN, squares: ['d5'], stakes: st },
-      { lane: 'gap', text: 'Their move left f7 undefended.', fen: FEN, squares: ['f7'], stakes: st },
-      { lane: 'positionFacts', text: 'Keep the tension on e5.', fen: FEN, squares: ['e5'], stakes: st },
+      { lane: 'moveIntent', proof: NO_PROOF.stated, text: 'Your move stops Bb4.', fen: FEN, squares: ['b4'], stakes: st },
+      { lane: 'planArc', proof: NO_PROOF.stated, text: 'Their plan is the queenside push.', fen: FEN, squares: ['b5'], stakes: st },
+      { lane: 'openingIdea', proof: NO_PROOF.stated, text: 'Masters break with d5 here.', fen: FEN, squares: ['d5'], stakes: st },
+      { lane: 'gap', proof: NO_PROOF.stated, text: 'Their move left f7 undefended.', fen: FEN, squares: ['f7'], stakes: st },
+      { lane: 'positionFacts', proof: NO_PROOF.stated, text: 'Keep the tension on e5.', fen: FEN, squares: ['e5'], stakes: st },
     ]);
     expect(d.spoke).toHaveLength(5);
   });
   it('five small asides: the lead and what must ride speak, the rest waits (not laborious)', () => {
     const d = decideTurn([
-      { lane: 'moveIntent', text: 'Your move stops Bb4.', fen: FEN, squares: ['b4'] },
-      { lane: 'openingIdea', text: 'Masters break with d5 here.', fen: FEN, squares: ['d5'] },
-      { lane: 'gap', text: 'Their move left f7 undefended.', fen: FEN, squares: ['f7'] },
-      { lane: 'positionFacts', text: 'Keep the tension on e5.', fen: FEN, squares: ['e5'], stakes: { points: 0.3, plies: 0 } },
+      { lane: 'moveIntent', proof: NO_PROOF.stated, text: 'Your move stops Bb4.', fen: FEN, squares: ['b4'] },
+      { lane: 'openingIdea', proof: NO_PROOF.stated, text: 'Masters break with d5 here.', fen: FEN, squares: ['d5'] },
+      { lane: 'gap', proof: NO_PROOF.stated, text: 'Their move left f7 undefended.', fen: FEN, squares: ['f7'] },
+      { lane: 'positionFacts', proof: NO_PROOF.stated, text: 'Keep the tension on e5.', fen: FEN, squares: ['e5'], stakes: { points: 0.3, plies: 0 } },
     ]);
     expect(d.spoke.length).toBeLessThan(4);
     expect(d.held.length).toBeGreaterThan(0);
@@ -372,9 +373,9 @@ describe('a danger turn stays on the danger (prod tape 2026-10-06)', () => {
   const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
   it('an off-topic plan waits; a fact on the danger squares speaks', () => {
     const d = decideTurn([
-      { lane: 'threat', text: 'Careful — your queen on d1 is attacked.', fen: FEN, squares: ['d1', 'g4'] },
-      { lane: 'planArc', text: 'Their plan is the queenside push.', fen: FEN, squares: ['b5'] },
-      { lane: 'moveIntent', text: 'Your move guards g4.', fen: FEN, squares: ['g4'] },
+      { lane: 'threat', proof: NO_PROOF.stated, text: 'Careful — your queen on d1 is attacked.', fen: FEN, squares: ['d1', 'g4'] },
+      { lane: 'planArc', proof: NO_PROOF.stated, text: 'Their plan is the queenside push.', fen: FEN, squares: ['b5'] },
+      { lane: 'moveIntent', proof: NO_PROOF.stated, text: 'Your move guards g4.', fen: FEN, squares: ['g4'] },
     ]);
     expect(d.spoke).toEqual(expect.arrayContaining(['threat', 'moveIntent']));
     expect(d.pkg.spoken).not.toContain('queenside push');
@@ -387,16 +388,16 @@ describe('one claim, one seat (unity U6, Learn walk #26)', () => {
   const FEN = '3q2k1/5ppp/8/3p4/8/8/5PPP/3R2K1 w - - 0 1';
   it('two facts on the same squares speak once — the bigger stake wins', () => {
     const d = decideTurn([
-      { lane: 'theirIntent', text: 'Their pawn on d5 is a discovered attack in waiting against the rook on d1.', fen: FEN, squares: ['d5', 'd1', 'd8'] },
-      { lane: 'tactic', text: 'Your rook on d1 pins their pawn on d5 against their queen on d8.', fen: FEN, squares: ['d1', 'd5', 'd8'] },
+      { lane: 'theirIntent', proof: NO_PROOF.stated, text: 'Their pawn on d5 is a discovered attack in waiting against the rook on d1.', fen: FEN, squares: ['d5', 'd1', 'd8'] },
+      { lane: 'tactic', proof: NO_PROOF.stated, text: 'Your rook on d1 pins their pawn on d5 against their queen on d8.', fen: FEN, squares: ['d1', 'd5', 'd8'] },
     ]);
     expect(d.spoke).toEqual(['tactic']);
     expect(d.held).toContain('theirIntent');
   });
   it('facts on different squares both stay in the running', () => {
     const d = decideTurn([
-      { lane: 'positional', text: 'Your pawn on h2 is weak.', fen: FEN, squares: ['h2'] },
-      { lane: 'tactic', text: 'Your rook on d1 pins their pawn on d5 against their queen on d8.', fen: FEN, squares: ['d1', 'd5', 'd8'] },
+      { lane: 'positional', proof: NO_PROOF.stated, text: 'Your pawn on h2 is weak.', fen: FEN, squares: ['h2'] },
+      { lane: 'tactic', proof: NO_PROOF.stated, text: 'Your rook on d1 pins their pawn on d5 against their queen on d8.', fen: FEN, squares: ['d1', 'd5', 'd8'] },
     ]);
     expect(d.held).not.toContain('tactic');
   });

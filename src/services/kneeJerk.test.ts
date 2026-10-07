@@ -3,7 +3,7 @@ import { kneeJerk } from './kneeJerk';
 
 describe('kneeJerk (P3 method beat)', () => {
   it('fires when the automatic recapture cost and the best was elsewhere', () => {
-    expect(kneeJerk('Bxf6', 'gxf6', 'Qh5', 180)).toMatch(/^Taking back was the reflex/);
+    expect(kneeJerk('Bxf6', 'gxf6', 'Qh5', 180)).toMatch(/^Taking back was the reflex — .*here Qh5 came first\./);
   });
   it('silent when the recapture was best, cheap, or not a recapture', () => {
     expect(kneeJerk('Bxf6', 'gxf6', 'Qxf6', 180)).toBeNull();

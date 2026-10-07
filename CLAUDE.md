@@ -2364,10 +2364,19 @@ board proves "nothing hangs" every move — that is a firehose).
 **THE SHAPE.** One type, `Proof` (`src/services/proof.ts`): `short` (the key
 move or the consequence) + `full` (the line played out) + `exact` (certain on
 the board vs an engine line) + the board's half (`line` drawn move by move,
-`squares` marked). Rendered by `withProof`. Each Learn lane declares
-`proof` in `COMPUTER_ROLES` (required — a new lane fails to compile until it
-answers); `computerRoles.proof.test.ts` holds the OWED count shrink-only.
-Carrying it today: `pinBreak`, `queenGrabTrap`, `planStopped`.
+`squares` marked). Rendered by `withProof`.
+
+🔴 **THE PROOF RIDES ON THE FACT — REQUIRED AT EVERY PRODUCER (David
+2026-10-07: "Root cause").** The first version kept proofs in a side map keyed
+by the sentence's lead clause and a hand-ticked `proof` column in
+`COMPUTER_ROLES` — a convention, and it was being ticked by reading prose. Both
+are DELETED. Now `FactProof` (a `Proof`, or a named `NoProof` reason: `name`,
+`description`, `method`, `stated`, `withheld`) is a REQUIRED field on
+`LaneFact`, `TeachingHint`, the deferred facts and `queueSpokenHint`, so a
+Learn line that cannot answer cannot compile; the door carries it on the kept
+fact and Why reads it from there. When you add a producer, answer with a real
+`Proof` wherever the computer has one; `stated` is only for a sentence that
+already says its evidence.
 
 **THE GUARDS — each is a foreseen backfire, do not drop one:**
 1. **Length.** Two sizes. Brief register and a skill the student has proven

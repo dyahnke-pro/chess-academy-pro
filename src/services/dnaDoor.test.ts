@@ -1,3 +1,4 @@
+import { NO_PROOF } from './proof';
 import { describe, expect, it } from 'vitest';
 import { decideTurn } from './learnTurnDoor';
 import { buildVoicePackage, stripMoveNumbers } from './voicePackage';
@@ -24,9 +25,9 @@ describe('the DNA outline at the door', () => {
   // keep the DNA beat — what the move does, then its cost.
   it('the beat order: danger first, then what the move does, then its cost', () => {
     const d = decideTurn([
-      { lane: 'threat', text: 'Their knight on c6 hits the pawn on e5.', fen: FEN, squares: ['c6', 'e5'] },
-      { lane: 'mistake', text: 'The knight on f3 left the pawn on e5 short of a defender.', fen: FEN, squares: ['f3', 'e5'] },
-      { lane: 'movePoint', text: 'The knight on f3 attacks the pawn on e5.', fen: FEN, squares: ['f3', 'e5'] },
+      { lane: 'threat', proof: NO_PROOF.stated, text: 'Their knight on c6 hits the pawn on e5.', fen: FEN, squares: ['c6', 'e5'] },
+      { lane: 'mistake', proof: NO_PROOF.stated, text: 'The knight on f3 left the pawn on e5 short of a defender.', fen: FEN, squares: ['f3', 'e5'] },
+      { lane: 'movePoint', proof: NO_PROOF.stated, text: 'The knight on f3 attacks the pawn on e5.', fen: FEN, squares: ['f3', 'e5'] },
     ]);
     const s = d.pkg.spoken;
     expect(s.indexOf('attacks the pawn')).toBeLessThan(s.indexOf('short of a defender'));

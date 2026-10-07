@@ -37,6 +37,7 @@
 //   4. What is spoken and what is logged are the same object. A package that
 //      reports something other than what the student heard is worse than no
 //      log at all.
+import type { FactProof } from './proof';
 import { Chess } from 'chess.js';
 import { gradeNarrationText } from './coachAnswerGates';
 import { falseConfigurationClaim } from './configurationClaims';
@@ -94,6 +95,9 @@ export type VoiceFactKind =
 
 export interface VoiceFact {
   kind: VoiceFactKind;
+  /** The proof that rides with this fact (proof.ts) — set by the Learn door
+   *  from the producer's REQUIRED answer; the Why button reads it. */
+  proof?: FactProof;
   /** THE CLAIMS THIS FACT MAKES, as keys computed where the fact is computed —
    *  a tactic is `concept:<type>:<squares>`, a positional idea is its idea key.
    *  The sentence ledger below catches the same WORDS twice; this catches the
