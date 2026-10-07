@@ -1,5 +1,15 @@
 # Questions for the swarm (from David, 2026-10-07)
 
+THE BAR (David): it must sound and feel like a real grandmaster chess coach is
+sitting next to the student, TEACHING them. Law: RULEBOOK.md.
+
+0. TEACHING TRACK: learn HOW the reference coach teaches (voiced corpus
+   public/data/voiced-teachings.json — 7,477 notes from 428 videos; the
+   speed-run study docs/plans/2026-09-24-speedrun-target.md; the teaching
+   census docs/plans/2026-09-27-naroditsky-teaching-census.md; the transcript
+   swarm-inputs/*.vtt), compare to our tapes, and design how the one thinking
+   chain teaches that way on every tab. His name is never used (F0d).
+
 1. ONE COACH: design the single thinking chain every computer feeds
    (Rulebook F0, F0b, F0c, F18) — goal / reason / obstacle / remove-it /
    tempting choice + why it fails / the line / the habit — and how every

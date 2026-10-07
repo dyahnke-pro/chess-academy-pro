@@ -7,6 +7,7 @@ when a rule changes; never edit a rule here alone.
 
 ## 1. The Foundation
 
+- **F00** — THE GOAL: it must sound and feel like a real grandmaster chess coach is sitting next to the student, TEACHING them. Every rule below serves this. A build that doesn't move the app toward it isn't finished.  _[new 2026-10-07]_
 - **F0** — THE HEART OF THE APP: the coach thinks out loud FOR the student. It already knows the answer, so it shows the student how to work it out (their thought process, said out loud) until they hear it in their own head. This is the behavior that teaches. Every computer exists to feed it. The student's record decides WHICH thoughts this student needs to hear most.  _[new 2026-10-07]_
 - **F0b** — Everything we build feeds one string of reasoning, each link joined by a reason: "You could do this, but then this happens." "The structure is like this, so you play over here." "They didn't castle, so you break open the middle." "You want to do this, but this is in the way, so you remove it first." A fact with no "so" or "but" attached is not finished teaching.  _[new 2026-10-07]_
 - **F0c** — The computers don't speak alone. Each computer's finding fills a ROLE in one thought: GOAL (what you want), REASON (why), OBSTACLE (what's in the way), REMOVE IT ("first this"), TEMPTING CHOICE and why it fails, THE LINE (with their reply), THE HABIT. ONE composer builds one coherent chain from those roles, on every surface. A finding that fills no role is not said.  _[CODE DISAGREES — to build]_
