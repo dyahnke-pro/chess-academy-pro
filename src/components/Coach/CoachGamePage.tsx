@@ -55,6 +55,7 @@ import { narrateMove } from '../../services/coachAgentRunner';
 import { useSettings } from '../../hooks/useSettings';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, pickTeachingReply, studentPlayingRating, prewarmTeachingReplies, opponentStrength, emitOpponentStrength } from '../../services/coachGameEngine';
 import { stockfishCache } from '../../services/stockfishCache';
+import { detectTacticType } from '../../services/missedTacticService';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
 import { DEFAULT_TIME_CONTROL_ID, TIME_CONTROLS, getTimeControlById, type ClockState } from '../../services/chessClock';
 import { shouldPersistFinishedGame } from '../../utils/coachGamePersistence';
@@ -3900,8 +3901,12 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // one fires. We reuse the Stockfish results we already computed
     // above (no extra engine cycle).
     if (analysis) {
-      const realTactics = tacticResult?.tactics.filter((t) => t.type !== 'none') ?? [];
-      const bestMoveWasTactical = realTactics.length > 0;
+      // WAS THE BEST MOVE TACTICAL — the one classifier Review and the record
+      // use (`detectTacticType`, census group 15), asked about the ENGINE'S
+      // MOVE. The old flag was "any tactic anywhere on the board", so a pin
+      // across the board made a quiet best move "a missed tactic".
+      const bestMoveWasTactical = !!engineBestMoveUci
+        && detectTacticType(preFen, engineBestMoveUci, livePv?.afterBest ? [engineBestMoveUci, ...livePv.afterBest] : undefined) !== 'tactical_sequence';
       const hasHangingPiece = !!(tacticResult && tacticResult.hangingPieces.length > 0);
       liveCoach.notifyPlayerMove({
         ply: moveCountRef.current,
