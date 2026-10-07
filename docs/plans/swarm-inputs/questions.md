@@ -19,3 +19,6 @@
    other fact, said once — never "here's what the masters do" on every move.
    STRONGEST IN OPENINGS (David): that is where exact master positions exist
    and where a real game teaches the idea best — start there.
+   DAVID'S EXAMPLE: while teaching the Catalan — "here's how Magnus plays the
+   Catalan", then a live example: one of his real games walked on the board
+   (credit for the game, never "he teaches"). Only a real game from the DB.
