@@ -17,6 +17,7 @@ import { lookupMasterPlay } from './masterPlayLookup';
 import { fetchLichessExplorer } from './lichessExplorerService';
 import type { MasterPlayResult } from './masterPlayTypes';
 import { explorerBandFor } from './ratingBands';
+import { MIN_BOOK_GAMES } from './bookDeparture';
 
 export interface TheoryLookup {
   (fen: string): Promise<MasterPlayResult>;
@@ -48,8 +49,8 @@ export interface TheoryDeparture {
   yourLevel: { san: string; games: number; pct: number } | null;
 }
 
-/** Book claims need real mass behind them. */
-const MIN_BOOK_GAMES = 20;
+/** Book claims need real mass behind them — the ONE bar, shared with Learn's
+ *  `bookDeparture` (census group 13: each file had declared its own 20). */
 /** Theory scanning stops here — nobody's "in book" at move 40. */
 const MAX_SCAN_PLIES = 30;
 
