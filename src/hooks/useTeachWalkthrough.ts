@@ -42,7 +42,7 @@ import { computeWatchGemAside } from '../services/gemCrushLines';
 import { playOutPunish, advantageAlreadyShown } from '../services/punishPlayout';
 import { computeThreatDelta, computeRouteDelta, type DeltaAside } from '../services/engineDeltaLines';
 import { squaresNamedIn } from '../utils/squaresNamedIn';
-import { buildReviewMoveBriefing, prevCaptureOf, NO_PREV_CAPTURE } from '../services/reviewMoveBriefing';
+import { lessonBeat, newLessonVoice, prevCaptureOf, NO_PREV_CAPTURE, type LessonVoice } from '../services/reviewMoveBriefing';
 import {
   isStartablePunishLesson,
   isValidConceptsQuestion,
@@ -908,6 +908,10 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     said: new Set(),
   });
   if (deltaSaidRef.current.tree !== tree) deltaSaidRef.current = { tree, said: new Set() };
+  // ONE LESSON VOICE per tree (the DNA template): an idea taught in full once,
+  // referred to after, and nothing said twice — the same door as Learn's.
+  const lessonVoiceRef = useRef<{ tree: WalkthroughTree | null; voice: LessonVoice }>({ tree: null, voice: newLessonVoice() });
+  if (lessonVoiceRef.current.tree !== tree) lessonVoiceRef.current = { tree, voice: newLessonVoice() };
 
   // BOARD-ORIENTATION-DRIVEN REGISTER (David 2026-07-31: "if the user flips
   // the board, I want the coach to flip how it addresses the different
@@ -1517,11 +1521,11 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
         const prev = prevSans.length === 0 ? NO_PREV_CAPTURE
           : prevCaptureOf(fenForPath(prevSans.slice(0, -1), treeRef.current?.startFen), prevSans[prevSans.length - 1]);
         const mover = new Chess(fenBefore).turn() === 'w' ? 'white' : 'black';
-        idea = buildReviewMoveBriefing({
+        idea = lessonBeat({
           fenBefore, san: node.san, prev,
           moverIsStudent: mover === (treeRef.current?.studentSide ?? 'white'),
           register: 'teach',
-        }) ?? '';
+        }, lessonVoiceRef.current.voice);
         narrationSquares = squaresNamedIn(idea);
       } else if (idea) {
         narrationSquares = squaresNamedIn(idea);

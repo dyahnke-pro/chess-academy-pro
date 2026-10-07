@@ -86,6 +86,7 @@ import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
 import { studentMoveTeaching, namedMoveArrows } from './learnBoardTeaching';
 import type { FacetTag } from './reviewFacetRank';
 import type { FactProof, Proof } from './proof';
+import { newPhraseMemory } from '../utils/phraseMemory';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
 
@@ -1762,6 +1763,9 @@ export function buildReviewSegments(
   // the PREVIOUS move's capture; updated at the end of each iteration.
   const PIECE_PTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
   let prevCap: { square: string | null; capturedValue: number } = { square: null, capturedValue: 0 };
+  // THE GAME'S PHRASE MEMORY (the DNA template): an idea said in full once in
+  // this review, referred to after.
+  const reviewPhrases = newPhraseMemory();
   for (let i = 0; i < usable; i++) {
     const m = moves[i];
     const fenPair = fenChain[i];
@@ -1791,7 +1795,7 @@ export function buildReviewSegments(
         || m.classification === 'blunder' || m.classification === 'brilliant' || m.classification === 'great'
         || (swingCp != null && Math.abs(swingCp) >= 150);
       return buildReviewMoveBriefing({
-        fenBefore: fenPair.fenBefore, san: m.san, prev: prevCap,
+        fenBefore: fenPair.fenBefore, san: m.san, prev: prevCap, phrases: reviewPhrases,
         moverIsStudent, studentSwingCp: swingCp, criticalMoment: critical,
         // The eval verdict + why (why the position is what it is) and the delta
         // (how this move moved it) — the reasons David wants to hear.

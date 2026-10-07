@@ -63,7 +63,7 @@ export function useProseReader(units: ProseUnit[], onComplete?: () => void): Pro
     // honored the brief cap, so on "brief" every paragraph was clipped to
     // ≤2 sentences / ≤30 words — the book read truncated. speakReadAloud
     // sets bypassVerbosity so the full passage is read.
-    await voiceService.speakReadAloud(sanitizeForTTS(scrubDescriptiveNotationForSpeech(text)));
+    await voiceService.speakVerbatim(sanitizeForTTS(scrubDescriptiveNotationForSpeech(text)));
   }, []);
 
   const playSequence = useCallback(

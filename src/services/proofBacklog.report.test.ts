@@ -104,7 +104,7 @@ describe('proof backlog — which producers owe a proof', { timeout: 600_000 }, 
         moves: synthMoves(pgnToSans(g.pgn ?? '')), playerColor: g.studentSide === 'black' ? 'black' : 'white',
         openingName: null, result: '*', playerRating: 1500, coachNarration: 'silent', uncapped: true,
       });
-      tape.push({ game: g.id, intro: n.intro, plies: n.segments.map((sg) => ({ ply: sg.ply, text: sg.narration })) });
+      tape.push({ game: g.id, intro: n.intro, plies: n.segments.map((sg) => ({ ply: sg.ply, text: sg.narration ?? '' })) });
     }
     off();
     const ranked = Object.entries(kinds).sort((a, b) => b[1] - a[1]);

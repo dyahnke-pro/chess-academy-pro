@@ -18,6 +18,7 @@ import { Chess } from 'chess.js';
 import { CENTRAL_SQUARES, CORE_CENTER, keyTargetSquares, kingZoneAmong, kingZoneClause } from './keySquares';
 import type { Move } from 'chess.js';
 import { describeStructure } from './boardStructure';
+import { sayIdea, type PhraseMemory } from '../utils/phraseMemory';
 
 // Q1 — OCCUPATION. A pawn reaching one of these has staked the centre.
 const CENTER = new Set(CORE_CENTER);
@@ -273,7 +274,7 @@ function pawnKickNextPoint(chessAfter: Chess, mv: Move, moverIsStudent: boolean)
 }
 
 /** LUFT — a quiet pawn step beside the CASTLED king that makes an escape square. */
-function luftPoint(chessAfter: Chess, mv: Move): string | null {
+function luftPoint(chessAfter: Chess, mv: Move, phrases: PhraseMemory | null = null): string | null {
   if (mv.piece !== 'p' || mv.captured) return null;
   const king = chessAfter.board().flat().find((c) => c && c.type === 'k' && c.color === mv.color);
   const backRank = mv.color === 'w' ? '1' : '8';
@@ -285,7 +286,7 @@ function luftPoint(chessAfter: Chess, mv: Move): string | null {
     && Math.abs(mv.to.charCodeAt(0) - king.square.charCodeAt(0)) <= 1
     && mv.to[1] === luftRank
   ) {
-    return 'Makes luft, a breathing hole for the king, so a back-rank check can never turn into mate.';
+    return sayIdea(phrases, 'luft', ['Makes luft, a breathing hole for the king, so a back-rank check can never turn into mate.', 'Makes luft — the same back-rank insurance.']);
   }
   return null;
 }
@@ -309,6 +310,20 @@ export function quietMovePoint(fenBefore: string, san: string): string | null {
  * silent"): the specific idea when there is one, else the universal teacher
  * (what the piece now attacks/controls, the file it takes, the king's journey).
  */
+/** THE CENTER FIGHT, said in full once a lesson — every developing move
+ *  fights for the center, and hearing it on every ply was the most repeated
+ *  phrase in the app (150 times over 25 lessons). */
+function centerFight(phrases: PhraseMemory | null, piece: string, squares: string, tail: string): string {
+  return sayIdea(phrases, 'center-fight', [
+    `The ${piece} bears down on ${squares}, fighting for the center${tail}.`,
+    `The ${piece} adds its weight to ${squares}${tail}.`,
+    `The ${piece} joins the fight for ${squares}${tail}.`,
+    `The ${piece} eyes ${squares} too${tail}.`,
+    `The ${piece} covers ${squares}${tail}.`,
+    `The ${piece} takes aim at ${squares}${tail}.`,
+  ]);
+}
+
 export function buildReviewMoveTeaching(
   fenBefore: string,
   san: string,
@@ -320,6 +335,9 @@ export function buildReviewMoveTeaching(
   // REQUIRED (oct3a review walk: the stronger-line playback took the default
   // and narrated the opponent's …f6 as "kicks their knight").
   moverIsStudent: boolean,
+  /** THE LESSON'S PHRASE MEMORY (the DNA template: say an idea in full once,
+   *  then refer to it). Null for a one-off read. */
+  phrases: PhraseMemory | null = null,
 ): string | null {
   const chess = new Chess(fenBefore);
   let mv: Move;
@@ -334,10 +352,10 @@ export function buildReviewMoveTeaching(
 
   // Castling — the idea is king safety + rook activation, not "castles".
   if (mv.san.startsWith('O-O-O')) {
-    return 'The king finds shelter on the queenside and the rook swings toward the open center.';
+    return sayIdea(phrases, 'castle-long', ['The king finds shelter on the queenside and the rook swings toward the open center.', 'The king goes long, and the rook comes to the center.']);
   }
   if (mv.san.startsWith('O-O')) {
-    return 'The king is tucked safely away and the rook connects to the center.';
+    return sayIdea(phrases, 'castle', ['The king is tucked safely away and the rook connects to the center.', 'The king steps out of the middle.', 'The king is castled and the rook is in play.']);
   }
 
   // A CONCRETE THREAT LEADS over the developing gloss (David 2026-09-07: "it
@@ -389,13 +407,13 @@ export function buildReviewMoveTeaching(
   const isDevelopingGloss = !minorAttacksPiece && !mv.san.includes('+');
   if (mv.piece === 'n' && isDevelopingGloss) {
     const targets = knightCentralTargets(chess, mv.to, mv.color);
-    if (targets.length) return `The knight bears down on ${list(targets)}, fighting for the center.`;
+    if (targets.length) return centerFight(phrases, 'knight', list(targets), '');
     // no central target → fall through to the light developing tag
   }
   if (mv.piece === 'b' && isDevelopingGloss) {
     if (FIANCHETTO.has(mv.to)) return 'The bishop takes aim along the long diagonal.';
     const targets = bishopCentralTargets(chess, mv.to, mv.color);
-    if (targets.length) return `The bishop rakes toward ${list(targets)}.`;
+    if (targets.length) return sayIdea(phrases, 'bishop-rakes', [`The bishop rakes toward ${list(targets)}.`, `The bishop aims at ${list(targets)}.`, `The bishop lines up on ${list(targets)}.`, `The bishop looks at ${list(targets)}.`]);
     // no central target → fall through to the light developing tag
   }
 
@@ -438,7 +456,7 @@ export function buildReviewMoveTeaching(
     // and "f4, gains space and cramps the opponent" was said of a runner in a
     // pawn race (calc hand walk 2026-10-01).
     if (!mv.captured && CENTER.has(mv.to) && hasPieces(chess)) {
-      return 'Stakes a claim in the center and opens lines for the pieces.';
+      return sayIdea(phrases, 'pawn-center', ['Stakes a claim in the center and opens lines for the pieces.', 'Takes its share of the center.', 'It adds another pawn to the center.']);
     }
     if (!mv.captured && BROAD_CENTER.has(mv.to) && (toRank === 4 || toRank === 5) && hasPieces(chess)) {
       // A c/f-file pawn that ATTACKS a central square is fighting for the centre
@@ -455,14 +473,14 @@ export function buildReviewMoveTeaching(
           && CENTER.has(`${String.fromCharCode(97 + af)}${ar + 1}`),
       );
       return strikesCenter
-        ? 'Fights for the center from the flank, striking at the central squares.'
+        ? sayIdea(phrases, 'pawn-flank', ['Fights for the center from the flank, striking at the central squares.', 'Hits the center from the side.', 'Leans on the center from the flank.'])
         : 'Gains space and cramps the opponent.';
     }
     // LUFT — a pawn beside the CASTLED king making an escape square. Board-true:
     // the king sits on its castled back-rank square and this pawn just advanced
     // one rank on an adjacent file. That's back-rank insurance, a real teaching
     // point currently spoken as silence.
-    const luft = pawnKickPoint(chess, mv, moverIsStudent) ?? luftPoint(chess, mv) ?? pawnKickNextPoint(chess, mv, moverIsStudent);
+    const luft = pawnKickPoint(chess, mv, moverIsStudent) ?? luftPoint(chess, mv, phrases) ?? pawnKickNextPoint(chess, mv, moverIsStudent);
     if (luft) return luft;
     // quiet pawn with no structural point → fall through to the universal teacher
   }
@@ -489,7 +507,8 @@ export function buildReviewMoveTeaching(
   // wins the exchange). A defended equal/lesser piece is NOT "pressure" (the
   // 2026-09-07 fail: false "pressure" on a defended knight/pawn).
   if (winnableTarget) {
-    return `The ${PIECE_NOUN[mv.piece]} trains on the ${PIECE_NOUN[winnableTarget.type]} on ${winnableTarget.sq} — pressure they have to answer.`;
+    const p = PIECE_NOUN[mv.piece]; const t = `${PIECE_NOUN[winnableTarget.type]} on ${winnableTarget.sq}`;
+    return sayIdea(phrases, 'pressure', [`The ${p} trains on the ${t} — pressure they have to answer.`, `The ${p} hits the ${t}.`, `The ${p} goes after the ${t}.`]);
   }
   // (c) A rook or queen seizing a file.
   if (mv.piece === 'r' || mv.piece === 'q') {
@@ -515,7 +534,7 @@ export function buildReviewMoveTeaching(
   const central = eyes.controlled.filter((s) => targets.includes(s));
   if (central.length) {
     const nearKing = kingZoneAmong(central, chess, mv.color === 'w' ? 'white' : 'black');
-    return `The ${PIECE_NOUN[mv.piece]} clamps down on ${list(central)}, fighting for the center${kingZoneClause(nearKing)}.`;
+    return centerFight(phrases, PIECE_NOUN[mv.piece], list(central), kingZoneClause(nearKing));
   }
   const advanced = coverageTeaches ? eyes.controlled.filter((s) => (mv.color === 'w' ? Number(s[1]) >= 5 : Number(s[1]) <= 4)) : [];
   if (advanced.length) {

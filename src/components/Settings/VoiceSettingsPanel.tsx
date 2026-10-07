@@ -115,7 +115,7 @@ export function VoiceSettingsPanel(): JSX.Element {
     // Defense-in-depth: route the Polly preview through sanitizeForTTS
     // just like every live-coach path. Current string has no chess
     // shorthand, but future edits won't leak "Nc3" into spoken audio.
-    const previewText = sanitizeForTTS('Great move! You found the key idea in this position.');
+    const previewText = sanitizeForTTS('Your knight on f3 eyes the e5 square and the center.');
     const url = getTtsUrl(previewText, pollyVoice);
     const audio = new Audio(url);
 
@@ -157,7 +157,7 @@ export function VoiceSettingsPanel(): JSX.Element {
     }
     // Defense-in-depth: route even hardcoded previews through the
     // sanitizer so future string changes can't leak chess shorthand.
-    void speechService.speak(sanitizeForTTS('Great move! You found the key idea in this position.'), {
+    void speechService.speak(sanitizeForTTS('Your knight on f3 eyes the e5 square and the center.'), {
       rate: voiceSpeed,
     });
     setTimeout(() => setSystemPreviewPlaying(false), 3000);

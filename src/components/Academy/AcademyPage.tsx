@@ -94,7 +94,7 @@ export function AcademyPage(): JSX.Element {
       for (const chunk of chunks) {
         if (token !== tokenRef.current) return;
         try {
-          await voiceService.speakReadAloud(chunk);
+          await voiceService.speakVerbatim(chunk);
         } catch {
           /* interrupted — stop/skip handles state */
         }

@@ -81,10 +81,10 @@ describe('the taught line with the provider dead', () => {
     // to the start: where a corpus note or the authored variation prose
     // teaches this ply, that note LEADS and the computed beat fills behind
     // it (PASS 1's two-beat contract).
-    const own = (n: WalkthroughTreeNode): RegExp => new RegExp(`${n.movedBy === tree.studentSide ? 'You' : 'They'} play ${n.san}(,| —)`);
+    const own = (n: WalkthroughTreeNode): RegExp => new RegExp(`${n.movedBy === tree.studentSide ? 'You' : 'They'} play ${n.san}(,| —|:)`);
     for (const n of plies.slice(0, 4)) expect(n.idea, `ply ${n.san}`).toMatch(own(n));
     expect(spoken[0]).toMatch(/play e4( —|,)/);
-    expect(spoken[3]).toMatch(/play Nf6,/);
+    expect(spoken[3]).toMatch(/play Nf6(,| —|:)/);
     // The Brief cue is computed too (≤ 60 chars, names the move).
     expect(plies[0].shortIdea).toMatch(/^e4 — /);
     expect(plies[3].shortIdea).toMatch(/^Nf6 — /);

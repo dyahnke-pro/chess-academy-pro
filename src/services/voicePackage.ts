@@ -42,6 +42,8 @@ import { Chess } from 'chess.js';
 import { gradeNarrationText } from './coachAnswerGates';
 import { falseConfigurationClaim } from './configurationClaims';
 import { claimSentences } from '../utils/claimSentences';
+import { DNA_REFUSE, stripMoveNumbers } from './dnaRules';
+export { stripMoveNumbers } from './dnaRules';
 
 /** What produced this line. Also its priority — see `RANK`. */
 export type VoiceFactKind =
@@ -275,22 +277,8 @@ const NOT_SPEAKABLE: Array<{ re: RegExp; why: string }> = [
   { re: /\bNEVER (?:say|invent|repeat)\b/i, why: 'instruction to a model' },
 ];
 
-/** THE DNA VOICE RULES (docs/DNA-outline.md), held at the one door every
- *  spoken fact passes (Learn and Review). The computers are written to them;
- *  this is the backstop, and a fact it refuses is a template to fix.
- *  • no praise or acknowledgement — the position is the acknowledgement;
- *  • no interface talk — the voice knows the position, not the buttons. */
-const DNA_REFUSE: Array<{ re: RegExp; why: string }> = [
-  // Sentence-OPENING praise only: "the only good move here" is teaching.
-  { re: /(?:^|[.!?]\s+)(?:great|nice|good|excellent|brilliant|well)\s+(?:move|job|find|done|play|shot)\b|\bwell done\b|\bgood job\b|(?:^|[.!?]\s+)(?:excellent|correct|great|nice|perfect)[!.]/i, why: 'dna: praise' },
-  { re: /\b(?:tap|click|press)\s+(?:the|a|on)\b|\b(?:button|menu)\b/i, why: 'dna: interface talk' },
-];
-/** DNA rule 7 — no move-number prefixes ("12.Nf3" is read "twelve"). A
- *  rephrase, never a drop: the move stays, the number goes. */
-export function stripMoveNumbers(text: string): string {
-  return text.replace(/(?<![\w.])\d{1,3}\s?(?:\.\.\.|…|\.)\s?(?=(?:[NBRQK][a-h1-8x]|O-O|[a-h][1-8x]))/g, (m) => (/(?:\.\.\.|…)/.test(m) ? '…' : ''));
-}
-
+/** THE DNA VOICE RULES (docs/DNA-outline.md) — one source, `dnaRules`: the
+ *  same rules the voice chokepoint holds for every surface. */
 /**
  * A sentence CONDITIONAL on a move ("Na7+? That drops the knight on a7.", "If
  * you play Rxd6, …", "After Bxf7+, …") describes the board AFTER that move, so

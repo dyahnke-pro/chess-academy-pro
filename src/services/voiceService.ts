@@ -12,6 +12,7 @@ import type { CoachPersonality } from '../coach/types';
 import { useAppStore } from '../stores/appStore';
 import { resolveCoachNarration, applyBriefVoiceCap } from '../utils/coachNarration';
 import { localizeSpokenText, spokenLanguageName } from './spokenLanguage';
+import { dnaPass } from './dnaRules';
 
 /** Shape of `window.ManagedMediaSource` on iOS Safari 17.1+. Not in
  *  lib.dom.d.ts yet, so we describe just the surface we use:
@@ -1283,6 +1284,14 @@ class VoiceService {
     return this.speakInternal(sanitizeForTTS(text), true, { bypassVerbosity: true });
   }
 
+  /** A PASSAGE READ AS WRITTEN — a public-domain book the student asked to
+   *  hear. The read-aloud exemption, plus the one exemption from the DNA pass:
+   *  a quote is not the coach's voice, so it is never rephrased or cut. */
+  async speakVerbatim(text: string): Promise<void> {
+    this.logSpeakInvoked('speakVerbatim', text);
+    return this.speakInternal(sanitizeForTTS(text), true, { bypassVerbosity: true, verbatim: true });
+  }
+
   /**
    * Speak LLM-generated commentary that makes claims about the CURRENT board,
    * GROUNDED against `fen`. Any sentence that isn't true on the board (e.g.
@@ -1359,7 +1368,7 @@ class VoiceService {
   private async speakInternal(
     rawText: string,
     force: boolean,
-    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean; sentenceFirst?: boolean },
+    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean; sentenceFirst?: boolean; verbatim?: boolean },
   ): Promise<void> {
     this.utterancesInFlight += 1;
     try {
@@ -1372,7 +1381,7 @@ class VoiceService {
   private async speakInternalTracked(
     rawText: string,
     force: boolean,
-    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean; sentenceFirst?: boolean },
+    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean; sentenceFirst?: boolean; verbatim?: boolean },
   ): Promise<void> {
     // ── ONE SPACE BETWEEN TWO SENTENCES (prod, week of 2026-09-11) ──────────
     // A user heard, as one run-on:
@@ -1388,6 +1397,33 @@ class VoiceService {
     // normalised text is what the ledger and the cap then see, so a line that
     // differs only by this gap is correctly treated as the same line.
     let text = rawText.replace(/([.!?])([A-Z])/g, '$1 $2');
+    // ── THE DNA, CODE SIDE, FOR EVERY SURFACE (David 2026-10-07: "All
+    // narrations everywhere need to pass through this. On the code side, not
+    // the llm side"). Sixty speaking files never reached the voice package's
+    // door; every one of them reaches this line. The context-free rules run
+    // here — move numbers rephrased away, a sentence of praise or interface
+    // talk cut (the sentence, never the line). Say-once and rotated wording
+    // need to know what a lesson already said and stay at the surface doors.
+    // Kids keep milestone praise and tap instructions (their contract); a book
+    // passage the student asked to hear is read as written.
+    {
+      const kid = typeof window !== 'undefined' && window.location?.pathname?.startsWith('/kid');
+      const dna = dnaPass(text, { kid, verbatim: opts?.verbatim });
+      if (dna.refused.length > 0) {
+        const cutFrom = text;
+        void import('./appAuditor').then(({ logAppAudit }) => {
+          void logAppAudit({
+            kind: 'voice-speak-invoked',
+            category: 'subsystem',
+            source: 'voiceService.speakInternal.dna',
+            summary: `dna cut ${dna.refused.length} sentence(s): ${dna.refused.join(', ')}`,
+            narrationText: cutFrom,
+          });
+        }).catch(() => { /* telemetry never blocks the voice */ });
+      }
+      text = dna.text;
+      if (!text) return;
+    }
     // Coach Narration = "silent" is the highest-priority gate: when
     // the user has explicitly set Settings → Coach → Coach Narration
     // to Silent, NO coach-driven speech fires anywhere in the app,

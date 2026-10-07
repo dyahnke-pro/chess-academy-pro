@@ -37,8 +37,12 @@ import { describeStructure } from './boardStructure';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
 import { shieldLoss } from './kingSafety';
 import { PIECE_NAMES } from '../types/tacticTypes';
+import type { PhraseMemory } from '../utils/phraseMemory';
+import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
 
 const PIECE_WORD = PIECE_NAMES;
+/** The piece a SAN names by its first letter (a pawn move names none). */
+const SAN_PIECE: Record<string, string> = { N: 'knight', B: 'bishop', R: 'rook', Q: 'queen', K: 'king' };
 
 interface Aspect {
   /** Seat-agnostic clause fragment ("winning the knight", "threatening Nxc7 — a fork"). */
@@ -162,6 +166,10 @@ export interface ReviewMoveBriefingInput {
    *  recapture Nxe3 as "winning the bishop" (census group 6, 2026-10-07).
    *  `prevCaptureOf` builds it; NO_PREV_CAPTURE for a first move. */
   prev: PrevCaptureContext;
+  /** THE LESSON'S PHRASE MEMORY (`phraseMemory`) — REQUIRED, null for a
+   *  one-off read: a lesson that never shares one says "fighting for the
+   *  center" on every developing move (150 times over 25 lessons). */
+  phrases: PhraseMemory | null;
   /** true = student's move ("you"), false = opponent's ("they"), undefined = seat-free. */
   moverIsStudent?: boolean;
   /** Student-POV eval swing of THIS move in centipawns (evalAfter − evalBefore,
@@ -292,7 +300,7 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
   // 10. The positional idea — the quiet fallback so a purely developing move
   //     still teaches (buildReviewMoveTeaching never returns null).
   if (aspects.length === 0 || aspects.every((a) => a.weight < 40)) {
-    const concept = buildReviewMoveTeaching(fenBefore, san, moverIsStudent !== false);
+    const concept = buildReviewMoveTeaching(fenBefore, san, moverIsStudent !== false, input.phrases);
     if (concept) aspects.push({ text: toClause(concept), weight: 25 });
   }
 
@@ -363,6 +371,41 @@ function joinReview(clauses: string[], moverIsStudent: boolean | undefined, san:
     const sep = c.startsWith('but ') ? ', ' : ', ';
     return acc + sep + c;
   }, '');
-  const lead = moverIsStudent === undefined ? subject : `${subject}${cleanSan(san)}${body.startsWith('it ') ? ' — ' : ', '}`;
-  return `${lead}${body}.`;
+  // A gerund list reads after a comma ("You play Nxe3, taking back the
+  // bishop"); a clause with its own subject takes a dash ("You play Nf3 — the
+  // knight trains on …"). A comma there spliced two sentences.
+  // The move just named its piece: "You play Nf3 — the knight trains on …"
+  // says the knight twice. The piece it names is "it".
+  const named = SAN_PIECE[cleanSan(san)[0]] ?? (/^[a-h]/.test(cleanSan(san)) ? 'pawn' : null);
+  const said = named && body.startsWith(`the ${named} `) ? `it ${body.slice(`the ${named} `.length)}` : body;
+  // A clause that carries its own dash takes a colon, so one sentence never
+  // holds two dashes ("Be6 — it unpins … — and the bishop eyes …").
+  const joiner = /^\w+ing\b/.test(said) ? ', ' : said.includes(' — ') ? ': ' : ' — ';
+  const lead = moverIsStudent === undefined ? subject : `${subject}${cleanSan(san)}${joiner}`;
+  return `${lead}${said}.`;
+}
+
+
+/** ONE LESSON'S VOICE: the phrase memory (say an idea once, then refer) and
+ *  the say-once ledger every DNA door keeps. One per lesson; a branch takes a
+ *  copy of the spine's, so each line it continues still remembers the spine. */
+export interface LessonVoice { phrases: PhraseMemory; keys: Set<string> }
+export function newLessonVoice(): LessonVoice { return { phrases: new Map(), keys: new Set() }; }
+export function forkLessonVoice(v: LessonVoice): LessonVoice { return { phrases: new Map(v.phrases), keys: new Set(v.keys) }; }
+
+/** A LESSON BEAT THROUGH THE DNA DOOR (David 2026-10-07: "pass all narrations
+ *  through Danya's DNA template"). The computed briefing, said through the
+ *  same `buildVoicePackage` Learn and Review speak through — praise, interface
+ *  talk and move numbers cut, the board-truth grade applied, and a sentence or
+ *  claim this lesson already said dropped — with the lesson's phrase memory so
+ *  an idea is taught in full once and referred to after. '' when nothing is
+ *  left to say: silence beats a repeat. */
+export function lessonBeat(input: Omit<ReviewMoveBriefingInput, 'phrases'>, voice: LessonVoice): string {
+  const raw = buildReviewMoveBriefing({ ...input, phrases: voice.phrases });
+  if (!raw) return '';
+  let fenAfter = input.fenBefore;
+  try { const c = new Chess(input.fenBefore); c.move(input.san); fenAfter = c.fen(); } catch { return ''; }
+  const pkg = buildVoicePackage([{ kind: 'computed', text: raw, fen: fenAfter }], undefined, voice.keys);
+  for (const k of spokenSentenceKeys(pkg)) voice.keys.add(k);
+  return pkg.spoken;
 }

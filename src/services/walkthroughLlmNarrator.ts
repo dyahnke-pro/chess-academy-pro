@@ -25,7 +25,7 @@
  */
 import { Chess } from 'chess.js';
 import { isGenericAnnotationText } from './walkthroughNarration';
-import { buildReviewMoveBriefing } from './reviewMoveBriefing';
+import { lessonBeat, newLessonVoice, type LessonVoice } from './reviewMoveBriefing';
 import { prevCaptureOf, NO_PREV_CAPTURE, type PrevCaptureContext } from './pvPlayback';
 
 export interface WalkthroughNarrationInput {
@@ -91,10 +91,12 @@ function computeWalkthroughNarrations(input: WalkthroughNarrationInput): Walkthr
   }
 
   const existing = input.existingNarrations ?? [];
+  // One voice for the whole line, said in play order (the DNA template).
+  const voice = newLessonVoice();
   const narrations = perMove.map((ctx, i) => {
     const curated = (existing[i] ?? '').trim();
     if (curated && !isGenericAnnotationText(curated)) return curated;
-    return computeFill(ctx, input.studentSide);
+    return computeFill(ctx, input.studentSide, voice);
   });
   return { narrations, fromCache: false };
 }
@@ -134,15 +136,15 @@ function buildPerMoveContext(startFen: string, sanMoves: string[]): PerMoveConte
 /** The computed fill for one ply — board-true by construction (chess.js
  *  replay), seat-stamped when the seat is known. '' when the move did
  *  nothing nameable: silence is allowed, filler is not. */
-export function computeFill(ctx: PerMoveContext, studentSide?: 'white' | 'black'): string {
+export function computeFill(ctx: PerMoveContext, studentSide: 'white' | 'black' | undefined, voice: LessonVoice): string {
   try {
-    return buildReviewMoveBriefing({
+    return lessonBeat({
       fenBefore: ctx.fenBefore,
       san: ctx.san,
       prev: ctx.prev,
       moverIsStudent: studentSide ? ctx.mover === studentSide : undefined,
       register: 'teach',
-    }) ?? '';
+    }, voice);
   } catch {
     return '';
   }

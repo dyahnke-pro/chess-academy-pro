@@ -88,6 +88,9 @@ describe('useTeachWalkthrough', () => {
   });
 
   it('advances through linear moves, then WAITS at the fork for the pick', async () => {
+    // A voice that takes time to speak: the computed lesson line is a full
+    // sentence, and an instant return trips speakPaced's reading-time hold.
+    vi.mocked(voiceService.speakForced).mockImplementation(() => new Promise((r) => setTimeout(r, 350)));
     const { result } = renderHook(() => useTeachWalkthrough());
     act(() => {
       result.current.start(SMOKE_TREE);
@@ -139,6 +142,7 @@ describe('useTeachWalkthrough', () => {
     expect(result.current.pathSans).toEqual(['e4', 'e5', 'Nc3']);
     expect(result.current.canBacktrack).toBe(true);
     expect(result.current.leafOutro).toBe('outro line');
+    vi.mocked(voiceService.speakForced).mockResolvedValue(undefined);
   });
 
   it('backtrackToLastFork restores the fork phase and trims the path', async () => {

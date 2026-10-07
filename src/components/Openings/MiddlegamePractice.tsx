@@ -7,8 +7,8 @@ import { stockfishEngine } from '../../services/stockfishEngine';
 import { groundedMoveFeedback } from '../../services/coachApi';
 import { buildFedTacticsContext } from '../../services/liveTacticsContext';
 import { applyCandidateArrows } from '../../services/coachAnswerGates';
-import { speechService } from '../../services/speechService';
-import { sanitizeForTTS } from '../../services/voiceService';
+
+import { voiceService } from '../../services/voiceService';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { DiscussionPracticePanel } from './DiscussionPracticePanel';
 import { useAppStore } from '../../stores/appStore';
@@ -300,7 +300,7 @@ export function MiddlegamePractice({
         // "rook to f8 dot dot dot d8" at the start of every reply.
         // sanitizeForTTS still expands any inline SAN inside the
         // body to plain English.
-        void speechService.speak(sanitizeForTTS(stripLeadingMoveCitation(grounded)));
+        void voiceService.speakForced(stripLeadingMoveCitation(grounded));
       }
     } catch {
       if (isMountedRef.current) {
@@ -350,18 +350,18 @@ export function MiddlegamePractice({
   // panel still shows the question visually).
   useEffect(() => {
     if (isNarrating && discussion.phase === 'asking' && discussion.prompt) {
-      void speechService.speak(sanitizeForTTS(discussion.prompt.question));
+      void voiceService.speakForced(discussion.prompt.question);
     }
   }, [isNarrating, discussion.phase, discussion.prompt]);
   useEffect(() => {
     if (isNarrating && discussion.phase === 'teaching' && discussion.teach) {
-      void speechService.speak(sanitizeForTTS(discussion.teach));
+      void voiceService.speakForced(discussion.teach);
     }
   }, [isNarrating, discussion.phase, discussion.teach]);
 
   const toggleNarration = useCallback(() => {
     if (isNarrating) {
-      speechService.stop();
+      voiceService.stop();
     }
     setIsNarrating((prev) => !prev);
   }, [isNarrating]);

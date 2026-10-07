@@ -75,6 +75,28 @@ export function lineProofFromUci(fen: string, uci: readonly string[]): Proof | n
   return lineProof({ fen, sans });
 }
 
+/** THE SQUARES A GEOMETRY CLAIM RESTS ON — certain on the board (the
+ *  detector read them off it), marked when the student asks Why. The proof
+ *  of "their bishop pins your knight to your queen" IS those three squares.
+ *  Null with no squares: nothing to show is no proof. */
+export function squaresProof(claim: string, squares: readonly string[]): Proof | null {
+  const sq = squares.filter((x) => /^[a-h][1-8]$/.test(x));
+  if (sq.length === 0) return null;
+  const body = claim.replace(/\s+$/, '');
+  return { kind: 'squares', exact: true, short: body, full: body, squares: sq };
+}
+
+/** A line given as moves from `fen`, kept only if every move is legal there
+ *  (SAN or coordinates) — a proof that cannot be played is no proof. */
+export function legalLineProof(fen: string, moves: readonly string[], exact = false): Proof | null {
+  const sans: string[] = [];
+  try {
+    const c = new Chess(fen);
+    for (const mv of moves) sans.push(c.move(mv).san);
+  } catch { return null; }
+  return lineProof({ fen, sans }, exact);
+}
+
 /** WHY A SPOKEN FACT HAS NO SEPARATE PROOF — answered at every producer, so a
  *  bare conclusion cannot compile (David 2026-10-07: "Root cause").
  *   name        — a name from the DB (an opening, a structure); nothing to prove

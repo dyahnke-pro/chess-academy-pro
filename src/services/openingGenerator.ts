@@ -51,7 +51,7 @@ import { gradeNarrationText, gradeNarrationAcrossLine } from './coachAnswerGates
 import { narrateContinuationMove } from './continuationMoveNarration';
 import { logAppAudit } from './appAuditor';
 import { buildDanyaTeachingBlock, noteAtPosition, spokenBeatText } from './danyaTeachingService';
-import { buildReviewMoveBriefing } from './reviewMoveBriefing';
+import { forkLessonVoice, lessonBeat, newLessonVoice, type LessonVoice } from './reviewMoveBriefing';
 import { authoredNoteAt, authoredEntryFor } from './authoredOpeningNotes';
 import { landedTacticTeaching } from './dnaLineNarrator';
 import authoredRepertoire from '../data/repertoire.json';
@@ -1692,15 +1692,18 @@ export interface TeachEntryOverride {
  *  beat cannot be a board lie and is identical with the provider dead. The
  *  corpus note still LEADS the beat and the computed beat fills behind it
  *  (PASS 1); the phrasing pass is the one chokepoint, `voiceFacts`. */
-function computedPlyBeat(fenBefore: string, san: string, moverIsStudent: boolean, prev: PrevCaptureContext): string {
+function computedPlyBeat(fenBefore: string, san: string, moverIsStudent: boolean, prev: PrevCaptureContext, voice: LessonVoice): string {
   try {
-    return buildReviewMoveBriefing({
+    // Through the DNA door, with the lesson's own memory: an idea is taught
+    // in full once and referred to after (David 2026-10-07: "teach me x has a
+    // lot of repeated phrases" — 2,167 repeats over 25 lessons).
+    return lessonBeat({
       fenBefore,
       san: stripSanAnnotations(san),
       prev,
       moverIsStudent,
       register: 'teach',
-    }) ?? '';
+    }, voice);
   } catch {
     return '';
   }
@@ -1920,9 +1923,10 @@ async function generateOpeningFromDbNarration(
   // the board, seat-stamped. Tour mode keeps every beat to its first sentence
   // (the student wants a quick playthrough, not a lecture).
   const startFenForBeats = new Chess().fen();
+  const spineVoice = newLessonVoice();
   const computedBeats: string[] = positions.map((p, i) => {
     const prev = i === 0 ? NO_PREV_CAPTURE : prevCaptureOf(i === 1 ? startFenForBeats : positions[i - 2].fen, positions[i - 1].san);
-    const beat = computedPlyBeat(i === 0 ? startFenForBeats : positions[i - 1].fen, p.san, p.movedBy === studentSide, prev);
+    const beat = computedPlyBeat(i === 0 ? startFenForBeats : positions[i - 1].fen, p.san, p.movedBy === studentSide, prev, spineVoice);
     return pace === 'tour' ? firstSentence(beat) : beat;
   });
   const computedShorts: Array<string | undefined> = positions.map((p, i) =>
@@ -1989,7 +1993,16 @@ async function generateOpeningFromDbNarration(
     // learning) and then says what its first move does — computed from the
     // terminus board, never authored.
     const terminusPrev = prevCaptureOf(positions.length >= 2 ? positions[positions.length - 2].fen : new Chess().fen(), positions[positions.length - 1].san);
-    const branchBeat = branchSeq[0] ? computedPlyBeat(terminusFen, b.san, branchMovedBy === studentSide, terminusPrev) : '';
+    // Each branch continues the spine's lesson: it remembers what the spine
+    // already taught, and its own extension beats are said in play order.
+    const branchVoice = forkLessonVoice(spineVoice);
+    const branchBeat = branchSeq[0] ? computedPlyBeat(terminusFen, b.san, branchMovedBy === studentSide, terminusPrev, branchVoice) : '';
+    const extBeats = b.extensionMoves.map((extSan, j) => {
+      const extMovedBy: 'white' | 'black' = (positions.length + 1 + j) % 2 === 0 ? 'white' : 'black';
+      return branchSeq[j] && branchSeq[j + 1]
+        ? computedPlyBeat(branchSeq[j].fen, extSan, extMovedBy === studentSide, prevCaptureOf(j === 0 ? terminusFen : branchSeq[j - 1].fen, branchSans[j]), branchVoice)
+        : '';
+    });
     const teaser = branchBeat
       ? `${b.label}. ${branchBeat}`
       : `${b.label} — ${b.count} sub-line${b.count === 1 ? '' : 's'} in the database.`;
@@ -2016,9 +2029,7 @@ async function generateOpeningFromDbNarration(
       // so its fen is this extension's fenBefore.
       const extBefore = branchSeq[j];
       const extAfter = branchSeq[j + 1];
-      const extGenerated = extBefore && extAfter
-        ? computedPlyBeat(extBefore.fen, extSan, extMovedBy === studentSide, prevCaptureOf(j === 0 ? terminusFen : branchSeq[j - 1].fen, branchSans[j]))
-        : '';
+      const extGenerated = extBefore && extAfter ? extBeats[j] : '';
       // Same note-leads rule as the spine. The branch's arrows were ALREADY
       // grounded on this note (`branchNoteSources` below); until now the prose
       // never said what they pointed at, so a green arrow could land on a
@@ -2559,16 +2570,20 @@ function buildFallbackTreeFromDb(
   // idea — board-true, no LLM. So teach never drops to thin generic.
   type ChildWrap = { node: WalkthroughTreeNode };
   let nextChildren: ChildWrap[] = [];
+  // Said in PLAY order through the DNA door (the build below is bottom-up,
+  // and say-once must run forward or the last ply is the one taught in full).
+  const dbVoice = newLessonVoice();
+  const dbIdeas = entry.moves.map((san, i) => lessonBeat({
+    fenBefore: fensBefore[i],
+    san: stripSanAnnotations(san),
+    prev: i === 0 ? NO_PREV_CAPTURE : prevCaptureOf(fensBefore[i - 1], stripSanAnnotations(entry.moves[i - 1])),
+    moverIsStudent: (i % 2 === 0 ? 'white' : 'black') === studentSide,
+    register: 'teach',
+  }, dbVoice));
   for (let i = entry.moves.length - 1; i >= 0; i -= 1) {
     const san = entry.moves[i];
     const movedBy: 'white' | 'black' = i % 2 === 0 ? 'white' : 'black';
-    const idea = buildReviewMoveBriefing({
-      fenBefore: fensBefore[i],
-      san: stripSanAnnotations(san),
-      prev: i === 0 ? NO_PREV_CAPTURE : prevCaptureOf(fensBefore[i - 1], stripSanAnnotations(entry.moves[i - 1])),
-      moverIsStudent: movedBy === studentSide,
-      register: 'teach',
-    }) ?? '';
+    const idea = dbIdeas[i];
     const node: WalkthroughTreeNode = {
       san,
       movedBy,

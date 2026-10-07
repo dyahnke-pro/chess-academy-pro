@@ -300,7 +300,7 @@ import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingRating } from '../../services/coachGameEngine';
 import { opponentStrength } from '../../services/engineStrength';
 import { samePosition } from '../../utils/samePosition';
-import { lineProof, lineProofFromUci, isProof, walkableLine, NO_PROOF, type FactProof } from '../../services/proof';
+import { legalLineProof, lineProof, lineProofFromUci, isProof, squaresProof, walkableLine, NO_PROOF, type FactProof } from '../../services/proof';
 import { readBoard, readBoardAll, newPlanThread, type BoardRead } from '../../services/boardComputers';
 import { splitThink, stripThink, THINK_MARK, THINK_PAUSE_MS } from '../../utils/thinkPause';
 import { withTimeout } from '../../coach/withTimeout';
@@ -7998,8 +7998,11 @@ export function CoachTeachPage(): JSX.Element {
      *  when no threat on the same move already carries one (one lecture per move). */
     let tacticTailType: string | null = null;
     let threatLine: string | null = null;
-    let threatFactProof: FactProof = NO_PROOF.stated;
-    let tacticFactProof: FactProof = NO_PROOF.stated;
+    // Each branch below sets the proof its own computer hands it; a geometry
+    // claim with nothing better rests on its squares (resolved where the facts
+    // are offered). No line speaks on the "stated" escape (one coach P3).
+    let threatFactProof: FactProof | null = null;
+    let tacticFactProof: FactProof | null = null;
     let threatShape: 'line' | 'hit' = 'line';
     /** A mate was named by the alert lane this turn — the composer below must
      *  not announce it a second time in other words. */
@@ -8130,6 +8133,10 @@ export function CoachTeachPage(): JSX.Element {
           : forcedMateN > 5
             ? (firstSan ? `There's a forced mate here, starting with ${firstSan}.` : `There's a forced mate here.`)
             : (firstSan ? `There's a forced mate here — mate in ${forcedMateN}, starting with ${firstSan}.` : `There's a forced mate here — mate in ${forcedMateN}.`);
+        // The mate's first move IS its proof — exact when it mates at once.
+        // Without a move the line says only that a mate is there: the answer
+        // is the student's to find.
+        tacticFactProof = (firstSan ? legalLineProof(args.fenAfterReply, [firstSan], forcedMateN === 1) : null) ?? NO_PROOF.withheld;
       } else if (theirHanging.length > 0) {
         const prize = theirHanging[0];
         tacticKey = `win:${prize.piece}${prize.square}`;
@@ -8149,7 +8156,11 @@ export function CoachTeachPage(): JSX.Element {
           // there's something to win here", and …Rxg5 loses to d4, the c1-bishop
           // opening onto the rook). This lane runs before the engine read, so it
           // states the fact and the question; the engine lane names the move.
-          : (prizeTeaching(args.fenAfterReply, prize.square, studentCC)?.text ?? null);
+          : (() => {
+            const pz = prizeTeaching(args.fenAfterReply, prize.square, studentCC);
+            if (pz) tacticFactProof = squaresProof(pz.text, pz.squares);
+            return pz?.text ?? null;
+          })();
       } else {
         // THE STUDENT ALREADY FOUND IT (hand walks 800 + 2000): "There's a pin
         // here for you — have a look" right after they played …Bg4 themselves,
@@ -8314,6 +8325,8 @@ export function CoachTeachPage(): JSX.Element {
           threatKey = `soon:${up.type}:${theirs ?? ''}`;
           threatSquares = (up.description.match(/\b[a-h][1-8]\b/g) ?? []).slice(0, 4);
           threatLine = `Watch out — ${up.spoken}.`;
+          // The moves that build it are its proof (played from this board).
+          threatFactProof = legalLineProof(args.fenAfterReply, up.line);
           threatLine = openThreatLine(threatLine, args.fenAfterReply, studentCC, threatSquares, Number(args.fenAfterReply.split(' ')[5] ?? 0), learnMemRef.current.loudAlarms.size);
         threatLine = proveThreat(threatLine);
         }
@@ -8925,14 +8938,14 @@ export function CoachTeachPage(): JSX.Element {
     // that looks free and leaves the queen with no safe square after one reply.
     // The proof's detail goes to the BOARD: every exit and every guard.
     const grab = readBoard('queenGrabTrap', { fen: args.fenAfterReply });
-    deferIf(grab, 'rejectedTempting', grab?.text ?? null, grab?.proof ?? NO_PROOF.stated, grab?.squares);
+    deferIf(grab, 'rejectedTempting', grab?.text ?? null, grab ? grab.proof : NO_PROOF.description, grab?.squares);
     deferIf(computedLine, 'commentary', computedLine, NO_PROOF.description, undefined, undefined, computedLineArrows);
     deferIf(behaviorLine && !decidedByMaterial, 'behavior', behaviorLine, NO_PROOF.description, behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)), behaviorClaims, behaviorArrows);
     deferIf(positionalLine && !decidedByMaterial, positionalIsOwnKing ? 'kingSafety' : 'positional', positionalLine, NO_PROOF.description, positionalSquares, positionalClaims);
     const instantDecision = coachTurn({ posture: 'learn', facts: [
       ...(gemLine ? [{ lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply, proof: NO_PROOF.withheld }] : []),
-      ...(tacticLine ? [{ lane: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, claims: tacticClaim ? [tacticClaim] : undefined, lines: tacticLines, proof: tacticLines?.[0] && !isProof(tacticFactProof) ? (lineProof(tacticLines[0]) ?? tacticFactProof) : tacticFactProof }] : []),
-      ...(threatLine ? [{ lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: threatFactProof }] : []),
+      ...(tacticLine ? [{ lane: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, claims: tacticClaim ? [tacticClaim] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0]) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
+      ...(threatLine ? [{ lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
       ...(announceLine ? [{ lane: 'opening' as const, text: announceLine, fen: args.fenAfterReply, proof: NO_PROOF.name }] : []),
       // Rate-matched Danya behavior — board-truth. MERGED with the positional
       // read into ONE board-read lane (David 2026-09-13: "computer and observation
@@ -9616,6 +9629,11 @@ export function CoachTeachPage(): JSX.Element {
                       // genuinely close, don't agonise").
                       const rawHedge = uncertaintyClause(turnRead, { spoken: true, rotation: gameRef.current.history.length });
                       const hedge = rawHedge ? `As for your next move: ${rawHedge.charAt(0).toLowerCase()}${rawHedge.slice(1)}` : null;
+                      // The hedge's proof is the two moves it weighs, from this
+                      // board — the same pair the clause names.
+                      if (hedge && !pendingRegisterLines && turnRead.closeAlternative && turnRead.bestMoveSan) {
+                        pendingRegisterLines = [{ fen: probe.fen(), sans: [turnRead.bestMoveSan] }, { fen: probe.fen(), sans: [turnRead.closeAlternative.san] }];
+                      }
                       // His "X, not Y, because…" — only when there is NO but-turn
                       // (a seductive blunder outranks a fine-margin preference) and
                       // NO hedge (a genuine coin-flip is the hedge, not a compare).
@@ -9866,9 +9884,9 @@ export function CoachTeachPage(): JSX.Element {
                     // TEMPTING move and its refutation; the hedge and the compare
                     // name the move that holds, which is the answer being held.
                     const registerNow = held ? pendingButTurn : countSpoken ? pendingRegisterNoHedge : pendingRegister;
-                    if (registerNow && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), registerNow, 'register', (pendingRegisterLines?.[0] ? lineProof(pendingRegisterLines[0]) : null) ?? NO_PROOF.stated, undefined, undefined, undefined, undefined, pendingRegisterLines);
+                    if (registerNow && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), registerNow, 'register', (pendingRegisterLines?.[0] ? lineProof(pendingRegisterLines[0]) : null) ?? NO_PROOF.withheld, undefined, undefined, undefined, undefined, pendingRegisterLines);
                     const gapEchoed = gapEchoedByVerdict(gapPending?.san ?? null, pf.clauses, gapPending?.square ?? null);
-                    if (gapPending && moveAdviceHere?.speak && !gapEchoed) queueSpokenHint(probe.fen(), gapPending.text, 'gap', NO_PROOF.stated, [gapPending.square], [`gap:${gapPending.square}:${probe.history().length}`]);
+                    if (gapPending && moveAdviceHere?.speak && !gapEchoed) queueSpokenHint(probe.fen(), gapPending.text, 'gap', (gapPending.san ? legalLineProof(probe.fen(), [gapPending.san]) : null) ?? squaresProof(gapPending.text, [gapPending.square]) ?? NO_PROOF.withheld, [gapPending.square], [`gap:${gapPending.square}:${probe.history().length}`]);
                     // PROPHYLAXIS — the quiet move that stops their next pin or kick,
                     // named only where a move is earned and the engine agrees it is
                     // one of the best (its own top lines), never on a held move.
@@ -9902,7 +9920,7 @@ export function CoachTeachPage(): JSX.Element {
                       // Their move's purpose rides its own lane, above the
                       // board descriptions it used to lose to on offer order.
                       const lane = c.kind === 'stopped' ? 'theirPurpose' as const : 'positionFacts' as const;
-                      queueSpokenHint(probe.fen(), c.text, lane, (c.lines?.[0] ? lineProof(c.lines[0]) : null) ?? NO_PROOF.stated, c.squares, c.claim ? [c.claim] : undefined, c.gradeFen, undefined, c.lines, c.stakes);
+                      queueSpokenHint(probe.fen(), c.text, lane, (c.proof && isProof(c.proof) ? c.proof : null) ?? (c.lines?.[0] ? lineProof(c.lines[0]) : null) ?? squaresProof(c.text, c.squares ?? []) ?? c.proof ?? NO_PROOF.description, c.squares, c.claim ? [c.claim] : undefined, c.gradeFen, undefined, c.lines, c.stakes);
                     }
                     if (pf.importance.speak) captureEvent('position_facts_spoken', { surface: 'coach-teach', tier: pf.importance.tier, clauses: pf.clauses.length });
                   }
@@ -9969,7 +9987,7 @@ export function CoachTeachPage(): JSX.Element {
                         captureEvent('priority_first_offered', { surface: 'coach-teach', target: pf.targetSquare });
                         // A held move keeps its arrow back too — the arrow IS the answer.
                         const moveHeld = learnMemRef.current.heldMove?.fen === probe.fen();
-                        queueSpokenHint(probe.fen(), packageForRegister(pf.hint, discussion.hintDial.register), 'priorityFirst', NO_PROOF.stated, [pf.targetSquare], undefined, undefined, moveHeld ? undefined : [{ from: pf.arrow.from, to: pf.arrow.to, role: 'play', vouchedBy: 'engine', source: 'learn.priorityFirst' }]);
+                        queueSpokenHint(probe.fen(), packageForRegister(pf.hint, discussion.hintDial.register), 'priorityFirst', legalLineProof(probe.fen(), [`${pf.arrow.from}${pf.arrow.to}`]) ?? squaresProof(packageForRegister(pf.hint, discussion.hintDial.register), [pf.targetSquare]) ?? NO_PROOF.withheld, [pf.targetSquare], undefined, undefined, moveHeld ? undefined : [{ from: pf.arrow.from, to: pf.arrow.to, role: 'play', vouchedBy: 'engine', source: 'learn.priorityFirst' }]);
                       }
                     }
                     // THE REJECTED TEMPTING MOVE (the speedrun's warning
@@ -9992,7 +10010,7 @@ export function CoachTeachPage(): JSX.Element {
                       if (rt) {
                         rejectedTemptingCountRef.current += 1;
                         captureEvent('rejected_tempting_offered', { surface: 'coach-teach', tempting: rt.temptingSan, refutation: rt.refutationSan });
-                        queueSpokenHint(probe.fen(), packageForRegister(rt.hint, discussion.hintDial.register), 'rejectedTempting', lineProof({ fen: probe.fen(), sans: [rt.temptingSan, rt.refutationSan] }) ?? NO_PROOF.stated, undefined, undefined, undefined, [{ from: rt.refutation.from, to: rt.refutation.to, role: 'line', fen: rt.refutation.fenBefore, source: 'learn.rejectedTempting' }]);
+                        queueSpokenHint(probe.fen(), packageForRegister(rt.hint, discussion.hintDial.register), 'rejectedTempting', legalLineProof(probe.fen(), [rt.temptingSan, rt.refutationSan]) ?? squaresProof(packageForRegister(rt.hint, discussion.hintDial.register), [rt.refutation.from, rt.refutation.to]) ?? NO_PROOF.description, undefined, undefined, undefined, [{ from: rt.refutation.from, to: rt.refutation.to, role: 'line', fen: rt.refutation.fenBefore, source: 'learn.rejectedTempting' }]);
                       }
                     }
 
@@ -10166,7 +10184,7 @@ export function CoachTeachPage(): JSX.Element {
                         // a facts list nobody heard while its arrows still
                         // painted — marks without words (G8.5). The package now
                         // marks the squares only if the words survive.
-                        queueSpokenHint(probe.fen(), chainLines.join(' '), 'causalChain', NO_PROOF.stated, causalChainHighlights(chain).map((h) => h.square), [`causal:${causalChainHighlights(chain).map((h) => h.square).join(',')}`]);
+                        queueSpokenHint(probe.fen(), chainLines.join(' '), 'causalChain', squaresProof(chainLines.join(' '), causalChainHighlights(chain).map((h) => h.square)) ?? NO_PROOF.description, causalChainHighlights(chain).map((h) => h.square), [`causal:${causalChainHighlights(chain).map((h) => h.square).join(',')}`]);
                         // A DIAGNOSTIC, NOT A SPOKEN LINE: the line is queued, and
                         // the package decides whether it is heard. Filed as
                         // "spoken", this summary landed in the run G tape as
@@ -10423,7 +10441,7 @@ export function CoachTeachPage(): JSX.Element {
                       });
                       if (ans) {
                         learnMemRef.current.questionsAnswered.add(`${fenNow}|${ans.san}`);
-                        queueSpokenHint(fenNow, ans.text, 'threatAnswer', readBoard('threatCost', { line: ans.text, fen: fenNow, student: playerColor === 'white' ? 'w' : 'b', squares: asked.squares })?.proof ?? NO_PROOF.stated, asked.squares, [`threat-answer:${ans.arrow.from}${ans.arrow.to}`], undefined, [ans.arrow]);
+                        queueSpokenHint(fenNow, ans.text, 'threatAnswer', (() => { const tc = readBoard('threatCost', { line: ans.text, fen: fenNow, student: playerColor === 'white' ? 'w' : 'b', squares: asked.squares })?.proof; return (tc && isProof(tc) ? tc : null) ?? legalLineProof(fenNow, [ans.san]) ?? tc ?? NO_PROOF.withheld; })(), asked.squares, [`threat-answer:${ans.arrow.from}${ans.arrow.to}`], undefined, [ans.arrow]);
                         captureEvent('threat_answer_queued', { surface: 'coach-teach', kind: ans.kind });
                       }
                     });
@@ -10603,7 +10621,7 @@ export function CoachTeachPage(): JSX.Element {
                     // pays off an idea the coach said earlier — close the loop.
                     {
                       const pay = payoffFor(learnMemRef.current, ((): { piece: string; to: string; captured?: string; san: string } | null => { try { return new Chess(fenBefore).move(move.san); } catch { return null; } })(), move.history.length);
-                      if (pay) queueSpokenHint(fenAfterReply, pay.say, 'movePoint', NO_PROOF.stated, [pay.square], [`payoff:${pay.key}`], move.fen);
+                      if (pay) queueSpokenHint(fenAfterReply, pay.say, 'movePoint', squaresProof(pay.say, [pay.square]) ?? NO_PROOF.description, [pay.square], [`payoff:${pay.key}`], move.fen);
                     }
                     // THE TIE THE MOVE CREATED (tiedDefender): their guard now cannot
                     // leave — said only while it still holds after their reply.
@@ -10632,7 +10650,7 @@ export function CoachTeachPage(): JSX.Element {
                       const tr = drilledTransferLine(fenBefore, playedUci, preStudentRead.bestMove || null, drilledMotifsRef.current);
                       if (tr && !drilledSaidRef.current.has(tr.motif)) {
                         drilledSaidRef.current.add(tr.motif);
-                        queueSpokenHint(fenAfterReply, tr.text, 'foundMove', NO_PROOF.stated, [move.to], [`drilled-transfer:${tr.motif}`]);
+                        queueSpokenHint(fenAfterReply, tr.text, 'foundMove', legalLineProof(fenBefore, [move.san], true) ?? NO_PROOF.description, [move.to], [`drilled-transfer:${tr.motif}`]);
                         captureEvent('coach_drilled_transfer', { surface: 'coach-teach', motif: tr.motif });
                       }
                     } catch { /* the transfer is a bonus, never a blocker */ }
@@ -10721,9 +10739,9 @@ export function CoachTeachPage(): JSX.Element {
                           const foundText = heldVerdictText(heldNow, 'found');
                           const missedText = heldVerdictText(heldNow, 'missed');
                           if (found) {
-                            queueSpokenHint(fenAfterReply, foundText, 'heldMove', NO_PROOF.stated, [move.to], [`found-${move.san}`], fenBefore);
+                            queueSpokenHint(fenAfterReply, foundText, 'heldMove', legalLineProof(fenBefore, [move.san], true) ?? NO_PROOF.description, [move.to], [`found-${move.san}`], fenBefore);
                           } else if (look?.namesBetter !== heldNow.san) {
-                            queueSpokenHint(fenAfterReply, missedText, 'heldMove', lineProof({ fen: fenBefore, sans: [heldNow.san] }) ?? NO_PROOF.stated, [heldMove.to], [`held-best:${heldNow.san}`], fenBefore, undefined, [{ fen: fenBefore, sans: [heldNow.san] }]);
+                            queueSpokenHint(fenAfterReply, missedText, 'heldMove', legalLineProof(fenBefore, [heldNow.san]) ?? squaresProof(missedText, [heldMove.to]) ?? NO_PROOF.description, [heldMove.to], [`held-best:${heldNow.san}`], fenBefore, undefined, [{ fen: fenBefore, sans: [heldNow.san] }]);
                           }
                         }
                         captureEvent('learn_move_held_answered', { surface: 'coach-teach', found, shown: heldNow.shown });
@@ -10750,7 +10768,7 @@ export function CoachTeachPage(): JSX.Element {
                             // ledger says it once (walk oct3b, 15…e5: "e5 prepares
                             // e4 …" twice in one breath).
                             const foundKeys = [`slip-found:${move.san}`, move.san.includes('x') ? `capture:${move.to}:${move.history.length}` : `point:${move.history.length}`];
-                            queueSpokenHint(fenAfterReply, text, 'slipAnswer', found ? NO_PROOF.description : lineProof({ fen: fenBefore, sans: [studentBestSan as string] }) ?? NO_PROOF.stated, [answer.to], found ? foundKeys : [`slip-answer:${studentBestSan}`], fenBefore, undefined, found ? undefined : [{ fen: fenBefore, sans: [studentBestSan as string] }]);
+                            queueSpokenHint(fenAfterReply, text, 'slipAnswer', found ? NO_PROOF.description : legalLineProof(fenBefore, [studentBestSan as string]) ?? squaresProof(text, [answer.to]) ?? NO_PROOF.description, [answer.to], found ? foundKeys : [`slip-answer:${studentBestSan}`], fenBefore, undefined, found ? undefined : [{ fen: fenBefore, sans: [studentBestSan as string] }]);
                           }
                         }
                         captureEvent('learn_slip_answered', { surface: 'coach-teach', found });
@@ -10816,7 +10834,7 @@ export function CoachTeachPage(): JSX.Element {
                         ? [`win-${look.square}`] : fundamental?.id === 'botched-conversion' ? ['convert-method'] : [`look:${look.kind}:${move.history.length}`];
                       // THE VERDICT'S PROOF is the punishing line it names (#68).
                       queueSpokenHint(fenAfterReply, line, look.kind,
-                        (!fundamental && look.punishLine ? lineProofFromUci(look.punishLine.fen, look.punishLine.uci) : fundamental?.lines?.[0] ? lineProof(fundamental.lines[0]) : null) ?? NO_PROOF.stated, /^[a-h][1-8]$/.test(look.square) ? [look.square] : [], winClaim, move.fen,
+                        (!fundamental && look.punishLine ? lineProofFromUci(look.punishLine.fen, look.punishLine.uci) : fundamental?.lines?.[0] ? lineProof(fundamental.lines[0]) : null) ?? squaresProof(line, /^[a-h][1-8]$/.test(look.square) ? [look.square] : []) ?? NO_PROOF.description, /^[a-h][1-8]$/.test(look.square) ? [look.square] : [], winClaim, move.fen,
                         // The punishing line the words play out, drawn ply by ply.
                         !fundamental && look.punishLine ? lineArrowClaims(look.punishLine.fen, look.punishLine.uci, 'teach.punishLine') : undefined,
                         // The fundamental's own lines lead this sentence.
@@ -10949,7 +10967,7 @@ export function CoachTeachPage(): JSX.Element {
                           // The follow-up that works NOW, as the move to play.
                           // DUAL-USE (P4): the right order played is calculation answered.
                           recordHeld('calculation-depth', 80, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
-                          queueSpokenHint(fenAfterReply, order.text, 'moveOrder', NO_PROOF.stated, order.squares, [`order:${order.followUp.uci}`, `stops:${order.answer.uci}`], undefined,
+                          queueSpokenHint(fenAfterReply, order.text, 'moveOrder', squaresProof(order.text, order.squares) ?? NO_PROOF.description, order.squares, [`order:${order.followUp.uci}`, `stops:${order.answer.uci}`], undefined,
                             [
                               { from: order.followUp.uci.slice(0, 2), to: order.followUp.uci.slice(2, 4), role: 'play', source: 'learn.moveOrder' },
                               // …and the answer it would have run into, walked on
@@ -11201,7 +11219,7 @@ export function CoachTeachPage(): JSX.Element {
                     const gemCalledIt = learnMemRef.current.gemFen !== null
                       && samePosition(learnMemRef.current.gemFen, cm.fenAfter);
                     if (look && !gemCalledIt) {
-                      queueSpokenHint(cm.fenAfter, look.line, look.kind, (look.punishLine ? lineProofFromUci(look.punishLine.fen, look.punishLine.uci) : null) ?? NO_PROOF.stated, undefined, [`look:${look.kind}:coach:${cm.fenAfter.split(' ').slice(0, 2).join(' ')}`]);
+                      queueSpokenHint(cm.fenAfter, look.line, look.kind, (look.punishLine ? lineProofFromUci(look.punishLine.fen, look.punishLine.uci) : null) ?? squaresProof(look.line, /^[a-h][1-8]$/.test(look.square) ? [look.square] : []) ?? NO_PROOF.description, undefined, [`look:${look.kind}:coach:${cm.fenAfter.split(' ').slice(0, 2).join(' ')}`]);
                       // The coach told the student to look — remember the board
                       // so the answer is revealed once they have moved from it.
                       learnMemRef.current.slipAnswer = look.offersStudent ? { fen: cm.fenAfter, theirSan: cm.playedSan } : null;

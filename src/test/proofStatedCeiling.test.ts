@@ -12,7 +12,7 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const SRC = resolve(__dirname, '..');
-const CEILING = 36; // 2026-10-07: measured after converting Learn's line-backed lanes (was 42)
+const CEILING = 18; // 2026-10-07: the Learn page carries none (was 36; 42 before the line-backed lanes)
 
 function walk(dir: string, out: string[] = []): string[] {
   for (const name of readdirSync(dir)) {
