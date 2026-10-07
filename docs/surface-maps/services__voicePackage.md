@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**669 lines · 13 exports · 15 importers · 9 tests · 2 audits**
+**657 lines · 13 exports · 16 importers · 9 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -24,6 +24,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnTurnDoor.ts`
 - `src/services/proof.ts`
 - `src/services/replayFence.najdorf1500.test.ts`
+- `src/services/reviewMoveBriefing.ts`
 - `src/services/ruleGradeFen.test.ts`
 - `src/services/speedRunReads.scale.test.ts`
 - `src/services/voicePackage.test.ts`
@@ -40,7 +41,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `markableSquares` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11328`
+- `src/components/Coach/CoachTeachPage.tsx:11347`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
@@ -51,17 +52,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `VoicePackage` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `stripMoveNumbers` (function) — 8 call sites
-- `scripts/convert-lichess-tsv.mjs:19`
-- `scripts/convert-lichess-tsv.mjs:45`
-- `scripts/danya-corpus/merge-corpus.mjs:36`
-- `scripts/danya-corpus/merge-corpus.mjs:110`
-- `scripts/danya-corpus/merge-corpus.mjs:111`
-- `scripts/danya-corpus/merge-corpus.mjs:112`
-- `src/services/dnaDoor.test.ts:10`
-- `src/services/dnaDoor.test.ts:11`
-
-### `buildVoicePackage` (function) — 80 call sites
+### `buildVoicePackage` (function) — 81 call sites
 - `src/components/Coach/CoachGameReview.tsx:1860`
 - `src/components/Coach/CoachGameReview.tsx:1899`
 - `src/components/Coach/CoachGameReview.tsx:1908`
@@ -80,8 +71,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/dnaDoor.test.ts:42`
 - `src/services/dnaDoor.test.ts:49`
 - `src/services/laneReachability.test.ts:136`
-- `src/services/learnTurnDoor.ts:356`
+- `src/services/learnTurnDoor.ts:362`
 - `src/services/replayFence.najdorf1500.test.ts:50`
+- `src/services/reviewMoveBriefing.ts:408`
 - `src/services/ruleGradeFen.test.ts:9`
 - `src/services/ruleGradeFen.test.ts:12`
 - `src/services/speedRunReads.scale.test.ts:41`
@@ -143,24 +135,25 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:568`
 - `src/services/voicePackage.test.ts:569`
 
-### `spokenSentenceKeys` (function) — 9 call sites
+### `spokenSentenceKeys` (function) — 10 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7839`
-- `src/components/Coach/CoachTeachPage.tsx:9366`
-- `src/components/Coach/CoachTeachPage.tsx:10392`
-- `src/components/Coach/CoachTeachPage.tsx:11309`
+- `src/components/Coach/CoachTeachPage.tsx:9379`
+- `src/components/Coach/CoachTeachPage.tsx:10410`
+- `src/components/Coach/CoachTeachPage.tsx:11328`
 - `src/services/coachFeatureService.ts:2536`
+- `src/services/reviewMoveBriefing.ts:409`
 - `src/services/voicePackage.test.ts:415`
 - `src/services/voicePackage.test.ts:424`
 - `src/services/voicePackage.test.ts:436`
 - `src/services/voicePackage.test.ts:514`
 
 ### `describeVoicePackage` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10379`
-- `src/components/Coach/CoachTeachPage.tsx:11404`
+- `src/components/Coach/CoachTeachPage.tsx:10397`
+- `src/components/Coach/CoachTeachPage.tsx:11423`
 - `src/services/voicePackage.test.ts:38`
 
 ### `joinSpoken` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:467`
+- `src/services/learnTurnDoor.ts:473`
 
 ### `LineArrow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -169,10 +162,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `keptLines` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11370`
+- `src/components/Coach/CoachTeachPage.tsx:11389`
 - `src/services/learnTurnDoor.test.ts:190`
 - `src/services/learnTurnDoor.test.ts:196`
 - `src/services/learnTurnDoor.test.ts:202`
+
+### `stripMoveNumbers` (re-export) — 10 call sites
+- `scripts/convert-lichess-tsv.mjs:19`
+- `scripts/convert-lichess-tsv.mjs:45`
+- `scripts/danya-corpus/merge-corpus.mjs:36`
+- `scripts/danya-corpus/merge-corpus.mjs:110`
+- `scripts/danya-corpus/merge-corpus.mjs:111`
+- `scripts/danya-corpus/merge-corpus.mjs:112`
+- `src/services/dnaDoor.test.ts:10`
+- `src/services/dnaDoor.test.ts:11`
+- `src/services/dnaRules.ts:20`
+- `src/services/dnaRules.ts:34`
 
 ## Tests
 

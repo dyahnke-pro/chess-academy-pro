@@ -4,20 +4,20 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3088 lines · 18 exports · 107 importers · 89 tests · 23 audits**
+**3124 lines · 18 exports · 108 importers · 94 tests · 23 audits**
 
 ## Locked rules that govern this surface
 
-- **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:353) — names `CLOUD_VOICES`, `voiceService`
-- **G4. TTS = streaming canonical. Buffered MP3 is gone.** (CLAUDE.md:818) — names `voiceService`
-- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1190) — names `voiceService`
-- **G9.1 The PRO-REP DEEP BUILD DOCTRINE — locked (David 2026-05-28, emphatic).** (CLAUDE.md:1613) — names `sanitizeForTTS`
-- **Golden rules (the most important — read these every time)** (CLAUDE.md:2269) — names `voiceService`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3201) — names `voiceService`
-- **🧒 Kids section — non-negotiables** (CLAUDE.md:3378) — names `voiceService`
-- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3687) — names `voiceService`
-- **Shared types / services** (CLAUDE.md:5317) — names `voiceService`
-- **The standard post-deploy ritual** (CLAUDE.md:6147) — names `voiceService`
+- **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:394) — names `CLOUD_VOICES`, `voiceService`
+- **G4. TTS = streaming canonical. Buffered MP3 is gone.** (CLAUDE.md:859) — names `voiceService`
+- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1231) — names `voiceService`
+- **G9.1 The PRO-REP DEEP BUILD DOCTRINE — locked (David 2026-05-28, emphatic).** (CLAUDE.md:1654) — names `sanitizeForTTS`
+- **Golden rules (the most important — read these every time)** (CLAUDE.md:2310) — names `voiceService`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3322) — names `voiceService`
+- **🧒 Kids section — non-negotiables** (CLAUDE.md:3499) — names `voiceService`
+- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3808) — names `voiceService`
+- **Shared types / services** (CLAUDE.md:5448) — names `voiceService`
+- **The standard post-deploy ritual** (CLAUDE.md:6291) — names `voiceService`
 
 ## Who calls in
 
@@ -34,9 +34,9 @@
 - `src/components/Coach/CoachGamePage.tsx`
 - `src/components/Coach/CoachGameReview.tsx`
 - `src/components/Coach/CoachOverlay.tsx`
-- `src/components/Coach/CoachPlaySessionView.tsx`
 - `src/components/Coach/CoachSessionPage.test.tsx`
 - `src/components/Coach/CoachTeachPage.tsx`
+- `src/components/Coach/CoachesLibraryPage.tsx`
 - `src/components/Coach/EndgameLessonTab.tsx`
 - `src/components/Coach/EndgameRecapCard.tsx`
 - `src/components/Coach/EndgameTablebaseTrainer.tsx`
@@ -97,6 +97,7 @@
 - `src/components/Settings/VoiceSettingsPanel.tsx`
 - `src/components/Tactics/AnalysisPracticePage.tsx`
 - `src/components/Tactics/FindSquarePage.tsx`
+- `src/components/Tactics/PatternSchoolPage.tsx`
 - `src/components/Tactics/TacticCreatePage.tsx`
 - `src/components/Tactics/TacticSetupBoard.tsx`
 - `src/components/ui/AppLayout.tsx`
@@ -173,7 +174,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolvePollyVoice` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:3688`
+- `src/components/Coach/CoachGamePage.tsx:3661`
 
 ### `resolvePollySecondaryVoice` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -228,11 +229,8 @@
 ### `normalizePieceShorthand` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `sanitizeForTTS` (function) — 53 call sites
-- `src/components/Openings/MiddlegamePractice.tsx:303`
-- `src/components/Openings/MiddlegamePractice.tsx:353`
-- `src/components/Openings/MiddlegamePractice.tsx:358`
-- `src/components/Openings/OpeningDetailPage.tsx:722`
+### `sanitizeForTTS` (function) — 50 call sites
+- `src/components/Openings/OpeningDetailPage.tsx:723`
 - `src/components/Settings/VoiceSettingsPanel.tsx:118`
 - `src/components/Settings/VoiceSettingsPanel.tsx:160`
 - `src/hooks/useProseReader.ts:66`
@@ -283,8 +281,8 @@
 - `src/services/voiceService.sentenceFirst.test.ts:127`
 - `src/services/voiceService.sentenceFirst.test.ts:139`
 
-### `voiceService` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `voiceService` (const) — 1 call site
+- `src/services/dnaRules.test.ts:24`
 
 ## Tests
 
@@ -340,11 +338,16 @@
 - `src/components/Puzzles/MistakePuzzleBoard.capabilityEvidence.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.capabilityRow.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.endsOnReply.test.tsx`
+- `src/components/Puzzles/MistakePuzzleBoard.moveAttempt.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.deepRun.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.evidence.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.oneLinePerMiss.test.tsx`
+- `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.test.tsx`
+- `src/components/Tactics/AnalysisPracticePage.tap.test.tsx`
+- `src/components/Tactics/TacticCreatePage.test.tsx`
+- `src/components/Tactics/TacticSetupBoard.ladder.test.tsx`
 - `src/components/Tactics/TacticSetupBoard.test.tsx`
 - `src/hooks/hintDialTally.test.ts`
 - `src/hooks/learnSilentCapture.test.ts`

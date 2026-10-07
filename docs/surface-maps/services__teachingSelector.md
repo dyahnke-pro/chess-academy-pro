@@ -59,12 +59,12 @@
 
 ### `selectTeaching` (function) — 16 call sites
 - `src/hooks/usePhaseNarration.ts:545`
-- `src/services/coachFeatureService.ts:1473`
+- `src/services/coachFeatureService.ts:1474`
 - `src/services/gameTurn.test.ts:43`
 - `src/services/gameTurn.test.ts:47`
 - `src/services/needCoverage.report.test.ts:60`
-- `src/services/openingGenerator.ts:524`
-- `src/services/openingGenerator.ts:2469`
+- `src/services/openingGenerator.ts:530`
+- `src/services/openingGenerator.ts:2489`
 - `src/services/teachingSelector.test.ts:39`
 - `src/services/teachingSelector.test.ts:51`
 - `src/services/teachingSelector.test.ts:80`
@@ -83,7 +83,7 @@
 - `src/components/Coach/CoachGameReview.tsx:1471`
 - `src/hooks/usePhaseNarration.ts:549`
 - `src/services/gameTurn.test.ts:45`
-- `src/services/openingGenerator.ts:2471`
+- `src/services/openingGenerator.ts:2491`
 - `src/services/teachingSelector.test.ts:45`
 - `src/services/teachingSelector.test.ts:46`
 - `src/services/teachingSelector.test.ts:62`
@@ -94,7 +94,7 @@
 ### `pliesFromSans` (function) — 6 call sites
 - `src/hooks/usePhaseNarration.ts:545`
 - `src/services/needCoverage.report.test.ts:59`
-- `src/services/openingGenerator.ts:522`
+- `src/services/openingGenerator.ts:528`
 - `src/services/teachingSelector.test.ts:111`
 - `src/services/teachingSelector.test.ts:112`
 - `src/services/teachingSelector.test.ts:115`
@@ -109,8 +109,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `summarizeTeaching` (function) — 3 call sites
-- `src/services/openingGenerator.ts:524`
-- `src/services/openingGenerator.ts:2470`
+- `src/services/openingGenerator.ts:530`
+- `src/services/openingGenerator.ts:2490`
 - `src/services/teachingSelector.test.ts:116`
 
 ## Tests

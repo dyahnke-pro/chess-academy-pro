@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**818 lines · 3 exports · 16 importers · 6 tests · 0 audits**
+**791 lines · 3 exports · 16 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6143) — names `tacticClassifier`
+- **The standard post-deploy ritual** (CLAUDE.md:6287) — names `tacticClassifier`
 
 ## Who calls in
 
@@ -19,6 +19,7 @@
 - `src/services/liveTacticsContext.ts`
 - `src/services/missedTacticService.ts`
 - `src/services/moveReason.ts`
+- `src/services/oneHanging.test.ts`
 - `src/services/playedMoveGrade.ts`
 - `src/services/pvPlayback.ts`
 - `src/services/searchDepth.ts`
@@ -26,61 +27,63 @@
 - `src/services/tacticClassifier.test.ts`
 - `src/services/tacticsDetector.ts`
 - `src/services/threatCheck.ts`
-- `src/services/threatOut.ts`
 - `src/test/kingIsNeverHanging.test.ts`
 
 ## Exports and every call site
 
-### `findHangingPieces` (function) — 13 call sites
+### `findHangingPieces` (function) — 15 call sites
 - `src/data/patternRegistry.ts:113`
 - `src/services/coachGameEngine.ts:301`
-- `src/services/deliberation.ts:122`
+- `src/services/deliberation.ts:123`
 - `src/services/hangingIgnoresCheck.test.ts:10`
 - `src/services/hangingIgnoresCheck.test.ts:11`
-- `src/services/liveTacticsContext.ts:378`
+- `src/services/liveTacticsContext.ts:374`
 - `src/services/moveReason.ts:133`
-- `src/services/playedMoveGrade.ts:139`
+- `src/services/oneHanging.test.ts:11`
+- `src/services/oneHanging.test.ts:16`
+- `src/services/oneHanging.test.ts:20`
+- `src/services/playedMoveGrade.ts:141`
 - `src/services/searchDepth.ts:69`
 - `src/services/tacticsDetector.ts:820`
 - `src/services/threatCheck.ts:55`
-- `src/services/threatOut.ts:92`
 - `src/test/kingIsNeverHanging.test.ts:56`
 
-### `classifyPosition` (function) — 30 call sites
-- `src/components/Coach/CoachGamePage.tsx:3355`
+### `classifyPosition` (function) — 31 call sites
+- `src/components/Coach/CoachGamePage.tsx:3320`
 - `src/services/missedTacticService.ts:755`
-- `src/services/pvPlayback.ts:407`
+- `src/services/pvPlayback.ts:421`
 - `src/services/tacticClassifier.test.ts:32`
 - `src/services/tacticClassifier.test.ts:40`
 - `src/services/tacticClassifier.test.ts:47`
 - `src/services/tacticClassifier.test.ts:54`
 - `src/services/tacticClassifier.test.ts:61`
-- `src/services/tacticClassifier.test.ts:68`
-- `src/services/tacticClassifier.test.ts:83`
-- `src/services/tacticClassifier.test.ts:93`
-- `src/services/tacticClassifier.test.ts:103`
-- `src/services/tacticClassifier.test.ts:114`
-- `src/services/tacticClassifier.test.ts:122`
-- `src/services/tacticClassifier.test.ts:134`
-- `src/services/tacticClassifier.test.ts:144`
-- `src/services/tacticClassifier.test.ts:157`
-- `src/services/tacticClassifier.test.ts:174`
-- `src/services/tacticClassifier.test.ts:194`
-- `src/services/tacticClassifier.test.ts:210`
-- `src/services/tacticClassifier.test.ts:220`
-- `src/services/tacticClassifier.test.ts:234`
-- `src/services/tacticClassifier.test.ts:249`
-- `src/services/tacticClassifier.test.ts:261`
-- `src/services/tacticClassifier.test.ts:275`
-- `src/services/tacticClassifier.test.ts:281`
-- `src/services/tacticClassifier.test.ts:299`
-- `src/services/tacticClassifier.test.ts:314`
-- `src/services/tacticClassifier.test.ts:323`
-- `src/services/tacticClassifier.test.ts:334`
+- `src/services/tacticClassifier.test.ts:62`
+- `src/services/tacticClassifier.test.ts:76`
+- `src/services/tacticClassifier.test.ts:86`
+- `src/services/tacticClassifier.test.ts:96`
+- `src/services/tacticClassifier.test.ts:109`
+- `src/services/tacticClassifier.test.ts:116`
+- `src/services/tacticClassifier.test.ts:123`
+- `src/services/tacticClassifier.test.ts:135`
+- `src/services/tacticClassifier.test.ts:145`
+- `src/services/tacticClassifier.test.ts:158`
+- `src/services/tacticClassifier.test.ts:175`
+- `src/services/tacticClassifier.test.ts:195`
+- `src/services/tacticClassifier.test.ts:211`
+- `src/services/tacticClassifier.test.ts:221`
+- `src/services/tacticClassifier.test.ts:235`
+- `src/services/tacticClassifier.test.ts:250`
+- `src/services/tacticClassifier.test.ts:262`
+- `src/services/tacticClassifier.test.ts:276`
+- `src/services/tacticClassifier.test.ts:282`
+- `src/services/tacticClassifier.test.ts:300`
+- `src/services/tacticClassifier.test.ts:315`
+- `src/services/tacticClassifier.test.ts:324`
+- `src/services/tacticClassifier.test.ts:335`
 
 ### `scanUpcomingTactics` (function) — 5 call sites
-- `src/components/Coach/CoachGamePage.tsx:2892`
-- `src/services/liveTacticsContext.ts:92`
+- `src/components/Coach/CoachGamePage.tsx:2857`
+- `src/services/liveTacticsContext.ts:94`
 - `src/services/tacticClassifier.skewer.test.ts:13`
 - `src/services/tacticClassifier.skewer.test.ts:15`
 - `src/services/tacticClassifier.skewer.test.ts:22`
@@ -88,6 +91,7 @@
 ## Tests
 
 - `src/services/hangingIgnoresCheck.test.ts`
+- `src/services/oneHanging.test.ts`
 - `src/services/tacticClassifier.skewer.test.ts`
 - `src/services/tacticClassifier.test.ts`
 - `src/services/tacticClassifierService.fill.test.ts`

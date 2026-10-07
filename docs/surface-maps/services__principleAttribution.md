@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1766 lines · 12 exports · 48 importers · 35 tests · 1 audits**
+**1765 lines · 12 exports · 48 importers · 35 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6168) — names `FundamentalId`
+- **The standard post-deploy ritual** (CLAUDE.md:6312) — names `FundamentalId`
 
 ## Who calls in
 
@@ -109,16 +109,16 @@
 - `src/services/claimTruth.manual.test.ts:182`
 - `src/services/claimTruth.manual.test.ts:187`
 - `src/services/claimTruth.manual.test.ts:195`
-- `src/services/coachFeatureService.ts:913`
+- `src/services/coachFeatureService.ts:931`
 - `src/services/learnWalkBlumenfeld.test.ts:65`
 - `src/services/liveFundamental.ts:153`
 - `src/services/misconceptionClassifier.ts:244`
-- `src/services/principleAttribution.pinPressure.test.ts:14`
-- `src/services/principleAttribution.pinPressure.test.ts:33`
-- `src/services/principleAttribution.pinPressure.test.ts:40`
-- `src/services/principleAttribution.pinPressure.test.ts:51`
-- `src/services/principleAttribution.pinPressure.test.ts:65`
-- `src/services/principleAttribution.pinPressure.test.ts:73`
+- `src/services/principleAttribution.pinPressure.test.ts:15`
+- `src/services/principleAttribution.pinPressure.test.ts:34`
+- `src/services/principleAttribution.pinPressure.test.ts:41`
+- `src/services/principleAttribution.pinPressure.test.ts:52`
+- `src/services/principleAttribution.pinPressure.test.ts:66`
+- `src/services/principleAttribution.pinPressure.test.ts:74`
 - `src/services/principleAttribution.section14.test.ts:27`
 - `src/services/principleAttribution.section14.test.ts:37`
 - `src/services/principleAttribution.section14.test.ts:46`
@@ -200,12 +200,12 @@
 ### `pvUciToSan` (function) — 11 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
-- `src/services/autoAnalyzeGame.ts:399`
-- `src/services/autoAnalyzeGame.ts:402`
-- `src/services/coachFeatureService.ts:918`
-- `src/services/coachFeatureService.ts:920`
-- `src/services/discussionPractice.ts:353`
-- `src/services/discussionPractice.ts:361`
+- `src/services/autoAnalyzeGame.ts:412`
+- `src/services/autoAnalyzeGame.ts:415`
+- `src/services/coachFeatureService.ts:936`
+- `src/services/coachFeatureService.ts:938`
+- `src/services/discussionPractice.ts:354`
+- `src/services/discussionPractice.ts:362`
 - `src/services/liveFundamental.ts:143`
 - `src/services/liveFundamental.ts:150`
 - `src/services/principleAttribution.test.ts:46`

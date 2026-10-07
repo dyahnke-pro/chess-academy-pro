@@ -39,7 +39,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `formatTrapForPrompt` (function) — 3 call sites
 - `src/coach/envelope.ts:764`
-- `src/components/Coach/CoachGamePage.tsx:3567`
+- `src/components/Coach/CoachGamePage.tsx:3568`
 - `src/services/openingTrapDetector.test.ts:100`
 
 ## Tests

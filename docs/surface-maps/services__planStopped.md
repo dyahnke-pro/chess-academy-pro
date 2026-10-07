@@ -19,12 +19,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `planStoppedProof` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2124`
+- `src/services/coachFeatureService.ts:2128`
 - `src/services/planStopped.test.ts:14`
 - `src/services/planThread.ts:60`
 
 ### `planStoppedLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:2127`
+- `src/services/coachFeatureService.ts:2131`
 - `src/services/planStopped.test.ts:40`
 - `src/services/planStopped.test.ts:43`
 - `src/services/planStopped.test.ts:49`

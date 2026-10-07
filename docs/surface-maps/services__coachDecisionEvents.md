@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**190 lines · 10 exports · 8 importers · 4 tests · 1 audits**
+**194 lines · 10 exports · 8 importers · 4 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -35,7 +35,7 @@
 - `src/test/computedOrderWired.test.ts:26`
 
 ### `emitCoachDecision` (function) — 1 call site
-- `src/services/coachDecider.ts:283`
+- `src/services/coachDecider.ts:323`
 
 ### `NeedScoreRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -63,7 +63,7 @@
 - `src/services/appAuditor.ts:2291`
 
 ### `emitLearnTurn` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:477`
+- `src/services/learnTurnDoor.ts:494`
 
 ## Tests
 

@@ -4,11 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**200 lines · 7 exports · 6 importers · 2 tests · 0 audits**
+**201 lines · 7 exports · 6 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3548) — names `theoryDeparture`
+- **STRENGTH IS MATCHED IN REAL TIME, FROM MOVE ONE (David 2026-09-18: "The coach can match in real time as they play on the board for the first time.")** (CLAUDE.md:139) — names `theoryDeparture`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4201) — names `ratingBandFor`, `theoryDeparture`
 
 ## Who calls in
 
@@ -31,36 +32,36 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `ratingBandFor` (function) — 11 call sites
+- `src/services/amateurPlayCache.test.ts:22`
 - `src/services/amateurPlayCache.test.ts:23`
 - `src/services/amateurPlayCache.test.ts:24`
-- `src/services/amateurPlayCache.test.ts:25`
-- `src/services/amateurPlayCache.test.ts:29`
-- `src/services/amateurPlayCache.test.ts:32`
+- `src/services/amateurPlayCache.test.ts:28`
+- `src/services/amateurPlayCache.test.ts:31`
 - `src/services/amateurPlayCache.ts:51`
-- `src/services/theoryDeparture.test.ts:125`
-- `src/services/theoryDeparture.test.ts:126`
-- `src/services/theoryDeparture.test.ts:127`
 - `src/services/theoryDeparture.test.ts:128`
 - `src/services/theoryDeparture.test.ts:129`
+- `src/services/theoryDeparture.test.ts:130`
+- `src/services/theoryDeparture.test.ts:131`
+- `src/services/theoryDeparture.test.ts:132`
 
 ### `findTheoryDeparture` (function) — 7 call sites
-- `src/components/Coach/CoachGameReview.tsx:2554`
+- `src/components/Coach/CoachGameReview.tsx:2459`
 - `src/services/bookDeparturePrecompute.ts:85`
-- `src/services/theoryDeparture.test.ts:52`
-- `src/services/theoryDeparture.test.ts:72`
-- `src/services/theoryDeparture.test.ts:82`
-- `src/services/theoryDeparture.test.ts:92`
-- `src/services/theoryDeparture.test.ts:100`
+- `src/services/theoryDeparture.test.ts:55`
+- `src/services/theoryDeparture.test.ts:75`
+- `src/services/theoryDeparture.test.ts:85`
+- `src/services/theoryDeparture.test.ts:95`
+- `src/services/theoryDeparture.test.ts:103`
 
 ### `BookLinePly` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `walkBookLine` (function) — 5 call sites
-- `src/components/Coach/CoachGameReview.tsx:2558`
-- `src/services/coachFeatureService.ts:3414`
-- `src/services/reviewOpeningTheory.ts:317`
-- `src/services/reviewOpeningTheory.ts:355`
-- `src/services/theoryDeparture.test.ts:109`
+- `src/components/Coach/CoachGameReview.tsx:2463`
+- `src/services/coachFeatureService.ts:4517`
+- `src/services/reviewOpeningTheory.ts:362`
+- `src/services/reviewOpeningTheory.ts:400`
+- `src/services/theoryDeparture.test.ts:112`
 
 ## Tests
 
@@ -69,4 +70,8 @@
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._

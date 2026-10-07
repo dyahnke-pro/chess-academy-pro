@@ -31,7 +31,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `findPinPressure` (function) — 14 call sites
-- `src/services/moveFundamentals.ts:352`
+- `src/services/moveFundamentals.ts:339`
 - `src/services/pinBreak.test.ts:46`
 - `src/services/pinPressure.test.ts:18`
 - `src/services/pinPressure.test.ts:27`
@@ -39,11 +39,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pinPressure.test.ts:43`
 - `src/services/pinPressure.test.ts:64`
 - `src/services/pinPressure.test.ts:69`
-- `src/services/positionFacts.ts:1662`
-- `src/services/principleAttribution.ts:734`
-- `src/services/principleAttribution.ts:743`
-- `src/services/principleAttribution.ts:768`
-- `src/services/principleAttribution.ts:771`
+- `src/services/positionFacts.ts:1658`
+- `src/services/principleAttribution.ts:733`
+- `src/services/principleAttribution.ts:742`
+- `src/services/principleAttribution.ts:767`
+- `src/services/principleAttribution.ts:770`
 - `src/services/thinkingTargetsStep.ts:156`
 
 ### `isPinPressureMove` (function) — 2 call sites
@@ -61,17 +61,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `scripts/pro-repertoire/build-all-naroditsky-plans.mjs:284`
 - `scripts/pro-repertoire/build-all-naroditsky-plans.mjs:292`
 - `scripts/pro-repertoire/build-all-naroditsky-plans.mjs:294`
-- `src/services/positionFacts.ts:1663`
-- `src/services/positionFacts.ts:1670`
-- `src/services/tacticClassifier.ts:41`
-- `src/services/tacticClassifier.ts:191`
-- `src/services/tacticClassifier.ts:193`
-- `src/services/tacticClassifier.ts:246`
-- `src/services/tacticClassifier.ts:303`
-- `src/services/tacticClassifier.ts:352`
-- `src/services/tacticClassifier.ts:396`
-- `src/services/tacticClassifier.ts:449`
-- `src/services/tacticClassifier.ts:502`
+- `src/services/positionFacts.ts:1659`
+- `src/services/positionFacts.ts:1666`
+- `src/services/tacticClassifier.ts:43`
+- `src/services/tacticClassifier.ts:201`
+- `src/services/tacticClassifier.ts:203`
+- `src/services/tacticClassifier.ts:256`
+- `src/services/tacticClassifier.ts:313`
+- `src/services/tacticClassifier.ts:362`
+- `src/services/tacticClassifier.ts:406`
+- `src/services/tacticClassifier.ts:459`
+- `src/services/tacticClassifier.ts:512`
 
 ## Tests
 

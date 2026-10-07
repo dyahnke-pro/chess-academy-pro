@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1716 lines · 15 exports · 23 importers · 22 tests · 3 audits**
+**1712 lines · 15 exports · 23 importers · 22 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -95,7 +95,7 @@
 - `src/services/whyBestMove.ts:141`
 
 ### `computePositionFacts` (function) — 85 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9797`
+- `src/components/Coach/CoachTeachPage.tsx:9815`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:635`
@@ -182,10 +182,10 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8426`
+- `src/components/Coach/CoachTeachPage.tsx:8439`
 
 ### `convertKey` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10048`
+- `src/components/Coach/CoachTeachPage.tsx:10066`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 
 ### `afterLine` (function) — 5 call sites
@@ -196,7 +196,7 @@
 - `src/services/positionFacts.afterLine.test.ts:25`
 
 ### `conceptInstanceKey` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8407`
+- `src/components/Coach/CoachTeachPage.tsx:8420`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.ts:9`

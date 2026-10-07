@@ -54,11 +54,11 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `factKind` (function) — 2 call sites
-- `src/services/coachDecider.ts:270`
-- `src/services/coachDecider.ts:371`
+- `src/services/coachDecider.ts:310`
+- `src/services/coachDecider.ts:411`
 
 ### `factValue` (function) — 1 call site
-- `src/services/coachDecider.ts:378`
+- `src/services/coachDecider.ts:418`
 
 ### `facetTag` (function) — 4 call sites
 - `src/services/reviewFacetRank.test.ts:19`

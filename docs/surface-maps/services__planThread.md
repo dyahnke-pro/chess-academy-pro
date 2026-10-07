@@ -26,9 +26,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `newPlanThread` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9691`
+- `src/components/Coach/CoachTeachPage.tsx:9709`
 - `src/services/boardComputers.test.ts:49`
-- `src/services/coachFeatureService.ts:1598`
+- `src/services/coachFeatureService.ts:1599`
 - `src/services/planThread.test.ts:15`
 - `src/services/planThread.test.ts:24`
 - `src/services/planThread.test.ts:33`

@@ -4,14 +4,15 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**345 lines · 2 exports · 5 importers · 2 tests · 0 audits**
+**412 lines · 8 exports · 6 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:2584) — names `buildReviewMoveBriefing`
+- **⏰ Standing notes** (CLAUDE.md:2705) — names `buildReviewMoveBriefing`
 
 ## Who calls in
 
+- `src/hooks/useTeachWalkthrough.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/materialSites.test.ts`
 - `src/services/openingGenerator.ts`
@@ -23,24 +24,57 @@
 ### `ReviewMoveBriefingInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewMoveBriefing` (function) — 17 call sites
-- `src/services/coachFeatureService.ts:1755`
-- `src/services/materialSites.test.ts:18`
-- `src/services/openingGenerator.ts:1691`
-- `src/services/openingGenerator.ts:2556`
-- `src/services/reviewMoveBriefing.test.ts:10`
-- `src/services/reviewMoveBriefing.test.ts:22`
-- `src/services/reviewMoveBriefing.test.ts:27`
-- `src/services/reviewMoveBriefing.test.ts:33`
+### `buildReviewMoveBriefing` (function) — 15 call sites
+- `src/services/coachFeatureService.ts:1797`
+- `src/services/materialSites.test.ts:20`
+- `src/services/reviewMoveBriefing.test.ts:11`
+- `src/services/reviewMoveBriefing.test.ts:23`
+- `src/services/reviewMoveBriefing.test.ts:28`
 - `src/services/reviewMoveBriefing.test.ts:34`
-- `src/services/reviewMoveBriefing.test.ts:42`
+- `src/services/reviewMoveBriefing.test.ts:35`
 - `src/services/reviewMoveBriefing.test.ts:43`
-- `src/services/reviewMoveBriefing.test.ts:51`
-- `src/services/reviewMoveBriefing.test.ts:59`
-- `src/services/reviewMoveBriefing.test.ts:64`
-- `src/services/reviewMoveBriefing.test.ts:69`
-- `src/services/reviewMoveBriefing.test.ts:86`
-- `src/services/walkthroughLlmNarrator.ts:135`
+- `src/services/reviewMoveBriefing.test.ts:44`
+- `src/services/reviewMoveBriefing.test.ts:52`
+- `src/services/reviewMoveBriefing.test.ts:60`
+- `src/services/reviewMoveBriefing.test.ts:65`
+- `src/services/reviewMoveBriefing.test.ts:70`
+- `src/services/reviewMoveBriefing.test.ts:88`
+- `src/services/reviewMoveBriefing.test.ts:105`
+
+### `LessonVoice` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `newLessonVoice` (function) — 6 call sites
+- `src/hooks/useTeachWalkthrough.ts:913`
+- `src/hooks/useTeachWalkthrough.ts:914`
+- `src/services/openingGenerator.ts:1926`
+- `src/services/openingGenerator.ts:2575`
+- `src/services/reviewMoveBriefing.test.ts:126`
+- `src/services/walkthroughLlmNarrator.ts:95`
+
+### `forkLessonVoice` (function) — 1 call site
+- `src/services/openingGenerator.ts:1998`
+
+### `lessonBeat` (function) — 5 call sites
+- `src/hooks/useTeachWalkthrough.ts:1524`
+- `src/services/openingGenerator.ts:1700`
+- `src/services/openingGenerator.ts:2576`
+- `src/services/reviewMoveBriefing.test.ts:130`
+- `src/services/walkthroughLlmNarrator.ts:141`
+
+### `prevCaptureOf` (re-export) — 9 call sites
+- `src/hooks/useTeachWalkthrough.ts:1522`
+- `src/services/openingGenerator.ts:1928`
+- `src/services/openingGenerator.ts:1995`
+- `src/services/openingGenerator.ts:2003`
+- `src/services/openingGenerator.ts:2579`
+- `src/services/pvPlayback.ts:224`
+- `src/services/reviewMoveBriefing.test.ts:101`
+- `src/services/reviewMoveBriefing.test.ts:130`
+- `src/services/walkthroughLlmNarrator.ts:131`
+
+### `NO_PREV_CAPTURE` (re-export) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ## Tests
 

@@ -31,9 +31,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pinGeometry.test.ts:104`
 
 ### `isRealPin` (function) — 4 call sites
-- `src/services/groundedAnswer.ts:2708`
+- `src/services/groundedAnswer.ts:2701`
 - `src/services/missedTacticService.ts:228`
-- `src/services/tacticClassifier.ts:233`
+- `src/services/tacticClassifier.ts:243`
 - `src/services/tacticsDetector.ts:227`
 
 ### `pinBites` (function) — 3 call sites

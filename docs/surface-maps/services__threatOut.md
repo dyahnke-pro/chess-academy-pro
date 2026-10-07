@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**112 lines · 3 exports · 12 importers · 3 tests · 0 audits**
+**113 lines · 3 exports · 13 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/forkTrick.ts`
+- `src/services/groundedAnswer.ts`
 - `src/services/liveTacticsContext.ts`
 - `src/services/moveInsight.ts`
 - `src/services/mustDefendHabit.test.ts`
@@ -32,7 +33,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `flipSideToMove` (function) — 8 call sites
 - `src/services/forkTrick.ts:138`
-- `src/services/liveTacticsContext.ts:786`
+- `src/services/liveTacticsContext.ts:781`
 - `src/services/narrationAuditor.ts:85`
 - `src/services/narrationAuditor.ts:201`
 - `src/services/threatOut.test.ts:6`
@@ -40,8 +41,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/threatProof.ts:25`
 - `src/services/threatProof.ts:72`
 
-### `computeMustDefend` (function) — 21 call sites
-- `src/services/liveTacticsContext.ts:788`
+### `computeMustDefend` (function) — 22 call sites
+- `src/services/groundedAnswer.ts:620`
+- `src/services/liveTacticsContext.ts:783`
 - `src/services/moveInsight.ts:167`
 - `src/services/mustDefendHabit.test.ts:13`
 - `src/services/obligationLifted.ts:49`

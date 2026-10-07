@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7473 lines · 162 exports · 77 importers · 50 tests · 8 audits**
+**7466 lines · 162 exports · 77 importers · 50 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -322,11 +322,11 @@
 - `src/services/groundedAnswer.trade.test.ts:30`
 - `src/services/groundedAnswer.trade.test.ts:39`
 - `src/services/groundedAnswer.trade.test.ts:48`
-- `src/services/materialSites.test.ts:41`
+- `src/services/materialSites.test.ts:44`
 
 ### `assembleEndgameOutlookAnswer` (function) — 2 call sites
 - `src/services/coachApi.ts:5936`
-- `src/services/materialSites.test.ts:46`
+- `src/services/materialSites.test.ts:49`
 
 ### `boardWeaknessNow` (function) — 2 call sites
 - `src/services/coachApi.ts:3955`
@@ -386,7 +386,7 @@
 - `src/services/groundedAnswer.test.ts:1145`
 - `src/services/groundedAnswer.test.ts:1150`
 - `src/services/groundedAnswer.test.ts:1154`
-- `src/services/groundedMoveWhy.ts:79`
+- `src/services/groundedMoveWhy.ts:82`
 - `src/services/guidedFindTheMove.ts:90`
 - `src/services/mistakeNarration.ts:640`
 - `src/services/moveAllowed.ts:56`
@@ -397,7 +397,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `describeMoveMerit` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1163`
+- `src/services/coachFeatureService.ts:1164`
 - `src/services/keySquares.test.ts:81`
 - `src/services/keySquares.test.ts:90`
 - `src/services/keySquares.test.ts:94`
@@ -410,7 +410,7 @@
 - `src/services/brilliancy.ts:130`
 - `src/services/coachFeatureService.test.ts:96`
 - `src/services/coachFeatureService.test.ts:102`
-- `src/services/coachFeatureService.ts:1163`
+- `src/services/coachFeatureService.ts:1164`
 
 ### `MovePurpose` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -454,7 +454,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `explainMoveOrder` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:1028`
+- `src/services/coachFeatureService.ts:1029`
 - `src/services/groundedAnswer.test.ts:1066`
 - `src/services/groundedAnswer.test.ts:1074`
 - `src/services/groundedAnswer.test.ts:1081`
@@ -985,8 +985,8 @@
 - `src/services/groundedAnswer.routerE.test.ts:216`
 
 ### `assembleSlipNarration` (function) — 4 call sites
-- `src/components/Coach/CoachGamePage.tsx:3813`
-- `src/components/Coach/CoachGamePage.tsx:3971`
+- `src/components/Coach/CoachGamePage.tsx:3814`
+- `src/components/Coach/CoachGamePage.tsx:3976`
 - `src/services/groundedAnswer.test.ts:725`
 - `src/services/groundedAnswer.test.ts:740`
 
@@ -1067,7 +1067,7 @@
 - `src/services/groundedAnswer.positional.test.ts:76`
 - `src/services/groundedAnswer.positional.test.ts:80`
 - `src/services/groundedAnswer.positional.test.ts:85`
-- `src/services/materialSites.test.ts:35`
+- `src/services/materialSites.test.ts:38`
 
 ### `CounterRecLike` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -1109,7 +1109,7 @@
 - `src/services/moveInsight.ts:731`
 - `src/services/opponentMovePurpose.ts:64`
 - `src/services/reviewFullData.ts:815`
-- `src/services/reviewMoveBriefing.ts:227`
+- `src/services/reviewMoveBriefing.ts:243`
 - `src/services/reviewNarrationFidelity.test.ts:218`
 - `src/services/reviewNarrationFidelity.test.ts:227`
 - `src/services/reviewNarrationFidelity.test.ts:239`
@@ -1170,11 +1170,11 @@
 - `src/services/coachApi.ts:6021`
 
 ### `seatPieceReferences` (re-export) — 33 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8269`
+- `src/components/Coach/CoachTeachPage.tsx:8280`
 - `src/services/coachFeatureService.ts:4143`
 - `src/services/coachFeatureService.ts:4194`
 - `src/services/coachFeatureService.ts:5295`
-- `src/services/liveTacticsContext.ts:454`
+- `src/services/liveTacticsContext.ts:449`
 - `src/services/lookaheadPlan.ts:128`
 - `src/services/reviewBoardAwareness.test.ts:47`
 - `src/services/reviewBoardAwareness.test.ts:51`

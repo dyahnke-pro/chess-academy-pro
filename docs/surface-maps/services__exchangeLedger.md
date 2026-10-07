@@ -85,15 +85,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts:208`
 
 ### `settledNetForLine` (function) — 5 call sites
-- `src/services/moveComparison.ts:201`
-- `src/services/moveComparison.ts:202`
+- `src/services/moveComparison.ts:182`
+- `src/services/moveComparison.ts:183`
 - `src/services/moveInsight.lineAudit.test.ts:49`
 - `src/services/moveInsight.ts:366`
 - `src/services/thinkAloud.ts:90`
 
 ### `settledExchange` (function) — 4 call sites
 - `src/services/playCommentary.ts:972`
-- `src/services/reviewConcepts.ts:90`
+- `src/services/reviewConcepts.ts:91`
 - `src/services/reviewFullData.ts:359`
 - `src/services/reviewWalkOct2a.test.ts:15`
 
@@ -109,8 +109,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/giftedMaterialIsNotWon.test.ts:30`
 - `src/services/giftedMaterialIsNotWon.test.ts:45`
 - `src/services/giftedMaterialIsNotWon.test.ts:56`
-- `src/services/groundedAnswer.ts:2520`
-- `src/services/groundedAnswer.ts:2587`
+- `src/services/groundedAnswer.ts:2513`
+- `src/services/groundedAnswer.ts:2580`
 - `src/services/inaccuracyCall.ts:294`
 - `src/services/inaccuracyCall.ts:352`
 - `src/services/inaccuracyCall.ts:664`
@@ -126,11 +126,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/lookaheadPlan.ts:597`
 - `src/services/lookaheadPlan.ts:659`
 - `src/services/moveOrder.ts:120`
-- `src/services/openingGenerator.ts:3577`
+- `src/services/openingGenerator.ts:3602`
 - `src/services/pieceOptions.ts:110`
 - `src/services/playedMoveGrade.ts:106`
-- `src/services/principleAttribution.ts:425`
-- `src/services/principleAttribution.ts:489`
+- `src/services/principleAttribution.ts:424`
+- `src/services/principleAttribution.ts:488`
 - `src/services/projectedLineVoice.report.test.ts:108`
 - `src/services/projectedLineVoice.ts:67`
 - `src/services/punishCountsPlayedMove.test.ts:16`

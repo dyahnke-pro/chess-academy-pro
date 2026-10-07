@@ -85,7 +85,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectBadHabitsFromGame` (function) — 8 call sites
-- `src/components/Coach/CoachGamePage.tsx:2072`
+- `src/components/Coach/CoachGamePage.tsx:2073`
 - `src/services/coachFeatureService.test.ts:200`
 - `src/services/coachFeatureService.test.ts:215`
 - `src/services/coachFeatureService.test.ts:238`
@@ -123,9 +123,9 @@
 
 ### `buildProfileContext` (function) — 7 call sites
 - `src/components/Coach/CoachAnalysisView.tsx:32`
-- `src/services/coachChatService.ts:363`
-- `src/services/coachChatService.ts:437`
-- `src/services/coachChatService.ts:463`
+- `src/services/coachChatService.ts:353`
+- `src/services/coachChatService.ts:397`
+- `src/services/coachChatService.ts:422`
 - `src/services/coachFeatureService.test.ts:297`
 - `src/services/coachFeatureService.test.ts:309`
 - `src/services/coachFeatureService.test.ts:315`
@@ -323,7 +323,7 @@
 - `src/components/Coach/CoachGameReview.tsx:234`
 
 ### `generateReviewNarration` (function) — 15 call sites
-- `src/services/proofBacklog.report.test.ts:100`
+- `src/services/proofBacklog.report.test.ts:103`
 - `src/services/reviewBetterLineWhy.test.ts:58`
 - `src/services/reviewBetterLineWhy.test.ts:74`
 - `src/services/reviewBetterLineWhy.test.ts:84`
