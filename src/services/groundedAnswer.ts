@@ -13,6 +13,7 @@
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
 import { MATERIAL_VALUE } from './pieceValues';
+import { computeMustDefend } from './threatOut';
 import { mechanismContrast, moveMissed, pvSans } from './moveInsight';
 import { walkableLine } from './proof';
 import { settledLeadFor, type LastMove } from './material';
@@ -613,19 +614,11 @@ export function assembleThreatAnswer(fen: string, _ask: string | null | undefine
   // "my threats" → what I can win off THEM; else → what THEY can win off ME.
   const victimColor: 'w' | 'b' = side === 'me' ? them : me;
   const isOpp = side !== 'me';
-  const wins: Array<{ sq: Square; type: PieceSymbol; g: number }> = [];
-  for (const row of chess.board()) {
-    for (const cell of row) {
-      if (!cell || cell.color !== victimColor || cell.type === 'k') continue;
-      // Pin-aware (2026-09-12): only a LEGAL profitable capture counts, so a
-      // pinned attacker/defender can't invent or mask a threat.
-      const capturer: 'w' | 'b' = victimColor === 'w' ? 'b' : 'w';
-      let g = 0;
-      try { g = legalSeeGainFor(fen, cell.square, capturer); } catch { g = 0; }
-      if (g > 0) wins.push({ sq: cell.square, type: cell.type, g });
-    }
-  }
-  wins.sort((a, b) => b.g - a.g);
+  // ONE THREAT READ (one-coach P2, census group 4): the same must-defend
+  // computer Learn's warning, the live read and Review's threat lane use —
+  // the null-move, pin-aware exchange read — never a second board scan.
+  const wins: Array<{ sq: Square; type: PieceSymbol; g: number }> = computeMustDefend(fen, victimColor).pieces
+    .map((p) => ({ sq: p.square as Square, type: p.piece as PieceSymbol, g: p.value }));
   const inCheck = chess.inCheck();
   if (wins.length === 0 && !inCheck) {
     return {

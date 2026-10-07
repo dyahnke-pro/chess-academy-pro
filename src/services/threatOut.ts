@@ -15,8 +15,9 @@
 // criticality at the call site per the cost architecture.
 import { Chess, type Square } from 'chess.js';
 import { findHangingBySee } from './positionReadingService';
+import { CAPTURE_VALUE } from './pieceValues';
 
-const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+const VALUE = CAPTURE_VALUE;
 
 export interface MustDefend {
   /** The biggest single piece (in points) the mover must defend — 0 if nothing
