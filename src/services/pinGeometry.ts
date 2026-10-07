@@ -180,10 +180,31 @@ export function pinBites(chess: Chess, attacker: Square, pinned: Square, behind:
   const att = chess.get(attacker);
   if (!back || !att) return false;
   if (back.type === 'k') return true;
+  // THE PINNER MUST BE FREE TO TAKE (teach-brief §3, "the would-be pinner is
+  // itself pinned"): Bg5 "pinning" Nf6 to the queen while …Bh6 pins Bg5 to its
+  // own king on e3 — the knight steps away and Bxd8 is illegal. With the front
+  // piece imagined off the line, the capture behind must be a legal move.
+  if (!pinnerCanTake(chess, attacker, pinned, behind)) return false;
   if (CAPTURE_VALUE[back.type] > CAPTURE_VALUE[att.type]) return true;
   let defenders: Square[];
   try { defenders = chess.attackers(behind, back.color); } catch { return false; }
   return !defenders.some((sq) => sq !== pinned);
+}
+
+/** With the front piece lifted off the board, is `attacker` taking on
+ *  `behind` a legal move? Unknown (a board chess.js will not load) → true, so
+ *  a probe failure never silences a real pin. */
+function pinnerCanTake(chess: Chess, attacker: Square, pinned: Square, behind: Square): boolean {
+  const att = chess.get(attacker);
+  if (!att) return false;
+  try {
+    const parts = chess.fen().split(' ');
+    parts[1] = att.color;
+    parts[3] = '-';
+    const probe = new Chess(parts.join(' '));
+    probe.remove(pinned);
+    return probe.moves({ square: attacker, verbose: true }).some((m) => m.to === behind);
+  } catch { return true; }
 }
 
 export type { PieceSymbol, Color };
