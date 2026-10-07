@@ -299,6 +299,7 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingR
 import { opponentStrength } from '../../services/engineStrength';
 import { samePosition } from '../../utils/samePosition';
 import { findPinBreaks, pinBreakLine } from '../../services/pinBreak';
+import { obligationLifted, obligationLiftedLine } from '../../services/obligationLifted';
 import { splitThink, stripThink, THINK_MARK, THINK_PAUSE_MS } from '../../utils/thinkPause';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
@@ -8867,6 +8868,17 @@ export function CoachTeachPage(): JSX.Element {
           : [];
       } catch { return []; }
     })();
+    // AN OBLIGATION LIFTS (teach-brief §3): their move took an attacker off a
+    // piece the student had to look after — the move it was costing is free.
+    const liftLine = ((): { text: string; squares: string[] } | null => {
+      try {
+        const b = new Chess();
+        for (const san of args.historyAfterReply.slice(0, -1)) b.move(san);
+        const o = obligationLifted(b.fen(), args.fenAfterReply, studentCC);
+        return o ? { text: obligationLiftedLine(o), squares: [o.square, o.from, o.to] } : null;
+      } catch { return null; }
+    })();
+    deferIf(liftLine, 'theirMoveCost', liftLine?.text ?? null, liftLine?.squares);
     deferIf(computedLine, 'commentary', computedLine, undefined, undefined, computedLineArrows);
     deferIf(behaviorLine && !decidedByMaterial, 'behavior', behaviorLine, behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)), behaviorClaims, behaviorArrows);
     deferIf(positionalLine && !decidedByMaterial, positionalIsOwnKing ? 'kingSafety' : 'positional', positionalLine, positionalSquares, positionalClaims);
