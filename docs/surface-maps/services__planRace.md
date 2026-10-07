@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**341 lines · 9 exports · 7 importers · 2 tests · 0 audits**
+**356 lines · 10 exports · 7 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The tools are COMPUTERS** (CLAUDE.md:25) — names `planRace`
-- **G4.5.3 NEVER HAND OUT AN INSTRUCTION YOU HAVE NOT TESTED — and two plans only RACE when they run the same kind of plan (found reading the code, 2026-09-17).** (CLAUDE.md:1137) — names `planRace`
+- **The tools are COMPUTERS** (CLAUDE.md:44) — names `planRace`
+- **G4.5.3 NEVER HAND OUT AN INSTRUCTION YOU HAVE NOT TESTED — and two plans only RACE when they run the same kind of plan (found reading the code, 2026-09-17).** (CLAUDE.md:1178) — names `planRace`
 
 ## Who calls in
 
@@ -78,13 +78,16 @@
 - `src/services/planRace.test.ts:109`
 - `src/services/planRace.test.ts:115`
 - `src/services/planRace.test.ts:157`
-- `src/services/reviewFullData.ts:809`
+- `src/services/reviewFullData.ts:937`
 
 ### `fileClaimed` (function) — 4 call sites
-- `src/services/learnBoardTeaching.ts:173`
+- `src/services/learnBoardTeaching.ts:206`
 - `src/services/planRace.test.ts:140`
 - `src/services/planRace.test.ts:147`
 - `src/services/planRace.test.ts:148`
+
+### `planRaceProof` (function) — 1 call site
+- `src/services/reviewFullData.ts:938`
 
 ## Tests
 

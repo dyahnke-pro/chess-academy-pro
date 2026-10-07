@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**112 lines · 3 exports · 10 importers · 3 tests · 0 audits**
+**112 lines · 3 exports · 12 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,11 +16,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/liveTacticsContext.ts`
 - `src/services/moveInsight.ts`
 - `src/services/mustDefendHabit.test.ts`
+- `src/services/obligationLifted.ts`
 - `src/services/playedMoveGrade.ts`
 - `src/services/positionFacts.ts`
 - `src/services/reviewHinge.ts`
 - `src/services/speedRunReads.ts`
 - `src/services/threatOut.test.ts`
+- `src/services/threatProof.ts`
 - `src/services/weaknessSpine.ts`
 
 ## Exports and every call site
@@ -28,24 +30,28 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `MustDefend` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `flipSideToMove` (function) — 6 call sites
+### `flipSideToMove` (function) — 8 call sites
 - `src/services/forkTrick.ts:138`
 - `src/services/liveTacticsContext.ts:786`
 - `src/services/narrationAuditor.ts:85`
 - `src/services/narrationAuditor.ts:201`
 - `src/services/threatOut.test.ts:6`
 - `src/services/threatOut.test.ts:10`
+- `src/services/threatProof.ts:25`
+- `src/services/threatProof.ts:72`
 
-### `computeMustDefend` (function) — 17 call sites
+### `computeMustDefend` (function) — 21 call sites
 - `src/services/liveTacticsContext.ts:788`
-- `src/services/moveInsight.ts:166`
+- `src/services/moveInsight.ts:167`
 - `src/services/mustDefendHabit.test.ts:13`
+- `src/services/obligationLifted.ts:49`
+- `src/services/obligationLifted.ts:51`
 - `src/services/playedMoveGrade.ts:125`
-- `src/services/positionFacts.ts:466`
+- `src/services/positionFacts.ts:472`
 - `src/services/replayFence.modern1690.test.ts:160`
 - `src/services/replayFence.modern1690.test.ts:165`
 - `src/services/reviewHinge.ts:36`
-- `src/services/speedRunReads.ts:601`
+- `src/services/speedRunReads.ts:608`
 - `src/services/threatOut.test.ts:17`
 - `src/services/threatOut.test.ts:24`
 - `src/services/threatOut.test.ts:31`
@@ -53,6 +59,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/threatOut.test.ts:46`
 - `src/services/threatOut.test.ts:53`
 - `src/services/threatOut.test.ts:60`
+- `src/services/threatProof.ts:39`
+- `src/services/threatProof.ts:75`
 - `src/services/weaknessSpine.ts:219`
 
 ## Tests

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**190 lines · 3 exports · 5 importers · 1 tests · 0 audits**
+**211 lines · 3 exports · 5 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -31,10 +31,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pinGeometry.test.ts:104`
 
 ### `isRealPin` (function) — 4 call sites
-- `src/services/groundedAnswer.ts:2557`
+- `src/services/groundedAnswer.ts:2708`
 - `src/services/missedTacticService.ts:228`
-- `src/services/tacticClassifier.ts:234`
-- `src/services/tacticsDetector.ts:221`
+- `src/services/tacticClassifier.ts:233`
+- `src/services/tacticsDetector.ts:227`
 
 ### `pinBites` (function) — 3 call sites
 - `src/services/pinGeometry.test.ts:89`

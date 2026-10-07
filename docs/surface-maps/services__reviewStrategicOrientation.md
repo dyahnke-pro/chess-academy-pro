@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**632 lines · 9 exports · 8 importers · 5 tests · 1 audits**
+**638 lines · 9 exports · 8 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -24,7 +24,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `buildOpeningMoveDetail` (function) — 1 call site
-- `src/services/coachFeatureService.ts:3113`
+- `src/services/coachFeatureService.ts:3237`
 
 ### `PlanArrow` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -41,46 +41,47 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planBeatShape.test.ts:78`
 
 ### `buildOpeningDevelopmentPlan` (function) — 12 call sites
-- `src/services/coachFeatureService.ts:2947`
+- `src/services/coachFeatureService.ts:3071`
 - `src/services/planPrescriptions.test.ts:53`
 - `src/services/planPrescriptions.test.ts:61`
 - `src/services/planPrescriptions.test.ts:74`
-- `src/services/reviewFullData.ts:1047`
-- `src/services/reviewStrategicOrientation.test.ts:48`
-- `src/services/reviewStrategicOrientation.test.ts:65`
-- `src/services/reviewStrategicOrientation.test.ts:66`
-- `src/services/reviewStrategicOrientation.test.ts:74`
-- `src/services/reviewStrategicOrientation.test.ts:85`
-- `src/services/reviewStrategicOrientation.test.ts:96`
-- `src/services/reviewStrategicOrientation.test.ts:110`
+- `src/services/reviewFullData.ts:1200`
+- `src/services/reviewStrategicOrientation.test.ts:58`
+- `src/services/reviewStrategicOrientation.test.ts:75`
+- `src/services/reviewStrategicOrientation.test.ts:76`
+- `src/services/reviewStrategicOrientation.test.ts:84`
+- `src/services/reviewStrategicOrientation.test.ts:95`
+- `src/services/reviewStrategicOrientation.test.ts:106`
+- `src/services/reviewStrategicOrientation.test.ts:120`
 
 ### `buildHisGroundedPlanBeat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2945`
+- `src/services/coachFeatureService.ts:3069`
 - `src/services/groundedPlanBeat.test.ts:21`
 - `src/services/groundedPlanBeat.test.ts:31`
 - `src/services/groundedPlanBeat.test.ts:55`
 
 ### `buildMastersGroundedPlanBeat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2946`
+- `src/services/coachFeatureService.ts:3070`
 - `src/services/groundedPlanBeat.test.ts:41`
 - `src/services/groundedPlanBeat.test.ts:49`
 - `src/services/groundedPlanBeat.test.ts:56`
 
-### `buildMiddlegameOrientation` (function) — 15 call sites
-- `src/services/coachFeatureService.ts:2968`
-- `src/services/reviewFullData.ts:1053`
+### `buildMiddlegameOrientation` (function) — 16 call sites
+- `src/services/coachFeatureService.ts:3092`
+- `src/services/reviewFullData.ts:1206`
 - `src/services/reviewStrategicOrientation.test.ts:4`
 - `src/services/reviewStrategicOrientation.test.ts:8`
-- `src/services/reviewStrategicOrientation.test.ts:16`
+- `src/services/reviewStrategicOrientation.test.ts:18`
 - `src/services/reviewStrategicOrientation.test.ts:26`
-- `src/services/reviewStrategicOrientation.test.ts:34`
-- `src/services/reviewStrategicOrientation.test.ts:35`
-- `src/services/reviewStrategicOrientation.test.ts:39`
+- `src/services/reviewStrategicOrientation.test.ts:36`
 - `src/services/reviewStrategicOrientation.test.ts:44`
-- `src/services/reviewStrategicOrientation.test.ts:126`
-- `src/services/reviewStrategicOrientation.test.ts:127`
-- `src/services/reviewStrategicOrientation.test.ts:134`
+- `src/services/reviewStrategicOrientation.test.ts:45`
+- `src/services/reviewStrategicOrientation.test.ts:49`
+- `src/services/reviewStrategicOrientation.test.ts:54`
 - `src/services/reviewStrategicOrientation.test.ts:136`
+- `src/services/reviewStrategicOrientation.test.ts:137`
+- `src/services/reviewStrategicOrientation.test.ts:144`
+- `src/services/reviewStrategicOrientation.test.ts:146`
 - `src/services/reviewWalk900.test.ts:33`
 
 ## Tests

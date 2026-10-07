@@ -4,16 +4,16 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7458 lines · 162 exports · 76 importers · 49 tests · 8 audits**
+**7473 lines · 162 exports · 77 importers · 50 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
 - **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:263) — names `describeThreatRecognition`
 - **G0. THE LLM DECIDES NOTHING — it voices facts computed in code (David 2026-06-10, LOCKED, supreme law).** (CLAUDE.md:346) — names `explainBestMoveGrounded`, `groundedAnswer`
 - **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:947) — names `groundedAnswer`
-- **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:3766) — names `describeThreatRecognition`
-- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3857) — names `explainBestMoveGrounded`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6092) — names `describeThreatRecognition`
+- **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:3836) — names `describeThreatRecognition`
+- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3927) — names `explainBestMoveGrounded`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6162) — names `describeThreatRecognition`
 
 ## Who calls in
 
@@ -69,6 +69,7 @@
 - `src/services/groundedAnswer.settings.test.ts`
 - `src/services/groundedAnswer.teaching.test.ts`
 - `src/services/groundedAnswer.test.ts`
+- `src/services/groundedAnswer.threatTake.test.ts`
 - `src/services/groundedAnswer.trade.test.ts`
 - `src/services/groundedMoveWhy.ts`
 - `src/services/guidedFindTheMove.ts`
@@ -151,8 +152,9 @@
 - `src/services/checkIsNotAGuard.test.ts:54`
 - `src/services/computedVoiceGrounding.test.ts:85`
 
-### `assembleThreatAnswer` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `assembleThreatAnswer` (function) — 2 call sites
+- `src/services/groundedAnswer.threatTake.test.ts:8`
+- `src/services/groundedAnswer.threatTake.test.ts:15`
 
 ### `assembleKingSafetyAnswer` (function) — 2 call sites
 - `src/services/kingSafetyAnswer.test.ts:6`
@@ -351,8 +353,8 @@
 - `src/services/coachFeatureService.test.ts:66`
 - `src/services/coachFeatureService.test.ts:80`
 - `src/services/coachFeatureService.test.ts:87`
-- `src/services/coachFeatureService.ts:2582`
-- `src/services/coachFeatureService.ts:2593`
+- `src/services/coachFeatureService.ts:2628`
+- `src/services/coachFeatureService.ts:2639`
 - `src/services/coachMoveCommentary.ts:221`
 - `src/services/computerAccuracy.audit.test.ts:111`
 - `src/services/explainBestMoveLines.test.ts:14`
@@ -365,14 +367,14 @@
 - `src/services/mistakeNarration.ts:646`
 - `src/services/reviewNarrationFidelity.test.ts:167`
 - `src/services/reviewNarrationFidelity.test.ts:173`
-- `src/services/whyBestMove.ts:104`
+- `src/services/whyBestMove.ts:105`
 
 ### `captureHasCounterTactic` (function) — 1 call site
 - `src/services/reviewTeachingPoints.ts:101`
 
 ### `describeMoveGeometry` (function) — 19 call sites
 - `src/components/Puzzles/PuzzleBoard.tsx:234`
-- `src/components/Tactics/TacticSetupBoard.tsx:152`
+- `src/components/Tactics/TacticSetupBoard.tsx:153`
 - `src/hooks/useHintSystem.ts:357`
 - `src/services/computedVoiceGrounding.test.ts:53`
 - `src/services/computedVoiceGrounding.test.ts:111`
@@ -395,7 +397,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `describeMoveMerit` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1157`
+- `src/services/coachFeatureService.ts:1163`
 - `src/services/keySquares.test.ts:81`
 - `src/services/keySquares.test.ts:90`
 - `src/services/keySquares.test.ts:94`
@@ -408,7 +410,7 @@
 - `src/services/brilliancy.ts:130`
 - `src/services/coachFeatureService.test.ts:96`
 - `src/services/coachFeatureService.test.ts:102`
-- `src/services/coachFeatureService.ts:1157`
+- `src/services/coachFeatureService.ts:1163`
 
 ### `MovePurpose` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -452,7 +454,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `explainMoveOrder` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:1022`
+- `src/services/coachFeatureService.ts:1028`
 - `src/services/groundedAnswer.test.ts:1066`
 - `src/services/groundedAnswer.test.ts:1074`
 - `src/services/groundedAnswer.test.ts:1081`
@@ -983,8 +985,8 @@
 - `src/services/groundedAnswer.routerE.test.ts:216`
 
 ### `assembleSlipNarration` (function) — 4 call sites
-- `src/components/Coach/CoachGamePage.tsx:3854`
-- `src/components/Coach/CoachGamePage.tsx:4012`
+- `src/components/Coach/CoachGamePage.tsx:3813`
+- `src/components/Coach/CoachGamePage.tsx:3971`
 - `src/services/groundedAnswer.test.ts:725`
 - `src/services/groundedAnswer.test.ts:740`
 
@@ -1098,15 +1100,15 @@
 - `src/services/bluffDetector.ts:73`
 - `src/services/captureThreatAnswerable.test.ts:13`
 - `src/services/captureThreatAnswerable.test.ts:29`
-- `src/services/coachFeatureService.ts:2913`
+- `src/services/coachFeatureService.ts:2959`
 - `src/services/engineDeltaLines.ts:53`
 - `src/services/falseAlarm.ts:52`
 - `src/services/falseAlarm.ts:60`
 - `src/services/learnMoveTeaching.ts:125`
-- `src/services/moveInsight.ts:581`
-- `src/services/moveInsight.ts:745`
+- `src/services/moveInsight.ts:567`
+- `src/services/moveInsight.ts:731`
 - `src/services/opponentMovePurpose.ts:64`
-- `src/services/reviewFullData.ts:779`
+- `src/services/reviewFullData.ts:815`
 - `src/services/reviewMoveBriefing.ts:227`
 - `src/services/reviewNarrationFidelity.test.ts:218`
 - `src/services/reviewNarrationFidelity.test.ts:227`
@@ -1119,7 +1121,7 @@
 - `src/services/captureThreatAnswerable.test.ts:18`
 
 ### `describeStudentThreat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2834`
+- `src/services/coachFeatureService.ts:2880`
 - `src/services/reviewNarrationFidelity.test.ts:184`
 - `src/services/reviewNarrationFidelity.test.ts:196`
 - `src/services/reviewNarrationFidelity.test.ts:204`
@@ -1135,7 +1137,7 @@
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/coachFeatureService.ts:2933`
+- `src/services/coachFeatureService.ts:2979`
 - `src/services/reviewNarrationFidelity.test.ts:254`
 
 ### `ComparedMove` (interface) — 0 call sites
@@ -1168,10 +1170,10 @@
 - `src/services/coachApi.ts:6021`
 
 ### `seatPieceReferences` (re-export) — 33 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8211`
-- `src/services/coachFeatureService.ts:4097`
-- `src/services/coachFeatureService.ts:4145`
-- `src/services/coachFeatureService.ts:5245`
+- `src/components/Coach/CoachTeachPage.tsx:8269`
+- `src/services/coachFeatureService.ts:4143`
+- `src/services/coachFeatureService.ts:4194`
+- `src/services/coachFeatureService.ts:5295`
 - `src/services/liveTacticsContext.ts:454`
 - `src/services/lookaheadPlan.ts:128`
 - `src/services/reviewBoardAwareness.test.ts:47`
@@ -1181,10 +1183,10 @@
 - `src/services/reviewBoardAwareness.test.ts:70`
 - `src/services/reviewBoardAwareness.test.ts:71`
 - `src/services/reviewBoardAwareness.test.ts:72`
-- `src/services/reviewFullData.ts:308`
-- `src/services/reviewFullData.ts:427`
-- `src/services/reviewFullData.ts:516`
-- `src/services/reviewFullData.ts:677`
+- `src/services/reviewFullData.ts:322`
+- `src/services/reviewFullData.ts:445`
+- `src/services/reviewFullData.ts:532`
+- `src/services/reviewFullData.ts:702`
 - `src/services/reviewNarrationFidelity.test.ts:85`
 - `src/services/reviewNarrationFidelity.test.ts:95`
 - `src/services/reviewNarrationFidelity.test.ts:101`
@@ -1240,6 +1242,7 @@
 - `src/services/groundedAnswer.settings.test.ts`
 - `src/services/groundedAnswer.teaching.test.ts`
 - `src/services/groundedAnswer.test.ts`
+- `src/services/groundedAnswer.threatTake.test.ts`
 - `src/services/groundedAnswer.trade.test.ts`
 - `src/services/keySquares.test.ts`
 - `src/services/kingSafetyAnswer.test.ts`

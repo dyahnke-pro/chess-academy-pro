@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**177 lines · 8 exports · 5 importers · 1 tests · 2 audits**
+**181 lines · 8 exports · 6 importers · 2 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/moveFundamentals.ts`
+- `src/services/pinBreak.test.ts`
 - `src/services/pinPressure.test.ts`
 - `src/services/positionFacts.ts`
 - `src/services/principleAttribution.ts`
@@ -29,15 +30,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `PIN_PRESSURE_PRINCIPLE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `findPinPressure` (function) — 13 call sites
+### `findPinPressure` (function) — 14 call sites
 - `src/services/moveFundamentals.ts:352`
+- `src/services/pinBreak.test.ts:46`
 - `src/services/pinPressure.test.ts:18`
 - `src/services/pinPressure.test.ts:27`
 - `src/services/pinPressure.test.ts:31`
 - `src/services/pinPressure.test.ts:43`
 - `src/services/pinPressure.test.ts:64`
 - `src/services/pinPressure.test.ts:69`
-- `src/services/positionFacts.ts:1652`
+- `src/services/positionFacts.ts:1662`
 - `src/services/principleAttribution.ts:734`
 - `src/services/principleAttribution.ts:743`
 - `src/services/principleAttribution.ts:768`
@@ -59,8 +61,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `scripts/pro-repertoire/build-all-naroditsky-plans.mjs:284`
 - `scripts/pro-repertoire/build-all-naroditsky-plans.mjs:292`
 - `scripts/pro-repertoire/build-all-naroditsky-plans.mjs:294`
-- `src/services/positionFacts.ts:1653`
-- `src/services/positionFacts.ts:1660`
+- `src/services/positionFacts.ts:1663`
+- `src/services/positionFacts.ts:1670`
 - `src/services/tacticClassifier.ts:41`
 - `src/services/tacticClassifier.ts:191`
 - `src/services/tacticClassifier.ts:193`
@@ -73,6 +75,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
+- `src/services/pinBreak.test.ts`
 - `src/services/pinPressure.test.ts`
 
 ## Audits that reach it

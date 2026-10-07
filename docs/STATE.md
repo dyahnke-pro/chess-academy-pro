@@ -45,9 +45,9 @@ fact-computer count (which excludes infrastructure) lives in
 `surfaceComposition.scan.test.ts`, and duplicating its INFRA list here would be
 exactly the drifting-constant the rot rule bans.
 
-- **CoachTeachPage.tsx**: 103
+- **CoachTeachPage.tsx**: 105
 - **CoachGamePage.tsx**: 47
-- **CoachGameReview.tsx**: 38
+- **CoachGameReview.tsx**: 40
 
 Each surface composing its own producer is the tax on the ONE mechanism the app
 grows by. Shrink-only; `surfaceComposition.scan.test.ts` holds the ceiling.
