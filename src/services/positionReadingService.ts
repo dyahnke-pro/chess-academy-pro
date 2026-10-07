@@ -27,6 +27,7 @@ import { developedMinorCount, totalMinorCount } from './development';
 import { isOutpost } from './outpost';
 import { MATERIAL_VALUE, materialBalance } from './pieceValues';
 import { describeStructure } from './boardStructure';
+import { shieldCount } from './kingSafety';
 
 /** Centipawn-free piece values for SEE + material reasoning (king ~ ∞). */
 const PIECE_VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
@@ -1788,6 +1789,11 @@ export function kingSafetyRead(fen: string, color: Color): KingSafetyNote | null
     for (let r = 1; r <= 8; r += 1) { const o = chess.get(`${fileLetter}${r}` as Square); if (o && o.type === 'p' && o.color === color) { hasOwnPawn = true; break; } }
     if (!hasOwnPawn) openFilesNearKing.push(fileLetter);
   }
+  // A CASTLED king's shield is the ONE count (`kingSafety.shieldCount`): a
+  // pawn one step ahead still shelters. This file counted only the second
+  // rank, so the 09-30 fix for a g6 fianchetto never reached chat (census 12).
+  const shield = castled ? shieldCount(fen, color) : null;
+  if (shield) shieldPawns = shield.present;
   const exposed = inCenter || shieldPawns <= 1 || openFilesNearKing.length >= 2;
   return { square: ksq, castled, inCenter, openFilesNearKing, shieldPawns, exposed };
 }

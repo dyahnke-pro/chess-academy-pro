@@ -48,6 +48,27 @@ export function shelterSquares(kingSq: Sq, color: 'w' | 'b'): Sq[] | null {
   return out;
 }
 
+/** How many of the shelter pawns in front of `color`'s king stand guard — a
+ *  pawn on its shelter square OR one step ahead of it (g6 / h6 still shelter;
+ *  claim check 2026-09-30, item 95). The ONE shield count (one-coach P2,
+ *  census group 12): `detectKingExposure` and `kingSafetyRead` both read it.
+ *  Null when the king is not on a castled square. */
+export function shieldCount(fen: string, color: 'w' | 'b'): { kingSquare: Sq; present: number; of: number } | null {
+  let game: Chess;
+  try { game = new Chess(fen); } catch { return null; }
+  const kingSq = kingSquareOf(game, color);
+  if (!kingSq) return null;
+  const shelter = shelterSquares(kingSq, color);
+  if (!shelter) return null;
+  const step = color === 'w' ? 1 : -1;
+  const own = (sq: string): boolean => {
+    const p = game.get(sq as Parameters<Chess['get']>[0]);
+    return !!p && p.type === 'p' && p.color === color;
+  };
+  const present = shelter.filter((s) => own(s) || own(`${s[0]}${Number(s[1]) + step}`)).length;
+  return { kingSquare: kingSq, present, of: shelter.length };
+}
+
 /**
  * A king-exposure read, or null when the king is safe enough to say nothing.
  * Requires BOTH a broken shelter (≥2 of 3 shield pawns gone) AND ≥1 enemy
@@ -67,19 +88,8 @@ export function detectKingExposure(fen: string, studentColor: 'w' | 'b'): KingEx
   const shelter = shelterSquares(kingSq, studentColor);
   if (!shelter) return null;
 
-  let missing = 0;
-  // A pawn one step forward (g6 for a king on g8) still shields — "two of the
-  // pawns in front of it are gone" with g6 + Bg7 in place was false (manual
-  // claim check 2026-09-30, item 95).
-  const step = studentColor === 'w' ? 1 : -1;
-  const own = (sq: string): boolean => {
-    const p = game.get(sq as Parameters<Chess['get']>[0]);
-    return !!p && p.type === 'p' && p.color === studentColor;
-  };
-  for (const s of shelter) {
-    const ahead = `${s[0]}${Number(s[1]) + step}`;
-    if (!own(s) && !own(ahead)) missing += 1;
-  }
+  const shield = shieldCount(fen, studentColor);
+  const missing = shield ? shield.of - shield.present : 0;
   if (missing < 2) return null; // shelter still largely intact — no alarm
 
   const enemy: 'w' | 'b' = studentColor === 'w' ? 'b' : 'w';
