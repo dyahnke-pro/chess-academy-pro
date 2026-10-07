@@ -87,7 +87,7 @@ when a rule changes; never edit a rule here alone.
 - **V16** — A claim that says "you" depends on which side you play. The coach never hands a Black player White's lesson.  _[settled]_
 - **V17** — Quality is the only measure. The coach is never quieter to save money.  _[settled]_
 - **V18** — Chess terms are taught in context. The first time the coach uses a term with you (pin, outpost, fianchetto), it explains it in one line using the board in front of you, with an arrow showing it (a pin draws the line through the pinned piece to what's behind it). After that it just uses the word; it remembers which terms each student has had and stops explaining once they've shown they understand.  _[new 2026-10-07]_
-- **V19** — RHYTHM IS ALGO'D. The coach works out from the student's record how much each move needs. In the opening, few moves are quiet: every move is taught unless the record proves the student has that opening down (no mistakes, never falls for its traps). A move that looks quiet but isn't always gets taught, with the tactic it allows: a small, slow pawn move is often exactly what lets the centre-fork trick happen.  _[new 2026-10-07]_
+- **V19** — RHYTHM IS ALGO'D, AND THE OPENING IS EXPLAINED TO THE HILT. Every opening move gets everything there is to teach about it, no matter how small: why it's played, what it prepares, what it stops, what it allows, the trap around it, the principle behind it. Several points on one move is normal. The coach says less only where the student's record proves they already know it. A move that looks quiet but isn't always gets taught, with the tactic it allows: a small, slow pawn move is often exactly what lets the centre-fork trick happen.  _[new 2026-10-07]_
 
 ## 4. The surfaces
 
