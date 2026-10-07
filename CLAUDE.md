@@ -290,6 +290,28 @@ reaches all. The pre-build Surface Map procedure is §0 of the unified-coach pla
 
 ## 🚨 NON-NEGOTIABLE GATES (apply to every change, every session)
 
+### 🔒🔒 EVERY FIX IS A ROOT-CAUSE FIX (David 2026-10-07, furious: "All fixes need to be root cause fixes. I want that saved to memory!").
+
+Before changing a line, name the CAUSE in one sentence: the computer, the data,
+or the decision that produced the wrong output. Then fix THAT, at the place it
+is produced, so every surface that reads it is fixed at once and the defect
+cannot come back from another path.
+
+NOT a fix (each one was shipped and had to be undone or redone):
+- silencing or blanking the OUTPUT where it is heard (a turning-point ply
+  blanked after its reveal hid the slip from the recap and lost its lesson);
+- patching the one sentence that was caught while its producer keeps running
+  (a second producer leaked "your answer was d4" after the first was fixed);
+- adding a gate, filter or say-once that hides a symptom instead of removing
+  the producer that makes it (gates are backups that should never fire);
+- editing a test or an audit row until it passes.
+
+The test before you call it fixed: if the same wrong input arrived through a
+different surface or a different producer tomorrow, would it still be wrong?
+If yes, you fixed a symptom. Find every producer of the claim (grep the
+wording AND the data it comes from), fix the shared source, and prove it with
+a test that fails on the old code.
+
 These are HARD requirements — not "best effort." Skipping them is a
 ship-blocking failure no matter how trivial the change looks.
 
