@@ -38,6 +38,7 @@ import { BLUNDER_CP } from './engineConstants';
 import { developedMinorCount, homeMinorCount, isMinorAtHome, minorsAtHome } from './development';
 import { proofCut } from './exchangeLedger';
 import { findPinPressure } from './pinPressure';
+import { pawnsOf } from './boardStructure';
 
 export const FUNDAMENTAL_IDS = [
   // opening
@@ -378,13 +379,11 @@ function pvHas(pv: readonly string[] | undefined, pred: (san: string, i: number)
   return pv.slice(0, plies).filter((s, i) => pred(s, i));
 }
 function isolatedPawns(chess: Chess, color: Color): Square[] {
-  const ps = pieces(chess, color, 'p');
-  const files = new Set(ps.map((p) => fileIdx(p.square)));
-  return ps.filter((p) => !files.has(fileIdx(p.square) - 1) && !files.has(fileIdx(p.square) + 1)).map((p) => p.square);
+  return pawnsOf(chess.fen(), color).isolated as Square[];
 }
 function doubledPawns(chess: Chess, color: Color): Square[] {
-  const ps = pieces(chess, color, 'p');
-  return ps.filter((p) => ps.some((q) => q.square !== p.square && fileIdx(q.square) === fileIdx(p.square))).map((p) => p.square);
+  const files = new Set(pawnsOf(chess.fen(), color).doubledFiles);
+  return pieces(chess, color, 'p').filter((p) => files.has(p.square[0])).map((p) => p.square);
 }
 function isPassed(chess: Chess, sq: Square, color: Color): boolean {
   const f = fileIdx(sq); const r = rankNum(sq);

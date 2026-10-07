@@ -26,6 +26,7 @@ import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { developedMinorCount, totalMinorCount } from './development';
 import { isOutpost } from './outpost';
 import { MATERIAL_VALUE, materialBalance } from './pieceValues';
+import { describeStructure } from './boardStructure';
 
 /** Centipawn-free piece values for SEE + material reasoning (king ~ ∞). */
 const PIECE_VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
@@ -1318,27 +1319,8 @@ export function pressuredTargets(fen: string, attackerColor: Color): PressureCou
  *  pawn-capture. Pure file/rank geometry (G3). Backs Naroditsky's "that a-pawn
  *  is a monster passer — push it" (#20/#33). Returns the pawn squares. */
 export function findPassedPawns(fen: string, color: Color): Square[] {
-  let chess: Chess;
-  try { chess = new Chess(fen); } catch { return []; }
-  const enemyPawns: { f: number; r: number }[] = [];
-  const ownPawns: Square[] = [];
-  for (const row of chess.board()) for (const cell of row) {
-    if (!cell || cell.type !== 'p') continue;
-    const f = cell.square.charCodeAt(0) - 97;
-    const r = Number(cell.square[1]);
-    if (cell.color === color) ownPawns.push(cell.square);
-    else enemyPawns.push({ f, r });
-  }
-  const forward = color === 'w' ? 1 : -1;
-  const passed: Square[] = [];
-  for (const sq of ownPawns) {
-    const f = sq.charCodeAt(0) - 97;
-    const r = Number(sq[1]);
-    const blocked = enemyPawns.some((ep) =>
-      Math.abs(ep.f - f) <= 1 && (color === 'w' ? ep.r > r : ep.r < r));
-    if (!blocked && r + forward >= 1 && r + forward <= 8) passed.push(sq);
-  }
-  return passed;
+  // ONE PAWN READ (one-coach P2, census group 10) — the structure computer's.
+  return (describeStructure(fen)?.pawns.passedPawns[color] ?? []) as Square[];
 }
 
 /** KING ACTIVATION — the endgame's first idea (David 2026-08-23). Fires only

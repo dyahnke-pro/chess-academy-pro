@@ -10,6 +10,7 @@
 import { CAPTURE_VALUE } from './pieceValues';
 import { Chess, type Move, type Square } from 'chess.js';
 import { rookReachesFile } from './positionalRead';
+import { pawnsOf } from './boardStructure';
 
 export interface RecaptureFacts {
   san: string;
@@ -32,9 +33,7 @@ function bishopReach(c: Chess, color: 'w' | 'b'): number {
   try { return probe.moves({ verbose: true }).filter((m) => m.piece === 'b').length; } catch { return 0; }
 }
 function isolated(c: Chess, file: string, color: 'w' | 'b'): boolean {
-  const f = file.charCodeAt(0);
-  const adj = [f - 1, f + 1].filter((x) => x >= 97 && x <= 104).map((x) => String.fromCharCode(x));
-  return pawnsOnFile(c, file, color) > 0 && adj.every((a) => pawnsOnFile(c, a, color) === 0);
+  return pawnsOf(c.fen(), color).isolated.some((sq) => sq[0] === file);
 }
 /** Can the opponent hit the square with a pawn or minor next move, safely? */
 function hitWithTempo(c: Chess, sq: string, them: 'w' | 'b', skip: string | null): string | null {

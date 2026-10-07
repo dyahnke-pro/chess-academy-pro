@@ -31,6 +31,7 @@ import { andList } from '../utils/andList';
 import { isOutpost } from './outpost';
 import { settledExchange } from './exchangeLedger';
 import { legalSeeGain } from './positionReadingService';
+import { isPassedPawnAt, pawnsOf } from './boardStructure';
 
 export interface ConceptCtx {
   fenBefore: string;
@@ -297,21 +298,7 @@ function detectConvertDontRush(ctx: ConceptCtx): ConceptBeat | null {
 /** A pawn on `square` (of `color`) is passed: no enemy pawn on its file or the
  *  adjacent files anywhere AHEAD of it. */
 function isPassedPawn(fen: string, square: Square, color: 'w' | 'b'): boolean {
-  const c = new Chess(fen);
-  const file = square.charCodeAt(0) - 97;
-  const rank = parseInt(square[1], 10);
-  const enemy: 'w' | 'b' = color === 'w' ? 'b' : 'w';
-  for (const df of [-1, 0, 1]) {
-    const f = file + df;
-    if (f < 0 || f > 7) continue;
-    for (let r = 1; r <= 8; r++) {
-      const ahead = color === 'w' ? r > rank : r < rank;
-      if (!ahead) continue;
-      const p = c.get(`${String.fromCharCode(97 + f)}${r}` as Square);
-      if (p && p.type === 'p' && p.color === enemy) return false;
-    }
-  }
-  return true;
+  return isPassedPawnAt(fen, square, color);
 }
 
 /** A file (0..7) with no pawns of either colour. */
@@ -480,33 +467,13 @@ function detectSpaceAdvantage(ctx: ConceptCtx): ConceptBeat | null {
   return { concept: 'space-advantage', text, source: 'concept:pos-space' };
 }
 
-/** Files (0..7) on which `color` has a pawn, with multiplicity. */
-function pawnFileList(fen: string, color: 'w' | 'b'): number[] {
-  const c = new Chess(fen);
-  const files: number[] = [];
-  for (let r = 1; r <= 8; r++) {
-    for (let f = 0; f < 8; f++) {
-      const p = c.get(`${String.fromCharCode(97 + f)}${r}` as Square);
-      if (p && p.type === 'p' && p.color === color) files.push(f);
-    }
-  }
-  return files;
-}
 /** Files where `color` has a pawn with NO friendly pawn on an adjacent file. */
 function isolatedFileSet(fen: string, color: 'w' | 'b'): Set<number> {
-  const files = pawnFileList(fen, color);
-  const present = new Set(files);
-  const out = new Set<number>();
-  for (const f of files) if (!present.has(f - 1) && !present.has(f + 1)) out.add(f);
-  return out;
+  return new Set(pawnsOf(fen, color).isolated.map((sq) => sq.charCodeAt(0) - 97));
 }
 /** Files where `color` has 2+ pawns (doubled). */
 function doubledFileSet(fen: string, color: 'w' | 'b'): Set<number> {
-  const counts = new Map<number, number>();
-  for (const f of pawnFileList(fen, color)) counts.set(f, (counts.get(f) ?? 0) + 1);
-  const out = new Set<number>();
-  for (const [f, n] of counts) if (n >= 2) out.add(f);
-  return out;
+  return new Set(pawnsOf(fen, color).doubledFiles.map((f) => f.charCodeAt(0) - 97));
 }
 
 /**

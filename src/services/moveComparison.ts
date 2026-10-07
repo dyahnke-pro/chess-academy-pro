@@ -29,6 +29,7 @@ import { countWords } from '../utils/countWords';
 import type { Square, Color, PieceSymbol } from 'chess.js';
 import { settledNetForLine } from './exchangeLedger';
 import { mechanismContrast } from './moveInsight';
+import { pawnsOf } from './boardStructure';
 
 /** One engine evaluation of a position — white-POV centipawns (+ = White
  *  better). A mate is folded into `cp` by the evaluate implementation. `pv` is
@@ -86,27 +87,7 @@ function materialWhiteMinusBlack(fen: string): number {
 /** Passed pawns of `color` — no enemy pawn on the same or an adjacent file
  *  ahead of it. Pure board fact. */
 function passedPawns(fen: string, color: Color): string[] {
-  const c = new Chess(fen);
-  const enemy: Color = color === 'w' ? 'b' : 'w';
-  const enemyPawns: Array<{ f: number; r: number }> = [];
-  for (const row of c.board()) {
-    for (const cell of row) {
-      if (cell && cell.type === 'p' && cell.color === enemy) {
-        enemyPawns.push({ f: cell.square.charCodeAt(0) - 97, r: Number(cell.square[1]) });
-      }
-    }
-  }
-  const out: string[] = [];
-  for (const row of c.board()) {
-    for (const cell of row) {
-      if (!cell || cell.type !== 'p' || cell.color !== color) continue;
-      const f = cell.square.charCodeAt(0) - 97;
-      const r = Number(cell.square[1]);
-      const blocked = enemyPawns.some((p) => Math.abs(p.f - f) <= 1 && (color === 'w' ? p.r > r : p.r < r));
-      if (!blocked) out.push(cell.square);
-    }
-  }
-  return out;
+  return pawnsOf(fen, color).passed;
 }
 
 /** Replay a UCI pv from `fen` into SANs (bounded), stopping at the first

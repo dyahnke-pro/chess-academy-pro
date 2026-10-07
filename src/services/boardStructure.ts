@@ -368,3 +368,15 @@ export function structureSignature(fen: string): StructureSignature | null {
   };
 }
 
+/** THE ONE PAWN READ FOR ONE SIDE (one-coach P2, census group 10): passed
+ *  pawns, isolated pawns and doubled files, from `describeStructure`. Every
+ *  "is this pawn passed / isolated / doubled" on a real board asks here. */
+export function pawnsOf(fen: string, color: Color): { passed: string[]; isolated: string[]; doubledFiles: string[] } {
+  const p = describeStructure(fen)?.pawns;
+  return { passed: p?.passedPawns[color] ?? [], isolated: p?.isolatedPawns[color] ?? [], doubledFiles: p?.doubledFiles[color] ?? [] };
+}
+
+/** Is the pawn on `square` passed? */
+export function isPassedPawnAt(fen: string, square: string, color: Color): boolean {
+  return pawnsOf(fen, color).passed.includes(square);
+}

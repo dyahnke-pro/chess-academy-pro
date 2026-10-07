@@ -30,6 +30,7 @@ import { isOutpost, noPawnCanChallenge } from './outpost';
 import { MATERIAL_VALUE } from './pieceValues';
 import { SPACE_RULE } from './reviewConcepts';
 import { findPinPressure } from './pinPressure';
+import { isPassedPawnAt } from './boardStructure';
 
 export type MoveFundamentalId =
   | 'king-safety'
@@ -224,21 +225,7 @@ function eyesCenter(after: Chess, to: string, mover: 'w' | 'b'): string[] {
 /** Is the pawn on `to` passed on the after-move board? No enemy pawn on the
  *  same or adjacent file ahead of it. */
 function isPassedPawn(after: Chess, to: string, mover: 'w' | 'b'): boolean {
-  const enemy = mover === 'w' ? 'b' : 'w';
-  const file = to.charCodeAt(0);
-  const rank = rankOf(to);
-  for (const df of [-1, 0, 1]) {
-    const f = file + df;
-    if (f < 97 || f > 104) continue;
-    const adjFile = String.fromCharCode(f);
-    for (let r = 1; r <= 8; r += 1) {
-      const p = after.get(`${adjFile}${r}` as Square);
-      if (!p || p.type !== 'p' || p.color !== enemy) continue;
-      const ahead = mover === 'w' ? r > rank : r < rank;
-      if (ahead) return false;
-    }
-  }
-  return true;
+  return isPassedPawnAt(after.fen(), to, mover);
 }
 
 /** The file has no FRIENDLY pawns (half-open); open when neither side has one. */
