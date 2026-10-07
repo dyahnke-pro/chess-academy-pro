@@ -47,7 +47,8 @@ import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './revie
 import { nameEndgamePhase } from './reviewMoveTeaching';
 import { detectOpening } from './openingDetectionService';
 import { planRaceClause } from './planRace';
-import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, deriveNextPlans, findTrappedPiece } from './reviewTeachingPoints';
+import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, findTrappedPiece } from './reviewTeachingPoints';
+import { deriveNextPlanFacts } from './nextPlans';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
 import { betterMoveReason, priorMoveLeadingTo, punishmentOf, toStudentSeat } from './inaccuracyCall';
@@ -887,8 +888,12 @@ export function computeMoveFacets(
     // plan, each with its method; deduped to first mention of each distinct plan
     // (see the caller) so the agenda is stated when it becomes relevant and
     // re-stated only when it changes.
-    for (const plan of deriveNextPlans(fenAfter, studentColorWB, { studentPovCp })) {
-      facets.push(`[plan-now] ${cap(plan)}.`);
+    for (const plan of deriveNextPlanFacts(fenAfter, studentColorWB, { studentPovCp })) {
+      const f = `[plan-now] ${cap(plan.text)}.`;
+      facets.push(f);
+      // The plan's id rides with it, so the walk can later prove what stopped
+      // it (`planStopped`) without reading the sentence back.
+      outIdentity?.set(f, `plan-fact:${plan.id}`);
     }
     // PLAN VERSUS PLAN — the RACE, in the retrospective register. `deriveNextPlans`
     // above states the student's agenda; it has never stated whose agenda arrives

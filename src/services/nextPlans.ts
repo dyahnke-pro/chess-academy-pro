@@ -161,13 +161,38 @@ export function isPinnedPiece(chess: Chess, sq: Square, color: Color): boolean {
 export function deriveNextPlans(
   fen: string,
   studentColorWB: Color,
+  opts: { studentPovCp?: number | null } = {},
+): string[] {
+  return deriveNextPlanFacts(fen, studentColorWB, opts).map((p) => p.text);
+}
+
+/** The plan kinds `deriveNextPlanFacts` emits — one per numbered branch. */
+export type PlanKind = 'king-attack' | 'passer' | 'weak-pawn' | 'open-file' | 'outpost' | 'worst-piece' | 'convert' | 'bishop-pair';
+
+/** A plan with the board objects it is about, so a later move can be checked
+ *  against them (`planStopped`) — never read back out of the sentence. */
+export interface PlanFact {
+  kind: PlanKind;
+  text: string;
+  /** The squares the plan is built on: the king it hunts, the pawn it pushes,
+   *  the pawn it besieges and its blockade square, the outpost, the piece. */
+  squares: string[];
+  /** The file, for the file plans (the open file, the king-attack file). */
+  file: string | null;
+  /** One stable id per plan on this board: kind + anchor. */
+  id: string;
+}
+
+export function deriveNextPlanFacts(
+  fen: string,
+  studentColorWB: Color,
   // The engine's student-POV eval at this position, when the caller has one.
   // The material plan reads the COUNT; the count lies while the material is
   // on its way back (walk 2026-09-23: after Bxf7+ Kxf7 the review said "convert
   // your extra material" at +0.5 for the other side — Ng5+ was about to win the
   // bishop back). With an eval in hand, "extra" must also be an edge.
   opts: { studentPovCp?: number | null } = {},
-): string[] {
+): PlanFact[] {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return []; }
   // A MATE ON THE BOARD OUTRANKS EVERY PLAN (WO-STANDARD-01 D-15, prod tape
@@ -190,7 +215,10 @@ export function deriveNextPlans(
   const enemy: Color = studentColorWB === 'w' ? 'b' : 'w';
   const all = cells(chess);
   const fullmove = Number(fen.split(' ')[5] ?? '0');
-  const plans: string[] = [];
+  const plans: PlanFact[] = [];
+  const add = (kind: PlanKind, text: string, squares: string[], file: string | null = null): void => {
+    plans.push({ kind, text, squares, file, id: `${kind}:${squares[0] ?? file ?? ''}` });
+  };
 
   // 1. Enemy king exposed in the centre → open lines and attack it, HOW spelled out.
   const enemyKing = all.find((c) => c.type === 'k' && c.color === enemy);
@@ -212,20 +240,26 @@ export function deriveNextPlans(
       : rookCount === 1
         ? `then swing your rook onto the open ${openCentralFile}-file so it bears straight down on the king; `
         : '';
-    plans.push(`the plan from here is to attack their king stuck on ${enemyKing.square} before it ever reaches safety. Here's exactly how: first make sure your OWN king is tucked away, ${fileClause}bring every piece into the attack with tempo — a move that develops AND threatens is worth two; and hunt for a sacrifice on the soft squares ${softSquares} that rips the cover off, because once the king is bare it's checks all the way to mate`);
+    add('king-attack', `the plan from here is to attack their king stuck on ${enemyKing.square} before it ever reaches safety. Here's exactly how: first make sure your OWN king is tucked away, ${fileClause}bring every piece into the attack with tempo — a move that develops AND threatens is worth two; and hunt for a sacrifice on the soft squares ${softSquares} that rips the cover off, because once the king is bare it's checks all the way to mate`, [enemyKing.square], openCentralFile);
   }
 
   // 2. Your passed pawn → push it, HOW spelled out. The king joins the escort
   // ONLY once the queens are off — telling a student to march the king up a
   // middlegame board is phase-blind advice (template-logic sweep, David
   // 2026-07-22: read every authored line as a chess player).
-  const passer = struct.pawns.passedPawns[studentColorWB][0];
+  // A passer with THEIR piece planted in front of it is blockaded: "push it"
+  // is not the plan while that piece sits there (planStopped says why).
+  const passer = struct.pawns.passedPawns[studentColorWB].find((sq) => {
+    const front = `${sq[0]}${Number(sq[1]) + (studentColorWB === 'w' ? 1 : -1)}` as Square;
+    const blocker = chess.get(front);
+    return !(blocker && blocker.color === enemy);
+  });
   if (passer) {
     const queensOn = all.some((c) => c.type === 'q');
     const escort = queensOn
       ? 'escort it with your pieces rather than pushing it alone into danger — the king joins the escort once the queens come off'
       : 'escort it up with your king and pieces rather than pushing it alone into danger';
-    plans.push(`the plan from here is to get your passed pawn on ${passer} promoting. Here's how: clear the square in front of it so nothing blocks the road, ${escort}, and advance it one safe square at a time until they have to give up a piece to stop it — a passed pawn's whole job is to run`);
+    add('passer', `the plan from here is to get your passed pawn on ${passer} promoting. Here's how: clear the square in front of it so nothing blocks the road, ${escort}, and advance it one safe square at a time until they have to give up a piece to stop it — a passed pawn's whole job is to run`, [passer]);
   }
 
   // 3. An enemy weak (isolated) pawn on the c–f files → besiege it, HOW spelled
@@ -259,30 +293,33 @@ export function deriveNextPlans(
           : blockader
             ? `plant your ${blockader.type === 'n' ? 'knight' : 'bishop'} on the square right in front of it, ${block}, so it can never advance to free itself`
             : `control the square right in front of it, ${block}, so it can never advance to free itself`;
-    plans.push(`the plan from here is to win their weak pawn on ${weak}. Here's how: ${blockBit ? `${blockBit}; then ` : ''}stack your heavy pieces on the file to gang up on it, trade off the pieces that defend it one by one, and either win it outright or tie their whole army to babysitting it`);
+    add('weak-pawn', `the plan from here is to win their weak pawn on ${weak}. Here's how: ${blockBit ? `${blockBit}; then ` : ''}stack your heavy pieces on the file to gang up on it, trade off the pieces that defend it one by one, and either win it outright or tie their whole army to babysitting it`, [weak, block]);
   }
 
   // 4. An open file you don't yet own with a heavy piece → seize it, HOW
   // spelled out — only when the student still HAS a rook to put there.
   const myRooks = all.filter((c) => c.type === 'r' && c.color === studentColorWB);
   const myHeavyFiles = new Set(all.filter((c) => (c.type === 'r' || c.type === 'q') && c.color === studentColorWB).map((c) => c.square[0]));
-  const freeOpenFile = struct.pawns.openFiles.find((f) => !myHeavyFiles.has(f));
+  // "Before they contest it" — a file their rook or queen already stands on
+  // is contested, not free to seize.
+  const theirHeavyFiles = new Set(all.filter((c) => (c.type === 'r' || c.type === 'q') && c.color === enemy).map((c) => c.square[0]));
+  const freeOpenFile = struct.pawns.openFiles.find((f) => !myHeavyFiles.has(f) && !theirHeavyFiles.has(f));
   if (freeOpenFile && myRooks.length > 0) {
     const doubleBit = myRooks.length >= 2 ? 'double the second rook behind the first so nothing can challenge you, and ' : '';
-    plans.push(`the plan from here is to seize the open ${freeOpenFile}-file. Here's how: put a rook on it right away before they contest it, ${doubleBit}drive down to the seventh rank where a rook chews through pawns and pins the king back`);
+    add('open-file', `the plan from here is to seize the open ${freeOpenFile}-file. Here's how: put a rook on it right away before they contest it, ${doubleBit}drive down to the seventh rank where a rook chews through pawns and pins the king back`, [], freeOpenFile);
   }
 
   // 5. You already hold an outpost → dominate from it, HOW spelled out.
   const myOutpost = struct.outposts.find((o) => o.color === studentColorWB);
   if (myOutpost) {
-    plans.push(`the plan from here is to make that ${myOutpost.piece === 'n' ? 'knight' : 'bishop'} on ${myOutpost.square} the boss of the board. Here's how: keep a pawn defending it so it stays anchored, refuse any trade that gives it up cheaply, and use it as the anchor to pile your other pieces onto the weakness behind it`);
+    add('outpost', `the plan from here is to make that ${myOutpost.piece === 'n' ? 'knight' : 'bishop'} on ${myOutpost.square} the boss of the board. Here's how: keep a pawn defending it so it stays anchored, refuse any trade that gives it up cheaply, and use it as the anchor to pile your other pieces onto the weakness behind it`, [myOutpost.square]);
   }
 
   // 6. Your worst-placed piece (stuck) → reroute it, HOW spelled out.
   if (fullmove >= 10) {
     const worst = findWorstPlacedPiece(chess, studentColorWB);
     if (worst) {
-      plans.push(`the plan from here is to rescue your worst piece, the ${PIECE_NOUN[worst.type]} on ${worst.sq}. Here's how: don't play a single attacking move until it's fixed — spend two or three tempi walking it to a square where it actually bites, because a piece doing nothing means you're effectively playing down a piece`);
+      add('worst-piece', `the plan from here is to rescue your worst piece, the ${PIECE_NOUN[worst.type]} on ${worst.sq}. Here's how: don't play a single attacking move until it's fixed — spend two or three tempi walking it to a square where it actually bites, because a piece doing nothing means you're effectively playing down a piece`, [worst.sq]);
     }
   }
 
@@ -314,7 +351,7 @@ export function deriveNextPlans(
       : nonPawnDiff > 0 ? 'your extra material'
       : pawnDiff >= 1 ? `your extra pawn${pawnDiff > 1 ? 's' : ''}`
       : 'your material edge';
-    plans.push(`the plan from here is to convert your extra material. Here's how: offer a trade of pieces at every chance but keep the pawns on, steer straight for an endgame where ${surplus} ${surplus.endsWith('s') ? 'are' : 'is'} decisive, and don't get greedy or complicate — simplicity is what wins a won game`);
+    add('convert', `the plan from here is to convert your extra material. Here's how: offer a trade of pieces at every chance but keep the pawns on, steer straight for an endgame where ${surplus} ${surplus.endsWith('s') ? 'are' : 'is'} decisive, and don't get greedy or complicate — simplicity is what wins a won game`, []);
   }
 
   // 8. Bishop pair → open the position for the two bishops, HOW spelled out.
@@ -332,7 +369,7 @@ export function deriveNextPlans(
       : enemyN ? 'their knights'
       : enemyB === 1 ? 'their lone bishop'
       : 'anything they have left';
-    plans.push(`the plan from here is to make your bishop pair count. Here's how: trade pawns to rip the position open, guard both bishops from any swap, and point them at both wings at once — in an open board two bishops rake the whole thing and simply outgun ${rival}. The pair is only an advantage while both live; you trade one at the very end, when it wins something concrete`);
+    add('bishop-pair', `the plan from here is to make your bishop pair count. Here's how: trade pawns to rip the position open, guard both bishops from any swap, and point them at both wings at once — in an open board two bishops rake the whole thing and simply outgun ${rival}. The pair is only an advantage while both live; you trade one at the very end, when it wins something concrete`, all.filter((c) => c.type === 'b' && c.color === studentColorWB).map((c) => c.square));
   }
 
   return plans;

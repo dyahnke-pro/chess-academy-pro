@@ -47,6 +47,8 @@
 
 /** "No think-aloud has fired yet." Far enough below any real ply that the
  *  first gap test passes. */
+import type { PlanThread } from './planThread';
+
 export const NEVER_FIRED = -999;
 
 export interface LearnMemory {
@@ -76,6 +78,9 @@ export interface LearnMemory {
   lastComputed: string;
   /** Pawn-structure families already NAMED this game. */
   readonly structureSaid: Set<string>;
+  /** The student's structural plan across the game — stated, stopped (with its
+   *  proof), changed (`planThread`, the same thread Review keeps). */
+  planThread: PlanThread | null;
   /** The threat and tactic lanes' say-once memory — the last spoken KEY (so a
    *  standing danger alerts once, not every ply) and EVERY sentence already
    *  spoken this game (an alternating pair walks straight through a single
@@ -243,6 +248,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
     gameId: mintGameId(),
     saidExplainers,
     structureSaid,
+    planThread: null,
     pieceQualitySaid,
     spokenKeys,
     conceptTaught,
@@ -281,6 +287,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
       mem.promises.clear();
       saidExplainers.clear();
       structureSaid.clear();
+      mem.planThread = null;
       pieceQualitySaid.clear();
       spokenKeys.clear();
       conceptTaught.clear();

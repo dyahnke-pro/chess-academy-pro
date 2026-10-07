@@ -66,5 +66,14 @@ thesis, or tell a turning point before asking it, it has crossed the line — st
 6. Walk Learn AND Review on fresh games, every claim counted; then the ~27
    non-unity errors by cause.
 
-## Status
-- [ ] U1 … U10 — not started (waiting on David's go).
+## Status (2026-10-07, after David's go)
+- [x] U1 one turning point — `gameTurn`; thesis, closing and theme read it; second builder deleted.
+- [x] U2 one grade-and-cost table — `GRADE_WORD` + `costFitsGrade`; Learn and Review both.
+- [x] U3 one reason per move — the reveal reads the verdict's stored reason; a taught ply is not re-narrated.
+- [~] U4 one engine read — the one-verdict store (abc9a7048) covers the grade; the reason/fan reads still search separately. Next.
+- [x] U5 one plan thread — one plan per side when kings are opposite; a plan holds two moves before it changes.
+- [x] U6 one claim, one seat — Learn's door collapses same-geometry facts (danger first, then stake).
+- [x] U7 question vs answer — the turn's question is asked after the instant decision and held when already answered.
+- [x] U8 one withholding rule — `reviewWithholding.advantageWasMissed`, read by the verdict and the projections.
+- [x] U9 one spoken ledger — Review playback never re-speaks a ply on an automatic pass; the yielded critical line is gone.
+- [ ] U10 lead order — the "trapped queen after the pin" case is the LATE wave finding danger after the instant wave spoke; a wave-timing change, not door order. Needs a walk to confirm.

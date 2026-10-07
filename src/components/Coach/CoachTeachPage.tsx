@@ -301,6 +301,7 @@ import { samePosition } from '../../utils/samePosition';
 import { findPinBreaks, pinBreakLine } from '../../services/pinBreak';
 import { obligationLifted, obligationLiftedLine } from '../../services/obligationLifted';
 import { findQueenGrabTraps, queenGrabTrapLine } from '../../services/queenGrabTrap';
+import { newPlanThread, planThreadTurn } from '../../services/planThread';
 import { splitThink, stripThink, THINK_MARK, THINK_PAUSE_MS } from '../../utils/thinkPause';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
@@ -9642,6 +9643,20 @@ export function CoachTeachPage(): JSX.Element {
                         if (line) queueSpokenHint(probe.fen(), line, 'structure', undefined, [`structure:${struct.name}`]);
                       }
                     } catch { /* the structure note is a bonus, never a blocker */ }
+                    // THE STRUCTURAL PLAN, across the game (David 2026-10-07:
+                    // "Learn needs to state the structural plans!!"): stated
+                    // once, its stop said with the PROOF read off their move,
+                    // "good defending" when they stop two in a row.
+                    try {
+                      const plansNow = planThreadTurn(learnMemRef.current.planThread ??= newPlanThread(), {
+                        ply: move.history.length + 1, fenBefore: move.fen, fenAfter: probe.fen(),
+                        student: playerColor === 'white' ? 'w' : 'b',
+                      });
+                      for (const pl of plansNow) {
+                        const line = gradeNarrationText(pl.text, probe.fen(), 'CoachTeachPage.structuralPlan')?.trim();
+                        if (line) queueSpokenHint(probe.fen(), line, 'planArc', pl.squares, [pl.claim]);
+                      }
+                    } catch { /* the plan is a bonus, never a blocker */ }
                   }
                 } catch { /* the read is a bonus, never a blocker */ }
                 // ── THE COACH JUDGES ITS OWN MOVE ──────────────────────────

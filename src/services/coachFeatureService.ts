@@ -39,6 +39,9 @@ import { foldStandingRefrains, emptyRefrainLedger } from './standingRefrains';
 import { renderStructureAtoms } from './structureProse';
 import { decide, habitNeedFrom } from './coachDecider';
 import { advantageWasMissed } from './reviewWithholding';
+import { planStoppedProof, planStoppedLine } from './planStopped';
+import { deriveNextPlanFacts } from './nextPlans';
+import { newPlanThread, type PlanThread } from './planThread';
 import { boardStateAfter } from './boardState';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
@@ -1584,6 +1587,10 @@ export function buildReviewSegments(
    *  a thread, not a per-ply read: a different goal inside PLAN_HOLD_PLIES of
    *  the last one is the read flickering, not the plan changing. */
   let planStatedPly: number | null = null;
+  /** The plan the student last HEARD, its stops in a row, and whether the last
+   *  one ended because they stopped it — the same thread shape Learn keeps
+   *  (`planThread`), so both surfaces remember a plan one way. */
+  const planT: PlanThread = newPlanThread();
   // ONE CLAIM, MANY LANES (review walk 2026-10-01). "Convert your extra
   // material" (the plan), "trade pieces, not pawns" (the conversion method) and
   // "when you're ahead the plan is to trade" (the concept fill) are one claim;
@@ -2101,6 +2108,23 @@ export function buildReviewSegments(
       const keep = (raw: string, commit?: () => void): void => { keptRaw.push(raw); if (commit) commitByRaw.set(raw, commit); };
       let verdictWordThisPly: string | null = null;
       const planNowPasserFiles = new Set(facets.flatMap((x) => (/^\[plan-now\].*passed pawn on ([a-h])[1-8] promoting/i.exec(x)?.[1] ?? [])));
+      // THEY STOPPED YOUR PLAN — said with its proof, on their move (David
+      // 2026-10-07: "The prove it is the part that needs to be spoken"). A plan
+      // that held for long enough resets the run.
+      if (planT.stated && m.ply - planT.stated.ply >= PLAN_HOLD_PLIES * 2) planT.stoppedInRow = 0;
+      const stated = planT.stated;
+      if (stated && studentColorWB && !isStudentForAttr) {
+        const proof = planStoppedProof(stated.fact, fenPair.fenBefore, fenPair.fenAfter, studentColorWB);
+        if (proof && claim('plan-stopped')) {
+          const inARow = planT.stoppedInRow + 1;
+          keep(`[plan-now] ${planStoppedLine(proof, inARow, fenPair.fenAfter, studentColorWB)}`, () => {
+            planT.stoppedInRow = inARow;
+            planT.stated = null;
+            planStatedPly = null;   // a proven stop is not a flicker: the next plan may follow at once
+            planT.wasStopped = true;
+          });
+        }
+      }
       for (const f of facets) {
         // A refuted alternative is said once per game (identity `refuted:<move>`).
         { const id = facetIdentity.get(f); if (id?.startsWith('refuted:') && (refutedSaid.has(id) || !claim(id))) continue; }
@@ -2138,16 +2162,22 @@ export function buildReviewSegments(
           // the change is the teaching (David 2026-09-25: "If the structure
           // plan changes then coach should say so"). Once per ply.
           const changed = planGoalsSeen.size > 0 && claim('plan-changed');
-          const said = !changed ? f
+          const said = planT.wasStopped
+            ? f.replace(/^\[plan-now\]\s*The plan from here is to /i, '[plan-now] The new plan is to ')
+            : !changed ? f
             : /^\[plan-now\]\s*The plan from here is to /i.test(f)
               ? f.replace(/^\[plan-now\]\s*The plan from here is to /i, '[plan-now] The plan changes here — now it\'s to ')
               : f.replace(/^\[plan-now\]\s*(.)/, (_m, c: string) => `[plan-now] The plan changes here: ${c.toLowerCase()}`);
           const passerFile = /passed pawn on ([a-h])[1-8] promoting/i.exec(f)?.[1] ?? null;
           if (passerFile && passerPlanFiles.has(passerFile)) continue;
           if (goalKey.startsWith('convert') && (convertTaughtPly !== null || !claim('convert'))) continue;
+          const planId = /^plan-fact:(.+)$/.exec(facetIdentity.get(f) ?? '')?.[1] ?? null;
           keep(said, () => {
             planGoalsSeen.add(goalKey);
             planStatedPly = m.ply;
+            planT.wasStopped = false;
+            const fact = planId && studentColorWB ? deriveNextPlanFacts(fenPair.fenAfter, studentColorWB).find((p) => p.id === planId) : undefined;
+            planT.stated = fact ? { fact, ply: m.ply } : null;
             if (goalKey.startsWith('convert')) convertTaughtPly ??= m.ply;
             if (passerFile) passerPlanFiles.add(passerFile);
           });
