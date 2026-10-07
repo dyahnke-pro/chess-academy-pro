@@ -189,6 +189,10 @@ export function turningQuestion(cause: TurningCause | null): string {
     const piece = cause.piece ? PIECE_NAME[cause.piece] : 'piece';
     return `This is where the game turned. Their ${piece} was about to strike — find the move that keeps you safe.`;
   }
+  if (cause?.kind === 'hung') {
+    const piece = cause.piece ? PIECE_NAME[cause.piece] : 'piece';
+    return `This is where the game turned. Your ${piece} was left hanging — find the move that keeps it.`;
+  }
   return 'This is where the game turned. Find the move.';
 }
 

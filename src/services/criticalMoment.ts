@@ -300,7 +300,17 @@ export function criticalMomentStatement(read: CriticalMomentRead | null, ply: nu
       `Two moves ${s} here. The rest give it away.`,
       `Narrow here — two moves ${s}, and nothing else does.`,
       `There are exactly two moves that ${s} — the rest concede.`,
-    ], ply);
+    ], ply) + lookAt(read.holdingSans);
+}
+
+const SAN_PIECE: Record<string, string> = { K: 'king', Q: 'queen', R: 'rook', B: 'bishop', N: 'knight' };
+/** WHAT TO LOOK AT, never the move (52-errors #43: "two moves keep the win"
+ *  with nothing to look at): the pieces the holding moves are played with. */
+export function lookAt(sans: readonly string[]): string {
+  const pieces = [...new Set(sans.map((m) => (m.startsWith('O-O') ? 'king' : SAN_PIECE[m[0]] ?? 'pawn')))];
+  if (pieces.length === 0) return '';
+  if (pieces.length === 1) return ` Both are ${pieces[0]} moves.`;
+  return ` Look at your ${pieces.slice(0, -1).join(', ')} and your ${pieces[pieces.length - 1]}.`;
 }
 
 /**

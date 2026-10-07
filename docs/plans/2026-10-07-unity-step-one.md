@@ -76,4 +76,4 @@ thesis, or tell a turning point before asking it, it has crossed the line — st
 - [x] U7 question vs answer — the turn's question is asked after the instant decision and held when already answered.
 - [x] U8 one withholding rule — `reviewWithholding.advantageWasMissed`, read by the verdict and the projections.
 - [x] U9 one spoken ledger — Review playback never re-speaks a ply on an automatic pass; the yielded critical line is gone.
-- [ ] U10 lead order — the "trapped queen after the pin" case is the LATE wave finding danger after the instant wave spoke; a wave-timing change, not door order. Needs a walk to confirm.
+- [x] U10 lead order — the trapped queen/rook is found in the INSTANT wave (trappedOnBoard at the head of the threat chain) and the threat fact carries its computed stakes (threatStakes), so it outranks lane order. Confirm on the next Learn walk.

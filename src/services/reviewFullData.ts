@@ -36,6 +36,8 @@ import { principleLine, principleContrastLine } from './moveFundamentals';
 import { threatStoppedBy } from './opponentMovePurpose';
 import { recordedMoveCost } from './moveCost';
 import { trickSidestepped } from './forkTrick';
+import { findProphylaxis, prophylaxisProof } from './prophylaxis';
+import { newTiedDefender, tiedDefenderLine } from './tiedDefender';
 import { advantageWasMissed } from './reviewWithholding';
 import { costWords, isMateEval, MISTAKE_CP, moverGaveUpMate, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
 import { shareAdverb } from '../utils/shareWords';
@@ -539,7 +541,9 @@ export function computeMoveFacets(
     const better = bestSan && fellShort
       ? (reason ? `the stronger move was ${bestSan} — ${reason}`
         : punishWhy ? `it let ${opponentMoved ? 'you' : 'them'} ${punishWhy}`
-          : answer ?? `the stronger move was ${bestSan}`)
+          // A better move with no reason is a bare conclusion (proof rule,
+          // 52-errors #47): the board's better-move arrow and Show me carry it.
+          : answer ?? '')
       : '';
     const tail = [whyBad, better].filter(Boolean).join('; ');
     const betterBit = tail ? ` — ${tail}` : '';
@@ -1120,6 +1124,27 @@ export function computeMoveFacets(
       const f = `[stopped] ${trick.text}`;
       facets.push(f);
       recSquares(f, [...trick.squares]);
+    }
+  }
+
+  // …and the PIN OR KICK THE STUDENT COULD HAVE STOPPED (prophylaxis, the
+  // computer Learn advises with): their move is exactly the one a quiet move of
+  // the student's would have taken away, and the student did not play it.
+  if (!isStudent && studentColorWB && ctx.teaching.prevFenBefore && ply >= 2) {
+    const ph = findProphylaxis(ctx.teaching.prevFenBefore);
+    if (ph && ph.intent.san === san && ctx.allSans[ply - 2] !== ph.prevention.san) {
+      const f = `[timing] That is the ${ph.kind === 'pin' ? 'pin' : 'kick'} a quiet move would have stopped — ${prophylaxisProof(ph).full}.`;
+      facets.push(f);
+      recSquares(f, [...ph.squares]);
+    }
+  }
+  // …and the GUARD THE STUDENT'S MOVE TIED DOWN (tiedDefender), still tied.
+  if (isStudent && studentColorWB) {
+    const tie = newTiedDefender(fenBefore, fenAfter, studentColorWB);
+    if (tie) {
+      const f = `[point] ${tiedDefenderLine(tie)}`;
+      facets.push(f);
+      recSquares(f, [tie.defender.square, tie.target.square]);
     }
   }
 

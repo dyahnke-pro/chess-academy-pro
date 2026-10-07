@@ -356,8 +356,10 @@ describe('[quality] names a "stronger move" only on a move that fell short (walk
     expect(facetsFor('great')).not.toMatch(/stronger move/);
     expect(facetsFor('best')).not.toMatch(/stronger move/);
   });
-  it('a mistake still names the stronger move', () => {
-    expect(facetsFor('mistake')).toMatch(/the stronger move was d4/);
+  it('a mistake never names a stronger move bare — no reason, no clause (52-errors #47)', () => {
+    // This fixture's better move has no computed reason; the board's
+    // better-move arrow and Show me carry it instead of a bare conclusion.
+    expect(facetsFor('mistake')).not.toMatch(/the stronger move was d4(?! —)/);
   });
 });
 
@@ -596,5 +598,29 @@ describe('the engine line decides the take-back (review walk oct3b, g2 ply 49)',
   });
   it('POSITIVE CONTROL: when the line takes back, it is a trade', () => {
     expect(facet(['g5h4', 'g2e3', 'd8c7'])).toMatch(/they can take back — a pawn trade/);
+  });
+});
+
+// DUAL-USE (2026-10-07): the computers Learn advises with also catch the
+// moment in Review — the pin a quiet move would have stopped, the guard a
+// move tied down.
+describe('Review reads the new computers too', () => {
+  const GAME = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Nf6', 'Nc3', 'Nc6', 'Be2', 'Bg4'];
+  const fens = fensAfter(GAME);
+  const at = (ply: number, prev: string | null): string[] => computeMoveFacets({
+    seenFundamentals: new Set(), teaching: { ...NO_TEACHING_CONTEXT, prevFenBefore: prev },
+    fenBefore: fens[ply - 2], fenAfter: fens[ply - 1], san: GAME[ply - 1], ply,
+    moverColor: ply % 2 === 1 ? 'white' : 'black', playerColor: 'white', studentColorWB: 'w',
+    evaluation: 0, preMoveEval: 0, costCp: null, classification: null, bestMoveSan: null,
+    prevCap: { square: null, capturedValue: 0 }, allSans: GAME, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
+  });
+
+  it('…Bg4 after Be2 is the pin h3 would have stopped', () => {
+    const f = at(10, fens[7]).find((x) => x.startsWith('[timing] That is the pin'));
+    expect(f).toBe('[timing] That is the pin a quiet move would have stopped — Bg4 would pin your knight on f3, and after h3 the pawn covers g4.');
+  });
+
+  it('NEGATIVE CONTROL: without the student’s previous board there is nothing to compare', () => {
+    expect(at(10, null).some((x) => x.startsWith('[timing] That is the pin'))).toBe(false);
   });
 });

@@ -18,7 +18,7 @@ import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'che
 import { legalSeeGainFor } from './positionReadingService';
 import type { Proof } from './proof';
 
-export type ProphylaxisKind = 'pin' | 'kick';
+export type ProphylaxisKind = 'pin' | 'kick' | 'fork';
 
 export interface Prophylaxis {
   kind: ProphylaxisKind;
@@ -96,6 +96,20 @@ function intents(fen: string, me: Color): { m: Move; kind: ProphylaxisKind; vict
     } else {
       const v = pinVictim(after, m, me);
       if (v) out.push({ m, kind: 'pin', victim: v });
+      else {
+        // A FORK: the piece lands hitting two of the student's pieces each
+        // worth more than it (or the king and one more).
+        const hit: { square: Square; piece: PieceSymbol }[] = [];
+        for (const row of after.board()) for (const cell of row) {
+          if (!cell || cell.color !== me) continue;
+          if (!after.attackers(cell.square, them).includes(m.to)) continue;
+          if (cell.type === 'k' || VAL[cell.type] > VAL[m.piece]) hit.push({ square: cell.square, piece: cell.type });
+        }
+        if (hit.length >= 2) {
+          const victim = hit.filter((h) => h.piece !== 'k').sort((a, b) => VAL[b.piece] - VAL[a.piece])[0];
+          if (victim) out.push({ m, kind: 'fork', victim });
+        }
+      }
     }
     board.undo();
   }
@@ -114,7 +128,7 @@ function stillWorks(fenAfterPrevention: string, me: Color, i: { m: Move; kind: P
   board.move(again);
   if (legalSeeGainFor(board.fen(), again.to, me) > 0) return false;
   if (i.kind === 'pin') return !!pinVictim(board, again, me);
-  return true;
+  return true;   // a fork or kick that still lands safely still works
 }
 
 /**
@@ -126,7 +140,8 @@ export function findProphylaxis(fen: string): Prophylaxis | null {
   try { board = new Chess(fen); } catch { return null; }
   if (board.inCheck()) return null;
   const me = board.turn();
-  const wants = intents(fen, me).sort((a, b) => (a.kind === b.kind ? 0 : a.kind === 'pin' ? -1 : 1));
+  const ORDER: Record<ProphylaxisKind, number> = { fork: 0, pin: 1, kick: 2 };
+  const wants = intents(fen, me).sort((a, b) => ORDER[a.kind] - ORDER[b.kind]);
   if (wants.length === 0) return null;
   const quiet = board.moves({ verbose: true }).filter((m) => !m.captured && !m.san.includes('+')
     && ((m.piece === 'p' && Math.abs(Number(m.to[1]) - Number(m.from[1])) === 1) || (m.piece === 'k' && !m.san.startsWith('O'))))
@@ -159,13 +174,13 @@ export function prophylaxisProof(p: Prophylaxis): Proof {
   return {
     kind: 'squares', exact: true,
     short: covers,
-    full: `${p.intent.san} would ${p.kind === 'pin' ? 'pin' : 'hit'} your ${NAME[p.victim.piece]} on ${p.victim.square}, and ${covers}`,
+    full: `${p.intent.san} would ${p.kind === 'pin' ? 'pin' : p.kind === 'fork' ? 'fork' : 'hit'} your ${NAME[p.victim.piece]} on ${p.victim.square}, and ${covers}`,
     squares: p.squares,
   };
 }
 
 /** The advice, with its proof. */
 export function prophylaxisLine(p: Prophylaxis): string {
-  const what = p.kind === 'pin' ? `the pin with ${p.intent.san}` : `the kick with ${p.intent.san}`;
+  const what = `the ${p.kind} with ${p.intent.san}`;
   return `${p.prevention.san} first — it stops ${what} before it lands. ${(() => { const f = prophylaxisProof(p).full; return `${f.charAt(0).toUpperCase()}${f.slice(1)}.`; })()}`;
 }

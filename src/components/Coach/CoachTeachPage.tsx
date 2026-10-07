@@ -305,7 +305,8 @@ import { lineProof, lineProofFromUci, type Proof } from '../../services/proof';
 import { walkableLine } from '../../services/moveInsight';
 import { obligationLifted, obligationLiftedLine } from '../../services/obligationLifted';
 import { findQueenGrabTraps, queenGrabTrapLine, queenGrabTrapProof } from '../../services/queenGrabTrap';
-import { provenThreatLine } from '../../services/threatProof';
+import { provenThreatLine, threatStakes } from '../../services/threatProof';
+import { trappedOnBoard } from '../../services/reviewTeachingPoints';
 import { findProphylaxis, prophylaxisLine, prophylaxisProof } from '../../services/prophylaxis';
 import { findTiedDefenders, newTiedDefender, tiedDefenderLine, tiedDefenderProof } from '../../services/tiedDefender';
 import { findEnablingMove, enablingMoveLine, enablingMoveProof } from '../../services/enablingMove';
@@ -8258,7 +8259,16 @@ export function CoachTeachPage(): JSX.Element {
         if (proof) { noteProof(text, proof); threatSquares = [...new Set([...threatSquares, ...(proof.squares ?? [])])]; }
         return text;
       };
-      if (againstMe.length > 0) {
+      // A TRAPPED QUEEN OR ROOK LEADS THE TURN (unity U10, 52-errors #48: the
+      // trapped queen arrived in a late wave, after a pin line and a callback).
+      // The same board computer Review's trap lane reads, in the instant wave.
+      const trappedMine = ((): ReturnType<typeof trappedOnBoard> => { try { return trappedOnBoard(args.fenAfterReply, studentCC); } catch { return null; } })();
+      if (trappedMine) {
+        const NAME_T: Record<string, string> = { q: 'queen', r: 'rook' };
+        threatKey = `trapped:${trappedMine.square}`;
+        threatSquares = [trappedMine.square, trappedMine.attackerSquare];
+        threatLine = proveThreat(`Careful — your ${NAME_T[trappedMine.piece] ?? 'piece'} on ${trappedMine.square} is attacked and has no safe square.`);
+      } else if (againstMe.length > 0) {
         const t = againstMe[0];
         // KEYED ON THE PATTERN, NOT EVERY SQUARE IN IT. A pin is the same pin
         // when the pinned piece shuffles — from the prod transcript, two plies
@@ -8951,7 +8961,7 @@ export function CoachTeachPage(): JSX.Element {
     const instantDecision = decideTurn([
       ...(gemLine ? [{ lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply }] : []),
       ...(tacticLine ? [{ lane: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, claims: tacticClaim ? [tacticClaim] : undefined, lines: tacticLines }] : []),
-      ...(threatLine ? [{ lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares }] : []),
+      ...(threatLine ? [{ lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, stakes: threatStakes(args.fenAfterReply, studentCC, threatSquares) ?? undefined }] : []),
       ...(announceLine ? [{ lane: 'opening' as const, text: announceLine, fen: args.fenAfterReply }] : []),
       // Rate-matched Danya behavior — board-truth. MERGED with the positional
       // read into ONE board-read lane (David 2026-09-13: "computer and observation

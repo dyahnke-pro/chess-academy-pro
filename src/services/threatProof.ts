@@ -12,6 +12,7 @@
 import { Chess } from 'chess.js';
 import { computeMustDefend, flipSideToMove } from './threatOut';
 import { withProof, type Proof } from './proof';
+import { MATE_POINTS, type FactStakes } from './factStakes';
 
 const COUNT = ['no', 'once', 'twice', 'three times', 'four times', 'five times'];
 const times = (n: number): string => COUNT[n] ?? `${n} times`;
@@ -58,4 +59,15 @@ export function threatProof(fen: string, student: 'w' | 'b', squares: readonly s
 export function provenThreatLine(line: string, fen: string, student: 'w' | 'b', squares: readonly string[]): { text: string; proof: Proof | null } {
   const proof = threatProof(fen, student, squares);
   return { text: proof ? withProof(line, proof) : line, proof };
+}
+
+/** WHAT A THREAT PUTS AT STAKE (unity U10): the same exchange read, as the
+ *  door's stakes — so a trapped queen or a mate threat leads the turn instead
+ *  of waiting behind a description that merely ranked higher by lane. */
+export function threatStakes(fen: string, student: 'w' | 'b', squares: readonly string[]): FactStakes | null {
+  const them = flipSideToMove(fen);
+  if (!them) return null;
+  try { if (new Chess(them).moves().some((m) => m.endsWith('#'))) return { points: MATE_POINTS, plies: 1 }; } catch { return null; }
+  const named = computeMustDefend(fen, student).pieces.find((p) => squares.includes(p.square));
+  return named && named.value > 0 ? { points: named.value, plies: 1 } : null;
 }

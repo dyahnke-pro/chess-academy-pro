@@ -241,7 +241,14 @@ export function positionOpened(lastMove: { fenBefore: string; san: string } | un
     const at = sq.get(t)?.[0];
     const p = at ? after.board.get(at as Square) : null;
     if (p && p.color === me) {
-      return { text: `Their move opened your ${name(p.type)}'s line — the position just opened up, so hit the gas: forcing moves now, before they can close it again.`, squares: [...(sq.get(t) ?? [])] };
+      // "Forcing moves now" names what to look at — counted (52-errors #44),
+      // and never said when there are none.
+      const forcing = (() => { try { return new Chess(after.board.fen()).moves({ verbose: true }); } catch { return []; } })();
+      const checks = forcing.filter((m) => /[+#]$/.test(m.san)).length;
+      const takes = forcing.filter((m) => m.captured && !/[+#]$/.test(m.san)).length;
+      if (checks + takes === 0) return null;
+      const count = [checks ? (checks === 1 ? 'one check' : `${checks} checks`) : '', takes ? (takes === 1 ? 'one capture' : `${takes} captures`) : ''].filter(Boolean).join(' and ');
+      return { text: `Their move opened your ${name(p.type)}'s line — the position just opened up, so hit the gas: you have ${count} to look at, before they can close it again.`, squares: [...(sq.get(t) ?? [])] };
     }
   }
   return null;
@@ -401,7 +408,7 @@ export function goodInEveryBranch(fen: string, me: 'w' | 'b', lines: Lines): Rea
   if (!loose) return null;
   // ONCE A GAME (claim): the idea is the lesson; the third instance in one game
   // was a template, not teaching (Learn tape 2026-10-06, game 2).
-  return { claim: 'srr:every-branch', stakes: costStakes(choiceGap(fen, lines)) ?? pieceStakes(pb.board.get(loose as Square)?.type ?? '', 1), idea: `Your ${name(pa.move.piece)} has a move that works whatever they answer — the next-best choice leaves your ${name(pb.board.get(loose as Square)?.type ?? '')} on ${loose} to be taken.`, namesMove: true, text: `${cap(sayMoveClause(a, fen))} works whatever they answer — nothing of yours can be taken after it. ${b2} leaves the piece on ${loose} to be collected.`, squares: [loose] };
+  return { claim: 'srr:every-branch', stakes: costStakes(choiceGap(fen, lines)) ?? pieceStakes(pb.board.get(loose as Square)?.type ?? '', 1), idea: `Your ${name(pa.move.piece)} on ${pa.move.from} has a move that works whatever they answer — the next-best choice leaves your ${name(pb.board.get(loose as Square)?.type ?? '')} on ${loose} to be taken.`, namesMove: true, text: `${cap(sayMoveClause(a, fen))} works whatever they answer — nothing of yours can be taken after it. ${b2} leaves the piece on ${loose} to be collected.`, squares: [loose] };
 }
 
 /** #31 TAKE THE STING OUT: a piece of yours can be won, and the engine neither

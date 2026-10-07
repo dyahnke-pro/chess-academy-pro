@@ -23,4 +23,13 @@ describe('prophylaxis — the quiet move that stops their next move', () => {
   it('quiet when nothing of theirs pins or kicks', () => {
     expect(findProphylaxis(new Chess().fen())).toBeNull();
   });
+
+  it('a fork square is taken away: …Ne5 would fork both rooks, and d4 covers e5', () => {
+    const fen = 'k7/5n2/8/8/2R3R1/3P4/8/7K w - - 0 1';
+    const p = findProphylaxis(fen);
+    expect(p?.kind).toBe('fork');
+    expect(p?.intent.san).toBe('Ne5');
+    expect(p?.prevention.san).toBe('d4');
+    expect(prophylaxisLine(p!)).toBe('d4 first — it stops the fork with Ne5 before it lands. Ne5 would fork your rook on c4, and after d4 the pawn covers e5.');
+  });
 });
