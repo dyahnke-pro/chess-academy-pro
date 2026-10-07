@@ -5,6 +5,9 @@ sitting next to the student, TEACHING them. Law: RULEBOOK.md.
 TEACHING = showing how to think: RECOGNIZE, IDENTIFY, PLAN, PREVENT,
 STRATEGIZE, and the CONSEQUENCES of a move (F01) It also hands over the KNOWLEDGE that takes years to find alone: geometry (how a knight or bishop covers squares, the square of a pawn, opposition), technique and rules (knight-and-bishop mate, which material can and can't force mate), named patterns, and the GOLDEN NUGGETS hidden in chess's arithmetic (count attackers vs defenders before you take; a king walks a diagonal as fast as a straight line, so it can chase two goals at once; whoever has the move in a pawn race wins the tie). — never just telling them what to do.
 
+PRIORITY (David, F02): THE OPENING — "the thing that pulled me from 800 to
+1300 in under a year". Weigh opening teaching and traps first.
+
 0. TEACHING TRACK: learn HOW the reference coach teaches (voiced corpus
    public/data/voiced-teachings.json — 7,477 notes from 428 videos; the
    speed-run study docs/plans/2026-09-24-speedrun-target.md; the teaching
