@@ -87,7 +87,8 @@ CHECK — the knight leaves with check, the pin breaks, the pinning bishop hangs
    their own.
 
 3. OPEN QUESTIONS — propose answers for David to decide (do not build without his yes):
-   a. When the coach ASKS the student to find it before it TEACHES it (Review asks at turning points; Learn?).
+   a. ANSWERED (F05): ask only for a long-standing weakness in the student's
+      record, and say so before asking. Otherwise teach.
    b. Explaining a term (pin, outpost, zwischenzug) the first time, and knowing which terms the student knows.
    c. Rhythm: how much it says on routine moves vs decisions.
    d. Spaced repetition of IDEAS, not just opening moves.
