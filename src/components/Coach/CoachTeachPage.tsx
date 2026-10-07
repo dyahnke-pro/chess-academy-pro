@@ -298,9 +298,9 @@ import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingRating } from '../../services/coachGameEngine';
 import { opponentStrength } from '../../services/engineStrength';
 import { samePosition } from '../../utils/samePosition';
-import { findPinBreaks, pinBreakLine } from '../../services/pinBreak';
+import { findPinBreaks, pinBreakLine, pinBreakProof } from '../../services/pinBreak';
 import { obligationLifted, obligationLiftedLine } from '../../services/obligationLifted';
-import { findQueenGrabTraps, queenGrabTrapLine } from '../../services/queenGrabTrap';
+import { findQueenGrabTraps, queenGrabTrapLine, queenGrabTrapProof } from '../../services/queenGrabTrap';
 import { newPlanThread, planThreadTurn } from '../../services/planThread';
 import { splitThink, stripThink, THINK_MARK, THINK_PAUSE_MS } from '../../utils/thinkPause';
 import { withTimeout } from '../../coach/withTimeout';
@@ -7979,6 +7979,8 @@ export function CoachTeachPage(): JSX.Element {
     const AV: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
     const leadEyeArrows: BoardArrow[] = [];
     let tacticLine: string | null = null;
+    /** The proof's line, drawn move by move when the tactic line says it. */
+    let tacticLines: SpokenLine[] | undefined;
     /** The claim the tactic line makes — keys the speak-time ledger. */
     let tacticClaim: string | null = null;
     /** The tactic whose definition may ride on `tacticLine` — attached only
@@ -8170,7 +8172,11 @@ export function CoachTeachPage(): JSX.Element {
           // the student is told before leaning on it.
           if (tacticLine && t.type === 'pin') {
             const brk = findPinBreaks(args.fenAfterReply, studentCC === 'w' ? 'b' : 'w').find((b) => b.pinned === t.squares[1]);
-            if (brk) tacticLine = `${tacticLine} ${pinBreakLine(brk, studentCC)}`;
+            if (brk) {
+              tacticLine = `${tacticLine} ${pinBreakLine(brk, studentCC)}`;
+              const pl = pinBreakProof(brk, studentCC).line;
+              if (pl) tacticLines = [pl];
+            }
           }
         }
         // …and the same computer read from the other seat: the student's own
@@ -8181,6 +8187,8 @@ export function CoachTeachPage(): JSX.Element {
             tacticKey = `pinbreak:${own.pinned}${own.to}`;
             tacticLine = pinBreakLine(own, studentCC);
             tacticSquares = [own.pinned, own.to, own.pinner];
+            const pl = pinBreakProof(own, studentCC).line;
+            if (pl) tacticLines = [pl];
           }
         }
       }
@@ -8886,7 +8894,8 @@ export function CoachTeachPage(): JSX.Element {
     const grab = ((): { text: string; squares: string[] } | null => {
       try {
         const t = findQueenGrabTraps(args.fenAfterReply)[0];
-        return t ? { text: queenGrabTrapLine(t), squares: [t.from, t.to, t.replyFrom, t.replyTo] } : null;
+        // The proof's detail goes to the BOARD: every exit and every guard.
+        return t ? { text: queenGrabTrapLine(t), squares: [t.from, t.to, t.replyFrom, t.replyTo, ...(queenGrabTrapProof(t).squares ?? [])] } : null;
       } catch { return null; }
     })();
     deferIf(grab, 'rejectedTempting', grab?.text ?? null, grab?.squares);
@@ -8895,7 +8904,7 @@ export function CoachTeachPage(): JSX.Element {
     deferIf(positionalLine && !decidedByMaterial, positionalIsOwnKing ? 'kingSafety' : 'positional', positionalLine, positionalSquares, positionalClaims);
     const instantDecision = decideTurn([
       ...(gemLine ? [{ lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply }] : []),
-      ...(tacticLine ? [{ lane: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, claims: tacticClaim ? [tacticClaim] : undefined }] : []),
+      ...(tacticLine ? [{ lane: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, claims: tacticClaim ? [tacticClaim] : undefined, lines: tacticLines }] : []),
       ...(threatLine ? [{ lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares }] : []),
       ...(announceLine ? [{ lane: 'opening' as const, text: announceLine, fen: args.fenAfterReply }] : []),
       // Rate-matched Danya behavior — board-truth. MERGED with the positional

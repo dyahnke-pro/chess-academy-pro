@@ -17,6 +17,7 @@
 // may simply take on g5). PURE: chess.js + the tactic detector's own pins.
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
+import { withProof, type Proof, type ProofSize } from './proof';
 
 export type PinBreakHow = 'check' | 'threat' | 'discovery';
 
@@ -35,6 +36,9 @@ export interface PinBreak {
   how: PinBreakHow;
   /** After the escape the pinning piece can be won. */
   pinnerHangs: boolean;
+  /** What the computer proved: the escape, the holder's best answer, and
+   *  what the pinned side then takes. Rendered per seat (`pinBreakProof`). */
+  line: { fen: string; reply: { san: string } | null; cap: { san: string; captured: PieceSymbol; to: Square } | null };
 }
 
 const VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
@@ -76,17 +80,32 @@ function bestCapture(chess: Chess, side: Color, depth: number): number {
 }
 
 /** Worst case for `side` after the escape: every holder reply, then two plies
- *  of captures. Mate against `side` is −∞. */
-function worstAfterEscape(afterEscape: Chess, side: Color): number {
+ *  of captures. Mate against `side` is −∞. Returns the reply that does it. */
+function worstAfterEscape(afterEscape: Chess, side: Color): { value: number; reply: Move | null } {
   let worst = Infinity;
+  let reply: Move | null = null;
   for (const r of afterEscape.moves({ verbose: true })) {
     afterEscape.move(r);
     const v = afterEscape.isCheckmate() ? -Infinity : bestCapture(afterEscape, side, 2);
     afterEscape.undo();
-    if (v < worst) worst = v;
+    if (v < worst) { worst = v; reply = r; }
     if (worst === -Infinity) break;
   }
-  return worst === Infinity ? balance(afterEscape, side) : worst;
+  return worst === Infinity ? { value: balance(afterEscape, side), reply: null } : { value: worst, reply };
+}
+
+/** The side's best capture on this board (by the same two-ply count), or null. */
+function bestCaptureMove(chess: Chess, side: Color): Move | null {
+  let best: Move | null = null;
+  let bestV = balance(chess, side);
+  for (const m of chess.moves({ verbose: true })) {
+    if (!m.captured) continue;
+    chess.move(m);
+    const v = bestCapture(chess, side, 1);
+    chess.undo();
+    if (v > bestV) { bestV = v; best = m; }
+  }
+  return best;
 }
 
 /** Does the piece on `from` (of `side`) now hit an enemy piece worth at least
@@ -163,8 +182,12 @@ export function findPinBreaks(fen: string, side?: Color): PinBreak[] {
       chess.move(m);
       const how = tempoOf(chess, m, s, behindValue, before);
       if (how) {
-        const worst = worstAfterEscape(chess, s);
+        const { value: worst, reply } = worstAfterEscape(chess, s);
         if (worst >= base) {
+          // THE PROOF (proof.ts): the escape, their best answer, what follows.
+          let cap: Move | null = null;
+          if (reply) { chess.move(reply); cap = bestCaptureMove(chess, s); chess.undo(); }
+          const line = { fen: board, reply: reply ? { san: reply.san } : null, cap: cap && cap.captured ? { san: cap.san, captured: cap.captured, to: cap.to } : null };
           // Can the pinner be won afterwards? Best capture ON the pinner.
           const pinnerHangs = (() => {
             for (const r of chess.moves({ verbose: true })) {
@@ -175,7 +198,7 @@ export function findPinBreaks(fen: string, side?: Color): PinBreak[] {
             }
             return true;
           })();
-          out.push({ side: s, pinner, pinned, behind, pinnedPiece: piece.type, pinnerPiece: pinnerP.type, san: m.san, from: m.from, to: m.to, how, pinnerHangs });
+          out.push({ side: s, pinner, pinned, behind, pinnedPiece: piece.type, pinnerPiece: pinnerP.type, san: m.san, from: m.from, to: m.to, how, pinnerHangs, line });
           chess.undo();
           break;
         }
@@ -190,15 +213,34 @@ const PIECE: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop'
 const HOW: Record<PinBreakHow, string> = { check: 'with check', threat: 'with a bigger threat', discovery: 'with a discovered attack' };
 
 /**
- * The sentence, from the student's seat. `student` is the student's colour:
- * their own piece pinned → the resource; their opponent's → the warning.
+ * The sentence, from the student's seat, WITH its proof (proof.ts): their own
+ * pinned piece → the resource; their opponent's → the warning.
  */
-export function pinBreakLine(b: PinBreak, student: Color): string {
+export function pinBreakLine(b: PinBreak, student: Color, size: ProofSize = 'full'): string {
   const piece = PIECE[b.pinnedPiece];
   const how = HOW[b.how];
-  if (b.side === student) {
-    return `Your ${piece} on ${b.pinned} only looks pinned: ${b.san} leaves ${how}, so the pin does not hold${b.pinnerHangs ? ` and their ${PIECE[b.pinnerPiece]} on ${b.pinner} is left hanging` : ''}.`;
-  }
-  return `Their ${piece} on ${b.pinned} looks pinned, but it can leave ${how} — ${b.san} — so the pin does not hold. Before you lean on a pin, check every move the pinned piece has.`;
+  const conclusion = b.side === student
+    ? `Your ${piece} on ${b.pinned} only looks pinned: ${b.san} leaves ${how}, so the pin does not hold.`
+    : `Their ${piece} on ${b.pinned} looks pinned, but it can leave ${how} — ${b.san} — so the pin does not hold.`;
+  const said = withProof(conclusion, pinBreakProof(b, student), size);
+  return b.side === student ? said : `${said} Before you lean on a pin, check every move the pinned piece has.`;
 }
 
+
+/**
+ * The proof, as the computer found it — exact: every move was checked. Said
+ * from the student's seat: the holder's reply is "yours" when the student
+ * holds the pin, "theirs" when the student's piece is the pinned one.
+ */
+export function pinBreakProof(b: PinBreak, student: Color): Proof {
+  const studentIsPinned = b.side === student;
+  const { reply, cap } = b.line;
+  // The pinned side takes; the holder answered. Said from the student's seat.
+  const taker = studentIsPinned ? 'you play' : 'they play';
+  const replyOwner = studentIsPinned ? 'their' : 'your';
+  const win = cap ? `${taker} ${cap.san}, winning the ${PIECE[cap.captured]} on ${cap.to}` : 'the pin is gone';
+  const full = reply ? `After ${b.san}, ${replyOwner} best is ${reply.san}, and ${win}` : `After ${b.san}, ${win}`;
+  const short = cap ? `Then ${win}` : '';
+  const sans = [b.san, ...(reply ? [reply.san] : []), ...(reply && cap ? [cap.san] : [])];
+  return { kind: 'line', exact: true, short, full, line: { fen: b.line.fen, sans }, squares: [b.from, b.to] };
+}

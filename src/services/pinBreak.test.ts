@@ -1,7 +1,7 @@
 // The pin that breaks with tempo (questions.md item 7) — dual-use: the student's
 // resource when their piece is pinned, the warning when they hold the pin.
 import { describe, it, expect } from 'vitest';
-import { findPinBreaks, pinBreakLine } from './pinBreak';
+import { findPinBreaks, pinBreakLine, pinBreakProof } from './pinBreak';
 import { findPinPressure } from './pinPressure';
 
 // Black's rook on e8 pins White's knight on e4 to the queen on e2.
@@ -32,6 +32,12 @@ describe('pinBreak — the pinned piece walks out with tempo', () => {
     expect(findPinBreaks(CHECK_ESCAPE.replace(' w ', ' b '), 'w')).toHaveLength(1);
     expect(pinBreakLine(b, 'w')).toMatch(/^Your knight on e4 only looks pinned: Nf6\+ leaves with check/);
     expect(pinBreakLine(b, 'b')).toMatch(/^Their knight on e4 looks pinned, but it can leave with check — Nf6\+ — so the pin does not hold/);
+    // THE PROOF IS SAID (proof.ts), from the right seat: the holder's reply is
+    // "their" for the pinned side and "your" for the holder.
+    expect(pinBreakLine(b, 'w')).toContain('After Nf6+, their best is Kh8, and you play Nxe8, winning the rook on e8.');
+    expect(pinBreakLine(b, 'b')).toContain('After Nf6+, your best is Kh8, and they play Nxe8, winning the rook on e8.');
+    expect(pinBreakLine(b, 'w', 'short')).toContain('Then you play Nxe8, winning the rook on e8.');
+    expect(pinBreakProof(b, 'w').line?.sans).toEqual(['Nf6+', 'Kh8', 'Nxe8']);
     expect(pinBreakLine(b, 'b')).not.toMatch(/\b(we|our|us)\b/i);
   });
   it('pin pressure never advises piling on a pin that breaks with tempo', () => {

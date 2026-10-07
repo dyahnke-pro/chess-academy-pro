@@ -2349,6 +2349,45 @@ the harm here.
 
 ---
 
+## 🔒🔒 EVERY SPOKEN CONCLUSION CARRIES ITS PROOF — the proof is the thinking out loud (David 2026-10-07: "Anything that gets proven is stated out loud?" → "Yes. I have a feeling it will backfire but I think a decent starting spot.")
+
+The computers prove far more than the coach says: a pin break checked four
+plies deep, a queen's every exit counted, a trade counted to the end. Until
+now only the CONCLUSION reached the voice ("the pin does not hold"). The proof
+is the teaching: it is how a strong player thinks out loud.
+
+**THE RULE.** If a conclusion is spoken, the proof its computer found is spoken
+with it. A proof nobody needs stays quiet — the RANKING decides what is said;
+this decides that a said thing never goes out bare. Not "say every proof" (the
+board proves "nothing hangs" every move — that is a firehose).
+
+**THE SHAPE.** One type, `Proof` (`src/services/proof.ts`): `short` (the key
+move or the consequence) + `full` (the line played out) + `exact` (certain on
+the board vs an engine line) + the board's half (`line` drawn move by move,
+`squares` marked). Rendered by `withProof`. Each Learn lane declares
+`proof` in `COMPUTER_ROLES` (required — a new lane fails to compile until it
+answers); `computerRoles.proof.test.ts` holds the OWED count shrink-only.
+Carrying it today: `pinBreak`, `queenGrabTrap`, `planStopped`.
+
+**THE GUARDS — each is a foreseen backfire, do not drop one:**
+1. **Length.** Two sizes. Brief register and a skill the student has proven
+   take `short`; the stakes decide how much proof a verdict earns.
+2. **THE VOICE SAYS THE SHAPE, THE BOARD SHOWS THE DETAIL.** A proof longer
+   than a sentence goes to the board. The first build read out ten squares and
+   seven guards for a trapped queen — now it says "Nc5 attacks it there, and
+   every one of its ten squares is guarded or loses it in a trade" and MARKS
+   the ten squares. (The first backfire, found the same hour.)
+3. **Truth.** An exact proof may be said in full; an engine proof only its
+   short form — a depth-limited line is never recited as fact. `withProof`
+   enforces it.
+4. **Withholding.** A proof that names the move a question asks for waits with
+   the answer (U8, `reviewWithholding`) — a proof must never hand over a find.
+5. **Seat.** A proof walks both sides' moves: build it from the student's seat
+   ("their best is Kh8, and you play Nxe8"), never a fixed "they".
+6. **Once.** A proof is a claim; the say-once ledger keys it by its moves.
+7. **Kids.** No SAN lines: the proof in plain words or not at all.
+8. **The phrasing model may not drop it** — proofs ride as must-keep.
+
 ## 🚫🚫 NO YES-MAN — PUSH BACK, IMPROVE HIS LOGIC, EVERY TIME (David 2026-08-26, emphatic, ALL CAPS: "DO NOT BE A YES MAN! PUSH BACK! IMPROVE ON MY LOGIC, IDEA, OR TRAIN OF THOUGHT!").
 
 This is a HARD standing order and it OVERRIDES any instinct to be agreeable.

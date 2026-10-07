@@ -1,0 +1,48 @@
+// proof — WHAT A COMPUTER FOUND, SAID WITH WHAT IT CONCLUDED (David 2026-10-07:
+// "Anything that gets proven is stated out loud?" → "Yes … a decent starting
+// spot").
+//
+// THE RULE: if a conclusion is spoken, the proof the computer found is spoken
+// with it. A proof nobody needs stays quiet — the ranking computer decides
+// WHAT is said; this decides that a said thing never goes out bare.
+//
+// The guards that keep it from backfiring (each named in CLAUDE.md):
+//   • TWO SIZES. `short` is the key move or the count; `full` is the whole
+//     line. Brief register and a skill the student has proven take `short`.
+//   • EXACT vs ENGINE. An exact proof (a count, legality, a forced check
+//     sequence) may be said in full; an engine proof is said only through its
+//     forcing part — a depth-limited line is never recited as fact.
+//   • THE BOARD'S HALF rides with it: the line is drawn move by move and the
+//     squares are marked, coupled here, never scraped from the words.
+//   • WITHHOLDING: a proof that names the move a question asks for waits with
+//     the answer (the caller's surface rule decides; this type only carries it).
+import type { SpokenLine } from './voicePackage';
+
+export type ProofKind = 'line' | 'squares' | 'count';
+
+export interface Proof {
+  kind: ProofKind;
+  /** True when the proof is certain on the board (chess.js legality, a count,
+   *  a forced sequence); false when it rests on an engine line. */
+  exact: boolean;
+  /** The key move or the count — one clause. */
+  short: string;
+  /** The whole proof — the line played out, every square named. */
+  full: string;
+  /** The moves it names, from the board they start on (drawn as arrows). */
+  line?: SpokenLine;
+  /** The squares it names (marked on the board). */
+  squares?: readonly string[];
+}
+
+export type ProofSize = 'short' | 'full';
+
+/** The conclusion with its proof, at the size the caller earned. An engine
+ *  proof is never said at full size. */
+export function withProof(conclusion: string, proof: Proof | null, size: ProofSize = 'full'): string {
+  if (!proof) return conclusion;
+  const body = size === 'full' && proof.exact ? proof.full : proof.short;
+  if (!body) return conclusion;
+  const head = /[.!?]$/.test(conclusion) ? conclusion : `${conclusion}.`;
+  return `${head} ${body.charAt(0).toUpperCase()}${body.slice(1)}${/[.!?]$/.test(body) ? '' : '.'}`;
+}
