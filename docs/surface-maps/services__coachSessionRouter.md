@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1060 lines · 10 exports · 15 importers · 10 tests · 4 audits**
+**1079 lines · 11 exports · 15 importers · 10 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6163) — names `coachSessionRouter`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6177) — names `coachSessionRouter`
+- **The standard post-deploy ritual** (CLAUDE.md:6228) — names `coachSessionRouter`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6244) — names `coachSessionRouter`
 
 ## Who calls in
 
@@ -39,10 +39,10 @@
 
 ### `routeChatIntent` (function) — 43 call sites
 - `src/coach/dispatchCoachTurn.test.ts:8`
-- `src/coach/dispatchCoachTurn.ts:42`
-- `src/coach/questionMatrix.audit.test.ts:102`
-- `src/coach/questionMatrix.audit.test.ts:137`
-- `src/components/Insights/GameInsightsPage.tsx:174`
+- `src/coach/dispatchCoachTurn.ts:198`
+- `src/coach/questionMatrix.audit.test.ts:104`
+- `src/coach/questionMatrix.audit.test.ts:139`
+- `src/components/Insights/GameInsightsPage.tsx:191`
 - `src/services/coachSessionRouter.i18n.test.ts:54`
 - `src/services/coachSessionRouter.i18n.test.ts:66`
 - `src/services/coachSessionRouter.i18n.test.ts:75`
@@ -112,10 +112,10 @@
 ### `IntentRouterContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `tryRouteIntent` (function) — 44 call sites
-- `src/components/Board/VoiceChatMic.tsx:237`
-- `src/components/Coach/CoachGameReview.tsx:3015`
-- `src/components/Coach/CoachTeachPage.tsx:3132`
+### `tryRouteIntent` (function) — 47 call sites
+- `src/components/Board/VoiceChatMic.tsx:239`
+- `src/components/Coach/CoachGameReview.tsx:2697`
+- `src/components/Coach/CoachTeachPage.tsx:3344`
 - `src/components/Coach/GameChatPanel.tsx:516`
 - `src/services/coachHands.test.ts:35`
 - `src/services/coachHands.test.ts:141`
@@ -152,11 +152,17 @@
 - `src/services/coachSessionRouter.boardMatch.test.ts:169`
 - `src/services/coachSessionRouter.boardMatch.test.ts:175`
 - `src/services/coachSessionRouter.boardMatch.test.ts:179`
+- `src/services/coachSessionRouter.boardMatch.test.ts:197`
+- `src/services/coachSessionRouter.boardMatch.test.ts:200`
+- `src/services/coachSessionRouter.boardMatch.test.ts:208`
 - `src/services/coachSessionRouter.recapture.test.ts:19`
 - `src/services/coachSessionRouter.recapture.test.ts:26`
 - `src/services/spokenSquares.test.ts:62`
 - `src/services/spokenSquares.test.ts:74`
 - `src/services/spokenSquares.test.ts:84`
+
+### `isMoveCommand` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ## Tests
 
