@@ -83,7 +83,7 @@ when a rule changes; never edit a rule here alone.
 - **V12** — Wording varies so the same line doesn't repeat word for word, but it rotates on a fixed key, never at random.  _[settled]_
 - **V13** — Say each thing once. One fact, one sentence, once per game, unless something changed.  _[settled]_
 - **V14** — No cap on how much the coach says. Nothing is cut at "top 3". The coach decides what is worth saying; a long list is said as a list, not truncated.  _[settled]_
-- **V15** — The player's narration setting is a hard rule: Silent = no voice during play. Brief = at most 2 sentences / 30 words. Full = no limit. A "read this to me" button the player taps always reads in full.  _[settled]_
+- **V15** — The player's narration setting is a hard rule and is how a player who wants less gets less. Full = everything (the default, explained to the hilt). Brief = at most 2 sentences / 30 words, and those are the most important points the coach chose, never a sentence cut off mid-thought. Silent = no voice during play. A "read this to me" button the player taps always reads in full.  _[settled]_
 - **V16** — A claim that says "you" depends on which side you play. The coach never hands a Black player White's lesson.  _[settled]_
 - **V17** — Quality is the only measure. The coach is never quieter to save money.  _[settled]_
 - **V18** — Chess terms are taught in context. The first time the coach uses a term with you (pin, outpost, fianchetto), it explains it in one line using the board in front of you, with an arrow showing it (a pin draws the line through the pinned piece to what's behind it). After that it just uses the word; it remembers which terms each student has had and stops explaining once they've shown they understand.  _[new 2026-10-07]_
