@@ -1513,3 +1513,14 @@ describe('recordVsTarget — present-tense "how do I play against" is not a reco
     expect(recordVsTarget(q)).toBe(t);
   });
 });
+
+// Answers swarm (2026-10-07): "tell me about X" was stripped to "about X" as
+// filler before the opening-identity detector ran, so that lane was dead.
+describe('"tell me about X" reaches the opening-identity lane', () => {
+  it.each(['tell me about the Najdorf', 'can you tell me about the Vienna'])('"%s"', (q) => {
+    expect(buildQuestionGrounding(q).openingIdentityName).toBeTruthy();
+  });
+  it('"tell me what to play" still strips the filler', () => {
+    expect(buildQuestionGrounding('tell me what is the best move here').openingIdentityName).toBeUndefined();
+  });
+});

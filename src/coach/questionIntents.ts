@@ -104,7 +104,7 @@ const anyOf = (alts: string[]): RegExp => new RegExp(alts.join('|'), 'i');
 // positional/temporal cues ("here", "right now", "in this position") that
 // disambiguate live-board from over-time questions.
 const LEADING_FILLER_RE =
-  /^(?:hey|hi|hiya|yo|ok|okay|kk?|alright|alrighty|so|well|um+|uh+|erm|hmm+|look|listen|like|and|but|also|please|yeah|yep|sup|dude|man|bro|ma'?am|sir|be\s+real\s+with\s+me|real\s+quick|quick\s+(?:one|question)|tell\s+me|i\s+mean|let\s+me\s+ask|i\s+(?:wanna|want\s+to)\s+know|i\s+was\s+wondering|can\s+you\s+tell\s+me|so\s+like)\b[\s,.:;–—-]*/i;
+  /^(?:hey|hi|hiya|yo|ok|okay|kk?|alright|alrighty|so|well|um+|uh+|erm|hmm+|look|listen|like|and|but|also|please|yeah|yep|sup|dude|man|bro|ma'?am|sir|be\s+real\s+with\s+me|real\s+quick|quick\s+(?:one|question)|tell\s+me(?!\s+about\b)|i\s+mean|let\s+me\s+ask|i\s+(?:wanna|want\s+to)\s+know|i\s+was\s+wondering|can\s+you\s+tell\s+me(?!\s+about\b)|so\s+like)\b[\s,.:;–—-]*/i;
 const MID_FILLER_RE =
   /\b(?:actually|honestly|basically|literally|seriously|really|just|even|simply|roughly|currently|kinda|sorta|pretty\s+much|i\s+guess|you\s+know|these\s+days|at\s+all|or\s+what|again|then)\b/gi;
 
@@ -2486,7 +2486,10 @@ export function isRecordsQuestion(ask: string | undefined): boolean {
  *  detector both DETECTS and EXTRACTS the target term (mirrors
  *  `openingProfileKind`). Requires a target after a preposition, so a
  *  bare "what's my record" falls through to the generic records vertical. */
-const RECORD_VS_LEAD = String.raw`(?:my\s+)?(?:record|results?|win[\s/-]?rate|w\/?l|win[\s/-]?loss|score|h2h|head[\s-]?to[\s-]?head)|how\s+(?:do|did|have|has|'?s)\s+i\s+(?:do|done|doing|fare|fared|perform|performed|play|played|score|scored)|(?:do|did)\s+i\s+struggle|am\s+i\s+(?:any\s+)?(?:good|bad|weak|strong|winning|losing)`;
+// "how do I PLAY against X" (present) asks HOW TO PLAY it, a teaching question;
+// only the past/perfect "how did/have I played against X" asks for the record
+// (answers swarm, 2026-10-07: the present form returned a win/loss table).
+const RECORD_VS_LEAD = String.raw`(?:my\s+)?(?:record|results?|win[\s/-]?rate|w\/?l|win[\s/-]?loss|score|h2h|head[\s-]?to[\s-]?head)|how\s+(?:do|did|have|has|'?s)\s+i\s+(?:do|done|doing|fare|fared|perform|performed|score|scored)|how\s+(?:did|have|has)\s+i\s+play(?:ed)?|(?:do|did)\s+i\s+struggle|am\s+i\s+(?:any\s+)?(?:good|bad|weak|strong|winning|losing)`;
 const RECORD_VS_RE = new RegExp(
   String.raw`\b(?:${RECORD_VS_LEAD})\b[\s\S]*?\b(?:against|versus|vs\.?|v\.?|facing|in|with|playing)\s+(?:the\s+)?([a-z0-9][a-z0-9'’\-.\s]*?)\s*[?.!]*$`,
   'i',
