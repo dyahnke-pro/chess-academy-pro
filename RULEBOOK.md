@@ -85,6 +85,7 @@ when a rule changes; never edit a rule here alone.
 - **V15** — The player's narration setting is a hard rule: Silent = no voice during play. Brief = at most 2 sentences / 30 words. Full = no limit. A "read this to me" button the player taps always reads in full.  _[settled]_
 - **V16** — A claim that says "you" depends on which side you play. The coach never hands a Black player White's lesson.  _[settled]_
 - **V17** — Quality is the only measure. The coach is never quieter to save money.  _[settled]_
+- **V18** — Chess terms are taught in context. The first time the coach uses a term with you (pin, outpost, fianchetto), it explains it in one line using the board in front of you, with an arrow showing it (a pin draws the line through the pinned piece to what's behind it). After that it just uses the word; it remembers which terms each student has had and stops explaining once they've shown they understand.  _[new 2026-10-07]_
 
 ## 4. The surfaces
 

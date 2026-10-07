@@ -89,7 +89,8 @@ CHECK — the knight leaves with check, the pin breaks, the pinning bishop hangs
 3. OPEN QUESTIONS — propose answers for David to decide (do not build without his yes):
    a. ANSWERED (F05): ask only for a long-standing weakness in the student's
       record, and say so before asking. Otherwise teach.
-   b. Explaining a term (pin, outpost, zwischenzug) the first time, and knowing which terms the student knows.
+   b. ANSWERED (V18): a term is taught in context the first time, with an arrow
+      showing it; remembered per student; explanation stops once understood.
    c. Rhythm: how much it says on routine moves vs decisions.
    d. Spaced repetition of IDEAS, not just opening moves.
    e. What great middlegame and endgame teaching looks like after move 15.
