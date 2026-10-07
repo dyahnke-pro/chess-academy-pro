@@ -20,9 +20,12 @@ describe('narratedContinuation helpers', () => {
     expect(materialBalance('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NBQKBNR w Kkq - 0 1')).toBe(-5);
   });
 
-  it('detectPhase: opening → middlegame by ply, endgame when queens off', () => {
+  it('detectPhase: the board decides — development, not the move count', () => {
     expect(detectPhase(START, 2)).toBe('opening');
-    expect(detectPhase(START, 20)).toBe('middlegame');
+    // Nothing developed is still the opening, whatever the ply (census 14).
+    expect(detectPhase(START, 20)).toBe('opening');
+    // Both sides castled with rooks connected: the middlegame.
+    expect(detectPhase('r4rk1/pppq1ppp/2npbn2/2b1p3/2B1P3/2NPBN2/PPPQ1PPP/R4RK1 w - - 0 10', 18)).toBe('middlegame');
     // No queens → endgame regardless of ply
     expect(detectPhase('r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1', 30)).toBe('endgame');
     expect(nonPawnMaterial('4k3/8/8/8/8/8/8/4K3 w - - 0 1')).toBe(0);
@@ -30,11 +33,13 @@ describe('narratedContinuation helpers', () => {
 
   it('announces a phase transition once', () => {
     const s0 = initialContinuationState(START, 2);
-    // move into middlegame territory (ply 18, full board still)
-    const r = continuationNarration(START, 18, s0, null);
+    // A real middlegame board — both sides castled, rooks connected (census
+    // 14: the board decides the phase, not the ply).
+    const MID = 'r4rk1/pppq1ppp/2npbn2/2b1p3/2B1P3/2NPBN2/PPPQ1PPP/R4RK1 w - - 0 10';
+    const r = continuationNarration(MID, 18, s0, null);
     expect(r.text).toMatch(/middlegame/i);
     // same phase next move → silent
-    const r2 = continuationNarration(START, 19, r.state, null);
+    const r2 = continuationNarration(MID, 19, r.state, null);
     expect(r2.text).toBeNull();
   });
 
@@ -42,7 +47,7 @@ describe('narratedContinuation helpers', () => {
     const s0 = initialContinuationState(START, 20); // already middlegame
     const upAPiece = 'rnbqkb1r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'; // white +3
     const r = continuationNarration(upAPiece, 22, s0, null);
-    expect(r.text).toMatch(/up a piece/i);
+    expect(r.text).toMatch(/a piece up/i); // named by the board (boardEdgeWords), not a point threshold
     // same balance next move → no repeat
     const r2 = continuationNarration(upAPiece, 23, r.state, null);
     expect(r2.text).toBeNull();

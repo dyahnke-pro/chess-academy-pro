@@ -30,27 +30,26 @@ export function nonPawnMaterial(fen: string): number {
 import { materialBalance, MATERIAL_VALUE } from './pieceValues';
 import { settledBalance, type LastMove } from './material';
 import type { GamePhase } from '../types';
+import { phaseOfFen } from './boardConcepts';
+import { boardEdgeWords } from '../utils/countWords';
 export type { GamePhase };
 
-/** Classify the phase from the position. Endgame once the queens are off OR
- *  heavy material is low; middlegame once development is done (by ply). */
+/** The phase, read off the board — ONE definition (one-coach P2, census
+ *  group 14): `boardConcepts.phaseOfFen` (endgame by material, middlegame once
+ *  development is done or the kings are castled and connected). The old rule
+ *  here called any queenless board an ending and moved to the middlegame by
+ *  ply count alone. `ply` is the fallback only for a board with no pieces. */
 export function detectPhase(fen: string, ply: number): GamePhase {
-  const board = fen.split(' ')[0];
-  const hasQueens = /q/i.test(board);
-  const npm = nonPawnMaterial(fen);
-  if (!hasQueens || npm <= 16) return 'endgame';
-  if (ply >= 16) return 'middlegame';
-  return 'opening';
+  return phaseOfFen(fen) ?? (ply >= 16 ? 'middlegame' : 'opening');
 }
 
-/** Phrase a material lead by size, named concretely (voice rule 1). */
-function describeLead(balance: number): string {
+/** A material lead, named by the pieces the BOARD shows (`boardEdgeWords`,
+ *  the one board namer) — never by a point threshold, which called the
+ *  exchange and a pawn "a piece" and two pawns "a pawn" (one-coach P2). */
+function describeLead(fen: string, balance: number): string {
   const side = balance > 0 ? 'White' : 'Black';
-  const m = Math.abs(balance);
-  if (m >= 8) return `${side} is winning — a whole queen's worth of material ahead.`;
-  if (m >= 5) return `${side} has won a rook's worth of material.`;
-  if (m >= 3) return `${side} is up a piece.`;
-  return `${side} has won a pawn.`;
+  const words = boardEdgeWords(fen, balance > 0 ? 'w' : 'b', Math.abs(balance));
+  return Math.abs(balance) >= 8 ? `${side} is winning — ${words} up.` : `${side} is ${words} up.`;
 }
 
 export interface ContinuationState {
@@ -88,7 +87,7 @@ export function continuationNarration(
   // 2) Decisive, NEW material swing (≥ a full point of change, ≥ a pawn lead).
   const bal = settledBalance(newFen, lastMove);
   if (Math.abs(bal) >= 1 && Math.abs(bal - prev.announcedBalance) >= 2) {
-    return { text: describeLead(bal), state: { phase, announcedBalance: bal } };
+    return { text: describeLead(newFen, bal), state: { phase, announcedBalance: bal } };
   }
   // 3) Routine move — silence.
   return { text: null, state: { phase, announcedBalance: prev.announcedBalance } };

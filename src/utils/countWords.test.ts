@@ -21,6 +21,9 @@ describe('material by count alone', () => {
       if (!f.endsWith('.ts') || f.endsWith('.test.ts')) continue;
       const src = readFileSync(join(dir, f), 'utf8');
       if (/>=\s*\d+\s*(\?|\)\s*return)\s*'(up )?(a piece|a rook|a queen|the queen|the exchange[^']*)'/.test(src)) bad.push(f);
+      // …and the template form (narratedContinuation, 2026-10-07: `if (m >= 3)
+      // return \`${side} is up a piece.\``) that dodged the quote above.
+      if (/>=\s*\d+\s*\)\s*return\s*`[^`]*\b(up a piece|a rook's worth|a whole queen|up the exchange)/.test(src)) bad.push(f);
     }
     expect(bad).toEqual([]);
   });
