@@ -35,3 +35,8 @@
    Speedrun Attacking Repertoire" = Naroditsky's, etc. The missing piece is
    the coach reaching INTO them while teaching (cite a real game, credit the
    game/move). Names still leak in the lesson text inside them (F0d).
+   The coach already SEARCHES by player in chat (`lookup_player_games`, test
+   `lookupPlayerGames.magnus-catalan`). The pipeline that built the
+   repertoires (fetch-chesscom / fetch-otb-games → build-game-references) can
+   add any player. Gap = Learn, Review and lessons never reach for a game on
+   their own.
