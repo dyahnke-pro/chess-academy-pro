@@ -17,6 +17,11 @@ ACCEPTANCE TEST (David: "i have never NEVER heard my app teach me a gem"):
 done = David HEARS a gem taught, in a real game and in the opening lessons.
 Start by tracing why none has ever reached him: gem data → surfacing →
 unlock → Learn's live gem detection → the voice.
+MEASURED: 344 gems over 86 openings (src/data/punish-gems.json). The Bishop's
+Opening has ZERO — it is not a built opening (only 40 raw DB entries, generic
+walkthrough). David: "so many ways black can go wrong … most noticeably with a
+bishop sac on f7". Build it properly, gems found BY HAND (no bots), every
+Bxf7 slip engine-verified, taught per F01.
 
 0. TEACHING TRACK: learn HOW the reference coach teaches (voiced corpus
    public/data/voiced-teachings.json — 7,477 notes from 428 videos; the
