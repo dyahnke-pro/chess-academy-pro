@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Chess } from 'chess.js';
-import { ArrowLeft, Volume2, VolumeX, Swords, RotateCcw, MessageCircle, X, HelpCircle } from 'lucide-react';
+import { ArrowLeft, Volume2, VolumeX, Swords, RotateCcw, MessageCircle, X, ChevronsLeft, ChevronsRight, Undo2 } from 'lucide-react';
 import { useChessGame } from '../../hooks/useChessGame';
 import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { useBoardContext } from '../../hooks/useBoardContext';
@@ -10,8 +10,10 @@ import { ControlledChessBoard } from '../Board/ControlledChessBoard';
 import { EngineLines } from '../Board/EngineLines';
 import { LichessLines } from '../Board/LichessLines';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
-import { BoardControls } from '../Board/BoardControls';
-import { HintButton } from '../Coach/HintButton';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { useBoardFit } from '../../hooks/useBoardFit';
+import { useLineWalk } from '../../hooks/useLineWalk';
+import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
 import { DifficultyToggle } from '../Coach/DifficultyToggle';
 import { ResignButton } from '../Coach/ResignButton';
@@ -36,7 +38,7 @@ import { usePieceSound } from '../../hooks/usePieceSound';
 import { useMasterPlayWatcher } from '../../hooks/useMasterPlayWatcher';
 import { useStudentNeed } from '../../hooks/useStudentNeed';
 import { logAppAudit } from '../../services/appAuditor';
-import type { OpeningRecord, OpeningVariation, OpeningPlayResult, AnalysisLine, LichessCloudEval, BoardArrow, BoardHighlight, BoardAnnotationCommand } from '../../types';
+import type { OpeningRecord, OpeningVariation, OpeningPlayResult, AnalysisLine, LichessCloudEval, BoardArrow, BoardHighlight, BoardAnnotationCommand, WalkableLine } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MoveQuality } from '../Board/ChessBoard';
 import { GameChatPanel } from '../Coach/GameChatPanel';
@@ -135,6 +137,8 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   // (G5's sanctioned read-aloud exemption), same class as "Read this position".
   const [whyCard, setWhyCard] = useState<string | null>(null);
   const [whyLoading, setWhyLoading] = useState(false);
+  /** The line the last Why proved — walked only when Play line is pressed. */
+  const [whyLine, setWhyLine] = useState<WalkableLine | null>(null);
   const askWhy = useCallback(async (): Promise<void> => {
     if (whyLoading) return;
     setWhyLoading(true);
@@ -153,6 +157,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
       }
       const answer = why || 'No single best move stands out here — the position is roughly balanced.';
       setWhyCard(answer);
+      setWhyLine(detail.lines[0] ?? null);
       void voiceService.speakReadAloud(answer);
     } catch {
       setWhyCard(null);
@@ -537,6 +542,23 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   const displayFen = viewedMoveIndex !== null
     ? (viewedMoveIndex === -1 ? 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' : moveHistory[viewedMoveIndex]?.fen ?? game.fen)
     : game.fen;
+
+  // THE ONE BOARD BAR's line walker + position read (David 2026-10-07: "Keep
+  // the boards identical"). A pending punish callout withholds Read and Why —
+  // both would name the move the callout asks the student to find.
+  const lineWalk = useLineWalk(playerColor, 'openingPlay.lineWalk');
+  /** The board gives up height so the board bar stays on screen (phones). */
+  const boardFit = useBoardFit(playPhase);
+  const positionRead = usePositionNarration({
+    fen: displayFen,
+    pgn: game.history.join(' '),
+    moveNumber: Math.floor(game.history.length / 2) + 1,
+    playerColor,
+    openingName: displayName,
+    corpusNotes: true,   // a Play mount (2026-09-23)
+    withhold: null,      // greyed while a punish callout is unrevealed, below
+  });
+  const punishPending = !!punishCue && !punishRevealed;
 
   const goToFirstMove = useCallback(() => {
     if (moveHistory.length === 0) return;
@@ -1046,12 +1068,12 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
 
       {/* Board */}
       <div className="flex flex-col items-center justify-start pt-2 px-2 py-2">
-        <div className="w-full md:max-w-[420px]">
+        <div ref={boardFit.boardRef} className="w-full md:max-w-[420px]" style={boardFit.boardStyle}>
           <ControlledChessBoard
             game={game}
-            positionOverride={viewedMoveIndex !== null ? displayFen : undefined}
+            positionOverride={lineWalk.walkFen ?? (viewedMoveIndex !== null ? displayFen : undefined)}
             interactive={
-              viewedMoveIndex === null &&
+              viewedMoveIndex === null && !lineWalk.walkFen &&
               (playPhase === 'opening' || playPhase === 'middlegame') &&
               !game.isGameOver &&
               !isComputerThinking.current
@@ -1065,7 +1087,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
             highlightSquares={computerLastMove}
             showLastMoveHighlight={settings.highlightLastMove}
             moveQualityFlash={moveFlash}
-            arrows={(() => {
+            arrows={lineWalk.walkFen ? lineWalk.walkArrows : (() => {
               // The hint's lead-the-eye arrow must ALWAYS show when a hint is
               // active — not be masked by a prior chat's arrows (David 2026-08-27
               // audit: hint showed no arrows). Merge + dedupe by square-pair so
@@ -1094,16 +1116,6 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
             <p className="text-sm text-theme-text flex-1 leading-snug" data-testid="punish-callout-text">
               {punishRevealed ? punishCue.reveal : punishCue.callout}
             </p>
-            {!punishRevealed && (
-              <button
-                type="button"
-                onClick={revealPunishLine}
-                data-testid="show-the-line"
-                className="shrink-0 px-3 py-1.5 rounded-xl bg-green-600 text-white text-sm font-bold active:scale-95 transition-transform"
-              >
-                Show the line
-              </button>
-            )}
           </div>
         </div>
       )}
@@ -1111,39 +1123,25 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
       {/* Controls bar */}
       {(playPhase === 'opening' || playPhase === 'middlegame') && !game.isGameOver && (
         <div className="px-4">
-          <BoardControls
-            onFirst={goToFirstMove}
-            onPrev={goToPrevMove}
-            onNext={goToNextMove}
-            onLast={goToLastMove}
-            canGoPrev={moveHistory.length > 0 && (viewedMoveIndex === null || viewedMoveIndex > -1)}
-            canGoNext={viewedMoveIndex !== null}
-            onTakeback={handleTakeback}
-            canTakeback={moveHistory.length >= 2}
-            extraLeft={
-              <div className="flex items-center gap-1.5">
-                {/* Why? — deeper grounded explanation of the best move (David
-                    2026-06-19), distinct from the Hint's quick reason. */}
-                <button
-                  type="button"
-                  onClick={() => { void askWhy(); }}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-cyan-400 border border-cyan-500/40 hover:bg-cyan-500/10 transition-colors active:scale-95"
-                  data-testid="why-button"
-                  aria-label="Why is the best move best?"
-                >
-                  <HelpCircle size={16} />
-                  <span>Why?</span>
-                </button>
-                {settings.showHints && (
-                  <HintButton
-                    currentLevel={hintState.level}
-                    onRequestHint={requestHint}
-                    disabled={hintState.isAnalyzing}
-                  />
-                )}
-              </div>
-            }
-            extraRight={<ResignButton onResign={handleResign} disabled={moveHistory.length === 0} />}
+          {/* THE ONE BOARD BAR — the same six as Learn, Play and Review. */}
+          <CoachBoardBar
+            keepRef={boardFit.keepRef}
+            onBack={moveHistory.length > 0 && (viewedMoveIndex === null || viewedMoveIndex > -1) ? goToPrevMove : null}
+            onForward={viewedMoveIndex !== null ? goToNextMove : null}
+            onHint={settings.showHints && !hintState.isAnalyzing && hintState.level < 3 ? requestHint : null}
+            hintLabel={hintState.level === 3 ? 'Shown' : undefined}
+              hintLevel={hintState.level}
+            onRead={punishPending ? null : () => { void positionRead.narrate(); }}
+            reading={positionRead.isNarrating}
+            onWhy={punishPending || whyLoading ? null : () => { void askWhy(); }}
+            onPlayLine={punishPending ? revealPunishLine : whyLine ? () => lineWalk.walk(whyLine) : null}
+            testIds={{ back: 'nav-prev', forward: 'nav-next', hint: 'hint-button', read: 'read-position-btn', why: 'why-button', line: 'show-the-line' }}
+            extras={<>
+              <button onClick={goToFirstMove} disabled={moveHistory.length === 0 || viewedMoveIndex === -1} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="First move" data-testid="nav-first"><ChevronsLeft size={12} /></button>
+              <button onClick={goToLastMove} disabled={viewedMoveIndex === null} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="Back to the live position" data-testid="nav-last"><ChevronsRight size={12} /></button>
+              <button onClick={handleTakeback} disabled={moveHistory.length < 2} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-amber-500/30 text-amber-400" aria-label="Take back your last move" data-testid="takeback-btn"><Undo2 size={12} /><span>Takeback</span></button>
+              <ResignButton compact onResign={handleResign} disabled={moveHistory.length === 0} />
+            </>}
           />
         </div>
       )}

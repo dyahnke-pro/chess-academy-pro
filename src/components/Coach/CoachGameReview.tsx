@@ -68,7 +68,11 @@ import type {
 import { ReviewCitationPreviews } from './ReviewCitationPreviews';
 import { useReviewPlayback, type ForwardOutcome } from '../../hooks/useReviewPlayback';
 import { useReviewEngineLines } from '../../hooks/useReviewEngineLines';
-import { SkipBack, SkipForward, ChevronLeft, ChevronRight, Cpu, BookOpen } from 'lucide-react';
+import { usePositionNarration } from '../../hooks/usePositionNarration';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { useBoardFit } from '../../hooks/useBoardFit';
+import { computeWhyBestMoveDetail } from '../../services/whyBestMove';
+import { SkipBack, SkipForward, Cpu, BookOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { tryCaptureForgetIntent } from '../../services/openingIntentCapture';
 import { coachService } from '../../coach/coachService';
@@ -86,7 +90,7 @@ import { getOrBuildReviewNarration, isReviewUncapped, reviewMoveInputsFrom } fro
 import { CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
 import { admitArrow } from '../../services/arrowDoor';
-import type { BoardArrow } from '../../types';
+import type { BoardArrow, WalkableLine } from '../../types';
 import { registerCoachHands, actionForCommand, actuate } from '../../services/coachActuator';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
 import type { CoachGameMove, KeyMoment, ReviewState, GameAccuracy, MoveClassificationCounts, PhaseAccuracy, MissedTactic, ChatMessage as ChatMessageType, MoveClassification, StockfishAnalysis } from '../../types';
@@ -2276,6 +2280,76 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const [theoryState, setTheoryState] = useState<TheoryState | null>(null);
   useEffect(() => { theoryStateRef.current = theoryState; }, [theoryState]);
 
+  // ── THE ONE BOARD BAR's Read / Why / Play line (David 2026-10-07: "Keep the
+  // boards identical"). The same computers Learn and Play use: the position
+  // read (`usePositionNarration`, no corpus notes in review) and the why
+  // computer (`computeWhyBestMoveDetail`). An open question withholds both —
+  // its answer is the point of the question.
+  const questionOpen = !!shotState || !!theoryState;
+  /** The board gives up height so the board bar stays on screen (phones). */
+  const boardFit = useBoardFit(walkPlayback.currentPly);
+  const barFen = useMemo<string>(() => {
+    const seg = walkPlayback.currentSegment;
+    if (seg) return seg.fenAfter;
+    const ply = walkPlayback.currentPly;
+    return ply > 0 ? moves[Math.min(ply, moves.length) - 1]?.fen ?? STARTING_FEN : STARTING_FEN;
+  }, [walkPlayback.currentSegment, walkPlayback.currentPly, moves]);
+  const reviewRead = usePositionNarration({
+    fen: walkExplorationFen ?? barFen,
+    pgn: moves.slice(0, Math.min(walkPlayback.currentPly, moves.length)).map((m) => m.san).join(' '),
+    moveNumber: Math.floor(Math.min(walkPlayback.currentPly, moves.length) / 2) + 1,
+    playerColor,
+    openingName,
+    corpusNotes: false,   // review carries no corpus notes (2026-09-23)
+    withhold: null,       // greyed while a question is open, below
+  });
+  /** The line the last Why proved, anchored to its ply. */
+  const [reviewWhy, setReviewWhy] = useState<{ ply: number; line: WalkableLine | null } | null>(null);
+  const reviewWhyBusyRef = useRef(false);
+  const handleReviewWhy = useCallback(async (): Promise<void> => {
+    const seg = walkPlayback.currentSegment;
+    if (!seg || reviewWhyBusyRef.current) return;
+    const ply = walkPlayback.currentPly;
+    // The decision the student faced here: the board BEFORE their own move,
+    // or the board after the opponent's (their move next).
+    const fen = seg.playerColor === playerColor ? seg.fenBefore : seg.fenAfter;
+    let toMove: 'w' | 'b';
+    try { toMove = new Chess(fen).turn(); } catch { return; }
+    if (toMove !== (playerColor === 'white' ? 'w' : 'b')) return;
+    reviewWhyBusyRef.current = true;
+    walkPlayback.pause('why');
+    try {
+      const analysis = await stockfishEngine.analyzePosition(fen, 16, undefined, 'brain');
+      const detail = await computeWhyBestMoveDetail({ fen, studentColor: playerColor, analysis, rating: playerRating, studentWeaknesses: weaknessSignalsRef.current, studentNeedContext: null });
+      if (walkPlyRef.current !== ply) return;
+      const answer = detail.text || 'No single best move stands out here — the position is roughly balanced.';
+      // The arrows are drawn on the board the line starts from; the pieces
+      // move only when Play line is pressed (David 2026-10-07).
+      if (detail.arrows.length > 0) {
+        setWalkExplorationFen(fen === seg.fenAfter ? null : fen);
+        setWalkExplorationArrows(detail.arrows);
+      }
+      const at = Date.now();
+      setAskMessages((prev) => [...prev, { id: `why-${ply}-${at}`, role: 'assistant', content: answer, timestamp: at }]);
+      setAskExpanded(true);
+      void voiceService.speakReadAloud(answer);
+      setReviewWhy({ ply, line: detail.lines[0] ?? null });
+    } catch { /* the engine read failed — the button stays for another tap */ } finally {
+      reviewWhyBusyRef.current = false;
+    }
+  }, [walkPlayback, playerColor, playerRating, weaknessSignalsRef]);
+  const reviewWhyLine = reviewWhy && reviewWhy.ply === walkPlayback.currentPly ? reviewWhy.line : null;
+  const playReviewLine = useCallback((): void => {
+    const ply = walkPlayback.currentPly;
+    if (reviewWhyLine) {
+      void walkSpokenLine(reviewWhyLine.plies.map((p) => ({ uci: p.uci, fenBefore: p.fenBefore, fenAfter: p.fenAfter })), ply, { waitForVoice: false });
+      return;
+    }
+    const seg = walkPlayback.currentSegment;
+    if (seg?.spokenLineArrows && seg.spokenLineArrows.length >= 2) void walkSpokenLine(seg.spokenLineArrows, ply, { waitForVoice: false });
+  }, [walkPlayback, reviewWhyLine, walkSpokenLine]);
+  const canPlayReviewLine = !!reviewWhyLine || (walkPlayback.currentSegment?.spokenLineArrows?.length ?? 0) >= 2;
+
   // AUTO LEAD-THE-EYE ARROWS for a spoken future line (David 2026-09-07: "I just
   // want the arrows to appear as the moves are spoken" — WITHOUT moving the
   // pieces). When the walk lands on a segment whose narration talks out a
@@ -3498,7 +3572,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   Narration is PINNED above the scroll middle, so a full-width
                   board no longer hides the coach's why (the old 2026-06-27/07-10
                   complaint the vh cap was solving). */}
-              <div className="w-full max-w-[68vh] mx-auto md:max-w-[420px] relative" data-testid="review-walk-board">
+              <div ref={boardFit.boardRef} className="w-full max-w-[68vh] mx-auto md:max-w-[420px] relative" style={boardFit.boardStyle} data-testid="review-walk-board">
                 <ChessBoard
                   // Re-key on exploration toggle so the underlying chess
                   // instance resets cleanly when the user enters or
@@ -3706,175 +3780,63 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                     Resume game
                   </button>
                 )}
-                {/* "Show me" on inaccuracy/mistake/blunder plies — the narrated
-                    better line, on demand (button only). The old "Explore this
-                    position" button is gone: the board is free, any piece moved
-                    is exploring (David 2026-09-05). */}
-                {hasArrow && walkExplorationFen === null && !walkShowMeActive && (
-                  <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex items-center gap-2">
-                    <button
-                      onClick={() => { void runShowMePlayout(); }}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold shadow-lg"
-                      style={{
-                        background: '#ef4444',
-                        color: 'white',
-                        boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
-                      }}
-                      data-testid="walk-show-me-btn"
-                      aria-label="Show me the better line"
-                    >
-                      Show me better move
-                    </button>
-                  </div>
-                )}
               </div>
             </div>
 
-            {/* Walk nav: four uniform 52px buttons, forward gets a
-                subtle accent border so it reads as primary without
-                dwarfing the others. Audit-driven redesign — the prior
-                gold 120×90 forward chevron next to 60×60 transparent
-                siblings was visually unbalanced. All four now share
-                the same shape, size, and active-press affordance. */}
-            <div className="flex items-center justify-center gap-2 py-2" data-testid="review-nav-controls">
-              <button
-                onClick={walkPlayback.goToStart}
-                className="w-[52px] h-[52px] rounded-xl border border-theme-border hover:bg-theme-surface disabled:opacity-30 flex items-center justify-center transition-transform active:scale-[0.96]"
-                disabled={walkPlayback.currentPly === 0}
-                aria-label="Jump to start"
-              >
-                <SkipBack size={22} style={{ color: 'var(--color-text)' }} />
-              </button>
-              <button
-                onClick={walkPlayback.goBack}
-                className="w-[52px] h-[52px] rounded-xl border border-theme-border hover:bg-theme-surface disabled:opacity-30 flex items-center justify-center transition-transform active:scale-[0.96]"
-                disabled={walkPlayback.currentPly === 0}
-                aria-label="Back one move"
-                data-testid="review-back-btn"
-              >
-                <ChevronLeft size={24} style={{ color: 'var(--color-text)' }} />
-              </button>
-              {/* ⏯ PLAY / PAUSE — the walk plays itself (David 2026-09-05):
-                  each ply's narration, a short pause, then the next move.
-                  Sits BETWEEN the arrows. Any user intervention (a piece moved
-                  on the board, Back, a Forward tap, a jump) pauses it, and ONLY
-                  this button restarts it. The "Paused" state is visible so a
-                  stop is never unexplained (G.1). */}
-              <button
-                onClick={() => { if (walkPlayback.isAutoPlaying) walkPlayback.pause(); else walkPlayback.play(); }}
-                className="w-[52px] h-[52px] rounded-xl border-2 flex items-center justify-center transition-transform active:scale-[0.96]"
-                style={{
-                  borderColor: 'var(--color-accent)',
-                  backgroundColor: walkPlayback.isAutoPlaying ? 'color-mix(in srgb, var(--color-accent) 15%, transparent)' : undefined,
-                }}
-                aria-label={walkPlayback.isAutoPlaying ? 'Pause auto-play' : 'Play — walk the game automatically'}
-                aria-pressed={walkPlayback.isAutoPlaying}
-                data-testid="review-play-pause-btn"
-                data-state={walkPlayback.isAutoPlaying ? 'playing' : 'paused'}
-              >
-                {walkPlayback.isAutoPlaying
-                  ? <Pause size={22} style={{ color: 'var(--color-accent)' }} />
-                  : <Play size={22} style={{ color: 'var(--color-accent)' }} />}
-              </button>
-              <button
-                onClick={handleWalkForwardManual}
-                className="w-[52px] h-[52px] rounded-xl border-2 disabled:opacity-30 flex items-center justify-center transition-transform active:scale-[0.96]"
-                disabled={walkPlayback.currentPly >= lastPly}
-                style={{
-                  borderColor: 'var(--color-accent)',
-                }}
-                aria-label="Forward one move"
-                data-testid="review-forward-btn"
-              >
-                <ChevronRight size={24} style={{ color: 'var(--color-accent)' }} />
-              </button>
-              <button
-                onClick={() => {
-                  if (nextKeyMomentPly !== null) walkPlayback.jumpToPly(nextKeyMomentPly, { keepAuto: true });
-                  else walkPlayback.goToEnd();
-                }}
-                className="w-[52px] h-[52px] rounded-xl border border-theme-border hover:bg-theme-surface disabled:opacity-30 flex items-center justify-center transition-transform active:scale-[0.96]"
-                disabled={walkPlayback.currentPly >= lastPly}
-                aria-label={nextKeyMomentPly !== null ? 'Next key moment' : 'Jump to end'}
-                data-testid="review-next-key-btn"
-              >
-                <SkipForward size={22} style={{ color: 'var(--color-text)' }} />
-              </button>
+            {/* THE ONE BOARD BAR (David 2026-10-07: "Keep the boards identical
+                … All buttons NEED to be visible without scrolling down!"). The
+                same six as Learn, Play and the Openings Play rung. Hint is the
+                better move on a flagged ply ("Show me"); review's own controls
+                — ⏯, start, next key moment, Ask, theory — ride the extras row. */}
+            <div className="px-3 py-1.5" data-testid="review-nav-controls">
+              <CoachBoardBar
+                keepRef={boardFit.keepRef}
+                onBack={walkPlayback.currentPly > 0 ? walkPlayback.goBack : null}
+                onForward={walkPlayback.currentPly < lastPly ? handleWalkForwardManual : null}
+                onHint={hasArrow && walkExplorationFen === null && !walkShowMeActive && !questionOpen ? () => { void runShowMePlayout(); } : null}
+                hintLabel="Show me"
+                onRead={questionOpen ? null : () => { walkPlayback.pause('read'); void reviewRead.narrate(); }}
+                reading={reviewRead.isNarrating}
+                onWhy={!questionOpen && walkPlayback.currentSegment ? () => { void handleReviewWhy(); } : null}
+                onPlayLine={!questionOpen && canPlayReviewLine ? playReviewLine : null}
+                testIds={{ back: 'review-back-btn', forward: 'review-forward-btn', hint: 'walk-show-me-btn', read: 'review-read-position-btn', why: 'review-why-btn', line: 'walk-the-line-btn' }}
+                extras={<>
+                  <button onClick={walkPlayback.goToStart} disabled={walkPlayback.currentPly === 0} className="flex items-center gap-1 text-[11px] px-2 py-1 rounded-md border whitespace-nowrap disabled:opacity-40 border-theme-border" style={{ color: 'var(--color-text)' }} aria-label="Jump to start" data-testid="review-start-btn"><SkipBack size={12} /></button>
+                  <button
+                    onClick={() => { if (walkPlayback.isAutoPlaying) walkPlayback.pause(); else walkPlayback.play(); }}
+                    className="flex items-center gap-1 text-[11px] px-2 py-1 rounded-md border whitespace-nowrap disabled:opacity-40 border-2"
+                    style={{ borderColor: 'var(--color-accent)', color: 'var(--color-accent)', backgroundColor: walkPlayback.isAutoPlaying ? 'color-mix(in srgb, var(--color-accent) 15%, transparent)' : undefined }}
+                    aria-label={walkPlayback.isAutoPlaying ? 'Pause auto-play' : 'Play — walk the game automatically'}
+                    aria-pressed={walkPlayback.isAutoPlaying}
+                    data-testid="review-play-pause-btn"
+                    data-state={walkPlayback.isAutoPlaying ? 'playing' : 'paused'}
+                  >{walkPlayback.isAutoPlaying ? <Pause size={12} /> : <Play size={12} />}{walkPlayback.isAutoPlaying ? 'Pause' : 'Auto'}</button>
+                  <button
+                    onClick={() => {
+                      if (nextKeyMomentPly !== null) walkPlayback.jumpToPly(nextKeyMomentPly, { keepAuto: true });
+                      else walkPlayback.goToEnd();
+                    }}
+                    disabled={walkPlayback.currentPly >= lastPly}
+                    className="flex items-center gap-1 text-[11px] px-2 py-1 rounded-md border whitespace-nowrap disabled:opacity-40 border-theme-border"
+                    style={{ color: 'var(--color-text)' }}
+                    aria-label={nextKeyMomentPly !== null ? 'Next key moment' : 'Jump to end'}
+                    data-testid="review-next-key-btn"
+                  ><SkipForward size={12} />{nextKeyMomentPly !== null ? 'Key' : 'End'}</button>
+                  <button onClick={() => setAskExpanded((v: boolean) => !v)} className="flex items-center gap-1 text-[11px] px-2 py-1 rounded-md border whitespace-nowrap disabled:opacity-40 border-theme-border" style={{ color: 'var(--color-text)' }} data-testid="walk-ask-toggle-btn"><MessageCircle size={12} />Ask</button>
+                  {theoryBeats && theoryBeats.length > 0 && (
+                    <button onClick={() => { if (theoryLecturePlaying) stopOpeningTheory(); else void playOpeningTheory(); }} className="flex items-center gap-1 text-[11px] px-2 py-1 rounded-md border whitespace-nowrap disabled:opacity-40 border-sky-500/40 bg-sky-500/10" style={{ color: 'var(--color-text)' }} data-testid="walk-theory-btn"><BookOpen size={12} />{theoryLecturePlaying ? 'Stop theory' : 'Theory'}</button>
+                  )}
+                  {(theoryBeats ?? []).flatMap((b) => b.explore ?? []).map((line) => (
+                    <button key={`explore-${line.san}`} onClick={() => { void playExploreLine(line); }} disabled={theoryLecturePlaying} className="flex items-center gap-1 text-[11px] px-2 py-1 rounded-md border whitespace-nowrap disabled:opacity-40 border-violet-500/40 bg-violet-500/10" style={{ color: 'var(--color-text)' }} data-testid={`walk-explore-btn-${line.san}`}><BookOpen size={12} />{`Explore ${line.san}`}</button>
+                  ))}
+                </>}
+              />
             </div>
             {!walkPlayback.isAutoPlaying && walkPlayback.currentPly > 0 && walkPlayback.currentPly < lastPly && (
               <div className="text-center text-[11px] text-theme-text-muted -mt-1 pb-1" data-testid="review-paused-label">
                 Paused — tap ▶ to keep walking
               </div>
             )}
-
-            {/* Secondary controls row: Ask (inline, small). The separate
-                narration replay/stop toggle was REMOVED (David 2026-09-14: "one
-                ▶/⏸ only") — it sat beside the ▶/⏸ auto-play button and let the
-                walk land in a "plays one move then stops" state. The single
-                ▶/⏸ above now owns play/pause; a ply is re-heard by stepping
-                back to it. */}
-            <div className="flex items-center justify-center gap-2 pb-2">
-              <button
-                onClick={() => setAskExpanded((v: boolean) => !v)}
-                className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg border border-theme-border hover:bg-theme-surface"
-                style={{ color: 'var(--color-text)' }}
-                data-testid="walk-ask-toggle-btn"
-              >
-                <MessageCircle size={12} />
-                Ask
-              </button>
-              {/* WALK THE LINE — PLAY OUT the projected line on the board (pieces
-                  move) with a lead-the-eye arrow per move (David 2026-07-24: "Or
-                  even a button that walks the line."). Opt-in: the lead-the-eye
-                  ARROWS now appear automatically as the coach speaks the line
-                  (David 2026-09-07), WITHOUT moving pieces; this button is the
-                  explicit "play it out" that does move them. */}
-              {walkPlayback.currentSegment?.spokenLineArrows
-                && walkPlayback.currentSegment.spokenLineArrows.length >= 2 && (
-                <button
-                  onClick={() => {
-                    const seg = walkPlayback.currentSegment;
-                    if (seg?.spokenLineArrows) void walkSpokenLine(seg.spokenLineArrows, walkPlayback.currentPly, { waitForVoice: false });
-                  }}
-                  className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg border border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20"
-                  style={{ color: 'var(--color-text)' }}
-                  data-testid="walk-the-line-btn"
-                >
-                  <Crosshair size={12} />
-                  Walk the line
-                </button>
-              )}
-              {/* OPENING THEORY LECTURE — the masters-DB tour of the mainline,
-                  sidelines, and where the game left theory (David 2026-07-20). */}
-              {theoryBeats && theoryBeats.length > 0 && (
-                <button
-                  onClick={() => { if (theoryLecturePlaying) stopOpeningTheory(); else void playOpeningTheory(); }}
-                  className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg border border-sky-500/40 bg-sky-500/10 hover:bg-sky-500/20"
-                  style={{ color: 'var(--color-text)' }}
-                  data-testid="walk-theory-btn"
-                >
-                  <BookOpen size={12} />
-                  {theoryLecturePlaying ? 'Stop theory' : 'Opening theory'}
-                </button>
-              )}
-              {/* EXPLORE chips — the untaken alternatives the C8 beat names. The
-                  student TAPS to see one played out, or ignores them (David
-                  2026-07-23: "the button lets users decide if they want to
-                  listen/learn them, instead of forcing more theory"). */}
-              {(theoryBeats ?? []).flatMap((b) => b.explore ?? []).map((line) => (
-                <button
-                  key={`explore-${line.san}`}
-                  onClick={() => { void playExploreLine(line); }}
-                  disabled={theoryLecturePlaying}
-                  className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg border border-violet-500/40 bg-violet-500/10 hover:bg-violet-500/20 disabled:opacity-40"
-                  style={{ color: 'var(--color-text)' }}
-                  data-testid={`walk-explore-btn-${line.san}`}
-                >
-                  <BookOpen size={12} />
-                  {`Explore ${line.san}`}
-                </button>
-              ))}
-            </div>
 
             {/* Current-move narration banner — PINNED in the fixed region so
                 the coach's per-move "why" is ALWAYS visible. It used to live in

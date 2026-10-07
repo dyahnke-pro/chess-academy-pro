@@ -367,14 +367,8 @@ async function main() {
         await page.waitForTimeout(400);
         continue;
       }
-      if (await visible('review-turning-point-card')) {
-        review.cards.turningPoint++;
-        await page.locator('[data-testid^="turning-point-pick-"]').first().click({ timeout: 2000 }).catch(() => {});
-        await page.waitForTimeout(800);
-        await page.locator('[data-testid="review-turning-point-done"]').click({ timeout: 2000 }).catch(() => {});
-        await page.waitForTimeout(400);
-        continue;
-      }
+      // The pick-a-turning-point card is gone (2026-10-07, unity U1: one turning
+      // point per game, revealed by the walk) — nothing to answer here.
       if (!review.badgeSeen && await visible('review-classification-badge')) review.badgeSeen = true;
 
       const fwd = page.locator('[data-testid="review-forward-btn"]');

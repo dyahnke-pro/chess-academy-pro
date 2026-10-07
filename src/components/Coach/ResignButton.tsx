@@ -4,9 +4,11 @@ import { Flag, Check, X } from 'lucide-react';
 interface ResignButtonProps {
   onResign: () => void;
   disabled?: boolean;
+  /** The board bar's extras row: one small line on a phone. */
+  compact?: boolean;
 }
 
-export function ResignButton({ onResign, disabled = false }: ResignButtonProps): JSX.Element {
+export function ResignButton({ onResign, disabled = false, compact = false }: ResignButtonProps): JSX.Element {
   const [confirming, setConfirming] = useState(false);
 
   const handleClick = useCallback(() => {
@@ -53,13 +55,13 @@ export function ResignButton({ onResign, disabled = false }: ResignButtonProps):
     <button
       onClick={handleClick}
       disabled={disabled}
-      className="flex items-center gap-1 px-3 py-2 rounded-lg border-2 border-red-500/30 text-sm text-red-400/70 hover:text-red-300 disabled:opacity-30 transition-all duration-200"
+      className={`flex items-center gap-1 ${compact ? 'px-2 py-1 rounded-md border text-[11px] whitespace-nowrap' : 'px-3 py-2 rounded-lg border-2 text-sm'} border-red-500/30 text-red-400/70 hover:text-red-300 disabled:opacity-30 transition-all duration-200`}
       style={{ boxShadow: '0 0 10px rgba(239, 68, 68, 0.2), 0 0 3px rgba(239, 68, 68, 0.1)' }}
       onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 18px rgba(239, 68, 68, 0.4), 0 0 6px rgba(239, 68, 68, 0.2)'; }}
       onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 10px rgba(239, 68, 68, 0.2), 0 0 3px rgba(239, 68, 68, 0.1)'; }}
       data-testid="resign-btn"
     >
-      <Flag size={14} />
+      <Flag size={compact ? 12 : 14} />
       Resign
     </button>
   );

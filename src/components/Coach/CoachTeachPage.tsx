@@ -10,6 +10,8 @@
  * actions.
  */
 import { useLineWalk } from '../../hooks/useLineWalk';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { useBoardFit } from '../../hooks/useBoardFit';
 import { characterOf, provenTacticLive, sharpGap, stepCharacter, EMPTY_CHARACTER, SHARP_GAP_CP, type CharacterState } from '../../services/positionCharacter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStandingFactMemory, fullmoveOf } from '../../services/standingFactMemory';
@@ -299,6 +301,8 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingR
 import { opponentStrength } from '../../services/engineStrength';
 import { samePosition } from '../../utils/samePosition';
 import { findPinBreaks, pinBreakLine, pinBreakProof } from '../../services/pinBreak';
+import type { Proof } from '../../services/proof';
+import { walkableLine } from '../../services/moveInsight';
 import { obligationLifted, obligationLiftedLine } from '../../services/obligationLifted';
 import { findQueenGrabTraps, queenGrabTrapLine, queenGrabTrapProof } from '../../services/queenGrabTrap';
 import { newPlanThread, planThreadTurn } from '../../services/planThread';
@@ -859,6 +863,12 @@ function logReasonSource(fenBefore: string, playedSan: string, said: string, bes
     fen: fenBefore,
     details: JSON.stringify({ playedSan, said, bestPv: bestPvUci.slice(0, 12), replyPv: replyPvUci.slice(0, 12) }),
   });
+}
+
+/** A claim's lead sentence — the key a proof is filed under (never a read of
+ *  the claim's meaning; the computer that made the claim filed it). */
+function leadSentence(text: string): string {
+  return text.split(/(?<=[.!?])\s+/)[0]?.trim() ?? text.trim();
 }
 
 export function CoachTeachPage(): JSX.Element {
@@ -1569,6 +1579,21 @@ export function CoachTeachPage(): JSX.Element {
   const [playerColor, setPlayerColor] = useState<'white' | 'black'>('white');
   /** A CALCULATED LINE ON THE BOARD — the one shared walker (useLineWalk). */
   const lineWalk = useLineWalk(playerColor, 'teach.lineWalk');
+  /** The board gives up height so the board bar stays on screen (phones). */
+  const boardFit = useBoardFit(game.history.length);
+  /** THE PROOF BEHIND EACH CONCLUSION a computer produced this game, keyed by
+   *  the claim's lead sentence. When that claim is SPOKEN its proof becomes
+   *  `learnMem.lastProof`, which the Why button says in full (proof.ts). */
+  const proofByLeadRef = useRef<Map<string, Proof>>(new Map());
+  const noteProof = useCallback((text: string, proof: Proof): void => { proofByLeadRef.current.set(leadSentence(text), proof); }, []);
+  /** Shows the Why button once a proof-bearing conclusion has been spoken. */
+  const [whyReady, setWhyReady] = useState(false);
+  const noteSpokenProofs = useCallback((kept: readonly { text: string }[]): void => {
+    for (const f of kept) {
+      const p = proofByLeadRef.current.get(leadSentence(f.text));
+      if (p) { learnMemRef.current.lastProof = p; setWhyReady(true); }
+    }
+  }, []);
   const { walkFen: lineWalkFen, walkArrows: lineWalkArrows, tokenRef: lineWalkTokenRef,
     setWalkFen: setLineWalkFen, setWalkArrows: setLineWalkArrows, arrowsOf: lineArrowsOf,
     clear: clearLineWalk, walk: walkLine } = lineWalk;
@@ -8174,8 +8199,9 @@ export function CoachTeachPage(): JSX.Element {
             const brk = findPinBreaks(args.fenAfterReply, studentCC === 'w' ? 'b' : 'w').find((b) => b.pinned === t.squares[1]);
             if (brk) {
               tacticLine = `${tacticLine} ${pinBreakLine(brk, studentCC)}`;
-              const pl = pinBreakProof(brk, studentCC).line;
-              if (pl) tacticLines = [pl];
+              const pf = pinBreakProof(brk, studentCC);
+              noteProof(tacticLine, pf);
+              if (pf.line) tacticLines = [pf.line];
             }
           }
         }
@@ -8187,8 +8213,9 @@ export function CoachTeachPage(): JSX.Element {
             tacticKey = `pinbreak:${own.pinned}${own.to}`;
             tacticLine = pinBreakLine(own, studentCC);
             tacticSquares = [own.pinned, own.to, own.pinner];
-            const pl = pinBreakProof(own, studentCC).line;
-            if (pl) tacticLines = [pl];
+            const pf = pinBreakProof(own, studentCC);
+            noteProof(tacticLine, pf);
+            if (pf.line) tacticLines = [pf.line];
           }
         }
       }
@@ -8895,7 +8922,10 @@ export function CoachTeachPage(): JSX.Element {
       try {
         const t = findQueenGrabTraps(args.fenAfterReply)[0];
         // The proof's detail goes to the BOARD: every exit and every guard.
-        return t ? { text: queenGrabTrapLine(t), squares: [t.from, t.to, t.replyFrom, t.replyTo, ...(queenGrabTrapProof(t).squares ?? [])] } : null;
+        if (!t) return null;
+        const text = queenGrabTrapLine(t);
+        noteProof(text, queenGrabTrapProof(t));
+        return { text, squares: [t.from, t.to, t.replyFrom, t.replyTo, ...(queenGrabTrapProof(t).squares ?? [])] };
       } catch { return null; }
     })();
     deferIf(grab, 'rejectedTempting', grab?.text ?? null, grab?.squares);
@@ -10337,6 +10367,7 @@ export function CoachTeachPage(): JSX.Element {
                 if (instant.pkg.spoken) {
                   lines.push(instant.pkg.spoken);
                   for (const f of instant.pkg.kept) spokenClaims.push(...(f.claims ?? []));
+                  noteSpokenProofs(instant.pkg.kept);
                   // Feed what was actually SPOKEN into the per-game novelty set so
                   // no later turn (or the late package below) repeats it.
                   for (const k of spokenSentenceKeys(instant.pkg)) learnMemRef.current.spokenKeys.add(k);
@@ -11250,6 +11281,7 @@ export function CoachTeachPage(): JSX.Element {
                     // Record the late package's phrases too — the per-game set is
                     // what keeps the NEXT turn from repeating any of them.
                     for (const k of spokenSentenceKeys(hintPkg)) learnMemRef.current.spokenKeys.add(k);
+                    noteSpokenProofs(hintPkg.kept);
                   // Same promotion as the instant pass — whichever package
                   // actually carried the name is the one that spent the flag.
                   if (hintPkg.kept.some((f) => f.kind === 'opening')) {
@@ -11973,6 +12005,28 @@ export function CoachTeachPage(): JSX.Element {
       walkthrough.phase === 'trap-prompt' ||
       walkthrough.phase === 'gem-picker');
 
+  /** WHY? — the proof behind the last conclusion the coach SPOKE, in full
+   *  (David 2026-10-07: "This is also our why button?" … "The arrows are drawn
+   *  out on the board. Only play the line if play the line button is pressed").
+   *  The arrows are drawn and stay; the chat message carries the Play-out
+   *  button, and the line only moves when it is pressed. */
+  const handleWhy = useCallback((): void => {
+    const proof = learnMemRef.current.lastProof;
+    if (!proof) return;
+    // Full only for an exact proof — an engine line is never recited (proof.ts).
+    const body = proof.exact ? proof.full : proof.short;
+    const said = `${body.charAt(0).toUpperCase()}${body.slice(1)}${/[.!?]$/.test(body) ? '' : '.'}`;
+    const line = proof.line && proof.line.sans.length > 0 ? walkableLine(proof.line.fen, proof.line.sans, proof.line.sans[0]) : null;
+    if (line) setLineWalkArrows(lineArrowsOf(line));
+    void coachDrillSay(said, line ? { lines: [line] } : undefined);
+  }, [coachDrillSay, lineArrowsOf, setLineWalkArrows]);
+  /** PLAY LINE — walks the proof's line on the board, only on this press. */
+  const handlePlayProofLine = useCallback((): void => {
+    const proof = learnMemRef.current.lastProof;
+    if (!proof?.line || proof.line.sans.length === 0) return;
+    const line = walkableLine(proof.line.fen, proof.line.sans, proof.line.sans[0]);
+    if (line) walkLine(line);
+  }, [walkLine]);
   const handleReadPosition = useCallback(() => {
     void positionNarration.narrate();
   }, [positionNarration]);
@@ -12551,15 +12605,15 @@ export function CoachTeachPage(): JSX.Element {
             tangent questions. */}
         <div className="px-2 py-1 flex justify-center w-full">
           <div
+            ref={boardFit.boardRef}
             className="w-full md:max-w-[420px] mx-auto"
             // When a picker is up on a NARROW (mobile) viewport, cap the board by
-            // available height so the under-board picker bar stays on screen
-            // (plain CSS calc/dvh — guaranteed, unlike an arbitrary Tailwind
-            // class). Desktop (≥768) keeps the 420px cap; no picker → no cap.
+            // available height so the under-board picker bar stays on screen.
+            // Otherwise the ONE fit (useBoardFit) keeps the board bar on screen.
             style={
               pickerActive && typeof window !== 'undefined' && window.innerWidth < 768
                 ? { maxWidth: 'min(100%, calc(100dvh - 23rem))' }
-                : undefined
+                : boardFit.boardStyle
             }
           >
             {walkthrough.isActive ? (
@@ -12942,122 +12996,37 @@ export function CoachTeachPage(): JSX.Element {
           // Resign). Same buttons + functions as before, so navigation is
           // unchanged; only the look matches Play. Plus the "Read this
           // position" row above (emerald, Volume2), identical to Play's.
-          <div className="flex flex-col gap-2 px-4 py-2">
-          <div className="flex items-center justify-center gap-2">
-            <button
-              onClick={() => void handleHint()}
-              disabled={hintBusy}
-              className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-yellow-500/30 text-sm font-medium text-yellow-400 hover:text-yellow-300 hover:bg-yellow-500/10 disabled:opacity-40 transition-all duration-200"
-              style={{ boxShadow: '0 0 10px rgba(234, 179, 8, 0.25), 0 0 3px rgba(234, 179, 8, 0.15)' }}
-              onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 18px rgba(234, 179, 8, 0.45), 0 0 6px rgba(234, 179, 8, 0.25)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 10px rgba(234, 179, 8, 0.25), 0 0 3px rgba(234, 179, 8, 0.15)'; }}
-              data-testid="teach-hint-btn"
-              aria-label="Show a hint — the best move"
-            >
-              {hintBusy ? (
-                <Loader2 size={16} className="animate-spin" />
-              ) : (
-                <Lightbulb size={16} />
+          // THE ONE BOARD BAR (David 2026-10-07: "Keep the boards identical …
+          // All buttons NEED to be visible without scrolling down! Even the
+          // show the line button"). The same six buttons as Play, Review and
+          // the Openings Play rung; Learn's own controls sit in the one small
+          // extras row. Why reads the proof behind the last thing SPOKEN; Play
+          // line walks it only when pressed — Why draws the arrows, never moves.
+          <div className="flex flex-col gap-1 px-3 py-1.5" data-testid="teach-nav-row">
+          <CoachBoardBar
+            keepRef={boardFit.keepRef}
+            onBack={canStepBack ? goToPrevMove : null}
+            onForward={canStepForward ? goToNextMove : null}
+            onHint={hintBusy ? null : () => void handleHint()}
+            hintLabel={hintBusy ? 'Thinking…' : heldMoveFen ? 'Show me' : undefined}
+            onRead={handleReadPosition}
+            reading={positionNarration.isNarrating}
+            onWhy={whyReady && learnMemRef.current.lastProof ? handleWhy : null}
+            onPlayLine={whyReady && learnMemRef.current.lastProof?.line?.sans.length ? handlePlayProofLine : null}
+            testIds={{ back: 'teach-nav-prev', forward: 'teach-nav-next', hint: 'teach-hint-btn', read: 'teach-read-position-btn', why: 'teach-why-btn', line: 'teach-play-line-btn' }}
+            extras={<>
+              <button onClick={goToFirstMove} disabled={!canStepBack} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="First move" data-testid="teach-nav-first"><ChevronsLeft size={12} /></button>
+              <span className="px-1 text-xs text-theme-text-muted tabular-nums" data-testid="teach-nav-status">
+                {reviewing ? `Move ${reviewIndex === -1 ? 0 : reviewIndex + 1} / ${game.history.length}` : 'Live'}
+              </span>
+              <button onClick={goToLastMove} disabled={!canStepForward} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="Back to the live position" data-testid="teach-nav-last"><ChevronsRight size={12} /></button>
+              {drillOnBoard && (
+                <button onClick={() => skipDrillRef.current()} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-sky-500/30 text-sky-400" aria-label="Next position — skip this one; it comes back later" data-testid="teach-drill-next-btn"><ChevronRight size={12} /><span>Next</span></button>
               )}
-              <span>{hintBusy ? 'Thinking…' : heldMoveFen ? 'Show me' : 'Hint'}</span>
-            </button>
-            {drillOnBoard && (
+              <button onClick={() => { learnMemRef.current.rewind(game.history.length - 1); game.undoMove(); }} disabled={busy || game.history.length === 0} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-amber-500/30 text-amber-400" aria-label="Take back last move" data-testid="teach-takeback"><Undo2 size={12} /><span>Takeback</span></button>
+              <button onClick={() => { void handleResetBoard(); }} disabled={busy} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="Restart" data-testid="teach-restart"><RotateCcw size={12} /><span>Restart</span></button>
               <button
-                onClick={() => skipDrillRef.current()}
-                className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-sky-500/30 text-sm font-medium text-sky-400 hover:text-sky-300 hover:bg-sky-500/10 transition-all duration-200"
-                data-testid="teach-drill-next-btn"
-                aria-label="Next position — skip this one; it comes back later"
-              >
-                <ChevronRight size={16} />
-                <span>Next</span>
-              </button>
-            )}
-            <button
-              onClick={handleReadPosition}
-              className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-emerald-500/30 text-sm font-medium text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 transition-all duration-200"
-              style={{ boxShadow: '0 0 10px rgba(16, 185, 129, 0.25), 0 0 3px rgba(16, 185, 129, 0.15)' }}
-              onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 18px rgba(16, 185, 129, 0.45), 0 0 6px rgba(16, 185, 129, 0.25)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 10px rgba(16, 185, 129, 0.25), 0 0 3px rgba(16, 185, 129, 0.15)'; }}
-              data-testid="teach-read-position-btn"
-              aria-label={positionNarration.isNarrating ? 'Restart position narration' : 'Read this position aloud'}
-            >
-              {positionNarration.isNarrating ? (
-                <Loader2 size={16} className="animate-spin" />
-              ) : (
-                <Volume2 size={16} />
-              )}
-              <span>{positionNarration.isNarrating ? 'Reading…' : 'Read this position'}</span>
-            </button>
-          </div>
-          {/* MOVE NAVIGATION — step back through what was played without
-              losing it. Takeback below is a different act: it DELETES the move.
-              Reviewing is read-only and any new move snaps back to live. */}
-          <div className="flex items-center justify-center gap-1" data-testid="teach-nav-row">
-            <button
-              onClick={goToFirstMove}
-              disabled={!canStepBack}
-              className="p-2 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
-              aria-label="First move"
-              data-testid="teach-nav-first"
-            >
-              <ChevronsLeft size={16} />
-            </button>
-            <button
-              onClick={goToPrevMove}
-              disabled={!canStepBack}
-              className="p-2 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
-              aria-label="Previous move"
-              data-testid="teach-nav-prev"
-            >
-              <ChevronLeft size={16} />
-            </button>
-            <span className="px-2 text-xs text-theme-text-muted tabular-nums" data-testid="teach-nav-status">
-              {reviewing ? `Move ${reviewIndex === -1 ? 0 : reviewIndex + 1} / ${game.history.length}` : 'Live'}
-            </span>
-            <button
-              onClick={goToNextMove}
-              disabled={!canStepForward}
-              className="p-2 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
-              aria-label="Next move"
-              data-testid="teach-nav-next"
-            >
-              <ChevronRight size={16} />
-            </button>
-            <button
-              onClick={goToLastMove}
-              disabled={!canStepForward}
-              className="p-2 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
-              aria-label="Back to the live position"
-              data-testid="teach-nav-last"
-            >
-              <ChevronsRight size={16} />
-            </button>
-          </div>
-          <div className="flex items-center justify-center gap-2">
-            <button
-              onClick={() => { learnMemRef.current.rewind(game.history.length - 1); game.undoMove(); }}
-              disabled={busy || game.history.length === 0}
-              className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-amber-500/30 text-sm font-medium text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 disabled:opacity-30 transition-all duration-200"
-              style={{ boxShadow: '0 0 10px rgba(245, 158, 11, 0.25), 0 0 3px rgba(245, 158, 11, 0.15)' }}
-              aria-label="Take back last move"
-              data-testid="teach-takeback"
-            >
-              <Undo2 size={16} />
-              <span>Takeback</span>
-            </button>
-            <button
-              onClick={() => { void handleResetBoard(); }}
-              disabled={busy}
-              className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-cyan-500/30 text-sm font-medium text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200"
-              style={{ boxShadow: '0 0 10px rgba(6, 182, 212, 0.25), 0 0 3px rgba(6, 182, 212, 0.15)' }}
-              aria-label="Restart"
-              data-testid="teach-restart"
-            >
-              <RotateCcw size={16} />
-              <span>Restart</span>
-            </button>
-            <button
-              onClick={() => {
+                onClick={() => {
                 // SESSION CLOSER (David 2026-07-11 bookends): walk them out
                 // with the computed takeaway — questions asked/found + slips
                 // captured this session. Deterministic line, real numbers;
@@ -13109,16 +13078,13 @@ export function CoachTeachPage(): JSX.Element {
                 }
                 void navigate('/coach/home');
               }}
-              disabled={busy}
-              className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-red-500/30 text-sm font-medium text-red-400/80 hover:text-red-300 hover:bg-red-500/10 disabled:opacity-30 transition-all duration-200"
-              style={{ boxShadow: '0 0 10px rgba(239, 68, 68, 0.2), 0 0 3px rgba(239, 68, 68, 0.1)' }}
-              aria-label="End lesson"
-              data-testid="teach-resign"
-            >
-              <Flag size={15} />
-              <span>End Lesson</span>
-            </button>
-          </div>
+                disabled={busy}
+                className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-red-500/30 text-red-400/80"
+                aria-label="End lesson"
+                data-testid="teach-resign"
+              ><Flag size={12} /><span>End</span></button>
+            </>}
+          />
           </div>
         )}
       </div>

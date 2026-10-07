@@ -105,7 +105,8 @@ describe('OpeningPlayMode — live punishment callout wiring', () => {
     expect(speakSpy).toHaveBeenCalled();
     const spokenReveal = speakSpy.mock.calls.some((c) => c[0].includes('exf5'));
     expect(spokenReveal).toBe(true);
-    // Button gone after reveal.
-    expect(screen.queryByTestId('show-the-line')).not.toBeInTheDocument();
-  });
+    // The bar's Play line has nothing left to reveal (no Why line yet) — greyed,
+    // never hidden, so every board keeps the same six buttons.
+    expect(screen.getByTestId('show-the-line')).toBeDisabled();
+  }, 20000); // mounts the whole Play rung (engine, read, bar) — 4s alone, slower under the suite
 });

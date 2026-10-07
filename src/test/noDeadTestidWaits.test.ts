@@ -49,6 +49,8 @@ function renderedTestids(): { ids: Set<string>; prefixes: Set<string>; suffixes:
     if (/\.test\.tsx?$/.test(f)) continue;
     const s = readFileSync(f, 'utf-8');
     for (const m of s.matchAll(/(?:data-testid=\{?|[tT]estId\s*[:=]\s*\{?|testid:\s*)["'`]([^"'`{}$]+)["'`]/g)) ids.add(m[1]);
+    // The board bar's per-button ids: `testIds={{ back: 'x', … }}`.
+    for (const block of s.matchAll(/testIds=\{\{([^}]*)\}\}/g)) for (const m of block[1].matchAll(/:\s*['"`]([a-z0-9-]+)['"`]/g)) ids.add(m[1]);
     for (const m of s.matchAll(/["'`]([a-z0-9]+(?:-[a-z0-9]+)*-)\$\{/g)) prefixes.add(m[1]);
     for (const m of s.matchAll(/\$\{[a-zA-Z.]+\}(-[a-z0-9]+(?:-[a-z0-9]+)*)["'`]/g)) suffixes.add(m[1]);
   }

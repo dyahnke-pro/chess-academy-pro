@@ -3,11 +3,14 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, Lightbulb, AlertTriangle, GraduationCap, Compass, RotateCcw, Volume2, MessageCircle, Timer, HelpCircle } from 'lucide-react';
+import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, Lightbulb, AlertTriangle, GraduationCap, Compass, RotateCcw, MessageCircle, Timer } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Chess, type Color } from 'chess.js';
 import { safeChessFromFen } from '../../services/chessSafe';
 import { useChessGame } from '../../hooks/useChessGame';
+import { useLineWalk } from '../../hooks/useLineWalk';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { useBoardFit } from '../../hooks/useBoardFit';
 import { usePracticePosition } from '../../hooks/usePracticePosition';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useLiveCoach } from '../../hooks/useLiveCoach';
@@ -20,7 +23,6 @@ import type { EngineSnapshot, LastMoveContext } from '../Board/VoiceChatMic';
 import { EngineLines } from '../Board/EngineLines';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { DifficultyToggle } from './DifficultyToggle';
-import { HintButton } from './HintButton';
 import { CoachGameReview } from './CoachGameReview';
 import { GameChatPanel } from './GameChatPanel';
 import type { GameChatPanelHandle } from './GameChatPanel';
@@ -43,7 +45,7 @@ import {
 import { logAppAudit } from '../../services/appAuditor';
 import { unwrapSpineError, SENTENCE_END_RE } from '../../services/sanitizeCoachText';
 import { createStreamingSpeaker } from '../../services/streamingSpeaker';
-import type { PhaseNarrationVerbosity, MoveClassification } from '../../types';
+import type { PhaseNarrationVerbosity, MoveClassification, WalkableLine } from '../../types';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useAppStore } from '../../stores/appStore';
@@ -919,6 +921,12 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   const [tacticArrows, setTacticArrows] = useState<BoardArrow[]>([]);
   const [tacticHighlights, setTacticHighlights] = useState<BoardHighlight[]>([]);
   const [temporaryFen, setTemporaryFen] = useState<string | null>(null);
+  /** THE ONE LINE WALKER (useLineWalk) — the line Why proved, played out only
+   *  when the bar's Play line is pressed (David 2026-10-07). */
+  const lineWalk = useLineWalk(playerColor, 'play.lineWalk');
+  /** The board gives up height so the board bar stays on screen (phones). */
+  const boardFit = useBoardFit(gameState.status);
+  const [whyLine, setWhyLine] = useState<WalkableLine | null>(null);
   const [temporaryLabel, setTemporaryLabel] = useState<string | null>(null);
 
   // Practice position (reusable hook)
@@ -1742,61 +1750,12 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     setViewedMoveIndex(null);
   }, []);
 
-  /** The move-navigation row, defined once and rendered from two places.
-   *
-   *  It used to live only inside the `status === 'playing'` control block, so
-   *  the moment a blocking card took the turn — "Blunder Detected", or the
-   *  game ending — the whole block unmounted and the student lost the ability
-   *  to step back and LOOK at the position the coach was asking them about.
-   *  That is the worst moment to take navigation away: the card's entire point
-   *  is "think about what just happened."
-   *
-   *  Stepping back is read-only (it only moves `viewedMoveIndex`; the board is
-   *  non-interactive while `viewedMoveIndex !== null`), so it cannot interfere
-   *  with resolving the card or with a finished game's result. */
-  const moveNavRow = (
-              <div className="flex items-center justify-center gap-0.5" data-testid="move-nav">
-                <button
-                  onClick={goToFirstMove}
-                  disabled={gameState.moves.length === 0 || viewedMoveIndex === -1}
-                  className="p-2 md:p-1.5 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
-                  aria-label="First move"
-                  data-testid="nav-first"
-                >
-                  <ChevronsLeft size={16} />
-                </button>
-                <button
-                  onClick={goToPrevMove}
-                  disabled={gameState.moves.length === 0 || viewedMoveIndex === -1}
-                  className="p-2 md:p-1.5 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
-                  aria-label="Previous move"
-                  data-testid="nav-prev"
-                >
-                  <ChevronLeft size={16} />
-                </button>
-                <button
-                  onClick={goToNextMove}
-                  disabled={gameState.moves.length === 0 || viewedMoveIndex === null}
-                  className="p-2 md:p-1.5 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
-                  aria-label="Next move"
-                  data-testid="nav-next"
-                >
-                  <ChevronRight size={16} />
-                </button>
-                <button
-                  onClick={goToLastMove}
-                  disabled={gameState.moves.length === 0 || viewedMoveIndex === null}
-                  className="p-2 md:p-1.5 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
-                  aria-label="Last move"
-                  data-testid="nav-last"
-                >
-                  <ChevronsRight size={16} />
-                </button>
-              </div>
-  );
+  /** A live turn — the in-move actions apply; a blocking card is not one. */
+  const live = gameState.status === 'playing';
 
   // Compute the displayed FEN based on navigation state
   const displayFen = practicePosition?.fen
+    ?? lineWalk.walkFen
     ?? temporaryFen
     ?? (viewedMoveIndex !== null
       ? (viewedMoveIndex === -1 ? START_FEN : gameState.moves[viewedMoveIndex]?.fen ?? game.fen)
@@ -4552,6 +4511,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       const answer = why || 'No single best move stands out here — the position is roughly balanced.';
       // The line it speaks, arrowed ply by ply (cleared on the next move).
       if (detail.arrows.length > 0) setAnnotationArrows(detail.arrows);
+      setWhyLine(detail.lines[0] ?? null);
       gameChatRef.current?.injectAssistantMessage(answer);
       void voiceService.speakReadAloud(answer);
     } catch {
@@ -5215,23 +5175,6 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
 
               {/* Action buttons */}
               <div className="flex items-center gap-2 mt-2">
-                {/* Show button — only when tactic line is available and not yet showing */}
-                {tipTacticLine && !showingTacticLine && (
-                  <button
-                    onClick={(e) => { e.stopPropagation(); handleShowTactic(); }}
-                    className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-semibold transition-all duration-200"
-                    style={{
-                      background: 'rgba(52, 211, 153, 0.15)',
-                      color: 'rgb(52, 211, 153)',
-                      border: '1px solid rgba(52, 211, 153, 0.3)',
-                      boxShadow: '0 0 6px rgba(52, 211, 153, 0.2)',
-                    }}
-                    data-testid="show-tactic-line-btn"
-                  >
-                    <Eye size={12} />
-                    Show
-                  </button>
-                )}
                 {/* Explore from here button — available during show mode, not during explore */}
                 {showingTacticLine && showIndex >= 0 && !isExploreMode && (
                   <button
@@ -5275,7 +5218,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
 
         {/* Board — flex-shrink-0 so it never shrinks regardless of content above/below */}
         <div className="px-2 py-1 flex justify-center flex-shrink-0">
-          <div className="w-full md:max-w-[420px] relative">
+          <div ref={boardFit.boardRef} className="w-full md:max-w-[420px] relative" style={boardFit.boardStyle}>
             <ChessBoard
               key={`${gameState.gameId}-${playerColor}-${practicePosition?.fen ?? ''}-${practiceAttempts}-${exploreFen ?? ''}`}
               initialFen={displayFen}
@@ -5287,7 +5230,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               // by the move handler if they move (David 2026-06-10: "play a
               // move as soon as the opponent's turn is over" + "these two
               // surfaces need to mirror each other").
-              interactive={(gameState.status === 'playing' && !isCoachThinking && !temporaryFen && viewedMoveIndex === null) || !!practicePosition || isExploreMode}
+              interactive={(gameState.status === 'playing' && !isCoachThinking && !temporaryFen && !lineWalk.walkFen && viewedMoveIndex === null) || !!practicePosition || isExploreMode}
               onMove={handleBoardMoveRouted}
               showEvalBar={showEvalBarEffective || isExploreMode}
               evaluation={isExploreMode && exploreEval !== null ? exploreEval : latestEval}
@@ -5297,7 +5240,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               showFlipButton={false}
               showVoiceMic={false}
               highlightSquares={coachLastMove}
-              arrows={(() => {
+              arrows={lineWalk.walkFen ? lineWalk.walkArrows : (() => {
                 // Coach markers OFF hides every AUTO coach arrow (chat / voice /
                 // tactic); an explicit Hint the student tapped still draws its
                 // arrow (David 2026-09-13 — user-requested affordance).
@@ -5442,84 +5385,39 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             of the controls stay hidden: those act on a live turn, and this is
             not one. (`gameover` and `postgame` never reach here — each returns
             its own screen above — so this is the whole of the fix.) */}
-        {gameState.status === 'blunder_pause' && (
-          <div className="flex flex-col gap-1.5 px-4 py-2 flex-shrink-0">{moveNavRow}</div>
+        {/* THE ONE BOARD BAR (David 2026-10-07: "Keep the boards identical …
+            All buttons NEED to be visible without scrolling down!"). The same
+            six as Learn, Review and the Openings Play rung. While a blocking
+            card owns the turn only Back/Forward stay live — stepping back is
+            read-only, and the card's point is "look at what just happened". */}
+        {(gameState.status === 'blunder_pause' || gameState.status === 'playing') && (
+          <div className="flex flex-col gap-1.5 px-3 py-1.5 flex-shrink-0" data-testid="move-nav">
+            <CoachBoardBar
+              keepRef={boardFit.keepRef}
+              onBack={gameState.moves.length > 0 && viewedMoveIndex !== -1 ? goToPrevMove : null}
+              onForward={gameState.moves.length > 0 && viewedMoveIndex !== null ? goToNextMove : null}
+              onHint={live && !isCoachThinking && !hintState.isAnalyzing && hintState.level < 3 ? handleHint : null}
+              hintLabel={hintState.level === 3 ? 'Shown' : undefined}
+              hintLevel={hintState.level}
+              onRead={live ? handleReadPosition : null}
+              reading={positionNarration.isNarrating}
+              onWhy={live && !isCoachThinking ? () => { void askWhy(); } : null}
+              onPlayLine={live && tipTacticLine ? handleShowTactic : live && whyLine ? () => lineWalk.walk(whyLine) : null}
+              testIds={{ back: 'nav-prev', forward: 'nav-next', hint: 'hint-button', read: 'read-position-btn', why: 'why-button', line: 'show-tactic-line-btn' }}
+              extras={<>
+                <button onClick={goToFirstMove} disabled={gameState.moves.length === 0 || viewedMoveIndex === -1} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="First move" data-testid="nav-first"><ChevronsLeft size={12} /></button>
+                <button onClick={goToLastMove} disabled={gameState.moves.length === 0 || viewedMoveIndex === null} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="Last move" data-testid="nav-last"><ChevronsRight size={12} /></button>
+                {live && (<>
+                  <button onClick={handleTakeback} disabled={gameState.moves.length === 0} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-amber-500/30 text-amber-400" aria-label="Take back your last move" data-testid="takeback-btn"><Undo2 size={12} /><span>Takeback</span></button>
+                  <button onClick={() => handleRestart()} disabled={gameState.moves.length === 0} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="Restart game" data-testid="restart-btn"><RotateCcw size={12} /><span>Restart</span></button>
+                  <ResignButton compact onResign={handleResign} disabled={gameState.moves.length === 0} />
+                </>)}
+              </>}
+            />
+          </div>
         )}
         {gameState.status === 'playing' && (
-          <div className="flex flex-col gap-1.5 px-4 py-2 flex-shrink-0">
-            {/* Row 1: Hint, Why?, Takeback — primary in-move actions. (David
-                2026-06-21: Restart + Resign moved to row 2 so this row stops
-                clipping Hint/Resign off the screen edges.) flex-wrap so nothing
-                ever clips on narrow phones. */}
-            <div className="flex items-center justify-center gap-2 flex-wrap">
-              <HintButton
-                currentLevel={hintState.level}
-                onRequestHint={handleHint}
-                disabled={isCoachThinking || hintState.isAnalyzing}
-              />
-              {/* Why? — explains why the best move is best (distinct from Hint,
-                  which shows it). Routes through the same grounded coach. David
-                  2026-06-19: "boards need both — one shows the best move, the
-                  other explains why." */}
-              <button
-                type="button"
-                onClick={() => { void askWhy(); }}
-                disabled={isCoachThinking}
-                className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-cyan-500/40 text-sm font-medium text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200"
-                data-testid="why-button"
-                aria-label="Why is the best move best?"
-              >
-                <HelpCircle size={16} />
-                <span>Why?</span>
-              </button>
-              <button
-                onClick={handleTakeback}
-                disabled={gameState.moves.length === 0}
-                className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-amber-500/30 text-sm font-medium text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 disabled:opacity-30 transition-all duration-200"
-                style={{ boxShadow: '0 0 10px rgba(245, 158, 11, 0.25), 0 0 3px rgba(245, 158, 11, 0.15)' }}
-                onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 18px rgba(245, 158, 11, 0.45), 0 0 6px rgba(245, 158, 11, 0.25)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 10px rgba(245, 158, 11, 0.25), 0 0 3px rgba(245, 158, 11, 0.15)'; }}
-                data-testid="takeback-btn"
-              >
-                <Undo2 size={16} />
-                <span>Takeback</span>
-              </button>
-            </div>
-
-            {/* Row 2: Read this position, Restart, Resign — secondary actions. */}
-            <div className="flex items-center justify-center gap-2 flex-wrap">
-              <button
-                onClick={handleReadPosition}
-                className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-emerald-500/30 text-sm font-medium text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 transition-all duration-200"
-                style={{ boxShadow: '0 0 10px rgba(16, 185, 129, 0.25), 0 0 3px rgba(16, 185, 129, 0.15)' }}
-                onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 18px rgba(16, 185, 129, 0.45), 0 0 6px rgba(16, 185, 129, 0.25)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 10px rgba(16, 185, 129, 0.25), 0 0 3px rgba(16, 185, 129, 0.15)'; }}
-                data-testid="read-position-btn"
-                aria-label={positionNarration.isNarrating ? 'Restart position narration' : 'Read this position aloud'}
-              >
-                {positionNarration.isNarrating ? (
-                  <Loader2 size={16} className="animate-spin" />
-                ) : (
-                  <Volume2 size={16} />
-                )}
-                <span>{positionNarration.isNarrating ? 'Reading…' : 'Read this position'}</span>
-              </button>
-              <button
-                onClick={() => handleRestart()}
-                disabled={gameState.moves.length === 0}
-                className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-cyan-500/30 text-sm font-medium text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200"
-                style={{ boxShadow: '0 0 10px rgba(6, 182, 212, 0.25), 0 0 3px rgba(6, 182, 212, 0.15)' }}
-                onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 18px rgba(6, 182, 212, 0.45), 0 0 6px rgba(6, 182, 212, 0.25)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 10px rgba(6, 182, 212, 0.25), 0 0 3px rgba(6, 182, 212, 0.15)'; }}
-                data-testid="restart-btn"
-                aria-label="Restart game"
-              >
-                <RotateCcw size={16} />
-                <span>Restart</span>
-              </button>
-              <ResignButton onResign={handleResign} disabled={gameState.moves.length === 0} />
-            </div>
-
+          <div className="flex flex-col gap-1.5 px-4 pb-2 flex-shrink-0">
             {/* Row 2: Ask (voice) button */}
             <div className="flex justify-center">
               {/* onPlayMove / onTakeBackMove / onResetBoard removed 2026-09-21:
@@ -5545,9 +5443,6 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               />
             </div>
 
-            {/* Row 3: Move navigation — see the sibling copy below, which keeps
-                these controls alive while a blocking card owns the turn. */}
-            {moveNavRow}
           </div>
         )}
 

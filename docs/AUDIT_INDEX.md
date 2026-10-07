@@ -269,3 +269,4 @@ narrated plies · PROMPTED changes nothing · muted. Vacuity-checked.
     AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY \
     AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app \
     node scripts/audit-loop-green-prod.mjs
+| `scripts/audit-board-bar-fold.mjs` | THE ONE BOARD BAR above the fold (David 2026-10-07: "All buttons NEED to be visible without scrolling down!") — at 375×667 and 390×844 opens Learn, Play, the Openings Play rung and a Review walk on fresh pages and asserts the same six buttons render and the bar + extras end above the bottom nav at scrollY 0. Muted. `AUDIT_SANDBOX=1 AUDIT_SMOKE_URL=http://localhost:5173 node scripts/audit-board-bar-fold.mjs` |

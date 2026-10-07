@@ -48,6 +48,7 @@
 /** "No think-aloud has fired yet." Far enough below any real ply that the
  *  first gap test passes. */
 import type { PlanThread } from './planThread';
+import type { Proof } from './proof';
 
 export const NEVER_FIRED = -999;
 
@@ -81,6 +82,9 @@ export interface LearnMemory {
   /** The student's structural plan across the game — stated, stopped (with its
    *  proof), changed (`planThread`, the same thread Review keeps). */
   planThread: PlanThread | null;
+  /** The proof behind the last conclusion the coach SPOKE — what "Why?" says
+   *  in full (proof.ts). Null until a proof-bearing conclusion is spoken. */
+  lastProof: Proof | null;
   /** The threat and tactic lanes' say-once memory — the last spoken KEY (so a
    *  standing danger alerts once, not every ply) and EVERY sentence already
    *  spoken this game (an alternating pair walks straight through a single
@@ -249,6 +253,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
     saidExplainers,
     structureSaid,
     planThread: null,
+    lastProof: null,
     pieceQualitySaid,
     spokenKeys,
     conceptTaught,
@@ -288,6 +293,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
       saidExplainers.clear();
       structureSaid.clear();
       mem.planThread = null;
+      mem.lastProof = null;
       pieceQualitySaid.clear();
       spokenKeys.clear();
       conceptTaught.clear();

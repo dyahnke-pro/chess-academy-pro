@@ -178,23 +178,7 @@ const run = async () => {
           if (await has(page, sel)) { await page.locator(sel).first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(400); break; }
         }
       }
-      // SPOT-THE-SEQUENCE: "Show me the line" (ask) → then Skip (playback) so
-      // the walk advances without solving the 3-move sequence by hand.
-      if (await has(page, '[data-testid="review-sequence-ask"]')) {
-        await page.locator('[data-testid="review-sequence-show"]').first().click({ timeout: 1500 }).catch(() => {});
-        for (let s = 0; s < 8; s++) {
-          if (await has(page, '[data-testid="review-sequence-skip"]')) {
-            await page.locator('[data-testid="review-sequence-skip"]').first().click({ timeout: 1500 }).catch(() => {});
-            break;
-          }
-          await page.waitForTimeout(500);
-        }
-        await page.waitForTimeout(400);
-      }
-      if (await has(page, '[data-testid="review-sequence-playback"]')) {
-        await page.locator('[data-testid="review-sequence-skip"]').first().click({ timeout: 1500 }).catch(() => {});
-        await page.waitForTimeout(400);
-      }
+      // SPOT-THE-SEQUENCE card is gone — no card to answer.
       // THEORY-DEPARTURE: skip (ask) or stop (playback).
       for (const sel of ['[data-testid="review-theory-skip"]', '[data-testid="review-theory-stop"]']) {
         if (await has(page, sel)) { await page.locator(sel).first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(400); }
