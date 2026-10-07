@@ -1524,3 +1524,17 @@ describe('"tell me about X" reaches the opening-identity lane', () => {
     expect(buildQuestionGrounding('tell me what is the best move here').openingIdentityName).toBeUndefined();
   });
 });
+
+describe('extractCandidateSan — a bare back-rank square (answers swarm 2026-10-07)', () => {
+  it('reads it as a promotion only when the words say so', () => {
+    expect(extractCandidateSan('should I promote on d1?')).toBe('d1=Q');
+    expect(extractCandidateSan('is queening on a8 good')).toBe('a8=Q');
+  });
+  it('ties it to the one piece the student named', () => {
+    expect(extractCandidateSan('is a8 a good square for my rook?')).toBe('Ra8');
+    expect(extractCandidateSan('can my queen go a8?')).toBe('Qa8');
+  });
+  it('leaves it bare when nothing says which piece', () => {
+    expect(extractCandidateSan('what about a8?')).toBe('a8');
+  });
+});

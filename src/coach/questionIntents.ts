@@ -566,11 +566,6 @@ function normalizeSan(tok: string): string {
   // sound sacrifice?" read as "B5" and was answered "B5 isn't a legal move"
   // (question walk 2026-09-27). "b" is the one piece letter that is also a file,
   // so only a square after it ("bc4", "bxc6") can make it a bishop.
-  // A pawn onto the last rank with no piece named IS a promotion — "promote on
-  // d1" read as the move "d1", which chess.js calls illegal, and the question
-  // fell to grading the move before it. The queen is what people mean.
-  const promo = /^([a-h](?:x[a-h])?[18])([+#]?)$/i.exec(tok);
-  if (promo) return `${promo[1].toLowerCase()}=Q${promo[2]}`;
   if (/^b[1-8]/.test(tok)) return tok.toLowerCase();
   if (/^[kqrbn]/i.test(tok)) return tok[0].toUpperCase() + tok.slice(1).toLowerCase();
   return tok.toLowerCase().replace(/=([qrbn])/i, (_m, p: string) => `=${p.toUpperCase()}`);
@@ -608,7 +603,23 @@ export function extractCandidateSan(ask: string | undefined): string | null {
     return `${letter}${spoken[2].toLowerCase()}${spoken[3]}`;
   }
   const m = ask.match(SAN_TOKEN_RE);
-  if (m) return normalizeSan(m[1]);
+  if (m) {
+    // A BARE SQUARE ON THE BACK RANK IS ONLY A PROMOTION WHEN THE WORDS SAY SO.
+    // "promote on d1" means d1=Q; "is a8 a good square for my rook?" means the
+    // ROOK — reading every bare a8 as a8=Q graded a pawn move the student never
+    // asked about (answers swarm 2026-10-07). So: promotion words → =Q; one
+    // piece named in the question → that piece onto the square; else the bare
+    // square, and chess.js judges it downstream.
+    const back = /^([a-h](?:x[a-h])?[18])([+#]?)$/i.exec(m[1]);
+    if (back) {
+      const sq = back[1].toLowerCase();
+      if (/\b(?:promot\w*|queening|queen\s+(?:it|the\s+pawn|up)|make\s+a\s+queen|new\s+queen)\b/i.test(ask)) return `${sq}=Q${back[2]}`;
+      const named = [...new Set([...ask.matchAll(/\b(knight|night|bishop|rook|queen|king)s?\b/gi)].map((x) => WORD_PIECE[x[1].toLowerCase()]))];
+      if (named.length === 1 && !sq.includes('x')) return `${named[0]}${sq}${back[2]}`;
+      return `${sq}${back[2]}`;
+    }
+    return normalizeSan(m[1]);
+  }
   if (/\bcastl(?:e|ing|es)\b/i.test(ask)) {
     return /\b(?:long|queen'?s?\s*side|queenside)\b/i.test(ask) ? 'O-O-O' : 'O-O';
   }
