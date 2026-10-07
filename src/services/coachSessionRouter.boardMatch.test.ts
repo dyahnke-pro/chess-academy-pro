@@ -179,3 +179,32 @@ describe('tryRouteIntent — non-matches fall through to LLM', () => {
     expect(tryRouteIntent('   ', { currentFen: STARTING_FEN })).toBeNull();
   });
 });
+
+// Answers swarm P0 (2026-10-07): a QUESTION about a move must never play it.
+// Before the fix the verb was matched anywhere, so every one of these played.
+describe('tryRouteIntent — a question about a move is never played', () => {
+  const FEN_NXE5 = 'rnbqkbnr/ppp2ppp/3p4/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3';
+  it.each([
+    'can I play Nf3?',
+    'can I play Nf3',
+    'should I play knight to f3',
+    'what if I play e4',
+    'is it good to play e4',
+    'why not play Nf3?',
+    'if I play e4 what happens',
+    'could I push pawn to e4',
+  ])('"%s" is not a move command', (q) => {
+    expect(tryRouteIntent(q, { currentFen: STARTING_FEN })?.kind).not.toBe('play_move');
+  });
+  it('"can I take on e5?" is not played', () => {
+    expect(tryRouteIntent('can I take on e5?', { currentFen: FEN_NXE5 })?.kind).not.toBe('play_move');
+  });
+  it.each([
+    ["I'll play Nf3", 'Nf3'],
+    ['ok play e4', 'e4'],
+    ['let me play knight to f3', 'Nf3'],
+    ["I'm going to play e4", 'e4'],
+  ])('command "%s" still plays', (q, san) => {
+    expect(tryRouteIntent(q, { currentFen: STARTING_FEN })).toEqual({ kind: 'play_move', san });
+  });
+});

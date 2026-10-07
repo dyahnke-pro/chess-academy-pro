@@ -943,6 +943,24 @@ function computeRoutedIntent(
  * Also handles natural-language piece names: "play knight to f3",
  * "move the bishop to c4", "play pawn to e4" → translates to SAN.
  */
+/**
+ * A move is played only on a COMMAND, never on a question (answers swarm P0,
+ * 2026-10-07). The verb used to be found ANYWHERE in the text, so "can I play
+ * Nf3?" and "what if I take on e5" played the move instead of answering. A
+ * command is the verb as the first word that carries meaning, after an
+ * optional lead-in ("ok", "I'll", "let me", "I'm going to"); a question mark
+ * or any question word in front of the verb makes it a question.
+ */
+const COMMAND_LEAD_IN_RE = /^(?:(?:ok(?:ay)?|alright|right|so|now|then|fine|yes|yeah|please|go\s+ahead\s+and|i'?ll|i\s+will|let\s+me|lemme|let'?s|i'?m\s+(?:going\s+to|gonna)|i\s+(?:want|wanna)\s+(?:to\s+)?|i\s+choose\s+to|i\s+decide\s+to)[\s,.!:;-]+)*/i;
+const COMMAND_VERB_START_RE = /^(?:play|move|make|do|push|take|capture|grab)\b/i;
+
+export function isMoveCommand(text: string): boolean {
+  const t = text.trim();
+  if (t.includes('?')) return false;
+  const rest = t.replace(COMMAND_LEAD_IN_RE, '');
+  return COMMAND_VERB_START_RE.test(rest);
+}
+
 function matchPlayMove(text: string, currentFen?: string): string | null {
   // `take|capture|grab` are capture-intent verbs — when they fire, we
   // try the SAN with an `x` (capture form) before the move form, so
@@ -950,6 +968,7 @@ function matchPlayMove(text: string, currentFen?: string): string | null {
   // rejects when the destination is occupied).
   const VERB_RE = /\b(play|move|make|do|push|take|capture|grab)\b/i;
   if (!VERB_RE.test(text)) return null;
+  if (!isMoveCommand(text)) return null;
 
   const verbMatch = text.match(VERB_RE);
   const verb = verbMatch ? verbMatch[1].toLowerCase() : '';
