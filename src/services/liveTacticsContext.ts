@@ -1,4 +1,5 @@
 import { logAppAudit } from './appAuditor';
+import { countMaterial } from './positionReadingService';
 import { isScenicPawnPin } from './factStakes';
 import type { PerspectiveMode } from './perspectiveRule';
 /**
@@ -217,7 +218,7 @@ function computeBoardFacts(fen: string): TacticsLiveContext['boardFacts'] {
     const sideToMove = chess.turn() === 'w' ? 'white' : 'black';
     const inCheck = chess.inCheck() ? sideToMove : null;
     const { whitePieces, blackPieces } = pieceInventory(board);
-    const material = describeMaterialBalance(board);
+    const material = describeMaterialBalance(chess.fen());
     const attackMap = computeAttackMap(chess);
     // Mate-in-one for the side to move: try every legal move; the first
     // that delivers checkmate is the forced mate. chess.js validates
@@ -280,18 +281,12 @@ function computeAttackMap(chess: Chess): NonNullable<TacticsLiveContext['boardFa
  *  "White is ahead" while actually down 3 — response-loop audit 2026-06-05),
  *  so we hand it the ground-truth direction. Pure material count — NOT a
  *  positional eval. */
-function describeMaterialBalance(board: ReturnType<Chess['board']>): string {
-  const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
-  const tally = (color: 'w' | 'b'): number => {
-    let sum = 0;
-    for (const row of board) for (const sq of row) {
-      if (sq && sq.color === color && sq.type !== 'k') sum += VAL[sq.type] ?? 0;
-    }
-    return sum;
-  };
-  const w = tally('w');
-  const b = tally('b');
-  const diff = w - b;
+function describeMaterialBalance(fen: string): string {
+  // The one count (`countMaterial`) — never a private tally.
+  const { totals, advantage } = countMaterial(fen);
+  const w = totals.white;
+  const b = totals.black;
+  const diff = advantage;
   if (diff === 0) return `Material is EVEN (White ${w} vs Black ${b} in piece points).`;
   const side = diff > 0 ? 'White' : 'Black';
   const mag = Math.abs(diff);

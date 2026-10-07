@@ -25,7 +25,7 @@ import type { WeaknessCategory } from '../types';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { developedMinorCount, totalMinorCount } from './development';
 import { isOutpost } from './outpost';
-import { MATERIAL_VALUE } from './pieceValues';
+import { MATERIAL_VALUE, materialBalance } from './pieceValues';
 
 /** Centipawn-free piece values for SEE + material reasoning (king ~ ∞). */
 const PIECE_VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
@@ -1823,21 +1823,23 @@ export interface MaterialCount {
  *  (findWeakPawns/kingSafetyRead/developmentRead) and were never read —
  *  computed and discarded on every call. One file, so nothing sits unused
  *  in a module nobody else reaches. */
-export function countMaterial(fen: string): { material: MaterialCount; advantage: number } {
+export function countMaterial(fen: string): { material: MaterialCount; advantage: number; totals: { white: number; black: number } } {
   const white: Record<string, number> = { p: 0, n: 0, b: 0, r: 0, q: 0 };
   const black: Record<string, number> = { p: 0, n: 0, b: 0, r: 0, q: 0 };
   let chess: Chess;
-  try { chess = new Chess(fen); } catch { return { material: { white, black }, advantage: 0 }; }
+  try { chess = new Chess(fen); } catch { return { material: { white, black }, advantage: 0, totals: { white: 0, black: 0 } }; }
   for (const row of chess.board()) for (const cell of row) {
     if (!cell || cell.type === 'k') continue;
     const bucket = cell.color === 'w' ? white : black;
     bucket[cell.type] += 1;
   }
+  // ONE MATERIAL COUNT (one-coach P2, census group 11): the totals on the one
+  // table, the balance from the one counter (`materialBalance`).
   let whiteTotal = 0;
   let blackTotal = 0;
-  for (const [type, count] of Object.entries(white)) whiteTotal += (PIECE_VALUE[type as PieceSymbol] ?? 0) * count;
-  for (const [type, count] of Object.entries(black)) blackTotal += (PIECE_VALUE[type as PieceSymbol] ?? 0) * count;
-  return { material: { white, black }, advantage: whiteTotal - blackTotal };
+  for (const [type, count] of Object.entries(white)) whiteTotal += (MATERIAL_VALUE[type] ?? 0) * count;
+  for (const [type, count] of Object.entries(black)) blackTotal += (MATERIAL_VALUE[type] ?? 0) * count;
+  return { material: { white, black }, advantage: materialBalance(fen), totals: { white: whiteTotal, black: blackTotal } };
 }
 
 const CENTER_SQUARES = new Set(['d4', 'd5', 'e4', 'e5']);

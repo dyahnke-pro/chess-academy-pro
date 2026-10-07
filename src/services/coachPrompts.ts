@@ -1,3 +1,4 @@
+import { materialBalance } from './pieceValues';
 import type { CoachContext, CoachVerbosity, OpeningAnnotationContext } from '../types';
 import { perspectiveRule } from './perspectiveRule';
 import { detectTactics } from './tacticsDetector';
@@ -994,17 +995,7 @@ export function buildOpeningAnnotationContext(ctx: OpeningAnnotationContext): st
 export function computeMaterialBalance(fen: string): string | null {
   const board = fen.split(' ')[0];
   if (!board || !board.includes('/')) return null;
-  const value: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
-  let white = 0;
-  let black = 0;
-  for (const ch of board) {
-    const key = ch.toLowerCase();
-    if (!(key in value)) continue;
-    const v = value[key];
-    if (ch >= 'A' && ch <= 'Z') white += v;
-    else black += v;
-  }
-  const diff = white - black;
+  const diff = materialBalance(fen);
   if (diff === 0) return 'even';
   return diff > 0 ? `White +${diff}` : `Black +${-diff}`;
 }

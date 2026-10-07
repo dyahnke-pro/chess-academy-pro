@@ -11,7 +11,9 @@
 import { Chess, type Color, type Square } from 'chess.js';
 import type { FairKey } from './thinkingPositions';
 import type { StepKit } from './thinkingLessonSession';
-import { countMaterial, kingSafetyRead, type KingSafetyNote } from './positionReadingService';
+import { kingSafetyRead, type KingSafetyNote } from './positionReadingService';
+import { quietBalance } from './material';
+import { countWords } from '../utils/countWords';
 import { rotateStem } from '../utils/rotateStem';
 import { andList } from '../utils/andList';
 import { positionAsk } from './moveInsight';
@@ -61,12 +63,14 @@ export function assessReason(fen: string, sq: Square): string | null {
 }
 
 function materialLine(fen: string): string {
-  const { advantage } = countMaterial(fen);
+  // SETTLED, not raw (census group 11; walk oct3a): a capture still to be
+  // taken back is not a lead — `quietBalance` cashes the side to move's best
+  // capture first. Said by count (`countWords`), never a point total.
+  const balance = quietBalance(fen);
   const toMove = fen.split(' ')[1] === 'b' ? 'b' : 'w';
-  const mine = toMove === 'w' ? advantage : -advantage;
+  const mine = toMove === 'w' ? balance : -balance;
   if (mine === 0) return 'Material is level.';
-  const n = Math.abs(mine);
-  return `${mine > 0 ? 'You are' : 'They are'} up ${n} point${n === 1 ? '' : 's'} of material.`;
+  return `${mine > 0 ? 'You are' : 'They are'} up ${countWords(Math.abs(mine), { unit: true })}.`;
 }
 
 export function assessShowLine(fen: string, key: readonly Square[], rot: number): string {
