@@ -337,17 +337,7 @@ export interface GameContext {
   lastMove?: { from: string; to: string; san: string } | null;
   history?: string[];
   engineData?: EngineData;
-  tacticAnalysis?: TacticAnalysisContext;
   positionAssessment?: PositionAssessmentContext;
-}
-
-export interface TacticAnalysisContext {
-  moveQuality?: string;
-  evalSwing?: number;
-  hangingPieces?: Array<{ square: string; piece: string; color: string }>;
-  currentTactics?: string[];
-  upcomingForPlayer?: string[];
-  upcomingForOpponent?: string[];
 }
 
 export interface PositionAssessmentContext {
@@ -399,36 +389,6 @@ export function buildGameContextBlock(
     ? `Full SAN: ${gameContext.history.join(' ')}`
     : '';
 
-  const tacticBlock = gameContext.tacticAnalysis
-    ? [
-        '[Tactic Analysis — TRUST THIS DATA]',
-        gameContext.tacticAnalysis.moveQuality
-          ? `Move quality: ${gameContext.tacticAnalysis.moveQuality}${gameContext.tacticAnalysis.evalSwing !== undefined ? ` (eval swing: ${gameContext.tacticAnalysis.evalSwing > 0 ? '+' : ''}${gameContext.tacticAnalysis.evalSwing}cp)` : ''}`
-          : '',
-        gameContext.tacticAnalysis.hangingPieces && gameContext.tacticAnalysis.hangingPieces.length > 0
-          ? `Hanging pieces: ${gameContext.tacticAnalysis.hangingPieces.map((p) => {
-              // Use full piece names so TTS doesn't speak "P on e4" — the LLM
-              // echoes whatever we feed it, so normalise here rather than
-              // hoping the prompt catches every shorthand case.
-              const pieceMap: Record<string, string> = {
-                p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
-              };
-              const pieceKey = p.piece.toLowerCase();
-              const pieceName = pieceMap[pieceKey] ?? p.piece;
-              return `${p.color === 'w' ? 'White' : 'Black'} ${pieceName} on ${p.square}`;
-            }).join(', ')}`
-          : '',
-        gameContext.tacticAnalysis.currentTactics && gameContext.tacticAnalysis.currentTactics.length > 0
-          ? `Current tactics: ${gameContext.tacticAnalysis.currentTactics.join('; ')}`
-          : '',
-        gameContext.tacticAnalysis.upcomingForPlayer && gameContext.tacticAnalysis.upcomingForPlayer.length > 0
-          ? `FOR PLAYER (opportunity): ${gameContext.tacticAnalysis.upcomingForPlayer.join('; ')}`
-          : '',
-        gameContext.tacticAnalysis.upcomingForOpponent && gameContext.tacticAnalysis.upcomingForOpponent.length > 0
-          ? `AGAINST PLAYER (threat): ${gameContext.tacticAnalysis.upcomingForOpponent.join('; ')}`
-          : '',
-      ].filter(Boolean).join('\n')
-    : '';
 
   const positionBlock = gameContext.positionAssessment
     ? `[Position Assessment — TRUST THIS DATA]\n${gameContext.positionAssessment.summary}`
@@ -446,7 +406,6 @@ export function buildGameContextBlock(
     `Player plays: ${gameContext.playerColor}`,
     gameContext.isGameOver ? `Game over — Result: ${gameContext.gameResult}` : '',
     engineBlock,
-    tacticBlock,
     positionBlock,
     '',
     '[Player context]',
@@ -481,36 +440,6 @@ export function buildGameChatMessages(
     : '';
 
   // Tactic analysis block (deterministic, from Stockfish + classifier)
-  const tacticBlock = gameContext.tacticAnalysis
-    ? [
-        '[Tactic Analysis — TRUST THIS DATA]',
-        gameContext.tacticAnalysis.moveQuality
-          ? `Move quality: ${gameContext.tacticAnalysis.moveQuality}${gameContext.tacticAnalysis.evalSwing !== undefined ? ` (eval swing: ${gameContext.tacticAnalysis.evalSwing > 0 ? '+' : ''}${gameContext.tacticAnalysis.evalSwing}cp)` : ''}`
-          : '',
-        gameContext.tacticAnalysis.hangingPieces && gameContext.tacticAnalysis.hangingPieces.length > 0
-          ? `Hanging pieces: ${gameContext.tacticAnalysis.hangingPieces.map((p) => {
-              // Use full piece names so TTS doesn't speak "P on e4" — the LLM
-              // echoes whatever we feed it, so normalise here rather than
-              // hoping the prompt catches every shorthand case.
-              const pieceMap: Record<string, string> = {
-                p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
-              };
-              const pieceKey = p.piece.toLowerCase();
-              const pieceName = pieceMap[pieceKey] ?? p.piece;
-              return `${p.color === 'w' ? 'White' : 'Black'} ${pieceName} on ${p.square}`;
-            }).join(', ')}`
-          : '',
-        gameContext.tacticAnalysis.currentTactics && gameContext.tacticAnalysis.currentTactics.length > 0
-          ? `Current tactics: ${gameContext.tacticAnalysis.currentTactics.join('; ')}`
-          : '',
-        gameContext.tacticAnalysis.upcomingForPlayer && gameContext.tacticAnalysis.upcomingForPlayer.length > 0
-          ? `FOR PLAYER (opportunity): ${gameContext.tacticAnalysis.upcomingForPlayer.join('; ')}`
-          : '',
-        gameContext.tacticAnalysis.upcomingForOpponent && gameContext.tacticAnalysis.upcomingForOpponent.length > 0
-          ? `AGAINST PLAYER (threat): ${gameContext.tacticAnalysis.upcomingForOpponent.join('; ')}`
-          : '',
-      ].filter(Boolean).join('\n')
-    : '';
 
   const positionBlock = gameContext.positionAssessment
     ? `[Position Assessment — TRUST THIS DATA]\n${gameContext.positionAssessment.summary}`
@@ -526,7 +455,6 @@ export function buildGameChatMessages(
     `Player plays: ${gameContext.playerColor}`,
     gameContext.isGameOver ? `Game over — Result: ${gameContext.gameResult}` : '',
     engineBlock,
-    tacticBlock,
     positionBlock,
   ].filter(Boolean).join('\n');
 

@@ -141,9 +141,10 @@ function countAttackers(chess: Chess, square: Square, byColor: Color): number {
  * Negative evalSwing = the move worsened the position (bad).
  */
 function classifyMoveQuality(evalSwing: number): MoveQuality {
-  if (evalSwing >= 200) return 'brilliant';
-  if (evalSwing >= 100) return 'great';
-  // A loss is graded on the ONE ladder (accuracyService.cpBand).
+  // A loss is graded on the ONE ladder (accuracyService.cpBand). A positive
+  // swing is not brilliance — that verdict needs a sacrifice and belongs to
+  // the stored grade (gameAnalysisService.classifyCpLoss, unity U4); this
+  // said "brilliant" at any +200 (census group 1).
   return cpBand(-evalSwing) ?? 'good';
 }
 

@@ -55,18 +55,11 @@ describe('classifyPosition — move quality', () => {
     expect(result.moveQuality).toBe('good');
   });
 
-  it('classifies a great move (eval swing 100 to 200)', () => {
+  it('a big positive swing is not "brilliant" — that verdict needs a sacrifice and is the stored grade (census group 1)', () => {
     const fenAfter = playMove(START_FEN, 'e4');
-    // swing = -(-150) - 0 = 150 → great
-    const result = classifyPosition(START_FEN, fenAfter, 'e4', 0, -150);
-    expect(result.moveQuality).toBe('great');
-  });
-
-  it('classifies a brilliant move (eval swing >= 200)', () => {
-    const fenAfter = playMove(START_FEN, 'e4');
-    // swing = -(-300) - 0 = 300 → brilliant
-    const result = classifyPosition(START_FEN, fenAfter, 'e4', 0, -300);
-    expect(result.moveQuality).toBe('brilliant');
+    // 1.e4 scored +3 is a good move; nothing was sacrificed.
+    expect(classifyPosition(START_FEN, fenAfter, 'e4', 0, -150).moveQuality).toBe('good');
+    expect(classifyPosition(START_FEN, fenAfter, 'e4', 0, -300).moveQuality).toBe('good');
   });
 });
 
