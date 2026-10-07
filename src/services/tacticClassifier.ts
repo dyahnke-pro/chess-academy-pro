@@ -9,6 +9,7 @@ import type {
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { isRealPin } from './pinGeometry';
 import { cpBand } from './accuracyService';
+import { findHangingBySee } from './positionReadingService';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -514,75 +515,38 @@ function detectRemovalOfGuard(
 // ─── Hanging Piece Detection ────────────────────────────────────────────────
 
 /**
- * Whether `enemyColor` has a LEGAL capture of `square`. Returns null when it
- * can't be determined (the position can't be legally re-cast with enemy to
- * move — e.g. the other king would be in check). `chess.attackers` counts
- * PINNED attackers that can't actually capture (the 2026-06-27 "pawn on e5
- * hanging" false positive — its only attacker was a pinned knight), so this
- * legality check is what lets `findHangingPieces` prune those.
- */
-function enemyHasLegalCapture(chess: Chess, square: Square, enemyColor: Color): boolean | null {
-  try {
-    if (chess.turn() === enemyColor) {
-      // IN CHECK IS NOT PINNED (review walk 2026-10-04, 24…Kf8: "Newly
-      // undefended: your rook on a1" — it had been loose since Rc7+, but while
-      // Black was in check no capture of it was legal, so the board before
-      // read it as safe). A check is answered and then the piece falls; it
-      // does not tell us whether the attacker can ever take — undeterminable.
-      if (chess.inCheck()) return null;
-      return chess.moves({ verbose: true }).some((m) => m.to === square && m.captured);
-    }
-    // Flip the side to move to the enemy so we can generate their legal moves.
-    // Clear en-passant/castling fields to avoid spurious illegal-FEN throws.
-    const parts = chess.fen().split(' ');
-    parts[1] = enemyColor;
-    parts[3] = '-';
-    const probe = new Chess(parts.join(' '));
-    return probe.moves({ verbose: true }).some((m) => m.to === square && m.captured);
-  } catch {
-    return null; // undeterminable — caller falls back to the naive test
-  }
-}
-
-/**
  * Find all hanging pieces (attacked, undefended, AND legally capturable) for
  * both sides. The legal-capture guard prunes pinned-attacker false positives;
  * it only ever REMOVES a piece the naive attacked-and-undefended test would
  * have wrongly flagged, never adds one (so real hangs stay detected).
  */
 export function findHangingPieces(chess: Chess): HangingPiece[] {
-  const hanging: HangingPiece[] = [];
-  const board = chess.board();
-
-  for (let r = 0; r < 8; r++) {
-    for (let c = 0; c < 8; c++) {
-      const piece = board[r][c];
-      if (!piece || piece.type === 'k') continue;
-
-      const sq = coordsToSquare(c, 7 - r);
-      if (!sq) continue;
-
-      const enemyColor = oppositeColor(piece.color);
-      const attackers = countAttackers(chess, sq, enemyColor);
-      if (attackers === 0) continue;
-
-      const defended = isDefended(chess, sq, piece.color);
-      if (defended) continue;
-
-      // Pin-aware: drop the piece if the enemy provably has NO legal capture
-      // of it (its "attackers" are all pinned). null = undeterminable → keep
-      // the naive result rather than risk hiding a real hang.
-      if (enemyHasLegalCapture(chess, sq, enemyColor) === false) continue;
-
-      hanging.push({
-        square: sq,
-        piece: piece.type,
-        color: piece.color,
-      });
+  // ONE HANGING COMPUTER (one-coach P2, duplicate census group 2). "Hanging"
+  // used to be read two ways: this scan (attacked and undefended) and
+  // `findHangingBySee` (the exchange loses material). Measured over 11,028
+  // corpus positions they disagreed on 336 — and where they did, the scan was
+  // the one lying: it called a piece hanging when the capture walks into an
+  // x-ray recapture (…Bh4 "hanging" to Qh3 with the queen on h1 behind it).
+  // So this is now the SEE read, narrowed to the pieces nothing defends.
+  const fen = chess.fen();
+  const out: HangingPiece[] = findHangingBySee(fen)
+    .filter((h) => !isDefended(chess, h.square, h.color))
+    .map((h) => ({ square: h.square, piece: h.piece, color: h.color }));
+  // IN CHECK IS NOT PINNED (review walk 2026-10-04, 24…Kf8): the side to move,
+  // in check, cannot take this move, so the legal SEE read sees nothing — but
+  // their target still falls once the check is answered. Those pieces are read
+  // as attacked-and-undefended, the one rule a legal read cannot answer.
+  if (chess.inCheck()) {
+    const capturer = chess.turn();
+    for (const row of chess.board()) for (const cell of row) {
+      if (!cell || cell.type === 'k' || cell.color === capturer) continue;
+      if (out.some((h) => h.square === cell.square)) continue;
+      if (countAttackers(chess, cell.square, capturer) > 0 && !isDefended(chess, cell.square, cell.color)) {
+        out.push({ square: cell.square, piece: cell.type, color: cell.color });
+      }
     }
   }
-
-  return hanging;
+  return out;
 }
 
 // ─── Main Classifier ────────────────────────────────────────────────────────
