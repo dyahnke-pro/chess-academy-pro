@@ -613,11 +613,17 @@ export function buildMiddlegameOrientation(
     pairs.push(...stormArrows(all, enemyWB, myKingWing, PLAN_THEIRS));
   }
 
-  if (studentWing && seat !== 'opponent') {
+  // ONE PLAN PER SIDE (unity U5, review walk #24: "throw your pawns at their
+  // king on the kingside" then "advance your queenside pawn majority"). With
+  // the kings on opposite wings the race IS the plan; a majority speaks only
+  // when it sits on the wing the race is run on.
+  const studentKingWingNow = struct.kings.kingWing[studentColorWB] === 'queenside' ? 'queenside' : 'kingside';
+  const raceSaid = oppositeCastling && seat !== 'opponent';
+  if (studentWing && seat !== 'opponent' && (!raceSaid || studentWing === enemyKingWingNow)) {
     parts.push(`your plan is to advance your ${studentWing} pawn majority and make it count`);
     if (!oppositeCastling) pairs.push(...majorityArrows(all, studentColorWB, studentWing, PLAN_MINE));
   }
-  if (enemyWing && seat !== 'student') {
+  if (enemyWing && seat !== 'student' && (!raceSaid || enemyWing === studentKingWingNow)) {
     parts.push(`your opponent's plan is to push on the ${enemyWing}, where they hold the majority`);
     if (!oppositeCastling) pairs.push(...majorityArrows(all, enemyWB, enemyWing, PLAN_THEIRS));
   }

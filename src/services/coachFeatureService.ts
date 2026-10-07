@@ -122,6 +122,10 @@ const REVIEW_TAG_FOR_LANE: Record<StudentMoveLane, FacetTag | null> = {
 
 export { advantageWasMissed } from './reviewWithholding';
 
+/** How long a stated plan holds before a different goal may replace it — two
+ *  full moves. Damping, not a cap: the new plan is said once it persists. */
+export const PLAN_HOLD_PLIES = 4;
+
 export { detectBadHabits };
 
 export async function updateBadHabits(profile: UserProfile): Promise<BadHabit[]> {
@@ -1575,6 +1579,11 @@ export function buildReviewSegments(
   // ply later. Square specifics are stripped from the key so "attack the king on
   // e8" and "attack the king on e8 before it runs" collapse to one goal.
   const planGoalsSeen = new Set<string>();
+  /** The ply the CURRENT plan was stated on (unity U5, review walk #23: "The
+   *  plan changes here" twice back to back, with different plans). A plan is
+   *  a thread, not a per-ply read: a different goal inside PLAN_HOLD_PLIES of
+   *  the last one is the read flickering, not the plan changing. */
+  let planStatedPly: number | null = null;
   // ONE CLAIM, MANY LANES (review walk 2026-10-01). "Convert your extra
   // material" (the plan), "trade pieces, not pawns" (the conversion method) and
   // "when you're ahead the plan is to trade" (the concept fill) are one claim;
@@ -2122,7 +2131,9 @@ export function buildReviewSegments(
           const goalKey = gm
             ? gm[1].toLowerCase().replace(/\b[a-h][1-8]\b/g, '').replace(/[^a-z ]/g, '').replace(/\s+/g, ' ').trim()
             : f;
-          if (planGoalsSeen.has(goalKey) || !claim(`plan:${goalKey}`)) continue;
+          if (planGoalsSeen.has(goalKey)) continue;
+          if (planStatedPly !== null && m.ply - planStatedPly < PLAN_HOLD_PLIES) continue;
+          if (!claim(`plan:${goalKey}`)) continue;
           // A NEW goal after plans the student already heard is a CHANGE, and
           // the change is the teaching (David 2026-09-25: "If the structure
           // plan changes then coach should say so"). Once per ply.
@@ -2136,6 +2147,7 @@ export function buildReviewSegments(
           if (goalKey.startsWith('convert') && (convertTaughtPly !== null || !claim('convert'))) continue;
           keep(said, () => {
             planGoalsSeen.add(goalKey);
+            planStatedPly = m.ply;
             if (goalKey.startsWith('convert')) convertTaughtPly ??= m.ply;
             if (passerFile) passerPlanFiles.add(passerFile);
           });

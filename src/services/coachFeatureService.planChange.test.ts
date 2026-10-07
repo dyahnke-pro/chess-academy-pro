@@ -3,7 +3,7 @@
 // heard is framed as the change. Real game: the KID hand walk (2000, Black).
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildReviewSegments, type ReviewMoveInput } from './coachFeatureService';
+import { buildReviewSegments, PLAN_HOLD_PLIES, type ReviewMoveInput } from './coachFeatureService';
 
 const SANS = 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 c6 Kh1 Nh5 Be3 f5 Qd2 f4 Bf2 Be5 Nc2 Ng3+ Kg1 Qh4 Bd4 Nxf1 Bxf1 Be6 Bxe5 dxe5 Qd6 Nd7 Qc7 Qd8 Qxd8 Raxd8 Kf2 Nc5 Rd1 a5 Rxd8 Rxd8 Ke1 Kf7 Be2 g5 h3 h5 b3 Kf6 Nd1 g4 hxg4 hxg4 Nf2 g3 Nd1 Rh8'.split(' ');
 
@@ -17,5 +17,8 @@ describe('review says when the plan changes', () => {
     expect(plans[0].narration).toMatch(/The plan from here is to/);
     expect(plans[0].narration).not.toMatch(/plan changes here/);
     expect(plans.slice(1).every((s) => /The plan changes here/.test(s.narration ?? ''))).toBe(true);
+    // A plan is a thread (unity U5, walk #23): two plans are never stated
+    // closer together than the hold.
+    for (let i = 1; i < plans.length; i++) expect(plans[i].ply - plans[i - 1].ply).toBeGreaterThanOrEqual(PLAN_HOLD_PLIES);
   }, 120000);
 });
