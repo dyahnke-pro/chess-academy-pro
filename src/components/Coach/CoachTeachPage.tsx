@@ -298,6 +298,7 @@ import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingRating } from '../../services/coachGameEngine';
 import { opponentStrength } from '../../services/engineStrength';
 import { samePosition } from '../../utils/samePosition';
+import { findPinBreaks, pinBreakLine } from '../../services/pinBreak';
 import { splitThink, stripThink, THINK_MARK, THINK_PAUSE_MS } from '../../utils/thinkPause';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
@@ -8162,6 +8163,22 @@ export function CoachTeachPage(): JSX.Element {
           if (word) { pendingMotif = { type: t.type, instance, moveNo }; tacticTailType = t.type; }
           myTacticType = word ? t.type : null;
           if (word) tacticSquares = t.squares.filter((sq) => /^[a-h][1-8]$/.test(sq));
+          // A PIN THAT BREAKS WITH TEMPO IS NOT A PIN (questions.md item 7):
+          // the student is told before leaning on it.
+          if (tacticLine && t.type === 'pin') {
+            const brk = findPinBreaks(args.fenAfterReply, studentCC === 'w' ? 'b' : 'w').find((b) => b.pinned === t.squares[1]);
+            if (brk) tacticLine = `${tacticLine} ${pinBreakLine(brk, studentCC)}`;
+          }
+        }
+        // …and the same computer read from the other seat: the student's own
+        // pinned piece that can walk out with tempo is their resource.
+        if (!tacticLine) {
+          const own = findPinBreaks(args.fenAfterReply, studentCC)[0];
+          if (own) {
+            tacticKey = `pinbreak:${own.pinned}${own.to}`;
+            tacticLine = pinBreakLine(own, studentCC);
+            tacticSquares = [own.pinned, own.to, own.pinner];
+          }
         }
       }
       const kingPawnThreat = (): boolean => {

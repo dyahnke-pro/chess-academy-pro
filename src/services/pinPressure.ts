@@ -23,6 +23,7 @@
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
 import { capturesWinMaterial } from './positionReadingService';
+import { findPinBreaks } from './pinBreak';
 import { PIECE_NAMES } from '../types/tacticTypes';
 
 export interface PinPressureMove {
@@ -139,6 +140,9 @@ export function findPinPressure(fen: string, holder?: Color): PinPressure[] {
       // wins nothing. Note 487's board (Bg5 pins Nf6, e5 "wins it") was said
       // as a won knight; after ...h6 Bh4 g5 Bg3 the knight walks away.
       if (pawnCanKick(fenAfter, pinner, them)) continue;
+      // …and when the pinned piece itself can walk out with tempo (check, a
+      // bigger threat, a discovery), the pile-on wins nothing either.
+      if (findPinBreaks(fenAfter, them).some((b) => b.pinned === pinned)) continue;
       moves.push({ san: m.san, from: m.from, to: m.to, piece: m.piece, byPawn });
     }
     if (moves.length === 0) continue;
