@@ -13,6 +13,10 @@ a June prod probe pressed unlock and no gem surfaced), plentiful (only
 hand-narrated gems surface today, few openings have any), and proven working
 end to end on prod (every audit run so far ended DEFERRED). They are the
 heart of opening teaching: the slip your opponent makes and how you punish it.
+ACCEPTANCE TEST (David: "i have never NEVER heard my app teach me a gem"):
+done = David HEARS a gem taught, in a real game and in the opening lessons.
+Start by tracing why none has ever reached him: gem data → surfacing →
+unlock → Learn's live gem detection → the voice.
 
 0. TEACHING TRACK: learn HOW the reference coach teaches (voiced corpus
    public/data/voiced-teachings.json — 7,477 notes from 428 videos; the
