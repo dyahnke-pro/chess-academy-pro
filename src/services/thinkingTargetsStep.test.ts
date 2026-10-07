@@ -70,7 +70,7 @@ describe('step 5 — words', () => {
 
 describe('step 5 — the pinned-piece form (PP on the PP)', () => {
   // Bg5 pins the f6-knight to the queen; e4-e5 piles on with a pawn.
-  const PIN = 'rnbqkb1r/ppp2ppp/4pn2/3p2B1/3PP3/2N5/PPP2PPP/R2QKBNR w KQkq - 0 5';
+  const PIN = 'r1bqk2r/p2p1p2/p1n1pn2/6B1/3PP3/2P5/P4PPP/R2QK1NR w KQkq - 0 9';
 
   it('asks where to attack the pinned piece again, keyed by the pile-on squares', async () => {
     const { targetsKit } = await import('./thinkingTargetsStep');

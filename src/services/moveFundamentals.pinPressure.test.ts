@@ -3,7 +3,7 @@ import { computeMoveFundamentals, MOVE_FUNDAMENTAL_TAG, principleToTeach } from 
 
 // PP on the PP (David 2026-10-05): Bg5 pins the f6-knight to the queen and
 // e4-e5 attacks it with a pawn — the positive half of `missed-pin-pressure`.
-const PILE_ON = 'rnbqkb1r/ppp2ppp/4pn2/3p2B1/3PP3/2N5/PPP2PPP/R2QKBNR w KQkq - 0 5';
+const PILE_ON = 'r1bqk2r/p2p1p2/p1n1pn2/6B1/3PP3/2P5/P4PPP/R2QK1NR w KQkq - 0 9';
 
 describe('pile-on-pin — the move that puts pressure on the pinned piece', () => {
   it('e5 piles on the pinned knight, named from its square, and is not read as a "kick"', () => {

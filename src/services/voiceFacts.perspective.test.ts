@@ -75,7 +75,8 @@ describe('every register carries the ONE perspective string', () => {
 
   it('a surface where the coach IS the opponent says so', async () => {
     await voiceFacts(facts, { warm: true, intent: 'position-read', perspective: { mode: 'coach-is-opponent' } });
-    expect(systemOf(calls[0])).toMatch(/your OWN pieces are "I \/ my"/);
+    expect(systemOf(calls[0])).toMatch(/pieces are "they \/ their"/);
+    expect(systemOf(calls[0])).toMatch(/never "I \/ my"/);
   });
 });
 

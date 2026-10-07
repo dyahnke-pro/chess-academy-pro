@@ -8,7 +8,7 @@ const line = (rank: number, evaluation: number) => ({ rank, evaluation, moves: [
 const flat = (cp: number) => ({ topLines: [line(1, cp), line(2, cp - 20), line(3, cp - 40)], evaluation: cp, isMate: false, mateIn: null, seldepth: 20, depth: 18, wdl: { win: 400, draw: 400, loss: 200 } });
 
 // Bg5 pins the f6-knight to the queen on d8; e4-e5 attacks it with a pawn.
-const PILE_ON = 'rnbqkb1r/ppp2ppp/4pn2/3p2B1/3PP3/2N5/PPP2PPP/R2QKBNR w KQkq - 0 5';
+const PILE_ON = 'r1bqk2r/p2p1p2/p1n1pn2/6B1/3PP3/2P5/P4PPP/R2QK1NR w KQkq - 0 9';
 // Same pin with no pawn to pile on — nothing to say beyond today's clause.
 const NO_PAWN = 'rnbqkb1r/ppp2ppp/4pn2/3p2B1/3P4/2N5/PPP2PPP/R2QKBNR w KQkq - 0 5';
 

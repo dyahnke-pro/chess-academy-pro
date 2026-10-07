@@ -237,7 +237,7 @@ describe('a smaller attacker you can take back is not "it has to move" (hand wal
     const { legalSeeGainFor } = await import('./positionReadingService');
     const fen = 'r2q1rk1/4bppp/p1npbn2/1p2p3/3pP3/2P1NN2/PPB2PPP/R1BQR1K1 w - - 0 15';
     expect(legalSeeGainFor(fen, 'd4', 'w')).toBeGreaterThanOrEqual(0);
-    expect(TEACH_CODE).toMatch(/legalSeeGainFor\(args\.fenAfterReply, low\.a, studentCC\) >= 0/);
+    expect(TEACH_CODE).toMatch(/takingTheAttackerAnswers\(args\.fenAfterReply, low\.a, studentCC\)/);
   });
 });
 

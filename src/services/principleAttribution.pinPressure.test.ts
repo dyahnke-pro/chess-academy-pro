@@ -5,9 +5,10 @@ import { fundamentalLines } from './learnFundamentalNarration';
 
 // PP on the PP (David 2026-10-05). The French with 4.Bg5: the bishop pins the
 // f6-knight to the queen on d8, and e4-e5 attacks it with a pawn — the knight
-// cannot step away without dropping the queen. Black's 4…a6 is a waste move
-// that leaves the pin standing; 4…Be7 (the book move) breaks it.
-const PINNED = ['e4', 'e6', 'd4', 'd5', 'Nc3', 'Nf6', 'Bg5', 'a6'];
+// cannot step away without dropping the queen. Black's 4…h5 leaves the pin
+// standing AND gives up the …h6 kick that breaks it with tempo (the old 4…a6
+// fixture still had …h6, so e5 won nothing there); 4…Be7 breaks it.
+const PINNED = ['e4', 'e6', 'd4', 'd5', 'Nc3', 'Nf6', 'Bg5', 'h5'];
 
 describe('missed-pin-pressure — FOR the student', () => {
   it('names the skipped pile-on when e5 was the move and they played a3', () => {
@@ -39,9 +40,9 @@ describe('missed-pin-pressure — FOR the student', () => {
   it('stays silent when the pile-on is still there after their reply (not missed yet)', () => {
     const out = attributePrinciples({
       historySans: [...PINNED, 'a3'], bestSan: 'e5', classification: 'mistake',
-      replySan: null, pvAfterPlayed: ['h6'],
+      replySan: null, pvAfterPlayed: ['a6'],
     });
-    // After …h6 the bishop on g5 still pins and e5 still piles on.
+    // After …a6 the bishop on g5 still pins and e5 still piles on.
     expect(out.map((x) => x.id)).not.toContain('missed-pin-pressure');
   });
 });
@@ -64,7 +65,7 @@ describe('ignored-pin-pressure — AGAINST the student', () => {
   it('reads the engine reply when the real one is not known yet', () => {
     const out = attributePrinciples({
       historySans: PINNED, bestSan: 'Be7', classification: 'mistake',
-      replySan: null, pvAfterPlayed: ['e5', 'h6'],
+      replySan: null, pvAfterPlayed: ['e5', 'a6'],
     });
     expect(out.find((x) => x.id === 'ignored-pin-pressure')?.facts.played).toBe(0);
   });
