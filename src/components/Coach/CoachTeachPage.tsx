@@ -300,6 +300,7 @@ import { opponentStrength } from '../../services/engineStrength';
 import { samePosition } from '../../utils/samePosition';
 import { findPinBreaks, pinBreakLine } from '../../services/pinBreak';
 import { obligationLifted, obligationLiftedLine } from '../../services/obligationLifted';
+import { findQueenGrabTraps, queenGrabTrapLine } from '../../services/queenGrabTrap';
 import { splitThink, stripThink, THINK_MARK, THINK_PAUSE_MS } from '../../utils/thinkPause';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
@@ -8879,6 +8880,15 @@ export function CoachTeachPage(): JSX.Element {
       } catch { return null; }
     })();
     deferIf(liftLine, 'theirMoveCost', liftLine?.text ?? null, liftLine?.squares);
+    // CHECK THE QUEEN'S EXITS BEFORE YOU GRAB (teach-brief §3): a capture
+    // that looks free and leaves the queen with no safe square after one reply.
+    const grab = ((): { text: string; squares: string[] } | null => {
+      try {
+        const t = findQueenGrabTraps(args.fenAfterReply)[0];
+        return t ? { text: queenGrabTrapLine(t), squares: [t.from, t.to, t.replyFrom, t.replyTo] } : null;
+      } catch { return null; }
+    })();
+    deferIf(grab, 'rejectedTempting', grab?.text ?? null, grab?.squares);
     deferIf(computedLine, 'commentary', computedLine, undefined, undefined, computedLineArrows);
     deferIf(behaviorLine && !decidedByMaterial, 'behavior', behaviorLine, behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)), behaviorClaims, behaviorArrows);
     deferIf(positionalLine && !decidedByMaterial, positionalIsOwnKing ? 'kingSafety' : 'positional', positionalLine, positionalSquares, positionalClaims);
