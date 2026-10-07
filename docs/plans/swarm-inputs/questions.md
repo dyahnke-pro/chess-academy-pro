@@ -10,6 +10,9 @@ PRIORITY (David, F02): THE OPENING — "the thing that pulled me from 800 to
 THE PROGRESSION (F03): traps HARD and OFTEN early, with principles, theory and
 good habits; the record shifts the weight to thinking and strategy once traps
 stop deciding the student's games.
+ONE TRAP LIBRARY (F04): today ~8 separate trap systems. One definition (a
+natural move opponents really play at the student's level that loses to a
+forced, engine-proven sequence), one library, every surface reads it.
 FIRST OPENING ITEM — THE GEMS (David: "those gems that have never fucking
 worked"): punish-gems must be reachable (not stuck behind the unlock ladder —
 a June prod probe pressed unlock and no gem surfaced), plentiful (only
