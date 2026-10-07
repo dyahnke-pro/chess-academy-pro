@@ -110,3 +110,10 @@ CHECK — the knight leaves with check, the pin breaks, the pinning bishop hangs
    arrows and some don't, plus 5 independent prose->arrow resolvers. Fix: each
    fact in the one chain CARRIES its moves and squares; arrows/highlights are
    drawn from the fact, never re-derived from the sentence.
+
+5. MISSING COMPUTERS (David: "no matter how small, because that detail might
+   and will become important at some point. even if it's only 1 game out of
+   1000"). List every chess fact a grandmaster coach would teach that no
+   computer produces today — however rare. Each with: what it detects, an
+   example position, how often it occurs, which F01 verb it serves. These are
+   NEW (B6): bring the list to David; do not build without his yes.
