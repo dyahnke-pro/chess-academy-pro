@@ -107,6 +107,7 @@ when a rule changes; never edit a rule here alone.
 - **S9** — OPENINGS (Watch / Learn / Practice / Play): Watch = the full explained line. Learn = the voice says only the move; the explanation is written below the board. Practice = silent, with a Hint button. Play = the coach plays exactly the taught line.  _[settled]_
 - **S10** — ARROWS AND HIGHLIGHTS: any move the coach mentions that doesn't happen on the board gets an arrow. Any square the coach mentions gets a highlight. A line it talks through is arrowed in full, not just its first move. All drawn by code from the same facts it speaks. No arrow or highlight without words.  _[CODE DISAGREES — to build]_
 - **S11** — KIDS has its own rules: no chess notation in anything a kid hears or reads, no adult coach personality, one gentle voice, praise only at milestones, no timers, and the model never chooses puzzles or moves.  _[settled]_
+- **S12** — LEARN calls out sacrifice patterns when the pieces are set up for one (the Greek gift, Bxf7+ ideas). If it's sound, the coach teaches it. If it isn't, the coach says so without being asked ("The bishop sac on h7 looks tempting, but it doesn't work here: their knight can come back to f6 and guard h7"), naming the condition that fails. Asking the student whether it's sound comes later.  _[CODE DISAGREES — to build]_
 
 ## 5. How the coach decides what to say
 
