@@ -96,3 +96,10 @@ CHECK — the knight leaves with check, the pin breaks, the pinning bishop hangs
    e. What great middlegame and endgame teaching looks like after move 15.
    f. A check that every spoken line does one of the F01 verbs (teaching vs description).
    g. Speed: thinking out loud must arrive in time (review prep ~7 s today).
+
+4. ARROWS MUST BE RIGHT (David: "good god can we get the fucking arrows right
+   too?"). Last walk: 7 of 64 plies arrowed, lines arrowed on the first move
+   only, arrows with no words, wrong arrows. One arrow door exists; the disease
+   is each lane deciding its own arrows. Under the one brain: every move,
+   piece or line SPOKEN gets its arrow from the same fact, in full (S10, V18).
+   Measured on every walk: named moves arrowed 100%, wordless arrows 0.
