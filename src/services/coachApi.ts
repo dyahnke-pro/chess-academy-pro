@@ -5671,7 +5671,7 @@ export async function getCoachChatResponse(
             const rfWhy = explainBestMoveGrounded(rf.fenBefore, rf.playedSan, rf.bestMoveUci, rfMover, null, null);
             if (rfBestSan && rfWhy) {
               const rfFacts = `The engine preferred ${rfBestSan} over ${rf.playedSan} here. ${rfWhy}`;
-              const voiced = await voice(rfFacts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true, mustPreserve: [rfBestSan] });
+              const voiced = await voice(rfFacts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'why-best-move', preferRaw: true, mustPreserve: [rfBestSan] });
               if (voiced) {
                 return `${voiced} [BOARD: arrow:${rf.bestMoveUci.slice(0, 2)}-${rf.bestMoveUci.slice(2, 4)}:green]`;
               }
@@ -5715,7 +5715,7 @@ export async function getCoachChatResponse(
             }
           }
           if (answer) {
-            const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true });
+            const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'why-best-move', preferRaw: true });
             if (voiced) {
               return answer.bestMoveFromTo
                 ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`

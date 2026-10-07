@@ -3,7 +3,9 @@ import { buildQuestionGrounding } from './questionIntents';
 import { routeChatIntent } from '../services/coachSessionRouter';
 import type { MasterGroundingOptions } from '../services/coachApi';
 // @ts-expect-error — .mjs matrix, no types
-import { QUESTION_MATRIX, allPhrasings, fillerVariants, STRUCTURAL_PROBES } from '../../scripts/audit-lib/coach-question-matrix.mjs';
+import { QUESTION_MATRIX, allPhrasings, fillerVariants, STRUCTURAL_PROBES, EXPECTED_INTENTS } from '../../scripts/audit-lib/coach-question-matrix.mjs';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 /**
  * THE COACH QUESTION-MATRIX AUDIT (David 2026-07-09: "list out all of the
@@ -147,4 +149,27 @@ describe('QUESTION MATRIX — PASS 4: filler robustness + hard structure', () =>
       }
     });
   }
+});
+
+// THE EXPECTED-LANE TABLE the prod audit grades against (answers swarm P0,
+// 2026-10-07). Two halves, so it can neither go missing nor go vacuous: every
+// Q&A row and probe has an entry, and every intent named is one coachApi
+// actually voices — a typo would fail every ask on prod and read as a routing
+// bug.
+describe('EXPECTED_INTENTS — the served-lane contract', () => {
+  const expected = EXPECTED_INTENTS as Record<string, string[]>;
+  it('every Q&A row and probe names the lane that must answer it', () => {
+    const ids = new Set<string>([
+      ...(QUESTION_MATRIX as Array<{ id: string; cat: string }>).filter((r) => r.cat !== 'action').map((r) => r.id),
+      ...(STRUCTURAL_PROBES as Array<{ id: string; cat: string }>).filter((p) => p.cat !== 'action').map((p) => p.id),
+    ]);
+    const missing = [...ids].filter((id) => !expected[id]?.length);
+    expect(missing, `no expected lane for: ${missing.join(', ')}`).toEqual([]);
+  });
+  it('every expected lane is an intent coachApi really voices', () => {
+    const src = readFileSync(resolve(__dirname, '../services/coachApi.ts'), 'utf8');
+    const voiced = new Set([...src.matchAll(/intent: '([a-z-]+)'/g)].map((m) => m[1]));
+    const unknown = [...new Set(Object.values(expected).flat())].filter((i) => !voiced.has(i));
+    expect(unknown, `not an intent coachApi voices: ${unknown.join(', ')}`).toEqual([]);
+  });
 });

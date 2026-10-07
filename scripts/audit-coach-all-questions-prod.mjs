@@ -24,7 +24,7 @@ import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } f
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { enableAuditCapture } from './audit-lib/enable-audit-capture.mjs';
-import { QUESTION_MATRIX, allPhrasings } from './audit-lib/coach-question-matrix.mjs';
+import { QUESTION_MATRIX, allPhrasings, STRUCTURAL_PROBES, EXPECTED_INTENTS } from './audit-lib/coach-question-matrix.mjs';
 import { loadFixtureIntoIDB } from './audit-lib/fixture-loader.mjs';
 import { seedProfileGames } from './audit-lib/seed-profile-games.mjs';
 import { seedWeaknessProfile } from './audit-lib/seed-weakness-profile.mjs';
@@ -57,7 +57,9 @@ const PROFILE_LANES = new Set([
 ]);
 const ACCEPT = {
   'position-assessment': /winning|better|equal|even|edge|ahead|balanced/i,
-  'best-move': /best move is|i'?d play/i,
+  // Names the move. "I'd play" used to pass here and is a voice-rule break
+  // (no first person) — the contract must never reward one (answers swarm P0).
+  'best-move': /best move is|the move is|strongest|\b(?:[KQRBN]x?[a-h][1-8]|[a-h]x[a-h][1-8]|[a-h][1-8]|O-O(?:-O)?)\b/,
   'why-best-move': /if .{1,30}(then|,)|engine plays|attacks|threat|controls/i,
   plan: /plan|idea|aim|target|push|develop|pressure/i,
   'tactics-live': /fork|pin|skewer|hanging|threat|mate|nothing is hanging|no immediate tactic|king.{0,40}(safe|exposed|castled)|pawn shield/i,
@@ -100,7 +102,8 @@ const ACCEPT = {
   'tactics-profile': /tactic|theme|fork|pin|puzzle|haven'?t|not enough/i,
   'phase-profile': /opening|middlegame|endgame|phase|haven'?t|not enough/i,
   'repertoire-gap': /gap|repertoire|unprepared|haven'?t|play or import/i,
-  accuracy: /accura|\d+\s?%|haven'?t|not enough/i,
+  // A percentage used to pass on its own; the numbers-leak rule bans it.
+  accuracy: /accura|haven'?t|not enough/i,
   consistency: /consisten|steadi|streak|form|haven'?t|not enough/i,
   converting: /convert|winning position|haven'?t|not enough/i,
   color: /white|black|colou?r|haven'?t|not enough/i,
@@ -151,7 +154,9 @@ const URL_PROOF = {
 // Section layout: reload between sections so a stage started by one ask
 // can't swallow the next section's turns.
 const SECTIONS = [
-  ['board', ['position-assessment', 'explain-position', 'best-move', 'why-best-move', 'plan', 'tactics-live', 'master-play', 'move-rating', 'endgame-tablebase', 'player-games']],
+  // retrospective-move, method, piece-plan and hint were in the matrix and
+  // never asked on prod (answers swarm P0, 2026-10-07).
+  ['board', ['position-assessment', 'explain-position', 'best-move', 'why-best-move', 'plan', 'tactics-live', 'master-play', 'move-rating', 'retrospective-move', 'method', 'piece-plan', 'hint', 'endgame-tablebase', 'player-games']],
   ['profile', ['weakness', 'progress', 'trend', 'stats', 'strengths', 'opening-profile', 'opening-accuracy', 'opening-record', 'opponent-record', 'review-due', 'mistakes', 'tactics-profile', 'phase-profile', 'repertoire-gap', 'accuracy', 'consistency', 'converting', 'color', 'records', 'record-vs-target', 'puzzle-stats', 'transfer-gap', 'skill-radar', 'time-trouble', 'last-game']],
   ['knowledge', ['concept', 'opening-existence', 'teaching-method', 'settings-query', 'app-help']],
   ['settings', ['set-voice', 'set-verbosity', 'set-hints', 'set-premium-voice', 'set-theme']],
@@ -387,7 +392,10 @@ for (const [section, ids] of SECTIONS) {
     if (!reply) { record(id, false, 'no reply rendered'); continue; }
     if (REJECT.test(reply)) { record(id, false, `stock/greeting/hijack: "${reply.slice(0, 110)}"`); continue; }
     const acc = ACCEPT[id];
-    let pass = acc ? acc.test(reply) : reply.length > 20;
+    // No contract is a failure of the AUDIT, never a pass: "any reply over 20
+    // characters" graded the stock line green.
+    if (!acc) { record(id, false, 'no ACCEPT contract for this lane — write one'); continue; }
+    let pass = acc.test(reply);
     // A profile/personal-game lane answered with the cold-data upload gate is
     // on-contract (correct behaviour with no games imported).
     // A profile lane answered with the upload gate is ON-CONTRACT but it is not
@@ -399,6 +407,81 @@ for (const [section, ids] of SECTIONS) {
     record(id, pass, `"${reply.slice(0, 130)}"`, pass ? '' : 'reply is off-contract for this lane');
    }
   }
+}
+
+// ── STRUCTURAL PROBES (answers swarm P0, 2026-10-07) ─────────────────────────
+// The harder shapes the routing unit gate holds (filler, terse, typos, new
+// question shapes, misroute guards) were never asked on prod — the unit gate
+// proves an intent FIRES, only the live app proves which lane ANSWERS. Q&A
+// probes only: action probes are post-state and the unit gate owns them.
+if (EXHAUSTIVE && !browserDead) {
+  console.log('\n── section: structural probes ──');
+  await gotoTeach();
+  try {
+    await page.locator('[data-square="e2"]').first().click({ timeout: 5000, force: true });
+    await page.waitForTimeout(500);
+    await page.locator('[data-square="e4"]').first().click({ timeout: 5000, force: true });
+    await page.waitForTimeout(6000);
+  } catch { /* lanes still answer */ }
+  for (const p of STRUCTURAL_PROBES.filter((x) => x.cat !== 'action')) {
+    if (browserDead) break;
+    CURRENT_ASK = p.q;
+    let asked;
+    try { asked = await ask(p.q, 30); }
+    catch (e) {
+      if (isClosedError(e)) { browserDead = true; break; }
+      asked = { reply: '', sent: false };
+    }
+    const id = `probe:${p.id}`;
+    if (!asked.sent) { record(id, false, 'chat input never usable'); continue; }
+    sentAsks += 1;
+    if (!asked.reply) { record(id, false, 'no reply rendered'); continue; }
+    if (REJECT.test(asked.reply)) { record(id, false, `stock/greeting/hijack: "${asked.reply.slice(0, 110)}"`); continue; }
+    // Wording is the lane check's job below; a probe's own pass is "it answered".
+    record(id, true, `"${asked.reply.slice(0, 130)}"`);
+  }
+}
+
+// ── THE SERVED LANE (answers swarm P0, 2026-10-07) ──────────────────────────
+// A reply's WORDS can satisfy a loose contract while it came from the wrong
+// lane or the safe-default fall-through — that is how misroutes stayed green.
+// coachService logs the lane that voiced each answer (`servedIntent` on the
+// coach-brain-answered row); every Q&A ask is held to EXPECTED_INTENTS.
+if (!browserDead) await page.waitForTimeout(8000).catch(() => {});
+{
+  const servedByAsk = new Map();
+  for (const e of appEvents) {
+    if (e?.kind !== 'coach-brain-answered' || typeof e.askText !== 'string') continue;
+    let d = null;
+    try { d = JSON.parse(e.details ?? '{}'); } catch { d = null; }
+    servedByAsk.set(e.askText.trim(), d?.servedIntent ?? null);
+  }
+  const graded = results.filter((r) => r.asked && EXPECTED_INTENTS[r.id.replace(/^probe:/, '')] && !URL_PROOF[r.id]);
+  const laneRows = [];
+  for (const r of graded) {
+    const want = EXPECTED_INTENTS[r.id.replace(/^probe:/, '')];
+    // Exact text first; a surface that wraps the student's words (context
+    // prefixes) still carries them inside its askText.
+    let key = r.asked.trim();
+    if (!servedByAsk.has(key)) key = [...servedByAsk.keys()].find((k) => k.includes(r.asked.trim())) ?? key;
+    CURRENT_ASK = r.asked;
+    if (!servedByAsk.has(key)) {
+      laneRows.push({ id: `lane:${r.id}`, pass: false, detail: 'answered outside the coach door — no coach-brain-answered row' });
+      continue;
+    }
+    const got = servedByAsk.get(key);
+    const pass = got !== null && want.includes(got);
+    const why = got === null ? 'no grounded lane voiced it (free text)'
+      : /^safe-default/.test(got) ? `fell through to ${got}`
+        : `served ${got}`;
+    laneRows.push({ id: `lane:${r.id}`, pass, detail: pass ? `served ${got}` : `${why}; expected ${want.join(' | ')}` });
+  }
+  console.log('\n── served lane ──');
+  for (const l of laneRows) record(l.id, l.pass, l.detail);
+  // Non-vacuous: zero graded rows means the instrument saw nothing, not that
+  // every lane was right.
+  record('SERVED LANE rows were graded', laneRows.length > 0 && servedByAsk.size > 0,
+    `${laneRows.length} ask(s) graded against ${servedByAsk.size} brain row(s)`);
 }
 
 if (browserDead) {

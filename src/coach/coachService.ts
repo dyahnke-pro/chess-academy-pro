@@ -2451,6 +2451,11 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
         tools: answer?.dispatchedToolNames ?? [],
         toolCallIds: answer?.toolCallIds ?? [],
         actionOffer: answer?.actionOffer ?? null,
+        // The lane that VOICED the answer. Computed every turn and, until
+        // 2026-10-07, dropped here — so the question audit could only grade
+        // the wording, and a fall-through that happened to say "winning"
+        // passed as the assessment lane.
+        servedIntent: answer?.servedIntent ?? null,
         errored: failure ? true : false,
       }),
     });

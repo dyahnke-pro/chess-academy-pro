@@ -683,3 +683,66 @@ export const ALL_PROBES = QUESTION_MATRIX.flatMap((r) =>
     (r[k] ?? []).map((q) => ({ q, pass: i + 1, lane: r.lane ?? r.kind, id: r.id, cat: r.cat, needsData: r.needsData ?? null })),
   ),
 );
+
+/**
+ * THE LANE EACH QUESTION MUST BE ANSWERED BY — the `servedIntent` coachApi
+ * records when a grounded lane voices the answer (answers swarm P0,
+ * 2026-10-07). The prod audit grades every Q&A ask against this, not only the
+ * wording: a reply's words can match a loose contract while it came from a
+ * fall-through (`safe-default-*`), which is how a misroute stayed green.
+ *
+ * Siblings are listed only where the matrix's own phrasings legitimately land
+ * on them (a mate question is the board-question lane; a record question about
+ * an opening is `record-vs-opening`). Actions are graded by post-state, so they
+ * carry no entry. `questionMatrix.audit.test.ts` fails if a Q&A row or probe id
+ * has no entry here.
+ */
+export const EXPECTED_INTENTS = {
+  'position-assessment': ['position-assessment', 'positional-feature'],
+  'explain-position': ['position-assessment', 'positional-feature'],
+  'best-move': ['best-move', 'candidate-move'],
+  'why-best-move': ['why-best-move'],
+  plan: ['plan'],
+  'tactics-live': ['tactics', 'attack-assessment', 'board-question'],
+  'master-play': ['master-play'],
+  'player-games': ['player-games'],
+  'endgame-tablebase': ['endgame', 'board-question', 'position-assessment'],
+  endgame: ['endgame'],
+  'move-rating': ['move-rating'],
+  'retrospective-move': ['move-rating'],
+  method: ['method'],
+  'piece-plan': ['board-question', 'piece-options'],
+  hint: ['hint'],
+  weakness: ['weakness-lifecycle', 'progress'],
+  progress: ['progress', 'training-request'],
+  trend: ['trend'],
+  stats: ['stats'],
+  strengths: ['strengths'],
+  'opening-profile': ['opening-profile'],
+  'opening-accuracy': ['opening-accuracy'],
+  'opening-traps': ['opening-traps'],
+  'opening-record': ['record-vs-opening', 'record-vs'],
+  'opponent-record': ['record-vs-opponent', 'record-vs'],
+  'record-vs-target': ['record-vs', 'record-vs-opening', 'record-vs-opponent'],
+  'review-due': ['review-due'],
+  mistakes: ['mistakes', 'misconceptions', 'errors-by-situation'],
+  'tactics-profile': ['tactics-profile'],
+  'phase-profile': ['phase-profile'],
+  phase: ['phase-profile'],
+  'repertoire-gap': ['repertoire-gap', 'counter-repertoire'],
+  accuracy: ['accuracy'],
+  consistency: ['consistency'],
+  converting: ['converting'],
+  color: ['color'],
+  records: ['records'],
+  'puzzle-stats': ['puzzle-stats'],
+  'transfer-gap': ['transfer-gap'],
+  'skill-radar': ['skill-radar'],
+  'time-trouble': ['time-trouble'],
+  'last-game': ['last-game'],
+  concept: ['concept'],
+  'opening-existence': ['opening-existence'],
+  'teaching-method': ['teaching-method'],
+  'settings-query': ['settings'],
+  'app-help': ['app-help'],
+};

@@ -26,12 +26,28 @@ const read = (p) => JSON.parse(readFileSync(ROOT + p, 'utf8'));
 const args = process.argv.slice(2);
 const ENGINE = args.includes('--engine');
 const DEPTH = Number(args[args.indexOf('--depth') + 1]) || 14;
+const MIN_POS_GAMES = 50;
 
 const rep = read('src/data/repertoire.json');
 const masterclass = Array.isArray(rep) ? rep : rep.openings;
 const pro = read('src/data/pro-repertoires.json').openings;
 const anti = read('src/data/anti-openings.json');
 const gambits = read('src/data/gambits.json');
+// G3's canon for anti-lines and gambits (masters rarely play them, so the
+// masters DB would flag every gambit): the line's first 6 plies must be a
+// prefix of some named line in the Lichess opening DB, or that line a prefix
+// of it (the repertoire-orientation gate's PGN_NOT_IN_DB rule).
+// Matched by POSITION, not move order: the Lichess file is a naming table with
+// one canonical order per line, so a mainstream line reached by transposition
+// ("d4 d5 Bf4 Nf6 e3 Bf5" vs the London) fails a move-by-move prefix test.
+const lichessFens = new Set();
+for (const e of read('src/data/openings-lichess.json')) {
+  const c = new Chess();
+  for (const m of e.pgn.split(/\s+/)) {
+    try { if (!c.move(m)) break; } catch { break; }
+    lichessFens.add(c.fen().split(' ').slice(0, 4).join(' '));
+  }
+}
 const plans = read('src/data/middlegame-plans.json');
 const masters = read('public/data/openings-masters-db.json').positions;
 
@@ -55,8 +71,13 @@ function mastersGap(moves, fens) {
   for (let i = 0; i < moves.length; i++) {
     const row = masters[fens[i]];
     if (!row) return { inDbThrough: i, leftDbAt: null }; // position not in the DB: data ends here
+    // A position masters rarely reached is not theory either way: judging a
+    // move there off a handful of games flags natural moves (Philidor 3.d3
+    // Nf6 sits on 7 games). The spine builder's own floor is "common".
+    const total = row.reduce((n, r) => n + (r.games ?? 0), 0);
+    if (total < MIN_POS_GAMES) return { inDbThrough: i, leftDbAt: null, thinAt: i };
     const san = moves[i].replace(/[+#]/g, '');
-    if (!row.some((r) => r.san.replace(/[+#]/g, '') === san)) return { inDbThrough: i, leftDbAt: i, move: moves[i] };
+    if (!row.some((r) => r.san.replace(/[+#]/g, '') === san)) return { inDbThrough: i, leftDbAt: i, move: moves[i], posGames: total };
   }
   return { inDbThrough: moves.length, leftDbAt: null };
 }
@@ -123,7 +144,14 @@ for (const l of lines) {
     if (l.kind === 'masterclass') {
       const g = mastersGap(l.moves, r.fens);
       res.inMastersDbThrough = g.inDbThrough;
-      if (g.leftDbAt !== null) res.problems.push(`NOT IN MASTERS DB at ply ${g.leftDbAt + 1}: ${g.move} (the position is in the DB, this move is not)`);
+      if (g.leftDbAt !== null) res.problems.push(`NOT IN MASTERS DB at ply ${g.leftDbAt + 1}: ${g.move} (masters reached this position in ${g.posGames} games and never played it)`);
+    } else if (l.kind === 'anti' || l.kind === 'gambit') {
+      // the position after 6 plies (or the line's end, if shorter) is a named
+      // Lichess position or one masters reached
+      const at = Math.min(6, l.moves.length);
+      const f = r.fens[at];
+      const anchored = lichessFens.has(f) || !!masters[f];
+      if (!anchored) res.problems.push(`NOT IN LICHESS DB: the position after ${at} plies is neither a named line nor a masters position`);
     } else if (l.kind === 'pro') {
       const player = l.opening.split('-')[1];
       const g = proGrounding(player, l.moves);
@@ -184,7 +212,7 @@ const count = (arr, re) => arr.reduce((n, x) => n + x.problems.filter((p) => re.
 const summary = {
   lines: results.length, linesWithProblems: bad.length,
   illegal: count(results, /^ILLEGAL/), short: count(results, /^SHORT/), cold: count(results, /^COLD/),
-  notInMastersDb: count(results, /^NOT IN MASTERS/), notInPlayerGames: count(results, /^NOT IN PLAYER/), noTree: count(results, /^NO TREE/), unsound: count(results, /^UNSOUND/),
+  notInMastersDb: count(results, /^NOT IN MASTERS/), notInPlayerGames: count(results, /^NOT IN PLAYER/), notInLichessDb: count(results, /^NOT IN LICHESS/), noTree: count(results, /^NO TREE/), unsound: count(results, /^UNSOUND/),
   plans: planResults.length, plansWithProblems: badPlans.length, plansExactlyOnLine: planResults.filter((p) => p.onLine).length, orphanPlans: count(planResults, /^ORPHAN/), illegalPlanLines: count(planResults, /illegal/),
   engine: ENGINE,
 };
