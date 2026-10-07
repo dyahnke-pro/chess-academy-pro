@@ -62,4 +62,12 @@ describe('the background sweep reads the stored verdict instead of grading again
     expect(h3?.classification).toBe('mistake');
     expect(h3?.bestMove).toBe('d3d4');
   });
+
+  it('U4 one read: the stored best move wins over this search\'s own pick', async () => {
+    // The harsh engine's own pick at this position is d3d4; Learn told the student c4.
+    await saveVerdict({ fenBefore: beforeH3, san: 'h3', label: 'mistake', cpLoss: 140, bestUci: 'c3c4', depth: 14, source: 'learn' });
+    const r = await analyzeGameOnWorker(GAME, harshEngine());
+    const h3 = r?.annotations.find((a) => a.san === 'h3');
+    expect(h3?.bestMove).toBe('c3c4');
+  });
 });

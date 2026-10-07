@@ -70,7 +70,7 @@ thesis, or tell a turning point before asking it, it has crossed the line — st
 - [x] U1 one turning point — `gameTurn`; thesis, closing and theme read it; second builder deleted.
 - [x] U2 one grade-and-cost table — `GRADE_WORD` + `costFitsGrade`; Learn and Review both.
 - [x] U3 one reason per move — the reveal reads the verdict's stored reason; a taught ply is not re-narrated.
-- [~] U4 one engine read — the one-verdict store (abc9a7048) covers the grade; the reason/fan reads still search separately. Next.
+- [x] U4 one engine read — the stored verdict (what the student was told) supplies the best move to every Review producer; a search that picked another drops its line rather than contradict it (`gameAnalysisService`, oneVerdict test "U4 one read").
 - [x] U5 one plan thread — one plan per side when kings are opposite; a plan holds two moves before it changes.
 - [x] U6 one claim, one seat — Learn's door collapses same-geometry facts (danger first, then stake).
 - [x] U7 question vs answer — the turn's question is asked after the instant decision and held when already answered.

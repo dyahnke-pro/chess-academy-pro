@@ -1749,9 +1749,12 @@ export async function analyzeGameOnWorker(
     const sv = storedVerdicts.get(verdictKey(fens[i], moves[i]));
     if (!sv) return;
     const next = applyVerdict(a.classification, sv, a.classification === 'book');
+    // ONE READ PER POSITION (unity U4): a fault names the stored best move —
+    // the one the student was told — even where this search found another.
+    if (isFaultClass(next) && sv.bestUci) a.bestMove = sv.bestUci;
     if (next === a.classification) return;
     a.classification = next;
-    if (isFaultClass(next)) { if (!a.bestMove && sv.bestUci) a.bestMove = sv.bestUci; } else a.bestMove = null;
+    if (!isFaultClass(next)) a.bestMove = null;
   });
 
   return {
@@ -2179,9 +2182,12 @@ async function analyzeGamePositions(
         const sv = storedVerdicts.get(verdictKey(fens[moveIdx], moves[moveIdx]));
         if (sv) {
           const next = applyVerdict(classification, sv, moveIsBook);
+          // ONE READ PER POSITION (unity U4): the stored best move wins, so the
+          // grade, its reason and its line all name the move the student heard
+          // (the line below is dropped when it does not start with it).
+          if (isFaultClass(next) && sv.bestUci) bestMove = sv.bestUci;
           if (next !== classification) {
             if (isFaultClass(next)) {
-              if (!bestMove && sv.bestUci) bestMove = sv.bestUci;
               if (sv.cpLoss !== null) costCp = sv.cpLoss;
             } else { bestMove = null; costCp = null; }
             classification = next;
