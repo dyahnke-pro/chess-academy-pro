@@ -77,3 +77,10 @@ Line: 1.e4 e5 2.Nf3 d6 3.Bc4 Bg4 4.Bxf7+ Kxf7 5.Ng5+ Ke8 6.Qxg4.
   diagonal is blocked (…Nf6 or …Be7 already played). Build the gem on the
   move orders where that's true, engine-verified, and teach the check:
   "before Bxf7+ and Ng5+, does their queen cover g5?"
+- Second order tried: 1.e4 e5 2.Nf3 d6 3.Bc4 Nf6 4.Nc3 Bg4 5.Bxf7+ — Black is
+  still about +3 after 5...Kxf7 with best defence. In both orders the sac is a
+  PRACTICAL trap: it wins only if Black picks the natural wrong king move.
+  QUESTION FOR DAVID (new, B6): does a practical trap — one that loses to the
+  right defence but punishes the natural reply — count as a trap, taught
+  honestly ("it works if they step the king back; if they take on g5 it fails")?
+  Under the bar as written (forced) it does not.
