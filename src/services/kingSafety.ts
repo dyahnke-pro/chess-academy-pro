@@ -69,6 +69,18 @@ export function shieldCount(fen: string, color: 'w' | 'b'): { kingSquare: Sq; pr
   return { kingSquare: kingSq, present, of: shelter.length };
 }
 
+/** Shelter pawns `color` lost on one move — the ONE count behind "prising
+ *  open their king's cover" and "loosening your own king's cover" (census
+ *  group 12/6, 2026-10-07: the briefing read raw pawns-in-front, so 1.e4 was
+ *  "loosening your own king's cover" with the king on e1). 0 when the king is
+ *  in the centre or moved — a king with no shelter has none to lose. */
+export function shieldLoss(fenBefore: string, fenAfter: string, color: 'w' | 'b'): number {
+  const b0 = shieldCount(fenBefore, color);
+  const a0 = shieldCount(fenAfter, color);
+  if (!b0 || !a0 || b0.kingSquare !== a0.kingSquare) return 0;
+  return Math.max(0, b0.present - a0.present);
+}
+
 /**
  * A king-exposure read, or null when the king is safe enough to say nothing.
  * Requires BOTH a broken shelter (≥2 of 3 shield pawns gone) AND ≥1 enemy

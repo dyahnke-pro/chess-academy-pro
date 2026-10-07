@@ -26,6 +26,7 @@
 import { Chess } from 'chess.js';
 import { isGenericAnnotationText } from './walkthroughNarration';
 import { buildReviewMoveBriefing } from './reviewMoveBriefing';
+import { prevCaptureOf, NO_PREV_CAPTURE, type PrevCaptureContext } from './pvPlayback';
 
 export interface WalkthroughNarrationInput {
   openingName: string;
@@ -103,6 +104,8 @@ interface PerMoveContext {
   fenBefore: string;
   san: string;
   mover: 'white' | 'black';
+  /** The previous ply as a capture, so a recapture is taking back. */
+  prev: PrevCaptureContext;
 }
 
 function buildPerMoveContext(startFen: string, sanMoves: string[]): PerMoveContext[] {
@@ -122,7 +125,8 @@ function buildPerMoveContext(startFen: string, sanMoves: string[]): PerMoveConte
     } catch {
       break;
     }
-    out.push({ index: i, fenBefore, san: moved.san, mover });
+    const last = out[out.length - 1];
+    out.push({ index: i, fenBefore, san: moved.san, mover, prev: last ? prevCaptureOf(last.fenBefore, last.san) : NO_PREV_CAPTURE });
   }
   return out;
 }
@@ -135,6 +139,7 @@ export function computeFill(ctx: PerMoveContext, studentSide?: 'white' | 'black'
     return buildReviewMoveBriefing({
       fenBefore: ctx.fenBefore,
       san: ctx.san,
+      prev: ctx.prev,
       moverIsStudent: studentSide ? ctx.mover === studentSide : undefined,
       register: 'teach',
     }) ?? '';

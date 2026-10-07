@@ -29,7 +29,10 @@ function moveTypeFloor(mv: Move): string {
   if (mv.san.includes('#')) return 'delivering checkmate';
   if (mv.san.includes('+')) return `a check on ${mv.to}, forcing the king to react`;
   if (mv.isCapture() || mv.isEnPassant()) return `capturing on ${mv.to}`;
-  if (mv.piece === 'n' || mv.piece === 'b') return `developing the ${mv.piece === 'n' ? 'knight' : 'bishop'} toward the centre`;
+  // Only a minor leaving its home rank DEVELOPS (census group 6: Nf1 was
+  // "developing the knight toward the centre").
+  if ((mv.piece === 'n' || mv.piece === 'b') && mv.from[1] === (mv.color === 'w' ? '1' : '8')) return `developing the ${mv.piece === 'n' ? 'knight' : 'bishop'} toward the centre`;
+  if (mv.piece === 'n' || mv.piece === 'b') return `bringing the ${mv.piece === 'n' ? 'knight' : 'bishop'} to ${mv.to}`;
   if (mv.piece === 'p') {
     const central = 'cdef'.includes(mv.to[0]) && (mv.to[1] === '4' || mv.to[1] === '5');
     return central ? `claiming space in the centre with the pawn to ${mv.to}` : `advancing the pawn to ${mv.to}`;

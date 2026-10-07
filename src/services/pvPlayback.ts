@@ -18,6 +18,7 @@
  */
 import { fileList } from '../utils/andList';
 import { Chess } from 'chess.js';
+import { shieldLoss } from './kingSafety';
 import type { Square } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
 import { detectTactics } from './tacticsDetector';
@@ -213,6 +214,19 @@ export interface PrevCaptureContext {
   square: string | null;
   /** The value of the piece the previous ply captured (0 if it wasn't a capture). */
   capturedValue: number;
+}
+
+export const NO_PREV_CAPTURE: PrevCaptureContext = { square: null, capturedValue: 0 };
+
+/** The previous ply as a capture context — so a RECAPTURE is read as taking
+ *  back, never as winning the piece. `fenBeforePrev` is the board before the
+ *  previous move. NO_PREV_CAPTURE for the first move or a non-capture. */
+export function prevCaptureOf(fenBeforePrev: string | null, prevSan: string | null): PrevCaptureContext {
+  if (!fenBeforePrev || !prevSan) return NO_PREV_CAPTURE;
+  try {
+    const m = new Chess(fenBeforePrev).move(prevSan);
+    return m.captured ? { square: m.to, capturedValue: PIECE_POINTS[m.captured] ?? 0 } : NO_PREV_CAPTURE;
+  } catch { return NO_PREV_CAPTURE; }
 }
 
 /** Minimal engine surface pvPlayback needs — injectable for tests. */
@@ -501,9 +515,7 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
   const outpostAfterNew = after
     ? after.outposts.find((o) => o.color === mover && !outpostsBefore.includes(o.square))
     : undefined;
-  const shieldLost = before && after
-    ? Math.max(0, before.kings.shieldPawns[defender] - after.kings.shieldPawns[defender])
-    : 0;
+  const shieldLost = shieldLoss(fenBefore, fenAfter, defender);
 
   return {
     captured: mv.captured ? PIECE_WORD[mv.captured] ?? null : null,

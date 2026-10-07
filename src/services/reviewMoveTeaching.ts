@@ -285,7 +285,7 @@ function luftPoint(chessAfter: Chess, mv: Move): string | null {
     && Math.abs(mv.to.charCodeAt(0) - king.square.charCodeAt(0)) <= 1
     && mv.to[1] === luftRank
   ) {
-    return 'Makes luft — a breathing hole for the king, so a back-rank check can never turn into mate.';
+    return 'Makes luft, a breathing hole for the king, so a back-rank check can never turn into mate.';
   }
   return null;
 }
@@ -541,7 +541,12 @@ export function buildReviewMoveTeaching(
   //     covered square.
   const eyedEnemy = eyes.enemies.find((e) => e.type !== 'k');
   if (eyedEnemy) return `The ${PIECE_NOUN[mv.piece]} eyes the ${PIECE_NOUN[eyedEnemy.type]} on ${eyedEnemy.sq}.`;
-  return `The ${PIECE_NOUN[mv.piece]} develops to ${mv.to}, joining the game.`;
+  // "Develops" is true only of a knight or bishop leaving its home rank; said
+  // of d3, Re1, Qb8 or a retreat (Nf1) it was a false claim (census group 6,
+  // 2026-10-07). Anything else has nothing true left to say — silence.
+  const homeRank = mv.color === 'w' ? '1' : '8';
+  if ((mv.piece === 'n' || mv.piece === 'b') && mv.from[1] === homeRank) return `The ${PIECE_NOUN[mv.piece]} develops to ${mv.to}, joining the game.`;
+  return null;
 }
 
 /** Anything on the board besides kings and pawns. */

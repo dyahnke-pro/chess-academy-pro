@@ -32,8 +32,10 @@ import { detectNewThreat } from './groundedAnswer';
 import { detectTactics } from './tacticsDetector';
 import { describeStructure } from './boardStructure';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
+import { shieldLoss } from './kingSafety';
+import { PIECE_NAMES } from '../types/tacticTypes';
 
-const PIECE_WORD: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+const PIECE_WORD = PIECE_NAMES;
 
 interface Aspect {
   /** Seat-agnostic clause fragment ("winning the knight", "threatening Nxc7 — a fork"). */
@@ -152,8 +154,11 @@ function deltaTailClause(swing: number): string | null {
 export interface ReviewMoveBriefingInput {
   fenBefore: string;
   san: string;
-  /** Recapture context (an even trade never reads as a windfall). */
-  prev?: PrevCaptureContext;
+  /** Recapture context (an even trade never reads as a windfall). REQUIRED:
+   *  three lesson builders left it out, so every baked lesson read the
+   *  recapture Nxe3 as "winning the bishop" (census group 6, 2026-10-07).
+   *  `prevCaptureOf` builds it; NO_PREV_CAPTURE for a first move. */
+  prev: PrevCaptureContext;
   /** true = student's move ("you"), false = opponent's ("they"), undefined = seat-free. */
   moverIsStudent?: boolean;
   /** Student-POV eval swing of THIS move in centipawns (evalAfter − evalBefore,
@@ -235,6 +240,18 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
     aspects.push({ text: `winning the ${PIECE_WORD[mv.captured] ?? 'piece'}`, weight: 90, keystone: true });
   }
 
+  // 2b. A capture that wins nothing is a TRADE or a TAKE-BACK, and says so —
+  //     with no words of its own it fell through to "the bishop rakes toward
+  //     c5, d4, f2" on Bxe3 (census group 6, 2026-10-07).
+  if (mv.captured && facts.materialGained <= 0 && facts.materialGained > -1) {
+    const took = PIECE_WORD[mv.captured] ?? 'piece';
+    const recapture = prev.square === mv.to && prev.capturedValue > 0;
+    const text = recapture ? `taking back the ${took}`
+      : mv.piece === mv.captured ? `trading ${took}s`
+        : `trading the ${PIECE_WORD[mv.piece] ?? 'piece'} for the ${took}`;
+    aspects.push({ text, weight: 60, keystone: true });
+  }
+
   // 3. A tactic LANDED (fork / pin / skewer) — when it isn't already the threat.
   if (facts.tacticLanded && !threat) {
     aspects.push({ text: `landing a ${tacticWord(facts.tacticLanded)}`, weight: 84, keystone: true });
@@ -266,7 +283,7 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
   if (ownWeak) aspects.push({ text: `but conceding ${ownWeak} of ${ownPoss} own`, weight: 47 });
 
   // 9. Loosening the mover's OWN king cover (a downside worth flagging).
-  const ownShieldLoss = before && after ? before.kings.shieldPawns[moverWB] - after.kings.shieldPawns[moverWB] : 0;
+  const ownShieldLoss = shieldLoss(fenBefore, fenAfter, moverWB);
   if (ownShieldLoss > 0) aspects.push({ text: `loosening ${ownPoss} own king's cover`, weight: 58 });
 
   // 10. The positional idea — the quiet fallback so a purely developing move
@@ -324,7 +341,11 @@ function cleanSan(san: string): string {
  *  keeping its article ("The knight bears down…" → "the knight bears down…"). */
 function toClause(sentence: string): string {
   const s = sentence.trim().replace(/\.$/, '').replace(/^(It|Now)\s+/i, '');
-  return s.charAt(0).toLowerCase() + s.slice(1);
+  const clause = s.charAt(0).toLowerCase() + s.slice(1);
+  // A VERB-LED sentence ("Stakes a claim in the center and opens lines") has
+  // no subject of its own; after "You play e4," it read "You play e4, stakes
+  // a claim…". It gets one: "it stakes a claim", joined with a dash below.
+  return /^(The|A|An|This|That)\b/.test(s) ? clause : `it ${clause}`;
 }
 
 /** Join the ranked aspect clauses into one review-register sentence, seat-stamped:
@@ -339,6 +360,6 @@ function joinReview(clauses: string[], moverIsStudent: boolean | undefined, san:
     const sep = c.startsWith('but ') ? ', ' : ', ';
     return acc + sep + c;
   }, '');
-  const lead = moverIsStudent === undefined ? subject : `${subject}${cleanSan(san)}, `;
+  const lead = moverIsStudent === undefined ? subject : `${subject}${cleanSan(san)}${body.startsWith('it ') ? ' — ' : ', '}`;
   return `${lead}${body}.`;
 }

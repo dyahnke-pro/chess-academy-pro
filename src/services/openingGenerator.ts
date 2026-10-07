@@ -82,6 +82,7 @@ import type {
   PunishLesson,
 } from '../types/walkthroughTree';
 import { proofCut } from './exchangeLedger';
+import { prevCaptureOf, NO_PREV_CAPTURE, type PrevCaptureContext } from './pvPlayback';
 
 /** Render a Lichess-DB entry list as a numbered, prompt-friendly
  *  block. Each line: "  {N}. [ECO] Name :: PGN". */
@@ -402,7 +403,12 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // 2026-09-24 (WO-TEACH-02): the refuted-alternative beat now states its real
 // share and source (never "most" on a 1% stray — cached trees could still say
 // so), a 10% floor, the line as proof, and rotated DNA stems. ONE bump.
-const WALKTHROUGH_GEN_REV = '2026-09-30-opening-identity';
+// 2026-10-07 (one-coach P2, census group 6): the computed ply beat now reads
+// the previous move (a recapture is "taking back", never "winning"), names an
+// even capture as a trade, stops calling 1.e4 a loosened king and a pawn or a
+// retreat "developing". ONE bump for the branch — batch any later beat change
+// into it before the deploy.
+const WALKTHROUGH_GEN_REV = '2026-10-07-one-coach-beats';
 
 export async function getCachedOpening(
   name: string,
@@ -1686,11 +1692,12 @@ export interface TeachEntryOverride {
  *  beat cannot be a board lie and is identical with the provider dead. The
  *  corpus note still LEADS the beat and the computed beat fills behind it
  *  (PASS 1); the phrasing pass is the one chokepoint, `voiceFacts`. */
-function computedPlyBeat(fenBefore: string, san: string, moverIsStudent: boolean): string {
+function computedPlyBeat(fenBefore: string, san: string, moverIsStudent: boolean, prev: PrevCaptureContext): string {
   try {
     return buildReviewMoveBriefing({
       fenBefore,
       san: stripSanAnnotations(san),
+      prev,
       moverIsStudent,
       register: 'teach',
     }) ?? '';
@@ -1914,7 +1921,8 @@ async function generateOpeningFromDbNarration(
   // (the student wants a quick playthrough, not a lecture).
   const startFenForBeats = new Chess().fen();
   const computedBeats: string[] = positions.map((p, i) => {
-    const beat = computedPlyBeat(i === 0 ? startFenForBeats : positions[i - 1].fen, p.san, p.movedBy === studentSide);
+    const prev = i === 0 ? NO_PREV_CAPTURE : prevCaptureOf(i === 1 ? startFenForBeats : positions[i - 2].fen, positions[i - 1].san);
+    const beat = computedPlyBeat(i === 0 ? startFenForBeats : positions[i - 1].fen, p.san, p.movedBy === studentSide, prev);
     return pace === 'tour' ? firstSentence(beat) : beat;
   });
   const computedShorts: Array<string | undefined> = positions.map((p, i) =>
@@ -1980,7 +1988,8 @@ async function generateOpeningFromDbNarration(
     // The spoken teaser NAMES the variation (the map the student is
     // learning) and then says what its first move does — computed from the
     // terminus board, never authored.
-    const branchBeat = branchSeq[0] ? computedPlyBeat(terminusFen, b.san, branchMovedBy === studentSide) : '';
+    const terminusPrev = prevCaptureOf(positions.length >= 2 ? positions[positions.length - 2].fen : new Chess().fen(), positions[positions.length - 1].san);
+    const branchBeat = branchSeq[0] ? computedPlyBeat(terminusFen, b.san, branchMovedBy === studentSide, terminusPrev) : '';
     const teaser = branchBeat
       ? `${b.label}. ${branchBeat}`
       : `${b.label} — ${b.count} sub-line${b.count === 1 ? '' : 's'} in the database.`;
@@ -2008,7 +2017,7 @@ async function generateOpeningFromDbNarration(
       const extBefore = branchSeq[j];
       const extAfter = branchSeq[j + 1];
       const extGenerated = extBefore && extAfter
-        ? computedPlyBeat(extBefore.fen, extSan, extMovedBy === studentSide)
+        ? computedPlyBeat(extBefore.fen, extSan, extMovedBy === studentSide, prevCaptureOf(j === 0 ? terminusFen : branchSeq[j - 1].fen, branchSans[j]))
         : '';
       // Same note-leads rule as the spine. The branch's arrows were ALREADY
       // grounded on this note (`branchNoteSources` below); until now the prose
@@ -2556,6 +2565,7 @@ function buildFallbackTreeFromDb(
     const idea = buildReviewMoveBriefing({
       fenBefore: fensBefore[i],
       san: stripSanAnnotations(san),
+      prev: i === 0 ? NO_PREV_CAPTURE : prevCaptureOf(fensBefore[i - 1], stripSanAnnotations(entry.moves[i - 1])),
       moverIsStudent: movedBy === studentSide,
       register: 'teach',
     }) ?? '';

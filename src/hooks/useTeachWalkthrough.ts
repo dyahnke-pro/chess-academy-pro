@@ -41,7 +41,9 @@ import { buildDrillWrongTeaching, buildDrillBetterLine, buildDrillThreatSpot, bu
 import { computeWatchGemAside } from '../services/gemCrushLines';
 import { playOutPunish, advantageAlreadyShown } from '../services/punishPlayout';
 import { computeThreatDelta, computeRouteDelta, type DeltaAside } from '../services/engineDeltaLines';
-import { computeMoveWhyDetail, squaresNamedIn } from '../services/moveWhy';
+import { squaresNamedIn } from '../services/moveWhy';
+import { buildReviewMoveBriefing } from '../services/reviewMoveBriefing';
+import { prevCaptureOf, NO_PREV_CAPTURE } from '../services/pvPlayback';
 import {
   isStartablePunishLesson,
   isValidConceptsQuestion,
@@ -1508,9 +1510,20 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       if (!idea && node.san) {
         const pathSans = path.filter((n) => n.san !== null).map((n) => n.san as string);
         const fenBefore = fenForPath(pathSans.slice(0, -1), treeRef.current?.startFen);
-        const detail = computeMoveWhyDetail(fenBefore, node.san);
-        idea = detail.text;
-        narrationSquares = detail.squares;
+        // ONE "what this move does" computer for the teach walkthrough — the
+        // briefing every generated lesson bakes (census group 6, 2026-10-07).
+        // A private one lived here and said "Be6 goes after the pawn on h3"
+        // of a defended pawn and "Nf1 comes into the game" of a retreat.
+        const prevSans = pathSans.slice(0, -1);
+        const prev = prevSans.length === 0 ? NO_PREV_CAPTURE
+          : prevCaptureOf(fenForPath(prevSans.slice(0, -1), treeRef.current?.startFen), prevSans[prevSans.length - 1]);
+        const mover = new Chess(fenBefore).turn() === 'w' ? 'white' : 'black';
+        idea = buildReviewMoveBriefing({
+          fenBefore, san: node.san, prev,
+          moverIsStudent: mover === (treeRef.current?.studentSide ?? 'white'),
+          register: 'teach',
+        }) ?? '';
+        narrationSquares = squaresNamedIn(idea);
       } else if (idea) {
         narrationSquares = squaresNamedIn(idea);
       }

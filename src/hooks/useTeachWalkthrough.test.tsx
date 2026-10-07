@@ -178,15 +178,19 @@ describe('useTeachWalkthrough', () => {
         ],
       },
     };
+    // A voice that actually took time to speak — an instant return on a full
+    // sentence trips speakPaced's reading-time hold (~19s here).
+    vi.mocked(voiceService.speakForced).mockImplementationOnce(() => new Promise((r) => setTimeout(r, 350)));
     const { result } = renderHook(() => useTeachWalkthrough());
     act(() => result.current.start(SILENT_TREE));
     await waitFor(() => expect(result.current.phase).toBe('leaf'), { timeout: 5000 });
     const spoken = (voiceService.speakForced as ReturnType<typeof vi.fn>).mock.calls
       .map((c) => String(c[0]))
       .join(' | ');
-    // The computed why names the real squares the e4-pawn now stakes out —
-    // NOT a generic template (David banned "eyeing key squares" filler).
-    expect(spoken).toMatch(/pawn to e4 stakes out d5 and f5/i);
+    // The ONE briefing every generated lesson bakes (census group 6) — seat-
+    // stamped to the student, never the private computer that called a
+    // defended pawn a target.
+    expect(spoken).toMatch(/You play e4 — it stakes a claim in the center/);
   }, 15000);
 
   it('a fork whose branch carries a verified gem offers "see the trap" (Phase 2/3)', async () => {

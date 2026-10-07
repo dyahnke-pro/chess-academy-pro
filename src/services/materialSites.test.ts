@@ -13,10 +13,12 @@ const fenAfter = (sans: string): string => {
   return c.fen();
 };
 
+import { NO_PREV_CAPTURE } from './pvPlayback';
+
 describe('material sites read the settled count', () => {
   it('review briefing: Bxf6 with …Bxf6 coming is not "you\'re up a piece"', () => {
     const text = buildReviewMoveBriefing({
-      fenBefore: fenAfter(QGD_TO_BG5), san: 'Bxf6', moverIsStudent: true,
+      fenBefore: fenAfter(QGD_TO_BG5), san: 'Bxf6', prev: NO_PREV_CAPTURE, moverIsStudent: true,
       studentColorWB: 'w', evalBeforeWhiteCp: 20, evalAfterWhiteCp: 170,
     }) ?? '';
     expect(text).not.toMatch(/up a piece/);
