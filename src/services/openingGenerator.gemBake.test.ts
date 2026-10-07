@@ -18,8 +18,10 @@ function bareNode(san: string): WalkthroughTreeNode {
   return { san, movedBy: 'white', idea: 'placeholder', children: [] };
 }
 
+// A Black opening whose gems are real traps (F04: wins a piece or mates).
+// The Caro-Kann used to be the fixture; none of its gems clears that bar.
 function firstSurfaceableGem() {
-  return getPunishGemsForOpening('caro-kann').filter(isSurfaceableGem)[0] ?? null;
+  return getPunishGemsForOpening('two-knights-defence').filter(isSurfaceableGem)[0] ?? null;
 }
 
 // Each case builds real played-out detours through chess.js; alone they take
@@ -30,7 +32,7 @@ vi.setConfig({ testTimeout: 30_000 });
 describe('buildGemDetour', () => {
   it('builds a legal played-out detour from a real gem, with narration + arrows', () => {
     const gem = firstSurfaceableGem();
-    expect(gem, 'expected a surfaceable Caro-Kann gem').not.toBeNull();
+    expect(gem, 'expected a surfaceable Two Knights gem').not.toBeNull();
     const detour = buildGemDetour(gem)!;
     expect(detour).toBeTruthy();
     expect(detour.gemId).toBeTruthy();
@@ -59,7 +61,7 @@ describe('gemsForPosition', () => {
   it('classifies a gem as a WEAPON for the punisher side, a WARNING for the other', () => {
     const gem = firstSurfaceableGem();
     const path = gem.lineMoves.split(/\s+/).filter(Boolean);
-    // Caro-Kann student punishes as Black → weapon; the same gem for a White
+    // Two Knights student punishes as Black → weapon; the same gem for a White
     // student is a trap to avoid → warning (David 2026-08-24 "add warnings too").
     const asBlack = gemsForPosition(path, 'black');
     expect(asBlack.length).toBeGreaterThan(0);
@@ -129,7 +131,7 @@ describe('bakeGemsIntoTree — the static masterclass path', () => {
       child = { san: spine[i], movedBy: i % 2 === 0 ? 'white' : 'black', idea: '', children: [{ node: child }] };
     }
     const tree = {
-      openingName: 'Caro-Kann Defense', eco: 'B10', intro: '', outro: '',
+      openingName: 'Two Knights Defense', eco: 'C55', intro: '', outro: '',
       root: { san: null, movedBy: null, idea: '', children: [{ node: child }] },
     } as WalkthroughTree;
 
@@ -149,7 +151,7 @@ describe('bakeGemsIntoTree — the static masterclass path', () => {
       child = { san: spine[i], movedBy: i % 2 === 0 ? 'white' : 'black', idea: '', children: [{ node: child }] };
     }
     const tree = {
-      openingName: 'Caro-Kann Defense', eco: 'B10', intro: '', outro: '',
+      openingName: 'Two Knights Defense', eco: 'C55', intro: '', outro: '',
       root: { san: null, movedBy: null, idea: '', children: [{ node: child }] },
     } as WalkthroughTree;
     expect(bakeGemsIntoTree(tree, 'black')).toBeGreaterThan(0);

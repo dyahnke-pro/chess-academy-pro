@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**931 lines · 13 exports · 3 importers · 1 tests · 0 audits**
+**932 lines · 13 exports · 3 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -65,7 +65,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.test.ts:274`
 - `src/services/reviewOpeningTheory.test.ts:307`
 - `src/services/reviewOpeningTheory.test.ts:339`
-- `src/services/reviewOpeningTheory.test.ts:366`
+- `src/services/reviewOpeningTheory.test.ts:368`
 
 ### `TheoryEngine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -88,7 +88,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.test.ts:280`
 - `src/services/reviewOpeningTheory.test.ts:317`
 - `src/services/reviewOpeningTheory.test.ts:340`
-- `src/services/reviewOpeningTheory.test.ts:367`
+- `src/services/reviewOpeningTheory.test.ts:369`
 
 ## Tests
 

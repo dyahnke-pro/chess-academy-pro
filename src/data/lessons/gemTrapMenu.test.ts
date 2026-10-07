@@ -20,7 +20,8 @@ const VIENNA = 'vienna-game';
 describe('the menu offers only what the app can actually play', () => {
   it('lists the Vienna traps', () => {
     const gems = teachableGems(VIENNA);
-    expect(gems.length).toBeGreaterThan(10);
+    // F04 (2026-10-07): only gems that win a piece or mate — 10 in the Vienna.
+    expect(gems.length).toBeGreaterThanOrEqual(10);
     expect(gems.every(isSurfaceableGem)).toBe(true);
   });
 

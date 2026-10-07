@@ -9,6 +9,7 @@
 // are NOT DOM-readable (react-chessboard canvas) — arrow correctness is the data
 // layer's job (punishGems/lessonIntegrity); here we verify highlights + narration
 // live. Run: AUDIT_SANDBOX=1 AUDIT_OPENING=<id> node scripts/audit-fullplay-prod.mjs
+import { isTrapGem } from './audit-lib/trap-bar.mjs';
 import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { readFile } from 'node:fs/promises';
@@ -315,7 +316,7 @@ async function highlightedSquares() {
   let weaponGemCount = 0;
   try {
     const gems = JSON.parse(await readFile('src/data/punish-gems.json', 'utf-8'));
-    weaponGemCount = gems.filter((g) => g.openingId === ONLY && (g.tier === 'confirmed' || g.tier === 'positional')).length;
+    weaponGemCount = gems.filter((g) => g.openingId === ONLY && isTrapGem(g)).length;
   } catch { /* none */ }
   if (weaponGemCount > 0) {
     rec('gems UNLOCKED by completing the progression', gemPlayable > 0, `${gemTiles} tiles, ${gemPlayable} playable (expected ${weaponGemCount})`);

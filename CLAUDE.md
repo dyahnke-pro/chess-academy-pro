@@ -4895,10 +4895,20 @@ playbook holds the rules you MUST follow, in particular:
      looked +1.4 at one ply) must collapse; a real crush holds. Require the
      final eval ≥ the bar AND a real jump from the pre-inaccuracy baseline
      (the move's fault, not the opening's).
-  4. **TIERS:** ≥ +1.0 = `confirmed` (crush — wins material / decisive);
-     +0.5..+1.0 = `positional` (clearly better, honest label, never "crush");
-     below +0.5 → dropped. ONLY confirmed + positional surface (`isWeaponGem`);
-     `practical`/unverified NEVER ship as a weapon.
+  4. **THE TRAP BAR (RULEBOOK F04, David 2026-10-07 — REPLACES the 2026-05-24
+     tiers, under which a +0.5 "positional" edge surfaced as a weapon).** A gem
+     surfaces only when the engine's eval at the quiet end of the forced
+     playout wins AT LEAST A PIECE (`engineCp >= TRAP_BAR_CP`, 300) or mates
+     (`isWeaponGem`). Measured: 54 of 344 mined gems and 15 of 45 gambit gems
+     cleared it; the rest were small edges, which belong in opening principles,
+     not in the weapon section. **The small edges are NOT deleted:** an
+     engine-verified slip worth ≥ +0.5 is a KNOWN MISTAKE (`isTeachableSlipGem`)
+     and keeps teaching on the PRINCIPLE surfaces — Review's refuted line, the
+     Watch aside, the live punish callout, the record — worded "a known
+     mistake … punishes it", never "trap" or "crush" (`GemCrush.trap`). The
+     TRAP surfaces (weapon section, trap menu, the opponent's slip on Easy,
+     trap-ahead warning, walkthrough trap detours, the traps lane) read
+     `isWeaponGem`. `practical`/unverified NEVER ship as either.
   5. **WALK EVERY VARIATION'S FULL LINE** node-by-node (not just the shared
      prefix — Marshall/Breyer/Berlin diverge late), with a shared scanned-FEN
      set so overlapping lines don't re-burn engine time.

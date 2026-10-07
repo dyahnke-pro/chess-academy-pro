@@ -188,6 +188,7 @@ import {
   gemInaccuracyFen,
   gemToPlayableLine,
   isSurfaceableGem,
+  gemWinLabel,
 } from '../../data/lessons/punishGems';
 import { CommonMistakesSection } from './CommonMistakesSection';
 import { OpeningZoneHeader } from './OpeningZoneHeader';
@@ -2285,16 +2286,8 @@ export function OpeningDetailPage(): JSX.Element {
                         <span className="text-[10px] font-semibold text-emerald-400/90">
                           {gem.freqPct}% of opponents · you score {gem.practicalScore}%
                         </span>
-                        <span
-                          className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
-                            gem.tier === 'confirmed'
-                              ? 'bg-emerald-500/20 text-emerald-300'
-                              : 'bg-sky-500/20 text-sky-300'
-                          }`}
-                        >
-                          {gem.engineCp !== null
-                            ? `${gem.tier === 'confirmed' ? 'Crush' : 'Edge'} ${gem.engineCp >= 0 ? '+' : ''}${(gem.engineCp / 100).toFixed(1)}`
-                            : gem.tier === 'confirmed' ? 'Crush' : 'Edge'}
+                        <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">
+                          {gemWinLabel(gem)}
                         </span>
                       </div>
                     </div>

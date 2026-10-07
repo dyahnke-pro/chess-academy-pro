@@ -8,6 +8,7 @@
 // makes; the page queues them into the Learn door, which ranks them.
 //
 // Pure: the engine reads are handed in by the page.
+import { shareAdverb } from '../utils/shareWords';
 import { andList } from '../utils/andList';
 import { Chess } from 'chess.js';
 import { moverFault } from './accuracyService';
@@ -508,6 +509,28 @@ function flipTurn(fen: string): string {
   return p.join(' ');
 }
 
+/** The student's move as a noun phrase for a warning. A capture names BOTH
+ *  pieces (walk 2026-09-30: "the knight taking on d4" right after THEIR knight
+ *  took on d4 read as their move), a trade says so, and when two of the same
+ *  kind can take there it says which one (clean-pass walk 2026-10-03, G3 ply 10:
+ *  "your pawn taking their bishop on c6" — both the b- and the d-pawn could). */
+export function trapMoveNoun(san: string, fen: string): string {
+  let moveNoun = sayMoveNoun(san, fen);
+  try {
+    const slip = new Chess(fen).move(san);
+    if (slip?.captured) {
+      const P: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+      const twins = new Chess(fen).moves({ verbose: true })
+        .filter((m) => m.to === slip.to && m.piece === slip.piece && m.from !== slip.from).length > 0;
+      const mover = !twins ? P[slip.piece] : slip.piece === 'p' ? `${slip.from[0]}-pawn` : `${P[slip.piece]} on ${slip.from}`;
+      moveNoun = slip.captured === slip.piece
+        ? (twins ? `your ${mover} trading on ${slip.to}` : `trading ${P[slip.piece]}s on ${slip.to}`)
+        : `your ${mover} taking their ${P[slip.captured]} on ${slip.to}`;
+    }
+  } catch { /* the plain noun stands */ }
+  return moveNoun;
+}
+
 /** A KNOWN TRAP AHEAD (practical lore): the student's natural-looking move
  *  here is a curated, engine-verified trap that club players fall into. Names
  *  the move to be careful with and the share that plays it; never the
@@ -528,24 +551,10 @@ export function trapAheadTeaching(fen: string, student: 'w' | 'b'): TeachingHint
   // the punishment lines"): the natural move in red, then their punishing
   // reply — the reason it is a trap, on the board.
   const arrows: ArrowClaim[] = [];
-  // NAME THE CAPTURE BY BOTH PIECES (walk 2026-09-30: "the knight taking on d4"
-  // right after THEIR knight took on d4 read as their move). A trade says so.
-  let moveNoun = sayMoveNoun(t.san, fen);
+  const moveNoun = trapMoveNoun(t.san, fen);
   try {
     const c = new Chess(fen);
     const slip = c.move(t.san);
-    if (slip?.captured) {
-      const P: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
-      // WHICH ONE, when two of the same kind can take there (clean-pass walk
-      // 2026-10-03, G3 ply 10: "your pawn taking their bishop on c6" — both the
-      // b- and the d-pawn could).
-      const twins = new Chess(fen).moves({ verbose: true })
-        .filter((m) => m.to === slip.to && m.piece === slip.piece && m.from !== slip.from).length > 0;
-      const mover = !twins ? P[slip.piece] : slip.piece === 'p' ? `${slip.from[0]}-pawn` : `${P[slip.piece]} on ${slip.from}`;
-      moveNoun = slip.captured === slip.piece
-        ? (twins ? `your ${mover} trading on ${slip.to}` : `trading ${P[slip.piece]}s on ${slip.to}`)
-        : `your ${mover} taking their ${P[slip.captured]} on ${slip.to}`;
-    }
     if (slip) {
       arrows.push({ from: slip.from, to: slip.to, role: 'missed', fen, source: 'learn.trapAhead' });
       // …then the WHOLE punishing line, every ply on the board it is played
@@ -560,7 +569,8 @@ export function trapAheadTeaching(fen: string, student: 'w' | 'b'): TeachingHint
   } catch { /* no arrows — the line still speaks */ }
   return {
     lane: 'trapAhead',
-    text: `Careful here: ${moveNoun} looks natural, and ${t.freqPct}% of club players play it — but it walks into a known trap.`,
+    // How often, in words — the share itself is never spoken (shareWords.ts).
+    text: `Careful here: ${moveNoun} looks natural, and club players ${shareAdverb(t.freqPct)} play it — but it walks into a known trap.`,
     squares: /^[a-h][1-8]$/.test(to) ? [to] : [], claims: [t.key],
     event: { name: 'coach_trap_ahead', props: { surface: 'coach-teach', freq: t.freqPct, state: learnt.state, spoken: learnt.speak } },
     arrows,

@@ -36,6 +36,7 @@
  * Run (sandbox): npm run dev, then
  *   AUDIT_SMOKE_URL=http://localhost:5173 node scripts/audit-punish-gems-loop.mjs
  */
+import { isTrapGem } from './audit-lib/trap-bar.mjs';
 import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
@@ -97,12 +98,12 @@ const REQUIRED_LEVELS = Array.from({ length: REQUIRED_PASSES }, (_, i) => i + 1)
 // Ruth ACTUALLY SPOKE in the running app, not just that /api/tts was hit.
 const LISTENER_URL = process.env.AUDIT_LISTENER_URL || '';
 
-// Data-driven: only WEAPON-tier gems (engine-verified ≥+0.5) surface, so the
+// Data-driven: only TRAPS surface (F04: engine ≥ +3.0 or mate, `isTrapGem`), so the
 // audit tests exactly the openings that actually have a weapon — not a
 // hardcoded list. If the engine bar leaves an opening gem-less, its card
 // self-hides and there's nothing to drive there.
 const GEMS = JSON.parse(await readFile('src/data/punish-gems.json', 'utf-8'));
-const WEAPON = new Set(['confirmed', 'positional']);
+// The trap bar is the app's own rule (F04, 2026-10-07): one shared copy for audits.
 
 // SURFACEABILITY IS TIER *AND* NARRATION — mirror `isSurfaceableGem`.
 //
@@ -128,7 +129,7 @@ const gemKey = (g) => `${g.openingId}:${g.lineMoves.replace(/\s+/g, '_')}:${g.in
 // that question directly cannot be broken by punctuation.
 const hasNarration = (g) => NARRATION_SRC.includes(gemKey(g));
 /** Exactly what the student can see — the only set a missing tile is a bug for. */
-const isSurfaceable = (g) => WEAPON.has(g.tier) && hasNarration(g);
+const isSurfaceable = (g) => isTrapGem(g) && hasNarration(g);
 
 /** THE UN-NARRATED GEMS ARE A FAILURE, NOT A FILTER (David 2026-08-16: "Why no
  *  narrations?? Need to add, the app should NEVER hide a gem!!").
@@ -139,7 +140,7 @@ const isSurfaceable = (g) => WEAPON.has(g.tier) && hasNarration(g);
  *  weapon the student should be learning never reaches them. So the backlog is
  *  reported in its own right, with the count and the worst openings named. */
 function narrationBacklog() {
-  const weapons = GEMS.filter((g) => WEAPON.has(g.tier));
+  const weapons = GEMS.filter((g) => isTrapGem(g));
   const missing = weapons.filter((g) => !hasNarration(g));
   const byOpening = {};
   for (const g of missing) byOpening[g.openingId] = (byOpening[g.openingId] ?? 0) + 1;
@@ -158,7 +159,7 @@ function narrationBacklog() {
 const ONLY = (process.env.AUDIT_OPENING || '').trim();
 const MANIFESTS = JSON.parse(await readFile('src/data/opening-manifests.json', 'utf-8'));
 let MASTERCLASS = Object.keys(MANIFESTS).filter((k) => !k.startsWith('_'));
-let GEM_OPENINGS = [...new Set(GEMS.filter((g) => WEAPON.has(g.tier)).map((g) => g.openingId))];
+let GEM_OPENINGS = [...new Set(GEMS.filter((g) => isTrapGem(g)).map((g) => g.openingId))];
 if (ONLY) {
   // Accepts a single id OR a comma-separated list (CI shards pass lists).
   const only = new Set(ONLY.split(',').map((s) => s.trim()).filter(Boolean));
@@ -749,7 +750,7 @@ async function continuityPreflight() {
   } catch { /* none */ }
   const gemId = (g) => `${g.openingId}:${g.lineMoves.replace(/\s+/g, '_')}:${g.inaccuracy}`;
 
-  for (const g of GEMS.filter((x) => WEAPON.has(x.tier))) {
+  for (const g of GEMS.filter((x) => isTrapGem(x))) {
     const tag = `${g.openingId} ${g.inaccuracy}→${g.punish}`;
     // 1. field continuity
     const rebuilt = [g.lineMoves, g.inaccuracy, ...(g.punishSeq ?? [])].join(' ').replace(/\s+/g, ' ').trim();

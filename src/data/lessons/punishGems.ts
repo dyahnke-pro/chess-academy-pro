@@ -55,14 +55,41 @@ function hasNarrationFor(id: string): boolean {
   return id in GAMBIT_GEM_NARRATION || hasGemNarration(id);
 }
 
-/** The tiers that earn a place in the weapon section: engine-verified REAL
- *  benefit (≥ +0.5). Practical (unverified) and weak (< +0.5) are not weapons
- *  — a 6%-better win-rate or a recapture is a scouting signal, not a crush.
- *  David 2026-05-24: "any add of real benefit — winning a piece or real
- *  strategic advantage; positional ok but ~+1.0 or greater." */
-export const WEAPON_TIERS: ReadonlySet<PunishGem['tier']> = new Set(['confirmed', 'positional']);
+/** THE TRAP BAR (RULEBOOK F04, David 2026-10-07): a natural move the opponent
+ *  really plays that loses to a FORCED sequence winning AT LEAST A PIECE, or
+ *  mate, proven by the engine. Anything less is not a trap — small edges
+ *  belong in opening principles. Measured on the engine's eval at the quiet
+ *  end of the best-play playout the miner stored; a mate is stored as
+ *  ±MATE_CP. This REPLACES the 2026-05-24 tiers, under which a +0.5
+ *  "positional" edge surfaced as a weapon: only 54 of 344 mined gems and 15 of
+ *  45 gambit gems were real traps. */
+export const TRAP_BAR_CP = 300;
+export const MATE_CP = 100000;
 export function isWeaponGem(gem: PunishGem): boolean {
-  return WEAPON_TIERS.has(gem.tier);
+  return gem.tier === 'confirmed' && gem.engineCp !== null && gem.engineCp >= TRAP_BAR_CP;
+}
+
+/** A KNOWN MISTAKE (F04, 2026-10-07): an engine-verified slip worth at least
+ *  half a pawn — the miner's confirmed + positional tiers. "Anything less is
+ *  not a trap; small edges belong in opening principles." So these keep their
+ *  place on the PRINCIPLE surfaces (Review's refuted line, the Watch aside, the
+ *  live punish callout, the record) and are never called a trap there unless
+ *  they also clear the trap bar (`isWeaponGem`). */
+export function isKnownSlipGem(gem: PunishGem): boolean {
+  return gem.tier === 'confirmed' || gem.tier === 'positional';
+}
+
+/** A known mistake with hand-authored narration — what the principle surfaces
+ *  read. The TRAP surfaces read `isSurfaceableGem`. */
+export function isTeachableSlipGem(gem: PunishGem): boolean {
+  return isKnownSlipGem(gem) && hasNarrationFor(gemId(gem));
+}
+
+/** What the gem wins, for its chip: a mate, or the engine's margin. */
+export function gemWinLabel(gem: PunishGem): string {
+  if (gem.engineCp === null) return 'Crush';
+  if (gem.engineCp >= MATE_CP / 10) return 'Mate';
+  return `Crush +${(gem.engineCp / 100).toFixed(1)}`;
 }
 
 /** A gem SURFACES only when it's both a real weapon AND has hand-authored

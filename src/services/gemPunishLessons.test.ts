@@ -9,8 +9,8 @@ import { Chess } from 'chess.js';
 import { gemToPunishLesson, gemPunishLessonsForOpening, gemPunishLessonsForOpeningName } from './gemPunishLessons';
 import { getAllPunishGems, isSurfaceableGem } from '../data/lessons/punishGems';
 
-// CONVERT ONCE, ASSERT MANY (2026-09-24). Three tests each converted all 388
-// surfaceable gems from scratch (~70s apiece after the SEE speed-up, 200s+
+// CONVERT ONCE, ASSERT MANY (2026-09-24). Three tests each converted all the
+// surfaceable gems (388 then; 69 since the F04 bar) from scratch (~70s apiece after the SEE speed-up, 200s+
 // before it, over the 120s budget under ship-check load). The conversion is
 // pure, so one pass feeds every assertion.
 type Converted = { gem: ReturnType<typeof getAllPunishGems>[number]; lesson: ReturnType<typeof gemToPunishLesson> };
@@ -61,7 +61,10 @@ describe('gem → coach punish lesson', () => {
         expect(chess.move(f.san), `${lesson.name}: illegal followup ${f.san}`).toBeTruthy();
       }
     }
-    expect(converted).toBeGreaterThan(300);
+    // F04 (2026-10-07): only gems that win a piece or mate surface — 69 of
+    // 389. The floor catches surfacing silently breaking (a narration lookup
+    // that stops matching would drop it to zero), not the old volume.
+    expect(converted).toBeGreaterThan(50);
     // The whole point of routing gems here: the line plays ON past the punish.
     expect(withPlayout).toBeGreaterThan(converted * 0.8);
     console.log(`converted ${converted} gems, ${withPlayout} carry a play-out, ${forced} dropped as forced`);
@@ -109,7 +112,9 @@ describe('gem → coach punish lesson', () => {
 describe('gemPunishLessonsForOpeningName — joins on the opening, not the spelling', () => {
   it('finds the same weapons either side of the Defence/Defense split', () => {
     for (const [british, american] of [
-      ['Caro-Kann Defence', 'Caro-Kann Defense'],
+      // The Caro-Kann left this list on 2026-10-07: none of its gems wins a
+      // piece (F04), so it has no weapons to join on either spelling.
+      ['Two Knights Defence', 'Two Knights Defense'],
       ['Scandinavian Defence', 'Scandinavian Defense'],
       ['French Defence', 'French Defense'],
     ]) {

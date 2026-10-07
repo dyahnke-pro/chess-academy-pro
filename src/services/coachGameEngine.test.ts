@@ -520,9 +520,11 @@ describe('slipsAllowed — the matrix, exactly', () => {
 // precedence in both, is what keeps the matrix and the budget from drifting
 // apart — and what stops the Play wiring from being a grep that never fires.
 describe('pickTaughtSlip — one lane, two surfaces', () => {
-  /** Stafford Gambit after 1.e4 e5 2.Nf3 Nf6 3.Nxe5 Nc6 — White to move, and a
-   *  curated gem (Nxf7, the "oh no, my queen" walk-in) sits exactly here. */
-  const GEM = 'r1bqkb1r/pppp1ppp/2n2n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 1 4';
+  /** Vienna after 1.e4 e5 2.Nc3 Nf6 3.Bc4 Nxe4 4.Qh5 — Black to move, and a
+   *  curated gem sits exactly here: 4…g6?? loses the rook to 5.Qxe5+. (The
+   *  Stafford board this used before wins less than a piece, so it is no
+   *  longer a trap under F04, 2026-10-07.) */
+  const GEM = 'rnbqkb1r/pppp1ppp/8/4p2Q/2B1n3/2N5/PPPP1PPP/R1B1K1NR b KQkq - 1 4';
   /** A fresh game, so the budget re-arms. */
   const NEW_GAME = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -542,7 +544,7 @@ describe('pickTaughtSlip — one lane, two surfaces', () => {
     // setting that should hand it over.
     const slip = await pickTaughtSlip(GEM, 1100, { studentElo: 1420, difficulty: 'easy' }, 'test');
     expect(slip, 'no slip offered on a board a gem is filed at').not.toBeNull();
-    expect(slip?.san).toBe('Nxf7');
+    expect(slip?.san).toBe('g6');
     expect(slip?.punishSan, 'the punish did not come with it').toBeTruthy();
     // UCI, because both call sites need a move they can actually play.
     expect(slip?.uci).toMatch(/^[a-h][1-8][a-h][1-8][qrbn]?$/);

@@ -1,4 +1,4 @@
-import { describe, it } from 'vitest';
+import { describe, it, vi } from 'vitest';
 import fs from 'node:fs';
 import { Chess } from 'chess.js';
 import { ALL_LESSONS } from '../../src/data/lessons/registry';
@@ -17,6 +17,10 @@ import bookPages from '../../src/data/opening-book-pages.json';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore shared mjs helper
 import { reachesMiddlegame } from '../../src/data/variationMiddlegameDepth.shared.mjs';
+
+// A report generator that replays the whole catalog: ~5s alone, which is the
+// vitest default, so it raced the clock under any load. A budget, not a fix.
+vi.setConfig({ testTimeout: 60_000 });
 
 interface Row { [k: string]: unknown }
 

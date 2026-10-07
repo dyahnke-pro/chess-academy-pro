@@ -26,6 +26,7 @@
  *   AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app \
  *   node scripts/audit-learn-teach-gems-prod.mjs
  */
+import { isTrapGem } from './audit-lib/trap-bar.mjs';
 import { chromium } from 'playwright';
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
@@ -58,8 +59,8 @@ async function main() {
 
   // The ground truth: every weapon gem for this opening, and every move in it.
   const GEMS = JSON.parse(await readFile('src/data/punish-gems.json', 'utf-8'));
-  const WEAPON = new Set(['confirmed', 'positional']);
-  const gems = GEMS.filter((g) => g.openingId === OPENING && WEAPON.has(g.tier));
+  // Traps only (F04) — the app's own bar, one shared copy for audits.
+  const gems = GEMS.filter((g) => g.openingId === OPENING && isTrapGem(g));
   const slips = new Set(gems.map((g) => g.inaccuracy));
   const punishes = new Set(gems.map((g) => g.punish));
   const everyGemMove = new Set(gems.flatMap((g) => g.playLine.trim().split(/\s+/)));

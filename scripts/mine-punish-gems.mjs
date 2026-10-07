@@ -260,7 +260,7 @@ async function mine(openingId, studentChar, walkLine, eng, scanned, extraPlies =
                 practicalScore: +(best.cand.s * 100).toFixed(0), mainMove: main.san,
                 punish: punishSan, punishSeq, playLine: playLine.join(' '),
                 engineCp, materialDelta: matDelta, tier,
-                why: `At your level opponents play ${best.cand.san} here in ${(best.cand.pct * 100).toFixed(0)}% of games. Punish with the best move ${punishSan} — the engine has ${sideWord} ${tier === 'confirmed' ? 'winning' : 'clearly better'} (${engineCp >= 0 ? '+' : ''}${(engineCp / 100).toFixed(1)}${matDelta >= 1 ? `, +${matDelta} material` : ''}).`,
+                why: `At your level opponents play ${best.cand.san} here in ${(best.cand.pct * 100).toFixed(0)}% of games. Punish with the best move ${punishSan} — ${Math.abs(engineCp) >= 10000 ? "it's checkmate" : `the engine has ${sideWord} ${tier === 'confirmed' ? 'winning' : 'clearly better'} (${engineCp >= 0 ? '+' : ''}${(engineCp / 100).toFixed(1)}${matDelta >= 1 ? `, +${matDelta} material` : ''})`}.`,
               });
             }
           }

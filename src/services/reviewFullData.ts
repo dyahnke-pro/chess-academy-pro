@@ -1001,7 +1001,9 @@ export function computeMoveFacets(
           // In words, never the share (David 2026-10-06: reason, not stats).
           const lead = pct !== null && pct >= MIN_ALTERNATIVE_SHARE
             ? `Players at your level ${shareAdverb(pct)} play ${crush.inaccuracy} here`
-            : `The trap here is ${crush.inaccuracy}`;
+            // A TRAP only when it clears the bar (F04); a small edge is a
+            // known mistake, taught the same way and never called a trap.
+            : crush.trap ? `The trap here is ${crush.inaccuracy}` : `${crush.inaccuracy} is a known mistake here`;
           const rf = `[refuted] ${lead} — it loses to ${crush.punish}, ${crush.payoff}.`;
           facets.push(rf);
           // SAID ONCE PER GAME by the alternative itself (review tape

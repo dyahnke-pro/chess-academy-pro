@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { Chess } from 'chess.js';
 import { getAllPunishGems, isSurfaceableGem } from '../data/lessons/punishGems';
 import { trapAheadAt, warmGemIndexes } from './gemCrushLines';
-import { trapAheadTeaching } from './learnBoardTeaching';
+import { trapAheadTeaching, trapMoveNoun } from './learnBoardTeaching';
 
 describe('trapAhead — a known trap one move ahead', () => {
   it('names the natural slip and its club share, never the refutation', async () => {
@@ -17,7 +17,9 @@ describe('trapAhead — a known trap one move ahead', () => {
     // Never for the other seat.
     expect(trapAheadTeaching(c.fen(), c.turn() === 'w' ? 'b' : 'w')).toBeNull();
     expect(hint?.lane).toBe('trapAhead');
-    expect(hint?.text).toMatch(/looks natural, and \d+% of club players play it — but it walks into a known trap/);
+    // The share in WORDS — never a percentage (shareWords.ts, reason not stats).
+    expect(hint?.text).toMatch(/looks natural, and club players (almost always|usually|often|sometimes) play it — but it walks into a known trap/);
+    expect(hint?.text).not.toMatch(/\d+%/);
     const punish = gem.punishSeq[0] ?? gem.punish;
     expect(hint?.text).not.toContain(punish);
     // The board shows the trap: the natural move, then their punishing reply.
@@ -31,15 +33,14 @@ describe('trapAhead — a known trap one move ahead', () => {
 });
 
 describe('trapAhead — a capture names both pieces', () => {
-  it('a knight trade on d4 says "trading knights", never a bare "the knight taking"', async () => {
-    // Four Knights Scotch: after 5.Nxd4 the Scotch gem (…Nxd4 Qxd4) is on the board.
+  it('a knight trade on d4 says "trading knights", never a bare "the knight taking"', () => {
+    // Four Knights Scotch after 5.Nxd4: Black's …Nxd4 is a knight trade. (The
+    // gem on this board wins less than a piece, so since F04 it no longer fires
+    // a trap warning; the naming is tested where it lives.)
     const c = new Chess();
     for (const san of 'e4 e5 Nc3 Nf6 Nf3 Nc6 d4 exd4 Nxd4'.split(' ')) c.move(san);
-    warmGemIndexes();
-    await vi.waitFor(() => { expect(trapAheadAt(c.fen())).not.toBeNull(); }, { timeout: 20_000 });
-    const hint = trapAheadTeaching(c.fen(), 'b');
-    expect(hint?.text).toMatch(/^Careful here: trading knights on d4 looks natural/);
-  }, 30_000);
+    expect(trapMoveNoun('Nxd4', c.fen())).toMatch(/^trading knights on d4/);
+  });
 });
 
 describe('arrows for what a line names', () => {

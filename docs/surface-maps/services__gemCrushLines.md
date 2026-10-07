@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**823 lines · 13 exports · 18 importers · 10 tests · 0 audits**
+**930 lines · 19 exports · 23 importers · 16 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,38 +14,42 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Openings/OpeningPlayMode.tsx`
+- `src/hooks/useDiscussionPractice.ts`
 - `src/hooks/useTeachWalkthrough.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/coachGameEngine.ts`
 - `src/services/coachSurfaceScorecard.report.test.ts`
 - `src/services/computedVoiceAudit.report.test.ts`
-- `src/services/forkNarration.ts`
+- `src/services/gemCrushLines.resolution.test.ts`
 - `src/services/gemCrushLines.slip.test.ts`
 - `src/services/gemCrushLines.test.ts`
 - `src/services/gemLaneProbe.report.test.ts`
 - `src/services/gemTransposition.test.ts`
 - `src/services/laneReachability.test.ts`
+- `src/services/learnBoardTeaching.ts`
 - `src/services/learnDeltaAudit.test.ts`
 - `src/services/openingGenerator.gemBake.test.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/reviewFullData.ts`
+- `src/services/reviewOpeningTheory.ts`
 - `src/services/reviewRefuted.test.ts`
+- `src/services/trapAhead.test.ts`
+- `src/services/trapAheadNamesWhichPawn.test.ts`
 
 ## Exports and every call site
 
 ### `GemCrush` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `teachableSlipAt` (function) — 6 call sites
-- `src/services/coachGameEngine.ts:455`
-- `src/services/coachGameEngine.ts:466`
-- `src/services/forkNarration.ts:134`
+### `teachableSlipAt` (function) — 5 call sites
+- `src/services/coachGameEngine.ts:458`
+- `src/services/coachGameEngine.ts:469`
 - `src/services/gemCrushLines.slip.test.ts:13`
 - `src/services/gemCrushLines.slip.test.ts:17`
 - `src/services/gemCrushLines.slip.test.ts:33`
 
 ### `computeGemCrush` (function) — 16 call sites
-- `src/services/coachFeatureService.ts:2539`
+- `src/services/coachFeatureService.ts:2960`
 - `src/services/gemCrushLines.test.ts:14`
 - `src/services/gemCrushLines.test.ts:16`
 - `src/services/gemCrushLines.test.ts:17`
@@ -59,7 +63,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/gemTransposition.test.ts:43`
 - `src/services/gemTransposition.test.ts:52`
 - `src/services/learnDeltaAudit.test.ts:56`
-- `src/services/reviewFullData.ts:701`
+- `src/services/reviewFullData.ts:990`
 - `src/services/reviewRefuted.test.ts:22`
 
 ### `GemAside` (interface) — 0 call sites
@@ -74,27 +78,56 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnDeltaAudit.test.ts:28`
 
 ### `buildGemDetour` (function) — 2 call sites
-- `src/services/openingGenerator.gemBake.test.ts:29`
-- `src/services/openingGenerator.gemBake.test.ts:75`
+- `src/services/openingGenerator.gemBake.test.ts:36`
+- `src/services/openingGenerator.gemBake.test.ts:82`
+
+### `warmGemIndexes` (function) — 7 call sites
+- `src/hooks/useDiscussionPractice.ts:362`
+- `src/services/liveStrength.test.ts:67`
+- `src/services/reviewOpeningTheory.test.ts:359`
+- `src/services/reviewOpeningTheory.ts:248`
+- `src/services/trapAhead.test.ts:14`
+- `src/services/trapAhead.test.ts:38`
+- `src/services/trapAheadNamesWhichPawn.test.ts:12`
+
+### `GemMoveSignal` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `trapAheadAt` (function) — 7 call sites
+- `src/services/learnBoardTeaching.ts:519`
+- `src/services/reviewOpeningTheory.test.ts:360`
+- `src/services/reviewOpeningTheory.ts:732`
+- `src/services/trapAhead.test.ts:15`
+- `src/services/trapAhead.test.ts:29`
+- `src/services/trapAhead.test.ts:39`
+- `src/services/trapAheadNamesWhichPawn.test.ts:13`
+
+### `gemMoveSignal` (function) — 6 call sites
+- `src/hooks/useDiscussionPractice.ts:374`
+- `src/services/liveStrength.test.ts:66`
+- `src/services/liveStrength.test.ts:68`
+- `src/services/liveStrength.test.ts:71`
+- `src/services/liveStrength.test.ts:73`
+- `src/services/liveStrength.test.ts:74`
 
 ### `gemsForPosition` (function) — 4 call sites
-- `src/services/openingGenerator.gemBake.test.ts:59`
-- `src/services/openingGenerator.gemBake.test.ts:62`
-- `src/services/openingGenerator.gemBake.test.ts:68`
-- `src/services/openingGenerator.ts:1756`
+- `src/services/openingGenerator.gemBake.test.ts:66`
+- `src/services/openingGenerator.gemBake.test.ts:69`
+- `src/services/openingGenerator.gemBake.test.ts:75`
+- `src/services/openingGenerator.ts:1761`
 
 ### `bakeGemsIntoTree` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:1027`
-- `src/components/Coach/CoachTeachPage.tsx:5241`
-- `src/services/openingGenerator.gemBake.test.ts:131`
-- `src/services/openingGenerator.gemBake.test.ts:150`
-- `src/services/openingGenerator.gemBake.test.ts:151`
+- `src/components/Coach/CoachTeachPage.tsx:1049`
+- `src/components/Coach/CoachTeachPage.tsx:5681`
+- `src/services/openingGenerator.gemBake.test.ts:138`
+- `src/services/openingGenerator.gemBake.test.ts:157`
+- `src/services/openingGenerator.gemBake.test.ts:158`
 
 ### `ReviewGemOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildReviewGemSay` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:2543`
+- `src/services/coachFeatureService.ts:2964`
 - `src/services/gemCrushLines.test.ts:66`
 - `src/services/gemCrushLines.test.ts:67`
 - `src/services/gemCrushLines.test.ts:68`
@@ -103,30 +136,46 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `LivePunishment` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `findLivePunishment` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7695`
-- `src/components/Coach/CoachTeachPage.tsx:9566`
-- `src/components/Openings/OpeningPlayMode.tsx:420`
+### `findLivePunishment` (function) — 11 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8487`
+- `src/components/Openings/OpeningPlayMode.tsx:435`
 - `src/services/coachSurfaceScorecard.report.test.ts:121`
-- `src/services/computedVoiceAudit.report.test.ts:356`
+- `src/services/computedVoiceAudit.report.test.ts:339`
+- `src/services/gemCrushLines.resolution.test.ts:11`
 - `src/services/gemLaneProbe.report.test.ts:36`
 - `src/services/gemTransposition.test.ts:45`
 - `src/services/gemTransposition.test.ts:53`
-- `src/services/laneReachability.test.ts:155`
+- `src/services/hintLaneCoverage.test.ts:86`
+- `src/services/laneReachability.test.ts:123`
 - `src/services/learnDeltaAudit.test.ts:88`
+
+### `GemResolution` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `gemResolution` (function) — 4 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9093`
+- `src/services/gemCrushLines.resolution.test.ts:23`
+- `src/services/gemCrushLines.resolution.test.ts:33`
+- `src/services/gemCrushLines.resolution.test.ts:40`
 
 ## Tests
 
 - `src/services/coachSurfaceScorecard.report.test.ts`
 - `src/services/computedVoiceAudit.report.test.ts`
+- `src/services/gemCrushLines.resolution.test.ts`
 - `src/services/gemCrushLines.slip.test.ts`
 - `src/services/gemCrushLines.test.ts`
 - `src/services/gemLaneProbe.report.test.ts`
 - `src/services/gemTransposition.test.ts`
+- `src/services/hintLaneCoverage.test.ts`
 - `src/services/laneReachability.test.ts`
 - `src/services/learnDeltaAudit.test.ts`
+- `src/services/liveStrength.test.ts`
 - `src/services/openingGenerator.gemBake.test.ts`
+- `src/services/reviewOpeningTheory.test.ts`
 - `src/services/reviewRefuted.test.ts`
+- `src/services/trapAhead.test.ts`
+- `src/services/trapAheadNamesWhichPawn.test.ts`
 
 ## Audits that reach it
 

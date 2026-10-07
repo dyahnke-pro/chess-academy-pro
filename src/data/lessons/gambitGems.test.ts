@@ -8,6 +8,8 @@ import { GAMBIT_GEM_NARRATION } from './gambitGemNarration';
 import {
   getPunishGemsForOpening,
   isSurfaceableGem,
+  isWeaponGem,
+  isKnownSlipGem,
   gemToPlayableLine,
   gemId,
   type PunishGem,
@@ -53,14 +55,15 @@ describe('gambit punish-gems (separate lane)', () => {
   // gem set, so the budget has to as well — the assertions are unchanged.
   it('each gambit opening surfaces exactly its OWN narrated weapons, and they build playable lines', () => {
     // Per-opening (not a single hardcoded KG count): for every opening, the
-    // surfaced set must equal the gems whose gemId has a narration entry.
+    // surfaced set must equal the gems whose gemId has a narration entry AND
+    // that clear the trap bar (F04, 2026-10-07: wins a piece or mates).
     const narratedIds = new Set(Object.keys(GAMBIT_GEM_NARRATION));
     const openingIds = [...new Set(GEMS.map((g) => g.openingId))];
     let surfacedTotal = 0;
     for (const openingId of openingIds) {
       const all = getPunishGemsForOpening(openingId);
       const surf = all.filter(isSurfaceableGem);
-      const narratedHere = all.filter((g) => narratedIds.has(gemId(g)));
+      const narratedHere = all.filter((g) => narratedIds.has(gemId(g)) && isWeaponGem(g));
       expect(
         surf.map(gemId).sort(),
         `surfaced gems for ${openingId} must equal its narrated gems`,
@@ -74,8 +77,14 @@ describe('gambit punish-gems (separate lane)', () => {
         expect(line!.learnCues?.length ?? 0).toBe(line!.moves.length);
       }
     }
-    // Every narration key maps to a surfaced gem (none keyed to a dropped /
-    // non-weapon gem).
-    expect(surfacedTotal).toBe(narratedIds.size);
+    // Every narration key maps to a gem that is still TAUGHT: a trap surfaces
+    // as a weapon, and a narrated small edge stays a known mistake on the
+    // principle surfaces (F04) — none is keyed to a dropped gem.
+    const byId = new Map(GEMS.map((g) => [gemId(g), g]));
+    for (const id of narratedIds) {
+      const g = byId.get(id);
+      expect(g && isKnownSlipGem(g), `${id} is narrated but not an engine-verified slip`).toBe(true);
+    }
+    expect(surfacedTotal).toBe([...narratedIds].filter((id) => { const g = byId.get(id); return !!g && isWeaponGem(g); }).length);
   }, 30000);
 });

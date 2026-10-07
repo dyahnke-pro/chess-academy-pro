@@ -8872,7 +8872,7 @@
     "engineCp": 100000,
     "materialDelta": 0,
     "tier": "confirmed",
-    "why": "At your level opponents play Nbd7 here in 3% of games. Punish with the best move Nd6# — the engine has White winning (+1000.0)."
+    "why": "At your level opponents play Nbd7 here in 3% of games. Punish with the best move Nd6# — it's checkmate."
   },
   {
     "openingId": "pro-aman-anti-caro",

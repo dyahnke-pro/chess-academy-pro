@@ -12,6 +12,7 @@
 // narration layer (reviewOpeningTheoryNarration) turns this into the spoken
 // lecture; the LLM only phrases these computed facts.
 
+import { shareAdverb } from '../utils/shareWords';
 import { andList } from '../utils/andList';
 import { Chess } from 'chess.js';
 import type { MasterPlayResult, MasterPlayMove, MasterPlayTopGame } from './masterPlayTypes';
@@ -742,7 +743,7 @@ export function buildTheoryLectureBeats(
       const w = lineWins(c.fen(), uci, slip.color === 'w' ? 'b' : 'w', undefined, { fenBefore: fen, san: t.san });
       line = w ? ` loses ${w.what}: ${andList(w.sans)}` : ` runs into ${t.punish[0]}`;
     } catch { return ''; }
-    return ` A trap to know here: the natural ${t.san}, which ${t.freqPct}% of club players choose,${line}.`;
+    return ` A trap to know here: the natural ${t.san}, which club players ${shareAdverb(t.freqPct)} choose,${line}.`;
   };
 
   // G2 — FAST-FORWARD the obvious, STOP at the distinctive. Danya rattles the

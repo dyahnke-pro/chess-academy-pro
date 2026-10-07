@@ -26,7 +26,9 @@ describe('the refuted alternative in review', () => {
     const n = await generateReviewNarration({ moves: moves([...SPINE, 'Nxe4', 'Nf6']), playerColor: 'white', openingName: null, result: '*', playerRating: 400, coachNarration: 'silent', uncapped: true });
     const seg = n.segments.find((s) => s.ply === 7);
     console.log('AVOIDED:', seg?.narration);
-    expect(seg?.narration ?? '').toMatch(/The trap here is f3 — it loses to exf3/);
+    // f3 wins Black a pawn, not a piece: a KNOWN MISTAKE, never "a trap" (F04).
+    expect(seg?.narration ?? '').toMatch(/f3 is a known mistake here — it loses to exf3/);
+    expect(seg?.narration ?? '').not.toMatch(/trap/i);
   });
 
   it('the opponent PLAYED the known slip: the coach names the punishment', async () => {

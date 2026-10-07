@@ -32,12 +32,13 @@ import { Chess } from 'chess.js';
 import {
   getPunishGemsForOpening,
   getAllPunishGems,
-  isSurfaceableGem,
   gemId,
   gemNarrationFor,
   gemToPlayableLine,
   gemInaccuracyFen,
   type PunishGem,
+  isTeachableSlipGem,
+  isWeaponGem,
 } from '../data/lessons/punishGems';
 import { narrateContinuationMove } from './continuationMoveNarration';
 import type {
@@ -68,6 +69,9 @@ export interface GemCrush {
   /** 'confirmed' = engine ≥ +1.0; 'positional' = +0.5..+1.0. NOT a material
    *  claim — see `payoff`. */
   tier: 'confirmed' | 'positional';
+  /** Clears the trap bar (F04: wins a piece or mates). Only then is it called a
+   *  trap or a crush; otherwise it is a known mistake that is punished. */
+  trap: boolean;
   /** FEN of the position the arrows are drawn on (after the gem's spine). */
   staticFen: string;
   /** BOARD-COMPUTED payoff clause (participial), never a tier proxy — the FACT
@@ -113,7 +117,9 @@ function positionIndex(): Map<string, PunishGem[]> {
   if (gemsByPosition) return gemsByPosition;
   const index = new Map<string, PunishGem[]>();
   for (const gem of getAllPunishGems()) {
-    if (!isSurfaceableGem(gem)) continue;
+    // Every KNOWN MISTAKE is indexed; each trap surface filters to the trap
+    // bar itself (F04 — small edges teach on the principle surfaces).
+    if (!isTeachableSlipGem(gem)) continue;
     const chess = new Chess();
     let ok = true;
     for (const san of gem.lineMoves.split(/\s+/).filter(Boolean)) {
@@ -184,9 +190,9 @@ export function teachableSlipAt(
   }
   const gems = positionIndex().get(positionKey(fen)) ?? [];
   for (const gem of gems) {
-    // Only the tiers that ship as weapons. A gem the student would never be
-    // shown is not one worth walking into.
-    if (gem.tier !== 'confirmed' && gem.tier !== 'positional') continue;
+    // Only TRAPS (F04: wins a piece or mates). The coach walks into a trap so
+    // the student can spring it; a small edge is not worth losing a move for.
+    if (!isWeaponGem(gem)) continue;
     // A slip nobody at this level plays teaches a trap the student will never
     // be sprung by. When the band is known, it decides.
     if (humanMoves && !humanMoves.has(gem.inaccuracy)) continue;
@@ -317,7 +323,7 @@ export function computeGemCrush(
   // Exact move order first (cheap, and the common case), then the POSITION —
   // the same board reached another way is the same teaching moment.
   const gem = pool
-    .filter(isSurfaceableGem)
+    .filter(isTeachableSlipGem)
     .find((g) => g.lineMoves.trim() === key)
     ?? gemsAtPosition(pathSans).find((g) => !openingId || g.openingId === openingId);
   if (!gem || (gem.tier !== 'confirmed' && gem.tier !== 'positional')) return null;
@@ -376,6 +382,7 @@ export function computeGemCrush(
     opponentSide: sideWord(opponent),
     studentSide: sideWord(punisher),
     tier: gem.tier,
+    trap: isWeaponGem(gem),
     staticFen,
     payoff,
     winsMaterial,
@@ -397,7 +404,9 @@ export function buildWatchGemSay(crush: GemCrush): string {
   const opp = cap(crush.opponentSide);
   const us = cap(crush.studentSide);
   // Payoff is READ OFF THE BOARD (crush.payoff), never a tier guess.
-  return `If ${opp} tries ${cleanSan(crush.inaccuracy)} here — natural-looking, but a mistake — ${us} crushes with ${cleanSan(crush.punish)}, ${crush.payoff}.`;
+  // "Crushes" only for a TRAP (F04); a small edge is punished, not crushed.
+  const verb = crush.trap ? 'crushes with' : 'punishes it with';
+  return `If ${opp} tries ${cleanSan(crush.inaccuracy)} here — natural-looking, but a mistake — ${us} ${verb} ${cleanSan(crush.punish)}, ${crush.payoff}.`;
 }
 
 export function computeWatchGemAside(
@@ -519,7 +528,7 @@ let warming = false;
 export function warmGemIndexes(): void {
   if (warming || (gemsByPosition && gemsAfterSlip)) return;
   warming = true;
-  const gems = getAllPunishGems().filter(isSurfaceableGem);
+  const gems = getAllPunishGems().filter(isTeachableSlipGem);
   const byPos = new Map<string, PunishGem[]>();
   const after = new Map<string, PunishGem[]>();
   let i = 0;
@@ -548,7 +557,8 @@ export type GemMoveSignal = 'walked-into' | 'punished' | 'missed-punish';
 
 /** A KNOWN TRAP ONE MOVE AHEAD — for the side to move (the student, on Learn):
  *  a curated gem whose slip is THEIR natural move from this exact board, engine-
- *  verified (weapon tiers only), with the club share that plays it. The punish
+ *  verified and clearing the trap bar (F04: a small edge is not a trap to warn
+ *  about), with the club share that plays it. The punish
  *  is withheld — the lesson is "this natural move is a known trap", not the
  *  refutation. Null until the chunked index has warmed, or when no gem is here. */
 export function trapAheadAt(fen: string): { san: string; freqPct: number; key: string; punish: string[]; confirmed: boolean } | null {
@@ -557,7 +567,7 @@ export function trapAheadAt(fen: string): { san: string; freqPct: number; key: s
   try { board = new Chess(fen); } catch { return null; }
   const legal = new Set(board.moves());
   const best = (gemsByPosition.get(positionKey(fen)) ?? [])
-    .filter((g) => (g.tier === 'confirmed' || g.tier === 'positional') && legal.has(g.inaccuracy))
+    .filter((g) => isWeaponGem(g) && legal.has(g.inaccuracy))
     .sort((a, b) => b.freqPct - a.freqPct)[0];
   return best ? { san: best.inaccuracy, freqPct: Math.round(best.freqPct), key: `trap-ahead:${best.openingId}:${best.inaccuracy}`, punish: best.punishSeq?.length ? best.punishSeq : [best.punish], confirmed: best.tier === 'confirmed' } : null;
 }
@@ -595,6 +605,8 @@ export function gemsForPosition(
 ): BakedGemLine[] {
   const out: BakedGemLine[] = [];
   for (const gem of gemsAtPosition(pathSans)) {
+    // The walkthrough's weapon / warning detours are TRAPS (F04).
+    if (!isWeaponGem(gem)) continue;
     let kind: 'weapon' | 'warning' = 'weapon';
     if (studentSide) {
       let punisher: 'white' | 'black';
@@ -685,7 +697,7 @@ export function buildReviewGemSay(crush: GemCrush, opts: ReviewGemOptions): stri
   if (opts.studentPlayedPunish) {
     return `${opp} played ${inSan} — a known mistake — and you punished it correctly with ${puSan}, ${payoff}. Well spotted.`;
   }
-  return `${opp} played ${inSan} here — a known mistake — and the crush was ${puSan}, ${payoff}.`;
+  return `${opp} played ${inSan} here — a known mistake — and ${crush.trap ? 'the crush' : 'the punishment'} was ${puSan}, ${payoff}.`;
 }
 
 // ─── LIVE punishment — the opponent JUST slipped, it's the student's move ────
@@ -743,7 +755,7 @@ export function findLivePunishment(
   // here the path INCLUDES their slip, so the gem's spine is everything before
   // it and the inaccuracy must be the move they actually just made.
   const gem = pool
-    .filter(isSurfaceableGem)
+    .filter(isTeachableSlipGem)
     .find((g) => `${g.lineMoves.trim()} ${g.inaccuracy}`.trim() === key)
     ?? gemsAtPosition(pathSans.slice(0, -1)).find(
       (g) => g.inaccuracy === pathSans[pathSans.length - 1]
@@ -780,10 +792,13 @@ export function findLivePunishment(
   // Their side names the trap and its club share, then asks for the punish
   // (withheld); the student's side is `trapAheadAt` — the warning before the
   // same kind of slip.
-  const share = Math.round(gem.freqPct);
+  // A TRAP only when it clears the bar (F04); a small edge is a known mistake.
+  // Never the club share as a number (reason, not stats — V-rules); the gem
+  // being mined at all is what makes it known.
   // "This move", never its square: the punish usually lands on it (…f3 exf3),
   // and a square named here is the answer given away.
-  const lore = share >= 1 ? `That's a known trap — ${share}% of club players play this move here. ` : '';
+  const trap = isWeaponGem(gem);
+  const lore = trap ? "That's a known trap at club level. " : "That's a known mistake at club level. ";
   const callout = `${lore}${CALLOUTS[gem.inaccuracy.length % CALLOUTS.length]}`;
 
   // SHOW THE LINE LANDING, not just its first move (David 2026-08-01: "make
@@ -862,8 +877,9 @@ export function findLivePunishment(
   const noteNamesPunish = authored.length > 0
     && new RegExp(`(^|[^A-Za-z0-9])${punishSan.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}([^A-Za-z0-9]|$)`).test(authored);
   const buildReveal = (): string => {
-    if (!authored) return `${us} crushes with ${punishSan}${tail}, ${payoff}.`;
-    if (!noteNamesPunish) return `${authored} ${us} crushes with ${punishSan}${tail}, ${payoff}.`;
+    const verb = trap ? 'crushes with' : 'punishes it with';
+    if (!authored) return `${us} ${verb} ${punishSan}${tail}, ${payoff}.`;
+    if (!noteNamesPunish) return `${authored} ${us} ${verb} ${punishSan}${tail}, ${payoff}.`;
     // The note said the move; continue its sentence rather than restart it.
     const line = spokenTail.length > 0 ? `The line runs ${spokenTail.join(', ')} — ${payoff}.` : `${cap(payoff)}.`;
     return `${authored} ${line}`;

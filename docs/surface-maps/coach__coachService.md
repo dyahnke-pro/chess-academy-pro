@@ -9,8 +9,8 @@
 ## Locked rules that govern this surface
 
 - **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3176) — names `coachService`
-- **The standard post-deploy ritual** (CLAUDE.md:6225) — names `coachService`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6244) — names `coachService`
+- **The standard post-deploy ritual** (CLAUDE.md:6235) — names `coachService`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6254) — names `coachService`
 
 ## Who calls in
 

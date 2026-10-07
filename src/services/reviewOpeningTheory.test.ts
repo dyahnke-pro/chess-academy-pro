@@ -352,21 +352,36 @@ describe('the departure judged — cost and the punishing line (Danya reviews, 2
 });
 
 describe('a known trap on the walked line is named with its punishment', () => {
-  it('Caro-Kann: after …dxe4 the natural f3 is the trap', async () => {
+  // The Caro-Kann's …dxe4 f3 was this fixture until 2026-10-07: it wins a pawn,
+  // not a piece, so under F04 it is a known mistake, never "a trap".
+  it('Vienna: after 4.Qh5 the natural …g6 is the trap', async () => {
     const { warmGemIndexes, trapAheadAt } = await import('./gemCrushLines');
-    const line = ['e4', 'c6', 'd4', 'd5', 'Nc3', 'dxe4', 'Nxe4'];
+    const line = ['e4', 'e5', 'Nc3', 'Nf6', 'Bc4', 'Nxe4', 'Qh5', 'Nd6'];
     const { fens, sans } = chain(line);
     warmGemIndexes();
-    for (let i = 0; i < 200 && !trapAheadAt(fens[6]); i++) await new Promise((r) => setTimeout(r, 25));
+    for (let i = 0; i < 200 && !trapAheadAt(fens[7]); i++) await new Promise((r) => setTimeout(r, 25));
     const lookup = async (fen: string): Promise<MasterPlayResult> => {
       const i = fens.indexOf(fen);
       if (i < 0 || i >= line.length) return res(fen, []);
-      return res(fen, [mv(line[i], 550), mv(i === 6 ? 'f3' : 'a3', 450)]);
+      return res(fen, [mv(line[i], 550), mv(i === 7 ? 'g6' : 'a3', 450)]);
     };
     const lec = await buildOpeningTheoryLecture(fens, sans, 'no-name', { lookup, studentColor: undefined });
     const beats = buildTheoryLectureBeats(lec!, [], 'white');
     const hit = beats.find((b) => /A trap to know here/.test(b.fact));
-    expect(hit?.fact).toMatch(/A trap to know here: the natural f3, which \d+% of club players choose, (loses|runs into)/);
+    // How often in WORDS, never a percentage (shareWords.ts).
+    expect(hit?.fact).toMatch(/A trap to know here: the natural g6, which club players (almost always|usually|often|sometimes) choose, (loses|runs into)/);
+    expect(hit?.fact.match(/A trap to know here:[^.]*\./)?.[0] ?? '').not.toMatch(/\d+%/);
     expect(beats.filter((b) => /A trap to know here/.test(b.fact))).toHaveLength(1);
+  });
+
+  it('a known mistake that wins less than a piece is never called a trap', async () => {
+    const { warmGemIndexes, trapAheadAt } = await import('./gemCrushLines');
+    const { fens } = chain(['e4', 'c6', 'd4', 'd5', 'Nc3', 'dxe4']);
+    warmGemIndexes();
+    // Wait for the index through a board that IS a trap, then ask the Caro one.
+    const { fens: vf } = chain(['e4', 'e5', 'Nc3', 'Nf6', 'Bc4', 'Nxe4', 'Qh5']);
+    for (let i = 0; i < 200 && !trapAheadAt(vf[7]); i++) await new Promise((r) => setTimeout(r, 25));
+    expect(trapAheadAt(vf[7]), 'index never warmed').not.toBeNull();
+    expect(trapAheadAt(fens[6])).toBeNull();
   });
 });

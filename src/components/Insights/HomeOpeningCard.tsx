@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Home, RefreshCw } from 'lucide-react';
 import { clearHomeOpening, getHomeOpeningRankings, getHomeOpenings, setHomeOpening, type HomeOpenings } from '../../services/homeOpeningService';
 import { HOME_OPENING_MIN_GAMES, type HomeOpeningRanking } from '../../services/homeOpening';
@@ -21,14 +21,26 @@ export function HomeOpeningCard({ refreshKey = '' }: { refreshKey?: string }): J
   const [open, setOpen] = useState<PlayerColor | null>(null);
   const [error, setError] = useState<boolean>(false);
 
+  // NO STATE AFTER UNMOUNT. The record read is async; a card that unmounted
+  // first (a tab switch, a test tearing its window down) must not be written
+  // to — the late setError crashed GameInsightsPage.test under load with
+  // "window is not defined". Reset on every mount so StrictMode's double
+  // mount still loads.
+  const alive = useRef(true);
+  useEffect(() => {
+    alive.current = true;
+    return () => { alive.current = false; };
+  }, []);
+
   const load = useCallback(async (): Promise<void> => {
     try {
       const [h, r] = await Promise.all([getHomeOpenings(), getHomeOpeningRankings()]);
+      if (!alive.current) return;
       setHome(h);
       setRankings(r);
       setError(false);
     } catch {
-      setError(true);
+      if (alive.current) setError(true);
     }
   }, []);
 

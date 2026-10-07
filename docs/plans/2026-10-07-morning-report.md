@@ -15,6 +15,8 @@ until David has read this). Rulebook: `RULEBOOK.md` + the checklist artifact.
 | 04:24 | Every-opening swarm launched (125 auditors) |
 | 04:28 | Every-variation script: all 864 lines + 578 plans checked |
 | 04:4x | First branch push failed: two heavy data tests timed out because my engine run was competing for CPU. Both pass alone (11/11). Engine run paused, push retried. |
+| 05:0x | Second push failed the context gate: I changed coach files without regenerating their surface maps. Regenerated, read, committed (d58defc8d). My miss: the 1-second map check now runs before every push. |
+| 05:22 | **Opening swarm paused.** Throughput is ~2–3 agents per swarm at ~15–20 min each; 125 auditors would take over a day and starve the main swarm, which everything else builds on. 3 openings done and cached; resumes from cache once the main swarm reaches its judge phase. The content swarm's 7 openings units cover the same ground at a coarser level meanwhile. |
 
 ## 2. Built and committed (branch)
 
@@ -49,6 +51,29 @@ See `2026-10-07-every-variation-findings.md`. 864 lines, 578 plans:
 7.f3, 0 master games, instead of the real 5.f3; it had been waved through the
 masters gate as "drift"). Both rebuilds batch with the opening swarm's
 findings. Engine soundness pass still to run.
+
+### The gem cut (F04, which you confirmed): traps vs known mistakes
+- **Traps** = a natural move that loses at least a piece or gets mated by force
+  (engine ≥ +3.0 at the quiet end of the line). **69 of 389 gems** (54 mined +
+  15 gambit) across 36 openings. Only these show as weapons, in the trap menu,
+  as the opponent's deliberate slip on Easy, as trap-ahead warnings, and as the
+  walkthrough's trap detours.
+- **The other 320 are NOT deleted.** An engine-verified slip worth half a pawn
+  or more stays a **known mistake**: Review still says "f3 is a known mistake
+  here — it loses to exf3, winning a pawn", the Watch aside and Learn's punish
+  callout still teach it — but none of them calls it a trap or a crush any more
+  ("punishes it with", not "crushes with"). That's F04's "small edges belong in
+  opening principles".
+- **Playing the Caro-Kann as Black, there are no real traps left** — none of
+  the 22 Caro gems Black punishes wins a piece. Playing AGAINST the Caro, 4 of
+  16 remain (the Advance and anti-Caro lines). The Vienna keeps 10, the Italian 4, the Scotch 3.
+- Fixed on the way, same "reason, not stats" rule: the trap warning ("…and 12%
+  of club players play it") and the review lecture's trap line now say how
+  often in words. The mate gem's text read "the engine has White winning
+  (+1000.0)"; it says "it's checkmate" now, and the miner's template is fixed.
+- Found, not yet fixed: **the Review theory lecture still speaks percentages
+  throughout** ("55% of master games", "White scores 55% here", "(45%)") — the
+  earlier numbers-leak fix missed this file. Next commit.
 
 ## 3. Swarm results
 

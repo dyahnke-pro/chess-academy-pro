@@ -39,12 +39,29 @@ move-by-move match. Each was corrected in the script, never by editing data.
 2. **Benko, "Modern 5.f3 System" — the line does not match its name.** It
    plays 5.bxa6 … 7.f3 (0 master games in 1,066) instead of the real 5.f3.
    Rebuild as the actual 5.f3 line from the masters DB and re-author.
+### Data spines for the two rebuilds (built 05:0x, `scripts/build-opening-spine.mjs`)
+
+- **Philidor Exchange** — `e4 e5 Nf3 d6 d4 exd4 Nxd4 Nf6 Nc3 Be7 Be2 O-O O-O`
+  then **Re8** (629/871) f4 (338/629) Bf8 (282/342) Bf3 (282/282) c5 (178/282)
+  Nb3 (104/178) Nc6 (106/108) Re1 (52/116) a5 (57/160, strong-online fallback).
+  Middlegame by move 11.
+- **Benko, the real 5.f3** — `d4 Nf6 c4 c5 d5 b5 cxb5 a6 f3 axb5 e4 Qa5+ Bd2 b4
+  Na3 d6 Nc4 Qd8 a3 e6 dxe6 Bxe6 axb4 Rxa1 Qxa1 d5 exd5`. Middlegame by move 14.
+  Its masters-coverage allowance (`benko-gambit::Modern 5.f3 System::13:f3`)
+  comes out with the rebuild.
+
+Cascade per the data-rebuild doctrine: repertoire `pgn`, the variation
+LessonScript beats (both registers, arrows board-verified, sources), any plan
+anchored to the old terminus, and the gates. Batched with the opening swarm's
+findings for the same files.
+
 ### Checked and cleared
 
 - **Anti-Hippo (4 lines)** — flagged because 1.e3 e5 2.d3 d5 3.b3 Bd6 is in
   neither static DB. The amateur explorer has it: 5,214 games at ply 6, and
   White's moves are its top replies (Bb2 3,624; Nd2; Bg2 83 of 105; Ne2 539).
-  Grounded in real games at the student's level, so kept. The script reads
+  Grounded in real games at the student's level, and it came from a
+  video-grounded build (commit 98a4a5901, "Anti-Hippo both sides"), so kept. The script reads
   only the static DBs; an amateur-explorer pass belongs in the engine run.
 
 ### Known backlog (already tracked, not new)
