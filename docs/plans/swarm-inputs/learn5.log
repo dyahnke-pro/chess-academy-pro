@@ -1,0 +1,93 @@
+[stream] pre-run pull: 0 events
+[listener] up at http://127.0.0.1:38361/audit-stream
+[audit-run-id] concept-gameplay-r15vtgs8
+[open] canonical: coach played e4
+[game] canonical: 49 plies in 99s — e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bg4 h3 Nc6 d5 O-O-O hxg4 e6 Bd2 exd5 Bb5 Nxg4 O-O Bc5 Qe2 Bxf2+ Rxf2 Nxf2 Kxf2 Qb6+ Kf1 Nd4 Nxd4 Qxd4 Be3 Qf6+ Bf2 Qd6 Bxa7 Qf4+ Kg1 Qd6 Be8 Rdxe8 Qe4 dxe4 Be3 Qc6 Bd4 Qc4 Bxg7
+✓ A. the ask STARTS A GAME on this surface (never a walkthrough / refusal / picker) — ask="Play the Scandinavian Defense, Lasker Variation with me" started=true plies=49 after 99s
+✓ B. narration listener captured spoken lines (instrument 3 alive) — 99 spoken
+✓ C. a SPOKEN line carries a computed concept INVARIANT (the concept was voiced mid-GAME) — tactic · lanes offered=[tactic] spoke=[tactic] lead=tactic held=[] — You have a pin: your queen on a5 pins their knight on c3 against their king on e1. Remember — a pin freezes the
+✓ D. every spoken board line is gate-clean (you/they; no raw enum leak) — 47 board lines
+[picker] typo: tapped "Scandinavian Defense: Lasker Variation" of 4 chips
+[open] typo: coach played e4
+[game] typo: 49 plies in 122s — e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bg4 h3 Nc6 hxg4 O-O-O Bd3 e6 g5 Nxd4 gxf6 gxf6 Nd2 Bc5 Kf1 Bd6 Nce4 Bc5 g3 Bd6 c3 Bc5 cxd4 Bxd4 Qe2 Bc3 bxc3 Qd5 Bc2 Qc6 Kg2 Qd5 Rb1 Qxa2 Nb3 Rd5 Ra1 Re5 Be3 Rd5 Rxa2
+✓ E. a misspelled play ask still starts a GAME (G7 off-canonical input) — ask="lets play the scandinavian lasker variaton" started=true plies=49 after 122s
+[piece-latency] 9030ms
+[piece] ask="couldn't they just move their queen?" walks=3 → C Where can their queen on e2 go and still guard c2? Just queen to d2 (Qd2), queen to d3 (Qd3) and queen to d1 (Qd1). So no — moving it doesn't help; rook takes on a2 (Rxa2) was the better move. Walk Qd2 Walk Qd3 Walk Qd1
+[piece-stage] piece=q seat=opponent resolved=opponent@e2 played=a1a2 options=3 narrowedBy=duty engine=held-live-engine ms=172 sinceAsk=342
+✓ H1. a "couldn't they just move X?" ask is answered by the COMPUTER (job → squares → refutation → verdict) — C Where can their queen on e2 go and still guard c2? Just queen to d2 (Qd2), queen to d3 (Qd3) and queen to d1 (Qd1). So no — moving it doesn't help; rook takes on a2 (Rxa2) was the better move. Walk 
+✓ H2. the answer carries a Walk button per calculated line — 3 walk button(s)
+✓ H3. Walk plays the line on the board and returns to the game — moved=true returned=true
+✓ F1. vacuity guard: ≥3 spoken lines across the run — 261
+✓ F2. the run stayed MUTED (zero /api/tts requests) — 0 tts requests
+✓ K. a carry-over question (when asked) is answerable and the game plays on — asked=1 cleared=1
+
+[tape] the full narration, in order:
+  (19w) Back at the board. Name any opening and I'll walk you through it, or tell me what to sharpen.
+  (41w) I don't have any of your games yet — upload and review your games and I'll find the patterns costing you points. Or ask me to teach or play a certain opening, like “teach me the Italian” or “play the Caro-Kann.”
+  (17w) You're Black — play the Scandinavian Defense: Lasker Variation and I'll talk you through it. I'll open.
+  (7w) Pawn to e 4 — your move.
+  (6w) This game is the Scandinavian Defense.
+  (17w) Drop everything — your queen on d5 is attacked and nothing's defending it. It's the Mieses-Kotroc Variation.
+  (44w) You have a pin: your queen on a5 pins their knight on c3 against their king on e1. Remember — a pin freezes the piece in front: it can't move without exposing the more valuable piece behind it, so it can be piled on.
+  (18w) You left the book with the knight to c6; the usual move there was the bishop to h5.
+  (78w) Not urgent yet, but see it coming — their pawn on d5 is a discovered attack in waiting — moving it unveils their queen on d1 against your rook on d8. Remember — a discovered attack unveils a second attacker by moving the piece in front, so two threats land at once. You have a pin: your rook on d8 pins their pawn on d5 against their queen on d1 — you saw this idea on move 4.
+  (17w) Prefer the e-pawn taking on d5 to the knight to e7 — the forcing move comes first.
+  (20w) Taking stock as the middlegame begins: you're in trouble — they're up a piece and they have the bishop pair.
+  (37w) Critical moment — only one move keeps you level. Slow down here. The capture on g4 isn't going anywhere — leave it hanging over them and make the useful move first; the threat is the stronger weapon.
+  (21w) bishop to c5 keeps you clearly on top, but d4 was cleaner — it would win a piece for a pawn.
+  (12w) Narrow here — two moves keep the win, and nothing else does.
+  (12w) Careful — your queen on d4 is attacked and nothing's defending it.
+  (11w) Careful — their bishop on g7 hits your rook on h8.
+  (19w) What can I help with? Learn a new opening, drill your weaknesses, or review a game — your call.
+  (46w) I've got your game mapped, and the pattern costing you the most right now is ignoring a threat. Want me to build you a lesson on it — teach the idea, then drill your own positions? Or just tell me what you'd like to work on.
+  (17w) You're Black — play the Scandinavian Defense: Lasker Variation and I'll talk you through it. I'll open.
+  (7w) Pawn to e 4 — your move.
+  (6w) This game is the Scandinavian Defense.
+  (17w) Drop everything — your queen on d5 is attacked and nothing's defending it. It's the Mieses-Kotroc Variation.
+  (9w) Which of your pieces could they win right now?
+  (6w) What do you do about it?
+  (10w) Your queen on d5 is attacked and nothing guards it.
+  (44w) You have a pin: your queen on a5 pins their knight on c3 against their king on e1. Remember — a pin freezes the piece in front: it can't move without exposing the more valuable piece behind it, so it can be piled on.
+  (18w) You left the book with the knight to c6; the usual move there was the bishop to h5.
+  (25w) Don't cash in on d4 yet — while the capture hangs over them they are tied up; improve, and take it when it suits you.
+  (22w) Your pawn has a move that works whatever they answer — the next-best choice leaves your pawn on h7 to be taken.
+  (30w) You could take on d4 right now, but the threat is stronger than carrying it out — the material will keep, so keep it hanging over them and improve first.
+  (42w) The middlegame starts here, so take stock: you're in trouble — they're up a piece and they have the bishop pair; what you have in return: your king is tucked away and theirs is still in the centre, and it isn't enough.
+  (43w) That pawn was defended: your knight takes on d4 and is taken on the spot — it cost you far more than a pawn. knight takes d4 was imprecise. knight to g4 was the move — it would swing pieces toward their king.
+  (20w) You are down material now — the job is to make it hard: keep pieces on and look for counterplay.
+  (69w) Their king to f1 gives up castling — the king has to find safety by hand now. Their king to f1 prepares queen to e1, to take the half-open e-file. The kings are on opposite wings, so split the board: your pawns go after their king on the kingside, theirs come at yours on the queenside. It is a race — a tempo matters more than a pawn here.
+  (22w) Your bishop has a move that works whatever they answer — the next-best choice leaves your pawn on f6 to be taken.
+  (23w) Their g3 costs them f3: no pawn of theirs can ever guard it again, and your knight on d4 can jump straight in.
+  (12w) Careful — your knight on d4 is attacked and nothing's defending it.
+  (25w) Their move opened your queen's line — the position just opened up, so hit the gas: forcing moves now, before they can close it again.
+  (40w) Your bishop on d4 pins their pawn on b2 to their rook on a1. A pinned piece cannot run — put more pressure on it. queen to b6 adds a second attacker on the pawn, and it can't step away.
+  (34w) That leaves the bishop on c3 undefended — b-pawn takes c3 wins it outright. bishop to c3 was imprecise. f5 was the move — the idea is to create a passed pawn on e6.
+  (54w) They play king to g2 first, so that rook to d1 can take the open d-file. Your queen on c6 pins their knight on e4 to their king on g2. Pile on the pinned piece: it is stuck, so attack it again. f5 adds a pawn on the knight, and it can't step away.
+  (13w) Their rook to b1 prepares queen to b5, to take the half-open b-file.
+  (25w) Their knight to b3 does two jobs: it stops your …queen takes c2, and it prepares rook to a1, to hit your queen on a2.
+  (62w) Watch out — your queen on a2 is attacked and has no safe square — it is trapped. Remember — a trapped piece has no safe square, so it can be won whoever is to move. You have a pin: your queen on a2 pins their bishop on c2 against their queen on e2 — you saw this idea on move 4.
+  (36w) Where can their queen on e2 go and still guard c2? Just queen to d2, queen to d3 and queen to d1. So no — moving it doesn't help; rook takes a2 was the better move.
+✓ V1. no line is said twice word for word within a game (repetition is laborious) — 45 lines over 3 game(s), 0 repeats
+✓ V3. no statistic is spoken — a reason, never a percentage, a point count or "N of M" — 0 line(s)
+✓ V2. words per student move REPORTED (his speed runs: ~35–50) — 1173 words over 25 student moves = 47/move; longest line 78w
+✓ LD1. the LEARN door EMITTED its turn decisions — 54 learn-turn rows
+✓ LD2. every spoken lane was offered, and the lead spoke — 0 malformed of 54
+✓ LD3. nothing FADED on a fresh device (grey teaches in full) — 0 of 54 rows faded or lack the field
+  [learn door] spoke by lane: {"opening":6,"positionFacts":12,"threat":7,"threatAnswer":4,"tactic":4,"coachMistake":1,"drawback":3,"mistake":4,"countMethod":1,"register":1,"phase":3,"character":2,"slipAnswer":1,"splitPosition":2,"behavior":1,"strongChoice":1,"moveIntent":1,"theirMoveCost":2,"theirIntent":4,"planArc":1}
+✓ LE1. LANE EVIDENCE rows are held-only and answer prompted — 4 rows (0 prompted), 0 malformed
+✓ G1. the deciding door EMITTED (a wire that does not fire is not a wire) — 49 coach-decision rows
+✓ G2. every silence names WHICH gate closed it — 14/49 silent — importance=0 need=0 unsupported=0 said-already=0 empty=14 proven=0 board=0
+✓ G-MA. the next move is named only where earned (not every ply) — 49 next-move rows — {"none":39,"deciding":3,"motif-record":7}
+✓ G3a. posture mix REPORTED (interrupt needs a warm engine cache — 0 is a measurement, not a pass; OUTLINE 11l) — postures=walk,interrupt — interrupt=2, walk=47
+✓ G2b. every door-closed row files its facts under the gate that closed it — 14 silent rows; 0 misfiled
+✓ G3b. no WALK row was closed by importance (the 46-ply-to-6 bug) — 0 walk rows closed on importance (must be 0 — importance RANKS a walk, it never gates it)
+✓ G4. the weighting is non-degenerate (it both spoke and stayed quiet) — spoke=35 silent=14 rows-with-quieted-facts=0 method-beats=0
+✓ G6. spoken moments TEACH (not just describe) — the Naroditsky bar, 70% — 35/35 spoken moments teach (100%)
+✓ G5a. the listener captured events at all (so a zero below is a measurement) — 1568 events captured off the sidecar
+✓ G5b. tactics context was never STALE (built for a different board than the one narrated) — 0 of 1568 captured events — the count, read off the listener
+✓ RW. LEARN REWARD only skill earns a chime (no fault, book move or recapture rewarded) — 14 graded moves, 1 rewarded (saved)
+✓ F3. no uncaught page errors
+[stream] post-run pull: 0 events this run (opt-in stream — empty is expected)
+
+30/30 green — report at audit-reports/concept-gameplay-2026-10-07T00-03-25-206Z/report.json
+EXIT 0
