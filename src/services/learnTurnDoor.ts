@@ -38,6 +38,7 @@ export type LearnLane =
   // ── the instant wave, spoken with the coach's reply ──
   | 'gem'
   | 'tactic'
+  | 'prophylaxis'
   | 'threat'
   | 'commentary'
   | 'behavior'
@@ -132,7 +133,7 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   positionFacts: 'point', commentary: 'point', positional: 'point', kingSafety: 'point', splitPosition: 'point',
   behavior: 'point',
   phase: 'verdict', character: 'verdict',
-  threat: 'now', threatAnswer: 'now', gem: 'now', trapAhead: 'now', priorityFirst: 'now', countMethod: 'now',
+  threat: 'now', threatAnswer: 'now', prophylaxis: 'now', gem: 'now', trapAhead: 'now', priorityFirst: 'now', countMethod: 'now',
   checkMethod: 'now', stalemate: 'now', blunderCheck: 'now', autopilot: 'now', keepPressing: 'now', pawnEnding: 'now',
 };
 
@@ -163,6 +164,8 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   gap: { kind: 'computed', why: 'what the opponent’s move left undone', lead: 60 },
   positionFacts: { kind: 'computed', why: 'position facts, already through coachDecider', lead: 50 },
   priorityFirst: { kind: 'computed', why: 'the priority before the move', lead: 68 },
+  // PROPHYLAXIS (census rank 2): the quiet move that stops their pin or kick before it lands.
+  prophylaxis: { kind: 'computed', why: 'the quiet move that stops their next pin or kick before it lands', lead: 66 },
   rejectedTempting: { kind: 'computed', why: 'the tempting move and its refutation', lead: 66 },
   // Behind the walkability check (2026-09-29): walk 2 heard 3 false lines in 4
   // — routes read off one engine line the CURRENT board cannot walk. Learn

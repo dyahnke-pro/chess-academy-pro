@@ -306,6 +306,9 @@ import { walkableLine } from '../../services/moveInsight';
 import { obligationLifted, obligationLiftedLine } from '../../services/obligationLifted';
 import { findQueenGrabTraps, queenGrabTrapLine, queenGrabTrapProof } from '../../services/queenGrabTrap';
 import { provenThreatLine } from '../../services/threatProof';
+import { findProphylaxis, prophylaxisLine, prophylaxisProof } from '../../services/prophylaxis';
+import { findTiedDefenders, newTiedDefender, tiedDefenderLine, tiedDefenderProof } from '../../services/tiedDefender';
+import { findEnablingMove, enablingMoveLine, enablingMoveProof } from '../../services/enablingMove';
 import { newPlanThread, planThreadTurn } from '../../services/planThread';
 import { splitThink, stripThink, THINK_MARK, THINK_PAUSE_MS } from '../../utils/thinkPause';
 import { withTimeout } from '../../coach/withTimeout';
@@ -9881,6 +9884,29 @@ export function CoachTeachPage(): JSX.Element {
                     if (registerNow && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), registerNow, 'register', undefined, undefined, undefined, undefined, pendingRegisterLines);
                     const gapEchoed = gapEchoedByVerdict(gapPending?.san ?? null, pf.clauses, gapPending?.square ?? null);
                     if (gapPending && moveAdviceHere?.speak && !gapEchoed) queueSpokenHint(probe.fen(), gapPending.text, 'gap', [gapPending.square], [`gap:${gapPending.square}:${probe.history().length}`]);
+                    // PROPHYLAXIS — the quiet move that stops their next pin or kick,
+                    // named only where a move is earned and the engine agrees it is
+                    // one of the best (its own top lines), never on a held move.
+                    if (moveAdviceHere?.speak && !held && studentBest?.topLines) {
+                      const ph = findProphylaxis(probe.fen());
+                      const pUci = ph ? `${ph.prevention.from}${ph.prevention.to}` : null;
+                      if (ph && pUci && studentBest.topLines.some((l) => l.moves[0] === pUci)) {
+                        const text = prophylaxisLine(ph);
+                        noteProof(text, prophylaxisProof(ph));
+                        queueSpokenHint(probe.fen(), text, 'prophylaxis', ph.squares, [`prophylaxis:${ph.intent.to}`], undefined,
+                          [{ from: ph.prevention.from, to: ph.prevention.to, role: 'play', vouchedBy: 'engine', source: 'learn.prophylaxis' }]);
+                      }
+                      // MOVE ORDER (enablingMove): the engine's own line plays A first
+                      // because A clears the road its next piece move needs.
+                      const pv = studentBest.topLines[0]?.moves ?? [];
+                      const order = findEnablingMove(probe.fen(), pv);
+                      if (order) {
+                        const text = enablingMoveLine(order);
+                        noteProof(text, enablingMoveProof(order));
+                        queueSpokenHint(probe.fen(), text, 'moveOrder', [order.opened, order.then.from, order.then.to], [`order:${order.first.san}>${order.then.san}`], undefined,
+                          [{ from: order.first.from, to: order.first.to, role: 'play', vouchedBy: 'engine', source: 'learn.moveOrder' }]);
+                      }
+                    }
                     standingRef.current.rememberAll(pf.remember);
                     if (pf.principleSpoken) for (const k of pf.principleSpoken.split('|')) learnMemRef.current.principleTaught.add(k);
                     // The student is to move at `probe`; their coming move is ply history+1.
@@ -10598,6 +10624,16 @@ export function CoachTeachPage(): JSX.Element {
                     {
                       const pay = payoffFor(learnMemRef.current, ((): { piece: string; to: string; captured?: string; san: string } | null => { try { return new Chess(fenBefore).move(move.san); } catch { return null; } })(), move.history.length);
                       if (pay) queueSpokenHint(fenAfterReply, pay.say, 'movePoint', [pay.square], [`payoff:${pay.key}`], move.fen);
+                    }
+                    // THE TIE THE MOVE CREATED (tiedDefender): their guard now cannot
+                    // leave — said only while it still holds after their reply.
+                    {
+                      const tie = newTiedDefender(fenBefore, move.fen, (playerColor === 'white' ? 'w' : 'b'));
+                      if (tie && findTiedDefenders(fenAfterReply, (playerColor === 'white' ? 'w' : 'b')).some((t) => t.defender.square === tie.defender.square && t.target.square === tie.target.square)) {
+                        const text = tiedDefenderLine(tie);
+                        noteProof(text, tiedDefenderProof(tie));
+                        queueSpokenHint(fenAfterReply, text, 'movePoint', [tie.defender.square, tie.target.square], [`tied:${tie.defender.square}>${tie.target.square}`]);
+                      }
                     }
                     for (const h of studentMoveTeaching({
                       fenBefore, san: move.san, history: move.history, cpLoss, bothCp,

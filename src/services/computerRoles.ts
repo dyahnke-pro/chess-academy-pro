@@ -81,6 +81,7 @@ export const COMPUTER_ROLES: Record<LearnLane, ComputerRole> = {
   splitPosition: { computer: 'splitPosition', tag: null, held: DESC('opposite-side castling'), broken: DESC('opposite-side castling'), askable: { state: 'wired', via: 'dangerAnswerLines' }, proof: OWED_PROOF },
   countMethod: { computer: 'countMethod', tag: 'calculation-depth', held: PRE, broken: SLIP, askable: { state: 'wired', via: 'dangerAnswerLines' }, proof: OWED_PROOF },
   checkMethod: { computer: 'checkMethod', tag: null, held: PRE, broken: PRE, askable: { state: 'wired', via: 'dangerAnswerLines' }, proof: OWED_PROOF },
+  prophylaxis: { computer: 'prophylaxis.findProphylaxis', tag: null, held: PRE, broken: PRE, askable: { state: 'wired', via: 'isBestMoveQuestion' }, proof: { state: 'wired', via: 'prophylaxisProof (the covering pawn, exact)' } },
   priorityFirst: { computer: 'priorityFirst', tag: null, held: PRE, broken: PRE, askable: { state: 'wired', via: 'isBestMoveQuestion' }, proof: OWED_PROOF },
   rejectedTempting: { computer: 'playCommentary.buildRejectedTempting', tag: null, held: PRE, broken: PRE, askable: { state: 'wired', via: 'isCandidateMoveQuestion' }, proof: { state: 'wired', via: 'queenGrabTrapProof' } },
   register: { computer: 'deliberation', tag: null, held: PRE, broken: PRE, askable: { state: 'wired', via: 'isBestMoveQuestion' }, proof: OWED_PROOF },
