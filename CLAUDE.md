@@ -2378,6 +2378,28 @@ first testing the idea, is the failure mode this rule exists to kill. If you
 catch yourself agreeing, STOP and ask: where does this break, and how do I make
 it better?
 
+## 🔒🔒 SWARM COST RULES — learned the hard way (David 2026-10-07: "Lock in what we learned so it doesn't happen again")
+
+An overnight swarm burned half of David's weekly limit. About a third of it was
+waste: ~40 agents ran at once, the usage limit cut them all off, and 24
+auditors lost ~28 minutes of work each, because a workflow saves only when
+every agent in it finishes. Every swarm from now on follows these rules:
+
+1. **Say the cost first.** Before launching, tell David roughly how many agents
+   and how much of his limit it will use. No silent swarms.
+2. **At most ~6 agents at once.** More concurrency hits the limit sooner and
+   loses more when it does.
+3. **Every agent saves its own result the moment it finishes** (one agent per
+   workflow, or write to a file). Never a design where one failure loses the
+   batch.
+4. **Right-size the swarm.** Stop when answers converge: 30 designers agreed on
+   one architecture where ~8 would have. One agent per job, not two angles
+   each.
+5. **Short briefs.** Each agent reads only what its job needs, never a 300K pile
+   that 50 agents re-read.
+6. **Code over analysis.** A swarm earns its cost only when its findings get
+   fixed. Fix what the last swarm found before launching the next.
+
 ## 🧠 Operate at full depth (non-negotiable)
 
 David has a very high IQ and is impatient with surface-level work.
