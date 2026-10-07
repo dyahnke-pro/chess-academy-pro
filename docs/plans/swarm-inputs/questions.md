@@ -12,7 +12,11 @@ good habits; the record shifts the weight to thinking and strategy once traps
 stop deciding the student's games.
 ONE TRAP LIBRARY (F04): today ~8 separate trap systems. One definition (a
 natural move opponents really play at the student's level that loses to a
-forced, engine-proven sequence), one library, every surface reads it.
+forced, engine-proven sequence winning AT LEAST A PIECE OR MATE within a few
+moves), one library, every surface reads it. MEASURED: only 54 of 344 gems
+clear that bar (median gain ~1.3 pawns; 106 under a pawn) — re-check all, cut
+the rest. Hand-build first: Bishop's Opening, Jobava London (0 gems each;
+Jobava has hand-written trap lessons in a separate system).
 FIRST OPENING ITEM — THE GEMS (David: "those gems that have never fucking
 worked"): punish-gems must be reachable (not stuck behind the unlock ladder —
 a June prod probe pressed unlock and no gem surfaced), plentiful (only
