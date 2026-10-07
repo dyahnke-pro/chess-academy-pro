@@ -108,6 +108,7 @@ when a rule changes; never edit a rule here alone.
 - **S10** — ARROWS AND HIGHLIGHTS: any move the coach mentions that doesn't happen on the board gets an arrow. Any square the coach mentions gets a highlight. A line it talks through is arrowed in full, not just its first move. All drawn by code from the same facts it speaks. No arrow or highlight without words.  _[CODE DISAGREES — to build]_
 - **S11** — KIDS has its own rules: no chess notation in anything a kid hears or reads, no adult coach personality, one gentle voice, praise only at milestones, no timers, and the model never chooses puzzles or moves.  _[settled]_
 - **S12** — LEARN and sacrifice patterns (the Greek gift, Bxf7+ ideas). When a sac is SOUND, the coach teaches it the way it teaches any deciding move (S3). When a sac is UNSOUND, the coach does not warn in advance: it waits. If the student plays it, the coach explains right after the move that it looked tempting but doesn't work here, names the condition that failed ("their knight comes back to f6 and guards h7"), and shows the refutation. Said once. Asking whether it's sound comes later.  _[CODE DISAGREES — to build]_
+  - Note: in REVIEW the game is already played, so the coach may name the tempting sac on the move before it was played ("here the h7 sac looks tempting; watch why it fails") — David: "maybe"; decide when Review is built.
 
 ## 5. How the coach decides what to say
 
