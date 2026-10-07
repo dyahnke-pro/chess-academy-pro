@@ -1498,3 +1498,18 @@ describe('how-to-think asks reach the calculation lesson (real users 2026-10)', 
     expect(isFundamentalLessonQuestion('can I calculate whether the sacrifice here works?')).toBe(false);
   });
 });
+
+// Answers swarm (2026-10-07): "how do I play against X" asks how to play it —
+// a teaching question — never the student's win/loss record.
+describe('recordVsTarget — present-tense "how do I play against" is not a record question', () => {
+  it.each(['how do I play against the Sicilian?', 'how do i play against the caro kann'])('"%s" → null', (q) => {
+    expect(recordVsTarget(q)).toBe(null);
+  });
+  it.each([
+    ['how did I play against the Sicilian?', 'Sicilian'],
+    ['how have I played against the French', 'French'],
+    ['how do I do against the Sicilian', 'Sicilian'],
+  ])('"%s" is still a record question', (q, t) => {
+    expect(recordVsTarget(q)).toBe(t);
+  });
+});
