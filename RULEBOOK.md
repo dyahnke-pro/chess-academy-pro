@@ -101,7 +101,7 @@ when a rule changes; never edit a rule here alone.
 - **S8** — TACTICS: puzzles are picked by the algorithm for each skill (F16, F17). A wrong try is refuted out loud with their reply, then you try again. That refutation is teaching, so it speaks.  _[new 2026-10-07]_
   - Note: Default applied since you moved on: refutations stay spoken, and the old "drills stay silent" rule goes. Strike if you disagree.
 - **S9** — OPENINGS (Watch / Learn / Practice / Play): Watch = the full explained line. Learn = the voice says only the move; the explanation is written below the board. Practice = silent, with a Hint button. Play = the coach plays exactly the taught line.  _[settled]_
-- **S10** — ARROWS: every move the coach names gets an arrow, drawn by code from the same facts it speaks. A line it plays out is arrowed in full, not just its first move. No arrow without words.  _[settled]_
+- **S10** — ARROWS AND HIGHLIGHTS: any move the coach mentions that doesn't happen on the board gets an arrow. Any square the coach mentions gets a highlight. A line it talks through is arrowed in full, not just its first move. All drawn by code from the same facts it speaks. No arrow or highlight without words.  _[CODE DISAGREES — to build]_
 - **S11** — KIDS has its own rules: no chess notation in anything a kid hears or reads, no adult coach personality, one gentle voice, praise only at milestones, no timers, and the model never chooses puzzles or moves.  _[settled]_
 
 ## 5. How the coach decides what to say

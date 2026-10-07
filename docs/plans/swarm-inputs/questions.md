@@ -101,5 +101,7 @@ CHECK — the knight leaves with check, the pin breaks, the pinning bishop hangs
    too?"). Last walk: 7 of 64 plies arrowed, lines arrowed on the first move
    only, arrows with no words, wrong arrows. One arrow door exists; the disease
    is each lane deciding its own arrows. Under the one brain: every move,
-   piece or line SPOKEN gets its arrow from the same fact, in full (S10, V18).
+   piece or line SPOKEN gets its arrow from the same fact, in full; any move
+   mentioned that is not played on the board = an arrow; any square mentioned
+   = a highlight (S10, V18).
    Measured on every walk: named moves arrowed 100%, wordless arrows 0.
