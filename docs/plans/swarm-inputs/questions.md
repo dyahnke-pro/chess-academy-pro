@@ -3,7 +3,7 @@
 THE BAR (David): it must sound and feel like a real grandmaster chess coach is
 sitting next to the student, TEACHING them. Law: RULEBOOK.md.
 TEACHING = showing how to think: RECOGNIZE, IDENTIFY, PLAN, PREVENT,
-STRATEGIZE, and the CONSEQUENCES of a move (F01) — never just telling them what to do.
+STRATEGIZE, and the CONSEQUENCES of a move (F01) It also hands over the KNOWLEDGE that takes years to find alone: geometry (how a knight or bishop covers squares, the square of a pawn, opposition), technique and rules (knight-and-bishop mate, which material can and can't force mate), and named patterns. — never just telling them what to do.
 
 0. TEACHING TRACK: learn HOW the reference coach teaches (voiced corpus
    public/data/voiced-teachings.json — 7,477 notes from 428 videos; the

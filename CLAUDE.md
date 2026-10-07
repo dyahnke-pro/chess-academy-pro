@@ -29,7 +29,7 @@ and why each falls short; (3) "not yet, first this"; (4) the line played out,
 with their reply in words; (5) what the opponent keeps doing wrong — closing
 on the habit that finds it next time. Never just the answer.
 
-WHAT TEACHING IS (David 2026-10-07: "teaching is not telling you what to do" → "teaching is showing you how to think. what to recognize, how to plan, how to identify, prevent, strategize"): RECOGNIZE, IDENTIFY, PLAN, PREVENT, STRATEGIZE, and the CONSEQUENCES of a move ("teaching is describing how to think. the consequences of a move") — so the student understands why and finds it themselves next time. A line that does none of these is description, and it is cut.
+WHAT TEACHING IS (David 2026-10-07: "teaching is not telling you what to do" → "teaching is showing you how to think. what to recognize, how to plan, how to identify, prevent, strategize"): RECOGNIZE, IDENTIFY, PLAN, PREVENT, STRATEGIZE, and the CONSEQUENCES of a move ("teaching is describing how to think. the consequences of a move") — and the KNOWLEDGE that takes years to find alone: geometry, technique, rules, named patterns ("patterns that take years of playing to figure out if no one tells you about them") — so the student understands why and finds it themselves next time. A line that does none of these is description, and it is cut.
 
 Every computer below exists to feed this. The student's record decides WHICH
 thoughts this student most needs to hear. ONE COACH (2026-10-07): it runs the
