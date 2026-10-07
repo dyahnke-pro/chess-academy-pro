@@ -23,8 +23,8 @@ describe('the rule itself', () => {
 
   it('keeps the two sanctioned exceptions intact', () => {
     // The coach playing the opponent cannot call itself "they".
-    expect(perspectiveRule('coach-is-opponent')).toMatch(/"I \/ my"/);
-    expect(perspectiveRule('coach-is-opponent')).toMatch(/never "they"/i);
+    expect(perspectiveRule('coach-is-opponent')).toMatch(/"they \/ their"/);
+    expect(perspectiveRule('coach-is-opponent')).toMatch(/never "I \/ my"/i);
     // A spectator model game is the one place bare colours are right.
     expect(perspectiveRule('spectator')).toMatch(/"White" and "Black"/);
     expect(perspectiveRule('spectator')).toMatch(/Never "you \/ your"/);

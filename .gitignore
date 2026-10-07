@@ -116,3 +116,6 @@ scripts/video-align/frames/
 .ship-out.log
 data/video-narration/
 scripts/.tmp/
+
+# Raw video transcripts are reference only and never committed (CLAUDE.md G9.1 step 8)
+docs/plans/swarm-inputs/*.vtt

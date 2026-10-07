@@ -85,7 +85,8 @@ export function detectOpponentGap(input: {
 export type GapSeat = 'student' | 'coach-is-opponent' | 'dictated';
 
 const GAP_STEM: Record<GapSeat, string> = {
-  'coach-is-opponent': 'I let you off there',
+  // The coach playing the opponent is still "they" (RULEBOOK V1/V2, 2026-10-07).
+  'coach-is-opponent': 'they let you off there',
   student: 'they let you off there',
   // The student TOLD the coach to play it (hand walk 2026-09-24: "I let you
   // off there" after a dictated Qc7). Nobody "let" anyone off — name the move.

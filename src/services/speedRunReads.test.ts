@@ -44,8 +44,13 @@ describe('his habits of thought, computed (each checked against the existing com
   it('the threat is stronger than the execution', () => {
     // Nxd5 wins a pawn now, but the engine prefers Bc4 by a margin
     const fen = '4k3/8/8/3p4/8/2N5/8/4KB2 w - - 0 1';
-    expect(threatStronger(fen, 'w', [line(['f1c4'], 200), line(['c3d5'], 100)])?.text).toMatch(/threat is stronger|threat is the stronger|Don't cash in/);
+    expect(threatStronger(fen, 'w', [line(['f1c4', 'e8e7'], 200), line(['c3d5'], 100)])?.text).toMatch(/threat is stronger|threat is the stronger|Don't cash in/);
     expect(threatStronger(fen, 'w', [line(['c3d5'], 200)])).toBeNull();
+    // "The material will keep" must be TRUE: after ...d4 the pawn has walked
+    // away (and hits the knight), so the read stays silent.
+    expect(threatStronger(fen, 'w', [line(['f1c4', 'd5d4'], 200), line(['c3d5'], 100)])).toBeNull();
+    // Once a game: the read carries its claim.
+    expect(threatStronger(fen, 'w', [line(['f1c4', 'e8e7'], 200), line(['c3d5'], 100)])?.claim).toBe('srr:threat-stronger');
   });
   it('a piece held only by a tactic: outnumbered, yet taking it loses', () => {
     // the knight on e5 is hit by the rook on a5 and the queen on e7, guarded once by d4 — and Rxe5 dxe5 loses for them

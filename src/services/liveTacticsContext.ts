@@ -509,7 +509,8 @@ export type LookaheadSeat = Extract<PerspectiveMode, 'student' | 'coach-is-oppon
  *  own shot in both seats ("you've got a … coming"), so it does not vary. */
 const THREAT_STEM: Record<LookaheadSeat, (pattern: string, depth: number, line: string) => string> = {
   student: (pattern, depth, line) => `Look ahead — they're lining up a ${pattern} in ${depth}: ${line} — spot it before it lands.`,
-  'coach-is-opponent': (pattern, depth, line) => `Look ahead — I'm lining up a ${pattern} in ${depth}: ${line} — spot it before it lands.`,
+  // The coach playing the opponent is still "they" (RULEBOOK V1/V2, 2026-10-07).
+  'coach-is-opponent': (pattern, depth, line) => `Look ahead — they're lining up a ${pattern} in ${depth}: ${line} — spot it before it lands.`,
 };
 
 /** How far the live board's spoken foresight reaches — "a couple of moves". */
@@ -601,7 +602,7 @@ export function speakDeepestLookahead(
  *  "if", the opponent's reply is the threat. Per seat, like `THREAT_STEM`. */
 const CONDITIONAL_THREAT_STEM: Record<LookaheadSeat, (pattern: string, depth: number, yours: string, theirs: string) => string> = {
   student: (pattern, depth, yours, theirs) => `Look ahead — if you play ${yours}, they have ${theirs}: a ${pattern} in ${depth} — spot it before it lands.`,
-  'coach-is-opponent': (pattern, depth, yours, theirs) => `Look ahead — if you play ${yours}, I have ${theirs}: a ${pattern} in ${depth} — spot it before it lands.`,
+  'coach-is-opponent': (pattern, depth, yours, theirs) => `Look ahead — if you play ${yours}, they have ${theirs}: a ${pattern} in ${depth} — spot it before it lands.`,
 };
 
 /** Render a computed `TacticsLiveContext` into the grounded prompt block (BOARD

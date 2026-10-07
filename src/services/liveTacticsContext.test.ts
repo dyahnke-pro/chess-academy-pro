@@ -281,13 +281,13 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
     // the opponent's: "they're lining up".
     const say = speakDeepestLookahead(ctx, 'student', 'b');
     expect(say).toMatch(/they're lining up/i);
-    // The seat is part of the sentence (2026-09-19): spoken AS the opponent, the
-    // same threat is "I'm lining up", never "they're" — the coach cannot name its
-    // own plan in the third person mid-read.
+    // The coach moving the opponent's pieces still says "they" (RULEBOOK V1/V2,
+    // 2026-10-07 — this replaced the 2026-09-19 "I'm lining up" seat): the coach
+    // never talks about itself, so both seats hear the same sentence.
     const asOpponent = speakDeepestLookahead(ctx, 'coach-is-opponent', 'b')!;
-    expect(asOpponent).toMatch(/I'm lining up/);
-    expect(asOpponent).not.toMatch(/they're/i);
-    expect(asOpponent.replace(/^Look ahead — I'm/, "Look ahead — they're")).toBe(say);
+    expect(asOpponent).toMatch(/they're lining up/);
+    expect(asOpponent).not.toMatch(/\bI'm\b|\bI\b|\bmy\b/);
+    expect(asOpponent).toBe(say);
     expect(say!.toLowerCase()).toContain('skewer');
     expect(say).toContain('the rook to e1');
   });
@@ -304,11 +304,11 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
     expect(say).toMatch(/if you play the rook to e1, they have the queen to d7, then your rook taking on e8/);
     expect(say).not.toMatch(/lining up/i);
     expect(say.toLowerCase()).toContain('skewer in 3');
-    // Coach seat: the reply is the coach's own — "I have", never "they have".
+    // Coach seat: still "they have" — the coach never says "I" (V1/V2).
     const asOpponent = speakDeepestLookahead(ctx, 'coach-is-opponent', 'w')!;
-    expect(asOpponent).toMatch(/if you play the rook to e1, I have the queen to d7/);
-    expect(asOpponent).not.toMatch(/they/i);
-    expect(asOpponent.replace(', I have', ', they have')).toBe(say);
+    expect(asOpponent).toMatch(/if you play the rook to e1, they have the queen to d7/);
+    expect(asOpponent).not.toMatch(/\bI\b|\bmy\b/);
+    expect(asOpponent).toBe(say);
     // NEGATIVE CONTROL: flip the student's colour and the same line becomes the
     // opponent's plan again — the branch is keyed on side-to-move, not on seat.
     expect(speakDeepestLookahead(ctx, 'student', 'b')).toMatch(/they're lining up/);

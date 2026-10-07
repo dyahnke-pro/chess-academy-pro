@@ -3817,7 +3817,7 @@ The coach spoke a different perspective on different tabs — sometimes "we/our"
 - **The opponent is "they / their."** The coach DOES narrate the opponent's moves, so the opponent needs a pronoun — it's "they/their", never "your opponent's" every time and never a bare color mid-flow. "they answer …e6", "their bishop pins your knight."
 - **"we / our / us" is BANNED** — it is the ambiguity source (whose piece?). This is the hard, gated rule.
 - **Two exceptions, both unambiguous:**
-  1. **Coach-plays-you live game** (`/coach/teach` guided play, "narrate while we play"): the opponent IS the coach speaking, so it says **"I / my"** for its own pieces (you can't call yourself "they"). Still "you/your" for the student; still never "we/our".
+  1. 🔴 **CORRECTED 2026-10-07 (RULEBOOK V1/V2: "never 'I'", the coach never talks about itself) — the "I / my" exception for the coach-plays-you game is DELETED.** In `/coach/teach` guided play the coach moves the opponent's pieces, and they are still **"they / their"**; "you/your" for the student; never "we/our". (`perspectiveRule('coach-is-opponent')`, `opponentGap`, `inaccuracyCall`, `concessionBeat` and the look-ahead stems all speak this way.)
   2. **Pure spectator model game** (the student plays neither side — a matchup demo of two other players): use **White / Black**, since neither side is "you".
 - **This reconciles with the two-register rule (2026-07-19):** review is retrospective ("you played X, they slipped"), in-game/watch is present-tense ("you push e5, they answer …e6") — they differ in TENSE, not in who "you" is. "You" is always the student in both.
 

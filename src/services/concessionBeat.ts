@@ -209,8 +209,8 @@ export function findConcession(args: {
         kind: 'defender-left',
         square: abandoned,
         blockedGuard,
-        said: `That shut my ${blockedGuard.piece} on ${blockedGuard.square} off from ${abandoned}.`,
-        opening: `Nothing of mine is watching ${abandoned} now.`,
+        said: `That shut their ${blockedGuard.piece} on ${blockedGuard.square} off from ${abandoned}.`,
+        opening: `Nothing of theirs is watching ${abandoned} now.`,
       };
     }
     // David's framing — "I do not take your attack seriously so I remove one
@@ -223,9 +223,9 @@ export function findConcession(args: {
       kind: 'defender-left',
       square: abandoned,
       said: wentAcross
-        ? `I don't rate your play over there, so I've taken a defender off ${abandoned} to play on the other wing.`
-        : `That took my last defender off ${abandoned}.`,
-      opening: `Nothing of mine is watching ${abandoned} now.`,
+        ? `They don't rate your play over there, so they've taken a defender off ${abandoned} to play on the other wing.`
+        : `That took their last defender off ${abandoned}.`,
+      opening: `Nothing of theirs is watching ${abandoned} now.`,
     };
   }
 
@@ -241,7 +241,7 @@ export function findConcession(args: {
     return {
       kind: 'pawn-weakened',
       square: newIsolated,
-      said: `That left my pawn on ${newIsolated} isolated — no pawn of mine can ever defend it.`,
+      said: `That left their pawn on ${newIsolated} isolated — no pawn of theirs can ever defend it.`,
       opening: `A pawn that can only be defended by pieces is a target for the rest of the game.`,
     };
   }
@@ -257,7 +257,7 @@ export function findConcession(args: {
       return {
         kind: 'file-opened',
         square: `${file}${king[1]}`,
-        said: `Pushing that pawn opened the ${file}-file next to my own king.`,
+        said: `Pushing that pawn opened the ${file}-file next to their own king.`,
         opening: `An open file beside a king is a road, and roads get used.`,
       };
     }
@@ -285,7 +285,7 @@ export function findConcession(args: {
       return {
         kind: 'piece-offside',
         square: moved.to,
-        said: `My ${NAME[moved.piece] ?? 'piece'} has gone all the way to ${moved.to} — it is a long way from my own king.`,
+        said: `Their ${NAME[moved.piece] ?? 'piece'} has gone all the way to ${moved.to} — it is a long way from their own king.`,
         opening: `A piece that far from home takes moves to come back.`,
       };
     }
@@ -314,7 +314,7 @@ export function findConcession(args: {
       kind: 'outpost-conceded',
       square: conceded.square,
       said: `That handed you ${conceded.square} — ${conceded.reason}.`,
-      opening: `A square my pawns can never challenge is yours for as long as you want it.`,
+      opening: `A square their pawns can never challenge is yours for as long as you want it.`,
     };
   }
 
@@ -388,7 +388,7 @@ export function findStudentDrawback(args: {
     'pawn-weakened': `That left your pawn on ${found.square} isolated — no pawn of yours can defend it now.`,
     'file-opened': `That opened the file next to your own king.`,
     'piece-offside': `Your piece went a long way from your king, to ${found.square}.`,
-    'outpost-conceded': `That handed me ${found.square} — ${found.opening.toLowerCase()}`,
+    'outpost-conceded': `That handed them ${found.square} — ${found.opening.toLowerCase()}`,
   })[found.kind];
   return {
     kind: found.kind,

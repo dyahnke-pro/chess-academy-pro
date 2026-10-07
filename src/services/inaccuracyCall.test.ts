@@ -84,12 +84,13 @@ describe('it names the better move AND what it was for', () => {
 });
 
 describe('the coach owns its own mistakes', () => {
-  it('speaks in the first person and hands over the punishment', () => {
+  it('says it of THEM (never "I") and hands over the punishment', () => {
     const call = callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE,
       cpLoss: 250, side: 'coach', moverColor: 'white',
     });
-    expect(call?.said).toMatch(/from me/);
+    expect(call?.said).toMatch(/^Their a3 is a /);
+    expect(call?.said).not.toMatch(/\bfrom me\b|\bI\b|\bmy\b/);
     expect(call?.said, 'did not point the student at the punishment').toContain('something here for you');
     expect(call?.offersStudent, 'the offer travels as data, so Learn can reveal the answer after the move').toBe(true);
   });

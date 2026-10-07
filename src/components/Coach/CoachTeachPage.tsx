@@ -289,7 +289,7 @@ import { admitArrow, admitArrows, lineClaims, narrationArrowsThroughDoor, withAd
 // ONE depth for the whole turn — the hint lane and the lane that grades the
 // student must not read the same board at different depths. See the constant.
 import { tacticalReadFromLines, temptingTurnClause, uncertaintyClause, candidateCompareRead } from '../../services/tacticalRead';
-import { legalSeeGainFor, namedPawnStructure, structureTransfer, signedLegalSeeFor, signedCaptureRead } from '../../services/positionReadingService';
+import { legalSeeGainFor, namedPawnStructure, structureTransfer, signedLegalSeeFor, signedCaptureRead, takingTheAttackerAnswers } from '../../services/positionReadingService';
 import { BehaviorScheduler, detectBehaviors } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
@@ -8290,9 +8290,10 @@ export function CoachTeachPage(): JSX.Element {
             // to take it, not to move away. Not only when it is FREE: a
             // defended pawn traded pawn-for-pawn answers the attack just the
             // same (hand walk 2026-09-30, Ruy 14.d4 cxd4: "it has to move"
-            // when cxd4 simply takes back).
-            const answeredByCapture = !!low && board.attackers(low.a, studentCC).length > 0
-              && legalSeeGainFor(args.fenAfterReply, low.a, studentCC) >= 0;
+            // when cxd4 simply takes back). SIGNED: a capture that loses
+            // material is no answer (6.h3 Bxh3 gxh3 silenced this warning in
+            // both Learn tapes of 2026-10-07).
+            const answeredByCapture = !!low && takingTheAttackerAnswers(args.fenAfterReply, low.a, studentCC);
             if (low && !answeredByCapture && (!hit || (AV[cell.type] ?? 0) > (AV[hit.piece] ?? 0))) hit = { sq: cell.square, piece: cell.type, by: low.t, bySq: low.a };
           }
           if (hit) {

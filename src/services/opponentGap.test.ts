@@ -64,7 +64,7 @@ describe('detectOpponentGap — the take-advantage-of-the-gap', () => {
 
   it('names the move WITH its reason (Learn names the move; re-walk 1380, 13.Be3)', () => {
     const clause = opponentGapClause(gapHere(), 'coach-is-opponent', FEN, 'w', 'h6');
-    expect(clause).toMatch(/^I let you off there: Nxe5 — it .+\.$/);
+    expect(clause).toMatch(/^They let you off there: Nxe5 — it .+\.$/);
     expect(clause).not.toMatch(/if you can spot it/);
   });
 
@@ -72,8 +72,8 @@ describe('detectOpponentGap — the take-advantage-of-the-gap', () => {
     expect(opponentGapClause(gapHere(), 'coach-is-opponent', '8/8/8/8/8/8/8/K6k w - - 0 1', 'w', null)).toBeNull();
   });
 
-  it('speaks from its seat — "I" when the coach is the opponent, "they" otherwise, never "he" (D-9)', () => {
-    expect(opponentGapClause(gapHere(), 'coach-is-opponent', FEN, 'w', 'h6')).toMatch(/^I let you off/);
+  it('the opponent is "they" in every seat — never "I", never "he" (V1/V2, D-9)', () => {
+    expect(opponentGapClause(gapHere(), 'coach-is-opponent', FEN, 'w', 'h6')).toMatch(/^They let you off/);
     expect(opponentGapClause(gapHere(), 'student', FEN, 'w', 'h6')).toMatch(/^They let you off/);
     for (const seat of ['coach-is-opponent', 'student'] as const) {
       expect(opponentGapClause(gapHere(), seat, FEN, 'w', 'h6')).not.toMatch(/\b(he|she|his|her)\b/i);

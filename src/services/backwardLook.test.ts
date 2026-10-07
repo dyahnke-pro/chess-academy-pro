@@ -179,8 +179,9 @@ describe('the coach side runs the same model, in the first person', () => {
     expect(coachCall!.kind).toBe('coachMistake');
   });
 
-  it('owns it in the first person', () => {
-    expect(coachCall!.line).toMatch(/\bfrom me\b|\bI\b|\bmy\b/);
+  it('says it of THEM, never in the first person (V1/V2)', () => {
+    expect(coachCall!.line).toMatch(/\btheir\b/i);
+    expect(coachCall!.line).not.toMatch(/\bfrom me\b|\bI\b|\bmy\b|\bmine\b/);
   });
 
   it('never apologises for it', () => {
@@ -283,7 +284,7 @@ describe('nothing is called against a move the engine says gained', () => {
   it('a move that really did cost still gets called — the gate is one-sided', () => {
     // The positive control. Without it "silent on -819" would also be satisfied
     // by a lane that had simply stopped working.
-    expect(at(400, 'coach')).toMatch(/from me/);
+    expect(at(400, 'coach')).toMatch(/^Their /);
     expect(at(400, 'student')).not.toBe('');
   });
 

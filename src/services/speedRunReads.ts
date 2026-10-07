@@ -152,8 +152,17 @@ export function threatStronger(fen: string, me: 'w' | 'b', lines: Lines): Read |
   if (!grab) return null;
   const grabLine = lines.find((l) => sanOf(fen, l.moves[0]) === grab.san);
   if (grabLine && seatCp(fen, best) - seatCp(fen, grabLine) < criticalityThresholds().notable) return null;
+  // "THE MATERIAL WILL KEEP" MUST BE TRUE (walk 2026-10-07, 10.Bb5: said while
+  // the engine's move was a kick that won a piece for another reason). After the
+  // engine's move AND their best reply, the same capture must still win —
+  // otherwise the target simply walks away and the sentence is false.
+  const afterBest = play(fen, bestSan);
+  const replySan = afterBest ? sanOf(afterBest.board.fen(), best.moves[1]) : null;
+  const afterReply = afterBest && replySan ? play(afterBest.board.fen(), replySan) : null;
+  if (!afterReply || afterReply.board.turn() !== me || legalSeeGainFor(afterReply.board.fen(), grab.to, me) <= 0) return null;
   const gap = grabLine ? seatCp(fen, best) - seatCp(fen, grabLine) : null;
-  return { promise: { key: `grab:${grab.to}`, piece: grab.piece, square: grab.to, takes: true, say: `Now you collect on ${grab.to} — the threat did its work first.` }, stakes: costStakes(gap) ?? { points: legalSeeGainFor(fen, grab.to, me), plies: 1 }, text: rot(fen, `You could take on ${grab.to} right now, but the threat is stronger than carrying it out — the material will keep, so keep it hanging over them and improve first.`, `The capture on ${grab.to} isn't going anywhere — leave it hanging over them and make the useful move first; the threat is the stronger weapon.`, `Don't cash in on ${grab.to} yet — while the capture hangs over them they are tied up; improve, and take it when it suits you.`), squares: [grab.to] };
+  // ONCE A GAME (claim): two consecutive moves heard it in the Learn tape.
+  return { claim: 'srr:threat-stronger', promise: { key: `grab:${grab.to}`, piece: grab.piece, square: grab.to, takes: true, say: `Now you collect on ${grab.to} — the threat did its work first.` }, stakes: costStakes(gap) ?? { points: legalSeeGainFor(fen, grab.to, me), plies: 1 }, text: rot(fen, `You could take on ${grab.to} right now, but the threat is stronger than carrying it out — the material will keep, so keep it hanging over them and improve first.`, `The capture on ${grab.to} isn't going anywhere — leave it hanging over them and make the useful move first; the threat is the stronger weapon.`, `Don't cash in on ${grab.to} yet — while the capture hangs over them they are tied up; improve, and take it when it suits you.`), squares: [grab.to] };
 }
 
 /** A9 A PIECE HELD ONLY BY A TACTIC ("the loose b1 bishop survives tactically —

@@ -690,10 +690,11 @@ export function callInaccuracyDetailed(args: {
     if (studentAfter !== null && studentAfter < 100) return ' That tips the game your way — look for the move that keeps it.';
     return ' There is something here for you now — look for it.';
   };
-  // A DICTATED MOVE IS THEIRS, NOT THE COACH'S (David 2026-09-30: "Speak
-  // dictated moves"): the student told the coach to play it, so the coach
-  // cannot own it in the first person — it is said of THEM.
-  if (args.side === 'coach' && args.dictated) {
+  // THE OPPONENT IS "THEY", WHOEVER PLAYS IT (RULEBOOK V1/V2, 2026-10-07:
+  // "never 'I'", the coach never talks about itself). A dictated move (David
+  // 2026-09-30) and the coach's own reply are both said of THEM — the
+  // first-person "That was a blunder from me" branch is gone.
+  if (args.side === 'coach') {
     const head = quality === 'blunder'
       ? ((args.allowedMate ?? null) !== null
         ? `Their ${args.playedSan} is a blunder — it walks into mate.`
@@ -721,39 +722,6 @@ export function callInaccuracyDetailed(args: {
     const offers = quality !== 'inaccuracy' && !stillHanging ? { offersStudent: true as const } : {};
     return { call: { quality, side: 'coach', cost, said: `${head}${should}${punish}`, square: better?.square ?? '', ...offers } };
   }
-  if (args.side === 'coach') {
-    const head = quality === 'blunder'
-      // The cost named is the real one: a move that walks into mate gave away
-      // no material (Damiano walk 2026-09-27, 42…Kf8 in a mating net).
-      ? ((args.allowedMate ?? null) !== null
-        ? `That was a blunder from me — ${args.playedSan} walks into mate.`
-        : givesMaterial
-          ? `That was a blunder from me — ${args.playedSan} gives away real material.`
-          : `That was a blunder from me — ${args.playedSan} throws away ${costWords(cost)} of advantage.`)
-      : quality === 'mistake'
-        ? `That was a mistake from me. ${args.playedSan} is not what the position wanted.`
-        : `A touch inaccurate from me — ${args.playedSan} is not quite right.`;
-    // NAMED WITH ITS REASON, OR NOT NAMED (the Learn rule, 2026-09-24): a move
-    // with no computed reason is an order, not teaching.
-    const should = better ? (better.own
-      ? ` ${args.bestSan} was the move, to ${toStudentSeat(better.why)}.`
-      : ` ${args.bestSan} was the move — the idea is to ${toStudentSeat(better.why)}.`) : '';
-    // WHICH KIND OF SLIP, read off the board (walk 6, L4). The coach's move can
-    // cost by GIVING something (the student now has a capture to find) or by
-    // MISSING a capture of the student's piece — and then that piece is still
-    // hanging and the student has nothing to take. The old line promised
-    // "something here for you — go and take it" after the coach had merely
-    // declined Qxg5, with the student's knight still en prise.
-    const stillHanging = missedCaptureStillOn(args.fenBefore, args.playedSan, args.bestSan, args.bestLineUci ?? null, args.priorMove);
-    const punish = quality === 'inaccuracy'
-      ? ''
-      : stillHanging
-        ? ` Your ${stillHanging.piece} on ${stillHanging.square} is still hanging, though — see to it.`
-        : theirSlipOffer(args.moverEvalAfterCp);
-    const offers = quality !== 'inaccuracy' && !stillHanging ? { offersStudent: true as const } : {};
-    return { call: { quality, side: 'coach', cost, said: `${head}${should}${punish}`, square: better?.square ?? '', ...offers } };
-  }
-
   // THE STUDENT'S OWN MOVE, in the retroactive register the backward look uses:
   // past tense, second person, no scolding. `whatItAllowed` already says what
   // the move LET THEM DO; this is the half that was missing — what should have

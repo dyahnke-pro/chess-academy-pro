@@ -256,6 +256,24 @@ export function signedLegalSeeFor(fen: string, square: Square, capturingColor: C
   return (PIECE_VALUE[victim.type] ?? 0) - recapture;
 }
 
+/** Does TAKING THE ATTACKER on `square` answer the attack for `color`? Only
+ *  when a legal capture exists and the exchange nets at least zero — SIGNED.
+ *  The floored `legalSeeGainFor` scores every losing capture as 0, so "take
+ *  the attacker" passed as an answer when it loses material: after 6.h3 in
+ *  the Scandinavian, Bxh3 gxh3 gives a bishop for a pawn, yet the warning on
+ *  the g4 bishop never fired (Learn tapes 2026-10-07, both games lost it). An
+ *  even trade (a defended pawn taken pawn for pawn) is an answer; a pinned
+ *  capturer is not one. */
+export function takingTheAttackerAnswers(fen: string, square: Square, color: Color): boolean {
+  const asIf = asIfToMove(fen, color);
+  if (!asIf) return false;
+  let chess: Chess;
+  try { chess = new Chess(asIf); } catch { return false; }
+  if (!chess.moves({ verbose: true }).some((m) => m.to === square && !!m.captured)) return false;
+  const net = signedCaptureRead(fen, square, color);
+  return net !== null && net >= 0;
+}
+
 /** Would `moverColor` win material by capturing on `square` if it were their
  *  move in `fen`? Pin/legality-aware — the honest "is this fork/attack target
  *  actually winnable" test (a pinned defender of the target no longer makes it

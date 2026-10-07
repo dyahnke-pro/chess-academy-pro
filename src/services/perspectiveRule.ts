@@ -46,8 +46,9 @@ export const BANNED_PRONOUNS = /\b(we|we're|we'll|we've|we'd|our|ours|us|ourselv
 export type PerspectiveMode =
   /** The ordinary case: the coach talks to a student about their own game. */
   | 'student'
-  /** `/coach/teach` guided play — the coach IS the opponent, so its own pieces
-   *  are "I / my" (you cannot call yourself "they"). CLAUDE.md exception 1. */
+  /** `/coach/teach` guided play — the coach plays the opponent's pieces, and
+   *  they are still "they / their": the coach never talks about itself
+   *  (RULEBOOK V1/V2, 2026-10-07 — this replaced the old "I / my" exception). */
   | 'coach-is-opponent'
   /** A pure spectator model game where the student plays neither side.
    *  CLAUDE.md exception 2. */
@@ -69,9 +70,10 @@ const RULES: Record<PerspectiveMode, (studentSide?: string) => string> = {
     + `"your" if it is ${studentSide ?? "the student"}'s, "their" if it is the opponent's. `
     + 'Get this right on every sentence.',
 
-  'coach-is-opponent': () => 'PERSPECTIVE — ONE STANDARD, NO EXCEPTIONS (David 2026-08-28). '
-    + 'You are the student\'s opponent in this game, so your OWN pieces are "I / my" — '
-    + 'never "they", because you cannot call yourself a third party. The student\'s pieces are '
+  'coach-is-opponent': () => 'PERSPECTIVE — ONE STANDARD, NO EXCEPTIONS (David 2026-10-07). '
+    + 'You move the opponent\'s pieces in this game, but you are the student\'s COACH, so those '
+    + 'pieces are "they / their" ("they answer …e6", "their bishop pins your knight") — '
+    + 'never "I / my": the coach never talks about itself. The student\'s pieces are '
     + `"you / your". NEVER "we / our / us" — it blurs whose piece it is. ${NO_GENDERED}`,
 
   spectator: () => 'PERSPECTIVE — ONE STANDARD, NO EXCEPTIONS (David 2026-08-28). '

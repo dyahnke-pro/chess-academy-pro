@@ -40,7 +40,7 @@ describe('the thread across moves: an idea said, then paid off', () => {
   });
   it('the capture the threat kept: paid when the student finally takes', () => {
     const fen = '4k3/8/8/3p4/8/2N5/8/4KB2 w - - 0 1';
-    const r = threatStronger(fen, 'w', [line(['f1c4'], 200), line(['c3d5'], 100)]);
+    const r = threatStronger(fen, 'w', [line(['f1c4', 'e8e7'], 200), line(['c3d5'], 100)]);
     const mem = createLearnMemory();
     notePromise(mem, r!.promise!, 0);
     expect(payoffFor(mem, fen, 'Nxd5', 2)?.say).toMatch(/collect on d5 — the threat did its work first/);

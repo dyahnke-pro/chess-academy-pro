@@ -14,7 +14,9 @@
 //   • one of its legal moves adds an attacker to the pinned piece that WINS
 //     it: a pawn now hits a piece (the pinned piece cannot step away), or the
 //     extra attacker makes the capture win material by legal SEE; and
-//   • the pressuring piece is not simply lost where it lands.
+//   • the pressuring piece is not simply lost where it lands, and
+//   • the pinned side cannot break the pin with tempo — a pawn hitting the
+//     PINNER kicks it off the line before the pressure lands.
 // No such move → null. A pin with nothing to pile on is not this principle.
 //
 // PURE: chess.js + the existing pin detector and SEE. Never decides by prose.
@@ -62,6 +64,22 @@ function winsOnCapture(fen: string, sq: Square, color: Color): boolean {
   parts[1] = color;
   parts[3] = '-';
   return capturesWinMaterial(parts.join(' '), sq, color);
+}
+
+/** Can `color` (to move on `fen`) hit the piece on `sq` with a PAWN move? */
+function pawnCanKick(fen: string, sq: Square, color: Color): boolean {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return false; }
+  if (chess.turn() !== color) return false;
+  const file = sq.charCodeAt(0) - 97;
+  const rank = Number(sq[1]);
+  // A pawn of `color` on (f, r) attacks (f±1, r+1) for White, (f±1, r−1) for Black.
+  const fromRank = color === 'w' ? rank - 1 : rank + 1;
+  return chess.moves({ verbose: true }).some((m) => {
+    if (m.piece !== 'p') return false;
+    const f = m.to.charCodeAt(0) - 97;
+    return Number(m.to[1]) === fromRank && Math.abs(f - file) === 1;
+  });
 }
 
 /** The board with `color` to move (a null move when it is not their turn). */
@@ -115,6 +133,12 @@ export function findPinPressure(fen: string, holder?: Color): PinPressure[] {
       if (!wins) continue;
       // The new attacker must not just be lost where it lands.
       if (winsOnCapture(fenAfter, m.to, them)) continue;
+      // THE PIN THAT BREAKS WITH TEMPO (David 2026-10-07; the reference coach's
+      // ...h6 then ...g5): when the pinned side can hit the PINNER with a pawn,
+      // it kicks it and the pin is gone before the pressure lands — piling on
+      // wins nothing. Note 487's board (Bg5 pins Nf6, e5 "wins it") was said
+      // as a won knight; after ...h6 Bh4 g5 Bg3 the knight walks away.
+      if (pawnCanKick(fenAfter, pinner, them)) continue;
       moves.push({ san: m.san, from: m.from, to: m.to, piece: m.piece, byPawn });
     }
     if (moves.length === 0) continue;
