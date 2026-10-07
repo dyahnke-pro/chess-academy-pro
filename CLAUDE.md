@@ -5450,6 +5450,8 @@ the log. Don't let it rot.
 
 🔒🔒 **SPEED FIRST (David 2026-10-07: "i hate waiting for checks and audits when we have so much more to build").** Do as much coding at once as possible; multi-step work goes to a branch. Stop for checks and audits only when necessary; the full prod audit runs when the work is sent to `main`, not during the build. Never sit waiting on a check when there is more to build (rulebook B2).
 
+🔒🔒 **PLAN WAITS FOR GO; A GO RUNS TO THE END (David 2026-10-07).** While planning how to build something, wait for David's go. Once the plan is agreed and he has said go, run every phase to the end — never stop to ask for a go on phase two ("i will get pissed") (rulebook B3).
+
 🔒 **WORK ON A BRANCH WHILE MAKING CHANGES; QUICK AUDITS OVER FULL PROD AUDITS (David 2026-09-25: "Remember to send to a branch while making changes. We don't need full production audits as much as we need quick audits with efficient fix").** Commit and push work-in-progress to the session's branch, and KEEP SHIPPING IT LIVE: merge to `main` as each fix is done and green (David: "Continue pushing your changes live though"). Verify with the fastest check that proves the change (a targeted test, a localhost hand-walk of the affected moves, one scoped audit), fix, and move on — reserve the full 3-instrument prod audit for when David asks or a change can only be proven on prod.
 **Stay reachable:** anything longer than a minute (ship-check, audits, walks, deploy polls) runs in the BACKGROUND with a monitor, so David's messages are read at the next tool boundary instead of waiting behind a blocking command.
 
