@@ -17,3 +17,5 @@
    only where the real game makes the teaching land harder (the same idea
    working, or the same mistake punished), chosen by the one decider like any
    other fact, said once — never "here's what the masters do" on every move.
+   STRONGEST IN OPENINGS (David): that is where exact master positions exist
+   and where a real game teaches the idea best — start there.
