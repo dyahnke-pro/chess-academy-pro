@@ -87,3 +87,19 @@ Line: 1.e4 e5 2.Nf3 d6 3.Bc4 Bg4 4.Bxf7+ Kxf7 5.Ng5+ Ke8 6.Qxg4.
 
 
 ANSWERED (David): teach the pattern with its conditions — when it is sound and when it is not, plus the check. "That is the beauty of a teacher." Build: the engine finds the move orders where both conditions hold (g5 not covered by their queen, g4 not otherwise guarded) and the ones where they fail; teach both.
+
+## Conditional sacrifice patterns — taught with their conditions (David)
+
+GREEK GIFT (Bxh7+). Existing computer: src/services/moveInsight.ts greekGift()
+— names the pattern only when the engine already says the sac is best; it
+never teaches WHY or WHEN IT FAILS. Extend it with David's three conditions,
+each computed on the board:
+  1. the knight reaches g5 (g4) without being taken or threatened
+     (no ...Bxg5 / ...hxg5 / ...Qxg5);
+  2. the queen reaches the h-file (h5 or h-file open in one move);
+  3. h7 (h2) cannot be defended in one tempo (no ...Nf6/...Nf8/...Bf5 back).
+All three hold -> teach the sac. One fails -> teach why it fails (and name the
+failing condition if the student plays it anyway).
+
+Bxf7+ / Ng5+ / Qxg4 — same shape: (1) their queen does not cover g5;
+(2) nothing else guards the bishop on g4.
