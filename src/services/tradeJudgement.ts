@@ -31,6 +31,8 @@ export interface TradeJudgement {
 }
 
 const NAME: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+/** The material edge in words — the count behind "ahead" / "behind". */
+const pointsWord = (pts: number): string => (pts >= 9 ? 'a queen' : pts >= 5 ? 'a rook' : pts >= 3 ? 'a piece' : pts === 2 ? 'two pawns' : 'a pawn');
 const isLight = (sq: string): boolean => (sq.charCodeAt(0) - 97 + Number(sq[1])) % 2 === 0;
 const dist = (a: string, b: string): number =>
   Math.max(Math.abs(a.charCodeAt(0) - b.charCodeAt(0)), Math.abs(Number(a[1]) - Number(b[1])));
@@ -72,10 +74,10 @@ export function tradeJudgement(fenBefore: string, san: string, reply: string | n
     }
   }
   if (edge >= 2) {
-    return { reason: 'ahead', squares: [mine.to], text: `A ${gave} for a ${got} — and trading is exactly right when you are ahead: every piece off the board makes your extra material count for more.` };
+    return { reason: 'ahead', squares: [mine.to], text: `A ${gave} for a ${got} — and trading is exactly right when you are ahead — and you are ${pointsWord(edge)} up — every piece off the board makes your extra material count for more.` };
   }
   if (edge <= -2 && cpLoss >= 50) {
-    return { reason: 'behind', squares: [mine.to], text: `Careful with trades when you are behind — each one brings the ending closer, and in the ending their extra material decides. Keep pieces on and make it complicated.` };
+    return { reason: 'behind', squares: [mine.to], text: `Careful with trades when you are behind — you are ${pointsWord(-edge)} down, and each one brings the ending closer, and in the ending their extra material decides. Keep pieces on and make it complicated.` };
   }
   if (mine.piece === 'b') {
     const colourLight = isLight(mine.from);

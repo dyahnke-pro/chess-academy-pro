@@ -301,10 +301,11 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingR
 import { opponentStrength } from '../../services/engineStrength';
 import { samePosition } from '../../utils/samePosition';
 import { findPinBreaks, pinBreakLine, pinBreakProof } from '../../services/pinBreak';
-import type { Proof } from '../../services/proof';
+import { lineProof, lineProofFromUci, type Proof } from '../../services/proof';
 import { walkableLine } from '../../services/moveInsight';
 import { obligationLifted, obligationLiftedLine } from '../../services/obligationLifted';
 import { findQueenGrabTraps, queenGrabTrapLine, queenGrabTrapProof } from '../../services/queenGrabTrap';
+import { provenThreatLine } from '../../services/threatProof';
 import { newPlanThread, planThreadTurn } from '../../services/planThread';
 import { splitThink, stripThink, THINK_MARK, THINK_PAUSE_MS } from '../../utils/thinkPause';
 import { withTimeout } from '../../coach/withTimeout';
@@ -1588,9 +1589,11 @@ export function CoachTeachPage(): JSX.Element {
   const noteProof = useCallback((text: string, proof: Proof): void => { proofByLeadRef.current.set(leadSentence(text), proof); }, []);
   /** Shows the Why button once a proof-bearing conclusion has been spoken. */
   const [whyReady, setWhyReady] = useState(false);
-  const noteSpokenProofs = useCallback((kept: readonly { text: string }[]): void => {
+  const noteSpokenProofs = useCallback((kept: readonly { text: string; lines?: readonly SpokenLine[] }[]): void => {
     for (const f of kept) {
-      const p = proofByLeadRef.current.get(leadSentence(f.text));
+      // A computer's own proof first; else the line the sentence names IS its
+      // proof (every lane that speaks a line hands it in as `lines`).
+      const p = proofByLeadRef.current.get(leadSentence(f.text)) ?? (f.lines?.[0] ? lineProof(f.lines[0]) : null);
       if (p) { learnMemRef.current.lastProof = p; setWhyReady(true); }
     }
   }, []);
@@ -8245,6 +8248,13 @@ export function CoachTeachPage(): JSX.Element {
         } catch { /* a bonus lane */ }
         return false;
       };
+      // THE COST A WARNING CLAIMS, PROVEN (threatProof): the count and the
+      // capture behind "this costs a piece", or the mating move.
+      const proveThreat = (line: string): string => {
+        const { text, proof } = provenThreatLine(line, args.fenAfterReply, studentCC, threatSquares);
+        if (proof) { noteProof(text, proof); threatSquares = [...new Set([...threatSquares, ...(proof.squares ?? [])])]; }
+        return text;
+      };
       if (againstMe.length > 0) {
         const t = againstMe[0];
         // KEYED ON THE PATTERN, NOT EVERY SQUARE IN IT. A pin is the same pin
@@ -8266,6 +8276,7 @@ export function CoachTeachPage(): JSX.Element {
         threatLine = `Watch out — ${seatPieceReferences(`${t.description.charAt(0).toLowerCase()}${t.description.slice(1)}`, args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b')}.${conceptTail(t.type)}`;
         // THE DANGER LEVEL, computed (`openThreatLine`): how much it costs if ignored, said first.
         threatLine = openThreatLine(threatLine, args.fenAfterReply, studentCC, threatSquares, Number(args.fenAfterReply.split(' ')[5] ?? 0), learnMemRef.current.loudAlarms.size);
+        threatLine = proveThreat(threatLine);
         // SAY WHOSE, WHEN BOTH ARE THE SAME SHAPE. David's transcript, 02:50:
         // "Watch out — queen on a5 pins knight on c3 against king on e1.
         //  There's a real pin here for you — look for it."
@@ -8311,6 +8322,7 @@ export function CoachTeachPage(): JSX.Element {
           threatSquares = (up.description.match(/\b[a-h][1-8]\b/g) ?? []).slice(0, 4);
           threatLine = `Watch out — ${up.spoken}.`;
           threatLine = openThreatLine(threatLine, args.fenAfterReply, studentCC, threatSquares, Number(args.fenAfterReply.split(' ')[5] ?? 0), learnMemRef.current.loudAlarms.size);
+        threatLine = proveThreat(threatLine);
         }
       } else if (!(myHanging.length > 0 && (AV[myHanging[0].piece] ?? 0) >= 3) && kingPawnThreat()) {
         // threatLine set above
@@ -8370,6 +8382,7 @@ export function CoachTeachPage(): JSX.Element {
             // threat answer says what to do, from the engine.
             threatLine = `Careful — their ${NAME[hit.by] ?? 'piece'} on ${hit.bySq} hits your ${NAME[hit.piece] ?? 'piece'} on ${hit.sq}.`;
             threatLine = openThreatLine(threatLine, args.fenAfterReply, studentCC, threatSquares, Number(args.fenAfterReply.split(' ')[5] ?? 0), learnMemRef.current.loudAlarms.size);
+        threatLine = proveThreat(threatLine);
             alertArrow = admitArrow({ from: hit.bySq, to: hit.sq, role: 'threat', source: 'teach.hitAlert' }, { fen: args.fenAfterReply, studentColor: studentCC === 'w' ? 'white' : 'black' });
           }
         } catch { /* the warning is a bonus */ }
@@ -10789,6 +10802,8 @@ export function CoachTeachPage(): JSX.Element {
                       // trading down" is the same claim (run I, 4GIsh ply 32).
                       const winClaim = !fundamental && /^That let them win /.test(look.line) && /^[a-h][1-8]$/.test(look.square)
                         ? [`win-${look.square}`] : fundamental?.id === 'botched-conversion' ? ['convert-method'] : [`look:${look.kind}:${move.history.length}`];
+                      // THE VERDICT'S PROOF is the punishing line it names (#68).
+                      if (!fundamental && look.punishLine) { const pf = lineProofFromUci(look.punishLine.fen, look.punishLine.uci); if (pf) noteProof(line, pf); }
                       queueSpokenHint(fenAfterReply, line, look.kind,
                         /^[a-h][1-8]$/.test(look.square) ? [look.square] : [], winClaim, move.fen,
                         // The punishing line the words play out, drawn ply by ply.

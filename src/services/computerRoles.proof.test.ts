@@ -7,7 +7,7 @@ import { COMPUTER_ROLES } from './computerRoles';
 import { withProof } from './proof';
 
 /** Lower this as lanes carry their proof. Never raise it. */
-const OWED_CEILING = 55;
+const OWED_CEILING = 50;
 
 describe('every spoken conclusion carries its proof', () => {
   it('the lanes still owing a proof never grow', () => {

@@ -16,6 +16,7 @@
 //     squares are marked, coupled here, never scraped from the words.
 //   • WITHHOLDING: a proof that names the move a question asks for waits with
 //     the answer (the caller's surface rule decides; this type only carries it).
+import { Chess } from 'chess.js';
 import type { SpokenLine } from './voicePackage';
 
 export type ProofKind = 'line' | 'squares' | 'count';
@@ -45,4 +46,30 @@ export function withProof(conclusion: string, proof: Proof | null, size: ProofSi
   if (!body) return conclusion;
   const head = /[.!?]$/.test(conclusion) ? conclusion : `${conclusion}.`;
   return `${head} ${body.charAt(0).toUpperCase()}${body.slice(1)}${/[.!?]$/.test(body) ? '' : '.'}`;
+}
+
+/** THE PROOF OF A LINE THE SENTENCE ALREADY NAMES (every lane that speaks a
+ *  line hands it in as `VoiceFact.lines`). An engine line, so said short — its
+ *  first moves — and drawn in full; the Why button plays it on request. */
+export function lineProof(line: SpokenLine, exact = false): Proof | null {
+  const sans = line.sans.filter(Boolean);
+  if (sans.length === 0) return null;
+  const rest = sans.slice(1);
+  const full = rest.length ? `After ${sans[0]}, it goes ${rest.join(', then ')}` : `The move is ${sans[0]}`;
+  const short = rest.length ? `After ${sans[0]}, it goes ${rest.slice(0, 2).join(', then ')}${rest.length > 2 ? ', and on' : ''}` : full;
+  return { kind: 'line', exact, short, full, line };
+}
+
+/** The same proof from an engine line in UCI (a verdict's punishing line). */
+export function lineProofFromUci(fen: string, uci: readonly string[]): Proof | null {
+  const sans: string[] = [];
+  try {
+    const c = new Chess(fen);
+    for (const u of uci) {
+      const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+      if (!m) break;
+      sans.push(m.san);
+    }
+  } catch { /* the line ends where it stops being legal */ }
+  return lineProof({ fen, sans });
 }
