@@ -7,6 +7,9 @@ STRATEGIZE, and the CONSEQUENCES of a move (F01) It also hands over the KNOWLEDG
 
 PRIORITY (David, F02): THE OPENING — "the thing that pulled me from 800 to
 1300 in under a year". Weigh opening teaching and traps first.
+THE PROGRESSION (F03): traps HARD and OFTEN early, with principles, theory and
+good habits; the record shifts the weight to thinking and strategy once traps
+stop deciding the student's games.
 FIRST OPENING ITEM — THE GEMS (David: "those gems that have never fucking
 worked"): punish-gems must be reachable (not stuck behind the unlock ladder —
 a June prod probe pressed unlock and no gem surfaced), plentiful (only
