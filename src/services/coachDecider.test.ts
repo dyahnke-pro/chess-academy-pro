@@ -133,7 +133,7 @@ describe('ONE door — no surface composes the decision itself', () => {
     const { join } = await import('node:path');
     const src = readFileSync(join(process.cwd(), file), 'utf8');
     const code = src.split('\n').filter((l) => !/^\s*(\/\/|\*|\/\*)/.test(l)).join('\n');
-    expect(code).toMatch(/\bdecide\(/);
+    expect(code).toMatch(/\bcoachTurn\(/);
     // Composing importance + selection + ranking by hand is how the three
     // deciders drifted apart in the first place. The parts stay exported for
     // their own unit tests; a SURFACE reaches them only through `decide` (or
@@ -142,6 +142,30 @@ describe('ONE door — no surface composes the decision itself', () => {
     expect(code).not.toMatch(/computeImportance\(/);
     expect(code).not.toMatch(/selectFacts\(/);
     expect(code).not.toMatch(/rankFacets\(/);
+  });
+
+  it('ONE DOOR: nothing outside coachDecider calls decide( or decideTurn( (one coach P1, 2026-10-07)', async () => {
+    // Learn ran its own door (`decideTurn`) beside `decide`; every surface now
+    // asks `coachTurn`, and Learn's free play is its `'learn'` posture. A file
+    // that calls either inner door directly has gone around the one door.
+    const { readFileSync, readdirSync, statSync } = await import('node:fs');
+    const { join } = await import('node:path');
+    const walk = (d: string): string[] => readdirSync(d).flatMap((f) => {
+      const p = join(d, f);
+      return statSync(p).isDirectory() ? walk(p) : /\.(ts|tsx)$/.test(f) && !/\.test\.tsx?$/.test(f) ? [p] : [];
+    });
+    const INNER = new Set(['src/services/coachDecider.ts', 'src/services/learnTurnDoor.ts']);
+    const offenders: string[] = [];
+    for (const p of walk(join(process.cwd(), 'src'))) {
+      const rel = p.slice(process.cwd().length + 1);
+      if (INNER.has(rel)) continue;
+      const code = readFileSync(p, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').split('\n').map((l) => l.replace(/\/\/.*$/, '')).join('\n');
+      // Only the doors' own functions — a component's local `decide` (the
+      // consent modal's yes/no) is not a door.
+      const importsInner = /import\s*\{[^}]*\b(decide|decideTurn)\b[^}]*\}\s*from\s*'[./]*(?:services\/)?(coachDecider|learnTurnDoor)'/.test(code);
+      if (importsInner && /(?<![\w.])(decide|decideTurn)\(/.test(code)) offenders.push(rel);
+    }
+    expect(offenders, 'call coachTurn — the one door').toEqual([]);
   });
 
   it('every surface that composes a briefing DECLARES a posture', async () => {

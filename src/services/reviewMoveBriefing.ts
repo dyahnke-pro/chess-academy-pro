@@ -28,6 +28,9 @@ import { settledLeadFor, type LastMove } from './material';
 import { Chess } from 'chess.js';
 import { boardEdgeWords } from '../utils/countWords';
 import { computePlyFacts, tacticWord, type PrevCaptureContext } from './pvPlayback';
+// The previous-move context is part of this input's contract, so it travels
+// with it: a caller builds `prev` without reaching for a second computer.
+export { prevCaptureOf, NO_PREV_CAPTURE } from './pvPlayback';
 import { detectNewThreat } from './groundedAnswer';
 import { detectTactics } from './tacticsDetector';
 import { describeStructure } from './boardStructure';

@@ -41,9 +41,8 @@ import { buildDrillWrongTeaching, buildDrillBetterLine, buildDrillThreatSpot, bu
 import { computeWatchGemAside } from '../services/gemCrushLines';
 import { playOutPunish, advantageAlreadyShown } from '../services/punishPlayout';
 import { computeThreatDelta, computeRouteDelta, type DeltaAside } from '../services/engineDeltaLines';
-import { squaresNamedIn } from '../services/moveWhy';
-import { buildReviewMoveBriefing } from '../services/reviewMoveBriefing';
-import { prevCaptureOf, NO_PREV_CAPTURE } from '../services/pvPlayback';
+import { squaresNamedIn } from '../utils/squaresNamedIn';
+import { buildReviewMoveBriefing, prevCaptureOf, NO_PREV_CAPTURE } from '../services/reviewMoveBriefing';
 import {
   isStartablePunishLesson,
   isValidConceptsQuestion,

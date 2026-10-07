@@ -37,7 +37,7 @@ import { assessPositionalEdge, verdictBand } from './reviewPositionalAssessment'
 import { classifyPhase } from './gamePhaseService';
 import { foldStandingRefrains, emptyRefrainLedger } from './standingRefrains';
 import { renderStructureAtoms } from './structureProse';
-import { decide, habitNeedFrom } from './coachDecider';
+import { coachTurn, habitNeedFrom } from './coachDecider';
 import { advantageWasMissed } from './reviewWithholding';
 import { planStoppedProof, planStoppedLine } from './planStopped';
 import { deriveNextPlanFacts } from './nextPlans';
@@ -1447,7 +1447,7 @@ export function buildReviewSegments(
   // stamp the prior directly (keeps the legacy callers' walk at its old cost).
   // 🚨 KEEP THE WHOLE PACKAGE. This used to end `.needByPly`, throwing away
   // everything else the selector computed — including the student term the
-  // RANKER needs. Review's `decide()` then passed no `momentBoost` at all, so
+  // RANKER needs. Review's `coachTurn()` then passed no `momentBoost` at all, so
   // on the surface where diagnosis happens a student's own recorded holes could
   // not raise a single moment: the weaknesses were loaded, used to ORDER facts,
   // and ignored by the computer that decides how much a moment is worth saying.
@@ -2101,7 +2101,7 @@ export function buildReviewSegments(
       // sub-claims) so this is a loop, not a pure filter.
       // 🔒 THE LEDGERS ARE WRITTEN AFTER THE DOOR, FOR SPOKEN FACTS ONLY (B4,
       // 2026-09-22). Every say-once set below used to be mutated HERE, while
-      // building the candidate list — before `decide()` collapsed, floored or
+      // building the candidate list — before `coachTurn()` collapsed, floored or
       // (on a familiar opening ply) silenced the whole beat. So a fact the
       // student never heard was ledgered as said, and its next appearance was
       // dropped as a repeat: the development plan consumed on a need-silenced
@@ -2350,16 +2350,14 @@ export function buildReviewSegments(
       // are a SINGLE call now — review does not compose them itself, so it
       // cannot drift from the surface that adopts the decider next.
       const habitScratch = new Set(spokenHabits);
-      const decision = decide(
-        {
+      const decision = coachTurn({ signals: {
           decision: null,          // no per-ply criticality scan in the review pass
           cpLossCp: realCpLossCp,
           threatNet: 0,
           teachingBeat: fundamentalLed || !!causalLead,
           evalCpWhitePov: m.evaluation ?? null,
           wdl: null,
-        },
-        {
+        }, student: {
           rating: rating ?? DEFAULT_STUDENT_RATING,
           weaknesses: studentWeaknesses ?? [],
           // THE STUDENT TERM FOR THE RANKER — red or grey, raise-only, applied
@@ -2384,8 +2382,7 @@ export function buildReviewSegments(
           // Review is retrospective: it names the move that WAS the one, not the
           // student's next move, so the live advice gate does not apply.
           moveAdvice: null,
-        },
-        {
+        }, bundle: {
           facts: kept, squares: keptSquares, incoming: keptIncoming, stakes: keptStakes, family: keptFamily, proofs: keptProofs,
           // THE BOARD AFTER THIS PLY — a recapture pending, or mate for the
           // side to move (`boardState`). Review had no such guard at all: "You're
@@ -2411,12 +2408,12 @@ export function buildReviewSegments(
         // REVIEW IS A WALK: the student asked to be taken through the game, so a
         // quiet moment is a shorter beat, never a skipped one. Gating review on
         // the live-surface importance check cut this game to 6 narrated plies.
-        'walk',
+        posture: 'walk',
         // HOW TO THINK, not just what happened (David 2026-09-16). The signals
         // are ones this loop already holds — the attributor's own
         // `ignored-threat` finding, the cost, the move that was there — so the
         // habit is earned by a computed condition, never generic advice.
-        {
+        method: {
           // THE REAL COST — see `realCpLossCp` above: the same number the door
           // judged on, so the habit and the moment can never disagree.
           cpLossCp: realCpLossCp,
@@ -2431,8 +2428,7 @@ export function buildReviewSegments(
           habitByFact: new Map(kept
             .filter((f) => f.startsWith('[principle] '))
             .flatMap((f) => fundamentals.flatMap((fd) => (fd.id in FUNDAMENTAL_HABIT ? [[f, FUNDAMENTAL_HABIT[fd.id]] as const] : [])))),
-        },
-      );
+        } });
       // SILENCE IS A COMPUTED VERDICT, so it has to be explainable — emit what
       // went quiet and why, or a future session cannot tell a deliberate
       // collapse from a lost fact.
@@ -3631,7 +3627,7 @@ const REFUTED_PREP_MS = 8_000;
  * S2 — THE REFUTED ALTERNATIVE, computed BEFORE the walk is built (WO-TEACH-02).
  * `buildReviewSegments` is synchronous and the door runs per ply inside it, so
  * the engine work that costs the popular alternative happens here and is
- * handed in; the `[refuted]` facet it becomes goes through `decide()` like
+ * handed in; the `[refuted]` facet it becomes goes through `coachTurn()` like
  * every other fact. Student opening plies with nothing to correct only —
  * those are the plies a strong coach teaches with "most players play X here".
  * Candidates: players at the student's level first (cache), masters after.

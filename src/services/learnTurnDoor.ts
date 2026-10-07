@@ -23,7 +23,7 @@
  * Slice 1 (this file): route + record, behaviour-preserving. Ordering and dedupe are still
  * `buildVoicePackage`'s. Picking ONE lead per turn is the next slice.
  */
-import type { FactProof } from './proof';
+import { isProof, type FactProof, type Proof } from './proof';
 import { emitLearnTurn } from './coachDecisionEvents';
 import { COMPUTER_ROLES } from './computerRoles';
 import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type VoiceFactKind, type VoicePackage } from './voicePackage';
@@ -305,6 +305,12 @@ export interface TurnDecision {
   /** Lanes that spoke their SHORT phrasing because the student's own record
    *  proves the skill (David 2026-09-30: "Short phrasing when green"). */
   faded: LearnLane[];
+  /** THE PROOF LEDGER — the same contract as `CoachDecision` (one coach P1,
+   *  2026-10-07): the proof of every fact that SPOKE, keyed by its spoken
+   *  text, and the lanes that spoke a conclusion on the `stated` escape. */
+  proofOf: ReadonlyMap<string, Proof>;
+  unproven: number;
+  unprovenLanes: LearnLane[];
 }
 
 /** THE FADE. A lane that teaches a skill the student has PROVEN (green on the
@@ -472,10 +478,21 @@ export function decideTurn(
     ],
   };
   const lead = ownLead ? { lane: ownLead.lane, squares: ownLead.fact.squares ?? [] } : null;
+  // THE PROOF LEDGER over what spoke — the proof travels with the fact from
+  // its producer (`LaneFact.proof`), never re-derived.
+  const proofOf = new Map<string, Proof>();
+  const unprovenLanes: LearnLane[] = [];
+  for (const k of keep) {
+    const lane = laneFor(k);
+    const src = lane ? open.find((o) => o.lane === lane && (o.text === k.text || o.text.includes(k.text))) : undefined;
+    if (!src) continue;
+    if (isProof(src.proof)) proofOf.set(k.text, src.proof);
+    else if (src.proof && src.proof.none === 'stated' && lane && !unprovenLanes.includes(lane)) unprovenLanes.push(lane);
+  }
   // EMIT every decision (the algo-audit rule): a door whose decisions cannot be
   // inspected can only be judged by reading the tape.
-  if (offered.length > 0) emitLearnTurn({ offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded] });
-  return { pkg, offered, spoke, lead, held, faded };
+  if (offered.length > 0) emitLearnTurn({ offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes] });
+  return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes };
 }
 
 /** One line for the audit log: which lanes were offered and which spoke. */

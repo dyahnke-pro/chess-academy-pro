@@ -154,8 +154,8 @@ describe('WO-1b — one lead per turn', () => {
 
 describe('WO-1b — board descriptions wait for the turn\'s one decision', () => {
   it('the instant wave carries only urgent lanes; descriptions are deferred to the late wave', () => {
-    const start = TEACH_CODE.indexOf('const instantDecision = decideTurn([');
-    const end = TEACH_CODE.indexOf('learnMemRef.current.spokenKeys, null, provenTagsRef.current', start);
+    const start = TEACH_CODE.indexOf("const instantDecision = coachTurn({ posture: 'learn', facts: [");
+    const end = TEACH_CODE.indexOf('priorKeys: learnMemRef.current.spokenKeys, priorLead: null', start);
     const instantCall = TEACH_CODE.slice(start, end);
     for (const lane of ['commentary', 'behavior', 'positional', 'kingSafety']) {
       expect(instantCall, `${lane} speaks instantly again — it will lead the turn by arriving first`).not.toContain(`'${lane}'`);
@@ -400,5 +400,32 @@ describe('one claim, one seat (unity U6, Learn walk #26)', () => {
       { lane: 'tactic', proof: NO_PROOF.stated, text: 'Your rook on d1 pins their pawn on d5 against their queen on d8.', fen: FEN, squares: ['d1', 'd5', 'd8'] },
     ]);
     expect(d.held).not.toContain('tactic');
+  });
+});
+
+describe('ONE DOOR — Learn is a posture of coachTurn (one coach P1, 2026-10-07)', () => {
+  const LEAD = 'Their knight on c6 defends the pawn on e5.';
+  const FUND = 'You moved the same piece twice — develop a new one first.';
+  const facts = (): Parameters<typeof decideTurn>[0] => [
+    { lane: 'mistake', proof: NO_PROOF.stated, text: LEAD, fen: FEN, squares: ['c6', 'e5'] },
+    { lane: 'fundamental', proof: NO_PROOF.method, text: FUND, fen: FEN, squares: ['g1'] },
+  ];
+
+  it('the door decides exactly what the Learn ranking decided — nothing changed on the way in', async () => {
+    const { coachTurn } = await import('./coachDecider');
+    for (const beginner of [false, true]) {
+      const viaDoor = coachTurn({ posture: 'learn', facts: facts(), priorLead: null, green: null, beginner });
+      const direct = decideTurn(facts(), undefined, undefined, null, null, beginner);
+      expect(viaDoor).toEqual(direct);
+    }
+  });
+
+  it('a conclusion on the "stated" escape is counted on the decision — Learn answers the same ledger as review', () => {
+    const d = decideTurn(facts(), undefined, undefined, null, null, true);
+    expect(d.spoke).toContain('mistake');
+    expect(d.unprovenLanes).toEqual(['mistake']);
+    expect(d.unproven).toBe(1);
+    // A method line has a reason not to need one — it is not counted.
+    expect(d.unprovenLanes).not.toContain('fundamental');
   });
 });

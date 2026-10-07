@@ -96,15 +96,20 @@ describe('proof backlog — which producers owe a proof', { timeout: 600_000 }, 
     let rows = 0; let unproven = 0;
     const off = onCoachDecision((r) => { rows += 1; unproven += r.unproven; for (const k of r.unprovenKinds) kinds[k] = (kinds[k] ?? 0) + 1; });
     const picked = games.filter((g) => g.pgn && pgnToSans(g.pgn).length >= 40).slice(0, Number(process.env.BACKLOG_GAMES ?? 2));
+    // THE TAPE (one coach P1, 2026-10-07): every spoken review line, per ply,
+    // so a change to the door is diffed by TEXT, not only by counts.
+    const tape: Array<{ game: string | undefined; intro: string; plies: Array<{ ply: number; text: string }> }> = [];
     for (const g of picked) {
-      await generateReviewNarration({
+      const n = await generateReviewNarration({
         moves: synthMoves(pgnToSans(g.pgn ?? '')), playerColor: g.studentSide === 'black' ? 'black' : 'white',
         openingName: null, result: '*', playerRating: 1500, coachNarration: 'silent', uncapped: true,
       });
+      tape.push({ game: g.id, intro: n.intro, plies: n.segments.map((sg) => ({ ply: sg.ply, text: sg.narration })) });
     }
     off();
     const ranked = Object.entries(kinds).sort((a, b) => b[1] - a[1]);
     mkdirSync('audit-reports', { recursive: true });
+    writeFileSync('audit-reports/review-tape-corpus.json', JSON.stringify(tape, null, 2));
     writeFileSync('audit-reports/proof-backlog.json', JSON.stringify({ games: picked.map((g) => g.id), rows, unproven, byKind: ranked }, null, 2));
     console.log(`proof backlog: ${unproven} unproven over ${rows} decisions — ${ranked.map(([k, n]) => `${k}:${n}`).join(' ')}`);
     expect(rows).toBeGreaterThan(0);

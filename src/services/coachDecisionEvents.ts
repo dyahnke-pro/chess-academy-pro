@@ -173,6 +173,10 @@ export interface LearnTurnRow {
   held: string[];
   /** Lanes that spoke short because the skill is proven (the fade). */
   faded: string[];
+  /** Conclusions that spoke on the `stated` escape (no proof) — the P3
+   *  backlog, measured live on Learn as it is on the other surfaces. */
+  unproven: number;
+  unprovenLanes: string[];
 }
 
 const learnTurnListeners = new Set<(row: LearnTurnRow) => void>();

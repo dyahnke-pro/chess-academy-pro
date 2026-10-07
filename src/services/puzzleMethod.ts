@@ -1,4 +1,4 @@
-import { decide } from './coachDecider';
+import { coachTurn } from './coachDecider';
 import { CALM_BOARD } from './boardState';
 import { NO_BOOST } from './studentMomentBoost';
 import { layerStandings } from './teachingLayers';
@@ -38,9 +38,7 @@ export function puzzleMethodLine(
   record: StudentRecord,
   variety = 0,
 ): string | null {
-  const d = decide(
-    { decision: null, cpLossCp: stakesCp, threatNet: 0, teachingBeat: false, evalCpWhitePov: null, wdl: null },
-    {
+  const d = coachTurn({ signals: { decision: null, cpLossCp: stakesCp, threatNet: 0, teachingBeat: false, evalCpWhitePov: null, wdl: null }, student: {
       // Not read for volume (B6) — carried for completeness of the context.
       rating: DEFAULT_STUDENT_RATING,
       weaknesses: record.weaknesses,
@@ -50,11 +48,7 @@ export function puzzleMethodLine(
       moveAdvice: null,
       momentBoost: NO_BOOST,
       layers: layerStandings(record.weaknesses, record.capabilities),
-    },
-    { facts: [], board: CALM_BOARD, squares: new Map(), proofs: new Map() },
-    'walk',
-    { bestSan, cpLossCp: stakesCp, ignoredThreat: false, isStudentMove: true, saidHabits: said, ply: variety },
-  );
+    }, bundle: { facts: [], board: CALM_BOARD, squares: new Map(), proofs: new Map() }, posture: 'walk', method: { bestSan, cpLossCp: stakesCp, ignoredThreat: false, isStudentMove: true, saidHabits: said, ply: variety } });
   const beat = d.spoken.find((t) => t.startsWith('[method] '));
   return beat ? beat.slice('[method] '.length) : null;
 }

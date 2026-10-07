@@ -54,7 +54,7 @@ describe('review — the cost handed to the door and the method beat is SIGNED, 
     const src = readFileSync('src/services/coachFeatureService.ts', 'utf8')
       .replace(/\/\*[\s\S]*?\*\//g, '')
       .replace(/^\s*\/\/.*$/gm, '');
-    const door = src.slice(src.indexOf('const decision = decide('), src.indexOf('const decision = decide(') + 4000);
+    const door = src.slice(src.indexOf('const decision = coachTurn({'), src.indexOf('const decision = coachTurn({') + 4000);
     expect(door).toMatch(/cpLossCp: realCpLossCp,[\s\S]*cpLossCp: realCpLossCp,/);
     expect(door).not.toMatch(/Math\.abs\(m\.evaluation - m\.preMoveEval\)/);
     expect(door).not.toMatch(/classification === 'blunder' \? 300/);

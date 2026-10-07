@@ -352,7 +352,7 @@ describe('B1 — the pre-gate and the door judge ONE signals object (2026-09-22)
       .replace(/\/\*[\s\S]*?\*\//g, '')
       .replace(/^\s*\/\/.*$/gm, '');
     expect(src).toMatch(/judgeMoment\(momentSignals,/);
-    expect(src).toMatch(/decide\(\s*momentSignals,/);
+    expect(src).toMatch(/coachTurn\(\{ signals: momentSignals,/);
     // One construction site for the moment's signals.
     expect((src.match(/const momentSignals: ImportanceSignals = \{/g) ?? []).length).toBe(1);
   });

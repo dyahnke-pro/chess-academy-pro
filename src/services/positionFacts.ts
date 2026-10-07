@@ -33,7 +33,7 @@ import { phaseVerdictLine, phaseVerdictKeys } from './reviewPositionalAssessment
 import { stemKeyOf, rotateStem } from '../utils/rotateStem';
 import { findPinPressure, PIN_PRESSURE_PRINCIPLE, PIN_PRESSURE_WARNING, pieceName, type PinPressure } from './pinPressure';
 import { type ImportanceVerdict, type ImportanceSignals } from './narrationImportance';
-import { judgeMoment, decide, type SurfacePosture } from './coachDecider';
+import { judgeMoment, coachTurn, type SurfacePosture } from './coachDecider';
 import { isMateEval } from './engineConstants';
 import { boardStateAfter, inFluxAfter, mateInOneOnBoard, type BoardState } from './boardState';
 import type { QuietFact } from './factSelector';
@@ -666,7 +666,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // no student term — and its `importance.speak` is what gates the EXPENSIVE
   // facts below (`computeLeansOn`, `structurePlan`). So a moment this student's
   // own record would have raised never got those facts COMPUTED, and the real
-  // door (`decide()`, which DOES get the boost) can only rank facts that exist.
+  // door (`coachTurn()`, which DOES get the boost) can only rank facts that exist.
   // The heat map was excluded from the gate deciding what the heat map would
   // later choose between.
   //
@@ -1053,9 +1053,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   const boardHere: BoardState = producedBy
     ? boardStateAfter(producedBy.fenBefore, producedBy.san, fen, evalCpWhitePov)
     : { inFlux: null, mateOnBoard: isMateEval(evalCpWhitePov) || mateInOneOnBoard(fen) };
-  const decision = decide(
-    momentSignals,
-    {
+  const decision = coachTurn({ signals: momentSignals, student: {
       rating,
       weaknesses: input.studentWeaknesses ?? [],
       // THE DATA TERM (algo-based supreme law): matched HERE, where the clauses
@@ -1077,8 +1075,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       // The student's standing per teaching layer — the same record that
       // feeds the boost above, read as layers (WO-LAYERS-01).
       layers: layerStandings(input.studentWeaknesses ?? [], input.studentNeedContext?.capabilities),
-    },
-    {
+    }, bundle: {
       facts: composed.map((c) => c.text),
       proofs: new Map(composed.flatMap((c) => (c.proof ? [[c.text, c.proof] as const] : []))),
       squares: new Map(composed.flatMap((c) => (c.squares && c.squares.length ? [[c.text, c.squares] as const] : []))),
@@ -1101,13 +1098,12 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       // when the student is to move, the student's otherwise.
       board: boardHere,
       alreadySaid: input.alreadySaid,
-    },
-    input.posture,
+    }, posture: input.posture,
     // No method context: this composer already emits its own method beat in the
     // PRESENT-tense register (`liveMethodBeatFor`). Passing one here would
     // append the RETROSPECTIVE stem too — two habits, one of them a lie about a
     // move nobody has played yet.
-  );
+  });
   const clauses = decision.spoken.flatMap((t) => { const c = clauseByText.get(t); return c ? [c] : []; });
 
   return {

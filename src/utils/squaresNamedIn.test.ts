@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { squaresNamedIn } from './moveWhy';
+import { squaresNamedIn } from './squaresNamedIn';
 
 
 describe('squaresNamedIn — the squares a spoken line names (voiced or computed)', () => {

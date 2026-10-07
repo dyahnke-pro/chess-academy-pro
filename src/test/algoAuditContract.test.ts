@@ -66,7 +66,7 @@ const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
   'learn-turn-decision': {
     script: 'scripts/audit-concept-gameplay-prod.mjs',
     contractMarker: 'the LEARN door EMITTED',
-    emittedBy: 'src/services/learnTurnDoor.ts (decideTurn), aggregated by appAuditor',
+    emittedBy: 'src/services/learnTurnDoor.ts (decideTurn, reached only through coachDecider.coachTurn posture learn), aggregated by appAuditor',
   },
   'lane-evidence': {
     script: 'scripts/audit-concept-gameplay-prod.mjs',

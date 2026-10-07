@@ -44,6 +44,11 @@ import type { WeaknessSignal } from './weaknessSignal';
 import { emitCoachDecision } from './coachDecisionEvents';
 import type { MoveAdviceVerdict } from './nextMoveAdvice';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
+import { decideTurn, type LaneFact, type LearnLane, type TurnDecision } from './learnTurnDoor';
+// The Learn turn's vocabulary travels through the door, so a surface imports
+// ONE deciding module (one coach P1).
+export { buildVoicePackage, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys } from './learnTurnDoor';
+export type { FactStakes, LaneFact, LearnLane, SpokenLine, TurnDecision, VoicePackage, VoiceFactKind } from './learnTurnDoor';
 
 /** HOW A SURFACE LISTENS — and it is not cosmetic, it decides what silence MEANS.
  *
@@ -59,6 +64,41 @@ import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
  *  every unit test stayed green — only reading the narration caught it. A
  *  surface must declare its posture; there is no safe default. */
 export type SurfacePosture = 'walk' | 'interrupt';
+
+/** THE ONE DOOR (one coach P1, 2026-10-07). Every surface asks `coachTurn`;
+ *  the request's posture picks the rule. Learn's free play is a posture of
+ *  this door, not a second decider: its turn ranking (danger first, stakes,
+ *  the turn grammar) runs here and answers the same proof ledger.
+ *  `Record` over the postures, so a new one fails to compile until someone
+ *  says which rule decides it. */
+export type DoorPosture = SurfacePosture | 'learn';
+export interface MomentRequest {
+  posture: SurfacePosture;
+  signals: ImportanceSignals;
+  student: StudentContext;
+  bundle: FactBundle;
+  method?: MethodContext;
+}
+export interface LearnTurnRequest {
+  posture: 'learn';
+  facts: readonly LaneFact[];
+  alreadySaid?: string;
+  priorKeys?: ReadonlySet<string>;
+  priorLead?: { lane: LearnLane; squares: readonly string[] } | null;
+  green?: ReadonlySet<string> | null;
+  beginner?: boolean;
+}
+export type DoorRequest = MomentRequest | LearnTurnRequest;
+const DOOR_RULE: Record<DoorPosture, 'moment' | 'learn-turn'> = { walk: 'moment', interrupt: 'moment', learn: 'learn-turn' };
+export function coachTurn(req: LearnTurnRequest): TurnDecision;
+export function coachTurn(req: MomentRequest): CoachDecision;
+export function coachTurn(req: DoorRequest): TurnDecision | CoachDecision {
+  if (DOOR_RULE[req.posture] === 'learn-turn' && req.posture === 'learn') {
+    return decideTurn(req.facts, req.alreadySaid, req.priorKeys, req.priorLead, req.green, req.beginner ?? false);
+  }
+  const m = req as MomentRequest;
+  return decide(m.signals, m.student, m.bundle, m.posture, m.method);
+}
 
 /** What this student brings to the board. */
 export interface StudentContext {

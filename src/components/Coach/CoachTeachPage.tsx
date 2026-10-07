@@ -33,7 +33,7 @@ import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { transferClause, recordMotif, withTransfer, studentMoveAfterReply } from '../../services/motifLedger';
-import { buildVoicePackage, DANGER_LANES, decideTurn, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/learnTurnDoor';
+import { buildVoicePackage, coachTurn, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/coachDecider';
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, intentRule, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
@@ -7817,7 +7817,7 @@ export function CoachTeachPage(): JSX.Element {
       const prior = turnLeadRef.current && samePosition(turnLeadRef.current.fen, liveFenRef.current ?? fen)
         ? turnLeadRef.current.lead
         : null;
-      const d = decideTurn([{ lane: 'phase', text, fen, proof: NO_PROOF.description }], undefined, learnMemRef.current.spokenKeys, prior, provenTagsRef.current, isBeginnerMode(useAppStore.getState().activeProfile));
+      const d = coachTurn({ posture: 'learn', facts: [{ lane: 'phase', text, fen, proof: NO_PROOF.description }], priorKeys: learnMemRef.current.spokenKeys, priorLead: prior, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile) });
       // A held sentence was not spoken, so it must not ride the narration
       // kind every listener reads as speech.
       void logAppAudit(d.pkg.spoken ? {
@@ -8929,7 +8929,7 @@ export function CoachTeachPage(): JSX.Element {
     deferIf(computedLine, 'commentary', computedLine, NO_PROOF.description, undefined, undefined, computedLineArrows);
     deferIf(behaviorLine && !decidedByMaterial, 'behavior', behaviorLine, NO_PROOF.description, behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)), behaviorClaims, behaviorArrows);
     deferIf(positionalLine && !decidedByMaterial, positionalIsOwnKing ? 'kingSafety' : 'positional', positionalLine, NO_PROOF.description, positionalSquares, positionalClaims);
-    const instantDecision = decideTurn([
+    const instantDecision = coachTurn({ posture: 'learn', facts: [
       ...(gemLine ? [{ lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply, proof: NO_PROOF.withheld }] : []),
       ...(tacticLine ? [{ lane: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, claims: tacticClaim ? [tacticClaim] : undefined, lines: tacticLines, proof: tacticLines?.[0] && !isProof(tacticFactProof) ? (lineProof(tacticLines[0]) ?? tacticFactProof) : tacticFactProof }] : []),
       ...(threatLine ? [{ lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: threatFactProof }] : []),
@@ -8965,7 +8965,7 @@ export function CoachTeachPage(): JSX.Element {
       // priorKeys = every phrase spoken EARLIER this game, so no lane repeats a
       // phrase across turns (David 2026-09-13). Within-turn dedupe is separate
       // (the late package's `alreadySaid`); this is the cross-turn guarantee.
-    ], undefined, learnMemRef.current.spokenKeys, null, provenTagsRef.current, isBeginnerMode(useAppStore.getState().activeProfile));
+    ], priorKeys: learnMemRef.current.spokenKeys, priorLead: null, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile) });
     // Every lane's speak/silent answer is the door's lane table now
     // (`learnTurnDoor.LEARN_LANES`), not a kind whitelist applied after the
     // fact. NO COUNT CAP (David 2026-09-13) still holds — repetition is caught
@@ -11264,8 +11264,9 @@ export function CoachTeachPage(): JSX.Element {
                   // what may speak; the package orders and dedupes. NO COUNT CAP
                   // (David 2026-09-13) — repetition is caught by the twin gate and
                   // the per-game novelty set, not by a number.
-                  const lateDecision = decideTurn(
-                    pending.lines
+                  const lateDecision = coachTurn({
+                    posture: 'learn',
+                    facts: pending.lines
                       // A threat alert already said a tactic is on the board;
                       // "it has turned sharp — there is a tactic" beside it is
                       // the same fact, and it landed between the question and
@@ -11277,14 +11278,14 @@ export function CoachTeachPage(): JSX.Element {
                       // A live threat is the answer; the slow plan waits.
                       .filter((l) => !(l.lane === 'planArc' && /^What is their /.test(l.text) && /(?:^|\. )(?:Watch out|Careful) —/.test(instantSpokenText)))
                       .map(({ lane, kind, text, squares, claims, gradeFen, lines, stakes, proof }) => ({ lane, kind, text, squares, claims, lines, stakes, proof, fen: gradeFen ?? pending.fen })),
-                    instantSpokenText,
-                    learnMemRef.current.spokenKeys,
+                    alreadySaid: instantSpokenText,
+                    priorKeys: learnMemRef.current.spokenKeys,
                     // ONE THOUGHT PER TURN (WO-1b): the late wave leads only
                     // if it outranks what the instant wave led with.
-                    instantLead,
-                    provenTagsRef.current,
-                    isBeginnerMode(useAppStore.getState().activeProfile),
-                  );
+                    priorLead: instantLead,
+                    green: provenTagsRef.current,
+                    beginner: isBeginnerMode(useAppStore.getState().activeProfile),
+                  });
                   const hintPkg = lateDecision.pkg;
                   if (announcesTheMove(lateDecision.spoke)) announcedBoardsRef.current.add(pending.fen.split(' ').slice(0, 2).join(' '));
                   if (lateDecision.lead) turnLeadRef.current = { fen: pending.fen, lead: lateDecision.lead };

@@ -568,6 +568,12 @@ async function main() {
       // A fade here is the heat map reading green off an empty record.
       const fadedRows = turns.filter((t) => !Array.isArray(t.faded) || t.faded.length > 0 || t.faded.some((l) => !t.offered.includes(l)));
       record('LD3. nothing FADED on a fresh device (grey teaches in full)', fadedRows.length === 0, `${fadedRows.length} of ${turns.length} rows faded or lack the field`);
+      // THE PROOF LEDGER (one coach P1, 2026-10-07): Learn answers the same
+      // unproven count as review. The field must be present on every row (the
+      // ledger ran); the count is REPORTED — it is the P3 backlog, shrinking.
+      const noLedger = turns.filter((t) => typeof t.unproven !== 'number' || !Array.isArray(t.unprovenLanes));
+      const unprovenTotal = turns.reduce((n, t) => n + (typeof t.unproven === 'number' ? t.unproven : 0), 0);
+      record('LD4. every Learn turn carries its proof ledger', noLedger.length === 0, `${noLedger.length} rows lack it; ${unprovenTotal} unproven conclusions spoke across ${turns.length} turns`);
       const laneCount = {};
       for (const t of turns) for (const l of t.spoke) laneCount[l] = (laneCount[l] ?? 0) + 1;
       console.log('  [learn door] spoke by lane:', JSON.stringify(laneCount));

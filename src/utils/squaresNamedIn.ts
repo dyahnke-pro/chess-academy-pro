@@ -1,7 +1,7 @@
-// moveWhy — squaresNamedIn: the board squares a spoken line names, so the eye
-// is led to them. The old private 'what a move does' computer that lived here
-// (computeMoveWhy) was deleted 2026-10-07 (census group 6): the teach
-// walkthrough reads the one briefing every generated lesson bakes.
+// squaresNamedIn: the board squares a spoken line names, so the eye
+// is led to them. Text only — no chess judgement. The 'what a move does'
+// computer that shared this file (computeMoveWhy) was deleted 2026-10-07 (census
+// group 6): the walkthrough reads the briefing every generated lesson bakes.
 
 /**
  * The board squares NAMED in a spoken line — so the eye can be led to every
