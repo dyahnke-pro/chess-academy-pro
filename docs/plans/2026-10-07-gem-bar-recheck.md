@@ -63,3 +63,17 @@ Source: engineCp already stored per gem (engine playout to a quiet position). Me
 | vienna-game | Nge7 | Nxg5 | 304 |
 
 Next: confirm each keeper is FORCED (no defence holds the material) with a deeper engine pass at build time; gambit-punish-gems.json checked the same way.
+## David's Bxf7 trap — engine check (depth 18, 2026-10-07)
+
+Line: 1.e4 e5 2.Nf3 d6 3.Bc4 Bg4 4.Bxf7+ Kxf7 5.Ng5+ Ke8 6.Qxg4.
+
+- In THIS exact move order it does **not** clear the bar: after 5.Ng5+ Black
+  answers **5...Qxg5!** (the queen takes the knight along d8-e7-f6-g5, which is
+  still open) and Black is about +4.9. After 4.Bxf7+ with best defence Black is
+  about +2.7. So 3...Bg4 is not refuted by force here; the sac only wins if
+  Black plays the natural-looking 5...Ke8 / ...Ke7.
+- The NUGGET this teaches is real and worth building on: **the trap works only
+  when their queen can't take the knight on g5** — i.e. when the d8-g5
+  diagonal is blocked (…Nf6 or …Be7 already played). Build the gem on the
+  move orders where that's true, engine-verified, and teach the check:
+  "before Bxf7+ and Ng5+, does their queen cover g5?"
