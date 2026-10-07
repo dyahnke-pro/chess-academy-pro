@@ -22,3 +22,10 @@
    DAVID'S EXAMPLE: while teaching the Catalan — "here's how Magnus plays the
    Catalan", then a live example: one of his real games walked on the board
    (credit for the game, never "he teaches"). Only a real game from the DB.
+   SOURCES, MEASURED: public/data/pro-game-references.json = 2,209 real games,
+   8 pros (naroditsky 530, gothamchess 403, caruana 317, carlsen 300, aman 247,
+   ericrosen 237, samayraina 116, hikaru 59), tagged by opening (Carlsen has
+   15 Catalans) — answers "how does X play this opening". The live masters
+   explorer (proxy) returns named top games for an EXACT position — answers
+   "a famous game reached this position". The bundled masters DB holds move
+   counts only (no names, no games).
