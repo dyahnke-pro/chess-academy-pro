@@ -22,6 +22,11 @@ Opening has ZERO — it is not a built opening (only 40 raw DB entries, generic
 walkthrough). David: "so many ways black can go wrong … most noticeably with a
 bishop sac on f7". Build it properly, gems found BY HAND (no bots), every
 Bxf7 slip engine-verified, taught per F01.
+FIRST GEM (David's, "OH MY GOD WHAT A BEAUTIFUL TACTIC"; he learned it a month
+ago): 1.e4 e5 2.Nf3 d6 3.Bc4 Bg4? 4.Bxf7+! Kxf7 5.Ng5+ Ke8 6.Qxg4 —
+chess.js-legal (verified 2026-10-07); engine value to verify at build. The
+nugget to TEACH: a pin only holds while the pinned piece can't move WITH
+CHECK — the knight leaves with check, the pin breaks, the pinning bishop hangs.
 
 0. TEACHING TRACK: learn HOW the reference coach teaches (voiced corpus
    public/data/voiced-teachings.json — 7,477 notes from 428 videos; the
