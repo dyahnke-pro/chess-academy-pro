@@ -18,6 +18,23 @@ Openings → Coach → Weaknesses → Tactics are **stations, not the loop**. Th
 is that the output of every session becomes the input of the next one. A coach
 that forgets between games is not running the loop — it is replaying the intro.
 
+## ❤️ THE HEART OF THE APP — the coach THINKS OUT LOUD FOR the student (David 2026-10-07: "THIS IS THE HEART AND SOUL OF THE APP! THIS IS THE BEHAVIOR THAT TEACHES. THIS IS WHAT ALL THE COMPUTERS ARE BUILT FOR! SO WE CAN THINK OUT LOUD FOR THE USER!")
+
+Naroditsky works the answer out live. We already KNOW it — so the coach never
+guesses; it shows the student how to work it out: THEIR thought process, said
+out loud, until they hear it in their own head. In order: (1) what their move
+changed; (2) the choices THE STUDENT would consider (the tempting capture, the
+natural move, what players at their level play, what they played last time)
+and why each falls short; (3) "not yet, first this"; (4) the line played out,
+with their reply in words; (5) what the opponent keeps doing wrong — closing
+on the habit that finds it next time. Never just the answer.
+
+Every computer below exists to feed this. The student's record decides WHICH
+thoughts this student most needs to hear. ONE COACH (2026-10-07): it runs the
+same on every surface. The live checklist of the rules is the Rulebook
+artifact (https://claude.ai/artifact/NRthGVKnujdnRxpegdLrxP), built with David
+rule by rule.
+
 ## The tools are COMPUTERS
 
 The coach's toolkit is the deterministic calculators that have been built into
