@@ -84,3 +84,6 @@ Line: 1.e4 e5 2.Nf3 d6 3.Bc4 Bg4 4.Bxf7+ Kxf7 5.Ng5+ Ke8 6.Qxg4.
   right defence but punishes the natural reply — count as a trap, taught
   honestly ("it works if they step the king back; if they take on g5 it fails")?
   Under the bar as written (forced) it does not.
+
+
+ANSWERED (David): teach the pattern with its conditions — when it is sound and when it is not, plus the check. "That is the beauty of a teacher." Build: the engine finds the move orders where both conditions hold (g5 not covered by their queen, g4 not otherwise guarded) and the ones where they fail; teach both.
