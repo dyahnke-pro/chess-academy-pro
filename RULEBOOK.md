@@ -122,7 +122,7 @@ when a rule changes; never edit a rule here alone.
 - **D8** — Moves and lines are always real: from the opening database, the rules of chess, or the engine. Nothing is invented from memory. If the database doesn't have a line, the line doesn't exist for us.  _[settled]_
 - **D9** — Every decision the coach makes is recorded so it can be checked: what it chose, why, and what it left quiet.  _[settled]_
 - **D10** — Every claim the coach makes must be true on the board. The bar is 100%: a false claim is a defect, fixed at the computer that produced it.  _[settled]_
-- **D11** — IMPORTANCE = CONSEQUENCE. A fact ranks high when it changes what either side must do or can do now. Every move has a drawback (it stops defending something, gives up a square); say it when the opponent can actually use it, skip it when they can't. A new weakness is said with what it now means: "that's a backward pawn now; you'll have to keep a minor piece defending it" or, for theirs, "it's a target: attack it and their pieces get tied down defending it."  _[new 2026-10-07]_
+- **D11** — IMPORTANCE = CONSEQUENCE. A fact ranks high when it changes what either side must do or can do now. Every move has a drawback (it stops defending something, gives up a square); say it when the opponent can actually use it, skip it when they can't. A new weakness is said with what it now means: "that's a backward pawn now; you'll have to keep a minor piece defending it" or, for theirs, "it's a target: attack it and their pieces get tied down defending it." The ranking grows with the student: as they get stronger, a single pawn or square can decide their games, so small things rise (the record decides, F03).  _[new 2026-10-07]_
 
 ## 6. The student record
 
