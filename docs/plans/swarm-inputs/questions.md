@@ -85,3 +85,12 @@ CHECK — the knight leaves with check, the pin breaks, the pinning bishop hangs
    repertoires (fetch-chesscom / fetch-otb-games → build-game-references) can
    add any player. Gap = Learn, Review and lessons never reach for a game on
    their own.
+
+3. OPEN QUESTIONS — propose answers for David to decide (do not build without his yes):
+   a. When the coach ASKS instead of tells (Review asks at turning points; Learn?).
+   b. Explaining a term (pin, outpost, zwischenzug) the first time, and knowing which terms the student knows.
+   c. Rhythm: how much it says on routine moves vs decisions.
+   d. Spaced repetition of IDEAS, not just opening moves.
+   e. What great middlegame and endgame teaching looks like after move 15.
+   f. A check that every spoken line does one of the F01 verbs (teaching vs description).
+   g. Speed: thinking out loud must arrive in time (review prep ~7 s today).
