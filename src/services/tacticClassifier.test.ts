@@ -101,11 +101,19 @@ describe('classifyPosition — fork detection', () => {
   });
 
   it('detects a queen fork with check', () => {
-    // White queen on d1 plays Qa4+ forking black king on e8 and rook on a8
+    // Qe4+ hits the king down the e-file and the a8 rook down the diagonal, and
+    // nothing can take the queen. (The old fixture, Qa4+, was a false fork:
+    // …Rxa4 takes the queen — the verified check now rejects it, census 3.)
+    const fen = 'r3k3/8/8/8/8/3Q4/8/4K3 w - - 0 1';
+    const fenAfter = playMove(fen, 'Qe4');
+    const result = classifyPosition(fen, fenAfter, 'Qe4', 0, -500);
+    expect(hasTactic(result, 'fork')).toBe(true);
+  });
+
+  it('a "fork" the forked piece simply captures is not a fork (Qa4+ Rxa4)', () => {
     const fen = 'r3k3/8/8/8/8/8/8/3QK3 w - - 0 1';
     const fenAfter = playMove(fen, 'Qa4');
-    const result = classifyPosition(fen, fenAfter, 'Qa4', 0, -500);
-    expect(hasTactic(result, 'fork')).toBe(true);
+    expect(hasTactic(classifyPosition(fen, fenAfter, 'Qa4', 0, 0), 'fork')).toBe(false);
   });
 
   it('does not detect a fork with only one target', () => {

@@ -10,6 +10,7 @@ import { PIECE_NAMES } from '../types/tacticTypes';
 import { isRealPin } from './pinGeometry';
 import { cpBand } from './accuracyService';
 import { findHangingBySee } from './positionReadingService';
+import { verifyForkOnBoard } from './tacticVerification';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -188,6 +189,13 @@ function detectFork(
   }
 
   if (targets.length < 2) return null;
+  // A FORK IS ONLY A FORK IF IT WINS SOMETHING — the same check Review's fork
+  // facet uses (`verifyForkOnBoard`: tempo + the exchange). Measured on 13,372
+  // corpus plies: this shape-only test called 497 forks, the verified detector
+  // 82, every one of them shared — the other 415 attacked two guarded pieces
+  // (…Bxe7 "forking" a defended queen and rook) and reached Play's move-list
+  // commentary (census group 3).
+  if (verifyForkOnBoard(chessAfter.fen(), toSquare, targets.map((t) => t.square)).status === 'none') return null;
 
   const movedPiece = chessAfter.get(toSquare);
   const movedName = movedPiece ? pieceName(movedPiece.type) : 'piece';
