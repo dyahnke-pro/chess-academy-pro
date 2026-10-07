@@ -78,7 +78,8 @@ when a rule changes; never edit a rule here alone.
   - Note: Default applied since you moved on: words everywhere, including the Review opening lecture. Strike if you want its percentages kept.
 - **V9** — No move numbers in speech ("2.Nc3" is read "two knight c3"). Say the move, or the piece and square.  _[settled]_
 - **V10** — Name the pattern, not just the move: "Anastasia's mate", "Lucena", "a fork". The move is on the board; the name is the takeaway.  _[settled]_
-- **V11** — Silence is allowed. Two words beat two sentences when two words is enough. Nothing is said just to fill space.  _[settled]_
+- **V11** — NEVER SILENT. In Learn, Review and the lessons, the coach says something on every move, the way the reference coach talks through every move as he plays it. The algorithm (V19) decides how much: a full thought where it matters, a short clause where it doesn't. Nothing is said just to fill space, but no move passes in silence.  _[new 2026-10-07]_
+  - Note: still open — does this also cover Play?
 - **V12** — Wording varies so the same line doesn't repeat word for word, but it rotates on a fixed key, never at random.  _[settled]_
 - **V13** — Say each thing once. One fact, one sentence, once per game, unless something changed.  _[settled]_
 - **V14** — No cap on how much the coach says. Nothing is cut at "top 3". The coach decides what is worth saying; a long list is said as a list, not truncated.  _[settled]_
@@ -110,7 +111,7 @@ when a rule changes; never edit a rule here alone.
 - **D1** — ONE decider chooses everything the coach says, on every surface: whether to speak, which facts, in what order.  _[CODE DISAGREES — to build]_
   - Note: Census: 9 separate deciders today.
 - **D2** — WHETHER to speak comes from two things: does this moment matter (is the choice here a real one), and does THIS student need it (their own record). With no record yet, the answer is teach.  _[settled]_
-- **D3** — When you asked to walk through a game (Review, Watch), every move gets its turn; importance only decides how much is said. On a live board (Learn), silence is the default and the coach speaks when it matters.  _[settled]_
+- **D3** — When walking through a game (Review, Watch) and on a live board (Learn), every move gets its turn; importance decides how much is said, never whether the move is spoken about.  _[new 2026-10-07]_
 - **D4** — Two facts that say the same thing about the same squares become one: the stronger one speaks. ("The pin and the battery are the same idea, so the battery wins.")  _[settled]_
 - **D5** — Order is worked out, not fixed: what is at stake comes first (material or mate, and how soon), and the student's own weak spots move up.  _[settled]_
 - **D6** — One memory per game of what has been said, shared by every part of the coach. Nothing repeats unless something changed.  _[CODE DISAGREES — to build]_
