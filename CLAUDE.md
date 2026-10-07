@@ -5454,6 +5454,8 @@ the log. Don't let it rot.
 
 🔒🔒 **NO BANDAGES ON THE FLY (David 2026-10-07: "YOU SLAP BANDAIDS ON when you fix on the fly. that cannot happen anymore").** A problem found mid-build: small root-cause fix → fix it now; big → the list. Either way it is a root-cause fix (name the cause, fix the producer, a test that fails on the old code). "Quick" never means "patch the symptom" (rulebook B4).
 
+🔒🔒 **NEVER STOP MID-BUILD (David 2026-10-07: "an hour could go by waiting for me to say yes to a question that you already know the answer to").** Once a plan is set, keep building while checks and audits run, and never ask whether to fix something you already know is broken — fix it at the root. A question whose answer you already know is never asked (rulebook B5).
+
 🔒 **WORK ON A BRANCH WHILE MAKING CHANGES; QUICK AUDITS OVER FULL PROD AUDITS (David 2026-09-25: "Remember to send to a branch while making changes. We don't need full production audits as much as we need quick audits with efficient fix").** Commit and push work-in-progress to the session's branch, and KEEP SHIPPING IT LIVE: merge to `main` as each fix is done and green (David: "Continue pushing your changes live though"). Verify with the fastest check that proves the change (a targeted test, a localhost hand-walk of the affected moves, one scoped audit), fix, and move on — reserve the full 3-instrument prod audit for when David asks or a change can only be proven on prod.
 **Stay reachable:** anything longer than a minute (ship-check, audits, walks, deploy polls) runs in the BACKGROUND with a monitor, so David's messages are read at the next tool boundary instead of waiting behind a blocking command.
 
