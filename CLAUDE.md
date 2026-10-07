@@ -29,6 +29,8 @@ and why each falls short; (3) "not yet, first this"; (4) the line played out,
 with their reply in words; (5) what the opponent keeps doing wrong — closing
 on the habit that finds it next time. Never just the answer.
 
+WHAT TEACHING IS (David 2026-10-07: "teaching is not telling you what to do" → "teaching is showing you how to think. what to recognize, how to plan, how to identify, prevent, strategize"): RECOGNIZE, IDENTIFY, PLAN, PREVENT, STRATEGIZE — so the student understands why and finds it themselves next time. A line that does none of these is description, and it is cut.
+
 Every computer below exists to feed this. The student's record decides WHICH
 thoughts this student most needs to hear. ONE COACH (2026-10-07): it runs the
 same on every surface. The live checklist of the rules is the Rulebook
