@@ -39,12 +39,12 @@ export interface UseThinkingLesson {
   /** Step 5 asked about one pattern on its own board (Pattern Recognition). */
   motifKit: (board: MotifBoard) => StepKit;
   /** The lesson game: ask the step's question once, on this live board. */
-  askOnce: (kit: StepKit, fen: string) => Promise<void>;
+  askOnce: (kit: StepKit, fen: string, answered?: readonly string[]) => Promise<boolean>;
   /** Review: the step to ask at each slip of a game, from its recorded tags. */
   slipSteps: (gameId: string, boards: readonly { ply: number; fen: string }[]) => Promise<Map<number, string>>;
   /** Learn free play: ask a step the student keeps failing in games when the
    *  board poses it — one question per game. Resolves true when it asked. */
-  carryOver: (fen: string) => Promise<boolean>;
+  carryOver: (fen: string, answered?: readonly string[]) => Promise<boolean>;
   /** A new game: the carry-over re-reads the record and may ask each step again. */
   newGame: () => void;
   /** What to say when `plan` finds no lesson (the habit gap, or no board yet). */
@@ -54,6 +54,12 @@ export interface UseThinkingLesson {
   practiseKit: () => StepKit | null;
   setPractiseKit: (kit: StepKit | null) => void;
   stop: () => void;
+}
+
+/** Did this turn already name every square the question asks for? Then the
+ *  question would only make the student repeat what they were just told. */
+export function questionAlreadyAnswered(key: readonly string[], said: readonly string[]): boolean {
+  return key.length > 0 && key.every((sq) => said.includes(sq));
 }
 
 const IDLE: LessonView = IDLE_LESSON_VIEW;
@@ -105,7 +111,14 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
   const choose = useCallback((step: string): void => { sessionRef.current?.choose(step); }, []);
   const hold = useCallback((): void => { sessionRef.current?.hold(); }, []);
 
-  const askOnce = useCallback(async (kit: StepKit, fen: string): Promise<void> => {
+  const askOnce = useCallback(async (kit: StepKit, fen: string, answered?: readonly string[]): Promise<boolean> => {
+    // A QUESTION NEVER FOLLOWS ITS OWN ANSWER (unity U7, Learn walk #27/#28:
+    // "Drop everything — your queen on d5 is attacked", then "Which of your
+    // pieces could they win right now?"). When this turn already named every
+    // square the question would ask for, the alert WAS the answer.
+    let key: readonly string[] = [];
+    try { key = kit.keyFor(fen)?.key ?? []; } catch { key = []; }
+    if (questionAlreadyAnswered(key, answered ?? [])) return false;
     sessionRef.current?.stop();
     const session = new ThinkingLessonSession(kit, [{ fen, origin: 'game' }], new Set(), {
       say: (t) => depsRef.current.say(t),
@@ -118,6 +131,7 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
     sessionRef.current = session;
     await session.run('grey', { once: true });
     if (sessionRef.current === session) sessionRef.current = null;
+    return true;
   }, []);
 
   // CARRY-OVER memory, per game: the steps read once from the game record,
@@ -126,7 +140,7 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
   const carryAskedRef = useRef<Set<string>>(new Set());
   const newGame = useCallback((): void => { carryStepsRef.current = null; carryAskedRef.current = new Set(); }, []);
   const carryPlyRef = useRef(0);
-  const carryOver = useCallback(async (fen: string): Promise<boolean> => {
+  const carryOver = useCallback(async (fen: string, answered?: readonly string[]): Promise<boolean> => {
     // A board earlier than the last one seen is a new game: forget what was asked.
     const parts = fen.split(' ');
     const ply = (Number(parts[5]) || 1) * 2 + (parts[1] === 'b' ? 1 : 0);
@@ -141,9 +155,10 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
     carryStepsRef.current ??= loadCarryOverSteps();
     const kit = carryOverKitFor(await carryStepsRef.current, fen, carryAskedRef.current);
     if (!kit) return false;
-    carryAskedRef.current.add(kit.step);
-    await askOnce(kit, fen);
-    return true;
+    // Held for an answered question: the step stays available later this game.
+    const asked = await askOnce(kit, fen, answered);
+    if (asked) carryAskedRef.current.add(kit.step);
+    return asked;
   }, [askOnce, newGame]);
 
   const practiseRef = useRef<StepKit | null>(null);

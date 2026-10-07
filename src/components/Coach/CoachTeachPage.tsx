@@ -31,7 +31,7 @@ import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { transferClause, recordMotif, withTransfer, studentMoveAfterReply } from '../../services/motifLedger';
-import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/learnTurnDoor';
+import { buildVoicePackage, DANGER_LANES, decideTurn, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/learnTurnDoor';
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, intentRule, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
@@ -10100,15 +10100,25 @@ export function CoachTeachPage(): JSX.Element {
           // above have been computing underneath it the whole time.
           await padDone;
           const played = handlePlayMove(reply);
-          if (lessonMomentPendingRef.current) {
-            lessonMomentPendingRef.current = false;
-            const kit = lessonGameRef.current;
-            if (kit && played.ok) void thinkingLesson.askOnce(kit, liveFenRef.current);
-          } else if (played.ok && !lessonGameRef.current) {
-            // CARRY-OVER: a habit this student keeps failing in games, asked
-            // on their own board when it poses the question (once per game).
-            void thinkingLesson.carryOver(liveFenRef.current);
-          }
+          // THE TURN'S QUESTION is asked AFTER the turn's instant decision
+          // (below), so it can see what this turn already TOLD them: a danger
+          // lead's squares on this very board. A question asking for exactly
+          // those squares is not asked — the alert was its answer (unity U7).
+          const askTurnQuestion = (): void => {
+            const lead = turnLeadRef.current;
+            const answered = lead && samePosition(lead.fen, liveFenRef.current) && DANGER_LANES.has(lead.lead.lane)
+              ? lead.lead.squares : [];
+            if (lessonMomentPendingRef.current) {
+              lessonMomentPendingRef.current = false;
+              const kit = lessonGameRef.current;
+              if (kit && played.ok) void thinkingLesson.askOnce(kit, liveFenRef.current, answered);
+            } else if (played.ok && !lessonGameRef.current) {
+              // CARRY-OVER: a habit this student keeps failing in games, asked
+              // on their own board when it poses the question (once per game).
+              void thinkingLesson.carryOver(liveFenRef.current, answered);
+            }
+          };
+          if (!played.ok) askTurnQuestion();
           // 🔒 PUBLISH THE TURN. Play emits `coach-turn-checkpoint` with the
           // committed SAN and the resulting FEN; Learn never did, so a Learn
           // game left no record of what the coach actually played.
@@ -10354,6 +10364,7 @@ export function CoachTeachPage(): JSX.Element {
               }
               if (lines.length > 0) speakTrackA(lines.join(' '));
             } catch { /* Track A is a bonus — the warm beat still speaks */ }
+            askTurnQuestion();
             // Registered BEFORE the `await factsReady` below, so this
             // callback runs first when the facts settle — handleSubmit
             // always sees the complete instantSpokenText.
