@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { Chess } from 'chess.js';
 import { stockfishCache } from './stockfishCache';
 import type { StockfishAnalysis } from '../types';
 
@@ -207,17 +208,35 @@ async function initEngine(engine: {
 // Helper: emit canned analysis data
 // ---------------------------------------------------------------------------
 
+/** The board the engine was last told about — the canned lines are moves ON
+ *  it, the way a real engine's are (a read ignores lines for another board). */
+function lastPositionFen(): string {
+  const p = [...mockWorker.postMessageCalls].reverse().find((m) => m.startsWith('position fen '));
+  return p ? p.slice('position fen '.length) : START_FEN_FOR_MOCK;
+}
+const START_FEN_FOR_MOCK = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+function legalUcis(fen: string, n: number): string[] {
+  try {
+    return new Chess(fen).moves({ verbose: true }).slice(0, n).map((m) => `${m.from}${m.to}${m.promotion ?? ''}`);
+  } catch {
+    return [];
+  }
+}
+
 function emitAnalysisResponse(options?: {
   mateScore?: { value: number; multipv?: number };
   lines?: Array<{ multipv: number; cp: number; pv: string }>;
   bestmove?: string;
 }): void {
-  const bestmove = options?.bestmove ?? 'e2e4 ponder e7e5';
+  const fen = lastPositionFen();
+  const fromStart = fen === START_FEN_FOR_MOCK;
+  const own = fromStart ? [] : legalUcis(fen, 3);
+  const bestmove = options?.bestmove ?? (fromStart ? 'e2e4 ponder e7e5' : own[0] ?? '(none)');
 
   if (options?.mateScore) {
     const mv = options.mateScore.multipv ?? 1;
     mockWorker.emit(
-      `info depth 15 multipv ${mv} score mate ${options.mateScore.value} pv e2e4 e7e5 d1h5`,
+      `info depth 15 multipv ${mv} score mate ${options.mateScore.value} pv ${fromStart ? 'e2e4 e7e5 d1h5' : own[0]}`,
     );
   }
 
@@ -228,15 +247,19 @@ function emitAnalysisResponse(options?: {
       );
     }
   } else if (!options?.mateScore) {
-    mockWorker.emit(
-      'info depth 18 multipv 1 score cp 30 pv e2e4 e7e5 g1f3 b8c6',
-    );
-    mockWorker.emit(
-      'info depth 18 multipv 2 score cp 20 pv d2d4 d7d5 c2c4',
-    );
-    mockWorker.emit(
-      'info depth 18 multipv 3 score cp 10 pv c2c4 e7e5 b1c3',
-    );
+    if (fromStart) {
+      mockWorker.emit(
+        'info depth 18 multipv 1 score cp 30 pv e2e4 e7e5 g1f3 b8c6',
+      );
+      mockWorker.emit(
+        'info depth 18 multipv 2 score cp 20 pv d2d4 d7d5 c2c4',
+      );
+      mockWorker.emit(
+        'info depth 18 multipv 3 score cp 10 pv c2c4 e7e5 b1c3',
+      );
+    } else {
+      own.forEach((uci, i) => mockWorker.emit(`info depth 18 multipv ${i + 1} score cp ${30 - i * 10} pv ${uci}`));
+    }
   }
 
   mockWorker.emit(`bestmove ${bestmove}`);
@@ -871,10 +894,10 @@ describe('StockfishEngine', () => {
         if (msg === 'isready') queueMicrotask(() => mockWorker.emit('readyok'));
         if (msg.startsWith('go ')) {
           queueMicrotask(() => {
-            mockWorker.emit('info depth 14 multipv 1 score cp 700 pv g3g2 g7g5');
+            mockWorker.emit('info depth 14 multipv 1 score cp 700 pv e2e4 e7e5');
             // The search was stopped mid-iteration on an aspiration fail-high.
-            mockWorker.emit('info depth 15 multipv 1 score mate 9 lowerbound pv g3g2');
-            mockWorker.emit('bestmove g3g2');
+            mockWorker.emit('info depth 15 multipv 1 score mate 9 lowerbound pv e2e4');
+            mockWorker.emit('bestmove e2e4');
           });
         }
       });
@@ -1032,7 +1055,7 @@ describe('StockfishEngine', () => {
       pmMock.mockImplementation((msg: string) => {
         mockWorker.postMessageCalls.push(msg);
         if (msg.startsWith('go movetime')) {
-          queueMicrotask(() => mockWorker.emit('bestmove e2e4'));
+          queueMicrotask(() => mockWorker.emit('bestmove d2d4'));
         }
       });
 
@@ -1175,7 +1198,7 @@ describe('StockfishEngine', () => {
           queueMicrotask(() => mockWorker.emit('readyok'));
         }
         if (msg.startsWith('go depth')) {
-          queueMicrotask(() => emitAnalysisResponse({ bestmove: 'd2d4' }));
+          queueMicrotask(() => emitAnalysisResponse({ bestmove: 'd7d5' }));
         }
       });
 
@@ -1188,7 +1211,7 @@ describe('StockfishEngine', () => {
       );
 
       const result = await secondAnalysis;
-      expect(result.bestMove).toBe('d2d4');
+      expect(result.bestMove).toBe('d7d5');
       expect(mockWorker.postMessageCalls).toContain('stop');
     });
 
@@ -1359,7 +1382,7 @@ describe('StockfishEngine', () => {
         if (msg.startsWith('go depth')) {
           queueMicrotask(() => {
             order.push('analysis');
-            emitAnalysisResponse({ bestmove: 'e2e4' });
+            emitAnalysisResponse();
           });
         }
       });
@@ -1696,12 +1719,12 @@ describe('analyzePosition priority', () => {
     // Resolve brainA.
     queueMicrotask(() =>
       mockWorker.emit(
-        'info depth 18 multipv 1 score cp 30 pv e2e4 e7e5',
+        'info depth 18 multipv 1 score cp 30 pv e7e5 g1f3',
       ),
     );
-    queueMicrotask(() => mockWorker.emit('bestmove e2e4'));
+    queueMicrotask(() => mockWorker.emit('bestmove e7e5'));
     const resultA = await brainA;
-    expect(resultA.bestMove).toBe('e2e4');
+    expect(resultA.bestMove).toBe('e7e5');
 
     // Now B should start.
     await vi.waitFor(() => {
@@ -2290,8 +2313,8 @@ describe('analyzeWithBudget — the budget starts when the search dispatches', (
     expect(mockWorker.postMessageCalls.filter((m) => m === 'stop').length).toBe(1);
     await vi.advanceTimersByTimeAsync(150);
     expect(mockWorker.postMessageCalls.filter((m) => m === 'stop').length).toBe(2);
-    mockWorker.emit('info depth 12 score cp -10 pv e7e5');
-    mockWorker.emit('bestmove e7e5');
+    mockWorker.emit('info depth 12 score cp -10 pv g1f3');
+    mockWorker.emit('bestmove g1f3');
     const [ra, rb] = await settled;
     expect(ra.status).toBe('fulfilled');
     expect(rb.status).toBe('fulfilled');
@@ -2321,5 +2344,85 @@ describe('resolveWorkerUrl — the pool asks for the single-thread build', () =>
       Object.defineProperty(window, 'crossOriginIsolated', { value: prevIso, configurable: true });
       (globalThis as { SharedArrayBuffer?: unknown }).SharedArrayBuffer = prevSab;
     }
+  });
+});
+
+// ─── ONE READ, ITS OWN LINES (walk 2026-10-07) ────────────────────────────────
+// A Learn verdict said "Bc5 keeps you clearly on top" to a Black student with
+// White +2.9 on the board: a search on another board streamed into the open
+// read and its score was flipped by the read's side to move.
+describe('a read never takes another position\'s lines', () => {
+  it('uciBelongsToSideToMove reads the side to move off the board', async () => {
+    const { uciBelongsToSideToMove } = await import('./stockfishEngine');
+    const afterE4 = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1';
+    expect(uciBelongsToSideToMove(STARTING_FEN, 'e2e4')).toBe(true);
+    expect(uciBelongsToSideToMove(STARTING_FEN, 'e7e5')).toBe(false); // Black's pawn, White to move
+    expect(uciBelongsToSideToMove(STARTING_FEN, 'e3e4')).toBe(false); // empty square
+    expect(uciBelongsToSideToMove(afterE4, 'e7e5')).toBe(true);
+    expect(uciBelongsToSideToMove(afterE4, 'g1f3')).toBe(false);
+    expect(uciBelongsToSideToMove(afterE4, '(none)')).toBe(true);
+    expect(uciBelongsToSideToMove(afterE4, 'e7e8q')).toBe(true);
+  });
+
+  it('a read of a Black-to-move board ignores a White search\'s lines and waits for its own', async () => {
+    const { stockfishEngine } = await getEngine();
+    await initEngine(stockfishEngine);
+    const afterE4 = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1';
+    const pmMock = mockWorker.instance.postMessage as ReturnType<typeof vi.fn>;
+    pmMock.mockImplementation((msg: string) => {
+      mockWorker.postMessageCalls.push(msg);
+      if (msg === 'isready') queueMicrotask(() => mockWorker.emit('readyok'));
+      if (msg.startsWith('go ')) {
+        queueMicrotask(() => {
+          // Another search's output arrives first (White to move, +2.87 from White's view).
+          mockWorker.emit('info depth 14 multipv 1 score cp 287 pv g1f3 b8c6');
+          mockWorker.emit('bestmove g1f3');
+          // Then this read's own.
+          mockWorker.emit('info depth 14 multipv 1 score cp -40 pv e7e5 g1f3');
+          mockWorker.emit('bestmove e7e5');
+        });
+      }
+    });
+    const read = await stockfishEngine.analyzePosition(afterE4, 14);
+    expect(read.bestMove).toBe('e7e5');
+    expect(read.topLines[0].moves[0]).toBe('e7e5');
+    expect(read.evaluation).toBe(40); // Black's −40, from White's view
+  });
+
+  it('getBestMove ignores another search\'s bestmove', async () => {
+    const { stockfishEngine } = await getEngine();
+    await initEngine(stockfishEngine);
+    const pmMock = mockWorker.instance.postMessage as ReturnType<typeof vi.fn>;
+    pmMock.mockImplementation((msg: string) => {
+      mockWorker.postMessageCalls.push(msg);
+      if (msg.startsWith('go movetime')) {
+        queueMicrotask(() => {
+          mockWorker.emit('bestmove e7e5'); // a Black move: not this White board's answer
+          mockWorker.emit('bestmove g1f3');
+        });
+      }
+    });
+    expect(await stockfishEngine.getBestMove(STARTING_FEN, 500)).toBe('g1f3');
+  });
+
+  it('the coach\'s move search waits for an open read before it touches the worker', async () => {
+    const { stockfishEngine } = await getEngine();
+    await initEngine(stockfishEngine);
+    const pmMock = mockWorker.instance.postMessage as ReturnType<typeof vi.fn>;
+    pmMock.mockImplementation((msg: string) => {
+      mockWorker.postMessageCalls.push(msg);
+      if (msg === 'isready') queueMicrotask(() => mockWorker.emit('readyok'));
+      if (msg.startsWith('go movetime')) queueMicrotask(() => mockWorker.emit('bestmove d2d4'));
+      // `go depth` (the read) is answered by hand below.
+    });
+    const read = stockfishEngine.analyzePosition(STARTING_FEN, 14);
+    await vi.waitFor(() => expect(mockWorker.postMessageCalls.some((m) => m.startsWith('go depth'))).toBe(true));
+    const move = stockfishEngine.getBestMove(STARTING_FEN, 500);
+    await new Promise((r) => setTimeout(r, 60));
+    expect(mockWorker.postMessageCalls.some((m) => m.startsWith('go movetime'))).toBe(false);
+    mockWorker.emit('info depth 14 multipv 1 score cp 30 pv e2e4 e7e5');
+    mockWorker.emit('bestmove e2e4');
+    expect((await read).bestMove).toBe('e2e4');
+    expect(await move).toBe('d2d4');
   });
 });

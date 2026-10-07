@@ -21,7 +21,41 @@ export class PrefetchDroppedError extends Error {
   }
 }
 
+/** Is `uci`'s from-square occupied by a piece of the side to move in `fen`?
+ *
+ *  🔒 A READ NEVER TAKES ANOTHER POSITION'S LINES. The worker is one engine
+ *  shared by every caller, and output carries no search id — a line is
+ *  attributed to whichever read is open when it arrives. When a search on a
+ *  board with the OTHER side to move streams into an open read, its scores are
+ *  from that side's view but get flipped by this read's side to move: a Learn
+ *  verdict said "Bc5 keeps you clearly on top" to a Black student with White
+ *  +2.9 on the board (walk 2026-10-07). A principal line's first move, and a
+ *  bestmove, must be a move of THIS board's side to move; one that is not
+ *  belongs to some other search and is ignored. `(none)` (no legal move) and
+ *  anything unparseable pass, so a real read is never refused. */
+export function uciBelongsToSideToMove(fen: string, uci: string): boolean {
+  const m = /^([a-h])([1-8])[a-h][1-8]/.exec(uci);
+  if (!m) return true;
+  const [board, turn] = fen.split(' ');
+  const rows = board?.split('/');
+  if (!rows || rows.length !== 8 || (turn !== 'w' && turn !== 'b')) return true;
+  const row = rows[8 - Number(m[2])];
+  let file = 0;
+  const want = m[1].charCodeAt(0) - 97;
+  for (const ch of row) {
+    if (/\d/.test(ch)) { file += Number(ch); continue; }
+    if (file === want) return turn === 'w' ? ch === ch.toUpperCase() : ch === ch.toLowerCase();
+    file += 1;
+  }
+  return false; // an empty from-square: not a move on this board
+}
+
 interface PendingAnalysis {
+  /** The board this read is OF — every line and the bestmove must be a move of
+   *  its side to move (`uciBelongsToSideToMove`). */
+  fen: string;
+  /** Lines dropped because they belonged to another search — logged once. */
+  foreign?: number;
   resolve: (analysis: StockfishAnalysis) => void;
   reject: (error: Error) => void;
   lines: Map<number, AnalysisLine>;
@@ -336,6 +370,11 @@ const ANALYSIS_HARD_TIMEOUT_MS = 30_000;
  *  30s engine-level backstop) — reject → the brain serves its grounded
  *  "I can't verify" fallback instead of freezing. */
 const ANALYSIS_BUDGET_GRACE_MS = 2_000;
+/** How long the coach's move search waits for an open read before it takes
+ *  the worker anyway. Stockfish already made it wait for a running search; this
+ *  makes the wait explicit and bounded, and the foreign-line filter covers the
+ *  rare overrun. */
+const EXCLUSIVE_WAIT_MS = 8_000;
 /** asm/iOS liveness window. The asm.js build is SLOW and slow to honor
  *  `stop` on iOS WebKit, but it streams `info` lines throughout a search —
  *  so a worker that emitted ANY message within this window is ALIVE, just
@@ -1533,6 +1572,10 @@ class StockfishEngine {
     priority: AnalysisPriority,
   ): Promise<StockfishAnalysis> {
     await this.initialize();
+    // A read never opens while the coach's move search owns the worker.
+    while (this._exclusive) {
+      try { await this._exclusive; } catch { /* settles either way */ }
+    }
 
     return new Promise((resolve, reject) => {
       // If a previous analysis is pending, stop it and wait for bestmove
@@ -1558,6 +1601,7 @@ class StockfishEngine {
       this._analysisStarted = false;
 
       this.pending = {
+        fen,
         resolve,
         reject,
         lines: new Map(),
@@ -1700,6 +1744,28 @@ class StockfishEngine {
     }
   }
 
+  /** Held while a search that is not a read (the coach's move) owns the worker. */
+  private _exclusive: Promise<void> | null = null;
+
+  /** Wait until no read is open and no other exclusive search runs, then take
+   *  the worker. The check and the claim happen in one synchronous step, so no
+   *  read can open in between. Bounded: a read stuck past its own recovery
+   *  window never blocks the coach's move forever. */
+  private async acquireExclusive(): Promise<() => void> {
+    const deadline = Date.now() + EXCLUSIVE_WAIT_MS;
+    while ((this.pending || this._exclusive) && Date.now() < deadline) {
+      if (this._exclusive) { try { await this._exclusive; } catch { /* settles either way */ } }
+      else await new Promise((r) => setTimeout(r, 20));
+    }
+    let release!: () => void;
+    const held = new Promise<void>((r) => { release = r; });
+    this._exclusive = held;
+    return () => {
+      if (this._exclusive === held) this._exclusive = null;
+      release();
+    };
+  }
+
   /**
    * True while an analysis is in flight. Opportunistic background prewarming
    * (pondering on the student's clock) checks this so it YIELDS to real,
@@ -1743,6 +1809,12 @@ class StockfishEngine {
     targetElo?: number,
   ): Promise<string> {
     await this.initialize();
+    // 🔒 ONE SEARCH AT A TIME ON THE ONE WORKER (walk 2026-10-07). This search
+    // used to go straight to the worker while a read was open, and the read
+    // then took its lines (and its bestmove) as its own — the sign of a read
+    // flipped, and the coach could play the READ's move instead of its own.
+    // Wait for the open read to finish and hold the worker until this one does.
+    const release = await this.acquireExclusive();
 
     return new Promise<string>((resolve, reject) => {
       // 🔒 THE ENGINE MUST NEVER HANG (David 2026-09-07 freeze report).
@@ -1764,11 +1836,14 @@ class StockfishEngine {
 
       const handler = (event: MessageEvent<string>): void => {
         const match = /^bestmove (\S+)/.exec(event.data);
+        // Another search's bestmove is not this one's answer (same rule as a read).
+        if (match && match[1] !== '(none)' && !uciBelongsToSideToMove(fen, match[1])) return;
         if (match) {
           if (settled) return;
           settled = true;
           if (timers.watchdog) clearTimeout(timers.watchdog);
           workerAtCall?.removeEventListener('message', handler);
+          release();
           resolve(match[1]);
         }
       };
@@ -1801,6 +1876,7 @@ class StockfishEngine {
         if (settled) return;
         settled = true;
         workerAtCall?.removeEventListener('message', handler);
+        release();
         this.forceRestart(`getBestMove: no bestmove in ${timeoutMs}ms`);
         reject(new Error(`getBestMove timed out after ${timeoutMs}ms`));
       }, timeoutMs);
@@ -2017,35 +2093,6 @@ class StockfishEngine {
     this.send(`setoption name MultiPV value ${Math.max(1, Math.min(256, Math.round(lines)))}`);
   }
 
-  /** ASK ABOUT ONE SPECIFIC MOVE — `go searchmoves`.
-   *
-   *  "What if I play X?" answered by the engine directly, instead of inferred
-   *  from whether X happens to appear in the top three. Returns the analysis
-   *  restricted to that move, so its eval is the eval OF THAT MOVE rather than
-   *  of the position. */
-  async evaluateMove(fen: string, uci: string, moveTimeMs = 1200): Promise<number | null> {
-    if (!this.isReady || !this.worker) return null;
-    await this.initialize();
-    return new Promise<number | null>((resolve) => {
-      let cp: number | null = null;
-      const stm = fen.split(' ')[1];
-      const done = setTimeout(() => { this.worker?.removeEventListener('message', h); resolve(null); }, moveTimeMs + 2500);
-      const h = (event: MessageEvent<string>): void => {
-        const line = event.data;
-        const m = /score cp (-?\d+)/.exec(line);
-        if (m) cp = Number(m[1]) * (stm === 'b' ? -1 : 1);
-        if (/^bestmove/.test(line)) {
-          clearTimeout(done);
-          this.worker?.removeEventListener('message', h);
-          resolve(cp);
-        }
-      };
-      this.worker?.addEventListener('message', h);
-      this.send(`position fen ${fen}`);
-      this.send(`go movetime ${moveTimeMs} searchmoves ${uci}`);
-    });
-  }
-
   async evalBoard(fen: string, timeoutMs = 2500): Promise<string> {
     if (!this.isReady || !this.worker) return '';
     // Never interleave two captures; the second would collect the first's tail.
@@ -2088,6 +2135,22 @@ class StockfishEngine {
     }
   }
 
+  /** A line that belonged to another search reached the open read. Counted,
+   *  and logged once per read, so a crossed read is a measured event (D9). */
+  private noteForeign(kind: 'info' | 'bestmove', uci: string): void {
+    const p = this.pending;
+    if (!p) return;
+    p.foreign = (p.foreign ?? 0) + 1;
+    if (p.foreign === 1 || kind === 'bestmove') {
+      void logAppAudit({
+        kind: 'stockfish-foreign-line',
+        category: 'subsystem',
+        source: 'stockfishEngine.handleMessage',
+        summary: `${kind} ${uci} is not a move of the side to move in fen=${p.fen.slice(0, 60)} — ignored (${p.foreign} so far)`,
+      });
+    }
+  }
+
   private handleMessage(data: string): void {
     if (!this.pending || !this._analysisStarted) return;
 
@@ -2105,6 +2168,11 @@ class StockfishEngine {
         const scoreType = scoreMatch[1];
         const scoreValue = parseInt(scoreMatch[2]);
         const moves = pvMatch[1].trim().split(' ');
+        // Another search's line (the other side to move) is never this read's.
+        if (!uciBelongsToSideToMove(this.pending.fen, moves[0] ?? '')) {
+          this.noteForeign('info', moves[0] ?? '');
+          return;
+        }
 
         this.pending.depth = depth;
 
@@ -2157,6 +2225,12 @@ class StockfishEngine {
 
     // Best move signal
     const bestMoveMatch = /^bestmove (\S+)/.exec(data);
+    // A bestmove from another search ends THAT search, not this read: keep
+    // waiting for this read's own (the queued `go` runs next).
+    if (bestMoveMatch && bestMoveMatch[1] !== '(none)' && !uciBelongsToSideToMove(this.pending.fen, bestMoveMatch[1])) {
+      this.noteForeign('bestmove', bestMoveMatch[1]);
+      return;
+    }
     if (bestMoveMatch) {
       const bestMove = bestMoveMatch[1];
       const topLines = Array.from(this.pending.lines.values())

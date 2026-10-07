@@ -419,6 +419,11 @@ export type AuditKind =
   // can fail silently. Surfaces WHY the bar is stuck at 0.0
   // (David 2026-06-15).
   | 'stockfish-analysis-stalled'
+  // A line from ANOTHER search reached an open read (its first move is not a
+  // move of the read's side to move) and was ignored. The shared worker carries
+  // no search id, so this counts how often two searches crossed (walk
+  // 2026-10-07: a crossed read flipped a Learn verdict's sign).
+  | 'stockfish-foreign-line'
   // OTA (Capgo capacitor-updater) lifecycle — emitted by otaObserver on native
   // to make "the OTA hasn't worked once" (David 2026-07-24) OBSERVABLE instead
   // of guessed. ota-boot carries the decisive per-launch snapshot (running vs
