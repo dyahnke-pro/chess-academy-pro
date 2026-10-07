@@ -18,7 +18,7 @@
  * student's side ("you" / "they").
  */
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
-import { findPieceQuality, legalSeeGain, type PieceQualityNote } from './positionReadingService';
+import { findPieceQuality, signedLegalSeeFor, type PieceQualityNote } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
 import { settledLeadFor, type LastMove } from './material';
 import { describeStructure } from './boardStructure';
@@ -63,6 +63,26 @@ function kingGuardCount(chess: Chess, sq: Square, color: Color): number {
     }
   }
   return pressed ? n : 0;
+}
+
+/** How many of the squares around `victim`'s king — the king's own square
+ *  included, so a checking piece counts — the piece on `sq` attacks. The
+ *  attacker half of `kingGuardCount`: a trade that removes a piece bearing on
+ *  your king (one-coach P2: this lesson lived only in Learn's old judge). */
+function kingAttackCount(chess: Chess, sq: Square, victim: Color): number {
+  const king = chess.board().flat().find((c) => c && c.type === 'k' && c.color === victim);
+  if (!king) return 0;
+  const attacker: Color = victim === 'w' ? 'b' : 'w';
+  const kf = king.square.charCodeAt(0); const kr = Number(king.square[1]);
+  let n = 0;
+  for (let df = -1; df <= 1; df += 1) {
+    for (let dr = -1; dr <= 1; dr += 1) {
+      const f = kf + df; const r = kr + dr;
+      if (f < 97 || f > 104 || r < 1 || r > 8) continue;
+      if (chess.attackers(`${String.fromCharCode(f)}${r}` as Square, attacker).includes(sq)) n += 1;
+    }
+  }
+  return n;
 }
 
 /** Does taking back on `sq` cost the recapturer structure — every legal
@@ -143,7 +163,15 @@ export function readTrade(
   if (Math.abs(VAL[mv.piece] - VAL[mv.captured]) > 0) return null;
   const after = before; // already played
   // It is a TRADE only if they can take back — otherwise it simply wins a piece.
-  if (legalSeeGain(after.fen(), mv.to) <= 0) return null;
+  // A legal retake that does not lose material — an even chain (Bxf6 Bxf6
+  // Qxf6) nets the retaker zero and is still a trade; the floored gain read
+  // called it "no retake" and the judge went silent (found unifying the two
+  // trade judges, 2026-10-07).
+  {
+    const enemyWB: Color = mv.color === 'w' ? 'b' : 'w';
+    const canRetake = after.moves({ verbose: true }).some((m) => m.to === mv.to && !!m.captured);
+    if (!canRetake || signedLegalSeeFor(after.fen(), mv.to, enemyWB) < 0) return null;
+  }
 
   const mover = mv.color;
   const enemy: Color = mover === 'w' ? 'b' : 'w';
@@ -164,6 +192,9 @@ export function readTrade(
   }
   if (given && given.quality === 'bad') {
     good.push({ why: `it swaps off ${yours(NAME[mv.piece])}, ${qualityPhrase(given)}`, key: 'bad-swapped', sq: [mv.from] });
+  }
+  if (kingAttackCount(board0, mv.to, mover) >= 2) {
+    good.push({ why: `it takes off ${theirs(NAME[mv.captured])} that was bearing down on ${yours('king')}`, key: 'attacker-removed', sq: [mv.to] });
   }
   if (kingGuardCount(board0, mv.to, enemy) >= 2) {
     good.push({ why: `it removes a defender of ${theirs('king')}`, key: 'guard-removed', sq: [mv.to] });

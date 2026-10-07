@@ -6,8 +6,10 @@ import type { PieceValue } from './pieceValueRead';
 const at = (moves: string[]): string => { const c = new Chess(); for (const m of moves) c.move(m); return c.fen(); };
 
 describe('tradeJudgement (P3, T3)', () => {
-  it('silent on an even trade with nothing to say — the Ruy exchange', () => {
-    expect(tradeJudgement(at(['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'Nf6']), 'Bxc6', 'dxc6', 'w', 0)).toBeNull();
+  it('the Ruy exchange: the one trade judge names what it does — taking back doubles their pawns', () => {
+    const t = tradeJudgement(at(['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'Nf6']), 'Bxc6', 'dxc6', 'w', 0);
+    expect(t?.reason).toBe('good');
+    expect(t?.text).toMatch(/doubles their pawns/);
   });
   it('silent without a recapture on the same square', () => {
     expect(tradeJudgement('4k3/8/5n2/3n4/8/2N5/8/R3K3 w - - 0 1', 'Nxd5', null, 'w', 0)).toBeNull();
@@ -15,14 +17,13 @@ describe('tradeJudgement (P3, T3)', () => {
   it('a trade when ahead is praised', () => {
     const t = tradeJudgement('4k3/8/5n2/3n4/8/2N5/8/R3K3 w - - 0 1', 'Nxd5', 'Nxd5', 'w', 0);
     expect(t?.reason).toBe('ahead');
-    expect(t?.text).toMatch(/^A knight for a knight — and trading is exactly right when you are ahead/);
+    expect(t?.text).toMatch(/trades pieces while you're ahead/);
   });
-  it('a bishop hemmed in by its own centre pawns is a good one to give', () => {
-    // Recaptured by the e-pawn: with …Nxd5 instead, cxd5 wins the knight and
-    // the settled read is honestly "ahead" (walk 2026-10-02, settledLead).
-    const t = tradeJudgement('4k3/4n3/4p3/3b4/2P1B3/3P1P2/8/4K3 w - - 0 1', 'Bxd5', 'exd5', 'w', 0);
-    expect(t?.reason).toBe('bad-bishop');
-    expect(t?.text).toMatch(/3 of your own centre pawns stand on its light squares/);
+  it('a bishop standing IN FRONT of its pawns is not a bad bishop — the one piece-quality read says so', () => {
+    // The old judge called Be4 bad for its colour-mates on c4/d3/f3; it stands
+    // outside the chain, and the shared computer (findPieceQuality: hemmed in
+    // BEHIND its own pawns) does not call it bad. One definition (census 7/8).
+    expect(tradeJudgement('4k3/4n3/4p3/3b4/2P1B3/3P1P2/8/4K3 w - - 0 1', 'Bxd5', 'exd5', 'w', 0)).toBeNull();
   });
 
   describe('good piece, bad piece — from the engine table (David 2026-09-30)', () => {

@@ -39,6 +39,7 @@ import { tempoCount } from './tempoCount';
 import { readTiming, timingClause } from './moveTiming';
 import { checkMethod } from './checkMethod';
 import { tradeJudgement } from './tradeJudgement';
+import { lastMoveFromSan } from './material';
 import type { PieceValue } from './pieceValueRead';
 import { kneeJerk } from './kneeJerk';
 import { autopilotGuard, blunderCheck, keepPressing } from './safetyHabits';
@@ -233,10 +234,10 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   // WAS THE TRADE A GOOD DEAL (P3, T3 #45) — a like-for-like trade the reply
   // completed, judged by the first reason the board supports.
   try {
-    const tj = tradeJudgement(i.fenBefore, i.san, i.reply, new Chess(i.fenBefore).turn(), faultCp, i.evalBefore);
+    const tj = tradeJudgement(i.fenBefore, i.san, i.reply, new Chess(i.fenBefore).turn(), faultCp, i.evalBefore, ((pm) => (pm ? lastMoveFromSan(pm.fenBefore, pm.san) : null))(priorFromHistory(i.history, i.fenBefore)));
     if (tj) out.push({ lane: 'trade', proof: NO_PROOF.stated, text: tj.text, squares: tj.squares, claims: [`trade-${tj.reason}`, `capture:${to}:${i.history.length}`, ...(tj.reason === 'their-best' ? [`piece-quality:${to}`] : [])], event: { name: 'coach_trade_judged', props: { surface: 'coach-teach', reason: tj.reason } }, arrows: [],
       // A good trade the student chose is the 'bad-trade' question answered well.
-      ...(tj.reason !== 'behind' && tj.reason !== 'gave-best' ? { evidence: { tag: 'bad-trade' as const, posedImportance: 60 } } : {}) });
+      ...(tj.reason !== 'behind' && tj.reason !== 'gave-best' && tj.reason !== 'bad' ? { evidence: { tag: 'bad-trade' as const, posedImportance: 60 } } : {}) });
   } catch { /* a bonus, never a blocker */ }
 
   // THE TIMING (capability parity with review, WO-TEACH-GAPS P3): "b4 is

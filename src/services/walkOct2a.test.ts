@@ -44,11 +44,11 @@ describe('Learn walk oct2a', () => {
     expect(f?.imperative).not.toMatch(/rooks/);
   });
 
-  it('F13: a knight two squares from the king is "close to", not "right next to"', () => {
+  it('F13: the knight that gave check is a piece bearing down on your king — trading it off is named', () => {
     const c = play('e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nxd4 Qxd4 Nf6 Bg5 Be7 Nc3 O-O Nd5 Re8 Nxf6+');
     const t = tradeJudgement(c.fen(), 'Bxf6', 'Bxf6', 'b', 0);
-    expect(t?.reason).toBe('attacker-gone');
-    expect(t?.text).toMatch(/close to your king/);
+    expect(t?.reason).toBe('good');
+    expect(t?.text).toMatch(/their knight that was bearing down on your king/);
   });
 
   it('F8: a discovery the line takes straight back is not the reason for d5', () => {
