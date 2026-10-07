@@ -33,7 +33,11 @@ function play(pgn) {
 function replyKind(c, reply, defMove) {
   const x = new Chess(c.fen());
   let mv; try { mv = x.move(reply); } catch { return null; }
-  if (mv.captured && mv.to === defMove.to && defMove.piece === 'p') {
+  // An OFFER is a pawn put where it can be taken. A defining move that is
+  // itself a capture (the Caro-Kann Exchange's exd5, the Smith-Morra
+  // Accepted's dxc3) offers nothing: the reply is a recapture, and calling it
+  // "offers a pawn, and they take it" was false on 31 lines (2026-10-07).
+  if (mv.captured && mv.to === defMove.to && defMove.piece === 'p' && !defMove.captured) {
     // Taken back at once (the Scandinavian's exd5 Qxd5) is a TRADE the opening
     // invites; not taken back is a pawn given.
     // …and "taken back" means the MASTERS take it back: the Smith-Morra's
@@ -139,6 +143,8 @@ for (const g of models) {
 }
 
 const out = {};
+/** Names whose every line has nothing to say — kept aside so a family fact can still reach them. */
+const silent = {};
 for (const e of db) {
   const c = play(e.pgn);
   if (!c) continue;
@@ -168,9 +174,59 @@ for (const e of db) {
     forcing: sans.length ? Math.round((100 * forcing) / sans.length) : 0,
     famous: (famous[e.name] ?? []).sort((a, b) => a.year - b.year).slice(0, 3),
   };
-  if (!rec.provokes && !rec.aims.length && !rec.gambit && !rec.famous.length && rec.theoryPlies < 4) continue;
+  const sansOf = hist.map((h) => h.san);
+  const empty = !rec.provokes && !rec.aims.length && !rec.gambit && !rec.famous.length && rec.theoryPlies < 4;
+  // The shortest line per name, empty or not — the candidates for inheriting.
+  const quiet0 = silent[e.name];
+  if (empty) {
+    if (!out[e.name] && (!quiet0 || sansOf.length < quiet0.plies)) silent[e.name] = { ...rec, plies: sansOf.length, sans: sansOf };
+    continue;
+  }
   const prev = out[e.name];
-  if (!prev || e.pgn.split(/\s+/).length < prev.plies) out[e.name] = { ...rec, plies: e.pgn.split(/\s+/).length };
+  if (!prev || e.pgn.split(/\s+/).length < prev.plies) out[e.name] = { ...rec, plies: e.pgn.split(/\s+/).length, sans: sansOf };
+}
+
+// A VARIATION KEEPS ITS FAMILY'S FACT WHEN ITS OWN MOVES PROVE IT (Learn tape
+// 2026-10-07: the Scandinavian was named and its identity never spoken). The
+// detector refines "Scandinavian Defense" to "…: Mieses-Kotroc Variation" a
+// move later, and that entry has nothing of its own to say — so the family's
+// "they almost always take on d5, and the pawn is taken back" was blocked for
+// the whole game, on 340 of the 1,577 lines. The child inherits the nearest
+// named ancestor's `provokes` only when its own line PLAYED the provoked
+// reply, and for a trade only when the pawn was then taken back — the
+// Blackburne-Kloosterboer (2...c6) does not take it back and inherits nothing.
+const parentName = (n) => {
+  const comma = n.lastIndexOf(',');
+  if (comma > 0) return n.slice(0, comma).trim();
+  const colon = n.indexOf(':');
+  return colon > 0 ? n.slice(0, colon).trim() : null;
+};
+const bare = (s) => s.replace(/[+#!?]+$/, '');
+/** The provokes kinds `openingIdentity.ts` renders; the rest are recorded, never said. */
+const SAID = new Set(['pawn-hits', 'invites-trade', 'takes-offered-pawn']);
+for (const r of Object.values(out)) if (r.provokes) r.provokes.by = r.side;
+for (const [name, r] of Object.entries(silent)) if (!out[name]) out[name] = r;
+for (const [name, r] of Object.entries(out)) {
+  if (r.provokes) continue;
+  for (let p = parentName(name); p; p = parentName(p)) {
+    const a = out[p];
+    // Only an ancestor's OWN fact (an inherited one's reply sits at its own
+    // ancestor's ply, not this one's), and only a kind that is ever said.
+    if (!a?.provokes || a.provokes.from || !SAID.has(a.provokes.kind)) continue;
+    const prefixOk = a.sans.every((s, i) => r.sans[i] === s);
+    const replyAt = a.sans.length;
+    const played = prefixOk && r.sans[replyAt] !== undefined && bare(r.sans[replyAt]) === bare(a.provokes.reply);
+    // A trade is a trade only if the next move (when the line has one) takes back.
+    const takeBack = r.sans[replyAt + 1];
+    const tradeOk = a.provokes.kind !== 'invites-trade' || takeBack === undefined
+      || (takeBack.includes('x') && bare(takeBack).slice(-2) === bare(a.provokes.reply).slice(-2));
+    if (played && tradeOk) r.provokes = { ...a.provokes, from: p };
+    break;
+  }
+}
+for (const [name, r] of Object.entries(out)) {
+  if (!r.provokes && !r.aims.length && !r.gambit && !r.famous.length && r.theoryPlies < 4) delete out[name];
+  else delete r.sans;
 }
 writeFileSync('public/data/opening-identity.json', JSON.stringify(out));
 const n = Object.values(out);

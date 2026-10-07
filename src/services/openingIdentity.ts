@@ -18,7 +18,10 @@ import { shareAdverb } from '../utils/shareWords';
 export interface IdentityFacts {
   side: 'w' | 'b';
   defining: string;
-  provokes: null | { reply: string; share: number; kind: 'pawn-hits' | 'invites-trade' | 'takes-offered-pawn' | 'capture'; piece?: string; square?: string; provoked?: boolean };
+  /** `by` is the side whose move provokes the reply; `from` names the family
+   *  the fact was inherited from, when this line's own move has none (the
+   *  build proves the line played the reply first). */
+  provokes: null | { reply: string; share: number; kind: 'pawn-hits' | 'invites-trade' | 'takes-offered-pawn' | 'capture'; by?: 'w' | 'b'; from?: string; piece?: string; square?: string; provoked?: boolean };
   aims: Array<{ kind: 'locked-centre' | 'isolated-d-pawn' | 'fianchetto'; side?: 'w' | 'b'; advanced?: 'w' | 'b'; squares: string[] }>;
   gambit: null | { side: 'w' | 'b'; down: number; forPlies: number };
   theoryPlies: number;
@@ -96,25 +99,36 @@ export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'se
   // "they answer" / "White answers": a colour takes the third-person verb.
   const v = (base: string): string => (voice === 'demo' ? (base.endsWith('y') && !/[aeiou]y$/.test(base) ? `${base.slice(0, -1)}ies` : `${base}s`) : base);
   const whose = (c: 'w' | 'b'): string => (voice === 'demo' ? `${colour(c)}'s` : c === student ? 'your' : 'their');
-  const other: 'w' | 'b' = f.side === 'w' ? 'b' : 'w';
   const out: string[] = [];
   const squares: string[] = [];
 
   const p = f.provokes;
   if (p) {
+    // The side that asked the question — this line's own move, or the
+    // family's when the fact was inherited (a variation can belong to the
+    // other colour: the Scandinavian's Lasker Variation is White's h3).
+    // A file built before 2026-10-07 has no `by` and inherits nothing, so the
+    // line's own side is right for it (a cached copy can outlive a deploy).
+    const by = p.by ?? f.side;
+    const other: 'w' | 'b' = by === 'w' ? 'b' : 'w';
     const reply = sayMoveNoun(p.reply, null);
     const on = p.reply.replace(/[+#]/g, '').slice(-2);
+    // An inherited fact is about the FAMILY's move, so it names the family —
+    // by its own last name ("Bird Opening: From's Gambit" → "From's Gambit"),
+    // with no article before a possessive.
+    const family = p.from ? (p.from.split(/[:,]/).pop() ?? p.from).trim() : null;
+    const it = family ? (/^\S+['’]s\b/.test(family) ? family : `The ${family}`) : 'It';
     if (p.kind === 'pawn-hits' && p.piece && p.square) {
-      const target = `${whose(f.side)} ${PIECE[p.piece] ?? 'piece'} on ${p.square}`;
+      const target = `${whose(by)} ${PIECE[p.piece] ?? 'piece'} on ${p.square}`;
       out.push(p.provoked
-        ? `It is built to provoke: ${who(other)} ${shareAdverb(p.share)} ${v('answer')} with ${reply}, a centre pawn thrown forward at ${target}.`
+        ? `${it} is built to provoke: ${who(other)} ${shareAdverb(p.share)} ${v('answer')} with ${reply}, a centre pawn thrown forward at ${target}.`
         : `The usual answer is ${reply}, putting the question to ${target}.`);
       squares.push(p.square);
     } else if (p.kind === 'invites-trade') {
-      out.push(`It challenges the centre at once: ${who(other)} ${shareAdverb(p.share)} ${v('take')} on ${on}, and the pawn is taken back.`);
+      out.push(`${it} challenges the centre at once: ${who(other)} ${shareAdverb(p.share)} ${v('take')} on ${on}, and the pawn is taken back.`);
       squares.push(on);
     } else if (p.kind === 'takes-offered-pawn') {
-      out.push(`It offers a pawn, and ${who(other)} ${shareAdverb(p.share)} ${v('take')} it on ${on}.`);
+      out.push(`${it} offers a pawn, and ${who(other)} ${shareAdverb(p.share)} ${v('take')} it on ${on}.`);
       squares.push(on);
     }
   }

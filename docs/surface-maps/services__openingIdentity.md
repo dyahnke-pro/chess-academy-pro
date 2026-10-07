@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**150 lines · 8 exports · 6 importers · 2 tests · 0 audits**
+**164 lines · 8 exports · 6 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -25,13 +25,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `loadOpeningIdentity` (function) — 3 call sites
-- `src/services/coachApi.ts:5579`
-- `src/services/coachApi.ts:6108`
+- `src/services/coachApi.ts:5580`
+- `src/services/coachApi.ts:6109`
 - `src/services/openingGenerator.ts:2484`
 
 ### `warmOpeningIdentity` (function) — 2 call sites
-- `src/services/learnBoardTeaching.ts:632`
-- `src/services/reviewOpeningTheory.ts:248`
+- `src/services/learnBoardTeaching.ts:643`
+- `src/services/reviewOpeningTheory.ts:246`
 
 ### `setOpeningIdentity` (function) — 1 call site
 - `src/services/openingIdentity.test.ts:9`
@@ -45,10 +45,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `isWaypointOpening` (function) — 1 call site
 - `src/services/openingAnnouncement.ts:81`
 
-### `openingIdentityLine` (function) — 13 call sites
-- `src/services/coachApi.ts:5581`
-- `src/services/coachApi.ts:6110`
-- `src/services/learnBoardTeaching.ts:633`
+### `openingIdentityLine` (function) — 17 call sites
+- `src/services/coachApi.ts:5582`
+- `src/services/coachApi.ts:6111`
+- `src/services/learnBoardTeaching.ts:644`
 - `src/services/openingGenerator.ts:2485`
 - `src/services/openingIdentity.test.ts:18`
 - `src/services/openingIdentity.test.ts:20`
@@ -57,7 +57,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingIdentity.test.ts:27`
 - `src/services/openingIdentity.test.ts:31`
 - `src/services/openingIdentity.test.ts:32`
-- `src/services/reviewOpeningTheory.ts:639`
+- `src/services/openingIdentity.test.ts:43`
+- `src/services/openingIdentity.test.ts:47`
+- `src/services/openingIdentity.test.ts:55`
+- `src/services/openingIdentity.test.ts:62`
+- `src/services/reviewOpeningTheory.ts:638`
 - `src/services/walkOct2a.test.ts:67`
 
 ## Tests
