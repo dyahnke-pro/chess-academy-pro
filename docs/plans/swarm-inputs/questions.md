@@ -91,7 +91,8 @@ CHECK — the knight leaves with check, the pin breaks, the pinning bishop hangs
       record, and say so before asking. Otherwise teach.
    b. ANSWERED (V18): a term is taught in context the first time, with an arrow
       showing it; remembered per student; explanation stops once understood.
-   c. Rhythm: how much it says on routine moves vs decisions.
+   c. ANSWERED (V19): rhythm algo'd from the record; opening moves are rarely
+      quiet; a quiet-looking waste (unnecessary pawn move) is always taught.
    d. Spaced repetition of IDEAS, not just opening moves.
    e. What great middlegame and endgame teaching looks like after move 15.
    f. A check that every spoken line does one of the F01 verbs (teaching vs description).
