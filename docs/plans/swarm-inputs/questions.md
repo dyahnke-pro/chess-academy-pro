@@ -117,3 +117,5 @@ CHECK — the knight leaves with check, the pin breaks, the pinning bishop hangs
    computer produces today — however rare. Each with: what it detects, an
    example position, how often it occurs, which F01 verb it serves. These are
    NEW (B6): bring the list to David; do not build without his yes.
+
+6. LINE ARROWS (David, decided): a line is drawn ONE ARROW PER SPOKEN MOVE, timed to the words, from where each piece WILL BE once the line is walked (pieces stay put — visualization training), building up, then all cleared at the end of the idea. This replaces the 4-arrow ceiling (MAX_GREEN_ARROWS_PER_PLY), which existed only because lines were dumped on one board at once.
