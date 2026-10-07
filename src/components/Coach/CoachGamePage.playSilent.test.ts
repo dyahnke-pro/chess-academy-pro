@@ -65,6 +65,12 @@ describe('Play volunteers nothing', () => {
     expect(offenders).toEqual([]);
   });
 
+  // The voice was silent while the TEXT channel volunteered: unasked tips in
+  // the chat, a tip bubble and arrows, on by default (attack round 2026-10-07).
+  it('the proactive tip hook is behind the switch too (text, bubble, arrows)', () => {
+    expect(SRC).toMatch(/useCoachTips\(\{[\s\S]*?enabled: PLAY_VOLUNTEERS_COACHING && /);
+  });
+
   it('phase transitions are suppressed with a named reason, not skipped silently', () => {
     expect(SRC).toContain("? 'play-silent'");
   });

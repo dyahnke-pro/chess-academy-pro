@@ -21,6 +21,10 @@ until David has read this). Rulebook: `RULEBOOK.md` + the checklist artifact.
 | 06:12–07:30 | **Stage 1 of the widened main swarm:** 16 more close readers of the reference coach's notes + 5 comparers (Learn tape, Review tapes, the 52 walk errors, opening teaching, traps). All 21 finished, 0 errors. |
 | 07:31 | Stage 2 started: 28 readers found 1,757 distinct teaching acts (300K characters, too much for one designer to read), so one agent condenses them into a single catalogue first. I also caught a silent cap in my own stage script (each comparer cut to 9,000 characters); the full texts are now saved and the cut is logged. |
 
+| 08:41 | Condense done: **458 distinct teaching acts** (104 built, 242 partial, 112 missing) — the designers' brief, 69K characters, readable in full. 30 design agents launched as 15 shards. |
+| 08:42–11:10 | **Everything stopped: the account hit its usage limit** (all 30 design agents and all 24 content auditors failed with "session limit, resets 11:10"; the content auditors had run ~28 min each and their work was lost, since a workflow saves only at the end). The container also restarted. Nothing on disk was lost. |
+| 11:12 | Resumed: the Learn batch and the opening-identity fix committed (61cf511a7, ff95cc226 — the pre-commit tests had timed out under swarm load; all 402 pass on an idle box). Design swarm relaunched. Content swarm relaunches once the related-test run is off the CPU (its auditors run engines and starved the tests). |
+
 ## 2. Built and committed (branch)
 
 ### Answers plan — P0 (safety + the instrument): DONE
@@ -95,6 +99,17 @@ findings. Engine soundness pass still to run.
   The old CLAUDE.md pro-rep rule said "stats stay"; V8's note applies words
   everywhere, so V8 wins and that pass is queued (each sentence rewritten by
   hand, gates run).
+
+### Learn never said what the opening IS — fixed (ff95cc226)
+The identity line ("it challenges the centre at once: they almost always take
+on d5, and the pawn is taken back") was computed every game and never
+offered. The detector refines the name a move later ("…Mieses-Kotroc
+Variation"), and the refined entry had nothing of its own, which blocked the
+family's fact all game — on 340 of 1,577 named lines. A variation now
+inherits its family's fact only when its own moves played it (a gambit that
+does not take the pawn back inherits nothing), and the sentence names the
+family. Found on the way: "the Caro-Kann Exchange offers a pawn, and they take
+it" — a capture read as an offer, false on 31 lines; fixed in the builder.
 
 ### Learn's wrong statements, fixed at the computer
 From the swarm's Learn-tape comparison (section 3):
@@ -197,3 +212,13 @@ _(new design questions only — never guessed)_
    player's games (e.g. all 4 GothamChess London lines). The doctrine allows
    taught lines but says to label them; the data has no field for it. Add a
    `taught: true` flag shown in the UI, or something else?
+
+4. **Kids merge needs a separate kid profile (attack round, 2026-10-07).**
+   You said kids merge into the app, "memory and all". Today the phone has ONE
+   profile, so a child playing on the Kids tab would write their misses into
+   the adult's record (raising the adult's weaknesses, dragging the strength
+   estimate down) and would hear the adult's history ("you've walked into this
+   fork in several games"). Proposal: entering Kids picks or creates a kid
+   profile; the kid's own record and memory carry into the full app when they
+   graduate. Separate kid profile per child — yes?
+

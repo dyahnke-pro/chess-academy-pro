@@ -8,6 +8,12 @@ describe('the danger level, computed and spoken first (David 2026-10-06)', () =>
     expect(dangerLevel(fen, 'w', ['b4', 'c3'])).toBe('piece');
     expect(openThreatLine('Watch out — their bishop on b4 hits your knight on c3.', fen, 'w', ['b4', 'c3'], 0)).toBe('Danger — a whole piece is at stake. Their bishop on b4 hits your knight on c3.');
   });
+  it('a guarded bishop hit by a pawn loses material — never "a pawn is at stake" (Learn tape 2026-10-07, 6.h3)', () => {
+    const fen = 'rn2kb1r/ppp1pppp/5n2/q7/3P2b1/2N2N1P/PPP2PP1/R1BQKB1R b KQkq - 0 6';
+    expect(dangerLevel(fen, 'b', ['h3', 'g4'])).toBe('material');
+    expect(openThreatLine('Watch out — their pawn on h3 hits your bishop on g4.', fen, 'b', ['h3', 'g4'], 0))
+      .toBe('Watch out — this loses material if you ignore it. Their pawn on h3 hits your bishop on g4.');
+  });
   it('a mate threat decides the game', () => {
     // back rank: their rook can mate on e1 if you pass
     const fen = '4r1k1/8/8/8/8/8/5PPP/6K1 w - - 0 1';

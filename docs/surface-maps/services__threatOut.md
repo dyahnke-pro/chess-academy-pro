@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**109 lines · 3 exports · 6 importers · 2 tests · 0 audits**
+**112 lines · 3 exports · 10 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,9 +13,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/forkTrick.ts`
+- `src/services/liveTacticsContext.ts`
+- `src/services/moveInsight.ts`
+- `src/services/mustDefendHabit.test.ts`
 - `src/services/playedMoveGrade.ts`
 - `src/services/positionFacts.ts`
 - `src/services/reviewHinge.ts`
+- `src/services/speedRunReads.ts`
 - `src/services/threatOut.test.ts`
 - `src/services/weaknessSpine.ts`
 
@@ -24,28 +28,36 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `MustDefend` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `flipSideToMove` (function) — 5 call sites
-- `src/services/forkTrick.ts:131`
+### `flipSideToMove` (function) — 6 call sites
+- `src/services/forkTrick.ts:138`
+- `src/services/liveTacticsContext.ts:786`
 - `src/services/narrationAuditor.ts:85`
 - `src/services/narrationAuditor.ts:201`
 - `src/services/threatOut.test.ts:6`
 - `src/services/threatOut.test.ts:10`
 
-### `computeMustDefend` (function) — 11 call sites
-- `src/services/playedMoveGrade.ts:116`
-- `src/services/positionFacts.ts:448`
+### `computeMustDefend` (function) — 17 call sites
+- `src/services/liveTacticsContext.ts:788`
+- `src/services/moveInsight.ts:166`
+- `src/services/mustDefendHabit.test.ts:13`
+- `src/services/playedMoveGrade.ts:125`
+- `src/services/positionFacts.ts:466`
 - `src/services/replayFence.modern1690.test.ts:160`
 - `src/services/replayFence.modern1690.test.ts:165`
 - `src/services/reviewHinge.ts:36`
+- `src/services/speedRunReads.ts:601`
 - `src/services/threatOut.test.ts:17`
 - `src/services/threatOut.test.ts:24`
 - `src/services/threatOut.test.ts:31`
 - `src/services/threatOut.test.ts:37`
-- `src/services/threatOut.test.ts:45`
+- `src/services/threatOut.test.ts:46`
+- `src/services/threatOut.test.ts:53`
+- `src/services/threatOut.test.ts:60`
 - `src/services/weaknessSpine.ts:219`
 
 ## Tests
 
+- `src/services/mustDefendHabit.test.ts`
 - `src/services/replayFence.modern1690.test.ts`
 - `src/services/threatOut.test.ts`
 

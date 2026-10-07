@@ -10,7 +10,9 @@
 // Pure: the engine reads are handed in by the page.
 import { shareAdverb } from '../utils/shareWords';
 import { andList } from '../utils/andList';
-import { Chess } from 'chess.js';
+import { countWords } from '../utils/countWords';
+import { Chess, type Square } from 'chess.js';
+import { legalSeeGainFor } from './positionReadingService';
 import { moverFault } from './accuracyService';
 import { lineWins, lineArrows, mateLine, type MateLine } from './lineCalc';
 /** A line as board arrows, ply by ply (one door for the page). */
@@ -648,6 +650,54 @@ export function openingIdentityTeaching(name: string, student: 'w' | 'b'): Teach
     event: { name: 'coach_opening_identity', props: { surface: 'coach-teach' } },
     arrows: [],
   };
+}
+
+const PRIZE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+const PRIZE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+const times = (n: number): string => (n === 1 ? 'once' : n === 2 ? 'twice' : `${countWords(n)} times`);
+
+/**
+ * WHAT CAN BE WON, AND WHY (Learn tape 2026-10-07: 21.Be8 and 22.Qe4 gave away
+ * a bishop and a queen and the coach said nothing — the lane read only pieces
+ * with NO defender). The student is to move; `square` holds a piece of theirs
+ * the legal exchange wins (`findHangingBySee`). The sentence is the reason it
+ * can be won, from the board:
+ *   · nothing guards it;
+ *   · a cheaper piece hits it — a guard does not help against that;
+ *   · more pieces hit it than guard it — "hit twice, guarded once".
+ * When none of those three is plainly true (an x-ray, a pinned guard), it says
+ * only that the guard is not enough. The move is never named: the student
+ * finds it. Null when the exchange does not actually win anything.
+ */
+export function prizeTeaching(fen: string, square: string, student: 'w' | 'b'): { text: string; squares: string[] } | null {
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return null; }
+  if (board.turn() !== student) return null;
+  const piece = board.get(square as Square);
+  if (!piece || piece.color === student || piece.type === 'k') return null;
+  if (legalSeeGainFor(fen, square as Square, student) <= 0) return null;
+  const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
+  const name = PRIZE_NAME[piece.type] ?? 'piece';
+  const value = PRIZE_VALUE[piece.type] ?? 0;
+  const takers = board.moves({ verbose: true }).filter((m) => m.to === square && m.captured)
+    .sort((a, b) => (PRIZE_VALUE[a.piece] ?? 0) - (PRIZE_VALUE[b.piece] ?? 0));
+  if (takers.length === 0) return null;
+  const guards = board.attackers(square as Square, them).length;
+  // The undefended sentence is the one this lane always said (kept word for word).
+  if (guards === 0) return { text: `Their ${name} on ${square} has nothing defending it — before you take, check what taking it allows.`, squares: [square] };
+  const caution = 'Before you take, check what taking it allows.';
+  const cheap = takers[0];
+  if ((PRIZE_VALUE[cheap.piece] ?? 0) < value) {
+    return {
+      text: `Their ${name} on ${square} is guarded, but your ${PRIZE_NAME[cheap.piece] ?? 'piece'} on ${cheap.from} is worth less — a guard does not save it. ${caution}`,
+      squares: [square, cheap.from],
+    };
+  }
+  const hitters = [...new Set(takers.map((m) => m.from))];
+  if (hitters.length > guards) {
+    return { text: `Their ${name} on ${square} is hit ${times(hitters.length)} and guarded only ${times(guards)}. ${caution}`, squares: [square, ...hitters] };
+  }
+  return { text: `Their ${name} on ${square} can be won — its guard is not enough. ${caution}`, squares: [square] };
 }
 
 /** The student's own master-game break at `fen` (the one `openingPlanTeaching`

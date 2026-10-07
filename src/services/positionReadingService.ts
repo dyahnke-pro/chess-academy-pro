@@ -401,6 +401,11 @@ export function findHangingBySee(fen: string): HangingPiece[] {
       // with a REAL, legal capture. Geometric `seeGain` counted pinned attackers
       // (false hang) and pinned defenders (masked a real hang) — 2026-09-13 sweep.
       const enemy: Color = cell.color === 'w' ? 'b' : 'w';
+      // Nothing attacks it → no capture → no gain. Exactly the same answer,
+      // and it is what makes this cheap enough for the every-ply must-defend
+      // probe (measured 2026-10-07: ~30ms a board scanning every piece, ~1ms
+      // scanning only the attacked ones).
+      if (!chess.isAttacked(cell.square, enemy)) continue;
       const gain = legalSeeGainFor(fen, cell.square, enemy);
       if (gain > 0) out.push({ square: cell.square, piece: cell.type, color: cell.color, gain });
     }

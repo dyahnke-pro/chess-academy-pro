@@ -1472,7 +1472,12 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     fen: game.fen,
     playerColor,
     isPlayerTurn: isPlayersTurn,
-    enabled: coachTipsOn && !voiceActive && gameState.status === 'playing' && !game.isGameOver,
+    // PLAY VOLUNTEERS NOTHING — TEXT INCLUDED (2026-09-23). These tips put
+    // unasked lines in the chat, a tip bubble and arrows on the board ("Your
+    // opponent just made a serious error!"), and the tips toggle defaults ON,
+    // so a fresh device got them; the switch covered only the voice (attack
+    // round 2026-10-07). The toggle stays — it also gates Learn's arrows.
+    enabled: PLAY_VOLUNTEERS_COACHING && coachTipsOn && !voiceActive && gameState.status === 'playing' && !game.isGameOver,
     moves: gameState.moves,
     playerRating: activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING,
     onTip: handleCoachTip,

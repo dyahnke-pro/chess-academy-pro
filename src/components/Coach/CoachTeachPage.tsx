@@ -35,7 +35,7 @@ import { buildVoicePackage, decideTurn, describeTurnDecision, describeVoicePacka
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, intentRule, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
+import { notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -289,7 +289,7 @@ import { admitArrow, admitArrows, lineClaims, narrationArrowsThroughDoor, withAd
 // ONE depth for the whole turn — the hint lane and the lane that grades the
 // student must not read the same board at different depths. See the constant.
 import { tacticalReadFromLines, temptingTurnClause, uncertaintyClause, candidateCompareRead } from '../../services/tacticalRead';
-import { legalSeeGainFor, namedPawnStructure, structureTransfer, signedLegalSeeFor, signedCaptureRead, takingTheAttackerAnswers } from '../../services/positionReadingService';
+import { findHangingBySee, legalSeeGainFor, namedPawnStructure, structureTransfer, signedLegalSeeFor, signedCaptureRead, takingTheAttackerAnswers } from '../../services/positionReadingService';
 import { BehaviorScheduler, detectBehaviors } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
@@ -2232,9 +2232,12 @@ export function CoachTeachPage(): JSX.Element {
       return result;
     };
     try {
+      const pliesBefore = gameRef.current.history.length;
       for (let i = 0; i < count; i++) {
         gameRef.current.undoMove();
       }
+      // A takeback is not a new game — the coach keeps its memory.
+      learnMemRef.current.rewind(pliesBefore - count);
       // Re-derive the post-takeback FEN from the live game object so
       // subsequent trips see the rolled-back state.
       liveFenRef.current = gameRef.current.fen;
@@ -2837,6 +2840,7 @@ export function CoachTeachPage(): JSX.Element {
       // read the engine contradicted). As good as the key → the drill takes
       // it. Only an engine-confirmed loss is called one; the board-read reason
       // is spoken then, and only then.
+      learnMemRef.current.rewind(gameRef.current.history.length - 1);
       gameRef.current.undoMove();
       liveFenRef.current = gameRef.current.fen;
       const fenBefore = gameRef.current.fen;
@@ -8049,9 +8053,15 @@ export function CoachTeachPage(): JSX.Element {
       const myHanging = tctx.hanging
         .filter((h) => h.color === studentCC && AV[h.piece] !== undefined && !onlyTheRecaptured(h.square))
         .sort((a, b) => (AV[b.piece] ?? 0) - (AV[a.piece] ?? 0));
-      const theirHanging = tctx.hanging
-        .filter((h) => h.color !== studentCC && AV[h.piece] !== undefined)
-        .sort((a, b) => (AV[b.piece] ?? 0) - (AV[a.piece] ?? 0));
+      // EVERY PIECE OF THEIRS THE EXCHANGE WINS, not only the undefended ones
+      // (Learn tape 2026-10-07: 21.Be8 — hit by two rooks, guarded once — and
+      // 22.Qe4 — guarded by the c3 knight, hit by a pawn — gave away a bishop and
+      // a queen, and this lane said nothing because both had a guard). The
+      // legal exchange decides, the same read the must-defend probe uses;
+      // biggest win first.
+      const theirHanging = ((): Array<{ square: string; piece: string }> => {
+        try { return findHangingBySee(args.fenAfterReply).filter((h) => h.color !== studentCC && AV[h.piece] !== undefined); } catch { return []; }
+      })();
       // A tactic against the student outranks one loose piece — but not when
       // the piece DELIVERING it is itself hanging (his e2 queen "forking"
       // two pieces while en prise: the lesson is take it, not fear it).
@@ -8120,7 +8130,7 @@ export function CoachTeachPage(): JSX.Element {
           // there's something to win here", and …Rxg5 loses to d4, the c1-bishop
           // opening onto the rook). This lane runs before the engine read, so it
           // states the fact and the question; the engine lane names the move.
-          : `Their ${NAME[prize.piece] ?? 'piece'} on ${prize.square} has nothing defending it — before you take, check what taking it allows.`;
+          : (prizeTeaching(args.fenAfterReply, prize.square, studentCC)?.text ?? null);
       } else {
         // THE STUDENT ALREADY FOUND IT (hand walks 800 + 2000): "There's a pin
         // here for you — have a look" right after they played …Bg4 themselves,
@@ -9695,6 +9705,11 @@ export function CoachTeachPage(): JSX.Element {
                       // is a beat, so importance ranks it and never mutes it.
                       posture: 'walk',
                       fen: probe.fen(),
+                      // The game's moves to this board (the student's, then the
+                      // reply). Never passed before, so the speed-run read of
+                      // what they keep doing (`depthClauses` → `opponentHabits`)
+                      // always saw an empty game (swarm design 1 + 8, 2026-10-07).
+                      history: [...move.history, m.san],
                       moverColor: probe.turn(),
                       studentColor: playerColor === 'white' ? 'w' : 'b',
                       rating,
@@ -12946,7 +12961,7 @@ export function CoachTeachPage(): JSX.Element {
           </div>
           <div className="flex items-center justify-center gap-2">
             <button
-              onClick={() => game.undoMove()}
+              onClick={() => { learnMemRef.current.rewind(game.history.length - 1); game.undoMove(); }}
               disabled={busy || game.history.length === 0}
               className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-amber-500/30 text-sm font-medium text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 disabled:opacity-30 transition-all duration-200"
               style={{ boxShadow: '0 0 10px rgba(245, 158, 11, 0.25), 0 0 3px rgba(245, 158, 11, 0.15)' }}

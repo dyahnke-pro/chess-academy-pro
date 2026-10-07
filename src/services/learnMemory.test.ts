@@ -98,6 +98,25 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
     expect(mem.gameId).not.toBe(first);
   });
 
+  // Attack round 2026-10-07: a takeback re-announced the opening, re-said every
+  // definition and filed the rest of the game under a second id.
+  it('a TAKEBACK keeps the memory and the game id (rewind, then observe)', () => {
+    const mem = createLearnMemory();
+    mem.observe(14);
+    mem.spokenOpeningName = 'Scandinavian Defense';
+    mem.structureSaid.add('masters-plan');
+    const id = mem.gameId;
+    mem.rewind(12);                              // took two plies back
+    expect(mem.observe(12)).toBe(false);
+    expect(mem.observe(13)).toBe(false);
+    expect(mem.spokenOpeningName).toBe('Scandinavian Defense');
+    expect(mem.structureSaid.has('masters-plan')).toBe(true);
+    expect(mem.gameId).toBe(id);
+    // …and a real new game still resets.
+    expect(mem.observe(1)).toBe(true);
+    expect(mem.gameId).not.toBe(id);
+  });
+
   it('observe() forgets when the board goes BACKWARDS — a second game', () => {
     const mem = createLearnMemory();
     mem.spokenOpeningName = 'Scandinavian Defense: Lasker Variation';

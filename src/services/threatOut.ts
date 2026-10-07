@@ -3,7 +3,7 @@
 //
 // "What must I defend?" = give the opponent the move (null-move: flip the
 // side-to-move) and ask what they win. It reuses the grounded primitives — the
-// side flip and `findHangingPieces` (SEE-verified) — so it adds NO new engine
+// side flip and `findHangingBySee` (the legal exchange) — so it adds NO new engine
 // search and no new hanging-detection; it is the composition the runtime was
 // missing. It feeds two things: the importance model's `threatNet` (must-defend,
 // the standing-threat signal the flat eval bar hides) and the fact supply ("the
@@ -14,9 +14,7 @@
 // best line) is deliberately NOT here: it costs a search and is gated behind
 // criticality at the call site per the cost architecture.
 import { Chess, type Square } from 'chess.js';
-import { findHangingPieces } from './tacticClassifier';
-import { legalSeeGain } from './positionReadingService';
-import type { HangingPiece } from '../types/tacticTypes';
+import { findHangingBySee } from './positionReadingService';
 
 const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 
@@ -87,21 +85,26 @@ export function computeMustDefend(fen: string, subjectColor: 'w' | 'b'): MustDef
   }
   // else: the opponent is ALREADY to move — read the position directly.
 
-  let hanging: HangingPiece[];
-  try {
-    hanging = findHangingPieces(new Chess(probeFen));
-  } catch {
-    return { net: 0, pieces: [] };
-  }
   // CONFIRMED BY THE EXCHANGE, NOT JUST "NO DEFENDER RIGHT NOW" (claim check
   // 2026-09-27: "they're threatening the rook on a8" — Qxa8 is met by …Rxa8
   // from behind the square the queen just left; "win the knight on e4" and
   // "the rook on d6" were the same). The legal SEE plays the real captures, so
   // a defender standing behind the attacker counts, and the net is what the
   // opponent actually wins, not the piece's full value.
+  //
+  // …AND A DEFENDER DOES NOT HELP WHEN THE ATTACKER IS CHEAPER (Learn tape
+  // 2026-10-07: 6.h3 hit the bishop on g4, guarded by the f6 knight, and hxg4
+  // Nxg4 wins a bishop for a pawn — lost in both games, with no warning). The
+  // candidates used to be `findHangingPieces`, which skips every DEFENDED
+  // piece, so a pawn hitting a guarded bishop was never a threat at all, and
+  // the "their threat first" habit (gated on this net) never fired once in 49
+  // moves. Every piece the exchange loses is a candidate now — the undefended
+  // ones were always a subset (their swap gain is their full value).
+  let hanging: ReturnType<typeof findHangingBySee>;
+  try { hanging = findHangingBySee(probeFen); } catch { return { net: 0, pieces: [] }; }
   const mine = hanging
-    .filter((h) => h.color === subjectColor && h.piece.toLowerCase() !== 'k')
-    .map((h) => ({ square: h.square, piece: h.piece, value: Math.min(VALUE[h.piece.toLowerCase()] ?? 0, legalSeeGain(probeFen, h.square as Square)), ...boardFact(probeFen, h.square as Square, subjectColor) }))
+    .filter((h) => h.color === subjectColor && h.piece !== 'k')
+    .map((h) => ({ square: h.square, piece: h.piece, value: Math.min(VALUE[h.piece] ?? 0, h.gain), ...boardFact(probeFen, h.square, subjectColor) }))
     .filter((h) => h.value > 0)
     .sort((a, b) => b.value - a.value);
   return { net: mine[0]?.value ?? 0, pieces: mine };

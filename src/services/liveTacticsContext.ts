@@ -766,11 +766,14 @@ export function formatTacticsSubBlock(
 // student loses by force if they ignore it (`computeMustDefend`, the same
 // net the importance model reads) — and only when the piece at risk is one
 // the warning itself names, so a level is never pinned to the wrong threat.
-export type DangerLevel = 'decisive' | 'piece' | 'pawn' | 'not-yet';
+export type DangerLevel = 'decisive' | 'piece' | 'material' | 'pawn' | 'not-yet';
 
 export const DANGER_OPENERS: Record<DangerLevel, readonly string[]> = {
   decisive: ['This one decides the game — ', 'Drop everything — '],
   piece: ['Danger — a whole piece is at stake. ', 'Watch out — this costs a piece if you ignore it. '],
+  // A swap net of two: a piece for a pawn, or the exchange. "A pawn is at
+  // stake" would be false — the student loses more than a pawn.
+  material: ['Watch out — this loses material if you ignore it. ', 'Careful — this costs material if you ignore it. '],
   pawn: ['Watch out — a pawn is at stake. ', 'Careful — this costs a pawn if you ignore it. '],
   'not-yet': ['Not urgent yet, but see it coming — ', 'No rush yet — '],
 };
@@ -785,7 +788,9 @@ export function dangerLevel(fen: string, student: 'w' | 'b', squares: readonly s
     const md = computeMustDefend(fen, student);
     const named = md.pieces.find((p) => squares.includes(p.square));
     if (!named) return md.net > 0 ? null : 'not-yet';
-    return named.value >= 5 ? 'decisive' : named.value >= 3 ? 'piece' : 'pawn';
+    // `value` is what the exchange nets, not the piece's face value: a guarded
+    // bishop hit by a pawn nets two (Learn tape 2026-10-07, 6.h3).
+    return named.value >= 5 ? 'decisive' : named.value >= 3 ? 'piece' : named.value >= 2 ? 'material' : 'pawn';
   } catch { return null; }
 }
 

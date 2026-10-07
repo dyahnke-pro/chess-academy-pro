@@ -171,6 +171,12 @@ export interface LearnMemory {
    * trace.
    */
   observe(plies: number): boolean;
+  /** A TAKEBACK, not a new game: the board went backwards on purpose, so the
+   *  memory keeps what was said and the game keeps its id (attack round
+   *  2026-10-07: a takeback re-announced the opening and re-said every
+   *  definition, and split the game's evidence across two ids). Lowers the
+   *  watermark `observe` compares against; never raises it. */
+  rewind(plies: number): void;
   /** Forget everything. Every "a new game starts" site calls THIS. */
   newGame(): void;
   /**
@@ -266,6 +272,9 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
       if (forgot) mem.newGame();
       lastPlies = plies;
       return forgot;
+    },
+    rewind(plies: number): void {
+      lastPlies = Math.min(lastPlies, Math.max(0, plies));
     },
     newGame(): void {
       mem.slipsThisGame.clear();

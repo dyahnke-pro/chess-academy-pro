@@ -39,6 +39,21 @@ describe('computeMustDefend — the null-move must-defend', () => {
     expect(md.pieces[0].square).toBe('e5');
   });
 
+  // Learn tape 2026-10-07: 6.h3 hit the bishop on g4 in both games, the bishop
+  // was lost both times, and nothing warned — the f6 knight guards g4, so the
+  // undefended-only candidates never saw it. hxg4 Nxg4 is a bishop for a pawn.
+  it('a GUARDED piece the exchange still loses is a threat — a defender does not help against a cheaper attacker', () => {
+    const md = computeMustDefend('rn2kb1r/ppp1pppp/5n2/q7/3P2b1/2N2N1P/PPP2PP1/R1BQKB1R b KQkq - 0 6', 'b');
+    expect(md.net).toBe(2);
+    expect(md.pieces[0]).toMatchObject({ square: 'g4', piece: 'b', value: 2, attacker: 'p', defenders: 1 });
+  });
+
+  it('a guarded piece attacked by an EQUAL one is not a threat (the swap is even)', () => {
+    // White knight e5, guarded by the f4 pawn, attacked by the c6 knight.
+    const md = computeMustDefend('4k3/8/2n5/4N3/5P2/8/8/4K3 w - - 0 1', 'w');
+    expect(md.net).toBe(0);
+  });
+
   it('reports the biggest hanging piece first (net = its value)', () => {
     // White queen on d5 undefended, Black to be given the move → …exd5 / …anything wins it.
     // Construct: White Qd5 attacked by Black e6 pawn, undefended.
